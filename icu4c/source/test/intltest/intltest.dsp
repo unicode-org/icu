@@ -312,6 +312,10 @@ SOURCE=.\tchcfmt.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\testutil.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\tfsmalls.cpp
 # End Source File
 # Begin Source File
@@ -325,6 +329,10 @@ SOURCE=.\tmsgfmt.cpp
 # Begin Source File
 
 SOURCE=.\transapi.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\transrt.cpp
 # End Source File
 # Begin Source File
 
