@@ -22,6 +22,7 @@
 #include "ufmt_cmn.h"
 #include "unicode/uchar.h"
 #include "unicode/ucnv.h"
+#include "umutex.h"
 
 int
 ufmt_digitvalue(UChar c)
