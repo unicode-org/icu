@@ -299,8 +299,8 @@ ibm-1089_P100-1995 { UTR22* }
                         ISO_8859-6:1987 { IANA* }
                         ecma-114 { IANA }
                         asmo-708 { IANA }
-                        ISO-8859-6-I # { IANA MIME } considers this alias different
-                        ISO-8859-6-E # { IANA MIME } considers this alias different
+                        ISO-8859-6-I { IANA MIME } # IANA considers this alias different and BiDi needs to be applied.
+                        ISO-8859-6-E { IANA MIME } # IANA considers this alias different and BiDi needs to be applied.
                         cp1089
                         1089
 
@@ -330,8 +330,8 @@ ibm-916 { IBM* }        iso-8859-8 { MIME* IANA }
                         csISOLatinHebrew { IANA }
                         iso-ir-138 { IANA }
                         ISO_8859-8:1988 { IANA* }
-                        ISO-8859-8-I # { IANA MIME } considers this alias different
-                        ISO-8859-8-E # { IANA MIME } considers this alias different
+                        ISO-8859-8-I { IANA MIME } # IANA considers this alias different and BiDi needs to be applied.
+                        ISO-8859-8-E { IANA MIME } # IANA considers this alias different and BiDi needs to be applied.
                         cp916
                         916
 
@@ -695,20 +695,20 @@ ibm-16804_X110-1999 { UTR22* }  ibm-16804 { IBM* } cpibm16804 ebcdic-ar # EBCDIC
 # mapping files.
 
 # Some examples
-ibm-37_P100-1995,swaplfnl     ibm-37,swaplfnl ibm-37-s390 ibm037-s390
-ibm-1047_P100-1995,swaplfnl   ibm-1047,swaplfnl ibm-1047-s390
-ibm-1140_P100-1997,swaplfnl   ibm-1140,swaplfnl ibm-1140-s390
-ibm-1142_P100-1997,swaplfnl   ibm-1142,swaplfnl ibm-1142-s390
-ibm-1143_P100-1997,swaplfnl   ibm-1143,swaplfnl ibm-1143-s390
-ibm-1144_P100-1997,swaplfnl   ibm-1144,swaplfnl ibm-1144-s390
-ibm-1145_P100-1997,swaplfnl   ibm-1145,swaplfnl ibm-1145-s390
-ibm-1146_P100-1997,swaplfnl   ibm-1146,swaplfnl ibm-1146-s390
-ibm-1147_P100-1997,swaplfnl   ibm-1147,swaplfnl ibm-1147-s390
-ibm-1148_P100-1997,swaplfnl   ibm-1148,swaplfnl ibm-1148-s390
-ibm-1149_P100-1997,swaplfnl   ibm-1149,swaplfnl ibm-1149-s390
-ibm-1153_P100-1999,swaplfnl   ibm-1153,swaplfnl ibm-1153-s390
-ibm-12712_P100-1998,swaplfnl  ibm-12712,swaplfnl ibm-12712-s390
-ibm-16804_X110-1999,swaplfnl  ibm-16804,swaplfnl ibm-16804-s390
+ibm-37_P100-1995,swaplfnl     ibm-37-s390 ibm037-s390
+ibm-1047_P100-1995,swaplfnl   ibm-1047-s390
+ibm-1140_P100-1997,swaplfnl   ibm-1140-s390
+ibm-1142_P100-1997,swaplfnl   ibm-1142-s390
+ibm-1143_P100-1997,swaplfnl   ibm-1143-s390
+ibm-1144_P100-1997,swaplfnl   ibm-1144-s390
+ibm-1145_P100-1997,swaplfnl   ibm-1145-s390
+ibm-1146_P100-1997,swaplfnl   ibm-1146-s390
+ibm-1147_P100-1997,swaplfnl   ibm-1147-s390
+ibm-1148_P100-1997,swaplfnl   ibm-1148-s390
+ibm-1149_P100-1997,swaplfnl   ibm-1149-s390
+ibm-1153_P100-1999,swaplfnl   ibm-1153-s390
+ibm-12712_P100-1998,swaplfnl  ibm-12712-s390
+ibm-16804_X110-1999,swaplfnl  ibm-16804-s390
 
 # This is a special version of ibm-1140 that the XML4C (Xerces) parser team
 # requested in 2000.
