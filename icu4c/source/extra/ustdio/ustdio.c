@@ -30,6 +30,9 @@
 #define DELIM_CR 0x000D
 #define DELIM_LF 0x000A
 
+/* Leave this copyright notice here! */
+static const char copyright[] = U_COPYRIGHT_STRING;
+
 #ifdef WIN32
 static const UChar DELIMITERS [] = { DELIM_CR, DELIM_LF, 0x0000 };
 static const uint32_t DELIMITERS_LEN = 2;
@@ -173,11 +176,13 @@ static const UChar * u_file_translit(UFILE *f, const UChar *src, int32_t *count,
             &pos,
             &status);
 
+#ifdef _DEBUG
         if(U_FAILURE(status))
         {
             fprintf(stderr, " Gack. Translit blew up with a %s\n", u_errorName(status));
             return src;
         }
+#endif
 
         /* now: start/limit point to the transliterated text */
         /* Transliterated is [buffer..pos.start) */
@@ -200,11 +205,13 @@ static const UChar * u_file_translit(UFILE *f, const UChar *src, int32_t *count,
             &textLimit,
             &status);
 
+#ifdef _DEBUG
         if(U_FAILURE(status))
         {
             fprintf(stderr, " Gack. Translit(flush) blew up with a %s\n", u_errorName(status));
             return src;
         }
+#endif
 
         /* out: converted len */
         *count = textLimit;
