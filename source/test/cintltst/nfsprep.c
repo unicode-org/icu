@@ -86,7 +86,7 @@ nfs4_prepare( const char* src, int32_t srcLength,
     /* open the profile */
     profile = usprep_open(testdatapath, NFS4DataFileNames[state],  status);
     /* prepare the string */
-    b2Len = usprep_prepare(profile, b1, b1Len, b2, b2Capacity, USPREP_NONE, parseError, status);
+    b2Len = usprep_prepare(profile, b1, b1Len, b2, b2Capacity, USPREP_DEFAULT, parseError, status);
     if(*status == U_BUFFER_OVERFLOW_ERROR){
         *status = U_ZERO_ERROR;
         b2 = (UChar*) malloc(b2Len * U_SIZEOF_UCHAR);
@@ -94,7 +94,7 @@ nfs4_prepare( const char* src, int32_t srcLength,
             *status = U_MEMORY_ALLOCATION_ERROR;
             goto CLEANUP;
         }
-        b2Len = usprep_prepare(profile, b1, b1Len, b2, b2Len, USPREP_NONE, parseError, status);
+        b2Len = usprep_prepare(profile, b1, b1Len, b2, b2Len, USPREP_DEFAULT, parseError, status);
     }
     
     /* convert the string back to UTF-8 */

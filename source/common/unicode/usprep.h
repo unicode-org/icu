@@ -66,7 +66,7 @@ typedef struct UStringPrepProfile UStringPrepProfile;
  * @see  usprep_prepare
  * @draft ICU 2.8
  */
-#define USPREP_NONE 0x0000
+#define USPREP_DEFAULT 0x0000
 
 /** 
  * Option to allow processing of unassigned code points in the input

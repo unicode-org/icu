@@ -277,6 +277,11 @@ usprep_getProfile(const char* path,
         if(!loadData(profile, path, name, _SPREP_DATA_TYPE, status) || U_FAILURE(*status) ){
             return NULL;
         }
+        
+        /* get the options */
+        profile->doNFKC            = (UBool)((profile->indexes[_SPREP_OPTIONS] & _SPREP_NORMALIZATION_ON) > 0);
+        profile->checkBiDi         = (UBool)((profile->indexes[_SPREP_OPTIONS] & _SPREP_CHECK_BIDI_ON) > 0);
+        
         umtx_lock(&usprepMutex);
         /* add the data object to the cache */
         uhash_put(SHARED_DATA_HASHTABLE, key, profile, status);
@@ -656,10 +661,6 @@ usprep_prepare(   const UStringPrepProfile* profile,
     int32_t rtlPos =-1, ltrPos =-1;
     const int32_t *indexes = profile->indexes;
 
-    // get the options
-    UBool doNFKC            = (UBool)((indexes[_SPREP_OPTIONS] & _SPREP_NORMALIZATION_ON) > 0);
-    UBool checkBiDi         = (UBool)((indexes[_SPREP_OPTIONS] & _SPREP_CHECK_BIDI_ON) > 0);
-
     //get the string length
     if(srcLength == -1){
         srcLength = u_strlen(src);
@@ -683,7 +684,7 @@ usprep_prepare(   const UStringPrepProfile* profile,
     }
 
     // normalize
-    if(doNFKC == TRUE){
+    if(profile->doNFKC == TRUE){
         b2Len = usprep_normalize(b1,b1Len, b2,b2Capacity,status);
         
         if(*status == U_BUFFER_OVERFLOW_ERROR){
@@ -748,7 +749,7 @@ usprep_prepare(   const UStringPrepProfile* profile,
             rtlPos = b2Index-1;
         }
     }           
-    if(checkBiDi == TRUE){
+    if(profile->checkBiDi == TRUE){
         // satisfy 2
         if( leftToRight == TRUE && rightToLeft == TRUE){
             *status = U_STRINGPREP_CHECK_BIDI_ERROR;
