@@ -88,56 +88,104 @@ public class TestUScriptRun extends TestFmwk
     public void TestContstruction()
     {
         UScriptRun scriptRun = null;
-        char[] dummy = {'d', 'u', 'm', 'm', 'y'};
+        char[] nullChars  = null, dummyChars  = {'d', 'u', 'm', 'm', 'y'};
+        String nullString = null, dummyString = new String(dummyChars);
         
         try {
-            scriptRun = new UScriptRun(null, 0, 100);
-            errln("new UScriptRun(null, 0, 100) did not produce an IllegalArgumentException!");
+            scriptRun = new UScriptRun(nullString, 0, 100);
+            errln("new UScriptRun(nullString, 0, 100) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
         }
         
         try {
-            scriptRun = new UScriptRun(null, 100, 0);
-            errln("new UScriptRun(null, 100, 0) did not produce an IllegalArgumentException!");
+            scriptRun = new UScriptRun(nullString, 100, 0);
+            errln("new UScriptRun(nullString, 100, 0) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
         }
         
         try {
-            scriptRun = new UScriptRun(null, 0, -100);
-            errln("new UScriptRun(null, 0, -100) did not produce an IllegalArgumentException!");
+            scriptRun = new UScriptRun(nullString, 0, -100);
+            errln("new UScriptRun(nullString, 0, -100) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
         }
         
         try {
-            scriptRun = new UScriptRun(null, -100, 0);
-            errln("new UScriptRun(null, -100, 0) did not produce an IllegalArgumentException!");
+            scriptRun = new UScriptRun(nullString, -100, 0);
+            errln("new UScriptRun(nullString, -100, 0) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
         }
         
         try {
-            scriptRun = new UScriptRun(dummy, 0, 6);
-            errln("new UScriptRun(dummy, 0, 6) did not produce an IllegalArgumentException!");
+            scriptRun = new UScriptRun(nullChars, 0, 100);
+            errln("new UScriptRun(nullChars, 0, 100) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
         }
         
         try {
-            scriptRun = new UScriptRun(dummy, 6, 0);
+            scriptRun = new UScriptRun(nullChars, 100, 0);
+            errln("new UScriptRun(nullChars, 100, 0) did not produce an IllegalArgumentException!");
+        } catch (IllegalArgumentException iae) {
+        }
+        
+        try {
+            scriptRun = new UScriptRun(nullChars, 0, -100);
+            errln("new UScriptRun(nullChars, 0, -100) did not produce an IllegalArgumentException!");
+        } catch (IllegalArgumentException iae) {
+        }
+        
+        try {
+            scriptRun = new UScriptRun(nullChars, -100, 0);
+            errln("new UScriptRun(nullChars, -100, 0) did not produce an IllegalArgumentException!");
+        } catch (IllegalArgumentException iae) {
+        }
+        
+        try {
+            scriptRun = new UScriptRun(dummyString, 0, 6);
+            errln("new UScriptRun(dummyString, 0, 6) did not produce an IllegalArgumentException!");
+        } catch (IllegalArgumentException iae) {
+        }
+        
+        try {
+            scriptRun = new UScriptRun(dummyString, 6, 0);
             errln("new UScriptRun(dummy, 6, 0) did not produce an IllegalArgumentException!");
         }catch (IllegalArgumentException iae) {
         }
         
         try {
-            scriptRun = new UScriptRun(dummy, 0, -100);
-            errln("new UScriptRun(dummy, 0, -100) did not produce an IllegalArgumentException!");
+            scriptRun = new UScriptRun(dummyString, 0, -100);
+            errln("new UScriptRun(dummyString, 0, -100) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
         }
         
         try {
-            scriptRun = new UScriptRun(dummy, -100, 0);
+            scriptRun = new UScriptRun(dummyString, -100, 0);
             errln("new UScriptRun(dummy, -100, 0) did not produce an IllegalArgumentException!");
         } catch (IllegalArgumentException iae) {
         }
-
+        
+        try {
+            scriptRun = new UScriptRun(dummyChars, 0, 6);
+            errln("new UScriptRun(dummyChars, 0, 6) did not produce an IllegalArgumentException!");
+        } catch (IllegalArgumentException iae) {
+        }
+        
+        try {
+            scriptRun = new UScriptRun(dummyChars, 6, 0);
+            errln("new UScriptRun(dummyChars, 6, 0) did not produce an IllegalArgumentException!");
+        }catch (IllegalArgumentException iae) {
+        }
+        
+        try {
+            scriptRun = new UScriptRun(dummyChars, 0, -100);
+            errln("new UScriptRun(dummyChars, 0, -100) did not produce an IllegalArgumentException!");
+        } catch (IllegalArgumentException iae) {
+        }
+        
+        try {
+            scriptRun = new UScriptRun(dummyChars, -100, 0);
+            errln("new UScriptRun(dummy, -100, 0) did not produce an IllegalArgumentException!");
+        } catch (IllegalArgumentException iae) {
+        }
     }
     
     public void TestReset()
@@ -239,6 +287,20 @@ public class TestUScriptRun extends TestFmwk
         runStarts[testData.length] = stringLimit;
         
         try {
+            scriptRun = new UScriptRun(testString);
+            CheckScriptRuns(scriptRun, runStarts, testData);
+        } catch (IllegalArgumentException iae) {
+            errln("new UScriptRun(testString) produced an IllegalArgumentException!");
+        }
+        
+        try {
+            scriptRun.reset();
+            CheckScriptRuns(scriptRun, runStarts, testData);
+        } catch (IllegalArgumentException iae) {
+            errln("scriptRun.reset() on a valid UScriptRun produced an IllegalArgumentException!");
+        }
+        
+        try {
             scriptRun = new UScriptRun(testString.toCharArray());
             CheckScriptRuns(scriptRun, runStarts, testData);
         } catch (IllegalArgumentException iae) {
@@ -262,6 +324,13 @@ public class TestUScriptRun extends TestFmwk
             errln("new UScriptRun() produced an IllegalArgumentException!");
         }
         
+        try {
+            scriptRun.reset(testString, 0, testString.length());
+            CheckScriptRuns(scriptRun, runStarts, testData);
+        } catch (IllegalArgumentException iae) {
+            errln("scriptRun.reset(testString.toCharArray(), 0, testString.length) produced an IllegalArgumentException!");
+        }
+
         try {
             scriptRun.reset(testString.toCharArray(), 0, testString.length());
             CheckScriptRuns(scriptRun, runStarts, testData);

@@ -11,16 +11,18 @@ package com.ibm.icu.lang;
 
 /**
  * <code>UScriptRun</code> is used to find runs of characters in
- * the same script. It implements a simple iterator over an array
- * of characters. The iterator will resolve script-neutral characters
- * like punctuation into the script of the surrounding characters.
+ * the same script, as defined in the <code>UScript</code> class.
+ * It implements a simple iterator over an array of characters.
+ * The iterator will assign <code>COMMON</code> and <code>INHERITED</code>
+ * characters to the same script as the preceeding characters. If the
+ * COMMON and INHERITED characters are first, they will be assigned to
+ * the same script as the following characters.
  *
  * The iterator will try to match paired punctuation. If it sees an
  * opening punctuation character, it will remember the script that
  * was assigned to that character, and assign the same script to the
  * matching closing punctuation.
  *
- * Scripts are chosen based on the <code>UScript</code> class.
  * No attempt is made to combine related scripts into a single run. In
  * particular, Hiragana, Katakana, and Han characters will appear in seperate
  * runs.
@@ -56,7 +58,33 @@ public final class UScriptRun
      */
     public UScriptRun()
     {
-        reset(null, 0, 0);
+        char[] nullChars = null;
+        
+        reset(nullChars, 0, 0);
+    }
+    
+    /**
+     * Construct a <code>UScriptRun</code> object which iterates over the
+     * characters in the given string.
+     *
+     * @param text the string of characters over which to iterate.
+     */
+    public UScriptRun(String text)
+    {
+        reset (text);
+    }
+    
+    /**
+     * Construct a <code>UScriptRun</code> object which iterates over a subrange
+     * of the characetrs in the given string.
+     *
+     * @param text the string of characters over which to iterate.
+     * @param start the index of the first character over which to iterate
+     * @param count the number of characters over which to iterate
+     */
+    public UScriptRun(String text, int start, int count)
+    {
+        reset(text, start, count);
     }
 
     /**
@@ -67,7 +95,7 @@ public final class UScriptRun
      */
     public UScriptRun(char[] chars)
     {
-        reset(chars, 0, chars.length);
+        reset(chars);
     }
 
     /**
@@ -90,7 +118,8 @@ public final class UScriptRun
     public final void reset() {
         scriptStart = charStart;
         scriptLimit = charStart;
-        scriptCode  = UScript.COMMON;
+        scriptCode  = UScript.INVALID_CODE;
+        parenSP     = -1;
     }
 
     /**
@@ -136,6 +165,61 @@ public final class UScriptRun
 
         reset(start, count);
     }
+    
+    /**
+     * Reset the iterator to iterate over the characters
+     * in <code>chars</code>. This allows clients to reuse an iterator.
+     *
+     * @param chars the new array of characters over which to iterate.
+     */
+    public final void reset(char[] chars)
+    {
+        int length = 0;
+        
+        if (chars != null) {
+            length = chars.length;
+        }
+        
+        reset(chars, 0, length);
+    }
+    
+    /**
+     * Reset the iterator to iterate over <code>count</code> characters
+     * in <code>text</code> starting at <code>start</code>. This allows
+     * clients to reuse an iterator.
+     *
+     * @param text the new string of characters over which to iterate.
+     * @param start the index of the first character over which to iterate.
+     * @param count the nuber of characters over which to iterate.
+     */
+    public final void reset(String text, int start, int count)
+    {
+        char[] chars = null;
+        
+        if (text != null) {
+            chars = text.toCharArray();
+        }
+        
+        reset(chars, start, count);
+    }
+    
+    /**
+     * Reset the iterator to iterate over the characters
+     * in <code>text</code>. This allows clients to reuse an iterator.
+     *
+     * @param text the new string of characters over which to iterate.
+     */
+    public final void reset(String text)
+    {
+        int length   = 0;
+        
+        if (text != null) {
+            length = text.length();
+        }
+        
+        reset(text, 0, length);
+    }
+        
 
 
     /**
