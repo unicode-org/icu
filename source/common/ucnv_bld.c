@@ -204,7 +204,8 @@ getAlgorithmicTypeFromName(const char *realName)
 }
 
 /*Puts the shared data in the static hashtable SHARED_DATA_HASHTABLE */
-void   shareConverterData(UConverterSharedData * data)
+void
+ucnv_shareConverterData(UConverterSharedData * data)
 {
     UErrorCode err = U_ZERO_ERROR;
     /*Lazy evaluates the Hashtable itself */
@@ -228,7 +229,7 @@ umtx_lock (NULL);
     /* ### check to see if the element is not already there! */
 
     /*
-    sanity =   getSharedConverterData (data->staticData->name);
+    sanity =   ucnv_getSharedConverterData (data->staticData->name);
     if(sanity != NULL)
     {
     UCNV_DEBUG_LOG("put:overwrite!",data->staticData->name,sanity);
@@ -246,7 +247,7 @@ umtx_unlock (NULL);
 }
 
 UConverterSharedData *
-getSharedConverterData(const char *name)
+ucnv_getSharedConverterData(const char *name)
 {
     /*special case when no Table has yet been created we return NULL */
     if (SHARED_DATA_HASHTABLE == NULL)
@@ -269,7 +270,7 @@ umtx_unlock(NULL);
  *if and only if the referenceCounter == 0
  */
 UBool
-deleteSharedConverterData(UConverterSharedData * deadSharedData)
+ucnv_deleteSharedConverterData(UConverterSharedData * deadSharedData)
 {
     if (deadSharedData->referenceCounter > 0)
         return FALSE;
@@ -412,7 +413,7 @@ ucnv_createConverter (const char *converterName, UErrorCode * err)
     if (mySharedConverterData == NULL)
     {
         /* it is a data-based converter, get its shared data */
-        mySharedConverterData = getSharedConverterData (realName);
+        mySharedConverterData = ucnv_getSharedConverterData (realName);
         if (mySharedConverterData == NULL)
         {
             /*Not cached, we need to stream it in from file */
@@ -424,7 +425,7 @@ ucnv_createConverter (const char *converterName, UErrorCode * err)
             else
             {
                 /* share it with other library clients */
-                shareConverterData(mySharedConverterData);
+                ucnv_shareConverterData(mySharedConverterData);
             }
         }
         else
@@ -568,7 +569,7 @@ ucnv_flushCache ()
             UCNV_DEBUG_LOG("del",mySharedData->staticData->name,mySharedData);
             
             uhash_removeElement(SHARED_DATA_HASHTABLE, e);
-            deleteSharedConverterData (mySharedData);
+            ucnv_deleteSharedConverterData (mySharedData);
         }
     }
     umtx_unlock (NULL);
