@@ -18,6 +18,15 @@
 #include "unicode/unistr.h"
 #include "unicode/parseerr.h"
 #include "prscmnts.h"
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_SPLIT_STRINGS 20
+
+const char *patternStrings[UPC_LIMIT]={
+    "^translate\\s*?(.*)",
+    "^note\\s*?(.*)"
+};
 
 U_CFUNC int32_t 
 removeText(UChar *source, int32_t srcLen, UnicodeString patString,uint32_t options,  UErrorCode *status){
@@ -65,20 +74,20 @@ getText(const UChar* source, int32_t srcLen,
         return 0;
     }
 
-    UnicodeString     stringArray[3];
+    UnicodeString     stringArray[MAX_SPLIT_STRINGS];
     RegexPattern      *pattern = RegexPattern::compile("@", 0, *status);
     UnicodeString src = source;
     
     if (U_FAILURE(*status)) {
         return 0;
     }
-    pattern->split(src, stringArray, 3, *status);
+    pattern->split(src, stringArray, MAX_SPLIT_STRINGS, *status);
     
     RegexMatcher matcher(patternString, 0, *status);
     if (U_FAILURE(*status)) {
         return 0;
     }
-    for(int32_t i=0; i<3; i++){
+    for(int32_t i=0; i<MAX_SPLIT_STRINGS; i++){
         matcher.reset(stringArray[i]);
         if(matcher.lookingAt(*status)){
             UnicodeString out = matcher.group(1, *status);
@@ -100,20 +109,97 @@ getDescription( const UChar* source, int32_t srcLen,
         return 0;
     }
 
-    UnicodeString     stringArray[3];
+    UnicodeString     stringArray[MAX_SPLIT_STRINGS];
     RegexPattern      *pattern = RegexPattern::compile("@", 0, *status);
     UnicodeString src = source;
     
     if (U_FAILURE(*status)) {
         return 0;
     }
-    pattern->split(src, stringArray, 3, *status);
+    pattern->split(src, stringArray,MAX_SPLIT_STRINGS , *status);
 
     if(stringArray[0].indexOf((UChar)AT_SIGN)==-1){
         int32_t destLen =  stringArray[0].extract(*dest, destCapacity, *status);
         return trim(*dest, destLen, status);
     }
     return 0;
+}
+
+U_CFUNC int32_t
+getCount(const UChar* source, int32_t srcLen, 
+         UParseCommentsOption option, UErrorCode *status){
+    
+    if(status == NULL || U_FAILURE(*status)){
+        return 0;
+    }
+
+    UnicodeString     stringArray[MAX_SPLIT_STRINGS];
+    RegexPattern      *pattern = RegexPattern::compile("@", 0, *status);
+    UnicodeString src = source;
+
+
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
+    int32_t retLen = pattern->split(src, stringArray, MAX_SPLIT_STRINGS, *status);
+    
+    RegexMatcher matcher(patternStrings[option], 0, *status);
+    if (U_FAILURE(*status)) {
+        return 0;
+    } 
+    int32_t count = 0;
+    for(int32_t i=0; i<MAX_SPLIT_STRINGS; i++){
+        matcher.reset(stringArray[i]);
+        if(matcher.lookingAt(*status)){
+            count++;
+        }
+    }
+    if(option == UPC_TRANSLATE && count > 1){
+        fprintf(stderr, "Multiple @translate tags cannot be supported.\n");
+        exit(U_UNSUPPORTED_ERROR);
+    }
+    return count;
+}
+
+U_CFUNC int32_t 
+getAt(const UChar* source, int32_t srcLen,
+        UChar** dest, int32_t destCapacity,
+        int32_t index,
+        UParseCommentsOption option,
+        UErrorCode* status){
+
+    if(status == NULL || U_FAILURE(*status)){
+        return 0;
+    }
+
+    UnicodeString     stringArray[MAX_SPLIT_STRINGS];
+    RegexPattern      *pattern = RegexPattern::compile("@", 0, *status);
+    UnicodeString src = source;
+
+
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
+    int32_t retLen = pattern->split(src, stringArray, MAX_SPLIT_STRINGS, *status);
+    
+    RegexMatcher matcher(patternStrings[option], 0, *status);
+    if (U_FAILURE(*status)) {
+        return 0;
+    } 
+    int32_t count = 0;
+    for(int32_t i=0; i<MAX_SPLIT_STRINGS; i++){
+        matcher.reset(stringArray[i]);
+        if(matcher.lookingAt(*status)){
+            if(count == index){
+                UnicodeString out = matcher.group(1, *status);
+                return out.extract(*dest, destCapacity,*status);
+            }
+            count++;
+            
+        }
+    }
+    return 0;
+
 }
 
 U_CFUNC int32_t
