@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TitlecaseTransliterator.java,v $ 
- * $Date: 2001/11/25 23:12:22 $ 
- * $Revision: 1.8 $
+ * $Date: 2001/11/28 02:00:31 $ 
+ * $Revision: 1.9 $
  */
 package com.ibm.text;
 import java.util.*;
@@ -70,9 +70,9 @@ class TitlecaseTransliterator extends Transliterator {
         // in which case we want to start in toLower mode.  If the
         // prior context is anything else (including empty) then start
         // in toTitle mode.
-        int start = offsets.start;
-        while (start > offsets.contextStart) {
-            char c = text.charAt(--start);
+        int c;
+        for (int start = offsets.start - 1; start >= offsets.contextStart; start -= UTF16.getCharCount(c)) {
+            c = UTF16.charAt(text, start);
             if (SKIP.contains(c)) {
                 continue;
             }
