@@ -7,6 +7,7 @@
 
 package com.ibm.icu.text;
 
+import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -144,7 +145,7 @@ public class RBBIDataWrapper {
     static RBBIDataWrapper get(InputStream is) throws IOException {
         int i;
         
-        DataInputStream dis = new DataInputStream(is);
+        DataInputStream dis = new DataInputStream(new BufferedInputStream(is));
         RBBIDataWrapper This = new RBBIDataWrapper();
         
         // Seek past the ICU data header.
