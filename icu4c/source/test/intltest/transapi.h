@@ -58,7 +58,7 @@ public:
 	void keyboardAux(Transliterator*, UnicodeString[] , UnicodeString&, int32_t, int32_t);
      
     void displayOutput(const UnicodeString&, const UnicodeString&, UnicodeString&,
-                       Transliterator::Position&);
+                       UTransPosition&);
 
 };
 
