@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NumberFormat.java,v $ 
- * $Date: 2003/02/25 23:39:44 $ 
- * $Revision: 1.23 $
+ * $Date: 2003/04/24 22:58:03 $ 
+ * $Revision: 1.24 $
  *
  *****************************************************************************************
  */
@@ -27,6 +27,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import com.ibm.icu.util.Currency;
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.LocaleUtility;
 
@@ -804,6 +805,29 @@ public abstract class NumberFormat extends Format{
             maximumFractionDigits = minimumFractionDigits;
     }
 
+    /**
+     * Sets the <tt>Currency</tt> object used to display currency
+     * amounts.  This takes effect immediately, if this format is a
+     * currency format.  If this format is not a currency format, then
+     * the currency object is used if and when this object becomes a
+     * currency format.
+     * @param theCurrency new currency object to use.  May be null for
+     * some subclasses.
+     * @draft ICU 2.6
+     */
+    public void setCurrency(Currency theCurrency) {
+        currency = theCurrency;
+    }
+
+    /**
+     * Gets the <tt>Currency</tt> object used to display currency
+     * amounts.  This may be null.
+     * @draft ICU 2.6
+     */
+    public Currency getCurrency() {
+        return currency;
+    }
+    
     // =======================privates===============================
 
     // Hook for service
@@ -1098,6 +1122,14 @@ public abstract class NumberFormat extends Format{
      * @see #getMinimumFractionDigits
      */
     private int    minimumFractionDigits = 0;
+
+    /**
+     * Currency object used to format currencies.  Subclasses may
+     * ignore this if they are not currency formats.  This will be
+     * null unless a subclass sets it to a non-null value.
+     * @since ICU 2.6
+     */
+    private Currency currency;
 
     static final int currentSerialVersion = 1;
 
