@@ -4045,12 +4045,10 @@ static void NullRule(void) {
  */
 static void TestNumericCollation(void)
 {
-    UCollationElements *iter;
     UErrorCode status = U_ZERO_ERROR;
 
 	int i = 0, j = 0, size = 0;
 	/*UCollationResult collResult;*/
-	UChar t1[100], t2[100];
 
 	const static char *basicTestStrings[]={
 	"hello1",
