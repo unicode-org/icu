@@ -7,14 +7,14 @@
 # This file can be freely redistributed under the same license as ICU.
 
 Name: icu
-Version: 2.2
+Version: 2.4
 Release: 1
-Requires: libicu22 >= 2.2
+Requires: libicu24 >= 2.4
 Summary: International Components for Unicode
 Packager: Ian Holsman (CNET Networks) <ianh@cnet.com>
 Copyright: X License
 Group: System Environment/Libraries
-Source: icu-2.2.tar.gz
+Source: icu-2.4.tar.gz
 BuildRoot: /var/tmp/%{name}
 %description
 ICU is a C++ and C library that provides robust and full-featured Unicode
@@ -22,10 +22,10 @@ support. This package contains the runtime libraries for ICU. It does
 not contain any of the data files needed at runtime and present in the
 `icu' and `icu-locales` packages.
 
-%package -n libicu22
+%package -n libicu24
 Summary: International Components for Unicode (libraries)
 Group: Development/Libraries
-%description -n libicu22
+%description -n libicu24
 ICU is a C++ and C library that provides robust and full-featured Unicode
 support. This package contains the runtime libraries for ICU. It does
 not contain any of the data files needed at runtime and present in the
@@ -34,7 +34,7 @@ not contain any of the data files needed at runtime and present in the
 %package -n libicu-devel
 Summary: International Components for Unicode (development files)
 Group: Development/Libraries
-Requires: libicu22 = 2.2
+Requires: libicu24 = 2.4
 %description -n libicu-devel
 ICU is a C++ and C library that provides robust and full-featured Unicode
 support. This package contains the development files for ICU.
@@ -42,7 +42,7 @@ support. This package contains the development files for ICU.
 %package locales
 Summary: Locale data for ICU
 Group: System Environment/Libraries
-Requires: libicu22 >= 2.2
+Requires: libicu24 >= 2.4
 %description locales
 The locale data are used by ICU to provide localization (l10n) and
 internationalization (i18n) support to ICU applications. This package
@@ -59,7 +59,7 @@ then
     ln -s "$icucurrent" current
 fi
 
-ICU_DATA=/usr/lib/icu/2.2
+ICU_DATA=/usr/lib/icu/2.4
 export ICU_DATA
 if test ! -f $ICU_DATA/cnvalias.dat -o /etc/icu/convrtrs.txt -nt $ICU_DATA/cnvalias.dat
 then
@@ -70,7 +70,7 @@ fi
 %preun
 # Adjust the current ICU link in /usr/lib/icu
 
-icucurrent=`2>/dev/null ls -dp /usr/lib/icu/* | sed -n -e '/\/2.2\//d' -e 's,.*/\([^/]*\)/$,\1,p'| sort -rn | head -1`
+icucurrent=`2>/dev/null ls -dp /usr/lib/icu/* | sed -n -e '/\/2.4\//d' -e 's,.*/\([^/]*\)/$,\1,p'| sort -rn | head -1`
 cd /usr/lib/icu
 rm -f /usr/lib/icu/current
 if test x"$icucurrent" != x
@@ -78,7 +78,7 @@ then
     ln -s "$icucurrent" current
 fi
 
-%post -n libicu22
+%post -n libicu24
 ldconfig
 
 # Adjust the current ICU link in /usr/lib/icu
@@ -91,10 +91,10 @@ then
     ln -s "$icucurrent" current
 fi
 
-%preun -n libicu22
+%preun -n libicu24
 # Adjust the current ICU link in /usr/lib/icu
 
-icucurrent=`2>/dev/null ls -dp /usr/lib/icu/* | sed -n -e '/\/2.2\//d' -e 's,.*/\([^/]*\)/$,\1,p'| sort -rn | head -1`
+icucurrent=`2>/dev/null ls -dp /usr/lib/icu/* | sed -n -e '/\/2.4\//d' -e 's,.*/\([^/]*\)/$,\1,p'| sort -rn | head -1`
 cd /usr/lib/icu
 rm -f /usr/lib/icu/current
 if test x"$icucurrent" != x
@@ -121,9 +121,9 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %doc readme.html
 %doc license.html
 %config /etc/icu/convrtrs.txt
-/usr/share/icu/2.2/README
-/usr/lib/icu/2.2/*.cnv
-/usr/lib/icu/2.2/*.icu
+/usr/share/icu/2.4/README
+/usr/lib/icu/2.4/*.cnv
+/usr/lib/icu/2.4/*.icu
 
 /usr/bin/derb
 /usr/bin/gencnval
@@ -137,6 +137,7 @@ make install DESTDIR=$RPM_BUILD_ROOT
 /usr/sbin/decmn
 /usr/sbin/genccode
 /usr/sbin/gencmn
+/usr/sbin/genpname
 /usr/sbin/gennames
 /usr/sbin/gennorm
 /usr/sbin/genprops
@@ -160,28 +161,28 @@ make install DESTDIR=$RPM_BUILD_ROOT
 /usr/man/man8/genuca.8.gz
 
 %files -n icu-locales
-/usr/lib/icu/2.2/*.brk
-/usr/lib/icu/2.2/*.res
-%files -n libicu22
+/usr/lib/icu/2.4/*.brk
+/usr/lib/icu/2.4/*.res
+%files -n libicu24
 %doc license.html
-/usr/lib/libicui18n.so.22
-/usr/lib/libicui18n.so.22.0
-/usr/lib/libicutoolutil.so.22
-/usr/lib/libicutoolutil.so.22.0
-/usr/lib/libicuuc.so.22
-/usr/lib/libicuuc.so.22.0
-/usr/lib/libicudata.so.22
-/usr/lib/libicudata.so.22.0
-/usr/lib/libustdio.so.22
-/usr/lib/libustdio.so.22.0
+/usr/lib/libicui18n.so.24
+/usr/lib/libicui18n.so.24.0
+/usr/lib/libicutoolutil.so.24
+/usr/lib/libicutoolutil.so.24.0
+/usr/lib/libicuuc.so.24
+/usr/lib/libicuuc.so.24.0
+/usr/lib/libicudata.so.24
+/usr/lib/libicudata.so.24.0
+/usr/lib/libustdio.so.24
+/usr/lib/libustdio.so.24.0
 
 %files -n libicu-devel
 %doc readme.html
 %doc license.html
 /usr/lib/libicuctestfw.so
 /usr/lib/libicuctestfw.a
-/usr/lib/libicuctestfw.so.22
-/usr/lib/libicuctestfw.so.22.0
+/usr/lib/libicuctestfw.so.24
+/usr/lib/libicuctestfw.so.24.0
 
 /usr/lib/libicui18n.so
 /usr/lib/libicui18n.a
@@ -194,13 +195,15 @@ make install DESTDIR=$RPM_BUILD_ROOT
 /usr/lib/libicudata.so
 /usr/lib/libicudata.a
 /usr/include/unicode/*.h
-/usr/lib/icu/2.2/Makefile.inc
+/usr/lib/icu/2.4/Makefile.inc
 /usr/lib/icu/Makefile.inc
-/usr/share/icu/2.2/config
-/usr/share/icu/2.2/README
-/usr/share/doc/icu/*
+/usr/share/icu/2.4/config
+/usr/share/icu/2.4/README
+/usr/share/doc/icu-2.4/*
 
 %changelog
+* Fri Dec 27 2002 Steven Loomis <srl@jtcsv.com>
+- Update to 2.4 spec
 * Fri Sep 27 2002 Steven Loomis <srl@jtcsv.com>
 - minor updates to 2.2 spec. Rpath is off by default, don't pass it as an option.
 * Mon Sep 16 2002 Ian Holsman <ian@holsman.net> 
