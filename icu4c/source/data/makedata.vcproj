@@ -50,10 +50,10 @@
 				RelativePath=".\makedata.mak">
 			</File>
 			<File
-				RelativePath=".\locales\resfiles.mk">
+				RelativePath=".\misc\miscfiles.mk">
 			</File>
 			<File
-				RelativePath=".\misc\miscfiles.mk">
+				RelativePath=".\locales\resfiles.mk">
 			</File>
 			<File
 				RelativePath="..\test\testdata\testdata.mk">
