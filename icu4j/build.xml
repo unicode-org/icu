@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2001/02/03 00:57:34 $ 
-* $Revision: 1.26 $
+* $Date: 2001/02/21 17:22:02 $ 
+* $Revision: 1.27 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -23,7 +23,6 @@
     <property name="build.dir" value="classes"/>
     <property name="obsolete.dir" value="build"/>
     <property name="jar.file" value="icu4j.jar"/>
-    <property name="ucharacter.jar.file" value="ucharacter.jar"/>
     <property name="zipbin.file" value="../icu4jbin${DSTAMP}.zip"/>
     <property name="zip.file" value="../icu4j${DSTAMP}.zip"/>
     <property name="classpath" value="${build.dir}"/>
@@ -37,13 +36,13 @@
     <property name="richedit.manifest" value="${richedit.dist.dir}/manifest.stub"/>
   </target>
 
-  <target name="all" depends="core,tests,tools,demos,jar,ucharacterjar,docs"/>
+  <target name="all" depends="core,tests,tools,demos,jar,docs"/>
   
   <target name="core" depends="init,ucharacterData,translitData">
     <mkdir dir="${build.dir}"/>
     <copy file="${src.dir}/com/ibm/text/resources/thai_dict"
            todir="${build.dir}/com/ibm/text/resources/"/>
-    <javac includes="com/ibm/util/**/*.java,com/ibm/text/**/*.java,com/ibm/math/**/*.java,com/ibm/richtext/**/*.java"
+    <javac includes="com/ibm/util/**/*.java,com/ibm/text/**/*.java,com/ibm/math/**/*.java,com/ibm/richtext/**/*.java,com/ibm/icu/text/**/*.java"
            excludes="**/CVS/**/*"
            srcdir="${src.dir}"
     	   destdir="${build.dir}" 
@@ -52,7 +51,7 @@
   </target>
   
   <target name="tests" depends="core,miscData">
-    <javac includes="com/ibm/test/**/*.java"
+    <javac includes="com/ibm/test/**/*.java,com/ibm/icu/test/**/*.java"
            excludes="**/CVS/**/*"
     	   srcdir="${src.dir}"
     	   destdir="${build.dir}" 
@@ -100,7 +99,7 @@
   
   <target name="jar" depends="core">
     <jar jarfile="${jar.file}"
-         includes="com/ibm/util/**/*,com/ibm/text/**/*,com/ibm/math/**/*,com/ibm/richtext/**/*"
+         includes="com/ibm/util/**/*,com/ibm/text/**/*,com/ibm/math/**/*,com/ibm/richtext/**/*,com/ibm/icu/text/**/*"
          basedir="${build.dir}"/>
   </target>
 
@@ -116,12 +115,6 @@
       <fileset dir="${src.dir}/com/ibm/text/resources"
                includes="Transliterator_*.utf8.txt"/>
     </copy>
-  </target>
-
-  <target name="ucharacterjar" depends="core">
-    <jar jarfile="${ucharacter.jar.file}"
-         includes="com/ibm/icu/text/*.class,com/ibm/icu/text/*.dat"
-         basedir="${build.dir}"/>
   </target>
 
   <target name="richeditJar" depends="core">
@@ -156,7 +149,7 @@
          includes="${richedit.cont.dir}/**/*"/>
   </target>
   
-  <target name="zipbin" depends="docs,jar,ucharacterjar">
+  <target name="zipbin" depends="docs,jar">
     <!--Create a zip archive of the source, docs, and jar file for
     distribution.  The zip file will be created in the directory above
     the root ICU4J directory.-->
