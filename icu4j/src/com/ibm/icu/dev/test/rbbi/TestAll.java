@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/rbbi/TestAll.java,v $
- * $Date: 2003/06/04 20:24:14 $
- * $Revision: 1.4 $
+ * $Date: 2004/02/25 01:32:34 $
+ * $Revision: 1.5 $
  *
  *******************************************************************************
  */
@@ -26,7 +26,8 @@ public class TestAll extends TestGroup {
     public TestAll() {
         super(
               new String[] {
-                  "SimpleBITest",
+                  // Disabled for now; see comment in SimpleBITest for details
+                  // "SimpleBITest",
                   "BreakIteratorTest",
                   "RBBITest",
                   "RBBIAPITest",
