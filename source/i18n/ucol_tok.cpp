@@ -24,7 +24,6 @@
 #include "cmemory.h"
 #include "ucol_tok.h"
 #include "ucmp32.h"
-#include "ucol_sol.h"
 
 const UChar *rulesToParse;
 
