@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2003, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -12,7 +12,7 @@
 
 class SimpleFwdCharIterator : public ForwardCharacterIterator {
 public:
-    SimpleFwdCharIterator(const UnicodeString& s);
+    // not used -- SimpleFwdCharIterator(const UnicodeString& s);
     SimpleFwdCharIterator(UChar *s, int32_t len, UBool adopt = FALSE);
 
     virtual ~SimpleFwdCharIterator();
@@ -21,7 +21,7 @@ public:
    * Returns true when both iterators refer to the same
    * character in the same character-storage object.  
    */
-  virtual UBool operator==(const ForwardCharacterIterator& that) const;
+  // not used -- virtual UBool operator==(const ForwardCharacterIterator& that) const;
         
   /**
    * Generates a hash code for this iterator.  
