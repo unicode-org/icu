@@ -214,7 +214,9 @@ void UObjectTest::testIDs()
     //TESTCLASSID_DEFAULT(AnonymousStringFactory);
 
     
+#if !UCONFIG_NO_NORMALIZATION
     TESTCLASSID_FACTORY(CanonicalIterator, new CanonicalIterator(UnicodeString("abc"), status));
+#endif
     //TESTCLASSID_DEFAULT(CollationElementIterator);
 #if !UCONFIG_NO_COLLATION
     TESTCLASSID_DEFAULT(CollationKey);

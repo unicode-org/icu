@@ -1,10 +1,13 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2003, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_NORMALIZATION
+
 #include "unicode/uchar.h"
 #include "unicode/normlzr.h"
 #include "unicode/uniset.h"
@@ -1832,3 +1835,5 @@ BasicNormalizerTest::TestSkippable() {
         }
     }
 }
+
+#endif /* #if !UCONFIG_NO_NORMALIZATION */

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2003, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -15,12 +15,21 @@
 *********************************************************************************/
 /*tests for u_normalization*/
 #include "unicode/utypes.h"
+#include "cintltst.h"
+
+#if UCONFIG_NO_NORMALIZATION
+
+void addNormTest(TestNode** root) {
+    /* no normalization - nothing to do */
+}
+
+#else
+
 #include <stdlib.h>
 #include <time.h>
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
 #include "unicode/unorm.h"
-#include "cintltst.h"
 #include "cnormtst.h"
 
 #define ARRAY_LENGTH(array) (sizeof (array) / sizeof (*array))
@@ -100,8 +109,6 @@ const static char* compatTests[][3] = {
     { "\\u30AB\\uFF9E",                "\\u30AB\\u3099",                "\\u30AC"            } /* ka + hw_ten*/
     
 };
-
-void addNormTest(TestNode** root);
 
 void addNormTest(TestNode** root)
 {
@@ -1367,3 +1374,5 @@ TestFCNFKCClosure(void) {
         log_err("u_getFC_NFKC_Closure(U_FAILURE) is wrong (%s)\n", u_errorName(errorCode));
     }
 }
+
+#endif /* #if !UCONFIG_NO_NORMALIZATION */

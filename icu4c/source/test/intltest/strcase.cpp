@@ -217,6 +217,9 @@ StringCaseTest::TestCaseConversion()
         }
     }
 
+#if !UCONFIG_NO_NORMALIZATION
+    // some context-sensitive casing depends on normalization data being present
+
     // Unicode 3.1.1 SpecialCasing tests
     {
         UnicodeString t;
@@ -291,6 +294,8 @@ StringCaseTest::TestCaseConversion()
             errln("error in i.toLower(de)=\"" + t + "\" expected \"" + iDefault + "\"");
         }
     }
+
+#endif
 
     // test case folding
     {

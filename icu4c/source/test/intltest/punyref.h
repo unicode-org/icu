@@ -17,6 +17,8 @@ Punycode (draft-ietf-idn-punycode-03).
 #include <limits.h>
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_IDNA
+
 enum punycode_status {
   punycode_success,
   punycode_bad_input,   /* Input is invalid.                       */
@@ -89,5 +91,7 @@ enum punycode_status punycode_decode(
     /* decoder will never need to write an output_length greater than */
     /* input_length, because of how the encoding is defined.          */
 U_CDECL_END
-#endif
 
+#endif /* #if !UCONFIG_NO_IDNA */
+
+#endif

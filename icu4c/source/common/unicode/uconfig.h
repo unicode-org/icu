@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2002, International Business Machines
+*   Copyright (C) 2002-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  uconfig.h
@@ -45,6 +45,7 @@
 #if UCONFIG_ONLY_COLLATION
     /* common library */
 #   define UCONFIG_NO_BREAK_ITERATION 1
+#   define UCONFIG_NO_IDNA 1
 
     /* i18n library */
 #   if UCONFIG_NO_COLLATION
@@ -74,6 +75,28 @@
 #endif
 
 /**
+ * \def UCONFIG_NO_NORMALIZATION
+ * This switch turns off normalization.
+ * It implies turning off several other services as well, for example
+ * collation and IDNA.
+ *
+ * @draft ICU 2.6
+ */
+#ifndef UCONFIG_NO_NORMALIZATION
+#   define UCONFIG_NO_NORMALIZATION 0
+#elif UCONFIG_NO_NORMALIZATION
+    /* common library */
+#   define UCONFIG_NO_IDNA 1
+
+    /* i18n library */
+#   if UCONFIG_ONLY_COLLATION
+#       error Contradictory collation switches in uconfig.h.
+#   endif
+#   define UCONFIG_NO_COLLATION 1
+#   define UCONFIG_NO_TRANSLITERATION 1
+#endif
+
+/**
  * \def UCONFIG_NO_BREAK_ITERATION
  * This switch turns off break iteration.
  *
@@ -81,6 +104,16 @@
  */
 #ifndef UCONFIG_NO_BREAK_ITERATION
 #   define UCONFIG_NO_BREAK_ITERATION 0
+#endif
+
+/**
+ * \def UCONFIG_NO_IDNA
+ * This switch turns off IDNA.
+ *
+ * @draft ICU 2.6
+ */
+#ifndef UCONFIG_NO_IDNA
+#   define UCONFIG_NO_IDNA 0
 #endif
 
 /* i18n library switches ---------------------------------------------------- */

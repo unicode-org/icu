@@ -1,12 +1,15 @@
 /*
  *************************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1996-2001, International Business Machines Corporation and
+ * Copyright (c) 1996-2003, International Business Machines Corporation and
  * others. All Rights Reserved.
  *************************************************************************
  */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_NORMALIZATION
+
 #include "unicode/unistr.h"
 #include "unicode/chariter.h"
 #include "unicode/schriter.h"
@@ -604,3 +607,5 @@ Normalizer::previousNormalize() {
 }
 
 U_NAMESPACE_END
+
+#endif /* #if !UCONFIG_NO_NORMALIZATION */

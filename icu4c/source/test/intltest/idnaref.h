@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2002, International Business Machines
+ *   Copyright (C) 2003, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -18,6 +18,9 @@
 #define __IDNAREF_H__
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_IDNA
+
 #include "unicode/parseerr.h"
 
 #define IDNAREF_DEFAULT          0x0000
@@ -220,7 +223,6 @@ idnaref_compare(  const UChar *s1, int32_t length1,
                 int32_t options,
                 UErrorCode* status);
 
-
-
+#endif /* #if !UCONFIG_NO_IDNA */
 
 #endif

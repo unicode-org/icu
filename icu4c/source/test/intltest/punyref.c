@@ -9,6 +9,11 @@ http://www.nicemice.net/amc/
 /* Implementation (would normally go in its own .c file): */
 
 #include <string.h>
+
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_IDNA
+
 #include "punyref.h"
 
 /*** Bootstring parameters for Punycode ***/
@@ -266,4 +271,4 @@ enum punycode_status punycode_decode(
 
 U_CDECL_END
 
-
+#endif /* #if !UCONFIG_NO_IDNA */
