@@ -756,8 +756,8 @@ TestUTF8() {
 
 void
 TestLMBCS() {
-    /* test input */
-    static const uint8_t in[]={
+    /* LMBCS string */
+    static const uint8_t pszLMBCS[]={
         0x61,
         0x01, 0x29,
         0x81,
@@ -766,31 +766,46 @@ TestLMBCS() {
         0x0F, 0x91,
         0x14, 0x0a, 0x74,
         0x14, 0xF6, 0x02, 
+        0x14, 0xd8, 0x4d, 0x14, 0xdc, 0x56, /* UTF-16 surrogate pair */
         0x10, 0x88, 0xA0,
-        0x14, 0xd8, 0x4d, /* single UTF-16 high (first) surrogate */
-        0x14, 0x01, 0x09, /* followed by a Unicode c^ */
-        0x14, 0xd8, 0x4d, 0x14, 0xdc, 0x56 /* UTF-16 surrogate pair */
     };
 
-    /* expected test results */
-    static const uint32_t results[]={
+    /* Unicode equivalents */
+    static const UChar32 pszUnicode[]={
+        /* code point */
+        0x0061,
+        0x2013,
+        0x00FC,
+        0x00E1,
+        0x0007,
+        0x0091,
+        0x0a74,
+        0x0200,
+        0x23456, /* code point for surrogate pair */
+        0x5516
+    };
+
+/* expected test results */
+    static const uint32_t offsets[]={
         /* number of bytes read, code point */
-        1, 0x0061,
-        2, 0x2013,
-        1, 0x00FC,
-        1, 0x00E1,
-        2, 0x0007,
-        2, 0x0091,
-        3, 0x0a74,
-        3, 0x0200,
-        3, 0x5516,
-        3, 0xd84d,
-        3, 0x0109,
-        6, 0x23456 /* code point for above surrogate pair */
+        0, 
+        1, 
+        3, 
+        4, 
+        5, 
+        7, 
+        9, 
+        12, 
+        15, 
+        21, 
+        24, 
     };
 
-    const char *s=(const char *)in, *s0, *limit=(const char *)in+sizeof(in);
-    const uint32_t *r=results;
+   /* LMBCS to Unicode */
+
+    const char *s=(const char *)pszLMBCS, *s0, *limit=(const char *)pszLMBCS+sizeof(pszLMBCS);
+    const uint32_t *r=pszUnicode;
+    const uint32_t *o = offsets;
 
     UErrorCode errorCode=U_ZERO_ERROR;
     uint32_t c;
@@ -808,15 +823,52 @@ TestLMBCS() {
          if(U_FAILURE(errorCode)) {
                log_err("LMBCS-1 ucnv_getNextUChar() failed: %s\n", u_errorName(errorCode));
                break;
-         } else if((uint32_t)(s-s0)!=*r || c!=(UChar32)*(r+1)) {
+         } else if((uint32_t)(s-s0)!= (o[1] - o[0]) || c!=*r) {
                log_err("LMBCS-1 ucnv_getNextUChar() result %lx from %d bytes, should have been %lx from %d bytes.\n",
-                   c, (s-s0), *(r+1), *r);
+                   c, (s-s0), *r, *o);
                break;
          }
-         r+=2;
+         r++;
+         o++;
+
       }
 
       ucnv_close(cnv);
+    }
+
+    { /* test locale & coptimization group operations: Unicode to LMBCS */
+    
+      UConverter *cnv16he = ucnv_open("LMBCS-16,locale=he", &errorCode);
+      UConverter *cnv01us = ucnv_open("LMBCS-1,locale=USen", &errorCode);
+      UChar uniString [] = {0x0192}; /* Latin Small letter f with hook */
+      UChar * pUni = uniString;
+      char lmbcsString [4];
+      char * pLMBCS = lmbcsString;
+      UErrorCode errorCode=U_ZERO_ERROR;
+
+
+
+      ucnv_fromUnicode (cnv16he, 
+                        &pLMBCS, pLMBCS + sizeof(lmbcsString)/sizeof(lmbcsString[0]), 
+                        &pUni, pUni + sizeof(uniString)/sizeof(uniString[0]), 
+                        NULL, 1, &errorCode);
+
+      if (lmbcsString[0] != (char)0x3 || lmbcsString[1] != (char)0x83)
+      {
+         log_err("LMBCS-16,locale=he gives unexpected translation");
+      }
+			 
+	  pLMBCS=lmbcsString;
+      pUni = uniString;
+      ucnv_fromUnicode (cnv01us, 
+                        &pLMBCS, lmbcsString + sizeof(lmbcsString)/sizeof(lmbcsString[0]), 
+                        &pUni, pUni + sizeof(uniString)/sizeof(uniString[0]),
+                        NULL, 1, &errorCode);
+
+      if (lmbcsString[0] != (char)0x9F)
+      {
+         log_err("LMBCS-1,locale=US gives unexpected translation");
+      }
     }
 }
 
