@@ -42,6 +42,7 @@
 #include "ucol_swp.h"
 #include "ucnv_bld.h"
 #include "unormimp.h"
+#include "sprpimpl.h"
 
 /* swapping implementations in i18n */
 
@@ -284,6 +285,9 @@ static const struct {
     { { 0x43, 0x76, 0x41, 0x6c }, ucnv_swapAliases },   /* dataFormat="CvAl" */
 #endif
     { { 0x43, 0x6d, 0x6e, 0x44 }, udata_swapPackage },  /* dataFormat="CmnD" */
+#if !UCONFIG_NO_IDNA
+    { { 0x53, 0x50, 0x52, 0x50 }, usprep_swap },        /* dataFormat="SPRP" */
+#endif
     /* insert data formats here, descending by expected frequency of occurrence */
     { { 0x55, 0x50, 0x72, 0x6f }, uprops_swap },        /* dataFormat="UPro" */
 #if !UCONFIG_NO_NORMALIZATION

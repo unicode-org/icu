@@ -18,13 +18,15 @@
 #define SPRPIMPL_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_IDNA
+
 #include "unicode/ustring.h"
 #include "unicode/parseerr.h"
 #include "unicode/usprep.h"
 #include "unicode/udata.h"
 #include "utrie.h"
-
-#if !UCONFIG_NO_IDNA
+#include "udataswp.h"
 
 #define _SPREP_DATA_TYPE "spp"
 
@@ -155,6 +157,15 @@ usprep_isLabelSeparator(UStringPrepProfile* profile,
                         UChar32 ch, UErrorCode* status);
 
 
+
+/**
+ * Swap StringPrep .spp profile data. See udataswp.h.
+ * @internal
+ */
+U_CAPI int32_t U_EXPORT2
+usprep_swap(const UDataSwapper *ds,
+            const void *inData, int32_t length, void *outData,
+            UErrorCode *pErrorCode);
 
 #endif /* #if !UCONFIG_NO_IDNA */
 
