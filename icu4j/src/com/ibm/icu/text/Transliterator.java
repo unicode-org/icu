@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $ 
- * $Date: 2001/02/08 19:29:48 $ 
- * $Revision: 1.24 $
+ * $Date: 2001/02/16 22:34:30 $ 
+ * $Revision: 1.25 $
  *
  *****************************************************************************************
  */
@@ -239,7 +239,7 @@ import com.ibm.text.resources.ResourceReader;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.24 $ $Date: 2001/02/08 19:29:48 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.25 $ $Date: 2001/02/16 22:34:30 $
  */
 public abstract class Transliterator {
     /**
@@ -282,8 +282,9 @@ public abstract class Transliterator {
         /**
          * Beginning index, inclusive, of the context to be considered for
          * a transliteration operation.  The transliterator will ignore
-         * anything before this index.  INPUT parameter: This parameter is
-         * not changed by a transliteration operation.
+         * anything before this index.  INPUT/OUTPUT parameter: This parameter
+         * is updated by a transliteration operation to reflect the maximum
+         * amount of antecontext needed by a transliterator.
          */
         public int contextStart;
 
@@ -609,7 +610,7 @@ public abstract class Transliterator {
         handleTransliterate(text, index, true);
 
         index.contextStart = Math.max(index.start - getMaximumContextLength(),
-                               originalStart);
+                                      originalStart);
     }
 
     /**
@@ -659,9 +660,7 @@ public abstract class Transliterator {
      */
     public final void finishTransliteration(Replaceable text,
                                             Position index) {
-        int limit = transliterate(text, index.start, index.limit);
-        index.contextLimit += limit - index.limit;
-        index.start = index.limit = limit;
+        handleTransliterate(text, index, false);
     }
 
     /**
