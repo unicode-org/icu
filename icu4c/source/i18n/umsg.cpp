@@ -124,18 +124,17 @@ u_parseMessage( const char   *locale,
                 UErrorCode   *status,
                 ...)
 {
-  va_list    ap;
+    va_list    ap;
 
-  if(U_FAILURE(*status)) return;
+    if(U_FAILURE(*status)) return;
 
-  // start vararg processing
-  va_start(ap, status);
+    // start vararg processing
+    va_start(ap, status);
 
-  u_vparseMessage(locale,pattern,patternLength,source,sourceLength,ap,status);
+    u_vparseMessage(locale,pattern,patternLength,source,sourceLength,ap,status);
 
-  // end vararg processing
-  va_end(ap);
-
+    // end vararg processing
+    va_end(ap);
 }
 
 U_CAPI void U_EXPORT2
@@ -149,7 +148,11 @@ u_vparseMessage(const char  *locale,
 {
     UMessageFormat *fmt = umsg_open(pattern,patternLength,locale,NULL,status);
     int32_t count = 0;
-    umsg_vparse(fmt,source,sourceLength,&count,ap,status);
+
+    if (U_SUCCESS(*status)) {
+        umsg_vparse(fmt,source,sourceLength,&count,ap,status);
+    }
+
     umsg_close(fmt);
 }
 
@@ -163,17 +166,17 @@ u_parseMessageWithError(const char  *locale,
                         UErrorCode  *status,
                         ...)
 {
-  va_list    ap;
+    va_list    ap;
 
-  if(U_FAILURE(*status)) return;
+    if(U_FAILURE(*status)) return;
 
-  // start vararg processing
-  va_start(ap, status);
+    // start vararg processing
+    va_start(ap, status);
 
-  u_vparseMessageWithError(locale,pattern,patternLength,source,sourceLength,ap,error,status);
+    u_vparseMessageWithError(locale,pattern,patternLength,source,sourceLength,ap,error,status);
 
-  // end vararg processing
-  va_end(ap);
+    // end vararg processing
+    va_end(ap);
 }
 U_CAPI void U_EXPORT2
 u_vparseMessageWithError(const char  *locale,
