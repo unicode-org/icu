@@ -4,9 +4,9 @@
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_InterIndic_Bengali.txt
-// Date: Fri Nov 30 13:01:41 2001
+// Date: Fri Nov 30 19:39:31 2001
 //--------------------------------------------------------------------
 
 // InterIndic_Bengali
@@ -125,6 +125,8 @@ translit_InterIndic_Bengali {
 "\uE061>\u09E1;"          // LETTER VOCALIC LL
 "\uE062>\u09E2;"          // VOWEL SIGN VOCALIC L
 "\uE063>\u09E3;"          // VOWEL SIGN VOCALIC LL
+"\uE064>\u0964;"          // DANDA
+"\uE065>\u0965;"          // DOUBLE DANDA
 "\uE066>\u09E6;"          // DIGIT ZERO
 "\uE067>\u09E7;"          // DIGIT ONE
 "\uE068>\u09E8;"          // DIGIT TWO

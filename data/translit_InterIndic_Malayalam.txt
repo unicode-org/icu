@@ -4,9 +4,9 @@
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_InterIndic_Malayalam.txt
-// Date: Fri Nov 30 13:01:42 2001
+// Date: Fri Nov 30 19:39:31 2001
 //--------------------------------------------------------------------
 
 // InterIndic_Malayalam
@@ -129,6 +129,8 @@ translit_InterIndic_Malayalam {
 "\ue061>\u0d61;" // LETTER VOCALIC LL
 "\ue062>;" // FALLBACK BLOW AWAY VOWEL SIGN VOCALIC L
 "\ue063>;" // FALLBACK BLOW AWAY VOWEL SIGN VOCALIC LL
+"\ue064>'.'   ;" // FALLBACK FOR DANDA
+"\ue065>'.'   ;" // FALLBACK FOR DOUBLE DANDA	
 "\ue066>\u0d66;" // DIGIT ZERO
 "\ue067>\u0d67;" // DIGIT ONE
 "\ue068>\u0d68;" // DIGIT TWO

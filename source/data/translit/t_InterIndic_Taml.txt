@@ -4,9 +4,9 @@
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_InterIndic_Tamil.txt
-// Date: Fri Nov 30 13:01:42 2001
+// Date: Fri Nov 30 19:39:31 2001
 //--------------------------------------------------------------------
 
 // InterIndic_Tamil
@@ -130,6 +130,9 @@ translit_InterIndic_Tamil {
 "\ue061>\u0b88;" // REMAP (indicExceptions.txt): \u0be1>\u0b88 = LETTER VOCALIC LL>LETTER II
 "\ue062>\u0bbf;"// FALLBACK VOWEL SIGN VOCALIC L
 "\ue063>\u0bc0;"// FALLBACK VOWEL SIGN VOCALIC LL
+"\ue064>'.'   ;" // FALLBACK FOR DANDA
+"\ue065>'.'   ;" // FALLBACK FOR DOUBLE DANDA	
+
 "\ue066>\u0030;" // FALLBACK DIGIT ZERO
 
 "\ue067\ue066\ue066\ue066>\u0bF2;"

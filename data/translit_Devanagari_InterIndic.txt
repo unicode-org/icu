@@ -4,9 +4,9 @@
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Devanagari_InterIndic.txt
-// Date: Fri Nov 30 13:01:41 2001
+// Date: Fri Nov 30 19:39:30 2001
 //--------------------------------------------------------------------
 
 // Devanagari_InterIndic
@@ -121,8 +121,8 @@ translit_Devanagari_InterIndic {
  "\u0961>\uE061;"  // LETTER VOCALIC LL
  "\u0962>\uE062;"  // VOWEL SIGN VOCALIC L
  "\u0963>\uE063;"  // VOWEL SIGN VOCALIC LL
- "\u0964>'.';"        // UNMAPPED Devanagari-InterIndic: DANDA
- "\u0965>'.';"        // UNMAPPED Devanagari-InterIndic: DOUBLE DANDA
+ "\u0964>\ue064;"  // DANDA
+ "\u0965>\ue065;"  // DOUBLE DANDA
  "\u0966>\uE066;"  // DIGIT ZERO
  "\u0967>\uE067;"  // DIGIT ONE
  "\u0968>\uE068;"  // DIGIT TWO

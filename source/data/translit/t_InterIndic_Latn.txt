@@ -4,9 +4,9 @@
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_InterIndic_Latin.txt
-// Date: Fri Nov 30 13:01:41 2001
+// Date: Fri Nov 30 19:39:31 2001
 //--------------------------------------------------------------------
 
 // InterIndic_Latin
@@ -533,5 +533,7 @@ translit_InterIndic_Latin {
     "$ecpD >;"
     "$ecpE >;"
     "$ecpF >;"
+    "$danda>'.';"
+    "$doubleDanda>'.';"
   }
 }
