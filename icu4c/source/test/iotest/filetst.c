@@ -1104,6 +1104,12 @@ static void TestFScanset(void) {
 
     TestFScanSetFormat("%[qrst]", abcUChars, abcChars, TRUE);
 
+    /* Extra long string for testing */
+    TestFScanSetFormat("                                                                                                                         %[qrst]",
+        abcUChars, abcChars, TRUE);
+
+    TestFScanSetFormat("%[a-]", abcUChars, abcChars, TRUE);
+
     /* Bad format */
     TestFScanSetFormat("%[f-a]", abcUChars, abcChars, FALSE);
     TestFScanSetFormat("%[c-a]", abcUChars, abcChars, FALSE);

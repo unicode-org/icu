@@ -629,6 +629,11 @@ static void TestSScanset(void) {
     TestSScanSetFormat("%2[^f]", abcUChars, abcChars, TRUE);
 
     TestSScanSetFormat("%[qrst]", abcUChars, abcChars, TRUE);
+
+    /* Extra long string for testing */
+    TestSScanSetFormat("                                                                                                                         %[qrst]",
+        abcUChars, abcChars, TRUE);
+
     TestSScanSetFormat("%[a-]", abcUChars, abcChars, TRUE);
 
     /* Bad format */
