@@ -64,6 +64,12 @@ public:
    void TestBuilder(void);
 
     /**
+     * Tests grouping effect of 'single quotes' in rules.
+     **/
+   void TestQuoteGrouping();
+
+
+    /**
      *Internal subroutines
      **/
     /* Internal subroutine used by TestIsBoundary() */ 

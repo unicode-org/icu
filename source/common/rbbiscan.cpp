@@ -700,6 +700,21 @@ void RBBIRuleScanner::findSetFor(const UnicodeString &s, RBBINode *node, Unicode
 
 
 
+//
+//  Assorted Unicode character constants.
+//     Numeric because there is no portable way to enter them as literals.
+//     (Think EBCDIC).   
+//     
+static const UChar      chCR        = 0x0d;      // New lines, for terminating comments.
+static const UChar      chLF        = 0x0a;
+static const UChar      chNEL       = 0x85;      //    NEL newline variant
+static const UChar      chLS        = 0x2028;    //    Unicode Line Separator
+static const UChar      chApos      = 0x27;      //  single quote, for quoted chars.
+static const UChar      chPound     = 0x23;      // '#', introduces a comment.
+static const UChar      chBackSlash = 0x5c;      // '\'  introduces a char escape
+static const UChar      chLParen    = 0x28;
+static const UChar      chRParen    = 0x29;
+
 
 //----------------------------------------------------------------------------------------
 //
@@ -708,11 +723,6 @@ void RBBIRuleScanner::findSetFor(const UnicodeString &s, RBBINode *node, Unicode
 //                keep track of input position for error reporting.
 //
 //----------------------------------------------------------------------------------------
-static const UChar      chCR       = 0x0d;      // New lines, for terminating comments.
-static const UChar      chLF       = 0x0a;
-static const UChar      chNEL      = 0x85;      //    NEL newline variant
-static const UChar      chLS       = 0x2028;    //    Unicode Line Separator
-static const UChar      chApos     = 0x27;      //  single quote, for quoted chars.
 UChar32  RBBIRuleScanner::nextCharLL() {
     UChar32  ch;
 
@@ -758,10 +768,6 @@ void RBBIRuleScanner::nextChar(RBBIRuleChar &c) {
 
     // Unicode Character constants needed for the processing done by nextChar(),
     //   in hex because literals wont work on EBCDIC machines.
-    static const UChar      chPound     = 0x23;      // '#', introduces a comment.
-    static const UChar      chBackSlash = 0x5c;      // '\'  introduces a char escape
-    static const UChar      ch_U        = 0x55;      // Escapes with special meaning.
-    static const UChar      ch_u        = 0x75;
 
     fScanIndex = fNextIndex;
     c.fChar    = nextCharLL();
@@ -779,9 +785,15 @@ void RBBIRuleScanner::nextChar(RBBIRuleChar &c) {
         else
         {
             // Single quote, by itself.
-            // Toggle quoting mode, then recursively call ourselves to get a char to return.
+            //   Toggle quoting mode.
+            //   Return either '('  or ')', because quotes cause a grouping of the quoted text.
             fQuoteMode = !fQuoteMode;
-            nextChar(c);
+            if (fQuoteMode == TRUE) {
+                c.fChar = chLParen;
+            } else {
+                c.fChar = chRParen;
+            }
+            c.fEscaped = FALSE;      // The paren that we return is not escaped.
             return;
         }
     }

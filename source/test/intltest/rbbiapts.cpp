@@ -614,6 +614,33 @@ void RBBIAPITest::TestBuilder() {
 }
 
 
+//
+//  TestQuoteGrouping
+//       Single quotes within rules imply a grouping, so that a modifier
+//       following the quoted text (* or +) applies to all of the quoted chars.
+//
+void RBBIAPITest::TestQuoteGrouping() {
+     UnicodeString rulesString1 = "#Here comes the rule...\n"
+                                  "'$@!'*;\n"
+                                  ".;\n";
+
+     UnicodeString testString1  = "$@!X$@!XX";
+                                // 01234567890
+     int32_t bounds1[] = {0, 3, 4, 7, 8, 9};
+     UErrorCode status=U_ZERO_ERROR;
+     UParseError    parseError;
+     
+     RuleBasedBreakIterator *bi = new RuleBasedBreakIterator(rulesString1, parseError, status);
+     if(U_FAILURE(status)) {
+         errln("FAIL : in construction");
+     } else {
+         bi->setText(testString1);
+         doBoundaryTest(*bi, testString1, bounds1);
+     }
+     delete bi;
+}
+
+
 //---------------------------------------------
 // runIndexedTest
 //---------------------------------------------
@@ -631,6 +658,7 @@ void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
         case 5: name = "TestLastPreviousPreceding"; if (exec) TestLastPreviousPreceding(); break;
         case 6: name = "TestIsBoundary"; if (exec) TestIsBoundary(); break;
         case 7: name = "TestBuilder"; if (exec) TestBuilder(); break;
+        case 8: name = "TestQuoteGrouping"; if (exec) TestQuoteGrouping(); break;
                    
         default: name = ""; break; /*needed to end loop*/
     }
