@@ -529,7 +529,6 @@ ucnv_createConverter(UConverter *myUConverter, const char *converterName, UError
     UConverterSharedData *mySharedConverterData = NULL;
     UErrorCode internalErrorCode = U_ZERO_ERROR;
     uint32_t options = 0;
-    int32_t cnvNumber = -1;
     if (U_FAILURE (*err))
         return NULL;
 
@@ -552,7 +551,7 @@ ucnv_createConverter(UConverter *myUConverter, const char *converterName, UError
         }
 
         /* get the canonical converter name */
-        realName = ucnv_io_getConverterName(cnvName, &cnvNumber, &internalErrorCode);
+        realName = ucnv_io_getConverterName(cnvName, &internalErrorCode);
         if (U_FAILURE(internalErrorCode) || realName == NULL) {
             /*
             * set the input name in case the converter was added
