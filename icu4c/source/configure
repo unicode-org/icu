@@ -2687,6 +2687,7 @@ case "${host}" in
 	*-*-linux*) 	platform=LINUX ;;
 	*-*-freebsd*) 	platform=LINUX ;;
 	*-*-aix*) 	platform=AIX ;;
+	*-sequent-*) 	platform=PTX ;;
 	*-*-hpux*) 	platform=HPUX ;;
 	*-*-irix*)      platform=IRIX ;;
 	*-*-os390*)	platform=OS390 ;;
@@ -2702,6 +2703,7 @@ case "${host}" in
 	*-*-linux*) 	ld_rpath_suf=" " ;;
 	*-*-freebsd*) 	ld_rpath_suf=" " ;;
 	*-*-aix*) 	ld_rpath_suf="" ;;
+	*-sequent-*) 	ld_rpath_suf="" ;;
 	*-*-hpux*) 	ld_rpath_suf=":" ;;
 	*-*-irix*)      ld_rpath_suf=" " ;;
 	*-*-os390*)	ld_rpath_suf="" ;;
