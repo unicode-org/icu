@@ -257,7 +257,7 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
         }
     }
 
-    ucbuf = ucbuf_open(in, cp, verbose, status);
+    ucbuf = ucbuf_open(in, cp, 0, status);
 
     if (ucbuf == NULL || U_FAILURE(*status)) {
         goto finish;
