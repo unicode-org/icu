@@ -49,6 +49,8 @@ u_growAnyBufferFromStatic(void *context,
     return (UBool)(newBuffer!=NULL);
 }
 
+#define _STACK_BUFFER_CAPACITY 1000
+#define _BUFFER_CAPACITY_MULTIPLIER 2
 
 #if !defined(U_WCHAR_IS_UTF16) && !defined(U_WCHAR_IS_UTF32)
 /* helper function */
