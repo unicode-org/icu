@@ -186,6 +186,8 @@ void pkg_mode_static(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
             "\tdone;\n\n");
     }
 
+    pkg_mak_writeAssemblyHeader(makefile, o);
+
     sprintf(tmp,"$(TEMP_PATH)$(NAME)_dat.$(STATIC_O) : $(TEMP_PATH)$(NAME)_dat.c\n"
         "\t$(COMPILE.c) -o $@ $<\n\n");
     T_FileStream_writeLine(makefile, tmp);
@@ -204,6 +206,8 @@ void pkg_mode_static(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     T_FileStream_writeLine(makefile, "BASE_OBJECTS= $(TOCOBJ) ");
 
     pkg_writeCharListWrap(makefile, objects, " ", " \\\n",0);
+    pkg_mak_writeAssemblyFooter(makefile, o);
+
     T_FileStream_writeLine(makefile, "\n\n");
     T_FileStream_writeLine(makefile, "OBJECTS=$(BASE_OBJECTS:%=$(TEMP_PATH)%)\n\n");
 
