@@ -4160,7 +4160,7 @@ done
 ac_given_srcdir=$srcdir
 ac_given_INSTALL="$INSTALL"
 
-trap 'rm -fr `echo "README icudefs.mk \
+trap 'rm -fr `echo "icudefs.mk \
 		Makefile \
 		data/Makefile data/icupkg.inc \
 		common/Makefile config/Makefile.inc i18n/Makefile \
@@ -4361,7 +4361,7 @@ EOF
 
 cat >> $CONFIG_STATUS <<EOF
 
-CONFIG_FILES=\${CONFIG_FILES-"README icudefs.mk \
+CONFIG_FILES=\${CONFIG_FILES-"icudefs.mk \
 		Makefile \
 		data/Makefile data/icupkg.inc \
 		common/Makefile config/Makefile.inc i18n/Makefile \
