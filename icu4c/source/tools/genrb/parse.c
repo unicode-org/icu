@@ -24,6 +24,7 @@
 #include "uhash.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "uassert.h"
 #include "read.h"
 #include "ustr.h"
 #include "reslist.h"
@@ -371,7 +372,7 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
     if(isVerbose()){
         printf(" %s at line %i \n",  (tag == NULL) ? "(null)" : tag,startline);
     }
-    
+
     if (U_FAILURE(*status))
     {
         return NULL;
@@ -416,7 +417,7 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
     size = ucbuf_size(ucbuf);
     pTarget     = (UChar*) uprv_malloc(U_SIZEOF_UCHAR * size);
     target      = pTarget;
-    targetLimit = pTarget+size;   
+    targetLimit = pTarget+size;
 
     /* read the rules into the buffer */
     while (target < targetLimit)
@@ -429,7 +430,7 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
          * - preserving spaces in commands [...]
          * - # comments until the end of line
          */
-        if (c == STARTCOMMAND) 
+        if (c == STARTCOMMAND)
         {
           /* preserve commands 
            * closing bracket will be handled by the 
@@ -525,11 +526,11 @@ parseAlias(char *tag, uint32_t startline, UErrorCode *status)
     struct SResource *result = NULL;
 
     expect(TOK_STRING, &tokenValue, NULL, status);
-    
+
     if(isVerbose()){
         printf(" alias %s at line %i \n",  (tag == NULL) ? "(null)" : tag,startline);
     }
-    
+
     if (U_SUCCESS(*status))
     {
         /* create the string now - tokenValue doesn't survive a call to getToken (and therefore
@@ -560,7 +561,7 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
     UVersionInfo       version;
     UBool              override = FALSE;
     uint32_t           line;
-    
+
     result = table_open(bundle, tag, status);
 
     if (result == NULL || U_FAILURE(*status))
@@ -604,7 +605,7 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
             table_close(result, status);
             return NULL;
         }
-    
+
         member = parseResource(subtag, status);
 
         if (U_FAILURE(*status))
@@ -643,7 +644,6 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
         else if(uprv_strcmp(subtag, "%%CollationBin")==0)
         {
             /* discard duplicate %%CollationBin if any*/
-            
         }
         else if (uprv_strcmp(subtag, "Sequence") == 0)
         {
@@ -653,62 +653,62 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
             /* first we add the "Sequence", so that we always have rules */
             table_add(result, member, line, status);
             if(gMakeBinaryCollation) {
-              UErrorCode intStatus = U_ZERO_ERROR;
+                UErrorCode intStatus = U_ZERO_ERROR;
 
-              /* do the collation elements */
-              int32_t     len   = 0;
-              uint8_t   *data  = NULL;
-              UCollator *coll  = NULL;
-              UParseError parseError;
-              /* add sequence */
-              /*table_add(result, member, line, status);*/
-            
-              coll = ucol_openRules(member->u.fString.fChars, member->u.fString.fLength,
-                  UCOL_OFF, UCOL_DEFAULT_STRENGTH,&parseError, &intStatus);
+                /* do the collation elements */
+                int32_t     len   = 0;
+                uint8_t   *data  = NULL;
+                UCollator *coll  = NULL;
+                UParseError parseError;
+                /* add sequence */
+                /*table_add(result, member, line, status);*/
 
-              if (U_SUCCESS(intStatus) && coll != NULL)
-              {
-                  data = ucol_cloneRuleData(coll, &len, &intStatus);
+                coll = ucol_openRules(member->u.fString.fChars, member->u.fString.fLength,
+                    UCOL_OFF, UCOL_DEFAULT_STRENGTH,&parseError, &intStatus);
 
-                  /* tailoring rules version */
-                  /* This is wrong! */
-                  /*coll->dataInfo.dataVersion[1] = version[0];*/
-                  /* Copy tailoring version. Builder version already */
-                  /* set in ucol_openRules */
-                  ((UCATableHeader *)data)->version[1] = version[0];
-                  ((UCATableHeader *)data)->version[2] = version[1];
-                  ((UCATableHeader *)data)->version[3] = version[2];
+                if (U_SUCCESS(intStatus) && coll != NULL)
+                {
+                    data = ucol_cloneRuleData(coll, &len, &intStatus);
 
-                  if (U_SUCCESS(intStatus) && data != NULL)
-                  {
-                      member = bin_open(bundle, "%%CollationBin", len, data, NULL, status);
-                      /*table_add(bundle->fRoot, member, line, status);*/
-                      table_add(result, member, line, status);
-                      uprv_free(data);
-                  }
-                  else
-                  {
-                      warning(line, "could not obtain rules from collator");
-                      if(isStrict()){
-                          *status = U_INVALID_FORMAT_ERROR;
-                          return NULL;
-                      }
-                  }
+                    /* tailoring rules version */
+                    /* This is wrong! */
+                    /*coll->dataInfo.dataVersion[1] = version[0];*/
+                    /* Copy tailoring version. Builder version already */
+                    /* set in ucol_openRules */
+                    ((UCATableHeader *)data)->version[1] = version[0];
+                    ((UCATableHeader *)data)->version[2] = version[1];
+                    ((UCATableHeader *)data)->version[3] = version[2];
 
-                  ucol_close(coll);
-              }
-              else
-              {
-                  warning(line, "%%Collation could not be constructed from CollationElements - check context!");
-                  if(isStrict()){
-                          *status = U_INVALID_FORMAT_ERROR;
-                          return NULL;
-                  }
-              }
+                    if (U_SUCCESS(intStatus) && data != NULL)
+                    {
+                        member = bin_open(bundle, "%%CollationBin", len, data, NULL, status);
+                        /*table_add(bundle->fRoot, member, line, status);*/
+                        table_add(result, member, line, status);
+                        uprv_free(data);
+                    }
+                    else
+                    {
+                        warning(line, "could not obtain rules from collator");
+                        if(isStrict()){
+                            *status = U_INVALID_FORMAT_ERROR;
+                            return NULL;
+                        }
+                    }
+
+                    ucol_close(coll);
+                }
+                else
+                {
+                    warning(line, "%%Collation could not be constructed from CollationElements - check context!");
+                    if(isStrict()){
+                        *status = U_INVALID_FORMAT_ERROR;
+                        return NULL;
+                    }
+                }
             } else {
-              if(isVerbose()) {
-                printf("Not building Collation binary\n");
-              }
+                if(isVerbose()) {
+                    printf("Not building Collation binary\n");
+                }
             }
 #endif
         }
@@ -722,11 +722,12 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
             table_close(result, status);
             return NULL;
         }
-     }
+    }
 
-     /* not reached */
-     *status = U_INTERNAL_PROGRAM_ERROR;
-     return NULL;
+    /* not reached */
+    /* A compiler warning will appear if all paths don't contain a return statement. */
+/*    *status = U_INTERNAL_PROGRAM_ERROR;
+    return NULL;*/
 }
 
 /* Necessary, because CollationElements requires the bundle->fRoot member to be present which,
@@ -804,8 +805,9 @@ realParseTable(struct SResource *table, char *tag, uint32_t startline, UErrorCod
     }
 
     /* not reached */
-    *status = U_INTERNAL_PROGRAM_ERROR;
-    return NULL;
+    /* A compiler warning will appear if all paths don't contain a return statement. */
+/*     *status = U_INTERNAL_PROGRAM_ERROR;
+     return NULL;*/
 }
 
 static struct SResource *
@@ -937,7 +939,7 @@ parseIntVector(char *tag, uint32_t startline, UErrorCode *status)
     if(isVerbose()){
         printf(" vector %s at line %i \n",  (tag == NULL) ? "(null)" : tag,startline);
     }
-    
+
     /* '{' . string [','] '}' */
     for (;;)
     {
@@ -1002,9 +1004,10 @@ parseIntVector(char *tag, uint32_t startline, UErrorCode *status)
     }
 
     /* not reached */
-    intvector_close(result, status);
+    /* A compiler warning will appear if all paths don't contain a return statement. */
+/*    intvector_close(result, status);
     *status = U_INTERNAL_PROGRAM_ERROR;
-    return NULL;
+    return NULL;*/
 }
 
 static struct SResource *
@@ -1035,7 +1038,7 @@ parseBinary(char *tag, uint32_t startline, UErrorCode *status)
         uprv_free(string);
         return NULL;
     }
-    
+
     if(isVerbose()){
         printf(" binary %s at line %i \n",  (tag == NULL) ? "(null)" : tag,startline);
     }
@@ -1118,7 +1121,7 @@ parseInteger(char *tag, uint32_t startline, UErrorCode *status)
     if(isVerbose()){
         printf(" integer %s at line %i \n",  (tag == NULL) ? "(null)" : tag,startline);
     }
-    
+
     if (uprv_strlen(string) <= 0)
     {
         warning(startline, "Encountered empty integer. Default value is 0.");
@@ -1174,7 +1177,7 @@ parseImport(char *tag, uint32_t startline, UErrorCode *status)
     if(isVerbose()){
         printf(" import %s at line %i \n",  (tag == NULL) ? "(null)" : tag,startline);
     }
-    
+
     /* Open the input file for reading */
     if (inputdir == NULL)
     {
@@ -1182,7 +1185,7 @@ parseImport(char *tag, uint32_t startline, UErrorCode *status)
     }
     else
     {
-        
+
         int32_t  count     = uprv_strlen(filename);
 
         if (inputdir[inputdirLength - 1] != U_FILE_SEP_CHAR)
@@ -1213,13 +1216,13 @@ parseImport(char *tag, uint32_t startline, UErrorCode *status)
                 *status = U_MEMORY_ALLOCATION_ERROR;
                 return NULL;
             }
-            
+
             uprv_strcpy(fullname, inputdir);
             uprv_strcat(fullname, filename);
         }
 
         file = T_FileStream_open(fullname, "rb");
-        
+
     }
 
     if (file == NULL)
@@ -1247,7 +1250,7 @@ parseImport(char *tag, uint32_t startline, UErrorCode *status)
     uprv_free(data);
     uprv_free(filename);
     uprv_free(fullname);
-    
+
     return result;
 }
 
@@ -1265,10 +1268,10 @@ parseInclude(char *tag, uint32_t startline, UErrorCode *status)
     int32_t  count     = 0;
     const char* cp = NULL;
     const UChar* uBuffer = NULL;
-    
+
     filename = getInvariantString(&line, status);
     count     = uprv_strlen(filename);
-    
+
     if (U_FAILURE(*status))
     {
         return NULL;
@@ -1298,7 +1301,7 @@ parseInclude(char *tag, uint32_t startline, UErrorCode *status)
     if(inputdir!=NULL){
         if (inputdir[inputdirLength - 1] != U_FILE_SEP_CHAR)
         {
-        
+
             uprv_strcpy(fullname, inputdir);
 
             fullname[inputdirLength]      = U_FILE_SEP_CHAR;
@@ -1343,11 +1346,11 @@ parseResource(char *tag, UErrorCode *status)
     uint32_t                 line;
 
     token = getToken(&tokenValue, &startline, status);
-    
+
     if(isVerbose()){
         printf(" resource %s at line %i \n",  (tag == NULL) ? "(null)" : tag,startline);
     }
-    
+
     /* name . [ ':' type ] '{' resource '}' */
     /* This function parses from the colon onwards.  If the colon is present, parse the
     type then try to parse a resource of that type.  If there is no explicit type,
