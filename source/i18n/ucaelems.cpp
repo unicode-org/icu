@@ -365,7 +365,7 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
             uprv_cnttab_changeLastCE(contractions, CE, element->mapCE, TRUE, status);
         } else {
 #ifdef UCOL_DEBUG
-          fprintf(stderr, "Warning - trying to overwrite already existing data for codepoint %04X\n", element->cPoints[0]);
+          fprintf(stderr, "Warning - trying to overwrite existing data %08X for cp %04X with %08X\n", CE, element->cPoints[0], element->CEs[0]);
           //*status = U_ILLEGAL_ARGUMENT_ERROR;
 #endif
         }
