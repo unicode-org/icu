@@ -378,28 +378,23 @@ ucol_open_internal(const char *loc,
   /* we try to find stuff from keyword */
   UResourceBundle *collations = ures_getByKey(b, "collations", NULL, status);
   UResourceBundle *collElem = NULL;
-  if(*status == U_ZERO_ERROR) { // no fallback
-    char keyBuffer[256];
-    // if there is a keyword, we pick it up and try to get elements 
-    if(!uloc_getKeywordValue(loc, "collation", keyBuffer, 256, status)) {
-      // no keyword. we try to find the default setting, which will give us the keyword value
-      UResourceBundle *defaultColl = ures_getByKeyWithFallback(collations, "default", NULL, status);
-      if(U_SUCCESS(*status)) {
-        int32_t defaultKeyLen = 0;
-        const UChar *defaultKey = ures_getString(defaultColl, &defaultKeyLen, status);
-        u_UCharsToChars(defaultKey, keyBuffer, defaultKeyLen);
-        keyBuffer[defaultKeyLen] = 0;
-      } else {
-        *status = U_INTERNAL_PROGRAM_ERROR;
-        return NULL;
-      }
-      ures_close(defaultColl);
+  char keyBuffer[256];
+  // if there is a keyword, we pick it up and try to get elements 
+  if(!uloc_getKeywordValue(loc, "collation", keyBuffer, 256, status)) {
+    // no keyword. we try to find the default setting, which will give us the keyword value
+    UResourceBundle *defaultColl = ures_getByKeyWithFallback(collations, "default", NULL, status);
+    if(U_SUCCESS(*status)) {
+      int32_t defaultKeyLen = 0;
+      const UChar *defaultKey = ures_getString(defaultColl, &defaultKeyLen, status);
+      u_UCharsToChars(defaultKey, keyBuffer, defaultKeyLen);
+      keyBuffer[defaultKeyLen] = 0;
+    } else {
+      *status = U_INTERNAL_PROGRAM_ERROR;
+      return NULL;
     }
-    collElem = ures_getByKeyWithFallback(collations, keyBuffer, collElem, status);
-
-  } else {
-    collElem = ures_getByKey(b, "CollationElements", collElem, status);
+    ures_close(defaultColl);
   }
+  collElem = ures_getByKeyWithFallback(collations, keyBuffer, collElem, status);
 
   UResourceBundle *binary = NULL;
   UErrorCode binaryStatus = U_ZERO_ERROR;  
@@ -7297,14 +7292,12 @@ ucol_getRules(    const    UCollator       *coll,
     return coll->rules;
   } else {
     UErrorCode status = U_ZERO_ERROR;
-    if(coll->rb != NULL) {
-      UResourceBundle *collElem = ures_getByKey(coll->rb, "CollationElements", NULL, &status);
+    if(coll->elements != NULL) {
       if(U_SUCCESS(status)) {
         /*Semantic const */
-        ((UCollator *)coll)->rules = ures_getStringByKey(collElem, "Sequence", length, &status);
+        ((UCollator *)coll)->rules = ures_getStringByKey(coll->elements, "Sequence", length, &status);
         ((UCollator *)coll)->rulesLength = *length;
         ((UCollator *)coll)->freeRulesOnClose = FALSE;
-        ures_close(collElem);
         return coll->rules;
       }
     }
