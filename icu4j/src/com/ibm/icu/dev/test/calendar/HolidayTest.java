@@ -147,6 +147,16 @@ public class HolidayTest extends TestFmwk {
         logln("first between " + abd + " and " + xbd + " is " + rdr.firstBetween(abd, xbd));
         logln("first between " + abd + " and " + null + " is " + rdr.firstBetween(abd, null));
         logln("first between " + xbd + " and " + null + " is " + rdr.firstBetween(xbd, null));
+        
+        //getRule, setRule
+        logln("The rule in the holiday: " + h[1].getRule());
+        exerciseHoliday(h[1], Locale.getDefault());
+        h[1].setRule(rdr);
+        logln("Set the new rule to the SimpleHoliday ...");
+        if (!rdr.equals(h[1].getRule())) {
+            errln("FAIL: getRule and setRule not matched.");
+        }
+        exerciseHoliday(h[1], Locale.getDefault());
     }
 
     public void TestIsOn() {

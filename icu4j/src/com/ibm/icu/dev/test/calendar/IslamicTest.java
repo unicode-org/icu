@@ -14,6 +14,7 @@ import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.IslamicCalendar;
 import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.ULocale;
 
 /**
  * Tests for the <code>IslamicCalendar</code> class.
@@ -141,7 +142,15 @@ public class IslamicTest extends CalendarTest {
             errln("could not create IslamicCalendar with TimeZone");
         }
     }
-    
+
+    {
+        // new IslamicCalendar(ULocale)
+        IslamicCalendar cal = new IslamicCalendar(ULocale.getDefault());
+        if(cal == null){
+            errln("could not create IslamicCalendar with ULocale");
+        }
+    }
+        
     {
         // new IslamicCalendar(Locale)
         IslamicCalendar cal = new IslamicCalendar(Locale.getDefault());

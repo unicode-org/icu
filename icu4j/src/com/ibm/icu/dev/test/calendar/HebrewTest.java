@@ -13,6 +13,7 @@ import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.HebrewCalendar;
 import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.ULocale;
 
 /**
  * Tests for the <code>HebrewCalendar</code> class.
@@ -215,7 +216,7 @@ public class HebrewTest extends CalendarTest {
                 doTestCases(testCases, new HebrewCalendar());
    
         }catch(Exception ex){
-        	warnln("Got Exception: "+ ex.getMessage());
+            warnln("Got Exception: "+ ex.getMessage());
         }
     }
 
@@ -368,7 +369,15 @@ public class HebrewTest extends CalendarTest {
                 errln("could not create HebrewCalendar with TimeZone");
             }
         }
-    
+
+        {
+            // new HebrewCalendar(ULocale)
+            HebrewCalendar cal = new HebrewCalendar(ULocale.getDefault());
+            if(cal == null){
+                errln("could not create HebrewCalendar with ULocale");
+            }
+        }
+            
         {
             // new HebrewCalendar(Locale)
             HebrewCalendar cal = new HebrewCalendar(Locale.getDefault());
