@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/TransliterationRuleSet.java,v $ 
- * $Date: 2000/03/10 04:07:24 $ 
- * $Revision: 1.9 $
+ * $Date: 2000/06/29 21:59:23 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -27,9 +27,12 @@ import java.util.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.9 $ $Date: 2000/03/10 04:07:24 $
+ * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.10 $ $Date: 2000/06/29 21:59:23 $
  *
  * $Log: TransliterationRuleSet.java,v $
+ * Revision 1.10  2000/06/29 21:59:23  alan4j
+ * Fix handling of Transliterator.Position fields
+ *
  * Revision 1.9  2000/03/10 04:07:24  johnf
  * Copyright update
  *
@@ -226,16 +229,16 @@ class TransliterationRuleSet {
      * <tt>null</tt> then no filtering is applied.
      * @return the matching rule, or null if none found.
      */
-    public TransliterationRule findMatch(Replaceable text, int start, int limit,
-                                         int cursor,
+    public TransliterationRule findMatch(Replaceable text,
+                                         Transliterator.Position pos,
                                          RuleBasedTransliterator.Data variables,
                                          UnicodeFilter filter) {
         /* We only need to check our indexed bin of the rule table,
          * based on the low byte of the first key character.
          */
-        int x = text.charAt(cursor) & 0xFF;
+        int x = text.charAt(pos.start) & 0xFF;
         for (int i=index[x]; i<index[x+1]; ++i) {
-            if (rules[i].matches(text, start, limit, cursor, variables, filter)) {
+            if (rules[i].matches(text, pos, variables, filter)) {
                 return rules[i];
             }
         }
@@ -269,8 +272,8 @@ class TransliterationRuleSet {
      * @return the matching rule, or null if none found, or if the text buffer
      * does not have enough text yet to unambiguously match a rule.
      */
-    public TransliterationRule findIncrementalMatch(Replaceable text, int start,
-                                                    int limit, int cursor,
+    public TransliterationRule findIncrementalMatch(Replaceable text,
+                                                    Transliterator.Position pos,
                                                     RuleBasedTransliterator.Data variables,
                                                     boolean partial[],
                                                     UnicodeFilter filter) {
@@ -278,9 +281,9 @@ class TransliterationRuleSet {
          * based on the low byte of the first key character.
          */
         partial[0] = false;
-        int x = text.charAt(cursor) & 0xFF;
+        int x = text.charAt(pos.start) & 0xFF;
         for (int i=index[x]; i<index[x+1]; ++i) {
-            int match = rules[i].getMatchDegree(text, start, limit, cursor,
+            int match = rules[i].getMatchDegree(text, pos,
                                                 variables, filter);
             switch (match) {
             case TransliterationRule.FULL_MATCH:

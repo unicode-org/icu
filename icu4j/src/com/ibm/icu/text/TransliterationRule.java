@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRule.java,v $ 
- * $Date: 2000/05/18 21:37:19 $ 
- * $Revision: 1.22 $
+ * $Date: 2000/06/29 21:59:23 $ 
+ * $Revision: 1.23 $
  *
  *****************************************************************************************
  */
@@ -44,7 +44,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.22 $ $Date: 2000/05/18 21:37:19 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.23 $ $Date: 2000/06/29 21:59:23 $
  */
 class TransliterationRule {
     /**
@@ -402,13 +402,14 @@ class TransliterationRule {
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
      */
-    public final boolean matches(Replaceable text, int start, int limit,
-                                 int cursor, RuleBasedTransliterator.Data variables,
+    public final boolean matches(Replaceable text,
+                                 Transliterator.Position pos,
+                                 RuleBasedTransliterator.Data variables,
                                  UnicodeFilter filter) {
         // Match anteContext, key, and postContext
-        cursor -= anteContextLength;
-        if (cursor < start
-            || (cursor + pattern.length()) > limit) {
+        int cursor = pos.start - anteContextLength;
+        if (cursor < pos.contextStart
+            || (cursor + pattern.length()) > pos.contextLimit) {
             return false;
         }
         for (int i=0; i<pattern.length(); ++i, ++cursor) {
@@ -445,10 +446,11 @@ class TransliterationRule {
      * @see #PARTIAL_MATCH
      * @see #FULL_MATCH
      */
-    public int getMatchDegree(Replaceable text, int start, int limit,
-                              int cursor, RuleBasedTransliterator.Data variables,
+    public int getMatchDegree(Replaceable text,
+                              Transliterator.Position pos,
+                              RuleBasedTransliterator.Data variables,
                               UnicodeFilter filter) {
-        int len = getRegionMatchLength(text, start, limit, cursor - anteContextLength,
+        int len = getRegionMatchLength(text, pos,
                                        pattern, variables, filter);
         return len < anteContextLength ? MISMATCH :
             (len < pattern.length() ? PARTIAL_MATCH : FULL_MATCH);
@@ -477,16 +479,17 @@ class TransliterationRule {
      * match any characters, otherwise the number of characters of text that
      * match this rule.
      */
-    protected static int getRegionMatchLength(Replaceable text, int start,
-                                              int limit, int cursor,
-                                              String template,
-                                              RuleBasedTransliterator.Data variables,
-                                              UnicodeFilter filter) {
-        if (cursor < start) {
+    protected int getRegionMatchLength(Replaceable text,
+                                       Transliterator.Position pos,
+                                       String template,
+                                       RuleBasedTransliterator.Data variables,
+                                       UnicodeFilter filter) {
+        int cursor = pos.start - anteContextLength;
+        if (cursor < pos.contextStart) {
             return -1;
         }
         int i;
-        for (i=0; i<template.length() && cursor<limit; ++i, ++cursor) {
+        for (i=0; i<template.length() && cursor<pos.contextLimit; ++i, ++cursor) {
             if (!charMatches(template.charAt(i), text.charAt(cursor),
                              variables, filter)) {
                 return -1;
@@ -521,6 +524,9 @@ class TransliterationRule {
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.23  2000/06/29 21:59:23  alan4j
+ * Fix handling of Transliterator.Position fields
+ *
  * Revision 1.22  2000/05/18 21:37:19  alan
  * Update docs
  *
