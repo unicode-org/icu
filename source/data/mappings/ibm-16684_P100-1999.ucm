@@ -1,6 +1,6 @@
 # ***************************************************************************
 # *
-# *   Copyright (C) 1995-2002, International Business Machines
+# *   Copyright (C) 1995-2003, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # *
 # ***************************************************************************
@@ -14,7 +14,6 @@
 <mb_cur_min>                  2
 <uconv_class>                 "DBCS"
 <subchar>                     \xFE\xFE
-<subchar1>                    \x3F
 <icu:charsetFamily>           "ASCII"
 <icu:alias>                   "ibm-16684_VPUA"
 
