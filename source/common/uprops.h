@@ -186,6 +186,15 @@ u_getUnicodeProperties(UChar32 c, int32_t column);
 
 /**
  * Get the the maximum values for some enum/int properties.
+ * Use the same column numbers as for u_getUnicodeProperties().
+ * The returned value will contain maximum values stored in the same bit fields
+ * as where the enum values are stored in the u_getUnicodeProperties()
+ * return values for the same columns.
+ *
+ * Valid columns are those for properties words that contain enumerated values.
+ * (ICU 2.6: columns 0 and 2)
+ * For other column numbers, this function will return 0.
+ *
  * @internal
  */
 U_CFUNC int32_t
