@@ -29,6 +29,7 @@
 #include "pkgtypes.h"
 #include "makefile.h"
 
+#ifdef WIN32
 #define WINBUILDMODE (*(o->options)=='R'?"Release":"Debug")
 
 void writeCmnRules(UPKGOptions *o,  FileStream *makefile)
@@ -219,3 +220,4 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
     writeCmnRules(o, makefile);
 }
 
+#endif
