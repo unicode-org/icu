@@ -1564,7 +1564,7 @@ static void TestKeywordSet(void)
           log_err("Err on test case %d: got error %s\n", i, u_errorName(status));
           continue;
         }
-        if(strcmp(buffer,kwSetTestCases[i].x) || (strlen(buffer)!=resultLen)) {
+        if(strcmp(buffer,kwSetTestCases[i].x) || ((int32_t)strlen(buffer)!=resultLen)) {
           log_err("FAIL: #%d: %s + [%s=%s] -> %s (%d) expected %s (%d)\n", i, kwSetTestCases[i].l, kwSetTestCases[i].k,
                   kwSetTestCases[i].v, buffer, resultLen, kwSetTestCases[i].x, strlen(buffer));
         } else {
@@ -1612,7 +1612,7 @@ static void TestKeywordSetError(void)
             log_err("expected buffer overflow on buffer %d got %s, len %d (%s + [%s=%s])\n", blen, u_errorName(status), res, kwSetTestCases[i].l, kwSetTestCases[i].k, kwSetTestCases[i].v);
             return;
         }
-        if(res!=strlen(kwSetTestCases[i].x)) {
+        if(res!=(int32_t)strlen(kwSetTestCases[i].x)) {
             log_err("expected result %d got %d\n", strlen(kwSetTestCases[i].x), res);
             return;
         }
@@ -1638,11 +1638,11 @@ static void TestKeywordSetError(void)
             log_err("Buffer byte %d was modified: now %c\n", blen+1, buffer[blen+1]);
             return;
         }
-        if(res!=strlen(kwSetTestCases[i].x)) {
+        if(res!=(int32_t)strlen(kwSetTestCases[i].x)) {
             log_err("expected result %d got %d\n", strlen(kwSetTestCases[i].x), res);
             return;
         }
-        if(strcmp(buffer,kwSetTestCases[i].x) || (strlen(buffer)!=res)) {
+        if(strcmp(buffer,kwSetTestCases[i].x) || ((int32_t)strlen(buffer)!=res)) {
             log_err("FAIL: #%d: %s + [%s=%s] -> %s (%d) expected %s (%d)\n", i, kwSetTestCases[i].l, kwSetTestCases[i].k,
                 kwSetTestCases[i].v, buffer, res, kwSetTestCases[i].x, strlen(buffer));
         } else {
