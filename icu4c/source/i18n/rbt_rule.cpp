@@ -27,7 +27,7 @@ const UChar TransliterationRule::ETHER = 0xFFFF;
  * if none.  Must be <= input.length() if not -1, and must be >=
  * anteContextPos.
  * @param output output string
- * @param cursorPos offset into output at which cursor is located, or -1 if
+ * @param cursorPosition offset into output at which cursor is located, or -1 if
  * none.  If less than zero, then the cursor is placed after the
  * <code>output</code>; that is, -1 is equivalent to
  * <code>output.length()</code>.  If greater than
@@ -44,13 +44,13 @@ const UChar TransliterationRule::ETHER = 0xFFFF;
  */
 TransliterationRule::TransliterationRule(const UnicodeString& input,
                                          int32_t anteContextPos, int32_t postContextPos,
-                                         const UnicodeString& output,
-                                         int32_t cursorPos, int32_t cursorOffset,
+                                         const UnicodeString& outputStr,
+                                         int32_t cursorPosition, int32_t cursorOffset,
                                          int32_t* adoptedSegs,
                                          UBool anchorStart, UBool anchorEnd,
                                          UErrorCode& status) {
     init(input, anteContextPos, postContextPos,
-         output, cursorPos, cursorOffset, adoptedSegs,
+         outputStr, cursorPosition, cursorOffset, adoptedSegs,
          anchorStart, anchorEnd, status);
 }
 
@@ -65,7 +65,7 @@ TransliterationRule::TransliterationRule(const UnicodeString& input,
  * if none.  Must be <= input.length() if not -1, and must be >=
  * anteContextPos.
  * @param output output string
- * @param cursorPos offset into output at which cursor is located, or -1 if
+ * @param cursorPosition offset into output at which cursor is located, or -1 if
  * none.  If less than zero, then the cursor is placed after the
  * <code>output</code>; that is, -1 is equivalent to
  * <code>output.length()</code>.  If greater than
@@ -73,11 +73,11 @@ TransliterationRule::TransliterationRule(const UnicodeString& input,
  */
 TransliterationRule::TransliterationRule(const UnicodeString& input,
                                          int32_t anteContextPos, int32_t postContextPos,
-                                         const UnicodeString& output,
-                                         int32_t cursorPos,
+                                         const UnicodeString& outputStr,
+                                         int32_t cursorPosition,
                                          UErrorCode& status) {
     init(input, anteContextPos, postContextPos,
-         output, cursorPos, 0, NULL, FALSE, FALSE, status);
+         outputStr, cursorPosition, 0, NULL, FALSE, FALSE, status);
 }
 
 /**
@@ -94,7 +94,9 @@ TransliterationRule::TransliterationRule(TransliterationRule& other) :
     if (other.segments != 0) {
         // Find the end marker, which is a -1.
         int32_t len = 0;
-        while (other.segments[len] >= 0) { ++len; }
+        while (other.segments[len] >= 0) {
+            ++len;
+        }
         ++len;
         segments = new int32_t[len];
         uprv_memcpy(segments, other.segments, len*sizeof(segments[0]));
@@ -103,8 +105,8 @@ TransliterationRule::TransliterationRule(TransliterationRule& other) :
 
 void TransliterationRule::init(const UnicodeString& input,
                                int32_t anteContextPos, int32_t postContextPos,
-                               const UnicodeString& output,
-                               int32_t cursorPos, int32_t cursorOffset,
+                               const UnicodeString& outputStr,
+                               int32_t cursorPosition, int32_t cursorOffset,
                                int32_t* adoptedSegs,
                                UBool anchorStart, UBool anchorEnd,
                                UErrorCode& status) {
@@ -133,17 +135,17 @@ void TransliterationRule::init(const UnicodeString& input,
         }
         keyLength = postContextPos - anteContextLength;
     }
-    if (cursorPos < 0) {
-        cursorPos = output.length();
+    if (cursorPosition < 0) {
+        cursorPosition = outputStr.length();
     } else {
-        if (cursorPos > output.length()) {
+        if (cursorPosition > outputStr.length()) {
             // throw new IllegalArgumentException("Invalid cursor position");
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return;
         }
     }
-    this->cursorPos = cursorPos + cursorOffset;
-    this->output = output;
+    this->cursorPos = cursorPosition + cursorOffset;
+    this->output = outputStr;
     // We don't validate the segments array.  The caller must
     // guarantee that the segments are well-formed.
     this->segments = adoptedSegs;
@@ -157,7 +159,10 @@ void TransliterationRule::init(const UnicodeString& input,
         if (anchorStart) {
             pattern.append(ETHER);
             ++anteContextLength;
-            ++cursorPos;
+/*          // The following was commented out because it modified the parameter
+            // instead of this->cursorPos [grhoten j535]
+            ++cursorPosition;
+*/
             // Adjust segment offsets
             if (segments != 0) {
                 int32_t *p = segments;

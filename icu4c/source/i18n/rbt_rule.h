@@ -144,7 +144,7 @@ public:
      * if none.  Must be <= input.length() if not -1, and must be >=
      * anteContextPos.
      * @param output output string
-     * @param cursorPos offset into output at which cursor is located, or -1 if
+     * @param cursorPosition offset into output at which cursor is located, or -1 if
      * none.  If less than zero, then the cursor is placed after the
      * <code>output</code>; that is, -1 is equivalent to
      * <code>output.length()</code>.  If greater than
@@ -166,8 +166,8 @@ public:
      */
     TransliterationRule(const UnicodeString& input,
                         int32_t anteContextPos, int32_t postContextPos,
-                        const UnicodeString& output,
-                        int32_t cursorPos, int32_t cursorOffset,
+                        const UnicodeString& outputStr,
+                        int32_t cursorPosition, int32_t cursorOffset,
                         int32_t* adoptedSegs,
                         UBool anchorStart, UBool anchorEnd,
                         UErrorCode& status);
@@ -183,7 +183,7 @@ public:
      * if none.  Must be <= input.length() if not -1, and must be >=
      * anteContextPos.
      * @param output output string
-     * @param cursorPos offset into output at which cursor is located, or -1 if
+     * @param cursorPosition offset into output at which cursor is located, or -1 if
      * none.  If less than zero, then the cursor is placed after the
      * <code>output</code>; that is, -1 is equivalent to
      * <code>output.length()</code>.  If greater than
@@ -191,8 +191,8 @@ public:
      */
     TransliterationRule(const UnicodeString& input,
                         int32_t anteContextPos, int32_t postContextPos,
-                        const UnicodeString& output,
-                        int32_t cursorPos,
+                        const UnicodeString& outputStr,
+                        int32_t cursorPosition,
                         UErrorCode& status);
 
     /**
