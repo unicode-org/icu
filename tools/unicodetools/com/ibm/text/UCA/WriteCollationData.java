@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2002/07/03 02:15:46 $ 
-* $Revision: 1.25 $
+* $Date: 2002/07/15 15:23:01 $ 
+* $Revision: 1.26 $
 *
 *******************************************************************************
 */
@@ -2695,6 +2695,7 @@ F900..FAFF; CJK Compatibility Ideographs
         
         
         // now translate!!
+        String highCompat = UTF16.valueOf(0x2F805);
         
         System.out.println("Sorting");
         Map ordered = new TreeMap();
@@ -2705,6 +2706,9 @@ F900..FAFF; CJK Compatibility Ideographs
             Utility.dot(ccounter++);
             String s = ucac.next();
             if (s == null) break;
+            if (s.equals("\uFA36") || s.equals("\uF900") || s.equals("\u2ADC") || s.equals(highCompat)) {
+                System.out.println(" * " + ucd.getCodeAndName(s));
+            }
             contentsForCanonicalIteration.add(s);
             ordered.put(collator.getSortKey(s, UCA.NON_IGNORABLE) + '\u0000' + s, s);
         }
@@ -2718,7 +2722,8 @@ F900..FAFF; CJK Compatibility Ideographs
             if (!ucd.isNoncharacter(i)) {
                 if (!ucd.isAllocated(i)) continue;
                 if (NFD.isNormalized(i)) continue;
-                if (collator.getCEType(i) >= UCA.FIXED_CE) continue;
+                if (ucd.isHangulSyllable(i)) continue;
+                //if (collator.getCEType(i) >= UCA.FIXED_CE) continue;
             }
             String s = UTF16.valueOf(i);
             if (contentsForCanonicalIteration.contains(s)) continue; // skip if already present
