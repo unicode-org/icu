@@ -494,7 +494,7 @@ makeUnfoldData() {
         for(i=0; i<unfoldRows; ++i) {
             p+=UGENCASE_UNFOLD_WIDTH;
             printf("[%2d] %04x %04x %04x <- %04x %04x\n",
-                   i, p[0], p[1], p[2], p[3], p[4]);
+                   (int)i, p[0], p[1], p[2], p[3], p[4]);
         }
     }
 }
