@@ -49,7 +49,8 @@ randul()
     }
     /* Assume rand has at least 12 bits of precision */
     
-    for (i=0; i<sizeof(l); ++i) ((char*)&l)[i] = (rand() & 0x0FF0) >> 4;
+    for (i=0; i<sizeof(l); ++i)
+        ((char*)&l)[i] = (char)((rand() & 0x0FF0) >> 4);
     return l;
 }
 
