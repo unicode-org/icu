@@ -98,7 +98,7 @@ u_vfscanf_u(UFILE       *f,
             const UChar *patternSpecification,
             va_list     ap)
 {
-    return u_scanf_parse(f, patternSpecification, &ap);
+    return u_scanf_parse(f, patternSpecification, (va_list*)&ap);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
