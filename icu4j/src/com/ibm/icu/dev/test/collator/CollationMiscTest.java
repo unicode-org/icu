@@ -1612,7 +1612,6 @@ public class CollationMiscTest extends TestFmwk{
         String prevrule = null;
         for (int i = 0; i < locale.length; i ++) {
             Locale l = locale[i];
-            System.out.println(l.toString());
             try {
                 RuleBasedCollator col1 = 
                                   (RuleBasedCollator)Collator.getInstance(l);
