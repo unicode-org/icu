@@ -258,8 +258,8 @@ public final class CollationElementIterator
             return NULLORDER;
         }
         if (m_collator_.m_isHiragana4_) {
-            m_isCodePointHiragana_ = (ch >= 0x3040 && ch <= 0x3094) 
-                || ch == 0x309d || ch == 0x309e;
+            m_isCodePointHiragana_ = (ch >= 0x3040 && ch <= 0x309e) 
+                                     && !(ch > 0x3094 && ch < 0x309d);
         }
             
         int result = NULLORDER;
@@ -272,25 +272,24 @@ public final class CollationElementIterator
                 result = nextSpecial(m_collator_, result, ch);
             }
         }
-        else
-            {
-                result = m_collator_.m_trie_.getLeadValue(ch);
-                //System.out.println(Integer.toHexString(result));
-                if (RuleBasedCollator.isSpecial(result)) {               
-                    // surrogate leads are handled as special ces
-                    result = nextSpecial(m_collator_, result, ch);
-                }
-                if (result == CE_NOT_FOUND_) {   
-                    // couldn't find a good CE in the tailoring
-                    // if we got here, the codepoint MUST be over 0xFF - so we look 
-                    // directly in the UCA
-                    result = m_collator_.UCA_.m_trie_.getLeadValue(ch);
-                    if (RuleBasedCollator.isSpecial(result)) { 
-                        // UCA also gives us a special CE
-                        result = nextSpecial(m_collator_.UCA_, result, ch);
-                    }
+        else {
+            result = m_collator_.m_trie_.getLeadValue(ch);
+            //System.out.println(Integer.toHexString(result));
+            if (RuleBasedCollator.isSpecial(result)) {               
+                // surrogate leads are handled as special ces
+                result = nextSpecial(m_collator_, result, ch);
+            }
+            if (result == CE_NOT_FOUND_) {   
+                // couldn't find a good CE in the tailoring
+                // if we got here, the codepoint MUST be over 0xFF - so we look 
+                // directly in the UCA
+                result = m_collator_.UCA_.m_trie_.getLeadValue(ch);
+                if (RuleBasedCollator.isSpecial(result)) { 
+                    // UCA also gives us a special CE
+                    result = nextSpecial(m_collator_.UCA_, result, ch);
                 }
             }
+        }
         return result; 
     }
 
@@ -487,7 +486,8 @@ public final class CollationElementIterator
      * @draft 2.2 */
     public void setText(String source)
     {
-        m_source_ = new StringCharacterIterator(source);
+        m_srcUtilIter_.setText(source);   
+        m_source_ = m_srcUtilIter_;
         updateInternalState();
     }
 
@@ -499,7 +499,7 @@ public final class CollationElementIterator
      * @draft 2.2
      */
     public void setText(CharacterIterator source)
-    {
+    {   
         m_source_ = source;     
         m_source_.setIndex(m_source_.getBeginIndex());
         updateInternalState();
@@ -544,11 +544,13 @@ public final class CollationElementIterator
      * @draft 2.2 */
     CollationElementIterator(String source, RuleBasedCollator collator) 
     {
-        m_source_ = new StringCharacterIterator(source);
+        m_srcUtilIter_ = new StringCharacterIterator(source);
+        m_utilStringBuffer_ = new StringBuffer();
+        m_source_ = m_srcUtilIter_;
         m_collator_ = collator;
         m_CEBuffer_ = new int[CE_BUFFER_INIT_SIZE_];
         m_buffer_ = new StringBuffer();
-        m_backup_ = new Backup();
+        m_utilSpecialBackUp_ = new Backup();
         updateInternalState();
     }
 
@@ -565,11 +567,13 @@ public final class CollationElementIterator
     CollationElementIterator(CharacterIterator source, 
                              RuleBasedCollator collator) 
     {
+        m_srcUtilIter_ = new StringCharacterIterator("");
+        m_utilStringBuffer_ = new StringBuffer();
         m_source_ = source;
         m_collator_ = collator;
         m_CEBuffer_ = new int[CE_BUFFER_INIT_SIZE_];
         m_buffer_ = new StringBuffer();
-        m_backup_ = new Backup();
+        m_utilSpecialBackUp_ = new Backup();
         updateInternalState();
     }
     
@@ -639,7 +643,7 @@ public final class CollationElementIterator
      */
     boolean isInBuffer()
     {
-        return m_bufferOffset_ != -1;
+        return m_bufferOffset_ > 0;
     }
     
     /**
@@ -653,12 +657,34 @@ public final class CollationElementIterator
         return (ch >= 0xe40 && ch <= 0xe44) || (ch >= 0xec0 && ch <= 0xec4);
     }
     
+    /**
+     * <p>Sets the iterator to point to the collation element corresponding to
+     * the specified character (the parameter is a CHARACTER offset in the
+     * original string, not an offset into its corresponding sequence of
+     * collation elements). The value returned by the next call to next()
+     * will be the collation element corresponding to the specified position
+     * in the text. Unlike the public method setOffset(int), this method does 
+     * not try to readjust the offset to the start of a contracting sequence.
+     * getOffset() is guaranteed to return the same value as was passed to a 
+     * preceding call to setOffset().</p>
+     * </p>
+     * @param source the new source string iterator for iteration.
+     * @param offset to the source
+     * @draft 2.2
+     */
+    void setText(CharacterIterator source, int offset)
+    {
+        m_source_ = source;     
+        m_source_.setIndex(offset);
+        updateInternalState();
+    }
+    
     // private inner class --------------------------------------------------
     
     /**
      * Backup data class
      */
-    private static class Backup
+    private static final class Backup
     {
         // protected data members -------------------------------------------
         
@@ -742,9 +768,24 @@ public final class CollationElementIterator
      */
     private static final int CE_BUFFER_INIT_SIZE_ = 512;
     /**
-     * Backup storage
+     * Backup storage for special processing inner cases
      */
-    private Backup m_backup_;
+    private Backup m_utilSpecialBackUp_;
+    /**
+     * Backup storage in special processing entry state
+     */
+    private Backup m_utilSpecialEntryBackUp_;
+    /**
+     * Backup storage in special processing discontiguous state
+     */
+    private Backup m_utilSpecialDiscontiguousBackUp_;
+    /**
+     * Utility 
+     */
+    private StringCharacterIterator m_srcUtilIter_;
+    private StringBuffer m_utilStringBuffer_;
+    private StringBuffer m_utilSkippedBuffer_;
+    private CollationElementIterator m_utilColEIter_;
     /**
      * One character before the first non-zero combining class character
      */
@@ -841,7 +882,7 @@ public final class CollationElementIterator
     private void updateInternalState()
     {
         m_isCodePointHiragana_ = false;
-        m_buffer_.delete(0, m_buffer_.length());
+        m_buffer_.setLength(0);
         m_bufferOffset_ = -1; 
         m_CEBufferOffset_ = 0;
         m_CEBufferSize_ = 0; 
@@ -862,6 +903,7 @@ public final class CollationElementIterator
         backup.m_FCDStart_ = m_FCDStart_;
         backup.m_isCodePointHiragana_ = m_isCodePointHiragana_;
         backup.m_bufferOffset_ = m_bufferOffset_;
+        backup.m_buffer_.setLength(0);
         if (m_bufferOffset_ >= 0) {
             // jdk 1.3.1 does not have append(StringBuffer) yet
             if(ICUDebug.isJDK14OrHigher){
@@ -883,7 +925,7 @@ public final class CollationElementIterator
         m_bufferOffset_ = backup.m_bufferOffset_;
         m_FCDLimit_ = backup.m_FCDLimit_;
         m_FCDStart_ = backup.m_FCDStart_;
-        m_buffer_.delete(0, m_buffer_.length());
+        m_buffer_.setLength(0);
         if (m_bufferOffset_ >= 0) {
             // jdk 1.3.1 does not have append(StringBuffer) yet
             m_buffer_.append(backup.m_buffer_.toString());
@@ -914,14 +956,14 @@ public final class CollationElementIterator
     private void normalize() 
     {
         int size = m_FCDLimit_ - m_FCDStart_;
-        m_buffer_.delete(0, m_buffer_.length());
+        m_buffer_.setLength(0);
         m_source_.setIndex(m_FCDStart_);
         for (int i = 0; i < size; i ++) {
             m_buffer_.append(m_source_.current());
             m_source_.next();
         }
         String decomp = Normalizer.decompose(m_buffer_.toString(), false);
-        m_buffer_.delete(0, m_buffer_.length());
+        m_buffer_.setLength(0);
         m_buffer_.append(decomp);
         m_bufferOffset_ = 0;
     }
@@ -1010,9 +1052,9 @@ public final class CollationElementIterator
     private char nextChar()
     {
         char result;
-        int startoffset = m_source_.getIndex();
+        
         // loop handles the next character whether it is in the buffer or not.
-        if (m_bufferOffset_ == -1) {
+        if (m_bufferOffset_ < 0) {
             // we're working on the source and not normalizing. fast path.
             // note Thai pre-vowel reordering uses buffer too
             result = m_source_.current();
@@ -1024,19 +1066,17 @@ public final class CollationElementIterator
                 // loop back to top to try again to get a character.
                 m_source_.setIndex(m_FCDLimit_);
                 m_bufferOffset_ = -1;
-                m_buffer_.delete(0, m_buffer_.length());
+                m_buffer_.setLength(0);
                 return nextChar();
             }
             return m_buffer_.charAt(m_bufferOffset_ ++);
         }
-        
-        if (m_collator_.getDecomposition() == Collator.NO_DECOMPOSITION 
-            || m_bufferOffset_ != -1 || m_FCDLimit_ > startoffset
-            // skip the fcd checks
-            || result < FULL_ZERO_COMBINING_CLASS_FAST_LIMIT_  
+        int startoffset = m_source_.getIndex();
+        if (result < FULL_ZERO_COMBINING_CLASS_FAST_LIMIT_  
             // Fast fcd safe path. trail combining class == 0.
-            ) {
-                        
+            || m_collator_.getDecomposition() == Collator.NO_DECOMPOSITION 
+            || m_bufferOffset_ >= 0 || m_FCDLimit_ > startoffset) {
+            // skip the fcd checks            
             m_source_.next();
             return result;
         }
@@ -1046,7 +1086,7 @@ public final class CollationElementIterator
             // FCD
             char next = m_source_.next();
             if (next == CharacterIterator.DONE 
-                || next == LEAD_ZERO_COMBINING_CLASS_FAST_LIMIT_) {
+                || next <= LEAD_ZERO_COMBINING_CLASS_FAST_LIMIT_) {
                 return result; // end of source string and if next character 
                 // starts with a base character is always fcd.
             }
@@ -1176,7 +1216,7 @@ public final class CollationElementIterator
             }
             else {
                 // At the start of buffer, route back to string.
-                m_buffer_.delete(0, m_buffer_.length());
+                m_buffer_.setLength(0);
                 if (m_FCDStart_ == m_source_.getBeginIndex()) {
                     m_FCDStart_ = -1;
                     m_source_.setIndex(m_source_.getBeginIndex());
@@ -1258,14 +1298,14 @@ public final class CollationElementIterator
                                     char trail)
     {
         if (!UTF16.isTrailSurrogate(trail)) {
-            updateInternalState(m_backup_);
+            updateInternalState(m_utilSpecialBackUp_);
             return IGNORABLE;
         } 
         // TODO: CE contain the data from the previous CE + the mask. 
         // It should at least be unmasked
         int result = collator.m_trie_.getTrailValue(ce, trail);
         if (result == CE_NOT_FOUND_) { 
-            updateInternalState(m_backup_);
+            updateInternalState(m_utilSpecialBackUp_);
         }
         return result;
     }
@@ -1348,7 +1388,7 @@ public final class CollationElementIterator
     private int nextSpecialPrefix(RuleBasedCollator collator, int ce,
                                   Backup entrybackup)
     {
-        backupInternalState(m_backup_);
+        backupInternalState(m_utilSpecialBackUp_);
         updateInternalState(entrybackup);
         previousChar();
         // We want to look at the character where we entered
@@ -1437,7 +1477,7 @@ public final class CollationElementIterator
         }
         if (ce != CE_NOT_FOUND_) { 
             // we found something and we can merilly continue
-            updateInternalState(m_backup_);
+            updateInternalState(m_utilSpecialBackUp_);
         } 
         else { // prefix search was a failure, we have to backup all the way to 
             // the start
@@ -1473,14 +1513,15 @@ public final class CollationElementIterator
     private void setDiscontiguous(StringBuffer skipped)
     {
         if (m_bufferOffset_ >= 0) {
-            skipped.append(m_buffer_.substring(m_bufferOffset_));
+            m_buffer_.replace(0, m_bufferOffset_, skipped.toString());
         }
         else {
             m_FCDLimit_ = m_source_.getIndex();
+            m_buffer_.setLength(0);
+            m_buffer_.append(skipped.toString());
         }
         
         m_bufferOffset_ = 0;
-        m_buffer_ = skipped;
     }
         
     /**
@@ -1514,11 +1555,20 @@ public final class CollationElementIterator
     {
         int offset = entryoffset;
         boolean multicontraction = false;
-        StringBuffer skipped = new StringBuffer();
+        // since it will be stuffed into this iterator and ran over again
+        if (m_utilSkippedBuffer_ == null) {
+            m_utilSkippedBuffer_ = new StringBuffer(); 
+        }
+        else {
+            m_utilSkippedBuffer_.setLength(0);
+        }
         char ch = currentChar();
-        skipped.append(currentChar()); // accent after the first character
-        Backup backup = new Backup();
-        backupInternalState(backup);
+        m_utilSkippedBuffer_.append(currentChar()); 
+        // accent after the first character
+        if (m_utilSpecialDiscontiguousBackUp_ == null) {
+            m_utilSpecialDiscontiguousBackUp_ = new Backup();
+        }
+        backupInternalState(m_utilSpecialDiscontiguousBackUp_);
         char nextch = ch;
         while (true) {
             ch = nextch;
@@ -1532,28 +1582,28 @@ public final class CollationElementIterator
                     if (nextch != CharacterIterator.DONE) {
                         previousChar(); // backtrack
                     }
-                    setDiscontiguous(skipped);
+                    setDiscontiguous(m_utilSkippedBuffer_);
                     return collator.m_contractionCE_[offset];
                 }
                 break;
             }
-
+    
             offset ++; // skip the combining class offset
             while (nextch > collator.m_contractionIndex_[offset]) {
                 offset ++;
             }
-
+    
             int ce = CE_NOT_FOUND_;
             if (nextch != collator.m_contractionIndex_[offset]
-                || getCombiningClass(nextch) == getCombiningClass(ch)) {
-                // unmatched or blocked character
-                skipped.append(nextch);
+                    || getCombiningClass(nextch) == getCombiningClass(ch)) {
+                    // unmatched or blocked character
+                m_utilSkippedBuffer_.append(nextch);
                 continue;
             }
             else {
                 ce = collator.m_contractionCE_[offset];
             }
-                
+                    
             if (ce == CE_NOT_FOUND_) {
                 break;
             } 
@@ -1562,16 +1612,16 @@ public final class CollationElementIterator
                 offset = getContractionOffset(collator, ce);
                 if (collator.m_contractionCE_[offset] != CE_NOT_FOUND_) {
                     multicontraction = true;
-                    backupInternalState(backup);
+                    backupInternalState(m_utilSpecialDiscontiguousBackUp_);
                 }
             } 
             else {
-                setDiscontiguous(skipped);
+                setDiscontiguous(m_utilSkippedBuffer_);
                 return ce;
             }
         }
         
-        updateInternalState(backup);
+        updateInternalState(m_utilSpecialDiscontiguousBackUp_);
         // backup is one forward of the base character, we need to move back 
         // one more
         previousChar();
@@ -1587,8 +1637,7 @@ public final class CollationElementIterator
      */
     private int nextContraction(RuleBasedCollator collator, int ce)
     {
-        Backup backup = new Backup();
-        backupInternalState(backup);
+        backupInternalState(m_utilSpecialBackUp_);
         int entryce = CE_NOT_FOUND_;
         while (true) {
             int entryoffset = getContractionOffset(collator, ce);
@@ -1600,7 +1649,7 @@ public final class CollationElementIterator
                     // back up the source over all the chars we scanned going 
                     // into this contraction.
                     ce = entryce;  
-                    updateInternalState(backup);
+                    updateInternalState(m_utilSpecialBackUp_);
                 }
                 break;
             }
@@ -1631,7 +1680,7 @@ public final class CollationElementIterator
                 } 
                 else if (UTF16.isLeadSurrogate(ch)) { 
                     if (!isEnd()) { 
-                        backupInternalState(backup); 
+                        backupInternalState(m_utilSpecialBackUp_); 
                         char trail = nextChar(); 
                         if (UTF16.isTrailSurrogate(trail)) { 
                             // do stuff with trail 
@@ -1647,10 +1696,11 @@ public final class CollationElementIterator
                         else { 
                             // broken surrogate sequence, thus completely 
                             // ignorable 
-                            updateInternalState(backup); 
+                            updateInternalState(
+                                              m_utilSpecialBackUp_); 
                             continue; 
                         } 
-                        updateInternalState(backup); 
+                        updateInternalState(m_utilSpecialBackUp_); 
                     } 
                     else { 
                         // no  more characters, so broken surrogate pair...  
@@ -1690,7 +1740,7 @@ public final class CollationElementIterator
         
             if (ce == CE_NOT_FOUND_) {
                 // source did not match the contraction, revert back original
-                updateInternalState(backup);
+                updateInternalState(m_utilSpecialBackUp_);
                 ce = entryce;
                 break;
             }
@@ -1706,15 +1756,15 @@ public final class CollationElementIterator
                 // the so-far completed ce, so that if we fail in the next
                 // round we just return this one.
                 entryce = collator.m_contractionCE_[entryoffset];
-                backupInternalState(backup);
-                if (backup.m_bufferOffset_ >= 0) {
-                    backup.m_bufferOffset_ --;
+                backupInternalState(m_utilSpecialBackUp_);
+                if (m_utilSpecialBackUp_.m_bufferOffset_ >= 0) {
+                    m_utilSpecialBackUp_.m_bufferOffset_ --;
                 }
                 else {
-                    backup.m_offset_ --;
+                    m_utilSpecialBackUp_.m_offset_ --;
                 }
             }
-        }                                                               
+        }                                                            
         return ce;
     }
         
@@ -1887,62 +1937,73 @@ public final class CollationElementIterator
     private int nextSpecial(RuleBasedCollator collator, int ce, char ch) 
     {
         int codepoint = ch;
-        Backup entrybackup = new Backup();
+        Backup entrybackup = m_utilSpecialEntryBackUp_;
+        // this is to handle recursive looping
+        if (entrybackup != null) {
+            m_utilSpecialEntryBackUp_ = null;
+        }
+        else {
+            entrybackup = new Backup();
+        }
         backupInternalState(entrybackup);
-        while (true) {
-            // This loop will repeat only in the case of contractions, 
-            // surrogate
-            switch(RuleBasedCollator.getTag(ce)) {
-            case CE_NOT_FOUND_TAG_:
-                                // impossible case for icu4j
-                return ce;
-            case RuleBasedCollator.CE_SURROGATE_TAG_:
-                if (isEnd()) {
-                    return IGNORABLE;
+        try { // forces it to assign m_utilSpecialEntryBackup_
+            while (true) {
+                // This loop will repeat only in the case of contractions, 
+                // surrogate
+                switch(RuleBasedCollator.getTag(ce)) {
+                case CE_NOT_FOUND_TAG_:
+                    // impossible case for icu4j
+                    return ce;
+                case RuleBasedCollator.CE_SURROGATE_TAG_:
+                    if (isEnd()) {
+                        return IGNORABLE;
+                    }
+                    backupInternalState(m_utilSpecialBackUp_);
+                    char trail = nextChar();
+                    ce = nextSurrogate(collator, ce, trail);
+                    // calculate the supplementary code point value, 
+                    // if surrogate was not tailored we go one more round
+                    codepoint = 
+                        UCharacterProperty.getRawSupplementary(ch, trail);
+                    break;
+                case CE_THAI_TAG_:
+                    ce = nextThai(collator, ce, ch);
+                    break;
+                case CE_SPEC_PROC_TAG_:
+                    ce = nextSpecialPrefix(collator, ce, entrybackup);
+                    break;
+                case CE_CONTRACTION_TAG_:
+                    ce = nextContraction(collator, ce);
+                    break;
+                case CE_LONG_PRIMARY_TAG_:
+                    return nextLongPrimary(ce);
+                case CE_EXPANSION_TAG_:
+                    return nextExpansion(collator, ce);
+                    // various implicits optimization
+                case CE_CJK_IMPLICIT_TAG_:    
+                    // 0x3400-0x4DB5, 0x4E00-0x9FA5, 0xF900-0xFA2D
+                    return nextImplicit(codepoint);
+                case CE_IMPLICIT_TAG_: // everything that is not defined 
+                    return nextImplicit(codepoint);
+                case CE_TRAIL_SURROGATE_TAG_: 
+                    return IGNORABLE; // DC00-DFFF broken surrogate
+                case CE_LEAD_SURROGATE_TAG_:  // D800-DBFF
+                    return nextSurrogate(ch);
+                case CE_HANGUL_SYLLABLE_TAG_: // AC00-D7AF
+                    return nextHangul(collator, ch);
+                case CE_CHARSET_TAG_:
+                                    // not yet implemented probably after 1.8
+                    return CE_NOT_FOUND_;
+                default:
+                    ce = IGNORABLE;
+                    // synwee todo, throw exception or something here.
                 }
-                backupInternalState(m_backup_);
-                char trail = nextChar();
-                ce = nextSurrogate(collator, ce, trail);
-                                // calculate the supplementary code point value, 
-                                // if surrogate was not tailored we go one more round
-                codepoint = 
-                    UCharacterProperty.getRawSupplementary(ch, trail);
-                break;
-            case CE_THAI_TAG_:
-                ce = nextThai(collator, ce, ch);
-                break;
-            case CE_SPEC_PROC_TAG_:
-                ce = nextSpecialPrefix(collator, ce, entrybackup);
-                break;
-            case CE_CONTRACTION_TAG_:
-                ce = nextContraction(collator, ce);
-                break;
-            case CE_LONG_PRIMARY_TAG_:
-                return nextLongPrimary(ce);
-            case CE_EXPANSION_TAG_:
-                return nextExpansion(collator, ce);
-                // various implicits optimization
-            case CE_CJK_IMPLICIT_TAG_:    
-                                // 0x3400-0x4DB5, 0x4E00-0x9FA5, 0xF900-0xFA2D
-                return nextImplicit(codepoint);
-            case CE_IMPLICIT_TAG_: // everything that is not defined 
-                return nextImplicit(codepoint);
-            case CE_TRAIL_SURROGATE_TAG_: 
-                return IGNORABLE; // DC00-DFFF broken surrogate
-            case CE_LEAD_SURROGATE_TAG_:  // D800-DBFF
-                return nextSurrogate(ch);
-            case CE_HANGUL_SYLLABLE_TAG_: // AC00-D7AF
-                return nextHangul(collator, ch);
-            case CE_CHARSET_TAG_:
-                                // not yet implemented probably after 1.8
-                return CE_NOT_FOUND_;
-            default:
-                ce = IGNORABLE;
-                                // synwee todo, throw exception or something here.
+                if (!RuleBasedCollator.isSpecial(ce)) {
+                    break;
+                }
             }
-            if (!RuleBasedCollator.isSpecial(ce)) {
-                break;
-            }
+        } finally {
+            m_utilSpecialEntryBackUp_ = entrybackup;
         }
         return ce;
     }
@@ -2002,8 +2063,7 @@ public final class CollationElementIterator
      */
     private int previousSpecialPrefix(RuleBasedCollator collator, int ce)
     {
-        Backup backup = new Backup();
-        backupInternalState(backup);
+        backupInternalState(m_utilSpecialBackUp_);
         while (true) {
             // position ourselves at the begining of contraction sequence 
             int offset = getContractionOffset(collator, ce);
@@ -2081,7 +2141,7 @@ public final class CollationElementIterator
                 break;
             }
         }
-        updateInternalState(backup);
+        updateInternalState(m_utilSpecialBackUp_);
         return ce;
     }
         
@@ -2097,16 +2157,16 @@ public final class CollationElementIterator
      */
     private int previousContraction(RuleBasedCollator collator, int ce, char ch)
     {
-        StringBuffer buffer = new StringBuffer();
+        m_utilStringBuffer_.setLength(0);
         while (collator.isUnsafe(ch)) {
-            buffer.insert(0, ch);
+            m_utilStringBuffer_.insert(0, ch);
             ch = previousChar();
             if (isBackwardsStart()) {
                 break;
             }
         }
         // adds the initial base character to the string
-        buffer.insert(0, ch);   
+        m_utilStringBuffer_.insert(0, ch);   
         
         // a new collation element iterator is used to simply things, since 
         // using the current collation element iterator will mean that the 
@@ -2115,26 +2175,33 @@ public final class CollationElementIterator
         int originaldecomp = collator.getDecomposition();
         // for faster access, since string would have been normalized above
         collator.setDecomposition(Collator.NO_DECOMPOSITION); 
-        CollationElementIterator temp = 
-            new CollationElementIterator(buffer.toString(), collator);
-        ce = temp.next();
+        if (m_utilColEIter_ == null) {
+            m_utilColEIter_ = new CollationElementIterator(
+                                                m_utilStringBuffer_.toString(),
+                                                collator);
+        }
+        else {
+            m_utilColEIter_.m_collator_ = collator;
+            m_utilColEIter_.setText(m_utilStringBuffer_.toString());
+        }
+        ce = m_utilColEIter_.next();
         m_CEBufferSize_ = 0;
         while (ce != NULLORDER) {
             if (m_CEBufferSize_ == m_CEBuffer_.length) {
                 try {
+                    // increasing cebuffer size
                     int tempbuffer[] = new int[m_CEBuffer_.length + 50];
                     System.arraycopy(m_CEBuffer_, 0, tempbuffer, 0, 
                                      m_CEBuffer_.length);
                     m_CEBuffer_ = tempbuffer;
                 }
-                catch (Exception e)
-                    {
-                        e.printStackTrace();
-                        return NULLORDER;
-                    }
+                catch (Exception e) {
+                    e.printStackTrace();
+                    return NULLORDER;
+                }
             }
             m_CEBuffer_[m_CEBufferSize_ ++] = ce;
-            ce = temp.next();
+            ce = m_utilColEIter_.next();
         }
         collator.setDecomposition(originaldecomp);       
         m_CEBufferOffset_ = m_CEBufferSize_ - 1;

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringSearch.java,v $ 
- * $Date: 2002/07/25 22:49:06 $ 
- * $Revision: 1.12 $
+ * $Date: 2002/08/08 23:37:52 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -1068,8 +1068,7 @@ public final class StringSearch extends SearchIterator
 	        				 	 || breakIterator.following(end - 1) == end);
 	        if (result) {
 	            // iterates the individual ces
-	            m_utilColEIter_.setText(targetText);
-	            m_utilColEIter_.setExactOffset(start);
+	            m_utilColEIter_.setText(targetText, start);
 	            for (int count = 0; count < m_pattern_.m_CELength_;
 	                 count ++) {
                     int ce = getCE(m_utilColEIter_.next());
@@ -2750,7 +2749,7 @@ public final class StringSearch extends SearchIterator
 	   								  m_pattern_.m_CELength_);
 		int targetce = CollationElementIterator.IGNORABLE;
 	    while (textoffset <= m_textLimitOffset_) {
-            	    	m_colEIter_.setExactOffset(textoffset);
+            m_colEIter_.setExactOffset(textoffset);
 	        int patternceindex = m_pattern_.m_CELength_ - 1;
 	        boolean found = false;
 	        int lastce = CollationElementIterator.NULLORDER;
