@@ -271,6 +271,8 @@ static const SearchData BASICCANONICAL[] = {
     NULL, {0, -1}, {5}},
     {"a\\u0300\\u0325b\\u0300\\u0325c \\u0325b\\u0300 \\u0300b\\u0325", 
     "\\u0300b\\u0325", NULL, UCOL_TERTIARY, NULL, {1, 12, -1}, {5, 3}},
+    {"\\u00c4\\u0323", "A\\u0323\\u0308", NULL, UCOL_TERTIARY, NULL, {0, -1}, {2}},
+    {"\\u0308\\u0323", "\\u0323\\u0308", NULL, UCOL_TERTIARY, NULL, {0, -1}, {2}},
     {NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
 };
 
