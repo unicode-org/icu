@@ -24,7 +24,7 @@
 class UCAConformanceTest: public IntlTestCollator {
 public:
   UCAConformanceTest();
-  ~UCAConformanceTest();
+  virtual ~UCAConformanceTest();
 
   void runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par = NULL */);
 

@@ -391,9 +391,6 @@ lineFn(void *context,
     /* get the ISO 10646 comment */
     names[2]=fields[11][0];
     lengths[2]=(int16_t)(fields[11][1]-names[2]);
-    if(lengths[2]!=0) {
-        char *s=names[2];
-    }
 
     if(lengths[0]+lengths[1]+lengths[2]==0) {
         return;
@@ -497,7 +494,7 @@ parseName(char *name, int16_t length) {
     }
 }
 
-static U_INLINE
+static UBool U_INLINE
 isWordChar(char c) {
     return ('A'<=c && c<='I') || /* EBCDIC-safe check for letters */
            ('J'<=c && c<='R') ||

@@ -58,7 +58,6 @@ static const char warningMsg[] =
     " *********************************************************************\n"
     " */\n\n";
 static const char* openBrace="{\n";
-static const char* closeBrace="}\n";
 static const char* closeClass="    };\n"
                               "}\n";
 
@@ -343,7 +342,7 @@ string_write_java(struct SResource *res,UErrorCode *status) {
         const char* type = "new ICUListResourceBundle.ResourceString(";
         char* dest  = (char*) uprv_malloc( 8 * res->u.fString.fLength);
         int32_t len = 0;
-        const UChar* src = res->u.fString.fChars;
+
         uprv_strcat(fileName,outDir);
         if(outDir[uprv_strlen(outDir)-1]!=U_FILE_SEP_CHAR){
             uprv_strcat(fileName,U_FILE_SEP_STRING);
@@ -386,12 +385,12 @@ string_write_java(struct SResource *res,UErrorCode *status) {
 
 static void 
 alias_write_java(struct SResource *res,UErrorCode *status) {
-    char* str = "new ICUListResourceBundle.Alias(";
+    static const char str[] = "new ICUListResourceBundle.Alias(";
     write_tabs(out);
     T_FileStream_write(out,str,uprv_strlen(str));
     
     /*str_write_java(res->u.fString.fChars,res->u.fString.fLength,FALSE,status);*/
-    /*if(*res->u.fString.fChars == RES_PATH_SEPARATOR) {
+    /*if(*res->u.fString.fChars == RES_PATH_SEPARATOR) {*/
         /* there is a path included 
         locale = u_strchr(res->u.fString.fChars +1, RES_PATH_SEPARATOR);
         *locale = 0;
@@ -541,7 +540,6 @@ bin_write_java( struct SResource *res, UErrorCode *status) {
         uint16_t* target=NULL;
         uint16_t* saveTarget = NULL;
         int32_t tgtLen = 0;
-        char* dest = NULL;
 
         if(uprv_strcmp(srBundle->fKeys+res->fKey,"%%CollationBin")==0 || uprv_strcmp(srBundle->fKeys+res->fKey,"BreakDictionaryData")==0){
             char fileName[1024] ={0};
@@ -726,7 +724,7 @@ table_write_java(struct SResource *res, UErrorCode *status) {
             assert(i < res->u.fTable.fCount);
             write_tabs(out);
             
-            T_FileStream_write(out, "{\n", 2);
+            T_FileStream_write(out, openBrace, 2);
 
 
             tabCount++;

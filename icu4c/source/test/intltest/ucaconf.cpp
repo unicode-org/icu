@@ -73,7 +73,6 @@ void UCAConformanceTest::initRbUCA()
         ucarules = (UChar *)malloc(size * sizeof(UChar));
         size = ucol_getRulesEx(UCA, UCOL_FULL_RULES, ucarules, size);
     }
-    int i = 0;
     rbUCA = ucol_openRules(ucarules, size, UCOL_DEFAULT, UCOL_TERTIARY, 
                           NULL, &status);
     if (U_FAILURE(status)) {

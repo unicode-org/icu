@@ -95,7 +95,7 @@ public:
 private:
 //  RBTestData() {};
 //  RBTestData(const RBTestData& original) {};
-  RBTestData& operator=(const RBTestData& original) {return *this;};
+  RBTestData& operator=(const RBTestData& /*original*/) {return *this;};
 
 public:
   virtual ~RBTestData();
