@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2003, International Business Machines
+* Copyright (c) 2002, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -129,107 +129,107 @@ _findMetaData(const UChar* currency) {
 
 // don't use ICUService since we don't need fallback
 
+struct CReg;
+
+static UMTX gCRegLock = 0;
+static CReg* gCRegHead = 0;
+
 struct CReg : public UMemory {
-  static UMTX gCRegLock;
-  static CReg* gCRegHead;
-
-  CReg *next;
-  UChar iso[4];
-  char  id[12];
-
-  CReg(const UChar* _iso, const char* _id)
-    : next(0)
-  {
-    int32_t len = uprv_strlen(_id);
-    if (len > (int32_t)(sizeof(id)-1)) {
-      len = (sizeof(id)-1);
-    }
-    uprv_strncpy(id, _id, len);
-    id[len] = 0;
-    uprv_memcpy(iso, _iso, 3 * sizeof(const UChar));
-    iso[3] = 0;
-  }
-
-  static UCurrRegistryKey reg(const UChar* _iso, const char* _id, UErrorCode* status)
-  {
-    if (status && U_SUCCESS(*status) && _iso && _id) {
-      CReg* n = new CReg(_iso, _id);
-      if (n) {
-        Mutex mutex(&gCRegLock);
-        if (!gCRegHead) {
-            ucln_i18n_registerCleanup();
+    CReg *next;
+    UChar iso[4];
+    char  id[12];
+    
+    CReg(const UChar* _iso, const char* _id)
+        : next(0)
+    {
+        int32_t len = uprv_strlen(_id);
+        if (len > (int32_t)(sizeof(id)-1)) {
+            len = (sizeof(id)-1);
         }
-        n->next = gCRegHead;
-        gCRegHead = n;
-        return n;
-      }
-      *status = U_MEMORY_ALLOCATION_ERROR;
+        uprv_strncpy(id, _id, len);
+        id[len] = 0;
+        uprv_memcpy(iso, _iso, 3 * sizeof(const UChar));
+        iso[3] = 0;
     }
-    return 0;
-  }
-
-  static UBool unreg(UCurrRegistryKey key) {
-    Mutex mutex(&gCRegLock);
-    if (gCRegHead == key) {
-      gCRegHead = gCRegHead->next;
-      delete (CReg*)key;
-      return TRUE;
+    
+    static UCurrRegistryKey reg(const UChar* _iso, const char* _id, UErrorCode* status)
+    {
+        if (status && U_SUCCESS(*status) && _iso && _id) {
+            CReg* n = new CReg(_iso, _id);
+            if (n) {
+                Mutex mutex(&gCRegLock);
+                if (!gCRegHead) {
+                    ucln_i18n_registerCleanup();
+                }
+                n->next = gCRegHead;
+                gCRegHead = n;
+                return n;
+            }
+            *status = U_MEMORY_ALLOCATION_ERROR;
+        }
+        return 0;
     }
-
-    CReg* p = gCRegHead;
-    while (p) {
-      if (p->next == key) {
-        p->next = ((CReg*)key)->next;
-	delete (CReg*)key;	
-        return TRUE;
-      }
-      p = p->next;
+    
+    static UBool unreg(UCurrRegistryKey key) {
+        Mutex mutex(&gCRegLock);
+        if (gCRegHead == key) {
+            gCRegHead = gCRegHead->next;
+            delete (CReg*)key;
+            return TRUE;
+        }
+        
+        CReg* p = gCRegHead;
+        while (p) {
+            if (p->next == key) {
+                p->next = ((CReg*)key)->next;
+                delete (CReg*)key;	
+                return TRUE;
+            }
+            p = p->next;
+        }
+        
+        return FALSE;
     }
-
-    return FALSE;
-  }
-
-  static const UChar* get(const char* id) {
-    Mutex mutex(&gCRegLock);
-    CReg* p = gCRegHead;
-    while (p) {
-      if (uprv_strcmp(id, p->id) == 0) {
-        return p->iso;
-      }
-      p = p->next;
+    
+    static const UChar* get(const char* id) {
+        Mutex mutex(&gCRegLock);
+        CReg* p = gCRegHead;
+        while (p) {
+            if (uprv_strcmp(id, p->id) == 0) {
+                return p->iso;
+            }
+            p = p->next;
+        }
+        return NULL;
     }
-    return NULL;
-  }
-
-  static void cleanup(void) {
-    while (gCRegHead) {
-      CReg* n = gCRegHead;
-      gCRegHead = gCRegHead->next;
-      delete n;
+    
+    static void cleanup(void) {
+        while (gCRegHead) {
+            CReg* n = gCRegHead;
+            gCRegHead = gCRegHead->next;
+            delete n;
+        }
+        umtx_destroy(&gCRegLock);
     }
-    umtx_destroy(&gCRegLock);
-  }
-
 };
-
-UMTX CReg::gCRegLock = 0;
-CReg* CReg:: gCRegHead = 0;
 
 // -------------------------------------
 
 static void
-idForLocale(const char* locale, char* buffer, int capacity, UErrorCode* ec) {
-  // !!! this is internal only, assumes buffer is not null and capacity is sufficient
-  // Extract the country name and variant name.  We only
-  // recognize two variant names, EURO and PREEURO.
-  char variant[8];
-  uloc_getCountry(locale, buffer, capacity, ec);
-  uloc_getVariant(locale, variant, sizeof(variant), ec);
-  if (0 == uprv_strcmp(variant, VAR_PRE_EURO) ||
-      0 == uprv_strcmp(variant, VAR_EURO)) {
-    uprv_strcat(buffer, VAR_DELIM);
-    uprv_strcat(buffer, variant);
-  }
+idForLocale(const char* locale, char* buffer, int capacity, UErrorCode* ec)
+{
+    // !!! this is internal only, assumes buffer is not null and capacity is sufficient
+    // Extract the country name and variant name.  We only
+    // recognize two variant names, EURO and PREEURO.
+    char variant[ULOC_FULLNAME_CAPACITY];
+    uloc_getCountry(locale, buffer, capacity, ec);
+    uloc_getVariant(locale, variant, sizeof(variant), ec);
+    if (0 == uprv_strcmp(variant, VAR_PRE_EURO) ||
+        0 == uprv_strcmp(variant, VAR_EURO))
+    {
+        uprv_strcat(buffer, VAR_DELIM);
+        uprv_strcat(buffer, variant);
+    }
 }
 
 // -------------------------------------
@@ -237,12 +237,12 @@ idForLocale(const char* locale, char* buffer, int capacity, UErrorCode* ec) {
 U_CAPI UCurrRegistryKey U_EXPORT2
 ucurr_register(const UChar* isoCode, const char* locale, UErrorCode *status) 
 {
-  if (status && U_SUCCESS(*status)) {
-    char id[12];
-    idForLocale(locale, id, sizeof(id), status);
-    return CReg::reg(isoCode, id, status);
-  }
-  return NULL;
+    if (status && U_SUCCESS(*status)) {
+        char id[ULOC_FULLNAME_CAPACITY];
+        idForLocale(locale, id, sizeof(id), status);
+        return CReg::reg(isoCode, id, status);
+    }
+    return NULL;
 }
 
 // -------------------------------------
@@ -250,41 +250,41 @@ ucurr_register(const UChar* isoCode, const char* locale, UErrorCode *status)
 U_CAPI UBool U_EXPORT2
 ucurr_unregister(UCurrRegistryKey key, UErrorCode* status) 
 {
-  if (status && U_SUCCESS(*status)) {
-    return CReg::unreg(key);
-  }
-  return FALSE;
+    if (status && U_SUCCESS(*status)) {
+        return CReg::unreg(key);
+    }
+    return FALSE;
 }
 
 // -------------------------------------
 
 U_CAPI const UChar* U_EXPORT2
 ucurr_forLocale(const char* locale, UErrorCode* ec) {
-  if (ec != NULL && U_SUCCESS(*ec)) {
-    char id[12];
-    idForLocale(locale, id, sizeof(id), ec);
-    if (U_FAILURE(*ec)) {
-      return NULL;
+    if (ec != NULL && U_SUCCESS(*ec)) {
+        char id[ULOC_FULLNAME_CAPACITY];
+        idForLocale(locale, id, sizeof(id), ec);
+        if (U_FAILURE(*ec)) {
+            return NULL;
+        }
+        
+        const UChar* result = CReg::get(id);
+        if (result) {
+            return result;
+        }
+        
+        // Look up the CurrencyMap element in the root bundle.
+        UResourceBundle* rb = ures_open(NULL, "", ec);
+        UResourceBundle* cm = ures_getByKey(rb, CURRENCY_MAP, NULL, ec);
+        int32_t len;
+        const UChar* s = ures_getStringByKey(cm, id, &len, ec);
+        ures_close(cm);
+        ures_close(rb);
+        
+        if (U_SUCCESS(*ec)) {
+            return s;
+        }
     }
-
-    const UChar* result = CReg::get(id);
-    if (result) {
-      return result;
-    }
-
-    // Look up the CurrencyMap element in the root bundle.
-    UResourceBundle* rb = ures_open(NULL, "", ec);
-    UResourceBundle* cm = ures_getByKey(rb, CURRENCY_MAP, NULL, ec);
-    int32_t len;
-    const UChar* s = ures_getStringByKey(cm, id, &len, ec);
-    ures_close(cm);
-    ures_close(rb);
-
-    if (U_SUCCESS(*ec)) {
-      return s;
-    }
-  }
-  return NULL;
+    return NULL;
 }
 
 // end registration
@@ -350,7 +350,7 @@ ucurr_getName(const UChar* currency,
     // this function.
     UErrorCode ec2 = U_ZERO_ERROR;
 
-    char loc[100];
+    char loc[ULOC_FULLNAME_CAPACITY];
     uloc_getName(locale, loc, sizeof(loc), &ec2);
     if (U_FAILURE(ec2) || ec2 == U_STRING_NOT_TERMINATED_WARNING) {
         *ec = U_ILLEGAL_ARGUMENT_ERROR;
@@ -407,7 +407,7 @@ ucurr_getName(const UChar* currency,
 //!U_CAPI const UChar* U_EXPORT2
 //!ucurr_getSymbol(const UChar* currency,
 //!                const char* locale,
-//!		int32_t* len, // fillin
+//!    int32_t* len, // fillin
 //!                UErrorCode* ec) {
 //!    UBool isChoiceFormat;
 //!    const UChar* s = ucurr_getName(currency, locale, UCURR_SYMBOL_NAME,
@@ -445,8 +445,8 @@ ucurr_getRoundingIncrement(const UChar* currency) {
  * Release all static memory held by currency.
  */
 U_CFUNC UBool currency_cleanup(void) {
-  CReg::cleanup();
-  return TRUE;
+    CReg::cleanup();
+    return TRUE;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
