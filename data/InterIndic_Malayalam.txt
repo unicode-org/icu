@@ -1,0 +1,125 @@
+﻿ // -*- Coding: utf-8; -*-
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// THIS IS A MACHINE-GENERATED FILE
+// Tool: dumpICUrules.bat
+// Source: \icu4j\src\com\ibm\text\resources/Transliterator_InterIndic_Malayalam.utf8.txt
+// Date: Thu Mar  1 20:03:55 2001
+//--------------------------------------------------------------------
+
+// InterIndic_Malayalam
+
+InterIndic_Malayalam {
+  Rule {
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// Date: Tue Jan 23 12:42:00 2001
+//--------------------------------------------------------------------
+
+// InterIndic-Malayalam
+
+"\uE001>ം;" // REMAP (indicExceptions.txt): ഁ>ം = SIGN CANDRABINDU>SIGN ANUSVARA
+"\uE002>ം;" // SIGN ANUSVARA
+"\uE003>ഃ;" // SIGN VISARGA
+"\uE005>അ;" // LETTER A
+"\uE006>ആ;" // LETTER AA
+"\uE007>ഇ;" // LETTER I
+"\uE008>ഈ;" // LETTER II
+"\uE009>ഉ;" // LETTER U
+"\uE00A>ഊ;" // LETTER UU
+"\uE00B>ഋ;" // LETTER VOCALIC R
+"\uE00C>ഌ;" // LETTER VOCALIC L
+"\uE00F>ഏ;" // LETTER EE
+"\uE010>ഐ;" // LETTER AI
+"\uE013>ഓ;" // LETTER OO
+"\uE014>ഔ;" // LETTER AU
+"\uE015>ക;" // LETTER KA
+"\uE016>ഖ;" // LETTER KHA
+"\uE017>ഗ;" // LETTER GA
+"\uE018>ഘ;" // LETTER GHA
+"\uE019>ങ;" // LETTER NGA
+"\uE01A>ച;" // LETTER CA
+"\uE01B>ഛ;" // LETTER CHA
+"\uE01C>ജ;" // LETTER JA
+"\uE01D>ഝ;" // LETTER JHA
+"\uE01E>ഞ;" // LETTER NYA
+"\uE01F>ട;" // LETTER TTA
+"\uE020>ഠ;" // LETTER TTHA
+"\uE021>ഡ;" // LETTER DDA
+"\uE022>ഢ;" // LETTER DDHA
+"\uE023>ണ;" // LETTER NNA
+"\uE024>ത;" // LETTER TA
+"\uE025>ഥ;" // LETTER THA
+"\uE026>ദ;" // LETTER DA
+"\uE027>ധ;" // LETTER DHA
+"\uE028>ന;" // LETTER NA
+"\uE029>ന;" // REMAP (indicExceptions.txt): ഩ>ന = LETTER NNNA>LETTER NA
+"\uE02A>പ;" // LETTER PA
+"\uE02B>ഫ;" // LETTER PHA
+"\uE02C>ബ;" // LETTER BA
+"\uE02D>ഭ;" // LETTER BHA
+"\uE02E>മ;" // LETTER MA
+"\uE02F>യ;" // LETTER YA
+"\uE030>ര;" // LETTER RA
+"\uE032>ല;" // LETTER LA
+"\uE033>ള;" // LETTER LLA
+"\uE034>ഴ;" // LETTER LLLA
+"\uE035>വ;" // LETTER VA
+"\uE036>ശ;" // LETTER SHA
+"\uE037>ഷ;" // LETTER SSA
+"\uE038>സ;" // LETTER SA
+"\uE039>ഹ;" // LETTER HA
+// \uE03C>; // UNMAPPED InterIndic-Malayalam: SIGN NUKTA
+// \uE03D>; // UNMAPPED InterIndic-Malayalam: SIGN AVAGRAHA
+"\uE03E>ാ;" // VOWEL SIGN AA
+"\uE03F>ി;" // VOWEL SIGN I
+"\uE040>ീ;" // VOWEL SIGN II
+"\uE041>ു;" // VOWEL SIGN U
+"\uE042>ൂ;" // VOWEL SIGN UU
+"\uE043>ൃ;" // VOWEL SIGN VOCALIC R
+// \uE044>; // UNMAPPED InterIndic-Malayalam: VOWEL SIGN VOCALIC RR
+"\uE045>ാ;" // REMAP (indicExceptions.txt): ൅>ാ = VOWEL SIGN CANDRA E>VOWEL SIGN AA
+"\uE047>േ;" // VOWEL SIGN EE
+"\uE048>ൈ;" // VOWEL SIGN AI
+"\uE049>ോ;" // REMAP (indicExceptions.txt): ൉>ോ = VOWEL SIGN CANDRA O>VOWEL SIGN OO
+"\uE04B>ോ;" // VOWEL SIGN OO
+"\uE04C>ൌ;" // VOWEL SIGN AU
+"\uE04D>്;" // SIGN VIRAMA
+// \uE050>; // UNMAPPED InterIndic-Malayalam: OM
+// \uE055>; // UNMAPPED InterIndic-Malayalam: LENGTH MARK
+"\uE056>ൈ;" // REMAP (indicExceptions.txt): ൖ>ൈ = AI LENGTH MARK>VOWEL SIGN AI
+"\uE057>ൗ;" // AU LENGTH MARK
+"\uE059>ഖ;" // REMAP (indicExceptions.txt): ൙>ഖ = LETTER KHHA>LETTER KHA
+"\uE05A>ഗ;" // REMAP (indicExceptions.txt): ൚>ഗ = LETTER GHHA>LETTER GA
+"\uE05B>ജ;" // REMAP (indicExceptions.txt): ൛>ജ = LETTER ZA>LETTER JA
+"\uE05D>ഢ;" // REMAP (indicExceptions.txt): ൝>ഢ = LETTER RHA>LETTER DDHA
+"\uE05E>ഫ;" // REMAP (indicExceptions.txt): ൞>ഫ = LETTER FA>LETTER PHA
+"\uE05F>യ;" // REMAP (indicExceptions.txt): ൟ>യ = LETTER YYA>LETTER YA
+"\uE060>ൠ;" // LETTER VOCALIC RR
+"\uE061>ൡ;" // LETTER VOCALIC LL
+// \uE062>; // UNMAPPED InterIndic-Malayalam: VOWEL SIGN VOCALIC L
+// \uE063>; // UNMAPPED InterIndic-Malayalam: VOWEL SIGN VOCALIC LL
+"\uE066>൦;" // DIGIT ZERO
+"\uE067>൧;" // DIGIT ONE
+"\uE068>൨;" // DIGIT TWO
+"\uE069>൩;" // DIGIT THREE
+"\uE06A>൪;" // DIGIT FOUR
+"\uE06B>൫;" // DIGIT FIVE
+"\uE06C>൬;" // DIGIT SIX
+"\uE06D>൭;" // DIGIT SEVEN
+"\uE06E>൮;" // DIGIT EIGHT
+"\uE06F>൯;" // DIGIT NINE
+// \uE080>; // UNMAPPED InterIndic-Malayalam: ISSHAR
+"\uE081>എ;" // LETTER E
+"\uE082>ഒ;" // LETTER O
+"\uE083>റ;" // LETTER RRA
+"\uE084>െ;" // VOWEL SIGN E
+"\uE085>ൊ;" // VOWEL SIGN O
+
+// eof
+  }
+}

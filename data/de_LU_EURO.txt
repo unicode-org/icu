@@ -1,0 +1,14 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2000, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+de_LU_EURO {
+    CurrencyElements { 
+            "\u20AC",
+            "EUR",
+            ",",
+    }
+}

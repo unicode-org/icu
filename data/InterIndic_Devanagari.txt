@@ -1,0 +1,125 @@
+﻿ // -*- Coding: utf-8; -*-
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// THIS IS A MACHINE-GENERATED FILE
+// Tool: dumpICUrules.bat
+// Source: \icu4j\src\com\ibm\text\resources/Transliterator_InterIndic_Devanagari.utf8.txt
+// Date: Thu Mar  1 20:03:55 2001
+//--------------------------------------------------------------------
+
+// InterIndic_Devanagari
+
+InterIndic_Devanagari {
+  Rule {
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// Date: Tue Jan 23 12:41:59 2001
+//--------------------------------------------------------------------
+
+// InterIndic-Devanagari
+
+"\uE001>ँ;" // SIGN CANDRABINDU
+"\uE002>ं;" // SIGN ANUSVARA
+"\uE003>ः;" // SIGN VISARGA
+"\uE005>अ;" // LETTER A
+"\uE006>आ;" // LETTER AA
+"\uE007>इ;" // LETTER I
+"\uE008>ई;" // LETTER II
+"\uE009>उ;" // LETTER U
+"\uE00A>ऊ;" // LETTER UU
+"\uE00B>ऋ;" // LETTER VOCALIC R
+"\uE00C>ऌ;" // LETTER VOCALIC L
+// \uE00F>; // UNMAPPED InterIndic-Devanagari: LETTER EE (ए = LETTER E)
+"\uE010>ऐ;" // LETTER AI
+// \uE013>; // UNMAPPED InterIndic-Devanagari: LETTER OO (ओ = LETTER O)
+"\uE014>औ;" // LETTER AU
+"\uE015>क;" // LETTER KA
+"\uE016>ख;" // LETTER KHA
+"\uE017>ग;" // LETTER GA
+"\uE018>घ;" // LETTER GHA
+"\uE019>ङ;" // LETTER NGA
+"\uE01A>च;" // LETTER CA
+"\uE01B>छ;" // LETTER CHA
+"\uE01C>ज;" // LETTER JA
+"\uE01D>झ;" // LETTER JHA
+"\uE01E>ञ;" // LETTER NYA
+"\uE01F>ट;" // LETTER TTA
+"\uE020>ठ;" // LETTER TTHA
+"\uE021>ड;" // LETTER DDA
+"\uE022>ढ;" // LETTER DDHA
+"\uE023>ण;" // LETTER NNA
+"\uE024>त;" // LETTER TA
+"\uE025>थ;" // LETTER THA
+"\uE026>द;" // LETTER DA
+"\uE027>ध;" // LETTER DHA
+"\uE028>न;" // LETTER NA
+"\uE029>ऩ;" // LETTER NNNA
+"\uE02A>प;" // LETTER PA
+"\uE02B>फ;" // LETTER PHA
+"\uE02C>ब;" // LETTER BA
+"\uE02D>भ;" // LETTER BHA
+"\uE02E>म;" // LETTER MA
+"\uE02F>य;" // LETTER YA
+"\uE030>र;" // LETTER RA
+"\uE032>ल;" // LETTER LA
+"\uE033>ळ;" // LETTER LLA
+"\uE034>ऴ;" // LETTER LLLA
+"\uE035>व;" // LETTER VA
+"\uE036>श;" // LETTER SHA
+"\uE037>ष;" // LETTER SSA
+"\uE038>स;" // LETTER SA
+"\uE039>ह;" // LETTER HA
+"\uE03C>़;" // SIGN NUKTA
+"\uE03D>ऽ;" // SIGN AVAGRAHA
+"\uE03E>ा;" // VOWEL SIGN AA
+"\uE03F>ि;" // VOWEL SIGN I
+"\uE040>ी;" // VOWEL SIGN II
+"\uE041>ु;" // VOWEL SIGN U
+"\uE042>ू;" // VOWEL SIGN UU
+"\uE043>ृ;" // VOWEL SIGN VOCALIC R
+"\uE044>ॄ;" // VOWEL SIGN VOCALIC RR
+"\uE045>ॅ;" // VOWEL SIGN CANDRA E
+// \uE047>; // UNMAPPED InterIndic-Devanagari: VOWEL SIGN EE (े = VOWEL SIGN E)
+"\uE048>ै;" // VOWEL SIGN AI
+"\uE049>ॉ;" // VOWEL SIGN CANDRA O
+// \uE04B>; // UNMAPPED InterIndic-Devanagari: VOWEL SIGN OO (ो = VOWEL SIGN O)
+"\uE04C>ौ;" // VOWEL SIGN AU
+"\uE04D>्;" // SIGN VIRAMA
+"\uE050>ॐ;" // OM
+// \uE055>; // UNMAPPED InterIndic-Devanagari: LENGTH MARK
+"\uE056>ै;" // REMAP (indicExceptions.txt): ॖ>ै = AI LENGTH MARK>VOWEL SIGN AI
+"\uE057>ौ;" // REMAP (indicExceptions.txt): ॗ>ौ = AU LENGTH MARK>VOWEL SIGN AU
+"\uE059>ख़;" // LETTER KHHA
+"\uE05A>ग़;" // LETTER GHHA
+"\uE05B>ज़;" // LETTER ZA
+"\uE05D>ढ़;" // LETTER RHA
+"\uE05E>फ़;" // LETTER FA
+"\uE05F>य़;" // LETTER YYA
+"\uE060>ॠ;" // LETTER VOCALIC RR
+"\uE061>ॡ;" // LETTER VOCALIC LL
+"\uE062>ॢ;" // VOWEL SIGN VOCALIC L
+"\uE063>ॣ;" // VOWEL SIGN VOCALIC LL
+"\uE066>०;" // DIGIT ZERO
+"\uE067>१;" // DIGIT ONE
+"\uE068>२;" // DIGIT TWO
+"\uE069>३;" // DIGIT THREE
+"\uE06A>४;" // DIGIT FOUR
+"\uE06B>५;" // DIGIT FIVE
+"\uE06C>६;" // DIGIT SIX
+"\uE06D>७;" // DIGIT SEVEN
+"\uE06E>८;" // DIGIT EIGHT
+"\uE06F>९;" // DIGIT NINE
+// \uE080>; // UNMAPPED InterIndic-Devanagari: ISSHAR
+"\uE081>ए;" // LETTER E
+"\uE082>ओ;" // LETTER O
+"\uE083>ऱ;" // LETTER RRA
+"\uE084>े;" // VOWEL SIGN E
+"\uE085>ो;" // VOWEL SIGN O
+
+// eof
+  }
+}
