@@ -633,41 +633,13 @@ UnicodeString::doCompareCodePointOrder(int32_t start,
   // pin indices to legal values
   pinIndices(start, length);
 
-  // get the correct pointer
-  const UChar *chars = getArrayStart();
-
-  chars += start;
-  srcChars += srcStart;
-
-  int32_t minLength;
-  int8_t lengthResult;
-
-  // get the srcLength if necessary
-  if(srcLength < 0) {
-    srcLength = u_strlen(srcChars + srcStart);
-  }
-
-  // are we comparing different lengths?
-  if(length != srcLength) {
-    if(length < srcLength) {
-      minLength = length;
-      lengthResult = -1;
-    } else {
-      minLength = srcLength;
-      lengthResult = 1;
-    }
+  int32_t diff = u_strCompareCodePointOrder(fArray + start, length, srcChars + srcStart, srcLength, FALSE);
+  /* translate the 32-bit result into an 8-bit one */
+  if(diff!=0) {
+    return (int8_t)(diff >> 15 | 1);
   } else {
-    minLength = length;
-    lengthResult = 0;
+    return 0;
   }
-
-  if(minLength > 0 && chars != srcChars) {
-    int32_t diff = u_memcmpCodePointOrder(chars, srcChars, minLength);
-    if(diff!=0) {
-      return (int8_t)(diff >> 15 | 1);
-    }
-  }
-  return lengthResult;
 }
 
 int8_t
