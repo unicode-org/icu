@@ -1,0 +1,135 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+// Initial data contributed by Maurice Bauhahn (bauhahnm at clara.net)
+
+
+km {
+    Version { "x0.1" }
+    calendar {
+        gregorian {
+            AmPmMarkers {
+                "\u1796\u17D2\u179A\u17B9\u1780",
+                "\u179B\u17D2\u1784\u17B6\u1785, \u1799\u1794\u17CB",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "\u17A2\u17B6",
+                        "\u1785",
+                        "\u17A2",
+                        "\u1796\u17BB",
+                        "\u1796\u17D2\u179A\u17A0",
+                        "\u179F\u17BB",
+                        "\u179F",
+                    }
+//                    narrow{
+//                        "",
+//                        "",
+//                        "",
+//                        "",
+//                        "",
+//                        "",
+//                        "",
+//                    }
+                    wide{
+                        "\u1790\u17D2\u1784\u17C3\u200B\u17A2\u17B6\u1791\u17B7\u178F\u17D2\u1799",
+                        "\u1790\u17D2\u1784\u17C3\u200B\u1785\u17D0\u1793\u17D2\u1791",
+                        "\u1790\u17D2\u1784\u17C3\u200B\u17A2\u1784\u17D2\u1782\u17B6\u179A",
+                        "\u1790\u17D2\u1784\u17C3\u200B\u1796\u17BB\u1792",
+                        "\u1790\u17D2\u1784\u17C3\u200B\u1796\u17D2\u179A\u17A0\u179F\u17D2\u1794\u178F\u17B7\u17CD",
+                        "\u1790\u17D2\u1784\u17C3\u200B\u179F\u17BB\u1780\u17D2\u179A",
+                        "\u1790\u17D2\u1784\u17C3\u200B\u179F\u17C5\u179A\u17CD",
+                    }
+                }
+            }
+            eras{
+                "\u1796.\u179F.",
+                "\u1782.\u179F.",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "\u1798",
+                        "\u1780\u17BB",
+                        "\u1798\u17B7",
+                        "\u1798\u17C1",
+                        "\u17A7",
+                        "\u1798\u17B7\u1790\u17BB",
+                        "\u1780\u1780\u17D2\u1780",
+                        "\u179F\u17B8",
+                        "\u1780",
+                        "\u178F\u17BB",
+                        "\u179C\u17B7",
+                        "\u1792",
+                    }
+//                    narrow {
+//                        "J",
+//                        "F",
+//                        "M",
+//                        "A",
+//                        "M",
+//                        "J",
+//                        "J",
+//                        "A",
+//                        "S",
+//                        "O",
+//                        "N",
+//                        "D",
+//                    }
+                    wide{
+                        "\u1798\u1780\u179A\u17B6",
+                        "\u1780\u17BB\u1798\u17D2\u1797\u17C8",
+                        "\u1798\u17B7\u1793\u17B6",
+                        "\u1798\u17C1\u179F\u17B6",
+                        "\u17A7\u179F\u1797\u17B6",
+                        "\u1798\u17B7\u1790\u17BB\u1793",
+                        "\u1780\u1780\u17D2\u1780\u178A\u17B6",
+                        "\u179F\u17B8\u17A0\u17B6",
+                        "\u1780\u1789\u17D2\u1789\u17B6",
+                        "\u178F\u17BB\u179B\u17B6",
+                        "\u179C\u17B7\u1785\u17D2\u1786\u17B7\u1780\u17C8",
+                        "\u1792\u17D2\u1793\u17BC",
+                    }
+                }
+            }
+        }
+    }
+    Countries {
+        KH { "\u1780\u1798\u17D2\u1796\u17BB\u1787\u17B6" }
+    }
+    Currencies {
+        KHR { "\u17DB",  "KHR" }
+    }
+    Languages {
+        km { "\u1781\u17D2\u1798\u17C2\u179A" }
+    }
+    LocaleScript:array{ 
+        "Khmr",  // ISO 15924 Name 
+    }
+    ExemplarCharacters { "[\u1780-\u17A2 \u17A4-\u17B3 \u17B6-\u17D2]" }
+    NumberElements { 
+        ",",
+        "\u00A0",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+        ",",
+        "+",
+    }
+    // /**************** Info Below is needed ****************/
+    // collations{}
+    // localPatternChars{}
+    // Lunar Calendar information
+    // Narrow month and day names
+    //
+}
