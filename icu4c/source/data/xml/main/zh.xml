@@ -3,7 +3,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="zh" /> 
 	</identity>
 	<localeDisplayNames>
@@ -526,75 +526,83 @@
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">一月</month>
-					<month type="2">二月</month>
-					<month type="3">三月</month>
-					<month type="4">四月</month>
-					<month type="5">五月</month>
-					<month type="6">六月</month>
-					<month type="7">七月</month>
-					<month type="8">八月</month>
-					<month type="9">九月</month>
-					<month type="10">十月</month>
-					<month type="11">十一月</month>
-					<month type="12">十二月</month>
-				</monthNames>
-				<monthNames context="format" width="narrow">
-					<month type="1">1月</month>
-					<month type="2">2月</month>
-					<month type="3">3月</month>
-					<month type="4">4月</month>
-					<month type="5">5月</month>
-					<month type="6">6月</month>
-					<month type="7">7月</month>
-					<month type="8">8月</month>
-					<month type="9">9月</month>
-					<month type="10">10月</month>
-					<month type="11">11月</month>
-					<month type="12">12月</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">一月</month>
-					<month type="2">二月</month>
-					<month type="3">三月</month>
-					<month type="4">四月</month>
-					<month type="5">五月</month>
-					<month type="6">六月</month>
-					<month type="7">七月</month>
-					<month type="8">八月</month>
-					<month type="9">九月</month>
-					<month type="10">十月</month>
-					<month type="11">十一月</month>
-					<month type="12">十二月</month>
-				</monthNames>
-				<dayNames context="format" width="abbreviated" >
-					<day type="sun">日</day>
-					<day type="mon">一</day>
-					<day type="tue">二</day>
-					<day type="wed">三</day>
-					<day type="thu">四</day>
-					<day type="fri">五</day>
-					<day type="sat">六</day>
-				</dayNames>
-				<dayNames context="format" width="narrow" >
-					<day type="sun">日</day>
-					<day type="mon">一</day>
-					<day type="tue">二</day>
-					<day type="wed">三</day>
-					<day type="thu">四</day>
-					<day type="fri">五</day>
-					<day type="sat">六</day>
-				</dayNames>
-				<dayNames context="format" width="wide" >
-					<day type="sun">星期日</day>
-					<day type="mon">星期一</day>
-					<day type="tue">星期二</day>
-					<day type="wed">星期三</day>
-					<day type="thu">星期四</day>
-					<day type="fri">星期五</day>
-					<day type="sat">星期六</day>
-				</dayNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">一月</month>
+							<month type="2">二月</month>
+							<month type="3">三月</month>
+							<month type="4">四月</month>
+							<month type="5">五月</month>
+							<month type="6">六月</month>
+							<month type="7">七月</month>
+							<month type="8">八月</month>
+							<month type="9">九月</month>
+							<month type="10">十月</month>
+							<month type="11">十一月</month>
+							<month type="12">十二月</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">1月</month>
+							<month type="2">2月</month>
+							<month type="3">3月</month>
+							<month type="4">4月</month>
+							<month type="5">5月</month>
+							<month type="6">6月</month>
+							<month type="7">7月</month>
+							<month type="8">8月</month>
+							<month type="9">9月</month>
+							<month type="10">10月</month>
+							<month type="11">11月</month>
+							<month type="12">12月</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">一月</month>
+							<month type="2">二月</month>
+							<month type="3">三月</month>
+							<month type="4">四月</month>
+							<month type="5">五月</month>
+							<month type="6">六月</month>
+							<month type="7">七月</month>
+							<month type="8">八月</month>
+							<month type="9">九月</month>
+							<month type="10">十月</month>
+							<month type="11">十一月</month>
+							<month type="12">十二月</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">日</day>
+							<day type="mon">一</day>
+							<day type="tue">二</day>
+							<day type="wed">三</day>
+							<day type="thu">四</day>
+							<day type="fri">五</day>
+							<day type="sat">六</day>
+						</dayWidth>
+						<dayWidth type="narrow">
+							<day type="sun">日</day>
+							<day type="mon">一</day>
+							<day type="tue">二</day>
+							<day type="wed">三</day>
+							<day type="thu">四</day>
+							<day type="fri">五</day>
+							<day type="sat">六</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">星期日</day>
+							<day type="mon">星期一</day>
+							<day type="tue">星期二</day>
+							<day type="wed">星期三</day>
+							<day type="thu">星期四</day>
+							<day type="fri">星期五</day>
+							<day type="sat">星期六</day>
+						</dayWidth>
+					</dayContext>
+				</days>
 				<am>上午</am>
 				<pm>下午</pm>
 			</calendar>

@@ -3,7 +3,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="ga" /> 
 	</identity>
 	<localeDisplayNames>
@@ -379,52 +379,60 @@
 		<localizedPatternChars>RbMLkUnsSElFtTauKcBeyrAC</localizedPatternChars>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">Ean</month>
-					<month type="2">Feabh</month>
-					<month type="3">Márta</month>
-					<month type="4">Aib</month>
-					<month type="5">Beal</month>
-					<month type="6">Meith</month>
-					<month type="7">Iúil</month>
-					<month type="8">Lún</month>
-					<month type="9">MFómh</month>
-					<month type="10">DFómh</month>
-					<month type="11">Samh</month>
-					<month type="12">Noll</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">Eanáir</month>
-					<month type="2">Feabhra</month>
-					<month type="3">Márta</month>
-					<month type="4">Aibreán</month>
-					<month type="5">Bealtaine</month>
-					<month type="6">Meitheamh</month>
-					<month type="7">Iúil</month>
-					<month type="8">Lúnasa</month>
-					<month type="9">Meán Fómhair</month>
-					<month type="10">Deireadh Fómhair</month>
-					<month type="11">Samhain</month>
-					<month type="12">Nollaig</month>
-				</monthNames>
-				<dayNames context="format" width="abbreviated" >
-					<day type="sun">Domh</day>
-					<day type="mon">Luan</day>
-					<day type="tue">Máirt</day>
-					<day type="wed">Céad</day>
-					<day type="thu">Déar</day>
-					<day type="fri">Aoine</day>
-					<day type="sat">Sath</day>
-				</dayNames>
-				<dayNames context="format" width="wide" >
-					<day type="sun">Dé Domhnaigh</day>
-					<day type="mon">Dé Luain</day>
-					<day type="tue">Dé Máirt</day>
-					<day type="wed">Dé Céadaoin</day>
-					<day type="thu">Déardaoin</day>
-					<day type="fri">Dé hAoine</day>
-					<day type="sat">Dé Sathairn</day>
-				</dayNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">Ean</month>
+							<month type="2">Feabh</month>
+							<month type="3">Márta</month>
+							<month type="4">Aib</month>
+							<month type="5">Beal</month>
+							<month type="6">Meith</month>
+							<month type="7">Iúil</month>
+							<month type="8">Lún</month>
+							<month type="9">MFómh</month>
+							<month type="10">DFómh</month>
+							<month type="11">Samh</month>
+							<month type="12">Noll</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Eanáir</month>
+							<month type="2">Feabhra</month>
+							<month type="3">Márta</month>
+							<month type="4">Aibreán</month>
+							<month type="5">Bealtaine</month>
+							<month type="6">Meitheamh</month>
+							<month type="7">Iúil</month>
+							<month type="8">Lúnasa</month>
+							<month type="9">Meán Fómhair</month>
+							<month type="10">Deireadh Fómhair</month>
+							<month type="11">Samhain</month>
+							<month type="12">Nollaig</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">Domh</day>
+							<day type="mon">Luan</day>
+							<day type="tue">Máirt</day>
+							<day type="wed">Céad</day>
+							<day type="thu">Déar</day>
+							<day type="fri">Aoine</day>
+							<day type="sat">Sath</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">Dé Domhnaigh</day>
+							<day type="mon">Dé Luain</day>
+							<day type="tue">Dé Máirt</day>
+							<day type="wed">Dé Céadaoin</day>
+							<day type="thu">Déardaoin</day>
+							<day type="fri">Dé hAoine</day>
+							<day type="sat">Dé Sathairn</day>
+						</dayWidth>
+					</dayContext>
+				</days>
 				<am>a.m.</am>
 				<pm>p.m.</pm>
 			</calendar>

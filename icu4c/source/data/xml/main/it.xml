@@ -3,7 +3,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="it" /> 
 	</identity>
 	<localeDisplayNames>
@@ -419,75 +419,83 @@
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">gen</month>
-					<month type="2">feb</month>
-					<month type="3">mar</month>
-					<month type="4">apr</month>
-					<month type="5">mag</month>
-					<month type="6">giu</month>
-					<month type="7">lug</month>
-					<month type="8">ago</month>
-					<month type="9">set</month>
-					<month type="10">ott</month>
-					<month type="11">nov</month>
-					<month type="12">dic</month>
-				</monthNames>
-				<monthNames context="format" width="narrow">
-					<month type="1">G</month>
-					<month type="2">F</month>
-					<month type="3">M</month>
-					<month type="4">A</month>
-					<month type="5">M</month>
-					<month type="6">G</month>
-					<month type="7">L</month>
-					<month type="8">A</month>
-					<month type="9">S</month>
-					<month type="10">O</month>
-					<month type="11">N</month>
-					<month type="12">D</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">gennaio</month>
-					<month type="2">febbraio</month>
-					<month type="3">marzo</month>
-					<month type="4">aprile</month>
-					<month type="5">maggio</month>
-					<month type="6">giugno</month>
-					<month type="7">luglio</month>
-					<month type="8">agosto</month>
-					<month type="9">settembre</month>
-					<month type="10">ottobre</month>
-					<month type="11">novembre</month>
-					<month type="12">dicembre</month>
-				</monthNames>
-				<dayNames context="format" width="abbreviated" >
-					<day type="sun">dom</day>
-					<day type="mon">lun</day>
-					<day type="tue">mar</day>
-					<day type="wed">mer</day>
-					<day type="thu">gio</day>
-					<day type="fri">ven</day>
-					<day type="sat">sab</day>
-				</dayNames>
-				<dayNames context="format" width="narrow" >
-					<day type="sun">D</day>
-					<day type="mon">L</day>
-					<day type="tue">M</day>
-					<day type="wed">M</day>
-					<day type="thu">G</day>
-					<day type="fri">V</day>
-					<day type="sat">S</day>
-				</dayNames>
-				<dayNames context="format" width="wide" >
-					<day type="sun">domenica</day>
-					<day type="mon">lunedì</day>
-					<day type="tue">martedì</day>
-					<day type="wed">mercoledì</day>
-					<day type="thu">giovedì</day>
-					<day type="fri">venerdì</day>
-					<day type="sat">sabato</day>
-				</dayNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">gen</month>
+							<month type="2">feb</month>
+							<month type="3">mar</month>
+							<month type="4">apr</month>
+							<month type="5">mag</month>
+							<month type="6">giu</month>
+							<month type="7">lug</month>
+							<month type="8">ago</month>
+							<month type="9">set</month>
+							<month type="10">ott</month>
+							<month type="11">nov</month>
+							<month type="12">dic</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">G</month>
+							<month type="2">F</month>
+							<month type="3">M</month>
+							<month type="4">A</month>
+							<month type="5">M</month>
+							<month type="6">G</month>
+							<month type="7">L</month>
+							<month type="8">A</month>
+							<month type="9">S</month>
+							<month type="10">O</month>
+							<month type="11">N</month>
+							<month type="12">D</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">gennaio</month>
+							<month type="2">febbraio</month>
+							<month type="3">marzo</month>
+							<month type="4">aprile</month>
+							<month type="5">maggio</month>
+							<month type="6">giugno</month>
+							<month type="7">luglio</month>
+							<month type="8">agosto</month>
+							<month type="9">settembre</month>
+							<month type="10">ottobre</month>
+							<month type="11">novembre</month>
+							<month type="12">dicembre</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">dom</day>
+							<day type="mon">lun</day>
+							<day type="tue">mar</day>
+							<day type="wed">mer</day>
+							<day type="thu">gio</day>
+							<day type="fri">ven</day>
+							<day type="sat">sab</day>
+						</dayWidth>
+						<dayWidth type="narrow">
+							<day type="sun">D</day>
+							<day type="mon">L</day>
+							<day type="tue">M</day>
+							<day type="wed">M</day>
+							<day type="thu">G</day>
+							<day type="fri">V</day>
+							<day type="sat">S</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">domenica</day>
+							<day type="mon">lunedì</day>
+							<day type="tue">martedì</day>
+							<day type="wed">mercoledì</day>
+							<day type="thu">giovedì</day>
+							<day type="fri">venerdì</day>
+							<day type="sat">sabato</day>
+						</dayWidth>
+					</dayContext>
+				</days>
 				<am>m.</am>
 				<pm>p.</pm>
 				<dateFormats>

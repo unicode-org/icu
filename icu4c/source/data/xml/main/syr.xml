@@ -3,7 +3,7 @@
 <ldml draft="true">
 	<identity>
 		<version number="x0.2"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="syr" /> 
 	</identity>
 	<localeDisplayNames>
@@ -20,20 +20,24 @@
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">܏ܟܢ ܏ܒ</month>
-					<month type="2">ܫܒܛ</month>
-					<month type="3">ܐܕܪ</month>
-					<month type="4">ܢܝܣܢ</month>
-					<month type="5">ܐܝܪ</month>
-					<month type="6">ܚܙܝܪܢ</month>
-					<month type="7">ܬܡܘܙ</month>
-					<month type="8">ܐܒ</month>
-					<month type="9">ܐܝܠܘܠ</month>
-					<month type="10">܏ܬܫ ܏ܐ</month>
-					<month type="11">܏ܬܫ ܏ܒ</month>
-					<month type="12">܏ܟܢ ܏ܐ</month>
-				</monthNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">܏ܟܢ ܏ܒ</month>
+							<month type="2">ܫܒܛ</month>
+							<month type="3">ܐܕܪ</month>
+							<month type="4">ܢܝܣܢ</month>
+							<month type="5">ܐܝܪ</month>
+							<month type="6">ܚܙܝܪܢ</month>
+							<month type="7">ܬܡܘܙ</month>
+							<month type="8">ܐܒ</month>
+							<month type="9">ܐܝܠܘܠ</month>
+							<month type="10">܏ܬܫ ܏ܐ</month>
+							<month type="11">܏ܬܫ ܏ܒ</month>
+							<month type="12">܏ܟܢ ܏ܐ</month>
+						</monthWidth>
+					</monthContext>
+				</months>
 			</calendar>
 		</calendars>
 	</dates>

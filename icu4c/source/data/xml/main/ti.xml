@@ -3,7 +3,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="ti" /> 
 	</identity>
 	<localeDisplayNames>
@@ -290,52 +290,60 @@
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">ጃንዩ</month>
-					<month type="2">ፌብሩ</month>
-					<month type="3">ማርች</month>
-					<month type="4">ኤፕረ</month>
-					<month type="5">ሜይ</month>
-					<month type="6">ጁን</month>
-					<month type="7">ጁላይ</month>
-					<month type="8">ኦገስ</month>
-					<month type="9">ሴፕቴ</month>
-					<month type="10">ኦክተ</month>
-					<month type="11">ኖቬም</month>
-					<month type="12">ዲሴም</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">ጃንዩወሪ</month>
-					<month type="2">ፌብሩወሪ</month>
-					<month type="3">ማርች</month>
-					<month type="4">ኤፕረል</month>
-					<month type="5">ሜይ</month>
-					<month type="6">ጁን</month>
-					<month type="7">ጁላይ</month>
-					<month type="8">ኦገስት</month>
-					<month type="9">ሴፕቴምበር</month>
-					<month type="10">ኦክተውበር</month>
-					<month type="11">ኖቬምበር</month>
-					<month type="12">ዲሴምበር</month>
-				</monthNames>
-				<dayNames context="format" width="abbreviated" >
-					<day type="sun">ሰንበ</day>
-					<day type="mon">ሰኑይ</day>
-					<day type="tue">ሠሉስ</day>
-					<day type="wed">ረቡዕ</day>
-					<day type="thu">ኃሙስ</day>
-					<day type="fri">ዓርቢ</day>
-					<day type="sat">ቀዳም</day>
-				</dayNames>
-				<dayNames context="format" width="wide" >
-					<day type="sun">ሰንበት</day>
-					<day type="mon">ሰኑይ</day>
-					<day type="tue">ሠሉስ</day>
-					<day type="wed">ረቡዕ</day>
-					<day type="thu">ኃሙስ</day>
-					<day type="fri">ዓርቢ</day>
-					<day type="sat">ቀዳም</day>
-				</dayNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">ጃንዩ</month>
+							<month type="2">ፌብሩ</month>
+							<month type="3">ማርች</month>
+							<month type="4">ኤፕረ</month>
+							<month type="5">ሜይ</month>
+							<month type="6">ጁን</month>
+							<month type="7">ጁላይ</month>
+							<month type="8">ኦገስ</month>
+							<month type="9">ሴፕቴ</month>
+							<month type="10">ኦክተ</month>
+							<month type="11">ኖቬም</month>
+							<month type="12">ዲሴም</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">ጃንዩወሪ</month>
+							<month type="2">ፌብሩወሪ</month>
+							<month type="3">ማርች</month>
+							<month type="4">ኤፕረል</month>
+							<month type="5">ሜይ</month>
+							<month type="6">ጁን</month>
+							<month type="7">ጁላይ</month>
+							<month type="8">ኦገስት</month>
+							<month type="9">ሴፕቴምበር</month>
+							<month type="10">ኦክተውበር</month>
+							<month type="11">ኖቬምበር</month>
+							<month type="12">ዲሴምበር</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">ሰንበ</day>
+							<day type="mon">ሰኑይ</day>
+							<day type="tue">ሠሉስ</day>
+							<day type="wed">ረቡዕ</day>
+							<day type="thu">ኃሙስ</day>
+							<day type="fri">ዓርቢ</day>
+							<day type="sat">ቀዳም</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">ሰንበት</day>
+							<day type="mon">ሰኑይ</day>
+							<day type="tue">ሠሉስ</day>
+							<day type="wed">ረቡዕ</day>
+							<day type="thu">ኃሙስ</day>
+							<day type="fri">ዓርቢ</day>
+							<day type="sat">ቀዳም</day>
+						</dayWidth>
+					</dayContext>
+				</days>
 				<am>ንጉሆ ሰዓተ</am>
 				<pm>ድሕር ሰዓት</pm>
 			</calendar>

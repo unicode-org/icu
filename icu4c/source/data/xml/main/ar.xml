@@ -3,7 +3,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="ar" /> 
 	</identity>
 	<localeDisplayNames>
@@ -258,112 +258,128 @@
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAeugXZ</localizedPatternChars>
 		<calendars>
 			<calendar type="arabic">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">محرم</month>
-					<month type="2">صفر</month>
-					<month type="3">ربيع الأول</month>
-					<month type="4">ربيع الآخر</month>
-					<month type="5">جمادى الأولى</month>
-					<month type="6">جمادى الآخرة</month>
-					<month type="7">رجب</month>
-					<month type="8">شعبان</month>
-					<month type="9">رمضان</month>
-					<month type="10">شوال</month>
-					<month type="11">ذو القعدة</month>
-					<month type="12">ذو الحجة</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">محرم</month>
-					<month type="2">صفر</month>
-					<month type="3">ربيع الأول</month>
-					<month type="4">ربيع الآخر</month>
-					<month type="5">جمادى الأولى</month>
-					<month type="6">جمادى الآخرة</month>
-					<month type="7">رجب</month>
-					<month type="8">شعبان</month>
-					<month type="9">رمضان</month>
-					<month type="10">شوال</month>
-					<month type="11">ذو القعدة</month>
-					<month type="12">ذو الحجة</month>
-				</monthNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">محرم</month>
+							<month type="2">صفر</month>
+							<month type="3">ربيع الأول</month>
+							<month type="4">ربيع الآخر</month>
+							<month type="5">جمادى الأولى</month>
+							<month type="6">جمادى الآخرة</month>
+							<month type="7">رجب</month>
+							<month type="8">شعبان</month>
+							<month type="9">رمضان</month>
+							<month type="10">شوال</month>
+							<month type="11">ذو القعدة</month>
+							<month type="12">ذو الحجة</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">محرم</month>
+							<month type="2">صفر</month>
+							<month type="3">ربيع الأول</month>
+							<month type="4">ربيع الآخر</month>
+							<month type="5">جمادى الأولى</month>
+							<month type="6">جمادى الآخرة</month>
+							<month type="7">رجب</month>
+							<month type="8">شعبان</month>
+							<month type="9">رمضان</month>
+							<month type="10">شوال</month>
+							<month type="11">ذو القعدة</month>
+							<month type="12">ذو الحجة</month>
+						</monthWidth>
+					</monthContext>
+				</months>
 			</calendar>
 			<calendar type="arabic-civil">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">محرم</month>
-					<month type="2">صفر</month>
-					<month type="3">ربيع الأول</month>
-					<month type="4">ربيع الآخر</month>
-					<month type="5">جمادى الأولى</month>
-					<month type="6">جمادى الآخرة</month>
-					<month type="7">رجب</month>
-					<month type="8">شعبان</month>
-					<month type="9">رمضان</month>
-					<month type="10">شوال</month>
-					<month type="11">ذو القعدة</month>
-					<month type="12">ذو الحجة</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">محرم</month>
-					<month type="2">صفر</month>
-					<month type="3">ربيع الأول</month>
-					<month type="4">ربيع الآخر</month>
-					<month type="5">جمادى الأولى</month>
-					<month type="6">جمادى الآخرة</month>
-					<month type="7">رجب</month>
-					<month type="8">شعبان</month>
-					<month type="9">رمضان</month>
-					<month type="10">شوال</month>
-					<month type="11">ذو القعدة</month>
-					<month type="12">ذو الحجة</month>
-				</monthNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">محرم</month>
+							<month type="2">صفر</month>
+							<month type="3">ربيع الأول</month>
+							<month type="4">ربيع الآخر</month>
+							<month type="5">جمادى الأولى</month>
+							<month type="6">جمادى الآخرة</month>
+							<month type="7">رجب</month>
+							<month type="8">شعبان</month>
+							<month type="9">رمضان</month>
+							<month type="10">شوال</month>
+							<month type="11">ذو القعدة</month>
+							<month type="12">ذو الحجة</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">محرم</month>
+							<month type="2">صفر</month>
+							<month type="3">ربيع الأول</month>
+							<month type="4">ربيع الآخر</month>
+							<month type="5">جمادى الأولى</month>
+							<month type="6">جمادى الآخرة</month>
+							<month type="7">رجب</month>
+							<month type="8">شعبان</month>
+							<month type="9">رمضان</month>
+							<month type="10">شوال</month>
+							<month type="11">ذو القعدة</month>
+							<month type="12">ذو الحجة</month>
+						</monthWidth>
+					</monthContext>
+				</months>
 			</calendar>
 			<calendar type="gregorian">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">يناير</month>
-					<month type="2">فبراير</month>
-					<month type="3">مارس</month>
-					<month type="4">أبريل</month>
-					<month type="5">مايو</month>
-					<month type="6">يونيو</month>
-					<month type="7">يوليو</month>
-					<month type="8">أغسطس</month>
-					<month type="9">سبتمبر</month>
-					<month type="10">أكتوبر</month>
-					<month type="11">نوفمبر</month>
-					<month type="12">ديسمبر</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">يناير</month>
-					<month type="2">فبراير</month>
-					<month type="3">مارس</month>
-					<month type="4">أبريل</month>
-					<month type="5">مايو</month>
-					<month type="6">يونيو</month>
-					<month type="7">يوليو</month>
-					<month type="8">أغسطس</month>
-					<month type="9">سبتمبر</month>
-					<month type="10">أكتوبر</month>
-					<month type="11">نوفمبر</month>
-					<month type="12">ديسمبر</month>
-				</monthNames>
-				<dayNames context="format" width="abbreviated" >
-					<day type="sun">ح</day>
-					<day type="mon">ن</day>
-					<day type="tue">ث</day>
-					<day type="wed">ر</day>
-					<day type="thu">خ</day>
-					<day type="fri">ج</day>
-					<day type="sat">س</day>
-				</dayNames>
-				<dayNames context="format" width="wide" >
-					<day type="sun">الأحد</day>
-					<day type="mon">الاثنين</day>
-					<day type="tue">الثلاثاء</day>
-					<day type="wed">الأربعاء</day>
-					<day type="thu">الخميس</day>
-					<day type="fri">الجمعة</day>
-					<day type="sat">السبت</day>
-				</dayNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">يناير</month>
+							<month type="2">فبراير</month>
+							<month type="3">مارس</month>
+							<month type="4">أبريل</month>
+							<month type="5">مايو</month>
+							<month type="6">يونيو</month>
+							<month type="7">يوليو</month>
+							<month type="8">أغسطس</month>
+							<month type="9">سبتمبر</month>
+							<month type="10">أكتوبر</month>
+							<month type="11">نوفمبر</month>
+							<month type="12">ديسمبر</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">يناير</month>
+							<month type="2">فبراير</month>
+							<month type="3">مارس</month>
+							<month type="4">أبريل</month>
+							<month type="5">مايو</month>
+							<month type="6">يونيو</month>
+							<month type="7">يوليو</month>
+							<month type="8">أغسطس</month>
+							<month type="9">سبتمبر</month>
+							<month type="10">أكتوبر</month>
+							<month type="11">نوفمبر</month>
+							<month type="12">ديسمبر</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">ح</day>
+							<day type="mon">ن</day>
+							<day type="tue">ث</day>
+							<day type="wed">ر</day>
+							<day type="thu">خ</day>
+							<day type="fri">ج</day>
+							<day type="sat">س</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">الأحد</day>
+							<day type="mon">الاثنين</day>
+							<day type="tue">الثلاثاء</day>
+							<day type="wed">الأربعاء</day>
+							<day type="thu">الخميس</day>
+							<day type="fri">الجمعة</day>
+							<day type="sat">السبت</day>
+						</dayWidth>
+					</dayContext>
+				</days>
 				<am>ص</am>
 				<pm>م</pm>
 				<dateFormats>

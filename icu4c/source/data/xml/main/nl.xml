@@ -3,7 +3,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="nl" /> 
 	</identity>
 	<localeDisplayNames>
@@ -322,135 +322,151 @@
 	<dates>
 		<calendars>
 			<calendar type="arabic">
-				<monthNames context="format" width="abrreviated">
-					<month type="1">Moeharram</month>
-					<month type="2">Safar</month>
-					<month type="3">Rabi'a al awal</month>
-					<month type="4">Rabi'a al thani</month>
-					<month type="5">Joemad'al awal</month>
-					<month type="6">Joemad'al thani</month>
-					<month type="7">Rajab</month>
-					<month type="8">Sja'aban</month>
-					<month type="9">Ramadan</month>
-					<month type="10">Sjawal</month>
-					<month type="11">Doe al ka'aba</month>
-					<month type="12">Doe al hizja</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">Moeharram</month>
-					<month type="2">Safar</month>
-					<month type="3">Rabi'a al awal</month>
-					<month type="4">Rabi'a al thani</month>
-					<month type="5">Joemad'al awal</month>
-					<month type="6">Joemad'al thani</month>
-					<month type="7">Rajab</month>
-					<month type="8">Sja'aban</month>
-					<month type="9">Ramadan</month>
-					<month type="10">Sjawal</month>
-					<month type="11">Doe al ka'aba</month>
-					<month type="12">Doe al hizja</month>
-				</monthNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abrreviated">
+							<month type="1">Moeharram</month>
+							<month type="2">Safar</month>
+							<month type="3">Rabi'a al awal</month>
+							<month type="4">Rabi'a al thani</month>
+							<month type="5">Joemad'al awal</month>
+							<month type="6">Joemad'al thani</month>
+							<month type="7">Rajab</month>
+							<month type="8">Sja'aban</month>
+							<month type="9">Ramadan</month>
+							<month type="10">Sjawal</month>
+							<month type="11">Doe al ka'aba</month>
+							<month type="12">Doe al hizja</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Moeharram</month>
+							<month type="2">Safar</month>
+							<month type="3">Rabi'a al awal</month>
+							<month type="4">Rabi'a al thani</month>
+							<month type="5">Joemad'al awal</month>
+							<month type="6">Joemad'al thani</month>
+							<month type="7">Rajab</month>
+							<month type="8">Sja'aban</month>
+							<month type="9">Ramadan</month>
+							<month type="10">Sjawal</month>
+							<month type="11">Doe al ka'aba</month>
+							<month type="12">Doe al hizja</month>
+						</monthWidth>
+					</monthContext>
+				</months>
 			</calendar>
 			<calendar type="arabic-civil">
-				<monthNames context="format" width="abrreviated">
-					<month type="1">Moeharram</month>
-					<month type="2">Safar</month>
-					<month type="3">Rabi'a al awal</month>
-					<month type="4">Rabi'a al thani</month>
-					<month type="5">Joemad'al awal</month>
-					<month type="6">Joemad'al thani</month>
-					<month type="7">Rajab</month>
-					<month type="8">Sja'aban</month>
-					<month type="9">Ramadan</month>
-					<month type="10">Sjawal</month>
-					<month type="11">Doe al ka'aba</month>
-					<month type="12">Doe al hizja</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">Moeharram</month>
-					<month type="2">Safar</month>
-					<month type="3">Rabi'a al awal</month>
-					<month type="4">Rabi'a al thani</month>
-					<month type="5">Joemad'al awal</month>
-					<month type="6">Joemad'al thani</month>
-					<month type="7">Rajab</month>
-					<month type="8">Sja'aban</month>
-					<month type="9">Ramadan</month>
-					<month type="10">Sjawal</month>
-					<month type="11">Doe al ka'aba</month>
-					<month type="12">Doe al hizja</month>
-				</monthNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abrreviated">
+							<month type="1">Moeharram</month>
+							<month type="2">Safar</month>
+							<month type="3">Rabi'a al awal</month>
+							<month type="4">Rabi'a al thani</month>
+							<month type="5">Joemad'al awal</month>
+							<month type="6">Joemad'al thani</month>
+							<month type="7">Rajab</month>
+							<month type="8">Sja'aban</month>
+							<month type="9">Ramadan</month>
+							<month type="10">Sjawal</month>
+							<month type="11">Doe al ka'aba</month>
+							<month type="12">Doe al hizja</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Moeharram</month>
+							<month type="2">Safar</month>
+							<month type="3">Rabi'a al awal</month>
+							<month type="4">Rabi'a al thani</month>
+							<month type="5">Joemad'al awal</month>
+							<month type="6">Joemad'al thani</month>
+							<month type="7">Rajab</month>
+							<month type="8">Sja'aban</month>
+							<month type="9">Ramadan</month>
+							<month type="10">Sjawal</month>
+							<month type="11">Doe al ka'aba</month>
+							<month type="12">Doe al hizja</month>
+						</monthWidth>
+					</monthContext>
+				</months>
 			</calendar>
 			<calendar type="gregorian">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">jan</month>
-					<month type="2">feb</month>
-					<month type="3">mrt</month>
-					<month type="4">apr</month>
-					<month type="5">mei</month>
-					<month type="6">jun</month>
-					<month type="7">jul</month>
-					<month type="8">aug</month>
-					<month type="9">sep</month>
-					<month type="10">okt</month>
-					<month type="11">nov</month>
-					<month type="12">dec</month>
-				</monthNames>
-				<monthNames context="format" width="narrow">
-					<month type="1">J</month>
-					<month type="2">F</month>
-					<month type="3">M</month>
-					<month type="4">A</month>
-					<month type="5">M</month>
-					<month type="6">J</month>
-					<month type="7">J</month>
-					<month type="8">A</month>
-					<month type="9">S</month>
-					<month type="10">O</month>
-					<month type="11">N</month>
-					<month type="12">D</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">januari</month>
-					<month type="2">februari</month>
-					<month type="3">maart</month>
-					<month type="4">april</month>
-					<month type="5">mei</month>
-					<month type="6">juni</month>
-					<month type="7">juli</month>
-					<month type="8">augustus</month>
-					<month type="9">september</month>
-					<month type="10">oktober</month>
-					<month type="11">november</month>
-					<month type="12">december</month>
-				</monthNames>
-				<dayNames context="format" width="abbreviated" >
-					<day type="sun">zo</day>
-					<day type="mon">ma</day>
-					<day type="tue">di</day>
-					<day type="wed">wo</day>
-					<day type="thu">do</day>
-					<day type="fri">vr</day>
-					<day type="sat">za</day>
-				</dayNames>
-				<dayNames context="format" width="narrow" >
-					<day type="sun">Z</day>
-					<day type="mon">M</day>
-					<day type="tue">D</day>
-					<day type="wed">W</day>
-					<day type="thu">D</day>
-					<day type="fri">V</day>
-					<day type="sat">Z</day>
-				</dayNames>
-				<dayNames context="format" width="wide" >
-					<day type="sun">zondag</day>
-					<day type="mon">maandag</day>
-					<day type="tue">dinsdag</day>
-					<day type="wed">woensdag</day>
-					<day type="thu">donderdag</day>
-					<day type="fri">vrijdag</day>
-					<day type="sat">zaterdag</day>
-				</dayNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">jan</month>
+							<month type="2">feb</month>
+							<month type="3">mrt</month>
+							<month type="4">apr</month>
+							<month type="5">mei</month>
+							<month type="6">jun</month>
+							<month type="7">jul</month>
+							<month type="8">aug</month>
+							<month type="9">sep</month>
+							<month type="10">okt</month>
+							<month type="11">nov</month>
+							<month type="12">dec</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">J</month>
+							<month type="2">F</month>
+							<month type="3">M</month>
+							<month type="4">A</month>
+							<month type="5">M</month>
+							<month type="6">J</month>
+							<month type="7">J</month>
+							<month type="8">A</month>
+							<month type="9">S</month>
+							<month type="10">O</month>
+							<month type="11">N</month>
+							<month type="12">D</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">januari</month>
+							<month type="2">februari</month>
+							<month type="3">maart</month>
+							<month type="4">april</month>
+							<month type="5">mei</month>
+							<month type="6">juni</month>
+							<month type="7">juli</month>
+							<month type="8">augustus</month>
+							<month type="9">september</month>
+							<month type="10">oktober</month>
+							<month type="11">november</month>
+							<month type="12">december</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">zo</day>
+							<day type="mon">ma</day>
+							<day type="tue">di</day>
+							<day type="wed">wo</day>
+							<day type="thu">do</day>
+							<day type="fri">vr</day>
+							<day type="sat">za</day>
+						</dayWidth>
+						<dayWidth type="narrow">
+							<day type="sun">Z</day>
+							<day type="mon">M</day>
+							<day type="tue">D</day>
+							<day type="wed">W</day>
+							<day type="thu">D</day>
+							<day type="fri">V</day>
+							<day type="sat">Z</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">zondag</day>
+							<day type="mon">maandag</day>
+							<day type="tue">dinsdag</day>
+							<day type="wed">woensdag</day>
+							<day type="thu">donderdag</day>
+							<day type="fri">vrijdag</day>
+							<day type="sat">zaterdag</day>
+						</dayWidth>
+					</dayContext>
+				</days>
 				<dateFormats>
 					<default type="medium"/>
 					<dateFormatLength type="full">
@@ -506,36 +522,40 @@
 				</dateTimeFormats>
 			</calendar>
 			<calendar type="hebrew">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">Tisjrie</month>
-					<month type="2">Chesjwan</month>
-					<month type="3">Kislev</month>
-					<month type="4">Tevet</month>
-					<month type="5">Sjevat</month>
-					<month type="6">Adar</month>
-					<month type="7">Adar B</month>
-					<month type="8">Nisan</month>
-					<month type="9">Ijar</month>
-					<month type="10">Sivan</month>
-					<month type="11">Tammoez</month>
-					<month type="12">Av</month>
-					<month type="13">Elloel</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">Tisjrie</month>
-					<month type="2">Chesjwan</month>
-					<month type="3">Kislev</month>
-					<month type="4">Tevet</month>
-					<month type="5">Sjevat</month>
-					<month type="6">Adar</month>
-					<month type="7">Adar B</month>
-					<month type="8">Nisan</month>
-					<month type="9">Ijar</month>
-					<month type="10">Sivan</month>
-					<month type="11">Tammoez</month>
-					<month type="12">Av</month>
-					<month type="13">Elloel</month>
-				</monthNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">Tisjrie</month>
+							<month type="2">Chesjwan</month>
+							<month type="3">Kislev</month>
+							<month type="4">Tevet</month>
+							<month type="5">Sjevat</month>
+							<month type="6">Adar</month>
+							<month type="7">Adar B</month>
+							<month type="8">Nisan</month>
+							<month type="9">Ijar</month>
+							<month type="10">Sivan</month>
+							<month type="11">Tammoez</month>
+							<month type="12">Av</month>
+							<month type="13">Elloel</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Tisjrie</month>
+							<month type="2">Chesjwan</month>
+							<month type="3">Kislev</month>
+							<month type="4">Tevet</month>
+							<month type="5">Sjevat</month>
+							<month type="6">Adar</month>
+							<month type="7">Adar B</month>
+							<month type="8">Nisan</month>
+							<month type="9">Ijar</month>
+							<month type="10">Sivan</month>
+							<month type="11">Tammoez</month>
+							<month type="12">Av</month>
+							<month type="13">Elloel</month>
+						</monthWidth>
+					</monthContext>
+				</months>
 			</calendar>
 		</calendars>
 	</dates>

@@ -3,7 +3,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="th" /> 
 	</identity>
 	<localeDisplayNames>
@@ -411,52 +411,60 @@
 				</dateTimeFormats>
 			</calendar>
 			<calendar type="gregorian">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">ม.ค.</month>
-					<month type="2">ก.พ.</month>
-					<month type="3">มี.ค.</month>
-					<month type="4">เม.ย.</month>
-					<month type="5">พ.ค.</month>
-					<month type="6">มิ.ย.</month>
-					<month type="7">ก.ค.</month>
-					<month type="8">ส.ค.</month>
-					<month type="9">ก.ย.</month>
-					<month type="10">ต.ค.</month>
-					<month type="11">พ.ย.</month>
-					<month type="12">ธ.ค.</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">มกราคม</month>
-					<month type="2">กุมภาพันธ์</month>
-					<month type="3">มีนาคม</month>
-					<month type="4">เมษายน</month>
-					<month type="5">พฤษภาคม</month>
-					<month type="6">มิถุนายน</month>
-					<month type="7">กรกฎาคม</month>
-					<month type="8">สิงหาคม</month>
-					<month type="9">กันยายน</month>
-					<month type="10">ตุลาคม</month>
-					<month type="11">พฤศจิกายน</month>
-					<month type="12">ธันวาคม</month>
-				</monthNames>
-				<dayNames context="format" width="abbreviated" >
-					<day type="sun">อา.</day>
-					<day type="mon">จ.</day>
-					<day type="tue">อ.</day>
-					<day type="wed">พ.</day>
-					<day type="thu">พฤ.</day>
-					<day type="fri">ศ.</day>
-					<day type="sat">ส.</day>
-				</dayNames>
-				<dayNames context="format" width="wide" >
-					<day type="sun">วันอาทิตย์</day>
-					<day type="mon">วันจันทร์</day>
-					<day type="tue">วันอังคาร</day>
-					<day type="wed">วันพุธ</day>
-					<day type="thu">วันพฤหัสบดี</day>
-					<day type="fri">วันศุกร์</day>
-					<day type="sat">วันเสาร์</day>
-				</dayNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">ม.ค.</month>
+							<month type="2">ก.พ.</month>
+							<month type="3">มี.ค.</month>
+							<month type="4">เม.ย.</month>
+							<month type="5">พ.ค.</month>
+							<month type="6">มิ.ย.</month>
+							<month type="7">ก.ค.</month>
+							<month type="8">ส.ค.</month>
+							<month type="9">ก.ย.</month>
+							<month type="10">ต.ค.</month>
+							<month type="11">พ.ย.</month>
+							<month type="12">ธ.ค.</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">มกราคม</month>
+							<month type="2">กุมภาพันธ์</month>
+							<month type="3">มีนาคม</month>
+							<month type="4">เมษายน</month>
+							<month type="5">พฤษภาคม</month>
+							<month type="6">มิถุนายน</month>
+							<month type="7">กรกฎาคม</month>
+							<month type="8">สิงหาคม</month>
+							<month type="9">กันยายน</month>
+							<month type="10">ตุลาคม</month>
+							<month type="11">พฤศจิกายน</month>
+							<month type="12">ธันวาคม</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">อา.</day>
+							<day type="mon">จ.</day>
+							<day type="tue">อ.</day>
+							<day type="wed">พ.</day>
+							<day type="thu">พฤ.</day>
+							<day type="fri">ศ.</day>
+							<day type="sat">ส.</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">วันอาทิตย์</day>
+							<day type="mon">วันจันทร์</day>
+							<day type="tue">วันอังคาร</day>
+							<day type="wed">วันพุธ</day>
+							<day type="thu">วันพฤหัสบดี</day>
+							<day type="fri">วันศุกร์</day>
+							<day type="sat">วันเสาร์</day>
+						</dayWidth>
+					</dayContext>
+				</days>
 				<am>ก่อนเที่ยง</am>
 				<pm>หลังเที่ยง</pm>
 				<dateFormats>

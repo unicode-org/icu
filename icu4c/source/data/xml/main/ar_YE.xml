@@ -3,7 +3,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="ar" /> 
 		<territory type="YE" /> 
 	</identity>
@@ -13,29 +13,37 @@
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">يناير</month>
-					<month type="2">فبراير</month>
-					<month type="3">مارس</month>
-					<month type="4">أبريل</month>
-					<month type="5">مايو</month>
-					<month type="6">يونيو</month>
-					<month type="7">يوليو</month>
-					<month type="8">أغسطس</month>
-					<month type="9">سبتمبر</month>
-					<month type="10">أكتوبر</month>
-					<month type="11">نوفمبر</month>
-					<month type="12">ديسمبر</month>
-				</monthNames>
-				<dayNames context="format" width="abbreviated" >
-					<day type="sun">الأحد</day>
-					<day type="mon">الاثنين</day>
-					<day type="tue">الثلاثاء</day>
-					<day type="wed">الأربعاء</day>
-					<day type="thu">الخميس</day>
-					<day type="fri">الجمعة</day>
-					<day type="sat">السبت</day>
-				</dayNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">يناير</month>
+							<month type="2">فبراير</month>
+							<month type="3">مارس</month>
+							<month type="4">أبريل</month>
+							<month type="5">مايو</month>
+							<month type="6">يونيو</month>
+							<month type="7">يوليو</month>
+							<month type="8">أغسطس</month>
+							<month type="9">سبتمبر</month>
+							<month type="10">أكتوبر</month>
+							<month type="11">نوفمبر</month>
+							<month type="12">ديسمبر</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">الأحد</day>
+							<day type="mon">الاثنين</day>
+							<day type="tue">الثلاثاء</day>
+							<day type="wed">الأربعاء</day>
+							<day type="thu">الخميس</day>
+							<day type="fri">الجمعة</day>
+							<day type="sat">السبت</day>
+						</dayWidth>
+					</dayContext>
+				</days>
 			</calendar>
 		</calendars>
 	</dates>

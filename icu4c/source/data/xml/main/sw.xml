@@ -3,7 +3,7 @@
 <ldml>
 	<identity>
 		<version number="2.0"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="sw" /> 
 	</identity>
 	<localeDisplayNames>
@@ -97,52 +97,60 @@
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">Jan</month>
-					<month type="2">Feb</month>
-					<month type="3">Mar</month>
-					<month type="4">Apr</month>
-					<month type="5">Mei</month>
-					<month type="6">Jun</month>
-					<month type="7">Jul</month>
-					<month type="8">Ago</month>
-					<month type="9">Sep</month>
-					<month type="10">Okt</month>
-					<month type="11">Nov</month>
-					<month type="12">Des</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">Januari</month>
-					<month type="2">Februari</month>
-					<month type="3">Machi</month>
-					<month type="4">Aprili</month>
-					<month type="5">Mei</month>
-					<month type="6">Juni</month>
-					<month type="7">Julai</month>
-					<month type="8">Agosti</month>
-					<month type="9">Septemba</month>
-					<month type="10">Oktoba</month>
-					<month type="11">Novemba</month>
-					<month type="12">Desemba</month>
-				</monthNames>
-				<dayNames context="format" width="abbreviated" >
-					<day type="sun">Jpi</day>
-					<day type="mon">Jtt</day>
-					<day type="tue">Jnn</day>
-					<day type="wed">Jtn</day>
-					<day type="thu">Alh</day>
-					<day type="fri">Iju</day>
-					<day type="sat">Jmo</day>
-				</dayNames>
-				<dayNames context="format" width="wide" >
-					<day type="sun">Jumapili</day>
-					<day type="mon">Jumatatu</day>
-					<day type="tue">Jumanne</day>
-					<day type="wed">Jumatano</day>
-					<day type="thu">Alhamisi</day>
-					<day type="fri">Ijumaa</day>
-					<day type="sat">Jumamosi</day>
-				</dayNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">Jan</month>
+							<month type="2">Feb</month>
+							<month type="3">Mar</month>
+							<month type="4">Apr</month>
+							<month type="5">Mei</month>
+							<month type="6">Jun</month>
+							<month type="7">Jul</month>
+							<month type="8">Ago</month>
+							<month type="9">Sep</month>
+							<month type="10">Okt</month>
+							<month type="11">Nov</month>
+							<month type="12">Des</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Januari</month>
+							<month type="2">Februari</month>
+							<month type="3">Machi</month>
+							<month type="4">Aprili</month>
+							<month type="5">Mei</month>
+							<month type="6">Juni</month>
+							<month type="7">Julai</month>
+							<month type="8">Agosti</month>
+							<month type="9">Septemba</month>
+							<month type="10">Oktoba</month>
+							<month type="11">Novemba</month>
+							<month type="12">Desemba</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">Jpi</day>
+							<day type="mon">Jtt</day>
+							<day type="tue">Jnn</day>
+							<day type="wed">Jtn</day>
+							<day type="thu">Alh</day>
+							<day type="fri">Iju</day>
+							<day type="sat">Jmo</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">Jumapili</day>
+							<day type="mon">Jumatatu</day>
+							<day type="tue">Jumanne</day>
+							<day type="wed">Jumatano</day>
+							<day type="thu">Alhamisi</day>
+							<day type="fri">Ijumaa</day>
+							<day type="sat">Jumamosi</day>
+						</dayWidth>
+					</dayContext>
+				</days>
 			</calendar>
 		</calendars>
 		<timeZoneNames>

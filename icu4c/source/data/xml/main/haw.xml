@@ -3,7 +3,7 @@
 <ldml draft="true">
 	<identity>
 		<version number="x0.2"/>
-		<generation date="2004-05-13" />
+		<generation date="2004-05-14" />
 		<language type="haw" /> 
 	</identity>
 	<localeDisplayNames>
@@ -39,52 +39,60 @@
 	<dates>
 		<calendars>
 			<calendar type="gregorian">
-				<monthNames context="format" width="abbreviated">
-					<month type="1">Ian.</month>
-					<month type="2">Pep.</month>
-					<month type="3">Mal.</month>
-					<month type="4">ʻAp.</month>
-					<month type="5">Mei</month>
-					<month type="6">Iun.</month>
-					<month type="7">Iul.</month>
-					<month type="8">ʻAu.</month>
-					<month type="9">Kep.</month>
-					<month type="10">ʻOk.</month>
-					<month type="11">Now.</month>
-					<month type="12">Kek.</month>
-				</monthNames>
-				<monthNames context="format" width="wide">
-					<month type="1">Ianuali</month>
-					<month type="2">Pepeluali</month>
-					<month type="3">Malaki</month>
-					<month type="4">ʻApelila</month>
-					<month type="5">Mei</month>
-					<month type="6">Iune</month>
-					<month type="7">Iulai</month>
-					<month type="8">ʻAukake</month>
-					<month type="9">Kepakemapa</month>
-					<month type="10">ʻOkakopa</month>
-					<month type="11">Nowemapa</month>
-					<month type="12">Kekemapa</month>
-				</monthNames>
-				<dayNames context="format" width="abbreviated" >
-					<day type="sun">LP</day>
-					<day type="mon">P1</day>
-					<day type="tue">P2</day>
-					<day type="wed">P3</day>
-					<day type="thu">P4</day>
-					<day type="fri">P5</day>
-					<day type="sat">P6</day>
-				</dayNames>
-				<dayNames context="format" width="wide" >
-					<day type="sun">Lāpule</day>
-					<day type="mon">Poʻakahi</day>
-					<day type="tue">Poʻalua</day>
-					<day type="wed">Poʻakolu</day>
-					<day type="thu">Poʻahā</day>
-					<day type="fri">Poʻalima</day>
-					<day type="sat">Poʻaono</day>
-				</dayNames>
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">Ian.</month>
+							<month type="2">Pep.</month>
+							<month type="3">Mal.</month>
+							<month type="4">ʻAp.</month>
+							<month type="5">Mei</month>
+							<month type="6">Iun.</month>
+							<month type="7">Iul.</month>
+							<month type="8">ʻAu.</month>
+							<month type="9">Kep.</month>
+							<month type="10">ʻOk.</month>
+							<month type="11">Now.</month>
+							<month type="12">Kek.</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Ianuali</month>
+							<month type="2">Pepeluali</month>
+							<month type="3">Malaki</month>
+							<month type="4">ʻApelila</month>
+							<month type="5">Mei</month>
+							<month type="6">Iune</month>
+							<month type="7">Iulai</month>
+							<month type="8">ʻAukake</month>
+							<month type="9">Kepakemapa</month>
+							<month type="10">ʻOkakopa</month>
+							<month type="11">Nowemapa</month>
+							<month type="12">Kekemapa</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">LP</day>
+							<day type="mon">P1</day>
+							<day type="tue">P2</day>
+							<day type="wed">P3</day>
+							<day type="thu">P4</day>
+							<day type="fri">P5</day>
+							<day type="sat">P6</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">Lāpule</day>
+							<day type="mon">Poʻakahi</day>
+							<day type="tue">Poʻalua</day>
+							<day type="wed">Poʻakolu</day>
+							<day type="thu">Poʻahā</day>
+							<day type="fri">Poʻalima</day>
+							<day type="sat">Poʻaono</day>
+						</dayWidth>
+					</dayContext>
+				</days>
 			</calendar>
 		</calendars>
 	</dates>
