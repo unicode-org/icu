@@ -375,7 +375,7 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
         goto finish;
     }
     /* auto detected popular encodings? */
-    if (cp!=NULL) {
+    if (cp!=NULL && isVerbose()) {
         printf("autodetected encoding %s\n", cp);
     }
     /* Parse the data into an SRBRoot */
