@@ -256,120 +256,121 @@ char TestFactory::gClassID = 0;
 
 void CollationServiceTest::TestRegisterFactory(void) 
 {
-  Locale fu_FU("fu", "FU", "");
-  Locale fu_FU_FOO("fu", "FU", "FOO");
-
-  UErrorCode status = U_ZERO_ERROR;
-
-  Hashtable* fuFUNames = new Hashtable(FALSE, status);
-  if (!fuFUNames) {
-    errln("memory allocation error");
-    return;
-  }
-  fuFUNames->setValueDeleter(uhash_deleteUnicodeString);
-
-  fuFUNames->put(fu_FU.getName(), new UnicodeString("ze leetle bunny Fu-Fu"), status);
-  fuFUNames->put(fu_FU_FOO.getName(), new UnicodeString("zee leetel bunny Foo-Foo"), status);
-  fuFUNames->put(Locale::getUS().getName(), new UnicodeString("little bunny Foo Foo"), status);
-
-  Collator* frcol = Collator::createInstance(Locale::getFrance(), status);
-  Collator* gecol = Collator::createInstance(Locale::getGermany(), status);
-  Collator* jpcol = Collator::createInstance(Locale::getJapan(), status);
-
-  CollatorInfo** info = new CollatorInfo*[4];
-  if (!info) {
-    errln("memory allocation error");
-    return;
-  }
-
-  info[0] = new CollatorInfo(Locale::getUS(), frcol, NULL);
-  info[1] = new CollatorInfo(Locale::getFrance(), gecol, NULL);
-  info[2] = new CollatorInfo(fu_FU, jpcol, fuFUNames);
-  info[3] = NULL;
-
-  TestFactory* factory = new TestFactory(info);
-  if (!factory) {
-    errln("memory allocation error");
-    return;
-  }
-
-  Collator* uscol = Collator::createInstance(Locale::getUS(), status);
-  Collator* fucol = Collator::createInstance(fu_FU, status);
-        
-  {
-    URegistryKey key = Collator::registerFactory(factory, status);
-    Collator* ncol = Collator::createInstance(Locale::getUS(), status);
-    if (*frcol != *ncol) {
-      errln("frcoll for en_US failed");
-    }
-    delete ncol; ncol = NULL;
-
-    ncol = Collator::createInstance(fu_FU_FOO, status);
-    if (*jpcol != *ncol) {
-      errln("jpcol for fu_FU_FOO failed");
-    }
-
-	Locale loc = ncol->getLocale(ULOC_REQUESTED_LOCALE, status);
-	if (loc != fu_FU_FOO) {
-		errln(UnicodeString("requested locale for fu_FU_FOO is not fu_FU_FOO but ") + loc.getName());
-	}
-	loc = ncol->getLocale(ULOC_VALID_LOCALE, status);
-	if (loc != fu_FU) {
-		errln(UnicodeString("valid locale for fu_FU_FOO is not fu_FU but ") + loc.getName());
-	}
-    delete ncol; ncol = NULL;
-
-    UnicodeString locName = fu_FU.getName();
-    StringEnumeration* localeEnum = Collator::getAvailableLocales();
-    UBool found = FALSE;
-    for (const UnicodeString* loc = localeEnum->snext(status);
-         !found && loc != NULL;
-         loc = localeEnum->snext(status)) {
-      //
-      if (locName == *loc) {
-        found = TRUE;
-      }
-    }
-    delete localeEnum;
+    Locale fu_FU("fu", "FU", "");
+    Locale fu_FU_FOO("fu", "FU", "FOO");
     
-    if (!found) {
-      errln("new locale fu_FU not reported as supported locale");
+    UErrorCode status = U_ZERO_ERROR;
+    
+    Hashtable* fuFUNames = new Hashtable(FALSE, status);
+    if (!fuFUNames) {
+        errln("memory allocation error");
+        return;
     }
-
-    UnicodeString name;
-    Collator::getDisplayName(fu_FU, name);
-    if (name != "little bunny Foo Foo") {
-      errln(UnicodeString("found ") + name + " for fu_FU");
+    fuFUNames->setValueDeleter(uhash_deleteUnicodeString);
+    
+    fuFUNames->put(fu_FU.getName(), new UnicodeString("ze leetle bunny Fu-Fu"), status);
+    fuFUNames->put(fu_FU_FOO.getName(), new UnicodeString("zee leetel bunny Foo-Foo"), status);
+    fuFUNames->put(Locale::getUS().getName(), new UnicodeString("little bunny Foo Foo"), status);
+    
+    Collator* frcol = Collator::createInstance(Locale::getFrance(), status);
+    Collator* gecol = Collator::createInstance(Locale::getGermany(), status);
+    Collator* jpcol = Collator::createInstance(Locale::getJapan(), status);
+    
+    CollatorInfo** info = new CollatorInfo*[4];
+    if (!info) {
+        errln("memory allocation error");
+        return;
     }
-
-    Collator::getDisplayName(fu_FU, fu_FU_FOO, name);
-    if (name != "zee leetel bunny Foo-Foo") {
-      errln(UnicodeString("found ") + name + " for fu_FU in fu_FU_FOO");
+    
+    info[0] = new CollatorInfo(Locale::getUS(), frcol, NULL);
+    info[1] = new CollatorInfo(Locale::getFrance(), gecol, NULL);
+    info[2] = new CollatorInfo(fu_FU, jpcol, fuFUNames);
+    info[3] = NULL;
+    
+    TestFactory* factory = new TestFactory(info);
+    if (!factory) {
+        errln("memory allocation error");
+        return;
     }
-
-    if (!Collator::unregister(key, status)) {
-      errln("failed to unregister factory");
+    
+    Collator* uscol = Collator::createInstance(Locale::getUS(), status);
+    Collator* fucol = Collator::createInstance(fu_FU, status);
+    
+    {
+        URegistryKey key = Collator::registerFactory(factory, status);
+        Collator* ncol = Collator::createInstance(Locale::getUS(), status);
+        if (*frcol != *ncol) {
+            errln("frcoll for en_US failed");
+        }
+        delete ncol; ncol = NULL;
+        
+        ncol = Collator::createInstance(fu_FU_FOO, status);
+        if (*jpcol != *ncol) {
+            errln("jpcol for fu_FU_FOO failed");
+        }
+        
+        Locale loc = ncol->getLocale(ULOC_REQUESTED_LOCALE, status);
+        if (loc != fu_FU_FOO) {
+            errln(UnicodeString("requested locale for fu_FU_FOO is not fu_FU_FOO but ") + loc.getName());
+        }
+        loc = ncol->getLocale(ULOC_VALID_LOCALE, status);
+        if (loc != fu_FU) {
+            errln(UnicodeString("valid locale for fu_FU_FOO is not fu_FU but ") + loc.getName());
+        }
+        delete ncol; ncol = NULL;
+        
+        UnicodeString locName = fu_FU.getName();
+        StringEnumeration* localeEnum = Collator::getAvailableLocales();
+        UBool found = FALSE;
+        const UnicodeString* locStr;
+        for (locStr = localeEnum->snext(status);
+            !found && locStr != NULL;
+            locStr = localeEnum->snext(status))
+        {
+            if (locName == *locStr) {
+                found = TRUE;
+            }
+        }
+        delete localeEnum;
+        
+        if (!found) {
+            errln("new locale fu_FU not reported as supported locale");
+        }
+        
+        UnicodeString name;
+        Collator::getDisplayName(fu_FU, name);
+        if (name != "little bunny Foo Foo") {
+            errln(UnicodeString("found ") + name + " for fu_FU");
+        }
+        
+        Collator::getDisplayName(fu_FU, fu_FU_FOO, name);
+        if (name != "zee leetel bunny Foo-Foo") {
+            errln(UnicodeString("found ") + name + " for fu_FU in fu_FU_FOO");
+        }
+        
+        if (!Collator::unregister(key, status)) {
+            errln("failed to unregister factory");
+        }
+        // ja, fr, ge collators no longer valid
+        
+        ncol = Collator::createInstance(fu_FU, status);
+        if (*fucol != *ncol) {
+            errln("collator after unregister does not match original fu_FU");
+        }
     }
-    // ja, fr, ge collators no longer valid
-
-    ncol = Collator::createInstance(fu_FU, status);
-    if (*fucol != *ncol) {
-      errln("collator after unregister does not match original fu_FU");
-    }
-  }
-
-  delete fucol;
-  delete uscol;
+    
+    delete fucol;
+    delete uscol;
 }
 
 void CollationServiceTest::runIndexedTest(int32_t index, UBool exec, const char* &name, char* /*par */)
 {
-  if (exec) logln("TestSuite CollationServiceTest: ");
-  switch (index) {
-    TESTCASE(0, TestRegister);
-    TESTCASE(1, TestRegisterFactory);
-  default: name = ""; break;
-  }
+    if (exec) logln("TestSuite CollationServiceTest: ");
+    switch (index) {
+        TESTCASE(0, TestRegister);
+        TESTCASE(1, TestRegisterFactory);
+    default: name = ""; break;
+    }
 }
 
 #endif
