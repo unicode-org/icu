@@ -510,7 +510,7 @@ readHeader(ConvData *data,
             uint8_t bytes[UCNV_EXT_MAX_BYTES];
 
             s=value;
-            if(1==ucm_parseBytes(bytes, line, &s) && *s==0) {
+            if(1==ucm_parseBytes(bytes, line, (const char **)&s) && *s==0) {
                 staticData->subChar1=bytes[0];
             } else {
                 fprintf(stderr, "error: illegal <subchar1> %s\n", value);

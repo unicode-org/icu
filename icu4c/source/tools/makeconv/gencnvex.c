@@ -118,7 +118,7 @@ CnvExtWrite(NewConverter *cnvData, const UConverterStaticData *staticData,
     if(tableType&TABLE_BASE) {
         headerSize=0;
     } else {
-        _MBCSHeader header={ 0 };
+        _MBCSHeader header={ { 0, 0, 0, 0 }, 0, 0, 0, 0, 0, 0, 0 };
 
         /* write the header and base table name for an extension-only table */
         length=uprv_strlen(extData->ucm->baseName)+1;

@@ -240,7 +240,7 @@ ConversionTest::TestFromUnicode() {
                     // start after the NUL
                     p+=length;
                     length=s.length()-length;
-                    if(length>=sizeof(cc.subchar)) {
+                    if(length>=(int32_t)sizeof(cc.subchar)) {
                         errorCode=U_ILLEGAL_ARGUMENT_ERROR;
                     } else {
                         int32_t j;
@@ -850,7 +850,7 @@ ConversionTest::checkToUnicode(ConversionCase &cc, UConverter *cnv, const char *
         s=printBytes(cc.invalidChars, cc.invalidLength, invalidCharsString=s);
         s=printBytes((uint8_t *)resultInvalidChars, resultInvalidLength, resultInvalidCharsString=s);
 
-        if((s-buffer)>sizeof(buffer)) {
+        if((s-buffer)>(int32_t)sizeof(buffer)) {
             errln("toUnicode[%d](%s cb=\"%s\" fb=%d flush=%d %s) fatal error: checkToUnicode() test output buffer overflow writing %d chars\n",
                     cc.caseNr, cc.charset, cc.cbopt, cc.fallbacks, cc.finalFlush, name, (int)(s-buffer));
             exit(1);
@@ -1108,7 +1108,7 @@ ConversionTest::checkFromUnicode(ConversionCase &cc, UConverter *cnv, const char
         s=printUnicode(cc.invalidUChars, cc.invalidLength, invalidCharsString=s);
         s=printUnicode(resultInvalidUChars, resultInvalidLength, resultInvalidUCharsString=s);
 
-        if((s-buffer)>sizeof(buffer)) {
+        if((s-buffer)>(int32_t)sizeof(buffer)) {
             errln("fromUnicode[%d](%s cb=\"%s\" fb=%d flush=%d %s) fatal error: checkFromUnicode() test output buffer overflow writing %d chars\n",
                     cc.caseNr, cc.charset, cc.cbopt, cc.fallbacks, cc.finalFlush, name, (int)(s-buffer));
             exit(1);
