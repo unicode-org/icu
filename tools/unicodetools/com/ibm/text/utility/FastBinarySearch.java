@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/FastBinarySearch.java,v $
-* $Date: 2002/10/01 01:19:15 $
-* $Revision: 1.2 $
+* $Date: 2002/10/01 01:43:21 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -35,6 +35,8 @@ final public class FastBinarySearch {
         
         // try different combinations of data size and iterations
         
+        perfTest(10, 2000000);
+        perfTest(30, 500000);
         perfTest(100, 200000);
         perfTest(1000, 2000);
         perfTest(100000, 200);
