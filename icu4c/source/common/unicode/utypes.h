@@ -631,8 +631,21 @@ typedef enum UErrorCode {
      U_REGEX_INVALID_BACK_REF,             /**< Back-reference to a non-existent capture group.    */
      U_REGEX_INVALID_FLAG,                 /**< Invalid value for match mode flags.                */
      U_REGEX_ERROR_LIMIT,                  /**< This must always be the last value to indicate the limit for regexp errors */
+     
+     /*
+      * The error code in the range 0x10400-0x104ff are reserved for IDNA related error codes
+      */
+      U_IDNA_ERROR_START=0x10400,
+      U_IDNA_PROHIBITED_CODEPOINT_FOUND_ERROR,
+      U_IDNA_UNASSIGNED_CODEPOINT_FOUND_ERROR,
+      U_IDNA_CHECK_BIDI_ERROR,
+      U_IDNA_STD3_ASCII_RULES_ERROR,
+      U_IDNA_ACE_PREFIX_ERROR,
+      U_IDNA_VERIFICATION_ERROR,
+      U_IDNA_LABEL_TOO_LONG_ERROR,
+      U_IDNA_ERROR_LIMIT,
 
-    U_ERROR_LIMIT=U_REGEX_ERROR_LIMIT      /**< This must always be the last value to indicate the limit for UErrorCode (last error code +1) */
+    U_ERROR_LIMIT=U_IDNA_ERROR_LIMIT      /**< This must always be the last value to indicate the limit for UErrorCode (last error code +1) */
 } UErrorCode;
 
 /* Use the following to determine if an UErrorCode represents */
