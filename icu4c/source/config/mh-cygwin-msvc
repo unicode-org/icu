@@ -38,6 +38,11 @@ THREADSCFLAGS += /MD
 THREADSCXXFLAGS += /MD
 endif
 
+ifeq ($(ENABLE_RELEASE),1)
+# Make sure that assertions are disabled
+CPPFLAGS+=-DU_RELEASE=1
+endif
+
 # /GF pools strings and places them into read-only memory
 # /GX enables exception handling
 CFLAGS += /GF
