@@ -186,6 +186,39 @@ public class JDKTimeZone extends TimeZone {
     }
 
     /**
+     * Returns the amount of time in ms that the clock is advanced during DST.
+     * @return the number of milliseconds the time is
+     * advanced with respect to standard time when the daylight savings rules
+     * are in effect. A positive number, typically one hour (3600000).
+     * @stable ICU 2.0
+     */
+    public int getDSTSavings() {
+	if (useDaylightTime()) {
+	    try {   
+		// This is only to make a 1.3 compiler happy.  JDKTimeZone
+		// is only used in JDK 1.4, where TimeZone has the getDSTSavings
+		// API on it, so a straight call to getDSTSavings would actually
+		// work if we could compile it.  Since on 1.4 the time zone is
+		// not a SimpleTimeZone, we can't downcast in order to make
+		// the direct call that a 1.3 compiler would like, because at
+		// runtime the downcast would fail.
+		// todo: remove when we no longer support compiling under 1.3
+
+		// The following works if getDSTSavings is declared in   
+		// TimeZone (JDK 1.4) or SimpleTimeZone (JDK 1.3).   
+		final Object[] args = new Object[0];
+		final Class[] argtypes = new Class[0];
+		System.out.println("JDKTimeZone.getDSTSavings");
+		Method m = zone.getClass().getMethod("getDSTSavings", argtypes); 
+		return ((Integer) m.invoke(zone, args)).intValue();   
+	    } catch (Exception e) {   
+		// should never happen
+	    }   
+  	}
+	return 0;
+    }
+
+    /**
      * Boilerplate API; calls through to wrapped object.
      */
     public boolean equals(Object obj) {
