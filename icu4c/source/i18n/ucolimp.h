@@ -22,7 +22,7 @@
 #include "unicode/ucol.h"
 #include "ucmp32.h"
 #include "unicode/ures.h"
-
+#include "unicode/udata.h"
 
 /* This is the size of the stack allocated buffer for sortkey generation and similar operations */
 /* if it is too small, heap allocation will occur.*/
@@ -384,6 +384,8 @@ struct UCollator {
     UBool strengthisDefault;          /* attribute for strength */
     UChar *rules;
     UChar zero;
+    UDataInfo dataInfo;               /* Data info of UCA table */
+    uint8_t trVersion;                /* version info of tailoring rules*/
 };
 
 /* various internal functions */
