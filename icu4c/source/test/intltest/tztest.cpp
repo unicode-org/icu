@@ -428,171 +428,171 @@ TimeZoneTest::TestGetAvailableIDs913()
 }
 
 
-    /**
-     * This test is problematic. It should really just confirm that
-     * the list of compatibility zone IDs exist and are somewhat
-     * meaningful (that is, they aren't all aliases of GMT). It goes a
-     * bit further -- it hard-codes expectations about zone behavior,
-     * when in fact zones are redefined quite frequently. ICU's build
-     * process means that it is easy to update ICU to contain the
-     * latest Olson zone data, but if a zone tested here changes, then
-     * this test will fail.  I have updated the test for 1999j data,
-     * but further updates will probably be required. Note that some
-     * of the concerts listed below no longer apply -- in particular,
-     * we do NOT overwrite real UNIX zones with 3-letter IDs. There
-     * are two points of overlap as of 1999j: MET and EET. These are
-     * both real UNIX zones, so we just use the official
-     * definition. This test has been updated to reflect this.
-     * 12/3/99 aliu
-     *
-     * [srl - from java - 7/5/1998]
-     * @bug 4130885
-     * Certain short zone IDs, used since 1.1.x, are incorrect.
-     *
-     * The worst of these is:
-     *
-     * "CAT" (Central African Time) should be GMT+2:00, but instead returns a
-     * zone at GMT-1:00. The zone at GMT-1:00 should be called EGT, CVT, EGST,
-     * or AZOST, depending on which zone is meant, but in no case is it CAT.
-     *
-     * Other wrong zone IDs:
-     *
-     * ECT (European Central Time) GMT+1:00: ECT is Ecuador Time,
-     * GMT-5:00. European Central time is abbreviated CEST.
-     *
-     * SST (Solomon Island Time) GMT+11:00. SST is actually Samoa Standard Time,
-     * GMT-11:00. Solomon Island time is SBT.
-     *
-     * NST (New Zealand Time) GMT+12:00. NST is the abbreviation for
-     * Newfoundland Standard Time, GMT-3:30. New Zealanders use NZST.
-     *
-     * AST (Alaska Standard Time) GMT-9:00. [This has already been noted in
-     * another bug.] It should be "AKST". AST is Atlantic Standard Time,
-     * GMT-4:00.
-     *
-     * PNT (Phoenix Time) GMT-7:00. PNT usually means Pitcairn Time,
-     * GMT-8:30. There is no standard abbreviation for Phoenix time, as distinct
-     * from MST with daylight savings.
-     *
-     * In addition to these problems, a number of zones are FAKE. That is, they
-     * don't match what people use in the real world.
-     *
-     * FAKE zones:
-     *
-     * EET (should be EEST)
-     * ART (should be EEST)
-     * MET (should be IRST)
-     * NET (should be AMST)
-     * PLT (should be PKT)
-     * BST (should be BDT)
-     * VST (should be ICT)
-     * CTT (should be CST) +
-     * ACT (should be CST) +
-     * AET (should be EST) +
-     * MIT (should be WST) +
-     * IET (should be EST) +
-     * PRT (should be AST) +
-     * CNT (should be NST)
-     * AGT (should be ARST)
-     * BET (should be EST) +
-     *
-     * + A zone with the correct name already exists and means something
-     * else. E.g., EST usually indicates the US Eastern zone, so it cannot be
-     * used for Brazil (BET).
-     */
+/**
+ * This test is problematic. It should really just confirm that
+ * the list of compatibility zone IDs exist and are somewhat
+ * meaningful (that is, they aren't all aliases of GMT). It goes a
+ * bit further -- it hard-codes expectations about zone behavior,
+ * when in fact zones are redefined quite frequently. ICU's build
+ * process means that it is easy to update ICU to contain the
+ * latest Olson zone data, but if a zone tested here changes, then
+ * this test will fail.  I have updated the test for 1999j data,
+ * but further updates will probably be required. Note that some
+ * of the concerts listed below no longer apply -- in particular,
+ * we do NOT overwrite real UNIX zones with 3-letter IDs. There
+ * are two points of overlap as of 1999j: MET and EET. These are
+ * both real UNIX zones, so we just use the official
+ * definition. This test has been updated to reflect this.
+ * 12/3/99 aliu
+ *
+ * [srl - from java - 7/5/1998]
+ * @bug 4130885
+ * Certain short zone IDs, used since 1.1.x, are incorrect.
+ *
+ * The worst of these is:
+ *
+ * "CAT" (Central African Time) should be GMT+2:00, but instead returns a
+ * zone at GMT-1:00. The zone at GMT-1:00 should be called EGT, CVT, EGST,
+ * or AZOST, depending on which zone is meant, but in no case is it CAT.
+ *
+ * Other wrong zone IDs:
+ *
+ * ECT (European Central Time) GMT+1:00: ECT is Ecuador Time,
+ * GMT-5:00. European Central time is abbreviated CEST.
+ *
+ * SST (Solomon Island Time) GMT+11:00. SST is actually Samoa Standard Time,
+ * GMT-11:00. Solomon Island time is SBT.
+ *
+ * NST (New Zealand Time) GMT+12:00. NST is the abbreviation for
+ * Newfoundland Standard Time, GMT-3:30. New Zealanders use NZST.
+ *
+ * AST (Alaska Standard Time) GMT-9:00. [This has already been noted in
+ * another bug.] It should be "AKST". AST is Atlantic Standard Time,
+ * GMT-4:00.
+ *
+ * PNT (Phoenix Time) GMT-7:00. PNT usually means Pitcairn Time,
+ * GMT-8:30. There is no standard abbreviation for Phoenix time, as distinct
+ * from MST with daylight savings.
+ *
+ * In addition to these problems, a number of zones are FAKE. That is, they
+ * don't match what people use in the real world.
+ *
+ * FAKE zones:
+ *
+ * EET (should be EEST)
+ * ART (should be EEST)
+ * MET (should be IRST)
+ * NET (should be AMST)
+ * PLT (should be PKT)
+ * BST (should be BDT)
+ * VST (should be ICT)
+ * CTT (should be CST) +
+ * ACT (should be CST) +
+ * AET (should be EST) +
+ * MIT (should be WST) +
+ * IET (should be EST) +
+ * PRT (should be AST) +
+ * CNT (should be NST)
+ * AGT (should be ARST)
+ * BET (should be EST) +
+ *
+ * + A zone with the correct name already exists and means something
+ * else. E.g., EST usually indicates the US Eastern zone, so it cannot be
+ * used for Brazil (BET).
+ */
 void TimeZoneTest::TestShortZoneIDs()
 {
-     int32_t i;
-     // Create a small struct to hold the array
-     struct
-     {
-          char      id[4];
-          int32_t   offset;
-          UBool    daylight;
-     }
-     kReferenceList [] =
-     {
-        "MIT", -660, FALSE,
-        "HST", -600, FALSE,
-        "AST", -540, TRUE,
-        "PST", -480, TRUE,
-        "PNT", -420, FALSE,
-        "MST", -420, TRUE,
-        "CST", -360, TRUE,
-        "IET", -300, FALSE,
-        "EST", -300, TRUE,
-        "PRT", -240, FALSE,
-        "CNT", -210, TRUE,
-        "AGT", -180, FALSE, // updated 26 Sep 2000 aliu
-        "BET", -180, TRUE,
+    int32_t i;
+    // Create a small struct to hold the array
+    struct
+    {
+        char      id[4];
+        int32_t   offset;
+        UBool    daylight;
+    }
+    kReferenceList [] =
+    {
+        {"MIT", -660, FALSE},
+        {"HST", -600, FALSE},
+        {"AST", -540, TRUE},
+        {"PST", -480, TRUE},
+        {"PNT", -420, FALSE},
+        {"MST", -420, TRUE},
+        {"CST", -360, TRUE},
+        {"IET", -300, FALSE},
+        {"EST", -300, TRUE},
+        {"PRT", -240, FALSE},
+        {"CNT", -210, TRUE},
+        {"AGT", -180, FALSE}, // updated 26 Sep 2000 aliu
+        {"BET", -180, TRUE},
         // "CAT", -60, FALSE, // Wrong:
         // As of bug 4130885, fix CAT (Central Africa)
-        "CAT", 120, FALSE, // Africa/Harare
-        "GMT", 0, FALSE,
-        "UTC", 0, FALSE, // ** srl: seems broken in C++
-        "ECT", 60, TRUE,
-        "ART", 120, TRUE,
-        "EET", 120, TRUE,
-        "EAT", 180, FALSE,
-        "MET", 60, TRUE, // updated 12/3/99 aliu
-        "NET", 240, TRUE, // updated 12/3/99 aliu
-        "PLT", 300, FALSE,
-        "IST", 330, FALSE,
-        "BST", 360, FALSE,
-        "VST", 420, FALSE,
-        "CTT", 480, TRUE, // updated 12/3/99 aliu
-        "JST", 540, FALSE,
-        "ACT", 570, TRUE, // updated 12/3/99 aliu
-        "AET", 600, TRUE,
-        "SST", 660, FALSE,
+        {"CAT", 120, FALSE}, // Africa/Harare
+        {"GMT", 0, FALSE},
+        {"UTC", 0, FALSE}, // ** srl: seems broken in C++
+        {"ECT", 60, TRUE},
+        {"ART", 120, TRUE},
+        {"EET", 120, TRUE},
+        {"EAT", 180, FALSE},
+        {"MET", 60, TRUE}, // updated 12/3/99 aliu
+        {"NET", 240, TRUE}, // updated 12/3/99 aliu
+        {"PLT", 300, FALSE},
+        {"IST", 330, FALSE},
+        {"BST", 360, FALSE},
+        {"VST", 420, FALSE},
+        {"CTT", 480, TRUE}, // updated 12/3/99 aliu
+        {"JST", 540, FALSE},
+        {"ACT", 570, TRUE}, // updated 12/3/99 aliu
+        {"AET", 600, TRUE},
+        {"SST", 660, FALSE},
         // "NST", 720, FALSE,
         // As of bug 4130885, fix NST (New Zealand)
-        "NST", 720, TRUE, // Pacific/Auckland
-        "",0,FALSE
-     };
+        {"NST", 720, TRUE}, // Pacific/Auckland
+        {"",0,FALSE}
+    };
 
 
-     for(i=0;kReferenceList[i].id[0];i++) {
-          UnicodeString itsID(kReferenceList[i].id);
-          UBool ok = TRUE;
-          // Check existence.
-          TimeZone *tz = TimeZone::createTimeZone(itsID);
-          if (!tz) {
-              errln("FAIL: Time Zone " + itsID + " does not exist!");
-              continue;
-          }
+    for(i=0;kReferenceList[i].id[0];i++) {
+        UnicodeString itsID(kReferenceList[i].id);
+        UBool ok = TRUE;
+        // Check existence.
+        TimeZone *tz = TimeZone::createTimeZone(itsID);
+        if (!tz) {
+            errln("FAIL: Time Zone " + itsID + " does not exist!");
+            continue;
+        }
 
-          // Check daylight usage.
-          UBool usesDaylight = tz->useDaylightTime();
-          if (usesDaylight != kReferenceList[i].daylight) {
-              errln("FAIL: Time Zone " + itsID + " use daylight is " +
-                    (usesDaylight?"TRUE":"FALSE") +
-                    " but it should be " +
-                    ((kReferenceList[i].daylight)?"TRUE":"FALSE"));
-              ok = FALSE;
-          }
+        // Check daylight usage.
+        UBool usesDaylight = tz->useDaylightTime();
+        if (usesDaylight != kReferenceList[i].daylight) {
+            errln("FAIL: Time Zone " + itsID + " use daylight is " +
+                  (usesDaylight?"TRUE":"FALSE") +
+                  " but it should be " +
+                  ((kReferenceList[i].daylight)?"TRUE":"FALSE"));
+            ok = FALSE;
+        }
 
-          // Check offset
-          int32_t offsetInMinutes = tz->getRawOffset()/60000;
-          if (offsetInMinutes != kReferenceList[i].offset) {
-              errln("FAIL: Time Zone " + itsID + " raw offset is " +
-                    offsetInMinutes +
-                    " but it should be " + kReferenceList[i].offset);
-              ok = FALSE;
-          }
+        // Check offset
+        int32_t offsetInMinutes = tz->getRawOffset()/60000;
+        if (offsetInMinutes != kReferenceList[i].offset) {
+            errln("FAIL: Time Zone " + itsID + " raw offset is " +
+                  offsetInMinutes +
+                  " but it should be " + kReferenceList[i].offset);
+            ok = FALSE;
+        }
 
-          if (ok) {
-              logln("OK: " + itsID +
-                    " useDaylightTime() & getRawOffset() as expected");
-          }
-          delete tz;
-     }
+        if (ok) {
+            logln("OK: " + itsID +
+                  " useDaylightTime() & getRawOffset() as expected");
+        }
+        delete tz;
+    }
 
 
-     // OK now test compat
-     logln("Testing for compatibility zones");
+    // OK now test compat
+    logln("Testing for compatibility zones");
 
-     const char* compatibilityMap[] = {
+    const char* compatibilityMap[] = {
         // This list is copied from tz.alias.  If tz.alias
         // changes, this list must be updated.  Current as of 12/3/99
         "ACT", "Australia/Darwin",
@@ -626,7 +626,7 @@ void TimeZoneTest::TestShortZoneIDs()
         "SST", "Pacific/Guadalcanal",
         "UTC", "Etc/GMT",
         "VST", "Asia/Saigon",
-         "","","",
+         "","",""
     };
 
     for (i=0;*compatibilityMap[i];i+=2) {
@@ -716,23 +716,23 @@ void TimeZoneTest::TestCustomParse()
     {
         // ID        Expected offset in minutes
         //"GMT",       kUnparseable,   Isn't custom. Can't test it here. [returns normal GMT]
-        "GMT-YOUR.AD.HERE",     kUnparseable,
-        "GMT0",      kUnparseable,
-        "GMT+0",     (0),
-        "GMT+1",     (60),
-        "GMT-0030",  (-30),
-        "GMT+15:99", (15*60+99),
-        "GMT+",      kUnparseable,
-        "GMT-",      kUnparseable,
-        "GMT+0:",    kUnparseable,
-        "GMT-:",     kUnparseable,
-        "GMT-YOUR.AD.HERE",     kUnparseable,
-        "GMT+0010",  (10), // Interpret this as 00:10
-        "GMT-10",    (-10*60),
-        "GMT+30",    (30),
-        "GMT-3:30",  (-(3*60+30)),
-        "GMT-230",   (-(2*60+30)),
-        0,           0
+        {"GMT-YOUR.AD.HERE",     kUnparseable},
+        {"GMT0",      kUnparseable},
+        {"GMT+0",     (0)},
+        {"GMT+1",     (60)},
+        {"GMT-0030",  (-30)},
+        {"GMT+15:99", (15*60+99)},
+        {"GMT+",      kUnparseable},
+        {"GMT-",      kUnparseable},
+        {"GMT+0:",    kUnparseable},
+        {"GMT-:",     kUnparseable},
+        {"GMT-YOUR.AD.HERE",     kUnparseable},
+        {"GMT+0010",  (10)}, // Interpret this as 00:10
+        {"GMT-10",    (-10*60)},
+        {"GMT+30",    (30)},
+        {"GMT-3:30",  (-(3*60+30))},
+        {"GMT-230",   (-(2*60+30))},
+        {0,           0}
     };
 
     for (i=0; kData[i].customId[0] != '\0'; i++)
@@ -827,12 +827,12 @@ TimeZoneTest::TestDisplayName()
         TimeZone::EDisplayType style;
         char expect[100];
     } kData[] = {
-        FALSE, TimeZone::SHORT, "PST",
-        TRUE,  TimeZone::SHORT, "PDT",
-        FALSE, TimeZone::LONG,  "Pacific Standard Time",
-        TRUE,  TimeZone::LONG,  "Pacific Daylight Time",
+        {FALSE, TimeZone::SHORT, "PST"},
+        {TRUE,  TimeZone::SHORT, "PDT"},
+        {FALSE, TimeZone::LONG,  "Pacific Standard Time"},
+        {TRUE,  TimeZone::LONG,  "Pacific Daylight Time"},
 
-        FALSE, TimeZone::LONG, ""
+        {FALSE, TimeZone::LONG, ""}
     };
 
     for (i=0; kData[i].expect[0] != '\0'; i++)
