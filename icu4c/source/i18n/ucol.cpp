@@ -30,6 +30,8 @@
 static UCollator* UCA = NULL;
 static const InverseTableHeader* invUCA = NULL;
 
+extern "C" UBool checkFCD(const UChar*, int32_t, UErrorCode*);
+
 /* Fixup table a la Markus */
 /* see http://www.ibm.com/software/developer/library/utf16.html for further explanation */
 static uint8_t utf16fixup[32] = {
@@ -1523,8 +1525,11 @@ ucol_calcSortKey(const    UCollator    *coll,
     /* If we need to normalize, we'll do it all at once at the beggining! */
     UColAttributeValue normMode = coll->normalizationMode;
     if((normMode != UCOL_OFF) 
-      && (u_quickCheck(source, len, UNORM_NFD, status) != UQUICK_CHECK_YES) 
-      && (u_quickCheck(source, len, UNORM_NFC, status) != UQUICK_CHECK_YES)) {
+      /* && (u_quickCheck(source, len, UNORM_NFD, status) != UQUICK_CHECK_YES) 
+      && (u_quickCheck(source, len, UNORM_NFC, status) != UQUICK_CHECK_YES)) */
+      /* changed by synwee */
+      && !checkFCD(source, len, status))
+    {
       /*fprintf(stderr, ".");*/
         normSourceLen = u_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLen, status);
         if(U_FAILURE(*status)) {
@@ -1957,8 +1962,12 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
     /* If we need to normalize, we'll do it all at once at the beggining! */
     UColAttributeValue normMode = coll->normalizationMode;
     if((normMode != UCOL_OFF) 
-      && (u_quickCheck(source, len, UNORM_NFD, status) != UQUICK_CHECK_YES)
-      && (u_quickCheck(source, len, UNORM_NFC, status) != UQUICK_CHECK_YES)) {
+      /* && (u_quickCheck(source, len, UNORM_NFD, status) != UQUICK_CHECK_YES)
+      && (u_quickCheck(source, len, UNORM_NFC, status) != UQUICK_CHECK_YES)) */
+      /* changed by synwee */
+      && !checkFCD(source, len, status))
+    {
+
         normSourceLen = u_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLen, status);
         if(U_FAILURE(*status)) {
             *status=U_ZERO_ERROR;
@@ -2555,8 +2564,11 @@ ucol_strcoll(    const    UCollator    *coll,
     
     init_collIterate(source, sourceLength, &sColl, FALSE);
     if((coll->normalizationMode == UCOL_ON)
-      && (u_quickCheck( sColl.string, sColl.len - sColl.string, UNORM_NFD, &status) != UQUICK_CHECK_YES)
-      && (u_quickCheck( sColl.string, sColl.len - sColl.string, UNORM_NFC, &status) != UQUICK_CHECK_YES)) {
+      /* && (u_quickCheck( sColl.string, sColl.len - sColl.string, UNORM_NFD, &status) != UQUICK_CHECK_YES)
+      && (u_quickCheck( sColl.string, sColl.len - sColl.string, UNORM_NFC, &status) != UQUICK_CHECK_YES)) */
+      /* changed by synwee */
+      && !checkFCD(sColl.string, sColl.len - sColl.string, &status))
+    {
         normSourceLength = u_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLength, &status);
         /* if we don't have enough space in buffers, we'll recursively call strcoll, so that we have single point */
         /* of exit - to free buffers we allocated. Otherwise, returns from strcoll are in various places and it   */
@@ -2586,8 +2598,11 @@ ucol_strcoll(    const    UCollator    *coll,
 
     init_collIterate(target, targetLength, &tColl, FALSE);
     if((coll->normalizationMode == UCOL_ON)
-      && (u_quickCheck(tColl.string, tColl.len - tColl.string, UNORM_NFD, &status) != UQUICK_CHECK_YES)
-      && (u_quickCheck(tColl.string, tColl.len - tColl.string, UNORM_NFC, &status) != UQUICK_CHECK_YES)) {
+      /* && (u_quickCheck(tColl.string, tColl.len - tColl.string, UNORM_NFD, &status) != UQUICK_CHECK_YES)
+      && (u_quickCheck(tColl.string, tColl.len - tColl.string, UNORM_NFC, &status) != UQUICK_CHECK_YES)) */
+      /* changed by synwee */
+      && !checkFCD(tColl.string, tColl.len - tColl.string, &status))
+    {
       normTargetLength = u_normalize(target, targetLength, UNORM_NFD, 0, normTarget, normTargetLength, &status);
       if(U_FAILURE(status)) { /* This would be buffer overflow */
           UColAttributeValue mode = coll->normalizationMode;
