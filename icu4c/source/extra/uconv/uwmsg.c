@@ -80,6 +80,7 @@ finish:
     ucnv_close(converter);
 }
 
+static const char *gPath = 0;
 static UResourceBundle *gBundle = NULL;
 
 U_CAPI UResourceBundle *u_wmsg_setPath(const char *path, UErrorCode *err)
@@ -99,6 +100,7 @@ U_CAPI UResourceBundle *u_wmsg_setPath(const char *path, UErrorCode *err)
     UResourceBundle *b = NULL;
     b = ures_open(path, NULL, err);
 
+    gPath = uprv_strdup(path);
     gBundle = b;
   }
   
@@ -125,7 +127,7 @@ U_CAPI void  u_wmsg(const char *tag, ... )
 
     if(U_FAILURE(err))
     {
-        fprintf(stderr, "u_wmsg: failed to load tag [%s] [%s]!!\n", tag,  u_errorName(err));
+        fprintf(stderr, "u_wmsg: failed to load tag [%s] [%s] [%s]!!\n", tag,  u_errorName(err), gPath);
         return;
     }
 
