@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/caniter.cpp,v $ 
- * $Date: 2002/03/14 23:53:29 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/03/16 06:15:58 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -167,6 +167,21 @@ void CanonicalIterator::setSource(UnicodeString newSource, UErrorCode status) {
     done = FALSE;
     
     cleanPieces();
+
+    // catch degenerate case
+    if (newSource.length() == 0) {
+    	pieces = new UnicodeString*[1];
+        pieces_length = 1;
+    	current = new int32_t[1];
+        current_length = 1;
+        current[0] = 0;
+    	pieces[0] = new UnicodeString[1];
+        pieces[0][0] = UnicodeString("");
+        pieces_lengths = new int32_t[1];
+        pieces_lengths[0] = 1;
+    	return;
+    }
+        
 
     UnicodeString *list = new UnicodeString[source.length()];
     int32_t list_length = 0;
