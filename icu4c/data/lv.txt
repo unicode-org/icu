@@ -42,7 +42,7 @@ lv {
             "pirmdiena",
             "otrdiena",
             "tre\u0161diena",
-            "ceturdien",
+            "ceturtdiena",
             "piektdiena",
             "sestdiena",
     }
