@@ -32,16 +32,29 @@ doTest(UBiDi *pBiDi, int testNumber, BiDiTestData *test, UTextOffset lineStart);
 static void
 testReordering(UBiDi *pBiDi, int testNumber);
 
+extern void
+doInverseBiDiTest();
+
+static void
+testManyInverseBiDi(UBiDi *pBiDi, UBiDiLevel direction);
+
+static void
+testInverseBiDi(UBiDi *pBiDi, const UChar *src, int32_t srcLength, UBiDiLevel direction, UErrorCode *pErrorCode);
+
 static char *levelString;
 
 static UChar *
 getStringFromDirProps(const uint8_t *dirProps, UTextOffset length);
 
+static void
+printUnicode(const UChar *s, int32_t length, const UBiDiLevel *levels);
+
 /* regression tests ---------------------------------------------------------*/
 
 extern void
 addComplexTest(TestNode** root) {
-    addTest(root, doBiDiTest, "complex/bidi/regression");
+    addTest(root, doBiDiTest, "complex/bidi");
+    addTest(root, doInverseBiDiTest, "complex/invbidi");
 }
 
 extern void
@@ -345,7 +358,166 @@ testReordering(UBiDi *pBiDi, int testNumber) {
     }
 }
 
-/* helpers ------------------------------------------------------------------*/
+/* inverse BiDi ------------------------------------------------------------- */
+
+static const UChar
+    string0[]={ 0x6c, 0x61, 0x28, 0x74, 0x69, 0x6e, 0x20, 0x5d0, 0x5d1, 0x29, 0x5d2, 0x5d3 },
+    string1[]={ 0x6c, 0x61, 0x74, 0x20, 0x5d0, 0x5d1, 0x5d2, 0x20, 0x31, 0x32, 0x33 },
+    string2[]={ 0x6c, 0x61, 0x74, 0x20, 0x5d0, 0x28, 0x5d1, 0x5d2, 0x20, 0x31, 0x29, 0x32, 0x33 },
+    string3[]={ 0x31, 0x32, 0x33, 0x20, 0x5d0, 0x5d1, 0x5d2, 0x20, 0x34, 0x35, 0x36 },
+    string4[]={ 0x61, 0x62, 0x20, 0x61, 0x62, 0x20, 0x661, 0x662 };
+
+#define STRING_TEST_CASE(s) { (s), sizeof(s)/U_SIZEOF_UCHAR }
+
+static const struct {
+    const UChar *s;
+    int32_t length;
+} testCases[]={
+    STRING_TEST_CASE(string0),
+    STRING_TEST_CASE(string1),
+    STRING_TEST_CASE(string2),
+    STRING_TEST_CASE(string3)
+};
+
+static int countRoundtrips=0, countNonRoundtrips=0;
+
+extern void
+doInverseBiDiTest() {
+    UBiDi *pBiDi;
+    UErrorCode errorCode;
+    int i;
+
+    pBiDi=ubidi_open();
+    if(pBiDi==NULL) {
+        log_err("unable to open a UBiDi object (out of memory)\n");
+        return;
+    }
+
+    log_info("inverse BiDi: testInverseBiDi(L) with %u test cases ---\n", sizeof(testCases)/sizeof(testCases[0]));
+    for(i=0; i<sizeof(testCases)/sizeof(testCases[0]); ++i) {
+        errorCode=U_ZERO_ERROR;
+        testInverseBiDi(pBiDi, testCases[i].s, testCases[i].length, 0, &errorCode);
+    }
+
+    log_info("inverse BiDi: testInverseBiDi(R) with %u test cases ---\n", sizeof(testCases)/sizeof(testCases[0]));
+    for(i=0; i<sizeof(testCases)/sizeof(testCases[0]); ++i) {
+        errorCode=U_ZERO_ERROR;
+        testInverseBiDi(pBiDi, testCases[i].s, testCases[i].length, 1, &errorCode);
+    }
+
+    testManyInverseBiDi(pBiDi, 0);
+    testManyInverseBiDi(pBiDi, 1);
+
+    ubidi_close(pBiDi);
+
+    log_verbose("inverse BiDi: rountrips: %5u\nnon-roundtrips: %5u\n", countRoundtrips, countNonRoundtrips);
+}
+
+#define COUNT_REPEAT_SEGMENTS 6
+
+static const UChar repeatSegments[COUNT_REPEAT_SEGMENTS][2]={
+    { 0x61, 0x62 },     /* L */
+    { 0x5d0, 0x5d1 },   /* R */
+    { 0x627, 0x628 },   /* AL */
+    { 0x31, 0x32 },     /* EN */
+    { 0x661, 0x662 },   /* AN */
+    { 0x20, 0x20 }      /* WS (N) */
+};
+
+static void
+testManyInverseBiDi(UBiDi *pBiDi, UBiDiLevel direction) {
+    static UChar text[8]={ 0, 0, 0x20, 0, 0, 0x20, 0, 0 };
+    int i, j, k;
+    UErrorCode errorCode;
+
+    log_info("inverse BiDi: testManyInverseBiDi(%c) - test permutations of text snippets ---\n", direction==0 ? 'L' : 'R');
+    for(i=0; i<COUNT_REPEAT_SEGMENTS; ++i) {
+        text[0]=repeatSegments[i][0];
+        text[1]=repeatSegments[i][1];
+        for(j=0; j<COUNT_REPEAT_SEGMENTS; ++j) {
+            text[3]=repeatSegments[j][0];
+            text[4]=repeatSegments[j][1];
+            for(k=0; k<COUNT_REPEAT_SEGMENTS; ++k) {
+                text[6]=repeatSegments[k][0];
+                text[7]=repeatSegments[k][1];
+
+                errorCode=U_ZERO_ERROR;
+                log_verbose("inverse BiDi: testManyInverseBiDi()[%u %u %u]\n", i, j, k);
+                testInverseBiDi(pBiDi, text, 8, direction, &errorCode);
+            }
+        }
+    }
+}
+
+static void
+testInverseBiDi(UBiDi *pBiDi, const UChar *src, int32_t srcLength, UBiDiLevel direction, UErrorCode *pErrorCode) {
+    static UChar visualLTR[200], logicalDest[200], visualDest[200];
+    int32_t ltrLength, logicalLength, visualLength;
+
+    if(direction==0) {
+        log_verbose("inverse BiDi: testInverseBiDi(L)\n");
+
+        /* convert visual to logical */
+        ubidi_setInverse(pBiDi, TRUE);
+        ubidi_setPara(pBiDi, src, srcLength, 0, NULL, pErrorCode);
+        logicalLength=ubidi_writeReordered(pBiDi, logicalDest, sizeof(logicalDest)/U_SIZEOF_UCHAR,
+                                           UBIDI_DO_MIRRORING|UBIDI_INSERT_LRM_FOR_NUMERIC, pErrorCode);
+        log_verbose("  v ");
+        printUnicode(src, srcLength, ubidi_getLevels(pBiDi, pErrorCode));
+        log_verbose("\n");
+
+        /* convert back to visual LTR */
+        ubidi_setInverse(pBiDi, FALSE);
+        ubidi_setPara(pBiDi, logicalDest, logicalLength, 0, NULL, pErrorCode);
+        visualLength=ubidi_writeReordered(pBiDi, visualDest, sizeof(visualDest)/U_SIZEOF_UCHAR,
+                                          UBIDI_DO_MIRRORING|UBIDI_REMOVE_BIDI_CONTROLS, pErrorCode);
+    } else {
+        log_verbose("inverse BiDi: testInverseBiDi(R)\n");
+
+        /* reverse visual from RTL to LTR */
+        ltrLength=ubidi_writeReverse(src, srcLength, visualLTR, sizeof(visualLTR)/U_SIZEOF_UCHAR, 0, pErrorCode);
+        log_verbose("  vr");
+        printUnicode(src, srcLength, NULL);
+        log_verbose("\n");
+
+        /* convert visual RTL to logical */
+        ubidi_setInverse(pBiDi, TRUE);
+        ubidi_setPara(pBiDi, visualLTR, ltrLength, 0, NULL, pErrorCode);
+        logicalLength=ubidi_writeReordered(pBiDi, logicalDest, sizeof(logicalDest)/U_SIZEOF_UCHAR,
+                                           UBIDI_DO_MIRRORING|UBIDI_INSERT_LRM_FOR_NUMERIC, pErrorCode);
+        log_verbose("  vl");
+        printUnicode(visualLTR, ltrLength, ubidi_getLevels(pBiDi, pErrorCode));
+        log_verbose("\n");
+
+        /* convert back to visual RTL */
+        ubidi_setInverse(pBiDi, FALSE);
+        ubidi_setPara(pBiDi, logicalDest, logicalLength, 0, NULL, pErrorCode);
+        visualLength=ubidi_writeReordered(pBiDi, visualDest, sizeof(visualDest)/U_SIZEOF_UCHAR,
+                                          UBIDI_DO_MIRRORING|UBIDI_REMOVE_BIDI_CONTROLS|UBIDI_OUTPUT_REVERSE, pErrorCode);
+    }
+    log_verbose("  l ");
+    printUnicode(logicalDest, logicalLength, ubidi_getLevels(pBiDi, pErrorCode));
+    log_verbose("\n");
+    log_verbose("  v ");
+    printUnicode(visualDest, visualLength, NULL);
+    log_verbose("\n");
+
+    /* check and print results */
+    if(U_FAILURE(*pErrorCode)) {
+        log_err("inverse BiDi: *** error %s\n"
+                "                 turn on verbose mode to see details\n", u_errorName(*pErrorCode));
+    } else if(srcLength==visualLength && memcmp(src, visualDest, srcLength*U_SIZEOF_UCHAR)==0) {
+        ++countRoundtrips;
+        log_verbose(" + roundtripped\n");
+    } else {
+        ++countNonRoundtrips;
+        log_verbose(" * did not roundtrip\n");
+        log_err("inverse BiDi: transformation visual->logical->visual did not roundtrip the text;\n"
+                "                 turn on verbose mode to see details\n");
+    }
+}
+
+/* helpers ------------------------------------------------------------------ */
 
 static char *levelString="...............................................................";
 
@@ -361,4 +533,19 @@ getStringFromDirProps(const uint8_t *dirProps, UTextOffset length) {
     }
     s[i]=0;
     return s;
+}
+
+static void
+printUnicode(const UChar *s, int32_t length, const UBiDiLevel *levels) {
+    int32_t i;
+
+    log_verbose("{ ");
+    for(i=0; i<length; ++i) {
+        if(levels!=NULL) {
+            log_verbose("%4x.%u  ", s[i], levels[i]);
+        } else {
+            log_verbose("%4x    ", s[i]);
+        }
+    }
+    log_verbose(" }");
 }
