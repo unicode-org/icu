@@ -1,0 +1,158 @@
+<HTML><!-- #BeginTemplate "/Templates/MainTemplate.dwt" -->
+<HEAD>
+<!-- #BeginEditable "doctitle" --> 
+<TITLE>RB Manager Tutorial - Creating Resource Files</TITLE>
+<!-- #EndEditable --> 
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<STYLE TYPE="TEXT/CSS">
+<!--
+.topicHead {  font-family: "Times New Roman", Times, serif; font-size: 14pt; font-weight: bold; text-align: center; color: #333333}
+.topicList {  font-family: Georgia, "Times New Roman", Times, serif; font-size: 9pt; color: #FF0099; list-style-image: url(../images/diamond_bullet.gif); text-decoration: none; font-weight: bold}
+.mainBlock {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12pt; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; padding-top: 5px; padding-right: 10px; padding-bottom: 5px; padding-left: 10px; text-align: justify}
+-->
+</STYLE>
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF" LEFTMARGIN="0" TOPMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0">
+<TABLE WIDTH="100%" BORDER="0" CELLSPACING="0" CELLPADDING="0">
+  <TR>
+    <TD ROWSPAN="2" COLSPAN="2" BACKGROUND="../images/template_ul.gif" HEIGHT="75"><IMG SRC="../images/spacer.gif" WIDTH="280" HEIGHT="1" HSPACE="0"></TD>
+		<TD HEIGHT="15"  WIDTH="100%" BACKGROUND="../images/template_u.gif"></TD>
+	</TR>
+	<TR>
+		<TD HEIGHT="60" >
+			<CENTER><IMG SRC="../images/TitleLogo_transparent.gif" VSPACE="0"></CENTER>
+		</TD>
+	</TR>
+	<TR>
+		
+    <TD WIDTH="200" BACKGROUND="../images/template_l.gif" VALIGN="top">
+		<TABLE WIDTH="180" CELLSPACING="0" CELLPADDING="1"> 
+      	<TR>
+			<TD CLASS="topicHead">General</TD>
+		</TR>
+		<TR>
+			<TD VALIGN="center"><IMG SRC="../images/template_line.gif"></TD>
+		</TR>
+		<TR>
+			<TD CLASS="topicList">
+	        <UL>
+              <LI><A HREF="../system_requirements.html">System Requirements</A></LI>
+              <LI><A HREF="../faq.html">FAQ</A></LI>
+              <LI><A HREF="../future_features.html">Future Releases</A></LI>
+              <LI CLASS="topicList"><A HREF="../future_features.html">Version 
+                History</A></LI>
+            </UL>
+			</TD>
+		</TR>
+      	<TR>
+			<TD CLASS="topicHead">RB Manager</TD>
+		</TR>
+		<TR>
+			<TD VALIGN="center"><IMG SRC="../images/template_line.gif"></TD>
+		</TR>
+		<TR>
+			<TD CLASS="topicList">
+	        <UL>
+              <LI><A HREF="../index.html">Home</A></LI>
+              <LI><A HREF="index.html">Tutorial</A></LI>
+              <LI><A HREF="../views/index.html">Functionality and Views</A></LI>
+              <LI><A HREF="../lookandfeel.html">Look and Feel</A></LI>
+              <LI><A HREF="../menu.html">Menu Items</A></LI>
+              <LI CLASS="topicList"><A HREF="step1.html">Preferences</A></LI>
+            </UL>
+			</TD>
+		</TR>
+		<TR>
+			<TD CLASS="topicHead">RB Reporter</TD>
+		</TR>
+		<TR>
+			<TD VALIGN="center"><IMG SRC="../images/template_line.gif"></TD>
+		</TR>
+		<TR>
+			<TD CLASS="topicList">
+	  <UL>
+              <LI><A HREF="../RBReporter.html">Home</A></LI>
+        <LI>Report Types</LI>
+              <LI><A HREF="../scanfile.html">Code Scanning</A></LI>
+            </UL>
+			</TD>
+		</TR>
+	</TABLE>
+
+      <P>&nbsp; </P>
+      </TD>
+		
+    <TD COLSPAN="2" VALIGN="top" CLASS="mainBlock"><!-- #BeginEditable "Main" --> 
+      <H3 ALIGN="CENTER">Step 5. Adding Resource Files for New Languages</H3>
+      <P><B>Creating a New Language File</B></P>
+      <P>The only way by which to create a new language file is by selecting the 
+        'Add New Resource File...' option from the 'Options' menu. When you do 
+        so a dialog box will appear similar to this:</P>
+      <P><IMG SRC="../images/screenshots/basic_file.gif" WIDTH="620" HEIGHT="421"></P>
+      <P>The top three fields identify the file. The bottom three sections, Language, 
+        Country, and Variant define the role of the resource file within the bundle. 
+        The only required field is the encoding field for the language. The encoding 
+        fields are inserted into the name of the resource file whenever the fields 
+        are filled. The file name would following the pattern <CODE>baseclass_language_encoding_variant.properties</CODE>. 
+        In the above example, the file would be named<CODE> RBTutorial_de.properties</CODE>. 
+        Note that it is important to define fallback files for each language (i.e. 
+        if you have a file for <CODE>RBTutorial_de_DE.properties</CODE>, you should 
+        also have a file for <CODE>RBTutorial_de.properties</CODE>).</P>
+      <P>Since there may be instances where the language file being created may 
+        have few differences from the base class property file, an option is given 
+        for copying or not all of the resources from the base class file to the 
+        new file. By default, this option is selected and each resource will be 
+        copied from the base file and marked as untranslated in the new resource 
+        file.</P>
+      <P><B>Working with the New Language File</B><BR>
+      </P>
+      <P>Once a language file has been created, there will be resources that need 
+        to be translated. This can be done from two different views. First, go 
+        to the tree on the lower left of the screen and select the file that you 
+        have just created. In this case it will be under the language encoding 
+        de node of the tree. Select the file by clicking on it once. Selecting 
+        the 'Untranslated' tab on the right should result in a view similar to 
+        this:</P>
+      <P><IMG SRC="../images/screenshots/basic_untranslated.gif" WIDTH="750" HEIGHT="416"> 
+      </P>
+      <P>This section displays all of the resources that are marked as untranslated 
+        in the file. Alternatively, you could select the 'Groups' tab and see 
+        all of the resources, one group at a time, whether or not they have been 
+        marked as translated. Double clicking on a row in the the tables present 
+        in either view will bring up a dialog box similar to one you have all 
+        ready seen:</P>
+      <P><IMG SRC="../images/screenshots/basic_translation.gif" WIDTH="513" HEIGHT="269"></P>
+      <P>The top three editable components are all disabled. This is because changing 
+        them would required editing files other than the one currently being viewed. 
+        This type of editing can be accomplished only from the base class. To 
+        change the translation value, alter the field labeled 'Translation:' with 
+        the new translation. You may also change the resource comment and lookup 
+        comments if you like, but this change will be visible only from RBManager. 
+        You also may find that the resource requires no translation if this is 
+        the case, just select the 'Translated' check box at the bottom of the 
+        dialog and press 'Edit'. If you change the translation, the 'Translated' 
+        check box will automatically check itself when you are finished.</P>
+      <P>Continue this process until you have completely translated this file, 
+        or leave the file untranslated, but save your work so that you or someone 
+        else can return to it later. To learn how to save your results, go to 
+        the next step.</P>
+      <P><A HREF="step4.html">Back to Step 4</A> -or- <A HREF="step6.html">Forward 
+        to Step 6</A></P>
+      <!-- #EndEditable --></TD>
+	</TR>
+	<TR>
+		<TD BACKGROUND="../images/template_ll.gif" HEIGHT="40" WIDTH="200">
+			<!-- Comment -->
+		</TD>
+		<TD WIDTH="80">
+			<!-- Comment -->
+		</TD>
+		<TD>
+			<CENTER><SPAN CLASS="Copyright">Copyright 2000-2001 International Business Machines, All Rights Reserved</SPAN></CENTER>
+		</TD>
+	</TR>
+</TABLE>
+
+</BODY>
+<!-- #EndTemplate --></HTML>

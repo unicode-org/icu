@@ -1,0 +1,168 @@
+<HTML><!-- #BeginTemplate "/Templates/MainTemplate.dwt" -->
+<HEAD>
+<!-- #BeginEditable "doctitle" --> 
+<TITLE>RB Manager Tutorial - Preferences</TITLE>
+<!-- #EndEditable --> 
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<STYLE TYPE="TEXT/CSS">
+<!--
+.topicHead {  font-family: "Times New Roman", Times, serif; font-size: 14pt; font-weight: bold; text-align: center; color: #333333}
+.topicList {  font-family: Georgia, "Times New Roman", Times, serif; font-size: 9pt; color: #FF0099; list-style-image: url(../images/diamond_bullet.gif); text-decoration: none; font-weight: bold}
+.mainBlock {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12pt; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; padding-top: 5px; padding-right: 10px; padding-bottom: 5px; padding-left: 10px; text-align: justify}
+-->
+</STYLE>
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF" LEFTMARGIN="0" TOPMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0">
+<TABLE WIDTH="100%" BORDER="0" CELLSPACING="0" CELLPADDING="0">
+  <TR>
+    <TD ROWSPAN="2" COLSPAN="2" BACKGROUND="../images/template_ul.gif" HEIGHT="75"><IMG SRC="../images/spacer.gif" WIDTH="280" HEIGHT="1" HSPACE="0"></TD>
+		<TD HEIGHT="15"  WIDTH="100%" BACKGROUND="../images/template_u.gif"></TD>
+	</TR>
+	<TR>
+		<TD HEIGHT="60" >
+			<CENTER><IMG SRC="../images/TitleLogo_transparent.gif" VSPACE="0"></CENTER>
+		</TD>
+	</TR>
+	<TR>
+		
+    <TD WIDTH="200" BACKGROUND="../images/template_l.gif" VALIGN="top">
+		<TABLE WIDTH="180" CELLSPACING="0" CELLPADDING="1"> 
+      	<TR>
+			<TD CLASS="topicHead">General</TD>
+		</TR>
+		<TR>
+			<TD VALIGN="center"><IMG SRC="../images/template_line.gif"></TD>
+		</TR>
+		<TR>
+			<TD CLASS="topicList">
+	        <UL>
+              <LI><A HREF="../system_requirements.html">System Requirements</A></LI>
+              <LI><A HREF="../faq.html">FAQ</A></LI>
+              <LI><A HREF="../future_features.html">Future Releases</A></LI>
+              <LI CLASS="topicList"><A HREF="../future_features.html">Version 
+                History</A></LI>
+            </UL>
+			</TD>
+		</TR>
+      	<TR>
+			<TD CLASS="topicHead">RB Manager</TD>
+		</TR>
+		<TR>
+			<TD VALIGN="center"><IMG SRC="../images/template_line.gif"></TD>
+		</TR>
+		<TR>
+			<TD CLASS="topicList">
+	        <UL>
+              <LI><A HREF="../index.html">Home</A></LI>
+              <LI><A HREF="index.html">Tutorial</A></LI>
+              <LI><A HREF="../views/index.html">Functionality and Views</A></LI>
+              <LI><A HREF="../lookandfeel.html">Look and Feel</A></LI>
+              <LI><A HREF="../menu.html">Menu Items</A></LI>
+              <LI CLASS="topicList"><A HREF="step1.html">Preferences</A></LI>
+            </UL>
+			</TD>
+		</TR>
+		<TR>
+			<TD CLASS="topicHead">RB Reporter</TD>
+		</TR>
+		<TR>
+			<TD VALIGN="center"><IMG SRC="../images/template_line.gif"></TD>
+		</TR>
+		<TR>
+			<TD CLASS="topicList">
+	  <UL>
+              <LI><A HREF="../RBReporter.html">Home</A></LI>
+        <LI>Report Types</LI>
+              <LI><A HREF="../scanfile.html">Code Scanning</A></LI>
+            </UL>
+			</TD>
+		</TR>
+	</TABLE>
+
+      <P>&nbsp; </P>
+      </TD>
+		
+    <TD COLSPAN="2" VALIGN="top" CLASS="mainBlock"><!-- #BeginEditable "Main" --> 
+      <H3 ALIGN="CENTER">Setting Your Personal Preferences</H3>
+      <P><B>Getting Started</B></P>
+      <P>Before you can do anything with the program, of course, you have to get 
+        it running. RB Manager is purely a Java application. The download does 
+        not come with a Java runtime environment. In order to use RBManager, you 
+        will need to hava a Java runtime environment installed on your machine. 
+        The environment is available to most computing platforms at <A HREF="http://java.sun.com">Sun's 
+        internet site</A>. RB Manager has been tested for Java versions 1.2.2 
+        and higher. It is recommended that you use Java version 1.3 if it is available 
+        for your system.</P>
+      <P>To run the program from the command line, first go to the RBManager directory 
+        on your system, then enter:</P>
+      <P><CODE>java -classpath ./lib/RBManager.jar;./lib/xerces.jar com.ibm.rbm.RBManager</CODE></P>
+      <P>Alternatively, Windows users can use the batch file, RBManager.bat to 
+        accomplish the same thing. Linux and Unix users tend not to need their 
+        hands held, and can probably figure out how to write a simple script or 
+        alias to run the application without help. Mac OS X users can run the 
+        program from the Terminal application with the above command line, substituting 
+        a colon for the semi-colon in the classpath argument.</P>
+      <P><B>The Display</B></P>
+      <P>Once you get the application running, you will hopefully see something 
+        like this:</P>
+      <P><IMG SRC="../images/screenshots/empty_screen.gif"></P>
+      <P>The display may differ because of differences in the various Java Virtual 
+        Machines and differences in Look and Feels. At the top is a menu bar and 
+        a logo. Below the logo and to the left is a pane in which all of the various 
+        language files will be listed in a tree view. Since no resource bundle 
+        has been selected, this tree is currently empty. To the right is a tabbed 
+        pane in which three views will be shown. The views will either present 
+        information or provide an interface for editing the various data contained 
+        across your resource bundle.</P>
+      <P><B>Customizing the Application for You</B></P>
+      <P>Go to the Options menu and select Preferences. The first time after opening 
+        the application, it may take a few seconds to get to the preferences as 
+        the application tries to get information from your virtual machine.A dialog 
+        box should appear that looks similar to this:</P>
+      <P><IMG SRC="../images/screenshots/preferences_dialog.gif" WIDTH="429" HEIGHT="269"></P>
+      <P>The first thing to do is to change the user name to your own name. You 
+        will only have to do this once unless someone else uses this application 
+        and changes the name. Second, you should change the look and feel of the 
+        application to your preference. All of the look and feels that your JVM 
+        supports should be listed in the drop down box. (Note that changes will 
+        not take affect until after you are done and have pressed the Update button).</P>
+      <P>The last thing to change is the locale you would like to use to work 
+        with this application. When you download RBManager, it is set by default 
+        to display in U.S. English. As of this writing, you can use the program 
+        in Finnish, Swedish, and German as well. Three lists choices are possible 
+        for selecting a locale. The first, called 'Machine Supported', lists all 
+        of the locals supported by your JVM. The second, called 'Defined for RBManager', 
+        analyzes the Resource Bundle for RBManager and lets you select from the 
+        available translation files. The third option, called 'ISO Standards', 
+        lists all of the language and country 2-letter codes defined by the ISO. 
+        You may select any of the three options by use of the radio button on 
+        the left and then select the encoding you would like to use. Of course 
+        if the encoding you select is not supported by RBManager, the translations 
+        in the base class of the bundle will be used, which are in English. Also 
+        note, that the base class language may not appear in the 'Defined for 
+        RBManager' section because the encoding is not always specified for that 
+        file. </P>
+      <P>When you are done making your personalized selections, click on the Update 
+        button. The preferences will be saved in a file called preferences.properties 
+        stored in your RBManager directory. You will not need to make these selections 
+        in the future, unless you want to change your defaul options.</P>
+      <P><A HREF="index.html">Back to the Tutorial Menu</A> -or- <A HREF="step2.html">Forward 
+        to Step 2</A></P>
+      <!-- #EndEditable --></TD>
+	</TR>
+	<TR>
+		<TD BACKGROUND="../images/template_ll.gif" HEIGHT="40" WIDTH="200">
+			<!-- Comment -->
+		</TD>
+		<TD WIDTH="80">
+			<!-- Comment -->
+		</TD>
+		<TD>
+			<CENTER><SPAN CLASS="Copyright">Copyright 2000-2001 International Business Machines, All Rights Reserved</SPAN></CENTER>
+		</TD>
+	</TR>
+</TABLE>
+
+</BODY>
+<!-- #EndTemplate --></HTML>
