@@ -293,7 +293,6 @@ UConverter*  createConverterFromFile (const char *fileName, UErrorCode * err)
   int32_t myValuesCount = 0;
   int32_t myIndexCount = 0;
   UConverter *myConverter = NULL;
-  int32_t myCheck;
   int8_t errorLevel = 0;
 
   UDataMemory *data;
@@ -524,7 +523,7 @@ bool_t   deleteSharedConverterData (UConverterSharedData * deadSharedData)
     };
     break;
 
-    default:
+    default: ; // semicolon makes MSVC happy
     };
 
     if(deadSharedData->dataMemory != NULL)
