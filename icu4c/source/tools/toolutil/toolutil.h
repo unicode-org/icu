@@ -20,7 +20,6 @@
 #define __TOOLUTIL_H__
 
 #include "unicode/utypes.h"
-#include "cmemory.h"
 
 /*
  * For Windows, a path/filename may be the short (8.3) version
