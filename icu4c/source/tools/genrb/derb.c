@@ -698,7 +698,6 @@ static void printOutBundle(FILE *out, UConverter *converter, UResourceBundle *re
                   }
               }
             } else { /* we have to use low level access to do this */
-              uint16_t i = 0;
               Resource r = RES_BOGUS;
               for(i = 0; i < ures_getSize(resource); i++) {
                 /* need to know if it's an alias */

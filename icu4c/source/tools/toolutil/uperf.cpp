@@ -361,9 +361,9 @@ UBool UPerfTest::runTestLoop( char* testname, char* par )
                   }
 */
                   if(events == -1){
-                      fprintf(stdout,"= %s end: %f loops: %i operations: %i \n",name , t , loops, testFunction->getOperationsPerIteration());
+                      fprintf(stdout,"= %s end: %f loops: %i operations: %li \n",name , t , loops, testFunction->getOperationsPerIteration());
                   }else{
-                      fprintf(stdout,"= %s end: %f loops: %i operations: %i events: %i\n",name , t , loops, testFunction->getOperationsPerIteration(), events);
+                      fprintf(stdout,"= %s end: %f loops: %i operations: %li events: %li\n",name , t , loops, testFunction->getOperationsPerIteration(), events);
                   }
               }else{
 /*
@@ -374,9 +374,9 @@ UBool UPerfTest::runTestLoop( char* testname, char* par )
                   }                   
 */
                   if(events == -1){
-                      fprintf(stdout,"= %s end %f %i %i\n",name , t , loops, testFunction->getOperationsPerIteration());
+                      fprintf(stdout,"= %s end %f %i %li\n",name , t , loops, testFunction->getOperationsPerIteration());
                   }else{
-                      fprintf(stdout,"= %s end %f %i %i %i\n",name , t , loops, testFunction->getOperationsPerIteration(), events);
+                      fprintf(stdout,"= %s end %f %i %li %li\n",name , t , loops, testFunction->getOperationsPerIteration(), events);
                   }
               }
             }

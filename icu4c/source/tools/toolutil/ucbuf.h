@@ -162,7 +162,8 @@ ucbuf_ungetc(int32_t ungetChar,UCHARBUF* buf);
  * @return The input FileStream if its charset was autodetected; NULL otherwise.
  */
 U_CAPI FileStream * U_EXPORT2
-ucbuf_autodetect(const char* fileName, const char** cp,UConverter** conv, int32_t* signatureLength,UErrorCode* error);
+ucbuf_autodetect(const char* fileName, const char** cp,UConverter** conv,
+int32_t* signatureLength, UErrorCode* status);
 
 /**
  * Autodetects the encoding of the file stream. Only Unicode charsets are autodectected. 
@@ -181,7 +182,7 @@ ucbuf_autodetect(const char* fileName, const char** cp,UConverter** conv, int32_
  */
 
 U_CAPI UBool U_EXPORT2
-ucbuf_autodetect_fs(FileStream* in, const char** cp, UConverter** conv, int32_t* signatureLength, UErrorCode* error);
+ucbuf_autodetect_fs(FileStream* in, const char** cp, UConverter** conv, int32_t* signatureLength, UErrorCode* status);
 
 /**
  * Returns the approximate size in UChars required for converting the file to UChars

@@ -183,7 +183,7 @@ typedef void FuntionToBeTimed(void* param);
         struct timeval placeHolder;
     };
     
-    int32_t uprv_initFrequency(UTimer* timer)
+    int32_t uprv_initFrequency(UTimer* /*timer*/)
     {
         return 0;
     }
@@ -198,7 +198,7 @@ typedef void FuntionToBeTimed(void* param);
         t2 =  (double)timer2->start.tv_sec + (double)timer2->start.tv_usec/(1000*1000);
         return (t2-t1);
     }
-    UBool uprv_compareFrequency(UTimer* timer1, UTimer* timer2){
+    UBool uprv_compareFrequency(UTimer* /*timer1*/, UTimer* /*timer2*/){
         return TRUE;
     }
 

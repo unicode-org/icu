@@ -104,7 +104,6 @@ encodeRunByte(uint16_t* buffer,uint16_t* bufLimit, uint8_t value, int32_t length
  */
 static int32_t 
 encodeRunShort(uint16_t* buffer,uint16_t* bufLimit, uint16_t value, int32_t length,UErrorCode* status) {
-    uint16_t* saveBuf =  buffer;
     int32_t num=0;
     if (length < 4) {
         int j=0;
@@ -147,7 +146,6 @@ encodeRunShort(uint16_t* buffer,uint16_t* bufLimit, uint16_t value, int32_t leng
  */
 int32_t 
 usArrayToRLEString(const uint16_t* src,int32_t srcLen,uint16_t* buffer, int32_t bufLen,UErrorCode* status) {
-    const uint16_t* saveBuf = buffer;
     uint16_t* bufLimit =  buffer+bufLen;
     int32_t num = 0;
     if(buffer < bufLimit){

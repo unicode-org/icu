@@ -915,7 +915,6 @@ ucol_uprv_bld_copyRangeFromUCA(UColTokenParser *src, tempUCATable *t,
                                UErrorCode *status) {
   //UChar decomp[256];
   uint32_t CE = UCOL_NOT_FOUND;
-  uint32_t tag = UCOL_NOT_FOUND;
   UChar32 u = 0;
   UCAElements el;
   el.isThai = FALSE;
@@ -1072,8 +1071,6 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     }
   }
 
-  uint32_t CE = UCOL_NOT_FOUND;
-  UChar u = 0;
   UCAElements el;
   el.isThai = FALSE;
   el.prefixSize = 0;
