@@ -122,7 +122,7 @@ $(TARGET) : $(OBJECTS)
 # Rule to build a compiled cnv file
 @DATABUILDDIR@/%.cnv : $(top_srcdir)/../data/%.ucm
 	@echo -n "$< -> "
-	@ICU_DATA=@DATABUILDDIR@/ ./makeconv $<
+	@./makeconv -d @DATABUILDDIR@ $<
 
 ifneq ($(MAKECMDGOALS),distclean)
 -include $(DEPS)

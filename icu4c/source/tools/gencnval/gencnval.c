@@ -94,6 +94,7 @@ extern int
 main(int argc, char *argv[]) {
     char line[512];
     const char *path, *arg, *convfile = 0;
+    const char *destdir = 0;
     FileStream *in;
     UNewDataMemory *out;
     char *s;
@@ -124,6 +125,10 @@ main(int argc, char *argv[]) {
 	} else {
 	   usage(argv[0]);
  	}
+    }
+
+    if (!destdir) {
+	destdir = u_getDataDirectory();
     }
 
     if (convfile) {
@@ -165,7 +170,7 @@ main(int argc, char *argv[]) {
     qsort(aliases, aliasCount, sizeof(Alias), compareAliases);
 
     /* create the output file */
-    out=udata_create(DATA_TYPE, DATA_NAME, &dataInfo,
+    out=udata_create(DATA_TYPE, DATA_NAME, destdir, &dataInfo,
                      haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "gencnval: unable to open output file - error %s\n", u_errorName(errorCode));
@@ -327,3 +332,12 @@ static int
 compareAliases(const void *alias1, const void *alias2) {
     return uprv_stricmp(((Alias *)alias1)->alias, ((Alias *)alias2)->alias);
 }
+
+/*
+ * Hey, Emacs, please set the following:
+ *
+ * Local Variables:
+ * indent-tabs-mode: nil
+ * End:
+ *
+ */
