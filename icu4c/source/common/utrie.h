@@ -475,7 +475,7 @@ utrie_enum(UTrie *trie,
  * @return the number of bytes at data taken up by the trie data
  */
 U_CAPI int32_t U_EXPORT2
-utrie_unserialize(UTrie *trie, const uint8_t *data, int32_t length, UErrorCode *pErrorCode);
+utrie_unserialize(UTrie *trie, const void *data, int32_t length, UErrorCode *pErrorCode);
 
 /* Building a trie ----------------------------------------------------------*/
 
@@ -654,7 +654,7 @@ utrie_setRange32(UNewTrie *trie, UChar32 start, UChar32 limit, uint32_t value, U
  * @return the number of bytes written for the trie
  */
 U_CAPI int32_t U_EXPORT2
-utrie_serialize(UNewTrie *trie, uint8_t *data, int32_t capacity,
+utrie_serialize(UNewTrie *trie, void *data, int32_t capacity,
                 UNewTrieGetFoldedValue *getFoldedValue,
                 UBool reduceTo16Bits,
                 UErrorCode *pErrorCode);

@@ -700,7 +700,7 @@ enum {
 };
 
 U_CAPI int32_t U_EXPORT2
-utrie_serialize(UNewTrie *trie, uint8_t *data, int32_t capacity,
+utrie_serialize(UNewTrie *trie, void *dt, int32_t capacity,
                 UNewTrieGetFoldedValue *getFoldedValue,
                 UBool reduceTo16Bits,
                 UErrorCode *pErrorCode) {
@@ -708,17 +708,18 @@ utrie_serialize(UNewTrie *trie, uint8_t *data, int32_t capacity,
     uint32_t *p;
     uint16_t *dest16;
     int32_t i, length;
+    uint8_t* data = NULL;
 
     /* argument check */
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0;
     }
 
-    if(trie==NULL || capacity<0 || (capacity>0 && data==NULL) || getFoldedValue==NULL) {
+    if(trie==NULL || capacity<0 || (capacity>0 && dt==NULL) || getFoldedValue==NULL) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
-
+    data = (uint8_t*)dt;
     /* fold and compact if necessary, also checks that indexLength is within limits */
     if(!trie->isCompacted) {
         /* compact once without overlap to improve folding */
@@ -799,7 +800,7 @@ utrie_serialize(UNewTrie *trie, uint8_t *data, int32_t capacity,
 }
 
 U_CAPI int32_t U_EXPORT2
-utrie_unserialize(UTrie *trie, const uint8_t *data, int32_t length, UErrorCode *pErrorCode) {
+utrie_unserialize(UTrie *trie, const void *data, int32_t length, UErrorCode *pErrorCode) {
     UTrieHeader *header;
     uint16_t *p16;
     uint32_t options;
