@@ -160,13 +160,10 @@ void printIndent(UFILE *out, int32_t indent) {
 }
 
 void printHex(UFILE *out, const int8_t *what) {
-	int8_t value = (int8_t)*what;
-	char result[256];
-	itoa(value, result, 16);
-	if(value < 0x10) {
-		u_fprintf(out, "0%s", result);
+	if(*what < 0x10) {
+		u_fprintf(out, "0%X", *what);
 	}  else {
-		u_fprintf(out, "%s", result);
+		u_fprintf(out, "%X", *what);
 	}
 }
 
