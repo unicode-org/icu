@@ -24,4 +24,6 @@ void u_cleanup(void)
     ucln_ustring();
     ucln_ucnv();
     ucln_ures();
+    udata_cleanup();
 }
+

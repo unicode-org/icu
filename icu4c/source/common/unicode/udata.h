@@ -289,20 +289,6 @@ udata_setCommonData(const void *data, UErrorCode *err);
 U_CAPI void U_EXPORT2
 udata_setAppData(const char *path, const void *data, UErrorCode *err);
 
-/**
- * Clean-up function for allocated memory and any other resources owned
- *  by udata.  Deletes all such items.  Everything is returned to its initial
- *  state.
- *
- *  This function is called by <fill in the name>.  Applicataions normally
- *  have no reason to call it directly.
- *
- *  @draft
- */
-U_CAPI void U_EXPORT2
-udata_cleanup();
-
-
 U_CDECL_END
 
 #endif
