@@ -330,36 +330,36 @@ unum_setAttribute(    UNumberFormat*          fmt,
   case UNUM_PARSE_INT_ONLY:
     ((NumberFormat*)fmt)->setParseIntegerOnly((UBool)newValue);
     break;
-    
+
   case UNUM_GROUPING_USED:
     ((NumberFormat*)fmt)->setGroupingUsed((UBool)newValue);
     break;
-    
+
   case UNUM_DECIMAL_ALWAYS_SHOWN:
     ((DecimalFormat*)fmt)->setDecimalSeparatorAlwaysShown((UBool)newValue);
     break;
-    
+
   case UNUM_MAX_INTEGER_DIGITS:
     ((NumberFormat*)fmt)->setMaximumIntegerDigits(newValue);
     break;
-    
+
   case UNUM_MIN_INTEGER_DIGITS:
     ((NumberFormat*)fmt)->setMinimumIntegerDigits(newValue);
     break;
-    
+
   case UNUM_INTEGER_DIGITS:
     ((NumberFormat*)fmt)->setMinimumIntegerDigits(newValue);
     ((NumberFormat*)fmt)->setMaximumIntegerDigits(newValue);
     break;
-    
+
   case UNUM_MAX_FRACTION_DIGITS:
     ((NumberFormat*)fmt)->setMaximumFractionDigits(newValue);
     break;
-    
+
   case UNUM_MIN_FRACTION_DIGITS:
     ((NumberFormat*)fmt)->setMinimumFractionDigits(newValue);
     break;
-    
+
   case UNUM_FRACTION_DIGITS:
     ((NumberFormat*)fmt)->setMinimumFractionDigits(newValue);
     ((NumberFormat*)fmt)->setMaximumFractionDigits(newValue);
@@ -368,7 +368,7 @@ unum_setAttribute(    UNumberFormat*          fmt,
   case UNUM_MULTIPLIER:
     ((DecimalFormat*)fmt)->setMultiplier(newValue);    
     break;
-    
+
   case UNUM_GROUPING_SIZE:
     ((DecimalFormat*)fmt)->setGroupingSize(newValue);    
     break;
@@ -385,8 +385,13 @@ unum_setAttribute(    UNumberFormat*          fmt,
   case UNUM_PADDING_POSITION:
       ((DecimalFormat*)fmt)->setPadPosition((DecimalFormat::EPadPosition)newValue);
     break;
+
   case UNUM_SECONDARY_GROUPING_SIZE:
       ((DecimalFormat*)fmt)->setSecondaryGroupingSize(newValue);
+    break;
+
+  default:
+    /* Shouldn't get here anyway */
     break;
   }
 }
@@ -395,7 +400,7 @@ U_CAPI double
 unum_getDoubleAttribute(const UNumberFormat*          fmt,
           UNumberFormatAttribute  attr)
 {
-  if(attr==UNUM_ROUNDING_INCREMENT) {
+  if (attr == UNUM_ROUNDING_INCREMENT) {
     return ((DecimalFormat*)fmt)->getRoundingIncrement();
   } else {
     return -1.0;
@@ -407,11 +412,8 @@ unum_setDoubleAttribute(    UNumberFormat*          fmt,
             UNumberFormatAttribute  attr,
             double                 newValue)
 {
-  switch(attr) {   
-  case UNUM_ROUNDING_INCREMENT:
+  if (attr == UNUM_ROUNDING_INCREMENT) {   
     ((DecimalFormat*)fmt)->setRoundingIncrement(newValue);
-    break;
-  
   }
 }
 
@@ -422,7 +424,8 @@ unum_getTextAttribute(    const    UNumberFormat*                    fmt,
             int32_t                            resultLength,
             UErrorCode*                        status)
 {
-  if(U_FAILURE(*status)) return -1;
+  if(U_FAILURE(*status))
+      return -1;
 
   int32_t actSize = 0;
 
