@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2003/06/11 20:00:11 $ 
- * $Revision: 1.50 $
+ * $Date: 2003/07/23 19:38:28 $ 
+ * $Revision: 1.51 $
  *
  *****************************************************************************************
  */
@@ -1028,14 +1028,15 @@ public class UnicodeSetTest extends TestFmwk {
     }
 
     public void TestEscapePattern() {
+        // The following pattern must contain at least one range "c-d"
+        // for which isRuleWhiteSpace(c) or isRuleWhiteSpace(d) is true.
         String pattern =
-            "[\\uFEFF \\uFFF9-\\uFFFC \\U0001D173-\\U0001D17A \\U000F0000-\\U000FFFFD ]";
+            "[\\uFEFF \\u200E-\\u20FF \\uFFF9-\\uFFFC \\U0001D173-\\U0001D17A \\U000F0000-\\U000FFFFD ]";
         String exp =
-            "[\\uFEFF\\uFFF9-\\uFFFC\\U0001D173-\\U0001D17A\\U000F0000-\\U000FFFFD]";
+            "[\\u200E-\\u20FF\\uFEFF\\uFFF9-\\uFFFC\\U0001D173-\\U0001D17A\\U000F0000-\\U000FFFFD]";
         // We test this with two passes; in the second pass we
-        // pre-unescape the pattern.  Since U+FEFF and several other code
-        // points are rule whitespace, this fails -- which is what we
-        // expect.
+        // pre-unescape the pattern.  Since U+200E is rule whitespace,
+        // this fails -- which is what we expect.
         for (int pass=1; pass<=2; ++pass) {
             String pat = pattern;
             if (pass==2) {
