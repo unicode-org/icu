@@ -203,7 +203,7 @@ public final class RuleBasedCollator extends Collator
      */
     public RuleBasedCollator(String rules) throws Exception
     {
-        if (rules == null || rules.length() == 0) {
+        if (rules == null) {
             throw new IllegalArgumentException(
                                             "Collation rules can not be null");
         }
