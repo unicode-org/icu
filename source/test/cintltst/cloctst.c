@@ -1288,7 +1288,8 @@ TestKeyInRootRecursive(UResourceBundle *root, UResourceBundle *currentBundle, co
                 else {*/
                     if (subBundleKey == NULL
                         || (strcmp(subBundleKey, "TransliterateLATIN") != 0 /* Ignore these special cases */
-                        && strcmp(subBundleKey, "BreakDictionaryData") != 0))
+                        && strcmp(subBundleKey, "BreakDictionaryData") != 0
+                        && strcmp(ures_getKey(currentBundle), "Currencies") != 0))
                     {
                         log_data_err("Can't open a resource with key \"%s\" in \"%s\" from root for locale \"%s\"\n",
                                 subBundleKey,
