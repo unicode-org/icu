@@ -333,10 +333,11 @@ class RBStatisticsPanel extends JPanel {
 			jTextFieldStatsLanguage.setText(bundle.language == null ? "" : bundle.language);
 			jTextFieldStatsCountry.setText(bundle.country == null ? "" : bundle.country);
 			jTextFieldStatsVariant.setText(bundle.variant == null ? "" : bundle.variant);
-			
-		} else if (rbm != null) {
-			
-		} else {
+			jLabelStatsNumTrans.setText(Resources.getTranslation("languagestats_item_count") + " " +
+					   String.valueOf(bundle.allItems.size()));
+			jLabelStatsNumUntrans.setText(Resources.getTranslation("languagestats_translation_count") + 
+					   String.valueOf(untranslated));
+		} else if (rbm == null) {
 			removeAll();
 		}
 		

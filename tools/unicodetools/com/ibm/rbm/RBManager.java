@@ -113,9 +113,6 @@ public class RBManager {
         // Count the number of language files and set up the encoding and dictionary data
         int numLanguages = 1;
         String NLSbaseClass = null;
-        String NLSlanguage  = null;
-        String NLScountry   = null;
-        String NLSvariant   = null;
         String NLSpostfix   = null;
 		
         if (mainFile.getName().indexOf(".") >= 0) {
@@ -168,7 +165,6 @@ public class RBManager {
 		
         // Read in the entries from the main file
         String line;
-        int index = 0;
         // Set the dictionary for the main file
         Bundle dict = new Bundle(encodings[0]);
         bundles.addElement(dict);
@@ -231,7 +227,7 @@ public class RBManager {
                         if (tag.startsWith("{")) {
                             if (tag.indexOf("}") < 0) continue;
                             String lookup = tag.substring(1,tag.indexOf("}"));
-                            item.getLookups().put(lookup,(String) descriptors.get(tag));
+                            item.getLookups().put(lookup, descriptors.get(tag));
                         }
                     }
                 } 
@@ -265,7 +261,7 @@ public class RBManager {
         allBundleKeys = new Vector();
         Enumeration enum = ((Bundle)bundles.elementAt(0)).allItems.keys();
         while (enum.hasMoreElements()) {
-            allBundleKeys.addElement((String)enum.nextElement());
+            allBundleKeys.addElement(enum.nextElement());
         }
 		
         // Now go through all of the other languages
@@ -280,7 +276,6 @@ public class RBManager {
             p = new Properties();
             p.load(new FileInputStream(tempFile));
             
-            index = 0;
             // Set the dictionary for the main file
             dict = new Bundle(encodings[i]);
             bundles.addElement(dict);
@@ -334,7 +329,7 @@ public class RBManager {
                             if (tag.startsWith("{")) {
                                 if (tag.indexOf("}") < 0) continue;
                                 String lookup = tag.substring(1,tag.indexOf("}"));
-                                item.getLookups().put(lookup,(String) descriptors.get(tag));
+                                item.getLookups().put(lookup, descriptors.get(tag));
                             }
                         }
                     }	
@@ -474,7 +469,7 @@ public class RBManager {
         String oldName = item.getKey();
         String oldComment = item.getComment();
         String oldValue = item.getTranslation();
-        String oldGroupName = item.getParentGroup().getName();
+        //String oldGroupName = item.getParentGroup().getName();
         // Loop through the bundles
         for (int i = 0; i < bundles.size(); i++) {
             Bundle bundle = (Bundle)bundles.elementAt(i);
@@ -847,6 +842,9 @@ public class RBManager {
         return baseClass;
     }
 	
+    /**
+     * A Vector of NLSbundles, one for each language
+     */
     public Vector getBundles() {
         return bundles;
     }
@@ -907,36 +905,22 @@ public class RBManager {
     }
 
     // Checks an array of strings to see if it contains a particular string
-    private static boolean arrayContains(String[] array, String match) {
+/*    private static boolean arrayContains(String[] array, String match) {
         for (int i = 0; i < array.length; i++) {
             if (array[i].equals(match)) return true;
         }
         return false;
-    }
+    }*/
 	
     // Prints the usage of the program when called from main
-    private static void printUsage() {
+/*    private static void printUsage() {
         String usage = new String();
         usage += "Usage:\n\njava com.ibm.almaden.TempusFugit.Tools.RBManager fileName ((-r | -d) encoding?)?";
         usage += "\n\n  fileName -> The file (and path?) representing the main NLS resource\n\t\t(i.e. TempusFugit.resources)\n";
         usage += "  encoding -> Returns results for only the language encoding specified\n";
         usage += "  flag -r  -> Gives only a status report on the state of the translations\n"; 
         System.out.println(usage);
-    }
+    }*/
     
-    // Given a language encoding, returns the name of the language if known, otherwise returns the given parameter
-    // Example: decodeLanguageName("de"); returns "German"
-	
-    private static String decodeLanguageName(String encoding) {
-        // This should probably be done with a hash table
-        if (encoding.equalsIgnoreCase("de"))         return "German";
-        else if (encoding.equalsIgnoreCase("en_us")) return "U.S. English";
-        else if (encoding.equalsIgnoreCase("en_ca")) return "Canadian English";
-        else if (encoding.equalsIgnoreCase("fi"))    return "Finnish";
-        else if (encoding.equalsIgnoreCase("fr"))    return "French";
-        else if (encoding.equalsIgnoreCase("sv"))    return "Swedish";
-        else if (encoding.equalsIgnoreCase("kr"))    return "Korean";
-        return encoding;
-    }	
-}	// ListAllInstances
+}
 

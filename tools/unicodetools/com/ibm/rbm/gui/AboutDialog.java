@@ -14,7 +14,7 @@ import javax.swing.*;
 
 /** A dialog displaying information about this application */
 class AboutDialog {
-	public static JDialog dialog = null;
+	private static JDialog dialog = null;
 	
 	public static void showDialog(Frame parent) {
 		if (dialog == null) {
@@ -53,14 +53,10 @@ class AboutDialog {
 		dialog.getContentPane().add(logoLabel, BorderLayout.WEST);
 		dialog.getContentPane().add(panel, BorderLayout.CENTER);
 		
-		dialog.addMouseListener(new MouseListener() {
-			public void mousePressed(MouseEvent ev) { }
+		dialog.addMouseListener(new MouseAdapter() {
 			public void mouseReleased(MouseEvent ev) {
 				hideDialog();
 			}
-			public void mouseEntered(MouseEvent ev) { }
-			public void mouseExited(MouseEvent ev) { }
-			public void mouseClicked(MouseEvent ev) { }
 		});
 		
 		//dialog.validate();

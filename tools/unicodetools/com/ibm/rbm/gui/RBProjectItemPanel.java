@@ -76,12 +76,13 @@ class RBProjectItemPanel extends JPanel implements ActionListener {
 					BundleItem item = rbundle.getBundleItem(key);
 					if (item != null) {
 						item.setTranslation(translation);
-						System.out.println("Set translation to : " + translation);
+						RBManagerGUI.debugMsg("Set translation to : " + translation);
 					}
 					else
-						System.out.println("Item was null");
+					    RBManagerGUI.debugMsg("Item was null");
 					break;
-				} else System.out.println("Compared " + rbundle.encoding + " with " + encoding);
+				} 
+				RBManagerGUI.debugMsg("Compared " + rbundle.encoding + " with " + encoding);
 			}
 			gui.saveResources(bundle, encoding);
 		}

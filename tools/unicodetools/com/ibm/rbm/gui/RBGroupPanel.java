@@ -106,14 +106,14 @@ class RBGroupPanel extends JPanel {
 			GroupItemsTableModel model = (GroupItemsTableModel)jTableGroupTable.getModel();
 			BundleItem item = model.getBundleItem(row);
 			if (item.getParentGroup() != null && item.getParentGroup().getParentBundle() != null) {
-				Bundle bundle = item.getParentGroup().getParentBundle();
-				bundle.removeItem(item.getKey());
+				Bundle parentBundle = item.getParentGroup().getParentBundle();
+				parentBundle.removeItem(item.getKey());
 			}
 			model.update();
 		}
 	}
 		
-	public void initComponents() {
+	private void initComponents() {
 		// Initialize components
 		if (bundle != null) {
 			jLabelGroupTitle          = new JLabel(bundle.name);
@@ -252,8 +252,7 @@ class RBGroupPanel extends JPanel {
 			jLabelGroupTitle.setFont(new Font("SansSerif",Font.PLAIN,18));
 
 			// Add the listeners
-			jListGroup.addMouseListener(new MouseListener() {
-				public void mousePressed(MouseEvent ev) { }
+			jListGroup.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(MouseEvent ev) { 
 					if(ev.getClickCount() == 2 && ev.getSource() instanceof JList) {
 						// A double click means they want to edit a bundle item
@@ -265,9 +264,6 @@ class RBGroupPanel extends JPanel {
 								panel.listener.rbm, panel.listener, Resources.getTranslation("dialog_title_edit_item"), true);
 					}
 				}
-				public void mouseReleased(MouseEvent ev) { }
-				public void mouseEntered(MouseEvent ev) { }
-				public void mouseExited(MouseEvent ev) { }
 			});
 			
 			createItemButton.addActionListener(new ActionListener(){
@@ -481,7 +477,9 @@ class GroupComboActionListener implements ActionListener {
 			((GroupItemsTableModel)table.getModel()).setGroup((BundleGroup)cbox.getSelectedItem());
 			//table.validate();
 			Container c = table.getParent();
-			while (!(c instanceof RBGroupPanel)) { c = c.getParent(); } 
+			while (!(c instanceof RBGroupPanel)) {
+			    c = c.getParent();
+			} 
 			((RBGroupPanel)c).updateComponents();
 		} else if (list != null) {
 			list.setListData(((BundleGroup)cbox.getSelectedItem()).getItemsAsVector());

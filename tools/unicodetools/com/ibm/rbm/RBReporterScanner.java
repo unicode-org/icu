@@ -140,8 +140,7 @@ public class RBReporterScanner {
 		if (recurse) {
 			File children[] = directory.listFiles(new java.io.FileFilter(){
 				public boolean accept(File f) {
-					if (f.isDirectory()) return true;
-					else return false;
+					return f.isDirectory();
 				}
 				
 				public String getDescription() {
@@ -272,11 +271,11 @@ class ParseRule {
 					//before_index = source.indexOf(before, before_index);
 					after_index = -1;
 					after_index = source.indexOf(after, before_index + before.length()+1);
-					if (after_index < 0 || before_index < 0 || before.length() < 0) break;
-					else {
-						v.addElement(source.substring(before_index + before.length(), after_index));
-						before_index = after_index;
+					if (after_index < 0 || before_index < 0 || before.length() < 0) {
+					    break;
 					}
+					v.addElement(source.substring(before_index + before.length(), after_index));
+					before_index = after_index;
 				}
 			} else {
 				// Before non-empty, after empty

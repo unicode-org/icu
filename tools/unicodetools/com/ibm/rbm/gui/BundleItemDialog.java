@@ -84,7 +84,7 @@ class BundleItemDialog extends JDialog implements ActionListener {
 		}
 	}
 	
-	public void initComponents(){
+	private void initComponents(){
 		// Error check
 		if (item == null) closeWindow();
 		if (!firstInit) closeWindow();

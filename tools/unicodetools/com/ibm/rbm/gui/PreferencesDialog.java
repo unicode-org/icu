@@ -207,7 +207,7 @@ class PreferencesDialog extends JDialog {
 		setVisible(true);
 	}
 	
-	public void thisWindowClosing() {
+	private void thisWindowClosing() {
 		setVisible(false);
 		dispose();
 	}

@@ -96,7 +96,8 @@ public class RBImporter extends JDialog {
 	
     protected void beginImport() throws IOException {
         // To be overwritten
-        if (!pathSet) return;
+        if (!pathSet)
+            throw new IOException("Path not set yet");
     }
 	
     protected void chooseFile() {
@@ -216,30 +217,30 @@ public class RBImporter extends JDialog {
     protected void resolveEncodings(Vector v) {
         for (int i=0; i < v.size(); i++) {
             String encoding = (String)v.elementAt(i);
-            if (encoding == null || encoding.equals("")) continue;
-            if (rbm.hasResource(encoding)) continue;
-            else {
-                // We need to resolve this conflict
-                if (this.getFileConflictOption() == FILE_OPTION_IGNORE) continue;
-                else if (this.getFileConflictOption() == FILE_OPTION_POPULATE) {
+            if (encoding == null || encoding.equals("") || rbm.hasResource(encoding)) {
+                continue;
+            }
+
+            // We need to resolve this conflict
+            if (this.getFileConflictOption() == FILE_OPTION_IGNORE) continue;
+            else if (this.getFileConflictOption() == FILE_OPTION_POPULATE) {
+                rbm.createResource(null, null, null, encoding, null, null, null, true);
+            } else if (this.getFileConflictOption() == FILE_OPTION_EMPTY) {
+                rbm.createResource(null, null, null, encoding, null, null, null, true);
+            } else if (this.getFileConflictOption() == FILE_OPTION_PROMPT) {
+                String options[] = { Resources.getTranslation("import_file_conflict_generate_populate"),
+                                     Resources.getTranslation("import_file_conflict_generate_empty"),
+                                     Resources.getTranslation("import_file_conflict_ignore")};
+				
+                String result = (String)JOptionPane.showInputDialog(this, Resources.getTranslation("import_file_conflict_choose", encoding),
+                    Resources.getTranslation("import_file_conflicts"), JOptionPane.QUESTION_MESSAGE,
+                    null, options, options[0]);
+                if (result == null) continue;
+                if (result.equals(Resources.getTranslation("import_file_conflict_ignore"))) continue;
+                else if (result.equals(Resources.getTranslation("import_file_conflict_generate_populate"))) {
                     rbm.createResource(null, null, null, encoding, null, null, null, true);
-                } else if (this.getFileConflictOption() == FILE_OPTION_EMPTY) {
-                    rbm.createResource(null, null, null, encoding, null, null, null, true);
-                } else if (this.getFileConflictOption() == FILE_OPTION_PROMPT) {
-                    String options[] = { Resources.getTranslation("import_file_conflict_generate_populate"),
-                                         Resources.getTranslation("import_file_conflict_generate_empty"),
-                                         Resources.getTranslation("import_file_conflict_ignore")};
-					
-                    String result = (String)JOptionPane.showInputDialog(this, Resources.getTranslation("import_file_conflict_choose", encoding),
-                        Resources.getTranslation("import_file_conflicts"), JOptionPane.QUESTION_MESSAGE,
-                        null, options, options[0]);
-                    if (result == null) continue;
-                    if (result.equals(Resources.getTranslation("import_file_conflict_ignore"))) continue;
-                    else if (result.equals(Resources.getTranslation("import_file_conflict_generate_populate"))) {
-                        rbm.createResource(null, null, null, encoding, null, null, null, true);
-                    } else if (result.equals(Resources.getTranslation("import_file_conflict_generate_empty"))) {
-                        rbm.createResource(null, null, null, encoding, null, null, null, false);
-                    }
+                } else if (result.equals(Resources.getTranslation("import_file_conflict_generate_empty"))) {
+                    rbm.createResource(null, null, null, encoding, null, null, null, false);
                 }
             }
         }

@@ -145,7 +145,7 @@ public class RBICUExporter extends RBExporter {
         int len = str.length();
         boolean quoteRequired = !isKey;
         for (int idx = 0; idx < len; idx++) {
-            char ch = str.charAt(idx);
+            int ch = str.charAt(idx);
             if (ch <= ' ' || '~' < ch) {
                 if (isKey && ch != ' ') {
                     IOException e = new IOException(str + " needs to use invariant characters for the key.");
@@ -157,7 +157,7 @@ public class RBICUExporter extends RBExporter {
                     if ((ch & 0xf800) == 0xd800) {
                         // We assume that we found a valid UTF-16 string with a surrogate
                         int ch2 = str.charAt(idx++);
-                        int chSurrogate = ((((int)ch)<<10)+(ch2)-((0xd800<<10)+0xdc00-0x10000));
+                        int chSurrogate = (((ch)<<10)+(ch2)-((0xd800<<10)+0xdc00-0x10000));
 
                         zeros = "00000000";
                         hexNum = Integer.toHexString(chSurrogate);

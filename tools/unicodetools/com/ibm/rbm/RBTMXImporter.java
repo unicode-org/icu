@@ -78,7 +78,7 @@ public class RBTMXImporter extends RBImporter {
         while (node != null && (node.getNodeType() != Node.ELEMENT_NODE || !(node.getNodeName().equalsIgnoreCase("header")))) {
             node = node.getNextSibling();
         }
-        ElementImpl header = (ElementImpl)node;
+        //ElementImpl header = (ElementImpl)node;
         node = root.getFirstChild();
         while (node != null && (node.getNodeType() != Node.ELEMENT_NODE || !(node.getNodeName().equalsIgnoreCase("body")))) {
             node = node.getNextSibling();

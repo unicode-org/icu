@@ -160,7 +160,7 @@ class BundleItemCreationDialog extends JDialog {
 		}
 	}
 	
-	public void initComponents(){
+	private void initComponents(){
 		enableEvents(AWTEvent.KEY_EVENT_MASK);
 		// Error check
 		if (rbm == null || rbm.getBundles() == null) {
