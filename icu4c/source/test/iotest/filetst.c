@@ -911,11 +911,11 @@ static void TestFprintfFormat(void) {
     TestFPrintFormat("%-8s", abcChars, "%-8s", abcChars);
     TestFPrintFormat("%.2s", abcChars, "%.2s", abcChars); /* strlen is 3 */
 
-    TestFPrintFormat("%8c", 0x65, "%8c", 0x65);
-    TestFPrintFormat("%-8c", 0x65, "%-8c", 0x65);
+    TestFPrintFormat("%8c", (char)'e', "%8c", (char)'e');
+    TestFPrintFormat("%-8c", (char)'e', "%-8c", (char)'e');
 
-    TestFPrintFormat("%8C", (UChar)0x65, "%8c", (char)0x65);
-    TestFPrintFormat("%-8C", (UChar)0x65, "%-8c", (char)0x65);
+    TestFPrintFormat("%8C", (UChar)0x65, "%8c", (char)'e');
+    TestFPrintFormat("%-8C", (UChar)0x65, "%-8c", (char)'e');
 
     TestFPrintFormat("%f", 1.23456789, "%f", 1.23456789);
     TestFPrintFormat("%f", 12345.6789, "%f", 12345.6789);
