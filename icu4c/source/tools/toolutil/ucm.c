@@ -1024,6 +1024,12 @@ ucm_addMappingAuto(UCMFile *ucm, UBool forBase, UCMStates *baseStates,
                    uint8_t bytes[UCNV_EXT_MAX_BYTES]) {
     int32_t type;
 
+    if(m->f==2 && m->uLen>1) {
+        fprintf(stderr, "ucm error: illegal <subchar1> |2 mapping from multiple code points\n");
+        printMapping(m, codePoints, bytes, stderr);
+        return FALSE;
+    }
+
     if(baseStates!=NULL) {
         /* check validity of the bytes and count the characters in them */
         type=ucm_mappingType(baseStates, m, codePoints, bytes);
