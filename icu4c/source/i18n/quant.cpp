@@ -21,10 +21,11 @@ Quantifier::Quantifier(UnicodeMatcher *adopted,
 }
 
 Quantifier::Quantifier(const Quantifier& o) :
+    UnicodeMatcher(o),
     matcher(o.matcher->clone()),
     minCount(o.minCount),
-    maxCount(o.maxCount) {
-    delete matcher;
+    maxCount(o.maxCount)
+{
 }
 
 Quantifier::~Quantifier() {
