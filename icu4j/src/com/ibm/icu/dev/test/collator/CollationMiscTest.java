@@ -1587,15 +1587,31 @@ public class CollationMiscTest extends TestFmwk{
             // not serious enough to run this
             return;
         }
-        /// TODO: synwee to do strict checks on the locales
         Locale locale[] = Collator.getAvailableLocales();
         String prevrule = null;
         for (int i = 0; i < locale.length; i ++) {
             Locale l = locale[i];
             try {
+                ResourceBundle rb = ICULocaleData.getLocaleElements(l);
+                Object elements = rb.getObject("CollationElements");
+                if (elements == null) {
+                    continue;
+                }
+                String rule = null;
+                Object[][] colldata = (Object[][])elements;
+                // %%CollationBin
+                if (colldata[0][1] instanceof byte[]){
+                    rule = (String)colldata[1][1];
+                }
+                else {
+                    rule = (String)colldata[0][1];
+                }
+                    
                 RuleBasedCollator col1 = 
                                   (RuleBasedCollator)Collator.getInstance(l);
-                String rule = col1.getRules();
+                if (!rule.equals(col1.getRules())) {
+                    errln("Rules should be the same in the RuleBasedCollator and Locale");
+                }
                 if (rule != null && rule.length() > 0 
                     && !rule.equals(prevrule)) {
                     RuleBasedCollator col2 = new RuleBasedCollator(rule);
