@@ -1392,12 +1392,13 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
       order = UCOL_CONTRACTION;
   }
   else {
-      if (ch <= 0xFF) {
+      /* if (ch <= 0xFF) {
         order = UCA->latinOneMapping[ch];
       }
       else {
+      */
         order = ucmp32_get(UCA->mapping, ch);
-      }
+      //}
   }
 
   if (order > UCOL_NOT_FOUND) {
@@ -1482,9 +1483,7 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
     {
         UChar  prevChar;
         UChar *prev;
-        if ((collationSource->string == collationSource->pos) ||
-            (collationSource->pos == collationSource->writableBuffer &&
-            collationSource->fcdPosition == NULL)) {
+        if (isAtStartPrevIterate(collationSource)) {
             /* we are at the start of the string, wrong place to be at */
             return 0;
         }
@@ -1549,10 +1548,6 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
           r = 0xEF030303 - hanFixup + (last2 << 16) + (last1 << 8) +
               (last0 * IMPLICIT_LAST2_MULTIPLIER_);
       }
-      /*
-      order = (r & UCOL_PRIMARYMASK) | 0x00000303;
-      *(collationSource->CEpos++) = ((r & 0x0000FFFF)<<16) | 0x00000080;
-      */
       *(collationSource->CEpos++) = (r & UCOL_PRIMARYMASK) | 0x00000505;
       collationSource->toReturn = collationSource->CEpos;
       order = ((r & 0x0000FFFF)<<16) | 0x000000C0;
@@ -2333,7 +2328,6 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
         UChar    schar;
   const UChar    *constart    = NULL;
         uint32_t size;
-/*        uint32_t firstCE      = UCOL_NOT_FOUND;*/
         UChar    buffer[UCOL_MAX_BUFFER];
         uint32_t *endCEBuffer;
         UChar   *strbuffer;
@@ -2401,8 +2395,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
         constart = (UChar *)coll->image + getContractOffset(CE);
         if (isAtStartPrevIterate(source)
             /* commented away contraction end checks after adding the checks
-            in getPrevCE and getPrevUCA 
-            || !ucol_contractionEndCP(schar, coll)*/) {
+            in getPrevCE and getPrevUCA */) {
             /* start of string or this is not the end of any contraction */
             CE = *(coll->contractionCEs + 
                      (constart - coll->contractionIndex));
