@@ -32,8 +32,8 @@ static UTrie idnTrie={ 0,0,0,0,0,0,0 };
 static UDataMemory* idnData=NULL;
 static UErrorCode dataErrorCode =U_ZERO_ERROR;
 /* file definitions */
-static const char* DATA_NAME = "uidna";
-static const char* DATA_TYPE = "icu";
+static const char DATA_NAME[] = "uidna";
+static const char DATA_TYPE[] = "icu";
 
 U_CFUNC UBool
 ustrprep_cleanup() {
