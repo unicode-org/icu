@@ -403,7 +403,7 @@ void SimpleDateFormat::parseAmbiguousDatesAsAfter(UDate startDate, UErrorCode& s
 //----------------------------------------------------------------------
 
 UnicodeString&
-SimpleDateFormat::format(Calendar& cal, UnicodeString& toAppendTo, FieldPosition& pos) const
+SimpleDateFormat::format(Calendar& cal, UnicodeString& appendTo, FieldPosition& pos) const
 {
     UErrorCode status = U_ZERO_ERROR;
     pos.setBeginIndex(0);
@@ -420,14 +420,14 @@ SimpleDateFormat::format(Calendar& cal, UnicodeString& toAppendTo, FieldPosition
         // Use subFormat() to format a repeated pattern character
         // when a different pattern or non-pattern character is seen
         if (ch != prevCh && count > 0) {
-            subFormat(toAppendTo, prevCh, count, pos, cal, status);
+            subFormat(appendTo, prevCh, count, pos, cal, status);
             count = 0;
         }
         if (ch == 0x0027 /*'\''*/) {
             // Consecutive single quotes are a single quote literal,
             // either outside of quotes or between quotes
             if ((i+1) < fPattern.length() && fPattern[i+1] == 0x0027 /*'\''*/) {
-                toAppendTo += (UChar)0x0027 /*'\''*/;
+                appendTo += (UChar)0x0027 /*'\''*/;
                 ++i;
             } else {
                 inQuote = ! inQuote;
@@ -442,13 +442,13 @@ SimpleDateFormat::format(Calendar& cal, UnicodeString& toAppendTo, FieldPosition
         }
         else {
             // Append quoted characters and unquoted non-pattern characters
-            toAppendTo += ch;
+            appendTo += ch;
         }
     }
 
     // Format the last item in the pattern, if any
     if (count > 0) {
-        subFormat(toAppendTo, prevCh, count, pos, cal, status);
+        subFormat(appendTo, prevCh, count, pos, cal, status);
     }
 
     // and if something failed (e.g., an invalid format character), reset our FieldPosition
@@ -459,12 +459,12 @@ SimpleDateFormat::format(Calendar& cal, UnicodeString& toAppendTo, FieldPosition
         pos.setEndIndex(0);
     }
     
-    return toAppendTo;
+    return appendTo;
 }
 
 UnicodeString&
 SimpleDateFormat::format(const Formattable& obj, 
-                         UnicodeString& toAppendTo, 
+                         UnicodeString& appendTo, 
                          FieldPosition& pos,
                          UErrorCode& status) const
 {
@@ -472,7 +472,7 @@ SimpleDateFormat::format(const Formattable& obj,
     // (the previous format() override would hide the version of
     // format() on DateFormat that this function correspond to, so we
     // have to redefine it here)
-    return DateFormat::format(obj, toAppendTo, pos, status);
+    return DateFormat::format(obj, appendTo, pos, status);
 }
 
 //----------------------------------------------------------------------
@@ -509,7 +509,7 @@ SimpleDateFormat::fgPatternIndexToDateFormatField[] = {
 //----------------------------------------------------------------------
 
 void
-SimpleDateFormat::subFormat(UnicodeString &toAppendTo,
+SimpleDateFormat::subFormat(UnicodeString &appendTo,
                             UChar ch,
                             int32_t count,
                             FieldPosition& pos,
@@ -522,7 +522,7 @@ SimpleDateFormat::subFormat(UnicodeString &toAppendTo,
     UChar *patternCharPtr = u_strchr(DateFormatSymbols::getPatternUChars(), ch);
     EField patternCharIndex;
     const int32_t maxIntCount = 10;
-    int32_t beginOffset = toAppendTo.length();
+    int32_t beginOffset = appendTo.length();
 
     // if the pattern character is unrecognized, signal an error and dump out
     if (patternCharPtr == NULL)
@@ -541,16 +541,16 @@ SimpleDateFormat::subFormat(UnicodeString &toAppendTo,
     
     // for any "G" symbol, write out the appropriate era string
     case kEraField:
-        toAppendTo += fSymbols->fEras[value];
+        appendTo += fSymbols->fEras[value];
         break;
 
     // for "yyyy", write out the whole year; for "yy", write out the last 2 digits
     case kYearField:
     case kYearWOYField:
         if (count >= 4) 
-            zeroPaddingNumber(toAppendTo, value, 4, maxIntCount);
+            zeroPaddingNumber(appendTo, value, 4, maxIntCount);
         else 
-            zeroPaddingNumber(toAppendTo, value, 2, 2);
+            zeroPaddingNumber(appendTo, value, 2, 2);
         break;
 
     // for "MMMM", write out the whole month name, for "MMM", write out the month
@@ -558,19 +558,19 @@ SimpleDateFormat::subFormat(UnicodeString &toAppendTo,
     // appropriate number of digits
     case kMonthField:
         if (count >= 4) 
-            toAppendTo += fSymbols->fMonths[value];
+            appendTo += fSymbols->fMonths[value];
         else if (count == 3) 
-            toAppendTo += fSymbols->fShortMonths[value];
+            appendTo += fSymbols->fShortMonths[value];
         else 
-            zeroPaddingNumber(toAppendTo, value + 1, count, maxIntCount);
+            zeroPaddingNumber(appendTo, value + 1, count, maxIntCount);
         break;
 
     // for "k" and "kk", write out the hour, adjusting midnight to appear as "24"
     case kHourOfDay1Field:
         if (value == 0) 
-            zeroPaddingNumber(toAppendTo, cal.getMaximum(Calendar::HOUR_OF_DAY) + 1, count, maxIntCount);
+            zeroPaddingNumber(appendTo, cal.getMaximum(Calendar::HOUR_OF_DAY) + 1, count, maxIntCount);
         else 
-            zeroPaddingNumber(toAppendTo, value, count, maxIntCount);
+            zeroPaddingNumber(appendTo, value, count, maxIntCount);
         break;
 
     // for "SS" and "S", we want to truncate digits so that you still see the MOST
@@ -582,29 +582,29 @@ SimpleDateFormat::subFormat(UnicodeString &toAppendTo,
             value = value / 10;
         else if (count == 1) 
             value = value / 100;
-        zeroPaddingNumber(toAppendTo, value, count, maxIntCount);
+        zeroPaddingNumber(appendTo, value, count, maxIntCount);
         break;
 
     // for "EEEE", write out the day-of-the-week name; otherwise, use the abbreviation
     case kDayOfWeekField:
         if (count >= 4) 
-            toAppendTo += fSymbols->fWeekdays[value];
+            appendTo += fSymbols->fWeekdays[value];
         else 
-            toAppendTo += fSymbols->fShortWeekdays[value];
+            appendTo += fSymbols->fShortWeekdays[value];
         break;
 
     // for and "a" symbol, write out the whole AM/PM string
     case kAmPmField:
-        toAppendTo += fSymbols->fAmPms[value];
+        appendTo += fSymbols->fAmPms[value];
         break;
 
     // for "h" and "hh", write out the hour, adjusting noon and midnight to show up
     // as "12"
     case kHour1Field:
         if (value == 0) 
-            zeroPaddingNumber(toAppendTo, cal.getLeastMaximum(Calendar::HOUR) + 1, count, maxIntCount);
+            zeroPaddingNumber(appendTo, cal.getLeastMaximum(Calendar::HOUR) + 1, count, maxIntCount);
         else 
-            zeroPaddingNumber(toAppendTo, value, count, maxIntCount);
+            zeroPaddingNumber(appendTo, value, count, maxIntCount);
         break;
 
     // for the "z" symbols, we have to check our time zone data first.  If we have a
@@ -621,27 +621,27 @@ SimpleDateFormat::subFormat(UnicodeString &toAppendTo,
                     cal.get(Calendar::DST_OFFSET, status);
 
             if (value < 0) {
-                toAppendTo += fgGmtMinus;
+                appendTo += fgGmtMinus;
                 value = -value; // suppress the '-' sign for text display.
             }
             else
-                toAppendTo += fgGmtPlus;
+                appendTo += fgGmtPlus;
             
-            zeroPaddingNumber(toAppendTo, (int32_t)(value/U_MILLIS_PER_HOUR), 2, 2);
-            toAppendTo += (UChar)0x003A /*':'*/;
-            zeroPaddingNumber(toAppendTo, (int32_t)((value%U_MILLIS_PER_HOUR)/U_MILLIS_PER_MINUTE), 2, 2);
+            zeroPaddingNumber(appendTo, (int32_t)(value/U_MILLIS_PER_HOUR), 2, 2);
+            appendTo += (UChar)0x003A /*':'*/;
+            zeroPaddingNumber(appendTo, (int32_t)((value%U_MILLIS_PER_HOUR)/U_MILLIS_PER_MINUTE), 2, 2);
         }
         else if (cal.get(Calendar::DST_OFFSET, status) != 0) {
             if (count >= 4) 
-                toAppendTo += fSymbols->fZoneStrings[zoneIndex][3];
+                appendTo += fSymbols->fZoneStrings[zoneIndex][3];
             else 
-                toAppendTo += fSymbols->fZoneStrings[zoneIndex][4];
+                appendTo += fSymbols->fZoneStrings[zoneIndex][4];
         }
         else {
             if (count >= 4) 
-                toAppendTo += fSymbols->fZoneStrings[zoneIndex][1];
+                appendTo += fSymbols->fZoneStrings[zoneIndex][1];
             else 
-                toAppendTo += fSymbols->fZoneStrings[zoneIndex][2];
+                appendTo += fSymbols->fZoneStrings[zoneIndex][2];
         }
         }
         break;
@@ -659,7 +659,7 @@ SimpleDateFormat::subFormat(UnicodeString &toAppendTo,
     // case kWeekOfMonthField:
     // case kHour0Field:
     // case kDOWLocalField:
-        zeroPaddingNumber(toAppendTo, value, count, maxIntCount);
+        zeroPaddingNumber(appendTo, value, count, maxIntCount);
         break;
     }
 
@@ -668,7 +668,7 @@ SimpleDateFormat::subFormat(UnicodeString &toAppendTo,
     if (pos.getField() == fgPatternIndexToDateFormatField[patternCharIndex]) {
         if (pos.getBeginIndex() == 0 && pos.getEndIndex() == 0) {
             pos.setBeginIndex(beginOffset);
-            pos.setEndIndex(toAppendTo.length());
+            pos.setEndIndex(appendTo.length());
         }
     }
 }
@@ -676,13 +676,13 @@ SimpleDateFormat::subFormat(UnicodeString &toAppendTo,
 //----------------------------------------------------------------------
 
 void
-SimpleDateFormat::zeroPaddingNumber(UnicodeString &toAppendTo, int32_t value, int32_t minDigits, int32_t maxDigits) const
+SimpleDateFormat::zeroPaddingNumber(UnicodeString &appendTo, int32_t value, int32_t minDigits, int32_t maxDigits) const
 {
     FieldPosition pos(0);
 
     fNumberFormat->setMinimumIntegerDigits(minDigits);
     fNumberFormat->setMaximumIntegerDigits(maxDigits);
-    fNumberFormat->format(value, toAppendTo, pos);  // 3rd arg is there to speed up processing
+    fNumberFormat->format(value, appendTo, pos);  // 3rd arg is there to speed up processing
 }
 
 //----------------------------------------------------------------------

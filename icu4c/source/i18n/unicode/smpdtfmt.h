@@ -286,17 +286,17 @@ public:
      * Example: using the US locale: "yyyy.MM.dd e 'at' HH:mm:ss zzz" ->>
      * 1996.07.10 AD at 15:08:56 PDT
      *
-     * @param cal           a Calendar set to the date and time to be formatted
-     *                      into a date/time string.
-     * @param toAppendTo    The result of the formatting operation is appended to this
-     *                      string.
-     * @param pos           The formatting position. On input: an alignment field,
-     *                      if desired. On output: the offsets of the alignment field.
-     * @return              A reference to 'toAppendTo'.
+     * @param cal       Calendar set to the date and time to be formatted
+     *                  into a date/time string.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param pos       The formatting position. On input: an alignment field,
+     *                  if desired. On output: the offsets of the alignment field.
+     * @return          Reference to 'appendTo' parameter.
      * @draft ICU 2.1
      */
     virtual UnicodeString& format(  Calendar& cal,
-                                    UnicodeString& toAppendTo,
+                                    UnicodeString& appendTo,
                                     FieldPosition& pos) const;
 
     /**
@@ -306,56 +306,59 @@ public:
      * Example: using the US locale: "yyyy.MM.dd e 'at' HH:mm:ss zzz" ->>
      * 1996.07.10 AD at 15:08:56 PDT
      *
-     * @param obj           A Formattable containing the date-time value to be formatted
-     *                      into a date-time string.  If the type of the Formattable
-     *                      is a numeric type, it is treated as if it were an
-     *                      instance of Date.
-     * @param toAppendTo    The result of the formatting operation is appended to this
-     *                      string.
-     * @param pos           The formatting position. On input: an alignment field,
-     *                      if desired. On output: the offsets of the alignment field.
-     * @param status        Output param set to success/faulure code.
-     * @return              A reference to 'toAppendTo'.
+     * @param obj       A Formattable containing the date-time value to be formatted
+     *                  into a date-time string.  If the type of the Formattable
+     *                  is a numeric type, it is treated as if it were an
+     *                  instance of Date.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param pos       The formatting position. On input: an alignment field,
+     *                  if desired. On output: the offsets of the alignment field.
+     * @param status    Output param set to success/faulure code.
+     * @return          Reference to 'appendTo' parameter.
      * @stable
      */
     virtual UnicodeString& format(  const Formattable& obj,
-                                    UnicodeString& toAppendTo,
+                                    UnicodeString& appendTo,
                                     FieldPosition& pos,
                                     UErrorCode& status) const;
 
     /**
      * Redeclared DateFormat method.
      * @param date          the Date value to be formatted.
-     * @param result        Output param to receive the formatted string.
+     * @param appendTo      Output parameter to receive result.
+     *                      Result is appended to existing contents.
      * @param fieldPosition The formatting position. On input: an alignment field,
      *                      if desired. On output: the offsets of the alignment field.
-     * @return              A reference to 'result'.
+     * @return              Reference to 'appendTo' parameter.
      * @draft ICU 2.1
      */
     UnicodeString& format(UDate date,
-                          UnicodeString& result,
+                          UnicodeString& appendTo,
                           FieldPosition& fieldPosition) const;
 
     /**
      * Redeclared DateFormat method.
-     * @param obj    the object to be formatted.
-     * @param result Output param to receive the formatted string.
-     * @param status Output param set to success/faulure code.
-     * @return              A reference to 'toAppendTo'. 
+     * @param obj       Object to be formatted.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param status    Input/output success/failure code.
+     * @return          Reference to 'appendTo' parameter.
      * @stable
      */
     UnicodeString& format(const Formattable& obj,
-                          UnicodeString& result,
+                          UnicodeString& appendTo,
                           UErrorCode& status) const;
 
     /**
      * Redeclared DateFormat method.
-     * @param date          the Date value to be formatted.
-     * @param result        Output param to receive the formatted string.
-     * @return              A reference to 'result'.
+     * @param date      Date value to be formatted.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @return          Reference to 'appendTo' parameter.
      * @stable
      */
-    UnicodeString& format(UDate date, UnicodeString& result) const;
+    UnicodeString& format(UDate date, UnicodeString& appendTo) const;
 
     /**
      * Parse a date/time string beginning at the given parse position. For
@@ -605,7 +608,8 @@ private:
     /**
      * Called by format() to format a single field.
      *
-     * @param toAppendTo A string which gets the result appended to it.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
      * @param ch        The format character we encountered in the pattern.
      * @param count     Number of characters in the current pattern symbol (e.g.,
      *                  "yyyy" in the pattern would result in a call to this function
@@ -617,7 +621,7 @@ private:
      * @param status    Receives a status code, which will be U_ZERO_ERROR if the operation
      *                  succeeds.
      */
-    void subFormat(             UnicodeString &toAppendTo,
+    void subFormat(             UnicodeString &appendTo,
                                 UChar ch,
                                 int32_t count,
                                 FieldPosition& pos,
@@ -630,12 +634,13 @@ private:
      * having a number of digits between "minDigits" and
      * "maxDigits".  Uses the DateFormat's NumberFormat.
      *
-     * @param toAppendTo A string which gets the formatted number appended to it.
+     * @param appendTo  Output parameter to receive result.
+     *                  Formatted number is appended to existing contents.
      * @param value     Value to format.
      * @param minDigits Minimum number of digits the result should have
      * @param maxDigits Maximum number of digits the result should have
      */
-    void zeroPaddingNumber(          UnicodeString &toAppendTo,
+    void zeroPaddingNumber(          UnicodeString &appendTo,
                                      int32_t value,
                                      int32_t minDigits,
                                      int32_t maxDigits) const;
@@ -833,25 +838,25 @@ SimpleDateFormat::get2DigitYearStart(UErrorCode& /*status*/) const
 
 inline UnicodeString&
 SimpleDateFormat::format(const Formattable& obj,
-                         UnicodeString& result,
+                         UnicodeString& appendTo,
                          UErrorCode& status) const {
     // Don't use Format:: - use immediate base class only,
     // in case immediate base modifies behavior later.
-    return DateFormat::format(obj, result, status);
+    return DateFormat::format(obj, appendTo, status);
 }
 
 inline UnicodeString&
 SimpleDateFormat::format(UDate date,
-                         UnicodeString& result,
+                         UnicodeString& appendTo,
                          FieldPosition& fieldPosition) const {
     // Don't use Format:: - use immediate base class only,
     // in case immediate base modifies behavior later.
-    return DateFormat::format(date, result, fieldPosition);
+    return DateFormat::format(date, appendTo, fieldPosition);
 }
 
 inline UnicodeString&
-SimpleDateFormat::format(UDate date, UnicodeString& result) const {
-    return DateFormat::format(date, result);
+SimpleDateFormat::format(UDate date, UnicodeString& appendTo) const {
+    return DateFormat::format(date, appendTo);
 }
 
 U_NAMESPACE_END
