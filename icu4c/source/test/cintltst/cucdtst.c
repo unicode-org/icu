@@ -33,6 +33,9 @@ TestCharNames();
 static void
 TestMirroring();
 
+static void
+TestWhitespace();
+
 /* test data ---------------------------------------------------------------- */
 #define MIN(a,b) (a < b ? a : b)
 
@@ -108,6 +111,7 @@ void addUnicodeTest(TestNode** root)
     addTest(root, &TestStringFunctions, "tsutil/cucdtst/TestStringFunctions");
     addTest(root, &TestCharNames, "tsutil/cucdtst/TestCharNames");
     addTest(root, &TestMirroring, "tsutil/cucdtst/TestMirroring");
+    addTest(root, &TestWhitespace, "tsutil/cucdtst/TestWhitespace");
 }
 
 /*==================================================== */
@@ -696,5 +700,34 @@ TestMirroring() {
         )
     ) {
         log_err("u_charMirror() does not work correctly\n");
+    }
+}
+
+/* test u_isWhitespace() ---------------------------------------------------- */
+
+static void
+TestWhitespace() {
+    static const UChar32
+    whitespaces[]={
+        9, 0xa, 0xb, 0xc, 0xd, 0x1c, 0x1d, 0x1e, 0x1f, 0x20, 0x2028, 0x2029,
+        0x1680, 0x2000, 0x200b, 0x3000
+    },
+    nonWhitespaces[]={
+        0xa0, 0x202f, 0xfeff, 0x61, 0x200e, 0x4efa, 0x30014
+    };
+
+    int i;
+
+    log_verbose("Testing u_isWhitespace()\n");
+    for(i=0; i<sizeof(whitespaces)/sizeof(whitespaces[0]); ++i) {
+        if(!u_isWhitespace(whitespaces[i])) {
+            log_err("u_isWhitespace(0x%lx) does not return TRUE as expected\n", whitespaces[i]);
+        }
+    }
+
+    for(i=0; i<sizeof(nonWhitespaces)/sizeof(nonWhitespaces[0]); ++i) {
+        if(u_isWhitespace(nonWhitespaces[i])) {
+            log_err("u_isWhitespace(0x%lx) does not return FALSE as expected\n", nonWhitespaces[i]);
+        }
     }
 }
