@@ -20,6 +20,31 @@
 #include "unicode/utypes.h"
 
 /**
+ *  Initialize ICU.  This function loads and initializes data items
+ *  that are required internally by various ICU functions.  Use of this explicit
+ *  initialization is required in multi-threaded applications; in 
+ *  single threaded apps, use is optional, but incurs little additional
+ *  cost, and is thus recommended.
+ *  <p>
+ *  In multi-threaded applications, u_init() should be called  in the
+ *  main thread before starting additional threads, or, alternatively
+ *  it can be called in each individual thread once, before other ICU
+ *  functions are called in that thread.  In this second scenario, the
+ *  application must guarantee that the first call to u_init() happen
+ *  without contention, in a single thread only.
+ *  <p>
+ *  Extra, repeated, or otherwise unneeded calls to u_init() do no harm,
+ *  other taking a small amount of time.
+ *
+ * @param pErrorCode An ICU UErrorCode parameter. It must not be <code>NULL</code>.
+ *    An Error will be retuned if some required part of ICU data can not
+ *    be loaded or initialized.
+ *
+ */  
+U_CAPI void U_EXPORT2 
+u_init(UErrorCode *status);
+
+/**
  * Clean up the system resources, such as allocated memory or open files,
  * used in all ICU libraries. This will free/delete all memory owned by the
  * ICU libraries, and return them to their original load state. All open ICU
@@ -39,10 +64,10 @@
  * results.
  * <p>
  * After calling u_cleanup(), an application may continue to use ICU by
- * creating an ICU C++ object or opening new items (converters, collators,
- * etc.) and using them.  An application must use ICU from one single
- * thread before allowing other threads or processes from using ICU.  This
- * is so that the ICU libraries can reinitialize in a thread safe manner.
+ * calling u_init().  An application must invoke u_init() first from one single
+ * thread before allowing other threads call u_init().  All threads existing
+ * at the time of the first thread's call to u_init() must also call
+ * u_init() themselves before continuing with other ICU operations.  
  * <p>
  * The use of u_cleanup() just before an application terminates is optional,
  * but it should be called only once for performance reasons. The primary
