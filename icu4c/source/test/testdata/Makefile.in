@@ -54,7 +54,7 @@ ifneq ($(wildcard .links),)
 endif
 
 distclean-local: clean-local
-	$(RMV) Makefile icupkg.inc
+	$(RMV) Makefile pkgdata.inc
 
 check-local:
 
@@ -62,7 +62,7 @@ Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	cd $(top_builddir) \
 	&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-icupkg.inc: $(srcdir)/icupkg.inc.in Makefile $(top_builddir)/config.status
+pkgdata.inc: $(srcdir)/pkgdata.inc.in Makefile $(top_builddir)/config.status
 	cd $(top_builddir) \
 	&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
@@ -81,7 +81,7 @@ endif
 ############################## Test ## stuff ############################
 
 ifeq ($(PKGDATA_OPTS),)
-PKGDATA_OPTS = -O $(top_builddir)/test/testdata/icupkg.inc
+PKGDATA_OPTS = -O $(top_builddir)/test/testdata/pkgdata.inc
 endif
 
 # relative lib links from pkgdata are the same as for tmp
@@ -190,7 +190,7 @@ testdata: build-dir $(ALL_TEST_FILES) $(UNPACKAGEDTESTDATA)
 
 $(ALL_TEST_FILES): build-dir
 
-packagetest: testdata icupkg.inc $(TESTBUILDDIR)/testdata.lst 
+packagetest: testdata pkgdata.inc $(TESTBUILDDIR)/testdata.lst 
 	$(PKGDATA_INVOKE) $(PKGDATA) -T $(TESTBUILDDIR) -d $(TESTOUTDIR) -s $(TESTBUILDDIR) -p $(TESTDATA) -m common $(TESTBUILDDIR)/testdata.lst
 
 build-dir:
