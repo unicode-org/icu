@@ -410,8 +410,10 @@ static const ILcidPosixElement nl[] = {
 static const ILcidPosixElement no[] = {
     {0x14,   "nb"},     /* really nb */
     {0x0414, "nb_NO"},  /* really nb_NO */
+    {0x0414, "no"},     /* really nb_NO */
     {0x0814, "nn_NO"},  /* really nn_NO */
-    {0x0814, "nn"}      /* It's 0x14 or 0x814, pick one to make the test program happy. */
+    {0x0814, "nn"},     /* It's 0x14 or 0x814, pick one to make the test program happy. */
+    {0x0814, "no_NO_NY"}/* really nn_NO */
 };
 
 /* Declared as or_IN to get around compiler errors*/
