@@ -47,7 +47,7 @@ uscript_getCode(const char* nameOrAbbrOrLocale,
     if(code==(UScriptCode)UCHAR_INVALID_CODE){
         /* Do not propagate error codes from just not finding a locale bundle. */
         UErrorCode localErrorCode = U_ZERO_ERROR;
-        UResourceBundle* resB = ures_open(u_getDataDirectory(),nameOrAbbrOrLocale,&localErrorCode);
+        UResourceBundle* resB = ures_open(NULL,nameOrAbbrOrLocale,&localErrorCode);
         if(U_SUCCESS(localErrorCode)&& localErrorCode != U_USING_DEFAULT_WARNING){
             UResourceBundle* resD = ures_getByKey(resB,kLocaleScript,NULL,&localErrorCode);
             if(U_SUCCESS(localErrorCode) ){
