@@ -754,10 +754,10 @@ ucol_strcoll(    const    UCollator    *coll,
 
         int8_t comparison;
         
-        Normalizer::normalize(source, ((RuleBasedCollator *)coll)->getDecomposition(), 
+        Normalizer::normalize(UnicodeString(source, sourceLength), ((RuleBasedCollator *)coll)->getDecomposition(), 
                       0, sourceDecomp,  status);
 
-        Normalizer::normalize(target, ((RuleBasedCollator *)coll)->getDecomposition(), 
+        Normalizer::normalize(UnicodeString(target, targetLength), ((RuleBasedCollator *)coll)->getDecomposition(), 
                       0, targetDecomp,  status);
         
         comparison = sourceDecomp.compare(targetDecomp);
@@ -944,9 +944,14 @@ ucol_getSortKey(const    UCollator    *coll,
 
 
     if(compareIdent) {
-      for(i = 0; i<len; i++) {
-          *(primaries++) = (s.string[i] >> 8) + utf16fixup[s.string[i] >> 11];
-          *(primaries++) = (s.string[i] & 0xFF);
+		UChar *ident = s.string;
+		while(ident < s.len) {
+          *(primaries++) = (*(ident) >> 8) + utf16fixup[*(ident) >> 11];
+          *(primaries++) = (*(ident) & 0xFF);
+		  ident++;
+//      for(i = 0; i<len; i++) {
+//          *(primaries++) = (s.string[i] >> 8) + utf16fixup[s.string[i] >> 11];
+//          *(primaries++) = (s.string[i] & 0xFF);
       }
       *(primaries++) = UCOL_LEVELTERMINATOR;
     }
