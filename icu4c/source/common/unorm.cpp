@@ -25,6 +25,7 @@
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
 #include "unicode/udata.h"
+#include "unicode/uchar.h"
 #include "unicode/uiter.h"
 #include "unicode/unorm.h"
 #include "cmemory.h"
@@ -478,6 +479,27 @@ _isTrueStarter(uint32_t norm32, uint32_t ccOrQCMask, uint32_t decompQCMask) {
         }
     }
     return FALSE;
+}
+
+/* uchar.h */
+U_CAPI uint8_t U_EXPORT2
+u_getCombiningClass(UChar32 c) {
+    UErrorCode errorCode=U_ZERO_ERROR;
+    if(_haveData(errorCode)) {
+        uint32_t norm32;
+
+        if((uint32_t)c<=0xffff) {
+            norm32=_getNorm32((UChar)c);
+        } else {
+            norm32=_getNorm32(UTF16_LEAD(c));
+            if((norm32&_NORM_CC_MASK)!=0) {
+                norm32=_getNorm32FromSurrogatePair(norm32, UTF16_TRAIL(c));
+            }
+        }
+        return (uint8_t)(norm32>>_NORM_CC_SHIFT);
+    } else {
+        return 0;
+    }
 }
 
 /* reorder UTF-16 in-place -------------------------------------------------- */
