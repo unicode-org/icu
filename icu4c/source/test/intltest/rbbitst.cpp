@@ -1587,7 +1587,7 @@ void RBBITest::TestLineBreakData() {
         return;
     }
 
-    char *       lbdfName = "LBTest.txt";
+    const char *    lbdfName = "LBTest.txt";
 
     // Open the test data file.
     //   TODO:  a proper way to handle this data.
