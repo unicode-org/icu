@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2002/07/26 21:17:42 $
- * $Revision: 1.30 $
+ * $Date: 2002/09/09 16:05:09 $
+ * $Revision: 1.31 $
  *
  *****************************************************************************************
  */
@@ -1033,6 +1033,73 @@ public final class Utility {
         }
         return pos;
     }
+
+    /**
+     * Parse a pattern string within the given Replaceable and a parsing
+     * pattern.  Characters are matched literally and case-sensitively
+     * except for the following special characters:
+     *
+     * ~  zero or more uprv_isRuleWhiteSpace chars
+     *
+     * If end of pattern is reached with all matches along the way,
+     * pos is advanced to the first unparsed index and returned.
+     * Otherwise -1 is returned.
+     * @param pat pattern that controls parsing
+     * @param text text to be parsed, starting at index
+     * @param index offset to first character to parse
+     * @param limit offset after last character to parse
+     * @return index after last parsed character, or -1 on parse failure.
+     */
+    public static int parsePattern(String pat,
+                                   Replaceable text,
+                                   int index,
+                                   int limit) {
+        int ipat = 0;
+
+        // empty pattern matches immediately
+        if (ipat == pat.length()) {
+            return index;
+        }
+
+        int cpat = UTF16.charAt(pat, ipat);
+
+        while (index < limit) {
+            int c = text.char32At(index);
+
+            // parse \s*
+            if (cpat == '~') {
+                if (UCharacterProperty.isRuleWhiteSpace(c)) {
+                    index += UTF16.getCharCount(c);
+                    continue;
+                } else {
+                    if (++ipat == pat.length()) {
+                        return index; // success; c unparsed
+                    }
+                    // fall thru; process c again with next cpat
+                }
+            }
+
+            // parse literal
+            else if (c == cpat) {
+                int n = UTF16.getCharCount(c);
+                index += n;
+                ipat += n;
+                if (ipat == pat.length()) {
+                    return index; // success; c parsed
+                }
+                // fall thru; get next cpat
+            }
+
+            // match failure of literal
+            else {
+                return -1;
+            }
+
+            cpat = UTF16.charAt(pat, ipat);
+        }
+
+        return -1; // text ended before end of pat
+    }    
 
     /**
      * Parse an integer at pos, either of the form \d+ or of the form
