@@ -123,7 +123,7 @@ use strict;
 use Getopt::Long;
 use vars qw(@FILES $YEAR $DATA_DIR $OUT $SEP @MONTH
             $VERSION_YEAR $VERSION_SUFFIX $RAW_VERSION
-            $TZ_ALIAS $TZ_DEFAULT);
+            $TZ_ALIAS $TZ_DEFAULT $URL $HTML_FILE);
 require 'dumpvar.pl';
 use tzparse;
 use tzutil;
@@ -132,6 +132,9 @@ use tzutil;
 $OUT = 'tz.txt';
 $TZ_ALIAS = 'tz.alias';
 $TZ_DEFAULT = 'tz.default';
+
+# Source of our data
+$URL = "ftp://elsie.nci.nih.gov/pub";
 
 # Separator between fields in the output file
 $SEP = ','; # Don't use ':'!
@@ -185,6 +188,7 @@ if ($DATA_DIR =~ /(tzdata(\d{4})(\w?))/) {
     usage();
 }
 
+$HTML_FILE = shift;
 
 @MONTH = qw(jan feb mar apr may jun
             jul aug sep oct nov dec);
@@ -192,14 +196,16 @@ if ($DATA_DIR =~ /(tzdata(\d{4})(\w?))/) {
 main();
 
 sub usage {
-    print STDERR "Usage: $0 data_dir\n\n";
+    print STDERR "Usage: $0 data_dir [html_out]\n\n";
     print STDERR "data_dir contains the unpacked files from\n";
-    print STDERR "ftp://elsie.nci.nih.gov/pub/tzdataYYYYR,\n";
+    print STDERR "$URL/tzdataYYYYR,\n";
     print STDERR "where YYYY is the year and R is the revision\n";
     print STDERR "letter.\n";
     print STDERR "\n";
     print STDERR "Files that are expected to be present are:\n";
     print STDERR join(", ", @FILES), "\n";
+    print STDERR "\n";
+    print STDERR "[html_out] optional name of HTML file to output\n";
     exit 1;
 }
 
@@ -219,7 +225,7 @@ sub main {
 
     TZ::Postprocess(\%ZONES, \%RULES);
 
-    incorporateAliases($TZ_ALIAS, \%ZONES);
+    my $aliases = incorporateAliases($TZ_ALIAS, \%ZONES);
 
     print
         "Read ", scalar keys %ZONES, " current zones and ",
@@ -259,6 +265,9 @@ sub main {
     my $STD_COUNT = 0; # Count of standard zones
     my $DST_COUNT = 0; # Count of DST zones
     my $maxNameLen = 0;
+    # IMPORTANT: This sort must correspond to the sort
+    #            order of UnicodeString::compare.  That
+    #            is, it must be a plain sort.
     foreach my $z (sort keys %ZONES) {
         # Make sure zone IDs only contain invariant chars
         assertInvariantChars($z);
@@ -288,6 +297,13 @@ sub main {
         $maxPerOffset = $_ if ($_ > $maxPerOffset);
     }
     
+    # Create the offset index table, that includes the zones
+    # for each offset and the default zone for each offset.
+    # This is a hash{$name -> array ref}.  Element [0] of
+    # the array is the default name.  Elements [1..n] are the
+    # zones for the offset, in sorted order, including the default.
+    my $offsetIndex = createOffsetIndex(\%ZONES, $TZ_DEFAULT);
+
     open(OUT,">$OUT") or die "Can't open $OUT for writing: $!";
 
     ############################################################
@@ -295,7 +311,7 @@ sub main {
     ############################################################
     # Zone data version
     print OUT $VERSION_YEAR, " # ($RAW_VERSION) version of Olson zone\n";
-    print OUT $VERSION_SUFFIX, " #  data from ftp://elsie.nci.nih.gov\n";
+    print OUT $VERSION_SUFFIX, " #  data from $URL\n";
     print OUT scalar keys %ZONES, " # total zone count\n";
     print OUT $maxPerOffset, " # max count of zones with same gmtOffset\n";
     print OUT $maxNameLen, " # max name length not incl final zero\n";
@@ -368,93 +384,20 @@ sub main {
         $zoneNumber{$_} = $i++;
     }
 
-    # Create a hash by index.  The hash has offset integers as keys
-    # and arrays of index numbers as values.
-    my %offsetMap;
-    foreach (sort keys %ZONES) {
-        my $offset = parseOffset($ZONES{$_}->{gmtoff});
-        push @{$offsetMap{$offset}}, $zoneNumber{$_};
-    }
-
-    # Select defaults.  We do this by reading the file $TZ_DEFAULT.
-    # If there are multiple errors, we want to report them all,
-    # so we set a flag and die at the end if there are problems.
-    my %defaults; # key=offset integer, value=zone #
-    my $ok = 1;
-    open(IN, $TZ_DEFAULT) or die "Can't open $TZ_DEFAULT: $!";
-    while (<IN>) {
-        my $raw = $_;
-        s/\#.*//; # Trim comments
-        next unless (/\S/); # Skip blank lines
-        if (/^\s*(\S+)\s*$/) {
-            my $z = $1;
-            if (! exists $ZONES{$z}) {
-                print "Error: Nonexistent zone $z listed in $TZ_DEFAULT line: $raw";
-                $ok = 0;
-                next;
-            }
-            my $offset = parseOffset($ZONES{$z}->{gmtoff});
-            if (exists $defaults{$offset}) {
-                print
-                    "Error: Offset ", formatOffset($offset), " has both ",
-                    $zoneName[$defaults{$offset}], " and ", $z,
-                    " specified as defaults\n";
-                $ok = 0;
-                next;
-            }
-            $defaults{$offset} = $zoneNumber{$z};
-        } else {
-            print "Error: Can't parse line in $TZ_DEFAULT: $raw";
-            $ok = 0;
-        }
-    }
-    close(IN);
-    die "Error: Aborting due to errors in $TZ_DEFAULT\n" unless ($ok);
-    print "Incorporated ", scalar keys %defaults, " defaults from $TZ_DEFAULT\n";
-
-    # Emit it
-    my $missing = 0;
-    print OUT scalar keys %offsetMap, " # index by offset entries to follow\n";
-    foreach (sort {$a <=> $b} keys %offsetMap) {
-        my $aref = $offsetMap{$_};
-        my $def = -1;
-        if (exists $defaults{$_}) {
-            $def = $defaults{$_};
-        } else {
-            # If there is an offset for which we have no listed default
-            # in $TZ_DEFAULT, we try to figure out a reasonable default
-            # ourselves.  We ignore any zone named Etc/ because that's not
-            # a "real" zone; it's just one listed as a POSIX convience.
-            # We take the first (alphabetically) zone of what's left,
-            # and if there are more than one of those, we emit a warning.
-
-            my $ambiguous = 0;
-            # Ignore zones named Etc/ and take the first one we otherwise see;
-            # if there is more than one of those, emit a warning.
-            foreach (sort map($zoneName[$_], @{$aref})) {
-                next if (m|^Etc/|);
-                if ($def < 0) {
-                    $def = $zoneNumber{$_}
-                } else {
-                    $ambiguous = 1;
-                }
-            }
-            $def = $aref->[0] if ($def < 0);
-            if ($ambiguous) {
-                $missing = 1;
-                print
-                    "Warning: No default for GMT", formatOffset($_),
-                    ", using ", $zoneName[$def], "\n";
-            }
-        }
-        # Emit the actual line, including a descriptive comment
+    # Emit offset index
+    print OUT scalar keys %{$offsetIndex}, " # index by offset entries to follow\n";
+    foreach (sort {$a <=> $b} keys %{$offsetIndex}) {
+        my $aref = $offsetIndex->{$_};
+        my $def = $aref->[0];
+        # Make a slice of 1..n
+        my @b = @{$aref}[1..$#{$aref}];
         print OUT
-            $_, ",", $def, ",",
-            scalar @{$aref}, ",", join(",", @{$aref}),
-            " # ", formatOffset($_), " d=", $zoneName[$def], " ",
-            join(" ", map($zoneName[$_], @{$aref})), "\n";
+            $_, ",", $zoneNumber{$def}, ",",
+            scalar @b, ",",
+            join(",", map($zoneNumber{$_}, @b)),
+            " # ", formatOffset($_), " d=", $def, " ",
+            join(" ", @b), "\n";
     }
-    print "Defaults may be specified in $TZ_DEFAULT\n" if ($missing);
 
     print OUT "end\n";
 
@@ -464,6 +407,11 @@ sub main {
     close(OUT);
     print "$OUT written.\n";
 
+    # Emit the HTML file
+    if ($HTML_FILE) {
+        emitHTML($HTML_FILE, \%ZONES, \%RULES, $offsetIndex, $aliases);
+        print "$HTML_FILE written.\n";
+    }
 
     if (0) {
         TZ::FormZoneEquivalencyGroups(\%ZONES, \%RULES, \@EQUIV);
@@ -498,14 +446,393 @@ sub main {
     }
 }
 
+# Create an index of all the zones by GMT offset.  This index will
+# list the zones for each offset and also the default zone for that
+# offset.
+# 
+# Param: Ref to zone table
+# Param: Name of default file
+# 
+# Return: ref to hash; the hash has offset integers as keys and arrays
+# of zone names as values.  If there are n zone names at an offset,
+# the array contains n+1 items.  The first item, [0], is the default
+# zone.  Items [1..n] are the zones sorted lexically.  Thus the
+# default appears twice, once in slot [0], and once somewhere in
+# [1..n].
+sub createOffsetIndex {
+    my $zones = shift;
+    my $defaultFile = shift;
+
+    # Create an index by gmtoff.
+    my %offsetMap;
+    foreach (sort keys %{$zones}) {
+        my $offset = parseOffset($zones->{$_}->{gmtoff});
+        push @{$offsetMap{$offset}}, $_;
+    }
+
+    # Select defaults.  We do this by reading the file $defaultFile.
+    # If there are multiple errors, we want to report them all,
+    # so we set a flag and die at the end if there are problems.
+    my %defaults; # key=offset integer, value=zone name
+    my $ok = 1;
+    open(IN, $defaultFile) or die "Can't open $defaultFile: $!";
+    while (<IN>) {
+        my $raw = $_;
+        s/\#.*//; # Trim comments
+        next unless (/\S/); # Skip blank lines
+        if (/^\s*(\S+)\s*$/) {
+            my $z = $1;
+            if (! exists $zones->{$z}) {
+                print "Error: Nonexistent zone $z listed in $defaultFile line: $raw";
+                $ok = 0;
+                next;
+            }
+            my $offset = parseOffset($zones->{$z}->{gmtoff});
+            if (exists $defaults{$offset}) {
+                print
+                    "Error: Offset ", formatOffset($offset), " has both ",
+                    $defaults{$offset}, " and ", $z,
+                    " specified as defaults\n";
+                $ok = 0;
+                next;
+            }
+            $defaults{$offset} = $z;
+        } else {
+            print "Error: Can't parse line in $defaultFile: $raw";
+            $ok = 0;
+        }
+    }
+    close(IN);
+    die "Error: Aborting due to errors in $defaultFile\n" unless ($ok);
+    print "Incorporated ", scalar keys %defaults, " defaults from $defaultFile\n";
+
+    # Go through and record the default for each GMT offset, and unshift
+    # it into slot [0].
+    # Fill in the blanks, since the default table will typically
+    # not list a default for every single offset.
+    my $missing;
+    foreach my $gmtoff (keys %offsetMap) {
+        my $aref = $offsetMap{$gmtoff};
+        my $def;
+        if (exists $defaults{$gmtoff}) {
+            $def = $defaults{$gmtoff};
+        } else {
+            # If there is an offset for which we have no listed default
+            # in $defaultFile, we try to figure out a reasonable default
+            # ourselves.  We ignore any zone named Etc/ because that's not
+            # a "real" zone; it's just one listed as a POSIX convience.
+            # We take the first (alphabetically) zone of what's left,
+            # and if there are more than one of those, we emit a warning.
+
+            my $ambiguous;
+            # Ignore zones named Etc/ and take the first one we otherwise see;
+            # if there is more than one of those, emit a warning.
+            foreach (sort @{$aref}) {
+                next if (m|^Etc/|i);
+                if (!$def) {
+                    $def = $_;
+                } else {
+                    $ambiguous = 1;
+                }
+            }
+            $def = $aref->[0] unless ($def);
+            if ($ambiguous) {
+                $missing = 1;
+                print
+                    "Warning: No default for GMT", formatOffset($gmtoff),
+                    ", using ", $def, "\n";
+            }
+        }
+        # Push $def onto front of list
+        unshift @{$aref}, $def;
+    }
+    print "Defaults may be specified in $TZ_DEFAULT\n" if ($missing);
+
+    return \%offsetMap;
+}
+
+# Given a zone and an offset index, return the gmtoff if the name
+# is a default zone, otherwise return ''.
+# Param: zone name
+# Param: zone offset, as a string (that is, raw {gmtoff})
+# Param: ref to offset index hash
+sub isDefault {
+    my $name = shift;
+    my $offset = shift;
+    my $offsetIndex = shift;
+    my $aref = $offsetIndex->{parseOffset($offset)};
+    return ($aref->[0] eq $name);
+}
+
+# Emit an HTML file that contains a description of the system zones.
+# Param: File name
+# Param: ref to zone hash
+# Param: ref to rule hash
+# Param: ref to offset index
+# Param: ref to alias hash
+sub emitHTML {
+    my $file = shift;
+    my $zones = shift;
+    my $rules = shift;
+    my $offsetIndex = shift;
+    my $aliases = shift;
+
+    # These are variables for the template
+    my $_count = scalar keys %{$zones};
+
+    # Build table in order of zone offset
+    my $_offsetTable = "<p><table>\n";
+    foreach (sort {$a <=> $b} keys %{$offsetIndex}) {
+        my $aref = $offsetIndex->{$_};
+        my $def = $aref->[0];
+        # Make a slice of 1..n
+        my @b = @{$aref}[1..$#{$aref}];
+        my $gmtoff = "GMT" . formatOffset($_);
+        $_offsetTable .=
+            "<tr valign=top>" .
+            "<td><a name=\"" . bookmark($gmtoff) . "\">$gmtoff</a></td>" .
+            "<td>" .
+            join(", ", map($_ eq $def ?
+                           "<a href=\"#" . bookmark($_) . "\"><b>$_</b></a>" :
+                           "<a href=\"#" . bookmark($_) . "\">$_</a>", @b)) .
+            "</td>" .
+            "</tr>\n";
+    }
+    $_offsetTable .= "</table>\n";
+
+    # Build table in alphabetical order of zone name
+    my $_nameTable = "<p><table>\n";
+    $_nameTable .= "<tr><td>ID</td>";
+    $_nameTable .= "<td>Offset</td><td>DST Begins</td><td>DST Ends</td>";
+    $_nameTable .= "<td>Savings</td><td></td></tr>\n";
+
+    $_nameTable .= "<tr><td><hr></td>";
+    $_nameTable .= "<td><hr></td><td><hr></td>";
+    $_nameTable .= "<td><hr></td><td><hr></td><td></td></tr>\n";
+    # Need a reverse alias table
+    my %revaliases = reverse(%$aliases);
+    foreach my $z (sort keys %$zones) {
+        $_nameTable .= emitHTMLZone($z, $zones->{$z}, $rules, $offsetIndex,
+                                    $aliases, \%revaliases);
+    }
+    $_nameTable .= "</table>\n";
+
+    # Time stamp
+    my $_timeStamp = localtime;
+
+############################################################
+# BEGIN HTML TEMPLATE
+############################################################
+    my $html = <<"END";
+<html>
+
+<head>
+<title>ICU System Time Zones</title>
+</head>
+
+<body>
+
+<h1>ICU System Time Zones</h1>
+
+<table border="0">
+  <tr>
+    <td>Version</td>
+    <td><strong>$RAW_VERSION</strong> ($VERSION_YEAR.$VERSION_SUFFIX)</td>
+  </tr>
+  <tr>
+    <td>Total zone count</td>
+    <td><strong>$_count</strong></td>
+  </tr>
+  <tr>
+    <td>Original source</td>
+    <td><strong><a href="$URL">$URL</a></strong></td>
+  </tr>
+  <tr>
+    <td>Author</td>
+    <td><strong>Alan Liu <a href="mailto:liuas\@us.ibm.com">&lt;liuas\@us.ibm.com&gt;</a></strong></td>
+  </tr>
+  <tr>
+    <td>This document generated</td>
+    <td><strong>$_timeStamp</strong></td>
+  </tr>
+</table>
+
+<h3>Background</h3>
+
+<p>A time zone represents an offset applied to Greenwich Mean Time
+(GMT) to obtain local time. The offset may vary throughout the year,
+if daylight savings time (DST) is used, or may be the same all year
+long. Typically, regions closer to the equator do not use DST. If DST
+is in use, then specific rules define the point at which the offset
+changes, and the amount by which it changes. Thus, a time zone is
+described by the following information:
+
+<ul>
+  <li><a name="cols">An</a> identifying string, or ID. This consists only of invariant characters (see the file <code>utypes.h</code>).
+    It typically has the format <em>continent</em> / <em>city</em>. The city chosen is
+    not the only city in which the zone applies, but rather a representative city for the
+    region. Some IDs consist of three or four uppercase letters; these are legacy zone
+    names that are aliases to standard zone names.</li>
+  <li>An offset from GMT, either positive or negative. Offsets range from approximately minus
+    half a day to plus half a day.</li>
+</ul>
+
+<p>If DST is observed, then three additional pieces of information are needed:
+
+<ul>
+  <li>The precise date and time during the year when DST begins. This is in the first
+    half of the year in the northern hemisphere, and in the second half of the year in the
+    southern hemisphere.</li>
+  <li>The precise date and time during the year when DST ends. This is in the first half
+    of the year in the southern hemisphere, and in the second half of the year in the northern
+    hemisphere.</li>
+  <li>The amount by which the GMT offset changes when DST is in effect. This is almost
+    always one hour.</li>
+</ul>
+
+<h3>System and User Time Zones</h3>
+
+<p>ICU supports local time zones through the classes
+<code>TimeZone</code> and <code>SimpleTimeZone</code> in the C++
+API. In the C API, time zones are designated by their ID strings.</p>
+
+<p>Users may construct their own time zone objects by specifying the
+above information to the C++ API. However, it is more typical for
+users to use a pre-existing system time zone, since these represent
+all current international time zones in use. This document lists the
+system time zones, both in order of GMT offset, and in alphabetical
+order of ID.</p>
+
+<p>Since this list changes one or more times a year, <em>this document
+only represents a snapshot</em>. For the current list of ICU system
+zones, use the method <code>TimeZone::getAvailableIDs()</code>.</p>
+
+<h3>Notes</h3>
+
+<p><a name="order">The</a> zones are listed in binary sort order.  That is, 'A' through
+'Z' come before 'a' through 'z'.  This is the same order in which the
+zones are stored internally, and the same order in which they are
+returned by <code>TimeZone::getAvailableIDs()</code>.  The reason for
+this is that ICU locates zones using a binary search, and the binary
+search relies on this sort order.</p>
+
+<p>You may notice that zones such as <a href="#EtcGMTp1">Etc/GMT+1</a>
+appear to have the wrong sign for their GMT offset.  In fact, their
+sign is inverted because the the Etc zones follow the POSIX sign
+conventions.  This is the way the original Olson data is set up, and
+ICU reproduces the Olson data faithfully, including this confusing
+aspect.  See the Olson files for more details.
+
+<h3>References</h3>
+
+<p>The ICU system time zones are derived from the Olson data at <a
+href="$URL">$URL</a>. This is the data used by UNIX systems and is
+updated one or more times each year. Unlike the Olson zone data, ICU
+only contains data for current zone usage. There is no support for
+historical zone data in ICU at this time.</p>
+
+<hr>
+
+<h2>Time Zones in order of GMT offset</h2>
+
+<p>Zone listed in <strong>bold</strong> are the default zone for a
+given GMT offset. This default is used by ICU if it cannot identify
+the host OS time zone by name. In that case, it uses the default zone
+for the host zone offset.</p>
+
+$_offsetTable
+<hr>
+
+<h2>Time Zones in order of ID</h2>
+
+<p>Zone listed in <strong>bold</strong> are the default zone for their
+GMT offset. This default is used by ICU if it cannot identify the host
+OS time zone by name. In that case, it uses the default zone for the
+host zone offset. See above for a description of <a
+href="#cols">columns</a>. See note above for an explanation of the
+sort <a href="#order">order</a>.</p>
+
+<p>Times suffixed with 's' are in standard time. Times suffixed with 'u' are in UTC time.
+Times without suffixes are in wall time (that is, either standard time or daylight savings
+time, depending on which is in effect).</p>
+
+$_nameTable
+</body>
+</html>
+END
+############################################################
+# END HTML TEMPLATE
+############################################################
+
+    open(HTML, ">$file") or die "Can't open $file for writing: $!";
+    print HTML $html;
+    close(HTML);
+}
+
+# Make a bookmark name out of a string.  This just means normalizing
+# non-word characters.
+sub bookmark {
+    local $_ = shift;
+    s/-/m/g;
+    s/\+/p/g;
+    s/\W//g;
+    $_;
+}
+
+# Emit a single zone description as HTML table row.  Return the string.
+# Param: Zone name
+# Param: Zone hash object ref
+# Param: Ref to rules hash
+# Param: ref to offset index
+# Param: ref to alias hash
+# Param: ref to reverse alias hash
+sub emitHTMLZone {
+    my ($name, $zone, $rules, $offsetIndex, $aliases, $revaliases) = @_;
+    my $isDefault = isDefault($name, $zone->{gmtoff}, $offsetIndex);
+    my $alias = exists $aliases->{$name} ? $aliases->{$name} : '';
+    my $revalias = exists $revaliases->{$name} ? $revaliases->{$name} : '';
+    local $_ = "<tr><td>" . ($isDefault?"<b>":"") .
+        "<a name=\"" . bookmark($name) . "\">$name</a>" . ($isDefault?"</b>":"") . "</td>";
+    my $gmtoff = "GMT" . formatOffset(parseOffset($zone->{gmtoff}));
+    $_ .= "<td><a href=\"#" . bookmark($gmtoff) . "\">$gmtoff</a></td>";
+    if ($zone->{rule} ne $TZ::STANDARD) {
+        my $rule = $rules->{$zone->{rule}};
+        $_ .= "<td>" . emitHTMLRule($rule->[0]) . "</td>";
+        $_ .= "<td>" . emitHTMLRule($rule->[1]) . "</td>";
+        $_ .= "<td>" . $rule->[0]->{save} . "</td>";
+    } else {
+        $_ .= "<td colspan=3></td>";
+    }
+    if ($alias) {
+        $_ .= "<td><em>alias for</em> <a href=\"#" .
+            bookmark($alias) . "\">$alias</a></td>";
+    } elsif ($revalias) {
+        $_ .= "<td><em>alias </em> <a href=\"#" .
+            bookmark($revalias) . "\">$revalias</a></td>";
+    } else {
+        $_ .= "<td></td>";
+    }
+    $_ .= "</tr>\n";
+    $_;
+}
+
+# Emit a zone rule as HTML.  Return the string.
+# Param: Rule hash object ref
+sub emitHTMLRule {
+    my $rule = shift;
+    $rule->{in} ." ". $rule->{on} ." ". $rule->{at};
+}
+
 # Read the alias list and create clones with alias names.  This
 # sub should be called AFTER all standard zones have been read in.
 # Param: File name of alias list
 # Param: Ref to zone hash
+# Return: Ref to hash of {alias name -> zone name}
 sub incorporateAliases {
     my $aliasFile = shift;
     my $zones = shift;
     my $n = 0;
+    my %hash;
     local *IN;
     open(IN,$aliasFile) or die "Can't open $aliasFile: $!";
     while (<IN>) {
@@ -523,6 +850,7 @@ sub incorporateAliases {
             }
             # Create the alias!
             $zones->{$alias} = $zones->{$original};
+            $hash{$alias} = $original;
             $n++;
         } else {
             die "Bad line in alias table $aliasFile: $_\n";
@@ -530,6 +858,7 @@ sub incorporateAliases {
     }
     print "Incorporated $n aliases from $aliasFile\n";
     close(IN);
+    \%hash;
 }
 
 # Format a time zone as a machine-readable line of text.  Another
