@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/text/Attic/UCharacterTest.java,v $ 
-* $Date: 2001/03/05 19:26:48 $ 
-* $Revision: 1.1 $
+* $Date: 2001/03/05 19:54:42 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -429,7 +429,8 @@ public final class UCharacterTest extends TestFmwk
     final String UNICODE_DATA_SYSTEM_NAME = "UnicodeData";
     String s = System.getProperty(UNICODE_DATA_SYSTEM_NAME);
     if (s == null)
-      s = UNICODE_DATA_FILE;
+    // assuming runtime directory is on the same level as the source
+      s = System.getProperty("user.dir") + "//..//" + UNICODE_DATA_FILE;
     
     final int LASTUNICODECHAR = 0xFFFD;
     int ch = 0,
