@@ -266,6 +266,14 @@ U_CAPI UBool U_EXPORT2
 uprv_isRuleWhiteSpace(UChar32 c);
 
 /**
+ * Get the set of "white space" characters in the sense of ICU rule
+ * parsers.  Caller must close/delete result.
+ * @internal
+ */
+U_CAPI USet* U_EXPORT2
+uprv_openRuleWhiteSpaceSet(UErrorCode* ec);
+
+/**
  * Get the maximum length of a (regular/1.0/extended) character name.
  * @return 0 if no character names available.
  */

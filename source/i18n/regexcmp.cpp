@@ -19,7 +19,7 @@
 #include "unicode/parseerr.h"
 #include "unicode/regex.h"
 #include "regeximp.h"
-#include "upropset.h"
+#include "uprops.h"
 #include "cmemory.h"
 #include "cstring.h"
 
@@ -128,7 +128,7 @@ RegexCompile::RegexCompile(UErrorCode &status) : fParenStack(status)
         //  TODO:  Make thread safe.
         //  TODO:  Memory Cleanup on ICU shutdown.
         gRuleSets[kRuleSet_rule_char-128]       = new UnicodeSet(gRuleSet_rule_char_pattern,       status);
-        gRuleSets[kRuleSet_white_space-128]     = new UnicodeSet(UnicodePropertySet::getRuleWhiteSpaceSet(status));
+        gRuleSets[kRuleSet_white_space-128]     = (UnicodeSet*) uprv_openRuleWhiteSpaceSet(&status);
         gRuleSets[kRuleSet_digit_char-128]      = new UnicodeSet(gRuleSet_digit_char_pattern,      status);
         gUnescapeCharSet                        = new UnicodeSet(gUnescapeCharPattern,             status);
         gPropSets[URX_ISWORD_SET]               = new UnicodeSet(gIsWordPattern,                   status); 
