@@ -1,211 +1,61 @@
 ﻿#Override	List
 #Format is <code><tab><char><tab><pinyin>(<tab><comment>)?
-#Note: code is currently discarded; only the char is important
+#Note: the 'code' field is currently discarded; only the char is important.
+#Note: if there is conflict, the FIRST char wins.
+#Note: the software corrects some of the tone variations below.
 
-4F1A	会	huì
-4F3D	伽	jia
-4F42	佂	zheng
-4F54	佔	zhàn
-4F87	侇	yí
-4F97	侗	tóng
-4FA8	侨	qiáo
-4FC7	俇	kuăng
-4FE2	俢	xiu
-4FEA	俪	lì
-4FF1	俱	jù
-5004	倄	yáo
-5006	倆	liăng
-5007	倇	wăn
-5015	倕	chuí
-5024	値	zhí
-502D	倭	wei
-502E	倮	luŏ
-503D	倽	xiá
-5053	偓	wò
-5080	傀	kuĭ
-5081	傁	sŏu
-5086	傆	yuàn
-5093	傓	shàn
-50D4	僔	zŭn
-50EF	僯	lĭn
-510D	儍	shă	#edited
-516A	兪	yú
-5199	写	xiĕ
-51A0	冠	guàn
-51CA	凊	qýng
-524C	剌	là
-524E	剎	sha
-5262	剢	zhuó
-5266	剦	yan
-52C2	勂	háo
-52DD	勝	shèng
-533D	匽	yăn	# edited from yãn
-5340	區	qu
-534F	协	xié
-5352	卒	zú
-53A1	厡	yuán
-53A7	厧	jĭn
-53AE	厮	si
-53CE	収	shou
-5401	吁	yù
-5402	吂	máng
-5408	合	hé
-5413	吓	xià
-5414	吔	yĕ
-542D	吭	keng
-5432	吲	yĭn
-5441	呁	jùn
-5451	呑	tun
-5456	呖	lì
-545C	呜	wu
-545F	呟	quăn	#edited from quãn
-546C	呬	xì
-5472	呲	zi
-548F	咏	yŏng
-5497	咗	zuŏ
-54A6	咦	yí
-54B2	咲	xiào
-54B3	咳	ké
-54BE	咾	lăo	#edited from lão
-54C5	哅	xiong
-54CC	哌	pài
-54D0	哐	kuang
-54E6	哦	ó
-54EB	哫	zú
-5500	唀	yŏu
-550B	唋	tŭ
-5529	唩	wo
-552B	唫	yín
-5530	唰	shua
-553A	唺	tiăn
-5545	啅	zhuó
-5552	啒	wa
-5559	啙	zĭ
-555E	啞	yă	#edited from yã
-5567	啧	zé
-5578	啸	xiào
-5580	喀	kè
-5581	喁	yú
-558C	喌	zhou
-5592	喒	zán
-5594	喔	wo
-5595	喕	miăn	#edited from miãn
-55AE	單	dan
-55AF	喯	pen
-55B4	喴	wei
-55C4	嗄	shà
-55C6	嗆	qiàng
-55D5	嗕	rù
-55F0	嗰	gè
-55F5	嗵	tong
-560F	嘏	jiă
-5615	嘕	xian
-561C	嘜	mà
-5621	嘡	tang
-562A	嘪	măi	#edited from mãi
-562C	嘬	zuo
-563A	嘺	qiáo
-563E	嘾	tán
-5663	噣	zhuó
-5670	噰	yong
-5678	噸	dùn
-5688	嚈	yà
-56A2	嚢	náng
-56AA	嚪	rang
-56BC	嚼	jué
-56E4	囤	tún
-56EF	囯	guó
-56F7	囷	qun
-5708	圈	juàn
-576E	坮	tái
-577B	坻	dĭ
-57A8	垨	shŏu
-57C6	埆	què
-57CF	埏	yán
-57E1	埡	yà
-57E9	埩	zheng
-57FE	埾	jù
-5816	堖	năo
-5838	堸	fÚng
-584A	塊	kuài
-585F	塟	zàng
-5873	塳	péng
-587B	塻	mò
-5887	墇	zhang
-588F	墏	qiăng	#edited from qiãng
-58A4	墤	tuí
-58AD	墭	shèng
-58B0	墰	tán
-58BB	墻	qiáng
-58C6	壆	xuan
-58D0	壐	xĭ
-58E7	壧	yán
-5905	夅	jiàng
-5906	夆	feng
-5915	夕	xì
-593E	夾	jiá
-5947	奇	qí
-597E	奾	xian
-59D4	委	wĕi
-59FA	姺	shen
-5A29	娩	wăn	#edited from wãn
-5A2A	娪	wú
-5A2E	娮	yán	#edited from yßn
-5A64	婤	chou
-5A7C	婼	ruò
-5A9C	媜	zhen
-5AAF	媯	guĭ
-5AC0	嫀	qín
-5B46	孆	ying
-5B5B	孛	bó
-5B6C	孬	nao
-5B71	孱	chán
-5BD6	寖	qìn
-5BD8	寘	zhì
-5C05	尅	kè
-5C3F	尿	niào
-5C4F	屏	píng	#edited from pÝng
-5C84	岄	yuè
-5CAE	岮	tuó
-5CB0	岰	yŏu
-5CC8	峈	luò
-5CE5	峥	zheng
-5D17	崗	gang
-5D18	崘	lún
-5D21	崡	hán
-5E77	幷	bìng
-5E7E	幾	jĭ
-5E7F	广	guăng	#edited from guãng
-5EE9	廩	bĭng
-5F04	弄	nòng
-5F3A	强	qiáng
-5F84	径	jìng
-60A6	悦	yuè
-60CA	惊	liáng
-60DD	惝	tăng	#edited from tãng
-60DE	惞	xin
-60E1	惡	è
-613C	愼	shèn
-6241	扁	biăn	#edited from biãn
-6253	打	dă	#edited from dã
-625B	扛	káng
-6272	扲	qián
-629B	抛	pao
-62AE	抮	zhĕn
-62CD	拍	bó
-62CE	拎	ling
-62D3	拓	tuò
-62FD	拽	zhuai
-63BB	掻	sao
-63D0	提	tí
-63E3	揣	chuăi	#edited from chuãi
-63E4	揤	jí
-6403	搃	zŏng
-641B	搛	jian
-6436	搶	qiăng	#edited from qiãng
-8BB8	许	xŭ
-6D4F	浏	liú
-89C8	览	lăn	#edited from lãn
+# fix for fifth tone
+\u37F7	㟷	dā	#fix for 5th tone
+
+# fixes for typos
+U+347C	㑼	liù	#lyuè
+U+3500	㔀	lüè	#lvè
+U+3527	㔧	liù	#lyù
+U+3729	㜩	ào	#àu
+U+380E	㠎	jí	#jjí
+U+3825	㠥	lǜ	#lv̀
+U+3A3C	㨼	lüè	#luè
+U+3B5A	㭚	lǚ	#lyǔ
+U+3CB6	㲶	lǜ	#lv̀
+U+3D56	㵖	nǜ	#nyù
+U+3D88	㶈	liǎng	#liǒng
+U+3EF2	㻲	lǚ	#lyǔ
+U+3F94	㾔	lǚ	#lyǔ
+U+4071	䁱	ào	#àu
+U+40AE	䂮	lüè	#lyuè
+U+430E	䌎	lüè	#lyuè
+U+451E	䔞	lǜ	#lyù
+U+4588	䖈	nüè	#nuè
+U+458B	䖋	nüè	#nuè
+U+45A1	䖡	nǜ	#nyù
+U+4610	䘐	nǜ	#nyù
+U+46BC	䚼	nǜ	#nyù
+U+46DA	䛚	lüè	#lyuè
+U+4896	䢖	lǜ	#lyù
+U+4923	䤣	lüè	#lyuè
+U+4968	䥨	lǜ	#lyù
+U+4A0B	䨋	nüè	#nyuè
+U+4AC4	䫄	chuài	#chuà
+U+4D08	䴈	ǎo	#ǎu
+U+4D8A	䶊	nǜ	#nyù
+U+51CA	凊	qíng	#qýng
+U+51D6	凖	zhǔn	#zhuěn
+U+5481	咁	gàn	#gèm
+U+5838	堸	féng	#fúng
+U+639F	掟	lüě	#luě
+U+66D5	曕	yàn	#yiàn
+U+6B3B	欻	chuài	#chuā
+U+6B56	歖	chuài	#chuā
+U+6C7C	汼	niū	#niōu
+U+6E6D	湭	qiú	#qióu
+U+6F71	潱	yē	#yiē
+U+7493	璓	xiù	#xiòu
+U+7607	瘇	zhǒng	#zhǔng
+U+7674	癴	luán	#lüán
+U+7867	硧	yǒng	#iǒng
+U+7878	硸	nüè	#nuè
+
+# Shanghai fixes
 
 \u4E7F	乿	lē
 \u5183	冃	māo
@@ -9114,54 +8964,209 @@
 \uD840\uDC65	𠁥	gǎ
 \uD858\uDE46	𦉆	chá
 
-# fix for fifth tone
-\u37F7	㟷	dā
+# previous fixes
 
-# fixes for typos
-U+347C	㑼	liù	#lyuè
-U+3500	㔀	lüè	#lvè
-U+3527	㔧	liù	#lyù
-U+3729	㜩	ào	#àu
-U+380E	㠎	jí	#jjí
-U+3825	㠥	lǜ	#lv̀
-U+3A3C	㨼	lüè	#luè
-U+3B5A	㭚	lǚ	#lyǔ
-U+3CB6	㲶	lǜ	#lv̀
-U+3D56	㵖	nǜ	#nyù
-U+3D88	㶈	liǎng	#liǒng
-U+3EF2	㻲	lǚ	#lyǔ
-U+3F94	㾔	lǚ	#lyǔ
-U+4071	䁱	ào	#àu
-U+40AE	䂮	lüè	#lyuè
-U+430E	䌎	lüè	#lyuè
-U+451E	䔞	lǜ	#lyù
-U+4588	䖈	nüè	#nuè
-U+458B	䖋	nüè	#nuè
-U+45A1	䖡	nǜ	#nyù
-U+4610	䘐	nǜ	#nyù
-U+46BC	䚼	nǜ	#nyù
-U+46DA	䛚	lǜe	#lyuè
-U+4896	䢖	lǜ	#lyù
-U+4923	䤣	lüè	#lyuè
-U+4968	䥨	lǜ	#lyù
-U+4A0B	䨋	nüè	#nyuè
-#U+4AC4	䫄	chuò	#chuà
-U+4D08	䴈	ǎo	#ǎu
-U+4D8A	䶊	nǜ	#nyù
-U+51CA	凊	qíng	#qýng
-U+51D6	凖	zhǔn	#zhuěn
-U+5481	咁	gàn	#gèm
-U+5838	堸	féng	#fúng
-U+639F	掟	lüě	#luě
-U+66D5	曕	yàn	#yiàn
-#U+6B3B	欻	chuō	#chuā
-#U+6B56	歖	chuō	#chuā
-U+6C7C	汼	niū	#niōu
-U+6E6D	湭	qiú	#qióu
-U+6F71	潱	yē	#yiē
-U+7493	璓	xiù	#xiòu
-U+7607	瘇	zhǒng	#zhǔng
-U+7674	癴	luán	#lüán
-U+7867	硧	yǒng	#iǒng
-U+7878	硸	nüè	#nuè
-
+4F1A	会	huì
+4F3D	伽	jia
+4F42	佂	zheng
+4F54	佔	zhàn
+4F87	侇	yí
+4F97	侗	tóng
+4FA8	侨	qiáo
+4FC7	俇	kuăng
+4FE2	俢	xiu
+4FEA	俪	lì
+4FF1	俱	jù
+5004	倄	yáo
+5006	倆	liăng
+5007	倇	wăn
+5015	倕	chuí
+5024	値	zhí
+502D	倭	wei
+502E	倮	luŏ
+503D	倽	xiá
+5053	偓	wò
+5080	傀	kuĭ
+5081	傁	sŏu
+5086	傆	yuàn
+5093	傓	shàn
+50D4	僔	zŭn
+50EF	僯	lĭn
+510D	儍	shă	#edited
+516A	兪	yú
+5199	写	xiĕ
+51A0	冠	guàn
+51CA	凊	qýng
+524C	剌	là
+524E	剎	sha
+5262	剢	zhuó
+5266	剦	yan
+52C2	勂	háo
+52DD	勝	shèng
+533D	匽	yăn	# edited from yãn
+5340	區	qu
+534F	协	xié
+5352	卒	zú
+53A1	厡	yuán
+53A7	厧	jĭn
+53AE	厮	si
+53CE	収	shou
+5401	吁	yù
+5402	吂	máng
+5408	合	hé
+5413	吓	xià
+5414	吔	yĕ
+542D	吭	keng
+5432	吲	yĭn
+5441	呁	jùn
+5451	呑	tun
+5456	呖	lì
+545C	呜	wu
+545F	呟	quăn	#edited from quãn
+546C	呬	xì
+5472	呲	zi
+548F	咏	yŏng
+5497	咗	zuŏ
+54A6	咦	yí
+54B2	咲	xiào
+54B3	咳	ké
+54BE	咾	lăo	#edited from lão
+54C5	哅	xiong
+54CC	哌	pài
+54D0	哐	kuang
+54E6	哦	ó
+54EB	哫	zú
+5500	唀	yŏu
+550B	唋	tŭ
+5529	唩	wo
+552B	唫	yín
+5530	唰	shua
+553A	唺	tiăn
+5545	啅	zhuó
+5552	啒	wa
+5559	啙	zĭ
+555E	啞	yă	#edited from yã
+5567	啧	zé
+5578	啸	xiào
+5580	喀	kè
+5581	喁	yú
+558C	喌	zhou
+5592	喒	zán
+5594	喔	wo
+5595	喕	miăn	#edited from miãn
+55AE	單	dan
+55AF	喯	pen
+55B4	喴	wei
+55C4	嗄	shà
+55C6	嗆	qiàng
+55D5	嗕	rù
+55F0	嗰	gè
+55F5	嗵	tong
+560F	嘏	jiă
+5615	嘕	xian
+561C	嘜	mà
+5621	嘡	tang
+562A	嘪	măi	#edited from mãi
+562C	嘬	zuo
+563A	嘺	qiáo
+563E	嘾	tán
+5663	噣	zhuó
+5670	噰	yong
+5678	噸	dùn
+5688	嚈	yà
+56A2	嚢	náng
+56AA	嚪	rang
+56BC	嚼	jué
+56E4	囤	tún
+56EF	囯	guó
+56F7	囷	qun
+5708	圈	juàn
+576E	坮	tái
+577B	坻	dĭ
+57A8	垨	shŏu
+57C6	埆	què
+57CF	埏	yán
+57E1	埡	yà
+57E9	埩	zheng
+57FE	埾	jù
+5816	堖	năo
+5838	堸	fÚng
+584A	塊	kuài
+585F	塟	zàng
+5873	塳	péng
+587B	塻	mò
+5887	墇	zhang
+588F	墏	qiăng	#edited from qiãng
+58A4	墤	tuí
+58AD	墭	shèng
+58B0	墰	tán
+58BB	墻	qiáng
+58C6	壆	xuan
+58D0	壐	xĭ
+58E7	壧	yán
+5905	夅	jiàng
+5906	夆	feng
+5915	夕	xì
+593E	夾	jiá
+5947	奇	qí
+597E	奾	xian
+59D4	委	wĕi
+59FA	姺	shen
+5A29	娩	wăn	#edited from wãn
+5A2A	娪	wú
+5A2E	娮	yán	#edited from yßn
+5A64	婤	chou
+5A7C	婼	ruò
+5A9C	媜	zhen
+5AAF	媯	guĭ
+5AC0	嫀	qín
+5B46	孆	ying
+5B5B	孛	bó
+5B6C	孬	nao
+5B71	孱	chán
+5BD6	寖	qìn
+5BD8	寘	zhì
+5C05	尅	kè
+5C3F	尿	niào
+5C4F	屏	píng	#edited from pÝng
+5C84	岄	yuè
+5CAE	岮	tuó
+5CB0	岰	yŏu
+5CC8	峈	luò
+5CE5	峥	zheng
+5D17	崗	gang
+5D18	崘	lún
+5D21	崡	hán
+5E77	幷	bìng
+5E7E	幾	jĭ
+5E7F	广	guăng	#edited from guãng
+5EE9	廩	bĭng
+5F04	弄	nòng
+5F3A	强	qiáng
+5F84	径	jìng
+60A6	悦	yuè
+60CA	惊	liáng
+60DD	惝	tăng	#edited from tãng
+60DE	惞	xin
+60E1	惡	è
+613C	愼	shèn
+6241	扁	biăn	#edited from biãn
+6253	打	dă	#edited from dã
+625B	扛	káng
+6272	扲	qián
+629B	抛	pao
+62AE	抮	zhĕn
+62CD	拍	bó
+62CE	拎	ling
+62D3	拓	tuò
+62FD	拽	zhuai
+63BB	掻	sao
+63D0	提	tí
+63E3	揣	chuăi	#edited from chuãi
+63E4	揤	jí
+6403	搃	zŏng
+641B	搛	jian
+6436	搶	qiăng	#edited from qiãng
+8BB8	许	xŭ
+6D4F	浏	liú
+89C8	览	lăn	#edited from lãn
