@@ -24,6 +24,10 @@ TARGET = gnomelayout
 
 DEFS = @DEFS@
 CPPFLAGS = @CPPFLAGS@ `gnome-config --cflags gnomeui` -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/layout -I$(top_srcdir)/extra/scrptrun -I$(top_srcdir)
+
+# Change the following as needed to locate freetype.
+CPPFLAGS +=  -I/usr/include/freetype1
+
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 ENABLE_RPATH = @ENABLE_RPATH@
@@ -31,7 +35,6 @@ ifeq ($(ENABLE_RPATH),YES)
 RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
 endif
 LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
-INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$(top_builddir)/i18n:$(top_builddir)/tools/toolutil:$$$(LDLIBRARYPATH_ENVVAR)
 LIBS = $(LIBICULE) $(LIBICUUC) $(LIBICUI18N) @LIBS@ @LIB_M@ `gnome-config --libs gnomeui` -lttf
 
 
@@ -68,6 +71,7 @@ distclean-local: clean-local
 	$(RMV) Makefile
 
 check-local: all-local
+	$(INVOKE) ./$(TARGET)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
