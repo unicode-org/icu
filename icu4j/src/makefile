@@ -1,5 +1,5 @@
 #
-# @(#)$RCSfile: makefile,v $ $Revision: 1.6 $ $Date: 2000/02/23 00:35:28 $
+# @(#)$RCSfile: makefile,v $ $Revision: 1.7 $ $Date: 2000/02/23 21:59:12 $
 # 
 
 TOPDIR=		..
@@ -35,13 +35,13 @@ demos: classes demosinternal
 
 
 toolsinternal: FORCE
-	cd com\ibm\test && nmake -nologo /f makefile.nmk classes && cd ..\..\..
+	cd com\ibm\test && $(MAKE) classes && cd ..\..\..
 
 testsinternal: FORCE
-	cd com\ibm\test && nmake -nologo /f makefile.nmk classes && cd ..\..\..
+	cd com\ibm\test && $(MAKE) classes && cd ..\..\..
 
 demosinternal: FORCE
-	cd com\ibm\demo && nmake -nologo /f makefile.nmk classes && cd ..\..\..
+	cd com\ibm\demo && $(MAKE) classes && cd ..\..\..
 
 complete: classes testsinternal toolsinternal demosinternal javadoc
 
