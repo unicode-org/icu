@@ -59,13 +59,24 @@ public:
     virtual int32_t length() const = 0;
 
     /**
-     * Return the character at the given offset into the text.
+     * Return the Unicode code unit at the given offset into the text.
      * @param offset an integer between 0 and <code>length()</code>-1
      * inclusive
-     * @return character of text at given offset
+     * @return code unit of text at given offset
      * @draft
      */
     virtual UChar charAt(UTextOffset offset) const = 0;
+
+    /**
+     * Return the Unicode code point that contains the code unit
+     * at the given offset into the text.
+     * @param offset an integer between 0 and <code>length()</code>-1
+     * inclusive that indicates the text offset of any of the code units
+     * that will be assembled into a code point (21-bit value) and returned
+     * @return code point of text at given offset
+     * @draft
+     */
+    virtual UChar32 char32At(UTextOffset offset) const = 0;
 
     /**
      * Copy characters from this object into the destination character
