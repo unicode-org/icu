@@ -62,6 +62,7 @@
      **/
     void TestGetDefaultRules(void);
 
+    void TestDecomposition(void);
     
  
     

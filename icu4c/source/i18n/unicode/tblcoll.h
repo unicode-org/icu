@@ -1024,6 +1024,7 @@ private:
   NormalizerIterator  *cursor2;
   UBool              dataIsOwned;
   TableCollationData* data;
+  Normalizer::EMode fDefaultDecomp;
 };
 
 inline UBool

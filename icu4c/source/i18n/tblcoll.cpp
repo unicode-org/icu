@@ -823,6 +823,19 @@ RuleBasedCollator::constructFromBundle(const Locale & name,
       realName = binary.getName();
       if(U_SUCCESS(status)) {
         UErrorCode intStatus = U_ZERO_ERROR;
+        ResourceBundle colElem = rb.get("CollationElements", intStatus);
+        if(U_SUCCESS(intStatus)) {
+            UnicodeString norm = colElem.getStringEx("Normalize", intStatus);
+            if(U_SUCCESS(intStatus)) {
+                setDecomposition(Normalizer::DECOMP);
+                fDefaultDecomp = Normalizer::DECOMP;
+            } else {
+                setDecomposition(Normalizer::NO_OP);
+                fDefaultDecomp = Normalizer::NO_OP;
+            }
+        }
+        intStatus = U_ZERO_ERROR;
+
         constructFromCache(realName, intStatus); // check whether we already have this data in cache
         if(U_SUCCESS(intStatus)) {
           return realName;
@@ -911,9 +924,6 @@ RuleBasedCollator::RuleBasedCollator(   const Locale& desiredLocale,
   if (U_SUCCESS(status)) {
     data->desiredLocale = desiredLocale;
     data->realLocaleName = locName;
-    if(status != U_USING_DEFAULT_ERROR) {
-      setDecomposition(Normalizer::NO_OP);
-    }
   } else {
     UErrorCode intStatus = U_ZERO_ERROR;
     constructFromCache(ResourceBundle::kDefaultFilename, intStatus);
@@ -931,7 +941,6 @@ RuleBasedCollator::RuleBasedCollator(   const Locale& desiredLocale,
       }
     }
     data->realLocaleName = ResourceBundle::kDefaultFilename;
-    setDecomposition(Normalizer::NO_OP);
     addToCache(ResourceBundle::kDefaultFilename);
   }
   return;
@@ -2954,7 +2963,16 @@ void RuleBasedCollator::setAttribute(UColAttribute attr, UColAttributeValue valu
 		status = U_UNSUPPORTED_ERROR;
 		break;
 	case UCOL_NORMALIZATION_MODE: /* attribute for normalization */
-		status = U_UNSUPPORTED_ERROR;
+		if(value == UCOL_ON) {
+            setDecomposition(Normalizer::DECOMP);
+		} else if (value == UCOL_OFF) {
+            setDecomposition(Normalizer::NO_OP);
+		} else if (value == UCOL_DEFAULT) {
+            setDecomposition(fDefaultDecomp);
+		} else {
+			status = U_ILLEGAL_ARGUMENT_ERROR  ;
+		}
+		break;
 		break;
 	case UCOL_STRENGTH:         /* attribute for strength */
 		status = U_UNSUPPORTED_ERROR;
@@ -2985,7 +3003,11 @@ UColAttributeValue RuleBasedCollator::getAttribute(UColAttribute attr, UErrorCod
 		status = U_UNSUPPORTED_ERROR;
 		break;
 	case UCOL_NORMALIZATION_MODE: /* attribute for normalization */
-		status = U_UNSUPPORTED_ERROR;
+        if(getDecomposition() == Normalizer::DECOMP) {
+            return UCOL_ON;
+        } else {
+            return UCOL_OFF;
+        }
 		break;
 	case UCOL_STRENGTH:         /* attribute for strength */
         switch(getStrength()) {
