@@ -7,10 +7,14 @@
 //
 // Created by Roozbeh Pournader <roozbeh@sharif.edu> and Michael Everson <everson@evertype.com>
 
+// WARNING: This locale is a different script from uz and uz_UZ.
+//      This locale will be changed once ICU implements ISO-3066 locale names.
+
 uz_AF {
     Version { "x0.1" }
 
     // This is a unified sort with uz_AF, fa_AF and ps.
+    CollationElements:alias { "ps" }
 //    CollationElements {
 //        Version { "1.0" }
 //        Sequence { "[normalization on]"
@@ -28,7 +32,7 @@ uz_AF {
 //           "&\u0648 << \u0624 << \u06c7 << \u06c9"
 //           "&\u0647 <<< \u06c0 <<< \u0647\u0654 << \u06d5 << \u06c1 << \u06be << \u0629 << \u06c3"
 //           "&\u06cc << \u0649 << \u06d2 << \u064a << \u06d0 << \u06cd << \u06cc\u0654 <<< \u0649\u0654 <<< \u0626"
-////           "&\u00a0<<\u200c<<\u200d"  // This is NBSP << ZWNJ << ZWJ Don't use them in collation rules!
+//           "&'\u00a0'<<'\u200c'<<'\u200d'"  // This is NBSP << ZWNJ << ZWJ
 //         }
 //    }
 
@@ -77,7 +81,7 @@ uz_AF {
         "\u0642.\u0645.",
         "\u0645.", //MoE additionally suggests "\u0639."
     }
-//    ExemplarCharacters{"[\u0621-\u0624\u0626-\u063a\u0641\u0642\u0644-\u0648\u064a\u064b-\u0652\u0654\u0670\u067c\u067e\u0681\u0685-\u0686\u0689\u0693\u0696\u0698\u069a\u06a9\u06ab\u06af\u06bc\u06c7\u06c9\u06cc-\u06cd\u06d0]"}
+    ExemplarCharacters{"[\u0621-\u0624\u0626-\u063a\u0641\u0642\u0644-\u0648\u064a\u064b-\u0652\u0654\u0670\u067c\u067e\u0681\u0685-\u0686\u0689\u0693\u0696\u0698\u069a\u06a9\u06ab\u06af\u06bc\u06c7\u06c9\u06cc-\u06cd\u06d0]"}
 
     Languages {        
         fa { "\u062f\u0631\u06cc" }

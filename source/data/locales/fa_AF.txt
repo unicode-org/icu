@@ -14,8 +14,8 @@ fa_AF {
 //        "\u0642.\u0638.",
 //        "\u0628.\u0638.",
 //    }
-    // Use the fa rules instead
     // This is a unified sort with uz_AF, fa_AF and ps.
+    CollationElements:alias { "ps" }
 //    CollationElements {
 //        Version { "1.0" }
 //        Sequence { "[normalization on]"
@@ -33,7 +33,7 @@ fa_AF {
 //           "&\u0648<<\u0624<<\u06c7<<\u06c9"
 //           "&\u0647<<<\u06c0<<<\u0647\u0654<<\u06d5<<\u06c1<<\u06be<<\u0629<<\u06c3"
 //           "&\u06cc<<\u0649<<\u06d2<<\u064a<<\u06d0<<\u06cd<<\u06cc\u0654<<<\u0649\u0654<<<\u0626"
-////           "&\u00a0<<\u200c<<\u200d"  // This is NBSP << ZWNJ << ZWJ Don't use them in collation rules!
+//           "&'\u00a0'<<'\u200c'<<'\u200d'"  // This is NBSP << ZWNJ << ZWJ
 //         }
 //    }
     Countries {
