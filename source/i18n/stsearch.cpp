@@ -24,6 +24,11 @@ StringSearch::StringSearch(const UnicodeString &pattern,
                            m_collator_(),
                            m_pattern_(pattern)
 {
+    if (U_FAILURE(status)) {
+        m_strsrch_ = NULL;
+        return;
+    }
+
     m_strsrch_ = usearch_open(m_pattern_.fArray, m_pattern_.fLength, 
                               m_text_.fArray, m_text_.fLength, 
                               locale.getName(), NULL, &status);
@@ -50,6 +55,10 @@ StringSearch::StringSearch(const UnicodeString     &pattern,
                            m_collator_(),
                            m_pattern_(pattern)
 {
+    if (U_FAILURE(status)) {
+        m_strsrch_ = NULL;
+        return;
+    }
     if (coll == NULL) {
         status     = U_ILLEGAL_ARGUMENT_ERROR;
         m_strsrch_ = NULL;
@@ -82,6 +91,10 @@ StringSearch::StringSearch(const UnicodeString     &pattern,
                            m_collator_(),
                            m_pattern_(pattern)
 {
+    if (U_FAILURE(status)) {
+        m_strsrch_ = NULL;
+        return;
+    }
     m_strsrch_ = usearch_open(m_pattern_.fArray, m_pattern_.fLength, 
                               m_text_.fArray, m_text_.fLength, 
                               locale.getName(), NULL, &status);
@@ -108,6 +121,10 @@ StringSearch::StringSearch(const UnicodeString     &pattern,
                            m_collator_(),
                            m_pattern_(pattern)
 {
+    if (U_FAILURE(status)) {
+        m_strsrch_ = NULL;
+        return;
+    }
     if (coll == NULL) {
         status     = U_ILLEGAL_ARGUMENT_ERROR;
         m_strsrch_ = NULL;
@@ -152,7 +169,7 @@ StringSearch::StringSearch(const StringSearch &that) :
     m_search_ = NULL;
 
     if (U_SUCCESS(status)) {
-              int32_t  length;
+        int32_t  length;
         const UChar   *rules = ucol_getRules(m_strsrch_->collator, &length);
         m_collation_rules_.setTo(rules, length);
         m_collator_.setUCollator((UCollator *)m_strsrch_->collator,
@@ -214,6 +231,7 @@ UBool StringSearch::operator==(const SearchIterator &that) const
 
 void StringSearch::setOffset(UTextOffset position, UErrorCode &status)
 {
+    // status checked in usearch_setOffset
     usearch_setOffset(m_strsrch_, position, &status);
 }
 
@@ -224,14 +242,18 @@ UTextOffset StringSearch::getOffset(void) const
 
 void StringSearch::setText(const UnicodeString &text, UErrorCode &status)
 {
-    m_text_ = text;
-    usearch_setText(m_strsrch_, text.fArray, text.fLength, &status);
+    if (U_SUCCESS(status)) {
+        m_text_ = text;
+        usearch_setText(m_strsrch_, text.fArray, text.fLength, &status);
+    }
 }
     
 void StringSearch::setText(CharacterIterator &text, UErrorCode &status)
 {
-    text.getText(m_text_);
-    usearch_setText(m_strsrch_, m_text_.fArray, m_text_.fLength, &status);
+    if (U_SUCCESS(status)) {
+        text.getText(m_text_);
+        usearch_setText(m_strsrch_, m_text_.fArray, m_text_.fLength, &status);
+    }
 }
 
 RuleBasedCollator * StringSearch::getCollator() const
@@ -241,18 +263,22 @@ RuleBasedCollator * StringSearch::getCollator() const
     
 void StringSearch::setCollator(RuleBasedCollator *coll, UErrorCode &status)
 {
-    usearch_setCollator(m_strsrch_, coll->getUCollator(), &status);
-    m_collation_rules_.setTo(coll->getRules());
-    m_collator_.setUCollator((UCollator *)m_strsrch_->collator, 
-                             &m_collation_rules_);
+    if (U_SUCCESS(status)) {
+        usearch_setCollator(m_strsrch_, coll->getUCollator(), &status);
+        m_collation_rules_.setTo(coll->getRules());
+        m_collator_.setUCollator((UCollator *)m_strsrch_->collator, 
+                                 &m_collation_rules_);
+    }
 }
     
 void StringSearch::setPattern(const UnicodeString &pattern, 
                                     UErrorCode    &status)
 {
-    m_pattern_ = pattern;
-    usearch_setPattern(m_strsrch_, m_pattern_.fArray, m_pattern_.fLength,
-                       &status);
+    if (U_SUCCESS(status)) {
+        m_pattern_ = pattern;
+        usearch_setPattern(m_strsrch_, m_pattern_.fArray, m_pattern_.fLength,
+                           &status);
+    }
 }
     
 const UnicodeString & StringSearch::getPattern() const
