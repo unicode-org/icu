@@ -2177,7 +2177,7 @@ void TransliteratorTest::TestQuantifiedSegment(void) {
         return;
     }
     UnicodeString rr;
-    t->toRules(rr, true);
+    t->toRules(rr, TRUE);
     if (r != rr) {
         errln((UnicodeString)"FAIL: \"" + r + "\" x toRules() => \"" + rr + "\"");
     } else {
@@ -2194,7 +2194,7 @@ void TransliteratorTest::TestQuantifiedSegment(void) {
         delete t;
         return;
     }
-    t->toRules(rr, true);
+    t->toRules(rr, TRUE);
     if (r != rr) {
         errln((UnicodeString)"FAIL: \"" + r + "\" x toRules() => \"" + rr + "\"");
     } else {
