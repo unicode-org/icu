@@ -203,7 +203,7 @@ const double CalendarAstronomer::PI = 3.14159265358979323846;
  * @deprecated ICU 2.4. This class may be removed or modified.
  */
 CalendarAstronomer::CalendarAstronomer():
-  fTime(Calendar::getNow()), moonPosition(0,0), moonPositionSet(FALSE), fLongitude(0.0), fLatitude(0.0), fGmtOffset(0.0) {
+  fTime(Calendar::getNow()), fLongitude(0.0), fLatitude(0.0), fGmtOffset(0.0), moonPosition(0,0), moonPositionSet(FALSE) {
   clearCache();
 }
     
@@ -213,7 +213,7 @@ CalendarAstronomer::CalendarAstronomer():
  * @internal
  * @deprecated ICU 2.4. This class may be removed or modified.
  */
-CalendarAstronomer::CalendarAstronomer(UDate d): fTime(d),moonPosition(0,0), moonPositionSet(FALSE), fLongitude(0.0), fLatitude(0.0), fGmtOffset(0.0) {
+CalendarAstronomer::CalendarAstronomer(UDate d): fTime(d), fLongitude(0.0), fLatitude(0.0), fGmtOffset(0.0), moonPosition(0,0), moonPositionSet(FALSE) {
   clearCache();
 }
 
@@ -567,12 +567,12 @@ double CalendarAstronomer::getSunLongitude()
 /**
  * TODO Make this public when the entire class is package-private.
  */
-/*public*/ void CalendarAstronomer::getSunLongitude(double julianDay, double &longitude, double &meanAnomaly)
+/*public*/ void CalendarAstronomer::getSunLongitude(double jDay, double &longitude, double &meanAnomaly)
 {
   // See page 86 of "Practial Astronomy with your Calculator",
   // by Peter Duffet-Smith, for details on the algorithm.
         
-  double day = julianDay - JD_EPOCH;       // Days since epoch
+  double day = jDay - JD_EPOCH;       // Days since epoch
         
   // Find the angular distance the sun in a fictitious
   // circular orbit has travelled since the epoch.
@@ -994,7 +994,7 @@ const CalendarAstronomer::Equatorial& CalendarAstronomer::getMoonPosition()
   if (moonPositionSet == FALSE) {
     // Calculate the solar longitude.  Has the side effect of
     // filling in "meanAnomalySun" as well.
-    double sunLongitude = getSunLongitude();
+    getSunLongitude();
             
     //
     // Find the # of days since the epoch of our orbital parameters.
@@ -1005,7 +1005,7 @@ const CalendarAstronomer::Equatorial& CalendarAstronomer::getMoonPosition()
     // Calculate the mean longitude and anomaly of the moon, based on
     // a circular orbit.  Similar to the corresponding solar calculation.
     double meanLongitude = norm2PI(13.1763966*PI/180*day + moonL0);
-    double meanAnomalyMoon = norm2PI(meanLongitude - 0.1114041*PI/180 * day - moonP0);
+    meanAnomalyMoon = norm2PI(meanLongitude - 0.1114041*PI/180 * day - moonP0);
             
     //
     // Calculate the following corrections:
@@ -1522,7 +1522,7 @@ void CalendarCache::put(CalendarCache** cache, int32_t key, int32_t value, UErro
 }
 
 CalendarCache::CalendarCache(int32_t size, UErrorCode &status) {
-  fTable = uhash_openSize(uhash_hashLong, uhash_compareLong, 32, &status);
+  fTable = uhash_openSize(uhash_hashLong, uhash_compareLong, size, &status);
   U_DEBUG_ASTRO_MSG(("%p: Opening.\n", fTable));
 }
 

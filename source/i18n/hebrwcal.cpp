@@ -579,7 +579,7 @@ int32_t HebrewCalendar::handleGetExtendedYear() {
  * Return JD of start of given month/year.
  * @internal
  */
-int32_t HebrewCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UBool useMonth) const {
+int32_t HebrewCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UBool /*useMonth*/) const {
   UErrorCode status = U_ZERO_ERROR;
   // Resolve out-of-range months.  This is necessary in order to
   // obtain the correct year.  We correct to
