@@ -22,6 +22,7 @@
 #include "unicode/nultrans.h"
 #include "unicode/putil.h"
 #include "unicode/rep.h"
+#include "unicode/remtrans.h"
 #include "unicode/resbund.h"
 #include "unicode/translit.h"
 #include "unicode/unifilt.h"
@@ -576,7 +577,7 @@ Transliterator* Transliterator::createInstance(const UnicodeString& ID,
                 delete filter;
                 return 0;
             }
-            ID.extractBetween(0, bracket, id);
+            id.remove(bracket);
         }
 
         // The 'facadeID' is the ID to be applied to an alias
@@ -597,7 +598,8 @@ Transliterator* Transliterator::createInstance(const UnicodeString& ID,
                 id.extractBetween(i+1, id.length(), facadeID);
                 id.extractBetween(0, i, right);
                 facadeID.append(ID_SEP).append(right);
-            } else if (ID == NullTransliterator::ID) {
+            } else if (id == NullTransliterator::ID ||
+                       id == RemoveTransliterator::ID) {
                 facadeID = id;
             } else {
                 return 0;
@@ -966,6 +968,7 @@ void Transliterator::initializeCache(void) {
     _registerInstance(new JamoHangulTransliterator(), status);
     _registerInstance(new HangulJamoTransliterator(), status);
     _registerInstance(new NullTransliterator(), status);
+    _registerInstance(new RemoveTransliterator(), status);
 
     cacheInitialized = TRUE;
 }
