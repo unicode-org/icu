@@ -82,7 +82,7 @@ void UCAConformanceTest::initRbUCA()
     rbUCA = ucol_openRules(ucarules, size, UCOL_DEFAULT, UCOL_TERTIARY, 
                           &parseError, &status);
     if (U_FAILURE(status)) {
-        errln("Failure creating UCA rule-based collator.");
+        errln("Failure creating UCA rule-based collator: %s", u_errorName(status));
         return;
     }
   }

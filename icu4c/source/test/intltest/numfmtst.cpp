@@ -1312,7 +1312,7 @@ void NumberFormatTest::TestCurrencyPatterns(void) {
         UErrorCode ec = U_ZERO_ERROR;
         NumberFormat* nf = NumberFormat::createCurrencyInstance(locs[i], ec);
         if (U_FAILURE(ec)) {
-            errln("FAIL: Can't create NumberFormat");
+            errln("FAIL: Can't create NumberFormat(%s) - %s", locs[i], u_errorName(ec));
         } else {
             // Make sure currency formats do not have a variable number
             // of fraction digits

@@ -277,7 +277,7 @@ IntlTestDateFormatAPI::TestNameHiding(void) {
             fmt->format(numObj, str, fpos, status);
             delete fmt;
         } else {
-            errln("FAIL: Can't create NumberFormat");
+            errln("FAIL: Can't create NumberFormat()");
         }
     }
 
