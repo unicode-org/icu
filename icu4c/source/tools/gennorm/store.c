@@ -28,6 +28,10 @@
 #include "unormimp.h"
 #include "gennorm.h"
 
+#ifdef WIN32
+#   pragma warning(disable: 4100)
+#endif
+
 #define DO_DEBUG_OUT 0
 
 /* file data ---------------------------------------------------------------- */
@@ -78,12 +82,15 @@ utm_open(const char *name, uint32_t count, uint32_t size) {
     return mem;
 }
 
+#if 0
+/* we don't use this - we don't clean up memory here... */
 static void
 utm_close(UToolMemory *mem) {
     if(mem!=NULL) {
         uprv_free(mem);
     }
 }
+#endif
 
 static void *
 utm_getStart(UToolMemory *mem) {
@@ -198,7 +205,7 @@ createStage2Block(uint32_t code) {
         uint16_t *p;
 
         p=(uint16_t *)utm_allocN(stage2Mem, _NORM_STAGE_2_BLOCK_COUNT);
-        stage1[i]=j=p-stage2;
+        stage1[i]=j=(uint16_t)(p-stage2);
     }
     return j;
 }
@@ -208,7 +215,7 @@ createStage2Block(uint32_t code) {
  * get or create the intermediate trie entries for it as well
  */
 static Norm *
-createNorm(code) {
+createNorm(uint32_t code) {
     Norm *p;
     uint16_t stage2Block, k;
 
@@ -217,7 +224,7 @@ createNorm(code) {
     if(stage2[k]==0) {
         /* allocate Norm */
         p=(Norm *)utm_alloc(normMem);
-        stage2[k]=p-norms;
+        stage2[k]=(uint16_t)(p-norms);
     } else {
         p=norms+stage2[k];
     }
@@ -226,7 +233,7 @@ createNorm(code) {
 
 /* get an existing Norm unit */
 static Norm *
-getNorm(code) {
+getNorm(uint32_t code) {
     uint32_t i;
     uint16_t j;
 
@@ -268,6 +275,7 @@ enumTrie(EnumTrieFn *fn, void *context) {
     uint16_t j, k, l;
 
     code=0;
+    count=0;
     for(i=0; i<_NORM_STAGE_1_MAX_COUNT; ++i) {
         j=stage1[i];
         if(j!=0) {
@@ -450,7 +458,7 @@ processCombining() {
         /* calculate the length of the combining data for this lead code point in the combiningTable */
         while(j<count && i==triples[j].leadIndex) {
             /* count 2 16-bit units per composition code unit */
-            tableTop+=2*UTF16_CHAR_LENGTH(combined=triples[j++].combined);
+            tableTop+=(uint16_t)(2*UTF16_CHAR_LENGTH(combined=triples[j++].combined));
         }
     }
 
@@ -614,7 +622,7 @@ decompWithSingleFn(void *context, uint32_t code, Norm *norm) {
     DecompSingle *me=(DecompSingle *)context;
     uint32_t c, myC;
     int32_t i, length;
-    uint8_t lenNFD, lenNFKD, myLenNFD, myLenNFKD;
+    uint8_t lenNFD=0, lenNFKD=0, myLenNFD, myLenNFKD;
     UBool changedNFD=FALSE, changedNFKD=FALSE;
 
     /* get the new character's data */
@@ -626,7 +634,6 @@ decompWithSingleFn(void *context, uint32_t code, Norm *norm) {
     if((length=norm->lenNFD)!=0 && myLenNFD!=0) {
         /* apply NFD(myC) to norm->nfd */
         s32=norm->nfd;
-        lenNFD=0;
         for(i=0; i<length; ++i) {
             c=s32[i];
             if(c==myC) {
@@ -642,7 +649,6 @@ decompWithSingleFn(void *context, uint32_t code, Norm *norm) {
     if((length=norm->lenNFKD)!=0) {
         /* apply NFD(myC) and NFKD(myC) to norm->nfkd */
         s32=norm->nfkd;
-        lenNFKD=0;
         for(i=0; i<length; ++i) {
             c=s32[i];
             if(c==myC) {
@@ -661,7 +667,6 @@ decompWithSingleFn(void *context, uint32_t code, Norm *norm) {
     } else if((length=norm->lenNFD)!=0 && myLenNFKD!=0) {
         /* apply NFKD(myC) to norm->nfd, forming a new norm->nfkd */
         s32=norm->nfd;
-        lenNFKD=0;
         for(i=0; i<length; ++i) {
             c=s32[i];
             if(c==myC) {
@@ -807,7 +812,7 @@ setHangulJamoSpecials() {
     /* set one complete stage 2 block with this Hangul information */
     pStage2Block=(uint16_t *)utm_allocN(stage2Mem, _NORM_STAGE_2_BLOCK_COUNT);
     for(i=0; i<_NORM_STAGE_2_BLOCK_COUNT; ++i) {
-        pStage2Block[i]=norm-norms;
+        pStage2Block[i]=(uint16_t)(norm-norms);
     }
 
     /* set these data for U+ac00..U+d7a3 */
@@ -815,22 +820,22 @@ setHangulJamoSpecials() {
 
     /* set a partial stage 2 block before pStage2Block can be repeated */
     if(c&_NORM_STAGE_2_MASK) {
-        i=createStage2Block(c)+(uint16_t)(c&_NORM_STAGE_2_MASK);
+        i=(uint16_t)(createStage2Block(c)+(c&_NORM_STAGE_2_MASK));
         do {
-            stage2[i++]=norm-norms;
+            stage2[i++]=(uint16_t)(norm-norms);
         } while(++c&_NORM_STAGE_2_MASK);
     }
 
     /* set full stage 1 blocks to the common stage 2 block */
     while(c<(0xd7a3&~_NORM_STAGE_2_MASK)) {
-        stage1[c>>_NORM_TRIE_SHIFT]=pStage2Block-stage2;
+        stage1[c>>_NORM_TRIE_SHIFT]=(uint16_t)(pStage2Block-stage2);
         c+=_NORM_STAGE_2_BLOCK_COUNT;
     }
 
     /* set a partial stage 2 block after the repetition */
     i=createStage2Block(c);
     while(c<=0xd7a3) {
-        stage2[i++]=norm-norms;
+        stage2[i++]=(uint16_t)(norm-norms);
         ++c;
     }
 }
@@ -873,7 +878,7 @@ reorderString(uint32_t *s, int32_t length) {
         }
     }
 
-    return ((uint16_t)ccs[0]<<8)|ccs[length-1];
+    return (uint16_t)(((uint16_t)ccs[0]<<8)|ccs[length-1]);
 }
 
 static UBool combineAndQC[64]={ 0 };
@@ -1102,7 +1107,7 @@ makeFCD() {
                 map[i>>_NORM_TRIE_SHIFT]=(uint16_t)0;
             } else {
                 /* keep this block */
-                map[i>>_NORM_TRIE_SHIFT]=(uint16_t)(i&~_NORM_STAGE_2_MASK)-delta;
+                map[i>>_NORM_TRIE_SHIFT]=(uint16_t)((i&~_NORM_STAGE_2_MASK)-delta);
                 oredValues=0;
             }
         }
@@ -1364,8 +1369,8 @@ generateData(const char *dataDir) {
 
     indexes[_NORM_INDEX_COMBINE_DATA_COUNT]=combiningTableTop;
     indexes[_NORM_INDEX_COMBINE_FWD_COUNT]=combineFwdTop;
-    indexes[_NORM_INDEX_COMBINE_BOTH_COUNT]=combineBothTop-combineFwdTop;
-    indexes[_NORM_INDEX_COMBINE_BACK_COUNT]=combineBackTop-combineBothTop;
+    indexes[_NORM_INDEX_COMBINE_BOTH_COUNT]=(uint16_t)(combineBothTop-combineFwdTop);
+    indexes[_NORM_INDEX_COMBINE_BACK_COUNT]=(uint16_t)(combineBackTop-combineBothTop);
 
     indexes[_NORM_INDEX_FCD_TRIE_INDEX_COUNT]=fcdStage1Top;
     indexes[_NORM_INDEX_FCD_TRIE_DATA_COUNT]=fcdTableTop;
