@@ -22,6 +22,7 @@
 #include "tsmthred.h"
 #include "tsputil.h"
 #include "biditst.h"
+#include "uobjtest.h"
 //#include "custrtest.h"
 //#include "ccitrtst.h"
 //#include "cloctest.h"
@@ -120,9 +121,18 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
                 callTest( test, par );
             }
             break;
+            
+    case 10:
+      name = "UObjectTest";
+      if(exec) {
+        logln ("UObjectTest---"); logln("");
+        UObjectTest test;
+        callTest( test, par );
+      }
+      break;;
 
 #ifdef ICU_UBIDI_USE_DEPRECATES
-        case 10:
+        case 11:
             name = "BiDiTest";
             if(exec){
                logln("BiDiTest----"); logln("");
