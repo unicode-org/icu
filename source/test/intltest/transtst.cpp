@@ -644,7 +644,7 @@ void TransliteratorTest::TestPatternQuoting(void) {
 void TransliteratorTest::TestJ277(void) {
     UErrorCode status = U_ZERO_ERROR;
     UParseError parseError;
-    Transliterator *gl = Transliterator::createInstance("Greek-Latin", UTRANS_FORWARD, parseError, status);
+    Transliterator *gl = Transliterator::createInstance("Greek-Latin; NFD; [:M:]Remove; NFC", UTRANS_FORWARD, parseError, status);
     if (gl == NULL) {
         errln("FAIL: createInstance(Greek-Latin) returned NULL");
         return;
