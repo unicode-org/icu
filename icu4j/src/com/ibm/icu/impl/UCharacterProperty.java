@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2002/06/20 01:18:09 $ 
-* $Revision: 1.9 $
+* $Date: 2002/07/08 23:52:14 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -15,8 +15,6 @@
 package com.ibm.icu.impl;
 
 import java.io.InputStream;
-import java.io.DataInputStream;
-import java.io.FileInputStream;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.Locale;
@@ -430,17 +428,20 @@ public final class UCharacterProperty implements Trie.DataManipulate
     }
     
     /**
-     * Gets the unicode additional properties
+     * Gets the unicode additional properties.
+     * C version getUnicodeProperties.
      * @param codepoint codepoint whose additional properties is to be 
      *                  retrieved
      * @param column
      * @return unicode properties
      */ 
    	public int getAdditional(int codepoint, int column) { 
+        if (column == -1) {
+            return getProperty(codepoint);
+        }
    		if (column < 0 || column >= m_additionalColumnsCount_) { 
            return 0; 
        } 
-      
        return m_additionalVectors_[
                      m_additionalTrie_.getCodePointValue(codepoint) + column]; 
    	} 
@@ -495,14 +496,15 @@ public final class UCharacterProperty implements Trie.DataManipulate
 	{
 		switch(property) {
     		case UProperty.ALPHABETIC: {
-        		// Lu+Ll+Lt+Lm+Lo+Other_Alphabetic
+        		// Lu+Ll+Lt+Lm+Lo+Nl+Other_Alphabetic
         		int generaltype = getPropType(getProperty(codepoint));
         		boolean generalmatch = 
-        		        generaltype == UCharacterCategory.UPPERCASE_LETTER ||
-        		        generaltype == UCharacterCategory.LOWERCASE_LETTER ||
-        		        generaltype == UCharacterCategory.TITLECASE_LETTER ||
-        		        generaltype == UCharacterCategory.MODIFIER_LETTER ||
-        		        generaltype == UCharacterCategory.OTHER_LETTER;
+        		        generaltype == UCharacterCategory.UPPERCASE_LETTER 
+                        || generaltype == UCharacterCategory.LOWERCASE_LETTER 
+                        || generaltype == UCharacterCategory.TITLECASE_LETTER 
+                        || generaltype == UCharacterCategory.MODIFIER_LETTER 
+                        || generaltype == UCharacterCategory.LETTER_NUMBER
+                        || generaltype == UCharacterCategory.OTHER_LETTER;
         		return generalmatch ||
                        compareAdditionalType(getAdditional(codepoint, 1), 
                                              OTHER_ALPHABETIC_PROPERTY_);
@@ -523,20 +525,29 @@ public final class UCharacterProperty implements Trie.DataManipulate
         		                             DASH_PROPERTY_);
     		}
     		case UProperty.DEFAULT_IGNORABLE_CODE_POINT: {
-        		// Cf+Cc+Cs+Other_Default_Ignorable_Code_Point-White_Space
-        		int generaltype = getPropType(getProperty(codepoint));
-        		if (generaltype == UCharacterCategory.FORMAT ||
-        		    generaltype == UCharacterCategory.CONTROL ||
-        		    generaltype == UCharacterCategory.SURROGATE) {
-        		    return true;
-        		}
+        		// <2060..206F, FFF0..FFFB, E0000..E0FFF>
+                // +Other_Default_Ignorable_Code_Point+(Cf+Cc+Cs-White_Space) 
+                if ((0x2060 <= codepoint && codepoint <= 0x206f) 
+                    || (0xfff0 <= codepoint && codepoint <= 0xfffb) 
+                    || (0xe0000 <= codepoint && codepoint <= 0xe0fff)) {
+                    return true;
+                }
+        		
         		int additionalproperty = getAdditional(codepoint, 1);
-        		return compareAdditionalType(additionalproperty, 
-       		                   OTHER_DEFAULT_IGNORABLE_CODE_POINT_PROPERTY_)
-		               || compareAdditionalType(additionalproperty, 
-		                                        WHITE_SPACE_PROPERTY_) ||
-		               compareAdditionalType(additionalproperty, 
-                     			OTHER_DEFAULT_IGNORABLE_CODE_POINT_PROPERTY_);
+        		if (compareAdditionalType(additionalproperty, 
+       		                   OTHER_DEFAULT_IGNORABLE_CODE_POINT_PROPERTY_)) {
+                    return true;
+                }
+                if (compareAdditionalType(additionalproperty, 
+		                                              WHITE_SPACE_PROPERTY_)) {
+                    int generaltype = getPropType(getProperty(codepoint));
+                    if (generaltype == UCharacterCategory.FORMAT 
+                        || generaltype == UCharacterCategory.CONTROL 
+                        || generaltype == UCharacterCategory.SURROGATE) {
+                        return true;
+                    }
+                }
+                return false;
     		}
     		case UProperty.DEPRECATED: {
         		return compareAdditionalType(getAdditional(codepoint, 1),
@@ -554,44 +565,54 @@ public final class UCharacterProperty implements Trie.DataManipulate
         		return NormalizerImpl.isFullCompositionExclusion(codepoint);
     		}
     		case UProperty.GRAPHEME_BASE: {
-    			int generaltype = getPropType(getProperty(codepoint));
-        		// [0..10FFFF]-Cc-Cf-Cs-Co-Cn-Zl-Zp-Grapheme_Link-Grapheme_Extend ==
-         		// [0..10FFFF]-Cc-Cf-Cs-Co-Cn-Zl-Zp-Grapheme_Link-(Me+Mn+Mc+Other_Grapheme_Extend) ==
-         		// [0..10FFFF]-Cc-Cf-Cs-Co-Cn-Zl-Zp-Me-Mn-Mc-Grapheme_Link-Other_Grapheme_Extend
-         		// getType(c out of range) returns Cn so we need not check for the range
-         		if (generaltype == UCharacterCategory.FORMAT || 
-         		    generaltype == UCharacterCategory.SURROGATE || 
-         		    generaltype == UCharacterCategory.PRIVATE_USE ||
-         		    generaltype == UCharacterCategory.GENERAL_OTHER_TYPES ||
-         		    generaltype == UCharacterCategory.LINE_SEPARATOR ||
-         		    generaltype == UCharacterCategory.PARAGRAPH_SEPARATOR ||
-         		    generaltype == UCharacterCategory.ENCLOSING_MARK ||
-         		    generaltype == UCharacterCategory.NON_SPACING_MARK ||
-         		    generaltype == UCharacterCategory.COMBINING_SPACING_MARK) {
-         		    return true;
-         		}
-         		int additionalproperty = getAdditional(codepoint, 1);
-                return compareAdditionalType(additionalproperty,
-                                             GRAPHEME_LINK_PROPERTY_) ||
-                       compareAdditionalType(additionalproperty,
-                                             OTHER_GRAPHEME_EXTEND_PROPERTY_);
+    			// [0..10FFFF]-Cc-Cf-Cs-Co-Cn-Zl-Zp-Grapheme_Link-Grapheme_Extend-CGJ ==
+                // [0..10FFFF]-Cc-Cf-Cs-Co-Cn-Zl-Zp-Grapheme_Link-(Me+Mn+Mc+Other_Grapheme_Extend)-CGJ ==
+                // [0..10FFFF]-Cc-Cf-Cs-Co-Cn-Zl-Zp-Me-Mn-Mc-Grapheme_Link-Other_Grapheme_Extend-CGJ
+                if (codepoint != 0x34f) { // CGJ
+                    int generaltype = getPropType(getProperty(codepoint));
+             		if (generaltype != UCharacterCategory.CONTROL 
+                        && generaltype != UCharacterCategory.FORMAT 
+                        && generaltype != UCharacterCategory.SURROGATE
+                        && generaltype != UCharacterCategory.PRIVATE_USE
+                        && generaltype != UCharacterCategory.GENERAL_OTHER_TYPES
+                        && generaltype != UCharacterCategory.LINE_SEPARATOR
+                        && generaltype != UCharacterCategory.PARAGRAPH_SEPARATOR
+             		    && generaltype != UCharacterCategory.ENCLOSING_MARK
+             		    && generaltype != UCharacterCategory.NON_SPACING_MARK 
+             		    && generaltype 
+                                != UCharacterCategory.COMBINING_SPACING_MARK) {
+             		    int additionalproperty = getAdditional(codepoint, 1);
+                        return !compareAdditionalType(additionalproperty,
+                                                      GRAPHEME_LINK_PROPERTY_) 
+                               && !compareAdditionalType(additionalproperty,
+                                              OTHER_GRAPHEME_EXTEND_PROPERTY_);
+             		}
+                }
+                return false;
     		}
     		case UProperty.GRAPHEME_EXTEND: {
-        		// Me+Mn+Mc+Other_Grapheme_Extend-Grapheme_Link
-        		int generaltype = getPropType(getProperty(codepoint));
-        		if (generaltype == UCharacterCategory.ENCLOSING_MARK ||
-        		    generaltype == UCharacterCategory.NON_SPACING_MARK ||
-        		    generaltype == UCharacterCategory.COMBINING_SPACING_MARK)
-        		{
-        			return true;
-        		}
+                // Me+Mn+Mc+Other_Grapheme_Extend-Grapheme_Link-CGJ
+                if (codepoint == 0x34f) { // CGJ
+                    return false; // fastest check first
+                }
+        
                 int additionalproperty = getAdditional(codepoint, 1);
-                return compareAdditionalType(additionalproperty, 
-                                           OTHER_GRAPHEME_EXTEND_PROPERTY_) ||
-                       compareAdditionalType(additionalproperty, 
-                                             GRAPHEME_LINK_PROPERTY_) || 
-					   compareAdditionalType(additionalproperty,
-					                         OTHER_GRAPHEME_EXTEND_PROPERTY_);
+                if (!compareAdditionalType(additionalproperty, 
+                                           GRAPHEME_LINK_PROPERTY_)) {
+                    if (compareAdditionalType(additionalproperty, 
+                                             OTHER_GRAPHEME_EXTEND_PROPERTY_)) {
+                        return true;
+                    }
+                    int generaltype = getPropType(getProperty(codepoint));
+                    if (generaltype == UCharacterCategory.ENCLOSING_MARK ||
+                        generaltype == UCharacterCategory.NON_SPACING_MARK ||
+                        generaltype 
+                               == UCharacterCategory.COMBINING_SPACING_MARK) {
+                        return true;
+                    }
+                }
+                                             
+                return false;
     		}
     		case UProperty.GRAPHEME_LINK: {
         		return compareAdditionalType(getAdditional(codepoint, 1),
@@ -769,6 +790,10 @@ public final class UCharacterProperty implements Trie.DataManipulate
         	int offset = uchariter.getIndex();
             // fill u and i with the case mapping result string
             // use hardcoded conditions and mappings
+            // Test for conditional mappings first
+            // (otherwise the unconditional default mappings are always taken),
+            // then test for characters that have unconditional mappings in 
+            // SpecialCasing.txt, then get the UnicodeData.txt mappings.
             if (locale.getLanguage().equals(LITHUANIAN_) &&
                 // base characters, find accents above
                 (((ch == LATIN_CAPITAL_LETTER_I_ || 
@@ -781,6 +806,26 @@ public final class UCharacterProperty implements Trie.DataManipulate
                    ch == LATIN_CAPITAL_I_WITH_TILDE_))) {
                    // lithuanian: add a dot above if there are more accents 
                    // above (to always have the dot)
+                   // # Lithuanian
+                   // # Lithuanian retains the dot in a lowercase i when 
+                   //   followed by accents.
+                   // # Introduce an explicit dot above when lowercasing 
+                   // capital I's and J's
+                   // whenever there are more accents above.
+                   // (of the accents used in Lithuanian: grave, acute, tilde 
+                   // above, and ogonek)
+                   // 0049; 0069 0307; 0049; 0049; lt More_Above; 
+                   // # LATIN CAPITAL LETTER I
+                   // 004A; 006A 0307; 004A; 004A; lt More_Above; 
+                   // # LATIN CAPITAL LETTER J
+                   // 012E; 012F 0307; 012E; 012E; lt More_Above; 
+                   // # LATIN CAPITAL LETTER I WITH OGONEK
+                   // 00CC; 0069 0307 0300; 00CC; 00CC; lt; 
+                   // # LATIN CAPITAL LETTER I WITH GRAVE
+                   // 00CD; 0069 0307 0301; 00CD; 00CD; lt; 
+                   // # LATIN CAPITAL LETTER I WITH ACUTE
+                   // 0128; 0069 0307 0303; 0128; 0128; lt; 
+                   // # LATIN CAPITAL LETTER I WITH TILDE
                    switch(ch) {
                    case LATIN_CAPITAL_LETTER_I_: 
                         buffer.append((char)LATIN_SMALL_LETTER_I_);
@@ -810,30 +855,60 @@ public final class UCharacterProperty implements Trie.DataManipulate
                         buffer.append((char)COMBINING_TILDE_);
                         return 3;
                    }
-                   /*
-                   Note: This handling of I and of dot above differs from 
-                   Unicode 3.1.1's SpecialCasing-5.txt because the AFTER_i 
-                   condition there does not work for decomposed I+dot above.
-                   This fix is being proposed to the UTC.
-                   */
             } 
             
             String language = locale.getLanguage();
-            if ((language.equals(TURKISH_) || language.equals(AZERBAIJANI_)) && 
-                ch == LATIN_CAPITAL_LETTER_I_ && 
-                !isFollowedByDotAbove(uchariter, offset)) {
-                // turkish: I maps to dotless i
-                // other languages or turkish with decomposed I+dot above: 
-                // I maps to i
-                buffer.append(LATIN_SMALL_LETTER_DOTLESS_I_);
-                return 1;
+            if (language.equals(TURKISH_) || language.equals(AZERBAIJANI_)) { 
+                if (ch == 0x130) {
+                    // # I and i-dotless; I-dot and i are case pairs in Turkish 
+                    // and Azeri
+                    // # The following rules handle those cases.
+                    // 0130; 0069; 0130; 0130; tr 
+                    // # LATIN CAPITAL LETTER I WITH DOT ABOVE
+                    // 0130; 0069; 0130; 0130; az 
+                    // # LATIN CAPITAL LETTER I WITH DOT ABOVE
+                    buffer.append(LATIN_SMALL_LETTER_I_);
+                    return 1;
+                } 
+                if (ch == 0x307 && isPrecededBySoftDotted(uchariter, offset)) {
+                    // ### TODO see comment above about isAfter_I()
+                    // # When lowercasing, remove dot_above in the sequence 
+                    // I + dot_above, which will turn into i.
+                    // # This matches the behavior of the canonically
+                    // equivalent I-dot_above
+                    // 0307; ; 0307; 0307; tr After_Soft_Dotted; 
+                    // # COMBINING DOT ABOVE
+                    // 0307; ; 0307; 0307; az After_Soft_Dotted; 
+                    // # COMBINING DOT ABOVE
+                    return 0; // remove the dot (continue without output)
+
+                }
+                if (ch == LATIN_CAPITAL_LETTER_I_ && 
+                    !isFollowedByDotAbove(uchariter, offset)) {
+                    // turkish: I maps to dotless i
+                    // other languages or turkish with decomposed I+dot above: 
+                    // I maps to i
+                    // # When lowercasing, unless an I is before a dot_above, 
+                    // it turns into a dotless i.
+                    //  0049; 0131; 0049; 0049; tr Not_Before_Dot; 
+                    // # LATIN CAPITAL LETTER I
+                    // 0049; 0131; 0049; 0049; az Not_Before_Dot; 
+                    // # LATIN CAPITAL LETTER I
+                    buffer.append(LATIN_SMALL_LETTER_DOTLESS_I_);
+                    return 1;
+                }
             } 
             
-			if (ch == COMBINING_DOT_ABOVE_ && isAFTER_I(uchariter, offset) 
-			    && !isFollowedByMOREABOVE(uchariter, offset)) {
+			if (ch == 0x130) {
                 // decomposed I+dot above becomes i (see handling of 
                 // U+0049 for turkish) and removes the dot above
-                return 0; // remove the dot (continue without output)
+                // # Preserve canonical equivalence for I with dot. Turkic is 
+                // handled below.
+                // 0130; 0069 0307; 0130; 0130; 
+                // # LATIN CAPITAL LETTER I WITH DOT ABOVE
+                buffer.append(LATIN_SMALL_LETTER_I_);
+                buffer.append(COMBINING_DOT_ABOVE_);
+                return 2; // remove the dot (continue without output)
             } 
             
             if (ch == GREEK_CAPITAL_LETTER_SIGMA_ && 
@@ -841,6 +916,11 @@ public final class UCharacterProperty implements Trie.DataManipulate
                 isNotCINITIAL(uchariter, offset)) {
                 // greek capital sigma maps depending on surrounding cased 
                 // letters
+                // greek capital sigma maps depending on surrounding cased 
+                // letters (see SpecialCasing.txt) */
+                // # Special case for final form of sigma
+                // 03A3; 03C2; 03A3; 03A3; Final_Sigma; 
+                // # GREEK CAPITAL LETTER SIGMA
                 buffer.append(GREEK_SMALL_LETTER_RHO_);
                 return 1;
             } 
@@ -992,13 +1072,24 @@ public final class UCharacterProperty implements Trie.DataManipulate
             if ((language.equals(TURKISH_) || language.equals(AZERBAIJANI_))
                 && ch == LATIN_SMALL_LETTER_I_) {
                 // turkish: i maps to dotted I
+                // # Turkish and Azeri
+                // # I and i-dotless; I-dot and i are case pairs in Turkish and Azeri
+                // # The following rules handle those cases.
+                // # When uppercasing, i turns into a dotted capital I
+                // 0069; 0069; 0130; 0130; tr; # LATIN SMALL LETTER I
+                // 0069; 0069; 0130; 0130; az; # LATIN SMALL LETTER I
                 buffer.append(LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE_);
                 return 1;
             } 
             
             if (language.equals(LITHUANIAN_) && ch == COMBINING_DOT_ABOVE_ 
-                && isAFTER_i(uchariter, uchariter.getIndex())) {
-                // lithuanian: remove DOT ABOVE after U+0069 "i" with 
+                && isPrecededBySoftDotted(uchariter, uchariter.getIndex())) {
+                // # Lithuanian
+                // # Lithuanian retains the dot in a lowercase i when followed 
+                // by accents.
+                // # Remove DOT ABOVE after "i" with upper or titlecase
+                // 0307; 0307; ; ; lt After_Soft_Dotted; # COMBINING DOT ABOVE
+                                // lithuanian: remove DOT ABOVE after U+0069 "i" with 
                 // upper or titlecase
                 return 0; // remove the dot (continue without output)
             } 
@@ -1183,7 +1274,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
 	        int ch = UTF16.charAt(str, index);
 	        ucharIter.setIndex(index);
 	        index += UTF16.getCharCount(ch);
-        	int size = toUpperOrTitleCase(locale, ch, ucharIter, false, result);
+        	toUpperOrTitleCase(locale, ch, ucharIter, false, result);
         	int next = breakiter.next();
         	if (index != BreakIterator.DONE && index < next) {
 	        	// lowercase [prev..index]
@@ -1193,6 +1284,77 @@ public final class UCharacterProperty implements Trie.DataManipulate
         }
         return result.toString();
  	}
+
+    /**
+     * <p>
+     * Unicode property names and property value names are compared
+     * "loosely". Property[Value]Aliases.txt say:
+     * <quote>
+     *   "With loose matching of property names, the case distinctions, 
+     *    whitespace, and '_' are ignored."
+     * </quote>
+     * </p>
+     * <p>
+     * This function does just that, for ASCII (char *) name strings.
+     * It is almost identical to ucnv_compareNames() but also ignores
+     * ASCII White_Space characters (U+0009..U+000d).
+     * </p>
+     * @param name1 name to compare
+     * @param name2 name to compare
+     * @return 0 if names are equal, < 0 if name1 is less than name2 and > 0
+     *         if name1 is greater than name2.
+     */
+    public static int comparePropertyNames(String name1, String name2) 
+    {
+        int result = 0;
+        int i1 = 0;
+        int i2 = 0;
+        while (true) {
+            char ch1 = 0;
+            char ch2 = 0;
+            // Ignore delimiters '-', '_', and ASCII White_Space 
+            if (i1 < name1.length()) {
+                ch1 = name1.charAt(i1 ++);
+            }
+            while (ch1 == '-' || ch1 == '_' || ch1 == ' ' || ch1 == '\t' 
+                   || ch1 == '\n' /* synwee what is || ch1 == '\v' */
+                   || ch1 == '\f' || ch1=='\r') {
+                if (i1 < name1.length()) {
+                    ch1 = name1.charAt(i1 ++);
+                }
+                else {
+                    ch1 = 0;
+                }
+            }
+            if (i2 < name2.length()) {
+                ch2 = name2.charAt(i2 ++);
+            }
+            while (ch2 == '-' || ch2 == '_' || ch2 == ' ' || ch2 == '\t' 
+                   || ch2 == '\n' /* synwee what is || ch1 == '\v' */ 
+                   || ch2 == '\f' || ch2=='\r') {
+                if (i2 < name2.length()) {
+                    ch2 = name2.charAt(i2 ++);
+                }
+                else {
+                    ch2 = 0;
+                }
+            }
+    
+            // If we reach the ends of both strings then they match
+            if (ch1 == 0 && ch2 == 0) {
+                return 0;
+            }
+            
+            // Case-insensitive comparison
+            if (ch1 != ch2) {
+                result = Character.toLowerCase(ch1)
+                                                - Character.toLowerCase(ch2);
+                if (result != 0) {
+                    return result;
+                }
+            }
+        }
+    }
 
     // protected variables -----------------------------------------------
   
@@ -1574,26 +1736,75 @@ public final class UCharacterProperty implements Trie.DataManipulate
     }
     
     /**
-    * Determines if a string at offset is preceded by any base characters 
-    * { 'i', 'j', U+012f, U+1e2d, U+1ecb } with no intervening character with
-    * combining class = 230
+     * Unicode 3.2 UAX 21 "Case Mappings" defines the conditions as follows:
+     *
+     * Final_Sigma
+     *   C is preceded by a sequence consisting of
+     *     a cased letter and a case-ignorable sequence,
+     *   and C is not followed by a sequence consisting of
+     *     an ignorable sequence and then a cased letter.
+     *
+     * More_Above
+     *   C is followed by one or more characters of combining class 230 (ABOVE)
+     *   in the combining character sequence.
+     *
+     * After_Soft_Dotted
+     *   The last preceding character with combining class of zero before C
+     *   was Soft_Dotted,
+     *   and there is no intervening combining character class 230 (ABOVE).
+     *
+     * Before_Dot
+     *   C is followed by combining dot above (U+0307).
+     *   Any sequence of characters with a combining class that is neither 0 
+     *   nor 230 may intervene between the current character and the combining 
+     *   dot above.
+     *
+     * Helper definitions in Unicode 3.2 UAX 21:
+     *
+     * D1. A character C is defined to be cased
+     *     if it meets any of the following criteria:
+     *
+     *   - The general category of C is Titlecase Letter (Lt)
+     *   - In [CoreProps], C has one of the properties Uppercase, or Lowercase
+     *   - Given D = NFD(C), then it is not the case that:
+     *     D = UCD_lower(D) = UCD_upper(D) = UCD_title(D)
+     *     (This third criterium does not add any characters to the list
+     *      for Unicode 3.2. Ignored.)
+     *
+     * D2. A character C is defined to be case-ignorable
+     *     if it meets either of the following criteria:
+     *
+     *   - The general category of C is
+     *     Nonspacing Mark (Mn), or Enclosing Mark (Me), or Format Control (Cf), or
+     *     Letter Modifier (Lm), or Symbol Modifier (Sk)
+     *   - C is one of the following characters 
+     *     U+0027 APOSTROPHE
+     *     U+00AD SOFT HYPHEN (SHY)
+     *     U+2019 RIGHT SINGLE QUOTATION MARK
+     *            (the preferred character for apostrophe)
+     *
+     * D3. A case-ignorable sequence is a sequence of
+     *     zero or more case-ignorable characters.
+     */
+
+    /**
+    * Determines if a string at offset is preceded by any soft dotted character
+    * with no intervening character with combining class = 230
     * @param uchariter text iterator to be determined
     * @param offset offset in string to check
     * @return true if some characters preceding the offset index belongs to
-    *         the set { 'i', 'j', U+012f, U+1e2d, U+1ecb }
+    *         the set of soft dotted characters with no intervening character
     * @see SpecialCasing.txt
     */
-    private static boolean isAFTER_i(UnicodeCharacterIterator uchariter, int offset) 
+    private boolean isPrecededBySoftDotted(
+                                UnicodeCharacterIterator uchariter, int offset) 
     {
     	uchariter.setIndex(offset);
     	
     	int ch = uchariter.previousCodePoint();
     	
         while (ch != UnicodeCharacterIterator.DONE_CODEPOINT) {
-            if (ch == LATIN_SMALL_LETTER_I_ || ch == LATIN_SMALL_LETTER_J_ || 
-                ch == LATIN_SMALL_LETTER_I_WITH_OGONEK_ ||
-                ch == LATIN_SMALL_LETTER_I_WITH_TILDE_BELOW_ || 
-                ch == LATIN_SMALL_LETTER_I_WITH_DOT_BELOW_) {
+            if (isSoftDotted(ch)) {
                 return true; // preceded by TYPE_i
             }
     
@@ -1659,12 +1870,10 @@ public final class UCharacterProperty implements Trie.DataManipulate
     	
     	while (ch != UnicodeCharacterIterator.DONE_CODEPOINT) {
             int cat = getType(ch);
-            if (cat == UCharacterCategory.LOWERCASE_LETTER || 
-                cat == UCharacterCategory.UPPERCASE_LETTER ||
-                cat == UCharacterCategory.TITLECASE_LETTER) {
+            if (isCased(ch, cat)) {
                 return false; // followed by cased letter
             }
-            if (!isIgnorable(ch, cat)) {
+            if (!isCaseIgnorable(ch, cat)) {
                 return true; // not ignorable
             }
             ch = uchariter.nextCodePoint();
@@ -1689,12 +1898,10 @@ public final class UCharacterProperty implements Trie.DataManipulate
     	
         while (ch != UnicodeCharacterIterator.DONE_CODEPOINT) {
             int cat = getType(ch);
-            if (cat == UCharacterCategory.LOWERCASE_LETTER || 
-                cat == UCharacterCategory.UPPERCASE_LETTER ||
-                cat == UCharacterCategory.TITLECASE_LETTER) {
+            if (isCased(ch, cat)) {
                 return true; // preceded by cased letter
             }
-            if (!isIgnorable(ch, cat)) {
+            if (!isCaseIgnorable(ch, cat)) {
                 return false; // not ignorable
             }
 			ch = uchariter.previousCodePoint();
@@ -1764,19 +1971,53 @@ public final class UCharacterProperty implements Trie.DataManipulate
     }
     
     /**  
-    * In Unicode 3.1.1, an ignorable sequence is a sequence of *zero* or more 
-    * characters from the set {HYPHEN, SOFT HYPHEN, general category = Mn}.
-    * (Expected to change!) 
+    * Checks if the case ignorable
     * @param ch codepoint
     * @param cat category of the argument codepoint
     * @return true if ch is case ignorable.
     */
-    private static boolean isIgnorable(int ch, int cat) 
+    private static boolean isCaseIgnorable(int ch, int cat) 
     {
-        return cat == UCharacterCategory.NON_SPACING_MARK || ch == HYPHEN_ || 
-               ch == SOFT_HYPHEN_;
+        return cat == UCharacterCategory.NON_SPACING_MARK 
+               || cat == UCharacterCategory.ENCLOSING_MARK 
+               || cat == UCharacterCategory.FORMAT
+               || cat == UCharacterCategory.MODIFIER_LETTER
+               || cat == UCharacterCategory.MODIFIER_SYMBOL
+               || ch == 0x27 || ch == 0xad || ch == 0x2019;
     }
-      
+
+    /** 
+     * Is this a "cased" character? 
+     * @param ch codepoint
+     * @param cat category of the argument
+     * @return true if ch is a cased character
+     */
+    private boolean isCased(int ch, int cat) 
+    {
+        // Lt + Uppercase + Lowercase = Lt + Lu + Ll 
+        // + Other_Uppercase+Other_Lowercase
+        boolean result = (cat == UCharacterCategory.TITLECASE_LETTER 
+               || cat == UCharacterCategory.UPPERCASE_LETTER
+               || cat == UCharacterCategory.LOWERCASE_LETTER);
+        if (result) {
+            return result;
+        } 
+        int prop = getAdditional(ch, 1);
+        return compareAdditionalType(prop, OTHER_UPPERCASE_PROPERTY_) 
+               || compareAdditionalType(prop, OTHER_LOWERCASE_PROPERTY_);
+    }
+    
+    /** 
+     * Is Soft_Dotted? 
+     * @param ch codepoint
+     * @return true if ch is soft dotted
+     */
+    private boolean isSoftDotted(int ch) {
+        return compareAdditionalType(getAdditional(ch, 1), 
+                                     SOFT_DOTTED_PROPERTY_);
+    }
+    
+    /* Is followed by {case-ignorable}* cased  ? */
     /**
     * Getting the correct address for data in the exception value
     * @param evalue exception value

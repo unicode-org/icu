@@ -6,8 +6,8 @@
 *
 * $Source: 
 *      /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterCategory.java $ 
-* $Date: 2002/03/20 05:11:15 $ 
-* $Revision: 1.2 $
+* $Date: 2002/07/08 23:52:13 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -42,7 +42,7 @@ public interface UProperty
   	 * <p>Binary property Alphabetic. </p>
   	 * <p>Property for UCharacter.isUAlphabetic(), different from the property 
   	 * in UCharacter.isalpha().</p>
-  	 * <p>Lu + Ll + Lt + Lm + Lo + Other_Alphabetic.</p>
+  	 * <p>Lu + Ll + Lt + Lm + Lo + Nl + Other_Alphabetic.</p>
   	 * @draft ICU 2.1 
   	 */ 
     public static final int ALPHABETIC = 0; 
@@ -82,7 +82,8 @@ public interface UProperty
      * </p> 
      * <p>Property that indicates codepoint is ignorable in most processing.
      * </p>
-     * <p>Cf+Cc+Cs+Other_Default_Ignorable_Code_Point-White_Space</p> 
+     * <p>Codepoints (2060..206F, FFF0..FFFB, E0000..E0FFF) + 
+     * Other_Default_Ignorable_Code_Point + (Cf + Cc + Cs - White_Space)</p> 
      * @draft ICU 2.1 
      */ 
     public static final int DEFAULT_IGNORABLE_CODE_POINT = 5; 
@@ -116,14 +117,14 @@ public interface UProperty
     /** 
      * <p>Binary property Grapheme_Base (new).</p>
      * <p>For programmatic determination of grapheme cluster boundaries. 
-     * [0..10FFFF]-Cc-Cf-Cs-Co-Cn-Zl-Zp-Grapheme_Link-Grapheme_Extend</p> 
+     * [0..10FFFF]-Cc-Cf-Cs-Co-Cn-Zl-Zp-Grapheme_Link-Grapheme_Extend-CGJ</p> 
      * @draft ICU 2.1 
      */ 
     public static final int GRAPHEME_BASE = 10; 
     /** 
      * <p>Binary property Grapheme_Extend (new).</p> 
      * <p>For programmatic determination of grapheme cluster boundaries.</p> 
-     * <p>Me+Mn+Mc+Other_Grapheme_Extend-Grapheme_Link</p> 
+     * <p>Me+Mn+Mc+Other_Grapheme_Extend-Grapheme_Link-CGJ</p> 
      * @draft ICU 2.1 
      */ 
     public static final int GRAPHEME_EXTEND = 11; 
@@ -281,4 +282,82 @@ public interface UProperty
      * @draft ICU 2.1 
      */ 
     public static final int BINARY_LIMIT = 34;
+    /** 
+     * Enumerated property Bidi_Class.
+     * Same as u_charDirection, returns UCharDirection values. 
+     * @draft ICU 2.2 
+     */
+    // public static final int BIDI_CLASS = 0x1000;
+    /** 
+     * First constant for enumerated/integer Unicode properties. 
+     * @draft ICU 2.2 
+     */
+    // public static final int INT_START = BIDI_CLASS;
+    /** 
+     * Enumerated property Block.
+     * Same as ublock_getCode, returns UBlockCode values. 
+     * @draft ICU 2.2 
+     */
+    // public static final int BLOCK = 0x1001;
+    /** 
+     * Enumerated property Canonical_Combining_Class.
+     * Same as getCombiningClass, returns 8-bit numeric values. 
+     * @draft ICU 2.2 
+     */
+    // public static final int CANONICAL_COMBINING_CLASS = 0x1002;
+    /** 
+     * Enumerated property Decomposition_Type.
+     * Returns UDecompositionType values. 
+     * @draft ICU 2.2 
+     */
+    // public static final int DECOMPOSITION_TYPE = 0x1003;
+    /** 
+     * Enumerated property East_Asian_Width.
+     * See http://www.unicode.org/reports/tr11/
+     * Returns UEastAsianWidth values. 
+     * @draft ICU 2.2 
+     */
+    // public static final int EAST_ASIAN_WIDTH = 0x1004;
+    /** 
+     * Enumerated property General_Category.
+     * Same as charType, returns UCharacterCategory values. 
+     * @draft ICU 2.2 
+     */
+    // public static final int GENERAL_CATEGORY = 0x1005;
+    /** 
+     * Enumerated property Joining_Group.
+     * Returns UJoiningGroup values. 
+     * @draft ICU 2.2 
+     */
+    // public static final int JOINING_GROUP = 0x1006;
+    /** 
+     * Enumerated property Joining_Type.
+     * Returns UJoiningType values. 
+     * @draft ICU 2.2 
+     */
+    // public static final int JOINING_TYPE = 0x1007;
+    /** 
+     * Enumerated property Line_Break.
+     * Returns ULineBreak values. 
+     * @draft ICU 2.2 
+     */
+    // public static final int LINE_BREAK = 0x1008;
+    /** 
+     * Enumerated property Numeric_Type.
+     * Returns UNumericType values. 
+     * @draft ICU 2.2 
+     */
+    // public static final int NUMERIC_TYPE = 0x1009;
+    /** 
+     * Enumerated property Script.
+     * Same as uscript_getScript, returns UScriptCode values. 
+     * @draft ICU 2.2 
+     */
+    // public static final int SCRIPT = 0x100A;
+    /** 
+     * One more than the last constant for enumerated/integer Unicode 
+     * properties. 
+     * @draft ICU 2.2 
+     */
+    // public static final int INT_LIMIT = 0x100B;
 }

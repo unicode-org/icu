@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/06/05 20:31:11 $ 
-* $Revision: 1.40 $
+* $Date: 2002/07/08 23:52:13 $ 
+* $Revision: 1.41 $
 *
 *******************************************************************************
 */
@@ -15,7 +15,6 @@ package com.ibm.icu.lang;
 
 import java.util.Locale;
 import com.ibm.icu.impl.UCharacterProperty;
-import com.ibm.icu.impl.Utility; 
 import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.util.ValueIterator;
 import com.ibm.icu.util.VersionInfo;
@@ -1158,6 +1157,42 @@ public final class UCharacter
     */
     public static int foldCase(int ch, boolean defaultmapping)
     {
+        // Some special cases are hardcoded because their conditions cannot be
+        // parsed and processed from CaseFolding.txt.
+        // Unicode 3.2 CaseFolding.txt specifies for its status field:
+        // # C: common case folding, common mappings shared by both simple and 
+        // full mappings.
+        // # F: full case folding, mappings that cause strings to grow in 
+        // length. Multiple characters are separated by spaces.
+        // # S: simple case folding, mappings to single characters where 
+        // different from F.
+        // # T: special case for uppercase I and dotted uppercase I
+        // #    - For non-Turkic languages, this mapping is normally not used.
+        // #    - For Turkic languages (tr, az), this mapping can be used 
+        // instead of the normal mapping for these characters.
+        // # Usage:
+        // #  A. To do a simple case folding, use the mappings with status 
+        // C + S.
+        // #  B. To do a full case folding, use the mappings with status C + F.
+        // #    The mappings with status T can be used or omitted depending on 
+        // the desired case-folding behavior. 
+        // (The default option is to exclude them.)
+        // Unicode 3.2 has 'T' mappings as follows:
+        // 0049; T; 0131; # LATIN CAPITAL LETTER I
+        // 0130; T; 0069; # LATIN CAPITAL LETTER I WITH DOT ABOVE
+        // while the default mappings for these code points are:
+        // 0049; C; 0069; # LATIN CAPITAL LETTER I
+        // 0130; F; 0069 0307; # LATIN CAPITAL LETTER I WITH DOT ABOVE
+        // U+0130 is otherwise lowercased to U+0069 (UnicodeData.txt).
+        // In case this code is used with CaseFolding.txt from an older version 
+        // of Unicode where CaseFolding.txt contains mappings with a status of 
+        // 'I' that have the opposite polarity ('I' mappings are included by 
+        // default but excluded for Turkic), we must also hardcode the Unicode 
+        // 3.2 mappings for the code points with 'I' mappings. 
+        // Unicode 3.1.1 has 'I' mappings for U+0130 and U+0131.
+        // Unicode 3.2 has a 'T' mapping for U+0130, and lowercases U+0131 to 
+        // itself (see UnicodeData.txt).
+
         int props = PROPERTY_.getProperty(ch);
         if (!UCharacterProperty.isExceptionIndicator(props)) {
             int type = UCharacterProperty.getPropType(props);
@@ -1181,14 +1216,26 @@ public final class UCharacter
                 }
                 else {
                     // special case folding mappings, hardcoded
-                    if (defaultmapping && 
-                        (ch == 
-                           UCharacterProperty.LATIN_SMALL_LETTER_DOTLESS_I_ || 
-                         ch == 
-                    UCharacterProperty.LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE_)) 
-                    {
-                        // map dotted I and dotless i to U+0069 small i
-                        return UCharacterProperty.LATIN_SMALL_LETTER_I_;
+                    if (defaultmapping) { 
+                        // default mappings
+                        if (ch == 0x49 || ch == 0x130) { 
+                            // 0049; C; 0069; # LATIN CAPITAL LETTER I */
+                            // no simple default mapping for U+0130, 
+                            // use UnicodeData.txt
+                            return UCharacterProperty.LATIN_SMALL_LETTER_I_;
+                        } 
+                    } 
+                    else {
+                        // Turkic mappings 
+                        if (ch == 0x49) {
+                            // 0049; T; 0131; # LATIN CAPITAL LETTER I
+                            return 0x131;
+                        } 
+                        else if (ch == 0x130) {
+                            // 0130; T; 0069; 
+                            // # LATIN CAPITAL LETTER I WITH DOT ABOVE
+                            return 0x69;
+                        }
                     }
                     // return ch itself because it is excluded from case folding
                     return ch;
@@ -1252,20 +1299,39 @@ public final class UCharacter
                     } 
                     else {
                         // special case folding mappings, hardcoded
-                        if (defaultmapping && 
-                            (ch == 
-                            UCharacterProperty.LATIN_SMALL_LETTER_DOTLESS_I_ || 
-                             ch == 
-                    UCharacterProperty.LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE_)) 
-                        {
-                            // map dotted I and dotless i to U+0069 small i
-                            result.append(
-                                    UCharacterProperty.LATIN_SMALL_LETTER_I_);
-                        } 
-                        else {
-                            // output c itself because it is excluded from 
-                            // case folding
+                        if (ch != 0x49 && ch != 0x130) {
+                            // return ch itself because there is no special 
+                            // mapping for it
                             UTF16.append(result, ch);
+                            continue;
+                        }
+                        if (defaultmapping) {
+                            // default mappings
+                            if (ch == 0x49) {
+                                // 0049; C; 0069; # LATIN CAPITAL LETTER I
+                                result.append(
+                                    UCharacterProperty.LATIN_SMALL_LETTER_I_);
+                            }
+                            else if (ch == 0x130) {
+                                // 0130; F; 0069 0307; 
+                                // # LATIN CAPITAL LETTER I WITH DOT ABOVE
+                                result.append(
+                                    UCharacterProperty.LATIN_SMALL_LETTER_I_);
+                                result.append((char)0x307);
+                            }
+                        }
+                        else {
+                            // Turkic mappings
+                            if (ch == 0x49) {
+                                // 0049; T; 0131; # LATIN CAPITAL LETTER I
+                                result.append((char)0x131);
+                            } 
+                            else if (ch == 0x130) {
+                                // 0130; T; 0069; 
+                                // # LATIN CAPITAL LETTER I WITH DOT ABOVE
+                                result.append(
+                                    UCharacterProperty.LATIN_SMALL_LETTER_I_);
+                            }
                         }
                     }
                     // do not fall through to the output of c

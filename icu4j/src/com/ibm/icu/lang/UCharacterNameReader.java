@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/Attic/UCharacterNameReader.java,v $ 
-* $Date: 2002/03/25 22:03:45 $ 
-* $Revision: 1.8 $
+* $Date: 2002/07/08 23:52:13 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -159,8 +159,8 @@ final class UCharacterNameReader
                                     {(byte)0x1, (byte)0x0, (byte)0x0, (byte)0x0};
     private static final byte DATA_FORMAT_ID_[] = {(byte)0x75, (byte)0x6E, 
                                                     (byte)0x61, (byte)0x6D};
-    private static final byte UNICODE_VERSION_[] = {(byte)0x3, (byte)0x1, 
-                                                    (byte)0x1, (byte)0x0};
+    private static final byte UNICODE_VERSION_[] = {(byte)0x3, (byte)0x2, 
+                                                    (byte)0x0, (byte)0x0};
                                                      
     /**
     * Corrupted error string

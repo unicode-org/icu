@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/UCharacterPropertyReader.java,v $ 
-* $Date: 2002/03/13 05:44:14 $ 
-* $Revision: 1.3 $
+* $Date: 2002/07/08 23:52:14 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -14,7 +14,6 @@ package com.ibm.icu.impl;
 
 import java.io.InputStream;
 import java.io.DataInputStream;
-import java.util.Arrays;
 import java.io.IOException;
 import com.ibm.icu.util.VersionInfo;
 
@@ -154,9 +153,9 @@ final class UCharacterPropertyReader
     */
     private static final byte DATA_FORMAT_ID_[] = {(byte)0x55, (byte)0x50, 
                                                     (byte)0x72, (byte)0x6F};
-    private static final byte DATA_FORMAT_VERSION_[] = {(byte)0x3, (byte)0x0, 
+    private static final byte DATA_FORMAT_VERSION_[] = {(byte)0x3, (byte)0x1, 
                                              (byte)Trie.INDEX_STAGE_1_SHIFT_, 
                                              (byte)Trie.INDEX_STAGE_2_SHIFT_};
-    private static final byte UNICODE_VERSION_[] = {(byte)0x3, (byte)0x1, 
-                                                    (byte)0x1, (byte)0x0};  
+    private static final byte UNICODE_VERSION_[] = {(byte)0x3, (byte)0x2, 
+                                                    (byte)0x0, (byte)0x0};  
 }
