@@ -124,7 +124,6 @@ typedef struct UPKGOptions_
   const char *install;     /* Where to install to (NULL = don't install) */
   const char *icuroot;     /* where does ICU lives */
   const char *libName;     /* name for library (default: shortName) */
-  UBool      compatMode;
   UBool      rebuild;
   UBool      clean;
   UBool      nooutput;
