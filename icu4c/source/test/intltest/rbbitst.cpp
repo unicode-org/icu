@@ -2225,7 +2225,7 @@ RBBIWordMonkey::RBBIWordMonkey() : fGCFMatcher(0),
     fSets->addElement(fOtherSet,     status);
 
 
-    fGCFMatcher = new RegexMatcher("\\X(?:\\p{Format})*", 0, status);
+    fGCFMatcher = new RegexMatcher("\\X(?:[\\p{Format}-\\p{Grapheme_Extend}])*", 0, status);
     fGCMatcher  = new RegexMatcher("\\X", 0, status);
 
     if (U_FAILURE(status)) {
