@@ -690,7 +690,7 @@ RuleBasedCollator::RuleBasedCollator(const Locale& desiredLocale,
     {
       status = U_ZERO_ERROR;
 
-      unsigned long size = 0;
+      uint32_t size = 0;
       const UChar * defaultrules = ucol_getDefaultRulesArray(&size);
 
       ucollator = ucol_openRules(defaultrules, size, 
