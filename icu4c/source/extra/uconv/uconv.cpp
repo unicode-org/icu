@@ -450,7 +450,7 @@ int main(int argc, char** argv)
             if (iter!=end) {
                 UErrorCode e = U_ZERO_ERROR;
                 printName = ucnv_getAlias(*iter, 0, &e);
-                if (U_FAILURE(e)) {
+                if (U_FAILURE(e) || !printName) {
                     UnicodeString str(*iter);
                     initMsg(pname);
                     u_wmsg("noSuchCodeset", str.getBuffer());
