@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2003/11/14 21:55:19 $
-* $Revision: 1.80 $
+* $Date: 2003/11/21 19:45:03 $
+* $Revision: 1.81 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -80,6 +80,7 @@
         <property name="src.dir" value="src"/>
         <property name="build.dir" value="classes"/>
         <property name="doc.dir" value="doc"/>
+        <property name="testjar.file" value="icu4jtests.jar"/>
         <property name="jar.file" value="icu4j.jar"/>
         <property name="jarSrc.file" value="icu4jsrc.jar"/>
         <property name="jarDocs.file" value="icu4jdocs.jar"/>
@@ -197,6 +198,7 @@
                  includes="Transliterator_*.txt,*.icu,*.spp"
                  excludes="**/CVS/**/*,Transliterator_Han_Latin_*.txt"/>
         </copy>
+	<copy file="${src.dir}/com/ibm/icu/impl/foo.txt" todir="${build.dir}/com/ibm/icu/impl"/>
     </target>
 
     <target name ="testData" depends="init">
@@ -232,10 +234,17 @@
 	
     <target name="jar" depends="core">
         <jar jarfile="${jar.file}"
-            compress="true"
+            compress="false"
             includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*"
             basedir="${build.dir}"
             manifest="${icu4j.manifest}"/>
+    </target>
+
+    <target name="testJar" depends="tests">
+        <jar jarfile="${testjar.file}"
+            compress="false"
+            includes="com/ibm/icu/dev/test/**/*"
+            basedir="${build.dir}"/>
     </target>
 
     <target name="jarSrc" depends="init">
