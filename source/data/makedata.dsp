@@ -155,7 +155,7 @@ SOURCE=.\locales\resfiles.mk
 # End Source File
 # Begin Source File
 
-SOURCE=..\test\testdata\testdata.mk
+SOURCE=..\test\testdata\testdata.mak
 # End Source File
 # Begin Source File
 

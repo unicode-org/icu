@@ -58,10 +58,13 @@
 				RelativePath=".\misc\miscfiles.mk">
 			</File>
 			<File
+				RelativePath=".\rbnf\rbnffiles.mk">
+			</File>
+			<File
 				RelativePath=".\locales\resfiles.mk">
 			</File>
 			<File
-				RelativePath="..\test\testdata\testdata.mk">
+				RelativePath="..\test\testdata\testdata.mak">
 			</File>
 			<File
 				RelativePath=".\translit\trnsfiles.mk">
