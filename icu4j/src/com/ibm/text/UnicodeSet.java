@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UnicodeSet.java,v $ 
- * $Date: 2000/03/10 04:07:25 $ 
- * $Revision: 1.16 $
+ * $Date: 2000/04/21 21:16:40 $ 
+ * $Revision: 1.17 $
  *
  *****************************************************************************************
  */
@@ -241,7 +241,7 @@ import java.text.*;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.16 $ $Date: 2000/03/10 04:07:25 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.17 $ $Date: 2000/04/21 21:16:40 $
  */
 public class UnicodeSet implements UnicodeFilter {
     /**
@@ -886,6 +886,47 @@ public class UnicodeSet implements UnicodeFilter {
                 }
                 i = j; // Make i point at closing '}'
             }
+
+            /* Parse variable references.  These are treated as literals.  If a
+             * variable refers to a UnicodeSet, nestedPairs is assigned here.
+             * Variable names are only parsed if varNameToChar is not null.
+             * Set variables are only looked up if varCharToSet is not null.
+             */
+            // TEMPORARY
+            // TEMPORARY
+            // TEMPORARY
+            else if (symbols != null && !isLiteral && c == '$') {
+                ++i;
+                c = pattern.charAt(i);
+                int j = i;
+                if (Character.isUnicodeIdentifierStart(c)) {
+                    ++j;
+                    while (j < limit &&
+                           Character.isUnicodeIdentifierPart(pattern.charAt(j))) {
+                        ++j;
+                    }
+                }
+                if (i == j || j < 0) { // empty or unterminated
+                    throw new IllegalArgumentException("Illegal variable reference " +
+                                                       pattern.substring(i-1, limit));
+                }
+                String name = pattern.substring(i, j);
+                Object obj = symbols.lookup(name);
+                if (obj == null) {
+                    throw new IllegalArgumentException("Undefined variable: "
+                                                       + name);
+                }
+                isLiteral = true;
+                if (obj instanceof Character) {
+                    c = ((Character) obj).charValue();
+                } else {
+                    nestedPairs = ((UnicodeSet) obj).pairs.toString();
+                }
+                i = j-1; // Make i point at last char of var name
+            }
+            // TEMPORARY
+            // TEMPORARY
+            // TEMPORARY
 
             /* An opening bracket indicates the first bracket of a nested
              * subpattern, either a normal pattern or a category pattern.  We

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedTransliterator.java,v $ 
- * $Date: 2000/04/19 17:35:23 $ 
- * $Revision: 1.20 $
+ * $Date: 2000/04/21 21:16:40 $ 
+ * $Revision: 1.21 $
  *
  *****************************************************************************************
  */
@@ -274,7 +274,7 @@ import com.ibm.util.Utility;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.20 $ $Date: 2000/04/19 17:35:23 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.21 $ $Date: 2000/04/21 21:16:40 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -559,9 +559,19 @@ public class RuleBasedTransliterator extends Transliterator {
         /**
          * The last available stand-in for variables.  This is discovered
          * dynamically.  At any point during parsing, available variables are
-         * <code>variableNext..variableLimit-1</code>.
+         * <code>variableNext..variableLimit-1</code>.  During variable definition
+         * we use the special value variableLimit-1 as a placeholder.
          */
         private char variableLimit;
+
+        /**
+         * When we encounter an undefined variable, we do not immediately signal
+         * an error, in case we are defining this variable, e.g., "$a = [a-z];".
+         * Instead, we save the name of the undefined variable, and substitute
+         * in the placeholder char variableLimit - 1, and decrement
+         * variableLimit.
+         */
+        private String undefinedVariableName;
 
         // Operators
         private static final char VARIABLE_DEF_OP   = '=';
@@ -577,17 +587,15 @@ public class RuleBasedTransliterator extends Transliterator {
         private static final char END_OF_RULE         = ';';
         private static final char RULE_COMMENT_CHAR   = '#';
 
-        private static final char VARIABLE_REF_OPEN   = '{';
-        private static final char VARIABLE_REF_CLOSE  = '}';
-        private static final char CONTEXT_OPEN        = '(';
-        private static final char CONTEXT_CLOSE       = ')';
+        private static final char VARIABLE_REF        = '$'; // also segment refs
+        private static final char CONTEXT_ANTE        = '{'; // ante{key
+        private static final char CONTEXT_POST        = '}'; // key}post
         private static final char SET_OPEN            = '[';
         private static final char SET_CLOSE           = ']';
         private static final char CURSOR_POS          = '|';
 
         // Segments of the input string are delimited by "$(" and "$)".  In the
         // output string these segments are referenced as "$1" through "$9".
-        private static final char SEGMENT_REF         = '$';
         private static final char SEGMENT_OPEN        = '(';
         private static final char SEGMENT_CLOSE       = ')';
 
@@ -703,7 +711,6 @@ public class RuleBasedTransliterator extends Transliterator {
                              RuleBasedTransliterator.Parser parser) {
                 int start = pos;
                 StringBuffer buf = new StringBuffer();
-                int postClose = -1; // position of post context close ')' in text
 
             main:
                 while (pos < limit) {
@@ -756,86 +763,77 @@ public class RuleBasedTransliterator extends Transliterator {
                         --pos; // Backup to point to operator
                         break main;
                     }
-                    // Handle segment definitions "$(" ")$" and references "$1"
-                    // .. "$9".
-                    if (c == SEGMENT_REF) {
-                        // After a SEGMENT_REF, must see SEGMENT_OPEN,
-                        // SEGMENT_CLOSE, or a digit 1 to 9, with no intervening
-                        // whitespace
-                        if (pos == limit) {
-                            syntaxError("Trailing " + c, rule, start);
-                        }
-                        c = rule.charAt(pos++);
-                        if (c == SEGMENT_OPEN || c == SEGMENT_CLOSE) {
-                            // Parse "$(", "$)"
-                            if (segments == null) {
-                                segments = new Vector();
-                            }
-                            if ((c == SEGMENT_OPEN) !=
-                                (segments.size() % 2 == 0)) {
-                                syntaxError("Mismatched segment delimiters",
-                                            rule, start);
-                            }
-                            segments.addElement(new Integer(buf.length()));
-                        } else {
-                            // Parse "$1" "$2" .. "$9"
-                            int r = Character.digit(c, 10);
-                            if (r < 1 || r > 9) {
-                                syntaxError("Illegal char after " + SEGMENT_REF,
-                                            rule, start);
-                            }
-                            if (r > maxRef) {
-                                maxRef = r;
-                            }
-                            buf.append((char) (parser.data.segmentBase + r - 1));
-                        }
-                        continue;
-                    }
                     switch (c) {
+                    case SEGMENT_OPEN:
+                    case SEGMENT_CLOSE:
+                        // Handle segment definitions "(" and ")"
+                        // Parse "(", ")"
+                        if (segments == null) {
+                            segments = new Vector();
+                        }
+                        if ((c == SEGMENT_OPEN) !=
+                            (segments.size() % 2 == 0)) {
+                            syntaxError("Mismatched segment delimiters",
+                                        rule, start);
+                        }
+                        segments.addElement(new Integer(buf.length()));
+                        break;
                     case END_OF_RULE:
                         --pos; // Backup to point to END_OF_RULE
                         break main;
-                    case VARIABLE_REF_OPEN:
+                    case VARIABLE_REF:
+                        // Handle variable references and segment references "$1" .. "$9"
                         {
-                            int j = rule.indexOf(VARIABLE_REF_CLOSE, pos);
-                            if (pos == j || j < 0) { // empty or unterminated
-                                syntaxError("Malformed variable reference", rule, start);
+                            // A variable reference must be followed immediately
+                            // by a Unicode identifier start and zero or more
+                            // Unicode identifier part characters, or by a digit
+                            // 1..9 if it is a segment reference.
+                            if (pos == limit) {
+                                syntaxError("Trailing " + c, rule, start);
                             }
-                            String name = rule.substring(pos, j);
-                            pos = j+1;
-                            buf.append(parser.getVariableDef(name));
+                            // Parse "$1" "$2" .. "$9"
+                            c = rule.charAt(pos++);
+                            int r = Character.digit(c, 10);
+                            if (r >= 1 && r <= 9) {
+                                if (r > maxRef) {
+                                    maxRef = r;
+                                }
+                                buf.append((char) (parser.data.segmentBase + r - 1));
+                            } else if (Character.isUnicodeIdentifierStart(c)) {
+                                int j = pos;
+                                while (j < limit &&
+                                       Character.isUnicodeIdentifierPart(rule.charAt(j))) {
+                                    ++j;
+                                }
+                                String name = rule.substring(pos-1, j);
+                                pos = j;
+                                // If this is a variable definition statement, then the LHS
+                                // variable will be undefined.  In that case getVariableName()
+                                // will return the special placeholder variableLimit-1.
+                                buf.append(parser.getVariableDef(name));
+                            } else {
+                                syntaxError("Illegal char after " + VARIABLE_REF,
+                                            rule, start);
+                            }
                         }
                         break;
-                    case CONTEXT_OPEN:
+                    case CONTEXT_ANTE:
+                        if (ante >= 0) {
+                            syntaxError("Multiple ante contexts", rule, start);
+                        }
+                        ante = buf.length();
+                        break;
+                    case CONTEXT_POST:
                         if (post >= 0) {
                             syntaxError("Multiple post contexts", rule, start);
                         }
-                        // Ignore CONTEXT_OPEN if buffer length is zero -- that means
-                        // this is the optional opening delimiter for the ante context.
-                        if (buf.length() > 0) {
-                            post = buf.length();
-                        }
-                        break;
-                    case CONTEXT_CLOSE:
-                        if (postClose >= 0) {
-                            syntaxError("Unexpected " + c, rule, start);
-                        }
-                        if (post >= 0) {
-                            // This is probably the optional closing delimiter
-                            // for the post context; save the pos and check later.
-                            postClose = buf.length();
-                        } else if (ante >= 0) {
-                            syntaxError("Multiple ante contexts", rule, start);
-                        } else {
-                            ante = buf.length();
-                        }
+                        post = buf.length();
                         break;
                     case SET_OPEN:
                         ParsePosition pp = new ParsePosition(pos-1); // Backup to opening '['
                         buf.append(parser.registerSet(new UnicodeSet(rule, pp, parser.parseData)));
                         pos = pp.getIndex();
                         break;
-                    case VARIABLE_REF_CLOSE:
                     case SET_CLOSE:
                         syntaxError("Unquoted " + c, rule, start);
                     case CURSOR_POS:
@@ -848,11 +846,6 @@ public class RuleBasedTransliterator extends Transliterator {
                         buf.append(c);
                         break;
                     }
-                }
-
-                // Check context close parameters
-                if (postClose >= 0 && postClose != buf.length()) {
-                    syntaxError("Extra text after ]", rule, start);
                 }
 
                 text = buf.toString();
@@ -906,6 +899,7 @@ public class RuleBasedTransliterator extends Transliterator {
             RuleHalf left  = new RuleHalf();
             RuleHalf right = new RuleHalf();
 
+            undefinedVariableName = null;
             pos = left.parse(rule, pos, limit, this);
 
             if (pos == limit ||
@@ -936,15 +930,29 @@ public class RuleBasedTransliterator extends Transliterator {
                 // or a set (already parsed).  If RHS is longer than one
                 // character, it is either a multi-character string, or multiple
                 // sets, or a mixture of chars and sets -- syntax error.
+
+                // We expect to see a single undefined variable (the one being
+                // defined).
+                if (undefinedVariableName == null) {
+                    syntaxError("Missing '$' or duplicate definition", rule, start);
+                }
+                if (left.text.length() != 1 || left.text.charAt(0) != variableLimit) {
+                    syntaxError("Malformed LHS", rule, start);
+                }
                 if (right.text.length() != 1) {
                     syntaxError("Malformed RHS", rule, start);
                 }
-                if (data.variableNames.get(left.text) != null) {
-                    syntaxError("Duplicate definition of {" +
-                                left.text + "}", rule, start);
-                }
-                data.variableNames.put(left.text, new Character(right.text.charAt(0)));
+                data.variableNames.put(undefinedVariableName,
+                                       new Character(right.text.charAt(0)));
+                ++variableLimit;
                 return pos;
+            }
+
+            // If this is not a variable definition rule, we shouldn't have
+            // any undefined variable names.
+            if (undefinedVariableName != null) {
+                syntaxError("Undefined variable $" + undefinedVariableName,
+                            rule, start);
             }
 
             // If the direction we want doesn't match the rule
@@ -1041,7 +1049,18 @@ public class RuleBasedTransliterator extends Transliterator {
         private char getVariableDef(String name) {
             Character ch = (Character) data.variableNames.get(name);
             if (ch == null) {
-                throw new IllegalArgumentException("Undefined variable: "
+                // We allow one undefined variable so that variable definition
+                // statements work.  For the first undefined variable we return
+                // the special placeholder variableLimit-1, and save the variable
+                // name.
+                if (undefinedVariableName == null) {
+                    undefinedVariableName = name;
+                    if (variableNext >= variableLimit) {
+                        throw new RuntimeException("Private use variables exhausted");
+                    }
+                    return --variableLimit;
+                }
+                throw new IllegalArgumentException("Undefined variable $"
                                                    + name);
             }
             return ch.charValue();
@@ -1210,7 +1229,11 @@ public class RuleBasedTransliterator extends Transliterator {
     }
 }
 
-/* $Log: RuleBasedTransliterator.java,v $
+/**
+ * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.21  2000/04/21 21:16:40  alan
+ * Modify rule syntax
+ *
  * Revision 1.20  2000/04/19 17:35:23  alan
  * Update javadoc; fix compile error
  *

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/TransliterationRule_Latin_Jamo.java,v $ 
- * $Date: 2000/03/10 04:07:31 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/04/21 21:17:08 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -23,19 +23,19 @@ public class TransliterationRule_Latin_Jamo extends ListResourceBundle {
 
   // VARIABLES
 
-  + "initial=[\u1100-\u115F];"
-  + "medial=[\u1160-\u11A7];"
-  + "final=[\u11A8-\u11F9];" // added - aliu
-  + "vowel=[aeiouwyAEIOUWY\u1160-\u11A7];"
-  + "consonant=[bcdfghjklmnpqrstvxzBCDFGHJKLMNPQRSTVXZ{medial}{final}];"
-  + "ye=[yeYE];"
-  + "ywe=[yweYWE];"
-  + "yw=[ywYW];"
-  + "nl=[nlNL];"
-  + "gnl=[gnlGNL];"
-  + "lsgb=[lsgbLSGB];"
-  + "ywao=[ywaoYWAO];"
-  + "bl=[blBL];"
+  + "$initial=[\u1100-\u115F];"
+  + "$medial=[\u1160-\u11A7];"
+  + "$final=[\u11A8-\u11F9];" // added - aliu
+  + "$vowel=[aeiouwyAEIOUWY\u1160-\u11A7];"
+  + "$consonant=[bcdfghjklmnpqrstvxzBCDFGHJKLMNPQRSTVXZ$medial$final];"
+  + "$ye=[yeYE];"
+  + "$ywe=[yweYWE];"
+  + "$yw=[ywYW];"
+  + "$nl=[nlNL];"
+  + "$gnl=[gnlGNL];"
+  + "$lsgb=[lsgbLSGB];"
+  + "$ywao=[ywaoYWAO];"
+  + "$bl=[blBL];"
 
   // RULES
 
@@ -60,8 +60,8 @@ public class TransliterationRule_Latin_Jamo extends ListResourceBundle {
 
   // special insertion for funny sequences of vowels, and for empty consonant
 
-  + "'' < ({consonant}) \u110B;" // insert a break between any consonant and the empty consonant.
-  + "({medial}) ({vowel}) <> \u110B;"  // HANGUL CHOSEONG IEUNG
+  + "'' < $consonant{\u110B;" // insert a break between any consonant and the empty consonant.
+  + "$medial{}$vowel<>\u110B;"  // HANGUL CHOSEONG IEUNG
   
   // Below, insert an empty consonant in front of a vowel, if there is no Initial in front.
   
@@ -144,57 +144,57 @@ public class TransliterationRule_Latin_Jamo extends ListResourceBundle {
   // from Hangul to Latin. Catch every letter that can be the
   // LAST of a digraph (or multigraph) AND first of an initial
 
-  + "'' < (l) (\u11c0;"      // hangul jongseong thieuth
-  + "'' < ({lsgb}) (\u11ba;" // hangul jongseong sios
-  + "'' < (l) (\u11c1;"      // hangul jongseong phieuph
-  + "'' < (l) (\u11b7;"      // hangul jongseong mieum
-  + "'' < (n) (\u11bd;"      // hangul jongseong cieuc
-  + "'' < ({nl}) (\u11c2;"   // hangul jongseong hieuh
-  + "'' < ({gnl}) (\u11a9;"  // hangul jongseong ssangkiyeok
-  + "'' < ({bl}) (\u11b8;"   // hangul jongseong pieup
-  + "'' < (d) (\u11ae;"      // hangul jongseong tikeut
+  + "'' < l{ }\u11c0;"      // hangul jongseong thieuth
+  + "'' < $lsgb{}\u11ba;" // hangul jongseong sios
+  + "'' < l{ }\u11c1;"      // hangul jongseong phieuph
+  + "'' < l{ }\u11b7;"      // hangul jongseong mieum
+  + "'' < n{ }\u11bd;"      // hangul jongseong cieuc
+  + "'' < $nl{}\u11c2;"   // hangul jongseong hieuh
+  + "'' < $gnl{}\u11a9;"  // hangul jongseong ssangkiyeok
+  + "'' < $bl{}\u11b8;"   // hangul jongseong pieup
+  + "'' < d{ }\u11ae;"      // hangul jongseong tikeut
   
-  + "'' < ({ye}) (\u116e;"   // hangul jungseong u
-  + "'' < ({ywe}) (\u1169;"  // hangul jungseong o
-  + "'' < ({yw}) (\u1175;"   // hangul jungseong i
-  + "'' < ({ywao}) (\u1166;" // hangul jungseong e
-  + "'' < ({yw}) (\u1161;"   // hangul jungseong a
+  + "'' < $ye{}\u116e;"   // hangul jungseong u
+  + "'' < $ywe{}\u1169;"  // hangul jungseong o
+  + "'' < $yw{}\u1175;"   // hangul jungseong i
+  + "'' < $ywao{}\u1166;" // hangul jungseong e
+  + "'' < $yw{}\u1161;"   // hangul jungseong a
   
-  + "'' < (l) (\u1110;"      // hangul choseong thieuth
-  + "'' < ({lsgb}) (\u110a;" // hangul choseong ssangsios
-  + "'' < ({lsgb}) (\u1109;" // hangul choseong sios
-  + "'' < (l) (\u1111;"      // hangul choseong phieuph
-  + "'' < (l) (\u1106;"      // hangul choseong mieum
-  + "'' < (n) (\u110c;"      // hangul choseong cieuc
-  + "'' < (n) (\u110d;"
-  + "'' < ({nl}) (\u1112;"   // hangul choseong hieuh
-  + "'' < ({gnl}) (\u1101;"  // hangul choseong ssangkiyeok
-  + "'' < ({gnl}) (\u1100;"  // hangul choseong kiyeok
-  + "'' < (d) (\u1103;"      // hangul choseong tikeut
-  + "'' < (d) (\u1104;"
-  + "'' < ({bl}) (\u1107;"   // hangul choseong pieup
-  + "'' < ({bl}) (\u1108;"
+  + "'' < l{ }\u1110;"      // hangul choseong thieuth
+  + "'' < $lsgb{}\u110a;" // hangul choseong ssangsios
+  + "'' < $lsgb{}\u1109;" // hangul choseong sios
+  + "'' < l{ }\u1111;"      // hangul choseong phieuph
+  + "'' < l{ }\u1106;"      // hangul choseong mieum
+  + "'' < n{ }\u110c;"      // hangul choseong cieuc
+  + "'' < n{ }\u110d;"
+  + "'' < $nl{}\u1112;"   // hangul choseong hieuh
+  + "'' < $gnl{}\u1101;"  // hangul choseong ssangkiyeok
+  + "'' < $gnl{}\u1100;"  // hangul choseong kiyeok
+  + "'' < d{ }\u1103;"      // hangul choseong tikeut
+  + "'' < d{ }\u1104;"
+  + "'' < $bl{}\u1107;"   // hangul choseong pieup
+  + "'' < $bl{}\u1108;"
 
   // INITIALS
 
-  + "t ({vowel}) <> \u1110;"   // hangul choseong thieuth
-  + "ss ({vowel}) <> \u110a;"  // hangul choseong ssangsios
-  + "s ({vowel}) <> \u1109;"   // hangul choseong sios
-  + "p ({vowel}) <> \u1111;"   // hangul choseong phieuph
-  + "n ({vowel}) <> \u1102;"   // hangul choseong nieun
-  + "m ({vowel}) <> \u1106;"   // hangul choseong mieum
-  + "l ({vowel}) <> \u1105;"   // hangul choseong rieul
-  + "k ({vowel}) <> \u110f;"   // hangul choseong khieukh
-  + "j ({vowel}) <> \u110c;"   // hangul choseong cieuc
-  + "h ({vowel}) <> \u1112;"   // hangul choseong hieuh
-  + "gg ({vowel}) <> \u1101;"  // hangul choseong ssangkiyeok
-  + "g ({vowel}) <> \u1100;"   // hangul choseong kiyeok
-  + "d ({vowel}) <> \u1103;"   // hangul choseong tikeut
-  + "c ({vowel}) <> \u110e;"   // hangul choseong chieuch
-  + "b ({vowel}) <> \u1107;"   // hangul choseong pieup  
-  + "bb ({vowel}) <> \u1108;"
-  + "jj ({vowel}) <> \u110d;"
-  + "dd ({vowel}) <> \u1104;"
+  + "t }$vowel<>\u1110;"   // hangul choseong thieuth
+  + "ss }$vowel<>\u110a;"  // hangul choseong ssangsios
+  + "s }$vowel<>\u1109;"   // hangul choseong sios
+  + "p }$vowel<>\u1111;"   // hangul choseong phieuph
+  + "n }$vowel<>\u1102;"   // hangul choseong nieun
+  + "m }$vowel<>\u1106;"   // hangul choseong mieum
+  + "l }$vowel<>\u1105;"   // hangul choseong rieul
+  + "k }$vowel<>\u110f;"   // hangul choseong khieukh
+  + "j }$vowel<>\u110c;"   // hangul choseong cieuc
+  + "h }$vowel<>\u1112;"   // hangul choseong hieuh
+  + "gg }$vowel<>\u1101;"  // hangul choseong ssangkiyeok
+  + "g }$vowel<>\u1100;"   // hangul choseong kiyeok
+  + "d }$vowel<>\u1103;"   // hangul choseong tikeut
+  + "c }$vowel<>\u110e;"   // hangul choseong chieuch
+  + "b }$vowel<>\u1107;"   // hangul choseong pieup  
+  + "bb }$vowel<>\u1108;"
+  + "jj }$vowel<>\u110d;"
+  + "dd }$vowel<>\u1104;"
   
   // If we have gotten through to these rules, and we start with
   // a consonant, then the remaining mappings would be to F,
@@ -209,45 +209,45 @@ public class TransliterationRule_Latin_Jamo extends ListResourceBundle {
   + "jj > \u1108\u110d;"   // hangul choseong ssangcieuc
   + "dd > \u1108\u1104;"   // hangul choseong ssangtikeut
   
-  + "({final}) t > \u1110\u116e;"   // hangul choseong thieuth
-  + "({final}) ss > \u110a\u116e;"  // hangul choseong ssangsios
-  + "({final}) s > \u1109\u116e;"   // hangul choseong sios
-  + "({final}) p > \u1111\u116e;"   // hangul choseong phieuph
-  + "({final}) n > \u1102\u116e;"   // hangul choseong nieun
-  + "({final}) m > \u1106\u116e;"   // hangul choseong mieum
-  + "({final}) l > \u1105\u116e;"   // hangul choseong rieul
-  + "({final}) k > \u110f\u116e;"   // hangul choseong khieukh
-  + "({final}) j > \u110c\u116e;"   // hangul choseong cieuc
-  + "({final}) h > \u1112\u116e;"   // hangul choseong hieuh
-  + "({final}) gg > \u1101\u116e;"  // hangul choseong ssangkiyeok
-  + "({final}) g > \u1100\u116e;"   // hangul choseong kiyeok
-  + "({final}) d > \u1103\u116e;"   // hangul choseong tikeut
-  + "({final}) c > \u110e\u116e;"   // hangul choseong chieuch
-  + "({final}) b > \u1107\u116e;"   // hangul choseong pieup
+  + "$final{ t > \u1110\u116e;"   // hangul choseong thieuth
+  + "$final{ ss > \u110a\u116e;"  // hangul choseong ssangsios
+  + "$final{ s > \u1109\u116e;"   // hangul choseong sios
+  + "$final{ p > \u1111\u116e;"   // hangul choseong phieuph
+  + "$final{ n > \u1102\u116e;"   // hangul choseong nieun
+  + "$final{ m > \u1106\u116e;"   // hangul choseong mieum
+  + "$final{ l > \u1105\u116e;"   // hangul choseong rieul
+  + "$final{ k > \u110f\u116e;"   // hangul choseong khieukh
+  + "$final{ j > \u110c\u116e;"   // hangul choseong cieuc
+  + "$final{ h > \u1112\u116e;"   // hangul choseong hieuh
+  + "$final{ gg > \u1101\u116e;"  // hangul choseong ssangkiyeok
+  + "$final{ g > \u1100\u116e;"   // hangul choseong kiyeok
+  + "$final{ d > \u1103\u116e;"   // hangul choseong tikeut
+  + "$final{ c > \u110e\u116e;"   // hangul choseong chieuch
+  + "$final{ b > \u1107\u116e;"   // hangul choseong pieup
   
   // MEDIALS after INITIALS
   
-  + "({initial}) yu <> \u1172;"   // hangul jungseong yu
-  + "({initial}) yo <> \u116d;"   // hangul jungseong yo
-  + "({initial}) yi <> \u1174;"   // hangul jungseong yi
-  + "({initial}) yeo <> \u1167;"  // hangul jungseong yeo
-  + "({initial}) ye <> \u1168;"   // hangul jungseong ye
-  + "({initial}) yae <> \u1164;"  // hangul jungseong yae
-  + "({initial}) ya <> \u1163;"   // hangul jungseong ya
-  + "({initial}) wi <> \u1171;"   // hangul jungseong wi
-  + "({initial}) weo <> \u116f;"  // hangul jungseong weo
-  + "({initial}) we <> \u1170;"   // hangul jungseong we
-  + "({initial}) wae <> \u116b;"  // hangul jungseong wae
-  + "({initial}) wa <> \u116a;"   // hangul jungseong wa
-  + "({initial}) u <> \u116e;"    // hangul jungseong u
-  + "({initial}) oe <> \u116c;"   // hangul jungseong oe
-  + "({initial}) o <> \u1169;"    // hangul jungseong o
-  + "({initial}) i <> \u1175;"    // hangul jungseong i
-  + "({initial}) eu <> \u1173;"   // hangul jungseong eu
-  + "({initial}) eo <> \u1165;"   // hangul jungseong eo
-  + "({initial}) e <> \u1166;"    // hangul jungseong e
-  + "({initial}) ae <> \u1162;"   // hangul jungseong ae
-  + "({initial}) a <> \u1161;"    // hangul jungseong a
+  + "$initial{ yu <> \u1172;"   // hangul jungseong yu
+  + "$initial{ yo <> \u116d;"   // hangul jungseong yo
+  + "$initial{ yi <> \u1174;"   // hangul jungseong yi
+  + "$initial{ yeo <> \u1167;"  // hangul jungseong yeo
+  + "$initial{ ye <> \u1168;"   // hangul jungseong ye
+  + "$initial{ yae <> \u1164;"  // hangul jungseong yae
+  + "$initial{ ya <> \u1163;"   // hangul jungseong ya
+  + "$initial{ wi <> \u1171;"   // hangul jungseong wi
+  + "$initial{ weo <> \u116f;"  // hangul jungseong weo
+  + "$initial{ we <> \u1170;"   // hangul jungseong we
+  + "$initial{ wae <> \u116b;"  // hangul jungseong wae
+  + "$initial{ wa <> \u116a;"   // hangul jungseong wa
+  + "$initial{ u <> \u116e;"    // hangul jungseong u
+  + "$initial{ oe <> \u116c;"   // hangul jungseong oe
+  + "$initial{ o <> \u1169;"    // hangul jungseong o
+  + "$initial{ i <> \u1175;"    // hangul jungseong i
+  + "$initial{ eu <> \u1173;"   // hangul jungseong eu
+  + "$initial{ eo <> \u1165;"   // hangul jungseong eo
+  + "$initial{ e <> \u1166;"    // hangul jungseong e
+  + "$initial{ ae <> \u1162;"   // hangul jungseong ae
+  + "$initial{ a <> \u1161;"    // hangul jungseong a
   
   // MEDIALS (vowels) not after INITIALs
   
