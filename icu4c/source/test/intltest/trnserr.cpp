@@ -177,24 +177,26 @@ void TransliteratorErrorTest::TestUnicodeSetErrors() {
     status = U_ZERO_ERROR;
     UnicodeSet *set1 = new UnicodeSet(badPattern, status);
     if (U_SUCCESS(status)) {
-        delete set1;
         errln("FAIL: Created a UnicodeSet based on bad patterns.");
     }
+    delete set1;
 }
 
 void TransliteratorErrorTest::TestUniToHexErrors() {
     UErrorCode status = U_ZERO_ERROR;
     Transliterator *t = new UnicodeToHexTransliterator("", TRUE, NULL, status);
     if (U_SUCCESS(status)) {
-        delete t;
         errln("FAIL: Created a UnicodeToHexTransliterator with an empty pattern.");
     }
+    delete t;
+
     status = U_ZERO_ERROR;
     t = new UnicodeToHexTransliterator("\\x", TRUE, NULL, status);
     if (U_SUCCESS(status)) {
-        delete t;
         errln("FAIL: Created a UnicodeToHexTransliterator with a bad pattern.");
     }
+    delete t;
+
     status = U_ZERO_ERROR;
     t = new UnicodeToHexTransliterator();
     ((UnicodeToHexTransliterator*)t)->applyPattern("\\x", status);
