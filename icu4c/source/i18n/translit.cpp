@@ -393,6 +393,18 @@ void Transliterator::_transliterate(Replaceable& text,
 }
 
 /**
+ * Rollback makes global filters and compound transliterators very
+ * bulletproof, but it also makes some transliterators completely
+ * non-incremental -- that is, for some transliterators, rollback
+ * is always triggered, until finishTransliteration() is called.
+ * Since this eliminates most of the usefulness of incremental
+ * mode, rollback should usually be disabled.
+ *
+ * This is used by Transliterator and CompoundTransliterator.
+ */
+// #define TRANSLIT_ROLLBACK
+
+/**
  * This method breaks up the input text into runs of unfiltered
  * characters.  It passes each such run to
  * <subclass>.handleTransliterate().  Subclasses that can handle the
@@ -495,12 +507,14 @@ void Transliterator::filteredTransliterate(Replaceable& text,
         // incremental.  This is the solution implemented here.
         int32_t rollbackStart = 0;
         int32_t rollbackCopy = 0;
+#ifdef TRANSLIT_ROLLBACK
         if (isIncrementalSegment) {
             // Make a rollback copy at the end of the string
             rollbackStart = index.start;
             rollbackCopy = text.length();
             text.copy(rollbackStart, limit, rollbackCopy);
         }
+#endif
         
         // Delegate to subclass for actual transliteration.
         handleTransliterate(text, index, isIncrementalSegment);
@@ -512,6 +526,7 @@ void Transliterator::filteredTransliterate(Replaceable& text,
         // maintains that.
         globalLimit += delta;
 
+#ifdef TRANSLIT_ROLLBACK
         // If we failed to complete transliterate this segment,
         // then we are done.  If rollback is required, then do so.
         if (index.start != index.limit) {
@@ -546,6 +561,13 @@ void Transliterator::filteredTransliterate(Replaceable& text,
             rollbackCopy += delta;
             text.handleReplaceBetween(rollbackCopy, text.length(), EMPTY);
         }
+#else
+        // If we failed to complete transliterate this segment,
+        // then we are done.
+        if (index.start != index.limit) {
+            break;
+        }
+#endif
         
         // If we did completely transliterate this
         // segment, then repeat with the next unfiltered segment.
