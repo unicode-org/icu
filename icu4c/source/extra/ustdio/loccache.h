@@ -25,9 +25,6 @@
 
 #include "locbund.h"
 
-/* The global LocaleCacheInfo cache */
-extern struct UHashtable *gLocaleCache;
-
 ULocaleBundle*
 u_loccache_get(const char *loc);
 

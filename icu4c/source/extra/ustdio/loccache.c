@@ -28,7 +28,7 @@
 #include "ucln.h"
 
 /* The global cache */
-UHashtable     *gLocaleCache = NULL;
+static UHashtable     *gLocaleCache = NULL;
 
 static void U_CALLCONV
 hash_freeBundle(void* obj)
