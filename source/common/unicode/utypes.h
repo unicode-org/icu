@@ -32,6 +32,10 @@
 #ifndef UTYPES_H
 #define UTYPES_H
 
+
+#include "unicode/urenuc.h"
+#include "unicode/ureni18n.h"
+
 #include "unicode/umachine.h"
 #include "unicode/utf.h"
 #include "unicode/uversion.h"

@@ -22,8 +22,7 @@
 #   define U_UTF8_IMPL
 #endif
 
-#include "unicode/umachine.h"
-#include "unicode/utf.h"
+#include "unicode/utypes.h"
 
 /*
  * This table could be replaced on many machines by
