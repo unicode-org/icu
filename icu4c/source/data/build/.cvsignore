@@ -1,4 +1,14 @@
+Makefile
+*.so
+*.opt
+*.ncb
+*.a
+Debug
+Release
 *.cnv
+icu*.mak
+pkgdatain.txt
+*.plg
 *.dat
 *.lst
 *.res
@@ -11,10 +21,3 @@ line_th.brk
 sent.brk
 word.brk
 word_th.brk
-icudt*.*
-testdat*.*
-pkgdatain.txt
-*.lib
-*.exp
-*.mak
-
