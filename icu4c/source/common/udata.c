@@ -177,7 +177,7 @@ strcpy_returnEnd(char *dest, const char *src) {
 char *
 uprv_computeDirPath(const char *path, char *pathBuffer) {
     char   *finalSlash;       /* Ptr to last dir separator in input path, or null if none. */
-    int     pathLen;          /* Length of the returned directory path                     */
+    int32_t pathLen;          /* Length of the returned directory path                     */
     
     finalSlash = 0;
     if (path != 0) {
@@ -200,7 +200,7 @@ uprv_computeDirPath(const char *path, char *pathBuffer) {
     
     /* User supplied path did contain a directory portion.
      * Copy it to the output path buffer */
-    pathLen = finalSlash - path + 1;
+    pathLen = (int32_t)(finalSlash - path + 1);
     uprv_memcpy(pathBuffer, path, pathLen);
     *(pathBuffer+pathLen) = 0;
     return pathBuffer+pathLen;
@@ -296,7 +296,7 @@ static UDataMemory *udata_findCachedData(const char *path)
 static UDataMemory *udata_cacheDataItem(const char *path, UDataMemory *item, UErrorCode *pErr) {
     DataCacheElement *newElement;
     const char       *baseName;
-    int               nameLen;
+    int32_t           nameLen;
     UHashtable       *htable;
     UDataMemory      *oldValue = NULL;
 
@@ -319,7 +319,7 @@ static UDataMemory *udata_cacheDataItem(const char *path, UDataMemory *item, UEr
     UDatamemory_assign(newElement->item, item);
 
     baseName = findBasename(path);
-    nameLen = uprv_strlen(baseName);
+    nameLen = (int32_t)uprv_strlen(baseName);
     newElement->name = uprv_malloc(nameLen+1);
     if (newElement->name == NULL) {
         *pErr = U_MEMORY_ALLOCATION_ERROR;

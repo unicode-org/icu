@@ -137,7 +137,7 @@ u_writeIdenticalLevelRun(const UChar *s, int32_t length, uint8_t *p) {
         p=u_writeDiff(c-prev, p);
         prev=c;
     }
-    return p-p0;
+    return (int32_t)(p-p0);
 }
 
 /* How many bytes would writeIdenticalLevelRun() write? */

@@ -888,7 +888,7 @@ uint32_t util64_tou(int64_t w, UChar* buf, uint32_t len, uint32_t radix, UBool r
         *p = 0; // null terminate if room for caller convenience
     }
 
-    len = p - buf;
+    len = (uint32_t)(p - buf);
     if (*buf == kUMinus) {
         ++buf;
     }
