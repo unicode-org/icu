@@ -426,7 +426,7 @@ public abstract class DateFormat extends UFormat {
      */
     public final String format(Date date)
     {
-        return format(date, new StringBuffer(),new FieldPosition(0)).toString();
+        return format(date, new StringBuffer(64),new FieldPosition(0)).toString();
     }
 
     /**
