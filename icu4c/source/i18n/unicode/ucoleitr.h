@@ -31,7 +31,10 @@
 typedef struct UCollationElements UCollationElements;
 
 /**
- * The UCollationElements  is used as an iterator to walk through each 
+ * \file
+ * \brief C API: UCollationElements
+ *
+ * The UCollationElements API is used as an iterator to walk through each 
  * character of an international string. Use the iterator to return the
  * ordering priority of the positioned character. The ordering priority of a 
  * character, which we refer to as a key, defines how a character is collated 
@@ -43,7 +46,7 @@ typedef struct UCollationElements UCollationElements;
  * </pre>
  * And in German,
  * <pre>
- * .       "æb"-> the first key is key('a'), the second key is key('e'), and
+ * .       "<ae ligature>b"-> the first key is key('a'), the second key is key('e'), and
  * .       the third key is key('b').
  * </pre>
  * <p>Example of the iterator usage: (without error checking)
