@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/LocaleWriter.java,v $ 
- * $Date: 2002/02/16 03:05:29 $ 
- * $Revision: 1.3 $
+ * $Date: 2003/08/14 22:10:25 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -273,7 +273,30 @@ public abstract class LocaleWriter {
             print("\"\"");
         }
     }
-        
+    protected void printUnquotedString(String val) {
+         if (val != null) {
+             indent();
+             lineBuffer.setLength(0);
+             //lineBuffer.append("\"");
+             final int size = val.length();
+             for (int i = 0; i < size; i++) {
+                 append(val.charAt(i));
+                 /*if (!append(val.charAt(i))) {
+                         lineBuffer.append("\"");
+                         lineBuffer.append(getStringJoiningCharacter());
+                         println(lineBuffer.toString());
+                         lineBuffer.setLength(0);
+                         lineBuffer.append("\"");
+                 }*/
+             }
+            
+             //lineBuffer.append("\"");
+             print(lineBuffer.toString());
+             outdent();
+         } else {
+             print("");
+         }
+     }      
     protected boolean append(final char c) {
         boolean escape = isEscapeChar(c);
         if (escape) {
