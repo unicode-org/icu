@@ -80,26 +80,21 @@ static void initMsg(const char *pname) {
 }
 
 // Print all available codepage converters
-static int printConverters(const char *pname, int defonly, int canon)
+static int printConverters(const char *pname, const char *lookfor, int canon)
 {
     UErrorCode err = U_ZERO_ERROR;
-    const char *lookfor = 0;
 
     int32_t num;
     uint16_t num_stds;
     const char **stds;
 
-    if (defonly) {
-
-        /* Find the name of the default converter, and either print it,
-           or find its real name (in case the function returns an alias)
-           and save it for later to recognize the real entry. */
-
-        lookfor = ucnv_getDefaultName();
+    if (lookfor) {
         if (!canon) {
             printf("%s\n", lookfor);
             return 0;
         } else {
+            /* We've done that already except for the default name. Oh well. */
+
             const char *truename = ucnv_getAlias(lookfor, 0, &err);
             if (U_SUCCESS(err)) {
                 lookfor = truename;
@@ -422,7 +417,8 @@ int main(int argc, char** argv)
 
     const char *pname = *argv;
 
-    int printConvs = 0, printDef = 0, printCanon = 0;
+    int printConvs = 0, printCanon = 0;
+    const char *printName = 0;
 
     // First, get the arguments from command-line
     // to know the codepages to convert between
@@ -445,8 +441,23 @@ int main(int argc, char** argv)
         {
             printConvs = 1;
         }
-        else if (strcmp("--default-code", *iter) == 0) {
-            printDef = 1;
+        else if (strcmp("--default-code", *iter) == 0)
+        {
+            printName = ucnv_getDefaultName();
+        }
+        else if (strcmp("--list-code", *iter) == 0) {
+            iter++;
+            if (iter!=end) {
+                UErrorCode e = U_ZERO_ERROR;
+                printName = ucnv_getAlias(*iter, 0, &e);
+                if (U_FAILURE(e)) {
+                    UnicodeString str(*iter);
+                    initMsg(pname);
+                    u_wmsg("noSuchCodeset", str.getBuffer());
+                    return 2;
+                }
+            }
+            else usage(pname, 1);
         }
         else if (strcmp("--canon", *iter) == 0) {
             printCanon = 1;
@@ -464,8 +475,8 @@ int main(int argc, char** argv)
         }
     }
 
-    if (printConvs || printDef) {
-        return printConverters(pname, printDef, printCanon) ? 2 : 0;
+    if (printConvs || printName) {
+        return printConverters(pname, printName, printCanon) ? 2 : 0;
     }
 
     if (fromcpage==0 && tocpage==0)
