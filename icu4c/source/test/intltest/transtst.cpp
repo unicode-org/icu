@@ -1530,6 +1530,18 @@ void TransliteratorTest::TestQuantifier() {
     expect("q(ab)* > '(' $1 ')';",
            "qa qab qaba qababc",
            "()a (ab) (ab)a (abab)c");
+
+    // 'foo'+ and 'foo'* -- the quantifier should apply to the entire
+    // quoted string
+    expect("'ab'+ > x;",
+           "bb ab ababb",
+           "bb x xb");
+
+    // $foo+ and $foo* -- the quantifier should apply to the entire
+    // variable reference
+    expect("$var = ab; $var+ > x;",
+           "bb ab ababb",
+           "bb x xb");
 }
 
 //======================================================================
