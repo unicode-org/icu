@@ -141,11 +141,17 @@ void CanonicalIterator::reset() {
  */
 UnicodeString CanonicalIterator::next() {
     int32_t i = 0;
-    buffer.truncate(0); //buffer.setLength(0); // delete old contents
 
     if (done) {
       buffer.setToBogus();
       return buffer;
+    }
+
+    // delete old contents
+    if(buffer.isBogus()) {
+        buffer.setTo((UChar32)-1); // un-bogus the buffer
+    } else {
+        buffer.truncate(0); // keep the internal array allocated
     }
 
     // construct return value
@@ -661,7 +667,7 @@ Hashtable *CanonicalIterator::extract(UChar32 comp, const UChar *segment, int32_
           return 0;
       }
       result->setValueDeleter(uhash_deleteUnicodeString);
-      result->put("", new UnicodeString(""), status);
+      result->put(UnicodeString(), new UnicodeString(), status);
       return result; // succeed, but no remainder
     }
 
