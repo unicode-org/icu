@@ -28,6 +28,7 @@
 #define __USET_H__
 
 #include "unicode/utypes.h"
+#include "unicode/uchar.h"
 
 #ifndef UCNV_H
 struct USet;
@@ -155,6 +156,18 @@ U_STABLE void U_EXPORT2
 uset_close(USet* set);
 
 /**
+ * Causes the USet object to represent the range <code>start - end</code>.
+ * If <code>start > end</code> then this USet is set to an empty range.
+ * @param set the object to set to the given range
+ * @param start first character in the set, inclusive
+ * @param end last character in the set, inclusive
+ * @draft ICU 3.2
+ */
+U_DRAFT void U_EXPORT2
+uset_set(USet* set,
+         UChar32 start, UChar32 end);
+
+/**
  * Modifies the set to represent the set specified by the given
  * pattern. See the UnicodeSet class description for the syntax of 
  * the pattern language. See also the User Guide chapter about UnicodeSet.
@@ -179,6 +192,83 @@ uset_applyPattern(USet *set,
                   const UChar *pattern, int32_t patternLength,
                   uint32_t options,
                   UErrorCode *status);
+
+/**
+ * Modifies the set to contain those code points which have the given value
+ * for the given binary or enumerated property, as returned by
+ * u_getIntPropertyValue.  Prior contents of this set are lost.
+ *
+ * @param set the object to contain the code points defined by the property
+ *
+ * @param prop a property in the range UCHAR_BIN_START..UCHAR_BIN_LIMIT-1
+ * or UCHAR_INT_START..UCHAR_INT_LIMIT-1
+ * or UCHAR_MASK_START..UCHAR_MASK_LIMIT-1.
+ *
+ * @param value a value in the range u_getIntPropertyMinValue(prop)..
+ * u_getIntPropertyMaxValue(prop), with one exception.  If prop is
+ * UCHAR_GENERAL_CATEGORY_MASK, then value should not be a UCharCategory, but
+ * rather a mask value produced by U_GET_GC_MASK().  This allows grouped
+ * categories such as [:L:] to be represented.
+ *
+ * @param ec error code input/output parameter
+ *
+ * @draft ICU 3.2
+ */
+U_DRAFT void U_EXPORT2
+uset_applyIntPropertyValue(USet* set,
+                           UProperty prop, int32_t value, UErrorCode* ec);
+
+/**
+ * Modifies the set to contain those code points which have the
+ * given value for the given property.  Prior contents of this
+ * set are lost.
+ *
+ * @param set the object to contain the code points defined by the given
+ * property and value alias
+ *
+ * @param prop a string specifying a property alias, either short or long.
+ * The name is matched loosely.  See PropertyAliases.txt for names and a
+ * description of loose matching.  If the value string is empty, then this
+ * string is interpreted as either a General_Category value alias, a Script
+ * value alias, a binary property alias, or a special ID.  Special IDs are
+ * matched loosely and correspond to the following sets:
+ *
+ * "ANY" = [\\u0000-\\U0010FFFF],
+ * "ASCII" = [\\u0000-\\u007F].
+ *
+ * @param propLength the length of the prop, or -1 if NULL
+ *
+ * @param value a string specifying a value alias, either short or long.
+ * The name is matched loosely.  See PropertyValueAliases.txt for names
+ * and a description of loose matching.  In addition to aliases listed,
+ * numeric values and canonical combining classes may be expressed
+ * numerically, e.g., ("nv", "0.5") or ("ccc", "220").  The value string
+ * may also be empty.
+ *
+ * @param valueLength the length of the value, or -1 if NULL
+ *
+ * @param ec error code input/output parameter
+ *
+ * @draft ICU 3.2
+ */
+U_DRAFT void U_EXPORT2
+uset_applyPropertyAlias(USet* set,
+                        const UChar *prop, int32_t propLength,
+                        const UChar *value, int32_t valueLength,
+                        UErrorCode* ec);
+
+/**
+ * Return true if the given position, in the given pattern, appears
+ * to be the start of a UnicodeSet pattern.
+ *
+ * @param pattern a string specifying the pattern
+ * @param patternLength the length of the pattern, or -1 if NULL
+ * @param pos the given position
+ * @draft ICU 3.2
+ */
+U_DRAFT UBool U_EXPORT2
+uset_resemblesPattern(const UChar *pattern, int32_t patternLength,
+                      int32_t pos);
 
 /**
  * Returns a string representation of this set.  If the result of
@@ -280,6 +370,59 @@ U_STABLE void U_EXPORT2
 uset_removeString(USet* set, const UChar* str, int32_t strLen);
 
 /**
+ * Removes from this set all of its elements that are contained in the
+ * specified set.  This operation effectively modifies this
+ * set so that its value is the <i>asymmetric set difference</i> of
+ * the two sets.
+ * @param set the object from which the elements are to be removed
+ * @param remove the object that defines which elements will be
+ * removed from this set
+ * @draft ICU 3.2
+ */
+U_DRAFT void U_EXPORT2
+uset_removeAll(USet* set, const USet* remove);
+
+/**
+ * Retain only the elements in this set that are contained in the
+ * specified range.  If <code>start > end</code> then an empty range is
+ * retained, leaving the set empty.  This is equivalent to
+ * a boolean logic AND, or a set INTERSECTION.
+ *
+ * @param set the object for which to retain only the specified range
+ * @param start first character, inclusive, of range to be retained
+ * to this set.
+ * @param end last character, inclusive, of range to be retained
+ * to this set.
+ * @draft ICU 3.2
+ */
+U_DRAFT void U_EXPORT2
+uset_retain(USet* set, UChar32 start, UChar32 end);
+
+/**
+ * Retains only the elements in this set that are contained in the
+ * specified set.  In other words, removes from this set all of
+ * its elements that are not contained in the specified set.  This
+ * operation effectively modifies this set so that its value is
+ * the <i>intersection</i> of the two sets.
+ *
+ * @param set the object on which to perform the retain
+ * @param retain set that defines which elements this set will retain
+ * @draft ICU 3.2
+ */
+U_DRAFT void U_EXPORT2
+uset_retainAll(USet* set, const USet* retain);
+
+/**
+ * Reallocate this objects internal structures to take up the least
+ * possible space, without changing this object's value.
+ *
+ * @param set the object on which to perfrom the compact
+ * @draft ICU 3.2
+ */
+U_DRAFT void U_EXPORT2
+uset_compact(USet* set);
+
+/**
  * Inverts this set.  This operation modifies this set so that
  * its value is its complement.  This operation does not affect
  * the multicharacter strings, if any.
@@ -288,6 +431,19 @@ uset_removeString(USet* set, const UChar* str, int32_t strLen);
  */
 U_STABLE void U_EXPORT2
 uset_complement(USet* set);
+
+/**
+ * Complements in this set all elements contained in the specified
+ * set.  Any character in the other set will be removed if it is
+ * in this set, or will be added if it is not in this set.
+ *
+ * @param set the set with which to complement
+ * @param complement set that defines which elements will be xor'ed
+ * from this set.
+ * @draft ICU 3.2
+ */
+U_DRAFT void U_EXPORT2
+uset_complementAll(USet* set, const USet* complement);
 
 /**
  * Removes all of the elements from this set.  This set will be
@@ -342,6 +498,32 @@ U_STABLE UBool U_EXPORT2
 uset_containsString(const USet* set, const UChar* str, int32_t strLen);
 
 /**
+ * Returns the index of the given character within this set, where
+ * the set is ordered by ascending code point.  If the character
+ * is not in this set, return -1.  The inverse of this method is
+ * <code>charAt()</code>.
+ * @param set the set
+ * @param c the character to obtain the index for
+ * @return an index from 0..size()-1, or -1
+ * @draft ICU 3.2
+ */
+U_DRAFT int32_t U_EXPORT2
+uset_indexOf(const USet* set, UChar32 c);
+
+/**
+ * Returns the character at the given index within this set, where
+ * the set is ordered by ascending code point.  If the index is
+ * out of range, return (UChar32)-1.  The inverse of this method is
+ * <code>indexOf()</code>.
+ * @param set the set
+ * @param index an index from 0..size()-1 to obtain the char for
+ * @return the character at the given index, or (UChar32)-1.
+ * @draft ICU 3.2
+ */
+U_DRAFT UChar32 U_EXPORT2
+uset_charAt(const USet* set, int32_t index);
+
+/**
  * Returns the number of characters and strings contained in the given
  * USet.
  * @param set the set
@@ -387,24 +569,48 @@ uset_getItem(const USet* set, int32_t itemIndex,
              UChar* str, int32_t strCapacity,
              UErrorCode* ec);
 
-/* TODO: propose the following to the list and make them public */
-
 /**
- * @internal
+ * Returns true if set1 contains all the characters and strings
+ * of set2. It answers the question, 'Is set1 a subset of set2?'
+ * @param set1 set to be checked for containment
+ * @param set2 set to be checked for containment
+ * @return true if the test condition is met
+ * @draft ICU 3.2
  */
-U_INTERNAL UBool U_EXPORT2
+U_DRAFT UBool U_EXPORT2
 uset_containsAll(const USet* set1, const USet* set2);
 
 /**
- * @internal
+ * Returns true if set1 contains none of the characters and strings
+ * of set2. It answers the question, 'Is set1 a disjoint set of set2?'
+ * @param set1 set to be checked for containment
+ * @param set2 set to be checked for containment
+ * @return true if the test condition is met
+ * @draft ICU 3.2
  */
-U_INTERNAL UBool U_EXPORT2
+U_DRAFT UBool U_EXPORT2
 uset_containsNone(const USet* set1, const USet* set2);
 
 /**
- * @internal
+ * Returns true if set1 contains some of the characters and strings
+ * of set2. It answers the question, 'Does set1 and set2 have an intersection?'
+ * @param set1 set to be checked for containment
+ * @param set2 set to be checked for containment
+ * @return true if the test condition is met
+ * @draft ICU 3.2
  */
-U_INTERNAL UBool U_EXPORT2
+U_DRAFT UBool U_EXPORT2
+uset_containsSome(const USet* set1, const USet* set2);
+
+/**
+ * Returns true if set1 contains all of the characters and strings
+ * of set2, and vis versa. It answers the question, 'Is set1 equal to set2?'
+ * @param set1 set to be checked for containment
+ * @param set2 set to be checked for containment
+ * @return true if the test condition is met
+ * @draft ICU 3.2
+ */
+U_DRAFT UBool U_EXPORT2
 uset_equals(const USet* set1, const USet* set2);
 
 /*********************************************************************

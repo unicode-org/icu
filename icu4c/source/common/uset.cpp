@@ -79,6 +79,12 @@ uset_close(USet* set) {
     delete (UnicodeSet*) set;
 }
 
+U_CAPI void U_EXPORT2
+uset_set(USet* set,
+	 UChar32 start, UChar32 end) {
+    ((UnicodeSet*) set)->set(start, end);
+}
+
 U_CAPI int32_t U_EXPORT2 
 uset_applyPattern(USet *set,
                   const UChar *pattern, int32_t patternLength,
@@ -106,6 +112,35 @@ uset_applyPattern(USet *set,
     ((UnicodeSet*) set)->applyPattern(pat, pos, options, NULL, *status);
     
     return pos.getIndex();
+}
+
+U_CAPI void U_EXPORT2
+uset_applyIntPropertyValue(USet* set,
+			   UProperty prop, int32_t value, UErrorCode* ec) {
+    ((UnicodeSet*) set)->applyIntPropertyValue(prop, value, *ec);
+}
+
+U_CAPI void U_EXPORT2
+uset_applyPropertyAlias(USet* set,
+                        const UChar *prop, int32_t propLength,
+                        const UChar *value, int32_t valueLength,
+			UErrorCode* ec) {
+
+    UnicodeString p(prop, propLength);
+    UnicodeString v(value, valueLength);
+
+    ((UnicodeSet*) set)->applyPropertyAlias(p, v, *ec);
+}
+
+U_CAPI UBool U_EXPORT2
+uset_resemblesPattern(const UChar *pattern, int32_t patternLength,
+                      int32_t pos) {
+
+    UnicodeString pat(pattern, patternLength);
+
+    return ((pos+1) < pat.length() &&
+            pat.charAt(pos) == (UChar)91/*[*/) ||
+            UnicodeSet::resemblesPattern(pat, pos);
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -163,8 +198,33 @@ uset_removeString(USet* set, const UChar* str, int32_t strLen) {
 }
 
 U_CAPI void U_EXPORT2
+uset_removeAll(USet* set, const USet* remove) {
+    ((UnicodeSet*) set)->removeAll(*(const UnicodeSet*)remove);
+}
+
+U_CAPI void U_EXPORT2
+uset_retain(USet* set, UChar32 start, UChar32 end) {
+    ((UnicodeSet*) set)->retain(start, end);
+}
+
+U_CAPI void U_EXPORT2
+uset_retainAll(USet* set, const USet* retain) {
+    ((UnicodeSet*) set)->retainAll(*(const UnicodeSet*)retain);
+}
+
+U_CAPI void U_EXPORT2
+uset_compact(USet* set) {
+    ((UnicodeSet*) set)->compact();
+}
+
+U_CAPI void U_EXPORT2
 uset_complement(USet* set) {
     ((UnicodeSet*) set)->complement();
+}
+
+U_CAPI void U_EXPORT2
+uset_complementAll(USet* set, const USet* complement) {
+    ((UnicodeSet*) set)->complementAll(*(const UnicodeSet*)complement);
 }
 
 U_CAPI void U_EXPORT2
@@ -203,10 +263,24 @@ uset_containsNone(const USet* set1, const USet* set2) {
     return ((const UnicodeSet*) set1)->containsNone(* (const UnicodeSet*) set2);
 }
 
+U_CAPI UBool U_EXPORT2
+uset_containsSome(const USet* set1, const USet* set2) {
+    return ((const UnicodeSet*) set1)->containsSome(* (const UnicodeSet*) set2);
+}
 
 U_CAPI UBool U_EXPORT2
 uset_equals(const USet* set1, const USet* set2) {
     return *(const UnicodeSet*)set1 == *(const UnicodeSet*)set2;
+}
+
+U_CAPI int32_t U_EXPORT2
+uset_indexOf(const USet* set, UChar32 c) {
+    return ((UnicodeSet*) set)->indexOf(c);
+}
+
+U_CAPI UChar32 U_EXPORT2
+uset_charAt(const USet* set, int32_t index) {
+    return ((UnicodeSet*) set)->charAt(index);
 }
 
 U_CAPI int32_t U_EXPORT2
