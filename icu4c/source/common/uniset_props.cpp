@@ -30,6 +30,7 @@
 #include "util.h"
 #include "uvector.h"
 #include "uprops.h"
+#include "propname.h"
 #include "charstr.h"
 #include "ustrfmt.h"
 #include "mutex.h"
