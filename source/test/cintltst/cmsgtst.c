@@ -249,6 +249,9 @@ static void TestSampleMessageFormat()
     int32_t resultLengthOut, resultlength;
     UDate d = 837039928046.0;
     UErrorCode status = U_ZERO_ERROR;
+
+    ctest_setTimeZone(NULL, &status);
+
     str=(UChar*)malloc(sizeof(UChar) * 15);
     u_uastrcpy(str, "abc");    
     
@@ -333,6 +336,8 @@ static void TestSampleMessageFormat()
     
     free(result);
     free(str);
+
+    ctest_resetTimeZone();
 }
 
 /* Test umsg_format() and umsg_parse() , format and parse sequence and round trip */
@@ -885,6 +890,8 @@ static void TestJ904(void) {
     const char* PAT = "Number {1,number,#0.000}, String {0}, Date {2,date,12:mm:ss.SSS}";
     const char* EXP = "Number 0,143, String foo, Date 12:34:56.789";
 
+    ctest_setTimeZone(NULL, &status);
+
     u_uastrcpy(string, "foo");
     /* Slight hack here -- instead of date pattern HH:mm:ss.SSS, use
      * 12:mm:ss.SSS.  Why?  So this test generates the same output --
@@ -908,6 +915,8 @@ static void TestJ904(void) {
     } else {
         log_err("FAIL: got \"%s\", expected \"%s\"\n", cresult, EXP);
     }
+
+    ctest_resetTimeZone();
 }
 
 static void OpenMessageFormatTest(void)
