@@ -51,9 +51,9 @@ Greek-Latin:file:Transliterator_Greek_Latin.txt:UTF8:FORWARD
 Latin-el:file:Transliterator_el_Latin.txt:UTF8:REVERSE
 el-Latin:file:Transliterator_el_Latin.txt:UTF8:FORWARD
 
-LowerLatin-Jamo:internal:Transliterator_Latin_Jamo.utf8.txt:UTF8:FORWARD
-Latin-Jamo:alias:Any-Lower;LowerLatin-Jamo
-Jamo-Latin:file:Transliterator_Latin_Jamo.utf8.txt:UTF8:REVERSE
+LowerLatin-Jamo:internal:Transliterator_Latin_Jamo.txt:UTF8:FORWARD
+Latin-Jamo:alias:[:Latin:]Any-Lower;LowerLatin-Jamo
+Jamo-Latin:file:Transliterator_Latin_Jamo.txt:UTF8:REVERSE
 
 Latin-Katakana:file:Transliterator_Latin_Katakana.txt:UTF8:FORWARD
 Katakana-Latin:file:Transliterator_Latin_Katakana.txt:UTF8:REVERSE
@@ -78,8 +78,8 @@ Kanji-OnRomaji:file:Transliterator_Kanji_OnRomaji.utf8.txt:UTF8:FORWARD
 
 # Compound rules
 
-Latin-Hangul:alias:[\p{Latin}];Latin-Jamo;[\u1100-\u11FF]NFC
-Hangul-Latin:alias:[\uAC00-\uD7AF];NFD;Jamo-Latin
+Latin-Hangul:alias:[\p{Latin}];NFD;Latin-Jamo;NFC
+Hangul-Latin:alias:[:Hangul:];NFD;Jamo-Latin
 
 # Inter-Indic composed rules
 Latin-InterIndic:internal:Transliterator_Latin_InterIndic.txt:UTF8:FORWARD
