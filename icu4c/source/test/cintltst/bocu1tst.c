@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2002, International Business Machines
+*   Copyright (C) 2002-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -66,7 +66,9 @@
 #define BOCU1_MIN               0x21
 #define BOCU1_MIDDLE            0x90
 #define BOCU1_MAX_LEAD          0xfe
-#define BOCU1_MAX_TRAIL         0xff
+
+/* add the L suffix to make computations with BOCU1_MAX_TRAIL work on 16-bit compilers */
+#define BOCU1_MAX_TRAIL         0xffL
 #define BOCU1_RESET             0xff
 
 /* number of lead bytes */
@@ -258,8 +260,8 @@ bocu1Prev(int32_t c) {
         /* CJK Unihan */
         return 0x4e00-BOCU1_REACH_NEG_2;
     } else if(0xac00<=c && c<=0xd7a3) {
-        /* Korean Hangul */
-        return (0xd7a3+0xac00)/2;
+        /* Korean Hangul (cast to int32_t to avoid wraparound on 16-bit compilers) */
+        return ((int32_t)0xd7a3+(int32_t)0xac00)/2;
     } else {
         /* mostly small scripts */
         return (c&~0x7f)+BOCU1_ASCII_PREV;
