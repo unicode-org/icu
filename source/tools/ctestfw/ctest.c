@@ -554,9 +554,13 @@ int processArgs(const TestNode* root,
         {
             doList = TRUE;
         }
+        else if (strcmp( argv[i], "-e1") == 0)
+        {
+            QUICK = -1;
+        }
         else if (strcmp( argv[i], "-e") ==0)
         {
-            QUICK = FALSE;
+            QUICK = 0;
         }
         else if (strcmp( argv[i], "-w") ==0)
         {
