@@ -1,4 +1,5 @@
 icu4c/*-stamp
+icu4c/bin
 icu4c/build
 icu4c/data/*.cnv
 icu4c/data/*.dat
@@ -31,10 +32,13 @@ icu4c/debian/libicu[0-9]*.p*
 icu4c/debian/postinst
 icu4c/debian/prerm
 icu4c/debian/tmp
+icu4c/include
+icu4c/lib
 icu4c/source/Makefile
 icu4c/source/README
 icu4c/source/common/*.ao
 icu4c/source/common/*.d
+icu4c/source/common/*.plg
 icu4c/source/common/Debug
 icu4c/source/common/Makefile
 icu4c/source/common/Release
