@@ -56,22 +56,17 @@ BreakIterator::createWordInstance(const Locale& key, UErrorCode& status)
     UDataMemory* file = udata_open(NULL, "brk", filename, &status);
 
     if (!U_FAILURE(status)) {
-        const void* image = udata_getMemory(file);
 
-        if (image != NULL) {
             if(!uprv_strcmp(filename, "word_th")) {
                 filename = "thaidict.brk";
 
-                result = new DictionaryBasedBreakIterator(image, (char *)filename, status);
+                result = new DictionaryBasedBreakIterator(file, (char *)filename, status);
             }
             else {
-                result = new RuleBasedBreakIterator(image);
+	      result = new RuleBasedBreakIterator(file);
             }
-        }
     }
     
-    //udata_close(file); // This prevents a leak, but it should be checked whether it is harmful
-
     return result;
 }
 
@@ -97,21 +92,17 @@ BreakIterator::createLineInstance(const Locale& key, UErrorCode& status)
     UDataMemory* file = udata_open(NULL, "brk", filename, &status);
 
     if (!U_FAILURE(status)) {
-        const void* image = udata_getMemory(file);
 
-        if (image != NULL) {
           if (!uprv_strcmp(key.getLanguage(), "th")) {
                 const char* dataDir = u_getDataDirectory();
                 filename = "thaidict.brk";
-                result = new DictionaryBasedBreakIterator(image, (char *)filename, status);
+                result = new DictionaryBasedBreakIterator(file, (char *)filename, status);
             }
             else {
-                result = new RuleBasedBreakIterator(image);
+                result = new RuleBasedBreakIterator(file);
             }
-        }
     }
     
-    //udata_close(file); // This prevents a leak, but it should be checked whether it is harmful
 
     return result;
 }
@@ -132,14 +123,9 @@ BreakIterator::createCharacterInstance(const Locale& key, UErrorCode& status)
     UDataMemory* file = udata_open(NULL, "brk", filename, &status);
 
     if (!U_FAILURE(status)) {
-        const void* image = udata_getMemory(file);
-
-        if (image != NULL) {
-            result = new RuleBasedBreakIterator(image);
-        }
+	  result = new RuleBasedBreakIterator(file);
     }
     
-    //udata_close(file); // This prevents a leak, but it should be checked whether it is harmful
 
     return result;
 }
@@ -160,15 +146,9 @@ BreakIterator::createSentenceInstance(const Locale& key, UErrorCode& status)
     UDataMemory* file = udata_open(NULL, "brk", filename, &status);
 
     if (!U_FAILURE(status)) {
-        const void* image = udata_getMemory(file);
-
-        if (image != NULL) {
-            result = new RuleBasedBreakIterator(image);
-        }
+	  result = new RuleBasedBreakIterator(file);
     }
     
-    //udata_close(file); // This prevents a leak, but it should be checked whether it is harmful
-
     return result;
 }
 

@@ -12,6 +12,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/brkiter.h"
+#include "unicode/udata.h"
 
 class RuleBasedBreakIteratorTables;
 class BreakIterator;
@@ -226,7 +227,7 @@ private:
 // This constructor uses the udata interface to create a BreakIterator whose
 // internal tables live in a memory-mapped file.  "image" is a pointer to the
 // beginning of that file.
-RuleBasedBreakIterator(const void* image);
+RuleBasedBreakIterator(UDataMemory* image);
 
  public:
     /**

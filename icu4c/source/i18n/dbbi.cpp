@@ -19,10 +19,10 @@ char DictionaryBasedBreakIterator::fgClassID = 0;
 // constructors
 //=======================================================================
 
-DictionaryBasedBreakIterator::DictionaryBasedBreakIterator(const void* tablesImage,
+DictionaryBasedBreakIterator::DictionaryBasedBreakIterator(UDataMemory* tablesImage,
                                                            char* dictionaryFilename, 
                                                            UErrorCode& status)
-: RuleBasedBreakIterator((const void*)NULL),
+: RuleBasedBreakIterator((UDataMemory*)NULL),
   dictionaryCharCount(0),
   cachedBreakPositions(NULL),
   numCachedBreakPositions(0),

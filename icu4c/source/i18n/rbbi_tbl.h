@@ -13,6 +13,7 @@
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 #include "unicode/brkiter.h"
+#include "unicode/udata.h"
 #include "filestrm.h"
 
 U_CDECL_BEGIN
@@ -99,7 +100,8 @@ private:
 protected:
     RuleBasedBreakIteratorTables();
     
-    RuleBasedBreakIteratorTables(const void* image);
+    RuleBasedBreakIteratorTables(UDataMemory* memory);
+    UDataMemory *fMemory;
 
 private:
     /**
