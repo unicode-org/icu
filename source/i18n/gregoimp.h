@@ -14,7 +14,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/ures.h"
-#include "unicode/resbund.h"
+#include "unicode/locid.h"
 
 U_NAMESPACE_BEGIN
 

@@ -28,7 +28,6 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "unicode/resbund.h"
 #include "unicode/gregocal.h"
 #include "gregoimp.h"
 #include "buddhcal.h"
