@@ -198,11 +198,11 @@ AC_DEFUN(AC_CHECK_STRICT_COMPILE,
 [
     AC_MSG_CHECKING([whether strict compiling is on])
     AC_ARG_ENABLE(strict,[  --enable-strict         compile with strict compiler options [default=no]], [
-    	if test "$enableval" = no
-    	then
-	    ac_use_strict_options=no
+        if test "$enableval" = no
+        then
+            ac_use_strict_options=no
         else
-	    ac_use_strict_options=yes
+            ac_use_strict_options=yes
         fi
       ], [ac_use_strict_options=no])
     AC_MSG_RESULT($ac_use_strict_options)
@@ -225,6 +225,14 @@ AC_DEFUN(AC_CHECK_STRICT_COMPILE,
                 CXXFLAGS="$CXXFLAGS -D__STDC__=0";;
             esac
         fi
+        case "${host}" in
+        *-*-cygwin)
+            if test `cl /? 2>&1 | head -c9` = "Microsoft"
+            then
+                CFLAGS="$CFLAGS /W4"
+                CXXFLAGS="$CXXFLAGS /W4"
+            fi
+        esac
     fi
 ])
 
