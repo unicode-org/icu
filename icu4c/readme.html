@@ -230,6 +230,39 @@
     "http://oss.software.ibm.com/icu/download/2.8/index.html">ICU 2.8 download
     page</a>.</p>
 
+    <h3><a name="News_Locale">Locale Identifier Changes</a></h3>
+
+    <p>The ICU locale identifier format has recently changed. In order to
+    improve support for RFC 3066 identifiers and to support keyword
+    identifiers, some minor breaking changes have been introduced. When your
+    application is working with POSIX locale identifiers or .NET locale
+    identifiers, you should use <code><a href=
+    "http://oss.software.ibm.com/icu/apiref/uloc_8h.html">uloc_canonicalize</a>()</code>
+    to convert it to an ICU locale identifier. It was an undocumented feature
+    that you could pass a POSIX locale to ICU, and ICU would convert it for you
+    automatically. For example, if you used @EURO or @PREEURO to identify
+    certain currencies, you should now be using the "@currency=" keyword for
+    the locale identifiers. If you use the <code>uloc_canonicalize()</code>
+    function, it will convert the @PREEURO variants to the proper ICU locale
+    identifier. For example, it will convert "fr-fr@PREEURO" to
+    "fr_FR@currency=FRF". More information about keywords can be found in the
+    <a href="http://oss.software.ibm.com/icu/userguide/locale.html">Locale
+    Section</a> of the User's Guide and <a href=
+    "http://www.openi18n.org/specs/ldml/1.0/ldml-spec.htm">on the OpenI18N
+    site</a>.</p>
+
+    <p>Some ISO 15924 script codes are used in some RFC 3066 language tags.
+    This is especially helpful when you need to differentiate cases where a
+    language can be written with more than one script. Since ICU now supports
+    ISO 15924 script codes in the locale identifier, you can now specify
+    locales like "zh_Hant" to specify Traditional Chinese. Previously, people
+    had to use "zh_TW" to specify Traditional Chinese, which isn't quite
+    correct because the locale identifier is specifying the language of a
+    region and not the type of language. The current locale identifiers, like
+    en_US, still work, and do not require any changes in your code. Future
+    versions of ICU will move the data into the proper locale resources, and
+    the locale infrastructure will be improved.</p>
+
     <h3><a name="News_Library_Names">Static Library Names and AIX
     linking</a></h3>
 
