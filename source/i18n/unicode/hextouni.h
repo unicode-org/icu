@@ -24,8 +24,8 @@ U_NAMESPACE_BEGIN
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: hextouni.h,v $ $Revision: 1.11 $ $Date: 2001/10/11 23:54:55 $
- * @draft
+ * @version $RCSfile: hextouni.h,v $ $Revision: 1.12 $ $Date: 2001/11/14 00:16:29 $
+ * @stable
  */
 class U_I18N_API HexToUnicodeTransliterator : public Transliterator {
 
@@ -69,7 +69,7 @@ public:
      * Constructs a transliterator that recognizes the standard
      * prefixes "&#92;u", "&#92;U", "u+", and "U+", each with no
      * suffix.
-     * @draft
+     * @stable
      */
     HexToUnicodeTransliterator(UnicodeFilter* adoptedFilter = 0);
 
@@ -91,25 +91,25 @@ public:
 
     /**
      * Destructor.
-     * @draft
+     * @stable
      */
     virtual ~HexToUnicodeTransliterator();
 
     /**
      * Copy constructor.
-     * @draft
+     * @stable
      */
     HexToUnicodeTransliterator(const HexToUnicodeTransliterator&);
 
     /**
      * Assignment operator.
-     * @draft
+     * @stable
      */
     HexToUnicodeTransliterator& operator=(const HexToUnicodeTransliterator&);
 
     /**
      * Transliterator API.
-     * @draft
+     * @stable
      */
     Transliterator* clone(void) const;
 
@@ -148,7 +148,7 @@ public:
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
-     * @draft
+     * @stable
      */
     virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
                                      UBool isIncremental) const;

@@ -17,6 +17,7 @@ U_NAMESPACE_BEGIN
 /**
  * A transliterator that performs name to character mapping.
  * @author Alan Liu
+ * @draft ICU 2.0
  */
 class U_I18N_API NameUnicodeTransliterator : public Transliterator {
 
@@ -27,6 +28,7 @@ class U_I18N_API NameUnicodeTransliterator : public Transliterator {
 
     /**
      * Constructs a transliterator.
+     * @draft ICU 2.0
      */
     NameUnicodeTransliterator(UChar32 openDelimiter, UChar32 closeDelimiter,
                               UnicodeFilter* adoptedFilter = 0);
@@ -34,26 +36,31 @@ class U_I18N_API NameUnicodeTransliterator : public Transliterator {
     /**
      * Constructs a transliterator with the default delimiters '{' and
      * '}'.
+     * @draft ICU 2.0
      */
     NameUnicodeTransliterator(UnicodeFilter* adoptedFilter = 0);
 
     /**
      * Destructor.
+     * @draft ICU 2.0
      */
     virtual ~NameUnicodeTransliterator();
 
     /**
      * Copy constructor.
+     * @draft ICU 2.0
      */
     NameUnicodeTransliterator(const NameUnicodeTransliterator&);
 
     /**
      * Assignment operator.
+     * @draft ICU 2.0
      */
     NameUnicodeTransliterator& operator=(const NameUnicodeTransliterator&);
 
     /**
      * Transliterator API.
+     * @draft ICU 2.0
      */
     Transliterator* clone(void) const;
 
@@ -61,7 +68,7 @@ class U_I18N_API NameUnicodeTransliterator : public Transliterator {
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
-     * @draft
+     * @draft ICU 2.0
      */
     virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
                                      UBool isIncremental) const;

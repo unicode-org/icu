@@ -277,7 +277,7 @@ class TransliterationRuleData;
  * rule <em>masks</em> the second rule. </p>
  * 
  * @author Alan Liu
- * @draft
+ * @stable
  */
 class U_I18N_API RuleBasedTransliterator : public Transliterator {
 
@@ -300,7 +300,7 @@ public:
      * @param direction either FORWARD or REVERSE.
      * @exception IllegalArgumentException if rules are malformed
      * or direction is invalid.
-     * @draft
+     * @stable
      */
     RuleBasedTransliterator(const UnicodeString& id,
                             const UnicodeString& rules,
@@ -324,7 +324,7 @@ public:
 
     /**
      * Covenience constructor with no filter.
-     * @draft
+     * @stable
      */
     RuleBasedTransliterator(const UnicodeString& id,
                             const UnicodeString& rules,
@@ -333,7 +333,7 @@ public:
 
     /**
      * Covenience constructor with no filter and FORWARD direction.
-     * @draft
+     * @stable
      */
     RuleBasedTransliterator(const UnicodeString& id,
                             const UnicodeString& rules,
@@ -341,7 +341,7 @@ public:
 
     /**
      * Covenience constructor with FORWARD direction.
-     * @draft
+     * @stable
      */
     RuleBasedTransliterator(const UnicodeString& id,
                             const UnicodeString& rules,
@@ -350,7 +350,7 @@ public:
 
     /**
      * Covenience constructor.
-     * @draft
+     * @stable
      */
     RuleBasedTransliterator(const UnicodeString& id,
                             const TransliterationRuleData* theData,
@@ -371,7 +371,7 @@ public:
 
     /**
      * Copy constructor.
-     * @draft
+     * @stable
      */
     RuleBasedTransliterator(const RuleBasedTransliterator&);
 
@@ -379,13 +379,13 @@ public:
 
     /**
      * Implement Transliterator API.
-     * @draft
+     * @stable
      */
     Transliterator* clone(void) const;
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
-     * @draft
+     * @stable
      */
     virtual void handleTransliterate(Replaceable& text, UTransPosition& offsets,
                                      UBool isIncremental) const;
