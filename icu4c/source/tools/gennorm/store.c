@@ -25,6 +25,7 @@
 #include "filestrm.h"
 #include "unicode/udata.h"
 #include "utrie.h"
+#include "uset.h"
 #include "unewdata.h"
 #include "unormimp.h"
 #include "gennorm.h"
@@ -179,6 +180,9 @@ typedef struct CombiningTriple {
 /* 15b in the combining index -> <=0x8000 uint16_t values in the combining table */
 static uint16_t combiningTable[0x8000];
 static uint16_t combiningTableTop=0;
+
+static uint16_t canonStartSets[_NORM_AUX_MAX_CANON_SET]={ 0 };
+static int32_t canonStartSetsTop=1;
 
 extern void
 init() {
@@ -781,7 +785,7 @@ setCompositionExclusion(uint32_t code) {
 static void
 setHangulJamoSpecials() {
     Norm *norm;
-    uint32_t c;
+    uint32_t c, hangul;
 
     /*
      * Hangul syllables are algorithmically decomposed into Jamos,
@@ -790,10 +794,15 @@ setHangulJamoSpecials() {
      */
 
     /* set Jamo L specials */
+    hangul=0xac00;
     for(c=0x1100; c<=0x1112; ++c) {
         norm=createNorm(c);
         norm->specialTag=_NORM_EXTRA_INDEX_TOP+_NORM_EXTRA_JAMO_L;
         norm->combiningFlags=1;
+
+        /* for each Jamo L create a set with its associated Hangul block */
+        norm->canonStart=uset_open(hangul, hangul+21*28);
+        hangul+=21*28;
     }
 
     /* set Jamo V specials */
@@ -801,6 +810,7 @@ setHangulJamoSpecials() {
         norm=createNorm(c);
         norm->specialTag=_NORM_EXTRA_INDEX_TOP+_NORM_EXTRA_JAMO_V;
         norm->combiningFlags=2;
+        norm->unsafeStart=TRUE;
     }
 
     /* set Jamo T specials */
@@ -808,6 +818,7 @@ setHangulJamoSpecials() {
         norm=createNorm(c);
         norm->specialTag=_NORM_EXTRA_INDEX_TOP+_NORM_EXTRA_JAMO_T;
         norm->combiningFlags=2;
+        norm->unsafeStart=TRUE;
     }
 
     /* set Hangul specials, precompacted */
@@ -916,6 +927,8 @@ static UBool combineAndQC[64]={ 0 };
 /*
  * canonically reorder the up to two decompositions
  * and store the leading and trailing combining classes accordingly
+ *
+ * also process canonical decompositions for canonical closure
  */
 static void
 postParseFn(void *context, uint32_t code, Norm *norm) {
@@ -941,7 +954,7 @@ postParseFn(void *context, uint32_t code, Norm *norm) {
         fprintf(stderr, "gennorm warning: U+%04lx has NFD[%d] NFKD[%d] but quick check 0x%02x\n", (long)code, norm->lenNFD, norm->lenNFKD, norm->qcFlags);
     }
 
-    /* ### see which combinations of combiningFlags and qcFlags are used for NFC/NFKC */
+    /* see which combinations of combiningFlags and qcFlags are used for NFC/NFKC */
     combineAndQC[(norm->qcFlags&0x33)|((norm->combiningFlags&3)<<2)]=1;
 
     if(norm->combiningFlags&1) {
@@ -963,6 +976,41 @@ postParseFn(void *context, uint32_t code, Norm *norm) {
     }
     if((norm->combiningFlags&3)==3 && beVerbose) {
         printf("U+%04lx combines both ways\n", (long)code);
+    }
+
+    /*
+     * process canonical decompositions for canonical closure
+     *
+     * in each canonical decomposition:
+     *   add the current character (code) to the set of canonical starters of its norm->nfd[0]
+     *   set the "unsafe starter" flag for each norm->nfd[1..]
+     */
+    length=norm->lenNFD;
+    if(length>0) {
+        Norm *otherNorm;
+        UChar32 c;
+        int32_t i;
+
+        /* nfd[0].canonStart.add(code) */
+        c=norm->nfd[0];
+        otherNorm=createNorm(c);
+        if(otherNorm->canonStart==NULL) {
+            otherNorm->canonStart=uset_open(code, code+1);
+            if(otherNorm->canonStart==NULL) {
+                fprintf(stderr, "gennorm error: out of memory in uset_open()\n");
+                exit(U_MEMORY_ALLOCATION_ERROR);
+            }
+        } else {
+            if(!uset_add(otherNorm->canonStart, code)) {
+                fprintf(stderr, "gennorm error: uset_add(setOf(U+%04x), U+%04x)\n", c, code);
+                exit(U_INTERNAL_PROGRAM_ERROR);
+            }
+        }
+
+        /* for(i=1..length-1) nfd[i].unsafeStart=TRUE */
+        for(i=1; i<length; ++i) {
+            createNorm(norm->nfd[i])->unsafeStart=TRUE;
+        }
     }
 }
 
@@ -1153,6 +1201,7 @@ makeAux() {
     Norm *norm;
     uint32_t *pData;
     int32_t i, length;
+    UErrorCode errorCode=U_ZERO_ERROR;
 
     pData=utrie_getData(&auxTrie, &length);
 
@@ -1165,6 +1214,23 @@ makeAux() {
         pData[i]=
             ((uint32_t)(norm->combiningFlags&0x80)<<(_NORM_AUX_COMP_EX_SHIFT-7))|
             (uint32_t)(norm->fncIndex<<_NORM_AUX_FNC_SHIFT);
+
+        if(norm->unsafeStart || norm->udataCC!=0) {
+            pData[i]|=_NORM_AUX_UNSAFE_MASK;
+        }
+
+        if(!uset_isEmpty(norm->canonStart)) {
+            pData[i]|=(uint32_t)canonStartSetsTop;
+            canonStartSetsTop+=
+                    uset_serialize(norm->canonStart,
+                            canonStartSets+canonStartSetsTop,
+                            _NORM_AUX_MAX_CANON_SET-canonStartSetsTop,
+                            &errorCode);
+            if(U_FAILURE(errorCode)) {
+                fprintf(stderr, "gennorm error: uset_serialize()->%s (canonStartSetsTop=%d)\n", u_errorName(errorCode), canonStartSetsTop);
+                exit(errorCode);
+            }
+        }
     }
 }
 
@@ -1357,13 +1423,19 @@ generateData(const char *dataDir) {
         combiningTable[combiningTableTop++]=0x1234; /* add one 16-bit word for an even number */
     }
 
+    /* pad canonStartSets to 4-alignment, too */
+    if(canonStartSetsTop&1) {
+        canonStartSets[canonStartSetsTop++]=0x1235;
+    }
+
     size=
         _NORM_INDEX_TOP*4+
         normTrieSize+
         extraMem->index*2+
         combiningTableTop*2+
         fcdTrieSize+
-        auxTrieSize;
+        auxTrieSize+
+        canonStartSetsTop*2;
 
     if(beVerbose) {
         printf("size of normalization trie              %5lu bytes\n", normTrieSize);
@@ -1372,6 +1444,7 @@ generateData(const char *dataDir) {
         printf("size of combining table                 %5lu uint16_t\n", combiningTableTop);
         printf("size of FCD trie                        %5lu bytes\n", fcdTrieSize);
         printf("size of auxiliary trie                  %5lu bytes\n", auxTrieSize);
+        printf("size of canonStartSets                  %5lu uint16_t\n", canonStartSetsTop);
         printf("size of " DATA_NAME "." DATA_TYPE " contents: %ld bytes\n", (long)size);
     }
 
@@ -1387,7 +1460,7 @@ generateData(const char *dataDir) {
 
     indexes[_NORM_INDEX_FCD_TRIE_SIZE]=fcdTrieSize;
     indexes[_NORM_INDEX_AUX_TRIE_SIZE]=auxTrieSize;
-    /* ### TODO indexes[_NORM_INDEX_UNICODE_SET_COUNT]=###; */
+    indexes[_NORM_INDEX_CANON_SET_COUNT]=canonStartSetsTop;
 
     /* write the data */
     pData=udata_create(dataDir, DATA_TYPE, DATA_NAME, &dataInfo,
@@ -1403,6 +1476,7 @@ generateData(const char *dataDir) {
     udata_writeBlock(pData, combiningTable, combiningTableTop*2);
     udata_writeBlock(pData, fcdTrieBlock, fcdTrieSize);
     udata_writeBlock(pData, auxTrieBlock, auxTrieSize);
+    udata_writeBlock(pData, canonStartSets, canonStartSetsTop*2);
 
     /* finish up */
     dataLength=udata_finish(pData, &errorCode);
@@ -1420,6 +1494,13 @@ generateData(const char *dataDir) {
 
 extern void
 cleanUpData(void) {
+    int32_t i, count;
+
+    count=(int32_t)normMem->index;
+    for(i=0; i<count; ++i) {
+        uset_close(norms[i].canonStart);
+    }
+
     utm_close(normMem);
     utm_close(utf32Mem);
     utm_close(extraMem);
