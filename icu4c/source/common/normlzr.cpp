@@ -637,7 +637,7 @@ Normalizer::decompose(const UnicodeString& source,
         return;
     }
     UBool     hangul = (options & IGNORE_HANGUL) == 0;
-    uint16_t  limit  = compat ? 0 : DecompData::MAX_COMPAT;
+    uint16_t  minDecomp = compat ? 0 : DecompData::MAX_COMPAT;
     UnicodeString buffer;
     int32_t i = 0, bufPtr = -1;
 
@@ -659,7 +659,7 @@ Normalizer::decompose(const UnicodeString& source,
         uint16_t offset = ucmp16_getu(DecompData::offsets, ch);
         uint16_t index = offset & DecompData::DECOMP_MASK;
     
-        if (index > limit) {
+        if (index > minDecomp) {
             if ((offset & DecompData::DECOMP_RECURSE) != 0) {
                 buffer.truncate(0);
                 doAppend((const UChar*)DecompData::contents, index, buffer);
@@ -668,7 +668,7 @@ Normalizer::decompose(const UnicodeString& source,
                 doAppend((const UChar*)DecompData::contents, index, result);
             }
         } else if (ch >= HANGUL_BASE && ch < HANGUL_LIMIT && hangul) {
-            hangulToJamo(ch, result, limit);
+            hangulToJamo(ch, result, minDecomp);
         } else {
             result += ch;
         }
