@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/BasicTest.java,v $
- * $Date: 2003/01/28 18:55:33 $
- * $Revision: 1.24 $
+ * $Date: 2003/02/15 01:20:07 $
+ * $Revision: 1.25 $
  *
  *****************************************************************************************
  */
@@ -2560,5 +2560,13 @@ public class BasicTest extends TestFmwk {
             errln("Normalizer is not cloning the UCharacterIterator");
         }
      }   
-        
+     public void TestGetCombiningClass(){
+    	for(int i=0;i<0x10FFFF;i++){
+    		int cc = UCharacter.getCombiningClass(i);
+    		if(0xD800<= i && i<=0xDFFF && cc >0 ){
+    		    cc = UCharacter.getCombiningClass(i);
+    			errln("CC: "+ cc + " for codepoint: " +Utility.hex(i,8));
+    		} 
+    	}
+    }  
 }
