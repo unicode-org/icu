@@ -25,6 +25,11 @@ U_CDECL_BEGIN
 /* No-Op UCharIterator implementation for illegal input --------------------- */
 
 static int32_t U_CALLCONV
+noopGetIndex(UCharIterator *iter, UCharIteratorOrigin origin) {
+    return 0;
+}
+
+static int32_t U_CALLCONV
 noopMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin) {
     return 0;
 }
@@ -34,19 +39,21 @@ noopHasNext(UCharIterator *iter) {
     return FALSE;
 }
 
-static UChar U_CALLCONV
+static int32_t U_CALLCONV
 noopCurrent(UCharIterator *iter) {
-    return 0xffff;
+    return -1;
 }
 
 static const UCharIterator noopIterator={
-    0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0,
+    noopGetIndex,
     noopMove,
     noopHasNext,
     noopHasNext,
     noopCurrent,
     noopCurrent,
-    noopCurrent
+    noopCurrent,
+    0
 };
 
 /* UCharIterator implementation for simple strings -------------------------- */
@@ -59,6 +66,22 @@ static const UCharIterator noopIterator={
  */
 
 static int32_t U_CALLCONV
+stringIteratorGetIndex(UCharIterator *iter, UCharIteratorOrigin origin) {
+    switch(origin) {
+    case UITERATOR_START:
+        return iter->start;
+    case UITERATOR_CURRENT:
+        return iter->index;
+    case UITERATOR_LIMIT:
+        return iter->limit;
+    default:
+        /* not a valid origin */
+        /* Should never get here! */
+        return 0;
+    }
+}
+
+static int32_t U_CALLCONV
 stringIteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin) {
     int32_t pos;
 
@@ -69,7 +92,7 @@ stringIteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origi
     case UITERATOR_CURRENT:
         pos=iter->index+delta;
         break;
-    case UITERATOR_END:
+    case UITERATOR_LIMIT:
         pos=iter->limit+delta;
         break;
     default:
@@ -98,41 +121,43 @@ stringIteratorHasPrevious(UCharIterator *iter) {
     return iter->index>iter->start;
 }
 
-static UChar U_CALLCONV
+static int32_t U_CALLCONV
 stringIteratorCurrent(UCharIterator *iter) {
     if(iter->index<iter->limit) {
         return ((const UChar *)(iter->context))[iter->index];
     } else {
-        return 0xffff;
+        return -1;
     }
 }
 
-static UChar U_CALLCONV
+static int32_t U_CALLCONV
 stringIteratorNext(UCharIterator *iter) {
     if(iter->index<iter->limit) {
         return ((const UChar *)(iter->context))[iter->index++];
     } else {
-        return 0xffff;
+        return -1;
     }
 }
 
-static UChar U_CALLCONV
+static int32_t U_CALLCONV
 stringIteratorPrevious(UCharIterator *iter) {
     if(iter->index>iter->start) {
         return ((const UChar *)(iter->context))[--iter->index];
     } else {
-        return 0xffff;
+        return -1;
     }
 }
 
 static const UCharIterator stringIterator={
-    0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0,
+    stringIteratorGetIndex,
     stringIteratorMove,
     stringIteratorHasNext,
     stringIteratorHasPrevious,
     stringIteratorCurrent,
     stringIteratorNext,
-    stringIteratorPrevious
+    stringIteratorPrevious,
+    0
 };
 
 U_CAPI void U_EXPORT2
@@ -163,6 +188,22 @@ uiter_setString(UCharIterator *iter, const UChar *s, int32_t length) {
  */
 
 static int32_t U_CALLCONV
+characterIteratorGetIndex(UCharIterator *iter, UCharIteratorOrigin origin) {
+    switch(origin) {
+    case UITERATOR_START:
+        return ((CharacterIterator *)(iter->context))->startIndex();
+    case UITERATOR_CURRENT:
+        return ((CharacterIterator *)(iter->context))->getIndex();
+    case UITERATOR_LIMIT:
+        return ((CharacterIterator *)(iter->context))->endIndex();
+    default:
+        /* not a valid origin */
+        /* Should never get here! */
+        return 0;
+    }
+}
+
+static int32_t U_CALLCONV
 characterIteratorMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin) {
     return ((CharacterIterator *)(iter->context))->move(delta, (CharacterIterator::EOrigin)origin);
 }
@@ -177,29 +218,46 @@ characterIteratorHasPrevious(UCharIterator *iter) {
     return ((CharacterIterator *)(iter->context))->hasPrevious();
 }
 
-static UChar U_CALLCONV
+static int32_t U_CALLCONV
 characterIteratorCurrent(UCharIterator *iter) {
-    return ((CharacterIterator *)(iter->context))->current();
+    int32_t c;
+
+    c=((CharacterIterator *)(iter->context))->current();
+    if(c!=0xffff || ((CharacterIterator *)(iter->context))->hasNext()) {
+        return c;
+    } else {
+        return -1;
+    }
 }
 
-static UChar U_CALLCONV
+static int32_t U_CALLCONV
 characterIteratorNext(UCharIterator *iter) {
-    return ((CharacterIterator *)(iter->context))->nextPostInc();
+    if(((CharacterIterator *)(iter->context))->hasNext()) {
+        return ((CharacterIterator *)(iter->context))->nextPostInc();
+    } else {
+        return -1;
+    }
 }
 
-static UChar U_CALLCONV
+static int32_t U_CALLCONV
 characterIteratorPrevious(UCharIterator *iter) {
-    return ((CharacterIterator *)(iter->context))->previous();
+    if(((CharacterIterator *)(iter->context))->hasPrevious()) {
+        return ((CharacterIterator *)(iter->context))->previous();
+    } else {
+        return -1;
+    }
 }
 
 static const UCharIterator characterIteratorWrapper={
-    0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0,
+    characterIteratorGetIndex,
     characterIteratorMove,
     characterIteratorHasNext,
     characterIteratorHasPrevious,
     characterIteratorCurrent,
     characterIteratorNext,
-    characterIteratorPrevious
+    characterIteratorPrevious,
+    0
 };
 
 U_CAPI void U_EXPORT2
@@ -225,41 +283,43 @@ uiter_setCharacterIterator(UCharIterator *iter, CharacterIterator *charIter) {
  * and the iteration index.
  */
 
-static UChar U_CALLCONV
+static int32_t U_CALLCONV
 replaceableIteratorCurrent(UCharIterator *iter) {
     if(iter->index<iter->limit) {
         return ((Replaceable *)(iter->context))->charAt(iter->index);
     } else {
-        return 0xffff;
+        return -1;
     }
 }
 
-static UChar U_CALLCONV
+static int32_t U_CALLCONV
 replaceableIteratorNext(UCharIterator *iter) {
     if(iter->index<iter->limit) {
         return ((Replaceable *)(iter->context))->charAt(iter->index++);
     } else {
-        return 0xffff;
+        return -1;
     }
 }
 
-static UChar U_CALLCONV
+static int32_t U_CALLCONV
 replaceableIteratorPrevious(UCharIterator *iter) {
     if(iter->index>iter->start) {
         return ((Replaceable *)(iter->context))->charAt(--iter->index);
     } else {
-        return 0xffff;
+        return -1;
     }
 }
 
 static const UCharIterator replaceableIterator={
-    0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0,
+    stringIteratorGetIndex,
     stringIteratorMove,
     stringIteratorHasNext,
     stringIteratorHasPrevious,
     replaceableIteratorCurrent,
     replaceableIteratorNext,
-    replaceableIteratorPrevious
+    replaceableIteratorPrevious,
+    0
 };
 
 U_CAPI void U_EXPORT2

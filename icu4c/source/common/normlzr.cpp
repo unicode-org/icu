@@ -355,7 +355,7 @@ UChar32 Normalizer::first() {
  * the input text corresponding to that normalized character.
  */
 UChar32 Normalizer::last() {
-    currentIndex=nextIndex=text->move(text, 0, UITERATOR_END);
+    currentIndex=nextIndex=text->move(text, 0, UITERATOR_LIMIT);
     clearBuffer();
     return previous();
 }
@@ -397,7 +397,7 @@ UTextOffset Normalizer::startIndex() const {
  * over which this <tt>Normalizer</tt> is iterating
  */
 UTextOffset Normalizer::endIndex() const {
-    return text->move(text, 0, UITERATOR_END);
+    return text->move(text, 0, UITERATOR_LIMIT);
 }
 
 //-------------------------------------------------------------------------
