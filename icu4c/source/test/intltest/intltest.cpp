@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <stdarg.h>
 
 #include "unicode/unistr.h"
 #include "unicode/ures.h"
@@ -764,6 +765,51 @@ void IntlTest::errln( const UnicodeString &message )
 {
     IncErrorCount();
     if (!no_err_msg) LL_message( message, TRUE );
+}
+
+/* convenience functions that include sprintf formatting */
+void IntlTest::log(const char *fmt, ...)
+{
+    char buffer[300];
+    va_list ap;
+
+    va_start(ap, fmt);
+    vsprintf(buffer, fmt, ap);
+    va_end(ap);
+    log(UnicodeString(buffer, ""));
+}
+
+void IntlTest::logln(const char *fmt, ...)
+{
+    char buffer[300];
+    va_list ap;
+
+    va_start(ap, fmt);
+    vsprintf(buffer, fmt, ap);
+    va_end(ap);
+    logln(UnicodeString(buffer, ""));
+}
+
+void IntlTest::err(const char *fmt, ...)
+{
+    char buffer[300];
+    va_list ap;
+
+    va_start(ap, fmt);
+    vsprintf(buffer, fmt, ap);
+    va_end(ap);
+    err(UnicodeString(buffer, ""));
+}
+
+void IntlTest::errln(const char *fmt, ...)
+{
+    char buffer[300];
+    va_list ap;
+
+    va_start(ap, fmt);
+    vsprintf(buffer, fmt, ap);
+    va_end(ap);
+    errln(UnicodeString(buffer, ""));
 }
 
 void IntlTest::printErrors()

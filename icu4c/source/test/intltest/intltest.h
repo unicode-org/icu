@@ -64,13 +64,7 @@ public:
 
     virtual void log( const UnicodeString &message );
 
-    // convenience function; assume that the message contains only invariant charcters
-    virtual void log( const char *message );
-    
     virtual void logln( const UnicodeString &message );
-
-    // convenience function; assume that the message contains only invariant charcters
-    virtual void logln( const char *message );
 
     virtual void logln( void );
 
@@ -78,14 +72,14 @@ public:
     
     virtual void err( const UnicodeString &message );
 
-    // convenience function; assume that the message contains only invariant charcters
-    virtual void err( const char *message );
-
     virtual void errln( const UnicodeString &message );
 
-    // convenience function; assume that the message contains only invariant charcters
-    virtual void errln( const char *message );
-    
+    // convenience functions: sprintf() + errln() etc.
+    void log(const char *fmt, ...);
+    void logln(const char *fmt, ...);
+    void err(const char *fmt, ...);
+    void errln(const char *fmt, ...);
+
     // Print ALL named errors encountered so far
     void printErrors(); 
         
@@ -149,22 +143,6 @@ public:
     static IntlTest* gTest;
 
 };
-
-inline void IntlTest::log( const char *message ) {
-    log(UnicodeString(message, ""));
-}
-
-inline void IntlTest::logln( const char *message ) {
-    logln(UnicodeString(message, ""));
-}
-
-inline void IntlTest::err( const char *message ) {
-    err(UnicodeString(message, ""));
-}
-
-inline void IntlTest::errln( const char *message ) {
-    errln(UnicodeString(message, ""));
-}
 
 void it_log( UnicodeString message );
 void it_logln( UnicodeString message );
