@@ -37,41 +37,36 @@
 ********************************************************************************
 */
 
-#ifndef _GREGOCAL
 #include "unicode/gregocal.h"
-#endif
 
 // *****************************************************************************
 // class GregorianCalendar
 // *****************************************************************************
 
 
-const int32_t GregorianCalendar::kJan1_1JulianDay = 1721426; // January 1, year 1 (Gregorian)
+static const int32_t kJan1_1JulianDay = 1721426; // January 1, year 1 (Gregorian)
 
 /**
  * Note that the Julian date used here is not a true Julian date, since
  * it is measured from midnight, not noon.  This value is the Julian
  * day number of January 1, 1970 (Gregorian calendar) at noon UTC. [LIU]
  */
-const int32_t GregorianCalendar::kEpochStartAsJulianDay    = 2440588; // January 1, 1970 (Gregorian)
+static const int32_t kEpochStartAsJulianDay    = 2440588; // January 1, 1970 (Gregorian)
 
-const int32_t GregorianCalendar::kEpochYear             = 1970;
+static const int32_t kEpochYear             = 1970;
 
-const int32_t GregorianCalendar::kNumDays[]
+static const int32_t kNumDays[]
     = {0,31,59,90,120,151,181,212,243,273,304,334}; // 0-based, for day-in-year
-const int32_t GregorianCalendar::kLeapNumDays[]
+static const int32_t kLeapNumDays[]
     = {0,31,60,91,121,152,182,213,244,274,305,335}; // 0-based, for day-in-year
-const int32_t GregorianCalendar::kMonthLength[]
+static const int32_t kMonthLength[]
     = {31,28,31,30,31,30,31,31,30,31,30,31}; // 0-based
-const int32_t GregorianCalendar::kLeapMonthLength[]
+static const int32_t kLeapMonthLength[]
     = {31,29,31,30,31,30,31,31,30,31,30,31}; // 0-based
 
 // Useful millisecond constants
-const int32_t GregorianCalendar::kOneSecond = U_MILLIS_PER_SECOND;
-const int32_t GregorianCalendar::kOneMinute = U_MILLIS_PER_MINUTE;    //      60,000
-const int32_t GregorianCalendar::kOneHour   = U_MILLIS_PER_HOUR;      //   3,600,000
-const double  GregorianCalendar::kOneDay    = U_MILLIS_PER_DAY;       //  86,400,000
-const double  GregorianCalendar::kOneWeek   = 7.0 * U_MILLIS_PER_DAY; // 604,800,000
+static const double  kOneDay    = U_MILLIS_PER_DAY;       //  86,400,000
+static const double  kOneWeek   = 7.0 * U_MILLIS_PER_DAY; // 604,800,000
 
 // These numbers are 2^52 - 1, the largest allowable mantissa in a 64-bit double
 // with a 0 exponent.  These are the absolute largest numbers for millis that
@@ -79,8 +74,8 @@ const double  GregorianCalendar::kOneWeek   = 7.0 * U_MILLIS_PER_DAY; // 604,800
 // The problem is that, once the exponent is not 0, the calendar will jump.
 // When translated into a year, LATEST_SUPPORTED_MILLIS corresponds to 144,683 AD 
 // and EARLIEST_SUPPORTED_MILLIS corresponds to 140,742 BC
-const UDate GregorianCalendar::EARLIEST_SUPPORTED_MILLIS = - 4503599627370495.0;
-const UDate GregorianCalendar::LATEST_SUPPORTED_MILLIS    =   4503599627370495.0;
+static const UDate EARLIEST_SUPPORTED_MILLIS = - 4503599627370495.0;
+static const UDate LATEST_SUPPORTED_MILLIS    =   4503599627370495.0;
 
 /*
  * <pre>
@@ -109,13 +104,13 @@ const UDate GregorianCalendar::LATEST_SUPPORTED_MILLIS    =   4503599627370495.0
  * </pre>
  * (*) In units of one-hour
  */
-const int32_t GregorianCalendar::kMinValues[] = {
+static const int32_t kMinValues[] = {
     0,1,0,1,0,1,1,1,-1,0,0,0,0,0,0,-12*U_MILLIS_PER_HOUR,0,1,1
 };
-const int32_t GregorianCalendar::kLeastMaxValues[] = {
+static const int32_t kLeastMaxValues[] = {
     1,140742,11,52,4,28,365,7,4,1,11,23,59,59,999,12*U_MILLIS_PER_HOUR,1*U_MILLIS_PER_HOUR,140742,7
 };
-const int32_t GregorianCalendar::kMaxValues[] = {
+static const int32_t kMaxValues[] = {
     1,144683,11,53,6,31,366,7,6,1,11,23,59,59,999,12*U_MILLIS_PER_HOUR,1*U_MILLIS_PER_HOUR, 144683,7
 };
 
@@ -127,7 +122,7 @@ char GregorianCalendar::fgClassID = 0; // Value is irrelevant
 // the next few centuries, some as late as 1928. [LIU]
 // in Java, -12219292800000L
 //const UDate GregorianCalendar::kPapalCutover = -12219292800000L;
-const UDate GregorianCalendar::kPapalCutover = (2299161.0 - kEpochStartAsJulianDay) * U_MILLIS_PER_DAY;
+static const UDate kPapalCutover = (2299161.0 - kEpochStartAsJulianDay) * U_MILLIS_PER_DAY;
 
 // -------------------------------------
 
@@ -1578,7 +1573,7 @@ GregorianCalendar::roll(EDateFields field, int32_t amount, UErrorCode& status)
             int32_t newHour = (oldHour + amount) % (max + 1);
             if(newHour < 0)
                 newHour += max + 1;
-            setTime(start + ((double)kOneHour * (newHour - oldHour)), status);
+            setTime(start + ((double)U_MILLIS_PER_HOUR * (newHour - oldHour)), status);
             return;
         }
     case MONTH:
