@@ -1623,9 +1623,6 @@ static void TestComposeDecompose(void) {
     UChar comp[NORM_BUFFER_TEST_LEN];
     uint32_t len = 0;
 
-    log_err("error - ### TODO re-enable /tscoll/cmsccoll/TestComposeDecompose after the upgrade to Unicode 3.2 _and_ the new UCA table/algorithm is complete (see Mark & Markus)\n");
-    return;
-
     noOfLoc = uloc_countAvailable();
 
     t = uprv_malloc(0x30000 * sizeof(tester *));
@@ -1869,7 +1866,8 @@ static void TestRedundantRules(void) {
   };
 
   const static char *expectedRules[] = {
-    "&\\u3029<<<x",
+    /*"&\\u3029<<<x",*/
+    "&\\u2089<<<x",
     "& a <<< x < b <<< c << d <<< e",
     "& a < b < m < c < d",
     "& a < b <<< c << d <<< x <<< e",
@@ -1886,7 +1884,8 @@ static void TestRedundantRules(void) {
   };
 
   const static char *testdata[][8] = {
-    {"\\u3029", "x"},
+    /*{"\\u3029", "x"},*/
+    {"\\u2089", "x"},
     {"a", "x", "b", "c", "d", "e"},
     {"a", "b", "m", "c", "d"},
     {"a", "b", "c", "d", "x", "e"},
@@ -2186,7 +2185,12 @@ static void TestIncrementalNormalize(void) {
     /*  Test 3:  Non-normal sequence is terminated by a surrogate pair.*/
 
     {
-        UChar strA[] = {0x41, 0x41, 0x300, 0x316, 0xD801, 0xDC00, 0};
+      /* New UCA  3.1.1. 
+       * test below used a code point from Desseret, which sorts differently 
+       * than d800 dc00
+       */
+        /*UChar strA[] = {0x41, 0x41, 0x300, 0x316, 0xD801, 0xDC00, 0};*/
+        UChar strA[] = {0x41, 0x41, 0x300, 0x316, 0xD800, 0xDC01, 0};
         UChar strB[] = {0x41, 0xc0, 0x316, 0xD800, 0xDC00, 0};
         ucol_setStrength(coll, UCOL_TERTIARY);
         doTest(coll, strA, strB, UCOL_GREATER);
@@ -2494,6 +2498,8 @@ static void TestCyrillicTailoring(void) {
       "\\u0410\\u0306a",
       "\\u04d0A"
   };
+  log_err("*** Disabled, pending corrected FractionalUCA.txt from Mark ***\n");
+  return;
     genericLocaleStarter("ru", test, 3);
     genericRulesStarter("&\\u0410 = \\u0410", test, 3);
     genericRulesStarter("&Z < \\u0410", test, 3);
@@ -2819,6 +2825,10 @@ static void TestVariableTopSetting(void) {
   UChar first[256] = { 0 };
   UChar second[256] = { 0 };
   UParseError parseError;
+
+  log_err("*** Disabled, pending amendend UCARules.txt from Mark ***\n");
+  return;
+
   src.opts = &opts;
 
   log_verbose("Slide variable top over UCARules\n");
@@ -2910,7 +2920,8 @@ static void TestVariableTopSetting(void) {
   log_verbose("Testing setting variable top to contractions\n");
   {
     /* uint32_t tailoredCE = UCOL_NOT_FOUND; */
-    UChar *conts = (UChar *)((uint8_t *)coll->image + coll->image->contractionUCACombos);
+    UChar *conts = (UChar *)((uint8_t *)coll->image + coll->image->UCAConsts+sizeof(UCAConstants));
+    /*UChar *conts = (UChar *)((uint8_t *)coll->image + coll->image->contractionUCACombos);*/
     while(*conts != 0) {
       if(*(conts+2) == 0) {
         varTop1 = ucol_setVariableTop(coll, conts, -1, &status);
@@ -3489,9 +3500,102 @@ static void TestRuleOptions(void) {
   }
 }
 
+static void TestIgnorableShifted(void) {
+#if 0
+Mark	a <space> <acute> b
+Mark	vs
+Mark	A <space> b
+Mark	I think those should differ.
+weiv	these should be equal when shifted but different when non ignorable, right
+weiv	except capital A would sort after lower case a
+Mark	OLD implementation: IGNOREABLE: #1 > #2
+Mark	NEW implemenation: IGNOREABLE: #2 > #1
+Mark	NON-IGNOREABLE: #1 > #2
+"a<space>b","A<space>b","a<space><grave>b","A<space><grave>b","a\\0300b","A<grave>b"
+"A<space>\\u300b","a<space><grave>b","A<space>b","a<grave>b","A<grave>b"
+#endif
+  static struct {
+    const char *data[50];
+    const uint32_t len;
+    const UColAttribute att[2];
+    const UColAttribute value[2];
+  } tests[] = {     
+    {
+      { "a \\u0300b", "a b", "A \\u0300b", "A b", "a\\u0300b", "A\\u0300b"}, 5,
+      { UCOL_ALTERNATE_HANDLING, UCOL_STRENGTH }, { UCOL_SHIFTED, UCOL_QUATERNARY }
+    },
+    {
+      {"a b", "A b", "a \\u0300b", "A \\u0300b", "a\\u0300b", "A\\u0300b"}, 6,
+      { UCOL_ALTERNATE_HANDLING, UCOL_STRENGTH }, { UCOL_NON_IGNORABLE, UCOL_TERTIARY }
+    },
+    {
+      { 
+#if 0
+        "a<space>b",
+        "A<space>b",
+        "a<space><grave>b",
+        "A<space><grave>b",
+        "a<grave>b",
+        "A<grave>b"
+        "a<lowline>b",
+        "A<lowline>b",
+        "a<lowline><grave>b",
+        "A<lowline><grave>b",
+        "a<grave>b",
+        "A<grave>b"
+        "a<space>b",
+        "A<space>b",
+        "a<space><acute>b",
+        "A<space><acute>b",
+        "a<acute>b",
+        "A<acute>b"
+        "a<lowline>b",
+        "A<lowline>b",
+        "a<lowline><acute>b",
+        "A<lowline><acute>b",
+        "a<acute>b",
+        "A<acute>b"
+#endif
+        "a b",
+        "A b",
+        "a \\u0300b",
+        "A \\u0300b",
+        "a\\u0300b",
+        "A\\u0300b",
+        "a\\u005fb",
+        "A\\u005fb",
+        "a\\u005f\\u0300b",
+        "A\\u005f\\u0300b",
+        "a\\u0300b",
+        "A\\u0300b",
+        "a b",
+        "A b",
+        "a \\u0301b",
+        "A \\u0301b",
+        "a\\u0301b",
+        "A\\u0301b",
+        "a\\u005fb",
+        "A\\u005fb",
+        "a\\u005f\\u0301b",
+        "A\\u005f\\u0301b",
+        "a\\u0301b",
+        "A\\u0301b"
+      }, 22, 
+      { UCOL_ALTERNATE_HANDLING, UCOL_STRENGTH }, { UCOL_SHIFTED, UCOL_QUATERNARY }
+      //{ UCOL_ALTERNATE_HANDLING, UCOL_STRENGTH }, { UCOL_NON_IGNORABLE, UCOL_TERTIARY }
+    }
+  };
+
+  int32_t i = 0;
+
+  for(i = 0; i<sizeof(tests)/sizeof(tests[0]); i++) {
+    genericLocaleStarterWithOptions("", tests[i].data, tests[i].len, tests[i].att, tests[i].value, 2);
+  }
+}
+
 void addMiscCollTest(TestNode** root)
 {
-
+    /*addTest(root, &TestIgnorableShifted, "tscoll/cmsccoll/TestIgnorableShifted");*/ /* turned off for now, until I make a normal ordering */
     addTest(root, &TestRuleOptions, "tscoll/cmsccoll/TestRuleOptions");
     addTest(root, &TestBeforePrefixFailure, "tscoll/cmsccoll/TestBeforePrefixFailure");
     addTest(root, &TestContractionClosure, "tscoll/cmsccoll/TestContractionClosure");

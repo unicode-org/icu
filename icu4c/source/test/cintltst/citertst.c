@@ -1334,12 +1334,13 @@ static FileStream * getFractionalUCA(void)
 */
 static void TestCEs() {
     FileStream *file = NULL;
-    char        line[300];
+    char        line[1024];
     char       *str;
     UChar       codepoints[5];
     uint32_t    ces[20];
     UErrorCode  status = U_ZERO_ERROR;
     UCollator          *coll = ucol_open("", &status);
+    uint32_t lineNo = 0;
 
     if (U_FAILURE(status)) {
         log_err("Error in opening root collator\n");
@@ -1353,9 +1354,11 @@ static void TestCEs() {
         return;
     }
 
+
     while (T_FileStream_readLine(file, line, sizeof(line)) != NULL) {
         int                 count = 0;
         UCollationElements *iter;
+        lineNo++;
         /* skip this line if it is empty or a comment or is a return value
         or start of some variable section */
         if(line[0] == 0 || line[0] == '#' || line[0] == '\n' ||
@@ -1364,6 +1367,7 @@ static void TestCEs() {
         }
 
         str = getCodePoints(line, codepoints);
+
         getCEs(str, ces, &status);
         if (U_FAILURE(status)) {
             log_err("Error in parsing collation elements in FractionalUCA.txt\n");
@@ -1683,7 +1687,7 @@ static void TestCEValidity()
     /* tailored locales */
     char        locale[][6] = {"fr_FR\0", "ko_KR\0", "sh_YU\0", "th_TH\0", "zh_CN\0"};
     FileStream *file = getFractionalUCA();
-    char        line[300];
+    char        line[1024];
     UChar       codepoints[5];
     int         count = 0;
     UParseError parseError;
@@ -1862,7 +1866,7 @@ static void TestSortKeyValidity(void)
     /* tailored locales */
     char        locale[][6] = {"fr_FR\0", "ko_KR\0", "sh_YU\0", "th_TH\0", "zh_CN\0"};
     FileStream *file = getFractionalUCA();
-    char        line[300];
+    char        line[1024];
     UChar       codepoints[5];
     int         count = 0;
     UParseError parseError;
