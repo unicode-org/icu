@@ -153,19 +153,25 @@ uset_getItem(const USet* uset, int32_t itemIndex,
              UErrorCode* ec) {
     if (U_FAILURE(*ec)) return 0;
     const UnicodeSet& set = *(const UnicodeSet*)uset;
-    if ((uint32_t) itemIndex < (uint32_t) set.getRangeCount()) {
+    int32_t rangeCount;
+
+    if (itemIndex < 0) {
+        *ec = U_ILLEGAL_ARGUMENT_ERROR;
+        return -1;
+    } else if (itemIndex < (rangeCount = set.getRangeCount())) {
         *start = set.getRangeStart(itemIndex);
         *end = set.getRangeEnd(itemIndex);
         return 0;
     } else {
-        itemIndex -= set.getRangeCount();
-        if ((uint32_t) itemIndex < (uint32_t) USetAccess::getStringCount(set)) {
+        itemIndex -= rangeCount;
+        if (itemIndex < USetAccess::getStringCount(set)) {
             const UnicodeString* s = USetAccess::getString(set, itemIndex);
             return s->extract(str, strCapacity, *ec);
+        } else {
+            *ec = U_INDEX_OUTOFBOUNDS_ERROR;
+            return -1;
         }
     }
-    *ec = U_ILLEGAL_ARGUMENT_ERROR;
-    return -1;
 }
 
 //U_CAPI int32_t U_EXPORT2
@@ -361,6 +367,11 @@ uset_getSerializedRange(const USerializedSet* set, int32_t rangeIndex,
         }
     }
 }
+
+// TODO The old, internal uset.c had an efficient uset_containsOne function.
+// Returned the one and only code point, or else -1 or something.
+// Consider adding such a function to both C and C++ UnicodeSet/uset.
+// See tools/gennorm/store.c for usage, now usetContainsOne there.
 
 // TODO Investigate incorporating this code into UnicodeSet to improve
 // efficiency.
