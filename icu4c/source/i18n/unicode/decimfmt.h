@@ -476,22 +476,8 @@ public:
      * For a permill, set the suffixes to have "\u2031" and the multiplier to be 1000.
      *
      * Examples: with 100, 1.23 -> "123", and "123" -> 1.23
-     * @deprecated Use the other setMultiplier, remove after Apr. 12, 2001
      */
     virtual void setMultiplier(int32_t newValue);
-
-    /**
-     * Set the multiplier for use in percent, permill, etc.
-     * For a percentage, set the suffixes to have "%" and the multiplier to be 100.
-     * (For Arabic, use arabic percent symbol).
-     * For a permill, set the suffixes to have "\u2031" and the multiplier to be 1000.
-     *
-     * Examples: with 100, 1.23 -> "123", and "123" -> 1.23
-     * @param err Will return U_ILLEGAL_ARGUMENT_ERROR when newValue is 0 or
-     *            some other invalid number.
-     * @draft
-     */
-    virtual void setMultiplier(int32_t newValue, UErrorCode *err);
 
     /**
      * Get the rounding increment.
@@ -572,7 +558,7 @@ public:
      * @see #setPadCharacter
      * @see #getPadPosition
      * @see #setPadPosition
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See the other getPadCharacter() function
      */
     inline UChar getPadCharacter(void);
 
@@ -600,7 +586,7 @@ public:
      * @see #getPadCharacter
      * @see #getPadPosition
      * @see #setPadPosition
-     * @deprecated remove after 2000-dec-31. See UNumberFormatSymbol and unum_getSymbol() for a replacement.
+     * @deprecated remove after 2000-dec-31. See the other setPadCharacter() function
      */
     inline void setPadCharacter(UChar padChar);
 
@@ -992,9 +978,11 @@ private:
                              UBool         isNegative,
                              UBool         isInteger) const;
 
-    static const int32_t fgStatusInfinite;
-    static const int32_t fgStatusPositive;
-    static const int32_t fgStatusLength;
+    enum {
+        fgStatusInfinite,
+        fgStatusPositive,
+        fgStatusLength      // Leave last in list.
+    } StatusFlags;
 
     /**
      * Parse the given text into a number.  The text is parsed beginning at
@@ -1038,7 +1026,7 @@ private:
     /**
      * Constants.
      */
-    static const int8_t fgMaxDigit; // The largest digit, in this case 9
+    //static const int8_t fgMaxDigit; // The largest digit, in this case 9
 
     /*transient*/ DigitList* fDigitList;
 
@@ -1055,7 +1043,7 @@ private:
     int32_t                 fGroupingSize2;
     UBool                  fDecimalSeparatorAlwaysShown;
     /*transient*/ UBool    fIsCurrencyFormat;
-    DecimalFormatSymbols*   fSymbols;
+    /* @deprecated */ DecimalFormatSymbols*   fSymbols;
 
     UBool                  fUseExponentialNotation;
     int8_t                  fMinExponentDigits;

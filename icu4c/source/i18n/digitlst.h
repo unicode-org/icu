@@ -91,6 +91,7 @@ public:
 
     /**
      * Utility routine to get the value of the digit list
+     * Make sure that fitsIntoLong() is called before calling this function.
      * Returns 0 if zero length.
      */
     int32_t getLong(void);
@@ -133,6 +134,15 @@ public:
      */
     static const char kZero;
 
+private:
+    enum {
+        MAX_DIGITS = DBL_DIG,
+        MAX_EXPONENT = 30,
+
+         // "." + fDigits + "e" + fDecimalAt
+        MAX_DEC_DIGITS = DBL_DIG + 2 + MAX_EXPONENT
+    };
+
 public:
     /**
      * These data members are intentionally public and can be set directly.
@@ -157,12 +167,15 @@ public:
      */
     int32_t     fDecimalAt;
     int32_t     fCount;
-private:
-    enum      { MAX_DIGITS = DBL_DIG };
-public:
-    char        fDigits[MAX_DIGITS + 1];
+    char        *fDigits;
 
 private:
+
+    char        fDecimalDigits[MAX_DEC_DIGITS + 1]; // +1 for NULL
+
+//    static char LONG_MIN_REP[LONG_DIGITS];
+//    static const char LONG_MIN_REP[];
+//    static int32_t    LONG_MIN_REP_LENGTH;
 
     /**
      * Round the representation to the given number of digits.
@@ -178,9 +191,15 @@ private:
 
     UBool shouldRoundUp(int32_t maximumDigits);
 
-//    static char LONG_MIN_REP[LONG_DIGITS];
-    static const char LONG_MIN_REP[];
-    static int32_t    LONG_MIN_REP_LENGTH;
+    /**
+     * Formats a number into a base 10 string representation, and NULL terminates it.
+     * @param number The number to format
+     * @param outputStr The string to output to
+     * @param outputLen The maximum number of characters to put into outputStr
+     *                  (including NULL).
+     * @return the length of the new string.
+     */
+    static int32_t formatBase10(int32_t number, char *outputStr, int32_t outputLen);
 };
  
 // -------------------------------------

@@ -38,10 +38,12 @@
 
 const char DigitList::kZero = '0';
 
-const char DigitList::LONG_MIN_REP[] = "2147483648"; // ignore negative sign
+/* Only for 32 bit numbers. Ignore the negative sign. */
+static const char LONG_MIN_REP[] = "2147483648";
 
-/* Ignore the NULL at the end */
-int32_t    DigitList::LONG_MIN_REP_LENGTH = sizeof(DigitList::LONG_MIN_REP) - 1;
+enum {
+    LONG_MIN_REP_LENGTH = sizeof(LONG_MIN_REP) - 1 //Ignore the NULL at the end
+};
 
 // -------------------------------------
 // default constructor
@@ -62,6 +64,8 @@ DigitList::~DigitList()
 
 DigitList::DigitList(const DigitList &other)
 {
+    *fDecimalDigits = '.';
+    fDigits = fDecimalDigits + 1;   // skip the decimal
     *this = other;
 }
 
@@ -97,21 +101,62 @@ DigitList::operator==(const DigitList& that) const
 void
 DigitList::clear()
 {
+    *fDecimalDigits = '.';
+    fDigits = fDecimalDigits + 1;   // skip the decimal
     fDecimalAt = 0;
     fCount = 0;
-    for (int32_t i=0; i<MAX_DIGITS; ++i)
-        fDigits[i] = kZero;
+
+// This isn't needed because fCount = 0;
+//    for (int32_t i=0; i<MAX_DIGITS; ++i)
+//        fDigits[i] = kZero;
 }
 
 
 
 // -------------------------------------
 
+int32_t
+DigitList::formatBase10(int32_t number, char *outputStr, int32_t outputLen) 
+{
+    char buffer[MAX_DIGITS + 1];
+    int32_t bufferLen;
+
+    if (outputLen > MAX_DIGITS) {
+        outputLen = MAX_DIGITS;     // Ignore NULL
+    }
+    else if (outputLen < 3) {
+        return 0;                   // Not enough room
+    }
+
+    bufferLen = outputLen;
+
+    if (number < 0) {   // Negative numbers are slightly larger than a postive
+        buffer[bufferLen--] = -(number % 10) + '0';
+        number /= -10;
+        *(outputStr++) = '-';
+    }
+    else {
+        *(outputStr++) = '+';    // allow +0
+    }
+    while (bufferLen >= 0 && number) {      // Output the number
+        buffer[bufferLen--] = number % 10 + '0';
+        number /= 10;
+    }
+
+    outputLen -= bufferLen++;
+
+    while (bufferLen <= MAX_DIGITS) {     // Copy the number to output
+        *(outputStr++) = buffer[bufferLen++];
+    }
+    *outputStr = 0;   // NULL terminate.
+    return outputLen;
+}
+
 /**
  * Currently, getDouble() depends on atof() to do its conversion.
  *
  * WARNING!!
- * This is an extremely costly function. ~2/3 of the conversion time
+ * This is an extremely costly function. ~1/2 of the conversion time
  * can be linked to this function.
  */
 double
@@ -120,24 +165,25 @@ DigitList::getDouble() const
     if (fCount == 0)
         return 0.0;
 
-    // For the string "." + fDigits + "e" + fDecimalAt.
-    char buffer[MAX_DIGITS+32];
-    *buffer = '.';
-    strncpy(buffer+1, fDigits, fCount);
-    sprintf(buffer+fCount+1, "e%d", fDecimalAt);
-    return atof(buffer);
+    *(fDigits+fCount) = 'e';    // add an e after the digits.
+    formatBase10(fDecimalAt,
+                 fDigits + fCount + 1,  // skip the 'e'
+                 MAX_DEC_DIGITS - fCount - 2);  // skip the 'e' and '.'
+    return atof(fDecimalDigits);
 }
 
 // -------------------------------------
 
+/**
+ * Make sure that fitsIntoLong() is called before calling this function.
+ */
 int32_t DigitList::getLong()
 {
     if (fCount == fDecimalAt) {
         fDigits[fCount] = 0;    // NULL terminate
 
-        /* This conversion is bad on 64-bit platforms when we want to
-           be able to return a 64-bit number [grhoten]
-        */
+        // This conversion is bad on 64-bit platforms when we want to
+        // be able to return a 64-bit number [grhoten]
         return (int32_t)atol(fDigits);
     }
     else {
