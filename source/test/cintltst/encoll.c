@@ -295,6 +295,7 @@ static void TestTertiary( )
     myCollation = ucol_open("en_US", &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+	return;
     }
     log_verbose("Testing English Collation with Tertiary strength\n");
     ucol_setAttribute(myCollation, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
@@ -336,6 +337,7 @@ static void TestPrimary()
     myCollation = ucol_open("en_US", &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+	return;
     }
     ucol_setAttribute(myCollation, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
     ucol_setStrength(myCollation, UCOL_PRIMARY);
@@ -355,6 +357,7 @@ static void TestSecondary()
     myCollation = ucol_open("en_US", &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+	return;
     }
     ucol_setStrength(myCollation, UCOL_SECONDARY);
     log_verbose("Testing English Collation with Secondary strength\n");

@@ -122,6 +122,7 @@ static void TestTertiary( )
     myCollation = ucol_open("ja_JP", &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+	return;
     }
     log_verbose("Testing Kanna(Japan) Collation with Tertiary strength\n");
     ucol_setNormalization(myCollation, UCOL_DECOMP_COMPAT);
