@@ -121,7 +121,7 @@ MTL=midl.exe
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win64
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win64
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN64" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /FD /c
-# ADD CPP /nologo /MD /Za /W3 /GX /Zi /O2 /I "..\..\common" /I "..\toolutil" /D "WIN64" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_IA64_" /D "WIN32" /D "_AFX_NO_DAO_SUPPORT" /FD /QIA64_fmaopt /Wp64 /Zm600 /c
+# ADD CPP /nologo /MD /Za /W3 /GX /Zi /O2 /I "..\..\common" /I "..\toolutil" /D "WIN64" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_IA64_" /D "WIN32" /D "_AFX_NO_DAO_SUPPORT" /FD /Wp64 /Zm600 /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -158,7 +158,7 @@ MTL=midl.exe
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win64
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win64
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN64" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /FD /GZ /c
-# ADD CPP /nologo /MDd /Za /W3 /Gm /GX /Zi /Od /I "..\..\common" /I "..\toolutil" /D "WIN64" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_IA64_" /D "WIN32" /D "_AFX_NO_DAO_SUPPORT" /FD /GZ /QIA64_fmaopt /Wp64 /Zm600 /c
+# ADD CPP /nologo /MDd /Za /W3 /Gm /GX /Zi /Od /I "..\..\common" /I "..\toolutil" /D "WIN64" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_IA64_" /D "WIN32" /D "_AFX_NO_DAO_SUPPORT" /FD /GZ /Wp64 /Zm600 /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe

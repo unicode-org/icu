@@ -109,7 +109,7 @@ PreLink_Cmds=echo "File with stubdata build time, used as a dependency to trigge
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN64" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "STUBDATA_EXPORTS" /FD /c
-# ADD CPP /nologo /MD /Za /W3 /GX /Zi /O2 /I "..\common" /D "WIN64" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "STUBDATA_EXPORTS" /D "_IA64_" /D "WIN32" /D "_AFX_NO_DAO_SUPPORT" /FD /QIA64_fmaopt /Wp64 /Zm600 /c
+# ADD CPP /nologo /MD /Za /W3 /GX /Zi /O2 /I "..\common" /D "WIN64" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "STUBDATA_EXPORTS" /D "_IA64_" /D "WIN32" /D "_AFX_NO_DAO_SUPPORT" /FD /Wp64 /Zm600 /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win64
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win64
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -140,7 +140,7 @@ PreLink_Cmds=echo "File with stubdata build time, used as a dependency to trigge
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN64" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "STUBDATA_EXPORTS" /FD /GZ /c
-# ADD CPP /nologo /MDd /Za /W3 /GX /Zi /Od /I "..\common" /D "WIN64" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "STUBDATA_EXPORTS" /D "_IA64_" /D "WIN32" /D "_AFX_NO_DAO_SUPPORT" /FD /GZ /QIA64_fmaopt /Wp64 /Zm600 /c
+# ADD CPP /nologo /MDd /Za /W3 /GX /Zi /Od /I "..\common" /D "WIN64" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "STUBDATA_EXPORTS" /D "_IA64_" /D "WIN32" /D "_AFX_NO_DAO_SUPPORT" /FD /GZ /Wp64 /Zm600 /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win64
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win64
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
