@@ -417,7 +417,7 @@ void addAllCollTest(TestNode** root)
 void doTest(UCollator* myCollation, const UChar source[], const UChar target[], UCollationResult result)
 {
     int32_t sortklen1, sortklen2, sortklenmax, sortklenmin;
-    int temp=0;
+    int temp=0, gSortklen1=0,gSortklen2=0;
     UCollationResult compareResult, keyResult, incResult;
     uint8_t *sortKey1, *sortKey2;
     
@@ -436,6 +436,15 @@ void doTest(UCollator* myCollation, const UChar source[], const UChar target[], 
     ucol_getSortKey(myCollation, target, u_strlen(target), sortKey2, sortklen2+1);
     
     temp= uprv_strcmp(sortKey1, sortKey2);/*memcmp(sortKey1, sortKey2,sortklenmax);*/
+    gSortklen1 = uprv_strlen(sortKey1)+1;
+    gSortklen2 = uprv_strlen(sortKey2)+1;
+    if(sortklen1 != gSortklen1){
+        log_err("SortKey length does not match Expected: %i Got: %i",sortklen1, gSortklen1);
+    }
+    if(sortklen2!= gSortklen2){
+        log_err("SortKey length does not match Expected: %i Got: %i", sortklen2, gSortklen2);
+    }
+
     if(temp < 0) keyResult=UCOL_LESS;
     else if(temp > 0) keyResult= UCOL_GREATER;
     else keyResult = UCOL_EQUAL;
