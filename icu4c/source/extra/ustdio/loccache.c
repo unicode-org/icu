@@ -50,7 +50,7 @@ u_loccache_get(const char *loc)
   if(gLocaleCache == 0) {
     locCount = uloc_countAvailable();
     
-    tempCache = uhash_openSize(u_locbund_hash, locCount, &status);
+    tempCache = uhash_openSize((UHashFunction)u_locbund_hash, locCount, &status);
     if(U_FAILURE(status)) return 0;
     
     /* Lock the cache */

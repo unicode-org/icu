@@ -753,7 +753,7 @@ Locale::getLanguagesForCountry(const UnicodeString& country, int32_t& count)
   // lookups.
   if(ctry2LangMapping == 0) {
     UErrorCode err = U_ZERO_ERROR;
-    UHashtable *temp = uhash_open(uhash_hashUString, &err);
+    UHashtable *temp = uhash_open((UHashFunction)uhash_hashUString, &err);
     if (U_FAILURE(err)) 
       {
 	count = 0;
