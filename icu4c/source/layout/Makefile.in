@@ -92,6 +92,7 @@ MarkArrays.o \
 MarkToBasePosnSubtables.o \
 MarkToLigaturePosnSubtables.o \
 MarkToMarkPosnSubtables.o \
+MPreFixups.o \
 MultipleSubstSubtables.o \
 OpenTypeUtilities.o \
 PairPositioningSubtables.o \

@@ -1,7 +1,9 @@
 /*
- * %W% %E%
+ * (C) Copyright IBM Corp. 1998 - 2003 - All Rights Reserved
  *
- * (C) Copyright IBM Corp. 1998, 1999, 2000 - All Rights Reserved
+ * $Source: /xsrl/Nsvn/icu/icu/source/layout/IndicReordering.cpp,v $
+ * $Date: 2003/01/04 02:52:22 $
+ * $Revision: 1.8 $
  *
  */
 
@@ -9,6 +11,7 @@
 #include "OpenTypeTables.h"
 #include "OpenTypeUtilities.h"
 #include "IndicReordering.h"
+#include "MPreFixups.h"
 
 U_NAMESPACE_BEGIN
 
@@ -27,6 +30,9 @@ private:
     LEUnicode fLengthMark;
     le_int32 fMatraIndex;
     const LETag *fMatraTags;
+    le_int32 fMPreOutIndex;
+
+    MPreFixups *fMPreFixups;
 
     void saveMatra(LEUnicode matra, IndicClassTable::CharClass matraClass)
     {
@@ -44,14 +50,11 @@ private:
         }
     }
 
-    ReorderingOutput(const ReorderingOutput &other); // forbid copying of this class
-    ReorderingOutput &operator=(const ReorderingOutput &other); // forbid copying of this class
-
 public:
-    ReorderingOutput(LEUnicode *outChars, le_int32 *charIndices, const LETag **charTags)
+    ReorderingOutput(LEUnicode *outChars, le_int32 *charIndices, const LETag **charTags, MPreFixups *mpreFixups)
         : fOutIndex(0), fOutChars(outChars), fCharIndices(charIndices), fCharTags(charTags),
           fMpre(0), fMbelow(0), fMabove(0), fMpost(0), fLengthMark(0),
-          fMatraIndex(0), fMatraTags(NULL)
+          fMatraIndex(0), fMatraTags(NULL), fMPreOutIndex(-1), fMPreFixups(mpreFixups)
     {
         // nothing else to do...
     }
@@ -66,6 +69,7 @@ public:
         IndicClassTable::CharClass matraClass = classTable->getCharClass(matra);
 
         fMpre = fMbelow = fMabove = fMpost = fLengthMark = 0;
+        fMPreOutIndex = -1;
         fMatraIndex = matraIndex;
         fMatraTags = matraTags;
 
@@ -86,9 +90,17 @@ public:
         }
     }
 
+    void noteBaseConsonant()
+    {
+        if (fMPreFixups != NULL && fMPreOutIndex >= 0) {
+            fMPreFixups->add(fOutIndex, fMPreOutIndex);
+        }
+    }
+
     void writeMpre()
     {
         if (fMpre != 0) {
+            fMPreOutIndex = fOutIndex;
             writeChar(fMpre, fMatraIndex, fMatraTags);
         }
     }
@@ -221,10 +233,18 @@ le_int32 IndicReordering::findSyllable(const IndicClassTable *classTable, const 
     return cursor;
 }
 
-le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le_int32 scriptCode, LEUnicode *outChars, le_int32 *charIndices, const LETag **charTags)
+le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le_int32 scriptCode,
+                                  LEUnicode *outChars, le_int32 *charIndices, const LETag **charTags,
+                                  MPreFixups **outMPreFixups)
 {
+    MPreFixups *mpreFixups = NULL;
     const IndicClassTable *classTable = IndicClassTable::getScriptClassTable(scriptCode);
-    ReorderingOutput output(outChars, charIndices, charTags);
+
+    if (classTable->scriptFlags & IndicClassTable::SF_MPRE_FIXUP) {
+        mpreFixups = new MPreFixups(charCount);
+    }
+
+    ReorderingOutput output(outChars, charIndices, charTags, mpreFixups);
     le_int32 i, prev = 0;
 
     while (prev < charCount) {
@@ -384,6 +404,9 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
                     }
                 }
 
+                // note the base consonant for post-GSUB fixups
+                output.noteBaseConsonant();
+
                 // write base consonant
                 for (i = baseConsonant; i < bcSpan; i += 1) {
                     output.writeChar(chars[i], i, &tagArray[3]);
@@ -480,69 +503,18 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
         prev = syllable;
     }
 
+    *outMPreFixups = mpreFixups;
+
     return output.getOutputIndex();
 }
 
-void IndicReordering::adjustMPres(const LEUnicode *chars, le_int32 charCount, LEGlyphID *glyphs, le_int32 *charIndices, le_int32 scriptCode)
+void IndicReordering::adjustMPres(MPreFixups *mpreFixups, LEGlyphID *glyphs, le_int32 *charIndices)
 {
-    const IndicClassTable *classTable = IndicClassTable::getScriptClassTable(scriptCode);
-
-    if (classTable->scriptFlags & IndicClassTable::SF_MPRE_FIXUP) {
-        le_int32 i;
-
-        for (i = 0; i < charCount; i += 1) {
-            if (classTable->isMpre(chars[i])) {
-                le_int32 j;
-                le_bool cflag = true;
-
-                for (j = i + 1; j < charCount; j += 1) {
-                    IndicClassTable::CharClass charClass = classTable->getCharClass(chars[j]);
-
-                    if (IndicClassTable::isConsonant(charClass)) {
-                        if (! cflag) {
-                            break;
-                        }
-
-                        cflag = false;
-                    } else if (IndicClassTable::isVirama(charClass)) {
-                        if (cflag) {
-                            break;
-                        }
-
-                        cflag = true;
-                    } else {
-                        break;
-                    }
-                }
-
-                // Don't bother to reorder if
-                // there's one or fewer consonants
-                if (j <= i + 2) {
-                    continue;
-                }
-
-                int lastConsonant = j - 1;
-                int base;
-
-                for (base = lastConsonant; base > i; base -= 1) {
-                    if (classTable->isConsonant(chars[base]) && glyphs[base] != 0xFFFF) {
-                        break;
-                    }
-                }
-
-                LEGlyphID matra = glyphs[i];
-                le_int32 mIndex = charIndices[i];
-                le_int32 x;
-
-                for (x = i; x < base - 1; x += 1) {
-                    glyphs[x] = glyphs[x + 1];
-                    charIndices[x] = charIndices[x + 1];
-                }
-
-                glyphs[base - 1] = matra;
-                charIndices[base - 1] = mIndex;
-            }
-        }
+    if (mpreFixups != NULL)
+    {
+        mpreFixups->apply(glyphs, charIndices);
+        
+        delete mpreFixups;
     }
 }
 
