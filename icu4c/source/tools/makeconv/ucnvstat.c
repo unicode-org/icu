@@ -22,7 +22,8 @@ static const UConverterStaticData _SBCSStaticData={
     0, UCNV_IBM, UCNV_SBCS, 1, 1,
     { 0x1a, 0, 0, 0 }, 1, FALSE, FALSE,
     0,
-    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
 
 
@@ -32,7 +33,8 @@ static const UConverterStaticData _DBCSStaticData={
     0, UCNV_IBM, UCNV_DBCS, 2, 2,
     { 0, 0, 0, 0 },0, FALSE, FALSE, /* subchar */
     0,
-    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
 
 static const UConverterStaticData _MBCSStaticData={
@@ -41,7 +43,8 @@ static const UConverterStaticData _MBCSStaticData={
     0, UCNV_IBM, UCNV_MBCS, 1, 1,
     { 0x1a, 0, 0, 0 }, 1, FALSE, FALSE,
     0,
-    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
 
 static const UConverterStaticData _EBCDICStatefulStaticData={
@@ -50,13 +53,14 @@ static const UConverterStaticData _EBCDICStatefulStaticData={
     0, UCNV_IBM, UCNV_EBCDIC_STATEFUL, 1, 1,
     { 0, 0, 0, 0 },0, FALSE, FALSE,
     0,
-    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
 
 /* NULLs for algorithmic types, their tables live in ucnv_bld.c */
 const UConverterStaticData *ucnv_converterStaticData[UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES]={
     &_SBCSStaticData, &_DBCSStaticData, &_MBCSStaticData, NULL/*Lat1*/,
-    NULL/*UTF8*/, NULL/*UTF16be*/, NULL/*UTF16LE*/, &_EBCDICStatefulStaticData,
+    NULL/*UTF8*/, NULL/*UTF16be*/, NULL/*UTF16LE*/, NULL/*UTF32be*/, NULL/*UTF32LE*/, &_EBCDICStatefulStaticData,
     NULL/*ISO2022*/,
     /* LMBCS */ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 };
