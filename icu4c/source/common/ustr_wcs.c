@@ -373,10 +373,10 @@ _strFromWCS( UChar   *dest,
                  * end of source so we copy the source to a temp buffer
                  * null terminate it and convert wchar_ts to chars
                  */
-                if(nulLen > _STACK_BUFFER_CAPACITY){
+                if(nulLen >= _STACK_BUFFER_CAPACITY){
                     /* Should rarely occcur */
                     /* allocate new buffer buffer */
-                    pWStack =(wchar_t*) uprv_malloc(sizeof(wchar_t) * nulLen);
+                    pWStack =(wchar_t*) uprv_malloc(sizeof(wchar_t) * (nulLen + 1));
                     if(pWStack==NULL){
                         *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
                         goto cleanup;
