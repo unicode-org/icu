@@ -4,7 +4,7 @@
 #**********************************************************************
 # nmake file for creating data files on win32
 # invoke with
-# nmake /f makedata.mak [Debug|Release]
+# nmake /f makedata.mak icumake=$(ProjectDir)
 #
 #	12/10/1999	weiv	Created
 
@@ -178,7 +178,7 @@ CNV_FILES=$(UCM_SOURCE:.ucm=.cnv)
 !INCLUDE "$(ICUSRCDATA)\$(ICULOC)\reslocal.mk"
 GENRB_SOURCE=$(GENRB_SOURCE) $(GENRB_SOURCE_LOCAL)
 !ELSE
-!MESSAGE Information: cannot find "reslocal.mk". Not building user-additional resource bundle files. 
+!MESSAGE Information: cannot find "reslocal.mk". Not building user-additional resource bundle files.
 !ENDIF
 !ELSE
 !MESSAGE Warning: cannot find "resfiles.mk"
@@ -208,7 +208,7 @@ TRANSLIT_FILES = $(TRANSLIT_SOURCE:.txt=.res)
 !INCLUDE "$(ICUSRCDATA)\$(ICUMISC2)\misclocal.mk"
 MISC_SOURCE=$(MISC_SOURCE) $(MISC_SOURCE_LOCAL)
 !ELSE
-!MESSAGE Information: cannot find "misclocal.mk". Not building user-additional miscellaenous files. 
+!MESSAGE Information: cannot find "misclocal.mk". Not building user-additional miscellaenous files.
 !ENDIF
 !ELSE
 !MESSAGE Warning: cannot find "miscfiles.mk"
@@ -222,7 +222,7 @@ ALL_RES = $(INDEX_RES_FILES) $(RB_FILES) $(TRANSLIT_FILES) $(MISC_FILES)
 
 #############################################################################
 #
-# ALL  
+# ALL
 #     This target builds all the data files.  The world starts here.
 #			Note: we really want the common data dll to go to $(DLL_OUTPUT), not $(ICUBLD).  But specifying
 #				that here seems to cause confusion with the building of the stub library of the same name.
@@ -233,7 +233,7 @@ ALL : GODATA "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" "$(TESTDATAOUT)\testdata.dat"
 	@echo All targets are up to date
 
 #
-# testdata - nmake will invoke pkgdata, which will create testdata.dat 
+# testdata - nmake will invoke pkgdata, which will create testdata.dat
 #
 "$(TESTDATAOUT)\testdata.dat": $(ICUDT)ucadata.icu $(TRANSLIT_FILES) $(MISC_FILES) $(RB_FILES) {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe
 	@cd "$(TESTDATA)"
@@ -274,7 +274,7 @@ $(BRK_FILES:.brk =.brk
 	copy "$(ICUPKG).dat" "$(ICUOUT)\$(U_ICUDATA_NAME)$(U_ICUDATA_ENDIAN_SUFFIX).dat"
 	-@erase "$(ICUPKG).dat"
 
- 
+
 
 # RBBI .brk file generation.
 #      TODO:  set up an inference rule, so these don't need to be written out one by one...
