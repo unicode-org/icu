@@ -26,7 +26,33 @@
 #include "ucol_elm.h"
 #include "unicode/uchar.h"
 
-void uprv_uca_reverseElement(UCAElements *el) {
+static uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *element, uint32_t existingCE, UErrorCode *status);
+
+static int32_t prefixLookupHash(const UHashKey e) {
+  UCAElements *element = (UCAElements *)e.pointer;
+  UHashKey key;
+  key.pointer = element->cPoints;
+  element->cPoints[element->cSize] = 0;
+  return uhash_hashUChars(key);
+}
+
+static int8_t prefixLookupComp(const UHashKey e1, const UHashKey e2) {
+  UCAElements *element1 = (UCAElements *)e1.pointer;
+  UCAElements *element2 = (UCAElements *)e2.pointer;
+  UHashKey key1;
+  UHashKey key2;
+  key1.pointer = element1->cPoints;
+  key2.pointer = element2->cPoints;
+  element1->cPoints[element1->cSize] = 0;
+  element2->cPoints[element2->cSize] = 0;
+  return uhash_compareUChars(key1, key2);
+}
+
+static void prefixLookupDeleter(void *element) {
+  uprv_free(element);
+}
+
+static void uprv_uca_reverseElement(UCAElements *el) {
     uint32_t i = 0;
     UChar temp;
 
@@ -35,61 +61,9 @@ void uprv_uca_reverseElement(UCAElements *el) {
         el->cPoints[i] = el->cPoints[el->cSize-i-1];
         el->cPoints[el->cSize-i-1] = temp;
     }
-
-#if 0
-    /* Syn Wee does not need reversed expansions at all */
-    UErrorCode status = U_ZERO_ERROR;
-    uint32_t tempCE = 0, expansion = 0;
-    if(el->noOfCEs>1) { /* this is an expansion that needs to be reversed and added - also, we need to change the mapValue */
-    uint32_t buffer[256];
-#if 0
-      /* this is with continuations preserved */
-      tempCE = el->CEs[0];
-      i = 1;
-      while(i<el->noOfCEs) {
-        if(!isContinuation(el->CEs[i])) {
-          buffer[el->noOfCEs-i] = tempCE;
-        } else { /* it is continuation*/
-          buffer[el->noOfCEs-i] = el->CEs[i];
-          buffer[el->noOfCEs-i-1] = tempCE;
-          i++;
-        }
-        if(i<el->noOfCEs) {
-          tempCE = el->CEs[i];
-          i++;
-        }
-      }
-      if(i==el->noOfCEs) {
-        buffer[0] = tempCE;
-      }
-      uprv_memcpy(el->CEs, buffer, el->noOfCEs*sizeof(uint32_t));
-#endif
-#if 0
-      /* this is simple reversal */
-      for(i = 0; i<el->noOfCEs/2; i++) {
-          tempCE = el->CEs[i];
-          el->CEs[i] = el->CEs[el->noOfCEs-i-1];
-          el->CEs[el->noOfCEs-i-1] = tempCE;
-      }
-#endif
-      expansion = UCOL_SPECIAL_FLAG | (EXPANSION_TAG<<UCOL_TAG_SHIFT) 
-        | ((uprv_uca_addExpansion(expansions, el->CEs[0], &status)+(headersize>>2))<<4)
-        & 0xFFFFF0;
-
-      for(i = 1; i<el->noOfCEs; i++) {
-        uprv_uca_addExpansion(expansions, el->CEs[i], &status);
-      }
-      if(el->noOfCEs <= 0xF) {
-        expansion |= el->noOfCEs;
-      } else {
-        uprv_uca_addExpansion(expansions, 0, &status);
-      }
-      el->mapCE = expansion;
-    }
-#endif
 }
 
-int32_t uprv_uca_addExpansion(ExpansionTable *expansions, uint32_t value, UErrorCode *status) {
+static int32_t uprv_uca_addExpansion(ExpansionTable *expansions, uint32_t value, UErrorCode *status) {
     if(U_FAILURE(*status)) {
         return 0;
     }
@@ -129,6 +103,9 @@ tempUCATable * uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts
   t->expansions = (ExpansionTable *)uprv_malloc(sizeof(ExpansionTable));
   uprv_memset(t->expansions, 0, sizeof(ExpansionTable));
   t->mapping = ucmpe32_open(UCOL_SPECIAL_FLAG | (initTag<<24), UCOL_SPECIAL_FLAG | (SURROGATE_TAG<<24), status);
+  t->prefixLookup = uhash_open(prefixLookupHash, prefixLookupComp, status);
+  uhash_setValueDeleter(t->prefixLookup, prefixLookupDeleter);
+
   t->contractions = uprv_cnttab_open(t->mapping, status);
 
   /* copy UCA's maxexpansion and merge as we go along */
@@ -181,6 +158,10 @@ tempUCATable *uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
   if(t->mapping != NULL) {
     r->mapping = ucmpe32_clone(t->mapping, status);
   }
+
+  // a hashing clone function would be very nice. We have none currently...
+  // However, we should be good, as closing should not produce any prefixed elements.
+  t->prefixLookup = NULL; // prefixes are not used in closing
 
   /* expansions */
   if(t->expansions != NULL) {
@@ -261,6 +242,10 @@ void uprv_uca_closeTempTable(tempUCATable *t) {
     uprv_cnttab_close(t->contractions);
   }
   ucmpe32_close(t->mapping);
+
+  if(t->prefixLookup != NULL) {
+    uhash_close(t->prefixLookup);
+  }
 
   uprv_free(t->maxExpansions->endExpansionCE);
   uprv_free(t->maxExpansions->expansionCESize);
@@ -550,24 +535,43 @@ uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE,
     UChar *oldCP = element->cPoints;
     uint32_t oldCPSize = element->cSize;
 
+
     contractions->currentTag = SPEC_PROC_TAG;
 
-    // First we need to check if contractions starts with a surrogate
-    UTF_NEXT_CHAR(element->cPoints, cpsize, element->cSize, cp);
+    // I'm quite unhappy with the two following loops, as they probably affect prefix analysis
+    // in strcoll. Basically, if we have a contraction we add the starting contraction character
+    // to the unsafe table, so that backward contraction skips it, as it has to pick the whole 
+    // prefix, which won't happen if start is safe.
     uint32_t j = 0;
-    for (j=1; j<element->prefixSize; j++) {   /* First add contraction chars to unsafe CP hash table */
+    if(element->cSize > 1) {
+      if(!(UTF_IS_TRAIL(element->cPoints[0]))) {
+        unsafeCPSet(t->unsafeCP, element->cPoints[0]);
+      }
+    }
+
+    // The second loop I'm unhappy with as it increases the number of unsafe characters. 
+    // Now, all the characters in a prefix are unsafe and that will pick the whole contraction,
+    // and the prefixes for forward processing.
+    for (j=0; j<element->prefixSize; j++) {   /* First add contraction chars to unsafe CP hash table */
       // Unless it is a trail surrogate, which is handled algoritmically and 
       // shouldn't take up space in the table.
       if(!(UTF_IS_TRAIL(element->prefix[j]))) {
         unsafeCPSet(t->unsafeCP, element->prefix[j]);
       }
     }
+
+    element->cPoints = element->prefix;
+    element->cSize = element->prefixSize;
+
     // Add the last char of the contraction to the contraction-end hash table.
     // unless it is a trail surrogate, which is handled algorithmically and 
     // shouldn't be in the table
-    if(!(UTF_IS_TRAIL(element->prefix[element->prefixSize -1]))) {
-      ContrEndCPSet(t->contrEndCP, element->prefix[element->prefixSize -1]);
+    if(!(UTF_IS_TRAIL(element->cPoints[element->cSize -1]))) {
+      ContrEndCPSet(t->contrEndCP, element->cPoints[element->cSize -1]);
     }
+
+    // First we need to check if contractions starts with a surrogate
+    UTF_NEXT_CHAR(element->cPoints, cpsize, element->cSize, cp);
 
     // If there are any Jamos in the contraction, we should turn on special 
     // processing for Jamos
@@ -577,16 +581,13 @@ uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE,
     /* then we need to deal with it */
     /* we could aready have something in table - or we might not */
 
-    element->cPoints = element->prefix;
-    element->cSize = element->prefixSize;
-
     if(!isPrefix(CE)) { 
       /* if it wasn't contraction, we wouldn't end up here*/
       int32_t firstContractionOffset = 0;
       int32_t contractionOffset = 0;
       firstContractionOffset = uprv_cnttab_addContraction(contractions, UPRV_CNTTAB_NEWELEMENT, 0, CE, status);
       uint32_t newCE = uprv_uca_processContraction(contractions, element, UCOL_NOT_FOUND, status);
-      contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, *element->prefix, element->mapCE, status);
+      contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, *element->prefix, newCE, status);
       contractionOffset = uprv_cnttab_addContraction(contractions, firstContractionOffset, 0xFFFF, CE, status);
       CE =  constructContractCE(SPEC_PROC_TAG, firstContractionOffset);
     } else { /* we are adding to existing contraction */
@@ -685,7 +686,7 @@ uint32_t uprv_uca_addContraction(tempUCATable *t, uint32_t CE,
 }
 
 
-uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *element, uint32_t existingCE, UErrorCode *status) {
+static uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *element, uint32_t existingCE, UErrorCode *status) {
     int32_t firstContractionOffset = 0;
     int32_t contractionOffset = 0;
 //    uint32_t contractionElement = UCOL_NOT_FOUND;
@@ -696,7 +697,7 @@ uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *elemen
 
     /* end of recursion */
     if(element->cSize == 1) {
-      if(isCntTableElement(existingCE)) {
+      if(isCntTableElement(existingCE) && ((UColCETags)getCETag(existingCE) == contractions->currentTag)) {
         uprv_cnttab_changeContraction(contractions, existingCE, 0, element->mapCE, status);
         uprv_cnttab_changeContraction(contractions, existingCE, 0xFFFF, element->mapCE, status);
         return existingCE;
@@ -808,8 +809,25 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
   // prefix buffer is already reversed.
 
   if(element->prefixSize!=0) {
-    CE = ucmpe32_get(mapping, element->cPoints[0]);
-    element->mapCE = uprv_uca_addPrefix(t, CE, element, status);
+    // This is CRAP! We cannot find the good CE unless go over contractions
+    // Just the first CP will confuse single CPs and contractions.
+    // if it is NOT_FOUND, that is more - less ok. However, it is 
+    // problematic in other cases. Some sort of cacheing is required
+    // WE CANNOT LOOK SIMPLY IN THE CE TABLE!
+    // The current solution is to keep the added elements in a hashtable
+    // keys would be codepoints, but we use the whole element as a key.
+    // NOTE: hasher & comparer will zero terminate codepoints array.
+    if(t->prefixLookup != NULL) {
+      UCAElements *uCE = (UCAElements *)uhash_get(t->prefixLookup, element);
+      if(uCE != NULL) { // there is already a set of code points here
+        element->mapCE = uprv_uca_addPrefix(t, uCE->mapCE, element, status);
+      } else { // no code points, so this spot is clean
+        element->mapCE = uprv_uca_addPrefix(t, UCOL_NOT_FOUND, element, status);
+        uCE = (UCAElements *)uprv_malloc(sizeof(UCAElements));
+        uprv_memcpy(uCE, element, sizeof(UCAElements));
+        uhash_put(t->prefixLookup, uCE, uCE, status);
+      }
+    }
   }
 
 
