@@ -2,7 +2,7 @@
 #******************************************************************************
 #   Copyright (C) 1999-2001, International Business Machines
 #   Corporation and others.  All Rights Reserved.
-# $Revision: 1.21 $
+# $Revision: 1.22 $
 #******************************************************************************
 # This Makefile is designed to be included into projects which make use
 # of the ICU.
@@ -21,7 +21,22 @@ LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
 LIBS = @LIBS@ 
 ICUPREFIX = icu
 ICULIBSUFFIX = @ICULIBSUFFIX@
-ICULIBS = $(LIBS) -L$(libdir) -l$(ICUPREFIX)i18n$(ICULIBSUFFIX) -l$(ICUPREFIX)uc$(ICULIBSUFFIX)
+ICULIBS = $(LIBS) -L$(libdir)                      \
+			-l$(ICUPREFIX)data                     \
+			-l$(ICUPREFIX)i18n$(ICULIBSUFFIX)      \
+			-l$(ICUPREFIX)uc$(ICULIBSUFFIX)        \
+			-l$(ICUPREFIX)toolutil$(ICULIBSUFFIX)  \
+			-lustdio$(ICULIBSUFFIX)
+#TODO layout library probably wants to be added to ICULIBS.
+#			-l$(ICUPREFIX)le$(ICULIBSSUFFIX)      
+
+## Environment variable to set a runtime search path
+#   (Overridden when necessary in -mh files)
+LDLIBRARYPATH_ENVVAR = LD_LIBRARY_PATH
+
+# Force removal [for make clean]
+RMV = rm -rf
+
 exec_prefix = @exec_prefix@
 prefix = @prefix@
 program_transform_name = @program_transform_name@
@@ -43,6 +58,11 @@ LIB_VERSION = @LIB_VERSION@
 LIB_VERSION_MAJOR = @LIB_VERSION_MAJOR@
 CC = @CC@
 CXX = @CXX@
+
+# Commands to make a shared library
+#   (Overridden when necessary in -mh files)
+SHLIB.c=      $(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -shared
+SHLIB.cc=     $(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -shared
 
 INSTALL  =  @INSTALL@
 INSTALL_PROGRAM  =  @INSTALL_PROGRAM@
