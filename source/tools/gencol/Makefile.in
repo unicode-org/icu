@@ -101,7 +101,7 @@ pl.res pl_PL.res pt.res pt_BR.res pt_PT.res pt_PT_EURO.res ro.res       \
 ro_RO.res ru.res ru_RU.res sh.res sh_YU.res sk.res sk_SK.res sl.res     \
 sl_SI.res sq.res sq_AL.res sr.res sr_YU.res sv.res sv_SE.res th.res     \
 th_TH.res tr.res tr_TR.res uk.res uk_UA.res vi.res vi_VN.res zh.res     \
-zh_CN.res zh_HK.res zh_TW.res default.res index.res
+zh_CN.res zh_HK.res zh_TW.res root.res index.res
 
 RES_FILES = $(RES_BUNDLES:%=@DATABUILDDIR@/%)
 
