@@ -20,6 +20,7 @@
 
 #include "uprint.h"
 #include "unicode/ucnv.h"
+#include "unicode/ustring.h"
 
 #define BUF_SIZE 128
 
