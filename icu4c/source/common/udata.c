@@ -68,9 +68,15 @@
 *    static (Global) data
 *
 ************************************************************************/
-static UDataMemory *gCommonICUData = NULL;
-static UHashtable  *gCommonDataCache = NULL;
+static UDataMemory *gCommonICUData = NULL;    /* Pointer to the common ICU data.           */
+                                              /*   May be updated once, if we started with */
+                                              /*   a stub or subset library.               */
 
+static UDataMemory *gStubICUData   = NULL;    /* If gCommonICUData does get updated, remember */
+                                              /*   the original one so that it can be cleaned */
+                                              /*   up when ICU is shut down.                  */
+
+static UHashtable  *gCommonDataCache = NULL;  /* Global hash table of opened ICU data files.  */
 
 
 UBool
@@ -81,8 +87,16 @@ udata_cleanup()
         gCommonDataCache = 0;            /*   Cleanup is not thread safe.                */
     }
 
-    udata_close(gCommonICUData);    /* Clean up common ICU Data             */
+    if (gCommonICUData != NULL) {
+    udata_close(gCommonICUData);         /* Clean up common ICU Data             */
     gCommonICUData = NULL;
+    }
+
+    if (gStubICUData != NULL) {
+        udata_close(gStubICUData);     /* Clean up the stub ICU Data             */
+        gStubICUData = NULL;
+    }
+
 
     return TRUE;                   /* Everything was cleaned up */
 }
@@ -113,6 +127,7 @@ setCommonICUData(UDataMemory *pData,     /*  The new common data.  Belongs to ca
     UDatamemory_assign(newCommonData, pData);
     umtx_lock(NULL);
     if (gCommonICUData==oldData) {
+        gStubICUData   = gCommonICUData;   /* remember the old Common Data, so it can be cleaned up. */
         gCommonICUData = newCommonData;
     }
     else {
@@ -318,6 +333,7 @@ static UDataMemory *udata_cacheDataItem(const char *path, UDataMemory *item, UEr
     umtx_unlock(NULL);
 
     if (*pErr == U_USING_DEFAULT_WARNING || U_FAILURE(*pErr)) {
+        //  TODO  - get rid of newElement->item too.
         uprv_free(newElement->name);
         uprv_free(newElement);
         return oldValue;
