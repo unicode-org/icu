@@ -7,11 +7,13 @@
 
 ky{
     Version{ "x0.1" }
-    CollationElements {
+    collations {
+      standard {
         Version { "1.0" }
         Sequence { 
             "[normalization on]"
         }
+      }
     }
     Countries {
         KG { "\u041A\u044B\u0440\u0433\u044B\u0437\u0441\u0442\u0430\u043D" }

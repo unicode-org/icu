@@ -7,11 +7,13 @@
 
 mn{
     Version{ "x0.3" }
-    CollationElements {
+    collations {
+      standard {
         Version { "1.0" }
         Sequence { 
             "[normalization on]"
         }
+      }
     }
 //    Currencies {
 //        MNT { "Tug", "Mongolian Tugrik"      } // 03/13/1921-

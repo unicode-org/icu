@@ -83,10 +83,12 @@ ka{
     }
     LocaleScript:array { "Geor" }
     ExemplarCharacters { "[:Geor:]" }
-    CollationElements {
+    collations {
+      standard {
         Version { "1.0" }
         Sequence { 
             "[normalization on]"
         }
+      }
     }
 }

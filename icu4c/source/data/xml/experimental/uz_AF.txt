@@ -14,8 +14,9 @@ uz_AF {
     Version { "x0.1" }
 
     // This is a unified sort with uz_AF, fa_AF and ps.
-    CollationElements:alias { "ps" }
-//    CollationElements {
+    collations:alias { "ps" }
+//    collations {
+//      standard {
 //        Version { "1.0" }
 //        Sequence { "[normalization on]"
 //           "&\u064e << \u0650 << \u064f << \u064b << \u064d << \u064c"
@@ -34,6 +35,7 @@ uz_AF {
 //           "&\u06cc << \u0649 << \u06d2 << \u064a << \u06d0 << \u06cd << \u06cc\u0654 <<< \u0649\u0654 <<< \u0626"
 //           "&'\u00a0'<<'\u200c'<<'\u200d'"  // This is NBSP << ZWNJ << ZWJ
 //         }
+//      }
 //    }
 
     Countries {

@@ -7,11 +7,13 @@
 
 tt{
     Version{ "x0.3" }
-    CollationElements {
+    collations {
+      standard {
         Version { "1.0" }
         Sequence { 
             "[normalization on]"
         }
+      }
     }
     Currencies {
         RUR { "\u0440.", "RUR" }
