@@ -1,18 +1,17 @@
-﻿// ****************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/9 14:56
+// * Source File: \work\locale\common\collation\\ar.xml
 // *
 // ***************************************************************************
-
-ar {
-    Version{"2.0"}
-    collations {
-      standard { 
-        // according to Ayman M. Roshdy
-        Version { "3.0" }
-        Sequence { "& ة"
-                "= ت"}
-      }
+ar{
+    collations{
+        standard{
+            Sequence{"&ة=ت"}
+            Version{"1.1.1"}
+        }
     }
 }

@@ -1,14 +1,12 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/9 14:56
+// * Source File: \work\locale\common\collation\\be.xml
 // *
 // ***************************************************************************
-
-be {
-    Version { "2.0" }
-
-    // We use UCA collation table optimized for Cyrillic
-    // as defined in the Russian locale
-    collations:alias { "ru" }
+be{
+    collations:alias{"ru"}
 }

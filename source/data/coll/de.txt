@@ -1,31 +1,21 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/9 14:56
+// * Source File: \work\locale\common\collation\\de.xml
 // *
 // ***************************************************************************
-
-
-de {
-    Version{ "3.0" }
-    collations {
-        standard { 
-            Version { "1.0" }
-            Sequence { 
-                "&A<<\u00c6/E"
-                "&a<<\u00e6/e" 
-            }
+de{
+    collations{
+        phonebook{
+            Sequence{"&a<<æ/e<<ä/e&A<<Æ/E<<Ä/E&œ<<ö/e&Œ<<Ö/E&u<<ü/e&U<<Ü/E"}
+            Version{"1.1.1"}
         }
-        phonebook {
-            Version { "2.0" }
-            Sequence { 
-                "&a<<\u00e6/e<<\u00E4/e"
-                "&A<<\u00c6/E<<\u00C4/E" 
-                "&\u0153<<\u00F6/e"
-                "&\u0152<<\u00D6/E" 
-                "&u<<\u00FC/e"
-                "&U<<\u00DC/E" 
-            }
+        standard{
+            Sequence{"&A<<Æ/E&a<<æ/e"}
+            Version{"1.1.1"}
         }
     }
 }
