@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2001/03/26 20:15:25 $ 
-* $Revision: 1.5 $
+* $Date: 2001/03/26 20:34:36 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -30,7 +30,8 @@ import java.util.Locale;
 * E.g. In Windows <code>set CLASSPATH=%CLASSPATH%;$JAR_FILE_PATH/ucharacter.jar
 * </code><br>
 * For more information about the data file format, please refer to 
-* <a href=ReadMe.html>Read Me</a>.<br>
+* <a href=http://oss.software.ibm.com/icu4j/icu4jhtml/com/ibm/text/ReadMe.html>
+* Read Me</a>.<br>
 * Each code point used here in in terms of a 32 bit int. This is so as to 
 * handle supplementary code points which has 21 bit in size.<br>
 * APIs provide up-to-date Unicode implementation of java.lang.Character, <br>
