@@ -59,7 +59,7 @@ static const UChar gRuleSet_rule_char_pattern[]       = {
 static const UChar gRuleSet_digit_char_pattern[] = {
 //    [    0      -    9     ]
     0x5b, 0x30, 0x2d, 0x39, 0x5d, 0};
-static const UnicodeSet *gRuleDigits = NULL;
+//static const UnicodeSet *gRuleDigits = NULL;
 
 
 
