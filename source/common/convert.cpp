@@ -81,6 +81,7 @@ UBool UnicodeConverter::operator==(const UnicodeConverter& that) const
       (myUnicodeConverter->fromCharErrorBehaviour == that.myUnicodeConverter->fromCharErrorBehaviour) &&
       (myUnicodeConverter->toUContext == that.myUnicodeConverter->toUContext) &&
       (myUnicodeConverter->toUnicodeStatus == that.myUnicodeConverter->toUnicodeStatus) &&
+      (myUnicodeConverter->subChar1 == that.myUnicodeConverter->subChar1) &&
       (myUnicodeConverter->subCharLen == that.myUnicodeConverter->subCharLen) &&
       (uprv_memcmp(myUnicodeConverter->subChar, that.myUnicodeConverter->subChar, myUnicodeConverter->subCharLen) == 0) &&
       (myUnicodeConverter->UCharErrorBufferLength == that.myUnicodeConverter->UCharErrorBufferLength) &&

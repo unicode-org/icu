@@ -1438,7 +1438,8 @@ static const UConverterStaticData _SCSUStaticData={
     { 0x0e, 0xff, 0xfd, 0 }, 3, /* ### the subchar really must be written by an SCSU function! */
     FALSE, FALSE,
     0,
-    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
 
 const UConverterSharedData _SCSUData={

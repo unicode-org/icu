@@ -374,6 +374,13 @@ void   ucnv_setSubstChars (UConverter * converter,
   uprv_memcpy (converter->subChar, mySubChar, len);	/*copies the subchars */
   converter->subCharLen = len;	/*sets the new len */
 
+  /*
+   * There is currently (2001Feb) no separate API to set/get subChar1.
+   * In order to always have subChar written after it is explicitly set,
+   * we set subChar1 to 0.
+   */
+  converter->subChar1 = 0;
+
   return;
 }
 
