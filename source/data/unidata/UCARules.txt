@@ -1,10 +1,10 @@
 ﻿#	UCA Rules
 #	This file contains the UCA tables for the given version, but transformed into rule syntax.
-#	Generated:   2002-07-02,18:49:17 GMT [MD]
+#	Generated:   2003-03-19,12:34:38 GMT [MD]
 #	NOTE: Since UCA handles canonical equivalents, no composites are necessary
 #	(except in extensions).
 #	For syntax description, see: http://oss.software.ibm.com/icu/userguide/Collate_Intro.html
-# VERSION: UCA=3.1.1d6, UCD=3.2.0
+# VERSION: UCA=3.1.1, UCD=4.0.0
 & [last tertiary ignorable]
 
     =	 '\u0001'
@@ -99,14 +99,14 @@
     =	 ֯
     =	 ֽ
     =	 ׄ
-    =	 '۝'
-    =	 '۞'
+    =	 '\u06DD'
+    =	 ۞
     =	 ۟
     =	 ۠
     =	 ۪
     =	 ۫
     =	 ۬
-    =	 '܏'
+    =	 '\u070F'
     =	 ๎
     =	 ༘
     =	 ༙
@@ -117,30 +117,30 @@
     =	 ྆
     =	 ྇
     =	 ࿆
-    =	 '᠋'
-    =	 '᠌'
-    =	 '᠍'
-    =	 '᠎'
-    =	 '​'
-    =	 '‌'
-    =	 '‍'
-    =	 '‎'
-    =	 '‏'
-    =	 '‪'
-    =	 '‫'
-    =	 '‬'
-    =	 '‭'
-    =	 '‮'
-    =	 '⁪'
-    =	 '⁫'
-    =	 '⁬'
-    =	 '⁭'
-    =	 '⁮'
-    =	 '⁯'
-    =	 '﻿'
-    =	 '￹'
-    =	 '￺'
-    =	 '￻'
+    =	 ᠋
+    =	 ᠌
+    =	 ᠍
+    =	 '\u180E'
+    =	 ​
+    =	 '\u200C'
+    =	 '\u200D'
+    =	 '\u200E'
+    =	 '\u200F'
+    =	 '\u202A'
+    =	 '\u202B'
+    =	 '\u202C'
+    =	 '\u202D'
+    =	 '\u202E'
+    =	 '\u206A'
+    =	 '\u206B'
+    =	 '\u206C'
+    =	 '\u206D'
+    =	 '\u206E'
+    =	 '\u206F'
+    =	 '\uFEFF'
+    =	 '\uFFF9'
+    =	 '\uFFFA'
+    =	 '\uFFFB'
     =	 𝅥
     =	 𝅦
     =	 𝅧
@@ -556,22 +556,22 @@
  <	 '\u000D'
  <	 '\u0085'
  <	 '\u2028'
- <	 ' '
+ <	 '\u2029'
  <	 '\u0020'
-   <<<	 '　'
-   <<<	 ' '
-    =	 ' '
-    =	 ' '
-    =	 ' '
-    =	 ' '
-    =	 ' '
-    =	 ' '
-    =	 ' '
-   <<<	 ' '
-    =	 ' '
-    =	 ' '
- <	 ' '
- <	 'ـ'
+   <<<	 '\u3000'
+   <<<	 '\u2002'
+    =	 '\u2003'
+    =	 '\u2004'
+    =	 '\u2005'
+    =	 '\u2006'
+    =	 '\u2008'
+    =	 '\u2009'
+    =	 '\u200A'
+   <<<	 '\u00A0'
+    =	 '\u2007'
+    =	 '\u202F'
+ <	 '\u1680'
+ <	 ـ
  <	 '`'
    <<<	 ｀
  <	 ´
@@ -607,7 +607,7 @@
  <	 ῀
  <	 ゛
  <	 ゜
- <	 ­
+ <	 '­'
  <	 '-'
    <<<	 －
    <<<	 ﹣
@@ -7558,8 +7558,8 @@
  <	 ឱ
  <	 ឲ
  <	 ឳ
- <	 ឴
- <	 ឵
+ <	 '឴'
+ <	 '឵'
  <	 ា
  <	 ិ
  <	 ី
@@ -9903,13 +9903,13 @@
 & 弢		# U+5F22 CJK UNIFIED IDEOGRAPH-5F22
     =	 弢
     =	 弢
-& 弳		# U+5F33 CJK UNIFIED IDEOGRAPH-5F33
-    =	 弳
 & 彐		# U+5F50 CJK UNIFIED IDEOGRAPH-5F50
    <<<	 ⼹
   <<	 ⺕
 & 彑		# U+5F51 CJK UNIFIED IDEOGRAPH-5F51
     =	 ⺔
+& 当		# U+5F53 CJK UNIFIED IDEOGRAPH-5F53
+    =	 当
 & 彡		# U+5F61 CJK UNIFIED IDEOGRAPH-5F61
    <<<	 ⼺
 & 形		# U+5F62 CJK UNIFIED IDEOGRAPH-5F62
@@ -10353,10 +10353,10 @@
     =	 穏
 & 穴		# U+7A74 CJK UNIFIED IDEOGRAPH-7A74
    <<<	 ⽳
-& 窮		# U+7AAE CJK UNIFIED IDEOGRAPH-7AAE
-    =	 窮
 & 立		# U+7ACB CJK UNIFIED IDEOGRAPH-7ACB
    <<<	 ⽴
+& 竮		# U+7AEE CJK UNIFIED IDEOGRAPH-7AEE
+    =	 竮
 & 竹		# U+7AF9 CJK UNIFIED IDEOGRAPH-7AF9
    <<<	 ⽵
   <<	 ⺮
@@ -10923,6 +10923,8 @@
     =	 㔕
 & 㛮		# U+36EE CJK UNIFIED IDEOGRAPH-36EE
     =	 㛮
+& 㛼		# U+36FC CJK UNIFIED IDEOGRAPH-36FC
+    =	 㛼
 & 㞁		# U+3781 CJK UNIFIED IDEOGRAPH-3781
     =	 㞁
 & 㠯		# U+382F CJK UNIFIED IDEOGRAPH-382F
@@ -10994,8 +10996,6 @@
     =	 䌴
 & 䍙		# U+4359 CJK UNIFIED IDEOGRAPH-4359
     =	 䍙
-& 䎫		# U+43AB CJK UNIFIED IDEOGRAPH-43AB
-    =	 䎫
 & 䏕		# U+43D5 CJK UNIFIED IDEOGRAPH-43D5
     =	 䏕
 & 䏙		# U+43D9 CJK UNIFIED IDEOGRAPH-43D9
@@ -11012,6 +11012,8 @@
     =	 䕡
 & 䕫		# U+456B CJK UNIFIED IDEOGRAPH-456B
     =	 䕫
+& 䗗		# U+45D7 CJK UNIFIED IDEOGRAPH-45D7
+    =	 䗗
 & 䗹		# U+45F9 CJK UNIFIED IDEOGRAPH-45F9
     =	 䗹
 & 䘵		# U+4635 CJK UNIFIED IDEOGRAPH-4635
@@ -11042,8 +11044,6 @@
     =	 䳸
 & 䵖		# U+4D56 CJK UNIFIED IDEOGRAPH-4D56
     =	 䵖
-& 䵗		# U+4D57 CJK UNIFIED IDEOGRAPH-4D57
-    =	 䵗
 & 𠄢		# U+20122 CJK UNIFIED IDEOGRAPH-20122
     =	 𠄢
 & 𠔜		# U+2051C CJK UNIFIED IDEOGRAPH-2051C
@@ -11062,8 +11062,6 @@
     =	 𠨬
 & 𠭣		# U+20B63 CJK UNIFIED IDEOGRAPH-20B63
     =	 𠭣
-& 𡍪		# U+2136A CJK UNIFIED IDEOGRAPH-2136A
-    =	 𡍪
 & 𡓤		# U+214E4 CJK UNIFIED IDEOGRAPH-214E4
     =	 𡓤
 & 𡚨		# U+216A8 CJK UNIFIED IDEOGRAPH-216A8
@@ -11127,6 +11125,8 @@
     =	 𣾎
 & 𤉣		# U+24263 CJK UNIFIED IDEOGRAPH-24263
     =	 𤉣
+& 𤎫		# U+243AB CJK UNIFIED IDEOGRAPH-243AB
+    =	 𤎫
 & 𤘈		# U+24608 CJK UNIFIED IDEOGRAPH-24608
     =	 𤘈
 & 𤜵		# U+24735 CJK UNIFIED IDEOGRAPH-24735
