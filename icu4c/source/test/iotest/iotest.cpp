@@ -27,7 +27,13 @@
 
 #if U_IOSTREAM_SOURCE >= 199711
 #include <iostream>
+#ifdef U_LINUX
+#define USE_SSTREAM 1
 #include <sstream>
+#else
+// <strstream> is deprecated on some platforms, and the compiler complains very loudly if you use it.
+#include <strstream>
+#endif
 using namespace std;
 #elif U_IOSTREAM_SOURCE >= 198506
 #include <iostream.h>
@@ -707,7 +713,7 @@ static void U_CALLCONV TestStream(void)
     strncpy(defConvName, ucnv_getDefaultName(), sizeof(defConvName)/sizeof(defConvName[0]));
     ucnv_setDefaultName("UTF-8");
 
-#if U_IOSTREAM_SOURCE >= 199711
+#ifdef USE_SSTREAM
     ostringstream outTestStream;
     istringstream inTestStream("\x20\x74\x48\x69\x73\xCE\xBC\xE2\x80\x82\x20\x6D\x75\x20\x77\x6F\x72\x6C\x64");
 #else
@@ -722,7 +728,7 @@ static void U_CALLCONV TestStream(void)
 
     outTestStream << "\x42\x65\x67\x69\x6E\x6E\x69\x6E\x67\x20\x6F\x66\x20\x74\x65\x73\x74\x20";
     outTestStream << str1 << "\x20\x20" << str2 << str3 << "\x31\x20" << UTF8_NEW_LINE << str4 << ends;
-#if U_IOSTREAM_SOURCE >= 199711
+#ifdef USE_SSTREAM
     string tempStr = outTestStream.str();
     const char *testStreamBuf = tempStr.c_str();
 #endif
