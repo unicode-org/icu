@@ -20,6 +20,7 @@
 #include "cintltst.h"
 #include "unicode/utypes.h"
 #include "cmemory.h"
+#include "unicode/ustring.h"
 
 void addUCharTransformTest(TestNode** root);
 
