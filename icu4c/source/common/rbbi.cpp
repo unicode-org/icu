@@ -569,9 +569,12 @@ int32_t RuleBasedBreakIterator::preceding(int32_t offset) {
         // move backwards one codepoint to prepare for moving forwards to a
         // safe point.
         // this handles offset being between a supplementary character
+        // TODO:  would it be better to just check for being in the middle of a surrogate pair,
+        //        rather than adjusting the position unconditionally?
+        //        (Change would interact with safe rules.)
         fText->previous32();
         handleNext(fData->fSafeFwdTable);
-        int32_t result = /*previous(); */ fText->getIndex();
+        int32_t result = fText->getIndex();
         while (result >= offset) {
             result = previous();
         }

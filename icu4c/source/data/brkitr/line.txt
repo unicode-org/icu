@@ -388,6 +388,4 @@ $QU $CM* $SP+;
 $CL $CM* $SP+;
 
 # LB 18
-$HY $CM* $NU;
-$IS $CM* $CL;
-$SY $CM* $CL;
+$CM* $PRcm? ($OPcm | $HYcm)? $NU;
