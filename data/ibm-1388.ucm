@@ -1,9 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<!-- saved from url=(0087)ftp://cdra:4amtd20@nltclinux.torolab.ibm.com/home/cdra/new_upmap/dbcs/IBM-1388.UPMAP101 -->
-<HTML><HEAD>
-<META content="text/html; charset=windows-1252" http-equiv=Content-Type>
-<META content="MSHTML 5.00.2920.0" name=GENERATOR></HEAD>
-<BODY><XMP>#________________________________________________________________________
+#________________________________________________________________________
 #
 # (C) COPYRIGHT International Business Machines Corp. 2000
 #     All Rights Reserved
@@ -21,7 +16,7 @@
 <char_name_mask>              "AXXXX"
 <mb_cur_max>                  2
 <mb_cur_min>                  1
-<uconv_class>                 "MBCS"
+<uconv_class>                 "EBCDIC_STATEFUL"
 <subchar>                     \xFE\xFE
 #<subchar1>                   \x3F
 #
@@ -24130,4 +24125,3 @@ CHARMAP
 END CHARMAP
 #
 #________________________________________________________________________
-</XMP></BODY></HTML>

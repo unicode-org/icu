@@ -108,8 +108,8 @@ ibm-33722               EUC-JP ibm-eucJP eucjis extended_unix_code_packed_format
 ibm-970                 EUC-KR ibm-eucKR csEUCKR                       # Korean EUC
 ibm-964                 EUC-TW ibm-eucTW cns11643              # Taiwan EUC
 ibm-1383                EUC-CN ibm-eucCN                       # China EUC
-#ibm-1162               tis-620 cp874 windows-874 ms874       # Thai (w/ euro support) #what is the connection between this and the one below!!!
-ibm-874                 ibm-1161 #same as 1162 (w/o euro update) ***This is commented out in Helena's
+ibm-1162               tis-620 cp874 windows-874 ms874 cp9066      # Thai (w/ euro support) #what is the connection between this and the one below!!!
+ibm-874                 ibm-1161 #same as 1162 (w/o euro update)
 
 lmb-excp                # special exceptions list for LMBCS algorithm
 
@@ -145,7 +145,8 @@ ibm-901                 cp921 # PC Baltic (w/ euro update) moved cp921 down
 ibm-921                 # PC Baltic (w/o euro update) from above
 ibm-902                 cp922 # PC Estonian (w/ euro update) moved cp922 down
 ibm-922                 # PC Estonian (w/o euro update) from above
-ibm-942                 shift_jis78 sjis78 ibm-932    # Old s_jis ibm-932 added!
+ibm-942                 shift_jis78 sjis78 ibm-932   # Old s_jis ibm-932 added!
+ibm-941                 jis-208 jisx-208 # Pure DBCS jisx-208
 ibm-1038                Adobe-Symbol-Encoding csHPPSMath symbol
 ibm-5346                windows-1250  cp1250 { MIME }    # Windows Latin2 (w/ euro update)
 ibm-5347                windows-1251  cp1251 { MIME }    # Windows Cyrillic (w/ euro update)
@@ -182,7 +183,6 @@ ibm-849                cp1131          # PC Belarus (w/ euro update)
 ibm-848                cp1125          # PC Ukraine (w/ euro update)
 ibm-5104               cp1008          # 8-bit Arabic (w/ euro update)
 ibm-9238               cp1046          # PC Arabic Extended (w/ euro update)
-#ibm-1161              cp9066          # PC Thailand (IBM "version) (w/ euro update)
 ibm-1362               cp1362          # Korean Windows DBCS (w/ euro update)
 ibm-1363               cp1363 cp949 ksc korean # Korean KSC Korean Windows MBCS (w/ euro update)
 ibm-5210               cp1114          # PC SBCS Big-5 (w/ euro update)
