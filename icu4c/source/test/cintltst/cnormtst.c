@@ -34,6 +34,9 @@ TestAPI(void);
 static void
 TestNormCoverage(void);
 
+static void
+TestConcatenate(void);
+
 const static char* canonTests[][3] = {
     /* Input*/                    /*Decomposed*/                /*Composed*/
     { "cat",                    "cat",                        "cat"                    },
@@ -104,6 +107,7 @@ void addNormTest(TestNode** root)
     addTest(root, &TestQuickCheck, "tscoll/cnormtst/TestQuickCheck");
     addTest(root, &TestCheckFCD, "tscoll/cnormtst/TestCheckFCD");
     addTest(root, &TestNormCoverage, "tscoll/cnormtst/TestNormCoverage");
+    addTest(root, &TestConcatenate, "tscoll/cnormtst/TestConcatenate");
 }
 
 void TestDecomp() 
@@ -900,5 +904,68 @@ TestNormCoverage() {
                 break;
             }
         }
+    }
+}
+
+/* API test for unorm_concatenate() - for real test strings see intltest/tstnorm.cpp */
+static void
+TestConcatenate(void) {
+    /* "re + 'sume'" */
+    static const UChar
+    left[]={
+        0x72, 0x65, 0
+    },
+    right[]={
+        0x301, 0x73, 0x75, 0x6d, 0xe9, 0
+    },
+    expect[]={
+        0x72, 0xe9, 0x73, 0x75, 0x6d, 0xe9, 0
+    };
+
+    UChar buffer[100];
+    UErrorCode errorCode;
+    int32_t length;
+
+    /* left with length, right NUL-terminated */
+    errorCode=U_ZERO_ERROR;
+    length=unorm_concatenate(left, 2, right, -1, buffer, 100, UNORM_NFC, 0, &errorCode);
+    if(U_FAILURE(errorCode) || length!=6 || 0!=u_memcmp(buffer, expect, length)) {
+        log_err("error: unorm_concatenate()=%ld (expect 6) failed with %s\n", length, u_errorName(errorCode));
+    }
+
+    /* preflighting */
+    errorCode=U_ZERO_ERROR;
+    length=unorm_concatenate(left, 2, right, -1, NULL, 0, UNORM_NFC, 0, &errorCode);
+    if(errorCode!=U_BUFFER_OVERFLOW_ERROR || length!=6) {
+        log_err("error: unorm_concatenate(preflighting)=%ld (expect 6) failed with %s\n", length, u_errorName(errorCode));
+    }
+
+    buffer[2]=0x5555;
+    errorCode=U_ZERO_ERROR;
+    length=unorm_concatenate(left, 2, right, -1, buffer, 1, UNORM_NFC, 0, &errorCode);
+    if(errorCode!=U_BUFFER_OVERFLOW_ERROR || length!=6 || buffer[2]!=0x5555) {
+        log_err("error: unorm_concatenate(preflighting 2)=%ld (expect 6) failed with %s\n", length, u_errorName(errorCode));
+    }
+
+    /* enter with U_FAILURE */
+    buffer[2]=0xaaaa;
+    errorCode=U_UNEXPECTED_TOKEN;
+    length=unorm_concatenate(left, 2, right, -1, buffer, 100, UNORM_NFC, 0, &errorCode);
+    if(errorCode!=U_UNEXPECTED_TOKEN || buffer[2]!=0xaaaa) {
+        log_err("error: unorm_concatenate(failure)=%ld failed with %s\n", length, u_errorName(errorCode));
+    }
+
+    /* illegal arguments */
+    buffer[2]=0xaaaa;
+    errorCode=U_ZERO_ERROR;
+    length=unorm_concatenate(NULL, 2, right, -1, buffer, 100, UNORM_NFC, 0, &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR || buffer[2]!=0xaaaa) {
+        log_err("error: unorm_concatenate(left=NULL)=%ld failed with %s\n", length, u_errorName(errorCode));
+    }
+
+    errorCode=U_ZERO_ERROR;
+    length=unorm_concatenate(left, 2, right, -1, NULL, 100, UNORM_NFC, 0, &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("error: unorm_concatenate(buffer=NULL)=%ld failed with %s\n", length, u_errorName(errorCode));
     }
 }
