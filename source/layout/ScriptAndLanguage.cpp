@@ -27,11 +27,11 @@ const LangSysTable *ScriptTable::findLanguage(LETag languageTag) const
         }
     }
 
-	if (langSysTableOffset != 0) {
-		return (const LangSysTable *) ((char *)this + SWAPW(langSysTableOffset));
-	}
+    if (langSysTableOffset != 0) {
+        return (const LangSysTable *) ((char *)this + SWAPW(langSysTableOffset));
+    }
 
-	return 0;
+    return 0;
 }
 
 const ScriptTable *ScriptListTable::findScript(LETag scriptTag) const
