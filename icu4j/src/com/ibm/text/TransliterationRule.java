@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/TransliterationRule.java,v $ 
- * $Date: 2000/04/21 21:16:40 $ 
- * $Revision: 1.17 $
+ * $Date: 2000/04/22 01:25:10 $ 
+ * $Revision: 1.18 $
  *
  *****************************************************************************************
  */
@@ -44,7 +44,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.17 $ $Date: 2000/04/21 21:16:40 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.18 $ $Date: 2000/04/22 01:25:10 $
  */
 class TransliterationRule {
     /**
@@ -151,7 +151,7 @@ class TransliterationRule {
     public TransliterationRule(String input,
                                int anteContextPos, int postContextPos,
                                String output,
-                               int cursorPos,
+                               int cursorPos, int cursorOffset,
                                int[] segs) {
         // Do range checks only when warranted to save time
         if (anteContextPos < 0) {
@@ -172,13 +172,12 @@ class TransliterationRule {
             keyLength = postContextPos - anteContextLength;
         }
         if (cursorPos < 0) {
-            this.cursorPos = output.length();
-        } else {
-            if (cursorPos > output.length()) {
-                throw new IllegalArgumentException("Invalid cursor position");
-            }
-            this.cursorPos = cursorPos;
+            cursorPos = output.length();
         }
+        if (cursorPos > output.length()) {
+            throw new IllegalArgumentException("Invalid cursor position");
+        }
+        this.cursorPos = cursorPos + cursorOffset;
         pattern = input;
         this.output = output;
         // We don't validate the segments array.  The caller must
@@ -208,7 +207,7 @@ class TransliterationRule {
                                String output,
                                int cursorPos) {
         this(input, anteContextPos, postContextPos,
-             output, cursorPos, null);
+             output, cursorPos, 0, null);
     }
 
     /**
@@ -494,6 +493,9 @@ class TransliterationRule {
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.18  2000/04/22 01:25:10  alan
+ * Add support for cursor positioner '@'; update javadoc
+ *
  * Revision 1.17  2000/04/21 21:16:40  alan
  * Modify rule syntax
  *
