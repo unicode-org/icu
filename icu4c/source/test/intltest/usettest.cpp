@@ -757,8 +757,10 @@ void UnicodeSetTest::TestPropertySet() {
         "x",
 
         "[:math=false:]",
-        "q",
-        "(*+)",
+        "q)*(",
+        // weiv: )(and * were removed from math in Unicode 4.0.1
+        //"(*+)",
+        "+<>^",
 
         // JB#1767 \N{}, \p{ASCII}
         "[:Ascii:]",
