@@ -478,6 +478,10 @@ SOURCE=.\cloctst.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\cposxtst.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\crestst.c
 # End Source File
 # Begin Source File
