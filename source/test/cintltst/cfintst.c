@@ -102,7 +102,7 @@ static void TestPrimary()
     }
     log_verbose("Testing Finnish Collation with Tertiary strength\n");
     ucol_setStrength(myCollation, UCOL_PRIMARY);
-    for (i = 4; i < 4; i++)
+    for (i = 4; i < 5; i++)
     {
         doTest(myCollation, testSourceCases[i], testTargetCases[i], results[i]);
     }
