@@ -44,18 +44,20 @@ static const UChar INTL_CURRENCY_SYMBOL_STR[] = {0xa4, 0xa4, 0};
 // Initializes this with the decimal format symbols in the default locale.
  
 DecimalFormatSymbols::DecimalFormatSymbols(UErrorCode& status)
-    : UObject()
+    : UObject(),
+    locale()
 {
-    initialize(Locale::getDefault(), status, TRUE);
+    initialize(locale, status, TRUE);
 }
  
 // -------------------------------------
 // Initializes this with the decimal format symbols in the desired locale.
  
 DecimalFormatSymbols::DecimalFormatSymbols(const Locale& loc, UErrorCode& status)
-    : UObject()
+    : UObject(),
+    locale(loc)
 {
-    initialize(loc, status);
+    initialize(locale, status);
 }
  
 // -------------------------------------
@@ -118,11 +120,11 @@ void
 DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
                                  UBool useLastResortData)
 {
-    if (U_FAILURE(status)) return;
+    if (U_FAILURE(status))
+        return;
 
-    this->locale = loc;
-
-    ResourceBundle resource((char *)0, loc, status);
+    const char* locStr = loc.getName();
+    UResourceBundle *resource = ures_open((char *)0, locStr, &status);
     if (U_FAILURE(status))
     {
         // Initializes with last resort data if necessary.
@@ -131,47 +133,47 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
             status = U_USING_FALLBACK_WARNING;
             initialize();
         }
-        return;
     }
+    else {
+        // Gets the number element array.
+        UResourceBundle *numberElementsRes = ures_getByKey(resource, gNumberElements, NULL, &status);
+        int32_t numberElementsLength = ures_getSize(numberElementsRes);
 
-    // Gets the number element array.
-    int32_t i = 0;
-    ResourceBundle numberElementsRes = resource.get(gNumberElements, status);
-    int32_t numberElementsLength = numberElementsRes.getSize();
+        // If the array size is too small, something is wrong with the resource
+        // bundle, returns the failure error code.
+        if (numberElementsLength < 11 || U_FAILURE(status)) {
+            status = U_INVALID_FORMAT_ERROR;
+        }
+        else {
+            UnicodeString numberElements[kFormatSymbolCount];
+            int32_t i = 0;
+            for(i = 0; i<numberElementsLength; i++) {
+                int32_t len = 0;
+                const UChar *resUChars = ures_getStringByIndex(numberElementsRes, i, &len, &status);
+                numberElements[i].fastCopyFrom(UnicodeString(TRUE, resUChars, len));
+            }
 
-    // If the array size is too small, something is wrong with the resource
-    // bundle, returns the failure error code.
-    if (numberElementsLength < 11) {
-        status = U_INVALID_FORMAT_ERROR;
-        return;
+            if (U_SUCCESS(status)) {
+                initialize(numberElements, numberElementsLength);
+
+                // Obtain currency data from the currency API.  This is strictly
+                // for backward compatibility; we don't use DecimalFormatSymbols
+                // for currency data anymore.
+                UErrorCode internalStatus = U_ZERO_ERROR; // don't propagate failures out
+                const UChar* curriso = ucurr_forLocale(locStr, &internalStatus);
+
+                // Reuse numberElements[0] as a temporary buffer
+                uprv_getStaticCurrencyName(curriso, locStr, numberElements[0], internalStatus);
+                if (U_SUCCESS(internalStatus)) {
+                    fSymbols[kIntlCurrencySymbol] = curriso;
+                    fSymbols[kCurrencySymbol] = numberElements[0];
+                }
+                /* else use the default values. */
+            }
+        }
+        ures_close(numberElementsRes);
     }
-
-    UnicodeString numberElements[kFormatSymbolCount];
-    for(i = 0; i<numberElementsLength; i++) {
-        numberElements[i].fastCopyFrom(numberElementsRes.getStringEx(i, status));
-    }
-
-    if (U_FAILURE(status)) {
-        return;
-    }
-
-    initialize(numberElements, numberElementsLength);
-
-
-    // Obtain currency data from the currency API.  This is strictly
-    // for backward compatibility; we don't use DecimalFormatSymbols
-    // for currency data anymore.
-    UErrorCode ec = U_ZERO_ERROR; // don't propagate failures out
-    const char* l = loc.getName();
-    const UChar* curriso = ucurr_forLocale(l, &ec);
-    UnicodeString currname;
-
-    uprv_getStaticCurrencyName(curriso, l, currname, ec);
-    if (U_SUCCESS(ec)) {
-        fSymbols[kIntlCurrencySymbol] = curriso;
-        fSymbols[kCurrencySymbol] = currname;
-    }
-    /* else use the default values. */
+    ures_close(resource);
 }
 
 // Initializes the DecimalFormatSymbol instance with the data obtained
