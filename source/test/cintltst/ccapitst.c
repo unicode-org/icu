@@ -34,6 +34,9 @@
 static UConverterFromUCallback otherUnicodeAction(UConverterFromUCallback MIA);
 static UConverterToUCallback otherCharAction(UConverterToUCallback MIA);
 
+
+static void ListNames(void);
+static void TestFlushCache(void);
 static void TestDuplicateAlias(void);
 static void TestCCSID(void);
 static void TestJ932(void);
@@ -45,7 +48,9 @@ void addTestConvert(TestNode** root);
 
 void addTestConvert(TestNode** root)
 {
+    addTest(root, &ListNames, "tsconv/ccapitst/ListNames");
     addTest(root, &TestConvert, "tsconv/ccapitst/TestConvert");
+    addTest(root, &TestFlushCache,   "tsconv/ccapitst/TestFlushCache"); 
     addTest(root, &TestAlias,   "tsconv/ccapitst/TestAlias"); 
     addTest(root, &TestDuplicateAlias,   "tsconv/ccapitst/TestDuplicateAlias"); 
     addTest(root, &TestConvertSafeClone,   "tsconv/ccapitst/TestConvertSafeClone"); 
@@ -56,131 +61,13 @@ void addTestConvert(TestNode** root)
     addTest(root, &TestEBCDICSwapLFNL,   "tsconv/ccapitst/TestEBCDICSwapLFNL");
 }
 
-static void TestConvert() 
-{
-    char                myptr[4];
-    char                save[4];
-    int32_t             testLong1           =   0;
-    uint16_t            rest                =   0;
-    int32_t             len                 =   0;
-    int32_t             x                   =   0;
-    FILE*               ucs_file_in         =   NULL;
-    UChar                BOM                 =   0x0000;
-    UChar                myUChar           =   0x0000;
-    char*               mytarget; /*    [MAX_FILE_LEN] */
-    char*               mytarget_1;
-    char*               mytarget_use;
-    UChar*                consumedUni         =   NULL;
-    char*               consumed            =   NULL;
-    char*                 output_cp_buffer; /*    [MAX_FILE_LEN] */
-    UChar*                ucs_file_buffer; /*    [MAX_FILE_LEN] */
-    UChar*                ucs_file_buffer_use;
-    UChar*                my_ucs_file_buffer; /*    [MAX_FILE_LEN] */
-    UChar*                my_ucs_file_buffer_1;
-    int8_t                ii                  =   0;
-    int32_t             j                   =   0;
-    uint16_t            codepage_index      =   0;
-    uint16_t            count;
-    int32_t             cp                  =   0;
+static void ListNames(void) {
     UErrorCode          err                 =   U_ZERO_ERROR;
-    const char*            available_conv;  
-    char                ucs_file_name[UCS_FILE_NAME_SIZE];
-    UConverterFromUCallback          MIA1, MIA1_2;
-    UConverterToUCallback              MIA2, MIA2_2;
-    const void         *MIA1Context, *MIA1Context2, *MIA2Context, *MIA2Context2;
-    UConverter*            someConverters[5];
-    UConverter*         myConverter = 0;
-    UChar*                displayname = 0;
-   
-    const char* locale;
-
-    UChar* uchar1 = 0;
-    UChar* uchar2 = 0;
-    UChar* uchar3 = 0;
-    int32_t targetcapacity2;
-    int32_t targetcapacity;
-    int32_t targetsize;
-    int32_t disnamelen;
-
-    const UChar* tmp_ucs_buf;
-    const UChar* tmp_consumedUni=NULL;
-    const char* tmp_mytarget_use;
-    const char* tmp_consumed; 
-
-    int flushCount = 0;
-    
-    /******************************************************************
-                                Checking Unicode -> ksc
-     ******************************************************************/
-
-    const char*      CodePagesToTest[NUM_CODEPAGE]       =
-    {
-       "ibm-949_P110-2000"
-
-        
-    }; 
-    const uint16_t CodePageNumberToTest[NUM_CODEPAGE]             =
-    {
-        949
-    };
-    
-
-    const int8_t     CodePagesMinChars[NUM_CODEPAGE] =
-    { 
-        1
-    
-    };
-
-    const int8_t     CodePagesMaxChars[NUM_CODEPAGE] =
-    { 
-        2
-    
-    };
-
-    const uint16_t        CodePagesSubstitutionChars[NUM_CODEPAGE]    =
-    { 
-        0xAFFE
-    };
-
-    const char* CodePagesTestFiles[NUM_CODEPAGE]    =
-    { 
-      "uni-text.bin"
-    };
-
-    
-    const UConverterPlatform        CodePagesPlatform[NUM_CODEPAGE]    =
-    { 
-        UCNV_IBM
-    
-    };
-
-    const char* CodePagesLocale[NUM_CODEPAGE] =
-    {
-        "ko_KR"
-    };
-
-    UConverterFromUCallback oldFromUAction = NULL;
-    UConverterToUCallback oldToUAction = NULL;
-    const void* oldFromUContext = NULL;
-    const void* oldToUContext = NULL;
+    int32_t             testLong1           =   0;
+    const char*            available_conv;
     UEnumeration *allNamesEnum = NULL;
     int32_t allNamesCount = 0;
-
-    /* Allocate memory */
-    mytarget = (char*) malloc(MAX_FILE_LEN * sizeof(mytarget[0]));
-    output_cp_buffer = (char*) malloc(MAX_FILE_LEN * sizeof(output_cp_buffer[0]));
-    ucs_file_buffer = (UChar*) malloc(MAX_FILE_LEN * sizeof(ucs_file_buffer[0]));
-    my_ucs_file_buffer = (UChar*) malloc(MAX_FILE_LEN * sizeof(my_ucs_file_buffer[0]));
-
-    ucs_file_buffer_use = ucs_file_buffer;
-    mytarget_1=mytarget;
-    mytarget_use        = mytarget;
-    my_ucs_file_buffer_1=my_ucs_file_buffer;
-
-    /* flush the converter cache to get a consistent state before the flushing is tested */
-    flushCount = ucnv_flushCache();
-
-    /*Calling all the UnicodeConverterCPP API and checking functionality*/
+    uint16_t            count;
 
     log_verbose("Testing ucnv_openAllNames()...");
     allNamesEnum = ucnv_openAllNames(&err);
@@ -217,7 +104,7 @@ static void TestConvert()
     log_verbose("Testing ucnv_countAvailable()...");
 
     testLong1=ucnv_countAvailable();
-    log_info("Number of available Codepages: %d/%d\n", testLong1, allNamesCount);
+    log_info("Number of available codepages: %d/%d\n", testLong1, allNamesCount);
 
     log_verbose("\n---Testing ucnv_getAvailableName..");  /*need to check this out */
 
@@ -280,7 +167,203 @@ static void TestConvert()
             }
         }
     }
-     /*Testing ucnv_openU()*/
+}
+
+static void TestFlushCache(void) {
+    UErrorCode          err                 =   U_ZERO_ERROR;
+    UConverter*            someConverters[5];
+    int flushCount = 0;
+
+    /* Close the default converter just in case one of the tested converters is also the default converter. */
+    ucnv_close(u_getDefaultConverter(&err));
+
+    /* flush the converter cache to get a consistent state before the flushing is tested */
+    ucnv_flushCache();
+
+    /*Testing ucnv_open()*/
+    /* Note: These converters have been chosen because they do NOT
+       encode the Latin characters (U+0041, ...), and therefore are
+       highly unlikely to be chosen as system default codepages */
+
+    someConverters[0] = ucnv_open("ibm-1047", &err);
+    if (U_FAILURE(err)) {
+        log_data_err("FAILURE! %s\n", myErrorName(err));
+    }
+
+    someConverters[1] = ucnv_open("ibm-1047", &err);
+    if (U_FAILURE(err)) {
+        log_data_err("FAILURE! %s\n", myErrorName(err));
+    }
+
+    someConverters[2] = ucnv_open("ibm-1047", &err);
+    if (U_FAILURE(err)) {
+        log_data_err("FAILURE! %s\n", myErrorName(err));
+    }
+
+    someConverters[3] = ucnv_open("gb18030", &err);
+    if (U_FAILURE(err)) {
+        log_data_err("FAILURE! %s\n", myErrorName(err));
+    }
+
+    someConverters[4] = ucnv_open("ibm-949", &err);
+    if (U_FAILURE(err)) {
+        log_data_err("FAILURE! %s\n", myErrorName(err));
+    }
+
+
+    /* Testing ucnv_flushCache() */
+    log_verbose("\n---Testing ucnv_flushCache...\n");
+    if ((flushCount=ucnv_flushCache())==0)
+        log_verbose("Flush cache ok\n");
+    else 
+        log_data_err("Flush Cache failed [line %d], expect 0 got %d \n", __LINE__, flushCount);
+
+    /*testing ucnv_close() and ucnv_flushCache() */
+    ucnv_close(someConverters[0]);
+    ucnv_close(someConverters[1]);
+
+    if ((flushCount=ucnv_flushCache())==0)
+        log_verbose("Flush cache ok\n");
+    else 
+        log_data_err("Flush Cache failed [line %d], expect 0 got %d \n", __LINE__, flushCount);
+
+    ucnv_close(someConverters[2]);
+    ucnv_close(someConverters[3]);
+
+    if ((flushCount=ucnv_flushCache())==2) 
+        log_verbose("Flush cache ok\n");  /*because first, second and third are same  */
+    else 
+        log_data_err("Flush Cache failed  line %d, got %d expected 2 or there is an error in ucnv_close()\n",
+            __LINE__,
+            flushCount);
+
+    ucnv_close(someConverters[4]);
+    if ( (flushCount=ucnv_flushCache())==1) 
+        log_verbose("Flush cache ok\n");
+    else 
+        log_data_err("Flush Cache failed line %d, expected 1 got %d \n", __LINE__, flushCount);
+
+}
+
+static void TestConvert() 
+{
+    char                myptr[4];
+    char                save[4];
+    int32_t             testLong1           =   0;
+    uint16_t            rest                =   0;
+    int32_t             len                 =   0;
+    int32_t             x                   =   0;
+    FILE*               ucs_file_in         =   NULL;
+    UChar                BOM                 =   0x0000;
+    UChar                myUChar           =   0x0000;
+    char*               mytarget; /*    [MAX_FILE_LEN] */
+    char*               mytarget_1;
+    char*               mytarget_use;
+    UChar*                consumedUni         =   NULL;
+    char*               consumed            =   NULL;
+    char*                 output_cp_buffer; /*    [MAX_FILE_LEN] */
+    UChar*                ucs_file_buffer; /*    [MAX_FILE_LEN] */
+    UChar*                ucs_file_buffer_use;
+    UChar*                my_ucs_file_buffer; /*    [MAX_FILE_LEN] */
+    UChar*                my_ucs_file_buffer_1;
+    int8_t                ii                  =   0;
+    int32_t             j                   =   0;
+    uint16_t            codepage_index      =   0;
+    int32_t             cp                  =   0;
+    UErrorCode          err                 =   U_ZERO_ERROR;
+    char                ucs_file_name[UCS_FILE_NAME_SIZE];
+    UConverterFromUCallback          MIA1, MIA1_2;
+    UConverterToUCallback              MIA2, MIA2_2;
+    const void         *MIA1Context, *MIA1Context2, *MIA2Context, *MIA2Context2;
+    UConverter*            someConverters[5];
+    UConverter*         myConverter = 0;
+    UChar*                displayname = 0;
+   
+    const char* locale;
+
+    UChar* uchar1 = 0;
+    UChar* uchar2 = 0;
+    UChar* uchar3 = 0;
+    int32_t targetcapacity2;
+    int32_t targetcapacity;
+    int32_t targetsize;
+    int32_t disnamelen;
+
+    const UChar* tmp_ucs_buf;
+    const UChar* tmp_consumedUni=NULL;
+    const char* tmp_mytarget_use;
+    const char* tmp_consumed; 
+
+    /******************************************************************
+                                Checking Unicode -> ksc
+     ******************************************************************/
+
+    const char*      CodePagesToTest[NUM_CODEPAGE]       =
+    {
+       "ibm-949_P110-2000"
+
+        
+    }; 
+    const uint16_t CodePageNumberToTest[NUM_CODEPAGE]             =
+    {
+        949
+    };
+    
+
+    const int8_t     CodePagesMinChars[NUM_CODEPAGE] =
+    { 
+        1
+    
+    };
+
+    const int8_t     CodePagesMaxChars[NUM_CODEPAGE] =
+    { 
+        2
+    
+    };
+
+    const uint16_t        CodePagesSubstitutionChars[NUM_CODEPAGE]    =
+    { 
+        0xAFFE
+    };
+
+    const char* CodePagesTestFiles[NUM_CODEPAGE]    =
+    { 
+      "uni-text.bin"
+    };
+
+    
+    const UConverterPlatform        CodePagesPlatform[NUM_CODEPAGE]    =
+    { 
+        UCNV_IBM
+    
+    };
+
+    const char* CodePagesLocale[NUM_CODEPAGE] =
+    {
+        "ko_KR"
+    };
+
+    UConverterFromUCallback oldFromUAction = NULL;
+    UConverterToUCallback oldToUAction = NULL;
+    const void* oldFromUContext = NULL;
+    const void* oldToUContext = NULL;
+
+    /* Allocate memory */
+    mytarget = (char*) malloc(MAX_FILE_LEN * sizeof(mytarget[0]));
+    output_cp_buffer = (char*) malloc(MAX_FILE_LEN * sizeof(output_cp_buffer[0]));
+    ucs_file_buffer = (UChar*) malloc(MAX_FILE_LEN * sizeof(ucs_file_buffer[0]));
+    my_ucs_file_buffer = (UChar*) malloc(MAX_FILE_LEN * sizeof(my_ucs_file_buffer[0]));
+
+    ucs_file_buffer_use = ucs_file_buffer;
+    mytarget_1=mytarget;
+    mytarget_use        = mytarget;
+    my_ucs_file_buffer_1=my_ucs_file_buffer;
+
+    /* flush the converter cache to get a consistent state before the flushing is tested */
+    ucnv_flushCache();
+
+    /*Testing ucnv_openU()*/
     {
         UChar converterName[]={ 0x0069, 0x0062, 0x006d, 0x002d, 0x0039, 0x0034, 0x0033, 0x0000}; /*ibm-943*/
         UChar firstSortedName[]={ 0x0021, 0x0000}; /* ! */
@@ -392,66 +475,6 @@ static void TestConvert()
         }
     }
 
-    ucnv_close(u_getDefaultConverter(&err));    /* Just in case the default converter was one of the previously opened converters */
-    ucnv_flushCache();
-
-    /*Testing ucnv_open()*/
-    /* Note: These converters have been chosen because they do NOT
-       encode the Latin characters (U+0041, ...), and therefore are
-       highly unlikely to be chosen as system default codepages */
-
-    someConverters[0] = ucnv_open("ibm-1047", &err);
-    if (U_FAILURE(err)) {
-        log_data_err("FAILURE! %s\n", myErrorName(err));
-    }
-
-    someConverters[1] = ucnv_open("ibm-1047", &err);
-    if (U_FAILURE(err)) {
-        log_data_err("FAILURE! %s\n", myErrorName(err));
-    }
-
-    someConverters[2] = ucnv_open("ibm-1047", &err);
-    if (U_FAILURE(err)) {
-        log_data_err("FAILURE! %s\n", myErrorName(err));
-    }
-
-    someConverters[3] = ucnv_open("gb18030", &err);
-    if (U_FAILURE(err)) {
-        log_data_err("FAILURE! %s\n", myErrorName(err));
-    }
-
-    someConverters[4] = ucnv_open("ibm-949", &err);
-    if (U_FAILURE(err)) {
-        log_data_err("FAILURE! %s\n", myErrorName(err));
-    }
-
-
-    /* Testing ucnv_flushCache() */
-    log_verbose("\n---Testing ucnv_flushCache...\n");
-    if ((flushCount=ucnv_flushCache())==0)
-        log_verbose("Flush cache ok\n");
-    else 
-        log_data_err("Flush Cache failed [line %d], expect 0 got %d \n", __LINE__, flushCount);
-
-    /*testing ucnv_close() and ucnv_flushCache() */
-    ucnv_close(someConverters[0]);
-    ucnv_close(someConverters[1]);
-    ucnv_close(someConverters[2]);
-    ucnv_close(someConverters[3]);
-
-    if ((flushCount=ucnv_flushCache())==2) 
-        log_verbose("Flush cache ok\n");  /*because first, second and third are same  */
-    else 
-        log_data_err("Flush Cache failed  line %d, got %d expected 2 or there is an error in ucnv_close()\n",
-            __LINE__,
-            flushCount);
-
-    ucnv_close(someConverters[4]);
-    if ( (flushCount=ucnv_flushCache())==1) 
-        log_verbose("Flush cache ok\n");
-    else 
-        log_data_err("Flush Cache failed line %d, expected 1 got %d \n", __LINE__, flushCount);
-
     /*Testing ucnv_openCCSID and ucnv_open with error conditions*/
     log_verbose("\n---Testing ucnv_open with err ! = U_ZERO_ERROR...\n");
     err=U_ILLEGAL_ARGUMENT_ERROR;
@@ -513,7 +536,7 @@ static void TestConvert()
         int32_t i = 0;  
         char* index = NULL;
 
-	err = U_ZERO_ERROR;
+        err = U_ZERO_ERROR;
         strcpy(ucs_file_name, loadTestData(&err));
         
         if(U_FAILURE(err)){
