@@ -30,7 +30,7 @@ PKGDATA_VERSIONING = -r $(SO_TARGET_VERSION)
 
 SRCDATADIR=$(top_srcdir)/data
 OUTDIR=$(top_builddir)/data/out
-BUILDDIR=$(top_builddir)/data/out/build
+BUILDDIR=$(OUTDIR)/build
 UNICODEDATADIR=$(SRCDATADIR)/unidata
 LOCSRCDIR=$(SRCDATADIR)/locales
 TRNSSRCDIR=$(SRCDATADIR)/translit
@@ -39,7 +39,7 @@ MISCSRCDIR=$(SRCDATADIR)/misc
 UCMSRCDIR=$(SRCDATADIR)/mappings
 TESTSRCDATADIR=$(top_srcdir)/test/testdata
 TESTOUTDIR=$(top_builddir)/test/testdata/out
-TESTBUILDDIR=$(top_builddir)/test/testdata/out/build
+TESTBUILDDIR=$(TESTOUTDIR)/build
 SRCLISTDEPS=Makefile $(srcdir)/Makefile.in $(LOCSRCDIR)/resfiles.mk $(TRNSSRCDIR)/trnsfiles.mk
 
 ## Extra files to install [nothing at present]
@@ -203,10 +203,7 @@ endif
 build-data: build-dir $(ALL_FILES) $(BUILDDIR)/icudata.lst  $(OS390LIST)
 
 build-dir:
-	-$(shell) mkdir -p $(OUTDIR)
-	-$(shell) mkdir -p $(BUILDDIR)
-	-$(shell) mkdir -p $(TESTOUTDIR)
-	-$(shell) mkdir -p $(TESTBUILDDIR)
+	-$(MKINSTALLDIRS) $(OUTDIR) $(BUILDDIR) $(TESTOUTDIR) $(TESTBUILDDIR)
 
 
 #$(ALL_TEST_FILES)
