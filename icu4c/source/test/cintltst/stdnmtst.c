@@ -44,7 +44,35 @@ static void dotestname(const char *name, const char *standard, const char *expec
 
 void TestStandardNames()
 {
+    int i, count;
+    UErrorCode err;
+
+#if  0
+    /* Iterate over all standards. */
+ 
+    for (i = 0, count = ucnv_countStandards(); i < count; ++i) {
+        const char *std;
+
+        err = U_ZERO_ERROR;
+        std = ucnv_getStandard(i, &err);
+        if (U_FAILURE(err)) {
+            log_err("FAIL: ucnv_getStandard(%d), error=%s\n", i, u_errorName(err));
+        } else if (!std || !*std) {
+            log_err("FAIL: %s standard name at index %d\n", (std ? "empty" :
+                "null"), i);
+        }
+    }
+    err = U_ZERO_ERROR;
+    if (ucnv_getStandard(i, &err)) {
+        log_err("FAIL: ucnv_getStandard(%d) should return NULL\n", i);
+    }
+
+#endif
+
+    /* Test for some expected results. */
+
     dotestname("ibm-1208", "MIME", "utf-8");
+    dotestname("cp1252", "MIME", "windows-1252");
     dotestname("ascii", "MIME", "us-ascii");
     dotestname("ascii", "IANA", "ANSI_X3.4-1968");
 }
