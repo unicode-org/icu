@@ -522,13 +522,13 @@ DecimalFormat::format(  double number,
     if (icu_isNaN(number))
     {
         if (fieldPosition.getField() == NumberFormat::kIntegerField)
-            fieldPosition.setBeginIndex(result.size());
+            fieldPosition.setBeginIndex(result.length());
 
         UnicodeString nan;
         result += fSymbols->getNaN(nan);
 
         if (fieldPosition.getField() == NumberFormat::kIntegerField)
-            fieldPosition.setEndIndex(result.size());
+            fieldPosition.setEndIndex(result.length());
 
         addPadding(result, FALSE, FALSE /*ignored*/);
         return result;
@@ -566,13 +566,13 @@ DecimalFormat::format(  double number,
         result += (isNegative ? fNegativePrefix : fPositivePrefix);
 
         if (fieldPosition.getField() == NumberFormat::kIntegerField)
-            fieldPosition.setBeginIndex(result.size());
+            fieldPosition.setBeginIndex(result.length());
 
         UnicodeString inf;
         result += fSymbols->getInfinity(inf);
 
         if (fieldPosition.getField() == NumberFormat::kIntegerField)
-            fieldPosition.setEndIndex(result.size());
+            fieldPosition.setEndIndex(result.length());
 
         result += (isNegative ? fNegativeSuffix : fPositiveSuffix);
 
@@ -678,7 +678,7 @@ DecimalFormat::subformat(UnicodeString& result,
         // Record field information for caller.
         if (fieldPosition.getField() == NumberFormat::kIntegerField)
         {
-            fieldPosition.setBeginIndex(result.size());
+            fieldPosition.setBeginIndex(result.length());
             fieldPosition.setEndIndex(-1);
         }
         else if (fieldPosition.getField() == NumberFormat::kFractionField)
@@ -731,13 +731,13 @@ DecimalFormat::subformat(UnicodeString& result,
             {
                 // Record field information for caller.
                 if (fieldPosition.getField() == NumberFormat::kIntegerField)
-                    fieldPosition.setEndIndex(result.size());
+                    fieldPosition.setEndIndex(result.length());
 
                 result += (decimal);
 
                 // Record field information for caller.
                 if (fieldPosition.getField() == NumberFormat::kFractionField)
-                    fieldPosition.setBeginIndex(result.size());
+                    fieldPosition.setBeginIndex(result.length());
             }
             // Restores the digit character or pads the buffer with zeros.
             UChar c = ((i < fDigitList->fCount) ?
@@ -750,13 +750,13 @@ DecimalFormat::subformat(UnicodeString& result,
         if (fieldPosition.getField() == NumberFormat::kIntegerField)
         {
             if (fieldPosition.getEndIndex() < 0)
-                fieldPosition.setEndIndex(result.size());
+                fieldPosition.setEndIndex(result.length());
         }
         else if (fieldPosition.getField() == NumberFormat::kFractionField)
         {
             if (fieldPosition.getBeginIndex() < 0)
-                fieldPosition.setBeginIndex(result.size());
-            fieldPosition.setEndIndex(result.size());
+                fieldPosition.setBeginIndex(result.length());
+            fieldPosition.setEndIndex(result.length());
         }
 
         // The exponent is output using the pattern-specified minimum
@@ -793,7 +793,7 @@ DecimalFormat::subformat(UnicodeString& result,
     {
         // Record field information for caller.
         if (fieldPosition.getField() == NumberFormat::kIntegerField)
-            fieldPosition.setBeginIndex(result.size());
+            fieldPosition.setBeginIndex(result.length());
 
         // Output the integer portion.  Here 'count' is the total
         // number of integer digits we will display, including both
@@ -815,7 +815,7 @@ DecimalFormat::subformat(UnicodeString& result,
             digitIndex = fDigitList->fDecimalAt - count;
         }
 
-        int32_t sizeBeforeIntegerPart = result.size();
+        int32_t sizeBeforeIntegerPart = result.length();
 
         int32_t i;
         for (i=count-1; i>=0; --i)
@@ -842,7 +842,7 @@ DecimalFormat::subformat(UnicodeString& result,
 
         // Record field information for caller.
         if (fieldPosition.getField() == NumberFormat::kIntegerField)
-            fieldPosition.setEndIndex(result.size());
+            fieldPosition.setEndIndex(result.length());
 
         // Determine whether or not there are any printable fractional
         // digits.  If we've used up the digits we know there aren't.
@@ -852,7 +852,7 @@ DecimalFormat::subformat(UnicodeString& result,
         // If there is no fraction present, and we haven't printed any
         // integer digits, then print a zero.  Otherwise we won't print
         // _any_ digits, and we won't be able to parse this string.
-        if (!fractionPresent && result.size() == sizeBeforeIntegerPart)
+        if (!fractionPresent && result.length() == sizeBeforeIntegerPart)
             result += (zero);
 
         // Output the decimal separator if we always do so.
@@ -861,7 +861,7 @@ DecimalFormat::subformat(UnicodeString& result,
 
         // Record field information for caller.
         if (fieldPosition.getField() == NumberFormat::kFractionField)
-            fieldPosition.setBeginIndex(result.size());
+            fieldPosition.setBeginIndex(result.length());
 
         for (i=0; i < getMaximumFractionDigits(); ++i)
         {
@@ -897,7 +897,7 @@ DecimalFormat::subformat(UnicodeString& result,
 
         // Record field information for caller.
         if (fieldPosition.getField() == NumberFormat::kFractionField)
-            fieldPosition.setEndIndex(result.size());
+            fieldPosition.setEndIndex(result.length());
     }
 
     result += (isNegative ? fNegativeSuffix : fPositiveSuffix);
@@ -919,7 +919,7 @@ DecimalFormat::subformat(UnicodeString& result,
 void DecimalFormat::addPadding(UnicodeString& result, bool_t hasAffixes,
                                bool_t isNegative) const {
     if (fFormatWidth > 0) {
-        int32_t len = fFormatWidth - result.size();
+        int32_t len = fFormatWidth - result.length();
         if (len > 0) {
             UChar* padding = (UChar*) icu_malloc(sizeof(UChar) * len);
             for (int32_t i=0; i<len; ++i) {
@@ -928,8 +928,8 @@ void DecimalFormat::addPadding(UnicodeString& result, bool_t hasAffixes,
             switch (fPadPosition) {
             case kPadAfterPrefix:
                 if (hasAffixes) {
-                    result.insert(isNegative ? fNegativePrefix.size()
-                                             : fPositivePrefix.size(),
+                    result.insert(isNegative ? fNegativePrefix.length()
+                                             : fPositivePrefix.length(),
                                   padding, len);
                     break;
                 } // else fall through to next case
@@ -938,9 +938,9 @@ void DecimalFormat::addPadding(UnicodeString& result, bool_t hasAffixes,
                 break;
             case kPadBeforeSuffix:
                 if (hasAffixes) {
-                    result.insert(result.size() -
-                                  (isNegative ? fNegativeSuffix.size()
-                                              : fPositiveSuffix.size()),
+                    result.insert(result.length() -
+                                  (isNegative ? fNegativeSuffix.length()
+                                              : fPositiveSuffix.length()),
                                   padding, len);
                     break;
                 } // else fall through to next case
@@ -976,7 +976,7 @@ DecimalFormat::parse(const UnicodeString& text,
     int32_t backup = parsePosition.getIndex();
     int32_t i = backup;
     if (fFormatWidth > 0) {
-        while (i < text.size() && text[(UTextOffset) i] == fPad) {
+        while (i < text.length() && text[(UTextOffset) i] == fPad) {
             ++i;
         }
         parsePosition.setIndex(i);
@@ -986,9 +986,9 @@ DecimalFormat::parse(const UnicodeString& text,
     UnicodeString nan;
     fSymbols->getNaN(nan);
     // If the text is composed of the representation of NaN, returns NaN.
-    if (text.compare(parsePosition.getIndex(), nan.size(), nan,
-                     0, nan.size()) == 0) {
-        parsePosition.setIndex(parsePosition.getIndex() + nan.size());
+    if (text.compare(parsePosition.getIndex(), nan.length(), nan,
+                     0, nan.length()) == 0) {
+        parsePosition.setIndex(parsePosition.getIndex() + nan.length());
         result.setDouble(icu_getNaN());
         return;
     }
@@ -1002,7 +1002,7 @@ DecimalFormat::parse(const UnicodeString& text,
         return;
     } else if (fFormatWidth < 0) {
         i = parsePosition.getIndex();
-        while (i < text.size() && text[(UTextOffset) i] == fPad) {
+        while (i < text.length() && text[(UTextOffset) i] == fPad) {
             ++i;
         }
         parsePosition.setIndex(i);
@@ -1063,23 +1063,23 @@ bool_t DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePo
     int32_t backup;
 
     // check for positivePrefix; take longest
-    bool_t gotPositive = text.compare(position,fPositivePrefix.size(),fPositivePrefix,0,
-                                      fPositivePrefix.size()) == 0;
-    bool_t gotNegative = text.compare(position,fNegativePrefix.size(),fNegativePrefix,0,
-                                      fNegativePrefix.size()) == 0;
+    bool_t gotPositive = text.compare(position,fPositivePrefix.length(),fPositivePrefix,0,
+                                      fPositivePrefix.length()) == 0;
+    bool_t gotNegative = text.compare(position,fNegativePrefix.length(),fNegativePrefix,0,
+                                      fNegativePrefix.length()) == 0;
     // If the number is positive and negative at the same time,
     // 1. the number is positive if the positive prefix is longer
     // 2. the number is negative if the negative prefix is longer
     if (gotPositive && gotNegative) {
-        if (fPositivePrefix.size() > fNegativePrefix.size())
+        if (fPositivePrefix.length() > fNegativePrefix.length())
             gotNegative = FALSE;
-        else if (fPositivePrefix.size() < fNegativePrefix.size())
+        else if (fPositivePrefix.length() < fNegativePrefix.length())
             gotPositive = FALSE;
     }
     if(gotPositive)
-        position += fPositivePrefix.size();
+        position += fPositivePrefix.length();
     else if(gotNegative)
-        position += fNegativePrefix.size();
+        position += fNegativePrefix.length();
     else {
         parsePosition.setErrorIndex(position);
         return FALSE;
@@ -1088,11 +1088,11 @@ bool_t DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePo
     status[fgStatusInfinite] = FALSE;
     UnicodeString inf;
     fSymbols->getInfinity(inf);
-    if (!isExponent && text.compare(position,inf.size(),inf,0,
-                                    inf.size()) == 0)
+    if (!isExponent && text.compare(position,inf.length(),inf,0,
+                                    inf.length()) == 0)
     {
         // Found a infinite number.
-        position += inf.size();
+        position += inf.length();
         status[fgStatusInfinite] = TRUE;
     } else {
         // We now have a string of digits, possibly with grouping symbols,
@@ -1120,7 +1120,7 @@ bool_t DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePo
         int32_t digitCount = 0;
 
         backup = -1;
-        for (; position < text.size(); ++position)
+        for (; position < text.length(); ++position)
         {
             UChar ch = text[(UTextOffset)position];
 
@@ -1192,7 +1192,7 @@ bool_t DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePo
                 // Parse sign, if present
                 bool_t negExp = FALSE;
                 int32_t pos = position + 1; // position + exponentSep.length();
-                if (pos < text.size()) {
+                if (pos < text.length()) {
                     ch = text[(UTextOffset) pos];
                     if (ch == fSymbols->getPlusSign()) {
                         ++pos;
@@ -1204,7 +1204,7 @@ bool_t DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePo
 
                 DigitList exponentDigits;
                 exponentDigits.fCount = 0;
-                while (pos < text.size()) {
+                while (pos < text.length()) {
                     digit = text[(UTextOffset) pos] - zero;
                     //~~*~~*~~*~~*~~*~~*~~*~~*~~*~~*~~*~~*~~*~~*~~*~~*~~*~~*~~*~
                     // TEMPORARY WORKAROUND
@@ -1264,17 +1264,17 @@ bool_t DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePo
 
     // check for positiveSuffix
     if (gotPositive)
-        gotPositive = text.compare(position,fPositiveSuffix.size(),fPositiveSuffix,0,
-                                   fPositiveSuffix.size()) == 0;
+        gotPositive = text.compare(position,fPositiveSuffix.length(),fPositiveSuffix,0,
+                                   fPositiveSuffix.length()) == 0;
     if (gotNegative)
-        gotNegative = text.compare(position,fNegativeSuffix.size(),fNegativeSuffix,0,
-                                   fNegativeSuffix.size()) == 0;
+        gotNegative = text.compare(position,fNegativeSuffix.length(),fNegativeSuffix,0,
+                                   fNegativeSuffix.length()) == 0;
 
     // if both match, take longest
     if (gotPositive && gotNegative) {
-        if (fPositiveSuffix.size() > fNegativeSuffix.size())
+        if (fPositiveSuffix.length() > fNegativeSuffix.length())
             gotNegative = FALSE;
-        else if (fPositiveSuffix.size() < fNegativeSuffix.size())
+        else if (fPositiveSuffix.length() < fNegativeSuffix.length())
             gotPositive = FALSE;
     }
 
@@ -1285,8 +1285,8 @@ bool_t DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePo
     }
 
     parsePosition.setIndex(position +
-                           (gotPositive ? fPositiveSuffix.size() :
-                            fNegativeSuffix.size())); // mark success!
+                           (gotPositive ? fPositiveSuffix.length() :
+                            fNegativeSuffix.length())); // mark success!
 
     status[fgStatusPositive] = gotPositive;
 
@@ -1781,7 +1781,7 @@ void DecimalFormat::expandAffixes() {
 void DecimalFormat::expandAffix(const UnicodeString& pattern,
                                 UnicodeString& affix) const {
     affix.remove();
-    for (int i=0; i<pattern.size(); ) {
+    for (int i=0; i<pattern.length(); ) {
         UChar c = pattern.charAt(i++);
         if (c == kQuote) {
             c = pattern.charAt(i++);
@@ -1789,7 +1789,7 @@ void DecimalFormat::expandAffix(const UnicodeString& pattern,
             case kCurrencySign:
                 {
                     UnicodeString s;
-                    if (i<pattern.size() &&
+                    if (i<pattern.length() &&
                         pattern.charAt(i) == kCurrencySign) {
                         ++i;
                         affix += fSymbols->getInternationalCurrencySymbol(s);
@@ -1839,11 +1839,11 @@ void DecimalFormat::appendAffix(UnicodeString& buffer,
         appendAffix(buffer, expAffix, localized);
     } else {
         int i;
-        for (int pos=0; pos<affixPattern->size(); pos=i) {
+        for (int pos=0; pos<affixPattern->length(); pos=i) {
             i = affixPattern->indexOf(kQuote, pos);
             if (i < 0) {
                 UnicodeString s;
-                affixPattern->extractBetween(pos, affixPattern->size(), s);
+                affixPattern->extractBetween(pos, affixPattern->length(), s);
                 appendAffix(buffer, s, localized);
                 break;
             }
@@ -1858,7 +1858,7 @@ void DecimalFormat::appendAffix(UnicodeString& buffer,
                 buffer.append(c);
                 // Fall through and append another kQuote below
             } else if (c == kCurrencySign &&
-                       i<affixPattern->size() &&
+                       i<affixPattern->length() &&
                        affixPattern->charAt(i) == kCurrencySign) {
                 ++i;
                 buffer.append(c);
@@ -1924,7 +1924,7 @@ DecimalFormat::appendAffix(    UnicodeString& buffer,
     if (affix.indexOf(0x0027 /*'\''*/) < 0)
         buffer += affix;
     else {
-        for (int32_t j = 0; j < affix.size(); ++j) {
+        for (int32_t j = 0; j < affix.length(); ++j) {
             UChar c = affix[j];
             buffer += c;
             if (c == 0x0027 /*'\''*/) buffer += c;
@@ -2171,7 +2171,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
         int32_t start = pos;
         bool_t isPartDone = FALSE;
 
-        for (; !isPartDone && pos < pattern.size(); ++pos) {
+        for (; !isPartDone && pos < pattern.length(); ++pos) {
             UChar ch = pattern[(UTextOffset) pos];
             switch (subpart) {
             case 0: // Pattern proper subpart (between prefix & suffix)
@@ -2244,7 +2244,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                             return;
                         }
                         // Check for positive prefix
-                        if ((pos+1) < pattern.size()
+                        if ((pos+1) < pattern.length()
                             && pattern[(UTextOffset) (pos+1)] == plus) {
                             expSignAlways = TRUE;
                             ++pos;
@@ -2252,7 +2252,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                         // Use lookahead to parse out the exponential part of the
                         // pattern, then jump into suffix subpart.
                         expDigits = 0;
-                        while (++pos < pattern.size() &&
+                        while (++pos < pattern.length() &&
                                pattern[(UTextOffset) pos] == zeroDigit) {
                             ++expDigits;
                         }
@@ -2292,7 +2292,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                 } else if (ch == kCurrencySign) {
                     // Use lookahead to determine if the currency sign is
                     // doubled or not.
-                    bool_t doubled = (pos + 1) < pattern.size() &&
+                    bool_t doubled = (pos + 1) < pattern.length() &&
                         pattern[(UTextOffset) (pos+1)] == kCurrencySign;
                     affix->append(kQuote); // Encode currency
                     if (doubled) {
@@ -2305,7 +2305,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                     // A quote outside quotes indicates either the opening
                     // quote or two quotes, which is a quote literal.  That is,
                     // we have the first quote in 'do' or o''clock.
-                    if ((pos+1) < pattern.size() &&
+                    if ((pos+1) < pattern.length() &&
                         pattern[(UTextOffset) (pos+1)] == kQuote) {
                         ++pos;
                         affix->append(kQuote); // Encode quote
@@ -2345,7 +2345,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                     // Fall through to append(ch)
                 } else if (ch == padEscape) {
                     if (padPos >= 0 ||               // Multiple pad specifiers
-                        (pos+1) == pattern.size()) { // Nothing after padEscape
+                        (pos+1) == pattern.length()) { // Nothing after padEscape
                         debug("Multiple pad specifiers")
                         status = U_ILLEGAL_ARGUMENT_ERROR;
                         return;
@@ -2373,7 +2373,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                 // quote or two quotes, which is a quote literal.  That is,
                 // we have the second quote in 'do' or 'don''t'.
                 if (ch == kQuote) {
-                    if ((pos+1) < pattern.size() &&
+                    if ((pos+1) < pattern.length() &&
                         pattern[(UTextOffset) (pos+1)] == kQuote) {
                         ++pos;
                         affix->append(kQuote); // Encode quote
@@ -2389,11 +2389,11 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
         }
 
         if (sub0Limit == 0) {
-            sub0Limit = pattern.size();
+            sub0Limit = pattern.length();
         }
 
         if (sub2Limit == 0) {
-            sub2Limit = pattern.size();
+            sub2Limit = pattern.length();
         }
 
         /* Handle patterns with no '0' pattern character.  These patterns
@@ -2513,7 +2513,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
         }
     }
 
-    if (pattern.size() == 0) {
+    if (pattern.length() == 0) {
         delete fNegPrefixPattern;
         delete fNegSuffixPattern;
         fNegPrefixPattern = NULL;

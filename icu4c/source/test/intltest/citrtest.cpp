@@ -89,12 +89,12 @@ void CharIterTest::TestIteration() {
         c = iter.first();
         i = 0;
 
-        if (iter.startIndex() != 0 || iter.endIndex() != text.size())
+        if (iter.startIndex() != 0 || iter.endIndex() != text.length())
             errln("startIndex() or endIndex() failed");
 
         logln("Testing forward iteration...");
         do {
-            if (c == CharacterIterator::DONE && i != text.size())
+            if (c == CharacterIterator::DONE && i != text.length())
                 errln("Iterator reached end prematurely");
             else if (c != text[i])
                 errln((UnicodeString)"Character mismatch at position " + i +
@@ -113,7 +113,7 @@ void CharIterTest::TestIteration() {
         } while (c != CharacterIterator::DONE);
 
         c = iter.last();
-        i = text.size() - 1;
+        i = text.length() - 1;
 
         logln("Testing backward iteration...");
         do {

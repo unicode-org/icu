@@ -228,7 +228,7 @@ DecimalFormatSymbols::initialize(const UnicodeString* numberElements, const Unic
     // if the resource data specified the empty string as the monetary decimal
     // separator, that means we should just use the regular separator as the
     // monetary separator
-    if(currencyElements[2].size() == 0)
+    if(currencyElements[2].length() == 0)
         fMonetarySeparator = fDecimalSeparator;
     else
         fMonetarySeparator = currencyElements[2][(UTextOffset)0];

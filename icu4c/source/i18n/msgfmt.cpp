@@ -220,11 +220,11 @@ MessageFormat::applyPattern(const UnicodeString& newPattern,
     bool_t inQuote = FALSE;
     int32_t braceStack = 0;
     fMaxOffset = -1;
-    for (int i = 0; i < newPattern.size(); ++i) {
+    for (int i = 0; i < newPattern.length(); ++i) {
         UChar ch = newPattern[i];
         if (part == 0) {
             if (ch == 0x0027 /*'\''*/) {
-                if (i + 1 < newPattern.size()
+                if (i + 1 < newPattern.length()
                     && newPattern[i+1] == 0x0027 /*'\''*/) {
                     segments[part] += ch;  // handle doubles
                     ++i;
@@ -402,7 +402,7 @@ MessageFormat::toPattern(UnicodeString& result) const
     }
     result += 0x007D /*'}'*/;
   }
-  copyAndFixQuotes(fPattern, lastOffset, fPattern.size(), result);
+  copyAndFixQuotes(fPattern, lastOffset, fPattern.length(), result);
   return result;
 }
  
@@ -661,7 +661,7 @@ MessageFormat::format(const Formattable* arguments,
     }
     buffer.remove();
     // Appends the rest of the pattern characters after the real last offset.
-    fPattern.extract(lastOffset, fPattern.size(), buffer);
+    fPattern.extract(lastOffset, fPattern.length(), buffer);
     result += buffer;
     return result;
 }
@@ -724,11 +724,11 @@ MessageFormat::parse(const UnicodeString& source,
       // if at end, use longest possible match
       // otherwise uses first match to intervening string
       // does NOT recursively try all possibilities
-      int32_t tempLength = (i != fMaxOffset) ? fOffsets[i+1] : fPattern.size();
+      int32_t tempLength = (i != fMaxOffset) ? fOffsets[i+1] : fPattern.length();
 
       int32_t next;
       if (patternOffset >= tempLength) {
-    next = source.size();
+        next = source.length();
       }
       else {
     UnicodeString buffer;
@@ -777,7 +777,7 @@ MessageFormat::parse(const UnicodeString& source,
       sourceOffset = tempStatus.getIndex(); // update
     }
   }
-  int32_t len = fPattern.size() - patternOffset;
+  int32_t len = fPattern.length() - patternOffset;
   if (len == 0 || 
       fPattern.compare(patternOffset, len, source, sourceOffset, len) == 0) {
     status.setIndex(sourceOffset + len);
@@ -948,7 +948,7 @@ MessageFormat::makeFormat(int32_t position,
         return;
     }
     fMaxOffset = offsetNumber;
-    fOffsets[offsetNumber] = segments[0].size();
+    fOffsets[offsetNumber] = segments[0].length();
     fArgumentNumbers[offsetNumber] = argumentNumber;
 
     // now get the format

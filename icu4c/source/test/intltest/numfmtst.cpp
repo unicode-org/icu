@@ -157,7 +157,7 @@ NumberFormatTest::TestExponential()
             if (af.getType() == Formattable::kLong) a = af.getLong();
             else if (af.getType() == Formattable::kDouble) a = af.getDouble();
             else errln((UnicodeString)"FAIL: Non-numeric Formattable returned");
-            if (pos.getIndex() == s.size())
+            if (pos.getIndex() == s.length())
             {
                 logln((UnicodeString)"  -parse-> " + a);
                 if (a != valParse[v+ival])
@@ -179,7 +179,7 @@ NumberFormatTest::TestExponential()
             int32_t a;
             if (af.getType() == Formattable::kLong) a = af.getLong();
             else errln((UnicodeString)"FAIL: Non-long Formattable returned");
-            if (pos.getIndex() == s.size())
+            if (pos.getIndex() == s.length())
             {
                 logln((UnicodeString)"  -parse-> " + a);
                 if (a != lvalParse[v+ilval])
@@ -269,7 +269,7 @@ UnicodeString&
 NumberFormatTest::escape(UnicodeString& s)
 {
     UnicodeString buf;
-    for (int32_t i=0; i<s.size(); ++i)
+    for (int32_t i=0; i<s.length(); ++i)
     {
         UChar c = s[(UTextOffset)i];
         if (c <= (UChar)0x7F) buf += c;

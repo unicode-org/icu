@@ -172,20 +172,20 @@ Locale::Locale( const   UnicodeString&  newLanguage,
   UnicodeString newVariantCopy(newVariant);
   
   
-  if (newCountry.size() > 0 ||
-      newVariantCopy.size() > 0 )
+  if (newCountry.length() > 0 ||
+      newVariantCopy.length() > 0 )
     {
       togo += sep;
       togo += newCountry;
     }
   
-  int vsize = newVariantCopy.size();
+  int vsize = newVariantCopy.length();
     if (vsize > 0)
       {
     int i = 0;
     //We need to trim variant codes : (_*)$var(_*) --> $var 
     while ((i<vsize) && newVariantCopy[i] == sep) newVariantCopy.remove(i++, 1);
-    i = newVariantCopy.size() - 1;
+    i = newVariantCopy.length() - 1;
     while (i && (newVariantCopy[i] == sep)) newVariantCopy.remove(i--, 1);
     
     togo += sep ;
@@ -331,7 +331,7 @@ Locale::setHashCode()
   fullNameUString += UnicodeString(country, "");
   fullNameUString += UnicodeString(variant, "");
   const UChar *key       = fullNameUString.getUChars();
-  int32_t len           = fullNameUString.size();
+  int32_t len           = fullNameUString.length();
   int32_t hash          = 0;
   const UChar *limit     = key + len;
   int32_t inc           = (len >= 128 ? len/64 : 1);
@@ -431,7 +431,7 @@ Locale::getISO3Language(UnicodeString& lang, UErrorCode& status) const
       return lang;
 
     lang = uloc_getISO3Language(fullName);
-    if (lang.size() == 0)
+    if (lang.length() == 0)
       status = U_MISSING_RESOURCE_ERROR;
     
     return lang;
@@ -452,7 +452,7 @@ Locale::getISO3Country(UnicodeString& cntry, UErrorCode& status) const
         return cntry;
 
     cntry = uloc_getISO3Country(fullName);
-    if (cntry.size() == 0)
+    if (cntry.length() == 0)
         status = U_MISSING_RESOURCE_ERROR;
 
     return cntry;
@@ -778,7 +778,7 @@ Locale::getLanguagesForCountry(const UnicodeString& country, int32_t& count)
       break;
       UnicodeString compressedValues;
       compressedCtry2LangMapping.extractBetween(i, j, compressedValues);
-      UnicodeString *values = new UnicodeString[compressedValues.size() / 2];
+      UnicodeString *values = new UnicodeString[compressedValues.length() / 2];
       int32_t valLen = sizeof(values) / sizeof(values[0]);
       for (int32_t k = 0; k < valLen; ++k)
     compressedValues.extractBetween(k * 2, (k * 2) + 2, values[k]);

@@ -292,7 +292,7 @@ NumberFormatRoundTripTest::escape(UnicodeString& s)
 {
     UnicodeString copy(s);
     s.remove();
-    for(int i = 0; i < copy.size(); ++i) {
+    for(int i = 0; i < copy.length(); ++i) {
         UChar c = copy[i];
         if(c < 0x00FF) 
             s += c;

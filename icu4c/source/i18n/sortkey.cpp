@@ -229,7 +229,7 @@ int32_t
 CollationKey::storeUnicodeString(int32_t cursor, const UnicodeString &value)
 {
     UTextOffset input = 0;
-    int32_t charCount = value.size();
+    int32_t charCount = value.length();
 
     while (input < charCount)
     {
@@ -242,7 +242,7 @@ CollationKey::storeUnicodeString(int32_t cursor, const UnicodeString &value)
 CollationKey&
 CollationKey::copyUnicodeString(const UnicodeString &value)
 {
-    int32_t charCount = value.size();
+    int32_t charCount = value.length();
 
     // We allocate enough space for two null bytes at the end.
     ensureCapacity((charCount * 2) + 2);

@@ -114,7 +114,7 @@ void DateFormatTest::TestWallyWedel()
         {
             //fmtDstOffset = fmtOffset->substring(3);
             fmtDstOffset = new UnicodeString();
-            fmtOffset.extract(3, fmtOffset.size(), *fmtDstOffset);
+            fmtOffset.extract(3, fmtOffset.length(), *fmtDstOffset);
         }
         /*
          * Show our result.
@@ -193,7 +193,7 @@ UnicodeString&
 DateFormatTest::escape(UnicodeString& s)
 {
     UnicodeString buf;
-    for (int32_t i=0; i<s.size(); ++i)
+    for (int32_t i=0; i<s.length(); ++i)
     {
         UChar c = s[(UTextOffset)i];
         if (c <= (UChar)0x7F) buf += c;
@@ -579,7 +579,7 @@ DateFormatTest::TestQuotePattern161()
     UnicodeString dateString; ((DateFormat*)formatter)->format(currentTime_1, dateString);
     UnicodeString exp("08/13/1997 at 10:42:28 AM ");
     logln((UnicodeString)"format(" + dateToString(currentTime_1) + ") = " + dateString);
-    if (0 != dateString.compareBetween(0, exp.size(), exp, 0, exp.size())) errln((UnicodeString)"FAIL: Expected " + exp);
+    if (0 != dateString.compareBetween(0, exp.length(), exp, 0, exp.length())) errln((UnicodeString)"FAIL: Expected " + exp);
     delete formatter;
     if (U_FAILURE(status)) errln((UnicodeString)"FAIL: UErrorCode received during test: " + (int32_t)status);
 }
@@ -621,7 +621,7 @@ DateFormatTest::TestBadInput135()
                     {
                         UnicodeString format; full->format(when, format);
                         logln(prefix + "OK: " + format);
-                        if (0!=format.compareBetween(0, expected.size(), expected, 0, expected.size()))
+                        if (0!=format.compareBetween(0, expected.length(), expected, 0, expected.length()))
                             errln((UnicodeString)"FAIL: Expected " + expected);
                     }
                 //}
@@ -708,7 +708,7 @@ DateFormatTest::TestBadInput135a()
       if (parsePosition.getIndex() != 0) {
     UnicodeString s1, s2;
     s.extract(0, parsePosition.getIndex(), s1);
-    s.extract(parsePosition.getIndex(), s.size(), s2);
+    s.extract(parsePosition.getIndex(), s.length(), s2);
     if (date == 0) errln((UnicodeString)"ERROR: null result fmt=\"" +
                  parseFormats[index] +
                  "\" pos=" + parsePosition.getIndex() + " " +

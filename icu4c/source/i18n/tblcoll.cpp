@@ -553,7 +553,7 @@ RuleBasedCollator::RuleBasedCollator(   const Locale& desiredLocale,
     
   for (;;)
     {
-      if (localeName.size() == 0)
+      if (localeName.length() == 0)
     {
       if (next == eDone)
             {
@@ -949,8 +949,8 @@ RuleBasedCollator::compare( const UnicodeString& source,
     UnicodeString target_togo;
     UTextOffset begin=0;
 
-    source.extract(begin, icu_min(length,source.size()), source_togo);
-    target.extract(begin, icu_min(length,target.size()), target_togo);
+    source.extract(begin, icu_min(length,source.length()), source_togo);
+    target.extract(begin, icu_min(length,target.length()), target_togo);
     return (RuleBasedCollator::compare(source_togo, target_togo));
 }
 
@@ -1362,7 +1362,7 @@ RuleBasedCollator::getCollationKey( const   UnicodeString&  source,
                                     CollationKey&   sortkey,
                                     UErrorCode&      status) const
 {
-    return RuleBasedCollator::getCollationKey(source.getUChars(), source.size(), sortkey, status);
+    return RuleBasedCollator::getCollationKey(source.getUChars(), source.length(), sortkey, status);
 }
 
 CollationKey&
@@ -1466,7 +1466,7 @@ RuleBasedCollator::getCollationKey( const   UChar*  source,
 
         if (U_SUCCESS(status))
         {
-            totalIdent = decomp.size() + 1;
+            totalIdent = decomp.length() + 1;
         }
     }
 
@@ -1607,7 +1607,7 @@ RuleBasedCollator::build(const UnicodeString&   pattern,
     UnicodeString expChars;
     UnicodeString groupChars;
 
-    if (pattern.size() == 0)
+    if (pattern.length() == 0)
     {
         status = U_INVALID_FORMAT_ERROR;
         return;
@@ -1645,16 +1645,16 @@ RuleBasedCollator::build(const UnicodeString&   pattern,
             entry->getChars(groupChars);
 
             // check if french secondary needs to be turned on
-            if ((groupChars.size() > 1) &&
-                (groupChars[groupChars.size()-(T_INT32(1))] == 0x0040))
+            if ((groupChars.length() > 1) &&
+                (groupChars[groupChars.length()-(T_INT32(1))] == 0x0040))
             {
                 data->isFrenchSec = TRUE;
-                groupChars.remove(groupChars.size()-(T_INT32(1)));
+                groupChars.remove(groupChars.length()-(T_INT32(1)));
             }
 
             order = increment((Collator::ECollationStrength)entry->getStrength(), order);
 
-            if (entry->getExtension(expChars).size() != 0)
+            if (entry->getExtension(expChars).length() != 0)
             {
                 // encountered an expanding character, where one character on input
                 // expands to several sort elements (e.g. 'ö' --> 'o' 'e')
@@ -1664,7 +1664,7 @@ RuleBasedCollator::build(const UnicodeString&   pattern,
                     return;
                 }
             }
-            else if (groupChars.size() > 1)
+            else if (groupChars.length() > 1)
             {
                 // encountered a contracting character, where several characters on input
                 // contract into one sort order.  For example, "ch" is treated as a single
@@ -1750,7 +1750,7 @@ RuleBasedCollator::build(const UnicodeString&   pattern,
                 bool_t allThere = TRUE;
                 int32_t i;
 
-                for (i = 0; i < decomp.size(); i += 1)
+                for (i = 0; i < decomp.length(); i += 1)
                 {
                     if (getCharOrder(decomp[i]) == UNMAPPED)
                     {
@@ -1914,7 +1914,7 @@ RuleBasedCollator::addExpandOrder(  const   UnicodeString& contractChars,
     int32_t tableIndex = addExpansion(anOrder, expandChars);
     
     // And add its index into the main mapping table
-    if (contractChars.size() > 1)
+    if (contractChars.length() > 1)
     {
         addContractOrder(contractChars, tableIndex, status);
     }
@@ -1939,7 +1939,7 @@ int32_t RuleBasedCollator::addExpansion(int32_t anOrder, const UnicodeString &ex
     // If anOrder is valid, we want to add it at the beginning of the list
     int32_t offset = (anOrder == UNMAPPED) ? 0 : 1;
     
-    VectorOfInt *valueList = new VectorOfInt(expandChars.size() + offset);
+    VectorOfInt *valueList = new VectorOfInt(expandChars.length() + offset);
 
     if (offset == 1)
     {
@@ -1947,7 +1947,7 @@ int32_t RuleBasedCollator::addExpansion(int32_t anOrder, const UnicodeString &ex
     }
 
     int32_t i;
-    for (i = 0; i < expandChars.size(); i += 1)
+    for (i = 0; i < expandChars.length(); i += 1)
     {
         UChar ch = expandChars[i];
         int32_t mapValue = getCharOrder(ch);
@@ -2140,7 +2140,7 @@ RuleBasedCollator::hashCode() const
 {
     int32_t         value = 0;
     int32_t         c;
-    int32_t         count = getRules().size();
+    int32_t         count = getRules().length();
     UTextOffset      pos = count - 1;
 
     if (count > 64)
@@ -2410,7 +2410,7 @@ RuleBasedCollator::createPathName(  const UnicodeString&    prefix,
     workingName += name;
     workingName += suffix;
 
-    size = workingName.size();
+    size = workingName.length();
     returnVal = new char[size + 1];
     workingName.extract(0, size, returnVal, "");
     returnVal[size] = 0;
@@ -2425,7 +2425,7 @@ RuleBasedCollator::chopLocale(UnicodeString& localeName)
     // For instance, "de_CH" becomes "de", and "de" becomes "".
     // "" remains "".
 
-    int32_t     size = localeName.size();
+    int32_t     size = localeName.length();
     int32_t     i;
 
     for (i = size - 1; i > 0; i--)

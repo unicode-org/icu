@@ -477,7 +477,7 @@ void ConvertTest::TestConvert()
     
     logln("\n---Testing UChar* RoundTrip ...");
    // uniString3->remove();
-    uniString3->replace(0, uniString3->size(), my_ucs_file_buffer, i);
+    uniString3->replace(0, uniString3->length(), my_ucs_file_buffer, i);
     //uniString3 = new UnicodeString(my_ucs_file_buffer,i);
     
     /*checks if Uni1 == Uni3*/ 
@@ -499,7 +499,7 @@ void ConvertTest::TestConvert()
 
 
     SJIS.toUnicodeString(myString, mySJIS, 12, err);
-    if (U_FAILURE(err)||(myString.size()!=10)) errln("toUnicodeString test failed");
+    if (U_FAILURE(err)||(myString.length()!=10)) errln("toUnicodeString test failed");
     else logln("toUnicodeString test ok");
 
     fclose(ucs_file_in);    
@@ -516,7 +516,7 @@ void ConvertTest::TestConvert()
 
 void WriteToFile(const UnicodeString *a, FILE *myfile)
 {
-      uint32_t  size    =   a->size();
+      uint32_t  size    =   a->length();
       uint16_t  i       =   0;
       UChar   b       =   0xFEFF;
 

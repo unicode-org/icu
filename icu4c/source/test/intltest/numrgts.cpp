@@ -121,7 +121,7 @@ static UnicodeString str(const char *input)
   
   while ((index = result.indexOf("\\u")) != -1)
     {
-      if (index + 6 <= result.size())
+      if (index + 6 <= result.length())
     {
       UChar c = 0;
       for (int i = index + 2; i < index + 6; i++) {
@@ -258,11 +258,11 @@ void NumberFormatRegressionTest::Test4087535 ()
     UnicodeString buffer;
     FieldPosition pos(FieldPosition::DONT_CARE);
     buffer = df->format(n, buffer, pos);
-    if (buffer.size() == 0)
+    if (buffer.length() == 0)
         errln(/*n + */": '" + buffer + "'");
     n = 0.1;
     buffer = df->format(n, buffer, pos);
-    if (buffer.size() == 0)
+    if (buffer.length() == 0)
         errln(/*n + */": '" + buffer + "'");
 
     delete df;
@@ -1445,16 +1445,16 @@ void NumberFormatRegressionTest::Test4122840()
             symbols->setDecimalSeparator(symbols->getMonetaryDecimalSeparator());
             
             UnicodeString buf(pattern);
-            for (int j = 0; j < buf.size(); j++) {
+            for (int j = 0; j < buf.length(); j++) {
                 if (buf[j] == 0x00a4 ) {
                     if(buf[j + 1] == 0x00a4) {
                         // {sfb} added to support double currency marker (intl currency sign)
                         buf.replace(j, /*j+*/2, symbols->getInternationalCurrencySymbol(temp)); 
-                        j += symbols->getInternationalCurrencySymbol(temp).size() - 1 + 1;
+                        j += symbols->getInternationalCurrencySymbol(temp).length() - 1 + 1;
                     }
                     else {
                         buf.replace(j, /*j+*/1, symbols->getCurrencySymbol(temp)); 
-                        j += symbols->getCurrencySymbol(temp).size() - 1;
+                        j += symbols->getCurrencySymbol(temp).length() - 1;
                     }                    
                 }
             }
