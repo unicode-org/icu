@@ -25,6 +25,7 @@
 *   07/21/99    stephen     Added U_CFUNC setDefault
 *   11/09/99    weiv        Added const char * getName() const;
 *   04/12/00    srl         removing unicodestring api's and cached hash code
+*   08/10/01    grhoten     Change the static Locales to accessor functions
 ******************************************************************************
 */
 
@@ -38,25 +39,20 @@
 #include "cmemory.h"
 #include "cstring.h"
 
-#ifdef ICU_LOCID_USE_DEPRECATES
-#include "uhash.h"
-#endif
+/*Character separating the posix id fields*/
+// '_'
+#define SEP_UCHAR 0x005F
+// In the platform codepage.
+#define SEP_CHAR '_'
 
 /**
  * static variables
  */
-Locale Locale::fgDefaultLocale;
+Locale*  availableLocaleList = NULL;
+int32_t  availableLocaleListCount;
 
-Locale*            Locale::localeList = NULL;
-int32_t            Locale::localeListCount;
 #ifdef ICU_LOCID_USE_DEPRECATES
-UnicodeString*    Locale::isoLanguages = NULL;
-int32_t            Locale::isoLanguagesCount;
-UnicodeString*    Locale::isoCountries = NULL;;
-int32_t            Locale::isoCountriesCount;
-#endif
-
-
+Locale Locale::fgDefaultLocale;
 
 /**
  * Constant definitions
@@ -74,7 +70,7 @@ const Locale  Locale::TRADITIONAL_CHINESE("zh", "TW");
 // Useful constant for country.
 
 const Locale  Locale::FRANCE    ("fr", "FR");
-const Locale  Locale::GERMANY   ("de", "DE"); 
+const Locale  Locale::GERMANY   ("de", "DE");
 const Locale  Locale::ITALY     ("it", "IT");
 const Locale  Locale::JAPAN     ("ja", "JP");
 const Locale  Locale::KOREA     ("ko", "KR");
@@ -86,47 +82,67 @@ const Locale  Locale::US        ("en", "US");
 const Locale  Locale::CANADA    ("en", "CA");
 const Locale  Locale::CANADA_FRENCH("fr", "CA");
 
-#ifdef ICU_LOCID_USE_DEPRECATES
+#else
+typedef enum ELocalePos {
+    eENGLISH,
+    eFRENCH,
+    eGERMAN,
+    eITALIAN,
+    eJAPANESE,
+    eKOREAN,
+    eCHINESE,
 
-/**
- * Table mapping ISO country codes to the ISO language codes of the languages spoken
- * in those countries.
- * (Because the Java VM specification for building arrays and hashtables causes
- * code that builds the tables element by element to be produces, we compress the data
- * into a single encoded String, and lazy evaluate the table from it.)
- */
-UHashtable* Locale::ctry2LangMapping = 0;
-const UnicodeString Locale::compressedCtry2LangMapping(
-    "ADfresAEarenAFpsAGenAIrnALsqAMhyruANnlenAOptAResASensmATdeAUenAWnlenAZazhyru"
-    "BAsrshhrslmksqBBenBDbnhibhenBEfrnldeBFfrBGbgtrBHarenBIrnfrswBJfrBMenBNmsenzh"
-    "BOesayquBRptBSenBTdzenneBVnoBWentnBYberuBZenesCAenfrCCenCFfrsgCGfrCHfrdeitrm"
-    "CIfrCKmienCLesCMenfrCNzhboCOesCResCUesCVptCXenCYeltrenCZcsskDEdeDJarfrsoDKda"
-    "DMenfrDOesDZarfrECesquEEetruEGarenfrEHarfritERamtiarenitESeseucaglETamaren"
-    "FIfisvFJenfjhiFKenFMenFOfodaFRfreubrcoFXfrGAfrGBengdcyGDenfrGEkahyruGFfrGHen"
-    "GIenesGLdaikklGMenwoGNfrGPfrenGQesGRelGTesGUenGWptGYenhiurHKzhenHNesHRhrHTfr"
-    "HUhuIDinennlIEengaILiwarjiINhienguknksmlmrneorpasatateIOenIQarkutkIRfaarku"
-    "ISisITitfrdeJMenJOarJPjaKEenswKGkyKHkmKIenKMfrarKNenKPkoKRkoKWarenKYenKZkkru"
-    "LAlofrLBarenfrLCenfrLIdeLKtasienLRenLSstenLTltruplLUfrdeLVlvltruLYarenit"
-    "MAarfresMCfrenitMDmorobgMGmgenfrMKmkshtrMLfrMMmyMNmnruMOzhptMQfrMRarfrMSen"
-    "MTmtenitMUenfrhiMWenMXesMYmsenMZptNAenafdeNEfrhaNFenNGenhayoNIesNLnlfyNOno"
-    "NPneNRnaenNUenNZenmiOMarenPAesenPEesquayPFfrPGenPHentlesPKurenpspasdPLplPMfren"
-    "PNenPResenPTptPWenPYesgnQAarenREfrtaROrohuRUruRWenfrrwSAarSBenSCenfrSDarsu"
-    "SEsvSGzhenmstaSHenSIslSJnoSKskhuplshSLenSMitSNfrSOarenitsoSRnleneshiSTptSVes"
-    "SYarSZenssTCenTDfrarTFfrTGfrTHthTJtgruuzTKenmiTMtkruTNarTOentoTRtrkuTTenTVen"
-    "TWzhTZenswUAukruUGenswUMenUSenesUYesUZuzruVAlaitVCenVEesVGenVIenVNvizhfr"
-    "VUenfrbiWFfrWSensmYEarYTfrmgswYUsrshmkhuZAafenZMenZRfrswZWensn",
-    "");
+    eFRANCE,
+    eGERMANY,
+    eITALY,
+    eJAPAN,
+    eKOREA,
+    eCHINA,      /* Alias for PRC */
+    eTAIWAN,
+    eUK,
+    eUS,
+    eCANADA,
+    eCANADA_FRENCH,
+
+
+    eDEFAULT,
+    eMAX_LOCALES
+} ELocalePos;
+
+const Locale::LocaleProxy Locale::ENGLISH  = {eENGLISH};
+const Locale::LocaleProxy Locale::FRENCH   = {eFRENCH};
+const Locale::LocaleProxy Locale::GERMAN   = {eGERMAN};
+const Locale::LocaleProxy Locale::ITALIAN  = {eITALIAN};
+const Locale::LocaleProxy Locale::JAPANESE = {eJAPANESE};
+const Locale::LocaleProxy Locale::KOREAN   = {eKOREAN};
+const Locale::LocaleProxy Locale::CHINESE  = {eCHINESE};
+const Locale::LocaleProxy Locale::SIMPLIFIED_CHINESE={eCHINA};
+const Locale::LocaleProxy Locale::TRADITIONAL_CHINESE={eTAIWAN};
+
+const Locale::LocaleProxy Locale::FRANCE   = {eFRANCE};
+const Locale::LocaleProxy Locale::GERMANY  = {eGERMANY};
+const Locale::LocaleProxy Locale::ITALY    = {eITALY};
+const Locale::LocaleProxy Locale::JAPAN    = {eJAPAN};
+const Locale::LocaleProxy Locale::KOREA    = {eKOREA};
+const Locale::LocaleProxy Locale::CHINA    = {eCHINA};
+const Locale::LocaleProxy Locale::PRC      = {eCHINA};
+const Locale::LocaleProxy Locale::TAIWAN   = {eTAIWAN};
+const Locale::LocaleProxy Locale::UK       = {eUK};
+const Locale::LocaleProxy Locale::US       = {eUS};
+const Locale::LocaleProxy Locale::CANADA   = {eCANADA};
+const Locale::LocaleProxy Locale::CANADA_FRENCH={eCANADA_FRENCH};
+
+#define LOCALE_CACHE_SIZE (eMAX_LOCALES * sizeof(Locale))
+uint8_t gByteLocaleCache[LOCALE_CACHE_SIZE];
+
+Locale *gLocaleCache = NULL;
+
+Locale::LocaleProxy::operator const class Locale&(void) const
+{
+    return Locale::getLocale(magicLocaleNumber);
+}
+
 #endif
-
-/*Used for stack allocation of temporary buffers
- *can be tweaked  for speed and likelihood of resorting to heap allocation*/ 
-#define BUFFER_SIZE 50
-
-/*Character separating the posix id fields*/
-// '_'
-#define SEP_UCHAR 0x005F
-// In the platform codepage.
-#define SEP_CHAR '_'
 
 Locale::~Locale()
 {   
@@ -280,15 +296,13 @@ Locale::Locale(const    Locale& other)
     uprv_strcpy(fullName, other.fullName);
 
     /*Make the variant point to the same offset as the copied*/
-    variant = fullName + (other.variant - other.fullName) ;
+    variantBegin = other.variantBegin;
 }
 
 UBool
 Locale::operator==( const   Locale& other) const
 {
-    if (uprv_strcmp(other.language, language) == 0
-        && uprv_strcmp(other.country, country) == 0
-        && uprv_strcmp(other.variant, variant) == 0)
+    if (uprv_strcmp(other.fullName, fullName) == 0)
     {
         return TRUE;
     }
@@ -337,32 +351,27 @@ Locale& Locale::init(const char* localeID)
     {
         if (this->fullName[l] == '\0')
         {
-            this->variant = this->fullName + l;
+            this->variantBegin = l;
         }
         else
         {
             int32_t varLength;
             UErrorCode intErr = U_ZERO_ERROR;
-            varLength = uloc_getVariant(this->fullName, NULL, 0,  &intErr);
+            varLength = uloc_getVariant(this->fullName, NULL, 0, &intErr);
 
-            if(U_FAILURE(intErr) && (intErr != U_BUFFER_OVERFLOW_ERROR))
-            {
-                this->variant = (char*)u_errorName(intErr);
-            }
-            else if(varLength <= 0)
+            if((U_FAILURE(intErr) && (intErr != U_BUFFER_OVERFLOW_ERROR)) || (varLength <= 0))
             {   /* bail  - point at the null*/
-                this->variant = this->fullName + j;
-                // this->variant = "Len<=0";
+                this->variantBegin = j;
             }
             else
             {
                 /* variant is at the end. We just don't know where exactly it might be. */
-                this->variant = this->fullName + j - varLength + 1 ;
+                this->variantBegin = j - varLength + 1 ;
             }
         }
     }
     else
-        this->variant = this->fullName + l - 1;
+        this->variantBegin = l - 1;
 
     return *this;
 }
@@ -385,7 +394,7 @@ Locale& Locale::operator=(const Locale& other)
     }
     uprv_strcpy(fullName, other.fullName);
     /*Make the variant point to the same offset as the assigner*/
-    variant = fullName + (other.variant - other.fullName) ;
+    variantBegin = other.variantBegin;
 
     return *this;
 }
@@ -393,21 +402,32 @@ Locale& Locale::operator=(const Locale& other)
 int32_t
 Locale::hashCode() const 
 {
-    UnicodeString fullNameUString(language, "");
-    return fullNameUString.append(UnicodeString(country, "")).append(UnicodeString(variant, "")).hashCode();
+    return UnicodeString(fullName, "").hashCode();
 }
 
 
-Locale&
+const Locale&
 Locale::getDefault() 
 {
+#ifdef ICU_LOCID_USE_DEPRECATES
     return fgDefaultLocale;
+#else
+    return getLocale(eDEFAULT);
+#endif
 }
 
 
 void locale_set_default_internal(const char *id)
 {
-    Locale::getDefault().init(id);
+#ifdef ICU_LOCID_USE_DEPRECATES
+    Locale::fgDefaultLocale.init(id);
+#else
+    if (gLocaleCache == NULL) {
+        Locale::initLocaleCache();
+    }
+
+    gLocaleCache[eDEFAULT].init(id);
+#endif
 }
 
 /* sfb 07/21/99 */
@@ -428,7 +448,15 @@ Locale::setDefault( const   Locale&     newLocale,
 
     uloc_setDefault(newLocale.fullName, &status);
 
+#ifdef ICU_LOCID_USE_DEPRECATES
     fgDefaultLocale = newLocale;
+#else
+    if (gLocaleCache == NULL) {
+        initLocaleCache();
+    }
+
+    gLocaleCache[eDEFAULT] = newLocale;
+#endif
 }
 
 Locale
@@ -472,62 +500,6 @@ Locale::getISO3Country() const
     return uloc_getISO3Country(fullName);
 }
 
-#ifdef ICU_LOCID_USE_DEPRECATES
-UnicodeString& 
-Locale::getLanguage(UnicodeString& lang) const
-{
-  lang = language;
-  return lang;
-}
-
-UnicodeString& 
-Locale::getCountry(UnicodeString& cntry) const
-{
-  cntry = country;
-  return cntry;
-}
-
-UnicodeString& 
-Locale::getVariant(UnicodeString& var) const
-{
-  var = variant;
-  return var;
-}
-
-UnicodeString& 
-Locale::getName(UnicodeString& name) const
-{
-    name = UnicodeString(fullName,"");
-  return name;
-}
-
-UnicodeString& 
-Locale::getISO3Language(UnicodeString& lang, UErrorCode& status) const
-{
-    if(U_FAILURE(status))
-      return lang;
-
-    lang = uloc_getISO3Language(fullName);
-    if (lang.length() == 0)
-      status = U_MISSING_RESOURCE_ERROR;
-    
-    return lang;
-}
-
-UnicodeString& 
-Locale::getISO3Country(UnicodeString& cntry, UErrorCode& status) const
-{
-    if(U_FAILURE(status))
-        return cntry;
-
-    cntry = uloc_getISO3Country(fullName);
-    if (cntry.length() == 0)
-        status = U_MISSING_RESOURCE_ERROR;
-
-    return cntry;
-}
-#endif
-
 /**
  * Return the LCID value as specified in the "LocaleID" resource for this
  * locale.  The LocaleID must be expressed as a hexadecimal number, from
@@ -558,7 +530,7 @@ Locale::getDisplayLanguage( const   Locale&         inLocale,
                 UnicodeString&  dispLang) const
 {
     UErrorCode status = U_ZERO_ERROR;
-    UChar bufBuffer[BUFFER_SIZE];
+    UChar bufBuffer[ULOC_FULLNAME_CAPACITY];
     UChar* buf = bufBuffer;
     
     //  dispLang = "result";
@@ -566,7 +538,7 @@ Locale::getDisplayLanguage( const   Locale&         inLocale,
     int size = uloc_getDisplayLanguage(fullName,
         inLocale.fullName,
         buf,
-        BUFFER_SIZE,
+        ULOC_FULLNAME_CAPACITY,
         &status);
     
     
@@ -602,13 +574,13 @@ Locale::getDisplayCountry(  const   Locale&         inLocale,
                                     UnicodeString&  dispCntry) const
 {
     UErrorCode status = U_ZERO_ERROR;
-    UChar bufBuffer[BUFFER_SIZE];
+    UChar bufBuffer[ULOC_FULLNAME_CAPACITY];
     UChar* buf = bufBuffer;
 
     int size = uloc_getDisplayCountry(fullName,
         inLocale.fullName,
         buf,
-        BUFFER_SIZE,
+        ULOC_FULLNAME_CAPACITY,
         &status);
 
     if (status == U_BUFFER_OVERFLOW_ERROR)
@@ -640,13 +612,13 @@ UnicodeString& Locale::getDisplayVariant(const Locale& inLocale,
                      UnicodeString& dispVar) const
 {
     UErrorCode status = U_ZERO_ERROR;
-    UChar bufBuffer[BUFFER_SIZE];
+    UChar bufBuffer[ULOC_FULLNAME_CAPACITY];
     UChar* buf = bufBuffer;
 
     int size = uloc_getDisplayVariant(fullName,
         inLocale.fullName,
         buf,
-        BUFFER_SIZE,
+        ULOC_FULLNAME_CAPACITY,
         &status);
 
     if (status == U_BUFFER_OVERFLOW_ERROR)
@@ -679,13 +651,13 @@ Locale::getDisplayName( const   Locale&     inLocale,
             UnicodeString& result) const
 {
     UErrorCode status = U_ZERO_ERROR;
-    UChar bufBuffer[BUFFER_SIZE];
+    UChar bufBuffer[ULOC_FULLNAME_CAPACITY];
     UChar* buf = bufBuffer;
 
     int size = uloc_getDisplayName(fullName,
         inLocale.fullName,
         buf,
-        BUFFER_SIZE,
+        ULOC_FULLNAME_CAPACITY,
         &status);
 
     if (status == U_BUFFER_OVERFLOW_ERROR)
@@ -713,7 +685,7 @@ const Locale*
 Locale::getAvailableLocales(int32_t& count) 
 {
     // for now, there is a hardcoded list, so just walk through that list and set it up.
-    if (localeList == 0) {
+    if (availableLocaleList == 0) {
         UErrorCode status = U_ZERO_ERROR;
         ResourceBundle index(UnicodeString(""), Locale(kIndexLocaleName), status);
         ResourceBundle locales = index.get(kIndexTag, status);
@@ -735,16 +707,16 @@ Locale::getAvailableLocales(int32_t& count)
         }
 
         Mutex mutex;
-        if(localeList != 0) {
+        if(availableLocaleList != 0) {
             delete []newLocaleList;
         }
         else {
-            localeListCount = count;
-            localeList = newLocaleList;
+            availableLocaleListCount = count;
+            availableLocaleList = newLocaleList;
         }
     }
-    count = localeListCount;
-    return localeList;
+    count = availableLocaleListCount;
+    return availableLocaleList;
 }
 
 const char* const* Locale::getISOCountries()
@@ -757,233 +729,210 @@ const char* const* Locale::getISOLanguages()
     return uloc_getISOLanguages();
 }
 
-
-#ifdef ICU_LOCID_USE_DEPRECATES
-/**
- * Returns a list of all 2-letter country codes defined in ISO 3166.
- * Can be used to create Locales.
- */
-const UnicodeString*
-Locale::getISOCountries(int32_t& count) 
-{
-  if(isoCountries == 0) {
-    const char* const*    cResult = uloc_getISOCountries();
-    int32_t tempCount;
-    
-    int i;
-    tempCount = 0;
-    for (i = 0; cResult[i] != NULL; i++)      ++tempCount;
-    
-    UnicodeString *temp = new UnicodeString [tempCount];
-    
-    for(i = 0; i < tempCount; ++i)
-      temp[i] = cResult[i];
-    
-    Mutex mutex;        
-    if(isoCountries != 0)
-      delete [] temp;
-    else {
-      isoCountries = temp;
-      isoCountriesCount = tempCount;
-    }
-  }
-  
-  count = isoCountriesCount;
-
-
-  return isoCountries;
-}
-
-/**
- * Returns a list of all 2-letter language codes defined in ISO 639.
- * Can be used to create Locales.
- * [NOTE:  ISO 639 is not a stable standard-- some languages' codes have changed.
- * The list this function returns includes both the new and the old codes for the
- * languages whose codes have changed.]
- */
-const UnicodeString* 
-Locale::getISOLanguages(int32_t& count) 
-{
-  if(isoLanguages == 0) {
-    const char* const* cResult = uloc_getISOLanguages();
-    int32_t tempCount;
-    
-    int i;
-    tempCount = 0;
-    for (i = 0; cResult[i] != NULL; i++)   ++tempCount;
-    
-    UnicodeString *temp = new UnicodeString [tempCount];
-    
-    for(i = 0; i < tempCount; ++i)
-      temp[i] = cResult[i];
-    
-    Mutex mutex;        
-    if(isoLanguages != 0)
-      delete [] temp;
-    else {
-      isoLanguages = temp;
-      isoLanguagesCount = tempCount;
-    }
-  }
-  
-  count = isoLanguagesCount;
-  return isoLanguages;
-}
-
-/**
- * Given an ISO country code, returns an array of Strings containing the ISO
- * codes of the languages spoken in that country.  Official languages are listed
- * in the returned table before unofficial languages, but other than that, the
- * order of the returned list is indeterminate.  If the value the user passes in
- * for "country" is not a valid ISO 316 country code, or if we don't have language
- * information for the specified country, this function returns an empty array.
- *
- * [This function is not currently part of Locale's API, but is needed in the
- * implementation.  We hope to add it to the API in a future release.]
- */
-const UnicodeString* 
-Locale::getLanguagesForCountry(const UnicodeString& country, int32_t& count) 
-{
-    // To save on the size of a static array in the .class file, we keep the
-    // data around encoded into a String.  The first time this function is called,
-    // the String s parsed to produce a Hashtable, which is then used for all
-    // lookups.
-    if(ctry2LangMapping == 0) {
-        UErrorCode err = U_ZERO_ERROR;
-        UHashtable *temp = uhash_open(uhash_hashUnicodeString, uhash_compareUnicodeString, &err);
-        if (U_FAILURE(err)) 
-        {
-            count = 0;
-            return NULL;
-        }
-
-        uhash_setKeyDeleter(temp, uhash_deleteUnicodeString);
-
-        int32_t i = 0;
-        int32_t j;
-        int32_t count = (int32_t)(sizeof(compressedCtry2LangMapping) / sizeof(compressedCtry2LangMapping[0]));
-        while (i < count) {
-            UnicodeString key;
-            compressedCtry2LangMapping.extractBetween(i, i + 2, key);
-            i += 2;
-            for(j = i; j < count; j += 2)
-                if(Unicode::isUpperCase(compressedCtry2LangMapping[j]))
-                    break;
-                UnicodeString compressedValues;
-                compressedCtry2LangMapping.extractBetween(i, j, compressedValues);
-                UnicodeString *values = new UnicodeString[compressedValues.length() / 2];
-                int32_t valLen = (int32_t)(sizeof(values) / sizeof(values[0]));
-                for (int32_t k = 0; k < valLen; ++k)
-                    compressedValues.extractBetween(k * 2, (k * 2) + 2, values[k]);
-                uhash_put(temp, new UnicodeString(key), values, &err);
-                i = j;
-        }
-
-        Mutex mutex;
-        if(ctry2LangMapping != 0)
-            uhash_close(temp);
-        else
-            ctry2LangMapping = temp;
-    }
-
-    const UnicodeString *result = (const UnicodeString*)uhash_get(ctry2LangMapping, &country);
-    if(result == 0)
-        count = 0;
-    else
-        count = (int32_t)(sizeof(result) / sizeof(result[0]));
-
-    return result;
-}
-#endif
-
-
-// ================= privates =====================================
-
-
-
-
 // Set the locale's data based on a posix id. 
 void Locale::setFromPOSIXID(const char *posixID)
 {
     init(posixID);
 }
 
-#ifdef ICU_LOCID_USE_DEPRECATES
-// Deprecated APIs
-Locale::Locale( const   UnicodeString&  newLanguage)
+#ifndef ICU_LOCID_USE_DEPRECATES
+const Locale &
+Locale::getEnglish(void)
 {
-  char myLocaleID[ULOC_FULLNAME_CAPACITY];
-
-  myLocaleID[newLanguage.extract(0, 0x7fffffff, myLocaleID, "")] = '\0';
-  init(myLocaleID);
+    return getLocale(eENGLISH);
 }
 
-Locale::Locale( const   UnicodeString&  newLanguage, 
-                const   UnicodeString&  newCountry)
+const Locale &
+Locale::getFrench(void)
 {
-    UnicodeString togo(newLanguage);
-    char myLocaleID[ULOC_FULLNAME_CAPACITY];
-  
-    if(newCountry.length()>0) {
-        togo += SEP_UCHAR;
-        togo += newCountry;
-    }
+    return getLocale(eFRENCH);
+}
 
-    myLocaleID[togo.extract(0, 0x7fffffff, myLocaleID, "")] = '\0';
-    init(myLocaleID);
+const Locale &
+Locale::getGerman(void)
+{
+    return getLocale(eGERMAN);
+}
+
+const Locale &
+Locale::getItalian(void)
+{
+    return getLocale(eITALIAN);
+}
+
+const Locale &
+Locale::getJapanese(void)
+{
+    return getLocale(eJAPANESE);
+}
+
+const Locale &
+Locale::getKorean(void)
+{
+    return getLocale(eKOREAN);
+}
+
+const Locale &
+Locale::getChinese(void)
+{
+    return getLocale(eCHINESE);
+}
+
+const Locale &
+Locale::getSimplifiedChinese(void)
+{
+    return getLocale(eCHINESE);
+}
+
+const Locale &
+Locale::getTraditionalChinese(void)
+{
+    return getLocale(eTAIWAN);
 }
 
 
-Locale::Locale( const   UnicodeString&  newLanguage, 
-                const   UnicodeString&  newCountry, 
-                const   UnicodeString&  newVariant) 
+const Locale &
+Locale::getFrance(void)
 {
-  UnicodeString togo(newLanguage);
-  
-  char myLocaleID[ULOC_FULLNAME_CAPACITY];
-  UnicodeString newVariantCopy(newVariant);
-  
-  
-  if (newCountry.length() > 0 ||
-      newVariantCopy.length() > 0 )
-    {
-      togo += SEP_UCHAR;
-      togo += newCountry;
-    }
-  
-  int vsize = newVariantCopy.length();
-    if (vsize > 0)
-      {
-    int i = 0;
-    //We need to trim variant codes : (_*)$var(_*) --> $var 
-    while ((i<vsize) && newVariantCopy[i] == SEP_UCHAR) newVariantCopy.remove(i++, 1);
-    i = newVariantCopy.length() - 1;
-    while (i && (newVariantCopy[i] == SEP_UCHAR)) newVariantCopy.remove(i--, 1);
-    
-    togo += SEP_UCHAR ;
-    togo += newVariantCopy ;
-      }
-  
-  int size = togo.length();
-
-  /*if the variant is longer than our internal limit, we need
-  to go to the heap for temporary buffers*/
-  if (size > ULOC_FULLNAME_CAPACITY)
-    {
-      char *togo_heap = new char[size+1];
-      togo.extract(0,size, togo_heap, "");
-      togo_heap[size] = '\0';
-      init(togo_heap);
-      delete []togo_heap;
-    }
-  else 
-    {
-      togo.extract(0,size, myLocaleID, "");
-      myLocaleID[size] = '\0';
-      init(myLocaleID);
-    }
-  
+    return getLocale(eFRANCE);
 }
+
+const Locale &
+Locale::getGermany(void)
+{
+    return getLocale(eGERMANY);
+}
+
+const Locale &
+Locale::getItaly(void)
+{
+    return getLocale(eITALY);
+}
+
+const Locale &
+Locale::getJapan(void)
+{
+    return getLocale(eJAPAN);
+}
+
+const Locale &
+Locale::getKorea(void)
+{
+    return getLocale(eKOREA);
+}
+
+const Locale &
+Locale::getChina(void)
+{
+    return getLocale(eCHINESE);
+}
+
+const Locale &
+Locale::getPRC(void)
+{
+    return getLocale(eCHINESE);
+}
+
+const Locale &
+Locale::getTaiwan(void)
+{
+    return getLocale(eTAIWAN);
+}
+
+const Locale &
+Locale::getUK(void)
+{
+    return getLocale(eUK);
+}
+
+const Locale &
+Locale::getUS(void)
+{
+    return getLocale(eUS);
+}
+
+const Locale &
+Locale::getCanada(void)
+{
+    return getLocale(eCANADA);
+}
+
+const Locale &
+Locale::getCanadaFrench(void)
+{
+    return getLocale(eFRENCH);
+}
+
+const Locale &
+Locale::getLocale(int locid)
+{
+    if (gLocaleCache) {
+        return gLocaleCache[locid];
+    }
+
+    initLocaleCache();
+
+    return gLocaleCache[locid];
+}
+
+/*
+This function is defined this way in order to get around static
+initialization and static destruction.
+ */
+void
+Locale::initLocaleCache(void)
+{
+    Locale newLocales[] = {
+        Locale("en"),
+        Locale("fr"),
+        Locale("de"),
+        Locale("it"),
+        Locale("ja"),
+        Locale("ko"),
+        Locale("zh"),
+        Locale("fr", "FR"),
+        Locale("de", "DE"),
+        Locale("it", "IT"),
+        Locale("ja", "JP"),
+        Locale("ko", "KR"),
+        Locale("zh", "CN"),
+        Locale("zh", "TW"),
+        Locale("en", "GB"),
+        Locale("en", "US"),
+        Locale("en", "CA"),
+        Locale("fr", "CA"),
+        Locale()    // This can use a mutex
+    };
+    Locale *localeCache = reinterpret_cast<Locale *>(gByteLocaleCache);
+
+    {
+        Mutex lock;
+        if (gLocaleCache != NULL) {
+            return;
+        }
+        uprv_memcpy(gByteLocaleCache, newLocales ,sizeof(newLocales));
+
+        for (int idx = 0; idx < eMAX_LOCALES; idx++)
+        {
+            if (localeCache[idx].fullName == newLocales[idx].fullNameBuffer)
+            {
+                localeCache[idx].fullName = localeCache[idx].fullNameBuffer;
+            }
+            else
+            {
+                // Since we did a memcpy we need to make sure that the local
+                // Locales do not destroy the memory of the permanent locales.
+                //
+                // This can be a memory leak, but this code shouldn't normally
+                // get executed.
+                localeCache[idx].fullName = new char[uprv_strlen(localeCache[idx].fullNameBuffer) + 1];
+                uprv_strcpy(localeCache[idx].fullName, localeCache[idx].fullNameBuffer);
+            }
+        }
+        gLocaleCache = localeCache;
+    }
+}
+
 #endif
 
 //eof
