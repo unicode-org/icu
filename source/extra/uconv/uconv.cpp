@@ -416,12 +416,74 @@ static int printTransliterators(UBool canon)
 }
 
 enum {
+    uSP = 0x20,         // space
+    uCR = 0xd,          // carriage return
+    uLF = 0xa,          // line feed
+    uNL = 0x85,         // newline
+    uLS = 0x2028,       // line separator
+    uPS = 0x2029,       // paragraph separator
+    uSig = 0xfeff       // signature/BOM character
+};
+
+static inline int32_t
+getChunkLimit(const UnicodeString &prev, const UnicodeString &s) {
+    // find one of
+    // CR, LF, CRLF, NL, LS, PS
+    // for paragraph ends (see UAX #13/Unicode 4)
+    // and include it in the chunk
+    // all of these characters are on the BMP
+    // do not include FF or VT in case they are part of a paragraph
+    // (important for bidi contexts)
+    static const UChar paraEnds[] = {
+        0xd, 0xa, 0x85, 0x2028, 0x2029
+    };
+    enum {
+        iCR, iLF, iNL, iLS, iPS, iCount
+    };
+
+    // first, see if there is a CRLF split between prev and s
+    if (prev.endsWith(paraEnds + iCR, 1)) {
+        if (s.startsWith(paraEnds + iLF, 1)) {
+            return 1; // split CRLF, include the LF
+        } else if (!s.isEmpty()) {
+            return 0; // complete the last chunk
+        } else {
+            return -1; // wait for actual further contents to arrive
+        }
+    }
+
+    const UChar *u = s.getBuffer(), *limit = u + s.length();
+    UChar c;
+
+    while (u < limit) {
+        c = *u++;
+        if (
+            ((c < uSP) && (c == uCR || c == uLF)) ||
+            (c == uNL) ||
+            ((c & uLS) == uLS)
+        ) {
+            if (c == uCR) {
+                // check for CRLF
+                if (u == limit) {
+                    return -1; // LF may be in the next chunk
+                } else if (*u == uLF) {
+                    ++u; // include the LF in this chunk
+                }
+            }
+            return (int32_t)(u - s.getBuffer());
+        }
+    }
+
+    return -1; // continue collecting the chunk
+}
+
+enum {
     CNV_NO_FEFF,    // cannot convert the U+FEFF Unicode signature character (BOM)
     CNV_WITH_FEFF,  // can convert the U+FEFF signature character
     CNV_ADDS_FEFF   // automatically adds/detects the U+FEFF signature character
 };
 
-inline UChar
+static inline UChar
 nibbleToHex(uint8_t n) {
     n &= 0xf;
     return
@@ -442,7 +504,7 @@ cnvSigType(UConverter *cnv) {
     USet *set = uset_open(1, 0);
     err = U_ZERO_ERROR;
     ucnv_getUnicodeSet(cnv, set, UCNV_ROUNDTRIP_SET, &err);
-    if (U_SUCCESS(err) && uset_contains(set, 0xfeff)) {
+    if (U_SUCCESS(err) && uset_contains(set, uSig)) {
         result = CNV_WITH_FEFF;
     } else {
         result = CNV_NO_FEFF; // an error occurred or U+FEFF cannot be converted
@@ -550,9 +612,15 @@ ConvertFile::convertFile(const char *pname,
 
 #if !UCONFIG_NO_TRANSLITERATION
     Transliterator *t = 0;      // Transliterator acting on Unicode data.
+    UnicodeString chunk;        // One chunk of the text being collected for transformation.
 #endif
     UnicodeString u;            // String to do the transliteration.
     int32_t ulen;
+
+    // use conversion offsets for error messages
+    // unless a transliterator is used -
+    // a text transformation will reorder characters in unpredictable ways
+    UBool useOffsets = TRUE;
 
     // Open the correct input file or connect to stdin for reading input
 
@@ -621,6 +689,8 @@ ConvertFile::convertFile(const char *pname,
             }
             goto error_exit;
         }
+
+        useOffsets = FALSE;
     }
 #endif
 
@@ -704,7 +774,7 @@ ConvertFile::convertFile(const char *pname,
             // Use bufsz instead of u.getCapacity() for the targetLimit
             // so that we don't overflow fromoffsets[].
             ucnv_toUnicode(convfrom, &unibufp, unibuf + bufsz, &cbufp,
-                buf + rd, fromoffsets, flush, &err);
+                buf + rd, useOffsets ? fromoffsets : NULL, flush, &err);
 
             ulen = (int32_t)(unibufp - unibuf);
             u.releaseBuffer(ulen);
@@ -745,7 +815,7 @@ ConvertFile::convertFile(const char *pname,
                 UnicodeString str;
                 for (i = 0; i < errorLength; ++i) {
                     if (i > 0) {
-                        str.append((UChar)0x20);
+                        str.append((UChar)uSP);
                     }
                     str.append(nibbleToHex((uint8_t)errorBytes[i] >> 4));
                     str.append(nibbleToHex((uint8_t)errorBytes[i]));
@@ -770,15 +840,17 @@ ConvertFile::convertFile(const char *pname,
 
             // remove a U+FEFF Unicode signature character if requested
             if (sig < 0) {
-                if (u.charAt(0) == 0xfeff) {
+                if (u.charAt(0) == uSig) {
                     u.remove(0, 1);
 
                     // account for the removed UChar and offset
                     --ulen;
 
-                    // remove an offset from fromoffsets[] as well
-                    // to keep the array parallel with the UChars
-                    memmove(fromoffsets, fromoffsets + 1, ulen * 4);
+                    if (useOffsets) {
+                        // remove an offset from fromoffsets[] as well
+                        // to keep the array parallel with the UChars
+                        memmove(fromoffsets, fromoffsets + 1, ulen * 4);
+                    }
 
                 }
                 sig = 0;
@@ -787,15 +859,40 @@ ConvertFile::convertFile(const char *pname,
 #if !UCONFIG_NO_TRANSLITERATION
             // Transliterate/transform if needed.
 
-            // TODO For transformation, we should add chunking code -
-            // collect Unicode input until, for example, an end-of-line (LF, CRLF, CR, LS, PS, NL, ...),
+            // For transformation, we use chunking code -
+            // collect Unicode input until, for example, an end-of-line,
             // then transform and output-convert that and continue collecting.
-            // This would make the transformation result independent of the buffer size
-            // while avoiding the slow keyboard mode.
-            // The end-of-chunk characters should be completely included in the
+            // This makes the transformation result independent of the buffer size
+            // while avoiding the slower keyboard mode.
+            // The end-of-chunk characters are completely included in the
             // transformed string in case they are to be transformed themselves.
             if (t != NULL) {
-                t->transliterate(u);
+                UnicodeString out;
+                int32_t chunkLimit;
+
+                do {
+                    chunkLimit = getChunkLimit(chunk, u);
+                    if (chunkLimit < 0 && flush && fromSawEndOfBytes) {
+                        // use all of the rest at the end of the text
+                        chunkLimit = u.length();
+                    }
+                    if (chunkLimit >= 0) {
+                        // complete the chunk and transform it
+                        chunk.append(u, 0, chunkLimit);
+                        u.remove(0, chunkLimit);
+                        t->transliterate(chunk);
+
+                        // append the transformation result to the result and empty the chunk
+                        out.append(chunk);
+                        chunk.remove();
+                    } else {
+                        // continue collecting the chunk
+                        chunk.append(u);
+                        break;
+                    }
+                } while (!u.isEmpty());
+
+                u = out;
                 ulen = u.length();
             }
 #endif
@@ -803,13 +900,15 @@ ConvertFile::convertFile(const char *pname,
             // add a U+FEFF Unicode signature character if requested
             // and possible/necessary
             if (sig > 0) {
-                if (u.charAt(0) != 0xfeff && cnvSigType(convto) == CNV_WITH_FEFF) {
-                    u.insert(0, (UChar)0xfeff);
+                if (u.charAt(0) != uSig && cnvSigType(convto) == CNV_WITH_FEFF) {
+                    u.insert(0, (UChar)uSig);
 
-                    // insert a pseudo-offset into fromoffsets[] as well
-                    // to keep the array parallel with the UChars
-                    memmove(fromoffsets + 1, fromoffsets, ulen * 4);
-                    fromoffsets[0] = -1;
+                    if (useOffsets) {
+                        // insert a pseudo-offset into fromoffsets[] as well
+                        // to keep the array parallel with the UChars
+                        memmove(fromoffsets + 1, fromoffsets, ulen * 4);
+                        fromoffsets[0] = -1;
+                    }
 
                     // account for the additional UChar and offset
                     ++ulen;
@@ -860,7 +959,7 @@ ConvertFile::convertFile(const char *pname,
 
                     int32_t ferroffset;
 
-                    if (t == NULL) {
+                    if (useOffsets) {
                         // Unicode buffer offset of the start of the error UChars
                         ferroffset = (int32_t)((unibufbp - unibuf) - errorLength);
                         if (ferroffset < 0) {
@@ -896,7 +995,7 @@ ConvertFile::convertFile(const char *pname,
                     UnicodeString str;
                     for (i = 0; i < errorLength;) {
                         if (i > 0) {
-                            str.append((UChar)0x20);
+                            str.append((UChar)uSP);
                         }
                         U16_NEXT(errorUChars, i, errorLength, c);
                         if (c >= 0x100000) {
