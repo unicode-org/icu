@@ -266,7 +266,7 @@ nfs4_mixed_prepare( const char* src, int32_t srcLength,
         return 0;
     }
     if(srcLength == -1){
-        srcLength = strlen(src);
+        srcLength = (int32_t)strlen(src);
     }
     getPrefixSuffix(src, srcLength, &prefix, &prefixLen, &suffix, &suffixLen, status); 
 

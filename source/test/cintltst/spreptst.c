@@ -300,11 +300,11 @@ static void Test_nfs4_cis_prep(void){
         char* dest = NULL;
         int32_t destLen = 0;
 
-        destLen = nfs4_cis_prepare(src , strlen(src), dest, destLen, &parseError, &status); 
+        destLen = nfs4_cis_prepare(src , (int32_t)strlen(src), dest, destLen, &parseError, &status); 
         if(status == U_BUFFER_OVERFLOW_ERROR){
             status = U_ZERO_ERROR;
             dest = (char*) malloc(++destLen);
-            destLen = nfs4_cis_prepare( src , strlen(src), dest, destLen, &parseError, &status); 
+            destLen = nfs4_cis_prepare( src , (int32_t)strlen(src), dest, destLen, &parseError, &status); 
         }
 
         if(expectedStatus != status){
@@ -413,7 +413,7 @@ Test_nfs4_mixed_prep(void){
             char* dest = NULL;
             UErrorCode status = U_ZERO_ERROR;
             UParseError parseError;
-            srcLen = unescapeData(mixed_prep_data[i], strlen(mixed_prep_data[i]), src, MAX_BUFFER_SIZE, &status);
+            srcLen = unescapeData(mixed_prep_data[i], (int32_t)strlen(mixed_prep_data[i]), src, MAX_BUFFER_SIZE, &status);
             if(U_FAILURE(status)){
                 log_err("Conversion of data at index %i failed. Error: %s\n", i, u_errorName(status));
                 continue;
@@ -439,7 +439,7 @@ Test_nfs4_mixed_prep(void){
         UErrorCode status = U_ZERO_ERROR;
         UParseError parseError;
         
-        int32_t srcLen = unescapeData(source, strlen(source), src, MAX_BUFFER_SIZE, &status);
+        int32_t srcLen = unescapeData(source, (int32_t)strlen(source), src, MAX_BUFFER_SIZE, &status);
 
         nfs4_mixed_prepare(src, srcLen, dest, MAX_BUFFER_SIZE, &parseError, &status);
 
@@ -459,7 +459,7 @@ Test_nfs4_cs_prep(void){
         UErrorCode status = U_ZERO_ERROR;
         char src[MAX_BUFFER_SIZE]={'\0'};
         UParseError parseError;
-        int32_t srcLen = unescapeData(source, strlen(source), src, MAX_BUFFER_SIZE, &status);
+        int32_t srcLen = unescapeData(source, (int32_t)strlen(source), src, MAX_BUFFER_SIZE, &status);
         if(U_SUCCESS(status)){
             char dest[MAX_BUFFER_SIZE] = {'\0'};
             int32_t destLen = nfs4_cs_prepare(src, srcLen, dest, MAX_BUFFER_SIZE, FALSE, &parseError, &status);
@@ -482,7 +482,7 @@ Test_nfs4_cs_prep(void){
         UErrorCode status = U_ZERO_ERROR;
         char src[MAX_BUFFER_SIZE]={'\0'};
         UParseError parseError;
-        int32_t srcLen = unescapeData(source, strlen(source), src, MAX_BUFFER_SIZE, &status);
+        int32_t srcLen = unescapeData(source, (int32_t)strlen(source), src, MAX_BUFFER_SIZE, &status);
         if(U_SUCCESS(status)){
             char dest[MAX_BUFFER_SIZE] = {'\0'};
             int32_t destLen = nfs4_cs_prepare(src, srcLen, dest, MAX_BUFFER_SIZE, FALSE, &parseError, &status);
@@ -505,7 +505,7 @@ Test_nfs4_cs_prep(void){
         UErrorCode status = U_ZERO_ERROR;
         char src[MAX_BUFFER_SIZE]={'\0'};
         UParseError parseError;
-        int32_t srcLen = unescapeData(source, strlen(source), src, MAX_BUFFER_SIZE, &status);
+        int32_t srcLen = unescapeData(source, (int32_t)strlen(source), src, MAX_BUFFER_SIZE, &status);
         if(U_SUCCESS(status)){
             char dest[MAX_BUFFER_SIZE] = {'\0'};
             int32_t destLen = nfs4_cs_prepare(src, srcLen, dest, MAX_BUFFER_SIZE, TRUE, &parseError, &status);
@@ -530,8 +530,8 @@ Test_nfs4_cs_prep(void){
         char src[MAX_BUFFER_SIZE]={'\0'};
         char exp[MAX_BUFFER_SIZE]={'\0'};
         UParseError parseError;
-        int32_t srcLen = unescapeData(source, strlen(source), src, MAX_BUFFER_SIZE, &status);
-        int32_t expLen = unescapeData(expected, strlen(expected), exp, MAX_BUFFER_SIZE, &status);
+        int32_t srcLen = unescapeData(source, (int32_t)strlen(source), src, MAX_BUFFER_SIZE, &status);
+        int32_t expLen = unescapeData(expected, (int32_t)strlen(expected), exp, MAX_BUFFER_SIZE, &status);
         if(U_SUCCESS(status)){
             char dest[MAX_BUFFER_SIZE] = {'\0'};
             int32_t destLen = nfs4_cs_prepare(src, srcLen, dest, MAX_BUFFER_SIZE, FALSE, &parseError, &status);
