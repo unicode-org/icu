@@ -473,6 +473,23 @@ static void Test_UChar_WCHART_API(void){
     int32_t uDestLen = 0;
     int i =0;
     {
+        /* Bad UErrorCode arguments. Make sure that the API doesn't crash, and that Purify doesn't complain. */
+        u_strFromWCS(NULL,0,NULL,NULL,0,NULL);
+        u_strToWCS(NULL,0,NULL,NULL,0,NULL);
+
+        /* Bad UErrorCode arguments. */
+        err = U_ZERO_ERROR;
+        u_strFromWCS(NULL,0,NULL,NULL,0,&err);
+        if (err != U_ILLEGAL_ARGUMENT_ERROR) {
+            log_err("u_strFromWCS() didn't fail as expected with bad arguments. Error: %s \n", u_errorName(err));
+        }
+        err = U_ZERO_ERROR;
+        u_strToWCS(NULL,0,NULL,NULL,0,&err);
+        if (err != U_ILLEGAL_ARGUMENT_ERROR) {
+            log_err("u_strToWCS() didn't fail as expected with bad arguments. Error: %s \n", u_errorName(err));
+        }
+        err = U_ZERO_ERROR;
+
         /* pre-flight*/
         u_strToWCS(wDest,wDestLen,&reqLen,uSrc,uSrcLen-1,&err);
 
