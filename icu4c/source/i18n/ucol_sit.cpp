@@ -973,6 +973,7 @@ ucol_getContractions( const UCollator *coll,
     c.coll = coll;
     c.removedContractions =  NULL;
     utrie_enum(coll->mapping, NULL, _processContractions, &c);
+    ucol_tok_closeTokenList(&src);
 
     return uset_getItemCount(contractions);
 
