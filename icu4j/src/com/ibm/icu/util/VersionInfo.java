@@ -101,6 +101,11 @@ public final class VersionInfo
      */
     public static final VersionInfo ICU_VERSION;
     
+    /**
+     * Data version string for ICU's internal data
+     * @internal
+     * @draft ICU 3.0
+     */
     public static final String ICU_DATA_VERSION = "30b";
     
     /**
