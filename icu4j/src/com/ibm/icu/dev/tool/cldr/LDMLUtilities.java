@@ -752,6 +752,30 @@ public class LDMLUtilities {
             throw new RuntimeException(ex.getMessage());
         }   
     }
+    
+    public static final boolean isAlternate(Node node){
+        NamedNodeMap attributes = node.getAttributes();
+        Node attr = attributes.getNamedItem(LDMLConstants.ALT);
+        if(attr!=null){
+            return true;
+        }
+        return false;
+    }
+
+    private static final Node getNonaltNode(NodeList list /*, StringBuffer xpath*/){
+        // A nonalt node is one which .. does not have alternate
+        // attribute set
+        Node node =null;
+        for(int i =0; i<list.getLength(); i++){
+            node = list.item(i);
+            if(/*!isDraft(node, xpath)&& */!isAlternate(node)){
+                return node;
+            }
+        }
+        return null;
+    }
+
+
     /**
      * Fetches the node from the document that matches the given xpath.
      * The context namespace node is required if the xpath contains 
@@ -790,7 +814,18 @@ public class LDMLUtilities {
             int len = nl.getLength();
             //TODO watch for attribute "alt"
             if(len>1){
-              throw new IllegalArgumentException("The XPATH returned more than 1 node!. Check XPATH: "+xpath);   
+                Node best = getNonaltNode(nl);
+                if(best != null) {
+                    System.err.println("Chose best node from " + xpath);
+                    return best;
+                }
+                /* else complain */
+                String all = ""; 
+                int i;
+                for(i=0;i<len;i++) {
+                    all = all + ", " + nl.item(i);
+                }
+                throw new IllegalArgumentException("The XPATH returned more than 1 node!. Check XPATH: "+xpath + " = " + all);   
             }
             if(len==0){
                 return null;
