@@ -114,7 +114,7 @@ static void TestDateFormat()
         log_err("Error in creating the clone using udat_clone: %s\n", myErrorName(status) );
     }
     /*if(def != copy)
-        log_err("Error in udat_clone");*//*how should i check for equality????*/
+        log_err("Error in udat_clone");*/ /*how should i check for equality???? */
     
     /*Testing udat_format()*/
     log_verbose("\nTesting the udat_format() function of date format\n");
@@ -544,7 +544,7 @@ void TestDateFormatCalendar() {
     UDate when;
     UErrorCode ec = U_ZERO_ERROR;
 
-    // Create a formatter for date fields.
+    /* Create a formatter for date fields. */
     date = udat_open(UDAT_NONE, UDAT_SHORT, "en_US", NULL, 0, NULL, 0, &ec);
     if (U_FAILURE(ec)) {
         log_err("FAIL: udat_open(NONE, SHORT, en_US) failed with %s\n", 
@@ -552,7 +552,7 @@ void TestDateFormatCalendar() {
         goto FAIL;
     }
 
-    // Create a formatter for time fields.
+    /* Create a formatter for time fields. */
     time = udat_open(UDAT_SHORT, UDAT_NONE, "en_US", NULL, 0, NULL, 0, &ec);
     if (U_FAILURE(ec)) {
         log_err("FAIL: udat_open(SHORT, NONE, en_US) failed with %s\n", 
@@ -560,7 +560,7 @@ void TestDateFormatCalendar() {
         goto FAIL;
     }
 
-    // Create a full format for output
+    /* Create a full format for output */
     full = udat_open(UDAT_FULL, UDAT_FULL, "en_US", NULL, 0, NULL, 0, &ec);
     if (U_FAILURE(ec)) {
         log_err("FAIL: udat_open(FULL, FULL, en_US) failed with %s\n", 
@@ -568,7 +568,7 @@ void TestDateFormatCalendar() {
         goto FAIL;
     }
 
-    // Create a calendar
+    /* Create a calendar */
     cal = ucal_open(NULL, 0, "en_US", UCAL_GREGORIAN, &ec);
     if (U_FAILURE(ec)) {
         log_err("FAIL: ucal_open(en_US) failed with %s\n", 
@@ -576,7 +576,7 @@ void TestDateFormatCalendar() {
         goto FAIL;
     }
 
-    // Parse the date
+    /* Parse the date */
     ucal_clear(cal);
     u_uastrcpy(buf, "4/5/2001");
     pos = 0;
@@ -587,7 +587,7 @@ void TestDateFormatCalendar() {
         goto FAIL;
     }
 
-    // Parse the time
+    /* Parse the time */
     u_uastrcpy(buf, "5:45 PM");
     pos = 0;
     udat_parseCalendar(time, cal, buf, -1, &pos, &ec);
@@ -597,7 +597,7 @@ void TestDateFormatCalendar() {
         goto FAIL;
     }
     
-    // Check result
+    /* Check result */
     when = ucal_getMillis(cal, &ec);
     if (U_FAILURE(ec)) {
         log_err("FAIL: ucal_getMillis() failed with %s\n", u_errorName(ec));
