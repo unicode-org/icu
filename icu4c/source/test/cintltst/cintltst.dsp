@@ -262,6 +262,10 @@ SOURCE=.\udatatst.c
 
 SOURCE=.\utf16tst.c
 # End Source File
+# Begin Source File
+
+SOURCE=.\utransts.c
+# End Source File
 # End Group
 # Begin Group "Header Files"
 

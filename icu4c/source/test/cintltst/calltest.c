@@ -24,6 +24,7 @@ void addCollTest(TestNode** root);
 void addComplexTest(TestNode** root);
 void addUDataTest(TestNode** root);
 void addUTF16Test(TestNode** root);
+void addUTransTest(TestNode** root);
 
 void addAllTests(TestNode** root)
 {
@@ -35,4 +36,5 @@ void addAllTests(TestNode** root)
     addCollTest(root);
     addComplexTest(root);
 	addUDataTest(root);
+    addUTransTest(root);
 }
