@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/rbbi/BreakIteratorRegTest.java,v $
- * $Date: 2003/06/04 20:29:42 $
- * $Revision: 1.1 $
+ * $Date: 2003/09/18 21:00:34 $
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -118,7 +118,7 @@ public class BreakIteratorRegTest extends TestFmwk
     private static String getString(CharacterIterator ci) {
 	StringBuffer buf = new StringBuffer(ci.getEndIndex() - ci.getBeginIndex() + 2);
 	buf.append("'");
-	for (char c = ci.first(); c != ci.DONE; c = ci.next()) {
+	for (char c = ci.first(); c != CharacterIterator.DONE; c = ci.next()) {
 	    buf.append(c);
 	}
 	buf.append("'");

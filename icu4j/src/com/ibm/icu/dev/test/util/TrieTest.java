@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/TrieTest.java,v $ 
-* $Date: 2003/08/20 00:19:19 $ 
-* $Revision: 1.8 $
+* $Date: 2003/09/18 20:59:46 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -23,8 +23,6 @@ import com.ibm.icu.impl.TrieIterator;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.RangeValueIterator;
-import com.ibm.icu.lang.UCharacter;
-import java.io.ByteArrayInputStream;
 
 /**
 * Testing class for Trie. Tests here will be simple, since both CharTrie and 
