@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/JamoTest.java,v $
- * $Date: 2003/12/20 03:07:09 $
- * $Revision: 1.16 $
+ * $Date: 2004/02/25 01:28:20 $
+ * $Revision: 1.17 $
  *
  *******************************************************************************
  */
@@ -151,8 +151,9 @@ public class JamoTest extends TransliteratorTest {
         Transliterator jamoLatin = latinJamo.getInverse();
         Transliterator jamoHangul = Transliterator.getInstance("NFC");
         Transliterator hangulJamo = Transliterator.getInstance("NFD");
-        Transliterator rt = new CompoundTransliterator(new Transliterator[] {
-            hangulJamo, jamoLatin, latinJamo, jamoHangul });
+        //Transliterator rt = new CompoundTransliterator(new Transliterator[] {
+        //    hangulJamo, jamoLatin, latinJamo, jamoHangul });
+        Transliterator rt = Transliterator.getInstance("NFD;Jamo-Latin;Latin-Jamo;NFC");
 
         int pos = 0;
         StringBuffer buf = new StringBuffer();

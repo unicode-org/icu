@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NullTransliterator.java,v $ 
- * $Date: 2003/06/03 18:49:34 $ 
- * $Revision: 1.13 $
+ * $Date: 2004/02/25 01:26:23 $ 
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -14,9 +14,9 @@ package com.ibm.icu.text;
 
 /**
  * A transliterator that leaves text unchanged.
- * @deprecated ICU 2.4 This class to become private after 2003-12-01. Use the Transliterator factory methods.
+ * @internal
  */
-public class NullTransliterator extends Transliterator {
+class NullTransliterator extends Transliterator {
     private static final String COPYRIGHT =
         "\u00A9 IBM Corporation 2000. All rights reserved.";
 
@@ -28,7 +28,7 @@ public class NullTransliterator extends Transliterator {
 
     /**
      * Constructs a transliterator.
-     * @deprecated ICU 2.4 This class to become private after 2003-12-01. Use the Transliterator factory methods.
+     * @internal
      */
     public NullTransliterator() {
         super(_ID, null);
@@ -36,7 +36,7 @@ public class NullTransliterator extends Transliterator {
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
-     * @deprecated ICU 2.4 This class to become private after 2003-12-01. Use the Transliterator factory methods.
+     * @internal
      */
     protected void handleTransliterate(Replaceable text,
                                        Position offsets, boolean incremental) {
