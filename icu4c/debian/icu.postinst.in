@@ -26,6 +26,9 @@ case "$1" in
     configure)
 	# Adjust the current ICU link in /usr/lib/icu
 
+	if [ -d /usr/lib/icu ]
+	then
+
 	icucurrent=`2>/dev/null ls -dp /usr/lib/icu/* | sed -n 's,.*/\([^/]*\)/$,\1,p'| sort -rn | head -1`
 	cd /usr/lib/icu
 	rm -f current
@@ -49,6 +52,8 @@ case "$1" in
 	then
 	    echo Compiling converters and aliases list from @sysconfdir@/icu/convrtrs.txt
 	    /usr/sbin/gencnval @sysconfdir@/icu/convrtrs.txt
+	fi
+
 	fi
     ;;
 
