@@ -39,8 +39,8 @@ static const char* copyRight =   "/* \n"
                                  " *\n"
                                  " *******************************************************************************\n"
                                  " * $Source: /xsrl/Nsvn/icu/icu/source/tools/genrb/wrtjava.c,v $ \n"
-                                 " * $Date: 2002/03/20 23:56:22 $ \n"
-                                 " * $Revision: 1.4 $ \n"
+                                 " * $Date: 2002/03/22 03:15:27 $ \n"
+                                 " * $Revision: 1.5 $ \n"
                                  " *******************************************************************************\n"
                                  " */\n\n"
                                  "/*******************************************************************************\n"
@@ -144,11 +144,11 @@ uCharsToChars( char* target,int32_t targetLen, UChar* source, int32_t sourceLen,
     int i=0, j=0;
     char str[30]={'\0'};
     while(i<sourceLen){
-        if(source[i]==0x0A){
-            if(j+2<targetLen){
-                uprv_strcat(target,"\\r");
+        if (source[i] == '\n') {
+            if (j + 2 < targetLen) {
+                uprv_strcat(target, "\\n");
             }
-            j+=2;
+            j += 2;
         }else if(source[i]==0x0D){
             if(j+2<targetLen){
                 uprv_strcat(target,"\\f");
