@@ -17,7 +17,7 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_FORMATTING
+#if (!UCONFIG_NO_COLLATION)  /* This is not a formatting test. This is a collation test. */
 
 #include "unicode/ucol.h"
 #include "unicode/uloc.h"
@@ -164,4 +164,4 @@ void currTest()
     ucol_close(c);
 }
 
-#endif /* #if !UCONFIG_NO_FORMATTING */
+#endif /* #if !UCONFIG_NO_FORMATTING && !UCONFIG_NO_COLLATION */

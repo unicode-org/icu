@@ -22,7 +22,7 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_FORMATTING
+#if !UCONFIG_NO_COLLATION
 
 #include "cintltst.h"
 
@@ -30,6 +30,6 @@
    /* Perform Collation Currency Test */   
     void currTest(void);
 
-#endif /* #if !UCONFIG_NO_FORMATTING */
+#endif /* #if !UCONFIG_NO_COLLATION */
 
 #endif
