@@ -421,30 +421,7 @@ InputPath=.\unicode\calendar.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\unicode\caniter.h
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\caniter.h
-
-"..\..\include\unicode\caniter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy                unicode\caniter.h                ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\caniter.h
-
-"..\..\include\unicode\caniter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy                unicode\caniter.h                ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
+SOURCE=.\caniter.h
 # End Source File
 # Begin Source File
 
