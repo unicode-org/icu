@@ -1,0 +1,72 @@
+.TH GENRB 1 @VERSION@ "ICU"
+\" -*-nroff-*-   $Revision: 1.1 $ 
+.SH NAME
+genrb \- Compile a resource bundle
+.SH SYNOPSIS
+.ta 6n
+\fBgenrb\fP  	[-\fIoptions\fP ...] [ \fIbundle.txt\fP ...]
+.SH DESCRIPTION
+The 
+.I genrb
+program converts resource bundle source files (
+.I .txt
+) to their binary form (
+.I .res
+).
+.I convrtrs.txt
+into the binary file
+.I cnvalias.dat
+.SH OPTIONS
+.PP
+.TP 8
+.B \-\-help\fP or \fB \-h \fP or \fB \-?
+Displays a short help message
+.TP 8
+.B \-\-version\fP or \fB \-V
+Prints out version number and exits
+.TP 8
+.B \-\-verbose\fP or \fB \-v
+Turns on Verbose mode (default: off)
+.TP 8
+.B \-\-destdir=\fIpath\fP\fR \fP or \fB \-d=\fIpath\fP
+Change the output destination directory. Default is ICU_DATA directory.
+See
+.B ENVIRONMENT
+below.
+.TP 8
+.B \-\-encoding=\fIencoding\fP\fR \fP or \fB \-e=\fIencoding\fP
+Change the encoding used for source files. Default is the invariant (subset of ASCII or EBCDIC)
+codepage for the system. (See below: 
+.B INVARIANT CHARACTERS
+)
+Note: auto detects utf-8, utf-16 BE and LE if a byte order mark (BOM) is present. 
+.TP 8
+.B \-\-sourcedir=\fIpath\fP\fR \fP or \fB \-s=\fIpath\fP
+Change the default source directory. Default is ICU_DATA directory.
+See
+.B ENVIRONMENT
+below.
+.TP 8
+.I bundle.txt ...
+Specify the source resource bundle files which will be compiled. 
+The filename should be a locale ID, for example,  \fBja_JP.txt\fP for Japanese (Japan),   
+or \fBroot.txt\fP for the root bundle. 
+.fi
+.sp
+.SH INVARIANT CHARACTERS
+.PP
+.TP 8
+The 'invariant character set' consists of the following characters . It is the set which is guaranteed to
+be available regardless of code page.
+.TP 8
+[a-z]|[A-Z]|[0-9]|_| |+|-|*|/
+.sp
+.SH ENVIRONMENT
+.PP
+.TP 8
+.B ICU_DATA
+Specifies the directory containing ICU data.  Default is \fI@prefix@share/icu/@VERSION@/\fP
+- Make sure there is a trailing slash.
+.SH COPYRIGHT
+Copyright (c) 2000 IBM, Inc. and others.
+

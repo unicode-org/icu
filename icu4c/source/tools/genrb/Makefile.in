@@ -11,6 +11,7 @@ top_srcdir = @top_srcdir@
 prefix = @prefix@
 exec_prefix = @exec_prefix@
 
+mandir = @mandir@
 bindir = @bindir@
 sbindir = @sbindir@
 datadir = @datadir@
@@ -28,6 +29,8 @@ INSTALL = @INSTALL@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
 INSTALL_DATA = @INSTALL_DATA@
 
+SECTION = 1
+
 ## Compiler/tools information
 CC = @CC@
 CXX = @CXX@
@@ -42,7 +45,7 @@ top_builddir = ../..
 subdir = tools/genrb
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~
+CLEANFILES = *~ $(TARGET).$(SECTION)
 
 ## Target information
 TARGET = genrb
@@ -62,6 +65,9 @@ OBJECTS = error.o genrb.o parse.o read.o reslist.o ustr.o util.o
 DEPS = $(OBJECTS:.o=.d)
 
 include $(srcdir)/genrbfiles.mk
+
+DATABUILDDIR=@DATABUILDDIR@
+
 -include $(srcdir)/reslocal.mk
 
 ## List of resource bundles to build
@@ -79,7 +85,7 @@ $(top_builddir)/test/testdata/testtypes.res
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local		\
 distclean distclean-local dist dist-local check	\
-check-local
+check-local install-man
 
 ## Clear suffix list
 .SUFFIXES :
@@ -94,7 +100,7 @@ check: all check-local
 
 all-local: $(TARGET) $(RES_FILES) $(TRANSLIT_RES) $(TEST_FILES)
 
-install-local: all-local
+install-local: all-local install-man
 	$(mkinstalldirs) $(DESTDIR)$(sbindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
 
@@ -130,8 +136,21 @@ $(top_builddir)/data/%.res : $(top_srcdir)/../data/%.txt
 
 # the 'mv' will always fail if you are building in the source dir
 
-all-local:
-install-local:
+# man page
+install-man: $(TARGET).$(SECTION)
+	$(mkinstalldirs) $(DESTDIR)$(mandir)/man$(SECTION)
+	$(INSTALL_DATA) $< $(DESTDIR)$(mandir)/man$(SECTION)
+
+$(TARGET).$(SECTION): $(TARGET).$(SECTION).in
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+# only on linux probably ?
+$(TARGET).ps: $(TARGET).$(SECTION)
+	groff -man < $< > $@
+
+$(TARGET).pdf: $(TARGET).ps
+	ps2pdf $< $@
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)
