@@ -673,6 +673,19 @@ static void TestSetText()
         assertEqual(iter1, iter2);
     }
 
+    /* Now set it to point to a null string with fake length*/
+    ucol_setText(iter2, NULL, 2, &status);
+    if (U_FAILURE(status))
+    {
+        log_err("call to iter2->setText(null) failed. %s\n", myErrorName(status));
+    }
+    else
+    {
+        if (ucol_next(iter2, &status) != UCOL_NULLORDER) {
+            log_err("iter2 with null text expected to return UCOL_NULLORDER\n");
+        }
+    }
+
     ucol_closeElements(iter2);
     ucol_closeElements(iter1);
     ucol_close(en_us);

@@ -83,6 +83,21 @@ public:
      * @bug 4157299
      */
     void TestClearBuffers(/* char* par */);
+
+    /**
+     * Testing the assignment operator
+     */
+    void TestAssignment();
+
+    /**
+     * Testing the constructors
+     */
+    void TestConstructors();
+
+    /**
+    * Testing the strength order functionality
+    */
+    void TestStrengthOrder();
     
     //------------------------------------------------------------------------
     // Internal utilities

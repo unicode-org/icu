@@ -10,7 +10,6 @@
 #include "unicode/unistr.h"
 #include "unicode/sortkey.h"
 #include "encoll.h"
-#include "sfwdchit.h"
 
 CollationEnglishTest::CollationEnglishTest()
 : myCollation(0)
