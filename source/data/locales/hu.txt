@@ -1,0 +1,563 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../locale/common/main\hu.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\hu.xml
+ */
+hu{
+    Countries{
+        AD{"Andorra"}
+        AE{"Egyesült Arab Emirátus"}
+        AF{"Afganisztán"}
+        AG{"Antigua és Barbuda"}
+        AI{"Anguilla"}
+        AL{"Albánia"}
+        AM{"Örményország"}
+        AN{"Holland Antillák"}
+        AO{"Angola"}
+        AQ{"Antarktisz"}
+        AR{"Argentína"}
+        AS{"Amerikai Szamoa"}
+        AT{"Ausztria"}
+        AU{"Ausztrália"}
+        AW{"Aruba"}
+        AZ{"Azerbajdzsán"}
+        BA{"Bosznia-Hercegovina"}
+        BB{"Barbados"}
+        BD{"Banglades"}
+        BE{"Belgium"}
+        BF{"Burkina Faso"}
+        BG{"Bulgária"}
+        BH{"Bahrain"}
+        BI{"Burundi"}
+        BJ{"Benin"}
+        BM{"Bermuda"}
+        BN{"Brunei Darussalam"}
+        BO{"Bolívia"}
+        BR{"Brazília"}
+        BS{"Bahamák"}
+        BT{"Bhután"}
+        BV{"Bouvet-sziget"}
+        BW{"Botswana"}
+        BY{"Fehéroroszország"}
+        BZ{"Beliz"}
+        CA{"Kanada"}
+        CC{"Kókusz (Keeling)-szigetek"}
+        CD{"Kongó, Demokratikus köztársaság"}
+        CF{"Közép-afrikai Köztársaság"}
+        CG{"Kongó"}
+        CH{"Svájc"}
+        CI{"Elefántcsontpart"}
+        CK{"Cook-szigetek"}
+        CL{"Chile"}
+        CM{"Kamerun"}
+        CN{"Kína"}
+        CO{"Kolumbia"}
+        CR{"Costa Rica"}
+        CU{"Kuba"}
+        CV{"Zöld-foki Köztársaság"}
+        CX{"Karácsony-szigetek"}
+        CY{"Ciprus"}
+        CZ{"Cseh Köztársaság"}
+        DE{"Németország"}
+        DJ{"Dzsibuti"}
+        DK{"Dánia"}
+        DM{"Dominika"}
+        DO{"Dominikai Köztársaság"}
+        DZ{"Algéria"}
+        EC{"Ecuador"}
+        EE{"Észtország"}
+        EG{"Egyiptom"}
+        EH{"Nyugat Szahara"}
+        ER{"Eritrea"}
+        ES{"Spanyolország"}
+        ET{"Etiópia"}
+        FI{"Finnország"}
+        FJ{"Fidzsi"}
+        FK{"Falkland-szigetek"}
+        FM{"Mikronézia, Szövetségi Államok"}
+        FO{"Feröer-szigetek"}
+        FR{"Franciaország"}
+        GA{"Gabon"}
+        GB{"Egyesült Királyság"}
+        GD{"Grenada"}
+        GE{"Grúzia"}
+        GF{"Francia Guyana"}
+        GH{"Ghana"}
+        GI{"Gibraltár"}
+        GL{"Grönland"}
+        GM{"Gambia"}
+        GN{"Guinea"}
+        GP{"Guadeloupe"}
+        GQ{"Egyenlítďi Guinea"}
+        GR{"Görögország"}
+        GS{"Dél-Georgia és Dél-Sandwich Szigetek"}
+        GT{"Guatemala"}
+        GU{"Guam"}
+        GW{"Guinea-Bissau"}
+        GY{"Guyana"}
+        HK{"Hong Kong S.A.R., China"}
+        HM{"Heard és McDonald Szigetek"}
+        HN{"Honduras"}
+        HR{"Horvátország"}
+        HT{"Haiti"}
+        HU{"Magyarország"}
+        ID{"Indonézia"}
+        IE{"Írország"}
+        IL{"Izrael"}
+        IN{"India"}
+        IO{"Brit Indiai Oceán"}
+        IQ{"Irak"}
+        IR{"Irán"}
+        IS{"Izland"}
+        IT{"Olaszország"}
+        JM{"Jamaica"}
+        JO{"Jordánia"}
+        JP{"Japán"}
+        KE{"Kenya"}
+        KG{"Kirgizisztán"}
+        KH{"Kambodzsa"}
+        KI{"Kiribati"}
+        KM{"Comore-szigetek"}
+        KN{"Saint Kitts és Nevis"}
+        KP{"Korea, Észak"}
+        KR{"Korea, Dél"}
+        KW{"Kuwait"}
+        KY{"Kajmán-szigetek"}
+        KZ{"Kazahsztán"}
+        LA{"Laoszi Népi Demokratikus Köztársaság"}
+        LB{"Libanon"}
+        LC{"Saint Lucia"}
+        LI{"Liechtenstein"}
+        LK{"Sri Lanka"}
+        LR{"Libéria"}
+        LS{"Lesotho"}
+        LT{"Litvánia"}
+        LU{"Luxemburg"}
+        LV{"Lettország"}
+        LY{"Líbiai Arab Jamahiriya"}
+        MA{"Marokkó"}
+        MC{"Monaco"}
+        MD{"Moldáv Köztársaság"}
+        MG{"Madagaszkár"}
+        MH{"Marshall-szigetek"}
+        MK{"Macedónia, Köztársaság"}
+        ML{"Mali"}
+        MM{"Mianmar"}
+        MN{"Mongólia"}
+        MO{"Macao S.A.R., China"}
+        MP{"Északi Mariana-szigetek"}
+        MQ{"Martinique (francia)"}
+        MR{"Mauritánia"}
+        MS{"Montserrat"}
+        MT{"Málta"}
+        MU{"Mauritius"}
+        MV{"Maldív-szigetek"}
+        MW{"Malawi"}
+        MX{"Mexikó"}
+        MY{"Malajzia"}
+        MZ{"Mozambik"}
+        NA{"Namíbia"}
+        NC{"Új Kaledónia (francia)"}
+        NE{"Niger"}
+        NF{"Norfolk-sziget"}
+        NG{"Nigéria"}
+        NI{"Nicaragua"}
+        NL{"Hollandia"}
+        NO{"Norvégia"}
+        NP{"Nepál"}
+        NR{"Nauru"}
+        NU{"Niue"}
+        NZ{"Új-Zéland"}
+        OM{"Omán"}
+        PA{"Panama"}
+        PE{"Peru"}
+        PF{"Polinézia (francia)"}
+        PG{"Pápua Új-Guinea"}
+        PH{"Fülöp-szigetek"}
+        PK{"Pakisztán"}
+        PL{"Lengyelország"}
+        PM{"Saint Pierre és Miquelon"}
+        PN{"Pitcairn-sziget"}
+        PR{"Puerto Rico"}
+        PS{"Palesztín Terület"}
+        PT{"Portugália"}
+        PW{"Palau"}
+        PY{"Paraguay"}
+        QA{"Katar"}
+        RE{"Reunion (francia)"}
+        RO{"Románia"}
+        RU{"Orosz Köztársaság"}
+        RW{"Ruanda"}
+        SA{"Szaud-Arábia"}
+        SB{"Salamon-szigetek"}
+        SC{"Seychelles"}
+        SD{"Szudán"}
+        SE{"Svédország"}
+        SG{"Szingapúr"}
+        SH{"Saint Helena"}
+        SI{"Szlovénia"}
+        SJ{"Svalbard és Jan Mayen"}
+        SK{"Szlovákia"}
+        SL{"Sierra Leone"}
+        SM{"San Marino"}
+        SN{"Szenegál"}
+        SO{"Szomália"}
+        SP{"Serbia"}
+        SR{"Suriname"}
+        ST{"Saint Tome és Principe"}
+        SV{"El Salvador"}
+        SY{"Szíriai Arab Köztársaság"}
+        SZ{"Szváziföld"}
+        TC{"Török és Caicos Szigetek"}
+        TD{"Csád"}
+        TF{"Francia Déli Területek"}
+        TG{"Togo"}
+        TH{"Thaiföld"}
+        TJ{"Tadzsikisztán"}
+        TK{"Tokelau"}
+        TL{"Kelet-Timor"}
+        TM{"Türkmenisztán"}
+        TN{"Tunézia"}
+        TO{"Tonga"}
+        TR{"Törökország"}
+        TT{"Trinidad és Tobago"}
+        TV{"Tuvalu"}
+        TW{"Taiwan"}
+        TZ{"Tanzánia"}
+        UA{"Ukrajna"}
+        UG{"Uganda"}
+        UM{"United States Minor Outlying Islands"}
+        US{"Egyesült Államok"}
+        UY{"Uruguay"}
+        UZ{"Üzbegisztán"}
+        VA{"Vatikán"}
+        VC{"Saint Vincent és Grenadines"}
+        VE{"Venezuela"}
+        VG{"Brit Virgin-szigetek"}
+        VI{"U.S. Virgin-szigetek"}
+        VN{"Vietnám"}
+        VU{"Vanuatu"}
+        WF{"Wallis és Futuna Szigetek"}
+        WS{"Szamoa"}
+        YE{"Jemen"}
+        YT{"Mayotte"}
+        YU{"Jugoszlávia"}
+        ZA{"Dél-Afrika"}
+        ZM{"Zambia"}
+        ZW{"Zimbabwe"}
+    }
+    ExemplarCharacters{
+        "[a-z á é í ó ú ö ü ő ű {cs} {dz} {dzs} {gy} {ly} {ny} {sz} {ty} {zs} {ccs} {"
+        "ddz} {ddzs} {ggy} {lly} {nny} {ssz} {tty} {zzs}]"
+    }
+    Languages{
+        aa{"afar"}
+        ab{"abház"}
+        af{"afrikai"}
+        am{"amhara"}
+        ar{"arab"}
+        as{"asszámi"}
+        ay{"ajmara"}
+        az{"azerbajdzsáni"}
+        ba{"baskír"}
+        be{"belorusz"}
+        bg{"bolgár"}
+        bh{"bihari"}
+        bi{"bislama"}
+        bn{"bengáli"}
+        bo{"tibeti"}
+        br{"breton"}
+        ca{"katalán"}
+        co{"korzikai"}
+        cs{"cseh"}
+        cy{"walesi"}
+        da{"dán"}
+        de{"német"}
+        dz{"butáni"}
+        el{"görög"}
+        en{"angol"}
+        eo{"eszperantó"}
+        es{"spanyol"}
+        et{"észt"}
+        eu{"baszk"}
+        fa{"perzsa"}
+        fi{"finn"}
+        fj{"fidzsi"}
+        fo{"feröeri"}
+        fr{"francia"}
+        fy{"fríz"}
+        ga{"ír"}
+        gd{"skót (gael)"}
+        gl{"galíciai"}
+        gn{"guarani"}
+        gu{"gudzsaráti"}
+        ha{"hausza"}
+        he{"héber"}
+        hi{"hindi"}
+        hr{"horvát"}
+        hu{"magyar"}
+        hy{"örmény"}
+        ia{"interlingua"}
+        id{"indonéz"}
+        ie{"interlingue"}
+        ik{"inupiak"}
+        is{"izlandi"}
+        it{"olasz"}
+        iu{"inuktitut"}
+        ja{"japán"}
+        jv{"jávai"}
+        ka{"grúz"}
+        kk{"kazah"}
+        kl{"grönlandi"}
+        km{"kambodzsai"}
+        kn{"kannada"}
+        ko{"koreai"}
+        ks{"kasmíri"}
+        ku{"kurd"}
+        ky{"kirgiz"}
+        la{"latin"}
+        ln{"lingala"}
+        lo{"laoszi"}
+        lt{"litván"}
+        lv{"lett"}
+        mg{"madagaszkári"}
+        mi{"maori"}
+        mk{"macedón"}
+        ml{"malajalam"}
+        mn{"mongol"}
+        mo{"moldvai"}
+        mr{"marati"}
+        ms{"maláj"}
+        mt{"máltai"}
+        my{"burmai"}
+        na{"naurui"}
+        ne{"nepáli"}
+        nl{"holland"}
+        no{"norvég"}
+        oc{"okszitán"}
+        om{"oromói"}
+        or{"orija"}
+        pa{"pandzsábi"}
+        pl{"lengyel"}
+        ps{"pastu (afgán)"}
+        pt{"portugál"}
+        qu{"kecsua"}
+        rm{"rétoromán"}
+        rn{"kirundi"}
+        ro{"román"}
+        ru{"orosz"}
+        rw{"kiruanda"}
+        sa{"szanszkrit"}
+        sd{"szindi"}
+        sg{"sango"}
+        sh{"szerb-horvát"}
+        si{"szingaléz"}
+        sk{"szlovák"}
+        sl{"szlovén"}
+        sm{"szamoai"}
+        sn{"sona"}
+        so{"szomáli"}
+        sq{"albán"}
+        sr{"szerb"}
+        ss{"sziszuati"}
+        st{"szeszotó"}
+        su{"szundanéz"}
+        sv{"svéd"}
+        sw{"szuahéli"}
+        ta{"tamil"}
+        te{"telugu"}
+        tg{"tadzsik"}
+        th{"thai"}
+        ti{"tigrinya"}
+        tk{"türkmén"}
+        tl{"tagalog"}
+        tn{"szecsuáni"}
+        to{"tonga"}
+        tr{"török"}
+        ts{"conga"}
+        tt{"tatár"}
+        tw{"tui"}
+        ug{"ujgur"}
+        uk{"ukrán"}
+        ur{"urdu"}
+        uz{"üzbég"}
+        vi{"vietnámi"}
+        vo{"volapük"}
+        wo{"volof"}
+        xh{"hosza"}
+        yi{"zsidó"}
+        yo{"joruba"}
+        za{"zsuang"}
+        zh{"kínai"}
+        zu{"zulu"}
+    }
+    LocaleScript{
+        "Latn",
+    }
+    NumberElements{
+        ",",
+        " ",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "�",
+        "+",
+    }
+    Version{"1.2"}
+    calendar{
+        buddhist{
+            eras{
+                abbreviated{
+                    "BK",
+                }
+            }
+        }
+        gregorian{
+            AmPmMarkers{
+                "DE",
+                "DU",
+            }
+            DateTimeElements:intvector{
+                2,
+                1,
+            }
+            DateTimePatterns{
+                "H:mm:ss z",
+                "H:mm:ss z",
+                "H:mm:ss",
+                "H:mm",
+                "yyyy. MMMM d.",
+                "yyyy. MMMM d.",
+                "yyyy.MM.dd.",
+                "yyyy.MM.dd.",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "V",
+                        "H",
+                        "K",
+                        "Sze",
+                        "Cs",
+                        "P",
+                        "Szo",
+                    }
+                    wide{
+                        "vasárnap",
+                        "hétfő",
+                        "kedd",
+                        "szerda",
+                        "csütörtök",
+                        "péntek",
+                        "szombat",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "i.e.",
+                    "i.u.",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "jan.",
+                        "febr.",
+                        "márc.",
+                        "ápr.",
+                        "máj.",
+                        "jún.",
+                        "júl.",
+                        "aug.",
+                        "szept.",
+                        "okt.",
+                        "nov.",
+                        "dec.",
+                    }
+                    wide{
+                        "január",
+                        "február",
+                        "március",
+                        "április",
+                        "május",
+                        "június",
+                        "július",
+                        "augusztus",
+                        "szeptember",
+                        "október",
+                        "november",
+                        "december",
+                    }
+                }
+            }
+        }
+        hebrew{
+            eras{
+                abbreviated{
+                    "TÉ",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated:alias{"hu/calendar/hebrew/monthNames/format/wide"}
+                    wide{
+                        "Tisri",
+                        "Hesván",
+                        "Kiszlév",
+                        "Tévész",
+                        "Svát",
+                        "Ádár risón",
+                        "Ádár séni",
+                        "Niszán",
+                        "Ijár",
+                        "Sziván",
+                        "Tamuz",
+                        "Áv",
+                        "Elul",
+                    }
+                }
+            }
+        }
+        islamic{
+            eras{
+                abbreviated{
+                    "MF",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated:alias{"hu/calendar/islamic/monthNames/format/wide"}
+                    wide{
+                        "Moharrem",
+                        "Safar",
+                        "Rébi el avvel",
+                        "Rébi el accher",
+                        "Dsemádi el avvel",
+                        "Dsemádi el accher",
+                        "Redseb",
+                        "Sabán",
+                        "Ramadán",
+                        "Sevvál",
+                        "Dsül kade",
+                        "Dsül hedse",
+                    }
+                }
+            }
+        }
+        islamic-civil:alias{"hu/calendar/islamic"}
+    }
+    localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZ"}
+}

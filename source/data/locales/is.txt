@@ -1,0 +1,264 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../locale/common/main\is.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\is.xml
+ */
+is{
+    Countries{
+        AE{"Sameinte arabísku fyrstadæmin"}
+        AF{"Afganistan"}
+        AG{"Antigua og Barbuda"}
+        AL{"Albanía"}
+        AM{"Armenía"}
+        AO{"Angóla"}
+        AR{"Argentína"}
+        AT{"Austurríki"}
+        AU{"Ástralía"}
+        BA{"Bosnía-Hersegovína"}
+        BG{"Búlgaría"}
+        BI{"Búrúndí"}
+        BO{"Bólivía"}
+        BR{"Brasilía"}
+        BS{"Bahama eyjar"}
+        BT{"Bhútan"}
+        BY{"Hvíta Rússland"}
+        CA{"Kanada"}
+        CF{"Mið-Afríku lyðveldið"}
+        CG{"Kongó"}
+        CH{"Sviss"}
+        CI{"Fílabeinsströndin"}
+        CM{"Kamerún"}
+        CN{"Kína"}
+        CO{"Kólumbía"}
+        CR{"Kostaríka"}
+        CU{"Kúba"}
+        CV{"Grænhöfðaeyjar"}
+        CY{"Kýpur"}
+        CZ{"Tékkland"}
+        DE{"Þýskaland"}
+        DK{"Danmörk"}
+        DO{"Dóminíska lýðveldið"}
+        DZ{"Alsír"}
+        EC{"Ekvador"}
+        EE{"Eistland"}
+        EG{"Egyptaland"}
+        EH{"Vestur-Sahara"}
+        ER{"Erítrea"}
+        ES{"Spánn"}
+        ET{"Eþíópía"}
+        FI{"Finnland"}
+        FM{"Mikrónesía"}
+        FR{"Frakkland"}
+        GB{"Stóra Bretland"}
+        GE{"Georgía"}
+        GH{"Gana"}
+        GN{"Gínea"}
+        GQ{"Miðbaugs Gínea"}
+        GR{"Grikkland"}
+        GT{"Gvatemala"}
+        GW{"Gínea-Bissau"}
+        HN{"Hondúras"}
+        HR{"Króatía"}
+        HT{"Haítí"}
+        HU{"Ungverjaland"}
+        ID{"Indónesía"}
+        IE{"Írland"}
+        IL{"Ísrael"}
+        IN{"Indland"}
+        IQ{"Írak"}
+        IR{"Íran"}
+        IS{"Ísland"}
+        IT{"Ítalía"}
+        JM{"Jamaíka"}
+        JO{"Jórdanía"}
+        KE{"Kenýa"}
+        KG{"Kirgisistan"}
+        KH{"Kambódía"}
+        KI{"Kiribatí"}
+        KM{"Comoro eyjar"}
+        KN{"Saint Kitts og Nevis"}
+        KP{"Norður-Kórea"}
+        KR{"Suður-Kórea"}
+        KW{"Kúveit"}
+        KZ{"Kasakstan"}
+        LB{"Líbanon"}
+        LC{"Saint Lúsia"}
+        LR{"Líbería"}
+        LS{"Lesótó"}
+        LT{"Litháen"}
+        LU{"Lúxemborg"}
+        LV{"Lettland"}
+        LY{"Lýbía"}
+        MA{"Marokkó"}
+        MC{"Mónacó"}
+        MD{"Moldovía"}
+        MG{"Madagaskar"}
+        MH{"Marshalleyjar"}
+        MK{"Makedónía"}
+        MN{"Mongólía"}
+        MR{"Máritanía"}
+        MU{"Máritíus"}
+        MV{"Maldíveyjar"}
+        MX{"Mexíkó"}
+        MY{"Malasía"}
+        MZ{"Mósambík"}
+        NA{"Namibía"}
+        NE{"Níger"}
+        NG{"Nígería"}
+        NI{"Níkaragúa"}
+        NL{"Niðurlönd"}
+        NO{"Noregur"}
+        NZ{"Nýja-Sjáland"}
+        OM{"Óman"}
+        PE{"Perú"}
+        PG{"Papúa Nýja Gínea"}
+        PH{"Filipseyjar"}
+        PL{"Pólland"}
+        PT{"Portúgal"}
+        PW{"Palaueyjar"}
+        PY{"Paragvæ"}
+        QA{"Katar"}
+        RO{"Rúmenía"}
+        RU{"Rússland"}
+        RW{"Rúanda"}
+        SA{"Sádi Arabía"}
+        SB{"Salómons eyjar"}
+        SC{"Seychelle eyjar"}
+        SD{"Súdan"}
+        SE{"Svíþjoð"}
+        SI{"Slóvenía"}
+        SK{"Slóvakía"}
+        SO{"Sómalía"}
+        SP{"Serbía"}
+        SR{"Súrinam"}
+        ST{"Sao Tome og Prinsípe"}
+        SY{"Sýrland"}
+        SZ{"Svasiland"}
+        TH{"Tæland"}
+        TJ{"Tadjikistan"}
+        TM{"Túrkmenistan"}
+        TN{"Túnis"}
+        TR{"Tyrkland"}
+        TT{"Trinidad og Tobago"}
+        TV{"Túvalú"}
+        TW{"Tævan"}
+        TZ{"Tansanía"}
+        UA{"Úkraína"}
+        UG{"Úganda"}
+        US{"Bandaríki Norður-Ameríku"}
+        UY{"Úrúgvæ"}
+        UZ{"Úsbekistan"}
+        VA{"Vatíkanið"}
+        VC{"Saint Vinsent og Grenadíneyjar"}
+        VE{"Venesúela"}
+        WS{"Samóa"}
+        YE{"Jemen"}
+        ZA{"Suður-Afríka"}
+    }
+    ExemplarCharacters{"[a-záéíóúýöæðþ]"}
+    Languages{
+        is{"Íslenska"}
+    }
+    LocaleScript{
+        "Latn",
+    }
+    NumberElements{
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "�",
+        "+",
+    }
+    Version{"1.2"}
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d. MMMM yyyy",
+                "d. MMMM yyyy",
+                "d.M.yyyy",
+                "d.M.yyyy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "sun",
+                        "mán",
+                        "þri",
+                        "mið",
+                        "fim",
+                        "fös",
+                        "lau",
+                    }
+                    narrow{
+                        "s",
+                        "m",
+                        "þ",
+                        "m",
+                        "f",
+                        "f",
+                        "l",
+                    }
+                    wide{
+                        "sunnudagur",
+                        "mánudagur",
+                        "þriðjudagur",
+                        "miðvikudagur",
+                        "fimmtudagur",
+                        "föstudagur",
+                        "laugardagur",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "jan",
+                        "feb",
+                        "mar",
+                        "apr",
+                        "maí",
+                        "jún",
+                        "júl",
+                        "ágú",
+                        "sep",
+                        "okt",
+                        "nóv",
+                        "des",
+                    }
+                    wide{
+                        "janúar",
+                        "febrúar",
+                        "mars",
+                        "apríl",
+                        "maí",
+                        "júní",
+                        "júlí",
+                        "ágúst",
+                        "september",
+                        "október",
+                        "nóvember",
+                        "desember",
+                    }
+                }
+            }
+        }
+    }
+}

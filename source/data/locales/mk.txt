@@ -1,0 +1,124 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../locale/common/main\mk.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\mk.xml
+ */
+mk{
+    Countries{
+        MK{"Македонија"}
+    }
+    Currencies{
+        MKD{
+            "Den",
+            "MKD",
+        }
+    }
+    ExemplarCharacters{"[а-и к-ш ѐ ѓ ѕ ј љ њ ќ ѝ џ]"}
+    Languages{
+        mk{"македонски"}
+    }
+    LocaleScript{
+        "Cyrl",
+    }
+    NumberElements{
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "�",
+        "+",
+    }
+    Version{"1.2"}
+    calendar{
+        gregorian{
+            DateTimeElements:intvector{
+                2,
+                1,
+            }
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, dd MMMM yyyy",
+                "dd MMMM yyyy",
+                "dd.M.yyyy",
+                "dd.M.yy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "нед.",
+                        "пон.",
+                        "вт.",
+                        "сре.",
+                        "чет.",
+                        "пет.",
+                        "саб.",
+                    }
+                    wide{
+                        "недела",
+                        "понеделник",
+                        "вторник",
+                        "среда",
+                        "четврток",
+                        "петок",
+                        "сабота",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "пр.н.е.",
+                    "ае.",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "јан.",
+                        "фев.",
+                        "мар.",
+                        "апр.",
+                        "мај.",
+                        "јун.",
+                        "јул.",
+                        "авг.",
+                        "септ.",
+                        "окт.",
+                        "ноем.",
+                        "декем.",
+                    }
+                    wide{
+                        "јануари",
+                        "февруари",
+                        "март",
+                        "април",
+                        "мај",
+                        "јуни",
+                        "јули",
+                        "август",
+                        "септември",
+                        "октомври",
+                        "ноември",
+                        "декември",
+                    }
+                }
+            }
+        }
+    }
+    localPatternChars{"GuMtkHmsSEDFwWahKzUeygAZ"}
+}

@@ -1,0 +1,493 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../locale/common/main\tr.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\tr.xml
+ */
+tr{
+    Countries{
+        AD{"Andora"}
+        AE{"Birleşik Arap Emirlikleri"}
+        AF{"Afganistan"}
+        AG{"Antigua ve Barbuda"}
+        AI{"Anguilla"}
+        AL{"Arnavutluk"}
+        AM{"Ermenistan"}
+        AN{"Hollanda Antilleri"}
+        AO{"Angola"}
+        AQ{"Antarktika"}
+        AR{"Arjantin"}
+        AS{"Amerikan Samoası"}
+        AT{"Avusturya"}
+        AU{"Avustralya"}
+        AW{"Aruba"}
+        AZ{"Azerbaycan"}
+        BA{"Bosna Hersek"}
+        BB{"Barbados"}
+        BD{"Bangladeş"}
+        BE{"Belçika"}
+        BF{"Burkina Faso"}
+        BG{"Bulgaristan"}
+        BH{"Bahreyn"}
+        BI{"Burundi"}
+        BJ{"Benin"}
+        BM{"Bermuda"}
+        BN{"Brunei"}
+        BO{"Bolivya"}
+        BR{"Brezilya"}
+        BS{"Bahamalar"}
+        BT{"Bhutan"}
+        BV{"Bouvet Adası"}
+        BW{"Botswana"}
+        BY{"Belarus"}
+        BZ{"Belize"}
+        CA{"Kanada"}
+        CC{"Cocos (Keeling) Adaları"}
+        CD{"Kongo Demokratik Cumhuriyeti"}
+        CF{"Orta Afrika Cumhuriyeti"}
+        CG{"Kongo"}
+        CH{"İsviçre"}
+        CI{"Fildişi Sahilleri"}
+        CK{"Cook Adaları"}
+        CL{"Şili"}
+        CM{"Kamerun"}
+        CN{"Çin"}
+        CO{"Kolombiya"}
+        CR{"Kosta Rika"}
+        CU{"Küba"}
+        CV{"Cape Verde"}
+        CX{"Christmas Adası"}
+        CY{"Kıbrıs"}
+        CZ{"Çek Cumhuriyeti"}
+        DE{"Almanya"}
+        DJ{"Cibuti"}
+        DK{"Danimarka"}
+        DM{"Dominik"}
+        DO{"Dominik Cumhuriyeti"}
+        DZ{"Cezayir"}
+        EC{"Ekvador"}
+        EE{"Estonya"}
+        EG{"Mısır"}
+        EH{"Batı Sahara"}
+        ER{"Eritre"}
+        ES{"İspanya"}
+        ET{"Etiyopya"}
+        FI{"Finlandiya"}
+        FJ{"Fiji"}
+        FK{"Falkland Adaları (Malvinalar)"}
+        FM{"Mikronezya Federal Eyaletleri"}
+        FO{"Faroe Adaları"}
+        FR{"Fransa"}
+        GA{"Gabon"}
+        GB{"Birleşik Krallık"}
+        GD{"Granada"}
+        GE{"Gürcistan"}
+        GF{"Fransız Ginesi"}
+        GH{"Gana"}
+        GI{"Cebelitarık"}
+        GL{"Grönland"}
+        GM{"Gambia"}
+        GN{"Gine"}
+        GP{"Guadeloupe"}
+        GQ{"Ekvator Ginesi"}
+        GR{"Yunanistan"}
+        GS{"Güney Georgia ve Güney Sandwich Adaları"}
+        GT{"Guatemala"}
+        GU{"Guam"}
+        GW{"Gine-Bissau"}
+        GY{"Guyana"}
+        HK{"Hong Kong SAR - Çin"}
+        HM{"Heard Adası ve McDonald Adaları"}
+        HN{"Honduras"}
+        HR{"Hırvatistan"}
+        HT{"Haiti"}
+        HU{"Macaristan"}
+        ID{"Endonezya"}
+        IE{"İrlanda"}
+        IL{"İsrail"}
+        IN{"Hindistan"}
+        IO{"Hint Okyanusu İngiliz Bölgesi"}
+        IQ{"Irak"}
+        IR{"İran"}
+        IS{"İzlanda"}
+        IT{"İtalya"}
+        JM{"Jamaika"}
+        JO{"Ürdün"}
+        JP{"Japonya"}
+        KE{"Kenya"}
+        KG{"Kırgızistan"}
+        KH{"Kamboçya"}
+        KI{"Kiribati"}
+        KM{"Komorlar"}
+        KN{"Saint Kittler ve Neviler"}
+        KP{"Kore, Kuzey"}
+        KR{"Kore, Güney"}
+        KW{"Kuveyt"}
+        KY{"Cayman Adaları"}
+        KZ{"Kazakistan"}
+        LA{"Lao Demokratik Halk Cumhuriyeti"}
+        LB{"Lübnan"}
+        LC{"Saint Lucia"}
+        LI{"Liechtenstein"}
+        LK{"Sri Lanka"}
+        LR{"Liberya"}
+        LS{"Lesotho"}
+        LT{"Litvanya"}
+        LU{"Lüksemburg"}
+        LV{"Letonya"}
+        LY{"Libya"}
+        MA{"Fas"}
+        MC{"Monako"}
+        MD{"Moldovya Cumhuriyeti"}
+        MG{"Madagaskar"}
+        MH{"Marshall Adaları"}
+        MK{"Makedonya Cumhuriyeti"}
+        ML{"Mali"}
+        MM{"Myanmar"}
+        MN{"Moğolistan"}
+        MO{"Macao S.A.R. - Çin"}
+        MP{"Kuzey Mariana Adaları"}
+        MQ{"Martinik"}
+        MR{"Moritanya"}
+        MS{"Montserrat"}
+        MT{"Malta"}
+        MU{"Mauritius"}
+        MV{"Maldivler"}
+        MW{"Malavi"}
+        MX{"Meksika"}
+        MY{"Malezya"}
+        MZ{"Mozambik"}
+        NA{"Namibya"}
+        NC{"Yeni Kaledonya"}
+        NE{"Nijer"}
+        NF{"Norfolk Adası"}
+        NG{"Nijerya"}
+        NI{"Nikaragua"}
+        NL{"Hollanda"}
+        NO{"Norveç"}
+        NP{"Nepal"}
+        NR{"Nauru Adası"}
+        NU{"Niue Adaları"}
+        NZ{"Yeni Zelanda"}
+        OM{"Umman"}
+        PA{"Panama"}
+        PE{"Peru"}
+        PF{"Fransız Polinezyası"}
+        PG{"Papua Yeni Gine"}
+        PH{"Filipinler"}
+        PK{"Pakistan"}
+        PL{"Polonya"}
+        PM{"Saint Pierre ve Miquelon"}
+        PN{"Pitcairn"}
+        PR{"Porto Riko"}
+        PS{"Filistin Bölgesi"}
+        PT{"Portekiz"}
+        PW{"Palau"}
+        PY{"Paraguay"}
+        QA{"Katar"}
+        RE{"Reunion"}
+        RO{"Romanya"}
+        RU{"Rusya Federasyonu"}
+        RW{"Ruanda"}
+        SA{"Suudi Arabistan"}
+        SB{"Solomon Adaları"}
+        SC{"Seyşeller"}
+        SD{"Sudan"}
+        SE{"İsveç"}
+        SG{"Singapur"}
+        SH{"Saint Helena"}
+        SI{"Slovenya"}
+        SJ{"Svalbard ve Jan Mayen"}
+        SK{"Slovakya"}
+        SL{"Sierra Leone"}
+        SM{"San Marino"}
+        SN{"Senegal"}
+        SO{"Somali"}
+        SP{"Serbia"}
+        SR{"Surinam"}
+        ST{"Sao Tome ve Principe"}
+        SV{"El Salvador"}
+        SY{"Suriye"}
+        SZ{"Swaziland"}
+        TC{"Turks ve Caicos Adaları"}
+        TD{"Çad"}
+        TF{"Fransız Güney Bölgeleri"}
+        TG{"Togo"}
+        TH{"Tayland"}
+        TJ{"Tacikistan"}
+        TK{"Tokelau"}
+        TL{"Doğu Timor"}
+        TM{"Türkmenistan"}
+        TN{"Tunus"}
+        TO{"Tonga"}
+        TR{"Türkiye"}
+        TT{"Trinidad ve Tobago"}
+        TV{"Tuvalu"}
+        TZ{"Tanzanya"}
+        UA{"Ukrayna"}
+        UG{"Uganda"}
+        UM{"Amerika Birleşik Devletleri Küçük Dış Adaları"}
+        US{"Amerika Birleşik Devletleri"}
+        UY{"Uruguay"}
+        UZ{"Özbekistan"}
+        VA{"Kutsal Devlet (Vatikan Şehir Devleti)"}
+        VC{"Saint Vincent ve Grenadinler"}
+        VE{"Venezuela"}
+        VG{"İngiliz Virgin Adaları"}
+        VI{"ABD Virgin Adaları"}
+        VN{"Vietnam"}
+        VU{"Vanuatu"}
+        WF{"Wallis ve Futuna"}
+        WS{"Samoa"}
+        YE{"Yemen"}
+        YT{"Mayotte"}
+        YU{"Yugoslavya"}
+        ZA{"Güney Afrika"}
+        ZM{"Zambiya"}
+        ZW{"Zimbabwe"}
+    }
+    ExemplarCharacters{"[a-zâûöüıçşğ]"}
+    Languages{
+        aa{"Afar"}
+        ab{"Abazca"}
+        af{"Afrikaan Dili"}
+        am{"Amharik"}
+        ar{"Arapça"}
+        ay{"Aymara"}
+        az{"Azerice"}
+        ba{"Başkırt Dili"}
+        be{"Beyaz Rusça"}
+        bg{"Bulgarca"}
+        bh{"Bihari"}
+        bi{"Bislama"}
+        bn{"Bengal Dili"}
+        bo{"Tibetçe"}
+        br{"Breton Dili"}
+        ca{"Katalan Dili"}
+        co{"Korsika Dili"}
+        cs{"Çekçe"}
+        cy{"Gal Dili"}
+        da{"Danca"}
+        de{"Almanca"}
+        dz{"Bhutan Dili"}
+        el{"Yunanca"}
+        en{"İngilizce"}
+        eo{"Esperanto"}
+        es{"İspanyolca"}
+        et{"Estonya Dili"}
+        eu{"Bask Dili"}
+        fa{"Farsça"}
+        fi{"Fince"}
+        fj{"Fiji Dili"}
+        fo{"Faroe Dili"}
+        fr{"Fransızca"}
+        fy{"Frizye Dili"}
+        ga{"İrlanda Dili"}
+        gd{"İskoç Gal Dili"}
+        gl{"Galiçya Dili"}
+        gn{"Guarani"}
+        gu{"Gujarati"}
+        ha{"Hausa"}
+        he{"İbranice"}
+        hi{"Hint Dili"}
+        hr{"Hırvatça"}
+        hu{"Macarca"}
+        hy{"Ermenice"}
+        ia{"Interlingua"}
+        id{"Endonezya Dili"}
+        ie{"Interlingue"}
+        ik{"Inupiak"}
+        is{"İzlandaca"}
+        it{"İtalyanca"}
+        iu{"Inuktitut"}
+        ja{"Japonca"}
+        jv{"Java Dili"}
+        ka{"Gürcüce"}
+        kk{"Kazak Dili"}
+        kl{"Grönland Dili"}
+        km{"Kamboçya Dili"}
+        kn{"Kannada"}
+        ko{"Korece"}
+        ks{"Keşmirce"}
+        ku{"Kürtçe"}
+        ky{"Kırgızca"}
+        la{"Latince"}
+        ln{"Lingala"}
+        lo{"Laos Dili"}
+        lt{"Litvanya Dili"}
+        lv{"Letonya Dili"}
+        mg{"Malaga Dili"}
+        mi{"Maori"}
+        mk{"Makedonca"}
+        ml{"Malayalam"}
+        mn{"Moğol Dili"}
+        mo{"Moldavya Dili"}
+        mr{"Marathi"}
+        ms{"Malay"}
+        mt{"Malta Dili"}
+        my{"Birmanya Dili"}
+        na{"Nauru"}
+        ne{"Nepal Dili"}
+        nl{"Hollanda Dili"}
+        no{"Norveççe"}
+        oc{"Occitan"}
+        om{"Oromo (Afan)"}
+        or{"Oriya"}
+        pa{"Pencap Dili"}
+        pl{"Polonya Dili"}
+        ps{"Peştun Dili"}
+        pt{"Portekizce"}
+        qu{"Quechua"}
+        rm{"Rhaeto-Roman Dili"}
+        rn{"Kirundi"}
+        ro{"Romence"}
+        ru{"Rusça"}
+        rw{"Kinyarwanda"}
+        sa{"Sanskritçe"}
+        sd{"Sindhi"}
+        sg{"Sangho"}
+        sh{"Sırp-Hırvat Dili"}
+        si{"Sinhal Dili"}
+        sk{"Slovakça"}
+        sl{"Slovence"}
+        sm{"Samoa Dili"}
+        sn{"Shona"}
+        so{"Somali Dili"}
+        sq{"Arnavutça"}
+        sr{"Sırpça"}
+        ss{"Siswati"}
+        st{"Sesotho"}
+        su{"Sudan Dili"}
+        sv{"İsveççe"}
+        sw{"Swahili"}
+        ta{"Tamil"}
+        te{"Telugu"}
+        tg{"Tacik Dili"}
+        th{"Tay Dili"}
+        ti{"Tigrinya"}
+        tk{"Türkmence"}
+        tl{"Tagalog"}
+        tn{"Setswana"}
+        to{"Tonga"}
+        tr{"Türkçe"}
+        ts{"Tsonga"}
+        tt{"Tatarca"}
+        tw{"Twi"}
+        ug{"Uygurca"}
+        uk{"Ukraynaca"}
+        ur{"Urduca"}
+        uz{"Özbekçe"}
+        vi{"Vietnam Dili"}
+        vo{"Volapuk"}
+        wo{"Wolof"}
+        xh{"Xhosa"}
+        yi{"Yiddiş"}
+        yo{"Yoruba"}
+        za{"Zhuang"}
+        zh{"Çince"}
+        zu{"Zulu"}
+    }
+    LocaleScript{
+        "Latn",
+    }
+    NumberElements{
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "�",
+        "+",
+    }
+    Version{"1.2"}
+    calendar{
+        gregorian{
+            DateTimeElements:intvector{
+                2,
+                1,
+            }
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "dd MMMM yyyy EEEE",
+                "dd MMMM yyyy EEEE",
+                "dd.MMM.yyyy",
+                "dd.MM.yyyy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Paz",
+                        "Pzt",
+                        "Sal",
+                        "Çar",
+                        "Per",
+                        "Cum",
+                        "Cmt",
+                    }
+                    wide{
+                        "Pazar",
+                        "Pazartesi",
+                        "Salı",
+                        "Çarşamba",
+                        "Perşembe",
+                        "Cuma",
+                        "Cumartesi",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "MÖ",
+                    "MS",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Oca",
+                        "Şub",
+                        "Mar",
+                        "Nis",
+                        "May",
+                        "Haz",
+                        "Tem",
+                        "Ağu",
+                        "Eyl",
+                        "Eki",
+                        "Kas",
+                        "Ara",
+                    }
+                    wide{
+                        "Ocak",
+                        "Şubat",
+                        "Mart",
+                        "Nisan",
+                        "Mayıs",
+                        "Haziran",
+                        "Temmuz",
+                        "Ağustos",
+                        "Eylül",
+                        "Ekim",
+                        "Kasım",
+                        "Aralık",
+                    }
+                }
+            }
+        }
+    }
+    localPatternChars{"GanjkHmsSEDFwWxhKzAeugXZ"}
+}

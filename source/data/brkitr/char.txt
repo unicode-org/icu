@@ -1,0 +1,61 @@
+#
+#   Copyright (C) 2002-2004, International Business Machines Corporation and others.
+#       All Rights Reserved.
+#
+#   file:  char.txt 
+#
+#   ICU Character Break Rules, also known as Grapheme Cluster Boundaries
+#      See Unicode Standard Annex #29.
+#      These rules are based on TR29 Version 4.0.0
+#
+
+#
+#  Character Class Definitions.
+#    The names are those from TR29.
+#
+$CR = \r;
+$LF = \n;
+$Control    = [[:Zl:] [:Zp:] [:Cc:] [:Cf:] - [:Grapheme_Extend = TRUE:]];
+
+$Extend     = [[:Grapheme_Extend = TRUE:]];
+
+#
+# Korean Syllable Definitions
+#
+$L   = [:Hangul_Syllable_Type = L:];
+$V   = [:Hangul_Syllable_Type = V:];
+$T   = [:Hangul_Syllable_Type = T:];
+
+$LV  = [:Hangul_Syllable_Type = LV:];
+$LVT = [:Hangul_Syllable_Type = LVT:];
+
+$HangulSyllable = $L+ | ($L* ($LV? $V+ | $LV | $LVT) $T*) | $T+;
+
+## -------------------------------------------------
+
+!!forward;
+
+$CR $LF;
+([^$Control] | $HangulSyllable) $Extend*;
+
+## -------------------------------------------------
+
+!!reverse;
+
+$BackHangulSyllable = $L+ | ($T* ($V+$LV? | $LV | $LVT) $L*) | $T+;
+$BackOneCluster = ($LF $CR) | ($Extend* ([^$Control] | $BackHangulSyllable));
+$BackOneCluster;
+
+## -------------------------------------------------
+
+!!safe_reverse;
+
+# rule 6, 7, 8
+$V+ $L;
+
+## -------------------------------------------------
+
+!!safe_forward;
+
+# rule 6, 7, 8
+$V+ $T;

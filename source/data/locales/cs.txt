@@ -1,0 +1,557 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../locale/common/main\cs.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/main\cs.xml
+ */
+cs{
+    Countries{
+        AD{"Andorra"}
+        AE{"Spojené arabské emiráty"}
+        AF{"Afghánistán"}
+        AG{"Antigua a Barbuda"}
+        AI{"Anguila"}
+        AL{"Albánie"}
+        AM{"Arménie"}
+        AN{"Nizozemské Antily"}
+        AO{"Angola"}
+        AQ{"Antarktida"}
+        AR{"Argentina"}
+        AS{"Americká Samoa"}
+        AT{"Rakousko"}
+        AU{"Austrálie"}
+        AW{"Aruba"}
+        AZ{"Ázerbájdžán"}
+        BA{"Bosna a Hercegovina"}
+        BB{"Barbados"}
+        BD{"Bangladéš"}
+        BE{"Belgie"}
+        BF{"Burkina Faso"}
+        BG{"Bulharsko"}
+        BH{"Bahrajn"}
+        BI{"Burundi"}
+        BJ{"Benin"}
+        BM{"Bermudy"}
+        BN{"Brunej Darussalam"}
+        BO{"Bolívie"}
+        BR{"Brazílie"}
+        BS{"Bahamy"}
+        BT{"Bhútán"}
+        BV{"Ostrov Bouvet"}
+        BW{"Botswana"}
+        BY{"Bělorusko"}
+        BZ{"Belize"}
+        CA{"Kanada"}
+        CC{"Kokosové ostrovy"}
+        CD{"Kongo, demokratická republika"}
+        CF{"Středoafrická republika"}
+        CG{"Kongo"}
+        CH{"Švýcarsko"}
+        CI{"Pobřeží slonoviny"}
+        CK{"Cookovy ostrovy"}
+        CL{"Chile"}
+        CM{"Kamerun"}
+        CN{"Čína"}
+        CO{"Kolumbie"}
+        CR{"Kostarika"}
+        CU{"Kuba"}
+        CV{"Kapverdy"}
+        CX{"Vánoční ostrovy"}
+        CY{"Kypr"}
+        CZ{"Česká republika"}
+        DE{"Německo"}
+        DJ{"Džibuti"}
+        DK{"Dánsko"}
+        DM{"Dominika"}
+        DO{"Dominikánská republika"}
+        DZ{"Alžírsko"}
+        EC{"Ekvádor"}
+        EE{"Estonsko"}
+        EG{"Egypt"}
+        EH{"Západní Sahara"}
+        ER{"Eritrea"}
+        ES{"Španělsko"}
+        ET{"Etiopie"}
+        FI{"Finsko"}
+        FJ{"Fidži"}
+        FK{"Falklandské ostrovy"}
+        FM{"Mikronésie, federativní stát"}
+        FO{"Faerské ostrovy"}
+        FR{"Francie"}
+        GA{"Gabon"}
+        GB{"Velká Británie"}
+        GD{"Grenada"}
+        GE{"Gruzie"}
+        GF{"Francouzská Guyana"}
+        GH{"Ghana"}
+        GI{"Gibraltar"}
+        GL{"Grónsko"}
+        GM{"Gambie"}
+        GN{"Guinea"}
+        GP{"Guadeloupe"}
+        GQ{"Rovníková Guinea"}
+        GR{"Řecko"}
+        GS{"Jižní Georgie a Jižní Sandwichovy ostrovy"}
+        GT{"Guatemala"}
+        GU{"Guam"}
+        GW{"Guinea-Bissau"}
+        GY{"Guyana"}
+        HK{"Hongkong, zvláštní administrativní oblast Číny"}
+        HM{"Ostrovy Heard a McDonald"}
+        HN{"Honduras"}
+        HR{"Chorvatsko"}
+        HT{"Haiti"}
+        HU{"Maďarsko"}
+        ID{"Indonésie"}
+        IE{"Irsko"}
+        IL{"Izrael"}
+        IN{"Indie"}
+        IO{"Britské území v Indickém oceánu"}
+        IQ{"Irák"}
+        IR{"Írán"}
+        IS{"Island"}
+        IT{"Itálie"}
+        JM{"Jamajka"}
+        JO{"Jordánsko"}
+        JP{"Japonsko"}
+        KE{"Keňa"}
+        KG{"Kyrgyzstán"}
+        KH{"Kambodža"}
+        KI{"Kiribati"}
+        KM{"Komory"}
+        KN{"Svatý Kitts a Nevis"}
+        KP{"Severní Korea"}
+        KR{"Jižní Korea"}
+        KW{"Kuvajt"}
+        KY{"Kajmanské ostrovy"}
+        KZ{"Kazachstán"}
+        LA{"Lidově demokratická republika Laos"}
+        LB{"Libanon"}
+        LC{"Svatá Lucie"}
+        LI{"Lichtenštejnsko"}
+        LK{"Srí Lanka"}
+        LR{"Libérie"}
+        LS{"Lesotho"}
+        LT{"Litva"}
+        LU{"Lucembursko"}
+        LV{"Lotyšsko"}
+        LY{"Libye"}
+        MA{"Maroko"}
+        MC{"Monako"}
+        MD{"Moldavsko, republika"}
+        MG{"Madagaskar"}
+        MH{"Marshallovy ostrovy"}
+        MK{"Macedonia"}
+        ML{"Mali"}
+        MM{"Myanmar (Burma)"}
+        MN{"Mongolsko"}
+        MO{"Macao S.A.R., China"}
+        MP{"Severní Mariany"}
+        MQ{"Martinik"}
+        MR{"Mauritánie"}
+        MS{"Montserrat"}
+        MT{"Malta"}
+        MU{"Mauricius"}
+        MV{"Maladivy"}
+        MW{"Malawi"}
+        MX{"Mexiko"}
+        MY{"Malajsie"}
+        MZ{"Mosambik"}
+        NA{"Namibie"}
+        NC{"Nová Kaledonie"}
+        NE{"Niger"}
+        NF{"Norfolk"}
+        NG{"Nigérie"}
+        NI{"Nikaragua"}
+        NL{"Nizozemsko"}
+        NO{"Norsko"}
+        NP{"Nepál"}
+        NR{"Nauru"}
+        NU{"Niue"}
+        NZ{"Nový Zéland"}
+        OM{"Omán"}
+        PA{"Panama"}
+        PE{"Peru"}
+        PF{"Francouzská Polynésie"}
+        PG{"Papua-Nová Guinea"}
+        PH{"Filipíny"}
+        PK{"Pákistán"}
+        PL{"Polsko"}
+        PM{"Svatý Pierre a Miquelon"}
+        PN{"Pitcairn"}
+        PR{"Portoriko"}
+        PS{"Palestinian Territory"}
+        PT{"Portugalsko"}
+        PW{"Palau"}
+        PY{"Paraguay"}
+        QA{"Katar"}
+        RE{"Réunion"}
+        RO{"Rumunsko"}
+        RU{"Rusko"}
+        RW{"Rwanda"}
+        SA{"Saúdská Arábie"}
+        SB{"Šalamounovy ostrovy"}
+        SC{"Seychely"}
+        SD{"Súdán"}
+        SE{"Švédsko"}
+        SG{"Singapur"}
+        SH{"Svatá Helena"}
+        SI{"Slovinsko"}
+        SJ{"Svalbard a Jan Mayen"}
+        SK{"Slovensko"}
+        SL{"Sierra Leone"}
+        SM{"San Marino"}
+        SN{"Senegal"}
+        SO{"Somálsko"}
+        SP{"Serbia"}
+        SR{"Surinam"}
+        ST{"Svatý Tomáš"}
+        SV{"El Salvador"}
+        SY{"Sýrie"}
+        SZ{"Svazijsko"}
+        TC{"Ostrovy Caicos a Turks"}
+        TD{"Čad"}
+        TF{"Francouzská jižní teritoria"}
+        TG{"Togo"}
+        TH{"Thajsko"}
+        TJ{"Tádžikistán"}
+        TK{"Tokelau"}
+        TL{"Východní Timor"}
+        TM{"Turkmenistán"}
+        TN{"Tunisko"}
+        TO{"Tonga"}
+        TR{"Turecko"}
+        TT{"Trinidad a Tobago"}
+        TV{"Tuvalu"}
+        TW{"Tchaj-wan"}
+        TZ{"Tanzanie"}
+        UA{"Ukrajina"}
+        UG{"Uganda"}
+        UM{"Menší odlehlé ostrovy USA"}
+        US{"Spojené státy"}
+        UY{"Uruguay"}
+        UZ{"Uzbekistán"}
+        VA{"Svatý stolec"}
+        VC{"Svatý Vincent a Grenadiny"}
+        VE{"Venezuela"}
+        VG{"Britské Panenské ostrovy"}
+        VI{"Americké Panenské ostrovy"}
+        VN{"Vietnam"}
+        VU{"Vanuatu"}
+        WF{"Wallis a Futuna"}
+        WS{"Samoa"}
+        YE{"Jemen"}
+        YT{"Mayotte"}
+        YU{"Jugoslávie"}
+        ZA{"Jižní Afrika"}
+        ZM{"Zambie"}
+        ZW{"Zimbabwe"}
+    }
+    ExemplarCharacters{"[a-z ý á é í ó ú ě ů č ď ň ř š ť ž]"}
+    Languages{
+        aa{"Afarština"}
+        ab{"Abcházština"}
+        af{"Afrikánština"}
+        am{"Amharština"}
+        ar{"Arabština"}
+        as{"Assaméština"}
+        ay{"Aymárština"}
+        az{"Azerbajdžánština"}
+        ba{"Baskirština"}
+        be{"Běloruština"}
+        bg{"Bulharština"}
+        bh{"Biharština"}
+        bi{"Bislámština"}
+        bn{"Bengálština"}
+        bo{"Tibetština"}
+        br{"Bretaňština"}
+        ca{"Katalánština"}
+        co{"Korsičtina"}
+        cs{"Čeština"}
+        cy{"Velština"}
+        da{"Dánština"}
+        de{"Němčina"}
+        dz{"Bhútánština"}
+        el{"Řečtina"}
+        en{"Angličtina"}
+        eo{"Esperanto"}
+        es{"Španělština"}
+        et{"Estonština"}
+        eu{"Baskičtina"}
+        fa{"Perština"}
+        fi{"Finština"}
+        fj{"Fidži"}
+        fo{"Faerština"}
+        fr{"Francouzština"}
+        fy{"Fríština"}
+        ga{"Irština"}
+        gd{"Skotská galština"}
+        gl{"Haličština"}
+        gn{"Guaranština"}
+        gu{"Gujaratština"}
+        ha{"Hausa"}
+        he{"Hebrejština"}
+        hi{"Hindština"}
+        hr{"Chorvatština"}
+        hu{"Maďarština"}
+        hy{"Arménština"}
+        ia{"Interlingua"}
+        id{"Indonéština"}
+        ie{"Interlingue"}
+        ik{"Inupiakština"}
+        is{"Islandština"}
+        it{"Italština"}
+        iu{"Inuktitutština"}
+        ja{"Japonština"}
+        jv{"Javánština"}
+        ka{"Gruzínština"}
+        kk{"Kazachština"}
+        kl{"Grónština"}
+        km{"Kambodžština"}
+        kn{"Kannadština"}
+        ko{"Korejština"}
+        ks{"Kašmírština"}
+        ku{"Kurdština"}
+        ky{"Kirgizština"}
+        la{"Latina"}
+        ln{"Lingalština"}
+        lo{"Laoština"}
+        lt{"Litevština"}
+        lv{"Lotyština"}
+        mg{"Malgaština"}
+        mi{"Maorština"}
+        mk{"Makedonština"}
+        ml{"Malabarština"}
+        mn{"Mongolština"}
+        mo{"Moldavština"}
+        mr{"Marathi"}
+        ms{"Malajština"}
+        mt{"Maltština"}
+        my{"Barmština"}
+        na{"Nauru"}
+        ne{"Nepálština"}
+        nl{"Holandština"}
+        no{"Norština"}
+        oc{"Occitan"}
+        om{"Oromo (Afan)"}
+        or{"Oriya"}
+        pa{"Paňdžábština"}
+        pl{"Polština"}
+        ps{"Pashto (Pushto)"}
+        pt{"Portugalština"}
+        qu{"Kečuánština"}
+        rm{"Rétorománština"}
+        rn{"Kirundi"}
+        ro{"Rumunština"}
+        ru{"Ruština"}
+        rw{"Kinyarwandština"}
+        sa{"Sanskrt"}
+        sd{"Sindhi"}
+        sg{"Sangho"}
+        sh{"Srbochorvatština"}
+        si{"Sinhálština"}
+        sk{"Slovenština"}
+        sl{"Slovinština"}
+        sm{"Samoyština"}
+        sn{"Shona"}
+        so{"Somálština"}
+        sq{"Albánština"}
+        sr{"Srbština"}
+        ss{"Siswatština"}
+        st{"Sesotho"}
+        su{"Sundanština"}
+        sv{"Švédština"}
+        sw{"Svahilština"}
+        ta{"Tamilština"}
+        te{"Telugština"}
+        tg{"Tádžičtina"}
+        th{"Thajština"}
+        ti{"Tigrinijština"}
+        tk{"Turkmenština"}
+        tl{"Tagalog"}
+        tn{"Setswanština"}
+        to{"Tonga"}
+        tr{"Turečtina"}
+        ts{"Tsonga"}
+        tt{"Tatarština"}
+        tw{"Twi"}
+        ug{"Uighurština"}
+        uk{"Ukrajinština"}
+        ur{"Urdština"}
+        uz{"Uzbečtina"}
+        vi{"Vietnamština"}
+        vo{"Volapuk"}
+        wo{"Wolof"}
+        xh{"Xhosa"}
+        yi{"Jidiš"}
+        yo{"Yoruba"}
+        za{"Zhuang"}
+        zh{"Čínština"}
+        zu{"Zulu"}
+    }
+    LocaleScript{
+        "Latn",
+    }
+    NumberElements{
+        ",",
+        " ",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "�",
+        "+",
+    }
+    Version{"1.2"}
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "dop.",
+                "odp.",
+            }
+            DateTimeElements:intvector{
+                2,
+                1,
+            }
+            DateTimePatterns{
+                "H:mm:ss z",
+                "H:mm:ss z",
+                "H:mm:ss",
+                "H:mm",
+                "EEEE, d. MMMM yyyy",
+                "d. MMMM yyyy",
+                "d.M.yyyy",
+                "d.M.yy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "ne",
+                        "po",
+                        "út",
+                        "st",
+                        "čt",
+                        "pá",
+                        "so",
+                    }
+                    wide{
+                        "neděle",
+                        "pondělí",
+                        "úterý",
+                        "středa",
+                        "čtvrtek",
+                        "pátek",
+                        "sobota",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "př.Kr.",
+                    "po Kr.",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "1.",
+                        "2.",
+                        "3.",
+                        "4.",
+                        "5.",
+                        "6.",
+                        "7.",
+                        "8.",
+                        "9.",
+                        "10.",
+                        "11.",
+                        "12.",
+                    }
+                    narrow{
+                        "l",
+                        "ú",
+                        "b",
+                        "d",
+                        "k",
+                        "č",
+                        "č",
+                        "s",
+                        "z",
+                        "ř",
+                        "l",
+                        "p",
+                    }
+                    wide{
+                        "ledna",
+                        "února",
+                        "března",
+                        "dubna",
+                        "května",
+                        "června",
+                        "července",
+                        "srpna",
+                        "září",
+                        "října",
+                        "listopadu",
+                        "prosince",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "1.",
+                        "2.",
+                        "3.",
+                        "4.",
+                        "5.",
+                        "6.",
+                        "7.",
+                        "8.",
+                        "9.",
+                        "10.",
+                        "11.",
+                        "12.",
+                    }
+                    narrow{
+                        "l",
+                        "ú",
+                        "b",
+                        "d",
+                        "k",
+                        "č",
+                        "č",
+                        "s",
+                        "z",
+                        "ř",
+                        "l",
+                        "p",
+                    }
+                    wide{
+                        "Leden",
+                        "Únor",
+                        "Březen",
+                        "Duben",
+                        "Květen",
+                        "Červen",
+                        "Červenec",
+                        "Srpen",
+                        "Září",
+                        "Říjen",
+                        "Listopad",
+                        "Prosinec",
+                    }
+                }
+            }
+        }
+    }
+    localPatternChars{"GuMtkHmsSEDFwWahKzUeygAZ"}
+}

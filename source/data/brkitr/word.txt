@@ -1,0 +1,243 @@
+#
+# Copyright (C) 2002-2004,
+# International Business Machines Corporation and others.
+# All Rights Reserved.
+#
+# file:  word.txt
+#
+# ICU Word Break Rules
+#      See Unicode Standard Annex #29.
+#      These rules are based on Version 4.0.0, dated 2003-04-17
+#
+
+##############################################################################
+#
+#  Character class definitions from TR 29
+#
+##############################################################################
+
+!!chain;
+!!LBCMNoChain;
+
+$Katakana  = [[:Script = KATAKANA:]
+			  [:name = KATAKANA-HIRAGANA PROLONGED SOUND MARK:]
+			  [:name = HALFWIDTH KATAKANA-HIRAGANA PROLONGED SOUND MARK:]
+			  [:name = HALFWIDTH KATAKANA VOICED SOUND MARK:]
+			  [:name = HALFWIDTH KATAKANA SEMI-VOICED SOUND MARK:]];
+
+
+$ALetter   = [[:Alphabetic:] [:name= HEBREW PUNCTUATION GERESH:]
+						   - [:Ideographic:]
+						   - $Katakana
+						   - [:Script = Thai:]
+						   - [:Script = Lao:]
+						   - [:Script = Hiragana:]];
+
+$ABaseLetter = [$ALetter - [:Grapheme_Extend = TRUE:]];
+$ACMLetter   = [$ALetter & [:Grapheme_Extend = TRUE:]];
+
+$MidLetter = [[:name = APOSTROPHE:] [:name = MIDDLE DOT:]
+			  [:name = HEBREW PUNCTUATION GERSHAYIM:]
+			  [:name = RIGHT SINGLE QUOTATION MARK:]
+			  [:name = HYPHENATION POINT:]];
+
+$MidNumLet = [[:name = FULL STOP:] [:name = COLON:]];
+
+$MidNum    = [[:LineBreak = Infix_Numeric:] - $MidNumLet];
+$Numeric   = [:LineBreak = Numeric:];
+
+#
+#  Character Class Definitions.
+#    The names are those from TR29.
+#
+
+$CR      = \u000d;
+$LF      = \u000a;
+$Extend  = [[:Grapheme_Extend = TRUE:]];
+$Control = [[:Zl:] [:Zp:] [:Cc:] [:Cf:] - $Extend];
+$Format  = [[:Cf:] - $Extend];
+$Hiragana = [:Hiragana:];
+$Ideographic = [:IDEOGRAPHIC:];
+
+## -------------------------------------------------
+
+!!forward;
+
+$CR $LF;
+
+# rule 3 and 4
+
+$ALetterEx     = $ALetter     $Extend*;
+$ABaseLetterEx = $ABaseLetter $Extend*;
+$ACMLetterEx   = $ACMLetter   $Extend*;
+$NumericEx     = $Numeric     $Extend*;
+$MidNumEx      = $MidNum      $Extend*;
+$MidNumLetEx   = $MidNumLet   $Extend*;
+$MidLetterEx   = $MidLetter   $Extend*;
+$KatakanaEx    = $Katakana    $Extend*;
+
+# see character breaks
+
+[^$Control] $Extend*;
+
+# rule 5
+
+$ALetterEx ($Format* $ALetterEx)* {200};
+
+# rule 6 and 7
+
+$MidALetterEx = ($ABaseLetterEx | $Format $ACMLetterEx);
+
+$ALetterSeq =
+$ALetterEx
+(
+    $Format* ($MidLetterEx | $MidNumLetEx) $Format* $MidALetterEx
+)*;
+
+$MidALetterSeq =
+$MidALetterEx
+(
+    $Format* ($MidLetterEx | $MidNumLetEx) $Format* $MidALetterEx
+)*;
+
+# rule 8
+
+$NumericEx ($Format* $NumericEx)* {100};
+
+# rule 9
+
+$ALetterSeq ($Format* ($NumericEx | $MidALetterSeq))* {200};
+
+# rule 10
+
+$NumericEx ($Format* $MidALetterSeq)+ ($Format* $NumericEx)* {200};
+
+# rule 11 and 12 
+
+$NumericEx ($Format* ($MidNumEx | $MidNumLetEx) $Format* $NumericEx)+ {100};
+
+# rule 13
+
+$KatakanaEx ($Format* $KatakanaEx)* {300};
+$Hiragana $Extend* {300};
+$Ideographic $Extend* {400};
+
+## -------------------------------------------------
+
+!!reverse;
+
+$BackALetterEx     = $Extend* $ALetter;
+$BackABaseLetterEx = $Extend* $ABaseLetter;
+$BackACMLetterEx   = $Extend* $ACMLetter;
+$BackNumericEx     = $Extend* $Numeric;
+$BackMidNumEx      = $Extend* $MidNum;
+$BackMidNumLetEx   = $Extend* $MidNumLet;
+$BackMidLetterEx   = $Extend* $MidLetter;
+$BackKatakanaEx    = $Extend* $Katakana;
+
+$LF $CR;
+
+# see character breaks
+
+$Extend* [^$Control];
+
+# rule 5
+
+($BackALetterEx $Format*)* $BackABaseLetterEx;
+($BackALetterEx $Format*)* $BackACMLetterEx / $Control;
+
+# rule 6 and 7
+
+$BackMidALetterEx = ($BackABaseLetterEx | $BackACMLetterEx $Format);
+
+$BackALetterSeq =
+(
+    $BackMidALetterEx $Format* ($BackMidLetterEx | $BackMidNumLetEx) $Format*
+)*
+$BackABaseLetterEx;
+
+$BackMidALetterSeq =
+(
+    $BackMidALetterEx $Format* ($BackMidLetterEx | $BackMidNumLetEx) $Format*
+)*
+$BackMidALetterEx;
+
+# rule 8
+
+$BackNumericEx $Format* $BackNumericEx;
+
+# rule 10
+
+(($BackNumericEx | $BackMidALetterSeq) $Format*)* $BackALetterSeq;
+
+# to handle letter sequences ending with a combining mark
+(($BackNumericEx | $BackMidALetterSeq) $Format*)* 
+(
+    $BackMidALetterEx $Format* ($BackMidLetterEx | $BackMidNumLetEx) $Format*
+)*
+$BackACMLetterEx / $Control;
+
+# rule 10
+
+($BackNumericEx $Format*)* ($BackMidALetterSeq $Format*)* $BackNumericEx;
+
+# rule 11 and 12
+
+$BackNumericEx $Format* ($BackMidNumEx | $BackMidNumLetEx) $Format* $BackNumericEx;
+
+# rule 13
+
+$BackKatakanaEx $Format* $BackKatakanaEx;
+
+## -------------------------------------------------
+
+!!safe_reverse;
+
+# rule 3
+$Extend+ [^$Extend];
+$Extend+;               # comes into play when buffer _begins_ with an $Extend+.
+
+# rule 4
+$Format+ $BackABaseLetterEx;
+$Format+ $BackACMLetterEx / $Control;
+$Format+ $BackNumericEx;
+$Format+ $BackMidLetterEx;
+$Format+ $BackMidNumLetEx;
+$Format+ $BackMidNumEx;
+$Format+ $BackKatakanaEx;
+
+
+# rule 6
+($MidLetter | $MidNumLet) $Format* $BackABaseLetterEx;
+($MidLetter | $MidNumLet) $Format* $BackACMLetterEx / $Control;
+
+# rule 11
+($MidNum | $MidNumLet) $Format* $BackNumericEx;
+
+## -------------------------------------------------
+
+!!safe_forward;
+
+# rule 3
+$Extend+;
+
+# rule 4
+$Extend* $Format+ $ALetterEx;
+$Extend* $Format+ $NumericEx;
+$Extend* $Format+ $MidLetterEx;
+$Extend* $Format+ $MidNumLetEx;
+$Extend* $Format+ $MidNumEx;
+$Extend* $Format+ $KatakanaEx;
+
+$Extend+ $Format* $ALetterEx;
+$Extend+ $Format* $NumericEx;
+$Extend+ $Format* $MidLetterEx;
+$Extend+ $Format* $MidNumLetEx;
+$Extend+ $Format* $MidNumEx;
+$Extend+ $Format* $KatakanaEx;
+
+# rule 6
+($MidLetterEx | $MidNumLetEx) $Format* $ALetterEx;
+
+# rule 11
+($MidNumEx | $MidNumLetEx) $Format* $NumericEx;

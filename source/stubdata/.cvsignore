@@ -1,0 +1,9 @@
+Debug
+Release
+Makefile
+libicu*.*
+*.d
+*.ao
+*.o
+*.plg
+stubdatabuilt.txt
