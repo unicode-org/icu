@@ -887,6 +887,9 @@ static void TestFprintfFormat(void) {
     TestFPrintFormat("%-8C", (UChar)0x65, "%-8c", (char)0x65);
 
     TestFPrintFormat("%f", 1.23456789, "%f", 1.23456789);
+    TestFPrintFormat("%f", 12345.6789, "%f", 12345.6789);
+    TestFPrintFormat("%f", 123456.789, "%f", 123456.789);
+    TestFPrintFormat("%f", 1234567.89, "%f", 1234567.89);
     TestFPrintFormat("%10f", 1.23456789, "%10f", 1.23456789);
     TestFPrintFormat("%-10f", 1.23456789, "%-10f", 1.23456789);
     TestFPrintFormat("%10f", 123.456789, "%10f", 123.456789);
@@ -901,8 +904,10 @@ static void TestFprintfFormat(void) {
     TestFPrintFormat("%10e", 1234.56789, "%10e", 1234.56789);
     TestFPrintFormat("%-10e", 1234.56789, "%-10e", 1234.56789);
 
+    TestFPrintFormat("%g", 12345.6789, "%g", 12345.6789);
     TestFPrintFormat("%g", 123456.789, "%g", 123456.789);
     TestFPrintFormat("%g", 1234567.89, "%g", 1234567.89);
+    TestFPrintFormat("%G", 123456.789, "%G", 123456.789);
     TestFPrintFormat("%G", 1234567.89, "%G", 1234567.89);
     TestFPrintFormat("%10g", 1.23456789, "%10g", 1.23456789);
     TestFPrintFormat("%10.4g", 1.23456789, "%10.4g", 1.23456789);
