@@ -11,7 +11,12 @@ top_srcdir = @top_srcdir@
 prefix = @prefix@
 exec_prefix = @exec_prefix@
 
+CC = @CC@
+CXX = @CXX@
+
 CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common
+CFLAGS = @CFLAGS@
+CXXFLAGS = @CXXFLAGS@
 
 
 @host_frag@
@@ -108,15 +113,24 @@ install-data: $(DATAFILES)
 
 build-cmnfile:  $(COMMONFILE)
 
-$(COMMONFILE):	$(DATAFILES)
+# argh!  the -Wpath [etc] has relative DLL paths in it
+# so we have to cd into the other dir..
+
+gencmn/mkmap.tmp: Makefile
+	-rm -f gencmn/mkmap.tmp
+	for file in $(DATAFILES); do \
+	  echo `pwd`/$$file >> gencmn/mkmap.tmp; \
+	done;
+
+
+$(COMMONFILE):	$(DATAFILES) gencmn/mkmap.tmp
 	-rm -f $(COMMONFILE)
-	echo "$(DATAFILES)" > mkmap.tmp
-	ICU_DATA=$(SRCDATADIR)	./gencmn/gencmn 1000000 mkmap.tmp
+	(cd gencmn ; ICU_DATA=../$(SRCDATADIR)	./gencmn 1000000 mkmap.tmp )
 
 build-dll: $(COMMONDLL)
 
 %_dat.c: %.dat
-	./genccode/genccode $<
+	(cd genccode ; ./genccode ../$< )
 
 # strip is optional 
 $(COMMONDLL): $(OBJDATAFILES)
