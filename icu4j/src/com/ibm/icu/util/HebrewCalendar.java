@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/HebrewCalendar.java,v $ 
- * $Date: 2002/12/18 19:35:07 $ 
- * $Revision: 1.14 $
+ * $Date: 2003/01/21 18:42:11 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -228,7 +228,7 @@ public class HebrewCalendar extends Calendar {
         {   88,         89,         90  },          // Kislev
         {  117,        118,        119  },          // Tevet
         {  147,        148,        149  },          // Shevat
-        {  147,        148,        149  },          // (Adar I)
+        {  147,        148,        149  },          // (Adar I placeholder)
         {  176,        177,        178  },          // Adar
         {  206,        207,        208  },          // Nisan
         {  235,        236,        237  },          // Iyar
@@ -414,28 +414,6 @@ public class HebrewCalendar extends Calendar {
         switch (field) {
         case MONTH: 
             {
-//~             // This seems like a good idea but it isn't working :( - Alan
-
-//~             // MONTH is tricky, because the number of months per year varies
-//~             // It's easiest to just convert to an absolute # of months
-//~             // since the epoch, do the addition, and convert back.
-//~             int month = (235 * get(YEAR) - 234) / 19 + get(MONTH);
-//~             month += amount;
-
-//~             // Now convert back to year and month values
-//~             int year = (19 * month + 234) / 235;
-//~             month -= (235 * year - 234) / 19;
-//~             
-//~             // In a non-leap year, months after the (missing) leap month
-//~             // must be bumped up by one.
-//~             // TODO: but only if we started before the leap month
-//~             if (month >= ADAR_1 && !isLeapYear(year)) {
-//~                 month++;
-//~             }
-//~             set(YEAR, year);
-//~             set(MONTH, month);
-//~             pinField(DAY_OF_MONTH);
-
                 // We can't just do a set(MONTH, get(MONTH) + amount).  The
                 // reason is ADAR_1.  Suppose amount is +2 and we land in
                 // ADAR_1 -- then we have to bump to ADAR_2 aka ADAR.  But
@@ -443,30 +421,34 @@ public class HebrewCalendar extends Calendar {
                 // bump the other way -- down to SHEVAT.  - Alan 11/00
                 int month = get(MONTH);
                 int year = get(YEAR);
-                //public static final int SHEVAT = 4;
-                //public static final int ADAR_1 = 5;
-                //public static final int ADAR = 6;
+                boolean acrossAdar1;
                 if (amount > 0) {
-                    while (amount-- > 0) {
-                        ++month;
-                        if (month == ADAR_1 && !isLeapYear(year)) {
+                    acrossAdar1 = (month < ADAR_1); // started before ADAR_1?
+                    month += amount;
+                    for (;;) {
+                        if (acrossAdar1 && month>=ADAR_1 && !isLeapYear(year)) {
                             ++month;
                         }
-                        if (month > ELUL) { // Last month of year
-                            month = 0;
-                            ++year;
+                        if (month <= ELUL) {
+                            break;
                         }
+                        month -= ELUL+1;
+                        ++year;
+                        acrossAdar1 = true;
                     }
                 } else {
-                    while (amount++ < 0) {
-                        --month;
-                        if (month == ADAR_1 && !isLeapYear(year)) {
+                    acrossAdar1 = (month > ADAR_1); // started after ADAR_1?
+                    month += amount;
+                    for (;;) {
+                        if (acrossAdar1 && month<=ADAR_1 && !isLeapYear(year)) {
                             --month;
                         }
-                        if (month < 0) {
-                            month = ELUL; // Last month of year
-                            --year;
+                        if (month >= 0) {
+                            break;
                         }
+                        month += ELUL+1;
+                        --year;
+                        acrossAdar1 = true;
                     }
                 }
                 set(MONTH, month);
@@ -593,7 +575,7 @@ public class HebrewCalendar extends Calendar {
             int months = (235 * year - 234) / 19;           // # of months before year
 
             long frac = months * MONTH_FRACT + BAHARAD;     // Fractional part of day #
-            day  = months * 29 + (frac / DAY_PARTS);   // Whole # part of calculation
+            day  = months * 29 + (frac / DAY_PARTS);        // Whole # part of calculation
             frac = frac % DAY_PARTS;                        // Time of day
 
             int wd = (int)(day % 7);                        // Day of week (0 == Monday)
@@ -658,7 +640,7 @@ public class HebrewCalendar extends Calendar {
             case 355:
                 type = 2; break;
             default:
-                System.out.println("Illegal year length " + yearLength + " in yearType");
+                throw new RuntimeException("Illegal year length " + yearLength + " in year " + year);
 
         }
         return type;
@@ -671,7 +653,9 @@ public class HebrewCalendar extends Calendar {
      * The formula below performs the same test, believe it or not.
      */
     private static final boolean isLeapYear(int year) {
-        return (year * 12 + 17) % 19 >= 12;
+        //return (year * 12 + 17) % 19 >= 12;
+        int x = (year*12 + 17) % 19;
+        return x >= ((x < 0) ? -7 : 12);
     }
 
     private static int monthsInYear(int year) {
@@ -797,20 +781,17 @@ public class HebrewCalendar extends Calendar {
     protected int handleComputeMonthStart(int eyear, int month, boolean useMonth) {
 
         // Resolve out-of-range months.  This is necessary in order to
-        // obtain the correct year.
-        if (month < 0) {
-            while (month < 0) {
-                month += monthsInYear(--eyear);
-            }
-        } else if (month > 0) {
-            for (;;) {
-                int monthsInYear = monthsInYear(eyear);
-                if (month < monthsInYear) {
-                    break;
-                }
-                ++eyear;
-                month -= monthsInYear;
-            }
+        // obtain the correct year.  We correct to
+        // a 12- or 13-month year (add/subtract 12 or 13, depending
+        // on the year) but since we _always_ number from 0..12, and
+        // the leap year determines whether or not month 5 (Adar 1)
+        // is present, we allow 0..12 in any given year.
+        while (month < 0) {
+            month += monthsInYear(--eyear);
+        }
+        // Careful: allow 0..12 in all years
+        while (month > 12) {
+            month -= monthsInYear(eyear++);
         }
 
         long day = startOfYear(eyear);
