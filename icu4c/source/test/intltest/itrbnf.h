@@ -31,6 +31,11 @@ class IntlTestRBNF : public IntlTest {
   virtual void TestFractionalRuleSet();
 
   /**
+   * Perform API tests on llong
+   */
+  virtual void TestLLong();
+
+  /**
    * Perform a simple spot check on the English spellout rules
    */
   virtual void TestEnglishSpellout();
