@@ -1,0 +1,48 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2003, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+// * Walaita language locale for Ethiopia.
+// * Contributed by Daniel Yacob <yacob@geez.org>, Ge'ez Frontier Foundation
+
+wal_ET {
+    Version{ "x0.1" }
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "h:mm:ss a",
+                "h:mm:ss a",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE\u1365 dd MMMM \u130B\u120B\u1233 yyyy G",
+                "dd MMMM yyyy",
+                "dd-MMM-yyyy",
+                "dd/MM/yy",
+                "{1} {0}",
+            }
+        }
+    }
+    NumberElements {
+        ".",
+        "\u12C8",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+        ".",
+        "+",
+    }
+    NumberPatterns {
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;-\u00A4#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+}

@@ -1,0 +1,203 @@
+#
+# Copyright (C) 2002-2005, International Business Machines Corporation 
+# and others. All Rights Reserved.
+#
+# file:  word.txt
+#
+# ICU Word Break Rules
+#      See Unicode Standard Annex #29.
+#      These rules are based on Version 4.1 draft, dated 2004-11-11
+#
+
+##############################################################################
+#
+#  Character class definitions from TR 29
+#
+##############################################################################
+
+!!chain;
+
+
+#
+#  Character Class Definitions.
+#
+
+$Format       = [\p{Word_Break = Format}];
+$Katakana     = [\p{Word_Break = Katakana}];
+$ALetter      = [\p{Word_Break = ALetter}];
+$MidLetter    = [\p{Word_Break = MidLetter}];
+$MidNum       = [\p{Word_Break = MidNum}];
+$Numeric      = [\p{Word_Break = Numeric}];
+$ExtendNumLet = [\p{General_Category=Connector_Punctuation}];
+
+
+$CR             = \u000d;
+$LF             = \u000a;
+$Extend         = [\p{Grapheme_Cluster_Break = Extend}];
+$Control        = [\p{Grapheme_Cluster_Break = Control}];
+
+$KatakanaEx     = $Katakana     $Extend*;
+$ALetterEx      = $ALetter      $Extend*;
+$MidLetterEx    = $MidLetter    $Extend*;
+$MidNumEx       = $MidNum       $Extend*;
+$NumericEx      = $Numeric      $Extend*;
+$ExtendNumLetEx = $ExtendNumLet $Extend*;
+
+## -------------------------------------------------
+
+!!forward;
+
+
+# Rule 3 - don't break grapheme clusters.
+#          see character breaks.
+
+$CR $LF;
+[^$Control $CR $LF] $Extend+;
+$NumericEx $Extend* {100};
+$ALetterEx $Extend* {200};
+
+# rule 5
+
+$ALetterEx $Format* $ALetterEx {200};
+
+# rule 6 and 7
+$ALetterEx $Format* $MidLetterEx  $Format* $ALetterEx {200};
+
+# rule 8
+
+$NumericEx $Format* $NumericEx {100};
+
+# rule 9
+
+$ALetterEx $Format* $NumericEx {200};
+
+# rule 10
+
+$NumericEx $Format* $ALetterEx {200};
+
+# rule 11 and 12 
+
+$NumericEx $Format* $MidNumEx $Format* $NumericEx {100};
+
+# rule 13
+
+$KatakanaEx  $Format* $KatakanaEx {300};
+
+[\p{Hiragana}]    $Extend* {300};     # To get tag values.
+[\p{Ideographic}] $Extend* {400};
+
+# rule 13a/b
+
+$ALetterEx  $Format* $ExtendNumLetEx {200};    #  (13a)
+$NumericEx  $Format* $ExtendNumLetEx {100};    #  (13a)
+$KatakanaEx $Format* $ExtendNumLetEx {300};    #  (13a)
+$ExtendNumLetEx $Format* $ExtendNumLetEx{200}; #  (13a)
+
+$ExtendNumLetEx $Format* $ALetterEx  {200};    #  (13b)
+$ExtendNumLetEx $Format* $NumericEx  {100};    #  (13b)
+$ExtendNumLetEx $Format* $KatakanaEx {300};    #  (13b)
+ 
+
+
+## -------------------------------------------------
+
+!!reverse;
+
+$BackALetterEx     = $Extend* $ALetter;
+$BackNumericEx     = $Extend* $Numeric;
+$BackMidNumEx      = $Extend* $MidNum;
+$BackMidLetterEx   = $Extend* $MidLetter;
+$BackKatakanaEx    = $Extend* $Katakana;
+$BackExtendNumLetEx= $Extend* $ExtendNumLet;
+
+$LF $CR;
+
+# see character breaks
+
+$Extend* [^$Control $CR $LF];
+
+# rule 5
+
+$BackALetterEx $Format* $BackALetterEx;
+
+# rule 6 and 7
+
+$BackALetterEx $Format* $BackMidLetterEx $Format* $BackALetterEx;
+
+
+# rule 8
+
+$BackNumericEx $Format* $BackNumericEx;
+
+# rule 9
+
+$BackNumericEx  $Format* $BackALetterEx;
+
+# rule 10
+
+$BackALetterEx $Format* $BackNumericEx;
+
+# rule 11 and 12
+
+$BackNumericEx $Format* $BackMidNumEx $Format* $BackNumericEx;
+
+# rule 13
+
+$BackKatakanaEx $Format* $BackKatakanaEx;
+
+# rules 13 a/b
+#
+($BackALetterEx | $BackNumericEx | $BackKatakanaEx | $BackExtendNumLetEx) $Format* $BackExtendNumLetEx; 
+$BackExtendNumLetEx $Format* ($BackALetterEx | $BackNumericEx | $BackKatakanaEx);        
+
+## -------------------------------------------------
+
+!!safe_reverse;
+
+# rule 3
+$Extend+ [^$Extend];
+$Extend+;               # comes into play when buffer _begins_ with an $Extend+.
+
+# rule 4
+$Format+ $BackALetterEx;
+$Format+ $BackNumericEx;
+$Format+ $BackMidLetterEx;
+$Format+ $BackMidNumEx;
+$Format+ $BackKatakanaEx;
+$Format+ $BackExtendNumLetEx;
+
+
+# rule 6
+$MidLetter $Format* $BackALetterEx;
+
+# rule 11
+$MidNum $Format* $BackNumericEx;
+
+## -------------------------------------------------
+
+!!safe_forward;
+
+# rule 3
+$Extend+;
+
+# rule 4
+$Extend* $Format+ $ALetterEx;
+$Extend* $Format+ $NumericEx;
+$Extend* $Format+ $MidLetterEx;
+$Extend* $Format+ $MidNumEx;
+$Extend* $Format+ $KatakanaEx;
+$Extend* $Format+ $ExtendNumLetEx;
+
+$Extend+ $Format* $ALetterEx;
+$Extend+ $Format* $NumericEx;
+$Extend+ $Format* $MidLetterEx;
+$Extend+ $Format* $MidNumEx;
+$Extend+ $Format* $KatakanaEx;
+$Extend+ $Format* $ExtendNumLetEx;
+
+# rule 6
+$MidLetterEx $Format* $ALetterEx;
+
+# rule 11
+$MidNumEx $Format* $NumericEx;
+

@@ -1,0 +1,110 @@
+## Makefile.in for ICU - tools/gencmn
+## Copyright (c) 1999-2004, International Business Machines Corporation and
+## others. All Rights Reserved.
+## Steven R. Loomis
+
+## Source directory information
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+
+top_builddir = ../..
+
+include $(top_builddir)/icudefs.mk
+
+## Build directory information
+subdir = tools/gencmn
+
+##
+
+TARGET_STUB_NAME = gencmn
+DECMN_STUB_NAME = decmn
+
+SECTION = 8
+
+MANX_FILES = $(TARGET_STUB_NAME).$(SECTION) $(DECMN_STUB_NAME).$(SECTION)
+
+ALL_MAN_FILES = $(MANX_FILES)
+
+## Extra files to remove for 'make clean'
+CLEANFILES = *~ $(DEPS) $(DECMN_DEP) $(ALL_MAN_FILES)
+
+## Target information
+TARGET = $(BINDIR)/$(TARGET_STUB_NAME)$(EXEEXT)
+DECMN = $(BINDIR)/$(DECMN_STUB_NAME)$(EXEEXT)
+
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil $(BIR_CPPFLAGS)
+LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
+
+OBJECTS = gencmn.o
+DECMN_OBJ = decmn.o
+
+DEPS = $(OBJECTS:.o=.d)
+DECMN_DEP = $(DECMN_OBJ:.o=.d)
+
+## List of phony targets
+.PHONY : all all-local install install-local clean clean-local		\
+distclean distclean-local dist dist-local check	\
+check-local install-man install-manx
+
+## Clear suffix list
+.SUFFIXES :
+
+## List of standard targets
+all: all-local
+install: install-local
+clean: clean-local
+distclean : distclean-local
+dist: dist-local
+check: all check-local
+
+all-local: $(TARGET) $(DECMN) $(ALL_MAN_FILES)
+
+install-local: all-local install-man
+	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
+	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)
+	$(INSTALL) $(DECMN) $(DESTDIR)$(sbindir)
+
+dist-local:
+
+clean-local:
+	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
+	$(RMV) $(TARGET) $(OBJECTS) $(DECMN) $(DECMN_OBJ)
+
+distclean-local: clean-local
+	$(RMV) Makefile
+
+check-local: all-local
+
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+$(TARGET) : $(OBJECTS)
+	$(LINK.cc) $(OUTOPT)$@ $^ $(LIBS) 
+
+$(DECMN) : $(DECMN_OBJ)
+	$(LINK.cc) $(OUTOPT)$@ $^ $(LIBS) 
+
+# man page
+install-man: install-manx
+install-manx: $(MANX_FILES)
+	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
+	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
+
+# This line is needed to serialize builds when the gmake -j option is used.
+$(DECMN:$(EXEEXT)=).$(SECTION): $(TARGET:$(EXEEXT)=).$(SECTION)
+
+%.$(SECTION): $(srcdir)/%.$(SECTION).in
+	cd $(top_builddir) \
+	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+ifeq (,$(MAKECMDGOALS))
+-include $(DEPS)
+-include $(DECMN_DEP)
+else
+ifneq ($(patsubst %clean,,$(MAKECMDGOALS)),)
+-include $(DEPS)
+-include $(DECMN_DEP)
+endif
+endif
+

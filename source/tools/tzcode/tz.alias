@@ -1,0 +1,47 @@
+######################################################################
+# Copyright (C) 1999-2004, International Business Machines
+# Corporation and others.  All Rights Reserved.
+######################################################################
+# A simple alias list. We use this to retain backward compatibility.
+# For example, ICU has always defined the zone name "PST" to indicate
+# the zone America/Los_Angeles. Unless we continue to have a zone with
+# this ID, legacy code may break.
+# 
+# This list is read by tz2icu to incorporate legacy ICU zone aliases
+# into the ICU system zone data.
+#
+# Format: alias_name unix_name # optional comment
+
+#### Aliases that conflict with Olson compatibility links
+
+ACT Australia/Darwin
+AET Australia/Sydney
+AGT America/Buenos_Aires
+ART Africa/Cairo
+AST America/Anchorage
+BET America/Sao_Paulo
+BST Asia/Dhaka # spelling changed in 2000h; was Asia/Dacca
+CAT Africa/Harare
+CNT America/St_Johns
+CST America/Chicago
+CTT Asia/Shanghai
+EAT Africa/Addis_Ababa
+ECT Europe/Paris
+# EET Europe/Istanbul # EET is a standard UNIX zone
+#### EST America/New_York # Linked to America/Indianapolis in Olson
+# HST Pacific/Honolulu # Olson LINK
+IET America/Indianapolis
+IST Asia/Calcutta
+JST Asia/Tokyo
+# MET Asia/Tehran # MET is a standard UNIX zone
+MIT Pacific/Apia
+#### MST America/Denver # Linked to America/Phoenix in Olson
+NET Asia/Yerevan
+NST Pacific/Auckland
+PLT Asia/Karachi
+PNT America/Phoenix
+PRT America/Puerto_Rico
+PST America/Los_Angeles
+SST Pacific/Guadalcanal
+# UTC Etc/UTC # Olson LINK
+VST Asia/Saigon

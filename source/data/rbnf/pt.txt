@@ -1,0 +1,43 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2004, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+// 
+
+pt {
+    SpelloutRules {
+        "-x: menos >>;\n"
+        "x.x: << ponto >>;\n"
+        "zero; um; dois; tr\u00EAs; qtro; cinco; seis; sete; oito; nove;\n"
+        "dez; onze; doze; treze; catorze; quinze; dezasseis;"
+        "    dezassete; dezoito; dezanove;\n"
+        "vinte; vinte e um; vinte e dois; vinte e tr\u00EAs; vete e quatro;"
+        "    vinte cinco; vinte seis; vinte sete; vinte e oito;"
+        "    vinte e nove;\n"
+        "30: trinta[ e >>];\n"
+        "40: cuarenta[ e >>];\n"
+        "50: cincuenta[ e >>];\n"
+        "60: sessenta[ e >>];\n"
+        "70: setenta[ e >>];\n"
+        "80: oitenta[ e >>];\n"
+        "90: noventa[ e >>];\n"
+        "100: cem;\n"
+        "200: doscentos[ >>];\n"
+        "300: tr\u00E8sentos[ >>];\n"
+        "400: cuatrocentos[ >>];\n"
+        "500: quinientos[ >>];\n"
+        "600: seiscentos[ >>];\n"
+        "700: setecentos[ >>];\n"
+        "800: oitocentos[ >>];\n"
+        "900: novecentos[ >>];\n"
+        "1000: mil[ >>];\n"
+        "2000: << mil[ >>];\n"
+        "1,000,000: um milh\u00E3o[ >>];\n"
+        "2,000,000: << milh\u00F5es[ >>];\n"
+        "1,000,000,000: um bilh\u00E3o[>>];\n"         
+        "2,000,000,000: << bilh\u00F5es[>>];\n"     
+        "1,000,000,000,000: =#,##0=;" 
+    }
+}

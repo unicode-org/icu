@@ -1,0 +1,1656 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2005 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File: ../../../locale/common/main/nb.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: ./xml/main/nb.xml
+ */
+nb{
+    Countries{
+        AD{"Andorra"}
+        AE{"De forente arabiske emiratene"}
+        AF{"Afghanistan"}
+        AG{"Antigua og Barbuda"}
+        AI{"Anguilla"}
+        AL{"Albania"}
+        AM{"Armenia"}
+        AN{"De nederlandske antiller"}
+        AO{"Angola"}
+        AQ{"Antarktis"}
+        AR{"Argentina"}
+        AS{"Amerikansk Samoa"}
+        AT{"Østerrike"}
+        AU{"Australia"}
+        AW{"Aruba"}
+        AZ{"Aserbajdsjan"}
+        BA{"Bosnia og Hercegovina"}
+        BB{"Barbados"}
+        BD{"Bangladesh"}
+        BE{"Belgia"}
+        BF{"Burkina Faso"}
+        BG{"Bulgaria"}
+        BH{"Bahrain"}
+        BI{"Burundi"}
+        BJ{"Benin"}
+        BM{"Bermuda"}
+        BN{"Brunei Darussalam"}
+        BO{"Bolivia"}
+        BR{"Brasil"}
+        BS{"Bahamas"}
+        BT{"Bhutan"}
+        BV{"Bouvetøya"}
+        BW{"Botswana"}
+        BY{"Hviterussland"}
+        BZ{"Belize"}
+        CA{"Canada"}
+        CC{"Kokosøyene (Keelingøyene)"}
+        CD{"Kongo, Den demokratiske republikken"}
+        CF{"Den sentralafrikanske republikk"}
+        CG{"Kongo"}
+        CH{"Sveits"}
+        CI{"Elfenbenskysten"}
+        CK{"Cookøyene"}
+        CL{"Chile"}
+        CM{"Kamerun"}
+        CN{"Kina"}
+        CO{"Colombia"}
+        CR{"Costa Rica"}
+        CU{"Cuba"}
+        CV{"Kapp Verde"}
+        CX{"Christmasøya"}
+        CY{"Kypros"}
+        CZ{"Tsjekkia"}
+        DE{"Tyskland"}
+        DJ{"Djibouti"}
+        DK{"Danmark"}
+        DM{"Dominica"}
+        DO{"Den dominikanske republikk"}
+        DZ{"Algerie"}
+        EC{"Ecuador"}
+        EE{"Estland"}
+        EG{"Egypt"}
+        EH{"Vest-Sahara"}
+        ER{"Eritrea"}
+        ES{"Spania"}
+        ET{"Etiopia"}
+        FI{"Finland"}
+        FJ{"Fiji"}
+        FK{"Falklandsøyene (Malvinas)"}
+        FM{"Mikronesiaføderasjonen"}
+        FO{"Færøyene"}
+        FR{"Frankrike"}
+        GA{"Gabon"}
+        GB{"Storbritannia"}
+        GD{"Grenada"}
+        GE{"Georgia"}
+        GF{"Fransk Guyana"}
+        GH{"Ghana"}
+        GI{"Gibraltar"}
+        GL{"Grønland"}
+        GM{"Gambia"}
+        GN{"Guinea"}
+        GP{"Guadeloupe"}
+        GQ{"Ekvatorial-Guinea"}
+        GR{"Hellas"}
+        GS{"Sør-Georgia og Sør-Sandwich-øyene"}
+        GT{"Guatemala"}
+        GU{"Guam"}
+        GW{"Guinea-Bissau"}
+        GY{"Guyana"}
+        HK{"Hong Kong S.A.R. (Kina)"}
+        HM{"Heard- og McDonaldsøyene"}
+        HN{"Honduras"}
+        HR{"Kroatia"}
+        HT{"Haiti"}
+        HU{"Ungarn"}
+        ID{"Indonesia"}
+        IE{"Irland"}
+        IL{"Israel"}
+        IN{"India"}
+        IO{"Britiske områder i det indiske hav"}
+        IQ{"Irak"}
+        IR{"Iran"}
+        IS{"Island"}
+        IT{"Italia"}
+        JM{"Jamaica"}
+        JO{"Jordan"}
+        JP{"Japan"}
+        KE{"Kenya"}
+        KG{"Kirgisistan"}
+        KH{"Kambodsja"}
+        KI{"Kiribati"}
+        KM{"Komorene"}
+        KN{"St. Christopher og Nevis"}
+        KP{"Nord-Korea"}
+        KR{"Sør-Korea"}
+        KW{"Kuwait"}
+        KY{"Caymanøyene"}
+        KZ{"Kasakhstan"}
+        LA{"Laos, Den folkedemokratiske republikken"}
+        LB{"Libanon"}
+        LC{"St. Lucia"}
+        LI{"Liechtenstein"}
+        LK{"Sri Lanka"}
+        LR{"Liberia"}
+        LS{"Lesotho"}
+        LT{"Litauen"}
+        LU{"Luxembourg"}
+        LV{"Latvia"}
+        LY{"Libya"}
+        MA{"Marokko"}
+        MC{"Monaco"}
+        MD{"Moldova"}
+        MG{"Madagaskar"}
+        MH{"Marshalløyene"}
+        MK{"Makedonia, Republikken"}
+        ML{"Mali"}
+        MM{"Myanmar"}
+        MN{"Mongolia"}
+        MO{"Macao S.A.R. (Kina)"}
+        MP{"Nord-Marianene"}
+        MQ{"Martinique"}
+        MR{"Mauritania"}
+        MS{"Montserrat"}
+        MT{"Malta"}
+        MU{"Mauritius"}
+        MV{"Maldivene"}
+        MW{"Malawi"}
+        MX{"Mexico"}
+        MY{"Malaysia"}
+        MZ{"Mosambik"}
+        NA{"Namibia"}
+        NC{"Ny-Caledonia"}
+        NE{"Niger"}
+        NF{"Norfolkøyene"}
+        NG{"Nigeria"}
+        NI{"Nicaragua"}
+        NL{"Nederland"}
+        NO{"Norge"}
+        NP{"Nepal"}
+        NR{"Nauru"}
+        NU{"Niue"}
+        NZ{"New Zealand"}
+        OM{"Oman"}
+        PA{"Panama"}
+        PE{"Peru"}
+        PF{"Fransk Polynesia"}
+        PG{"Papua Ny-Guinea"}
+        PH{"Filippinene"}
+        PK{"Pakistan"}
+        PL{"Polen"}
+        PM{"St. Pierre og Miquelon"}
+        PN{"Pitcairn"}
+        PR{"Puerto Rico"}
+        PS{"Palestinsk territorium"}
+        PT{"Portugal"}
+        PW{"Palau"}
+        PY{"Paraguay"}
+        QA{"Qatar"}
+        RE{"Reunion"}
+        RO{"Romania"}
+        RU{"Den russiske føderasjon"}
+        RW{"Rwanda"}
+        SA{"Saudi Arabia"}
+        SB{"Salomonøyene"}
+        SC{"Seychellene"}
+        SD{"Sudan"}
+        SE{"Sverige"}
+        SG{"Singapore"}
+        SH{"Saint Helena"}
+        SI{"Slovenia"}
+        SJ{"Svalbard og Jan Mayen"}
+        SK{"Slovakia"}
+        SL{"Sierra Leone"}
+        SM{"San Marino"}
+        SN{"Senegal"}
+        SO{"Somalia"}
+        SR{"Surinam"}
+        ST{"Sao Tome og Principe"}
+        SV{"El Salvador"}
+        SY{"Syria"}
+        SZ{"Swaziland"}
+        TC{"Turks- og Caicosøyene"}
+        TD{"Tchad"}
+        TF{"Franske sørområder"}
+        TG{"Togo"}
+        TH{"Thailand"}
+        TJ{"Tadsjikistan"}
+        TK{"Tokelau"}
+        TL{"Øst-Timor"}
+        TM{"Turkmenistan"}
+        TN{"Tunisia"}
+        TO{"Tonga"}
+        TR{"Tyrkia"}
+        TT{"Trinidad og Tobago"}
+        TV{"Tuvalu"}
+        TW{"Taiwan"}
+        TZ{"Tanzania"}
+        UA{"Ukraina"}
+        UG{"Uganda"}
+        UM{"USAs mindre øyer"}
+        US{"USA"}
+        UY{"Uruguay"}
+        UZ{"Usbekistan"}
+        VA{"Vatikanstaten"}
+        VC{"St. Vincent og Grenadinene"}
+        VE{"Venezuela"}
+        VG{"Jomfruøyene (britisk)"}
+        VI{"Jomfruøyene (USA)"}
+        VN{"Vietnam"}
+        VU{"Vanuatu"}
+        WF{"Wallis og Futuna"}
+        WS{"Samoa"}
+        YE{"Yemen"}
+        YT{"Mayotte"}
+        YU{"Jugoslavia"}
+        ZA{"Sør-Afrika"}
+        ZM{"Zambia"}
+        ZW{"Zimbabwe"}
+    }
+    Currencies{
+        ADP{
+            "ADP",
+            "Andorranske pesetas",
+        }
+        AED{
+            "AED",
+            "UAE dirham",
+        }
+        AFA{
+            "AFA",
+            "Afghani (1927-2002)",
+        }
+        AFN{
+            "Af",
+            "Afghani",
+        }
+        ALK{
+            "ALK",
+            "Albanske lek (1946-1961)",
+        }
+        ALL{
+            "lek",
+            "Albanske lek",
+        }
+        AMD{
+            "dram",
+            "Armenske dram",
+        }
+        ANG{
+            "NA f.",
+            "Nederlandske antillegylden",
+        }
+        AOA{
+            "AOA",
+            "Angolanske kwanza",
+        }
+        AOK{
+            "AOK",
+            "Angolanske kwanza (1977-1990)",
+        }
+        AON{
+            "AON",
+            "Angolanske ny kwanza (1990-2000)",
+        }
+        AOR{
+            "AOR",
+            "Angolan Kwanza Reajustado (1995-1999)",
+        }
+        ARA{
+            "ARA",
+            "Argentinske australer",
+        }
+        ARP{
+            "ARP",
+            "Argentinske pesos (1983-1985)",
+        }
+        ARS{
+            "Arg$",
+            "Argentinske pesos",
+        }
+        ATS{
+            "ATS",
+            "Østerrikske shilling",
+        }
+        AUD{
+            "$A",
+            "Australske dollar",
+        }
+        AWG{
+            "AWG",
+            "Arubiske gylden",
+        }
+        AZM{
+            "AZM",
+            "Aserbajdsjanske Manat",
+        }
+        BAD{
+            "BAD",
+            "Bosnia-Hercegovina dinarer",
+        }
+        BAM{
+            "KM",
+            "Bosnia-Hercegovina mark (konvertible)",
+        }
+        BBD{
+            "BDS$",
+            "Barbadisk dollar",
+        }
+        BDT{
+            "Tk",
+            "Bangladeshiske taka",
+        }
+        BEC{
+            "BEC",
+            "Belgiske franc (konvertible)",
+        }
+        BEF{
+            "BF",
+            "Belgiske franc",
+        }
+        BEL{
+            "BEL",
+            "Belgiske franc (økonomiske)",
+        }
+        BGL{
+            "lev",
+            "Bulgarske lev (hard)",
+        }
+        BGN{
+            "BGN",
+            "Bulgarske lev",
+        }
+        BHD{
+            "BD",
+            "Bahrainske dinarer",
+        }
+        BIF{
+            "Fbu",
+            "Burundiske franc",
+        }
+        BMD{
+            "Ber$",
+            "Bermudiske dollar",
+        }
+        BND{
+            "BND",
+            "Bruneiske dollar",
+        }
+        BOB{
+            "Bs",
+            "Boliviano",
+        }
+        BOP{
+            "BOP",
+            "Boliviansk pesos",
+        }
+        BOV{
+            "BOV",
+            "Boliviansk mvdol",
+        }
+        BRB{
+            "BRB",
+            "Brasiliansk cruzeiro novo (1967-1986)",
+        }
+        BRC{
+            "BRC",
+            "Brasilianske cruzado",
+        }
+        BRE{
+            "BRE",
+            "Brasilianske cruzeiro (1990-1993)",
+        }
+        BRL{
+            "R$",
+            "Brasilianske realer",
+        }
+        BRN{
+            "BRN",
+            "Brasilianske cruzado novo",
+        }
+        BRR{
+            "BRR",
+            "Brasilianske cruzeiro",
+        }
+        BSD{
+            "BSD",
+            "Bahamske dollar",
+        }
+        BTN{
+            "Nu",
+            "Bhutanske ngultrum",
+        }
+        BUK{
+            "BUK",
+            "Burmesiske kyat",
+        }
+        BWP{
+            "BWP",
+            "Botswanske pula",
+        }
+        BYB{
+            "BYB",
+            "Hviterussiske nye rubler (1994-1999)",
+        }
+        BYR{
+            "Rbl",
+            "Hviterussiske rubler",
+        }
+        BZD{
+            "BZ$",
+            "Beliziske dollar",
+        }
+        CAD{
+            "Can$",
+            "Kanadiske dollar",
+        }
+        CDF{
+            "CDF",
+            "Kongolesiske franc (congolais)",
+        }
+        CHF{
+            "SwF",
+            "Sveitsiske franc",
+        }
+        CLF{
+            "CLF",
+            "Chilenske Unidades de Fomento",
+        }
+        CLP{
+            "Ch$",
+            "Chilenske pesos",
+        }
+        CNX{
+            "CNX",
+            "Kinesiske US dollar (FEC)",
+        }
+        CNY{
+            "Y",
+            "Kinesiske Yuan Renminbi",
+        }
+        COP{
+            "Col$",
+            "Colombianske pesos",
+        }
+        CRC{
+            "C",
+            "Costaricanske colon",
+        }
+        CSK{
+            "CSK",
+            "Tsjekkoslovakiske koruna (hard)",
+        }
+        CUP{
+            "CUP",
+            "Kubanske pesos",
+        }
+        CVE{
+            "CVEsc",
+            "Kappverdiske escudo",
+        }
+        CYP{
+            "£C",
+            "Kypriotiske pund",
+        }
+        CZK{
+            "CZK",
+            "Tsjekkiske koruna",
+        }
+        DDM{
+            "DDM",
+            "Østtyske ostmark",
+        }
+        DEM{
+            "DEM",
+            "Tyske mark",
+        }
+        DJF{
+            "DF",
+            "Djiboutiske franc",
+        }
+        DKK{
+            "DKr",
+            "Danske kroner",
+        }
+        DOP{
+            "RD$",
+            "Dominikanske pesos",
+        }
+        DZD{
+            "DA",
+            "Algeriske dinarer",
+        }
+        ECS{
+            "ECS",
+            "Ecuadorianske sucre",
+        }
+        ECV{
+            "ECV",
+            "Ecuadorianske Unidad de Valor Constante (UVC)",
+        }
+        EEK{
+            "EEK",
+            "Estiske kroon",
+        }
+        EGP{
+            "EGP",
+            "Egyptiske pund",
+        }
+        ERN{
+            "ERN",
+            "Eritreiske nakfa",
+        }
+        ESP{
+            "ESP",
+            "Spanske peseta",
+        }
+        ETB{
+            "Br",
+            "Etiopiske birr",
+        }
+        EUR{
+            "€",
+            "Euro",
+        }
+        FIM{
+            "FIM",
+            "Finske mark",
+        }
+        FJD{
+            "F$",
+            "Fijianske dollar",
+        }
+        FKP{
+            "FKP",
+            "Falklandsøyene-pund",
+        }
+        FRF{
+            "FRF",
+            "Franske franc",
+        }
+        GBP{
+            "£",
+            "Britiske pund sterling",
+        }
+        GEK{
+            "GEK",
+            "Georgiske kupon larit",
+        }
+        GEL{
+            "lari",
+            "Georgiske lari",
+        }
+        GHC{
+            "GHC",
+            "Ghanesiske cedi",
+        }
+        GIP{
+            "GIP",
+            "Gibraltarske pund",
+        }
+        GMD{
+            "GMD",
+            "Gambiske dalasi",
+        }
+        GNF{
+            "GF",
+            "Guineanske franc",
+        }
+        GNS{
+            "GNS",
+            "Guineanske syli",
+        }
+        GQE{
+            "GQE",
+            "Ekvatorialguineanske ekwele guineana",
+        }
+        GRD{
+            "GRD",
+            "Greske drakmer",
+        }
+        GTQ{
+            "Q",
+            "Guatemalanske quetzal",
+        }
+        GWE{
+            "GWE",
+            "Portugisiske guinea escudo",
+        }
+        GWP{
+            "GWP",
+            "Guinea-Bissau-pesos",
+        }
+        GYD{
+            "G$",
+            "Guyanske dollar",
+        }
+        HKD{
+            "HK$",
+            "Hongkong-dollar",
+        }
+        HNL{
+            "L",
+            "Hoduras Lempira",
+        }
+        HRD{
+            "HRD",
+            "Kroatiske dinarer",
+        }
+        HRK{
+            "HRK",
+            "Kroatiske kuna",
+        }
+        HTG{
+            "HTG",
+            "Haitiske gourde",
+        }
+        HUF{
+            "Ft",
+            "Ungarske forinter",
+        }
+        IDR{
+            "Rp",
+            "Indonesiske rupier",
+        }
+        IEP{
+            "IR£",
+            "Irske pund",
+        }
+        ILP{
+            "ILP",
+            "Israelske pund",
+        }
+        ILS{
+            "ILS",
+            "Israelske nye shekler",
+        }
+        INR{
+            "=0#Rs.|1#Re.|1<Rs.",
+            "Indiske rupier",
+        }
+        IQD{
+            "ID",
+            "Irakske dinarer",
+        }
+        IRR{
+            "RI",
+            "Iranske rialer",
+        }
+        ISK{
+            "ISK",
+            "Islandske kronar",
+        }
+        ITL{
+            "₤",
+            "Italienske lire",
+        }
+        JMD{
+            "J$",
+            "Jamaikanske dollar",
+        }
+        JOD{
+            "JD",
+            "Jordanske dinarer",
+        }
+        JPY{
+            "¥",
+            "Japanske yen",
+        }
+        KES{
+            "K Sh",
+            "Kenyanske shilling",
+        }
+        KGS{
+            "som",
+            "Kirgisiske som",
+        }
+        KHR{
+            "CR",
+            "Kambodsjanske riel",
+        }
+        KMF{
+            "CF",
+            "Komoriske franc",
+        }
+        KPW{
+            "KPW",
+            "Nordkoreanske won",
+        }
+        KRW{
+            "KRW",
+            "Sørkoreanske won",
+        }
+        KWD{
+            "KD",
+            "Kuwaitiske dinarer",
+        }
+        KYD{
+            "KYD",
+            "Caymanske dollar",
+        }
+        KZT{
+            "T",
+            "Kasakhstanske tenge",
+        }
+        LAK{
+            "LAK",
+            "Laotiske kip",
+        }
+        LBP{
+            "LL",
+            "Libanesiske pund",
+        }
+        LKR{
+            "SL Re",
+            "Srilankiske rupier",
+        }
+        LRD{
+            "LRD",
+            "Liberiske dollar",
+        }
+        LSL{
+            "M",
+            "Lesothiske loti",
+        }
+        LTL{
+            "LTL",
+            "Litauiske lita",
+        }
+        LTT{
+            "LTT",
+            "Litauiske talonas",
+        }
+        LUF{
+            "LUF",
+            "Luxemburgske franc",
+        }
+        LVL{
+            "LVL",
+            "Latviske lats",
+        }
+        LVR{
+            "LVR",
+            "Latviske rubler",
+        }
+        LYD{
+            "LD",
+            "Libyske dinarer",
+        }
+        MAD{
+            "MAD",
+            "Marokkanske dirham",
+        }
+        MAF{
+            "MAF",
+            "Marokkanske franc",
+        }
+        MDL{
+            "MDL",
+            "Moldovske leu",
+        }
+        MGA{
+            "MGA",
+            "Madagassiske ariary",
+        }
+        MGF{
+            "MGF",
+            "Madagassiske franc",
+        }
+        MKD{
+            "MDen",
+            "Makedonske denarer",
+        }
+        MLF{
+            "MLF",
+            "Maliske franc",
+        }
+        MMK{
+            "MMK",
+            "Myanmarske kyat",
+        }
+        MNT{
+            "Tug",
+            "Mongolske tugrik",
+        }
+        MOP{
+            "MOP",
+            "Makaoske pataca",
+        }
+        MRO{
+            "UM",
+            "Mauritanske ouguiya",
+        }
+        MTL{
+            "Lm",
+            "Maltesiske lira",
+        }
+        MTP{
+            "MTP",
+            "Maltesiske pund",
+        }
+        MUR{
+            "MUR",
+            "Mauritiske rupier",
+        }
+        MVR{
+            "MVR",
+            "Maldiviske rufiyaa",
+        }
+        MWK{
+            "MK",
+            "Malawisle kwacha",
+        }
+        MXN{
+            "MEX$",
+            "Meksikanske pesos",
+        }
+        MXP{
+            "MXP",
+            "Meksikanske sølvpesos (1861-1992)",
+        }
+        MXV{
+            "MXV",
+            "Meksikanske Unidad de Inversion (UDI)",
+        }
+        MYR{
+            "RM",
+            "Malaysiske ringgit",
+        }
+        MZE{
+            "MZE",
+            "Mosambikiske escudo",
+        }
+        MZM{
+            "Mt",
+            "Mosambikiske metical",
+        }
+        NAD{
+            "N$",
+            "Namibiske dollar",
+        }
+        NGN{
+            "NGN",
+            "Nigerianske naira",
+        }
+        NIC{
+            "NIC",
+            "Nicaraguanske cordoba",
+        }
+        NIO{
+            "NIO",
+            "Nicaraguanske cordoba oro",
+        }
+        NLG{
+            "NLG",
+            "Nederlandske gylden",
+        }
+        NOK{
+            "kr",
+            "Norske kroner",
+        }
+        NPR{
+            "Nrs",
+            "Nepalesiske rupier",
+        }
+        NZD{
+            "$NZ",
+            "Nyzealandske dollar",
+        }
+        OMR{
+            "RO",
+            "Omanske rialer",
+        }
+        PAB{
+            "PAB",
+            "Panamanske balboa",
+        }
+        PEI{
+            "PEI",
+            "Peruvianske inti",
+        }
+        PEN{
+            "PEN",
+            "Peruvianske sol nuevo",
+        }
+        PES{
+            "PES",
+            "Peruvianske sol",
+        }
+        PGK{
+            "PGK",
+            "Papuanske kina",
+        }
+        PHP{
+            "PHP",
+            "Filippinske pesos",
+        }
+        PKR{
+            "Pra",
+            "Pakistanske rupier",
+        }
+        PLN{
+            "Zl",
+            "Polske zloty",
+        }
+        PLZ{
+            "PLZ",
+            "Polske zloty (1950-1995)",
+        }
+        PTE{
+            "PTE",
+            "Portugisiske escudo",
+        }
+        PYG{
+            "PYG",
+            "Paraguayanske guarani",
+        }
+        QAR{
+            "QR",
+            "Qatarske riyaler",
+        }
+        ROL{
+            "leu",
+            "Rumenske leu",
+        }
+        RUB{
+            "RUB",
+            "Russiske rubler",
+        }
+        RUR{
+            "RUR",
+            "Russiske rubler (1991-1998)",
+        }
+        RWF{
+            "RWF",
+            "Rwandiske franc",
+        }
+        SAR{
+            "SRl",
+            "Saudiarabiske riyaler",
+        }
+        SBD{
+            "SI$",
+            "Salomonske dollar",
+        }
+        SCR{
+            "SR",
+            "Seychelliske rupier",
+        }
+        SDD{
+            "SDD",
+            "Sudanesiske dinarer",
+        }
+        SDP{
+            "SDP",
+            "Sudanesiske pund",
+        }
+        SEK{
+            "SKr",
+            "Svenske kroner",
+        }
+        SGD{
+            "S$",
+            "Singaporske dollar",
+        }
+        SHP{
+            "SHP",
+            "Sankthelenske pund",
+        }
+        SIT{
+            "SIT",
+            "Slovenske tolar",
+        }
+        SKK{
+            "Sk",
+            "Slovakiske koruna",
+        }
+        SLL{
+            "SLL",
+            "Sierraleonske leone",
+        }
+        SOS{
+            "So. Sh.",
+            "Somaliske shilling",
+        }
+        SRG{
+            "Sf",
+            "Surinamske gylden",
+        }
+        STD{
+            "Db",
+            "Sao Tome og Principe-dobra",
+        }
+        SUR{
+            "SUR",
+            "Sovjetiske rubler",
+        }
+        SVC{
+            "SVC",
+            "Salvadoranske colon",
+        }
+        SYP{
+            "LS",
+            "Syriske pund",
+        }
+        SZL{
+            "E",
+            "Swazilandske lilangeni",
+        }
+        THB{
+            "THB",
+            "Thailandske baht",
+        }
+        TJR{
+            "TJR",
+            "Tadsjikiske rubler",
+        }
+        TJS{
+            "TJS",
+            "Tadsjikiske somoni",
+        }
+        TMM{
+            "TMM",
+            "Turkmenske manat",
+        }
+        TND{
+            "TND",
+            "Tunisiske dinarer",
+        }
+        TOP{
+            "T$",
+            "Tonganske paʻanga",
+        }
+        TPE{
+            "TPE",
+            "Timoresiske escudo",
+        }
+        TRL{
+            "TL",
+            "Tyrkiske lira",
+        }
+        TTD{
+            "TT$",
+            "Trinidadiske dollar",
+        }
+        TWD{
+            "NT$",
+            "Taiwanske nye dollar",
+        }
+        TZS{
+            "T Sh",
+            "Tanzanianske shilling",
+        }
+        UAH{
+            "UAH",
+            "Ukrainsle hryvnia",
+        }
+        UAK{
+            "UAK",
+            "Ukrainske karbovanetz",
+        }
+        UGS{
+            "UGS",
+            "Ugandiske shilling (1966-1987)",
+        }
+        UGX{
+            "U Sh",
+            "Ugandiske shilling",
+        }
+        USD{
+            "US$",
+            "Amerikanske dollar",
+        }
+        USN{
+            "USN",
+            "Amerikanske dollar (neste dag)",
+        }
+        USS{
+            "USS",
+            "Amerikanske dollar (samme dag)",
+        }
+        UYP{
+            "UYP",
+            "Uruguayanske pesos (1975-1993)",
+        }
+        UYU{
+            "Ur$",
+            "Uruguayanske peso uruguayo",
+        }
+        UZS{
+            "UZS",
+            "Usbekiske sum",
+        }
+        VEB{
+            "Be",
+            "Venezuelanske bolivar",
+        }
+        VND{
+            "VND",
+            "Vietnamesiske dong",
+        }
+        VUV{
+            "VT",
+            "Vanuatisk vatu",
+        }
+        WST{
+            "WST",
+            "Vestsamoisk tala",
+        }
+        XAF{
+            "XAF",
+            "CFA Franc BEAC",
+        }
+        XAU{
+            "XAU",
+            "Gull",
+        }
+        XBA{
+            "XBA",
+            "European Composite Unit",
+        }
+        XBB{
+            "XBB",
+            "European Monetary Unit",
+        }
+        XBC{
+            "XBC",
+            "European Unit of Account (XBC)",
+        }
+        XBD{
+            "XBD",
+            "European Unit of Account (XBD)",
+        }
+        XCD{
+            "EC$",
+            "Østkaribiske dollar",
+        }
+        XDR{
+            "XDR",
+            "Special Drawing Rights",
+        }
+        XEU{
+            "XEU",
+            "European Currency Unit",
+        }
+        XFO{
+            "XFO",
+            "French Gold Franc",
+        }
+        XFU{
+            "XFU",
+            "French UIC-Franc",
+        }
+        XOF{
+            "XOF",
+            "CFA Franc BCEAO",
+        }
+        XPF{
+            "CFPF",
+            "CFP Franc",
+        }
+        YDD{
+            "YDD",
+            "Jemenittiske dinarer",
+        }
+        YER{
+            "YRl",
+            "Jemenittiske rialer",
+        }
+        YUD{
+            "YUD",
+            "Jugoslaviske dinarer (hard)",
+        }
+        YUM{
+            "YUM",
+            "Jugoslaviske noviy-dinarer",
+        }
+        YUN{
+            "YUN",
+            "Jugoslaviske konvertible dinarer",
+        }
+        ZAL{
+            "ZAL",
+            "Sørafrikanske rand (økonomisk)",
+        }
+        ZAR{
+            "R",
+            "Sørafrikanske rand",
+        }
+        ZMK{
+            "ZMK",
+            "Zambiske kwacha",
+        }
+        ZRN{
+            "ZRN",
+            "Zairiske nye zaire",
+        }
+        ZRZ{
+            "ZRZ",
+            "Zairiske zaire",
+        }
+        ZWD{
+            "Z$",
+            "Zimbabwiske dollar",
+        }
+    }
+    ExemplarCharacters{"[a-zæåøéóôàüǎ]"}
+    Keys{
+        calendar{"Kalendar"}
+        collation{"Kollasjon"}
+        currency{"Valuta"}
+    }
+    Languages{
+        aa{"afar"}
+        ab{"abkhasisk"}
+        ae{"avestisk"}
+        af{"afrikaans"}
+        ak{"akan"}
+        am{"amharisk"}
+        an{"aragonsk"}
+        ar{"arabisk"}
+        as{"assamisk"}
+        av{"avarisk"}
+        ay{"aymara"}
+        az{"aserbajdsjansk"}
+        ba{"basjkirsk"}
+        be{"hviterussisk"}
+        bg{"bulgarsk"}
+        bh{"bihari"}
+        bi{"bislama"}
+        bm{"bambara"}
+        bn{"bengali"}
+        bo{"tibetansk"}
+        br{"bretonsk"}
+        bs{"bosnisk"}
+        byn{"blin"}
+        ca{"katalansk"}
+        ce{"tsjetsjensk"}
+        ch{"chamorro"}
+        chr{"cherokee"}
+        co{"korsikansk"}
+        cr{"cree"}
+        cs{"tsjekkisk"}
+        cu{"kirkeslavisk"}
+        cv{"tsjuvansk"}
+        cy{"walisisk"}
+        da{"dansk"}
+        de{"tysk"}
+        dv{"divehi"}
+        dz{"dzongkha"}
+        ee{"ewe"}
+        el{"gresk"}
+        en{"engelsk"}
+        eo{"esperanto"}
+        es{"spansk"}
+        et{"estisk"}
+        eu{"baskisk"}
+        fa{"persisk"}
+        ff{"fulani"}
+        fi{"finsk"}
+        fj{"fijiansk"}
+        fo{"færøysk"}
+        fr{"fransk"}
+        fy{"frisisk"}
+        ga{"irsk"}
+        gd{"skotsk gælisk"}
+        gez{"ges"}
+        gl{"galicisk"}
+        gn{"guarani"}
+        gu{"gujarati"}
+        gv{"manx"}
+        haw{"hawaiisk"}
+        he{"hebraisk"}
+        hi{"hindi"}
+        ho{"hiri motu"}
+        hr{"kroatisk"}
+        ht{"haitisk"}
+        hu{"ungarsk"}
+        hy{"armensk"}
+        hz{"herero"}
+        ia{"interlingua"}
+        id{"indonesisk"}
+        ie{"interlingue"}
+        ig{"ibo"}
+        ii{"sichuan-yi"}
+        ik{"unupiak"}
+        io{"ido"}
+        is{"islandsk"}
+        it{"italiensk"}
+        iu{"inuktitut"}
+        ja{"japansk"}
+        jv{"javanesisk"}
+        ka{"georgisk"}
+        kg{"kikongo"}
+        ki{"kikuyu"}
+        kj{"kuanyama"}
+        kk{"kasakhisk"}
+        kl{"kalaallisut"}
+        km{"khmer"}
+        kn{"kannada"}
+        ko{"koreansk"}
+        kok{"konkani"}
+        kr{"kanuri"}
+        ks{"kasjmiri"}
+        ku{"kurdisk"}
+        kv{"komi"}
+        kw{"kornisk"}
+        ky{"kirgisisk"}
+        la{"latin"}
+        lb{"luxemburgsk"}
+        lg{"ganda"}
+        li{"limburgisk"}
+        ln{"lingala"}
+        lo{"laotisk"}
+        lt{"litauisk"}
+        lu{"luba-katanga"}
+        lv{"latvisk"}
+        mg{"madagassisk"}
+        mh{"marshallesisk"}
+        mi{"maori"}
+        mk{"makedonsk"}
+        ml{"malayalam"}
+        mn{"mongolsk"}
+        mo{"moldavisk"}
+        mr{"marathi"}
+        ms{"malayisk"}
+        mt{"maltesisk"}
+        my{"burmesisk"}
+        na{"nauru"}
+        nb{"norsk bokmål"}
+        nd{"ndebele (nord)"}
+        ne{"nepalsk"}
+        ng{"ndonga"}
+        nl{"nederlandsk"}
+        nn{"norsk nynorsk"}
+        no{"norsk"}
+        nr{"ndebele, sør"}
+        nv{"navajo"}
+        ny{"nyanja"}
+        oc{"oksitansk (etter 1500)"}
+        oj{"ojibwa"}
+        om{"oromo"}
+        or{"oriya"}
+        os{"ossetisk"}
+        pa{"panjabi"}
+        pi{"pali"}
+        pl{"polsk"}
+        ps{"pashto"}
+        pt{"portugisisk"}
+        qu{"quechua"}
+        rm{"retoromansk"}
+        rn{"rundi"}
+        ro{"rumensk"}
+        ru{"russisk"}
+        rw{"kinjarwanda"}
+        sa{"sanskrit"}
+        sc{"sardinsk"}
+        sd{"sindhi"}
+        se{"nordsamisk"}
+        sg{"sango"}
+        sh{"serbokroatisk"}
+        si{"singalesisk"}
+        sid{"sidamo"}
+        sk{"slovakisk"}
+        sl{"slovensk"}
+        sm{"samoansk"}
+        sn{"shona"}
+        so{"somalisk"}
+        sq{"albansk"}
+        sr{"serbisk"}
+        ss{"swati"}
+        st{"sotho (sørlig)"}
+        su{"sundanesisk"}
+        sv{"svensk"}
+        sw{"swahili"}
+        syr{"syrisk"}
+        ta{"tamil"}
+        te{"telugu"}
+        tg{"tatsjikisk"}
+        th{"thai"}
+        ti{"tigrinja"}
+        tig{"tigré"}
+        tk{"turkmensk"}
+        tl{"tagalog"}
+        tn{"tswana"}
+        to{"tonga (Tonga-øyene)"}
+        tr{"tyrkisk"}
+        ts{"tsonga"}
+        tt{"tatarisk"}
+        tw{"twi"}
+        ty{"tahitisk"}
+        ug{"uigurisk"}
+        uk{"ukrainsk"}
+        ur{"urdu"}
+        uz{"usbekisk"}
+        ve{"venda"}
+        vi{"vietnamesisk"}
+        vo{"volapyk"}
+        wa{"vallonsk"}
+        wo{"wolof"}
+        xh{"xhosa"}
+        yi{"jiddisk"}
+        yo{"joruba"}
+        za{"zhuang"}
+        zh{"kinesisk"}
+        zu{"zulu"}
+    }
+    LocaleScript{
+        "Latn",
+    }
+    NumberElements{
+        ",",
+        " ",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "�",
+        "+",
+    }
+    NumberPatterns{
+        "#,##0.###",
+        "¤ #,##0.00",
+        "#,##0 %",
+        "#E0",
+    }
+    Scripts{
+        Arab{"arabisk"}
+        Armn{"armensk"}
+        Beng{"bengalsk"}
+        Bopo{"bopomofo"}
+        Brai{"braille"}
+        Buhd{"buhid"}
+        Cans{"Unified Canadian Aboriginal Symbols"}
+        Cher{"cherokee"}
+        Copt{"koptisk"}
+        Cprt{"kypriotisk"}
+        Cyrl{"kyrillisk"}
+        Deva{"devanagari"}
+        Dsrt{"deseret"}
+        Ethi{"etiopisk"}
+        Geor{"georgisk"}
+        Goth{"gotisk"}
+        Grek{"gresk"}
+        Gujr{"gujarati"}
+        Guru{"gurmukhi"}
+        Hang{"hangul"}
+        Hani{"han"}
+        Hano{"hanunoo"}
+        Hans{"forenklet han"}
+        Hant{"tradisjonell han"}
+        Hebr{"hebraisk"}
+        Hira{"hiragana"}
+        Ital{"gammelitalisk"}
+        Kana{"katakana"}
+        Khmr{"khmer"}
+        Knda{"kannada"}
+        Laoo{"laotisk"}
+        Latn{"latin"}
+        Limb{"limbu"}
+        Linb{"lineær B"}
+        Mlym{"malayalam"}
+        Mong{"mongolsk"}
+        Mymr{"myanmar"}
+        Ogam{"ogham"}
+        Orya{"oriya"}
+        Osma{"osmanya"}
+        Qaai{"nedarvet"}
+        Runr{"runisk"}
+        Shaw{"shavisk"}
+        Sinh{"sinhala"}
+        Syrc{"syrisk"}
+        Tagb{"tagbanwa"}
+        Tale{"tai le"}
+        Taml{"tamil"}
+        Telu{"telugu"}
+        Tglg{"tagalog"}
+        Thaa{"thaana"}
+        Thai{"thai"}
+        Tibt{"tibetansk"}
+        Ugar{"ugaritisk"}
+        Yiii{"yi"}
+        Zyyy{"generelt"}
+    }
+    Types{
+        calendar{
+            buddhist{"Buddhistisk kalender"}
+            chinese{"Kinesisk kalender"}
+            gregorian{"Gregoriansk kalender"}
+            hebrew{"Hebraisk kalender"}
+            islamic{"Islamsk kalender"}
+            islamic-civil{"Islamsk sivil kalender"}
+            japanese{"Japansk kalender"}
+        }
+        collation{
+            direct{"Direkte rekkefølge"}
+            phonebook{"Telefonkatalogrekkefølge"}
+            pinyin{"Pinyin-rekkefølge"}
+            stroke{"Strekrekkefølge"}
+            traditional{"Tradisjonell rekkefølge"}
+        }
+    }
+    Variants{
+        REVISED{"Revidert"}
+    }
+    Version{"1.43"}
+    calendar{
+        gregorian{
+            DateTimeElements:intvector{
+                2,
+                4,
+            }
+            DateTimePatterns{
+                "'kl. 'HH.mm.ss z",
+                "HH.mm.ss z",
+                "HH.mm.ss",
+                "HH.mm",
+                "EEEE d. MMMM yyyy",
+                "d. MMMM yyyy",
+                "d. MMM. yyyy",
+                "dd.MM.yy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "sø",
+                        "ma",
+                        "ti",
+                        "on",
+                        "to",
+                        "fr",
+                        "lø",
+                    }
+                    narrow{
+                        "S",
+                        "M",
+                        "T",
+                        "O",
+                        "T",
+                        "F",
+                        "L",
+                    }
+                    wide{
+                        "søndag",
+                        "mandag",
+                        "tirsdag",
+                        "onsdag",
+                        "torsdag",
+                        "fredag",
+                        "lørdag",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "f.Kr.",
+                    "e.Kr.",
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "jan",
+                        "feb",
+                        "mar",
+                        "apr",
+                        "mai",
+                        "jun",
+                        "jul",
+                        "aug",
+                        "sep",
+                        "okt",
+                        "nov",
+                        "des",
+                    }
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
+                    wide{
+                        "januar",
+                        "februar",
+                        "mars",
+                        "april",
+                        "mai",
+                        "juni",
+                        "juli",
+                        "august",
+                        "september",
+                        "oktober",
+                        "november",
+                        "desember",
+                    }
+                }
+            }
+        }
+    }
+    zoneStrings{
+        {
+            "Europe/Bucharest",
+            "Eastern European Standard Time",
+            "EET",
+            "Eastern European Daylight Time",
+            "EEST",
+            "Bucuresti",
+        }
+    }
+}
