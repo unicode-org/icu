@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/ReplaceableTest.java,v $
- * $Date: 2002/11/22 17:48:00 $
- * $Revision: 1.15 $
+ * $Date: 2002/12/11 02:09:08 $
+ * $Revision: 1.16 $
  *
  *******************************************************************************
  */
@@ -69,6 +69,11 @@ public class ReplaceableTest extends TestFmwk {
                 + original + " ) => " + tr.toString() + "; should be {" + shouldProduceStyles + "}!");
         } else {
             logln("OK: " + transliteratorName + " ( " + original + " ) => " + tr.toString());
+        }
+        
+        if (!tr.hasMetaData() || tr.chars.hasMetaData() 
+            || tr.styles.hasMetaData()) {
+            errln("Fail hasMetaData()");
         }
     }
     

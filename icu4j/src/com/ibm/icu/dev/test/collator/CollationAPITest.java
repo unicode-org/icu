@@ -64,11 +64,14 @@ public class CollationAPITest extends TestFmwk {
         logln("Use tertiary comparison level testing ....");
         sortk1 = col.getCollationKey(test1);
         sortk2 = col.getCollationKey(test2);
-        doAssert((sortk1.compareTo(sortk2)) > 0, "Result should be \"Abcda\" >>> \"abcda\"");
+        Object sortk3 = sortk2;
+        doAssert((sortk1.compareTo(sortk2)) > 0 
+                 && (sortk1.compareTo(sortk3)) > 0, "Result should be \"Abcda\" >>> \"abcda\"");
     
         CollationKey sortkNew;
         sortkNew = sortk1;
-        doAssert(!(sortk1.equals(sortk2)), "The sort keys should be different");
+        doAssert(!(sortk1.equals(sortk2)) && !(sortk1.equals(sortk3)), 
+                 "The sort keys should be different");
         doAssert((sortk1.hashCode() != sortk2.hashCode()), "sort key hashCode() failed");
         doAssert((sortk1.equals(sortkNew)), "The sort keys assignment failed");
         doAssert((sortk1.hashCode() == sortkNew.hashCode()), "sort key hashCode() failed");
@@ -76,6 +79,17 @@ public class CollationAPITest extends TestFmwk {
         col.setStrength(Collator.SECONDARY);
         doAssert(col.getCollationKey(test1).compareTo(col.getCollationKey(test2)) == 0, 
                                       "Result should be \"Abcda\" == \"abcda\"");
+        // check invaliad comparisons
+        Object fake = "fake";
+        try {
+            sortk1.compareTo(fake);
+            errln("Non-CollationKey comparison");
+        }
+        catch (Exception e) {
+        }
+        if (sortk1.equals(fake)) {
+            errln("Non-CollationKey comparison");
+        }
     }
     
     void doAssert(boolean conditions, String message) {
