@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/calendar/Attic/CalendarTest.java,v $ 
- * $Date: 2000/11/18 00:17:58 $ 
- * $Revision: 1.7 $
+ * $Date: 2000/11/21 06:58:06 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -77,10 +77,10 @@ public class CalendarTest extends TestFmwk {
         
         // Get a format to use for printing dates in the calendar system we're testing
         DateFormat format = DateFormat.getDateTimeInstance(cal, DateFormat.SHORT, -1, Locale.getDefault());
-        
-        // TODO Fix this to include the ERA ("G") again once ChineseDateFormat
-        // is implemented - Liu
-        final String pattern = "E, MM/dd/yyyy HH:mm:ss.S z";
+
+        final String pattern = (cal instanceof ChineseCalendar) ?
+            "E MMl/dd/y G HH:mm:ss.S z" :
+            "E, MM/dd/yyyy G HH:mm:ss.S z";
     
         ((SimpleDateFormat)format).applyPattern(pattern);
 

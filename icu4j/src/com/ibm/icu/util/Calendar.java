@@ -368,7 +368,7 @@ import com.ibm.text.SimpleDateFormat;
  * @see          GregorianCalendar
  * @see          TimeZone
  * @see          DateFormat
- * @version      $Revision: 1.11 $ $Date: 2000/11/18 01:07:18 $
+ * @version      $Revision: 1.12 $ $Date: 2000/11/21 06:55:09 $
  * @author Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu, Laura Werner
  * @since JDK1.1
  */
@@ -2174,6 +2174,17 @@ public abstract class Calendar implements Serializable, Cloneable {
     public DateFormat getDateTimeFormat(int dateStyle, int timeStyle, Locale loc) {
         return formatHelper(this, loc, dateStyle, timeStyle);
     }
+
+    /**
+     * Framework method to create a calendar-specific DateFormat object
+     * using the the given pattern.  This method is responsible for
+     * creating the calendar- specific DateFormat and DateFormatSymbols
+     * objects as needed.
+     */
+    protected DateFormat handleGetDateFormat(String pattern, Locale locale) {
+        DateFormatSymbols symbols = new DateFormatSymbols(this, locale);
+        return new SimpleDateFormat(pattern, symbols);
+    }
     
     static private DateFormat formatHelper(Calendar cal, Locale loc,
                                             int dateStyle, int timeStyle)
@@ -2181,17 +2192,10 @@ public abstract class Calendar implements Serializable, Cloneable {
         // See if there are any custom resources for this calendar
         // If not, just use the default DateFormat
         DateFormat result = null;
-        DateFormatSymbols symbols = null;
 
         ResourceBundle bundle = DateFormatSymbols.getDateFormatBundle(cal, loc);
 
         if (bundle != null) {
-            //if (cal instanceof com.ibm.util.Calendar) {
-            //    symbols = ((com.ibm.util.Calendar)cal).getDateFormatSymbols(loc);
-            //} else {
-            //    symbols = getDateFormatSymbols(null, bundle, loc);
-            //}
-            symbols = new DateFormatSymbols(cal, loc);
 
             try {
                 String[] patterns = bundle.getStringArray("DateTimePatterns");
@@ -2211,7 +2215,7 @@ public abstract class Calendar implements Serializable, Cloneable {
                 else {
                     throw new IllegalArgumentException("No date or time style specified");
                 }
-                result = new SimpleDateFormat(pattern, symbols);
+                result = cal.handleGetDateFormat(pattern, loc);
             } catch (MissingResourceException e) {
                 // No custom patterns
                 if (dateStyle == -1) {
@@ -2221,7 +2225,7 @@ public abstract class Calendar implements Serializable, Cloneable {
 	            } else {
 	                result = SimpleDateFormat.getDateTimeInstance(dateStyle, timeStyle, loc);
 	            }
-                //((java.text.SimpleDateFormat)result).setDateFormatSymbols(oldStyleSymbols(symbols, loc));
+                DateFormatSymbols symbols = new DateFormatSymbols(cal, loc);
                 ((SimpleDateFormat)result).setDateFormatSymbols(symbols); // aliu
             }
         } else {

@@ -3,11 +3,12 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/calendar/Attic/ChineseTest.java,v $
- * $Date: 2000/11/18 00:17:58 $
- * $Revision: 1.1 $
+ * $Date: 2000/11/21 06:58:06 $
+ * $Revision: 1.2 $
  */
 package com.ibm.test.calendar;
 import com.ibm.util.*;
+import com.ibm.text.*;
 import java.util.Date;
 import java.util.Locale;
 
@@ -188,5 +189,73 @@ public class ChineseTest extends CalendarTest {
         ChineseCalendar cal = new ChineseCalendar();
         cal.setLenient(true);
         doTestCases(tests, cal);
+    }
+
+    /**
+     * Test formatting.
+     *
+     * Leap months in this century:
+     * Wed May 23 2001 = Month 4(leap), Day 1, Year 18, Cycle 78
+     * Sun Mar 21 2004 = Month 2(leap), Day 1, Year 21, Cycle 78
+     * Thu Aug 24 2006 = Month 7(leap), Day 1, Year 23, Cycle 78
+     * Tue Jun 23 2009 = Month 5(leap), Day 1, Year 26, Cycle 78
+     * Mon May 21 2012 = Month 4(leap), Day 1, Year 29, Cycle 78
+     * Fri Oct 24 2014 = Month 9(leap), Day 1, Year 31, Cycle 78
+     * Sun Jul 23 2017 = Month 6(leap), Day 1, Year 34, Cycle 78
+     * Sat May 23 2020 = Month 4(leap), Day 1, Year 37, Cycle 78
+     * Wed Mar 22 2023 = Month 2(leap), Day 1, Year 40, Cycle 78
+     * Fri Jul 25 2025 = Month 6(leap), Day 1, Year 42, Cycle 78
+     * Fri Jun 23 2028 = Month 5(leap), Day 1, Year 45, Cycle 78
+     * Tue Apr 22 2031 = Month 3(leap), Day 1, Year 48, Cycle 78
+     * Thu Dec 22 2033 = Month 11(leap), Day 1, Year 50, Cycle 78
+     * Wed Jul 23 2036 = Month 6(leap), Day 1, Year 53, Cycle 78
+     * Wed Jun 22 2039 = Month 5(leap), Day 1, Year 56, Cycle 78
+     * Sat Mar 22 2042 = Month 2(leap), Day 1, Year 59, Cycle 78
+     * Tue Aug 23 2044 = Month 7(leap), Day 1, Year 01, Cycle 79
+     * Sun Jun 23 2047 = Month 5(leap), Day 1, Year 04, Cycle 79
+     * Thu Apr 21 2050 = Month 3(leap), Day 1, Year 07, Cycle 79
+     * Mon Sep 23 2052 = Month 8(leap), Day 1, Year 09, Cycle 79
+     * Sat Jul 24 2055 = Month 6(leap), Day 1, Year 12, Cycle 79
+     * Wed May 22 2058 = Month 4(leap), Day 1, Year 15, Cycle 79
+     * Wed Apr 20 2061 = Month 3(leap), Day 1, Year 18, Cycle 79
+     * Fri Aug 24 2063 = Month 7(leap), Day 1, Year 20, Cycle 79
+     * Wed Jun 23 2066 = Month 5(leap), Day 1, Year 23, Cycle 79
+     * Tue May 21 2069 = Month 4(leap), Day 1, Year 26, Cycle 79
+     * Thu Sep 24 2071 = Month 8(leap), Day 1, Year 28, Cycle 79
+     * Tue Jul 24 2074 = Month 6(leap), Day 1, Year 31, Cycle 79
+     * Sat May 22 2077 = Month 4(leap), Day 1, Year 34, Cycle 79
+     * Sat Apr 20 2080 = Month 3(leap), Day 1, Year 37, Cycle 79
+     * Mon Aug 24 2082 = Month 7(leap), Day 1, Year 39, Cycle 79
+     * Fri Jun 22 2085 = Month 5(leap), Day 1, Year 42, Cycle 79
+     * Fri May 21 2088 = Month 4(leap), Day 1, Year 45, Cycle 79
+     * Sun Sep 24 2090 = Month 8(leap), Day 1, Year 47, Cycle 79
+     * Thu Jul 23 2093 = Month 6(leap), Day 1, Year 50, Cycle 79
+     * Tue May 22 2096 = Month 4(leap), Day 1, Year 53, Cycle 79
+     * Sun Mar 22 2099 = Month 2(leap), Day 1, Year 56, Cycle 79
+     */
+    public void TestFormat() {
+        ChineseCalendar cal = new ChineseCalendar();
+        DateFormat fmt = cal.getDateTimeFormat(
+            DateFormat.DEFAULT, DateFormat.DEFAULT, Locale.getDefault());
+
+        Date[] DATA = {
+            new Date(2001-1900, Calendar.MAY, 22),
+            new Date(2001-1900, Calendar.MAY, 23)
+        };
+        
+        for (int i=0; i<DATA.length; ++i) {
+            String s = fmt.format(DATA[i]);
+            try {
+                Date e = fmt.parse(s);
+                if (e.equals(DATA[i])) {
+                    logln("Ok: " + DATA[i] + " -> " + s + " -> " + e);
+                } else {
+                    errln("FAIL: " + DATA[i] + " -> " + s + " -> " + e);
+                }
+            } catch (java.text.ParseException e) {
+                errln("Fail: " + s + " -> parse failure at " + e.getErrorOffset());
+                errln(e.toString());
+            }
+        }
     }
 }
