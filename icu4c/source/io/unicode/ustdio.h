@@ -103,17 +103,17 @@
 /**
  * When an end of file is encountered, this value can be returned.
  * @see u_fgetc
- * @draft
+ * @draft 3.0
  */
 #define U_EOF 0xFFFF
 
-/** Forward declaration of a Unicode-aware file @draft */
+/** Forward declaration of a Unicode-aware file @draft 3.0 */
 typedef struct UFILE UFILE;
 
 /**
  * Enum for which direction of stream a transliterator applies to.
  * @see u_fsettransliterator
- * @draft
+ * @draft 3.0
  */
 typedef enum { 
    U_READ = 1,
@@ -137,7 +137,7 @@ typedef enum {
  * read using the default codepage for <TT>locale</TT>, unless <TT>locale</TT>
  * is NULL, in which case the system default codepage will be used.
  * @return A new UFILE, or NULL if an error occurred.
- * @draft
+ * @draft 3.0
  */
 U_CAPI UFILE* U_EXPORT2
 u_fopen(const char    *filename,
@@ -156,7 +156,7 @@ u_fopen(const char    *filename,
  * read using the default codepage for <TT>locale</TT>, unless <TT>locale</TT>
  * is NULL, in which case the system default codepage will be used.
  * @return A new UFILE, or NULL if an error occurred.
- * @draft
+ * @draft 3.0
  */
 U_CAPI UFILE* U_EXPORT2
 u_finit(FILE        *f,
@@ -185,7 +185,7 @@ u_fstropen(UChar      *stringBuf,
 /**
  * Close a UFILE.
  * @param file The UFILE to close.
- * @draft
+ * @draft 3.0
  */
 U_CAPI void U_EXPORT2
 u_fclose(UFILE *file);
@@ -196,7 +196,7 @@ u_fclose(UFILE *file);
  * @return Returns TRUE after the first read operation that attempts to
  * read past the end of the file. It returns FALSE if the current position is
  * not end of file.
- * @draft
+ * @draft 3.0
 */
 U_CAPI UBool U_EXPORT2
 u_feof(UFILE  *f);
@@ -207,7 +207,7 @@ u_feof(UFILE  *f);
  * made in the output stream - for example if a different type of
  * output is desired.)  The underlying OS level file is also flushed.
  * @param file The UFILE to flush.
- * @draft
+ * @draft 3.0
  */
 U_CAPI void U_EXPORT2
 u_fflush(UFILE *file);
@@ -215,7 +215,7 @@ u_fflush(UFILE *file);
 /**
  * Rewind the file pointer to the beginning of the file.
  * @param file The UFILE to rewind.
- * @draft
+ * @draft 3.0
  */
 U_CAPI void
 u_frewind(UFILE *file);
@@ -224,7 +224,7 @@ u_frewind(UFILE *file);
  * Get the FILE* associated with a UFILE.
  * @param f The UFILE
  * @return A FILE*, owned by the UFILE.  The FILE <EM>must not</EM> be closed.
- * @draft
+ * @draft 3.0
  */
 U_CAPI FILE* U_EXPORT2
 u_fgetfile(UFILE *f);
@@ -237,7 +237,7 @@ u_fgetfile(UFILE *f);
  * or <TT>u_fopen</TT>.
  * @param file The UFILE to set.
  * @return The locale whose conventions are used to format and parse output.
- * @draft
+ * @draft 3.0
  */
 U_CAPI const char* U_EXPORT2
 u_fgetlocale(UFILE *file);
@@ -248,11 +248,11 @@ u_fgetlocale(UFILE *file);
  * and parse output.
  * @param file The UFILE to query.
  * @return NULL if successful, otherwise a negative number.
- * @draft
+ * @draft 3.0
  */
 U_CAPI int32_t U_EXPORT2
-u_fsetlocale(const char *locale,
-             UFILE      *file);
+u_fsetlocale(UFILE      *file,
+             const char *locale);
 
 #endif
 
@@ -263,7 +263,7 @@ u_fsetlocale(const char *locale,
  * @param file The UFILE to query.
  * @return The codepage in which data is written to and read from the UFILE,
  * or NULL if an error occurred.
- * @draft
+ * @draft 3.0
  */
 U_CAPI const char* U_EXPORT2
 u_fgetcodepage(UFILE *file);
@@ -281,7 +281,7 @@ u_fgetcodepage(UFILE *file);
  * @param file The UFILE to set.
  * @return 0 if successful, otherwise a negative number.
  * @see u_frewind
- * @draft
+ * @draft 3.0
  */
 U_CAPI int32_t U_EXPORT2
 u_fsetcodepage(const char   *codepage,
@@ -292,7 +292,7 @@ u_fsetcodepage(const char   *codepage,
  * Returns an alias to the converter being used for this file.
  * @param file The UFILE to set.
  * @return alias to the converter
- * @draft
+ * @draft 3.0
  */
 U_CAPI UConverter* U_EXPORT2 u_fgetConverter(UFILE *f);
 
@@ -304,7 +304,7 @@ U_CAPI UConverter* U_EXPORT2 u_fgetConverter(UFILE *f);
  * @param patternSpecification A pattern specifying how <TT>u_fprintf</TT> will
  * interpret the variable arguments received and format the data.
  * @return The number of Unicode characters written to <TT>f</TT>.
- * @draft
+ * @draft 3.0
  */
 U_CAPI int32_t U_EXPORT2
 u_fprintf(UFILE         *f,
@@ -321,7 +321,7 @@ u_fprintf(UFILE         *f,
  * @param ap The argument list to use.
  * @return The number of Unicode characters written to <TT>f</TT>.
  * @see u_fprintf
- * @draft
+ * @draft 3.0
  */
 U_CAPI int32_t U_EXPORT2
 u_vfprintf(UFILE        *f,
@@ -334,7 +334,7 @@ u_vfprintf(UFILE        *f,
  * @param patternSpecification A pattern specifying how <TT>u_fprintf</TT> will
  * interpret the variable arguments received and format the data.
  * @return The number of Unicode characters written to <TT>f</TT>.
- * @draft
+ * @draft 3.0
  */
 U_CAPI int32_t U_EXPORT2
 u_fprintf_u(UFILE       *f,
@@ -351,7 +351,7 @@ u_fprintf_u(UFILE       *f,
  * @param ap The argument list to use.
  * @return The number of Unicode characters written to <TT>f</TT>.
  * @see u_fprintf_u
- * @draft
+ * @draft 3.0
  */
 U_CAPI int32_t U_EXPORT2
 u_vfprintf_u(UFILE      *f,
@@ -365,7 +365,7 @@ u_vfprintf_u(UFILE      *f,
  * @param s The UChar* to write.
  * @param f The UFILE to which to write.
  * @return A non-negative number if successful, EOF otherwise.
- * @draft
+ * @draft 3.0
  */
 U_CAPI int32_t U_EXPORT2
 u_fputs(const UChar *s,
@@ -376,7 +376,7 @@ u_fputs(const UChar *s,
  * @param uc The UChar to write.
  * @param f The UFILE to which to write.
  * @return The character written if successful, EOF otherwise.
- * @draft
+ * @draft 3.0
  */
 U_CAPI int32_t U_EXPORT2
 u_fputc(UChar   uc,
@@ -391,7 +391,7 @@ u_fputc(UChar   uc,
  * @param f The UFILE to which to write.
  * @return The number of Unicode characters written.
  * @see u_fputs
- * @draft
+ * @draft 3.0
  */
 U_CAPI int32_t U_EXPORT2
 u_file_write(const UChar    *ustring, 
@@ -408,7 +408,7 @@ u_file_write(const UChar    *ustring,
  * interpret the variable arguments received and parse the data.
  * @return The number of items successfully converted and assigned, or EOF
  * if an error occurred.
- * @draft
+ * @draft 3.0
  */
 U_CAPI int32_t U_EXPORT2
 u_fscanf(UFILE      *f,
@@ -426,7 +426,7 @@ u_fscanf(UFILE      *f,
  * @return The number of items successfully converted and assigned, or EOF
  * if an error occurred.
  * @see u_fscanf
- * @draft
+ * @draft 3.0
  */
 U_CAPI int32_t U_EXPORT2
 u_vfscanf(UFILE         *f,
@@ -440,7 +440,7 @@ u_vfscanf(UFILE         *f,
  * interpret the variable arguments received and parse the data.
  * @return The number of items successfully converted and assigned, or EOF
  * if an error occurred.
- * @draft
+ * @draft 3.0
  */
 U_CAPI int32_t U_EXPORT2
 u_fscanf_u(UFILE        *f,
@@ -458,7 +458,7 @@ u_fscanf_u(UFILE        *f,
  * @return The number of items successfully converted and assigned, or EOF
  * if an error occurred.
  * @see u_fscanf_u
- * @draft
+ * @draft 3.0
  */
 U_CAPI int32_t U_EXPORT2
 u_vfscanf_u(UFILE       *f,
@@ -475,7 +475,7 @@ u_vfscanf_u(UFILE       *f,
  * stored successively in <TT>s</TT> until a newline or EOF is
  * reached. A null character (U+0000) will be appended to <TT>s</TT>.
  * @return A pointer to <TT>s</TT>, or NULL if no characters were available.
- * @draft
+ * @draft 3.0
  */
 U_CAPI UChar* U_EXPORT2
 u_fgets(UChar  *s,
@@ -486,7 +486,7 @@ u_fgets(UChar  *s,
  * Read a UChar from a UFILE.
  * @param f The UFILE from which to read.
  * @return The UChar value read, or U+FFFF if no character was available.
- * @draft
+ * @draft 3.0
  */
 U_CAPI UChar U_EXPORT2
 u_fgetc(UFILE   *f);
@@ -499,7 +499,7 @@ u_fgetc(UFILE   *f);
  * available, or U+FFFFFFFF if an ill-formed character was
  * encountered.
  * @see u_unescape()
- * @draft
+ * @draft 3.0
  */
 U_CAPI UChar32 U_EXPORT2
 u_fgetcx(UFILE  *f);
@@ -511,7 +511,7 @@ u_fgetcx(UFILE  *f);
  * @param c The UChar to put back on the stream.
  * @param f The UFILE to receive <TT>c</TT>.
  * @return The UChar32 value put back if successful, U_EOF otherwise.
- * @draft
+ * @draft 3.0
  */
 U_CAPI UChar32 U_EXPORT2
 u_fungetc(UChar32   c,
@@ -525,7 +525,7 @@ u_fungetc(UChar32   c,
  * @param count The number of Unicode characters to read.
  * @param f The UFILE from which to read.
  * @return The number of Unicode characters read.
- * @draft
+ * @draft 3.0
  */
 U_CAPI int32_t U_EXPORT2
 u_file_read(UChar        *chars, 
@@ -549,7 +549,7 @@ u_file_read(UChar        *chars,
  * caller. If U_READWRITE is specified, only the WRITE transliterator
  * is returned. In most cases, the caller should call utrans_close()
  * on the result of this function.
- * @draft
+ * @draft 3.0
  */
 U_CAPI UTransliterator* U_EXPORT2
 u_fsettransliterator(UFILE *file, UFileDirection direction,
@@ -571,7 +571,7 @@ u_fsettransliterator(UFILE *file, UFileDirection direction,
  * interpret the variable arguments received and format the data.
  * @return The number of Unicode code units written to <TT>buffer</TT>. This
  * does not include the terminating null character.
- * @draft
+ * @draft 3.0
  */
 U_CAPI int32_t U_EXPORT2
 u_sprintf(UChar       *buffer,
@@ -594,7 +594,7 @@ u_sprintf(UChar       *buffer,
  * interpret the variable arguments received and format the data.
  * @return The number of Unicode code units written to <TT>buffer</TT>. This
  * does not include the terminating null character.
- * @draft
+ * @draft 3.0
  */
 U_CAPI int32_t U_EXPORT2
 u_snprintf(UChar      *buffer,
@@ -615,7 +615,7 @@ u_snprintf(UChar      *buffer,
  * @param ap The argument list to use.
  * @return The number of Unicode characters written to <TT>buffer</TT>.
  * @see u_sprintf
- * @draft
+ * @draft 3.0
  */
 U_CAPI int32_t U_EXPORT2
 u_vsprintf(UChar      *buffer,
@@ -641,7 +641,7 @@ u_vsprintf(UChar      *buffer,
  * @param ap The argument list to use.
  * @return The number of Unicode characters written to <TT>buffer</TT>.
  * @see u_sprintf
- * @draft
+ * @draft 3.0
  */
 U_CAPI int32_t U_EXPORT2
 u_vsnprintf(UChar     *buffer,
@@ -658,7 +658,7 @@ u_vsnprintf(UChar     *buffer,
  * @param patternSpecification A pattern specifying how <TT>u_sprintf</TT> will
  * interpret the variable arguments received and format the data.
  * @return The number of Unicode characters written to <TT>buffer</TT>.
- * @draft
+ * @draft 3.0
  */
 U_CAPI int32_t U_EXPORT2
 u_sprintf_u(UChar      *buffer,
@@ -680,7 +680,7 @@ u_sprintf_u(UChar      *buffer,
  * @param patternSpecification A pattern specifying how <TT>u_sprintf</TT> will
  * interpret the variable arguments received and format the data.
  * @return The number of Unicode characters written to <TT>buffer</TT>.
- * @draft
+ * @draft 3.0
  */
 U_CAPI int32_t U_EXPORT2
 u_snprintf_u(UChar     *buffer,
@@ -702,7 +702,7 @@ u_snprintf_u(UChar     *buffer,
  * @param ap The argument list to use.
  * @return The number of Unicode characters written to <TT>f</TT>.
  * @see u_sprintf_u
- * @draft
+ * @draft 3.0
  */
 U_CAPI int32_t U_EXPORT2
 u_vsprintf_u(UChar     *buffer,
@@ -727,7 +727,7 @@ u_vsprintf_u(UChar     *buffer,
  * @param ap The argument list to use.
  * @return The number of Unicode characters written to <TT>f</TT>.
  * @see u_sprintf_u
- * @draft
+ * @draft 3.0
  */
 U_CAPI int32_t U_EXPORT2
 u_vsnprintf_u(UChar *buffer,
@@ -747,7 +747,7 @@ u_vsnprintf_u(UChar *buffer,
  * interpret the variable arguments received and parse the data.
  * @return The number of items successfully converted and assigned, or EOF
  * if an error occurred.
- * @draft
+ * @draft 3.0
  */
 U_CAPI int32_t U_EXPORT2
 u_sscanf(const UChar   *buffer,
@@ -768,7 +768,7 @@ u_sscanf(const UChar   *buffer,
  * @return The number of items successfully converted and assigned, or EOF
  * if an error occurred.
  * @see u_sscanf
- * @draft
+ * @draft 3.0
  */
 U_CAPI int32_t U_EXPORT2
 u_vsscanf(const UChar  *buffer,
@@ -785,7 +785,7 @@ u_vsscanf(const UChar  *buffer,
  * interpret the variable arguments received and parse the data.
  * @return The number of items successfully converted and assigned, or EOF
  * if an error occurred.
- * @draft
+ * @draft 3.0
  */
 U_CAPI int32_t U_EXPORT2
 u_sscanf_u(const UChar  *buffer,
@@ -806,7 +806,7 @@ u_sscanf_u(const UChar  *buffer,
  * @return The number of items successfully converted and assigned, or EOF
  * if an error occurred.
  * @see u_sscanf_u
- * @draft
+ * @draft 3.0
  */
 U_CAPI int32_t U_EXPORT2
 u_vsscanf_u(const UChar *buffer,
