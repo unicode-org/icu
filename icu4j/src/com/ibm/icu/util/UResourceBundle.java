@@ -434,9 +434,6 @@ public abstract class UResourceBundle extends ResourceBundle{
         if (b == null) {
             b = ICUResourceBundle.createBundle(baseName, localeName, root);
             if(b==null){
-                // if we haven't already tried the Java tree, try it here and
-                // throw an error if there is one...
-                
                 int i = localeName.lastIndexOf('_');
                 if (i != -1) {
                     b = instantiateICUResource(baseName, localeName.substring(0, i), root);
