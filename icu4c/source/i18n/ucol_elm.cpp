@@ -405,7 +405,13 @@ uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *elemen
 
     /* end of recursion */
     if(element->cSize == 1) {
-      return element->mapCE;
+      if(isContraction(existingCE)) {
+        uprv_cnttab_changeContraction(contractions, existingCE, 0, element->mapCE, forward, status);
+        uprv_cnttab_changeContraction(contractions, existingCE, 0xFFFF, element->mapCE, forward, status);
+        return existingCE;
+      } else {
+        return element->mapCE; /*can't do just that. existingCe might be a contraction, meaning that we need to do another step */
+      }
     }
 
     /* this recursion currently feeds on the only element we have... We will have to copy it in order to accomodate */

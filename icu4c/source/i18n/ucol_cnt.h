@@ -71,5 +71,6 @@ uint32_t uprv_cnttab_changeLastCE(CntTable *table, uint32_t element, uint32_t va
 uint32_t uprv_cnttab_findCP(CntTable *table, uint32_t element, UChar codePoint, UBool forward, UErrorCode *status);
 
 uint32_t uprv_cnttab_getCE(CntTable *table, uint32_t element, int32_t position, UBool forward, UErrorCode *status);
+uint32_t uprv_cnttab_changeContraction(CntTable *table, uint32_t element, UChar codePoint, uint32_t newCE, UBool forward, UErrorCode *status);
 
 #endif

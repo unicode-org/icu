@@ -955,6 +955,7 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
             if (CE == UCOL_NOT_FOUND && firstFound != UCOL_NOT_FOUND) {
               CE = firstFound;
               firstFound = UCOL_NOT_FOUND;
+              source->pos--; /* spit out yet another char, which led us in this contraction */
             }
           }
           break;
@@ -986,6 +987,7 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
           if(firstFound != UCOL_NOT_FOUND) {
             CE = firstFound;
             firstFound = UCOL_NOT_FOUND;
+            source->pos--; /* spit out yet another char, which led us in this contraction */
             break;
           }
         } else if(isContraction(CE)) { /* fix for the bug. Other places need to be checked */
