@@ -11,8 +11,8 @@
 #include "LETypes.h"
 #include "MorphTables.h"
 #include "SubtableProcessor.h"
-#include "NonContextualGlyphSubstitution.h"
-#include "NonContextualGlyphSubstitutionProcessor.h"
+#include "NonContextualGlyphSubst.h"
+#include "NonContextualGlyphSubstProc.h"
 
 class TrimmedArrayProcessor : public NonContextualGlyphSubstitutionProcessor
 {

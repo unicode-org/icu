@@ -12,7 +12,7 @@
 #include "GlyphDefinitionTables.h"
 #include "GlyphPositionAdjustments.h"
 #include "GlyphSubstitutionTables.h"
-#include "GlyphSubstitutionLookupProcessor.h"
+#include "GlyphSubstLookupProc.h"
 #include "ScriptAndLanguage.h"
 #include "LESwaps.h"
 

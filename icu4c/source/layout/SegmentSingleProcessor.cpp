@@ -8,8 +8,8 @@
 #include "LETypes.h"
 #include "MorphTables.h"
 #include "SubtableProcessor.h"
-#include "NonContextualGlyphSubstitution.h"
-#include "NonContextualGlyphSubstitutionProcessor.h"
+#include "NonContextualGlyphSubst.h"
+#include "NonContextualGlyphSubstProc.h"
 #include "SegmentSingleProcessor.h"
 #include "LESwaps.h"
 
