@@ -1284,3 +1284,27 @@ u_growBufferFromStatic(void *context,
     *pBuffer=newBuffer;
     return (UBool)(newBuffer!=NULL);
 }
+
+/* NUL-termination of strings ----------------------------------------------- */
+
+U_CAPI int32_t U_EXPORT2
+u_terminateUChars(UChar *dest, int32_t destCapacity, int32_t length, UErrorCode *pErrorCode) {
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return length;
+    }
+
+    /* not a public function, so no complete argument checking */
+
+    if(length<destCapacity) {
+        /* NUL-terminate the string, the NUL fits */
+        dest[length]=0;
+    } else if(length==destCapacity) {
+        /* unable to NUL-terminate, but the string itself fit - set a warning code */
+        *pErrorCode=U_STRING_NOT_TERMINATED_WARNING;
+    } else /* length>destCapacity */ {
+        /* even the string itself did not fit - set an error code */
+        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
+    }
+
+    return length;
+}

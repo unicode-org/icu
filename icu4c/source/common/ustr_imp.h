@@ -116,7 +116,7 @@ u_internalGetCombiningClass(UChar32 c);
  * Remember to use the u_releaseDefaultConverter when you are done.
  * @internal
  */
-U_CAPI UConverter*
+U_CAPI UConverter* U_EXPORT2
 u_getDefaultConverter(UErrorCode *status);
 
 
@@ -124,7 +124,23 @@ u_getDefaultConverter(UErrorCode *status);
  * Release the default converter to the converter cache.
  * @internal
  */
-U_CAPI void
+U_CAPI void U_EXPORT2
 u_releaseDefaultConverter(UConverter *converter);
+
+/**
+ * NUL-terminate a UChar * string if possible.
+ * If length  < destCapacity then NUL-terminate.
+ * If length == destCapacity then do not terminate but set U_STRING_NOT_TERMINATED_WARNING.
+ * If length  > destCapacity then do not terminate but set U_BUFFER_OVERFLOW_ERROR.
+ *
+ * @param dest Destination buffer, can be NULL if destCapacity==0.
+ * @param destCapacity Number of UChars available at dest.
+ * @param length Number of UChars that were (to be) written to dest.
+ * @param pErrorCode ICU error code.
+ * @return length
+ * @internal
+ */
+U_CAPI int32_t U_EXPORT2
+u_terminateUChars(UChar *dest, int32_t destCapacity, int32_t length, UErrorCode *pErrorCode);
 
 #endif
