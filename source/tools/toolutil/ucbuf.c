@@ -92,37 +92,37 @@ ucbuf_autodetect_fs(FileStream* in, const char** cp, UConverter** conv, int32_t*
     return TRUE; 
 }
 static UBool ucbuf_isCPKnown(const char* cp){
-    if(ucnv_compareNames("UTF-8",cp)){
+    if(ucnv_compareNames("UTF-8",cp)==0){
         return TRUE;
     }
-    if(ucnv_compareNames("UTF-16BE",cp)){
+    if(ucnv_compareNames("UTF-16BE",cp)==0){
         return TRUE;
     }
-    if(ucnv_compareNames("UTF-16LE",cp)){
+    if(ucnv_compareNames("UTF-16LE",cp)==0){
         return TRUE;
     }
-    if(ucnv_compareNames("UTF-16",cp)){
+    if(ucnv_compareNames("UTF-16",cp)==0){
         return TRUE;
     }
-    if(ucnv_compareNames("UTF-32",cp)){
+    if(ucnv_compareNames("UTF-32",cp)==0){
         return TRUE;
     }
-    if(ucnv_compareNames("UTF-32BE",cp)){
+    if(ucnv_compareNames("UTF-32BE",cp)==0){
         return TRUE;
     }
-    if(ucnv_compareNames("UTF-32LE",cp)){
+    if(ucnv_compareNames("UTF-32LE",cp)==0){
         return TRUE;
     }
-    if(ucnv_compareNames("UTF-32BE",cp)){
+    if(ucnv_compareNames("UTF-32BE",cp)==0){
         return TRUE;
     }
-    if(ucnv_compareNames("SCSU",cp)){
+    if(ucnv_compareNames("SCSU",cp)==0){
         return TRUE;
     }
-    if(ucnv_compareNames("BOCU",cp)){
+    if(ucnv_compareNames("BOCU",cp)==0){
         return TRUE;
     }
-    if(ucnv_compareNames("UTF-7",cp)){
+    if(ucnv_compareNames("UTF-7",cp)==0){
         return TRUE;
     }
     return FALSE;
