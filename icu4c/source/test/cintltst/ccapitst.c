@@ -1784,7 +1784,7 @@ static void TestConvertSafeClone()
         }
     }
 
-    log_info("ucnv_safeClone(): sizeof(UConverter)=%lu  max preflighted clone size=%d (%s)  U_CNV_SAFECLONE_BUFFERSIZE=%d\n",
+    log_verbose("ucnv_safeClone(): sizeof(UConverter)=%lu  max preflighted clone size=%d (%s)  U_CNV_SAFECLONE_BUFFERSIZE=%d\n",
         sizeof(UConverter), maxBufferSize, maxName, (int)U_CNV_SAFECLONE_BUFFERSIZE);
 }
 
