@@ -276,67 +276,53 @@ unum_getAttribute(const UNumberFormat*          fmt,
   switch(attr) {
   case UNUM_PARSE_INT_ONLY:
     return ((NumberFormat*)fmt)->isParseIntegerOnly();
-    break;
     
   case UNUM_GROUPING_USED:
     return ((NumberFormat*)fmt)->isGroupingUsed();
-    break;
     
   case UNUM_DECIMAL_ALWAYS_SHOWN:
     return ((DecimalFormat*)fmt)->isDecimalSeparatorAlwaysShown();    
-    break;
     
   case UNUM_MAX_INTEGER_DIGITS:
     return ((NumberFormat*)fmt)->getMaximumIntegerDigits();
-    break;
     
   case UNUM_MIN_INTEGER_DIGITS:
     return ((NumberFormat*)fmt)->getMinimumIntegerDigits();
-    break;
     
   case UNUM_INTEGER_DIGITS:
     // TBD: what should this return?
     return ((NumberFormat*)fmt)->getMinimumIntegerDigits();
-    break;
     
   case UNUM_MAX_FRACTION_DIGITS:
     return ((NumberFormat*)fmt)->getMaximumFractionDigits();
-    break;
     
   case UNUM_MIN_FRACTION_DIGITS:
     return ((NumberFormat*)fmt)->getMinimumFractionDigits();
-    break;
     
   case UNUM_FRACTION_DIGITS:
     // TBD: what should this return?
     return ((NumberFormat*)fmt)->getMinimumFractionDigits();
-    break;
 
   case UNUM_MULTIPLIER:
     return ((DecimalFormat*)fmt)->getMultiplier();    
-    break;
     
   case UNUM_GROUPING_SIZE:
     return ((DecimalFormat*)fmt)->getGroupingSize();    
-    break;
 
   case UNUM_ROUNDING_MODE:
     return ((DecimalFormat*)fmt)->getRoundingMode();
-    break;
 
   case UNUM_FORMAT_WIDTH:
     return ((DecimalFormat*)fmt)->getFormatWidth();
-    break;
 
   /** The position at which padding will take place. */
   case UNUM_PADDING_POSITION:
     return ((DecimalFormat*)fmt)->getPadPosition();
-    break;
 
   default:
-    return -1;
     break;
   }
+  return -1;
 }
 
 U_CAPI void
@@ -411,14 +397,10 @@ U_CAPI double
 unum_getDoubleAttribute(const UNumberFormat*          fmt,
           UNumberFormatAttribute  attr)
 {
-  switch(attr) {
-  case UNUM_ROUNDING_INCREMENT:
+  if(attr==UNUM_ROUNDING_INCREMENT) {
     return ((DecimalFormat*)fmt)->getRoundingIncrement();
-    break;
-
-  default:
+  } else {
     return -1.0;
-    break;
   }
 }
 

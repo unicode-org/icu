@@ -215,7 +215,11 @@ ucol_getNormalization(const UCollator* coll)
 
   case Normalizer::DECOMP_COMPAT:
     return UCOL_DECOMP_COMPAT;
+
+  default:
+    break;
   }
+  return UCOL_NO_NORMALIZATION;
 }
 
 U_CAPI void

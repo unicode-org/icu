@@ -180,20 +180,17 @@ ucal_getAttribute(    const    UCalendar*              cal,
   switch(attr) {
   case UCAL_LENIENT:
     return ((Calendar*)cal)->isLenient();
-    break;
     
   case UCAL_FIRST_DAY_OF_WEEK:
     return ((Calendar*)cal)->getFirstDayOfWeek();
-    break;
       
   case UCAL_MINIMAL_DAYS_IN_FIRST_WEEK:
     return ((Calendar*)cal)->getMinimalDaysInFirstWeek();
-    break;
 
   default:
-    return -1;
     break;
   }
+  return -1;
 }
 
 U_CAPI void
@@ -349,37 +346,33 @@ ucal_getLimit(    const    UCalendar*              cal,
             UCalendarLimitType      type,
             UErrorCode        *status)
 {
-  if(U_FAILURE(*status)) return -1;
+  if(status==0 || U_FAILURE(*status)) {
+    return -1;
+  }
   
   switch(type) {
   case UCAL_MINIMUM:
     return ((Calendar*)cal)->getMinimum((Calendar::EDateFields)field);
-    break;
 
   case UCAL_MAXIMUM:
     return ((Calendar*)cal)->getMaximum((Calendar::EDateFields)field);
-    break;
 
   case UCAL_GREATEST_MINIMUM:
     return ((Calendar*)cal)->getGreatestMinimum((Calendar::EDateFields)field);
-    break;
 
   case UCAL_LEAST_MAXIMUM:
     return ((Calendar*)cal)->getLeastMaximum((Calendar::EDateFields)field);
-    break;
 
   case UCAL_ACTUAL_MINIMUM:
     return ((Calendar*)cal)->getActualMinimum((Calendar::EDateFields)field,
                           *status);
-    break;
 
   case UCAL_ACTUAL_MAXIMUM:
     return ((Calendar*)cal)->getActualMaximum((Calendar::EDateFields)field,
                           *status);
-    break;
 
   default:
-    return -1;
     break;
   }
+  return -1;
 }
