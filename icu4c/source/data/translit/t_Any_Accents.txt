@@ -1,12 +1,12 @@
 ﻿ // -*- Coding: utf-8; -*-
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2001, International Business Machines
+// Copyright (c) 1999-2004, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
-// Source: ../../text/resources/Transliterator_Any_Accents.txt
-// Date: Fri Feb  8 15:53:54 2002
+// Source: C:\work\DevICU4J\icu4j\src\com\ibm\icu\impl\data/Transliterator_Any_Accents.txt
+// Date: Fri Mar  1 16:15:45 2002
 //--------------------------------------------------------------------
 
 // Any_Accents
@@ -14,12 +14,7 @@
 t_Any_Accents {
   Rule {
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2001, International Business Machines
-// Corporation and others. All Rights Reserved.
 //--------------------------------------------------------------------
-// $Source: /xsrl/Nsvn/icu/icu/source/data/translit/Attic/t_Any_Accents.txt,v $
-// $Date: 2002/02/09 00:27:08 $
-// $Revision: 1.6 $
 //--------------------------------------------------------------------
 
 ":: NFD (NFC) ;"
