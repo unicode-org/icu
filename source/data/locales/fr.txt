@@ -46,7 +46,7 @@ fr {
         DK { "Danemark" }
         DM { "Dominique" }
         DO { "R\u00e9publique Dominicaine" }
-        TP { "Timor Oriental" }
+        TL { "Timor Oriental" }
         EC { "Equateur" }
         EG { "Egypte" }
         GQ { "Guin\u00e9e Equatoriale" }

@@ -651,7 +651,7 @@ mt {
         //TM { "Turkmenistan" } 	// Turkmenistan
         TN { "Tuneż" } 	// Tunisia
         //TO { "Tonga" } 	// Tonga
-        TP { "Timor tal-Lvant" } 	// East Timor
+        TL { "Timor tal-Lvant" } 	// East Timor
         TR { "Turkija" } 	// Turkey
         TT { "Trinidad u Tobago" } 	// Trinidad and Tobago
         TW { "Tajwan" } 	// Taiwan

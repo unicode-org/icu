@@ -821,7 +821,7 @@ zh {
         DJ { "\u5409\u5e03\u63d0" }
         DM { "\u591a\u7c73\u5c3c\u52a0\u8054\u90a6" }
         DO { "\u591a\u7c73\u5c3c\u52a0\u5171\u548c\u56fd" }
-        TP { "\u4e1c\u5e1d\u6c76" }
+        TL { "\u4e1c\u5e1d\u6c76" }
         EC { "\u5384\u74dc\u591a\u5c14" }
         EG { "\u57c3\u53ca" }
         SV { "\u8428\u5c14\u74e6\u591a" }
