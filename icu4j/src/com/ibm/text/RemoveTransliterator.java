@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/RemoveTransliterator.java,v $ 
- * $Date: 2001/11/17 20:45:35 $ 
- * $Revision: 1.4 $
+ * $Date: 2001/11/29 17:54:31 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -20,9 +20,21 @@ import java.util.*;
 class RemoveTransliterator extends Transliterator {
 
     /**
-     * Package accessible ID for this transliterator.
+     * ID for this transliterator.
      */
-    static String _ID = "Any-Remove";
+    private static String _ID = "Any-Remove";
+
+    /**
+     * System registration hook.
+     */
+    static void register() {
+        Transliterator.registerFactory(_ID, new Transliterator.Factory() {
+            public Transliterator getInstance(String ID) {
+                return new RemoveTransliterator();
+            }
+        });
+        Transliterator.registerSpecialInverse("Remove", "Null", false);
+    }
 
     /**
      * Constructs a transliterator.

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Transliterator.java,v $
- * $Date: 2001/11/29 17:40:44 $
- * $Revision: 1.68 $
+ * $Date: 2001/11/29 17:54:31 $
+ * $Revision: 1.69 $
  *
  *****************************************************************************************
  */
@@ -242,7 +242,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.68 $ $Date: 2001/11/29 17:40:44 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.69 $ $Date: 2001/11/29 17:54:31 $
  */
 public abstract class Transliterator {
     /**
@@ -1996,8 +1996,7 @@ public abstract class Transliterator {
         // Register non-rule-based transliterators
         registerClass(NullTransliterator._ID,
                       NullTransliterator.class, null);
-        registerClass(RemoveTransliterator._ID,
-                      RemoveTransliterator.class, null);
+        RemoveTransliterator.register();
         EscapeTransliterator.register();
         UnescapeTransliterator.register();
         LowercaseTransliterator.register();
