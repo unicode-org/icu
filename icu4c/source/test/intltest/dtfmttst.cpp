@@ -302,7 +302,7 @@ void DateFormatTest::TestFieldPosition() {
         "", "1997", "August", "13", "", "", "34", "12", "",
         "Wednesday", "", "", "", "", "PM", "2", "", "PDT", "", "", "", "", "", "",
 
-        "", "1997", "ao\u00FBt", "13", "", "14", "34", "", "",
+        "", "1997", "ao\\u00FBt", "13", "", "14", "34", "", "",
         "mercredi", "", "", "", "", "", "", "", "GMT-07:00", "", "", "", "", "", "",
 
         "AD", "1997", "8", "13", "14", "14", "34", "12", "5",
@@ -334,7 +334,7 @@ void DateFormatTest::TestFieldPosition() {
             UnicodeString field;
             buf.extractBetween(pos.getBeginIndex(), pos.getEndIndex(), field);
             assertEquals((UnicodeString)"field #" + i + " " + DATEFORMAT_FIELD_NAMES[i],
-                         EXPECTED[exp], field);
+                         ctou(EXPECTED[exp]), field);
         }
     }
 
