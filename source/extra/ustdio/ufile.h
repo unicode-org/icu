@@ -87,13 +87,22 @@ void
 ufile_fill_uchar_buffer(UFILE *f);
 
 /**
- * Get one character and detect whether the end of file has been reached.
+ * Get one code unit and detect whether the end of file has been reached.
  * @param f The UFILE containing the characters.
  * @param ch The read in character
  * @return TRUE if the character is valid, or FALSE when EOF has been detected
  */
 U_CFUNC UBool U_EXPORT2
 ufile_getch(UFILE *f, UChar *ch);
+
+/**
+ * Get one character and detect whether the end of file has been reached.
+ * @param f The UFILE containing the characters.
+ * @param ch The read in character
+ * @return TRUE if the character is valid, or FALSE when EOF has been detected
+ */
+U_CFUNC UBool U_EXPORT2
+ufile_getch32(UFILE *f, UChar *ch);
 
 /**
  * Close out the transliterator and flush any data therein.

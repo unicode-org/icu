@@ -571,38 +571,47 @@ u_fgetc(UFILE        *f)
     return ch;
 }
 
-/* Read a UChar from a UFILE and process escape sequences */
-U_CAPI UChar32 U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
-u_fgetcx(UFILE        *f)
+U_CFUNC UBool U_EXPORT2
+ufile_getch32(UFILE *f, UChar32 *c32)
 {
-    UChar32 c32;
+    UBool isValidChar = FALSE;
     u_localized_string *str;
+
+    *c32 = U_EOF;
 
     /* Fill the buffer if it is empty */
     str = &f->str;
-    if (str->fPos + 1 >= str->fLimit) {
+    if (f && str->fPos + 1 >= str->fLimit) {
         ufile_fill_uchar_buffer(f);
     }
 
     /* Get the next character in the buffer */
     if (str->fPos < str->fLimit) {
-        c32 = *(str->fPos)++;
-    }
-    else {
-        c32 = U_EOF;
-    }
-
-    if (U_IS_LEAD(c32)) {
-        if (str->fPos < str->fLimit) {
-            UChar c16 = *(str->fPos)++;
-            c32 = U16_GET_SUPPLEMENTARY(c32, c16);
+        *c32 = *(str->fPos)++;
+        if (U_IS_LEAD(*c32)) {
+            if (str->fPos < str->fLimit) {
+                UChar c16 = *(str->fPos)++;
+                *c32 = U16_GET_SUPPLEMENTARY(*c32, c16);
+                isValidChar = TRUE;
+            }
+            else {
+                *c32 = U_EOF;
+            }
         }
         else {
-            c32 = U_EOF;
+            isValidChar = TRUE;
         }
     }
 
-    return c32;
+    return isValidChar;
+}
+
+U_CAPI UChar32 U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
+u_fgetcx(UFILE        *f)
+{
+    UChar32 ch;
+    ufile_getch32(f, &ch);
+    return ch;
 }
 
 U_CAPI UChar32 U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
