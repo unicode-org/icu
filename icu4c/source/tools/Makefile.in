@@ -200,11 +200,22 @@ build-testdlls: $(TESTDATADLL) $(BASEDATADLL) $(BASETESTDATADLL)
 %_brk.c: %.brk
 	(cd genccode ; ./genccode ../$< )
 
+## Note: this generates a dummy C++ file to cause the HPUX CC linker
+## to load exception handling (when requested..) 
+
+hpux_junk_obj.cpp:
+	echo "void to_emit_cxx_stuff_in_the_linker(){}" >> hpux_junk_obj.cpp
+
+hpux_junk_obj.o: hpux_junk_obj.cpp
+	$(COMPILE.cc) -o $@ $<
 
 # strip is optional 
 #	-$(STRIP) $@
 
-$(COMMONDLL): $(OBJDATAFILES)
+
+# HPUX_JUNK_OBJ is usually unset except by mh-hpux-cc
+
+$(COMMONDLL): $(OBJDATAFILES) $(HPUX_JUNK_OBJ)
 	$(SHLIB.c) -o $@ $^
 	-ls -l $@
 
