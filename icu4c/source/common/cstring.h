@@ -51,10 +51,13 @@
 #define uprv_strtol(str, end, base) strtol(str, end, base)
 #ifdef WIN32
 #   define uprv_stricmp(str1, str2) _stricmp(str1, str2)
+#   define uprv_strnicmp(str1, str2, n) _strnicmp(str1, str2, n)
 #elif defined(POSIX)
 #   define uprv_stricmp(str1, str2) strcasecmp(str1, str2)
+#   define uprv_strnicmp(str1, str2, n) strncasecmp(str1, str2, n)
 #else
 #   define uprv_stricmp(str1, str2) T_CString_stricmp(str1, str2)
+#   define uprv_strnicmp(str1, str2, n) T_CString_strnicmp(str1, str2, n)
 #endif
 U_CAPI char *uprv_strdup(const char *src);
 
@@ -91,5 +94,8 @@ T_CString_stringToInteger(const char *integerString, int32_t radix);
 
 U_CAPI int U_EXPORT2
 T_CString_stricmp(const char *str1, const char *str2);
+
+U_CAPI int U_EXPORT2
+T_CString_strnicmp(const char *str1, const char *str2, uint32_t n);
 
 #endif /* ! CSTRING_H */
