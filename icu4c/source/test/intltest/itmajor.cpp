@@ -136,7 +136,7 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
                 }
 #endif
                 break;
-        case 11: name = "idna";
+        case 10: name = "idna";
             if(exec){
                 logln("TestSuite IDNA----"); logln();
                 TestIDNA test;
