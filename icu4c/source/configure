@@ -3775,7 +3775,7 @@ case "${host}" in
 		  tools/makeconv/makeconv tools/genrb/genrb \
 		  tools/rbdump/read tools/genccode/genccode \
 		  tools/gencmn/gencmn tools/gencmn/decmn \
-		  tools/gencnval/gencnval \
+		  tools/gencnval/gencnval tools/gennorm/gennorm \
 		  tools/gennames/gennames tools/gentest/gentest \
           tools/pkgdata/pkgdata tools/genprops/genprops
 		do

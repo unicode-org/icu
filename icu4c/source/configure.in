@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.112 2001/06/22 17:04:37 yves Exp $
+dnl $Id: configure.in,v 1.113 2001/07/23 18:34:35 grhoten Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -694,7 +694,7 @@ case "${host}" in
 		  tools/makeconv/makeconv tools/genrb/genrb \
 		  tools/rbdump/read tools/genccode/genccode \
 		  tools/gencmn/gencmn tools/gencmn/decmn \
-		  tools/gencnval/gencnval \
+		  tools/gencnval/gencnval tools/gennorm/gennorm \
 		  tools/gennames/gennames tools/gentest/gentest \
           tools/pkgdata/pkgdata tools/genprops/genprops
 		do
