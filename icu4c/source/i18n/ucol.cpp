@@ -2481,46 +2481,22 @@ U_CAPI void ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttribute
 U_CAPI UColAttributeValue ucol_getAttribute(const UCollator *coll, UColAttribute attr, UErrorCode *status) {
     switch(attr) {
     case UCOL_FRENCH_COLLATION: /* attribute for direction of secondary weights*/
-        if(coll->frenchCollationisDefault) {
-            return coll->image->frenchCollation;
-        } else {
-            return coll->frenchCollation;
-        }
+        return coll->frenchCollation;
         break;
     case UCOL_ALTERNATE_HANDLING: /* attribute for handling variable elements*/
-        if(coll->alternateHandlingisDefault) {
-            return coll->image->alternateHandling;
-        } else {
-            return coll->alternateHandling;
-        }
+        return coll->alternateHandling;
         break;
     case UCOL_CASE_FIRST: /* who goes first, lower case or uppercase */
-        if(coll->caseFirstisDefault) {
-            return coll->image->caseFirst;
-        } else {
-            return coll->caseFirst;
-        }
+        return coll->caseFirst;
         break;
     case UCOL_CASE_LEVEL: /* do we have an extra case level */
-        if(coll->caseLevelisDefault) {
-            return coll->image->caseLevel;
-        } else {
-            return coll->caseLevel;
-        }
+        return coll->caseLevel;
         break;
     case UCOL_NORMALIZATION_MODE: /* attribute for normalization */
-        if(coll->normalizationModeisDefault) {
-            return coll->image->normalizationMode;
-        } else {
-            return coll->normalizationMode;
-        }
+        return coll->normalizationMode;
         break;
     case UCOL_STRENGTH:         /* attribute for strength */
-        if(coll->strengthisDefault) {
-            return coll->image->strength;
-        } else {
-            return coll->strength;
-        }
+        return coll->strength;
         break;
     case UCOL_ATTRIBUTE_COUNT:
     default:
