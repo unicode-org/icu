@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/search/Attic/SearchTest.java,v $ 
- * $Date: 2001/11/17 01:25:28 $ 
- * $Revision: 1.9 $
+ * $Date: 2001/11/21 23:26:02 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -463,8 +463,8 @@ public class SearchTest extends com.ibm.test.TestFmwk {
                    "Years</TH><TH>Yes</TH></TR>\n<TR><TH>Gold</TH>";
         String pattern = "HE";
 
-		System.out.println("Searching for all occurrences of pattern " +
-						   pattern + " following contents:\n" + contents);
+		/* System.out.println("Searching for all occurrences of pattern " +
+						   pattern + " following contents:\n" + contents); */
 
 	    StringSearch searcher = new StringSearch(pattern, contents);
 	    int	    	 offset;
