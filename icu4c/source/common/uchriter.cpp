@@ -15,28 +15,28 @@ UCharCharacterIterator::UCharCharacterIterator()
     // never default construct!
 }
 
-UCharCharacterIterator::UCharCharacterIterator(const UChar* text,
-                                               int32_t textLength)
- : CharacterIterator(text != 0 ? textLength : 0),
-  text(text)
+UCharCharacterIterator::UCharCharacterIterator(const UChar* textPtr,
+                                               int32_t length)
+ : CharacterIterator(textPtr != 0 ? length : 0),
+  text(textPtr)
 {
 }
 
-UCharCharacterIterator::UCharCharacterIterator(const UChar* text,
-                                               int32_t textLength,
-                                               UTextOffset pos)
-  : CharacterIterator(text != 0 ? textLength : 0, pos),
-  text(text)
+UCharCharacterIterator::UCharCharacterIterator(const UChar* textPtr,
+                                               int32_t length,
+                                               UTextOffset position)
+  : CharacterIterator(textPtr != 0 ? length : 0, position),
+  text(textPtr)
 {
 }
 
-UCharCharacterIterator::UCharCharacterIterator(const UChar* text,
-                                               int32_t textLength,
-                                               UTextOffset begin,
-                                               UTextOffset end,
-                                               UTextOffset pos)
-  : CharacterIterator(text != 0 ? textLength : 0, begin, end, pos),
-  text(text)
+UCharCharacterIterator::UCharCharacterIterator(const UChar* textPtr,
+                                               int32_t length,
+                                               UTextOffset textBegin,
+                                               UTextOffset textEnd,
+                                               UTextOffset position)
+  : CharacterIterator(textPtr != 0 ? length : 0, textBegin, textEnd, position),
+  text(textPtr)
 {
 }
 
