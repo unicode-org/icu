@@ -148,11 +148,7 @@ UnicodeString CanonicalIterator::next() {
     }
 
     // delete old contents
-    if(buffer.isBogus()) {
-        buffer.setTo((UChar32)-1); // un-bogus the buffer
-    } else {
-        buffer.truncate(0); // keep the internal array allocated
-    }
+    buffer.remove();
 
     // construct return value
 

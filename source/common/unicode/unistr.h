@@ -1516,7 +1516,7 @@ public:
    * @draft ICU 2.0
    */
   int32_t
-  countChar32(int32_t start=0, int32_t length=0x7fffffff) const;
+  countChar32(int32_t start=0, int32_t length=INT32_MAX) const;
 
   /**
    * Check if the length UChar code units of the string
@@ -1531,7 +1531,7 @@ public:
    *
    * @param start the index of the first code unit to check (0 for the entire string)
    * @param length the number of UChar code units to check
-   *               (use 0x7fffffff for the entire string; remember that start/length
+   *               (use INT32_MAX for the entire string; remember that start/length
    *                values are pinned)
    * @param number The number of code points in the (sub)string is compared against
    *               the 'number' parameter.
@@ -1770,19 +1770,24 @@ public:
    * take a UErrorCode for simplicity.
    *
    * More generally, a bogus string has a non-value that is different from an empty string.
-   * It behaves much like a null reference in Java, a NULL pointer in C,
+   * It behaves much (but of course not entirely) like a null reference in Java, a NULL pointer in C,
    * or a NULL value in SQL.
    * A "bogus" string does not contain a string value, and getBuffer()
    * and similar will return NULL.
    *
    * The string object can be "revived" by assigning (operator=() or fastCopyFrom())
-   * another string, or by using one of the other setToXYZ functions.
+   * another string, or by using one of the other setToXYZ functions,
+   * or by using truncate() and remove() in ways that are always equivalent to assigning
+   * an empty string. See examples below.
    *
    * The simplest ways to turn a bogus string into an empty one
-   * is to assign an empty string, or to setTo an empty one.
-   * For example:
+   * is to use the remove() function.
+   * Examples for other functions that are equivalent to "set to empty string":
    * \code
    * if(s.isBogus()) {
+   *   s.remove();           // set to an empty string (remove all), or
+   *   s.remove(0, INT32_MAX); // set to an empty string (remove all), or
+   *   s.truncate(0);        // set to an empty string (complete truncation), or
    *   s=UnicodeString();    // assign an empty string, or
    *   s.setTo((UChar32)-1); // set to a pseudo code point that is out of range, or
    *   static const UChar nul=0;
@@ -3954,11 +3959,26 @@ UnicodeString::insert(int32_t start,
 inline UnicodeString& 
 UnicodeString::remove(int32_t start, 
              int32_t length)
-{ return doReplace(start, length, NULL, 0, 0); }
+{
+  if(start <= 0 && length == INT32_MAX) {
+    // remove(guaranteed everything) of a bogus string makes the string empty and non-bogus
+    return remove();
+  } else {
+    return doReplace(start, length, NULL, 0, 0);
+  }
+}
 
 inline UnicodeString& 
 UnicodeString::remove()
-{ return doReplace(0, fLength, 0, 0, 0); }
+{
+  // remove() of a bogus string makes the string empty and non-bogus
+  if(isBogus()) {
+    unBogus();
+  } else {
+    fLength = 0;
+  }
+  return *this;
+}
 
 inline UnicodeString& 
 UnicodeString::removeBetween(int32_t start,
@@ -3968,7 +3988,11 @@ UnicodeString::removeBetween(int32_t start,
 inline UBool 
 UnicodeString::truncate(int32_t targetLength)
 {
-  if((uint32_t)targetLength < (uint32_t)fLength) {
+  if(isBogus() && targetLength == 0) {
+    // truncate(0) of a bogus string makes the string empty and non-bogus
+    unBogus();
+    return FALSE;
+  } else if((uint32_t)targetLength < (uint32_t)fLength) {
     fLength = targetLength;
     return TRUE;
   } else {
