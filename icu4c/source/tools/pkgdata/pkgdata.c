@@ -385,7 +385,11 @@ main(int argc, char* argv[]) {
 
     /* Makefile pathname */
     uprv_strcpy(tmp, o.tmpDir);
+#ifdef U_MAKE_IS_NMAKE
     uprv_strcat(tmp, U_FILE_SEP_STRING);
+#else
+    uprv_strcat(tmp, U_FILE_ALT_SEP_STRING);
+#endif
     uprv_strcat(tmp, o.shortName);
     uprv_strcat(tmp, "_");
     uprv_strcat(tmp, o.mode);
