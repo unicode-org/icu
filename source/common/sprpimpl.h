@@ -39,8 +39,7 @@ enum {
     _IDNA_MAP_TO_NOTHING = 0xFFF
 };
 
-U_CFUNC UBool U_EXPORT2
-ustrprep_cleanup();
+
 
 /* error codes for prototyping 
 #define U_IDNA_ERROR_START                      U_ERROR_LIMIT
