@@ -16,14 +16,14 @@ eu_ES {
             ",",
     }
     DateTimePatterns { 
-            "HH:mm:ss",
-            "HH:mm:ss",
-            "HH:mm:ss",
-            "HH:mm:ss",
-            "yy'-'MM'-'dd  z",
-            "yy'-'MM'-'dd  z",
-            "EEE, YYYY'eko' MMMren ss'a'",
-            "EEE, YYYY'eko' MMMren ss'a'",
+            "h:mm:ss a",
+            "h:mm:ss a",
+            "h:mm a",
+            "hh:mm:ss",
+			"EEEE, YYYY'eko' MMMM'ren' dd'a'",
+            "EEE, YYYY'eko' MMM'ren' dd'a'",
+            "yy'-'MMM'-'dd",
+            "yy'-'MM'-'dd",
             "{1} {0}",
     }
 
