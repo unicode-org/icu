@@ -1455,7 +1455,7 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
           last1 %= IMPLICIT_OTHER_COUNT_;
           r = 0xEF030303 - hanFixup + (last2 << 16) + (last1 << 8) + (last0 * IMPLICIT_LAST2_MULTIPLIER_);
       }
-      order = (r & 0xFFFF0000) | 0x00000505;
+      order = (r & UCOL_PRIMARYMASK) | 0x00000505;
       *(collationSource->CEpos++) = ((r & 0x0000FFFF)<<16) | 0x000000C0;
 
     }
@@ -1634,10 +1634,10 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
               (last0 * IMPLICIT_LAST2_MULTIPLIER_);
       }
       /*
-      order = (r & 0xFFFF0000) | 0x00000303;
+      order = (r & UCOL_PRIMARYMASK) | 0x00000303;
       *(collationSource->CEpos++) = ((r & 0x0000FFFF)<<16) | 0x00000080;
       */
-      *(collationSource->CEpos++) = (r & 0xFFFF0000) | 0x00000505;
+      *(collationSource->CEpos++) = (r & UCOL_PRIMARYMASK) | 0x00000505;
       collationSource->toReturn = collationSource->CEpos;
       order = ((r & 0x0000FFFF)<<16) | 0x000000C0;
   }
@@ -4407,7 +4407,7 @@ UCollationResult    ucol_checkIdent(collIterate *sColl, collIterate *tColl, UBoo
     }
 
     if (sLen == -1 && tLen == -1) {
-        comparison = u_strcmp(sBuf, tBuf);
+        comparison = u_strcmpCodePointOrder(sBuf, tBuf);
     }
     else
     {
@@ -4417,7 +4417,7 @@ UCollationResult    ucol_checkIdent(collIterate *sColl, collIterate *tColl, UBoo
         if (tLen == -1) {
             tLen = u_strlen(tBuf);
         }
-        comparison = u_strncmp(sBuf, tBuf, uprv_min(sLen, tLen));
+        comparison = u_strncmpCodePointOrder(sBuf, tBuf, uprv_min(sLen, tLen));
     }
 
     result = UCOL_LESS;
@@ -4612,12 +4612,6 @@ ucol_strcoll( const UCollator    *coll,
     IInit_collIterate(coll, source, sourceLength, &sColl);
     IInit_collIterate(coll, target, targetLength, &tColl);
 
-/*
-    uint32_t sCEsArray[512], tCEsArray[512];
-    uint32_t *sCEs = sCEsArray, *tCEs = tCEsArray;
-    uint32_t *sCEend = sCEs+512, *tCEend = tCEs+512;
-    */
-
     ucol_CEBuf   sCEs;
     ucol_CEBuf   tCEs;
     UCOL_INIT_CEBUF(&sCEs);
@@ -4638,22 +4632,17 @@ ucol_strcoll( const UCollator    *coll,
         while(sOrder == 0) {
           sOrder = ucol_IGetNextCE(coll, &sColl, &status);
           UCOL_CEBUF_PUT(&sCEs, sOrder, &sColl);
-          sOrder &= 0xFFFF0000;
+          sOrder &= UCOL_PRIMARYMASK;
         }
 
         while(tOrder == 0) {
-          // UCOL_GETNEXTCE(tOrder, coll, tColl, &status);
           tOrder = ucol_IGetNextCE(coll, &tColl, &status);
-          //if(!isContinuation(tOrder)) {
-          //  tOrder ^= caseSwitch;
-          //}
           UCOL_CEBUF_PUT(&tCEs, tOrder, &tColl);
-          // *(tCEs++) = tOrder;
-          tOrder &= 0xFFFF0000;
+          tOrder &= UCOL_PRIMARYMASK;
         }
 
         if(sOrder == tOrder) {
-            if(sOrder == 0x00010000) {
+            if(sOrder == UCOL_NO_MORE_CES_PRIMARY) {
 
               break;
             } else {
@@ -4672,23 +4661,19 @@ ucol_strcoll( const UCollator    *coll,
 
 /* This is where abridged version for shifted should go */
         for(;;) {
-          // UCOL_GETNEXTCE(sOrder, coll, sColl, &status);
           sOrder = ucol_IGetNextCE(coll, &sColl, &status);
           if(sOrder == UCOL_NO_MORE_CES) {
             UCOL_CEBUF_PUT(&sCEs, sOrder, &sColl);
             break;
-          } else if((sOrder & 0xFFFFFFBF) == 0) {
+          } else if(sOrder == 0) {
             continue;
           } else if(isContinuation(sOrder)) {
-            if((sOrder & 0xFFFF0000) > 0) { /* There is primary value */
+            if((sOrder & UCOL_PRIMARYMASK) > 0) { /* There is primary value */
               if(sInShifted) {
-                sOrder &= 0xFFFF0000;
+                sOrder &= UCOL_PRIMARYMASK;
                 UCOL_CEBUF_PUT(&sCEs, sOrder, &sColl);
-                //  *(sCEs++) = sOrder;
                 continue;
               } else {
-                //sOrder ^= caseSwitch;
-                // *(sCEs++) = sOrder;
                 UCOL_CEBUF_PUT(&sCEs, sOrder, &sColl);
                 break;
               }
@@ -4696,96 +4681,79 @@ ucol_strcoll( const UCollator    *coll,
               if(sInShifted) {
                 continue;
               } else {
-                //sOrder ^= caseSwitch;
                 UCOL_CEBUF_PUT(&sCEs, sOrder, &sColl);
-                // *(sCEs++) = sOrder;
                 continue;
               }
             }
           } else { /* regular */
             if(sOrder > LVT) {
               UCOL_CEBUF_PUT(&sCEs, sOrder, &sColl);
-              // *(sCEs++) = sOrder;
               break;
             } else {
-              if((sOrder & 0xFFFF0000) > 0) {
+              if((sOrder & UCOL_PRIMARYMASK) > 0) {
                 sInShifted = TRUE;
-                sOrder &= 0xFFFF0000;
+                sOrder &= UCOL_PRIMARYMASK;
                 UCOL_CEBUF_PUT(&sCEs, sOrder, &sColl);
-                // *(sCEs++) = sOrder;
                 continue;
               } else {
-                //sOrder ^= caseSwitch;
                 UCOL_CEBUF_PUT(&sCEs, sOrder, &sColl);
                 sInShifted = FALSE;
-                // *(sCEs++) = sOrder;
                 continue;
               }
             }
           }
         }
-        sOrder &= 0xFFFF0000;
+        sOrder &= UCOL_PRIMARYMASK;
         sInShifted = FALSE;
 
         for(;;) {
-          // UCOL_GETNEXTCE(tOrder, coll, tColl, &status);
           tOrder = ucol_IGetNextCE(coll, &tColl, &status);
           if(tOrder == UCOL_NO_MORE_CES) {
             UCOL_CEBUF_PUT(&tCEs, tOrder, &tColl);
-            // *(tCEs++) = tOrder;
             break;
-          } else if((tOrder & 0xFFFFFFBF) == 0) {
+          } else if(tOrder == 0) {
             continue;
           } else if(isContinuation(tOrder)) {
-            if((tOrder & 0xFFFF0000) > 0) { /* There is primary value */
+            if((tOrder & UCOL_PRIMARYMASK) > 0) { /* There is primary value */
               if(tInShifted) {
-                tOrder &= 0xFFFF0000;
+                tOrder &= UCOL_PRIMARYMASK;
                 UCOL_CEBUF_PUT(&tCEs, tOrder, &tColl);
-                // *(tCEs++) = tOrder;
                 continue;
               } else {
-                //tOrder ^= caseSwitch;
                 UCOL_CEBUF_PUT(&tCEs, tOrder, &tColl);
-                // *(tCEs++) = tOrder;
                 break;
               }
             } else { /* Just lower level values */
               if(tInShifted) {
                 continue;
               } else {
-                //tOrder ^= caseSwitch;
                 UCOL_CEBUF_PUT(&tCEs, tOrder, &tColl);
-                // *(tCEs++) = tOrder;
                 continue;
               }
             }
           } else { /* regular */
             if(tOrder > LVT) {
               UCOL_CEBUF_PUT(&tCEs, tOrder, &tColl);
-              // *(tCEs++) = tOrder;
               break;
             } else {
-              if((tOrder & 0xFFFF0000) > 0) {
+              if((tOrder & UCOL_PRIMARYMASK) > 0) {
                 tInShifted = TRUE;
-                tOrder &= 0xFFFF0000;
-                // *(tCEs++) = tOrder;
+                tOrder &= UCOL_PRIMARYMASK;
                 UCOL_CEBUF_PUT(&tCEs, tOrder, &tColl);
                 continue;
               } else {
-                //tOrder ^= caseSwitch;
                 UCOL_CEBUF_PUT(&tCEs, tOrder, &tColl);
                 tInShifted = FALSE;
-                // *(tCEs++) = tOrder;
                 continue;
               }
             }
           }
         }
-        tOrder &= 0xFFFF0000;
+        tOrder &= UCOL_PRIMARYMASK;
         tInShifted = FALSE;
 
         if(sOrder == tOrder) {
-            if(sOrder == 0x00010000) {
+            if(sOrder == UCOL_NO_MORE_CES_PRIMARY) {
               break;
             } else {
               sOrder = 0; tOrder = 0;
@@ -4801,8 +4769,6 @@ ucol_strcoll( const UCollator    *coll,
     /* now, we're gonna reexamine collected CEs */
     uint32_t    *sCE;
     uint32_t    *tCE;
-    //sCEend = sCEs;
-    //tCEend = tCEs;
 
     /* This is the secondary level of comparison */
     if(checkSecTer) {
@@ -4811,15 +4777,15 @@ ucol_strcoll( const UCollator    *coll,
         tCE = tCEs.buf;
         for(;;) {
           while (secS == 0) {
-            secS = *(sCE++) & 0xFF00;
+            secS = *(sCE++) & UCOL_SECONDARYMASK;
           }
 
           while(secT == 0) {
-              secT = *(tCE++) & 0xFF00;
+              secT = *(tCE++) & UCOL_SECONDARYMASK;
           }
 
           if(secS == secT) {
-            if(secS == 0x0100) {
+            if(secS == UCOL_NO_MORE_CES_SECONDARY) {
               break;
             } else {
               secS = 0; secT = 0;
@@ -4838,48 +4804,48 @@ ucol_strcoll( const UCollator    *coll,
         for(;;) {
           while (secS == 0 && sCE >= sCEs.buf) {
             if(sCESave == 0) {
-              secS = *(sCE--) & 0xFF80;
+              secS = *(sCE--);
               if(isContinuation(secS)) {
-                while(isContinuation(secS = *(sCE--) & 0xFF80));
+                while(isContinuation(secS = *(sCE--)));
                 /* after this, secS has the start of continuation, and sCEs points before that */
                 sCESave = sCE; /* we save it, so that we know where to come back AND that we need to go forward */
                 sCE+=2;  /* need to point to the first continuation CP */
                 /* However, now you can just continue doing stuff */
               }
             } else {
-              secS = *(sCE++) & 0xFF80;
+              secS = *(sCE++);
               if(!isContinuation(secS)) { /* This means we have finished with this cont */
                 sCE = sCESave;            /* reset the pointer to before continuation */
                 sCESave = 0;
                 continue;
               }
             }
-            secS &= 0xFF00; /* remove the continuation bit */
+            secS &= UCOL_SECONDARYMASK; /* remove the continuation bit */
           }
 
           while(secT == 0 && tCE >= tCEs.buf) {
             if(tCESave == 0) {
-              secT = *(tCE--) & 0xFF80;
+              secT = *(tCE--);
               if(isContinuation(secT)) {
-                while(isContinuation(secT = *(tCE--) & 0xFF80));
+                while(isContinuation(secT = *(tCE--)));
                 /* after this, secS has the start of continuation, and sCEs points before that */
                 tCESave = tCE; /* we save it, so that we know where to come back AND that we need to go forward */
                 tCE+=2;  /* need to point to the first continuation CP */
                 /* However, now you can just continue doing stuff */
               }
             } else {
-              secT = *(tCE++) & 0xFF80;
+              secT = *(tCE++);
               if(!isContinuation(secT)) { /* This means we have finished with this cont */
                 tCE = tCESave;          /* reset the pointer to before continuation */
                 tCESave = 0;
                 continue;
               }
             }
-            secT &= 0xFF00; /* remove the continuation bit */
+            secT &= UCOL_SECONDARYMASK; /* remove the continuation bit */
           }
 
           if(secS == secT) {
-            if(secS == 0x0100 || (sCE < sCEs.buf && tCE < tCEs.buf)) {
+            if(secS == UCOL_NO_MORE_CES_SECONDARY || (sCE < sCEs.buf && tCE < tCEs.buf)) {
               break;
             } else {
               secS = 0; secT = 0;
@@ -4924,7 +4890,7 @@ ucol_strcoll( const UCollator    *coll,
           goto commonReturn;
         }
 
-        if((secS & UCOL_REMOVE_CASE) == 0x01 || (secT & UCOL_REMOVE_CASE) == 0x01 ) {
+        if((secS & UCOL_REMOVE_CASE) == UCOL_NO_MORE_CES_TERTIARY || (secT & UCOL_REMOVE_CASE) == UCOL_NO_MORE_CES_TERTIARY ) {
           break;
         } else {
           secS = 0;
@@ -4981,37 +4947,37 @@ ucol_strcoll( const UCollator    *coll,
       sCE = sCEs.buf;
       tCE = tCEs.buf;
       for(;;) {
-        while(secS == 0 && secS != 0x00010101 || (isContinuation(secS) && !sInShifted)) {
+        while(secS == 0 && secS != UCOL_NO_MORE_CES || (isContinuation(secS) && !sInShifted)) {
           secS = *(sCE++);
           if(isContinuation(secS) && !sInShifted) {
             continue;
           }
-          if(secS > LVT || (secS & 0xFFFF0000) == 0) {
-            secS = 0xFFFF0000;
+          if(secS > LVT || (secS & UCOL_PRIMARYMASK) == 0) {
+            secS = UCOL_PRIMARYMASK;
             sInShifted = FALSE;
           } else {
             sInShifted = TRUE;
           }
         }
-        secS &= 0xFFFF0000;
+        secS &= UCOL_PRIMARYMASK;
 
 
-        while(secT == 0 && secT != 0x00010101 || (isContinuation(secT) && !tInShifted)) {
+        while(secT == 0 && secT != UCOL_NO_MORE_CES || (isContinuation(secT) && !tInShifted)) {
           secT = *(tCE++);
           if(isContinuation(secT) && !tInShifted) {
             continue;
           }
-          if(secT > LVT || (secT & 0xFFFF0000) == 0) {
-            secT = 0xFFFF0000;
+          if(secT > LVT || (secT & UCOL_PRIMARYMASK) == 0) {
+            secT = UCOL_PRIMARYMASK;
             tInShifted = FALSE;
           } else {
             tInShifted = TRUE;
           }
         }
-        secT &= 0xFFFF0000;
+        secT &= UCOL_PRIMARYMASK;
 
         if(secS == secT) {
-          if(secS == 0x00010000) {
+          if(secS == UCOL_NO_MORE_CES_PRIMARY) {
             break;
           } else {
             secS = 0; secT = 0;
@@ -5192,14 +5158,14 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
           sOrder = ucol_getIncrementalCE(coll, &sColl, &status);
           sOrder ^= caseSwitch;
           *(sCEs++) = sOrder;
-          sOrder &= 0xFFFF0000;
+          sOrder &= UCOL_PRIMARYMASK;
         }
 
         while(tOrder == 0) {
           tOrder = ucol_getIncrementalCE(coll, &tColl, &status);
           tOrder ^= caseSwitch;
           *(tCEs++) = tOrder;
-          tOrder &= 0xFFFF0000;
+          tOrder &= UCOL_PRIMARYMASK;
         }
 
         if((sOrder == (UCOL_NO_MORE_CES & UCOL_PRIMARYORDERMASK) && sColl.panic == TRUE) ||
@@ -5239,12 +5205,12 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
             }
             *(sCEs++) = sOrder;
             break;
-          } else if((sOrder & 0xFFFFFFBF) == 0) {
+          } else if(sOrder == 0) {
             continue;
           } else if(isContinuation(sOrder)) {
-            if((sOrder & 0xFFFF0000) > 0) { /* There is primary value */
+            if((sOrder & UCOL_PRIMARYMASK) > 0) { /* There is primary value */
               if(sInShifted) {
-                sOrder &= 0xFFFF0000;
+                sOrder &= UCOL_PRIMARYMASK;
                 *(sCEs++) = sOrder;
                 continue;
               } else {
@@ -5266,9 +5232,9 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
               *(sCEs++) = sOrder;
               break;
             } else {
-              if((sOrder & 0xFFFF0000) > 0) {
+              if((sOrder & UCOL_PRIMARYMASK) > 0) {
                 sInShifted = TRUE;
-                sOrder &= 0xFFFF0000;
+                sOrder &= UCOL_PRIMARYMASK;
                 *(sCEs++) = sOrder;
                 continue;
               } else {
@@ -5279,7 +5245,7 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
             }
           }
         }
-        sOrder &= 0xFFFF0000;
+        sOrder &= UCOL_PRIMARYMASK;
         sInShifted = FALSE;
 
         for(;;) {
@@ -5290,12 +5256,12 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
             }
             *(tCEs++) = tOrder;
             break;
-          } else if((tOrder & 0xFFFFFFBF) == 0) {
+          } else if(tOrder == 0) {
             continue;
           } else if(isContinuation(tOrder)) {
-            if((tOrder & 0xFFFF0000) > 0) { /* There is primary value */
+            if((tOrder & UCOL_PRIMARYMASK) > 0) { /* There is primary value */
               if(tInShifted) {
-                tOrder &= 0xFFFF0000;
+                tOrder &= UCOL_PRIMARYMASK;
                 *(tCEs++) = tOrder;
                 continue;
               } else {
@@ -5317,9 +5283,9 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
               *(tCEs++) = tOrder;
               break;
             } else {
-              if((tOrder & 0xFFFF0000) > 0) {
+              if((tOrder & UCOL_PRIMARYMASK) > 0) {
                 tInShifted = TRUE;
-                tOrder &= 0xFFFF0000;
+                tOrder &= UCOL_PRIMARYMASK;
                 *(tCEs++) = tOrder;
                 continue;
               } else {
@@ -5330,11 +5296,11 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
             }
           }
         }
-        tOrder &= 0xFFFF0000;
+        tOrder &= UCOL_PRIMARYMASK;
         tInShifted = FALSE;
 
         if(sOrder == tOrder) {
-            if(sOrder == 0x00010000) {
+            if(sOrder == UCOL_NO_MORE_CES_PRIMARY) {
               break;
             } else {
               sOrder = 0; tOrder = 0;
@@ -5359,15 +5325,15 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
         tCEs = tCEsArray;
         for(;;) {
           while (secS == 0) {
-            secS = *(sCEs++) & 0xFF00;
+            secS = *(sCEs++) & UCOL_SECONDARYMASK;
           }
 
           while(secT == 0) {
-              secT = *(tCEs++) & 0xFF00;
+              secT = *(tCEs++) & UCOL_SECONDARYMASK;
           }
 
           if(secS == secT) {
-            if(secS == 0x0100) {
+            if(secS == UCOL_NO_MORE_CES_SECONDARY) {
               break;
             } else {
               secS = 0; secT = 0;
@@ -5403,7 +5369,7 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
                 continue;
               }
             }
-            secS &= 0xFF00; /* remove the continuation bit */
+            secS &= UCOL_SECONDARYMASK; /* remove the continuation bit */
           }
 
           while(secT == 0 && tCEs >= tCEsArray) {
@@ -5424,11 +5390,11 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
                 continue;
               }
             }
-            secT &= 0xFF00; /* remove the continuation bit */
+            secT &= UCOL_SECONDARYMASK; /* remove the continuation bit */
           }
 
           if(secS == secT) {
-            if(secS == 0x0100 || (sCEs < sCEsArray && tCEs < tCEsArray)) {
+            if(secS == UCOL_NO_MORE_CES_SECONDARY || (sCEs < sCEsArray && tCEs < tCEsArray)) {
               break;
             } else {
               secS = 0; secT = 0;
@@ -5466,7 +5432,8 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
           return UCOL_GREATER;
         }
 
-        if((secS & UCOL_REMOVE_CASE) == 0x01 || (secT & UCOL_REMOVE_CASE) == 0x01 ) {
+        if((secS & UCOL_REMOVE_CASE) == UCOL_NO_MORE_CES_TERTIARY 
+          || (secT & UCOL_REMOVE_CASE) == UCOL_NO_MORE_CES_TERTIARY ) {
           break;
         } else {
           secS = 0;
@@ -5514,37 +5481,37 @@ U_CAPI UCollationResult ucol_strcollinc(const UCollator *coll,
       sCEs = sCEsArray;
       tCEs = tCEsArray;
       for(;;) {
-        while(secS == 0 && secS != 0x00010101 || (isContinuation(secS) && !sInShifted)) {
+        while(secS == 0 && secS != UCOL_NO_MORE_CES || (isContinuation(secS) && !sInShifted)) {
           secS = *(sCEs++);
           if(isContinuation(secS) && !sInShifted) {
             continue;
           }
-          if(secS > LVT || (secS & 0xFFFF0000) == 0) {
-            secS = 0xFFFF0000;
+          if(secS > LVT || (secS & UCOL_PRIMARYMASK) == 0) {
+            secS = UCOL_PRIMARYMASK;
             sInShifted = FALSE;
           } else {
             sInShifted = TRUE;
           }
         }
-        secS &= 0xFFFF0000;
+        secS &= UCOL_PRIMARYMASK;
 
 
-        while(secT == 0 && secT != 0x00010101 || (isContinuation(secT) && !tInShifted)) {
+        while(secT == 0 && secT != UCOL_NO_MORE_CES || (isContinuation(secT) && !tInShifted)) {
           secT = *(tCEs++);
           if(isContinuation(secT) && !tInShifted) {
             continue;
           }
-          if(secT > LVT || (secT & 0xFFFF0000) == 0) {
-            secT = 0xFFFF0000;
+          if(secT > LVT || (secT & UCOL_PRIMARYMASK) == 0) {
+            secT = UCOL_PRIMARYMASK;
             tInShifted = FALSE;
           } else {
             tInShifted = TRUE;
           }
         }
-        secT &= 0xFFFF0000;
+        secT &= UCOL_PRIMARYMASK;
 
         if(secS == secT) {
-          if(secS == 0x00010000) {
+          if(secS == UCOL_NO_MORE_CES_PRIMARY) {
             break;
           } else {
             secS = 0; secT = 0;
