@@ -1587,7 +1587,7 @@ ucnv_toUChars(UConverter *cnv,
     ucnv_resetToUnicode(cnv);
     originalDest=dest;
     if(srcLength==-1) {
-        srcLength=uprv_strlen(src);
+        srcLength=(int32_t)uprv_strlen(src);
     }
     if(srcLength>0) {
         srcLimit=src+srcLength;
@@ -1984,7 +1984,7 @@ ucnv_internalConvert(UConverter *outConverter, UConverter *inConverter,
                        FALSE,
                        TRUE,
                        pErrorCode);
-        targetLength=myTarget-target;
+        targetLength=(int32_t)(myTarget-target);
     }
 
     /*
@@ -2007,7 +2007,7 @@ ucnv_internalConvert(UConverter *outConverter, UConverter *inConverter,
                            FALSE,
                            TRUE,
                            pErrorCode);
-            targetLength+=(myTarget-targetBuffer);
+            targetLength+=(int32_t)(myTarget-targetBuffer);
         } while(*pErrorCode==U_BUFFER_OVERFLOW_ERROR);
 
         /* done with preflighting, set warnings and errors as appropriate */
@@ -2322,7 +2322,7 @@ ucnv_detectUnicodeSignature( const char* source,
     }
 
     if(sourceLength==-1){
-        sourceLength=uprv_strlen(source);
+        sourceLength=(int32_t)uprv_strlen(source);
     }
 
     

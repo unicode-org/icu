@@ -42,7 +42,7 @@ _Latin1ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     /* set up the local pointers */
     source=(const uint8_t *)pArgs->source;
     target=pArgs->target;
-    targetCapacity=pArgs->targetLimit-pArgs->target;
+    targetCapacity=(int32_t)(pArgs->targetLimit-pArgs->target);
     offsets=pArgs->offsets;
 
     sourceIndex=0;
@@ -51,7 +51,7 @@ _Latin1ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
      * since the conversion here is 1:1 UChar:uint8_t, we need only one counter
      * for the minimum of the sourceLength and targetCapacity
      */
-    length=(const uint8_t *)pArgs->sourceLimit-source;
+    length=(int32_t)((const uint8_t *)pArgs->sourceLimit-source);
     if(length<=targetCapacity) {
         targetCapacity=length;
     } else {
@@ -163,7 +163,7 @@ _Latin1FromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     source=pArgs->source;
     sourceLimit=pArgs->sourceLimit;
     target=oldTarget=(uint8_t *)pArgs->target;
-    targetCapacity=pArgs->targetLimit-pArgs->target;
+    targetCapacity=(int32_t)(pArgs->targetLimit-pArgs->target);
     offsets=pArgs->offsets;
 
     if(cnv->sharedData==&_Latin1Data) {
@@ -182,7 +182,7 @@ _Latin1FromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
      * since the conversion here is 1:1 UChar:uint8_t, we need only one counter
      * for the minimum of the sourceLength and targetCapacity
      */
-    length=sourceLimit-source;
+    length=(int32_t)(sourceLimit-source);
     if(length<targetCapacity) {
         targetCapacity=length;
     }
@@ -396,7 +396,7 @@ _ASCIIToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
     source=(const uint8_t *)pArgs->source;
     sourceLimit=(const uint8_t *)pArgs->sourceLimit;
     target=oldTarget=pArgs->target;
-    targetCapacity=pArgs->targetLimit-pArgs->target;
+    targetCapacity=(int32_t)(pArgs->targetLimit-pArgs->target);
     offsets=pArgs->offsets;
 
     /* sourceIndex=-1 if the current character began in the previous buffer */
@@ -406,7 +406,7 @@ _ASCIIToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
      * since the conversion here is 1:1 UChar:uint8_t, we need only one counter
      * for the minimum of the sourceLength and targetCapacity
      */
-    length=sourceLimit-source;
+    length=(int32_t)(sourceLimit-source);
     if(length<targetCapacity) {
         targetCapacity=length;
     }

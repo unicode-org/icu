@@ -613,7 +613,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
            */
           ++len; /* count the terminating NUL */
           if(parent != NULL && parent->fResPath != NULL) {
-            capacity = uprv_strlen(parent->fResPath) + 1;
+            capacity = (int32_t)uprv_strlen(parent->fResPath) + 1;
           } else {
             capacity = 0;
           }
@@ -684,7 +684,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
                   /* we need to make keyPath from parent's fResPath and
                    * current key, if there is a key associated
                    */
-                  len = uprv_strlen(key) + 1;
+                  len = (int32_t)(uprv_strlen(key) + 1);
                   if(len > capacity) {
                     capacity = len;
                     if(chAlias == stackAlias) {
@@ -793,7 +793,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
       ures_appendResPath(resB, parent->fResPath, parent->fResPathLen);
     }
     if(key != NULL) {
-      ures_appendResPath(resB, key, uprv_strlen(key));
+      ures_appendResPath(resB, key, (int32_t)uprv_strlen(key));
       ures_appendResPath(resB, RES_PATH_SEPARATOR_S, 1);
     } else {
       char buf[256];
@@ -1221,7 +1221,7 @@ ures_findResource(const char* path, UResourceBundle *fillIn, UErrorCode *status)
     return result;
   }
 
-  length = uprv_strlen(path)+1;
+  length = (int32_t)(uprv_strlen(path)+1);
   pathToResource = (char *)uprv_malloc(length*sizeof(char));
   /* test for NULL */
   if(pathToResource == NULL) {
@@ -1916,7 +1916,7 @@ ures_loc_nextLocale(UEnumeration* en,
     int32_t len = 0;
     if(ures_hasNext(res) && (k = ures_getNextResource(res, &ctx->curr, status))) {
         result = ures_getKey(k);
-        len = uprv_strlen(result);
+        len = (int32_t)uprv_strlen(result);
     }
     if (resultLength) {
         *resultLength = len;
@@ -2266,7 +2266,7 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
     ures_close(&bund1);
     ures_close(&bund2);
     
-    length = uprv_strlen(found);
+    length = (int32_t)uprv_strlen(found);
 
     if(U_SUCCESS(*status)) {
         int32_t copyLength = uprv_min(length, resultCapacity);
@@ -2355,7 +2355,7 @@ ures_getKeywordValues(const char *path, const char *keyword, UErrorCode *status)
                 }
             }
             if(k && *k) {
-                int32_t kLen = uprv_strlen(k);
+                int32_t kLen = (int32_t)uprv_strlen(k);
                 if(!uprv_strcmp(k,DEFAULT_TAG)) {
                     continue; /* don't need 'default'. */
                 }

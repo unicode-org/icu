@@ -101,7 +101,7 @@ u_strFromUTF32(UChar   *dest,
         }
     }
 
-    reqLength += pDest - dest;
+    reqLength += (int32_t)(pDest - dest);
     if(pDestLength){
         *pDestLength = reqLength;
     }
@@ -175,7 +175,7 @@ u_strToUTF32(UChar32 *dest,
         }
     }
 
-    reqLength+=(pDest - (uint32_t *)dest);
+    reqLength+=(int32_t)(pDest - (uint32_t *)dest);
     if(pDestLength){
         *pDestLength = reqLength;
     }
@@ -212,7 +212,7 @@ u_strFromUTF8(UChar *dest,
     }
 
     if(srcLength == -1){
-       srcLength = uprv_strlen((char*)pSrc);
+       srcLength = (int32_t)uprv_strlen((char*)pSrc);
     }
     
     while((index < srcLength)&&(pDest<pDestLimit)){
@@ -252,7 +252,7 @@ u_strFromUTF8(UChar *dest,
         }
     }
 
-    reqLength+=(pDest - dest);
+    reqLength+=(int32_t)(pDest - dest);
 
     if(pDestLength){
         *pDestLength = reqLength;

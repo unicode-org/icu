@@ -553,7 +553,7 @@ Locale& Locale::init(const char* localeID, UBool canonicalize)
         fieldIdx = 1;
         while ((separator = uprv_strchr(field[fieldIdx-1], SEP_CHAR)) && fieldIdx < (int32_t)(sizeof(field)/sizeof(field[0]))-1) {
             field[fieldIdx] = separator + 1;
-            fieldLen[fieldIdx-1] = separator - field[fieldIdx-1];
+            fieldLen[fieldIdx-1] = (int32_t)(separator - field[fieldIdx-1]);
             fieldIdx++;
         }
         // variant may contain @foo or .foo POSIX cruft; remove it
@@ -563,7 +563,7 @@ Locale& Locale::init(const char* localeID, UBool canonicalize)
             if (separator==NULL || (sep2!=NULL && separator > sep2)) {
                 separator = sep2;
             }
-            fieldLen[fieldIdx-1] = separator - field[fieldIdx-1];
+            fieldLen[fieldIdx-1] = (int32_t)(separator - field[fieldIdx-1]);
         } else {
             fieldLen[fieldIdx-1] = length - (int32_t)(field[fieldIdx-1] - fullName);
         }
@@ -1242,7 +1242,7 @@ public:
         int32_t len;
         if(U_SUCCESS(status) && *current != 0) {
             result = current;
-            len = uprv_strlen(current);
+            len = (int32_t)uprv_strlen(current);
             current += len+1;
             if(resultLength != NULL) {
                 *resultLength = len;
