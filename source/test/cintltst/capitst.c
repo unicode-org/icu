@@ -244,7 +244,7 @@ void TestProperty()
     doAssert( tempLength != 0, "getRules() result incorrect" );
     log_verbose("getRules tests end.\n");
     {
-        UChar *buffer = (UChar *)uprv_malloc(200000);
+        UChar *buffer = (UChar *)uprv_malloc(200000*sizeof(UChar));
         int32_t bufLen = 200000;
         buffer[0] = '\0';
         log_verbose("ucol_getRulesEx() testing ...\n");
