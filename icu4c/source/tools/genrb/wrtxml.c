@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2003, International Business Machines
+*   Copyright (C) 2002-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -386,7 +386,7 @@ static char* convertAndEscape(char** pDest, int32_t destCap, int32_t* destLength
                 case 0x1E:
                 case 0x1F:
                     *status = U_ILLEGAL_CHAR_FOUND;
-                    fprintf(stderr, "Illegal Character \\u%04X! \n",c);
+                    fprintf(stderr, "Illegal Character \\u%04X!\n",(int)c);
                     uprv_free(dest);
                     return NULL;
                 default:
@@ -397,7 +397,7 @@ static char* convertAndEscape(char** pDest, int32_t destCap, int32_t* destLength
                 U8_APPEND((unsigned char*)dest,destLen,destCap,c,isError);
                 if(isError){
                     *status = U_ILLEGAL_CHAR_FOUND;
-                    fprintf(stderr, "Illegal Character \\U%08X! \n",c);
+                    fprintf(stderr, "Illegal Character \\U%08X!\n",(int)c);
                     uprv_free(dest);
                     return NULL;
                 }

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2000, International Business Machines
+*   Copyright (C) 1998-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -25,7 +25,7 @@ void error(uint32_t linenumber, const char *msg, ...)
     va_list va;
 
     va_start(va, msg);
-    fprintf(stderr, "%s:%d: ", gCurrentFileName, linenumber);
+    fprintf(stderr, "%s:%u: ", gCurrentFileName, (int)linenumber);
     vfprintf(stderr, msg, va);
     fprintf(stderr, "\n");
     va_end(va);
@@ -63,7 +63,7 @@ void warning(uint32_t linenumber, const char *msg, ...)
         va_list va;
 
         va_start(va, msg);
-        fprintf(stderr, "%s:%d: warning: ", gCurrentFileName, linenumber);
+        fprintf(stderr, "%s:%u: warning: ", gCurrentFileName, (int)linenumber);
         vfprintf(stderr, msg, va);
         fprintf(stderr, "\n");
         va_end(va);
