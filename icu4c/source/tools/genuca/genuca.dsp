@@ -43,8 +43,8 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
-# ADD CPP /nologo /MD /Za /W3 /GX /O2 /I "..\..\common" /I "..\..\i18n" /I "..\toolutil" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
+# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FD /c
+# ADD CPP /nologo /MD /Za /W3 /GX /O2 /I "..\..\common" /I "..\..\i18n" /I "..\toolutil" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -60,7 +60,7 @@ InputName=genuca
 SOURCE="$(InputPath)"
 
 "..\..\..\bin\$(InputName).exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(TargetPath) ..\..\..\bin
+    copy $(TargetPath) ..\..\..\bin
 
 # End Custom Build
 
@@ -77,8 +77,8 @@ SOURCE="$(InputPath)"
 # PROP Intermediate_Dir "Debug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
-# ADD CPP /nologo /MDd /Za /W3 /Gm /GX /ZI /Od /I "..\..\common" /I "..\..\i18n" /I "..\toolutil" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FR  /FD /GZ /c
+# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FD /GZ /c
+# ADD CPP /nologo /MDd /Za /W3 /Gm /GX /ZI /Od /I "..\..\common" /I "..\..\i18n" /I "..\toolutil" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FR /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -95,7 +95,7 @@ InputName=genuca
 SOURCE="$(InputPath)"
 
 "..\..\..\bin\$(InputName).exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(TargetPath) ..\..\..\bin
+    copy $(TargetPath) ..\..\..\bin
 
 # End Custom Build
 
@@ -112,7 +112,7 @@ SOURCE="$(InputPath)"
 # PROP Intermediate_Dir "Release"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN64" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
+# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN64" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FD /c
 # ADD CPP /nologo /MD /Za /W3   /I "..\..\common" /I "..\..\i18n" /I "..\toolutil" /D"WIN64" /D"NDEBUG" /D"_CONSOLE" /D"_MBCS"  /FD /c /O2 /GX /Op /QIA64_fmaopt /D"_IA64_" /Zi /D"WIN64" /D"WIN32" /D"_AFX_NO_DAO_SUPPORT" /Wp64 /Zm600
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
@@ -129,7 +129,7 @@ InputName=genuca
 SOURCE="$(InputPath)"
 
 "..\..\..\bin\$(InputName).exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(TargetPath) ..\..\..\bin
+    copy $(TargetPath) ..\..\..\bin
 
 # End Custom Build
 
@@ -146,7 +146,7 @@ SOURCE="$(InputPath)"
 # PROP Intermediate_Dir "Debug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN64" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
+# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN64" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FD /GZ /c
 # ADD CPP /nologo /MDd /Za /W3 /Gm    /I "..\..\common" /I "..\..\i18n" /I "..\toolutil" /D"WIN64" /D"_DEBUG" /D"_CONSOLE" /D"_MBCS" /FR  /FD /GZ /c /Od /GX /Op /QIA64_fmaopt /D"_IA64_" /Zi /D"WIN64" /D"WIN32" /D"_AFX_NO_DAO_SUPPORT" /Wp64 /Zm600
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
@@ -164,7 +164,7 @@ InputName=genuca
 SOURCE="$(InputPath)"
 
 "..\..\..\bin\$(InputName).exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(TargetPath) ..\..\..\bin
+    copy $(TargetPath) ..\..\..\bin
 
 # End Custom Build
 
@@ -183,10 +183,6 @@ SOURCE="$(InputPath)"
 
 SOURCE=.\genuca.cpp
 # End Source File
-# Begin Source File
-
-SOURCE=.\tblprint.cpp
-# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -194,10 +190,6 @@ SOURCE=.\tblprint.cpp
 # Begin Source File
 
 SOURCE=.\genuca.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\tblprint.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
