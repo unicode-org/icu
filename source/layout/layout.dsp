@@ -94,7 +94,7 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\AlternateSubstitutionSubtables.cpp
+SOURCE=.\AlternateSubstSubtables.cpp
 # End Source File
 # Begin Source File
 
@@ -118,11 +118,11 @@ SOURCE=.\ClassDefinitionTables.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ContextualGlyphSubstitutionProcessor.cpp
+SOURCE=.\ContextualGlyphSubstProc.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ContextualSubstitutionSubtables.cpp
+SOURCE=.\ContextualSubstSubtables.cpp
 # End Source File
 # Begin Source File
 
@@ -150,19 +150,19 @@ SOURCE=.\GlyphIterator.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\GlyphPositioningLookupProcessor.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\GlyphPositioningTables.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\GlyphSubstitutionLookupProcessor.cpp
+SOURCE=.\GlyphPosnLookupProc.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\GlyphSubstitutionTables.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\GlyphSubstLookupProc.cpp
 # End Source File
 # Begin Source File
 
@@ -198,11 +198,11 @@ SOURCE=.\LayoutEngine.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\LigatureSubstitutionProcessor.cpp
+SOURCE=.\LigatureSubstProc.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\LigatureSubstitutionSubtables.cpp
+SOURCE=.\LigatureSubstSubtables.cpp
 # End Source File
 # Begin Source File
 
@@ -226,15 +226,15 @@ SOURCE=.\MarkArrays.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\MarkToBasePositioningSubtables.cpp
+SOURCE=.\MarkToBasePosnSubtables.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\MarkToLigaturePositioningSubtables.cpp
+SOURCE=.\MarkToLigaturePosnSubtables.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\MarkToMarkPositioningSubtables.cpp
+SOURCE=.\MarkToMarkPosnSubtables.cpp
 # End Source File
 # Begin Source File
 
@@ -242,11 +242,11 @@ SOURCE=.\MorphTables.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\MultipleSubstitutionSubtables.cpp
+SOURCE=.\MultipleSubstSubtables.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\NonContextualGlyphSubstitutionProcessor.cpp
+SOURCE=.\NonContextualGlyphSubstProc.cpp
 # End Source File
 # Begin Source File
 
@@ -326,7 +326,7 @@ SOURCE=.\ValueRecords.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=.\AlternateSubstitutionSubtables.h
+SOURCE=.\AlternateSubstSubtables.h
 # End Source File
 # Begin Source File
 
@@ -342,7 +342,7 @@ SOURCE=.\ArabicShaping.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\AttachmentPositioningSubtables.h
+SOURCE=.\AttachmentPosnSubtables.h
 # End Source File
 # Begin Source File
 
@@ -358,11 +358,11 @@ SOURCE=.\ContextualGlyphSubstitution.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\ContextualGlyphSubstitutionProcessor.h
+SOURCE=.\ContextualGlyphSubstProc.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\ContextualSubstitutionSubtables.h
+SOURCE=.\ContextualSubstSubtables.h
 # End Source File
 # Begin Source File
 
@@ -394,19 +394,19 @@ SOURCE=.\GlyphPositionAdjustments.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\GlyphPositioningLookupProcessor.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\GlyphPositioningTables.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\GlyphSubstitutionLookupProcessor.h
+SOURCE=.\GlyphPosnLookupProc.h
 # End Source File
 # Begin Source File
 
 SOURCE=.\GlyphSubstitutionTables.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\GlyphSubstLookupProc.h
 # End Source File
 # Begin Source File
 
@@ -659,15 +659,15 @@ SOURCE=.\MarkArrays.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\MarkToBasePositioningSubtables.h
+SOURCE=.\MarkToBasePosnSubtables.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\MarkToLigaturePositioningSubtables.h
+SOURCE=.\MarkToLigaturePosnSubtables.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\MarkToMarkPositioningSubtables.h
+SOURCE=.\MarkToMarkPosnSubtables.h
 # End Source File
 # Begin Source File
 
@@ -683,11 +683,11 @@ SOURCE=.\MultipleSubstitutionSubtables.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\NonContextualGlyphSubstitution.h
+SOURCE=.\NonContextualGlyphSubst.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\NonContextualGlyphSubstitutionProcessor.h
+SOURCE=.\NonContextualGlyphSubstProc.h
 # End Source File
 # Begin Source File
 
