@@ -22,6 +22,7 @@
 #include "tsputil.h"
 #include "uobjtest.h"
 #include "v32test.h"
+#include "uvectest.h"
 //#include "custrtest.h"
 //#include "ccitrtst.h"
 //#include "cloctest.h"
@@ -126,6 +127,15 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
             if(exec) {
                 logln ("UVector32Test---"); logln("");
                 UVector32Test test;
+                callTest( test, par );
+            }
+            break;;
+
+        case 11:
+            name = "UVectorTest";
+            if(exec) {
+                logln ("UVectorTest---"); logln("");
+                UVectorTest test;
                 callTest( test, par );
             }
             break;;
