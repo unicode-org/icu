@@ -156,6 +156,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(66,TestSurrogateCasing);
         TESTCASE(67,TestFunction);
         TESTCASE(68,TestInvalidBackRef);
+        TESTCASE(69,TestUserFunction);
 
         default: name = ""; break;
     }
@@ -3337,7 +3338,7 @@ void TransliteratorTest::TestFunction() {
     // Careful with spacing and ';' here:  Phrase this exactly
     // as toRules() is going to return it.  If toRules() changes
     // with regard to spacing or ';', then adjust this string.
-    UnicodeString rule = // TODO clean up spacing
+    UnicodeString rule =
         "([:Lu:]) > $1 '(' &Lower( $1 ) '=' &Hex( &Any-Lower( $1 ) ) ')';";
     
     UParseError pe;
@@ -3385,6 +3386,123 @@ void TransliteratorTest::TestInvalidBackRef(void) {
         errln("FAIL: Ok: . > $1; => no error");
     } else {
         logln((UnicodeString)"Ok: . > $1; => " + u_errorName(ec));
+    }
+}
+
+// vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+// BEGIN TestUserFunction support factory
+
+Transliterator* _TUFF[4];
+UnicodeString _TUFID[4];
+
+static Transliterator* _TUFFactory(const UnicodeString& ID,
+                                   Transliterator::Token context) {
+    return _TUFF[context.integer]->clone();
+}
+
+static void _TUFReg(const UnicodeString& ID, Transliterator* t, int32_t n) {
+    _TUFF[n] = t;
+    _TUFID[n] = ID;
+    Transliterator::registerFactory(ID, _TUFFactory, Transliterator::integerToken(n));
+}
+
+static void _TUFUnreg(int32_t n) {
+    if (_TUFF[n] != NULL) {
+        Transliterator::unregister(_TUFID[n]);
+        delete _TUFF[n];
+    }
+}
+
+// END TestUserFunction support factory
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+/**
+ * Test that user-registered transliterators can be used under function
+ * syntax.
+ */
+void TransliteratorTest::TestUserFunction() {
+ 
+    Transliterator* t;
+    UParseError pe;
+    UErrorCode ec = U_ZERO_ERROR;
+
+    // Setup our factory
+    int32_t i;
+    for (i=0; i<4; ++i) {
+        _TUFF[i] = NULL;
+    }
+
+    // There's no need to register inverses if we don't use them
+    t = Transliterator::createFromRules("gif",
+                                        "'\\'u(..)(..) > '<img src=\"http://www.unicode.org/gifs/24/' $1 '/U' $1$2 '.gif\">';",
+                                        UTRANS_FORWARD, pe, ec);
+    if (t == NULL || U_FAILURE(ec)) {
+        errln((UnicodeString)"FAIL: createFromRules gif " + u_errorName(ec));
+        return;
+    }
+    _TUFReg("Any-gif", t, 0);
+
+    t = Transliterator::createFromRules("RemoveCurly",
+                                        "[\\{\\}] > ;",
+                                        UTRANS_FORWARD, pe, ec);
+    if (t == NULL || U_FAILURE(ec)) {
+        errln((UnicodeString)"FAIL: createFromRules RemoveCurly " + u_errorName(ec));
+        goto FAIL;
+    }
+    _TUFReg("Any-RemoveCurly", t, 1);
+
+    logln("Trying &hex");
+    t = Transliterator::createFromRules("hex2",
+                                        "(.) > &hex($1);",
+                                        UTRANS_FORWARD, pe, ec);
+    if (t == NULL || U_FAILURE(ec)) {
+        errln("FAIL: createFromRules");
+        goto FAIL;
+    }
+    logln("Registering");
+    _TUFReg("Any-hex2", t, 2);
+    t = Transliterator::createInstance("Any-hex2", UTRANS_FORWARD, ec);
+    if (t == NULL || U_FAILURE(ec)) {
+        errln((UnicodeString)"FAIL: createInstance Any-hex2 " + u_errorName(ec));
+        goto FAIL;
+    }
+    expect(*t, "abc", "\\u0061\\u0062\\u0063");
+    delete t;
+
+    logln("Trying &gif");
+    t = Transliterator::createFromRules("gif2",
+                                        "(.) > &Gif(&Hex2($1));",
+                                        UTRANS_FORWARD, pe, ec);
+    if (t == NULL || U_FAILURE(ec)) {
+        errln((UnicodeString)"FAIL: createFromRules gif2 " + u_errorName(ec));
+        goto FAIL;
+    }
+    logln("Registering");
+    _TUFReg("Any-gif2", t, 3);
+    t = Transliterator::createInstance("Any-gif2", UTRANS_FORWARD, ec);
+    if (t == NULL || U_FAILURE(ec)) {
+        errln((UnicodeString)"FAIL: createInstance Any-gif2 " + u_errorName(ec));
+        goto FAIL;
+    }
+    expect(*t, "ab", "<img src=\"http://www.unicode.org/gifs/24/00/U0061.gif\">"
+           "<img src=\"http://www.unicode.org/gifs/24/00/U0062.gif\">");
+    delete t;
+
+    // Test that filters are allowed after &
+    t = Transliterator::createFromRules("test",
+                                        "(.) > &Hex($1) ' ' &[\\{\\}]Remove(&Name($1)) ' ';",
+                                        UTRANS_FORWARD, pe, ec);
+    if (t == NULL || U_FAILURE(ec)) {
+        errln((UnicodeString)"FAIL: createFromRules test " + u_errorName(ec));
+        goto FAIL;
+    }
+    expect(*t, "abc",
+           "\\u0061 LATIN SMALL LETTER A \\u0062 LATIN SMALL LETTER B \\u0063 LATIN SMALL LETTER C ");
+    delete t;
+
+ FAIL:
+    for (i=0; i<4; ++i) {
+        _TUFUnreg(i);
     }
 }
 

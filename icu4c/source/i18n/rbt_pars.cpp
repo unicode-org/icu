@@ -501,14 +501,16 @@ int32_t RuleHalf::parseSection(const UnicodeString& rule, int32_t pos, int32_t l
         case FUNCTION:
             {
                 int32_t iref = pos;
-                UnicodeString id = TransliteratorIDParser::parseBasicID(rule, iref);
+                TransliteratorIDParser::SingleID* single =
+                    TransliteratorIDParser::parseFilterID(rule, iref);
                 // The next character MUST be a segment open
-                if (id.length() == 0 ||
+                if (single == NULL ||
                     !ICU_Utility::parseChar(rule, iref, SEGMENT_OPEN)) {
                     return syntaxError(U_INVALID_FUNCTION, rule, start);
                 }
                 
-                Transliterator *t = TransliteratorParser::createBasicInstance(id, &id);
+                Transliterator *t = single->createInstance();
+                delete single;
                 if (t == NULL) {
                     return syntaxError(U_INVALID_FUNCTION, rule, start);
                 }
