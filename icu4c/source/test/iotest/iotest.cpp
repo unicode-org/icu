@@ -56,6 +56,7 @@ static void TestFileFromICU(UFILE *myFile) {
     UChar uStringBuf[256];
     char myString[256] = "";
     char testBuf[256] = "";
+    void *origPtr, *ptr;
     U_STRING_DECL(myStringOrig, "My-String", 9);
 
     U_STRING_INIT(myStringOrig, "My-String", 9);
@@ -70,6 +71,17 @@ static void TestFileFromICU(UFILE *myFile) {
     }
 
     *n = -1234;
+    if (sizeof(void *) == 4) {
+        origPtr = (void *)0xdeadbeef;
+    } else if (sizeof(void *) == 8) {
+        origPtr = (void *) INT64_C(0x1000200030004000);
+    } else if (sizeof(void *) == 16) {
+        /* iSeries */
+        int32_t massiveBigEndianPtr[] = { 0x10002000, 0x30004000, 0x50006000, 0x70008000 };
+        origPtr = *((void **)massiveBigEndianPtr);
+    } else {
+        log_err("sizeof(void*)=%d hasn't been tested before", (int)sizeof(void*));
+    }
 
     /* Test fprintf */
     u_fprintf(myFile, "Signed decimal integer %%d: %d\n", *n);
@@ -83,7 +95,7 @@ static void TestFileFromICU(UFILE *myFile) {
     u_fprintf(myFile, "Uppercase float %%E: %E\n", myFloat);
     u_fprintf(myFile, "Lowercase float %%g: %g\n", myFloat);
     u_fprintf(myFile, "Uppercase float %%G: %G\n", myFloat);
-//    u_fprintf(myFile, "Pointer %%p: %p\n", myFile);
+    u_fprintf(myFile, "Pointer %%p: %p\n", origPtr);
     u_fprintf(myFile, "Char %%c: %c\n", 'A');
     u_fprintf(myFile, "UChar %%C: %C\n", (UChar)0x0041); /*'A'*/
     u_fprintf(myFile, "String %%s: %s\n", "My-String");
@@ -191,7 +203,11 @@ static void TestFileFromICU(UFILE *myFile) {
     if (myFloat != *newDoubleValuePtr) {
         log_err("%%G Got: %G, Expected: %G\n", *newDoubleValuePtr, myFloat);
     }
-//  u_fscanf(myFile, "Pointer %%p: %p\n", newDoubleValue);
+    ptr = NULL;
+    u_fscanf(myFile, "Pointer %%p: %p\n", &ptr);
+    if (ptr != origPtr) {
+        log_err("%%p Got: %p, Expected: %p\n", ptr, origPtr);
+    }
     u_fscanf(myFile, "Char %%c: %c\n", myString);
     if (*myString != 'A') {
         log_err("%%c Got: %c, Expected: A\n", *myString);
@@ -1038,6 +1054,7 @@ static void TestString() {
     char myString[512] = "";
     char testBuf[512] = "";
     int32_t retVal;
+    void *origPtr, *ptr;
     U_STRING_DECL(myStringOrig, "My-String", 9);
 
     U_STRING_INIT(myStringOrig, "My-String", 9);
@@ -1045,6 +1062,17 @@ static void TestString() {
     u_memset(uStringBuf, 0x0a, sizeof(uStringBuf) / sizeof(*uStringBuf));
 
     *n = -1234;
+    if (sizeof(void *) == 4) {
+        origPtr = (void *)0xdeadbeef;
+    } else if (sizeof(void *) == 8) {
+        origPtr = (void *) INT64_C(0x1000200030004000);
+    } else if (sizeof(void *) == 16) {
+        /* iSeries */
+        int32_t massiveBigEndianPtr[] = { 0x10002000, 0x30004000, 0x50006000, 0x70008000 };
+        origPtr = *((void **)massiveBigEndianPtr);
+    } else {
+        log_err("sizeof(void*)=%d hasn't been tested before", (int)sizeof(void*));
+    }
 
     /* Test sprintf */
     u_sprintf(uStringBuf, NULL, "Signed decimal integer d: %d", *n);
@@ -1124,7 +1152,13 @@ static void TestString() {
         log_err("%%G Got: %G, Expected: %G\n", *newDoubleValuePtr, myFloat);
     }
 
-//    u_sprintf(uStringBuf, NULL, "Pointer %%p: %p\n", myFile);
+    ptr = NULL;
+    u_sprintf(uStringBuf, NULL, "Pointer %%p: %p\n", origPtr);
+    u_sscanf(uStringBuf, NULL, "Pointer %%p: %p\n", &ptr);
+    if (ptr != origPtr || u_strlen(uStringBuf) != 13+(sizeof(void*)*2)) {
+        log_err("%%p Got: %p, Expected: %p\n", ptr, origPtr);
+    }
+
     u_sprintf(uStringBuf, NULL, "Char c: %c", 'A');
     u_sscanf(uStringBuf, NULL, "Char c: %c", myString);
     if (*myString != 'A') {
