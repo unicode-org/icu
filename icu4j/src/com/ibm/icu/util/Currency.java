@@ -114,6 +114,7 @@ public class Currency extends MeasureUnit implements Serializable {
         if (shim == null) {
             return createCurrency(locale);
         }
+
         return shim.createInstance(locale);
     }
 
@@ -134,9 +135,13 @@ public class Currency extends MeasureUnit implements Serializable {
         String curriso = null;
         try{
             curriso = cm.getString(country);
+	    if (curriso != null) {
+		return new Currency(curriso);
+	    }
         }catch(MissingResourceException ex){
          //do nothing   
         }
+	return null;
         /*
         for (int i=0; i<cm.length; ++i) {
             if (country.equals((String) cm[i][0])) {
@@ -144,9 +149,10 @@ public class Currency extends MeasureUnit implements Serializable {
                 break;
             }
         }
-        */
+
         Currency curr = null;
         if (curriso != null) {
+	    
             curr = new Currency(curriso);
 
             // TODO: Determine valid and actual locale correctly.
@@ -154,6 +160,7 @@ public class Currency extends MeasureUnit implements Serializable {
             curr.setLocale(uloc, uloc);
         }
         return curr;
+        */
     }
 
     /**
@@ -634,7 +641,7 @@ public class Currency extends MeasureUnit implements Serializable {
 
     // -------- BEGIN ULocale boilerplate --------
 
-    /**
+    /*
      * Return the locale that was used to create this object, or null.
      * This may may differ from the locale requested at the time of
      * this object's creation.  For example, if an object is created
@@ -643,10 +650,10 @@ public class Currency extends MeasureUnit implements Serializable {
      * <tt>en_US</tt> may be the most specific locale that exists (the
      * <i>valid</i> locale).
      *
-     * <p>Note: This method will be implemented in ICU 3.0; ICU 2.8
-     * contains a partial preview implementation.  The * <i>actual</i>
-     * locale is returned correctly, but the <i>valid</i> locale is
-     * not, in most cases.
+     * <p>Note: This method will be obsoleted.  The implementation is
+     * no longer locale-specific and so there is no longer a valid or
+     * actual locale associated with the Currency object.  Until
+     * it is removed, this method will return the root locale.
      * @param type type of information requested, either {@link
      * com.ibm.icu.util.ULocale#VALID_LOCALE} or {@link
      * com.ibm.icu.util.ULocale#ACTUAL_LOCALE}.
@@ -655,12 +662,10 @@ public class Currency extends MeasureUnit implements Serializable {
      * @see com.ibm.icu.util.ULocale
      * @see com.ibm.icu.util.ULocale#VALID_LOCALE
      * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
-     * @draft ICU 2.8
-     * @deprecated This is a draft API and might change in a future release of ICU.
+     * @obsolete ICU 3.2
      */
     public final ULocale getLocale(ULocale.Type type) {
-        return type == ULocale.ACTUAL_LOCALE ?
-            this.actualLocale : this.validLocale;
+	return ULocale.ROOT;
     }
 
     /**

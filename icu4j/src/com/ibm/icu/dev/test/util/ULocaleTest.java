@@ -73,6 +73,10 @@ public class ULocaleTest extends TestFmwk {
             });
     }
 
+    // Currency getLocale API is obsolete in 3.2.  Since it now returns ULocale.ROOT,
+    // and this is not equal to the requested locale zh_TW_TAIPEI, the
+    // checkService call would always fail.  So we now omit the test.
+    /*
     public void TestCurrency() {
         checkService("zh_TW_TAIPEI", new ServiceFacade() {
                 public Object create(ULocale req) {
@@ -87,6 +91,7 @@ public class ULocaleTest extends TestFmwk {
                     }
                 });
     }
+    */
 
     public void TestBreakIterator() {
         checkService("hi_IN_BHOPAL", new ServiceFacade() {
@@ -234,17 +239,20 @@ public class ULocaleTest extends TestFmwk {
         String actual = actualLoc.toString();
         int reqValid = loccmp(req, valid);
         int validActual = loccmp(valid, actual);
-        if (((expReqValid.equals("gt") && reqValid > 0) ||
-             (expReqValid.equals("ge") && reqValid >= 0) ||
-             (expReqValid.equals("eq") && reqValid == 0)) &&
-            ((expValidActual.equals("gt") && validActual > 0) ||
-             (expValidActual.equals("ge") && validActual >= 0) ||
-             (expValidActual.equals("eq") && validActual == 0))) {
+	boolean reqOK = (expReqValid.equals("gt") && reqValid > 0) ||
+	    (expReqValid.equals("ge") && reqValid >= 0) ||
+	    (expReqValid.equals("eq") && reqValid == 0); 
+	boolean valOK = (expValidActual.equals("gt") && validActual > 0) ||
+	    (expValidActual.equals("ge") && validActual >= 0) ||
+	    (expValidActual.equals("eq") && validActual == 0);
+        if (reqOK && valOK) {
             logln("Ok: " + label + "; req=" + req + ", valid=" + valid +
                   ", actual=" + actual);
         } else {
             errln("FAIL: " + label + "; req=" + req + ", valid=" + valid +
-                  ", actual=" + actual);
+                  ", actual=" + actual +
+		  (reqOK ? "" : "\n  req !" + expReqValid + " valid") +
+		  (valOK ? "" : "\n  val !" + expValidActual + " actual"));
         }
     }
 
@@ -297,7 +305,8 @@ public class ULocaleTest extends TestFmwk {
         // catch(Exception), since that will catch the exception
         // that errln throws.
         catch(NoSuchMethodException e1) {
-            errln("FAIL: reflection failed: " + e1);
+	    // no longer an error, Currency has no getLocale
+            // errln("FAIL: reflection failed: " + e1);
         } catch(SecurityException e2) {
             errln("FAIL: reflection failed: " + e2);
         } catch(IllegalAccessException e3) {
@@ -305,7 +314,8 @@ public class ULocaleTest extends TestFmwk {
         } catch(IllegalArgumentException e4) {
             errln("FAIL: reflection failed: " + e4);
         } catch(InvocationTargetException e5) {
-            errln("FAIL: reflection failed: " + e5);
+	    // no longer an error, Currency has no getLocale
+            // errln("FAIL: reflection failed: " + e5);
         }
     }
 
