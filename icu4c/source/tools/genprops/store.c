@@ -588,7 +588,6 @@ addProps(uint32_t c, uint32_t x) {
         fprintf(stderr, "error: too many entries for the properties trie\n");
         exit(U_BUFFER_OVERFLOW_ERROR);
     }
-    setMainProperties(c, c+1, x);
 }
 
 /* areas of same properties ------------------------------------------------- */
@@ -599,7 +598,6 @@ repeatProps(uint32_t first, uint32_t last, uint32_t x) {
         fprintf(stderr, "error: too many entries for the properties trie\n");
         exit(U_BUFFER_OVERFLOW_ERROR);
     }
-    setMainProperties(first, last+1, x);
 }
 
 /* compacting --------------------------------------------------------------- */
