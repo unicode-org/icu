@@ -2489,14 +2489,14 @@ RuleBasedCollator::getEntry(VectorOfPToContractElement* list,
                          UBool fwd)
 {
     int32_t i;
-
+	
     if (list != NULL)
     {
         for (i = 0; i < list->size(); i += 1)
         {
             EntryPair *pair = list->at(i);
 
-            if ((pair != NULL) && (pair->fwd == fwd) && (pair->entryName == name))
+            if ((pair != NULL) && (pair->fwd == fwd) && (pair->getEntryName() == name))
             {
                 return i;
             }
