@@ -438,14 +438,14 @@ public:
      * u_getIntPropertyValue.  Prior contents of this set are lost.
      *
      * @param prop a property in the range UCHAR_BIN_START..UCHAR_BIN_LIMIT-1
-     * or UCHAR_INT_START..UCHAR_INT_LIMIT-1.
+     * or UCHAR_INT_START..UCHAR_INT_LIMIT-1
+     * or UCHAR_MASK_START..UCHAR_MASK_LIMIT-1.
      *
      * @param value a value in the range u_getIntPropertyMinValue(prop)..
      * u_getIntPropertyMaxValue(prop), with one exception.  If prop is
-     * UCHAR_GENERAL_CATEGORY, then value should not be a UCharCategory, but
+     * UCHAR_GENERAL_CATEGORY_MASK, then value should not be a UCharCategory, but
      * rather a mask value produced by U_GET_GC_MASK().  This allows grouped
-     * categories such as [:L:] to be represented.  Mask values range
-     * non-contiguously from 1..U_GC_P_MASK.
+     * categories such as [:L:] to be represented.
      *
      * @param ec error code input/output parameter
      *
