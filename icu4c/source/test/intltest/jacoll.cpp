@@ -147,22 +147,20 @@ void CollationKanaTest::TestTertiary(/* char* par */)
 /* Testing base letters */
 void CollationKanaTest::TestBase()
 {
-  int32_t i;
-  UErrorCode status = U_ZERO_ERROR;
-  myCollation->setStrength(Collator::PRIMARY);
-  for (i = 0; i < 3 ; i++)
-    doTest(testBaseCases[i], testBaseCases[i + 1], Collator::LESS);
+    int32_t i;
+    myCollation->setStrength(Collator::PRIMARY);
+    for (i = 0; i < 3 ; i++)
+        doTest(testBaseCases[i], testBaseCases[i + 1], Collator::LESS);
 }
 
 /* Testing plain, Daku-ten, Handaku-ten letters */
 void CollationKanaTest::TestPlainDakutenHandakuten(void)
 {
-  int32_t i;
-  UErrorCode status = U_ZERO_ERROR;
-  myCollation->setStrength(Collator::SECONDARY);
-  for (i = 0; i < 3 ; i++)
-    doTest(testPlainDakutenHandakutenCases[i], testPlainDakutenHandakutenCases[i + 1], 
-           Collator::LESS);
+    int32_t i;
+    myCollation->setStrength(Collator::SECONDARY);
+    for (i = 0; i < 3 ; i++)
+        doTest(testPlainDakutenHandakutenCases[i], testPlainDakutenHandakutenCases[i + 1], 
+        Collator::LESS);
 }
 
 /* 
