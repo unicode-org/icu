@@ -223,6 +223,7 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestJitterbug981, "tsconv/nucnvtst/TestJitterbug981");
    addTest(root, &TestJitterbug1293, "tsconv/nucnvtst/TestJitterbug1293");
    addTest(root, &TestCoverageMBCS, "tsconv/nucnvtst/TestCoverageMBCS");
+   addTest(root, &TestRoundTrippingAllUTF, "tsconv/nucnvtst/TestRoundTrippingAllUTF");
 
 }
 
@@ -2863,6 +2864,76 @@ unescape(UChar* dst, int32_t dstLen,const char* src,int32_t srcLen,UErrorCode *s
     return dstIndex;
 }
 
+static void
+TestFullRoundtrip(const char* cp){
+    UChar usource[10] ={0};
+    UChar nsrc[10] = {0};
+    uint32_t i=1;
+    int len=0;
+    nsrc[0]=0x0061;
+    /* Test codepoint 0 */
+    TestConv(usource,1,cp,"",NULL,0);
+    TestConv(usource,2,cp,"",NULL,0);
+    nsrc[2]=0x5555;
+    TestConv(nsrc,3,cp,"",NULL,0);
+
+    for(;i<=0x10FFFF;i++){
+        int j =0;
+
+        if(i>=0xD800 && i<=0xDFFF){
+            continue;
+        }
+        if(i<=0xFFFF){
+            usource[0] =(UChar) i;
+            len=1;
+        }else{
+            usource[0]=UTF16_LEAD(i);
+            usource[1]=UTF16_TRAIL(i);
+            len=2;
+        }
+        /* Test only single code points */
+        TestConv(usource,u_strlen(usource),cp,"",NULL,0);
+        /* Test codepoint repeated twice */
+        u_strncat(usource,usource,len);
+        TestConv(usource,u_strlen(usource),cp,"",NULL,0);
+        /* Test codepoint repeated 3 times */
+        u_strncat(usource,usource,len);
+        TestConv(usource,u_strlen(usource),cp,"",NULL,0);
+        /* Test codepoint in between 2 codepoints */
+        nsrc[1]=0;
+        u_strncat(nsrc,usource,len);
+        nsrc[len+1]=0x5555;
+        TestConv(nsrc,len+2,cp,"",NULL,0);        
+        uprv_memset(usource,0,sizeof(UChar)*10);
+    }
+}
+
+static void
+TestRoundTrippingAllUTF(){
+    if(!QUICK){
+        log_verbose("Running exhaustive round trip test for SCSU\n");
+        TestFullRoundtrip("SCSU");
+        log_verbose("Running exhaustive round trip test for UTF-8\n");
+        TestFullRoundtrip("UTF-8");
+        log_verbose("Running exhaustive round trip test for UTF-16BE\n");
+        TestFullRoundtrip("UTF-16BE");
+        log_verbose("Running exhaustive round trip test for UTF-16LE\n");
+        TestFullRoundtrip("UTF-16LE");
+        log_verbose("Running exhaustive round trip test for UTF-32BE\n");
+        TestFullRoundtrip("UTF-32BE");
+        log_verbose("Running exhaustive round trip test for UTF-32LE\n");
+        TestFullRoundtrip("UTF-32LE");
+        log_verbose("Running exhaustive round trip test for UTF-7\n");
+        TestFullRoundtrip("UTF-7");
+        log_verbose("Running exhaustive round trip test for UTF-7\n");
+        TestFullRoundtrip("UTF-7,version=1");
+        /*#### TODO: Enable this test when BOCU-1 is available */
+        /*log_verbose("Running exhaustive round trip test for BOCU-1");*/
+        /*TestFullRoundtrip("BOCU-1");*/
+        log_verbose("Running exhaustive round trip test for GB18030\n");
+        TestFullRoundtrip("GB18030");
+    }
+}
 
 static void
 TestSCSU() {
