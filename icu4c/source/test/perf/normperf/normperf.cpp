@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2003, International Business Machines
+* Copyright (c) 2002-2005, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 **********************************************************************
@@ -12,6 +12,8 @@
  * c:\normperf.exe -s C:\work\ICUCupertinoRep\icu4c\collation-perf-data  -i 10 -p 15 -f TestNames_Asian.txt -u -e UTF-8  -l
  */
 #include "normperf.h"
+#include "uoptions.h"
+#include <stdio.h>
 
 #define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
 

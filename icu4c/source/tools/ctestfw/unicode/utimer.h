@@ -211,7 +211,7 @@ typedef void FuntionToBeTimed(void* param);
  *
  * @param timer A pointer to UTimer struct to recieve the current time
  */
-U_CAPI void U_EXPORT2
+static void U_EXPORT2
 utimer_getTime(UTimer* timer){
     uprv_initFrequency(timer);
     uprv_start(timer);
@@ -225,7 +225,7 @@ utimer_getTime(UTimer* timer){
  * @param timer2 A pointer to UTimer struct to be used as end time
  * @return Time in seconds
  */
-U_CAPI double U_EXPORT2
+static double U_EXPORT2
 utimer_getDeltaSeconds(UTimer* timer1, UTimer* timer2){
     if(uprv_compareFrequency(timer1,timer2)){
         return uprv_delta(timer1,timer2);
@@ -240,7 +240,7 @@ utimer_getDeltaSeconds(UTimer* timer1, UTimer* timer2){
  * @param timer A pointer to UTimer struct to be used as starting time
  * @return Time elapsed in seconds
  */
-U_CAPI double U_EXPORT2
+static double U_EXPORT2
 utimer_getElapsedSeconds(UTimer* timer){
     UTimer temp;
     utimer_getTime(&temp);
@@ -256,7 +256,7 @@ utimer_getElapsedSeconds(UTimer* timer){
  * @param param Parameters to be passed to the fn
  * @return the time elapsed in seconds
  */
-U_CAPI double U_EXPORT2
+static double U_EXPORT2
 utimer_loopUntilDone(double thresholdTimeVal,
                      int32_t* loopCount, 
                      FuntionToBeTimed fn, 

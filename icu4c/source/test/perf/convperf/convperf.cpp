@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2004, International Business Machines
+* Copyright (c) 2002-2005, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 **********************************************************************
@@ -13,6 +13,7 @@
  */
 #include "convperf.h"
 #include "data.h"
+#include <stdio.h>
 
 int main(int argc, const char* argv[]){
     UErrorCode status = U_ZERO_ERROR;

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2004, International Business Machines
+* Copyright (c) 2002-2005, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 **********************************************************************
@@ -8,12 +8,14 @@
 #ifndef _CONVPERF_H
 #define _CONVPERF_H
 
-#include "uperf.h"
+#include <mlang.h>
+#include <objbase.h>
+#include <stdlib.h>
 #include "unicode/ucnv.h"
 #include "unicode/uclean.h"
 #include "unicode/ustring.h"
-#include <mlang.h>
-#include <objbase.h>
+
+#include "unicode/uperf.h"
 
 #define CONVERSION_FLAGS (0) /*WC_DEFAULTCHAR WC_COMPOSITECHECK & WC_SEPCHARS*/
 #define MAX_BUF_SIZE  3048
@@ -42,7 +44,7 @@ public:
                                         source, srcLen, &status);
         if(status==U_BUFFER_OVERFLOW_ERROR) {
             status=U_ZERO_ERROR;
-            target=(UChar*)uprv_malloc((reqdLen) * U_SIZEOF_UCHAR*2);
+            target=(UChar*)malloc((reqdLen) * U_SIZEOF_UCHAR*2);
             targetLimit = target + reqdLen;
             if(target == NULL){
                 status = U_MEMORY_ALLOCATION_ERROR;
@@ -60,7 +62,7 @@ public:
         return srcLen;
     }
     ~ICUToUnicodePerfFunction(){
-        uprv_free(target);
+        free(target);
         ucnv_close(conv);
     }
 };
@@ -88,7 +90,7 @@ public:
                                           source, srcLen, &status);
         if(status==U_BUFFER_OVERFLOW_ERROR) {
             status=U_ZERO_ERROR;
-            target=(char*)uprv_malloc((reqdLen*2));
+            target=(char*)malloc((reqdLen*2));
             targetLimit = target + reqdLen;
             if(target == NULL){
                 status = U_MEMORY_ALLOCATION_ERROR;
@@ -106,7 +108,7 @@ public:
         return srcLen;
     }
     ~ICUFromUnicodePerfFunction(){
-        uprv_free(target);
+        free(target);
         ucnv_close(conv);
     }
 };
