@@ -251,6 +251,13 @@ de {
         TC { "Turks- und Caicosinseln" }
         WF { "Wallis und Futuna" }
         CX { "Weihnachtsinsel" }
+
+        // some entries that are not in the official list:
+        EH { "West Sahara" }
+        // same as in root: HK { "Hong Kong" }
+        SP { "Serbien" }
+        // Zaire is now the Democratic Republic of Congo (CD)
+        // same as in root: ZR { "Zaire" }
     }
     DateTimeElements { 
             "2",
@@ -289,20 +296,155 @@ de {
             "v. Chr.",
             "n. Chr.",
     }
-    Languages { 
-        de { "Deutsch" }
+
+    // For the languages, I am trying to use the adjective list in the
+    // official list of country names.
+    // Sometimes I am guessing, many entries have a question mark for
+    // further checking.
+    //   Markus Scherer, 2000jun01
+    Languages {
+        ab { "Abchasisch" }
+        // ? aa { "Afar" }
+        // same as in root? af { "Afrikaans" }
+        sq { "Albanisch" }
+        am { "Amharisch" } // ?
+        ar { "Arabisch" }
+        hy { "Armenisch" }
+        // ? as { "Assamese" }
+        // ? ay { "Aymara" }
+        az { "Aserbaidschanisch" }
+        // ? ba { "Bashkir" }
+        eu { "Baskisch" }
+        bn { "Bengalisch" } // ?
+        dz { "Bhutanisch" }
+        // ? bh { "Bihari" }
+        // ? bi { "Bislama" }
+        br { "Bretonisch" }
+        bg { "Bulgarisch" }
+        my { "Burmesisch" }
+        be { "Wei\u00dfrussisch" }
+        km { "Kkambodschanisch" }
+        ca { "Katalanisch" } // Katalonisch?
+        zh { "Chinesisch" }
+        co { "Korsisch" }
+        hr { "Kroatisch" }
+        cs { "Tschechisch" }
+        da { "D\u00e4nisch" }
+        nl { "Holl\u00e4ndisch" }
         en { "Englisch" }
-        da { "D\u00E4nisch" }
-        el { "Griechisch" }
-        es { "Spanisch" }
+        // same as in root: eo { "Esperanto" }
+        et { "Estnisch" }
+        fo { "F\u00e4r\u00f6isch" }
+        fj { "Fidschianisch" }
         fi { "Finnisch" }
+        fr { "Franz\u00f6sisch" }
+        fy { "Frisisch" }
+        gl { "Galizisch" } // Galizianisch??
+        ka { "Georgisch" }
+        de { "Deutsch" }
+        el { "Griechisch" }
+        kl { "Gr\u00f6nl\u00e4ndisch" }
+        // ? gn { "Guarani" }
+        // ? gu { "Gujarati" }
+        // ? ha { "Hausa" }
+        he { "Hebr\u00e4isch" }
+        iw { "Hebr\u00e4isch" }
+        // same as in root? hi { "Hindi" }
+        hu { "Ungarisch" }
+        is { "Isl\u00e4ndisch" }
+        id { "Indonesisch" }
+        in { "Indonesisch" }
+        // same as in root: ia { "Interlingua" }
+        // same as in root: ie { "Interlingue" }
+        // ? iu { "Inukitut" }
+        // ? ik { "Inupiak" }
+        ga { "Irisch" }
         it { "Italienisch" }
         ja { "Japanisch" }
-        nl { "Holl\u00E4ndisch" }
+        jw { "Javanesisch" } // ?
+        // ? kn { "Kannada" }
+        ks { "Kaschmirisch" } // ?
+        kk { "Kasachisch" }
+        // ? rw { "Kinyarwanda" }
+        ky { "Kirgisisch" }
+        // ? rn { "Kirundi" }
+        ko { "Koreanisch" }
+        ku { "Kurdisch" }
+        // ? lo { "Laothian" }
+        la { "Latein" }
+        lv { "Lettisch" }
+        // ? ln { "Lingala" }
+        lt { "Litauisch" }
+        mk { "Mazedonisch" }
+        // ? mg { "Malagasy" }
+        // ? ms { "Malay" }
+        // ? ml { "Malayalam" }
+        mt { "Maltesisch" }
+        // ? mi { "Maori" }
+        // ? mr { "Marathi" }
+        mo { "Moldawisch" }
+        mn { "Mongolisch" }
+        na { "Nauruisch" }
+        ne { "Nepalesisch" }
         no { "Norwegisch" }
+        // ? oc { "Occitan" }
+        // ? or { "Oriya" }
+        // ? om { "Oromo (Afan)" }
+        // ? ps { "Pashto (Pushto)" }
+        fa { "Persisch" }
+        pl { "Polnisch" }
         pt { "Portugiesisch" }
+        // ? pa { "Punjabi" }
+        // ? qu { "Quechua" }
+        rm { "R\u00e4toromanisch" }
+        ro { "Rum\u00e4nisch" }
+        ru { "Russisch" }
+        sm { "Samoanisch" }
+        // ? sg { "Sangro" }
+        // same as in root: sa { "Sanskrit" }
+        gd { "Schottisch-G\u00e4lisch" }
+        sr { "Serbisch" }
+        sh { "Serbo-Kroatisch" }
+        // ? st { "Sesotho" }
+        // ? tn { "Setswana" }
+        // ? sn { "Shona" }
+        // ? sd { "Sindhi" }
+        // ? si { "Singhalese" }
+        // ? ss { "Siswati" }
+        sk { "Slowakisch" }
+        sl { "Slowenisch" }
+        so { "Somalisch" }
+        es { "Spanisch" }
+        // ? su { "Sundanese" }
+        // ? sw { "Swahili" }
         sv { "Schwedisch" }
-        tr { "T\u00FCrkisch" }
+        // ? tl { "Tagalog" }
+        tg { "Tadschikisch" }
+        // ? ta { "Tamil" }
+        // ? tt { "Tatar" }
+        // ? te { "Telugu" }
+        // same as in root? th { "Thai" }
+        bo { "Tibetisch" }
+        // ? ti { "Tigrinya" }
+        // ? to { "Tonga" }
+        // ? ts { "Tsonga" }
+        tr { "T\u00fcrkisch" }
+        tk { "T\u00fcrkmenisch" } // Turkmenisch??
+        // ? tw { "Twi" }
+        // ? ug { "Uighur" }
+        uk { "Ukrainisch" }
+        // ? ur { "Urdu" }
+        uz { "Usbekisch" }
+        vi { "Vietnamesisch" }
+        vo { "Volap\u00fck" }
+        cy { "Walisisch" }
+        // ? wo { "Wolof" }
+        // ? xh { "Xhosa" }
+        ji { "Jiddisch" }
+        yi { "Jiddisch" }
+        // ? yo { "Yoruba" }
+        // ? za { "Zhuang" }
+        // same as in root?? zu { "Zulu" }
     }
     LocaleID { "0407" }
     LocaleString { "de" }
