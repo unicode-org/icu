@@ -715,6 +715,24 @@ static void TestConvertFallBackWithBufferSizes(int32_t outsize, int32_t insize )
             log_err("test4(MBCS conversion with four-byte) -> u  did not match.\n"); 
 
     }
+    /* Test for jitterbug 509 EBCDIC_STATEFUL Converters*/
+    {                                    
+        const UChar unicodeInput[]    = {0x00AF         ,0x2013    ,0x2223    ,0x004C    ,0x5F5D         ,0xFF5E };
+                                        
+        const uint8_t expectedtest1[] = {0x0E,0x42,0xA1 ,0x44,0x4A ,0x42,0x4F ,0x0F,0xD3 ,0x0E,0x65,0x60 ,0x43,0xA1};
+        int32_t  totest1Offs[]        = {0,0,0          ,1,1       ,2,2       ,3,3       ,4,4,4          ,5,5};         
+        const uint8_t test1input[]    ={0x0E,0x42,0xA1  ,0x44,0x4A ,0x42,0x4F ,0x0F,0xD3 ,0x0E,0x65,0x60 ,0x43,0xA1};
+        const UChar expectedUnicode[] = {0x203e         ,0x2014    ,0xff5c    ,0x004c    ,0x5f5e         ,0x223c };
+        int32_t fromtest1Offs[]       = {1              ,3         ,5         ,8         ,10              ,12};       
+        /*from Unicode*/
+        if(!testConvertFromUnicode(unicodeInput, sizeof(unicodeInput)/sizeof(unicodeInput[0]),
+                expectedtest1, sizeof(expectedtest1), "ibm-1371", TRUE, totest1Offs ))
+            log_err("u-> ibm-1371(MBCS conversion with single-byte) did not match.,\n");
+        /*to Unicode*/
+        if(!testConvertToUnicode(test1input, sizeof(test1input),
+               expectedUnicode, sizeof(expectedUnicode)/sizeof(expectedUnicode[0]), "ibm-1371", TRUE, fromtest1Offs ))
+            log_err("ibm-1371(MBCS conversion with single-byte) -> u  did not match.,\n");
+    }
 
 
 }
