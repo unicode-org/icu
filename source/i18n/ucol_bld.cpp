@@ -19,7 +19,6 @@
 
 #include "ucol_bld.h" 
 
-static const UChar *rulesToParse = 0;
 static const InverseTableHeader* invUCA = NULL;
 
 static UBool U_CALLCONV
@@ -854,7 +853,6 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     boundaries except where there is only a single-byte primary. That is to 
     ensure that the script reordering will continue to work. 
 */
-  rulesToParse = src->source;
   UCATableHeader *image = (UCATableHeader *)uprv_malloc(sizeof(UCATableHeader));
   uprv_memcpy(image, src->UCA->image, sizeof(UCATableHeader));
 
