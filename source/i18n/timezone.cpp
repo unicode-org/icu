@@ -788,11 +788,11 @@ public:
         return new TZEnumeration(*this);
     }
 
-    int32_t count(UErrorCode& status) const {
+    virtual int32_t count(UErrorCode& status) const {
         return U_FAILURE(status) ? 0 : len;
     }
 
-    const UnicodeString* snext(UErrorCode& status) {
+    virtual const UnicodeString* snext(UErrorCode& status) {
         if (U_SUCCESS(status) && pos < len) {
             getID((map == 0) ? pos : map[pos]);
             ++pos;
@@ -801,7 +801,7 @@ public:
         return 0;
     }
 
-    void reset(UErrorCode& /*status*/) {
+    virtual void reset(UErrorCode& /*status*/) {
         pos = 0;
     }
 

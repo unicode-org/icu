@@ -1226,7 +1226,7 @@ public:
         return new KeywordEnumeration(keywords, length, (int32_t)(current - keywords), status);
     }
 
-    int32_t count(UErrorCode &/*status*/) const {
+    virtual int32_t count(UErrorCode &/*status*/) const {
         char *kw = keywords;
         int32_t result = 0;
         while(*kw) {
@@ -1236,7 +1236,7 @@ public:
         return result;
     }
 
-    const char* next(int32_t* resultLength, UErrorCode& status) {
+    virtual const char* next(int32_t* resultLength, UErrorCode& status) {
         const char* result;
         int32_t len;
         if(U_SUCCESS(status) && *current != 0) {
@@ -1255,13 +1255,13 @@ public:
         return result;
     }
 
-    const UnicodeString* snext(UErrorCode& status) {
+    virtual const UnicodeString* snext(UErrorCode& status) {
         int32_t resultLength = 0;
         const char *s = next(&resultLength, status);
         return setChars(s, resultLength, status);
     }
 
-    void reset(UErrorCode& /*status*/) {
+    virtual void reset(UErrorCode& /*status*/) {
         current = keywords;
     }
 };
