@@ -21,14 +21,6 @@
 #include "unicode/utypes.h"
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
-#include "ucnv_bld.h"
-#include "ucnvmbcs.h"
-
-union UConverterTable
-  {
-    UConverterMBCSTable mbcs;
-  };
-
 
 U_CDECL_BEGIN
 
@@ -43,7 +35,11 @@ U_CDECL_BEGIN
  * U+ffff "illegal"
  */
 
+/** Forward declaration, see ucnv_bld.h */
+struct UConverterSharedData;
+typedef struct UConverterSharedData UConverterSharedData;
 
+/* function types for UConverterImpl ---------------------------------------- */
 
 typedef void (*UConverterLoad) (UConverterSharedData *sharedData, const uint8_t *raw, UErrorCode *pErrorCode);
 typedef void (*UConverterUnload) (UConverterSharedData *sharedData);
