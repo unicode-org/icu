@@ -1,11 +1,11 @@
-icu (1.6.0.1-20001025-1) unstable; urgency=low
+icu (1.6.0.1-20001026-1) unstable; urgency=low
 
   * Move architecture-dependent files into /usr/lib, instead of
     /usr/share.
   * Move convrtrs.txt into /etc/icu, make it a conffile, and generate
     /usr/lib/icu/1.6.0.1/cnvalias.dat from it at postinst time.
 
- -- Yves Arrouye <yves@debian.org>  Tue, 24 Oct 2000 16:14:22 -0700
+ -- Yves Arrouye <yves@debian.org>  Tue, 26 Oct 2000 11:14:22 -0700
 
 icu (1.6.0.1-20001017-1) unstable; urgency=low
 

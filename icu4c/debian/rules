@@ -11,8 +11,9 @@
 # This is the debhelper compatability version to use.
 export DH_COMPAT=1
 
-# Where the source for ICU is.
+# Where the source for ICU is, where to build
 srcdir = source
+builddir = build
 
 # ICU installation directories, w/o the initial slash
 icudatadir = usr/share/icu/$(version)
@@ -45,32 +46,35 @@ endif
 
 all: build
 
-configure: configure-stamp
-configure-stamp:
+configure: $(builddir)/configure-stamp
+$(builddir)/configure-stamp:
 	dh_testdir
 	# Add here commands to configure the package.
-	cd $(srcdir); CFLAGS='$(CFLAGS)' CXXFLAGS='$(CFLAGS)' INSTALL_PROGRAM='$(INSTALL_PROGRAM)' ./configure --prefix=/usr --mandir=/usr/share/man --sysconfdir=/etc --with-data-packaging=files --disable-rpath --enable-shared --enable-static --disable-samples
-	touch configure-stamp
+	test -d $(builddir) || mkdir $(builddir)
+	cd build; CFLAGS='$(CFLAGS)' CXXFLAGS='$(CFLAGS)' INSTALL_PROGRAM='$(INSTALL_PROGRAM)' ../$(srcdir)/configure --srcdir=../$(srcdir) --prefix=/usr --mandir=/usr/share/man --sysconfdir=/etc --with-data-packaging=files --disable-rpath --enable-shared --enable-static --disable-samples
+	touch $@
 
-build: configure-stamp build-stamp
-build-stamp:
+build: $(builddir)/configure-stamp $(builddir)/build-stamp
+$(builddir)/build-stamp:
 	dh_testdir
 
 	# Add here commands to compile the package.
-	$(MAKE) -C $(srcdir)
+	$(MAKE) -C $(builddir)
 
-	touch build-stamp
+	touch $@
 
 clean:
 	dh_testdir
 	dh_testroot
-	rm -f build-stamp configure-stamp
+	rm -f $(builddir)/build-stamp $(builddir)/configure-stamp
 
 	# Add here commands to clean up after the build process.
 	-$(MAKE) -C $(srcdir) distclean
 
 	rm -f $(addprefix debian/,$(DEBIAN_FILES))
 	dh_clean
+
+	test $(builddir) != $(srcdir) && rmdir $(builddir)
 
 install: build
 	dh_testdir
@@ -79,7 +83,7 @@ install: build
 	dh_installdirs
 
 	# Add here commands to install the package into debian/tmp.
-	$(MAKE) -C $(srcdir) install DESTDIR=`pwd`/debian/tmp
+	$(MAKE) -C $(builddir) install DESTDIR=`pwd`/debian/tmp
 
 
 # Build architecture-independent files here.
