@@ -68,6 +68,7 @@ check: all
 
 distclean-local: clean
 	$(RMV) Makefile
+
 ifeq ($(OS390DATA),1)
 OS390PKG= package390
 OS390INSTALL= install390
@@ -75,15 +76,17 @@ endif
 
 all-local: icupkg.inc build-local packagedata testdata packagetest $(OS390PKG)
 
-
-
 dist-local:
+
+clean-local: cleanpackage cleanfiles
+	$(RMV) $(TESTOUTDIR)/testdata.dat
 
 cleanfiles:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
 
-clean-local: cleanpackage cleanfiles
-	$(RMV) $(TESTOUTDIR)/testdata.dat
+cleanpackage:
+	$(RMV) $(OUTDIR)
+	$(RMV) $(TESTOUTDIR)
 
 
 check-local:
@@ -94,9 +97,6 @@ packagedata: icupkg.inc $(BUILDDIR)/icudata.lst
 packagetest: icupkg.inc $(TESTBUILDDIR)/testdata.lst 
 	$(INVOKE) $(PKGDATA) -T $(TESTBUILDDIR) -d $(TESTOUTDIR) -s $(BUILDDIR) -p testdata -m common $(TESTBUILDDIR)/testdata.lst
 
-cleanpackage:
-	$(RMV)  $(OUTDIR)
-	$(RMV)  $(TESTOUTDIR)
 ## Install ICU data.
 install-local:  $(BUILDDIR)/icudata.lst ./icupkg.inc install-convrtrstxt $(OS390INSTALL)
 	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(ICUPKGDATA_DIR)
@@ -176,7 +176,7 @@ ALL_TEST_FILES = $(TEST_DAT_FILES) $(TEST_BRK_FILES) $(TEST_CNV_FILES) $(TEST_RE
 # General data build rules
 
 ## Files to remove for 'make clean'
-CLEANFILES = *~ $(ALL_FILES) $(ALL_TEST_FILES) icupkg.inc $(BUILDDIR)\*.o $(BUILDDIR)\*.c $(BUILDDIR)\*.dat 
+CLEANFILES = *~ icupkg.inc
 
 $(BUILDDIR)/icudata.lst: $(SRCLISTDEPS)
 	@echo "generating $@ (list of data files)"
