@@ -153,7 +153,7 @@ UnicodeString append(UnicodeString& result, const UObject* obj)
         } else if (id == Locale::getStaticClassID()) {
             result.append(((Locale*)obj)->getName());
         } else if (id == Integer::getStaticClassID()) {
-            sprintf(buffer, "%d", ((Integer*)obj)->_val);
+            sprintf(buffer, "%d", (int)((Integer*)obj)->_val);
             result.append(buffer);
         } else {
             sprintf(buffer, "%p", (const void*)obj);
