@@ -27,6 +27,8 @@
 #include "unicode/ucurr.h"
 #include "unicode/choicfmt.h"
 #include "ucurrimp.h"
+#include "cstring.h"
+#include "locbased.h"
 
 // *****************************************************************************
 // class DecimalFormatSymbols
@@ -77,6 +79,8 @@ DecimalFormatSymbols::DecimalFormatSymbols(const DecimalFormatSymbols &source)
         // fastCopyFrom is safe, see docs on fSymbols
         fSymbols[(ENumberFormatSymbol)i].fastCopyFrom(source.fSymbols[(ENumberFormatSymbol)i]);
     }
+    uprv_strcpy(validLocale, source.validLocale);
+    uprv_strcpy(actualLocale, source.actualLocale);
 }
 
 // -------------------------------------
@@ -120,6 +124,8 @@ void
 DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
                                  UBool useLastResortData)
 {
+    *validLocale = *actualLocale = 0;
+
     if (U_FAILURE(status))
         return;
 
@@ -171,6 +177,12 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
                 }
                 /* else use the default values. */
             }
+
+            U_LOCALE_BASED(locBased, *this);
+            locBased.setLocaleIDs(ures_getLocaleByType(numberElementsRes,
+                                       ULOC_VALID_LOCALE, &status),
+                                  ures_getLocaleByType(numberElementsRes,
+                                       ULOC_ACTUAL_LOCALE, &status));
         }
         ures_close(numberElementsRes);
     }
@@ -235,6 +247,12 @@ DecimalFormatSymbols::initialize() {
     fSymbols[kPadEscapeSymbol] = (UChar)0x2a;           // '*' pad escape symbol
     fSymbols[kInfinitySymbol] = (UChar)0x221e;          // 'oo' infinite
     fSymbols[kNaNSymbol] = (UChar)0xfffd;               // SUB NaN
+}
+
+Locale 
+DecimalFormatSymbols::getLocale(ULocDataLocaleType type, UErrorCode& status) const {
+    U_LOCALE_BASED(locBased, *this);
+    return locBased.getLocale(type, status);
 }
 
 U_NAMESPACE_END

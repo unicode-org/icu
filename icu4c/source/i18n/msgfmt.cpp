@@ -187,6 +187,7 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
         return;
     }
     applyPattern(pattern, success);
+    setLocaleIDs(fLocale.getName(), fLocale.getName());
 }
  
 MessageFormat::MessageFormat(const UnicodeString& pattern,
@@ -210,6 +211,7 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
         return;
     }
     applyPattern(pattern, success);
+    setLocaleIDs(fLocale.getName(), fLocale.getName());
 }
 
 MessageFormat::MessageFormat(const UnicodeString& pattern,
@@ -234,6 +236,7 @@ MessageFormat::MessageFormat(const UnicodeString& pattern,
         return;
     }
     applyPattern(pattern, parseError, success);
+    setLocaleIDs(fLocale.getName(), fLocale.getName());
 }
 
 MessageFormat::MessageFormat(const MessageFormat& that)
@@ -427,6 +430,7 @@ MessageFormat::setLocale(const Locale& theLocale)
         defaultDateFormat = NULL;
     }
     fLocale = theLocale;
+    setLocaleIDs(fLocale.getName(), fLocale.getName());
 }
  
 // -------------------------------------
@@ -1391,40 +1395,6 @@ const DateFormat* MessageFormat::getDefaultDateFormat(UErrorCode& ec) const {
         }
     }
     return defaultDateFormat;
-}
-
-Locale 
-MessageFormat::getLocale(ULocDataLocaleType type, UErrorCode& status) const 
-{
-    switch(type) {
-    case ULOC_VALID_LOCALE:
-        return fLocale;
-        break;
-    case ULOC_ACTUAL_LOCALE:
-        return fLocale;
-        break;
-    default:
-        status = U_UNSUPPORTED_ERROR;
-        return Locale("");
-        break;
-    }
-}
-
-const char* 
-MessageFormat::getLocaleInternal(ULocDataLocaleType type, UErrorCode &status) const
-{
-    switch(type) {
-    case ULOC_VALID_LOCALE:
-        return fLocale.getName();
-        break;
-    case ULOC_ACTUAL_LOCALE:
-        return fLocale.getName();
-        break;
-    default:
-        status = U_UNSUPPORTED_ERROR;
-        return NULL;
-        break;
-    }
 }
 
 U_NAMESPACE_END

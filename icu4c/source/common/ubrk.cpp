@@ -270,7 +270,13 @@ ubrk_getLocaleByType(const UBreakIterator *bi,
                      ULocDataLocaleType type, 
                      UErrorCode* status)
 {
-  return ((BreakIterator *)bi)->getLocaleInternal(type, *status);
+    if (bi == NULL) {
+        if (U_SUCCESS(*status)) {
+            *status = U_ILLEGAL_ARGUMENT_ERROR;
+        }
+        return NULL;
+    }
+    return ((BreakIterator*)bi)->getLocaleID(type, *status);
 }
 
 
