@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Normalizer.java,v $ 
- * $Date: 2002/10/31 01:12:38 $ 
- * $Revision: 1.24 $
+ * $Date: 2002/11/15 21:04:19 $ 
+ * $Revision: 1.25 $
  *
  *******************************************************************************
  */
@@ -186,6 +186,9 @@ public final class Normalizer implements Cloneable{
             }
             return NO;
         }
+        protected boolean isNFSkippable(int c){
+            return true;
+        }
         
     }
     
@@ -227,7 +230,11 @@ public final class Normalizer implements Cloneable{
                                       allowMaybe
                                  );
             }
-           
+            protected boolean isNFSkippable(int c){
+                return NormalizerImpl.isNFSkippable(c,this,
+                                (NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFD)
+                       );
+            }           
          };
                                          
     /** Compatibility decomposition.  */
@@ -263,7 +270,12 @@ public final class Normalizer implements Cloneable{
                                       NormalizerImpl.QC_NFKD,
                                       allowMaybe
                                 );
-            }                                        
+            }
+            protected boolean isNFSkippable(int c){
+                return NormalizerImpl.isNFSkippable(c, this,
+                                (NormalizerImpl.CC_MASK|NormalizerImpl.QC_NFKD)
+                       );
+            }                                         
          };
                                          
     /** Canonical decomposition followed by canonical composition.  */
@@ -304,6 +316,11 @@ public final class Normalizer implements Cloneable{
                                        allowMaybe
                                    );
             }
+            protected boolean isNFSkippable(int c){
+                return NormalizerImpl.isNFSkippable(c,this,
+                                (NormalizerImpl.CC_MASK|NormalizerImpl.COMBINES_ANY|(NormalizerImpl.QC_NFC & NormalizerImpl.QC_ANY_NO))
+                       );
+            } 
          };
                                          
     /** Default normalization.  */
@@ -345,6 +362,11 @@ public final class Normalizer implements Cloneable{
                                        allowMaybe
                                      );
             }
+            protected boolean isNFSkippable(int c){
+                return NormalizerImpl.isNFSkippable(c, this,
+                                (NormalizerImpl.CC_MASK|NormalizerImpl.COMBINES_ANY|(NormalizerImpl.QC_NFKC & NormalizerImpl.QC_ANY_NO))
+                       );
+            } 
          };
                                         
     /** "Fast C or D" form. @since ICU 2.1 */
@@ -372,7 +394,10 @@ public final class Normalizer implements Cloneable{
             protected QuickCheckResult quickCheck(char[] src,int start, 
                                                   int limit,boolean allowMaybe){
                 return NormalizerImpl.checkFCD(src,start,limit) ? YES : NO;
-            }  
+            }
+            protected boolean isNFSkippable(int c){
+               return (NormalizerImpl.getFCD16(c)>1);
+            }   
          };
 
     
@@ -2010,7 +2035,7 @@ public final class Normalizer implements Cloneable{
         return buffer.length-startIndex[0];
     }
     
-    private static int previous(UCharacterIterator src,
+    protected static int previous(UCharacterIterator src,
                    char[] dest, int destStart, int destLimit, 
                    Mode mode, 
                    /*int options,*/
@@ -2238,7 +2263,7 @@ public final class Normalizer implements Cloneable{
         return bufferIndex;
     }
     
-    private static int next(UCharacterIterator src,
+    protected static int next(UCharacterIterator src,
                            char[] dest, int destStart, int destLimit,
                            Normalizer.Mode mode, /*int options,*/
                            boolean doNormalize, boolean[] pNeededToNormalize){
@@ -2363,5 +2388,12 @@ public final class Normalizer implements Cloneable{
         return buffer[index];
         
     }
-                  
+    
+    /**
+     * Internal API
+     * @internal
+     */
+    public static boolean isNFSkippable(int c, Mode mode){
+        return mode.isNFSkippable(c);
+    }              
 }
