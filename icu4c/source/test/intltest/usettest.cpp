@@ -104,20 +104,29 @@ UnicodeSetTest::TestCategories(void) {
 void
 UnicodeSetTest::TestCloneEqualHash(void) {
     UErrorCode status = U_ZERO_ERROR;
-    //int8_t category=Unicode::LOWERCASE_LETTER;
-    //UnicodeSet *set1=new UnicodeSet(category, status); //  :Li: Letter, lowercase
-    UnicodeSet *set1=new UnicodeSet("[:Ll:]", status); //  Letter, lowercase
+    int8_t category=Unicode::LOWERCASE_LETTER;
+    UnicodeSet *set1=new UnicodeSet(category, status); //  :Ll: Letter, lowercase
+    UnicodeSet *set1a=new UnicodeSet("[:Ll:]", status); //  Letter, lowercase
     if (U_FAILURE(status)){
         errln((UnicodeString)"FAIL: Can't construst set with category->Ll");
         return;
     }
-    //category=Unicode::DECIMAL_DIGIT_NUMBER;
-    //UnicodeSet *set2=new UnicodeSet(category, status);   //Number, Decimal digit
-    UnicodeSet *set2=new UnicodeSet("[:Nd:]", status);   //Number, Decimal digit
+    category=Unicode::DECIMAL_DIGIT_NUMBER;
+    UnicodeSet *set2=new UnicodeSet(category, status);   //Number, Decimal digit
+    UnicodeSet *set2a=new UnicodeSet("[:Nd:]", status);   //Number, Decimal digit
     if (U_FAILURE(status)){
         errln((UnicodeString)"FAIL: Can't construct set with category->Nd");
         return;
     }
+
+    if (*set1 != *set1a) {
+        errln("FAIL: category constructor for Ll broken");
+    }
+    if (*set2 != *set2a) {
+        errln("FAIL: category constructor for Nd broken");
+    }
+    delete set1a;
+    delete set2a;
 
     logln("Testing copy construction");
     UnicodeSet *set1copy=new UnicodeSet(*set1);

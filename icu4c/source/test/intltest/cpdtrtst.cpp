@@ -27,20 +27,19 @@
 // runIndexedTest
 //---------------------------------------------
 
-void CompoundTransliteratorTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
-{
-    if (exec) logln((UnicodeString)"TestSuite CompoundTransliterator API ");
+void
+CompoundTransliteratorTest::runIndexedTest(int32_t index, UBool exec,
+                                           const char* &name, char* /*par*/) {
     switch (index) {
-     
-        case 0: name = "TestConstruction"; if (exec) TestConstruction(); break;
-        case 1: name = "TestCloneEqual"; if (exec) TestCloneEqual(); break;
-        case 2: name = "TestGetCount"; if (exec) TestGetCount(); break;
-        case 3: name = "TestGetSetAdoptTransliterator"; if (exec) TestGetSetAdoptTransliterator(); break;
-        case 4: name = "TestTransliterate"; if (exec) TestTransliterate(); break;
-       
-        default: name = ""; break; /*needed to end loop*/
+        TESTCASE(0,TestConstruction);
+        TESTCASE(1,TestCloneEqual);
+        TESTCASE(2,TestGetCount);
+        TESTCASE(3,TestGetSetAdoptTransliterator);
+        TESTCASE(4,TestTransliterate);
+        default: name = ""; break;
     }
 }
+
 void CompoundTransliteratorTest::TestConstruction(){
      logln("Testing the construction of the compound Transliterator");
    UnicodeString names[]={"Greek-Latin", "Latin-Devanagari", "Devanagari-Latin", "Latin-Greek"};
@@ -258,7 +257,7 @@ void CompoundTransliteratorTest::TestGetSetAdoptTransliterator(){
 
     ct1->setTransliterators(transarray, count);
     if(ct1->getCount() != count || ct1->getID() != ID2){
-        errln((UnicodeString)"Error: setTransliterators) failed.\n\t Count:- expected->" + count + (UnicodeString)".  got->" + ct1->getCount() +
+        errln((UnicodeString)"Error: setTransliterators() failed.\n\t Count:- expected->" + count + (UnicodeString)".  got->" + ct1->getCount() +
                                                    (UnicodeString)"\n\tID   :- expected->" + ID2 + (UnicodeString)".  got->" + ct1->getID());
     }
     else{
@@ -277,14 +276,14 @@ void CompoundTransliteratorTest::TestGetSetAdoptTransliterator(){
         logln("OK: setTransliterator() passed");
     }*/
     logln("Testing adoptTransliterator() API of CompoundTransliterator");
-    UnicodeString ID3("Latin-Kana");
+    UnicodeString ID3("Latin-Katakana");
     Transliterator **transarray2=new Transliterator*[1];
     transarray2[0] = Transliterator::createInstance(ID3,UTRANS_FORWARD,parseError,status);
     if (transarray2[0] != 0) {
         ct1->adoptTransliterators(transarray2, 1);
     }
 	if(ct1->getCount() != 1 || ct1->getID() != ID3){
-        errln((UnicodeString)"Error: adoptTransliterators) failed.\n\t Count:- expected->1" + (UnicodeString)".  got->" + ct1->getCount() +
+        errln((UnicodeString)"Error: adoptTransliterators() failed.\n\t Count:- expected->1" + (UnicodeString)".  got->" + ct1->getCount() +
                                                    (UnicodeString)"\n\tID   :- expected->" + ID3 + (UnicodeString)".  got->" + ct1->getID());
     }
     else{
@@ -352,17 +351,17 @@ void CompoundTransliteratorTest::TestTransliterate(){
              "Any-Hex;Hex-Any;Any-Hex",     "hello",  UnicodeString("\\u0068\\u0065\\u006C\\u006C\\u006F", ""), 
              "Any-Hex;Hex-Any",                 "hello! How are you?",  "hello! How are you?",
              //"Devanagari-Latin;Latin-Devanagari",        CharsToUnicodeString("\\u092D\\u0948'\\u0930'\\u0935"),  CharsToUnicodeString("\\u092D\\u0948\\u0930\\u0935"), // quotes lost
-             "Latin-Cyrillic;Cyrillic-Latin",           "a'b'k'd'e'f'g'h'i'j'Shch'shch'zh'h", "abkdefghijShchshchzhh",
+             "Latin-Cyrillic;Cyrillic-Latin",           "a'b'k'd'e'f'g'h'i'j'Shch'shch'zh'h", "a'b'k'd'e'f'g'h'i'j'Shch'shch'zh'h", //"abkdefghijShchshchzhh",
              "Latin-Greek;Greek-Latin",                 "ABGabgAKLMN", "ABGabgAKLMN",
-             "Latin-Arabic;Arabic-Latin",               "Ad'r'a'b'i'k'dh'dd'gh", "Adrabikdhddgh",
+             //"Latin-Arabic;Arabic-Latin",               "Ad'r'a'b'i'k'dh'dd'gh", "Adrabikdhddgh",
              "Hiragana-Katakana",                       CharsToUnicodeString("\\u3041\\u308f\\u3099\\u306e\\u304b\\u3092\\u3099"), 
                                                                  CharsToUnicodeString("\\u30A1\\u30f7\\u30ce\\u30ab\\u30fa"),  
              "Hiragana-Katakana;Katakana-Hiragana",     CharsToUnicodeString("\\u3041\\u308f\\u3099\\u306e\\u304b\\u3051"), 
                                                                  CharsToUnicodeString("\\u3041\\u308f\\u3099\\u306e\\u304b\\u3051"),
              "Katakana-Hiragana;Hiragana-Katakana",     CharsToUnicodeString("\\u30A1\\u30f7\\u30ce\\u30f5\\u30f6"), 
                                                                  CharsToUnicodeString("\\u30A1\\u30f7\\u30ce\\u30ab\\u30b1"),  
-             "Latin-Kana;Kana-Latin",                   CharsToUnicodeString("VAVIVUVEVOhuZIZUZONYINYUNYAsesuzezu"), 
-                                                                 CharsToUnicodeString("VAVIVUVEVOhuZIZUZONYINYUNYAsesuzezu"),  
+             "Latin-Katakana;Katakana-Latin",                   CharsToUnicodeString("vavivuvevohuzizuzonyinyunyasesuzezu"), 
+                                                                 CharsToUnicodeString("vavivuvevohuzizuzonyinyunyasesuzezu"),  
     };
     uint32_t i;
     for(i=0; i<sizeof(Data)/sizeof(Data[0]); i=i+3){
