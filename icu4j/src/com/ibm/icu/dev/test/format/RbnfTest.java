@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/RbnfTest.java,v $ 
- * $Date: 2002/07/31 00:55:03 $ 
- * $Revision: 1.11 $
+ * $Date: 2002/07/31 17:37:07 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -38,6 +38,83 @@ public class RbnfTest extends TestFmwk {
         }
     }
 
+    static final String fracRules = 
+	    "%main:\n" +
+	    // this rule formats the number if it's 1 or more.  It formats
+	    // the integral part using a DecimalFormat ("#,##0" puts
+	    // thousands separators in the right places) and the fractional
+	    // part using %%frac.  If there is no fractional part, it
+	    // just shows the integral part.
+	    "    x.0: <#,##0<[ >%%frac>];\n" +
+	    // this rule formats the number if it's between 0 and 1.  It
+	    // shows only the fractional part (0.5 shows up as "1/2," not
+	    // "0 1/2")
+	    "    0.x: >%%frac>;\n" +
+	    // the fraction rule set.  This works the same way as the one in the
+	    // preceding example: We multiply the fractional part of the number
+	    // being formatted by each rule's base value and use the rule that
+	    // produces the result closest to 0 (or the first rule that produces 0).
+	    // Since we only provide rules for the numbers from 2 to 10, we know
+	    // we'll get a fraction with a denominator between 2 and 10.
+	    // "<0<" causes the numerator of the fraction to be formatted
+	    // using numerals
+	    "%%frac:\n" +
+	    "    2: 1/2;\n" +
+	    "    3: <0</3;\n" +
+	    "    4: <0</4;\n" +
+	    "    5: <0</5;\n" +
+	    "    6: <0</6;\n" +
+	    "    7: <0</7;\n" +
+	    "    8: <0</8;\n" +
+	    "    9: <0</9;\n" +
+	    "   10: <0</10;\n";
+
+	static final String durationInSecondsRules =
+        // main rule set for formatting with words
+        "%with-words:\n"
+               // take care of singular and plural forms of "second"
+        + "    0 seconds; 1 second; =0= seconds;\n"
+               // use %%min to format values greater than 60 seconds
+        + "    60/60: <%%min<[, >>];\n"
+               // use %%hr to format values greater than 3,600 seconds
+               // (the ">>>" below causes us to see the number of minutes
+               // when when there are zero minutes)
+        + "    3600/60: <%%hr<[, >>>];\n"
+        // this rule set takes care of the singular and plural forms
+        // of "minute"
+        + "%%min:\n"
+        + "    0 minutes; 1 minute; =0= minutes;\n"
+        // this rule set takes care of the singular and plural forms
+        // of "hour"
+        + "%%hr:\n"
+        + "    0 hours; 1 hour; =0= hours;\n"
+
+        // main rule set for formatting in numerals
+        + "%in-numerals:\n"
+               // values below 60 seconds are shown with "sec."
+        + "    =0= sec.;\n"
+               // higher values are shown with colons: %%min-sec is used for
+               // values below 3,600 seconds...
+        + "    60: =%%min-sec=;\n"
+               // ...and %%hr-min-sec is used for values of 3,600 seconds
+               // and above
+        + "    3600: =%%hr-min-sec=;\n"
+        // this rule causes values of less than 10 minutes to show without
+        // a leading zero
+        + "%%min-sec:\n"
+        + "    0: :=00=;\n"
+        + "    60/60: <0<>>;\n"
+        // this rule set is used for values of 3,600 or more.  Minutes are always
+        // shown, and always shown with two digits
+        + "%%hr-min-sec:\n"
+        + "    0: :=00=;\n"
+        + "    60/60: <00<>>;\n"
+        + "    3600/60: <#,##0<:>>>;\n"
+        // the lenient-parse rules allow several different characters to be used
+        // as delimiters between hours, minutes, and seconds
+        + "%%lenient-parse:\n"
+        + "    & : = . = ' ' = -;\n";
+
     public void TestCoverage() {
 	// extra calls to boost coverage numbers
 	RuleBasedNumberFormat fmt0 = new RuleBasedNumberFormat(RuleBasedNumberFormat.SPELLOUT);
@@ -54,6 +131,89 @@ public class RbnfTest extends TestFmwk {
 	}
 	String str = fmt0.toString();
 	logln(str);
+
+	RuleBasedNumberFormat fmt3 =  new RuleBasedNumberFormat(durationInSecondsRules);
+
+	if (fmt0.equals(fmt3)) {
+	    errln("nonequal fails");
+	}
+	if (!fmt3.equals(fmt3)) {
+	    errln("self equal 2 fails");
+	}
+	str = fmt3.toString();
+	logln(str);
+
+	String[] names = fmt3.getRuleSetNames();
+
+	try {
+	    fmt3.setDefaultRuleSet(null);
+	    fmt3.setDefaultRuleSet("%%foo");
+	    errln("sdrf %%foo didn't fail");
+	}
+	catch (Exception e) {
+	}
+
+	try {
+	    fmt3.setDefaultRuleSet("%bogus");
+	    errln("sdrf %bogus didn't fail");
+	}
+	catch (Exception e) {
+	}
+
+	try {
+	    str = fmt3.format(2.3, names[0]);
+	    logln(str);
+	    str = fmt3.format(2.3, "%%foo");
+	    errln("format double %%foo didn't fail");
+	}
+	catch (Exception e) {
+	}
+
+	try {
+	    str = fmt3.format(123L, names[0]);
+	    logln(str);
+	    str = fmt3.format(123L, "%%foo");
+	    errln("format double %%foo didn't fail");
+	}
+	catch (Exception e) {
+	}
+
+	RuleBasedNumberFormat fmt4 = new RuleBasedNumberFormat(fracRules, Locale.ENGLISH);
+	RuleBasedNumberFormat fmt5 = new RuleBasedNumberFormat(fracRules, Locale.ENGLISH);
+	str = fmt4.toString();
+	logln(str);
+	if (!fmt4.equals(fmt5)) {
+	    errln("duplicate 2 equality failed");
+	}
+	str = fmt4.format(123L);
+	logln(str);
+	try {
+	    Number num = fmt4.parse(str);
+	    logln(num.toString());
+	}
+	catch (Exception e) {
+	    errln("parse caught exception");
+	}
+
+	str = fmt4.format(.000123);
+	logln(str);
+	try {
+	    Number num = fmt4.parse(str);
+	    logln(num.toString());
+	}
+	catch (Exception e) {
+	    errln("parse caught exception");
+	}
+
+	str = fmt4.format(456.000123);
+	logln(str);
+	try {
+	    Number num = fmt4.parse(str);
+	    logln(num.toString());
+	}
+	catch (Exception e) {
+	    errln("parse caught exception");
+	}
     }
 
     public void TestUndefinedSpellout() {
@@ -432,36 +592,6 @@ public class RbnfTest extends TestFmwk {
     }
 
     public void TestFractionalRuleSet() {
-	String fracRules = 
-	    "%main:\n" +
-	    // this rule formats the number if it's 1 or more.  It formats
-	    // the integral part using a DecimalFormat ("#,##0" puts
-	    // thousands separators in the right places) and the fractional
-	    // part using %%frac.  If there is no fractional part, it
-	    // just shows the integral part.
-	    "    x.0: <#,##0<[ >%%frac>];\n" +
-	    // this rule formats the number if it's between 0 and 1.  It
-	    // shows only the fractional part (0.5 shows up as "1/2," not
-	    // "0 1/2")
-	    "    0.x: >%%frac>;\n" +
-	    // the fraction rule set.  This works the same way as the one in the
-	    // preceding example: We multiply the fractional part of the number
-	    // being formatted by each rule's base value and use the rule that
-	    // produces the result closest to 0 (or the first rule that produces 0).
-	    // Since we only provide rules for the numbers from 2 to 10, we know
-	    // we'll get a fraction with a denominator between 2 and 10.
-	    // "<0<" causes the numerator of the fraction to be formatted
-	    // using numerals
-	    "%%frac:\n" +
-	    "    2: 1/2;\n" +
-	    "    3: <0</3;\n" +
-	    "    4: <0</4;\n" +
-	    "    5: <0</5;\n" +
-	    "    6: <0</6;\n" +
-	    "    7: <0</7;\n" +
-	    "    8: <0</8;\n" +
-	    "    9: <0</9;\n" +
-	    "   10: <0</10;\n";
 
 
 	RuleBasedNumberFormat formatter =
