@@ -153,6 +153,7 @@ final class CollationRuleParser
        Token m_previous_;
        Token m_next_;
        StringBuffer m_rules_;
+       char m_flags_;     
        
        // package private constructors ---------------------------------------
        
@@ -883,6 +884,18 @@ final class CollationRuleParser
 		               m_extraCurrent_ += size + m_parsedToken_.m_extensionLen_;
 		           }
 		        }
+               // if the previous token was a reset before, the strength of this
+               // token must match the strength of before. Otherwise we have an
+               // undefined situation.
+               // In other words, we currently have a cludge which we use to 
+               // represent &a >> x. This is written as &[before 2]a << x.
+               if((lastToken.m_flags_ & TOKEN_BEFORE_) != 0) {
+                   int beforeStrength = (lastToken.m_flags_ & TOKEN_BEFORE_) - 1;
+                   if(beforeStrength != sourceToken.m_strength_) {
+                   	   throwParseException(m_source_.toString(), m_current_);
+                   }
+               }
+               
             } 
             else {
 	            if (lastToken != null && lastStrength == TOKEN_RESET_) {
@@ -1585,6 +1598,36 @@ final class CollationRuleParser
 		    int invpos = CollationParsedRuleBuilder.INVERSE_UCA_.getInversePrevCE(
 	                                                     basece, basecontce, 
 	                                                     strength, m_utilCEBuffer_);
+		    // we got the previous CE. Now we need to see if the difference between
+		    // the two CEs is really of the requested strength.
+		    // if it's a bigger difference (we asked for secondary and got primary), we 
+		    // need to modify the CE.
+		    if(CollationParsedRuleBuilder.INVERSE_UCA_.getCEStrengthDifference(basece, basecontce, m_utilCEBuffer_[0], m_utilCEBuffer_[1]) < strength) {
+		    	// adjust the strength
+		    	// now we are in the situation where our baseCE should actually be modified in 
+		    	// order to get the CE in the right position.
+		    	if(strength == Collator.SECONDARY) {
+		    		m_utilCEBuffer_[0] = basece - 0x0200;
+		    	} else { // strength == UCOL_TERTIARY
+		    		m_utilCEBuffer_[0] = basece - 0x02;
+		    	}
+		    	if(RuleBasedCollator.isContinuation(basecontce)) {
+		    		if(strength == Collator.SECONDARY) {
+		    			m_utilCEBuffer_[1] = basecontce - 0x0200;
+		    		} else { // strength == UCOL_TERTIARY
+		    			m_utilCEBuffer_[1] = basecontce - 0x02;
+		    		}
+		    	}
+		    }
+            
+/*            
+            // the code below relies on getting a code point from the inverse table, in order to be
+            // able to merge the situations like &x < 9 &[before 1]a < d. This won't work:
+            // 1. There are many code points that have the same CE
+            // 2. The CE to codepoint table (things pointed to by CETable[3*invPos+2] are broken.
+            // Also, in case when there is no equivalent strength before an element, we have to actually
+            // construct one. For example, &[before 2]a << x won't result in x << a, because the element 
+            // before a is a primary difference. 
 		    ch = CollationParsedRuleBuilder.INVERSE_UCA_.m_table_[3 * invpos 
 	                                                                  + 2];
 	        if ((ch &  INVERSE_SIZE_MASK_) != 0) {
@@ -1606,16 +1649,27 @@ final class CollationRuleParser
 		                                         | m_parsedToken_.m_charsOffset_;
 		    m_utilToken_.m_rules_ = m_source_;
 		    sourcetoken = (Token)m_hashTable_.get(m_utilToken_);
-		  
+*/		  
+
+		    // here is how it should be. The situation such as &[before 1]a < x, should be 
+		    // resolved exactly as if we wrote &a > x. 
+		    // therefore, I don't really care if the UCA value before a has been changed.
+		    // However, I do care if the strength between my element and the previous element
+		    // is bigger then I wanted. So, if CE < baseCE and I wanted &[before 2], then i'll 
+		    // have to construct the base CE.
+            
 		    // if we found a tailored thing, we have to use the UCA value and 
 		    // construct a new reset token with constructed name
-		    if (sourcetoken != null && sourcetoken.m_strength_ != TOKEN_RESET_) {
+		    //if (sourcetoken != null && sourcetoken.m_strength_ != TOKEN_RESET_) {
 		        // character to which we want to anchor is already tailored. 
 		        // We need to construct a new token which will be the anchor point
-	            m_source_.setCharAt(m_extraCurrent_ - 1, '\uFFFE');
-		        m_source_.append(ch);
-		        m_extraCurrent_ ++;
-		        m_parsedToken_.m_charsLen_ ++;
+	            //m_source_.setCharAt(m_extraCurrent_ - 1, '\uFFFE');
+		        //m_source_.append(ch);
+		        //m_extraCurrent_ ++;
+		        //m_parsedToken_.m_charsLen_ ++;
+                // grab before
+                m_parsedToken_.m_charsOffset_ -= 10;
+                m_parsedToken_.m_charsLen_ += 10;
 	            m_listHeader_[m_resultLength_] = new TokenListHeader();
 		        m_listHeader_[m_resultLength_].m_baseCE_ 
 	                                             = m_utilCEBuffer_[0] & 0xFFFFFF3F;
@@ -1633,7 +1687,7 @@ final class CollationRuleParser
 		        m_listHeader_[m_resultLength_].m_indirect_ = false;
 		        sourcetoken = new Token();
 		        initAReset(-1, sourcetoken);   
-		    }
+		    //}
 	    }
 	    return sourcetoken;
 	}
@@ -1665,6 +1719,9 @@ final class CollationRuleParser
 	                            | m_parsedToken_.m_charsOffset_;
 	    targetToken.m_expansion_ = m_parsedToken_.m_extensionLen_ << 24 
 	                               | m_parsedToken_.m_extensionOffset_;
+	    // keep the flags around so that we know about before
+	    targetToken.m_flags_ = m_parsedToken_.m_flags_;
+	    
 	    if (m_parsedToken_.m_prefixOffset_ != 0) {
 	        throwParseException(m_rules_, m_parsedToken_.m_charsOffset_ - 1);
 	    } 
