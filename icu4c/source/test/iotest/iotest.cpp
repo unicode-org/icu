@@ -332,13 +332,14 @@ static void TestfgetsBuffers() {
     u_fputc(0xFF41, myFile);
     u_memset(buffer, 0xDEAD, sizeof(buffer)/sizeof(buffer[0]));
     u_memset(expectedBuffer, 0, sizeof(expectedBuffer)/sizeof(expectedBuffer[0]));
-    u_uastrcpy(buffer, testStr);
+    u_uastrncpy(buffer, testStr, expectedSize+1);
     for (repetitions = 0; repetitions < 16; repetitions++) {
         u_file_write(buffer, expectedSize, myFile);
         u_strcat(expectedBuffer, buffer);
     }
     u_fclose(myFile);
 
+    u_memset(buffer, 0xDEAD, sizeof(buffer)/sizeof(buffer[0]));
     myFile = u_fopen(STANDARD_TEST_FILE, "r", NULL, "UTF-16");
     if (u_fgetc(myFile) != 0x3BC) {
         log_err("The first character is wrong\n");
@@ -371,13 +372,14 @@ static void TestfgetsBuffers() {
     u_fputc(0xFF41, myFile);
     u_memset(buffer, 0xDEAD, sizeof(buffer)/sizeof(buffer[0]));
     u_memset(expectedBuffer, 0, sizeof(expectedBuffer)/sizeof(expectedBuffer[0]));
-    u_uastrcpy(buffer, testStr);
+    u_uastrncpy(buffer, testStr, expectedSize+1);
     for (repetitions = 0; repetitions < 16; repetitions++) {
         u_file_write(buffer, expectedSize, myFile);
         u_strcat(expectedBuffer, buffer);
     }
     u_fclose(myFile);
 
+    u_memset(buffer, 0xDEAD, sizeof(buffer)/sizeof(buffer[0]));
     myFile = u_fopen(STANDARD_TEST_FILE, "r", NULL, "UTF-8");
     if (u_fgetc(myFile) != 0x3BC) {
         log_err("The first character is wrong\n");
@@ -402,9 +404,37 @@ static void TestfgetsBuffers() {
     u_fclose(myFile);
 
 
+    log_verbose("Now trying a multi-byte encoding (UTF-8) with a really small buffer.\n");
 
+    myFile = u_fopen(STANDARD_TEST_FILE, "w", NULL, "UTF-8");
 
+    u_fputc(0xFF41, myFile);
+    u_memset(buffer, 0xDEAD, sizeof(buffer)/sizeof(buffer[0]));
+    u_memset(expectedBuffer, 0, sizeof(expectedBuffer)/sizeof(expectedBuffer[0]));
+    u_uastrncpy(buffer, testStr, expectedSize+1);
+    for (repetitions = 0; repetitions < 1; repetitions++) {
+        u_file_write(buffer, expectedSize, myFile);
+        u_strcat(expectedBuffer, buffer);
+    }
+    u_fclose(myFile);
 
+    u_memset(buffer, 0xDEAD, sizeof(buffer)/sizeof(buffer[0]));
+    myFile = u_fopen(STANDARD_TEST_FILE, "r", NULL, "UTF-8");
+    if (u_fgets(myFile, 2, buffer) != buffer) {
+        log_err("Didn't get the buffer back\n");
+        return;
+    }
+    readSize = u_strlen(buffer);
+    if (readSize != 1) {
+        log_err("Buffer is the wrong size. Got %d Expected %d\n", u_strlen(buffer), 1);
+    }
+    if (buffer[0] != 0xFF41 || buffer[1] != 0) {
+        log_err("Did get expected string back\n");
+    }
+    if (buffer[2] != 0xDEAD) {
+        log_err("u_fgets wrote too much data\n");
+    }
+    u_fclose(myFile);
 
 }
 
