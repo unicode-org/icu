@@ -271,7 +271,7 @@ Transliterator* AnyTransliterator::getTransliterator(UScriptCode source) const {
     Transliterator* t = (Transliterator*) uhash_iget(cache, (int32_t) source);
     if (t == NULL) {
         UErrorCode ec = U_ZERO_ERROR;
-        UnicodeString sourceName(uscript_getName(source), "");
+        UnicodeString sourceName(uscript_getName(source), -1, US_INV);
         UnicodeString id(sourceName);
         id.append(TARGET_SEP).append(target);
         
