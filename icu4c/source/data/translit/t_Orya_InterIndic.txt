@@ -1,12 +1,12 @@
 ﻿ // -*- Coding: utf-8; -*-
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2002, International Business Machines
+// Copyright (c) 1999-2004, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../../impl/data/Transliterator_Oriya_InterIndic.txt
-// Date: Sat Jul 27 10:31:07 2002
+// Date: Tue May 18 17:24:49 2004
 //--------------------------------------------------------------------
 
 // Oriya_InterIndic
@@ -69,6 +69,7 @@ t_Orya_InterIndic {
 "\u0B30>\uE030;"      // LETTER RA
 "\u0B32>\uE032;"      // LETTER LA
 "\u0B33>\uE033;"      // LETTER LLA
+"\u0B35>\uE035;"      // LETTER VA
 "\u0B36>\uE036;"      // LETTER SHA
 "\u0B37>\uE037;"      // LETTER SSA
 "\u0B38>\uE038;"      // LETTER SA
@@ -86,6 +87,8 @@ t_Orya_InterIndic {
 "\u0B4D>\uE04D;"      // SIGN VIRAMA
 "\u0B56>\uE056;"      // AI LENGTH MARK
 "\u0B57>\uE057;"      // AU LENGTH MARK
+"\u0964>\ue064;"      // DANDA
+"\u0965>\ue065;"      // DOUBLE DANDA
 //
 "\u0B5F>\uE05F;"      // LETTER YYA
 "\u0B60>\uE060;"      // LETTER VOCALIC RR
@@ -100,7 +103,8 @@ t_Orya_InterIndic {
 "\u0B6D>\uE06D;"      // DIGIT SEVEN
 "\u0B6E>\uE06E;"      // DIGIT EIGHT
 "\u0B6F>\uE06F;"      // DIGIT NINE
-"\u0B70>\uE070;"      // ISSHAR
+"\u0B70>\ue07B;"      // ISSHAR
+"\u0B71>\ue081;"      // LETTER WA
 //    :: NFC (NFD) ;
 // eof
   }

@@ -1,12 +1,12 @@
 ﻿ // -*- Coding: utf-8; -*-
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2002, International Business Machines
+// Copyright (c) 1999-2004, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../../impl/data/Transliterator_Hebrew_Latin.txt
-// Date: Sat Jul 27 10:31:07 2002
+// Date: Tue May 18 17:24:49 2004
 //--------------------------------------------------------------------
 
 // Hebrew_Latin
@@ -37,7 +37,7 @@ t_Hebr_Latn {
 // For more information, see"
 //   http://oss.software.ibm.com/icu/userguide/Transliteration.html
 
-":: [[:Hebrew:] [\u05B0-\u05B9\u05BB-\u05BC\u05C1-\u05C2\u2135-\u2138̄\u05BF]] ;"
+":: [[:Hebrew:] [\u05B0-\u05B9\u05BB-\u05BC\u05C1-\u05C2\u2135-\u2138̄\u05BF] - [\u05BD]] ;"
 ":: nfkd (nfc) ;"
 "$letterAfter = [:M:]* [:L:] ;"
 

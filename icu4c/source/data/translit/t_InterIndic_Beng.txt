@@ -1,12 +1,12 @@
 ﻿ // -*- Coding: utf-8; -*-
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2002, International Business Machines
+// Copyright (c) 1999-2004, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../../impl/data/Transliterator_InterIndic_Bengali.txt
-// Date: Sat Jul 27 10:31:07 2002
+// Date: Tue May 18 17:24:49 2004
 //--------------------------------------------------------------------
 
 // InterIndic_Bengali
@@ -22,6 +22,7 @@ t_InterIndic_Beng {
 "\uE001>\u0981;"          // SIGN CANDRABINDU
 "\uE002>\u0982;"          // SIGN ANUSVARA
 "\uE003>\u0983;"          // SIGN VISARGA
+"\uE004>\u0985;"          // FALLBACK TO LETTER A
 "\uE005>\u0985;"          // LETTER A
 "\uE006>\u0986;"          // LETTER AA
 "\uE007>\u0987;"          // LETTER I
@@ -76,7 +77,7 @@ t_InterIndic_Beng {
 "\uE038>\u09B8;"          // LETTER SA
 "\uE039>\u09B9;"          // LETTER HA
 "\uE03C>\u09BC;"          // SIGN NUKTA
-"\uE03D>;"                // FALLBACK BLOW AWAY AVAGRAHA
+"\uE03D>\u09bd;"          // SIGN AVAGRAHA
 "\uE03E>\u09BE;"          // VOWEL SIGN AA
 "\uE03F>\u09BF;"          // VOWEL SIGN I
 "\uE040>\u09C0;"          // VOWEL SIGN II
@@ -98,7 +99,7 @@ t_InterIndic_Beng {
 "\ue052>;"
 "\ue053>;"
 "\ue054>;"
-"\uE055>;"               // UNMAPPED InterIndic-Bengali: LENGTH MARK
+"\uE055>;"                // LENGTH MARK
 "\uE056>\u09C8;"          // REMAP (indicExceptions.txt): \u09d6>\u09c8 = AI LENGTH MARK>VOWEL SIGN AI
 "\uE057>\u09D7;"          // AU LENGTH MARK
 "\uE058>\u0995\u09BC;"    // FALLBACK
@@ -125,20 +126,36 @@ t_InterIndic_Beng {
 "\uE06D>\u09ED;"          // DIGIT SEVEN
 "\uE06E>\u09EE;"          // DIGIT EIGHT
 "\uE06F>\u09EF;"          // DIGIT NINE
-"\uE070>\u09F0;"          //  UNMAPPED Bengali-InterIndic: LETTER RA WITH MIDDLE DIAGONAL
-"\uE071>;"
+"\ue070>;"                // ABBREVIATION SIGN
+"\ue071>\u09F0;"          // LETTER RA WITH MIDDLE DIAGONAL
+"\ue072>\u09F1;"          // LETTER RA WITH LOWER DIAGONAL
+"\ue073>\u09F2;"          // RUPEE MARK
+"\ue074>\u09F3;"          // RUPEE SIGN
+"\ue075>\u09F4;"          // CURRENCY NUMERATOR ONE
+"\ue076>\u09F5;"          // CURRENCY NUMERATOR TWO
+"\ue077>\u09F6;"          // CURRENCY NUMERATOR THREE
+"\ue078>\u09F7;"          // CURRENCY NUMERATOR FOUR
+"\ue079>\u09F8;"          // CURRENCY NUMERATOR ONE LESS THAN THE DENOMINATOR
+"\ue07A>\u09F9;"          // CURRENCY DENOMINATOR SIXTEEN
+"\ue07B>\u09FA;"          // ISSHAR
+"\uE07C>;"                // TIPPI
+"\uE07D>;"                // ADDAK
+"\uE07E>;"                // IRI
+"\uE07F>;"                // URA
+"\uE080>;"                // EK ONKAR
+"\uE081>\u09AC;"			// FALLBACK FOR ORIYA LETTER WA 
 "0 > \u09E6;"       // FALLBACK FOR TAMIL
 "1 > \u09E7;"
-"\ue072>;"
-"\ue073>;"
-"\ue074>;"
 
-"\ue075>\u09F5;"
-"\ue076>\u09F6;"
-"\ue077>\u09F7;"
-"\ue078>\u09F8;"
-"\ue079>\u09F9;"
-"\ue07A>\u09FA;"		// ISSHAR
+
+
+
+
+
+
+
+
+
 
 //    :: NFC (NFD) ;
 // eof

@@ -1,12 +1,12 @@
 ﻿ // -*- Coding: utf-8; -*-
 //--------------------------------------------------------------------
-// Copyright (c) 1999-2002, International Business Machines
+// Copyright (c) 1999-2004, International Business Machines
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../../impl/data/Transliterator_InterIndic_Gujarati.txt
-// Date: Sat Jul 27 10:31:07 2002
+// Date: Tue May 18 17:24:49 2004
 //--------------------------------------------------------------------
 
 // InterIndic_Gujarati
@@ -22,6 +22,7 @@ t_InterIndic_Gujr {
 "\ue001>\u0a81;" // SIGN CANDRABINDU
 "\ue002>\u0a82;" // SIGN ANUSVARA
 "\ue003>\u0a83;" // SIGN VISARGA
+"\uE004>\u0a85;" // FALLBACK TO LETTER A
 "\ue005>\u0a85;" // LETTER A
 "\ue006>\u0a86;" // LETTER AA
 "\ue007>\u0a87;" // LETTER I
@@ -29,7 +30,7 @@ t_InterIndic_Gujr {
 "\ue009>\u0a89;" // LETTER U
 "\ue00a>\u0a8a;" // LETTER UU
 "\ue00b>\u0a8b;" // LETTER VOCALIC R
-"\ue00c>\u0ab2\u0ac3;" // REMAP (indicExceptions.txt): \u0a8c>\u0ab2\u0ac3 = LETTER VOCALIC L>LETTER LA.VOWEL SIGN VOCALIC R
+"\ue00c>\u0a8c;" // LETTER VOCALIC L
 "\ue00d>\u0a8d;" // GUJARATI VOWEL CANDRA E
 "\ue00e>\u0a8f;" // FALLBACK
 "\ue00f>\u0a8f;" //  InterIndic-Gujarati: LETTER EE (\u0a8f = LETTER E)
@@ -110,7 +111,7 @@ t_InterIndic_Gujr {
 "\ue05e>\u0aab\u0abc;" // REMAP (indicExceptions.txt): \u0ade>\u0aab\u0abc = LETTER FA>LETTER PHA.SIGN NUKTA
 "\ue05f>\u0aaf\u0abc;" // REMAP (indicExceptions.txt): \u0adf>\u0aaf\u0abc = LETTER YYA>LETTER YA.SIGN NUKTA
 "\ue060>\u0ae0;" // LETTER VOCALIC RR
-"\ue061>\u0ab2\u0ac3;" // REMAP (indicExceptions.txt): \u0ae1>\u0ab2\u0ac3 = LETTER VOCALIC LL>LETTER LA.VOWEL SIGN VOCALIC R
+"\ue061>\u0ae1;" // LETTER VOCALIC LL
 "\ue062>\u0abf\u0abc;" // REMAP (indicExceptions.txt): \u0ae2>\u0abf\u0abc = VOWEL SIGN VOCALIC L>VOWEL SIGN I.SIGN NUKTA
 "\ue063>\u0ac0\u0abc;" // REMAP (indicExceptions.txt): \u0ae3>\u0ac0\u0abc = VOWEL SIGN VOCALIC LL>VOWEL SIGN II.SIGN NUKTA
 "\uE064>\u0964;"          // DANDA
@@ -125,21 +126,27 @@ t_InterIndic_Gujr {
 "\ue06d>\u0aed;" // DIGIT SEVEN
 "\ue06e>\u0aee;" // DIGIT EIGHT
 "\ue06f>\u0aef;" // DIGIT NINE
-"\ue070>;"
-"\ue071>;"
-"\ue072>;"
-"\ue073>;"
-"\ue074>;"
-"\ue075>;"
-"\ue076>;"
-"\ue077>;"
-"\ue078>;"
-"\ue079>;"
-"\ue07A>;"
+"\ue070>;"       // ABBREVIATION SIGN
+"\ue071>\u0ab0;"     // LETTER RA WITH MIDDLE DIAGONAL
+"\ue072>\u0ab0;"     // LETTER RA WITH LOWER DIAGONAL
+"\ue073>;"           // RUPEE MARK
+"\ue074>;"           // RUPEE SIGN
+"\ue075>;"           // CURRENCY NUMERATOR ONE
+"\ue076>;"           // CURRENCY NUMERATOR TWO
+"\ue077>;"           // CURRENCY NUMERATOR THREE
+"\ue078>;"           // CURRENCY NUMERATOR FOUR
+"\ue079>;"           // CURRENCY NUMERATOR ONE LESS THAN THE DENOMINATOR
+"\ue07A>;"           // CURRENCY DENOMINATOR SIXTEEN
+"\ue07B>;"           // ISSHAR
+"\uE07C>;"           // TIPPI
+"\uE07D>;"           // ADDAK
+"\uE07E>;"           // IRI
+"\uE07F>;"           // URA
+"\uE080>;"           // EK ONKAR
+"\uE081>\u0ab5;"      // FALLBACK FOR ORIYA LETTER WA 
 "0 > \u0ae6;"       // FALLBACK FOR TAMIL
 "1 > \u0ae7;"
-"\ue0f0 >  \u0ab0;"  // FALLBACK RA 
-"\ue0f1 >  \u0ab0;"  // FALLBACK RA
+
 //\ue080>; # UNMAPPED InterIndic-Gujarati: ISSHAR
 //    :: NFC (NFD) ;
 // eof
