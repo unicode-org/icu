@@ -34,7 +34,6 @@ nl_BE {
             "#,##0%",
     }
     ShortCountry { "BEL" }
-    localPatternChars { "GyMdkHmsSEDFwWahKzYe" }
     zoneStrings { 
         {
                 "Africa/Casablanca",

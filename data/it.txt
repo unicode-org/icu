@@ -102,7 +102,6 @@ it {
             "\uFFFD",
     }
     ShortLanguage { "ita" }
-    localPatternChars { "GyMdkHmsSEDFwWahKzYe" }
     zoneStrings { 
         {
                 "Europe/Rome",
