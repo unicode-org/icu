@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $ 
- * $Date: 2000/06/30 00:00:21 $ 
- * $Revision: 1.24 $
+ * $Date: 2000/08/17 15:31:40 $ 
+ * $Revision: 1.25 $
  *
  *****************************************************************************************
  */
@@ -373,6 +373,29 @@ public class TransliteratorTest extends TestFmwk {
         } else {
             logln("FAIL: \"" + out + "\", wanted \"" + exp + "\"");
         }
+    }
+
+    /**
+     * Test anchors
+     */
+    public void TestAnchors() { 
+        expect("^ab  > 01 ;" +
+               " ab  > |8 ;" +
+               "  b  > k ;" +
+               " 8x$ > 45 ;" +
+               " 8x  > 77 ;",
+
+               "ababbabxabx",
+               "018k7745");  
+        expect("$s = [z$] ;" +
+               "$s{ab    > 01 ;" +
+               "   ab    > |8 ;" +
+               "    b    > k ;" +
+               "   8x}$s > 45 ;" +
+               "   8x    > 77 ;",
+
+               "abzababbabxzabxabx",
+               "01z018k45z01x45");
     }
 
     /**
