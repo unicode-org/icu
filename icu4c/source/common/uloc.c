@@ -27,13 +27,14 @@
 */
 
 
+#include "unicode/utypes.h"
+#include "unicode/ustring.h"
 #include "unicode/uloc.h"
 
-#include "unicode/utypes.h"
+#include "ustr_imp.h"
 #include "uresimp.h"
 #include "umutex.h"
 #include "cstring.h"
-#include "unicode/ustring.h"
 #include "cmemory.h"
 #include "ucln_cmn.h"
 
@@ -61,11 +62,6 @@ static const char* _kShortCountry   = "ShortCountry";
 #endif
 
 #define TEMPBUFSIZE 8
-
-/*Some static strings needed in the getDisplay* functions*/
-static const UChar openParen[]  = { 0x20, 0x28, 0}; /* " (" */
-static const UChar comma[]      = { 0x2C, 0x20, 0}; /* ", " */
-static const UChar closeParen[] = { 0x29, 0};       /* ")" */
 
 static char** _installedLocales = NULL;
 static int32_t _installedLocalesCount = 0;
@@ -240,49 +236,67 @@ int32_t uloc_getParent(const char*    localeID,
                int32_t parentCapacity,
                UErrorCode* err)
 {
-    int i=0;
-    int offset = 0;
-    int count = 0;
+    const char *lastUnderscore;
+    int32_t i;
     
     if (U_FAILURE(*err))
         return 0;
     
     if (localeID == NULL)
         localeID = uloc_getDefault();
-    
-    
-    while (localeID[offset]&&(count < 2))
-    {
-        if (_isIDSeparator(localeID[offset++]))
-            count++;
+
+    lastUnderscore=uprv_strrchr(localeID, '_');
+    if(lastUnderscore!=NULL) {
+        i=(int32_t)(lastUnderscore-localeID);
+    } else {
+        i=0;
+    }
+
+    if(i>0) {
+        uprv_memcpy(parent, localeID, uprv_min(i, parentCapacity));
+    }
+    return u_terminateChars(parent, parentCapacity, i, err);
+}
+
+/*
+ * the internal functions _getLanguage(), _getCountry(), _getVariant()
+ * avoid duplicating code to handle the earlier locale ID pieces
+ * in the functions for the later ones by
+ * setting the *pEnd pointer to where they stopped parsing
+ *
+ * TODO try to use this in Locale
+ */
+static int32_t
+_getLanguage(const char *localeID,
+             char *language, int32_t languageCapacity,
+             const char **pEnd) {
+    int32_t i=0;
+
+    /* if it starts with i- or x- then copy that prefix */
+    if(_isIDPrefix(localeID)) {
+        if(i<languageCapacity) {
+            language[i]=(char)uprv_tolower(*localeID);
+        }
+        if(i<languageCapacity) {
+            language[i+1]='-';
+        }
+        i+=2;
+        localeID+=2;
     }
     
-    /*finds the second IDSeparator*/
-    while (offset && !_isIDSeparator(localeID[offset]))
-    {
-        offset--;
-    }
-    
-    
-    /*Loop updates i to the size of the parent
-    but only copies into the buffer as much as the buffer can bare*/
-    while (i < offset)
-    {
-        if (parentCapacity > i)
-            parent[i] = localeID[i];
+    /* copy the language as far as possible and count its length */
+    while(!_isTerminator(*localeID) && !_isIDSeparator(*localeID)) {
+        if(i<languageCapacity) {
+            language[i]=(char)uprv_tolower(*localeID);
+        }
         i++;
+        localeID++;
     }
-    
-    /*Sets the error code on case of need*/
-    if (i >= parentCapacity )
-    {
-        *err = U_BUFFER_OVERFLOW_ERROR;
+
+    if(pEnd!=NULL) {
+        *pEnd=localeID;
     }
-    
-    if (parentCapacity>0)
-        parent[uprv_min(i,parentCapacity-1)] = '\0';
-    
-    return i+1;
+    return i;
 }
 
 int32_t
@@ -291,101 +305,108 @@ uloc_getLanguage(const char*    localeID,
          int32_t languageCapacity,
          UErrorCode* err)
 {
-    int i=0;
-    
-    
-    if (U_FAILURE(*err))
+    int32_t i;
+
+    if(err==NULL || U_FAILURE(*err)) {
         return 0;
-    
-    if (localeID == NULL)
-        localeID = uloc_getDefault();
-    
-    /* If it starts with i- or x- */
-    if(_isIDPrefix(localeID))
-    {
-        if(languageCapacity > i)
-        {
-            language[i] = (char)uprv_tolower(*localeID);
-        }
-        i++;
-        localeID++;
-        
-        if(languageCapacity > i)
-        {
-            language[i] = '-';
-        }
-        i++;
-        localeID++;
     }
     
-    /*Loop updates i to the size of the language
-    but only copies into the buffer as much as the buffer can bare*/
-    while (!_isTerminator(*localeID) && !_isIDSeparator(*localeID))
-    {
-        if (languageCapacity > i)
-            language[i] = (char)uprv_tolower(*localeID);
-        i++;
-        localeID++;
+    if(localeID==NULL) {
+        localeID=uloc_getDefault();
     }
-    
-    if (i >= languageCapacity )
-    {
-        *err = U_BUFFER_OVERFLOW_ERROR;
-    }
-    
-    if (languageCapacity > 0) 
-    {
-        language[uprv_min(i,languageCapacity-1)] = '\0';
-    }
-    
-    return i+1;
+
+    i=_getLanguage(localeID, language, languageCapacity, NULL);
+    return u_terminateChars(language, languageCapacity, i, err);
 }
 
+
+static int32_t
+_getCountry(const char *localeID,
+            char *country, int32_t countryCapacity,
+            const char **pEnd) {
+    int32_t i=0;
+
+    /* copy the country as far as possible and count its length */
+    while(!_isTerminator(*localeID) && !_isIDSeparator(*localeID)) {
+        if(i<countryCapacity) {
+            country[i]=(char)uprv_toupper(*localeID);
+        }
+        i++;
+        localeID++;
+    }
+
+    if(pEnd!=NULL) {
+        *pEnd=localeID;
+    }
+    return i;
+}
 
 int32_t uloc_getCountry(const char* localeID,
             char* country,
             int32_t countryCapacity,
             UErrorCode* err) 
 {
-    int i=0;
-    
-    if (U_FAILURE(*err))
+    int32_t i=0;
+
+    if(err==NULL || U_FAILURE(*err)) {
         return 0;
-    if (localeID == NULL)
-        localeID = uloc_getDefault();
-    
-    
-    /* skip over i- or x- */
-    if(_isIDPrefix(localeID))
-    {
-        localeID += 2;
     }
     
-    localeID = _findCharSeparator(localeID);
-    
-    /*Loop updates i to the size of the language
-    but only copies into the buffer as much as the buffer can bare*/
-    if (localeID)
-    {
-        ++localeID;
-        while (!_isTerminator(*localeID) && !_isIDSeparator(*localeID))
-        {
-            if (countryCapacity > i)
-                country[i] = (char)uprv_toupper(*localeID);
+    if(localeID==NULL) {
+        localeID=uloc_getDefault();
+    }
+
+    /* skip the language */
+    _getLanguage(localeID, NULL, 0, &localeID);
+    if(_isIDSeparator(*localeID)) {
+        i=_getCountry(localeID+1, country, countryCapacity, NULL);
+    }
+    return u_terminateChars(country, countryCapacity, i, err);
+}
+
+static int32_t
+_getVariant(const char *localeID,
+            char prev,
+            char *variant, int32_t variantCapacity) {
+    int32_t i=0;
+
+    /* get one or more variant tags and separate them with '_' */
+    if(_isIDSeparator(prev)) {
+        /* get a variant string after a '-' or '_' */
+        while(!_isTerminator(*localeID)) {
+            if(i<variantCapacity) {
+                variant[i]=(char)uprv_toupper(*localeID);
+                if(variant[i]=='-') {
+                    variant[i]='_';
+                }
+            }
             i++;
             localeID++;
         }
     }
-    
-    if (i >= countryCapacity )
-    {
-        *err = U_BUFFER_OVERFLOW_ERROR;
+
+    /* if there is no variant tag after a '-' or '_' then look for '@' */
+    if(i==0) {
+        if(prev=='@') {
+            /* keep localeID */
+        } else if((localeID=uprv_strrchr(localeID, '@'))!=NULL) {
+            ++localeID; /* point after the '@' */
+        } else {
+            return 0;
+        }
+        while(!_isTerminator(*localeID)) {
+            if(i<variantCapacity) {
+                variant[i]=(char)uprv_toupper(*localeID);
+                if(variant[i]=='-' || variant[i]==',') {
+                    variant[i]='_';
+                }
+            }
+            i++;
+            localeID++;
+        }
     }
-    
-    if (countryCapacity > 0) {
-        country[uprv_min(i,countryCapacity-1)] = '\0';
-    }
-    return i+1;
+
+    return i;
 }
 
 int32_t uloc_getVariant(const char* localeID,
@@ -393,71 +414,32 @@ int32_t uloc_getVariant(const char* localeID,
                         int32_t variantCapacity,
                         UErrorCode* err) 
 {
-    int i=0;
-    const char *p = localeID;
-    
-    if (U_FAILURE(*err))
+    int32_t i=0;
+    UBool haveVariant=FALSE;
+
+    if(err==NULL || U_FAILURE(*err)) {
         return 0;
-    if (localeID == NULL)
-    {
-        localeID = uloc_getDefault();
     }
     
-    /* skip over i- or x- */
-    if(_isIDPrefix(localeID))
-    {
-        localeID += 2;
+    if(localeID==NULL) {
+        localeID=uloc_getDefault();
     }
-    
-    localeID = _findCharSeparator(localeID);
-    if (localeID)
-    {
-        localeID = _findCharSeparator(++localeID);
-    }
-    
-    if (localeID)
-    {
-        ++localeID;
-        /*Loop updates i to the size of the language
-        but only copies into the buffer as much as the buffer can bear*/
-        while (!_isTerminator(*localeID))
-        {
-            if (variantCapacity > i)
-                variant[i] = (char)uprv_toupper(*localeID);
-            i++;
-            localeID++;
-        }
-    }
-    
-    /* But wait, there's more! 
-    **IFF** no variant was otherwise found, take one from @...
-    */
-    if ( (i == 0) &&  /* Found nothing (zero chars copied) */
-        (localeID = uprv_strrchr(p, '@')) != NULL)
-    {
-        localeID++; /* point after the @ */
-                    /* Note that we will stop at a period if the user accidentally
-                       put a period after the @ sign */
 
-        /* repeat above copying loop */
-        while (!_isTerminator(*localeID))
-        {
-            if (variantCapacity > i)
-                variant[i] = (char)uprv_toupper(*localeID);
-            i++;
-            localeID++;
+    /* skip the language and the country */
+    _getLanguage(localeID, NULL, 0, &localeID);
+    if(_isIDSeparator(*localeID)) {
+        _getCountry(localeID+1, NULL, 0, &localeID);
+        if(_isIDSeparator(*localeID)) {
+            haveVariant=TRUE;
+            i=_getVariant(localeID+1, *localeID, variant, variantCapacity);
         }
     }
 
-    if (i >= variantCapacity )
-    {
-        *err = U_BUFFER_OVERFLOW_ERROR;
+    /* if we do not have a variant tag yet then try a POSIX variant after '@' */
+    if(!haveVariant && (localeID=uprv_strrchr(localeID, '@'))!=NULL) {
+        i=_getVariant(localeID+1, '@', variant, variantCapacity);
     }
-
-    if (variantCapacity>0) {
-        variant[uprv_min(i,variantCapacity-1)] = '\0';
-    }
-    return i+1;
+    return u_terminateChars(variant, variantCapacity, i, err);
 }
 
 int32_t uloc_getName(const char* localeID,
@@ -465,114 +447,48 @@ int32_t uloc_getName(const char* localeID,
              int32_t nameCapacity,
              UErrorCode* err)  
 {
-    int i= 0;       /* total required size */
-    int n= 0;       /* How much has been copied currently */
-    int varSze = 0; /* How big the variant is */
-    int cntSze = 0; /* How big the country is */
-    
-    UErrorCode int_err = U_ZERO_ERROR;
-    
-    if (U_FAILURE(*err)) return 0;
-    
-    /*First we preflight the components in order to ensure a valid return value*/
-    if (localeID == NULL)    localeID = uloc_getDefault();
-    
-    cntSze = uloc_getCountry(localeID, 
-        NULL , 
-        0,
-        &int_err);
-    int_err = U_ZERO_ERROR;
-    varSze = uloc_getVariant(localeID, 
-        NULL , 
-        0,
-        &int_err);
-    
-    int_err = U_ZERO_ERROR;
-    i = uloc_getLanguage(localeID, 
-        NULL,
-        0, 
-        &int_err);
-    
-    /*Adjust for the zero terminators*/
-    --varSze;
-    --cntSze;
-    /* i is still languagesize+1 for the terminator */
-    
-    /* Add space for underscores */
-    if (varSze)
-    {
-        i+= 2;  /* if theres a variant, it will ALWAYS contain two underscores. */
-    }
-    else if (cntSze)
-    {
-        i++; /* Otherwise - only language _ country. */
+    int32_t i, fieldCount;
+
+    if(err==NULL || U_FAILURE(*err)) {
+        return 0;
     }
     
-    /* Update i (total req'd size) */
-    i += cntSze + varSze;
-    
-    if(nameCapacity)  /* If size is zero, skip the actual copy */
-    {
-        /* Now, the real copying */
-        int_err = U_ZERO_ERROR;
-        
-        uloc_getLanguage(localeID, 
-            name,
-            nameCapacity /* -(n=0) */,  
-            &int_err);
-        
-        n += uprv_strlen(name);
-        
-        /*We fill in the users buffer*/
-        if ((n<nameCapacity) && cntSze)
-        {
-            if(U_SUCCESS(int_err))
-            {
-                name[n++] = '_';
-            }
-            
-            uloc_getCountry(localeID,
-                name + n,
-                nameCapacity - n,
-                &int_err);
-            n += cntSze;
-            
-            if (varSze && (n<nameCapacity))
-            {
-                if(U_SUCCESS(int_err))
-                {
-                    name[n++] = '_';
-                }
-                
-                uloc_getVariant(localeID,
-                    name + n,
-                    nameCapacity - n,
-                    &int_err);
-            }
-            
+    if(localeID==NULL) {
+        localeID=uloc_getDefault();
+    }
+
+    /* get all pieces, one after another, and separate with '_' */
+    fieldCount=0;
+    i=_getLanguage(localeID, name, nameCapacity, &localeID);
+    if(_isIDSeparator(*localeID)) {
+        ++fieldCount;
+        if(i<nameCapacity) {
+            name[i]='_';
         }
-        else if((n<nameCapacity) && varSze)
-        {
-            if (U_SUCCESS(int_err))
-            {
-                name[n++] = '_';
-                if(n<nameCapacity)
-                    name[n++] = '_';
+        ++i;
+        i+=_getCountry(localeID+1, name+i, nameCapacity-i, &localeID);
+        if(_isIDSeparator(*localeID)) {
+            ++fieldCount;
+            if(i<nameCapacity) {
+                name[i]='_';
             }
-            
-            uloc_getVariant(localeID,
-                name + n,
-                nameCapacity - n,
-                &int_err);
+            ++i;
+            i+=_getVariant(localeID+1, *localeID, name+i, nameCapacity-i);
         }
-        
-        /* Tie it off */
-        name[uprv_min(i,nameCapacity-1)] = '\0';
-    }   /* end (if nameCapacity > 0) */
-    
-    *err  = int_err;
-    
-    return i;
+    }
+
+    /* if we do not have a variant tag yet then try a POSIX variant after '@' */
+    if(fieldCount<2 && (localeID=uprv_strrchr(localeID, '@'))!=NULL) {
+        do {
+            if(i<nameCapacity) {
+                name[i]='_';
+            }
+            ++i;
+            ++fieldCount;
+        } while(fieldCount<2);
+        i+=_getVariant(localeID+1, '@', name+i, nameCapacity-i);
+    }
+    return u_terminateChars(name, nameCapacity, i, err);
 }
        
 const char* uloc_getISO3Language(const char* localeID) 
@@ -638,548 +554,452 @@ uint32_t uloc_getLCID(const char* localeID)
     return result;
 }
 
-int32_t uloc_getDisplayLanguage(const char* locale,
-                const char* inLocale,
-                UChar* language,
-                int32_t languageCapacity,
-                UErrorCode* status) 
-{
-    const UChar* result = NULL;
-    int32_t resultLen = 0;
-    int langBufSize;
-    char inLanguageBuffer[TEMPBUFSIZE];
-    char inLocaleBuffer[TEMPBUFSIZE];
-    UErrorCode err = U_ZERO_ERROR;
-    UResourceBundle* bundle;
-    UBool isDefaultLocale = FALSE;
-    UBool done = FALSE;
-    
-    if (U_FAILURE(*status))
-        return 0;
-    
-    if (inLocale == NULL) 
-    {
-        inLocale = uloc_getDefault();
-        isDefaultLocale = TRUE;
-    }
-    else if (uprv_strcmp(inLocale, uloc_getDefault()) == 0)
-    {
-        isDefaultLocale = TRUE;
-    }
-    /*truncates the fallback mechanism if we start out with a defaultLocale*/
-    
-    if (locale == NULL)
-        locale = uloc_getDefault();
-    
-    /*extracts the language*/
-    langBufSize = uloc_getLanguage(locale,
-        inLanguageBuffer,
-        TEMPBUFSIZE,
-        &err);  
-    
-    
-    
-    /*We need to implement a fallback mechanism here because we are getting keys out of a
-    tagged array, there is no capability of doing this with fallback through the resource
-    bundle API*/
-    
-    if (langBufSize > 1)
-    {
-        do 
-        {    
-            /*
-            If we are at the root locale ("")
-            The first time we fall back to the full default locale
-            As we iterate down the latter, if we hit the root locale ("")
-            we pass it to the resource bundle api so it checks default.txt
-            */
-            
-            if (inLocale[0] == '\0')
-            {
-                if (!isDefaultLocale)
-                {
-                    isDefaultLocale = TRUE;
-                    inLocale = uloc_getDefault();
-                }
-                else {
-                    done = TRUE;
-                }
-            }
-            
-            
-            bundle = ures_open(NULL, inLocale, &err);
-            
-            if (U_SUCCESS(err))
-            {
-                const UChar* temp = NULL;  
-                UResourceBundle* langBundle;
-
-                err = U_ZERO_ERROR;
-                langBundle = ures_getByKey(bundle, _kLanguages, NULL, &err);
-                if (U_SUCCESS(err))
-                {
-                    temp = ures_getStringByKey(langBundle,
-                        inLanguageBuffer,
-                        &resultLen,
-                        &err);
-                    resultLen++;
-                    if (U_SUCCESS(err))
-                        result = temp;
-                    ures_close(langBundle);
-                }
-                ures_close(bundle);
-            }
-            
-            
-            err = U_ZERO_ERROR;
-            
-            /*Iterates down the Locale ID*/
-            uloc_getParent(inLocale, inLocaleBuffer, TEMPBUFSIZE, &err);
-
-            inLocale = inLocaleBuffer;
-        } while ((result == NULL) && !done);
-    }
-    
-    if (result)
-    {
-        if (resultLen > languageCapacity)
-        {
-            *status = U_BUFFER_OVERFLOW_ERROR;
-            
-            if (languageCapacity >= 1) 
-            {
-                u_strncpy(language, result, languageCapacity-1);
-                language[languageCapacity-1] = (UChar)0x0000;
-            }
+static UBool
+_startsWith(const char *s, const char *possiblePrefix) {
+    while(*possiblePrefix!=0) {
+        if(*possiblePrefix!=*s) {
+            return FALSE;
         }
-        else
-        {
-            u_strcpy(language, result);
-        }
+        ++s;
+        ++possiblePrefix;
     }
-    else 
-    {
-        /*Falls back to ISO Name*/
-        resultLen = langBufSize;
-        if (resultLen > languageCapacity)
-        {
-            *status = U_BUFFER_OVERFLOW_ERROR;
-            
-            if (languageCapacity >= 1) 
-            {
-                u_charsToUChars(inLanguageBuffer, language, languageCapacity-1);
-                language[languageCapacity-1] = (UChar)0x0000;
-            }
-        }
-        else
-        {
-            u_charsToUChars(inLanguageBuffer, language, resultLen);
-        }
-    }
-
-    return resultLen;
+    return TRUE;
 }
 
-int32_t uloc_getDisplayCountry(const char* locale,
-                   const char* inLocale,
-                   UChar* country,
-                   int32_t countryCapacity,
-                   UErrorCode* status)
-{
-    /* NULL may be used to specify the default */
-    const UChar* result = NULL;
-    int32_t resultLen = 0;
-    int cntryBufSize;
-    char inCountryBuffer[TEMPBUFSIZE];
-    UErrorCode err = U_ZERO_ERROR;
-    UResourceBundle* bundle = NULL;
-    char inLocaleBuffer[TEMPBUFSIZE];
-    UBool isDefaultLocale = FALSE;
-    UBool done = FALSE;
-    
-    if (U_FAILURE(*status))
-        return 0;
-    
-    if (inLocale == NULL)    
-    {
-        inLocale = uloc_getDefault();
-        isDefaultLocale = TRUE;
+/*
+ * TODO check fallback semantics - fall back through default??
+ * Needs discussion!
+ *
+ * Regular resource bundle lookup falls back through default only when a bundle
+ * is opened. Once open, the lookup for an item in that bundle follows only
+ * the bundle's chain, without going through default.
+ *
+ * This lookup for the display strings does go through the default locale
+ * for the sub-item.
+ * It seems to be inconsistent with how the resource bundle mechanism is documented.
+ *
+ * Note also that using this mechanism (with itemKey=NULL) for the variant's
+ * display string, which is a top-level item and should always be available
+ * at least in root, is effectively the same as opening the displayLocale's
+ * bundle and getting the string directly from there - the fallback is the same
+ * (right?!).
+ * So, for variant's strings, one could either do that, or if the above elaborate
+ * mechanism is desired, one could move variant display strings into their
+ * own table "Variants" like the Languages and Countries tables.
+ */
+static UResourceBundle *
+_res_getTableItemWithFallback(const char *path, const char *locale,
+                              const char *tableKey, const char *itemKey,
+                              UResourceBundle **pMainRB,
+                              UErrorCode *pErrorCode) {
+    char localeBuffer[200];
+    UResourceBundle *rb, *table, *item;
+    const char *defaultLocale;
+    UBool lookedAtDefault;
+
+    *pMainRB=NULL;
+    lookedAtDefault=FALSE;
+    defaultLocale=uloc_getDefault();
+
+    /* normalize the input locale name */
+    if(locale==NULL) {
+        locale=defaultLocale;
+        lookedAtDefault=TRUE;
+    } else {
+        uloc_getName(locale, localeBuffer, sizeof(localeBuffer), pErrorCode);
+        if(U_FAILURE(*pErrorCode) || *pErrorCode==U_STRING_NOT_TERMINATED_WARNING) {
+            *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+            return NULL;
+        }
+        locale=localeBuffer;
+
+        /* is the requested locale the root locale, or part of the default locale? */
+        if(*locale==0 || 0==uprv_strcmp(locale, "root") || _startsWith(defaultLocale, locale)) {
+            lookedAtDefault=TRUE;
+        }
     }
-    else if (uprv_strcmp(inLocale, uloc_getDefault()) == 0)
-    {
-        isDefaultLocale = TRUE;
-    }
-    /*truncates the fallback mechanism if we start out with a defaultLocale*/
-    
-    if (locale == NULL) {
-        locale = uloc_getDefault();
-    }
-    
-    /*extracts the country*/
-    cntryBufSize = uloc_getCountry(locale, inCountryBuffer, TEMPBUFSIZE, &err);
-    
-    
-    if (cntryBufSize > 1)
-    {
+
+    for(;;) {
         /*
-        We need to implement a fallback mechanism here because we are getting keys out of a
-        tagged array, there is no capability of doing this with fallback through the resource
-        bundle API
-        */
-        do 
-        {
-            /*
-            If we are at the root locale ("")
-            The first time we fall back to the full default locale
-            As we iterate down the latter, if we hit the root locale ("")
-            we pass it to the resource bundle api so it checks default.txt
-            */
-            
-            if (inLocale[0] == '\0')
-            {
-                if (!isDefaultLocale)
-                {
-                    isDefaultLocale = TRUE;
-                    inLocale = uloc_getDefault();
-                }
-                else
-                    done = TRUE;
-            }
-            
-            
-            bundle = ures_open(NULL, inLocale, &err);      
-            
-            if (U_SUCCESS(err))
-            {
-                const UChar* temp;
-                UResourceBundle* countryBundle;
+         * open the bundle for the current locale
+         * this falls back through the locale's chain to the default locale's chain to root
+         */
+        *pErrorCode=U_ZERO_ERROR;
+        rb=ures_open(path, locale, pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
+            return NULL;
+        } else if(*pErrorCode==U_USING_DEFAULT_WARNING) {
+            lookedAtDefault=TRUE;
+        }
 
-                err = U_ZERO_ERROR;
-                countryBundle = ures_getByKey(bundle, _kCountries, NULL, &err);
-                if (U_SUCCESS(err))
-                {
-                    temp = ures_getStringByKey(countryBundle,
-                        inCountryBuffer,
-                        &resultLen,
-                        &err);
-                    resultLen++;
-                    if (U_SUCCESS(err))
-                        result = temp;
-                    ures_close(countryBundle);
-                }
-                ures_close(bundle);
+        /* get the real locale ID for this bundle in case of aliases & fallbacks */
+        locale=ures_getLocale(rb, pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
+            /* error getting the locale ID for an open RB - should never happen */
+            ures_close(rb);
+            return NULL;
+        }
+        if(!lookedAtDefault && _startsWith(defaultLocale, locale)) {
+            lookedAtDefault=TRUE;
+        }
+
+        /*
+         * try to open the requested table
+         * this falls back through the locale's chain to root, but not through the default locale
+         */
+        *pErrorCode=U_ZERO_ERROR;
+        table=ures_getByKey(rb, tableKey, NULL, pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
+            /* no such table anywhere in this fallback chain */
+            ures_close(rb);
+            if(lookedAtDefault) {
+                return NULL;
             }
-            
-            err = U_ZERO_ERROR;
-            uloc_getParent(inLocale, inLocaleBuffer, TEMPBUFSIZE, &err);
-            
-            inLocale = inLocaleBuffer;
-        } while ((result == NULL) && !done);
-    }
-    
-    if (result)
-    {
-        if (resultLen > countryCapacity)
-        {
-            *status = U_BUFFER_OVERFLOW_ERROR;
-            
-            if (countryCapacity >= 1)
-            {
-                u_strncpy(country, result, countryCapacity-1);
-                country[countryCapacity-1] = (UChar)0x0000;
+
+            /* try fallback through the default locale */
+            locale=defaultLocale;
+            lookedAtDefault=TRUE;
+            continue;
+        }
+
+        /*
+         * Disable (#if 0) the following check:
+         * Assume that only the language that is the same as the root language does not
+         * have its own override of this item.
+         * Therefore, we _do_ want to use the item even if it is from root before default,
+         * because for the languages where this happens, it is exactly what we need.
+         * Markus Scherer 2001-oct-02
+         */
+#if 0
+        /* do not use the root bundle if we did not look at the default locale yet */
+        if(*pErrorCode==U_USING_DEFAULT_WARNING && !lookedAtDefault) {
+            ures_close(table);
+            ures_close(rb);
+
+            /* try fallback through the default locale */
+            locale=defaultLocale;
+            lookedAtDefault=TRUE;
+            continue;
+        }
+#endif
+
+        /* get the real locale ID for this table in case of aliases & fallbacks */
+        locale=ures_getLocale(table, pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
+            /* error getting the locale ID for an open RB - should never happen */
+            ures_close(table);
+            ures_close(rb);
+            return NULL;
+        }
+
+        if(itemKey!=NULL) {
+            /* try to open the requested item in the table */
+            item=ures_getByKey(table, itemKey, NULL, pErrorCode);
+            ures_close(table); /* we will not need the table any more */
+            if(U_SUCCESS(*pErrorCode)) {
+                /* we got the requested item! */
+                *pMainRB=rb;
+                return item;
             }
+        } else {
+            /* return the "table" resource itself, not an item from it */
+            *pMainRB=rb;
+            return table;
         }
-        else
-        {
-            u_strcpy(country, result);
+
+        ures_close(rb);
+        if(lookedAtDefault && (*locale==0 || 0==uprv_strcmp(locale, "root"))) {
+            /* end of fallback, default and root do not have the requested item either */
+            return NULL;
+        }
+
+        /* could not find the table, or its item, try to fall back to a different RB and table */
+        *pErrorCode=U_ZERO_ERROR;
+        uloc_getParent(locale, localeBuffer, sizeof(localeBuffer), pErrorCode);
+        if(U_FAILURE(*pErrorCode) || *pErrorCode==U_STRING_NOT_TERMINATED_WARNING) {
+            *pErrorCode=U_INTERNAL_PROGRAM_ERROR;
+            return NULL;
+        }
+        locale=localeBuffer;
+
+        /* parent==root? try the default locale if not done so already */
+        if(!lookedAtDefault && (*locale==0 || 0==uprv_strcmp(locale, "root"))) {
+            /* try fallback through the default locale */
+            locale=defaultLocale;
+            lookedAtDefault=TRUE;
         }
     }
-    else 
-    {
-        /*Falls back to ISO Name*/
-        resultLen = cntryBufSize;
-        if (resultLen > countryCapacity)
-        {
-            *status = U_BUFFER_OVERFLOW_ERROR;
-            
-            if (countryCapacity >= 1) 
-            {
-                u_charsToUChars(inCountryBuffer, country, countryCapacity-1);
-                country[countryCapacity-1] = (UChar)0x0000;
-            }
-        }
-        else
-        {
-            u_charsToUChars(inCountryBuffer, country, resultLen);
-        }
-    }
-    
-    return resultLen;
 }
 
-int32_t uloc_getDisplayVariant(const char* locale,
-                   const char* inLocale,
-                   UChar* variant,
-                   int32_t variantCapacity,
-                   UErrorCode* status)
-{
-    const UChar* result = NULL;
-    int32_t resultLen = 0;
-    int varBufSize;
-    char inVariantBuffer[TEMPBUFSIZE];
-    char* inVariant = inVariantBuffer;
-    UErrorCode err = U_ZERO_ERROR;
-    UResourceBundle* bundle;
-    char inLocaleBuffer[TEMPBUFSIZE];
-    UBool isDefaultLocale = FALSE;
-    char inVariantTagBuffer[TEMPBUFSIZE+2];
-    char* inVariantTag = inVariantTagBuffer;
-    UBool done = FALSE;
-    
-    if (U_FAILURE(*status))
+static int32_t
+_getStringOrCopyKey(const char *path, const char *locale,
+                    const char *tableKey, const char *itemKey,
+                    const char *substitute,
+                    UChar *dest, int32_t destCapacity,
+                    UErrorCode *pErrorCode) {
+    UResourceBundle *rb, *item;
+    const UChar *s;
+    int32_t length;
+
+    length=-1;
+    item=_res_getTableItemWithFallback(path, locale,
+                                       tableKey, itemKey,
+                                       &rb,
+                                       pErrorCode);
+    if(U_SUCCESS(*pErrorCode)) {
+        s=ures_getString(item, &length, pErrorCode);
+        if(U_SUCCESS(*pErrorCode)) {
+            int32_t copyLength=uprv_min(length, destCapacity);
+            if(copyLength>0) {
+                u_memcpy(dest, s, copyLength);
+            }
+        } else {
+            length=-1;
+        }
+        ures_close(item);
+        ures_close(rb);
+    }
+
+    /* no string from a resource bundle: convert the substitute */
+    if(length==-1) {
+        length=uprv_strlen(substitute);
+        u_charsToUChars(substitute, dest, uprv_min(length, destCapacity));
+        *pErrorCode=U_ZERO_ERROR;
+    }
+
+    return u_terminateUChars(dest, destCapacity, length, pErrorCode);
+}
+
+int32_t
+uloc_getDisplayLanguage(const char *locale,
+                        const char *displayLocale,
+                        UChar *dest, int32_t destCapacity,
+                        UErrorCode *pErrorCode) {
+    char localeBuffer[200];
+    int32_t length;
+
+    /* argument checking */
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0;
-    
-    inVariantTagBuffer[0] = '\0';
-    
-    if (inLocale == NULL)    
-    {
-        inLocale = uloc_getDefault();
-        isDefaultLocale = TRUE;
     }
-    else if (uprv_strcmp(inLocale, uloc_getDefault()) == 0)
-    {
-        isDefaultLocale = TRUE;
+
+    if(destCapacity<0 || (destCapacity>0 && dest==NULL)) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
     }
-    /*truncates the fallback mechanism if we start out with a defaultLocale*/
-    
-    if (locale == NULL)
-        locale = uloc_getDefault();
-    
-    /*extracts the variant*/
-    varBufSize = uloc_getVariant(locale, inVariant, TEMPBUFSIZE, &err);
-    
-    if (varBufSize > 1)
-    {
-        /*In case the variant is longer than our stack buffers*/
-        if (err == U_BUFFER_OVERFLOW_ERROR)
-        {
-            inVariant = (char*)uprv_malloc(varBufSize*sizeof(char)+1);
-            if (inVariant == NULL)
-                goto NO_MEMORY;
-            inVariantTag = (char*)uprv_malloc(varBufSize*sizeof(char)+uprv_strlen("%%")+1);
-            if (inVariantTag == NULL) 
-            {
-                uprv_free(inVariant);
-                goto NO_MEMORY;
-            }
-            err = U_ZERO_ERROR;
-            uloc_getVariant(locale, inVariant, varBufSize, &err);
-        }
-        
-        uprv_strcpy(inVariantTag,"%%");  
-        uprv_strcat(inVariantTag, inVariant);
-        
-        /*We need to implement a fallback mechanism here because we are getting keys out of a
-        tagged array, there is no capability of doing this with fallback through the resource
-        bundle API*/
-        do {
-            /*
-            If we are at the root locale ("")
-            The first time we fall back to the full default locale
-            As we iterate down the latter, if we hit the root locale ("")
-            we pass it to the resource bundle api so it checks default.txt
-            */
-            
-            if (inLocale[0] == '\0')
-            {
-                if (!isDefaultLocale)
-                {
-                    isDefaultLocale = TRUE;
-                    inLocale = uloc_getDefault();
-                }
-                else
-                    done = TRUE;
-            }
-            
-            
-            bundle = ures_open(NULL, inLocale, &err);      
-            
-            if (U_SUCCESS(err))
-            {
-                const UChar* temp;
-                
-                temp = ures_getStringByKey(bundle,
-                    inVariantTag,
-                    &resultLen,
-                    &err);
-                resultLen++;
-                if (U_SUCCESS(err))
-                    result = temp;
-                ures_close(bundle);
-            }
-            
-            err = U_ZERO_ERROR;
-            uloc_getParent(inLocale, inLocaleBuffer, TEMPBUFSIZE, &err);
-            
-            inLocale = inLocaleBuffer;
-        } while ((result == NULL) && !done);
+
+    *pErrorCode=U_ZERO_ERROR;   /* necessary because we will check for a warning code */
+    length=uloc_getLanguage(locale, localeBuffer, sizeof(localeBuffer), pErrorCode);
+    if(U_FAILURE(*pErrorCode) || *pErrorCode==U_STRING_NOT_TERMINATED_WARNING) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
     }
-    
-    if (result)
-    {
-        if (resultLen > variantCapacity)
-        {
-            *status = U_BUFFER_OVERFLOW_ERROR;
-            
-            if (variantCapacity >= 1) 
-            {
-                u_strncpy(variant, result, variantCapacity-1);
-                variant[variantCapacity-1] = (UChar)0x0000;
-            }
-        }
-        else
-        {
-            u_strcpy(variant, result);
-        }
+    if(length==0) {
+        return u_terminateUChars(dest, destCapacity, 0, pErrorCode);
     }
-    else 
-    {
-        /*Falls back to user's Name*/
-        resultLen = varBufSize;
-        if (resultLen > variantCapacity)
-        {
-            *status = U_BUFFER_OVERFLOW_ERROR;
-            
-            if (variantCapacity >= 1) 
-            {
-                u_charsToUChars(inVariant, variant, variantCapacity-1);
-                variant[variantCapacity-1] = (UChar)0x0000;
-            }
-        }
-        else
-        {
-            u_charsToUChars(inVariant, variant, resultLen);
-        }
-    }
-    
-    /*Clean up memory*/
-    if (inVariant != inVariantBuffer)
-    {
-        uprv_free(inVariant);
-        uprv_free(inVariantTag);
-    } 
-    return resultLen;
-    
-NO_MEMORY:
-    *status = U_MEMORY_ALLOCATION_ERROR;
-    return 0;
+
+    return _getStringOrCopyKey(NULL, displayLocale,
+                               _kLanguages, localeBuffer,
+                               localeBuffer,
+                               dest, destCapacity,
+                               pErrorCode);
 }
 
-int32_t uloc_getDisplayName(const char* locale,
-                const char* inLocale, 
-                UChar* result,
-                int32_t nameCapacity,
-                UErrorCode* err) 
-{
-    UErrorCode int_err = U_ZERO_ERROR;
-    int i = 0;
-    int cntSze, varSze;
-    UBool has_lang = TRUE;
-    int result_size;
-    
-    int_err = U_ZERO_ERROR;
-    
-    /*Preflights all the components*/
-    cntSze = uloc_getDisplayCountry(locale, 
-        inLocale,
-        NULL , 
-        0,
-        &int_err);
-    int_err = U_ZERO_ERROR;
-    varSze = uloc_getDisplayVariant(locale, 
-        inLocale,
-        NULL , 
-        0,
-        &int_err);
-    
-    int_err = U_ZERO_ERROR;
-    i = uloc_getDisplayLanguage(locale, 
-        inLocale,
-        NULL,
-        0, 
-        &int_err);
-    /*Decrement duplicative zero-terminators*/
-    --varSze;
-    --cntSze;
-    
-    /*Logic below adjusts pre-flight information with additional characters "(", ",", " ", ")"
-    when neeed be*/
-    if ((i-1 == 0) && (varSze == 0)) /*No language field*/
-    {
-        has_lang = FALSE;
-        i = cntSze+1;
+int32_t
+uloc_getDisplayCountry(const char *locale,
+                       const char *displayLocale,
+                       UChar *dest, int32_t destCapacity,
+                       UErrorCode *pErrorCode) {
+    char localeBuffer[200];
+    int32_t length;
+
+    /* argument checking */
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
     }
-    else if (cntSze)
-    {
-        if (varSze)
-        {
-            i += cntSze + varSze + 5;
-        }
-        else
-        {
-            i += cntSze + 3;
-        }
+
+    if(destCapacity<0 || (destCapacity>0 && dest==NULL)) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
     }
-    
-    int_err = U_ZERO_ERROR;
-    
-    result_size = uloc_getDisplayLanguage(locale, 
-        inLocale,
-        result,
-        nameCapacity, 
-        &int_err) - 1;
-    
-    if (U_SUCCESS(int_err)&&cntSze)
-    {
-        if (U_SUCCESS(int_err))
-        {
-            if (has_lang) 
-            {
-                u_strcat(result, openParen);
-                result_size += 2;
+
+    *pErrorCode=U_ZERO_ERROR;   /* necessary because we will check for a warning code */
+    length=uloc_getCountry(locale, localeBuffer, sizeof(localeBuffer), pErrorCode);
+    if(U_FAILURE(*pErrorCode) || *pErrorCode==U_STRING_NOT_TERMINATED_WARNING) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    if(length==0) {
+        return u_terminateUChars(dest, destCapacity, 0, pErrorCode);
+    }
+
+    return _getStringOrCopyKey(NULL, displayLocale,
+                               _kCountries, localeBuffer,
+                               localeBuffer,
+                               dest, destCapacity,
+                               pErrorCode);
+}
+
+/*
+ * TODO separate variant1_variant2_variant3...
+ * by getting each tag's display string and concatenating them with ", "
+ * in between - similar to uloc_getDisplayName()
+ */
+int32_t
+uloc_getDisplayVariant(const char *locale,
+                       const char *displayLocale,
+                       UChar *dest, int32_t destCapacity,
+                       UErrorCode *pErrorCode) {
+    char localeBuffer[200];
+    int32_t length;
+
+    /* argument checking */
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+
+    if(destCapacity<0 || (destCapacity>0 && dest==NULL)) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    /*
+     * display names for variants are top-level items of
+     * locale resource bundles
+     * the rb keys are "%%" followed by the variant tags
+     */
+    *pErrorCode=U_ZERO_ERROR;   /* necessary because we will check for a warning code */
+    localeBuffer[0]=localeBuffer[1]='%';
+    length=uloc_getVariant(locale, localeBuffer+2, sizeof(localeBuffer)-2, pErrorCode);
+    if(U_FAILURE(*pErrorCode) || *pErrorCode==U_STRING_NOT_TERMINATED_WARNING) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    if(length==0) {
+        return u_terminateUChars(dest, destCapacity, 0, pErrorCode);
+    }
+
+    /* pass itemKey=NULL to look for a top-level item */
+    return _getStringOrCopyKey(NULL, displayLocale,
+                               localeBuffer, NULL,
+                               localeBuffer+2,      /* substitute=variant without %% */
+                               dest, destCapacity,
+                               pErrorCode);
+}
+
+int32_t
+uloc_getDisplayName(const char *locale,
+                    const char *displayLocale,
+                    UChar *dest, int32_t destCapacity,
+                    UErrorCode *pErrorCode) {
+    int32_t length, length2;
+    UBool hasLanguage, hasCountry, hasVariant;
+
+    /* argument checking */
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+
+    if(destCapacity<0 || (destCapacity>0 && dest==NULL)) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    /*
+     * if there is a language, then write "language (country, variant)"
+     * otherwise write "country, variant"
+     */
+
+    /* write the language */
+    length=uloc_getDisplayLanguage(locale, displayLocale,
+                                   dest, destCapacity,
+                                   pErrorCode);
+    hasLanguage= length>0;
+
+    if(hasLanguage) {
+        /* append " (" */
+        if(length<destCapacity) {
+            dest[length]=0x20;
+        }
+        ++length;
+        if(length<destCapacity) {
+            dest[length]=0x28;
+        }
+        ++length;
+    }
+
+    if(*pErrorCode=U_BUFFER_OVERFLOW_ERROR) {
+        /* keep preflighting */
+        *pErrorCode=U_ZERO_ERROR;
+    }
+
+    /* append the country */
+    if(length<destCapacity) {
+        length2=uloc_getDisplayCountry(locale, displayLocale,
+                                       dest+length, destCapacity-length,
+                                       pErrorCode);
+    } else {
+        length2=uloc_getDisplayCountry(locale, displayLocale,
+                                       NULL, 0,
+                                       pErrorCode);
+    }
+    hasCountry= length2>0;
+    length+=length2;
+
+    if(hasCountry) {
+        /* append ", " */
+        if(length<destCapacity) {
+            dest[length]=0x2c;
+        }
+        ++length;
+        if(length<destCapacity) {
+            dest[length]=0x20;
+        }
+        ++length;
+    }
+
+    if(*pErrorCode=U_BUFFER_OVERFLOW_ERROR) {
+        /* keep preflighting */
+        *pErrorCode=U_ZERO_ERROR;
+    }
+
+    /* append the variant */
+    if(length<destCapacity) {
+        length2=uloc_getDisplayVariant(locale, displayLocale,
+                                       dest+length, destCapacity-length,
+                                       pErrorCode);
+    } else {
+        length2=uloc_getDisplayVariant(locale, displayLocale,
+                                       NULL, 0,
+                                       pErrorCode);
+    }
+    hasVariant= length2>0;
+    length+=length2;
+
+    if(hasCountry && !hasVariant) {
+        /* remove ", " */
+        length-=2;
+    }
+
+    if(hasLanguage) {
+        if(hasCountry || hasVariant) {
+            /* append ")" */
+            if(length<destCapacity) {
+                dest[length]=0x29;
             }
-            
-            result_size += uloc_getDisplayCountry(locale,
-                inLocale,
-                result + result_size,
-                nameCapacity - result_size,
-                &int_err) - 1;
-        }
-        
-        if (varSze)
-        {
-            if (U_SUCCESS(int_err))      
-            {
-                u_strcat(result, comma);
-                result_size += 2;
-                
-                result_size += uloc_getDisplayVariant(locale,
-                    inLocale,
-                    result + result_size,
-                    nameCapacity - result_size, 
-                    &int_err) - 1;
-            }
-        }
-        
-        if (U_SUCCESS(int_err)&&has_lang)
-        {
-            u_strcat(result, closeParen);
+            ++length;
+        } else {
+            /* remove " (" */
+            length-=2;
         }
     }
-    
-    *err  = int_err;
-    
-    return i;
+
+    if(*pErrorCode=U_BUFFER_OVERFLOW_ERROR) {
+        /* keep preflighting */
+        *pErrorCode=U_ZERO_ERROR;
+    }
+
+    return u_terminateUChars(dest, destCapacity, length, pErrorCode);
 }
 
 const char*
