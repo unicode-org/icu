@@ -207,24 +207,30 @@ u_finit(FILE        *f,
   result->fOwnBundle     = FALSE;
   result->fUCPos     = result->fUCBuffer;
   result->fUCLimit     = result->fUCBuffer;
+  result->fConverter = NULL;
 
   /* if the codepage is 0, use the default for the locale */
   if(codepage == 0) {
     codepage = ufile_lookup_codepage(locale);
   
     /* if the codepage is still 0, the default codepage will be used */
-  }
-  
-  /* if both locale and codepage are 0, use the system default codepage */
-  else if(useSysCP)
+    if(codepage == 0) {
+        result->fConverter = ucnv_open(0, &status);
+        if(U_FAILURE(status) || result->fConverter == 0) {
+            fclose(result->fFile);
+            free(result);
+            return 0;
+        }
+    }
+  } else if (strlen(codepage)>strlen("")) {
+      result->fConverter = ucnv_open(codepage, &status);
+      if(U_FAILURE(status) || result->fConverter == 0) {
+        fclose(result->fFile);
+        free(result);
+        return 0;
+      }
+  }   else if(useSysCP)  /* if both locale and codepage are 0, use the system default codepage */
     codepage = 0;
-
-  result->fConverter = ucnv_open(codepage, &status);
-  if(U_FAILURE(status) || result->fConverter == 0) {
-    fclose(result->fFile);
-    free(result);
-    return 0;
-  }
 
   return result;
 }
