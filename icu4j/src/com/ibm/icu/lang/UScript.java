@@ -338,7 +338,7 @@ public final class UScript {
      * @param Locale the locale.
      */
     private static int[] findCodeFromLocale(ULocale locale) {
-        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME, locale);
+        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
 
         // if rb is not a strict fallback of the requested locale, return null
         if(rb==null || !LocaleUtility.isFallbackOf(rb.getULocale().toString(), locale.toString())){

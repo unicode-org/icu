@@ -502,7 +502,7 @@ public abstract class Collator implements Comparator, Cloneable
     public static Locale[] getAvailableLocales() {
         // TODO make this wrap getAvailableULocales later
         if (shim == null) {
-            return ICUResourceBundle.getAvailableLocales(UResourceBundle.ICU_COLLATION_BASE_NAME);
+            return ICUResourceBundle.getAvailableLocales(ICUResourceBundle.ICU_COLLATION_BASE_NAME);
         }
         return shim.getAvailableLocales();
     }
@@ -517,7 +517,7 @@ public abstract class Collator implements Comparator, Cloneable
      */
     public static final ULocale[] getAvailableULocales() {
         if (shim == null) {
-            return ICUResourceBundle.getAvailableULocales(UResourceBundle.ICU_COLLATION_BASE_NAME);
+            return ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_COLLATION_BASE_NAME);
         }
         return shim.getAvailableULocales();
     }
@@ -540,7 +540,7 @@ public abstract class Collator implements Comparator, Cloneable
      * The resource bundle base name for this service.
      * *since ICU 3.0
      */
-    private static final String BASE = UResourceBundle.ICU_COLLATION_BASE_NAME;
+    private static final String BASE = ICUResourceBundle.ICU_COLLATION_BASE_NAME;
 
     /**
      * Return an array of all possible keywords that are relevant to

@@ -1628,7 +1628,7 @@ public abstract class Calendar implements Serializable, Cloneable {
     public static Locale[] getAvailableLocales()
     {
         return service == null
-            ? ICUResourceBundle.getAvailableLocales(UResourceBundle.ICU_BASE_NAME)
+            ? ICUResourceBundle.getAvailableLocales(ICUResourceBundle.ICU_BASE_NAME)
             : service.getAvailableLocales();
     }
     ///CLOVER:OFF
@@ -3686,6 +3686,7 @@ public abstract class Calendar implements Serializable, Cloneable {
         WeekData data = (WeekData) cachedLocaleData.get(locale);
         
         if (data == null) {  /* cache miss */
+
             CalendarData calData = new CalendarData(new ULocale(locale), getType());
             int[] dateTimeElements = calData.get("DateTimeElements").getIntVector();
             int[] weekend = calData.get("weekend").getIntVector();

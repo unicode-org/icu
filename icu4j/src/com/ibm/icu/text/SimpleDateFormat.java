@@ -323,7 +323,6 @@ public class SimpleDateFormat extends DateFormat {
         String[] dateTimePatterns = (String[]) cachedLocaleData.get(loc);
         if (dateTimePatterns == null) { /* cache miss */
             CalendarData calData = new CalendarData(new ULocale(loc), null); // TODO: type?
-             
             // TODO: get correct actual/valid locale here
             ULocale uloc = calData.getULocale();
             setLocale(uloc, uloc);

@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUResourceBundleReader;
 import com.ibm.icu.impl.ResourceBundleWrapper;
@@ -43,58 +42,7 @@ import com.ibm.icu.util.ULocale;
  * @author ram
  */
 public abstract class UResourceBundle extends ResourceBundle{
-    /**
-     * The data path to be used with getBundleInstance API
-     * @draft ICU 3.0
-     */
-	protected static final String ICU_DATA_PATH = "com/ibm/icu/impl/";
-    /**
-     * The data path to be used with getBundleInstance API
-     * @draft ICU 3.0
-     */
-	public static final String ICU_BUNDLE = "data/icudt"+VersionInfo.ICU_DATA_VERSION;    
-    
-    /**
-     * The base name of ICU data to be used with getBundleInstance API
-     * @draft ICU 3.0
-     */
-    public static final String ICU_BASE_NAME= ICU_DATA_PATH+ICU_BUNDLE;
-    
-    /**
-     * The base name of collation data to be used with getBundleInstance API
-     * @draft ICU 3.0
-     */
-    public static final String ICU_COLLATION_BASE_NAME = ICU_BASE_NAME + "/coll";
-    
-    /**
-     * The class loader constant to be used with getBundleInstance API
-     * @draft ICU 3.0
-     */
-    public static final ClassLoader ICU_DATA_CLASS_LOADER = ICUData.class.getClassLoader();
-    
-    /**
-     * The name of the resource containing the installed locales
-     * @draft ICU 3.0
-     */
-    protected static final String INSTALLED_LOCALES = "InstalledLocales";
-    
-    /**
-     * The locale ID of this bundle
-     * @draft ICU 3.0
-     */
-    protected String  localeID;
-    
-    /**
-     * The base name with which this bundle was opened
-     * @draft ICU 3.0
-     */
-    protected String baseName;
-    
-    /**
-     * Denotes if this bundle has fallback or not
-     * @draft ICU 3.0
-     */
-    protected boolean hasFallback;
+
     
     /**
      * Creates a resource bundle using the specified base name and locale.
@@ -107,7 +55,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @draft ICU 3.0
      */
     public static final UResourceBundle getBundleInstance(String baseName, String localeName){
-        return getBundleInstance(baseName, localeName, ICU_DATA_CLASS_LOADER, false);
+        return getBundleInstance(baseName, localeName, ICUResourceBundle.ICU_DATA_CLASS_LOADER, false);
     }
     
     /**
@@ -164,7 +112,7 @@ public abstract class UResourceBundle extends ResourceBundle{
         if(locale==null){
             locale = ULocale.getDefault();   
         }
-        return getBundleInstance( ICU_BASE_NAME, locale.toString(), ICU_DATA_CLASS_LOADER );   
+        return getBundleInstance( ICUResourceBundle.ICU_BASE_NAME, locale.toString(), ICUResourceBundle.ICU_DATA_CLASS_LOADER );   
     }
     /**
      * Creates a UResourceBundle for the default locale and specified base name,
@@ -175,7 +123,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @draft ICU 3.0 
      */    
     public static final UResourceBundle getBundleInstance(String baseName){
-        return getBundleInstance( baseName, ULocale.getDefault().toString(), ICU_DATA_CLASS_LOADER );
+        return getBundleInstance( baseName, ULocale.getDefault().toString(), ICUResourceBundle.ICU_DATA_CLASS_LOADER );
     }
     /**
      * Creates a UResourceBundle for the specified locale and specified base name,
@@ -203,7 +151,7 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @draft ICU 3.0
      */
     public static final UResourceBundle getBundleInstance(String baseName, ULocale locale){
-         return getBundleInstance(baseName, locale.toString(),ICU_DATA_CLASS_LOADER);  
+         return getBundleInstance(baseName, locale.toString(),ICUResourceBundle.ICU_DATA_CLASS_LOADER);  
     }
     
 
@@ -216,9 +164,12 @@ public abstract class UResourceBundle extends ResourceBundle{
      * @return the locale of this resource bundle
      * @draft ICU 3.0
      */
-    public ULocale getULocale() {
-        return new ULocale(localeID);
-    }    
+    public abstract ULocale getULocale(); 
+    
+    protected abstract String getLocaleID();
+    protected abstract String getBaseName();
+    protected abstract UResourceBundle getParent();
+    
     
     /**
      * Get the locale of this bundle
@@ -228,14 +179,7 @@ public abstract class UResourceBundle extends ResourceBundle{
     public Locale getLocale(){
         return getULocale().toLocale();   
     }
-    /**
-     * Set the parent bundle of this bundle
-     * @param parent
-     * @draft ICU 3.0
-     */
-    protected void setParent(UResourceBundle parent){
-        this.parent = parent;   
-    }
+
     // Cache for ResourceBundle instantiation
     private static SoftReference BUNDLE_CACHE;
 
@@ -362,27 +306,30 @@ public abstract class UResourceBundle extends ResourceBundle{
         // first try to create an ICUResourceBundle
         // the expectation is that most client using 
         // this interface will open an *.res file
-        try{
-            if(disableFallback){
-                ULocale defaultLocale = ULocale.getDefault();
-                String fullName = ICUResourceBundleReader.getFullName(baseName, localeName);
+        UResourceBundle b = null;
+        if(disableFallback){
+            ULocale defaultLocale = ULocale.getDefault();
+            localeName = ULocale.getBaseName(localeName);
+            String fullName = ICUResourceBundleReader.getFullName(baseName, localeName);
+            cacheKey.setKeyValues(root, fullName, defaultLocale);
+            b = loadFromCache(cacheKey);
+            if(b==null){
+                b =  ICUResourceBundle.createBundle(baseName, localeName, root);
                 cacheKey.setKeyValues(root, fullName, defaultLocale);
-                UResourceBundle b = loadFromCache(cacheKey);
-                if(b==null){
-                    b =  ICUResourceBundle.createBundle(baseName, localeName, root);
-                    cacheKey.setKeyValues(root, fullName, defaultLocale);
-                    addToCache(cacheKey, b);
-                }
-                b.hasFallback = disableFallback;
-                return b;
-            }else{
-                return instantiateICUResource(baseName,localeName,root);
+                addToCache(cacheKey, b);
             }
-        }catch(MissingResourceException e){
+        }else{
+            b = instantiateICUResource(baseName,localeName,root);
+        }
+        if(b==null){
            // we can't find an *.res file .. so fallback to
            // Java ResourceBundle loadeing 
-            return new ResourceBundleWrapper(baseName, localeName, root);
+           b = new ResourceBundleWrapper(baseName, localeName, root);
         }
+        if(b==null){
+            throw new MissingResourceException("Could not find the bundle ", baseName,localeName );   
+        }
+        return b;
     }
     /**
      * Creates a new ICUResourceBundle for the given locale, baseName and class loader
@@ -401,44 +348,47 @@ public abstract class UResourceBundle extends ResourceBundle{
         String fullName = ICUResourceBundleReader.getFullName(baseName, localeName);
         cacheKey.setKeyValues(root, fullName, defaultLocale);
         UResourceBundle b = loadFromCache(cacheKey);
+        final String rootLocale = "root";
+        final String defaultID = ULocale.getDefault().toString();
+        if(localeName.equals("")){
+            localeName = rootLocale;   
+        }
         if (b == null) {
-            UResourceBundle parent = null;
-            int i = localeName.lastIndexOf('_');
-            final String rootLocale = "root";
- 
-            if (i != -1) {
-                parent = instantiateICUResource(baseName, localeName.substring(0, i), root);
-            }else{
-                parent = ICUResourceBundle.createBundle(baseName, rootLocale, root);   
-            }
-            try {
-                UResourceBundle b1 = ICUResourceBundle.createBundle(baseName, localeName, root);
-
-                if (parent != null) {
-                    b1.setParent(parent);
+            b = ICUResourceBundle.createBundle(baseName, localeName, root);
+            if(b==null){
+                int i = localeName.lastIndexOf('_');
+                if (i != -1) {
+                    b = instantiateICUResource(baseName, localeName.substring(0, i), root);
+                }else{
+                    if(defaultID.indexOf(localeName)==-1){
+                        b = instantiateICUResource(baseName, defaultID, root);   
+                    }
                 }
-                
-                b = b1;
-                
+            }else{
+                localeName = b.getLocaleID();
+                int i = localeName.lastIndexOf('_');
                 cacheKey.setKeyValues(root, fullName, defaultLocale);
                 addToCache(cacheKey, b);
-            }catch (MissingResourceException e) {
-
-                // if a bogus locale is passed then the parent should be
-                // the default locale not the root locale!
-                if(localeName.indexOf('_')==-1){    
-                    String defaultName = defaultLocale.toString();
-                        
-                    if(!localeName.equals(rootLocale.toString()) &&
-                       defaultName.indexOf(localeName)==-1){
-                       parent = instantiateICUResource(baseName, defaultName, root);
-                    } 
+                UResourceBundle parent = null;
+                if (i != -1) {
+                    parent = instantiateICUResource(baseName, localeName.substring(0, i), root);
+                }else{
+                    parent = ICUResourceBundle.createBundle(baseName, rootLocale, root);   
                 }
-                b = parent;
-            }
+                b.setParent(parent);
+            }      
         }
         return b;
     }
-
-
+    /*
+    protected static UResourceBundle instantiateResource(String baseName,String localeID, ClassLoader root, boolean required){
+        // first try
+        try{
+        }catch(MissingResourceException e){  
+            if(required){
+                throw e;   
+            }
+        }
+    }
+   */
 }

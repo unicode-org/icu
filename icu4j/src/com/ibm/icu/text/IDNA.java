@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import com.ibm.icu.impl.ICUData;
-import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.impl.ICUResourceBundle;
 
 /**
  *
@@ -44,7 +44,6 @@ public final class IDNA {
 
     private static final int MAX_LABEL_LENGTH   = 63;
     private static final int HYPHEN             = 0x002D;
-    private static final String NAME_PREP_PROFILE = "uidna";
     private static final int CAPITAL_A          = 0x0041;
     private static final int CAPITAL_Z          = 0x005A;
     private static final int LOWER_CASE_DELTA   = 0x0020;
@@ -84,7 +83,7 @@ public final class IDNA {
     /* private constructor to prevent construction of the object */
     private IDNA(){
         try{
-           InputStream stream = ICUData.getRequiredStream(UResourceBundle.ICU_BUNDLE+"/uidna.spp");
+           InputStream stream = ICUData.getRequiredStream(ICUResourceBundle.ICU_BUNDLE+"/uidna.spp");
            namePrep = new StringPrep(stream);
            stream.close();
         }catch (IOException e){
@@ -135,7 +134,7 @@ public final class IDNA {
         
             /* Case-insensitive comparison */
             if(c1!=c2) {
-                rc=(int)toASCIILower(c1)-(int)toASCIILower(c2);
+                rc=toASCIILower(c1)-toASCIILower(c2);
                 if(rc!=0) {
                     return rc;
                 }
@@ -307,7 +306,7 @@ public final class IDNA {
         boolean srcIsLDH = true; 
 
         //get the options
-        boolean useSTD3ASCIIRules = (boolean)((options & USE_STD3_RULES) != 0);
+        boolean useSTD3ASCIIRules = ((options & USE_STD3_RULES) != 0);
     
         int failPos = -1;
         // step 2
@@ -605,7 +604,7 @@ public final class IDNA {
         boolean srcIsLDH = true; 
         
         //get the options
-        boolean useSTD3ASCIIRules = (boolean)((options & USE_STD3_RULES) != 0);
+        boolean useSTD3ASCIIRules = ((options & USE_STD3_RULES) != 0);
         
         int failPos = -1;
         int ch;

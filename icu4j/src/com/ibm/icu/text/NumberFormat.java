@@ -708,7 +708,7 @@ public abstract class NumberFormat extends UFormat {
      */
     public static Locale[] getAvailableLocales() {
         if (shim == null) {
-            return ICUResourceBundle.getAvailableLocales(UResourceBundle.ICU_BASE_NAME);
+            return ICUResourceBundle.getAvailableLocales(ICUResourceBundle.ICU_BASE_NAME);
         }
         return getShim().getAvailableLocales();
     }
@@ -1070,7 +1070,7 @@ public abstract class NumberFormat extends UFormat {
         //}
 
 		// {dlf}
-		ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,forLocale);
+		ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,forLocale);
 		String[] numberPatterns = rb.getStringArray("NumberPatterns");
 
 		/* {dlf}

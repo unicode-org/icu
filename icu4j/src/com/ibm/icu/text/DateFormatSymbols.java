@@ -418,6 +418,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     
     protected void initializeData(ULocale desiredLocale, CalendarData calData)
     {
+
         // FIXME: cache only ResourceBundle. Hence every time, will do
         // getObject(). This won't be necessary if the Resource itself
         // is cached.
@@ -438,7 +439,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         ampms = calData.getStringArray("AmPmMarkers");
 
         // These really do use rb and not calData
-        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,desiredLocale);
+        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,desiredLocale);
         // hack around class cast problem
         // zoneStrings = (String[][])rb.getObject("zoneStrings");
         ICUResourceBundle zoneObject = rb.get("zoneStrings");

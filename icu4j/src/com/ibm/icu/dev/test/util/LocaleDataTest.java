@@ -30,7 +30,7 @@ public class LocaleDataTest extends TestFmwk{
     private ULocale[] availableLocales = null;
     
     public LocaleDataTest(){
-        availableLocales = ICUResourceBundle.getAvailableULocales(UResourceBundle.ICU_BASE_NAME);
+        availableLocales = ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_BASE_NAME);
     }
     public void TestPaperSize(){
         for(int i = 0; i < availableLocales.length; i++){

@@ -997,7 +997,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 		f = DateFormat.getDateInstance();
 		logln("time yet again: " + f.format(now));
 
-        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,"de_DE");
+        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"de_DE");
         DateFormatSymbols sym = new DateFormatSymbols(rb, Locale.GERMANY);
         DateFormatSymbols sym2 = (DateFormatSymbols)sym.clone();
         if (sym.hashCode() != sym2.hashCode()) {

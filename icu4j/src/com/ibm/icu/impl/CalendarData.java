@@ -34,7 +34,7 @@ public class CalendarData {
      * @param status error code
      */
     public CalendarData(ULocale loc, String type) {
-        this((ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME, loc), type);
+        this((ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, loc), type);
     }
     
     public CalendarData(ICUResourceBundle b, String type) {

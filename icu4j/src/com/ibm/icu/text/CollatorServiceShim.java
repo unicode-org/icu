@@ -18,7 +18,7 @@ import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.Collator.CollatorFactory;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.impl.ICUResourceBundle;
 
 final class CollatorServiceShim extends Collator.ServiceShim {
 
@@ -82,14 +82,14 @@ final class CollatorServiceShim extends Collator.ServiceShim {
     Locale[] getAvailableLocales() {
         // TODO rewrite this to just wrap getAvailableULocales later
         if (service.isDefault()) {
-            return ICUResourceBundle.getAvailableLocales(UResourceBundle.ICU_COLLATION_BASE_NAME);
+            return ICUResourceBundle.getAvailableLocales(ICUResourceBundle.ICU_COLLATION_BASE_NAME);
         }
         return service.getAvailableLocales();
     }
 
     ULocale[] getAvailableULocales() {
         if (service.isDefault()) {
-            return ICUResourceBundle.getAvailableULocales(UResourceBundle.ICU_COLLATION_BASE_NAME);
+            return ICUResourceBundle.getAvailableULocales(ICUResourceBundle.ICU_COLLATION_BASE_NAME);
         }
         return service.getAvailableULocales();
     }

@@ -1048,7 +1048,7 @@ public final class UCharacterName
     /**
     * Default name of the name datafile
     */
-    private static final String NAME_FILE_NAME_ = UResourceBundle.ICU_BUNDLE+"/unames.icu";
+    private static final String NAME_FILE_NAME_ = ICUResourceBundle.ICU_BUNDLE+"/unames.icu";
     /**
     * Shift count to retrieve group information
     */

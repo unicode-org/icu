@@ -102,7 +102,7 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
     /**
      * Name of the datafile
      */
-    private static final String DATA_FILE_NAME = UResourceBundle.ICU_BUNDLE+"/pnames.icu";
+    private static final String DATA_FILE_NAME = ICUResourceBundle.ICU_BUNDLE+"/pnames.icu";
 
     /**
      * Buffer size of datafile.  The whole file is < 16k.

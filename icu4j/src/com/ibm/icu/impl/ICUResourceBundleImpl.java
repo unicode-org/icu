@@ -5,12 +5,16 @@
  ******************************************************************************
  */
 package com.ibm.icu.impl;
+
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.IntBuffer;
 import java.util.Hashtable;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import com.ibm.icu.util.StringTokenizer;
+import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceTypeMismatchException;
 /**
@@ -20,6 +24,10 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
 	//protected byte[] version;
 	private ByteBuffer rawData;
 	private long rootResource;
+    private String localeID;
+    private String baseName;
+    private ULocale ulocale;
+    
 	/**
 	 * 
 	 * @param baseName
@@ -28,20 +36,43 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
 	 * @return
 	 */
 	public static ICUResourceBundle createBundle(String baseName,
-			String localeID, ClassLoader root) {
-        ICUResourceBundleReader reader = new ICUResourceBundleReader(baseName, localeID, root);
+			                                     String localeID, ClassLoader root) {
+        
+        ICUResourceBundleReader reader = ICUResourceBundleReader.getReader(baseName, localeID, root);
+        
+        // could not open the .res file so return null
+        if(reader==null){
+            return null;   
+        }
+        
         ByteBuffer rawData = reader.getData();
         long rootResource = (UNSIGNED_INT_MASK)& rawData.getInt(0);
         ICUResourceBundleImpl bundle = new ICUResourceBundleImpl(rawData, baseName, localeID, rootResource);
         return bundle.getBundle();
 	}
+    
+    protected String getLocaleID(){
+        return localeID;   
+    }
+ 
+    protected String getBaseName(){
+        return baseName;   
+    }
+    
+    public ULocale getULocale(){
+        return ulocale;   
+    }
+    
+    public UResourceBundle getParent(){
+        return (UResourceBundle)parent;   
+    }
+    
     private ICUResourceBundle getBundle(){
         int type = RES_GET_TYPE(rootResource);
-        
         if(type==TABLE){
             // %%ALIAS is such a hack! I can understand the
             // ICU4C legacy .. do we need to port it?
-            ResourceTable table = new  ResourceTable(null, rootResource, true);   
+            ResourceTable table = new  ResourceTable(null, rootResource, "", true);   
             
             ICUResourceBundle b = table.handleGet(0);
             String itemKey = b.getKey();
@@ -54,7 +85,9 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
             }
             
         }else if(type == TABLE32){
-            return new ResourceTable32(null, rootResource, true); 
+            
+            // genrb does not generate Table32 with %%ALIAS
+            return new ResourceTable32(null, rootResource, "", true); 
         }else{
              throw new RuntimeException("Invalid format error"); 
         }
@@ -65,6 +98,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
 		this.rootResource = rootResource;
 		this.baseName = baseName;
 		this.localeID = localeID;
+        this.ulocale  = new ULocale(localeID);
 	}
 	private static final int RES_GET_TYPE(long res) {
 		return (int) ((res) >> 28L);
@@ -95,65 +129,48 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
 	private static final int getCharOffset(int offset) {
 		return (offset * 2);
 	}
-	private final ICUResourceBundle createBundleObject(String key, long resource, Hashtable table) {
-		if (resource != RES_BOGUS) {
+	private final ICUResourceBundle createBundleObject(String key, long resource,String resPath, Hashtable table) {
+		//if (resource != RES_BOGUS) {
 			switch (RES_GET_TYPE(resource)) {
 				case STRING :
 					{
-						return new ResourceString(key, resource);
+						return new ResourceString(key, resPath, resource);
 					}
 				case BINARY :
 					{
-						return new ResourceBinary(key, resource);
+						return new ResourceBinary(key, resPath, resource);
 					}
 				case ALIAS :
 					{
-						return findResource(key,resource, table);
+						return findResource(key, resource, table);
 					}
 				case INT :
 					{
-						return new ResourceInt(key, resource);
+						return new ResourceInt(key, resPath, resource);
 					}
 				case INT_VECTOR :
 					{
-						return new ResourceIntVector(key, resource);
+						return new ResourceIntVector(key, resPath, resource);
 					}
 				case ARRAY :
 					{
-						return new ResourceArray(key, resource);
+						return new ResourceArray(key, resPath, resource);
 					}
 				case TABLE32 :
 					{
-						return new ResourceTable32(key, resource);
+						return new ResourceTable32(key, resPath, resource);
 					}
 				case TABLE :
 					{
-						return new ResourceTable(key, resource);
+						return new ResourceTable(key, resPath, resource);
 					}
 				default :
 					throw new InternalError("The resource type is unknown");
 			}
-		}
-		return null;
+		//}
+		//return null;
 	}
-	private static final String getTableKey(ByteBuffer rawData, int size, int currentOffset, int index, int type) {
-		switch (type) {
-			case TABLE32 :
-				{
-					int charOffset = currentOffset + getIntOffset(index);
-					int keyOffset = rawData.getInt(charOffset);
-					return RES_GET_KEY(rawData, keyOffset).toString();
-				}
-			case TABLE :
-			default :
-				{
-					int charOffset = currentOffset + getCharOffset(index);
-					int keyOffset = rawData.getChar(charOffset);
-					return RES_GET_KEY(rawData, keyOffset).toString();
-				}
-		}
-	}
-	private static int findKey(ByteBuffer rawData, int size, int currentOffset, int type, String target) {
+	private int findKey(int size, int currentOffset, Resource res,  String target) {
 		int mid = 0, start = 0, limit = size, rc;
 		int lastMid = -1;
 		//int myCharOffset = 0, keyOffset = 0;
@@ -163,7 +180,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
 				break; /* We haven't moved, and it wasn't found. */
 			}
 			lastMid = mid;
-			String comp = getTableKey(rawData, size, currentOffset, mid, type);
+			String comp = res.getKey(currentOffset, mid);
 			rc = target.compareTo(comp);
 			if (rc < 0) {
 				limit = mid;
@@ -175,16 +192,10 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
 		}
 		return -1;
 	}
-    private ResourceBundle parent(){
-        return parent;
+    private interface Resource{
+        public String getKey( int currentOfset, int index);   
     }
-    private String baseName(){
-        return baseName;   
-    }
-    private String localeID(){
-        return localeID;   
-    }
-	private class ResourceTable extends ICUResourceBundle {
+	private class ResourceTable extends ICUResourceBundle implements Resource{
 
 		public ICUResourceBundle handleGet(String key) {
 			return handleGet(key, null);
@@ -196,7 +207,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
 			int currentOffset = (offset) + getCharOffset(1);
 			//int keyOffset = rawData.getChar(currentOffset);
 			/* do a binary search for the key */
-			int foundOffset = findKey(rawData, size, currentOffset, type, key);
+			int foundOffset = findKey(size, currentOffset, this, key);
 			if (foundOffset == -1) {
 				//throw new MissingResourceException(ICUResourceBundleReader.getFullName(baseName, localeID),
 				//                                    localeID,
@@ -206,11 +217,17 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
 			currentOffset += getCharOffset(size + (~size & 1))
 					+ getIntOffset(foundOffset);
 			long resource = (UNSIGNED_INT_MASK) & rawData.getInt(currentOffset);
-			return createBundleObject(key, resource, table);
+            String path = (isTopLevel==true)? key : resPath+"/"+key;
+			return createBundleObject(key, resource, path, table);
 		}
 		public ICUResourceBundle handleGet(int index) {
 			return handleGet(index, null);
 		}
+        public String getKey(int currentOffset, int index){
+            int charOffset = currentOffset + getCharOffset(index);
+            int keyOffset = rawData.getChar(charOffset);
+            return RES_GET_KEY(rawData, keyOffset).toString();   
+        }
 		public ICUResourceBundle handleGet(int index, Hashtable table) {
 			if (index > size) {
 				throw new IndexOutOfBoundsException();
@@ -219,32 +236,46 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
 			// offset+0 contains number of entries
 			// offset+1 contains the keyOffset  
 			int currentOffset = (offset) + getCharOffset(1);
-			String itemKey = getTableKey(rawData, size, currentOffset, index,
-					type);
+			String itemKey = getKey(currentOffset, index);
 			currentOffset += getCharOffset(size + (~size & 1))
 					+ getIntOffset(index);
 			long resource = (UNSIGNED_INT_MASK) & rawData.getInt(currentOffset);
-			return createBundleObject(itemKey, resource, table);
+            String path = (isTopLevel==true)? Integer.toString(index) : resPath+"/"+index ;
+			return createBundleObject(itemKey, resource, path, table);
 		}
         private int countItems(){   
             int offset = RES_GET_OFFSET(resource);
             int value = rawData.getChar(offset);
             return value;  
         }
-		private ResourceTable(String key, long resource) {
-			this(key, resource, false);
+		private ResourceTable(String key, String resPath, long resource) {
+			this(key, resource, resPath, false);
 		}
-		private ResourceTable(String key, long resource, boolean isTopLevel) {
+		private ResourceTable(String key, long resource, String resPath,  boolean isTopLevel) {
 			this.key = key;
 			this.resource = resource;
 			this.isTopLevel = isTopLevel;
 			this.size = countItems();
-            this.baseName = baseName();
-            this.localeID = localeID();
-            this.parent  = parent();
+            this.resPath = resPath;
 		}
+        protected String getLocaleID(){
+            return localeID;   
+        }
+        protected String getBaseName(){
+            return baseName;   
+        }
+        
+        public ULocale getULocale(){
+            return ulocale;   
+        }
+        public UResourceBundle getParent(){
+            return ICUResourceBundleImpl.this.getParent();  
+        }
+        protected void setParent(ResourceBundle parent){
+            ICUResourceBundleImpl.this.parent = parent;   
+        }
 	}
-	private class ResourceTable32 extends ICUResourceBundle {
+	private class ResourceTable32 extends ICUResourceBundle implements Resource {
 
 		public ICUResourceBundle get(String key) {
 			return get(key, null);
@@ -256,8 +287,7 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
 			int currentOffset = (offset) + getIntOffset(1);
 			//int keyOffset = rawData.getChar(currentOffset);
 			/* do a binary search for the key */
-			int foundOffset = findKey(rawData, size, currentOffset, TABLE32,
-					key);
+			int foundOffset = findKey(size, currentOffset, this, key);
 			if (foundOffset == -1) {
 				throw new MissingResourceException(
 						"Could not find resource ",
@@ -266,11 +296,17 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
 			}
 			currentOffset += getIntOffset(size) + getIntOffset(foundOffset);
 			long resource = (UNSIGNED_INT_MASK) & rawData.getInt(currentOffset);
-			return createBundleObject(key, resource, table);
+            String path = (isTopLevel==true)? key : resPath+"/"+key;
+			return createBundleObject(key, resource, path, table);
 		}
 		public ICUResourceBundle get(int index) {
 			return get(index, null);
 		}
+        public String getKey(int currentOffset, int index){
+            int charOffset = currentOffset + getIntOffset(index);
+            int keyOffset = rawData.getInt(charOffset);
+            return RES_GET_KEY(rawData, keyOffset).toString();   
+        }
 		public ICUResourceBundle get(int index, Hashtable table) {
 			if (index > size) {
 				throw new IndexOutOfBoundsException();
@@ -280,45 +316,72 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
 			// offset+1 contains the keyOffset  
 			int currentOffset = (offset) + getIntOffset(1)
 					+ getIntOffset(index);
-			String itemKey = getTableKey(rawData, size, currentOffset, 0,
-					TABLE32);
+			String itemKey = getKey(currentOffset, 0);
 			currentOffset += getIntOffset(size);
 			long resource = (UNSIGNED_INT_MASK) & rawData.getInt(currentOffset);
-			return createBundleObject(itemKey, resource, table);
+            String path = (isTopLevel==true)? Integer.toString(index): resPath+"/"+index ;
+			return createBundleObject(itemKey, resource, path, table);
 		}
         private int countItems(){
             int offset = RES_GET_OFFSET(resource);
             int value = rawData.getInt(offset);
             return value;   
         }
-		private ResourceTable32(String key, long resource, boolean isTopLevel) {
+		private ResourceTable32(String key, long resource, String resPath, boolean isTopLevel) {
 			this.resource = resource;
 			this.key = key;
 			this.type = TABLE;//Mask the table32's real type
 			this.isTopLevel = isTopLevel;
 			this.size = countItems();
-            this.baseName = baseName();
-            this.localeID = localeID();
-            this.parent  = parent();;
+            this.resPath = resPath;
 		}
-		private ResourceTable32(String key, long resource) {
-			this(key, resource, false);
+		private ResourceTable32(String key, String resPath, long resource) {
+			this(key, resource, resPath, false);
 		}
+        
+        protected String getLocaleID(){
+            return localeID;   
+        }
+        protected String getBaseName(){
+            return baseName;   
+        }
+        
+        public ULocale getULocale(){
+            return ulocale;   
+        }
+        public UResourceBundle getParent(){
+            return ICUResourceBundleImpl.this.getParent();  
+        }
+        protected void setParent(ResourceBundle parent){
+            ICUResourceBundleImpl.this.parent = parent;   
+        }
+          
 	}
 	private class ResourceString extends ICUResourceBundle {
         private String value;
         public String getString(){
             return value;
         }
-		private ResourceString(String key, long resource) {
+		private ResourceString(String key, String resPath, long resource) {
 			value = getStringValue(resource);
 			this.key = key;
 		    this.resource = resource;
 			this.type = RES_GET_TYPE(resource);
-            this.baseName = baseName();
-            this.localeID = localeID();
-            this.parent  = parent();
+            this.resPath = resPath;
 		}
+        protected String getLocaleID(){
+            return localeID;   
+        }
+        protected String getBaseName(){
+            return baseName;   
+        }
+        
+        public ULocale getULocale(){
+            return ulocale;   
+        }
+        public UResourceBundle getParent(){
+            return ICUResourceBundleImpl.this.getParent();  
+        }
 	}
 	private class ResourceInt extends ICUResourceBundle {
 		public int getInt() {
@@ -328,14 +391,25 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
 			long ret = RES_GET_UINT(resource);
 			return (int) ret;
 		}
-		private ResourceInt(String key, long resource) {
+		private ResourceInt(String key, String resPath, long resource) {
 			this.key = key;
 			this.resource = resource;
             this.type = RES_GET_TYPE(resource);
-            this.baseName = baseName();
-            this.localeID = localeID();
-            this.parent  = parent();
+            this.resPath = resPath;
 		}
+        protected String getLocaleID(){
+            return localeID;   
+        }
+        protected String getBaseName(){
+            return baseName;   
+        }
+        
+        public ULocale getULocale(){
+            return ulocale;   
+        }
+        public UResourceBundle getParent(){
+            return ICUResourceBundleImpl.this.getParent();  
+        }
 	}
 	private class ResourceArray extends ICUResourceBundle {
 		protected String[] handleGetStringArray() {
@@ -374,23 +448,34 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
 			int itemOffset = offset + getIntOffset(index + 1);
 			long itemResource = (UNSIGNED_INT_MASK)
 					& rawData.getInt(itemOffset);
-			return createBundleObject( null, itemResource, table);
+            String path = (isTopLevel==true)?  Integer.toString(index) : resPath+"/"+index;
+			return createBundleObject( null, itemResource, path, table);
 		}
         private int countItems(){
             int offset = RES_GET_OFFSET(resource);
             int value = rawData.getInt(offset);
             return value;   
         }
-		private ResourceArray(String key, long resource) {
+		private ResourceArray(String key, String resPath, long resource) {
 			this.resource = resource;
 			this.key = key;
 			this.type = RES_GET_TYPE(resource);
 			this.size = countItems();
-            this.baseName = baseName();
-            this.localeID = localeID();
-            this.parent  = parent();
-            
+            this.resPath = resPath;
 		}
+        protected String getLocaleID(){
+            return localeID;   
+        }
+        protected String getBaseName(){
+            return baseName;   
+        }
+        
+        public ULocale getULocale(){
+            return ulocale;   
+        }
+        public UResourceBundle getParent(){
+            return ICUResourceBundleImpl.this.getParent();  
+        }
 	}
 	private class ResourceBinary extends ICUResourceBundle {
 		private ByteBuffer value;
@@ -402,21 +487,32 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
 			int offset = RES_GET_OFFSET(resource);
 			int length = rawData.getInt(offset);
 			int byteOffset = offset + getIntOffset(1);
-			ByteBuffer val = ByteBuffer.allocate(length);
-			for (int i = 0; i < length; i++) {
-				val.put(rawData.get(byteOffset + i));
-			}
-			return val;
+            
+            byte[] dst = new byte[length];
+            rawData.position(byteOffset);
+            rawData.get(dst);
+            return ByteBuffer.wrap(dst);
 		}
-		public ResourceBinary(String key, long resource) {
+		public ResourceBinary(String key, String resPath,  long resource) {
 			this.resource = resource;
 			this.key = key;
 			this.type = RES_GET_TYPE(resource);
-            this.baseName = baseName();
-            this.localeID = localeID();
-            this.parent  = parent();
+            this.resPath = resPath;
 			value = getValue();
 		}
+        protected String getLocaleID(){
+            return localeID;   
+        }
+        protected String getBaseName(){
+            return baseName;   
+        }
+        
+        public ULocale getULocale(){
+            return ulocale;   
+        }
+        public UResourceBundle getParent(){
+            return ICUResourceBundleImpl.this.getParent();  
+        }
 	}
 	private class ResourceIntVector extends ICUResourceBundle {
 		private int[] value;
@@ -427,32 +523,43 @@ public class ICUResourceBundleImpl extends ICUResourceBundle {
 			int offset = RES_GET_OFFSET(resource);
 			int length = rawData.getInt(offset);
 			int intOffset = offset + getIntOffset(1);
-			int[] val = new int[length];
-			for (int i = 0; i < length; i++) {
-				val[i] = rawData.getInt(intOffset + getIntOffset(i));
-			}
-			return val;
+            rawData.position(intOffset);
+            IntBuffer buf = rawData.asIntBuffer();
+            int[] val = new int[length];
+            buf.get(val);
+            return val;
 		}
-		public ResourceIntVector(String key, long resource) {
+		public ResourceIntVector(String key, String resPath, long resource) {
 			this.key = key;
 			this.resource = resource;
 			this.size = 1;
 			this.type = RES_GET_TYPE(resource);
+            this.resPath = resPath;
 			value = getValue();
-            this.baseName = baseName();
-            this.localeID = localeID();
-            this.parent  = parent();
 		}
+        protected String getLocaleID(){
+            return localeID;   
+        }
+        protected String getBaseName(){
+            return baseName;   
+        }
+        
+        public ULocale getULocale(){
+            return ulocale;   
+        }
+        public UResourceBundle getParent(){
+            return ICUResourceBundleImpl.this.getParent();  
+        }
 	}
 	private String getStringValue(long resource) {
 		int offset = RES_GET_OFFSET(resource);
 		int length = rawData.getInt(offset);
 		int stringOffset = offset + getIntOffset(1);
-		StringBuffer val = new StringBuffer();
-		for (int i = 0; i < length; i++) {
-			val.append(rawData.getChar(stringOffset + getCharOffset(i)));
-		}
-		return val.toString();
+        char[] dst = new char[length];
+        rawData.position(stringOffset);
+        CharBuffer buf = rawData.asCharBuffer();
+        buf.get(dst);
+		return new String(dst);
 	}
 	private static final char RES_PATH_SEP_CHAR = '/';
 	private static final String ICUDATA = "ICUDATA";

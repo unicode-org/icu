@@ -12,8 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
-import java.util.MissingResourceException;
-
 import com.ibm.icu.util.VersionInfo;
 
 
@@ -140,13 +138,7 @@ public class ICUResourceBundleReader implements ICUBinary.Authenticate{
     
     private ByteBuffer data;
     
-    public ICUResourceBundleReader(String baseName, String localeName, ClassLoader root){
-        String resolvedName = getFullName(baseName, localeName);
-        InputStream stream = ICUData.getStream(root,resolvedName);
-        
-        if(stream==null){
-            throw new MissingResourceException(baseName, localeName,root.toString());
-        }
+    private ICUResourceBundleReader(InputStream stream, String resolvedName){
 
         BufferedInputStream bs = new BufferedInputStream(stream);
         try{
@@ -165,7 +157,16 @@ public class ICUResourceBundleReader implements ICUBinary.Authenticate{
             throw new RuntimeException("Data file "+ resolvedName+ " is corrupt.", ex);   
         }
     }
-
+    public static ICUResourceBundleReader getReader(String baseName, String localeName, ClassLoader root){
+        String resolvedName = getFullName(baseName, localeName);
+        InputStream stream = ICUData.getStream(root,resolvedName);
+        
+        if(stream==null){
+            return null;
+        }
+        ICUResourceBundleReader reader = new ICUResourceBundleReader(stream, resolvedName);
+        return reader;
+    }
     /* indexes[] value names; indexes are generally 32-bit (Resource) indexes */
         
     private static ByteBuffer readData(InputStream stream)
@@ -195,6 +196,7 @@ public class ICUResourceBundleReader implements ICUBinary.Authenticate{
     }
     
     public static String getFullName(String baseName, String localeName){
+        baseName = baseName.replace('.','/');
         if(baseName.charAt(baseName.length()-1)!= '/'){
             return baseName+"/"+localeName+ICU_RESOURCE_SUFFIX;
         }else{

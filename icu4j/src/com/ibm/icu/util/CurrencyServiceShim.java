@@ -24,7 +24,7 @@ final class CurrencyServiceShim extends Currency.ServiceShim {
     
     Locale[] getAvailableLocales() {
         if (service.isDefault()) {
-            return ICUResourceBundle.getAvailableLocales(UResourceBundle.ICU_BASE_NAME);
+            return ICUResourceBundle.getAvailableLocales(ICUResourceBundle.ICU_BASE_NAME);
         }
         return service.getAvailableLocales();
     }
