@@ -26,29 +26,29 @@ StringCharacterIterator::StringCharacterIterator()
   // NEVER DEFAULT CONSTRUCT!
 }
 
-StringCharacterIterator::StringCharacterIterator(const UnicodeString& text)
-  : UCharCharacterIterator(text.fArray, text.length()),
-    text(text)
+StringCharacterIterator::StringCharacterIterator(const UnicodeString& textStr)
+  : UCharCharacterIterator(textStr.fArray, textStr.length()),
+    text(textStr)
 {
     // we had set the input parameter's array, now we need to set our copy's array
     UCharCharacterIterator::text = this->text.fArray;
 }
 
-StringCharacterIterator::StringCharacterIterator(const UnicodeString& text,
-                                                 UTextOffset pos)
-  : UCharCharacterIterator(text.fArray, text.length(), pos),
-    text(text)
+StringCharacterIterator::StringCharacterIterator(const UnicodeString& textStr,
+                                                 UTextOffset textPos)
+  : UCharCharacterIterator(textStr.fArray, textStr.length(), textPos),
+    text(textStr)
 {
     // we had set the input parameter's array, now we need to set our copy's array
     UCharCharacterIterator::text = this->text.fArray;
 }
 
-StringCharacterIterator::StringCharacterIterator(const UnicodeString& text,
-                                                 UTextOffset begin,
-                                                 UTextOffset end,
-                                                 UTextOffset pos)
-  : UCharCharacterIterator(text.fArray, text.length(), begin, end, pos),
-    text(text)
+StringCharacterIterator::StringCharacterIterator(const UnicodeString& textStr,
+                                                 UTextOffset textBegin,
+                                                 UTextOffset textEnd,
+                                                 UTextOffset textPos)
+  : UCharCharacterIterator(textStr.fArray, textStr.length(), textBegin, textEnd, textPos),
+    text(textStr)
 {
     // we had set the input parameter's array, now we need to set our copy's array
     UCharCharacterIterator::text = this->text.fArray;
