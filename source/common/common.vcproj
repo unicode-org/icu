@@ -711,7 +711,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\unicode\udeprcted.h">
+				RelativePath=".\unicode\udeprctd.h">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
