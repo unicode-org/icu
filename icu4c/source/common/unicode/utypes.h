@@ -35,9 +35,6 @@
 #include "unicode/umachine.h"
 #include "unicode/utf.h"
 
-#include <memory.h>
-#include <stdlib.h>
-
 /*===========================================================================*/
 /* char Character set family                                                 */
 /*===========================================================================*/
@@ -103,7 +100,7 @@ updates come out.  */
 
 /* Define NULL (the wrong way, cast to void *) if it does not exist. */
 #ifndef NULL
-#ifdef XP_CPLUSPLUS
+#if defined(XP_CPLUSPLUS) || defined(__cplusplus)
 #define NULL    0
 #else
 #define NULL    ((void *)0)
