@@ -710,7 +710,10 @@ RuleBasedCollator::constructFromFile(   const Locale&           locale,
     cerr << localeFileName  << kFilenameSuffix << " binary load " << errorName(status) << endl;
 #endif
     if(U_SUCCESS(status) || status == U_MEMORY_ALLOCATION_ERROR) 
-      return;
+      {
+          delete [] binaryFilePath;
+          return;
+      }
     }
 
   // Now try to load it up from a resource bundle text source file
@@ -718,7 +721,10 @@ RuleBasedCollator::constructFromFile(   const Locale&           locale,
 
   // if there is no resource bundle file for the give locale, break out
   if(U_FAILURE(status))
-    return;
+  {
+      delete [] binaryFilePath;
+      return;
+  }
 
 #ifdef COLLDEBUG
   cerr << localeFileName << " ascii load " << errorName(status) << endl;
@@ -732,12 +738,14 @@ RuleBasedCollator::constructFromFile(   const Locale&           locale,
   bundle.getString("CollationElements", colString, intStatus);
   if(colString.isBogus()) {
     status = U_MEMORY_ALLOCATION_ERROR;
+    delete [] binaryFilePath;
     return;
   }
 
   // if this bundle doesn't contain collation data, break out
   if(U_FAILURE(intStatus)) {
     status = U_MISSING_RESOURCE_ERROR;
+    delete [] binaryFilePath;
     return;
   }
 
@@ -748,12 +756,14 @@ RuleBasedCollator::constructFromFile(   const Locale&           locale,
   colString.insert(0, DEFAULTRULES);
   if(colString.isBogus()) {
     status = U_MEMORY_ALLOCATION_ERROR;
+    delete [] binaryFilePath;
     return;
   }
     
   constructFromRules(colString, intStatus);
   if(intStatus == U_MEMORY_ALLOCATION_ERROR) {
     status = U_MEMORY_ALLOCATION_ERROR;
+    delete [] binaryFilePath;
     return;
   }
   
