@@ -185,9 +185,13 @@ public:
                                         UErrorCode&              err);
                         ResourceBundle( const UnicodeString&    path,
                                         UErrorCode&              err);
+			ResourceBundle(UErrorCode &err);
                         ResourceBundle( const wchar_t* path,
                                         const Locale& locale,
                                         UErrorCode& err);
+			ResourceBundle( const char* path,
+					const Locale& locale,
+					UErrorCode& err);
                         ResourceBundle(const ResourceBundle &original);
                         ResourceBundle(UResourceBundle *res);
 
@@ -496,6 +500,8 @@ public:
      * @draft
      */
     const char*         getVersionNumber(void) const;
+
+    void getVersion(UVersionInfo versionInfo) const;
 
 	/**
 	 * Return the Locale associated with this ResourceBundle. 

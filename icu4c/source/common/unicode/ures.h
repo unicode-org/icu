@@ -99,6 +99,37 @@
  * The array must be strictly rectangular; that is, each row must have the same number
  * of elements.
  * <P>
+ * <H2>Usage model:</H2>
+ * Resource bundles contain resources. In code, both types of entities are treated the
+ * same and are represented with a same data structure <pre>UResourceBundle</pre>. 
+ * Resource bundle has a tree structure, where leaf nodes can be strings, binaries 
+ * and integers while non-leaf nodes (including the root node) can be tables and arrays.
+ * One or more resource bundles are used to represent data needed by the application
+ * for running in the particular locale. Complete set of resource bundles for an application
+ * would contain all the data needed to run in intended locales. <P>
+ * If the data for the requested locale is missing, an effort will be made to obtain most
+ * usable data. This process is called fallback. Also, fallback happens when a resource 
+ * is not present in the given bundle. Then, the other bundles in the fallback chain are
+ * also searched for the requested resource.<P>
+ * Retrieving data from resources is possible in several ways, depending on the type of
+ * the resources:<P>
+ * 1) Access by a key: this approach works only for table resources<P>
+ * 2) Access by an index: tables and arrays can be addressed by an index<P>
+ * 3) Iteration: works for tables and arrays<P>
+ * To use data in resource bundles, following steps are needed:<P>
+ * 1) opening a bundle for a particular locale:
+ * <pre>
+ *      UErrorCode status = U_ZERO_ERROR;
+ *      UResourceBundle* resB = ures_open("/datadir/resources/GUI", "de_AT_EURO", &status);
+ * </pre>
+ * Status allows, besides testing for plain error, to see whether fallback occured. There
+ * are two extra non error values for status after this operation: U_USING_FALLBACK_ERROR,
+ * which implies that the bundle for the requested locale was not found, but that one of
+ * the bundles in the fallback chain was used (de_AT and de in this case) and
+ * U_USING_DEFAULT_ERROR which implies that not one bundle in the fallback chain was found
+ * and that default locale was used. In any case, 'root' locale is always at the end of the
+ * chain.
+ *
  * This is an example for using a possible custom resource:
  * <pre>
  * .    const char *currentLocale;
@@ -130,36 +161,36 @@ typedef enum {
     RES_RESERVED=15
 } UResType;
 
- /**
+/**
  * Functions to create and destroy resource bundles.
  */
 
 /**
-*Opens a UResourceBundle, from which users can extract strings by using
-*their corresponding keys.
-*Note that the caller is responsible of calling <TT>ures_close</TT> on each succesfully
-*opened resource bundle.
-*@param path  : string containing the full path pointing to the directory
-*                where the resources reside (should end with a directory
-*                separator.
-*                e.g. "/usr/resource/my_app/resources/" on a Unix system
-*                if NULL will use the system's current data directory
-*@param locale: specifies the locale for which we want to open the resource
-*                if NULL will use the default locale
-*                
-*@param status : fills in the outgoing error code.
-* The UErrorCode err parameter is used to return status information to the user. To
-     * check whether the construction succeeded or not, you should check the value of
-     * U_SUCCESS(err). If you wish more detailed information, you can check for
-     * informational error results which still indicate success. U_USING_FALLBACK_ERROR
-     * indicates that a fall back locale was used. For example, 'de_CH' was requested,
-     * but nothing was found there, so 'de' was used. U_USING_DEFAULT_ERROR indicates that
-     * the default locale data was used; neither the requested locale nor any of its
-     * fall back locales could be found.
-*@return      : a newly allocated resource bundle.
-*@see ures_close
-*@draft
-*/
+ * Opens a UResourceBundle, from which users can extract strings by using
+ * their corresponding keys.
+ * Note that the caller is responsible of calling <TT>ures_close</TT> on each succesfully
+ * opened resource bundle.
+ * @param path  : string containing the full path pointing to the directory
+ *                where the resources reside followed by the package name
+ *                e.g. "/usr/resource/my_app/resources/guimessages" on a Unix system.
+ *                if NULL, ICU default data files will be used.
+ * @param locale: specifies the locale for which we want to open the resource
+ *                if NULL, the default locale will be used. If strlen(locale) == 0
+ *                root locale will be used.
+ *                
+ * @param status : fills in the outgoing error code.
+ * The UErrorCode err parameter is used to return status information to the user. To
+ * check whether the construction succeeded or not, you should check the value of
+ * U_SUCCESS(err). If you wish more detailed information, you can check for
+ * informational error results which still indicate success. U_USING_FALLBACK_ERROR
+ * indicates that a fall back locale was used. For example, 'de_CH' was requested,
+ * but nothing was found there, so 'de' was used. U_USING_DEFAULT_ERROR indicates that
+ * the default locale data or root locale data was used; neither the requested locale 
+ * nor any of its fall back locales could be found.
+ * @return      a newly allocated resource bundle.
+ * @see ures_close
+ * @draft
+ */
 U_CAPI UResourceBundle*  U_EXPORT2 ures_open(const char*    path,   /* NULL if none */
 					   const char*  locale, /* NULL if none */
 					   UErrorCode*     status);
@@ -185,6 +216,10 @@ U_CAPI UResourceBundle*  U_EXPORT2 ures_open(const char*    path,   /* NULL if n
 *@draft
 */
 U_CAPI UResourceBundle* U_EXPORT2 ures_openW(const wchar_t* path, 
+                  const char* locale, 
+                  UErrorCode* status);
+
+U_CAPI UResourceBundle* U_EXPORT2 ures_openU(const UChar* path, 
                   const char* locale, 
                   UErrorCode* status);
 
@@ -342,6 +377,8 @@ U_CAPI void U_EXPORT2 ures_close(UResourceBundle*    resourceBundle);
  */
 
 U_CAPI const char* U_EXPORT2 ures_getVersionNumber(const UResourceBundle*   resourceBundle);
+
+U_CAPI void U_EXPORT2 ures_getVersion(const UResourceBundle* resB, UVersionInfo versionInfo);
 
 /**
  * Return the name of the Locale associated with this ResourceBundle.
