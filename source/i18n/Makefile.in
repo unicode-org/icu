@@ -62,7 +62,7 @@ ucurr.o digitlst.o \
 choicfmt.o datefmt.o smpdtfmt.o dtfmtsym.o udat.o \
 nfrs.o nfrule.o nfsubs.o rbnf.o \
 ucal.o calendar.o gregocal.o timezone.o simpletz.o olsontz.o \
-astro.o buddhcal.o islamcal.o japancal.o gregoimp.o \
+astro.o buddhcal.o islamcal.o japancal.o gregoimp.o hebrwcal.o chnsecal.o \
 sortkey.o bocsu.o coleitr.o coll.o ucoleitr.o \
 ucol.o ucol_bld.o ucol_cnt.o ucol_elm.o ucol_tok.o ucol_wgt.o tblcoll.o \
 strmatch.o usearch.o search.o stsearch.o \

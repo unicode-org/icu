@@ -13,6 +13,9 @@
 #include "math.h"
 #include <float.h>
 #include "unicode/putil.h"
+#include "uhash.h"
+#include "umutex.h"
+#include "ucln_in.h"
 #include <stdio.h>  // for toString()
 
 #ifdef U_DEBUG_ASTRO
@@ -54,6 +57,8 @@ static const char * debug_astro_date(UDate d) {
 static inline UBool isINVALID(double d) {
   return(uprv_isNaN(d));
 }
+
+U_NAMESPACE_BEGIN
 
 /**
  * The number of standard hours in one sidereal day.
@@ -1457,6 +1462,77 @@ UnicodeString CalendarAstronomer::Horizon::toString() const
 //    return Integer.toString(deg) + "\u00b0" + min + "'" + sec + "\"";
 //  }
 
+// =============== Calendar Cache ================
+UMTX ccLock = NULL;
 
+void CalendarCache::createCache(CalendarCache** cache, UErrorCode& status) {
+  ucln_i18n_registerCleanup();
+  *cache = new CalendarCache(32, status);
+  if(cache == NULL) {
+    status = U_MEMORY_ALLOCATION_ERROR;
+  }
+  if(U_FAILURE(status)) {
+    delete *cache;
+    *cache = NULL;
+  }
+}
+
+int32_t CalendarCache::get(CalendarCache** cache, int32_t key, UErrorCode &status) {
+  int32_t res;
+
+  if(U_FAILURE(status)) {
+    return 0;
+  }
+  umtx_lock(&ccLock);
+
+  if(*cache == NULL) {
+    createCache(cache, status);
+    if(U_FAILURE(status)) {
+      umtx_unlock(&ccLock);
+      return 0;
+    }
+  }
+
+  res = uhash_geti((*cache)->fTable, (void*)key);
+
+  umtx_unlock(&ccLock);
+  return res;
+}
+
+void CalendarCache::put(CalendarCache** cache, int32_t key, int32_t value, UErrorCode &status) {
+
+  if(U_FAILURE(status)) {
+    return;
+  }
+  umtx_lock(&ccLock);
+
+  if(*cache == NULL) {
+    createCache(cache, status);
+    if(U_FAILURE(status)) {
+      umtx_unlock(&ccLock);
+      return;
+    }
+  }
+
+  uhash_puti((*cache)->fTable, (void*)key, value, &status);
+
+  umtx_unlock(&ccLock);
+}
+
+CalendarCache::CalendarCache(int32_t size, UErrorCode &status) {
+  fTable = uhash_openSize(uhash_hashLong, uhash_compareLong, 32, &status);
+}
+
+CalendarCache::~CalendarCache() {
+  if(fTable != NULL) {
+    uhash_close(fTable);
+  }
+}
+
+U_NAMESPACE_END
+
+U_CFUNC UBool calendar_astro_cleanup(void) {
+  umtx_destroy(&ccLock);
+}
 
 #endif //  !UCONFIG_NO_FORMATTING

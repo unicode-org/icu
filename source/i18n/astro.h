@@ -757,5 +757,27 @@ private:
    */
   UDate local(UDate localMillis);
 };
+
+struct UHashtable;
+
+/**
+ * Cache of month -> julian day
+ * @internal
+ */
+class U_I18N_API CalendarCache : public UMemory {
+ public:
+  static int32_t get(CalendarCache** cache, int32_t key, UErrorCode &status);
+  static void put(CalendarCache** cache, int32_t key, int32_t value, UErrorCode &status);
+  virtual ~CalendarCache();
+ private:
+  CalendarCache(int32_t size, UErrorCode& status);
+  static void createCache(CalendarCache** cache, UErrorCode& status);
+  /**
+   * not implemented 
+   */
+  CalendarCache(); 
+  UHashtable *fTable;
+};
+
 #endif
 #endif
