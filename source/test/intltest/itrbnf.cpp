@@ -1659,8 +1659,9 @@ IntlTestRBNF::doTest(RuleBasedNumberFormat* formatter, const char* testData[][2]
   // man, error reporting would be easier with printf-style syntax for unicode string and formattable
 
     UErrorCode status = U_ZERO_ERROR;
+    DecimalFormatSymbols dfs("en", status);
     // NumberFormat* decFmt = NumberFormat::createInstance(Locale::getUS(), status);
-    NumberFormat* decFmt = new DecimalFormat("#,###.################", status);
+    DecimalFormat decFmt("#,###.################", dfs, status);
     if (U_FAILURE(status)) {
         errln("FAIL: could not create NumberFormat");
     } else {
@@ -1670,7 +1671,7 @@ IntlTestRBNF::doTest(RuleBasedNumberFormat* formatter, const char* testData[][2]
 
             log("[%i] %s = ", i, numString);
             Formattable expectedNumber;
-            decFmt->parse(numString, expectedNumber, status);
+            decFmt.parse(numString, expectedNumber, status);
             if (U_FAILURE(status)) {
                 errln("FAIL: decFmt could not parse %s", numString);
                 break;
@@ -1680,14 +1681,14 @@ IntlTestRBNF::doTest(RuleBasedNumberFormat* formatter, const char* testData[][2]
                 formatter->format(expectedNumber, actualString/* , pos*/, status);
                 if (U_FAILURE(status)) {
                     UnicodeString msg = "Fail: formatter could not format ";
-                    decFmt->format(expectedNumber, msg, status);
+                    decFmt.format(expectedNumber, msg, status);
                     errln(msg);
                     break;
                 } else {
                     UnicodeString expectedString = UnicodeString(expectedWords).unescape();
                     if (actualString != expectedString) {
                         UnicodeString msg = "FAIL: check failed for ";
-                        decFmt->format(expectedNumber, msg, status);
+                        decFmt.format(expectedNumber, msg, status);
                         msg.append(", expected ");
                         msg.append(expectedString);
                         msg.append(" but got ");
@@ -1711,9 +1712,9 @@ IntlTestRBNF::doTest(RuleBasedNumberFormat* formatter, const char* testData[][2]
                                     UnicodeString msg = "FAIL: parse failed for ";
                                     msg.append(actualString);
                                     msg.append(", expected ");
-                                    decFmt->format(expectedNumber, msg, status);
+                                    decFmt.format(expectedNumber, msg, status);
                                     msg.append(", but got ");
-                                    decFmt->format(parsedNumber, msg, status);
+                                    decFmt.format(parsedNumber, msg, status);
                                     errln(msg);
                                     break;
                                 }
@@ -1723,7 +1724,6 @@ IntlTestRBNF::doTest(RuleBasedNumberFormat* formatter, const char* testData[][2]
                 }
             }
         }
-        delete decFmt;
     }
 }
 
