@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/Attic/TestAll.java,v $ 
- * $Date: 2000/07/21 21:20:51 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/10/04 21:58:59 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -54,14 +54,16 @@ public class TestAll extends TestFmwk {
 	public void TestRuleBasedBreakIterator() throws Exception {
 		run(new TestFmwk[] {
             new com.ibm.test.rbbi.SimpleBITest(),
-            new com.ibm.test.rbbi.BreakIteratorTest()
+            new com.ibm.test.rbbi.BreakIteratorTest(),
+            new com.ibm.test.rbbi.RBBITest()
             });
 	}
 
 	public void TestTranslit() throws Exception {
 		run(new TestFmwk[] {
             new com.ibm.test.translit.TransliteratorTest(),
-            new com.ibm.test.translit.UnicodeSetTest()
+            new com.ibm.test.translit.UnicodeSetTest(),
+            new com.ibm.test.translit.UnicodeFilterLogicTest()
             });
 	}
 
