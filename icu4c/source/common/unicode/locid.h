@@ -80,11 +80,11 @@
  * <P>
  * The third constructor requires a third argument--the <STRONG>Variant.</STRONG>
  * The Variant codes are vendor and browser-specific.
- * For example, use WIN for Windows, MAC for Macintosh, and POSIX for POSIX.
+ * For example, use REVISED for a langauge's revised script orthography, and POSIX for POSIX.
  * Where there are two variants, separate them with an underscore, and
  * put the most important one first. For
  * example, a Traditional Spanish collation might be referenced, with
- * "ES", "ES", "Traditional_WIN".
+ * "ES", "ES", "Traditional_POSIX".
  *
  * <P>
  * Because a <code>Locale</code> object is just an identifier for a region,
@@ -538,10 +538,10 @@ public:
      * Fills in "dispCountry" with the name of this locale's country in a format suitable
      * for user display in the locale specified by "displayLocale".  For example, if the locale's
      * country code is "US" and displayLocale's language code is "fr", this function would set
-     * dispCountry to "Etats-Unis".
+     * dispCountry to "&Eacute;tats-Unis".
      * @param displayLocale      Specifies the locale to be used to display the name.  In other
      *                      words, if the locale's country code is "US", passing
-     *                      Locale::getFrench() for displayLocale would result in "&#x00C9;tats-Unis", while
+     *                      Locale::getFrench() for displayLocale would result in "&Eacute;tats-Unis", while
      *                      passing Locale::getGerman() for displayLocale would result in
      *                      "Vereinigte Staaten".
      * @param dispCountry   Receives the country's display name.
