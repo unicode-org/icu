@@ -24,6 +24,9 @@ SHLIB.cc=	$(CXX) -dynamiclib -dynamic $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 LD_RPATH=	-L
 LD_RPATH_PRE=	
 
+## Environment variable to set a runtime search path
+LDLIBRARYPATH_ENVVAR = LD_LIBRARY_PATH
+
 ## Versioned target for a shared library.
 FINAL_SO_TARGET = $(SO_TARGET)
 MIDDLE_SO_TARGET = 

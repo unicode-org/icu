@@ -51,7 +51,12 @@ DEFS = @DEFS@
 CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
-LDFLAGS = @LDFLAGS@ $(LD_RPATH)$(LD_RPATH_PRE)$(top_builddir)/common
+ENABLE_RPATH = @ENABLE_RPATH@
+ifeq ($(ENABLE_RPATH),YES)
+RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
+endif
+LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
+INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$$$(LDLIBRARYPATH_ENVVAR)
 LIBS = $(LIBICU-UC) @LIBS@ @LIB_M@
 
 OBJECTS = ieeetest.o
@@ -87,7 +92,7 @@ distclean-local: clean-local
 	$(RMV) Makefile
 
 check-local: all-local
-	- ICU_DATA=$(top_srcdir)/../data/ ./$(TARGET)
+	- ICU_DATA=$(top_srcdir)/../data/ $(INVOKE) ./$(TARGET)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \

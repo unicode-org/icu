@@ -23,6 +23,9 @@ SHLIB.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -shared
 LD_RPATH=	
 LD_RPATH_PRE=	-Wl,-rpath,
 
+## Environment variable to set a runtime search path
+LDLIBRARYPATH_ENVVAR = LD_LIBRARY_PATH
+
 ## Versioned target for a shared library.
 FINAL_SO_TARGET = $(SO_TARGET)
 MIDDLE_SO_TARGET = 

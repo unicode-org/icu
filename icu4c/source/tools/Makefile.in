@@ -19,7 +19,6 @@ CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common -I$(top_builddir)/common
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 
-
 @host_frag@
 
 bindir = @bindir@
@@ -46,7 +45,8 @@ endif
 ICUDATADIR=$(pkgdatadir)/$(VERSION)
 SRCDATADIR=$(top_srcdir)/../data
 OBJDATADIR=$(top_builddir)/data
-# tmpdir is INSIDE pkgdata dir
+# tmpdir is INSIDE pkgdata dir. if you change TMPDATADIR then the invokation
+# of pkgdata will break...
 TMPDATADIR=tmp
 
 # DATABUILDDIR must be an absolute path because of the way pkgdata is invoked
@@ -55,7 +55,9 @@ TMPDATADIR=tmp
 DATABUILDDIR=$(shell cd $(OBJDATADIR) && /bin/pwd)
 
 # relative lib links from pkgdata are the same as for tmp
-PKGDATA=../pkgdata/pkgdata -T . -s $(DATABUILDDIR) -O ./icupkg.inc -d $(DATABUILDDIR) -v -m $(MODE) 
+top_builddir_from_tmp = $(patsubst ..%,../..%,$(top_builddir))
+INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir_from_tmp)/common:$(top_builddir_from_tmp)/tools/toolutil:$$$(LDLIBRARYPATH_ENVVAR)
+PKGDATA = ../pkgdata/pkgdata -T . -s $(DATABUILDDIR) -O ./icupkg.inc -d $(DATABUILDDIR) -v -m $(MODE) 
 
 ## Install program information
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -196,20 +198,20 @@ $(TMPDATADIR)/icupkg.inc: pkgdata/icupkg.inc
 
 build-local build-pkgdata: $(TMPDATADIR)/icudata.lst $(TMPDATADIR)/testdata.lst  $(TMPDATADIR)/icupkg.inc $(DATAFILES) 
 	@$(mkinstalldirs) $(TMPDATADIR)
-	(cd $(TMPDATADIR); $(PKGDATA) -p icudata ./icudata.lst   )
-	(cd $(TMPDATADIR); $(PKGDATA) -p testdat1  ./testdata.lst )
-	(cd $(TMPDATADIR); $(PKGDATA) -p testdat2  ./testdata.lst )
+	(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p icudata ./icudata.lst   )
+	(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p testdat1  ./testdata.lst )
+	(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p testdat2  ./testdata.lst )
 
 install-pkgdata: $(TMPDATADIR)/icudata.lst $(TMPDATADIR)/icupkg.inc
 	$(mkinstalldirs) $(TMPDATADIR) $(DESTDIR)$(pkgdatadir)/$(VERSION)
-	(cd $(TMPDATADIR); $(PKGDATA) -p icudata ./icudata.lst -I $(DESTDIR)$(pkgdatadir)/$(VERSION) )
+	(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p icudata ./icudata.lst -I $(DESTDIR)$(pkgdatadir)/$(VERSION) )
 
 
 clean-pkgdata:
 	@$(mkinstalldirs) $(TMPDATADIR)
-	-@(cd $(TMPDATADIR); $(PKGDATA) -p icudata ./icudata.lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
-	-@(cd $(TMPDATADIR); $(PKGDATA) -p testdat1  ./testdata.lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
-	-@(cd $(TMPDATADIR); $(PKGDATA) -p testdat2  ./testdata.lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
+	-@(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p icudata ./icudata.lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
+	-@(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p testdat1  ./testdata.lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
+	-@(cd $(TMPDATADIR); $(INVOKE) $(PKGDATA) -p testdat2  ./testdata.lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
 	-$(RMV) $(TMPDATADIR)/icudata.lst $(TMPDATADIR)/icupkg.inc 
 
 check-local:

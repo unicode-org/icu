@@ -64,8 +64,12 @@ DEFS = @DEFS@
 CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/extra/ustdio -I$(srcdir)/../toolutil
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
-LDFLAGS = @LDFLAGS@ \
-$(LD_RPATH)$(LD_RPATH_PRE)$(top_builddir)/common@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/i18n@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/tools/toolutil@ld_rpath_suf@$(LD_RPATH_PRE)$(top_builddir)/extra/ustdio@ld_rpath_suf@$(LD_RPATH_PRE)$(libdir)
+ENABLE_RPATH = @ENABLE_RPATH@
+ifeq ($(ENABLE_RPATH),YES)
+RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
+endif
+LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
+INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$(top_builddir)/i18n:$(top_builddir)/tools/toolutil:$(top_builddir)/extra/ustdio:$$$(LDLIBRARYPATH_ENVVAR)
 LIBS = $(LIBUSTDIO) $(LIBICU-I18N) $(LIBICU-TOOLUTIL) $(LIBICU-UC) @LIBS@ @LIB_M@ 
 
 ##OBJECTS = error.o genrb.o ustr.o parse.o read.o write.o list.o	\
@@ -137,11 +141,11 @@ $(TARGET) : $(OBJECTS)
 
 $(top_builddir)/test/testdata/%.res : $(top_srcdir)/test/testdata/%.txt
 	@echo "Creating testdata resource file for $<"
-	ICU_DATA=$(top_builddir)/data ./genrb -s $(top_srcdir)/test/testdata/ -d $(top_builddir)/test/testdata/ $(<F)
+	ICU_DATA=$(top_builddir)/data $(INVOKE) ./$(TARGET) -s $(top_srcdir)/test/testdata/ -d $(top_builddir)/test/testdata/ $(<F)
 
 $(top_builddir)/data/%.res : $(top_srcdir)/../data/%.txt
 	@echo "Creating compiled resource file for $<"
-	@ICU_DATA=$(top_builddir)/data ./genrb -s $(top_srcdir)/../data/ -d $(top_builddir)/data/ $(<F)
+	@ICU_DATA=$(top_builddir)/data $(INVOKE) ./$(TARGET) -s $(top_srcdir)/../data/ -d $(top_builddir)/data/ $(<F)
 
 
 # the 'mv' will always fail if you are building in the source dir
