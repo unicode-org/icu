@@ -97,6 +97,15 @@
 /* Related version information                                               */
 /*===========================================================================*/
 
+/** The current ICU major version as an integer. */
+#define U_ICU_VERSION_MAJOR_NUM 1
+
+/** The current ICU minor version as an integer. */
+#define U_ICU_VERSION_MINOR_NUM 8
+
+/** The current ICU patchlevel version as an integer. */
+#define U_ICU_VERSION_PATCHLEVEL_NUM 0
+
 /** The current ICU library version as a dotted-decimal string. */
 #define U_ICU_VERSION "1.8"
 
