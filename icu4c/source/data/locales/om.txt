@@ -17,18 +17,18 @@
 
 om {
     Version{ "2.0" }
-    collations {
-        standard { 
-            Version { "1.0" }
-            Sequence { "&Z<ch<<<Ch<<<CH"
-                "<dh<<<Dh<<<DH"
-                "<kh<<<Kh<<<KH"
-                "<ny<<<Ny<<<NY"
-                "<ph<<<Ph<<<PH"
-                "<sh<<<Sh<<<SH"
-            }
-        }
-    }
+//    collations {
+//        standard { 
+//            Version { "1.0" }
+//            Sequence { "&Z<ch<<<Ch<<<CH"
+//                "<dh<<<Dh<<<DH"
+//                "<kh<<<Kh<<<KH"
+//                "<ny<<<Ny<<<NY"
+//                "<ph<<<Ph<<<PH"
+//                "<sh<<<Sh<<<SH"
+//            }
+//        }
+//    }
     DayAbbreviations {
         "Dil",
         "Wix",
