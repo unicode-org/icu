@@ -590,8 +590,8 @@ private:
     static NumberFormat* fgNumberFormat;
     static char fgClassID;
 
-    static const UnicodeString fgPositiveInfinity;
-    static const UnicodeString fgNegativeInfinity;
+    static const UChar fgPositiveInfinity[];
+    static const UChar fgNegativeInfinity[];
 
     /**
      * Each ChoiceFormat divides the range -Inf..+Inf into fCount

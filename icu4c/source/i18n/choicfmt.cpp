@@ -50,16 +50,15 @@ inline double _getDouble(const Formattable& f) {
 #define SINGLE_QUOTE ((UChar)0x0027)   /*'*/
 #define LESS_THAN    ((UChar)0x003C)   /*<*/
 #define LESS_EQUAL   ((UChar)0x0023)   /*#*/
-#define LESS_EQUAL2  ((UChar32)0x2264)
+#define LESS_EQUAL2  ((UChar)0x2264)
 #define VERTICAL_BAR ((UChar)0x007C)   /*|*/
 #define MINUS        ((UChar)0x002D)   /*-*/
-#define INFINITY     ((UChar32)0x221E)
+#define INFINITY     ((UChar)0x221E)
 
-static const UChar _posInf   = INFINITY;
-static const UChar _negInf[] = { MINUS, INFINITY };
-
-const UnicodeString ChoiceFormat::fgPositiveInfinity(FALSE, &_posInf, 1);
-const UnicodeString ChoiceFormat::fgNegativeInfinity(FALSE, _negInf, 2);
+const UChar ChoiceFormat::fgPositiveInfinity[] = {INFINITY, 0};
+const UChar ChoiceFormat::fgNegativeInfinity[] = {MINUS, INFINITY, 0};
+#define POSITIVE_STRLEN 1
+#define NEGATIVE_STRLEN 2
 
 // -------------------------------------
 // Creates a ChoiceFormat instance based on the pattern.
@@ -337,9 +336,9 @@ ChoiceFormat::applyPattern(const UnicodeString& pattern,
 
             double limit;
             buf.trim();
-            if (buf == fgPositiveInfinity) {
+            if (!buf.compare(fgPositiveInfinity, POSITIVE_STRLEN)) {
                 limit = uprv_getInfinity();
-            } else if (buf == fgNegativeInfinity) {
+            } else if (!buf.compare(fgNegativeInfinity, NEGATIVE_STRLEN)) {
                 limit = -uprv_getInfinity();
             } else {
                 limit = stod(buf, status);
@@ -353,7 +352,7 @@ ChoiceFormat::applyPattern(const UnicodeString& pattern,
                 // the count determined in the first pass did not
                 // match the number of elements found in the second
                 // pass.
-                goto error;                
+                goto error;
             }
             newLimits[k] = limit;
             newClosures[k] = (c == LESS_THAN);
@@ -374,7 +373,7 @@ ChoiceFormat::applyPattern(const UnicodeString& pattern,
             buf.truncate(0);
         } else if (c == VERTICAL_BAR) {
             if (inNumber) {
-                goto error;                
+                goto error;
             }
             inNumber = TRUE;
 
@@ -387,7 +386,7 @@ ChoiceFormat::applyPattern(const UnicodeString& pattern,
     }
 
     if (k != (count-1) || inNumber || inQuote) {
-        goto error;                
+        goto error;
     }
     newFormats[k] = buf;
 
