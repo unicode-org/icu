@@ -2139,6 +2139,8 @@ RBBIWordMonkey::RBBIWordMonkey() : fGCFMatcher(0),
     fOtherSet->removeAll(*fMidNumSet);
     fOtherSet->removeAll(*fNumericSet);
     fOtherSet->removeAll(*fExtendNumLetSet);
+    fOtherSet->removeAll(*fFormatSet);
+    fOtherSet->removeAll(*fExtendSet);
 
     fSets->addElement(fALetterSet,   status);
     fSets->addElement(fKatakanaSet,  status);
@@ -2146,6 +2148,7 @@ RBBIWordMonkey::RBBIWordMonkey() : fGCFMatcher(0),
     fSets->addElement(fMidNumSet,    status);
     fSets->addElement(fNumericSet,   status);
     fSets->addElement(fFormatSet,    status);
+    fSets->addElement(fExtendSet,    status);
     fSets->addElement(fOtherSet,     status);
     fSets->addElement(fExtendNumLetSet, status);
 
