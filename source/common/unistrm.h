@@ -18,6 +18,7 @@
 #define UNISTRM_H
 
 #include "filestrm.h"
+#include "umemstrm.h"
 #include "unicode/unistr.h"
 
 
@@ -26,6 +27,8 @@ class U_COMMON_API UnicodeStringStreamer
 public:
     static void streamIn(UnicodeString* string, FileStream* is);
     static void streamOut(const UnicodeString* string, FileStream* os);
+    static void streamIn(UnicodeString* string, UMemoryStream* is);
+    static void streamOut(const UnicodeString* string, UMemoryStream* os);
 };
 
 
