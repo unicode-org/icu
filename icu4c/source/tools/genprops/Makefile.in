@@ -11,9 +11,6 @@ top_builddir = ../..
 
 include $(top_builddir)/icudefs.mk
 
-## Platform-specific setup
-include @platform_make_fragment@
-
 ##
 
 SECTION = 8
@@ -32,16 +29,8 @@ CLEANFILES = *~ $(DEPS) $(RES_FILES) $(TEST_FILES) $(MAN_FILES)
 ## Target information
 TARGET = genprops
 
-DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
-CFLAGS = @CFLAGS@
-CXXFLAGS = @CXXFLAGS@
-ENABLE_RPATH = @ENABLE_RPATH@
-ifeq ($(ENABLE_RPATH),YES)
-RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
-endif
-LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
-LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) @LIBS@ @LIB_M@
+CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
+LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = genprops.o props2.o propsvec.o store.o
 

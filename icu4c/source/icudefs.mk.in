@@ -82,12 +82,32 @@ ICULIBSUFFIX=@ICULIBSUFFIX@
 
 # Compiler and tools
 
+EXEEXT = @EXEEXT@
 CC = @CC@
 CXX = @CXX@
 AIX_SHLIB = @AIX_SHLIB@
 AR = @AR@
 ARFLAGS := @ARFLAGS@ $(ARFLAGS)
 RANLIB = @RANLIB@
+
+# Various flags for the tools
+
+DEFS = @DEFS@
+CFLAGS = @CFLAGS@
+CPPFLAGS = @CPPFLAGS@
+CXXFLAGS = @CXXFLAGS@
+DEFAULT_LIBS = @LIBS@
+LIB_M = @LIB_M@
+
+ENABLE_RPATH = @ENABLE_RPATH@
+ifeq ($(ENABLE_RPATH),YES)
+RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
+endif
+LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
+
+# What kind of libraries are we building and linking against?
+ENABLE_STATIC = @ENABLE_STATIC@
+ENABLE_SHARED = @ENABLE_SHARED@
 
 # Echo w/o newline
 
@@ -135,3 +155,7 @@ LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio$(ICULIBSUFFIX)
 
 # Invoke, set library path for all ICU libraries.
 INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$(top_builddir)/i18n:$(top_builddir)/tools/toolutil:$(top_builddir)/extra/ustdio:$(top_builddir)/tools/ctestfw:$(top_builddir)/data/out:$(top_builddir)/data:$(top_builddir)/stubdata/:$$$(LDLIBRARYPATH_ENVVAR)
+
+# Platform-specific setup
+include @platform_make_fragment@
+

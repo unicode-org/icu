@@ -21,9 +21,6 @@ include $(top_builddir)/icudefs.mk
 ## Build directory information
 subdir = extra
 
-## Platform-specific setup
-include @platform_make_fragment@
-
 ## Files to remove for 'make clean'
 CLEANFILES = *~
 
