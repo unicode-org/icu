@@ -215,7 +215,7 @@ isAcceptable(void * /* context */,
 }
 
 static UBool U_CALLCONV
-_enumPropertyStartsRange(const void *context, UChar32 start, UChar32 limit, uint32_t value) {
+_enumPropertyStartsRange(const void *context, UChar32 start, UChar32 /*limit*/, uint32_t /*value*/) {
     /* add the start code point to the USet */
     uset_add((USet *)context, start);
     return TRUE;

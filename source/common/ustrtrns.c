@@ -637,7 +637,8 @@ u_strToWCS(wchar_t *dest,
 
 #elif defined U_WCHAR_IS_UTF32
     
-    return u_strToUTF32(dest,destCapacity,pDestLength,src,srcLength,pErrorCode);
+    return (wchar_t*)u_strToUTF32((UChar32*)dest, destCapacity, pDestLength,
+                                  src, srcLength, pErrorCode);
 
 #else
     
@@ -888,7 +889,8 @@ u_strFromWCS(UChar   *dest,
 
 #elif defined U_WCHAR_IS_UTF32
     
-    return u_strFromUTF32(dest,destCapacity,pDestLength,src,srcLength,pErrorCode);
+    return u_strFromUTF32(dest, destCapacity, pDestLength,
+                          (UChar32*)src, srcLength, pErrorCode);
 
 #else
 
