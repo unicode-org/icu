@@ -1231,11 +1231,6 @@ _decomposeFCD(const UChar *src, const UChar *decompLimit, const UChar *limit,
     return prevCC;
 }
 
-/*
- * ### TODO:
- * try to use the previous two functions in incremental FCD in collation
- */
-
 static int32_t
 unorm_makeFCD(UChar *&dest, int32_t &destCapacity,
               const UChar *src, int32_t srcLength,
@@ -1307,6 +1302,14 @@ unorm_makeFCD(UChar *&dest, int32_t &destCapacity,
             }
         }
 
+        /*
+         * prevCC has values from the following ranges:
+         * 0..0xff - the previous trail combining class
+         * <0      - the negative value of the previous code unit;
+         *           that code unit was <_NORM_MIN_WITH_LEAD_CC and its _getFCD16()
+         *           was deferred so that average text is checked faster
+         */
+
         /* copy these code units all at once */
         if(src!=prevSrc) {
             length=(int32_t)(src-prevSrc);
@@ -1322,30 +1325,33 @@ unorm_makeFCD(UChar *&dest, int32_t &destCapacity,
             }
             destIndex+=length;
             prevSrc=src;
+
+            /* prevCC<0 is only possible from the above loop, i.e., only if prevSrc<src */
+            if(prevCC<0) {
+                /* the previous character was <_NORM_MIN_WITH_LEAD_CC, we need to get its trail cc */
+                prevCC=(int16_t)_getFCD16((UChar)-prevCC)&0xff;
+
+                /*
+                 * set a pointer to this below-U+0300 character;
+                 * if prevCC==0 then it will moved to after this character below
+                 */
+                decompStart=prevSrc-1;
+            }
         }
-        /* now prevSrc==src - used later to adjust destIndex before decomposition */
+        /*
+         * now:
+         * prevSrc==src - used later to adjust destIndex before decomposition
+         * prevCC>=0
+         */
 
         /* end of source reached? */
         if(limit==NULL ? c==0 : src==limit) {
             break;
         }
 
-        /*
-         * prevCC has values from the following ranges:
-         * 0..0xff - the previous trail combining class
-         * <0      - the negative value of the previous code unit;
-         *           that code unit was <_NORM_MIN_WITH_LEAD_CC and its _getFCD16()
-         *           was deferred so that average text is checked faster
-         */
-
         /* set a pointer to after the last source position where prevCC==0 */
-        if(prevCC<0) {
-            /* the previous character was <_NORM_MIN_WITH_LEAD_CC, we need to get its trail cc */
-            prevCC=(int16_t)_getFCD16((UChar)-prevCC)&0xff;
-            decompStart= prevCC==0 ? src : src-1;
-        } else if(prevCC==0) {
-            decompStart=src;
-        /* else do not change decompStart */
+        if(prevCC==0) {
+            decompStart=prevSrc;
         }
 
         /* c already contains *src and fcd16 is set for it, increment src */
@@ -1358,17 +1364,41 @@ unorm_makeFCD(UChar *&dest, int32_t &destCapacity,
                 ++src;
                 fcd16=_getFCD16FromSurrogatePair(fcd16, c2);
             } else {
+                c2=0;
                 fcd16=0;
             }
+        } else {
+            c2=0;
         }
 
-        /* we are looking at the character at [prevSrc..src[ */
+        /* we are looking at the character (c, c2) at [prevSrc..src[ */
 
-        /* check the combining order */
+        /* check the combining order, get the lead cc */
         cc=(int16_t)(fcd16>>8);
         if(cc==0 || cc>=prevCC) {
             /* the order is ok */
+            if(cc==0) {
+                decompStart=prevSrc;
+            }
             prevCC=(int16_t)fcd16&0xff;
+
+            /* just append (c, c2) */
+            length= c2==0 ? 1 : 2;
+            if( (destIndex+length)<=destCapacity ||
+                /* attempt to grow the buffer */
+                (canGrow && (canGrow=growBuffer(context, &dest, &destCapacity,
+                                                limit==NULL ?
+                                                    2*destCapacity+length+20 :
+                                                    destCapacity+length+2*(limit-src)+20,
+                                                destIndex))!=FALSE)
+            ) {
+                dest[destIndex++]=c;
+                if(c2!=0) {
+                    dest[destIndex++]=c2;
+                }
+            } else {
+                destIndex+=length;
+            }
         } else {
             /*
              * back out the part of the source that we copied already but
