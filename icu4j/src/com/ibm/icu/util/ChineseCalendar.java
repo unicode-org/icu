@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ChineseCalendar.java,v $
- * $Date: 2000/11/28 22:17:49 $
- * $Revision: 1.8 $
+ * $Date: 2000/11/29 21:57:48 $
+ * $Revision: 1.9 $
  */
 package com.ibm.util;
 import com.ibm.text.*;
@@ -106,6 +106,13 @@ public class ChineseCalendar extends Calendar {
      * @see #newYear
      */
     private transient CalendarCache newYearCache = new CalendarCache();
+
+    /**
+     * True if the current year is a leap year.  Updated with each time to
+     * fields resolution.
+     * @see #computeChineseFields
+     */
+    private transient boolean isLeapYear;
 
     //------------------------------------------------------------------
     // Constructors
@@ -298,6 +305,44 @@ public class ChineseCalendar extends Calendar {
     }
 
     /**
+     * Adjust this calendar to be delta months before or after a given
+     * start position, pinning the day of month if necessary.  The start
+     * position is given as a local days number for the start of the month
+     * and a day-of-month.  Used by add() and roll().
+     * @param newMoon the local days of the first day of the month of the
+     * start position (days after January 1, 1970 0:00 Asia/Shanghai)
+     * @param dom the 1-based day-of-month of the start position
+     * @param delta the number of months to move forward or backward from
+     * the start position
+     */
+    private void offsetMonth(int newMoon, int dom, int delta) {
+        // Move to the middle of the month before our target month.
+        newMoon += (int) (CalendarAstronomer.SYNODIC_MONTH * (delta - 0.5));
+
+        // Search forward to the target month's new moon
+        newMoon = newMoonNear(newMoon, true);
+
+        // Find the target dom
+        int jd = newMoon + EPOCH_JULIAN_DAY - 1 + dom;
+
+        // Pin the dom.  In this calendar all months are 29 or 30 days
+        // so pinning just means handling dom 30.
+        if (dom > 29) {
+            set(JULIAN_DAY, jd-1);
+            // TODO Fix this.  We really shouldn't ever have to
+            // explicitly call complete().  This is either a bug in
+            // this method, in ChineseCalendar, or in
+            // Calendar.getActualMaximum().  I suspect the last.
+            complete();
+            if (getActualMaximum(DAY_OF_MONTH) >= dom) {
+                set(JULIAN_DAY, jd);
+            }
+        } else {
+            set(JULIAN_DAY, jd);
+        }
+    }
+
+    /**
      * Override Calendar to handle leap months properly.
      */
     public void add(int field, int amount) {
@@ -306,38 +351,69 @@ public class ChineseCalendar extends Calendar {
             if (amount != 0) {
                 int dom = get(DAY_OF_MONTH);
                 int day = get(JULIAN_DAY) - EPOCH_JULIAN_DAY; // Get local day
-                int m = day - dom + 1; // New moon 
-                
-                // Move m as close as possible to the middle of the month
-                // before our target month.
-                m += (int) (CalendarAstronomer.SYNODIC_MONTH * (amount - 0.5));
-
-                // Search forward to the actual new moon
-                m = newMoonNear(m, true);
-
-                // Find the target dom
-                int jd = m + EPOCH_JULIAN_DAY - 1 + dom;
-
-                // Pin the dom.  In this calendar all months are 29 or 30 days
-                // so pinning just means handling dom 30.
-                DateFormat fmt = DateFormat.getInstance(this);
-                if (dom > 29) {
-                    set(JULIAN_DAY, jd-1);
-                    // TODO Fix this.  We really shouldn't ever have to
-                    // explicitly call complete().  This is either a bug in
-                    // this method, in ChineseCalendar, or in
-                    // Calendar.getActualMaximum().  I suspect the last.
-                    complete();
-                    if (getActualMaximum(DAY_OF_MONTH) >= dom) {
-                        set(JULIAN_DAY, jd);
-                    }
-                } else {
-                    set(JULIAN_DAY, jd);
-                }
+                int moon = day - dom + 1; // New moon 
+                offsetMonth(moon, dom, amount);
             }
             break;
         default:
             super.add(field, amount);
+            break;
+        }
+    }
+
+    /**
+     * Override Calendar to handle leap months properly.
+     */
+    public void roll(int field, int amount) {
+        switch (field) {
+        case MONTH:
+            if (amount != 0) {
+                int dom = get(DAY_OF_MONTH);
+                int day = get(JULIAN_DAY) - EPOCH_JULIAN_DAY; // Get local day
+                int moon = day - dom + 1; // New moon (start of this month)
+
+                // Note throughout the following:  Months 12 and 1 are never
+                // followed by a leap month (D&R p. 185).
+
+                // Compute the adjusted month number m.  This is zero-based
+                // value from 0..11 in a non-leap year, and from 0..12 in a
+                // leap year.
+                int m = get(MONTH); // 0-based month
+                if (isLeapYear) { // (member variable)
+                    if (get(IS_LEAP_MONTH) == 1) {
+                        ++m;
+                    } else {
+                        // Check for a prior leap month.  (In the
+                        // following, month 0 is the first month of the
+                        // year.)  Month 0 is never followed by a leap
+                        // month, and we know month m is not a leap month.
+                        // moon1 will be the start of month 0 if there is
+                        // no leap month between month 0 and month m;
+                        // otherwise it will be the start of month 1.
+                        int moon1 = moon -
+                            (int) (CalendarAstronomer.SYNODIC_MONTH * (m - 0.5));
+                        moon1 = newMoonNear(moon1, true);
+                        if (isLeapMonthBetween(moon1, moon)) {
+                            ++m;
+                        }
+                    }
+                }
+
+                // Now do the standard roll computation on m, with the
+                // allowed range of 0..n-1, where n is 12 or 13.
+                int n = isLeapYear ? 13 : 12; // Months in this year
+                int newM = (m + amount) % n;
+                if (newM < 0) {
+                    newM += n;
+                }
+
+                if (newM != m) {
+                    offsetMonth(moon, dom, newM - m);
+                }
+            }
+            break;
+        default:
+            super.roll(field, amount);
             break;
         }
     }
@@ -535,6 +611,8 @@ public class ChineseCalendar extends Calendar {
      * <code>handleComputeFields()</code>, or it can just set the MONTH and
      * IS_LEAP_MONTH fields, as required by
      * <code>handleComputeMonthStart()</code>.
+     *
+     * <p>As a side effect, this method sets {@link #isLeapYear}.
      * @param days days after January 1, 1970 0:00 Asia/Shanghai of the
      * date to compute fields for
      * @param gyear the Gregorian year of the given date
@@ -565,7 +643,8 @@ public class ChineseCalendar extends Calendar {
         int firstMoon = newMoonNear(solsticeBefore + 1, true);
         int lastMoon = newMoonNear(solsticeAfter + 1, false);
         int thisMoon = newMoonNear(days + 1, false); // Start of this month
-        boolean isLeapYear = synodicMonthsBetween(firstMoon, lastMoon) == 12;
+        // Note: isLeapYear is a member variable
+        isLeapYear = synodicMonthsBetween(firstMoon, lastMoon) == 12;
 
         int month = synodicMonthsBetween(firstMoon, thisMoon);
         if (isLeapYear && isLeapMonthBetween(firstMoon, thisMoon)) {
