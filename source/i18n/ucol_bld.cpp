@@ -876,6 +876,8 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     ensure that the script reordering will continue to work. 
 */
   UHashtable *tailored = uhash_open(uhash_hashLong, uhash_compareLong, status);
+  UCATableHeader *image = (UCATableHeader *)uprv_malloc(sizeof(UCATableHeader));
+  uprv_memcpy(image, src->UCA->image, sizeof(UCATableHeader));
 
   for(i = 0; i<src->resultLen; i++) {
     /* now we need to generate the CEs */ 
@@ -886,7 +888,7 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
     }
   }
 
-  tempUCATable *t = uprv_uca_initTempTable(src->image, src->UCA, status);
+  tempUCATable *t = uprv_uca_initTempTable(image, src->opts, src->UCA, status);
 
 
   /* After this, we have assigned CE values to all regular CEs      */

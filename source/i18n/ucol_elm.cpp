@@ -73,7 +73,7 @@ void uprv_uca_reverseElement(UCAElements *el) {
       }
 #endif
       expansion = UCOL_SPECIAL_FLAG | (EXPANSION_TAG<<UCOL_TAG_SHIFT) 
-        | ((uprv_uca_addExpansion(expansions, el->CEs[0], &status)+(paddedsize(sizeof(UCATableHeader))>>2))<<4)
+        | ((uprv_uca_addExpansion(expansions, el->CEs[0], &status)+(headersize>>2))<<4)
         & 0xFFFFF0;
 
       for(i = 1; i<el->noOfCEs; i++) {
@@ -114,11 +114,12 @@ int32_t uprv_uca_addExpansion(ExpansionTable *expansions, uint32_t value, UError
     return(expansions->position++);
 }
 
-tempUCATable * uprv_uca_initTempTable(UCATableHeader *image, const UCollator *UCA, UErrorCode *status) {
+tempUCATable * uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollator *UCA, UErrorCode *status) {
   tempUCATable *t = (tempUCATable *)uprv_malloc(sizeof(tempUCATable));
   MaxExpansionTable *maxet = (MaxExpansionTable *)uprv_malloc(
                                                    sizeof(MaxExpansionTable));
   t->image = image;
+  t->options = opts;
 
   t->UCA = UCA;
   t->expansions = (ExpansionTable *)uprv_malloc(sizeof(ExpansionTable));
@@ -347,13 +348,13 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
       element->mapCE = element->CEs[0];
     } else { /* add thai - totally bad here */
       expansion = UCOL_SPECIAL_FLAG | (THAI_TAG<<UCOL_TAG_SHIFT) 
-        | ((uprv_uca_addExpansion(expansions, element->CEs[0], status)+(paddedsize(sizeof(UCATableHeader))>>2))<<4) 
+        | ((uprv_uca_addExpansion(expansions, element->CEs[0], status)+(headersize>>2))<<4) 
         | 0x1;
       element->mapCE = expansion;
     }
   } else {     
     expansion = UCOL_SPECIAL_FLAG | (EXPANSION_TAG<<UCOL_TAG_SHIFT) 
-      | ((uprv_uca_addExpansion(expansions, element->CEs[0], status)+(paddedsize(sizeof(UCATableHeader))>>2))<<4)
+      | ((uprv_uca_addExpansion(expansions, element->CEs[0], status)+(headersize>>2))<<4)
       & 0xFFFFF0;
 
     for(i = 1; i<element->noOfCEs; i++) {
@@ -524,7 +525,7 @@ UCATableHeader *uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
         return NULL;
     }
 
-    uint32_t beforeContractions = (paddedsize(sizeof(UCATableHeader))+paddedsize(expansions->position*sizeof(uint32_t)))/sizeof(UChar);
+    uint32_t beforeContractions = (headersize+paddedsize(expansions->position*sizeof(uint32_t)))/sizeof(UChar);
 
     int32_t contractionsSize = 0;
     contractionsSize = uprv_cnttab_constructTable(contractions, beforeContractions, status);
@@ -540,7 +541,7 @@ UCATableHeader *uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
     uint32_t tableOffset = 0;
     uint8_t *dataStart;
 
-    uint32_t toAllocate = paddedsize(sizeof(UCATableHeader))+
+    uint32_t toAllocate =           headersize+                                    
                                     paddedsize(expansions->position*sizeof(uint32_t))+
                                     paddedsize(mappingSize)+
                                     paddedsize(contractionsSize*(sizeof(UChar)+sizeof(uint32_t)))+
@@ -572,6 +573,10 @@ UCATableHeader *uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
     myData->contractionSize = contractionsSize;
 
     tableOffset += paddedsize(sizeof(UCATableHeader));
+
+    myData->options = tableOffset;
+    memcpy(dataStart+tableOffset, t->options, sizeof(UColOptionSet));
+    tableOffset += paddedsize(sizeof(UColOptionSet));
 
     /* copy expansions */
     /*myData->expansion = (uint32_t *)dataStart+tableOffset;*/
