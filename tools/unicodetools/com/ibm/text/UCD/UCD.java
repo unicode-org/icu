@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2004/11/12 23:17:15 $
-* $Revision: 1.35 $
+* $Date: 2004/11/13 23:10:32 $
+* $Revision: 1.36 $
 *
 *******************************************************************************
 */
@@ -1579,8 +1579,13 @@ to guarantee identifier closure.
 
                 //T = Mc + (Cf - ZWNJ - ZWJ)
                 int cp = uData.codePoint;
-                    byte old = uData.joiningType;
-                    byte cat = uData.generalCategory;
+                byte old = uData.joiningType;
+                byte cat = uData.generalCategory;
+                if (cat == Me) {
+                	if (compositeVersion >= 0x40100) {
+                		uData.joiningType = JT_T; 
+                	}
+                }
                 //if (cp == 0x200D) {
                   //  uData.joiningType = JT_C;
                 //} else

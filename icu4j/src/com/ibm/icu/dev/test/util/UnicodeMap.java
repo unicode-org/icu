@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -30,11 +31,16 @@ public final class UnicodeMap implements Cloneable {
     private int length = 2;
     private int[] transitions = {0,0x110000,0,0,0,0,0,0,0,0};
     private Object[] values = new Object[10];
+    private boolean errorOnReset = false;
+    
+    private ListSet availableValues;
+    boolean staleAvailableValues = false;
 
     private int lastIndex = 0;
     
-    public UnicodeMap(Equator equator) {
+    public UnicodeMap(Comparator equator) {
         this.equator = equator;
+        availableValues = new ListSet(equator);
     }
     
     public UnicodeMap() {
@@ -49,7 +55,7 @@ public final class UnicodeMap implements Cloneable {
             if (length != that.length || !equator.equals(that.equator)) return false;
             for (int i = 0; i < length-1; ++i) {
                 if (transitions[i] != that.transitions[i]) return false;
-                if (!equator.isEqual(values[i], that.values[i])) return false;
+                if (!areEqual(values[i], that.values[i])) return false;
             }
             return true;
         } catch (ClassCastException e) {
@@ -57,12 +63,22 @@ public final class UnicodeMap implements Cloneable {
         }
     }
     
+    public int getHashCode(Object o) {
+    	return o.hashCode();
+    	//equator.getHashCode
+    }
+    
+    public boolean areEqual(Object a, Object b) {
+    	return equator.compare(a, b) == 0;
+    	//equator.getHashCode
+    }
+    
     public int hashCode() {
         int result = length;
         // TODO might want to abbreviate this for speed.
         for (int i = 0; i < length-1; ++i) {
             result = 37*result + transitions[i];
-            result = 37*result + equator.getHashCode(values[i]);
+            result = 37*result + getHashCode(values[i]);
         }
         return result;
     }
@@ -75,6 +91,8 @@ public final class UnicodeMap implements Cloneable {
         that.length = length;
         that.transitions = (int[]) transitions.clone();
         that.values = (Object[]) values.clone();
+        that.equator = equator;
+        that.availableValues = new ListSet(equator);
         return that;
     }
     
@@ -87,7 +105,7 @@ public final class UnicodeMap implements Cloneable {
               throw new IllegalArgumentException("Invariant failed: Lengths bad");
           }
         for (int i = 1; i < length-1; ++i) {
-            if (equator.isEqual(values[i-1], values[i])) {
+            if (areEqual(values[i-1], values[i])) {
                 throw new IllegalArgumentException("Invariant failed: values shared at " 
                     + "\t" + Utility.hex(i-1) + ": <" + values[i-1] + ">"
                     + "\t" + Utility.hex(i) + ": <" + values[i] + ">"
@@ -107,39 +125,20 @@ public final class UnicodeMap implements Cloneable {
         }
     }
     
-    public interface Equator {
-        /**
-          * Comparator function. If overridden, must handle case of null,
-          * and compare any two objects that could be compared.
-          * Must obey normal rules of symmetry: a=b => b=a
-          * and transitivity: a=b & b=c => a=b)
-          * @param a
-          * @param b
-          * @return true if a and b are equal
-          */
-         public boolean isEqual(Object a, Object b);
-
-        /**
-         * Must obey normal rules: a=b => getHashCode(a)=getHashCode(b)
-         * @param object
-         * @return a hash code for the object
-         */
-        public int getHashCode(Object object);
-    }
-    
-    private static final class SimpleEquator implements Equator {
-        public boolean isEqual(Object a, Object b) {
-            if (a == b) return true;
-            if (a == null || b == null) return false;
-            return a.equals(b);
+    private static final class SimpleEquator implements Comparator {
+        public int compare(Object a, Object b) {
+            if (a == b) return 0;
+            if (a == null) return -1;
+            if (b == null) return 1;
+            return ((Comparable)a).compareTo((Comparable)b);
         }
         public int getHashCode(Object a) {
             if (a == null) return 0;
             return a.hashCode();
         }
     }
-    public static Equator SIMPLE_EQUATOR = new SimpleEquator(); 
-    private Equator equator = SIMPLE_EQUATOR;
+    public static Comparator SIMPLE_EQUATOR = new SimpleEquator(); 
+    private Comparator equator = SIMPLE_EQUATOR;
  
     /**
      * Finds an index such that inversionList[i] <= codepoint < inversionList[i+1]
@@ -261,7 +260,16 @@ public final class UnicodeMap implements Cloneable {
         }
         int limitIndex = baseIndex + 1;
         // cases are (a) value is already set
-        if (equator.isEqual(values[baseIndex], value)) return this;
+        if (areEqual(values[baseIndex], value)) return this;        
+        if (errorOnReset && values[baseIndex] != null) {
+        	throw new IllegalArgumentException("Attempt to reset value for " + Utility.hex(codepoint)
+        			+ " when that is disallowed. Old: " + values[baseIndex] + "; New: " + value);
+        }
+
+        // adjust the available values
+        staleAvailableValues = true;
+        availableValues.add(value); // add if not there already      
+
         int baseCP = transitions[baseIndex];
         int limitCP = transitions[limitIndex];
         // we now start walking through the difference case,
@@ -271,12 +279,12 @@ public final class UnicodeMap implements Cloneable {
         if (baseCP == codepoint) {
             // CASE: At very start of range
             boolean connectsWithPrevious = 
-                baseIndex != 0 && equator.isEqual(value, values[baseIndex-1]);               
+                baseIndex != 0 && areEqual(value, values[baseIndex-1]);               
                 
             if (limitCP == codepoint + 1) {
                 // CASE: Single codepoint range
                 boolean connectsWithFollowing =
-                    baseIndex < length - 1 && equator.isEqual(value, values[limitIndex]);
+                    baseIndex < length - 1 && areEqual(value, values[limitIndex]);
                 
                 if (connectsWithPrevious) {
                     // A1a connects with previous & following, so remove index
@@ -308,7 +316,7 @@ public final class UnicodeMap implements Cloneable {
             // CASE: at end of range        
             // if connects, just back up range
             boolean connectsWithFollowing =
-                baseIndex < length - 1 && equator.isEqual(value, values[limitIndex]);
+                baseIndex < length - 1 && areEqual(value, values[limitIndex]);
 
             if (connectsWithFollowing) {
                 --transitions[limitIndex]; 
@@ -396,6 +404,8 @@ public final class UnicodeMap implements Cloneable {
      * @return this (for chaining)
      */
     public UnicodeMap setMissing(Object value) {
+    	staleAvailableValues = true;
+    	availableValues.add(value);
         for (int i = 0; i < length; ++i) {
             if (values[i] == null) values[i] = value;
         }
@@ -412,7 +422,7 @@ public final class UnicodeMap implements Cloneable {
     public UnicodeSet getSet(Object value, UnicodeSet result) {
         if (result == null) result = new UnicodeSet();
         for (int i = 0; i < length - 1; ++i) {
-            if (equator.isEqual(value, values[i])) {
+            if (areEqual(value, values[i])) {
                 result.add(transitions[i], transitions[i+1]-1);
             } 
         }
@@ -429,13 +439,18 @@ public final class UnicodeMap implements Cloneable {
      * @return result
      */
     public Collection getAvailableValues(Collection result) {
-        if (result == null) result = new ArrayList(1);
-        for (int i = 0; i < length - 1; ++i) {
-            Object value = values[i];
-            if (value == null) continue;
-            if (result.contains(value)) continue;
-            result.add(value);
-        }
+    	if (staleAvailableValues) {
+    		// collect all the current values
+    		// retain them in the availableValues
+    		Set temp = new TreeSet(equator);
+            for (int i = 0; i < length - 1; ++i) {
+                temp.add(values[i]);
+            }
+            availableValues.retainAll(temp);
+            staleAvailableValues = false;
+    	}
+    	if (result == null) result = new ArrayList(1);
+        result.addAll(availableValues);
         return result;
     }
     
@@ -539,4 +554,16 @@ public final class UnicodeMap implements Cloneable {
         }
         return result.toString();
     }
+	/**
+	 * @return Returns the errorOnReset.
+	 */
+	public boolean isErrorOnReset() {
+		return errorOnReset;
+	}
+	/**
+	 * @param errorOnReset The errorOnReset to set.
+	 */
+	public void setErrorOnReset(boolean errorOnReset) {
+		this.errorOnReset = errorOnReset;
+	}
 }

@@ -39,7 +39,7 @@ public class TestUtilities extends TestFmwk {
     UnicodeMap map1 = new UnicodeMap();
     Map map2 = new HashMap();
     Map map3 = new TreeMap();
-    UnicodeMap.Equator equator = UnicodeMap.SIMPLE_EQUATOR;
+    Comparator equator = UnicodeMap.SIMPLE_EQUATOR;
     SortedSet log = new TreeSet();
     static String[] TEST_VALUES = {null, "A", "B", "C", "D", "E", "F"};
     static Random random = new Random(12345);
@@ -126,7 +126,7 @@ public class TestUtilities extends TestFmwk {
         map3 = new TreeMap();
         Object lastValue = new Object();
         while (mi.next()) {
-            if (!UnicodeMap.SIMPLE_EQUATOR.isEqual(lastValue, mi.value)) {
+            if (UnicodeMap.SIMPLE_EQUATOR.compare(lastValue, mi.value) != 0) {
                 // System.out.println("Change: " + Utility.hex(mi.codepoint) + " => " + mi.value);
                 lastValue = mi.value;
             }
@@ -140,7 +140,7 @@ public class TestUtilities extends TestFmwk {
         for (int i = 0; i < LIMIT; ++i) {
             Object value1 = map1.getValue(i);
             Object value2 = map2.get(new Integer(i));
-            if (!equator.isEqual(value1, value2)) {
+            if (equator.compare(value1, value2) != 0) {
                 errln(counter + " Difference at " + Utility.hex(i)
                      + "\t UnicodeMap: " + value1
                      + "\t HashMap: " + value2);

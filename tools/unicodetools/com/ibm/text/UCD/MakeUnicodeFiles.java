@@ -314,9 +314,10 @@ public class MakeUnicodeFiles {
                             addValueComments(property, value, comments);
                         comments = "";
                         if (line.startsWith("Generate:")) {
-                            filesToDo = Utility.split(lineValue, ' ');
-                            if (filesToDo.length == 0) {
-                                filesToDo = new String[] {""};
+                            filesToDo = Utility.split(lineValue.trim(), ' ');
+                            if (filesToDo.length == 0
+                            		|| (filesToDo.length == 1 && filesToDo[0].length() == 0)) {
+                                filesToDo = new String[] {".*"};
                             }
                         } else if (line.startsWith("DeltaVersion:")) {
                             dVersion = Integer.parseInt(lineValue);
@@ -476,24 +477,22 @@ public class MakeUnicodeFiles {
     }
     
     public static void generateFile() throws IOException {
-    	String[] lines = new String[2];
-    	Utility.filesAreIdentical("C:\\DATA\\UCD\\4.0.1-Update\\CaseFolding-4.0.1.txt", 
-    			"C:\\DATA\\GEN\\DerivedData\\CaseFolding-4.1.0d13.txt", lines);
         for (int i = 0; i < Format.theFormat.filesToDo.length; ++i) {
-            String fileName =
-                Format.theFormat.filesToDo[i].trim().toLowerCase(
-                    Locale.ENGLISH);
+            String fileNamePattern =
+                Format.theFormat.filesToDo[i].trim(); // .toLowerCase(Locale.ENGLISH);
+            Matcher matcher = Pattern.compile(fileNamePattern, Pattern.CASE_INSENSITIVE).matcher("");
             Iterator it = Format.theFormat.getFiles().iterator();
             boolean gotOne = false;
             while (it.hasNext()) {
                 String propname = (String) it.next();
-                if (!propname.toLowerCase(Locale.ENGLISH).startsWith(fileName)) continue;
+                if (!matcher.reset(propname).matches()) continue;
+                //if (!propname.toLowerCase(Locale.ENGLISH).startsWith(fileName)) continue;
                 generateFile(propname);
                 gotOne = true;
             }
             if (!gotOne) {
                 throw new IllegalArgumentException(
-                    "Non-matching file name: " + fileName);
+                    "Non-matching file name: " + fileNamePattern);
             }
         }
     }
@@ -715,7 +714,8 @@ public class MakeUnicodeFiles {
         List propList = Format.theFormat.getPropertiesFromFile(filename);
         for (Iterator propIt = propList.iterator(); propIt.hasNext();) {
              BagFormatter bf = new BagFormatter(toolFactory);
-             UnicodeProperty prop = toolFactory.getProperty((String) propIt.next());
+             String nextPropName = (String) propIt.next();
+             UnicodeProperty prop = toolFactory.getProperty(nextPropName);
              String name = prop.getName();
              System.out.println("Property: " + name + "; " + prop.getTypeName(prop.getType()));
             pw.println();

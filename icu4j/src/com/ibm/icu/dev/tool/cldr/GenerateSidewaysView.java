@@ -90,7 +90,8 @@ public class GenerateSidewaysView {
         SKIP = 5,
         TZADIR = 6,
         NONVALIDATING = 7,
-        SHOW_DTD = 8;
+        SHOW_DTD = 8,
+		TRANSLIT = 9;
 
     private static final String NEWLINE = "\n";
 
@@ -104,11 +105,11 @@ public class GenerateSidewaysView {
             UOption.create("tzadir", 't', UOption.REQUIRES_ARG).setDefault("C:\\ICU4J\\icu4j\\src\\com\\ibm\\icu\\dev\\tool\\cldr\\"),
             UOption.create("nonvalidating", 'n', UOption.NO_ARG),
             UOption.create("dtd", 'w', UOption.NO_ARG),
+            UOption.create("transliterate", 'y', UOption.NO_ARG),
     };
     private static String timeZoneAliasDir = null;
 
     public static void main(String[] args) throws SAXException, IOException {
-
         UOption.parseArgs(args, options);
 
         Matcher skipper = Pattern.compile(options[SKIP].value).matcher("");
@@ -1553,6 +1554,10 @@ public class GenerateSidewaysView {
         }
         */
         void showCacheData() throws IOException {
+        	UnicodeSet untransliteratedCharacters = new UnicodeSet();
+        	Set translitErrors = new TreeSet();
+        	GenerateCldrTests.DraftChecker dc = new GenerateCldrTests.DraftChecker(options[SOURCEDIR].value);
+        	dc.isDraft("en");
             writeStyleSheet();
             PrintWriter out = null;
             String lastChainName = "";
@@ -1597,18 +1602,35 @@ public class GenerateSidewaysView {
                         files.addAll(remainingFiles);
                         dataStyle = " class='nodata'";
                     }
-                    out.print("<tr><th" + dataStyle +
+
+                    String extra = "";
+                    if (data.string != null && options[TRANSLIT].doesOccur 
+                    		&& GenerateCldrTests.NON_LATIN.containsSome(data.string)) {                    	
+                    	try {
+							extra = GenerateCldrTests.toLatin.transliterate(data.string);
+	                    	untransliteratedCharacters.addAll(extra);
+	                    	if (extra.equals(data.string)) extra = "";
+	                  		else extra = "<br>(\"" + BagFormatter.toHTML.transliterate(extra) + "\")";                      	
+						} catch (RuntimeException e) {
+							translitErrors.add(e.getMessage());
+						}
+                    }
+                    out.print("<tr><th" + dataStyle + 
                             (lineCounter == 1 ? " width='20%'" : "")
-                            + ">\"" + data + "\"</th><td>");
+                            + ">\"" + data + "\""
+							+ extra
+							+ "</th><td>");
                     boolean first = true;
                     for (Iterator it3 = files.iterator(); it3.hasNext();) {
                         if (first) first = false;
                         else out.print(" ");
                         String localeID = (String)it3.next();
                         boolean emphasize = localeID.equals("root") || localeID.indexOf('_') >= 0;
+                        if (dc.isDraft(localeID)) out.print("<i>");
                         if (emphasize) out.print("<b>");
                         out.print("\u00B7" + localeID + "\u00B7");
                         if (emphasize) out.print("</b>");
+                        if (dc.isDraft(localeID)) out.print("</i>");
                     }
                     out.println("</td></tr>");
                 }
@@ -1622,6 +1644,15 @@ public class GenerateSidewaysView {
             }
             writeIndex();
             tripleData.writeData();
+            untransliteratedCharacters.retainAll(GenerateCldrTests.NON_LATIN);
+            log.println("Untranslated Characters*: " + untransliteratedCharacters.toPattern(false));
+            log.println("Untranslated Characters* (hex): " + untransliteratedCharacters.toPattern(true));
+            untransliteratedCharacters.closeOver(UnicodeSet.CASE);
+            log.println("Untranslated Characters: " + untransliteratedCharacters.toPattern(false));
+            log.println("Untranslated Characters (hex): " + untransliteratedCharacters.toPattern(true));
+            for (Iterator it = translitErrors.iterator(); it.hasNext();) {
+            	log.println(it.next());
+            }
         }
 
         /**
@@ -1651,8 +1682,9 @@ public class GenerateSidewaysView {
                     "Each value is listed under the field designator (in XML XPath format), " +
                     "followed by all the locales that use it. " +
                     "Locales are omitted if the value would be the same as the parent's. " +
-                    "The locales are listed in the format: \u00B7aa\u00B7 for searching. " +
-                    "The value appears in red if it is the same as the root. </p>");
+					"The locales are listed in the format: \u00B7aa\u00B7 for searching. " +
+                    "The value appears in red if it is the same as the root. " +
+                    "Draft locales are italic-gray; territory locales are bold.</p>");             
             out.println("<table>");
             return out;
         }
@@ -1661,6 +1693,7 @@ public class GenerateSidewaysView {
             out.println(".head { font-weight:bold; background-color:#DDDDFF }");
             out.println("td, th { border: 1px solid #0000FF; text-align }");
             out.println("th { width:10% }");
+            out.println("i { color: gray }");            
             out.println(".nodata { background-color:#FF0000 }");
             out.println("table {margin-top: 1em}");
             out.close();

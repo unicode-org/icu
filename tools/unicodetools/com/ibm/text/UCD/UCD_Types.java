@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Types.java,v $
-* $Date: 2004/03/11 19:03:16 $
-* $Revision: 1.28 $
+* $Date: 2004/11/13 23:10:32 $
+* $Revision: 1.29 $
 *
 *******************************************************************************
 */
@@ -15,7 +15,7 @@ package com.ibm.text.UCD;
 
 public interface UCD_Types {
     
-    static final byte BINARY_FORMAT = 15; // bumped if binary format of UCD changes. Forces rebuild   
+    static final byte BINARY_FORMAT = 16; // bumped if binary format of UCD changes. Forces rebuild   
     
     public static final String BASE_DIR = "C:\\DATA\\";
     public static final String UCD_DIR = BASE_DIR + "UCD\\";
@@ -214,7 +214,9 @@ public interface UCD_Types {
         Sentence_Terminal = 32,
         Variation_Selector = 33,
         Other_ID_Continue = 34,
-	    LIMIT_BINARY_PROPERTIES = 35;
+        Pattern_White_Space = 35,
+        Pattern_Syntax = 36,
+	    LIMIT_BINARY_PROPERTIES = 37;
 
 	/*
     static final int
@@ -247,10 +249,15 @@ public interface UCD_Types {
         LB_SA = 24, LB_AI = 25, LB_B2 = 26, LB_SG = 27, LB_ZW = 28,
         LB_NL = 29,
         LB_WJ = 30,
+        LB_JL = 31,
+        LB_JV = 32,
+        LB_JT = 33,
+        LB_H2 = 34,
+        LB_H3 = 35,
         //LB_JL = 29,
         //LB_JV = 30,
         //LB_JT = 31,
-        LIMIT_LINE_BREAK = 31,
+        LIMIT_LINE_BREAK = 36,
         LB_LIMIT = LIMIT_LINE_BREAK;
 
     // east asian width
@@ -394,7 +401,8 @@ public interface UCD_Types {
     AGE31 = 5,
     AGE32 = 6,
     AGE40 = 7,
-    LIMIT_AGE = 8;
+    AGE41 = 8,
+    LIMIT_AGE = 9;
 
     static final String[] AGE_VERSIONS = {
         "?",
@@ -404,7 +412,8 @@ public interface UCD_Types {
         "3.0.0",
         "3.1.0",
         "3.2.0",
-        "4.0.0"       
+        "4.0.0",  
+        "4.1.0"       
     };
 
 public static byte

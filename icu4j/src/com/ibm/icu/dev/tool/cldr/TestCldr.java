@@ -38,6 +38,8 @@ import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.text.Transliterator;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 
 /**
  * This is a file that runs the CLDR tests for ICU4J, to verify that ICU4J implements them
@@ -201,37 +203,53 @@ public class TestCldr {
 
     static String[] NumberNames = {"standard", "integer", "decimal", "percent", "scientific"};
 
-    // ============ Handler for Collation ============
-    {
-        addHandler("collation", new Handler() {
-            public void handleResult(ULocale currentLocale, String value) {
-                Collator col = Collator.getInstance(currentLocale);
-                String lastLine = "";
-                int count = 0;
-                for (int pos = 0; pos < value.length();) {
-                    int nextPos = value.indexOf('\n', pos);
-                    if (nextPos < 0)
-                        nextPos = value.length();
-                    String line = value.substring(pos, nextPos).trim(); // HACK for SAX
-                    if (line.length() != 0) {  // HACK for SAX
-                        int comp = col.compare(lastLine, line);
-                        if (comp > 0) {
-                            failures++;
-                            logln("\tLine " + (count + 1) + "\tFailure: " + showString(lastLine) + " should be leq " + showString(line));
-                        } else if (DEBUG) {
-                            System.out.println("OK: " + line);
-                        }
-                    }
-                    pos = nextPos + 1;
-                    lastLine = line;
-                    count++;
-                }
-            }
-        });
 
-        // ============ Handler for Numbers ============
-        addHandler("number", new Handler() {
-            public void handleResult(ULocale locale, String result) {
+    // ============ Handler for Collation ============ 
+    static UnicodeSet controlsAndSpace = new UnicodeSet("[:cc:]");
+    
+    static String remove(String in, UnicodeSet toRemove) {
+    	int cp;
+    	StringBuffer result = new StringBuffer();
+    	for (int i = 0; i < in.length(); i += UTF16.getCharCount(cp)) {
+    		cp = UTF16.charAt(in, i);
+    		if (!toRemove.contains(cp)) UTF16.append(result, cp);
+    	}
+    	return result.toString();
+    }
+
+    {
+		addHandler("collation", new Handler() {
+			public void handleResult(ULocale currentLocale, String value) {
+				Collator col = Collator.getInstance(currentLocale);
+				String lastLine = "";
+				int count = 0;
+				for (int pos = 0; pos < value.length();) {
+					int nextPos = value.indexOf('\n', pos);
+					if (nextPos < 0)
+						nextPos = value.length();
+					String line = value.substring(pos, nextPos);
+					line = remove(line, controlsAndSpace); // HACK for SAX
+					if (line.trim().length() != 0) { // HACK for SAX
+						int comp = col.compare(lastLine, line);
+						if (comp > 0) {
+							failures++;
+							logln("\tLine " + (count + 1) + "\tFailure: "
+									+ showString(lastLine) + " should be leq "
+									+ showString(line));
+						} else if (DEBUG) {
+							System.out.println("OK: " + line);
+						}
+						lastLine = line;
+					}
+					pos = nextPos + 1;
+					count++;
+				}
+			}
+		});
+        
+        // ============ Handler for Numbers ============ 
+		addHandler("number", new Handler() {
+			public void handleResult(ULocale locale, String result) {
                 NumberFormat nf = null;
                 double v = Double.NaN;
                 for (Iterator it = settings.keySet().iterator(); it.hasNext();) {

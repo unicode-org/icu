@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2004/11/12 23:17:15 $
-* $Revision: 1.28 $
+* $Date: 2004/11/13 23:10:32 $
+* $Revision: 1.29 $
 *
 *******************************************************************************
 */
@@ -154,6 +154,8 @@ final class UCD_Names implements UCD_Types {
         "STerm",
         "Variation_Selector",
         "Other_ID_Continue",
+		"Pattern_White_Space",
+		"Pattern_Syntax"
     };
 
     static final String[] SHORT_BP = {
@@ -191,7 +193,9 @@ final class UCD_Names implements UCD_Types {
         "OIDS",
         "STerm",
         "VS",
-        "OIDC"
+        "OIDC",
+		"PatWS",
+		"PatSyn"
     };
 
     /*
@@ -253,7 +257,7 @@ final class UCD_Names implements UCD_Types {
         "CM", "BB", "BA", "SP", "BK", "CR", "LF", "CB",
         "SA", "AI", "B2", "SG", "ZW",
         "NL",
-        "WJ",
+        "WJ", "JL", "JV", "JT", "H2", "H3"
         //"JL",
         //"JV",
         //"JT",
@@ -269,7 +273,7 @@ final class UCD_Names implements UCD_Types {
         "MandatoryBreak", "CarriageReturn", "LineFeed", "ContingentBreak",
         "ComplexContext", "Ambiguous", "BreakBoth", "Surrogate", "ZWSpace",
         "Next_Line",
-        "Word_Joiner"
+        "Word_Joiner", "JL", "JV", "JT", "H2", "H3"
         //"Leading_Jamo",
         //"Vowel_Jamo",
         //"Trailing_Jamo",
@@ -412,7 +416,8 @@ final class UCD_Names implements UCD_Types {
     "3.0",
     "3.1",
     "3.2",
-    "4.0"
+    "4.0",
+	"4.1",
   };
 
 
