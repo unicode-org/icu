@@ -135,6 +135,7 @@ void TestAliasConflict(void) {
     UResourceBundle *he = NULL;
     UResourceBundle *iw = NULL;
     const UChar *result = NULL;
+    int32_t resultLen;
 
     he = ures_open(NULL, "he", &status);
     iw = ures_open(NULL, "iw", &status);
@@ -142,7 +143,7 @@ void TestAliasConflict(void) {
         log_err("Failed to get resource with %s", myErrorName(status));
     }
     ures_close(iw);
-    result = ures_get(he, "ShortLanguage", &status);
+    result = ures_getStringByKey(he, "ShortLanguage", &resultLen, &status);
     if(U_FAILURE(status) || result == NULL) { 
         log_err("Failed to get resource with %s", myErrorName(status));
     }
@@ -167,53 +168,53 @@ void TestResourceBundles()
 
 void TestConstruction1()
 {
-  UResourceBundle *test1 = 0, *test2 = 0;
-  const UChar *result1, *result2;
-  UErrorCode   err = U_ZERO_ERROR;
-  const char*        directory=NULL;
-  const char*      locale="te_IN";
-  char testdatapath[256];
-
-  directory= u_getDataDirectory();
-  uprv_strcpy(testdatapath, directory);
-  uprv_strcat(testdatapath, "testdata");
-  log_verbose("Testing ures_open()......\n");
-
-  test1=ures_open(testdatapath, NULL, &err);
-  test2=ures_open(testdatapath, locale, &err);
-
-  if(U_FAILURE(err))
+    UResourceBundle *test1 = 0, *test2 = 0;
+    const UChar *result1, *result2;
+    int32_t resultLen;
+    UErrorCode   err = U_ZERO_ERROR;
+    const char*        directory=NULL;
+    const char*      locale="te_IN";
+    char testdatapath[256];
+    
+    directory= u_getDataDirectory();
+    uprv_strcpy(testdatapath, directory);
+    uprv_strcat(testdatapath, "testdata");
+    log_verbose("Testing ures_open()......\n");
+    
+    test1=ures_open(testdatapath, NULL, &err);
+    test2=ures_open(testdatapath, locale, &err);
+    
+    if(U_FAILURE(err))
     {
-      log_err("construction did not succeed :  %s \n", myErrorName(err));
-      return;
+        log_err("construction did not succeed :  %s \n", myErrorName(err));
+        return;
     }
-
-  result1= ures_get(test1, "string_in_Root_te_te_IN", &err);
-  result2= ures_get(test2, "string_in_Root_te_te_IN", &err);
-
-
-  if (U_FAILURE(err)) {
-
-    log_err("Something threw an error in TestConstruction(): %s\n", myErrorName(err));
-    return;
-  }
-
-
-  log_verbose("for string_in_Root_te_te_IN, default.txt had  %s\n", austrdup(result1));
-  log_verbose("for string_in_Root_te_te_IN, te_IN.txt had %s\n", austrdup(result2));
-
-
-  /* Test getVersionNumber*/
-  log_verbose("Testing version number\n");
-  log_verbose("for getVersionNumber :  %s\n", ures_getVersionNumber(test1));
-
-  ures_close(test1);
-  ures_close(test2);
+    
+    result1= ures_getStringByKey(test1, "string_in_Root_te_te_IN", &resultLen, &err);
+    result2= ures_getStringByKey(test2, "string_in_Root_te_te_IN", &resultLen, &err);
+    
+    
+    if (U_FAILURE(err)) {
+        log_err("Something threw an error in TestConstruction(): %s\n", myErrorName(err));
+        return;
+    }
+    
+    
+    log_verbose("for string_in_Root_te_te_IN, default.txt had  %s\n", austrdup(result1));
+    log_verbose("for string_in_Root_te_te_IN, te_IN.txt had %s\n", austrdup(result2));
+    
+    /* Test getVersionNumber*/
+    log_verbose("Testing version number\n");
+    log_verbose("for getVersionNumber :  %s\n", ures_getVersionNumber(test1));
+    
+    ures_close(test1);
+    ures_close(test2);
 }
 
 void TestConstruction2()
 {
   int n;
+  int32_t resultLen;
   UChar temp[7];
   UResourceBundle *test4 = 0;
   const UChar*   result4;
@@ -236,7 +237,7 @@ void TestConstruction2()
     return;
   }
 
-  result4=ures_get(test4, "string_in_Root_te_te_IN", &err);
+  result4=ures_getStringByKey(test4, "string_in_Root_te_te_IN", &resultLen, &err);
 
   if (U_FAILURE(err)) {
     log_err("Something threw an error in TestConstruction()  %s\n", myErrorName(err));
@@ -291,19 +292,25 @@ UBool testTag(const char* frag,
     UResourceBundle* theBundle = NULL;
     char tag[99];
     char action[256];
-    UErrorCode expected_status,status = U_ZERO_ERROR,expected_resource_status = U_ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR,expected_resource_status = U_ZERO_ERROR;
     UChar* base = NULL;
     UChar* expected_string = NULL;
     const UChar* string = NULL;
-    char buf[5];
     char item_tag[10];
-    int32_t i,j,k,row,col;
+    int32_t i,j;
     int32_t actual_bundle;
+    int32_t resultLen;
     int32_t count = 0;
     int32_t row_count=0;
     int32_t column_count=0;
     int32_t index = 0;
     char testdatapath[256];
+
+#ifdef ICU_URES_USE_DEPRECATES
+    UErrorCode expected_status;
+    int32_t k,row,col;
+    char buf[5];
+#endif
 
     const char *directory= u_getDataDirectory();
 
@@ -418,11 +425,11 @@ UBool testTag(const char* frag,
 
         status = U_ZERO_ERROR;
 
-        ures_get(theBundle, tag, &status);
+        ures_getStringByKey(theBundle, tag, &resultLen, &status);
         if(U_SUCCESS(status))
         {
             status = U_ZERO_ERROR;
-            string=ures_get(theBundle, tag, &status);
+            string=ures_getStringByKey(theBundle, tag, &resultLen, &status);
         }
 
         log_verbose("%s got %d, expected %d\n", action, status, expected_resource_status);
@@ -447,6 +454,7 @@ UBool testTag(const char* frag,
         CONFIRM_EQ(string, expected_string);
 
 
+#ifdef ICU_URES_USE_DEPRECATES
 
         /*-------------------------------------------------------------------- */
         /*-------------------------------------------------------------------- */
@@ -595,7 +603,7 @@ UBool testTag(const char* frag,
             }
 
         }
-
+#endif
         free(expected_string);
         ures_close(theBundle);
     }
@@ -620,48 +628,49 @@ void record_fail()
 
 void TestFallback()
 {
-  UErrorCode status = U_ZERO_ERROR;
-  UResourceBundle *fr_FR = NULL;
-  const UChar *junk; /* ignored */
-
-  log_verbose("Opening fr_FR..");
-  fr_FR = ures_open(NULL, "fr_FR", &status);
-  if(U_FAILURE(status))
+    UErrorCode status = U_ZERO_ERROR;
+    UResourceBundle *fr_FR = NULL;
+    const UChar *junk; /* ignored */
+    int32_t resultLen;
+    
+    log_verbose("Opening fr_FR..");
+    fr_FR = ures_open(NULL, "fr_FR", &status);
+    if(U_FAILURE(status))
     {
-      log_err("Couldn't open fr_FR - %d\n", status);
-      return;
+        log_err("Couldn't open fr_FR - %d\n", status);
+        return;
     }
-
-  status = U_ZERO_ERROR;
-
-
-  /* clear it out..  just do some calls to get the gears turning */
-  junk = ures_get(fr_FR, "LocaleID", &status);
-  status = U_ZERO_ERROR;
-  junk = ures_get(fr_FR, "LocaleString", &status);
-  status = U_ZERO_ERROR;
-  junk = ures_get(fr_FR, "LocaleID", &status);
-  status = U_ZERO_ERROR;
-
-  /* OK first one. This should be a Default value. */
-  junk = ures_get(fr_FR, "%%EURO", &status);
-  if(status != U_USING_DEFAULT_ERROR)
+    
+    status = U_ZERO_ERROR;
+    
+    
+    /* clear it out..  just do some calls to get the gears turning */
+    junk = ures_getStringByKey(fr_FR, "LocaleID", &resultLen, &status);
+    status = U_ZERO_ERROR;
+    junk = ures_getStringByKey(fr_FR, "LocaleString", &resultLen, &status);
+    status = U_ZERO_ERROR;
+    junk = ures_getStringByKey(fr_FR, "LocaleID", &resultLen, &status);
+    status = U_ZERO_ERROR;
+    
+    /* OK first one. This should be a Default value. */
+    junk = ures_getStringByKey(fr_FR, "%%EURO", &resultLen, &status);
+    if(status != U_USING_DEFAULT_ERROR)
     {
-      log_err("Expected U_USING_DEFAULT_ERROR when trying to get %%EURO from fr_FR, got %s\n", 
-          u_errorName(status));
+        log_err("Expected U_USING_DEFAULT_ERROR when trying to get %%EURO from fr_FR, got %s\n", 
+            u_errorName(status));
     }
-
-  status = U_ZERO_ERROR;
-
-  /* and this is a Fallback, to fr */
-  junk = ures_get(fr_FR, "ShortLanguage", &status);
-  if(status != U_USING_FALLBACK_ERROR)
+    
+    status = U_ZERO_ERROR;
+    
+    /* and this is a Fallback, to fr */
+    junk = ures_getStringByKey(fr_FR, "ShortLanguage", &resultLen, &status);
+    if(status != U_USING_FALLBACK_ERROR)
     {
-      log_err("Expected U_USING_FALLBACK_ERROR when trying to get ShortLanguage from fr_FR, got %s\n", 
-          u_errorName(status));
+        log_err("Expected U_USING_FALLBACK_ERROR when trying to get ShortLanguage from fr_FR, got %s\n", 
+            u_errorName(status));
     }
-
-  status = U_ZERO_ERROR;
-
-  ures_close(fr_FR);
+    
+    status = U_ZERO_ERROR;
+    
+    ures_close(fr_FR);
 }
