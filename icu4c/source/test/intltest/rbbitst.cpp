@@ -270,13 +270,15 @@ void RBBITest::TestDefaultRuleBasedCharacterIteration()
     ADD_DATACHUNK(chardata, "\\u0906", 0, status);                    //devanagiri AA
     //ADD_DATACHUNK(chardata, "\\u093e\\u0901", 0);              //devanagiri vowelsign AA+ chandrabindhu
     ADD_DATACHUNK(chardata, "\\u0906\\u0901", 0, status);              // Devanagari AA + chandrabindu
-    ADD_DATACHUNK(chardata, "\\u0915\\u093e\\u0901", 0, status);       // Devanagari KA + AA vowelsign + chandrabindu
+    ADD_DATACHUNK(chardata, "\\u0915", 0, status);              // Devanagari KA + AA vowelsign + chandrabindu
+    ADD_DATACHUNK(chardata, "\\u093e\\u0901", 0, status);       // Devanagari KA + AA vowelsign + chandrabindu
 
     ADD_DATACHUNK(chardata, "\\u0916\\u0947", 0, status);              //devanagiri KHA+vowelsign E
     ADD_DATACHUNK(chardata, "\\u0938\\u0941\\u0902", 0, status);        //devanagiri SA+vowelsign U + anusvara(bindu)
     ADD_DATACHUNK(chardata, "\\u0926", 0, status);                    //devanagiri consonant DA
     ADD_DATACHUNK(chardata, "\\u0930", 0, status);                    //devanagiri consonant RA
-    ADD_DATACHUNK(chardata, "\\u0939\\u094c", 0, status);              //devanagiri HA+vowel sign AI
+    ADD_DATACHUNK(chardata, "\\u0939", 0, status);              //devanagiri HA+vowel sign AI
+    ADD_DATACHUNK(chardata, "\\u094c", 0, status);              //devanagiri HA+vowel sign AI
     ADD_DATACHUNK(chardata, "\\u0964", 0, status);                    //devanagiri danda
     //end hindi characters
     ADD_DATACHUNK(chardata, "A\\u0302", 0, status);                   //circumflexA
@@ -948,20 +950,20 @@ void RBBITest::TestHindiCharacterBreak()
 
     //hindi character break should make sure that it
     // doesn't break in-between a vowelsign and a chandrabindu
-    // TODO:  Rules need some fixing.  As currently written, they'll correctly recognize this combination
-    //        as part of a legit character, but not standalone.
 
     ADD_DATACHUNK(hindicharData, "\\u000a", 0, status);                   // Force break so following can appear stand-alone.
     ADD_DATACHUNK(hindicharData, "\\u093e\\u0901", 0, status);            //devanagari vowelsign AA+ chandrabindu
     ADD_DATACHUNK(hindicharData, "\\u0906\\u0901", 0, status);            // Devanagari AA + chandrabindu
-    ADD_DATACHUNK(hindicharData, "\\u0915\\u093e\\u0901", 0, status);     // Devanagari KA + AA vowelsign + chandrabindu
+    ADD_DATACHUNK(hindicharData, "\\u0915", 0, status);                   // Devanagari KA 
+    ADD_DATACHUNK(hindicharData, "\\u093e\\u0901", 0, status);            // Devanagari AA vowelsign + chandrabindu
 
 
     ADD_DATACHUNK(hindicharData, "\\u0916\\u0947", 0, status);              //devanagari KHA+vowelsign E
     ADD_DATACHUNK(hindicharData, "\\u0938\\u0941\\u0902", 0, status);        //devanagari SA+vowelsign U + anusvara(bindu)
     ADD_DATACHUNK(hindicharData, "\\u0926", 0, status);                    //devanagari consonant DA
     ADD_DATACHUNK(hindicharData, "\\u0930", 0, status);                    //devanagari consonant RA
-    ADD_DATACHUNK(hindicharData, "\\u0939\\u094c", 0, status);              //devanagari consonant HA+dependent vowel sign AI
+    ADD_DATACHUNK(hindicharData, "\\u0939", 0, status);                    //devanagari consonant HA+
+    ADD_DATACHUNK(hindicharData, "\\u094c", 0, status);                    //           +dependent vowel sign AI
     ADD_DATACHUNK(hindicharData, "\\u0964", 0, status);                    //devanagari danda
     ADD_DATACHUNK(hindicharData, "\\u0950", 0, status);                    //devanagari OM
     ADD_DATACHUNK(hindicharData, "\\u0915\\u0943", 0, status);              //devanagari KA+dependent vowel RI->KRI
