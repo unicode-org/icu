@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2002/12/05 01:23:18 $
- * $Revision: 1.82 $
+ * $Date: 2002/12/11 19:41:03 $
+ * $Revision: 1.83 $
  *
  *****************************************************************************************
  */
@@ -2628,9 +2628,9 @@ public class UnicodeSet extends UnicodeFilter {
         }
     }
 
-    private static class GeneralCategoryFilter implements Filter {
+    private static class GeneralCategoryMaskFilter implements Filter {
         int mask;
-        GeneralCategoryFilter(int mask) { this.mask = mask; }
+        GeneralCategoryMaskFilter(int mask) { this.mask = mask; }
         public boolean contains(int ch) {
             return ((1 << UCharacter.getType(ch)) & mask) != 0;
         }
@@ -2737,23 +2737,24 @@ public class UnicodeSet extends UnicodeFilter {
      *
      * @param prop a property in the range
      * UProperty.BIN_START..UProperty.BIN_LIMIT-1 or
-     * UProperty.INT_START..UProperty.INT_LIMIT-1.
+     * UProperty.INT_START..UProperty.INT_LIMIT-1 or.
+     * UProperty.MASK_START..UProperty.MASK_LIMIT-1.
      *
      * @param value a value in the range
      * UCharacter.getIntPropertyMinValue(prop)..
      * UCharacter.getIntPropertyMaxValue(prop), with one exception.
-     * If prop is UProperty.GENERAL_CATEGORY, then value should not be
+     * If prop is UProperty.GENERAL_CATEGORY_MASK, then value should not be
      * a UCharacter.getType() result, but rather a mask value produced
      * by logically ORing (1 << UCharacter.getType()) values together.
-     * This allows grouped categories such as [:L:] to be repregsented.
+     * This allows grouped categories such as [:L:] to be represented.
      *
      * @return a reference to this set
      *
      * @draft ICU 2.4
      */
     public UnicodeSet applyIntPropertyValue(int prop, int value) {
-        if (prop == UProperty.GENERAL_CATEGORY) {
-            applyFilter(new GeneralCategoryFilter(value));
+        if (prop == UProperty.GENERAL_CATEGORY_MASK) {
+            applyFilter(new GeneralCategoryMaskFilter(value));
         } else {
             applyFilter(new IntPropertyFilter(prop, value));
         }
@@ -2796,8 +2797,14 @@ public class UnicodeSet extends UnicodeFilter {
         if (valueAlias.length() > 0) {
             p = UCharacter.getPropertyEnum(propertyAlias);
 
+            // Treat gc as gcm
+            if (p == UProperty.GENERAL_CATEGORY) {
+                p = UProperty.GENERAL_CATEGORY_MASK;
+            }
+
             if ((p >= UProperty.BINARY_START && p < UProperty.BINARY_LIMIT) ||
-                (p >= UProperty.INT_START && p < UProperty.INT_LIMIT)) {
+                (p >= UProperty.INT_START && p < UProperty.INT_LIMIT) ||
+                (p >= UProperty.MASK_START && p < UProperty.MASK_LIMIT)) {
                 try {
                     v = UCharacter.getPropertyValueEnum(p, valueAlias);
                 } catch (IllegalArgumentException e) {
@@ -2853,7 +2860,7 @@ public class UnicodeSet extends UnicodeFilter {
             // Binary property, or ANY or ASCII.  Upon success, p and v will
             // be set.
             try { 
-                p = UProperty.GENERAL_CATEGORY;
+                p = UProperty.GENERAL_CATEGORY_MASK;
                 v = UCharacter.getPropertyValueEnum(p, propertyAlias);
             } catch (IllegalArgumentException e) {
                 try {

@@ -201,6 +201,25 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
     //----------------------------------------------------------------
     // Public API
 
+    // NOTE (ICU 2.4) For the 2.4 release it was decided late in the cycle
+    // to add a new enum to UProperty, UCHAR_GENERAL_CATEGORY_MASK.  This
+    // enum would specify UCharCategory mask values.  Because of time
+    // constraints, the underlying binary data and genprop scripts were
+    // not updated.  So the PNAME->... API takes UCHAR_GENERAL_CATEGORY
+    // and associates it with a MASK value.  We munge things to make this
+    // associate with a UCharCategory value, and we make
+    // UCHAR_GENERAL_CATEGORY_MASK correspond to the mask value.
+
+    // We add a synthetic (not in PropertyAliases.txt) pair of property
+    // names corresponding to UCHAR_GENERAL_CATEGORY_MASK:
+    // gcm       ; General_Category_Mask
+
+    // TODO: Remove the munge code, marked "//TODO:munge" below, after the
+    // script/binary data are updated (probably in ICU 2.6).
+
+    private static final String SHORT_GCM_NAME = "gcm";
+    private static final String LONG_GCM_NAME  = "General_Category_Mask";
+
     /**
      * Return a property name given a property enum.  Multiple
      * names may be available for each property; the nameChoice
@@ -208,6 +227,17 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
      */
     public String getPropertyName(int property,
                                   int nameChoice) {
+        //TODO:munge
+        if (property == UProperty.GENERAL_CATEGORY_MASK) {
+            switch (nameChoice) {
+            case UProperty.NameChoice.SHORT:
+                return SHORT_GCM_NAME;
+            case UProperty.NameChoice.LONG:
+                return LONG_GCM_NAME;
+            default:
+                throw new IllegalArgumentException("Invalid name choice");
+            }
+        }
         short nameGroupIndex = enumToName.getShort(property);
         return chooseNameInGroup(nameGroupIndex, nameChoice);
     }
@@ -216,7 +246,16 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
      * Return a property enum given one of its property names.
      */
     public int getPropertyEnum(String propertyAlias) {
-        return nameToEnum.getEnum(propertyAlias);
+        try {
+            return nameToEnum.getEnum(propertyAlias);
+        } catch (IllegalArgumentException e) {
+            //TODO:munge
+            if (0 == compare(propertyAlias, SHORT_GCM_NAME) ||
+                0 == compare(propertyAlias, LONG_GCM_NAME)) {
+                return UProperty.GENERAL_CATEGORY_MASK;
+            }
+            throw e;
+        }
     }
 
     /**
@@ -227,6 +266,15 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
     public String getPropertyValueName(int property,
                                        int value,
                                        int nameChoice) {
+        //TODO:munge
+        switch (property) {
+        case UProperty.GENERAL_CATEGORY:
+            value = (value < 32) ? UCharacterProperty.getMask(value) : 0;
+            break;
+        case UProperty.GENERAL_CATEGORY_MASK:
+            property = UProperty.GENERAL_CATEGORY;
+            break;
+        }
         ValueMap vm = getValueMap(property);
         short nameGroupIndex = vm.enumToName.getShort(value);
         return chooseNameInGroup(nameGroupIndex, nameChoice);
@@ -238,8 +286,28 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
      */
     public int getPropertyValueEnum(int property,
                                     String valueAlias) {
-        ValueMap vm = getValueMap(property);
-        return vm.nameToEnum.getEnum(valueAlias);
+        //TODO:munge
+        int p = (property == UProperty.GENERAL_CATEGORY_MASK) ?
+                UProperty.GENERAL_CATEGORY : property;
+        ValueMap vm = getValueMap(p);
+        int v = vm.nameToEnum.getEnum(valueAlias);
+        //TODO:munge
+        if (property == UProperty.GENERAL_CATEGORY) {
+            int gc = 0;
+            for (;;) {
+                if (v == 1) {
+                    return gc;
+                }
+                if ((v & 1) != 0) {
+                    // More than one bit is set; we can't map this mask to
+                    // a UCharacterCategory.
+                    throw new IllegalArgumentException("Invalid name: " + valueAlias);
+                }
+                v >>= 1;
+                gc += 1;
+            }
+        }
+        return v;
     }
 
     //----------------------------------------------------------------

@@ -56,7 +56,7 @@ public class UPropertyAliasesTest extends TestFmwk {
                 int max = 0;
                 if (p == UProperty.CANONICAL_COMBINING_CLASS) {
                     max = 255;
-                } else if (p == UProperty.GENERAL_CATEGORY) {
+                } else if (p == UProperty.GENERAL_CATEGORY_MASK) {
                     /* it's far too slow to iterate all the way up to
                        the real max, U_GC_P_MASK */
                     max = 0x1000; // U_GC_NL_MASK;
