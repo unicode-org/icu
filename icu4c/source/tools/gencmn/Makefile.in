@@ -63,7 +63,7 @@ DEPS = $(OBJECTS:.o=.d)
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local		\
-distclean distclean-local target-clean-local dist dist-local check	\
+distclean distclean-local dist dist-local check	\
 check-local
 
 ## Clear suffix list
@@ -79,18 +79,15 @@ check: check-local
 
 all-local: $(TARGET) $(RES_FILES) $(TRANSLIT_RES) $(TEST_FILES)
 
-install-local: target-clean-local all-local
+install-local: all-local
 	$(mkinstalldirs) $(sbindir)
 	$(INSTALL) $(TARGET) $(sbindir)/$(TARGET)
 
 dist-local:
 
-target-clean-local:
-	rm -f $(TARGET)
-
-clean-local: target-clean-local
+clean-local:
 	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
-	rm -f $(OBJECTS)
+	rm -f $(TARGET) $(OBJECTS)
 
 distclean-local: clean-local
 	rm -f Makefile $(DEPS) $(RES_FILES) $(TEST_FILES)

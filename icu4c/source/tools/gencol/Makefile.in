@@ -61,7 +61,7 @@ DEPS = $(OBJECTS:.o=.d)
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local		\
-distclean distclean-local target-clean-local dist dist-local check	\
+distclean distclean-local clean-sentinel force-build-data dist dist-local check	\
 check-local
 
 ## Clear suffix list
@@ -86,7 +86,11 @@ build-data: .sentinel
 	@ICU_DATA=@DATABUILDDIR@/ ./$(TARGET) > /dev/null 2>&1	
 	@touch .sentinel
 
-install-local: target-clean-local all-local
+force-build-data: clean-sentinel build-data
+clean-sentinel:
+	rm -f .sentinel
+
+install-local: all-local
 #	$(mkinstalldirs) $(sbindir)
 #	$(INSTALL) $(TARGET) $(sbindir)/$(TARGET)
 	$(mkinstalldirs) $(pkgdatadir)/$(VERSION)
@@ -94,12 +98,9 @@ install-local: target-clean-local all-local
 
 dist-local:
 
-target-clean-local:
-	rm -f $(TARGET) .sentinel
-
-clean-local: target-clean-local
+clean-local:
 	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
-	rm -f $(OBJECTS)
+	rm -f $(TARGET) $(OBJECTS)
 
 distclean-local: clean-local
 	rm -f Makefile $(DEPS) $(CNV_FILES)
