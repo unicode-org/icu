@@ -297,6 +297,67 @@ typedef enum UProperty {
         see StandardizedVariants.html and 15.6 Variation Selectors.
         @draft ICU 3.0 */
     UCHAR_VARIATION_SELECTOR,
+    /** Binary property NFD_Inert.
+        ICU-specific property for characters that are inert under NFD,
+        i.e., they do not interact with adjacent characters.
+        Used for example in normalizing transforms in incremental mode
+        to find the boundary of safely normalizable text despite possible
+        text additions.
+
+        There is one such property per normalization form.
+        These properties are computed as follows - an inert character is:
+        a) unassigned, or ALL of the following:
+        b) of combining class 0.
+        c) not decomposed by this normalization form.
+        AND if NFC or NFKC,
+        d) can never compose with a previous character.
+        e) can never compose with a following character.
+        f) can never change if another character is added.
+           Example: a-breve might satisfy all but f, but if you
+           add an ogonek it changes to a-ogonek + breve
+
+        See also com.ibm.text.UCD.NFSkippable in the ICU4J repository,
+        and icu/source/common/unormimp.h .
+        @draft ICU 3.0 */
+    UCHAR_NFD_INERT,
+    /** Binary property NFKD_Inert.
+        ICU-specific property for characters that are inert under NFKD,
+        i.e., they do not interact with adjacent characters.
+        Used for example in normalizing transforms in incremental mode
+        to find the boundary of safely normalizable text despite possible
+        text additions.
+        @see UCHAR_NFD_INERT
+        @draft ICU 3.0 */
+    UCHAR_NFKD_INERT,
+    /** Binary property NFC_Inert.
+        ICU-specific property for characters that are inert under NFC,
+        i.e., they do not interact with adjacent characters.
+        Used for example in normalizing transforms in incremental mode
+        to find the boundary of safely normalizable text despite possible
+        text additions.
+        @see UCHAR_NFD_INERT
+        @draft ICU 3.0 */
+    UCHAR_NFC_INERT,
+    /** Binary property NFKC_Inert.
+        ICU-specific property for characters that are inert under NFKC,
+        i.e., they do not interact with adjacent characters.
+        Used for example in normalizing transforms in incremental mode
+        to find the boundary of safely normalizable text despite possible
+        text additions.
+        @see UCHAR_NFD_INERT
+        @draft ICU 3.0 */
+    UCHAR_NFKC_INERT,
+    /** Binary Property Segment_Starter.
+        ICU-specific property for characters that are starters in terms of
+        Unicode normalization and combining character sequences.
+        They have ccc=0 and do not occur in non-initial position of the
+        canonical decomposition of any character
+        (like " in NFD(a-umlaut) and a Jamo T in an NFD(Hangul LVT)).
+        ICU uses this property for segmenting a string for generating a set of
+        canonically equivalent strings, e.g. for canonical closure while
+        processing collation tailoring rules.
+        @draft ICU 3.0 */
+    UCHAR_SEGMENT_STARTER,
     /** One more than the last constant for binary Unicode properties. @stable ICU 2.1 */
     UCHAR_BINARY_LIMIT,
 

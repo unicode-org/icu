@@ -174,7 +174,7 @@ ublock_getCode(UChar32 c) {
 static const struct {
     int32_t column;
     uint32_t mask;
-} binProps[]={
+} binProps[UCHAR_BINARY_LIMIT]={
     /*
      * column and mask values for binary properties from u_getUnicodeProperties().
      * Must be in order of corresponding UProperty,
@@ -216,7 +216,12 @@ static const struct {
     {  1, U_MASK(UPROPS_XID_START) },
     { -1, U_MASK(UPROPS_CASE_SENSITIVE_SHIFT) },
     {  2, U_MASK(UPROPS_V2_S_TERM) },
-    {  2, U_MASK(UPROPS_V2_VARIATION_SELECTOR) }
+    {  2, U_MASK(UPROPS_V2_VARIATION_SELECTOR) },
+    {  0, 0 },                                  /* UCHAR_NFD_INERT */
+    {  0, 0 },                                  /* UCHAR_NFKD_INERT */
+    {  0, 0 },                                  /* UCHAR_NFC_INERT */
+    {  0, 0 },                                  /* UCHAR_NFKC_INERT */
+    {  0, 0 }                                   /* UCHAR_SEGMENT_STARTER */
 };
 
 U_CAPI UBool U_EXPORT2
@@ -224,17 +229,31 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
     /* c is range-checked in the functions that are called from here */
     if(which<UCHAR_BINARY_START || UCHAR_BINARY_LIMIT<=which) {
         /* not a known binary property */
-        return FALSE;
-    } else if(which==UCHAR_FULL_COMPOSITION_EXCLUSION) {
-#if !UCONFIG_NO_NORMALIZATION
-        return unorm_internalIsFullCompositionExclusion(c);
-#else
-        return FALSE;
-#endif
     } else {
-        /* systematic, directly stored properties */
-        return (u_getUnicodeProperties(c, binProps[which].column)&binProps[which].mask)!=0;
+        uint32_t mask=binProps[which].mask;
+        if(mask!=0) {
+            /* systematic, directly stored properties */
+            return (u_getUnicodeProperties(c, binProps[which].column)&mask)!=0;
+        } else {
+#if !UCONFIG_NO_NORMALIZATION
+            /* normalization properties from unorm.icu */
+            switch(which) {
+            case UCHAR_FULL_COMPOSITION_EXCLUSION:
+                return unorm_internalIsFullCompositionExclusion(c);
+            case UCHAR_NFD_INERT:
+            case UCHAR_NFKD_INERT:
+            case UCHAR_NFC_INERT:
+            case UCHAR_NFKC_INERT:
+                return unorm_isNFSkippable(c, (UNormalizationMode)(which-UCHAR_NFD_INERT)+UNORM_NFD);
+            case UCHAR_SEGMENT_STARTER:
+                return unorm_isCanonSafeStart(c);
+            default:
+                break;
+            }
+#endif
+        }
     }
+    return FALSE;
 }
 
 U_CAPI UBool U_EXPORT2
