@@ -78,7 +78,7 @@ static const char* javaClassICU= " extends ICUListResourceBundle {\n\n"
                                  "    public %s  () {\n"
                                  "          super.contents = data;\n"
                                  "    }\n"
-                                 "    private static Object[][] data = new Object[][] { \n";
+                                 "    static final Object[][] data = new Object[][] { \n";
 static int tabCount = 3;
 
 static FileStream* out=NULL;
