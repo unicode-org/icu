@@ -169,7 +169,7 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   writeObjRules(o, makefile, &objects);
 
   sprintf(tmp, "# List file for gencmn:\n"
-          "CMNLIST=%s%s$(CNAME)_dll.lst\n\n",
+          "CMNLIST=%s%s$(NAME)_dll.lst\n\n",
           o->tmpDir,
           U_FILE_SEP_STRING);
   T_FileStream_writeLine(makefile, tmp);
