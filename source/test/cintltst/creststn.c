@@ -1792,6 +1792,14 @@ static void TestResourceLevelAliasing(void) {
       log_err("Referencing alias didn't get the right string\n");
     }
 
+#if !UCONFIG_NO_COLLATION
+
+    /*
+     * TODO for Vladimir: Make this test independent of UCONFIG_NO_xyz-switchable
+     * modules like collation, so that it can be tested even when collation
+     * data is not included in resource bundles.
+     */
+
     /* check whether the binary collation data is properly referenced by an alias */
     uk = ures_findResource("uk/CollationElements/%%CollationBin", uk, &status);
     binSequence = ures_getBinary(uk, &binSeqLen, &status);
@@ -1812,7 +1820,7 @@ static void TestResourceLevelAliasing(void) {
     tb = ures_getByKey(aliasB, "simplealias", tb, &status);
     string = ures_getString(tb, &strLen, &status);
 
-    if(seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
+    if(U_FAILURE(status) || seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
       log_err("Referencing alias didn't get the right string\n");
     }
 
@@ -1825,9 +1833,11 @@ static void TestResourceLevelAliasing(void) {
     en = ures_findResource("en/zoneStrings/3/0", en, &status);
     sequence = ures_getString(en, &seqLen, &status);
 
-    if(seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
+    if(U_FAILURE(status) || seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
       log_err("Referencing alias didn't get the right string\n");
     }
+
+#endif
   }
 
   ures_close(aliasB);
