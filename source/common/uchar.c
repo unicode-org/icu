@@ -27,6 +27,7 @@
 #include "ucmp8.h"
 #include "umutex.h"
 #include "uchar.h"
+#include "cmemory.h"
 #include <string.h>
 
 #include <stdio.h>
@@ -5226,7 +5227,6 @@ createDirTables()
 #endif
   umtx_unlock(NULL);
 }
-
 
 const char* u_getVersion()
 {
