@@ -4,13 +4,15 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#include <stdio.h>
+#include <string.h>
+#include <assert.h>
 #include "ucdtest.h"
 #include "unicode/unicode.h"
 #include "unicode/ustring.h"
 #include "unicode/uchar.h"
-#include <stdio.h>
-#include <string.h>
-#include <assert.h>
+#include "cstring.h"
+#include "uparse.h"
 
 UnicodeTest::UnicodeTest()
 {
@@ -307,19 +309,139 @@ void UnicodeTest::TestIdentifier()
     }
 }
 
-/* tests for getType(), isTitleCase(), and toTitleCase() as well as characterDirection()*/
+/* for each line of UnicodeData.txt, check some of the properties */
+void
+UnicodeTest::unicodeDataLineFn(void *context,
+                  char *fields[][2], int32_t fieldCount,
+                  UErrorCode *pErrorCode) {
+    char *end;
+    uint32_t value;
+    UChar32 c;
+    int8_t type;
+    UnicodeTest *me=(UnicodeTest *)context;
+
+    /* get the character code, field 0 */
+    c=uprv_strtoul(fields[0][0], &end, 16);
+    if(end<=fields[0][0] || end!=fields[0][1]) {
+        me->errln("error: syntax error in field 0 at %s\n" + UnicodeString(fields[0][0], ""));
+        return;
+    }
+    if((uint32_t)c>=0x110000) {
+        me->errln("error in UnicodeData.txt: code point %lu out of range\n" + c);
+        return;
+    }
+
+    /* get general category, field 2 */
+    /* we override the general category of some control characters */
+    switch(c) {
+    case 9:
+    case 0xb:
+    case 0x1f:
+        type = U_SPACE_SEPARATOR;
+        break;
+    case 0xc:
+        type = U_LINE_SEPARATOR;
+        break;
+    case 0xa:
+    case 0xd:
+    case 0x1c:
+    case 0x1d:
+    case 0x1e:
+    case 0x85:
+        type = U_PARAGRAPH_SEPARATOR;
+        break;
+    default:
+        *fields[2][1]=0;
+        type = (int8_t)tagValues[me->MakeProp(fields[2][0])];
+        break;
+    }
+    if(Unicode::getType(c)!=type) {
+        me->errln("error: Unicode::getType(U+%04lx)==%u instead of %u\n", c, Unicode::getType(c), type);
+    }
+
+    /* get canonical combining class, field 3 */
+    value=uprv_strtoul(fields[3][0], &end, 10);
+    if(end<=fields[3][0] || end!=fields[3][1]) {
+        me->errln("error: syntax error in field 3 at code 0x%lx\n", c);
+        return;
+    }
+    if(value>255) {
+        me->errln("error in UnicodeData.txt: combining class %lu out of range\n", value);
+        return;
+    }
+    if(value!=Unicode::getCombiningClass(c)) {
+        me->errln("error: Unicode::getCombiningClass(U+%04lx)==%hu instead of %lu\n", c, Unicode::getCombiningClass(c), value);
+    }
+
+    /* get BiDi category, field 4 */
+    *fields[4][1]=0;
+    if(Unicode::characterDirection(c)!=me->MakeDir(fields[4][0])) {
+        me->errln("error: Unicode::characterDirection(U+%04lx)==%u instead of %u (%s)\n", c, Unicode::characterDirection(c), me->MakeDir(fields[4][0]), fields[4][0]);
+    }
+
+    /* get uppercase mapping, field 12 */
+    if(fields[12][0]!=fields[12][1]) {
+        value=uprv_strtoul(fields[12][0], &end, 16);
+        if(end!=fields[12][1]) {
+            me->errln("error: syntax error in field 12 at code 0x%lx\n", c);
+            return;
+        }
+        if((UChar32)value!=Unicode::toUpperCase(c)) {
+            me->errln("error: Unicode::toUpperCase(U+%04lx)==U+%04lx instead of U+%04lx\n", c, Unicode::toUpperCase(c), value);
+        }
+    } else {
+        /* no case mapping: the API must map the code point to itself */
+        if(c!=Unicode::toUpperCase(c)) {
+            me->errln("error: U+%04lx does not have an uppercase mapping but Unicode::toUpperCase()==U+%04lx\n", c, Unicode::toUpperCase(c));
+        }
+    }
+
+    /* get lowercase mapping, field 13 */
+    if(fields[13][0]!=fields[13][1]) {
+        value=uprv_strtoul(fields[13][0], &end, 16);
+        if(end!=fields[13][1]) {
+            me->errln("error: syntax error in field 13 at code 0x%lx\n", c);
+            return;
+        }
+        if((UChar32)value!=Unicode::toLowerCase(c)) {
+            me->errln("error: Unicode::toLowerCase(U+%04lx)==U+%04lx instead of U+%04lx\n", c, Unicode::toLowerCase(c), value);
+        }
+    } else {
+        /* no case mapping: the API must map the code point to itself */
+        if(c!=Unicode::toLowerCase(c)) {
+            me->errln("error: U+%04lx does not have a lowercase mapping but Unicode::toLowerCase()==U+%04lx\n", c, Unicode::toLowerCase(c));
+        }
+    }
+
+    /* get titlecase mapping, field 14 */
+    if(fields[14][0]!=fields[14][1]) {
+        value=uprv_strtoul(fields[14][0], &end, 16);
+        if(end!=fields[14][1]) {
+            me->errln("error: syntax error in field 14 at code 0x%lx\n", c);
+            return;
+        }
+        if((UChar32)value!=Unicode::toTitleCase(c)) {
+            me->errln("error: Unicode::toTitleCase(U+%04lx)==U+%04lx instead of U+%04lx\n", c, Unicode::toTitleCase(c), value);
+        }
+    } else {
+        /* no case mapping: the API must map the code point to itself */
+        if(c!=Unicode::toTitleCase(c)) {
+            me->errln("error: U+%04lx does not have a titlecase mapping but Unicode::toTitleCase()==U+%04lx\n", c, Unicode::toTitleCase(c));
+        }
+    }
+}
+
+/* tests for several properties */
 void UnicodeTest::TestUnicodeData()
 {
-    FILE*   input;
-    char    buffer[1000];
-    char*   bufferPtr, *dirPtr;
     char newPath[256];
     char backupPath[256];
-  
+    char *fields[15][2];
+    UErrorCode errorCode;
+
     /* Look inside ICU_DATA first */
     strcpy(newPath, u_getDataDirectory());
-    strcat(newPath, "unidata" U_FILE_SEP_STRING "UnicodeData");
-    strcat(newPath, ".txt");
+    strcat(newPath, "unidata" U_FILE_SEP_STRING "UnicodeData.txt");
 
 #if defined (U_SRCDATADIR) /* points to the icu/data directory */
     /* If defined, we'll try an alternate directory second */
@@ -329,85 +451,21 @@ void UnicodeTest::TestUnicodeData()
     strcat(backupPath, ".." U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "data");
     strcat(backupPath, U_FILE_SEP_STRING);
 #endif
-    strcat(backupPath, "unidata" U_FILE_SEP_STRING "UnicodeData");
-    strcat(backupPath, ".txt");
+    strcat(backupPath, "unidata" U_FILE_SEP_STRING "UnicodeData.txt");
 
-      
-    input = fopen(newPath, "r");
-
-    if (input == 0) {
-      input = fopen(backupPath, "r");
-      if (input == 0) {
-        errln("Failed to open either " + UnicodeString(newPath) + " or " + UnicodeString(backupPath) );
-        return;
-      }
+    errorCode=U_ZERO_ERROR;
+    u_parseDelimitedFile(backupPath, ';', fields, 15, unicodeDataLineFn, this, &errorCode);
+    if(errorCode==U_FILE_ACCESS_ERROR) {
+        errorCode=U_ZERO_ERROR;
+        u_parseDelimitedFile(newPath, ';', fields, 15, unicodeDataLineFn, this, &errorCode);
     }
-
-    int32_t unicode;
-    int8_t type;
-    for(;;) {
-        bufferPtr = fgets(buffer, 999, input);
-        if (bufferPtr == NULL)
-            break;
-        if (bufferPtr[0] == '#' || bufferPtr[0] == '\n' || bufferPtr[0] == 0)
-            continue;
-        sscanf(bufferPtr, "%X", &unicode);
-        assert(0 <= unicode && unicode < 65536);
-        if (unicode == LAST_CHAR_CODE_IN_FILE)
-            break;
-        bufferPtr = strchr(bufferPtr, ';');
-        assert(bufferPtr != NULL);
-        bufferPtr = strchr(bufferPtr + 1, ';'); // go to start of third field
-        assert(bufferPtr != NULL);
-        dirPtr = bufferPtr;
-        dirPtr = strchr(dirPtr + 1, ';');
-        assert(dirPtr != NULL);
-        dirPtr = strchr(dirPtr + 1, ';');
-        assert(dirPtr != NULL);
-        bufferPtr++;
-        bufferPtr[2] = 0;
-//      logln((UnicodeString)"testing " + (int32_t)unicode + "...");
-
-        /* we override the general category of some control characters */
-        switch(unicode) {
-        case 9:
-        case 0xb:
-        case 0x1f:
-            type = U_SPACE_SEPARATOR;
-            break;
-        case 0xc:
-            type = U_LINE_SEPARATOR;
-            break;
-        case 0xa:
-        case 0xd:
-        case 0x1c:
-        case 0x1d:
-        case 0x1e:
-        case 0x85:
-            type = U_PARAGRAPH_SEPARATOR;
-            break;
-        default:
-            type = (int8_t)tagValues[MakeProp(bufferPtr)];
-            break;
-        }
-        if (Unicode::getType((UChar)unicode) != type)
-            errln("Unicode character type failed at " + unicode);
-        // test title case
-        if ((Unicode::toTitleCase((UChar)unicode) != Unicode::toUpperCase((UChar)unicode)) &&
-            !(Unicode::isTitleCase(Unicode::toTitleCase((UChar)unicode))))
-            errln("Title case test failed at " + unicode);
-        bufferPtr = strchr(dirPtr + 1, ';');
-        dirPtr++;
-        bufferPtr[0] = 0;
-        if (Unicode::characterDirection((UChar)unicode) != MakeDir(dirPtr))
-            errln("Unicode character directionality failed at\n " + unicode);
+    if(U_FAILURE(errorCode)) {
+        errln("error parsing UnicodeData.txt: %s\n" + UnicodeString(u_errorName(errorCode), ""));
     }
-
-    if (input)
-        fclose(input);
 
     // test Unicode::getCharName()
     // a more thorough test of u_charName() is in cintltst/cucdtst.c
+    char buffer[100];
     UTextOffset length=Unicode::getCharName(0x284, buffer, sizeof(buffer));
 
     // use invariant-character conversion to Unicode

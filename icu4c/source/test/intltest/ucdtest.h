@@ -37,6 +37,11 @@ public:
      * Tests methods isDefined(), isBaseForm(), isSpaceChar() and getCellWidth()
      **/
     void TestMisc(void);
+
+    /** Helper function for TestUnicodeData */
+    static void unicodeDataLineFn(void *context,
+                                  char *fields[][2], int32_t fieldCount,
+                                  UErrorCode *pErrorCode);
     /** 
      * tests methods getType(), isTitleCase(), and toTitleCase() 
      * as well as characterDirection()
