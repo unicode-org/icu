@@ -158,7 +158,7 @@ static int32_t bundles_count = sizeof(param) / sizeof(param[0]);
 
 
 static void printUChars(UChar*);
-static void TestDecodedBundle();
+static void TestDecodedBundle(void);
 
 /***************************************************************************************/
 
@@ -412,8 +412,7 @@ static void TestNewTypes() {
     /* test for jitterbug#1435 */
     {
         const UChar* str = ures_getStringByKey(theBundle,"test_underscores",&len,&status);
-        const char* expect ="test message ....";
-        UChar uExpect[200];
+        expect ="test message ....";
         u_charsToUChars(expect,uExpect,uprv_strlen(expect)+1);
         CONFIRM_ErrorCode(status, U_ZERO_ERROR);
         if(u_strcmp(uExpect,str)){

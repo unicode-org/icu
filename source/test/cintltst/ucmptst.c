@@ -187,10 +187,6 @@ static void query(CompactEIntArray *a) {
 
 static void TestUCMPE32API(){
     CompactEIntArray *ucmpe32Array=NULL, *ucmpe32Clone = NULL;
-   
-    int32_t i=0;
-    /*int32_t *values;*/
-    int32_t const TEST_DEFAULT_VALUE = 0xFFFF;
     UErrorCode status = U_ZERO_ERROR;
 
     /*ucmpe32_open*/

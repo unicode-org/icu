@@ -891,7 +891,7 @@ MessageFormat::parse(const UnicodeString& source,
                      ParsePosition& status,
                      int32_t& count) const
 {
-    Formattable *resultArray = new Formattable[kMaxFormat];
+    Formattable *resultArray = new Formattable[(size_t)kMaxFormat];
     int32_t patternOffset = 0;
     int32_t sourceOffset = status.getIndex();
     ParsePosition tempStatus(0);
