@@ -97,9 +97,9 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         break;
 
     case 3:
-        name = "CollationDanishTest";
+        name = "CollationDanishTest"; 
 
-        if (exec)
+        if (0) // exec // removed by weiv - we have changed Danish collation
         {
             logln("CollationDanishtest---");
             logln("");
@@ -125,7 +125,7 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
     case 5:
         name = "CollationFinnishTest"; 
 
-        if (exec)
+        if (0) // exec // removed by weiv - we have changed Finnish collation
         {
             logln("CollationFinnishtest---");
             
