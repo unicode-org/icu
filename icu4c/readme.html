@@ -23,7 +23,7 @@
       caption {font-weight: bold; text-align: left}
       div.indent {margin-left: 2em}
       ul.TOC {list-style-type: none}
-      samp {margin-left: 2em; border-style: groove; padding: 1em; display: block; background-color: #EEEEEE}
+      samp {margin-left: 1em; border-style: groove; padding: 1em; display: block; background-color: #EEEEEE}
 </style>
   </head>
 
@@ -1192,49 +1192,40 @@ Data set name type  : PDS</samp>
     platform. After building ICU and running the tests, you may notice that
     some of the formatting tests fail. The formating failures can be ignored
     for now. These failures are expected to be resolved in a future release of
-    ICU.</p>
+    OS/400.</p>
+
+    <p>Before you start building ICU, ICU requires the following:</p>
+
+    <ul>
+      <li>QSHELL interpreter installed (install base option 30, operating
+      system)</li>
+      <!--li>QShell Utilities, PRPQ 5799-XEH (not required for V4R5)</li-->
+
+      <li>ILE C/C++ Compiler for iSeries, LPP 5722-WDS</li>
+
+      <li>The latest GNU facilities (You can get the GNU facilities for OS/400
+      from <a href=
+      "http://www.as400.ibm.com/developer/factory/porting/gnu_utilities.html">http://www.as400.ibm.com/developer/factory/porting/gnu_utilities.html</a>).
+      Older versions may not work properly.</li>
+    </ul>
 
     <p>The following describes how to setup and build ICU.</p>
 
-    <ul>
+    <ol>
       <li>
-        Requirements: 
-
-        <ul>
-          <li>QSHELL interpreter installed (install base option 30, operating
-          system)</li>
-          <!--li>QShell Utilities, PRPQ 5799-XEH (not required for V4R5)</li-->
-
-          <li>ILE C/C++ Compiler for iSeries, LPP 5722-WDS</li>
-
-          <li>The latest GNU facilities (You can get the GNU facilities for
-          OS/400 from <a href=
-          "http://www.as400.ibm.com/developer/factory/porting/gnu_utilities.html">
-          http://www.as400.ibm.com/developer/factory/porting/gnu_utilities.html</a>).
-          Older versions may not work properly.</li>
-        </ul>
-        <!-- end requirements -->
-      </li>
-
-      <li>
-        Build environment setup: 
-
-        <ol>
-          <li>
-            Create AS400 target library. This library will be the target for
-            the resulting modules, programs and service programs. You will
-            specify this library on the OUTPUTDIR environment variable in step
-            2.<br>
-             
+        Create AS400 target library. This library will be the target for the
+        resulting modules, programs and service programs. You will specify this
+        library on the OUTPUTDIR environment variable in step 2.<br>
+         
 <pre>
 <samp>CRTLIB LIB(<i>libraryname</i>)</samp>
 </pre>
-            <br>
-          </li>
+        <br>
+      </li>
 
-          <li>
-            Set up the following environment variables in your build process
-            (use the <i>libraryname</i> from the previous step) 
+      <li>
+        Set up the following environment variables in your build process (use
+        the <i>libraryname</i> from the previous step) 
 <pre>
 <samp>ADDENVVAR ENVVAR(CC) VALUE('/usr/bin/icc')
 ADDENVVAR ENVVAR(CXX) VALUE('/usr/bin/icc')
@@ -1242,53 +1233,104 @@ ADDENVVAR ENVVAR(MAKE) VALUE('/usr/bin/gmake')
 ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')
 ADDENVVAR ENVVAR(QIBM_MULTI_THREADED) VALUE('Y')</samp>
 </pre>
-            <i>libraryname</i> identifies target as400 library for *module,
-            *pgm and *srvpgm objects. The QIBM_MULTI_THREADED environment
-            variable is only needed for the multithreaded tests to pass.<br>
-            <br>
-          </li>
-          <!--li>Add QCXXN, to your build process library list. This results in the resolution of CRTCPPMOD used by the icc compiler</li-->
+        <i>libraryname</i> identifies target as400 library for *module, *pgm
+        and *srvpgm objects.<br>
+        <br>
+      </li>
+      <!--li>Add QCXXN, to your build process library list. This results in the resolution of CRTCPPMOD used by the icc compiler</li-->
 
-          <li>
-            In order to get the tests to run correctly, the QUTCOFFSET needs to
-            be set to the Pacific Time Zone offset.<br>
-            <br>
-             To check your QUTCOFFSET: 
+      <li>
+        In order to get the tests to run correctly, the QUTCOFFSET needs to be
+        set to the Pacific Time Zone offset.<br>
+        <br>
+         To check your QUTCOFFSET: 
 <pre>
 <samp>DSPSYSVAL SYSVAL(QUTCOFFSET)</samp>
 </pre>
-            <br>
-             To change your QUTCOFFSET:<br>
+        <br>
+         To change your QUTCOFFSET:<br>
 <pre>
 <samp>CHGSYSVAL SYSVAL(QUTCOFFSET) VALUE('-0800')</samp>
 </pre>
-            You should change -0800 to -0700 for daylight savings.<br>
-            <br>
+        You should change -0800 to -0700 for daylight savings.<br>
+        <br>
+      </li>
+
+      <li>Run <tt>'CHGJOB CCSID(37)'</tt></li>
+
+      <li>Run <tt>'QSH'</tt></li>
+
+      <li>Run gunzip on the ICU source code compressed tar archive
+      (icu-<i>X</i>-<i>Y</i>.tar.gz or icu-<i>X</i>-<i>Y</i>.tgz).</li>
+
+      <li>Run unpax-icu.sh on the tar file from the ICU download page.</li>
+
+      <li>Change your current directory to icu/source.</li>
+
+      <li>Run <tt>'cp ../as_is/os400/configure .'</tt></li>
+
+      <li>Run <tt>'./configure --host=as400-os400'</tt></li>
+
+      <li>
+        If you do not want to do the 'gmake install' step, like in the Unix
+        instructions for ICU, or you did not specify
+        <tt>--with-data-packaging=archive</tt> to configure, you can skip this
+        step. In a future release of ICU, we hope to eliminate this complicated
+        step. Any suggestions to improve the ICU installation are greatly
+        appreciated, and you can send those suggestions to the <a href=
+        "http://oss.software.ibm.com/developerworks/oss/mailman/listinfo/icu4c-support/">
+        icu4c-support</a> mailing list. 
+
+        <ol type="a">
+          <li>Run <tt>'mv data/Makefile data/Makefile.tmp'</tt></li>
+
+          <li>Run <tt>'gmake'</tt> to build some of the ICU libraries.</li>
+
+          <li>
+            When the gmake fails in icu/source/data, change OUTPUTDIR to a
+            different library than what it was previously set to. This should
+            be an empty library. You can do this by running the following
+            command: 
+<pre>
+<samp>system CHGENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>datalibraryname</i>')</samp>
+</pre>
           </li>
 
-          <li>Run 'CHGJOB CCSID(37)'</li>
+          <li>Run <tt>'mv data/Makefile.tmp data/Makefile'</tt></li>
 
-          <li>Run 'QSH'</li>
+          <li>Run <tt>'gmake'</tt> to build the ICU data library.</li>
 
-          <li>Run gunzip on the ICU source code compressed tar archive
-          (icu-<i>X</i>-<i>Y</i>.tar.gz or icu-<i>X</i>-<i>Y</i>.tgz).</li>
+          <li>
+            When gmake is finished run the following commands to setup the data
+            library: 
+<pre>
+<samp>system CRTSRVPGM SRVPGM(<i>libraryname</i>/LIBICUDATA) MODULE(<i>datalibraryname</i>/*ALL) \
+        EXPORT(*ALL) TEXT('ICU 2.4 DATA') OPTION(*DUPPROC *DUPVAR)
+system CHGENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')
+ln -fs /qsys.lib/<i>libraryname</i>.lib/libicudata.srvpgm data/libicudata.o
+del common/libicuuc.o
+</samp>
+</pre>
+          </li>
 
-          <li>Run unpax-icu.sh on the tar file from the ICU download page.</li>
-
-          <li>Change your current directory to icu/source.</li>
-
-          <li>Run 'cp ../as_is/os400/configure .'</li>
-
-          <li>Run './configure --host=as400-os400
-          --with-data-packaging=archive'</li>
-
-          <li>Run 'gmake' to build ICU.</li>
-
-          <li>Run 'gmake check' to run the tests.</li>
+          <li>Your data library should now be usable. Go to the next step,
+          which is needed to rebind to the actual data library.</li>
         </ol>
-        <!-- end build environment -->
       </li>
-    </ul>
+
+      <li>Run <tt>'gmake'</tt> to build ICU.</li>
+
+      <li>Run <tt>'gmake check'</tt> to build the tests.</li>
+
+      <li>If you did not specify the <tt>--disable-threads</tt> option to configure
+      before you built ICU, the "utility/MultithreadTest" test in intltest may
+      have failed. In order to make this test pass, please use <tt>'gmake check
+      QIBM_MULTI_THREADED=Y'</tt> after you built the tests with <tt>'gmake
+      check'</tt> from the previous step. You can look at the <a href=
+      "http://publib.boulder.ibm.com/iseries/v5r1/ic2924/index.htm?info/apis/concept4.htm">
+      iSeries Information Center</a> for more details.</li>
+    </ol>
+    <!-- end build environment -->
 
     <h2><a name="ImportantNotes" href="#ImportantNotes">Important Notes About
     Using ICU</a></h2>
