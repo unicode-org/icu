@@ -97,77 +97,62 @@ LINK32=link.exe
 # Begin Source File
 
 SOURCE=.\bidi.cpp
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\chariter.cpp
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\compdata.cpp
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\compitr.cpp
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\convert.cpp
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\cpputils.cpp
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\cstring.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\cwchar.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\dcmpdata.cpp
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\digitlst.cpp
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\filestrm.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\locid.cpp
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
-SOURCE=.\locmap.cpp
-# ADD CPP /Za
+SOURCE=.\locmap.c
 # End Source File
 # Begin Source File
 
 SOURCE=.\mutex.cpp
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\normlzr.cpp
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
@@ -177,42 +162,34 @@ SOURCE=.\putil.c
 # Begin Source File
 
 SOURCE=.\resbund.cpp
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\schriter.cpp
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\scsu.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ubidi.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ubidiln.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ubidiwrt.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\uchar.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\uchriter.cpp
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
@@ -221,17 +198,14 @@ SOURCE=.\ucln_cmn.c
 # Begin Source File
 
 SOURCE=.\ucmp16.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucmp32.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucmp8.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
@@ -240,52 +214,42 @@ SOURCE=.\ucmpe32.c
 # Begin Source File
 
 SOURCE=.\ucnv.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucnv2022.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucnv_bld.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucnv_cb.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucnv_cnv.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucnv_err.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucnv_io.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucnv_lmb.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucnv_utf.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucnvhz.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
@@ -294,17 +258,14 @@ SOURCE=.\ucnvisci.c
 # Begin Source File
 
 SOURCE=.\ucnvlat1.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucnvmbcs.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\ucnvscsu.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
@@ -314,22 +275,18 @@ SOURCE=.\udata.c
 # Begin Source File
 
 SOURCE=.\uhash.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\uhash_us.cpp
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\uloc.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\umemstrm.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
@@ -339,32 +296,26 @@ SOURCE=.\umutex.c
 # Begin Source File
 
 SOURCE=.\unames.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\unicode.cpp
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\unistr.cpp
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\unorm.cpp
-# ADD CPP /Za /W3
 # End Source File
 # Begin Source File
 
 SOURCE=.\uresbund.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\uresdata.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
@@ -373,7 +324,6 @@ SOURCE=.\uscript.c
 # Begin Source File
 
 SOURCE=.\ushape.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
@@ -387,17 +337,14 @@ SOURCE=.\ustrfmt.c
 # Begin Source File
 
 SOURCE=.\ustring.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\utf_impl.c
-# ADD CPP /Za
 # End Source File
 # Begin Source File
 
 SOURCE=.\uvector.cpp
-# ADD CPP /Za
 # End Source File
 # End Group
 # Begin Group "Header Files"
