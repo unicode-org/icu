@@ -861,6 +861,12 @@ UnicodeStringTest::TestReverse()
     if (test != "I used to say words backwards")
         errln("reverse() failed:  Expected \"I used to say words backwards\",\n got \""
             + test + "\"");
+
+    test=UNICODE_STRING("\\U0002f999\\U0001d15f\\u00c4\\u1ed0", 32).unescape();
+    test.reverse();
+    if(test.char32At(0)!=0x1ed0 || test.char32At(1)!=0xc4 || test.char32At(2)!=0x1d15f || test.char32At(4)!=0x2f999) {
+        errln("reverse() failed with supplementary characters");
+    }
 }
 
 void
