@@ -772,7 +772,7 @@ UnicodeString::extract(UTextOffset start,
     converter = ucnv_open(codepage, &status);
 
   // if we failed, set the appropriate flags and return
-  if(FAILURE(status)) {
+  if(U_FAILURE(status)) {
     // close the converter
     if(codepage == 0)
       releaseDefaultConverter(converter);
@@ -822,7 +822,7 @@ UnicodeString::doCodepageCreate(const char *codepageData,
            : ucnv_open(codepage, &status));
 
   // if we failed, set the appropriate flags and return
-  if(FAILURE(status)) {
+  if(U_FAILURE(status)) {
     // close the converter
     if(codepage == 0)
       releaseDefaultConverter(converter);
@@ -1016,7 +1016,7 @@ UnicodeString::cloneArrayIfNeeded()
 }
 
 // private function for C API
-C_FUNC const UChar*
+U_CFUNC const UChar*
 T_UnicodeString_getUChars(const UnicodeString *s)
 {
   return s->getUChars();
@@ -1045,7 +1045,7 @@ UnicodeString::getDefaultConverter(UErrorCode &status)
   // if the cache was empty, create a converter
   if(converter == 0) {
     converter = ucnv_open(0, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
       return 0;
   }
 

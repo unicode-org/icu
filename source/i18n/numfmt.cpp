@@ -131,7 +131,7 @@ NumberFormat::format(const Formattable& obj,
                         FieldPosition& pos,
                         UErrorCode& status) const
 {
-    if (FAILURE(status)) return toAppendTo;
+    if (U_FAILURE(status)) return toAppendTo;
 
     if (obj.getType() == Formattable::kDouble) {
         return format(obj.getDouble(), toAppendTo, pos);
@@ -191,7 +191,7 @@ NumberFormat::parse(const UnicodeString& text,
                         Formattable& result,
                         UErrorCode& status) const
 {
-    if (FAILURE(status)) return;
+    if (U_FAILURE(status)) return;
 
     ParsePosition parsePosition(0);
     parse(text, result, parsePosition);
@@ -405,7 +405,7 @@ NumberFormat::createInstance(const Locale& desiredLocale,
                              EStyles style, 
                              UErrorCode& status)
 {
-    if (FAILURE(status)) return NULL;
+    if (U_FAILURE(status)) return NULL;
 
     if (style < 0 || style >= kStyleCount) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -413,18 +413,18 @@ NumberFormat::createInstance(const Locale& desiredLocale,
     }
 
     ResourceBundle resource(Locale::getDataDirectory(), desiredLocale, status);
-    if (FAILURE(status))
+    if (U_FAILURE(status))
     {
         // We don't appear to have resource data available -- use the last-resort data
         status = U_USING_FALLBACK_ERROR;
         
         // Use the DecimalFormatSymbols constructor which uses last-resort data
         DecimalFormatSymbols* symbolsToAdopt = new DecimalFormatSymbols(status);
-        if (FAILURE(status)) { delete symbolsToAdopt; return NULL; } // This should never happen
+        if (U_FAILURE(status)) { delete symbolsToAdopt; return NULL; } // This should never happen
 
         // Creates a DecimalFormat instance with the last resort number patterns.
         NumberFormat* f = new DecimalFormat(fgLastResortNumberPatterns[style], symbolsToAdopt, status);
-        if (FAILURE(status)) { delete f; f = NULL; }
+        if (U_FAILURE(status)) { delete f; f = NULL; }
         return f;
     }
 
@@ -434,7 +434,7 @@ NumberFormat::createInstance(const Locale& desiredLocale,
     // If not all the styled patterns exists for the NumberFormat in this locale,
     // sets the status code to failure and returns nil.
     if (patternCount < fgNumberPatternsCount) status = U_INVALID_FORMAT_ERROR;
-    if (FAILURE(status)) return NULL;
+    if (U_FAILURE(status)) return NULL;
 
     // If the requested style doesn't exist, use a last-resort style.
     // This is to support scientific styles before we have all the
@@ -444,11 +444,11 @@ NumberFormat::createInstance(const Locale& desiredLocale,
 
     // Loads the decimal symbols of the desired locale.
     DecimalFormatSymbols* symbolsToAdopt = new DecimalFormatSymbols(desiredLocale, status);
-    if (FAILURE(status)) { delete symbolsToAdopt; return NULL; }
+    if (U_FAILURE(status)) { delete symbolsToAdopt; return NULL; }
 
     // Creates the specified decimal format style of the desired locale.
     NumberFormat* f = new DecimalFormat(pattern, symbolsToAdopt, status);
-    if (FAILURE(status)) { delete f; f = NULL; }
+    if (U_FAILURE(status)) { delete f; f = NULL; }
     return f;
 }
 

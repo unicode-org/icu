@@ -432,7 +432,7 @@ myTest(const UChar *chars,
 		myCSource + len,
 		&status);
 
-  if(FAILURE(status)) {
+  if(U_FAILURE(status)) {
     printf("Failing status code at line %d.\n", __LINE__);
     exit(1);
   }
@@ -452,7 +452,7 @@ myTest(const UChar *chars,
 		  myDSource + myByteCount,
 		  &status);
 
-  if(FAILURE(status)) {
+  if(U_FAILURE(status)) {
     printf("Failing status code at line %d.\n", __LINE__);
     exit(1);
   }
@@ -536,7 +536,7 @@ myMultipassTest(const UChar *chars,
 		  chars + len,
 		  &status);
     
-    if(status != U_INDEX_OUTOFBOUNDS_ERROR && FAILURE(status)) {
+    if(status != U_INDEX_OUTOFBOUNDS_ERROR && U_FAILURE(status)) {
       printf("Failing status code at line %d.\n", __LINE__);
       exit(1);
     }
@@ -575,7 +575,7 @@ myMultipassTest(const UChar *chars,
 		    myCompressed + totalBytesWritten,
 		    &status);
     
-    if(status != U_INDEX_OUTOFBOUNDS_ERROR && FAILURE(status)) {
+    if(status != U_INDEX_OUTOFBOUNDS_ERROR && U_FAILURE(status)) {
       printf("Failing status code at line %d.\n", __LINE__);
       exit(1);
     }

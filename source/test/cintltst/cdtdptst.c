@@ -59,7 +59,7 @@ void TestTwoDigitYearDSTParse()
     pattern=(UChar*)malloc(sizeof(UChar) * (strlen("EEE MMM dd HH:mm:ss.SSS zzz yyyy G")+1 ));
     u_uastrcpy(pattern, "EEE MMM dd HH:mm:ss.SSS zzz yyyy G");
     fullFmt= udat_openPattern(pattern, u_strlen(pattern), "en_US", &status);
-    if(FAILURE(status))    {
+    if(U_FAILURE(status))    {
         log_err("FAIL: Error in creating a date format using udat_openPattern \n %s\n", 
             myErrorName(status) );
     }
@@ -103,7 +103,7 @@ void TestPartialParse994()
     null=0;
 
     f = udat_open(UDAT_DEFAULT, UDAT_SHORT, NULL, NULL, 0, &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("FAIL: ErrorCode received during test: %s\n", myErrorName(status));
     }
     s=(UChar*)malloc(sizeof(UChar) * (strlen("01/01/97 10:11:42 AM")+1) );
@@ -137,7 +137,7 @@ void tryPat994(UDateFormat* format, const char* pattern, const char* s, UDate ex
     udat_applyPattern(format, FALSE, pat, u_strlen(pat));
     pos=0;
     date = udat_parse(format, str, u_strlen(str), &pos, &status);
-    if(FAILURE(status) || date == null) {
+    if(U_FAILURE(status) || date == null) {
         log_verbose("ParseException: : %s\n", myErrorName(status) );
          if (expected != null) 
              log_err("FAIL: Expected: %s\n", austrdup(myDateFormat(format, expected)) );
@@ -170,7 +170,7 @@ void TestRunTogetherPattern985()
     pattern=(UChar*)malloc(sizeof(UChar) * (strlen("yyyyMMddHHmmssSSS")+1) );
     u_uastrcpy(pattern, "yyyyMMddHHmmssSSS");
     format = udat_openPattern(pattern, u_strlen(pattern), NULL, &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("FAIL: Error in date format construction with pattern: %s\n", myErrorName(status));
     }
     date1 = ucal_getNow();
@@ -203,7 +203,7 @@ void TestCzechMonths459()
     UErrorCode status = U_ZERO_ERROR;
     
     fmt = udat_open(UDAT_FULL, UDAT_FULL, "cs", NULL, 0, &status);
-    if(FAILURE(status)){log_err("Error in constructing the date format\n"); }
+    if(U_FAILURE(status)){log_err("Error in constructing the date format\n"); }
     lneed=0;
     lneed=udat_toPattern(fmt, TRUE, NULL, lneed, &status);
     if(status==U_BUFFER_OVERFLOW_ERROR){
@@ -211,11 +211,11 @@ void TestCzechMonths459()
         pattern=(UChar*)malloc(sizeof(UChar) * (lneed+1) );
         udat_toPattern(fmt, TRUE, pattern, lneed+1, &status);
     }
-    if(FAILURE(status)){ log_err("Error in extracting the pattern\n"); }
+    if(U_FAILURE(status)){ log_err("Error in extracting the pattern\n"); }
     tzID=(UChar*)malloc(sizeof(UChar) * 4);
     u_uastrcpy(tzID, "GMT");
     cal=ucal_open(tzID, u_strlen(tzID), "cs", UCAL_GREGORIAN, &status);
-    if(FAILURE(status)){ log_err("error in ucal_open caldef : %s\n", myErrorName(status));    }
+    if(U_FAILURE(status)){ log_err("error in ucal_open caldef : %s\n", myErrorName(status));    }
     
     ucal_setDate(cal, 1997, UCAL_JUNE, 15, &status);
     june=ucal_getMillis(cal, &status);
@@ -259,11 +259,11 @@ void TestQuotePattern161()
     u_uastrcpy(pattern, "MM/dd/yyyy 'at' hh:mm:ss a zzz");
     
     format= udat_openPattern(pattern, u_strlen(pattern), NULL, &status);
-    if(FAILURE(status)){ log_err("error in udat_openPattern  : %s\n", myErrorName(status));    }
+    if(U_FAILURE(status)){ log_err("error in udat_openPattern  : %s\n", myErrorName(status));    }
     tzID=(UChar*)malloc(sizeof(UChar) * 4);
     u_uastrcpy(tzID, "PST");
     cal=ucal_open(tzID, u_strlen(tzID), NULL, UCAL_TRADITIONAL, &status);
-    if(FAILURE(status)){ log_err("error in ucal_open cal : %s\n", myErrorName(status));    }
+    if(U_FAILURE(status)){ log_err("error in ucal_open cal : %s\n", myErrorName(status));    }
     
     ucal_setDateTime(cal, 1999, UCAL_APRIL, 13, 10, 42, 28, &status);
     currentTime_1 = ucal_getMillis(cal, &status);

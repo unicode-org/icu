@@ -15,7 +15,7 @@
 *
 * Modification History:
 *        Name                     Description            
-*     Madhu Katragadda              Ported for CAPI
+*     Madhu Katragadda              Ported for C API
 *********************************************************************************
 */
 /**
@@ -431,7 +431,7 @@ void TestTertiary()
     u_strcpy(rules, DEFAULTRULEARRAY);
     u_strcat(rules, newRules);
     myCollation=ucol_openRules(rules, u_strlen(rules), UCOL_NO_NORMALIZATION, UCOL_DEFAULT_STRENGTH, &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator :%s\n", myErrorName(status));
     }
    
@@ -462,7 +462,7 @@ void TestPrimary( )
     u_strcpy(rules, DEFAULTRULEARRAY);
     u_strcat(rules, newRules);
     myCollation=ucol_openRules(rules, u_strlen(rules), UCOL_NO_NORMALIZATION, UCOL_DEFAULT_STRENGTH, &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator :%s\n", myErrorName(status));
     }
     ucol_setNormalization(myCollation, UCOL_DEFAULT_NORMALIZATION);
@@ -496,7 +496,7 @@ void TestSecondary()
     u_strcat(rules, newRules);
     
     myCollation=ucol_openRules(rules, u_strlen(rules), UCOL_NO_NORMALIZATION, UCOL_DEFAULT_STRENGTH, &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator :%s\n", myErrorName(status));
     }
     ucol_setStrength(myCollation, UCOL_SECONDARY);
@@ -526,7 +526,7 @@ void TestIdentical()
     u_strcat(rules, newRules);
     
     myCollation=ucol_openRules(rules, u_strlen(rules), UCOL_NO_NORMALIZATION, UCOL_IDENTICAL, &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator :%s\n", myErrorName(status));
     }
     for(i= 34; i<37; i++)
@@ -555,7 +555,7 @@ void TestExtra()
     
 
     myCollation=ucol_openRules(rules, u_strlen(rules), UCOL_NO_NORMALIZATION, UCOL_DEFAULT_STRENGTH, &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator :%s\n", myErrorName(status));
     }
     ucol_setNormalization(myCollation, UCOL_DEFAULT_NORMALIZATION); 

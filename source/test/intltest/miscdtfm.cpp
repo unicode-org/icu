@@ -44,7 +44,7 @@ DateFormatMiscTests::runIndexedTest( int32_t index, bool_t exec, char* &name, ch
 bool_t 
 DateFormatMiscTests::failure(UErrorCode status, const char* msg)
 {
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
         errln(UnicodeString("FAIL: ") + msg + " failed, error " + errorName(status));
         return TRUE;
     }
@@ -53,7 +53,7 @@ DateFormatMiscTests::failure(UErrorCode status, const char* msg)
 }
 
 /*
- * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.3 $ $Date: 1999/10/07 00:07:52 $
+ * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.4 $ $Date: 1999/10/18 22:48:31 $
  *
  * @bug 4097450
  */
@@ -145,7 +145,7 @@ DateFormatMiscTests::test4097450()
 }
 
 /*
- * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.3 $ $Date: 1999/10/07 00:07:52 $
+ * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.4 $ $Date: 1999/10/18 22:48:31 $
  *
  * @bug 4099975
  */

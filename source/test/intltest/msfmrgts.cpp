@@ -59,7 +59,7 @@ MessageFormatRegressionTest::runIndexedTest( int32_t index, bool_t exec, char* &
 bool_t 
 MessageFormatRegressionTest::failure(UErrorCode status, const char* msg)
 {
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
         errln(UnicodeString("FAIL: ") + msg + " failed, error " + errorName(status));
         return TRUE;
     }
@@ -437,7 +437,7 @@ void MessageFormatRegressionTest::Test4114743()
     //try {
         UnicodeString illegalPattern("ab { '}' de");
         mf->applyPattern(illegalPattern, status);
-        if( ! FAILURE(status))
+        if( ! U_FAILURE(status))
             errln("illegal pattern: \"" + illegalPattern + "\"");
     /*} catch (IllegalArgumentException foo) {
         if (!originalPattern.equals(mf.toPattern()))
@@ -546,7 +546,7 @@ void MessageFormatRegressionTest::Test4113018()
     logln("illegal pattern: \"" + illegalPattern + "\"");
     //try {
         mf->applyPattern(illegalPattern, status);
-        if( ! FAILURE(status))
+        if( ! U_FAILURE(status))
             errln("Should have thrown IllegalArgumentException for pattern : " + illegalPattern);
     /*} catch (IllegalArgumentException e) {
         if (!originalPattern.equals(mf.toPattern()))

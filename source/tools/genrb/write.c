@@ -157,7 +157,7 @@ rb_write(FileStream *f,
   int32_t i;
   struct SRBItem *item;
 
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
   /* Write the byte order mark to the file */
   T_FileStream_write(f, &sBOM, sizeof(sBOM));

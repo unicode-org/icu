@@ -396,7 +396,7 @@ void CollationDummyTest::doTest( UnicodeString source, UnicodeString target, Col
     UErrorCode key1status = U_ZERO_ERROR, key2status = U_ZERO_ERROR; //nos
     myCollation->getCollationKey(source, /*nos*/ sortKey1, key1status );
     myCollation->getCollationKey(target, /*nos*/ sortKey2, key2status );
-    if (FAILURE(key1status) || FAILURE(key2status))
+    if (U_FAILURE(key1status) || U_FAILURE(key2status))
     {
         errln("SortKey generation Failed.\n");
         return;

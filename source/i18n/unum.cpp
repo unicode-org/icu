@@ -26,12 +26,12 @@
 #include "fmtable.h"
 #include "dcfmtsym.h"
 
-CAPI UNumberFormat*
+U_CAPI UNumberFormat*
 unum_open(    UNumberFormatStyle    style,
         const   char*        locale,
         UErrorCode*        status)
 {
-  if(FAILURE(*status)) return 0;
+  if(U_FAILURE(*status)) return 0;
   UNumberFormat *retVal = 0;
   
   switch(style) {
@@ -75,13 +75,13 @@ unum_open(    UNumberFormatStyle    style,
   return retVal;
 }
 
-CAPI UNumberFormat*
+U_CAPI UNumberFormat*
 unum_openPattern(    const    UChar*            pattern,
             int32_t            patternLength,
             const    char*        locale,
             UErrorCode*        status)
 {
-  if(FAILURE(*status)) return 0;
+  if(U_FAILURE(*status)) return 0;
 
   int32_t len = (patternLength == -1 ? u_strlen(pattern) : patternLength);
   const UnicodeString pat((UChar*)pattern, len, len);
@@ -109,17 +109,17 @@ unum_openPattern(    const    UChar*            pattern,
   return (UNumberFormat*) fmt;
 }
 
-CAPI void
+U_CAPI void
 unum_close(UNumberFormat* fmt)
 {
   delete (NumberFormat*) fmt;
 }
 
-CAPI UNumberFormat*
+U_CAPI UNumberFormat*
 unum_clone(const UNumberFormat *fmt,
        UErrorCode *status)
 {
-  if(FAILURE(*status)) return 0;
+  if(U_FAILURE(*status)) return 0;
 
   Format *res = ((DecimalFormat*)fmt)->clone();
   
@@ -131,7 +131,7 @@ unum_clone(const UNumberFormat *fmt,
   return (UNumberFormat*) res;
 }
 
-CAPI int32_t
+U_CAPI int32_t
 unum_format(    const    UNumberFormat*    fmt,
         int32_t            number,
         UChar*            result,
@@ -139,7 +139,7 @@ unum_format(    const    UNumberFormat*    fmt,
         UFieldPosition    *pos,
         UErrorCode*        status)
 {
-  if(FAILURE(*status)) return -1;
+  if(U_FAILURE(*status)) return -1;
 
   int32_t actSize;
 
@@ -160,7 +160,7 @@ unum_format(    const    UNumberFormat*    fmt,
   return actSize;  
 }
 
-CAPI int32_t
+U_CAPI int32_t
 unum_formatDouble(    const    UNumberFormat*  fmt,
             double          number,
             UChar*          result,
@@ -168,7 +168,7 @@ unum_formatDouble(    const    UNumberFormat*  fmt,
             UFieldPosition  *pos, /* 0 if ignore */
             UErrorCode*     status)
 {
-  if(FAILURE(*status)) return -1;
+  if(U_FAILURE(*status)) return -1;
 
   int32_t actSize;
 
@@ -189,14 +189,14 @@ unum_formatDouble(    const    UNumberFormat*  fmt,
   return actSize;  
 }
 
-CAPI int32_t
+U_CAPI int32_t
 unum_parse(    const   UNumberFormat*  fmt,
         const   UChar*          text,
         int32_t         textLength,
         int32_t         *parsePos /* 0 = start */,
         UErrorCode      *status)
 {
-  if(FAILURE(*status)) return 0;
+  if(U_FAILURE(*status)) return 0;
 
   int32_t len = (textLength == -1 ? u_strlen(text) : textLength);
   const UnicodeString src((UChar*)text, len, len);
@@ -223,14 +223,14 @@ unum_parse(    const   UNumberFormat*  fmt,
     : (int32_t) res.getDouble();
 }
 
-CAPI double
+U_CAPI double
 unum_parseDouble(    const   UNumberFormat*  fmt,
             const   UChar*          text,
             int32_t         textLength,
             int32_t         *parsePos /* 0 = start */,
             UErrorCode      *status)
 {
-  if(FAILURE(*status)) return 0;
+  if(U_FAILURE(*status)) return 0;
 
   int32_t len = (textLength == -1 ? u_strlen(text) : textLength);
   const UnicodeString src((UChar*)text, len, len);
@@ -257,19 +257,19 @@ unum_parseDouble(    const   UNumberFormat*  fmt,
     : (double) res.getLong();
 }
 
-CAPI const char*
+U_CAPI const char*
 unum_getAvailable(int32_t index)
 {
   return uloc_getAvailable(index);
 }
 
-CAPI int32_t
+U_CAPI int32_t
 unum_countAvailable()
 {
   return uloc_countAvailable();
 }
 
-CAPI int32_t
+U_CAPI int32_t
 unum_getAttribute(const UNumberFormat*          fmt,
           UNumberFormatAttribute  attr)
 {
@@ -339,7 +339,7 @@ unum_getAttribute(const UNumberFormat*          fmt,
   }
 }
 
-CAPI void
+U_CAPI void
 unum_setAttribute(    UNumberFormat*          fmt,
             UNumberFormatAttribute  attr,
             int32_t                 newValue)
@@ -407,7 +407,7 @@ unum_setAttribute(    UNumberFormat*          fmt,
   }
 }
 
-CAPI double
+U_CAPI double
 unum_getDoubleAttribute(const UNumberFormat*          fmt,
           UNumberFormatAttribute  attr)
 {
@@ -422,7 +422,7 @@ unum_getDoubleAttribute(const UNumberFormat*          fmt,
   }
 }
 
-CAPI void
+U_CAPI void
 unum_setDoubleAttribute(    UNumberFormat*          fmt,
             UNumberFormatAttribute  attr,
             double                 newValue)
@@ -435,14 +435,14 @@ unum_setDoubleAttribute(    UNumberFormat*          fmt,
   }
 }
 
-CAPI int32_t
+U_CAPI int32_t
 unum_getTextAttribute(    const    UNumberFormat*                    fmt,
             UNumberFormatTextAttribute      tag,
             UChar*                            result,
             int32_t                            resultLength,
             UErrorCode*                        status)
 {
-  if(FAILURE(*status)) return -1;
+  if(U_FAILURE(*status)) return -1;
 
   int32_t actSize = 0;
 
@@ -481,14 +481,14 @@ unum_getTextAttribute(    const    UNumberFormat*                    fmt,
   return actSize;
 }
 
-CAPI void
+U_CAPI void
 unum_setTextAttribute(    UNumberFormat*                    fmt,
             UNumberFormatTextAttribute      tag,
             const    UChar*                            newValue,
             int32_t                            newValueLength,
             UErrorCode                        *status)
 {
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
   int32_t len = (newValueLength == -1 ? u_strlen(newValue) : newValueLength);
   const UnicodeString val((UChar*)newValue, len, len);
@@ -520,14 +520,14 @@ unum_setTextAttribute(    UNumberFormat*                    fmt,
   }
 }
 
-CAPI int32_t
+U_CAPI int32_t
 unum_toPattern(    const    UNumberFormat*          fmt,
         bool_t                  isPatternLocalized,
         UChar*                  result,
         int32_t                 resultLength,
         UErrorCode*             status)
 {
-  if(FAILURE(*status)) return -1;
+  if(U_FAILURE(*status)) return -1;
 
   int32_t actSize;
 
@@ -542,7 +542,7 @@ unum_toPattern(    const    UNumberFormat*          fmt,
   return actSize;
 }
 
-CAPI void
+U_CAPI void
 unum_getSymbols(const UNumberFormat* fmt,
         UNumberFormatSymbols *syms)
 {
@@ -586,12 +586,12 @@ unum_getSymbols(const UNumberFormat* fmt,
   syms->naN[len > 0 ? len + 1 : 0] = 0x0000;
 }
 
-CAPI void
+U_CAPI void
 unum_setSymbols(            UNumberFormat*          fmt,
                     const   UNumberFormatSymbols*   symbolsToSet,
                     UErrorCode *status)
 {
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
   DecimalFormatSymbols *syms = new DecimalFormatSymbols(*status);
   if(syms == 0) {

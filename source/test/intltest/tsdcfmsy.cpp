@@ -40,13 +40,13 @@ void IntlTestDecimalFormatSymbols::testSymbols(char *par)
     UErrorCode status = U_ZERO_ERROR;
 
     DecimalFormatSymbols fr(Locale::FRENCH, status);
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
         errln("ERROR: Couldn't create French DecimalFormatSymbols");
     }
 
     status = U_ZERO_ERROR;
     DecimalFormatSymbols en(Locale::ENGLISH, status);
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
         errln("ERROR: Couldn't create English DecimalFormatSymbols");
     }
 

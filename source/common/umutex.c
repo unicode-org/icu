@@ -126,7 +126,7 @@ void umtx_unlock( UMTX* mutex )
 #endif /* APP_NO_THREADS not defined */
 }
 
-CAPI void umtx_init( UMTX *mutex )
+U_CAPI void umtx_init( UMTX *mutex )
 {
 #ifndef APP_NO_THREADS
 

@@ -94,7 +94,7 @@ main(int argc,
   for(i = optind; i < argc; ++i) {
     status = U_ZERO_ERROR;
     processFile(argv[i], &status);
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
       printf("rbdump: %s processing file \"%s\"\n", errorName(status), argv[i]);
     }
   }
@@ -131,7 +131,7 @@ processFile(const char *filename,
 {
   FileStream *in;
 
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
   /* Setup */
   in =  0;

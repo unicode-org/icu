@@ -59,11 +59,11 @@ enum ETokenType getNextToken(UFILE *f,
 {
   UChar c;
   
-  if(FAILURE(*status)) return tok_error;
+  if(U_FAILURE(*status)) return tok_error;
 
   /* Skip whitespace */
   c = getNextChar(f, TRUE, status);
-  if(FAILURE(*status)) return tok_error;
+  if(U_FAILURE(*status)) return tok_error;
   
   switch(c) {
   case OPENBRACE:    return tok_open_brace;
@@ -98,20 +98,20 @@ static enum ETokenType getStringToken(UFILE *f,
      doesn't matter; we still want to validly return the initialChar
      (if nothing else) as a string token. */
  
-  if(FAILURE(*status)) return tok_error;
+  if(U_FAILURE(*status)) return tok_error;
   
   /* setup */
   lastStringWasQuoted = FALSE;
   c = initialChar;
   ustr_setlen(token, 0, status);
 
-  if(FAILURE(*status)) return tok_error;
+  if(U_FAILURE(*status)) return tok_error;
   
   for(;;) {
     if(c == QUOTE) {
       if( ! lastStringWasQuoted && token->fLength > 0) {
 	ustr_ucat(token, SPACE, status);
-	if(FAILURE(*status)) return tok_error;
+	if(U_FAILURE(*status)) return tok_error;
       }
       lastStringWasQuoted = TRUE;
       
@@ -120,31 +120,31 @@ static enum ETokenType getStringToken(UFILE *f,
 	/* EOF reached */
 	if(c == (UChar)U_EOF)        return tok_EOF;
 	/* Unterminated quoted strings */
-	if(FAILURE(*status))  return tok_error;
+	if(U_FAILURE(*status))  return tok_error;
 	if(c == QUOTE) 
 	  break;
 	if(c == ESCAPE) 
 	  c = unescape(f, status);
 	ustr_ucat(token, c, status);
-	if(FAILURE(*status)) return tok_error;
+	if(U_FAILURE(*status)) return tok_error;
       }
     }
     else {
       if(token->fLength > 0) {
 	ustr_ucat(token, SPACE, status);
-	if(FAILURE(*status)) return tok_error;
+	if(U_FAILURE(*status)) return tok_error;
       }
       lastStringWasQuoted = FALSE;
       
       if(c == ESCAPE) 
 	c = unescape(f, status);
       ustr_ucat(token, c, status);
-      if(FAILURE(*status)) return tok_error;
+      if(U_FAILURE(*status)) return tok_error;
 
       for(;;) {
 	/* DON'T skip whitespace */
 	c = getNextChar(f, FALSE, status);
-	if(FAILURE(*status)) 
+	if(U_FAILURE(*status)) 
 	  return tok_string;
 
 	if(c == QUOTE
@@ -162,13 +162,13 @@ static enum ETokenType getStringToken(UFILE *f,
 	if(c == ESCAPE) 
 	  c = unescape(f, status);
 	ustr_ucat(token, c, status);
-	if(FAILURE(*status)) return tok_error;
+	if(U_FAILURE(*status)) return tok_error;
       }
     }
     
     /* DO skip whitespace */
     c = getNextChar(f, TRUE, status);
-    if(FAILURE(*status)) 
+    if(U_FAILURE(*status)) 
       return tok_string;
     
     if(c == OPENBRACE || c == CLOSEBRACE || c == COMMA) {
@@ -186,7 +186,7 @@ static UChar getNextChar(UFILE *f,
 {
   UChar c;
 
-  if(FAILURE(*status)) return U_EOF;
+  if(U_FAILURE(*status)) return U_EOF;
   
   for(;;) {
     c = u_fgetc(f, status);
@@ -225,13 +225,13 @@ void seekUntilNewline(UFILE *f,
 {
   UChar c;
 
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
   
   do {
     c = u_fgetc(f, status);
   } while(! isNewline(c) && c != (UChar)U_EOF && *status == U_ZERO_ERROR);
   
-  /*if(FAILURE(*status))
+  /*if(U_FAILURE(*status))
     err = kItemNotFound;*/
 }
 
@@ -240,7 +240,7 @@ void seekUntilEndOfComment(UFILE *f,
 {
   UChar c, d;
 
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
   do {
     c = u_fgetc(f, status);
@@ -266,10 +266,10 @@ static UChar unescape(UFILE *f,
   UChar out;
   int16_t maxChars;
   
-  if(FAILURE(*status)) return U_EOF;
+  if(U_FAILURE(*status)) return U_EOF;
   
   c = u_fgetc(f, status);
-  if(c == (UChar)U_EOF || FAILURE(*status)) return U_EOF;
+  if(c == (UChar)U_EOF || U_FAILURE(*status)) return U_EOF;
 
   switch (c) {
     
@@ -300,7 +300,7 @@ static UChar unescape(UFILE *f,
     out = 0;
     while(maxChars != 0 && *status == U_ZERO_ERROR) {
       c = u_fgetc(f, status);
-      if(c == (UChar)U_EOF || FAILURE(*status)) return U_EOF;
+      if(c == (UChar)U_EOF || U_FAILURE(*status)) return U_EOF;
       
       switch(c) {
 	/* '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' */

@@ -69,7 +69,7 @@ Format::format(const Formattable& obj,
                UnicodeString& toAppendTo, 
                UErrorCode& status) const
 {
-    if (FAILURE(status)) return toAppendTo;
+    if (U_FAILURE(status)) return toAppendTo;
 
     // {sfb} should really be FieldPosition::DONT_CARE, not 0
     // leave at 0 for now, to keep in sync with Java
@@ -87,7 +87,7 @@ Format::parseObject(const UnicodeString& source,
                     Formattable& result, 
                     UErrorCode& status) const
 {
-    if (FAILURE(status)) return;
+    if (U_FAILURE(status)) return;
 
     ParsePosition parsePosition(0);
     parseObject(source, result, parsePosition);

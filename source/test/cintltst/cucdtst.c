@@ -15,7 +15,7 @@
 *
 * Modification History:
 *        Name                     Description            
-*     Madhu Katragadda            Ported for CAPI, added tests for string functions
+*     Madhu Katragadda            Ported for C API, added tests for string functions
 *********************************************************************************
 */
 #include "uchar.h"
@@ -324,7 +324,7 @@ void TestUnicodeData()
     input = fopen(newPath, "r");
 
     if (input == 0) {
-      log_err("Unicode CAPI test 'fopen' (%s) error\n", newPath);
+      log_err("Unicode C API test 'fopen' (%s) error\n", newPath);
       return;
     }
 
@@ -335,30 +335,30 @@ void TestUnicodeData()
             if (bufferPtr[0] == '#' || bufferPtr[0] == '\n' || bufferPtr[0] == 0) continue;
             sscanf(bufferPtr, "%X", &unicode);
             if (!(0 <= unicode && unicode < 65536)) {
-                log_err("Unicode CAPI test precondition '(0 <= unicode && unicode < 65536)' failed\n");
+                log_err("Unicode C API test precondition '(0 <= unicode && unicode < 65536)' failed\n");
                 return;
             }
             if (unicode == LAST_CHAR_CODE_IN_FILE)
                 break;
             bufferPtr = strchr(bufferPtr, ';');
             if (!(bufferPtr != NULL)) {
-                log_err("Unicode CAPI test condition '(bufferPtr != NULL)' failed\n");
+                log_err("Unicode C API test condition '(bufferPtr != NULL)' failed\n");
                 return;
             }
             bufferPtr = strchr(bufferPtr + 1, ';'); /* go to start of third field */
             if (!(bufferPtr != NULL)) {
-                log_err("Unicode CAPI test condition '(bufferPtr != NULL)' failed\n");
+                log_err("Unicode C API test condition '(bufferPtr != NULL)' failed\n");
                 return;
             }
             dirPtr = bufferPtr;
             dirPtr = strchr(dirPtr + 1, ';');
             if (!(dirPtr != NULL)) {
-                log_err("Unicode CAPI test precondition '(dirPtr != NULL)' failed\n");
+                log_err("Unicode C API test precondition '(dirPtr != NULL)' failed\n");
                 return;
             }
             dirPtr = strchr(dirPtr + 1, ';');
             if (!(dirPtr != NULL)) {
-                log_err("Unicode CAPI test precondition '(dirPtr != NULL)' failed\n");
+                log_err("Unicode C API test precondition '(dirPtr != NULL)' failed\n");
                 return;
             }
             bufferPtr++;

@@ -68,7 +68,7 @@ void CollationIteratorTest::TestPrevious(char *par)
     c1 = new RuleBasedCollator(
         "< a,A < b,B < c,C, d,D < z,Z < ch,cH,Ch,CH", status);
 
-    if (c1 == NULL || FAILURE(status))
+    if (c1 == NULL || U_FAILURE(status))
     {
         errln("Couldn't create a RuleBasedCollator with a contracting sequence.");
         delete c1;
@@ -85,7 +85,7 @@ void CollationIteratorTest::TestPrevious(char *par)
     RuleBasedCollator *c2 = NULL;
     c2 = new RuleBasedCollator("< a < b < c/abd < d", status);
 
-    if (c2 == NULL || FAILURE(status))
+    if (c2 == NULL || U_FAILURE(status))
     {
         errln("Couldn't create a RuleBasedCollator with an expanding sequence.");
         delete c2;
@@ -102,7 +102,7 @@ void CollationIteratorTest::TestPrevious(char *par)
     RuleBasedCollator *c3 = NULL;
     c3 = new RuleBasedCollator("< a < b < c/aba < d < z < ch", status);
 
-    if (c3 == NULL || FAILURE(status))
+    if (c3 == NULL || U_FAILURE(status))
     {
         errln("Couldn't create a RuleBasedCollator with both an expanding and a contracting sequence.");
         delete c3;
@@ -143,7 +143,7 @@ void CollationIteratorTest::TestOffset(char *par)
 
     iter->setOffset(0, status);
 
-    if (FAILURE(status))
+    if (U_FAILURE(status))
     {
         errln("setOffset failed.");
     }
@@ -174,7 +174,7 @@ void CollationIteratorTest::TestSetText(char *par)
 
     while ( ++i < 10 && c != CollationElementIterator::NULLORDER)
     {
-        if (FAILURE(status))
+        if (U_FAILURE(status))
         {
             errln("iter2->next() returned an error.");
             delete iter2;
@@ -187,7 +187,7 @@ void CollationIteratorTest::TestSetText(char *par)
     // Now set it to point to the same string as the first iterator
     iter2->setText(test1, status);
 
-    if (FAILURE(status))
+    if (U_FAILURE(status))
     {
         errln("call to inter2->setText(test1) failed.");
     }
@@ -242,7 +242,7 @@ void CollationIteratorTest::TestClearBuffers(char *par)
     RuleBasedCollator *c = NULL;
     c = new RuleBasedCollator("< a < b < c & ab = d", status);
 
-    if (c == NULL || FAILURE(status))
+    if (c == NULL || U_FAILURE(status))
     {
         errln("Couldn't create a RuleBasedCollator.");
         delete c;
@@ -253,7 +253,7 @@ void CollationIteratorTest::TestClearBuffers(char *par)
     CollationElementIterator *i = c->createCollationElementIterator(source);
     int32_t e0 = i->next(status);    // save the first collation element
 
-    if (FAILURE(status))
+    if (U_FAILURE(status))
     {
         errln("call to i->next() failed");
         goto bail;
@@ -261,7 +261,7 @@ void CollationIteratorTest::TestClearBuffers(char *par)
 
     i->setOffset(3, status);        // go to the expanding character
 
-    if (FAILURE(status))
+    if (U_FAILURE(status))
     {
         errln("call to i->setOffset(3) failed");
         goto bail;
@@ -269,7 +269,7 @@ void CollationIteratorTest::TestClearBuffers(char *par)
 
     i->next(status);                // but only use up half of it
 
-    if (FAILURE(status))
+    if (U_FAILURE(status))
     {
         errln("call to i->next() failed");
         goto bail;
@@ -277,7 +277,7 @@ void CollationIteratorTest::TestClearBuffers(char *par)
 
     i->setOffset(0, status);        // go back to the beginning
 
-    if (FAILURE(status))
+    if (U_FAILURE(status))
     {
         errln("call to i->setOffset(0) failed");
         goto bail;
@@ -289,7 +289,7 @@ void CollationIteratorTest::TestClearBuffers(char *par)
         // of e...
         int32_t e = i->next(status);    // and get this one again
 
-        if (FAILURE(status))
+        if (U_FAILURE(status))
         {
             errln("call to i->next() failed.");
             goto bail;
@@ -388,7 +388,7 @@ void CollationIteratorTest::verifyExpansion(UnicodeString rules, ExpansionRecord
     RuleBasedCollator *coll = NULL;
     coll = new RuleBasedCollator(rules, status);
 
-    if (coll == NULL || FAILURE(status))
+    if (coll == NULL || U_FAILURE(status))
     {
         errln("Couldn't create a RuleBasedCollator.");
         delete coll;
@@ -405,7 +405,7 @@ void CollationIteratorTest::verifyExpansion(UnicodeString rules, ExpansionRecord
         UnicodeString test(&tests[i].character, 1);
         iter->setText(test, status);
 
-        if (FAILURE(status))
+        if (U_FAILURE(status))
         {
             errln("call to iter->setText() failed.");
             return;
@@ -413,7 +413,7 @@ void CollationIteratorTest::verifyExpansion(UnicodeString rules, ExpansionRecord
         
         int32_t order = iter->next(status);
 
-        if (FAILURE(status))
+        if (U_FAILURE(status))
         {
             errln("call to iter->next() failed.");
             return;

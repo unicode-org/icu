@@ -62,32 +62,32 @@ void TestDateFormat()
     /*Testing udat_open() to open a dateformat */
     log_verbose("\nTesting udat_open() with various parameters\n");
     fr = udat_open(UDAT_FULL, UDAT_DEFAULT, "fr_FR", NULL,0, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using full time style with french locale\n %s\n", 
             myErrorName(status) );
     }
     def = udat_open(UDAT_SHORT, UDAT_SHORT, NULL, NULL, 0, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using short date and time style\n %s\n", 
             myErrorName(status) );
     }
     it = udat_open(UDAT_DEFAULT, UDAT_MEDIUM, "it_IT", NULL, 0, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using medium date style with italian locale\n %s\n", 
             myErrorName(status) );
     }
     de = udat_open(UDAT_LONG, UDAT_LONG, "de_DE", NULL, 0, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using long time and date styles with german locale\n %s\n",
             myErrorName(status));
     }
     /*creating a default dateformat */
     def1 = udat_open(UDAT_SHORT, UDAT_SHORT, NULL, NULL, 0, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using short date and time style\n %s\n", 
             myErrorName(status) );
@@ -107,7 +107,7 @@ void TestDateFormat()
     /*Testing udat_clone()*/
     log_verbose("\nTesting the udat_clone() function of date format\n");
     copy=udat_clone(def, &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("Error in creating the clone using udat_clone: %s\n", myErrorName(status) );
     }
     /*if(def != copy)
@@ -126,7 +126,7 @@ void TestDateFormat()
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_format(def, d, result, resultlength, &pos, &status);
     }
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("FAIL: Error in formatting using udat_format(.....) %s\n", myErrorName(status) );
     }
@@ -160,7 +160,7 @@ free(result);
     parsepos=0;
     
     d1=udat_parse(def, temp, u_strlen(temp), &parsepos, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("FAIL: Error in parsing using udat_parse(.....) %s\n", myErrorName(status) );
     }
@@ -180,7 +180,7 @@ free(result);
     log_verbose("\nTesting the udat_openPattern with a specified pattern\n");
     /*for french locale */
     fr_pat=udat_openPattern(temp, u_strlen(temp), "fr_FR", &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("FAIL: Error in creating a date format using udat_openPattern \n %s\n", 
             myErrorName(status) );
@@ -203,7 +203,7 @@ free(result);
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_toPattern(def1, FALSE, result, resultlength, &status);
     }
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("FAIL: error in extracting the pattern from UNumberFormat\n %s\n", 
             myErrorName(status) );
@@ -230,12 +230,12 @@ free(result);
     /*Test get2DigitYearStart set2DigitYearStart */
     log_verbose("\nTesting the get and set 2DigitYearStart properties\n");
     d1= udat_get2DigitYearStart(fr_pat,&status);
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
             log_err("ERROR: udat_get2DigitYearStart failed %s\n", myErrorName(status) );
     }
     status = U_ZERO_ERROR;
     udat_set2DigitYearStart(def1 ,d1, &status);
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
         log_err("ERROR: udat_set2DigitYearStart failed %s\n", myErrorName(status) );
     }
     if(udat_get2DigitYearStart(fr_pat, &status) != udat_get2DigitYearStart(def1, &status))
@@ -244,7 +244,7 @@ free(result);
         log_verbose("PASS: set2DigitYearStart successful\n");
     /*try setting it to another value */
     udat_set2DigitYearStart(de, 2000.0, &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_verbose("ERROR: udat_set2DigitYearStart failed %s\n", myErrorName(status) );
     }
     if(udat_get2DigitYearStart(de, &status) != 2000)
@@ -311,7 +311,7 @@ void TestSymbols()
     /*creating a dateformat with french locale */
     log_verbose("\ncreating a date format with french locale\n");
     fr = udat_open(UDAT_FULL, UDAT_DEFAULT, "fr_FR", NULL, 0, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("error in creating the dateformat using full time style with french locale\n %s\n", 
             myErrorName(status) );
@@ -319,7 +319,7 @@ void TestSymbols()
     /*creating a default dateformat */
     log_verbose("\ncreating a date format with default locale\n");
     def = udat_open(UDAT_DEFAULT,UDAT_DEFAULT ,NULL, NULL, 0, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("error in creating the dateformat using short date and time style\n %s\n", 
             myErrorName(status) );
@@ -351,7 +351,7 @@ void TestSymbols()
         udat_getSymbols(fr, UDAT_WEEKDAYS, 5, result, resultlength, &status);
         
     }
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("FAIL: Error in udat_getSymbols().... %s\n", myErrorName(status) );
     }
@@ -393,7 +393,7 @@ free(pattern);
         pattern=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_toPattern(fr, FALSE, pattern, resultlength, &status);
     }
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("FAIL: error in extracting the pattern from UNumberFormat\n %s\n", 
             myErrorName(status) );
@@ -409,7 +409,7 @@ free(pattern);
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_toPattern(fr, FALSE,result, resultlength, &status);
     }
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("FAIL: error in extracting the pattern from UNumberFormat\n %s\n", 
             myErrorName(status) );
@@ -431,12 +431,12 @@ free(pattern);
         udat_getSymbols(fr, UDAT_MONTHS, 11, result, resultlength, &status);
         
     }
-    if(FAILURE(status))
+    if(U_FAILURE(status))
         log_err("FAIL: error in getSymbols() %s\n", myErrorName(status) );
     resultlength=resultlengthout+1;
     
     udat_setSymbols(def, UDAT_MONTHS, 11, result, resultlength, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
         {
             log_err("FAIL: Error in udat_setSymbols() : %s\n", myErrorName(status) );
         }
@@ -451,7 +451,7 @@ free(pattern);
         value=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_getSymbols(def, UDAT_MONTHS, 11, value, resultlength, &status);
     }
-    if(FAILURE(status))
+    if(U_FAILURE(status))
         log_err("FAIL: error in retrieving the value using getSymbols i.e roundtrip\n");
     
     if(u_strcmp(result, value)!=0)
@@ -512,7 +512,7 @@ void VerifygetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, int32_t i
         udat_getSymbols(datfor, type, index, result, resultlength, &status);
         
     }
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("FAIL: Error in udat_getSymbols()... %s\n", myErrorName(status) );
         return;
@@ -537,7 +537,7 @@ void VerifysetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, int32_t i
     value=(UChar*)malloc(sizeof(UChar) * (strlen(expected) + 1));
     u_uastrcpy(value, expected);
     udat_setSymbols(datfor, type, index, value, u_strlen(value), &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
         {
             log_err("FAIL: Error in udat_setSymbols()  %s\n", myErrorName(status) );
             return;
@@ -551,7 +551,7 @@ void VerifysetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, int32_t i
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_getSymbols(datfor, type, index, result, resultlength, &status);
     }
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("FAIL: error in retrieving the value using getSymbols after setting it previously\n %s\n", 
             myErrorName(status) );
         return;
@@ -584,14 +584,14 @@ void VerifygetsetSymbols(UDateFormat* from, UDateFormat* to, UDateFormatSymbolTy
         result=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_getSymbols(from, type, index, result, resultlength, &status);
     }
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("FAIL: error in getSymbols() %s\n", myErrorName(status) );
         return;
     }
     
     resultlength=resultlengthout+1;
     udat_setSymbols(to, type, index, result, resultlength, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
         {
             log_err("FAIL: Error in udat_setSymbols() : %s\n", myErrorName(status) );
             return;
@@ -605,7 +605,7 @@ void VerifygetsetSymbols(UDateFormat* from, UDateFormat* to, UDateFormatSymbolTy
         value=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_getSymbols(to, type, index, value, resultlength, &status);
     }
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("FAIL: error in retrieving the value using getSymbols i.e roundtrip\n %s\n", 
             myErrorName(status) );
         return;
@@ -640,7 +640,7 @@ UChar* myNumformat(const UNumberFormat* numfor, double d)
         result2=(UChar*)malloc(sizeof(UChar) * resultlength);
         unum_formatDouble(numfor, d, result2, resultlength, &pos, &status);
     }
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("FAIL: Error in formatting using unum_format(.....) %s\n", myErrorName(status) );
         return 0;

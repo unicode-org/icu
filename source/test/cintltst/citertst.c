@@ -15,7 +15,7 @@
 *
 * Modification History:
 *        Name                     Description            
-*     Madhu Katragadda            Ported for CAPI
+*     Madhu Katragadda            Ported for C API
 *********************************************************************************
 /*
  * Collation Iterator tests.
@@ -68,7 +68,7 @@ void TestPrevious()
     en_us = ucol_open("en_US", &status);
     
     iter=ucol_openElements(en_us, test1, u_strlen(test1), &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n", 
             myErrorName(status));
         return;
@@ -80,7 +80,7 @@ void TestPrevious()
     /* Test with a contracting character sequence */
     u_uastrcpy(rule, " < a,A < b,B < c,C, d,D < z,Z < ch,cH,Ch,CH");
     c1 = ucol_openRules(rule, u_strlen(rule), UCOL_NO_NORMALIZATION, UCOL_DEFAULT_STRENGTH, &status);
-    if (c1 == NULL || FAILURE(status))
+    if (c1 == NULL || U_FAILURE(status))
     {
         log_err("Couldn't create a RuleBasedCollator with a contracting sequence\n %s\n", 
             myErrorName(status));
@@ -89,7 +89,7 @@ void TestPrevious()
     source=(UChar*)malloc(sizeof(UChar) * 20);
     u_uastrcpy(source, "abchdcba");
     iter=ucol_openElements(c1, source, u_strlen(source), &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n", 
             myErrorName(status));
         return;
@@ -102,7 +102,7 @@ void TestPrevious()
     /* Test with an expanding character sequence */
     u_uastrcpy(rule, "< a < b < c/abd < d");
     c2 = ucol_openRules(rule, u_strlen(rule), UCOL_NO_NORMALIZATION, UCOL_DEFAULT_STRENGTH,  &status);
-    if (c2 == NULL || FAILURE(status))
+    if (c2 == NULL || U_FAILURE(status))
     {
         log_err("Couldn't create a RuleBasedCollator with a contracting sequence.\n %s\n", 
             myErrorName(status));
@@ -111,7 +111,7 @@ void TestPrevious()
     source=(UChar*)malloc(sizeof(UChar) * 5);    
     u_uastrcpy(source, "abcd");
     iter=ucol_openElements(c2, source, u_strlen(source), &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n", 
             myErrorName(status));
         return;
@@ -123,7 +123,7 @@ void TestPrevious()
     /* Now try both */
     u_uastrcpy(rule, "< a < b < c/aba < d < z < ch");
     c3 = ucol_openRules(rule, u_strlen(rule), UCOL_DEFAULT_NORMALIZATION,  UCOL_DEFAULT_STRENGTH, &status);
-    if (c3 == NULL || FAILURE(status))
+    if (c3 == NULL || U_FAILURE(status))
     {
         log_err("Couldn't create a RuleBasedCollator with a contracting sequence.\n %s\n", 
             myErrorName(status));
@@ -132,7 +132,7 @@ void TestPrevious()
     source=(UChar*)malloc(sizeof(UChar) * 10);    
     u_uastrcpy(source, "abcdbchdc");
     iter=ucol_openElements(c3, source, u_strlen(source), &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n", 
             myErrorName(status));
         return;
@@ -163,7 +163,7 @@ void TestOffset()
     en_us = ucol_open("en_US", &status);
     log_verbose("Testing getOffset and setOffset for CollationElements\n");
     iter=ucol_openElements(en_us, test1, u_strlen(test1), &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n", 
             myErrorName(status));
         return;
@@ -182,7 +182,7 @@ void TestOffset()
 
     /* Now set the offset back to the beginning and see if it works */
     pristine=ucol_openElements(en_us, test1, u_strlen(test1), &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n", 
             myErrorName(status));
         return;
@@ -190,7 +190,7 @@ void TestOffset()
     status = U_ZERO_ERROR;
 
     ucol_setOffset(iter, 0, &status);
-    if (FAILURE(status))
+    if (U_FAILURE(status))
     {
         log_err("setOffset failed. %s\n",    myErrorName(status));
     }
@@ -222,13 +222,13 @@ void TestSetText()
     en_us = ucol_open("en_US", &status);
     log_verbose("testing setText for Collation elements\n");
     iter1=ucol_openElements(en_us, test1, u_strlen(test1), &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: in creation of collation element iterator1 using ucol_openElements()\n %s\n", 
             myErrorName(status));
         return;
     }
     iter2=ucol_openElements(en_us, test2, u_strlen(test2), &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: in creation of collation element iterator2 using ucol_openElements()\n %s\n", 
             myErrorName(status));
         return;
@@ -240,7 +240,7 @@ void TestSetText()
 
     while ( ++i < 10 && c != UCOL_NULLORDER)
     {
-        if (FAILURE(status))
+        if (U_FAILURE(status))
         {
             log_err("iter2->next() returned an error. %s\n", myErrorName(status));
             ucol_closeElements(iter2);
@@ -253,7 +253,7 @@ void TestSetText()
 
     /* Now set it to point to the same string as the first iterator */
     ucol_setText(iter2, test1, u_strlen(test1), &status);
-    if (FAILURE(status))
+    if (U_FAILURE(status))
     {
         log_err("call to iter2->setText(test1) failed. %s\n", myErrorName(status));
     }

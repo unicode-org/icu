@@ -99,7 +99,7 @@ DateFormat::format(const Formattable& obj,
                    FieldPosition& fieldPosition,
                    UErrorCode& status) const
 {
-    if (FAILURE(status)) return toAppendTo;
+    if (U_FAILURE(status)) return toAppendTo;
 
     // if the type of the Formattable is double or long, treat it as if it were a Date
     switch (obj.getType())
@@ -143,7 +143,7 @@ UDate
 DateFormat::parse(const UnicodeString& text,
                   UErrorCode& status) const
 {
-    if (FAILURE(status)) return 0;
+    if (U_FAILURE(status)) return 0;
 
     ParsePosition pos(0);
     UDate result = parse(text, pos);
@@ -207,14 +207,14 @@ DateFormat::create(EStyle timeStyle, EStyle dateStyle, const Locale& locale)
     // Try to create a SimpleDateFormat of the desired style.
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat *f = new SimpleDateFormat(timeStyle, dateStyle, locale, status);
-    if (SUCCESS(status)) return f;
+    if (U_SUCCESS(status)) return f;
     delete f;
 
     // If that fails, try to create a format using the default pattern and
     // the DateFormatSymbols for this locale.
     status = U_ZERO_ERROR;
     f = new SimpleDateFormat(locale, status);
-    if (SUCCESS(status)) return f;
+    if (U_SUCCESS(status)) return f;
     delete f;
 
     // This should never really happen, because the preceding constructor
@@ -251,7 +251,7 @@ DateFormat::getAvailableLocales(int32_t& count)
             ResourceBundle resource(Locale::getDataDirectory(), locales[i], status);
             int32_t ignoredCount;
             resource.getStringArray(SimpleDateFormat::fgDateTimePatternsTag, ignoredCount, status);
-            if (SUCCESS(status))
+            if (U_SUCCESS(status))
             {
                 temp[newLocalesCount++] = locales[i];
             }

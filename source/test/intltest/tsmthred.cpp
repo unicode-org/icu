@@ -538,7 +538,7 @@ void formatErrorMessage(UErrorCode &realStatus, const UnicodeString& pattern, co
                      UErrorCode inStatus0, /* statusString 1 */ const Locale &inCountry2, double currency3, // these numbers are the message arguments.
                      UnicodeString &result)
 {
-    if(FAILURE(realStatus))
+    if(U_FAILURE(realStatus))
         return; // you messed up
 
     UnicodeString errString1;
@@ -558,7 +558,7 @@ void formatErrorMessage(UErrorCode &realStatus, const UnicodeString& pattern, co
     fmt->setLocale(theLocale);
     fmt->applyPattern(pattern, realStatus);
     
-    if (FAILURE(realStatus)) {
+    if (U_FAILURE(realStatus)) {
         delete fmt;
         return;
     }
@@ -587,7 +587,7 @@ public:
         UErrorCode status = U_ZERO_ERROR;
         NumberFormat *formatter = NumberFormat::createInstance(Locale::ENGLISH,status);
 
-        if(FAILURE(status))
+        if(U_FAILURE(status))
         {
             error("Error on NumberFormat::createInstance()");
             return;
@@ -595,7 +595,7 @@ public:
 
         NumberFormat *percentFormatter = NumberFormat::createPercentInstance(Locale::FRENCH,status);
 
-        if(FAILURE(status))
+        if(U_FAILURE(status))
         {
             error("Error on NumberFormat::createPercentInstance()");
             delete formatter;
@@ -670,7 +670,7 @@ public:
             UnicodeString result;
             UErrorCode status = U_ZERO_ERROR;
             formatErrorMessage(status,patternToCheck,messageLocale,statusToCheck,countryToCheck,currencyToCheck,result);
-            if(FAILURE(status))
+            if(U_FAILURE(status))
             {
                UnicodeString tmp;
                errorToString(status,tmp);

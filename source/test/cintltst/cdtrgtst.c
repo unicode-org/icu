@@ -13,7 +13,7 @@
 *
 * File CDTRGTST.C
 *
-*     Madhu Katragadda            Ported for CAPI
+*     Madhu Katragadda            Ported for C API
 * Modification History:
 *   Date        Name        Description
 *   07/15/99    helena      Ported to HPUX 10/11 CC.
@@ -63,7 +63,7 @@ void Test4029195()
     today = ucal_getNow();
     
     df = udat_open(UDAT_DEFAULT,UDAT_DEFAULT ,NULL, NULL, 0, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using default date and time style : %s\n", myErrorName(status));
     }
@@ -91,7 +91,7 @@ void Test4029195()
     log_verbose("After teh pattern is applied\n today: %s\n", austrdup(todayS) );
     parsepos=0;
     d1=udat_parse(df, todayS, u_strlen(todayS), &parsepos, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("FAIL: Error in parsing using udat_parse(.....): %s\n", myErrorName(status));
     }
@@ -138,12 +138,12 @@ void Test4056591()
     tzID=(UChar*)malloc(sizeof(UChar) * 4);
     u_uastrcpy(tzID, "PST");
     cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_GREGORIAN, &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("error in ucal_open caldef : %s\n", myErrorName(status));
     }
     ucal_setDateTime(cal, 1809, UCAL_DECEMBER, 25, 17, 40, 30, &status);
     d[0]=ucal_getMillis(cal, &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
             log_err("Error: failure in get millis: %s\n", myErrorName(status));
     }
     ucal_setDateTime(cal, 1909, UCAL_DECEMBER, 24, 17, 40, 30, &status);
@@ -156,13 +156,13 @@ void Test4056591()
     
     u_uastrcpy(pat, "yyMMdd");
     def = udat_openPattern(pat, u_strlen(pat), NULL, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using u_openPattern(): %s\n", myErrorName(status));
     }
     start = 1800;
     udat_set2DigitYearStart(def, start, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
         log_err("ERROR: in setTwoDigitStartDate: %s\n", myErrorName(status));
     if( (udat_get2DigitYearStart(def, &status) != start))
             log_err("ERROR: get2DigitYearStart broken\n");
@@ -199,7 +199,7 @@ void Test4059917()
     u_uastrcpy(pattern, "yyyy/MM/dd");
     log_verbose("%s\n", austrdup(pattern) );
     def = udat_openPattern(pattern, u_strlen(pattern), NULL, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using openPattern: %s\n", myErrorName(status));
     }
@@ -211,7 +211,7 @@ void Test4059917()
     
     u_uastrcpy(pattern, "yyyyMMdd");
     def = udat_openPattern(pattern, u_strlen(pattern), NULL, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using openPattern: %s\n", myErrorName(status));
     }
@@ -240,7 +240,7 @@ void aux917( UDateFormat *fmt, UChar* str)
         pat=(UChar*)malloc(sizeof(UChar) * (resultlength));
         udat_toPattern(fmt, TRUE, pat, resultlength, &status);
     }
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("failure in retrieving the pattern: %s\n", myErrorName(status));
     }
     log_verbose("pattern: %s\n", austrdup(pat) );
@@ -277,7 +277,7 @@ void Test4060212()
     
     
     fmt = udat_open(UDAT_FULL,UDAT_LONG ,NULL, NULL, 0, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using default date and time style: %s\n", 
                         myErrorName(status) );
@@ -285,7 +285,7 @@ void Test4060212()
     myString = myFormatit(fmt, myDate);
     u_uastrcpy(tzID, "PST");
     cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_GREGORIAN, &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("FAIL: error in ucal_open caldef : %s\n", myErrorName(status));
     }
     ucal_setMillis(cal, myDate, &status);
@@ -316,7 +316,7 @@ void Test4061287()
     status = U_ZERO_ERROR;
     log_verbose("Testing parsing by changing the attribute lenient\n");
     df = udat_openPattern(pattern, u_strlen(pattern), NULL, &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: failure in open pattern of test4061287: %s\n", myErrorName(status));
     }
 
@@ -328,7 +328,7 @@ void Test4061287()
         log_err("setLenient nor working\n");
     ok = FALSE;
     myDate = udat_parse(df, dateString, u_strlen(dateString), &pos, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
         ok = TRUE;
     if(ok!=TRUE) 
         log_err("Fail: Lenient not working: does lenient parsing in spite of setting Leninent as FALSE ");
@@ -367,7 +367,7 @@ void Test4073003()
         };
     
     fmt= udat_open(UDAT_SHORT,UDAT_SHORT ,NULL, NULL, 0, &status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("FAIL: error in creating the dateformat using short date and time style: %s\n", 
             myErrorName(status));
@@ -382,7 +382,7 @@ void Test4073003()
             
             pos=0;
             d = udat_parse(fmt, datestr, u_strlen(datestr), &pos, &status);
-            if(FAILURE(status)){
+            if(U_FAILURE(status)){
                 log_err("ERROR : in test 4073003: %s\n", myErrorName(status));
             }
             
@@ -393,7 +393,7 @@ void Test4073003()
             pos=0;
             status=U_ZERO_ERROR;
             dd = udat_parse(fmt, datestr, u_strlen(datestr), &pos, &status);
-            if(FAILURE(status)){
+            if(U_FAILURE(status)){
                 log_err("ERROR : in test 4073003: %s\n", myErrorName(status));
             }
             free(datestr);
@@ -428,12 +428,12 @@ void Test4162071()
     status = U_ZERO_ERROR;
     /* Can't hardcode the result to assume the default locale is "en_US". */
     df = udat_openPattern(format, u_strlen(format), "en_US", &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: couldn't create date format: %s\n", myErrorName(status));
     }
   pos=0;
     x = udat_parse(df, datestr, u_strlen(datestr), &pos, &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
                 log_err("ERROR : parse format  %s failes : %s\n", austrdup(format), myErrorName(status));
             }
     else{
@@ -460,7 +460,7 @@ UChar* myFormatit(UDateFormat* datdef, UDate d1)
         result1=(UChar*)malloc(sizeof(UChar) * resultlength);
         udat_format(datdef, d1, result1, resultlength, &pos, &status);
     }
-    if(FAILURE(status))
+    if(U_FAILURE(status))
     {
         log_err("FAIL: Error in formatting using udat_format(.....): %s\n", myErrorName(status));
         return 0;

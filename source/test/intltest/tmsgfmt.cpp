@@ -134,7 +134,7 @@ void TestMessageFormat::testBug3()
         UErrorCode success = U_ZERO_ERROR;
 //        form = (DecimalFormat*)NumberFormat::createCurrencyInstance(locale[i], success);
         form = (DecimalFormat*)NumberFormat::createInstance(locale[i], success);
-        if (FAILURE(success)) {
+        if (U_FAILURE(success)) {
             it_errln("Err: Number Format ");
             it_out << "Number format creation failed.\n";
             continue;
@@ -149,7 +149,7 @@ void TestMessageFormat::testBug3()
 #ifdef _DEBUG
         it_out << " -> " /*<< dec*/ /*<< result*/ << "[supposed output for result]" <<endl;
 #endif
-        if (FAILURE(success)) {
+        if (U_FAILURE(success)) {
             it_errln("Err: Number Format parse");
             it_out << "Number format parse failed.\n";
         }
@@ -182,7 +182,7 @@ void TestMessageFormat::testBug2()
     const UnicodeString pattern = "There {0,choice,0.0#are no files|1.0#is one file|1.0<are {0, number} files} on disk {1}. ";
     it_out << "The input pattern : " << pattern << endl;
     MessageFormat *fmt = new MessageFormat(pattern, status);
-    if (FAILURE(status)) {
+    if (U_FAILURE(status)) {
         it_errln("MessageFormat pattern creation failed.\n");
         it_out << "MessageFormat pattern creation failed.\n";
         return;
@@ -260,7 +260,7 @@ void TestMessageFormat::PatternTest()
         UErrorCode success = U_ZERO_ERROR;
         UnicodeString buffer;
         form = new MessageFormat(testCases[i], Locale::US, success);
-        if (FAILURE(success)) {
+        if (U_FAILURE(success)) {
             it_errln ("MessageFormat creation failed.#1");
             it_out << "MessageFormat for "<< testCases[i] << " creation failed.\n";
             continue;
@@ -278,7 +278,7 @@ void TestMessageFormat::PatternTest()
         int32_t count = 4;
         FieldPosition fieldpos(0);
         form->format(testArgs, count, result, fieldpos, success);
-        if (FAILURE(success)) {
+        if (U_FAILURE(success)) {
             it_errln ("MessageFormat failed test #3");
             it_out << "TestMessageFormat::PatternTest failed test #3" << endl;
             continue;
@@ -299,7 +299,7 @@ void TestMessageFormat::PatternTest()
         it_out << "MSG pattern for parse: " << buffer << endl;
 
         Formattable* values = form->parse(result, count, success);
-        if (FAILURE(success)) {
+        if (U_FAILURE(success)) {
             errln("MessageFormat failed test #5");
             logln(UnicodeString("MessageFormat failed test #5 with error code ")+(int32_t)success);
         }else
@@ -326,7 +326,7 @@ void TestMessageFormat::sample()
     UnicodeString buffer1, buffer2;
     UErrorCode success = U_ZERO_ERROR;
     form = new MessageFormat("There are {0} files on {1}", success);
-    if (FAILURE(success)) {
+    if (U_FAILURE(success)) {
         it_errln("Err: Message format creation failed");
         it_out << "Sample message format creation failed.\n";
         return;
@@ -360,7 +360,7 @@ void TestMessageFormat::testStaticFormat(char* parm)
             result,
             err);
 
-        if (FAILURE(err)) {
+        if (U_FAILURE(err)) {
             errln("TestMessageFormat::testStaticFormat #1");
             logln(UnicodeString("TestMessageFormat::testStaticFormat failed test #1 with error code ")+(int32_t)err);
             return;
@@ -392,14 +392,14 @@ void TestMessageFormat::testSimpleFormat(char* parm)
     UnicodeString string;
     FieldPosition ignore(FieldPosition::DONT_CARE);
     form->format(testArgs1, 2, string, ignore, err);
-    if (FAILURE(err) || string != "The disk \"MyDisk\" contains 0 file(s).") {
+    if (U_FAILURE(err) || string != "The disk \"MyDisk\" contains 0 file(s).") {
         errln(UnicodeString("TestMessageFormat::testSimpleFormat failed on test #1"));
     }
  
     ignore.setField(FieldPosition::DONT_CARE);
     string.remove();
     form->format(testArgs2, 2, string, ignore, err);
-    if (FAILURE(err) || string != "The disk \"MyDisk\" contains 1 file(s).") {
+    if (U_FAILURE(err) || string != "The disk \"MyDisk\" contains 1 file(s).") {
         logln(string);
         errln(UnicodeString("TestMessageFormat::testSimpleFormat failed on test #2")+string);
     }
@@ -407,7 +407,7 @@ void TestMessageFormat::testSimpleFormat(char* parm)
     ignore.setField(FieldPosition::DONT_CARE);
     string.remove();
     form->format(testArgs3, 2, string, ignore, err);
-    if (FAILURE(err) || string != "The disk \"MyDisk\" contains 12 file(s).") {
+    if (U_FAILURE(err) || string != "The disk \"MyDisk\" contains 12 file(s).") {
         errln(UnicodeString("TestMessageFormat::testSimpleFormat failed on test #3")+string);
     }
 
@@ -731,7 +731,7 @@ void TestMessageFormat::testParse()
     UnicodeString tmp1, tmp2;
 
     Formattable* fmt_arr = msg.parse( source, count, err );
-    if (FAILURE(err) || (!fmt_arr)) {
+    if (U_FAILURE(err) || (!fmt_arr)) {
         it_errln("*** MSG parse (ustring, count, err) error.");
     }else{
         it_out << "MSG parse -- count: " << count << endl;

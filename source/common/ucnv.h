@@ -26,6 +26,23 @@
 #include "ucnv_bld.h"
 #include "ucnv_err.h"
 
+typedef void (*UConverterToUCallback) (UConverter *,
+				  UChar **,
+				  const UChar *,
+				  const char **,
+				  const char *,
+				  int32_t* offsets,
+				  bool_t,
+				  UErrorCode *);
+
+typedef void (*UConverterFromUCallback) (UConverter *,
+				    char **,
+				    const char *,
+				    const UChar **,
+				    const UChar *,
+				    int32_t* offsets,
+				    bool_t,
+				    UErrorCode *);
 
 
 /**
@@ -41,7 +58,7 @@
  * @see ucnv_close
  */
 
-CAPI
+U_CAPI
 UConverter* U_EXPORT2 ucnv_open   (const char *converterName,
 				   UErrorCode * err);
 
@@ -58,7 +75,7 @@ UConverter* U_EXPORT2 ucnv_open   (const char *converterName,
  * @see ucnv_openCCSID
  * @see ucnv_close
  */
-CAPI UConverter* U_EXPORT2 ucnv_openU (const UChar * name,
+U_CAPI UConverter* U_EXPORT2 ucnv_openU (const UChar * name,
 				       UErrorCode * err);
 
 
@@ -74,8 +91,8 @@ CAPI UConverter* U_EXPORT2 ucnv_openU (const UChar * name,
  * @see ucnv_close
  */
 
-CAPI UConverter* U_EXPORT2 ucnv_openCCSID (int32_t codepage,
-					   UCNV_PLATFORM platform,
+U_CAPI UConverter* U_EXPORT2 ucnv_openCCSID (int32_t codepage,
+					   UConverterPlatform platform,
 					   UErrorCode * err);
 
 
@@ -86,7 +103,7 @@ CAPI UConverter* U_EXPORT2 ucnv_openCCSID (int32_t codepage,
  * @see ucnv_openU
  * @see ucnv_openCCSID
  */
-CAPI void  U_EXPORT2 ucnv_close (UConverter * converter);
+U_CAPI void  U_EXPORT2 ucnv_close (UConverter * converter);
 
 
 
@@ -102,7 +119,7 @@ CAPI void  U_EXPORT2 ucnv_close (UConverter * converter);
  * @see ucnv_setSubstChars
  */
 
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
     ucnv_getSubstChars (const UConverter * converter,
 			char *subChars,
 			int8_t * len,
@@ -120,7 +137,7 @@ CAPI void U_EXPORT2
  * @see ucnv_getSubstChars
  */
 
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
     ucnv_setSubstChars (UConverter * converter,
 			const char *subChars,
 			int8_t len,
@@ -139,7 +156,7 @@ CAPI void U_EXPORT2
  * <TT>U_INDEX_OUTOFBOUNDS_ERROR</TT> will be returned.
  */
 
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
     ucnv_getInvalidChars (const UConverter * converter,
 			  char *errBytes,
 			  int8_t * len,
@@ -157,7 +174,7 @@ CAPI void U_EXPORT2
  * <TT>U_INDEX_OUTOFBOUNDS_ERROR</TT> will be returned.
  */
 
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
     ucnv_getInvalidUChars (const UConverter * converter,
 			   char *errUChars,
 			   int8_t * len,
@@ -170,7 +187,7 @@ CAPI void U_EXPORT2
  * @param converter the Unicode converter
  */
 
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
     ucnv_reset (UConverter * converter);
 
 /**
@@ -179,7 +196,7 @@ CAPI void U_EXPORT2
  * @return the maximum number of bytes allowed by this particular converter
  * @see ucnv_getMinCharSize
  */
-CAPI int8_t U_EXPORT2
+U_CAPI int8_t U_EXPORT2
     ucnv_getMaxCharSize (const UConverter * converter);
 
 
@@ -190,7 +207,7 @@ CAPI int8_t U_EXPORT2
  * @return the minimum number of bytes allowed by this particular converter
  * @see ucnv_getMaxCharSize
  */
-CAPI int8_t U_EXPORT2
+U_CAPI int8_t U_EXPORT2
     ucnv_getMinCharSize (const UConverter * converter);
 
 
@@ -206,7 +223,7 @@ CAPI int8_t U_EXPORT2
  * @return displayNameLength number of UChar needed in displayName
  * @see ucnv_getName
  */
-CAPI
+U_CAPI
   int32_t U_EXPORT2 ucnv_getDisplayName (const UConverter * converter,
 			       const char *displayLocale,
 			       UChar * displayName,
@@ -222,7 +239,7 @@ CAPI
  * @return the internal name of the converter
  * @see ucnv_getDisplayName
  */
-CAPI
+U_CAPI
   const char * U_EXPORT2 ucnv_getName (const UConverter * converter, UErrorCode * err);
 
 
@@ -237,7 +254,7 @@ CAPI
  * @return If any error occurrs, -1 will be returned otherwise, the codepage number
  * will be returned
  */
-CAPI int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
     ucnv_getCCSID (const UConverter * converter,
 		   UErrorCode * err);
 
@@ -249,7 +266,7 @@ CAPI int32_t U_EXPORT2
  * the converter is <TT>NULL</TT> or if converter's data table is <TT>NULL</TT>.
  * @return The codepage platform
  */
-CAPI UCNV_PLATFORM U_EXPORT2
+U_CAPI UConverterPlatform U_EXPORT2
     ucnv_getPlatform (const UConverter * converter,
 		      UErrorCode * err);
 
@@ -259,7 +276,7 @@ CAPI UCNV_PLATFORM U_EXPORT2
  * @param converter: a valid, opened converter
  * @return the type of the converter
  */
-CAPI UCNV_TYPE U_EXPORT2
+U_CAPI UConverterType U_EXPORT2
 ucnv_getType (const UConverter * converter);
 
 /**
@@ -274,7 +291,7 @@ ucnv_getType (const UConverter * converter);
  * @param err: an array of size 256 to be filled in
  * @see ucnv_getType
  */
-CAPI void U_EXPORT2 ucnv_getStarters(const UConverter* converter, 
+U_CAPI void U_EXPORT2 ucnv_getStarters(const UConverter* converter, 
 				     bool_t starters[256],
 				     UErrorCode* err);
 
@@ -285,7 +302,7 @@ CAPI void U_EXPORT2 ucnv_getStarters(const UConverter* converter,
  * @return a pointer to the callback function
  * @see ucnv_setToUCallBack
  */
-CAPI UCNV_ToUCallBack U_EXPORT2
+U_CAPI UConverterToUCallback U_EXPORT2
     ucnv_getToUCallBack (const UConverter * converter);
 
 /**
@@ -294,7 +311,7 @@ CAPI UCNV_ToUCallBack U_EXPORT2
  * @return a pointer to the callback function
  * @see ucnv_setFromUCallBack
  */
-CAPI UCNV_FromUCallBack U_EXPORT2
+U_CAPI UConverterFromUCallback U_EXPORT2
     ucnv_getFromUCallBack (const UConverter * converter);
 
 /**
@@ -305,9 +322,9 @@ CAPI UCNV_FromUCallBack U_EXPORT2
  * @return the previously assigned callback function pointer
  * @see ucnv_getToUCallBack
  */
-CAPI UCNV_ToUCallBack U_EXPORT2
+U_CAPI UConverterToUCallback U_EXPORT2
     ucnv_setToUCallBack (UConverter * converter,
-			 UCNV_ToUCallBack action,
+			 UConverterToUCallback action,
 			 UErrorCode * err);
 
 /**
@@ -318,9 +335,9 @@ CAPI UCNV_ToUCallBack U_EXPORT2
  * @return the previously assigned callback function pointer
  * @see ucnv_getFromUCallBack
  */
-CAPI UCNV_FromUCallBack U_EXPORT2
+U_CAPI UConverterFromUCallback U_EXPORT2
     ucnv_setFromUCallBack (UConverter * converter,
-			   UCNV_FromUCallBack action,
+			   UConverterFromUCallback action,
 			   UErrorCode * err);
 
 
@@ -356,7 +373,7 @@ CAPI UCNV_FromUCallBack U_EXPORT2
  * @see ucnv_setToUCallBack
  */
 
-CAPI
+U_CAPI
   void U_EXPORT2 ucnv_fromUnicode (UConverter * converter,
 			 char **target,
 			 const char *targetLimit,
@@ -395,7 +412,7 @@ CAPI
  * @see ucnv_setFromUCallBack
  */
 
-CAPI
+U_CAPI
   void U_EXPORT2 ucnv_toUnicode (UConverter * converter,
 		       UChar ** target,
 		       const UChar * targetLimit,
@@ -428,7 +445,7 @@ CAPI
  * @see ucnv_fromUnicode
  * @see ucnv_convert
  */
-CAPI
+U_CAPI
   int32_t U_EXPORT2 ucnv_fromUChars (const UConverter * converter,
 			   char *target,
 			   int32_t targetCapacity,
@@ -465,7 +482,7 @@ CAPI
  * @see ucnv_toUnicode
  * @see ucnv_convert
  */
-CAPI
+U_CAPI
   int32_t U_EXPORT2 ucnv_toUChars (const UConverter * converter,
 			 UChar * target,
 			 int32_t targetCapacity,
@@ -488,7 +505,7 @@ CAPI
  *@see ucnv_toUChars
  *@see ucnv_convert
  */
-CAPI
+U_CAPI
   UChar U_EXPORT2 ucnv_getNextUChar (UConverter * converter,
 			   const char **source,
 			   const char *sourceLimit,
@@ -513,7 +530,7 @@ CAPI
 * @see ucnv_toUChars
 * @see ucnv_getNextUChar
 */
-CAPI
+U_CAPI
   int32_t U_EXPORT2 ucnv_convert (const char *toConverterName,
 			const char *fromConverterName,
 			char *target,
@@ -527,7 +544,7 @@ CAPI
  * Iterates through every cached converter and frees all the unused ones.
  * @return the number of cached converters successfully deleted
  */
-CAPI int32_t U_EXPORT2 ucnv_flushCache (void);
+U_CAPI int32_t U_EXPORT2 ucnv_flushCache (void);
 
 
 /**
@@ -537,7 +554,7 @@ CAPI int32_t U_EXPORT2 ucnv_flushCache (void);
  * @return a pointer a string (library owned), or <TT>NULL</TT> if the index is out of bounds.
  * @see ucnv_countAvailable
  */
-CAPI
+U_CAPI
   const char * U_EXPORT2 ucnv_getAvailableName (int32_t index);
 
 /**
@@ -545,14 +562,14 @@ CAPI
  * @return the number of available converters
  * @see ucnv_getAvailableName
  */
-CAPI int32_t U_EXPORT2 ucnv_countAvailable (void);
+U_CAPI int32_t U_EXPORT2 ucnv_countAvailable (void);
 
 /**
  * returns the current default converter name.
  * @return returns the current default converter name
  * @see ucnv_setDefaultName
  */
-CAPI const char * U_EXPORT2 ucnv_getDefaultName (void);
+U_CAPI const char * U_EXPORT2 ucnv_getDefaultName (void);
 
 /**
  * sets the current default converter name.
@@ -561,7 +578,7 @@ CAPI const char * U_EXPORT2 ucnv_getDefaultName (void);
  * @see ucnv_getDefaultName
  *
  */
-CAPI void U_EXPORT2 ucnv_setDefaultName (const char *name);
+U_CAPI void U_EXPORT2 ucnv_setDefaultName (const char *name);
 
 
 #endif

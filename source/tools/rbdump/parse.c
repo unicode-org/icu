@@ -53,7 +53,7 @@ read_ustring(FileStream *rb,
   int32_t len;
   UChar *s;
 
-  if(FAILURE(*status)) return 0;
+  if(U_FAILURE(*status)) return 0;
 
   /* Read the string's length */
   T_FileStream_read(rb, &len, sizeof(len));
@@ -83,7 +83,7 @@ read_strlist(FileStream *rb,
   UChar *name;
   UChar *s;
 
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
   /* Read the name of this string list */
   name = read_ustring(rb, status);
@@ -100,7 +100,7 @@ read_strlist(FileStream *rb,
     s = read_ustring(rb, status);
     
     /* handle error */
-    if(FAILURE(*status) || s == 0) {
+    if(U_FAILURE(*status) || s == 0) {
       goto finish;
     }
 
@@ -126,7 +126,7 @@ read_strlist2d(FileStream *rb,
   UChar *name;
   UChar *s;
 
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
   /* Read the name of this 2-d string list */
   name = read_ustring(rb, status);
@@ -151,7 +151,7 @@ read_strlist2d(FileStream *rb,
       s = read_ustring(rb, status);
       
       /* handle error */
-      if(FAILURE(*status) || s == 0) {
+      if(U_FAILURE(*status) || s == 0) {
 	goto finish;
       }
       
@@ -180,7 +180,7 @@ read_taglist(FileStream *rb,
   UChar *name;
   UChar *tag, *value;
 
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
   /* Read the name of this tagged list */
   name = read_ustring(rb, status);
@@ -198,7 +198,7 @@ read_taglist(FileStream *rb,
     value = read_ustring(rb, status);
     
     /* handle error */
-    if(FAILURE(*status) || tag == 0 || value == 0) {
+    if(U_FAILURE(*status) || tag == 0 || value == 0) {
       goto finish;
     }
 
@@ -227,7 +227,7 @@ parse(FileStream *f,
   int32_t itemtype;
   UChar *localename;
 
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
   /* Read the byte order mark from the file */
   T_FileStream_read(f, &bom, sizeof(bom));
@@ -244,7 +244,7 @@ parse(FileStream *f,
   uprint(localename, stdout, status);
   fputc('\n', stdout);
 
-  if(FAILURE(*status)) {
+  if(U_FAILURE(*status)) {
     goto finish;
   }
 
@@ -263,21 +263,21 @@ parse(FileStream *f,
     switch(itemtype) {
     case STRINGLIST:
       read_strlist(f, status);
-      if(FAILURE(*status)) {
+      if(U_FAILURE(*status)) {
 	goto finish;
       }
       break;
 
     case STRINGLIST2D:
       read_strlist2d(f, status);
-      if(FAILURE(*status)) {
+      if(U_FAILURE(*status)) {
 	goto finish;
       }
       break;
 
     case TAGGEDLIST:
       read_taglist(f, status);
-      if(FAILURE(*status)) {
+      if(U_FAILURE(*status)) {
 	goto finish;
       }
       break;

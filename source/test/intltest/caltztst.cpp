@@ -28,7 +28,7 @@ Calendar*           CalendarTimeZoneTest::fgCalendar   = 0;
 
 bool_t CalendarTimeZoneTest::failure(UErrorCode status, const char* msg)
 {
-    if (FAILURE(status))
+    if (U_FAILURE(status))
     {
         errln(UnicodeString("FAIL: ") + msg + " failed, error " + errorName(status));
         return TRUE;
@@ -55,7 +55,7 @@ DateFormat*   CalendarTimeZoneTest::getDateFormat()
     {
         UErrorCode status = U_ZERO_ERROR;
         theFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", status);
-        if (FAILURE(status))
+        if (U_FAILURE(status))
         {
             delete theFormat;
             theFormat = 0;
@@ -101,7 +101,7 @@ Calendar*  CalendarTimeZoneTest::getCalendar()
     {
         UErrorCode status = U_ZERO_ERROR;
         theCalendar = Calendar::createInstance(status);
-        if (FAILURE(status))
+        if (U_FAILURE(status))
         {
             delete theCalendar;
             theCalendar = 0;
@@ -163,7 +163,7 @@ CalendarTimeZoneTest::date(int32_t y, int32_t m, int32_t d, int32_t hr, int32_t 
     UErrorCode status = U_ZERO_ERROR;
     UDate dt = cal->getTime(status);
     releaseCalendar(cal);
-    if (FAILURE(status))
+    if (U_FAILURE(status))
     {
         errln("FAIL: Calendar::getTime failed");
         return 0.0;
@@ -182,7 +182,7 @@ CalendarTimeZoneTest::utcDate(int32_t y, int32_t m, int32_t d, int32_t hr, int32
         cal->get(Calendar::ZONE_OFFSET, status) -
         cal->get(Calendar::DST_OFFSET, status);
     releaseCalendar(cal);
-    if (FAILURE(status))
+    if (U_FAILURE(status))
     {
         errln("FAIL: Calendar::get failed");
         return 0.0;

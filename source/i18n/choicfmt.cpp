@@ -152,7 +152,7 @@ ChoiceFormat::getNumberFormat(UErrorCode &status)
     if(theFormat == 0) // If we weren't able to pull it out of the cache, then we have to create it.
     {
         theFormat = NumberFormat::createInstance(Locale::US, status);
-        if(FAILURE(status))
+        if(U_FAILURE(status))
             return 0;
         theFormat->setMinimumFractionDigits(1);
     }
@@ -189,14 +189,14 @@ ChoiceFormat::stod(const UnicodeString& string,
     // or string or vice versa.
     NumberFormat *myFormat = getNumberFormat(status);
 
-    if(FAILURE(status))
+    if(U_FAILURE(status))
         return -1; // OK?
 
     Formattable result;
     myFormat->parse(string, result, status);
     releaseNumberFormat(myFormat);
     double value = 0.0;
-    if (SUCCESS(status))
+    if (U_SUCCESS(status))
     {
         switch(result.getType())
         {
@@ -220,7 +220,7 @@ ChoiceFormat::dtos(double value,
 {
     NumberFormat *myFormat = getNumberFormat(status);
 
-    if (SUCCESS(status)) {
+    if (U_SUCCESS(status)) {
         FieldPosition fieldPos(0);
         myFormat->format(value, string, fieldPos);
     }
@@ -235,7 +235,7 @@ void
 ChoiceFormat::applyPattern(const UnicodeString& newPattern,
                            UErrorCode& status)
 {
-    if (FAILURE(status))
+    if (U_FAILURE(status))
         return;
 
     UnicodeString segments[2];
@@ -279,7 +279,7 @@ ChoiceFormat::applyPattern(const UnicodeString& newPattern,
             else {
                 //segments[0].trim();
                 startValue = stod(tempBuffer, status);
-                if(FAILURE(status))
+                if(U_FAILURE(status))
                     return;
             }
 

@@ -32,6 +32,25 @@
 
 #include <stdio.h>
 
+struct UCharDigitPair{
+    uint16_t fUnicode;
+    int8_t     fValue;
+};
+typedef struct UCharDigitPair UCharDigitPair;
+
+struct BlockScriptMap {
+    UChar        fFirstCode;
+    UChar        fLastCode;
+};
+typedef struct BlockScriptMap BlockScriptMap;
+
+static  bool_t  tablesCreated=FALSE;
+static  bool_t  ulTablesCreated=FALSE;
+static  bool_t  dirTablesCreated=FALSE;
+static  void    createTables(void);
+static  void    createUlTables(void);
+static  void    createDirTables(void);
+
 char* _ucdVersion=NULL;
 
 const   UChar   MIN_VALUE = 0x0000;

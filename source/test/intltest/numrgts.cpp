@@ -100,7 +100,7 @@ NumberFormatRegressionTest::runIndexedTest( int32_t index, bool_t exec, char* &n
 bool_t 
 NumberFormatRegressionTest::failure(UErrorCode status, const UnicodeString& msg)
 {
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
         errln(UnicodeString("FAIL: ") + msg + " failed, error " + errorName(status));
         return TRUE;
     }
@@ -527,7 +527,7 @@ void NumberFormatRegressionTest::Test4087251 ()
     failure(status, "new DecimalFormat");
     //try {
         df->applyPattern(UnicodeString("#.#.#"), status);
-        if( ! FAILURE(status))
+        if( ! U_FAILURE(status))
             errln("df->applyPattern with illegal pattern didn't fail");
         UnicodeString temp;
         logln("toPattern() returns \"" + df->toPattern(temp) + "\"");
@@ -538,7 +538,7 @@ void NumberFormatRegressionTest::Test4087251 ()
     // Second test; added 5/11/98 when reported to fail on 1.2b3
     //try {
         df->applyPattern("#0.0#0#0", status);
-        if( ! FAILURE(status))
+        if( ! U_FAILURE(status))
             errln("df->applyPattern with illegal pattern didn't fail");
         logln("toPattern() returns \"" + df->toPattern(temp) + "\"");
         //errln("applyPattern(\"#0.0#0#0\") doesn't throw IllegalArgumentException");
@@ -1094,7 +1094,7 @@ void NumberFormatRegressionTest::Test4099404()
     //try {
         UErrorCode status = U_ZERO_ERROR;
         DecimalFormat *fmt = new DecimalFormat(UnicodeString("000.0#0"), status);
-        if(! FAILURE(status))
+        if(! U_FAILURE(status))
             errln(UnicodeString("Bug 4099404 failed applying illegal pattern \"000.0#0\""));
     /*} catch (Exception foo) {
         logln("Bug 4099404 pattern \"000.0#0\" passed");
@@ -1103,7 +1103,7 @@ void NumberFormatRegressionTest::Test4099404()
     fmt = 0;
         //try {
         fmt = new DecimalFormat(UnicodeString("0#0.000"), status);
-        if( !FAILURE(status))
+        if( !U_FAILURE(status))
            errln("Bug 4099404 failed applying illegal pattern \"0#0.000\"");
     /*} catch (Exception foo) {
         logln("Bug 4099404 pattern \"0#0.000\" passed");
@@ -1133,7 +1133,7 @@ void NumberFormatRegressionTest::Test4052223()
         failure(status, "new DecimalFormat");
         Formattable num;
         fmt->parse(UnicodeString("abc3"), num, status);
-        if(! FAILURE(status))
+        if(! U_FAILURE(status))
             errln(UnicodeString("Bug 4052223 failed : can't parse string \"a\".  Got ") /*+ num*/);
     /*} catch (ParseException foo) {
         logln("Caught expected ParseException : " + foo.getMessage() + " at index : " + foo.getErrorOffset());
@@ -1792,7 +1792,7 @@ NumberFormatRegressionTest::Test4162198()
     double dbl = LONG_MAX * 1000.0;
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *f = NumberFormat::createInstance(status);
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
         errln("Couldn't create number format");
         return;
     }
@@ -1804,7 +1804,7 @@ NumberFormatRegressionTest::Test4162198()
     Formattable n;
     //try {
     f->parse(s, n, status);
-    if(FAILURE(status))
+    if(U_FAILURE(status))
         errln("Couldn't parse!");
     //} catch (java.text.ParseException e) {
     //    errln("Caught a ParseException:");
@@ -1830,7 +1830,7 @@ NumberFormatRegressionTest::Test4162852()
     for(int32_t i=0; i < 2; ++i) {
         NumberFormat *f = (i == 0) ? NumberFormat::createInstance(status)
             : NumberFormat::createPercentInstance(status);
-        if(FAILURE(status)) {
+        if(U_FAILURE(status)) {
             errln("Couldn't create number format");
             return;
         }
@@ -1840,7 +1840,7 @@ NumberFormatRegressionTest::Test4162852()
         f->format(d, s);
         Formattable n;
         f->parse(s, n, status);
-        if(FAILURE(status))
+        if(U_FAILURE(status))
             errln("Couldn't parse!");
         double e = n.getDouble();
         logln(UnicodeString("") +
@@ -2106,7 +2106,7 @@ void NumberFormatRegressionTest::Test4212072() {
                 failure(status, "createPercentInstance");
                 break;
             }
-            if (FAILURE(status)) {
+            if (U_FAILURE(status)) {
                 continue;
             }
             DecimalFormat *df = (DecimalFormat*) nf;
@@ -2133,7 +2133,7 @@ void NumberFormatRegressionTest::Test4212072() {
             f2.applyLocalizedPattern(pat, status);
             failure(status,
                     UnicodeString("applyLocalizedPattern(") + pat + ")");
-            if (FAILURE(status)) {
+            if (U_FAILURE(status)) {
                 continue;
             }
             if (*df != f2) {

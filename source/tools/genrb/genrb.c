@@ -103,7 +103,7 @@ main(int argc,
   for(i = optind; i < argc; ++i) {
     status = U_ZERO_ERROR;
     processFile(argv[i], &status);
-    if(FAILURE(status)) {
+    if(U_FAILURE(status)) {
       printf("genrb: %s processing file \"%s\"\n", errorName(status), argv[i]);
       if(getErrorText() != 0)
 	printf("       (%s)\n", getErrorText());
@@ -145,7 +145,7 @@ processFile(const char *filename,
   struct SRBItemList *data;
   char *rbname;
 
-  if(FAILURE(*status)) return;
+  if(U_FAILURE(*status)) return;
 
   /* Setup */
   in = rb_out = 0;
@@ -163,7 +163,7 @@ processFile(const char *filename,
 
   /* Determine the target rb filename */
   rbname = make_res_filename(filename, status);
-  if(FAILURE(*status)) {
+  if(U_FAILURE(*status)) {
     goto finish;
   }
 
@@ -197,7 +197,7 @@ make_res_filename(const char *filename,
   char *dirname;
   char *resName;
 
-  if(FAILURE(*status)) return 0;
+  if(U_FAILURE(*status)) return 0;
 
   /* setup */
   basename = dirname = resName = 0;
@@ -244,7 +244,7 @@ make_col_filename(const char *filename,
   char *dirname;
   char *colName;
 
-  if(FAILURE(*status)) return 0;
+  if(U_FAILURE(*status)) return 0;
 
   /* setup */
   basename = dirname = colName = 0;

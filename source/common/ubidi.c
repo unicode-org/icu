@@ -134,18 +134,18 @@ adjustWSLevels(UBiDi *pBiDi);
 
 /* UBiDi object management -------------------------------------------------- */
 
-CAPI UBiDi * U_EXPORT2
+U_CAPI UBiDi * U_EXPORT2
 ubidi_open() {
     UErrorCode errorCode=U_ZERO_ERROR;
     return ubidi_openSized(0, 0, &errorCode);
 }
 
-CAPI UBiDi * U_EXPORT2
+U_CAPI UBiDi * U_EXPORT2
 ubidi_openSized(UTextOffset maxLength, UTextOffset maxRunCount, UErrorCode *pErrorCode) {
     UBiDi *pBiDi;
 
     /* check the argument values */
-    if(pErrorCode==NULL || FAILURE(*pErrorCode)) {
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return NULL;
     } else if(maxLength<0 || maxRunCount<0) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
@@ -184,7 +184,7 @@ ubidi_openSized(UTextOffset maxLength, UTextOffset maxRunCount, UErrorCode *pErr
         pBiDi->mayAllocateRuns=TRUE;
     }
 
-    if(SUCCESS(*pErrorCode)) {
+    if(U_SUCCESS(*pErrorCode)) {
         return pBiDi;
     } else {
         ubidi_close(pBiDi);
@@ -240,7 +240,7 @@ getMemory(void **pMemory, UTextOffset *pSize, bool_t mayAllocate, UTextOffset si
     }
 }
 
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
 ubidi_close(UBiDi *pBiDi) {
     if(pBiDi!=NULL) {
         if(pBiDi->dirPropsMemory!=NULL) {
@@ -258,14 +258,14 @@ ubidi_close(UBiDi *pBiDi) {
 
 /* ubidi_setPara ------------------------------------------------------------ */
 
-CAPI void U_EXPORT2
+U_CAPI void U_EXPORT2
 ubidi_setPara(UBiDi *pBiDi, const UChar *text, UTextOffset length,
               UBiDiLevel paraLevel, UBiDiLevel *embeddingLevels,
               UErrorCode *pErrorCode) {
     UBiDiDirection direction;
 
     /* check the argument values */
-    if(pErrorCode==NULL || FAILURE(*pErrorCode)) {
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return;
     } else if(pBiDi==NULL || text==NULL ||
               (UBIDI_MAX_EXPLICIT_LEVEL<paraLevel) && !IS_DEFAULT_LEVEL(paraLevel) ||
@@ -339,7 +339,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, UTextOffset length,
         /* set BN for all explicit codes, check that all levels are paraLevel..UBIDI_MAX_EXPLICIT_LEVEL */
         pBiDi->levels=embeddingLevels;
         direction=checkExplicitLevels(pBiDi, pErrorCode);
-        if(FAILURE(*pErrorCode)) {
+        if(U_FAILURE(*pErrorCode)) {
             return;
         }
     }
@@ -1126,7 +1126,7 @@ adjustWSLevels(UBiDi *pBiDi) {
 
 /* -------------------------------------------------------------------------- */
 
-CAPI UBiDiDirection U_EXPORT2
+U_CAPI UBiDiDirection U_EXPORT2
 ubidi_getDirection(const UBiDi *pBiDi) {
     if(pBiDi!=NULL) {
         return pBiDi->direction;
@@ -1135,7 +1135,7 @@ ubidi_getDirection(const UBiDi *pBiDi) {
     }
 }
 
-CAPI UTextOffset U_EXPORT2
+U_CAPI UTextOffset U_EXPORT2
 ubidi_getLength(const UBiDi *pBiDi) {
     if(pBiDi!=NULL) {
         return pBiDi->length;
@@ -1144,7 +1144,7 @@ ubidi_getLength(const UBiDi *pBiDi) {
     }
 }
 
-CAPI UBiDiLevel U_EXPORT2
+U_CAPI UBiDiLevel U_EXPORT2
 ubidi_getParaLevel(const UBiDi *pBiDi) {
     if(pBiDi!=NULL) {
         return pBiDi->paraLevel;

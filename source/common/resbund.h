@@ -167,7 +167,7 @@ public:
      *                returned by Locale::getDefault()) will be used.
      * The UErrorCode& err parameter is used to return status information to the user. To
      * check whether the construction succeeded or not, you should check the value of
-     * SUCCESS(err). If you wish more detailed information, you can check for
+     * U_SUCCESS(err). If you wish more detailed information, you can check for
      * informational error results which still indicate success. U_USING_FALLBACK_ERROR
      * indicates that a fall back locale was used. For example, 'de_CH' was requested,
      * but nothing was found there, so 'de' was used. U_USING_DEFAULT_ERROR indicates that

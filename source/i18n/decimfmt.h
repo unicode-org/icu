@@ -784,7 +784,7 @@ public:
      * </pre>
      * @return          The class ID for all objects of this class.
      */
-    static ClassID getStaticClassID(void) { return (ClassID)&fgClassID; }
+    static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
 
     /**
      * Returns a unique class ID POLYMORPHICALLY.  Pure virtual override.
@@ -796,7 +796,7 @@ public:
      *                  given class have the same class ID.  Objects of
      *                  other classes have different class IDs.
      */
-    virtual ClassID getDynamicClassID(void) const { return getStaticClassID(); }
+    virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); }
 
 private:
     static char fgClassID;

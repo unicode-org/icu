@@ -273,7 +273,7 @@ scsu_compress(UnicodeCompressor *comp,
 
 
     /* verify we weren't passed a failing error code */
-  if(FAILURE(*status)) {
+  if(U_FAILURE(*status)) {
     return;
   }
   /* verify the target buffer can hold at least 4 bytes */
@@ -864,7 +864,7 @@ scsu_decompress(UnicodeCompressor *comp,
 
 
   /* verify we weren't passed a failing error code */
-  if(FAILURE(*status)) {
+  if(U_FAILURE(*status)) {
     return; 
   }
   /* verify the target buffer can hold at least 1 UChar */
@@ -879,11 +879,11 @@ scsu_decompress(UnicodeCompressor *comp,
 
     int32_t newBytes = 0;
     const uint8_t *newSource = comp->fBuffer;
-    const uint8_t *newSourceLimit = comp->fBuffer + SCSU_BUFSIZE;
+    const uint8_t *newSourceLimit = comp->fBuffer + USCSU_BUFSIZE;
 
     /* fill the buffer completely, to guarantee one full character */
-    if(comp->fBufferLength != SCSU_BUFSIZE) {
-      newBytes = SCSU_BUFSIZE - comp->fBufferLength;
+    if(comp->fBufferLength != USCSU_BUFSIZE) {
+      newBytes = USCSU_BUFSIZE - comp->fBufferLength;
 
       /* verify there are newBytes bytes in byteBuffer */
       if(sourceLimit - byteBuffer < newBytes)
@@ -1249,12 +1249,12 @@ scsu_reset(UnicodeCompressor *comp)
   comp->fOffsets[7] = 0xFF00;  /* Fullwidth ASCII*/
     
   /* reset time stamps*/
-  for(i = 0; i < NUMWINDOWS; i++) {
+  for(i = 0; i < USCSU_NUM_WINDOWS; i++) {
     comp->fTimeStamps[i]          = 0;
   }
     
   /* reset count of seen indices*/
-  for( i = 0; i <= MAXINDEX; i++ ) {
+  for( i = 0; i <= USCSU_MAX_INDEX; i++ ) {
     comp->fIndexCount[i] = 0;
   }
     
@@ -1355,7 +1355,7 @@ scsu_findDynamicWindow(const UnicodeCompressor *comp,
 {
   int32_t i;
     
-  for(i = 0; i < NUMWINDOWS; i++) {
+  for(i = 0; i < USCSU_NUM_WINDOWS; i++) {
     if(scsu_inDynamicWindow(comp, c, i)) {
       return i;
     }
@@ -1375,7 +1375,7 @@ scsu_findStaticWindow(int32_t c)
 {
   int32_t i;
     
-  for(i = 0; i < NUMSTATICWINDOWS; i++) {
+  for(i = 0; i < USCSU_NUM_STATIC_WINDOWS; i++) {
     if(scsu_inStaticWindow(c, i)) {
       return i;
     }
@@ -1393,7 +1393,7 @@ scsu_getLRDefinedWindow(const UnicodeCompressor *comp)
   int32_t i;
   
   /* find least recently used window*/
-  for(i = 0; i < NUMWINDOWS; i++ ) {
+  for(i = 0; i < USCSU_NUM_WINDOWS; i++ ) {
     if(comp->fTimeStamps[i] < leastRU) {
       leastRU = comp->fTimeStamps[i];
       whichWindow = i;

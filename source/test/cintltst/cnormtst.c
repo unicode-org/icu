@@ -15,7 +15,7 @@
 *
 * Modification History:
 *        Name                     Description            
-*     Madhu Katragadda            Ported for CAPI
+*     Madhu Katragadda            Ported for C API
 *********************************************************************************
 /*tests for u_normalization*/
 #include "utypes.h"
@@ -107,7 +107,7 @@ void TestDecomp()
     UChar *source, *result; 
     status = U_ZERO_ERROR;
     myCollation = ucol_open("en_US", &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
     }
     resLen=0;
@@ -123,7 +123,7 @@ void TestDecomp()
         result=(UChar*)malloc(sizeof(UChar*) * resLen);
         u_normalize(source, u_strlen(source), UCOL_DECOMP_CAN, UCOL_IGNORE_HANGUL, result, resLen, &status); 
         }
-        if(FAILURE(status)){
+        if(U_FAILURE(status)){
             log_err("ERROR in u_normalize at %s:  %s\n", austrdup(source), myErrorName(status) );
         }
         assertEqual(result, CharsToUChars(canonTests[x][1]), x);
@@ -138,7 +138,7 @@ void TestCompatDecomp()
     UChar *source, *result; 
     status = U_ZERO_ERROR;
     myCollation = ucol_open("en_US", &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
     }
     resLen=0;
@@ -154,7 +154,7 @@ void TestCompatDecomp()
         result=(UChar*)malloc(sizeof(UChar*) * resLen);
         u_normalize(source, u_strlen(source), UCOL_DECOMP_COMPAT,UCOL_IGNORE_HANGUL, result, resLen, &status); 
         }
-        if(FAILURE(status)){
+        if(U_FAILURE(status)){
             log_err("ERROR in u_normalize at %s:  %s\n", austrdup(source), myErrorName(status) );
         }
         assertEqual(result, CharsToUChars(compatTests[x][1]), x);
@@ -169,7 +169,7 @@ void TestCanonDecompCompose()
     UChar *source, *result; 
     status = U_ZERO_ERROR;
     myCollation = ucol_open("en_US", &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
     }
     resLen=0;
@@ -185,7 +185,7 @@ void TestCanonDecompCompose()
         result=(UChar*)malloc(sizeof(UChar*) * resLen);
         u_normalize(source, u_strlen(source), UCOL_DECOMP_CAN_COMP_COMPAT, UCOL_IGNORE_HANGUL, result, resLen, &status); 
         }
-        if(FAILURE(status)){
+        if(U_FAILURE(status)){
             log_err("ERROR in u_normalize at %s:  %s\n", austrdup(source),myErrorName(status) );
         }
         assertEqual(result, CharsToUChars(canonTests[x][2]), x);
@@ -200,7 +200,7 @@ void TestCompatDecompCompose()
     UChar *source, *result; 
     status = U_ZERO_ERROR;
     myCollation = ucol_open("en_US", &status);
-    if(FAILURE(status)){
+    if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
     }
     resLen=0;
@@ -216,7 +216,7 @@ void TestCompatDecompCompose()
         result=(UChar*)malloc(sizeof(UChar*) * resLen);
         u_normalize(source, u_strlen(source), UCOL_DECOMP_COMPAT_COMP_CAN, UCOL_IGNORE_HANGUL, result, resLen, &status); 
         }
-        if(FAILURE(status)){
+        if(U_FAILURE(status)){
             log_err("ERROR in u_normalize at %s:  %s\n", austrdup(source), myErrorName(status) );
         }
         assertEqual(result, CharsToUChars(compatTests[x][2]), x);

@@ -30,7 +30,7 @@
 
 #include <stdio.h>
 
-CAPI FileStream*
+U_CAPI FileStream*
 T_FileStream_open(const char* filename, const char* mode)
 {
   FILE *file = fopen(filename, mode);
@@ -38,7 +38,7 @@ T_FileStream_open(const char* filename, const char* mode)
 }
 
 
-CAPI FileStream*
+U_CAPI FileStream*
 T_FileStream_wopen(const wchar_t* filename, const wchar_t* mode)
 {
   /* TBD: is _wfopen MS-specific?  If so, change _WIN32 to WIN32 */
@@ -69,13 +69,13 @@ T_FileStream_wopen(const wchar_t* filename, const wchar_t* mode)
 #endif
 }
 
-CAPI void
+U_CAPI void
 T_FileStream_close(FileStream* fileStream)
 {
     if (fileStream != 0) fclose((FILE*)fileStream);
 }
 
-CAPI bool_t
+U_CAPI bool_t
 T_FileStream_file_exists(const char* filename)
 {
     FILE* temp = fopen(filename, "r");
@@ -89,47 +89,47 @@ T_FileStream_file_exists(const char* filename)
 /*static const int32_t kEOF;
 const int32_t FileStream::kEOF = EOF;*/
 
-CAPI FileStream*
+U_CAPI FileStream*
 T_FileStream_tmpfile()
 {
     FILE* file = tmpfile();
     return (FileStream*)file;
 }
 
-CAPI int32_t
+U_CAPI int32_t
 T_FileStream_read(FileStream* fileStream, void* addr, int32_t len)
 {
     return fread(addr, 1, len, (FILE*)fileStream);
 }
 
-CAPI int32_t
+U_CAPI int32_t
 T_FileStream_write(FileStream* fileStream, const void* addr, int32_t len)
 {
 
     return fwrite(addr, 1, len, (FILE*)fileStream);
 }
 
-CAPI void
+U_CAPI void
 T_FileStream_rewind(FileStream* fileStream)
 {
     rewind((FILE*)fileStream);
 }
 
-CAPI int32_t
+U_CAPI int32_t
 T_FileStream_putc(FileStream* fileStream, int32_t ch)
 {
     int32_t c = fputc(ch, (FILE*)fileStream);
     return c;
 }
 
-CAPI int
+U_CAPI int
 T_FileStream_getc(FileStream* fileStream)
 {
     int c = fgetc((FILE*)fileStream);
     return c;
 }
 
-CAPI int32_t
+U_CAPI int32_t
 T_FileStream_ungetc(int32_t ch, FileStream* fileStream)
 {
 
@@ -137,7 +137,7 @@ T_FileStream_ungetc(int32_t ch, FileStream* fileStream)
     return c;
 }
 
-CAPI int32_t
+U_CAPI int32_t
 T_FileStream_peek(FileStream* fileStream)
 {
     int32_t c = fgetc((FILE*)fileStream);
@@ -145,19 +145,19 @@ T_FileStream_peek(FileStream* fileStream)
 }
 
 /*Added by Bertrand A. D. */
-CAPI char *
+U_CAPI char *
 T_FileStream_readLine(FileStream* fileStream, char* buffer, int32_t length)
 {
     return fgets(buffer, length, (FILE*)fileStream);
 }
 
-CAPI int32_t
+U_CAPI int32_t
 T_FileStream_writeLine(FileStream* fileStream, const char* buffer)
 {
     return fputs(buffer, (FILE*)fileStream);
 }
 
-CAPI int32_t
+U_CAPI int32_t
 T_FileStream_size(FileStream* fileStream)
 {
     int32_t savedPos = ftell((FILE*)fileStream);
@@ -171,19 +171,19 @@ T_FileStream_size(FileStream* fileStream)
     return size;
 }
 
-CAPI int
+U_CAPI int
 T_FileStream_eof(FileStream* fileStream)
 {
     return feof((FILE*)fileStream);
 }
 
-CAPI int
+U_CAPI int
 T_FileStream_error(FileStream* fileStream)
 {
     return (fileStream == 0 || ferror((FILE*)fileStream));
 }
 
-CAPI void
+U_CAPI void
 T_FileStream_setError(FileStream* fileStream)
 {
     /* force the stream to set its error flag*/
@@ -191,20 +191,20 @@ T_FileStream_setError(FileStream* fileStream)
 }
 
 
-CAPI FileStream*
+U_CAPI FileStream*
 T_FileStream_stdin(void)
 {
     return (FileStream*)stdin;
 }
 
-CAPI FileStream*
+U_CAPI FileStream*
 T_FileStream_stdout(void)
 {
     return (FileStream*)stdout;
 }
 
 
-CAPI FileStream*
+U_CAPI FileStream*
 T_FileStream_stderr(void)
 {
     return (FileStream*)stderr;

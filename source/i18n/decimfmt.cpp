@@ -183,7 +183,7 @@ DecimalFormat::construct(UErrorCode&             status,
     fRoundingIncrement = NULL;
     fRoundingDouble = 0.0;
     fRoundingMode = kRoundHalfEven;
-    if (FAILURE(status)) return;
+    if (U_FAILURE(status)) return;
 
     fPosPrefixPattern = fPosSuffixPattern = NULL;
     fNegPrefixPattern = fNegSuffixPattern = NULL;
@@ -206,7 +206,7 @@ DecimalFormat::construct(UErrorCode&             status,
         pattern = &str;
     }
 
-    if (FAILURE(status)) return;
+    if (U_FAILURE(status)) return;
 
     applyPattern(*pattern, FALSE /*not localized*/, status);
 }
@@ -2109,7 +2109,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                             bool_t localized,
                             UErrorCode& status)
 {
-    if (FAILURE(status)) return;
+    if (U_FAILURE(status)) return;
     // Set the significant pattern symbols
     UChar zeroDigit         = kPatternZeroDigit;
     UChar groupingSeparator = kPatternGroupingSeparator;
