@@ -1425,10 +1425,7 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnic
                        break;
 
                 }while(initIterState != *currentState);
-                /* Half width Kantakana Range */
-                if(sourceChar >= 0xFF61 && sourceChar <=0xFF96){
 
-                }
             }
             else{
                 targetUniChar = sourceChar;
@@ -1861,18 +1858,16 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC_IBM(UConverterFrom
 
 U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args, UErrorCode* err){
 
-    const UChar *mySource = args->source;
-    unsigned char *myTarget = (unsigned char *) args->target;
-    int32_t mySourceIndex = 0;
-    int32_t myTargetIndex = 0;
-    int32_t targetLength = args->targetLimit - args->target;
-    int32_t mySourceLength = args->sourceLimit - args->source;
+    const UChar *source = args->source;
+    const UChar *sourceLimit = args->sourceLimit;
+    unsigned char *target = (unsigned char *) args->target;
+    unsigned char *targetLimit = (unsigned char *) args->targetLimit;
     int32_t* offsets = args->offsets;
-    uint32_t targetUniChar = 0x0000;
-    UChar32 mySourceChar = 0x0000;
-    UBool isTargetUCharDBCS = (UBool)args->converter->fromUnicodeStatus;
-    UBool oldIsTargetUCharDBCS = isTargetUCharDBCS;
-    UConverterDataISO2022 *myConverterData=(UConverterDataISO2022*)args->converter->extraInfo;
+    uint32_t targetByteUnit = 0x0000;
+    UChar32 sourceChar = 0x0000;
+    UBool isTargetByteDBCS = (UBool)args->converter->fromUnicodeStatus;
+    UBool oldIsTargetByteDBCS = isTargetByteDBCS;
+    UConverterDataISO2022 *converterData=(UConverterDataISO2022*)args->converter->extraInfo;
     UConverterCallbackReason reason;
     int32_t length =0;
 
@@ -1889,83 +1884,74 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnic
      * conversion with ibm-25546 pass the arguments to 
      * MBCS converter and return
      */
-    if(myConverterData->version==1){
+    if(converterData->version==1){
         UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC_IBM(args,err);
         return;
     }
     
-    isTargetUCharDBCS   = (UBool) args->converter->fromUnicodeStatus;
-    if(args->converter->fromUSurrogateLead!=0 && myTargetIndex <targetLength) {
+    isTargetByteDBCS   = (UBool) args->converter->fromUnicodeStatus;
+    if(args->converter->fromUSurrogateLead!=0 && target <targetLimit) {
         goto getTrail;
     }
-    /*writing the char to the output stream */
-    while (mySourceIndex < mySourceLength){
+    while(source < sourceLimit){
+        
+        targetByteUnit = missingCharMarker;
 
-        targetUniChar=missingCharMarker;
-
-        if (myTargetIndex < targetLength){
-
-            mySourceChar = (UChar) args->source[mySourceIndex++];
-
-            length= _MBCSFromUChar32(myConverterData->fromUnicodeConverter->sharedData,
-                mySourceChar,&targetUniChar,args->converter->useFallback);
-
+        if(target < (unsigned char*) args->targetLimit){
+            sourceChar = *source++;
+            length= _MBCSFromUChar32(converterData->fromUnicodeConverter->sharedData,
+                sourceChar,&targetByteUnit,args->converter->useFallback);
             /* only DBCS or SBCS characters are expected*/
             /* DB haracters with high bit set to 1 are expected */
-            if(length > 2 || length==0 ||(((targetUniChar & 0x8080) != 0x8080)&& length==2)){
-                targetUniChar=missingCharMarker;
+            if(length > 2 || length==0 ||(((targetByteUnit & 0x8080) != 0x8080)&& length==2)){
+                targetByteUnit=missingCharMarker;
             }
-            if (targetUniChar != missingCharMarker){
+            if (targetByteUnit != missingCharMarker){
 
-                oldIsTargetUCharDBCS = isTargetUCharDBCS;
-
-                isTargetUCharDBCS = (UBool)(targetUniChar>0x00FF);
-
-                /* append the shift sequence */
-                if (oldIsTargetUCharDBCS != isTargetUCharDBCS ){
-
-                    if (isTargetUCharDBCS) 
-                        args->target[myTargetIndex++] = UCNV_SO;
+                oldIsTargetByteDBCS = isTargetByteDBCS;
+                isTargetByteDBCS = (UBool)(targetByteUnit>0x00FF);
+                  /* append the shift sequence */
+                if (oldIsTargetByteDBCS != isTargetByteDBCS ){
+                    
+                    if (isTargetByteDBCS) 
+                        *target++ = UCNV_SO;
                     else 
-                        args->target[myTargetIndex++] = UCNV_SI;
-                    if(args->offsets)
-                        *(offsets++)= mySourceIndex -1;
-
+                        *target++ = UCNV_SI;
+                    if(offsets)
+                        *(offsets++)=   source - args->source-1;
                 }
-                /* write the targetUniChar  to target buffer*/
-                if(isTargetUCharDBCS){
-                    if( myTargetIndex <targetLength){
-                        args->target[myTargetIndex++] =(char) ((targetUniChar >> 8) -0x80);
-                        if(myTargetIndex < targetLength){
-                            args->target[myTargetIndex++] =(char) ((targetUniChar & 0x00FF) -0x80);
+                /* write the targetUniChar  to target */
+                if(targetByteUnit <= 0x00FF){
+                    if( target < targetLimit){
+                        *(target++) = (unsigned char) targetByteUnit;
+
+                    }else{
+                        args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = (unsigned char) (targetByteUnit);
+                        *err = U_BUFFER_OVERFLOW_ERROR;
+                    }
+                }else{
+                    if(target < targetLimit){
+                        *(target++) =(unsigned char) ((targetByteUnit>>8) -0x80);
+                        if(target < targetLimit){
+                            *(target++) =(unsigned char) (targetByteUnit -0x80);
                         }else{
-                            args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = (char) ((targetUniChar & 0x00FF) -0x80);
+                            args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = (unsigned char) (targetByteUnit -0x80);
                             *err = U_BUFFER_OVERFLOW_ERROR;
                         }
                     }else{
-                        args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] =(char) ((targetUniChar >> 8) -0x80);
-                        args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = (char) ((targetUniChar & 0x00FF) -0x80);
-                        *err = U_BUFFER_OVERFLOW_ERROR;
-                    }
-
-                }else{
-                    if( myTargetIndex <targetLength){
-                        args->target[myTargetIndex++] = (char) (targetUniChar );
-
-                    }else{
-                        args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = (char) targetUniChar;
+                        args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = (unsigned char) ((targetByteUnit>>8) -0x80);
+                        args->converter->charErrorBuffer[args->converter->charErrorBufferLength++] = (unsigned char) (targetByteUnit-0x80);
                         *err = U_BUFFER_OVERFLOW_ERROR;
                     }
                 }
                 /* write the offsets */
                 if(offsets){
-                    int i = mySourceIndex-1;
-                    int len = 2 - (targetUniChar < 0x00FF);
+                    int i = source - args->source-1;
+                    int len = 1 + isTargetByteDBCS;
                     while(len-->0){
                         *(offsets++) = i;
                     }
                 }
-
             }
             else{
                 /* oops.. the code point is unassingned
@@ -1973,21 +1959,22 @@ U_CFUNC void UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnic
                  */
                 reason =UCNV_UNASSIGNED;
                 *err =U_INVALID_CHAR_FOUND;
+
                 /*check if the char is a First surrogate*/
-                if(UTF_IS_SURROGATE(mySourceChar)) {
-                    if(UTF_IS_SURROGATE_FIRST(mySourceChar)) {
-                        args->converter->fromUSurrogateLead=(UChar)mySourceChar;
+                if(UTF_IS_SURROGATE(sourceChar)) {
+                    if(UTF_IS_SURROGATE_FIRST(sourceChar)) {
+                        args->converter->fromUSurrogateLead=(UChar)sourceChar;
 getTrail:
                         /*look ahead to find the trail surrogate*/
-                        if(mySourceIndex <  mySourceLength) {
+                        if(source <  sourceLimit) {
                             /* test the following code unit */
-                            UChar trail=(UChar) args->source[mySourceIndex];
+                            UChar trail=(UChar) *source;
                             if(UTF_IS_SECOND_SURROGATE(trail)) {
-                                ++mySourceIndex;
-                                mySourceChar=UTF16_GET_PAIR_VALUE(args->converter->fromUSurrogateLead, trail);
+                                source++;
+                                sourceChar=UTF16_GET_PAIR_VALUE(args->converter->fromUSurrogateLead, trail);
                                 args->converter->fromUSurrogateLead=0x00;
-                                /* there are no surrogates in KSC5601*/
-                                reason=UCNV_UNASSIGNED;
+                                reason =UCNV_UNASSIGNED;
+                                /* convert this surrogate code point */
                                 /* exit this condition tree */
                             } else {
                                 /* this is an unmatched lead code unit (1st surrogate) */
@@ -2007,43 +1994,41 @@ getTrail:
                         *err=U_ILLEGAL_CHAR_FOUND;
                     }
                 }
-                args->converter->fromUnicodeStatus = (int32_t)isTargetUCharDBCS;
-                myTarget+=myTargetIndex;
-                /* call the callback function */
-                fromUnicodeCallback(args,mySourceChar,&mySource,&myTarget,&offsets,reason,err);
-                myTargetIndex = myTarget - (unsigned char*)args->target;
-                myTarget =(unsigned char*) args->target;
-                isTargetUCharDBCS=(UBool)args->converter->fromUnicodeStatus;
-                if (U_FAILURE (*err))
-                    break;
-            }
+                args->converter->fromUnicodeStatus = (int32_t)isTargetByteDBCS;
+                /* Call the callback function*/
+                fromUnicodeCallback(args,sourceChar,&source,&target,&offsets,reason,err);
+                isTargetByteDBCS=(UBool)args->converter->fromUnicodeStatus;
 
-        }
+                if (U_FAILURE (*err)){
+                    break;
+                }
+            }
+        } /* end if(myTargetIndex<myTargetLength) */
         else{
-            *err = U_BUFFER_OVERFLOW_ERROR;
+            *err =U_BUFFER_OVERFLOW_ERROR;
             break;
         }
 
-    }
+    }/* end while(mySourceIndex<mySourceLength) */
+
 
     /*If at the end of conversion we are still carrying state information
-    *flush is TRUE, we can deduce that the input stream is truncated
-    */
-    if (args->converter->fromUSurrogateLead !=0 && (mySourceIndex == mySourceLength) && args->flush){
+     *flush is TRUE, we can deduce that the input stream is truncated
+     */
+    if (args->converter->fromUSurrogateLead !=0 && (source == sourceLimit) && args->flush){
         *err = U_TRUNCATED_CHAR_FOUND;
-        args->converter->fromUSurrogateLead = 0x00;
     }
     /* Reset the state of converter if we consumed 
      * the source and flush is true
      */
-    if( (mySourceIndex == mySourceLength) && args->flush){
-        setInitialStateFromUnicodeKR(args->converter,myConverterData);
+    if( (source == sourceLimit) && args->flush){
+        setInitialStateFromUnicodeKR(args->converter,converterData);
     }
 
-    args->target += myTargetIndex;
-    args->source += mySourceIndex;
-    args->converter->fromUnicodeStatus = (int32_t)isTargetUCharDBCS;
-
+    /*save the state and return */
+    args->source = source;
+    args->target = (char*)target;
+    args->converter->fromUnicodeStatus = (int32_t)isTargetByteDBCS;
 }
 
 /************************ To Unicode ***************************************/
