@@ -375,7 +375,7 @@ res_index {
 	@"$(ICUTOOLS)\genpname\$(CFG)\genpname" -d "$(ICUBLD)"
 
 # Targets for uprops.icu
-"$(ICUBLD)\$(ICUDT)uprops.icu": "$(ICUUNIDATA)\*.txt" "$(ICUTOOLS)\genprops\$(CFG)\genprops.exe"
+"$(ICUBLD)\$(ICUDT)uprops.icu": "$(ICUUNIDATA)\*.txt" "$(ICUTOOLS)\genprops\$(CFG)\genprops.exe" "$(ICUBLD)\$(ICUDT)pnames.icu"
 	@echo Creating data file for Unicode Character Properties
 	@set ICU_DATA=$(ICUBLD)
 	@"$(ICUTOOLS)\genprops\$(CFG)\genprops" -u $(UNICODE_VERSION) -s "$(ICUUNIDATA)"
