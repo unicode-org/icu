@@ -1,3 +1,4 @@
+Copyright (c) 2002, International Business Machines Corporation and others. All Rights Reserved.
 icudate: a sample program which displays the current date
 
 This sample demonstrates

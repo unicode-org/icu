@@ -1,3 +1,7 @@
+#*********************************************************************
+#   Copyright (C) 2002 International Business Machines Corporation   *
+#   and others. All rights reserved.                                 *
+#*********************************************************************
 #
 #  rbbicst   Compile the RBBI rule paser state table data into initialized C data.
 #            Usage:
@@ -11,10 +15,6 @@
 #
 #             See rbbirpt.h for a description of the input format for this script.
 #
-#*********************************************************************
-#   Copyright (C) 2002 International Business Machines Corporation   *
-#   and others. All rights reserved.                                 *
-#*********************************************************************
 
 
 $num_states = 1;     # Always the state number for the line being compiled.

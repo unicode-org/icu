@@ -1,3 +1,4 @@
+Copyright (c) 2002, International Business Machines Corporation and others. All Rights Reserved.
 icucal: a sample program which displays the calendar.
 
 This sample demonstrates

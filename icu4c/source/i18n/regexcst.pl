@@ -1,3 +1,9 @@
+#!/usr/bin/perl
+#  ********************************************************************
+#  * COPYRIGHT:
+#  * Copyright (c) 2002, International Business Machines Corporation and
+#  * others. All Rights Reserved.
+#  ********************************************************************
 #
 #  regexcst.pl
 #            Compile the regular expression paser state table data into initialized C data.
