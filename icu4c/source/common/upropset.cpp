@@ -427,6 +427,20 @@ UnicodeSet* UnicodePropertySet::createBinaryPropertySet(const UnicodeString& nam
     return set;
 }
 
+UnicodeSet
+UnicodePropertySet::getRuleWhiteSpaceSet() {
+    UnicodeSet set;
+    int32_t code;
+
+    /* "white space" in the sense of ICU rule parsers: Cf+White_Space */
+    code = UCHAR_WHITE_SPACE;
+    initSetFromFilter(set, _binaryPropertyFilter, &code);
+
+    set.addAll(getCategorySet(U_FORMAT_CHAR));
+
+    return set; /* return by value */
+}
+
 //----------------------------------------------------------------
 // Utility methods
 //----------------------------------------------------------------
