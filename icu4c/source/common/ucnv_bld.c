@@ -37,6 +37,13 @@
 
 #include <stdio.h>
 
+#if 0
+extern void UCNV_DEBUG_LOG(char *what, char *who, void *p, int l);
+#define UCNV_DEBUG_LOG(x,y,z) UCNV_DEBUG_LOG(x,y,z,__LINE__)
+#else
+# define UCNV_DEBUG_LOG(x,y,z)
+#endif
+
 static const UConverterSharedData *
 converterData[UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES]={
     &_SBCSData, &_DBCSData, &_MBCSData, &_Latin1Data,
@@ -92,6 +99,14 @@ U_CAPI  UConverterSharedData* U_EXPORT2 ucnv_data_unFlattenClone(UDataMemory *pD
 
 /*initializes some global variables */
 UHashtable *SHARED_DATA_HASHTABLE = NULL;
+
+#if 0
+/* For MEMORY LEAK checking.. */
+U_CAPI void U_EXPORT2 ucnv_orphanAllConverters()
+{
+    SHARED_DATA_HASHTABLE = NULL; /* will leak: hashtable + hashtable elements */
+}
+#endif
 
 static UBool
 isCnvAcceptable(void *context,
@@ -175,6 +190,7 @@ void   shareConverterData (UConverterSharedData * data)
 {
   UErrorCode err = U_ZERO_ERROR;
   /*Lazy evaluates the Hashtable itself */
+    void *sanity = NULL;
 
   if (SHARED_DATA_HASHTABLE == NULL)
     {
@@ -190,11 +206,22 @@ void   shareConverterData (UConverterSharedData * data)
     }
   umtx_lock (NULL);
   /* ### check to see if the element is not already there! */
-  uhash_put(SHARED_DATA_HASHTABLE,
-             (void*) data->staticData->name, /* Okay to cast away const as long as
+
+#if 0
+    sanity =   getSharedConverterData (data->staticData->name);
+    if(sanity != NULL)
+    {
+        UCNV_DEBUG_LOG("put:overwrite!",data->staticData->name,sanity);
+    }
+    UCNV_DEBUG_LOG("put:chk",data->staticData->name,sanity);
+#endif
+
+   uhash_put(SHARED_DATA_HASHTABLE,
+    (void*) data->staticData->name, /* Okay to cast away const as long as
                                     keyDeleter == NULL */
             data,
             &err);
+    UCNV_DEBUG_LOG("put",data->staticData->name,data);
   umtx_unlock (NULL);
 
   return;
@@ -206,7 +233,13 @@ UConverterSharedData *getSharedConverterData (const char *name)
   if (SHARED_DATA_HASHTABLE == NULL)    return NULL;
   else
     {
-      return (UConverterSharedData*)uhash_get (SHARED_DATA_HASHTABLE, name);
+      UConverterSharedData *rc;
+
+umtx_lock(NULL);
+      rc = (UConverterSharedData*)uhash_get (SHARED_DATA_HASHTABLE, name);
+umtx_unlock(NULL);
+      UCNV_DEBUG_LOG("get",name,rc);
+      return rc;
     }
 }
 
@@ -239,6 +272,11 @@ UBool   deleteSharedConverterData (UConverterSharedData * deadSharedData)
     {
         UDataMemory *data = (UDataMemory*)deadSharedData->dataMemory;
         udata_close(data);
+    }
+
+    if(deadSharedData->table != NULL)
+    {
+        uprv_free(deadSharedData->table);
     }
 
     uprv_free (deadSharedData);
