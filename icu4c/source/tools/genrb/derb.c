@@ -100,7 +100,7 @@ main(int argc, char* argv[]) {
     currdir = getcwd(NULL, 0);
 #endif
 
-    // Get the name of tool.
+    /* Get the name of tool. */
     pname = uprv_strrchr(*argv, U_FILE_SEP_CHAR);
 #ifdef WIN32
     if (!pname) {
@@ -203,7 +203,7 @@ main(int argc, char* argv[]) {
 
     for (i = 1; i < argc; ++i) {
         static UChar sp[] = { 0x0020 }; /* " " */
-        char infile[4096]; // XXX Sloppy.
+        char infile[4096]; /* XXX Sloppy. */
         char locale[64];
         const char *thename = 0, *p, *q;
         UBool fromICUData = FALSE;
