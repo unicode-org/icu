@@ -84,11 +84,12 @@ void CollationServiceTest::TestRegister()
     UnicodeString locName = fu_FU.getName();
     StringEnumeration* localeEnum = Collator::getAvailableLocales();
     UBool found = FALSE;
-    for (const UnicodeString* loc = localeEnum->snext(status);
-         !found && loc != NULL;
-         loc = localeEnum->snext(status)) {
+    const UnicodeString* locStr;
+    for (locStr = localeEnum->snext(status);
+         !found && locStr != NULL;
+         locStr = localeEnum->snext(status)) {
       //
-      if (locName == *loc) {
+      if (locName == *locStr) {
         found = TRUE;
       }
     }
