@@ -207,6 +207,26 @@ IntlTestRBNF::TestAPI() {
   }
 #endif
 
+  // test API
+  UnicodeString expected("four point five","");
+  logln("Testing format(double)");
+  UnicodeString result;
+  formatter->format(4.5,result);
+  if(result != expected) {
+      errln("Formatted 4.5, expected " + expected + " got " + result);
+  } else {
+      logln("Formatted 4.5, expected " + expected + " got " + result);
+  }
+  result.remove();
+  expected = "four";
+  formatter->format((long)4,result);
+  if(result != expected) {
+      errln("Formatted 4, expected " + expected + " got " + result);
+  } else {
+      logln("Formatted 4, expected " + expected + " got " + result);
+  }
+
+
   // clean up
   logln("Cleaning up");
   delete formatter;

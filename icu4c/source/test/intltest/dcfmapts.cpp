@@ -12,6 +12,7 @@
 
 #include "unicode/decimfmt.h"
 #include "unicode/dcfmtsym.h"
+#include "unicode/parseerr.h"
 
 // This is an API test, not a unit test.  It doesn't test very many cases, and doesn't
 // try to test the full functionality.  It just calls each function in the class and
@@ -297,7 +298,15 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
         errln((UnicodeString)"ERROR: toPattern() result did not match pattern applied");
     }
 
-    UnicodeString p2("#,##0.0# FF;(#,##0.0# FF)");
+    if(pat.getSecondaryGroupingSize() != 0) {
+        errln("FAIL: Secondary Grouping Size should be 0, not %d\n", pat.getSecondaryGroupingSize());
+    }
+
+    if(pat.getGroupingSize() != 3) {
+        errln("FAIL: Primary Grouping Size should be 3, not %d\n", pat.getGroupingSize());
+    }
+
+    UnicodeString p2("#,##,##0.0# FF;(#,##,##0.0# FF)");
     logln((UnicodeString)"Applying pattern " + p2);
     status = U_ZERO_ERROR;
     pat.applyLocalizedPattern(p2, status);
@@ -309,6 +318,27 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
     logln((UnicodeString)"Extracted pattern is " + s3);
     if(s3 != p2) {
         errln((UnicodeString)"ERROR: toLocalizedPattern() result did not match pattern applied");
+    }
+
+    status = U_ZERO_ERROR;
+    UParseError pe;
+    pat.applyLocalizedPattern(p2, pe, status);
+    if(U_FAILURE(status)) {
+        errln((UnicodeString)"ERROR: applyPattern((with ParseError)) failed with " + (int32_t) status);
+    }
+    UnicodeString s4;
+    s4 = pat.toLocalizedPattern(s3);
+    logln((UnicodeString)"Extracted pattern is " + s4);
+    if(s4 != p2) {
+        errln((UnicodeString)"ERROR: toLocalizedPattern(with ParseErr) result did not match pattern applied");
+    }
+
+    if(pat.getSecondaryGroupingSize() != 2) {
+        errln("FAIL: Secondary Grouping Size should be 2, not %d\n", pat.getSecondaryGroupingSize());
+    }
+
+    if(pat.getGroupingSize() != 3) {
+        errln("FAIL: Primary Grouping Size should be 3, not %d\n", pat.getGroupingSize());
     }
 
 // ======= Test getStaticClassID()
