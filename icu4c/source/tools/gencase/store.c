@@ -53,7 +53,9 @@ The file contains the following structures:
     i2 trieSize; -- size in bytes of the case mapping properties trie
     i3 exceptionsLength; -- length in uint16_t of the exceptions array
 
-    i4..indexes[i0] reservedIndexes; -- reserved values; 0 for now
+    i4..i14 reservedIndexes; -- reserved values; 0 for now
+
+    i15 maxFullLength; -- maximum length of a full case mapping/folding string
 
 
     Serizalied trie, see utrie.h;
@@ -69,6 +71,9 @@ if(exception) {
     if(not uncased) {
         15..6   signed delta to simple case mapping code point
                 (add delta to input code point)
+    } else {
+            6   the code point is case-ignorable
+                (U+0307 is also case-ignorable but has an exception)
     }
      5..4   0 normal character with cc=0
             1 soft-dotted character
@@ -159,6 +164,9 @@ static uint16_t exceptionsTop=0;
 static Props excProps[MAX_EXC_COUNT];
 static uint16_t exceptionsCount=0;
 
+/* becomes indexes[UCASE_IX_MAX_FULL_LENGTH] */
+static int32_t maxFullLength=U16_MAX_LENGTH;
+
 /* -------------------------------------------------------------------------- */
 
 extern void
@@ -173,16 +181,16 @@ setUnicodeVersion(const char *v) {
 extern void
 setProps(Props *p) {
     UErrorCode errorCode;
-    uint32_t value;
+    uint32_t value, oldValue;
     int32_t delta;
-    uint16_t count;
 
-    /* count the case mappings and other values competing for the value bit field */
-    value=upvec_getValue(pv, p->code, 0);
+    /* get the non-UnicodeData.txt properties */
+    value=oldValue=upvec_getValue(pv, p->code, 0);
+
+    /* default: map to self */
     delta=0;
-    count=0;
 
-    if(p->isTitle) {
+    if(p->gc==U_TITLECASE_LETTER) {
         /* the Titlecase property is read late, from UnicodeData.txt */
         value|=UCASE_TITLE;
     }
@@ -197,7 +205,7 @@ setProps(Props *p) {
     }
     if(p->lowerCase!=0) {
         /* lowercase mapping as delta if the character is uppercase or titlecase */
-        if((value&UCASE_TYPE_MASK)==UCASE_UPPER || (value&UCASE_TYPE_MASK)==UCASE_TITLE) {
+        if((value&UCASE_TYPE_MASK)>=UCASE_UPPER) {
             delta=p->lowerCase-p->code;
         } else {
             value|=UCASE_EXCEPTION;
@@ -229,6 +237,33 @@ setProps(Props *p) {
         }
     }
 
+    /* encode case-ignorable as delta==1 on uncased characters */
+    if(
+        (value&UCASE_TYPE_MASK)==UCASE_NONE &&
+        p->code!=0x307 &&
+        ((U_MASK(p->gc)&(U_GC_MN_MASK|U_GC_ME_MASK|U_GC_CF_MASK|U_GC_LM_MASK|U_GC_SK_MASK))!=0 ||
+            p->code==0x27 || p->code==0xad || p->code==0x2019)
+    ) {
+        /*
+         * We use one of the delta/exception bits, which works because we only
+         * store the case-ignorable flag for uncased characters.
+         * There is no delta for uncased characters (see checks above).
+         * If there is an exception for an uncased, case-ignorable character
+         * (although there should not be any case mappings if it's uncased)
+         * then we have a problem.
+         * There is one character which is case-ignorable but has an exception:
+         * U+0307 is uncased, Mn, has conditional special casing and
+         * is therefore handled in code instead.
+         */
+        if(value&UCASE_EXCEPTION) {
+            fprintf(stderr, "gencase error: unable to encode case-ignorable for U+%04lx with exceptions\n",
+                            (unsigned long)p->code);
+            exit(U_INTERNAL_PROGRAM_ERROR);
+        }
+
+        delta=1;
+    }
+
     /* handle exceptions */
     if(value&UCASE_EXCEPTION) {
         /* simply store exceptions for later processing and encoding */
@@ -244,7 +279,9 @@ setProps(Props *p) {
     }
 
     errorCode=U_ZERO_ERROR;
-    if(!upvec_setValue(pv, p->code, p->code+1, 0, value, 0xffffffff, &errorCode)) {
+    if( value!=oldValue &&
+        !upvec_setValue(pv, p->code, p->code+1, 0, value, 0xffffffff, &errorCode)
+    ) {
         fprintf(stderr, "gencase error: unable to set case mapping values, code: %s\n",
                         u_errorName(errorCode));
         exit(errorCode);
@@ -305,6 +342,28 @@ makeException(uint32_t value, Props *p) {
     /* copy and shift the soft-dotted bits */
     excWord=((uint16_t)value&UCASE_DOT_MASK)<<UCASE_EXC_DOT_SHIFT;
 
+    /* update maxFullLength */
+    if(p->specialCasing!=NULL) {
+        length=p->specialCasing->lowerCase[0];
+        if(length>maxFullLength) {
+            maxFullLength=length;
+        }
+        length=p->specialCasing->upperCase[0];
+        if(length>maxFullLength) {
+            maxFullLength=length;
+        }
+        length=p->specialCasing->titleCase[0];
+        if(length>maxFullLength) {
+            maxFullLength=length;
+        }
+    }
+    if(p->caseFolding!=NULL) {
+        length=p->caseFolding->full[0];
+        if(length>maxFullLength) {
+            maxFullLength=length;
+        }
+    }
+
     /* set the bits for conditional mappings */
     if(p->specialCasing!=NULL && p->specialCasing->isComplex) {
         excWord|=UCASE_EXC_CONDITIONAL_SPECIAL;
@@ -355,6 +414,7 @@ makeException(uint32_t value, Props *p) {
         excWord|=U_MASK(UCASE_EXC_LOWER);
     }
     if( p->caseFolding!=NULL &&
+        p->caseFolding->simple!=0 &&
         (p->lowerCase!=0 ?
             p->caseFolding->simple!=p->lowerCase :
             p->caseFolding->simple!=p->code)
@@ -461,29 +521,6 @@ makeExceptions() {
 
 /* generate output data ----------------------------------------------------- */
 
-/* TODO: create/use default folding function?! */
-
-/* folding value: just store the offset (16 bits) if there is any non-0 entry */
-U_CFUNC uint32_t U_EXPORT2
-getFoldedPropsValue(UNewTrie *trie, UChar32 start, int32_t offset) {
-    uint32_t value;
-    UChar32 limit;
-    UBool inBlockZero;
-
-    limit=start+0x400;
-    while(start<limit) {
-        value=utrie_get32(trie, start, &inBlockZero);
-        if(inBlockZero) {
-            start+=UTRIE_DATA_BLOCK_LENGTH;
-        } else if(value!=0) {
-            return (uint32_t)(offset|0x8000);
-        } else {
-            ++start;
-        }
-    }
-    return 0;
-}
-
 extern void
 generateData(const char *dataDir) {
     static int32_t indexes[UCASE_IX_TOP]={
@@ -514,7 +551,7 @@ generateData(const char *dataDir) {
         }
     }
 
-    trieSize=utrie_serialize(pTrie, trieBlock, sizeof(trieBlock), getFoldedPropsValue, TRUE, &errorCode);
+    trieSize=utrie_serialize(pTrie, trieBlock, sizeof(trieBlock), NULL, TRUE, &errorCode);
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "error: utrie_serialize failed: %s (length %ld)\n", u_errorName(errorCode), (long)trieSize);
         exit(errorCode);
@@ -523,6 +560,8 @@ generateData(const char *dataDir) {
     indexes[UCASE_IX_EXC_LENGTH]=exceptionsTop;
     indexes[UCASE_IX_TRIE_SIZE]=trieSize;
     indexes[UCASE_IX_LENGTH]=(int32_t)sizeof(indexes)+trieSize+2*exceptionsTop;
+
+    indexes[UCASE_IX_MAX_FULL_LENGTH]=maxFullLength;
 
     if(beVerbose) {
         printf("trie size in bytes:                    %5d\n", (int)trieSize);
