@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2001/11/06 00:02:13 $ 
-* $Revision: 1.17 $
+* $Date: 2001/11/07 00:30:02 $ 
+* $Revision: 1.18 $
 *
 *******************************************************************************
 */
@@ -551,7 +551,6 @@ public final class UCharacterTest extends TestFmwk
   /**
   * Test for the character names
   */
-  /*
   public void TestNames()
   {
     int c[] = {0x0061, 0x0284, 0x3401, 0x7fed, 0xac00, 0xd7a3, 0xff08, 0xffe5,
@@ -605,6 +604,13 @@ public final class UCharacterTest extends TestFmwk
         break;
       }
     }
+    
+    // test getName works with mixed-case names (new in 2.0)
+    if (0x61 != UCharacter.getCharFromName("LATin smALl letTER A")) { 
+        errln(
+          "FAIL: 'LATin smALl letTER A' should result in character U+0061"); 
+    } 
+
     
     // extra testing different from icu
     for (int i = UCharacter.MIN_VALUE; i < UCharacter.MAX_VALUE; i ++)
