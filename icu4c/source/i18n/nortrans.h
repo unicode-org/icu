@@ -19,7 +19,7 @@ U_NAMESPACE_BEGIN
 /**
  * A transliterator that performs normalization.
  * @author Alan Liu
- * @version $RCSfile: nortrans.h,v $ $Revision: 1.1 $ $Date: 2001/11/16 23:51:15 $
+ * @version $RCSfile: nortrans.h,v $ $Revision: 1.2 $ $Date: 2001/12/03 20:50:11 $
  */
 class U_I18N_API NormalizationTransliterator : public Transliterator {
 
@@ -32,6 +32,11 @@ class U_I18N_API NormalizationTransliterator : public Transliterator {
      * Normalization options for this transliterator.
      */
     int32_t options;
+
+    /**
+     * Alias to skippables set.  NOT OWNED.
+     */
+    UnicodeSet* skippable;
 
  public:
 
@@ -69,6 +74,11 @@ class U_I18N_API NormalizationTransliterator : public Transliterator {
      */
     static void registerIDs();
 
+    /**
+     * Static memory cleanup function.
+     */
+    static void cleanup();
+
  private:
 
     // Transliterator::Factory methods
@@ -81,6 +91,8 @@ class U_I18N_API NormalizationTransliterator : public Transliterator {
      */
     NormalizationTransliterator(const UnicodeString& id,
                                 UNormalizationMode mode, int32_t opt);
+
+    static void initStatics();
 };
 
 U_NAMESPACE_END

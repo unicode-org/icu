@@ -747,6 +747,18 @@ UBool UnicodeSet::containsAll(const UnicodeSet& c) const {
 }
 
 /**
+ * Return TRUE if every character in s is in this set.
+ */
+UBool UnicodeSet::containsAll(const UnicodeString& s) const {
+    UChar32 cp;
+    for (int32_t i = 0; i < s.length(); i += UTF_CHAR_LENGTH(cp)) {
+        cp = s.char32At(i);
+        if (!contains(cp)) return FALSE;
+    }
+    return TRUE;
+}
+
+/**
  * Adds all of the elements in the specified set to this set if
  * they're not already present.  This operation effectively
  * modifies this set so that its value is the <i>union</i> of the two
