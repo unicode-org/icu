@@ -1324,7 +1324,7 @@ U_CFUNC void ures_appendResPath(UResourceBundle *resB, const char* toAdd) {
 }
 
 U_CFUNC void ures_freeResPath(UResourceBundle *resB) {
-  if(resB->fResPath != resB->fResBuf) {
+  if (resB->fResPath && resB->fResPath != resB->fResBuf) {
     uprv_free(resB->fResPath);
   }
   resB->fResPath = NULL;
