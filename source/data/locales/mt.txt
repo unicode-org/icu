@@ -19,7 +19,6 @@
 
 mt {
     Version { "1.0" } // 2002-01-15 
-//    ShortLanguage { mlt }
 
 
     // Duplicate data has been commented out.
@@ -708,8 +707,8 @@ mt {
     }
 
     Eras {
-         "QK",  // Quddiem Kristu  [from Il-BIBBJA - it-tieni edijoni,
-         "WK"   // Wara Kristu      Ghaqda Biblika Maltija]
+        "QK",  // Quddiem Kristu  [from Il-BIBBJA - it-tieni edijoni,
+        "WK"   // Wara Kristu      Ghaqda Biblika Maltija]
     }
 
     DayAbbreviations { 
@@ -779,6 +778,9 @@ mt {
         }
     }
 
+//    Variants{
+//        PREEURO { "Qabel il-Euro" }
+//    }
 // Time zone
 //CET: 
     zoneStrings {
