@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UnicodePropertySet.java,v $
-* $Date: 2001/11/07 19:24:21 $
-* $Revision: 1.4 $
+* $Date: 2001/11/07 19:27:09 $
+* $Revision: 1.5 $
 **********************************************************************
 */
 package com.ibm.text;
@@ -52,7 +52,7 @@ import com.ibm.util.Utility;
  * '+' indicates a supported property.
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodePropertySet.java,v $ $Revision: 1.4 $ $Date: 2001/11/07 19:24:21 $
+ * @version $RCSfile: UnicodePropertySet.java,v $ $Revision: 1.5 $ $Date: 2001/11/07 19:27:09 $
  */
 class UnicodePropertySet {
 
@@ -395,6 +395,10 @@ class UnicodePropertySet {
         // to have identical properties, such as the CJK Ideographs
         // from U+4E00 to U+9FA5.  INCLUSIONS contains all characters
         // except the first characters of such ranges.
+        //
+        // TODO Where possible, instead of scanning over code points,
+        // use internal property data to initialize UnicodeSets for
+        // those properties.  Scanning code points is slow.
 
         UnicodeSet set = new UnicodeSet();
         int startHasProperty = -1;
@@ -422,25 +426,6 @@ class UnicodePropertySet {
         if (startHasProperty >= 0) {
             set.add(startHasProperty, 0x10FFFF);
         }
-
-//      int start = -1;
-//      int end = -2;
-
-//      for (int i=UnicodeSet.MIN_VALUE; i<=0xFFFF; ++i) {
-//          if (filter.contains(i)) {
-//              if ((end+1) == i) {
-//                  end = i;
-//              } else {
-//                  if (start >= 0) {
-//                      set.add(start, end);
-//                  }
-//                  start = end = i;
-//              }
-//          }
-//      }
-//      if (start >= 0) {
-//          set.add(start, end);
-//      }
 
         return set;
     }
