@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: MTextIterator.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:50:03 $
+ * @(#)$RCSfile: MTextIterator.java,v $ $Revision: 1.2 $ $Date: 2000/04/20 19:23:12 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -226,7 +226,7 @@ public final class MTextIterator implements AttributedCharacterIterator,
      * @return the index at which the text begins.
      */
     public int getBeginIndex() {
-        return fCharIter.getBeginIndex();;
+        return fCharIter.getBeginIndex();
     }
 
     /**
