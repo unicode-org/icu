@@ -952,13 +952,12 @@ void UnicodeSetTest::TestCloseOver() {
 
 void UnicodeSetTest::TestEscapePattern() {
     const char pattern[] =
-        "[\\uFEFF \\uFFF9-\\uFFFC \\U0001D173-\\U0001D17A \\U000F0000-\\U000FFFFD ]";
+        "[\\uFEFF \\u200A-\\u200E \\U0001D173-\\U0001D17A \\U000F0000-\\U000FFFFD ]";
     const char exp[] =
-        "[\\uFEFF\\uFFF9-\\uFFFC\\U0001D173-\\U0001D17A\\U000F0000-\\U000FFFFD]";
+        "[\\u200A-\\u200E\\uFEFF\\U0001D173-\\U0001D17A\\U000F0000-\\U000FFFFD]";
     // We test this with two passes; in the second pass we
-    // pre-unescape the pattern.  Since U+FEFF and several other code
-    // points are rule whitespace, this fails -- which is what we
-    // expect.
+    // pre-unescape the pattern.  Since U+200E is rule whitespace,
+    // this fails -- which is what we expect.
     for (int32_t pass=1; pass<=2; ++pass) {
         UErrorCode ec = U_ZERO_ERROR;
         UnicodeString pat(pattern);

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $
-* $Date: 2003/08/08 20:49:57 $
-* $Revision: 1.61 $
+* $Date: 2003/10/04 00:37:16 $
+* $Revision: 1.62 $
 *
 *******************************************************************************
 */
@@ -184,12 +184,13 @@ public final class UCharacterTest extends TestFmwk
                   " and \\u" + hex(nonwhitespaces[i]));
         }
         
-        int rulewhitespace[] = {0x9, 0xd, 0x20, 0x85, 0xa0, 0x1680, 0x180e,
-                                0x2000, 0x200a, 0x200e, 0x200f, 0x2028, 0x2029, 
-                                0x202f, 0x205f, 0x3000};
-        int nonrulewhitespace[] = {0x8, 0xe, 0x21, 0x86, 0xa1, 0x1681, 0x180f,
-                                   0x1FFF, 0x200b, 0x2010, 0x2030, 0x2030, 
-                                   0x2060, 0x3001};
+        int rulewhitespace[] = {0x9, 0xd, 0x20, 0x85,
+                                0x200e, 0x200f, 0x2028, 0x2029};
+        int nonrulewhitespace[] = {0x8, 0xe, 0x21, 0x86, 0xa0, 0xa1,
+                                   0x1680, 0x1681, 0x180e, 0x180f,
+                                   0x1FFF, 0x2000, 0x200a, 0x200b,
+                                   0x2010, 0x202f, 0x2030, 0x205f,
+                                   0x2060, 0x3000, 0x3001};
         for (int i = 0; i < rulewhitespace.length; i ++) {
             if (!UCharacterProperty.isRuleWhiteSpace(rulewhitespace[i])) {
                 errln("\\u" + Utility.hex(rulewhitespace[i], 4) 

@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2003/07/22 20:21:32 $ 
-* $Revision: 1.33 $
+* $Date: 2003/10/04 00:37:18 $ 
+* $Revision: 1.34 $
 *
 *******************************************************************************
 */
@@ -1209,11 +1209,14 @@ public final class UCharacterProperty implements Trie.DataManipulate
      */
     public static boolean isRuleWhiteSpace(int c) 
     {
-        // "white space" in the sense of ICU rule parsers: White_Space + 
-        // left/right mark
-        UCharacterProperty property = UCharacterProperty.getInstance();
-        return property.hasBinaryProperty(c, UProperty.WHITE_SPACE) 
-               || c == LEFT_RIGHT_MARK_ || c == RIGHT_LEFT_MARK_;
+        /* "white space" in the sense of ICU rule parsers
+           This is a FIXED LIST that is NOT DEPENDENT ON UNICODE PROPERTIES.
+           See UTR #31: http://www.unicode.org/reports/tr31/.
+           U+0009..U+000D, U+0020, U+0085, U+200E..U+200F, and U+2028..U+2029
+        */
+        return (c >= 0x0009 && c <= 0x2029 &&
+                (c <= 0x000D || c == 0x0020 || c == 0x0085 ||
+                 c == 0x200E || c == 0x200F || c >= 0x2028));
     }
 
     /**
@@ -1992,8 +1995,6 @@ public final class UCharacterProperty implements Trie.DataManipulate
 	private static final int FIGURESP= 0x2007;
 	private static final int HAIRSP  = 0x200a;
 	private static final int ZWNJ    = 0x200c;
-    private static final int LEFT_RIGHT_MARK_ = 0x200E;
-    private static final int RIGHT_LEFT_MARK_ = 0x200F;
 	private static final int ZWJ     = 0x200d;
 	private static final int RLM     = 0x200f;
 	private static final int NNBSP   = 0x202f;
