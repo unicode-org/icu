@@ -318,18 +318,18 @@ vi {
     }
     ExemplarCharacters{ "[a-z\u1EA0-\u1Ef9\u0111\u01A1\u00E0-\u00E3\u00E8-\u00EA\u00EC\u00ED\u00F2-\u00F5\u00F9\u00FA\u00FD\u0103\u0129\u0169\u01B0]" }
     MonthAbbreviations {
-        "th 1",
-        "th 2",
-        "th 3",
-        "th 4",
-        "th 5",
-        "th 6",
-        "th 7",
-        "th 8",
-        "th 9",
-        "th 10",
-        "th 11",
-        "th 12",
+        "thg 1",
+        "thg 2",
+        "thg 3",
+        "thg 4",
+        "thg 5",
+        "thg 6",
+        "thg 7",
+        "thg 8",
+        "thg 9",
+        "thg 10",
+        "thg 11",
+        "thg 12",
     }
     MonthNames {
         "th\u00E1ng m\u1ED9t",
