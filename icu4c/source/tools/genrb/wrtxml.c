@@ -378,7 +378,8 @@ bin_write_xml( struct SResource *res, UErrorCode *status) {
     static const char* end      = "\"/>\n";
     static const char* importStart ="<importBin key=\"%s\" filename=\"%s\"/>\n";  
     char fileName[1024] ={0};
-    char* fn =  (char*) uprv_malloc(sizeof(char) * (uprv_strlen(outDir)+1024 + 
+    int32_t tLen = ( outDir == NULL) ? 0 :uprv_strlen(outDir);
+    char* fn =  (char*) uprv_malloc(sizeof(char) * (tLen+1024 + 
                                                     (res->u.fBinaryValue.fFileName !=NULL ? 
 													uprv_strlen(res->u.fBinaryValue.fFileName) :0)));
     char* buffer = NULL;
