@@ -224,18 +224,29 @@ public class LDML2ICUConverter {
                     // TODO: save/restore writeDraft
                 }
                 if(specialsDir!=null){
-                    printInfo("Parsing: " + specialsDir+File.separator+ args[i]);
-                    specialsDoc = LDMLUtilities.parseAndResolveAliases(args[i], specialsDir, true);
-                    /*
-                    try{ 
-                        OutputStreamWriter writer = new
-                        OutputStreamWriter(new FileOutputStream("./"+File.separator+args[i]+"_debug.xml"),"UTF-8");
-                        LDMLUtilities.printDOMTree(fullyResolvedSpecials,new PrintWriter(writer));
-                        writer.flush(); 
-                    }catch( IOException e){ 
-                          //throw the exceptionaway .. this is for debugging 
+                    String icuSpecialFile = specialsDir+File.separator+ args[i];
+                    if(new File(icuSpecialFile).exists()) {
+                        printInfo("Parsing ICU specials from: " + icuSpecialFile);
+                        specialsDoc = LDMLUtilities.parseAndResolveAliases(args[i], specialsDir, true);
+                        /*
+                        try{ 
+                            OutputStreamWriter writer = new
+                            OutputStreamWriter(new FileOutputStream("./"+File.separator+args[i]+"_debug.xml"),"UTF-8");
+                            LDMLUtilities.printDOMTree(fullyResolvedSpecials,new PrintWriter(writer));
+                            writer.flush(); 
+                        }catch( IOException e){ 
+                              //throw the exceptionaway .. this is for debugging 
+                        }
+                        */
+                    } else {
+                        String theCountry = ULocale.getCountry(locName);
+                        if(ULocale.getCountry(locName).length()==0) {
+                            printWarning(icuSpecialFile, "ICU special not found for language-locale \"" + locName + "\"");
+                            //System.exit(-1);
+                        } else {
+                            printInfo("ICU special " + icuSpecialFile + " not found, continuing.");
+                        }
                     }
-                    */
                 }
                 createResourceBundle(xmlfileName);
                 long stop = System.currentTimeMillis();
