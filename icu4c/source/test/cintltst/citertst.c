@@ -1727,6 +1727,8 @@ static void TestCEValidity()
         uint32_t chLen = 0;
         uint32_t exOffset = 0; 
         uint32_t exLen = 0;
+        uint32_t prefixOffset = 0;
+        uint32_t prefixLen = 0;
         UBool    startOfRules = TRUE;
         UColOptionSet opts;
   
@@ -1754,6 +1756,7 @@ static void TestCEValidity()
 
             while ((current = ucol_tok_parseNextToken(&src, &strength, 
                                      &chOffset, &chLen, &exOffset, &exLen, 
+                                     &prefixOffset, &prefixLen,
                                      &specs, startOfRules, &parseError,&status)) != NULL) {
                 startOfRules = FALSE;
                 uprv_memcpy(codepoints, rules + chOffset, 
@@ -1896,6 +1899,8 @@ static void TestSortKeyValidity(void)
         uint32_t chLen = 0;
         uint32_t exOffset = 0; 
         uint32_t exLen = 0;
+        uint32_t prefixOffset = 0;
+        uint32_t prefixLen = 0;
         UBool    startOfRules = TRUE;
         UColOptionSet opts;
   
@@ -1923,6 +1928,7 @@ static void TestSortKeyValidity(void)
 
             while ((current = ucol_tok_parseNextToken(&src, &strength, 
                                      &chOffset, &chLen, &exOffset, &exLen, 
+                                     &prefixOffset, &prefixLen,
                                      &specs, startOfRules,&parseError, &status)) != NULL) {
                 startOfRules = FALSE;
                 uprv_memcpy(codepoints, rules + chOffset, 
