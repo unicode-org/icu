@@ -1327,7 +1327,7 @@ root {
         TL { "USD" } // TIMOR-LESTE: US Dollar
         TM { "TMM" } // TURKMENISTAN: Manat
         TN { "TND" } // TUNISIA: Tunisian Dinar
-        TO { "TOP" } // TONGA: Pa´anga
+        TO { "TOP" } // TONGA: Pa'anga
         TR { "TRL" } // TURKEY: Turkish Lira
         TT { "TTD" } // TRINIDAD AND TOBAGO: Trinidad and Tobago Dollar
         TV { "AUD" } // TUVALU: Australian Dollar
