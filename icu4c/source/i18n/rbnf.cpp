@@ -529,6 +529,10 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, UParseError& pErr, UErro
     // the rest of the descriptions and finish initializing everything
     // because we have to know the names and locations of all the rule
     // sets before we can actually set everything up
+    if(!numRuleSets) {
+      status = U_ILLEGAL_ARGUMENT_ERROR;
+      return;
+    }
     UnicodeString* ruleSetDescriptions = new UnicodeString[numRuleSets];
     /* test for NULL */
     if (ruleSetDescriptions == 0) {
