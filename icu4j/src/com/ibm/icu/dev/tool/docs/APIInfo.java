@@ -41,11 +41,32 @@ class APIInfo {
 
     // internal state
     private int    info; // information about numeric values packed into an int as 2-bit nibbles
-    private String pack; // package
-    private String cls;  // enclosing class
-    private String name; // name
-    private String sig;  // signature, class: inheritance, method: signature, field: type, const: signature
-    private String exc;  // throws 
+    private String pack = ""; // package
+    private String cls  = "";  // enclosing class
+    private String name = ""; // name
+    private String sig  = "";  // signature, class: inheritance, method: signature, field: type, const: signature
+    private String exc  = "";  // throws 
+
+    public int hashCode() {
+        return (((pack.hashCode() << 3) ^ cls.hashCode()) << 3) ^ name.hashCode();
+    }
+
+    public boolean equals(Object rhs) {
+        if (rhs == this) return true;
+        if (rhs == null) return false;
+        try {
+            APIInfo that = (APIInfo)rhs;
+            return this.info == that.info &&
+                this.pack.equals(that.pack) &&
+                this.cls.equals(that.cls) &&
+                this.name.equals(that.name) &&
+                this.sig.equals(that.sig) &&
+                this.exc.equals(that.exc);
+        }
+        catch (ClassCastException e) {
+            return false;
+        }
+    }
 
     public void setDraft() { setType(STA, STA_DRAFT); }
     public void setStable() { setType(STA, STA_STABLE); }
@@ -100,8 +121,8 @@ class APIInfo {
      * will be one of corresponding values for that type.
      */
     public int getVal(int typ) {
-	validateType(typ);
-	return (info >> (typ*2)) & 0x3;
+        validateType(typ);
+        return (info >> (typ*2)) & 0x3;
     }
 
     /**
@@ -112,19 +133,19 @@ class APIInfo {
      * information to the user.
      */
     public String get(int typ, boolean brief) {
-	validateType(typ);
-	String[] vals = brief ? shortNames[typ] : names[typ];
-	if (vals == null) {
-	    switch (typ) {
-	    case PAK: return pack;
-	    case CLS: return cls;
-	    case NAM: return name;
-	    case SIG: return sig;
-	    case EXC: return exc;
-	    }
-	}
-	int val = (info >> (typ*2)) & 0x3;
-	return vals[val];
+        validateType(typ);
+        String[] vals = brief ? shortNames[typ] : names[typ];
+        if (vals == null) {
+            switch (typ) {
+            case PAK: return pack;
+            case CLS: return cls;
+            case NAM: return name;
+            case SIG: return sig;
+            case EXC: return exc;
+            }
+        }
+        int val = (info >> (typ*2)) & 0x3;
+        return vals[val];
     }
 
     /**
@@ -133,9 +154,9 @@ class APIInfo {
      * of the value are used.
      */
     public void setType(int typ, int val) {
-	validateType(typ);
-	info &= ~(0x3 << (typ*2));
-	info |= (val&0x3) << (typ * 2);
+        validateType(typ);
+        info &= ~(0x3 << (typ*2));
+        info |= (val&0x3) << (typ * 2);
     }
 
     /**
@@ -145,28 +166,31 @@ class APIInfo {
      * string.
      */
     private void setType(int typ, String val) {
-	validateType(typ);
-	String[] vals = shortNames[typ];
-	if (vals == null) {
-	    switch (typ) {
-	    case PAK: pack = val; break;
-	    case CLS: cls = val; break;
-	    case NAM: name = val; break;
-	    case SIG: sig = val; break;
-	    case EXC: exc = val; break;
-	    }
-	    return;
-	}
+        validateType(typ);
+        String[] vals = shortNames[typ];
+        if (vals == null) {
+            if (val == null) {
+                val = "";
+            }
+            switch (typ) {
+            case PAK: pack = val; break;
+            case CLS: cls = val; break;
+            case NAM: name = val; break;
+            case SIG: sig = val; break;
+            case EXC: exc = val; break;
+            }
+            return;
+        }
 
-	for (int i = 0; i < vals.length; ++i) {
-	    if (val.equalsIgnoreCase(vals[i])) {
-		info &= ~(0x3 << (typ*2));
-		info |= i << (typ*2);
-		return;
-	    }
-	}
+        for (int i = 0; i < vals.length; ++i) {
+            if (val.equalsIgnoreCase(vals[i])) {
+                info &= ~(0x3 << (typ*2));
+                info |= i << (typ*2);
+                return;
+            }
+        }
 
-	throw new IllegalArgumentException("unrecognized value '" + val + "' for type '" + typeNames[typ] + "'");
+        throw new IllegalArgumentException("unrecognized value '" + val + "' for type '" + typeNames[typ] + "'");
     }
 
     /**
@@ -174,21 +198,21 @@ class APIInfo {
      * If there are IO errors, throws a RuntimeException.
      */
     public void writeln(BufferedWriter w) {
-	try {
-	    for (int i = 0; i < NUM_TYPES; ++i) {
-		String s = get(i, true);
-		if (s != null) {
-		    w.write(s);
-		}
-		w.write(SEP);
-	    }
-	    w.newLine();
-	}
-	catch (IOException e) {
-	    RuntimeException re = new RuntimeException("IO Error");
-	    re.initCause(e);
-	    throw re;
-	}
+        try {
+            for (int i = 0; i < NUM_TYPES; ++i) {
+                String s = get(i, true);
+                if (s != null) {
+                    w.write(s);
+                }
+                w.write(SEP);
+            }
+            w.newLine();
+        }
+        catch (IOException e) {
+            RuntimeException re = new RuntimeException("IO Error");
+            re.initCause(e);
+            throw re;
+        }
     }
 
     /**
@@ -197,23 +221,23 @@ class APIInfo {
      * a RuntimeException.
      */
     public boolean read(BufferedReader r) {
-	int i = 0;
-	try {
-	    for (; i < NUM_TYPES; ++i) {
-		setType(i, readToken(r));
-	    }
-	    r.readLine(); // swallow line end sequence
-	}
-	catch (IOException e) {
-	    if (i == 0) { // assume if first read returns error, we have reached end of input
-		return false;
-	    }
-	    RuntimeException re = new RuntimeException("IO Error");
-	    re.initCause(e);
-	    throw re;
-	}
+        int i = 0;
+        try {
+            for (; i < NUM_TYPES; ++i) {
+                setType(i, readToken(r));
+            }
+            r.readLine(); // swallow line end sequence
+        }
+        catch (IOException e) {
+            if (i == 0) { // assume if first read returns error, we have reached end of input
+                return false;
+            }
+            RuntimeException re = new RuntimeException("IO Error");
+            re.initCause(e);
+            throw re;
+        }
 
-	return true;
+        return true;
     }
 
     /**
@@ -248,28 +272,28 @@ class APIInfo {
      * and signature.
      */
     public static Comparator defaultComparator() {
-	final Comparator c = new Comparator() {
-		public int compare(Object lhs, Object rhs) {
-		    APIInfo lhi = (APIInfo)lhs;
-		    APIInfo rhi = (APIInfo)rhs;
-		    int result = lhi.pack.compareTo(rhi.pack);
-		    if (result == 0) {
-			result = (lhi.getVal(CAT) == CAT_CLASS ? lhi.name : lhi.cls)
-			    .compareTo(rhi.getVal(CAT) == CAT_CLASS ? rhi.name : rhi.cls);
-			if (result == 0) {
-			    result = lhi.getVal(CAT)- rhi.getVal(CAT);
-			    if (result == 0) {
-				result = lhi.name.compareTo(rhi.name);
-				if (result == 0) {
-				    result = lhi.sig.compareTo(rhi.sig);
-				}
-			    }
-			}
-		    }
-		    return result;
-		}
-	    };
-	return c;
+        final Comparator c = new Comparator() {
+                public int compare(Object lhs, Object rhs) {
+                    APIInfo lhi = (APIInfo)lhs;
+                    APIInfo rhi = (APIInfo)rhs;
+                    int result = lhi.pack.compareTo(rhi.pack);
+                    if (result == 0) {
+                        result = (lhi.getVal(CAT) == CAT_CLASS ? lhi.name : lhi.cls)
+                            .compareTo(rhi.getVal(CAT) == CAT_CLASS ? rhi.name : rhi.cls);
+                        if (result == 0) {
+                            result = lhi.getVal(CAT)- rhi.getVal(CAT);
+                            if (result == 0) {
+                                result = lhi.name.compareTo(rhi.name);
+                                if (result == 0) {
+                                    result = lhi.sig.compareTo(rhi.sig);
+                                }
+                            }
+                        }
+                    }
+                    return result;
+                }
+            };
+        return c;
     }
 
     /**
@@ -279,28 +303,28 @@ class APIInfo {
      * equal regardless of their signatures (which represent inheritance for classes).
      */ 
     public static Comparator changedComparator() {
-	final Comparator c = new Comparator() {
-		public int compare(Object lhs, Object rhs) {
-		    APIInfo lhi = (APIInfo)lhs;
-		    APIInfo rhi = (APIInfo)rhs;
-		    int result = lhi.pack.compareTo(rhi.pack);
-		    if (result == 0) {
-			result = (lhi.getVal(CAT) == CAT_CLASS ? lhi.name : lhi.cls)
-			    .compareTo(rhi.getVal(CAT) == CAT_CLASS ? rhi.name : rhi.cls);
-			if (result == 0) {
-			    result = lhi.getVal(CAT)- rhi.getVal(CAT);
-			    if (result == 0) {
-				result = lhi.name.compareTo(rhi.name);
-				if (result == 0 && lhi.getVal(CAT) != CAT_CLASS) {
-				    result = lhi.sig.compareTo(rhi.sig);
-				}
-			    }
-			}
-		    }
-		    return result;
-		}
-	    };
-	return c;
+        final Comparator c = new Comparator() {
+                public int compare(Object lhs, Object rhs) {
+                    APIInfo lhi = (APIInfo)lhs;
+                    APIInfo rhi = (APIInfo)rhs;
+                    int result = lhi.pack.compareTo(rhi.pack);
+                    if (result == 0) {
+                        result = (lhi.getVal(CAT) == CAT_CLASS ? lhi.name : lhi.cls)
+                            .compareTo(rhi.getVal(CAT) == CAT_CLASS ? rhi.name : rhi.cls);
+                        if (result == 0) {
+                            result = lhi.getVal(CAT)- rhi.getVal(CAT);
+                            if (result == 0) {
+                                result = lhi.name.compareTo(rhi.name);
+                                if (result == 0 && lhi.getVal(CAT) != CAT_CLASS) {
+                                    result = lhi.sig.compareTo(rhi.sig);
+                                }
+                            }
+                        }
+                    }
+                    return result;
+                }
+            };
+        return c;
     }
 
     /**
@@ -308,156 +332,156 @@ class APIInfo {
      * by class/name, category, name, and signature.
      */
     public static Comparator classFirstComparator() {
-	final Comparator c = new Comparator() {
-		public int compare(Object lhs, Object rhs) {
-		    APIInfo lhi = (APIInfo)lhs;
-		    APIInfo rhi = (APIInfo)rhs;
-		    int result = lhi.pack.compareTo(rhi.pack);
-		    if (result == 0) {
-			boolean lcls = lhi.getVal(CAT) == CAT_CLASS;
-			boolean rcls = rhi.getVal(CAT) == CAT_CLASS;
-			result = lcls == rcls ? 0 : (lcls ? -1 : 1);
-			if (result == 0) {
-			    result = (lcls ? lhi.name : lhi.cls).compareTo(rcls ? rhi.name : rhi.cls);
-			    if (result == 0) {
-				result = lhi.getVal(CAT)- rhi.getVal(CAT);
-				if (result == 0) {
-				    result = lhi.name.compareTo(rhi.name);
-				    if (result == 0 && !lcls) {
-					result = lhi.sig.compareTo(rhi.sig);
-				    }
-				}
-			    }
-			}
-		    }
-		    return result;
-		}
-	    };
-	return c;
+        final Comparator c = new Comparator() {
+                public int compare(Object lhs, Object rhs) {
+                    APIInfo lhi = (APIInfo)lhs;
+                    APIInfo rhi = (APIInfo)rhs;
+                    int result = lhi.pack.compareTo(rhi.pack);
+                    if (result == 0) {
+                        boolean lcls = lhi.getVal(CAT) == CAT_CLASS;
+                        boolean rcls = rhi.getVal(CAT) == CAT_CLASS;
+                        result = lcls == rcls ? 0 : (lcls ? -1 : 1);
+                        if (result == 0) {
+                            result = (lcls ? lhi.name : lhi.cls).compareTo(rcls ? rhi.name : rhi.cls);
+                            if (result == 0) {
+                                result = lhi.getVal(CAT)- rhi.getVal(CAT);
+                                if (result == 0) {
+                                    result = lhi.name.compareTo(rhi.name);
+                                    if (result == 0 && !lcls) {
+                                        result = lhi.sig.compareTo(rhi.sig);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return result;
+                }
+            };
+        return c;
     }
 
     /**
      * Write the data in report format.
      */
     public void print(PrintWriter pw, boolean detail) {
-	StringBuffer buf = new StringBuffer();
+        StringBuffer buf = new StringBuffer();
 
-	// remove all occurrences of icu packages from the param string
-	// fortunately, all the packages have 4 chars (lang, math, text, util).
-	String xsig = sig;
-	if (!detail) {
-	    final String ICUPACK = "com.ibm.icu.";
-	    StringBuffer tbuf = new StringBuffer();
-	    for (int i = 0; i < sig.length();) {
-		int n = sig.indexOf(ICUPACK, i);
-		if (n == -1) {
-		    tbuf.append(sig.substring(i));
-		    break;
-		}
-		tbuf.append(sig.substring(i, n));
-		i = n + ICUPACK.length() + 5; // trailing 'xxxx.'
-	    }
-	    xsig = tbuf.toString();
-	}
+        // remove all occurrences of icu packages from the param string
+        // fortunately, all the packages have 4 chars (lang, math, text, util).
+        String xsig = sig;
+        if (!detail) {
+            final String ICUPACK = "com.ibm.icu.";
+            StringBuffer tbuf = new StringBuffer();
+            for (int i = 0; i < sig.length();) {
+                int n = sig.indexOf(ICUPACK, i);
+                if (n == -1) {
+                    tbuf.append(sig.substring(i));
+                    break;
+                }
+                tbuf.append(sig.substring(i, n));
+                i = n + ICUPACK.length() + 5; // trailing 'xxxx.'
+            }
+            xsig = tbuf.toString();
+        }
 
-	// construct signature
-	for (int i = STA; i < CAT; ++i) { // include status
-	    String s = get(i, false);
-	    if (s != null && s.length() > 0) {
-		buf.append(s);
-		buf.append(' ');
-	    }
-	}
+        // construct signature
+        for (int i = STA; i < CAT; ++i) { // include status
+            String s = get(i, false);
+            if (s != null && s.length() > 0) {
+                buf.append(s);
+                buf.append(' ');
+            }
+        }
 
-	int val = getVal(CAT);
-	switch (val) {
-	case CAT_CLASS:
-	    if (sig.indexOf("extends") == -1) {
-		buf.append("interface ");
-	    } else {
-		buf.append("class ");
-	    }
-	    if (cls.length() > 0) {
-		buf.append(cls);
-		buf.append('.');
-	    }
-	    buf.append(name);
-	    if (detail) {
-		buf.append(' ');
-		buf.append(sig);
-	    }
-	    break;
+        int val = getVal(CAT);
+        switch (val) {
+        case CAT_CLASS:
+            if (sig.indexOf("extends") == -1) {
+                buf.append("interface ");
+            } else {
+                buf.append("class ");
+            }
+            if (cls.length() > 0) {
+                buf.append(cls);
+                buf.append('.');
+            }
+            buf.append(name);
+            if (detail) {
+                buf.append(' ');
+                buf.append(sig);
+            }
+            break;
 
-	case CAT_FIELD:
-	    buf.append(xsig);
-	    buf.append(' ');
-	    buf.append(name);
-	    break;
+        case CAT_FIELD:
+            buf.append(xsig);
+            buf.append(' ');
+            buf.append(name);
+            break;
 
-	case CAT_METHOD:
-	case CAT_CONSTRUCTOR:
-	    int n = xsig.indexOf('(');
-	    if (n > 0) {
-		buf.append(xsig.substring(0, n));
-		buf.append(' ');
-	    } else {
-		n = 0;
-	    }
-	    buf.append(name);
-	    buf.append(xsig.substring(n));
-	    break;
-	}
+        case CAT_METHOD:
+        case CAT_CONSTRUCTOR:
+            int n = xsig.indexOf('(');
+            if (n > 0) {
+                buf.append(xsig.substring(0, n));
+                buf.append(' ');
+            } else {
+                n = 0;
+            }
+            buf.append(name);
+            buf.append(xsig.substring(n));
+            break;
+        }
 
-	pw.print(buf.toString());
+        pw.print(buf.toString());
     }
 
     public void println(PrintWriter pw, boolean detail) {
-	print(pw, detail);
-	pw.println();
+        print(pw, detail);
+        pw.println();
     }
 
     private static final String[] typeNames = {
-	"status", "visibility", "static", "final", "synchronized", 
-	"abstract", "category", "package", "class", "name", "signature"
+        "status", "visibility", "static", "final", "synchronized", 
+        "abstract", "category", "package", "class", "name", "signature"
     };
 
     private static final String[][] names = {
-	{ "(draft)     ", "(stable)    ", "(deprecated)", "(obsolete)  " },
-	{ "package", "public", "protected", "private" },
-	{ "", "static" },
-	{ "", "final" },
-	{ "", "synchronized" },
-	{ "", "abstract" },
-	{ "class", "field", "constructor", "method"  },
-	null,
-	null,
-	null,
-	null,
-	null
+        { "(draft)     ", "(stable)    ", "(deprecated)", "(obsolete)  " },
+        { "package", "public", "protected", "private" },
+        { "", "static" },
+        { "", "final" },
+        { "", "synchronized" },
+        { "", "abstract" },
+        { "class", "field", "constructor", "method"  },
+        null,
+        null,
+        null,
+        null,
+        null
     };
 
     private static final String[][] shortNames = {
-	{ "DR", "ST", "DP", "OB" },
-	{ "PK", "PB", "PT", "PR" },
-	{ "NS", "ST" },
-	{ "NF", "FN" },
-	{ "NS", "SY" },
-	{ "NA", "AB" },
-	{ "L", "F", "C", "M" },
-	null,
-	null,
-	null,
-	null,
-	null
+        { "DR", "ST", "DP", "OB" },
+        { "PK", "PB", "PT", "PR" },
+        { "NS", "ST" },
+        { "NF", "FN" },
+        { "NS", "SY" },
+        { "NA", "AB" },
+        { "L", "F", "C", "M" },
+        null,
+        null,
+        null,
+        null,
+        null
     };
 
     private static void validateType(int typ) {
-	if (typ < 0 || typ > NUM_TYPES) {
-	    throw new IllegalArgumentException("bad type index: " + typ);
-	}
+        if (typ < 0 || typ > NUM_TYPES) {
+            throw new IllegalArgumentException("bad type index: " + typ);
+        }
     }
 
     public String toString() {
-	return get(NAM, true);
+        return get(NAM, true);
     }
 }
