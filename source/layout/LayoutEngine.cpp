@@ -19,36 +19,9 @@
 #include "GlyphSubstitutionTables.h"
 #include "MorphTables.h"
 
+#include "DefaultCharMapper.h"
+
 #define ARRAY_SIZE(array) (sizeof array  / sizeof array[0])
-
-class DefaultCharMapper : public LECharMapper
-{
-private:
-    le_bool fFilterControls;
-    le_bool fMirror;
-
-    static LEUnicode32 controlChars[];
-
-    static const le_int32 controlCharsCount;
-
-    static LEUnicode32 mirroredChars[];
-
-    static const le_int32 mirroredCharsCount;
-
-public:
-    DefaultCharMapper(le_bool filterControls, le_bool mirror)
-        : fFilterControls(filterControls), fMirror(mirror)
-    {
-        // nothing
-    };
-
-    ~DefaultCharMapper()
-    {
-        // nada
-    };
-
-    LEUnicode32 mapChar(LEUnicode32 ch) const;
-};
 
 LEUnicode32 DefaultCharMapper::controlChars[] = {
     0x0009, 0x000A, 0x000D,
@@ -150,6 +123,7 @@ void LayoutEngine::getGlyphs(le_uint32 glyphs[], le_uint32 extraBits, LEErrorCod
 
 	if (fGlyphs == NULL) {
 		success = LE_NO_LAYOUT_ERROR;
+		return;
 	}
 
     for (i = 0; i < fGlyphCount; i += 1) {
@@ -360,7 +334,7 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstan
         case kndaScriptCode:
         case mlymScriptCode:
         case oryaScriptCode:
-        case punjScriptCode:
+        case guruScriptCode:
         case tamlScriptCode:
         case teluScriptCode:
             result = new IndicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, gsubTable);
@@ -387,7 +361,7 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstan
             case kndaScriptCode:
             case mlymScriptCode:
             case oryaScriptCode:
-            case punjScriptCode:
+            case guruScriptCode:
             case tamlScriptCode:
             case teluScriptCode:
             {

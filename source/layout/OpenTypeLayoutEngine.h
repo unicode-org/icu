@@ -1,6 +1,6 @@
 
 /*
- * @(#)OpenTypeLayoutEngine.h	1.4 00/03/15
+ * %W% %W%
  *
  * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
@@ -103,6 +103,11 @@ private:
 	 * and language codes to four byte tags and save them.
 	 */
     void setScriptAndLanguageTags();
+
+	/**
+	 * The array of script tags, indexed by script code.
+	 */
+	static const LETag scriptTags[];
 
 protected:
 	/**

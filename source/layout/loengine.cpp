@@ -23,87 +23,87 @@ int32_t ICULayoutEngine::le_scriptCodes[] = {
         latnScriptCode,    // kLatinExtendedA
         latnScriptCode,    // kLatinExtendedB
         latnScriptCode,    // kIPAExtension
-        neutScriptCode,    // kSpacingModifier
-        neutScriptCode,    // kCombiningDiacritical
+        qaaiScriptCode,    // kSpacingModifier
+        qaaiScriptCode,    // kCombiningDiacritical
         grekScriptCode,    // kGreek
         cyrlScriptCode,    // kCyrillic
         armnScriptCode,    // kArmenian
         hebrScriptCode,    // kHebrew
         arabScriptCode,    // kArabic
-        neutScriptCode,    // kSyriac **** FIXME: need LEScriptCode ****
-        neutScriptCode,    // kThaana **** FIXME: need LEScriptCode ****
+        syrcScriptCode,    // kSyriac
+        thaaScriptCode,    // kThaana
         devaScriptCode,    // kDevanagari
         bengScriptCode,    // kBengali
-        punjScriptCode,    // kGurmukhi
+        guruScriptCode,    // kGurmukhi
         gujrScriptCode,    // kGujarati
         oryaScriptCode,    // kOriya
         tamlScriptCode,    // kTamil
         teluScriptCode,    // kTelugu
         kndaScriptCode,    // kKannada
         mlymScriptCode,    // kMalayalam
-        neutScriptCode,    // kSinhala **** FIXME: need LEScriptCode ****
+        sinhScriptCode,    // kSinhala
         thaiScriptCode,    // kThai
-        laoScriptCode,     // kLao
+        laooScriptCode,    // kLao
         tibtScriptCode,    // kTibetan
-        neutScriptCode,    // kMyanmar **** FIXME: need LEScriptCode ****
-        grgnScriptCode,    // kGeorgian
+        mymrScriptCode,    // kMyanmar
+        georScriptCode,    // kGeorgian
         hangScriptCode,    // kHangulJamo
-        neutScriptCode,    // kEthiopic **** FIXME: need LEScriptCode ****
-        neutScriptCode,    // kCherokee **** FIXME: need LEScriptCode ****
-        neutScriptCode,    // kUnifiedCanadianAboriginalSyllabics **** FIXME: need LEScriptCode ****
-        neutScriptCode,    // kogham **** FIXME: need LEScriptCode ****
-        neutScriptCode,    // kRunic **** FIXME: need LEScriptCode ****
-        neutScriptCode,    // kKhmer **** FIXME: need LEScriptCode ****
-        neutScriptCode,    // kMongolian **** FIXME: need LEScriptCode ****
+        ethiScriptCode,    // kEthiopic
+        cherScriptCode,    // kCherokee
+        cansScriptCode,    // kUnifiedCanadianAboriginalSyllabics
+        ogamScriptCode,    // kogham
+        runrScriptCode,    // kRunic
+        khmrScriptCode,    // kKhmer
+        mongScriptCode,    // kMongolian
         latnScriptCode,    // kLatinExtendedAdditional
         grekScriptCode,    // kGreekExtended
-        neutScriptCode,    // kGeneralPunctuation
-        neutScriptCode,    // kSuperSubScript
-        neutScriptCode,    // kCurrencySymbolScript
-        neutScriptCode,    // kSymbolCombiningMark
-        neutScriptCode,    // kLetterlikeSymbol
-        neutScriptCode,    // kNumberForm
-        neutScriptCode,    // kArrow
-        neutScriptCode,    // kMathOperator
-        neutScriptCode,    // kMiscTechnical
-        neutScriptCode,    // kControlPicture
-        neutScriptCode,    // kOpticalCharacter
-        neutScriptCode,    // kEnclosedAlphanumeric
-        neutScriptCode,    // kBoxDrawing
-        neutScriptCode,    // kBlockElement
-        neutScriptCode,    // kGeometricShape
-        neutScriptCode,    // kMiscSymbol
-        neutScriptCode,    // kDingbat
-        neutScriptCode,    // kBraillePatterns **** FIXME: need LEScriptCode ****
-        neutScriptCode,    // kCJKRadicalsSupplement **** FIXME: need LEScriptCode ****
-        neutScriptCode,    // kKangxiRadicals **** FIXME: need LEScriptCode ****
-        neutScriptCode,    // kIdeographicDescriptionCharacters **** FIXME: need LEScriptCode ****
-        neutScriptCode,    // kCJKSymbolPunctuation
-        kanaScriptCode,    // kHiragana
-        kanaScriptCode,    // kKatakana
-        bpmfScriptCode,    // kBopomofo
+        qaaiScriptCode,    // kGeneralPunctuation
+        qaaiScriptCode,    // kSuperSubScript
+        qaaiScriptCode,    // kCurrencySymbolScript
+        qaaiScriptCode,    // kSymbolCombiningMark
+        qaaiScriptCode,    // kLetterlikeSymbol
+        qaaiScriptCode,    // kNumberForm
+        qaaiScriptCode,    // kArrow
+        qaaiScriptCode,    // kMathOperator
+        qaaiScriptCode,    // kMiscTechnical
+        qaaiScriptCode,    // kControlPicture
+        qaaiScriptCode,    // kOpticalCharacter
+        qaaiScriptCode,    // kEnclosedAlphanumeric
+        qaaiScriptCode,    // kBoxDrawing
+        qaaiScriptCode,    // kBlockElement
+        qaaiScriptCode,    // kGeometricShape
+        qaaiScriptCode,    // kMiscSymbol
+        qaaiScriptCode,    // kDingbat
+        zyyyScriptCode,    // kBraillePatterns
+        haniScriptCode,    // kCJKRadicalsSupplement
+        haniScriptCode,    // kKangxiRadicals
+        zyyyScriptCode,    // kIdeographicDescriptionCharacters
+        haniScriptCode,    // kCJKSymbolPunctuation
+        hiraScriptCode,    // kHiragana
+        kataScriptCode,    // kKatakana
+        bopoScriptCode,    // kBopomofo
         hangScriptCode,    // kHangulCompatibilityJamo
-        knbnScriptCode,    // kKanbun
-        bpmfScriptCode,    // kBopomofoExtended
+        zyyyScriptCode,    // kKanbun
+        bopoScriptCode,    // kBopomofoExtended
         haniScriptCode,    // kEnclosedCJKLetterMonth
         haniScriptCode,    // kCJKCompatibility
         haniScriptCode,    // kCJKUnifiedIdeographExtensionA
         haniScriptCode,    // kCJKUnifiedIdeograph
-        neutScriptCode,    // kYiSyllables **** FIXME: need LEScriptCode ****
-        neutScriptCode,    // kYiRadicals **** FIXME: need LEScriptCode ****
+        yiiiScriptCode,    // kYiSyllables
+        yiiiScriptCode,    // kYiRadicals
         hangScriptCode,    // kHangulSyllable
-        surrScriptCode,    // kHighSurrogate
-        surrScriptCode,    // kHighPrivateUseSurrogate
-        surrScriptCode,    // kLowSurrogate
-        puseScriptCode,    // kPrivateUse
+        zyyyScriptCode,    // kHighSurrogate
+        zyyyScriptCode,    // kHighPrivateUseSurrogate
+        zyyyScriptCode,    // kLowSurrogate
+        zyyyScriptCode,    // kPrivateUse
         haniScriptCode,    // kCJKCompatibilityIdeograph
-        neutScriptCode,    // kAlphabeticPresentation
+        qaaiScriptCode,    // kAlphabeticPresentation
         arabScriptCode,    // kArabicPresentationA
-        neutScriptCode,    // kCombiningHalfMark
+        qaaiScriptCode,    // kCombiningHalfMark
         haniScriptCode,    // kCJKCompatibilityForm
-        neutScriptCode,    // kSmallFormVariant
+        qaaiScriptCode,    // kSmallFormVariant
         arabScriptCode,    // kArabicPresentationB
-        neutScriptCode,    // kNoScript
-        neutScriptCode     // kHalfwidthFullwidthForm **** FIXME: should be ASCII, CJK, KANA, HANGUL ****
+        qaaiScriptCode,    // kNoScript
+        qaaiScriptCode     // kHalfwidthFullwidthForm **** FIXME: should be ASCII, CJK, KANA, HANGUL ****
 };
 

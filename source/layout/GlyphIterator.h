@@ -1,5 +1,5 @@
 /*
- * @(#)GlyphIterator.h	1.9 00/03/15
+ * %W% %E%
  *
  * (C) Copyright IBM Corp. 1998, 1999, 2000, 2001 - All Rights Reserved
  *
@@ -31,6 +31,7 @@ public:
     le_bool findFeatureTag();
 
     le_bool isRightToLeft() const;
+    le_bool ignoresMarks() const;
 
     LEGlyphID getCurrGlyphID() const;
     le_int32  getCurrStreamPosition() const;

@@ -86,6 +86,11 @@ le_bool GlyphIterator::isRightToLeft() const
     return direction < 0;
 }
 
+le_bool GlyphIterator::ignoresMarks() const
+{
+    return (lookupFlags & lfIgnoreMarks) != 0;
+}
+
 LEGlyphID GlyphIterator::getCurrGlyphID() const
 {
     if (direction < 0) {
@@ -190,7 +195,8 @@ le_bool GlyphIterator::filterGlyph(le_uint32 index) const
     LEGlyphID glyphID = (LEGlyphID) glyphs[index];
     le_int32 glyphClass = gcdNoGlyphClass;
 
-    if (glyphID == 0xFFFF) {
+    // FIXME: is this test really safe?
+    if (glyphID >= 0xFFFE) {
         return true;
     }
 
@@ -322,7 +328,7 @@ le_int32 GlyphIterator::getMarkComponent(le_int32 markPosition) const
         }
 
     for (posn = start; posn <= end; posn += 1) {
-        if (glyphs[posn] == 0xFFFF) {
+        if (glyphs[posn] == 0xFFFE) {
             component += 1;
 		}
     }
