@@ -836,8 +836,11 @@ uint32_t ucol_getDynamicCEs(UColTokenParser *src, tempUCATable *t, UChar *decomp
   collIterate colIt;
   UBool lastNotFound = FALSE;
 
+  init_collIterate(src->UCA, decomp, noOfDec, &colIt);
+
   
   while(j<noOfDec) {
+    colIt.pos = decomp+j;
     CE = ucmp32_get(t->mapping, decomp[j]);
     if(CE == UCOL_NOT_FOUND || lastNotFound) { /* get it from the UCA */
       if(lastNotFound) {
@@ -845,13 +848,14 @@ uint32_t ucol_getDynamicCEs(UColTokenParser *src, tempUCATable *t, UChar *decomp
         j = firstIndex;
       }
       if(firstFound == UCOL_NOT_FOUND) {
-        init_collIterate(src->UCA, decomp+j, 1, &colIt);
-        while(CE != UCOL_NO_MORE_CES) {
-          CE = ucol_getNextCE(src->UCA, &colIt, status);
-          if(CE != UCOL_NO_MORE_CES) {
-            result[resLen++] = CE;
-          }
+        colIt.pos++;
+        CE = ucol_getNextUCA(decomp[j], &colIt, status);
+        result[resLen++] = CE;
+        while(colIt.CEpos>colIt.toReturn) {
+          result[resLen++] = *(colIt.toReturn)++;
         }
+        colIt.CEpos = colIt.toReturn = colIt.CEs;
+        j = colIt.pos - colIt.string-1;
       } else { /* there was some stuff found in contraction */
         result[resLen++] = firstFound;
         j = firstIndex;
