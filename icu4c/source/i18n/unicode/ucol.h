@@ -8,6 +8,7 @@
 #define UCOL_H
 
 #include "unicode/utypes.h"
+#include "unicode/unorm.h"
 /**
  * @name Collator C API
  *
@@ -105,20 +106,20 @@ typedef void* UCollator;
      * @see u_strcoll()
      **/
 /** Possible values for a comparison result */
-enum UCollationResult {
+typedef enum {
   /** string a == string b */
   UCOL_EQUAL    = 0,
   /** string a > string b */
   UCOL_GREATER    = 1,
   /** string a < string b */
   UCOL_LESS    = -1
-};
-typedef enum UCollationResult UCollationResult;
+} UCollationResult ;
 
 
 typedef enum {
   /* accepted by most attributes */
   UCOL_DEFAULT = -1,
+
   /* for UCOL_STRENGTH */
   /** Primary collation strength */
   UCOL_PRIMARY = 0,
@@ -126,60 +127,32 @@ typedef enum {
   UCOL_SECONDARY = 1,
   /** Tertiary collation strength */
   UCOL_TERTIARY = 2,
+  /** Default collation strength */
   UCOL_DEFAULT_STRENGTH = UCOL_TERTIARY,
   /** Quaternary collation strength */
   UCOL_QUATERNARY=3,
   /** Identical collation strength */
   UCOL_IDENTICAL=15,
 
-  /* for UCOL_FRENCH_COLLATION & UCOL_CASE_LEVEL*/
+  /* for UCOL_FRENCH_COLLATION, UCOL_CASE_LEVEL & UCOL_DECOMPOSITION_MODE*/
   UCOL_OFF = 16,
   UCOL_ON = 17,
   
   /* for UCOL_ALTERNATE_HANDLING */
-  UCOL_SHIFTED = 0,
-  UCOL_NON_IGNORABLE = 1,
+  UCOL_SHIFTED = 20,
+  UCOL_NON_IGNORABLE = 21,
 
   /* for UCOL_CASE_FIRST */
-  UCOL_LOWER_FIRST = 0,
-  UCOL_UPPER_FIRST = 1,
+  UCOL_LOWER_FIRST = 24,
+  UCOL_UPPER_FIRST = 25,
 
   /* for UCOL_NORMALIZATION_MODE */
-  /** No decomposition/composition */
-  UCOL_NO_NORMALIZATION = 1,
-  /** Canonical decomposition */
-  UCOL_DECOMP_CAN = 2,
-  /** Compatibility decomposition */
-  UCOL_DECOMP_COMPAT = 3,
-  /** Default normalization */
-  UCOL_DEFAULT_NORMALIZATION = UCOL_DECOMP_COMPAT, 
-  /** Canonical decomposition followed by canonical composition */
-  UCOL_DECOMP_CAN_COMP_COMPAT = 4,
-  /** Compatibility decomposition followed by canonical composition */
-  UCOL_DECOMP_COMPAT_COMP_CAN =5,
-  /** Default collation strength */
+  UCOL_ON_WITHOUT_HANGUL = 28,
+
+  /** No more attribute values after this*/
   UCOL_ATTRIBUTE_VALUE_COUNT
 
 } UColAttributeValue;
-
-  /**
-    * UCOL_NO_NORMALIZATION : Accented characters will not be decomposed for sorting.  
-    * UCOL_DECOM_CAN          : Characters that are canonical variants according 
-    * to Unicode 2.0 will be decomposed for sorting. 
-    * UCOL_DECOMP_COMPAT    : Characters that are compatibility variants will be
-    * decomposed for sorting. This is the default normalization mode used.
-    * UCOL_DECOMP_CAN_COMP_COMPAT : Canonical decomposition followed by canonical composition 
-    * UCOL_DECOMP_COMPAT_COMP_CAN : Compatibility decomposition followed by canonical composition
-    *
-    **/
-/** Possible collation normalization modes  - see UColAttributeValue for the enum */
-typedef UColAttributeValue UNormalizationMode;
-
-/** Possible normalization options */
-typedef enum {
-  /** Do not normalize Hangul */
-  UCOL_IGNORE_HANGUL    = 1
-} UNormalizationOption;
 
     /**
      * Base letter represents a primary difference.  Set comparison
@@ -217,91 +190,6 @@ typedef enum {
      UCOL_STRENGTH,         /* attribute for strength */
      UCOL_ATTRIBUTE_COUNT
 } UColAttribute;
-
-/**
- * @name Unicode normalization API
- *
- * <tt>u_normalize</tt> transforms Unicode text into an equivalent composed or
- * decomposed form, allowing for easier sorting and searching of text.
- * <tt>u_normalize</tt> supports the standard normalization forms described in
- * <a href="http://www.unicode.org/unicode/reports/tr15/" target="unicode">
- * Unicode Technical Report #15</a>.
- * <p>
- * Characters with accents or other adornments can be encoded in
- * several different ways in Unicode.  For example, take the character "Á"
- * (A-acute).   In Unicode, this can be encoded as a single character (the
- * "composed" form):
- * <pre>
- *      00C1    LATIN CAPITAL LETTER A WITH ACUTE</pre>
- * or as two separate characters (the "decomposed" form):
- * <pre>
- *      0041    LATIN CAPITAL LETTER A
- *      0301    COMBINING ACUTE ACCENT</pre>
- * <p>
- * To a user of your program, however, both of these sequences should be
- * treated as the same "user-level" character "Á".  When you are searching or
- * comparing text, you must ensure that these two sequences are treated 
- * equivalently.  In addition, you must handle characters with more than one
- * accent.  Sometimes the order of a character's combining accents is
- * significant, while in other cases accent sequences in different orders are
- * really equivalent.
- * <p>
- * Similarly, the string "ffi" can be encoded as three separate letters:
- * <pre>
- *      0066    LATIN SMALL LETTER F
- *      0066    LATIN SMALL LETTER F
- *      0069    LATIN SMALL LETTER I</pre>
- * or as the single character
- * <pre>
- *      FB03    LATIN SMALL LIGATURE FFI</pre>
- * <p>
- * The ffi ligature is not a distinct semantic character, and strictly speaking
- * it shouldn't be in Unicode at all, but it was included for compatibility
- * with existing character sets that already provided it.  The Unicode standard
- * identifies such characters by giving them "compatibility" decompositions
- * into the corresponding semantic characters.  When sorting and searching, you
- * will often want to use these mappings.
- * <p>
- * <tt>u_normalize</tt> helps solve these problems by transforming text into the
- * canonical composed and decomposed forms as shown in the first example above.  
- * In addition, you can have it perform compatibility decompositions so that 
- * you can treat compatibility characters the same as their equivalents.
- * Finally, <tt>u_normalize</tt> rearranges accents into the proper canonical
- * order, so that you do not have to worry about accent rearrangement on your
- * own.
- * <p>
- * <tt>u_normalize</tt> adds one optional behavior, {@link #UCOL_IGNORE_HANGUL},
- * that differs from
- * the standard Unicode Normalization Forms. 
- **/
- 
- 
-/**
- * Normalize a string.
- * The string will be normalized according the the specified normalization mode
- * and options.
- * @param source The string to normalize.
- * @param sourceLength The length of source, or -1 if null-terminated.
- * @param mode The normalization mode; one of UCOL_NO_NORMALIZATION, 
- * UCOL_CAN_DECOMP, UCOL_COMPAT_DECOMP, UCOL_CAN_DECOMP_COMPAT_COMP, 
- * UCOL_COMPAT_DECOMP_CAN_COMP, UCOL_DEFAULT_NORMALIZATION
- * @param options The normalization options, ORed together; possible values
- * are UCOL_IGNORE_HANGUL
- * @param result A pointer to a buffer to receive the attribute.
- * @param resultLength The maximum size of result.
- * @param status A pointer to an UErrorCode to receive any errors
- * @return The total buffer size needed; if greater than resultLength,
- * the output was truncated.
- * @stable
- */
-U_CAPI int32_t
-u_normalize(const UChar*           source,
-        int32_t                 sourceLength, 
-        UNormalizationMode      mode, 
-        int32_t            options,
-        UChar*                  result,
-        int32_t                 resultLength,
-        UErrorCode*             status);    
 
 /**
  * Open a UCollator for comparing strings.
