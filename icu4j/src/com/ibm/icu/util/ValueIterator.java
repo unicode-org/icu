@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ValueIterator.java,v $
-* $Date: 2002/12/03 20:46:09 $
-* $Revision: 1.9 $
+* $Date: 2003/05/24 00:48:08 $
+* $Revision: 1.10 $
 *
 ******************************************************************************
 */
@@ -36,7 +36,7 @@ package com.ibm.icu.util;
  * }
  * </pre>
  * @author synwee
- * @draft ICU 2.1
+ * @stable ICU 2.6
  */
 public interface ValueIterator
 {
@@ -45,7 +45,7 @@ public interface ValueIterator
     /**
     * <p>The return result container of each iteration. Stores the next 
     * integer index and its associated value Object.</p> 
-    * @draft ICU 2.1
+    * @stable ICU 2.6
     */
     public static final class Element
     {
@@ -53,12 +53,12 @@ public interface ValueIterator
         
         /**
         * Integer index of the current iteration
-        * @draft ICU 2.1
+        * @stable ICU 2.6
         */
         public int integer;
         /**
         * Gets the Object value associated with the integer index.
-        * @draft ICU 2.1
+        * @stable ICU 2.6
         */ 
         public Object value;
         
@@ -83,7 +83,7 @@ public interface ValueIterator
     * @param element for storing the result index and value
     * @return true if we are not at the end of the iteration, false otherwise.
     * @see Element
-    * @draft ICU 2.1
+    * @stable ICU 2.6
     */
     public boolean next(Element element);
     
@@ -91,7 +91,7 @@ public interface ValueIterator
     * <p>Resets the iterator to start iterating from the integer index 
     * Integer.MIN_VALUE or X if a setRange(X, Y) has been called previously.
     * </p>
-    * @draft ICU 2.1
+    * @stable ICU 2.6
     */
     public void reset();
     
@@ -109,7 +109,7 @@ public interface ValueIterator
      * @param limit 1 integer after the last integer in range 
      * @exception IllegalArgumentException thrown when attempting to set an 
      *            illegal range. E.g limit <= start
-     * @draft ICU 2.1
+     * @stable ICU 2.6
      */
     public void setRange(int start, int end);
 }

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationKey.java,v $ 
-* $Date: 2003/02/27 23:43:16 $ 
-* $Revision: 1.14 $
+* $Date: 2003/05/24 00:48:07 $ 
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -104,21 +104,30 @@ public final class CollationKey implements Comparable
          
         /** 
          * Lower bound
+         * @draft ICU 2.6
          */
         public static final int LOWER = 0;
         /** 
          * Upper bound that will match strings of exact size
+         * @draft ICU 2.6
          */
         public static final int UPPER = 1;
         /** 
          * Upper bound that will match all the strings that have the same 
          * initial substring as the given string
+         * @draft ICU 2.6
          */
         public static final int UPPER_LONG = 2;
         /**
          * Number of bound mode
+         * @draft ICU 2.6
          */
         public static final int COUNT = 3;
+        
+        /**
+         * Private Constructor
+         */
+        private BoundMode(){};
     };
     
     // public constructor ---------------------------------------------------

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Normalizer.java,v $ 
- * $Date: 2003/05/14 19:03:30 $ 
- * $Revision: 1.31 $
+ * $Date: 2003/05/24 00:48:07 $ 
+ * $Revision: 1.32 $
  *
  *******************************************************************************
  */
@@ -2002,6 +2002,7 @@ public final class Normalizer implements Cloneable{
      *                  turn the option on and <tt>false</tt> to turn it off.
      *
      * @see #getOption
+     * @draft ICU 2.6
      */
     public void setOption(int option,boolean value) {
 		if (value) {
@@ -2015,6 +2016,7 @@ public final class Normalizer implements Cloneable{
      * Determine whether an option is turned on or off.
      * <p>
      * @see #setOption
+     * @draft ICU 2.6
      */
     public int getOption(int option){
 	    if((options & option)!=0){

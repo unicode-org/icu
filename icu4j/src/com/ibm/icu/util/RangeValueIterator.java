@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/RangeValueIterator.java,v $
-* $Date: 2002/12/03 20:46:09 $
-* $Revision: 1.5 $
+* $Date: 2003/05/24 00:48:08 $
+* $Revision: 1.6 $
 *
 ******************************************************************************
 */
@@ -49,7 +49,7 @@ package com.ibm.icu.util;
  * }
  * </pre>
  * @author synwee
- * @draft ICU 2.1
+ * @stable ICU 2.6
  */
 public interface RangeValueIterator
 {
@@ -59,7 +59,7 @@ public interface RangeValueIterator
     * Return result wrapper for com.ibm.icu.util.RangeValueIterator.
     * Stores the start and limit of the continous result range and the
     * common value all integers between [start, limit - 1] has.
-    * @draft ICU 2.1
+    * @stable ICU 2.6
     */
     public class Element
     {
@@ -68,18 +68,18 @@ public interface RangeValueIterator
         /**
         * Starting integer of the continuous result range that has the same 
         * value
-        * @draft ICU 2.1
+        * @stable ICU 2.6
         */
         public int start;
         /**
         * (End + 1) integer of continuous result range that has the same 
         * value
-        * @draft ICU 2.1
+        * @stable ICU 2.6
         */
         public int limit;
         /**
         * Gets the common value of the continous result range
-        * @draft ICU 2.1
+        * @stable ICU 2.6
         */ 
         public int value;
         
@@ -104,13 +104,13 @@ public interface RangeValueIterator
     * @param element for storing the result range and value
     * @return true if we are not at the end of the iteration, false otherwise.
     * @see Element
-    * @draft ICU 2.1
+    * @stable ICU 2.6
     */
     public boolean next(Element element);
     
     /**
     * Resets the iterator to the beginning of the iteration.
-    * @draft ICU 2.1
+    * @stable ICU 2.6
     */
     public void reset();
 }
