@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: MTextIterator.java,v $ $Revision: 1.4 $ $Date: 2002/02/16 03:06:43 $
+ * @(#)$RCSfile: MTextIterator.java,v $ $Revision: 1.5 $ $Date: 2002/12/13 00:19:49 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -33,6 +33,9 @@ import com.ibm.richtext.textlayout.attributes.AttributedCharacterIterator.Attrib
 import com.ibm.richtext.textlayout.attributes.Map;
 JDK11IMPORTS*/
 
+/**
+ * An AttributedCharacterIterator over an MConstText.
+ */
 public final class MTextIterator implements AttributedCharacterIterator,
                                             Cloneable {
 

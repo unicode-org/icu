@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TestMTextIterator.java,v $ $Revision: 1.2 $ $Date: 2002/02/16 03:06:44 $
+ * @(#)$RCSfile: TestMTextIterator.java,v $ $Revision: 1.3 $ $Date: 2002/12/13 00:19:08 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -24,7 +24,10 @@ import com.ibm.richtext.textlayout.attributes.AttributeMap;
 
 import com.ibm.richtext.textpanel.TextPanel;
 
-public class TestMTextIterator {
+/**
+ * Test for MTextIterator.
+ */
+class TestMTextIterator {
 
     static final String COPYRIGHT =
                 "(C) Copyright IBM Corp. 1998-1999 - All Rights Reserved";
