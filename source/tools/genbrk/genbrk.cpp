@@ -40,11 +40,12 @@
 
 static char *progName;
 static UOption options[]={
-    UOPTION_HELP_H,
-    UOPTION_HELP_QUESTION_MARK,
-    UOPTION_VERBOSE,
-    { "rules", NULL, NULL, NULL, 'r', UOPT_REQUIRES_ARG, 0 },
-    { "out",   NULL, NULL, NULL, 'o', UOPT_REQUIRES_ARG, 0 }
+    UOPTION_HELP_H,             /* 0 */
+    UOPTION_HELP_QUESTION_MARK, /* 1 */
+    UOPTION_VERBOSE,            /* 2 */
+    { "rules", NULL, NULL, NULL, 'r', UOPT_REQUIRES_ARG, 0 },   /* 3 */
+    { "out",   NULL, NULL, NULL, 'o', UOPT_REQUIRES_ARG, 0 },   /* 4 */
+    UOPTION_ICUDATADIR          /* 5 */
 };
 
 void usageAndDie(int retCode) {
@@ -86,6 +87,10 @@ int  main(int argc, char **argv) {
     }
     ruleFileName = options[3].value;
     outFileName  = options[4].value;
+
+    if (options[5].doesOccur) {
+        u_setDataDirectory(options[5].value);
+    }
 
     //
     //  Read in the rule source file
