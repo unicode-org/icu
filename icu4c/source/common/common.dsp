@@ -72,7 +72,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "COMMON_EXPORTS" /FD /GZ /c
-# ADD CPP /nologo /G6 /MDd /Za /W3 /Gm /GX /ZI /Od /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "COMMON_EXPORTS" /D "U_COMMON_IMPLEMENTATION" /D "UDATA_STATIC_LIB" /FR /FD /GF /GZ /c
+# ADD CPP /nologo /G6 /MDd /Za /W3 /Gm /GX /ZI /Od /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "COMMON_EXPORTS" /D "U_COMMON_IMPLEMENTATION" /D "UDATA_STATIC_LIB" /D "RBBI_DEBUG" /FR /FD /GF /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -523,7 +523,7 @@ SOURCE=.\unicode\bidi.h
 InputPath=.\unicode\bidi.h
 
 "..\..\include\unicode\bidi.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -533,7 +533,7 @@ InputPath=.\unicode\bidi.h
 InputPath=.\unicode\bidi.h
 
 "..\..\include\unicode\bidi.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -543,7 +543,7 @@ InputPath=.\unicode\bidi.h
 InputPath=.\unicode\bidi.h
 
 "..\..\include\unicode\bidi.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -553,7 +553,7 @@ InputPath=.\unicode\bidi.h
 InputPath=.\unicode\bidi.h
 
 "..\..\include\unicode\bidi.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -574,7 +574,7 @@ SOURCE=.\unicode\brkiter.h
 InputPath=.\unicode\brkiter.h
 
 "..\..\include\unicode\brkiter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -584,7 +584,7 @@ InputPath=.\unicode\brkiter.h
 InputPath=.\unicode\brkiter.h
 
 "..\..\include\unicode\brkiter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -594,7 +594,7 @@ InputPath=.\unicode\brkiter.h
 InputPath=.\unicode\brkiter.h
 
 "..\..\include\unicode\brkiter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -604,7 +604,7 @@ InputPath=.\unicode\brkiter.h
 InputPath=.\unicode\brkiter.h
 
 "..\..\include\unicode\brkiter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -621,7 +621,7 @@ SOURCE=.\unicode\chariter.h
 InputPath=.\unicode\chariter.h
 
 "..\..\include\unicode\chariter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -631,7 +631,7 @@ InputPath=.\unicode\chariter.h
 InputPath=.\unicode\chariter.h
 
 "..\..\include\unicode\chariter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -641,7 +641,7 @@ InputPath=.\unicode\chariter.h
 InputPath=.\unicode\chariter.h
 
 "..\..\include\unicode\chariter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -651,7 +651,7 @@ InputPath=.\unicode\chariter.h
 InputPath=.\unicode\chariter.h
 
 "..\..\include\unicode\chariter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -676,7 +676,7 @@ SOURCE=.\unicode\convert.h
 InputPath=.\unicode\convert.h
 
 "..\..\include\unicode\convert.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -686,7 +686,7 @@ InputPath=.\unicode\convert.h
 InputPath=.\unicode\convert.h
 
 "..\..\include\unicode\convert.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -696,7 +696,7 @@ InputPath=.\unicode\convert.h
 InputPath=.\unicode\convert.h
 
 "..\..\include\unicode\convert.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -706,7 +706,7 @@ InputPath=.\unicode\convert.h
 InputPath=.\unicode\convert.h
 
 "..\..\include\unicode\convert.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -735,7 +735,7 @@ SOURCE=.\unicode\dbbi.h
 InputPath=.\unicode\dbbi.h
 
 "..\..\include\unicode\dbbi.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -745,7 +745,7 @@ InputPath=.\unicode\dbbi.h
 InputPath=.\unicode\dbbi.h
 
 "..\..\include\unicode\dbbi.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -755,7 +755,7 @@ InputPath=.\unicode\dbbi.h
 InputPath=.\unicode\dbbi.h
 
 "..\..\include\unicode\dbbi.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -765,7 +765,7 @@ InputPath=.\unicode\dbbi.h
 InputPath=.\unicode\dbbi.h
 
 "..\..\include\unicode\dbbi.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -798,7 +798,7 @@ SOURCE=.\unicode\locid.h
 InputPath=.\unicode\locid.h
 
 "..\..\include\unicode\locid.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -808,7 +808,7 @@ InputPath=.\unicode\locid.h
 InputPath=.\unicode\locid.h
 
 "..\..\include\unicode\locid.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -818,7 +818,7 @@ InputPath=.\unicode\locid.h
 InputPath=.\unicode\locid.h
 
 "..\..\include\unicode\locid.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -828,7 +828,7 @@ InputPath=.\unicode\locid.h
 InputPath=.\unicode\locid.h
 
 "..\..\include\unicode\locid.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -853,7 +853,7 @@ SOURCE=.\unicode\normlzr.h
 InputPath=.\unicode\normlzr.h
 
 "..\..\include\unicode\normlzr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -863,7 +863,7 @@ InputPath=.\unicode\normlzr.h
 InputPath=.\unicode\normlzr.h
 
 "..\..\include\unicode\normlzr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -873,7 +873,7 @@ InputPath=.\unicode\normlzr.h
 InputPath=.\unicode\normlzr.h
 
 "..\..\include\unicode\normlzr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -883,7 +883,7 @@ InputPath=.\unicode\normlzr.h
 InputPath=.\unicode\normlzr.h
 
 "..\..\include\unicode\normlzr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -900,7 +900,7 @@ SOURCE=.\unicode\parseerr.h
 InputPath=.\unicode\parseerr.h
 
 "..\..\include\unicode\parseerr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -910,7 +910,7 @@ InputPath=.\unicode\parseerr.h
 InputPath=.\unicode\parseerr.h
 
 "..\..\include\unicode\parseerr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -920,7 +920,7 @@ InputPath=.\unicode\parseerr.h
 InputPath=.\unicode\parseerr.h
 
 "..\..\include\unicode\parseerr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -930,7 +930,7 @@ InputPath=.\unicode\parseerr.h
 InputPath=.\unicode\parseerr.h
 
 "..\..\include\unicode\parseerr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -947,7 +947,7 @@ SOURCE=.\unicode\parsepos.h
 InputPath=.\unicode\parsepos.h
 
 "..\..\include\unicode\parsepos.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -957,7 +957,7 @@ InputPath=.\unicode\parsepos.h
 InputPath=.\unicode\parsepos.h
 
 "..\..\include\unicode\parsepos.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -967,7 +967,7 @@ InputPath=.\unicode\parsepos.h
 InputPath=.\unicode\parsepos.h
 
 "..\..\include\unicode\parsepos.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -977,7 +977,7 @@ InputPath=.\unicode\parsepos.h
 InputPath=.\unicode\parsepos.h
 
 "..\..\include\unicode\parsepos.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -994,7 +994,7 @@ SOURCE=.\unicode\putil.h
 InputPath=.\unicode\putil.h
 
 "..\..\include\unicode\putil.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1004,7 +1004,7 @@ InputPath=.\unicode\putil.h
 InputPath=.\unicode\putil.h
 
 "..\..\include\unicode\putil.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1014,7 +1014,7 @@ InputPath=.\unicode\putil.h
 InputPath=.\unicode\putil.h
 
 "..\..\include\unicode\putil.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1024,7 +1024,7 @@ InputPath=.\unicode\putil.h
 InputPath=.\unicode\putil.h
 
 "..\..\include\unicode\putil.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1041,7 +1041,7 @@ SOURCE=.\unicode\pwin32.h
 InputPath=.\unicode\pwin32.h
 
 "..\..\include\unicode\pwin32.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1051,7 +1051,7 @@ InputPath=.\unicode\pwin32.h
 InputPath=.\unicode\pwin32.h
 
 "..\..\include\unicode\pwin32.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1061,7 +1061,7 @@ InputPath=.\unicode\pwin32.h
 InputPath=.\unicode\pwin32.h
 
 "..\..\include\unicode\pwin32.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1071,7 +1071,7 @@ InputPath=.\unicode\pwin32.h
 InputPath=.\unicode\pwin32.h
 
 "..\..\include\unicode\pwin32.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1088,7 +1088,7 @@ SOURCE=.\unicode\rbbi.h
 InputPath=.\unicode\rbbi.h
 
 "..\..\include\unicode\rbbi.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1098,7 +1098,7 @@ InputPath=.\unicode\rbbi.h
 InputPath=.\unicode\rbbi.h
 
 "..\..\include\unicode\rbbi.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1108,7 +1108,7 @@ InputPath=.\unicode\rbbi.h
 InputPath=.\unicode\rbbi.h
 
 "..\..\include\unicode\rbbi.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1118,7 +1118,7 @@ InputPath=.\unicode\rbbi.h
 InputPath=.\unicode\rbbi.h
 
 "..\..\include\unicode\rbbi.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1163,7 +1163,7 @@ SOURCE=.\unicode\rep.h
 InputPath=.\unicode\rep.h
 
 "..\..\include\unicode\rep.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1173,7 +1173,7 @@ InputPath=.\unicode\rep.h
 InputPath=.\unicode\rep.h
 
 "..\..\include\unicode\rep.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1183,7 +1183,7 @@ InputPath=.\unicode\rep.h
 InputPath=.\unicode\rep.h
 
 "..\..\include\unicode\rep.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1193,7 +1193,7 @@ InputPath=.\unicode\rep.h
 InputPath=.\unicode\rep.h
 
 "..\..\include\unicode\rep.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1210,7 +1210,7 @@ SOURCE=.\unicode\resbund.h
 InputPath=.\unicode\resbund.h
 
 "..\..\include\unicode\resbund.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1220,7 +1220,7 @@ InputPath=.\unicode\resbund.h
 InputPath=.\unicode\resbund.h
 
 "..\..\include\unicode\resbund.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1230,7 +1230,7 @@ InputPath=.\unicode\resbund.h
 InputPath=.\unicode\resbund.h
 
 "..\..\include\unicode\resbund.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1240,7 +1240,7 @@ InputPath=.\unicode\resbund.h
 InputPath=.\unicode\resbund.h
 
 "..\..\include\unicode\resbund.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1257,7 +1257,7 @@ SOURCE=.\unicode\schriter.h
 InputPath=.\unicode\schriter.h
 
 "..\..\include\unicode\schriter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1267,7 +1267,7 @@ InputPath=.\unicode\schriter.h
 InputPath=.\unicode\schriter.h
 
 "..\..\include\unicode\schriter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1277,7 +1277,7 @@ InputPath=.\unicode\schriter.h
 InputPath=.\unicode\schriter.h
 
 "..\..\include\unicode\schriter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1287,7 +1287,7 @@ InputPath=.\unicode\schriter.h
 InputPath=.\unicode\schriter.h
 
 "..\..\include\unicode\schriter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1312,7 +1312,7 @@ SOURCE=.\unicode\ubidi.h
 InputPath=.\unicode\ubidi.h
 
 "..\..\include\unicode\ubidi.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1322,7 +1322,7 @@ InputPath=.\unicode\ubidi.h
 InputPath=.\unicode\ubidi.h
 
 "..\..\include\unicode\ubidi.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1332,7 +1332,7 @@ InputPath=.\unicode\ubidi.h
 InputPath=.\unicode\ubidi.h
 
 "..\..\include\unicode\ubidi.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1342,7 +1342,7 @@ InputPath=.\unicode\ubidi.h
 InputPath=.\unicode\ubidi.h
 
 "..\..\include\unicode\ubidi.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1363,7 +1363,7 @@ SOURCE=.\unicode\ubrk.h
 InputPath=.\unicode\ubrk.h
 
 "..\..\include\unicode\ubrk.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1373,7 +1373,7 @@ InputPath=.\unicode\ubrk.h
 InputPath=.\unicode\ubrk.h
 
 "..\..\include\unicode\ubrk.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1383,7 +1383,7 @@ InputPath=.\unicode\ubrk.h
 InputPath=.\unicode\ubrk.h
 
 "..\..\include\unicode\ubrk.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1393,7 +1393,7 @@ InputPath=.\unicode\ubrk.h
 InputPath=.\unicode\ubrk.h
 
 "..\..\include\unicode\ubrk.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1410,7 +1410,7 @@ SOURCE=.\unicode\uchar.h
 InputPath=.\unicode\uchar.h
 
 "..\..\include\unicode\uchar.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1420,7 +1420,7 @@ InputPath=.\unicode\uchar.h
 InputPath=.\unicode\uchar.h
 
 "..\..\include\unicode\uchar.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1430,7 +1430,7 @@ InputPath=.\unicode\uchar.h
 InputPath=.\unicode\uchar.h
 
 "..\..\include\unicode\uchar.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1440,7 +1440,7 @@ InputPath=.\unicode\uchar.h
 InputPath=.\unicode\uchar.h
 
 "..\..\include\unicode\uchar.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1457,7 +1457,7 @@ SOURCE=.\unicode\uchriter.h
 InputPath=.\unicode\uchriter.h
 
 "..\..\include\unicode\uchriter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1467,7 +1467,7 @@ InputPath=.\unicode\uchriter.h
 InputPath=.\unicode\uchriter.h
 
 "..\..\include\unicode\uchriter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1477,7 +1477,7 @@ InputPath=.\unicode\uchriter.h
 InputPath=.\unicode\uchriter.h
 
 "..\..\include\unicode\uchriter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1487,7 +1487,7 @@ InputPath=.\unicode\uchriter.h
 InputPath=.\unicode\uchriter.h
 
 "..\..\include\unicode\uchriter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1504,7 +1504,7 @@ SOURCE=.\unicode\uclean.h
 InputPath=.\unicode\uclean.h
 
 "..\..\include\unicode\uclean.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1514,7 +1514,7 @@ InputPath=.\unicode\uclean.h
 InputPath=.\unicode\uclean.h
 
 "..\..\include\unicode\uclean.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1524,7 +1524,7 @@ InputPath=.\unicode\uclean.h
 InputPath=.\unicode\uclean.h
 
 "..\..\include\unicode\uclean.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1534,7 +1534,7 @@ InputPath=.\unicode\uclean.h
 InputPath=.\unicode\uclean.h
 
 "..\..\include\unicode\uclean.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1567,7 +1567,7 @@ SOURCE=.\unicode\ucnv.h
 InputPath=.\unicode\ucnv.h
 
 "..\..\include\unicode\ucnv.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1577,7 +1577,7 @@ InputPath=.\unicode\ucnv.h
 InputPath=.\unicode\ucnv.h
 
 "..\..\include\unicode\ucnv.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1587,7 +1587,7 @@ InputPath=.\unicode\ucnv.h
 InputPath=.\unicode\ucnv.h
 
 "..\..\include\unicode\ucnv.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1597,7 +1597,7 @@ InputPath=.\unicode\ucnv.h
 InputPath=.\unicode\ucnv.h
 
 "..\..\include\unicode\ucnv.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1618,7 +1618,7 @@ SOURCE=.\unicode\ucnv_cb.h
 InputPath=.\unicode\ucnv_cb.h
 
 "..\..\include\unicode\ucnv_cb.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1628,7 +1628,7 @@ InputPath=.\unicode\ucnv_cb.h
 InputPath=.\unicode\ucnv_cb.h
 
 "..\..\include\unicode\ucnv_cb.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1638,7 +1638,7 @@ InputPath=.\unicode\ucnv_cb.h
 InputPath=.\unicode\ucnv_cb.h
 
 "..\..\include\unicode\ucnv_cb.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1648,7 +1648,7 @@ InputPath=.\unicode\ucnv_cb.h
 InputPath=.\unicode\ucnv_cb.h
 
 "..\..\include\unicode\ucnv_cb.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1669,7 +1669,7 @@ SOURCE=.\unicode\ucnv_err.h
 InputPath=.\unicode\ucnv_err.h
 
 "..\..\include\unicode\ucnv_err.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1679,7 +1679,7 @@ InputPath=.\unicode\ucnv_err.h
 InputPath=.\unicode\ucnv_err.h
 
 "..\..\include\unicode\ucnv_err.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1689,7 +1689,7 @@ InputPath=.\unicode\ucnv_err.h
 InputPath=.\unicode\ucnv_err.h
 
 "..\..\include\unicode\ucnv_err.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1699,7 +1699,7 @@ InputPath=.\unicode\ucnv_err.h
 InputPath=.\unicode\ucnv_err.h
 
 "..\..\include\unicode\ucnv_err.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1728,7 +1728,7 @@ SOURCE=.\unicode\udata.h
 InputPath=.\unicode\udata.h
 
 "..\..\include\unicode\udata.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1738,7 +1738,7 @@ InputPath=.\unicode\udata.h
 InputPath=.\unicode\udata.h
 
 "..\..\include\unicode\udata.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1748,7 +1748,7 @@ InputPath=.\unicode\udata.h
 InputPath=.\unicode\udata.h
 
 "..\..\include\unicode\udata.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1758,7 +1758,7 @@ InputPath=.\unicode\udata.h
 InputPath=.\unicode\udata.h
 
 "..\..\include\unicode\udata.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1779,7 +1779,7 @@ SOURCE=.\unicode\uenum.h
 InputPath=.\unicode\uenum.h
 
 "..\..\include\unicode\uenum.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1789,7 +1789,7 @@ InputPath=.\unicode\uenum.h
 InputPath=.\unicode\uenum.h
 
 "..\..\include\unicode\uenum.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1799,7 +1799,7 @@ InputPath=.\unicode\uenum.h
 InputPath=.\unicode\uenum.h
 
 "..\..\include\unicode\uenum.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1809,7 +1809,7 @@ InputPath=.\unicode\uenum.h
 InputPath=.\unicode\uenum.h
 
 "..\..\include\unicode\uenum.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1834,7 +1834,7 @@ SOURCE=.\unicode\uiter.h
 InputPath=.\unicode\uiter.h
 
 "..\..\include\unicode\uiter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1844,7 +1844,7 @@ InputPath=.\unicode\uiter.h
 InputPath=.\unicode\uiter.h
 
 "..\..\include\unicode\uiter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1854,7 +1854,7 @@ InputPath=.\unicode\uiter.h
 InputPath=.\unicode\uiter.h
 
 "..\..\include\unicode\uiter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1864,7 +1864,7 @@ InputPath=.\unicode\uiter.h
 InputPath=.\unicode\uiter.h
 
 "..\..\include\unicode\uiter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1881,7 +1881,7 @@ SOURCE=.\unicode\uloc.h
 InputPath=.\unicode\uloc.h
 
 "..\..\include\unicode\uloc.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1891,7 +1891,7 @@ InputPath=.\unicode\uloc.h
 InputPath=.\unicode\uloc.h
 
 "..\..\include\unicode\uloc.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1901,7 +1901,7 @@ InputPath=.\unicode\uloc.h
 InputPath=.\unicode\uloc.h
 
 "..\..\include\unicode\uloc.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1911,7 +1911,7 @@ InputPath=.\unicode\uloc.h
 InputPath=.\unicode\uloc.h
 
 "..\..\include\unicode\uloc.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1928,7 +1928,7 @@ SOURCE=.\unicode\umachine.h
 InputPath=.\unicode\umachine.h
 
 "..\..\include\unicode\umachine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1938,7 +1938,7 @@ InputPath=.\unicode\umachine.h
 InputPath=.\unicode\umachine.h
 
 "..\..\include\unicode\umachine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1948,7 +1948,7 @@ InputPath=.\unicode\umachine.h
 InputPath=.\unicode\umachine.h
 
 "..\..\include\unicode\umachine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1958,7 +1958,7 @@ InputPath=.\unicode\umachine.h
 InputPath=.\unicode\umachine.h
 
 "..\..\include\unicode\umachine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1984,7 +1984,7 @@ InputPath=.\unicode\umisc.h
 InputName=umisc
 
 "..\..\include\unicode\$(InputName).h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -1995,7 +1995,7 @@ InputPath=.\unicode\umisc.h
 InputName=umisc
 
 "..\..\include\unicode\$(InputName).h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2006,7 +2006,7 @@ InputPath=.\unicode\umisc.h
 InputName=umisc
 
 "..\..\include\unicode\$(InputName).h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2017,7 +2017,7 @@ InputPath=.\unicode\umisc.h
 InputName=umisc
 
 "..\..\include\unicode\$(InputName).h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2038,7 +2038,7 @@ SOURCE=.\unicode\unicode.h
 InputPath=.\unicode\unicode.h
 
 "..\..\include\unicode\unicode.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2048,7 +2048,7 @@ InputPath=.\unicode\unicode.h
 InputPath=.\unicode\unicode.h
 
 "..\..\include\unicode\unicode.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2058,7 +2058,7 @@ InputPath=.\unicode\unicode.h
 InputPath=.\unicode\unicode.h
 
 "..\..\include\unicode\unicode.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2068,7 +2068,7 @@ InputPath=.\unicode\unicode.h
 InputPath=.\unicode\unicode.h
 
 "..\..\include\unicode\unicode.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2085,7 +2085,7 @@ SOURCE=.\unicode\unifilt.h
 InputPath=.\unicode\unifilt.h
 
 "..\..\include\unicode\unifilt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2095,7 +2095,7 @@ InputPath=.\unicode\unifilt.h
 InputPath=.\unicode\unifilt.h
 
 "..\..\include\unicode\unifilt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2105,7 +2105,7 @@ InputPath=.\unicode\unifilt.h
 InputPath=.\unicode\unifilt.h
 
 "..\..\include\unicode\unifilt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2115,7 +2115,7 @@ InputPath=.\unicode\unifilt.h
 InputPath=.\unicode\unifilt.h
 
 "..\..\include\unicode\unifilt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2132,7 +2132,7 @@ SOURCE=.\unicode\unifunct.h
 InputPath=.\unicode\unifunct.h
 
 "..\..\include\unicode\unifunct.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2142,7 +2142,7 @@ InputPath=.\unicode\unifunct.h
 InputPath=.\unicode\unifunct.h
 
 "..\..\include\unicode\unifunct.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2152,7 +2152,7 @@ InputPath=.\unicode\unifunct.h
 InputPath=.\unicode\unifunct.h
 
 "..\..\include\unicode\unifunct.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2162,7 +2162,7 @@ InputPath=.\unicode\unifunct.h
 InputPath=.\unicode\unifunct.h
 
 "..\..\include\unicode\unifunct.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2179,7 +2179,7 @@ SOURCE=.\unicode\unimatch.h
 InputPath=.\unicode\unimatch.h
 
 "..\..\include\unicode\unimatch.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2189,7 +2189,7 @@ InputPath=.\unicode\unimatch.h
 InputPath=.\unicode\unimatch.h
 
 "..\..\include\unicode\unimatch.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2199,7 +2199,7 @@ InputPath=.\unicode\unimatch.h
 InputPath=.\unicode\unimatch.h
 
 "..\..\include\unicode\unimatch.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2209,7 +2209,7 @@ InputPath=.\unicode\unimatch.h
 InputPath=.\unicode\unimatch.h
 
 "..\..\include\unicode\unimatch.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2226,7 +2226,7 @@ SOURCE=.\unicode\uniset.h
 InputPath=.\unicode\uniset.h
 
 "..\..\include\unicode\uniset.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2236,7 +2236,7 @@ InputPath=.\unicode\uniset.h
 InputPath=.\unicode\uniset.h
 
 "..\..\include\unicode\uniset.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2246,7 +2246,7 @@ InputPath=.\unicode\uniset.h
 InputPath=.\unicode\uniset.h
 
 "..\..\include\unicode\uniset.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2256,7 +2256,7 @@ InputPath=.\unicode\uniset.h
 InputPath=.\unicode\uniset.h
 
 "..\..\include\unicode\uniset.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2273,7 +2273,7 @@ SOURCE=.\unicode\unistr.h
 InputPath=.\unicode\unistr.h
 
 "..\..\include\unicode\unistr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2283,7 +2283,7 @@ InputPath=.\unicode\unistr.h
 InputPath=.\unicode\unistr.h
 
 "..\..\include\unicode\unistr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2293,7 +2293,7 @@ InputPath=.\unicode\unistr.h
 InputPath=.\unicode\unistr.h
 
 "..\..\include\unicode\unistr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2303,7 +2303,7 @@ InputPath=.\unicode\unistr.h
 InputPath=.\unicode\unistr.h
 
 "..\..\include\unicode\unistr.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2320,7 +2320,7 @@ SOURCE=.\unicode\unorm.h
 InputPath=.\unicode\unorm.h
 
 "..\..\include\unicode\unorm.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2330,7 +2330,7 @@ InputPath=.\unicode\unorm.h
 InputPath=.\unicode\unorm.h
 
 "..\..\include\unicode\unorm.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2340,7 +2340,7 @@ InputPath=.\unicode\unorm.h
 InputPath=.\unicode\unorm.h
 
 "..\..\include\unicode\unorm.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2350,7 +2350,7 @@ InputPath=.\unicode\unorm.h
 InputPath=.\unicode\unorm.h
 
 "..\..\include\unicode\unorm.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2371,7 +2371,7 @@ SOURCE=.\unicode\uobject.h
 InputPath=.\unicode\uobject.h
 
 "..\..\include\unicode\uobject.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy $(InputPath) ..\..\include\unicode
+	copy $(InputPath) ..\..\include\unicode
 
 # End Custom Build
 
@@ -2381,7 +2381,7 @@ InputPath=.\unicode\uobject.h
 InputPath=.\unicode\uobject.h
 
 "..\..\include\unicode\uobject.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy $(InputPath) ..\..\include\unicode
+	copy $(InputPath) ..\..\include\unicode
 
 # End Custom Build
 
@@ -2391,7 +2391,7 @@ InputPath=.\unicode\uobject.h
 InputPath=.\unicode\uobject.h
 
 "..\..\include\unicode\uobject.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy $(InputPath) ..\..\include\unicode
+	copy $(InputPath) ..\..\include\unicode
 
 # End Custom Build
 
@@ -2401,7 +2401,7 @@ InputPath=.\unicode\uobject.h
 InputPath=.\unicode\uobject.h
 
 "..\..\include\unicode\uobject.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy $(InputPath) ..\..\include\unicode
+	copy $(InputPath) ..\..\include\unicode
 
 # End Custom Build
 
@@ -2426,7 +2426,7 @@ SOURCE=.\unicode\urename.h
 InputPath=.\unicode\urename.h
 
 "..\..\include\unicode\urename.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2436,7 +2436,7 @@ InputPath=.\unicode\urename.h
 InputPath=.\unicode\urename.h
 
 "..\..\include\unicode\urename.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2446,7 +2446,7 @@ InputPath=.\unicode\urename.h
 InputPath=.\unicode\urename.h
 
 "..\..\include\unicode\urename.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2456,7 +2456,7 @@ InputPath=.\unicode\urename.h
 InputPath=.\unicode\urename.h
 
 "..\..\include\unicode\urename.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2473,7 +2473,7 @@ SOURCE=.\unicode\urep.h
 InputPath=.\unicode\urep.h
 
 "..\..\include\unicode\urep.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2483,7 +2483,7 @@ InputPath=.\unicode\urep.h
 InputPath=.\unicode\urep.h
 
 "..\..\include\unicode\urep.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2493,7 +2493,7 @@ InputPath=.\unicode\urep.h
 InputPath=.\unicode\urep.h
 
 "..\..\include\unicode\urep.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2503,7 +2503,7 @@ InputPath=.\unicode\urep.h
 InputPath=.\unicode\urep.h
 
 "..\..\include\unicode\urep.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2520,7 +2520,7 @@ SOURCE=.\unicode\ures.h
 InputPath=.\unicode\ures.h
 
 "..\..\include\unicode\ures.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2530,7 +2530,7 @@ InputPath=.\unicode\ures.h
 InputPath=.\unicode\ures.h
 
 "..\..\include\unicode\ures.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2540,7 +2540,7 @@ InputPath=.\unicode\ures.h
 InputPath=.\unicode\ures.h
 
 "..\..\include\unicode\ures.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2550,7 +2550,7 @@ InputPath=.\unicode\ures.h
 InputPath=.\unicode\ures.h
 
 "..\..\include\unicode\ures.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2579,7 +2579,7 @@ SOURCE=.\unicode\uscript.h
 InputPath=.\unicode\uscript.h
 
 "..\..\include\unicode\uscript.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2589,7 +2589,7 @@ InputPath=.\unicode\uscript.h
 InputPath=.\unicode\uscript.h
 
 "..\..\include\unicode\uscript.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2599,7 +2599,7 @@ InputPath=.\unicode\uscript.h
 InputPath=.\unicode\uscript.h
 
 "..\..\include\unicode\uscript.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2609,7 +2609,7 @@ InputPath=.\unicode\uscript.h
 InputPath=.\unicode\uscript.h
 
 "..\..\include\unicode\uscript.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2626,7 +2626,7 @@ SOURCE=.\unicode\uset.h
 InputPath=.\unicode\uset.h
 
 "..\..\include\unicode\uset.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2636,7 +2636,7 @@ InputPath=.\unicode\uset.h
 InputPath=.\unicode\uset.h
 
 "..\..\include\unicode\uset.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2646,7 +2646,7 @@ InputPath=.\unicode\uset.h
 InputPath=.\unicode\uset.h
 
 "..\..\include\unicode\uset.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2656,7 +2656,7 @@ InputPath=.\unicode\uset.h
 InputPath=.\unicode\uset.h
 
 "..\..\include\unicode\uset.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2673,7 +2673,7 @@ SOURCE=.\unicode\usetiter.h
 InputPath=.\unicode\usetiter.h
 
 "..\..\include\unicode\usetiter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2683,7 +2683,7 @@ InputPath=.\unicode\usetiter.h
 InputPath=.\unicode\usetiter.h
 
 "..\..\include\unicode\usetiter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2693,7 +2693,7 @@ InputPath=.\unicode\usetiter.h
 InputPath=.\unicode\usetiter.h
 
 "..\..\include\unicode\usetiter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2703,7 +2703,7 @@ InputPath=.\unicode\usetiter.h
 InputPath=.\unicode\usetiter.h
 
 "..\..\include\unicode\usetiter.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2720,7 +2720,7 @@ SOURCE=.\unicode\ushape.h
 InputPath=.\unicode\ushape.h
 
 "..\..\include\unicode\ushape.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2730,7 +2730,7 @@ InputPath=.\unicode\ushape.h
 InputPath=.\unicode\ushape.h
 
 "..\..\include\unicode\ushape.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2740,7 +2740,7 @@ InputPath=.\unicode\ushape.h
 InputPath=.\unicode\ushape.h
 
 "..\..\include\unicode\ushape.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2750,7 +2750,7 @@ InputPath=.\unicode\ushape.h
 InputPath=.\unicode\ushape.h
 
 "..\..\include\unicode\ushape.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2775,7 +2775,7 @@ SOURCE=.\unicode\ustring.h
 InputPath=.\unicode\ustring.h
 
 "..\..\include\unicode\ustring.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2785,7 +2785,7 @@ InputPath=.\unicode\ustring.h
 InputPath=.\unicode\ustring.h
 
 "..\..\include\unicode\ustring.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2795,7 +2795,7 @@ InputPath=.\unicode\ustring.h
 InputPath=.\unicode\ustring.h
 
 "..\..\include\unicode\ustring.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2805,7 +2805,7 @@ InputPath=.\unicode\ustring.h
 InputPath=.\unicode\ustring.h
 
 "..\..\include\unicode\ustring.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2822,7 +2822,7 @@ SOURCE=.\unicode\utf.h
 InputPath=.\unicode\utf.h
 
 "..\..\include\unicode\utf.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2832,7 +2832,7 @@ InputPath=.\unicode\utf.h
 InputPath=.\unicode\utf.h
 
 "..\..\include\unicode\utf.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2842,7 +2842,7 @@ InputPath=.\unicode\utf.h
 InputPath=.\unicode\utf.h
 
 "..\..\include\unicode\utf.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2852,7 +2852,7 @@ InputPath=.\unicode\utf.h
 InputPath=.\unicode\utf.h
 
 "..\..\include\unicode\utf.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2869,7 +2869,7 @@ SOURCE=.\unicode\utf16.h
 InputPath=.\unicode\utf16.h
 
 "..\..\include\unicode\utf16.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2879,7 +2879,7 @@ InputPath=.\unicode\utf16.h
 InputPath=.\unicode\utf16.h
 
 "..\..\include\unicode\utf16.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2889,7 +2889,7 @@ InputPath=.\unicode\utf16.h
 InputPath=.\unicode\utf16.h
 
 "..\..\include\unicode\utf16.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2899,7 +2899,7 @@ InputPath=.\unicode\utf16.h
 InputPath=.\unicode\utf16.h
 
 "..\..\include\unicode\utf16.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2916,7 +2916,7 @@ SOURCE=.\unicode\utf32.h
 InputPath=.\unicode\utf32.h
 
 "..\..\include\unicode\utf32.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2926,7 +2926,7 @@ InputPath=.\unicode\utf32.h
 InputPath=.\unicode\utf32.h
 
 "..\..\include\unicode\utf32.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2936,7 +2936,7 @@ InputPath=.\unicode\utf32.h
 InputPath=.\unicode\utf32.h
 
 "..\..\include\unicode\utf32.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2946,7 +2946,7 @@ InputPath=.\unicode\utf32.h
 InputPath=.\unicode\utf32.h
 
 "..\..\include\unicode\utf32.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2963,7 +2963,7 @@ SOURCE=.\unicode\utf8.h
 InputPath=.\unicode\utf8.h
 
 "..\..\include\unicode\utf8.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2973,7 +2973,7 @@ InputPath=.\unicode\utf8.h
 InputPath=.\unicode\utf8.h
 
 "..\..\include\unicode\utf8.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2983,7 +2983,7 @@ InputPath=.\unicode\utf8.h
 InputPath=.\unicode\utf8.h
 
 "..\..\include\unicode\utf8.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -2993,7 +2993,7 @@ InputPath=.\unicode\utf8.h
 InputPath=.\unicode\utf8.h
 
 "..\..\include\unicode\utf8.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -3018,7 +3018,7 @@ SOURCE=.\unicode\utypes.h
 InputPath=.\unicode\utypes.h
 
 "..\..\include\unicode\utypes.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -3028,7 +3028,7 @@ InputPath=.\unicode\utypes.h
 InputPath=.\unicode\utypes.h
 
 "..\..\include\unicode\utypes.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -3038,7 +3038,7 @@ InputPath=.\unicode\utypes.h
 InputPath=.\unicode\utypes.h
 
 "..\..\include\unicode\utypes.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -3048,7 +3048,7 @@ InputPath=.\unicode\utypes.h
 InputPath=.\unicode\utypes.h
 
 "..\..\include\unicode\utypes.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -3069,7 +3069,7 @@ SOURCE=.\unicode\uversion.h
 InputPath=.\unicode\uversion.h
 
 "..\..\include\unicode\uversion.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -3079,7 +3079,7 @@ InputPath=.\unicode\uversion.h
 InputPath=.\unicode\uversion.h
 
 "..\..\include\unicode\uversion.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -3089,7 +3089,7 @@ InputPath=.\unicode\uversion.h
 InputPath=.\unicode\uversion.h
 
 "..\..\include\unicode\uversion.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
@@ -3099,7 +3099,7 @@ InputPath=.\unicode\uversion.h
 InputPath=.\unicode\uversion.h
 
 "..\..\include\unicode\uversion.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-    copy    $(InputPath)    ..\..\include\unicode
+	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build
 
