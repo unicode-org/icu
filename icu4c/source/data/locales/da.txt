@@ -7,6 +7,106 @@
 
 da {
     Version {"3.0"}
+    calendar{
+        gregorian{
+            DateTimeElements:intvector {
+                2,
+                4,
+            }
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE dd MMMM yyyy",
+                "d. MMM yyyy",
+                "dd-MM-yyyy",
+                "dd-MM-yy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "s\u00F8n",
+                        "man",
+                        "tir",
+                        "ons",
+                        "tor",
+                        "fre",
+                        "l\u00F8r",
+                    }
+                    narrow{
+		                "S",
+		                "M",
+		                "T",
+		                "O",
+		                "T",
+		                "F",
+		                "L",
+                    }
+                    wide{
+                        "s\u00F8ndag",
+                        "mandag",
+                        "tirsdag",
+                        "onsdag",
+                        "torsdag",
+                        "fredag",
+                        "l\u00F8rdag",
+                    }
+                }
+            }
+            eras{
+                "f.Kr.",
+                "e.Kr.",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "jan",
+                        "feb",
+                        "mar",
+                        "apr",
+                        "maj",
+                        "jun",
+                        "jul",
+                        "aug",
+                        "sep",
+                        "okt",
+                        "nov",
+                        "dec",
+                    }
+                    narrow{
+		                "J",
+		                "F",
+		                "M",
+		                "A",
+		                "M",
+		                "J",
+		                "J",
+		                "A",
+		                "S",
+		                "O",
+		                "N",
+ 		                "D",
+                    }
+                    wide{
+                        "januar",
+                        "februar",
+                        "marts",
+                        "april",
+                        "maj",
+                        "juni",
+                        "juli",
+                        "august",
+                        "september",
+                        "oktober",
+                        "november",
+                        "december",
+                    }
+                }
+            }
+        }
+    }
     Countries {
         Fallback{ "en"}
         //AD { "Andorra" }
@@ -639,7 +739,6 @@ da {
         bad { "Banda" }
         //bai { "Bamileke Languages" }
         bal { "Baluchi" }
-        bam { "Bambara" }
         ban { "Balinesisk" }
         bas { "Basa" }
         bat { "Baltiske sprog (\u00f8vrige)" }
@@ -1072,6 +1171,10 @@ da {
         zu  { "Zulu" }
         zun { "Zuni" }
     }
+    ExemplarCharacters { "[a-z \u00e6 \u00e5 \u00f8 \u00e1 \u00e9 \u00ed \u00f3 \u00fa \u00fd]" }
+    LocaleScript{  
+        "Latn",  // ISO 15924 Name 
+    }
     localPatternChars { "GuMtkHmsSEDFwWahKzUeygAZ" }
     NumberElements { 
         ",",
@@ -1113,10 +1216,6 @@ da {
         Ugar { "Ugaritisk" }
         //Yiii { "Jiddisch" } // This is wrong. This is Yi, not Yiddish.
         Zyyy { "Ukendt" } // This may need to become "undetermined script"
-    }
-    ExemplarCharacters { "[a-z \u00e6 \u00e5 \u00f8 \u00e1 \u00e9 \u00ed \u00f3 \u00fa \u00fd]" }
-    LocaleScript{  
-        "Latn",  // ISO 15924 Name 
     }
     SpelloutRules {
         "-x: minus >>;\n"
@@ -1167,106 +1266,6 @@ da {
         }
     }
 
-    calendar{
-        gregorian{
-            DateTimeElements:intvector {
-                2,
-                4,
-            }
-            DateTimePatterns{
-                "HH:mm:ss z",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE dd MMMM yyyy",
-                "d. MMM yyyy",
-                "dd-MM-yyyy",
-                "dd-MM-yy",
-                "{1} {0}",
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "s\u00F8n",
-                        "man",
-                        "tir",
-                        "ons",
-                        "tor",
-                        "fre",
-                        "l\u00F8r",
-                    }
-                    narrow{
-		                "S",
-		                "M",
-		                "T",
-		                "O",
-		                "T",
-		                "F",
-		                "L",
-                    }
-                    wide{
-                        "s\u00F8ndag",
-                        "mandag",
-                        "tirsdag",
-                        "onsdag",
-                        "torsdag",
-                        "fredag",
-                        "l\u00F8rdag",
-                    }
-                }
-            }
-            eras{
-                "f.Kr.",
-                "e.Kr.",
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "jan",
-                        "feb",
-                        "mar",
-                        "apr",
-                        "maj",
-                        "jun",
-                        "jul",
-                        "aug",
-                        "sep",
-                        "okt",
-                        "nov",
-                        "dec",
-                    }
-                    narrow{
-		                "J",
-		                "F",
-		                "M",
-		                "A",
-		                "M",
-		                "J",
-		                "J",
-		                "A",
-		                "S",
-		                "O",
-		                "N",
- 		                "D",
-                    }
-                    wide{
-                        "januar",
-                        "februar",
-                        "marts",
-                        "april",
-                        "maj",
-                        "juni",
-                        "juli",
-                        "august",
-                        "september",
-                        "oktober",
-                        "november",
-                        "december",
-                    }
-                }
-            }
-        }
-    }
     zoneStrings {
          {
             "PST",

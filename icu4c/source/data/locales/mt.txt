@@ -21,9 +21,301 @@
 mt {
     Version { "2.0" } // 2003-10-18 - first MSA 200:2003 compliant v
     
-    //Variants{
-    //    PREEURO { "Qabel il-Euro" }
-    //} 
+    calendar{
+        gregorian{     
+        
+          // illum is-Sibt, 01 ta'' Awissu, 1998 :)
+          
+            DateTimeElements:intvector {
+                1,       // Sunday (il-Hadd) is first day of calendar week
+                4        // four days minimal in first week for week numbering  [MSA 200:2003 4.5.5, referencing 8601?]
+                //       Monday is first day of workweek. [MSA 200:2003 4.5.5]
+            }
+            DateTimePatterns{
+                "HH:mm:ss z",   // needs to be 24 hour
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d 'ta''' MMMM yyyy", // long day with weekday [MSA 200:2003 4.5.2]
+                "d 'ta''' MMMM yyyy", //
+                "dd MMM yyyy",
+                "dd/MM/yyyy",
+                "{1} {0}"
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Ħad",
+                        "Tne",
+                        "Tli",
+                        "Erb", 
+                        "Ħam",
+                        "Ġim",
+                        "Sib"
+                    }
+                    wide{
+                        "Il-Ħadd",
+                        "It-Tnejn",
+                        "It-Tlieta",
+                        "L-Erbgħa",
+                        "Il-Ħamis",
+                        "Il-Ġimgħa",
+                        "Is-Sibt"
+                    }
+                }
+            }
+            eras{
+                 "QK",  // "Qabel Kristu" 
+                 "WK"   // "Wara Kristu"
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Jan",
+                        "Fra",
+                        "Mar",
+                        "Apr",
+                        "Mej",
+                        "Ġun",
+                        "Lul",
+                        "Awi",
+                        "Set",
+                        "Ott",
+                        "Nov",
+                        "Diċ"
+                    }
+                    wide{
+                        Jannar,
+                        Frar,
+                        Marzu,
+                        April,
+                        Mejju,
+                        Ġunju,
+                        Lulju,
+                        Awissu,
+                        Settembru,
+                        Ottubru,
+                        Novembru,
+                        Diċembru
+                    }
+                }
+            }
+        }
+    }
+
+    // 'e' on left denotes formerly commented out dups of english
+    // Duplicate data has been commented out.
+    Countries {
+        Fallback{ "en"}
+  /*e*/ AD { "Andorra" } 	// Andorra
+        AE { "Emirati Għarab Maqgħuda" } 	// United Arab Emirates
+        AF { "Afganistan" } 	// Afghanistan
+        AI { "Angwilla" } 	// Anguilla
+        AL { "Albanija" } 	// Albania
+        AM { "Armenja" } 	// Armenia
+        AN { "Antilles Olandiżi" } 	// Netherlands Antilles
+  /*e*/ AO { "Angola" } 	// Angola
+        AR { "Arġentina" } 	// Argentina
+        AS { "Samoa Amerikana" } 	// American Samoa
+        AT { "Awstrija" } 	// Austria
+        AU { "Awstralja" } 	// Australia
+  /*e*/ AW { "Aruba" } 	// Aruba
+        AZ { "Ażerbajġan" } 	// Azerbaijan
+        BA { "Bożnija Ħerżegovina" } 	// Bosnia and Herzegovina
+  /*e*/ BB { "Barbados" } 	// Barbados
+        BD { "Bangladexx" } 	// Bangladesh
+        BE { "Belġju" } 	// Belgium
+  /*e*/ BF { "Burkina Faso" } 	// Burkina Faso
+        BG { "Bulgarija" } 	// Bulgaria
+        BH { "Baħrajn" } 	// Bahrain
+  /*e*/ BI { "Burundi" } 	// Burundi
+  /*e*/ BJ { "Benin" } 	// Benin
+  /*e*/ BM { "Bermuda" } 	// Bermuda
+        BN { "Brunej" } 	// Brunei
+        BO { "Bolivja" } 	// Bolivia
+        BR { "Brażil" } 	// Brazil
+        BS { "Baħamas" } 	// Bahamas
+        BT { "Butan" } 	// Bhutan
+  /*e*/ BW { "Botswana" } 	// Botswana
+        BY { "Bjelorussja" } 	// Belarus
+        BZ { "Beliże" } 	// Belize
+        CA { "Kanada" } 	// Canada
+        CF { "Repubblika Afrikana Ċentrali" } 	// Central African Republic
+        CG { "Kongo" } 	// Congo
+        CH { "Svizzera" } 	// Switzerland
+        CI { "Kosta ta' l-Avorju" } 	// Côte d'Ivoire
+        CL { "Ċili" } 	// Chile
+        CM { "Kamerun" } 	// Cameroon
+        CN { "Ċina" } 	// China
+        CO { "Kolumbja" } 	// Colombia
+        CR { "Kosta Rika" } 	// Costa Rica
+        CU { "Kuba" } 	// Cuba
+        CV { "Kape Verde" } 	// Cape Verde
+        CY { "Ċipru" } 	// Cyprus
+        CZ { "Repubblika Ċeka" } 	// Czech Republic
+        DE { "Ġermanja" } 	// Germany
+        DJ { "Ġibuti" } 	// Djibouti
+        DK { "Danimarka" } 	// Denmark
+        DM { "Dominika" } 	// Dominica
+        DO { "Republikka Domenikana" } 	// Dominican Republic
+        DZ { "Alġerija" } 	// Algeria
+        EC { "Ekwador" } 	// Ecuador
+        EE { "Estonja" } 	// Estonia
+        EG { "Eġittu" } 	// Egypt
+        EH { "Sahara tal-Punent" } 	// Western Sahara
+        ER { "Eritreja" } 	// Eritrea
+        ES { "Spanja" } 	// Spain
+        ET { "Etijopja" } 	// Ethiopia
+        FI { "Finlandja" } 	// Finland
+        FJ { "Fiġi" } 	// Fiji
+        FM { "Mikronesja" } 	// Micronesia
+        FO { "Gżejjer Faroe" } 	// Faroe Islands
+        FR { "Franza" } 	// France
+  /*e*/ GA { "Gabon" } 	// Gabon
+        GB { "Ingilterra" } 	// United Kingdom
+        GE { "Ġorġja" } 	// Georgia
+        GF { "Gujana Franċiża" } 	// French Guiana
+        GH { "Gana" } 	// Ghana
+        GL { "Grinlandja" } 	// Greenland
+        GM { "Gambja" } 	// Gambia
+        GN { "Gineja" } 	// Guinea
+        GP { "Gwadelupe" } 	// Guadeloupe
+        GQ { "Ginea Ekwatorjali" } 	// Equatorial Guinea
+        GR { "Greċja" } 	// Greece
+        GT { "Gwatemala" } 	// Guatemala
+        GU { "Gwam" } 	// Guam
+        GW { "Ginea-Bissaw" } 	// Guinea-Bissau
+        GY { "Gujana" } 	// Guyana
+        HK { "Ħong Kong S.A.R., Ċina" } 	// Hong Kong S.A.R., China
+        HN { "Ħonduras" } 	// Honduras
+        HR { "Kroazja" } 	// Croatia
+        HT { "Ħaiti" } 	// Haiti
+        HU { "Ungerija" } 	// Hungary
+        ID { "Indoneżja" } 	// Indonesia
+        IE { "Irlanda" } 	// Ireland
+        IL { "Iżrael" } 	// Israel
+        IN { "Indja" } 	// India
+  /*e*/ IQ { "Iraq" } 	// Iraq
+  /*e*/ IR { "Iran" } 	// Iran
+        IS { "Islanda" } 	// Iceland
+        IT { "Italja" } 	// Italy
+        JM { "Ġamajka" } 	// Jamaica
+        JO { "Ġordan" } 	// Jordan
+        JP { "Ġappun" } 	// Japan
+        KE { "Kenja" } 	// Kenya
+        KG { "Kirgistan" } 	// Kyrgyzstan
+        KH { "Kambodja" } 	// Cambodia
+  /*e*/ KI { "Kiribati" } 	// Kiribati
+        KM { "Komoros" } 	// Comoros
+        KP { "Koreja ta' Fuq" } 	// North Korea
+        KR { "Koreja t'Isfel" } 	// South Korea
+        KW { "Kuwajt" } 	// Kuwait
+        KZ { "Każakstan" } 	// Kazakhstan
+  /*e*/ LA { "Laos" } 	// Laos
+        LB { "Libanu" } 	// Lebanon
+  /*e*/ LI { "Liechtenstein" } 	// Liechtenstein
+  /*e*/ LK { "Sri Lanka" } 	// Sri Lanka
+        LR { "Liberja" } 	// Liberia
+        LS { "Lesoto" } 	// Lesotho
+        LT { "Litwanja" } 	// Lithuania
+        LU { "Lussemburgu" } 	// Luxembourg
+        LV { "Latvja" } 	// Latvia
+        LY { "Libja" } 	// Libya
+        MA { "Marokk" } 	// Morocco
+        MC { "Monako" } 	// Monaco
+        MD { "Maldova" } 	// Moldova
+        MG { "Madagaskar" } 	// Madagascar
+        MH { "Gżejjer ta' Marshall" } 	// Marshall Islands
+        MK { "Maċedonja" } 	// Macedonia
+  /*e*/ ML { "Mali" } 	// Mali
+        MM { "Mjanmar" } 	// Myanmar
+        MN { "Mongolja" } 	// Mongolia
+        MP { "Gżejjer Marjana ta' Fuq" } 	// Northern Mariana Islands
+        MQ { "Martinik" } 	// Martinique
+        MR { "Mawritanja" } 	// Mauritania
+  /*e*/ MS { "Montserrat" } 	// Montserrat
+  /*e*/ MT { "Malta" } 	// Malta [MSA 200:2003 4.13]
+        MU { "Mawrizju" } 	// Mauritius
+        MX { "Messiku" } 	// Mexico
+        MY { "Malasja" } 	// Malaysia
+        MZ { "Możambik" } 	// Mozambique
+        NA { "Namibja" } 	// Namibia
+  /*e*/ NC { "New Caledonia" } 	// New Caledonia
+        NE { "Niġer" } 	// Niger
+        NG { "Niġerja" } 	// Nigeria
+        NI { "Nikaragwa" } 	// Nicaragua
+        NL { "Olanda" } 	// Netherlands
+        NO { "Norveġja" } 	// Norway
+  /*e*/ NP { "Nepal" } 	// Nepal
+  /*e*/ NU { "Niue" } 	// Niue
+  /*e*/ NZ { "New Zealand" } 	// New Zealand
+  /*e*/ OM { "Oman" } 	// Oman
+  /*e*/ PA { "Panama" } 	// Panama
+  /*e*/ PE { "Peru" } 	// Peru
+        PF { "Polinesja Franċiża" } 	// French Polynesia
+        PG { "Papwa-Ginea Ġdida" } 	// Papua New Guinea
+        PH { "Filippini" } 	// Philippines
+  /*e*/ PK { "Pakistan" } 	// Pakistan
+        PL { "Polonja" } 	// Poland
+  /*e*/ PR { "Puerto Rico" } 	// Puerto Rico
+        PT { "Portugall" } 	// Portugal
+        PY { "Paragwaj" } 	// Paraguay
+  /*e*/ QA { "Qatar" } 	// Qatar
+        RO { "Rumanija" } 	// Romania
+        RU { "Russja" } 	// Russia
+  /*e*/ RW { "Rwanda" } 	// Rwanda
+        SA { "Għarabja Sawdita" } 	// Saudi Arabia
+  /*e*/ SC { "Seychelles" } 	// Seychelles
+  /*e*/ SD { "Sudan" } 	// Sudan
+        SE { "Żvezja" } 	// Sweden
+        SG { "Singapor" } 	// Singapore
+        SI { "Slovenja" } 	// Slovenia
+        SK { "Slovakkja" } 	// Slovakia
+  /*e*/ SL { "Sierra Leone" } 	// Sierra Leone
+  /*e*/ SN { "Senegal" } 	// Senegal
+        SO { "Somalja" } 	// Somalia
+        SP { "Serbja" } 	// Serbia
+        SR { "Surinam" } 	// Suriname
+  /*e*/ SV { "El Salvador" } 	// El Salvador
+        SY { "Sirja" } 	// Syria
+        SZ { "Sważiland" } 	// Swaziland
+        TD { "Ċad" } 	// Chad
+        TF { "Territorji Franċiżi ta' Nofsinhar" } 	// French Southern Territories
+  /*e*/ TG { "Togo" } 	// Togo
+        TH { "Tajlandja" } 	// Thailand
+        TJ { "Taġikistan" } 	// Tajikistan
+        TK { "Tokelaw" } 	// Tokelau
+  /*e*/ TM { "Turkmenistan" } 	// Turkmenistan
+        TN { "Tuneż" } 	// Tunisia
+  /*e*/ TO { "Tonga" } 	// Tonga
+        TL { "Timor tal-Lvant" } 	// East Timor
+        TR { "Turkija" } 	// Turkey
+        TT { "Trinidad u Tobago" } 	// Trinidad and Tobago
+        TW { "Tajwan" } 	// Taiwan
+        TZ { "Tanżanija" } 	// Tanzania
+        UA { "Ukraina" } 	// Ukraine
+  /*e*/ UG { "Uganda" } 	// Uganda
+        US { "Stati Uniti" } 	// United States
+        UY { "Urugwaj" } 	// Uruguay
+        UZ { "Użbekistan" } 	// Uzbekistan
+        VA { "Vatikan" } 	// Vatican   
+        VE { "Venezwela" } 	// Venezuela
+  /*e*/// VG { "British Virgin Islands" } 	// British Virgin Islands
+  /*e*/// VI { "U.S. Virgin Islands" } 	// U.S. Virgin Islands
+        VN { "Vjetnam" } 	// Vietnam
+        VU { "Vanwatu" } 	// Vanuatu
+        YE { "Jemen" } 	// Yemen
+        YT { "Majotte" } 	// Mayotte
+        YU { "Jugoslavja" } 	// Yugoslavia
+        ZA { "Afrika t'Isfel" } 	// South Africa
+        ZM { "Żambja" } 	// Zambia
+        ZW { "Żimbabwe" } 	// Zimbabwe
+
+    }
+    // Currency display names
+    Currencies {
+        MTL { "Lm", "Lira Maltija" }
+    }
 
     // 'e' on left denotes formerly commented out dups of english
     Languages {
@@ -63,7 +355,6 @@ mt {
   /*e*/ bad	{ "Banda" }	// Banda
         bai	{ "Lingwi Bamileke" }	// Bamileke Languages
         bal	{ "Baluċi" }	// Baluuchi
-  /*e*/ bam	{ "Bambara" }	// Bambara
         ban	{ "Baliniż" }	// Balinese
   /*e*/ bas	{ "Basa" }	// Basa
         bat	{ "Baltiku (Oħra)" }	// Baltic (Other)
@@ -78,6 +369,7 @@ mt {
   /*e*/ bik	{ "Bikol" }	// Bikol
   /*e*/ bin	{ "Bini" }	// Bini
   /*e*/ bla	{ "Siksika" }	// Siksika
+  /*e*/ bm	{ "Bambara" }	// Bambara
   /*e*/ bn	{ "Bengali" }	// Bengali
   /*e*/ bnt	{ "Bantu" }	// Bantu
         bo	{ "Tibetjan" }	// Tibetan
@@ -463,216 +755,6 @@ mt {
         zun	{ "Żuni" }      // Zuni
     }
 
-    // 'e' on left denotes formerly commented out dups of english
-    // Duplicate data has been commented out.
-    Countries {
-        Fallback{ "en"}
-  /*e*/ AD { "Andorra" } 	// Andorra
-        AE { "Emirati Għarab Maqgħuda" } 	// United Arab Emirates
-        AF { "Afganistan" } 	// Afghanistan
-        AI { "Angwilla" } 	// Anguilla
-        AL { "Albanija" } 	// Albania
-        AM { "Armenja" } 	// Armenia
-        AN { "Antilles Olandiżi" } 	// Netherlands Antilles
-  /*e*/ AO { "Angola" } 	// Angola
-        AR { "Arġentina" } 	// Argentina
-        AS { "Samoa Amerikana" } 	// American Samoa
-        AT { "Awstrija" } 	// Austria
-        AU { "Awstralja" } 	// Australia
-  /*e*/ AW { "Aruba" } 	// Aruba
-        AZ { "Ażerbajġan" } 	// Azerbaijan
-        BA { "Bożnija Ħerżegovina" } 	// Bosnia and Herzegovina
-  /*e*/ BB { "Barbados" } 	// Barbados
-        BD { "Bangladexx" } 	// Bangladesh
-        BE { "Belġju" } 	// Belgium
-  /*e*/ BF { "Burkina Faso" } 	// Burkina Faso
-        BG { "Bulgarija" } 	// Bulgaria
-        BH { "Baħrajn" } 	// Bahrain
-  /*e*/ BI { "Burundi" } 	// Burundi
-  /*e*/ BJ { "Benin" } 	// Benin
-  /*e*/ BM { "Bermuda" } 	// Bermuda
-        BN { "Brunej" } 	// Brunei
-        BO { "Bolivja" } 	// Bolivia
-        BR { "Brażil" } 	// Brazil
-        BS { "Baħamas" } 	// Bahamas
-        BT { "Butan" } 	// Bhutan
-  /*e*/ BW { "Botswana" } 	// Botswana
-        BY { "Bjelorussja" } 	// Belarus
-        BZ { "Beliże" } 	// Belize
-        CA { "Kanada" } 	// Canada
-        CF { "Repubblika Afrikana Ċentrali" } 	// Central African Republic
-        CG { "Kongo" } 	// Congo
-        CH { "Svizzera" } 	// Switzerland
-        CI { "Kosta ta' l-Avorju" } 	// Côte d'Ivoire
-        CL { "Ċili" } 	// Chile
-        CM { "Kamerun" } 	// Cameroon
-        CN { "Ċina" } 	// China
-        CO { "Kolumbja" } 	// Colombia
-        CR { "Kosta Rika" } 	// Costa Rica
-        CU { "Kuba" } 	// Cuba
-        CV { "Kape Verde" } 	// Cape Verde
-        CY { "Ċipru" } 	// Cyprus
-        CZ { "Repubblika Ċeka" } 	// Czech Republic
-        DE { "Ġermanja" } 	// Germany
-        DJ { "Ġibuti" } 	// Djibouti
-        DK { "Danimarka" } 	// Denmark
-        DM { "Dominika" } 	// Dominica
-        DO { "Republikka Domenikana" } 	// Dominican Republic
-        DZ { "Alġerija" } 	// Algeria
-        EC { "Ekwador" } 	// Ecuador
-        EE { "Estonja" } 	// Estonia
-        EG { "Eġittu" } 	// Egypt
-        EH { "Sahara tal-Punent" } 	// Western Sahara
-        ER { "Eritreja" } 	// Eritrea
-        ES { "Spanja" } 	// Spain
-        ET { "Etijopja" } 	// Ethiopia
-        FI { "Finlandja" } 	// Finland
-        FJ { "Fiġi" } 	// Fiji
-        FM { "Mikronesja" } 	// Micronesia
-        FO { "Gżejjer Faroe" } 	// Faroe Islands
-        FR { "Franza" } 	// France
-  /*e*/ GA { "Gabon" } 	// Gabon
-        GB { "Ingilterra" } 	// United Kingdom
-        GE { "Ġorġja" } 	// Georgia
-        GF { "Gujana Franċiża" } 	// French Guiana
-        GH { "Gana" } 	// Ghana
-        GL { "Grinlandja" } 	// Greenland
-        GM { "Gambja" } 	// Gambia
-        GN { "Gineja" } 	// Guinea
-        GP { "Gwadelupe" } 	// Guadeloupe
-        GQ { "Ginea Ekwatorjali" } 	// Equatorial Guinea
-        GR { "Greċja" } 	// Greece
-        GT { "Gwatemala" } 	// Guatemala
-        GU { "Gwam" } 	// Guam
-        GW { "Ginea-Bissaw" } 	// Guinea-Bissau
-        GY { "Gujana" } 	// Guyana
-        HK { "Ħong Kong S.A.R., Ċina" } 	// Hong Kong S.A.R., China
-        HN { "Ħonduras" } 	// Honduras
-        HR { "Kroazja" } 	// Croatia
-        HT { "Ħaiti" } 	// Haiti
-        HU { "Ungerija" } 	// Hungary
-        ID { "Indoneżja" } 	// Indonesia
-        IE { "Irlanda" } 	// Ireland
-        IL { "Iżrael" } 	// Israel
-        IN { "Indja" } 	// India
-  /*e*/ IQ { "Iraq" } 	// Iraq
-  /*e*/ IR { "Iran" } 	// Iran
-        IS { "Islanda" } 	// Iceland
-        IT { "Italja" } 	// Italy
-        JM { "Ġamajka" } 	// Jamaica
-        JO { "Ġordan" } 	// Jordan
-        JP { "Ġappun" } 	// Japan
-        KE { "Kenja" } 	// Kenya
-        KG { "Kirgistan" } 	// Kyrgyzstan
-        KH { "Kambodja" } 	// Cambodia
-  /*e*/ KI { "Kiribati" } 	// Kiribati
-        KM { "Komoros" } 	// Comoros
-        KP { "Koreja ta' Fuq" } 	// North Korea
-        KR { "Koreja t'Isfel" } 	// South Korea
-        KW { "Kuwajt" } 	// Kuwait
-        KZ { "Każakstan" } 	// Kazakhstan
-  /*e*/ LA { "Laos" } 	// Laos
-        LB { "Libanu" } 	// Lebanon
-  /*e*/ LI { "Liechtenstein" } 	// Liechtenstein
-  /*e*/ LK { "Sri Lanka" } 	// Sri Lanka
-        LR { "Liberja" } 	// Liberia
-        LS { "Lesoto" } 	// Lesotho
-        LT { "Litwanja" } 	// Lithuania
-        LU { "Lussemburgu" } 	// Luxembourg
-        LV { "Latvja" } 	// Latvia
-        LY { "Libja" } 	// Libya
-        MA { "Marokk" } 	// Morocco
-        MC { "Monako" } 	// Monaco
-        MD { "Maldova" } 	// Moldova
-        MG { "Madagaskar" } 	// Madagascar
-        MH { "Gżejjer ta' Marshall" } 	// Marshall Islands
-        MK { "Maċedonja" } 	// Macedonia
-  /*e*/ ML { "Mali" } 	// Mali
-        MM { "Mjanmar" } 	// Myanmar
-        MN { "Mongolja" } 	// Mongolia
-        MP { "Gżejjer Marjana ta' Fuq" } 	// Northern Mariana Islands
-        MQ { "Martinik" } 	// Martinique
-        MR { "Mawritanja" } 	// Mauritania
-  /*e*/ MS { "Montserrat" } 	// Montserrat
-  /*e*/ MT { "Malta" } 	// Malta [MSA 200:2003 4.13]
-        MU { "Mawrizju" } 	// Mauritius
-        MX { "Messiku" } 	// Mexico
-        MY { "Malasja" } 	// Malaysia
-        MZ { "Możambik" } 	// Mozambique
-        NA { "Namibja" } 	// Namibia
-  /*e*/ NC { "New Caledonia" } 	// New Caledonia
-        NE { "Niġer" } 	// Niger
-        NG { "Niġerja" } 	// Nigeria
-        NI { "Nikaragwa" } 	// Nicaragua
-        NL { "Olanda" } 	// Netherlands
-        NO { "Norveġja" } 	// Norway
-  /*e*/ NP { "Nepal" } 	// Nepal
-  /*e*/ NU { "Niue" } 	// Niue
-  /*e*/ NZ { "New Zealand" } 	// New Zealand
-  /*e*/ OM { "Oman" } 	// Oman
-  /*e*/ PA { "Panama" } 	// Panama
-  /*e*/ PE { "Peru" } 	// Peru
-        PF { "Polinesja Franċiża" } 	// French Polynesia
-        PG { "Papwa-Ginea Ġdida" } 	// Papua New Guinea
-        PH { "Filippini" } 	// Philippines
-  /*e*/ PK { "Pakistan" } 	// Pakistan
-        PL { "Polonja" } 	// Poland
-  /*e*/ PR { "Puerto Rico" } 	// Puerto Rico
-        PT { "Portugall" } 	// Portugal
-        PY { "Paragwaj" } 	// Paraguay
-  /*e*/ QA { "Qatar" } 	// Qatar
-        RO { "Rumanija" } 	// Romania
-        RU { "Russja" } 	// Russia
-  /*e*/ RW { "Rwanda" } 	// Rwanda
-        SA { "Għarabja Sawdita" } 	// Saudi Arabia
-  /*e*/ SC { "Seychelles" } 	// Seychelles
-  /*e*/ SD { "Sudan" } 	// Sudan
-        SE { "Żvezja" } 	// Sweden
-        SG { "Singapor" } 	// Singapore
-        SI { "Slovenja" } 	// Slovenia
-        SK { "Slovakkja" } 	// Slovakia
-  /*e*/ SL { "Sierra Leone" } 	// Sierra Leone
-  /*e*/ SN { "Senegal" } 	// Senegal
-        SO { "Somalja" } 	// Somalia
-        SP { "Serbja" } 	// Serbia
-        SR { "Surinam" } 	// Suriname
-  /*e*/ SV { "El Salvador" } 	// El Salvador
-        SY { "Sirja" } 	// Syria
-        SZ { "Sważiland" } 	// Swaziland
-        TD { "Ċad" } 	// Chad
-        TF { "Territorji Franċiżi ta' Nofsinhar" } 	// French Southern Territories
-  /*e*/ TG { "Togo" } 	// Togo
-        TH { "Tajlandja" } 	// Thailand
-        TJ { "Taġikistan" } 	// Tajikistan
-        TK { "Tokelaw" } 	// Tokelau
-  /*e*/ TM { "Turkmenistan" } 	// Turkmenistan
-        TN { "Tuneż" } 	// Tunisia
-  /*e*/ TO { "Tonga" } 	// Tonga
-        TL { "Timor tal-Lvant" } 	// East Timor
-        TR { "Turkija" } 	// Turkey
-        TT { "Trinidad u Tobago" } 	// Trinidad and Tobago
-        TW { "Tajwan" } 	// Taiwan
-        TZ { "Tanżanija" } 	// Tanzania
-        UA { "Ukraina" } 	// Ukraine
-  /*e*/ UG { "Uganda" } 	// Uganda
-        US { "Stati Uniti" } 	// United States
-        UY { "Urugwaj" } 	// Uruguay
-        UZ { "Użbekistan" } 	// Uzbekistan
-        VA { "Vatikan" } 	// Vatican   
-        VE { "Venezwela" } 	// Venezuela
-  /*e*/// VG { "British Virgin Islands" } 	// British Virgin Islands
-  /*e*/// VI { "U.S. Virgin Islands" } 	// U.S. Virgin Islands
-        VN { "Vjetnam" } 	// Vietnam
-        VU { "Vanwatu" } 	// Vanuatu
-        YE { "Jemen" } 	// Yemen
-        YT { "Majotte" } 	// Mayotte
-        YU { "Jugoslavja" } 	// Yugoslavia
-        ZA { "Afrika t'Isfel" } 	// South Africa
-        ZM { "Żambja" } 	// Zambia
-        ZW { "Żimbabwe" } 	// Zimbabwe
-
-    }
-
 
 
 
@@ -698,18 +780,6 @@ mt {
 //    Variants{
 //        PREEURO { "Qabel il-Euro" }
 //    }
-
-// Time zone // [MSA 200:2003 4.5.5]
-    zoneStrings {
-        {
-            "Europe/Malta", 
-            "Ħin Ċentrali Ewropew", 
-            "CET", 
-            "Ħin Ċentrali Ewropew tas-Sajf",
-            "CEST",
-            "Valletta"
-        }
-    }
 
     LocaleScript{ 
         "Latn",  // ISO 15924 Name 
@@ -901,9 +971,16 @@ mt {
             "& ':' = '.' = ' ' = '-';\n" 
     }
 
-    // Currency display names
-    Currencies {
-        MTL { "Lm", "Lira Maltija" }
+// Time zone // [MSA 200:2003 4.5.5]
+    zoneStrings {
+        {
+            "Europe/Malta", 
+            "Ħin Ċentrali Ewropew", 
+            "CET", 
+            "Ħin Ċentrali Ewropew tas-Sajf",
+            "CEST",
+            "Valletta"
+        }
     }
 
     //TODO: (no format yet)
@@ -916,85 +993,4 @@ mt {
     //   TRUE:  'V' 'v' 'veru'
     //     NO:  'L' 'l' 'le'
     //  FALSE:  'F' 'f' 'falz'
-    calendar{
-        gregorian{     
-        
-          // illum is-Sibt, 01 ta'' Awissu, 1998 :)
-          
-            DateTimeElements:intvector {
-                1,       // Sunday (il-Hadd) is first day of calendar week
-                4        // four days minimal in first week for week numbering  [MSA 200:2003 4.5.5, referencing 8601?]
-                //       Monday is first day of workweek. [MSA 200:2003 4.5.5]
-            }
-            DateTimePatterns{
-                "HH:mm:ss z",   // needs to be 24 hour
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, d 'ta''' MMMM yyyy", // long day with weekday [MSA 200:2003 4.5.2]
-                "d 'ta''' MMMM yyyy", //
-                "dd MMM yyyy",
-                "dd/MM/yyyy",
-                "{1} {0}"
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Ħad",
-                        "Tne",
-                        "Tli",
-                        "Erb", 
-                        "Ħam",
-                        "Ġim",
-                        "Sib"
-                    }
-                    wide{
-                        "Il-Ħadd",
-                        "It-Tnejn",
-                        "It-Tlieta",
-                        "L-Erbgħa",
-                        "Il-Ħamis",
-                        "Il-Ġimgħa",
-                        "Is-Sibt"
-                    }
-                }
-            }
-            eras{
-                 "QK",  // "Qabel Kristu" 
-                 "WK"   // "Wara Kristu"
-            }
-            monthNames{
-                format{
-                    abbreviated{
-                        "Jan",
-                        "Fra",
-                        "Mar",
-                        "Apr",
-                        "Mej",
-                        "Ġun",
-                        "Lul",
-                        "Awi",
-                        "Set",
-                        "Ott",
-                        "Nov",
-                        "Diċ"
-                    }
-                    wide{
-                        Jannar,
-                        Frar,
-                        Marzu,
-                        April,
-                        Mejju,
-                        Ġunju,
-                        Lulju,
-                        Awissu,
-                        Settembru,
-                        Ottubru,
-                        Novembru,
-                        Diċembru
-                    }
-                }
-            }
-        }
-    }
 }
