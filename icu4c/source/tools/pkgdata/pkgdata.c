@@ -506,7 +506,7 @@ void fillInMakefileFromICUConfig(UOption *option)
 
   if(p == NULL)
   {
-    fprintf(stderr, "%s: icu-config: No icu-config found. (fix PATH or use -O option)\n");
+    fprintf(stderr, "%s: icu-config: No icu-config found. (fix PATH or use -O option)\n", progname);
     return;
   }
   
