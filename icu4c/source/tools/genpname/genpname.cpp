@@ -659,6 +659,16 @@ void Builder::buildStringPool(const AliasName* propertyNames,
     U_ASSERT(p == (stringPool + stringPool_size));
 }
 
+// Confirm that PropertyAliases is a POD (plain old data; see C++
+// std).  The following union will _fail to compile_ if
+// PropertyAliases is _not_ a POD.  (Note: We used to use the offsetof
+// macro to check this, but that's not quite right, so that test is
+// commented out -- see below.)
+typedef union {
+    int32_t i;
+    PropertyAliases p;
+} PropertyAliasesPODTest;
+
 void Builder::computeOffsets() {
     int32_t i;
     Offset off = sizeof(header);
@@ -669,7 +679,7 @@ void Builder::computeOffsets() {
 
     // PropertyAliases must have no v-table and must be
     // padded (if necessary) to the next 32-bit boundary.
-    U_ASSERT(offsetof(PropertyAliases, enumToName_offset) == 0);
+    //U_ASSERT(offsetof(PropertyAliases, enumToName_offset) == 0); // see above
     U_ASSERT(sizeof(header) % sizeof(int32_t) == 0);
 
     #define COMPUTE_OFFSET(foo) COMPUTE_OFFSET2(foo,int32_t)
