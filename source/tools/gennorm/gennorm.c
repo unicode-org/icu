@@ -152,6 +152,8 @@ main(int argc, char* argv[]) {
 
         /* write the properties data file */
         generateData(destDir);
+
+        cleanUpData();
     }
 
     return errorCode;
@@ -426,7 +428,7 @@ unicodeDataLineFn(void *context,
             } else {
                 if(length>2) {
                     fprintf(stderr, "gennorm: error - length of NFD(U+%04lx) = %ld >2 in UnicodeData - illegal\n",
-                            code, length);
+                            (long)code, (long)length);
                     *pErrorCode=U_PARSE_ERROR;
                     exit(U_PARSE_ERROR);
                 }
@@ -439,7 +441,7 @@ unicodeDataLineFn(void *context,
     /* check for non-character code points */
     if((code&0xfffe)==0xfffe || (uint32_t)(code-0xfdd0)<0x20 || code>0x10ffff) {
         fprintf(stderr, "gennorm: error - properties for non-character code point U+%04lx\n",
-                code);
+                (long)code);
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
@@ -448,7 +450,7 @@ unicodeDataLineFn(void *context,
         /* there are normalization values, so store them */
         if(beVerbose) {
             printf("store values for U+%04lx: cc=%d, lenNFD=%ld, lenNFKD=%ld\n",
-                   code, norm.udataCC, norm.lenNFD, norm.lenNFKD);
+                   (long)code, norm.udataCC, (long)norm.lenNFD, (long)norm.lenNFKD);
         }
         storeNorm(code, &norm);
     }
