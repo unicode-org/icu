@@ -4,8 +4,8 @@ import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.impl.Utility;
 import java.io.*;
-import java.util.BitSet;
 import java.text.ParseException;
+import java.util.Locale;
 
 /**
  * @test
@@ -647,6 +647,7 @@ public class RoundTripTest extends TestFmwk {
             
             return true;
             */
+            return true;
         }
     }
     
