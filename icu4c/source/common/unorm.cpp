@@ -3284,7 +3284,7 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
     // no argument error checking because this itself is not an API
 
     // assume that at least one of the options _COMPARE_EQUIV and U_COMPARE_IGNORE_CASE is set
-    // otherwise this function must behave exactly as u_strCompare()
+    // otherwise this function must behave exactly as uprv_strCompare()
     // not checking for that here makes testing this function easier
 
     // normalization/properties data loaded?
@@ -3563,7 +3563,7 @@ unorm_cmpEquivFold(const UChar *s1, int32_t length1,
         // c1=d800 cp1=10001 c2=dc00 cp2=10000
         // cp1-cp2>0 but c1-c2<0 and in fact in UTF-32 it is { d800 10001 } < { 10000 }
 
-        // therefore, use same fix-up as in ustring.c/u_strCompareCodePointOrder()
+        // therefore, use same fix-up as in ustring.c/uprv_strCompare()
 
         if(c1>=0xd800 && c2>=0xd800 && (options&U_COMPARE_CODE_POINT_ORDER)) {
             /* subtract 0x2800 from BMP code points to make them smaller than supplementary ones */
@@ -3743,7 +3743,7 @@ unorm_compare(const UChar *s1, int32_t length1,
         result=0;
     } else if(!(options&(_COMPARE_EQUIV|U_COMPARE_IGNORE_CASE))) {
         // compare NFD strings case-sensitive: just use normal comparison
-        result=u_strCompare(s1, length1, s2, length2,
+        result=uprv_strCompare(s1, length1, s2, length2,
                     FALSE, (UBool)(0!=(options&U_COMPARE_CODE_POINT_ORDER)));
     } else {
         result=unorm_cmpEquivFold(s1, length1, s2, length2, options, pErrorCode);

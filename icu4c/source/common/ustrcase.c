@@ -260,6 +260,24 @@ u_strFoldCase(UChar *dest, int32_t destCapacity,
 /* case-insensitive string comparisons */
 
 U_CAPI int32_t U_EXPORT2
+u_strCaseCompare(const UChar *s1, int32_t length1,
+                 const UChar *s2, int32_t length2,
+                 uint32_t options,
+                 UErrorCode *pErrorCode) {
+    /* argument checking */
+    if(pErrorCode==0 || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+    if(s1==NULL || length1<-1 || s2==NULL || length2<-1) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    return unorm_cmpEquivFold(s1, length1, s2, length2,
+                              options|U_COMPARE_IGNORE_CASE,
+                              pErrorCode);
+}
+
+U_CAPI int32_t U_EXPORT2
 u_strcasecmp(const UChar *s1, const UChar *s2, uint32_t options) {
     UErrorCode errorCode=U_ZERO_ERROR;
     return unorm_cmpEquivFold(s1, -1, s2, -1,
