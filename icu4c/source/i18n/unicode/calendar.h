@@ -387,6 +387,18 @@ public:
     UBool operator!=(const Calendar& that) const {return !operator==(that);}
 
     /**
+     * Returns TRUE if the given Calendar object is equivalent to this
+     * one.  An equivalent Calendar will behave exactly as this one
+     * does, but it may be set to a different time.  By contrast, for
+     * the operator==() method to return TRUE, the other Calendar must
+     * be set to the same time.
+     *
+     * @param other the Calendar to be compared with this Calendar   
+     * @draft ICU 2.4
+     */
+    virtual UBool isEquivalentTo(const Calendar& other) const;
+
+    /**
      * Compares the Calendar time, whereas Calendar::operator== compares the equality of
      * Calendar objects.
      *
