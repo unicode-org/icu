@@ -2558,6 +2558,14 @@ SOURCE=.\unicode\ulocdata.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
 
+# Begin Custom Build
+InputPath=.\unicode\ulocdata.h
+
+"..\..\include\unicode\ulocdata.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
 
 # Begin Custom Build
@@ -2570,7 +2578,23 @@ InputPath=.\unicode\ulocdata.h
 
 !ELSEIF  "$(CFG)" == "i18n - Win64 Release"
 
+# Begin Custom Build
+InputPath=.\unicode\ulocdata.h
+
+"..\..\include\unicode\ulocdata.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\ulocdata.h
+
+"..\..\include\unicode\ulocdata.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
 
 !ENDIF 
 
