@@ -6,19 +6,6 @@
  ********************************************************************
  */
 
-/*
-* Modification history
-* 
-* Date      Name      Description
-* 02/02/01  synwee    Added converters from EMode to UNormalizationMode, 
-*                     getUNormalizationMode and getNormalizerEMode,
-*                     useful in tbcoll and unorm.
-*                     Added quickcheck method and incorporated it into 
-*                     normalize()
-*                     Removed hard coded on EMode to UNormalizationMode 
-*                     conversion
-*/
-
 #ifndef NORMLZR_H
 #define NORMLZR_H
 
@@ -85,13 +72,6 @@
  * order, so that you do not have to worry about accent rearrangement on your
  * own.
  * <p>
- * <tt>Normalizer</tt> adds one optional behavior, {@link #IGNORE_HANGUL},
- * that differs from
- * the standard Unicode Normalization Forms.  This option can be passed
- * to the {@link #Normalizer constructors} and to the static
- * {@link #compose compose} and {@link #decompose decompose} methods.  This
- * option, and any that are added in the future, will be turned off by default.
- * <p>
  * There are three common usage models for <tt>Normalizer</tt>.  In the first,
  * the static {@link #normalize normalize()} method is used to process an
  * entire input string at once.  Second, you can create a <tt>Normalizer</tt>
@@ -123,129 +103,13 @@
  */
 class U_COMMON_API Normalizer
 {
-
- public:
-  // This tells us what the bits in the "mode" mean.
-  enum {
-    COMPAT_BIT         = 1,
-    DECOMP_BIT         = 2,
-    COMPOSE_BIT        = 4,
-    FCD_BIT            = 8
-  };
-
-
-
-  /** If DONE is returned, then there are no more normalization results available. */
+public:
+  /**
+   * If DONE is returned from an iteration function that returns a code point,
+   * then there are no more normalization results available.
+   */
   enum {
       DONE=0xffff
-  };
-
-  /** The mode of a Normalizer object */
-  enum EMode {
-
-    /**
-     * Null operation for use with the {@link #Normalizer constructors}
-     * and the static {@link #normalize normalize} method.  This value tells
-     * the <tt>Normalizer</tt> to do nothing but return unprocessed characters
-     * from the underlying String or CharacterIterator.  If you have code which
-     * requires raw text at some times and normalized text at others, you can
-     * use <tt>NO_OP</tt> for the cases where you want raw text, rather
-     * than having a separate code path that bypasses <tt>Normalizer</tt>
-     * altogether.
-     * <p>
-     * @see #setMode
-     */
-    NO_OP         = 0,
-    
-    /**
-     * Canonical decomposition followed by canonical composition.  Used with 
-     * the {@link #Normalizer constructors} and the static 
-     * {@link #normalize normalize}
-     * method to determine the operation to be performed.
-     * <p>
-     * If all optional features (<i>e.g.</i> {@link #IGNORE_HANGUL}) are turned
-     * off, this operation produces output that is in
-     * <a href=http://www.unicode.org/unicode/reports/tr15/>Unicode Canonical
-     * Form</a>
-     * <b>C</b>.
-     * <p>
-     * @see #setMode
-     */
-    COMPOSE         = COMPOSE_BIT,
-
-    /**
-     * Compatibility decomposition followed by canonical composition.
-     * Used with the {@link #Normalizer constructors} and the static
-     * {@link #normalize normalize} method to determine the operation to be
-     * performed.
-     * <p>
-     * If all optional features (<i>e.g.</i> {@link #IGNORE_HANGUL}) are turned
-     * off, this operation produces output that is in
-     * <a href=http://www.unicode.org/unicode/reports/tr15/>Unicode Canonical
-     * Form</a>
-     * <b>KC</b>.
-     * <p>
-     * @see #setMode
-     */
-    COMPOSE_COMPAT     = COMPOSE_BIT | COMPAT_BIT,
-
-    /**
-     * Canonical decomposition.  This value is passed to the
-     * {@link #Normalizer constructors} and the static 
-     * {@link #normalize normalize}
-     * method to determine the operation to be performed.
-     * <p>
-     * If all optional features (<i>e.g.</i> {@link #IGNORE_HANGUL}) are turned
-     * off, this operation produces output that is in
-     * <a href=http://www.unicode.org/unicode/reports/tr15/>Unicode Canonical 
-     * Form</a>
-     * <b>D</b>.
-     * <p>
-     * @see #setMode
-     */
-    DECOMP         = DECOMP_BIT,
-
-    /**
-     * Compatibility decomposition.  This value is passed to the
-     * {@link #Normalizer constructors} and the static 
-     * {@link #normalize normalize}
-     * method to determine the operation to be performed.
-     * <p>
-     * If all optional features (<i>e.g.</i> {@link #IGNORE_HANGUL}) are turned
-     * off, this operation produces output that is in
-     * <a href=http://www.unicode.org/unicode/reports/tr15/>Unicode Canonical 
-     * Form</a>
-     * <b>KD</b>.
-     * <p>
-     * @see #setMode
-     */
-    DECOMP_COMPAT     = DECOMP_BIT | COMPAT_BIT,
-
-    FCD = FCD_BIT
-  };
-
-  /** The options for a Normalizer object */
-  enum {
-
-    /**
-     * Option to disable Hangul/Jamo composition and decomposition.
-     * This option applies to Korean text, 
-     * which can be represented either in the Jamo alphabet or in Hangul
-     * characters, which are really just two or three Jamo combined
-     * into one visual glyph.  Since Jamo takes up more storage space than
-     * Hangul, applications that process only Hangul text may wish to turn
-     * this option on when decomposing text.
-     * <p>
-     * The Unicode standard treates Hangul to Jamo conversion as a 
-     * canonical decomposition, so this option must be turned <b>off</b> if you
-     * wish to transform strings into one of the standard
-     * <a href="http://www.unicode.org/unicode/reports/tr15/" target="unicode">
-     * Unicode Normalization Forms</a>.
-     * <p>
-     * @see #setOption
-     * @deprecated To be removed (or moved to private for documentation) after 2002-aug-31. Obsolete option.
-     */
-    IGNORE_HANGUL     = 0x001
   };
 
   // Constructors
@@ -260,33 +124,10 @@ class U_COMMON_API Normalizer
    * @param mode  The normalization mode.
    * @stable
    */
-  Normalizer(const UnicodeString& str, 
-         EMode mode);
+  Normalizer(const UnicodeString& str, UNormalizationMode mode);
     
   /**
    * Creates a new <tt>Normalizer</tt> object for iterating over the
-   * normalized form of a given string.
-   * <p>
-   * The <tt>options</tt> parameter specifies which optional
-   * <tt>Normalizer</tt> features are to be enabled for this object.
-   * <p>
-   * @param str   The string to be normalized.  The normalization
-   *              will start at the beginning of the string.
-   *
-   * @param mode  The normalization mode.
-   *
-   * @param opt   Any optional features to be enabled.
-   *              Currently the only available option is {@link #IGNORE_HANGUL}
-   *              If you want the default behavior corresponding to one of the
-   *              standard Unicode Normalization Forms, use 0 for this argument
-   * @stable
-   */
-  Normalizer(const UnicodeString& str, 
-         EMode mode, 
-         int32_t opt);
-
-  /**
-   * Creates a new <tt>Normalizer</tt> object for iterating over the
    * normalized form of a given UChar string.
    * <p>
    * @param str   The string to be normalized.  The normalization
@@ -297,30 +138,7 @@ class U_COMMON_API Normalizer
    * @stable
    *
    */
-  Normalizer(const UChar* str,
-         int32_t length,
-         EMode mode);
-
-  /**
-   * Creates a new <tt>Normalizer</tt> object for iterating over the
-   * normalized form of a given UChar string.
-   * <p>
-   * @param str   The string to be normalized.  The normalization
-   *              will start at the beginning of the string.
-   *
-   * @param length Lenght of the string
-   * @param mode  The normalization mode.
-   * @param opt   Any optional features to be enabled.
-   *              Currently the only available option is {@link #IGNORE_HANGUL}
-   *              If you want the default behavior corresponding to one of the
-   *              standard Unicode Normalization Forms, use 0 for this argument
-   * @unimplemented 
-   *
-   */
-  Normalizer(const UChar* str,
-         int32_t length,
-         EMode mode,
-         int32_t option);
+  Normalizer(const UChar* str, int32_t length, UNormalizationMode mode);
 
   /**
    * Creates a new <tt>Normalizer</tt> object for iterating over the
@@ -331,29 +149,8 @@ class U_COMMON_API Normalizer
    *
    * @param mode  The normalization mode.
    * @stable
-   *
    */
-  Normalizer(const CharacterIterator& iter, 
-         EMode mode);
-
-  /**
-   * Creates a new <tt>Normalizer</tt> object for iterating over the
-   * normalized form of the given text.
-   * <p>
-   * @param iter  The input text to be normalized.  The normalization
-   *              will start at the beginning of the string.
-   *
-   * @param mode  The normalization mode.
-   *
-   * @param opt   Any optional features to be enabled.
-   *              Currently the only available option is {@link #IGNORE_HANGUL}
-   *              If you want the default behavior corresponding to one of the
-   *              standard Unicode Normalization Forms, use 0 for this argument
-   * @stable
-   */
-  Normalizer(const CharacterIterator& iter, 
-         EMode mode, 
-         int32_t opt);
+  Normalizer(const CharacterIterator& iter, UNormalizationMode mode);
 
   /**
    * Copy constructor.
@@ -377,125 +174,89 @@ class U_COMMON_API Normalizer
    * <p>
    * The <tt>options</tt> parameter specifies which optional
    * <tt>Normalizer</tt> features are to be enabled for this operation.
-   * Currently the only available option is {@link #IGNORE_HANGUL}.
+   * Currently the only available option is deprecated.
    * If you want the default behavior corresponding to one of the standard
    * Unicode Normalization Forms, use 0 for this argument.
    * <p>
    * @param source    the input string to be normalized.
-   *
    * @param aMode     the normalization mode
-   *
    * @param options   the optional features to be enabled.
-   *
    * @param result    The normalized string (on output).
-   *
    * @param status    The error code.
    * @stable
    */
-  static void normalize(const UnicodeString& source, 
-            EMode mode, 
-            int32_t options,
-            UnicodeString& result, 
-            UErrorCode &status);
+  static void normalize(const UnicodeString& source,
+                        UNormalizationMode mode, int32_t options,
+                        UnicodeString& result,
+                        UErrorCode &status);
 
   /**
    * Compose a <tt>String</tt>.
    * <p>
    * The <tt>options</tt> parameter specifies which optional
    * <tt>Normalizer</tt> features are to be enabled for this operation.
-   * Currently the only available option is {@link #IGNORE_HANGUL}.
+   * Currently the only available option is deprecated.
    * If you want the default behavior corresponding
    * to Unicode Normalization Form <b>C</b> or <b>KC</b>,
    * use 0 for this argument.
    * <p>
    * @param source    the string to be composed.
-   *
    * @param compat    Perform compatibility decomposition before composition.
    *                  If this argument is <tt>false</tt>, only canonical
    *                  decomposition will be performed.
-   *
    * @param options   the optional features to be enabled.
-   *
    * @param result    The composed string (on output).
-   *
    * @param status    The error code.
    * @stable
    */
-  static void compose(const UnicodeString& source, 
-              UBool compat,
-              int32_t options,
-              UnicodeString& result, 
-              UErrorCode &status);
+  static void compose(const UnicodeString& source,
+                      UBool compat, int32_t options,
+                      UnicodeString& result,
+                      UErrorCode &status);
 
   /**
    * Static method to decompose a <tt>String</tt>.
    * <p>
    * The <tt>options</tt> parameter specifies which optional
    * <tt>Normalizer</tt> features are to be enabled for this operation.
-   * Currently the only available option is {@link #IGNORE_HANGUL}.
+   * Currently the only available option is deprecated.
    * The desired options should be OR'ed together to determine the value
    * of this argument.  If you want the default behavior corresponding
    * to Unicode Normalization Form <b>D</b> or <b>KD</b>,
    * use 0 for this argument.
    * <p>
    * @param str   the string to be decomposed.
-   *
    * @param compat    Perform compatibility decomposition.
    *                  If this argument is <tt>false</tt>, only canonical
    *                  decomposition will be performed.
-   *
    * @param options   the optional features to be enabled.
-   *
    * @param result    The composed string (on output).
-   *
    * @param status    The error code.
-   *
    * @return      the decomposed string.
    * @stable
    */
-  static void decompose(const UnicodeString& source, 
-            UBool compat,
-            int32_t options,
-            UnicodeString& result, 
-            UErrorCode &status);
+  static void decompose(const UnicodeString& source,
+                        UBool compat, int32_t options,
+                        UnicodeString& result,
+                        UErrorCode &status);
 
   /**
-  * Converts C's Normalizer::EMode to UNormalizationMode
-  * @param mode member of the enum Normalizer::EMode
-  * @param status error codes status
-  * @return UNormalizationMode equivalent of Normalizer::EMode
-  */
-  inline static UNormalizationMode getUNormalizationMode(EMode mode, 
-                                                  UErrorCode& status);
-
-  /**
-  * Converts C++'s UNormalizationMode to Normalizer::EMode
-  * @param mode member of the enum UNormalizationMode
-  * @param status error codes status
-  * @return Normalizer::EMode equivalent of UNormalizationMode
-  */
-  inline static EMode getNormalizerEMode(UNormalizationMode mode, 
-                                         UErrorCode& status);
-
-  /**
-  * Performing quick check on a string, to quickly determine if the string is 
-  * in a particular normalization format.
-  * Three types of result can be returned UNORM_YES, UNORM_NO or
-  * UNORM_MAYBE. Result UNORM_YES indicates that the argument
-  * string is in the desired normalized format, UNORM_NO determines that
-  * argument string is not in the desired normalized format. A 
-  * UNORM_MAYBE result indicates that a more thorough check is required, 
-  * the user may have to put the string in its normalized form and compare the 
-  * results.
-  * @param source       string for determining if it is in a normalized format
-  * @paran mode         normalization format
-  * @param status A pointer to an UErrorCode to receive any errors
-  * @return UNORM_YES, UNORM_NO or UNORM_MAYBE
-  */
+   * Performing quick check on a string, to quickly determine if the string is 
+   * in a particular normalization format.
+   * Three types of result can be returned UNORM_YES, UNORM_NO or
+   * UNORM_MAYBE. Result UNORM_YES indicates that the argument
+   * string is in the desired normalized format, UNORM_NO determines that
+   * argument string is not in the desired normalized format. A 
+   * UNORM_MAYBE result indicates that a more thorough check is required, 
+   * the user may have to put the string in its normalized form and compare the 
+   * results.
+   * @param source       string for determining if it is in a normalized format
+   * @paran mode         normalization format
+   * @param status A pointer to an UErrorCode to receive any errors
+   * @return UNORM_YES, UNORM_NO or UNORM_MAYBE
+   */
   static UNormalizationCheckResult
-  quickCheck(const UnicodeString& source,
-             EMode                mode, 
-             UErrorCode&          status);
+  quickCheck(const UnicodeString &source, UNormalizationMode mode, UErrorCode &status);
 
   //-------------------------------------------------------------------------
   // Iteration API
@@ -639,50 +400,32 @@ class U_COMMON_API Normalizer
    * {@link #last}, etc. after calling <tt>setMode</tt>.
    * <p>
    * @param newMode the new mode for this <tt>Normalizer</tt>.
-   * The supported modes are:
-   * <ul>
-   *  <li>{@link #COMPOSE}        - Unicode canonical decompositiion
-   *                                  followed by canonical composition.
-   *  <li>{@link #COMPOSE_COMPAT} - Unicode compatibility decompositiion
-   *                                  follwed by canonical composition.
-   *  <li>{@link #DECOMP}         - Unicode canonical decomposition
-   *  <li>{@link #DECOMP_COMPAT}  - Unicode compatibility decomposition.
-   *  <li>{@link #NO_OP}          - Do nothing but return characters
-   *                                  from the underlying input text.
-   * </ul>
-   *
-   * @see #getMode
+   * @see #getUMode
    * @stable
    */
-  void setMode(EMode newMode);
+  void setMode(UNormalizationMode newMode);
 
   /**
-   * Return the basic operation performed by this <tt>Normalizer</tt>
+   * Return the basic operation performed by this <tt>Normalizer</tt>.
+   * This is an unusual name because there used to be a getMode() that
+   * returned a different type.
    *
+   * @return the mode for this <code>Normalizer</code>
    * @see #setMode
    * @stable
    */
-  EMode getMode(void) const;
+  UNormalizationMode getUMode(void) const;
 
   /**
    * Set options that affect this <tt>Normalizer</tt>'s operation.
    * Options do not change the basic composition or decomposition operation
    * that is being performed , but they control whether
    * certain optional portions of the operation are done.
-   * Currently the only available option is:
-   * <p>
-   * <ul>
-   *   <li>{@link #IGNORE_HANGUL} - Do not decompose Hangul syllables into the
-   *       Jamo alphabet and vice-versa.  This option is off by default 
-   *       (<i>i.e.</i> Hangul processing is enabled) since the Unicode 
-   *       standard specifies that Hangul to Jamo is a canonical decomposition.
-   *       For any of the standard Unicode Normalization
-   *       Forms, you should leave this option off.
-   * </ul>
-   * <p>
+   * Currently the only available option is deprecated.
+   *
    * @param   option  the option whose value is to be set.
-   * @param   value   the new setting for the option.  Use <tt>true</tt> to
-   *                  turn the option on and <tt>false</tt> to turn it off.
+   * @param   value   the new setting for the option.  Use <tt>TRUE</tt> to
+   *                  turn the option on and <tt>FALSE</tt> to turn it off.
    *
    * @see #getOption
    * @stable
@@ -730,14 +473,350 @@ class U_COMMON_API Normalizer
    */
   void            getText(UnicodeString&  result);
 
+  //-------------------------------------------------------------------------
+  // Deprecated APIs
+  //-------------------------------------------------------------------------
+
   /**
-   * Returns the text under iteration into the UChar* buffer pointer.
-   * @param result Receives a copy of the text under iteration.
-   * @unimplemented
+   * This tells us what the bits in the "mode" mean.
+   * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
    */
-  const UChar*     getText(int32_t&  count);
+  enum {
+    COMPAT_BIT         = 1,
+    DECOMP_BIT         = 2,
+    COMPOSE_BIT        = 4,
+    FCD_BIT            = 8
+  };
+
+  /**
+   * The mode of a Normalizer object
+   * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
+   */
+  enum EMode {
+    /**
+     * Null operation for use with the {@link #Normalizer constructors}
+     * and the static {@link #normalize normalize} method.  This value tells
+     * the <tt>Normalizer</tt> to do nothing but return unprocessed characters
+     * from the underlying String or CharacterIterator.  If you have code which
+     * requires raw text at some times and normalized text at others, you can
+     * use <tt>NO_OP</tt> for the cases where you want raw text, rather
+     * than having a separate code path that bypasses <tt>Normalizer</tt>
+     * altogether.
+     * <p>
+     * @see #setMode
+     * @deprecated To be removed after 2002-sep-30. Use UNORM_NONE from UNormalizationMode.
+     */
+    NO_OP         = 0,
+    
+    /**
+     * Canonical decomposition followed by canonical composition.  Used with 
+     * the {@link #Normalizer constructors} and the static 
+     * {@link #normalize normalize}
+     * method to determine the operation to be performed.
+     * <p>
+     * If all optional features (<i>e.g.</i> {@link #IGNORE_HANGUL}) are turned
+     * off, this operation produces output that is in
+     * <a href=http://www.unicode.org/unicode/reports/tr15/>Unicode Canonical
+     * Form</a>
+     * <b>C</b>.
+     * <p>
+     * @see #setMode
+     * @deprecated To be removed after 2002-sep-30. Use UNORM_NFC from UNormalizationMode.
+     */
+    COMPOSE         = COMPOSE_BIT,
+
+    /**
+     * Compatibility decomposition followed by canonical composition.
+     * Used with the {@link #Normalizer constructors} and the static
+     * {@link #normalize normalize} method to determine the operation to be
+     * performed.
+     * <p>
+     * If all optional features (<i>e.g.</i> {@link #IGNORE_HANGUL}) are turned
+     * off, this operation produces output that is in
+     * <a href=http://www.unicode.org/unicode/reports/tr15/>Unicode Canonical
+     * Form</a>
+     * <b>KC</b>.
+     * <p>
+     * @see #setMode
+     * @deprecated To be removed after 2002-sep-30. Use UNORM_NFKC from UNormalizationMode.
+     */
+    COMPOSE_COMPAT     = COMPOSE_BIT | COMPAT_BIT,
+
+    /**
+     * Canonical decomposition.  This value is passed to the
+     * {@link #Normalizer constructors} and the static 
+     * {@link #normalize normalize}
+     * method to determine the operation to be performed.
+     * <p>
+     * If all optional features (<i>e.g.</i> {@link #IGNORE_HANGUL}) are turned
+     * off, this operation produces output that is in
+     * <a href=http://www.unicode.org/unicode/reports/tr15/>Unicode Canonical 
+     * Form</a>
+     * <b>D</b>.
+     * <p>
+     * @see #setMode
+     * @deprecated To be removed after 2002-sep-30. Use UNORM_NFD from UNormalizationMode.
+     */
+    DECOMP         = DECOMP_BIT,
+
+    /**
+     * Compatibility decomposition.  This value is passed to the
+     * {@link #Normalizer constructors} and the static 
+     * {@link #normalize normalize}
+     * method to determine the operation to be performed.
+     * <p>
+     * If all optional features (<i>e.g.</i> {@link #IGNORE_HANGUL}) are turned
+     * off, this operation produces output that is in
+     * <a href=http://www.unicode.org/unicode/reports/tr15/>Unicode Canonical 
+     * Form</a>
+     * <b>KD</b>.
+     * <p>
+     * @see #setMode
+     * @deprecated To be removed after 2002-sep-30. Use UNORM_NFKD from UNormalizationMode.
+     */
+    DECOMP_COMPAT     = DECOMP_BIT | COMPAT_BIT,
+
+    /**
+     * @deprecated To be removed after 2002-sep-30. Use UNORM_FCD from UNormalizationMode.
+     */
+    FCD = FCD_BIT
+  };
+
+  /** The options for a Normalizer object */
+  enum {
+    /**
+     * Option to disable Hangul/Jamo composition and decomposition.
+     * This option applies to Korean text, 
+     * which can be represented either in the Jamo alphabet or in Hangul
+     * characters, which are really just two or three Jamo combined
+     * into one visual glyph.  Since Jamo takes up more storage space than
+     * Hangul, applications that process only Hangul text may wish to turn
+     * this option on when decomposing text.
+     * <p>
+     * The Unicode standard treates Hangul to Jamo conversion as a 
+     * canonical decomposition, so this option must be turned <b>off</b> if you
+     * wish to transform strings into one of the standard
+     * <a href="http://www.unicode.org/unicode/reports/tr15/" target="unicode">
+     * Unicode Normalization Forms</a>.
+     * <p>
+     * @see #setOption
+     * @deprecated To be removed (or moved to private for documentation) after 2002-aug-31. Obsolete option.
+     */
+    IGNORE_HANGUL     = 0x001
+  };
+
+  /**
+   * Creates a new <tt>Normalizer</tt> object for iterating over the
+   * normalized form of a given string.
+   * <p>
+   * @param str   The string to be normalized.  The normalization
+   *              will start at the beginning of the string.
+   *
+   * @param mode  The normalization mode.
+   * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
+   */
+  Normalizer(const UnicodeString& str, 
+         EMode mode);
+    
+  /**
+   * Creates a new <tt>Normalizer</tt> object for iterating over the
+   * normalized form of a given string.
+   * <p>
+   * The <tt>options</tt> parameter specifies which optional
+   * <tt>Normalizer</tt> features are to be enabled for this object.
+   * <p>
+   * @param str   The string to be normalized.  The normalization
+   *              will start at the beginning of the string.
+   *
+   * @param mode  The normalization mode.
+   *
+   * @param opt   Any optional features to be enabled.
+   *              Currently the only available option is {@link #IGNORE_HANGUL}
+   *              If you want the default behavior corresponding to one of the
+   *              standard Unicode Normalization Forms, use 0 for this argument
+   * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
+   */
+  Normalizer(const UnicodeString& str, 
+         EMode mode, 
+         int32_t opt);
+
+  /**
+   * Creates a new <tt>Normalizer</tt> object for iterating over the
+   * normalized form of a given UChar string.
+   * <p>
+   * @param str   The string to be normalized.  The normalization
+   *              will start at the beginning of the string.
+   *
+   * @param length Lenght of the string
+   * @param mode  The normalization mode.
+   * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
+   */
+  Normalizer(const UChar* str,
+         int32_t length,
+         EMode mode);
+
+  /**
+   * Creates a new <tt>Normalizer</tt> object for iterating over the
+   * normalized form of a given UChar string.
+   * <p>
+   * @param str   The string to be normalized.  The normalization
+   *              will start at the beginning of the string.
+   *
+   * @param length Lenght of the string
+   * @param mode  The normalization mode.
+   * @param opt   Any optional features to be enabled.
+   *              Currently the only available option is {@link #IGNORE_HANGUL}
+   *              If you want the default behavior corresponding to one of the
+   *              standard Unicode Normalization Forms, use 0 for this argument
+   * @unimplemented 
+   *
+   */
+  Normalizer(const UChar* str,
+         int32_t length,
+         EMode mode,
+         int32_t option);
+
+  /**
+   * Creates a new <tt>Normalizer</tt> object for iterating over the
+   * normalized form of the given text.
+   * <p>
+   * @param iter  The input text to be normalized.  The normalization
+   *              will start at the beginning of the string.
+   *
+   * @param mode  The normalization mode.
+   * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
+   */
+  Normalizer(const CharacterIterator& iter, 
+         EMode mode);
+
+  /**
+   * Creates a new <tt>Normalizer</tt> object for iterating over the
+   * normalized form of the given text.
+   * <p>
+   * @param iter  The input text to be normalized.  The normalization
+   *              will start at the beginning of the string.
+   *
+   * @param mode  The normalization mode.
+   *
+   * @param opt   Any optional features to be enabled.
+   *              Currently the only available option is {@link #IGNORE_HANGUL}
+   *              If you want the default behavior corresponding to one of the
+   *              standard Unicode Normalization Forms, use 0 for this argument
+   * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
+   */
+  Normalizer(const CharacterIterator& iter, 
+         EMode mode, 
+         int32_t opt);
+
+  /**
+   * Normalizes a <tt>String</tt> using the given normalization operation.
+   * <p>
+   * The <tt>options</tt> parameter specifies which optional
+   * <tt>Normalizer</tt> features are to be enabled for this operation.
+   * Currently the only available option is {@link #IGNORE_HANGUL}.
+   * If you want the default behavior corresponding to one of the standard
+   * Unicode Normalization Forms, use 0 for this argument.
+   * <p>
+   * @param source    the input string to be normalized.
+   *
+   * @param aMode     the normalization mode
+   *
+   * @param options   the optional features to be enabled.
+   *
+   * @param result    The normalized string (on output).
+   *
+   * @param status    The error code.
+   * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
+   */
+  inline static void
+  normalize(const UnicodeString& source, 
+            EMode mode, 
+            int32_t options,
+            UnicodeString& result, 
+            UErrorCode &status);
+
+  /**
+   * Performing quick check on a string, to quickly determine if the string is 
+   * in a particular normalization format.
+   * Three types of result can be returned UNORM_YES, UNORM_NO or
+   * UNORM_MAYBE. Result UNORM_YES indicates that the argument
+   * string is in the desired normalized format, UNORM_NO determines that
+   * argument string is not in the desired normalized format. A 
+   * UNORM_MAYBE result indicates that a more thorough check is required, 
+   * the user may have to put the string in its normalized form and compare the 
+   * results.
+   * @param source       string for determining if it is in a normalized format
+   * @paran mode         normalization format
+   * @param status A pointer to an UErrorCode to receive any errors
+   * @return UNORM_YES, UNORM_NO or UNORM_MAYBE
+   * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
+   */
+  inline static UNormalizationCheckResult
+  quickCheck(const UnicodeString& source,
+             EMode                mode, 
+             UErrorCode&          status);
+
+  /**
+   * Converts C's Normalizer::EMode to UNormalizationMode
+   * @param mode member of the enum Normalizer::EMode
+   * @param status error codes status
+   * @return UNormalizationMode equivalent of Normalizer::EMode
+   * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
+   */
+  inline static UNormalizationMode getUNormalizationMode(EMode mode, 
+                                                  UErrorCode& status);
+
+  /**
+  * Converts C++'s UNormalizationMode to Normalizer::EMode
+  * @param mode member of the enum UNormalizationMode
+  * @param status error codes status
+  * @return Normalizer::EMode equivalent of UNormalizationMode
+  * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
+  */
+  inline static EMode getNormalizerEMode(UNormalizationMode mode, 
+                                         UErrorCode& status);
+
+  /**
+   * Set the normalization mode for this object.
+   * <p>
+   * <b>Note:</b>If the normalization mode is changed while iterating
+   * over a string, calls to {@link #next} and {@link #previous} may
+   * return previously buffers characters in the old normalization mode
+   * until the iteration is able to re-sync at the next base character.
+   * It is safest to call {@link #setText setText()}, {@link #first},
+   * {@link #last}, etc. after calling <tt>setMode</tt>.
+   * <p>
+   * @param newMode the new mode for this <tt>Normalizer</tt>.
+   * The supported modes are:
+   * <ul>
+   *  <li>{@link #COMPOSE}        - Unicode canonical decompositiion
+   *                                  followed by canonical composition.
+   *  <li>{@link #COMPOSE_COMPAT} - Unicode compatibility decompositiion
+   *                                  follwed by canonical composition.
+   *  <li>{@link #DECOMP}         - Unicode canonical decomposition
+   *  <li>{@link #DECOMP_COMPAT}  - Unicode compatibility decomposition.
+   *  <li>{@link #NO_OP}          - Do nothing but return characters
+   *                                  from the underlying input text.
+   * </ul>
+   *
+   * @see #getMode
+   * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
+   */
+  inline void setMode(EMode newMode);
+
+  /**
+   * Return the basic operation performed by this <tt>Normalizer</tt>
+   *
+   * @see #setMode
+   * @deprecated To be removed after 2002-sep-30. Use UNormalizationMode.
+   */
+  inline EMode getMode(void) const;
 
 private:
+  //-------------------------------------------------------------------------
+  // Private functions
+  //-------------------------------------------------------------------------
+
   // Private utility methods for iteration
   // For documentation, see the source code
   UBool nextNormalize();
@@ -746,12 +825,16 @@ private:
   void    checkData();
   void    clearBuffer(void);
 
+  // Helper, without UErrorCode, for easier transitional code
+  // remove after 2002-sep-30 with EMode etc.
+  inline static UNormalizationMode getUMode(EMode mode);
+
   //-------------------------------------------------------------------------
   // Private data
   //-------------------------------------------------------------------------
 
-  EMode         fMode;
-  int32_t       fOptions;
+  UNormalizationMode  fUMode;
+  int32_t             fOptions;
 
   // The input text and our position in it
   CharacterIterator*  text;
@@ -765,9 +848,40 @@ private:
   UTextOffset         bufferPos;
 };
 
+//-------------------------------------------------------------------------
+// Inline implementations
+//-------------------------------------------------------------------------
+
 inline UBool
 Normalizer::operator!= (const Normalizer& other) const
 { return ! operator==(other); }
+
+inline void 
+Normalizer::normalize(const UnicodeString& source, 
+                      EMode mode, int32_t options,
+                      UnicodeString& result, 
+                      UErrorCode &status) {
+  normalize(source, getUNormalizationMode(mode, status), options, result, status);
+}
+
+inline UNormalizationCheckResult
+Normalizer::quickCheck(const UnicodeString& source,
+                       EMode mode, 
+                       UErrorCode &status) {
+  return quickCheck(source, getUNormalizationMode(mode, status), status);
+}
+
+inline void
+Normalizer::setMode(EMode newMode) {
+  UErrorCode status = U_ZERO_ERROR;
+  fUMode = getUNormalizationMode(newMode, status);
+}
+
+inline Normalizer::EMode
+Normalizer::getMode() const {
+  UErrorCode status = U_ZERO_ERROR;
+  return getNormalizerEMode(fUMode, status);
+}
 
 inline UNormalizationMode Normalizer::getUNormalizationMode(
                                    Normalizer::EMode  mode, UErrorCode &status)
@@ -793,6 +907,26 @@ inline UNormalizationMode Normalizer::getUNormalizationMode(
     }
   }
   return UNORM_DEFAULT;
+}
+
+inline UNormalizationMode
+Normalizer::getUMode(Normalizer::EMode mode) {
+  switch(mode) {
+  case Normalizer::NO_OP : 
+    return UNORM_NONE;
+  case Normalizer::COMPOSE :
+    return UNORM_NFC;
+  case Normalizer::COMPOSE_COMPAT :
+    return UNORM_NFKC;
+  case Normalizer::DECOMP :
+    return UNORM_NFD;
+  case Normalizer::DECOMP_COMPAT :
+    return UNORM_NFKD;
+  case Normalizer::FCD:
+    return UNORM_FCD;
+  default : 
+    return UNORM_DEFAULT;
+  }
 }
 
 inline Normalizer::EMode Normalizer::getNormalizerEMode(

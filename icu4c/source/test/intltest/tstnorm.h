@@ -45,7 +45,7 @@ private:
     //
     void backAndForth(Normalizer* iter, const UnicodeString& input);
 
-    void staticTest(Normalizer::EMode mode, int options,
+    void staticTest(UNormalizationMode mode, int options,
                     UnicodeString tests[][3], int length, int outCol);
 
     void iterateTest(Normalizer* iter, UnicodeString tests[][3], int length, int outCol);

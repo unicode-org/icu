@@ -134,11 +134,6 @@ BasicNormalizerTest::BasicNormalizerTest()
   hangulCanon[0][0] = str("\\ud4db"); hangulCanon[0][1] = str("\\u1111\\u1171\\u11b6"); hangulCanon[0][2] = str("\\ud4db") ;
 
   hangulCanon[1][0] = str("\\u1111\\u1171\\u11b6"), hangulCanon[1][1] = str("\\u1111\\u1171\\u11b6"),   hangulCanon[1][2] = str("\\ud4db");
-
-  /* Hangul Compatible */
-  // Input            Decomposed                                    Composed
-  // THIS IS NO LONGER TRUE IN UNICODE v2.1.9, SO THIS TEST IS OBSOLETE
-//-obsolete-  hangulCompat[0][0] = str("\\ud4db"); hangulCompat[0][1] = str("\\u1111\\u116e\\u1175\\u11af\\u11c2"); hangulCompat[0][2] = str("\\ud478\\u1175\\u11af\\u11c2");
 }
 
 BasicNormalizerTest::~BasicNormalizerTest()
@@ -147,7 +142,7 @@ BasicNormalizerTest::~BasicNormalizerTest()
 
 void BasicNormalizerTest::TestPrevious() 
 {
-  Normalizer* norm = new Normalizer("", Normalizer::DECOMP, 0);
+  Normalizer* norm = new Normalizer("", UNORM_NFD);
   
   logln("testing decomp...");
   uint32_t i;
@@ -156,7 +151,7 @@ void BasicNormalizerTest::TestPrevious()
   }
   
   logln("testing compose...");
-  norm->setMode(Normalizer::COMPOSE);
+  norm->setMode(UNORM_NFC);
   for (i = 0; i < ARRAY_LENGTH(canonTests); i++) {
     backAndForth(norm, canonTests[i][0]);
   }
@@ -166,39 +161,39 @@ void BasicNormalizerTest::TestPrevious()
 
 void BasicNormalizerTest::TestDecomp() 
 {
-  Normalizer* norm = new Normalizer("", Normalizer::DECOMP, 0);
+  Normalizer* norm = new Normalizer("", UNORM_NFD);
   iterateTest(norm, canonTests, ARRAY_LENGTH(canonTests), 1);
   
-  staticTest(Normalizer::DECOMP, 0, canonTests, ARRAY_LENGTH(canonTests), 1);
+  staticTest(UNORM_NFD, 0, canonTests, ARRAY_LENGTH(canonTests), 1);
   delete norm;
 }
 
 void BasicNormalizerTest::TestCompatDecomp() 
 {
-  Normalizer* norm = new Normalizer("", Normalizer::DECOMP_COMPAT, 0);
+  Normalizer* norm = new Normalizer("", UNORM_NFKD);
   iterateTest(norm, compatTests, ARRAY_LENGTH(compatTests), 1);
   
-  staticTest(Normalizer::DECOMP_COMPAT, 0, 
+  staticTest(UNORM_NFKD, 0, 
          compatTests, ARRAY_LENGTH(compatTests), 1);
   delete norm;
 }
 
 void BasicNormalizerTest::TestCanonCompose() 
 {
-  Normalizer* norm = new Normalizer("", Normalizer::COMPOSE, 0);
+  Normalizer* norm = new Normalizer("", UNORM_NFC);
   iterateTest(norm, canonTests, ARRAY_LENGTH(canonTests), 2);
   
-  staticTest(Normalizer::COMPOSE, 0, canonTests,
+  staticTest(UNORM_NFC, 0, canonTests,
          ARRAY_LENGTH(canonTests), 2);
   delete norm;
 }
 
 void BasicNormalizerTest::TestCompatCompose() 
 {
-  Normalizer* norm = new Normalizer("", Normalizer::COMPOSE_COMPAT, 0);
+  Normalizer* norm = new Normalizer("", UNORM_NFKC);
   iterateTest(norm, compatTests, ARRAY_LENGTH(compatTests), 2);
   
-  staticTest(Normalizer::COMPOSE_COMPAT, 0, 
+  staticTest(UNORM_NFKC, 0, 
          compatTests, ARRAY_LENGTH(compatTests), 2);
   delete norm;
 }
@@ -210,18 +205,18 @@ void BasicNormalizerTest::TestHangulCompose()
 {
   // Make sure that the static composition methods work
   logln("Canonical composition...");
-  staticTest(Normalizer::COMPOSE, 0,                    hangulCanon,  ARRAY_LENGTH(hangulCanon),  2);
+  staticTest(UNORM_NFC, 0,                    hangulCanon,  ARRAY_LENGTH(hangulCanon),  2);
   logln("Compatibility composition...");
   
   // Now try iterative composition....
   logln("Static composition...");
-  Normalizer* norm = new Normalizer("", Normalizer::COMPOSE, 0);
+  Normalizer* norm = new Normalizer("", UNORM_NFC);
   iterateTest(norm, hangulCanon, ARRAY_LENGTH(hangulCanon), 2);
-  norm->setMode(Normalizer::COMPOSE_COMPAT);
+  norm->setMode(UNORM_NFKC);
   
   // And finally, make sure you can do it in reverse too
   logln("Reverse iteration...");
-  norm->setMode(Normalizer::COMPOSE);
+  norm->setMode(UNORM_NFC);
   for (uint32_t i = 0; i < ARRAY_LENGTH(hangulCanon); i++) {
     backAndForth(norm, hangulCanon[i][0]);
   }
@@ -232,18 +227,18 @@ void BasicNormalizerTest::TestHangulDecomp()
 {
   // Make sure that the static decomposition methods work
   logln("Canonical decomposition...");
-  staticTest(Normalizer::DECOMP, 0,                     hangulCanon,  ARRAY_LENGTH(hangulCanon),  1);
+  staticTest(UNORM_NFD, 0,                     hangulCanon,  ARRAY_LENGTH(hangulCanon),  1);
   logln("Compatibility decomposition...");
   
   // Now the iterative decomposition methods...
   logln("Iterative decomposition...");
-  Normalizer* norm = new Normalizer("", Normalizer::DECOMP, 0);
+  Normalizer* norm = new Normalizer("", UNORM_NFD);
   iterateTest(norm, hangulCanon, ARRAY_LENGTH(hangulCanon), 1);
-  norm->setMode(Normalizer::DECOMP_COMPAT);
+  norm->setMode(UNORM_NFKD);
   
   // And finally, make sure you can do it in reverse too
   logln("Reverse iteration...");
-  norm->setMode(Normalizer::DECOMP);
+  norm->setMode(UNORM_NFD);
   for (uint32_t i = 0; i < ARRAY_LENGTH(hangulCanon); i++) {
     backAndForth(norm, hangulCanon[i][0]);
   }
@@ -265,10 +260,10 @@ void BasicNormalizerTest::TestTibetan(void) {
     compose[0][1] = str("\\u0fb2\\u0f71\\u0f80");
     compose[0][2] = str("\\u0fb2\\u0f71\\u0f80");
 
-    staticTest(Normalizer::DECOMP,         0, decomp, ARRAY_LENGTH(decomp), 1);
-    staticTest(Normalizer::DECOMP_COMPAT,  0, decomp, ARRAY_LENGTH(decomp), 2);
-    staticTest(Normalizer::COMPOSE,        0, compose, ARRAY_LENGTH(compose), 1);
-    staticTest(Normalizer::COMPOSE_COMPAT, 0, compose, ARRAY_LENGTH(compose), 2);
+    staticTest(UNORM_NFD,         0, decomp, ARRAY_LENGTH(decomp), 1);
+    staticTest(UNORM_NFKD,  0, decomp, ARRAY_LENGTH(decomp), 2);
+    staticTest(UNORM_NFC,        0, compose, ARRAY_LENGTH(compose), 1);
+    staticTest(UNORM_NFKC, 0, compose, ARRAY_LENGTH(compose), 2);
 }
 
 /**
@@ -301,8 +296,8 @@ void BasicNormalizerTest::TestCompositionExclusion(void) {
         UnicodeString a(EXCLUDED.charAt(i));
         UnicodeString b;
         UnicodeString c;
-        Normalizer::normalize(a, Normalizer::DECOMP_COMPAT, 0, b, status);
-        Normalizer::normalize(b, Normalizer::COMPOSE, 0, c, status);
+        Normalizer::normalize(a, UNORM_NFKD, 0, b, status);
+        Normalizer::normalize(b, UNORM_NFC, 0, c, status);
         if (c == a) {
             errln("FAIL: " + hex(a) + " x DECOMP_COMPAT => " +
                   hex(b) + " x COMPOSE => " +
@@ -341,7 +336,7 @@ void BasicNormalizerTest::TestZeroIndex(void) {
         UnicodeString a(DATA[i], "");
         a = a.unescape();
         UnicodeString b;
-        Normalizer::normalize(a, Normalizer::COMPOSE_COMPAT, 0, b, status);
+        Normalizer::normalize(a, UNORM_NFKC, 0, b, status);
         UnicodeString exp(DATA[i+1], "");
         exp = exp.unescape();
         if (b == exp) {
@@ -350,7 +345,7 @@ void BasicNormalizerTest::TestZeroIndex(void) {
             errln((UnicodeString)"FAIL: " + hex(a) + " x COMPOSE_COMPAT => " + hex(b) +
                   ", expect " + hex(exp));
         }
-        Normalizer::normalize(b, Normalizer::DECOMP, 0, a, status);
+        Normalizer::normalize(b, UNORM_NFD, 0, a, status);
         exp = UnicodeString(DATA[i+2], "").unescape();
         if (a == exp) {
             logln((UnicodeString)"Ok: " + hex(b) + " x DECOMP => " + hex(a));
@@ -451,8 +446,8 @@ void BasicNormalizerTest::TestVerisign(void) {
     data[1][1] = str("\\u05B0\\u05B7\\u05BC\\u05A5\\u0592\\u05C0\\u05AD\\u05C4");
     data[1][2] = str("");
 
-    staticTest(Normalizer::DECOMP, 0, data, ARRAY_LENGTH(data), 1);
-    staticTest(Normalizer::COMPOSE, 0, data, ARRAY_LENGTH(data), 1);
+    staticTest(UNORM_NFD, 0, data, ARRAY_LENGTH(data), 1);
+    staticTest(UNORM_NFC, 0, data, ARRAY_LENGTH(data), 1);
 }
 
 //------------------------------------------------------------------------
@@ -502,7 +497,7 @@ void BasicNormalizerTest::backAndForth(Normalizer* iter, const UnicodeString& in
     }
 }
 
-void BasicNormalizerTest::staticTest(Normalizer::EMode mode, int options,
+void BasicNormalizerTest::staticTest(UNormalizationMode mode, int options,
                      UnicodeString tests[][3], int length,
                      int outCol)
 {
@@ -633,7 +628,7 @@ BasicNormalizerTest::TestPreviousNext() {
     static const char *moves="0+0+0--0-0-+++0--+++++++0--------";
 
     // iterators
-    Normalizer iter(src, sizeof(src)/U_SIZEOF_UCHAR, Normalizer::DECOMP);
+    Normalizer iter(src, sizeof(src)/U_SIZEOF_UCHAR, UNORM_NFD);
     UChar32Iterator iter32(expect, sizeof(expect)/4, EXPECT_MIDDLE);
 
     UChar32 c1, c2;
