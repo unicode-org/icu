@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/demo/calendar/Attic/CalendarFrame.java,v $ 
- * $Date: 2000/05/12 23:21:23 $ 
- * $Revision: 1.7 $
+ * $Date: 2000/10/19 00:27:16 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -14,7 +14,7 @@
 package com.ibm.demo.calendar;
 
 import com.ibm.demo.*;
-import com.ibm.util.IBMCalendar;
+import com.ibm.util.Calendar;
 import com.ibm.util.HebrewCalendar;
 import com.ibm.util.BuddhistCalendar;
 import com.ibm.util.JapaneseCalendar;
@@ -28,7 +28,7 @@ import java.awt.event.*;
 import java.net.*;
 import java.io.*;
 //import java.text.DateFormat;
-import  com.ibm.text.DateFormat;
+import com.ibm.text.DateFormat;
 import java.text.MessageFormat;
 //import java.util.Calendar;
 import com.ibm.util.Calendar;
@@ -245,7 +245,7 @@ class CalendarFrame extends Frame
             for (int i = 0; i < 2; i++) {
                 try {
                     if (monthFormat[i] == null) {     // TODO: optimize
-                        DateFormat f = IBMCalendar.getDateTimeFormat(
+                        DateFormat f = DateFormat.getDateTimeInstance(
                                                 calendars[i], DateFormat.MEDIUM, -1,
                                                 locales[displayMenu.getSelectedIndex()]);
                         if (f instanceof com.ibm.text.SimpleDateFormat) {
