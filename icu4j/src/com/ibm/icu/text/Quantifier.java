@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Quantifier.java,v $ 
- * $Date: 2002/02/25 22:43:58 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/06/28 19:15:52 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -111,11 +111,10 @@ class Quantifier implements UnicodeMatcher {
      * @param toUnionTo the set into which to union the source characters
      * @return a reference to toUnionTo
      */
-    public UnicodeSet getMatchSet(UnicodeSet toUnionTo) {
+    public void addMatchSetTo(UnicodeSet toUnionTo) {
         if (maxCount > 0) {
-            matcher.getMatchSet(toUnionTo);
+            matcher.addMatchSetTo(toUnionTo);
         }
-        return toUnionTo;
     }
 }
 

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeMatcher.java,v $ 
- * $Date: 2002/03/15 19:02:25 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/06/28 19:15:53 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -120,9 +120,8 @@ public interface UnicodeMatcher {
      * Union the set of all characters that may be matched by this object
      * into the given set.
      * @param toUnionTo the set into which to union the source characters
-     * @return a reference to toUnionTo
      */
-    public abstract UnicodeSet getMatchSet(UnicodeSet toUnionTo);
+    public abstract void addMatchSetTo(UnicodeSet toUnionTo);
 }
 
 //eof

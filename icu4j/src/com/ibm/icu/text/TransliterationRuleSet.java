@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRuleSet.java,v $
- * $Date: 2002/06/26 18:12:40 $
- * $Revision: 1.24 $
+ * $Date: 2002/06/28 19:15:53 $
+ * $Revision: 1.25 $
  *
  *****************************************************************************************
  */
@@ -28,7 +28,7 @@ import com.ibm.icu.impl.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.24 $ $Date: 2002/06/26 18:12:40 $
+ * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.25 $ $Date: 2002/06/28 19:15:53 $
  */
 class TransliterationRuleSet {
     /**
@@ -244,38 +244,32 @@ class TransliterationRuleSet {
     }
 
     /**
-     * Return the set of all characters that may be modified by this set.
+     * Return the set of all characters that may be modified (getTarget=false)
+     * or emitted (getTarget=true) by this set.
      */
-    UnicodeSet getSourceSet() {
+    UnicodeSet getSourceTargetSet(boolean getTarget) {
         UnicodeSet set = new UnicodeSet();
         int count = ruleVector.size();
         for (int i=0; i<count; ++i) {
             TransliterationRule r =
                 (TransliterationRule) ruleVector.elementAt(i);
-            r.getSourceSet(set);
-        }
-        return set;
-    }
-
-    /**
-     * Return the set of all characters that may be emitted by this set.
-     */
-    UnicodeSet getTargetSet() {
-        UnicodeSet set = new UnicodeSet();
-        int count = ruleVector.size();
-        for (int i=0; i<count; ++i) {
-            TransliterationRule r =
-                (TransliterationRule) ruleVector.elementAt(i);
-            r.getTargetSet(set);
+            if (getTarget) {
+            	r.addTargetSetTo(set);
+            } else {
+	            r.addSourceSetTo(set);
+            }
         }
         return set;
     }
 }
 
 /* $Log: TransliterationRuleSet.java,v $
- * Revision 1.24  2002/06/26 18:12:40  alan
- * jitterbug 1434: initial public implementation of getSourceSet and getTargetSet
+ * Revision 1.25  2002/06/28 19:15:53  alan
+ * jitterbug 1434: improve method names; minor cleanup
  *
+/* Revision 1.24  2002/06/26 18:12:40  alan
+/* jitterbug 1434: initial public implementation of getSourceSet and getTargetSet
+/*
 /* Revision 1.23  2002/02/25 22:43:58  ram
 /* Move Utility class to icu.impl
 /*
