@@ -6,7 +6,7 @@
 // ***************************************************************************
 
 gu {
-    Version{ "1.0" }
+    Version{ "2.0" }
     LocaleID:int { 0x47 }
     Languages {
         gu { "\u0A97\u0AC1\u0A9C\u0AB0\u0ABE\u0AA4\u0AC0" }

@@ -8,7 +8,7 @@
 // Hindi locale. Need to work on unicodizing more of the text..
 
 hi_IN {
-    Version { "1.1" }
+    Version { "2.0" }
     NumberPatterns {
         "##,##,##0.###;-##,##,##0.###",
         "\u00A4 ##,##,##0.00;-\u00A4 ##,##,##0.00",
