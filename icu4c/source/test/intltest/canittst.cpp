@@ -291,3 +291,5 @@ void CanonicalIteratorTest::TestAPI() {
   }
 
 }
+
+
