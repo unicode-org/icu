@@ -15,8 +15,10 @@
 #include "symtable.h"
 #include "cmemory.h"
 #include "rbt_rule.h"
+#include "uhash.h"
 #include "upropset.h"
 #include "util.h"
+#include "uvector.h"
 
 // HIGH_VALUE > all valid values. 110000 for codepoints
 #define UNICODESET_HIGH 0x0110000
@@ -41,6 +43,8 @@
 #define INTERSECTION    ((UChar)0x0026) /*&*/
 #define UPPER_U         ((UChar)0x0055) /*U*/
 #define LOWER_U         ((UChar)0x0075) /*u*/
+#define OPEN_BRACE      ((UChar)123)    /*{*/
+#define CLOSE_BRACE     ((UChar)125)    /*}*/
 
 // TEMPORARY: Remove when deprecated category code constructor is removed.
 static const UChar CATEGORY_NAMES[] = {
@@ -140,6 +144,20 @@ static inline void _dbgdt(UnicodeSet* set) {
 }
 
 //----------------------------------------------------------------
+// UnicodeString in UVector support
+//----------------------------------------------------------------
+
+static void cloneUnicodeString(UHashTok dst, UHashTok src) {
+    dst.pointer = new UnicodeString(*(UnicodeString*)src.pointer);
+}
+
+static int8_t compareUnicodeString(UHashTok t1, UHashTok t2) {
+    const UnicodeString &a = *(const UnicodeString*)t1.pointer;
+    const UnicodeString &b = *(const UnicodeString*)t2.pointer;
+    return a.compare(b);
+}
+
+//----------------------------------------------------------------
 // Constructors &c
 //----------------------------------------------------------------
 
@@ -152,6 +170,7 @@ UnicodeSet::UnicodeSet() :
 {
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
     list[0] = UNICODESET_HIGH;
+    allocateStrings();
     _dbgct(this);
 }
 
@@ -168,6 +187,7 @@ UnicodeSet::UnicodeSet(UChar32 start, UChar32 end) :
 {
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
     list[0] = UNICODESET_HIGH;
+    allocateStrings();
     complement(start, end);
     _dbgct(this);
 }
@@ -184,6 +204,7 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern,
     buffer(0)
 {
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
+    allocateStrings();
     applyPattern(pattern, status);
     _dbgct(this);
 }
@@ -196,6 +217,7 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
     buffer(0)
 {
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
+    allocateStrings();
     applyPattern(pattern, pos, &symbols, status);
     _dbgct(this);
 }
@@ -207,6 +229,7 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
     buffer(0)
 {
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
+    allocateStrings();
     applyPattern(pattern, pos, NULL, status);
     _dbgct(this);
 }
@@ -219,7 +242,7 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
  */
 UnicodeSet::UnicodeSet(int8_t category, UErrorCode& status) :
     len(0), capacity(START_EXTRA), bufferCapacity(0), list(0),
-    buffer(0)
+    buffer(0), strings(0)
 {
     static const UChar OPEN[] = { 91, 58, 0 }; // "[:"
     static const UChar CLOSE[]= { 58, 93, 0 }; // ":]"
@@ -231,6 +254,7 @@ UnicodeSet::UnicodeSet(int8_t category, UErrorCode& status) :
             pattern.insert(0, OPEN);
             pattern.append(CLOSE);
             list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
+            allocateStrings();
             applyPattern(pattern, status);
         }
     }
@@ -246,6 +270,7 @@ UnicodeSet::UnicodeSet(const UnicodeSet& o) :
     buffer(0)
 {
     list = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
+    allocateStrings();
     *this = o;
     _dbgct(this);
 }
@@ -257,6 +282,7 @@ UnicodeSet::~UnicodeSet() {
     _dbgdt(this); // first!
     uprv_free(list);
     uprv_free(buffer);
+    delete strings;
 }
 
 /**
@@ -266,6 +292,8 @@ UnicodeSet& UnicodeSet::operator=(const UnicodeSet& o) {
     ensureCapacity(o.len);
     len = o.len;
     uprv_memcpy(list, o.list, len*sizeof(UChar32));
+    UErrorCode ec = U_ZERO_ERROR;
+    strings->assign(*o.strings, cloneUnicodeString, ec);
     pat = o.pat;
     return *this;
 }
@@ -285,6 +313,7 @@ UBool UnicodeSet::operator==(const UnicodeSet& o) const {
     for (int32_t i = 0; i < len; ++i) {
         if (list[i] != o.list[i]) return FALSE;
     }
+    if (*strings != *o.strings) return FALSE;
     return TRUE;
 }
 
@@ -324,9 +353,10 @@ int32_t UnicodeSet::hashCode(void) const {
  * @param start first character in the set, inclusive
  * @rparam end last character in the set, inclusive
  */
-void UnicodeSet::set(UChar32 start, UChar32 end) {
+UnicodeSet& UnicodeSet::set(UChar32 start, UChar32 end) {
     clear();
     complement(start, end);
+    return *this;
 }
 
 /**
@@ -343,15 +373,15 @@ void UnicodeSet::set(UChar32 start, UChar32 end) {
  * @exception <code>IllegalArgumentException</code> if the pattern
  * contains a syntax error.
  */
-void UnicodeSet::applyPattern(const UnicodeString& pattern,
-                              UErrorCode& status) {
+UnicodeSet& UnicodeSet::applyPattern(const UnicodeString& pattern,
+                                     UErrorCode& status) {
     if (U_FAILURE(status)) {
-        return;
+        return *this;
     }
 
     ParsePosition pos(0);
     applyPattern(pattern, pos, NULL, status);
-    if (U_FAILURE(status)) return;
+    if (U_FAILURE(status)) return *this;
 
     // Skip over trailing whitespace
     int32_t i = pos.getIndex();
@@ -363,6 +393,7 @@ void UnicodeSet::applyPattern(const UnicodeString& pattern,
     if (i != n) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
     }
+    return *this;
 }
 
 /**
@@ -373,6 +404,17 @@ UBool UnicodeSet::resemblesPattern(const UnicodeString& pattern, int32_t pos) {
     return ((pos+1) < pattern.length() &&
             pattern.charAt(pos) == (UChar)91/*[*/) ||
         UnicodePropertySet::resemblesPattern(pattern, pos);
+}
+
+/**
+ * Append the <code>toPattern()</code> representation of a
+ * string to the given <code>StringBuffer</code>.
+ */
+void UnicodeSet::_appendToPat(UnicodeString& buf, const UnicodeString& s, UBool useHexEscape) {
+    UChar32 cp;
+    for (int32_t i = 0; i < s.length(); i += UTF_CHAR_LENGTH(cp)) {
+        _appendToPat(buf, cp = s.char32At(i), useHexEscape);
+    }
 }
 
 /**
@@ -515,6 +557,13 @@ UnicodeString& UnicodeSet::_generatePattern(UnicodeString& result,
         }
     }
     
+    for (int32_t i = 0; i<strings->size(); ++i) {
+        result.append(OPEN_BRACE);
+        _appendToPat(result,
+                     *(const UnicodeString*) strings->elementAt(i),
+                     escapeUnprintable);
+        result.append(CLOSE_BRACE);
+    }
     return result.append(SET_CLOSE);
 }
 
@@ -530,7 +579,7 @@ int32_t UnicodeSet::size(void) const {
     for (int32_t i = 0; i < count; ++i) {
         n += getRangeEnd(i) - getRangeStart(i) + 1;
     }
-    return n;
+    return n + strings->size();
 }
 
 /**
@@ -539,30 +588,13 @@ int32_t UnicodeSet::size(void) const {
  * @return <tt>true</tt> if this set contains no elements.
  */
 UBool UnicodeSet::isEmpty(void) const {
-    return len == 1;
+    return len == 1 && strings->size() == 0;
 }
 
 /**
- * Returns <tt>true</tt> if this set contains every character
- * in the specified range of chars.
- * If <code>end > start</code> then the results of this method
- * are undefined.
- *
- * @return <tt>true</tt> if this set contains the specified range
- * of chars.
- */
-UBool UnicodeSet::contains(UChar32 start, UChar32 end) const {
-    int32_t i = -1;
-    for (;;) {
-        if (start < list[++i]) break;
-    }
-    return ((i & 1) != 0 && end < list[i]);
-}
-
-/**
- * Returns <tt>true</tt> if this set contains the specified char.
- *
- * @return <tt>true</tt> if this set contains the specified char.
+ * Returns true if this set contains the given character.
+ * @param c character to be checked for containment
+ * @return true if the test condition is met
  */
 UBool UnicodeSet::contains(UChar32 c) const {
     // Set i to the index of the start item greater than ch
@@ -573,6 +605,122 @@ UBool UnicodeSet::contains(UChar32 c) const {
         if (c < list[++i]) break;
     }
     return ((i & 1) != 0); // return true if odd
+}
+
+/**
+ * Returns true if this set contains every character
+ * of the given range.
+ * @param start first character, inclusive, of the range
+ * @param end last character, inclusive, of the range
+ * @return true if the test condition is met
+ */
+UBool UnicodeSet::contains(UChar32 start, UChar32 end) const {
+    int32_t i = -1;
+    for (;;) {
+        if (start < list[++i]) break;
+    }
+    return ((i & 1) != 0 && end < list[i]);
+}
+
+/**
+ * Returns <tt>true</tt> if this set contains the given
+ * multicharacter string.
+ * @param s string to be checked for containment
+ * @return <tt>true</tt> if this set contains the specified string
+ */
+UBool UnicodeSet::contains(const UnicodeString& s) const {
+    if (s.length() == 0) return FALSE;
+    int32_t cp = getSingleCP(s);
+    if (cp < 0) {
+        return strings->contains((void*) &s);
+    } else {
+        return contains((UChar32) cp);
+    }
+}
+
+/**
+ * Returns true if this set contains all the characters and strings
+ * of the given set.
+ * @param c set to be checked for containment
+ * @return true if the test condition is met
+ */
+UBool UnicodeSet::containsAll(const UnicodeSet& c) const {
+    // The specified set is a subset if all of its pairs are contained in
+    // this set.  It's possible to code this more efficiently in terms of
+    // direct manipulation of the inversion lists if the need arises.
+    int32_t n = c.getRangeCount();
+    for (int i=0; i<n; ++i) {
+        if (!contains(c.getRangeStart(i), c.getRangeEnd(i))) {
+            return FALSE;
+        }
+    }
+    if (!strings->containsAll(*c.strings)) return FALSE;
+    return TRUE;
+}
+    
+/**
+ * Returns true if this set contains all the characters
+ * of the given string.
+ * @param s string containing characters to be checked for containment
+ * @return true if the test condition is met
+ */
+UBool UnicodeSet::containsAll(const UnicodeString& s) const {
+    UChar32 cp;
+    for (int32_t i = 0; i < s.length(); i += UTF_CHAR_LENGTH(cp)) {
+        cp = s.char32At(i);
+        if (!contains(cp)) return FALSE;
+    }
+    return TRUE;
+}
+    
+/**
+ * Returns true if this set contains none of the characters
+ * of the given range.
+ * @param start first character, inclusive, of the range
+ * @param end last character, inclusive, of the range
+ * @return true if the test condition is met
+ */
+UBool UnicodeSet::containsNone(UChar32 start, UChar32 end) const {
+    int32_t i = -1;
+    for (;;) {
+        if (start < list[++i]) break;
+    }
+    return ((i & 1) == 0 && end < list[i]);
+}
+
+/**
+ * Returns true if this set contains none of the characters and strings
+ * of the given set.
+ * @param c set to be checked for containment
+ * @return true if the test condition is met
+ */
+UBool UnicodeSet::containsNone(const UnicodeSet& c) const {
+    // The specified set is a subset if all of its pairs are contained in
+    // this set.  It's possible to code this more efficiently in terms of
+    // direct manipulation of the inversion lists if the need arises.
+    int32_t n = c.getRangeCount();
+    for (int32_t i=0; i<n; ++i) {
+        if (!containsNone(c.getRangeStart(i), c.getRangeEnd(i))) {
+            return FALSE;
+        }
+    }
+    if (!strings->containsNone(*c.strings)) return FALSE;
+    return TRUE;
+}
+    
+/**
+ * Returns true if this set contains none of the characters
+ * of the given string.
+ * @param s string containing characters to be checked for containment
+ * @return true if the test condition is met
+ */
+UBool UnicodeSet::containsNone(const UnicodeString& s) const {
+    UChar32 cp;
+    for (int32_t i = 0; i < s.length(); i += UTF_CHAR_LENGTH(cp)) {
+        cp = s.char32At(i);
+        if (contains(cp)) return FALSE;
+    }
+    return TRUE;
 }
 
 /**
@@ -589,7 +737,8 @@ UBool UnicodeSet::matchesIndexValue(uint8_t v) const {
      * Then v is contained if xx <= v || v <= yy.  (This is identical to the
      * time zone month containment logic.)
      */
-    for (int32_t i=0; i<getRangeCount(); ++i) {
+    int32_t i;
+    for (i=0; i<getRangeCount(); ++i) {
         UChar32 low = getRangeStart(i);
         UChar32 high = getRangeEnd(i);
         if ((low & ~0xFF) == (high & ~0xFF)) {
@@ -600,25 +749,154 @@ UBool UnicodeSet::matchesIndexValue(uint8_t v) const {
             return TRUE;
         }
     }
+    if (strings->size() != 0) {
+        for (i=0; i<strings->size(); ++i) {
+            const UnicodeString& s = *(const UnicodeString*)strings->elementAt(i);
+            //if (s.length() == 0) {
+            //    // Empty strings match everything
+            //    return TRUE;
+            //}
+            // assert(s.length() != 0); // We enforce this elsewhere
+            UChar32 c = s.char32At(0);
+            if ((c & 0xFF) == v) {
+                return TRUE;
+            }
+        }
+    }
     return FALSE;
 }
 
 /**
- * Implementation of UnicodeMatcher::matches().
+ * Implementation of UnicodeMatcher::matches().  Always matches the 
+ * longest possible multichar string. 
  */
 UMatchDegree UnicodeSet::matches(const Replaceable& text,
                                  int32_t& offset,
                                  int32_t limit,
                                  UBool incremental) {
     if (offset == limit) {
+        // Strings, if any, have length != 0, so we don't worry
+        // about them here.  If we ever allow zero-length strings
+        // we much check for them here.
         if (contains(TransliterationRule::ETHER)) {
             return incremental ? U_PARTIAL_MATCH : U_MATCH;
         } else {
             return U_MISMATCH;
         }
     } else {
+        if (strings->size() != 0) { // try strings first
+            
+            // might separate forward and backward loops later
+            // for now they are combined
+
+            // TODO Improve efficiency of this, at least in the forward
+            // direction, if not in both.  In the forward direction we
+            // can assume the strings are sorted.
+
+            int32_t i;
+            UBool forward = offset < limit;
+
+            // firstChar is the leftmost char to match in the
+            // forward direction or the rightmost char to match in
+            // the reverse direction.
+            UChar firstChar = text.charAt(offset);
+
+            // If there are multiple strings that can match we
+            // return the longest match.
+            int32_t highWaterLength = 0;
+
+            for (i=0; i<strings->size(); ++i) {
+                const UnicodeString& trial = *(const UnicodeString*)strings->elementAt(i);
+
+                //if (trial.length() == 0) {
+                //    return U_MATCH; // null-string always matches
+                //}
+                // assert(trial.length() != 0); // We ensure this elsewhere
+
+                UChar c = trial.charAt(forward ? 0 : trial.length() - 1);
+
+                // Strings are sorted, so we can optimize in the
+                // forward direction.
+                if (forward && c > firstChar) break;
+                if (c != firstChar) continue;
+                        
+                int32_t len = matchRest(text, offset, limit, trial);
+
+                if (incremental) {
+                    int32_t maxLen = forward ? limit-offset : offset-limit;
+                    if (len == maxLen) {
+                        // We have successfully matched but only up to limit.
+                        return U_PARTIAL_MATCH;
+                    }
+                }
+
+                if (len == trial.length()) {
+                    // We have successfully matched the whole string.
+                    if (len > highWaterLength) {
+                        highWaterLength = len;
+                    }
+                    // In the forward direction we know strings
+                    // are sorted so we can bail early.
+                    if (forward && len < highWaterLength) {
+                        break;
+                    }
+                    continue;
+                }
+            }
+
+            // We've checked all strings without a partial match.
+            // If we have full matches, return the longest one.
+            if (highWaterLength != 0) {
+                offset += forward ? highWaterLength : -highWaterLength;
+                return U_MATCH;
+            }
+        }
         return UnicodeFilter::matches(text, offset, limit, incremental);
     }
+}
+
+/**
+ * Returns the longest match for s in text at the given position.
+ * If limit > start then match forward from start+1 to limit
+ * matching all characters except s.charAt(0).  If limit < start,
+ * go backward starting from start-1 matching all characters
+ * except s.charAt(s.length()-1).  This method assumes that the
+ * first character, text.charAt(start), matches s, so it does not
+ * check it.
+ * @param text the text to match
+ * @param start the first character to match.  In the forward
+ * direction, text.charAt(start) is matched against s.charAt(0).
+ * In the reverse direction, it is matched against
+ * s.charAt(s.length()-1).
+ * @param limit the limit offset for matching, either last+1 in
+ * the forward direction, or last-1 in the reverse direction,
+ * where last is the index of the last character to match.
+ * @return If part of s matches up to the limit, return |limit -
+ * start|.  If all of s matches before reaching the limit, return
+ * s.length().  If there is a mismatch between s and text, return
+ * 0
+ */
+int32_t UnicodeSet::matchRest(const Replaceable& text,
+                              int32_t start, int32_t limit,
+                              const UnicodeString& s) {
+    int32_t i;
+    int32_t maxLen;
+    int32_t slen = s.length();
+    if (start < limit) {
+        maxLen = limit - start;
+        if (maxLen > slen) maxLen = slen;
+        for (i = 1; i < maxLen; ++i) {
+            if (text.charAt(start + i) != s.charAt(i)) return 0;
+        }
+    } else {
+        maxLen = start - limit;
+        if (maxLen > slen) maxLen = slen;
+        --slen; // <=> slen = s.length() - 1;
+        for (i = 1; i < maxLen; ++i) {
+            if (text.charAt(start - i) != s.charAt(slen - i)) return 0;
+        }
+    }
+    return maxLen;
 }
 
 /**
@@ -684,11 +962,12 @@ UChar32 UnicodeSet::charAt(int32_t index) const {
  * @param end last character, inclusive, of range to be added
  * to this set.
  */
-void UnicodeSet::add(UChar32 start, UChar32 end) {
+UnicodeSet& UnicodeSet::add(UChar32 start, UChar32 end) {
     if (start <= end) {
         UChar32 range[3] = { start, end+1, UNICODESET_HIGH };
         add(range, 2, 0);
     }
+    return *this;
 }
 
 /**
@@ -696,8 +975,138 @@ void UnicodeSet::add(UChar32 start, UChar32 end) {
  * present.  If this set already contains the specified character,
  * the call leaves this set unchanged.
  */
-void UnicodeSet::add(UChar32 c) {
-    add(c, c);
+UnicodeSet& UnicodeSet::add(UChar32 c) {
+    return add(c, c);
+}
+
+/**
+ * Adds the specified multicharacter to this set if it is not already
+ * present.  If this set already contains the multicharacter,
+ * the call leaves this set unchanged.
+ * Thus "ch" => {"ch"}
+ * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
+ * @param s the source string
+ * @return the modified set, for chaining
+ */
+UnicodeSet& UnicodeSet::add(const UnicodeString& s) {
+    if (s.length() == 0) return *this;
+    int32_t cp = getSingleCP(s);
+    if (cp < 0) {
+        _add(s);
+        pat.truncate(0);
+    } else {
+        add((UChar32)cp, (UChar32)cp);
+    }
+    return *this;
+}
+
+/**
+ * Adds the given string, in order, to 'strings'.  The given string
+ * must have been checked by the caller to not be empty and to not
+ * already be in 'strings'.
+ */
+void UnicodeSet::_add(const UnicodeString& s) {
+    UnicodeString* t = new UnicodeString(s);
+    UErrorCode ec = U_ZERO_ERROR;
+    strings->sortedInsert(t, compareUnicodeString, ec);
+}
+
+/**
+ * @return a code point IF the string consists of a single one.
+ * otherwise returns -1.
+ * @param string to test
+ */
+int32_t UnicodeSet::getSingleCP(const UnicodeString& s) {
+    //if (s.length() < 1) {
+    //    throw new IllegalArgumentException("Can't use zero-length strings in UnicodeSet");
+    //}
+    if (s.length() > 2) return -1;
+    if (s.length() == 1) return s.charAt(0);
+
+    // at this point, len = 2
+    UChar32 cp = s.char32At(0);
+    if (cp > 0xFFFF) { // is surrogate pair
+        return cp;
+    }
+    return -1;
+}
+
+/**
+ * Adds each of the characters in this string to the set. Thus "ch" => {"c", "h"}
+ * If this set already any particular character, it has no effect on that character.
+ * @param the source string
+ * @return the modified set, for chaining
+ */
+UnicodeSet& UnicodeSet::addAll(const UnicodeString& s) {
+    UChar32 cp;
+    for (int32_t i = 0; i < s.length(); i += UTF_CHAR_LENGTH(cp)) {
+        cp = s.char32At(i);
+        add(cp, cp);
+    }
+    return *this;
+}
+
+/**
+ * Retains EACH of the characters in this string. Note: "ch" == {"c", "h"}
+ * If this set already any particular character, it has no effect on that character.
+ * @param the source string
+ * @return the modified set, for chaining
+ */
+UnicodeSet& UnicodeSet::retainAll(const UnicodeString& s) {
+    UnicodeSet set;
+    set.addAll(s);
+    retainAll(set);
+    return *this;
+}
+
+/**
+ * Complement EACH of the characters in this string. Note: "ch" == {"c", "h"}
+ * If this set already any particular character, it has no effect on that character.
+ * @param the source string
+ * @return the modified set, for chaining
+ */
+UnicodeSet& UnicodeSet::complementAll(const UnicodeString& s) {
+    UnicodeSet set;
+    set.addAll(s);
+    complementAll(set);
+    return *this;
+}
+
+/**
+ * Remove EACH of the characters in this string. Note: "ch" == {"c", "h"}
+ * If this set already any particular character, it has no effect on that character.
+ * @param the source string
+ * @return the modified set, for chaining
+ */
+UnicodeSet& UnicodeSet::removeAll(const UnicodeString& s) {
+    UnicodeSet set;
+    set.addAll(s);
+    removeAll(set);
+    return *this;
+}
+
+/**
+ * Makes a set from a multicharacter string. Thus "ch" => {"ch"}
+ * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
+ * @param the source string
+ * @return a newly created set containing the given string
+ */
+UnicodeSet* UnicodeSet::createFrom(const UnicodeString& s) {
+    UnicodeSet *set = new UnicodeSet();
+    set->add(s);
+    return set;
+}
+
+
+/**
+ * Makes a set from each of the characters in the string. Thus "ch" => {"c", "h"}
+ * @param the source string
+ * @return a newly created set containing the given characters
+ */
+UnicodeSet* UnicodeSet::createFromAll(const UnicodeString& s) {
+    UnicodeSet *set = new UnicodeSet();
+    set->addAll(s);
+    return set;
 }
 
 /**
@@ -710,17 +1119,18 @@ void UnicodeSet::add(UChar32 c) {
  * @param end last character, inclusive, of range to be retained
  * to this set.
  */
-void UnicodeSet::retain(UChar32 start, UChar32 end) {
+UnicodeSet& UnicodeSet::retain(UChar32 start, UChar32 end) {
     if (start <= end) {
         UChar32 range[3] = { start, end+1, UNICODESET_HIGH };
         retain(range, 2, 0);
     } else {
         clear();
     }
+    return *this;
 }
 
-void UnicodeSet::retain(UChar32 c) {
-    retain(c, c);
+UnicodeSet& UnicodeSet::retain(UChar32 c) {
+    return retain(c, c);
 }
 
 /**
@@ -734,11 +1144,12 @@ void UnicodeSet::retain(UChar32 c) {
  * @param end last character, inclusive, of range to be removed
  * from this set.
  */
-void UnicodeSet::remove(UChar32 start, UChar32 end) {
+UnicodeSet& UnicodeSet::remove(UChar32 start, UChar32 end) {
     if (start <= end) {
         UChar32 range[3] = { start, end+1, UNICODESET_HIGH };
         retain(range, 2, 2);
     }
+    return *this;
 }
 
 /**
@@ -746,8 +1157,27 @@ void UnicodeSet::remove(UChar32 start, UChar32 end) {
  * The set will not contain the specified range once the call
  * returns.
  */
-void UnicodeSet::remove(UChar32 c) {
-    remove(c, c);
+UnicodeSet& UnicodeSet::remove(UChar32 c) {
+    return remove(c, c);
+}
+
+/**
+ * Removes the specified string from this set if it is present.
+ * The set will not contain the specified character once the call
+ * returns.
+ * @param the source string
+ * @return the modified set, for chaining
+ */
+UnicodeSet& UnicodeSet::remove(const UnicodeString& s) {
+    if (s.length() == 0) return *this;
+    int32_t cp = getSingleCP(s);
+    if (cp < 0) {
+        strings->removeElement((void*) &s);
+        pat.truncate(0);
+    } else {
+        remove((UChar32)cp, (UChar32)cp);
+    }
+    return *this;
 }
 
 /**
@@ -761,109 +1191,24 @@ void UnicodeSet::remove(UChar32 c) {
  * @param end last character, inclusive, of range to be removed
  * from this set.
  */
-void UnicodeSet::complement(UChar32 start, UChar32 end) {
+UnicodeSet& UnicodeSet::complement(UChar32 start, UChar32 end) {
     if (start <= end) {
         UChar32 range[3] = { start, end+1, UNICODESET_HIGH };
         exclusiveOr(range, 2, 0);
     }
+    pat.truncate(0);
+    return *this;
 }
 
-void UnicodeSet::complement(UChar32 c) {
-    complement(c, c);
-}
-
-/**
- * Returns <tt>true</tt> if the specified set is a <i>subset</i>
- * of this set.
- *
- * @param c set to be checked for containment in this set.
- * @return <tt>true</tt> if this set contains all of the elements of the
- *         specified set.
- */
-UBool UnicodeSet::containsAll(const UnicodeSet& c) const {
-    // The specified set is a subset if all of its pairs are contained in
-    // this set.  It's possible to code this more efficiently in terms of
-    // direct manipulation of the inversion lists if the need arises.
-    int32_t n = c.getRangeCount();
-    for (int i=0; i<n; ++i) {
-        if (!contains(c.getRangeStart(i), c.getRangeEnd(i))) {
-            return FALSE;
-        }
-    }
-    return TRUE;
+UnicodeSet& UnicodeSet::complement(UChar32 c) {
+    return complement(c, c);
 }
 
 /**
- * Return TRUE if every character in s is in this set.
+ * This is equivalent to
+ * <code>complement(MIN_VALUE, MAX_VALUE)</code>.
  */
-UBool UnicodeSet::containsAll(const UnicodeString& s) const {
-    UChar32 cp;
-    for (int32_t i = 0; i < s.length(); i += UTF_CHAR_LENGTH(cp)) {
-        cp = s.char32At(i);
-        if (!contains(cp)) return FALSE;
-    }
-    return TRUE;
-}
-
-/**
- * Adds all of the elements in the specified set to this set if
- * they're not already present.  This operation effectively
- * modifies this set so that its value is the <i>union</i> of the two
- * sets.  The behavior of this operation is unspecified if the specified
- * collection is modified while the operation is in progress.
- *
- * @param c set whose elements are to be added to this set.
- * @see #add(char, char)
- */
-void UnicodeSet::addAll(const UnicodeSet& c) {
-    add(c.list, c.len, 0);
-}
-
-/**
- * Retains only the elements in this set that are contained in the
- * specified set.  In other words, removes from this set all of
- * its elements that are not contained in the specified set.  This
- * operation effectively modifies this set so that its value is
- * the <i>intersection</i> of the two sets.
- *
- * @param c set that defines which elements this set will retain.
- */
-void UnicodeSet::retainAll(const UnicodeSet& c) {
-    retain(c.list, c.len, 0);
-}
-
-/**
- * Removes from this set all of its elements that are contained in the
- * specified set.  This operation effectively modifies this
- * set so that its value is the <i>asymmetric set difference</i> of
- * the two sets.
- *
- * @param c set that defines which elements will be removed from
- *          this set.
- */
-void UnicodeSet::removeAll(const UnicodeSet& c) {
-    retain(c.list, c.len, 2);
-}
-
-/**
- * Complements in this set all elements contained in the specified
- * set.  Any character in the other set will be removed if it is
- * in this set, or will be added if it is not in this set.
- *
- * @param c set that defines which elements will be xor'ed from
- *          this set.
- */
-void UnicodeSet::complementAll(const UnicodeSet& c) {
-    exclusiveOr(c.list, c.len, 0);
-}
-
-/**
- * Inverts this set.  This operation modifies this set so that its
- * value is its complement.  This is equivalent to the pseudo
- * code: <code>this = new UnicodeSet(UnicodeSet.MIN_VALUE,
- * UnicodeSet.MAX_VALUE).removeAll(this)</code>.
- */
-void UnicodeSet::complement(void) {
+UnicodeSet& UnicodeSet::complement(void) {
     if (list[0] == UNICODESET_LOW) { 
         ensureBufferCapacity(len-1);
         uprv_memcpy(buffer, list + 1, (len-1)*sizeof(UChar32));
@@ -876,16 +1221,116 @@ void UnicodeSet::complement(void) {
     }
     swapBuffers();
     pat.truncate(0);
+    return *this;
+}
+
+/**
+ * Complement the specified string in this set.
+ * The set will not contain the specified string once the call
+ * returns.
+ * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
+ * @param s the string to complement
+ * @return this object, for chaining
+ */
+UnicodeSet& UnicodeSet::complement(const UnicodeString& s) {
+    if (s.length() == 0) return *this;
+    int32_t cp = getSingleCP(s);
+    if (cp < 0) {
+        if (strings->contains((void*) &s)) {
+            strings->removeElement((void*) &s);
+        } else {
+            _add(s);
+        }
+        pat.truncate(0);
+    } else {
+        complement((UChar32)cp, (UChar32)cp);
+    }
+    return *this;
+}    
+
+/**
+ * Adds all of the elements in the specified set to this set if
+ * they're not already present.  This operation effectively
+ * modifies this set so that its value is the <i>union</i> of the two
+ * sets.  The behavior of this operation is unspecified if the specified
+ * collection is modified while the operation is in progress.
+ *
+ * @param c set whose elements are to be added to this set.
+ * @see #add(char, char)
+ */
+UnicodeSet& UnicodeSet::addAll(const UnicodeSet& c) {
+    add(c.list, c.len, 0);
+
+    // Add strings in order 
+    for (int32_t i=0; i<c.strings->size(); ++i) {
+        const UnicodeString* s = (const UnicodeString*)c.strings->elementAt(i);
+        if (!strings->contains((void*) s)) {
+            _add(*s);
+        }
+    }
+    return *this;
+}
+
+/**
+ * Retains only the elements in this set that are contained in the
+ * specified set.  In other words, removes from this set all of
+ * its elements that are not contained in the specified set.  This
+ * operation effectively modifies this set so that its value is
+ * the <i>intersection</i> of the two sets.
+ *
+ * @param c set that defines which elements this set will retain.
+ */
+UnicodeSet& UnicodeSet::retainAll(const UnicodeSet& c) {
+    retain(c.list, c.len, 0);
+    strings->retainAll(*c.strings);
+    return *this;
+}
+
+/**
+ * Removes from this set all of its elements that are contained in the
+ * specified set.  This operation effectively modifies this
+ * set so that its value is the <i>asymmetric set difference</i> of
+ * the two sets.
+ *
+ * @param c set that defines which elements will be removed from
+ *          this set.
+ */
+UnicodeSet& UnicodeSet::removeAll(const UnicodeSet& c) {
+    retain(c.list, c.len, 2);
+    strings->removeAll(*c.strings);
+    return *this;
+}
+
+/**
+ * Complements in this set all elements contained in the specified
+ * set.  Any character in the other set will be removed if it is
+ * in this set, or will be added if it is not in this set.
+ *
+ * @param c set that defines which elements will be xor'ed from
+ *          this set.
+ */
+UnicodeSet& UnicodeSet::complementAll(const UnicodeSet& c) {
+    exclusiveOr(c.list, c.len, 0);
+
+    for (int32_t i=0; i<c.strings->size(); ++i) {
+        void* e = c.strings->elementAt(i);
+        if (!strings->removeElement(e)) {
+            _add(*(const UnicodeString*)e);
+        }
+    }
+    return *this;
 }
 
 /**
  * Removes all of the elements from this set.  This set will be
  * empty after this call returns.
  */
-void UnicodeSet::clear(void) {
+UnicodeSet& UnicodeSet::clear(void) {
     list[0] = UNICODESET_HIGH;
     len = 1;
     pat.truncate(0);
+    strings->removeAllElements();
+    return *this;
 }
 
 /**
@@ -922,7 +1367,7 @@ UChar32 UnicodeSet::getRangeEnd(int32_t index) const {
  * Reallocate this objects internal structures to take up the least
  * possible space, without changing this object's value.
  */
-void UnicodeSet::compact() {
+UnicodeSet& UnicodeSet::compact() {
     if (len != capacity) {
         capacity = len;
         UChar32* temp = (UChar32*) uprv_malloc(sizeof(UChar32) * capacity);
@@ -932,6 +1377,7 @@ void UnicodeSet::compact() {
     }
     uprv_free(buffer);
     buffer = NULL;
+    return *this;
 }
 
 //----------------------------------------------------------------
@@ -996,6 +1442,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
     UnicodeString newPat(SET_OPEN);
     int32_t nestedPatStart = - 1; // see below for usage
     UBool nestedPatDone = FALSE; // see below for usage
+    UnicodeString multiCharBuffer;
 
     UBool invert = FALSE;
     clear();
@@ -1239,6 +1686,41 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
                 }
                 i = pos.getIndex();
             }
+
+            else if (!isLiteral && c == OPEN_BRACE) {
+                // start of a string. find the rest.
+                int32_t length = 0;
+                int32_t st = i;
+                multiCharBuffer.truncate(0);
+                while (i < pattern.length()) {
+                    UChar32 ch = pattern.char32At(i);
+                    i += UTF_CHAR_LENGTH(ch); 
+                    if (ch == CLOSE_BRACE) {
+                        length = -length; // signal that we saw '}'
+                        break;
+                    } else if (ch == BACKSLASH) {
+                        ch = pattern.unescapeAt(i);
+                        if (ch == (UChar32) -1) {
+                            status = U_ILLEGAL_ARGUMENT_ERROR;
+                            return;
+                        }
+                    }
+                    --length; // sic; see above
+                    multiCharBuffer.append(ch);
+                }
+                if (length < 1) {
+                    status = U_ILLEGAL_ARGUMENT_ERROR;
+                    return;
+                }
+                // We have new string. Add it to set and continue;
+                // we don't need to drop through to the further
+                // processing
+                add(multiCharBuffer);
+                pattern.extractBetween(st, i, multiCharBuffer);
+                newPat.append(OPEN_BRACE).append(multiCharBuffer);
+                rebuildPattern = TRUE;
+                continue;
+            }
         }
 
         /* At this point we have either a character c, or a nested set.  If
@@ -1400,6 +1882,21 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
 //----------------------------------------------------------------
 // Implementation: Utility methods
 //----------------------------------------------------------------
+
+/**
+ * Allocate our strings vector and return TRUE if successful.
+ */
+UBool UnicodeSet::allocateStrings() {
+    UErrorCode ec = U_ZERO_ERROR;
+    strings = new UVector(uhash_deleteUnicodeString,
+                          uhash_compareUnicodeString, ec);
+    if (U_FAILURE(ec)) {
+        delete strings;
+        strings = NULL;
+        return FALSE;
+    }
+    return TRUE;
+}
 
 void UnicodeSet::ensureCapacity(int32_t newLen) {
     if (newLen <= capacity)
