@@ -58,16 +58,16 @@ another pointer variable for this:
 
 Formally, the file contains the following structures:
 
-    A0 const uint16_t exceptionsIndex; -- 32-bit index
-    A1 const uint16_t ucharsIndex; -- 32-bit index
-    A2 const uint16_t reservedIndex;
-    A3 const uint16_t reservedIndex;
-    A4 const uint16_t reservedIndex;
+    A0 const uint16_t STAGE_1_BITS(=11);
+    A1 const uint16_t STAGE_2_BITS(=6);
+    A2 const uint16_t STAGE_3_BITS(=4);
+    A3 const uint16_t exceptionsIndex;  -- 32-bit unit index
+    A4 const uint16_t ucharsIndex;      -- 32-bit unit index
     A5 const uint16_t reservedIndex;
     A6 const uint16_t reservedIndex;
     A7 const uint16_t reservedIndex;
 
-    S1 const uint16_t stage1[0x440]; -- 0x440=0x110000>>10
+    S1 const uint16_t stage1[0x440];    -- 0x440=0x110000>>10
     S2 const uint16_t stage2[variable];
     S3 const uint16_t stage3[variable];
        (possible 1*uint16_t for padding to 4-alignment)
@@ -89,7 +89,8 @@ the Unicode code assignment are exploited:
 - The 21-bit space is not fully used for Unicode.
 
 The three-stage lookup organizes code points in groups of 16 in stage 3.
-64 such groups are grouped again, resulting in blocks of 1k in stage 2.
+64 such groups are grouped again, resulting in blocks of 64 indexes
+for a total of 1k code points in stage 2.
 The first stage is limited according to all code points being <0x110000.
 Each stage contains indexes to groups or blocks of the next stage
 in an n:1 manner, i.e., multiple entries of one stage may index the same
@@ -315,7 +316,8 @@ addProps(Props *p) {
      *
      * Using the same bits for alternate fields saves some space.
      *
-     * For the canonical categories, there are only few actually used.
+     * For the canonical categories, there are only few actually used
+     * most of the time.
      * They can be stored using 5 bits.
      *
      * In the BiDi categories, the 5 explicit codes are only ever
@@ -390,6 +392,7 @@ addProps(Props *p) {
         ++count;
     }
 
+    /* handle exceptions */
     if(count>1 || x!=0 || value<-2048 || 2047<value) {
         /* this code point needs exception values */
         if(DO_DEBUG_OUT /* ### beVerbose */) {
@@ -407,9 +410,9 @@ addProps(Props *p) {
 
         /* ### allocate and create exception values */
         value=-exceptionsCount;
-    } else {
     }
 
+    /* put together the 32-bit word of encoded properties */
     x|=
         p->generalCategory |
         bidiMap[p->bidi]<<6UL |
@@ -418,30 +421,9 @@ addProps(Props *p) {
 
     setProps(p->code, x, &count, &count, &count);
 
-#if 0
-    /* verify that no numbers and no Mn have case mappings */
-    /* this is not 100% true either (see 0345;COMBINING GREEK YPOGEGRAMMENI) */
-    if( (genCategoryNames[p->generalCategory][0]=='N' ||
-         p->generalCategory==U_NON_SPACING_MARK) &&
-        count>0
-    ) {
-        printf("*** code 0x%06x: number category or Mn but case mapping\n", p->code);
-    } else if(count>1) {
-        /* see for which characters there are two case mappings */
-        /* there are some, but few (12) */
-        printf("*** code 0x%06x: more than one case mapping\n", p->code);
-    }
-
-    /* verify that { Mn, Me } if and only if NSM */
-    if( (p->generalCategory==U_NON_SPACING_MARK ||
-         p->generalCategory==U_ENCLOSING_MARK)
-        ^
-        (p->bidi==U_DIR_NON_SPACING_MARK)) {
-        printf("*** code 0x%06x: bidi class does not fit expected range ***\n", p->code);
-    }
-
     /*
-     * "Higher-hanging fruit":
+     * "Higher-hanging fruit" (not implemented):
+     *
      * For some sets of fields, there are fewer sets of values
      * than the product of the numbers of values per field.
      * This means that storing one single value for more than
@@ -454,7 +436,6 @@ addProps(Props *p) {
      * and its case mappings. Store deltas. Store codes for few
      * occuring deltas.
      */
-#endif
 }
 
 /* areas of same properties ------------------------------------------------- */
@@ -490,8 +471,10 @@ repeatProps() {
     uint16_t i1, i2, i3, j3, i1Limit, i2Repeat, i3Repeat, area;
     uint32_t x, start, limit;
 
-    /* set the properties for the plane 15/16 Private Use area */
-    setProps(0xf0000, getProps(0xe000, &i1, &i2, &i3), &i1, &i2, &i3);
+    /* set the properties for the plane 15/16 Private Use area if necessary */
+    if(getProps(0xf0000, &i1, &i2, &i3)==0) {
+        setProps(0xf0000, getProps(0xe000, &i1, &i2, &i3), &i1, &i2, &i3);
+    }
 
     /* fill in the repetitive properties */
     for(area=0; area<sizeof(areas)/sizeof(areas[0]); ++area) {
@@ -533,9 +516,6 @@ repeatProps() {
          *   stage 1 indexes
          * - a range of code points after the last full block for
          *   one stage 1 index
-         * - if the start of an area is not the beginning of a full block,
-         *   then the end of the area is at least the last code point
-         *   in this same block
          */
 
         if((start&(STAGE_2_3_AREA-1))!=0) {
@@ -854,7 +834,12 @@ compareProps(const void *l, const void *r) {
 
 extern void
 generateData() {
-    static uint16_t indexes[8]={ 0, 0, 0, 0, 0, 0, 0, 0 };
+    static uint16_t indexes[8]={
+        STAGE_1_BITS, STAGE_2_BITS, STAGE_3_BITS,
+        0, 0,
+        0, 0, 0
+    };
+
     UNewDataMemory *pData;
     UErrorCode errorCode=U_ZERO_ERROR;
     uint32_t size;
@@ -877,8 +862,8 @@ generateData() {
         stage3[i]+=offset;
     }
 
-    indexes[0]=offset+=propsTop;            /* uint32_t offset to exceptions[] */
-    indexes[1]=offset+=(exceptionsTop+1)/2; /* uint32_t offset to uchars[], include padding */
+    indexes[3]=offset+=propsTop;            /* uint32_t offset to exceptions[] */
+    indexes[4]=offset+=(exceptionsTop+1)/2; /* uint32_t offset to uchars[], include padding */
 
     size=4*offset+ucharsTop*U_SIZEOF_UCHAR; /* total size of data */
 
