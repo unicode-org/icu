@@ -481,6 +481,21 @@ DataDrivenCollationTest {
                 "xű<Xű<xyx<xüx<xűx<xz<Xz<xzx<xå<Xå<xåx<xä<Xä<xæ<xÆ<Xæ<XÆ<xäx<"
                 "xæx<xÆx<xö<Xö<xø<Xø<xő<Xő<xõ<Xõ<xœ<xŒ<Xœ<XŒ<xöx<xøx<xőx<xõx<xœx<xŒx"
             }
+        }
+        ro_TestNewRules {
+            Info {
+                Description { "This test goes through new rules and tests against old rules" }
+            }
+            Settings {
+                {
+                    TestLocale { "ro" }
+                }
+            }
+            Cases { 
+                "xAx<xă<xĂ<Xă<XĂ<xăx<xĂx<xâ<xÂ<Xâ<XÂ<xâx<xÂx<xb<xIx<xî<xÎ<Xî<XÎ<xîx<xÎx<"
+                "xj<xSx<xș=xş<xȘ=xŞ<Xș=Xş<XȘ=XŞ<xșx=xşx<xȘx=xŞx<xT<xTx<xț=xţ<xȚ=xŢ<Xț=Xţ<XȚ"
+                "=XŢ<xțx=xţx<xȚx=xŢx<xU"
+            }
         }      
     }
 }
