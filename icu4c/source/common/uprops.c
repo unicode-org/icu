@@ -250,7 +250,7 @@ u_getIntPropertyValue(UChar32 c, UProperty which) {
         case UCHAR_HANGUL_SYLLABLE_TYPE:
             /* purely algorithmic; hardcode known characters, check for assigned new ones */
             if(c<JAMO_L_BASE) {
-                /* NA */
+                /* U_HST_NOT_APPLICABLE */
             } else if(c<=0x11ff) {
                 /* Jamo range */
                 if(c<=0x115f) {
@@ -270,12 +270,12 @@ u_getIntPropertyValue(UChar32 c, UProperty which) {
                     }
                 }
             } else if((c-=HANGUL_BASE)<0) {
-                /* NA */
+                /* U_HST_NOT_APPLICABLE */
             } else if(c<HANGUL_COUNT) {
                 /* Hangul syllable */
                 return c%JAMO_T_COUNT==0 ? U_HST_LV_SYLLABLE : U_HST_LVT_SYLLABLE;
             }
-            return 0; /* NA */
+            return U_HST_NOT_APPLICABLE;
         default:
             return 0; /* undefined */
         }
@@ -311,7 +311,7 @@ u_getIntPropertyMaxValue(UProperty which) {
         case UCHAR_CANONICAL_COMBINING_CLASS:
             return 0xff; /* TODO do we need to be more precise, getting the actual maximum? */
         case UCHAR_DECOMPOSITION_TYPE:
-            max=uprv_getMaxValues(1)&UPROPS_DT_MASK;
+            max=uprv_getMaxValues(2)&UPROPS_DT_MASK;
             return max!=0 ? max : (int32_t)U_DT_COUNT-1;
         case UCHAR_EAST_ASIAN_WIDTH:
             max=(uprv_getMaxValues(0)&UPROPS_EA_MASK)>>UPROPS_EA_SHIFT;
@@ -319,10 +319,10 @@ u_getIntPropertyMaxValue(UProperty which) {
         case UCHAR_GENERAL_CATEGORY:
             return (int32_t)U_CHAR_CATEGORY_COUNT-1;
         case UCHAR_JOINING_GROUP:
-            max=(uprv_getMaxValues(1)&UPROPS_JG_MASK)>>UPROPS_JG_SHIFT;
+            max=(uprv_getMaxValues(2)&UPROPS_JG_MASK)>>UPROPS_JG_SHIFT;
             return max!=0 ? max : (int32_t)U_JG_COUNT-1;
         case UCHAR_JOINING_TYPE:
-            max=(uprv_getMaxValues(1)&UPROPS_JT_MASK)>>UPROPS_JT_SHIFT;
+            max=(uprv_getMaxValues(2)&UPROPS_JT_MASK)>>UPROPS_JT_SHIFT;
             return max!=0 ? max : (int32_t)U_JT_COUNT-1;
         case UCHAR_LINE_BREAK:
             max=(uprv_getMaxValues(0)&UPROPS_LB_MASK)>>UPROPS_LB_SHIFT;
