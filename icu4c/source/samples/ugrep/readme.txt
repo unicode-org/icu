@@ -1,3 +1,4 @@
+Copyright (c) 2002, International Business Machines Corporation and others. All Rights Reserved.
 ugrep: a sample program demonstrating the use of ICU regular expression API.
 
 usage:   ugrep [options] pattern [file ...]

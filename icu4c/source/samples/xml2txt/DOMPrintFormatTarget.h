@@ -1,3 +1,7 @@
+/******************************************************************************
+ * Copyright (C) 2002, International Business Machines Corporation and
+ * others. All Rights Reserved.
+ ******************************************************************************/
 #ifndef DOMPRINTFORMATTARGET_H_
 #define DOMPRINTFORMATTARGET_H_
 #include "ChildName.h"
