@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeFilter.java,v $ 
- * $Date: 2001/09/26 18:00:06 $ 
- * $Revision: 1.6 $
+ * $Date: 2001/10/25 22:33:19 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -74,7 +74,7 @@ public abstract class UnicodeFilter implements UnicodeMatcher {
      * Stubbed out UnicodeMatcher implementation for filters that do
      * not implement indexing.
      */
-    public boolean matchesIndexValue(byte v) {
+    public boolean matchesIndexValue(int v) {
         return false;
     }
 }
