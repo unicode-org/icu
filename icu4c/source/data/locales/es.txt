@@ -504,6 +504,7 @@ es {
         ca { "catal\u00E1n" }
         co { "corso" }
         cs { "checo" }
+        cy { "gal\u00E9s" }
         da { "dan\u00E9s" }
         de { "alem\u00E1n" }
         el { "griego" }
@@ -517,6 +518,7 @@ es {
         fo { "fero\u00E9s" }
         fr { "franc\u00E9s" }
         ga { "irland\u00E9s" }
+        gd { "ga\u00E9lico escoc\u00E9s" }
         gl { "gallego" }
         gu { "goujarat\u00ED" }
         gv { "ga\u00E9lico man\u00E9s" }
@@ -580,21 +582,31 @@ es {
         si { "cingal\u00E9s" }
         sk { "eslovaco" }
         sl { "esloveno" }
+        sm { "samoano" }
         so { "somal\u00ED" }
         sq { "alban\u00E9s" }
         sr { "serbio" }
+        su { "sundan\u00E9s" }
         sv { "sueco" }
         sw { "swahili" }
         ta { "tamil" }
         te { "telugu" }
         th { "tailand\u00E9s" }
         ti { "tigrinya" }
+        tl { "tagalo" }
         tr { "turco" }
+        ts { "tsonga" }
         tt { "t\u00E1taro" }
+        ug { "uigur" }
         uk { "ucraniano" }
         ur { "urdu" }
         uz { "uzbeko" }
         vi { "vietnamita" }
+        vo { "volapuk" }
+        wo { "uolof" }
+        xh { "xhosa" }
+        yo { "yoruba" }
+        za { "zhuang" }
         zh { "chino" }
         zu { "zul\u00FA" }
     }
