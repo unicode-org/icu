@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2002/07/30 22:12:43 $
- * $Revision: 1.83 $
+ * $Date: 2002/12/03 21:01:34 $
+ * $Revision: 1.84 $
  *
  *****************************************************************************************
  */
@@ -251,7 +251,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.83 $ $Date: 2002/07/30 22:12:43 $
+ * @stable
  */
 public abstract class Transliterator {
     /**
@@ -261,6 +261,7 @@ public abstract class Transliterator {
      * direction, and B to A when operating in the reverse direction.
      * @see RuleBasedTransliterator
      * @see CompoundTransliterator
+     * @stable
      */
     public static final int FORWARD = 0;
 
@@ -271,6 +272,7 @@ public abstract class Transliterator {
      * direction, and B to A when operating in the reverse direction.
      * @see RuleBasedTransliterator
      * @see CompoundTransliterator
+     * @stable
      */
     public static final int REVERSE = 1;
 
@@ -293,6 +295,7 @@ public abstract class Transliterator {
      * boundaries.  That is, none of them may occur between two code units
      * of a surrogate pair.  If any index does split a surrogate pair,
      * results are unspecified.
+     * @stable
      */
     public static class Position {
 
@@ -302,6 +305,7 @@ public abstract class Transliterator {
          * anything before this index.  INPUT/OUTPUT parameter: This parameter
          * is updated by a transliteration operation to reflect the maximum
          * amount of antecontext needed by a transliterator.
+         * @stable
          */
         public int contextStart;
 
@@ -311,6 +315,7 @@ public abstract class Transliterator {
          * anything at or after this index.  INPUT/OUTPUT parameter: This
          * parameter is updated to reflect changes in the length of the
          * text, but points to the same logical position in the text.
+         * @stable
          */
         public int contextLimit;
 
@@ -319,6 +324,7 @@ public abstract class Transliterator {
          * INPUT/OUTPUT parameter: This parameter is advanced past
          * characters that have already been transliterated by a
          * transliteration operation.
+         * @stable
          */
         public int start;
 
@@ -327,17 +333,34 @@ public abstract class Transliterator {
          * INPUT/OUTPUT parameter: This parameter is updated to reflect
          * changes in the length of the text, but points to the same
          * logical position in the text.
+         * @stable
          */
         public int limit;
 
+        /**
+         * Constructs a Position object with start, limit,
+         * contextStart, and contextLimit all equal to zero.
+         * @stable
+         */
         public Position() {
             this(0, 0, 0, 0);
         }
 
+        /**
+         * Constructs a Position object with the given start,
+         * contextStart, and contextLimit.  The limit is set to the
+         * contextLimit.
+         * @stable
+         */
         public Position(int contextStart, int contextLimit, int start) {
             this(contextStart, contextLimit, start, contextLimit);
         }
 
+        /**
+         * Constructs a Position object with the given start, limit,
+         * contextStart, and contextLimit.
+         * @stable
+         */
         public Position(int contextStart, int contextLimit,
                         int start, int limit) {
             this.contextStart = contextStart;
@@ -351,6 +374,7 @@ public abstract class Transliterator {
          * @param length the length of the string this object applies to
          * @exception IllegalArgumentException if any indices are out
          * of bounds
+         * @stable
          */
         public final void validate(int length) {
             if (contextStart < 0 ||
@@ -412,10 +436,22 @@ public abstract class Transliterator {
      */
     private static final String RB_DISPLAY_NAME_PATTERN = "TransliteratorNamePattern";
 
+    /**
+     * Delimiter between elements in a compound ID.
+     * @deprecated ICU 2.4 To be made package private after 2003-12-01.
+     */
     protected static final char ID_DELIM = ';';
 
+    /**
+     * Delimiter before target in an ID.
+     * @deprecated ICU 2.4 To be made package private after 2003-12-01.
+     */
     protected static final char ID_SEP = '-';
 
+    /**
+     * Delimiter before variant in an ID.
+     * @deprecated ICU 2.4 To be made package private after 2003-12-01.
+     */
     protected static final char VARIANT_SEP = '/';
 
     private static final String ANY = "Any";
@@ -442,6 +478,7 @@ public abstract class Transliterator {
      * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
+     * @stable
      */
     protected Transliterator(String ID, UnicodeFilter filter) {
         if (ID == null) {
@@ -464,6 +501,7 @@ public abstract class Transliterator {
      * length, at <code>[start, </code><em>new-limit</em><code>)</code>, where
      * <em>new-limit</em> is the return value. If the input offsets are out of bounds,
      * the returned value is -1 and the input string remains unchanged.
+     * @stable
      */
     public final int transliterate(Replaceable text, int start, int limit) {
         if (start < 0 ||
@@ -480,6 +518,7 @@ public abstract class Transliterator {
     /**
      * Transliterates an entire string in place. Convenience method.
      * @param text the string to be transliterated
+     * @stable
      */
     public final void transliterate(Replaceable text) {
         transliterate(text, 0, text.length());
@@ -490,6 +529,7 @@ public abstract class Transliterator {
      *
      * @param text the string to be transliterated
      * @return The transliterated text
+     * @stable
      */
     public final String transliterate(String text) {
         ReplaceableString result = new ReplaceableString(text);
@@ -543,6 +583,7 @@ public abstract class Transliterator {
      * @see #handleTransliterate
      * @exception IllegalArgumentException if <code>index</code>
      * is invalid
+     * @stable
      */
     public final void transliterate(Replaceable text, Position index,
                                     String insertion) {
@@ -588,6 +629,7 @@ public abstract class Transliterator {
      * transliterated into the translation buffer at
      * <code>index.contextLimit</code>.
      * @see #transliterate(Replaceable, Transliterator.Position, String)
+     * @stable
      */
     public final void transliterate(Replaceable text, Position index,
                                     int insertion) {
@@ -604,6 +646,7 @@ public abstract class Transliterator {
      * @param index the start and limit of the text, the position
      * of the cursor, and the start and limit of transliteration.
      * @see #transliterate(Replaceable, Transliterator.Position, String)
+     * @stable
      */
     public final void transliterate(Replaceable text, Position index) {
         transliterate(text, index, null);
@@ -618,6 +661,7 @@ public abstract class Transliterator {
      * untransliterated text.
      * @param index the array of indices previously passed to {@link
      * #transliterate}
+     * @stable
      */
     public final void finishTransliteration(Replaceable text,
                                             Position index) {
@@ -702,6 +746,7 @@ public abstract class Transliterator {
      * <code>pos.limit</code>.
      * 
      * @see #transliterate
+     * @stable
      */
     protected abstract void handleTransliterate(Replaceable text,
                                                 Position pos, boolean incremental);
@@ -1045,6 +1090,7 @@ public abstract class Transliterator {
      * @param incremental if TRUE, then assume more characters may be inserted
      * at index.limit, and postpone processing to accomodate future incoming
      * characters
+     * @stable
      */
     protected void filteredTransliterate(Replaceable text,
                                          Position index,
@@ -1062,6 +1108,7 @@ public abstract class Transliterator {
      *
      * @return The maximum number of preceding context characters this
      * transliterator needs to examine
+     * @stable
      */
     protected final int getMaximumContextLength() {
         return maximumContextLength;
@@ -1070,6 +1117,7 @@ public abstract class Transliterator {
     /**
      * Method for subclasses to use to set the maximum context length.
      * @see #getMaximumContextLength
+     * @stable
      */
     protected void setMaximumContextLength(int a) {
         if (a < 0) {
@@ -1084,6 +1132,7 @@ public abstract class Transliterator {
      * will return this object, if it has been registered.
      * @see #registerClass
      * @see #getAvailableIDs
+     * @stable
      */
     public final String getID() {
         return ID;
@@ -1092,6 +1141,7 @@ public abstract class Transliterator {
     /**
      * Set the programmatic identifier for this transliterator.  Only
      * for use by subclasses.
+     * @stable
      */
     protected final void setID(String id) {
         ID = id;
@@ -1101,6 +1151,7 @@ public abstract class Transliterator {
      * Returns a name for this transliterator that is appropriate for
      * display to the user in the default locale.  See {@link
      * #getDisplayName(String,Locale)} for details.
+     * @stable
      */
     public final static String getDisplayName(String ID) {
         return getDisplayName(ID, Locale.getDefault());
@@ -1123,6 +1174,7 @@ public abstract class Transliterator {
      * @param inLocale the Locale in which the display name should be
      * localized.
      * @see java.text.MessageFormat
+     * @stable
      */
     public static String getDisplayName(String id, Locale inLocale) {
 
@@ -1188,6 +1240,7 @@ public abstract class Transliterator {
     /**
      * Returns the filter used by this transliterator, or <tt>null</tt>
      * if this transliterator uses no filter.
+     * @stable
      */
     public final UnicodeFilter getFilter() {
         return filter;
@@ -1200,13 +1253,10 @@ public abstract class Transliterator {
      * <p>Callers must take care if a transliterator is in use by
      * multiple threads.  The filter should not be changed by one
      * thread while another thread may be transliterating.
+     * @stable
      */
     public void setFilter(UnicodeFilter filter) {
         this.filter = filter;
-    }
-
-    public static final Transliterator getInstance(String ID) {
-        return getInstance(ID, FORWARD);
     }
 
     /**
@@ -1217,9 +1267,26 @@ public abstract class Transliterator {
      * @param ID a valid ID, as enumerated by <code>getAvailableIDs()</code>
      * @return A <code>Transliterator</code> object with the given ID
      * @exception IllegalArgumentException if the given ID is invalid.
+     * @stable
+     */
+    public static final Transliterator getInstance(String ID) {
+        return getInstance(ID, FORWARD);
+    }
+
+    /**
+     * Returns a <code>Transliterator</code> object given its ID.
+     * The ID must be either a system transliterator ID or a ID registered
+     * using <code>registerClass()</code>.
+     *
+     * @param ID a valid ID, as enumerated by <code>getAvailableIDs()</code>
+     * @param dir either FORWARD or REVERSE.  If REVERSE then the
+     * inverse of the given ID is instantiated.
+     * @return A <code>Transliterator</code> object with the given ID
+     * @exception IllegalArgumentException if the given ID is invalid.
      * @see #registerClass
      * @see #getAvailableIDs
      * @see #getID
+     * @stable
      */
     public static Transliterator getInstance(String ID,
                                              int dir) {
@@ -1280,6 +1347,7 @@ public abstract class Transliterator {
      * CompoundTransliterator, if it contains ID blocks, or a
      * NullTransliterator, if it contains ID blocks which parse as
      * empty for the given direction.
+     * @stable
      */
     public static final Transliterator createFromRules(String ID, String rules, int dir) {
         Transliterator t = null;
@@ -1323,10 +1391,27 @@ public abstract class Transliterator {
         return t;
     }
 
+    /**
+     * Returns a rule string for this transliterator.
+     * @param escapeUnprintable if true, then unprintable characters
+     * will be converted to escape form backslash-'u' or
+     * backslash-'U'.
+     * @stable
+     */
     public String toRules(boolean escapeUnprintable) {
         return baseToRules(escapeUnprintable);
     }
 
+    /**
+     * Returns a rule string for this transliterator.  This is
+     * a non-overrideable base class implementation that subclasses
+     * may call.  It simply munges the ID into the correct format,
+     * that is, "foo" => "::foo".
+     * @param escapeUnprintable if true, then unprintable characters
+     * will be converted to escape form backslash-'u' or
+     * backslash-'U'.
+     * @stable
+     */
     protected final String baseToRules(boolean escapeUnprintable) {
         // The base class implementation of toRules munges the ID into
         // the correct format.  That is: foo => ::foo
@@ -1359,6 +1444,7 @@ public abstract class Transliterator {
      * use by tests, tools, or utilities.
      * @see #getTargetSet
      * @see #handleGetSourceSet
+     * @draft ICU 2.2
      */
     public final UnicodeSet getSourceSet() {
         UnicodeSet set = handleGetSourceSet();
@@ -1388,6 +1474,7 @@ public abstract class Transliterator {
      * newly-created object.
      * @see #getSourceSet
      * @see #getTargetSet
+     * @draft ICU 2.2
      */
     protected UnicodeSet handleGetSourceSet() {
         return new UnicodeSet();
@@ -1402,6 +1489,7 @@ public abstract class Transliterator {
      * use by tests, tools, or utilities requiring such
      * meta-information.
      * @see #getTargetSet
+     * @draft ICU 2.2
      */
     public UnicodeSet getTargetSet() {
         return new UnicodeSet();
@@ -1423,6 +1511,7 @@ public abstract class Transliterator {
      * exact, of this transliterator, or <code>null</code> if no such
      * transliterator is registered.
      * @see #registerClass
+     * @stable
      */
     public final Transliterator getInverse() {
         return getInstance(ID, REVERSE);
@@ -1439,6 +1528,7 @@ public abstract class Transliterator {
      * transliterator
      * @param transClass a subclass of <code>Transliterator</code>
      * @see #unregister
+     * @stable
      */
     public static void registerClass(String ID, Class transClass, String displayName) {
         registry.put(ID, transClass, true);
@@ -1452,6 +1542,7 @@ public abstract class Transliterator {
      * method should return a new instance of the given transliterator.
      * @param ID the ID of this transliterator
      * @param factory the factory object
+     * @stable
      */
     public static void registerFactory(String ID, Factory factory) {
         registry.put(ID, factory, true);
@@ -1460,7 +1551,8 @@ public abstract class Transliterator {
     /**
      * Register a Transliterator object with the given ID.
      * @param ID the ID of this transliterator
-     * @param trans the Transliterator object
+     * @param trans the Transliterator object 
+     * @draft ICU 2.2
      */
     public static void registerInstance(Transliterator trans) {
         registry.put(trans.getID(), trans, true);
@@ -1519,6 +1611,7 @@ public abstract class Transliterator {
      *
      * @param ID the ID of the transliterator or class
      * @see #registerClass
+     * @stable
      */
     public static void unregister(String ID) {
         displayNameCache.remove(new CaseInsensitiveString(ID));
@@ -1535,42 +1628,63 @@ public abstract class Transliterator {
      * @return An <code>Enumeration</code> over <code>String</code> objects
      * @see #getInstance
      * @see #registerClass
+     * @stable
      */
     public static final Enumeration getAvailableIDs() {
         return registry.getAvailableIDs();
     }
 
+    /**
+     * Returns an enumeration over the source names of registered
+     * transliterators.  Source names may be passed to
+     * getAvailableTargets() to obtain available targets for each
+     * source.
+     * @stable
+     */
     public static final Enumeration getAvailableSources() {
         return registry.getAvailableSources();
     }
 
+    /**
+     * Returns an enumeration over the target names of registered
+     * transliterators having a given source name.  Target names may
+     * be passed to getAvailableVariants() to obtain available
+     * variants for each source and target pair.
+     * @stable
+     */
     public static final Enumeration getAvailableTargets(String source) {
         return registry.getAvailableTargets(source);
     }
 
+    /**
+     * Returns an enumeration over the variant names of registered
+     * transliterators having a given source name and target name.
+     * @stable
+     */
     public static final Enumeration getAvailableVariants(String source,
                                                          String target) {
         return registry.getAvailableVariants(source, target);
     }
 
-    /**
-     * Method for subclasses to use to obtain a character in the given
-     * string, with filtering.  If the character at the given offset
-     * is excluded by this transliterator's filter, then U+FFFE is returned.
-     *
-     * <p><b>Note:</b> Most subclasses that implement
-     * handleTransliterator() will <em>not</em> want to use this
-     * method, since characters they see are already filtered.
-     *
-     * @deprecated the new architecture provides filtering at the top
-     * level.  This method will be removed Dec 31 2001.
-     */
-    protected char filteredCharAt(Replaceable text, int i) {
-        char c;
-        UnicodeFilter filter = getFilter();
-        return (filter == null) ? text.charAt(i) :
-            (filter.contains(c = text.charAt(i)) ? c : '\uFFFE');
-    }
+// REMOVED: ICU 2.4
+//  /**
+//   * Method for subclasses to use to obtain a character in the given
+//   * string, with filtering.  If the character at the given offset
+//   * is excluded by this transliterator's filter, then U+FFFE is returned.
+//   *
+//   * <p><b>Note:</b> Most subclasses that implement
+//   * handleTransliterator() will <em>not</em> want to use this
+//   * method, since characters they see are already filtered.
+//   *
+//   * @deprecated the new architecture provides filtering at the top
+//   * level.  This method will be removed Dec 31 2001.
+//   */
+//  protected char filteredCharAt(Replaceable text, int i) {
+//      char c;
+//      UnicodeFilter filter = getFilter();
+//      return (filter == null) ? text.charAt(i) :
+//          (filter.contains(c = text.charAt(i)) ? c : '\uFFFE');
+//  }
 
     static {
         registry = new TransliteratorRegistry();
@@ -1674,6 +1788,7 @@ public abstract class Transliterator {
      * makes it possible to register one factory method to more than
      * one ID, or for a factory method to parameterize its result
      * based on the variant.
+     * @stable
      */
     public static interface Factory {
         Transliterator getInstance(String ID);
