@@ -1201,8 +1201,8 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
             * Trailing combining class == 0.
             * Note if pos is in the writablebuffer, norm is always 0
             */
-            if ((data->flags & UCOL_ITER_NORM) == 0 ||
-                ch < ZERO_CC_LIMIT_ ||
+            if (ch < ZERO_CC_LIMIT_ || 
+                (data->flags & UCOL_ITER_NORM) == 0 ||
                 (data->fcdPosition != NULL && data->fcdPosition <= data->pos) 
                 || data->string == data->pos) {
                 break;
@@ -1240,7 +1240,7 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
         /* attempt to handle contractions, after removal of the backwards
         contraction
         */
-        if (!isAtStartPrevIterate(data) && ucol_contractionEndCP(ch, coll)) {
+        if (ucol_contractionEndCP(ch, coll) && !isAtStartPrevIterate(data)) {
             result = getSpecialPrevCE(coll, UCOL_CONTRACTION, data, status);
         }
         else {

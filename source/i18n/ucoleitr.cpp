@@ -53,8 +53,6 @@ ucol_openElements(const UCollator  *coll,
   result = (UCollationElements *)uprv_malloc(sizeof(UCollationElements));
 
   result->reset_   = TRUE;
-  result->normalization_ = UNORM_DEFAULT;
-
   result->isWritable = FALSE;
 
   if (text == NULL) {
