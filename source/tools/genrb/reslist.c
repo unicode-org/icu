@@ -273,11 +273,14 @@ void bundle_write(struct SRBRoot *bundle, const char *outputDir, char *writtenFi
     }
 
     if (writtenFilename) {
-       int off = 0, len = uprv_strlen(outputDir);
-       if (len > writtenFilenameLen) {
-           len = writtenFilenameLen;
+       int off = 0, len = 0;
+       if (outputDir) {
+           len = uprv_strlen(outputDir);
+           if (len > writtenFilenameLen) {
+               len = writtenFilenameLen;
+           }
+           uprv_strncpy(writtenFilename, outputDir, len);
        }
-       uprv_strncpy(writtenFilename, outputDir, len);
        if (writtenFilenameLen -= len) {
            off += len;
            writtenFilename[off] = U_FILE_SEP_CHAR;
