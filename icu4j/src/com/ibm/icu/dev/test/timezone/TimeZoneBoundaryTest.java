@@ -32,11 +32,10 @@ public class TimeZoneBoundaryTest extends TestFmwk
     // than 1000.
     static final long INTERVAL = 10; // Milliseconds
 
-    // When long zone names are supported again, switch this to the
-    // long zone name.
-    static final String AUSTRALIA = "AET"; // Australia/Adelaide
-    static final long AUSTRALIA_1997_BEG = 872524800000L; // 877797000000L
-    static final long AUSTRALIA_1997_END = 859651200000L; // 859653000000L
+    // [3Jan01 Liu] Updated for 2000f data
+    static final String AUSTRALIA = "Australia/Adelaide";
+    static final long AUSTRALIA_1997_BEG = 877797000000L;
+    static final long AUSTRALIA_1997_END = 859653000000L;
     
     public static void main(String[] args) throws Exception {
         new TimeZoneBoundaryTest().run(args);
@@ -176,12 +175,14 @@ public class TimeZoneBoundaryTest extends TestFmwk
         logln(tz.getID() + " After:  " + showDate(max, tz));
 
         long mindelta = expectedBoundary - min;
-        long maxdelta = max - expectedBoundary;
+        long maxdelta = max - expectedBoundary; 
+        DateFormat fmt = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG);
+        fmt.setTimeZone(tz);
         if (mindelta >= 0 && mindelta <= INTERVAL &&
             mindelta >= 0 && mindelta <= INTERVAL)
-            logln("PASS: Expected boundary at " + expectedBoundary);
+            logln("PASS: Expected boundary at " + expectedBoundary + " = " + fmt.format(new Date(expectedBoundary)));
         else
-            errln("FAIL: Expected boundary at " + expectedBoundary);
+            errln("FAIL: Expected boundary at " + expectedBoundary + " = " + fmt.format(new Date(expectedBoundary)));
     }
 
     private static String showDate(long l)
@@ -209,7 +210,7 @@ public class TimeZoneBoundaryTest extends TestFmwk
         return "" + d.getYear() + "/" + showNN(d.getMonth()+1) + "/" + showNN(d.getDate()) +
             " " + showNN(d.getHours()) + ":" + showNN(d.getMinutes()) +
             " \"" + d + "\" = " +
-            fmt.format(d);
+            fmt.format(d) + " = " + d.getTime();
     }
 
     private static String showNN(int n)
@@ -668,7 +669,8 @@ public class TimeZoneBoundaryTest extends TestFmwk
     public void TestStepwise()
     {
         findBoundariesStepwise(1997, ONE_DAY, TimeZone.getTimeZone("EST"), 2);
-        findBoundariesStepwise(1997, ONE_DAY, TimeZone.getTimeZone("ACT"), 0);
+        findBoundariesStepwise(1997, ONE_DAY, TimeZone.getTimeZone("ACT"), 2); // Updated 3Jan01
+        findBoundariesStepwise(1997, ONE_DAY, TimeZone.getTimeZone("America/Phoenix"), 0); // Added 3Jan01
         findBoundariesStepwise(1997, ONE_DAY, TimeZone.getTimeZone(AUSTRALIA), 2);
     }
 }
