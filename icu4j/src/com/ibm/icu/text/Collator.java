@@ -1,12 +1,12 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2002, International Business Machines Corporation and    *
+* Copyright (C) 1996-2003, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Collator.java,v $
-* $Date: 2003/05/23 19:06:28 $
-* $Revision: 1.30 $
+* $Date: 2003/06/03 18:49:33 $
+* $Revision: 1.31 $
 *
 *******************************************************************************
 */

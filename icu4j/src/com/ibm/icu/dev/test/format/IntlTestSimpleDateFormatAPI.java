@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/IntlTestSimpleDateFormatAPI.java,v $ 
- * $Date: 2003/05/14 19:03:15 $ 
- * $Revision: 1.4 $
+ * $Date: 2003/06/03 18:49:29 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  **/
@@ -17,7 +17,7 @@
 */
 /*
 (C) Copyright Taligent, Inc. 1996, 1997 - All Rights Reserved
-(C) Copyright IBM Corp. 1996, 1997, 2001 - All Rights Reserved
+(C) Copyright IBM Corp. 1996-2003 - All Rights Reserved
 
   The original version of this source code and documentation is copyrighted and
 owned by Taligent, Inc., a wholly-owned subsidiary of IBM. These materials are

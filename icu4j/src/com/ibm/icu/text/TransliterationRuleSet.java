@@ -1,12 +1,12 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRuleSet.java,v $
- * $Date: 2003/01/28 18:55:42 $
- * $Revision: 1.26 $
+ * $Date: 2003/06/03 18:49:35 $
+ * $Revision: 1.27 $
  *
  *****************************************************************************************
  */
@@ -28,7 +28,7 @@ import com.ibm.icu.impl.UtilityExtensions;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.26 $ $Date: 2003/01/28 18:55:42 $
+ * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.27 $ $Date: 2003/06/03 18:49:35 $
  */
 class TransliterationRuleSet {
     /**
@@ -264,9 +264,12 @@ class TransliterationRuleSet {
 }
 
 /* $Log: TransliterationRuleSet.java,v $
- * Revision 1.26  2003/01/28 18:55:42  rviswanadha
- * jitterbug 2309: Modularize ICU4J big bang commit
+ * Revision 1.27  2003/06/03 18:49:35  alan
+ * jitterbug 2959: update copyright dates to include 2003
  *
+/* Revision 1.26  2003/01/28 18:55:42  rviswanadha
+/* jitterbug 2309: Modularize ICU4J big bang commit
+/*
 /* Revision 1.25  2002/06/28 19:15:53  alan
 /* jitterbug 1434: improve method names; minor cleanup
 /*

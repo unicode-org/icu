@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 1996-2001, International Business Machines Corporation and
+ * Copyright (C) 1996-2003, International Business Machines Corporation and
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NameUnicodeTransliterator.java,v $ 
- * $Date: 2003/05/14 19:03:30 $ 
- * $Revision: 1.14 $
+ * $Date: 2003/06/03 18:49:34 $ 
+ * $Revision: 1.15 $
  */
 package com.ibm.icu.text;
 import com.ibm.icu.lang.*;

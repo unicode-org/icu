@@ -1,12 +1,12 @@
 /*
  *******************************************************************************
- * Copyright (C) 1998-2002, International Business Machines Corporation and    *
+ * Copyright (C) 1998-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/ModuleWriter.java,v $
- * $Date: 2003/04/15 20:15:53 $
- * $Revision: 1.3 $
+ * $Date: 2003/06/03 18:49:31 $
+ * $Revision: 1.4 $
  *
  *******************************************************************************
  */

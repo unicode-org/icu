@@ -1,7 +1,7 @@
 /*
- * @(#)$RCSfile: SingleCheckMenuItem.java,v $ $Revision: 1.2 $ $Date: 2003/05/14 19:04:00 $
+ * @(#)$RCSfile: SingleCheckMenuItem.java,v $ $Revision: 1.3 $ $Date: 2003/06/03 18:49:38 $
  *
- * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2003.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or
  * implied, including the warranty of non-infringement and the implied

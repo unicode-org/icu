@@ -1,12 +1,12 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2003/05/29 17:51:20 $ 
- * $Revision: 1.32 $
+ * $Date: 2003/06/03 18:49:34 $ 
+ * $Revision: 1.33 $
  *
  *****************************************************************************************
  */

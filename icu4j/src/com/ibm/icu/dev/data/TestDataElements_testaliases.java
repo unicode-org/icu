@@ -1,12 +1,12 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2002, International Business Machines Corporation and    *
+* Copyright (C) 1996-2003, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/data/TestDataElements_testaliases.java,v $
-* $Date: 2003/05/14 18:35:27 $
-* $Revision: 1.5 $
+* $Date: 2003/06/03 18:49:27 $
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */

@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberRegression.java,v $ 
- * $Date: 2003/05/14 19:03:14 $ 
- * $Revision: 1.14 $
+ * $Date: 2003/06/03 18:49:29 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  **/
@@ -25,7 +25,7 @@
 
 /***************************************************************************
 *
-*   Copyright (C) 1996-2002, International Business Machines
+*   Copyright (C) 1996-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ************************************************************************/

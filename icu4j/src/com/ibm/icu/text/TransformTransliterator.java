@@ -1,10 +1,10 @@
 /*
- * Copyright (C) 1996-2000, International Business Machines Corporation and
+ * Copyright (C) 1996-2003, International Business Machines Corporation and
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransformTransliterator.java,v $ 
- * $Date: 2003/05/14 19:03:30 $ 
- * $Revision: 1.6 $
+ * $Date: 2003/06/03 18:49:35 $ 
+ * $Revision: 1.7 $
  */
 package com.ibm.icu.text;
 //import java.util.*;

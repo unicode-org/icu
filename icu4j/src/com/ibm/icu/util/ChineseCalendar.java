@@ -1,10 +1,10 @@
 /*********************************************************************
- * Copyright (C) 2000, International Business Machines Corporation and
+ * Copyright (C) 2000-2003, International Business Machines Corporation and
  * others. All Rights Reserved.
  *********************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ChineseCalendar.java,v $
- * $Date: 2003/05/14 19:03:48 $
- * $Revision: 1.15 $
+ * $Date: 2003/06/03 18:49:35 $
+ * $Revision: 1.16 $
  */
 package com.ibm.icu.util;
 import com.ibm.icu.text.*;
