@@ -47,6 +47,9 @@ U_CAPI  CompactByteArray* U_EXPORT2 ucmp8_open(int8_t defaultValue);
 U_CAPI  CompactByteArray* U_EXPORT2 ucmp8_openAdopt(uint16_t* indexArray, 
                                int8_t* newValues,
                                int32_t count);
+U_CAPI  CompactByteArray* U_EXPORT2 ucmp8_openAlias(uint16_t* indexArray, 
+                               int8_t* newValues,
+                               int32_t count);
 U_CAPI  void U_EXPORT2 ucmp8_close(CompactByteArray* array);
 U_CAPI  bool_t U_EXPORT2 isBogus(const CompactByteArray* array);
 
