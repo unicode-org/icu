@@ -108,6 +108,7 @@ void TestPartialParse994()
     UDateFormat *f;
     UErrorCode status = U_ZERO_ERROR;
     UChar *s;
+    UChar *fmtChars;
     UDate d, null;
     null=0;
 
@@ -123,7 +124,17 @@ void TestPartialParse994()
     u_uastrcpy(s, "01/01/1997 10:11:42 AM");
     pos=0;
     d = udat_parse(f, s, u_strlen(s), &pos, &status);
-    log_verbose("%s\n", austrdup(myDateFormat(f, d)) );
+    if(U_FAILURE(status)) {
+      log_data_err("FAIL: could not parse - exitting");
+      return;
+    }
+    fmtChars = myDateFormat(f, d);
+    if(fmtChars) {
+      log_verbose("%s\n", fmtChars);
+    } else {
+      log_data_err("FAIL: could not format \n");
+      return;
+    }
     tryPat994(f, "yy/MM/dd HH:mm:ss", "97/01/01 10:11:42", d);
     tryPat994(f, "yy/MM/dd HH:mm:ss", "97/01/01 10:", null);
     tryPat994(f, "yy/MM/dd HH:mm:ss", "97/01/01 10", null);
@@ -246,6 +257,10 @@ void TestCzechMonths459()
     juneStr = myDateFormat(fmt, june);
     julyStr = myDateFormat(fmt, july);
     pos=0;
+    if(juneStr == NULL) {
+      log_data_err("Can't load juneStr. Quitting.\n");
+      return;
+    }
     d = udat_parse(fmt, juneStr, u_strlen(juneStr), &pos, &status);
     date = myDateFormat(fmt, d);
     u_UCharsToChars(date, buffer, (int32_t)(u_strlen(date)+1));
