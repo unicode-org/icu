@@ -156,12 +156,10 @@ static void maskingError(const U_NAMESPACE_QUALIFIER TransliterationRule& rule1,
 
 U_NAMESPACE_BEGIN
 
-const char TransliterationRuleSet::fgClassID=0;
-
 /**
  * Construct a new empty rule set.
  */
-TransliterationRuleSet::TransliterationRuleSet(UErrorCode& status) : UObject() {
+TransliterationRuleSet::TransliterationRuleSet(UErrorCode& status) : UMemory() {
     ruleVector = new UVector(&_deleteRule, NULL, status);
     rules = NULL;
     maxContextLength = 0;
@@ -174,7 +172,7 @@ TransliterationRuleSet::TransliterationRuleSet(UErrorCode& status) : UObject() {
  * Copy constructor.
  */
 TransliterationRuleSet::TransliterationRuleSet(const TransliterationRuleSet& other) :
-    UObject(other),
+    UMemory(other),
     ruleVector(0),
     rules(0),
     maxContextLength(other.maxContextLength) {

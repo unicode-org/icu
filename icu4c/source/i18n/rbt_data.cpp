@@ -20,10 +20,8 @@
 
 U_NAMESPACE_BEGIN
 
-const char TransliterationRuleData::fgClassID=0;
-
 TransliterationRuleData::TransliterationRuleData(UErrorCode& status)
- : UObject(), ruleSet(status),
+ : UMemory(), ruleSet(status),
     variableNames(0), variables(0)
 {
     if (U_FAILURE(status)) {
@@ -43,7 +41,7 @@ TransliterationRuleData::TransliterationRuleData(UErrorCode& status)
 }
 
 TransliterationRuleData::TransliterationRuleData(const TransliterationRuleData& other) :
-    UObject(other), ruleSet(other.ruleSet),
+    UMemory(other), ruleSet(other.ruleSet),
     variablesBase(other.variablesBase),
     variablesLength(other.variablesLength)
 {
