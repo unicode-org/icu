@@ -26,7 +26,7 @@ static const uint32_t     URX_STATE_SAVE    = 6;    // Value field is pattern po
 static const uint32_t     URX_NOP           = 7;
 static const uint32_t     URX_START_CAPTURE = 8;    // Value field is capture group number.
 static const uint32_t     URX_END_CAPTURE   = 9;    // Value field is capture group number
-static const uint32_t     URX_UNUSED10      = 10;   // Value field is index in pattern to
+static const uint32_t     URX_BACKSLASH_A   = 10;   // Value field is index in pattern to
                                                     //   loop back to.
 static const uint32_t     URX_SETREF        = 11;   // Value field is index of set in array of sets.
 static const uint32_t     URX_DOTANY        = 12; 

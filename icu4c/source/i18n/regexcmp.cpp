@@ -59,22 +59,21 @@ static const UChar gRuleSet_rule_char_pattern[]       = {
     0x5c, 0x7b,0x5c, 0x7d, 0x5c, 0x5e, 0x5c, 0x24, 0x5c, 0x7c, 0x5c, 0x5c, 0x5c, 0x2e, 0x5d, 0};
 
 
-static const UChar gRuleSet_name_char_pattern[]       = {
-//    [    _      \    p     {     L      }     \     p     {    N      }     ]
-    0x5b, 0x5f, 0x5c, 0x70, 0x7b, 0x4c, 0x7d, 0x5c, 0x70, 0x7b, 0x4e, 0x7d, 0x5d, 0};
-
 static const UChar gRuleSet_digit_char_pattern[] = {
 //    [    0      -    9     ]
     0x5b, 0x30, 0x2d, 0x39, 0x5d, 0};
 
-static const UChar gRuleSet_name_start_char_pattern[] = {
-//    [    _      \    p     {     L      }     ]
-    0x5b, 0x5f, 0x5c, 0x70, 0x7b, 0x4c, 0x7d, 0x5d, 0 };
-
-static const UChar kAny[] = {0x61, 0x6e, 0x79, 0x00};  // "any"
 
 static UnicodeSet  *gRuleSets[10];         // Array of ptrs to the actual UnicodeSet objects.
+static UnicodeSet  *gUnescapeCharSet;
 
+//
+//   These are the backslash escape characters that ICU's unescape
+//    will handle.
+//
+static const UChar gUnescapeCharPattern[] = {
+//    [     a     b     c     e     f     n     r     t     u     U     ] 
+    0x5b, 0x61, 0x62, 0x63, 0x65, 0x66, 0x6e, 0x72, 0x74, 0x75, 0x55, 0x5d};
 
 
 //----------------------------------------------------------------------------------------
@@ -88,7 +87,7 @@ RegexCompile::RegexCompile(UErrorCode &status) : fParenStack(status)
 
     fScanIndex = 0;
     fNextIndex = 0;
-
+    fPeekChar  = -1;
     fLineNum    = 1;
     fCharNum    = 0;
     fQuoteMode  = FALSE;
@@ -110,13 +109,16 @@ RegexCompile::RegexCompile(UErrorCode &status) : fParenStack(status)
         gRuleSets[kRuleSet_rule_char-128]       = new UnicodeSet(gRuleSet_rule_char_pattern,       status);
         gRuleSets[kRuleSet_white_space-128]     = new UnicodeSet(UnicodePropertySet::getRuleWhiteSpaceSet(status));
         gRuleSets[kRuleSet_digit_char-128]      = new UnicodeSet(gRuleSet_digit_char_pattern,      status);
+        gUnescapeCharSet                        = new UnicodeSet(gUnescapeCharPattern,             status);
         if (U_FAILURE(status)) {
             delete gRuleSets[kRuleSet_rule_char-128];
             delete gRuleSets[kRuleSet_white_space-128];
             delete gRuleSets[kRuleSet_digit_char-128];
+            delete gUnescapeCharSet;
             gRuleSets[kRuleSet_rule_char-128]   = NULL;
             gRuleSets[kRuleSet_white_space-128] = NULL;
             gRuleSets[kRuleSet_digit_char-128]  = NULL;
+            gUnescapeCharSet = NULL;
             return;
         }
     }
@@ -218,7 +220,7 @@ void    RegexCompile::compile(
                 // Table row specified "quoted" and the char was quoted.
                 break;
             }
-            if (tableEl->fCharClass == 252 && fC.fChar == (UChar32)-1)  {
+            if (tableEl->fCharClass == 253 && fC.fChar == (UChar32)-1)  {
                 // Table row specified eof and we hit eof on the input.
                 break;
             }
@@ -605,14 +607,15 @@ UBool RegexCompile::doParseActions(EParseAction action)
         break;
 
 
-            
     case doDotAny:
         // scanned a ".",  match any single character.
         fRXPat->fCompiledPat->addElement(URX_BUILD(URX_DOTANY, 0), *fStatus);
         break;
 
 
-    case doExprFinished:
+    case doBackslashA:
+        // Scanned a "\A".
+        fRXPat->fCompiledPat->addElement(URX_BUILD(URX_BACKSLASH_A, 0), *fStatus);
         break;
 
     case doExit:
@@ -816,6 +819,11 @@ UChar32  RegexCompile::nextCharLL() {
     UChar32       ch;
     UnicodeString &pattern = fRXPat->fPattern;
 
+    if (fPeekChar != -1) {
+        ch = fPeekChar;
+        fPeekChar = -1;
+        return ch;
+    }
     if (fPatternLength==0 || fNextIndex >= fPatternLength) {
         return (UChar32)-1;
     }
@@ -846,12 +854,25 @@ UChar32  RegexCompile::nextCharLL() {
     return ch;
 }
 
+//---------------------------------------------------------------------------------
+//
+//   peekCharLL    Low Level Character Scanning, sneak a peek at the next
+//                 character without actually getting it.
+//
+//---------------------------------------------------------------------------------
+UChar32  RegexCompile::peekCharLL() {
+    if (fPeekChar == -1) {
+        fPeekChar = nextCharLL();
+    }
+    return fPeekChar;
+}
+
 
 //---------------------------------------------------------------------------------
 //
-//   nextChar     for rules scanning.  At this level, we handle stripping
-//                out comments and processing backslash character escapes.
-//                The rest of the rules grammar is handled at the next level up.
+//   nextChar     for pattern scanning.  At this level, we handle stripping
+//                out comments and processing some backslash character escapes.
+//                The rest of the pattern grammar is handled at the next level up.
 //
 //---------------------------------------------------------------------------------
 void RegexCompile::nextChar(RegexPatternChar &c) {
@@ -870,7 +891,7 @@ void RegexCompile::nextChar(RegexPatternChar &c) {
     {
         // We are not in a 'quoted region' of the source.
         //
-        if (c.fChar == chPound) {
+        if (fFreeForm && c.fChar == chPound) {
             // Start of a comment.  Consume the rest of it.
             //  The new-line char that terminates the comment is always returned.
             //  It will be treated as white-space, and serves to break up anything
@@ -891,16 +912,22 @@ void RegexCompile::nextChar(RegexPatternChar &c) {
 
         //
         //  check for backslash escaped characters.
-        //  Use UnicodeString::unescapeAt() to handle them.
+        //  Use UnicodeString::unescapeAt() to handle those that it can.
+        //  Otherwise just return the '\', and let the pattern parser deal with it.
         //
+        int32_t startX = fNextIndex;  // start and end positions of the 
+        int32_t endX   = fNextIndex;  //   sequence following the '\'
         if (c.fChar == chBackSlash) {
-            c.fQuoted = TRUE;
-            int32_t startX = fNextIndex;
-            c.fChar = fRXPat->fPattern.unescapeAt(fNextIndex);
-            if (fNextIndex == startX) {
-                error(U_BRK_HEX_DIGITS_EXPECTED);
+            if (gUnescapeCharSet->contains(peekCharLL())) {
+                nextCharLL();     // get & discard the peeked char.
+                c.fQuoted = TRUE;
+                c.fChar = fRXPat->fPattern.unescapeAt(endX);
+                if (startX == endX) {
+                    error(U_REGEX_BAD_ESCAPE_SEQUENCE);
+                }
+                fCharNum += endX - startX;
+                fNextIndex = endX;
             }
-            fCharNum += fNextIndex-startX;
         }
     }
     // putc(c.fChar, stdout);

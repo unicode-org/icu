@@ -40,6 +40,7 @@ enum Regex_PatternParseAction {
     doOpenLookAheadNeg,
     doPlus,
     doOpenNonCaptureParen,
+    doBackslashA,
     doNGPlus,
     doPatFinish,
     doIntervalMinValue,
@@ -51,7 +52,6 @@ enum Regex_PatternParseAction {
     doOpenLookAhead,
     doNumberExpectedError,
     doDotAny,
-    doExprFinished,
     doScanUnicodeSet,
     doNOP,
     doExit,
@@ -80,76 +80,71 @@ static const struct RegexTableEl gRuleParseStateTable[] = {
     {doNOP, 0, 0, 0, TRUE}
     , {doPatStart, 255, 3, 2, FALSE}     //  1      start
     , {doPatFinish, 255, 2,0,  FALSE}     //  2      finish
-    , {doStartString, 254, 10,0,  TRUE}     //  3      term
-    , {doStartString, 130, 10,0,  TRUE}     //  4 
-    , {doScanUnicodeSet, 91 /* [ */, 17,0,  TRUE}     //  5 
-    , {doNOP, 40 /* ( */, 29, 17, TRUE}     //  6 
-    , {doDotAny, 46 /* . */, 17,0,  TRUE}     //  7 
-    , {doNOP, 253, 255,0,  FALSE}     //  8 
-    , {doRuleError, 255, 67,0,  FALSE}     //  9 
-    , {doStringChar, 254, 10,0,  TRUE}     //  10      string
-    , {doStringChar, 130, 10,0,  TRUE}     //  11 
-    , {doSplitString, 63 /* ? */, 17,0,  FALSE}     //  12 
-    , {doSplitString, 43 /* + */, 17,0,  FALSE}     //  13 
-    , {doSplitString, 42 /* * */, 17,0,  FALSE}     //  14 
-    , {doSplitString, 123 /* { */, 17,0,  FALSE}     //  15 
-    , {doEndString, 255, 17,0,  FALSE}     //  16 
-    , {doNOP, 42 /* * */, 40,0,  TRUE}     //  17      expr-quant
-    , {doNOP, 43 /* + */, 43,0,  TRUE}     //  18 
-    , {doNOP, 63 /* ? */, 46,0,  TRUE}     //  19 
-    , {doNOP, 255, 21,0,  FALSE}     //  20 
-    , {doNOP, 254, 3,0,  FALSE}     //  21      expr-cont
-    , {doNOP, 130, 3,0,  FALSE}     //  22 
-    , {doNOP, 91 /* [ */, 3,0,  FALSE}     //  23 
-    , {doNOP, 40 /* ( */, 3,0,  FALSE}     //  24 
-    , {doNOP, 46 /* . */, 3,0,  FALSE}     //  25 
-    , {doOrOperator, 124 /* | */, 3,0,  TRUE}     //  26 
-    , {doCloseParen, 41 /* ) */, 255,0,  TRUE}     //  27 
-    , {doExprFinished, 255, 255,0,  FALSE}     //  28 
-    , {doNOP, 63 /* ? */, 31,0,  TRUE}     //  29      open-paren
-    , {doOpenCaptureParen, 255, 3, 17, FALSE}     //  30 
-    , {doOpenNonCaptureParen, 58 /* : */, 3, 17, TRUE}     //  31      open-paren-extended
-    , {doOpenAtomicParen, 62 /* > */, 3, 17, TRUE}     //  32 
-    , {doOpenLookAhead, 61 /* = */, 3, 21, TRUE}     //  33 
-    , {doOpenLookAheadNeg, 33 /* ! */, 3, 21, TRUE}     //  34 
-    , {doNOP, 60 /* < */, 37,0,  TRUE}     //  35 
-    , {doBadOpenParenType, 255, 67,0,  FALSE}     //  36 
-    , {doOpenLookBehind, 61 /* = */, 3, 21, TRUE}     //  37      open-paren-lookbehind
-    , {doOpenLookBehindNeg, 33 /* ! */, 3, 21, TRUE}     //  38 
-    , {doBadOpenParenType, 255, 67,0,  FALSE}     //  39 
-    , {doNGStar, 63 /* ? */, 21,0,  TRUE}     //  40      quant-star
-    , {doPossesiveStar, 43 /* + */, 21,0,  TRUE}     //  41 
-    , {doStar, 255, 21,0,  FALSE}     //  42 
-    , {doNGPlus, 63 /* ? */, 21,0,  TRUE}     //  43      quant-plus
-    , {doPossesivePlus, 43 /* + */, 21,0,  TRUE}     //  44 
-    , {doPlus, 255, 21,0,  FALSE}     //  45 
-    , {doNGOpt, 63 /* ? */, 21,0,  TRUE}     //  46      quant-opt
-    , {doPossesiveOpt, 43 /* + */, 21,0,  TRUE}     //  47 
-    , {doOpt, 255, 21,0,  FALSE}     //  48 
-    , {doNOP, 129, 49,0,  TRUE}     //  49      interval-open
-    , {doIntervalMinValue, 128, 52,0,  FALSE}     //  50 
-    , {doNumberExpectedError, 255, 67,0,  FALSE}     //  51 
-    , {doNOP, 129, 56,0,  TRUE}     //  52      interval-value
-    , {doNOP, 125 /* } */, 56,0,  FALSE}     //  53 
-    , {doIntervalDigit, 128, 52,0,  TRUE}     //  54 
-    , {doNumberExpectedError, 255, 67,0,  FALSE}     //  55 
-    , {doNOP, 129, 56,0,  TRUE}     //  56      interval-close
-    , {doTagValue, 125 /* } */, 59,0,  TRUE}     //  57 
-    , {doNumberExpectedError, 255, 67,0,  FALSE}     //  58 
-    , {doNOP, 254, 3,0,  FALSE}     //  59      expr-cont-no-interval
-    , {doNOP, 130, 3,0,  FALSE}     //  60 
-    , {doNOP, 91 /* [ */, 3,0,  FALSE}     //  61 
-    , {doNOP, 40 /* ( */, 3,0,  FALSE}     //  62 
-    , {doNOP, 46 /* . */, 3,0,  FALSE}     //  63 
-    , {doExprOrOperator, 124 /* | */, 3,0,  TRUE}     //  64 
-    , {doExprRParen, 41 /* ) */, 255,0,  TRUE}     //  65 
-    , {doExprFinished, 255, 255,0,  FALSE}     //  66 
-    , {doExit, 255, 67,0,  TRUE}     //  67      errorDeath
+    , {doStartString, 254, 11,0,  TRUE}     //  3      term
+    , {doStartString, 130, 11,0,  TRUE}     //  4 
+    , {doScanUnicodeSet, 91 /* [ */, 18,0,  TRUE}     //  5 
+    , {doNOP, 40 /* ( */, 25, 18, TRUE}     //  6 
+    , {doDotAny, 46 /* . */, 18,0,  TRUE}     //  7 
+    , {doNOP, 92 /* \ */, 59,0,  TRUE}     //  8 
+    , {doNOP, 253, 2,0,  FALSE}     //  9 
+    , {doRuleError, 255, 61,0,  FALSE}     //  10 
+    , {doStringChar, 254, 11,0,  TRUE}     //  11      string
+    , {doStringChar, 130, 11,0,  TRUE}     //  12 
+    , {doSplitString, 63 /* ? */, 18,0,  FALSE}     //  13 
+    , {doSplitString, 43 /* + */, 18,0,  FALSE}     //  14 
+    , {doSplitString, 42 /* * */, 18,0,  FALSE}     //  15 
+    , {doSplitString, 123 /* { */, 18,0,  FALSE}     //  16 
+    , {doEndString, 255, 18,0,  FALSE}     //  17 
+    , {doNOP, 42 /* * */, 36,0,  TRUE}     //  18      expr-quant
+    , {doNOP, 43 /* + */, 39,0,  TRUE}     //  19 
+    , {doNOP, 63 /* ? */, 42,0,  TRUE}     //  20 
+    , {doNOP, 255, 22,0,  FALSE}     //  21 
+    , {doOrOperator, 124 /* | */, 3,0,  TRUE}     //  22      expr-cont
+    , {doCloseParen, 41 /* ) */, 255,0,  TRUE}     //  23 
+    , {doNOP, 255, 3,0,  FALSE}     //  24 
+    , {doNOP, 63 /* ? */, 27,0,  TRUE}     //  25      open-paren
+    , {doOpenCaptureParen, 255, 3, 18, FALSE}     //  26 
+    , {doOpenNonCaptureParen, 58 /* : */, 3, 18, TRUE}     //  27      open-paren-extended
+    , {doOpenAtomicParen, 62 /* > */, 3, 18, TRUE}     //  28 
+    , {doOpenLookAhead, 61 /* = */, 3, 22, TRUE}     //  29 
+    , {doOpenLookAheadNeg, 33 /* ! */, 3, 22, TRUE}     //  30 
+    , {doNOP, 60 /* < */, 33,0,  TRUE}     //  31 
+    , {doBadOpenParenType, 255, 61,0,  FALSE}     //  32 
+    , {doOpenLookBehind, 61 /* = */, 3, 22, TRUE}     //  33      open-paren-lookbehind
+    , {doOpenLookBehindNeg, 33 /* ! */, 3, 22, TRUE}     //  34 
+    , {doBadOpenParenType, 255, 61,0,  FALSE}     //  35 
+    , {doNGStar, 63 /* ? */, 22,0,  TRUE}     //  36      quant-star
+    , {doPossesiveStar, 43 /* + */, 22,0,  TRUE}     //  37 
+    , {doStar, 255, 22,0,  FALSE}     //  38 
+    , {doNGPlus, 63 /* ? */, 22,0,  TRUE}     //  39      quant-plus
+    , {doPossesivePlus, 43 /* + */, 22,0,  TRUE}     //  40 
+    , {doPlus, 255, 22,0,  FALSE}     //  41 
+    , {doNGOpt, 63 /* ? */, 22,0,  TRUE}     //  42      quant-opt
+    , {doPossesiveOpt, 43 /* + */, 22,0,  TRUE}     //  43 
+    , {doOpt, 255, 22,0,  FALSE}     //  44 
+    , {doNOP, 129, 45,0,  TRUE}     //  45      interval-open
+    , {doIntervalMinValue, 128, 48,0,  FALSE}     //  46 
+    , {doNumberExpectedError, 255, 61,0,  FALSE}     //  47 
+    , {doNOP, 129, 52,0,  TRUE}     //  48      interval-value
+    , {doNOP, 125 /* } */, 52,0,  FALSE}     //  49 
+    , {doIntervalDigit, 128, 48,0,  TRUE}     //  50 
+    , {doNumberExpectedError, 255, 61,0,  FALSE}     //  51 
+    , {doNOP, 129, 52,0,  TRUE}     //  52      interval-close
+    , {doTagValue, 125 /* } */, 55,0,  TRUE}     //  53 
+    , {doNumberExpectedError, 255, 61,0,  FALSE}     //  54 
+    , {doNOP, 254, 3,0,  FALSE}     //  55      expr-cont-no-interval
+    , {doExprOrOperator, 124 /* | */, 3,0,  TRUE}     //  56 
+    , {doExprRParen, 41 /* ) */, 255,0,  TRUE}     //  57 
+    , {doNOP, 255, 3,0,  FALSE}     //  58 
+    , {doBackslashA, 65 /* A */, 3,0,  TRUE}     //  59      backslash
+    , {doStartString, 255, 11,0,  TRUE}     //  60 
+    , {doExit, 255, 61,0,  TRUE}     //  61      errorDeath
  };
 static const char *RegexStateNames[] = {    0,
      "start",
      "finish",
      "term",
+    0,
     0,
     0,
     0,
@@ -168,11 +163,6 @@ static const char *RegexStateNames[] = {    0,
     0,
     0,
      "expr-cont",
-    0,
-    0,
-    0,
-    0,
-    0,
     0,
     0,
      "open-paren",
@@ -209,9 +199,7 @@ static const char *RegexStateNames[] = {    0,
     0,
     0,
     0,
-    0,
-    0,
-    0,
+     "backslash",
     0,
      "errorDeath",
     0};

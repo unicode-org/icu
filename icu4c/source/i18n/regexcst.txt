@@ -77,7 +77,8 @@ term:
     '['                  n expr-quant     		            doScanUnicodeSet
     '('                  n open-paren            ^expr-quant          
     '.'                  n expr-quant                               doDotAny
-    eof		           pop
+    '\'                  n backslash
+    eof		           finish
     default                errorDeath                               doRuleError
     
 
@@ -110,17 +111,12 @@ expr-quant:
     
 #
 #  expr-cont      Expression, continuation.  At a point where additional terms are
-#                                            allowed, but not required.
+#                                            allowed, but not required.  No Quantifiers
 #
 expr-cont:
-    quoted                  term                                    
-    rule_char               term                                    
-    '['                     term                                    
-    '('                     term                                    
-    '.'                     term                                    
     '|'                  n  term                                    doOrOperator
     ')'                  n  pop                                     doCloseParen
-    default                 pop                                     doExprFinished
+    default                 term                                    
     
 
 #
@@ -205,16 +201,18 @@ interval-close:
 #
 expr-cont-no-interval:
     quoted                  term                                    
-    rule_char               term                                    
-    '['                     term                                    
-    '('                     term                                    
-    '.'                     term                                    
     '|'                  n  term                                    doExprOrOperator
     ')'                  n  pop                                     doExprRParen
-    default                 pop                                     doExprFinished
+    default                 term                   
     
     
-
+#
+#  backslash        #  Backslash.  Figure out which of the \thingies we have encountered.
+#                                  The low level next-char function will have preprocessed
+#                                  some of them already; those won't come here.
+backslash:
+   'A'                   n  term                                    doBackslashA
+   default               n  string				    doStartString   
 
     
     
