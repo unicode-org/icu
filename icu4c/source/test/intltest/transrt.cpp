@@ -581,7 +581,7 @@ void RTTest::test2(UBool quickRt, int32_t density) {
           return;
       }
 
-      usi.reset(sourceRange, quickRt);
+      usi.reset(sourceRange);
       for (;;) {
           if (!usi.next() || usi.isString()) break;
           UChar32 c = usi.getCodepoint();
@@ -596,7 +596,7 @@ void RTTest::test2(UBool quickRt, int32_t density) {
           }
       }
       
-      usi.reset(targetRange, quickRt);
+      usi.reset(targetRange);
       for (;;) {
           if (!usi.next() || usi.isString()) break;
           UChar32 c = usi.getCodepoint();
@@ -617,7 +617,7 @@ void RTTest::test2(UBool quickRt, int32_t density) {
     parent->logln("Checking that all source characters convert to target - Singles");
 
     UnicodeSet failSourceTarg;
-    usi.reset(sourceRange, quickRt);
+    usi.reset(sourceRange);
     for (;;) {
         if (!usi.next() || usi.isString()) break;
         UChar32 c = usi.getCodepoint();
@@ -708,7 +708,7 @@ void RTTest::test2(UBool quickRt, int32_t density) {
     UnicodeSet failTargSource;
     UnicodeSet failRound;
 
-    usi.reset(targetRange, quickRt);
+    usi.reset(targetRange);
     for (;;) {
         if (!usi.next()) break;
         
@@ -977,9 +977,10 @@ void TransliteratorRoundTripTest::TestJamo() {
 void TransliteratorRoundTripTest::TestHangul() {
     RTTest t("Latin-Hangul");
     Legal *legal = new Legal();
+    if (quick) t.setPairLimit(1000);
     t.test(UnicodeString("[a-zA-Z]", ""), 
            UnicodeString("[\\uAC00-\\uD7A4]", ""), 
-           NULL, this, quick, legal, 25);
+           NULL, this, quick, legal, 1);
     delete legal;
 }
 
