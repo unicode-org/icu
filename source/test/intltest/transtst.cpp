@@ -1160,7 +1160,7 @@ void TransliteratorTest::TestNameMap(void) {
 
     expect(*uni2name, CharsToUnicodeString("\\u00A0abc\\u4E01\\u00B5\\u0A81\\uFFFD\\u0004\\u0009\\u0081\\uFFFF"),
            CharsToUnicodeString("{NO-BREAK SPACE}abc{CJK UNIFIED IDEOGRAPH-4E01}{MICRO SIGN}{GUJARATI SIGN CANDRABINDU}{REPLACEMENT CHARACTER}{END OF TRANSMISSION}{HORIZONTAL TABULATION}{<control-0081>}{<noncharacter-FFFF>}"));
-    expect(*name2uni, "{NO-BREAK SPACE}abc{CJK UNIFIED IDEOGRAPH-4E01}{x{MICRO SIGN}{GUJARATI SIGN CANDRABINDU}{REPLACEMENT CHARACTER}{END OF TRANSMISSION}{HORIZONTAL TABULATION}{<control-0081>}{<noncharacter-FFFF>}{<control-0004>}{",
+    expect(*name2uni, "{ NO-BREAK SPACE}abc{  CJK UNIFIED  IDEOGRAPH-4E01  }{x{MICRO SIGN}{GUJARATI SIGN CANDRABINDU}{REPLACEMENT CHARACTER}{END OF TRANSMISSION}{HORIZONTAL TABULATION}{<control-0081>}{<noncharacter-FFFF>}{<control-0004>}{",
            CharsToUnicodeString("\\u00A0abc\\u4E01{x\\u00B5\\u0A81\\uFFFD\\u0004\\u0009\\u0081\\uFFFF\\u0004{"));
 
     delete uni2name;
