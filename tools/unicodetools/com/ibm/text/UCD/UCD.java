@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2003/02/25 23:38:22 $
-* $Revision: 1.20 $
+* $Date: 2003/03/12 16:01:26 $
+* $Revision: 1.21 $
 *
 *******************************************************************************
 */
@@ -373,12 +373,95 @@ public final class UCD implements UCD_Types {
     public byte getDecompositionType(int codePoint) {
         return get(codePoint, false).decompositionType;
     }
+    
+    IntMap hanExceptions = null;
+    
+    static class HanException {
+        double numericValue;
+        byte numericType;
+    }
+    
+    void populateHanExceptions() {
+        hanExceptions = new IntMap();
+        BufferedReader in = null;
+        try {
+            in = Utility.openUnicodeFile("Unihan", Default.ucdVersion, true, Utility.UTF8); 
+            int lineCounter = 0;
+            while (true) {
+                Utility.dot(++lineCounter);
+                
+                String line = in.readLine();
+                if (line == null) break;
+                if (line.length() < 6) continue;
+                if (line.charAt(0) == '#') continue;
+                line = line.trim();
+                
+                int tabPos = line.indexOf('\t');
+                int tabPos2 = line.indexOf('\t', tabPos+1);
+                
+                String property = line.substring(tabPos+1, tabPos2).trim();
+                if (!property.endsWith("Numeric")) continue;
+                
+                String propertyValue = line.substring(tabPos2+1).trim();
+                propertyValue = Utility.replace(propertyValue, ",", "");
+                int hack = propertyValue.indexOf(' ');
+                if (hack >= 0) {
+                    Utility.fixDot();
+                    System.out.println("BAD NUMBER: " + line);
+                    propertyValue = propertyValue.substring(0,hack);
+                }
+                
+                String scode = line.substring(2, tabPos).trim();
+                int code = Integer.parseInt(scode, 16);
+                
+                if (code == 0x5793 || code == 0x4EAC) continue; // two exceptions!!
+                
+                //kAccountingNumeric
+                //kOtherNumeric
+                //kPrimaryNumeric
+                
+                HanException except = (HanException) hanExceptions.get(code);
+                if (except != null) throw new Exception("Duplicate Numeric Value for " + line);
+                except = new HanException();
+                hanExceptions.put(code, except);
+                except.numericValue = Double.parseDouble(propertyValue);
+                except.numericType = property.equals("kAccountingNumeric") ? NUMERIC
+                : property.equals("kOtherNumeric") ? NUMERIC
+                : property.equals("kPrimaryNumeric") ? NUMERIC
+                : NONE;
+                if (except.numericType == NONE) throw new Exception("Unknown Numeric Type for " + line);
+                
+                if (false) {
+                    Utility.fixDot();
+                    System.out.println(line);
+                    System.out.println(getNumericValue(code));
+                    System.out.println(getNumericTypeID(code));
+                }
+            }
+            in.close();
+        } catch (Exception e) {
+            throw new ChainException("Han File Processing Exception", null, e);
+        } finally {
+            Utility.fixDot();
+            System.out.println("****Size: " + hanExceptions.size());
+        }
+    }
 
-    public float getNumericValue(int codePoint) {
+    public double getNumericValue(int codePoint) {
+        if (hanExceptions == null) populateHanExceptions();
+        Object except = hanExceptions.get(codePoint);
+        if (except != null) {
+            return ((HanException)except).numericValue;
+        }
         return get(codePoint, false).numericValue;
     }
 
     public byte getNumericType(int codePoint) {
+        if (hanExceptions == null) populateHanExceptions();
+        Object except = hanExceptions.get(codePoint);
+        if (except != null) {
+            return ((HanException)except).numericType;
+        }
         return get(codePoint, false).numericType;
     }
 
@@ -629,7 +712,7 @@ public final class UCD implements UCD_Types {
     }
 
     public int getNumericTypeMask(int codePoint) {
-        return 1<<get(codePoint, false).numericType;
+        return 1<<getNumericType(codePoint);
     }
 
     public int getDecompositionTypeMask(int codePoint) {
@@ -893,7 +976,7 @@ public final class UCD implements UCD_Types {
         */
         byte cat = getCategory(cp);
         if (cat == Lu || cat == Ll || cat == Lt || cat == Lm || cat == Lo || cat == Nl) return true;
-        if (getBinaryProperty(cp, ID_Start_Exceptions)) return true;
+        if (getBinaryProperty(cp, Other_ID_Start)) return true;
         return false;
     }
 
@@ -907,7 +990,7 @@ public final class UCD implements UCD_Types {
         */
         byte cat = getCategory(cp);
         if (cat == Mn || cat == Mc || cat == Nd || cat == Pc) return true;
-        if (getBinaryProperty(cp, ID_Start_Exceptions)) return true;
+        if (getBinaryProperty(cp, Other_ID_Start)) return true;
         return false;
     }
 
@@ -1167,6 +1250,9 @@ to guarantee identifier closure.
         LLimit = LBase + LCount,    // 1113
         VLimit = VBase + VCount,    // 1176
         TLimit = TBase + TCount,    // 11C3
+        LLimitFull = 0x1160,
+        VLimitFull = TBase,
+        TLimitFull = 0x11FF,
         SLimit = SBase + SCount;    // D7A4
 
     private static String getHangulName(int s) {
@@ -1246,13 +1332,14 @@ to guarantee identifier closure.
         return (VBase <= cp && cp < VLimit) || (TBase <= cp && cp < TLimit);
     }
     
-    static byte getHangulSyllableType(int cp) {
-        if (isLeadingJamo(cp)) return L;
-        else if (isVowelJamo(cp)) return V;
-        else if (isTrailingJamo(cp)) return T;
-        else if (isLV(cp)) return LV;
-        else if (isHangulSyllable(cp)) return LVT;
-        else return NA;
+    byte getHangulSyllableType(int cp) {
+        if (!isAssigned(cp)) return NA;
+        if (LBase <= cp && cp < LLimitFull) return L;
+        if (LLimitFull <= cp && cp < VLimitFull) return V;
+        if (VLimitFull <= cp && cp < TLimitFull) return T;
+        if (isLV(cp)) return LV;
+        if (isHangulSyllable(cp)) return LVT;
+        return NA;
     }
 
     static String getHangulSyllableTypeID_fromIndex(byte index, byte style) {
@@ -1260,7 +1347,7 @@ to guarantee identifier closure.
         return UCD_Names.HANGUL_SYLLABLE_TYPE[index];
     }
 
-    static String getHangulSyllableTypeID(int char1, byte style) {
+    String getHangulSyllableTypeID(int char1, byte style) {
         return getHangulSyllableTypeID_fromIndex(getHangulSyllableType(char1),style);
     }
 
@@ -1320,9 +1407,11 @@ to guarantee identifier closure.
                 //if (cp == 0x200D) {
                   //  uData.joiningType = JT_C;
                 //} else
+                /*
                 if (cp != 0x200D && cp != 0x200C && (cat == Mn || cat == Cf)) {
                     uData.joiningType = JT_T;
                 }
+                */
                 if (!didJoiningHack && uData.joiningType != old) {
                     System.out.println("HACK " + foundVersion + ": Setting "
                         + UCD_Names.LONG_JOINING_TYPE[uData.joiningType]

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedProperty.java,v $
-* $Date: 2003/02/25 23:38:23 $
-* $Revision: 1.18 $
+* $Date: 2003/03/12 16:01:26 $
+* $Revision: 1.19 $
 *
 *******************************************************************************
 */
@@ -306,7 +306,8 @@ public final class DerivedProperty implements UCD_Types {
         String MAYBE;
         Normalizer nfx;
         QuickDProp (int i) {
-            setValueType((i == NFC || i == NFKC) ? ENUMERATED : BINARY);
+            // setValueType((i == NFC || i == NFKC) ? ENUMERATED : BINARY);
+            setValueType(ENUMERATED);
             type = DERIVED_NORMALIZATION;
             nfx = nf[i];
             NO = nfx.getName() + "_NO";
@@ -363,7 +364,7 @@ public final class DerivedProperty implements UCD_Types {
                 shortName = "IDS";
                 header = "# Derived Property: " + name
                     + "\r\n#  Characters that can start an identifier."
-                    + "\r\n#  Generated from Lu+Ll+Lt+Lm+Lo+Nl+ID_Start_Exceptions";
+                    + "\r\n#  Generated from Lu+Ll+Lt+Lm+Lo+Nl+Other_ID_Start";
             }
             public boolean hasValue(int cp) {
                 return ucdData.isIdentifierStart(cp);
@@ -606,7 +607,9 @@ of characters, the first of which has a non-zero combining class.
                 header = "# Derived Property: " + name
                     + "\r\n#  Generated from computing: b = NFKC(Fold(a)); c = NFKC(Fold(b));"
                     + "\r\n#  Then if (c != b) add the mapping from a to c to the set of"
-                    + "\r\n#  mappings that constitute the FC_NFKC_Closure list";
+                    + "\r\n#  mappings that constitute the FC_NFKC_Closure list"
+                    + "\r\n#  Uses the full case folding from CaseFolding.txt, without the T option."
+                    ;
             }
             public String getValue(int cp, byte style) { 
                 if (!ucdData.isRepresented(cp)) return "";
@@ -628,7 +631,9 @@ of characters, the first of which has a non-zero combining class.
                 header = "# Derived Property: " + name
                     + "\r\n#  Generated from computing: b = NFC(Fold(a)); c = NFC(Fold(b));"
                     + "\r\n#  Then if (c != b) add the mapping from a to c to the set of"
-                    + "\r\n#  mappings that constitute the FC_NFC_Closure list";
+                    + "\r\n#  mappings that constitute the FC_NFC_Closure list"
+                    + "\r\n#  Uses the full case folding from CaseFolding.txt, without the T option."
+                    ;
             }
             public String getValue(int cp, byte style) { 
                 if (!ucdData.isRepresented(cp)) return "";
@@ -651,13 +656,16 @@ of characters, the first of which has a non-zero combining class.
                 hasUnassigned = true;
                 shortName = "DI";
                 header = header = "# Derived Property: " + name
-                    + "\r\n#  Generated from <2060..206F, FFF0..FFFB, E0000..E0FFF>"
-                    + "\r\n#    + Other_Default_Ignorable_Code_Point + (Cf + Cc + Cs - White_Space)";
+                    + "\r\n#  Generated from Other_Default_Ignorable_Code_Point + Cf + Cc + Cs - White_Space"
+                    //+ "\r\n#    - U+0600..U+0603 - U+06DD - U+070F"
+               ;
             }
             public boolean hasValue(int cp) {
-            	if (0x2060 <= cp && cp <= 0x206F || 0xFFF0 <= cp && cp <= 0xFFFB || 0xE0000 <= cp && cp <= 0xE0FFF) return true;
-                if (ucdData.getBinaryProperty(cp,Other_Default_Ignorable_Code_Point)) return true;
                 if (ucdData.getBinaryProperty(cp, White_space)) return false;
+            	//if (0x2060 <= cp && cp <= 0x206F || 0xFFF0 <= cp && cp <= 0xFFFB || 0xE0000 <= cp && cp <= 0xE0FFF) return true;
+            	//if (0x0600 <= cp && cp <= 0x0603 || 0x06DD == cp || 0x070F == cp) return false;
+            	
+                if (ucdData.getBinaryProperty(cp, Other_Default_Ignorable_Code_Point)) return true;
                 byte cat = ucdData.getCategory(cp);
                 if (cat == Cf || cat == Cs || cat == Cc) return true;
                 return false;

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UData.java,v $
-* $Date: 2002/07/30 09:56:40 $
-* $Revision: 1.6 $
+* $Date: 2003/03/12 16:01:26 $
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -32,7 +32,7 @@ class UData implements UCD_Types {
     String bidiMirror;
 
     int codePoint = -1;
-    float numericValue = Float.NaN;
+    double numericValue = Double.NaN;
     int binaryProperties; // bidiMirroring, compositionExclusions, PropList
 
     byte generalCategory = Cn;
@@ -43,7 +43,7 @@ class UData implements UCD_Types {
 
     byte eastAsianWidth = EAN;
     byte lineBreak = LB_XX;
-    byte joiningType = JT_U;
+    byte joiningType = -1;
     byte joiningGroup = NO_SHAPING;
     byte script = COMMON_SCRIPT;
     byte age = 0;
@@ -142,6 +142,12 @@ class UData implements UCD_Types {
 
         if (decompositionMapping.equals(codeValue)) decompositionMapping = null;
         if (bidiMirror.equals(codeValue)) bidiMirror = null;
+        
+        // Fix T, U in joining type
+        if (joiningType < 0) {
+            if (generalCategory == Mn || generalCategory == Cf) joiningType = JT_T;
+            else joiningType = JT_U;
+        }
     }
 
     public void setBinaryProperties(int binaryProperties) {
@@ -197,7 +203,7 @@ class UData implements UCD_Types {
 
         if (full || eastAsianWidth != EAN) result.append(" ea='").append(UCD_Names.EA[eastAsianWidth]).append('\'');
         if (full || lineBreak != LB_AL) result.append(" lb='").append(UCD_Names.LB[lineBreak]).append('\'');
-        if (full || joiningType != JT_U) result.append(" jt='").append(UCD_Names.JOINING_TYPE[joiningType]).append('\'');
+        if (joiningType != -1 && (full || joiningType != JT_U)) result.append(" jt='").append(UCD_Names.JOINING_TYPE[joiningType]).append('\'');
         if (full || joiningGroup != NO_SHAPING) result.append(" jg='").append(UCD_Names.JOINING_GROUP[joiningGroup]).append('\'');
         if (full || age != 0) result.append(" ag='").append(UCD_Names.AGE[age]).append('\'');
 
@@ -251,7 +257,7 @@ class UData implements UCD_Types {
         writeString(os, specialCasing);
         writeString(os, bidiMirror);
 
-        os.writeFloat(numericValue);
+        os.writeDouble(numericValue);
         os.writeInt(binaryProperties);
 
         os.writeByte(generalCategory);
@@ -283,7 +289,7 @@ class UData implements UCD_Types {
         specialCasing = readString(is);
         bidiMirror = readString(is);
 
-        numericValue = is.readFloat();
+        numericValue = is.readDouble();
         binaryProperties = is.readInt();
 
         generalCategory = is.readByte();

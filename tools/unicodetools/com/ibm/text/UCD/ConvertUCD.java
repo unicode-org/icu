@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/ConvertUCD.java,v $
-* $Date: 2003/02/25 23:38:23 $
-* $Revision: 1.10 $
+* $Date: 2003/03/12 16:01:26 $
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -862,7 +862,7 @@ public final class ConvertUCD implements UCD_Types {
                 if (major < 2) {
                     if (fieldValue.equals("-")) return;
                 }
-                uData.numericValue = Utility.floatFrom(fieldValue);
+                uData.numericValue = Utility.doubleFrom(fieldValue);
             } else if (fieldName.equals("cc")) {
                 uData.combiningClass = (byte)Utility.intFrom(fieldValue);
             } else if (fieldName.equals("bp")) {

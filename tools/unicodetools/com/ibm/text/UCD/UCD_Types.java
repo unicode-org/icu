@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Types.java,v $
-* $Date: 2003/02/25 23:38:22 $
-* $Revision: 1.17 $
+* $Date: 2003/03/12 16:01:26 $
+* $Revision: 1.18 $
 *
 *******************************************************************************
 */
@@ -15,7 +15,7 @@ package com.ibm.text.UCD;
 
 public interface UCD_Types {
     
-    public static final int dVersion = 10; // change to fix the generated file D version. If less than zero, no "d"
+    public static final int dVersion = 15; // change to fix the generated file D version. If less than zero, no "d"
     
     public static final String BASE_DIR = "C:\\DATA\\";
     public static final String UCD_DIR = BASE_DIR + "UCD\\";
@@ -34,7 +34,7 @@ public interface UCD_Types {
     	CJK_B_BASE = 0x20000,
     	CJK_B_LIMIT = 0x2A6DF+1;
     
-    static final byte BINARY_FORMAT = 6; // bumped if binary format of UCD changes
+    static final byte BINARY_FORMAT = 7; // bumped if binary format of UCD changes
     
     // Unicode Property Types
     static final byte 
@@ -208,7 +208,7 @@ public interface UCD_Types {
         Deprecated = 28,
         Soft_Dotted = 29,
         Logical_Order_Exception = 30,
-        ID_Start_Exceptions = 31,
+        Other_ID_Start = 31,
 	    LIMIT_BINARY_PROPERTIES = 32;
 
 	/*
@@ -240,7 +240,12 @@ public interface UCD_Types {
         LB_IS = 8, LB_PR = 9, LB_PO = 10, LB_NU = 11, LB_AL = 12, LB_ID = 13, LB_IN = 14, LB_HY = 15,
         LB_CM = 16, LB_BB = 17, LB_BA = 18, LB_SP = 19, LB_BK = 20, LB_CR = 21, LB_LF = 22, LB_CB = 23,
         LB_SA = 24, LB_AI = 25, LB_B2 = 26, LB_SG = 27, LB_ZW = 28,
-        LIMIT_LINE_BREAK = 29,
+        LB_JL = 29,
+        LB_JV = 30,
+        LB_JT = 31,
+        LB_NL = 32,
+        LB_WJ = 33,
+        LIMIT_LINE_BREAK = 34,
         LB_LIMIT = LIMIT_LINE_BREAK;
 
     // east asian width
@@ -311,6 +316,8 @@ public interface UCD_Types {
     // numericType
     static final byte NUMERIC_NONE = 0, NUMERIC = 1, DIGIT = 2, DECIMAL = 3,
         LIMIT_NUMERIC_TYPE = 4;
+//        HAN_PRIMARY = 4, HAN_ACCOUNTING = 5, HAN_OTHER = 6,
+    // WARNING, reset to 7 if all properties desired!!
         
     static final byte NA = 0, L = 1, V = 2, T = 3, LV = 4, LVT = 5,
         HANGUL_SYLLABLE_TYPE_LIMIT = 6;
@@ -369,7 +376,8 @@ public interface UCD_Types {
         SHAVIAN = 50,
         OSMANYA = 51,
         CYPRIOT = 52,
-        LIMIT_SCRIPT = 53;
+        BRAILLE = 53,
+        LIMIT_SCRIPT = 54;
 
   static final int
     UNKNOWN = 0,

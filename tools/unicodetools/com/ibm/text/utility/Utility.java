@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2003/02/25 23:38:22 $
-* $Revision: 1.27 $
+* $Date: 2003/03/12 16:01:26 $
+* $Revision: 1.28 $
 *
 *******************************************************************************
 */
@@ -285,6 +285,19 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
         if (q.length() != 0) num = Integer.parseInt(q);
         p = p.substring(fract+1,p.length());
         float den = 0;
+        if (p.length() != 0) den = Integer.parseInt(p);
+        return num/den;
+    }
+
+    public static double doubleFrom(String p) {
+        if (p.length() == 0) return Double.NaN;
+        int fract = p.indexOf('/');
+        if (fract == -1) return Double.valueOf(p).doubleValue();
+        String q = p.substring(0,fract);
+        double num = 0;
+        if (q.length() != 0) num = Integer.parseInt(q);
+        p = p.substring(fract+1,p.length());
+        double den = 0;
         if (p.length() != 0) den = Integer.parseInt(p);
         return num/den;
     }

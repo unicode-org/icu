@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/VerifyUCD.java,v $
-* $Date: 2003/02/25 23:38:22 $
-* $Revision: 1.20 $
+* $Date: 2003/03/12 16:01:26 $
+* $Revision: 1.21 $
 *
 *******************************************************************************
 */
@@ -2141,7 +2141,7 @@ E0020-E007F; [TAGGING CHARACTERS]
         System.out.println("  " + type + ": " + x + " != " + y) ;
     }
 
-    public static void check(int cp, float x, float y, String type) {
+    public static void check(int cp, double x, double y, String type) {
         if (!(x > y) && !(x < y)) return;   // funny syntax to catch NaN
         showLast(cp);
         Utility.fixDot();

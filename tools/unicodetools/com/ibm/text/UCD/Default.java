@@ -30,7 +30,7 @@ public final class Default implements UCD_Types {
         System.out.println("Loaded UCD" + ucd.getVersion() + " " + (new Date(ucd.getDate())));
     }
     
-    static DateFormat myDateFormat = new SimpleDateFormat("yyyy-MM-dd','HH:mm:ss' GMT'");
+    static DateFormat myDateFormat = new SimpleDateFormat("yyyy-MM-dd', 'HH:mm:ss' GMT'");
     static {
         myDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
     }
