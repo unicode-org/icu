@@ -62,6 +62,9 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name ustdio
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ieeetest
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -283,6 +286,24 @@ Package=<4>
 {{{
     Begin Project Dependency
     Project_Dep_Name common
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "ieeetest"=..\test\ieeetest\ieeetest.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name intltest
     End Project Dependency
 }}}
 
