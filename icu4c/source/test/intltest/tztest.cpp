@@ -279,7 +279,15 @@ TimeZoneTest::TestPRTOffset()
         errln("FAIL: TimeZone(PRT) is null");
     }
     else {
-        if (tz->getRawOffset() != (- 4 * millisPerHour)) errln("FAIL: Offset for PRT should be -4");
+      int32_t expectedHour = -4;
+      double expectedOffset = (((double)expectedHour) * millisPerHour);
+      double foundOffset = tz->getRawOffset();
+      int32_t foundHour = foundOffset / millisPerHour;
+      if (expectedOffset != foundOffset) {
+        errln("FAIL: Offset for PRT should be %d, found %d", expectedHour, foundHour);
+      } else {
+        logln("PASS: Offset for PRT should be %d, found %d", expectedHour, foundHour);
+      }
     }
     delete tz;
 }
@@ -356,11 +364,10 @@ TimeZoneTest::TestGetAvailableIDs913()
         // we own the array; the caller owns the contained strings (yuck)
         uprv_free(ids);
     }
-
     numIDs = -1;
     ids = TimeZone::createAvailableIDs("US", numIDs);
     if (ids == 0 || numIDs < 1) {
-        errln("FAIL: createAvailableIDs(US)");
+      errln("FAIL: createAvailableIDs(US) ids=%d, numIDs=%d", ids, numIDs);
     } else {
         UnicodeString buf("TimeZone::createAvailableIDs(US) = { ");
         for(i=0; i<numIDs; ++i) {
@@ -372,7 +379,6 @@ TimeZoneTest::TestGetAvailableIDs913()
         // we own the array; the caller owns the contained strings (yuck)
         uprv_free(ids);
     }
-
     UnicodeString str;
     UnicodeString *buf = new UnicodeString("TimeZone::createEnumeration() = { ");
     int32_t s_length;
