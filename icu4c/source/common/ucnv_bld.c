@@ -775,6 +775,7 @@ ucnv_createConverterFromSharedData(UConverter *myUConverter,
     myUConverter->fromCharErrorBehaviour = (UConverterToUCallback) UCNV_TO_U_CALLBACK_SUBSTITUTE;
     myUConverter->fromUCharErrorBehaviour = (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_SUBSTITUTE;
     myUConverter->toUnicodeStatus = myUConverter->sharedData->toUnicodeStatus;
+    myUConverter->maxBytesPerUChar = myUConverter->sharedData->staticData->maxBytesPerChar;
     myUConverter->subChar1 = myUConverter->sharedData->staticData->subChar1;
     myUConverter->subCharLen = myUConverter->sharedData->staticData->subCharLen;
     uprv_memcpy (myUConverter->subChar, myUConverter->sharedData->staticData->subChar, myUConverter->subCharLen);

@@ -435,10 +435,10 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
             uprv_strcpy(myConverterData->name,"ISO_2022");
         }
 
+        cnv->maxBytesPerUChar=cnv->sharedData->staticData->maxBytesPerChar;
     } else {
         *errorCode = U_MEMORY_ALLOCATION_ERROR;
     }
-
 }
 
 
@@ -2823,7 +2823,7 @@ static const UConverterStaticData _ISO2022StaticData={
     UCNV_IBM,
     UCNV_ISO_2022,
     1,
-    4,
+    3, /* max 3 bytes per UChar from UTF-8 (4 bytes from surrogate _pair_) */
     { 0x1a, 0, 0, 0 },
     1,
     FALSE,
@@ -2873,7 +2873,7 @@ static const UConverterStaticData _ISO2022JPStaticData={
     UCNV_IBM,
     UCNV_ISO_2022,
     1,
-    6,
+    6, /* max 6 bytes per UChar: 4-byte escape sequence + DBCS */
     { 0x1a, 0, 0, 0 },
     1,
     FALSE,
@@ -2923,7 +2923,7 @@ static const UConverterStaticData _ISO2022KRStaticData={
     UCNV_IBM,
     UCNV_ISO_2022,
     1,
-    3,
+    3, /* max 3 bytes per UChar: SO+DBCS */
     { 0x1a, 0, 0, 0 },
     1,
     FALSE,
@@ -2974,7 +2974,7 @@ static const UConverterStaticData _ISO2022CNStaticData={
     UCNV_IBM,
     UCNV_ISO_2022,
     2,
-    8,
+    8, /* max 8 bytes per UChar: 4-byte CNS designator + 2 bytes for SS2/SS3 + DBCS */
     { 0x1a, 0, 0, 0 },
     1,
     FALSE,
