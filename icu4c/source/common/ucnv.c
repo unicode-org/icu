@@ -603,11 +603,12 @@ int32_t   ucnv_fromUChars (const UConverter * converter,
 			   char *target,
 			   int32_t targetSize,
 			   const UChar * source,
+               int32_t sourceSize,
 			   UErrorCode * err)
 {
   const UChar *mySource = source;
   const UChar *mySource_limit;
-  int32_t mySourceLength = 0;
+  int32_t mySourceLength = sourceSize;
   UConverter myConverter;
   char *myTarget = target;
   char *myTarget_limit;
@@ -630,7 +631,9 @@ int32_t   ucnv_fromUChars (const UConverter * converter,
   ucnv_reset (&myConverter);
 
   /*if the source is empty we return immediately */
-  mySourceLength = u_strlen (source);
+  if (sourceSize == -1) {
+    mySourceLength = u_strlen (source);
+  } 
   if (mySourceLength == 0)
     {
       /*for consistency we still need to

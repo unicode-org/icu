@@ -451,6 +451,9 @@ U_CAPI
  * @param target the <TT>target</TT> string in codepage encoding (<STRONG>not zero-terminated</STRONG> because some
  * codepage do not use '\0' as a string terminator
  * @param targetCapacity Input the number of bytes available in the <TT>target</TT> buffer
+ * @param source the source buffer to convert with
+ * @param sourceLength the length of the source buffer. If -1 is passed in as the value, 
+ * the source buffer is NULL terminated string and whole source buffer will be converted.
  * @param err the error status code.
  * <TT>U_INDEX_OUTOFBOUNDS_ERROR</TT> will be returned if the
  * the # of bytes provided are not enough for transcoding.
@@ -465,6 +468,7 @@ U_CAPI
 			   char *target,
 			   int32_t targetCapacity,
 			   const UChar * source,
+               int32_t sourceLength,
 			   UErrorCode * err);
 
 
