@@ -119,9 +119,10 @@ void TestProperty()
     /* In general, we don't want to hard-code data from resource files
        etc. into tests.  To make things somewhat flexible we encode
        a min and max version that seem reasonable at this time.  This
-       still will have to be updated if we go beyond 1.9.9.9. */
-    UVersionInfo minVersionArray = {0x01, 0x00, 0x00, 0x00};
-    UVersionInfo maxVersionArray = {0x01, 0x09, 0x09, 0x09};
+       still will have to be updated if we go beyond 32.128.207.207
+    */
+    UVersionInfo minVersionArray = {0x08, 0x40, 0x01, 0xc8};
+    UVersionInfo maxVersionArray = {0x20, 0x80, 0xcf, 0xcf};
     UVersionInfo versionArray;
     
     log_verbose("The property tests begin : \n");
