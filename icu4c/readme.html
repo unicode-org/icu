@@ -1177,12 +1177,11 @@ Data set name type  : PDS</samp>
     <h3><a name="HowToBuildOS400" href="#HowToBuildOS400">How To Build And
     Install On OS/400 (iSeries)</a></h3>
 
-    <p>ICU Reference Release 2.2 contains partial support for the iSeries
-    platform. After building ICU and running the tests, you will notice that
-    some of the multthread and formatting tests fail. The SPAWN CL command will
-    allow the multithread tests in the intltest test suite to run successfully.
-    The formating failures can be ignored for now. These failures are expected
-    to be resolved in a future release of ICU.</p>
+    <p>ICU Reference Release 2.4 contains partial support for the iSeries
+    platform. After building ICU and running the tests, you may notice that
+    some of the formatting tests fail. The formating failures can be ignored
+    for now. These failures are expected to be resolved in a future release
+    of ICU.</p>
 
     <p>The following describes how to setup and build ICU.</p>
 
@@ -1228,10 +1227,12 @@ Data set name type  : PDS</samp>
 <samp>ADDENVVAR ENVVAR(CC) VALUE('/usr/bin/icc')
 ADDENVVAR ENVVAR(CXX) VALUE('/usr/bin/icc')
 ADDENVVAR ENVVAR(MAKE) VALUE('/usr/bin/gmake')
-ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
+ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')
+ADDENVVAR ENVVAR(QIBM_MULTI_THREADED) VALUE('Y')</samp>
 </pre>
             <i>libraryname</i> identifies target as400 library for *module,
-            *pgm and *srvpgm objects.<br>
+            *pgm and *srvpgm objects. The QIBM_MULTI_THREADED environment
+            variable is only needed for the multithreaded tests to pass.<br>
             <br>
           </li>
           <!--li>Add QCXXN, to your build process library list. This results in the resolution of CRTCPPMOD used by the icc compiler</li-->
