@@ -11,6 +11,11 @@
 #ifndef _INTLTEST
 #define _INTLTEST
 
+#ifdef OS390
+// avoid collision with math.h/log()
+#pragma map(IntlTest::log( const UnicodeString &message ),"logos390")
+#endif
+
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 #include "unicode/coll.h"
