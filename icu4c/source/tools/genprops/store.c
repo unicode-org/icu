@@ -32,13 +32,6 @@
 
 #define DO_DEBUG_OUT 0
 
-/*
- * ### TODO
- * document structure with additional properties
- * use index enums in uchar.c
- * improve UTrie compaction: remove identical data blocks before folding! - need to remember which ones are skipped?!
- */
-
 /* Unicode character properties file format ------------------------------------
 
 The file format prepared and written here contains several data
@@ -49,7 +42,7 @@ the udata API for loading ICU data. Especially, a UDataInfo structure
 precedes the actual data. It contains platform properties values and the
 file format version.
 
-The following is a description of format version 2.0 .
+The following is a description of format version 2.1 .
 
 Data contents:
 
@@ -68,19 +61,27 @@ to the beginning of the data:
 
 Formally, the file contains the following structures:
 
-    indexes[16] with values i0..i15:
+    const int32_t indexes[16] with values i0..i15:
 
-    i0 const int32_t propsIndex; -- 32-bit unit index to the table of 32-bit properties words
-    i1 const int32_t exceptionsIndex;  -- 32-bit unit index to the table of 32-bit exception words
-    i2 const int32_t exceptionsTopIndex; -- 32-bit unit index to the array of UChars for special mappings
-    i3 const int32_t ucharsTopIndex; -- 32-bit unit index to the first unit after the array of UChars for special mappings
-    i4..i15 const int32_t[] reservedIndex; -- reserved values; 0 for now
+    i0 propsIndex; -- 32-bit unit index to the table of 32-bit properties words
+    i1 exceptionsIndex;  -- 32-bit unit index to the table of 32-bit exception words
+    i2 exceptionsTopIndex; -- 32-bit unit index to the array of UChars for special mappings
+
+    i3 additionalTrieIndex; -- 32-bit unit index to the additional trie for more properties
+    i4 additionalVectorsIndex; -- 32-bit unit index to the table of properties vectors
+    i5 additionalVectorsColumns; -- number of 32-bit words per properties vector
+
+    i6 reservedItemIndex; -- 32-bit unit index to the top of the properties vectors table
+    i7..i15 reservedIndexes; -- reserved values; 0 for now
 
     PT serialized properties trie, see utrie.h (byte size: 4*(i0-16))
 
     P  const uint32_t props32[i1-i0];
     E  const uint32_t exceptions[i2-i1];
     U  const UChar uchars[2*(i3-i2)];
+
+    AT serialized trie for additional properties (byte size: 4*(i4-i3))
+    PV const uint32_t propsVectors[(i6-i4)/i5][i5]==uint32_t propsVectors[i6-i4];
 
 Trie lookup and properties:
 
@@ -138,7 +139,12 @@ Each 32-bit properties word contains:
  5      has exception values
  6..10  BiDi category
 11      is mirrored
-12..19  reserved
+12..13  numericType (new in format version 2.1):
+            0 no numeric value
+            1 decimal digit value
+            2 digit value
+            3 numeric value
+14..19  reserved
 20..31  value according to bits 0..5:
         if(has exception) {
             exception index;
@@ -239,6 +245,22 @@ Its exception values would be stored as 3 uint32_t words:
 - lowercase mapping 0x2170
 - numeric value=1
 
+--- Additional properties (new in format version 2.1) ---
+
+The second trie for additional properties (AT) is also a UTrie with 16-bit data.
+The data words consist of 32-bit unit indexes (not row indexes!) into the
+table of unique properties vectors (PV).
+Each vector contains a set of properties. The width of a vector may change
+with the formatVersion, it is stored in i5.
+
+Current properties: (see also icu/source/common/uprops.h)
+
+Word/Bits
+ 0 31..24   age of the code point designation/assignment, a Unicode version
+            bits 31..28 major version number
+            bits 27..24 minor version number
+ 0  6.. 0   UScriptCode
+
 ----------------------------------------------------------------------------- */
 
 /* UDataInfo cf. udata.h */
@@ -265,10 +287,13 @@ enum {
 
 /* definitions for the properties words */
 enum {
-    EXCEPTION_SHIFT=5,
-    BIDI_SHIFT,
-    MIRROR_SHIFT=BIDI_SHIFT+5,
-    VALUE_SHIFT=20,
+    /* general category shift==0                    0 (5 bits) */
+    EXCEPTION_SHIFT=5,                          /*  5 (1 bit)  */
+    BIDI_SHIFT,                                 /*  6 (5 bits) */
+    MIRROR_SHIFT=BIDI_SHIFT+5,                  /* 11 (1 bit)  */
+    NUMERIC_TYPE_SHIFT,                         /* 12 (2 bits) */
+    RESERVED_SHIFT=NUMERIC_TYPE_SHIFT+2,        /* 14 (6 bits) */
+    VALUE_SHIFT=20,                             /* 20 */
 
     EXCEPTION_BIT=1UL<<EXCEPTION_SHIFT,
     VALUE_BITS=32-VALUE_SHIFT
@@ -413,7 +438,7 @@ makeProps(Props *p) {
     if(p->generalCategory==U_DECIMAL_DIGIT_NUMBER) {
         /* verify that all numeric fields contain the same value */
         if(p->decimalDigitValue!=-1 && p->digitValue==p->decimalDigitValue &&
-           p->hasNumericValue && p->numericValue==p->decimalDigitValue &&
+           p->numericType==1 && p->numericValue==p->decimalDigitValue &&
            p->denominator==0
         ) {
             value=p->decimalDigitValue;
@@ -422,15 +447,13 @@ makeProps(Props *p) {
         }
         ++count;
     } else if(p->generalCategory==U_LETTER_NUMBER || p->generalCategory==U_OTHER_NUMBER) {
-        /* verify that only the numeric value field itself contains a value */
-        if(p->decimalDigitValue==-1 && p->digitValue==-1 && p->hasNumericValue) {
+        if(p->numericType==3) {
             value=p->numericValue;
         } else {
             x=EXCEPTION_BIT;
         }
         ++count;
-    } else if(p->decimalDigitValue!=-1 || p->digitValue!=-1 || p->hasNumericValue) {
-        /* verify that only numeric categories have numeric values */
+    } else if(p->numericType!=0) {
         x=EXCEPTION_BIT;
         ++count;
     }
@@ -506,7 +529,7 @@ makeProps(Props *p) {
                     (uint32_t)p->decimalDigitValue<<16|
                     (uint16_t)p->digitValue;
             }
-            if(p->hasNumericValue) {
+            if(p->numericType==3) {
                 if(p->denominator==0) {
                     first|=0x10;
                     exceptions[value+length++]=(uint32_t)p->numericValue;
@@ -593,6 +616,7 @@ makeProps(Props *p) {
         (uint32_t)p->generalCategory |
         (uint32_t)p->bidi<<BIDI_SHIFT |
         (uint32_t)p->isMirrored<<MIRROR_SHIFT |
+        (uint32_t)p->numericType<<NUMERIC_TYPE_SHIFT |
         (uint32_t)value<<VALUE_SHIFT;
 
     if(beVerbose && p->code<=0x9f) {
