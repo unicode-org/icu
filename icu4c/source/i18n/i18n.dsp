@@ -376,10 +376,6 @@ SOURCE=.\util.cpp
 
 SOURCE=.\utrans.cpp
 # End Source File
-# Begin Source File
-
-SOURCE=.\xformtrn.cpp
-# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -1645,10 +1641,6 @@ InputPath=.\unicode\utrans.h
 
 !ENDIF 
 
-# End Source File
-# Begin Source File
-
-SOURCE=.\xformtrn.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
