@@ -94,9 +94,8 @@ public class CollationIteratorTest extends TestFmwk {
      * Test for getMaxExpansion()
      */
     public void TestMaxExpansion(/* char* par */) {
-        // added jamo characters
-        String rule = "&a < ab < c/aba < d < z < ch < \u1100/aba " 
-                      + "< \u1175/aba < \u11A8/aba";
+        int unassigned = 0xEFFFD;
+        String rule = "&a < ab < c/aba < d < z < ch";
         RuleBasedCollator coll = null;
         try {
             coll = new RuleBasedCollator(rule);
@@ -107,7 +106,7 @@ public class CollationIteratorTest extends TestFmwk {
         char ch = 0;
         String str = String.valueOf(ch);
     
-        CollationElementIterator iter   = coll.getCollationElementIterator(str);
+        CollationElementIterator iter = coll.getCollationElementIterator(str);
     
         while (ch < 0xFFFF) {
             int count = 1;
@@ -128,6 +127,79 @@ public class CollationIteratorTest extends TestFmwk {
             if (iter.getMaxExpansion(order) < count) {
                 errln("Failure at codepoint " + ch + ", maximum expansion count < " + count);
             }
+        }
+        
+        // testing for exact max expansion 
+        ch = 0;
+        while (ch < 0x61) {
+            str = String.valueOf(ch);
+            iter.setText(str);
+            int order = iter.previous();
+            
+            if (iter.getMaxExpansion(order) != 1) {
+                errln("Failure at codepoint 0x" + Integer.toHexString(ch)
+                      + " maximum expansion count == 1");
+            }
+            ch ++;
+        }
+
+        ch = 0x63;
+        str = String.valueOf(ch);
+        iter.setText(str);
+        int temporder = iter.previous();
+            
+        if (iter.getMaxExpansion(temporder) != 3) {
+            errln("Failure at codepoint 0x" + Integer.toHexString(ch)
+                                  + " maximum expansion count == 3");
+        }
+
+        ch = 0x64;
+        str = String.valueOf(ch);
+        iter.setText(str);
+        temporder = iter.previous();
+            
+        if (iter.getMaxExpansion(temporder) != 1) {
+            errln("Failure at codepoint 0x" + Integer.toHexString(ch)
+                                  + " maximum expansion count == 1");
+        }
+
+        str = UCharacter.toString(unassigned);
+        iter.setText(str);
+        temporder = iter.previous();
+            
+        if (iter.getMaxExpansion(temporder) != 2) {
+            errln("Failure at codepoint 0x" + Integer.toHexString(ch)
+                                  + " maximum expansion count == 2");
+        }
+
+
+        // testing jamo
+        ch = 0x1165;
+        str = String.valueOf(ch);
+        iter.setText(str);
+        temporder = iter.previous();
+            
+        if (iter.getMaxExpansion(temporder) > 3) {
+            errln("Failure at codepoint 0x" + Integer.toHexString(ch)
+                                          + " maximum expansion count < 3");
+        }
+
+        // testing special jamo &a<\u1165
+        rule = "\u0026\u0071\u003c\u1165\u002f\u0071\u0071\u0071\u0071";
+
+        try {
+            coll = new RuleBasedCollator(rule);
+        } catch (Exception e) {
+            errln("Fail to create RuleBasedCollator");
+            return;
+        }
+        iter = coll.getCollationElementIterator(str);
+        
+        temporder = iter.previous();
+            
+        if (iter.getMaxExpansion(temporder) != 6) {
+            errln("Failure at codepoint 0x" + Integer.toHexString(ch)
+                                         + " maximum expansion count == 6");
         }
     }
     
