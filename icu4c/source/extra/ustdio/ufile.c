@@ -211,6 +211,7 @@ u_finit(FILE        *f,
   if(result == 0)
     return 0;
 
+
 #ifdef WIN32
   result->fFile = &_iob[_fileno(f)];
 #else
@@ -230,7 +231,7 @@ u_finit(FILE        *f,
 
       result->fBundle = u_loccache_get(locale);
       if(result->fBundle == 0) {
-        fclose(result->fFile);
+        /* DO NOT FCLOSE HERE! */
         free(result);
         return 0;
       }
@@ -246,7 +247,7 @@ u_finit(FILE        *f,
     if(codepage == 0) {
         result->fConverter = ucnv_open(0, &status);
         if(U_FAILURE(status) || result->fConverter == 0) {
-            fclose(result->fFile);
+        /* DO NOT fclose here!!!!!! */
             free(result);
             return 0;
         }
@@ -254,7 +255,7 @@ u_finit(FILE        *f,
   } else if (*codepage != '\0') {
       result->fConverter = ucnv_open(codepage, &status);
       if(U_FAILURE(status) || result->fConverter == 0) {
-        fclose(result->fFile);
+        /* DO NOT fclose here!!!!!! */
         free(result);
         return 0;
       }
