@@ -60,6 +60,7 @@ enum Regex_PatternParseAction {
     doPossesiveOpt,
     doEscapeError,
     doBackslashG,
+    doSuppressComments,
     doMatchModeParen,
     doOpt,
     doInterval,
@@ -127,11 +128,11 @@ static const struct RegexTableEl gRuleParseStateTable[] = {
     , {doOrOperator, 124 /* | */, 2,0,  TRUE}     //  20      expr-cont
     , {doCloseParen, 41 /* ) */, 255,0,  TRUE}     //  21 
     , {doNOP, 255, 2,0,  FALSE}     //  22 
-    , {doNOP, 63 /* ? */, 25,0,  TRUE}     //  23      open-paren-quant
+    , {doSuppressComments, 63 /* ? */, 25,0,  TRUE}     //  23      open-paren-quant
     , {doNOP, 255, 27,0,  FALSE}     //  24 
     , {doNOP, 35 /* # */, 46, 14, TRUE}     //  25      open-paren-quant2
     , {doNOP, 255, 29,0,  FALSE}     //  26 
-    , {doNOP, 63 /* ? */, 29,0,  TRUE}     //  27      open-paren
+    , {doSuppressComments, 63 /* ? */, 29,0,  TRUE}     //  27      open-paren
     , {doOpenCaptureParen, 255, 2, 14, FALSE}     //  28 
     , {doOpenNonCaptureParen, 58 /* : */, 2, 14, TRUE}     //  29      open-paren-extended
     , {doOpenAtomicParen, 62 /* > */, 2, 14, TRUE}     //  30 

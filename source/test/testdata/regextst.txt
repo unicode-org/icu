@@ -216,3 +216,17 @@
 "(?:(?i)a)b"                    "<0>Ab</0>"
 "ab(?i)cd"	                 "<0>abCd</0>"
 "ab$cd"                         "abcd"
+
+# White space handling
+"a b"                           "ab"
+"abc "                          "abc"
+"abc "                          "<0>abc </0>"
+#"ab[cd e]z"                     "<0>ab z</0>"           #TODO:  white space handling in Unicode Sets.
+
+
+#Multi-line mode
+'b\s^'                     m     "a\nb\n"
+
+# Free-spacing mode
+"a b c  # this is a comment"  x "<0>abc</0> "
+'^a (?#xxx) (?#yyy) {3}c'  x    "<0>aaac</0>"
