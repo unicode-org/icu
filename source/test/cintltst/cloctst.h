@@ -61,6 +61,8 @@ static  void TestDisplayNames(void);
  **/
  static void TestVariantParsing(void);
 
+ static void TestLocaleStructure(void);
+
 /**
  * routine to perform subtests, used by TestDisplayNames
  */
