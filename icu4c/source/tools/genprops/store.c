@@ -42,7 +42,7 @@ the udata API for loading ICU data. Especially, a UDataInfo structure
 precedes the actual data. It contains platform properties values and the
 file format version.
 
-The following is a description of format version 2.1 .
+The following is a description of format version 3 .
 
 Data contents:
 
@@ -139,12 +139,13 @@ Each 32-bit properties word contains:
  5      has exception values
  6..10  BiDi category
 11      is mirrored
-12..13  numericType (new in format version 2.1):
+12..14  numericType:
             0 no numeric value
             1 decimal digit value
             2 digit value
             3 numeric value
-14..19  reserved
+            ### TODO: type 4 for Han digits & numbers?!
+15..19  reserved
 20..31  value according to bits 0..5:
         if(has exception) {
             exception index;
@@ -152,15 +153,13 @@ Each 32-bit properties word contains:
         case Ll: delta to uppercase; -- same as titlecase
         case Lu: -delta to lowercase; -- titlecase is same as c
         case Lt: -delta to lowercase; -- uppercase is same as c
-        case Mn: combining class;
-        case Nd: value=numeric value==decimal digit value=digit value;
-        case Nl:
-        case No: value=numeric value - but decimal digit value and digit value are not defined;
         default:
             if(is mirrored) {
-                delta to mirror
+                delta to mirror;
+            } else if(numericType!=0) {
+                numericValue;
             } else {
-                0
+                0;
             };
         }
 
@@ -168,16 +167,16 @@ Exception values:
 
 In the first uint32_t exception word for a code point,
 bits
-31..24  reserved
-23..16  combining class
+31..16  reserved
 15..0   flags that indicate which values follow:
 
 bit
  0      has uppercase mapping
  1      has lowercase mapping
  2      has titlecase mapping
- 3      has digit value(s)
+ 3      unused
  4      has numeric value (numerator)
+            if numericValue=0x7fffff00+x then numericValue=10^x
  5      has denominator value
  6      has a mirror-image Unicode code point
  7      has SpecialCasing.txt entries
@@ -203,6 +202,8 @@ is implicitly 1. This means:
     x         none        x
     none      y           1/y
     x         y           x/y
+
+If the numerator value is 0x7fffff00+x then it is replaced with 10^x.
 
 For the denominator value, a uint32_t word contains the value directly.
 
@@ -250,16 +251,11 @@ Its exception values would be stored as 3 uint32_t words:
 The second trie for additional properties (AT) is also a UTrie with 16-bit data.
 The data words consist of 32-bit unit indexes (not row indexes!) into the
 table of unique properties vectors (PV).
-Each vector contains a set of properties. The width of a vector may change
+Each vector contains a set of properties.
+The width of a vector (number of uint32_t per row) may change
 with the formatVersion, it is stored in i5.
 
-Current properties: (see also icu/source/common/uprops.h)
-
-Word/Bits
- 0 31..24   age of the code point designation/assignment, a Unicode version
-            bits 31..28 major version number
-            bits 27..24 minor version number
- 0  6.. 0   UScriptCode
+Current properties: see icu/source/common/uprops.h
 
 ----------------------------------------------------------------------------- */
 
@@ -274,33 +270,15 @@ static UDataInfo dataInfo={
     0,
 
     { 0x55, 0x50, 0x72, 0x6f },                 /* dataFormat="UPro" */
-    { 2, 1, UTRIE_SHIFT, UTRIE_INDEX_SHIFT },   /* formatVersion */
+    { 3, 0, UTRIE_SHIFT, UTRIE_INDEX_SHIFT },   /* formatVersion */
     { 3, 0, 0, 0 }                              /* dataVersion */
 };
 
 /* definitions of expected data size limits */
 enum {
     MAX_PROPS_COUNT=25000,
-    MAX_UCHAR_COUNT=10000,
-    MAX_EXCEPTIONS_COUNT=4096
+    MAX_UCHAR_COUNT=10000
 };
-
-/* definitions for the properties words */
-enum {
-    /* general category shift==0                    0 (5 bits) */
-    EXCEPTION_SHIFT=5,                          /*  5 (1 bit)  */
-    BIDI_SHIFT,                                 /*  6 (5 bits) */
-    MIRROR_SHIFT=BIDI_SHIFT+5,                  /* 11 (1 bit)  */
-    NUMERIC_TYPE_SHIFT,                         /* 12 (2 bits) */
-    RESERVED_SHIFT=NUMERIC_TYPE_SHIFT+2,        /* 14 (6 bits) */
-    VALUE_SHIFT=20,                             /* 20 */
-
-    EXCEPTION_BIT=1UL<<EXCEPTION_SHIFT,
-    VALUE_BITS=32-VALUE_SHIFT
-};
-
-static const int32_t MAX_VALUE=(1L<<(VALUE_BITS-1))-1;
-static const int32_t MIN_VALUE=-(1L<<(VALUE_BITS-1));
 
 static UNewTrie *pTrie=NULL;
 
@@ -314,7 +292,7 @@ static uint32_t *props;
 static int32_t propsTop;
 
 /* exceptions values */
-static uint32_t exceptions[MAX_EXCEPTIONS_COUNT+20];
+static uint32_t exceptions[UPROPS_MAX_EXCEPTIONS_COUNT+20];
 static uint16_t exceptionsTop=0;
 
 /* Unicode characters, e.g. for special casing or decomposition */
@@ -350,6 +328,7 @@ initStore() {
     }
 
     uprv_memset(props32, 0, sizeof(props32));
+    initAdditionalProperties();
 }
 
 /* store a character's properties ------------------------------------------- */
@@ -409,7 +388,7 @@ makeProps(Props *p) {
         if(p->generalCategory==U_LOWERCASE_LETTER) {
             value=(int32_t)p->code-(int32_t)p->upperCase;
         } else {
-            x=EXCEPTION_BIT;
+            x=UPROPS_EXCEPTION_BIT;
         }
         ++count;
     }
@@ -418,48 +397,20 @@ makeProps(Props *p) {
         if(p->generalCategory==U_UPPERCASE_LETTER || p->generalCategory==U_TITLECASE_LETTER) {
             value=(int32_t)p->lowerCase-(int32_t)p->code;
         } else {
-            x=EXCEPTION_BIT;
+            x=UPROPS_EXCEPTION_BIT;
         }
         ++count;
     }
     if(p->upperCase!=p->titleCase) {
-        x=EXCEPTION_BIT;
+        x=UPROPS_EXCEPTION_BIT;
         ++count;
     }
-    if(p->canonicalCombining>0) {
-        /* verify that only Mn has a canonical combining class */
-        if(p->generalCategory==U_NON_SPACING_MARK) {
-            value=p->canonicalCombining;
-        } else {
-            x=EXCEPTION_BIT;
-        }
-        ++count;
-    }
-    if(p->generalCategory==U_DECIMAL_DIGIT_NUMBER) {
-        /* verify that all numeric fields contain the same value */
-        if(p->decimalDigitValue!=-1 && p->digitValue==p->decimalDigitValue &&
-           p->numericType==1 && p->numericValue==p->decimalDigitValue &&
-           p->denominator==0
-        ) {
-            value=p->decimalDigitValue;
-        } else {
-            x=EXCEPTION_BIT;
-        }
-        ++count;
-    } else if(p->generalCategory==U_LETTER_NUMBER || p->generalCategory==U_OTHER_NUMBER) {
-        if(p->numericType==3) {
-            value=p->numericValue;
-        } else {
-            x=EXCEPTION_BIT;
-        }
-        ++count;
-    } else if(p->numericType!=0) {
-        x=EXCEPTION_BIT;
+    if(p->numericType!=0) {
+        value=p->numericValue;
         ++count;
     }
     if(p->denominator!=0) {
-        /* verification for numeric category covered by the above */
-        x=EXCEPTION_BIT;
+        x=UPROPS_EXCEPTION_BIT;
         ++count;
     }
     if(p->isMirrored) {
@@ -469,42 +420,41 @@ makeProps(Props *p) {
         ++count;
     }
     if(p->specialCasing!=NULL) {
-        x=EXCEPTION_BIT;
+        x=UPROPS_EXCEPTION_BIT;
         ++count;
     }
     if(p->caseFolding!=NULL) {
-        x=EXCEPTION_BIT;
+        x=UPROPS_EXCEPTION_BIT;
         ++count;
     }
 
     /* handle exceptions */
-    if(count>1 || x!=0 || value<MIN_VALUE || MAX_VALUE<value) {
+    if(count>1 || x!=0 || value<UPROPS_MIN_VALUE || UPROPS_MAX_VALUE<value) {
         /* this code point needs exception values */
         if(beVerbose) {
             if(x!=0) {
+                /* do not print - many code points because of SpecialCasing & CaseFolding
                 printf("*** code 0x%06x needs an exception because it is irregular\n", p->code);
-            } else if(count==1) {
-                printf("*** code 0x%06x needs an exception because its value would be %ld\n",
-                    p->code, (long)value);
-            } else if(value<MIN_VALUE || MAX_VALUE<value) {
+                */
+            } else if(value<UPROPS_MIN_VALUE || UPROPS_MAX_VALUE<value) {
                 printf("*** code 0x%06x needs an exception because its value is out-of-bounds at %ld (not [%ld..%ld]\n",
-                    p->code, (long)value, (long)MIN_VALUE, (long)MAX_VALUE);
+                    p->code, (long)value, (long)UPROPS_MIN_VALUE, (long)UPROPS_MAX_VALUE);
             } else {
                 printf("*** code 0x%06x needs an exception because it has %u values\n", p->code, count);
             }
         }
 
         ++exceptionsCount;
-        x=EXCEPTION_BIT;
+        x=UPROPS_EXCEPTION_BIT;
 
         /* allocate and create exception values */
         value=exceptionsTop;
-        if(value>=4096) {
+        if(value>=UPROPS_MAX_EXCEPTIONS_COUNT) {
             fprintf(stderr, "genprops: out of exceptions memory at U+%06x. (%d exceeds allocated space)\n",
                     p->code, value);
             exit(U_MEMORY_ALLOCATION_ERROR);
         } else {
-            uint32_t first=(uint32_t)p->canonicalCombining<<16;
+            uint32_t first=0;
             uint16_t length=1;
 
             if(p->upperCase!=0) {
@@ -523,13 +473,7 @@ makeProps(Props *p) {
                     exceptions[value+length++]=p->code;
                 }
             }
-            if(p->decimalDigitValue!=-1 || p->digitValue!=-1) {
-                first|=8;
-                exceptions[value+length++]=
-                    (uint32_t)p->decimalDigitValue<<16|
-                    (uint16_t)p->digitValue;
-            }
-            if(p->numericType==3) {
+            if(p->numericType!=0) {
                 if(p->denominator==0) {
                     first|=0x10;
                     exceptions[value+length++]=(uint32_t)p->numericValue;
@@ -614,10 +558,10 @@ makeProps(Props *p) {
     /* put together the 32-bit word of encoded properties */
     x|=
         (uint32_t)p->generalCategory |
-        (uint32_t)p->bidi<<BIDI_SHIFT |
-        (uint32_t)p->isMirrored<<MIRROR_SHIFT |
-        (uint32_t)p->numericType<<NUMERIC_TYPE_SHIFT |
-        (uint32_t)value<<VALUE_SHIFT;
+        (uint32_t)p->bidi<<UPROPS_BIDI_SHIFT |
+        (uint32_t)p->isMirrored<<UPROPS_MIRROR_SHIFT |
+        (uint32_t)p->numericType<<UPROPS_NUMERIC_TYPE_SHIFT |
+        (uint32_t)value<<UPROPS_VALUE_SHIFT;
 
     return x;
 
@@ -644,6 +588,7 @@ addProps(uint32_t c, uint32_t x) {
         fprintf(stderr, "error: too many entries for the properties trie\n");
         exit(U_BUFFER_OVERFLOW_ERROR);
     }
+    setMainProperties(c, c+1, x);
 }
 
 /* areas of same properties ------------------------------------------------- */
@@ -654,6 +599,7 @@ repeatProps(uint32_t first, uint32_t last, uint32_t x) {
         fprintf(stderr, "error: too many entries for the properties trie\n");
         exit(U_BUFFER_OVERFLOW_ERROR);
     }
+    setMainProperties(first, last+1, x);
 }
 
 /* compacting --------------------------------------------------------------- */
@@ -783,7 +729,7 @@ generateData(const char *dataDir) {
         0, 0, 0, 0
     };
     static uint8_t trieBlock[40000];
-    static uint8_t additionalProps[40000];
+    static uint8_t additionalProps[120000];
 
     UNewDataMemory *pData;
     UErrorCode errorCode=U_ZERO_ERROR;
