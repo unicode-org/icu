@@ -702,5 +702,18 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
                           UResourceBundle *fillIn, 
                           UErrorCode *status);
 
+
+/**
+ * Create a string enumerator, owned by the caller, of all locales located within 
+ * the specified resource tree.
+ * @param path path to the tree, such as (NULL) or U_ICUDATA_ALIAS or  or "ICUDATA-coll"
+ * This call is similar to uloc_getAvailable().
+ * @param status error code
+ * @draft ICU 3.2
+ */
+U_DRAFT UEnumeration* U_EXPORT2
+ures_openAvailableLocales(const char *path, UErrorCode *status);
+
+
 #endif /*_URES*/
 /*eof*/
