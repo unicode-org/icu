@@ -60,6 +60,10 @@ am {
     	"Ethi",
     }
     ExemplarCharacters{"[:Ethi:]"}
+    DateTimeElements:intvector { 
+        7,
+        1,
+    }
     Eras {
         "\u12D3/\u12D3",
         "\u12D3/\u121D"

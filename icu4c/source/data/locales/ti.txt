@@ -59,6 +59,10 @@ ti{
         "\u12D3/\u12D3",
         "\u12D3/\u121D"
     }
+    DateTimeElements:intvector { 
+        7,
+        1,
+    }
     Languages { 
         ti { "\u1275\u130D\u122D\u129B" }
     }

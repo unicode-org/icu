@@ -59,8 +59,8 @@ so{
         "Bisha Laba iyo Tobnaad",
     }
     Eras { 
-            "Ciise ka hor",
-            "Ciise ka dib"
+        "Ciise ka hor",
+        "Ciise ka dib"
     }
     Languages { 
         so { "Soomaali" }
@@ -74,6 +74,10 @@ so{
     AmPmMarkers {
         "sn",
         "gn",
+    }
+    DateTimeElements:intvector { 
+        7,
+        1,
     }
     DateTimePatterns { 
         "h:mm:ss a",
