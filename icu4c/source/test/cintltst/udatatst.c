@@ -1106,7 +1106,8 @@ static const struct {
     {"unorm",                    "icu", unorm_swap},
 #endif
     {"uprops",                   "icu", uprops_swap},
-    {"ucase",                    "icu", ucase_swap}
+    {"ucase",                    "icu", ucase_swap},
+    {"ubidi",                    "icu", ubidi_swap}
 };
 
 #define SWAP_BUFFER_SIZE 1000000
