@@ -3,12 +3,12 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Latin_Katakana.txt,v $
-# $Date: 2001/11/20 00:06:23 $
-# $Revision: 1.13 $
+# $Date: 2001/11/25 23:16:14 $
+# $Revision: 1.14 $
 #--------------------------------------------------------------------
 
 # note: a global filter is more efficient, but MUST include all source chars
-:: [\u0000-\u00FF [:Latin:][:nonspacing mark:]] ;
+:: [\u0000-\u007E \u3001\u3002 \u3099-\u309C \u30A1-\u30FC \uFF61-\uFF9F [:Latin:][:Katakana:] [:nonspacing mark:]] ;
 
 :: NFKD (NFC);  # use NFKD to get the fullwidth latin characters
 :: Lower ();    # whenever transliterating from cased to uncased script, include this
@@ -487,6 +487,6 @@ x > | ks ;
 :: NFC (NFKD) ;  # use NFKD to get the halfwidth katakana characters
 
 # note: a global filter is more efficient, but MUST include all source chars!!
-:: ([\u0000-\u007E \u3001\u3002 \u3099-\u309C \u30A1-\u30FC \uFF61-\uFF9F [:Katakana:] [:nonspacing mark:]]);
+:: ([\u0000-\u007E \u3001\u3002 \u3099-\u309C \u30A1-\u30FC \uFF61-\uFF9F [:Latin:][:Katakana:] [:nonspacing mark:]]);
 
 # eof
