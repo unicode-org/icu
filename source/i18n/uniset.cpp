@@ -397,31 +397,32 @@ UnicodeString& UnicodeSet::toPattern(UnicodeString& result,
  */
 UnicodeString& UnicodeSet::_toPattern(UnicodeString& result,
                                       UBool escapeUnprintable) const {
-//    if (pat.length() > 0) {
-//        int32_t i;
-//        int32_t backslashCount = 0;
-//        for (i=0; i<pat.length(); ++i) {
-//            UChar c = pat.charAt(i);
-//            if (_isUnprintable(c)) {
-//                // If the unprintable character is preceded by an odd
-//                // number of backslashes, then it has been escaped.
-//                // Before unescaping it, we delete the final
-//                // backslash.
-//                if ((backslashCount % 2) == 1) {
-//                    result.truncate(result.length() - 1);
-//                }
-//                _escapeUnprintable(result, c);
-//            } else {
-//                result.append(c);
-//                if (c == BACKSLASH) {
-//                    ++backslashCount;
-//                } else {
-//                    backslashCount = 0;
-//                }
-//            }
-//        }
-//        return result;
-//    }
+    if (pat.length() > 0) {
+        int32_t i;
+        int32_t backslashCount = 0;
+        for (i=0; i<pat.length(); ++i) {
+            UChar c = pat.charAt(i);
+            if (escapeUnprintable && _isUnprintable(c)) {
+                // If the unprintable character is preceded by an odd
+                // number of backslashes, then it has been escaped.
+                // Before unescaping it, we delete the final
+                // backslash.
+                if ((backslashCount % 2) == 1) {
+                    result.truncate(result.length() - 1);
+                }
+                _escapeUnprintable(result, c);
+                backslashCount = 0;
+            } else {
+                result.append(c);
+                if (c == BACKSLASH) {
+                    ++backslashCount;
+                } else {
+                    backslashCount = 0;
+                }
+            }
+        }
+        return result;
+    }
     
     return _generatePattern(result, escapeUnprintable);
 }
@@ -887,7 +888,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
     // - an intersection or subtraction operator
     // - an anchor (trailing '$', indicating RBT ether)
     UBool rebuildPattern = FALSE;
-    rebuiltPat.append(SET_OPEN);
+    UnicodeString newPat(SET_OPEN);
 
     UBool invert = FALSE;
     clear();
@@ -966,7 +967,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
         switch (mode) {
         case 0:
             if (c == SET_OPEN) {
-                mode = 1; // Next look for '^'
+                mode = 1; // Next look for '^' or ':'
                 openPos = i;
                 continue;
             } else {
@@ -979,7 +980,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
             switch (c) {
             case COMPLEMENT:
                 invert = TRUE;
-                rebuiltPat.append(c);
+                newPat.append(c);
                 continue; // Back to top to fetch next character
             case COLON:
                 if (i == openPos+1) {
@@ -987,9 +988,9 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
                     --i;
                     c = SET_OPEN;
                     mode = 3;
-                    rebuildPattern = TRUE;
-                    rebuiltPat.append(c);
-                    // Fall through and parse category normally
+                    // Fall through and parse category using the same
+                    // code used to parse a nested category.  The mode
+                    // will indicate that this is actually top level.
                 }
                 break; // Fall through
             case HYPHEN:
@@ -1056,6 +1057,9 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
             /* An opening bracket indicates the first bracket of a nested
              * subpattern, either a normal pattern or a category pattern.  We
              * recognize these here and set nestedSet accordingly.
+             *
+             * The other way we wind up here is with a top level category.
+             * If that is the case, the mode will be set accordingly.
              */
             else if (!isLiteral && c == SET_OPEN) {
                 // Handle "[:...:]", representing a character category
@@ -1076,6 +1080,19 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
                         return;
                     }
                     i = j+1; // Make i point to ']' in ":]"
+
+                    // Use a rebuilt pattern.  If we are top level,
+                    // then there is already a SET_OPEN in newPat, and
+                    // SET_CLOSE will be appended elsewhere.
+                    if (mode != 3) {
+                        newPat.append(SET_OPEN);
+                    }
+                    newPat.append(COLON).append(scratch).append(COLON);
+                    if (mode != 3) {
+                        newPat.append(SET_CLOSE);
+                    }
+                    rebuildPattern = TRUE;
+
                     if (mode == 3) {
                         // Entire pattern is a category; leave parse
                         // loop.  This is oneof 2 ways we leave this
@@ -1089,10 +1106,10 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
                     switch (lastOp) {
                     case HYPHEN:
                     case INTERSECTION:
-                        rebuiltPat.append(lastOp);
+                        newPat.append(lastOp);
                         break;
                     }
-                    nestedAux._applyPattern(pattern, pos, symbols, rebuiltPat, status);
+                    nestedAux._applyPattern(pattern, pos, symbols, newPat, status);
                     nestedSet = &nestedAux;
                     if (U_FAILURE(status)) {
                         return;
@@ -1118,7 +1135,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
                     return;
                 }
                 add(lastChar, lastChar);
-                _appendToPat(rebuiltPat, lastChar, FALSE);
+                _appendToPat(newPat, lastChar, FALSE);
                 lastChar = -1;
             }
             switch (lastOp) {
@@ -1145,7 +1162,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
             }
             if (anchor == 2) {
                 rebuildPattern = TRUE;
-                rebuiltPat.append((UChar)SymbolTable::SYMBOL_REF);
+                newPat.append((UChar)SymbolTable::SYMBOL_REF);
                 add(TransliterationRule::ETHER);
             }
             break;
@@ -1161,9 +1178,9 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
                 return;
             }
             add(lastChar, c);
-            _appendToPat(rebuiltPat, lastChar, FALSE);
-            rebuiltPat.append(HYPHEN);
-            _appendToPat(rebuiltPat, c, FALSE);
+            _appendToPat(newPat, lastChar, FALSE);
+            newPat.append(HYPHEN);
+            _appendToPat(newPat, c, FALSE);
             lastOp = 0;
             lastChar = -1;
         } else if (lastOp != 0) {
@@ -1175,7 +1192,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
             if (lastChar >= 0) {
                 // We have <char><char>
                 add(lastChar, lastChar);
-                _appendToPat(rebuiltPat, lastChar, FALSE);
+                _appendToPat(newPat, lastChar, FALSE);
             }
             lastChar = c;
         }
@@ -1183,19 +1200,21 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
 
     if (lastChar >= 0) {
         add(lastChar, lastChar);
-        _appendToPat(rebuiltPat, lastChar, FALSE);
+        _appendToPat(newPat, lastChar, FALSE);
     }
 
     // Handle unprocessed stuff preceding the closing ']'
     if (lastOp == HYPHEN) {
         // Trailing '-' is treated as literal
         add(lastOp, lastOp);
-        rebuiltPat.append(HYPHEN);
+        newPat.append(HYPHEN);
     } else if (lastOp == INTERSECTION) {
         // throw new IllegalArgumentException("Unquoted trailing " + lastOp);
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
+
+    newPat.append(SET_CLOSE);
 
     /**
      * If we saw a '^' after the initial '[' of this pattern, then perform
@@ -1219,11 +1238,13 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
 
     pos.setIndex(i+1);
 
-    // Rebuild the pattern if needed.  See above for criteria.
+    // Use the rebuilt pattern (newPat) only if necessary.  Prefer the
+    // generated pattern.
     if (rebuildPattern) {
-        //rebuiltPat.setCharAt(0, (UChar) 1);
+        rebuiltPat.append(newPat);
+    } else {
+        _generatePattern(rebuiltPat, FALSE);
     }
-    rebuiltPat.append(SET_CLOSE);
 }
 
 //----------------------------------------------------------------
