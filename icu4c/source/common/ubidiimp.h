@@ -112,15 +112,6 @@ static Flags flagO[2]={ DIRPROP_FLAG(LRO), DIRPROP_FLAG(RLO) };
 
 #define IS_DEFAULT_LEVEL(level) (((level)&0xfe)==0xfe)
 
-/* handle surrogate pairs --------------------------------------------------- */
-
-#define IS_FIRST_SURROGATE(uchar) (((uchar)&0xfc00)==0xd800)
-#define IS_SECOND_SURROGATE(uchar) (((uchar)&0xfc00)==0xdc00)
-
-/* get the UTF-32 value directly from the surrogate pseudo-characters */
-#define SURROGATE_OFFSET ((0xd800<<10UL)+0xdc00-0x10000)
-#define GET_UTF_32(first, second) (((first)<<10UL)+(second)-SURROGATE_OFFSET)
-
 /* Run structure for reordering --------------------------------------------- */
 
 typedef struct Run {

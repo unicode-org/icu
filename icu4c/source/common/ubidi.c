@@ -445,31 +445,32 @@ static void
 getDirProps(UBiDi *pBiDi, const UChar *text) {
     DirProp *dirProps=pBiDi->dirPropsMemory;    /* pBiDi->dirProps is const */
 
-    UTextOffset i=0, length=pBiDi->length;
+    UTextOffset i=0, i0, i1, length=pBiDi->length;
     Flags flags=0;      /* collect all directionalities in the text */
-    UChar uchar;
+    UChar32 uchar;
     DirProp dirProp;
 
     if(IS_DEFAULT_LEVEL(pBiDi->paraLevel)) {
         /* determine the paragraph level (P2..P3) */
         for(;;) {
-            uchar=text[i];
-            if(!IS_FIRST_SURROGATE(uchar) || i+1==length || !IS_SECOND_SURROGATE(text[i+1])) {
-                /* not a surrogate pair */
-                flags|=DIRPROP_FLAG(dirProps[i]=dirProp=u_charDirection(uchar));
-            } else {
-                /* a surrogate pair */
-                dirProps[i++]=BN;   /* first surrogate in the pair gets the BN type */
-                flags|=DIRPROP_FLAG(dirProps[i]=dirProp=u_charDirection(GET_UTF_32(uchar, text[i])))|DIRPROP_FLAG(BN);
+            i0=i;           /* index of first code unit */
+            UTF_NEXT_CHAR(text, i, length, uchar);
+            i1=i-1;         /* index of last code unit, gets the directional property */
+            flags|=DIRPROP_FLAG(dirProps[i1]=dirProp=u_charDirection(uchar));
+            if(i1>i0) {     /* set previous code units' properties to BN */
+                flags|=DIRPROP_FLAG(BN);
+                do {
+                    dirProps[--i1]=BN;
+                } while(i1>i0);
             }
-            ++i;
+
             if(dirProp==L) {
                 pBiDi->paraLevel=0;
                 break;
             } else if(dirProp==R || dirProp==AL) {
                 pBiDi->paraLevel=1;
                 break;
-            } else if(i==length) {
+            } else if(i>=length) {
                 /*
                  * see comment in ubidi.h:
                  * the DEFAULT_XXX values are designed so that
@@ -483,16 +484,16 @@ getDirProps(UBiDi *pBiDi, const UChar *text) {
 
     /* get the rest of the directional properties and the flags bits */
     while(i<length) {
-        uchar=text[i];
-        if(!IS_FIRST_SURROGATE(uchar) || i+1==length || !IS_SECOND_SURROGATE(text[i+1])) {
-            /* not a surrogate pair */
-            flags|=DIRPROP_FLAG(dirProps[i]=u_charDirection(uchar));
-        } else {
-            /* a surrogate pair */
-            dirProps[i++]=BN;   /* second surrogate in the pair gets the BN type */
-            flags|=DIRPROP_FLAG(dirProps[i]=u_charDirection(GET_UTF_32(uchar, text[i])))|DIRPROP_FLAG(BN);
+        i0=i;           /* index of first code unit */
+        UTF_NEXT_CHAR(text, i, length, uchar);
+        i1=i-1;         /* index of last code unit, gets the directional property */
+        flags|=DIRPROP_FLAG(dirProps[i1]=dirProp=u_charDirection(uchar));
+        if(i1>i0) {     /* set previous code units' properties to BN */
+            flags|=DIRPROP_FLAG(BN);
+            do {
+                dirProps[--i1]=BN;
+            } while(i1>i0);
         }
-        ++i;
     }
     if(flags&MASK_EMBEDDING) {
         flags|=DIRPROP_FLAG_LR(pBiDi->paraLevel);
