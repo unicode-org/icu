@@ -1173,19 +1173,29 @@ static void TestAlias() {
         }
     }
 
+
     /* Check a list of predetermined aliases that we expect to map
      * back to ISO_2022 and UTF-8. */
     for (i=1; i<ISO_2022_NAMES_LENGTH; ++i) {
         const char* mapBack = ucnv_getAlias(ISO_2022_NAMES[i], 0, &status);
+        if(!mapBack) {
+          log_data_err("Couldn't get alias for %s. You probably have no data\n", ISO_2022_NAMES[i]);
+          continue;
+        }
         if (0 != strcmp(mapBack, ISO_2022_NAMES[0])) {
             log_err("FAIL: \"%s\" -> \"%s\", expect ISO_2022\n",
                     ISO_2022_NAMES[i], mapBack);
         }
     }
 
+
     for (i=1; i<UTF8_NAMES_LENGTH; ++i) {
         const char* mapBack = ucnv_getAlias(UTF8_NAMES[i], 0, &status);
-        if (0 != strcmp(mapBack, UTF8_NAMES[0])) {
+        if(!mapBack) {
+          log_data_err("Couldn't get alias for %s. You probably have no data\n", UTF8_NAMES[i]);
+          continue;
+        }
+        if (mapBack && 0 != strcmp(mapBack, UTF8_NAMES[0])) {
             log_err("FAIL: \"%s\" -> \"%s\", expect UTF-8\n",
                     UTF8_NAMES[i], mapBack);
         }
@@ -1198,6 +1208,10 @@ static void TestAlias() {
 
     for (i = 0; i < CONVERTERS_NAMES_LENGTH; ++i) {
         const char* mapBack = ucnv_getAlias(CONVERTERS_NAMES[i].alias, 0, &status);
+        if(!mapBack) {
+          log_data_err("Couldn't get alias for %s. You probably have no data\n", CONVERTERS_NAMES[i]);
+          continue;
+        }
         if (0 != strcmp(mapBack, CONVERTERS_NAMES[i].name)) {
             log_err("FAIL: \"%s\" -> \"%s\", expect %s\n",
                     CONVERTERS_NAMES[i].alias, mapBack, CONVERTERS_NAMES[i].name);

@@ -1178,6 +1178,7 @@ static void TestUnicodeData()
     }
     if(U_FAILURE(errorCode)) {
         log_err("error parsing UnicodeData.txt: %s\n", u_errorName(errorCode));
+        return; /* if we couldn't parse UnicodeData.txt, we should return */
     }
 
     /* sanity check on repeated properties */
@@ -2392,15 +2393,22 @@ TestNumericProperties(void) {
 static void
 TestPropertyNames(void) {
     int32_t p, v, choice, rev;
+    UBool atLeastSomething = FALSE;
 
     for (p=0; ; ++p) {
         UBool sawProp = FALSE;
+        if(p > 10 && !atLeastSomething) {
+          log_data_err("Never got anything after 10 tries.\nYour data is probably fried. Quitting this test\n", p, choice);
+          return;
+        }
+
         for (choice=0; ; ++choice) {
             const char* name = u_getPropertyName(p, choice);
             if (name) {
                 if (!sawProp) log_verbose("prop 0x%04x+%2d:", p&~0xfff, p&0xfff);
                 log_verbose("%d=\"%s\"", choice, name);
                 sawProp = TRUE;
+                atLeastSomething = TRUE;
 
                 /* test reverse mapping */
                 rev = u_getPropertyEnum(name);
