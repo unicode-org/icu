@@ -581,9 +581,15 @@ UnicodeStringTest::TestRemoveReplace()
               "  expected \"The SPAM in SPAM SPAM SPAM on the SPAM\",\n"
               "  got \"" + test1 + "\"");
 
-    for (int32_t i = 0; i < test1.length(); i++)
-        if (test5[i] != 0x53 && test5[i] != 0x50 && test5[i] != 0x41 && test5[i] != 0x4d && test5[i] != 0x20)
+    for (int32_t i = 0; i < test1.length(); i++) {
+        if (test5[i] != 0x53 && test5[i] != 0x50 && test5[i] != 0x41 && test5[i] != 0x4d && test5[i] != 0x20) {
+#ifdef U_USE_DEPRECATED_UCHAR_REFERENCE
             test1[i] = 0x78;
+#else
+            test1.setCharAt(i, 0x78);
+#endif
+        }
+    }
 
     if (test1 != "xxx SPAM xx SPAM SPAM SPAM xx xxx SPAM")
         errln("One of the remove methods failed:\n"

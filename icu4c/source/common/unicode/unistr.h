@@ -1238,7 +1238,7 @@ public:
    * @returns the code unit at offset <tt>offset</tt>
    * @stable
    */
-  inline UChar operator [] (int32_t offset) const;
+  inline UChar operator[] (int32_t offset) const;
 
   /**
    * Return the code point that contains the code unit
@@ -2777,14 +2777,21 @@ public:
               int32_t length = INT32_MAX,
               UBool asian = TRUE) const;
 
+#ifdef U_USE_DEPRECATED_UCHAR_REFERENCE
   /**
    * Return a modifiable reference to a code unit of the string.
+   * This is unsafe because copying the UCharReference can leave it with
+   * a dangling pointer to this UnicodeString object.
+   * It also causes inefficient code because in most cases, the r-value
+   * operator[] const is intended to be used instead of creating
+   * a UCharReference object.
    *
    * @param pos The index of the code unit to refer to.
    * @return A modifiable UCharReference to that code unit.
-   * @stable
+   * @deprecated since ICU 2.4. Use charAt(), setCharAt(), and operator[] const instead.
    */
   UCharReference operator[] (int32_t pos);
+#endif
 
   /**
    * Unescape a string of characters and return a string containing
@@ -3992,6 +3999,7 @@ inline const UChar*
 UnicodeString::getArrayStart() const
 { return fArray; }
 
+#ifdef U_USE_DEPRECATED_UCHAR_REFERENCE
 
 //========================================
 // class UCharReference
@@ -4000,7 +4008,8 @@ UnicodeString::getArrayStart() const
 /**
  * A proxy class to allow the UnicodeString::operator[] function to
  * work as a readable and a writable operator.
- * @stable
+ * @deprecated since ICU 2.4. Use charAt(), setCharAt(), and operator[] const
+ * instead of non-const UnicodeString::operator[].
  */
 class U_COMMON_API UCharReference : public UObject {
 public:
@@ -4070,6 +4079,8 @@ UCharReference::operator= (UChar c)
 inline
 UCharReference::operator UChar()
 { return fString->charAt(fPos); }
+
+#endif
 
 U_NAMESPACE_END
 
