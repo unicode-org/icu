@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CanonicalIterator.java,v $ 
- * $Date: 2002/02/25 22:43:58 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/03/09 02:48:33 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -21,31 +21,21 @@ import java.util.*;
 /**
  * This class allows one to iterate through all the strings that are canonically equivalent to a given
  * string. For example, here are some sample results:
-Results for: {LATIN CAPITAL LETTER A WITH RING ABOVE}{LATIN SMALL LETTER D}{COMBINING DOT ABOVE}{COMBINING CEDILLA}
-1: \u0041\u030A\u0064\u0307\u0327
- = {LATIN CAPITAL LETTER A}{COMBINING RING ABOVE}{LATIN SMALL LETTER D}{COMBINING DOT ABOVE}{COMBINING CEDILLA}
-2: \u0041\u030A\u0064\u0327\u0307
- = {LATIN CAPITAL LETTER A}{COMBINING RING ABOVE}{LATIN SMALL LETTER D}{COMBINING CEDILLA}{COMBINING DOT ABOVE}
-3: \u0041\u030A\u1E0B\u0327
- = {LATIN CAPITAL LETTER A}{COMBINING RING ABOVE}{LATIN SMALL LETTER D WITH DOT ABOVE}{COMBINING CEDILLA}
-4: \u0041\u030A\u1E11\u0307
- = {LATIN CAPITAL LETTER A}{COMBINING RING ABOVE}{LATIN SMALL LETTER D WITH CEDILLA}{COMBINING DOT ABOVE}
-5: \u00C5\u0064\u0307\u0327
- = {LATIN CAPITAL LETTER A WITH RING ABOVE}{LATIN SMALL LETTER D}{COMBINING DOT ABOVE}{COMBINING CEDILLA}
-6: \u00C5\u0064\u0327\u0307
- = {LATIN CAPITAL LETTER A WITH RING ABOVE}{LATIN SMALL LETTER D}{COMBINING CEDILLA}{COMBINING DOT ABOVE}
-7: \u00C5\u1E0B\u0327
- = {LATIN CAPITAL LETTER A WITH RING ABOVE}{LATIN SMALL LETTER D WITH DOT ABOVE}{COMBINING CEDILLA}
-8: \u00C5\u1E11\u0307
- = {LATIN CAPITAL LETTER A WITH RING ABOVE}{LATIN SMALL LETTER D WITH CEDILLA}{COMBINING DOT ABOVE}
-9: \u212B\u0064\u0307\u0327
- = {ANGSTROM SIGN}{LATIN SMALL LETTER D}{COMBINING DOT ABOVE}{COMBINING CEDILLA}
-10: \u212B\u0064\u0327\u0307
- = {ANGSTROM SIGN}{LATIN SMALL LETTER D}{COMBINING CEDILLA}{COMBINING DOT ABOVE}
-11: \u212B\u1E0B\u0327
- = {ANGSTROM SIGN}{LATIN SMALL LETTER D WITH DOT ABOVE}{COMBINING CEDILLA}
-12: \u212B\u1E11\u0307
- = {ANGSTROM SIGN}{LATIN SMALL LETTER D WITH CEDILLA}{COMBINING DOT ABOVE}
+ * Results for: {A WITH RING ABOVE}{d}{DOT ABOVE}{CEDILLA}
+ * <pre>
+ 1: {A}{RING ABOVE}{d}{DOT ABOVE}{CEDILLA}
+ 2: {A}{RING ABOVE}{d}{CEDILLA}{DOT ABOVE}
+ 3: {A}{RING ABOVE}{d WITH DOT ABOVE}{CEDILLA}
+ 4: {A}{RING ABOVE}{d WITH CEDILLA}{DOT ABOVE}
+ 5: {A WITH RING ABOVE}{d}{DOT ABOVE}{CEDILLA}
+ 6: {A WITH RING ABOVE}{d}{CEDILLA}{DOT ABOVE}
+ 7: {A WITH RING ABOVE}{d WITH DOT ABOVE}{CEDILLA}
+ 8: {A WITH RING ABOVE}{d WITH CEDILLA}{DOT ABOVE}
+ 9: {ANGSTROM SIGN}{d}{DOT ABOVE}{CEDILLA}
+10: {ANGSTROM SIGN}{d}{CEDILLA}{DOT ABOVE}
+11: {ANGSTROM SIGN}{d WITH DOT ABOVE}{CEDILLA}
+12: {ANGSTROM SIGN}{d WITH CEDILLA}{DOT ABOVE}
+ *</pre>
  *<br>Note: the code is intended for use with small strings, and is not suitable for larger ones,
  * since it has not been optimized for that situation.
  *@author M. Davis
@@ -61,7 +51,7 @@ public class CanonicalIterator {
     }
     
     /**
-     *@return gets the source: NOTE: it is the NFD form of source
+     *@return gets the source: NOTE: it is the NFD form of the source originally passed in
      */
     public String getSource() {
       return source;
@@ -138,12 +128,13 @@ public class CanonicalIterator {
     }
     
     /**
-     * Dumb recursive implementation of permutation. 
-     * TODO: optimize
+     * Simple implementation of permutation. 
      * @param source the string to find permutations for
      * @return the results in a set.
+     * @internal
      */
     public static Set permute(String source) {
+    	// TODO: optimize
         //if (PROGRESS) System.out.println("Permute: " + source);
         Set result = new TreeSet();
         
@@ -179,6 +170,7 @@ public class CanonicalIterator {
     
     /**
      *@return the set of "safe starts", characters that are class zero AND are never non-initial in a decomposition.
+     *@internal
      */
     public static UnicodeSet getSafeStart() {
         return (UnicodeSet) SAFE_START.clone();
@@ -186,6 +178,7 @@ public class CanonicalIterator {
     
     /**
      *@return the set of characters whose decompositions start with the given character
+     *@internal
      */
     public static UnicodeSet getStarts(int cp) {
         UnicodeSet result = AT_START.get(cp);
