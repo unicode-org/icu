@@ -1775,10 +1775,12 @@ public:
    * A "bogus" string does not contain a string value, and getBuffer()
    * and similar will return NULL.
    *
-   * The string object can be "revived" by assigning (operator=() or fastCopyFrom())
-   * another string, or by using one of the other setToXYZ functions,
-   * or by using truncate() and remove() in ways that are always equivalent to assigning
-   * an empty string. See examples below.
+   * The following methods, and no others, will clear a string object's bogus flag:
+   * - remove()
+   * - remove(0, INT32_MAX)
+   * - truncate(0)
+   * - operator=() (assignment operator)
+   * - setTo(...)
    *
    * The simplest ways to turn a bogus string into an empty one
    * is to use the remove() function.
