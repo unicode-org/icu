@@ -110,9 +110,15 @@ typedef struct UConverterSharedData UConverterSharedData;
 
 U_CFUNC UChar32
 _MBCSSimpleGetNextUChar(UConverterSharedData *sharedData,
-                        const char **pSource, const char *sourceLimit);
+                        const char **pSource, const char *sourceLimit,
+                        UBool useFallback);
 
 U_CFUNC UBool
 _MBCSIsLeadByte(UConverterSharedData *sharedData, char byte);
+
+U_CFUNC int32_t
+_MBCSFromUChar32(UConverterSharedData *sharedData,
+                 UChar32 c, uint32_t *pValue,
+                 UBool useFallback);
 
 #endif
