@@ -9,7 +9,7 @@ SHELL = @SHELL@
 VERSION = @VERSION@
 UNICODE_VERSION = @UNICODE_VERSION@
 
-ICUDATADIR=$(top_builddir)/../data/
+ICUDATADIR=@DATABUILDDIR@
 UNICODEFILE=$(top_builddir)/../data/UnicodeData-$(UNICODE_VERSION).txt
 
 ## Install directory information
@@ -55,7 +55,7 @@ CLEANFILES = *~
 TARGET = gentest
 
 DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common -I../toolutil
+CPPFLAGS = @CPPFLAGS@ -I$(top_srcdir)/common -I$(srcdir)/../toolutil
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 LDFLAGS = @LDFLAGS@ \
@@ -69,7 +69,7 @@ DEPS = $(OBJECTS:.o=.d)
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local		\
-distclean distclean-local target-clean-local dist dist-local check	\
+distclean distclean-local dist dist-local check	\
 check-local build-data
 
 ## Clear suffix list
@@ -85,7 +85,7 @@ check: check-local
 
 all-local: $(TARGET) build-data
 
-install-local: target-clean-local all-local build-data
+install-local: all-local build-data
 	$(mkinstalldirs) $(sbindir)
 	$(INSTALL) $(TARGET) $(sbindir)/$(TARGET)
 
@@ -98,12 +98,9 @@ $(ICUDATADIR)/test.dat: $(TARGET)
 
 dist-local:
 
-target-clean-local:
-	rm -f $(TARGET)
-
-clean-local: target-clean-local
+clean-local: 
 	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
-	rm -f $(OBJECTS)
+	rm -f $(TARGET) $(OBJECTS)
 
 distclean-local: clean-local
 	rm -f Makefile $(DEPS) $(RES_FILES) $(TEST_FILES)
