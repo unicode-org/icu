@@ -51,7 +51,7 @@ ucase_swap(const UDataSwapper *ds,
            UErrorCode *pErrorCode);
 
 U_CAPI void U_EXPORT2
-ucase_addPropertyStarts(const UCaseProps *csp, USetAdder *sa, UErrorCode *pErrorCode);
+ucase_addPropertyStarts(const UCaseProps *csp, const USetAdder *sa, UErrorCode *pErrorCode);
 
 /**
  * Bit mask for getting just the options from a string compare options word
@@ -82,6 +82,33 @@ ucase_totitle(const UCaseProps *csp, UChar32 c);
 
 U_CAPI UChar32 U_EXPORT2
 ucase_fold(UCaseProps *csp, UChar32 c, uint32_t options);
+
+/**
+ * Adds all simple case mappings and the full case folding for c to sa,
+ * and also adds special case closure mappings.
+ * c itself is not added.
+ * For example, the mappings
+ * - for s include long s
+ * - for sharp s include ss
+ * - for k include the Kelvin sign
+ */
+U_CAPI void U_EXPORT2
+ucase_addCaseClosure(const UCaseProps *csp, UChar32 c, const USetAdder *sa);
+
+/**
+ * Maps the string to single code points and adds the associated case closure
+ * mappings.
+ * The string is mapped to code points if it is their full case folding string.
+ * In other words, this performs a reverse full case folding and then
+ * adds the case closure items of the resulting code points.
+ * If the string is found and its closure applied, then
+ * the string itself is added as well as part of its code points' closure.
+ * It must be length>=0.
+ *
+ * @return TRUE if the string was found
+ */
+U_CAPI UBool U_EXPORT2
+ucase_addStringCaseClosure(const UCaseProps *csp, const UChar *s, int32_t length, const USetAdder *sa);
 
 /** @return UCASE_NONE, UCASE_LOWER, UCASE_UPPER, UCASE_TITLE */
 U_CAPI int32_t U_EXPORT2
@@ -211,6 +238,7 @@ enum {
     UCASE_IX_LENGTH,
     UCASE_IX_TRIE_SIZE,
     UCASE_IX_EXC_LENGTH,
+    UCASE_IX_UNFOLD_LENGTH,
 
     UCASE_IX_MAX_FULL_LENGTH=15,
     UCASE_IX_TOP=16
@@ -226,6 +254,8 @@ enum {
     UCASE_UPPER,
     UCASE_TITLE
 };
+
+#define UCASE_GET_TYPE(props) ((props)&UCASE_TYPE_MASK)
 
 #define UCASE_SENSITIVE     4
 #define UCASE_EXCEPTION     8
@@ -264,7 +294,7 @@ enum {
     UCASE_EXC_TITLE,
     UCASE_EXC_4,            /* reserved */
     UCASE_EXC_5,            /* reserved */
-    UCASE_EXC_6,            /* reserved */
+    UCASE_EXC_CLOSURE,
     UCASE_EXC_FULL_MAPPINGS,
     UCASE_EXC_ALL_SLOTS     /* one past the last slot */
 };
@@ -295,6 +325,17 @@ enum {
 #define UCASE_FULL_FOLDING  0xf0
 #define UCASE_FULL_UPPER    0xf00
 #define UCASE_FULL_TITLE    0xf000
+
+/* maximum lengths */
+#define UCASE_FULL_MAPPINGS_MAX_LENGTH (4*0xf)
+#define UCASE_CLOSURE_MAX_LENGTH 0xf
+
+/* constants for reverse case folding ("unfold") data */
+enum {
+    UCASE_UNFOLD_ROWS,
+    UCASE_UNFOLD_ROW_WIDTH,
+    UCASE_UNFOLD_STRING_WIDTH
+};
 
 U_CDECL_END
 

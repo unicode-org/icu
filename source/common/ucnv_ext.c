@@ -932,7 +932,7 @@ ucnv_extContinueMatchFromU(UConverter *cnv,
 static void
 ucnv_extGetUnicodeSetString(const UConverterSharedData *sharedData,
                             const int32_t *cx,
-                            USetAdder *sa,
+                            const USetAdder *sa,
                             UConverterUnicodeSet which,
                             int32_t minLength,
                             UChar32 c,
@@ -989,7 +989,7 @@ ucnv_extGetUnicodeSetString(const UConverterSharedData *sharedData,
 
 U_CFUNC void
 ucnv_extGetUnicodeSet(const UConverterSharedData *sharedData,
-                      USetAdder *sa,
+                      const USetAdder *sa,
                       UConverterUnicodeSet which,
                       UErrorCode *pErrorCode) {
     const int32_t *cx;

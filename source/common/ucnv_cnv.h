@@ -171,7 +171,7 @@ typedef UConverter * (*UConverterSafeClone) (const UConverter   *cnv,
  * For more documentation, see ucnv_getUnicodeSet() in ucnv.h.
  */
 typedef void (*UConverterGetUnicodeSet) (const UConverter *cnv,
-                                         USetAdder *sa,
+                                         const USetAdder *sa,
                                          UConverterUnicodeSet which,
                                          UErrorCode *pErrorCode);
 
@@ -246,13 +246,13 @@ U_CDECL_END
 
 U_CFUNC void
 ucnv_getCompleteUnicodeSet(const UConverter *cnv,
-                   USetAdder *sa,
+                   const USetAdder *sa,
                    UConverterUnicodeSet which,
                    UErrorCode *pErrorCode);
 
 U_CFUNC void
 ucnv_getNonSurrogateUnicodeSet(const UConverter *cnv,
-                               USetAdder *sa,
+                               const USetAdder *sa,
                                UConverterUnicodeSet which,
                                UErrorCode *pErrorCode);
 

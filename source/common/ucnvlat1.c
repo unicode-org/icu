@@ -332,7 +332,7 @@ noMoreInput:
 
 static void
 _Latin1GetUnicodeSet(const UConverter *cnv,
-                     USetAdder *sa,
+                     const USetAdder *sa,
                      UConverterUnicodeSet which,
                      UErrorCode *pErrorCode) {
     sa->addRange(sa->set, 0, 0xff);
@@ -534,7 +534,7 @@ _ASCIIGetNextUChar(UConverterToUnicodeArgs *pArgs,
 
 static void
 _ASCIIGetUnicodeSet(const UConverter *cnv,
-                    USetAdder *sa,
+                    const USetAdder *sa,
                     UConverterUnicodeSet which,
                     UErrorCode *pErrorCode) {
     sa->addRange(sa->set, 0, 0x7f);

@@ -19,7 +19,6 @@ U_NAMESPACE_BEGIN
 class ParsePosition;
 class SymbolTable;
 class UVector;
-class CaseEquivClass;
 class RuleCharacterIterator;
 
 /**
@@ -1324,20 +1323,6 @@ private:
     static const UnicodeSet* getInclusions(int32_t src, UErrorCode &errorCode);
 
     friend class UnicodeSetIterator;
-
-    //----------------------------------------------------------------
-    // Implementation: closeOver
-    //----------------------------------------------------------------
-
-    void caseCloseOne(const UnicodeString& folded);
-
-    void caseCloseOne(const CaseEquivClass& c);
-
-    void caseCloseOne(UChar folded);
-
-    static const CaseEquivClass* getCaseMapOf(const UnicodeString& folded);
-
-    static const CaseEquivClass* getCaseMapOf(UChar folded);
 };
 
 inline UBool UnicodeSet::operator!=(const UnicodeSet& o) const {

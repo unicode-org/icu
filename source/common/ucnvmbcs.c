@@ -344,7 +344,7 @@ gb18030Ranges[13][4]={
 static void
 _getUnicodeSetForBytes(const UConverterSharedData *sharedData,
                        const int32_t (*stateTable)[256], const uint16_t *unicodeCodeUnits,
-                       USetAdder *sa,
+                       const USetAdder *sa,
                        UConverterUnicodeSet which,
                        uint8_t state, uint32_t offset, int32_t lowByte, int32_t highByte,
                       
@@ -421,7 +421,7 @@ _getUnicodeSetForBytes(const UConverterSharedData *sharedData,
  */
 U_CFUNC void
 ucnv_MBCSGetUnicodeSetForBytes(const UConverterSharedData *sharedData,
-                           USetAdder *sa,
+                           const USetAdder *sa,
                            UConverterUnicodeSet which,
                            uint8_t state, int32_t lowByte, int32_t highByte,
                            UErrorCode *pErrorCode) {
@@ -434,7 +434,7 @@ ucnv_MBCSGetUnicodeSetForBytes(const UConverterSharedData *sharedData,
 
 U_CFUNC void
 ucnv_MBCSGetUnicodeSetForUnicode(const UConverterSharedData *sharedData,
-                             USetAdder *sa,
+                             const USetAdder *sa,
                              UConverterUnicodeSet which,
                              UErrorCode *pErrorCode) {
     const UConverterMBCSTable *mbcsTable;
@@ -571,7 +571,7 @@ ucnv_MBCSGetUnicodeSetForUnicode(const UConverterSharedData *sharedData,
 
 static void
 ucnv_MBCSGetUnicodeSet(const UConverter *cnv,
-                   USetAdder *sa,
+                   const USetAdder *sa,
                    UConverterUnicodeSet which,
                    UErrorCode *pErrorCode) {
     if(cnv->options&_MBCS_OPTION_GB18030) {

@@ -400,7 +400,7 @@ uprops_getSource(UProperty which) {
 #if 0
 
 U_CAPI void U_EXPORT2
-uprv_getInclusions(USetAdder *sa, UErrorCode *pErrorCode) {
+uprv_getInclusions(const USetAdder *sa, UErrorCode *pErrorCode) {
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return;
     }

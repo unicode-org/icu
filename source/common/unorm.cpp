@@ -262,7 +262,7 @@ isAcceptable(void * /* context */,
 static UBool U_CALLCONV
 _enumPropertyStartsRange(const void *context, UChar32 start, UChar32 /*limit*/, uint32_t /*value*/) {
     /* add the start code point to the USet */
-    USetAdder *sa=(USetAdder *)context;
+    const USetAdder *sa=(const USetAdder *)context;
     sa->add(sa->set, start);
     return TRUE;
 }
@@ -1129,7 +1129,7 @@ unorm_isNFSkippable(UChar32 c, UNormalizationMode mode) {
 }
 
 U_CAPI void U_EXPORT2
-unorm_addPropertyStarts(USetAdder *sa, UErrorCode *pErrorCode) {
+unorm_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode) {
     UChar c;
 
     if(U_FAILURE(*pErrorCode) || !_haveData(*pErrorCode)) {
