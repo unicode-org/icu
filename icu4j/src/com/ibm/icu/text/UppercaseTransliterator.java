@@ -5,14 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UppercaseTransliterator.java,v $ 
- * $Date: 2002/02/16 03:06:23 $ 
- * $Revision: 1.6 $
+ * $Date: 2002/02/28 23:55:46 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
 import java.util.*;
-import com.ibm.icu.lang.*;
+import com.ibm.icu.impl.UnicodeProperty;
+import com.ibm.icu.impl.UCharacterIterator;
 
 /**
  * A transliterator that performs locale-sensitive toUpper()
@@ -58,22 +59,20 @@ class UppercaseTransliterator extends Transliterator {
         // get string for context
         // TODO: add convenience method to do this, since we do it all over
         
-        char[] strBuffer = new char[offsets.contextLimit - offsets.contextStart]; // get whole context
-        text.getChars(offsets.contextStart, offsets.contextLimit, strBuffer, 0);
-        String original = new String(strBuffer);
+        UCharacterIterator original = new UCharacterIterator(text);
         
         // Walk through original string
         // If there is a case change, modify corresponding position in replaceable
         
-        int i = textPos - offsets.contextStart;
-        int limit = offsets.limit - offsets.contextStart;
+        int limit = offsets.limit;
         int cp;
         int oldLen;
         
-        for (; i < limit; i += oldLen) {
-            cp = UTF16.charAt(original, i);
+        while (textPos < limit) {
+        	original.setIndex(textPos);
+            cp = original.currentCodepoint();
             oldLen = UTF16.getCharCount(cp);
-            int newLen = UCharacter.toUpperCase(loc, original, i, buffer);
+            int newLen = UnicodeProperty.toUpperOrTitleCase(loc, cp, original, true, buffer);
             if (newLen >= 0) {
                 text.replace(textPos, textPos + oldLen, buffer, 0, newLen);
                 if (newLen != oldLen) {
@@ -88,6 +87,6 @@ class UppercaseTransliterator extends Transliterator {
         offsets.start = offsets.limit;
     }
     
-    private char buffer[] = new char[UCharacter.getMaxCaseExpansion()];
+    private char buffer[] = new char[UnicodeProperty.MAX_CASE_MAP_SIZE];
 
 }
