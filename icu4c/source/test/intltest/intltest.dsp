@@ -217,6 +217,14 @@ SOURCE=.\itrbbi.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\itrbnf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\itrbnfrt.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\ittrans.cpp
 # End Source File
 # Begin Source File
@@ -542,6 +550,14 @@ SOURCE=.\itmajor.h
 # Begin Source File
 
 SOURCE=.\itrbbi.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\itrbnf.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\itrbnfrt.h
 # End Source File
 # Begin Source File
 
