@@ -121,7 +121,7 @@ void   T_UConverter_fromUnicode_LATIN_1 (UConverter * _this,
   return;
 }
 
-UChar T_UConverter_getNextUChar_LATIN_1(UConverter* converter,
+UChar32 T_UConverter_getNextUChar_LATIN_1(UConverter* converter,
                                                   const char** source,
                                                   const char* sourceLimit,
                                                   UErrorCode* err)

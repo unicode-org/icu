@@ -570,17 +570,16 @@ void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverter * _this,
   return;
 }
 
-UChar T_UConverter_getNextUChar_UTF8(UConverter* converter,
+UChar32 T_UConverter_getNextUChar_UTF8(UConverter* converter,
                                                const char** source,
                                                const char* sourceLimit,
                                                UErrorCode* err)
 {
-  UChar myUChar;
   /*safe keeps a ptr to the beginning in case we need to step back*/
   char const *sourceInitial = *source;
   uint16_t extraBytesToWrite;
   uint8_t myByte;
-  uint32_t ch;
+  UChar32 ch;
   int8_t isLegalSequence = 1;
 
   /*Input boundary check*/
@@ -592,7 +591,7 @@ UChar T_UConverter_getNextUChar_UTF8(UConverter* converter,
   
   myByte = (uint8_t)*((*source)++);
   if(myByte < 0x80) {
-    return (UChar)myByte;
+    return (UChar32)myByte;
   }
   extraBytesToWrite = (uint16_t)bytesFromUTF8[myByte];
   if (extraBytesToWrite == 0 || extraBytesToWrite > 4) {
@@ -648,34 +647,20 @@ UChar T_UConverter_getNextUChar_UTF8(UConverter* converter,
 
   
   if (isLegalSequence == 0) goto CALL_ERROR_FUNCTION;
-  
-  /*we got a UCS-2 Character*/
-  if (ch <= kMaximumUCS2)  return (UChar)ch;
-  /*character out of bounds*/
-  else if (ch >= kMaximumUTF16)      goto CALL_ERROR_FUNCTION;
-  /*Surrogates found*/
-  else 
-    {
-      ch -= halfBase;
-      /*stores the 2nd surrogate inside the converter for the next call*/
-      converter->UCharErrorBuffer[0] = (UChar)((ch >> halfShift) + kSurrogateHighStart);
-      converter->UCharErrorBufferLength = 1;
-      
-      /*returns the 1st surrogate*/
-      return  (UChar)((ch & halfMask) + kSurrogateLowStart);
-    }
-  
-  
+
+  return ch; /* return the code point */
+
  CALL_ERROR_FUNCTION:
   {      
     /*rewinds source*/
     const char* sourceFinal = *source;
+    UChar myUChar = (UChar)ch; /* ### TODO: this is a hack until we prepare the callbacks for code points */
     UChar* myUCharPtr = &myUChar;
     
     *err = U_ILLEGAL_CHAR_FOUND;
     *source = sourceInitial;
     
-    /*It's is very likely that the ErrorFunctor will write to the
+    /*It is very likely that the ErrorFunctor will write to the
      *internal buffers */
     converter->fromCharErrorBehaviour(converter,
                                       &myUCharPtr,
@@ -689,7 +674,7 @@ UChar T_UConverter_getNextUChar_UTF8(UConverter* converter,
     /*makes the internal caching transparent to the user*/
     if (*err == U_INDEX_OUTOFBOUNDS_ERROR) *err = U_ZERO_ERROR;
     
-    return myUChar;
+    return (UChar32)myUChar;
   }
 } 
 
@@ -836,12 +821,12 @@ void  T_UConverter_fromUnicode_UTF16_BE (UConverter * _this,
   return;
 }
 
-UChar T_UConverter_getNextUChar_UTF16_BE(UConverter* converter,
+UChar32 T_UConverter_getNextUChar_UTF16_BE(UConverter* converter,
                                                    const char** source,
                                                    const char* sourceLimit,
                                                    UErrorCode* err)
 {
-  UChar myUChar;
+  UChar32 myUChar;
   /*Checks boundaries and set appropriate error codes*/
   if ((*source)+2 > sourceLimit) 
     {
@@ -850,7 +835,7 @@ UChar T_UConverter_getNextUChar_UTF16_BE(UConverter* converter,
           /*Either caller has reached the end of the byte stream*/
           *err = U_INDEX_OUTOFBOUNDS_ERROR;
         }
-      else if (((*source)+1) == sourceLimit)
+      else
         {
           /* a character was cut in half*/
           *err = U_TRUNCATED_CHAR_FOUND;
@@ -864,6 +849,26 @@ UChar T_UConverter_getNextUChar_UTF16_BE(UConverter* converter,
 
   myUChar = ((uint16_t)((**source)) << 8) |((uint8_t)*((*source)+1));
   *source += 2;
+
+  if(UTF_IS_FIRST_SURROGATE(myUChar)) {
+    uint16_t second;
+
+    if ((*source)+2 > sourceLimit) {
+      *err = U_TRUNCATED_CHAR_FOUND;
+      return 0xFFFD;
+    }
+
+    /* get the second surrogate and assemble the code point */
+    second = ((uint16_t)((**source)) << 8) |((uint8_t)*((*source)+1));
+
+    /* ignore unmatched surrogates and just deliver the first one in such a case */
+    if(UTF_IS_SECOND_SURROGATE(second)) {
+      /* matched pair, get pair value */
+      myUChar = UTF16_GET_PAIR_VALUE(myUChar, second);
+      *source += 2;
+    }
+  }
+
   return myUChar;
 } 
 
@@ -1014,12 +1019,12 @@ void   T_UConverter_fromUnicode_UTF16_LE (UConverter * _this,
   return;
 }
 
-UChar T_UConverter_getNextUChar_UTF16_LE(UConverter* converter,
+UChar32 T_UConverter_getNextUChar_UTF16_LE(UConverter* converter,
                                                    const char** source,
                                                    const char* sourceLimit,
                                                    UErrorCode* err)
 {
-  UChar myUChar;
+  UChar32 myUChar;
   /*Checks boundaries and set appropriate error codes*/
   if ((*source)+2 > sourceLimit) 
     {
@@ -1028,7 +1033,7 @@ UChar T_UConverter_getNextUChar_UTF16_LE(UConverter* converter,
           /*Either caller has reached the end of the byte stream*/
           *err = U_INDEX_OUTOFBOUNDS_ERROR;
         }
-      else if (((*source)+1) == sourceLimit)
+      else
         {
           /* a character was cut in half*/
           *err = U_TRUNCATED_CHAR_FOUND;
@@ -1042,6 +1047,26 @@ UChar T_UConverter_getNextUChar_UTF16_LE(UConverter* converter,
   myUChar =  ((uint16_t)*((*source)+1) << 8) |((uint8_t)((**source)));
   /*updates the source*/
   *source += 2;  
+
+  if(UTF_IS_FIRST_SURROGATE(myUChar)) {
+    uint16_t second;
+
+    if ((*source)+2 > sourceLimit) {
+      *err = U_TRUNCATED_CHAR_FOUND;
+      return 0xFFFD;
+    }
+
+    /* get the second surrogate and assemble the code point */
+    second = ((uint16_t)*((*source)+1) << 8) |((uint8_t)((**source)));
+
+    /* ignore unmatched surrogates and just deliver the first one in such a case */
+    if(UTF_IS_SECOND_SURROGATE(second)) {
+      /* matched pair, get pair value */
+      myUChar = UTF16_GET_PAIR_VALUE(myUChar, second);
+      *source += 2;
+    }
+  }
+
   return myUChar;
 } 
 

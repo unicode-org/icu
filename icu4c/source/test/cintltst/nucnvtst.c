@@ -710,7 +710,8 @@ TestUTF8() {
         0x61,
         0xc0, 0x80,
         0xe0, 0x80, 0x80,
-        0xf0, 0x80, 0x80, 0x80
+        0xf0, 0x80, 0x80, 0x80,
+        0xf4, 0x84, 0x8c, 0xa1
     };
 
     /* expected test results */
@@ -720,6 +721,7 @@ TestUTF8() {
         2, 0,
         3, 0,
         4, 0,
+        4, 0x104321
     };
 
     const char *s=(const char *)in, *s0, *limit=(const char *)in+sizeof(in);
@@ -739,7 +741,7 @@ TestUTF8() {
         if(U_FAILURE(errorCode)) {
             log_err("UTF-8 ucnv_getNextUChar() failed: %s\n", u_errorName(errorCode));
             break;
-        } else if((uint32_t)(s-s0)!=*r || c!=*(r+1)) {
+        } else if((uint32_t)(s-s0)!=*r || c!=(UChar32)*(r+1)) {
             log_err("UTF-8 ucnv_getNextUChar() result %lx from %d bytes, should have been %lx from %d bytes.\n",
                 c, (s-s0), *(r+1), *r);
             break;
@@ -762,7 +764,10 @@ TestLMBCS() {
         0x0F, 0x91,
         0x14, 0x0a, 0x74,
         0x14, 0xF6, 0x02, 
-        0x10, 0x88, 0xA0
+        0x10, 0x88, 0xA0,
+        0x14, 0xd8, 0x4d, /* single UTF-16 high (first) surrogate */
+        0x14, 0x01, 0x09, /* followed by a Unicode c^ */
+        0x14, 0xd8, 0x4d, 0x14, 0xdc, 0x56 /* UTF-16 surrogate pair */
     };
 
     /* expected test results */
@@ -776,8 +781,10 @@ TestLMBCS() {
         2, 0x0091,
         3, 0x0a74,
         3, 0x0200,
-        3, 0x5516
-
+        3, 0x5516,
+        3, 0xd84d,
+        3, 0x0109,
+        6, 0x23456 /* code point for above surrogate pair */
     };
 
     const char *s=(const char *)in, *s0, *limit=(const char *)in+sizeof(in);
@@ -799,7 +806,7 @@ TestLMBCS() {
          if(U_FAILURE(errorCode)) {
                log_err("LMBCS-1 ucnv_getNextUChar() failed: %s\n", u_errorName(errorCode));
                break;
-         } else if((uint32_t)(s-s0)!=*r || c!=*(r+1)) {
+         } else if((uint32_t)(s-s0)!=*r || c!=(UChar32)*(r+1)) {
                log_err("LMBCS-1 ucnv_getNextUChar() result %lx from %d bytes, should have been %lx from %d bytes.\n",
                    c, (s-s0), *(r+1), *r);
                break;
@@ -818,7 +825,7 @@ void TestJitterbug255()
                                (char)0xb7, (char)0x0d, (char)0x0a, 0x0000 };
     char *testBuffer = (char*)testBytes, *testEnd = (char*)testBytes+strlen(testBytes)+1;
     UErrorCode status = U_ZERO_ERROR;
-    UChar result;
+    UChar32 result;
     UConverter *cnv = 0;
 
     cnv = ucnv_open("shift-jis", &status); 
