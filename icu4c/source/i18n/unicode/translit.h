@@ -722,27 +722,6 @@ public:
 private:
 
     /**
-     * This is the path to the subdirectory within the locale data
-     * directory that contains the rule-based transliterator resource
-     * bundle files.  This is constructed dynamically the first time
-     * Transliterator::getDataDirectory() is called.
-     */
-    static char* DATA_DIR;
-    
-    /**
-     * This is the name of a subdirectory within the locale data directory
-     * that contains the rule-based transliterator resource bundle files.
-     */
-    static const char* RESOURCE_SUB_DIR;
-
-    /**
-     * Returns the directory in which the transliterator resource bundle
-     * files are located.  This is a subdirectory, named RESOURCE_SUB_DIR,
-     * under Locale::getDataDirectory().  It ends in a path separator.
-     */
-    static const char* getDataDirectory(void);
-
-    /**
      * Returns a transliterator object given its ID.  Unlike getInstance(),
      * this method returns null if it cannot make use of the given ID.
      */

@@ -574,55 +574,6 @@ Transliterator* Transliterator::createInstance(const UnicodeString& ID,
 }
 
 /**
- * This is the path to the subdirectory within the locale data
- * directory that contains the rule-based transliterator resource
- * bundle files.  This is constructed dynamically the first time
- * Transliterator::getDataDirectory() is called.
- */
-char* Transliterator::DATA_DIR = 0;
-
-/**
- * This is the name of a subdirectory within the locale data directory
- * that contains the rule-based transliterator resource bundle files.
- */
-const char* Transliterator::RESOURCE_SUB_DIR = "translit";
-
-/**
- * Returns the directory in which the transliterator resource bundle
- * files are located.  This is a subdirectory, named RESOURCE_SUB_DIR,
- * under u_getDataDirectory().  It ends in a path separator.
- */
-const char* Transliterator::getDataDirectory(void) {
-    if (DATA_DIR == 0) {
-        Mutex lock; // Okay to use the global mutex here
-        if (DATA_DIR == 0) {
-            /* Construct the transliterator data directory path.  This
-             * is a subdirectory of the locale data directory.
-             */
-            const char* data = u_getDataDirectory();
-            int32_t len = uprv_strlen(data);
-            DATA_DIR = (char*) uprv_malloc(
-                                 len + uprv_strlen(RESOURCE_SUB_DIR) + 2);
-            if (DATA_DIR == 0) {
-                // This is a fatal unrecoverable error -- we just set DATA_DIR
-                // to the ICU data directory.  We won't be able to retrieve any
-                // rule-based transliterator data but we won't keep trying.
-                DATA_DIR = (char*) data;
-            } else {
-                uprv_strcpy(DATA_DIR, data);
-                uprv_strcat(DATA_DIR, RESOURCE_SUB_DIR);
-                uprv_strcat(DATA_DIR, U_FILE_SEP_STRING);
-            }
-        }
-    }
-    return DATA_DIR;
-}
-
-/*inline int32_t Transliterator::hash(const UnicodeString& str) {
-    return str.hashCode() & 0x7FFFFFFF;
-    }*/
-
-/**
  * Returns a transliterator object given its ID.  Unlike getInstance(),
  * this method returns null if it cannot make use of the given ID.
  */
