@@ -555,9 +555,9 @@ echo $ac_n "checking for ICU version numbers""... $ac_c" 1>&6
 echo "configure:556: checking for ICU version numbers" >&5
 
 VERSION=`sed -n 's/^[ 	]*#[ 	]*define[ 	]*U_ICU_VERSION[ 	]*"\([^"]*\)".*/\1/p' $srcdir/common/unicode/utypes.h`
-
 LIB_VERSION=`echo $VERSION | sed -e 's/\.//' -e 's/^\([^.]*\)$/\1.0/'`
 LIB_VERSION_MAJOR=`echo $LIB_VERSION | sed 's/\..*//'`
+
 
 
 echo "$ac_t""release $VERSION, library $LIB_VERSION" 1>&6
@@ -3880,6 +3880,7 @@ s%@oldincludedir@%$oldincludedir%g
 s%@infodir@%$infodir%g
 s%@mandir@%$mandir%g
 s%@PACKAGE@%$PACKAGE%g
+s%@VERSION@%$VERSION%g
 s%@LIB_VERSION@%$LIB_VERSION%g
 s%@LIB_VERSION_MAJOR@%$LIB_VERSION_MAJOR%g
 s%@UNICODE_VERSION@%$UNICODE_VERSION%g
