@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UInfo.java,v $ 
- * $Date: 2000/03/10 04:07:24 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/05/18 19:08:40 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -426,7 +426,15 @@ public final class UInfo {
     }
 
     public UInfo() {
-        this("../src/data/unicode/UnicodeData.txt");
+        // FIX
+        // This is bad...this path must be correct relative to the
+        // user's current directory.  I have changed it so that it's
+        // relative to the root icu4j directory, so it works as long
+        // as code is run from that directory, e.g., "java -classpath
+        // classes...".  A better way to do this might be to get it
+        // from a system property that is defined on the command line,
+        // e.g., "java -Dicu4j=D:/icu4j..." - liu
+        this("src/data/unicode/UnicodeData.txt");
     }
 
     /*
