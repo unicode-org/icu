@@ -52,6 +52,7 @@ static void TestCalendar()
     UDateFormat *datdef = 0;
     UChar *result = 0;
     int32_t resultlength, resultlengthneeded;
+    char tempMsgBuf[256];
 
     /*Testing countAvailableTimeZones*/
     offset=0;
@@ -68,7 +69,7 @@ static void TestCalendar()
         if(U_FAILURE(status)){
             log_err("FAIL: There is an error in the getAvialableTZIDs the error is %s\n", myErrorName(status));
         }
-        log_verbose("%s\n", austrdup(ucal_getAvailableTZIDs(offset, i, &status)));
+        log_verbose("%s\n", u_austrcpy(tempMsgBuf, ucal_getAvailableTZIDs(offset, i, &status)));
     }
     /*get Illegal TZID where index >= count*/
     ucal_getAvailableTZIDs(offset, i, &status);
@@ -137,7 +138,7 @@ static void TestCalendar()
     if(U_FAILURE(status)){
         log_err("FAIL: error in creating the dateformat : %s\n", myErrorName(status));
     }
-    log_verbose("PASS: The current date and time fetched is %s\n", austrdup(myDateFormat(datdef, now)) );
+    log_verbose("PASS: The current date and time fetched is %s\n", u_austrcpy(tempMsgBuf, myDateFormat(datdef, now)) );
     
     
     /*Testing the TimeZoneDisplayName */
@@ -167,7 +168,7 @@ static void TestCalendar()
     tzdname=(UChar*)malloc(sizeof(UChar) * (sizeof(expectPDT)+1));
     u_uastrcpy(tzdname, expectPDT);
     if(u_strcmp(tzdname, result)==0){
-        log_verbose("PASS: got the correct time zone display name %s\n", austrdup(result) );
+        log_verbose("PASS: got the correct time zone display name %s\n", u_austrcpy(tempMsgBuf, result) );
     }
     else{
         log_err("FAIL: got the wrong time zone(DST) display name %s, wanted %s\n", austrdup(result) , expectPDT);
@@ -870,6 +871,7 @@ static void TestDOWProgression()
     int32_t delta=24;
     UErrorCode status = U_ZERO_ERROR;
     UChar* tzID = 0;
+    char tempMsgBuf[256];
     tzID=(UChar*)malloc(sizeof(UChar) * 4);
     u_strcpy(tzID, fgGMTID);
     /*open the calendar used */
@@ -897,7 +899,7 @@ static void TestDOWProgression()
         log_verbose("DOW = %d...\n", DOW);
         date1=ucal_getMillis(cal, &status);
         if(U_FAILURE(status)){ log_err("ucal_getMiilis() failed: %s\n", myErrorName(status)); return;}
-        log_verbose("%s\n", austrdup(myDateFormat(datfor, date1)));
+        log_verbose("%s\n", u_austrcpy(tempMsgBuf, myDateFormat(datfor, date1)));
         
         ucal_add(cal,UCAL_DAY_OF_WEEK, delta, &status);
         if (U_FAILURE(status)) { log_err("ucal_add() failed: %s\n", myErrorName(status)); return; }
@@ -909,7 +911,7 @@ static void TestDOWProgression()
         if(U_FAILURE(status)){ log_err("ucal_getMiilis() failed: %s\n", myErrorName(status)); return;}
         if (newDOW != expectedDOW) {
             log_err("Day of week should be %d instead of %d on %s", expectedDOW, newDOW, 
-                austrdup(myDateFormat(datfor, date1)) );    
+                u_austrcpy(tempMsgBuf, myDateFormat(datfor, date1)) );    
             return; 
         }
     }
@@ -945,6 +947,8 @@ static void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn
     UDateFormat *datfor = 0;
     UErrorCode status = U_ZERO_ERROR;
     UChar* tzID = 0;
+    char tempMsgBuf[256];
+
     tzID=(UChar*)malloc(sizeof(UChar) * 4);
     u_strcpy(tzID, fgGMTID);
     gmtcal=ucal_open(tzID, 3, "en_US", UCAL_TRADITIONAL, &status);;
@@ -971,17 +975,26 @@ static void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn
     }
     ucal_set(gmtcal, UCAL_MILLISECOND, 0);
     date1 = ucal_getMillis(gmtcal, &status);
-    if (U_FAILURE(status)) { log_err("ucal_getMillis failed: %s\n", myErrorName(status)); return; }
-    log_verbose("date = %s\n", austrdup(myDateFormat(datfor, date1)) );
+    if (U_FAILURE(status)) {
+        log_err("ucal_getMillis failed: %s\n", myErrorName(status));
+        return;
+    }
+    log_verbose("date = %s\n", u_austrcpy(tempMsgBuf, myDateFormat(datfor, date1)) );
 
     
     ucal_setMillis(cal, date1, &status);
-    if (U_FAILURE(status)) { log_err("ucal_setMillis() failed: %s\n", myErrorName(status)); return; }
+    if (U_FAILURE(status)) {
+        log_err("ucal_setMillis() failed: %s\n", myErrorName(status));
+        return;
+    }
 
     offset = ucal_get(cal, UCAL_ZONE_OFFSET, &status);
     offset += ucal_get(cal, UCAL_DST_OFFSET, &status);
    
-    if (U_FAILURE(status)) { log_err("ucal_get() failed: %s\n", myErrorName(status)); return; }
+    if (U_FAILURE(status)) {
+        log_err("ucal_get() failed: %s\n", myErrorName(status));
+        return;
+    }
     temp=(double)((double)offset / 1000.0 / 60.0 / 60.0);
     /*printf("offset for %s %f hr\n", austrdup(myDateFormat(datfor, date1)), temp);*/
        
@@ -989,7 +1002,10 @@ static void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn
                     ucal_get(cal, UCAL_MINUTE, &status)) * 60 +
                    ucal_get(cal, UCAL_SECOND, &status)) * 1000 +
                     ucal_get(cal, UCAL_MILLISECOND, &status) - offset;
-    if (U_FAILURE(status)) { log_err("ucal_get() failed: %s\n", myErrorName(status)); return; }
+    if (U_FAILURE(status)) {
+        log_err("ucal_get() failed: %s\n", myErrorName(status));
+        return;
+    }
     
     expected = ((hr * 60 + mn) * 60 + sc) * 1000;
     if (utc != expected) {
@@ -1115,6 +1131,8 @@ static void verify2(const char* msg, UCalendar* c, UDateFormat* dat, int32_t yea
 {
     UDate d1;
     UErrorCode status = U_ZERO_ERROR;
+    char tempMsgBuf[256];
+
     if (ucal_get(c, UCAL_YEAR, &status) == year &&
         ucal_get(c, UCAL_MONTH, &status) == month &&
         ucal_get(c, UCAL_DATE, &status) == day &&
@@ -1132,7 +1150,7 @@ static void verify2(const char* msg, UCalendar* c, UDateFormat* dat, int32_t yea
             log_err("ucal_getMillis failed: %s\n", myErrorName(status));
             return;
         }
-        log_verbose("%s\n" , austrdup(myDateFormat(dat, d1)) );
+        log_verbose("%s\n" , u_austrcpy(tempMsgBuf, myDateFormat(dat, d1)) );
     }
     else {
         log_err("FAIL: %s\n", msg);
