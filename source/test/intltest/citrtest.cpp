@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2001, International Business Machines Corporation and
+ * Copyright (c) 1997-2002, International Business Machines Corporation and
  * others. All Rights Reserved.
  * Modification History:
  *
@@ -17,6 +17,8 @@
 #include "unicode/uiter.h"
 #include "citrtest.h"
 
+#define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
+
 CharIterTest::CharIterTest()
 {
 }
@@ -30,6 +32,7 @@ void CharIterTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
         case 2: name = "TestIteration"; if (exec) TestIteration(); break;
         case 3: name = "TestIterationUChar32"; if (exec) TestIterationUChar32(); break;
         case 4: name = "TestUCharIterator"; if (exec) TestUCharIterator(); break;
+        case 5: name = "TestCharIteratorSubClasses"; if (exec) TestCharIteratorSubClasses(); break;
 
         default: name = ""; break; //needed to end loop
     }
@@ -785,4 +788,230 @@ void CharIterTest::TestUCharIterator() {
       errln("error: UCharIterator(string iter).move did not return error value");
     }
 
+}
+
+// subclass test, and completing API coverage -------------------------------
+
+class SubCharIter : public CharacterIterator {
+public:
+    // public default constructor, to get coverage of CharacterIterator()
+    SubCharIter() : CharacterIterator() {
+        textLength=end=LENGTHOF(s);
+        s[0]=0x61;      // 'a'
+        s[1]=0xd900;    // U+50400
+        s[2]=0xdd00;
+        s[3]=0x2029;    // PS
+    }
+
+    // useful stuff, mostly dummy but testing coverage and subclassability
+    virtual UChar nextPostInc() {
+        if(pos<LENGTHOF(s)) {
+            return s[pos++];
+        } else {
+            return DONE;
+        }
+    }
+
+    virtual UChar32 next32PostInc() {
+        if(pos<LENGTHOF(s)) {
+            UChar32 c;
+            U16_NEXT(s, pos, LENGTHOF(s), c);
+            return c;
+        } else {
+            return DONE;
+        }
+    }
+
+    virtual UBool hasNext() {
+        return pos<LENGTHOF(s);
+    }
+
+    virtual UChar first() {
+        pos=0;
+        return s[0];
+    }
+
+    virtual UChar32 first32() {
+        UChar32 c;
+        pos=0;
+        U16_NEXT(s, pos, LENGTHOF(s), c);
+        pos=0;
+        return c;
+    }
+
+    virtual UChar setIndex(int32_t position) {
+        if(0<=position && position<=LENGTHOF(s)) {
+            pos=position;
+            if(pos<LENGTHOF(s)) {
+                return s[pos];
+            }
+        }
+        return DONE;
+    }
+
+    virtual UChar32 setIndex32(int32_t position) {
+        if(0<=position && position<=LENGTHOF(s)) {
+            pos=position;
+            if(pos<LENGTHOF(s)) {
+                UChar32 c;
+                U16_GET(s, 0, pos, LENGTHOF(s), c);
+                return c;
+            }
+        }
+        return DONE;
+    }
+
+    virtual UChar current() const {
+        if(pos<LENGTHOF(s)) {
+            return s[pos];
+        } else {
+            return DONE;
+        }
+    }
+
+    virtual UChar32 current32() const {
+        if(pos<LENGTHOF(s)) {
+            UChar32 c;
+            U16_GET(s, 0, pos, LENGTHOF(s), c);
+            return c;
+        } else {
+            return DONE;
+        }
+    }
+
+    virtual UChar next() {
+        if(pos<LENGTHOF(s) && ++pos<LENGTHOF(s)) {
+            return s[pos];
+        } else {
+            return DONE;
+        }
+    }
+
+    virtual UChar32 next32() {
+        if(pos<LENGTHOF(s)) {
+            U16_FWD_1(s, pos, LENGTHOF(s));
+        }
+        if(pos<LENGTHOF(s)) {
+            UChar32 c;
+            int32_t i=pos;
+            U16_NEXT(s, i, LENGTHOF(s), c);
+            return c;
+        } else {
+            return DONE;
+        }
+    }
+
+    virtual UBool hasPrevious() {
+        return pos>0;
+    }
+
+    virtual void getText(UnicodeString &result) {
+        result.setTo(s, LENGTHOF(s));
+    }
+
+    // dummy implementations of other pure virtual base class functions
+    virtual UBool operator==(const ForwardCharacterIterator &that) const {
+        return
+            this==&that ||
+            getDynamicClassID()==that.getDynamicClassID() && pos==((SubCharIter &)that).pos;
+    }
+
+    virtual int32_t hashCode() const {
+        return 2;
+    }
+
+    virtual CharacterIterator *clone() const {
+        return NULL;
+    }
+
+    virtual UChar last() {
+        return 0;
+    }
+
+    virtual UChar32 last32() {
+        return 0;
+    }
+
+    virtual UChar previous() {
+        return 0;
+    }
+
+    virtual UChar32 previous32() {
+        return 0;
+    }
+
+    virtual int32_t move(int32_t delta, EOrigin origin) {
+        return 0;
+    }
+
+    virtual int32_t move32(int32_t delta, EOrigin origin) {
+        return 0;
+    }
+
+    // RTTI
+    virtual UClassID getDynamicClassID() const {
+        return getStaticClassID();
+    }
+
+    static UClassID getStaticClassID() {
+        return (UClassID)(&fgClassID);
+    }
+
+private:
+    // dummy string data
+    UChar s[4];
+
+    static const char fgClassID;
+};
+
+const char SubCharIter::fgClassID = 0;
+
+class SubStringCharIter : public StringCharacterIterator {
+public:
+    SubStringCharIter() {
+        setText(UNICODE_STRING("abc", 3));
+    }
+};
+
+class SubUCharCharIter : public UCharCharacterIterator {
+public:
+    SubUCharCharIter() {
+        setText(u, 3);
+    }
+
+private:
+    static const UChar u[3];
+};
+
+const UChar SubUCharCharIter::u[3]={ 0x61, 0x62, 0x63 };
+
+void CharIterTest::TestCharIteratorSubClasses() {
+    SubCharIter *p;
+
+    // coverage - call functions that are not otherwise tested
+    // first[32]PostInc() are default implementations that are overridden
+    // in ICU's own CharacterIterator subclasses
+    p=new SubCharIter;
+    if(p->firstPostInc()!=0x61) {
+        errln("SubCharIter.firstPosInc() failed\n");
+    }
+    delete p;
+
+    p=new SubCharIter[2];
+    if(p[1].first32PostInc()!=0x61) {
+        errln("SubCharIter.first32PosInc() failed\n");
+    }
+    delete [] p;
+
+    // coverage: StringCharacterIterator default constructor
+    SubStringCharIter sci;
+    if(sci.firstPostInc()!=0x61) {
+        errln("SubStringCharIter.firstPostInc() failed\n");
+    }
+
+    // coverage: UCharCharacterIterator default constructor
+    SubUCharCharIter uci;
+    if(uci.firstPostInc()!=0x61) {
+        errln("SubUCharCharIter.firstPostInc() failed\n");
+    }
 }
