@@ -379,7 +379,7 @@ typedef enum UCalendarAMPMs UCalendarAMPMs;
  * uenum_close(), or NULL upon failure. In case of failure *ec will
  * indicate the error.
  *
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
 U_DRAFT UEnumeration* U_EXPORT2
 ucal_openTimeZones(UErrorCode* ec);
@@ -398,7 +398,7 @@ ucal_openTimeZones(UErrorCode* ec);
  * uenum_close(), or NULL upon failure. In case of failure *ec will
  * indicate the error.
  *
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
 U_DRAFT UEnumeration* U_EXPORT2
 ucal_openCountryTimeZones(const char* country, UErrorCode* ec);
@@ -417,7 +417,7 @@ ucal_openCountryTimeZones(const char* country, UErrorCode* ec);
  * @return The result string length, not including the terminating
  * null
  *
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
 U_DRAFT int32_t U_EXPORT2
 ucal_getDefaultTimeZone(UChar* result, int32_t resultCapacity, UErrorCode* ec);
@@ -429,7 +429,7 @@ ucal_getDefaultTimeZone(UChar* result, int32_t resultCapacity, UErrorCode* ec);
  *
  * @param ec input/output error code
  *
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
 U_DRAFT void U_EXPORT2
 ucal_setDefaultTimeZone(const UChar* zoneID, UErrorCode* ec);
@@ -448,7 +448,7 @@ ucal_setDefaultTimeZone(const UChar* zoneID, UErrorCode* ec);
  * effect. This is always a non-negative number, most commonly either
  * 3,600,000 (one hour) or zero.
  *
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
 U_DRAFT int32_t U_EXPORT2
 ucal_getDSTSavings(const UChar* zoneID, UErrorCode* ec);

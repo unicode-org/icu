@@ -236,7 +236,7 @@ public:
     * @param status   A reference to a UErrorCode to receive any errors.
     * @return      A regexPattern object for the compiled pattern.
     *
-    * @draft ICU 2.6
+    * @stable ICU 2.6
     */
     static RegexPattern * U_EXPORT2 compile( const UnicodeString &regex,
         uint32_t             flags,
@@ -296,7 +296,7 @@ public:
     * @param status   A reference to a UErrorCode to receive any errors.
     * @return      A RegexMatcher object for this pattern and input.
     *
-    * @draft ICU 2.6
+    * @stable ICU 2.6
     */
     virtual RegexMatcher *matcher(UErrorCode  &status) const;
 
@@ -463,7 +463,7 @@ public:
       *  @param flags  Regular expression options, such as case insensitive matching.
       *                @see UREGEX_CASE_INSENSITIVE
       *  @param status Any errors are reported by setting this UErrorCode variable.
-      *  @draft ICU 2.6
+      *  @stable ICU 2.6
       */
     RegexMatcher(const UnicodeString &regexp, uint32_t flags, UErrorCode &status);
 
@@ -486,7 +486,7 @@ public:
       *  @param flags  Regular expression options, such as case insensitive matching.
       *                @see UREGEX_CASE_INSENSITIVE
       *  @param status Any errors are reported by setting this UErrorCode variable.
-      *  @draft ICU 2.6
+      *  @stable ICU 2.6
       */
     RegexMatcher(const UnicodeString &regexp, const UnicodeString &input,
         uint32_t flags, UErrorCode &status);
@@ -861,7 +861,7 @@ public:
      *                field delimiters, is placed in the last destination string.
      * @param status  A reference to a UErrorCode to receive any errors.
      * @return        The number of fields into which the input string was split.
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     virtual int32_t  split(const UnicodeString &input,
         UnicodeString    dest[],

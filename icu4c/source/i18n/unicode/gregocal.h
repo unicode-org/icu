@@ -364,7 +364,7 @@ public:
      * @param status  Output param set to success/failure code on exit. If any value
      *                previously set in the time field is invalid, this will be set to
      *                an error status.
-     * @draft ICU 2.6.
+     * @stable ICU 2.6.
      */
     virtual void roll(UCalendarDateFields field, int32_t amount, UErrorCode& status);
 
@@ -416,7 +416,7 @@ public:
      * @param field    the time field.
      * @param status   returns any errors that may result from this function call.
      * @return         the maximum value that this field could have, given the current date.
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     virtual int32_t getActualMaximum(UCalendarDateFields field, UErrorCode& status) const;
 

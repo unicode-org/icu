@@ -496,7 +496,7 @@ public:
      * @param toAdopt the NumberFormatFactory instance to be adopted
      * @param status the in/out status code, no special meanings are assigned
      * @return a registry key that can be used to unregister this factory
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     static URegistryKey U_EXPORT2 registerFactory(NumberFormatFactory* toAdopt, UErrorCode& status);
 
@@ -507,7 +507,7 @@ public:
      * @param key the registry key returned by a previous call to registerFactory
      * @param status the in/out status code, no special meanings are assigned
      * @return TRUE if the factory for the key was successfully unregistered
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     static UBool U_EXPORT2 unregister(URegistryKey key, UErrorCode& status);
 
@@ -515,7 +515,7 @@ public:
      * Return a StringEnumeration over the locales available at the time of the call,
      * including registered locales.
      * @return a StringEnumeration over the locales available at the time of the call
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     static StringEnumeration* U_EXPORT2 getAvailableLocales(void);
 #endif /* UCONFIG_NO_SERVICE */
@@ -648,7 +648,7 @@ public:
      * amounts.  This may be an empty string for some subclasses.
      * @return a 3-letter null-terminated ISO code indicating
      * the currency in use, or a pointer to the empty string.
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     const UChar* getCurrency() const;
 
@@ -764,7 +764,7 @@ private:
  * supports.  When registered, the locales it supports extend or override the
  * locale already supported by ICU.
  *
- * @draft ICU 2.6
+ * @stable ICU 2.6
  */
 class U_I18N_API NumberFormatFactory : public UObject {
 public:
@@ -779,14 +779,14 @@ public:
      * Return true if this factory will be visible.  Default is true.
      * If not visible, the locales supported by this factory will not
      * be listed by getAvailableLocales.
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     virtual UBool visible(void) const = 0;
 
     /**
      * Return the locale names directly supported by this factory.  The number of names
      * is returned in count;
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     virtual const UnicodeString * getSupportedIDs(int32_t &count, UErrorCode& status) const = 0;
 
@@ -795,7 +795,7 @@ public:
      * is not supported, return null.  If the locale is supported, but
      * the type is not provided by this service, return null.  Otherwise
      * return an appropriate instance of NumberFormat.
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     virtual NumberFormat* createFormat(const Locale& loc, UNumberFormatStyle formatType) = 0;
 };
@@ -808,19 +808,19 @@ class U_I18N_API SimpleNumberFormatFactory : public NumberFormatFactory {
 protected:
     /**
      * True if the locale supported by this factory is visible.
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     const UBool _visible;
 
     /**
      * The locale supported by this factory, as a UnicodeString.
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     UnicodeString _id;
 
 public:
     /**
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     SimpleNumberFormatFactory(const Locale& locale, UBool visible = TRUE);
 
@@ -830,12 +830,12 @@ public:
     virtual ~SimpleNumberFormatFactory();
 
     /**
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     virtual UBool visible(void) const;
 
     /**
-     * @draft ICU 2.6
+     * @stable ICU 2.6
      */
     virtual const UnicodeString * getSupportedIDs(int32_t &count, UErrorCode& status) const;
 };
