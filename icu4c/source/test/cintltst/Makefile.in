@@ -89,8 +89,10 @@ clean-local:
 distclean-local: clean-local
 	$(RMV) Makefile
 
+-include Makefile.local
+
 check-local: all-local
-	ICU_DATA=$(top_builddir)/data/ TZ=PST8PDT $(INVOKE) ./$(TARGET)
+	ICU_DATA=$(top_builddir)/data/ TZ=PST8PDT $(INVOKE) ./$(TARGET) $(CINTLTEST_OPTS)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
