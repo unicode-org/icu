@@ -330,7 +330,8 @@ public:
      * Return the status tag from the break rule that determined the most recently
      * returned break position.  The values appear in the rule source
      * within brackets, {123}, for example.  For rules that do not specify a
-     * status, a default value of 0 is returned.
+     * status, a default value of 0 is returned.  If more than one rule applies,
+     * the numerically largest of the possible status values is returned.
      * <p>
      * Of the standard types of ICU break iterators, only the word break
      * iterator provides status values.  The values are defined in
@@ -350,12 +351,17 @@ public:
     virtual int32_t getRuleStatus() const;
 
    /**
-    * Get the statuses from the break rules that determined the most recently
-    * returned break position.  The values appear in the rule source
+    * Get the status (tag) values from the break rule(s) that determined the most 
+    * recently returned break position.  The values appear in the rule source
     * within brackets, {123}, for example.  The default status value for rules
     * that do not explicitly provide one is zero.
     * <p>
     * For word break iterators, the possible values are defined in enum UWordBreak.
+    * <p>
+    * If the capacity of the output array is insufficient to hold the data,
+    *  the output will be truncated to the available length, and a
+    *  U_BUFFER_OVERFLOW_ERROR will be signaled.
+    *
     * @param fillInVec an array to be filled in with the status values.  
     * @param capacity  the length of the supplied vector.  A length of zero causes
     *                  the function to return the number of status values, in the
@@ -363,6 +369,9 @@ public:
     * @param status    receives error codes.  
     * @return          The number of rule status values from rules that determined 
     *                  the most recent boundary returned by the break iterator.
+    *                  In the event of a U_BUFFER_OVERFLOW_ERROR, the return value
+    *                  is the total number of status values that were available,
+    *                  not the reduced number that were actually returned.
     * @draft ICU 3.0
     */
     virtual int32_t getRuleStatusVec(int32_t *fillInVec, int32_t capacity, UErrorCode &status);
