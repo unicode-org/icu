@@ -29,13 +29,13 @@ fr_BE {
         "%",
         "0",
         "#",
-        "+",
         "-",
         "E",
         "\u2030",
         "\u221E",
         "\uFFFD",
         ",",
+        "+",
     }
 // Fall back to French
 //    zoneStrings { 

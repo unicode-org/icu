@@ -92,13 +92,13 @@ tr {
         "%",
         "0",
         "#",
-        "+",
         "-",
         "E",
         "\u2030",
         "\u221E",
         "\uFFFD",
         ",",
+        "+",
     }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 

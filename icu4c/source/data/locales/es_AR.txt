@@ -25,13 +25,13 @@ es_AR {
         "%",
         "0",
         "#",
-        "+",
         "-",
         "E",
         "\u2030",
         "\u221E",
         "\uFFFD",
         ",",
+        "+",
     }
     // Currency display names
     Currencies {

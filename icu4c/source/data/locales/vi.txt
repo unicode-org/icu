@@ -83,13 +83,13 @@ vi {
         "%",
         "0",
         "#",
-        "+",
         "-",
         "E",
         "\u2030",
         "\u221E",
         "\uFFFD",
         ",",
+        "+",
     }
     Currencies {
         VND { "\u20AB", "VND" } // Vietnamese Dong

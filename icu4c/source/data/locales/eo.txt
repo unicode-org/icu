@@ -128,13 +128,13 @@ eo {
         "%",
         "0",
         "#",
-        "+",
         "-",
         "E",
         "\u2030",
         "\u221E",
         "\uFFFD",
         ",",
+        "+",
     }
     localPatternChars { "GjMtkHmslTDUSnahKzJd" }
 //    LocaleScript{ 
