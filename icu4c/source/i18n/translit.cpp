@@ -155,12 +155,7 @@ Transliterator& Transliterator::operator=(const Transliterator& other) {
 int32_t Transliterator::transliterate(Replaceable& text,
                                       int32_t start, int32_t limit) const {
 
-    Position offsets; /* Broken HPUX compiler cannot handle this */
-
-    offsets.start  = start;
-    offsets.limit  = limit;
-    offsets.cursor = start;
-
+    Position offsets(start, limit);
     handleTransliterate(text, offsets, FALSE);
     return offsets.limit;
 }

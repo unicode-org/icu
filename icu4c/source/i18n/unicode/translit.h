@@ -251,6 +251,30 @@ public:
          * considered for transliteration
          */
         int32_t cursor;
+
+        /**
+         * In <code>transliterate()</code>, the limit character to be
+         * considered for transliteration
+         */
+        int32_t end;
+
+        /**
+         * Constructor from start, limit.  Sets cursor to start and
+         * end to limit.
+         */
+        Position(int32_t start, int32_t limit);
+
+        /**
+         * Constructor from start, limit, cursor.  Sets
+         * end to limit.
+         */
+        Position(int32_t start, int32_t limit, int32_t cursor);
+
+        /**
+         * Constructor from start, limit, cursor, end.
+         */
+        Position(int32_t start, int32_t limit,
+                 int32_t cursor, int32_t end);
     };
 
 private:
@@ -870,5 +894,16 @@ private:
 inline int32_t Transliterator::getMaximumContextLength(void) const {
     return maximumContextLength;
 }
+
+inline Transliterator::Position::Position(int32_t aStart, int32_t aLimit) :
+    start(aStart), limit(aLimit), cursor(aStart), end(aLimit) {}
+
+inline Transliterator::Position::Position(int32_t aStart, int32_t aLimit,
+                                          int32_t aCursor) :
+    start(aStart), limit(aLimit), cursor(aCursor), end(aLimit) {}
+
+inline Transliterator::Position::Position(int32_t aStart, int32_t aLimit,
+                                          int32_t aCursor, int32_t anEnd) :
+    start(aStart), limit(aLimit), cursor(aCursor), end(anEnd) {}
 
 #endif
