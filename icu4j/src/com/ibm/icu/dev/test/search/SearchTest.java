@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/search/SearchTest.java,v $ 
- * $Date: 2000/10/06 23:16:40 $ 
- * $Revision: 1.4 $
+ * $Date: 2001/02/08 19:37:07 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -458,6 +458,31 @@ public class SearchTest extends com.ibm.test.TestFmwk {
             int fVal = ((Integer)found.elementAt(f)).intValue();
             errln("Found unexpected match at " + fVal);
             f++;
+        }
+    }
+
+    /**
+     * ICU4J Jitterbug 11
+     */
+    public void TestJ11() {
+        AuxJ11("c", "Scott Ganyo", 1);
+        AuxJ11(" ", "Scott Ganyo", 5);
+    }
+
+    private void AuxJ11(String pattern, String text, int expectedLoc) {
+        try {
+            StringSearch ss = new StringSearch(pattern, text);
+            ss.setStrength(Collator.PRIMARY);
+            int loc = ss.next();
+            if (loc == expectedLoc) {
+                logln("Ok: StringSearch(\"" + pattern + "\", \"" + text + "\") = " + loc);
+            } else {
+                errln("FAIL: StringSearch(\"" + pattern + "\", \"" + text + "\") = " + loc +
+                      ", expected " + expectedLoc);
+            }
+        } catch (Exception e) {
+            errln("FAIL: StringSearch(\"" + pattern + "\", \"" + text + "\") threw ");
+            e.printStackTrace();
         }
     }
 }
