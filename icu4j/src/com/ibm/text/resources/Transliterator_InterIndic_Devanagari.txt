@@ -31,7 +31,8 @@
  
  #Decomposed compatibility transliterations
  \ue012\ue057>\u0914;   # FALLBACK FOR TAMIL AU
- \u0030 > \u0966;       # FALLBACK FOR TAMIL
+ 0 > \u0966;       # FALLBACK FOR TAMIL
+ 1 > \u0967;
 
  \ue046\ue056 > \u0948; # FALLBACK FOR TELUGU
  \ue055>; # FALLBACK BLOW AWAY KANNADA AND TELUGU LENGTH MARK
