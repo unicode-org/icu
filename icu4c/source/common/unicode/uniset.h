@@ -463,8 +463,8 @@ public:
      * @return a reference to this
      * @stable ICU 2.0
      */
-    virtual UnicodeSet& applyPattern(const UnicodeString& pattern,
-                                     UErrorCode& status);
+    UnicodeSet& applyPattern(const UnicodeString& pattern,
+                             UErrorCode& status);
 
     /**
      * Modifies this set to represent the set specified by the given
@@ -534,8 +534,8 @@ public:
      * U+000A, U+0020..U+007E.
      * @stable ICU 2.0
      */
-    virtual UnicodeString& toPattern(UnicodeString& result,
-                                     UBool escapeUnprintable = FALSE) const;
+    UnicodeString& toPattern(UnicodeString& result,
+                             UBool escapeUnprintable = FALSE) const;
 
     /**
      * Modifies this set to contain those code points which have the given value

@@ -197,6 +197,8 @@ u_internalFoldCase(UChar32 c,
                    UChar *dest, int32_t destCapacity,
                    uint32_t options);
 
+#if !UCONFIG_NO_CONVERSION
+
 /**
  * Get the default converter. This is a commonly used converter
  * that is used for the ustring and UnicodeString API.
@@ -213,6 +215,8 @@ u_getDefaultConverter(UErrorCode *status);
  */
 U_CAPI void U_EXPORT2
 u_releaseDefaultConverter(UConverter *converter);
+
+#endif
 
 /**
  * NUL-terminate a UChar * string if possible.

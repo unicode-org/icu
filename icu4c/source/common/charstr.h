@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001-2003, International Business Machines
+*   Copyright (c) 2001-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -25,11 +25,16 @@ U_NAMESPACE_BEGIN
 
 class U_COMMON_API CharString : public UMemory {
 public:
+
+#if !UCONFIG_NO_CONVERSION
     // Constructor
     //     @param  str    The unicode string to be converted to char *
     //     @param  codepage   The char * code page.  ""   for invariant conversion.
     //                                               NULL for default code page.
-    inline CharString(const UnicodeString& str, const char *codepage = "");
+    inline CharString(const UnicodeString& str, const char *codepage);
+#endif
+
+    inline CharString(const UnicodeString& str);
     inline ~CharString();
     inline operator const char*() const { return ptr; }
 
@@ -41,14 +46,27 @@ private:
     CharString &operator=(const CharString &other); // forbid copying of this class
 };
 
+#if !UCONFIG_NO_CONVERSION
+
 inline CharString::CharString(const UnicodeString& str, const char *codepage) {
     int32_t    len;
     ptr = buf;
     len = str.extract(0, 0x7FFFFFFF, buf ,sizeof(buf)-1, codepage);
-    buf[sizeof(buf)-1] = 0;  // extract does not add null if it thinks there is no space for it.
     if (len >= (int32_t)(sizeof(buf)-1)) {
         ptr = (char *)uprv_malloc(len+1);
         str.extract(0, 0x7FFFFFFF, ptr, len+1, codepage);
+    }
+}
+
+#endif
+
+inline CharString::CharString(const UnicodeString& str) {
+    int32_t    len;
+    ptr = buf;
+    len = str.extract(0, 0x7FFFFFFF, buf, (int32_t)(sizeof(buf)-1), US_INV);
+    if (len >= (int32_t)(sizeof(buf)-1)) {
+        ptr = (char *)uprv_malloc(len+1);
+        str.extract(0, 0x7FFFFFFF, ptr, len+1, US_INV);
     }
 }
 

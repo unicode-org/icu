@@ -1146,6 +1146,9 @@
 				RelativePath=".\resbund.cpp">
 			</File>
 			<File
+				RelativePath=".\resbund_cnv.cpp">
+			</File>
+			<File
 				RelativePath=".\unicode\resbund.h">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -1229,6 +1232,9 @@
 "
 						Outputs="..\..\include\unicode\$(InputFileName)"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\ures_cnv.c">
 			</File>
 			<File
 				RelativePath=".\uresbund.c">
@@ -1446,6 +1452,9 @@
 			</File>
 			<File
 				RelativePath=".\uniset.cpp">
+			</File>
+			<File
+				RelativePath=".\uniset_props.cpp">
 			</File>
 			<File
 				RelativePath=".\unicode\uniset.h">
@@ -1725,6 +1734,15 @@
 				RelativePath=".\unistr.cpp">
 			</File>
 			<File
+				RelativePath=".\unistr_case.cpp">
+			</File>
+			<File
+				RelativePath=".\unistr_cnv.cpp">
+			</File>
+			<File
+				RelativePath=".\unistr_props.cpp">
+			</File>
+			<File
 				RelativePath=".\unicode\unistr.h">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -1761,6 +1779,9 @@
 "
 						Outputs="..\..\include\unicode\$(InputFileName)"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\ustr_cnv.c">
 			</File>
 			<File
 				RelativePath=".\ustr_imp.h">

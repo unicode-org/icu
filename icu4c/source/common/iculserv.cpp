@@ -110,18 +110,47 @@ LocaleUtility::canonicalLocaleString(const UnicodeString* id, UnicodeString& res
 Locale&
 LocaleUtility::initLocaleFromName(const UnicodeString& id, Locale& result)
 {
-    if (id.isBogus()) {
+    enum { BUFLEN = 128 }; // larger than ever needed
+
+    if (id.isBogus() || id.length() >= BUFLEN) {
         result.setToBogus();
     } else {
-        const int32_t BUFLEN = 128; // larger than ever needed
+        /*
+         * We need to convert from a UnicodeString to char * in order to
+         * create a Locale.
+         *
+         * Problem: Locale ID strings may contain '@' which is a variant
+         * character and cannot be handled by invariant-character conversion.
+         *
+         * Hack: Since ICU code can handle locale IDs with multiple encodings
+         * of '@' (at least for EBCDIC; it's not known to be a problem for
+         * ASCII-based systems),
+         * we use regular invariant-character conversion for everything else
+         * and manually convert U+0040 into a compiler-char-constant '@'.
+         * While this compilation-time constant may not match the runtime
+         * encoding of '@', it should be one of the encodings which ICU
+         * recognizes.
+         *
+         * There should be only at most one '@' in a locale ID.
+         */
         char buffer[BUFLEN];
-        int len = id.extract(0, BUFLEN, buffer);
-        if (len >= BUFLEN) {
-            result.setToBogus();
-        } else {
-            buffer[len] = '\0';
-            result = Locale::createFromName(buffer);
+        int32_t prev, i;
+        prev = 0;
+        for(;;) {
+            i = id.indexOf((UChar)0x40, prev);
+            if(i < 0) {
+                // no @ between prev and the rest of the string
+                id.extract(prev, INT32_MAX, buffer + prev, BUFLEN - prev, US_INV);
+                break; // done
+            } else {
+                // normal invariant-character conversion for text between @s
+                id.extract(prev, i - prev, buffer + prev, BUFLEN - prev, US_INV);
+                // manually "convert" U+0040 at id[i] into '@' at buffer[i]
+                buffer[i] = '@';
+                prev = i + 1;
+            }
         }
+        result = Locale::createFromName(buffer);
     }
     return result;
 }
@@ -132,7 +161,7 @@ LocaleUtility::initNameFromLocale(const Locale& locale, UnicodeString& result)
     if (locale.isBogus()) {
         result.setToBogus();
     } else {
-        result.append(locale.getName());
+        result.append(UnicodeString(locale.getName(), -1, US_INV));
     }
     return result;
 }
@@ -620,7 +649,15 @@ UObject*
 ICUResourceBundleFactory::handleCreate(const Locale& loc, int32_t /* kind */, const ICUService* /* service */, UErrorCode& status) const
 {
     if (U_SUCCESS(status)) {
-        return new ResourceBundle(_bundleName, loc, status);
+        // _bundleName is a package name
+        // and should only contain invariant characters
+        char pkg[20];
+        int32_t length;
+        length=_bundleName.extract(0, INT32_MAX, pkg, (int32_t)sizeof(pkg), US_INV);
+        if(length>=sizeof(pkg)) {
+            return NULL;
+        }
+        return new ResourceBundle(pkg, loc, status);
     }
     return NULL;
 }
@@ -693,7 +730,7 @@ ICULocaleService::get(const Locale& locale, int32_t kind, Locale* actualReturn, 
         return result;
     }
 
-    UnicodeString locName(locale.getName(), "");
+    UnicodeString locName(locale.getName(), -1, US_INV);
     if (locName.isBogus()) {
         status = U_MEMORY_ALLOCATION_ERROR;
     } else {

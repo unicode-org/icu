@@ -28,6 +28,9 @@
 */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_CONVERSION
+
 #include "unicode/putil.h"
 #include "unicode/ucnv.h"           /* This file implements ucnv_xXXX() APIs */
 #include "unicode/udata.h"
@@ -1328,6 +1331,8 @@ ucnv_swapAliases(const UDataSwapper *ds,
 
     return headerSize+2*(int32_t)topOffset;
 }
+
+#endif
 
 /*
  * Hey, Emacs, please set the following:

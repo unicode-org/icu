@@ -337,7 +337,7 @@ protected:
 class ICUBreakIteratorService : public ICULocaleService {
 public:
     ICUBreakIteratorService()
-        : ICULocaleService("Break Iterator")
+        : ICULocaleService(UNICODE_STRING("Break Iterator", 14))
     {
         UErrorCode status = U_ZERO_ERROR;
         registerFactory(new ICUBreakIteratorFactory(), status);
