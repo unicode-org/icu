@@ -111,6 +111,6 @@ ca {
 
     // Currency display names
     Currencies {
-        ESP { "Pts", "ESP" }
+        ESP { "\u20A7", "ESP" } // Spanish Peseta
     }
 }
