@@ -64,13 +64,13 @@
   #include "unistrm.h"
 #endif
 
-// forward declarations -----------------------------------------------------
+/* forward declarations ----------------------------------------------------- */
 
 U_CAPI const UChar * U_EXPORT2 ucol_getDefaultRulesArray(uint32_t *size);
 
 UChar forwardCharIteratorGlue(void *iterator);
 
-// global variable ----------------------------------------------------------
+/* global variable ---------------------------------------------------------- */
 
 /*
 synwee : using another name for this
@@ -78,36 +78,36 @@ const uint32_t tblcoll_StackBufferLen = 1024;
 */
 const uint32_t StackBufferLen = 1024;
 
-// RuleBasedCollator declaration -----------------------------------------
+/* RuleBasedCollator declaration ----------------------------------------- */
 
-//---------------------------------------------------------------------------
-// The following diagram shows the data structure of the RuleBasedCollator 
-// object. Suppose we have the rule, where 'o-umlaut' is the unicode char 
-// 0x00F6. "a, A < b, B < c, C, ch, cH, Ch, CH < d, D ... < o, O; 
-// 'o-umlaut'/E, 'O-umlaut'/E ...".
-// What the rule says is, sorts 'ch'ligatures and 'c' only with tertiary 
-// difference and sorts 'o-umlaut' as if it's always expanded with 'e'.
-//
-// mapping table                 contracting list             expanding list
-// (contains all unicode 
-//  char entries)               ___    ____________      _________________________
-//  ________                |=>|_*_|->|'c' |v('c') | |=>|v('o')|v('umlaut')|v('e')|
-// |_\u0001_|-> v('\u0001') |  |_:_|  |------------| |  |-------------------------|
-// |_\u0002_|-> v('\u0002') |  |_:_|  |'ch'|v('ch')| |  |             :           |
-// |____:___|               |  |_:_|  |------------| |  |-------------------------|
-// |____:___|               |         |'cH'|v('cH')| |  |             :           |
-// |__'a'___|-> v('a')      |         |------------| |  |-------------------------|
-// |__'b'___|-> v('b')      |         |'Ch'|v('Ch')| |  |             :           |
-// |____:___|               |         |------------| |  |-------------------------|
-// |____:___|               |         |'CH'|v('CH')| |  |             :           |
-// |___'c'__|----------------          ------------  |  |-------------------------|
-// |____:___|                                        |  |             :           |
-// |o-umlaut|----------------------------------------   |_________________________|
-// |____:___|
-//
-//---------------------------------------------------------------------------
+/* ---------------------------------------------------------------------------
+The following diagram shows the data structure of the RuleBasedCollator  object. 
+Suppose we have the rule, where 'o-umlaut' is the unicode char 0x00F6. 
+"a, A < b, B < c, C, ch, cH, Ch, CH < d, D ... < o, O; 
+'o-umlaut'/E, 'O-umlaut'/E ...".
+What the rule says is, sorts 'ch'ligatures and 'c' only with tertiary 
+difference and sorts 'o-umlaut' as if it's always expanded with 'e'.
 
-// public RuleBasedCollator constructor ----------------------------------
+mapping table                 contracting list             expanding list
+(contains all unicode 
+char entries)               ___    ____________      _________________________
+ ________                |=>|_*_|->|'c' |v('c') | |=>|v('o')|v('umlaut')|v('e')|
+|_\u0001_|-> v('\u0001') |  |_:_|  |------------| |  |-------------------------|
+|_\u0002_|-> v('\u0002') |  |_:_|  |'ch'|v('ch')| |  |             :           |
+|____:___|               |  |_:_|  |------------| |  |-------------------------|
+|____:___|               |         |'cH'|v('cH')| |  |             :           |
+|__'a'___|-> v('a')      |         |------------| |  |-------------------------|
+|__'b'___|-> v('b')      |         |'Ch'|v('Ch')| |  |             :           |
+|____:___|               |         |------------| |  |-------------------------|
+|____:___|               |         |'CH'|v('CH')| |  |             :           |
+|___'c'__|----------------          ------------  |  |-------------------------|
+|____:___|                                        |  |             :           |
+|o-umlaut|----------------------------------------   |_________________________|
+|____:___|
+
+--------------------------------------------------------------------------- */
+
+/* public RuleBasedCollator constructor ---------------------------------- */
 
 /**
 * Copy constructor
@@ -255,7 +255,7 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
 
 
 
-// RuleBasedCollator public destructor -----------------------------------
+/* RuleBasedCollator public destructor ----------------------------------- */
 
 RuleBasedCollator::~RuleBasedCollator()
 {
@@ -267,16 +267,16 @@ RuleBasedCollator::~RuleBasedCollator()
   ucollator = NULL;
 }
 
-// RuleBaseCollator public methods ---------------------------------------
+/* RuleBaseCollator public methods --------------------------------------- */
 
 UBool RuleBasedCollator::operator==(const Collator& that) const
 {
-  // only checks for address equals here
+  /* only checks for address equals here */
   if (Collator::operator==(that))
     return TRUE;
     
   if (getDynamicClassID() != that.getDynamicClassID())
-    return FALSE;  // not the same class
+    return FALSE;  /* not the same class */
        
   RuleBasedCollator& thatAlias = (RuleBasedCollator&)that;
 
@@ -656,26 +656,28 @@ RuleBasedCollator::RuleBasedCollator(const Locale& desiredLocale,
   if (U_FAILURE(status))
     return;
 
-  // Try to load, in order:
-  // 1. The desired locale's collation.
-  // 2. A fallback of the desired locale.
-  // 3. The default locale's collation.
-  // 4. A fallback of the default locale.
-  // 5. The default collation rules, which contains en_US collation rules.
+  /* 
+  Try to load, in order:
+   1. The desired locale's collation.
+   2. A fallback of the desired locale.
+   3. The default locale's collation.
+   4. A fallback of the default locale.
+   5. The default collation rules, which contains en_US collation rules.
 
-  // To reiterate, we try:
-  // Specific:
-  //  language+country+variant
-  //  language+country
-  //  language
-  // Default:
-  //  language+country+variant
-  //  language+country
-  //  language
-  // Root: (aka DEFAULTRULES)
-  // steps 1-5 are handled by resource bundle fallback mechanism. 
-  // however, in a very unprobable situation that no resource bundle
-  // data exists, step 5 is repeated with hardcoded default rules.
+   To reiterate, we try:
+   Specific:
+    language+country+variant
+    language+country
+    language
+   Default:
+    language+country+variant
+    language+country
+    language
+   Root: (aka DEFAULTRULES)
+   steps 1-5 are handled by resource bundle fallback mechanism. 
+   however, in a very unprobable situation that no resource bundle
+   data exists, step 5 is repeated with hardcoded default rules.
+  */
 
   setUCollator(desiredLocale, status);
 
@@ -689,13 +691,11 @@ RuleBasedCollator::RuleBasedCollator(const Locale& desiredLocale,
       status = U_ZERO_ERROR;
 
       unsigned long size = 0;
-      /*
       const UChar * defaultrules = ucol_getDefaultRulesArray(&size);
 
       ucollator = ucol_openRules(defaultrules, size, 
                                  UCOL_DEFAULT_NORMALIZATION, 
                                  UCOL_DEFAULT_STRENGTH, &status);
-      */      
       if (status == U_ZERO_ERROR)
         status = U_USING_DEFAULT_ERROR;
       
@@ -715,57 +715,57 @@ RuleBasedCollator::RuleBasedCollator(const Locale& desiredLocale,
   return;
 }
 
-// RuleBasedCollator private data members --------------------------------
+/* RuleBasedCollator private data members -------------------------------- */
 
-// need look up in .commit()
+/* need look up in .commit() */
 const int32_t RuleBasedCollator::CHARINDEX = 0x70000000;             
-// Expand index follows
+/* Expand index follows */
 const int32_t RuleBasedCollator::EXPANDCHARINDEX = 0x7E000000;       
-// contract indexes follows
+/* contract indexes follows */
 const int32_t RuleBasedCollator::CONTRACTCHARINDEX = 0x7F000000;     
-// unmapped character values
+/* unmapped character values */
 const int32_t RuleBasedCollator::UNMAPPED = 0xFFFFFFFF;              
-// primary strength increment
+/* primary strength increment */
 const int32_t RuleBasedCollator::PRIMARYORDERINCREMENT = 0x00010000; 
-// secondary strength increment
+/* secondary strength increment */
 const int32_t RuleBasedCollator::SECONDARYORDERINCREMENT = 0x00000100;
-// tertiary strength increment 
+/* tertiary strength increment */
 const int32_t RuleBasedCollator::TERTIARYORDERINCREMENT = 0x00000001;
-// mask off anything but primary order
+/* mask off anything but primary order */
 const int32_t RuleBasedCollator::PRIMARYORDERMASK = 0xffff0000;      
-// mask off anything but secondary order
+/* mask off anything but secondary order */
 const int32_t RuleBasedCollator::SECONDARYORDERMASK = 0x0000ff00;    
-// mask off anything but tertiary order
+/* mask off anything but tertiary order */
 const int32_t RuleBasedCollator::TERTIARYORDERMASK = 0x000000ff;     
-// mask off ignorable char order
+/* mask off ignorable char order */
 const int32_t RuleBasedCollator::IGNORABLEMASK = 0x0000ffff;         
-// use only the primary difference
+/* use only the primary difference */
 const int32_t RuleBasedCollator::PRIMARYDIFFERENCEONLY = 0xffff0000; 
-// use only the primary and secondary difference
+/* use only the primary and secondary difference */
 const int32_t RuleBasedCollator::SECONDARYDIFFERENCEONLY = 0xffffff00;  
-// primary order shift
+/* primary order shift */
 const int32_t RuleBasedCollator::PRIMARYORDERSHIFT = 16;             
-// secondary order shift
+/* secondary order shift */
 const int32_t RuleBasedCollator::SECONDARYORDERSHIFT = 8;            
-// starting value for collation elements
+/* starting value for collation elements */
 const int32_t RuleBasedCollator::COLELEMENTSTART = 0x02020202;       
-// testing mask for primary low element
+/* testing mask for primary low element */
 const int32_t RuleBasedCollator::PRIMARYLOWZEROMASK = 0x00FF0000;    
-// reseting value for secondaries and tertiaries
+/* reseting value for secondaries and tertiaries */
 const int32_t RuleBasedCollator::RESETSECONDARYTERTIARY = 0x00000202;
-// reseting value for tertiaries
+/* reseting value for tertiaries */
 const int32_t RuleBasedCollator::RESETTERTIARY = 0x00000002;         
 
 const int32_t RuleBasedCollator::PRIMIGNORABLE = 0x0202;
 
-// unique file id for parity check
+/* unique file id for parity check */
 const int16_t RuleBasedCollator::FILEID = 0x5443;                    
-// binary collation file extension
+/* binary collation file extension */
 const char* RuleBasedCollator::kFilenameSuffix = ".col";             
-// class id ? Value is irrelevant 
+/* class id ? Value is irrelevant */ 
 char  RuleBasedCollator::fgClassID = 0; 
 
-// other methods not belonging to any classes -------------------------------
+/* other methods not belonging to any classes ------------------------------- */
 
 UChar forwardCharIteratorGlue(void *iterator) 
 {
