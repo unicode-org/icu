@@ -99,18 +99,6 @@ main(int argc,
     const char *encoding  = "";
     int         i;
     
-    /* Initialize ICU */
-    u_init(&status);
-    if (U_FAILURE(status) && status != U_FILE_ACCESS_ERROR) {
-        /* Note: u_init() will try to open ICU property data.
-         *       failures here are expected when building ICU from scratch.
-         *       ignore them.
-        */
-        fprintf(stderr, "%s: can not initialize ICU.  status = %s\n",
-            argv[0], u_errorName(status));
-        exit(1);
-    }
-    status = U_ZERO_ERROR;
     U_MAIN_INIT_ARGS(argc, argv);
 
     argc = u_parseArgs(argc, argv, (int32_t)(sizeof(options)/sizeof(options[0])), options);
@@ -221,6 +209,18 @@ main(int argc,
     if(options[ICUDATADIR].doesOccur) {
         u_setDataDirectory(options[ICUDATADIR].value);
     }
+    /* Initialize ICU */
+    u_init(&status);
+    if (U_FAILURE(status) && status != U_FILE_ACCESS_ERROR) {
+        /* Note: u_init() will try to open ICU property data.
+         *       failures here are expected when building ICU from scratch.
+         *       ignore them.
+        */
+        fprintf(stderr, "%s: can not initialize ICU.  status = %s\n",
+            argv[0], u_errorName(status));
+        exit(1);
+    }
+    status = U_ZERO_ERROR;
     if(options[WRITE_JAVA].doesOccur) {
         write_java = TRUE;
         outputEnc = options[WRITE_JAVA].value;

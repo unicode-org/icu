@@ -111,16 +111,6 @@ char symPrefix[100];
 extern int
 main(int argc, char* argv[]) {
     UBool verbose = TRUE;
-    UErrorCode status = U_ZERO_ERROR;
-
-    /* Initialize ICU */
-    u_init(&status);
-    if (U_FAILURE(status)) {
-        fprintf(stderr, "%s: can not initialize ICU.  status = %s\n",
-            argv[0], u_errorName(status));
-        exit(1);
-    }
-    status = U_ZERO_ERROR;
 
     U_MAIN_INIT_ARGS(argc, argv);
 
