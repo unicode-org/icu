@@ -273,21 +273,23 @@ const char*  getName( UErrorCode&  err) const;
 
  /**
   * Returns the current setting action taken when a character from a codepage
-  * is missing. (Currently STOP or SUBSTITUTE).
-  * @return the action constant when a Unicode character cannot be converted to a
-  * codepage equivalent
+  * is missing or a byte sequence is illegal etc.
+  * @param action the callback function pointer
+  * @param context the callback function state
   * @stable
   */
- UConverterToUCallback   getMissingCharAction(void) const;
+ void getMissingCharAction(UConverterToUCallback *action,
+                           void **context) const;
 
 /**
- * Return the current setting action taken when a unicode character is missing.
- * (Currently STOP or SUBSTITUTE).
- * @return the action constant when a codepage character cannot be converted to a
- * Unicode eqivalent
+ * Return the current setting action taken when a unicode character is missing
+ * or there is an unpaired surrogate etc.
+ * @param action the callback function pointer
+ * @param context the callback function state
  * @stable
  */
- UConverterFromUCallback   getMissingUnicodeAction(void) const;
+ void getMissingUnicodeAction(UConverterFromUCallback *action,
+                              void **context) const;
 
  /**
   * Sets the current setting action taken when a character from a codepage is
