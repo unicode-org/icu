@@ -2450,6 +2450,7 @@ private:
 
 public:
 
+#ifdef ICU_UNICODESTRING_USE_DEPRECATES
   //========================================
   // Deprecated API
   //========================================
@@ -2471,6 +2472,7 @@ public:
   inline void* operator new(size_t size, void *location);
    /* @deprecated Remove after 2000-dec-31. There is no replacement. */
   inline void operator delete(void *location);
+#endif
 
   //========================================
   // Non-public API - will be removed!
@@ -3378,6 +3380,7 @@ inline int32_t
 UnicodeString::setRefCount(int32_t count)
 { return (*((int32_t *)fArray - 1) = count); }
 
+#ifdef ICU_UNICODESTRING_USE_DEPRECATES
 
 // deprecated API - remove later
 inline int32_t
@@ -3404,6 +3407,7 @@ inline void
 UnicodeString::operator delete(void *location)
 { ::operator delete(location); }
 
+#endif
 
 //========================================
 // Static members
