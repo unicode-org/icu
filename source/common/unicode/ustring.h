@@ -219,7 +219,10 @@ u_strspn(const UChar *string, const UChar *matchSet);
  *            be NULL to get to the next token.
  * @param delim Set of delimiter characters (Unicode code points).
  * @param saveState The current pointer within the original string,
- *                which is set by this function.
+ *              which is set by this function. The saveState
+ *              parameter should the address of a local variable of type
+ *              UChar *. (i.e. defined "Uhar *myLocalSaveState" and use
+ *              &myLocalSaveState for this parameter).
  * @return A pointer to the next token found in src, or NULL
  *         when there are no more tokens.
  * @stable
