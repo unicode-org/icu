@@ -1,4 +1,3 @@
-#include <stdio.h>
 /*
 **********************************************************************
 *   Copyright (C) 2000-2001, International Business Machines
@@ -3286,8 +3285,7 @@ struct cloneStruct
 };
 
 
-/* static */
- UConverter * 
+static UConverter * 
 _ISO_2022_SafeClone(
             const UConverter *cnv, 
             void *stackBuffer, 
@@ -3311,7 +3309,7 @@ _ISO_2022_SafeClone(
 
     for(i=0;(i<UCNV_2022_MAX_CONVERTERS)&&cnvData->myConverterArray[i];i++) {
         int32_t size;
-	
+
         size = 0;
         ucnv_safeClone(cnvData->myConverterArray[i], NULL, &size, status);
         bufferSizeNeeded += size;
@@ -3328,13 +3326,13 @@ _ISO_2022_SafeClone(
     }
 
     if(currentConverterIndex == -1) {  /* -1 means - not found in array. Clone separately */
-	currentConverterSize = 0;
-	if(cnvData->currentConverter) { 
-	    ucnv_safeClone(cnvData->currentConverter, NULL, &currentConverterSize, status);
-	    bufferSizeNeeded += currentConverterSize;
-	}
+        currentConverterSize = 0;
+        if(cnvData->currentConverter) { 
+            ucnv_safeClone(cnvData->currentConverter, NULL, &currentConverterSize, status);
+            bufferSizeNeeded += currentConverterSize;
+        }
     }
-    
+
     for(;i<UCNV_2022_MAX_CONVERTERS;i++) { /* zero the other sizes */
         sizes[i]=0;
     }
@@ -3355,7 +3353,7 @@ _ISO_2022_SafeClone(
     uprv_memcpy(&localClone->mydata, cnv->extraInfo, sizeof(UConverterDataISO2022));
 
     /* clone back sub cnvs */
-    
+
     ptr = (char*)&localClone->clonedConverters;
     for(i=0;i<numConverters;i++) {
         int32_t size;
@@ -3366,14 +3364,14 @@ _ISO_2022_SafeClone(
     for(;i<UCNV_2022_MAX_CONVERTERS;i++) {
         localClone->mydata.myConverterArray[i] = NULL;
     }
-    
+
     if(currentConverterIndex == -1) { /* -1 = not found in list */
         /* KR version 1 also uses the state in currentConverter for preserving state
          * so we need to clone it too!
          */
         if(cnvData->currentConverter) { 
             localClone->mydata.currentConverter = ucnv_safeClone(cnvData->currentConverter, ptr, &currentConverterSize, status);
-	    ptr += currentConverterSize;
+            ptr += currentConverterSize;
         } else {
             localClone->mydata.currentConverter = NULL;
         }
@@ -3391,7 +3389,7 @@ _ISO_2022_SafeClone(
         /* fromUnicodeConverter is NULL */
         localClone->mydata.fromUnicodeConverter = NULL;
     }
-        
+
     localClone->cnv.extraInfo = &localClone->mydata; /* set pointer to extra data */
 
     return &localClone->cnv;
