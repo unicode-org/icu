@@ -23,15 +23,13 @@ public class RoundTripTest extends TestFmwk {
     */
     
     public void TestHiragana() throws IOException, ParseException {
-        new Test("Latin-Hiragana", 
-          TestUtility.LATIN_SCRIPT, TestUtility.HIRAGANA_SCRIPT)
-          .test("[a-z]", "[\u3040-\u3094]", null, this, new Legal());
+        new Test("Latin-Hiragana")
+          .test("[a-zA-Z]", "[[:hiragana:]\u3040-\u3094]", "[\u309D\u309E]", this, new Legal());
     }
 
     public void TestKatakana() throws IOException, ParseException {
-        new Test("Latin-Katakana", 
-          TestUtility.LATIN_SCRIPT, TestUtility.KATAKANA_SCRIPT)
-          .test("[a-z]", "[\u30A1-\u30FA\u30FC]", null, this, new Legal());
+        new Test("Latin-Katakana")
+          .test("[a-zA-Z]", "[[:katakana:]\u30A1-\u30FA\u30FC]", "[\u30FD\u30FE\uFF66-\uFF9D]", this, new Legal());
     }
 
 // Some transliterators removed for 2.0
@@ -39,7 +37,7 @@ public class RoundTripTest extends TestFmwk {
 //  public void TestArabic() throws IOException, ParseException {
 //      new Test("Latin-Arabic", 
 //        TestUtility.LATIN_SCRIPT, TestUtility.ARABIC_SCRIPT)
-//        .test("[a-z]", "[\u0620-\u065F-[\u0640]]", this);
+//        .test("[a-zA-Z]", "[\u0620-\u065F-[\u0640]]", this);
 //  }
 
 //  public void TestHebrew() throws IOException, ParseException {
@@ -55,27 +53,33 @@ public class RoundTripTest extends TestFmwk {
 //  }
 
     public void TestJamo() throws IOException, ParseException {
-        Test t = new Test("Latin-Jamo", 
-          TestUtility.LATIN_SCRIPT, TestUtility.JAMO_SCRIPT);
-        t.setErrorLimit(200); // Don't run full test -- too long
-        //t.test("[[a-z]-[fqvxz]]", null, this);
-        t.test("[a-z]", null, null, this, new Legal());
+        new Test("Latin-Jamo")
+            .test("[a-zA-Z]", "[\u1100-\u1113 \u1161-\u1176 \u11A8-\u11C2]", "", this, new Legal());
     }
 
-    public void TestJamoHangul() throws IOException, ParseException {
-        Test t = new Test("Latin-Hangul", 
-          TestUtility.LATIN_SCRIPT, TestUtility.HANGUL_SCRIPT);
-        t.setErrorLimit(50); // Don't run full test -- too long
-        t.test("[a-z]", null, null, this, new Legal());
+/*
+        SBase = 0xAC00, LBase = 0x1100, VBase = 0x1161, TBase = 0x11A7,
+        LCount = 19, VCount = 21, TCount = 28,
+        NCount = VCount * TCount,   // 588
+        SCount = LCount * NCount,   // 11172
+        LLimit = LBase + LCount,    // 1113
+        VLimit = VBase + VCount,    // 1176
+        TLimit = TBase + TCount,    // 11C3
+        SLimit = SBase + SCount;    // D7A4
+*/
+
+    public void TestHangul() throws IOException, ParseException {
+        Test t = new Test("Latin-Hangul");
+        t.setDoublePercentage(0.02);
+        t.test("[a-zA-Z]", "[\uAC00-\uD7A4]", "", this, new Legal());
     }
 
     public void TestGreek() throws IOException, ParseException {
         try {
             Legal lt = new LegalGreek(true);
-            new Test("Latin-Greek", 
-            TestUtility.LATIN_SCRIPT, TestUtility.GREEK_SCRIPT)
-            .test(null, "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]", 
-                "[\u037A\u03D0-\u03F5]", /* exclusions */
+            new Test("Latin-Greek")
+            .test("[a-zA-Z]", "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]", 
+                "[\u00B5\u037A\u03D0-\u03F5]", /* roundtrip exclusions */
                 this, lt);
         } catch (RuntimeException e) {
             System.out.println(e.getClass().getName() + ", " + e.getMessage());
@@ -84,119 +88,100 @@ public class RoundTripTest extends TestFmwk {
     }
 
     public void Testel() throws IOException, ParseException {
-        new Test("Latin-el", 
-          TestUtility.LATIN_SCRIPT, TestUtility.GREEK_SCRIPT)
-          .test(null, "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]", 
-            "[\u037A\u03D0-\u03F5]", /* exclusions */
+        new Test("Latin-el")
+          .test("[a-zA-Z]", "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]", 
+            "[\u00B5\u037A\u03D0-\uFFFF]", /* roundtrip exclusions */
             this, new LegalGreek(false));
     }
 
     public void TestCyrillic() throws IOException, ParseException {
-        new Test("Latin-Cyrillic", 
-          TestUtility.LATIN_SCRIPT, TestUtility.CYRILLIC_SCRIPT)
-          .test(null, "[\u0400-\u045F]", null, this, new Legal());
+        new Test("Latin-Cyrillic")
+          .test("[a-zA-Z]", "[\u0400-\u045F]", null, this, new Legal());
     }
     
     //----------------------------------
     // Inter-Indic Tests
     //----------------------------------
    public void TestDevanagariLatin() throws IOException, ParseException {
-        new Test("Latin-DEVANAGARI", 
-          TestUtility.LATIN_SCRIPT, TestUtility.DEVANAGARI_SCRIPT)
-          .test(null, "[:Devanagari:]", null, this, new Legal());
+        new Test("Latin-DEVANAGARI")
+          .test("[a-zA-Z]", "[:Devanagari:]", null, this, new Legal());
     }
     public void TestDevanagariBengali() throws IOException, ParseException {
-        new Test("BENGALI-DEVANAGARI", 
-          TestUtility.BENGALI_SCRIPT, TestUtility.DEVANAGARI_SCRIPT)
+        new Test("BENGALI-DEVANAGARI")
           .test("[:BENGALI:]", "[:Devanagari:]", 
                 "[\u090D\u090e\u0911\u0912\u0929\u0933\u0934\u0935\u093d\u0950\u0958\u0959\u095a\u095b\u095e\u09f0\u09f1]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("DEVANAGARI-BENGALI", 
-            TestUtility.DEVANAGARI_SCRIPT, TestUtility.BENGALI_SCRIPT )
-          .test("[:Devanagari:]", "[:BENGALI:]",
-                "[\u090D\u090e\u0911\u0912\u0929\u0933\u0934\u0935\u093d\u0950\u0958\u0959\u095a\u095b\u095e\u09f0\u09f1]", /*roundtrip exclusions*/
+        new Test("DEVANAGARI-BENGALI")
+          .test( "[:Devanagari:]", "[:BENGALI:]",
+                  "[\u090D\u090e\u0911\u0912\u0929\u0933\u0934\u0935\u093d\u0950\u0958\u0959\u095a\u095b\u095e\u09f0\u09f1]", /*roundtrip exclusions*/
                   this, new Legal());
     }
     public void TestDevanagariGurmukhi() throws IOException, ParseException {
-        new Test("GURMUKHI-DEVANAGARI", 
-          TestUtility.GURMUKHI_SCRIPT, TestUtility.DEVANAGARI_SCRIPT)
-          .test("[:GURMUKHI:]", "[:Devanagari:]",  
+        new Test("GURMUKHI-DEVANAGARI")
+          .test("[:GURMUKHI:]", "[:Devanagari:]", 
                 "[\u090B\u090C\u090D\u090e\u0911\u0912\u0934\u0937\u093D\u0950\u0960\u0961\u0a72\u0a73\u0a74]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("DEVANAGARI-GURMUKHI", 
-            TestUtility.DEVANAGARI_SCRIPT, TestUtility.GURMUKHI_SCRIPT )
+        new Test("DEVANAGARI-GURMUKHI")
           .test( "[:Devanagari:]", "[:GURMUKHI:]",
                   "[\u090B\u090C\u090D\u090e\u0911\u0912\u0934\u0937\u093D\u0950\u0960\u0961\u0a72\u0a73\u0a74]", /*roundtrip exclusions*/
                   this, new Legal());
     } 
     public void TestDevanagariGujarati() throws IOException, ParseException {
-        new Test("GUJARATI-DEVANAGARI", 
-          TestUtility.GUJARATI_SCRIPT, TestUtility.DEVANAGARI_SCRIPT)
+        new Test("GUJARATI-DEVANAGARI")
           .test("[:GUJARATI:]", "[:Devanagari:]", 
                 "[\u0961\u090c\u090e\u0912]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("DEVANAGARI-GUJARATI", 
-            TestUtility.DEVANAGARI_SCRIPT, TestUtility.GUJARATI_SCRIPT )
+        new Test("DEVANAGARI-GUJARATI")
           .test( "[:Devanagari:]", "[:GUJARATI:]",
                   "[\u0961\u090c\u090e\u0912]", /*roundtrip exclusions*/
                   this, new Legal());
    }
    public void TestDevanagariOriya() throws IOException, ParseException {
-        new Test("ORIYA-DEVANAGARI", 
-          TestUtility.ORIYA_SCRIPT, TestUtility.DEVANAGARI_SCRIPT)
+        new Test("ORIYA-DEVANAGARI")
           .test("[:ORIYA:]", "[:Devanagari:]", 
                 "[\u0950\u090D\u090e\u0912\u0911\u0931\u0935]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("DEVANAGARI-ORIYA", 
-            TestUtility.DEVANAGARI_SCRIPT, TestUtility.ORIYA_SCRIPT )
+        new Test("DEVANAGARI-ORIYA")
           .test( "[:Devanagari:]", "[:ORIYA:]",
                   "[\u0950\u090D\u090e\u0912\u0911\u0931\u0935]", /*roundtrip exclusions*/
                   this, new Legal());
    }
    public void TestDevanagariTamil() throws IOException, ParseException {
-        new Test("Tamil-DEVANAGARI", 
-          TestUtility.TAMIL_SCRIPT, TestUtility.DEVANAGARI_SCRIPT)
+        new Test("Tamil-DEVANAGARI")
           .test("[:tamil:]", "[:Devanagari:]", 
                   "[\u090B\u090C\u090D\u0911\u0916\u0917\u0918\u091B\u091D\u0920\u0921\u0922\u0925\u0926\u0927\u092B\u092C\u092D\u0936\u093d\u0950[\u0958-\u0961]]", /*roundtrip exclusions*/
                   this, new Legal());
-        new Test("DEVANAGARI-Tamil", 
-            TestUtility.DEVANAGARI_SCRIPT, TestUtility.TAMIL_SCRIPT )
+        new Test("DEVANAGARI-Tamil")
           .test( "[:Devanagari:]", "[:tamil:]",
                   "", /*roundtrip exclusions*/
                   this, new Legal());
    }
    public void TestDevanagariTelugu() throws IOException, ParseException {
-        new Test("Telugu-DEVANAGARI", 
-          TestUtility.TELUGU_SCRIPT, TestUtility.DEVANAGARI_SCRIPT)
+        new Test("Telugu-DEVANAGARI")
           .test("[:telugu:]", "[:Devanagari:]", 
                 "[\u0950\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("DEVANAGARI-TELUGU", 
-            TestUtility.DEVANAGARI_SCRIPT, TestUtility.TELUGU_SCRIPT )
+        new Test("DEVANAGARI-TELUGU")
           .test( "[:Devanagari:]", "[:TELUGU:]",
                   "[\u0950\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/
                   this, new Legal());
     }
     public void TestDevanagariKannada() throws IOException, ParseException {
-        new Test("KANNADA-DEVANAGARI", 
-          TestUtility.KANNADA_SCRIPT, TestUtility.DEVANAGARI_SCRIPT)
+        new Test("KANNADA-DEVANAGARI")
           .test("[:KANNADA:]", "[:Devanagari:]", 
                 "[\u0950\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("DEVANAGARI-KANNADA", 
-            TestUtility.DEVANAGARI_SCRIPT, TestUtility.KANNADA_SCRIPT )
+        new Test("DEVANAGARI-KANNADA")
           .test( "[:Devanagari:]", "[:KANNADA:]",
                   "[\u0950\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/ 
                   this, new Legal());
     }
     public void TestDevanagariMalayalam() throws IOException, ParseException {
-        new Test("MALAYALAM-DEVANAGARI", 
-          TestUtility.MALAYALAM_SCRIPT, TestUtility.DEVANAGARI_SCRIPT)
+        new Test("MALAYALAM-DEVANAGARI")
           .test("[:MALAYALAM:]", "[:Devanagari:]", 
                 "[\u0950\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/
                 this, new Legal());
-        new Test("DEVANAGARI-MALAYALAM", 
-            TestUtility.DEVANAGARI_SCRIPT, TestUtility.MALAYALAM_SCRIPT )
+        new Test("DEVANAGARI-MALAYALAM")
           .test( "[:Devanagari:]", "[:MALAYALAM:]",
                   "[\u0950\u090D\u0911\u093d\u0929\u0934[\u0958-\u095f]]", /*roundtrip exclusions*/
                   this, new Legal());
@@ -621,14 +606,17 @@ public class RoundTripTest extends TestFmwk {
         PrintWriter out;
     
         private String transliteratorID; 
-        private byte sourceScript;
-        private byte targetScript;
-        private int errorLimit = Integer.MAX_VALUE;
+        private int errorLimit = 500;
         private int errorCount = 0;
         private int pairLimit  = 0x10000;
         UnicodeSet sourceRange;
         UnicodeSet targetRange;
+        UnicodeSet toSource;
+        UnicodeSet toTarget;
         UnicodeSet roundtripExclusions;
+        
+        double doublePercentage = 1.0;
+        
         TestLog log;
         Legal legalSource;
         UnicodeSet badCharacters;
@@ -636,11 +624,8 @@ public class RoundTripTest extends TestFmwk {
         /*
          * create a test for the given script transliterator.
          */
-        Test(String transliteratorID, 
-             byte sourceScript, byte targetScript) {
+        Test(String transliteratorID) {
             this.transliteratorID = transliteratorID;
-            this.sourceScript = sourceScript;
-            this.targetScript = targetScript;
         }
     
         public void setErrorLimit(int limit) {
@@ -651,6 +636,10 @@ public class RoundTripTest extends TestFmwk {
             pairLimit = limit;
         }
         
+        public void setDoublePercentage(double newval) {
+            doublePercentage = newval;
+        }
+    
         // Added to do better equality check.
         
         public static boolean isSame(String a, String b) {
@@ -663,6 +652,7 @@ public class RoundTripTest extends TestFmwk {
             return false;
         }
         
+        /*
         public boolean includesSome(UnicodeSet set, String a) {
             int cp;
             for (int i = 0; i < a.length(); i += UTF16.getCharCount(cp)) {
@@ -671,6 +661,7 @@ public class RoundTripTest extends TestFmwk {
             }
             return false;
         }
+        */
         
         public static boolean isCamel(String a) {
             //System.out.println("CamelTest");
@@ -696,21 +687,27 @@ public class RoundTripTest extends TestFmwk {
             //System.out.println("FALSE");
             return false;
         }
+        
+        static final UnicodeSet okAnyway = new UnicodeSet("[^[:Letter:]]");
+        static final UnicodeSet neverOk = new UnicodeSet("[:Other:]");
       
         public void test(String sourceRange, String targetRange, String roundtripExclusions,
                          TestLog log, Legal legalSource) 
           throws java.io.IOException, java.text.ParseException {
             
             this.legalSource = legalSource;
-      
-            if (sourceRange != null && sourceRange.length() > 0) {
-                this.sourceRange = new UnicodeSet(sourceRange);
-            }else{
-                this.sourceRange = new UnicodeSet("[a-zA-Z]");
-            }
-            if (targetRange != null && targetRange.length() > 0) {
-                this.targetRange = new UnicodeSet(targetRange);
-            }
+            this.sourceRange = new UnicodeSet(sourceRange);
+            this.sourceRange.removeAll(neverOk);
+            
+            this.targetRange = new UnicodeSet(targetRange);
+            this.targetRange.removeAll(neverOk);
+            
+            this.toSource = new UnicodeSet(sourceRange);
+            this.toSource.addAll(okAnyway);
+            
+            this.toTarget = new UnicodeSet(targetRange);
+            this.toTarget.addAll(okAnyway);
+            
             if (roundtripExclusions != null && roundtripExclusions.length() > 0) {
                 this.roundtripExclusions = new UnicodeSet(roundtripExclusions);
             }else{
@@ -722,6 +719,7 @@ public class RoundTripTest extends TestFmwk {
             log.logln(Utility.escape("Source:  " + this.sourceRange));
             log.logln(Utility.escape("Target:  " + this.targetRange));
             log.logln(Utility.escape("Exclude: " + this.roundtripExclusions));
+            if (doublePercentage < 1.0) log.logln("Double Percentage: " + doublePercentage);
             
             badCharacters = new UnicodeSet("[:other:]");
 
@@ -729,8 +727,7 @@ public class RoundTripTest extends TestFmwk {
 
             // note: check that every transliterator transliterates the null string correctly!
 
-            String logFileName = "test_" + transliteratorID + "_"
-                + sourceScript + "_" + targetScript + ".html";
+            String logFileName = "test_" + transliteratorID + ".html";
 
             File lf = new File(logFileName); 
             log.logln("Creating log file " + lf.getAbsoluteFile());
@@ -751,7 +748,9 @@ public class RoundTripTest extends TestFmwk {
             out.close();
 
             if (errorCount > 0) {
-                log.errln(transliteratorID + " errors: " + errorCount + ", see " + lf.getAbsoluteFile());
+                log.errln(transliteratorID + " errors: " 
+                    + errorCount + (errorCount > errorLimit ? " (at least!)" : "")
+                    + ", see " + lf.getAbsoluteFile());
             } else {
                 log.logln(transliteratorID + " ok");
                 new File(logFileName).delete();
@@ -765,69 +764,192 @@ public class RoundTripTest extends TestFmwk {
 
             log.logln("Checking that source characters convert to target - Singles");
             
-            BitSet failSourceTarg = new BitSet();
+            UnicodeSet failSourceTarg = new UnicodeSet();
 
+            /*
             for (char c = 0; c < 0xFFFF; ++c) {
-                if (TestUtility.isUnassigned(c) ||
-                    !isSource(c)) continue;
-                String cs = String.valueOf(c);
+                if (!sourceRange.contains(c)) continue;
+                */
+            UnicodeSetIterator usi = new UnicodeSetIterator(sourceRange);
+            while (true) {
+                int c = usi.next();
+                if (c < 0) break;
+                
+                String cs = UTF16.valueOf(c);
                 String targ = sourceToTarget.transliterate(cs);
-                if (!isReceivingTarget(targ) || includesSome(badCharacters, targ)) {
-                    logWrongScript("Source-Target", cs, targ);
-                    failSourceTarg.set(c);
-                } else {
-                    String cs2 = Normalizer.normalize(cs, Normalizer.DECOMP, 0);
-                    String targ2 = sourceToTarget.transliterate(cs2);
-                    if (!targ.equals(targ2)) {
-                        logNotCanonical("Source-Target", cs, targ, targ2);
+                if (!UnicodeSetIterator.containsAll(toTarget, targ) 
+                        || UnicodeSetIterator.containsSome(badCharacters, targ)) {
+                    String targD = Normalizer.normalize(targ, Normalizer.DECOMP, 0);
+                    if (!UnicodeSetIterator.containsAll(toTarget, targD) 
+                            || UnicodeSetIterator.containsSome(badCharacters, targD)) {
+                        logWrongScript("Source-Target", cs, targ);
+                        failSourceTarg.add(c);
+                        continue;
                     }
+                }
+                
+                String cs2 = Normalizer.normalize(cs, Normalizer.DECOMP, 0);
+                String targ2 = sourceToTarget.transliterate(cs2);
+                if (!targ.equals(targ2)) {
+                    logNotCanonical("Source-Target", cs, targ, targ2);
                 }
             }
 
             log.logln("Checking that source characters convert to target - Doubles");
-
+            
+            /*
             for (char c = 0; c < 0xFFFF; ++c) { 
                 if (TestUtility.isUnassigned(c) ||
-                    !isSource(c)) continue;
+                    !sourceRange.contains(c)) continue;
                 if (failSourceTarg.get(c)) continue;
                 
+            */
+            
+            UnicodeSet sourceRangeMinusFailures = new UnicodeSet(sourceRange);
+            sourceRangeMinusFailures.removeAll(failSourceTarg);
+            
+            UnicodeSetIterator usi2 = new UnicodeSetIterator();
+
+            usi.reset(sourceRangeMinusFailures);
+            while (true) {
+                int c = usi.next();
+                if (c < 0) break;
+             
+                /*
                 for (char d = 0; d < 0xFFFF; ++d) {
                     if (TestUtility.isUnassigned(d) ||
-                        !isSource(d)) continue;
+                        !sourceRange.contains(d)) continue;
                     if (failSourceTarg.get(d)) continue;
+                */
+                usi2.reset(sourceRangeMinusFailures);
+                while (true) {
+                    int d = usi2.next();
+                    if (d < 0) break;
                     
-                    String cs = String.valueOf(c) + d;
+                    String cs = UTF16.valueOf(c) + UTF16.valueOf(d);
                     String targ = sourceToTarget.transliterate(cs);
-                    if (!isReceivingTarget(targ) || includesSome(badCharacters, targ)) {
-                        logWrongScript("Source-Target", cs, targ);
-                } else {
+                    if (!UnicodeSetIterator.containsAll(toTarget,targ) 
+                            || UnicodeSetIterator.containsSome(badCharacters, targ)) {
+                        String targD = Normalizer.normalize(targ, Normalizer.DECOMP, 0);
+                        if (!UnicodeSetIterator.containsAll(toTarget,targD) 
+                                || UnicodeSetIterator.containsSome(badCharacters, targD)) {
+                            logWrongScript("Source-Target", cs, targ);
+                            continue;
+                        }
+                    }
                     String cs2 = Normalizer.normalize(cs, Normalizer.DECOMP, 0);
                     String targ2 = sourceToTarget.transliterate(cs2);
                     if (!targ.equals(targ2)) {
                         logNotCanonical("Source-Target", cs, targ, targ2);
                     }
-                }
                 }
             }
 
             log.logln("Checking that target characters convert to source and back - Singles");
             
-            BitSet failTargSource = new BitSet();
-            BitSet failRound = new BitSet();
+            UnicodeSet failTargSource = new UnicodeSet();
+            UnicodeSet failRound = new UnicodeSet();
 
-            for (char c = 0; c < 0xFFFF; ++c) {
+            /*for (char c = 0; c < 0xFFFF; ++c) {
                 if (TestUtility.isUnassigned(c) ||
-                    !isTarget(c)) continue;
-                String cs = String.valueOf(c);
+                    !targetRange.contains(c)) continue;
+                    */
+                    
+            usi.reset(targetRange);
+            while (true) {
+                int c = usi.next();
+                if (c < 0) break;
+                    
+                String cs = UTF16.valueOf(c);
                 String targ = targetToSource.transliterate(cs);
                 String reverse = sourceToTarget.transliterate(targ);
-                if (!isReceivingSource(targ) || includesSome(badCharacters, targ)) {
-                    logWrongScript("Target-Source", cs, targ);
-                    failTargSource.set(c);
-                } else if (!isSame(cs, reverse) && !roundtripExclusions.contains(c)) {
+                
+                if (!UnicodeSetIterator.containsAll(toSource, targ) 
+                        || UnicodeSetIterator.containsSome(badCharacters, targ)) {
+                    String targD = Normalizer.normalize(targ, Normalizer.DECOMP, 0);
+                    if (!UnicodeSetIterator.containsAll(toSource, targD) 
+                            || UnicodeSetIterator.containsSome(badCharacters, targD)) {
+                        logWrongScript("Target-Source", cs, targ);
+                        failTargSource.add(c);
+                        continue;
+                    }
+                }
+                if (!isSame(cs, reverse) && !roundtripExclusions.contains(c)) {
                     logRoundTripFailure(cs, targ, reverse);
-                    failRound.set(c);
-                } else {
+                    failRound.add(c);
+                    continue;
+                }
+                String targ2 = Normalizer.normalize(targ, Normalizer.DECOMP, 0);
+                String reverse2 = sourceToTarget.transliterate(targ2);
+                if (!reverse.equals(reverse2)) {
+                    logNotCanonical("Target-Source", cs, targ, targ2);
+                }
+            }
+
+            log.logln("Checking that target characters convert to source and back - Doubles");
+            int count = 0;
+            
+            UnicodeSet targetRangeMinusFailures = new UnicodeSet(targetRange);
+            targetRangeMinusFailures.removeAll(failTargSource);
+            targetRangeMinusFailures.removeAll(failRound);
+            
+            //char[] buf = new char[4]; // maximum we can have with 2 code points
+            /*
+            for (char c = 0; c < 0xFFFF; ++c) {
+                if (TestUtility.isUnassigned(c) ||
+                    !targetRange.contains(c)) continue;
+                    */
+            
+            usi.reset(targetRangeMinusFailures);
+            while (true) {
+                int c = usi.next();
+                if (c < 0) break;
+                
+                if (doublePercentage != 1.0) {
+                    double rand = Math.random();
+                    if (rand > doublePercentage) {
+                        //log.log(".");
+                        continue;
+                    }
+                }
+                    
+                if (++count > pairLimit) {
+                    throw new TestTruncated("Test truncated at " + pairLimit + " x 64k pairs");
+                }
+                log.log(TestUtility.hex(c));
+                
+                /*
+                for (char d = 0; d < 0xFFFF; ++d) {
+                    if (TestUtility.isUnassigned(d) ||
+                        !targetRange.contains(d)) continue;
+                        */
+                usi2.reset(targetRangeMinusFailures);
+                while (true) {
+                    int d = usi2.next();
+                    if (d < 0) break;
+                    
+                    if (doublePercentage != 1.0) {
+                        if (Math.random() > doublePercentage) continue;
+                    }
+                                            
+                    String cs = UTF16.valueOf(c) + UTF16.valueOf(d);
+                    String targ = targetToSource.transliterate(cs);
+                    String reverse = sourceToTarget.transliterate(targ);
+                    
+                    if (!UnicodeSetIterator.containsAll(toSource, targ) /*&& !failTargSource.contains(c) && !failTargSource.contains(d)*/
+                            || UnicodeSetIterator.containsSome(badCharacters, targ)) {
+                        String targD = Normalizer.normalize(targ, Normalizer.DECOMP, 0);
+                        if (!UnicodeSetIterator.containsAll(toSource, targD) /*&& !failTargSource.contains(c) && !failTargSource.contains(d)*/
+                                || UnicodeSetIterator.containsSome(badCharacters, targD)) {
+                            logWrongScript("Target-Source", cs, targ);
+                            continue;
+                        }
+                    }
+                    if (!isSame(cs, reverse) /*&& !failRound.contains(c) && !failRound.contains(d)*/
+                         && !roundtripExclusions.contains(c) && !roundtripExclusions.contains(d)) {
+                        logRoundTripFailure(cs, targ, reverse);
+                        continue;
+                    }
                     String targ2 = Normalizer.normalize(targ, Normalizer.DECOMP, 0);
                     String reverse2 = sourceToTarget.transliterate(targ2);
                     if (!reverse.equals(reverse2)) {
@@ -835,45 +957,11 @@ public class RoundTripTest extends TestFmwk {
                     }
                 }
             }
-
-            log.logln("Checking that target characters convert to source and back - Doubles");
-            int count = 0;
-            StringBuffer buf = new StringBuffer("aa");
-            for (char c = 0; c < 0xFFFF; ++c) {
-                if (TestUtility.isUnassigned(c) ||
-                    !isTarget(c)) continue;
-                if (++count > pairLimit) {
-                    throw new TestTruncated("Test truncated at " + pairLimit + " x 64k pairs");
-                }
-                buf.setCharAt(0, c);
-                log.log(TestUtility.hex(c));
-                for (char d = 0; d < 0xFFFF; ++d) {
-                    if (TestUtility.isUnassigned(d) ||
-                        !isTarget(d)) continue;
-                    buf.setCharAt(1, d);
-                    String cs = buf.toString();
-                    String targ = targetToSource.transliterate(cs);
-                    String reverse = sourceToTarget.transliterate(targ);
-                    if (!isReceivingSource(targ) && !failTargSource.get(c) && !failTargSource.get(d)
-                         || includesSome(badCharacters, targ)) {
-                        logWrongScript("Target-Source", cs, targ);
-                    } else if (!isSame(cs, reverse) && !failRound.get(c) && !failRound.get(d)
-                         && !roundtripExclusions.contains(c) && !roundtripExclusions.contains(d)) {
-                        logRoundTripFailure(cs, targ, reverse);
-                    } else {
-                        String targ2 = Normalizer.normalize(targ, Normalizer.DECOMP, 0);
-                        String reverse2 = sourceToTarget.transliterate(targ2);
-                        if (!reverse.equals(reverse2)) {
-                            logNotCanonical("Target-Source", cs, targ, targ2);
-                        }
-                    }
-                }
-            }
             log.logln("");
         }
 
         final void logWrongScript(String label, String from, String to) {
-            if (++errorCount >= errorLimit) {
+            if (++errorCount > errorLimit) {
                 throw new TestTruncated("Test truncated; too many failures");
             }
             out.println("<br>Fail " + label + ": " +
@@ -885,7 +973,7 @@ public class RoundTripTest extends TestFmwk {
         }
 
         final void logNotCanonical(String label, String from, String to, String toCan) {
-            if (++errorCount >= errorLimit) {
+            if (++errorCount > errorLimit) {
                 throw new TestTruncated("Test truncated; too many failures");
             }
             out.println("<br>Fail (can.equiv)" + label + ": " +
@@ -901,7 +989,7 @@ public class RoundTripTest extends TestFmwk {
         final void logRoundTripFailure(String from, String to, String back) {
             if (!legalSource.is(from)) return; // skip illegals
             
-            if (++errorCount >= errorLimit) {
+            if (++errorCount > errorLimit) {
                 throw new TestTruncated("Test truncated; too many failures");
             }
             out.println("<br>Fail Roundtrip: " +
@@ -919,27 +1007,28 @@ public class RoundTripTest extends TestFmwk {
          * Typically is base alphabet, minus extended characters
          * Default is ASCII letters for Latin
          */
+         /*
         public boolean isSource(char c) {
-            byte script = TestUtility.getScript(c);
-            if (script != sourceScript) return false;
-            if (!TestUtility.isLetter(c)) return false;
             if (!sourceRange.contains(c)) return false;
             return true;
         }
+        */
 
         /*
          * Characters to check for target back to source mapping.
          * Typically the same as the target script, plus punctuation
          */
+         /*
         public boolean isReceivingSource(char c) {
-            byte script = TestUtility.getScript(c);
-            return (script == sourceScript || script == TestUtility.COMMON_SCRIPT);
+            if (!targetRange.contains(c)) return false;
+            return true;
         }
-
+        */
         /*
          * Characters to filter for target-source mapping
          * Typically is base alphabet, minus extended characters
          */
+         /*
         public boolean isTarget(char c) {
             byte script = TestUtility.getScript(c);
             if (script != targetScript) return false;
@@ -947,11 +1036,13 @@ public class RoundTripTest extends TestFmwk {
             if (targetRange != null && !targetRange.contains(c)) return false;
             return true;
         }
-
+        */
+        
         /*
          * Characters to check for target-source mapping
          * Typically the same as the source script, plus punctuation
          */
+        /*
         public boolean isReceivingTarget(char c) {
             byte script = TestUtility.getScript(c);
             return (script == targetScript || script == TestUtility.COMMON_SCRIPT);
@@ -984,6 +1075,7 @@ public class RoundTripTest extends TestFmwk {
             }
             return true;
         }
+        */
 
         static class TestTruncated extends RuntimeException {
             TestTruncated(String msg) {

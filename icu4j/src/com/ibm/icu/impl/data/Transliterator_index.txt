@@ -48,8 +48,8 @@ Cyrillic-Latin:file:Transliterator_Cyrillic_Latin.txt:UTF8:FORWARD
 Latin-Greek:file:Transliterator_Greek_Latin.txt:UTF8:REVERSE
 Greek-Latin:file:Transliterator_Greek_Latin.txt:UTF8:FORWARD
 
-Latin-Greek/UNGEGN:alias:Latin-el/UNGEGN
-Greek-Latin/UNGEGN:alias:el-Latin/UNGEGN
+Latin-Greek/UNGEGN:alias:Latin-el
+Greek-Latin/UNGEGN:alias:el-Latin
 
 LowerLatin-Jamo:internal:Transliterator_Latin_Jamo.txt:UTF8:FORWARD
 Latin-Jamo:alias:[\p{Latin}]Any-Lower;LowerLatin-Jamo
@@ -78,7 +78,7 @@ Kanji-OnRomaji:file:Transliterator_Kanji_OnRomaji.utf8.txt:UTF8:FORWARD
 
 # Compound rules
 
-Latin-Hangul:alias:[\p{Latin}];NFD;Latin-Jamo;NFC
+Latin-Hangul:alias:[\u002D[\p{Latin}]];NFD;Latin-Jamo;NFC
 Hangul-Latin:alias:[\p{Hangul}];NFD;Jamo-Latin
 
 # Inter-Indic composed rules

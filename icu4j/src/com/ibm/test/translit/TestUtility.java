@@ -61,6 +61,11 @@ public final class TestUtility {
 		return "0000".substring(0,4-foo.length()) + foo;
 	}
     
+	public static String hex(int ch) {
+		String foo = Integer.toString(ch,16).toUpperCase();
+		return "00000000".substring(0,4-foo.length()) + foo;
+	}
+    
 	public static String hex(String s) {
 	  return hex(s,",");
 	}

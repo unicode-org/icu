@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/WriteCharts.java,v $
- * $Date: 2001/11/13 21:13:58 $
- * $Revision: 1.8 $
+ * $Date: 2001/11/14 01:34:50 $
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -94,7 +94,7 @@ public class WriteCharts {
         return results;
     };
     
-    public int priority(int script) {
+    static public int priority(int script) {
         if (script == UScript.LATIN) return -2;
         return script;
     }
@@ -166,29 +166,35 @@ public class WriteCharts {
         
         UnicodeSet sourceSetPlusAnyways = new UnicodeSet(sourceSet);
         sourceSetPlusAnyways.addAll(okAnyway);
-                
+        
+        UnicodeSetIterator usi = new UnicodeSetIterator(sourceSet);
+        while (true) {
+            int j = usi.next();
+            if (j < 0) break;
+            /*
         int count = sourceSet.getRangeCount();
         for (int i = 0; i < count; ++i) {
             int end = sourceSet.getRangeEnd(i);
             for (int j = sourceSet.getRangeStart(i); j <= end; ++j) {
+            */
                 String flag = "";
                 String ss = UTF16.valueOf(j);
                 String ts = t.transliterate(ss);
                 char group = 0;
-                if (!containsAll(targetSetPlusAnyways, ts)) {
+                if (!UnicodeSetIterator.containsAll(targetSetPlusAnyways, ts)) {
                     group |= 1;
                 }
                 if (UTF16.countCodePoint(ts) == 1) {
                     leftOverSet.remove(UTF16.charAt(ts,0));
                 }
                 String rt = inverse.transliterate(ts);
-                if (!containsAll(sourceSetPlusAnyways, rt)) {
+                if (!UnicodeSetIterator.containsAll(sourceSetPlusAnyways, rt)) {
                     group |= 2;
                 } else if (!ss.equals(rt)) {
                     group |= 4;
                 }
                 
-                if (containsSome(privateUse, ts) || containsSome(privateUse, rt)) {
+                if (UnicodeSetIterator.containsSome(privateUse, ts) || UnicodeSetIterator.containsSome(privateUse, rt)) {
                     group |= 16;
                 }
                     
@@ -225,16 +231,23 @@ public class WriteCharts {
                     }
                 }
                 */
-            }
+            //}
         }
         
         
         leftOverSet.remove(0x0100,0x02FF); // remove extended & IPA
         
-        count = leftOverSet.getRangeCount();
+        /*int count = leftOverSet.getRangeCount();
         for (int i = 0; i < count; ++i) {
             int end = leftOverSet.getRangeEnd(i);
             for (int j = leftOverSet.getRangeStart(i); j <= end; ++j) {
+            */
+            
+        usi.reset(leftOverSet);
+        while (true) {
+            int j = usi.next();
+            if (j < 0) break;
+            
                 String ts = UTF16.valueOf(j);
                 // String decomp = Normalizer.normalize(ts, Normalizer.DECOMP_COMPAT, 0);
                 // if (!decomp.equals(ts)) continue;
@@ -243,10 +256,10 @@ public class WriteCharts {
                 String flag = "";
                 char group = 0x80;
                     
-                if (!containsAll(sourceSetPlusAnyways, rt)) {
+                if (!UnicodeSetIterator.containsAll(sourceSetPlusAnyways, rt)) {
                     group |= 8;
                 }
-                if (containsSome(privateUse, rt)) {
+                if (UnicodeSetIterator.containsSome(privateUse, rt)) {
                     group |= 16;
                 }
                     
@@ -254,7 +267,7 @@ public class WriteCharts {
                     "<td class='s'>-</td><td class='t'>" + ts + "<br><tt>" + hex(ts)
                     + "</tt></td><td class='r'>"
                     + rt + "<br><tt>" + hex(rt) + "</tt></td>");
-            }
+            //}
         }
 
         // make file name and open
@@ -294,7 +307,7 @@ public class WriteCharts {
             
             Iterator it = map.keySet().iterator();
             char lastGroup = 0;
-            count = 0;
+            int count = 0;
             int column = 0;
             while (it.hasNext()) {
                 String key = (String) it.next();
@@ -366,27 +379,6 @@ public class WriteCharts {
         return true;
     }
     */
-    
-    // tests whether a string is in a set.
-    public static boolean containsSome(UnicodeSet set, String s) {
-        int cp;
-        for (int i = 0; i < s.length(); i += UTF16.getCharCount(i)) {
-            cp = UTF16.charAt(s, i);
-            if (set.contains(cp)) return true;
-        }
-        return false;
-    }
-    
-    // tests whether a string is in a set.
-    public static boolean containsAll(UnicodeSet set, String s) {
-        int cp;
-        for (int i = 0; i < s.length(); i += UTF16.getCharCount(i)) {
-            cp = UTF16.charAt(s, i);
-            if (!set.contains(cp)) return false;
-        }
-        return true;
-    }
-    
     
 }
   
