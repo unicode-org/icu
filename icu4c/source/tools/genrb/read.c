@@ -417,6 +417,9 @@ static void seekUntilEndOfComment(UCHARBUF *buf,
         if(token!=NULL){
             ustr_u32cat(token, c, status);
         }
+        /* increment the lineCount */
+        isNewline(c);
+
     } while (c != U_EOF && *status == U_ZERO_ERROR);
 
     if (c == U_EOF) {
