@@ -46,9 +46,7 @@
 #include <fcntl.h>
 #endif
 
-#ifdef USE_TRANSLIT
-# include "unicode/translit.h"
-#endif
+#include "unicode/translit.h"
 
 static const size_t buffsize = 4096;
 
@@ -218,11 +216,29 @@ static int printConverters(const char *pname, const char *lookfor, int canon)
     return 0;
 }
 
+// Print all available transliterators
+static int printTransliterators(const char *pname) {
+    int32_t numtrans = utrans_countAvailableIDs(), i;
+    char buf[512];
+    
+    for (i = 0; i < numtrans; ++i) {
+        utrans_getAvailableID(i, buf, sizeof(buf));
+        printf("%s", buf);
+        if (i < numtrans - 1) {
+            putchar(' ');
+        }
+    }
+
+    return 0;
+}
+
+
 // Convert a file from one encoding to another
 static UBool convertFile(const char* fromcpage, 
-                 const char* tocpage, 
-                 FILE* infile, 
-                 FILE* outfile)
+                         const char* tocpage,
+                         const char *translit,
+                         FILE* infile, 
+                         FILE* outfile)
 {
   UBool ret = TRUE;
     UConverter* convfrom = 0;
@@ -240,18 +256,21 @@ static UBool convertFile(const char* fromcpage,
 
     size_t rd, totbuffsize;
 
-#if USE_TRANSLIT
-    const char *translit;
-
     Transliterator *t = NULL;
 
-    translit = getenv("TRANSLIT");
     if(translit != NULL && *translit)
       {
-        t = Transliterator::createInstance(UnicodeString(translit, ""));
-        fprintf(stderr, "Opening transliterator: %s\n", translit, t);
+        UnicodeString str(translit);
+        t = Transliterator::createInstance(str, UTRANS_FORWARD, err);
+        if (U_FAILURE(err)) {
+            u_wmsg("cantOpenTranslit", str.getBuffer(), u_wmsg_errorName(err));
+            if (t) {
+                delete t;
+                t = 0;
+            }
+            goto error_exit;
+        }
       }
-#endif
 
     // Create codepage converter. If the codepage or its aliases weren't
     // available, it returns NULL and a failure code
@@ -329,7 +348,6 @@ static UBool convertFile(const char* fromcpage,
         buffiter = buff;
         cuniiter = unibuff;
 
-#ifdef USE_TRANSLIT
         if(t) 
           {
             t->transliterate(u);
@@ -337,7 +355,6 @@ static UBool convertFile(const char* fromcpage,
             uniiter = unibuff + u.length();
             
           }
-#endif
 
         ucnv_fromUnicode(convto, &buffiter, buffiter + totbuffsize, &cuniiter, cuniiter + (size_t) (uniiter - unibuff), 0, flush, &err);
             
@@ -373,9 +390,7 @@ static UBool convertFile(const char* fromcpage,
     if (convfrom) ucnv_close(convfrom);
     if (convto) ucnv_close(convto);
 
-#ifdef USE_TRANSLIT
     if ( t ) delete t;
-#endif
 
     // Close the created converters
     if (buff) delete [] buff;
@@ -408,8 +423,10 @@ int main(int argc, char** argv)
     FILE* file = 0;
     FILE* infile;
     int   ret = 0;
+
     const char* fromcpage = 0;
     const char* tocpage = 0;
+    const char *translit = 0;
     const char* infilestr = 0;
 
     char** iter = argv+1;
@@ -419,6 +436,7 @@ int main(int argc, char** argv)
 
     int printConvs = 0, printCanon = 0;
     const char *printName = 0;
+    int printTranslits = 0;
 
     // First, get the arguments from command-line
     // to know the codepages to convert between
@@ -437,15 +455,33 @@ int main(int argc, char** argv)
             if (iter!=end)
                 tocpage = *iter;
         }
+        else if (strcmp("-x", *iter) == 0)
+        {
+            iter++;
+            if (iter!=end)
+                translit = *iter;
+            else
+                usage(pname, 1);
+        }
         else if (strcmp("-l", *iter) == 0 || !strcmp("--list", *iter))
         {
+            if (printTranslits) {
+                usage(pname, 1);
+            }
             printConvs = 1;
         }
         else if (strcmp("--default-code", *iter) == 0)
         {
+            if (printTranslits) {
+                usage(pname, 1);
+            }
             printName = ucnv_getDefaultName();
         }
         else if (strcmp("--list-code", *iter) == 0) {
+            if (printTranslits) {
+                usage(pname, 1);
+            }
+
             iter++;
             if (iter!=end) {
                 UErrorCode e = U_ZERO_ERROR;
@@ -462,6 +498,13 @@ int main(int argc, char** argv)
         else if (strcmp("--canon", *iter) == 0) {
             printCanon = 1;
         }
+        else if (strcmp("-L", *iter) == 0 || !strcmp("--list-transliterators", *iter))
+        {
+            if (printConvs) {
+                usage(pname, 1);
+            }
+            printTranslits = 1;
+        }
         else if (strcmp("-h", *iter) == 0 || !strcmp("-?", *iter)|| !strcmp("--help", *iter))
         {
             usage(pname, 0);
@@ -477,6 +520,8 @@ int main(int argc, char** argv)
 
     if (printConvs || printName) {
         return printConverters(pname, printName, printCanon) ? 2 : 0;
+    } else if (printTranslits) {
+        return printTransliterators(pname) ? 3 : 0;
     }
 
     if (fromcpage==0 && tocpage==0)
@@ -530,7 +575,9 @@ int main(int argc, char** argv)
           exit(-1);
   }
 #endif
-    if (!convertFile(fromcpage, tocpage, infile, stdout))
+
+  initMsg(pname);
+    if (!convertFile(fromcpage, tocpage, translit, infile, stdout))
         goto error_exit;
 
     goto normal_exit;
