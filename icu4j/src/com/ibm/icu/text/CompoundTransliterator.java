@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CompoundTransliterator.java,v $ 
- * $Date: 2001/11/29 16:11:46 $ 
- * $Revision: 1.23 $
+ * $Date: 2001/11/29 17:40:43 $ 
+ * $Revision: 1.24 $
  *
  *****************************************************************************************
  */
@@ -30,7 +30,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.23 $ $Date: 2001/11/29 16:11:46 $
+ * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.24 $ $Date: 2001/11/29 17:40:43 $
  */
 public class CompoundTransliterator extends Transliterator {
 
@@ -427,8 +427,7 @@ public class CompoundTransliterator extends Transliterator {
             // isn't transliterating all the way to the end, and it should
             // in non-incremental mode.)
             if (!incremental && index.start != index.limit) {
-                System.out.println("ERROR: Incomplete non-incremental transliteration in " + trans[i].getID());
-                index.start = index.limit;
+                throw new RuntimeException("ERROR: Incomplete non-incremental transliteration by " + trans[i].getID());
             }
 
             if (DEBUG) {

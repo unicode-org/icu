@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2001/11/29 16:11:46 $
- * $Revision: 1.67 $
+ * $Date: 2001/11/29 17:40:44 $
+ * $Revision: 1.68 $
  *
  *****************************************************************************************
  */
@@ -242,7 +242,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.67 $ $Date: 2001/11/29 16:11:46 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.68 $ $Date: 2001/11/29 17:40:44 $
  */
 public abstract class Transliterator {
     /**
@@ -971,8 +971,7 @@ public abstract class Transliterator {
                 // isn't transliterating all the way to the end, and it should
                 // in non-incremental mode.)
                 if (!isIncrementalRun && index.start != index.limit) {
-                    System.out.println("ERROR: Incomplete non-incremental transliteration in " + getID());
-                    index.start = index.limit;
+                    throw new RuntimeException("ERROR: Incomplete non-incremental transliteration by " + getID());
                 }
 
                 // Adjust overall limit for insertions/deletions.  Don't need
