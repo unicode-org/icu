@@ -8,13 +8,14 @@ SO_TARGET_VERSION_MAJOR = @LIB_VERSION_MAJOR@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 
-include $(top_srcdir)/icudefs.mk
+top_builddir = ..
+
+include $(top_builddir)/icudefs.mk
 
 ## Platform-specific setup
 include @platform_make_fragment@
 
 ## Build directory information
-top_builddir = ..
 subdir = i18n
 
 ## Extra files to remove for 'make clean'

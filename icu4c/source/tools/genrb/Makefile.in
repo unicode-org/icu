@@ -6,7 +6,9 @@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 
-include $(top_srcdir)/icudefs.mk
+top_builddir = ../..
+
+include $(top_builddir)/icudefs.mk
 
 ## Platform-specific setup
 
@@ -19,7 +21,6 @@ SECTION = 8
 MAN_FILES = $(TARGET).$(SECTION)
 
 ## Build directory information
-top_builddir = ../..
 subdir = tools/genrb
 
 ## Extra files to remove for 'make clean'

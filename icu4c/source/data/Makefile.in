@@ -11,10 +11,11 @@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 
-include $(top_srcdir)/icudefs.mk
+top_builddir = ..
+
+include $(top_builddir)/icudefs.mk
 
 ## Build directory information
-top_builddir = ..
 subdir = data
 
 ## Platform-specific setup
