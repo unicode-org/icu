@@ -93,7 +93,7 @@ for file in `find ./icu \( -name \*.txt -print \)`; do
 #    echo "bom8 is" $bom8 "for" $file
 #    bom8=`head -c 3 $file|od -t x1|head -n 1|cut -d ' ' -f2-4`;
     #Find a converted UTF-8 BOM
-    if [ "$bom8" = "057 08b 0ab" ]
+    if [ "$bom8" = "057 08b 0ab" -o "$bom8" = "57 8b ab" ]
     then
         binary_files="$binary_files `echo $file | cut -d / -f2-`";
     fi
