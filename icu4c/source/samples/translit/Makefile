@@ -12,7 +12,7 @@
 TARGET=translit
 
 # All object files (C or C++)
-OBJECTS=main.o util.o
+OBJECTS=main.o unaccent.o util.o
 
 #### rules
 # Load in standard makefile definitions
