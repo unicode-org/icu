@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CompoundTransliterator.java,v $ 
- * $Date: 2001/03/30 23:33:06 $ 
- * $Revision: 1.12 $
+ * $Date: 2001/09/20 21:20:39 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -35,7 +35,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.12 $ $Date: 2001/03/30 23:33:06 $
+ * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.13 $ $Date: 2001/09/20 21:20:39 $
  */
 public class CompoundTransliterator extends Transliterator {
 
@@ -47,6 +47,14 @@ public class CompoundTransliterator extends Transliterator {
      * Array of original filters associated with transliterators.
      */
     private UnicodeFilter[] filters = null;
+
+    /**
+     * For compound RBTs (those with an ::id block before and/or after
+     * the main rule block) we record the index of the RBT here.
+     * Otherwise, this should have a value of -1.  We need this
+     * information to implement toRules().
+     */
+    private int compoundRBTIndex;    
 
     private static final String COPYRIGHT =
         "\u00A9 IBM Corporation 1999. All rights reserved.";
@@ -129,6 +137,72 @@ public class CompoundTransliterator extends Transliterator {
     
     public CompoundTransliterator(String ID) {
         this(ID, FORWARD, null);
+    }
+
+    /**
+     * Package private constructor for Transliterator from a vector of
+     * transliterators.  The vector order is FORWARD, so if dir is
+     * REVERSE then the vector order will be reversed.  The caller is
+     * responsible for fixing up the ID.
+     */
+    CompoundTransliterator(int dir,
+                           Vector list) {
+        super("", null);
+        trans = null;
+        compoundRBTIndex = -1;
+        init(list, dir, false);
+        // assume caller will fixup ID
+    }
+
+    /**
+     * Finish constructing a transliterator: only to be called by
+     * constructors.  Before calling init(), set trans and filter to NULL.
+     * @param list a vector of transliterator objects to be adopted.  It
+     * should NOT be empty.  The list should be in declared order.  That
+     * is, it should be in the FORWARD order; if direction is REVERSE then
+     * the list order will be reversed.
+     * @param direction either FORWARD or REVERSE
+     * @param fixReverseID if TRUE, then reconstruct the ID of reverse
+     * entries by calling getID() of component entries.  Some constructors
+     * do not require this because they apply a facade ID anyway.
+     * @param status the error code indicating success or failure
+     */
+    private void init(Vector list,
+                      int direction,
+                      boolean fixReverseID) {
+        // assert(trans == 0);
+
+        // Allocate array
+        int count = list.size();
+        trans = new Transliterator[count];
+
+        // Move the transliterators from the vector into an array.
+        // Reverse the order if necessary.
+        int i;
+        for (i=0; i<count; ++i) {
+            int j = (direction == FORWARD) ? i : count - 1 - i;
+            trans[i] = (Transliterator) list.elementAt(j);
+        }
+
+        // Fix compoundRBTIndex for REVERSE transliterators
+        if (compoundRBTIndex >= 0 && direction == REVERSE) {
+            compoundRBTIndex = count - 1 - compoundRBTIndex;
+        }
+
+        // If the direction is UTRANS_REVERSE then we may need to fix the
+        // ID.
+        if (direction == REVERSE && fixReverseID) {
+            StringBuffer newID = new StringBuffer();
+            for (i=0; i<count; ++i) {
+                if (i > 0) {
+                    newID.append(ID_DELIM);
+                }
+                newID.append(trans[i].getID());
+            }
+            setID(newID.toString());
+        }
+
+        computeMaximumContextLength();
     }
 
     /**
