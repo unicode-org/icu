@@ -354,6 +354,9 @@ UnicodeSetTest::TestAddRemove(void) {
     UnicodeSet set; // Construct empty set
     doAssert(set.isEmpty() == TRUE, "set should be empty");
     doAssert(set.size() == 0, "size should be 0");
+    set.complement();
+    doAssert(set.size() == 0x110000, "size should be 0x110000");
+    set.clear();
     set.add(0x0061, 0x007a);
     expectPairs(set, "az");
     doAssert(set.isEmpty() == FALSE, "set should not be empty");
