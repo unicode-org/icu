@@ -483,7 +483,8 @@ le_int32 IndicReordering::reorder(const LEUnicode *chars, le_int32 charCount, le
 
             for (i = baseLimit; i < baseConsonant; i += 1) {
                 LEUnicode ch = chars[i];
-                const LETag *tag = &tagArray[1];
+                // Don't put 'blwf' on first consonant.
+                const LETag *tag = (i == baseLimit? &tagArray[2] : &tagArray[1]);
                 IndicClassTable::CharClass charClass = classTable->getCharClass(ch);
 
                 if (IndicClassTable::isConsonant(charClass)) {
