@@ -112,6 +112,11 @@
 #define U_HAVE_PLACEMENT_NEW @U_HAVE_PLACEMENT_NEW@
 #endif
 
+/* Determine whether to enable tracing. */
+#ifndef U_ENABLE_TRACING
+#define U_ENABLE_TRACING @U_ENABLE_TRACING@
+#endif
+
 /* Define the library suffix in a C syntax. */
 #define U_HAVE_LIB_SUFFIX @U_HAVE_LIB_SUFFIX@
 #define U_LIB_SUFFIX_C_NAME @ICULIBSUFFIXCNAME@

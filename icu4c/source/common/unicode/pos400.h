@@ -68,6 +68,11 @@
 #define U_OVERRIDE_CXX_ALLOCATION 1
 #endif
 
+/* Determine whether to enable tracing. */
+#ifndef U_ENABLE_TRACING
+#define U_ENABLE_TRACING 1
+#endif
+
 /*===========================================================================*/
 /* Generic data types                                                        */
 /*===========================================================================*/

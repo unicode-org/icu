@@ -87,6 +87,11 @@
 #define U_HAVE_PLACEMENT_NEW 1
 #endif
 
+/* Determine whether to enable tracing. */
+#ifndef U_ENABLE_TRACING
+#define U_ENABLE_TRACING 1
+#endif
+
 /*===========================================================================*/
 /* Generic data types                                                        */
 /*===========================================================================*/
