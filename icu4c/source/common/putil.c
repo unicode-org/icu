@@ -1586,7 +1586,7 @@ u_topNBytesOfDouble(double* d, int n)
 static char* u_bottomNBytesOfDouble(double* d, int n)
 {
 #if U_IS_BIG_ENDIAN
-    return (char*)(d + 1) - n
+    return (char*)(d + 1) - n;
 #else
     return (char*)d;
 #endif
