@@ -134,7 +134,9 @@ void TransliteratorErrorTest::TestTransliteratorErrors() {
     if(t1!=0 || U_SUCCESS(status)){
         delete t1;
         errln("FAIL: construction of bogus ID \"LATINGREEK-GREEKLATIN\"");
-    } 
+    } else {
+        delete t1;
+    }
     status = U_ZERO_ERROR;
     Transliterator* t2 = new RuleBasedTransliterator(newID, newIDRules, UTRANS_FORWARD, status);
     if (U_SUCCESS(status)) {
@@ -221,6 +223,7 @@ void TransliteratorErrorTest::TestRBTErrors() {
     RuleBasedTransliterator *t = new RuleBasedTransliterator(id, rules, UTRANS_REVERSE, set, parseErr, status);
     if (U_FAILURE(status)) {
         errln("FAIL: Was not able to create a good RBT to test registration.");
+        delete set;
         return;
     }
     Transliterator::registerInstance(t);
@@ -231,6 +234,7 @@ void TransliteratorErrorTest::TestRBTErrors() {
         delete t1;
         errln("FAIL: construction of unregistered ID failed.");
     } 
+    delete set;
 }
 
 void TransliteratorErrorTest::TestHexToUniErrors() {
