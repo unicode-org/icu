@@ -47,7 +47,7 @@ static UDataMemory *propsData=NULL;
 static UErrorCode dataErrorCode=U_ZERO_ERROR;
 
 static uint8_t formatVersion[4]={ 0, 0, 0, 0 };
-static UVersionInfo dataVersion={ 3, 0, 0, 0 };
+static UVersionInfo dataVersion={ 0, 0, 0, 0 };
 
 static UTrie propsTrie={ 0 }, propsVectorsTrie={ 0 };
 static const uint32_t *pData32=NULL, *props32Table=NULL, *exceptionsTable=NULL, *propsVectors=NULL;
