@@ -370,6 +370,7 @@ Locale &Locale::operator=(const Locale &other)
 
     /* The variantBegin is an offset into fullName, just copy it */
     variantBegin = other.variantBegin;
+    fIsBogus = other.fIsBogus;
     return *this;
 }
 
