@@ -699,10 +699,18 @@ int32_t  RegexMatcher::split(const UnicodeString &input,
     int i;
     int32_t numCaptureGroups = fPattern->fGroupMap->size();
     for (i=0; ; i++) {
-        if (i==destCapacity-1) {
-            // There is only one output string left.
-            // Fill it with whatever is left from the input, then exit the loop.
-            dest[i].setTo(input, nextOutputStringStart, inputLen-nextOutputStringStart);
+        if (i>=destCapacity-1) {
+            // There is one or zero output string left.
+            // Fill the last output string with whatever is left from the input, then exit the loop.
+            //  ( i will be == destCapicity if we filled the output array while processing
+            //    capture groups of the delimiter expression, in which case we will discard the
+            //    last capture group saved in favor of the unprocessed remainder of the
+            //    input string.)
+            i = destCapacity-1;
+            int32_t remainingLength = inputLen-nextOutputStringStart;
+            if (remainingLength > 0) {
+                dest[i].setTo(input, nextOutputStringStart, remainingLength);
+            }
             break;
         }
         if (find()) {
@@ -728,11 +736,6 @@ int32_t  RegexMatcher::split(const UnicodeString &input,
                 break;
             }
 
-            if (i==destCapacity-1) {
-                // We've filled up the last output string with capture group data.
-                //  Give back the last string, to be used for the remainder of the input.
-                i--;
-            }
         }
         else
         {
