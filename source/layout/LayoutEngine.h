@@ -65,7 +65,7 @@ class LEGlyphStorage;
 class U_LAYOUT_API LayoutEngine : public UObject {
 protected:
     /**
-     * The number of glyphs in the output
+     * The object which holds the glyph storage
      *
      * @internal
      */
@@ -123,6 +123,31 @@ protected:
     LayoutEngine();
 
     /**
+     * This method does any required pre-processing to the input characters. It
+     * may generate output characters that differ from the input charcters due to
+     * insertions, deletions, or reorderings. In such cases, it will also generate an
+     * output character index array reflecting these changes.
+     *
+     * Subclasses must override this method.
+     *
+     * Input parameters:
+     * @param chars - the input character context
+     * @param offset - the index of the first character to process
+     * @param count - the number of characters to process
+     * @param max - the number of characters in the input context
+     * @param rightToLeft - TRUE if the characters are in a right to left directional run
+     * @param outChars - the output character array, if different from the input
+     * @param glyphStorege - the object that holds the per-glyph storage. The character index array may be set.
+     * @param success - set to an error code if the operation fails
+     *
+     * @return the output character count (input character count if no change)
+     *
+     * @internal
+     */
+    virtual le_int32 characterProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
+            LEUnicode *&outChars, LEGlyphStorage &glyphStorage, LEErrorCode &success);
+
+    /**
      * This method does the glyph processing. It converts an array of characters
      * into an array of glyph indices and character indices. The characters to be
      * processed are passed in a surrounding context. The context is specified as
@@ -138,10 +163,10 @@ protected:
      * @param count - the number of characters to process
      * @param max - the number of characters in the context.
      * @param rightToLeft - TRUE if the text is in a right to left directional run
+     * @param glyphStorage - the object which holds the per-glyph storage. The glyph and char indices arrays
+     *                       will be set.
      *
      * Output parameters:
-     * @param glyphs - the glyph index array
-     * @param charIndices - the character index array
      * @param success - set to an error code if the operation fails
      *
      * @return the number of glyphs in the glyph index array
@@ -156,13 +181,10 @@ protected:
      * is not expected that many subclasses will override this method.
      *
      * Input parameters:
-     * @param glyphs - the input glyph array
-     * @param glyphCount - the number of glyphs in the glyph array
+     * @param glyphStorage - the object which holds the per-glyph storage. The glyph position array will be set.
      * @param x - the starting X position
      * @param y - the starting Y position
-     *
-     * Output parameters:
-     * @param positions - the output X and Y positions (two entries per glyph)
+     * @param success - set to an error code if the operation fails
      *
      * @internal
      */
@@ -181,14 +203,10 @@ protected:
      * @param chars - the input character context
      * @param offset - the offset of the first character to process
      * @param count - the number of characters to process
-     * @param reverse - TRUE if the glyphs in the glyph array have been reordered
-     * @param glyphs - the input glyph array
-     * @param glyphCount - the number of glyphs
-     * @param positions - the position array, will be updated as needed
+     * @param reverse - <code>TRUE</code> if the glyphs in the glyph array have been reordered
+     * @param glyphStorage - the object which holds the per-glyph storage. The glyph positions will be
+     *                       adjusted as needed.
      * @param success - output parameter set to an error code if the operation fails
-     *
-     * Note: the positions are passed as a plain array because this method should
-     * not need to reallocate them.
      *
      * @internal
      */
@@ -223,12 +241,10 @@ protected:
      * @param chars - the input character context
      * @param offset - the offset of the first character to be mapped
      * @param count - the number of characters to be mapped
-     * @param reverse - if TRUE, the output will be in reverse order
-     * @param mirror - if TRUE, do character mirroring
-     *
-     * Output parameters:
-     * @param glyphs - the glyph array
-     * @param charIndices - the character index array
+     * @param reverse - if <code>TRUE</code>, the output will be in reverse order
+     * @param mirror - if <code>TRUE</code>, do character mirroring
+     * @param glyphStorage - the object which holds the per-glyph storage. The glyph and char
+     *                       indices arrays will be filled in.
      * @param success - set to an error code if the operation fails
      *
      * @see LEFontInstance
@@ -241,11 +257,9 @@ protected:
      * This is a convenience method that forces the advance width of mark
      * glyphs to be zero, which is required for proper selection and highlighting.
      * 
-     * @param glyphs - the glyph array
-     * @param glyphCount - the number of glyphs
-     * @param reverse - TRUE if the glyph array has been reordered
+     * @param glyphStorage - the object containing the per-glyph storage. The positions array will be modified.
+     * @param reverse - <code>TRUE</code> if the glyph array has been reordered
      * @param markFilter - used to identify mark glyphs
-     * @param positions - the glyph position array - updated as required
      * @param success - output parameter set to an error code if the operation fails
      *
      * @see LEGlyphFilter
@@ -254,6 +268,25 @@ protected:
      */
     static void adjustMarkGlyphs(LEGlyphStorage &glyphStorage, LEGlyphFilter *markFilter, LEErrorCode &success);
 
+
+    /**
+     * This is a convenience method that forces the advance width of mark
+     * glyphs to be zero, which is required for proper selection and highlighting.
+     * This method uses the input characters to identify marks. This is required in
+     * cases where the font does not contain enough information to identify them based
+     * on the glyph IDs.
+     * 
+     * @param chars - the array of input characters
+     * @param charCount - the number of input characers
+     * @param glyphStorage - the object containing the per-glyph storage. The positions array will be modified.
+     * @param reverse - <code>TRUE</code> if the glyph array has been reordered
+     * @param markFilter - used to identify mark glyphs
+     * @param success - output parameter set to an error code if the operation fails
+     *
+     * @see LEGlyphFilter
+     *
+     * @internal
+     */
 	static void adjustMarkGlyphs(const LEUnicode chars[], le_int32 charCount, le_bool reverse, LEGlyphStorage &glyphStorage, LEGlyphFilter *markFilter, LEErrorCode &success);
 
 

@@ -66,7 +66,7 @@ class LEGlyphStorage;
  * methods with some default behavior such as returning constant values, or using the
  * values from the first subfont.
  *
- * @draft ICU 2.6
+ * @draft ICU 3.0
  */
 class U_LAYOUT_API LEFontInstance : public UObject
 {
@@ -167,7 +167,7 @@ public:
      *
      * @param ch - the character to be tested
      *
-     * @return TRUE if the font can render ch.
+     * @return <code>TRUE</code> if the font can render ch.
      *
      * @draft ICU 2.6
      */
@@ -190,7 +190,7 @@ public:
      * @param chars - the character array
      * @param offset - the index of the first character
      * @param count - the number of characters
-     * @param reverse - if TRUE, store the glyph indices in reverse order.
+     * @param reverse - if <code>TRUE</code>, store the glyph indices in reverse order.
      * @param mapper - the character mapper.
      * @param glyphStorage - the object which contains the output glyph array
      *
@@ -252,7 +252,7 @@ public:
      * @param pointNumber - the number of the point
      * @param point - the point's X and Y pixel values will be stored here
      *
-     * @return TRUE if the point coordinates could be stored.
+     * @return <code>TRUE</code> if the point coordinates could be stored.
      *
      * @stable ICU 2.8
      */

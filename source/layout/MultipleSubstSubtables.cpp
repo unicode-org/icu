@@ -18,6 +18,18 @@ U_NAMESPACE_BEGIN
 le_uint32 MultipleSubstitutionSubtable::process(GlyphIterator *glyphIterator, const LEGlyphFilter *filter) const
 {
     LEGlyphID glyph = glyphIterator->getCurrGlyphID();
+
+    // If there's a filter, we only want to do the
+    // substitution if the *input* glyphs doesn't
+    // exist.
+    //
+    // FIXME: is this always the right thing to do?
+    // FIXME: should this only be done for a non-zero
+    //        glyphCount?
+    if (filter != NULL && filter->accept(glyph)) {
+        return 0;
+    }
+
     le_int32 coverageIndex = getGlyphCoverage(glyph);
     le_uint16 seqCount = SWAPW(sequenceCount);
 
@@ -32,12 +44,25 @@ le_uint32 MultipleSubstitutionSubtable::process(GlyphIterator *glyphIterator, co
         } else if (glyphCount == 1) {
             TTGlyphID substitute = SWAPW(sequenceTable->substituteArray[0]);
 
-            if (filter == NULL || filter->accept(LE_SET_GLYPH(glyph, substitute))) {
-                glyphIterator->setCurrGlyphID(substitute);
+            if (filter != NULL && ! filter->accept(LE_SET_GLYPH(glyph, substitute))) {
+                return 0;
             }
 
+            glyphIterator->setCurrGlyphID(substitute);
             return 1;
         } else {
+            // If there's a filter, make sure all of the output glyphs
+            // exist.
+            if (filter != NULL) {
+                for (le_int32 i = 0; i < glyphCount; i += 1) {
+                    TTGlyphID substitute = SWAPW(sequenceTable->substituteArray[i]);
+
+                    if (! filter->accept(substitute)) {
+                        return 0;
+                    }
+                }
+            }
+
 			LEGlyphID *newGlyphs = glyphIterator->insertGlyphs(glyphCount);
 			le_int32 insert = 0, direction = 1;
 
