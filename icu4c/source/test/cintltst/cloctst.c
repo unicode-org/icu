@@ -35,6 +35,7 @@
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 static void TestNullDefault(void);
+static void TestNonexistentLanguageExemplars(void);
 void PrintDataTable();
 
 /*---------------------------------------------------
@@ -214,6 +215,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestGetBaseName);
     TESTCASE(TestGetLocale);
     TESTCASE(TestDisplayNameWarning);
+    TESTCASE(TestNonexistentLanguageExemplars);
 }
 
 
@@ -2250,3 +2252,13 @@ static void TestGetLocale(void) {
 #endif
 }
 
+static void TestNonexistentLanguageExemplars(void) {
+    /* JB 4068 - Nonexistent language */
+    UErrorCode ec = U_ZERO_ERROR;
+    USet *nothing = ulocdata_getExemplarSet(NULL, "qqq", 0, &ec);
+    uset_close(nothing);
+    if (ec != U_USING_DEFAULT_WARNING) {
+        log_err("Exemplar set for \"qqq\", expecting U_USING_DEFAULT_WARNING, but got %s\n",
+            u_errorName(ec));
+    }
+}
