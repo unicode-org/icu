@@ -33,6 +33,12 @@
 #define INVC_DATA_TYPE "icu"
 #define INVC_DATA_NAME "invuca"
 
+/**
+ * Convenience string denoting the Collation data tree
+ * @internal ICU 3.0
+ */
+#define U_ICUDATA_COLL U_ICUDATA_NAME U_TREE_SEPARATOR_STRING "coll"
+
 #if !UCONFIG_NO_COLLATION
 
 #include "unicode/ucol.h"
