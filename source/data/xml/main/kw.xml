@@ -3,7 +3,7 @@
 <localeData>
 	<identity>
 		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<generation date="2003-04-08" />
 		<language type="kw"></language>
 	</identity>
 	<localeDisplayNames>
@@ -25,7 +25,7 @@
 						<month type="3">Mys Merth</month>
 						<month type="4">Mys Ebrel</month>
 						<month type="5">Mys Me</month>
-						<month type="6">Mys Evan</month>
+						<month type="6">Mys Efan</month>
 						<month type="7">Mys Gortheren</month>
 						<month type="8">Mye Est</month>
 						<month type="9">Mys Gwyngala</month>
@@ -39,7 +39,7 @@
 						<month type="3">Mer</month>
 						<month type="4">Ebr</month>
 						<month type="5">Me</month>
-						<month type="6">Evn</month>
+						<month type="6">Efn</month>
 						<month type="7">Gor</month>
 						<month type="8">Est</month>
 						<month type="9">Gwn</month>

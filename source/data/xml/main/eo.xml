@@ -2,8 +2,8 @@
 <!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<version number="2.1">Various notes and changes in version 2.1</version>
+		<generation date="2003-04-08" />
 		<language type="eo"></language>
 	</identity>
 	<localeDisplayNames>
@@ -109,25 +109,35 @@
 					<firstDay day="thu"/>
 				</week>
 				<eras>
-					<era type="1">aK</era>
-					<era type="2">pK</era>
+					<eraAbbr>
+						<era type="1">aK</era>
+						<era type="2">pK</era>
+					</eraAbbr>
 				</eras>
 				<am>atm</am>
 				<pm>ptm</pm>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormat type="full">
-						<pattern>EEEE, d'-a de 'MMMM yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="long">
-						<pattern>yyyy-MMMM-dd</pattern>
-					</dateFormat>
-					<dateFormat type="medium">
-						<pattern>yyyy-MMM-dd</pattern>
-					</dateFormat>
-					<dateFormat type="short">
-						<pattern>yy-MM-dd</pattern>
-					</dateFormat>
+					<dateFormatStyle type="full">
+						<dateFormat >
+							<pattern>EEEE, d'-a de 'MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="long">
+						<dateFormat >
+							<pattern>yyyy-MMMM-dd</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="medium">
+						<dateFormat >
+							<pattern>yyyy-MMM-dd</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="short">
+						<dateFormat >
+							<pattern>yy-MM-dd</pattern>
+						</dateFormat>
+					</dateFormatStyle >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
@@ -150,6 +160,22 @@
 			</calendar>
 		</calendars>
 	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group> </group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+	</numbers>
 	<special owner="http://oss.software.ibm.com/icu/"  >
 		<ruleBasedNumberFormats>
 			<ruleBasedNumberFormat type="spellout">-x: minus &gt;&gt;;<cp hex="000A" />x.x: &lt;&lt; komo &gt;&gt;;<cp hex="000A" />nulo; unu; du; tri; kvar; kvin; ses; sep; ok; naŭ;<cp hex="000A" />10: dek[ &gt;&gt;];<cp hex="000A" />20: &lt;&lt;dek[ &gt;&gt;];<cp hex="000A" />100: cent[ &gt;&gt;];<cp hex="000A" />200: &lt;&lt;cent[ &gt;&gt;];<cp hex="000A" />1000: mil[ &gt;&gt;];<cp hex="000A" />2000: &lt;&lt;mil[ &gt;&gt;];<cp hex="000A" />10000: dekmil[ &gt;&gt;];<cp hex="000A" />11000&gt;: &lt;&lt; mil[ &gt;&gt;];<cp hex="000A" />1,000,000: miliono[ &gt;&gt;];<cp hex="000A" />2,000,000: &lt;&lt; milionoj[ &gt;&gt;];<cp hex="000A" />1,000,000,000: miliardo[ &gt;&gt;];<cp hex="000A" />2,000,000,000: &lt;&lt; miliardoj[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000: biliono[ &gt;&gt;];<cp hex="000A" />2,000,000,000,000: &lt;&lt; bilionoj[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000,000: =#,##0=;<cp hex="000A" /></ruleBasedNumberFormat>

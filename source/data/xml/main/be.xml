@@ -3,7 +3,7 @@
 <localeData>
 	<identity>
 		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<generation date="2003-04-08" />
 		<language type="be"></language>
 	</identity>
 	<localeDisplayNames>
@@ -80,23 +80,33 @@
 					<firstDay day="mon"/>
 				</week>
 				<eras>
-					<era type="1">да н.е.</era>
-					<era type="2">н.е.</era>
+					<eraAbbr>
+						<era type="1">да н.е.</era>
+						<era type="2">н.е.</era>
+					</eraAbbr>
 				</eras>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormat type="full">
-						<pattern>EEEE, d MMMM yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="long">
-						<pattern>d MMMM yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="medium">
-						<pattern>d.M.yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="short">
-						<pattern>d.M.yy</pattern>
-					</dateFormat>
+					<dateFormatStyle type="full">
+						<dateFormat >
+							<pattern>EEEE, d MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="long">
+						<dateFormat >
+							<pattern>d MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="medium">
+						<dateFormat >
+							<pattern>d.M.yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="short">
+						<dateFormat >
+							<pattern>d.M.yy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
@@ -121,9 +131,25 @@
 		<timeZoneNames>
 		</timeZoneNames>
 	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group> </group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+	</numbers>
 		<collations>
 			<collation  >
-				<suppress_contractions>[Ѐ-џ]</suppress_contractions>
+				<suppress_contractions>[0400-045f]</suppress_contractions>
 				<special owner="http://oss.software.ibm.com/icu/" version="1.1" />
 			</collation  >
 		</collations>

@@ -3,7 +3,7 @@
 <localeData>
 	<identity>
 		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<generation date="2003-04-08" />
 		<language type="hy"></language>
 		<territory type="ARM">AM</territory>
 		<variant type="REVISED">{2}</variant>
@@ -47,25 +47,35 @@
 						<month type="12">Դեկ</month>
 					</monthAbbr>
 					<eras>
-						<era type="1">Մ․Թ․Ա․</era>
-						<era type="2">Մ․Թ․</era>
+						<eraAbbr>
+							<era type="1">Մ․Թ․Ա․</era>
+							<era type="2">Մ․Թ․</era>
+						</eraAbbr>
 					</eras>
 					<am>Առ․</am>
 					<pm>Կե․</pm>
 					<dateFormats>
 						<default type="medium"/>
-						<dateFormat type="full">
-							<pattern>EEEE,d MMMM, yyyy</pattern>
-						</dateFormat>
-						<dateFormat type="long">
-							<pattern>d MMMM yyyy</pattern>
-						</dateFormat>
-						<dateFormat type="medium">
-							<pattern>d MMM yyyy</pattern>
-						</dateFormat>
-						<dateFormat type="short">
-							<pattern>dd-MM-yy</pattern>
-						</dateFormat>
+						<dateFormatStyle type="full">
+							<dateFormat >
+								<pattern>EEEE,d MMMM, yyyy</pattern>
+							</dateFormat>
+						</dateFormatStyle >
+						<dateFormatStyle type="long">
+							<dateFormat >
+								<pattern>d MMMM yyyy</pattern>
+							</dateFormat>
+						</dateFormatStyle >
+						<dateFormatStyle type="medium">
+							<dateFormat >
+								<pattern>d MMM yyyy</pattern>
+							</dateFormat>
+						</dateFormatStyle >
+						<dateFormatStyle type="short">
+							<dateFormat >
+								<pattern>dd-MM-yy</pattern>
+							</dateFormat>
+						</dateFormatStyle >
 					</dateFormats>
 					<timeFormats>
 						<default type="medium"/>

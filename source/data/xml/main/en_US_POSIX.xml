@@ -3,7 +3,7 @@
 <localeData>
 	<identity>
 		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<generation date="2003-04-08" />
 		<language type="en"></language>
 		<territory type="USA">US</territory>
 		<variant type="POSIX">{2}</variant>
@@ -22,22 +22,44 @@
 			</calendars>
 		</dates>
 		<numbers>
+			<symbols>
+				<decimal>.</decimal>
+				<group>,</group>
+				<list>;</list>
+				<percentSign>%</percentSign>
+				<nativeZeroDigit>0</nativeZeroDigit>
+				<patternDigit>#</patternDigit>
+				<plusSign>+</plusSign>
+				<minusSign>-</minusSign>
+				<exponential>E</exponential>
+				<perMille>0/00</perMille>
+				<infinity>INF</infinity>
+				<nan>�</nan>
+			</symbols>
 			<numberFormats>
 				<default type="decimal"/>
-				<numberFormat type="decimal">
-					<pattern>###0.###</pattern>
-					<pattern>-###0.###</pattern>
-				</numberFormat>
-				<numberFormat type="currency">
-					<pattern>¤ ###0.00</pattern>
-					<pattern>-¤ ###0.00</pattern>
-				</numberFormat>
-				<numberFormat type="percent">
-					<pattern>###0%</pattern>
-				</numberFormat>
-				<numberFormat type="scientific">
-					<pattern>0.000000E+000</pattern>
-				</numberFormat>
+				<numberFormatStyle type="decimal" >
+					<numberFormat >
+						<pattern>###0.###</pattern>
+						<pattern>-###0.###</pattern>
+					</numberFormat>
+				</numberFormatStyle  >
+				<numberFormatStyle type="currency" >
+					<numberFormat >
+						<pattern>¤ ###0.00</pattern>
+						<pattern>-¤ ###0.00</pattern>
+					</numberFormat>
+				</numberFormatStyle  >
+				<numberFormatStyle type="percent" >
+					<numberFormat >
+						<pattern>###0%</pattern>
+					</numberFormat>
+				</numberFormatStyle  >
+				<numberFormatStyle type="scientific" >
+					<numberFormat >
+						<pattern>0.000000E+000</pattern>
+					</numberFormat>
+				</numberFormatStyle  >
 			</numberFormats>
 		</numbers>
 </localeData>

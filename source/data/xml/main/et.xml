@@ -3,7 +3,7 @@
 <localeData>
 	<identity>
 		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<generation date="2003-04-08" />
 		<language type="et"></language>
 	</identity>
 	<localeDisplayNames>
@@ -80,23 +80,33 @@
 					<firstDay day="mon"/>
 				</week>
 				<eras>
-					<era type="1">e.m.a.</era>
-					<era type="2">m.a.j.</era>
+					<eraAbbr>
+						<era type="1">e.m.a.</era>
+						<era type="2">m.a.j.</era>
+					</eraAbbr>
 				</eras>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormat type="full">
-						<pattern>EEEE, d, MMMM yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="long">
-						<pattern>EEEE, d, MMMM yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="medium">
-						<pattern>dd.MM.yyyy</pattern>
-					</dateFormat>
-					<dateFormat type="short">
-						<pattern>dd.MM.yy</pattern>
-					</dateFormat>
+					<dateFormatStyle type="full">
+						<dateFormat >
+							<pattern>EEEE, d, MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="long">
+						<dateFormat >
+							<pattern>EEEE, d, MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="medium">
+						<dateFormat >
+							<pattern>dd.MM.yyyy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
+					<dateFormatStyle type="short">
+						<dateFormat >
+							<pattern>dd.MM.yy</pattern>
+						</dateFormat>
+					</dateFormatStyle >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
@@ -121,6 +131,22 @@
 		<timeZoneNames>
 		</timeZoneNames>
 	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group> </group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+	</numbers>
 		<collations>
 			<collation  >
 				<settings backwards="2"/>

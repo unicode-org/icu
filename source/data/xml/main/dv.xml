@@ -2,14 +2,17 @@
 <!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
-		<language type="div"></language>
+		<version number="x0.2">Various notes and changes in version x0.2</version>
+		<generation date="2003-04-08" />
+		<language type="dv"></language>
 	</identity>
 	<localeDisplayNames>
 		<languages>
-			<language type="div">ދިވެހިބަސް</language>
+			<language type="dv">ދިވެހިބަސް</language>
 		</languages>
+		<territories>
+			<territory type="MV">ދިވެހި ރާއްޖެ</territory>
+		</territories>
 		<keys>
 			<key type="collation">collation</key>
 			<key type="calendar">calendar</key>
@@ -77,22 +80,44 @@
 		</calendars>
 	</dates>
 	<numbers>
+		<symbols>
+			<decimal>.</decimal>
+			<group>,</group>
+			<list>،</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>٠</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
 		<numberFormats>
 			<default type="decimal"/>
-			<numberFormat type="decimal">
-				<pattern>#,##,##0.###</pattern>
-				<pattern>-#,##,##0.###</pattern>
-			</numberFormat>
-			<numberFormat type="currency">
-				<pattern>¤ #,##,##0.00</pattern>
-				<pattern>-¤ #,##,##0.00</pattern>
-			</numberFormat>
-			<numberFormat type="percent">
-				<pattern>#,##,##0%</pattern>
-			</numberFormat>
-			<numberFormat type="scientific">
-				<pattern>#E0</pattern>
-			</numberFormat>
+			<numberFormatStyle type="decimal" >
+				<numberFormat >
+					<pattern>#,##,##0.###</pattern>
+					<pattern>-#,##,##0.###</pattern>
+				</numberFormat>
+			</numberFormatStyle  >
+			<numberFormatStyle type="currency" >
+				<numberFormat >
+					<pattern>¤ #,##,##0.00</pattern>
+					<pattern>-¤ #,##,##0.00</pattern>
+				</numberFormat>
+			</numberFormatStyle  >
+			<numberFormatStyle type="percent" >
+				<numberFormat >
+					<pattern>#,##,##0%</pattern>
+				</numberFormat>
+			</numberFormatStyle  >
+			<numberFormatStyle type="scientific" >
+				<numberFormat >
+					<pattern>#E0</pattern>
+				</numberFormat>
+			</numberFormatStyle  >
 		</numberFormats>
 	</numbers>
 		<collations>

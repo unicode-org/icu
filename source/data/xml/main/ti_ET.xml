@@ -3,7 +3,7 @@
 <localeData>
 	<identity>
 		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<generation date="2003-04-08" />
 		<language type="ti"></language>
 		<territory type="ETH">ET</territory>
 	</identity>
@@ -21,18 +21,26 @@
 					<pm>ድሕር ሰዓት</pm>
 					<dateFormats>
 						<default type="medium"/>
-						<dateFormat type="full">
-							<pattern>EEEE፣ dd MMMM መዓልቲ yyyy G</pattern>
-						</dateFormat>
-						<dateFormat type="long">
-							<pattern>dd MMMM yyyy</pattern>
-						</dateFormat>
-						<dateFormat type="medium">
-							<pattern>dd-MMM-yy</pattern>
-						</dateFormat>
-						<dateFormat type="short">
-							<pattern>dd/MM/yy</pattern>
-						</dateFormat>
+						<dateFormatStyle type="full">
+							<dateFormat >
+								<pattern>EEEE፣ dd MMMM መዓልቲ yyyy G</pattern>
+							</dateFormat>
+						</dateFormatStyle >
+						<dateFormatStyle type="long">
+							<dateFormat >
+								<pattern>dd MMMM yyyy</pattern>
+							</dateFormat>
+						</dateFormatStyle >
+						<dateFormatStyle type="medium">
+							<dateFormat >
+								<pattern>dd-MMM-yy</pattern>
+							</dateFormat>
+						</dateFormatStyle >
+						<dateFormatStyle type="short">
+							<dateFormat >
+								<pattern>dd/MM/yy</pattern>
+							</dateFormat>
+						</dateFormatStyle >
 					</dateFormats>
 					<timeFormats>
 						<default type="medium"/>
@@ -58,20 +66,28 @@
 		<numbers>
 			<numberFormats>
 				<default type="decimal"/>
-				<numberFormat type="decimal">
-					<pattern>#,##0.###</pattern>
-					<pattern>-#,##0.###</pattern>
-				</numberFormat>
-				<numberFormat type="currency">
-					<pattern>¤#,##0.00</pattern>
-					<pattern>-¤#,##0.00</pattern>
-				</numberFormat>
-				<numberFormat type="percent">
-					<pattern>#,##0%</pattern>
-				</numberFormat>
-				<numberFormat type="scientific">
-					<pattern>#E0</pattern>
-				</numberFormat>
+				<numberFormatStyle type="decimal" >
+					<numberFormat >
+						<pattern>#,##0.###</pattern>
+						<pattern>-#,##0.###</pattern>
+					</numberFormat>
+				</numberFormatStyle  >
+				<numberFormatStyle type="currency" >
+					<numberFormat >
+						<pattern>¤#,##0.00</pattern>
+						<pattern>-¤#,##0.00</pattern>
+					</numberFormat>
+				</numberFormatStyle  >
+				<numberFormatStyle type="percent" >
+					<numberFormat >
+						<pattern>#,##0%</pattern>
+					</numberFormat>
+				</numberFormatStyle  >
+				<numberFormatStyle type="scientific" >
+					<numberFormat >
+						<pattern>#E0</pattern>
+					</numberFormat>
+				</numberFormatStyle  >
 			</numberFormats>
 			<currencies>
 				<default type="ETB"/>

@@ -3,7 +3,7 @@
 <localeData>
 	<identity>
 		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-01-07" />
+		<generation date="2003-04-08" />
 		<language type="fr"></language>
 		<territory type="CAN">CA</territory>
 	</identity>
@@ -19,18 +19,26 @@
 				<calendar type="gregorian">
 					<dateFormats>
 						<default type="medium"/>
-						<dateFormat type="full">
-							<pattern>EEEE d MMMM yyyy</pattern>
-						</dateFormat>
-						<dateFormat type="long">
-							<pattern>d MMMM yyyy</pattern>
-						</dateFormat>
-						<dateFormat type="medium">
-							<pattern>yy-MM-dd</pattern>
-						</dateFormat>
-						<dateFormat type="short">
-							<pattern>yy-MM-dd</pattern>
-						</dateFormat>
+						<dateFormatStyle type="full">
+							<dateFormat >
+								<pattern>EEEE d MMMM yyyy</pattern>
+							</dateFormat>
+						</dateFormatStyle >
+						<dateFormatStyle type="long">
+							<dateFormat >
+								<pattern>d MMMM yyyy</pattern>
+							</dateFormat>
+						</dateFormatStyle >
+						<dateFormatStyle type="medium">
+							<dateFormat >
+								<pattern>yy-MM-dd</pattern>
+							</dateFormat>
+						</dateFormatStyle >
+						<dateFormatStyle type="short">
+							<dateFormat >
+								<pattern>yy-MM-dd</pattern>
+							</dateFormat>
+						</dateFormatStyle >
 					</dateFormats>
 					<timeFormats>
 						<default type="medium"/>
@@ -56,20 +64,28 @@
 		<numbers>
 			<numberFormats>
 				<default type="decimal"/>
-				<numberFormat type="decimal">
-					<pattern>#,##0.###</pattern>
-					<pattern>-#,##0.###</pattern>
-				</numberFormat>
-				<numberFormat type="currency">
-					<pattern>#,##0.00 ¤</pattern>
-					<pattern>(#,##0.00¤)</pattern>
-				</numberFormat>
-				<numberFormat type="percent">
-					<pattern>#,##0%</pattern>
-				</numberFormat>
-				<numberFormat type="scientific">
-					<pattern>#E0</pattern>
-				</numberFormat>
+				<numberFormatStyle type="decimal" >
+					<numberFormat >
+						<pattern>#,##0.###</pattern>
+						<pattern>-#,##0.###</pattern>
+					</numberFormat>
+				</numberFormatStyle  >
+				<numberFormatStyle type="currency" >
+					<numberFormat >
+						<pattern>#,##0.00 ¤</pattern>
+						<pattern>(#,##0.00¤)</pattern>
+					</numberFormat>
+				</numberFormatStyle  >
+				<numberFormatStyle type="percent" >
+					<numberFormat >
+						<pattern>#,##0%</pattern>
+					</numberFormat>
+				</numberFormatStyle  >
+				<numberFormatStyle type="scientific" >
+					<numberFormat >
+						<pattern>#E0</pattern>
+					</numberFormat>
+				</numberFormatStyle  >
 			</numberFormats>
 			<currencies>
 				<default type="CAD"/>
