@@ -64,7 +64,7 @@ static uint32_t fileCount=0;
 /* prototypes --------------------------------------------------------------- */
 
 static void
-addFile(const char *filename);
+addFile(const char *filename, bool_t sourceTOC);
 
 static char *
 allocString(uint32_t length);
@@ -80,9 +80,10 @@ static UOption options[]={
     UOPTION_VERBOSE,
     UOPTION_COPYRIGHT,
     UOPTION_DESTDIR,
-    { "comment", NULL, NULL, NULL, 'C', UOPT_REQUIRES_ARG, 0 },
-    { "name", NULL, NULL, NULL, 'n', UOPT_REQUIRES_ARG, 0 },
-    { "type", NULL, NULL, NULL, 't', UOPT_REQUIRES_ARG, 0 }
+    UOPTION_DEF( "comment", 'C', UOPT_REQUIRES_ARG),
+    UOPTION_DEF( "name", 'n', UOPT_REQUIRES_ARG),
+    UOPTION_DEF( "type", 't', UOPT_REQUIRES_ARG),
+    UOPTION_DEF( "source", 'S', UOPT_NO_ARG)
 };
 
 extern int
@@ -95,6 +96,7 @@ main(int argc, const char *argv[]) {
     char *s;
     UErrorCode errorCode=U_ZERO_ERROR;
     uint32_t i, fileOffset, basenameOffset, length;
+    bool_t sourceTOC;
 
     /* preset then read command line options */
     options[4].value=u_getDataDirectory();
@@ -122,13 +124,16 @@ main(int argc, const char *argv[]) {
             "\t\t-C or --comment     include a comment string\n"
             "\t\t-d or --destdir     destination directory, followed by the path\n"
             "\t\t-n or --name        name of the destination file, defaults to " COMMON_DATA_NAME "\n"
-            "\t\t-t or --type        type of the destination file, defaults to " DATA_TYPE "\n",
+            "\t\t-t or --type        type of the destination file, defaults to " DATA_TYPE "\n"
+            "\t\t-s or --source      write a .c source file with the table of contents\n",
             argv[0]);
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
+    sourceTOC=options[8].doesOccur;
+
     maxSize=uprv_strtoul(argv[1], NULL, 0);
-    if(maxSize==0) {
+    if(maxSize==0 && !sourceTOC) {
         fprintf(stderr, "gencmn: maxSize %s not valid\n", argv[1]);
         exit(U_ILLEGAL_ARGUMENT_ERROR);
     }
@@ -143,6 +148,12 @@ main(int argc, const char *argv[]) {
         }
     }
 
+    if(sourceTOC) {
+        printf("Generating %s_%s.c Table of Contents source file\n", options[6].value, options[7].value);
+    } else {
+        printf("Generating %s.%s common data file with Table of Contents\n", options[6].value, options[7].value);
+    }
+
     /* read the list of files and get their lengths */
     while(T_FileStream_readLine(in, line, sizeof(line))!=NULL) {
         /* remove trailing newline characters */
@@ -155,7 +166,7 @@ main(int argc, const char *argv[]) {
             ++s;
         }
 
-        addFile(getLongPathname(line));
+        addFile(getLongPathname(line), sourceTOC);
     }
 
     if(in!=T_FileStream_stdin()) {
@@ -165,77 +176,168 @@ main(int argc, const char *argv[]) {
     /* sort the files by basename */
     qsort(files, fileCount, sizeof(File), compareFiles);
 
-    /* determine the offsets of all basenames and files in this common one */
-    basenameOffset=4+8*fileCount;
-    fileOffset=basenameOffset+(basenameTotal+15)&~0xf;
-    for(i=0; i<fileCount; ++i) {
-        files[i].fileOffset=fileOffset;
-        fileOffset+=(files[i].fileSize+15)&~0xf;
-        files[i].basenameOffset=basenameOffset;
-        basenameOffset+=files[i].basenameLength;
-    }
-
-    /* create the output file */
-    out=udata_create(options[4].value, options[7].value, options[6].value,
-                     &dataInfo,
-                     options[3].doesOccur ? U_COPYRIGHT_STRING : options[5].value,
-                     &errorCode);
-    if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "gencmn: unable to open output file - error %s\n", u_errorName(errorCode));
-        exit(errorCode);
-    }
-
-    /* write the table of contents */
-    udata_write32(out, fileCount);
-    for(i=0; i<fileCount; ++i) {
-        udata_write32(out, files[i].basenameOffset);
-        udata_write32(out, files[i].fileOffset);
-    }
-
-    /* write the basenames */
-    for(i=0; i<fileCount; ++i) {
-        udata_writeString(out, files[i].basename, files[i].basenameLength);
-    }
-    length=4+8*fileCount+basenameTotal;
-
-    /* copy the files */
-    for(i=0; i<fileCount; ++i) {
-        /* pad to 16-align the next file */
-        length&=0xf;
-        if(length!=0) {
-            udata_writePadding(out, 16-length);
+    if(!sourceTOC) {
+        /* determine the offsets of all basenames and files in this common one */
+        basenameOffset=4+8*fileCount;
+        fileOffset=basenameOffset+(basenameTotal+15)&~0xf;
+        for(i=0; i<fileCount; ++i) {
+            files[i].fileOffset=fileOffset;
+            fileOffset+=(files[i].fileSize+15)&~0xf;
+            files[i].basenameOffset=basenameOffset;
+            basenameOffset+=files[i].basenameLength;
         }
 
-        /* copy the next file */
-        file=T_FileStream_open(files[i].pathname, "rb");
-        if(file==NULL) {
-            fprintf(stderr, "gencmn: unable to open listed file %s\n", files[i].pathname);
+        /* create the output file */
+        out=udata_create(options[4].value, options[7].value, options[6].value,
+                         &dataInfo,
+                         options[3].doesOccur ? U_COPYRIGHT_STRING : options[5].value,
+                         &errorCode);
+        if(U_FAILURE(errorCode)) {
+            fprintf(stderr, "gencmn: unable to open output file - error %s\n", u_errorName(errorCode));
+            exit(errorCode);
+        }
+
+        /* write the table of contents */
+        udata_write32(out, fileCount);
+        for(i=0; i<fileCount; ++i) {
+            udata_write32(out, files[i].basenameOffset);
+            udata_write32(out, files[i].fileOffset);
+        }
+
+        /* write the basenames */
+        for(i=0; i<fileCount; ++i) {
+            udata_writeString(out, files[i].basename, files[i].basenameLength);
+        }
+        length=4+8*fileCount+basenameTotal;
+
+        /* copy the files */
+        for(i=0; i<fileCount; ++i) {
+            /* pad to 16-align the next file */
+            length&=0xf;
+            if(length!=0) {
+                udata_writePadding(out, 16-length);
+            }
+
+            /* copy the next file */
+            file=T_FileStream_open(files[i].pathname, "rb");
+            if(file==NULL) {
+                fprintf(stderr, "gencmn: unable to open listed file %s\n", files[i].pathname);
+                exit(U_FILE_ACCESS_ERROR);
+            }
+            for(;;) {
+                length=T_FileStream_read(file, buffer, sizeof(buffer));
+                if(length==0) {
+                    break;
+                }
+                udata_writeBlock(out, buffer, length);
+            }
+            T_FileStream_close(file);
+            length=files[i].fileSize;
+        }
+
+        /* finish */
+        udata_finish(out, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            fprintf(stderr, "gencmn: error finishing output file - %s\n", u_errorName(errorCode));
+            exit(errorCode);
+        }
+    } else {
+        /* write a .c source file with the table of contents */
+        char buffer[1000];
+        char *filename, *s;
+        FileStream *out;
+
+        /* create the output filename */
+        filename=s=buffer;
+        uprv_strcpy(filename, options[4].value);
+        s=filename+uprv_strlen(filename);
+        if(s>filename && *(s-1)!=U_FILE_SEP_CHAR) {
+            *s++=U_FILE_SEP_CHAR;
+        }
+        uprv_strcpy(s, options[6].value);
+        if(*(options[7].value)!=0) {
+            s+=uprv_strlen(s);
+            *s++='_';
+            uprv_strcpy(s, options[7].value);
+        }
+        s+=uprv_strlen(s);
+        uprv_strcpy(s, ".c");
+
+        /* open the output file */
+        out=T_FileStream_open(filename, "w");
+        if(out==NULL) {
+            fprintf(stderr, "gencmn: unable to open output file %s\n", filename);
             exit(U_FILE_ACCESS_ERROR);
         }
-        for(;;) {
-            length=T_FileStream_read(file, buffer, sizeof(buffer));
-            if(length==0) {
-                break;
-            }
-            udata_writeBlock(out, buffer, length);
-        }
-        T_FileStream_close(file);
-        length=files[i].fileSize;
-    }
 
-    /* finish */
-    udata_finish(out, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "gencmn: error finishing output file - %s\n", u_errorName(errorCode));
-        exit(errorCode);
+        /* write the source file */
+        sprintf(buffer,
+            "/*\n"
+            " * ICU common data table of contents for %s.%s ,\n"
+            " * Automatically generated by icu/source/tools/gencmn/gencmn .\n"
+            " */\n\n"
+            "#include \"unicode/utypes.h\"\n"
+            "#include \"unicode/udata.h\"\n"
+            "\n"
+            "/* external symbol declarations for data */\n",
+            options[6].value, options[7].value);
+        T_FileStream_writeLine(out, buffer);
+
+        if(fileCount>0) {
+            sprintf(buffer, "extern const char\n    %s[]", files[0].pathname);
+            T_FileStream_writeLine(out, buffer);
+            for(i=1; i<fileCount; ++i) {
+                sprintf(buffer, ",\n    %s[]", files[i].pathname);
+                T_FileStream_writeLine(out, buffer);
+            }
+        }
+        T_FileStream_writeLine(out, ";\n\n");
+
+        sprintf(
+            buffer,
+            "U_CAPI const struct {\n"
+            "    uint16_t headerSize;\n"
+            "    uint8_t magic1, magic2;\n"
+            "    UDataInfo info;\n"
+            "    char padding[%lu];\n"
+            "    uint32_t count, reserved;\n"
+            "    struct {\n"
+            "        const char *name;\n"
+            "        const void *data;\n"
+            "    } toc[%lu];\n"
+            "} U_EXPORT2 icudata_dat = {\n"
+            "    32, 0xda, 0x27, {\n"
+            "        %lu, 0, \n"
+            "        %u, %u, %u, 0, \n"
+            "        0x54, 0x6f, 0x43, 0x50, \n"
+            "        1, 0, 0, 0,\n"
+            "        0, 0, 0, 0\n"
+            "    },\n"
+            "    \"\", %lu, 0, {\n",
+            32-4-sizeof(UDataInfo),
+            fileCount,
+            sizeof(UDataInfo),
+            U_IS_BIG_ENDIAN,
+            U_CHARSET_FAMILY,
+            U_SIZEOF_UCHAR,
+            fileCount
+        );
+        T_FileStream_writeLine(out, buffer);
+
+        for(i=0; i<fileCount; ++i) {
+            sprintf(buffer, "        { \"%s\", %s },\n", files[i].basename, files[i].pathname);
+            T_FileStream_writeLine(out, buffer);
+        }
+      
+        T_FileStream_writeLine(out, "    }\n};\n");
+        T_FileStream_close(out);
     }
 
     return 0;
 }
 
 static void
-addFile(const char *filename) {
-    FileStream *file;
+addFile(const char *filename, bool_t sourceTOC) {
     char *s;
     uint32_t length;
 
@@ -244,39 +346,65 @@ addFile(const char *filename) {
         exit(U_BUFFER_OVERFLOW_ERROR);
     }
 
-    /* try to open the file */
-    file=T_FileStream_open(filename, "rb");
-    if(file==NULL) {
-        fprintf(stderr, "gencmn: unable to open listed file %s\n", filename);
-        exit(U_FILE_ACCESS_ERROR);
+    if(!sourceTOC) {
+        FileStream *file;
+
+        /* store the pathname */
+        length=uprv_strlen(filename)+1;
+        s=allocString(length);
+        uprv_memcpy(s, filename, length);
+        files[fileCount].pathname=s;
+
+        /* get the basename */
+        s=(char *)findBasename(s);
+        files[fileCount].basename=s;
+        length=uprv_strlen(s)+1;
+        files[fileCount].basenameLength=length;
+        basenameTotal+=length;
+
+        /* try to open the file */
+        file=T_FileStream_open(filename, "rb");
+        if(file==NULL) {
+            fprintf(stderr, "gencmn: unable to open listed file %s\n", filename);
+            exit(U_FILE_ACCESS_ERROR);
+        }
+
+        /* get the file length */
+        length=T_FileStream_size(file);
+        if(T_FileStream_error(file) || length<=20) {
+            fprintf(stderr, "gencmn: unable to get length of listed file %s\n", filename);
+            exit(U_FILE_ACCESS_ERROR);
+        }
+        T_FileStream_close(file);
+
+        /* do not add files that are longer than maxSize */
+        if(length>maxSize) {
+            return;
+        }
+        files[fileCount].fileSize=length;
+    } else {
+        char *t;
+
+        /* get and store the basename */
+        filename=findBasename(filename);
+        length=uprv_strlen(filename)+1;
+        s=allocString(length);
+        uprv_memcpy(s, filename, length);
+        files[fileCount].basename=s;
+
+        /* turn the basename into an entry point name and store in the pathname field */
+        t=files[fileCount].pathname=allocString(length);
+        while(--length>0) {
+            if(*s=='.' || *s=='-') {
+                *t='_';
+            } else {
+                *t=*s;
+            }
+            ++s;
+            ++t;
+        }
+        *t=0;
     }
-
-    /* get the file length */
-    length=T_FileStream_size(file);
-    if(T_FileStream_error(file) || length<=20) {
-        fprintf(stderr, "gencmn: unable to get length of listed file %s\n", filename);
-        exit(U_FILE_ACCESS_ERROR);
-    }
-    T_FileStream_close(file);
-
-    /* do not add files that are longer than maxSize */
-    if(length>maxSize) {
-        return;
-    }
-    files[fileCount].fileSize=length;
-
-    /* store the pathname */
-    length=uprv_strlen(filename)+1;
-    s=allocString(length);
-    uprv_memcpy(s, filename, length);
-    files[fileCount].pathname=s;
-
-    /* get the basename */
-    s=(char *)findBasename(s);
-    files[fileCount].basename=s;
-    length=uprv_strlen(s)+1;
-    files[fileCount].basenameLength=length;
-    basenameTotal+=length;
 
     ++fileCount;
 }
