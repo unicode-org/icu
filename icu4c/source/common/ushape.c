@@ -61,7 +61,7 @@ _shapeToArabicDigitsWithContext(UChar *s, int32_t length,
                 break;
             case U_EUROPEAN_NUMBER: /* EN */
                 if(lastStrongWasAL && (uint32_t)(c-0x30)<10) {
-                    s[i]=digitBase+c; /* digitBase+(c-0x30) - digitBase was modified above */
+                    s[i]=(UChar)(digitBase+c); /* digitBase+(c-0x30) - digitBase was modified above */
                 }
                 break;
             default :
@@ -81,7 +81,7 @@ _shapeToArabicDigitsWithContext(UChar *s, int32_t length,
                 break;
             case U_EUROPEAN_NUMBER: /* EN */
                 if(lastStrongWasAL && (uint32_t)(c-0x30)<10) {
-                    s[i]=digitBase+c; /* digitBase+(c-0x30) - digitBase was modified above */
+                    s[i]=(UChar)(digitBase+c); /* digitBase+(c-0x30) - digitBase was modified above */
                 }
                 break;
             default :
@@ -168,6 +168,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
             break;
         default:
             /* will never occur because of validity checks above */
+            digitBase=0;
             break;
         }
 
