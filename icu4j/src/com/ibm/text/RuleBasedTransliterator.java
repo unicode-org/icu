@@ -196,9 +196,12 @@ import java.text.ParsePosition;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.9 $ $Date: 2000/01/11 04:12:06 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.10 $ $Date: 2000/01/13 23:53:23 $
  *
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.10  2000/01/13 23:53:23  Alan
+ * Fix bugs found during ICU port
+ *
  * Revision 1.9  2000/01/11 04:12:06  Alan
  * Cleanup, embellish comments
  *
@@ -783,7 +786,7 @@ public class RuleBasedTransliterator extends Transliterator {
                         }
                         String name = rule.substring(pos, j);
                         pos = j+1;
-                        buf.append(getVariableDef(name).charValue());
+                        buf.append(getVariableDef(name));
                     }
                     break;
                 case CONTEXT_OPEN:
@@ -813,7 +816,7 @@ public class RuleBasedTransliterator extends Transliterator {
                 case SET_OPEN:
                     ParsePosition pp = new ParsePosition(pos-1); // Backup to opening '['
                     buf.append(registerSet(new UnicodeSet(rule, pp,
-                                   data.variableNames, data.setVariables)).charValue());
+                                   data.variableNames, data.setVariables)));
                     pos = pp.getIndex();
                     break;
                 case VARIABLE_REF_CLOSE:
@@ -907,7 +910,7 @@ public class RuleBasedTransliterator extends Transliterator {
 
         /**
          * Throw an exception indicating a syntax error.  Search the rule string
-         * for the probably end of the rule.  Of course, if the error is that
+         * for the probable end of the rule.  Of course, if the error is that
          * the end of rule marker is missing, then the rule end will not be found.
          * In any case the rule start will be correctly reported.
          * @param msg error description
@@ -928,13 +931,13 @@ public class RuleBasedTransliterator extends Transliterator {
          * register it in the setVariables hash, and return the substitution
          * character.
          */
-        private final Character registerSet(UnicodeSet set) {
+        private final char registerSet(UnicodeSet set) {
             if (variableNext >= variableLimit) {
                 throw new RuntimeException("Private use variables exhausted");
             }
             Character c = new Character(variableNext++);
             data.setVariables.put(c, set);
-            return c;
+            return c.charValue();
         }
 
         /**
@@ -942,13 +945,13 @@ public class RuleBasedTransliterator extends Transliterator {
          * names are recognized.
          * @exception IllegalArgumentException if the name is unknown.
          */
-        private Character getVariableDef(String name) {
+        private char getVariableDef(String name) {
             Character ch = (Character) data.variableNames.get(name);
             if (ch == null) {
                 throw new IllegalArgumentException("Undefined variable: "
                                                    + name);
             }
-            return ch;
+            return ch.charValue();
         }
 
         /**

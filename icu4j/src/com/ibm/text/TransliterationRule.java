@@ -21,9 +21,12 @@ import java.util.Dictionary;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.7 $ $Date: 2000/01/11 04:12:06 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.8 $ $Date: 2000/01/13 23:53:23 $
  *
  * $Log: TransliterationRule.java,v $
+ * Revision 1.8  2000/01/13 23:53:23  Alan
+ * Fix bugs found during ICU port
+ *
  * Revision 1.7  2000/01/11 04:12:06  Alan
  * Cleanup, embellish comments
  *
@@ -150,7 +153,7 @@ class TransliterationRule {
         if (cursorPos < 0) {
             this.cursorPos = output.length();
         } else {
-            if (cursorPos > input.length()) {
+            if (cursorPos > output.length()) {
                 throw new IllegalArgumentException("Invalid cursor position");
             }
             this.cursorPos = cursorPos;
@@ -255,9 +258,7 @@ class TransliterationRule {
 
         /* LIMITATION of the current mask algorithm: Some rule
          * maskings are currently not detected.  For example,
-         * "{Lu}]a>x" masks "A]a>y".  To detect these sorts of masking,
-         * we need a subset operator on UnicodeSet objects, which we
-         * currently do not have.  This can be added later.
+         * "{Lu}]a>x" masks "A]a>y".  This can be added later. TODO
          */
 
         int left = anteContextLength;
