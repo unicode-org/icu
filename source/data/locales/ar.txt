@@ -149,7 +149,6 @@ ar {
         BHD { "\u062F.\u0628.\u200F", "BHD" }
         DZD { "\u062F.\u062C.\u200F", "DZD" }
         EGP { "\u062C.\u0645.\u200F", "EGP" }
-        INR { "\u20A8", "INR" }
         IQD { "\u062F.\u0639.\u200F", "IQD" }
         JOD { "\u062F.\u0623.\u200F", "JOD" }
         KWD { "\u062F.\u0643.\u200F", "KWD" }
