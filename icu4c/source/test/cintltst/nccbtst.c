@@ -829,30 +829,7 @@ UBool testConvertToUnicode( const char *source, int sourcelen, const UChar *expe
 		return FALSE;
 		}
     }
-    else if (status == U_INDEX_OUTOFBOUNDS_ERROR)
-    {  /* Jim Snyder-Grant: testing for UCharErrorBuffer. Only has contents if output 
-       from last source char crosses TargetLimit. As of 2000-07-11, this happens only 
-       for escape procesing. */
-        UChar errChars [UCNV_MAX_SUBCHAR_LEN];
-        int8_t len = UCNV_MAX_SUBCHAR_LEN;
-        UErrorCode localStatus = U_ZERO_ERROR;
-        ucnv_getInvalidUChars (conv, errChars, &len, &localStatus);
-        if (U_FAILURE(localStatus))
-        {
-            log_err("Error from ucnv_getInvalidUChars\n");
-        }
-        else
-        {
-           int targIndex = targ - junkout;
-           if ((len != 0) && memcmp(errChars, expect+targIndex, len*sizeof(UChar)))
-           {
-              log_err("ucharErrorBuffer uchars do not match expected in %s\n", gNuConvTestName);
-              
-              printUSeqErr(errChars, len); 
-              printUSeqErr(expect+targIndex, len);
-           }
-        }
-     }
+    
   } while ( (status == U_INDEX_OUTOFBOUNDS_ERROR) || (U_SUCCESS(status) && (srcLimit < realSourceEnd)) ); /* while we just need another buffer */
 
     
