@@ -20,7 +20,7 @@
 # except for column 1 (file names) case insensitive. Names are separated
 # by whitespace.
 #
-# All names can be tagged by including a comma-separated list of tags in
+# All names can be tagged by including a space-separated list of tags in
 # curly braces, as in ISO_8859-1:1987{IANA} iso-8859-1 { MIME } or
 # some-charset{MIME IANA}. The order of tags does not matter, and
 # whitespace is allowed between the tagged name and the tags list.
@@ -64,10 +64,10 @@
 # be changed - or else code and/or file names must also be changed.
 
 # Algorithmic
-UTF8			 utf-8 { MIME } ibm-1208 cp1208
-UTF16_BigEndian		 utf-16be { MIME }
+UTF8			utf-8 {	MIME } ibm-1208 cp1208
+UTF16_BigEndian	        utf-16be { MIME }
 UTF16_LittleEndian	 utf-16le { MIME }
-UTF16_PlatformEndian	 ISO-10646-UCS-2 { IANA } csUnicode utf-16 { MIME } ibm-1200 cp1200 ucs-2
+UTF16_PlatformEndian	 ISO-10646-UCS-2 { IANA	} csUnicode utf-16 { MIME } ibm-1200 cp1200 ucs-2
 UTF16_OppositeEndian
 UTF32_BigEndian		 utf-32be { MIME }
 UTF32_LittleEndian	 utf-32le { MIME }
@@ -95,9 +95,13 @@ LMBCS-17
 LMBCS-18
 LMBCS-19
 
+HZ                    HZ-2312-GB {MIME}
+
+
+
 # Table-based
 
-ibm-367			us-ascii { MIME	} ascii ascii-7 US-ASCII ANSI_X3.4-1968 { IANA } ANSI_X3.4-1986 ISO_646.irv:1991 iso646-us us csASCII 646
+ibm-367			us-ascii { MIME	} ascii ascii-7 US-ASCII ANSI_X3.4-1968 { IANA } ANSI_X3.4-1986 ISO_646.irv:1991 iso646-us us csASCII 646 iso-ir-6 cp367
 
 # Special mapping for S/390 new line characters
 ebcdic-xml-us
@@ -133,7 +137,7 @@ ibm-437			cp437 csPC8CodePage437 437	   # PC	US
 # HSYS:
 ibm-850			IBM850 { IANA }	cp850 { MIME } 850 csPC850Multilingual	  # PC latin1
 ibm-851			IBM851 { IANA }	cp851 { MIME } 851 csPC851	     # PC DOS Greek (w/o euro)
-ibm-858			cp858  { MIME }	# PC latin1	with Euro cp850 removed
+ibm-858			cp858  { MIME } IBM00858 { IANA }	# PC latin1	with Euro cp850 removed
 ibm-9044		852 csPCp852 cp852 { MIME } # PC latin2	(w/ euro update)
 ibm-852			IBM852 { IANA }	# PC latin2	(w/o euro update)
 ibm-872			855 csIBM855 cp855 { MIME } # PC cyrillic (w/ euro update)
@@ -234,10 +238,10 @@ ibm-1390	       cpibm1390 # Japan EBCDIC	MIXED
 ibm-1371	       cpibm1371 # Taiwan EBCDIC MIXED
 ibm-1047	       cpibm1047 # EBCDIC Open systems Latin1
 ibm-1123	       cpibm1123 # Cyrillic Ukraine	EBCDIC
-ibm-1140	       cpibm1140 # EBCDIC US...
-ibm-1141	       cpibm1141 # EBCDIC Germanay,	Austria...
-ibm-1142	       cpibm1142 # EBCDIC Denmark...
-ibm-1143	       cpibm1143 # EBCDIC Sweden
+ibm-1140	       cpibm1140 IBM01140 { IANA } # EBCDIC US...
+ibm-1141	       cpibm1141 IBM01141 { IANA } # EBCDIC Germanay,	Austria...
+ibm-1142	       cpibm1142 IBM01142 { IANA } # EBCDIC Denmark...
+ibm-1143	       cpibm1143 IBM01143 { IANA }  # EBCDIC Sweden
 ibm-1144	       cpibm1144 # EBCDIC Italy
 ibm-1145	       cpibm1145 # EBCDIC Spain
 ibm-1146	       cpibm1146 # EBCDIC UK Ireland
