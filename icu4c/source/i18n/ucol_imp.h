@@ -118,7 +118,7 @@ data similar to collIterate.
 struct collIterateState {
     UChar    *pos; /* This is position in the string.  Can be to original or writable buf */
     UChar    *fcdPosition; /* Position in the original string to continue FCD check from. */
-    long      bufferaddress; /* address of the normalization buffer */
+    UChar    *bufferaddress; /* address of the normalization buffer */
     uint32_t  buffersize;
     uint8_t   flags;
     uint8_t   origFlags;
