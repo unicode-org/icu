@@ -8,7 +8,7 @@
 zh_MO {
     Version{ "2.0" }
     CollationElements:alias { "zh_TW" }
-    
+    Countries:alias { "zh_TW" }
     DateTimePatterns { 
         "ahh'\u6642'mm'\u5206'ss'\u79D2' z",
         "ahh'\u6642'mm'\u5206'ss'\u79D2'",
@@ -29,6 +29,7 @@ zh_MO {
         "\u4E94",
         "\u516D",
     }
+    Languages:alias { "zh_TW" }
     MonthAbbreviations { 
         "1\u6708",
         "2\u6708",
@@ -49,6 +50,8 @@ zh_MO {
         "#,##0%",
         "#E0",
     }
+    Types:alias { "zh_TW" }
+    Variants:alias { "zh_TW" }
 //    zoneStrings { 
 //        {
 //                "CTT",
@@ -60,3 +63,4 @@ zh_MO {
 //        }
 //    }
 }
+
