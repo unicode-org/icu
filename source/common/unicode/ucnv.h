@@ -463,12 +463,7 @@ ucnv_safeClone(const UConverter *cnv,
  * converters to be cloned with ucnv_safeClone().
  * @stable ICU 2.0
  */
-#ifdef OS400
-    /* OS/400 uses 16-byte pointers, making objects larger */
-#   define U_CNV_SAFECLONE_BUFFERSIZE  2048
-#else
-#   define U_CNV_SAFECLONE_BUFFERSIZE  1024
-#endif
+#define U_CNV_SAFECLONE_BUFFERSIZE  1024
 
 /**
  * Deletes the unicode converter and releases resources associated
