@@ -186,6 +186,8 @@ void ResourceBundleTest::runIndexedTest( int32_t index, UBool exec, const char* 
     case 0: name = "TestResourceBundles"; if (exec) TestResourceBundles(); break;
     case 1: name = "TestConstruction"; if (exec) TestConstruction(); break;
     case 2: name = "TestExemplar"; if (exec) TestExemplar(); break;
+    case 3: name = "TestGetSize"; if (exec) TestGetSize(); break;
+    case 4: name = "TestGetLocaleByType"; if (exec) TestGetLocaleByType(); break;
         default: name = ""; break; //needed to end loop
     }
 }
@@ -477,6 +479,124 @@ ResourceBundleTest::TestExemplar(){
     }
     logln("Number of installed locales with exemplar characters that could be tested: %d",num);
 
+}
+
+void 
+ResourceBundleTest::TestGetSize(void) 
+{
+  const struct {
+    const char* key;
+    int32_t size;
+  } test[] = {
+    { "zerotest", 1},
+    { "one", 1},
+    { "importtest", 1},
+    { "integerarray", 1},
+    { "emptyarray", 0},
+    { "emptytable", 0},
+    { "emptystring", 1}, /* empty string is still a string */
+    { "emptyint", 1}, 
+    { "emptybin", 1},
+    { "testinclude", 1},
+    { "CollationElements", 3}, /* not 2 - there is hidden %%CollationBin */
+  };
+
+  UErrorCode status = U_ZERO_ERROR;
+
+  const char* testdatapath = loadTestData(status);
+  int32_t i = 0, j = 0;
+  int32_t size = 0;
+
+  if(U_FAILURE(status))
+  {
+      err("Could not load testdata.dat %s\n", u_errorName(status));
+      return;
+  }
+
+  ResourceBundle rb(testdatapath, "testtypes", status);
+  if(U_FAILURE(status))
+  {
+      err("Could not testtypes resource bundle %s\n", u_errorName(status));
+      return;
+  }
+
+  for(i = 0; i < sizeof(test)/sizeof(test[0]); i++) {
+    ResourceBundle res = rb.get(test[i].key, status);
+    if(U_FAILURE(status))
+    {
+        err("Couldn't find the key %s. Error: %s\n", u_errorName(status));
+        return;
+    }
+    size = res.getSize();
+    if(size != test[i].size) {
+      err("Expected size %i, got size %i for key %s\n", test[i].size, size, test[i].key);
+      for(j = 0; j < size; j++) {
+        ResourceBundle helper = res.get(j, status);
+        err("%s\n", helper.getKey());
+      }
+    }
+  }
+}
+
+void 
+ResourceBundleTest::TestGetLocaleByType(void) 
+{
+  const struct {
+    char *requestedLocale;
+    char *resourceKey;
+    char *validLocale;
+    char *actualLocale;
+  } test[] = {
+    { "te_IN_BLAH", "string_only_in_te_IN", "te_IN", "te_IN" },
+    { "te_IN_BLAH", "string_only_in_te", "te_IN", "te" },
+    { "te_IN_BLAH", "string_only_in_Root", "te_IN", "root" },
+    { "te_IN_BLAH_01234567890_01234567890_01234567890_01234567890_01234567890_01234567890", "array_2d_only_in_Root", "te_IN", "root" },
+    { "te_IN_BLAH@currency=euro", "array_2d_only_in_te_IN", "te_IN", "te_IN" },
+    { "te_IN_BLAH@calendar=thai;collation=phonebook", "array_2d_only_in_te", "te_IN", "te" }
+  };
+
+  UErrorCode status = U_ZERO_ERROR;
+
+  const char* testdatapath = loadTestData(status);
+  int32_t i = 0;
+  Locale locale;
+
+  if(U_FAILURE(status))
+  {
+      err("Could not load testdata.dat %s\n", u_errorName(status));
+      return;
+  }
+
+  for(i = 0; i < sizeof(test)/sizeof(test[0]); i++) {
+    ResourceBundle rb(testdatapath, test[i].requestedLocale, status);
+    if(U_FAILURE(status))
+    {
+        err("Could not open resource bundle %s (error %s)\n", test[i].requestedLocale, u_errorName(status));
+        status = U_ZERO_ERROR;
+        continue;
+    }
+
+    ResourceBundle res = rb.get(test[i].resourceKey, status);
+    if(U_FAILURE(status))
+    {
+        err("Couldn't find the key %s. Error: %s\n", test[i].resourceKey, u_errorName(status));
+        status = U_ZERO_ERROR;
+        continue;
+    }
+
+    locale = res.getLocale(ULOC_REQUESTED_LOCALE, status);
+    if(strcmp(locale.getName(), test[i].requestedLocale) != 0) {
+      err("Expected requested locale to be %s. Got %s\n", test[i].requestedLocale, locale.getName());
+    }
+    locale = res.getLocale(ULOC_VALID_LOCALE, status);
+    if(strcmp(locale.getName(), test[i].validLocale) != 0) {
+      err("Expected valid locale to be %s. Got %s\n", test[i].requestedLocale, locale.getName());
+    }
+    locale = res.getLocale(ULOC_ACTUAL_LOCALE, status);
+    if(strcmp(locale.getName(), test[i].actualLocale) != 0) {
+      err("Expected actual locale to be %s. Got %s\n", test[i].requestedLocale, locale.getName());
+    }
+  }
 }
             
 //eof
