@@ -164,7 +164,7 @@ public:
     * this storage and should free it.
     * @param count the output parameter of number of collation key values,
     * including any trailing nulls.
-    * @stable
+    * @deprecated Remove after 2003-mar-25. Use getByteArray instead.
     */
     uint8_t*                toByteArray(int32_t& count) const;
 
