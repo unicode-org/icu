@@ -218,6 +218,23 @@ U_CAPI UResourceBundle*  U_EXPORT2 ures_open(const char*    path,   /* NULL if n
                                            UErrorCode*     status);
 
 
+/** This function does not care what kind of localeID is passed in. It simply opens a bundle with 
+ *  that name                                                                                     
+ * @param path  : string containing the full path pointing to the directory
+ *                where the resources reside followed by the package name
+ *                e.g. "/usr/resource/my_app/resources/guimessages" on a Unix system.
+ *                if NULL, ICU default data files will be used.
+ * @param locale: specifies the locale for which we want to open the resource
+ *                if NULL, the default locale will be used. If strlen(locale) == 0
+ *                root locale will be used.
+ *                
+ * @param status : fills in the outgoing error code. Either U_ZERO_ERROR or U_MISSING_RESOURCE_ERROR
+ * @return      a newly allocated resource bundle or NULL if it doesn't exist.
+ * @see ures_close
+ * @draft
+ */
+U_CAPI UResourceBundle* ures_openDirect(const char* path, const char* locale, UErrorCode* status);
+
 /**
 *Opens a UResourceBundle, from which users can extract strings by using
 *their corresponding keys. This version of open requires the path 
