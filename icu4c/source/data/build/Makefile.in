@@ -41,7 +41,7 @@ check check-local check-recursive build-testdlls build-basetestdata build-local
 
 ## List of standard targets
 all: all-local
-install: 
+install: all-local 
 clean: clean-local
 distclean : distclean
 dist: 
