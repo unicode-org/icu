@@ -1,31 +1,23 @@
-# *******************************************************************************
+# ***************************************************************************
 # *
-# *   Copyright (C) 1998-2001, International Business Machines
+# *   Copyright (C) 1995-2002, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # *
-# *******************************************************************************
+# ***************************************************************************
 #
-# File created on Mon Nov 13 08:50:45 2000
+# File created by rptp2ucm (compiled on Dec  3 2002)
+# from source files 44B014E6.RPMAP100 and 14E644B0.TPMAP100
 #
-# File created by dtcocm version 3.00
-# from source files 44B014E8.RPMAP100 and 14E844B0.TPMAP100
-#
-# Patched for jitterbug 792
-#
-# Table Version : 1.01
-#
-<code_set_name>               "IBM-5352"
+<code_set_name>               "ibm-5350_P100-1998"
 <char_name_mask>              "AXXXX"
 <mb_cur_max>                  1
 <mb_cur_min>                  1
 <uconv_class>                 "SBCS"
 <subchar>                     \x1A
-#
+<icu:charsetFamily>           "ASCII"
+<icu:alias>                   "ibm-5350_STD"
+
 CHARMAP
-#
-#
-#ISO 10646      IBM-5352
-#_________      _________
 <U0000> \x00 |0
 <U0001> \x01 |0
 <U0002> \x02 |0
@@ -154,7 +146,15 @@ CHARMAP
 <U007D> \x7D |0
 <U007E> \x7E |0
 <U007F> \x7F |0
+<U0081> \x81 |0
+<U008D> \x8D |0
+<U008E> \x8E |0
+<U008F> \x8F |0
+<U0090> \x90 |0
+<U009D> \x9D |0
+<U009E> \x9E |0
 <U00A0> \xA0 |0
+<U00A1> \xA1 |0
 <U00A2> \xA2 |0
 <U00A3> \xA3 |0
 <U00A4> \xA4 |0
@@ -163,6 +163,7 @@ CHARMAP
 <U00A7> \xA7 |0
 <U00A8> \xA8 |0
 <U00A9> \xA9 |0
+<U00AA> \xAA |0
 <U00AB> \xAB |0
 <U00AC> \xAC |0
 <U00AD> \xAD |0
@@ -178,115 +179,84 @@ CHARMAP
 <U00B7> \xB7 |0
 <U00B8> \xB8 |0
 <U00B9> \xB9 |0
+<U00BA> \xBA |0
 <U00BB> \xBB |0
 <U00BC> \xBC |0
 <U00BD> \xBD |0
 <U00BE> \xBE |0
+<U00BF> \xBF |0
+<U00C0> \xC0 |0
+<U00C1> \xC1 |0
+<U00C2> \xC2 |0
+<U00C3> \xC3 |0
+<U00C4> \xC4 |0
+<U00C5> \xC5 |0
+<U00C6> \xC6 |0
+<U00C7> \xC7 |0
+<U00C8> \xC8 |0
+<U00C9> \xC9 |0
+<U00CA> \xCA |0
+<U00CB> \xCB |0
+<U00CC> \xCC |0
+<U00CD> \xCD |0
+<U00CE> \xCE |0
+<U00CF> \xCF |0
+<U00D1> \xD1 |0
+<U00D2> \xD2 |0
+<U00D3> \xD3 |0
+<U00D4> \xD4 |0
+<U00D5> \xD5 |0
+<U00D6> \xD6 |0
 <U00D7> \xD7 |0
+<U00D8> \xD8 |0
+<U00D9> \xD9 |0
+<U00DA> \xDA |0
+<U00DB> \xDB |0
+<U00DC> \xDC |0
+<U00DF> \xDF |0
 <U00E0> \xE0 |0
+<U00E1> \xE1 |0
 <U00E2> \xE2 |0
+<U00E3> \xE3 |0
+<U00E4> \xE4 |0
+<U00E5> \xE5 |0
+<U00E6> \xE6 |0
 <U00E7> \xE7 |0
 <U00E8> \xE8 |0
 <U00E9> \xE9 |0
 <U00EA> \xEA |0
 <U00EB> \xEB |0
+<U00EC> \xEC |0
+<U00ED> \xED |0
 <U00EE> \xEE |0
 <U00EF> \xEF |0
+<U00F1> \xF1 |0
+<U00F2> \xF2 |0
+<U00F3> \xF3 |0
 <U00F4> \xF4 |0
+<U00F5> \xF5 |0
+<U00F6> \xF6 |0
 <U00F7> \xF7 |0
+<U00F8> \xF8 |0
 <U00F9> \xF9 |0
+<U00FA> \xFA |0
 <U00FB> \xFB |0
 <U00FC> \xFC |0
+<U00FF> \xFF |0
+<U011E> \xD0 |0
+<U011F> \xF0 |0
+<U0130> \xDD |0
+<U0131> \xFD |0
 <U0152> \x8C |0
 <U0153> \x9C |0
+<U015E> \xDE |0
+<U015F> \xFE |0
+<U0160> \x8A |0
+<U0161> \x9A |0
+<U0178> \x9F |0
 <U0192> \x83 |0
 <U02C6> \x88 |0
-<U060C> \xA1 |0
-<U061B> \xBA |0
-<U061F> \xBF |0
-<U0621> \xC1 |0
-<U0622> \xC2 |0
-<U0623> \xC3 |0
-<U0624> \xC4 |0
-<U0625> \xC5 |0
-<U0626> \xC6 |0
-<U0627> \xC7 |0
-<U0628> \xC8 |0
-<U0629> \xC9 |0
-<U062A> \xCA |0
-<U062B> \xCB |0
-<U062C> \xCC |0
-<U062D> \xCD |0
-<U062E> \xCE |0
-<U062F> \xCF |0
-<U0630> \xD0 |0
-<U0631> \xD1 |0
-<U0632> \xD2 |0
-<U0633> \xD3 |0
-<U0634> \xD4 |0
-<U0635> \xD5 |0
-<U0636> \xD6 |0
-<U0637> \xD8 |0
-<U0638> \xD9 |0
-<U0639> \xDA |0
-<U063A> \xDB |0
-<U0640> \xDC |0
-<U0641> \xDD |0
-<U0642> \xDE |0
-<U0643> \xDF |0
-<U0644> \xE1 |0
-<U0645> \xE3 |0
-<U0646> \xE4 |0
-<U0647> \xE5 |0
-<U0648> \xE6 |0
-<U0649> \xEC |0
-<U064A> \xED |0
-<U064B> \xF0 |0
-<U064C> \xF1 |0
-<U064D> \xF2 |0
-<U064E> \xF3 |0
-<U064F> \xF5 |0
-<U0650> \xF6 |0
-<U0651> \xF8 |0
-<U0652> \xFA |0
-<U0660> \x30 |1
-<U0661> \x31 |1
-<U0662> \x32 |1
-<U0663> \x33 |1
-<U0664> \x34 |1
-<U0665> \x35 |1
-<U0666> \x36 |1
-<U0667> \x37 |1
-<U0668> \x38 |1
-<U0669> \x39 |1
-<U066B> \x2C |1
-<U066C> \x2E |1
-<U0679> \x8A |0
-<U067E> \x81 |0
-<U0686> \x8D |0
-<U0688> \x8F |0
-<U0691> \x9A |0
-<U0698> \x8E |0
-<U06A9> \x98 |0
-<U06AF> \x90 |0
-<U06BA> \x9F |0
-<U06BE> \xAA |0
-<U06C1> \xC0 |0
-<U06D2> \xFF |0
-<U06F0> \x30 |1
-<U06F1> \x31 |1
-<U06F2> \x32 |1
-<U06F3> \x33 |1
-<U06F4> \x34 |1
-<U06F5> \x35 |1
-<U06F6> \x36 |1
-<U06F7> \x37 |1
-<U06F8> \x38 |1
-<U06F9> \x39 |1
-<U200C> \x9D |0
-<U200D> \x9E |0
-<U200E> \xFD |0
-<U200F> \xFE |0
+<U02DC> \x98 |0
 <U2013> \x96 |0
 <U2014> \x97 |0
 <U2018> \x91 |0
@@ -304,156 +274,6 @@ CHARMAP
 <U203A> \x9B |0
 <U20AC> \x80 |0
 <U2122> \x99 |0
-<UFB56> \x81 |1
-<UFB58> \x81 |1
-<UFB66> \x8A |1
-<UFB68> \x8A |1
-<UFB7A> \x8D |1
-<UFB7C> \x8D |1
-<UFB88> \x8F |1
-<UFB8A> \x8E |1
-<UFB8C> \x9A |1
-<UFB8E> \x98 |1
-<UFB90> \x98 |1
-<UFB92> \x90 |1
-<UFB94> \x90 |1
-<UFB9E> \x9F |1
-<UFBA6> \xC0 |1
-<UFBA8> \xC0 |1
-<UFBAA> \xAA |1
-<UFBAC> \xAA |1
-<UFBAE> \xFF |1
-<UFE70> \xF0 |1
-<UFE71> \xF0 |1
-<UFE72> \xF1 |1
-<UFE74> \xF2 |1
-<UFE76> \xF3 |1
-<UFE77> \xF3 |1
-<UFE78> \xF5 |1
-<UFE79> \xF5 |1
-<UFE7A> \xF6 |1
-<UFE7B> \xF6 |1
-<UFE7C> \xF8 |1
-<UFE7D> \xF8 |1
-<UFE7E> \xFA |1
-<UFE7F> \xFA |1
-<UFE80> \xC1 |1
-<UFE81> \xC2 |1
-<UFE82> \xC2 |1
-<UFE83> \xC3 |1
-<UFE84> \xC3 |1
-<UFE85> \xC4 |1
-<UFE86> \xC4 |1
-<UFE87> \xC5 |1
-<UFE88> \xC5 |1
-<UFE89> \xC6 |1
-<UFE8A> \xC6 |1
-<UFE8B> \xC6 |1
-<UFE8C> \xC6 |1
-<UFE8D> \xC7 |1
-<UFE8E> \xC7 |1
-<UFE8F> \xC8 |1
-<UFE90> \xC8 |1
-<UFE91> \xC8 |1
-<UFE92> \xC8 |1
-<UFE93> \xC9 |1
-<UFE94> \xC9 |1
-<UFE95> \xCA |1
-<UFE96> \xCA |1
-<UFE97> \xCA |1
-<UFE98> \xCA |1
-<UFE99> \xCB |1
-<UFE9A> \xCB |1
-<UFE9B> \xCB |1
-<UFE9C> \xCB |1
-<UFE9D> \xCC |1
-<UFE9E> \xCC |1
-<UFE9F> \xCC |1
-<UFEA0> \xCC |1
-<UFEA1> \xCD |1
-<UFEA2> \xCD |1
-<UFEA3> \xCD |1
-<UFEA4> \xCD |1
-<UFEA5> \xCE |1
-<UFEA6> \xCE |1
-<UFEA7> \xCE |1
-<UFEA8> \xCE |1
-<UFEA9> \xCF |1
-<UFEAA> \xCF |1
-<UFEAB> \xD0 |1
-<UFEAC> \xD0 |1
-<UFEAD> \xD1 |1
-<UFEAE> \xD1 |1
-<UFEAF> \xD2 |1
-<UFEB0> \xD2 |1
-<UFEB1> \xD3 |1
-<UFEB2> \xD3 |1
-<UFEB3> \xD3 |1
-<UFEB4> \xD3 |1
-<UFEB5> \xD4 |1
-<UFEB6> \xD4 |1
-<UFEB7> \xD4 |1
-<UFEB8> \xD4 |1
-<UFEB9> \xD5 |1
-<UFEBA> \xD5 |1
-<UFEBB> \xD5 |1
-<UFEBC> \xD5 |1
-<UFEBD> \xD6 |1
-<UFEBE> \xD6 |1
-<UFEBF> \xD6 |1
-<UFEC0> \xD6 |1
-<UFEC1> \xD8 |1
-<UFEC2> \xD8 |1
-<UFEC3> \xD8 |1
-<UFEC4> \xD8 |1
-<UFEC5> \xD9 |1
-<UFEC6> \xD9 |1
-<UFEC7> \xD9 |1
-<UFEC8> \xD9 |1
-<UFEC9> \xDA |1
-<UFECA> \xDA |1
-<UFECB> \xDA |1
-<UFECC> \xDA |1
-<UFECD> \xDB |1
-<UFECE> \xDB |1
-<UFECF> \xDB |1
-<UFED0> \xDB |1
-<UFED1> \xDD |1
-<UFED2> \xDD |1
-<UFED3> \xDD |1
-<UFED4> \xDD |1
-<UFED5> \xDE |1
-<UFED6> \xDE |1
-<UFED7> \xDE |1
-<UFED8> \xDE |1
-<UFED9> \xDF |1
-<UFEDA> \xDF |1
-<UFEDB> \xDF |1
-<UFEDC> \xDF |1
-<UFEDD> \xE1 |1
-<UFEDE> \xE1 |1
-<UFEDF> \xE1 |1
-<UFEE0> \xE1 |1
-<UFEE1> \xE3 |1
-<UFEE2> \xE3 |1
-<UFEE3> \xE3 |1
-<UFEE4> \xE3 |1
-<UFEE5> \xE4 |1
-<UFEE6> \xE4 |1
-<UFEE7> \xE4 |1
-<UFEE8> \xE4 |1
-<UFEE9> \xE5 |1
-<UFEEA> \xE5 |1
-<UFEEB> \xE5 |1
-<UFEEC> \xE5 |1
-<UFEED> \xE6 |1
-<UFEEE> \xE6 |1
-<UFEEF> \xEC |1
-<UFEF0> \xEC |1
-<UFEF1> \xED |1
-<UFEF2> \xED |1
-<UFEF3> \xED |1
-<UFEF4> \xED |1
 <UFF01> \x21 |1
 <UFF02> \x22 |1
 <UFF03> \x23 |1

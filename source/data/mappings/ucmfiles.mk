@@ -42,7 +42,7 @@ ibm-869.ucm\
 ibm-1275_P100-1995.ucm\
 ibm-1276_P100-1995.ucm\
 ibm-1277_P100-1995.ucm\
-ibm-5104.ucm ibm-872.ucm\
+ibm-5104_X110-1999.ucm ibm-872.ucm\
 ibm-874.ucm\
 ibm-1280_P100-1996.ucm ibm-878.ucm\
 ibm-1281_P100-1996.ucm ibm-901.ucm\
@@ -83,6 +83,5 @@ ibm-1129_P100-1997.ucm\
 ibm-1131_P100-1997.ucm\
 ibm-1133_P100-1997.ucm\
 ibm-1381_P110-2000.ucm\
-ibm-9066_P100-2000.ucm\
 ibm-33722_P120-2000.ucm
 
