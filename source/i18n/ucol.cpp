@@ -257,9 +257,8 @@ ucol_open(    const    char         *loc,
 
   UCollator *result = NULL;
   UResourceBundle *b = ures_open(NULL, loc, status);
-  /* first take on tailoring version: */
-  /* get CollationElements -> Version */
-  UResourceBundle *binary = ures_getByKey(b, "%%CollationBin", NULL, status);
+  UResourceBundle *collElem = ures_getByKey(b, "CollationElements", NULL, status);
+  UResourceBundle *binary = ures_getByKey(collElem, "%%CollationBin", NULL, status);
 
   if(*status == U_MISSING_RESOURCE_ERROR) { /* if we don't find tailoring, we'll fallback to UCA */
     *status = U_USING_DEFAULT_ERROR;
@@ -298,6 +297,7 @@ ucol_open(    const    char         *loc,
   } else { /* There is another error, and we're just gonna clean up */
 clean:
     ures_close(b);
+    ures_close(collElem);
     ures_close(binary);
     return NULL;
   }
@@ -306,6 +306,7 @@ clean:
   }
   result->requestedLocale = (char *)uprv_malloc((uprv_strlen(loc)+1)*sizeof(char));
   uprv_strcpy(result->requestedLocale, loc);
+  ures_close(collElem);
   return result;
 }
 
