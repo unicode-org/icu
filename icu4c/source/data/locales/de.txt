@@ -128,7 +128,7 @@ de {
             "\uFFFD",
     }
     ShortLanguage { "deu" }
-    localPatternChars { "GuMtkHmsSEDFwWahKz" }
+    localPatternChars { "GuMtkHmsSEDFwWahKzJd" }
     zoneStrings { 
         {
                 "Africa/Casablanca",
