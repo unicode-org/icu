@@ -142,8 +142,8 @@ struct CReg : public UMemory {
   CReg(const UChar* _iso, const char* _id)
     : next(0)
   {
-    int32_t len = strlen(_id);
-    if (len > (sizeof(id)-1)) {
+    int32_t len = uprv_strlen(_id);
+    if (len > (int32_t)(sizeof(id)-1)) {
       len = (sizeof(id)-1);
     }
     uprv_strncpy(id, _id, len);
@@ -349,7 +349,7 @@ ucurr_getName(const UChar* currency,
     UErrorCode ec2 = U_ZERO_ERROR;
 
     char loc[100];
-    int32_t loclen = uloc_getName(locale, loc, sizeof(loc), &ec2);
+    uloc_getName(locale, loc, sizeof(loc), &ec2);
     if (U_FAILURE(ec2) || ec2 == U_STRING_NOT_TERMINATED_WARNING) {
         *ec = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
