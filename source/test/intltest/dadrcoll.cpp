@@ -251,7 +251,6 @@ DataDrivenCollatorTest::processTest(TestData *testData, UErrorCode &status) {
       testSetting = settings->getString("Rules", intStatus);
       if(U_SUCCESS(intStatus)) {
         col = new RuleBasedCollator(testSetting, status);
-        UCollator *ucol = ucol_openRules(testSetting.getBuffer(), testSetting.length(), UCOL_DEFAULT, UCOL_DEFAULT, NULL, &status);
         if(U_SUCCESS(status)) {
           logln("Testing collator for rules "+testSetting);
         } else {

@@ -138,7 +138,6 @@ static UBool doTestNames(const char *name, const char *standard, const char **ex
 
 static void TestStandardNames()
 {
-    UErrorCode err = U_ZERO_ERROR;
     static const char *asciiIANA[] = {
         "ANSI_X3.4-1968",
         "US-ASCII",
