@@ -15,10 +15,10 @@ vi {
         standard { 
             Version { "3.0" }
               Sequence { "[normalization on]"
-		  // accented letters are actually ordered like this:
-		  // grave, hook above, tilde, acute, dot below.
-		  "&\u0300<<\u0309<<\u0303<<\u0301<<\u0323"
-		  // primary differences
+                  // accented letters are actually ordered like this:
+                  // grave, hook above, tilde, acute, dot below.
+                  "&\u0300<<\u0309<<\u0303<<\u0301<<\u0323"
+                  // primary differences
                   "&a<\u0103<<<\u0102<\u00E2<<<\u00C2"
                   "&c<ch<<<Ch<<<CH"
                   "&d<\u0111<<<\u0110"
@@ -267,22 +267,22 @@ vi {
         "{0} {1}",
     }
     DayAbbreviations {
+        "CN",
         "Th 2",
         "Th 3",
         "Th 4",
         "Th 5",
         "Th 6",
         "Th 7",
-        "CN",
     }
     DayNames {
+        "Ch\u1EE7 nh\u1EADt",
         "Th\u1EE9 hai",
         "Th\u1EE9 ba",
         "Th\u1EE9 t\u01B0",
         "Th\u1EE9 n\u0103m",
         "Th\u1EE9 s\u00E1u",
         "Th\u1EE9 b\u1EA3y",
-        "Ch\u1EE7 nh\u1EADt",
     }
     // The case of the letters may be wrong for languages because Ti\u1EBFng is used.
     // Ti\u1EBFng is used in order to clarify some of the names, and ti\u1EBFng means "language".
