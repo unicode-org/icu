@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os390,v 1.49 2003/04/24 21:00:35 emader-oss Exp $
+## $Id: mh-os390,v 1.50 2003/05/23 02:36:44 grhoten-oss Exp $
 
 ###################################################################
 #                    IMPORTANT NOTE                               #
@@ -25,12 +25,25 @@
 #                                                                 #
 #   export OS390_STUBDATA=1                                       #
 #                                                                 #
+# To build a version of ICU which exploits the C/C++ compiler     #
+# and runtime Extra Performance Linkage (XPLINK), specify         #
+#                                                                 #
+#   export OS390_XPLINK=1                                         #
+#                                                                 #
 ###################################################################
 
 ifeq (${IEEE390}, 1)
 ICU_IEEE          = -Wc,"float(ieee)" -DIEEE_754=1
 else
 ICU_IEEE          = -DIEEE_754=0
+endif
+
+ifeq (${OS390_XPLINK}, 1)
+# Note:  The following options require the PTF for PQ69418 on z/OS 1.2
+#        and later.
+CFLAGS          += -Wc,"xplink(backchain,storeargs)" -Wc,"GOFF,NOCSECT,RENT,SSCOMM" -Wc,"inline(auto,noreport,500,2500)"
+CXXFLAGS        += -Wc,"xplink(backchain,storeargs)" -Wc,"GOFF,NOCSECT,NOTEMPINC" -Wc,"inline(auto,noreport,300,2500)"
+LDFLAGS         += -Wl,dll,xplink -Wl,EDIT=NO
 endif
 
 # TODO: Consider using  -Wc,roc,rent for making the data readonly
@@ -56,7 +69,7 @@ GEN_DEPS.cc=	makedep
 # _CXX_STEPS="-1" is a prelink step when compiling C and C++, and
 # it's only needed for long function names
 COMPILE.c       = $(CXX) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
-COMPILE.cc      = _CXX_CXXSUFFIX="cpp" $(CXX) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
+COMPILE.cc      = _CXX_CXXSUFFIX="cpp" $(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -c
 
 # Commands to link
 LINK.c=		$(CC) $(CFLAGS) -Wl,dll $(LDFLAGS)
