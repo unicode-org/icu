@@ -163,6 +163,25 @@ u_finit(FILE        *f,
     const char    *codepage);
 
 /**
+ * Create a UFILE that can be used for localized formatting or parsing.
+ * The u_sprintf and u_sscanf functions do not read or write numbers for a
+ * specific locale. The ustdio.h file functions can be used on this UFILE.
+ * The string is usable once u_fclose or u_fflush has been called on the
+ * returned UFILE.
+ * @param stringBuf The string used for reading or writing.
+ * @param count The number of code units available for use in stringBuf
+ * @param locale The locale whose conventions will be used to format 
+ * and parse output. If this parameter is NULL, the default locale will 
+ * be used.
+ * @return A new UFILE, or NULL if an error occurred.
+ * @draft 3.0
+ */
+U_CAPI UFILE* U_EXPORT2
+u_fstropen(UChar      *stringBuf,
+           int32_t     capacity,
+           const char *locale);
+
+/**
  * Close a UFILE.
  * @param file The UFILE to close.
  * @draft
