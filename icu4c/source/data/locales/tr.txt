@@ -67,6 +67,7 @@ tr {
         CN { "\u00C7in" }
         CO { "Kolombiya" }
         CR { "Kosta Rika" }
+        CU { "K\u00FCba" }
         //CV { "Cape Verde" }
         CX { "Christmas Adas\u0131" }
         CY { "K\u0131br\u0131s" }
@@ -86,7 +87,7 @@ tr {
         ET { "Etiyopya" }
         FI { "Finlandiya" }
         //FJ { "Fiji" }
-        FK { "Falkland Adalar\u0131" }
+        FK { "Falkland Adalar\u0131 (Malvinalar)" }    // alternate name { "Falkland Adalar\u0131" }
         FM { "Mikronezya Federal Eyaletleri" }
         FO { "Faroe Adalar\u0131" }
         FR { "Fransa" }
@@ -119,6 +120,8 @@ tr {
         IL { "\u0130srail" }
         IN { "Hindistan" }
         IO { "Hint Okyanusu \u0130ngiliz B\u00F6lgesi" }
+        IQ { "Irak" }
+        IR { "\u0130ran" }
         IS { "\u0130zlanda" }
         IT { "\u0130talya" }
         JM { "Jamaika" }
@@ -130,7 +133,8 @@ tr {
         //KI { "Kiribati" }
         KM { "Komorlar" }
         KN { "Saint Kittler ve Neviler" }
-        KR { "Kore Cumhuriyeti" }
+        KP { "Kore, Kuzey" }    // alternate name { "Kore Demokratik Halk Cumhuriyeti" }
+        KR { "Kore, G\u00FCney" }    // alternate name { "Kore Cumhuriyeti" }
         KW { "Kuveyt" }
         KY { "Cayman Adalar\u0131" }
         KZ { "Kazakistan" }
@@ -144,6 +148,7 @@ tr {
         LT { "Litvanya" }
         LU { "L\u00FCksemburg" }
         LV { "Letonya" }
+        //LY { "Libya Arap Cemahiriyesi" }
         MA { "Fas" }
         MC { "Monako" }
         MD { "Moldovya Cumhuriyeti" }
@@ -200,6 +205,7 @@ tr {
         SA { "Suudi Arabistan" }
         SB { "Solomon Adalar\u0131" }
         SC { "Sey\u015Feller" }
+        //SD { "Sudan" }
         SE { "\u0130sve\u00E7" }
         SG { "Singapur" }
         //SH { "Saint Helena" }
@@ -213,6 +219,7 @@ tr {
         SR { "Surinam" }
         ST { "Sao Tome ve Principe" }
         //SV { "El Salvador" }
+        SY { "Suriye" }
         //SZ { "Swaziland" }
         TC { "Turks ve Caicos Adalar\u0131" }
         TD { "\u00C7ad" }
@@ -228,7 +235,7 @@ tr {
         TR { "T\u00FCrkiye" }
         TT { "Trinidad ve Tobago" }
         //TV { "Tuvalu" }
-        TW { "Tayvan" }
+        TW { "Tayvan, \u00C7in B\u00F6lgesi" }    // alternate name { "Tayvan" }
         TZ { "Tanzanya" }
         UA { "Ukrayna" }
         //UG { "Uganda" }

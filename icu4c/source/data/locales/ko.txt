@@ -2091,6 +2091,7 @@ ko {
         CR { "\uCF54\uC2A4\uD0C0\uB9AC\uCE74" }
         CU { "\uCFE0\uBC14" }
         CV { "\uAE4C\uBF40\uBCA0\uB974\uB370" }
+        CX { "\uD06C\uB9AC\uC2A4\uB9C8\uC2A4\uC12C" }
         CY { "\uC0AC\uC774\uD504\uB7EC\uC2A4" }
         CZ { "\uCCB4\uCF54" }
         DE { "\uB3C5\uC77C" }

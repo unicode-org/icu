@@ -62,6 +62,7 @@ lv {
         CN { "\u0136\u012Bna" }
         CO { "Kolumbija" }
         CR { "Kostarika" }
+        CU { "Kuba" }
         CV { "Kaboverde" }
         CX { "Ziemsv\u0113tku sala" }
         CY { "Kipra" }
@@ -114,6 +115,8 @@ lv {
         IL { "Izra\u0113la" }
         IN { "Indija" }
         IO { "Britu Indijas oke\u0101na teritorija" }
+        IQ { "Ir\u0101ka" }
+        IR { "Ir\u0101na" }
         IS { "Islande" }
         IT { "It\u0101lija" }
         JM { "Jamaika" }
@@ -125,7 +128,8 @@ lv {
         //KI { "Kiribati" }
         KM { "Komoru salas" }
         KN { "Sentkitsa un Nevisa" }
-        KR { "Korejas Republika" }
+        KP { "Zieme\u013Ckoreja" }    // alternate name { "Korejas Tautas Demokr\u0101tisk\u0101 Republika" }
+        KR { "Dienvidkoreja" }    // alternate name { "Korejas Republika" }
         KW { "Kuveita" }
         KY { "Kaimanu salas" }
         KZ { "Kazahst\u0101na" }
@@ -139,6 +143,7 @@ lv {
         LT { "Lietuva" }
         LU { "Luksemburga" }
         LV { "Latvija" }
+        LY { "L\u012Bbija" }
         MA { "Maroka" }
         MC { "Monako" }
         //MD { "Moldova" }
@@ -195,6 +200,7 @@ lv {
         SA { "Sa\u016Bda Ar\u0101bija" }
         SB { "Z\u0101lamana salas" }
         SC { "Sei\u0161e\u013Cu salas" }
+        SD { "Sud\u0101na" }
         SE { "Zviedrija" }
         SG { "Singap\u016Bra" }
         SH { "Sv. Hel\u0113nas sala" }
@@ -208,6 +214,7 @@ lv {
         SR { "Surinama" }
         ST { "Santome un Prinsipi" }
         SV { "Salvadora" }
+        SY { "S\u012Brija" }    // alternate name { "S\u012Brijas Ar\u0101bu Republika" }
         SZ { "Svazilenda" }
         TC { "T\u0113rksas un Kaikosas salas" }
         TD { "\u010Cada" }
@@ -223,7 +230,7 @@ lv {
         TR { "Turcija" }
         TT { "Trinid\u0101da un Tob\u0101go" }
         //TV { "Tuvalu" }
-        TW { "Taiv\u0101na" }
+        TW { "Taiv\u0101na, \u0136\u012Bnas province" }
         TZ { "Tanz\u0101nija" }
         UA { "Ukraina" }
         //UG { "Uganda" }
