@@ -47,7 +47,9 @@ MIDDLE_SO_TARGET= $(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR).$(SO)
 ICULIBSUFFIX_VERSION = $(LIB_VERSION_MAJOR)
 
 # this one is for icudefs.mk's use
+ifeq ($(ENABLE_SHARED),YES)
 SO_TARGET_VERSION_SUFFIX = $(SO_TARGET_VERSION_MAJOR)
+endif
 
 ## Compiler switch to embed a library name. Not present on AIX.
 LD_SONAME = 
