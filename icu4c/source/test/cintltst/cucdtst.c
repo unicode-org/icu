@@ -30,6 +30,9 @@
 static void
 TestCharNames();
 
+static void
+TestMirroring();
+
 /* test data ---------------------------------------------------------------- */
 #define MIN(a,b) (a < b ? a : b)
 
@@ -104,6 +107,7 @@ void addUnicodeTest(TestNode** root)
     addTest(root, &TestUnicodeData, "tsutil/cucdtst/TestUnicodeData");
     addTest(root, &TestStringFunctions, "tsutil/cucdtst/TestStringFunctions");
     addTest(root, &TestCharNames, "tsutil/cucdtst/TestCharNames");
+    addTest(root, &TestMirroring, "tsutil/cucdtst/TestMirroring");
 }
 
 /*==================================================== */
@@ -643,5 +647,26 @@ TestCharNames() {
         if(length<=0 || 0!=uprv_strcmp(name, names[i].name)) {
             log_err("u_charName(0x%lx) gets %s instead of %s\n", names[i].code, name, names[i].name);
         }
+    }
+}
+
+/* test u_isMirrored() and u_charMirror() ----------------------------------- */
+
+static void
+TestMirroring() {
+    log_verbose("Testing u_isMirrored()\n");
+    if(!(u_isMirrored(0x28) && u_isMirrored(0xbb) && u_isMirrored(0x2045) && u_isMirrored(0x232a) &&
+         !u_isMirrored(0x27) && !u_isMirrored(0x61) && !u_isMirrored(0x284) && !u_isMirrored(0x3400)
+        )
+    ) {
+        log_err("u_isMirrored() does not work correctly\n");
+    }
+
+    log_verbose("Testing u_charMirror()\n");
+    if(!(u_charMirror(0x3c)==0x3e && u_charMirror(0x5d)==0x5b && u_charMirror(0x208d)==0x208e && u_charMirror(0x3017)==0x3016 &&
+         u_charMirror(0x2e)==0x2e && u_charMirror(0x6f3)==0x6f3 && u_charMirror(0x301c)==0x301c && u_charMirror(0xa4ab)==0xa4ab
+        )
+    ) {
+        log_err("u_charMirror() does not work correctly\n");
     }
 }

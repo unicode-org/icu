@@ -356,6 +356,22 @@ void UnicodeTest::TestUnicodeData()
     if(name!=UNICODE_STRING("LATIN SMALL LETTER DOTLESS J WITH STROKE AND HOOK", 49)) {
         errln("Unicode character name lookup failed\n");
     }
+
+    // test Unicode::isMirrored() and charMirror()
+    // see also cintltst/cucdtest.c
+    if(!(Unicode::isMirrored(0x28) && Unicode::isMirrored(0xbb) && Unicode::isMirrored(0x2045) && Unicode::isMirrored(0x232a) &&
+         !Unicode::isMirrored(0x27) && !Unicode::isMirrored(0x61) && !Unicode::isMirrored(0x284) && !Unicode::isMirrored(0x3400)
+        )
+    ) {
+        errln("Unicode::isMirrored() does not work correctly\n");
+    }
+
+    if(!(Unicode::charMirror(0x3c)==0x3e && Unicode::charMirror(0x5d)==0x5b && Unicode::charMirror(0x208d)==0x208e && Unicode::charMirror(0x3017)==0x3016 &&
+         Unicode::charMirror(0x2e)==0x2e && Unicode::charMirror(0x6f3)==0x6f3 && Unicode::charMirror(0x301c)==0x301c && Unicode::charMirror(0xa4ab)==0xa4ab
+        )
+    ) {
+        errln("Unicode::charMirror() does not work correctly\n");
+    }
 }
 
 int32_t UnicodeTest::MakeProp(char* str) 
