@@ -245,10 +245,6 @@ pt {
         ZM { "Z\u00E2mbia" }
         ZW { "Zimb\u00E1bue" }
     }
-    DateTimeElements:intvector { 
-        2,
-        1,
-    }
     DateTimePatterns { 
         "HH'H'mm'm'ss's' z",
         "HH:mm:ss z",

@@ -86,6 +86,10 @@ pt_PT {
         YU { "Jugosl\u00E1via" }
         //ZW { "Zimbabwe" }
     }
+    DateTimeElements:intvector { 
+        2,
+        1,
+    }
     DateTimePatterns {
         "HH'H'mm'm'ss's' z",
         "HH:mm:ss z",
