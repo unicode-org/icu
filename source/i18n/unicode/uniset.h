@@ -477,6 +477,7 @@ public:
      * present.  If this set already contains the specified range,
      * the call leaves this set unchanged.  If <code>end > start</code>
      * then an empty range is added, leaving the set unchanged.
+     * This is equivalent to a boolean logic OR, or a set UNION.
      *
      * @param start first character, inclusive, of range to be added
      * to this set.
@@ -497,7 +498,8 @@ public:
     /**
      * Retain only the elements in this set that are contained in the
      * specified range.  If <code>end > start</code> then an empty range is
-     * retained, leaving the set empty.
+     * retained, leaving the set empty.  This is equivalent to
+     * a boolean logic AND, or a set INTERSECTION.
      *
      * @param start first character, inclusive, of range to be retained
      * to this set.
@@ -535,17 +537,26 @@ public:
     void remove(UChar32 c);
 
     /**
+     * Inverts this set.  This operation modifies this set so that
+     * its value is its complement.  This is equivalent to
+     * <code>complement(MIN_VALUE, MAX_VALUE)</code>.
+     * @draft
+     */
+    virtual void complement(void);
+
+    /**
      * Complements the specified range in this set.  Any character in
      * the range will be removed if it is in this set, or will be
      * added if it is not in this set.  If <code>end > start</code>
-     * then an empty range is xor'ed, leaving the set unchanged.
+     * then an empty range is complemented, leaving the set unchanged.
+     * This is equivalent to a boolean logic XOR.
      *
      * @param start first character, inclusive, of range to be removed
      * from this set.
      * @param end last character, inclusive, of range to be removed
      * from this set.
      */
-    virtual void exclusiveOr(UChar32 start, UChar32 end);
+    virtual void complement(UChar32 start, UChar32 end);
 
 
     /**
@@ -553,7 +564,7 @@ public:
      * will be removed if it is in this set, or will be added if it is
      * not in this set.
      */
-    void exclusiveOr(UChar32 c);
+    void complement(UChar32 c);
 
     /**
      * Returns <tt>true</tt> if the specified set is a <i>subset</i>
@@ -611,15 +622,7 @@ public:
      * @param c set that defines which elements will be xor'ed from
      *          this set.
      */
-    virtual void exclusiveOrAll(const UnicodeSet& c);
-
-    /**
-     * Inverts this set.  This operation modifies this set so that
-     * its value is its complement.  This is equivalent to the pseudo code:
-     * <code>this = new CharSet("[\u0000-\uFFFF]").removeAll(this)</code>.
-     * @draft
-     */
-    virtual void complement(void);
+    virtual void complementAll(const UnicodeSet& c);
 
     /**
      * Removes all of the elements from this set.  This set will be
