@@ -21,6 +21,7 @@
 #ifndef UNISTR_H
 #define UNISTR_H
 
+#include "unicode/utypes.h"
 #include "unicode/rep.h"
 #include "unicode/uchar.h"
 
@@ -2135,9 +2136,8 @@ public:
    * Get a read-only pointer to the internal buffer.
    * This can be called at any time on a valid UnicodeString.
    *
-   * It returns 0 if the string is empty or bogus, or
-   * during an "open" getBuffer(minCapacity)
-   * (at which time the string length is set to 0 anyway).
+   * It returns 0 if the string is bogus, or
+   * during an "open" getBuffer(minCapacity).
    *
    * It can be called as many times as desired.
    * The pointer that it returns will remain valid until the UnicodeString object is modified,
@@ -3339,7 +3339,7 @@ UnicodeString::hashCode() const
 
 inline const UChar *
 UnicodeString::getBuffer() const {
-  if(fLength>0) {
+  if(!(fFlags&(kIsBogus|kOpenGetBuffer))) {
     return fArray;
   } else {
     return 0;
