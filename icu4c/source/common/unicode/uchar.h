@@ -2609,6 +2609,18 @@ U_CAPI UChar32 U_EXPORT2
 u_foldCase(UChar32 c, uint32_t options);
 
 /**
+ * Returns true if the given code point is "case unique".  A case
+ * unique code point has the property that the case fold closure
+ * of that code point contains only itself.
+ *
+ * @param cp the code point to test
+ * @return true if cp's case fold closure contains only itself.
+ * @draft ICU 2.6
+ */
+U_CAPI UBool U_EXPORT2
+uchar_isCaseUnique(UChar32 ch);
+
+/**
  * Returns the decimal digit value of the code point in the
  * specified radix.
  *
