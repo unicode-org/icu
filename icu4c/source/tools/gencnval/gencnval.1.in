@@ -1,12 +1,12 @@
 .\" Hey, Emacs! This is -*-nroff-*- you know...
 .\"
-.\" gencnval.8: manual page for the gencnval utility
+.\" gencnval.1: manual page for the gencnval utility
 .\"
 .\" Copyright (C) 2000 IBM, Inc. and others.
 .\"
 .\" Manual page by Yves Arrouye <yves@realnames.com>.
 .\"
-.TH GENCNVAL 8 "12 October 2000" "ICU MANPAGE" "ICU @VERSION@ Manual"
+.TH GENCNVAL 1 "16 April 2002" "ICU MANPAGE" "ICU @VERSION@ Manual"
 .SH NAME
 .B gencnval
 \- compile the converters aliases file
@@ -34,7 +34,7 @@ converts the ICU aliases file
 into the binary file
 .BR cnvalias.dat .
 This binary file can then be read directly by ICU, or used by
-.BR pkgdata (8)
+.BR pkgdata (1)
 for incorporation into a larger archive or library.
 .PP
 If
@@ -81,4 +81,4 @@ Copyright (C) 2000-2002 IBM, Inc. and others.
 .SH SEE ALSO
 .BR convrtrs.txt (5) 
 .br
-.BR pkgdata (8)
+.BR pkgdata (1)

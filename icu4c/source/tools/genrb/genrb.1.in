@@ -1,12 +1,12 @@
 .\" Hey, Emacs! This is -*-nroff-*- you know...
 .\"
-.\" genrb.8: manual page for the genrb utility
+.\" genrb.1: manual page for the genrb utility
 .\"
 .\" Copyright (C) 2000-2002 IBM, Inc. and others.
 .\"
 .\" Manual page by Yves Arrouye <yves@realnames.com>.
 .\"
-.TH GENRB 8 "19 March 2002" "ICU MANPAGE" "ICU @VERSION@ Manual"
+.TH GENRB 1 "16 April 2002" "ICU MANPAGE" "ICU @VERSION@ Manual"
 .SH NAME
 .B genrb
 \- compile a resource bundle
@@ -65,7 +65,7 @@ will produce a file whose base name is the name of the locale found
 in the resource file, not the base name of the resource file itself.
 .PP
 The binary files can be read directly by ICU, or used by
-.BR pkgdata (8)
+.BR pkgdata (1)
 for incorporation into a larger archive or library.
 .SH OPTIONS
 .TP
@@ -141,4 +141,6 @@ is set.
 .SH COPYRIGHT
 Copyright (C) 2000-2002 IBM, Inc. and others.
 .SH SEE ALSO
-.BR pkgdata (8)
+.BR derb (1)
+.br
+.BR pkgdata (1)
