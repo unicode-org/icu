@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2000-2001, International Business Machines
+*   Copyright (C) 2000-2002, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -25,6 +25,8 @@
 
 #define MAGIC1 19700503
 #define MAGIC2 19641227
+
+#define URES_MAX_ALIAS_LEVEL 256
 
 /*
 enum UResEntryType {
@@ -51,8 +53,15 @@ struct UResourceDataEntry {
     int32_t fHashKey; /* for faster access in the hashtable */
 };
 
+#define RES_BUFSIZE 256
+#define RES_PATH_SEPARATOR   '/'
+#define RES_PATH_SEPARATOR_S   "/"
+
 struct UResourceBundle {
     const char *fKey; /*tag*/
+    char *fResPath; /* full path to the resource: "zh_TW/CollationElements/Sequence" */
+    char fResBuf[RES_BUFSIZE];
+    int32_t fResPathLen;
     char *fVersion;
     UBool fHasFallback;
     UBool fIsTopLevel;
@@ -64,6 +73,12 @@ struct UResourceBundle {
     int32_t fSize;
     ResourceData fResData;
     Resource fRes;
+
+    /* parent of this resource - 
+     * lives in the same data entry 
+     */
+    /* This cannot be done right now - need support in genrb */
+    /*Resource fParent; */
 };
 
 U_CFUNC void ures_initStackObject(UResourceBundle* resB);
@@ -73,6 +88,9 @@ U_CFUNC UBool ures_isStackObject( UResourceBundle* resB);
 /* Some getters used by the copy constructor */
 U_CFUNC const char* ures_getName(const UResourceBundle* resB);
 U_CFUNC const char* ures_getPath(const UResourceBundle* resB);
+U_CFUNC void ures_appendResPath(UResourceBundle *resB, const char* toAdd);
+/*U_CFUNC void ures_setResPath(UResourceBundle *resB, const char* toAdd);*/
+U_CFUNC void ures_freeResPath(UResourceBundle *resB);
 
 /* Candidates for export */
 U_CFUNC UResourceBundle *ures_copyResb(UResourceBundle *r, const UResourceBundle *original, UErrorCode *status);

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2001, International Business Machines
+*   Copyright (C) 1997-2002, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -16,6 +16,7 @@
 *   06/14/99    stephen     Removed functions taking a filename suffix.
 *   07/20/99    stephen     Language-independent ypedef to void*
 *   11/09/99    weiv        Added ures_getLocale()
+*   06/24/02    weiv        Added support for resource sharing
 ******************************************************************************
 */
 
@@ -182,15 +183,15 @@ typedef enum {
     RES_NONE=-1,
     RES_STRING=0,
     RES_BINARY=1,
-    RES_TABLE=2,
-
-    RES_INT=7,
-    RES_ARRAY=8,
+    RES_INT=2,
   /* this resource is an alias - contains a string 
    * that is the name of resource containing data 
    */
-    RES_ALIAS=13, 
-    RES_INT_VECTOR=14,
+    RES_ALIAS=3, 
+    RES_INT_VECTOR=4,
+
+    RES_TABLE=7,
+    RES_ARRAY=8,
     RES_RESERVED=15
 } UResType;
 
@@ -492,7 +493,8 @@ U_CAPI UBool U_EXPORT2 ures_hasNext(UResourceBundle *resourceBundle);
  * @return                  a pointer to a UResourceBundle struct. If fill in param was NULL, caller must delete it
  * @stable
  */
-U_CAPI UResourceBundle* U_EXPORT2 ures_getNextResource(UResourceBundle *resourceBundle, UResourceBundle *fillIn, UErrorCode *status);
+U_CAPI UResourceBundle* U_EXPORT2 ures_getNextResource(UResourceBundle *resourceBundle, 
+                                                       UResourceBundle *fillIn, UErrorCode *status);
 
 /**
  * Returns the next string in a given resource or NULL if there are no more resources 
@@ -505,7 +507,9 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getNextResource(UResourceBundle *resource
  * @return a pointer to a zero-terminated UChar array which lives in a memory mapped/DLL file.
  * @stable
  */
-U_CAPI const UChar* U_EXPORT2 ures_getNextString(UResourceBundle *resourceBundle, int32_t* len, const char ** key, UErrorCode *status);
+U_CAPI const UChar* U_EXPORT2 ures_getNextString(UResourceBundle *resourceBundle, 
+                                                 int32_t* len, const char ** key, 
+                                                 UErrorCode *status);
 
 /**
  * Returns the resource in a given resource at the specified index. Features a fill-in parameter. 
@@ -518,7 +522,9 @@ U_CAPI const UChar* U_EXPORT2 ures_getNextString(UResourceBundle *resourceBundle
  * @return                  a pointer to a UResourceBundle struct. If fill in param was NULL, caller must delete it
  * @stable
  */
-U_CAPI UResourceBundle* U_EXPORT2 ures_getByIndex(const UResourceBundle *resourceBundle, int32_t indexR, UResourceBundle *fillIn, UErrorCode *status);
+U_CAPI UResourceBundle* U_EXPORT2 ures_getByIndex(const UResourceBundle *resourceBundle, 
+                                                  int32_t indexR, 
+                                                  UResourceBundle *fillIn, UErrorCode *status);
 
 /**
  * Returns the string in a given resource at the specified index.
@@ -530,7 +536,47 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByIndex(const UResourceBundle *resourc
  * @return                  a pointer to a zero-terminated UChar array which lives in a memory mapped/DLL file.
  * @stable
  */
-U_CAPI const UChar* U_EXPORT2 ures_getStringByIndex(const UResourceBundle *resB, int32_t indexS, int32_t* len, UErrorCode *status);
+U_CAPI const UChar* U_EXPORT2 ures_getStringByIndex(const UResourceBundle *resB, 
+                                                    int32_t indexS, int32_t* len, 
+                                                    UErrorCode *status);
+
+/**
+ * Returns a resource that can be located using the pathToResource argument. One needs optional package, locale
+ * and path inside the locale, for example: "/myData/en/zoneStrings/3". Keys and indexes are supported. Keys
+ * need to reference data in named structures, while indexes can reference both named and anonymous resources.
+ * Features a fill-in parameter. 
+ *
+ * @param pathToResource    a path that will lead to the requested resource
+ * @param fillIn            if NULL a new UResourceBundle struct is allocated and must be deleted by the caller.
+ *                          Alternatively, you can supply a struct to be filled by this function.
+ * @param status            fills in the outgoing error code.
+ * @return                  a pointer to a UResourceBundle struct. If fill in param was NULL, caller must delete it
+ * @draft ICU 2.2
+ */
+U_CAPI UResourceBundle* U_EXPORT2
+ures_findResource(const char* pathToResource, 
+                  UResourceBundle *fillIn, UErrorCode *status); 
+
+/**
+ * Returns a sub resource that can be located using the pathToResource argument. One needs a path inside 
+ * the supplied resource, for example, if you have "en_US" resource bundle opened, you might ask for
+ * "zoneStrings/3". Keys and indexes are supported. Keys
+ * need to reference data in named structures, while indexes can reference both 
+ * named and anonymous resources.
+ * Features a fill-in parameter. 
+ *
+ * @param resourceBundle    a resource
+ * @param pathToResource    a path that will lead to the requested resource
+ * @param fillIn            if NULL a new UResourceBundle struct is allocated and must be deleted by the caller.
+ *                          Alternatively, you can supply a struct to be filled by this function.
+ * @param status            fills in the outgoing error code.
+ * @return                  a pointer to a UResourceBundle struct. If fill in param was NULL, caller must delete it
+ * @draft ICU 2.2
+ */
+U_CAPI UResourceBundle* U_EXPORT2
+ures_findSubResource(const UResourceBundle *resB, 
+                     const char* pathToResource, 
+                     UResourceBundle *fillIn, UErrorCode *status);
 
 /**
  * Returns a resource in a given resource that has a given key. This procedure works only with table
@@ -544,7 +590,9 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByIndex(const UResourceBundle *resB,
  * @return                  a pointer to a UResourceBundle struct. If fill in param was NULL, caller must delete it
  * @stable
  */
-U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resourceBundle, const char* key, UResourceBundle *fillIn, UErrorCode *status);
+U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resourceBundle, 
+                                                const char* key, 
+                                                UResourceBundle *fillIn, UErrorCode *status);
 
 /**
  * Returns a string in a given resource that has a given key. This procedure works only with table
