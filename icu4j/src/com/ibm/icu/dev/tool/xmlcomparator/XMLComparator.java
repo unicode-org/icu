@@ -192,7 +192,7 @@ public class XMLComparator {
         }
         boolean warning[] = new boolean[1];
         warning[0] = false;
-        Enumeration enum = optionTable.keys();
+        Enumeration en = optionTable.keys();
         
         try{
                         
@@ -203,8 +203,8 @@ public class XMLComparator {
             System.out.println("INFO: Creating file named: " + fileName);
             
             addToCompareMap(goldFileName, goldKey);
-            for(;enum.hasMoreElements();){
-                String key = (String)enum.nextElement();
+            for(;en.hasMoreElements();){
+                String key = (String)en.nextElement();
                 String compFile = (String) optionTable.get(key);
                 addToCompareMap(compFile,key);
                 
