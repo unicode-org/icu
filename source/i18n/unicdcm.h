@@ -49,7 +49,7 @@ public:
             int32_t mappedValue_length,
                         const SpecialMapping* exceptionChars, 
             int32_t exceptionChars_length,
-                        const bool_t* hasException,
+                        const UBool* hasException,
                         Type* asiiValues );
     
     /**
@@ -60,7 +60,7 @@ public:
     Type mappedChar(UChar ch) const;
 
 private:
-    const bool_t            *fHasException;
+    const UBool            *fHasException;
     const Type*             fMappedValue;
     const int32_t           fMappedValue_length;
     const SpecialMapping*   fExceptionChars;

@@ -33,7 +33,7 @@ public:
 
     CollationEnglishTest();
     virtual ~CollationEnglishTest();
-    void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par = NULL );
+    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par = NULL );
 
     // main test routine, tests rules defined by the "en" locale
     void doTest( UnicodeString source, UnicodeString target, Collator::EComparisonResult result);

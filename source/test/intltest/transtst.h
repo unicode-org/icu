@@ -21,7 +21,7 @@ class Transliterator;
  */
 class TransliteratorTest : public IntlTest {
 
-    void runIndexedTest(int32_t index, bool_t exec, char* &name,
+    void runIndexedTest(int32_t index, UBool exec, char* &name,
                         char* par=NULL);
 #if 0
     void TestHashtable(void);
@@ -118,7 +118,7 @@ class TransliteratorTest : public IntlTest {
                    const UnicodeString& expectedResult);
     
     void expectAux(const UnicodeString& tag,
-                   const UnicodeString& summary, bool_t pass,
+                   const UnicodeString& summary, UBool pass,
                    const UnicodeString& expectedResult);
 };
 

@@ -11,7 +11,7 @@
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
 
 void 
-PUtilTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+PUtilTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     //if (exec) logln("TestSuite PUtilTest: ");
     switch (index) {
@@ -173,7 +173,7 @@ PUtilTest::testMaxMin()
 }
 
 void
-PUtilTest::maxMinTest(double a, double b, double exp, bool_t max)
+PUtilTest::maxMinTest(double a, double b, double exp, UBool max)
 {
   double result = 0.0;
   
@@ -182,7 +182,7 @@ PUtilTest::maxMinTest(double a, double b, double exp, bool_t max)
   else
     result = uprv_fmin(a, b);
   
-  bool_t nanResultOK = (uprv_isNaN(a) || uprv_isNaN(b));
+  UBool nanResultOK = (uprv_isNaN(a) || uprv_isNaN(b));
   
   if(uprv_isNaN(result) && ! nanResultOK) {
     errln(UnicodeString("FAIL: got NaN as result without NaN as argument"));

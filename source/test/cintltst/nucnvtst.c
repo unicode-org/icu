@@ -127,7 +127,7 @@ void setNuConvTestName(const char *codepage, const char *direction)
       gOutBufferSize);
 }
 
-bool_t testConvertFromU( const UChar *source, int sourceLen,  const char *expect, int expectLen, 
+UBool testConvertFromU( const UChar *source, int sourceLen,  const char *expect, int expectLen, 
                 const char *codepage, int32_t *expectOffsets)
 {
     UErrorCode status = U_ZERO_ERROR;
@@ -143,8 +143,8 @@ bool_t testConvertFromU( const UChar *source, int sourceLen,  const char *expect
     char *realBufferEnd;
     const UChar *realSourceEnd;
     const UChar *sourceLimit;
-    bool_t checkOffsets = TRUE;
-    bool_t doFlush;
+    UBool checkOffsets = TRUE;
+    UBool doFlush;
 
     for(i=0;i<NEW_MAX_BUFFER;i++)
         junkout[i] = (char)0xF0;
@@ -269,7 +269,7 @@ bool_t testConvertFromU( const UChar *source, int sourceLen,  const char *expect
     }
 }
 
-bool_t testConvertToU( const char *source, int sourcelen, const UChar *expect, int expectlen, 
+UBool testConvertToU( const char *source, int sourcelen, const UChar *expect, int expectlen, 
                const char *codepage, int32_t *expectOffsets)
 {
     UErrorCode status = U_ZERO_ERROR;
@@ -283,7 +283,7 @@ bool_t testConvertToU( const char *source, int sourcelen, const UChar *expect, i
     UChar *end;
     int32_t *offs;
     int i;
-    bool_t   checkOffsets = TRUE;
+    UBool   checkOffsets = TRUE;
     
     int32_t   realBufferSize;
     UChar *realBufferEnd;
@@ -344,7 +344,7 @@ bool_t testConvertToU( const char *source, int sourcelen, const UChar *expect, i
                 &src,
                 srcLimit,
                 checkOffsets ? offs : NULL,
-                (bool_t)(srcLimit == realSourceEnd), /* flush if we're at the end of hte source data */
+                (UBool)(srcLimit == realSourceEnd), /* flush if we're at the end of hte source data */
                 &status);
 
         /*        offs += (targ-oldTarg); */
@@ -553,9 +553,9 @@ void TestConverterTypesAndStarters()
 {
     UConverter* myConverter[3];
     UErrorCode err = U_ZERO_ERROR;
-    bool_t mystarters[256];
+    UBool mystarters[256];
     
-    const bool_t expectedKSCstarters[256] = {
+    const UBool expectedKSCstarters[256] = {
         FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
         FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
         FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,

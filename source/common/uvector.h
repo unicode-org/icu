@@ -67,7 +67,7 @@
 class U_COMMON_API UVector {
 public:
     typedef void (*Deleter)(void*);
-    typedef bool_t (*Comparer)(void*, void*);
+    typedef UBool (*Comparer)(void*, void*);
 
 private:
     int32_t count;
@@ -80,7 +80,7 @@ private:
 
     Comparer comparer;
 
-    static bool_t outOfMemory;
+    static UBool outOfMemory;
 
 public:
     UVector(int32_t initialCapacity = 8);
@@ -107,19 +107,19 @@ public:
 
     int32_t indexOf(void* obj, int32_t startIndex = 0) const;
 
-    bool_t contains(void* obj) const;
+    UBool contains(void* obj) const;
 
     void removeElementAt(int32_t index);
 
-    bool_t removeElement(void* obj);
+    UBool removeElement(void* obj);
 
     void removeAllElements();
 
     int32_t size(void) const;
 
-    bool_t isEmpty(void) const;
+    UBool isEmpty(void) const;
 
-    bool_t ensureCapacity(int32_t minimumCapacity);
+    UBool ensureCapacity(int32_t minimumCapacity);
 
     //------------------------------------------------------------
     // New API
@@ -129,7 +129,7 @@ public:
 
     Comparer setComparer(Comparer c);
 
-    static bool_t isOutOfMemory(void);
+    static UBool isOutOfMemory(void);
 
     void* operator[](int32_t index) const;
 
@@ -180,7 +180,7 @@ public:
     // It's okay not to have a virtual destructor (in UVector)
     // because UStack has no special cleanup to do.
 
-    bool_t empty(void) const;
+    UBool empty(void) const;
 
     void* peek(void) const;
     
@@ -205,11 +205,11 @@ inline int32_t UVector::size(void) const {
     return count;
 }
 
-inline bool_t UVector::isEmpty(void) const {
+inline UBool UVector::isEmpty(void) const {
     return count == 0;
 }
 
-inline bool_t UVector::contains(void* obj) const {
+inline UBool UVector::contains(void* obj) const {
     return indexOf(obj) >= 0;
 }
 
@@ -227,7 +227,7 @@ inline void* UVector::operator[](int32_t index) const {
 
 // UStack inlines
 
-inline bool_t UStack::empty(void) const {
+inline UBool UStack::empty(void) const {
     return isEmpty();
 }
 

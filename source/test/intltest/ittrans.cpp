@@ -29,7 +29,7 @@
 #include "hajatrts.h"
 #include "ufltlgts.h"
 
-void IntlTestTransliterator::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void IntlTestTransliterator::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     if (exec) logln("TestSuite Transliterator");
     switch (index) {

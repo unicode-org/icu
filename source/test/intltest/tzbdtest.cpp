@@ -10,7 +10,7 @@
 #include "unicode/simpletz.h"
 #include "unicode/gregocal.h"
 
-void TimeZoneBoundaryTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void TimeZoneBoundaryTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     if (exec) logln("TestSuite TestTimeZoneBoundary");
     switch (index) {
@@ -100,7 +100,7 @@ TimeZoneBoundaryTest::findDaylightBoundaryUsingDate(UDate d, const char* startMo
 // -------------------------------------
  
 void
-TimeZoneBoundaryTest::findDaylightBoundaryUsingTimeZone(UDate d, bool_t startsInDST, UDate expectedBoundary)
+TimeZoneBoundaryTest::findDaylightBoundaryUsingTimeZone(UDate d, UBool startsInDST, UDate expectedBoundary)
 {
     TimeZone *zone = TimeZone::createDefault();
     findDaylightBoundaryUsingTimeZone(d, startsInDST, expectedBoundary, zone);
@@ -110,7 +110,7 @@ TimeZoneBoundaryTest::findDaylightBoundaryUsingTimeZone(UDate d, bool_t startsIn
 // -------------------------------------
  
 void
-TimeZoneBoundaryTest::findDaylightBoundaryUsingTimeZone(UDate d, bool_t startsInDST, UDate expectedBoundary, TimeZone* tz)
+TimeZoneBoundaryTest::findDaylightBoundaryUsingTimeZone(UDate d, UBool startsInDST, UDate expectedBoundary, TimeZone* tz)
 {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString str;
@@ -128,7 +128,7 @@ TimeZoneBoundaryTest::findDaylightBoundaryUsingTimeZone(UDate d, bool_t startsIn
     if (failure(status, "TimeZone::inDaylightTime")) return;
     while ((max - min) > INTERVAL) {
         UDate mid = (min + max) / 2;
-        bool_t isIn = tz->inDaylightTime(mid, status);
+        UBool isIn = tz->inDaylightTime(mid, status);
         if (failure(status, "TimeZone::inDaylightTime")) return;
         if (isIn == startsInDST) {
             min = mid;
@@ -179,7 +179,7 @@ TimeZoneBoundaryTest::showNN(int32_t n)
 // -------------------------------------
  
 void
-TimeZoneBoundaryTest::verifyDST(UDate d, TimeZone* time_zone, bool_t expUseDaylightTime, bool_t expInDaylightTime, UDate expZoneOffset, UDate expDSTOffset)
+TimeZoneBoundaryTest::verifyDST(UDate d, TimeZone* time_zone, UBool expUseDaylightTime, UBool expInDaylightTime, UDate expZoneOffset, UDate expDSTOffset)
 {
     UnicodeString str;
     UErrorCode status = U_ZERO_ERROR;
@@ -220,7 +220,7 @@ TimeZoneBoundaryTest::TestBoundaries()
         UDate d = date(97, Calendar::APRIL, 6);
         TimeZone *z = TimeZone::createTimeZone("PST");
         for (int32_t i = 60; i <= 180; i += 15) {
-            bool_t inDST = (i >= 120);
+            UBool inDST = (i >= 120);
             UDate e = d + i * 60 * 1000;
             verifyDST(e, z, TRUE, inDST, - 8 * ONE_HOUR, inDST ? - 7 * ONE_HOUR: - 8 * ONE_HOUR);
         }
@@ -271,7 +271,7 @@ TimeZoneBoundaryTest::testUsingBinarySearch(SimpleTimeZone* tz, UDate d, UDate e
     UErrorCode status = U_ZERO_ERROR;
     UDate min = d;
     UDate max = min + SIX_MONTHS;
-    bool_t startsInDST = tz->inDaylightTime(d, status);
+    UBool startsInDST = tz->inDaylightTime(d, status);
     if (failure(status, "SimpleTimeZone::inDaylightTime")) return;
     if (tz->inDaylightTime(max, status) == startsInDST) {
         logln("Error: inDaylightTime(" + dateToString(max) + ") != " + ((!startsInDST)?"true":"false"));
@@ -338,14 +338,14 @@ TimeZoneBoundaryTest::findBoundariesStepwise(int32_t year, UDate interval, TimeZ
     UDate d = date(year - 1900, Calendar::JANUARY, 1);
     UDate time = d;
     UDate limit = time + ONE_YEAR + ONE_DAY;
-    bool_t lastState = z->inDaylightTime(d, status);
+    UBool lastState = z->inDaylightTime(d, status);
     if (failure(status, "TimeZone::inDaylightTime")) return;
     int32_t changes = 0;
     logln(UnicodeString("-- Zone ") + z->getID(str) + " starts in " + year + " with DST = " + (lastState?"true":"false"));
     logln(UnicodeString("useDaylightTime = ") + (z->useDaylightTime()?"true":"false"));
     while (time < limit) {
         d = time;
-        bool_t state = z->inDaylightTime(d, status);
+        UBool state = z->inDaylightTime(d, status);
         if (failure(status, "TimeZone::inDaylightTime")) return;
         if (state != lastState) {
             logln(UnicodeString(state ? "Entry ": "Exit ") + "at " + d);

@@ -68,7 +68,7 @@ DateFormat::~DateFormat()
 
 //----------------------------------------------------------------------
 
-bool_t
+UBool
 DateFormat::operator==(const Format& other) const
 {
     // This protected comparison operator should only be called by subclasses
@@ -348,14 +348,14 @@ DateFormat::getTimeZone() const
 //----------------------------------------------------------------------
 
 void
-DateFormat::setLenient(bool_t lenient)
+DateFormat::setLenient(UBool lenient)
 {
     fCalendar->setLenient(lenient);
 }
 
 //----------------------------------------------------------------------
 
-bool_t
+UBool
 DateFormat::isLenient() const
 {
     return fCalendar->isLenient();

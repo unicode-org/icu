@@ -36,7 +36,7 @@
 
 u_printf_handler     g_u_printf_handlers     [256];
 u_printf_info       g_u_printf_infos     [256];
-bool_t            g_u_printf_inited    = FALSE;
+UBool            g_u_printf_inited    = FALSE;
 
 /* buffer size for formatting */
 #define UFPRINTF_BUFFER_SIZE 1024
@@ -337,7 +337,7 @@ u_printf_hex_handler(UFILE             *stream,
 
   /* format the number, preserving the minimum # of digits */
   ufmt_ltou(result, &len, num, 16,
-        (bool_t)(info->fSpec == 0x0078),
+        (UBool)(info->fSpec == 0x0078),
         (info->fPrecision == -1 && info->fZero) ? info->fWidth : info->fPrecision);
   
   /* convert to alt form, if desired */
@@ -1264,7 +1264,7 @@ u_printf_scidbl_handler(UFILE                 *stream,
             const ufmt_args            *args)
 {
   double     num = (double)(args[0].doubleValue);
-  bool_t     useE;
+  UBool     useE;
 
   /* a precision of 0 is taken as 1 */
   if(info->fPrecision == 0)

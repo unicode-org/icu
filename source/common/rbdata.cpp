@@ -105,7 +105,7 @@ TaggedList::get(const UnicodeString& tag) const {
     return (const UnicodeString*) hash->get(tag);
 }
 
-bool_t TaggedList::nextElement(const UnicodeString*& key,
+UBool TaggedList::nextElement(const UnicodeString*& key,
                                const UnicodeString*& value,
                                int32_t& pos) const {
     const UHashElement *e = hash->nextElement(pos);

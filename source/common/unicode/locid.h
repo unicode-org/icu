@@ -286,7 +286,7 @@ public:
      * @return      True if the two locale keys are the same, false otherwise.
      * @stable
      */
-                bool_t          operator==(const    Locale&     other) const;   
+                UBool          operator==(const    Locale&     other) const;   
 
     /**
      * Checks if two locale keys are not the same.
@@ -296,7 +296,7 @@ public:
      *              otherwise.
      * @stable
      */
-                bool_t          operator!=(const    Locale&     other) const;
+                UBool          operator!=(const    Locale&     other) const;
 
     /**
      * Common methods of getting the current default Locale. Used for the
@@ -651,7 +651,7 @@ friend  void locale_set_default_internal(const char *);
 
 };
 
-inline bool_t
+inline UBool
 Locale::operator!=(const    Locale&     other) const
 {
     return !operator==(other);

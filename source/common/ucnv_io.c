@@ -71,7 +71,7 @@
 static UDataMemory *aliasData=NULL;
 static const uint16_t *aliasTable=NULL;
 
-static bool_t
+static UBool
 isAcceptable(void *context,
              const char *type, const char *name,
              const UDataInfo *pInfo) {
@@ -86,7 +86,7 @@ isAcceptable(void *context,
         pInfo->formatVersion[0]==2;
 }
 
-static bool_t
+static UBool
 haveAliasData(UErrorCode *pErrorCode) {
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return FALSE;
@@ -124,7 +124,7 @@ haveAliasData(UErrorCode *pErrorCode) {
     return TRUE;
 }
 
-static bool_t
+static UBool
 isAlias(const char *alias, UErrorCode *pErrorCode) {
     if(alias==NULL) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
@@ -363,7 +363,7 @@ ucnv_io_setDefaultConverterName(const char *converterName) {
             int32_t length=uprv_strlen(converterName);
             if(length<sizeof(defaultConverterNameBuffer)) {
                 /* it was not found as an alias, so copy it - accept an empty name */
-                bool_t didLock;
+                UBool didLock;
                 if(defaultConverterName==defaultConverterNameBuffer) {
                     umtx_lock(NULL);
                     didLock=TRUE;

@@ -139,14 +139,14 @@ public:
      * @return TRUE if the two field positions are equal, FALSE otherwise.
      * @stable
      */
-    bool_t              operator==(const FieldPosition& that) const;
+    UBool              operator==(const FieldPosition& that) const;
 
     /** 
      * Equality operator.
      * @return TRUE if the two field positions are not equal, FALSE otherwise.
      * @stable
      */
-    bool_t              operator!=(const FieldPosition& that) const;
+    UBool              operator!=(const FieldPosition& that) const;
 
     /**
      * Retrieve the field identifier.
@@ -214,7 +214,7 @@ FieldPosition::operator=(const FieldPosition& copy)
     return *this;
 }
 
-inline bool_t
+inline UBool
 FieldPosition::operator==(const FieldPosition& copy) const
 {
     if(    fField         != copy.fField || 
@@ -225,7 +225,7 @@ FieldPosition::operator==(const FieldPosition& copy) const
         return TRUE;
 }
 
-inline bool_t
+inline UBool
 FieldPosition::operator!=(const FieldPosition& copy) const
 {
     return !operator==(copy);

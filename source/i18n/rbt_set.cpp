@@ -251,7 +251,7 @@ TransliterationRuleSet::findIncrementalMatch(const Replaceable& text,
                                              int32_t start,
                                              int32_t limit, int32_t cursor,
                                              const TransliterationRuleData& data,
-                                             bool_t& isPartial,
+                                             UBool& isPartial,
                                              const UnicodeFilter* filter) const {
 
     /* We only need to check our indexed bin of the rule table,

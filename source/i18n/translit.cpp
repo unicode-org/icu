@@ -64,7 +64,7 @@ UMTX Transliterator::cacheMutex = NULL;
  * the code as part of a shared library, and (2) to avoid static
  * intialization problems.
  */
-bool_t Transliterator::cacheInitialized = FALSE;
+UBool Transliterator::cacheInitialized = FALSE;
 
 /**
  * Prefix for resource bundle key for the display name for a
@@ -644,7 +644,7 @@ Transliterator* Transliterator::_createInstance(const UnicodeString& ID,
     } else {
         // At this point entry type must be either RULE_BASED_PLACEHOLDER
         // or REVERSE_RULE_BASED_PLACEHOLDER.
-        bool_t isReverse =
+        UBool isReverse =
             (entry->entryType ==
              CacheEntry::REVERSE_RULE_BASED_PLACEHOLDER);
         
@@ -854,7 +854,7 @@ UChar Transliterator::filteredCharAt(const Replaceable& text, int32_t i) const {
  * Comparison function for UVector.  Compares two UnicodeString
  * objects given void* pointers to them.
  */
-bool_t Transliterator::compareIDs(void* a, void* b) {
+UBool Transliterator::compareIDs(void* a, void* b) {
     const UnicodeString* aa = (const UnicodeString*) a;
     const UnicodeString* bb = (const UnicodeString*) b;
     return *aa == *bb;

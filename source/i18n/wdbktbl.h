@@ -62,14 +62,14 @@ public:
      * @param state the state as returned by get, initialState, or endState
      * @return true if transition into state was marked.
      */
-    bool_t isMarkState(Node state) const;
+    UBool isMarkState(Node state) const;
 
     /**
      * Check to see if the state is the end state
      * @param state the state to check
      * @return true if state is an end state
      */
-    bool_t isEndState(Node state) const;
+    UBool isEndState(Node state) const;
 
     /**
      * Get the initial state
@@ -97,13 +97,13 @@ WordBreakTable::get(WordBreakTable::Node oldState, WordBreakTable::Type input) c
     return fData[(oldState & kIndex_mask) * fCols + input];
 }
 
-inline bool_t
+inline UBool
 WordBreakTable::isMarkState(WordBreakTable::Node state) const
 {
     return (state & kMark_mask) != 0;
 }
 
-inline bool_t
+inline UBool
 WordBreakTable::isEndState(WordBreakTable::Node state) const
 {
     return (state & kIndex_mask) == kEnd_state;

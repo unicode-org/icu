@@ -146,7 +146,7 @@ LocaleTest::~LocaleTest()
 
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
 
-void LocaleTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void LocaleTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     if (exec) logln("TestSuite LocaleTest: ");
     switch (index) {
@@ -533,7 +533,7 @@ void LocaleTest::TestDataDirectory()
 
 void LocaleTest::doTestDisplayNames(Locale& inLocale,
                                     int32_t compareIndex,
-                                    bool_t defaultIsFrench) {
+                                    UBool defaultIsFrench) {
     UnicodeString   temp;
     
     if (defaultIsFrench && (temp=Locale::getDefault().getLanguage()) != "fr")
@@ -814,7 +814,7 @@ public void TestGetLanguagesForCountry() {
 */
 
 /*
-private bool_t searchStringArrayFor(UnicodeString s, UnicodeString[] array) {
+private UBool searchStringArrayFor(UnicodeString s, UnicodeString[] array) {
     for (int32_t i = 0; i < array.length; i++)
         if (s.equals(array[i]))
             return TRUE;
@@ -1021,7 +1021,7 @@ LocaleTest::TestNullDefault()
 /*
     // why on earth anyone would ever try to do this is beyond me, but we should
     // definitely make sure we don't let them
-    bool_t gotException = FALSE;
+    UBool gotException = FALSE;
     try {
         Locale.setDefault(null);
     }

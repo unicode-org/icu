@@ -198,7 +198,7 @@ private:
     static const int32_t            kCharacterRawMapping_length;
     static SpecialMapping           kCharacterExceptionChar[];
     static const int32_t            kCharacterExceptionChar_length;
-    static const bool_t             kCharacterExceptionFlags[];
+    static const UBool             kCharacterExceptionFlags[];
     static UnicodeClassMapping*     kCharacterMap;
     static Type                     kCharacterAsciiValues[];
 
@@ -242,7 +242,7 @@ private:
     static const int32_t            kWordExceptionChar_length;
     static UnicodeClassMapping*     kWordMap;
     static Type                     kWordAsciiValues[];
-    static const bool_t             kWordExceptionFlags[];
+    static const UBool             kWordExceptionFlags[];
 
 private:
     // Sentence data
@@ -281,7 +281,7 @@ private:
     static const int32_t            kSentenceExceptionChar_length;
     static UnicodeClassMapping*     kSentenceMap;
     static Type                     kSentenceAsciiValues[];
-    static const bool_t             kSentenceExceptionFlags[];
+    static const UBool             kSentenceExceptionFlags[];
 
 private:
     // Line data
@@ -330,7 +330,7 @@ private:
     static const int32_t            kLineRawMapping_length;
     static SpecialMapping           kLineExceptionChar[];
     static const int32_t            kLineExceptionChar_length;
-    static const bool_t             kLineExceptionFlags[];
+    static const UBool             kLineExceptionFlags[];
     static UnicodeClassMapping*     kLineMap;
     static Type                     kLineAsciiValues[];
 

@@ -144,7 +144,7 @@ private:
      * Given (logical) row and column numbers, returns true if the
      * cell in that position is populated
      */
-    bool_t cellIsPopulated(int32_t row, int32_t col) const;
+    UBool cellIsPopulated(int32_t row, int32_t col) const;
 
     /**
      * Implementation of at() when we know the specified cell is populated.

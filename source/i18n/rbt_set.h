@@ -146,7 +146,7 @@ public:
                                               int32_t start,
                                               int32_t limit, int32_t cursor,
                                               const TransliterationRuleData& data,
-                                              bool_t& isPartial,
+                                              UBool& isPartial,
                                               const UnicodeFilter* filter) const;
 };
 #endif

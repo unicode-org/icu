@@ -285,7 +285,7 @@ public:
      * Objects of different subclasses are considered unequal.
      * @stable
      */
-    virtual bool_t operator==(const Format& other) const;
+    virtual UBool operator==(const Format& other) const;
 
    /**
     * Format a double or long number using base-10 representation.
@@ -614,7 +614,7 @@ public:
      * @see #setExponentSignAlwaysShown
      * @stable
      */
-    virtual bool_t isScientificNotation(void);
+    virtual UBool isScientificNotation(void);
 
     /**
      * Set whether or not scientific notation is used.
@@ -627,7 +627,7 @@ public:
      * @see #setExponentSignAlwaysShown
      * @stable
      */
-    virtual void setScientificNotation(bool_t useScientific);
+    virtual void setScientificNotation(UBool useScientific);
 
     /**
      * Return the minimum exponent digits that will be shown.
@@ -667,7 +667,7 @@ public:
      * @see #setExponentSignAlwaysShown
      * @stable
      */
-    virtual bool_t isExponentSignAlwaysShown(void);
+    virtual UBool isExponentSignAlwaysShown(void);
 
     /**
      * Set whether the exponent sign is always shown.  This has no effect
@@ -682,7 +682,7 @@ public:
      * @see #isExponentSignAlwaysShown
      * @stable
      */
-    virtual void setExponentSignAlwaysShown(bool_t expSignAlways);
+    virtual void setExponentSignAlwaysShown(UBool expSignAlways);
 
     /**
      * Return the grouping size. Grouping size is the number of digits between
@@ -713,7 +713,7 @@ public:
      * Example: Decimal ON: 12345 -> 12345.; OFF: 12345 -> 12345
      * @stable
      */
-    bool_t isDecimalSeparatorAlwaysShown(void) const;
+    UBool isDecimalSeparatorAlwaysShown(void) const;
 
     /**
      * Allows you to set the behavior of the decimal separator with integers.
@@ -722,7 +722,7 @@ public:
      * Example: Decimal ON: 12345 -> 12345.; OFF: 12345 -> 12345
      * @stable
      */
-    virtual void setDecimalSeparatorAlwaysShown(bool_t newValue);
+    virtual void setDecimalSeparatorAlwaysShown(UBool newValue);
 
     /**
      * Synthesizes a pattern string that represents the current state
@@ -883,7 +883,7 @@ private:
     /**
      * Does the real work of generating a pattern.
      */
-    UnicodeString& toPattern(UnicodeString& result, bool_t localized) const;
+    UnicodeString& toPattern(UnicodeString& result, UBool localized) const;
 
     /**
      * Does the real work of applying a pattern.
@@ -894,7 +894,7 @@ private:
      *                  set to a failure result.
      */
     void applyPattern(const UnicodeString& pattern,
-                            bool_t localized,
+                            UBool localized,
                             UErrorCode& status);
 
     /**
@@ -902,8 +902,8 @@ private:
      */
     UnicodeString& subformat(UnicodeString& result,
                              FieldPosition& fieldPosition,
-                             bool_t         isNegative,
-                             bool_t         isInteger) const;
+                             UBool         isNegative,
+                             UBool         isInteger) const;
 
     static const int32_t fgStatusInfinite;
     static const int32_t fgStatusPositive;
@@ -921,9 +921,9 @@ private:
      * @param status Upon return contains boolean status flags indicating
      * whether the value was infinite and whether it was positive.
      */
-    bool_t subparse(const UnicodeString& text, ParsePosition& parsePosition,
-                    DigitList& digits, bool_t isExponent,
-                    bool_t* status) const;
+    UBool subparse(const UnicodeString& text, ParsePosition& parsePosition,
+                    DigitList& digits, UBool isExponent,
+                    UBool* status) const;
 
     /**
      * Append an affix to the given StringBuffer, using quotes if
@@ -931,21 +931,21 @@ private:
      * escaped in either case.
      */
     void appendAffix(UnicodeString& buffer, const UnicodeString& affix, 
-                     bool_t localized) const;
+                     UBool localized) const;
 
     void appendAffix(UnicodeString& buffer,
                      const UnicodeString* affixPattern,
-                     const UnicodeString& expAffix, bool_t localized) const;
+                     const UnicodeString& expAffix, UBool localized) const;
 
     void expandAffix(const UnicodeString& pattern,
                      UnicodeString& affix) const;
 
     void expandAffixes(void);
     
-    static double round(double a, ERoundingMode mode, bool_t isNegative);
+    static double round(double a, ERoundingMode mode, UBool isNegative);
 
-    void addPadding(UnicodeString& result, bool_t hasAffixes,
-                    bool_t isNegative) const;
+    void addPadding(UnicodeString& result, UBool hasAffixes,
+                    UBool isNegative) const;
 
     /**
      * Constants.
@@ -964,13 +964,13 @@ private:
     UnicodeString*          fNegSuffixPattern;
     int32_t                 fMultiplier;
     int32_t                 fGroupingSize;
-    bool_t                  fDecimalSeparatorAlwaysShown;
-    /*transient*/ bool_t    fIsCurrencyFormat;
+    UBool                  fDecimalSeparatorAlwaysShown;
+    /*transient*/ UBool    fIsCurrencyFormat;
     DecimalFormatSymbols*   fSymbols;
 
-    bool_t                  fUseExponentialNotation;
+    UBool                  fUseExponentialNotation;
     int8_t                  fMinExponentDigits;
-    bool_t                  fExponentSignAlwaysShown;
+    UBool                  fExponentSignAlwaysShown;
 
     /* If fRoundingIncrement is NULL, there is no rounding.  Otherwise, round to
      * fRoundingIncrement.getDouble().  Since this operation may be expensive,

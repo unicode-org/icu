@@ -449,7 +449,7 @@ U_CAPI void U_EXPORT2 ures_resetIterator(UResourceBundle *resourceBundle);
  * @return TRUE if there are more elements, FALSE if there is no more elements
  * @draft
  */
-U_CAPI bool_t U_EXPORT2 ures_hasNext(UResourceBundle *resourceBundle);
+U_CAPI UBool U_EXPORT2 ures_hasNext(UResourceBundle *resourceBundle);
 
 /**
  * Returns the next resource in a given resource or NULL if there are no more resources 

@@ -73,7 +73,7 @@ UnicodeConverterCPP&   UnicodeConverterCPP::operator=(const UnicodeConverterCPP&
     return *this;
 }
 
-bool_t UnicodeConverterCPP::operator==(const UnicodeConverterCPP& that) const
+UBool UnicodeConverterCPP::operator==(const UnicodeConverterCPP& that) const
 {
   if ((myUnicodeConverter->sharedData    == that.myUnicodeConverter->sharedData) &&
       (myUnicodeConverter->fromCharErrorBehaviour == that.myUnicodeConverter->fromCharErrorBehaviour) &&
@@ -89,7 +89,7 @@ bool_t UnicodeConverterCPP::operator==(const UnicodeConverterCPP& that) const
   else return FALSE;
 }
 
-bool_t UnicodeConverterCPP::operator!=(const UnicodeConverterCPP& that) const
+UBool UnicodeConverterCPP::operator!=(const UnicodeConverterCPP& that) const
 {
   return !(*this == that);
 }
@@ -235,7 +235,7 @@ UnicodeConverterCPP::fromUnicode(char*&                 target,
                                  const UChar*&        source,
                                  const UChar*         sourceLimit,
 				 int32_t *offsets,
-				 bool_t                 flush,
+				 UBool                 flush,
                                  UErrorCode&             err)
 {
     ucnv_fromUnicode(myUnicodeConverter,
@@ -256,7 +256,7 @@ UnicodeConverterCPP::toUnicode(UChar*&           target,
                    const char*&        source,
                    const char*         sourceLimit,
 			       int32_t* offsets,
-                   bool_t              flush,
+                   UBool              flush,
                    UErrorCode&          err)
 {
     ucnv_toUnicode(myUnicodeConverter,
@@ -388,7 +388,7 @@ UConverterType UnicodeConverterCPP::getType() const
   return ucnv_getType(myUnicodeConverter);
 }
 
-void UnicodeConverterCPP::getStarters(bool_t starters[256],
+void UnicodeConverterCPP::getStarters(UBool starters[256],
 				 UErrorCode& err) const
 {
   ucnv_getStarters(myUnicodeConverter,
@@ -476,7 +476,7 @@ void UnicodeConverterCPP::fixFileSeparator(UnicodeString& source) const
     }
 }
 
-bool_t UnicodeConverterCPP::isAmbiguous(void) const
+UBool UnicodeConverterCPP::isAmbiguous(void) const
 {
     return ucnv_isAmbiguous(myUnicodeConverter);
 }

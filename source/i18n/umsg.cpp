@@ -89,7 +89,7 @@ matchType(const UChar         *pat,
     kw = findKeyword(type, fgTypeList, matchLen);
 
     // there is a modifier if type contains a ','
-    bool_t hasModifier = (type.indexOf((UChar)0x002C) != -1);
+    UBool hasModifier = (type.indexOf((UChar)0x002C) != -1);
     
     switch(kw) {
 
@@ -282,7 +282,7 @@ u_vformatMessage(    const    char        *locale,
   // All it does is look for an unquoted '{' and read the type
 
   int32_t     part         = 0;
-  bool_t     inQuote     = FALSE;
+  UBool     inQuote     = FALSE;
   int32_t     braceStack     = 0;
   const UChar     *pat         = pattern;
   const UChar     *patLimit     = pattern + patLen;

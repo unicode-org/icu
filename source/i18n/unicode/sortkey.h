@@ -124,7 +124,7 @@ public:
      * @return Returns true if two collation keys are equal, false otherwise.
 	 * @deprecated
      */
-     bool_t                  operator==(const CollationKey& source) const;
+     UBool                  operator==(const CollationKey& source) const;
 
     /**
      * Compare if two collation keys are not the same.
@@ -132,7 +132,7 @@ public:
      * @return Returns TRUE if two collation keys are different, FALSE otherwise.
 	 * @deprecated
      */
-     bool_t                  operator!=(const CollationKey& source) const;
+     UBool                  operator!=(const CollationKey& source) const;
 
 
     /**
@@ -141,7 +141,7 @@ public:
      * @return Returns TRUE if the key is in an invalid, FALSE otherwise.
 	 * @deprecated
      */
-     bool_t                  isBogus(void) const;
+     UBool                  isBogus(void) const;
 
     /** 
      * Returns a pointer to the collation key values. The storage is owned
@@ -223,20 +223,20 @@ private:
     static const int32_t            kInvalidHashCode;
     static const int32_t            kEmptyHashCode;
 
-            bool_t                  fBogus;
+            UBool                  fBogus;
             int32_t                 fCount;
             int32_t                 fCapacity;
             int32_t                 fHashCode;
             uint8_t*                fBytes;
 };
 
-inline bool_t
+inline UBool
 CollationKey::operator!=(const CollationKey& other) const
 {
     return !(*this == other);
 }
 
-inline bool_t
+inline UBool
 CollationKey::isBogus() const
 {
     return fBogus;

@@ -99,7 +99,7 @@ NumberFormat::operator=(const NumberFormat& rhs)
 
 // -------------------------------------
  
-bool_t
+UBool
 NumberFormat::operator==(const Format& that) const
 {
     NumberFormat* other = (NumberFormat*)&that;
@@ -198,7 +198,7 @@ NumberFormat::parse(const UnicodeString& text,
 // Sets to only parse integers.
  
 void
-NumberFormat::setParseIntegerOnly(bool_t value)
+NumberFormat::setParseIntegerOnly(UBool value)
 {
     fParseIntegerOnly = value;
 }
@@ -287,7 +287,7 @@ NumberFormat::getAvailableLocales(int32_t& count)
 // Checks if the thousand/10 thousand grouping is used in the 
 // NumberFormat instance.
 
-bool_t
+UBool
 NumberFormat::isGroupingUsed() const
 {
     return fGroupingUsed;
@@ -298,7 +298,7 @@ NumberFormat::isGroupingUsed() const
 // NumberFormat instance.
  
 void
-NumberFormat::setGroupingUsed(bool_t newValue)
+NumberFormat::setGroupingUsed(UBool newValue)
 {
     fGroupingUsed = newValue;
 }

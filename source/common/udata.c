@@ -286,7 +286,7 @@ typedef struct {
 /* memory-mapping base functions -------------------------------------------- */
 
 #if MAP_IMPLEMENTATION==MAP_WIN32
-    static bool_t
+    static UBool
     uprv_mapFile(UDataMemory *pData, const char *path, const char *basename) {
         char buffer[100];
         HANDLE map;
@@ -339,7 +339,7 @@ typedef struct {
     }
 
 #elif MAP_IMPLEMENTATION==MAP_POSIX
-    static bool_t
+    static UBool
     uprv_mapFile(UDataMemory *pData, const char *path, const char *basename) {
         int fd;
         int length;
@@ -394,7 +394,7 @@ typedef struct {
     }
 
 #elif MAP_IMPLEMENTATION==MAP_FILE_STREAM
-    static bool_t
+    static UBool
     uprv_mapFile(UDataMemory *pData, const char *path, const char *basename) {
         FileStream *file;
         int32_t fileLength;
@@ -542,7 +542,7 @@ static UDataMemory commonICUData={ NULL };
 
 static void
 setCommonICUData(UDataMemory *pData) {
-    bool_t setThisLib=FALSE;
+    UBool setThisLib=FALSE;
 
     /* in the mutex block, set the common library for this process */
     umtx_lock(NULL);
@@ -622,7 +622,7 @@ findBasename(const char *path) {
 
 static UDataMemory *
 openCommonData(UDataMemory *pData,
-               const char *path, bool_t isICUData,
+               const char *path, UBool isICUData,
                char *pathBuffer,
                UErrorCode *pErrorCode) {
 #   if !UDATA_NO_DLL
@@ -894,7 +894,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
     const char *inBasename;
     char *basename, *suffix;
     UErrorCode errorCode=U_ZERO_ERROR;
-    bool_t isICUData= path==NULL;
+    UBool isICUData= path==NULL;
 
     /* set up the ToC names for DLL and offset-ToC lookups */
     setEntryNames(type, name, tocEntryName, dllEntryName);

@@ -217,7 +217,7 @@ public:
  * @return TRUE if there are more elements, FALSE if there is no more elements
  * @draft
  */
-    bool_t hasNext(void) const;
+    UBool hasNext(void) const;
 /**
  * Resets the internal context of a resource so that iteration starts from the first element.
  *

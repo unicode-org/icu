@@ -86,7 +86,7 @@ typedef int32_t (* U_CALLCONV UHashFunction)(const void* key);
  * @param key2 A key stored in a hashtable
  * @return TRUE if the two keys are equal.
  */
-typedef bool_t (* U_CALLCONV UKeyComparator)(const void* key1,
+typedef UBool (* U_CALLCONV UKeyComparator)(const void* key1,
                                              const void* key2);
 
 /**
@@ -382,21 +382,21 @@ uhash_hashIChars(const void *key);
  * Comparator for null-terminated UChar* strings.  Use together with
  * uhash_hashUChars.
  */
-U_CAPI bool_t
+U_CAPI UBool
 uhash_compareUChars(const void *key1, const void *key2);
 
 /**
  * Comparator for null-terminated char* strings.  Use together with
  * uhash_hashChars.
  */
-U_CAPI bool_t
+U_CAPI UBool
 uhash_compareChars(const void *key1, const void *key2);
 
 /**
  * Case-insensitive comparator for null-terminated char* strings.  Use
  * together with uhash_hashIChars.
  */
-U_CAPI bool_t
+U_CAPI UBool
 uhash_compareIChars(const void *key1, const void *key2);
 
 /********************************************************************
@@ -412,7 +412,7 @@ uhash_hashUnicodeString(const void *key);
 /**
  * Comparator function for UnicodeString* keys.
  */
-U_CAPI bool_t
+U_CAPI UBool
 uhash_compareUnicodeString(const void *key1, const void *key2);
 
 /**
@@ -434,7 +434,7 @@ uhash_hashLong(const void *key);
 /**
  * Comparator function for 32-bit integer keys.
  */
-U_CAPI bool_t
+U_CAPI UBool
 uhash_compareLong(const void *key1, const void *key2);
 
 /********************************************************************

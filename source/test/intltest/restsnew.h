@@ -14,7 +14,7 @@ public:
     NewResourceBundleTest();
     ~NewResourceBundleTest();
     
-    void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par = NULL );
+    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par = NULL );
 
     /** 
      * Perform several extensive tests using the subtest routine testTag
@@ -31,7 +31,7 @@ private:
     /**
      * extensive subtests called by TestResourceBundles
      **/
-    bool_t testTag(const char* frag, bool_t in_Root, bool_t in_te, bool_t in_te_IN);
+    UBool testTag(const char* frag, UBool in_Root, UBool in_te, UBool in_te_IN);
 
     void record_pass(void);
     void record_fail(void);

@@ -302,7 +302,7 @@ DictionaryBasedBreakIterator::divideUpDictionaryRange(int32_t startPos, int32_t 
     // the character where the error occurred.
     int32_t farthestEndPoint = text->getIndex();
     UStack bestBreakPositions;
-    bool_t bestBreakPositionsInitialized = FALSE;
+    UBool bestBreakPositionsInitialized = FALSE;
 
     // initialize (we always exit the loop with a break statement)
     c = text->current();

@@ -10,7 +10,7 @@
 #include "unicode/dcfmtsym.h"
 
 
-void IntlTestDecimalFormatSymbols::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void IntlTestDecimalFormatSymbols::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     if (exec) logln("TestSuite DecimalFormatSymbols");
     switch (index) {

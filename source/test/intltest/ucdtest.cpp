@@ -19,7 +19,7 @@ UnicodeTest::~UnicodeTest()
 {
 }
 
-void UnicodeTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void UnicodeTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     if (exec) logln("TestSuite UnicodeTest: ");
     switch (index) {
@@ -562,7 +562,7 @@ void UnicodeTest::TestCharLength()
 	};
 	
 	int16_t i;
-	bool_t multiple;
+	UBool multiple;
 	for(i=0; i<sizeof(codepoint)/sizeof(codepoint[0]); i=i+2){
 		UChar32 c=codepoint[i+1];
 		UnicodeString msg;

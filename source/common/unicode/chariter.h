@@ -95,7 +95,7 @@ public:
    * character in the same character-storage object.  
    * @stable
    */
-  virtual bool_t operator==(const ForwardCharacterIterator& that) const = 0;
+  virtual UBool operator==(const ForwardCharacterIterator& that) const = 0;
         
   /**
    * Returns true when the iterators refer to different
@@ -103,7 +103,7 @@ public:
    * same text-storage object.  
    * @stable
    */
-  inline bool_t operator!=(const ForwardCharacterIterator& that) const;
+  inline UBool operator!=(const ForwardCharacterIterator& that) const;
 
   /**
    * Generates a hash code for this iterator.  
@@ -143,7 +143,7 @@ public:
    * This is used with nextPostInc() or next32PostInc() in forward
    * iteration.
    */
-  virtual bool_t        hasNext() = 0;
+  virtual UBool        hasNext() = 0;
 
 protected:
   ForwardCharacterIterator() {}
@@ -459,7 +459,7 @@ public:
    * This is used with previous() or previous32() in backward
    * iteration.
    */
-  virtual bool_t        hasPrevious() = 0;
+  virtual UBool        hasPrevious() = 0;
 
   /**
    * Returns the numeric index in the underlying text-storage
@@ -534,7 +534,7 @@ protected:
   UTextOffset  end;
 };
 
-inline bool_t
+inline UBool
 ForwardCharacterIterator::operator!=(const ForwardCharacterIterator& that) const {
   return !operator==(that);
 }

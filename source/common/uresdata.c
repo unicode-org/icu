@@ -164,7 +164,7 @@ _res_findTableIndex(const Resource *pRoot, const Resource res, const char *key) 
     }
 }
 
-static bool_t
+static UBool
 _res_isStringArray(Resource *r) {
         int32_t count=*(int32_t *)r;
         
@@ -180,7 +180,7 @@ _res_isStringArray(Resource *r) {
 
 /* helper for res_load() ---------------------------------------------------- */
 
-static bool_t
+static UBool
 isAcceptable(void *context,
              const char *type, const char *name,
              const UDataInfo *pInfo) {
@@ -198,7 +198,7 @@ isAcceptable(void *context,
 
 /* semi-public functions ---------------------------------------------------- */
 
-U_CFUNC bool_t
+U_CFUNC UBool
 res_load(ResourceData *pResData,
          const char *path, const char *name, UErrorCode *errorCode) {
     if(errorCode==NULL || U_FAILURE(*errorCode)) {

@@ -38,7 +38,7 @@ ComposedCharIter::ComposedCharIter()
    *                  over the Hangul characters and their corresponding
    *                  Jamo decompositions.
    */
-ComposedCharIter::ComposedCharIter(bool_t compat, 
+ComposedCharIter::ComposedCharIter(UBool compat, 
                    int32_t options)
   : minDecomp(compat ? 0 : DecompData::MAX_COMPAT),
     hangul((options & Normalizer::IGNORE_HANGUL) == 0),
@@ -51,7 +51,7 @@ ComposedCharIter::ComposedCharIter(bool_t compat,
  * Determines whether there any precomposed Unicode characters not yet returned
  * by {@link #next}.
  */
-bool_t ComposedCharIter::hasNext() const {
+UBool ComposedCharIter::hasNext() const {
     if (nextChar == DONE)  {
         ((ComposedCharIter*)this)->findNextChar();
     }

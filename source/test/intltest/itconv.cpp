@@ -13,7 +13,7 @@
 #include "itconv.h"
 #include "cppcnvt.h"
 
-void IntlTestConvert::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void IntlTestConvert::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     if (exec) logln("TestSuite Convert: ");
     switch (index) {

@@ -37,7 +37,7 @@ enum {
                           break
 
 void
-TransliteratorTest::runIndexedTest(int32_t index, bool_t exec,
+TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
                                    char* &name, char* par) {
     switch (index) {
         CASE(0,TestInstantiation);
@@ -442,7 +442,7 @@ class TestFilter : public UnicodeFilter {
     virtual UnicodeFilter* clone() const {
         return new TestFilter(*this);
     }
-    virtual bool_t contains(UChar c) const {
+    virtual UBool contains(UChar c) const {
         return c != (UChar)0x0063 /*c*/;
     }
 };
@@ -548,7 +548,7 @@ void TransliteratorTest::TestJ277(void) {
         }
         UnicodeString out(data[i]);
         gl->transliterate(out);
-        bool_t ok = TRUE;
+        UBool ok = TRUE;
         if (data[i].length() >= 2 && out.length() >= 2 &&
             u_isupper(data[i].charAt(0)) && u_islower(data[i].charAt(1))) {
             if (!(u_isupper(out.charAt(0)) && u_islower(out.charAt(1)))) {
@@ -594,7 +594,7 @@ void TransliteratorTest::TestJ243(void) {
  */
 void TransliteratorTest::TestJ329(void) {
     
-    struct { bool_t containsErrors; const char* rule; } DATA[] = {
+    struct { UBool containsErrors; const char* rule; } DATA[] = {
         { FALSE, "a > b; c > d" },
         { TRUE,  "a > b; no operator; c > d" },
     };
@@ -609,7 +609,7 @@ void TransliteratorTest::TestJ329(void) {
                                     0,
                                     parseError,
                                     status);
-        bool_t gotError = U_FAILURE(status);
+        UBool gotError = U_FAILURE(status);
         UnicodeString desc(DATA[i].rule);
         desc.append(gotError ? " -> error" : " -> no error");
         if (gotError) {
@@ -703,7 +703,7 @@ void TransliteratorTest::expectAux(const UnicodeString& tag,
 }
 
 void TransliteratorTest::expectAux(const UnicodeString& tag,
-                                   const UnicodeString& summary, bool_t pass,
+                                   const UnicodeString& summary, UBool pass,
                                    const UnicodeString& expectedResult) {
     if (pass) {
         logln(UnicodeString("(")+tag+") " + prettify(summary));

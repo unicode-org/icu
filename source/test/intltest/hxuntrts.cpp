@@ -40,7 +40,7 @@ static int32_t getInt(UnicodeString str)
 // runIndexedTest
 //---------------------------------------------
 
-void HexToUniTransliteratorTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void HexToUniTransliteratorTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     if (exec) logln((UnicodeString)"TestSuite HexadecimalToUnicode Transliterator API ");
     switch (index) {
@@ -60,7 +60,7 @@ class TestHexFilter : public UnicodeFilter {
     virtual UnicodeFilter* clone() const {
         return new TestHexFilter(*this);
     }
-    virtual bool_t contains(UChar c) const {
+    virtual UBool contains(UChar c) const {
        if(c == 0x0061 || c == 0x0063 )
           return FALSE;
        else
@@ -397,7 +397,7 @@ void HexToUniTransliteratorTest::expect(const HexToUnicodeTransliterator& t,
 
 }
 void HexToUniTransliteratorTest::expectAux(const UnicodeString& tag,
-                                   const UnicodeString& summary, bool_t pass,
+                                   const UnicodeString& summary, UBool pass,
                                    const UnicodeString& expectedResult) {
     if (pass) {
         logln(UnicodeString("(")+tag+") " + prettify(summary));

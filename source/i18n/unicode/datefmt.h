@@ -210,7 +210,7 @@ public:
      * Equality operator.  Returns true if the two formats have the same behavior.
      * @stable
      */
-    virtual bool_t operator==(const Format&) const;
+    virtual UBool operator==(const Format&) const;
 
     /**
      * Format an object to produce a string. This method handles Formattable
@@ -413,7 +413,7 @@ public:
      * Returns true if the formatter is set for lenient parsing.
      * @stable
      */
-    virtual bool_t isLenient(void) const;
+    virtual UBool isLenient(void) const;
 
     /**
      * Specify whether or not date/time parsing is to be lenient. With lenient
@@ -423,7 +423,7 @@ public:
      * @see Calendar::setLenient
      * @stable
      */
-    virtual void setLenient(bool_t lenient);
+    virtual void setLenient(UBool lenient);
     
     /**
      * Gets the calendar associated with this date/time formatter.

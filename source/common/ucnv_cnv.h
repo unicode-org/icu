@@ -44,7 +44,7 @@ UConverterDBCSTable;
 
 typedef struct
   {
-    bool_t *starters; /* [256]; */
+    UBool *starters; /* [256]; */
     CompactShortArray toUnicode;
     CompactShortArray fromUnicode;
     CompactShortArray toUnicodeFallback;
@@ -164,7 +164,7 @@ typedef void (*T_ToUnicodeFunction) (UConverter *,
 				     const char **,
 				     const char *,
 				     int32_t* offsets,
-				     bool_t,
+				     UBool,
 				     UErrorCode *);
 
 typedef void (*T_FromUnicodeFunction) (UConverter *,
@@ -173,7 +173,7 @@ typedef void (*T_FromUnicodeFunction) (UConverter *,
 				       const UChar **,
 				       const UChar *,
 				       int32_t* offsets,
-				       bool_t,
+				       UBool,
 				       UErrorCode *);
 
 typedef UChar32 (*T_GetNextUCharFunction) (UConverter *,
@@ -182,10 +182,10 @@ typedef UChar32 (*T_GetNextUCharFunction) (UConverter *,
 					 UErrorCode *);
 
 typedef void (*UConverterGetStarters)(const UConverter* converter,
-				     bool_t starters[256],
+				     UBool starters[256],
 				     UErrorCode *pErrorCode);
 
-bool_t CONVERSION_U_SUCCESS (UErrorCode err);
+UBool CONVERSION_U_SUCCESS (UErrorCode err);
 
 void flushInternalUnicodeBuffer (UConverter * _this,
 				 UChar * myTarget,

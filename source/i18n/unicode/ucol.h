@@ -352,7 +352,7 @@ ucol_strcoll(    const    UCollator    *coll,
  * @see ucol_equal
  * @stable
  */
-U_CAPI bool_t
+U_CAPI UBool
 ucol_greater(    const    UCollator    *coll,
         const    UChar        *source,
         int32_t            sourceLength,
@@ -373,7 +373,7 @@ ucol_greater(    const    UCollator    *coll,
  * @see ucol_equal
  * @stable
  */
-U_CAPI bool_t
+U_CAPI UBool
 ucol_greaterOrEqual(    const    UCollator    *coll,
             const    UChar        *source,
             int32_t            sourceLength,
@@ -394,7 +394,7 @@ ucol_greaterOrEqual(    const    UCollator    *coll,
  * @see ucol_greaterOrEqual
  * @stable
  */
-U_CAPI bool_t
+U_CAPI UBool
 ucol_equal(    const    UCollator    *coll,
         const    UChar        *source,
         int32_t            sourceLength,

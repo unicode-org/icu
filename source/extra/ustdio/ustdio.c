@@ -30,7 +30,7 @@ static const UChar DELIMITERS [] = { 0x000A, 0x0000 };
 #define DELIM_CR 0x000D
 #define DELIM_LF 0x000A
 
-#define IS_STRING_DELIMITER(s)    (bool_t)(    (s) == DELIM_CR || \
+#define IS_STRING_DELIMITER(s)    (UBool)(    (s) == DELIM_CR || \
                         (s) == DELIM_LF    )
 
 

@@ -39,7 +39,7 @@ static int32_t getInt(UnicodeString str)
 // runIndexedTest
 //---------------------------------------------
 
-void HangToJamoTransliteratorTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void HangToJamoTransliteratorTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     if (exec) logln((UnicodeString)"TestSuite HangToJamoul Transliterator API ");
     switch (index) {
@@ -60,7 +60,7 @@ class TestHangulFilter : public UnicodeFilter {
     virtual UnicodeFilter* clone() const {
         return new TestHangulFilter(*this);
     }
-    virtual bool_t contains(UChar c) const {
+    virtual UBool contains(UChar c) const {
        if(c == 0xae4c )
           return FALSE;
        else
@@ -318,7 +318,7 @@ void HangToJamoTransliteratorTest::expect(const HangulJamoTransliterator& t,
 
 }
 void HangToJamoTransliteratorTest::expectAux(const UnicodeString& tag,
-                                   const UnicodeString& summary, bool_t pass,
+                                   const UnicodeString& summary, UBool pass,
                                    const UnicodeString& expectedResult) {
     if (pass) {
         logln(UnicodeString("(")+tag+") " + prettify(summary));

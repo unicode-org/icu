@@ -110,13 +110,13 @@ public:
      * Return true if another object is semantically equal to this one.
      * @stable
      */
-    bool_t operator==(const DecimalFormatSymbols& other) const;
+    UBool operator==(const DecimalFormatSymbols& other) const;
 
     /**
      * Return true if another object is semantically unequal to this one.
      * @stable
      */
-    bool_t operator!=(const DecimalFormatSymbols& other) const { return !operator==(other); }
+    UBool operator!=(const DecimalFormatSymbols& other) const { return !operator==(other); }
 
     /**
      * character used for zero. Different for Arabic, etc.
@@ -328,7 +328,7 @@ private:
      * Note: The organization of LocaleElements badly needs to be
      * cleaned up.
      */
-    void initialize(const Locale& locale, UErrorCode& success, bool_t useLastResortData = FALSE);
+    void initialize(const Locale& locale, UErrorCode& success, UBool useLastResortData = FALSE);
 
     /**
      * Initialize the symbols from the given array of UnicodeStrings.

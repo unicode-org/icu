@@ -28,7 +28,7 @@ ufmt_digitvalue(UChar c)
   return c - 0x0030 - (c >= 0x0041 ? (c >= 0x0061 ? 39 : 7) : 0);
 }
 
-bool_t
+UBool
 ufmt_isdigit(UChar     c,
          int32_t     radix)
 {
@@ -45,7 +45,7 @@ ufmt_ltou(UChar     *buffer,
       int32_t     *len,
       long         value, 
       int32_t     radix,
-      bool_t    uselower,
+      UBool    uselower,
       int32_t    minDigits)
 {
   int32_t     length     = 0;
@@ -114,7 +114,7 @@ ufmt_utol(const UChar     *buffer,
   return result;
 }
 
-bool_t
+UBool
 ufmt_isws(UChar c)
 {
   return (c == 0x0020 || /* space */

@@ -32,10 +32,10 @@
 /* A UFILE */
 struct UFILE {
   FILE            *fFile;        /* the actual fs interface */
-  bool_t        fOwnFile;    /* TRUE if fFile should be closed */
+  UBool        fOwnFile;    /* TRUE if fFile should be closed */
   
   ULocaleBundle        *fBundle;     /* formatters */
-  bool_t        fOwnBundle;     /* TRUE if fBundle should be deleted */
+  UBool        fOwnBundle;     /* TRUE if fBundle should be deleted */
 
   UConverter        *fConverter;     /* for codeset conversion */
 

@@ -38,7 +38,7 @@
 #include "tzregts.h"        // TimeZoneRegressionTest
 #include "usettest.h"       // UnicodeSetTest
 
-void IntlTestFormat::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     // for all format tests, always set default Locale and TimeZone to ENGLISH and PST.
     TimeZone* saveDefaultTimeZone;

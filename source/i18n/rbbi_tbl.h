@@ -47,7 +47,7 @@ protected:
      * Whether or not we own the storage for the tables (the tables may be
      * stored in a memory-mapped file)
      */
-    bool_t ownTables;
+    UBool ownTables;
 
 private:
     /**
@@ -129,13 +129,13 @@ private:
      * Equality operator.  Returns TRUE if both tables objects are of the
      * same class, have the same behavior, and iterate over the same text.
      */
-    virtual bool_t operator==(const RuleBasedBreakIteratorTables& that) const;
+    virtual UBool operator==(const RuleBasedBreakIteratorTables& that) const;
 
     /**
      * Not-equal operator.  If operator== returns TRUE, this returns FALSE,
      * and vice versa.
      */
-    bool_t operator!=(const RuleBasedBreakIteratorTables& that) const;
+    UBool operator!=(const RuleBasedBreakIteratorTables& that) const;
 
     /**
      * Compute a hash code for these tables
@@ -187,18 +187,18 @@ protected:
     /**
      * Returns true if the specified state is an accepting state.
      */
-    virtual bool_t isEndState(int32_t state) const;
+    virtual UBool isEndState(int32_t state) const;
 
     /**
      * Returns true if the specified state is a lookahead state.
      */
-    virtual bool_t isLookaheadState(int32_t state) const;
+    virtual UBool isLookaheadState(int32_t state) const;
 
     friend class RuleBasedBreakIterator;
     friend class DictionaryBasedBreakIterator;
 };
 
-inline bool_t
+inline UBool
 RuleBasedBreakIteratorTables::operator!=(const RuleBasedBreakIteratorTables& that) const {
     return !operator==(that);
 }

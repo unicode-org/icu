@@ -48,7 +48,7 @@ U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_STOP (UConverter * _this,
 				     const UChar ** source,
 				     const UChar * sourceLimit,
 				     int32_t* offsets,
-				     bool_t flush,
+				     UBool flush,
 				     UErrorCode * err);
 
 
@@ -62,7 +62,7 @@ U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_STOP (UConverter * _this,
 				  const char **source,
 				  const char *sourceLimit,
 				  int32_t* offsets,
-				  bool_t flush,
+				  UBool flush,
 				  UErrorCode * err);
 
 
@@ -78,7 +78,7 @@ U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_SKIP (UConverter * _this,
 				     const UChar ** source,
 				     const UChar * sourceLimit,
 				     int32_t* offsets,
-				     bool_t flush,
+				     UBool flush,
 				     UErrorCode * err);
 
 /**
@@ -95,7 +95,7 @@ U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_SUBSTITUTE (UConverter * _this,
 					   const UChar ** source,
 					   const UChar * sourceLimit,
 					   int32_t* offsets,
-					   bool_t flush,
+					   UBool flush,
 					   UErrorCode * err);
 
 /**
@@ -115,7 +115,7 @@ U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_ESCAPE (UConverter * _this,
 						    const UChar ** source,
 						  const UChar * sourceLimit,
 						    int32_t* offsets,
-						    bool_t flush,
+						    UBool flush,
 						    UErrorCode * err);
 
 
@@ -129,7 +129,7 @@ U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_SKIP (UConverter * _this,
 				  const char **source,
 				  const char *sourceLimit,
 				  int32_t* offsets,
-				  bool_t flush,
+				  UBool flush,
 				  UErrorCode * err);
 
 
@@ -146,7 +146,7 @@ U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_SUBSTITUTE (UConverter * _this,
 					const char **source,
 					const char *sourceLimit,
 					int32_t* offsets,
-					bool_t flush,
+					UBool flush,
 					UErrorCode * err);
 
 /**
@@ -164,7 +164,7 @@ U_CAPI void U_EXPORT2 UCNV_TO_U_CALLBACK_ESCAPE (UConverter * _this,
 						 const char **source,
 						 const char *sourceLimit,
 						 int32_t* offsets,
-						 bool_t flush,
+						 UBool flush,
 						 UErrorCode * err);
 
 

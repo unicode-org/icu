@@ -60,7 +60,7 @@ MultithreadTest::~MultithreadTest()
 
 
 #if (ICU_USE_THREADS==0)
-void MultithreadTest::runIndexedTest( int32_t index, bool_t exec, 
+void MultithreadTest::runIndexedTest( int32_t index, UBool exec, 
                 char* &name, char* par ) {
   if (exec) logln("TestSuite MultithreadTest: ");
 
@@ -251,7 +251,7 @@ void SimpleThread::sleep(int32_t millis)
 // *************** end fluff ******************
 
 /* now begins the real test. */
-void MultithreadTest::runIndexedTest( int32_t index, bool_t exec, 
+void MultithreadTest::runIndexedTest( int32_t index, UBool exec, 
                 char* &name, char* par ) {
   if (exec) logln("TestSuite MultithreadTest: ");
   switch (index) {
@@ -344,7 +344,7 @@ public:
         fDone = TRUE;                   // finally, set our flag
     }
 public:
-    bool_t fDone;
+    UBool fDone;
 };
 
 class TestMutexThread2 : public SimpleThread
@@ -368,7 +368,7 @@ public:
     }
 public:
     TestMutexThread1 & fOtherThread;
-    bool_t fDone, fErr;
+    UBool fDone, fErr;
     int32_t fElapsed;
 };
 
@@ -440,7 +440,7 @@ void MultithreadTest::TestMutex()
 //    }
 //public:
 //    IntlTest &fTest;
-//    bool_t    fDone;
+//    UBool    fDone;
 //    int32_t   fErrs;
 //};
 //
@@ -498,9 +498,9 @@ UnicodeString showDifference(const UnicodeString& expected, const UnicodeString&
 class ThreadWithStatus : public SimpleThread
 {
 public:
-    bool_t  getDone() { return fDone; }
-    bool_t  getError() { return (fErrors > 0); } 
-    bool_t  getError(UnicodeString& fillinError) { fillinError = fErrorString; return (fErrors > 0); } 
+    UBool  getDone() { return fDone; }
+    UBool  getError() { return (fErrors > 0); } 
+    UBool  getError(UnicodeString& fillinError) { fillinError = fErrorString; return (fErrors > 0); } 
     virtual ~ThreadWithStatus(){}
 protected:
     ThreadWithStatus() : fDone(FALSE), fErrors(0) {}
@@ -508,7 +508,7 @@ protected:
     void error(const UnicodeString &error) { fErrors++; fErrorString = error; done(); }
     void error() { error("An error occured."); }
 private:
-    bool_t fDone;
+    UBool fDone;
     int32_t fErrors;
     UnicodeString fErrorString;
 };

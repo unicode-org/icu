@@ -91,7 +91,7 @@ public:
    * same string and are pointing at the same character.  
    * @stable
    */
-  virtual bool_t          operator==(const ForwardCharacterIterator& that) const;
+  virtual UBool          operator==(const ForwardCharacterIterator& that) const;
 
   /**
    * Generates a hash code for this iterator.  
@@ -233,7 +233,7 @@ public:
    * This is used with nextPostInc() or next32PostInc() in forward
    * iteration.
    */
-  virtual bool_t        hasNext();
+  virtual UBool        hasNext();
 
   /**
    * Advances to the previous code unit in the iteration rance (toward
@@ -257,7 +257,7 @@ public:
    * This is used with previous() or previous32() in backward
    * iteration.
    */
-  virtual bool_t        hasPrevious();
+  virtual UBool        hasPrevious();
 
   /**
    * Moves the current position relative to the start or end of the

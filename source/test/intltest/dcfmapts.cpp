@@ -14,7 +14,7 @@
 // try to test the full functionality.  It just calls each function in the class and
 // verifies that it works on a basic level.
 
-void IntlTestDecimalFormatAPI::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void IntlTestDecimalFormatAPI::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     if (exec) logln((UnicodeString)"TestSuite DecimalFormatAPI");
     switch (index) {
@@ -219,7 +219,7 @@ void IntlTestDecimalFormatAPI::testAPI(char *par)
     }
 
     pat.setDecimalSeparatorAlwaysShown(TRUE);
-    bool_t tf = pat.isDecimalSeparatorAlwaysShown();
+    UBool tf = pat.isDecimalSeparatorAlwaysShown();
     logln((UnicodeString)"DecimalSeparatorIsAlwaysShown (should be TRUE) is " + (UnicodeString) (tf ? "TRUE" : "FALSE"));
     if(tf != TRUE) {
         errln((UnicodeString)"ERROR: setDecimalSeparatorAlwaysShown() failed");

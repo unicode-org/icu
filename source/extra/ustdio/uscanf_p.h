@@ -27,7 +27,7 @@
 struct u_scanf_spec {
   u_scanf_spec_info    fInfo;        /* Information on this spec */
   int32_t        fArgPos;    /* Position of data in arg list */
-  bool_t        fSkipArg;    /* TRUE if arg should be skipped */
+  UBool        fSkipArg;    /* TRUE if arg should be skipped */
 };
 typedef struct u_scanf_spec u_scanf_spec;
 

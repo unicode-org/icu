@@ -11,7 +11,7 @@
 #include "uvector.h"
 #include "cmemory.h"
 
-bool_t UVector::outOfMemory = FALSE;
+UBool UVector::outOfMemory = FALSE;
 
 UVector::UVector(int32_t initialCapacity) :
     capacity(0),
@@ -86,7 +86,7 @@ void UVector::removeElementAt(int32_t index) {
     }
 }
 
-bool_t UVector::removeElement(void* obj) {
+UBool UVector::removeElement(void* obj) {
     int32_t i = indexOf(obj);
     if (i >= 0) {
         removeElementAt(i);
@@ -117,7 +117,7 @@ int32_t UVector::indexOf(void* obj, int32_t startIndex) const {
     return -1;
 }
 
-bool_t UVector::ensureCapacity(int32_t minimumCapacity) {
+UBool UVector::ensureCapacity(int32_t minimumCapacity) {
     if (capacity >= minimumCapacity) {
         return TRUE;
     } else {
@@ -147,7 +147,7 @@ UVector::Comparer UVector::setComparer(Comparer d) {
     return old;
 }
 
-bool_t UVector::isOutOfMemory(void) {
+UBool UVector::isOutOfMemory(void) {
     return outOfMemory;
 }
 

@@ -199,7 +199,7 @@ UnicodeString::UnicodeString(const UChar *text,
   doReplace(0, 0, text, 0, textLength);
 }
 
-UnicodeString::UnicodeString(bool_t isTerminated,
+UnicodeString::UnicodeString(UBool isTerminated,
                              const UChar *text,
                              int32_t textLength)
   : fArray((UChar *)text),
@@ -269,7 +269,7 @@ UnicodeString::UnicodeString(const UnicodeString& that)
 // array allocation
 //========================================
 
-bool_t
+UBool
 UnicodeString::allocate(int32_t capacity) {
   if(capacity <= US_STACKBUF_SIZE) {
     fArray = fStackBuffer;
@@ -379,7 +379,7 @@ UnicodeString::operator= (const UnicodeString& src)
 int32_t
 UnicodeString::numDisplayCells( UTextOffset start,
                 int32_t length,
-                bool_t asian) const
+                UBool asian) const
 {
   // pin indices to legal values
   pinIndices(start, length);
@@ -703,7 +703,7 @@ UnicodeString::setToBogus()
 
 // setTo() analogous to the readonly-aliasing constructor with the same signature
 UnicodeString &
-UnicodeString::setTo(bool_t isTerminated,
+UnicodeString::setTo(UBool isTerminated,
                      const UChar *text,
                      int32_t textLength)
 {
@@ -1055,7 +1055,7 @@ UnicodeString::doReverse(UTextOffset start,
   return *this;
 }
 
-bool_t 
+UBool 
 UnicodeString::padLeading(int32_t targetLength,
                           UChar padChar)
 {
@@ -1075,7 +1075,7 @@ UnicodeString::padLeading(int32_t targetLength,
   }
 }
 
-bool_t 
+UBool 
 UnicodeString::padTrailing(int32_t targetLength,
                            UChar padChar)
 {
@@ -1289,7 +1289,7 @@ UnicodeString::doCodepageCreate(const char *codepageData,
   int32_t arraySize = dataLength + (dataLength >> 2);
 
   // we do not care about the current contents
-  bool_t doCopyArray = FALSE;
+  UBool doCopyArray = FALSE;
   for(;;) {
     if(!cloneArrayIfNeeded(arraySize, arraySize, doCopyArray)) {
       setToBogus();
@@ -1353,10 +1353,10 @@ UnicodeString::getUChars() const {
 //========================================
 // Miscellaneous
 //========================================
-bool_t
+UBool
 UnicodeString::cloneArrayIfNeeded(int32_t newCapacity,
                                   int32_t growCapacity,
-                                  bool_t doCopyArray,
+                                  UBool doCopyArray,
                                   int32_t **pBufferToDelete) {
   // default parameters need to be static, therefore
   // the defaults are -1 to have convenience defaults

@@ -179,7 +179,7 @@ BreakDictionary::at(int32_t row, int32_t col) const
  * Given (logical) row and column numbers, returns true if the
  * cell in that position is populated
  */
-bool_t
+UBool
 BreakDictionary::cellIsPopulated(int32_t row, int32_t col) const
 {
     // look up the entry in the bitmap index for the specified row.

@@ -22,7 +22,7 @@
 
 #define CHECK(status,str) if (U_FAILURE(status)) { errln(UnicodeString("FAIL: ") + str); return; }
 
-void NumberFormatTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     // if (exec) logln((UnicodeString)"TestSuite DateFormatTest");
     switch (index) {
@@ -189,7 +189,7 @@ NumberFormatTest::TestExponential(void)
             Formattable af;
             fmt.parse(s, af, pos);
             double a;
-            bool_t useEpsilon = FALSE;
+            UBool useEpsilon = FALSE;
             if (af.getType() == Formattable::kLong) a = af.getLong();
             else if (af.getType() == Formattable::kDouble) {
                 a = af.getDouble();

@@ -345,7 +345,7 @@ void TestSingleByte(int32_t inputsize, int32_t outputsize)
 		log_err("ibm-943->u with subst did not match.\n");
 }
 
-bool_t testConvertFromUnicode(const UChar *source, int sourceLen,  const char *expect, int expectLen, 
+UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const char *expect, int expectLen, 
 			    const char *codepage, UConverterFromUCallback callback , int32_t *expectOffsets)
 {
 	
@@ -363,8 +363,8 @@ bool_t testConvertFromUnicode(const UChar *source, int sourceLen,  const char *e
 	char *realBufferEnd;
 	const UChar *realSourceEnd;
 	const UChar *sourceLimit;
-	bool_t checkOffsets = TRUE;
-	bool_t doFlush;
+	UBool checkOffsets = TRUE;
+	UBool doFlush;
 	UConverterFromUCallback action;
 	char junk[9999];
 	char offset_str[9999];
@@ -511,7 +511,7 @@ bool_t testConvertFromUnicode(const UChar *source, int sourceLen,  const char *e
 	}
 }
 
-bool_t testConvertToUnicode( const char *source, int sourcelen, const UChar *expect, int expectlen, 
+UBool testConvertToUnicode( const char *source, int sourcelen, const UChar *expect, int expectlen, 
 		       const char *codepage, UConverterToUCallback callback, int32_t *expectOffsets)
 {
 	UErrorCode status = U_ZERO_ERROR;
@@ -525,7 +525,7 @@ bool_t testConvertToUnicode( const char *source, int sourcelen, const UChar *exp
 	UChar *end;
 	int32_t *offs;
 	int i;
-	bool_t   checkOffsets = TRUE;
+	UBool   checkOffsets = TRUE;
 	char junk[9999];
 	char offset_str[9999];
 	UChar *p;
@@ -600,7 +600,7 @@ bool_t testConvertToUnicode( const char *source, int sourcelen, const UChar *exp
 			    &src,
 			    srcLimit,
 			    checkOffsets ? offs : NULL,
-			    (bool_t)(srcLimit == realSourceEnd), /* flush if we're at the end of hte source data */
+			    (UBool)(srcLimit == realSourceEnd), /* flush if we're at the end of hte source data */
 			    &status);
 
 	   	   

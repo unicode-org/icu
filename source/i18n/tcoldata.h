@@ -96,7 +96,7 @@ public:
          * Checks if this object is valid.
          * @return TRUE if the object is valid, FALSE otherwise.
          */
-            bool_t              isBogus() const;
+            UBool              isBogus() const;
 private:
     /**
      * The following are disallowed operations: not implemented.
@@ -119,13 +119,13 @@ private:
     friend class RuleBasedCollator;
     friend class CollationElementIterator;
 
-    bool_t                      isFrenchSec;
+    UBool                      isFrenchSec;
     int16_t                     maxSecOrder;
     int16_t                     maxTerOrder;
     CompactIntArray*            mapping;
     VectorOfPToContractTable*   contractTable;
     VectorOfPToExpandTable*     expandTable;
-    bool_t                      fBogus;
+    UBool                      fBogus;
 
     /**
      * Rule string data is generated dynamically when required by the TableCollation
@@ -145,7 +145,7 @@ private:
      * See RuleBasedCollator::getRules().
      */
     UnicodeString               ruleTable;
-    bool_t                      isRuleTableLoaded;
+    UBool                      isRuleTableLoaded;
     Locale                      desiredLocale;
     UnicodeString               realLocaleName;
 };

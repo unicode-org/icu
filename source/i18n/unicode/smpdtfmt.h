@@ -250,7 +250,7 @@ public:
      * of different subclasses are considered unequal.
      * @stable
      */
-    virtual bool_t operator==(const Format& other) const;
+    virtual UBool operator==(const Format& other) const;
 
     /**
      * Format a date or time, which is the standard millis since 24:00 GMT, Jan
@@ -615,7 +615,7 @@ private:
      * @draft
      */
     int32_t subParse(const UnicodeString& text, int32_t& start, UChar ch, int32_t count,
-                 bool_t obeyCount, bool_t ambiguousYear[]) const;
+                 UBool obeyCount, UBool ambiguousYear[]) const;
 
     /**
      * Parse the given text, at the given position, as a numeric value, using
@@ -624,7 +624,7 @@ private:
      * unchanged and returns FALSE; otherwise it advances pos and
      * returns TRUE.
      */
-    //bool_t subParseLong(const UnicodeString& text, ParsePosition& pos, int32_t& value) const;
+    //UBool subParseLong(const UnicodeString& text, ParsePosition& pos, int32_t& value) const;
 
     /**
      * Translate a pattern, mapping each character in the from string to the

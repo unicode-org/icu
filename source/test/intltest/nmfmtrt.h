@@ -20,13 +20,13 @@ class NumberFormat;
 class NumberFormatRoundTripTest : public IntlTest {    
     
     // IntlTest override
-    void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par );
+    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par );
 public:
 
-static bool_t verbose;
-static bool_t STRING_COMPARE;
-static bool_t EXACT_NUMERIC_COMPARE;
-static bool_t DEBUG;
+static UBool verbose;
+static UBool STRING_COMPARE;
+static UBool EXACT_NUMERIC_COMPARE;
+static UBool DEBUG;
 static double MAX_ERROR;
 static double max_numeric_error;
 static double min_numeric_error;
@@ -44,11 +44,11 @@ static double proportionalError(const Formattable& a, const Formattable& b);
 static UnicodeString& typeOf(const Formattable& n, UnicodeString& result);
 static UnicodeString& escape(UnicodeString& s);
 
-static bool_t
+static UBool
 isDouble(const Formattable& n)
 { return (n.getType() == Formattable::kDouble); }
 
-static bool_t
+static UBool
 isLong(const Formattable& n)
 { return (n.getType() == Formattable::kLong); }
 
@@ -78,7 +78,7 @@ static double randFraction()
 }
 
 protected:
-    bool_t failure(UErrorCode status, const char* msg);
+    UBool failure(UErrorCode status, const char* msg);
 
 };
  

@@ -65,7 +65,7 @@ extern int32_t  XMLUConvert( UConverter* inConverter,
                       int32_t* inBufSize, 
                       char* outBuffer, 
                       int32_t outBufCapacity, 
-                      bool_t flush,
+                      UBool flush,
                       UErrorCode* err);
 extern void XMLU_fromCodepageToCodepage(    UConverter*    outConverter,
                         UConverter*    inConverter,
@@ -74,7 +74,7 @@ extern void XMLU_fromCodepageToCodepage(    UConverter*    outConverter,
                         const char**        source,
                         const char*        sourceLimit,
                         int32_t*        offsets,
-                        bool_t            flush,
+                        UBool            flush,
                         UErrorCode*        err);
 
 static const BYTE    gEBCDICPre[]    = { 0x4C, 0x6F, 0xA7, 0x94 };
@@ -899,7 +899,7 @@ int32_t  XMLUConvert( UConverter* inConverter,
                       int32_t* inBufSize, 
                       char* outBuffer, 
                       int32_t outBufCapacity, 
-                      bool_t flush,
+                      UBool flush,
                       UErrorCode* err)
 {
     const char* inBufferAlias = inBuffer;
@@ -933,7 +933,7 @@ void XMLU_fromCodepageToCodepage(    UConverter*    outConverter,
                         const char**   source,
                         const char*    sourceLimit,
                         int32_t*       offsets,
-                        bool_t         flush,
+                        UBool         flush,
                         UErrorCode*    err)
 {
     

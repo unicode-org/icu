@@ -123,19 +123,19 @@ Collator::createInstance(const Locale&  desiredLocale,
   return collation;
 }
 
-bool_t
+UBool
 Collator::equals(const UnicodeString& source, 
          const UnicodeString& target) const
 {
   return (compare(source, target) == Collator::EQUAL);
 }
-bool_t
+UBool
 Collator::greaterOrEqual(const UnicodeString& source, 
              const UnicodeString& target) const
 {
   return (compare(source, target) != Collator::LESS);
 }
-bool_t
+UBool
 Collator::greater(const UnicodeString& source, 
           const UnicodeString& target) const
 {

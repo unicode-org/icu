@@ -418,7 +418,7 @@ typedef enum UCharNameChoice UCharNameChoice;
  * @see u_islower()
  * @draft
  */
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_islower(UChar32 c);
 
 /**
@@ -432,7 +432,7 @@ u_islower(UChar32 c);
  * @see u_tolower()
  * @draft
  */
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isupper(UChar32 c);
 
 /**
@@ -446,7 +446,7 @@ u_isupper(UChar32 c);
  * @see u_totitle()
  * @draft
  */
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_istitle(UChar32 c);
 
 /**
@@ -457,7 +457,7 @@ u_istitle(UChar32 c);
  * @return  true if the character is a digit; false otherwise.
  * @draft
  */
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isdigit(UChar32 c);
 
 /**
@@ -468,7 +468,7 @@ u_isdigit(UChar32 c);
  * @return  true if the character is a letter or a digit; false otherwise.
  * @draft
  */
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isalnum(UChar32 c);
 
 /**
@@ -486,7 +486,7 @@ u_isalnum(UChar32 c);
  * @see u_istitle()
  * @draft
  */
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isdefined(UChar32 c);
 
 /**
@@ -500,7 +500,7 @@ u_isdefined(UChar32 c);
  * @see u_isalnum()
  * @draft
  */
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isalpha(UChar32 c);
 
 /**
@@ -510,7 +510,7 @@ u_isalpha(UChar32 c);
  * @return  true if the character is a space character; false otherwise.
  * @draft
  */
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isspace(UChar32 c);
 
 /**
@@ -541,7 +541,7 @@ u_isspace(UChar32 c);
  * @see     #isspace
  * @draft
  */
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isWhitespace(UChar32 c);
 
 /**
@@ -553,7 +553,7 @@ u_isWhitespace(UChar32 c);
  * @see u_isprint()
  * @draft
  */
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_iscntrl(UChar32 c);
 
 
@@ -567,7 +567,7 @@ u_iscntrl(UChar32 c);
  * @see u_iscntrl()
  * @draft
  */
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isprint(UChar32 c);
 
 /**
@@ -581,7 +581,7 @@ u_isprint(UChar32 c);
  * @see u_isdigit()
  * @draft
  */
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isbase(UChar32 c);
 
 /**
@@ -605,7 +605,7 @@ u_charDirection(UChar32 c);
  * @param c the character (code point, Unicode scalar value) to be tested
  * @return TRUE if the character has the "mirrored" property
  */
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isMirrored(UChar32 c);
 
 /**
@@ -752,7 +752,7 @@ u_charName(uint32_t code, UCharNameChoice nameChoice,
   * @see     u_isIDPart
   * @draft
   */
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isIDStart(UChar32 c);
 /**
   * A convenience method for determining if a Unicode character
@@ -778,7 +778,7 @@ u_isIDStart(UChar32 c);
   * @see     u_isIDStart
   * @draft
   */
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isIDPart(UChar32 c);
 /**
   * A convenience method for determining if a Unicode character 
@@ -804,7 +804,7 @@ u_isIDPart(UChar32 c);
   * @see     u_isIDPart
   * @draft
   */
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isIDIgnorable(UChar32 c);
     /**
      * A convenience method for determining if a Unicode character
@@ -826,7 +826,7 @@ u_isIDIgnorable(UChar32 c);
      * @see     u_isIDStart
      * @draft
      */
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isJavaIDStart(UChar32 c);
     /**
      * A convenience method for determining if a Unicode character 
@@ -857,7 +857,7 @@ u_isJavaIDStart(UChar32 c);
      * @draft
      */
 
-U_CAPI bool_t U_EXPORT2
+U_CAPI UBool U_EXPORT2
 u_isJavaIDPart(UChar32 c);
 
 /**

@@ -99,7 +99,7 @@ void TestUDataOpen(){
 
 	free(path);
 }
-static bool_t
+static UBool
 isAcceptable1(void *context,
              const char *type, const char *name,
              const UDataInfo *pInfo) {
@@ -131,7 +131,7 @@ isAcceptable1(void *context,
 	}
 }
 
-static bool_t
+static UBool
 isAcceptable2(void *context, 
 			 const char *type, const char *name,
 			 const UDataInfo *pInfo){
@@ -154,7 +154,7 @@ isAcceptable2(void *context,
 
 
 }
-static bool_t
+static UBool
 isAcceptable3(void *context, 
 			 const char *type, const char *name,
 			 const UDataInfo *pInfo){
@@ -226,7 +226,7 @@ void TestUDataOpenChoiceDemo1() {
 	}
 
 }
-static bool_t
+static UBool
 isAcceptable(void *context, 
 			 const char *type, const char *name,
 			 const UDataInfo *pInfo){

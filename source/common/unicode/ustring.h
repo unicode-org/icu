@@ -188,7 +188,7 @@ U_CAPI char* U_EXPORT2 u_austrcpy(char *s1,
  * <pre>
  * &#32;   U_STRING_DECL(ustringVar1, "Quick-Fox 2", 11);
  * &#32;   U_STRING_DECL(ustringVar2, "jumps 5%", 8);
- * &#32;   static bool_t didInit=FALSE;
+ * &#32;   static UBool didInit=FALSE;
  * &#32;   
  * &#32;   int32_t function() {
  * &#32;       if(!didInit) {

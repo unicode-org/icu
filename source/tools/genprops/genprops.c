@@ -33,7 +33,7 @@
 #include "uparse.h"
 #include "genprops.h"
 
-bool_t beVerbose=FALSE, haveCopyright=TRUE;
+UBool beVerbose=FALSE, haveCopyright=TRUE;
 
 /* prototypes --------------------------------------------------------------- */
 

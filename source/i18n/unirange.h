@@ -41,7 +41,7 @@ public:
      */
     UnicodeRange* clone() const;
 
-    bool_t contains(UChar c) const;
+    UBool contains(UChar c) const;
 
     /**
      * Assume that contains(c) is true.  Split this range into two new

@@ -34,16 +34,16 @@ struct u_printf_spec_info {
 
   UChar     fPadChar;        /* Padding character  */
 
-  bool_t     fAlt;            /* # flag  */
-  bool_t     fSpace;            /* Space flag  */
-  bool_t     fLeft;            /* - flag  */
-  bool_t     fShowSign;        /* + flag  */
-  bool_t     fZero;            /* 0 flag  */
+  UBool     fAlt;            /* # flag  */
+  UBool     fSpace;            /* Space flag  */
+  UBool     fLeft;            /* - flag  */
+  UBool     fShowSign;        /* + flag  */
+  UBool     fZero;            /* 0 flag  */
 
-  bool_t     fIsLongDouble;        /* L flag  */
-  bool_t     fIsShort;        /* h flag  */
-  bool_t     fIsLong;        /* l flag  */
-  bool_t     fIsLongLong;        /* ll flag  */
+  UBool     fIsLongDouble;        /* L flag  */
+  UBool     fIsShort;        /* h flag  */
+  UBool     fIsLong;        /* l flag  */
+  UBool     fIsLongLong;        /* ll flag  */
 };
 typedef struct u_printf_spec_info u_printf_spec_info;
 

@@ -20,7 +20,7 @@ class DateFormat;
  */
 class CalendarLimitTest: public CalendarTimeZoneTest {
     // IntlTest override
-    void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par );
+    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par );
 public: // package
     static const UDate EARLIEST_SUPPORTED_MILLIS;
     static const UDate LATEST_SUPPORTED_MILLIS;
@@ -30,7 +30,7 @@ public: // package
 
     static double nextDouble(double a);
     static double previousDouble(double a);
-    static bool_t withinErr(double a, double b, double err);
+    static UBool withinErr(double a, double b, double err);
 
 public:
     // test behaviour and error reporting at boundaries of defined range
@@ -66,7 +66,7 @@ public: // package
     static int32_t MONTH;
     static int32_t DATE;
 
-    static bool_t timeToFields(UDate millis, int32_t *fields);
+    static UBool timeToFields(UDate millis, int32_t *fields);
 };
  
 #endif // __CalendarLimitTest__

@@ -39,7 +39,7 @@ UnicodeClassMapping::UnicodeClassMapping(Type* mappedValue,
                      int32_t mappedValue_length,
                                          const SpecialMapping* exceptionChars,
                                          int32_t exceptionChars_length,
-                                         const bool_t *hasException,
+                                         const UBool *hasException,
                                          Type* asciiValues)
 :   fMappedValue(mappedValue),
     fMappedValue_length(mappedValue_length),

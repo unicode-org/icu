@@ -36,7 +36,7 @@ typedef void (*UConverterToUCallback) (UConverter *,
 				  const char **,
 				  const char *,
 				  int32_t* offsets,
-				  bool_t,
+				  UBool,
 				  UErrorCode *);
 
 typedef void (*UConverterFromUCallback) (UConverter *,
@@ -45,7 +45,7 @@ typedef void (*UConverterFromUCallback) (UConverter *,
 				    const UChar **,
 				    const UChar *,
 				    int32_t* offsets,
-				    bool_t,
+				    UBool,
 				    UErrorCode *);
 
 U_CDECL_END
@@ -320,7 +320,7 @@ ucnv_getType (const UConverter * converter);
  * @stable
  */
 U_CAPI void U_EXPORT2 ucnv_getStarters(const UConverter* converter, 
-				     bool_t starters[256],
+				     UBool starters[256],
 				     UErrorCode* err);
 
 
@@ -417,7 +417,7 @@ U_CAPI
 			 const UChar ** source,
 			 const UChar * sourceLimit,
 			 int32_t* offsets,
-			 bool_t flush,
+			 UBool flush,
 			 UErrorCode * err);
 
 
@@ -457,7 +457,7 @@ U_CAPI
 		       const char **source,
 		       const char *sourceLimit,
 		       int32_t* offsets,
-		       bool_t flush,
+		       UBool flush,
 		       UErrorCode * err);
 
 
@@ -690,7 +690,7 @@ U_CAPI void U_EXPORT2 ucnv_fixFileSeparator(const UConverter *cnv, UChar* source
  * character, FALSE otherwise.
  * @draft
  */
-U_CAPI bool_t U_EXPORT2 ucnv_isAmbiguous(const UConverter *cnv);
+U_CAPI UBool U_EXPORT2 ucnv_isAmbiguous(const UConverter *cnv);
 
 /**
  * Sets the converter to use fallback mapping or not.
@@ -699,14 +699,14 @@ U_CAPI bool_t U_EXPORT2 ucnv_isAmbiguous(const UConverter *cnv);
  * mapping, FALSE otherwise.
  * @draft
  */
-U_CAPI void U_EXPORT2 ucnv_setFallback(UConverter *cnv, bool_t usesFallback);
+U_CAPI void U_EXPORT2 ucnv_setFallback(UConverter *cnv, UBool usesFallback);
 
 /**
  * Determines if the converter uses fallback mappings or not.
  * @return TRUE if the converter uses fallback, FALSE otherwise.
  * @draft
  */
-U_CAPI bool_t U_EXPORT2 ucnv_usesFallback(const UConverter *cnv);
+U_CAPI UBool U_EXPORT2 ucnv_usesFallback(const UConverter *cnv);
 
 #endif
 /*_UCNV*/

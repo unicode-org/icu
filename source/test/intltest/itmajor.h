@@ -17,7 +17,7 @@
 
 
 class MajorTestLevel: public IntlTest {
-    void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par = NULL );
+    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par = NULL );
 };
 
 #endif

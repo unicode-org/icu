@@ -131,7 +131,7 @@ void HexToUnicodeTransliterator::applyPattern(const UnicodeString& thePattern,
      * create a virtual ';' if necessary.
      */
     UChar c;          // These are outside the loop so we can see the
-    bool_t isLiteral; // previous character...
+    UBool isLiteral; // previous character...
     for (int32_t i=0; i<=pattern.length(); ++i) {
         // Create the virtual trailing ';' if necessary
         if (i == pattern.length()) {
@@ -238,7 +238,7 @@ const UnicodeString& HexToUnicodeTransliterator::toPattern(void) const {
 }
 
 void HexToUnicodeTransliterator::handleTransliterate(Replaceable& text, Position& offsets,
-                                                     bool_t isIncremental) const {
+                                                     UBool isIncremental) const {
     int32_t cursor = offsets.cursor;
     int32_t limit = offsets.limit;
     int32_t i, j, ipat;
@@ -263,7 +263,7 @@ void HexToUnicodeTransliterator::handleTransliterate(Replaceable& text, Position
             // curs is a copy of cursor that is advanced over the
             // characters as we parse them.
             int32_t curs = cursor;
-            bool_t match = TRUE;
+            UBool match = TRUE;
             
             for (i=0; i<prefixLen; ++i) {
                 if (curs >= limit) {

@@ -35,7 +35,7 @@ public:
      * <b><tt>false</tt></b>.
      * @draft
      */
-    virtual bool_t contains(UChar c) const = 0;
+    virtual UBool contains(UChar c) const = 0;
 
     /**
      * Returns a copy of this object.  All UnicodeFilter objects have

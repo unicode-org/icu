@@ -52,7 +52,7 @@ typedef struct {
 static UDataMemory *uCharNamesData=NULL;
 static UCharNames *uCharNames=NULL;
 
-static bool_t
+static UBool
 isAcceptable(void *context,
              const char *type, const char *name,
              const UDataInfo *pInfo);
@@ -146,7 +146,7 @@ u_charName(uint32_t code, UCharNameChoice nameChoice,
 
 /* implementation ----------------------------------------------------------- */
 
-static bool_t
+static UBool
 isAcceptable(void *context,
              const char *type, const char *name,
              const UDataInfo *pInfo) {

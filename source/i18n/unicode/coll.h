@@ -196,13 +196,13 @@ public:
    * Returns true if "other" is the same as "this"
    * @stable
    */
-  virtual     bool_t              operator==(const Collator& other) const;
+  virtual     UBool              operator==(const Collator& other) const;
 
   /**
    * Returns true if "other" is not the same as "this".
    * @stable
    */
-  virtual     bool_t              operator!=(const Collator& other) const;
+  virtual     UBool              operator!=(const Collator& other) const;
 
   /**
    * Makes a shallow copy of the current object.
@@ -422,7 +422,7 @@ public:
    * @see Collator#compare
    * @stable
    */
-  bool_t              greater(    const   UnicodeString& source, 
+  UBool              greater(    const   UnicodeString& source, 
                   const   UnicodeString& target) const;
   /**
    * Convenience method for comparing two strings based on the collation
@@ -434,7 +434,7 @@ public:
    * @see Collator#compare
    * @stable
    */
-  bool_t              greaterOrEqual( const   UnicodeString& source, 
+  UBool              greaterOrEqual( const   UnicodeString& source, 
                       const   UnicodeString& target) const;
   /**
    * Convenience method for comparing two strings based on the collation
@@ -446,7 +446,7 @@ public:
    * @see Collator#compare
    * @stable
    */
-  bool_t              equals( const   UnicodeString& source, 
+  UBool              equals( const   UnicodeString& source, 
                   const   UnicodeString& target) const;
         
   // getter/setter
@@ -573,19 +573,19 @@ private:
   static const UVersionInfo fVersion;
 };
 
-inline bool_t
+inline UBool
 Collator::operator==(const Collator& other) const
 {
-  bool_t result;
+  UBool result;
   if (this == &other) result = TRUE;
   else result = ((strength == other.strength) && (decmp == other.decmp));
   return result;
 }
 
-inline bool_t
+inline UBool
 Collator::operator!=(const Collator& other) const
 {
-  bool_t result;
+  UBool result;
   result = !(*this == other);
   return result;
 }

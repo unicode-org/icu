@@ -24,7 +24,7 @@
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
 
 void 
-DateFormatMiscTests::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+DateFormatMiscTests::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     // if (exec) logln((UnicodeString)"TestSuite DateFormatMiscTests");
     switch (index) {
@@ -36,7 +36,7 @@ DateFormatMiscTests::runIndexedTest( int32_t index, bool_t exec, char* &name, ch
     }
 }
 
-bool_t 
+UBool 
 DateFormatMiscTests::failure(UErrorCode status, const char* msg)
 {
     if(U_FAILURE(status)) {
@@ -48,7 +48,7 @@ DateFormatMiscTests::failure(UErrorCode status, const char* msg)
 }
 
 /*
- * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.8 $ $Date: 2000/04/15 21:28:17 $
+ * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.9 $ $Date: 2000/05/18 22:08:31 $
  *
  * @bug 4097450
  */
@@ -92,7 +92,7 @@ DateFormatMiscTests::test4097450()
         UnicodeString("yyyy")
     };
     
-    bool_t dresult [] = {
+    UBool dresult [] = {
         TRUE, 
         FALSE, 
         FALSE,  
@@ -140,7 +140,7 @@ DateFormatMiscTests::test4097450()
 }
 
 /*
- * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.8 $ $Date: 2000/04/15 21:28:17 $
+ * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.9 $ $Date: 2000/05/18 22:08:31 $
  *
  * @bug 4099975
  */

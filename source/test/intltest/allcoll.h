@@ -36,7 +36,7 @@ public:
 
     CollationDummyTest();
     virtual ~CollationDummyTest();
-    void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par = NULL );
+    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par = NULL );
 
     // main test method called with different strengths,
     // tests comparison of custum collation with different strengths

@@ -99,7 +99,7 @@ public:
    * same string and are pointing at the same character.  
    * @stable
    */
-  virtual bool_t          operator==(const ForwardCharacterIterator& that) const;
+  virtual UBool          operator==(const ForwardCharacterIterator& that) const;
 
   /**
    * Returns a new StringCharacterIterator referring to the same

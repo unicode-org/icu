@@ -19,7 +19,7 @@
 #include "ittrans.h"
 #include "itrbbi.h"
 
-void MajorTestLevel::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     switch (index) {
         case 0: name = "utility"; 

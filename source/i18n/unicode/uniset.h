@@ -373,14 +373,14 @@ public:
      * @return <tt>true</tt> if the specified set is equal to this set.
      * @draft
      */
-    virtual bool_t operator==(const UnicodeSet& o) const;
+    virtual UBool operator==(const UnicodeSet& o) const;
 
     /**
      * Compares the specified object with this set for equality.  Returns
      * <tt>true</tt> if the specified set is not equal to this set.
      * @draft
      */
-    bool_t operator!=(const UnicodeSet& o) const;
+    UBool operator!=(const UnicodeSet& o) const;
 
     /**
      * Returns a copy of this object.  All UnicodeFilter objects have
@@ -438,7 +438,7 @@ public:
      * @return <tt>true</tt> if this set contains no elements.
      * @draft
      */
-    virtual bool_t isEmpty(void) const;
+    virtual UBool isEmpty(void) const;
 
     /**
      * Returns <tt>true</tt> if this set contains the specified range
@@ -448,7 +448,7 @@ public:
      * of chars.
      * @draft
      */
-    virtual bool_t contains(UChar first, UChar last) const;
+    virtual UBool contains(UChar first, UChar last) const;
 
     /**
      * Returns <tt>true</tt> if this set contains the specified char.
@@ -456,7 +456,7 @@ public:
      * @return <tt>true</tt> if this set contains the specified char.
      * @draft
      */
-    virtual bool_t contains(UChar c) const;
+    virtual UBool contains(UChar c) const;
 
     /**
      * Adds the specified range to this set if it is not already
@@ -511,7 +511,7 @@ public:
      * 	       specified set.
      * @draft
      */
-    virtual bool_t containsAll(const UnicodeSet& c) const;
+    virtual UBool containsAll(const UnicodeSet& c) const;
 
     /**
      * Adds all of the elements in the specified set to this set if
@@ -601,7 +601,7 @@ private:
      * is the given value.  This is used by <tt>RuleBasedTransliterator</tt> for
      * indexing.
      */
-    bool_t containsIndexValue(uint8_t v) const;
+    UBool containsIndexValue(uint8_t v) const;
 
 private:
 
@@ -731,7 +731,7 @@ private:
     static UChar charAfter(const UnicodeString& str, int32_t i);
 };
 
-inline bool_t UnicodeSet::operator!=(const UnicodeSet& o) const {
+inline UBool UnicodeSet::operator!=(const UnicodeSet& o) const {
 	return !operator==(o);
 }
 

@@ -26,7 +26,7 @@
 // runIndexedTest
 //---------------------------------------------
 
-void CompoundTransliteratorTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void CompoundTransliteratorTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     if (exec) logln((UnicodeString)"TestSuite CompoundTransliterator API ");
     switch (index) {
@@ -346,7 +346,7 @@ void CompoundTransliteratorTest::expect(const CompoundTransliterator& t,
 }
 
 void CompoundTransliteratorTest::expectAux(const UnicodeString& tag,
-                                   const UnicodeString& summary, bool_t pass,
+                                   const UnicodeString& summary, UBool pass,
                                    const UnicodeString& expectedResult) {
     if (pass) {
         logln(UnicodeString("(")+tag+") " + prettify(summary));

@@ -39,18 +39,18 @@ U_STRING_DECL(k_start_array, "array", 5);
 U_STRING_DECL(k_start_intvector, "intvector", 9);
 U_STRING_DECL(k_start_reserved, "reserved", 8);
 
-static bool_t didInit=FALSE;
+static UBool didInit=FALSE;
 
 /* Protos */
 static enum ETokenType getStringToken(UFILE *f, UChar initialChar, 
                       struct UString *token,
                       UErrorCode *status);
 static UChar unescape(UFILE *f, UErrorCode *status);
-static UChar getNextChar(UFILE *f, bool_t skipwhite, UErrorCode *status);
+static UChar getNextChar(UFILE *f, UBool skipwhite, UErrorCode *status);
 static void seekUntilNewline(UFILE *f, UErrorCode *status);
 static void seekUntilEndOfComment(UFILE *f, UErrorCode *status);
-static bool_t isWhitespace(UChar c);
-static bool_t isNewline(UChar c);
+static UBool isWhitespace(UChar c);
+static UBool isNewline(UChar c);
      
 
 /* Read and return the next token from the stream.  If the token is of
@@ -134,7 +134,7 @@ static enum ETokenType getStringToken(UFILE *f,
 				      struct UString *token,
 				      UErrorCode *status)
 {
-  bool_t lastStringWasQuoted;
+  UBool lastStringWasQuoted;
   UChar c;
 
   /* We are guaranteed on entry that initialChar is not a whitespace
@@ -230,7 +230,7 @@ static enum ETokenType getStringToken(UFILE *f,
 /* Retrieve the next character, ignoring comments.  If skipwhite is
    true, whitespace is skipped as well. */
 static UChar getNextChar(UFILE *f,
-			 bool_t skipwhite, 
+			 UBool skipwhite, 
 			 UErrorCode *status)
 {
   UChar c;
@@ -400,7 +400,7 @@ static UChar unescape(UFILE *f,
   }
 }
 
-static bool_t isWhitespace(UChar c)
+static UBool isWhitespace(UChar c)
 {
   switch (c) {
     /* ' ', '\t', '\n', '\r', 0x2029, 0xFEFF */
@@ -412,7 +412,7 @@ static bool_t isWhitespace(UChar c)
   }
 }
 
-static bool_t isNewline(UChar c)
+static UBool isNewline(UChar c)
 {
   switch (c) {
     /* '\n', '\r', 0x2029 */

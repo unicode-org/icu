@@ -87,7 +87,7 @@ int         VARS_DEF_FILE[MAX_VARS]; /* The index of the last file to define
                                         def not seen in any file. */
 char**      VARS_DEF[MAX_VARS]; /* Actual definitions */
 int         VARS_DEF_I[MAX_VARS]; /* Index var used by readVarDefs */
-bool_t      VERBOSE = FALSE;
+UBool      VERBOSE = FALSE;
 
 /* CONSTANTS */
 const char    COMMENT        = '#';
@@ -116,11 +116,11 @@ void usage(const char* argv0);
 void countVarDefs(char* token, int32_t len, int fileNo, int varNo);
 void readVarDefs(char* token, int32_t len, int fileNo, int varNo);
 enum FileStat processFile(FileStream*, TokenHandler, int fileNo);
-void processLine(int fileNo, int varNo, char* line, bool_t isFirstLine, TokenHandler proc);
+void processLine(int fileNo, int varNo, char* line, UBool isFirstLine, TokenHandler proc);
 char* substituteEnvironmentVars(char*);
 char* skipWhiteSpace(char* p);
 int32_t readLine(FileStream*);
-void assert(int); /* use of bool_t as arg causes warnings */
+void assert(int); /* use of UBool as arg causes warnings */
 void memassert(void* a);
 
 /**
@@ -151,7 +151,7 @@ void usage(const char* argv0) {
 
 int main(int argc, char *argv[]) {
     int i, j;
-    bool_t err=FALSE;
+    UBool err=FALSE;
     parseCommandLine(argc, argv);
     for (i=0; i<VARS_COUNT; ++i) {
         VARS_DEF_FILE[i] = -1;
@@ -372,7 +372,7 @@ void readVarDefs(char* line, int32_t len, int fileNo, int varNo) {
  * Handle a line of a variable def.  Call the token handler once with NULL (for
  * each varNo) then once with each token.
  */
-void processLine(int fileNo, int varNo, char* line, bool_t isFirstLine, TokenHandler proc) {
+void processLine(int fileNo, int varNo, char* line, UBool isFirstLine, TokenHandler proc) {
     if (isFirstLine) {
         /* Call once with NULL for initialization */
         (*proc)(NULL, 0, fileNo, varNo);
@@ -403,11 +403,11 @@ enum FileStat processFile(FileStream* in, TokenHandler proc, int fileNo) {
     int32_t len;
     char* p;
     int j;
-    bool_t varsSeen = FALSE;
+    UBool varsSeen = FALSE;
     LINE_NO = 0;
     while ((len = readLine(in)) >= 0) {
         if (len) {
-            bool_t varFound = FALSE;
+            UBool varFound = FALSE;
             /* Skip white space */
             p = skipWhiteSpace(BUFFER);
             /* Is the next word a var? */
@@ -415,7 +415,7 @@ enum FileStat processFile(FileStream* in, TokenHandler proc, int fileNo) {
                 if (0 == uprv_strncmp(VARS[j], p, uprv_strlen(VARS[j]))) {
                     /* Yes, found a var, maybe...parse more to see */
                     char* savep = p;
-                    bool_t isFirstLine = TRUE;
+                    UBool isFirstLine = TRUE;
 
                     p += uprv_strlen(VARS[j]); /* Go past var name */
 

@@ -368,7 +368,7 @@ ucal_getTimeZoneDisplayName(    const     UCalendar*                 cal,
 * @return TRUE if cal is currently in daylight savings time, FALSE otherwise
 * @stable
 */
-U_CAPI bool_t 
+U_CAPI UBool 
 ucal_inDaylightTime(    const    UCalendar*      cal, 
                 UErrorCode*     status );
 
@@ -525,7 +525,7 @@ ucal_setDateTime(    UCalendar*        cal,
 * @return TRUE if cal1 and cal2 represent the same date, FALSE otherwise.
 * @stable
 */
-U_CAPI bool_t 
+U_CAPI UBool 
 ucal_equivalentTo(    const UCalendar*      cal1,
             const UCalendar*      cal2);
 
@@ -627,7 +627,7 @@ ucal_set(    UCalendar*            cal,
 * @see ucal_clear
 * @stable
 */
-U_CAPI bool_t 
+U_CAPI UBool 
 ucal_isSet(    const    UCalendar*        cal,
             UCalendarDateFields    field);
 

@@ -74,7 +74,7 @@ utf8_errorValue[6]={
 };
 
 U_CAPI UChar32 U_EXPORT2
-utf8_nextCharSafeBody(const uint8_t *s, UTextOffset *pi, UTextOffset length, UChar32 c, bool_t strict) {
+utf8_nextCharSafeBody(const uint8_t *s, UTextOffset *pi, UTextOffset length, UChar32 c, UBool strict) {
     UTextOffset i=*pi;
     uint8_t count=UTF8_COUNT_TRAIL_BYTES(c);
     if((i)+count<=(length)) {
@@ -193,7 +193,7 @@ utf8_appendCharSafeBody(uint8_t *s, UTextOffset i, UTextOffset length, UChar32 c
 }
 
 U_CAPI UChar32 U_EXPORT2
-utf8_prevCharSafeBody(const uint8_t *s, UTextOffset start, UTextOffset *pi, UChar32 c, bool_t strict) {
+utf8_prevCharSafeBody(const uint8_t *s, UTextOffset start, UTextOffset *pi, UChar32 c, UBool strict) {
     UTextOffset i=*pi;
     uint8_t b, count=1, shift=6;
 

@@ -37,7 +37,7 @@ typedef struct u_scanf_scanset_pair u_scanf_scanset_pair;
  * Struct representing a scanset
  */
 struct u_scanf_scanset {
-  bool_t        is_inclusive;    /* false if '^' is given */
+  UBool        is_inclusive;    /* false if '^' is given */
 
   UChar            singles        [U_SCANF_MAX_SCANSET_SIZE];
   u_scanf_scanset_pair     pairs         [U_SCANF_MAX_SCANSET_SIZE];
@@ -55,7 +55,7 @@ typedef struct u_scanf_scanset u_scanf_scanset;
  * a pointer to the number of characters parsed, excluding the final ']'
  * @return TRUE if successful, FALSE otherwise.
  */
-bool_t
+UBool
 u_scanf_scanset_init(u_scanf_scanset     *scanset,
              const UChar    *s,
              int32_t        *len);
@@ -66,7 +66,7 @@ u_scanf_scanset_init(u_scanf_scanset     *scanset,
  * @param c The UChar to test.
  * @return TRUE if the UChar is in the scanset, FALSE otherwise
  */
-bool_t
+UBool
 u_scanf_scanset_in(u_scanf_scanset     *scanset,
            UChar         c);
 

@@ -228,7 +228,7 @@ void CollationDanishTest::TestPrimary( char* par )
     }
 }
 
-void CollationDanishTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void CollationDanishTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     if (exec) logln("TestSuite CollationDanishTest: ");
     switch (index) {

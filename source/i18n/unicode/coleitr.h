@@ -99,13 +99,13 @@ public:
      * Returns true if "other" is the same as "this"
      * @stable
      */
-    bool_t          operator==(const CollationElementIterator& other) const;
+    UBool          operator==(const CollationElementIterator& other) const;
 
     /**
      * Returns true if "other" is not the same as "this".
      * @stable
      */
-    bool_t          operator!=(const CollationElementIterator& other) const;
+    UBool          operator!=(const CollationElementIterator& other) const;
 
     /**
      * Resets the cursor to the beginning of the string.
@@ -190,7 +190,7 @@ public:
      *  @return TRUE if a character is ignorable, FALSE otherwise.
 	 *  @stable
      */
-    static    bool_t              isIgnorable(int32_t order);
+    static    UBool              isIgnorable(int32_t order);
     /**
      *  Gets the offset of the currently processed character in the source string.
      *  @return the offset of the character.
@@ -288,14 +288,14 @@ private:
             int32_t             prevContractChar(   UChar     ch,
                                                     UErrorCode&  status);
     
-    inline static bool_t isThaiPreVowel(UChar ch);
+    inline static UBool isThaiPreVowel(UChar ch);
                  
-    inline static bool_t isThaiBaseConsonant(UChar ch);
+    inline static UBool isThaiBaseConsonant(UChar ch);
                  
     VectorOfInt* makeReorderedBuffer(UChar colFirst,
                                      int32_t lastValue,
                                      VectorOfInt* lastExpansion,
-                                     bool_t forward, UErrorCode& status);
+                                     UBool forward, UErrorCode& status);
 
     friend  class   RuleBasedCollator;
     static  const   int32_t         UNMAPPEDCHARVALUE;
@@ -368,7 +368,7 @@ CollationElementIterator::getMaxExpansion(int32_t order) const
     return orderAlias->getMaxExpansion(order);
 }
 
-inline bool_t
+inline UBool
 CollationElementIterator::isIgnorable(int32_t order)
 {
     return (primaryOrder(order) == 0);
@@ -378,14 +378,14 @@ CollationElementIterator::isIgnorable(int32_t order)
  * Determine if a character is a Thai vowel (which sorts after
  * its base consonant).
  */
-inline bool_t CollationElementIterator::isThaiPreVowel(UChar ch) {
+inline UBool CollationElementIterator::isThaiPreVowel(UChar ch) {
     return (ch >= (UChar)0x0E40) && (ch <= (UChar)0X0E44);
 }
 
 /**
  * Determine if a character is a Thai base consonant
  */
-inline bool_t CollationElementIterator::isThaiBaseConsonant(UChar ch) {
+inline UBool CollationElementIterator::isThaiBaseConsonant(UChar ch) {
     return (ch >= (UChar)0x0E01) && (ch <= (UChar)0x0E2E);
 }
 

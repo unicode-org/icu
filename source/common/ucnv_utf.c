@@ -62,7 +62,7 @@ void T_UConverter_toUnicode_UTF8 (UConverter * _this,
                                   const char **source,
                                   const char *sourceLimit,
                                   int32_t *offsets,
-                                  bool_t flush,
+                                  UBool flush,
                                   UErrorCode * err)
 {
   const unsigned char *mySource = (unsigned char *) *source;
@@ -205,7 +205,7 @@ void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverter * _this,
                                                 const char **source,
                                                 const char *sourceLimit,
                                                 int32_t *offsets,
-                                                bool_t flush,
+                                                UBool flush,
                                                 UErrorCode * err)
 {
   const unsigned char *mySource = (unsigned char *) *source;
@@ -345,7 +345,7 @@ void T_UConverter_fromUnicode_UTF8 (UConverter * _this,
                                     const UChar ** source,
                                     const UChar * sourceLimit,
                                     int32_t *offsets,
-                                    bool_t flush,
+                                    UBool flush,
                                     UErrorCode * err)
 {
   const UChar *mySource = *source;
@@ -455,7 +455,7 @@ void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverter * _this,
                                                   const UChar ** source,
                                                   const UChar * sourceLimit,
                                                   int32_t *offsets,
-                                                  bool_t flush,
+                                                  UBool flush,
                                                   UErrorCode * err)
 {
   const UChar *mySource = *source;
@@ -713,7 +713,7 @@ void T_UConverter_toUnicode_UTF16_BE (UConverter * _this,
                                       const char **source,
                                       const char *sourceLimit,
                                       int32_t *offsets,
-                                      bool_t flush,
+                                      UBool flush,
                                       UErrorCode * err)
 {
   const unsigned char *mySource = (unsigned char *) *source;
@@ -779,7 +779,7 @@ void  T_UConverter_fromUnicode_UTF16_BE (UConverter * _this,
                                          const UChar ** source,
                                          const UChar * sourceLimit,
                                          int32_t *offsets,
-                                         bool_t flush,
+                                         UBool flush,
                                          UErrorCode * err)
 {
   const UChar *mySource = *source;
@@ -914,7 +914,7 @@ void  T_UConverter_toUnicode_UTF16_LE (UConverter * _this,
                                        const char **source,
                                        const char *sourceLimit,
                                        int32_t *offsets,
-                                       bool_t flush,
+                                       UBool flush,
                                        UErrorCode * err)
 {
   const unsigned char *mySource = (unsigned char *) *source;
@@ -981,7 +981,7 @@ void   T_UConverter_fromUnicode_UTF16_LE (UConverter * _this,
                                           const UChar ** source,
                                           const UChar * sourceLimit,
                                           int32_t *offsets,
-                                          bool_t flush,
+                                          UBool flush,
                                           UErrorCode * err)
 {
   const UChar *mySource = *source;

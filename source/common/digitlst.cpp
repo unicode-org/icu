@@ -80,7 +80,7 @@ DigitList::operator=(const DigitList& other)
 
 // -------------------------------------
 
-bool_t
+UBool
 DigitList::operator==(const DigitList& that) const
 {
     return ((this == &that) ||
@@ -144,8 +144,8 @@ int32_t DigitList::getLong() const
  * Return true if the number represented by this object can fit into
  * a long.
  */
-bool_t
-DigitList::fitsIntoLong(bool_t isPositive, bool_t ignoreNegativeZero)
+UBool
+DigitList::fitsIntoLong(UBool isPositive, UBool ignoreNegativeZero)
 {
     // Figure out if the result will fit in a long.  We have to
     // first look for nonzero digits after the decimal point;
@@ -250,7 +250,7 @@ DigitList::set(int32_t source, int32_t maximumDigits)
  * fractional digits to be converted.  If false, total digits.
  */
 void
-DigitList::set(double source, int32_t maximumDigits, bool_t fixedPoint)
+DigitList::set(double source, int32_t maximumDigits, UBool fixedPoint)
 {
     if(source == 0) source = 0;
     // Generate a representation of the form DDDDD, DDDDD.DDDDD, or
@@ -265,7 +265,7 @@ DigitList::set(double source, int32_t maximumDigits, bool_t fixedPoint)
     // Number of zeros between decimal point and first non-zero digit after
     // decimal point, for numbers < 1.
     int32_t leadingZerosAfterDecimal = 0;
-    bool_t nonZeroDigitSeen = FALSE;
+    UBool nonZeroDigitSeen = FALSE;
     for (int32_t i=0; i < MAX_DIGITS + 7; ++i) {
         char c = rep[i];
         if (c == '.') {
@@ -275,7 +275,7 @@ DigitList::set(double source, int32_t maximumDigits, bool_t fixedPoint)
             // Parse an exponent of the form /[eE][+-]?[0-9]*/
             //exponent = Integer.valueOf(rep.substring(i+1)).intValue();
             i += 1;                 // adjust for 'e'
-            bool_t negExp = rep[i] == '-';
+            UBool negExp = rep[i] == '-';
             if (negExp || rep[i] == '+') {
                 ++i;
             }
@@ -412,7 +412,7 @@ DigitList::round(int32_t maximumDigits)
  * @return true if digit <code>maximumDigits-1</code> should be
  * incremented
  */
-bool_t DigitList::shouldRoundUp(int32_t maximumDigits) {
+UBool DigitList::shouldRoundUp(int32_t maximumDigits) {
     // Implement IEEE half-even rounding
     if (fDigits[maximumDigits] > '5') {
         return TRUE;
@@ -481,7 +481,7 @@ bool_t DigitList::shouldRoundUp(int32_t maximumDigits) {
  * Return true if this object represents the value zero.  Anything with
  * no digits, or all zero digits, is zero, regardless of fDecimalAt.
  */
-bool_t
+UBool
 DigitList::isZero() const
 {
     for (int32_t i=0; i<fCount; ++i) if (fDigits[i] != kZero) return FALSE;
@@ -492,7 +492,7 @@ DigitList::isZero() const
  * We represent LONG_MIN internally as LONG_MAX + 1.  This is actually an impossible
  * value, for positive long integers, so we are safe in doing so.
  */
-bool_t
+UBool
 DigitList::isLONG_MIN() const
 {
     initializeLONG_MIN_REP();

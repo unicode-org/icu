@@ -18,7 +18,7 @@
 *                           wchar.h.
 *   07/09/97    helena      Made ParsePosition into a class.
 *   08/06/97    nos         removed overloaded constructor, fixed 'format(array)'
-*    07/22/98    stephen        JDK 1.2 Sync - removed bool_t array (doubleFlags)
+*    07/22/98    stephen        JDK 1.2 Sync - removed UBool array (doubleFlags)
 *   02/22/99    stephen     Removed character literals for EBCDIC safety
 ********************************************************************************
 */
@@ -75,7 +75,7 @@ ChoiceFormat::ChoiceFormat(const    ChoiceFormat&   that)
 
 // -------------------------------------
 
-bool_t
+UBool
 ChoiceFormat::operator==(const Format& that) const
 {
     if (this == &that) return TRUE;
@@ -239,7 +239,7 @@ ChoiceFormat::applyPattern(const UnicodeString& newPattern,
     int32_t part = 0;
     double startValue = 0;
     double oldStartValue = uprv_getNaN();
-    bool_t inQuote = FALSE;
+    UBool inQuote = FALSE;
     for(int i = 0; i < newPattern.length(); ++i) {
         UChar ch = newPattern[i];
         if(ch == 0x0027 /*'\''*/) {
@@ -358,7 +358,7 @@ ChoiceFormat::toPattern(UnicodeString& result) const
         // Append fChoiceFormats[i], using quotes if there are special characters.
         // Single quotes themselves must be escaped in either case.
         UnicodeString text = fChoiceFormats[i];
-        bool_t needQuote = text.indexOf((UChar)0x003C /*'<'*/) >= 0
+        UBool needQuote = text.indexOf((UChar)0x003C /*'<'*/) >= 0
             || text.indexOf((UChar)0x0023 /*'#'*/) >= 0
             || text.indexOf((UChar32)0x2264) >= 0
             || text.indexOf((UChar)0x007C /*'|'*/) >= 0;
@@ -573,7 +573,7 @@ ChoiceFormat::clone() const
 // -------------------------------------
 
 double 
-ChoiceFormat::nextDouble( double d, bool_t positive )
+ChoiceFormat::nextDouble( double d, UBool positive )
 {
     return uprv_nextDouble( d, positive );
 }

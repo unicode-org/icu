@@ -52,7 +52,7 @@ Transliterator* JamoHangulTransliterator::clone(void) const {
  * Implements {@link Transliterator#handleTransliterate}.
  */
 void JamoHangulTransliterator::handleTransliterate(Replaceable& text, Position& offsets,
-                                                   bool_t isIncremental) const {
+                                                   UBool isIncremental) const {
     /**
      * Performs transliteration changing Jamo to Hangul 
      */

@@ -16,7 +16,7 @@
  **/
 class ParsePositionTest: public IntlTest {
     // IntlTest override
-    void runIndexedTest( int32_t index, bool_t exec, char* &name, char* par );
+    void runIndexedTest( int32_t index, UBool exec, char* &name, char* par );
 public:
 
     void TestParsePosition(void);
@@ -25,7 +25,7 @@ public:
     void Test4109023(void);
 
 protected:
-    bool_t failure(UErrorCode status, const char* msg);
+    UBool failure(UErrorCode status, const char* msg);
 };
  
 #endif // _PARSEPOSITIONIONTEST_

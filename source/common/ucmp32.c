@@ -27,7 +27,7 @@ static int32_t ucmp32_findOverlappingPosition(CompactIntArray* this_obj, uint32_
                                 int32_t tempIndexCount, 
                                 uint32_t cycle);
       
-static  bool_t debugSmall = FALSE;
+static  UBool debugSmall = FALSE;
 static  uint32_t debugSmallLimit = 30000;
 
 /** debug flags
@@ -207,7 +207,7 @@ void ucmp32_close(    CompactIntArray* this_obj)
   }
 }
 
-bool_t ucmp32_isBogus(const CompactIntArray* this_obj)
+UBool ucmp32_isBogus(const CompactIntArray* this_obj)
 {
     return this_obj == NULL || this_obj->fBogus;
 }

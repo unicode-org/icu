@@ -19,9 +19,9 @@
 #include "unicode/fmtable.h"
 
 
-static bool_t chkstatus( UErrorCode &status, char* msg = NULL )
+static UBool chkstatus( UErrorCode &status, char* msg = NULL )
 {
-    bool_t ok = (status == U_ZERO_ERROR);
+    UBool ok = (status == U_ZERO_ERROR);
     if (!ok) it_errln( msg );
     return ok;
 }
@@ -124,9 +124,9 @@ void test_FieldPosition( void )
     if ( fph->getField() != 3) it_errln("*** FP getField or heap constr.");
     delete fph;
 
-    bool_t err1 = FALSE;
-    bool_t err2 = FALSE;
-    bool_t err3 = FALSE;
+    UBool err1 = FALSE;
+    UBool err2 = FALSE;
+    UBool err3 = FALSE;
     for (int32_t i = -50; i < 50; i++ ) {
         fp.setField( i+8 );
         fp.setBeginIndex( i+6 );
@@ -229,7 +229,7 @@ void test_Formattable( void )
     int32_t res_cnt;
     const Formattable* res_array = ft_arr.getArray( res_cnt );
     if (res_cnt == ft_cnt) {
-        bool_t same  = TRUE;
+        UBool same  = TRUE;
         for (int32_t i = 0; i < res_cnt; i++ ) {
             if (res_array[i] != ftarray[i]) {
                 same = FALSE;
@@ -294,7 +294,7 @@ void test_Formattable( void )
 
 }
 
-void TestFormatSmallClasses::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void TestFormatSmallClasses::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     switch (index) {
         case 0: name = "pp"; 

@@ -54,7 +54,7 @@
 
 # ifdef POSIX_DEBUG_REENTRANCY
  pthread_t      gLastThread;
- bool_t         gInMutex;
+ UBool         gInMutex;
 
  U_EXPORT void WeAreDeadlocked();
 

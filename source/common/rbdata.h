@@ -83,7 +83,7 @@ public:
     
     void put(const UnicodeString& tag, const UnicodeString& data);
     const UnicodeString* get(const UnicodeString& tag) const;
-    bool_t nextElement(const UnicodeString*& key,
+    UBool nextElement(const UnicodeString*& key,
                        const UnicodeString*& value,
                        int32_t& pos) const;
     int32_t count() const;

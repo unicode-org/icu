@@ -19,7 +19,7 @@
 
 // Useful for turning up subtle bugs: Change the following to TRUE, recompile,
 // and run while at lunch.
-bool_t DateFormatRoundTripTest::INFINITE = FALSE; // Warning -- makes test run infinite loop!!!
+UBool DateFormatRoundTripTest::INFINITE = FALSE; // Warning -- makes test run infinite loop!!!
 
 // If SPARSENESS is > 0, we don't run each exhaustive possibility.
 // There are 24 total possible tests per each locale.  A SPARSENESS
@@ -33,7 +33,7 @@ int32_t DateFormatRoundTripTest::DEPTH = 5;
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
 
 void 
-DateFormatRoundTripTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+DateFormatRoundTripTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     // if (exec) logln((UnicodeString)"TestSuite NumberFormatRegressionTest");
     switch (index) {
@@ -42,7 +42,7 @@ DateFormatRoundTripTest::runIndexedTest( int32_t index, bool_t exec, char* &name
     }
 }
 
-bool_t 
+UBool 
 DateFormatRoundTripTest::failure(UErrorCode status, const char* msg)
 {
     if(U_FAILURE(status)) {
@@ -107,7 +107,7 @@ void DateFormatRoundTripTest::test(const Locale& loc)
     //  4 date
     //  4 time
     //  16 date-time
-    bool_t TEST_TABLE [24];//= new boolean[24];
+    UBool TEST_TABLE [24];//= new boolean[24];
     int32_t i = 0;
     for(i = 0; i < 24; ++i) 
         TEST_TABLE[i] = TRUE;
@@ -151,7 +151,7 @@ void DateFormatRoundTripTest::test(const Locale& loc)
     }
 }
 
-void DateFormatRoundTripTest::test(DateFormat *fmt, bool_t timeOnly) 
+void DateFormatRoundTripTest::test(DateFormat *fmt, UBool timeOnly) 
 {
     UnicodeString pat;
     if(fmt->getDynamicClassID() != SimpleDateFormat::getStaticClassID()) {
@@ -166,8 +166,8 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, bool_t timeOnly)
     // quoted characters.  Currently, this isn't a problem with the locale
     // patterns we have, but it may be a problem later.
 
-    bool_t hasEra = (pat.indexOf(UnicodeString("G")) != -1);
-    bool_t hasZone = (pat.indexOf(UnicodeString("z")) != -1);
+    UBool hasEra = (pat.indexOf(UnicodeString("G")) != -1);
+    UBool hasZone = (pat.indexOf(UnicodeString("z")) != -1);
 
     // Because patterns contain incomplete data representing the Date,
     // we must be careful of how we do the roundtrip.  We start with
@@ -204,7 +204,7 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, bool_t timeOnly)
 
                 if(loop > 0) {
                     if(smatch == 0) {
-                        bool_t match = s[loop] == s[loop-1];
+                        UBool match = s[loop] == s[loop-1];
                         if(smatch == 0) {
                             if(match) 
                                 smatch = loop;
@@ -215,7 +215,7 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, bool_t timeOnly)
 
                     if(dmatch == 0) {
                         // {sfb} watch out here, this might not work
-                        bool_t match = d[loop]/*.getTime()*/ == d[loop-1]/*.getTime()*/;
+                        UBool match = d[loop]/*.getTime()*/ == d[loop-1]/*.getTime()*/;
                         if(dmatch == 0) {
                             if(match) 
                                 dmatch = loop;

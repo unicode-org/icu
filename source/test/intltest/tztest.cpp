@@ -23,7 +23,7 @@
 // class TimeZoneTest
 // *****************************************************************************
 
-void TimeZoneTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* par )
+void TimeZoneTest::runIndexedTest( int32_t index, UBool exec, char* &name, char* par )
 {
     if (exec) logln("TestSuite TestTimeZone");
     switch (index) {
@@ -254,7 +254,7 @@ void
 TimeZoneTest::testUsingBinarySearch(SimpleTimeZone* tz, UDate min, UDate max, UDate expectedBoundary)
 {
     UErrorCode status = U_ZERO_ERROR;
-    bool_t startsInDST = tz->inDaylightTime(min, status);
+    UBool startsInDST = tz->inDaylightTime(min, status);
     if (failure(status, "SimpleTimeZone::inDaylightTime")) return;
     if (tz->inDaylightTime(max, status) == startsInDST) {
         logln("Error: inDaylightTime(" + dateToString(max) + ") != " + ((!startsInDST)?"TRUE":"FALSE"));
@@ -525,7 +525,7 @@ void TimeZoneTest::TestShortZoneIDs()
      {
           char      id[4];
           int32_t   offset;
-          bool_t    daylight;
+          UBool    daylight;
      }
      kReferenceList [] =
      {
@@ -571,7 +571,7 @@ void TimeZoneTest::TestShortZoneIDs()
 
      for(i=0;kReferenceList[i].id[0];i++) {
           UnicodeString itsID(kReferenceList[i].id);
-          bool_t ok = TRUE;
+          UBool ok = TRUE;
           // Check existence.
           TimeZone *tz = TimeZone::createTimeZone(itsID);
           if (!tz) {
@@ -580,7 +580,7 @@ void TimeZoneTest::TestShortZoneIDs()
           }
 
           // Check daylight usage.
-          bool_t usesDaylight = tz->useDaylightTime();
+          UBool usesDaylight = tz->useDaylightTime();
           if (usesDaylight != kReferenceList[i].daylight) {
               errln("FAIL: Time Zone " + itsID + " use daylight is " +
                     (usesDaylight?"TRUE":"FALSE") +
@@ -840,7 +840,7 @@ TimeZoneTest::TestDisplayName()
     //*****************************************************************
     struct
     {
-        bool_t useDst;
+        UBool useDst;
         TimeZone::EDisplayType style;
         char expect[100];
     } kData[] = {
@@ -907,7 +907,7 @@ TimeZoneTest::TestDisplayName()
     //if(U_FAILURE(status))
     //    errln("Couldn't get ResourceBundle for zh_CN");
 
-    bool_t noZH = U_FAILURE(status);
+    UBool noZH = U_FAILURE(status);
 
     if (noZH) {
         logln("Warning: Not testing the zh_CN behavior because resource is absent");
