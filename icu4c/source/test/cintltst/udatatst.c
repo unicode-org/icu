@@ -71,8 +71,9 @@ static void TestUDataOpen(){
         {"unames",   "dat"},
         {"ibm-1141", "cnv"}
     };
-    const char* name = "test";
-    const char* type="dat";
+    const char* name           = "test";
+    const char* type           = "dat";
+	const char  dirSepString[] = {U_FILE_SEP_CHAR, 0};
 
     char* path=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory())
                                            + strlen(U_ICUDATA_NAME)
@@ -134,22 +135,26 @@ static void TestUDataOpen(){
      *    back into this directory structure, but this is not required.  Soooo, if
      *    the files are missing, skip this test without error.
      */
-    icuDataFilePath = (char *)malloc(strlen(path) + 10);
+    icuDataFilePath = (char *)malloc(strlen(u_getDataDirectory()) + 50);
     strcpy(icuDataFilePath, u_getDataDirectory());
-    strcat(icuDataFilePath, "/build/tz.dat");
+    strcat(icuDataFilePath, "build");
+	strcat(icuDataFilePath, dirSepString);
+	strcat(icuDataFilePath, "tz.dat");
     if (stat(icuDataFilePath, &stat_buf) == 0)
     {
         int i;
         strcpy(icuDataFilePath, u_getDataDirectory());
-        strcat(icuDataFilePath, "/build");
+        strcat(icuDataFilePath, "build");
+		strcat(icuDataFilePath, dirSepString);
+		strcat(icuDataFilePath, "dummyLibraryName");
         log_verbose("Testing udata_open() on %s\n", icuDataFilePath);
         for(i=0; i<sizeof(memMap)/sizeof(memMap[0]); i++){
             status=U_ZERO_ERROR;
-            result=udata_open(path, memMap[i][1], memMap[i][0], &status);
+            result=udata_open(icuDataFilePath, memMap[i][1], memMap[i][0], &status);
             if(U_FAILURE(status)) {
-                log_err("FAIL: udata_open() failed for path = %s, name=%s, type=%s, \n errorcode=%s\n", path, memMap[i][0], memMap[i][1], myErrorName(status));
+                log_err("FAIL: udata_open() failed for path = %s, name=%s, type=%s, \n errorcode=%s\n", icuDataFilePath, memMap[i][0], memMap[i][1], myErrorName(status));
             } else {
-                log_verbose("PASS: udata_open worked for path = %s, name=%s, type=%s\n",  path, memMap[i][0], memMap[i][1]);
+                log_verbose("PASS: udata_open worked for path = %s, name=%s, type=%s\n",  icuDataFilePath, memMap[i][0], memMap[i][1]);
                 udata_close(result);
             }
         }
