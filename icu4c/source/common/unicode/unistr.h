@@ -2571,7 +2571,7 @@ UnicodeString::extract(UTextOffset start,
                int32_t length,
                char *dst,
                const char *codepage) const
-{return extract(start, length, dst, 0x0FFFFFFF, codepage);}
+{return extract(start, length, dst, INT32_MAX, codepage);}
 
 inline void  
 UnicodeString::extractBetween(UTextOffset start, 
