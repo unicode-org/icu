@@ -1,5 +1,5 @@
 #
-# @(#)$RCSfile: GNUmakefile,v $ $Revision: 1.1 $ $Date: 2000/02/16 23:40:09 $
+# @(#)$RCSfile: GNUmakefile,v $ $Revision: 1.2 $ $Date: 2000/03/01 01:57:00 $
 #
 
 TOPDIR=		../../../../..
@@ -11,7 +11,6 @@ FILES_java=	$(TARGDIR)/BuddhistCalendarSymbols.java		\
 			$(TARGDIR)/BuddhistCalendarSymbols_ar.java	\
 			$(TARGDIR)/BuddhistCalendarSymbols_hu.java	\
 			$(TARGDIR)/BuddhistCalendarSymbols_th.java	\
-			$(TARGDIR)/ChineseCalendarSymbols.java		\
 			$(TARGDIR)/HebrewCalendarSymbols.java		\
 			$(TARGDIR)/HebrewCalendarSymbols_fi.java	\
 			$(TARGDIR)/HebrewCalendarSymbols_fr.java	\
