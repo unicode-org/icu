@@ -17,11 +17,12 @@ root {
     "%%B"    { "Bokm\u00e5l" }  // Norwegian variant display name
     "%%NY"   { "Nynorsk" }      // Norwegian variant display name
     "%%AL" { "\u00C5land" } // Aland variant display name
-    CollationElements { 
-	    Version { "1.0" }
-		Override { "FALSE" }
-		Sequence { "" }
-    }    
+    // no collation elements any more
+    // CollationElements { 
+    //	    Version { "1.0" }
+    //		Override { "FALSE" }
+    //		Sequence { "" }
+    // }    
     // Formats for the display name of a locale, for a list of
     // items, and for composing two items in a list into one item.
     // The list patterns are used in the variant name and in the
