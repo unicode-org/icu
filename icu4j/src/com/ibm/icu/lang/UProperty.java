@@ -6,8 +6,8 @@
 *
 * $Source: 
 *      /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterCategory.java $ 
-* $Date: 2003/01/22 19:22:51 $ 
-* $Revision: 1.10 $
+* $Date: 2003/02/21 01:21:33 $ 
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -276,11 +276,19 @@ public interface UProperty
      * @draft ICU 2.1
      */ 
     public static final int XID_START = 33; 
+    /**
+     * <p>Binary property Case_Sensitive.</p>
+     * <p>Either the source of a case
+     * mapping or _in_ the target of a case mapping. Not the same as
+     * the general category Cased_Letter.</p>
+     * @draft ICU 2.6
+     */
+    public static final int CASE_SENSITIVE = 34;
     /** 
      * <p>One more than the last constant for binary Unicode properties.</p> 
      * @draft ICU 2.1
      */ 
-    public static final int BINARY_LIMIT = 34;
+    public static final int BINARY_LIMIT = 35;
     /** 
      * Enumerated property Bidi_Class.
      * Same as UCharacter.getDirection(int), returns UCharacterDirection values. 
