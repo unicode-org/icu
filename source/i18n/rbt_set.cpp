@@ -285,11 +285,22 @@ UnicodeString& TransliterationRuleSet::toRules(UnicodeString& ruleSource,
     int32_t i;
     int32_t count = index[256];
     ruleSource.truncate(0);
+    UBool first = TRUE;
     for (i=0; i<count; ++i) {
-        if (i != 0) {
-            ruleSource.append((UChar) 0x000A /*\n*/);
+        UBool seen = FALSE;
+        for (int32_t j=i-1; j>=0; --j) {
+            if (rules[i] == rules[j]) { // [sic] pointer comparison
+                seen = TRUE;
+                break;
+            }
         }
-        rules[i]->toRule(ruleSource, escapeUnprintable);
+        if (!seen) {
+            if (!first) {
+                ruleSource.append((UChar) 0x000A /*\n*/);
+            }
+            first = FALSE;
+            rules[i]->toRule(ruleSource, escapeUnprintable);
+        }
     }
     return ruleSource;
 }
