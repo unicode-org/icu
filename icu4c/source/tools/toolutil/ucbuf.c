@@ -714,7 +714,7 @@ ucbuf_readline(UCHARBUF* buf,int32_t* len,UErrorCode* err){
         for(;;){
             c = *temp++;
             if(buf->remaining==0){
-                *err = (UErrorCode) U_EOF;
+                return NULL; /* end of file is reached return NULL */
             }
             if(temp>=buf->bufLimit && buf->currentPos == buf->buffer){
                 *err= U_TRUNCATED_CHAR_FOUND;
@@ -722,7 +722,7 @@ ucbuf_readline(UCHARBUF* buf,int32_t* len,UErrorCode* err){
             }else{
                 ucbuf_fillucbuf(buf,err);
                 if(U_FAILURE(*err)){
-                    return NULL;
+                    return NULL; 
                 }
             }
             /*
@@ -753,8 +753,7 @@ ucbuf_readline(UCHARBUF* buf,int32_t* len,UErrorCode* err){
             c = *temp++;
             
             if(buf->currentPos==buf->bufLimit){
-                *err = (UErrorCode) U_EOF;
-                return NULL;
+                return NULL; /* end of file is reached return NULL */
             }
             /* Windows CR LF */
             if(c ==0x0d && temp+1<=buf->bufLimit && *(temp+1) == 0x0a ){
