@@ -60,7 +60,7 @@ class BreakIterator;        // unicode/brkiter.h
  *
  * @draft ICU 3.2
  */
-#define US_INV UnicodeString::EInvariant::kInvariant
+#define US_INV UnicodeString::kInvariant
 
 /**
  * Unicode String literals in C++.
