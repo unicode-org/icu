@@ -325,7 +325,7 @@ UErrorCode convsample_03()
     size of input and output buffer can be used, as long as the
     program handles the following cases: If the input buffer is empty,
     the source pointer will be equal to sourceLimit.  If the output
-    buffer is empty, U_INDEX_OUTOFBOUNDS_ERROR will be returned. 
+    buffer has overflowed, U_BUFFER_OVERFLOW_ERROR will be returned. 
  */
 
 UErrorCode convsample_05()
@@ -383,7 +383,7 @@ UErrorCode convsample_05()
                                    /* is true (when no more data will come) */
                        &status);
       
-        if(status != U_INDEX_OUTOFBOUNDS_ERROR)
+        if(status == U_BUFFER_OVERFLOW_ERROR)
         {
           // simply ran out of space - we'll reset the target ptr the next
           // time through the loop.

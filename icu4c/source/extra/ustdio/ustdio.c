@@ -93,7 +93,7 @@ u_file_write(    const UChar     *chars,
     written     += (myTarget - f->fCharBuffer);
     myTarget     = f->fCharBuffer;
   }
-  while(status == U_INDEX_OUTOFBOUNDS_ERROR); 
+  while(status == U_BUFFER_OVERFLOW_ERROR); 
 
   /* return # of chars written */
   return written;
