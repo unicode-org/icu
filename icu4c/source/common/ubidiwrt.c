@@ -22,11 +22,12 @@
 #   define U_COMMON_IMPLEMENTATION
 #endif
 
-#include "cmemory.h"
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
 #include "unicode/uchar.h"
 #include "unicode/ubidi.h"
+#include "cmemory.h"
+#include "ustr_imp.h"
 #include "ubidiimp.h"
 
 /*
@@ -80,7 +81,7 @@ doWriteForward(const UChar *src, int32_t srcLength,
         int32_t length=srcLength;
         if(destSize<length) {
             *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-            return 0;
+            return srcLength;
         }
         do {
             *dest++=*src++;
@@ -94,7 +95,7 @@ doWriteForward(const UChar *src, int32_t srcLength,
 
         if(destSize<srcLength) {
             *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-            return 0;
+            return srcLength;
         }
         do {
             UTF_NEXT_CHAR(src, i, srcLength, c);
@@ -112,7 +113,15 @@ doWriteForward(const UChar *src, int32_t srcLength,
             if(!IS_BIDI_CONTROL_CHAR(c)) {
                 if(--remaining<0) {
                     *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-                    return 0;
+
+                    /* preflight the length */
+                    while(--srcLength>0) {
+                        c=*src++;
+                        if(!IS_BIDI_CONTROL_CHAR(c)) {
+                            --remaining;
+                        }
+                    }
+                    return destSize-remaining;
                 }
                 *dest++=c;
             }
@@ -133,7 +142,16 @@ doWriteForward(const UChar *src, int32_t srcLength,
                 remaining-=i;
                 if(remaining<0) {
                     *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-                    return 0;
+
+                    /* preflight the length */
+                    while(srcLength>0) {
+                        c=*src++;
+                        if(!IS_BIDI_CONTROL_CHAR(c)) {
+                            --remaining;
+                        }
+                        --srcLength;
+                    }
+                    return destSize-remaining;
                 }
                 c=u_charMirror(c);
                 UTF_APPEND_CHAR_UNSAFE(dest, j, c);
@@ -181,7 +199,7 @@ doWriteReverse(const UChar *src, int32_t srcLength,
          */
         if(destSize<srcLength) {
             *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-            return 0;
+            return srcLength;
         }
         destSize=srcLength;
 
@@ -209,7 +227,7 @@ doWriteReverse(const UChar *src, int32_t srcLength,
          */
         if(destSize<srcLength) {
             *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-            return 0;
+            return srcLength;
         }
         destSize=srcLength;
 
@@ -258,7 +276,7 @@ doWriteReverse(const UChar *src, int32_t srcLength,
 
         if(destSize<i) {
             *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-            return 0;
+            return i;
         }
         destSize=i;
 
@@ -297,6 +315,7 @@ doWriteReverse(const UChar *src, int32_t srcLength,
         } while(srcLength>0);
         break;
     } /* end of switch */
+
     return destSize;
 }
 
@@ -305,32 +324,40 @@ ubidi_writeReverse(const UChar *src, int32_t srcLength,
                    UChar *dest, int32_t destSize,
                    uint16_t options,
                    UErrorCode *pErrorCode) {
+    int32_t destLength;
+
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return 0;
     }
 
     /* more error checking */
-    if( src==NULL || srcLength<0 ||
-        dest==NULL || destSize<=0)
+    if( src==NULL || srcLength<-1 ||
+        destSize<0 || (destSize>0 && dest==NULL))
     {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
 
     /* do input and output overlap? */
-    if((src>=dest && src<dest+destSize) ||
-       (dest>=src && dest<src+srcLength))
+    if( dest!=NULL &&
+        ((src>=dest && src<dest+destSize) ||
+         (dest>=src && dest<src+srcLength)))
     {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
 
+    if(srcLength==-1) {
+        srcLength=u_strlen(src);
+    }
     if(srcLength>0) {
-        return doWriteReverse(src, srcLength, dest, destSize, options, pErrorCode);
+        destLength=doWriteReverse(src, srcLength, dest, destSize, options, pErrorCode);
     } else {
         /* nothing to do */
-        return 0;
+        destLength=0;
     }
+
+    return u_terminateUChars(dest, destSize, destLength, pErrorCode);
 }
 
 #define MASK_R_AL (1UL<<U_RIGHT_TO_LEFT|1UL<<U_RIGHT_TO_LEFT_ARABIC)
@@ -341,8 +368,7 @@ ubidi_writeReordered(UBiDi *pBiDi,
                      uint16_t options,
                      UErrorCode *pErrorCode) {
     const UChar *text;
-    UChar *oldDest=dest;
-    int32_t length;
+    int32_t length, destCapacity;
     UTextOffset run, runCount, logicalStart, runLength;
 
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
@@ -352,15 +378,16 @@ ubidi_writeReordered(UBiDi *pBiDi,
     /* more error checking */
     if( pBiDi==NULL ||
         (text=ubidi_getText(pBiDi))==NULL || (length=ubidi_getLength(pBiDi))<0 ||
-        dest==NULL || destSize<=0
-    ) {
+        destSize<0 || (destSize>0 && dest==NULL))
+    {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
 
     /* do input and output overlap? */
-    if((text>=dest && text<dest+destSize) ||
-       (dest>=text && dest<text+length))
+    if( dest!=NULL &&
+        ((text>=dest && text<dest+destSize) ||
+         (dest>=text && dest<text+length)))
     {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
@@ -368,13 +395,16 @@ ubidi_writeReordered(UBiDi *pBiDi,
 
     if(length==0) {
         /* nothing to do */
-        return 0;
+        return u_terminateUChars(dest, destSize, 0, pErrorCode);
     }
 
     runCount=ubidi_countRuns(pBiDi, pErrorCode);
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
+
+    /* destSize shrinks, later destination length=destCapacity-destSize */
+    destCapacity=destSize;
 
     /*
      * If we do not perform the "inverse BiDi" algorithm, then we
@@ -392,6 +422,9 @@ ubidi_writeReordered(UBiDi *pBiDi,
      * BN codes or non-BMP code points at the beginning and end of a run;
      * they may insert LRMs unnecessarily but the tests are faster this way
      * (this would have to be improved for UTF-8).
+     *
+     * Note that the only errors that are set by doWriteXY() are buffer overflow
+     * errors. Ignore them until the end, and continue for preflighting.
      */
     if(!(options&UBIDI_OUTPUT_REVERSE)) {
         /* forward output */
@@ -409,9 +442,6 @@ ubidi_writeReordered(UBiDi *pBiDi,
                 }
                 dest+=runLength;
                 destSize-=runLength;
-                if(U_FAILURE(*pErrorCode)) {
-                    return 0;
-                }
             }
         } else {
             /* insert BiDi controls for "inverse BiDi" */
@@ -424,56 +454,42 @@ ubidi_writeReordered(UBiDi *pBiDi,
 
                 if(UBIDI_LTR==dir) {
                     if(/*run>0 &&*/ u_charDirection(*src)!=U_LEFT_TO_RIGHT) {
-                        if(destSize==0) {
-                            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-                            return 0;
+                        if(destSize>0) {
+                            *dest++=LRM_CHAR;
                         }
-                        *dest++=LRM_CHAR;
                         --destSize;
                     }
 
                     runLength=doWriteForward(src, runLength,
                                              dest, destSize,
                                              (uint16_t)(options&~UBIDI_DO_MIRRORING), pErrorCode);
-                    if(U_FAILURE(*pErrorCode)) {
-                        return 0;
-                    }
                     dest+=runLength;
                     destSize-=runLength;
 
                     if(/*run<runCount-1 &&*/ u_charDirection(src[runLength-1])!=U_LEFT_TO_RIGHT) {
-                        if(destSize==0) {
-                            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-                            return 0;
+                        if(destSize>0) {
+                            *dest++=LRM_CHAR;
                         }
-                        *dest++=LRM_CHAR;
                         --destSize;
                     }
                 } else {
                     if(/*run>0 &&*/ !(MASK_R_AL&1UL<<u_charDirection(src[runLength-1]))) {
-                        if(destSize==0) {
-                            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-                            return 0;
+                        if(destSize>0) {
+                            *dest++=RLM_CHAR;
                         }
-                        *dest++=RLM_CHAR;
                         --destSize;
                     }
 
                     runLength=doWriteReverse(src, runLength,
                                              dest, destSize,
                                              options, pErrorCode);
-                    if(U_FAILURE(*pErrorCode)) {
-                        return 0;
-                    }
                     dest+=runLength;
                     destSize-=runLength;
 
                     if(/*run<runCount-1 &&*/ !(MASK_R_AL&1UL<<u_charDirection(*src))) {
-                        if(destSize==0) {
-                            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-                            return 0;
+                        if(destSize>0) {
+                            *dest++=RLM_CHAR;
                         }
-                        *dest++=RLM_CHAR;
                         --destSize;
                     }
                 }
@@ -495,9 +511,6 @@ ubidi_writeReordered(UBiDi *pBiDi,
                 }
                 dest+=runLength;
                 destSize-=runLength;
-                if(U_FAILURE(*pErrorCode)) {
-                    return 0;
-                }
             }
         } else {
             /* insert BiDi controls for "inverse BiDi" */
@@ -511,56 +524,42 @@ ubidi_writeReordered(UBiDi *pBiDi,
 
                 if(UBIDI_LTR==dir) {
                     if(/*run<runCount-1 &&*/ u_charDirection(src[runLength-1])!=U_LEFT_TO_RIGHT) {
-                        if(destSize==0) {
-                            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-                            return 0;
+                        if(destSize>0) {
+                            *dest++=LRM_CHAR;
                         }
-                        *dest++=LRM_CHAR;
                         --destSize;
                     }
 
                     runLength=doWriteReverse(src, runLength,
                                              dest, destSize,
                                              (uint16_t)(options&~UBIDI_DO_MIRRORING), pErrorCode);
-                    if(U_FAILURE(*pErrorCode)) {
-                        return 0;
-                    }
                     dest+=runLength;
                     destSize-=runLength;
 
                     if(/*run>0 &&*/ u_charDirection(*src)!=U_LEFT_TO_RIGHT) {
-                        if(destSize==0) {
-                            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-                            return 0;
+                        if(destSize>0) {
+                            *dest++=LRM_CHAR;
                         }
-                        *dest++=LRM_CHAR;
                         --destSize;
                     }
                 } else {
                     if(/*run<runCount-1 &&*/ !(MASK_R_AL&1UL<<u_charDirection(*src))) {
-                        if(destSize==0) {
-                            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-                            return 0;
+                        if(destSize>0) {
+                            *dest++=RLM_CHAR;
                         }
-                        *dest++=RLM_CHAR;
                         --destSize;
                     }
 
                     runLength=doWriteForward(src, runLength,
                                              dest, destSize,
                                              options, pErrorCode);
-                    if(U_FAILURE(*pErrorCode)) {
-                        return 0;
-                    }
                     dest+=runLength;
                     destSize-=runLength;
 
                     if(/*run>0 &&*/ !(MASK_R_AL&1UL<<u_charDirection(src[runLength-1]))) {
-                        if(destSize==0) {
-                            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-                            return 0;
+                        if(destSize>0) {
+                            *dest++=RLM_CHAR;
                         }
-                        *dest++=RLM_CHAR;
                         --destSize;
                     }
                 }
@@ -568,5 +567,5 @@ ubidi_writeReordered(UBiDi *pBiDi,
         }
     }
 
-    return dest-oldDest;
+    return u_terminateUChars(dest, destCapacity, destCapacity-destSize, pErrorCode);
 }
