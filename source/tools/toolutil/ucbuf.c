@@ -31,20 +31,20 @@ ucbuf_autodetect(FileStream* in,const char** cp){
   char start[3];
   int cap =T_FileStream_size(in);
   if(cap>0){
-	  T_FileStream_read(in, start, 3);
-	  if(start[0] == '\xFE' && start[1] == '\xFF') {
-		  *cp = "UTF16_BigEndian";
-		  autodetect = TRUE;
-	  } else if(start[0] == '\xFF' && start[1] == '\xFE') {
-		  *cp = "UTF16_LittleEndian";
-		  autodetect = TRUE;
-	  } else if(start[0] == '\xEF' && start[1] == '\xBB' && start[2] == '\xBF') {
-		  *cp = "UTF8";
-		  autodetect = TRUE;
-	  }
-	  if(!autodetect){
-		  T_FileStream_rewind(in);
-	  }
+      T_FileStream_read(in, start, 3);
+      if(start[0] == '\xFE' && start[1] == '\xFF') {
+          *cp = "UTF16_BigEndian";
+          autodetect = TRUE;
+      } else if(start[0] == '\xFF' && start[1] == '\xFE') {
+          *cp = "UTF16_LittleEndian";
+          autodetect = TRUE;
+      } else if(start[0] == '\xEF' && start[1] == '\xBB' && start[2] == '\xBF') {
+          *cp = "UTF8";
+          autodetect = TRUE;
+      }
+      if(!autodetect){
+          T_FileStream_rewind(in);
+      }
   }
   return autodetect;
 }
@@ -98,19 +98,14 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
     buf->buffer= pTarget;
     buf->currentPos = pTarget;
     buf->bufLimit=pTarget+numRead;
-	uprv_free(cbuf);
+    uprv_free(cbuf);
     return buf;
 }
 
 /* get a UChar from the stream*/
 U_CAPI UChar32 U_EXPORT2
 ucbuf_getc(UCHARBUF* buf,UErrorCode* err){
-    UChar32 c =0;
-    if(buf->currentPos<buf->bufLimit){
-         c = *(buf->currentPos);
-        buf->currentPos++;
-        return c;
-    }else{
+    if(buf->currentPos>=buf->bufLimit){
         if(buf->remaining==0){
             return U_EOF;
         }
@@ -118,12 +113,9 @@ ucbuf_getc(UCHARBUF* buf,UErrorCode* err){
         if(U_FAILURE(*err)){
             return U_EOF;
         }
-        c = *(buf->currentPos);
-        buf->currentPos++;
-        return c;   
     }
 
-    return 0;
+    return *(buf->currentPos++);
 }
 
 
@@ -143,7 +135,7 @@ ucbuf_getcx(UCHARBUF* buf,UErrorCode* err) {
     
     /* Fill the buffer if it is empty */
     if (buf->currentPos >=buf->bufLimit) {
-        ucbuf_fillucbuf(buf,err);        
+        ucbuf_fillucbuf(buf,err);
     }
 
     /* Get the next character in the buffer */
@@ -218,9 +210,9 @@ ucbuf_open(FileStream* in, const char* cp,UErrorCode* err){
  */
 U_CAPI void U_EXPORT2
 ucbuf_ungetc(UChar32 c,UCHARBUF* buf){
-	/* decrement currentPos pointer
-	 * if not at the begining of buffer
-	 */
+    /* decrement currentPos pointer
+     * if not at the begining of buffer
+     */
     if(buf->currentPos!=buf->buffer){
         buf->currentPos--;
     }
@@ -249,13 +241,13 @@ ucbuf_close(UCHARBUF* buf){
 /* rewind the buf and file stream */
 U_CAPI void U_EXPORT2
 ucbuf_rewind(UCHARBUF* buf){
-	if(buf){
-		const char* cp="";
-		buf->currentPos=buf->buffer;
-		buf->bufLimit=buf->buffer;
-		ucnv_reset(buf->conv);
-		T_FileStream_rewind(buf->in);
-		ucbuf_autodetect(buf->in,&cp);
-		buf->remaining=T_FileStream_size(buf->in);
-	}
+    if(buf){
+        const char* cp="";
+        buf->currentPos=buf->buffer;
+        buf->bufLimit=buf->buffer;
+        ucnv_reset(buf->conv);
+        T_FileStream_rewind(buf->in);
+        ucbuf_autodetect(buf->in,&cp);
+        buf->remaining=T_FileStream_size(buf->in);
+    }
 }
