@@ -31,7 +31,7 @@ SECTION = 1
 ALL_MAN_FILES = $(TARGET).$(SECTION)
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(DEPS)
+CLEANFILES = *~ $(DEPS) $(ALL_MAN_FILES)
 
 ## Target information
 TARGET = uconv
