@@ -4,7 +4,7 @@
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
 */
-// $Revision: 1.14 $
+// $Revision: 1.15 $
 //
 // Provides functionality for mapping between
 // LCID and Posix IDs.
@@ -91,8 +91,6 @@ static const ILcidPosixElement posixID[] = { \
  */
 #define ILCID_POSIX_MAP(_posixID) \
     {sizeof(_posixID)/sizeof(ILcidPosixElement), _posixID}
-//#define ILCID_POSIX_MAP(_posixID) \
-//    {LANGUAGE_LCID(_posixID[0].hostID), #_posixID, sizeof(_posixID)/sizeof(ILcidPosixElement), _posixID}
 
 ////////////////////////////////////////////
 //
