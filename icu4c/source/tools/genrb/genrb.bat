@@ -154,6 +154,18 @@ if "%ICU_DATA%"=="" set ICU_DATA=%2\icu\data\
 %1\genrb %2\icu\data\zh_CN.txt
 %1\genrb %2\icu\data\zh_HK.txt
 %1\genrb %2\icu\data\zh_TW.txt
+rem RuleBasedTransliterator files
+%1\genrb %2\icu\data\translit\expcon.txt
+%1\genrb %2\icu\data\translit\kbdescl1.txt
+%1\genrb %2\icu\data\translit\larabic.txt
+%1\genrb %2\icu\data\translit\ldevan.txt
+%1\genrb %2\icu\data\translit\lgreek.txt
+%1\genrb %2\icu\data\translit\lhalfwid.txt
+%1\genrb %2\icu\data\translit\lhebrew.txt
+%1\genrb %2\icu\data\translit\lkana.txt
+%1\genrb %2\icu\data\translit\lrussian.txt
+%1\genrb %2\icu\data\translit\quotes.txt
+%1\genrb %2\icu\data\translit\ucname.txt
 rem Do the conversion for the test locales
 %1\genrb %2\icu\source\test\testdata\default.txt
 %1\genrb %2\icu\source\test\testdata\te.txt
