@@ -360,6 +360,10 @@ SOURCE=.\uresdata.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\uscript.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\ushape.c
 # ADD CPP /Za
 # End Source File
@@ -1202,6 +1206,10 @@ SOURCE=.\uresdata.h
 # Begin Source File
 
 SOURCE=.\uresimp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\uscript.h
 # End Source File
 # Begin Source File
 
