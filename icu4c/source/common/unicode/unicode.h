@@ -1262,10 +1262,10 @@ Unicode::digit(UChar32 ch, int8_t radix) {
         if (value < 0) {
             // ch is not a decimal digit, try latin letters
             if (ch >= 0x61 && ch <= 0x7A) {
-                value = ch - 0x57;  // ch - 'a' + 10
+                value = (int8_t)(ch - 0x57);  // ch - 'a' + 10
             }
             else if (ch >= 0x41 && ch <= 0x5A) {
-                value = ch - 0x37;  // ch - 'A' + 10
+                value = (int8_t)(ch - 0x37);  // ch - 'A' + 10
             }
         }
     } else {
