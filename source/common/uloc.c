@@ -43,6 +43,10 @@
 typedef struct UnicodeString UnicodeString;
 
 U_CAPI const UChar* T_UnicodeString_getUChars(const UnicodeString *s);
+
+U_CAPI int32_t
+T_UnicodeString_extract(const UnicodeString *s, char *dst);
+
 /* Locale stuff */
 U_CAPI void locale_set_default(const char *id);
 
@@ -1053,6 +1057,7 @@ void _lazyEvaluate_installedLocales()
   UnicodeString** temp;
   char **  temp2;
   int i;
+  int32_t strSize;
   if (_installedLocales == NULL)
     {
       temp = T_ResourceBundle_listInstalledLocales(uloc_getDataDirectory(),
@@ -1061,9 +1066,13 @@ void _lazyEvaluate_installedLocales()
       
       for (i = 0; i < _installedLocalesCount; i++)
     {
+      strSize = u_strlen(T_UnicodeString_getUChars(temp[i]));
+
       temp2[i] = (char*) icu_malloc(sizeof(char) *
-                        (u_strlen(T_UnicodeString_getUChars(temp[i])) + 1));
-      temp2[i] = u_austrcpy(temp2[i], T_UnicodeString_getUChars(temp[i]));
+                        (strSize + 1));
+
+      T_UnicodeString_extract(temp[i], temp2[i]);
+      temp2[i][strSize] = 0; /* Terminate the string */
     }
       {
     umtx_lock(NULL);
