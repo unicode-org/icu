@@ -134,33 +134,19 @@ typedef struct _UTransPosition {
 /********************************************************************
  * General API
  ********************************************************************/
-#if 0
+
 /**
- * Open a system transliterator, given its ID.  Any non-NULL result
- * from this function should later be closed with utrans_close().
+ * Open a custom transliterator, given a custom rules string 
+ * OR 
+ * a system transliterator, given its ID.  
+ * Any non-NULL result from this function should later be closed with
+ * utrans_close().
  *
  * @param id a valid ID, as returned by utrans_getAvailableID()
  * @param dir the desired direction
- * @param status a pointer to the UErrorCode
- * @return a transliterator pointer that may be passed to other
- * utrans_xxx() functions, or NULL if the open call fails.
- * @stable
- */
-U_CAPI UTransliterator*
-utrans_open(const char* id,
-            UTransDirection dir,
-            UErrorCode* status);
-
-/**
- * Open a custom transliterator, given a custom rules string.  Any
- * non-NULL result from this function should later be closed with
- * utrans_close().
- *
- * @param id an ID to be assigned to the given transliterator.  This
- * ID is for informational use only; it is <em>not</em> registered
- * with the system.
  * @param rules the transliterator rules.  See the C++ header rbt.h
- * for rules syntax.
+ * for rules syntax. If NULL then a system transliterator matching 
+ * the ID is returned.
  * @param rulesLength the length of the rules, or -1 if the rules
  * are zero-terminated.
  * @param dir the desired direction
@@ -170,18 +156,6 @@ utrans_open(const char* id,
  * @param status a pointer to the UErrorCode
  * @return a transliterator pointer that may be passed to other
  * utrans_xxx() functions, or NULL if the open call fails.
- * @draft ICU 2.0
- */
-U_CAPI UTransliterator*
-utrans_openRules(const char* id,
-                 const UChar* rules,
-                 int32_t rulesLength, /* -1 if null-terminated */
-                 UTransDirection dir,
-                 UParseError* parseErr, /* may be NULL */
-                 UErrorCode* status);
-#endif
-
-/**
  * @draft ICU 2.0
  */
 U_CAPI UTransliterator*

@@ -115,6 +115,7 @@ typedef void* UNumberFormat;
 
 /** The possible number format styles. */
 enum UNumberFormatStyle {
+    /** Ignore style specification and open the pattern */
     UNUM_IGNORE=0,
     /** Decimal format */
     UNUM_DECIMAL=1,
@@ -148,51 +149,13 @@ enum UNumberFormatPadPosition {
 };
 typedef enum UNumberFormatPadPosition UNumberFormatPadPosition;
 
-#if 0
 /**
 * Open a new UNumberFormat for formatting and parsing numbers.
 * A UNumberFormat may be used to format numbers in calls to \Ref{unum_format},
 * and to parse numbers in calls to \Ref{unum_parse}.
 * @param style The type of number format to open: one of UNUM_DECIMAL, UNUM_CURRENCY,
-* UNUM_PERCENT, UNUM_SPELLOUT, or UNUM_DEFAULT
-* @param locale The locale specifying the formatting conventions
-* @param status A pointer to an UErrorCode to receive any errors
-* @return A pointer to a UNumberFormat to use for formatting numbers, or 0 if
-* an error occurred.
-* @see unum_openPattern
-* @deprecated
-*/
-U_CAPI UNumberFormat*
-unum_open(UNumberFormatStyle    style,
-      const   char*        locale,
-      UErrorCode*        status);
-
-/**
-* Open a new UNumberFormat for formatting and parsing numbers.
-* A UNumberFormat may be used to format numbers in calls to \Ref{unum_format},
-* and to parse numbers in calls to \Ref{unum_parse}.
-* @param pattern A pattern specifying the format to use.
-* @param patternLength The number of characters in the pattern, or -1 if null-terminated.
-* @param locale The locale specifying the formatting conventions
-* @param status A pointer to an UErrorCode to receive any errors
-* @return A pointer to a UNumberFormat to use for formatting numbers, or 0 if
-* an error occurred.
-* @see unum_open
-* @deprecated
-*/
-U_CAPI UNumberFormat*
-unum_openPattern(    const    UChar*        pattern,
-            int32_t            patternLength,
-            const    char*        locale,
-            UErrorCode*        status);
-
-#endif
-/**
-* Open a new UNumberFormat for formatting and parsing numbers.
-* A UNumberFormat may be used to format numbers in calls to \Ref{unum_format},
-* and to parse numbers in calls to \Ref{unum_parse}.
-* @param style The type of number format to open: one of UNUM_DECIMAL, UNUM_CURRENCY,
-* UNUM_PERCENT, UNUM_SPELLOUT, or UNUM_DEFAULT
+* UNUM_PERCENT, UNUM_SPELLOUT, UNUM_DEFAULT or UNUM_IGNORE. If UNUM_IGNORE is passed
+* then the style specification is ignored and a number format is opened with the pattern.
 * @param pattern A pattern specifying the format to use.
 * @param patternLength The number of characters in the pattern, or -1 if null-terminated.
 * @param locale The locale specifying the formatting conventions
