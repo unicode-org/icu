@@ -68,7 +68,7 @@ static const UChar HEX[16] = {48,49,50,51,52,53,54,55,  // 0-7
  * Return true if the character is NOT printable ASCII.
  */
 UBool ICU_Utility::isUnprintable(UChar32 c) {
-    return !(c == 0x0A || (c >= 0x20 && c <= 0x7E));
+    return !(c >= 0x20 && c <= 0x7E);
 }
 
 /**
