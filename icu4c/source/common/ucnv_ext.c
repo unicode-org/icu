@@ -45,7 +45,7 @@
  */
 static U_INLINE uint32_t
 ucnv_extFindToU(const uint32_t *toUSection, int32_t length, uint8_t byte) {
-    uint32_t word;
+    uint32_t word0, word;
     int32_t i, start, limit;
 
     /* check the input byte against the lowest and highest section bytes */
@@ -60,6 +60,9 @@ ucnv_extFindToU(const uint32_t *toUSection, int32_t length, uint8_t byte) {
         return UCNV_EXT_TO_U_GET_VALUE(toUSection[byte-start]); /* could be 0 */
     }
 
+    /* word0 is suitable for <=toUSection[] comparison, word for <toUSection[] */
+    word0=UCNV_EXT_TO_U_MAKE_WORD(byte, 0);
+
     /*
      * Shift byte once instead of each section word and add 0xffffff.
      * We will compare the shifted/added byte (bbffffff) against
@@ -68,7 +71,7 @@ ucnv_extFindToU(const uint32_t *toUSection, int32_t length, uint8_t byte) {
      * for all v=0..f
      * so we need not mask off the lower 24 bits of each section word.
      */
-    word=UCNV_EXT_TO_U_MAKE_WORD(byte, UCNV_EXT_TO_U_VALUE_MASK);
+    word=word0|UCNV_EXT_TO_U_VALUE_MASK;
 
     /* binary search */
     start=0;
@@ -82,13 +85,13 @@ ucnv_extFindToU(const uint32_t *toUSection, int32_t length, uint8_t byte) {
 
         if(i<=4) {
             /* linear search for the last part */
-            if(word>=toUSection[start]) {
+            if(word<=toUSection[start]) {
                 break;
             }
-            if(++start<limit && word>=toUSection[start]) {
+            if(++start<limit && word<=toUSection[start]) {
                 break;
             }
-            if(++start<limit && word>=toUSection[start]) {
+            if(++start<limit && word<=toUSection[start]) {
                 break;
             }
             /* always break at start==limit-1 */
@@ -243,6 +246,14 @@ ucnv_extWriteToU(UConverter *cnv, const int32_t *cx,
 }
 
 /*
+ * TRUE if not an SI/SO stateful charset,
+ * or if the match length fits with the current converter state
+ */
+#define UCNV_EXT_TO_U_VERIFY_SISO_MATCH(cnv, match) \
+    ((cnv)->sharedData->table->mbcs.outputType!=MBCS_OUTPUT_2_SISO || \
+     ((uint8_t)(cnv->mode)==0) == (match==1))
+
+/*
  * target<targetLimit; set error code for overflow
  */
 U_CFUNC UBool
@@ -262,7 +273,7 @@ ucnv_extInitialMatchToU(UConverter *cnv, const int32_t *cx,
                            *src, (int32_t)(srcLimit-*src),
                            &value,
                            cnv->useFallback, flush);
-    if(match>0) {
+    if(match>0 && UCNV_EXT_TO_U_VERIFY_SISO_MATCH(cnv, match)) {
         /* advance src pointer for the consumed input */
         *src+=match-firstLength;
 
@@ -351,7 +362,7 @@ ucnv_extContinueMatchToU(UConverter *cnv,
                            pArgs->source, (int32_t)(pArgs->sourceLimit-pArgs->source),
                            &value,
                            cnv->useFallback, pArgs->flush);
-    if(match>0) {
+    if(match>0 && UCNV_EXT_TO_U_VERIFY_SISO_MATCH(cnv, match)) {
         if(match>=cnv->preToULength) {
             /* advance src pointer for the consumed input */
             pArgs->source+=match-cnv->preToULength;
@@ -440,13 +451,13 @@ ucnv_extFindFromU(const UChar *fromUSection, int32_t length, UChar u) {
 
         if(i<=4) {
             /* linear search for the last part */
-            if(u>=fromUSection[start]) {
+            if(u<=fromUSection[start]) {
                 break;
             }
-            if(++start<limit && u>=fromUSection[start]) {
+            if(++start<limit && u<=fromUSection[start]) {
                 break;
             }
-            if(++start<limit && u>=fromUSection[start]) {
+            if(++start<limit && u<=fromUSection[start]) {
                 break;
             }
             /* always break at start==limit-1 */
@@ -640,9 +651,9 @@ ucnv_extWriteFromU(UConverter *cnv, const int32_t *cx,
                    char **target, const char *targetLimit,
                    int32_t **offsets, int32_t srcIndex,
                    UErrorCode *pErrorCode) {
-    uint8_t buffer[4];
+    uint8_t buffer[1+UCNV_EXT_MAX_BYTES];
     const uint8_t *result;
-    int32_t length;
+    int32_t length, prevLength;
 
     length=(int32_t)UCNV_EXT_FROM_U_GET_LENGTH(value);
     value=(uint32_t)UCNV_EXT_FROM_U_GET_DATA(value);
@@ -655,7 +666,7 @@ ucnv_extWriteFromU(UConverter *cnv, const int32_t *cx,
          * extension mappings, and it is much simpler.
          * Offset and overflow handling are only done once this way.
          */
-        uint8_t *p=buffer;
+        uint8_t *p=buffer+1; /* reserve buffer[0] for shiftByte below */
         switch(length) {
         case 3:
             *p++=(uint8_t)(value>>16);
@@ -666,12 +677,40 @@ ucnv_extWriteFromU(UConverter *cnv, const int32_t *cx,
         default:
             break; /* will never occur */
         }
-        result=buffer;
+        result=buffer+1;
     } else {
         result=UCNV_EXT_ARRAY(cx, UCNV_EXT_FROM_U_BYTES_INDEX, uint8_t)+value;
     }
 
-    /* with correct data we have resultLength>0 */
+    /* with correct data we have length>0 */
+
+    if((prevLength=cnv->fromUnicodeStatus)!=0) {
+        /* handle SI/SO stateful output */
+        uint8_t shiftByte;
+
+        if(prevLength>1 && length==1) {
+            /* change from double-byte mode to single-byte */
+            shiftByte=(uint8_t)UCNV_SI;
+            cnv->fromUnicodeStatus=1;
+        } else if(prevLength==1 && length>1) {
+            /* change from single-byte mode to double-byte */
+            shiftByte=(uint8_t)UCNV_SO;
+            cnv->fromUnicodeStatus=2;
+        } else {
+            shiftByte=0;
+        }
+
+        if(shiftByte!=0) {
+            /* prepend the shift byte to the result bytes */
+            buffer[0]=shiftByte;
+            if(result!=buffer+1) {
+                uprv_memcpy(buffer+1, result, length);
+            }
+            result=buffer;
+            ++length;
+        }
+    }
+
     ucnv_fromUWriteBytes(cnv, (const char *)result, length,
                          target, targetLimit,
                          offsets, srcIndex,
