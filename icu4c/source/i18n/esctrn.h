@@ -137,17 +137,6 @@ class U_I18N_API EscapeTransliterator : public Transliterator {
     virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
                              UBool isIncremental) const;
 
- private:
-
-    /**
-     * Factory methods
-     */
-    static Transliterator* _createUnicode(const UnicodeString& ID, Token context);
-    static Transliterator* _createJava(const UnicodeString& ID, Token context);
-    static Transliterator* _createC(const UnicodeString& ID, Token context);
-    static Transliterator* _createXML(const UnicodeString& ID, Token context);
-    static Transliterator* _createXML10(const UnicodeString& ID, Token context);
-    static Transliterator* _createPerl(const UnicodeString& ID, Token context);
 };
 
 U_NAMESPACE_END
