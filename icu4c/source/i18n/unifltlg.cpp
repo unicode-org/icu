@@ -7,27 +7,52 @@
 *   11/17/99    aliu        Creation.
 **********************************************************************
 */
+
+//////////////////////////////////////////////////////////////
+//
+// NOTICE - Do not use
+//
+// This entire file has been deprecated as of ICU 2.4.
+//
+//////////////////////////////////////////////////////////////
+
 #include "unicode/unifltlg.h"
 #include "unicode/unifilt.h"
 
 U_NAMESPACE_BEGIN
 
 /**
+ * This class stubs out UnicodeMatcher API that we don't implement.
+ */
+class _UF: public UnicodeFilter {
+
+    // Stubs
+    virtual UnicodeString& toPattern(UnicodeString& result,
+                                     UBool escapeUnprintable) const {
+        return result;
+    }
+    virtual UBool matchesIndexValue(uint8_t v) const {
+        return FALSE;
+    }
+    virtual void addMatchSetTo(UnicodeSet& toUnionTo) const {}
+};
+
+/**
  * A NullFilter always returns a fixed value, either TRUE or FALSE.
  * A filter value of 0 (that is, a UnicodeFilter* f, where f == 0)
  * is equivalent to a NullFilter(TRUE).
  */
-class NullFilter : public UnicodeFilter {
+class NullFilter : public _UF {
     UBool result;
 public:
     NullFilter(UBool r) { result = r; }
-    NullFilter(const NullFilter& f) : UnicodeFilter(f) { result = f.result; }
+    NullFilter(const NullFilter& f) : _UF(f) { result = f.result; }
     virtual ~NullFilter() {}
     virtual UBool contains(UChar32 /*c*/) const { return result; }
     virtual UnicodeFunctor* clone() const { return new NullFilter(*this); }
 };
 
-class UnicodeNotFilter : public UnicodeFilter {
+class UnicodeNotFilter : public _UF {
     UnicodeFilter* filt;
 public:
     UnicodeNotFilter(UnicodeFilter* adopted);
@@ -39,7 +64,7 @@ public:
 
 UnicodeNotFilter::UnicodeNotFilter(UnicodeFilter* adopted) : filt(adopted) {}
 UnicodeNotFilter::UnicodeNotFilter(const UnicodeNotFilter& f)
- : UnicodeFilter(f), filt((UnicodeFilter*) f.filt->clone()) {}
+ : _UF(f), filt((UnicodeFilter*) f.filt->clone()) {}
 UnicodeNotFilter::~UnicodeNotFilter() { delete filt; }
 UBool UnicodeNotFilter::contains(UChar32 c) const { return !filt->contains(c); }
 UnicodeFunctor* UnicodeNotFilter::clone() const { return new UnicodeNotFilter(*this); }
@@ -56,7 +81,7 @@ UnicodeFilter* UnicodeFilterLogic::createNot(const UnicodeFilter* f) {
     }
 }
 
-class UnicodeAndFilter : public UnicodeFilter {
+class UnicodeAndFilter : public _UF {
     UnicodeFilter* filt1;
     UnicodeFilter* filt2;
 public:
@@ -69,7 +94,7 @@ public:
 
 UnicodeAndFilter::UnicodeAndFilter(UnicodeFilter* f1, UnicodeFilter* f2) : filt1(f1), filt2(f2) {}
 UnicodeAndFilter::UnicodeAndFilter(const UnicodeAndFilter& f)
- : UnicodeFilter(f), filt1((UnicodeFilter*)f.filt1->clone()), filt2((UnicodeFilter*)f.filt2->clone()) {}
+ : _UF(f), filt1((UnicodeFilter*)f.filt1->clone()), filt2((UnicodeFilter*)f.filt2->clone()) {}
 UnicodeAndFilter::~UnicodeAndFilter() { delete filt1; delete filt2; }
 UBool UnicodeAndFilter::contains(UChar32 c) const { return filt1->contains(c) && filt2->contains(c); }
 UnicodeFunctor* UnicodeAndFilter::clone() const { return new UnicodeAndFilter(*this); }
@@ -116,7 +141,7 @@ UnicodeFilter* UnicodeFilterLogic::createAdoptingAnd(UnicodeFilter* f,
     return new UnicodeAndFilter(f, g);
 }
 
-class UnicodeOrFilter : public UnicodeFilter {
+class UnicodeOrFilter : public _UF {
     UnicodeFilter* filt1;
     UnicodeFilter* filt2;
 public:
@@ -129,7 +154,7 @@ public:
 
 UnicodeOrFilter::UnicodeOrFilter(UnicodeFilter* f1, UnicodeFilter* f2) : filt1(f1), filt2(f2) {}
 UnicodeOrFilter::UnicodeOrFilter(const UnicodeOrFilter& f)
- : UnicodeFilter(f), filt1((UnicodeFilter*)f.filt1->clone()), filt2((UnicodeFilter*)f.filt2->clone()) {}
+ : _UF(f), filt1((UnicodeFilter*)f.filt1->clone()), filt2((UnicodeFilter*)f.filt2->clone()) {}
 UnicodeOrFilter::~UnicodeOrFilter() { delete filt1; delete filt2; }
 UBool UnicodeOrFilter::contains(UChar32 c) const { return filt1->contains(c) || filt2->contains(c); }
 UnicodeFunctor* UnicodeOrFilter::clone() const { return new UnicodeOrFilter(*this); }

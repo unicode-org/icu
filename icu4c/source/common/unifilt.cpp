@@ -53,21 +53,6 @@ UMatchDegree UnicodeFilter::matches(const Replaceable& text,
     return U_MISMATCH;
 }
 
-// Stub this out for filters that do not implement a pattern
-UnicodeString& UnicodeFilter::toPattern(UnicodeString& result,
-                                        UBool escapeUnprintable) const {
-    return result;
-}
-
-// Stub this out for filters that do not implement indexing
-UBool UnicodeFilter::matchesIndexValue(uint8_t v) const {
-    return FALSE;
-}
-
-// Stub this out for filters that do not implement this
-void UnicodeFilter::addMatchSetTo(UnicodeSet& toUnionTo) const {
-}
-
 U_NAMESPACE_END
 
 //eof
