@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-1999, International Business Machines
+*   Copyright (C) 1997-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -198,6 +198,7 @@ public:
 
     /**
      * Returns the locale for which this object was constructed.
+     * @stable ICU 2.6
      */
     inline Locale getLocale() const;
 
