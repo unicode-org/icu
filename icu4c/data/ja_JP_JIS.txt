@@ -9,72 +9,16 @@ ja_JP_JIS {
     CollationElements { 
         Version { "3.0" }
         Sequence {
-        // Make Hiragana, Katakana & compatibility forms equal on the first three levels
-        "&\u30A1=\u3041=\uff67" // SMALL A
-        "&\u30A2=\u3042=\uff71" // A
-        "&\u30A3=\u3043=\uff68" // SMALL I
-        "&\u30A4=\u3044=\uff72" // I
-        "&\u30A5=\u3045=\uff69" // SMALL U
-        "&\u30A6=\u3046=\uff73" // U
-        "&\u30A7=\u3047=\uff6a" // SMALL E
-        "&\u30A8=\u3048=\uff74" // E
-        "&\u30A9=\u3049=\uff6b" // SMALL O
-        "&\u30AA=\u304A=\uff75" // O
-        "&\u30AB=\u304B=\uff76" // KA
-        "&\u30AD=\u304D=\uff77" // KI
-        "&\u30AF=\u304F=\uff78" // KU
-        "&\u30B1=\u3051=\uff79" // KE
-        "&\u30B3=\u3053=\uff7a" // KO
-        "&\u30B5=\u3055=\uff7b" // SA
-        "&\u30B7=\u3057=\uff7c" // SI
-        "&\u30B9=\u3059=\uff7d" // SU
-        "&\u30BB=\u305B=\uff7e" // SE
-        "&\u30BD=\u305D=\uff7f" // SO
-        "&\u30BF=\u305F=\uff80" // TA
-        "&\u30C1=\u3061=\uff81" // TI
-        "&\u30C3=\u3063=\uff6f" // SMALL TU
-        "&\u30C4=\u3064=\uff82" // TU
-        "&\u30C6=\u3066=\uff83" // TE
-        "&\u30C8=\u3068=\uff84" // TO
-        "&\u30CA=\u306A=\uff85" // NA
-        "&\u30CB=\u306B=\uff86" // NI
-        "&\u30CC=\u306C=\uff87" // NU
-        "&\u30CD=\u306D=\uff88" // NE
-        "&\u30CE=\u306E=\uff89" // NO
-        "&\u30CF=\u306F=\uff8a" // HA
-        "&\u30D2=\u3072=\uff8b" // HI
-        "&\u30D5=\u3075=\uff8c" // HU
-        "&\u30D8=\u3078=\uff8d" // HE
-        "&\u30DB=\u307B=\uff8e" // HO
-        "&\u30DE=\u307E=\uff8f" // MA
-        "&\u30DF=\u307F=\uff90" // MI
-        "&\u30E0=\u3080=\uff91" // MU
-        "&\u30E1=\u3081=\uff92" // ME
-        "&\u30E2=\u3082=\uff93" // MO
-        "&\u30E3=\u3083=\uff6c" // SMALL YA
-        "&\u30E4=\u3084=\uff94" // YA
-        "&\u30E5=\u3085=\uff6d" // SMALL YU
-        "&\u30E6=\u3086=\uff95" // YU
-        "&\u30E7=\u3087=\uff6e" // SMALL YO
-        "&\u30E8=\u3088=\uff96" // YO
-        "&\u30E9=\u3089=\uff97" // RA
-        "&\u30EA=\u308A=\uff98" // RI
-        "&\u30EB=\u308B=\uff99" // RU
-        "&\u30EC=\u308C=\uff9a" // RE
-        "&\u30ED=\u308D=\uff9b" // RO
-        "&\u30EE=\u308E"        // SMALL WA
-        "&\u30EF=\u308F=\uff9c" // WA
-        "&\u30F0=\u3090"        // WI
-        "&\u30F1=\u3091"        // WE
-        "&\u30F2=\u3092=\uff66" // WO
-        "&\u30F3=\u3093=\uff9d" // N
+        "[strength 4][hiraganaQ on]"
+        "&\u309e=\u309e"
+        "&\u309d=\u309d"
 
         "&\u30fc=\uff70" // KATAKANA-HIRAGANA PROLONGED SOUND MARK
 
         "&\u3099=\uff9e" // VOICED SOUND MARK
         "&\u309a=\uff9f" // SEMI-VOICED SOUND MARK
 
-        "&[before 3]\u30a2"
+        "&[before 3]\u30a1"
         "<<<\u30a1|\u30fc=\u30a2|\u30fc=\u30ab|\u30fc=\u30f5|\u30fc"
           "=\u30b5|\u30fc=\u30bf|\u30fc=\u30ca|\u30fc=\u30cf|\u30fc"
           "=\u30de|\u30fc=\u30e3|\u30fc=\u30e4|\u30fc=\u30e9|\u30fc"
@@ -82,7 +26,7 @@ ja_JP_JIS {
           "=\u30ab\u3099|\u30fc=\u30b5\u3099|\u30fc=\u30bf\u3099|\u30fc=\u30cf\u3099|\u30fc"
           "=\u30cf\u309a|\u30fc"
 
-        "&[before 3]\u30a4"
+        "&[before 3]\u30a3"
         "<<<\u30a3|\u30fc=\u30a4|\u30fc=\u30ad|\u30fc=\u30b7|\u30fc"
           "=\u30c1|\u30fc=\u30cb|\u30fc=\u30d2|\u30fc=\u30df|\u30fc"
           "=\u30ea|\u30fc=\u30f0|\u30fc"
@@ -90,7 +34,7 @@ ja_JP_JIS {
           "=\u30d2\u3099|\u30fc=\u30f0\u3099\u30fc"
           "=\u30d2\u309a\u30fc"
 
-        "&[before 3]\u30a6"
+        "&[before 3]\u30a5"
         "<<<\u30a5|\u30fc=\u30a6|\u30fc=\u30af|\u30fc=\u30b9|\u30fc"
           "=\u30c4|\u30fc=\u30c3|\u30fc=\u30cc|\u30fc=\u30d5|\u30fc"
           "=\u30e0|\u30fc=\u30e5|\u30fc=\u30e6|\u30fc=\u30eb|\u30fc"
@@ -98,21 +42,21 @@ ja_JP_JIS {
           "=\u30d5\u3099|\u30fc=\u30a6\u3099|\u30fc"
           "=\u30d5\u309a\u30fc"
 
-        "&[before 3]\u30a8"
+        "&[before 3]\u30a7"
         "<<<\u30a7|\u30fc=\u30a8|\u30fc=\u30b1|\u30fc=\u30f6|\u30fc"
           "=\u30bb|\u30fc=\u30c6|\u30fc=\u30cd|\u30fc=\u30d8|\u30fc"
           "=\u30e1|\u30fc=\u30ec|\u30fc=\u30f1|\u30fc"
-          "=\u30b1\u3099|\u30fc=\u30bb\u3099|\u30fc\u30c6\u3099|\u30fc"
+          "=\u30b1\u3099|\u30fc=\u30bb\u3099|\u30fc=\u30c6\u3099|\u30fc"
           "=\u30d8\u3099|\u30fc=\u30f1\u3099|\u30fc"
           "=\u30d8\u309a|\u30fc"
 
-        "&[before 3]\u30aa"
+        "&[before 3]\u30a9"
         "<<<\u30a9|\u30fc=\u30aa|\u30fc=\u30b3|\u30fc=\u30bd|\u30fc"
           "=\u30c8|\u30fc=\u30ce|\u30fc=\u30db|\u30fc=\u30e2|\u30fc"
           "=\u30e7|\u30fc=\u30e8|\u30fc=\u30ed|\u30fc=\u30f2|\u30fc"
           "=\u30b3\u3099|\u30fc=\u30bd\u3099|\u30fc=\u30c8\u3099|\u30fc"
           "=\u30db\u3099|\u30fc=\u30f2\u3099|\u30fc"
-          "=\u30db\u309a|\u30aa=\u30db\u309a|\u30fc"
+          "=\u30db\u309a|\u30fc=\u30db\u309a|\u30fc"
 
         // Iteration mark - these should probably go as a tertiary difference above
 
@@ -122,7 +66,7 @@ ja_JP_JIS {
         "&[before 3]\u30a4<<<\u30a4|\u30fd=\u3044|\u309d" // I
         "=\u30a3|\u30fd=\u3043|\u309d"                    // SMALL I
 
-        "&[before 3]\u30a6<<<\u30a6|\u30fd=\u3046|\u309d  // U
+        "&[before 3]\u30a6<<<\u30a6|\u30fd=\u3046|\u309d"  // U
         "=\u30a5|\u30fd=\u3045|\u309d"                    // SMALL U
 
         "&[before 3]\u30a8<<<\u30a8|\u30fd=\u3048|\u309d" // E
@@ -150,7 +94,7 @@ ja_JP_JIS {
         "=\u30f6|\u30fe/\u3099" // SMALL KE FOLLOWED BY A VOICED ITERATION MARK
 
         "&[before 3]\u30b3<<<\u30b3|\u30fd=\u30b3\u3099|\u30fd=\u3053|\u309d=\u3053\u3099|\u309d" // KO
-        "\u30b3|\u30fe/\u3099=\u30b3\u3099|\u30fe/\u3099=\u3053|\u309e/\u3099=\u3053\u3099|\u309e/\u3099" // GO
+        "=\u30b3|\u30fe/\u3099=\u30b3\u3099|\u30fe/\u3099=\u3053|\u309e/\u3099=\u3053\u3099|\u309e/\u3099" // GO
 
         "&[before 3]\u30b5<<<\u30b5|\u30fd=\u30b5\u3099|\u30fd=\u3055|\u309d=\u3055\u3099|\u309d" // SA
         "=\u30b5|\u30fe/\u3099=\u30b5\u3099|\u30fe/\u3099=\u3055|\u309e/\u3099=\u3055\u3099|\u309e/\u3099" // ZA
@@ -165,7 +109,7 @@ ja_JP_JIS {
         "=\u30bb|\u30fe/\u3099=\u30bb\u3099|\u30fe/\u3099=\u305b|\u309e/\u3099=\u305b\u3099|\u309e/\u3099" // ZE
 
         "&[before 3]\u30bd<<<\u30bd|\u30fd=\u30bd\u3099|\u30fd=\u305d|\u309d=\u305d\u3099|\u309d" // SO
-        "=\u30bd|\u30fe/\u3099=\u30bd\u3099|\u30fe/\u3099<=\u305d|\u309e/\u3099=\u305d\u3099|\u309e/\u3099" // SO
+        "=\u30bd|\u30fe/\u3099=\u30bd\u3099|\u30fe/\u3099=\u305d|\u309e/\u3099=\u305d\u3099|\u309e/\u3099" // ZO
 
         "&[before 3]\u30bf<<<\u30bf|\u30fd=\u30bf\u3099|\u30fd=\u305f|\u309d=\u305f\u3099|\u309d" // TA
         "=\u30bf|\u30fe/\u3099=\u30bf\u3099|\u30fe/\u3099=\u305f|\u309e/\u3099=\u305f\u3099|\u309e/\u3099" // DA
@@ -194,20 +138,30 @@ ja_JP_JIS {
 
         "&[before 3]\u30ce<<<\u30ce|\u30fd=\u306e|\u309d" // NO
 
-        "&[before 3]\u30cf<<<\u30cf|\u30fd=\u30cf\u3099|\u30fd=\u30cf\u309a|\u30fd=\u306f|\u309d=\u306f\u3099|\u309d=\u306f\u309a|\u309d" // HA
-        "=\u30cf|\u30fe/\u3099=\u30cf\u309a|\u30fe/\u3099=\u30cf\u3099|\u30fe/\u3099=\u306f|\u309e/\u3099=\u306f\u309a|\u309e/\u3099=\u306f\u3099|\u309e/\u3099" // BA
+        "&[before 3]\u30cf<<<\u30cf|\u30fd=\u30cf\u3099|\u30fd=\u30cf\u309a|\u30fd"
+        "=\u306f|\u309d=\u306f\u3099|\u309d=\u306f\u309a|\u309d" // HA
+        "=\u30cf|\u30fe/\u3099=\u30cf\u309a|\u30fe/\u3099=\u30cf\u3099|\u30fe/\u3099
+        "=\u306f|\u309e/\u3099=\u306f\u309a|\u309e/\u3099=\u306f\u3099|\u309e/\u3099" // BA
 
-        "&[before 3]\u30d2<<<\u30d2|\u30fd=\u30d2\u3099|\u30fd=\u30d2\u309a|\u30fd=\u3072|\u309d=\u3072\u3099|\u309d=\u3072\u309a|\u309d" // HI
-        "=\u30d2|\u30fe/\u3099=\u30d2\u309a|\u30fe/\u3099=\u30d2\u3099|\u30fe/\u3099=\u3072|\u309e/\u3099=\u3072\u309a|\u309e/\u3099=\u3072\u3099|\u309e/\u3099" // BI
+        "&[before 3]\u30d2<<<\u30d2|\u30fd=\u30d2\u3099|\u30fd=\u30d2\u309a|\u30fd"
+        "=\u3072|\u309d=\u3072\u3099|\u309d=\u3072\u309a|\u309d" // HI
+        "=\u30d2|\u30fe/\u3099=\u30d2\u309a|\u30fe/\u3099=\u30d2\u3099|\u30fe/\u3099"
+        "=\u3072|\u309e/\u3099=\u3072\u309a|\u309e/\u3099=\u3072\u3099|\u309e/\u3099" // BI
 
-        "&[before 3]\u30d5<<<\u30d5|\u30fd=\u30d5\u3099|\u30fd=\u30d5\u309a|\u30fd=\u3075|\u309d=\u3075\u3099|\u309d=\u3075\u309a|\u309d" // HU
-        "=\u30d5|\u30fe/\u3099=\u30d5\u309a|\u30fe/\u3099=\u30d5\u3099|\u30fe/\u3099=\u3075|\u309e/\u3099=\u3075\u309a|\u309e/\u3099=\u3075\u3099|\u309e/\u3099" // BU
+        "&[before 3]\u30d5<<<\u30d5|\u30fd=\u30d5\u3099|\u30fd=\u30d5\u309a|\u30fd"
+        "=\u3075|\u309d=\u3075\u3099|\u309d=\u3075\u309a|\u309d" // HU
+        "=\u30d5|\u30fe/\u3099=\u30d5\u309a|\u30fe/\u3099=\u30d5\u3099|\u30fe/\u3099"
+        "=\u3075|\u309e/\u3099=\u3075\u309a|\u309e/\u3099=\u3075\u3099|\u309e/\u3099" // BU
 
-        "&[before 3]\u30d8<<<\u30d8|\u30fd=\u30d8\u3099|\u30fd=\u30d8\u309a|\u30fd=\u3078|\u309d=\u3078\u3099|\u309d=\u3078\u309a|\u309d" // HE
-        "=\u30d8|\u30fe/\u3099=\u30d8\u309a|\u30fe/\u3099=\u30d8\u3099|\u30fe/\u3099=\u3078|\u309e/\u3099=\u3078\u309a|\u309e/\u3099=\u3078\u3099|\u309e/\u3099" // BE
+        "&[before 3]\u30d8<<<\u30d8|\u30fd=\u30d8\u3099|\u30fd=\u30d8\u309a|\u30fd"
+        "=\u3078|\u309d=\u3078\u3099|\u309d=\u3078\u309a|\u309d" // HE
+        "=\u30d8|\u30fe/\u3099=\u30d8\u309a|\u30fe/\u3099=\u30d8\u3099|\u30fe/\u3099"
+        "=\u3078|\u309e/\u3099=\u3078\u309a|\u309e/\u3099=\u3078\u3099|\u309e/\u3099" // BE
 
-        "&[before 3]\u30db<<<\u30db|\u30fd=\u30db\u3099|\u30fd=\u30db\u309a|\u30fd=\u307b|\u309d=\u307b\u3099|\u309d=\u307b\u309a|\u309d" // HO
-        "=\u30db|\u30fe/\u3099=\u30db\u309a|\u30fe/\u3099=\u30db\u3099|\u30fe/\u3099=\u307b|\u309e/\u3099=\u307b\u309a|\u309e/\u3099=\u307b\u3099|\u309e/\u3099" // HO
+        "&[before 3]\u30db<<<\u30db|\u30fd=\u30db\u3099|\u30fd=\u30db\u309a|\u30fd"
+        "=\u307b|\u309d=\u307b\u3099|\u309d=\u307b\u309a|\u309d" // HO
+        "=\u30db|\u30fe/\u3099=\u30db\u309a|\u30fe/\u3099=\u30db\u3099|\u30fe/\u3099"
+        "=\u307b|\u309e/\u3099=\u307b\u309a|\u309e/\u3099=\u307b\u3099|\u309e/\u3099" // HO
 
         "&[before 3]\u30de<<<\u30de|\u30fd=\u307e|\u309d" // MA
 
@@ -219,13 +173,10 @@ ja_JP_JIS {
  
         "&[before 3]\u30e2<<<\u30e2|\u30fd=\u3082|\u309d" // MO
 
-        //"&\u30e3<<<\u30e3|\u30fd=\u3083|\u309d" // SMALL YA
         "&[before 3]\u30e4<<<\u30e4|\u30fd=\u3084|\u309d=\u30e3|\u30fd=\u3083|\u309d" // YA
 
-        //"&\u30e5<<<\u30e5|\u30fd=\u3085|\u309d" // SMALL YU
         "&[before 3]\u30e6<<<\u30e6|\u30fd=\u3086|\u309d=\u30e5|\u30fd=\u3085|\u309d" // YU
 
-        //"&\u30e7<<<\u30e7|\u30fd=\u3087|\u309d" // SMALL YO
         "&[before 3]\u30e8<<<\u30e8|\u30fd=\u3088|\u309d=\u30e7|\u30fd=\u3087|\u309d" // YO
 
         "&[before 3]\u30e9<<<\u30e9|\u30fd=\u3089|\u309d" // RA
@@ -238,7 +189,6 @@ ja_JP_JIS {
 
         "&[before 3]\u30ed<<<\u30ed|\u30fd=\u308d|\u309d" // RO
 
-        //"&\u30ee<<<\u30ee|\u30fd=\u308e|\u309d" // SMALL WA
 
         "&[before 3]\u30ef<<<\u30ef|\u30fd=\u30ef\u3099|\u30fd=\u308f|\u309d" // WA
         "=\u30ee|\u30fd=\u308e|\u309d" // SMALL WA
@@ -252,7 +202,7 @@ ja_JP_JIS {
         "=\u30f1|\u30fe/\u3099=\u30f1\u3099|\u30fe/\u3099" // VE
 
         "&[before 3]\u30f2<<<\u30f2|\u30fd=\u30f2\u3099|\u30fd=\u3092|\u309d" // WO
-        "\u30f2|\u30fe/\u3099=\u30f2\u3099|\u30fe/\u3099" // VO
+        "=\u30f2|\u30fe/\u3099=\u30f2\u3099|\u30fe/\u3099" // VO
 
         "&[before 3]\u30f3<<<\u30f3|\u30fd=\u3093|\u309d" // N
 
@@ -1087,6 +1037,71 @@ ja_JP_JIS {
         "&'\u25a0'=\uffed" // HALFWIDTH BLACK SQUARE
         "&'\u25cb'=\uffee" // HALFWIDTH WHITE CIRCLE
 
+        // Make Hiragana, Katakana & compatibility forms equal on the first three levels
+        "&\u30A1=\u3041=\uff67" // SMALL A
+        "&\u30A2=\u3042=\uff71" // A
+        "&\u30A3=\u3043=\uff68" // SMALL I
+        "&\u30A4=\u3044=\uff72" // I
+        "&\u30A5=\u3045=\uff69" // SMALL U
+        "&\u30A6=\u3046=\uff73" // U
+        "&\u30A7=\u3047=\uff6a" // SMALL E
+        "&\u30A8=\u3048=\uff74" // E
+        "&\u30A9=\u3049=\uff6b" // SMALL O
+        "&\u30AA=\u304A=\uff75" // O
+        "&\u30AB=\u304B=\uff76" // KA
+        "&\u30AD=\u304D=\uff77" // KI
+        "&\u30AF=\u304F=\uff78" // KU
+        "&\u30B1=\u3051=\uff79" // KE
+        "&\u30B3=\u3053=\uff7a" // KO
+        "&\u30B5=\u3055=\uff7b" // SA
+        "&\u30B7=\u3057=\uff7c" // SI
+        "&\u30B9=\u3059=\uff7d" // SU
+        "&\u30BB=\u305B=\uff7e" // SE
+        "&\u30BD=\u305D=\uff7f" // SO
+        "&\u30BF=\u305F=\uff80" // TA
+        "&\u30C1=\u3061=\uff81" // TI
+        "&\u30C3=\u3063=\uff6f" // SMALL TU
+        "&\u30C4=\u3064=\uff82" // TU
+        "&\u30C6=\u3066=\uff83" // TE
+        "&\u30C8=\u3068=\uff84" // TO
+        "&\u30CA=\u306A=\uff85" // NA
+        "&\u30CB=\u306B=\uff86" // NI
+        "&\u30CC=\u306C=\uff87" // NU
+        "&\u30CD=\u306D=\uff88" // NE
+        "&\u30CE=\u306E=\uff89" // NO
+        "&\u30CF=\u306F=\uff8a" // HA
+        "&\u30D2=\u3072=\uff8b" // HI
+        "&\u30D5=\u3075=\uff8c" // HU
+        "&\u30D8=\u3078=\uff8d" // HE
+        "&\u30DB=\u307B=\uff8e" // HO
+        "&\u30DE=\u307E=\uff8f" // MA
+        "&\u30DF=\u307F=\uff90" // MI
+        "&\u30E0=\u3080=\uff91" // MU
+        "&\u30E1=\u3081=\uff92" // ME
+        "&\u30E2=\u3082=\uff93" // MO
+        "&\u30E3=\u3083=\uff6c" // SMALL YA
+        "&\u30E4=\u3084=\uff94" // YA
+        "&\u30E5=\u3085=\uff6d" // SMALL YU
+        "&\u30E6=\u3086=\uff95" // YU
+        "&\u30E7=\u3087=\uff6e" // SMALL YO
+        "&\u30E8=\u3088=\uff96" // YO
+        "&\u30E9=\u3089=\uff97" // RA
+        "&\u30EA=\u308A=\uff98" // RI
+        "&\u30EB=\u308B=\uff99" // RU
+        "&\u30EC=\u308C=\uff9a" // RE
+        "&\u30ED=\u308D=\uff9b" // RO
+        "&\u30EE=\u308E"        // SMALL WA
+        "&\u30EF=\u308F=\uff9c" // WA
+        "&\u30F0=\u3090"        // WI
+        "&\u30F1=\u3091"        // WE
+        "&\u30F2=\u3092=\uff66" // WO
+        "&\u30F3=\u3093=\uff9d" // N
+
+		}
+	}
+}
+
+
 // Voiced and semivoiced syllables
 //		"&\u30A6\u3099=\u3046\u3099"
 //		"&\u30AB\u3099=\u304B\u3099"
@@ -1115,6 +1130,3 @@ ja_JP_JIS {
 //		"&\u30DB\u3099=\u307B\u3099"
 //		"&\u30DB\u309A=\u307B\u309A"
 
-		}
-	}
-}
