@@ -27,11 +27,17 @@
 #define UCNV_BLD_H
 
 #include "utypes.h"
-#include "ucmp8.h"
-#include "ucmp16.h"
 
 #define UCNV_MAX_SUBCHAR_LEN 4
 #define UCNV_ERROR_BUFFER_LENGTH 20
+
+#ifndef UCMP16_H
+typedef struct _CompactShortArray CompactShortArray;
+#endif
+
+#ifndef UCMP8_H
+typedef struct _CompactByteArray CompactByteArray;
+#endif
 
 #define UCNV_IMPLEMENTED_CONVERSION_TYPES 9
 /*Sentinel Value used to check the integrity of the binary data files */
