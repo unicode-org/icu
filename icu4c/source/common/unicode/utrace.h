@@ -25,13 +25,19 @@
 
 U_CDECL_BEGIN
 
-/* Trace severity levels */
+/**
+ * Trace severity levels.  Higher levels increase the verbosity of the trace output.
+ * @see utrace_setLevel
+ * @draft ICU 2.8
+ */
+
 enum UTraceLevel {
     UTRACE_OFF=-1,
-    UTRACE_ERROR,
-    UTRACE_WARNING,
-    UTRACE_INFO,
-    UTRACE_VERBOSE
+    UTRACE_ERROR=0,
+    UTRACE_WARNING=3,
+    UTRACE_OPEN_CLOSE=5,
+    UTRACE_INFO=7,
+    UTRACE_VERBOSE=9
 };
 typedef enum UTraceLevel UTraceLevel;
 
@@ -43,6 +49,14 @@ typedef enum UTraceLevel UTraceLevel;
  */
 U_CAPI void U_EXPORT2
 utrace_setLevel(int32_t traceLevel);
+
+/**
+ * Getter for the trace level.
+ * @param traceLevel A UTraceLevel value.
+ * @draft ICU 2.8
+ */
+U_CAPI int32_t U_EXPORT2
+utrace_getLevel();
 
 /* Trace function pointers types  ----------------------------- */
 
@@ -73,31 +87,39 @@ UTraceData(const void *context, int32_t fnNumber, int32_t level,
   *  @param d       Callback function to be called from within a 
   *                 traced ICU function, for the purpose of providing
   *                 data to the trace.
-  *  @param traceLevel  Specify the level, or degree of verbosity,
-  *                 of the trace output.
-  *  @param pErrorCode Receives error if the trace functions could
-  *                 not be set.
+  *
+  *  @draft ICU 2.8
   */
 U_CAPI void U_EXPORT2
 utrace_setFunctions(const void *context,
-                    UTraceEntry *e, UTraceExit *x, UTraceData *d,
-                    int32_t traceLevel,
-                    UErrorCode *pErrorCode);
-
-
+                    UTraceEntry *e, UTraceExit *x, UTraceData *d);
 
 /**
+  * Get the currently installed ICU tracing functions. 
+  * @param context  The currently installed tracing context.
+  * @param e        The currently installed UTraceEntry function.
+  * @param x        The currently installed UTraceExit function.
+  * @param d        The currently installed UTraceData function.
+  * @draft ICU 2.8
+  */
+U_CAPI void U_EXPORT2
+utrace_getFunctions(const void **context,
+                    UTraceEntry **e, UTraceExit **x, UTraceData **d);
+
+
+
+/*
  *
  * ICU trace format string syntax
  *
- *    Format Strings are passed to UTraceData functions, and define the
- *    number and types of the trace data being passed on each call.
+ * Format Strings are passed to UTraceData functions, and define the
+ * number and types of the trace data being passed on each call.
  *
- *    The UTraceData function, which is supplied by the application,
- *    not by ICU, can either pass the trace data (passed via
- *    varargs) and the format string back to ICU for formatting into
- *    a displayable string, or it can interpret the format itself,
- *    and do as it wishes with the trace data.
+ * The UTraceData function, which is supplied by the application,
+ * not by ICU, can either forward the trace data (passed via
+ * varargs) and the format string back to ICU for formatting into
+ * a displayable string, or it can interpret the format itself,
+ * and do as it wishes with the trace data.
  *
  *
  * Goals for the format string
@@ -116,52 +138,67 @@ utrace_setFunctions(const void *context,
  * Each insert begins with a '%', then optionally contains a 'v',
  * then exactly one type character.
  * Two '%' in a row represent a '%' instead of an insert.
- * If the 'v' is not specified, then one item of the specified type
- * is passed in.
- * If the 'v' (for "vector") is specified, then a vector of items of the
- * specified type is passed in, via a pointer to the first item
- * and an int32_t value for the length of the vector.
- *
  * The trace format strings need not have \n at the end.
  *
- * The ICU trace macros and functions that are used in ICU source code take
- * a variable number of arguments and pass them into the application trace
- * functions as va_list.
+ *
+ * Types
+ * -----
  *
  * Type characters:
  * - c A char character in the default codepage.
  * - s A NULL-terminated char * string in the default codepage.
- * - S A NULL-terminated UChar * string
+ * - S A UChar * string.  Requires two params, (ptr, length).  Length=-1 for null term.
  * - b A byte (8-bit integer).
  * - h A 16-bit integer.  Also a 16 bit Unicode code unit.
  * - d A 32-bit integer.  Also a 20 bit Unicode code point value. 
  * - l A 64-bit integer.
  * - p A data pointer.
  *
- * Examples:
+ * Vectors
+ * -------
+ *
+ * If the 'v' is not specified, then one item of the specified type
+ * is passed in.
+ * If the 'v' (for "vector") is specified, then a vector of items of the
+ * specified type is passed in, via a pointer to the first item
+ * and an int32_t value for the length of the vector.
+ * Length==-1 means zero or NULL termination.  Works for vectors of all types.
+ *
+ * Note:  %vS is a vector of (UChar *) strings.  The strings must
+ *        be null terminated as there is no way to provide a
+ *        separate length parameter for each string.  The length
+ *        parameter (required for all vectors) is the number of
+ *        strings, not the length of the strings.
+ *
+ * Examples
+ * --------
+ *
+ * These examples show the parameters that will be passed to an application's
+ *   UTraceData() function for various formats.
+ *
  * - the precise formatting is up to the application!
  * - the examples use type casts for arguments only to _show_ the types of
  *   arguments without needing variable declarations in the examples;
  *   the type casts will not be necessary in actual code
  *
- * UTRACE_DATA2(UTRACE_ERROR,
- *              "There is a character %c in the string %s.",
- *              (char)c, (const char *)s);
- * -> Error: There is a character 0x42 'B' in the string "Bravo".
+ * UTraceDataFunc(context, fnNumber, level,
+ *              "There is a character %c in the string %s.",   // Format String 
+ *              (char)c, (const char *)s);                     // varargs parameters
+ * ->   There is a character 0x42 'B' in the string "Bravo".
  *
- * UTRACE_DATA4(UTRACE_WARNING,
+ * UTraceDataFunc(context, fnNumber, level,
  *              "Vector of bytes %vb vector of chars %vc",
  *              (const uint8_t *)bytes, (int32_t)bytesLength,
  *              (const char *)chars, (int32_t)charsLength);
- * -> Warning: Vector of bytes
+ * ->  Vector of bytes
  *      42 63 64 3f [4]
- *    vector of chars
+ *     vector of chars
  *      "Bcd?"[4]
  *
- * UTRACE_DATA3(UTRACE_INFO,
+ * UTraceDataFunc(context, fnNumber, level,
  *              "An int32_t %d and a whole bunch of them %vd",
  *              (int32_t)-5, (const int32_t *)ints, (int32_t)intsLength);
- * -> Info: An int32_t -5=0xfffffffb and a whole bunch of them
+ * ->   An int32_t 0xfffffffb and a whole bunch of them
  *      fffffffb 00000005 0000010a [3]
  *
  */
@@ -227,6 +264,7 @@ typedef enum UTraceExitVal UTraceExitVal;
   *  @param args    Data to be formatted.
   *  @return        Length of formatted output, including the terminating NULL.
   *                 If buffer capacity is insufficient, the required capacity is returned. 
+  *  @draft ICU 2.8
   */
 
 U_CAPI void U_EXPORT2
@@ -247,6 +285,9 @@ utrace_formatExit(char *outBuf, int32_t capacity, int32_t indent,
 U_CAPI const char * U_EXPORT2
 utrace_functionName(int32_t fnNumber);
 
+/**
+ *  These are the ICU functions that will be traced when tracing is enabled.
+ */
 enum UTraceFunctionNumber {
     UTRACE_FUNCTION_START=0,
     UTRACE_U_INIT=UTRACE_FUNCTION_START,

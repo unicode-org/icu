@@ -139,11 +139,8 @@ int main(int argc, const char* const argv[])
     argc = j;
 
     
-    utrace_setFunctions(NULL, TraceEntry, TraceExit, TraceData, ICU_TRACE, &errorCode);
-    if (U_FAILURE(errorCode)) {
-        log_err("utrace_setFunctions()  failed.: %s\n", myErrorName(errorCode));
-        return -1;
-    }
+    utrace_setFunctions(NULL, TraceEntry, TraceExit, TraceData);
+    utrace_setLevel(ICU_TRACE);
  
     
     while (REPEAT_TESTS > 0) {   /* Loop runs once per complete execution of the tests 
@@ -164,7 +161,8 @@ int main(int argc, const char* const argv[])
         }
         u_cleanup();
         errorCode = U_ZERO_ERROR;
-        utrace_setFunctions(NULL, TraceEntry, TraceExit, TraceData, ICU_TRACE, &errorCode);
+        utrace_setFunctions(NULL, TraceEntry, TraceExit, TraceData);
+        utrace_setLevel(ICU_TRACE);
 
         /* Initialize ICU */
         ctest_setICU_DATA();    /* u_setDataDirectory() must happen Before u_init() */
