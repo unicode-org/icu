@@ -92,757 +92,227 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=.\opentype\AlternateSubstitutionSubtables.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\AlternateSubstitutionSubtables.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\AnchorTables.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\AnchorTables.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\ArabicLayoutEngine.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\ArabicLigatureData.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\ArabicLigatureData.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\ArabicShaping.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\ArabicShaping.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\CDACLayout.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\ClassDefinitionTables.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\CDACLigatureData.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\ContextualGlyphSubstitutionProcessor.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\ClassDefinitionTables.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\ContextualSubstitutionSubtables.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\ContextualGlyphSubstitutionProcessor.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\CoverageTables.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\ContextualSubstitutionSubtables.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\DeviceTables.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\CoverageTables.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\Features.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\DeviceTables.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\GDEFMarkFilter.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\Features.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\GlyphDefinitionTables.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\GDEFMarkFilter.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\GlyphIterator.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\GlyphDefinitionTables.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\GlyphPositioningLookupProcessor.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\GlyphIterator.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\GlyphPositioningTables.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\GlyphPositioningLookupProcessor.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\GlyphSubstitutionLookupProcessor.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\GlyphPositioningTables.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\opentype\GlyphSubstitutionLookupProcessor.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\opentype\GlyphSubstitutionTables.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\GlyphSubstitutionTables.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\GXLayoutEngine.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\HebrewLigatureData.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\HebrewLigatureData.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\HebrewShaping.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\HebrewShaping.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\IndicClassTables.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\IndicClassTables.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\IndicLayoutEngine.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\IndicRearrangementProcessor.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\IndicRearrangementProcessor.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\IndicReordering.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\IndicReordering.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\LayoutEngine.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\LigatureSubstitutionProcessor.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\LigatureSubstitutionProcessor.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\LigatureSubstitutionSubtables.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\LigatureSubstitutionSubtables.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\LookupProcessor.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\LookupProcessor.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\Lookups.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\Lookups.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\LookupTables.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\LookupTables.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\MarkArrays.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\MarkArrays.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\MarkToBasePositioningSubtables.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\MarkToBasePositioningSubtables.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\MarkToLigaturePositioningSubtables.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\MarkToLigaturePositioningSubtables.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\MarkToMarkPositioningSubtables.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\MarkToMarkPositioningSubtables.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\MorphTables.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\MorphTables.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\MultipleSubstitutionSubtables.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\MultipleSubstitutionSubtables.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\NonContextualGlyphSubstitutionProcessor.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\NonContextualGlyphSubstitutionProcessor.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\OpenTypeLayoutEngine.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\OpenTypeUtilities.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\OpenTypeUtilities.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\PairPositioningSubtables.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\PairPositioningSubtables.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\ScriptAndLanguage.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\ScriptAndLanguage.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\SegmentArrayProcessor.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\SegmentArrayProcessor.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\SegmentSingleProcessor.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\SegmentSingleProcessor.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\SimpleArrayProcessor.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\SimpleArrayProcessor.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\SinglePositioningSubtables.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\SinglePositioningSubtables.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\SingleSubstitutionSubtables.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\SingleSubstitutionSubtables.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\SingleTableProcessor.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\SingleTableProcessor.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\StateTableProcessor.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\StateTableProcessor.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\SubstitutionLookups.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\SubstitutionLookups.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\SubtableProcessor.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\SubtableProcessor.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\ThaiLayoutEngine.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\ThaiShaping.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\ThaiStateTables.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\TrimmedArrayProcessor.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\TrimmedArrayProcessor.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\ValueRecords.cpp
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# PROP Intermediate_Dir "debug"
-
-!ENDIF 
-
+SOURCE=.\ValueRecords.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -850,11 +320,11 @@ SOURCE=.\opentype\ValueRecords.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=.\opentype\AlternateSubstitutionSubtables.h
+SOURCE=.\AlternateSubstitutionSubtables.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\AnchorTables.h
+SOURCE=.\AnchorTables.h
 # End Source File
 # Begin Source File
 
@@ -862,79 +332,75 @@ SOURCE=.\ArabicLayoutEngine.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\ArabicShaping.h
+SOURCE=.\ArabicShaping.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\AttachmentPositioningSubtables.h
+SOURCE=.\AttachmentPositioningSubtables.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\CDACLayout.h
+SOURCE=.\ClassDefinitionTables.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\ClassDefinitionTables.h
+SOURCE=.\ContextualGlyphInsertion.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\ContextualGlyphInsertion.h
+SOURCE=.\ContextualGlyphSubstitution.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\ContextualGlyphSubstitution.h
+SOURCE=.\ContextualGlyphSubstitutionProcessor.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\ContextualGlyphSubstitutionProcessor.h
+SOURCE=.\ContextualSubstitutionSubtables.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\ContextualSubstitutionSubtables.h
+SOURCE=.\CoverageTables.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\CoverageTables.h
+SOURCE=.\DeviceTables.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\DeviceTables.h
+SOURCE=.\Features.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\Features.h
+SOURCE=.\GDEFMarkFilter.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\GDEFMarkFilter.h
+SOURCE=.\GlyphDefinitionTables.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\GlyphDefinitionTables.h
+SOURCE=.\GlyphIterator.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\GlyphIterator.h
+SOURCE=.\GlyphPositionAdjustments.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\GlyphPositionAdjustments.h
+SOURCE=.\GlyphPositioningLookupProcessor.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\GlyphPositioningLookupProcessor.h
+SOURCE=.\GlyphPositioningTables.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\GlyphPositioningTables.h
+SOURCE=.\GlyphSubstitutionLookupProcessor.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\GlyphSubstitutionLookupProcessor.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\opentype\GlyphSubstitutionTables.h
+SOURCE=.\GlyphSubstitutionTables.h
 # End Source File
 # Begin Source File
 
@@ -942,11 +408,11 @@ SOURCE=.\GXLayoutEngine.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\HebrewShaping.h
+SOURCE=.\HebrewShaping.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\HindiFeatureTags.h
+SOURCE=.\HindiFeatureTags.h
 # End Source File
 # Begin Source File
 
@@ -954,15 +420,15 @@ SOURCE=.\IndicLayoutEngine.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\IndicRearrangement.h
+SOURCE=.\IndicRearrangement.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\IndicRearrangementProcessor.h
+SOURCE=.\IndicRearrangementProcessor.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\IndicReordering.h
+SOURCE=.\IndicReordering.h
 # End Source File
 # Begin Source File
 
@@ -993,7 +459,7 @@ InputPath=.\LayoutEngine.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\LayoutTables.h
+SOURCE=.\LayoutTables.h
 # End Source File
 # Begin Source File
 
@@ -1132,63 +598,63 @@ InputPath=.\LETypes.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\LigatureSubstitution.h
+SOURCE=.\LigatureSubstitution.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\LigatureSubstitutionProcessor.h
+SOURCE=.\LigatureSubstitutionProcessor.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\LigatureSubstitutionSubtables.h
+SOURCE=.\LigatureSubstitutionSubtables.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\LookupProcessor.h
+SOURCE=.\LookupProcessor.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\Lookups.h
+SOURCE=.\Lookups.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\LookupTables.h
+SOURCE=.\LookupTables.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\MarkArrays.h
+SOURCE=.\MarkArrays.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\MarkToBasePositioningSubtables.h
+SOURCE=.\MarkToBasePositioningSubtables.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\MarkToLigaturePositioningSubtables.h
+SOURCE=.\MarkToLigaturePositioningSubtables.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\MarkToMarkPositioningSubtables.h
+SOURCE=.\MarkToMarkPositioningSubtables.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\MorphStateTables.h
+SOURCE=.\MorphStateTables.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\MorphTables.h
+SOURCE=.\MorphTables.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\MultipleSubstitutionSubtables.h
+SOURCE=.\MultipleSubstitutionSubtables.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\NonContextualGlyphSubstitution.h
+SOURCE=.\NonContextualGlyphSubstitution.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\NonContextualGlyphSubstitutionProcessor.h
+SOURCE=.\NonContextualGlyphSubstitutionProcessor.h
 # End Source File
 # Begin Source File
 
@@ -1196,63 +662,63 @@ SOURCE=.\OpenTypeLayoutEngine.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\OpenTypeTables.h
+SOURCE=.\OpenTypeTables.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\OpenTypeUtilities.h
+SOURCE=.\OpenTypeUtilities.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\PairPositioningSubtables.h
+SOURCE=.\PairPositioningSubtables.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\ScriptAndLanguage.h
+SOURCE=.\ScriptAndLanguage.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\ScriptAndLanguageTags.h
+SOURCE=.\ScriptAndLanguageTags.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\SegmentArrayProcessor.h
+SOURCE=.\SegmentArrayProcessor.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\SegmentSingleProcessor.h
+SOURCE=.\SegmentSingleProcessor.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\SimpleArrayProcessor.h
+SOURCE=.\SimpleArrayProcessor.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\SinglePositioningSubtables.h
+SOURCE=.\SinglePositioningSubtables.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\SingleSubstitutionSubtables.h
+SOURCE=.\SingleSubstitutionSubtables.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\SingleTableProcessor.h
+SOURCE=.\SingleTableProcessor.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\StateTableProcessor.h
+SOURCE=.\StateTableProcessor.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\StateTables.h
+SOURCE=.\StateTables.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\SubstitutionLookups.h
+SOURCE=.\SubstitutionLookups.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\SubtableProcessor.h
+SOURCE=.\SubtableProcessor.h
 # End Source File
 # Begin Source File
 
@@ -1264,11 +730,11 @@ SOURCE=.\ThaiShaping.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\aat\TrimmedArrayProcessor.h
+SOURCE=.\TrimmedArrayProcessor.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\opentype\ValueRecords.h
+SOURCE=.\ValueRecords.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
