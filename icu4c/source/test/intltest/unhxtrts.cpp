@@ -354,7 +354,11 @@ void UniToHexTransliteratorTest::expectTranslit(const UnicodeToHexTransliterator
 												const UnicodeString& expectedResult){
     
 
-	UTransPosition _index={start, limit, cursor, limit};
+	UTransPosition _index;
+    _index.contextStart=start;
+    _index.contextLimit= limit;
+    _index.start = cursor;
+    _index.limit = limit;
     UTransPosition index = _index;
    	UnicodeString rsource(source);
 	t.handleTransliterate(rsource, index, FALSE);
@@ -454,7 +458,11 @@ void UniToHexTransliteratorTest::expect(const UnicodeToHexTransliterator& t,
 	// Test handleTransliterate (incremental) transliteration -- 
     rsource.remove();
 	rsource.append(source);
-    UTransPosition index={0,source.length(),0,source.length()};
+    UTransPosition index;
+    index.contextStart=0;
+    index.contextLimit = source.length();
+    index.start =0;
+    index.limit=source.length();
 	t.handleTransliterate(rsource, index, TRUE);
 	expectAux(t.getID() + ":handleTransliterate " + message, source + "->" + rsource, rsource==expectedResult, expectedResult);
 
