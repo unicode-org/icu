@@ -7,19 +7,10 @@
 
 package com.ibm.icu.impl;
 
-import com.ibm.icu.impl.ICULocaleData;
-import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.Utility;
-import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.GregorianCalendar;
-import com.ibm.icu.util.UResourceBundle;
-import com.ibm.icu.impl.ZoneMeta;
-import com.ibm.icu.util.ULocale;
-
-import java.io.Serializable;
-import java.util.Locale;
 import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 
 /**
  * This class abstracts access to calendar (Calendar and DateFormat) data.

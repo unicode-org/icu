@@ -13,7 +13,6 @@ package com.ibm.icu.impl;
 import java.io.*;
 
 import com.ibm.icu.lang.*;
-import com.ibm.icu.util.UResourceBundle;
 
 /**
  * Wrapper for the pnames.icu binary data file.  This data file is
