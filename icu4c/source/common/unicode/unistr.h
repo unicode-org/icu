@@ -2159,6 +2159,11 @@ public:
                                     const UnicodeString& text);
 
   /**
+   * Replaceable API
+   */
+  virtual UBool hasMetaData() const;
+
+  /**
    * Copy a substring of this object, retaining attribute (out-of-band)
    * information.  This method is used to duplicate or reorder substrings.
    * The destination index must not overlap the source range.
