@@ -616,7 +616,8 @@ uint8_t ucol_uprv_tok_readAndSetOption(UColTokenParser *src, UErrorCode *status)
   } else {
     *status = U_UNSUPPORTED_ERROR;
   }
-  src->current = u_strchr(src->current, 0x005d /*']'*/);
+  while(*(src->current) != 0x005d && ++src->current < src->end);
+  //src->current = u_strchr(src->current, 0x005d /*']'*/);
   return result;
 }
 
