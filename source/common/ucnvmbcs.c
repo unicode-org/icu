@@ -913,7 +913,7 @@ endloop:
 U_CFUNC UChar32
 _MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
                   UErrorCode *pErrorCode) {
-	return ucnv_getNextUCharFromToUImpl(pArgs, _MBCSToUnicode, FALSE, pErrorCode);
+    return ucnv_getNextUCharFromToUImpl(pArgs, _MBCSToUnicode, FALSE, pErrorCode);
 }
 
 /*

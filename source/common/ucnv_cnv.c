@@ -200,9 +200,9 @@ ucnv_updateCallbackOffsets(int32_t *offsets, int32_t length, int32_t sourceIndex
  */
 U_CFUNC UChar32
 ucnv_getNextUCharFromToUImpl(UConverterToUnicodeArgs *pArgs,
-							 T_ToUnicodeFunction toU,
-							 UBool collectPairs,
-							 UErrorCode *pErrorCode) {
+                             T_ToUnicodeFunction toU,
+                             UBool collectPairs,
+                             UErrorCode *pErrorCode) {
     UChar buffer[UTF_MAX_CHAR_LENGTH];
     const char *realLimit=pArgs->sourceLimit;
 
@@ -214,25 +214,25 @@ ucnv_getNextUCharFromToUImpl(UConverterToUnicodeArgs *pArgs,
         pArgs->sourceLimit=pArgs->source+1;
         pArgs->flush= (UBool)(pArgs->sourceLimit==realLimit);
 
-		/* convert this byte and check the result */
+        /* convert this byte and check the result */
         toU(pArgs, pErrorCode);
         if(U_SUCCESS(*pErrorCode)) {
             int32_t length=pArgs->target-buffer;
 
-			/* this test is UTF-16 specific */
+            /* this test is UTF-16 specific */
             if(/* some output and
-				  (source consumed or don't collect surrogate pairs or not a surrogate or a surrogate pair) */
+                  (source consumed or don't collect surrogate pairs or not a surrogate or a surrogate pair) */
                length>0 &&
                (pArgs->flush || !collectPairs || !UTF_IS_FIRST_SURROGATE(buffer[0]) || length==2)
             ) {
                 return ucnv_getUChar32KeepOverflow(pArgs->converter, buffer, length);
             }
-			/* else continue with the loop */
-		} else if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+            /* else continue with the loop */
+        } else if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
             *pErrorCode=U_ZERO_ERROR;
             return ucnv_getUChar32KeepOverflow(pArgs->converter, buffer, UTF_MAX_CHAR_LENGTH);
         } else {
-			/* U_FAILURE() */
+            /* U_FAILURE() */
             return 0xffff;
         }
     }

@@ -1007,10 +1007,10 @@ UChar32 ucnv_getNextUChar(UConverter * converter,
   args.size = sizeof(args);
   if (converter->sharedData->impl->getNextUChar != NULL)
   {
-	ch = converter->sharedData->impl->getNextUChar(&args, err);
+    ch = converter->sharedData->impl->getNextUChar(&args, err);
   } else {
-	/* default implementation */
-	ch = ucnv_getNextUCharFromToUImpl(&args, converter->sharedData->impl->toUnicode, FALSE, err);
+    /* default implementation */
+    ch = ucnv_getNextUCharFromToUImpl(&args, converter->sharedData->impl->toUnicode, FALSE, err);
   }
   *source = args.source;
   return ch;
