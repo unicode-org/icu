@@ -13,8 +13,9 @@ COM=$(ICUDIR)/common/libicuuc.$(SO)
 I18=$(ICUDIR)/i18n/libicui18n.$(SO)
 LAY=$(ICUDIR)/layout/libicule.$(SO)
 DAT=$(ICUDIR)/stubdata/libicudata.$(SO)
+UIO=$(ICUDIR)/extra/ustdio/libustdio.$(SO)
 
-LIBS=$(COM) $(I18) $(LAY)
+LIBS=$(COM) $(I18) $(LAY) $(UIO)
 
 all:
 	@cat README
@@ -28,20 +29,23 @@ $(ICUDIR)/config.status:
 	-mv $(ICUDIR) $(ICUDIR)old
 	-(rm -rf $(ICUDIR)old &)
 	mkdir $(ICUDIR)
-	( cd $(ICUDIR) ; CPPFLAGS=-DURENAME_H $(TOP)/../configure --with-data-packaging=archive --enable-layout=yes --enable-tests=no --enable-extras=no --prefix=`pwd` $(GENREN_CONFIGURE_OPTS) )
+	( cd $(ICUDIR) ; CPPFLAGS=-DURENAME_H $(TOP)/../configure --with-data-packaging=archive --enable-layout=yes --enable-tests=no --enable-extras=yes --prefix=`pwd` $(GENREN_CONFIGURE_OPTS) )
 
 # build the libraries
 $(DAT): $(ICUDIR)/config.status Makefile
-	gmake -C $(ICUDIR)/stubdata libicudata.so
+	gmake -C $(ICUDIR)/stubdata libicudata.$(SO)
 
 $(COM): $(DAT) $(ICUDIR)/config.status Makefile
-	gmake -C $(ICUDIR)/common libicuuc.so
+	gmake -C $(ICUDIR)/common libicuuc.$(SO)
 
 $(I18): $(DAT) $(COM) $(ICUDIR)/config.status Makefile
-	gmake -C $(ICUDIR)/i18n libicui18n.so
+	gmake -C $(ICUDIR)/i18n libicui18n.$(SO)
 
 $(LAY): $(DAT) $(I18) $(COM) $(ICUDIR)/config.status Makefile
-	gmake -C $(ICUDIR)/layout libicule.so
+	gmake -C $(ICUDIR)/layout libicule.$(SO)
+
+$(UIO):	$(DAT) $(I18) $(COM) $(ICUDIR)/config.status Makefile
+	gmake -C $(ICUDIR)/extra/ustdio libustdio.$(SO)
 
 # the header itself
 urename.h: $(LIBS) genren.pl
