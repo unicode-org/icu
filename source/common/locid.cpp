@@ -101,7 +101,7 @@ void locale_set_default_internal(const char *id)
 #ifdef ICU_LOCID_USE_DEPRECATES
     Locale::fgDefaultLocale.init(id);
 #else
-if (gLocaleCache == NULL) {
+    if (gLocaleCache == NULL) {
         Locale::initLocaleCache();
     }
 
@@ -423,13 +423,13 @@ Locale& Locale::init(const char* localeID)
 
         /* preset all fields to empty */
         language[0] = country[0] = 0;
-        variantBegin = uprv_strlen(fullName);
+        variantBegin = (int32_t)uprv_strlen(fullName);
 
         /* after uloc_getName() we know that only '_' are separators */
         separator = uprv_strchr(fullName, SEP_CHAR);
         if(separator != 0) {
             /* there is a country field */
-            length = separator - fullName;
+            length = (int32_t)(separator - fullName);
             if(length > 0) {
                 if(length >= (int32_t)sizeof(language)) {
                     break;
@@ -442,7 +442,7 @@ Locale& Locale::init(const char* localeID)
             separator = uprv_strchr(prev, SEP_CHAR);
             if(separator != 0) {
                 /* there is a variant field */
-                length = separator - prev;
+                length = (int32_t)(separator - prev);
                 if(length > 0) {
                     if(length >= (int32_t)sizeof(country)) {
                         break;
@@ -451,7 +451,7 @@ Locale& Locale::init(const char* localeID)
                 }
                 country[length] = 0;
 
-                variantBegin = (separator + 1) - fullName;
+                variantBegin = (int32_t)((separator + 1) - fullName);
             } else {
                 /* variantBegin==strlen(fullName), length==strlen(language)==prev-1-fullName */
                 if((variantBegin - length - 1) >= (int32_t)sizeof(country)) {
