@@ -898,6 +898,25 @@ InputPath=.\unicode\name2uni.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\unicode\nortrans.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\nortrans.h
+
+"..\..\include\unicode\nortrans.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    unicode\nortrans.h    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
 SOURCE=.\unicode\nultrans.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
