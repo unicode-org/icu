@@ -33,7 +33,7 @@ RegexMatcher::RegexMatcher(const RegexPattern *pat)  {
     fCaptureStarts     = new UVector(status);
     fCaptureEnds       = new UVector(status);
     int i;
-    for (i=0; i<fPattern->fNumCaptureGroups; i++) {
+    for (i=0; i<=fPattern->fNumCaptureGroups; i++) {
         fCaptureStarts->addElement(-1, status);
         fCaptureEnds  ->addElement(-1, status);
     }
@@ -42,12 +42,14 @@ RegexMatcher::RegexMatcher(const RegexPattern *pat)  {
 
 
 RegexMatcher::RegexMatcher(const RegexMatcher &other) {
-    U_ASSERT(TRUE);
+    U_ASSERT(FALSE);
 }
 
 
 RegexMatcher::~RegexMatcher() {
     delete fBackTrackStack;
+    delete fCaptureStarts;
+    delete fCaptureEnds;
 }
 
 
@@ -66,45 +68,102 @@ UnicodeString &RegexMatcher::appendTail(UnicodeString &dest) {
 
 
 
-uint32_t RegexMatcher::end(UErrorCode &err) const {
-    return 0;
+int32_t RegexMatcher::end(UErrorCode &err) const {
+    return end(0, err);
 }
 
 
 
-uint32_t RegexMatcher::end(int group, UErrorCode &err) const {
-    return 0;
+int32_t RegexMatcher::end(int group, UErrorCode &err) const {
+    if (U_FAILURE(err)) {
+        return 0;
+    }
+    if (fLastMatch == FALSE) {
+        err = U_REGEX_INVALID_STATE;
+        return 0;
+    }
+    if (group < 0 || group > fPattern->fNumCaptureGroups) {
+        err = U_INDEX_OUTOFBOUNDS_ERROR;
+        return 0;
+    }
+    int32_t e = 0;
+    if (group == 0) {
+        e = fLastMatchEnd; 
+    } else {
+        int32_t s = fCaptureEnds->elementAti(group);
+        // TODO:  what to do if no match on this specific group?
+        if (s  != -1) {
+            e = fCaptureEnds->elementAti(group);
+        }
+    }
+    return e;
 }
 
 
 
 UBool RegexMatcher::find() {
+    // Start at the position of the last match end.  (Will be zero if the
+    //   matcher has been reset.
+    UErrorCode status = U_ZERO_ERROR;
+    return find(fLastMatchEnd, status);
+}
+
+
+
+UBool RegexMatcher::find(int32_t start, UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return FALSE;
+    }
+    if (start < 0 || start >= fInputLength) {
+        status = U_INDEX_OUTOFBOUNDS_ERROR;
+        return FALSE;
+    }
+
+    // TODO:  optimize a search for the first char of a possible match.
+    // TODO:  optimize the search for a leading literal string.
+    // TODO:  optimize based on the minimum length of a possible match
+    int32_t  startPos;
+    for (startPos=start; startPos < fInputLength; startPos++) {
+        MatchAt(startPos, status);
+        if (U_FAILURE(status)) {
+            return FALSE;
+        }
+        if (fLastMatch) {
+            return TRUE;
+        }
+    }
+    fLastMatchStart = fLastMatchEnd = fInputLength;
     return FALSE;
 }
 
 
 
-UBool RegexMatcher::find(uint32_t start, UErrorCode &err) {
-    return FALSE;
+UnicodeString RegexMatcher::group(UErrorCode &status) const {
+    return group(0, status);
 }
 
 
 
-UnicodeString RegexMatcher::group(UErrorCode &err) const {
-    return UnicodeString();
+UnicodeString RegexMatcher::group(int32_t group, UErrorCode &status) const {
+    int32_t  s = start(group, status);
+    int32_t  e = end(group, status);
+    if (U_FAILURE(status)) {
+        return UnicodeString();
+    }
+
+    if (s < 0 || s >= e) {
+        // Possible cases when a capture group didn't match 
+        // TODO:  firgure out what non-matching capture groups really are supposed to do.
+        return UnicodeString();
+    }
+    return UnicodeString(*fInput, s, e-s);
 }
 
 
 
-UnicodeString RegexMatcher::group(int group, UErrorCode &err) const {
-    return UnicodeString();
-}
 
-
-
-
-int RegexMatcher::groupCount() const {
-    return 0;
+int32_t RegexMatcher::groupCount() const {
+    return fPattern->fNumCaptureGroups;
 }
 
 
@@ -117,6 +176,9 @@ const UnicodeString &RegexMatcher::input() const {
 
 
 UBool RegexMatcher::lookingAt(UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return FALSE;
+    }
     reset();
     MatchAt(0, status);
     return fLastMatch;
@@ -125,6 +187,9 @@ UBool RegexMatcher::lookingAt(UErrorCode &status) {
 
 
 UBool RegexMatcher::matches(UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return FALSE;
+    }
     reset();
     MatchAt(0, status);
     UBool   success  = (fLastMatch && fLastMatchEnd==fInputLength);
@@ -154,10 +219,11 @@ UnicodeString RegexMatcher::replaceFirst(const UnicodeString &replacement, UErro
 
 
 RegexMatcher &RegexMatcher::reset() {
-    fLastMatchStart = -1;
-    fLastMatchEnd   =  0;
+    fLastMatchStart = 0;
+    fLastMatchEnd   = 0;
+    fLastMatch      = FALSE;
     int i;
-    for (i=0; i<fPattern->fNumCaptureGroups; i++) {
+    for (i=0; i<=fPattern->fNumCaptureGroups; i++) {
         fCaptureStarts->setElementAt(i, -1);
     }
     
@@ -175,16 +241,36 @@ RegexMatcher &RegexMatcher::reset(const UnicodeString &input) {
 
 
 
-int RegexMatcher::start(UErrorCode &err) const {
-    return 0;
+int32_t RegexMatcher::start(UErrorCode &err) const {
+    return start(0, err);
 }
 
 
 
 
-int RegexMatcher::start(int group, UErrorCode &err) const {
-    return 0;
+int32_t RegexMatcher::start(int group, UErrorCode &err) const {
+    if (U_FAILURE(err)) {
+        return 0;
+    }
+    if (fLastMatch == FALSE) {
+        err = U_REGEX_INVALID_STATE;
+        return 0;
+    }
+    if (group < 0 || group > fPattern->fNumCaptureGroups) {
+        err = U_INDEX_OUTOFBOUNDS_ERROR;
+        return 0;
+    }
+    int32_t s;
+    if (group == 0) {
+        s = fLastMatchStart; 
+    } else {
+        s = fCaptureStarts->elementAti(group);
+        // TODO:  what to do if no match on this specific group?
+    }
+    return s;
 }
+
+
 
 
 //--------------------------------------------------------------------------------

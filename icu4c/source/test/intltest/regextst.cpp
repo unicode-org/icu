@@ -31,10 +31,20 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
     if (exec) logln("TestSuite RegexTest: ");
     switch (index) {
 
-        case 0: name = "TestRegexAPI";
-            if(exec) TestRegexAPI(); break;
-
-        default: name = ""; break; //needed to end loop
+        case 0: name = "API_Match";
+            if (exec) API_Match(); 
+            break;
+        case 1: name = "Basic";
+            if (exec) Basic(); 
+            break;
+        case 2: name = "API_Replace";
+            if (exec) API_Replace(); 
+            break;
+        case 3: name = "API_Pattern";
+            if (exec) API_Pattern(); 
+            break;
+        default: name = ""; 
+            break; //needed to end loop
     }
 }
 
@@ -56,6 +66,9 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
 __LINE__, status); return;}}
 
 #define REGEX_ASSERT(expr) {if ((expr)==FALSE) {errln("RegexTest failure at line %d.\n", __LINE__);};}
+
+#define REGEX_ASSERT_FAIL(expr, errcode) {UErrorCode status=U_ZERO_ERROR; (expr);\
+if (status!=errcode) {errln("RegexTest failure at line %d.\n", __LINE__);};}
 
 #define REGEX_TESTLM(pat, text, looking, match) doRegexLMTest(pat, text, looking, match, __LINE__);
 
@@ -117,52 +130,194 @@ UBool RegexTest::doRegexLMTest(char *pat, char *text, UBool looking, UBool match
 
 //---------------------------------------------------------------------------
 //
-//      TestRegexAPI
+//      API_Match
 //
 //---------------------------------------------------------------------------
-void RegexTest::TestRegexAPI() {
+void RegexTest::API_Match() {
     UParseError         pe;
     UErrorCode          status=U_ZERO_ERROR;
-
-    RegexPattern        pat1;    // Test default constructor to not crash.
-
-    RegexPattern        *pat2;
     int32_t             flags = 0;
 
     //
     // Debug - slide failing test cases early
     //
 #if 0
-    REGEX_TESTLM("b+", "", FALSE, FALSE);
-        return;
+    {
+    }
+    return;
 #endif
 
     //
     // Simple pattern compilation
     //
-    UnicodeString       re("abc");
-    pat2 = RegexPattern::compile(re, flags, pe, status);
-    REGEX_CHECK_STATUS;
-
-    UnicodeString inStr1 = "abcdef this is a test";
-    UnicodeString instr2 = "not abc";
-    UnicodeString empty  = "";
+    {
+        UnicodeString       re("abc");
+        RegexPattern        *pat2;
+        pat2 = RegexPattern::compile(re, flags, pe, status);
+        REGEX_CHECK_STATUS;
+        
+        UnicodeString inStr1 = "abcdef this is a test";
+        UnicodeString instr2 = "not abc";
+        UnicodeString empty  = "";
+        
+        
+        //
+        // Matcher creation and reset.
+        //
+        RegexMatcher *m1 = pat2->matcher(inStr1, status);
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(m1->lookingAt(status) == TRUE); 
+        REGEX_ASSERT(m1->input() == inStr1);
+        m1->reset(instr2);
+        REGEX_ASSERT(m1->lookingAt(status) == FALSE);
+        REGEX_ASSERT(m1->input() == instr2);
+        m1->reset(inStr1);
+        REGEX_ASSERT(m1->input() == inStr1);
+        REGEX_ASSERT(m1->lookingAt(status) == TRUE);
+        m1->reset(empty);
+        REGEX_ASSERT(m1->lookingAt(status) == FALSE);
+        REGEX_ASSERT(m1->input() == empty);
+        REGEX_ASSERT(&m1->pattern() == pat2);
+        delete m1;
+        delete pat2;
+    }
 
 
     //
-    // Matcher creation and reset.
+    // Capture Group. 
+    //     RegexMatcher::start();
+    //     RegexMatcher::end();
+    //     RegexMatcher::groupCount();
     //
-    RegexMatcher *m1 = pat2->matcher(inStr1, status);
-    REGEX_CHECK_STATUS;
-    REGEX_ASSERT(m1->lookingAt(status) == TRUE); 
-    m1->reset(instr2);
-    REGEX_ASSERT(m1->lookingAt(status) == FALSE);
-    m1->reset(inStr1);
-    REGEX_ASSERT(m1->lookingAt(status) == TRUE);
-    m1->reset(empty);
-    REGEX_ASSERT(m1->lookingAt(status) == FALSE);
-    delete m1;
-    delete pat2;
+    {
+        int32_t             flags=0;
+        UParseError         pe;
+        UErrorCode          status=U_ZERO_ERROR;
+
+        UnicodeString       re("01(23(45)67)(.*)");
+        RegexPattern *pat = RegexPattern::compile(re, flags, pe, status);
+        REGEX_CHECK_STATUS;
+        UnicodeString data = "0123456789";
+        
+        RegexMatcher *matcher = pat->matcher(data, status);
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(matcher->lookingAt(status) == TRUE); 
+        int  matchStarts[] = {0,  2, 4, 8};
+        int  matchEnds[]   = {10, 8, 6, 10};
+        int i;
+        for (i=0; i<4; i++) {
+            int32_t actualStart = matcher->start(i, status);
+            REGEX_CHECK_STATUS;
+            if (actualStart != matchStarts[i]) {
+                errln("RegexTest failure at line %d, index %d.  Expected %d, got %d\n",
+                    __LINE__, i, matchStarts[i], actualStart);
+            }
+            int32_t actualEnd = matcher->end(i, status);
+            REGEX_CHECK_STATUS;
+            if (actualEnd != matchEnds[i]) {
+                errln("RegexTest failure at line %d index %d.  Expected %d, got %d\n",
+                    __LINE__, i, matchEnds[i], actualEnd);
+            }
+        }
+
+        REGEX_ASSERT(matcher->start(0, status) == matcher->start(status));
+        REGEX_ASSERT(matcher->end(0, status) == matcher->end(status));
+
+        REGEX_ASSERT_FAIL(matcher->start(-1, status), U_INDEX_OUTOFBOUNDS_ERROR);
+        REGEX_ASSERT_FAIL(matcher->start( 4, status), U_INDEX_OUTOFBOUNDS_ERROR);
+        matcher->reset();
+        REGEX_ASSERT_FAIL(matcher->start( 0, status), U_REGEX_INVALID_STATE);
+
+        matcher->lookingAt(status);
+        REGEX_ASSERT(matcher->group(status)    == "0123456789");
+        REGEX_ASSERT(matcher->group(0, status) == "0123456789");
+        REGEX_ASSERT(matcher->group(1, status) == "234567"    );
+        REGEX_ASSERT(matcher->group(2, status) == "45"        );
+        REGEX_ASSERT(matcher->group(3, status) == "89"        );
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT_FAIL(matcher->group(-1, status), U_INDEX_OUTOFBOUNDS_ERROR);
+        REGEX_ASSERT_FAIL(matcher->group( 4, status), U_INDEX_OUTOFBOUNDS_ERROR);
+        matcher->reset();
+        REGEX_ASSERT_FAIL(matcher->group( 0, status), U_REGEX_INVALID_STATE);
+
+        delete matcher;
+        delete pat;
+
+    }
+
+    //
+    //  find
+    //
+    {
+        int32_t             flags=0;
+        UParseError         pe;
+        UErrorCode          status=U_ZERO_ERROR;
+
+        UnicodeString       re("abc");
+        RegexPattern *pat = RegexPattern::compile(re, flags, pe, status);
+        REGEX_CHECK_STATUS;
+        UnicodeString data = ".abc..abc...abc..";
+        //                    012345678901234567
+        
+        RegexMatcher *matcher = pat->matcher(data, status);
+        REGEX_CHECK_STATUS;
+        REGEX_ASSERT(matcher->find());
+        REGEX_ASSERT(matcher->start(status) == 1);
+        REGEX_ASSERT(matcher->find());
+        REGEX_ASSERT(matcher->start(status) == 6);
+        REGEX_ASSERT(matcher->find());
+        REGEX_ASSERT(matcher->start(status) == 12);
+        REGEX_ASSERT(matcher->find() == FALSE);
+        REGEX_ASSERT(matcher->find() == FALSE);
+
+        matcher->reset();
+        REGEX_ASSERT(matcher->find());
+        REGEX_ASSERT(matcher->start(status) == 1);
+
+        REGEX_ASSERT(matcher->find(0, status));
+        REGEX_ASSERT(matcher->start(status) == 1);
+        REGEX_ASSERT(matcher->find(1, status));
+        REGEX_ASSERT(matcher->start(status) == 1);
+        REGEX_ASSERT(matcher->find(2, status));
+        REGEX_ASSERT(matcher->start(status) == 6);
+        REGEX_ASSERT(matcher->find(12, status));
+        REGEX_ASSERT(matcher->start(status) == 12);
+        REGEX_ASSERT(matcher->find(13, status) == FALSE);
+        REGEX_ASSERT(matcher->find(16, status) == FALSE);
+        REGEX_ASSERT_FAIL(matcher->start(status), U_REGEX_INVALID_STATE);
+        REGEX_CHECK_STATUS;
+
+        REGEX_ASSERT_FAIL(matcher->find(-1, status), U_INDEX_OUTOFBOUNDS_ERROR);
+        REGEX_ASSERT_FAIL(matcher->find(17, status), U_INDEX_OUTOFBOUNDS_ERROR);
+
+        REGEX_ASSERT(matcher->groupCount() == 0);
+
+        delete matcher;
+        delete pat;
+    }
+        
+}
+
+
+
+//---------------------------------------------------------------------------
+//
+//      Basic      Check for basic functionality of
+//                          regex pattern matching.
+//
+//---------------------------------------------------------------------------
+void RegexTest::Basic() {
+
+
+//
+// Debug - slide failing test cases early
+//
+#if 0
+    {
+    }
+    return;
+#endif
+
 
     //
     // Pattern with parentheses
@@ -264,6 +419,103 @@ void RegexTest::TestRegexAPI() {
     REGEX_TESTLM("a(b|c)?d", "abcd", FALSE, FALSE);
     REGEX_TESTLM("a(b|c)?d", "ab", FALSE, FALSE);
 
-
 };
+
+
+
+//---------------------------------------------------------------------------
+//
+//      API_Replace
+//
+//---------------------------------------------------------------------------
+void RegexTest::API_Replace() {
+}
+
+
+//---------------------------------------------------------------------------
+//
+//      API_Pattern
+//
+//---------------------------------------------------------------------------
+void RegexTest::API_Pattern() {
+    RegexPattern        pata;    // Test default constructor to not crash.
+    RegexPattern        patb;
+
+    REGEX_ASSERT(pata == patb);
+    REGEX_ASSERT(pata == pata);
+
+    UnicodeString re1("abc[a-l][m-z]");
+    UnicodeString re2("def");
+    UErrorCode    status = U_ZERO_ERROR;
+    UParseError   pe;
+
+    RegexPattern        *pat1 = RegexPattern::compile(re1, 0, pe, status);
+    RegexPattern        *pat2 = RegexPattern::compile(re2, 0, pe, status);
+    REGEX_CHECK_STATUS;
+    REGEX_ASSERT(*pat1 == *pat1);
+    REGEX_ASSERT(*pat1 != pata);
+
+    // Assign
+    patb = *pat1;
+    REGEX_ASSERT(patb == *pat1);
+
+    // Copy Construct
+    RegexPattern patc(*pat1);
+    REGEX_ASSERT(patc == *pat1);
+    REGEX_ASSERT(patb == patc);
+    REGEX_ASSERT(pat1 != pat2);
+    patb = *pat2;
+    REGEX_ASSERT(patb != patc);
+    REGEX_ASSERT(patb == *pat2);
+
+    // Compile with no flags.
+    RegexPattern         *pat1a = RegexPattern::compile(re1, pe, status);
+    REGEX_ASSERT(*pat1a == *pat1);
+
+    // Compile with different flags should be not equal
+    RegexPattern        *pat1b = RegexPattern::compile(re1, UREGEX_CASE_INSENSITIVE, pe, status);
+    REGEX_CHECK_STATUS;
+    REGEX_ASSERT(*pat1b != *pat1a);
+    REGEX_ASSERT(pat1b->flags() == UREGEX_CASE_INSENSITIVE);
+    REGEX_ASSERT(pat1a->flags() == 0);
+
+    // clone
+    RegexPattern *pat1c = pat1b->clone();
+    REGEX_ASSERT(*pat1b == *pat1c);
+    REGEX_ASSERT(*pat1a != *pat1c);
+
+
+    // TODO:  Actually do some matches with the cloned/copied/assigned patterns.
+
+
+
+    delete pat1c;
+    delete pat1b;
+    delete pat1a;
+    delete pat1;
+    delete pat2;
+
+    //
+    //   matches convenience API
+    //
+    REGEX_ASSERT(RegexPattern::matches(".*", "random input", pe, status) == TRUE);
+    REGEX_CHECK_STATUS;
+    REGEX_ASSERT(RegexPattern::matches("abc", "random input", pe, status) == FALSE);
+    REGEX_CHECK_STATUS;
+    REGEX_ASSERT(RegexPattern::matches(".*nput", "random input", pe, status) == TRUE);
+    REGEX_CHECK_STATUS;
+    REGEX_ASSERT(RegexPattern::matches("random input", "random input", pe, status) == TRUE);
+    REGEX_CHECK_STATUS;
+    REGEX_ASSERT(RegexPattern::matches(".*u", "random input", pe, status) == FALSE);
+    REGEX_CHECK_STATUS;
+    status = U_INDEX_OUTOFBOUNDS_ERROR;
+    REGEX_ASSERT(RegexPattern::matches("abc", "abc", pe, status) == FALSE);
+    REGEX_ASSERT(status == U_INDEX_OUTOFBOUNDS_ERROR);
+
+}
+
+
+
+
+
 

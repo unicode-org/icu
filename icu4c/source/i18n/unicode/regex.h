@@ -63,7 +63,7 @@ public:
     virtual ~RegexPattern();
     
     UBool                  operator==(const RegexPattern& that) const;
-    inline UBool           operator!=(const RegexPattern& that) const;
+    inline UBool           operator!=(const RegexPattern& that) const {return ! operator ==(that);};
     
     RegexPattern  &operator =(const RegexPattern &other);
     virtual RegexPattern  *clone() const;
@@ -83,7 +83,7 @@ public:
     *     Compiles the given regular expression into a pattern with the given flags 
     */
     static RegexPattern *compile( const UnicodeString &regex,
-        uint32_t              flags,
+        int32_t              flags,
         UParseError          &pe,
         UErrorCode           &err); 
 
@@ -91,7 +91,7 @@ public:
    /**
     *     Return the flags for this pattern
     */
-    virtual uint32_t flags() const;
+    virtual int32_t flags() const;
     
    /*
     *  Creates a matcher that will match the given input against this pattern.
@@ -131,9 +131,9 @@ public:
     *                   field delimiters, is placed in the last destination string.
     *    @return        The number of fields into which the input string was split.
     */
-    virtual uint32_t  split(const UnicodeString &input,
+    virtual int32_t  split(const UnicodeString &input,
         UnicodeString    dest[],
-        uint32_t         destCapacity,
+        int32_t          destCapacity,
         UErrorCode       &err) const;
     
     
@@ -164,7 +164,7 @@ private:
     //  Implementation Data
     //
     UnicodeString   fPattern;      // The original pattern string.
-    uint32_t        fFlags;        // The flags used when compiling the pattern.
+    int32_t         fFlags;        // The flags used when compiling the pattern.
                                    //   TODO:  make an enum type for the flags.
     UVector         *fCompiledPat; // The compiled, tokenized pattern.
     UnicodeString   fLiteralText;  // Any literal string data from the pattern, 
@@ -177,6 +177,14 @@ private:
 
     friend class RegexCompile;
     friend class RegexMatcher;
+
+    //
+    //  Implementation Methods
+    //
+    void        init();            // Common initialization, for use by constructors.
+    void        zap();             // Common cleanup
+
+
 
 };
 
@@ -239,7 +247,7 @@ public:
     *    Returns the index of the last character matched, plus one.
     *    error:  Illegal state - no match yet attemtped, or last match failed.
     */
-    virtual uint32_t end(UErrorCode &err) const;
+    virtual int32_t end(UErrorCode &err) const;
     
     
     /*
@@ -247,7 +255,7 @@ public:
     *    captured by the given group during the previous match operation. 
     *    Errors:  Illegal state, index out of bounds
     */
-    virtual uint32_t end(int group, UErrorCode &err) const; 
+    virtual int32_t end(int group, UErrorCode &err) const; 
     
     
     /*
@@ -261,12 +269,12 @@ public:
     *   input sequence that matches the pattern, starting at the specified index. 
     *  Errors:  Index out of bounds.
     */
-    virtual UBool find(uint32_t start, UErrorCode &err); 
+    virtual UBool find(int32_t start, UErrorCode &err); 
     
     
     /*
     *   Returns the input subsequence matched by the previous match. 
-    *   If the pattern can match an empty string, and empty string may be returned.
+    *   If the pattern can match an empty string, an empty string may be returned.
     *    Errors:   illegal state (no match has yet been attempted.)
     */
     virtual UnicodeString group(UErrorCode &err) const;
@@ -277,13 +285,13 @@ public:
     *    Group(0) is the entire match.
     *    Errors:   Index out of bounds, illegal state (no match has yet been attempted.)
     */
-    virtual UnicodeString group(int group, UErrorCode &err) const; 
+    virtual UnicodeString group(int32_t group, UErrorCode &err) const; 
     
     
     /*
     *   Returns the number of capturing groups in this matcher's pattern.
     */
-    virtual int groupCount() const;
+    virtual int32_t groupCount() const;
     
     
     /*
@@ -366,7 +374,7 @@ public:
     *   Returns the start index of the previous match. 
     *   Error:  Illegal State (no previous match)
     */
-    virtual int start(UErrorCode &err) const;
+    virtual int32_t start(UErrorCode &err) const;
     
     
     /*
@@ -376,7 +384,7 @@ public:
     *   Error:  Illegal State  (no previous match)
     *           Index out of bounds (no group with specified index)
     */
-    virtual int start(int group, UErrorCode &err) const;
+    virtual int32_t start(int group, UErrorCode &err) const;
     
 
     /**

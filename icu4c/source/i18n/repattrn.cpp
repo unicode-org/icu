@@ -21,43 +21,114 @@ U_NAMESPACE_BEGIN
 
 //--------------------------------------------------------------------------
 //
-//    RegexPattern    Constructors and destructor
+//    RegexPattern    Default Constructor
 //
 //--------------------------------------------------------------------------
 RegexPattern::RegexPattern() {
+    init();
+};
+
+
+//--------------------------------------------------------------------------
+//
+//   Copy Constructor        Note:  This is a rather inefficient implementation,
+//                                  but it probably doesn't matter.
+//
+//--------------------------------------------------------------------------
+RegexPattern::RegexPattern(const RegexPattern &other) :  UObject(other) {
+    init(); 
+    *this = other;
+}
+
+
+
+//--------------------------------------------------------------------------
+//
+//    Assignmenet Operator
+//
+//--------------------------------------------------------------------------
+RegexPattern &RegexPattern::operator = (const RegexPattern &other) {
+    if (this == &other) {
+        // Source and destination are the same.  Don't do anything.
+        return *this;
+    }
+
+    // Clean out any previous contents of object being assigned to.
+    zap();
+
+    // Give target object a default initialization
+    init();
+
+    // Copy simple fields
+    fPattern          = other.fPattern;
+    fFlags            = other.fFlags;
+    fLiteralText      = other.fLiteralText;
+    fBadState         = other.fBadState;
+    fNumCaptureGroups = other.fNumCaptureGroups;
+    if (fBadState) {
+        return *this;
+    }
+
+    //  Copy the pattern.  It's just values, nothing deep to copy.
+    int        i;
     UErrorCode status = U_ZERO_ERROR;
-    fFlags            = 0;
-    fCompiledPat      = NULL;
-    fSets             = NULL;
-    fBadState         = FALSE;
-    fNumCaptureGroups = 0;
 
-    fCompiledPat      = new UVector(status);
+    for (i=0; i<other.fCompiledPat->size(); i++) {
+        fCompiledPat->addElement(other.fCompiledPat->elementAti(i), status);
+    }
 
-    // fSets is a vector of all UnicodeSets built for this pattern.
-    //   Reserve element 0, to allow a sanity check against refs to element 0.
-    fSets             = new UVector(status);
-    fSets->addElement((int32_t)0, status);
-
+    //  Copy the Unicode Sets.  
+    //    Could be made more efficient if the sets were reference counted and shared,
+    //    but I doubt that pattern copying will be particularly common. 
+    for (i=1; i<other.fSets->size(); i++) {
+        UnicodeSet *sourceSet = (UnicodeSet *)other.fSets->elementAt(i);
+        UnicodeSet *newSet    = new UnicodeSet(*sourceSet);
+        if (newSet == NULL) {
+            fBadState = TRUE;
+            break;
+        }
+        fCompiledPat->addElement(other.fCompiledPat->elementAti(i), status);
+    }
     if (U_FAILURE(status)) {
         fBadState = TRUE;
-        delete fCompiledPat;
-        delete fSets;
-        fCompiledPat      = NULL;
-        fSets             = NULL;
     }
-};
+    return *this;
+}
 
 
-RegexPattern::RegexPattern(const RegexPattern &other) :  UObject(other) {
-    // TODO.   Need to add a reasonable assign or copy  constructor
-    //         to UVector.
-    U_ASSERT(FALSE);
-};
+//--------------------------------------------------------------------------
+//
+//    init        Shared initialization for use by constructors.
+//                Bring an uninitialized RegexPattern up to a default state.
+//
+//--------------------------------------------------------------------------
+void RegexPattern::init() {
+    fFlags            = 0;
+    fBadState         = FALSE;
+    fNumCaptureGroups = 0;
+    
+    UErrorCode status=U_ZERO_ERROR;
+    // Init of a completely new RegexPattern.
+    fCompiledPat = new UVector(status);
+    fSets        = new UVector(status);
+    if (U_FAILURE(status) || fCompiledPat == NULL || fSets == NULL) {
+        fBadState = TRUE;
+        return;
+    }
+
+    // Slot zero of the vector of sets is reserved.  Fill it here.
+    fSets->addElement((int32_t)0, status);
+}
 
 
-RegexPattern::~RegexPattern() {
+//--------------------------------------------------------------------------
+//
+//   zap            Delete everything owned by this RegexPattern. 
+//
+//--------------------------------------------------------------------------
+void RegexPattern::zap() {
     delete fCompiledPat;
+    fCompiledPat = NULL;
     int i;
     for (i=0; i<fSets->size(); i++) {
         UnicodeSet *s;
@@ -68,12 +139,43 @@ RegexPattern::~RegexPattern() {
     }
     delete fSets;
     fSets = NULL;
+}
+
+
+//--------------------------------------------------------------------------
+//
+//   Destructor
+//
+//--------------------------------------------------------------------------
+RegexPattern::~RegexPattern() {
+    zap();
 };
 
+
+//--------------------------------------------------------------------------
+//
+//   Clone
+//
+//--------------------------------------------------------------------------
 RegexPattern  *RegexPattern::clone() const { 
     RegexPattern  *copy = new RegexPattern(*this);
     return copy;
 };
+
+
+//--------------------------------------------------------------------------
+//
+//   operator ==   (comparison)    Consider to patterns to be == if the
+//                                 pattern strings and the flags are the same.
+//
+//--------------------------------------------------------------------------
+UBool   RegexPattern::operator ==(const RegexPattern &other) const {
+    UBool r = this->fFlags    == other.fFlags &&
+              this->fPattern  == other.fPattern &&
+              this->fBadState == FALSE &&
+              other.fBadState == FALSE;
+    return r;
+}
 
 //---------------------------------------------------------------------
 //
@@ -82,10 +184,9 @@ RegexPattern  *RegexPattern::clone() const {
 //---------------------------------------------------------------------
 RegexPattern  *RegexPattern::compile(
                              const UnicodeString &regex,
-                             uint32_t              flags,
+                             int32_t              flags,
                              UParseError          &pe,
                              UErrorCode           &err)  {
-
 
     if (U_FAILURE(err)) {
         return NULL;
@@ -95,6 +196,7 @@ RegexPattern  *RegexPattern::compile(
         err = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
+    This->fFlags = flags;
 
     RegexCompile     compiler(err);
     compiler.compile(*This, regex, pe, err);
@@ -102,6 +204,15 @@ RegexPattern  *RegexPattern::compile(
     return This;
 };
     
+//
+//   compile with default flags.
+//
+RegexPattern *RegexPattern::compile( const UnicodeString &regex,
+        UParseError          &pe,
+        UErrorCode           &err) 
+{
+    return compile(regex, 0, pe, err); 
+}
 
 
 
@@ -110,7 +221,7 @@ RegexPattern  *RegexPattern::compile(
 //   flags
 //
 //---------------------------------------------------------------------
-uint32_t RegexPattern::flags() const {
+int32_t RegexPattern::flags() const {
     return fFlags;
 }
 
@@ -137,6 +248,38 @@ RegexMatcher *RegexPattern::matcher(const UnicodeString &input,
 
 
 
+//---------------------------------------------------------------------
+//
+//   matches        Convenience function to test for a match, starting
+//                  with a pattern string and a data string.
+//
+//---------------------------------------------------------------------
+UBool RegexPattern::matches(const UnicodeString   &regex,
+              const UnicodeString   &input,
+                    UParseError     &pe,
+                    UErrorCode      &status) {
+
+    UBool   retVal        = FALSE;
+    RegexPattern *pat     = NULL;
+    RegexMatcher *matcher = NULL;
+    if (U_FAILURE(status)) {goto ret;}
+
+    pat = RegexPattern::compile(regex, 0, pe, status);
+    if (U_FAILURE(status)) {goto ret;}
+
+    matcher = pat->matcher(input, status);
+    if (U_FAILURE(status)) {goto ret;}
+
+    retVal = matcher->matches(status);
+
+ret:
+    delete matcher;
+    delete pat;
+    return retVal;
+}
+
+
+
 
 //---------------------------------------------------------------------
 //
@@ -155,9 +298,9 @@ UnicodeString RegexPattern::pattern() const {
 //   split
 //
 //---------------------------------------------------------------------
-uint32_t  RegexPattern::split(const UnicodeString &input,
+int32_t  RegexPattern::split(const UnicodeString &input,
         UnicodeString    dest[],
-        uint32_t         destCapacity,
+        int32_t         destCapacity,
         UErrorCode       &err) const
 {
     if (U_FAILURE(err)) {
