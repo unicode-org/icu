@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Attic/UnicodeCharacterIterator.java,v $ 
- * $Date: 2002/06/20 01:18:09 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/08/07 17:55:03 $ 
+ * $Revision: 1.2 $
  *
  *******************************************************************************
  */
@@ -227,21 +227,21 @@ public final class UnicodeCharacterIterator implements CharacterIterator
 	 */	
 	public int nextCodePoint()
 	{
-		if (m_index_ < m_limit_) {
-			char ch = m_replaceable_.charAt(m_index_);
-			m_index_ ++;
-			if (ch >= UTF16.LEAD_SURROGATE_MIN_VALUE &&
-			    ch <= UTF16.LEAD_SURROGATE_MAX_VALUE &&
-			    m_index_ < m_limit_) {
-			    char trail = m_replaceable_.charAt(m_index_);
-			    if (trail >= UTF16.TRAIL_SURROGATE_MIN_VALUE &&
-			    	trail <= UTF16.TRAIL_SURROGATE_MAX_VALUE) {
-			    	m_index_ ++;
-			    	return UCharacterProperty.getRawSupplementary(ch, 
-			    	                                              trail);
-				}
-			}
-			return ch;
+        if (m_index_ < m_limit_) {
+            char ch = m_replaceable_.charAt(m_index_);
+            m_index_ ++;
+            if (ch >= UTF16.LEAD_SURROGATE_MIN_VALUE &&
+                ch <= UTF16.LEAD_SURROGATE_MAX_VALUE &&
+                m_index_ < m_limit_) {
+                char trail = m_replaceable_.charAt(m_index_);
+                if (trail >= UTF16.TRAIL_SURROGATE_MIN_VALUE &&
+                    trail <= UTF16.TRAIL_SURROGATE_MAX_VALUE) {
+                    m_index_ ++;
+                    return UCharacterProperty.getRawSupplementary(ch, 
+                                                                  trail);
+                }
+            }
+            return ch;
         }
         return DONE_CODEPOINT;
 	}
@@ -282,18 +282,17 @@ public final class UnicodeCharacterIterator implements CharacterIterator
         if (m_index_ > m_start_) {
             m_index_ --;
             char ch = m_replaceable_.charAt(m_index_);
-			if (ch >= UTF16.TRAIL_SURROGATE_MIN_VALUE &&
-			    ch <= UTF16.TRAIL_SURROGATE_MAX_VALUE &&
-			    m_index_ > m_start_) {
-			    char lead = m_replaceable_.charAt(m_index_);
-			    if (lead >= UTF16.LEAD_SURROGATE_MIN_VALUE &&
-			    	lead <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
-			    	m_index_ --;
-			    	return UCharacterProperty.getRawSupplementary(ch, 
-			    	                                              lead);
-				}
-			}
-   			return ch;
+            if (ch >= UTF16.TRAIL_SURROGATE_MIN_VALUE &&
+                ch <= UTF16.TRAIL_SURROGATE_MAX_VALUE &&
+                m_index_ > m_start_) {
+                m_index_ --;
+                char lead = m_replaceable_.charAt(m_index_);
+                if (lead >= UTF16.LEAD_SURROGATE_MIN_VALUE &&
+                    lead <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
+                    return UCharacterProperty.getRawSupplementary(lead,ch);
+                }
+            }
+            return ch;
         }
         return DONE_CODEPOINT;
     }
