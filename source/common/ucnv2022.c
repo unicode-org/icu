@@ -607,8 +607,8 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
             myConverterData->version =options & UCNV_OPTIONS_VERSION_MASK;
             uprv_strcpy(myConverterData->name,"ISO_2022,locale=ja,version=");
             len=strlen(myConverterData->name);
-            myConverterData->name[len-1]=(char)(myConverterData->version+(int)'0');
-            myConverterData->name[len]='\0';
+            myConverterData->name[len]=(char)(myConverterData->version+(int)'0');
+            myConverterData->name[len+1]='\0';
         }
         else if(myLocale[0]=='k' && (myLocale[1]=='o'|| myLocale[1]=='r') && 
             (myLocale[2]=='_' || myLocale[2]=='\0')){
@@ -654,9 +654,9 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale,uint32_t opti
 
             if ((options  & UCNV_OPTIONS_VERSION_MASK)==1){
                 myConverterData->version = 1;
-                uprv_strcpy(myConverterData->name,"ISO_2022,locale=cn,version=1");
+                uprv_strcpy(myConverterData->name,"ISO_2022,locale=zh,version=1");
             }else{
-                uprv_strcpy(myConverterData->name,"ISO_2022,locale=cn,version=0");
+                uprv_strcpy(myConverterData->name,"ISO_2022,locale=zh,version=0");
                 myConverterData->version = 0;
             }
         }
