@@ -34,7 +34,9 @@
 # Currently, the IANA list is at
 # http://www.isi.edu/in-notes/iana/assignments/character-sets
 
-# Name matching is case-insensitive.
+# Name matching is case-insensitive.  The characters '-' and '_'
+# (dash and underscore) are ignored.  Space (' ') is also ignored,
+# but no names in this file can contain spaces.
 # However, the names in the left column are directly file names
 # or names of algorithmic converters, and their case must not
 # be changed - or else code and/or file names must also be changed.
@@ -45,7 +47,7 @@ UTF16_BigEndian         utf-16be
 UTF16_LittleEndian      utf-16le
 UTF16_PlatformEndian    iso-10646-ucs-2 csUnicode utf16 utf-16 ibm-1200 ibm1200 cp1200 ucs-2
 UTF16_OppositeEndian
-LATIN_1                 iso-8859-1 iso_8859-1 ibm-819 ibm819 cp819 latin1 latin-1  8859-1 csisolatin1 iso-ir-100 iso_8859-1:1978 cp367 ibm367 iso-8859-1:1987 l1 iso_8859_1 ansi_x3.110-1983 iso8859-1   #!!!!! There's whole lot of names for this
+LATIN_1                 iso-8859-1 iso_8859-1 ibm-819 ibm819 cp819 latin1 latin-1  8859-1 csisolatin1 iso-ir-100 iso_8859-1:1978 iso-8859-1:1987 l1 iso_8859_1 ansi_x3.110-1983 iso8859-1   #!!!!! There's whole lot of names for this
 ISO_2022                iso-2022 2022 cp2022 iso2022 iso_2022
 LMBCS-1                 lmbcs 
 LMBCS-2
@@ -62,7 +64,7 @@ LMBCS-19
 
 # Table-based
 
-ibm-367 usascii ascii ascii-7 us-ascii usascii ansi_x3.4-1968 ansi_x3.4-1986 iso_646.irv:1991 iso646-us us csASCII 646
+ibm-367 usascii ascii ascii-7 us-ascii usascii ansi_x3.4-1968 ansi_x3.4-1986 iso_646.irv:1991 iso646-us us csASCII 646 cp367
 
 # Special mapping for S/390 new line characters
 ebcdic-xml-us
@@ -73,14 +75,15 @@ ibm-913                 iso-8859-3 iso_8859-3 iso8859-3 latin3 cp913 ibm913 8859
 ibm-914                 iso-8859-4 iso_8859-4 iso8859-4 latin4 cp914 ibm914 8859-4 csisolatin4 iso-ir-110 iso_8859-4:1988 l4 # Baltic
 ibm-915                 iso-8859-5 iso_8859-5 iso8859-5 cyrillic cp915 ibm915 8859-5 csisolatincyrillic iso-ir-144 iso_8859-5:1988 # Cyrillic
 ibm-1089                iso-8859-6 iso_8859-6 iso8859-6 arabic cp1089 ibm1089 8859-6 csisolatinarabic iso-ir-127 iso_8859-6:1987 ecma-114 asmo-708   # Arabic
-ibm-4909                cp813 iso-8859-7 iso_8859-7 iso8859-7 ibm813 cp813 greek greek8 elot_928 ecma-118 8859-7 csisolatingreek iso-ir-126 iso_8859-7:1987  # ISO Greek (w/ euro update)
-ibm-813                 # same as 4909 (w/o euro update)
+ibm-4909                iso-8859-7 iso_8859-7 iso8859-7 greek greek8 elot_928 ecma-118 8859-7 csisolatingreek iso-ir-126 iso_8859-7:1987  # ISO Greek (w/ euro update)
+ibm-813                 cp813 ibm813 # same as 4909 (w/o euro update)
 ibm-916                 iso-8859-8 iso_8859-8 iso8859-8 hebrew cp916 ibm916 8859-8 csisolatinhebrew iso-ir-138 iso_8859-8:1988   # hebrew iso-8859-8i - typo?
 ibm-920                 iso-8859-9 iso_8859-9 iso8859-9 ECMA-128 latin5 cp920 ibm920 8859-9 csisolatin5 iso-ir-148 l5 # Turkish
 ibm-923                 iso-8859-15 iso_8859-15 iso8859-15 latin9 cp923 ibm923 8859-15 latin0 csisolatin0 csisolatin9       # Latin 9
-ibm-1252                windows-1252  cp1252  ibm-1004 cp1004        # Windows Latin 1 We don't have an ibm-5348, so this is a best possible match
+ibm-1252                windows-1252  cp1252        # Windows Latin 1 We don't have an ibm-5348, so this is a best possible match
+ibm-1004                cp1004  # Previously an alias of 1252
 ibm-943                 shift_jis csWindows31J sjis shiftjis shift-jis ibm943 cp943 cp932 ms_kanji csshiftjis windows-31j  x-sjis  # japanese. Unicode name is \u30b7\u30d5\u30c8\u7b26\u53f7\u5316\u8868\u73fe Iana says that Windows-31J is an extension to csshiftjis ibm-932 removed
-ibm-949                 KS_C_5601-1987 iso-ir-149 KS_C_5601-1989 csKSC56011987 korean ibm949 ksc-5601 ksc_5601 johab ks_x_1001:1992       # KSC-5601-1992, korean
+ibm-949                 KS_C_5601-1987 iso-ir-149 KS_C_5601-1989 csKSC56011987 korean ibm949 ksc-5601 ksc_5601 johab ks_x_1001:1992 ksc      # KSC-5601-1992, korean
 ibm-1370                Big5 csBig5 big-5 x-big5 cp950                # Taiwan Big-5 (w/ euro update)
 ibm-950                 # Taiwan Big-5 
 ibm-1386                gb_2312-80 iso-ir-58 csISO58GB231280 gb2312-80 gbk chinese gb ibm1386 gb2312  gb2312-1980 cp936 zh_cn # Chinese GBK removed
@@ -100,27 +103,27 @@ ibm-437                 ibm437 cp437 csPC8CodePage437 437         # PC US
 ibm-850                 IBM850 cp850 850 csPC850Multilingual    # PC latin1
 ibm-851                 IBM851 cp851 851 csPC851           # PC DOS Greek (no euro)
 ibm-858                 ibm858 cp858  # PC latin1 with Euro cp850 removed
-ibm-9044                IBM852 852 csPCp852 cp852            # PC latin2 (w/ euro update) #where should the names go here or below - inconsistency!!!
-ibm-852                 # PC latin2 (w/o euro update)
-ibm-872                 IBM855 855 csIBM855 cp855            # PC cyrillic (w/ euro update) #where should the names go here or below - inconsistency!!!
-ibm-855                 # PC cyrillic (w/o euro update)
+ibm-9044                # PC latin2 (w/ euro update) #where should the names go here or below - inconsistency!!!
+ibm-852                 IBM852 852 csPCp852 cp852            # PC latin2 (w/o euro update)
+ibm-872                 # PC cyrillic (w/ euro update) #where should the names go here or below - inconsistency!!!
+ibm-855                 IBM855 855 csIBM855 cp855            # PC cyrillic (w/o euro update)
 ibm-856                 ibm856 cp856            # PC Hebrew (old)
-ibm-9049                IBM857 857 csIBM857 cp857            # PC Latin 5 (Turkish) (w/ euro update) #where should the names go here or below - inconsistency!!!
-ibm-857                 # PC Latin 5 (w/o euro update)
+ibm-9049                # PC Latin 5 (Turkish) (w/ euro update) #where should the names go here or below - inconsistency!!!
+ibm-857                 IBM857 857 csIBM857 cp857            # PC Latin 5 (w/o euro update)
 ibm-859                 ibm859 cp859            # PC Latin 9 (w/ euro update)
 ibm-860                 ibm860 cp860 860 csIBM860            # PC Portugal
 ibm-861                 ibm861 cp861 861 cp-is csIBM861           # PC Iceland
 ibm-867                 ibm867 cp867 862 cp862 cspc862latinhebrew # PC Hebrew (w/ euro update) #where should the names go here or below - inconsistency!!!
 ibm-862                 IBM862 # PC Hebrew (w/o euro update)
 ibm-863                 ibm863 cp863 863 csIBM863           # PC Canadian French
-ibm-17248               IBM864 cp864 csIBM864            # PC Arabic (w/ euro update) #where should the names go here or below - inconsistency!!!
-ibm-864                 # PC Arabic (w/o euro update)
+ibm-17248               # PC Arabic (w/ euro update) #where should the names go here or below - inconsistency!!!
+ibm-864                 IBM864 cp864 csIBM864            # PC Arabic (w/o euro update)
 ibm-865                 ibm865 cp865 865 csIBM865            # PC Nordic
 ibm-808                 cp866 866 csIBM866     # PC Russian (w/ euro update) #where should the names go here or below - inconsistency!!! put IBM866 cp866 866 csIBM866 down
 ibm-866                 IBM866 # PC Russian (w/o euro update) added IBM866 cp866 866 csIBM866
 ibm-868                 ibm868 cp868 cp-ar csIBM868            # PC Urdu
-ibm-9061                IBM869 869 cp-gr csIBM869 cp869            # PC Greek (w/ euro update)
-ibm-869                 # PC Greek (w/o euro update)
+ibm-9061                cp-gr            # PC Greek (w/ euro update)
+ibm-869                 IBM869 869 csIBM869 cp869 # PC Greek (w/o euro update)
 ibm-878                 koi8-r ibm878 cp878 koi8 cskoi8r  # Russian internet
 ibm-901                 cp921 # PC Baltic (w/ euro update) moved cp921 down
 ibm-921                 # PC Baltic (w/o euro update) from above
@@ -163,7 +166,7 @@ ibm-5104               cp1008          # 8-bit Arabic (w/ euro update)
 ibm-9238               cp1046          # PC Arabic Extended (w/ euro update)
 #ibm-1161              cp9066          # PC Thailand (IBM "version) (w/ euro update)
 ibm-1362               cp1362          # Korean Windows DBCS (w/ euro update)
-ibm-1363               cp1363 cp949 ksc korean # Korean KSC Korean Windows MBCS (w/ euro update)
+ibm-1363               cp1363 cp949    # Korean KSC Korean Windows MBCS (w/ euro update)
 ibm-5210               cp1114          # PC SBCS Big-5 (w/ euro update)
 ibm-21427              cp947           # PC DBCS Big-5 (w/ euro update)
 
@@ -223,7 +226,6 @@ ibm-1364               cp1364 # Korean Host Mixed
 ibm-8482               # host SBCS (Katakana)
 ibm-4899               cpibm4899                          # Old EBCDIC Hebrew
 ibm-4971               cp875 cpibm4971                          # EBCDIC Greek
-ibm-1159               cp28709         # SBCS T-Ch Host
 ibm-9027               # DBCS T-Ch Host
 ibm-5123               cp1027          # Host Roman Jis
 ibm-12712              cpibm12712 ibm12712 ebcdic-he # EBCDIC Hebrew (new sheqel, control charaters update)
