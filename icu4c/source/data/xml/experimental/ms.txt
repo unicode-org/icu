@@ -36,7 +36,7 @@ ms{
         "Latn",  // ISO 15924 Name 
     }
     Languages {
-        ms { "Bahasa Malaysia" }
+        ms { "bahasa Melayu" }
     }
     MonthAbbreviations { 
         "Jan",
