@@ -13,13 +13,13 @@ AC_DEFUN(ICU_CHECK_MH_FRAG, [
 		[
 case "${host}" in
 *-*-solaris*)
-	if test "$ac_cv_prog_gcc" = yes; then	
+	if test "$GCC" = yes; then	
 		icu_cv_host_frag=mh-solaris-gcc 
 	else
 		icu_cv_host_frag=mh-solaris
 	fi ;;
 alpha*-*-linux-gnu)
-	if test "$ac_cv_prog_gcc" = yes; then
+	if test "$GCC" = yes; then
 		icu_cv_host_frag=mh-alpha-linux-gcc
 	else  
 		icu_cv_host_frag=mh-alpha-linux-cc
@@ -33,17 +33,17 @@ alpha*-*-linux-gnu)
 	fi ;;
 *-*-*bsd*) 	icu_cv_host_frag=mh-bsd-gcc ;;
 *-*-aix*)
-       if test "$ac_cv_prog_gcc" = yes; then
-        icu_cv_host_frag=mh-aix-gcc
-       else
-	if test -n "`$CXX --help 2>&1 | grep 'IBM C and C++ Compilers$'`"; then
-		icu_cv_host_frag=mh-aix
+	if test "$GCC" = yes; then
+		icu_cv_host_frag=mh-aix-gcc
 	else
-		icu_cv_host_frag=mh-aix-va
-       fi
+		if test -n "`$CXX --help 2>&1 | grep 'IBM C and C++ Compilers$'`"; then
+			icu_cv_host_frag=mh-aix
+		else
+			icu_cv_host_frag=mh-aix-va
+		fi
 	fi ;;
 *-*-hpux*)
-	if test "$ac_cv_prog_gcc" = yes; then
+	if test "$GCC" = yes; then
 		icu_cv_host_frag=mh-hpux-gcc
 	else
 		case "$CXX" in
@@ -125,7 +125,7 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
     else
         case "${host}" in
         *-*-solaris*)
-            if test "$ac_cv_prog_gcc" = no; then
+            if test "$GCC" = no; then
                 SOL64=`$CXX -xarch=v9 2>&1 && $CC -xarch=v9 2>&1 | grep -v usage:`
                 SPARCV9=`isainfo -n 2>&1 | grep sparcv9`
                 if test -z "$SOL64" && test -n "$SPARCV9"; then
@@ -140,25 +140,59 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
                 ENABLE_64BIT_LIBS=no
             fi
             ;;
+        ia64-*-linux*)
+            if test "$GCC" = yes; then
+                # gcc compiler support
+                if test -n "`$CXX -dumpspecs 2>&1 && $CC -dumpspecs 2>&1 | grep -v __LP64__`"; then
+                    ENABLE_64BIT_LIBS=yes
+                else
+                    ENABLE_64BIT_LIBS=no
+                fi
+            else
+                # check for ecc/ecpc compiler support
+                if test -n "`$CXX --help 2>&1 && $CC --help 2>&1 | grep -v Intel`"; then
+                    if test -n "`$CXX --help 2>&1 && $CC --help 2>&1 | grep -v Itanium`"; then
+                        ENABLE_64BIT_LIBS=yes
+                    else
+                        ENABLE_64BIT_LIBS=no
+                    fi
+                else
+                    # unknown
+                    ENABLE_64BIT_LIBS=no
+                fi
+            fi
+            ;;
+        x86_64-*-linux*)
+            if test "$GCC" = yes; then
+                if test -n "`$CXX -dumpspecs 2>&1 && $CC -dumpspecs 2>&1 | grep -v __LP64__`"; then
+                    ENABLE_64BIT_LIBS=yes
+                else
+                    ENABLE_64BIT_LIBS=no
+                fi
+            else
+                # unknown
+                ENABLE_64BIT_LIBS=no
+            fi
+            ;;
         *-*-aix*)
             if test "$ac_cv_prog_gcc" = no; then
-             # Note: Have not tested 64-bitness with gcc.
-             # Maybe the flag "-maix64" could be used with gcc?
-             OLD_CFLAGS="${CFLAGS}"
-             OLD_CXXFLAGS="${CXXFLAGS}"
-             OLD_LDFLAGS="${LDFLAGS}"
-             CFLAGS="${CFLAGS} -q64"
-             CXXFLAGS="${CXXFLAGS} -q64"
-             LDFLAGS="${LDFLAGS} -q64"
-             AC_TRY_RUN(int main(void) {return 0;},
-                ENABLE_64BIT_LIBS=yes, ENABLE_64BIT_LIBS=no, ENABLE_64BIT_LIBS=no)
-             if test "$ENABLE_64BIT_LIBS" = no; then
-                CFLAGS="${OLD_CFLAGS}"
-                CXXFLAGS="${OLD_CXXFLAGS}"
-                LDFLAGS="${OLD_LDFLAGS}"
-             else
-                ARFLAGS="${ARFLAGS} -X64"
-             fi
+                # Note: Have not tested 64-bitness with gcc.
+                # Maybe the flag "-maix64" could be used with gcc?
+                OLD_CFLAGS="${CFLAGS}"
+                OLD_CXXFLAGS="${CXXFLAGS}"
+                OLD_LDFLAGS="${LDFLAGS}"
+                CFLAGS="${CFLAGS} -q64"
+                CXXFLAGS="${CXXFLAGS} -q64"
+                LDFLAGS="${LDFLAGS} -q64"
+                AC_TRY_RUN(int main(void) {return 0;},
+                   ENABLE_64BIT_LIBS=yes, ENABLE_64BIT_LIBS=no, ENABLE_64BIT_LIBS=no)
+                if test "$ENABLE_64BIT_LIBS" = no; then
+                    CFLAGS="${OLD_CFLAGS}"
+                    CXXFLAGS="${OLD_CXXFLAGS}"
+                    LDFLAGS="${OLD_LDFLAGS}"
+                else
+                    ARFLAGS="${ARFLAGS} -X64"
+                fi
             fi
             ;;
         *-*-hpux*)
@@ -262,3 +296,4 @@ AC_DEFINE_UNQUOTED(AC_TYPE_NAME, $AC_CV_NAME)
 undefine([AC_TYPE_NAME])dnl
 undefine([AC_CV_NAME])dnl
 ])
+
