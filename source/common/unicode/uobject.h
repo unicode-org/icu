@@ -131,6 +131,15 @@ public:
  * like getDynamicClassID to allow derived classes such as Format
  * to declare these as pure virtual.
  *
+ * The clone() function is not available in UObject because it is not
+ * implemented by all ICU classes.
+ * Many ICU services provide a clone() function for their class trees,
+ * defined on the service's C++ base class, and all subclasses within that
+ * service class tree return a pointer to the service base class
+ * (which itself is a subclass of UObject).
+ * This is because some compilers do not support covariant (same-as-this)
+ * return types; cast to the appropriate subclass if necessary.
+ *
  * @draft ICU 2.2
  */
 class U_COMMON_API UObject : public UMemory {
@@ -178,6 +187,7 @@ protected:
     // clone() commented out from the base class:
     // some compilers do not support co-variant return types
     // (i.e., subclasses would have to return UObject * as well, instead of SubClass *)
+    // see also UObject class documentation.
     // virtual UObject *clone() const;
 #endif
 };
