@@ -44,7 +44,7 @@ ResourceBundle::constructForLocale(const UnicodeString& path,
 {
     char name[300];
 
-    if(path.length() >= sizeof(name)) {
+    if(path.length() >= (int32_t)sizeof(name)) {
         fResource = NULL;
         error = U_ILLEGAL_ARGUMENT_ERROR;
     } else if(!path.isEmpty()) {

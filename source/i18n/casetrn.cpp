@@ -144,7 +144,9 @@ void CaseMapTransliterator::handleTransliterate(Replaceable& text,
         return;
     }
 
-    UCaseContext csc={ &text };
+    UCaseContext csc;
+    uprv_memset(&csc, 0, sizeof(csc));
+    csc.p = &text;
     csc.start = offsets.contextStart;
     csc.limit = offsets.contextLimit;
 
