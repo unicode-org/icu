@@ -91,7 +91,7 @@ digitToBasic(int32_t digit, UBool uppercase) {
  * point (for use in representing integers) in the range 0 to
  * BASE-1, or -1 if b is does not represent a value.
  */
-static int8_t
+static const int8_t
 basicToDigit[256]={
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
