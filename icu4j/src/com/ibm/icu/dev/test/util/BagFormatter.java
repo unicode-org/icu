@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/BagFormatter.java,v $
- * $Date: 2004/02/07 00:59:26 $
- * $Revision: 1.6 $
+ * $Date: 2004/02/12 00:47:30 $
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -96,15 +96,18 @@ public class BagFormatter {
 
         UnicodeSet temp = new UnicodeSet(set1).removeAll(set2);
         pw.println();
-        showSetNames(pw, inOut.format(names), temp);
+        pw.println(inOut.format(names));
+        showSetNames(pw, temp);
 
         temp = new UnicodeSet(set2).removeAll(set1);
         pw.println();
-        showSetNames(pw, outIn.format(names), temp);
+        pw.println(outIn.format(names));
+        showSetNames(pw, temp);
 
         temp = new UnicodeSet(set2).retainAll(set1);
         pw.println();
-        showSetNames(pw, inIn.format(names), temp);
+        pw.println(inIn.format(names));
+        showSetNames(pw, temp);
     }
     
     public void showSetDifferences(
@@ -122,19 +125,22 @@ public class BagFormatter {
         Collection temp = new HashSet(set1);
         temp.removeAll(set2);
         pw.println();
-        showSetNames(pw, inOut.format(names), temp);
+        pw.println(inOut.format(names));
+        showSetNames(pw, temp);
 
         temp.clear();
         temp.addAll(set2);
         temp.removeAll(set1);
         pw.println();
-        showSetNames(pw, outIn.format(names), temp);
+        pw.println(outIn.format(names));
+        showSetNames(pw, temp);
 
         temp.clear();
         temp.addAll(set1);
         temp.retainAll(set2);
         pw.println();
-        showSetNames(pw, inIn.format(names), temp);
+        pw.println(inIn.format(names));
+        showSetNames(pw, temp);
     }
 
     /**
@@ -145,11 +151,10 @@ public class BagFormatter {
      * @return
      * @internal
      */
-    public String showSetNames(String title, Object c) {
+    public String showSetNames(Object c) {
         StringWriter buffer = new StringWriter();
         PrintWriter output = new PrintWriter(buffer);
-        output.println(title);
-        mainVisitor.doAt(c, output);
+        showSetNames(output,c);
         return buffer.toString();
     }
 
@@ -161,8 +166,7 @@ public class BagFormatter {
      * @return
      * @internal
      */
-    public void showSetNames(PrintWriter output, String title, Object c) {
-        output.println(title);
+    public void showSetNames(PrintWriter output, Object c) {
         mainVisitor.doAt(c, output);
         output.flush();
     }
@@ -175,11 +179,11 @@ public class BagFormatter {
      * @return
      * @internal
      */
-    public void showSetNames(String filename, String title, Object c) throws IOException {
+    public void showSetNames(String filename, Object c) throws IOException {
         PrintWriter pw = new PrintWriter(
             new OutputStreamWriter(
                 new FileOutputStream(filename),"utf-8"));
-        showSetNames(log,title,c);
+        showSetNames(log,c);
         pw.close();
     }
     
@@ -278,6 +282,7 @@ public class BagFormatter {
         String result = getName(start, false);
         if (start == end) return separator + result;
         String endString = getName(end, false);
+        if (result.length() == 0 && endString.length() == 0) return separator;
         if (abbreviated) endString = getAbbreviatedName(endString,result,"~");
         return separator + result + ".." + endString;
     }
@@ -288,17 +293,19 @@ public class BagFormatter {
     
     UnicodeLabel nameSource;
     
-    static class NameLabel extends UnicodeLabel {
+    class NameLabel extends UnicodeLabel {
         UnicodeProperty nameProp;
-        UnicodeProperty name1Prop;
-        UnicodeProperty catProp;
-        //UnicodeProperty shortCatProp;
+        UnicodeSet control;
+        UnicodeSet private_use;
+        UnicodeSet noncharacter;
+        UnicodeSet surrogate;
         
         NameLabel(UnicodeProperty.Factory source) {
             nameProp = source.getProperty("Name");
-            name1Prop = source.getProperty("Unicode_1_Name");
-            catProp = source.getProperty("General_Category");
-            //shortCatProp = source.getProperty("General_Category");
+            control = source.getSet("gc=Cc");
+            private_use = source.getSet("gc=Co");
+            surrogate = source.getSet("gc=Cs");
+            noncharacter = source.getSet("noncharactercodepoint=true");
         }       
 
         public String getValue(int codePoint, boolean isShort) {
@@ -308,13 +315,12 @@ public class BagFormatter {
             String result = nameProp.getValue(codePoint);
             if (result != null)
                 return hcp + result;
-            String prop = catProp.getValue(codePoint, true);
-            if (prop.equals("Control")) {
-                result = name1Prop.getValue(codePoint);
-                if (result != null)
-                    return hcp + "<" + result + ">";
-            }
-            return hcp + "<reserved>";
+            if (control.contains(codePoint)) return "<control-" + Utility.hex(codePoint, 4) + ">";
+            if (private_use.contains(codePoint)) return "<private use-" + Utility.hex(codePoint, 4) + ">";
+            if (noncharacter.contains(codePoint)) return "<noncharacter-" + Utility.hex(codePoint, 4) + ">";
+            if (surrogate.contains(codePoint)) return "<surrogate-" + Utility.hex(codePoint, 4) + ">";
+            if (suppressReserved) return "";
+            return hcp + "<reserved-" + Utility.hex(codePoint, 4) + ">";
         }
         
     }
@@ -341,24 +347,31 @@ public class BagFormatter {
     private String separator = ",";
     private String prefix = "[";
     private String suffix = "]";
-    UnicodeProperty.Factory source;
-    UnicodeLabel labelSource = UnicodeLabel.NULL;
-    UnicodeLabel valueSource = UnicodeLabel.NULL;
+    private UnicodeProperty.Factory source;
+    private UnicodeLabel labelSource;
+    private UnicodeLabel valueSource = UnicodeLabel.NULL;
     private boolean showCount = true;
+    private boolean suppressReserved = true;
 
     public BagFormatter setUnicodePropertySource(UnicodeProperty.Factory source) {
         this.source = source;
         nameSource = new NameLabel(source);
         return this;
     }
+
+    public BagFormatter () {
+        this(null);
+    }
     
-    {
-        setUnicodePropertySource(ICUPropertyFactory.make());
+    public BagFormatter (UnicodeProperty.Factory source) {
+        if (source == null) source = ICUPropertyFactory.make();
+        setUnicodePropertySource(source);
         Map labelMap = new HashMap();
-        labelMap.put("Lo","L&");
+        //labelMap.put("Lo","L&");
         labelMap.put("Lu","L&");
         labelMap.put("Lt","L&");
-        setLabelSource(new UnicodeProperty.FilteredUnicodeProperty(
+        labelMap.put("Ll","L&");
+        setLabelSource(new UnicodeProperty.FilteredProperty(
             source.getProperty("General_Category"),
                 new UnicodeProperty.MapFilter(labelMap)));
     }
@@ -418,13 +431,16 @@ public class BagFormatter {
 
     private static NumberFormat nf =
         NumberFormat.getIntegerInstance(Locale.ENGLISH);
+    static {
+        nf.setGroupingUsed(false);
+    }
     
     private String lineSeparator = "\r\n";
 
     private class MyVisitor extends Visitor {
         private PrintWriter output;
         Tabber.MonoTabber myTabber;
-        String commentSeparator = "\t# ";
+        String commentSeparator;
         
         public void doAt(Object c, PrintWriter output) {
             this.output = output;
@@ -432,16 +448,18 @@ public class BagFormatter {
             int valueSize = valueSource.getMaxWidth(shortValue);
             if (valueSize > 0) valueSize += 2;
             if (!mergeRanges) {
-                myTabber.add(0,Tabber.LEFT);
-                myTabber.add(6 + valueSize,Tabber.LEFT);
+                myTabber.add(6,Tabber.LEFT); // code
+                if (valueSource != UnicodeProperty.NULL) myTabber.add(2 + valueSize,Tabber.LEFT); // value
                 myTabber.add(2 + labelSource.getMaxWidth(shortLabel),Tabber.LEFT);
-                myTabber.add(4,Tabber.LEFT);
+                if (showLiteral != null) myTabber.add(4,Tabber.LEFT);
+                //myTabber.add(4,Tabber.LEFT);
             } else {
-                myTabber.add(0,Tabber.LEFT);
-                myTabber.add(15 + valueSize,Tabber.LEFT);
+                myTabber.add(13,Tabber.LEFT);
+                if (valueSource != UnicodeProperty.NULL) myTabber.add(2 + valueSize,Tabber.LEFT); // value
                 myTabber.add(2 + labelSource.getMaxWidth(shortLabel),Tabber.LEFT);
-                myTabber.add(11,Tabber.LEFT);
-                myTabber.add(7,Tabber.LEFT);
+                if (showCount) myTabber.add(8,Tabber.RIGHT);
+                if (showLiteral != null) myTabber.add(4,Tabber.LEFT);
+                //myTabber.add(7,Tabber.LEFT);
             }
             commentSeparator = (showCount || showLiteral != null 
               || labelSource != UnicodeProperty.NULL || nameSource != UnicodeProperty.NULL) 
@@ -469,7 +487,7 @@ public class BagFormatter {
         }
 
         protected void doAfter(Object container, Object o) {
-            output.print("# Total: " + nf.format(count(container)) + lineSeparator);
+            output.print(lineSeparator + "# Total code points: " + nf.format(count(container)) + lineSeparator);
         }
 
         protected void doSimpleAt(Object o) {
@@ -501,11 +519,9 @@ public class BagFormatter {
             if (!mergeRanges) {
                 for (int cp = usi.codepoint; cp <= usi.codepointEnd; ++cp) {
                     String label = labelSource.getValue(cp, shortLabel);
-                    if (label.length() != 0)
-                        label += " ";
                     String value = valueSource.getValue(cp, shortValue);
                     if (value.length() != 0) {
-                        value = "; " + value;
+                        value = "\t; " + value;
                     }
                     output.print(
                         myTabber.process(
@@ -528,13 +544,13 @@ public class BagFormatter {
                     int start = rf.start;
                     int end = rf.limit - 1;
                     String label = rf.label;
-                    if (label.length() != 0)
-                        label += " ";
                     String value = rf.value;
                     if (value.length() != 0) {
-                        value = "; " + value;
+                        value = "\t; " + value;
                     }
-                    String count = showCount ? "\t["+ nf.format(end - start + 1)+ "]" : "";
+                    String count = !showCount ? ""
+                      : end == start ? "\t"
+                      : "\t["+ nf.format(end - start + 1)+ "]";
                     output.print(
                         myTabber.process(
                             hex(start, end)
@@ -831,6 +847,10 @@ public class BagFormatter {
         if (label == null) label = UnicodeLabel.NULL;
         valueSource = label;
         return this;
+    }
+
+    public BagFormatter setValueSource(String label) {
+        return setValueSource(new UnicodeLabel.Constant(label));
     }
 
     /**

@@ -27,11 +27,18 @@ public abstract class UnicodeLabel {
             return "U+" + Utility.hex(codepoint,4);
         }       
     }
-    private static class Null extends UnicodeLabel {
+    public static class Constant extends UnicodeLabel {
+        private String value;
+        public Constant(String value) {
+            this.value = value;
+        }
         public String getValue(int codepoint, boolean isShort) {
-            return "";
-        }       
+            return value;
+        }
+        public int getMaxWidth(boolean isShort) {
+            return value.length();      
+        }
     }
-    public static final UnicodeLabel NULL = new Null();
+    public static final UnicodeLabel NULL = new Constant("");
     public static final UnicodeLabel HEX = new Hex();
 }
