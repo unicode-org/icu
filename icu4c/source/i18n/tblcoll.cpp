@@ -280,10 +280,13 @@ void RuleBasedCollator::getRules(UColRuleOption delta, UnicodeString &buffer)
 
     if (rulesize > 0) {
         UChar *rules = (UChar*) uprv_malloc( sizeof(UChar) * (rulesize) );
-
-        ucol_getRulesEx(ucollator, delta, rules, rulesize);
-        buffer.setTo(rules, rulesize);
-        uprv_free(rules);
+        if(rules != NULL) {
+          ucol_getRulesEx(ucollator, delta, rules, rulesize);
+          buffer.setTo(rules, rulesize);
+          uprv_free(rules);
+        } else { // couldn't allocate 
+          buffer.remove();
+        }
     }
     else {
         buffer.remove();
