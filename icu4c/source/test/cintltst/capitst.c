@@ -110,7 +110,7 @@ void TestGetDefaultRules(){
  getDecomposition/setDecomposition, getDisplayName*/
 void TestProperty()
 {    
-    UCollator *col;
+    UCollator *col, *ruled;
     UChar *disName;
     int32_t len, i;
     UChar *source, *target;
@@ -205,8 +205,9 @@ void TestProperty()
     }
     log_verbose("Default collation getDisplayName ended.\n");
 
+    ruled = ucol_open("da_DK", &status);
     log_verbose("ucol_getRules() testing ...\n");
-    ucol_getRules(col, &tempLength);
+    ucol_getRules(ruled, &tempLength);
     doAssert( tempLength != 0, "getRules() result incorrect" );
     log_verbose("getRules tests end.\n");
     {
@@ -222,6 +223,7 @@ void TestProperty()
         doAssert( tempLength != 0, "getRulesEx() result incorrect" );
         log_verbose("getRules tests end.\n");
     }
+    ucol_close(ruled);
     ucol_close(col);
     
     log_verbose("open an collator for french locale");
@@ -272,8 +274,8 @@ void TestRuleBasedColl()
     int32_t tempLength;
     UErrorCode status = U_ZERO_ERROR;
     
-    u_uastrcpy(ruleset1, "< a, A < b, B < c, C; ch, cH, Ch, CH < d, D, e, E");
-    u_uastrcpy(ruleset2, "< a, A < b, B < c, C < d, D, e, E");
+    u_uastrcpy(ruleset1, "&9 < a, A < b, B < c, C; ch, cH, Ch, CH < d, D, e, E");
+    u_uastrcpy(ruleset2, "&9 < a, A < b, B < c, C < d, D, e, E");
     
     col1 = ucol_openRules(ruleset1, u_strlen(ruleset1), UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT_STRENGTH, &status);
     if (U_FAILURE(status)) {
