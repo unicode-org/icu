@@ -90,7 +90,7 @@ typedef enum
   INVALID_2022 = -1, /*Doesn't correspond to a valid iso 2022 escape sequence*/
   VALID_NON_TERMINAL_2022 = 0, /*so far corresponds to a valid iso 2022 escape sequence*/
   VALID_TERMINAL_2022 = 1, /*corresponds to a valid iso 2022 escape sequence*/
-  VALID_MAYBE_TERMINAL_2022 = 2, /*so far matches one iso 2022 escape sequence, but by adding more characters might match another escape sequence*/
+  VALID_MAYBE_TERMINAL_2022 = 2 /*so far matches one iso 2022 escape sequence, but by adding more characters might match another escape sequence*/
 /*  VALID_TERMINAL_2022_DONOT_CHANGE_STATE =3 /* for ISO-2022 JP support*/ 
 } UCNV_TableStates_2022;
 
