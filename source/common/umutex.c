@@ -123,6 +123,12 @@ umtx_lock(UMTX *mutex)
         /* U_ASSERT(FALSE);    TODO:  Turn this back on */
         if (mutex != &gGlobalMutex) {
             umtx_init(mutex);
+        } else {
+            umtx_init(NULL);  /* initialize the global mutex - only get 
+                                 here if C++ static init is NOT working,
+                                 and u_init() hasn't been called.
+                                 
+                                 Not thread-safe if this call is contended! */
         }
     }
 
