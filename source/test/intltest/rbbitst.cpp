@@ -3069,7 +3069,7 @@ void RBBITest::TestWordBreaks(void)
 
         int count = 0;
         bi->setText(ustr);
-        for (int i = bi->first(); i != BreakIterator::DONE; i = bi->next()) {
+        for (i = bi->first(); i != BreakIterator::DONE; i = bi->next()) {
             forward[count] = i;
             if (count > 20 || expected[count] != i) {
                  errln("happy break forward test failed: expected %d but got %d", 
@@ -3082,7 +3082,7 @@ void RBBITest::TestWordBreaks(void)
             errln("happy break test failed: missed a match");
             break;
         }
-        for (int i = bi->last(); i != BreakIterator::DONE; i = bi->previous()) {
+        for (i = bi->last(); i != BreakIterator::DONE; i = bi->previous()) {
             count --;
             if (forward[count] != i) {
                 printStringBreaks(ustr, expected, expectedcount);
@@ -3210,7 +3210,7 @@ void RBBITest::TestLineBreaks(void)
 
         int count = 0;
         bi->setText(ustr);
-        for (int i = bi->first(); i != BreakIterator::DONE; i = bi->next()) {
+        for (i = bi->first(); i != BreakIterator::DONE; i = bi->next()) {
             forward[count] = i;
             if (count < expectedcount && expected[count] != i) {
                  errln("happy break forward test failed: expected %d but got %d", 
@@ -3223,7 +3223,7 @@ void RBBITest::TestLineBreaks(void)
             errln("happy break test failed: missed %d match", 
                   expectedcount - count);
         }
-        for (int i = bi->last(); i != BreakIterator::DONE; i = bi->previous()) {
+        for (i = bi->last(); i != BreakIterator::DONE; i = bi->previous()) {
             count --;
             if (forward[count] != i) {
                 printStringBreaks(ustr, expected, expectedcount);
@@ -3268,7 +3268,7 @@ void RBBITest::TestSentBreaks(void)
             forward[count ++] = i;
         }
         int tempcount = count;
-        for (int i = bi->last(); i != BreakIterator::DONE; i = bi->previous()) {
+        for (i = bi->last(); i != BreakIterator::DONE; i = bi->previous()) {
             tempcount --;
             if (forward[tempcount] != i) {
                 printStringBreaks(ustr, forward, count);
