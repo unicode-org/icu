@@ -183,7 +183,7 @@ public:
      * A proxy for the Locale. 
      * This is defined to stay source code compatible and to remove static initialization.
      * Treat it just like a Locale.
-     * @deprecated Remove after 2002-aug-31. Use one of the other Locale get functions.
+     * @obsolete ICU 2.4. Use one of the other Locale get functions instead since this API will be removed in that release.
      */
     typedef struct U_COMMON_API LocaleProxy {
 
@@ -235,51 +235,51 @@ public:
     /**
      * Useful constants for language.
      */
-    /* @deprecated Remove after 2002-aug-31. Use getEnglish() instead.*/
+    /** @obsolete ICU 2.4. Use getEnglish() instead since this API will be removed in that release. */
     static const LocaleProxy ENGLISH;
-    /* @deprecated Remove after 2002-aug-31. Use getFrench() instead.*/
+    /** @obsolete ICU 2.4. Use getFrench() instead since this API will be removed in that release. */
     static const LocaleProxy FRENCH;
-    /* @deprecated Remove after 2002-aug-31. Use getGerman() instead.*/
+    /** @obsolete ICU 2.4. Use getGerman() instead since this API will be removed in that release. */
     static const LocaleProxy GERMAN;
-    /* @deprecated Remove after 2002-aug-31. Use getItalian() instead.*/
+    /** @obsolete ICU 2.4. Use getItalian() instead since this API will be removed in that release. */
     static const LocaleProxy ITALIAN;
-    /* @deprecated Remove after 2002-aug-31. Use getJapanese() instead.*/
+    /** @obsolete ICU 2.4. Use getJapanese() instead since this API will be removed in that release. */
     static const LocaleProxy JAPANESE;
-    /* @deprecated Remove after 2002-aug-31. Use getKorean() instead.*/
+    /** @obsolete ICU 2.4. Use getKorean() instead since this API will be removed in that release. */
     static const LocaleProxy KOREAN;
-    /* @deprecated Remove after 2002-aug-31. Use getChinese() instead.*/
+    /** @obsolete ICU 2.4. Use getChinese() instead since this API will be removed in that release. */
     static const LocaleProxy CHINESE;
-    /* @deprecated Remove after 2002-aug-31. Use getSimplifiedChinese() instead.*/
+    /** @obsolete ICU 2.4. Use getSimplifiedChinese() instead since this API will be removed in that release. */
     static const LocaleProxy SIMPLIFIED_CHINESE;
-    /* @deprecated Remove after 2002-aug-31. Use getTraditionalChinese() instead.*/
+    /** @obsolete ICU 2.4. Use getTraditionalChinese() instead since this API will be removed in that release. */
     static const LocaleProxy TRADITIONAL_CHINESE;
 
     /**
      * Useful constants for country.
      */
-    /* @deprecated Remove after 2002-aug-31. Use getFrance() instead.*/
+    /** @obsolete ICU 2.4. Use getFrance() instead since this API will be removed in that release. */
     static const LocaleProxy FRANCE;
-    /* @deprecated Remove after 2002-aug-31. Use getGermany() instead.*/
+    /** @obsolete ICU 2.4. Use getGermany() instead since this API will be removed in that release. */
     static const LocaleProxy GERMANY;
-    /* @deprecated Remove after 2002-aug-31. Use getItaly() instead.*/
+    /** @obsolete ICU 2.4. Use getItaly() instead since this API will be removed in that release. */
     static const LocaleProxy ITALY;
-    /* @deprecated Remove after 2002-aug-31. Use getJapan() instead.*/
+    /** @obsolete ICU 2.4. Use getJapan() instead since this API will be removed in that release. */
     static const LocaleProxy JAPAN;
-    /* @deprecated Remove after 2002-aug-31. Use getKorea() instead.*/
+    /** @obsolete ICU 2.4. Use getKorea() instead since this API will be removed in that release. */
     static const LocaleProxy KOREA;
-    /* @deprecated Remove after 2002-aug-31. Use getChina() instead.*/
+    /** @obsolete ICU 2.4. Use getChina() instead since this API will be removed in that release. */
     static const LocaleProxy CHINA;      /* Alias for PRC */
-    /* @deprecated Remove after 2002-aug-31. Use getPRC() instead.*/
+    /** @obsolete ICU 2.4. Use getPRC() instead since this API will be removed in that release. */
     static const LocaleProxy PRC;        /* Peoples Republic of China */
-    /* @deprecated Remove after 2002-aug-31. Use getTaiwan() instead.*/
+    /** @obsolete ICU 2.4. Use getTaiwan() instead since this API will be removed in that release. */
     static const LocaleProxy TAIWAN;
-    /* @deprecated Remove after 2002-aug-31. Use getUK() instead.*/
+    /** @obsolete ICU 2.4. Use getUK() instead since this API will be removed in that release. */
     static const LocaleProxy UK;
-    /* @deprecated Remove after 2002-aug-31. Use getUS() instead.*/
+    /** @obsolete ICU 2.4. Use getUS() instead since this API will be removed in that release. */
     static const LocaleProxy US;
-    /* @deprecated Remove after 2002-aug-31. Use getCanada() instead.*/
+    /** @obsolete ICU 2.4. Use getCanada() instead since this API will be removed in that release. */
     static const LocaleProxy CANADA;
-    /* @deprecated Remove after 2002-aug-31. Use getCanadaFrench() instead.*/
+    /** @obsolete ICU 2.4. Use getCanadaFrench() instead since this API will be removed in that release. */
     static const LocaleProxy CANADA_FRENCH;
 
 #endif /* ICU_LOCID_USE_DEPRECATES */

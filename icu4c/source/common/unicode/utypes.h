@@ -378,16 +378,16 @@ typedef enum UErrorCode {
     U_ERROR_WARNING_LIMIT,              /**< This must always be the last warning value to indicate the limit for UErrorCode warnings (last warning code +1) */
 
 #ifdef ICU_UERRORCODE_USE_DEPRECATES
-    /** @deprecated remove after 09/01/2002. use the enum that ends in _WARNING */
-    U_USING_FALLBACK_ERROR    = -128,   /**< A resource bundle lookup returned a fallback result (not an error) */
-    /** @deprecated remove after 09/01/2002. use the enum that ends in _WARNING */
-    U_ERROR_INFO_START        = U_ERROR_WARNING_START,   /**< Start of information results (semantically successful) */
-    /** @deprecated remove after 09/01/2002. use the enum that ends in _WARNING */
-    U_USING_DEFAULT_ERROR     = -127,   /**< A resource bundle lookup returned a result from the root locale (not an error) */
-    /** @deprecated remove after 09/01/2002. use the enum that ends in _WARNING */
-    U_SAFECLONE_ALLOCATED_ERROR = -126, /**< A SafeClone operation required allocating memory (informational only) */
-    /** @deprecated remove after 09/01/2002. use the enum that ends in _WARNING */
-    U_ERROR_INFO_LIMIT        = U_ERROR_WARNING_LIMIT,  /**< This must always be the last warning value to indicate the limit for UErrorCode warnings (last warning code +1) */        
+    /** @obsolete ICU 2.4. Use the enum that ends in _WARNING instead since this API will be removed in that release. */
+    U_USING_FALLBACK_ERROR    = -128,
+    /** @obsolete ICU 2.4. Use the enum that ends in _WARNING instead since this API will be removed in that release. */
+    U_ERROR_INFO_START        = U_ERROR_WARNING_START,
+    /** @obsolete ICU 2.4. Use the enum that ends in _WARNING instead since this API will be removed in that release. */
+    U_USING_DEFAULT_ERROR     = -127,
+    /** @obsolete ICU 2.4. Use the enum that ends in _WARNING instead since this API will be removed in that release. */
+    U_SAFECLONE_ALLOCATED_ERROR = -126,
+    /** @obsolete ICU 2.4. Use the enum that ends in _WARNING instead since this API will be removed in that release. */
+    U_ERROR_INFO_LIMIT        = U_ERROR_WARNING_LIMIT,
 #endif /* ICU_UERRORCODE_USE_DEPRECATES */
 
 

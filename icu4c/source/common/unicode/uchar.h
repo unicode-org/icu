@@ -1750,7 +1750,7 @@ U_CAPI UChar32 U_EXPORT2
 u_charMirror(UChar32 c);
 
 /**
- * Deprecated because the "cell width" functions and implementation are
+ * Obsolete because the "cell width" functions and implementation are
  * out of date compared with Unicode Standard Annex #11.
  * Use u_getIntPropertyValue with UCHAR_EAST_ASIAN_WIDTH.
  * See http://www.unicode.org/reports/tr11/
@@ -1805,7 +1805,7 @@ u_charMirror(UChar32 c);
  * conventions.
  * @param c The character to be tested
  * @return a value indicating the display-cell width of the character when used in Asian text
- * @deprecated To be removed after 2003-jun-30; use UCHAR_EAST_ASIAN_WIDTH.
+ * @obsolete ICU 2.6. Use UCHAR_EAST_ASIAN_WIDTH instead since this API will be removed in that release.
  */
 U_CAPI uint16_t U_EXPORT2
 u_charCellWidth(UChar32 c);

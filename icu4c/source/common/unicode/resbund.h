@@ -126,7 +126,7 @@ public:
     /**
      * Constructs a ResourceBundle
      *
-     * @deprecated Remove after Aug  2002
+     * @obsolete ICU 2.4. Use const char * pathnames instead since this API will be removed in that release.
      */
     ResourceBundle(const wchar_t* path,
                    const Locale& locale,
@@ -447,7 +447,7 @@ private:
     void constructForLocale(const UnicodeString& path, const Locale& locale, UErrorCode& error);
 #ifdef ICU_RESOURCEBUNDLE_USE_DEPRECATES
     /**
-     *@deprecated Remove after Aug 2002
+     * @obsolete ICU 2.4. Use const char * pathnames instead since this API will be removed in that release.
      */
     void constructForLocale(const wchar_t* path, const Locale& locale, UErrorCode& error);
 #endif /* ICU_RESOURCEBUNDLE_USE_DEPRECATES */

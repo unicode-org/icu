@@ -134,7 +134,7 @@
  *
  * <hr>
  *
- * @deprecated since ICU 2.4. Use the macros in utf.h, utf16.h, utf8.h instead.
+ * @deprecated ICU 2.4. Use the macros in utf.h, utf16.h, utf8.h instead.
  */
 
 /* utf.h must be included first. */
@@ -152,23 +152,23 @@
  * ICU always counts Unicode code units (UChars) for
  * string offsets, indexes, and lengths, not Unicode code points.
  *
- * @deprecated Use int32_t directly. UTextOffset to be removed after 2003-mar.
+ * @obsolete ICU 2.6. Use int32_t directly instead since this API will be removed in that release.
  */
 typedef int32_t UTextOffset;
 
-/** Number of bits in a Unicode string code unit - ICU uses 16-bit Unicode. @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** Number of bits in a Unicode string code unit - ICU uses 16-bit Unicode. @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF_SIZE 16
 
 /**
  * The default choice for general Unicode string macros is to use the ..._SAFE macro implementations
  * with strict=FALSE.
  *
- * @deprecated since ICU 2.4. Obsolete, see utf_old.h.
+ * @deprecated ICU 2.4. Obsolete, see utf_old.h.
  */
 #define UTF_SAFE
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #undef UTF_UNSAFE
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #undef UTF_STRICT
 
 /**
@@ -181,14 +181,14 @@ typedef int32_t UTextOffset;
  * that needs the same number of code units (bytes) as were seen by
  * a macro. They should be tested with UTF_IS_ERROR() or UTF_IS_VALID().</p>
  *
- * @deprecated since ICU 2.4. Obsolete, see utf_old.h.
+ * @deprecated ICU 2.4. Obsolete, see utf_old.h.
  */
 #define UTF8_ERROR_VALUE_1 0x15
 
 /**
  * See documentation on UTF8_ERROR_VALUE_1 for details.
  *
- * @deprecated since ICU 2.4. Obsolete, see utf_old.h.
+ * @deprecated ICU 2.4. Obsolete, see utf_old.h.
  */
 #define UTF8_ERROR_VALUE_2 0x9f
 
@@ -196,7 +196,7 @@ typedef int32_t UTextOffset;
  * Error value for all UTFs. This code point value will be set by macros with error
  * checking if an error is detected.
  *
- * @deprecated since ICU 2.4. Obsolete, see utf_old.h.
+ * @deprecated ICU 2.4. Obsolete, see utf_old.h.
  */
 #define UTF_ERROR_VALUE 0xffff
 
@@ -204,7 +204,7 @@ typedef int32_t UTextOffset;
  * Is a given 32-bit code an error value
  * as returned by one of the macros for any UTF?
  *
- * @deprecated since ICU 2.4. Obsolete, see utf_old.h.
+ * @deprecated ICU 2.4. Obsolete, see utf_old.h.
  */
 #define UTF_IS_ERROR(c) \
     (((c)&0xfffe)==0xfffe || (c)==UTF8_ERROR_VALUE_1 || (c)==UTF8_ERROR_VALUE_2)
@@ -212,7 +212,7 @@ typedef int32_t UTextOffset;
 /**
  * This is a combined macro: Is c a valid Unicode value _and_ not an error code?
  *
- * @deprecated since ICU 2.4. Obsolete, see utf_old.h.
+ * @deprecated ICU 2.4. Obsolete, see utf_old.h.
  */
 #define UTF_IS_VALID(c) \
     (UTF_IS_UNICODE_CHAR(c) && \
@@ -220,14 +220,14 @@ typedef int32_t UTextOffset;
 
 /**
  * Is this code unit or code point a surrogate (U+d800..U+dfff)?
- * @deprecated since ICU 2.4. Renamed to U_IS_SURROGATE and U16_IS_SURROGATE, see utf_old.h.
+ * @deprecated ICU 2.4. Renamed to U_IS_SURROGATE and U16_IS_SURROGATE, see utf_old.h.
  */
 #define UTF_IS_SURROGATE(uchar) (((uchar)&0xfffff800)==0xd800)
 
 /**
  * Is a given 32-bit code point a Unicode noncharacter?
  *
- * @deprecated since ICU 2.4. Renamed to U_IS_UNICODE_NONCHAR, see utf_old.h.
+ * @deprecated ICU 2.4. Renamed to U_IS_UNICODE_NONCHAR, see utf_old.h.
  */
 #define UTF_IS_UNICODE_NONCHAR(c) \
     ((c)>=0xfdd0 && \
@@ -247,7 +247,7 @@ typedef int32_t UTextOffset;
  * This means that all code points below U+d800 are character code points,
  * and that boundary is tested first for performance.
  *
- * @deprecated since ICU 2.4. Renamed to U_IS_UNICODE_CHAR, see utf_old.h.
+ * @deprecated ICU 2.4. Renamed to U_IS_UNICODE_CHAR, see utf_old.h.
  */
 #define UTF_IS_UNICODE_CHAR(c) \
     ((uint32_t)(c)<0xd800 || \
@@ -259,24 +259,24 @@ typedef int32_t UTextOffset;
 
 /**
  * Count the trail bytes for a UTF-8 lead byte.
- * @deprecated since ICU 2.4. Renamed to U8_COUNT_TRAIL_BYTES, see utf_old.h.
+ * @deprecated ICU 2.4. Renamed to U8_COUNT_TRAIL_BYTES, see utf_old.h.
  */
 #define UTF8_COUNT_TRAIL_BYTES(leadByte) (utf8_countTrailBytes[(uint8_t)leadByte])
 
 /**
  * Mask a UTF-8 lead byte, leave only the lower bits that form part of the code point value.
- * @deprecated since ICU 2.4. Renamed to U8_MASK_LEAD_BYTE, see utf_old.h.
+ * @deprecated ICU 2.4. Renamed to U8_MASK_LEAD_BYTE, see utf_old.h.
  */
 #define UTF8_MASK_LEAD_BYTE(leadByte, countTrailBytes) ((leadByte)&=(1<<(6-(countTrailBytes)))-1)
 
-/** Is this this code point a single code unit (byte)? @deprecated since ICU 2.4. Renamed to U8_IS_SINGLE, see utf_old.h. */
+/** Is this this code point a single code unit (byte)? @deprecated ICU 2.4. Renamed to U8_IS_SINGLE, see utf_old.h. */
 #define UTF8_IS_SINGLE(uchar) (((uchar)&0x80)==0)
-/** Is this this code unit the lead code unit (byte) of a code point? @deprecated since ICU 2.4. Renamed to U8_IS_LEAD, see utf_old.h. */
+/** Is this this code unit the lead code unit (byte) of a code point? @deprecated ICU 2.4. Renamed to U8_IS_LEAD, see utf_old.h. */
 #define UTF8_IS_LEAD(uchar) ((uint8_t)((uchar)-0xc0)<0x3e)
-/** Is this this code unit a trailing code unit (byte) of a code point? @deprecated since ICU 2.4. Renamed to U8_IS_TRAIL, see utf_old.h. */
+/** Is this this code unit a trailing code unit (byte) of a code point? @deprecated ICU 2.4. Renamed to U8_IS_TRAIL, see utf_old.h. */
 #define UTF8_IS_TRAIL(uchar) (((uchar)&0xc0)==0x80)
 
-/** Does this scalar Unicode value need multiple code units for storage? @deprecated since ICU 2.4. Use U8_LENGTH or test ((uint32_t)(c)>0x7f) instead, see utf_old.h. */
+/** Does this scalar Unicode value need multiple code units for storage? @deprecated ICU 2.4. Use U8_LENGTH or test ((uint32_t)(c)>0x7f) instead, see utf_old.h. */
 #define UTF8_NEED_MULTIPLE_UCHAR(c) ((uint32_t)(c)>0x7f)
 
 /**
@@ -290,7 +290,7 @@ typedef int32_t UTextOffset;
  * Code point comparisons need to be in uint32_t because UChar32
  * may be a signed type, and negative values must be recognized.
  *
- * @deprecated since ICU 2.4. Use U8_LENGTH instead, see utf_old.h.
+ * @deprecated ICU 2.4. Use U8_LENGTH instead, see utf_old.h.
  */
 #if 1
 #   define UTF8_CHAR_LENGTH(c) \
@@ -314,27 +314,27 @@ typedef int32_t UTextOffset;
         )
 #endif
 
-/** The maximum number of bytes per code point. @deprecated since ICU 2.4. Renamed to U8_MAX_LENGTH, see utf_old.h. */
+/** The maximum number of bytes per code point. @deprecated ICU 2.4. Renamed to U8_MAX_LENGTH, see utf_old.h. */
 #define UTF8_MAX_CHAR_LENGTH 4
 
-/** Average number of code units compared to UTF-16. @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** Average number of code units compared to UTF-16. @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF8_ARRAY_SIZE(size) ((5*(size))/2)
 
-/** @deprecated since ICU 2.4. Renamed to U8_GET_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U8_GET_UNSAFE, see utf_old.h. */
 #define UTF8_GET_CHAR_UNSAFE(s, i, c) { \
     int32_t __I=(int32_t)(i); \
     UTF8_SET_CHAR_START_UNSAFE(s, __I); \
     UTF8_NEXT_CHAR_UNSAFE(s, __I, c); \
 }
 
-/** @deprecated since ICU 2.4. Use U8_GET instead, see utf_old.h. */
+/** @deprecated ICU 2.4. Use U8_GET instead, see utf_old.h. */
 #define UTF8_GET_CHAR_SAFE(s, start, i, length, c, strict) { \
     int32_t __I=(int32_t)(i); \
     UTF8_SET_CHAR_START_SAFE(s, start, __I); \
     UTF8_NEXT_CHAR_SAFE(s, __I, length, c, strict); \
 }
 
-/** @deprecated since ICU 2.4. Renamed to U8_NEXT_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U8_NEXT_UNSAFE, see utf_old.h. */
 #define UTF8_NEXT_CHAR_UNSAFE(s, i, c) { \
     (c)=(s)[(i)++]; \
     if((uint8_t)((c)-0xc0)<0x35) { \
@@ -354,7 +354,7 @@ typedef int32_t UTextOffset;
     } \
 }
 
-/** @deprecated since ICU 2.4. Renamed to U8_APPEND_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U8_APPEND_UNSAFE, see utf_old.h. */
 #define UTF8_APPEND_CHAR_UNSAFE(s, i, c) { \
     if((uint32_t)(c)<=0x7f) { \
         (s)[(i)++]=(uint8_t)(c); \
@@ -374,12 +374,12 @@ typedef int32_t UTextOffset;
     } \
 }
 
-/** @deprecated since ICU 2.4. Renamed to U8_FWD_1_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U8_FWD_1_UNSAFE, see utf_old.h. */
 #define UTF8_FWD_1_UNSAFE(s, i) { \
     (i)+=1+UTF8_COUNT_TRAIL_BYTES((s)[i]); \
 }
 
-/** @deprecated since ICU 2.4. Renamed to U8_FWD_N_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U8_FWD_N_UNSAFE, see utf_old.h. */
 #define UTF8_FWD_N_UNSAFE(s, i, n) { \
     int32_t __N=(n); \
     while(__N>0) { \
@@ -388,12 +388,12 @@ typedef int32_t UTextOffset;
     } \
 }
 
-/** @deprecated since ICU 2.4. Renamed to U8_SET_CP_START_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U8_SET_CP_START_UNSAFE, see utf_old.h. */
 #define UTF8_SET_CHAR_START_UNSAFE(s, i) { \
     while(UTF8_IS_TRAIL((s)[i])) { --(i); } \
 }
 
-/** @deprecated since ICU 2.4. Use U8_NEXT instead, see utf_old.h. */
+/** @deprecated ICU 2.4. Use U8_NEXT instead, see utf_old.h. */
 #define UTF8_NEXT_CHAR_SAFE(s, i, length, c, strict) { \
     (c)=(s)[(i)++]; \
     if((c)>=0x80) { \
@@ -405,7 +405,7 @@ typedef int32_t UTextOffset;
     } \
 }
 
-/** @deprecated since ICU 2.4. Use U8_APPEND instead, see utf_old.h. */
+/** @deprecated ICU 2.4. Use U8_APPEND instead, see utf_old.h. */
 #define UTF8_APPEND_CHAR_SAFE(s, i, length, c)  { \
     if((uint32_t)(c)<=0x7f) { \
         (s)[(i)++]=(uint8_t)(c); \
@@ -414,16 +414,16 @@ typedef int32_t UTextOffset;
     } \
 }
 
-/** @deprecated since ICU 2.4. Renamed to U8_FWD_1, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U8_FWD_1, see utf_old.h. */
 #define UTF8_FWD_1_SAFE(s, i, length) U8_FWD_1(s, i, length)
 
-/** @deprecated since ICU 2.4. Renamed to U8_FWD_N, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U8_FWD_N, see utf_old.h. */
 #define UTF8_FWD_N_SAFE(s, i, length, n) U8_FWD_N(s, i, length, n)
 
-/** @deprecated since ICU 2.4. Renamed to U8_SET_CP_START, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U8_SET_CP_START, see utf_old.h. */
 #define UTF8_SET_CHAR_START_SAFE(s, start, i) U8_SET_CP_START(s, start, i)
 
-/** @deprecated since ICU 2.4. Renamed to U8_PREV_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U8_PREV_UNSAFE, see utf_old.h. */
 #define UTF8_PREV_CHAR_UNSAFE(s, i, c) { \
     (c)=(s)[--(i)]; \
     if(UTF8_IS_TRAIL(c)) { \
@@ -446,12 +446,12 @@ typedef int32_t UTextOffset;
     } \
 }
 
-/** @deprecated since ICU 2.4. Renamed to U8_BACK_1_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U8_BACK_1_UNSAFE, see utf_old.h. */
 #define UTF8_BACK_1_UNSAFE(s, i) { \
     while(UTF8_IS_TRAIL((s)[--(i)])) {} \
 }
 
-/** @deprecated since ICU 2.4. Renamed to U8_BACK_N_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U8_BACK_N_UNSAFE, see utf_old.h. */
 #define UTF8_BACK_N_UNSAFE(s, i, n) { \
     int32_t __N=(n); \
     while(__N>0) { \
@@ -460,13 +460,13 @@ typedef int32_t UTextOffset;
     } \
 }
 
-/** @deprecated since ICU 2.4. Renamed to U8_SET_CP_LIMIT_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U8_SET_CP_LIMIT_UNSAFE, see utf_old.h. */
 #define UTF8_SET_CHAR_LIMIT_UNSAFE(s, i) { \
     UTF8_BACK_1_UNSAFE(s, i); \
     UTF8_FWD_1_UNSAFE(s, i); \
 }
 
-/** @deprecated since ICU 2.4. Use U8_PREV instead, see utf_old.h. */
+/** @deprecated ICU 2.4. Use U8_PREV instead, see utf_old.h. */
 #define UTF8_PREV_CHAR_SAFE(s, start, i, c, strict) { \
     (c)=(s)[--(i)]; \
     if((c)>=0x80) { \
@@ -478,64 +478,64 @@ typedef int32_t UTextOffset;
     } \
 }
 
-/** @deprecated since ICU 2.4. Renamed to U8_BACK_1, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U8_BACK_1, see utf_old.h. */
 #define UTF8_BACK_1_SAFE(s, start, i) U8_BACK_1(s, start, i)
 
-/** @deprecated since ICU 2.4. Renamed to U8_BACK_N, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U8_BACK_N, see utf_old.h. */
 #define UTF8_BACK_N_SAFE(s, start, i, n) U8_BACK_N(s, start, i, n)
 
-/** @deprecated since ICU 2.4. Renamed to U8_SET_CP_LIMIT, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U8_SET_CP_LIMIT, see utf_old.h. */
 #define UTF8_SET_CHAR_LIMIT_SAFE(s, start, i, length) U8_SET_CP_LIMIT(s, start, i, length)
 
 /* Formerly utf16.h --------------------------------------------------------- */
 
-/** Is uchar a first/lead surrogate? @deprecated since ICU 2.4. Renamed to U_IS_LEAD and U16_IS_LEAD, see utf_old.h. */
+/** Is uchar a first/lead surrogate? @deprecated ICU 2.4. Renamed to U_IS_LEAD and U16_IS_LEAD, see utf_old.h. */
 #define UTF_IS_FIRST_SURROGATE(uchar) (((uchar)&0xfffffc00)==0xd800)
 
-/** Is uchar a second/trail surrogate? @deprecated since ICU 2.4. Renamed to U_IS_TRAIL and U16_IS_TRAIL, see utf_old.h. */
+/** Is uchar a second/trail surrogate? @deprecated ICU 2.4. Renamed to U_IS_TRAIL and U16_IS_TRAIL, see utf_old.h. */
 #define UTF_IS_SECOND_SURROGATE(uchar) (((uchar)&0xfffffc00)==0xdc00)
 
-/** Assuming c is a surrogate, is it a first/lead surrogate? @deprecated since ICU 2.4. Renamed to U_IS_SURROGATE_LEAD and U16_IS_SURROGATE_LEAD, see utf_old.h. */
+/** Assuming c is a surrogate, is it a first/lead surrogate? @deprecated ICU 2.4. Renamed to U_IS_SURROGATE_LEAD and U16_IS_SURROGATE_LEAD, see utf_old.h. */
 #define UTF_IS_SURROGATE_FIRST(c) (((c)&0x400)==0)
 
-/** Helper constant for UTF16_GET_PAIR_VALUE. @deprecated since ICU 2.4. Renamed to U16_SURROGATE_OFFSET, see utf_old.h. */
+/** Helper constant for UTF16_GET_PAIR_VALUE. @deprecated ICU 2.4. Renamed to U16_SURROGATE_OFFSET, see utf_old.h. */
 #define UTF_SURROGATE_OFFSET ((0xd800<<10UL)+0xdc00-0x10000)
 
-/** Get the UTF-32 value from the surrogate code units. @deprecated since ICU 2.4. Renamed to U16_GET_SUPPLEMENTARY, see utf_old.h. */
+/** Get the UTF-32 value from the surrogate code units. @deprecated ICU 2.4. Renamed to U16_GET_SUPPLEMENTARY, see utf_old.h. */
 #define UTF16_GET_PAIR_VALUE(first, second) \
     (((first)<<10UL)+(second)-UTF_SURROGATE_OFFSET)
 
-/** @deprecated since ICU 2.4. Renamed to U16_LEAD, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_LEAD, see utf_old.h. */
 #define UTF_FIRST_SURROGATE(supplementary) (UChar)(((supplementary)>>10)+0xd7c0)
 
-/** @deprecated since ICU 2.4. Renamed to U16_TRAIL, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_TRAIL, see utf_old.h. */
 #define UTF_SECOND_SURROGATE(supplementary) (UChar)(((supplementary)&0x3ff)|0xdc00)
 
-/** @deprecated since ICU 2.4. Renamed to U16_LEAD, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_LEAD, see utf_old.h. */
 #define UTF16_LEAD(supplementary) UTF_FIRST_SURROGATE(supplementary)
 
-/** @deprecated since ICU 2.4. Renamed to U16_TRAIL, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_TRAIL, see utf_old.h. */
 #define UTF16_TRAIL(supplementary) UTF_SECOND_SURROGATE(supplementary)
 
-/** @deprecated since ICU 2.4. Renamed to U16_IS_SINGLE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_IS_SINGLE, see utf_old.h. */
 #define UTF16_IS_SINGLE(uchar) !UTF_IS_SURROGATE(uchar)
 
-/** @deprecated since ICU 2.4. Renamed to U16_IS_LEAD, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_IS_LEAD, see utf_old.h. */
 #define UTF16_IS_LEAD(uchar) UTF_IS_FIRST_SURROGATE(uchar)
 
-/** @deprecated since ICU 2.4. Renamed to U16_IS_TRAIL, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_IS_TRAIL, see utf_old.h. */
 #define UTF16_IS_TRAIL(uchar) UTF_IS_SECOND_SURROGATE(uchar)
 
-/** Does this scalar Unicode value need multiple code units for storage? @deprecated since ICU 2.4. Use U16_LENGTH or test ((uint32_t)(c)>0xffff) instead, see utf_old.h. */
+/** Does this scalar Unicode value need multiple code units for storage? @deprecated ICU 2.4. Use U16_LENGTH or test ((uint32_t)(c)>0xffff) instead, see utf_old.h. */
 #define UTF16_NEED_MULTIPLE_UCHAR(c) ((uint32_t)(c)>0xffff)
 
-/** @deprecated since ICU 2.4. Renamed to U16_LENGTH, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_LENGTH, see utf_old.h. */
 #define UTF16_CHAR_LENGTH(c) ((uint32_t)(c)<=0xffff ? 1 : 2)
 
-/** @deprecated since ICU 2.4. Renamed to U16_MAX_LENGTH, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_MAX_LENGTH, see utf_old.h. */
 #define UTF16_MAX_CHAR_LENGTH 2
 
-/** Average number of code units compared to UTF-16. @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** Average number of code units compared to UTF-16. @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF16_ARRAY_SIZE(size) (size)
 
 /**
@@ -547,7 +547,7 @@ typedef int32_t UTextOffset;
  * UTF16_CHAR_LENGTH() and UTF_IS_ERROR(),
  * but the use of UTF16_NEXT_CHAR[_UNSAFE]() and
  * UTF16_PREV_CHAR[_UNSAFE]() is more efficient for that.
- * @deprecated since ICU 2.4. Renamed to U16_GET_UNSAFE, see utf_old.h.
+ * @deprecated ICU 2.4. Renamed to U16_GET_UNSAFE, see utf_old.h.
  */
 #define UTF16_GET_CHAR_UNSAFE(s, i, c) { \
     (c)=(s)[i]; \
@@ -560,7 +560,7 @@ typedef int32_t UTextOffset;
     } \
 }
 
-/* @deprecated since ICU 2.4. Use U16_GET instead, see utf_old.h. */
+/* @deprecated ICU 2.4. Use U16_GET instead, see utf_old.h. */
 #define UTF16_GET_CHAR_SAFE(s, start, i, length, c, strict) { \
     (c)=(s)[i]; \
     if(UTF_IS_SURROGATE(c)) { \
@@ -587,7 +587,7 @@ typedef int32_t UTextOffset;
     } \
 }
 
-/** @deprecated since ICU 2.4. Renamed to U16_NEXT_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_NEXT_UNSAFE, see utf_old.h. */
 #define UTF16_NEXT_CHAR_UNSAFE(s, i, c) { \
     (c)=(s)[(i)++]; \
     if(UTF_IS_FIRST_SURROGATE(c)) { \
@@ -595,7 +595,7 @@ typedef int32_t UTextOffset;
     } \
 }
 
-/** @deprecated since ICU 2.4. Renamed to U16_APPEND_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_APPEND_UNSAFE, see utf_old.h. */
 #define UTF16_APPEND_CHAR_UNSAFE(s, i, c) { \
     if((uint32_t)(c)<=0xffff) { \
         (s)[(i)++]=(uint16_t)(c); \
@@ -605,14 +605,14 @@ typedef int32_t UTextOffset;
     } \
 }
 
-/** @deprecated since ICU 2.4. Renamed to U16_FWD_1_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_FWD_1_UNSAFE, see utf_old.h. */
 #define UTF16_FWD_1_UNSAFE(s, i) { \
     if(UTF_IS_FIRST_SURROGATE((s)[(i)++])) { \
         ++(i); \
     } \
 }
 
-/** @deprecated since ICU 2.4. Renamed to U16_FWD_N_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_FWD_N_UNSAFE, see utf_old.h. */
 #define UTF16_FWD_N_UNSAFE(s, i, n) { \
     int32_t __N=(n); \
     while(__N>0) { \
@@ -621,14 +621,14 @@ typedef int32_t UTextOffset;
     } \
 }
 
-/** @deprecated since ICU 2.4. Renamed to U16_SET_CP_START_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_SET_CP_START_UNSAFE, see utf_old.h. */
 #define UTF16_SET_CHAR_START_UNSAFE(s, i) { \
     if(UTF_IS_SECOND_SURROGATE((s)[i])) { \
         --(i); \
     } \
 }
 
-/** @deprecated since ICU 2.4. Use U16_NEXT instead, see utf_old.h. */
+/** @deprecated ICU 2.4. Use U16_NEXT instead, see utf_old.h. */
 #define UTF16_NEXT_CHAR_SAFE(s, i, length, c, strict) { \
     (c)=(s)[(i)++]; \
     if(UTF_IS_FIRST_SURROGATE(c)) { \
@@ -647,7 +647,7 @@ typedef int32_t UTextOffset;
     } \
 }
 
-/** @deprecated since ICU 2.4. Use U16_APPEND instead, see utf_old.h. */
+/** @deprecated ICU 2.4. Use U16_APPEND instead, see utf_old.h. */
 #define UTF16_APPEND_CHAR_SAFE(s, i, length, c) { \
     if((uint32_t)(c)<=0xffff) { \
         (s)[(i)++]=(uint16_t)(c); \
@@ -663,16 +663,16 @@ typedef int32_t UTextOffset;
     } \
 }
 
-/** @deprecated since ICU 2.4. Renamed to U16_FWD_1, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_FWD_1, see utf_old.h. */
 #define UTF16_FWD_1_SAFE(s, i, length) U16_FWD_1(s, i, length)
 
-/** @deprecated since ICU 2.4. Renamed to U16_FWD_N, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_FWD_N, see utf_old.h. */
 #define UTF16_FWD_N_SAFE(s, i, length, n) U16_FWD_N(s, i, length, n)
 
-/** @deprecated since ICU 2.4. Renamed to U16_SET_CP_START, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_SET_CP_START, see utf_old.h. */
 #define UTF16_SET_CHAR_START_SAFE(s, start, i) U16_SET_CP_START(s, start, i)
 
-/** @deprecated since ICU 2.4. Renamed to U16_PREV_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_PREV_UNSAFE, see utf_old.h. */
 #define UTF16_PREV_CHAR_UNSAFE(s, i, c) { \
     (c)=(s)[--(i)]; \
     if(UTF_IS_SECOND_SURROGATE(c)) { \
@@ -680,14 +680,14 @@ typedef int32_t UTextOffset;
     } \
 }
 
-/** @deprecated since ICU 2.4. Renamed to U16_BACK_1_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_BACK_1_UNSAFE, see utf_old.h. */
 #define UTF16_BACK_1_UNSAFE(s, i) { \
     if(UTF_IS_SECOND_SURROGATE((s)[--(i)])) { \
         --(i); \
     } \
 }
 
-/** @deprecated since ICU 2.4. Renamed to U16_BACK_N_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_BACK_N_UNSAFE, see utf_old.h. */
 #define UTF16_BACK_N_UNSAFE(s, i, n) { \
     int32_t __N=(n); \
     while(__N>0) { \
@@ -696,14 +696,14 @@ typedef int32_t UTextOffset;
     } \
 }
 
-/** @deprecated since ICU 2.4. Renamed to U16_SET_CP_LIMIT_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_SET_CP_LIMIT_UNSAFE, see utf_old.h. */
 #define UTF16_SET_CHAR_LIMIT_UNSAFE(s, i) { \
     if(UTF_IS_FIRST_SURROGATE((s)[(i)-1])) { \
         ++(i); \
     } \
 }
 
-/** @deprecated since ICU 2.4. Use U16_PREV instead, see utf_old.h. */
+/** @deprecated ICU 2.4. Use U16_PREV instead, see utf_old.h. */
 #define UTF16_PREV_CHAR_SAFE(s, start, i, c, strict) { \
     (c)=(s)[--(i)]; \
     if(UTF_IS_SECOND_SURROGATE(c)) { \
@@ -722,13 +722,13 @@ typedef int32_t UTextOffset;
     } \
 }
 
-/** @deprecated since ICU 2.4. Renamed to U16_BACK_1, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_BACK_1, see utf_old.h. */
 #define UTF16_BACK_1_SAFE(s, start, i) U16_BACK_1(s, start, i)
 
-/** @deprecated since ICU 2.4. Renamed to U16_BACK_N, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_BACK_N, see utf_old.h. */
 #define UTF16_BACK_N_SAFE(s, start, i, n) U16_BACK_N(s, start, i, n)
 
-/** @deprecated since ICU 2.4. Renamed to U16_SET_CP_LIMIT, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_SET_CP_LIMIT, see utf_old.h. */
 #define UTF16_SET_CHAR_LIMIT_SAFE(s, start, i, length) U16_SET_CP_LIMIT(s, start, i, length)
 
 /* Formerly utf32.h --------------------------------------------------------- */
@@ -748,7 +748,7 @@ typedef int32_t UTextOffset;
 
 /* internal definitions ----------------------------------------------------- */
 
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF32_IS_SAFE(c, strict) \
     (!(strict) ? \
         (uint32_t)(c)<=0x10ffff : \
@@ -764,33 +764,33 @@ typedef int32_t UTextOffset;
 
 /* classes of code unit values */
 
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF32_IS_SINGLE(uchar) 1
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF32_IS_LEAD(uchar) 0
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF32_IS_TRAIL(uchar) 0
 
 /* number of code units per code point */
 
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF32_NEED_MULTIPLE_UCHAR(c) 0
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF32_CHAR_LENGTH(c) 1
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF32_MAX_CHAR_LENGTH 1
 
 /* average number of code units compared to UTF-16 */
 
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF32_ARRAY_SIZE(size) (size)
 
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF32_GET_CHAR_UNSAFE(s, i, c) { \
     (c)=(s)[i]; \
 }
 
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF32_GET_CHAR_SAFE(s, start, i, length, c, strict) { \
     (c)=(s)[i]; \
     if(!UTF32_IS_SAFE(c, strict)) { \
@@ -800,31 +800,31 @@ typedef int32_t UTextOffset;
 
 /* definitions with forward iteration --------------------------------------- */
 
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF32_NEXT_CHAR_UNSAFE(s, i, c) { \
     (c)=(s)[(i)++]; \
 }
 
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF32_APPEND_CHAR_UNSAFE(s, i, c) { \
     (s)[(i)++]=(c); \
 }
 
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF32_FWD_1_UNSAFE(s, i) { \
     ++(i); \
 }
 
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF32_FWD_N_UNSAFE(s, i, n) { \
     (i)+=(n); \
 }
 
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF32_SET_CHAR_START_UNSAFE(s, i) { \
 }
 
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF32_NEXT_CHAR_SAFE(s, i, length, c, strict) { \
     (c)=(s)[(i)++]; \
     if(!UTF32_IS_SAFE(c, strict)) { \
@@ -832,7 +832,7 @@ typedef int32_t UTextOffset;
     } \
 }
 
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF32_APPEND_CHAR_SAFE(s, i, length, c) { \
     if((uint32_t)(c)<=0x10ffff) { \
         (s)[(i)++]=(c); \
@@ -841,44 +841,44 @@ typedef int32_t UTextOffset;
     } \
 }
 
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF32_FWD_1_SAFE(s, i, length) { \
     ++(i); \
 }
 
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF32_FWD_N_SAFE(s, i, length, n) { \
     if(((i)+=(n))>(length)) { \
         (i)=(length); \
     } \
 }
 
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF32_SET_CHAR_START_SAFE(s, start, i) { \
 }
 
 /* definitions with backward iteration -------------------------------------- */
 
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF32_PREV_CHAR_UNSAFE(s, i, c) { \
     (c)=(s)[--(i)]; \
 }
 
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF32_BACK_1_UNSAFE(s, i) { \
     --(i); \
 }
 
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF32_BACK_N_UNSAFE(s, i, n) { \
     (i)-=(n); \
 }
 
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF32_SET_CHAR_LIMIT_UNSAFE(s, i) { \
 }
 
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF32_PREV_CHAR_SAFE(s, start, i, c, strict) { \
     (c)=(s)[--(i)]; \
     if(!UTF32_IS_SAFE(c, strict)) { \
@@ -886,12 +886,12 @@ typedef int32_t UTextOffset;
     } \
 }
 
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF32_BACK_1_SAFE(s, start, i) { \
     --(i); \
 }
 
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF32_BACK_N_SAFE(s, start, i, n) { \
     (i)-=(n); \
     if((i)<(start)) { \
@@ -899,7 +899,7 @@ typedef int32_t UTextOffset;
     } \
 }
 
-/** @deprecated since ICU 2.4. Obsolete, see utf_old.h. */
+/** @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF32_SET_CHAR_LIMIT_SAFE(s, i, length) { \
 }
 
@@ -908,77 +908,77 @@ typedef int32_t UTextOffset;
 /**
  * Estimate the number of code units for a string based on the number of UTF-16 code units.
  *
- * @deprecated since ICU 2.4. Obsolete, see utf_old.h.
+ * @deprecated ICU 2.4. Obsolete, see utf_old.h.
  */
 #define UTF_ARRAY_SIZE(size) UTF16_ARRAY_SIZE(size)
 
-/** @deprecated since ICU 2.4. Renamed to U16_GET_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_GET_UNSAFE, see utf_old.h. */
 #define UTF_GET_CHAR_UNSAFE(s, i, c)                 UTF16_GET_CHAR_UNSAFE(s, i, c)
 
-/** @deprecated since ICU 2.4. Use U16_GET instead, see utf_old.h. */
+/** @deprecated ICU 2.4. Use U16_GET instead, see utf_old.h. */
 #define UTF_GET_CHAR_SAFE(s, start, i, length, c, strict) UTF16_GET_CHAR_SAFE(s, start, i, length, c, strict)
 
 
-/** @deprecated since ICU 2.4. Renamed to U16_NEXT_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_NEXT_UNSAFE, see utf_old.h. */
 #define UTF_NEXT_CHAR_UNSAFE(s, i, c)                UTF16_NEXT_CHAR_UNSAFE(s, i, c)
 
-/** @deprecated since ICU 2.4. Use U16_NEXT instead, see utf_old.h. */
+/** @deprecated ICU 2.4. Use U16_NEXT instead, see utf_old.h. */
 #define UTF_NEXT_CHAR_SAFE(s, i, length, c, strict)  UTF16_NEXT_CHAR_SAFE(s, i, length, c, strict)
 
 
-/** @deprecated since ICU 2.4. Renamed to U16_APPEND_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_APPEND_UNSAFE, see utf_old.h. */
 #define UTF_APPEND_CHAR_UNSAFE(s, i, c)              UTF16_APPEND_CHAR_UNSAFE(s, i, c)
 
-/** @deprecated since ICU 2.4. Use U16_APPEND instead, see utf_old.h. */
+/** @deprecated ICU 2.4. Use U16_APPEND instead, see utf_old.h. */
 #define UTF_APPEND_CHAR_SAFE(s, i, length, c)        UTF16_APPEND_CHAR_SAFE(s, i, length, c)
 
 
-/** @deprecated since ICU 2.4. Renamed to U16_FWD_1_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_FWD_1_UNSAFE, see utf_old.h. */
 #define UTF_FWD_1_UNSAFE(s, i)                       UTF16_FWD_1_UNSAFE(s, i)
 
-/** @deprecated since ICU 2.4. Renamed to U16_FWD_1, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_FWD_1, see utf_old.h. */
 #define UTF_FWD_1_SAFE(s, i, length)                 UTF16_FWD_1_SAFE(s, i, length)
 
 
-/** @deprecated since ICU 2.4. Renamed to U16_FWD_N_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_FWD_N_UNSAFE, see utf_old.h. */
 #define UTF_FWD_N_UNSAFE(s, i, n)                    UTF16_FWD_N_UNSAFE(s, i, n)
 
-/** @deprecated since ICU 2.4. Renamed to U16_FWD_N, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_FWD_N, see utf_old.h. */
 #define UTF_FWD_N_SAFE(s, i, length, n)              UTF16_FWD_N_SAFE(s, i, length, n)
 
 
-/** @deprecated since ICU 2.4. Renamed to U16_SET_CP_START_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_SET_CP_START_UNSAFE, see utf_old.h. */
 #define UTF_SET_CHAR_START_UNSAFE(s, i)              UTF16_SET_CHAR_START_UNSAFE(s, i)
 
-/** @deprecated since ICU 2.4. Renamed to U16_SET_CP_START, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_SET_CP_START, see utf_old.h. */
 #define UTF_SET_CHAR_START_SAFE(s, start, i)         UTF16_SET_CHAR_START_SAFE(s, start, i)
 
 
-/** @deprecated since ICU 2.4. Renamed to U16_PREV_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_PREV_UNSAFE, see utf_old.h. */
 #define UTF_PREV_CHAR_UNSAFE(s, i, c)                UTF16_PREV_CHAR_UNSAFE(s, i, c)
 
-/** @deprecated since ICU 2.4. Use U16_PREV instead, see utf_old.h. */
+/** @deprecated ICU 2.4. Use U16_PREV instead, see utf_old.h. */
 #define UTF_PREV_CHAR_SAFE(s, start, i, c, strict)   UTF16_PREV_CHAR_SAFE(s, start, i, c, strict)
 
 
-/** @deprecated since ICU 2.4. Renamed to U16_BACK_1_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_BACK_1_UNSAFE, see utf_old.h. */
 #define UTF_BACK_1_UNSAFE(s, i)                      UTF16_BACK_1_UNSAFE(s, i)
 
-/** @deprecated since ICU 2.4. Renamed to U16_BACK_1, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_BACK_1, see utf_old.h. */
 #define UTF_BACK_1_SAFE(s, start, i)                 UTF16_BACK_1_SAFE(s, start, i)
 
 
-/** @deprecated since ICU 2.4. Renamed to U16_BACK_N_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_BACK_N_UNSAFE, see utf_old.h. */
 #define UTF_BACK_N_UNSAFE(s, i, n)                   UTF16_BACK_N_UNSAFE(s, i, n)
 
-/** @deprecated since ICU 2.4. Renamed to U16_BACK_N, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_BACK_N, see utf_old.h. */
 #define UTF_BACK_N_SAFE(s, start, i, n)              UTF16_BACK_N_SAFE(s, start, i, n)
 
 
-/** @deprecated since ICU 2.4. Renamed to U16_SET_CP_LIMIT_UNSAFE, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_SET_CP_LIMIT_UNSAFE, see utf_old.h. */
 #define UTF_SET_CHAR_LIMIT_UNSAFE(s, i)              UTF16_SET_CHAR_LIMIT_UNSAFE(s, i)
 
-/** @deprecated since ICU 2.4. Renamed to U16_SET_CP_LIMIT, see utf_old.h. */
+/** @deprecated ICU 2.4. Renamed to U16_SET_CP_LIMIT, see utf_old.h. */
 #define UTF_SET_CHAR_LIMIT_SAFE(s, start, i, length) UTF16_SET_CHAR_LIMIT_SAFE(s, start, i, length)
 
 /* Define default macros (UTF-16 "safe") ------------------------------------ */
@@ -986,42 +986,42 @@ typedef int32_t UTextOffset;
 /**
  * Does this code unit alone encode a code point (BMP, not a surrogate)?
  * Same as UTF16_IS_SINGLE.
- * @deprecated since ICU 2.4. Renamed to U_IS_SINGLE and U16_IS_SINGLE, see utf_old.h.
+ * @deprecated ICU 2.4. Renamed to U_IS_SINGLE and U16_IS_SINGLE, see utf_old.h.
  */
 #define UTF_IS_SINGLE(uchar) U16_IS_SINGLE(uchar)
 
 /**
  * Is this code unit the first one of several (a lead surrogate)?
  * Same as UTF16_IS_LEAD.
- * @deprecated since ICU 2.4. Renamed to U_IS_LEAD and U16_IS_LEAD, see utf_old.h.
+ * @deprecated ICU 2.4. Renamed to U_IS_LEAD and U16_IS_LEAD, see utf_old.h.
  */
 #define UTF_IS_LEAD(uchar) U16_IS_LEAD(uchar)
 
 /**
  * Is this code unit one of several but not the first one (a trail surrogate)?
  * Same as UTF16_IS_TRAIL.
- * @deprecated since ICU 2.4. Renamed to U_IS_TRAIL and U16_IS_TRAIL, see utf_old.h.
+ * @deprecated ICU 2.4. Renamed to U_IS_TRAIL and U16_IS_TRAIL, see utf_old.h.
  */
 #define UTF_IS_TRAIL(uchar) U16_IS_TRAIL(uchar)
 
 /**
  * Does this code point require multiple code units (is it a supplementary code point)?
  * Same as UTF16_NEED_MULTIPLE_UCHAR.
- * @deprecated since ICU 2.4. Use U16_LENGTH or test ((uint32_t)(c)>0xffff) instead.
+ * @deprecated ICU 2.4. Use U16_LENGTH or test ((uint32_t)(c)>0xffff) instead.
  */
 #define UTF_NEED_MULTIPLE_UCHAR(c) UTF16_NEED_MULTIPLE_UCHAR(c)
 
 /**
  * How many code units are used to encode this code point (1 or 2)?
  * Same as UTF16_CHAR_LENGTH.
- * @deprecated since ICU 2.4. Renamed to U16_LENGTH, see utf_old.h.
+ * @deprecated ICU 2.4. Renamed to U16_LENGTH, see utf_old.h.
  */
 #define UTF_CHAR_LENGTH(c) U16_LENGTH(c)
 
 /**
  * How many code units are used at most for any Unicode code point (2)?
  * Same as UTF16_MAX_CHAR_LENGTH.
- * @deprecated since ICU 2.4. Renamed to U16_MAX_LENGTH, see utf_old.h.
+ * @deprecated ICU 2.4. Renamed to U16_MAX_LENGTH, see utf_old.h.
  */
 #define UTF_MAX_CHAR_LENGTH U16_MAX_LENGTH
 
@@ -1032,7 +1032,7 @@ typedef int32_t UTextOffset;
  * Same as UTF16_GET_CHAR.
  * \pre 0<=i<length
  *
- * @deprecated since ICU 2.4. Renamed to U16_GET, see utf_old.h.
+ * @deprecated ICU 2.4. Renamed to U16_GET, see utf_old.h.
  */
 #define UTF_GET_CHAR(s, start, i, length, c) U16_GET(s, start, i, length, c)
 
@@ -1045,7 +1045,7 @@ typedef int32_t UTextOffset;
  * \pre 0<=i<length
  * \post 0<i<=length
  *
- * @deprecated since ICU 2.4. Renamed to U16_NEXT, see utf_old.h.
+ * @deprecated ICU 2.4. Renamed to U16_NEXT, see utf_old.h.
  */
 #define UTF_NEXT_CHAR(s, i, length, c) U16_NEXT(s, i, length, c)
 
@@ -1058,7 +1058,7 @@ typedef int32_t UTextOffset;
  * \pre 0<=i<length
  * \post 0<i<=length
  *
- * @deprecated since ICU 2.4. Use U16_APPEND instead, see utf_old.h.
+ * @deprecated ICU 2.4. Use U16_APPEND instead, see utf_old.h.
  */
 #define UTF_APPEND_CHAR(s, i, length, c) UTF16_APPEND_CHAR_SAFE(s, i, length, c)
 
@@ -1069,7 +1069,7 @@ typedef int32_t UTextOffset;
  * \pre 0<=i<length
  * \post 0<i<=length
  *
- * @deprecated since ICU 2.4. Renamed to U16_FWD_1, see utf_old.h.
+ * @deprecated ICU 2.4. Renamed to U16_FWD_1, see utf_old.h.
  */
 #define UTF_FWD_1(s, i, length) U16_FWD_1(s, i, length)
 
@@ -1080,7 +1080,7 @@ typedef int32_t UTextOffset;
  * \pre 0<=i<length
  * \post 0<i<=length
  *
- * @deprecated since ICU 2.4. Renamed to U16_FWD_N, see utf_old.h.
+ * @deprecated ICU 2.4. Renamed to U16_FWD_N, see utf_old.h.
  */
 #define UTF_FWD_N(s, i, length, n) U16_FWD_N(s, i, length, n)
 
@@ -1096,7 +1096,7 @@ typedef int32_t UTextOffset;
  * \pre start<=i<length
  * \post start<=i<length
  *
- * @deprecated since ICU 2.4. Renamed to U16_SET_CP_START, see utf_old.h.
+ * @deprecated ICU 2.4. Renamed to U16_SET_CP_START, see utf_old.h.
  */
 #define UTF_SET_CHAR_START(s, start, i) U16_SET_CP_START(s, start, i)
 
@@ -1109,7 +1109,7 @@ typedef int32_t UTextOffset;
  * \pre start<i<=length
  * \post start<=i<length
  *
- * @deprecated since ICU 2.4. Renamed to U16_PREV, see utf_old.h.
+ * @deprecated ICU 2.4. Renamed to U16_PREV, see utf_old.h.
  */
 #define UTF_PREV_CHAR(s, start, i, c) U16_PREV(s, start, i, c)
 
@@ -1122,7 +1122,7 @@ typedef int32_t UTextOffset;
  * \pre start<i<=length
  * \post start<=i<length
  *
- * @deprecated since ICU 2.4. Renamed to U16_BACK_1, see utf_old.h.
+ * @deprecated ICU 2.4. Renamed to U16_BACK_1, see utf_old.h.
  */
 #define UTF_BACK_1(s, start, i) U16_BACK_1(s, start, i)
 
@@ -1135,7 +1135,7 @@ typedef int32_t UTextOffset;
  * \pre start<i<=length
  * \post start<=i<length
  *
- * @deprecated since ICU 2.4. Renamed to U16_BACK_N, see utf_old.h.
+ * @deprecated ICU 2.4. Renamed to U16_BACK_N, see utf_old.h.
  */
 #define UTF_BACK_N(s, start, i, n) U16_BACK_N(s, start, i, n)
 
@@ -1151,7 +1151,7 @@ typedef int32_t UTextOffset;
  * \pre start<i<=length
  * \post start<i<=length
  *
- * @deprecated since ICU 2.4. Renamed to U16_SET_CP_LIMIT, see utf_old.h.
+ * @deprecated ICU 2.4. Renamed to U16_SET_CP_LIMIT, see utf_old.h.
  */
 #define UTF_SET_CHAR_LIMIT(s, start, i, length) U16_SET_CP_LIMIT(s, start, i, length)
 

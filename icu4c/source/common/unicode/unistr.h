@@ -1241,7 +1241,7 @@ public:
    * to the first surrogate.
    * @param offset a valid offset into one code point of the text
    * @return offset of the first code unit of the same code point
-   * @deprecated To be removed after 2002-sep-30. Use getChar32Start().
+   * @obsolete ICU 2.4. Use getChar32Start() instead since this API will be removed in that release.
    */
   inline int32_t getCharStart(int32_t offset) const;
 
@@ -1265,7 +1265,7 @@ public:
    * behind the second surrogate (i.e., to the first surrogate).
    * @param offset a valid offset after any code unit of a code point of the text
    * @return offset of the first code unit after the same code point
-   * @deprecated To be removed after 2002-sep-30. Use getChar32Limit().
+   * @obsolete ICU 2.4. Use getChar32Limit() instead since this API will be removed in that release.
    */
   inline int32_t getCharLimit(int32_t offset) const;
 
@@ -1276,7 +1276,7 @@ public:
    * If you want to remove a string's contents, then call truncate(0).
    *
    * @return TRUE if this string contains 0 characters, FALSE otherwise.
-   * @deprecated To be removed after 2002-sep-30. Use isEmtpy() or truncate(0).
+   * @obsolete ICU 2.4. Use isEmtpy() or truncate(0) instead since this API will be removed in that release.
    */
   inline UBool empty(void) const;
 #endif
@@ -2790,7 +2790,7 @@ public:
    * of how many Latin display cells the text will take up in a monospaced
    * font.
    * @return the number of display cells occupied by the specified substring.
-   * @deprecated To be removed after 2003-jun-30; use UCHAR_EAST_ASIAN_WIDTH.
+   * @obsolete ICU 2.6. Use UCHAR_EAST_ASIAN_WIDTH instead since this API will be removed in that release.
    */
   int32_t numDisplayCells(int32_t start = 0,
               int32_t length = INT32_MAX,
@@ -2807,7 +2807,7 @@ public:
    *
    * @param pos The index of the code unit to refer to.
    * @return A modifiable UCharReference to that code unit.
-   * @deprecated since ICU 2.4. Use charAt(), setCharAt(), and operator[] const instead.
+   * @obsolete ICU 2.4. Use charAt(), setCharAt(), and operator[] const instead since this API will be removed in that release.
    */
   UCharReference operator[] (int32_t pos);
 #endif
@@ -4099,8 +4099,7 @@ UnicodeString::getArrayStart() const
 /**
  * A proxy class to allow the UnicodeString::operator[] function to
  * work as a readable and a writable operator.
- * @deprecated since ICU 2.4. Use charAt(), setCharAt(), and operator[] const
- * instead of non-const UnicodeString::operator[].
+ * @obsolete ICU 2.4. Use charAt(), setCharAt(), and operator[] const instead since this API will be removed in that release.
  */
 class U_COMMON_API UCharReference : public UObject {
 public:
