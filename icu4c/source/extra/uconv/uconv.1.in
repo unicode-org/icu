@@ -378,8 +378,8 @@ $
 (The names are delimited by curly braces.
 Also, the name of the line terminator is also displayed.)
 .PP
-Normalize data using Unicode NFKC, remove all control characters,
-and map Katakana to Hiragana, in an UTF-8 file:
+Normalize UTF-8 data using Unicode NFKC, remove all control characters,
+and map Katakana to Hiragana:
 
 .RS 4
 .B \fR$ \fPuconv \-f utf-8 \-t utf-8 \e
