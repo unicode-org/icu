@@ -635,7 +635,19 @@ public class ICUService extends ICUNotifier {
     public String getDisplayName(String id, Locale locale) {
         Map m = getVisibleIDMap();
         Factory f = (Factory)m.get(id);
-        return f != null ? f.getDisplayName(id, locale) : null;
+	if (f != null) {
+	    return f.getDisplayName(id, locale);
+	}
+
+	Key key = createKey(id);
+	while (key.fallback()) {
+	    f = (Factory)m.get(key.currentID());
+	    if (f != null) {
+		return f.getDisplayName(id, locale);
+	    }
+	}
+	
+	return null;
     }
 
     /**

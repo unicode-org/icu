@@ -449,14 +449,15 @@ public class ICULocaleService extends ICUService {
 	 * Return a localized name for the locale represented by id.
 	 */
 	public String getDisplayName(String id, Locale locale) {
-            if (isSupportedID(id)) {
+	    // assume if the user called this on us, we must have handled some fallback of this id
+//          if (isSupportedID(id)) {
                 if (locale == null) {
                     return id;
                 }
                 Locale loc = LocaleUtility.getLocaleFromName(id);
                 return loc.getDisplayName(locale);
-            }
-            return null;
+//  	    }
+//          return null;
 	}
 
         /**
