@@ -1082,20 +1082,22 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     }
 
     patternCharIndex = (EField)(patternCharPtr - DateFormatSymbols::getPatternUChars());
-    pos.setIndex(start);
 
     Calendar::EDateFields field = fgPatternIndexToCalendarField[patternCharIndex];
 
     // If there are any spaces here, skip over them.  If we hit the end
     // of the string, then fail.
     for (;;) {
-        if (pos.getIndex() >= text.length()) 
+        if (start >= text.length()) {
             return -start;
-        UChar c = text[pos.getIndex()];
-        if (c != 0x0020 /*' '*/ && c != 0x0009 /*'\t'*/) 
+        }
+        UChar32 c = text.char32At(start);
+        if (!u_isUWhiteSpace(c)) {
             break;
-        pos.setIndex(pos.getIndex() + 1);
+        }
+        start += UTF_CHAR_LENGTH(c);
     }
+    pos.setIndex(start);
 
     // We handle a few special cases here where we need to parse
     // a number value.  We handle further, more generic cases below.  We need
