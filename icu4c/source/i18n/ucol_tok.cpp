@@ -93,6 +93,8 @@ syntaxError(   const UChar* rules,
 void 
 ucol_uprv_tok_setOptionInImage(UColOptionSet *opts, UColAttribute attrib, UColAttributeValue value) {
   switch(attrib) {
+  case UCOL_HIRAGANA_QUATERNARY_MODE:
+    opts->hiraganaQ = value;
   case UCOL_FRENCH_COLLATION:
     opts->frenchCollation = value;
     break;
@@ -117,7 +119,7 @@ ucol_uprv_tok_setOptionInImage(UColOptionSet *opts, UColAttribute attrib, UColAt
   }
 }
 
-#define UTOK_OPTION_COUNT 13
+#define UTOK_OPTION_COUNT 14
 
 static UBool didInit = FALSE;
 /* we can be strict, or we can be lenient */
@@ -149,6 +151,7 @@ U_STRING_DECL(option_09,    "scriptOrder",   11);
 U_STRING_DECL(option_10,    "charsetname",   11); 
 U_STRING_DECL(option_11,    "charset",        7);  
 U_STRING_DECL(option_12,    "before",         6);  
+U_STRING_DECL(option_13,    "hiraganaQ",      9);
 
 
 ucolTokSuboption alternateSub[2] = {
@@ -184,6 +187,7 @@ ucolTokOption rulesOptions[UTOK_OPTION_COUNT] = {
  {option_07,  9, onOffSub, 2, UCOL_CASE_LEVEL},  /*"caseLevel"      */
  {option_08,  9, caseFirstSub, 3, UCOL_CASE_FIRST}, /*"caseFirst"   */
  {option_06, 13, onOffSub, 2, UCOL_NORMALIZATION_MODE}, /*"normalization" */
+ {option_13, 9, onOffSub, 2, UCOL_HIRAGANA_QUATERNARY_MODE}, /*"hiraganaQ" */
  {option_04, 12, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"variable top"   */
  {option_01,  9, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"rearrange"      */
  {option_05,  3, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"top"            */
@@ -245,6 +249,7 @@ uint8_t ucol_uprv_tok_readAndSetOption(UColOptionSet *opts, const UChar* start, 
     U_STRING_INIT(option_10, "charsetname",   11); 
     U_STRING_INIT(option_11, "charset",        7);  
     U_STRING_INIT(option_12, "before",         6);  
+    U_STRING_INIT(option_13, "hiraganaQ",      9);
   }
   start++; /*skip opening '['*/
   while(i < UTOK_OPTION_COUNT) {
@@ -266,7 +271,7 @@ uint8_t ucol_uprv_tok_readAndSetOption(UColOptionSet *opts, const UChar* start, 
     return FALSE;
   }
 
-  if(i<5) {
+  if(i<6) {
     if(optionArg) {
       for(j = 0; j<rulesOptions[i].subSize; j++) {
         if(u_strncmpNoCase(optionArg, rulesOptions[i].subopts[j].subName, rulesOptions[i].subopts[j].subLen) == 0) {
@@ -277,13 +282,13 @@ uint8_t ucol_uprv_tok_readAndSetOption(UColOptionSet *opts, const UChar* start, 
     }
     *status = U_ILLEGAL_ARGUMENT_ERROR;
     return FALSE;
-  } else if(i == 5) { /* variable top */
+  } else if(i == 6) { /* variable top */
     return UCOL_TOK_SUCCESS | UCOL_TOK_VARIABLE_TOP;
-  } else if(i == 6) {  /*rearange */
+  } else if(i == 7) {  /*rearange */
     return UCOL_TOK_SUCCESS;
-  } else if(i == 7) {  /*top */
+  } else if(i == 8) {  /*top */
     return UCOL_TOK_SUCCESS | UCOL_TOK_TOP;
-  } else if(i == 8) {  /*before*/
+  } else if(i == 9) {  /*before*/
     if(optionArg) {
       for(j = 0; j<rulesOptions[i].subSize; j++) {
         if(u_strncmpNoCase(optionArg, rulesOptions[i].subopts[j].subName, rulesOptions[i].subopts[j].subLen) == 0) {
