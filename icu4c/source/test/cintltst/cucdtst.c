@@ -1070,6 +1070,9 @@ static void TestStringFunctions()
         if(u_strchr32(s, 0xd841)!=(s+3) || u_strchr32(s, 0xdc02)!=(s+5)) {
             log_err("error: u_strchr32(surrogate) finds a partial supplementary code point\n");
         }
+        if(u_memchr32(s, 0xd841, 9)!=(s+3) || u_memchr32(s, 0xdc02, 9)!=(s+5)) {
+            log_err("error: u_memchr32(surrogate) finds a partial supplementary code point\n");
+        }
     }
 
     log_verbose("Testing u_austrcpy()");
