@@ -95,7 +95,8 @@ static UOption options[]={
     /*19*/    UOPTION_DEF( "numerictmp", 'N', UOPT_NO_ARG),
     /*20*/    UOPTION_DEF( "embed", 'E', UOPT_NO_ARG),
     /*21*/    UOPTION_DEF( "libname", 'L', UOPT_REQUIRES_ARG),
-    /*22*/    UOPTION_DEF( "compat", 'Z', UOPT_NO_ARG)
+    /*22*/    UOPTION_DEF( "quiet", 'q', UOPT_NO_ARG),
+    /*23*/    UOPTION_DEF( "compat", 'Z', UOPT_NO_ARG)
 };
 
 const char options_help[][320]={
@@ -125,6 +126,7 @@ const char options_help[][320]={
     "Use short numeric temporary file names such as t1234.c",
     "Use Embedded paths (such as 'mypackage_') - for compatibility.",
     "Library name to build (if different than package name)",
+    "Quite mode. (e.g. Do not output a readme file for static libraries)",
     "Collation compatibility mode. All paths reduced to basenames, 'x.crs' maps to coll/x.res. This internal-use-only option will be removed in future ICU versions- do not use. "
 };
 
@@ -281,6 +283,12 @@ main(int argc, char* argv[]) {
     }
     
     if(options[22].doesOccur) {
+      o.quiet = TRUE;
+    } else {
+      o.quiet = FALSE;
+    }
+
+    if(options[23].doesOccur) {
       o.compatMode = TRUE;
     } else {
       o.compatMode = FALSE;
