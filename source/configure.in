@@ -419,7 +419,7 @@ case "$datapackaging" in
 	DATA_PACKAGING_MODE=files
 	;;
     archive)
-	DATA_PACKAGING_CPPFLAGFS=-DUDATA_MAP
+	DATA_PACKAGING_CPPFLAGS=-DUDATA_MAP
 	DATA_PACKAGING_MODE=common
 	;;
     library)
