@@ -3580,9 +3580,9 @@ EOF
 
 fi
 
-echo $ac_n "checking for bool_t""... $ac_c" 1>&6
-echo "configure:3585: checking for bool_t" >&5
-if eval "test \"`echo '$''{'ac_cv_type_bool_t'+set}'`\" = set"; then
+echo $ac_n "checking for int64_t""... $ac_c" 1>&6
+echo "configure:3585: checking for int64_t" >&5
+if eval "test \"`echo '$''{'ac_cv_type_int64_t'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
@@ -3595,20 +3595,53 @@ else
 #endif
 EOF
 if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
-  egrep "(^|[^a-zA-Z_0-9])bool_t[^a-zA-Z_0-9]" >/dev/null 2>&1; then
+  egrep "(^|[^a-zA-Z_0-9])int64_t[^a-zA-Z_0-9]" >/dev/null 2>&1; then
   rm -rf conftest*
-  ac_cv_type_bool_t=yes
+  ac_cv_type_int64_t=yes
 else
   rm -rf conftest*
-  ac_cv_type_bool_t=no
+  ac_cv_type_int64_t=no
 fi
 rm -f conftest*
 
 fi
-echo "$ac_t""$ac_cv_type_bool_t" 1>&6
-if test $ac_cv_type_bool_t = no; then
+echo "$ac_t""$ac_cv_type_int64_t" 1>&6
+if test $ac_cv_type_int64_t = no; then
   cat >> confdefs.h <<\EOF
-#define bool_t signed char
+#define int64_t signed long
+EOF
+
+fi
+
+echo $ac_n "checking for uint64_t""... $ac_c" 1>&6
+echo "configure:3618: checking for uint64_t" >&5
+if eval "test \"`echo '$''{'ac_cv_type_uint64_t'+set}'`\" = set"; then
+  echo $ac_n "(cached) $ac_c" 1>&6
+else
+  cat > conftest.$ac_ext <<EOF
+#line 3623 "configure"
+#include "confdefs.h"
+#include <sys/types.h>
+#if STDC_HEADERS
+#include <stdlib.h>
+#include <stddef.h>
+#endif
+EOF
+if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
+  egrep "(^|[^a-zA-Z_0-9])uint64_t[^a-zA-Z_0-9]" >/dev/null 2>&1; then
+  rm -rf conftest*
+  ac_cv_type_uint64_t=yes
+else
+  rm -rf conftest*
+  ac_cv_type_uint64_t=no
+fi
+rm -f conftest*
+
+fi
+echo "$ac_t""$ac_cv_type_uint64_t" 1>&6
+if test $ac_cv_type_uint64_t = no; then
+  cat >> confdefs.h <<\EOF
+#define uint64_t unsigned long
 EOF
 
 fi
@@ -3656,10 +3689,17 @@ HAVE_UINT32_T=1
 fi
 
 
-if test $ac_cv_type_bool_t = no; then
-HAVE_BOOL_T=0
+if test $ac_cv_type_int64_t = no; then
+HAVE_INT64_T=0
 else
-HAVE_BOOL_T=1
+HAVE_INT64_T=1
+fi
+
+
+if test $ac_cv_type_uint64_t = no; then
+HAVE_UINT64_T=0
+else
+HAVE_UINT64_T=1
 fi
 
 
@@ -3801,7 +3841,7 @@ esac
 
 
 echo $ac_n "checking for a library suffix to use""... $ac_c" 1>&6
-echo "configure:3805: checking for a library suffix to use" >&5
+echo "configure:3845: checking for a library suffix to use" >&5
 # Check whether --with-library-suffix or --without-library-suffix was given.
 if test "${with_library_suffix+set}" = set; then
   withval="$with_library_suffix"
@@ -3904,7 +3944,7 @@ case "${host}" in
 		for file in samples/date/date \
 		  samples/cal/cal test/cintltst/cintltst \
 		  tools/makeconv/makeconv tools/genrb/genrb \
-		  tools/rbdump/read tools/genccode/genccode \
+		  tools/genccode/genccode \
 		  tools/gencmn/gencmn tools/gencmn/decmn \
 		  tools/gencnval/gencnval tools/gennorm/gennorm \
 		  tools/gennames/gennames tools/gentest/gentest \
@@ -4155,7 +4195,8 @@ s%@HAVE_INT16_T@%$HAVE_INT16_T%g
 s%@HAVE_UINT16_T@%$HAVE_UINT16_T%g
 s%@HAVE_INT32_T@%$HAVE_INT32_T%g
 s%@HAVE_UINT32_T@%$HAVE_UINT32_T%g
-s%@HAVE_BOOL_T@%$HAVE_BOOL_T%g
+s%@HAVE_INT64_T@%$HAVE_INT64_T%g
+s%@HAVE_UINT64_T@%$HAVE_UINT64_T%g
 s%@ECHO_N@%$ECHO_N%g
 s%@ECHO_C@%$ECHO_C%g
 s%@EXTRAS_TRUE@%$EXTRAS_TRUE%g
