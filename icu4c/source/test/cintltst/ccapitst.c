@@ -472,7 +472,7 @@ void TestConvert()
         if (!ucs_file_in) 
         {
             log_err("Couldn't open the Unicode file [%s]... Exiting...\n", ucs_file_name);
-            exit(0);
+		return;	
         }
 
      /*Creates a converter and testing ucnv_openCCSID(u_int code_page, platform, errstatus*/
@@ -484,7 +484,7 @@ void TestConvert()
         {
             log_err("Error creating the convertor \n");
             
-            exit(0);
+		return;
         }
     
     /*testing for ucnv_getName()  */
@@ -744,7 +744,7 @@ void TestConvert()
         if (BOM!=0xFEFF && BOM!=0xFFFE) 
           {
             log_err("File Missing BOM...Bailing!\n");
-            exit(0);
+		return;
           }
 
         
