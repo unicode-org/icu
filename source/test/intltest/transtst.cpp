@@ -2704,9 +2704,20 @@ void TransliteratorTest::TestIDForms() {
         "nfd", "NFC", // make sure case is ignored
         "Any-NFKD", "Any-NFKC",
         "Null", "Null",
+        "-nfkc", "NFKD",
+        "-nfkc/", "NFKD",
         "Latin-Greek/UNGEGN", "Greek-Latin/UNGEGN",
         "Greek/UNGEGN-Latin", "Latin-Greek/UNGEGN",
         "Bengali-Devanagari/", "Devanagari-Bengali",
+        "Source-", NULL,
+        "Source/Variant-", NULL,
+        "Source-/Variant", NULL,
+        "/Variant", NULL,
+        "/Variant-", NULL,
+        "-/Variant", NULL,
+        "-/", NULL,
+        "-", NULL,
+        "/", NULL,
     };
     const int32_t DATA_length = sizeof(DATA)/sizeof(DATA[0]);
     
@@ -2716,7 +2727,11 @@ void TransliteratorTest::TestIDForms() {
         Transliterator *t =
             Transliterator::createInstance(DATA[i], UTRANS_FORWARD, pe, ec);
         if (U_FAILURE(ec)) {
-            errln((UnicodeString)"FAIL: Couldn't create " + DATA[i]);
+            if (DATA[i+1] == NULL) {
+                logln((UnicodeString)"Ok: getInstance(" + DATA[i] +") => " + u_errorName(ec));
+            } else {
+                errln((UnicodeString)"FAIL: Couldn't create " + DATA[i]);
+            }
             delete t;
             continue;
         }
