@@ -35,6 +35,7 @@ public:
     void TestPreviousNext(void);
     void TestNormalizerAPI(void);
     void TestConcatenate(void);
+    void TestCompare(void);
 
 private:
     UnicodeString canonTests[24][3];

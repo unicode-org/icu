@@ -5,6 +5,7 @@
  ********************************************************************/
 
 #include "unicode/utypes.h"
+#include "unicode/uchar.h"
 #include "unicode/normlzr.h"
 #include "unicode/schriter.h"
 #include "cstring.h"
@@ -40,6 +41,7 @@ void BasicNormalizerTest::runIndexedTest(int32_t index, UBool exec,
         CASE(11,TestPreviousNext);
         CASE(12,TestNormalizerAPI);
         CASE(13,TestConcatenate);
+        CASE(14,TestCompare);
         default: name = ""; break;
     }
 }
@@ -902,5 +904,214 @@ void BasicNormalizerTest::TestConcatenate() {
     r=Normalizer::concatenate(left, right, result, mode, 0, errorCode);
     if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR || result!=r || !result.isBogus()) {
         errln("error in Normalizer::concatenate(), does not detect left.isBogus()\n");
+    }
+}
+
+// reference implementation of Normalizer::compare
+static int32_t
+ref_norm_compare(const UnicodeString &s1, const UnicodeString &s2, uint32_t options, UErrorCode &errorCode) {
+    UnicodeString t1, t2;
+
+    Normalizer::decompose(s1, FALSE, 0, t1, errorCode);
+    Normalizer::decompose(s2, FALSE, 0, t2, errorCode);
+
+    if(options&U_COMPARE_IGNORE_CASE) {
+        t1.foldCase(options);
+        t2.foldCase(options);
+    }
+
+    if(options&U_COMPARE_CODE_POINT_ORDER) {
+        return t1.compareCodePointOrder(t2);
+    } else {
+        return t1.compare(t2);
+    }
+}
+
+// test wrapper for Normalizer::compare, sets UNORM_INPUT_IS_FCD appropriately
+static int32_t
+_norm_compare(const UnicodeString &s1, const UnicodeString &s2, uint32_t options, UErrorCode &errorCode) {
+    if( UNORM_YES==Normalizer::quickCheck(s1, UNORM_FCD, errorCode) &&
+        UNORM_YES==Normalizer::quickCheck(s2, UNORM_FCD, errorCode)) {
+        options|=UNORM_INPUT_IS_FCD;
+    }
+
+    return Normalizer::compare(s1, s2, options, errorCode);
+}
+
+// reference implementation of UnicodeString::caseCompare
+static int32_t
+ref_case_compare(const UnicodeString &s1, const UnicodeString &s2, uint32_t options) {
+    UnicodeString t1, t2;
+
+    t1=s1;
+    t2=s2;
+
+    t1.foldCase(options);
+    t2.foldCase(options);
+
+    if(options&U_COMPARE_CODE_POINT_ORDER) {
+        return t1.compareCodePointOrder(t2);
+    } else {
+        return t1.compare(t2);
+    }
+}
+
+// reduce an integer to -1/0/1
+static inline int32_t
+_sign(int32_t value) {
+    if(value==0) {
+        return 0;
+    } else {
+        return (value>>31)|1;
+    }
+}
+
+void
+BasicNormalizerTest::TestCompare() {
+    // test Normalizer::compare and unorm_compare (thinly wrapped by the former)
+    // by comparing it with its semantic equivalent
+    // since we trust the pieces, this is sufficient
+
+    // test each string with itself and each other
+    // each time with all options
+    static const char *const
+    strings[]={
+        // some cases from NormalizationTest.txt
+        // 0..3
+        "D\\u031B\\u0307\\u0323",
+        "\\u1E0C\\u031B\\u0307",
+        "D\\u031B\\u0323\\u0307",
+        "d\\u031B\\u0323\\u0307",
+
+        // 4..6
+        "\\u00E4",
+        "a\\u0308",
+        "A\\u0308",
+
+        // Angstrom sign = A ring
+        // 7..10
+        "\\u212B",
+        "\\u00C5",
+        "A\\u030A",
+        "a\\u030A",
+
+        // 11.14
+        "a\\u059A\\u0316\\u302A\\u032Fb",
+        "a\\u302A\\u0316\\u032F\\u059Ab",
+        "a\\u302A\\u0316\\u032F\\u059Ab",
+        "A\\u059A\\u0316\\u302A\\u032Fb",
+
+        // from ICU case folding tests
+        // 15..20
+        "A\\u00df\\u00b5\\ufb03\\U0001040c\\u0131",
+        "ass\\u03bcffi\\U00010434i",
+        "\\u0061\\u0042\\u0131\\u03a3\\u00df\\ufb03\\ud93f\\udfff",
+        "\\u0041\\u0062\\u0069\\u03c3\\u0073\\u0053\\u0046\\u0066\\u0049\\ud93f\\udfff",
+        "\\u0041\\u0062\\u0131\\u03c3\\u0053\\u0073\\u0066\\u0046\\u0069\\ud93f\\udfff",
+        "\\u0041\\u0062\\u0069\\u03c3\\u0073\\u0053\\u0046\\u0066\\u0049\\ud93f\\udffd",
+
+        //     U+d800 U+10001   see implementation comment in unorm_cmpEquivFold
+        // vs. U+10000          at bottom - code point order
+        // 21..22
+        "\\ud800\\ud800\\udc01",
+        "\\ud800\\udc00",
+
+        // other code point order tests from ustrtest.cpp
+        // 23..31
+        "\\u20ac\\ud801",
+        "\\u20ac\\ud800\\udc00",
+        "\\ud800",
+        "\\ud800\\uff61",
+        "\\udfff",
+        "\\uff61\\udfff",
+        "\\uff61\\ud800\\udc02",
+        "\\ud800\\udc02",
+        "\\ud84d\\udc56",
+
+        // long strings, see cnormtst.c/TestNormCoverage()
+        // equivalent if case-insensitive
+        // 32..33
+        "\\uAD8B\\uAD8B\\uAD8B\\uAD8B"
+        "\\U0001d15e\\U0001d157\\U0001d165\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e"
+        "\\U0001d15e\\U0001d157\\U0001d165\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e"
+        "\\U0001d15e\\U0001d157\\U0001d165\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e"
+        "\\U0001d157\\U0001d165\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e"
+        "\\U0001d157\\U0001d165\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e"
+        "aaaaaaaaaaaaaaaaaazzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"
+        "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        "ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        "ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        "\\uAD8B\\uAD8B\\uAD8B\\uAD8B"
+        "d\\u031B\\u0307\\u0323",
+
+        "\\u1100\\u116f\\u11aa\\uAD8B\\uAD8B\\u1100\\u116f\\u11aa"
+        "\\U0001d157\\U0001d165\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e"
+        "\\U0001d157\\U0001d165\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e"
+        "\\U0001d157\\U0001d165\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e"
+        "\\U0001d15e\\U0001d157\\U0001d165\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e"
+        "\\U0001d15e\\U0001d157\\U0001d165\\U0001d15e\\U0001d15e\\U0001d15e\\U0001d15e"
+        "aaaaaaaaaaAAAAAAAAZZZZZZZZZZZZZZZZzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"
+        "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+        "ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+        "ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        "\\u1100\\u116f\\u11aa\\uAD8B\\uAD8B\\u1100\\u116f\\u11aa"
+        "\\u1E0C\\u031B\\u0307",
+
+        // empty string
+        // 34
+        ""
+    };
+
+    UnicodeString s[100]; // at least as many items as in strings[] !
+
+    // all combinations of options
+    // UNORM_INPUT_IS_FCD is set automatically if both input strings fulfill FCD conditions
+    static const struct {
+        uint32_t options;
+        const char *name;
+    } opt[6]={
+        { 0, "default" },
+        { U_COMPARE_CODE_POINT_ORDER, "code point order" },
+        { U_COMPARE_IGNORE_CASE, "ignore case" },
+        { U_COMPARE_CODE_POINT_ORDER|U_COMPARE_IGNORE_CASE, "code point order & ignore case" },
+        { U_COMPARE_IGNORE_CASE|U_FOLD_CASE_EXCLUDE_SPECIAL_I, "ignore case & special i" },
+        { U_COMPARE_CODE_POINT_ORDER|U_COMPARE_IGNORE_CASE|U_FOLD_CASE_EXCLUDE_SPECIAL_I, "code point order & ignore case & special i" }
+    };
+
+    int32_t i, j, k, count=sizeof(strings)/sizeof(strings[0]);
+    int32_t result, refResult;
+
+    UErrorCode errorCode;
+
+    // create the UnicodeStrings
+    for(i=0; i<count; ++i) {
+        s[i]=UnicodeString(strings[i], "").unescape();
+    }
+
+    // test them each with each other
+    for(i=0; i<count; ++i) {
+        for(j=i; j<count; ++j) {
+            for(k=0; k<sizeof(opt)/sizeof(opt[0]); ++k) {
+                // test Normalizer::compare
+                errorCode=U_ZERO_ERROR;
+                result=_norm_compare(s[i], s[j], opt[k].options, errorCode);
+                refResult=ref_norm_compare(s[i], s[j], opt[k].options, errorCode);
+                if(_sign(result)!=_sign(refResult)) {
+                    errln("Normalizer::compare(%d, %d, %s)=%d should be same sign as %d (%s)\n",
+                        i, j, opt[k].name, result, refResult, u_errorName(errorCode));
+                }
+
+                // test UnicodeString::caseCompare - same internal implementation function
+                if(opt[k].options&U_COMPARE_IGNORE_CASE) {
+                    errorCode=U_ZERO_ERROR;
+                    result=s[i].caseCompare(s[j], opt[k].options);
+                    refResult=ref_case_compare(s[i], s[j], opt[k].options);
+                    if(_sign(result)!=_sign(refResult)) {
+                        errln("Normalizer::compare(%d, %d, %s)=%d should be same sign as %d (%s)\n",
+                            i, j, opt[k].name, result, refResult, u_errorName(errorCode));
+                    }
+                }
+            }
+        }
     }
 }
