@@ -2,10 +2,6 @@
 # Copyright (c) 1999-2003, International Business Machines
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
-# $Source: /xsrl/Nsvn/icu/icu/source/test/testdata/translit_rules.txt,v $
-# $Date: 2003/06/03 20:56:50 $
-# $Revision: 1.2 $
-#--------------------------------------------------------------------
 
 # InterIndic-Bengali
 #:: NFD (NFC) ;
