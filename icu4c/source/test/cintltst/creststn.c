@@ -974,7 +974,16 @@ static void TestAPI() {
     utestdatapath = (UChar*) malloc((len+10)*sizeof(UChar));
 
     u_charsToUChars(testdatapath, utestdatapath, (int32_t)strlen(testdatapath)+1);
-    /*u_uastrcpy(utestdatapath, testdatapath);*/
+#if (U_FILE_SEP_CHAR != U_FILE_ALT_SEP_CHAR) && U_FILE_SEP_CHAR == '\\'
+    {
+        /* Convert all backslashes to forward slashes so that we can make sure that ures_openU
+           can handle invariant characters. */
+        UChar *backslash;
+        while ((backslash = u_strchr(utestdatapath, 0x005C))) {
+            *backslash = 0x002F;
+        }
+    }
+#endif
 
     /*Test ures_openU */
 
