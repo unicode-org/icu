@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/NameUnicodeTransliterator.java,v $ 
- * $Date: 2001/12/03 21:33:58 $ 
- * $Revision: 1.6 $
+ * $Date: 2002/02/09 01:01:47 $ 
+ * $Revision: 1.7 $
  */
 package com.ibm.text;
 import java.util.*;
@@ -76,7 +76,7 @@ class NameUnicodeTransliterator extends Transliterator {
         
         int c;
         for (; cursor < limit; cursor+=UTF16.getCharCount(c)) {
-            c = UTF16.charAt(text, cursor);
+            c = text.char32At(cursor);
 
             switch (mode) {
             case 0: // looking for open delimiter

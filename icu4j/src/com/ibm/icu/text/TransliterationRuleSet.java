@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRuleSet.java,v $
- * $Date: 2001/11/29 22:31:18 $
- * $Revision: 1.20 $
+ * $Date: 2002/02/09 01:01:47 $
+ * $Revision: 1.21 $
  *
  *****************************************************************************************
  */
@@ -28,7 +28,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.20 $ $Date: 2001/11/29 22:31:18 $
+ * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.21 $ $Date: 2002/02/09 01:01:47 $
  */
 class TransliterationRuleSet {
     /**
@@ -196,7 +196,7 @@ class TransliterationRuleSet {
     public boolean transliterate(Replaceable text,
                                  Transliterator.Position pos,
                                  boolean incremental) {
-        int indexByte = UTF16.charAt(text, pos.start) & 0xFF;
+        int indexByte = text.char32At(pos.start) & 0xFF;
         for (int i=index[indexByte]; i<index[indexByte+1]; ++i) {
             int m = rules[i].matchAndReplace(text, pos, incremental);
             switch (m) {
@@ -217,7 +217,7 @@ class TransliterationRuleSet {
             }
         }
         // No match or partial match from any rule
-        pos.start += UTF16.getCharCount(UTF16.charAt(text, pos.start));
+        pos.start += UTF16.getCharCount(text.char32At(pos.start));
         if (Transliterator.DEBUG) {
             System.out.println((incremental ? "Rule.i: no match => ":"Rule: no match => ") +
                                Utility.formatInput(text, pos));
@@ -259,9 +259,12 @@ class TransliterationRuleSet {
 }
 
 /* $Log: TransliterationRuleSet.java,v $
- * Revision 1.20  2001/11/29 22:31:18  alan
- * jitterbug 1560: add source-set methods and TransliteratorUtility class
+ * Revision 1.21  2002/02/09 01:01:47  alan
+ * jitterbug 1544: add char32At() to Replaceable
  *
+/* Revision 1.20  2001/11/29 22:31:18  alan
+/* jitterbug 1560: add source-set methods and TransliteratorUtility class
+/*
 /* Revision 1.19  2001/11/29 16:11:46  alan
 /* jitterbug 1560: add debugging code; fix handling of runs; detect incomplete non-incremental processing
 /*

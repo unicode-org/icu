@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UnicodeFilter.java,v $ 
- * $Date: 2001/11/29 22:31:18 $ 
- * $Revision: 1.8 $
+ * $Date: 2002/02/09 01:01:48 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -41,18 +41,18 @@ public abstract class UnicodeFilter implements UnicodeMatcher {
                        boolean incremental) {
         int c;
         if (offset[0] < limit &&
-            contains(c = UTF16.charAt(text, offset[0]))) {
+            contains(c = text.char32At(offset[0]))) {
             offset[0] += UTF16.getCharCount(c);
             return U_MATCH;
         }
         if (offset[0] > limit &&
-            contains(c = UTF16.charAt(text, offset[0]))) {
+            contains(c = text.char32At(offset[0]))) {
             // Backup offset by 1, unless the preceding character is a
             // surrogate pair -- then backup by 2 (keep offset pointing at
             // the lead surrogate).
             --offset[0];
             if (offset[0] >= 0) {
-                offset[0] -= UTF16.getCharCount(UTF16.charAt(text, offset[0])) - 1;
+                offset[0] -= UTF16.getCharCount(text.char32At(offset[0])) - 1;
             }
             return U_MATCH;
         }

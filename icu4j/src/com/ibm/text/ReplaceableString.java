@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/ReplaceableString.java,v $ 
- * $Date: 2001/12/04 20:09:07 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/02/09 01:01:47 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -26,7 +26,7 @@ import com.ibm.util.Utility;
  *
  * @see Replaceable
  * @author Alan Liu
- * @version $RCSfile: ReplaceableString.java,v $ $Revision: 1.7 $ $Date: 2001/12/04 20:09:07 $
+ * @version $RCSfile: ReplaceableString.java,v $ $Revision: 1.8 $ $Date: 2002/02/09 01:01:47 $
  */
 public class ReplaceableString implements Replaceable {
     private StringBuffer buf;
@@ -92,6 +92,20 @@ public class ReplaceableString implements Replaceable {
      */
     public char charAt(int offset) {
         return buf.charAt(offset);
+    }
+
+    /**
+     * Return the 32-bit code point at the given 16-bit offset into
+     * the text.  This assumes the text is stored as 16-bit code units
+     * with surrogate pairs intermixed.  If the offset of a leading or
+     * trailing code unit of a surrogate pair is given, return the
+     * code point of the surrogate pair.
+     * @param offset an integer between 0 and <code>length()</code>-1
+     * inclusive
+     * @return 32-bit code point of text at given offset
+     */
+    public int char32At(int offset) {
+        return UTF16.charAt(buf, offset);
     }
 
     /**

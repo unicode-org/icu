@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRule.java,v $
- * $Date: 2002/02/07 00:53:54 $
- * $Revision: 1.42 $
+ * $Date: 2002/02/09 01:01:47 $
+ * $Revision: 1.43 $
  *
  *****************************************************************************************
  */
@@ -46,7 +46,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.42 $ $Date: 2002/02/07 00:53:54 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.43 $ $Date: 2002/02/09 01:01:47 $
  */
 class TransliterationRule {
 
@@ -350,13 +350,13 @@ class TransliterationRule {
 
     static final int posBefore(Replaceable str, int pos) {
         return (pos > 0) ?
-            pos - UTF16.getCharCount(UTF16.charAt(str, pos-1)) :
+            pos - UTF16.getCharCount(str.char32At(pos-1)) :
             pos - 1;
     }
 
     static final int posAfter(Replaceable str, int pos) {
         return (pos >= 0 && pos < str.length()) ?
-            pos + UTF16.getCharCount(UTF16.charAt(str, pos)) :
+            pos + UTF16.getCharCount(str.char32At(pos)) :
             pos + 1;
     }
 
@@ -583,6 +583,9 @@ class TransliterationRule {
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.43  2002/02/09 01:01:47  alan
+ * jitterbug 1544: add char32At() to Replaceable
+ *
  * Revision 1.42  2002/02/07 00:53:54  alan
  * jitterbug 1234: make output side of RBTs object-oriented; rewrite ID parsers and modularize them; implement &Any-Lower() support
  *

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Replaceable.java,v $ 
- * $Date: 2001/11/21 21:15:02 $ 
- * $Revision: 1.4 $
+ * $Date: 2002/02/09 01:01:47 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -36,7 +36,7 @@ package com.ibm.text;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Replaceable.java,v $ $Revision: 1.4 $ $Date: 2001/11/21 21:15:02 $
+ * @version $RCSfile: Replaceable.java,v $ $Revision: 1.5 $ $Date: 2002/02/09 01:01:47 $
  */
 public interface Replaceable {
     /**
@@ -52,6 +52,21 @@ public interface Replaceable {
      * @return character of text at given offset
      */
     char charAt(int offset);
+
+    /**
+     * Return the 32-bit code point at the given 16-bit offset into
+     * the text.  This assumes the text is stored as 16-bit code units
+     * with surrogate pairs intermixed.  If the offset of a leading or
+     * trailing code unit of a surrogate pair is given, return the
+     * code point of the surrogate pair.
+     *
+     * <p>Most subclasses can return
+     * <code>com.ibm.text.UTF16.charAt(this, offset)</code>.
+     * @param offset an integer between 0 and <code>length()</code>-1
+     * inclusive
+     * @return 32-bit code point of text at given offset
+     */
+    int char32At(int offset);
 
     /**
      * Copies characters from this object into the destination
