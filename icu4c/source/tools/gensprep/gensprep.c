@@ -187,7 +187,7 @@ main(int argc, char* argv[]) {
 #if UCONFIG_NO_IDNA
 
     fprintf(stderr,
-        "gensprep writes dummy " U_ICUDATA_NAME "_" _SPREP_DATA_NAME "." DATA_TYPE
+        "gensprep writes dummy " U_ICUDATA_NAME "_" DATA_NAME "." DATA_TYPE
         " because UCONFIG_NO_IDNA is set, \n"
         "see icu/source/common/unicode/uconfig.h\n");
     generateData(destDir);
