@@ -46,6 +46,27 @@
 #define UTF16_GET_PAIR_VALUE(first, second) \
     (((first)<<10UL)+(second)-UTF_SURROGATE_OFFSET)
 
+/* get the first and second surrogates for a supplementary code point */
+/**
+ * Takes a supplementary code point (0x10000..0x10ffff)
+ * and computes the first surrogate (0xd800..0xdbff)
+ * for UTF-16 encoding.
+ */
+#define UTF_FIRST_SURROGATE(supplementary) (UChar)(((supplementary)>>10)+0xd7c0)
+
+/**
+ * Takes a supplementary code point (0x10000..0x10ffff)
+ * and computes the second surrogate (0xdc00..0xdfff)
+ * for UTF-16 encoding.
+ */
+#define UTF_SECOND_SURROGATE(supplementary) (UChar)(((supplementary)&0x3ff)|0xdc00)
+
+/** alias for UTF_FIRST_SURROGATE */
+#define UTF16_LEAD(supplementary) UTF_FIRST_SURROGATE(supplementary)
+
+/** alias for UTF_SECOND_SURROGATE */
+#define UTF16_TRAIL(supplementary) UTF_SECOND_SURROGATE(supplementary)
+
 /* classes of code unit values */
 #define UTF16_IS_SINGLE(uchar) !UTF_IS_SURROGATE(uchar)
 #define UTF16_IS_LEAD(uchar) UTF_IS_FIRST_SURROGATE(uchar)
