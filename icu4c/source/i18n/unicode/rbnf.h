@@ -993,39 +993,6 @@ private:
 
 // ---------------
 
-inline
-RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description, 
-					     UParseError& perror, 
-					     UErrorCode& status) 
-  : ruleSets(NULL)
-  , defaultRuleSet(NULL)
-  , locale(Locale::getDefault())
-  , collator(NULL)
-  , decimalFormatSymbols(NULL)
-  , lenient(FALSE)
-  , lenientParseRules(NULL)
-  , localizations(NULL)
-{
-    init(description, NULL, perror, status);
-}
-
-inline
-RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description, 
-					     const Locale& aLocale,
-					     UParseError& perror, 
-					     UErrorCode& status) 
-  : ruleSets(NULL)
-  , defaultRuleSet(NULL)
-  , locale(aLocale)
-  , collator(NULL)
-  , decimalFormatSymbols(NULL)
-  , lenient(FALSE)
-  , lenientParseRules(NULL)
-  , localizations(NULL)
-{
-    init(description, NULL, perror, status);
-}
-
 inline UnicodeString&
 RuleBasedNumberFormat::format(const Formattable& obj,
                               UnicodeString& result,

@@ -670,6 +670,37 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
   init(description, info, perror, status);
 }
 
+RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description, 
+					     UParseError& perror, 
+					     UErrorCode& status) 
+  : ruleSets(NULL)
+  , defaultRuleSet(NULL)
+  , locale(Locale::getDefault())
+  , collator(NULL)
+  , decimalFormatSymbols(NULL)
+  , lenient(FALSE)
+  , lenientParseRules(NULL)
+  , localizations(NULL)
+{
+    init(description, NULL, perror, status);
+}
+
+RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description, 
+					     const Locale& aLocale,
+					     UParseError& perror, 
+					     UErrorCode& status) 
+  : ruleSets(NULL)
+  , defaultRuleSet(NULL)
+  , locale(aLocale)
+  , collator(NULL)
+  , decimalFormatSymbols(NULL)
+  , lenient(FALSE)
+  , lenientParseRules(NULL)
+  , localizations(NULL)
+{
+    init(description, NULL, perror, status);
+}
+
 RuleBasedNumberFormat::RuleBasedNumberFormat(URBNFRuleSetTag tag, const Locale& alocale, UErrorCode& status)
   : ruleSets(NULL)
   , defaultRuleSet(NULL)
@@ -722,7 +753,7 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const RuleBasedNumberFormat& rhs)
     this->operator=(rhs);
 }
 
- // --------
+// --------
 
 RuleBasedNumberFormat&
 RuleBasedNumberFormat::operator=(const RuleBasedNumberFormat& rhs)
