@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/components/Attic/TransliteratingTextComponent.java,v $ 
- * $Date: 2000/06/28 20:36:45 $ 
- * $Revision: 1.6 $
+ * $Date: 2001/11/20 19:51:37 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -25,21 +25,23 @@ import com.ibm.text.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliteratingTextComponent.java,v $ $Revision: 1.6 $ $Date: 2000/06/28 20:36:45 $
+ * @version $RCSfile: TransliteratingTextComponent.java,v $ $Revision: 1.7 $ $Date: 2001/11/20 19:51:37 $
  */
 public class TransliteratingTextComponent extends DumbTextComponent {
 
-    private static boolean DEBUG = false;
+    private static boolean DEBUG = true;
 
     private Transliterator translit = null;
+    
+    // NOTE: DISABLE THE START AND CURSOR UNTIL WE CAN GET IT TO WORK AT ALL
 
     // Index into getText() where the start of transliteration is.
     // As we commit text during transliteration, we advance
     // this.
-    private int start = 0;
+    //private int start = 0;
 
     // Index into getText() where the cursor is; cursor >= start
-    private int cursor = 0;
+    //private int cursor = 0;
 
     private static final String COPYRIGHT =
         "\u00A9 IBM Corporation 1999. All rights reserved.";
@@ -49,12 +51,14 @@ public class TransliteratingTextComponent extends DumbTextComponent {
      */
     public TransliteratingTextComponent() {
         super();
+        /*
         addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // We get an ActionEvent only when the selection changes
                 resetTransliterationStart();
             }
         });
+        */
     }
 
     /**
@@ -98,27 +102,44 @@ public class TransliteratingTextComponent extends DumbTextComponent {
 
         // Need to save start because calls to replaceRange will update
         // start and cursor.
-        int saveStart = start;
+        //int saveStart = start;
 
-        ReplaceableString buf = new ReplaceableString();
-        buf.replace(0, 1, getText().substring(start,
-                                              getSelectionStart()));
+        String sourceText = getText().substring(0,getSelectionStart());
+        ReplaceableString buf = new ReplaceableString(sourceText);
+        /*buf.replace(0, 1, getText().substring(start,
+                                              getSelectionStart()));*/
 
-        Transliterator.Position index =
-            new Transliterator.Position(0, getSelectionStart() - start,
-                                        cursor - start);
+        Transliterator.Position index = new Transliterator.Position();
+        index.contextLimit = buf.length();
+        index.contextStart = 0;
+        index.start = 0;
+        index.limit = buf.length();;
 
         StringBuffer log = null;
         if (DEBUG) {
-            log = new StringBuffer();
-            log.append("start " + start + ", cursor " + cursor);
-            log.append(", sel " + getSelectionStart());
-            log.append(", {" + index.contextStart + ", " + index.contextLimit + ", " + index.start + "}, ");
-            log.append('"' + buf.toString() + "\" + '" + ch + "' -> \"");
+            System.out.println("Transliterator: " + translit.getID());
+            System.out.println("From:\t" + '"' + buf.toString() + '"'
+                + "; {cs: " + index.contextStart + ", cl: " + index.contextLimit + ", s: " + index.start + ", l: " + index.limit + "}"
+                + "; '" + ch + "'");
         }
 
         translit.transliterate(buf, index, ch);
-        replaceRange(buf.toString(), start, getSelectionEnd());
+        
+        if (DEBUG) {
+            System.out.println("To:\t" + '"' + buf.toString() + '"'
+                + "; {cs: " + index.contextStart + ", cl: " + index.contextLimit + ", s: " + index.start + ", l: " + index.limit + "}"
+                );
+            System.out.println();
+        }
+        /*
+        buf.replace(buf.length(), buf.length(), String.valueOf(ch));
+        translit.transliterate(buf);
+        */
+        
+        String result = buf.toString();
+        //if (result.equals(sourceText + ch)) return;
+        
+        replaceRange(result, 0, getSelectionEnd());
         // At this point start has been changed by the callback to
         // resetTransliteratorStart() via replaceRange() -- so use our
         // local copy, saveStart.
@@ -127,11 +148,12 @@ public class TransliteratingTextComponent extends DumbTextComponent {
         // it was zero.  We can therefore just add it to our original
         // getText()-based index value of start (in saveStart) to get
         // the new getText()-based start.
-        start = saveStart + index.contextStart;
+//        start = saveStart + index.contextStart;
 
         // Make the cursor getText()-based.  The CURSOR index is zero-based.
-        cursor = start + index.start - index.contextStart;
+//        cursor = start + index.start - index.contextStart;
 
+/*
         if (DEBUG) {
             String out = buf.toString();
             log.append(out.substring(0, index.contextStart)).
@@ -141,10 +163,11 @@ public class TransliteratingTextComponent extends DumbTextComponent {
                 append(out.substring(index.start)).
                 append('"');
             log.append(", {" + index.contextStart + ", " + index.contextLimit + ", " + index.start + "}, ");
-            log.append("start " + start + ", cursor " + cursor);
+//            log.append("start " + start + ", cursor " + cursor);
             log.append(", sel " + getSelectionStart());
             System.out.println(escape(log.toString()));
         }
+        */
     }
 
     /**
@@ -153,9 +176,11 @@ public class TransliteratingTextComponent extends DumbTextComponent {
      * @param t the {@link com.ibm.text.Transliterator} to use
      */
     public void setTransliterator(Transliterator t) {
+        /*
         if (translit != t) { // [sic] pointer compare ok; singletons
             resetTransliterationStart();
         }
+        */
         translit = t;
     }
 
@@ -164,10 +189,12 @@ public class TransliteratingTextComponent extends DumbTextComponent {
      * needs to be done when the user moves the cursor or when the
      * current {@link com.ibm.text.Transliterator} is changed. 
      */
+     /*
     private void resetTransliterationStart() {
         start = getSelectionStart();
         cursor = start;
     }
+    */
 
     /**
      * Escape non-ASCII characters as Unicode.
