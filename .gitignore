@@ -264,6 +264,13 @@ icu4c/source/tools/genfchk/Debug
 icu4c/source/tools/genfchk/Makefile
 icu4c/source/tools/genfchk/genfchk
 icu4c/source/tools/genfchk/genfchk.d
+icu4c/source/tools/genidna/*.d
+icu4c/source/tools/genidna/*.pdb
+icu4c/source/tools/genidna/Debug
+icu4c/source/tools/genidna/Makefile
+icu4c/source/tools/genidna/Release
+icu4c/source/tools/genidna/genidna
+icu4c/source/tools/genidna/genidna.8
 icu4c/source/tools/gennames/*.d
 icu4c/source/tools/gennames/*.pdb
 icu4c/source/tools/gennames/Debug
