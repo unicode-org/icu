@@ -80,7 +80,7 @@ case $platform in
                 CXX=/usr/ibmcxx/bin/xlC_r; export CXX
                 #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
                 #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
-                ./configure "$@"  ;;
+                $configure "$@"  ;;
         AIX4.3VA)
                 echo Running configure "$@"  for AIX using xlC compiler ...
                 CC=/usr/vacpp/bin/xlc; export CC
