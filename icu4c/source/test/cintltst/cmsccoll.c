@@ -1355,6 +1355,10 @@ static void RamsRulesTest(void) {
         log_verbose("Don't know how to test Japanese because of prefixes\n");
         continue;
       }
+      if (uprv_strcmp("de__PHONEBOOK", locName)==0) {
+        log_verbose("Don't know how to test Phonebook because the reset is on an expanding character\n");
+        continue;
+      }
       log_verbose("Testing locale %s\n", locName);
       coll = ucol_open(locName, &status);
       if(U_SUCCESS(status)) {
