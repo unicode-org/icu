@@ -57,15 +57,15 @@ typedef void *UMTX;
 
 /* Lock a mutex. Pass in NULL if you want the (ick) Single Global
    Mutex. */
-CAPI void  U_EXPORT2 umtx_lock   ( UMTX* mutex ); 
+U_CAPI void  U_EXPORT2 umtx_lock   ( UMTX* mutex ); 
 
 /* Unlock a mutex. Pass in NULL if you want the single global
    mutex. */
-CAPI void U_EXPORT2 umtx_unlock ( UMTX* mutex );
+U_CAPI void U_EXPORT2 umtx_unlock ( UMTX* mutex );
 
 /* Initialize a mutex. Use it this way:
    umtx_init( &aMutex ); */
-CAPI void U_EXPORT2 umtx_init   ( UMTX* mutex );
+U_CAPI void U_EXPORT2 umtx_init   ( UMTX* mutex );
 
 #endif /*_CMUTEX*/
 /*eof*/

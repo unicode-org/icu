@@ -63,17 +63,17 @@ static  uint32_t debugSmallLimit = 30000;
 int32_t ucmp32_getkUnicodeCount() { return UCMP32_kUnicodeCount;}
 int32_t ucmp32_getkBlockCount() { return UCMP32_kBlockCount;}
 
-CAPI int32_t ucmp32_get(CompactIntArray* array, uint16_t index) 
+U_CAPI int32_t ucmp32_get(CompactIntArray* array, uint16_t index) 
 {
     return (array->fArray[(array->fIndex[index >> UCMP32_kBlockShift]) +
                                  (index & UCMP32_kBlockMask)]);
 }
-CAPI uint32_t ucmp32_getu(CompactIntArray* array, uint16_t index)
+U_CAPI uint32_t ucmp32_getu(CompactIntArray* array, uint16_t index)
 {
 return (uint32_t)ucmp32_get(array, index);
 }
 
-CAPI void ucmp32_streamIn(CompactIntArray* this_obj, FileStream* is)
+U_CAPI void ucmp32_streamIn(CompactIntArray* this_obj, FileStream* is)
 {
 int32_t  newCount, len;
 char c;
@@ -122,7 +122,7 @@ char c;
     }
 }
 
-CAPI void ucmp32_streamOut(CompactIntArray* this_obj, FileStream* os)
+U_CAPI void ucmp32_streamOut(CompactIntArray* this_obj, FileStream* os)
 {
     char c;
 if (!T_FileStream_error(os))

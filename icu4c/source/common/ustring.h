@@ -27,7 +27,7 @@
  * @param s The array of UChars, NULL (U+0000) terminated.
  * @return The number of UChars in <TT>chars</TT>, minus the terminator.
  */
-CAPI int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 u_strlen(const UChar *s);
 
 /**
@@ -39,7 +39,7 @@ u_strlen(const UChar *s);
  * @return A pointer to <TT>dst</TT>.
  */
 
-CAPI UChar* U_EXPORT2
+U_CAPI UChar* U_EXPORT2
 u_strcat(UChar     *dst, 
     const UChar     *src);
 
@@ -52,7 +52,7 @@ u_strcat(UChar     *dst,
  * @param n The maximum number of characters to compare.
  * @return A pointer to <TT>dst</TT>.
  */
-CAPI UChar* U_EXPORT2
+U_CAPI UChar* U_EXPORT2
 u_strncat(UChar     *dst, 
      const UChar     *src, 
      int32_t     n);
@@ -64,7 +64,7 @@ u_strncat(UChar     *dst,
  * @return A pointer to the first occurrence of <TT>c</TT> in <TT>s</TT>,
  * or a null pointer if <TT>s</TT> does not contain <TT>c</TT>.
  */
-CAPI UChar*  U_EXPORT2
+U_CAPI UChar*  U_EXPORT2
 u_strchr(const UChar     *s, 
     UChar     c);
 
@@ -76,7 +76,7 @@ u_strchr(const UChar     *s,
  * value if <TT>s1</TT> is bitwise less than <TT>s2,/TT>; a positive
  * value if <TT>s1</TT> is bitwise greater than <TT>s2,/TT>.
  */
-CAPI int32_t  U_EXPORT2
+U_CAPI int32_t  U_EXPORT2
 u_strcmp(const UChar     *s1, 
     const UChar     *s2);
 
@@ -90,7 +90,7 @@ u_strcmp(const UChar     *s1,
  * value if <TT>s1</TT> is bitwise less than <TT>s2,/TT>; a positive
  * value if <TT>s1</TT> is bitwise greater than <TT>s2,/TT>.
  */
-CAPI int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 u_strncmp(const UChar     *ucs1, 
      const UChar     *ucs2, 
      int32_t     n);
@@ -102,7 +102,7 @@ u_strncmp(const UChar     *ucs1,
  * @param src The source string.
  * @return A pointer to <TT>dst</TT>.
  */
-CAPI UChar* U_EXPORT2
+U_CAPI UChar* U_EXPORT2
 u_strcpy(UChar     *dst, 
     const UChar     *src);
 
@@ -115,7 +115,7 @@ u_strcpy(UChar     *dst,
  * @param n The maximum number of characters to copy.
  * @return A pointer to <TT>dst</TT>.
  */
-CAPI UChar* U_EXPORT2
+U_CAPI UChar* U_EXPORT2
 u_strncpy(UChar     *dst, 
      const UChar     *src, 
      int32_t     n);
@@ -128,7 +128,7 @@ u_strncpy(UChar     *dst,
  * @param src The source string.
  * @return A pointer to <TT>dst</TT>.
  */
-CAPI UChar* U_EXPORT2 u_uastrcpy(UChar *ucs1,
+U_CAPI UChar* U_EXPORT2 u_uastrcpy(UChar *ucs1,
                const char *s2 );
 
 /**
@@ -141,7 +141,7 @@ CAPI UChar* U_EXPORT2 u_uastrcpy(UChar *ucs1,
  * @param n The maximum number of characters to copy.
  * @return A pointer to <TT>dst</TT>.
  */
-CAPI UChar* U_EXPORT2 u_uastrncpy(UChar *ucs1,
+U_CAPI UChar* U_EXPORT2 u_uastrncpy(UChar *ucs1,
             const char *s2,
             int32_t n);
 
@@ -153,7 +153,7 @@ CAPI UChar* U_EXPORT2 u_uastrncpy(UChar *ucs1,
  * @param src The source string.
  * @return A pointer to <TT>dst</TT>.
  */
-CAPI char* U_EXPORT2 u_austrcpy(char *s1,
+U_CAPI char* U_EXPORT2 u_austrcpy(char *s1,
             const UChar *us2 );
 #endif
 
