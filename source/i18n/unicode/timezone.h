@@ -25,16 +25,7 @@
 #ifndef TIMEZONE_H
 #define TIMEZONE_H
 
-
 #include "unicode/unistr.h"
-#include "unicode/locid.h"
-
-#include "unicode/udata.h"
-
-struct TZHeader;
-struct OffsetIndex;
-struct CountryIndex;
-struct TZEquivalencyGroup;
 
 /**
  * <code>TimeZone</code> represents a time zone offset, and also figures out daylight
@@ -527,71 +518,9 @@ protected:
 private:
     static char fgClassID;
 
-    static TimeZone*        createCustomTimeZone(const UnicodeString&); // Creates a time zone based on the string.
-
     static TimeZone*        fgDefaultZone; // default time zone (lazy evaluated)
 
-    static const UChar              GMT_ID[];
-    static const int32_t            GMT_ID_LENGTH;
-    static const UChar              CUSTOM_ID[];
-
-    ////////////////////////////////////////////////////////////////
-    // Pointers into memory-mapped icudata.  Writing to this memory
-    // will segfault!  See tzdat.h for more details.
-    ////////////////////////////////////////////////////////////////
-
-    /**
-     * DATA is the start of the memory-mapped zone data, and
-     * specifically points to the header object located there.
-     * May be zero if loading failed for some reason.
-     */
-    static const TZHeader *    DATA;
-
-    /**
-     * INDEX_BY_ID is an index table in lexicographic order of ID.
-     * Each entry is an offset from DATA to an equivalency group.
-     */
-    static const uint32_t*     INDEX_BY_ID;
-
-    /**
-     * INDEX_BY_OFFSET is an OffsetIndex table.  This table can only
-     * be walked through sequentially because the entries are of
-     * variable size.
-     */
-    static const OffsetIndex*  INDEX_BY_OFFSET;
-
-    /**
-     * INDEX_BY_COUNTRY is a CountryIndex table.  This table can
-     * be walked through sequentially because the entries are of
-     * variable size.
-     */
-    static const CountryIndex* INDEX_BY_COUNTRY;
-
-    ////////////////////////////////////////////////////////////////
-    // Other system zone data structures
-    ////////////////////////////////////////////////////////////////
-    /**
-     * ZONE_IDS is an array of all the system zone ID strings, in
-     * lexicographic order.  The createAvailableIDs() methods return
-     * arrays of pointers into this array.
-     */
-    static UnicodeString*      ZONE_IDS;
-
-    /**
-     * If DATA_LOADED is true, then an attempt has already been made
-     * to load the system zone data, and further attempts will not be
-     * made.  If DATA_LOADED is true, DATA itself will be zero if
-     * loading failed, or non-zero if it succeeded.
-     */
-    static UBool              DATA_LOADED;
-    static UDataMemory*       UDATA_POINTER;
-
-    /**
-     * The mutex object used to control write access to DATA,
-     * INDEX_BY_ID, INDEX_BY_OFFSET, and ZONE_IDS.  Also used to
-     * control read/write access to fgDefaultZone.
-     */
-    static UMTX                LOCK;
+    static TimeZone*        createCustomTimeZone(const UnicodeString&); // Creates a time zone based on the string.
 
     /**
      * Responsible for setting up fgDefaultZone.  Uses routines in TPlatformUtilities
@@ -606,13 +535,7 @@ private:
     static const TimeZone  *getGMT(void);
 
     // See source file for documentation
-    static void             loadZoneData(void);
-
-    // See source file for documentation
     static TimeZone* createSystemTimeZone(const UnicodeString& name);
-
-    // See source file for documentation
-    static const TZEquivalencyGroup* lookupEquivalencyGroup(const UnicodeString& id);
 
     UnicodeString           fID;    // this time zone's ID
 };
