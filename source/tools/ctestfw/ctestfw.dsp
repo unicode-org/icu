@@ -45,7 +45,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "CTESTFW_EXPORTS" /FD /c
-# ADD CPP /nologo /G6 /MD /Za /W3 /GX /O2 /I "..\..\..\include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "CTESTFW_EXPORTS" /D "T_CTEST_IMPLEMENTATION" /FD /c
+# ADD CPP /nologo /G6 /MD /Za /W3 /GX /O2 /I "..\..\..\include" /I "..\..\common" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "CTESTFW_EXPORTS" /D "T_CTEST_IMPLEMENTATION" /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -71,7 +71,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "CTESTFW_EXPORTS" /FD /GZ /c
-# ADD CPP /nologo /G6 /MDd /Za /W3 /Gm /GX /ZI /Od /I "..\..\..\include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "CTESTFW_EXPORTS" /D "T_CTEST_IMPLEMENTATION" /FR /FD /GZ /c
+# ADD CPP /nologo /G6 /MDd /Za /W3 /Gm /GX /ZI /Od /I "..\..\..\include" /I "..\..\common" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "CTESTFW_EXPORTS" /D "T_CTEST_IMPLEMENTATION" /FR /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -97,7 +97,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN64" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "CTESTFW_EXPORTS" /FD /c
-# ADD CPP /nologo /MD /Za /W3 /GX /Zi /O2 /I "..\..\..\include" /D "WIN64" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "CTESTFW_EXPORTS" /D "T_CTEST_IMPLEMENTATION" /D "_IA64_" /D "WIN32" /D "_AFX_NO_DAO_SUPPORT" /FD /QIA64_fmaopt /Wp64 /Zm600 /c
+# ADD CPP /nologo /MD /Za /W3 /GX /Zi /O2 /I "..\..\..\include" /I "..\..\common" /D "WIN64" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "CTESTFW_EXPORTS" /D "T_CTEST_IMPLEMENTATION" /D "_IA64_" /D "WIN32" /D "_AFX_NO_DAO_SUPPORT" /FD /QIA64_fmaopt /Wp64 /Zm600 /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win64
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win64
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -107,7 +107,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:IX86 /machine:IA64
-# ADD LINK32 /nologo /dll /machine:IA64 /out:"..\..\..\bin\ctestfw.dll"
+# ADD LINK32 /nologo /dll /machine:IX86 /out:"..\..\..\bin\ctestfw.dll" /machine:IA64
 
 !ELSEIF  "$(CFG)" == "ctestfw - Win64 Debug"
 
@@ -123,7 +123,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN64" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "CTESTFW_EXPORTS" /FD /GZ /c
-# ADD CPP /nologo /MDd /Za /W3 /Gm /GX /Zi /Od /I "..\..\..\include" /D "WIN64" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "CTESTFW_EXPORTS" /D "T_CTEST_IMPLEMENTATION" /D "_IA64_" /D "WIN32" /D "_AFX_NO_DAO_SUPPORT" /FR /FD /GZ /QIA64_fmaopt /Wp64 /Zm600 /c
+# ADD CPP /nologo /MDd /Za /W3 /Gm /GX /Zi /Od /I "..\..\..\include" /I "..\..\common" /D "WIN64" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "CTESTFW_EXPORTS" /D "T_CTEST_IMPLEMENTATION" /D "_IA64_" /D "WIN32" /D "_AFX_NO_DAO_SUPPORT" /FR /FD /GZ /QIA64_fmaopt /Wp64 /Zm600 /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win64
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win64
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -133,7 +133,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:IX86 /pdbtype:sept /machine:IA64
-# ADD LINK32 /nologo /dll /incremental:no /debug /machine:IA64 /out:"..\..\..\bin\ctestfwd.dll" /pdbtype:sept
+# ADD LINK32 /nologo /dll /incremental:no /debug /machine:IX86 /out:"..\..\..\bin\ctestfwd.dll" /pdbtype:sept /machine:IA64
 
 !ENDIF 
 
@@ -150,6 +150,18 @@ LINK32=link.exe
 
 SOURCE=.\ctest.c
 # End Source File
+# Begin Source File
+
+SOURCE=.\datamap.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\testdata.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\tstdtmod.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -157,49 +169,26 @@ SOURCE=.\ctest.c
 # Begin Source File
 
 SOURCE=.\unicode\ctest.h
+# End Source File
+# Begin Source File
 
-!IF  "$(CFG)" == "ctestfw - Win32 Release"
+SOURCE=.\unicode\datamap.h
+# End Source File
+# Begin Source File
 
-# Begin Custom Build
-InputPath=.\unicode\ctest.h
+SOURCE=.\unicode\testdata.h
+# End Source File
+# Begin Source File
 
-"..\..\..\include\unicode\ctest.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\..\include\unicode
+SOURCE=.\unicode\testlog.h
+# End Source File
+# Begin Source File
 
-# End Custom Build
+SOURCE=.\unicode\testtype.h
+# End Source File
+# Begin Source File
 
-!ELSEIF  "$(CFG)" == "ctestfw - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\ctest.h
-
-"..\..\..\include\unicode\ctest.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "ctestfw - Win64 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\ctest.h
-
-"..\..\..\include\unicode\ctest.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "ctestfw - Win64 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\ctest.h
-
-"..\..\..\include\unicode\ctest.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
+SOURCE=.\unicode\tstdtmod.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
