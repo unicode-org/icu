@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NumberFormat.java,v $ 
- * $Date: 2002/12/11 23:36:58 $ 
- * $Revision: 1.22 $
+ * $Date: 2003/02/25 23:39:44 $ 
+ * $Revision: 1.23 $
  *
  *****************************************************************************************
  */
@@ -28,11 +28,6 @@ import java.util.ResourceBundle;
 import java.util.Set;
 
 import com.ibm.icu.impl.ICULocaleData;
-import com.ibm.icu.impl.ICUService;
-import com.ibm.icu.impl.ICUService.Factory;
-import com.ibm.icu.impl.ICULocaleService;
-import com.ibm.icu.impl.ICULocaleService.ICUResourceBundleFactory;
-import com.ibm.icu.impl.ICULocaleService.LocaleKeyFactory;
 import com.ibm.icu.impl.LocaleUtility;
 
 /**
@@ -506,9 +501,15 @@ public abstract class NumberFormat extends Format{
     }
 
     // ===== Factory stuff =====
-    ///CLOVER:OFF
-    /* @prototype */
-    /* public */ static abstract class NumberFormatFactory {
+    /**
+     * A NumberFormatFactory is used to register new number formats.  The factory
+     * should be able to create any of the predefined formats for each locale it
+     * supports.  When registered, the locales it supports extend or override the
+     * locale already supported by ICU.
+     *
+     * @prototype
+     */
+    public static abstract class NumberFormatFactory {
         public static final int FORMAT_NUMBER = NUMBERSTYLE;
         public static final int FORMAT_CURRENCY = CURRENCYSTYLE;
         public static final int FORMAT_PERCENT = PERCENTSTYLE;
@@ -516,7 +517,10 @@ public abstract class NumberFormat extends Format{
         public static final int FORMAT_INTEGER = INTEGERSTYLE;
 
         /**
-         * Return true if this factory will be visible.  Default is true.  */
+         * Return true if this factory will be visible.  Default is true.
+         * If not visible, the locales supported by this factory will not
+         * be listed by getAvailableLocales.
+         */
         public boolean visible() {
             return true;
         }
@@ -529,14 +533,18 @@ public abstract class NumberFormat extends Format{
 
         /**
          * Return a number format of the appropriate type.  If the locale
-         * is not supported, return null.  All the defined types must be
-         * supported.
+         * is not supported, return null.  If the locale is supported, but
+         * the type is not provided by this service, return null.  Otherwise
+         * return an appropriate instance of NumberFormat.
          */
         public abstract NumberFormat createFormat(Locale loc, int formatType);
     }
 
-    /* @prototype */
-    /* public */ static abstract class SimpleNumberFormatFactory extends NumberFormatFactory {
+    /**
+     * A NumberFormatFactory that supports a single locale.  It can be visible or invisible.
+     * @prototype 
+     */
+    public static abstract class SimpleNumberFormatFactory extends NumberFormatFactory {
         final Set localeNames;
         final boolean visible;
 
@@ -558,48 +566,52 @@ public abstract class NumberFormat extends Format{
         }
     }
 
-    private static final class NFFactory extends LocaleKeyFactory {
-        private NumberFormatFactory delegate;
-
-        NFFactory(NumberFormatFactory delegate) {
-            super(delegate.visible() ? VISIBLE : INVISIBLE);
-
-            this.delegate = delegate;
-        }
-
-        protected Object handleCreate(Locale loc, int kind, ICUService service) {
-            return delegate.createFormat(loc, kind);
-        }
-
-        protected Set getSupportedIDs() {
-            return delegate.getSupportedLocaleNames();
-        }
+    // shim so we can build without service code
+    static abstract class NumberFormatShim {
+        abstract Locale[] getAvailableLocales();
+        abstract Object registerFactory(NumberFormatFactory f);
+        abstract boolean unregister(Object k);
+        abstract NumberFormat createInstance(Locale l, int k);
     }
-    ///CLOVER:ON
+
+    private static NumberFormatShim shim;
+    private static NumberFormatShim getShim() {
+        if (shim == null) {
+            try {
+                Class cls = Class.forName("com.ibm.icu.text.NumberFormatServiceShim");
+                shim = (NumberFormatShim)cls.newInstance();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException(e.getMessage());
+            }
+        }
+        return shim;
+    }
+
     /**
      * Get the set of Locales for which NumberFormats are installed
      * @return available locales
      * @stable ICU 2.0
      */
     public static Locale[] getAvailableLocales() {
-        if (service == null) {
+        if (shim == null) {
             return ICULocaleData.getAvailableLocales();
-        } else {
-            return service.getAvailableLocales();
         }
+        return getShim().getAvailableLocales();
     }
-    ///CLOVER:OFF
+
     /**
      * Registers a new NumberFormat for the provided locale of the defined
      * type.  The returned object is a key that can be used to unregister this
      * NumberFormat object.
      * @prototype
      */
-    /* public */ static Object register(NumberFormatFactory factory) {
+    public static Object registerFactory(NumberFormatFactory factory) {
         if (factory == null) {
             throw new IllegalArgumentException("factory must not be null");
         }
-        return getService().registerFactory(new NFFactory(factory));
+        return getShim().registerFactory(factory);
     }
 
     /**
@@ -607,35 +619,18 @@ public abstract class NumberFormat extends Format{
      * registerInstance).
      * @prototype
      */
-    /* public */ static boolean unregister(Object registryKey) {
-        if (service == null) {
-            return false;
-        } else {
-            return service.unregisterFactory((Factory)registryKey);
+    public static boolean unregister(Object registryKey) {
+        if (registryKey == null) {
+            throw new IllegalArgumentException("registryKey must not be null");
         }
+
+        if (shim == null) {
+            return false;
+        }
+
+        return shim.unregister(registryKey);
     }
 
-    private static ICULocaleService service = null;
-    private static ICULocaleService getService() {
-        if (service == null) {
-            class RBNumberFormatFactory extends ICUResourceBundleFactory {
-                protected Object handleCreate(Locale loc, int kind, ICUService service) {
-                    return createInstance(loc, kind);
-                }
-            }
-                
-            ICULocaleService newService = new ICULocaleService("NumberFormat");
-            newService.registerFactory(new RBNumberFormatFactory());
-            
-            synchronized (NumberFormat.class) {
-                if (service == null) {
-                    service = newService;
-                }
-            }
-        }
-        return service;
-    }
-    ///CLOVER:OFF
     // ===== End of factory stuff =====
 
     /**
@@ -813,16 +808,15 @@ public abstract class NumberFormat extends Format{
 
     // Hook for service
     private static NumberFormat getInstance(Locale desiredLocale, int choice) {
-        if (service == null) {
+        if (shim == null) {
             return createInstance(desiredLocale, choice);
         } else {
-            NumberFormat result = (NumberFormat)service.get(desiredLocale, choice);
-            return (NumberFormat)result.clone();
+            return getShim().createInstance(desiredLocale, choice);
         }
     }
 
     // [NEW]
-    private static NumberFormat createInstance(Locale desiredLocale,
+    static NumberFormat createInstance(Locale desiredLocale,
                                             int choice) {
         String pattern = getPattern(desiredLocale, choice);
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(desiredLocale);
