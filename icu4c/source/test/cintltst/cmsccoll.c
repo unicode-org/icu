@@ -822,6 +822,10 @@ static void logFailure (const char *platform, const char *test,
     strcat(sEsc, b);
     strcat(s, b);
     strcat(s, " ");
+    if(source[i] < 0x80) {
+      sprintf(b, "(%c)", source[i]);
+      strcat(sEsc, b);
+    }
   }
   for(i = 0; i<tLen; i++) {
     sprintf(b, "%04X", target[i]);
@@ -829,6 +833,10 @@ static void logFailure (const char *platform, const char *test,
     strcat(tEsc, b);
     strcat(t, b);
     strcat(t, " ");
+    if(target[i] < 0x80) {
+      sprintf(b, "(%c)", target[i]);
+      strcat(tEsc, b);
+    }
   }
 /*
   strcpy(output, "[[ ");
@@ -1702,6 +1710,9 @@ static void TestRedundantRules() {
   int32_t i;
 
   const static char *rules[] = {
+    "&AE <<< a << b <<< c &d <<< f",
+    "&AE <<< a <<< b << c << d < e < f <<< g",
+    "&AE <<< B <<< C / D <<< F",
     "& a << b <<< c << d <<< e& [before 1] e <<< x",
     "& a < b < c < d& [before 1] c < m",
     "& a << b <<< c << d <<< e& [before 3] e <<< x",
@@ -1718,6 +1729,9 @@ static void TestRedundantRules() {
   };
 
   const static char *expectedRules[] = {
+    "&A <<< a / E << b / E <<< c /E  &d <<< f",
+    "&A <<< a / E <<< b / E << c / E << d / E < e < f <<< g",
+    "&A <<< B / E <<< C / ED <<< F / E",
     "& a <<< x << b <<< c << d <<< e",
     "& a < b < m < c < d",
     "& a << b <<< c << d <<< x <<< e",
@@ -1734,6 +1748,9 @@ static void TestRedundantRules() {
   };
 
   const static char *testdata[][8] = {
+    {"AE", "a", "b", "c"},
+    {"AE", "a", "b", "c", "d", "e", "f", "g"},
+    {"AE", "B", "C"}, /* / ED <<< F / E"},*/
     {"a", "x", "b", "c", "d", "e"},
     {"a", "b", "m", "c", "d"},
     {"a", "b", "c", "d", "x", "e"},
@@ -1750,6 +1767,9 @@ static void TestRedundantRules() {
   };
 
   const static uint32_t testdatalen[] = {
+    4,
+      8,
+      3,
       6,
       5,
       6,
