@@ -1,14 +1,8 @@
 /*
- *******************************************************************************
- * Copyright (C) 1996-2000, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
- *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/caniter.cpp,v $ 
- * $Date: 2002/03/27 06:27:19 $ 
- * $Revision: 1.16 $
- *
- *****************************************************************************************
+ *****************************************************************************
+ * Copyright (C) 1996-2002, International Business Machines Corporation and  *
+ * others. All Rights Reserved.                                              *
+ *****************************************************************************
  */
 
 #include "hash.h"
@@ -81,7 +75,7 @@ static const UnicodeString &Tr(const UnicodeString &source) {
 /**
  *@param source string to get results for
  */
-CanonicalIterator::CanonicalIterator(UnicodeString source, UErrorCode &status) :
+CanonicalIterator::CanonicalIterator(UnicodeString sourceStr, UErrorCode &status) :
     pieces(NULL),
     pieces_lengths(NULL),
     current(NULL),
@@ -89,7 +83,7 @@ CanonicalIterator::CanonicalIterator(UnicodeString source, UErrorCode &status) :
     pieces_length(0)
 {
     if(U_SUCCESS(status)) {
-      setSource(source, status);
+      setSource(sourceStr, status);
     }
 }
 
