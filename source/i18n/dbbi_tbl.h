@@ -49,7 +49,7 @@ private:
     //=======================================================================
 
     DictionaryBasedBreakIteratorTables(UDataMemory* tablesMemory,
-                                       char* dictionaryFilename,
+                                       const char* dictionaryFilename,
                                        UErrorCode& status);
                                  
     /**

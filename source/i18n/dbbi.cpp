@@ -17,14 +17,14 @@
 
 U_NAMESPACE_BEGIN
 
-char DictionaryBasedBreakIterator::fgClassID = 0;
+const char DictionaryBasedBreakIterator::fgClassID = 0;
 
 //=======================================================================
 // constructors
 //=======================================================================
 
 DictionaryBasedBreakIterator::DictionaryBasedBreakIterator(UDataMemory* tablesImage,
-                                                           char* dictionaryFilename, 
+                                                           const char* dictionaryFilename, 
                                                            UErrorCode& status)
 : RuleBasedBreakIterator((UDataMemory*)NULL),
   dictionaryCharCount(0),

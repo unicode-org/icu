@@ -77,9 +77,8 @@ private:
     /**
      * Class ID
      */
-    static char fgClassID;
+    static const char fgClassID;
 
-public:
     /**=======================================================================
      * Create a dictionary based break boundary detection iterator.  
      * @param tablesImage The location for the dictionary to be loaded into memory
@@ -93,9 +92,9 @@ public:
      * U_FILE_ACCESS_ERROR will be returned if the file does not exist.
      * The caller owns the returned object and is responsible for deleting it.
      ======================================================================= */
- private:
-    DictionaryBasedBreakIterator(UDataMemory* tablesImage, char* dictionaryFilename, UErrorCode& status);
- public:
+    DictionaryBasedBreakIterator(UDataMemory* tablesImage, const char* dictionaryFilename, UErrorCode& status);
+
+public:
     //=======================================================================
     // boilerplate
     //=======================================================================

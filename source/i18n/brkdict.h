@@ -102,7 +102,7 @@ public:
      * Constructor.  Creates the BreakDictionary by using readDictionaryFile() to
      * load the dictionary tables from the disk.
      */
-    BreakDictionary(char* dictionaryFilename, UErrorCode& status);
+    BreakDictionary(const char* dictionaryFilename, UErrorCode& status);
 
     /**
      * Destructor.
