@@ -293,7 +293,7 @@ static void TestBinaryCollationData(){
     if(U_SUCCESS(status)){
         CONFIRM_ErrorCode(status, U_ZERO_ERROR);
         CONFIRM_INT_EQ(ures_getType(coll), RES_TABLE);
-        binColl=ures_getByKey(teRes, "%%Collation", binColl, &status);  
+        binColl=ures_getByKey(teRes, "%%CollationNew", binColl, &status);  
         if(U_SUCCESS(status)){
             CONFIRM_ErrorCode(status, U_ZERO_ERROR);
             CONFIRM_INT_EQ(ures_getType(binColl), RES_BINARY);
@@ -304,7 +304,7 @@ static void TestBinaryCollationData(){
             }
 
         }else{
-            log_err("ERROR: ures_getByKey(locale(te), %%Collation) failed\n");
+            log_err("ERROR: ures_getByKey(locale(te), %%CollationNew) failed\n");
         }
     }
     else{
@@ -364,7 +364,7 @@ static void TestAPI() {
         log_err("ERROR: ures_getNextResource() failed \n");
     }
     key=ures_getKey(teFillin);
-    if(strcmp(key, "%%Collation") != 0){
+    if(strcmp(key, "%%CollationNew") != 0){
         log_err("ERROR: ures_getNextResource() failed\n");
     }
 
