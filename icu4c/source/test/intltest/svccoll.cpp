@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003, International Business Machines Corporation and         *
+ * Copyright (C) 2003-2004, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -45,7 +45,7 @@ void CollationServiceTest::TestRegister()
         }
         // ensure original collator's params not touched
         Locale loc = frcol->getLocale(ULOC_REQUESTED_LOCALE, status);
-        if (loc != FRENCH) {
+        if (loc != FR) {
           errln(UnicodeString("fr collator's requested locale changed to ") + loc.getName());
         }
         loc = frcol->getLocale(ULOC_VALID_LOCALE, status);
