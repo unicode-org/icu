@@ -61,6 +61,7 @@ LIBS="$ac_save_LDFLAGS"
 ])
 if eval "test \"`echo $ac_ldflag_pthread`\" = yes"; then
 	AC_MSG_RESULT(yes)
+        ICU_USE_THREADS=1
 else
 	AC_MSG_RESULT(no)
 fi])
