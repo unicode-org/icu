@@ -471,7 +471,7 @@ nl {
     MonthNames_islamic {
             "Moeharram",            // Muharram
             "Safar",                // Safar
-            "Rabi'a al awal ",      // Rabi' al-awwal
+            "Rabi'a al awal",      // Rabi' al-awwal
             "Rabi'a al thani",      // Rabi' al-thani
             "Joemad'al awal",       // Jumada al-awwal
             "Joemad'al thani",      // Jumada al-thani
