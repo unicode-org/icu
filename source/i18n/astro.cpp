@@ -58,6 +58,15 @@ static inline UBool isINVALID(double d) {
   return(uprv_isNaN(d));
 }
 
+static UMTX ccLock = NULL;
+
+U_CDECL_BEGIN
+static UBool calendar_astro_cleanup(void) {
+  umtx_destroy(&ccLock);
+  return TRUE;
+}
+U_CDECL_END
+
 U_NAMESPACE_BEGIN
 
 /**
@@ -1475,10 +1484,9 @@ UnicodeString CalendarAstronomer::Horizon::toString() const
 //  }
 
 // =============== Calendar Cache ================
-static UMTX ccLock = NULL;
 
 void CalendarCache::createCache(CalendarCache** cache, UErrorCode& status) {
-  ucln_i18n_registerCleanup();
+  ucln_i18n_registerCleanup(UCLN_I18N_ASTRO_CALENDAR, calendar_astro_cleanup);
   *cache = new CalendarCache(32, status);
   if(cache == NULL) {
     status = U_MEMORY_ALLOCATION_ERROR;
@@ -1546,10 +1554,5 @@ CalendarCache::~CalendarCache() {
 }
 
 U_NAMESPACE_END
-
-U_CFUNC UBool calendar_astro_cleanup(void) {
-  umtx_destroy(&ccLock);
-  return TRUE;
-}
 
 #endif //  !UCONFIG_NO_FORMATTING

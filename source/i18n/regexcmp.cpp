@@ -82,19 +82,6 @@ RegexCompile::RegexCompile(RegexPattern *rxp, UErrorCode &status) : fParenStack(
 RegexCompile::~RegexCompile() {
 }
 
-
-
-//----------------------------------------------------------------------------------------
-//
-//   cleanup.    Called (indirectly) by u_cleanup to free all cached memory
-//
-//----------------------------------------------------------------------------------------
-void RegexCompile::cleanup() {
-    delete RegexStaticSets::gStaticSets;
-    RegexStaticSets::gStaticSets = NULL;
-}
-
-
 //---------------------------------------------------------------------------------
 //
 //  Compile regex pattern.   The state machine for rexexp pattern parsing is here.

@@ -1207,7 +1207,8 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *st
   return myData;
 }
 
-UBool
+U_CDECL_BEGIN
+static UBool U_CALLCONV
 ucol_bld_cleanup(void)
 {
     udata_close(invUCA_DATA_MEM);
@@ -1215,6 +1216,7 @@ ucol_bld_cleanup(void)
     _staticInvUCA = NULL;
     return TRUE;
 }
+U_CDECL_END
 
 U_CAPI const InverseUCATableHeader * U_EXPORT2
 ucol_initInverseUCA(UErrorCode *status)
@@ -1264,7 +1266,7 @@ ucol_initInverseUCA(UErrorCode *status)
                 //uprv_free(newInvUCA);
             }
             else {
-                ucln_i18n_registerCleanup();
+                ucln_i18n_registerCleanup(UCLN_I18N_UCOL_BLD, ucol_bld_cleanup);
             }
         }
     }

@@ -216,7 +216,7 @@ RegexStaticSets::RegexStaticSets(UErrorCode *status) {
 
     // Empty UnicodeString, for use by matchers with NULL input.
     fEmptyString = new UnicodeString;
-};
+}
 
 
 RegexStaticSets::~RegexStaticSets() {
@@ -236,8 +236,28 @@ RegexStaticSets::~RegexStaticSets() {
     fRuleDigits = NULL;
     delete fEmptyString;
     fEmptyString = NULL;
-};
+}
 
+
+//----------------------------------------------------------------------------------
+//
+//   regex_cleanup      Memory cleanup function, free/delete all
+//                      cached memory.  Called by ICU's u_cleanup() function.
+//
+//----------------------------------------------------------------------------------
+UBool
+RegexStaticSets::cleanup(void) {
+    delete RegexStaticSets::gStaticSets;
+    RegexStaticSets::gStaticSets = NULL;
+    return TRUE;
+}
+
+U_CDECL_BEGIN
+static UBool U_CALLCONV
+regex_cleanup(void) {
+    return RegexStaticSets::cleanup();
+}
+U_CDECL_END
 
 void RegexStaticSets::initGlobals(UErrorCode *status) {
     umtx_lock(NULL);
@@ -258,7 +278,7 @@ void RegexStaticSets::initGlobals(UErrorCode *status) {
         if (p) {
             delete p;
         }
-        ucln_i18n_registerCleanup();
+        ucln_i18n_registerCleanup(UCLN_I18N_REGEX, regex_cleanup);
     }
 }
     

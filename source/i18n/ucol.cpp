@@ -974,21 +974,6 @@ UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, con
     return result;
 }
 
-U_CFUNC UBool
-ucol_cleanup(void)
-{
-    if (UCA_DATA_MEM) {
-        udata_close(UCA_DATA_MEM);
-        UCA_DATA_MEM = NULL;
-    }
-    if (_staticUCA) {
-        ucol_close(_staticUCA);
-        _staticUCA = NULL;
-    }
-    fcdTrieIndex = NULL;
-    return TRUE;
-}
-
 /* new Mark's code */
 
 /**
@@ -1327,6 +1312,23 @@ uprv_uca_initImplicitConstants(int32_t minPrimary, int32_t maxPrimary, UErrorCod
     initImplicitConstants(minPrimary, maxPrimary, 0x04, 0xFE, 1, 1, status);
 }
 
+U_CDECL_BEGIN
+static UBool U_CALLCONV
+ucol_cleanup(void)
+{
+    if (UCA_DATA_MEM) {
+        udata_close(UCA_DATA_MEM);
+        UCA_DATA_MEM = NULL;
+    }
+    if (_staticUCA) {
+        ucol_close(_staticUCA);
+        _staticUCA = NULL;
+    }
+    fcdTrieIndex = NULL;
+    return TRUE;
+}
+U_CDECL_END
+
 /* do not close UCA returned by ucol_initUCA! */
 UCollator *
 ucol_initUCA(UErrorCode *status) {
@@ -1351,7 +1353,7 @@ ucol_initUCA(UErrorCode *status) {
         // init FCD data
         if (fcdTrieIndex == NULL) {
             fcdTrieIndex = unorm_getFCDTrie(status);
-            ucln_i18n_registerCleanup();
+            ucln_i18n_registerCleanup(UCLN_I18N_UCOL, ucol_cleanup);
         }
 
         if(result != NULL) { /* It looks like sometimes we can fail to find the data file */
@@ -1377,7 +1379,7 @@ ucol_initUCA(UErrorCode *status) {
                     uprv_free(newUCA);
                 }
                 else {
-                    ucln_i18n_registerCleanup();
+                    ucln_i18n_registerCleanup(UCLN_I18N_UCOL, ucol_cleanup);
                 }
                 // Initalize variables for implicit generation
                 const UCAConstants *UCAconsts = (UCAConstants *)((uint8_t *)_staticUCA->image + _staticUCA->image->UCAConsts);

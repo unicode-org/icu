@@ -84,6 +84,14 @@ inline int hash(uint32_t ce)
     return UCOL_PRIMARYORDER(ce) % MAX_TABLE_SIZE_;
 }
 
+U_CDECL_BEGIN
+static UBool U_CALLCONV
+usearch_cleanup(void) {
+    FCD_ = NULL;
+    return TRUE;
+}
+U_CDECL_END
+
 /**
 * Initializing the fcd tables.
 * Internal method, status assumed to be a success.
@@ -95,14 +103,8 @@ inline void initializeFCD(UErrorCode *status)
 {
     if (FCD_ == NULL) {
         FCD_ = unorm_getFCDTrie(status);
-        ucln_i18n_registerCleanup();
+        ucln_i18n_registerCleanup(UCLN_I18N_USEARCH, usearch_cleanup);
     }
-}
-
-U_CFUNC UBool 
-usearch_cleanup(void) {
-    FCD_ = NULL;
-    return TRUE;
 }
 
 /**

@@ -54,6 +54,21 @@ static UMTX astroLock = 0;  // pod bay door lock
 static CalendarCache *gMonthCache = NULL;
 static CalendarAstronomer *gIslamicCalendarAstro = NULL;
 
+U_CDECL_BEGIN
+static UBool calendar_islamic_cleanup(void) {
+    if (gMonthCache) {
+        delete gMonthCache;
+        gMonthCache = NULL;
+    }
+    if (gIslamicCalendarAstro) {
+        delete gIslamicCalendarAstro;
+        gIslamicCalendarAstro = NULL;
+    }
+    umtx_destroy(&astroLock);
+    return TRUE;
+}
+U_CDECL_END
+
 U_NAMESPACE_BEGIN
 
 // Implementation of the IslamicCalendar class
@@ -258,7 +273,7 @@ double IslamicCalendar::moonAge(UDate time)
   }
   gIslamicCalendarAstro->setTime(time);
   age = gIslamicCalendarAstro->getMoonAge();
-  ucln_i18n_registerCleanup();
+  ucln_i18n_registerCleanup(UCLN_I18N_ISLAMIC_CALENDAR, calendar_islamic_cleanup);
   umtx_unlock(&astroLock);
 
   // Convert to degrees and normalize...
@@ -507,21 +522,7 @@ IslamicCalendar::initializeSystemDefaultCentury()
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(IslamicCalendar)
 
-
 U_NAMESPACE_END
-
-U_CFUNC UBool calendar_islamic_cleanup(void) {
-    if (gMonthCache) {
-        delete gMonthCache;
-        gMonthCache = NULL;
-    }
-    if (gIslamicCalendarAstro) {
-        delete gIslamicCalendarAstro;
-        gIslamicCalendarAstro = NULL;
-    }
-    umtx_destroy(&astroLock);
-    return TRUE;
-}
 
 #endif
 
