@@ -650,16 +650,23 @@ typedef enum UErrorCode {
       * The error code in the range 0x10400-0x104ff are reserved for IDNA related error codes
       */
       U_IDNA_ERROR_START=0x10400,
-      U_IDNA_PROHIBITED_CODEPOINT_FOUND_ERROR,
-      U_IDNA_UNASSIGNED_CODEPOINT_FOUND_ERROR,
+      U_IDNA_PROHIBITED_ERROR,
+      U_IDNA_UNASSIGNED_ERROR,
       U_IDNA_CHECK_BIDI_ERROR,
       U_IDNA_STD3_ASCII_RULES_ERROR,
       U_IDNA_ACE_PREFIX_ERROR,
       U_IDNA_VERIFICATION_ERROR,
       U_IDNA_LABEL_TOO_LONG_ERROR,
       U_IDNA_ERROR_LIMIT,
+      /*
+       * Aliases for StringPrep
+       */
+      U_STRINGPREP_PROHIBITED_ERROR = U_IDNA_PROHIBITED_ERROR,
+      U_STRINGPREP_UNASSIGNED_ERROR = U_IDNA_UNASSIGNED_ERROR,
+      U_STRINGPREP_CHECK_BIDI_ERROR = U_IDNA_CHECK_BIDI_ERROR,
+      
 
-    U_ERROR_LIMIT=U_IDNA_ERROR_LIMIT      /**< This must always be the last value to indicate the limit for UErrorCode (last error code +1) */
+      U_ERROR_LIMIT=U_IDNA_ERROR_LIMIT      /**< This must always be the last value to indicate the limit for UErrorCode (last error code +1) */
 } UErrorCode;
 
 /* Use the following to determine if an UErrorCode represents */

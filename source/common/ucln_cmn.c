@@ -58,7 +58,7 @@ u_cleanup(void)
 
     }
 #if !UCONFIG_NO_IDNA
-    ustrprep_cleanup();
+    usprep_cleanup();
 #endif
 #if !UCONFIG_NO_BREAK_ITERATION
 	breakiterator_cleanup();

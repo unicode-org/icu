@@ -108,7 +108,7 @@ static int32_t uprv_uca_addExpansion(ExpansionTable *expansions, uint32_t value,
 }
 
 U_CAPI tempUCATable*  U_EXPORT2
-uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollator *UCA, UColCETags initTag, UErrorCode *status) {
+uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollator *UCA, UColCETags initTag, UColCETags supplementaryInitTag, UErrorCode *status) {
   tempUCATable *t = (tempUCATable *)uprv_malloc(sizeof(tempUCATable));
   /* test for NULL */
   if (t == NULL) {
@@ -147,7 +147,12 @@ uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollat
   }
   uprv_memset(t->expansions, 0, sizeof(ExpansionTable));
   /*t->mapping = ucmpe32_open(UCOL_SPECIAL_FLAG | (initTag<<24), UCOL_SPECIAL_FLAG | (SURROGATE_TAG<<24), UCOL_SPECIAL_FLAG | (LEAD_SURROGATE_TAG<<24), status);*/
-  t->mapping = utrie_open(NULL, NULL, 0x100000, UCOL_SPECIAL_FLAG | (initTag<<24), TRUE); // Do your own mallocs for the structure, array and have linear Latin 1
+  /*t->mapping = utrie_open(NULL, NULL, 0x100000, UCOL_SPECIAL_FLAG | (initTag<<24), TRUE); // Do your own mallocs for the structure, array and have linear Latin 1*/
+
+  t->mapping = utrie_open(NULL, NULL, 0x100000,
+                          UCOL_SPECIAL_FLAG | (initTag<<24),
+                          UCOL_SPECIAL_FLAG | (supplementaryInitTag << 24),
+                          TRUE); // Do your own mallocs for the structure, array and have linear Latin 1
   t->prefixLookup = uhash_open(prefixLookupHash, prefixLookupComp, status);
   uhash_setValueDeleter(t->prefixLookup, uhash_freeBlock);
 
@@ -1357,11 +1362,13 @@ uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
     // This is debug code to dump the contents of the trie. It needs two functions defined above
     {
       UTrie UCAt = { 0 };
+      uint32_t trieWord;
       utrie_unserialize(&UCAt, dataStart+tableOffset, 9999999, status);
       UCAt.getFoldingOffset = myGetFoldingOffset;
       if(U_SUCCESS(*status)) {
         utrie_enum(&UCAt, NULL, enumRange, NULL);
       }
+      trieWord = UTRIE_GET32_FROM_LEAD(UCAt, 0xDC01) 
     }
 #endif
     tableOffset += paddedsize(mappingSize);

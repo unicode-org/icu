@@ -18,7 +18,6 @@
 
 #if !UCONFIG_NO_IDNA && !UCONFIG_NO_TRANSLITERATION
 #include "idnaref.h"
-#include "strprep.h"
 #include "punyref.h"
 #include "ustr_imp.h"
 #include "cmemory.h"

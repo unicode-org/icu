@@ -3302,31 +3302,11 @@ InputPath=.\unicode\utf_old.h
 # PROP Default_Filter "*.c,*.h"
 # Begin Source File
 
-SOURCE=.\nameprep.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\nameprep.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\punycode.c
 # End Source File
 # Begin Source File
 
 SOURCE=.\punycode.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\sprpimpl.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\strprep.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\strprep.h
 # End Source File
 # Begin Source File
 
@@ -3344,6 +3324,41 @@ SOURCE=.\unicode\uidna.h
 InputPath=.\unicode\uidna.h
 
 "..\..\include\unicode\uidna.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "common - Win64 Release"
+
+!ELSEIF  "$(CFG)" == "common - Win64 Debug"
+
+!ENDIF 
+
+# End Source File
+# End Group
+# Begin Group "sprep"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\sprpimpl.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\usprep.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\usprep.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\usprep.h
+
+"..\..\include\unicode\usprep.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy    $(InputPath)    ..\..\include\unicode
 
 # End Custom Build

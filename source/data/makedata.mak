@@ -245,7 +245,7 @@ BRK_FILES = $(ICUDT)sent.brk $(ICUDT)char.brk $(ICUDT)line.brk $(ICUDT)word.brk 
 #  move the .dll and .lib files to their final destination afterwards.
 #  The $(U_ICUDATA_NAME).lib and $(U_ICUDATA_NAME).exp should already be in the right place due to stubdata.
 #
-"$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" : "$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata.exe" $(CNV_FILES) $(BRK_FILES) "$(ICUBLD)\$(ICUDT)uprops.icu" "$(ICUBLD)\$(ICUDT)unames.icu" "$(ICUBLD)\$(ICUDT)pnames.icu" "$(ICUBLD)\$(ICUDT)unorm.icu" "$(ICUBLD)\$(ICUDT)cnvalias.icu" "$(ICUBLD)\$(ICUDT)tz.icu" "$(ICUBLD)\$(ICUDT)ucadata.icu" "$(ICUBLD)\$(ICUDT)invuca.icu" "$(ICUBLD)\$(ICUDT)uidna.icu" $(ALL_RES) "$(ICUBLD)\$(ICUDT)icudata.res" "$(ICUP)\source\stubdata\stubdatabuilt.txt"
+"$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" : "$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata.exe" $(CNV_FILES) $(BRK_FILES) "$(ICUBLD)\$(ICUDT)uprops.icu" "$(ICUBLD)\$(ICUDT)unames.icu" "$(ICUBLD)\$(ICUDT)pnames.icu" "$(ICUBLD)\$(ICUDT)unorm.icu" "$(ICUBLD)\$(ICUDT)cnvalias.icu" "$(ICUBLD)\$(ICUDT)tz.icu" "$(ICUBLD)\$(ICUDT)ucadata.icu" "$(ICUBLD)\$(ICUDT)invuca.icu" "$(ICUBLD)\$(ICUDT)uidna.spp" $(ALL_RES) "$(ICUBLD)\$(ICUDT)icudata.res" "$(ICUP)\source\stubdata\stubdatabuilt.txt"
 	@echo Building icu data
 	@cd "$(ICUBLD)"
  	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -f -e $(U_ICUDATA_NAME) -v -m dll -c -p $(ICUPKG) -O "$(PKGOPT)" -d "$(ICUBLD)" -s . <<pkgdatain.txt
@@ -255,7 +255,7 @@ $(ICUDT)pnames.icu
 $(ICUDT)unames.icu
 $(ICUDT)ucadata.icu
 $(ICUDT)invuca.icu
-$(ICUDT)uidna.icu
+$(ICUDT)uidna.spp
 $(ICUDT)tz.icu
 $(ICUDT)cnvalias.icu
 $(CNV_FILES:.cnv =.cnv
@@ -409,9 +409,9 @@ res_index {
 	@set ICU_DATA=$(ICUBLD)
 	@"$(ICUTOOLS)\genuca\$(CFG)\genuca" -s "$(ICUUNIDATA)"
 
-# Targets for uidna.icu
-"$(ICUBLD)\$(ICUDT)uidna.icu" : "$(ICUUNIDATA)\*.txt" "$(ICUMISC)\*.txt"
-	genidna -s "$(ICUDATA)" -d "$(ICUBLD)\\"
+# Targets for uidna.spp
+"$(ICUBLD)\$(ICUDT)uidna.spp" : "$(ICUUNIDATA)\*.txt" "$(ICUMISC)\NamePrepProfile.txt"
+	gensprep -s "$(ICUMISC)" -d "$(ICUBLD)\\" -b uidna -n "$(ICUUNIDATA)" -k -u 3.2.0 NamePrepProfile.txt
 
 # Dependencies on the tools for the batch inference rules
 
