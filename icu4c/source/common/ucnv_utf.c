@@ -70,12 +70,11 @@ U_CFUNC void T_UConverter_toUnicode_UTF8 (UConverterToUnicodeArgs * args,
   int32_t myTargetIndex = 0;
   int32_t targetLength = args->targetLimit - myTarget;
   int32_t sourceLength = args->sourceLimit - (char *) mySource;
-  uint32_t ch = 0 ,
-           ch2 =0 ,
-           i =0;            /* Index into the current # of bytes consumed in the current sequence */
+  uint32_t ch = 0, ch2,
+           i;            /* Index into the current # of bytes consumed in the current sequence */
   uint32_t inBytes = 0;  /* Total number of bytes in the current UTF8 sequence */
   
-  if (args->converter->toUnicodeStatus)
+  if (args->converter->toUnicodeStatus && myTargetIndex < targetLength)
     {
       i = args->converter->invalidCharLength;   /* restore # of bytes consumed */
       inBytes = args->converter->toUnicodeStatus; /* Restore size of current sequence */
@@ -91,7 +90,6 @@ U_CFUNC void T_UConverter_toUnicode_UTF8 (UConverterToUnicodeArgs * args,
     {
       if (myTargetIndex < targetLength)
         {
-          ch = 0;
           ch = ((uint32_t)mySource[mySourceIndex++]) & 0x000000FF;
           if (ch < 0x80)        /* Simple case */
             {
@@ -212,10 +210,10 @@ U_CFUNC void T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC (UConverterToUnicodeArgs 
   int32_t myTargetIndex = 0;
   int32_t targetLength = args->targetLimit - myTarget;
   int32_t sourceLength = args->sourceLimit - (char *) mySource;
-  uint32_t ch = 0, ch2 = 0, i = 0;
+  uint32_t ch = 0, ch2, i;
   uint32_t inBytes = 0;
 
-  if (args->converter->toUnicodeStatus)
+  if (args->converter->toUnicodeStatus && myTargetIndex < targetLength)
     {
       i = args->converter->invalidCharLength;
       inBytes = args->converter->toUnicodeStatus;
@@ -353,11 +351,11 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8 (UConverterFromUnicodeArgs * args,
   int32_t targetLength = args->targetLimit - (char *) myTarget;
   int32_t sourceLength = args->sourceLimit - mySource;
   uint32_t ch;
-  int16_t i, bytesToWrite = 0;
+  int16_t i, bytesToWrite;
   uint32_t ch2;
   char temp[4];
 
-  if (args->converter->fromUnicodeStatus)
+  if (args->converter->fromUnicodeStatus && myTargetIndex < targetLength)
     {
       ch = args->converter->fromUnicodeStatus;
       args->converter->fromUnicodeStatus = 0;
@@ -394,7 +392,7 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8 (UConverterFromUnicodeArgs * args,
               if ((ch >= kSurrogateHighStart) && (ch <= kSurrogateHighEnd))
                 {
                 lowsurogate:
-                  if (mySourceIndex < sourceLength && !args->flush)
+                  if (mySourceIndex < sourceLength)
                     {
                       ch2 = mySource[mySourceIndex];
                       if ((ch2 >= kSurrogateLowStart) && (ch2 <= kSurrogateLowEnd))
@@ -402,6 +400,11 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8 (UConverterFromUnicodeArgs * args,
                           ch = ((ch - kSurrogateHighStart) << halfShift) + (ch2 - kSurrogateLowStart) + halfBase;
                           ++mySourceIndex;
                         }
+                    }
+                  else if (!args->flush)
+                    {
+                      args->converter->fromUnicodeStatus = ch;
+                      break;
                     }
                 }
               if (ch < 0x10000)
@@ -415,7 +418,7 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8 (UConverterFromUnicodeArgs * args,
                 {
                   bytesToWrite = 4;
                   temp[0] = (char) ((ch >> 18) | 0xf0);
-                  temp[1] = (char) ((ch >> 12) & 0x3f | 0xe0);
+                  temp[1] = (char) ((ch >> 12) & 0x3f | 0x80);
                   temp[2] = (char) ((ch >> 6) & 0x3f | 0x80);
                   temp[3] = (char) (ch & 0x3f | 0x80);
                 }
@@ -443,8 +446,6 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8 (UConverterFromUnicodeArgs * args,
 
   args->target += myTargetIndex;
   args->source += mySourceIndex;
-
-  return;
 }
 
 U_CFUNC void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
@@ -461,7 +462,7 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeA
   uint32_t ch2;
   char temp[4];
 
-  if (args->converter->fromUnicodeStatus)
+  if (args->converter->fromUnicodeStatus && myTargetIndex < targetLength)
     {
       ch = args->converter->fromUnicodeStatus;
       args->converter->fromUnicodeStatus = 0;
@@ -501,7 +502,7 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeA
               if ((ch >= kSurrogateHighStart) && (ch <= kSurrogateHighEnd))
                 {
                 lowsurogate:
-                  if (mySourceIndex < sourceLength && !args->flush)
+                  if (mySourceIndex < sourceLength)
                     {
                       ch2 = mySource[mySourceIndex];
                       if ((ch2 >= kSurrogateLowStart) && (ch2 <= kSurrogateLowEnd))
@@ -509,6 +510,11 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeA
                           ch = ((ch - kSurrogateHighStart) << halfShift) + (ch2 - kSurrogateLowStart) + halfBase;
                           ++mySourceIndex;
                         }
+                    }
+                  else if (!args->flush)
+                    {
+                      args->converter->fromUnicodeStatus = ch;
+                      break;
                     }
                 }
               if (ch < 0x10000)
@@ -522,7 +528,7 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeA
                 {
                   bytesToWrite = 4;
                   temp[0] = (char) ((ch >> 18) | 0xf0);
-                  temp[1] = (char) ((ch >> 12) & 0x3f | 0xe0);
+                  temp[1] = (char) ((ch >> 12) & 0x3f | 0x80);
                   temp[2] = (char) ((ch >> 6) & 0x3f | 0x80);
                   temp[3] = (char) (ch & 0x3f | 0x80);
                 }
@@ -551,8 +557,6 @@ U_CFUNC void T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC (UConverterFromUnicodeA
 
   args->target += myTargetIndex;
   args->source += mySourceIndex;
-
-  return;
 }
 
 U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
@@ -577,7 +581,7 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
     return (UChar32)myByte;
   }
   extraBytesToWrite = (uint16_t)bytesFromUTF8[myByte];
-  if (extraBytesToWrite == 0 || extraBytesToWrite > 4) {
+  if (extraBytesToWrite == 0) {
     goto CALL_ERROR_FUNCTION;
   }
   
@@ -635,7 +639,7 @@ U_CFUNC UChar32 T_UConverter_getNextUChar_UTF8(UConverterToUnicodeArgs *args,
 
  CALL_ERROR_FUNCTION:
   {      
-    UChar myUChar = (UChar)ch; /* ### TODO: this is a hack until we prepare the callbacks for code points */
+    UChar myUChar = (UChar)0xffff; /* ### TODO: this is a hack until we prepare the callbacks for code points */
     UChar* myUCharPtr = &myUChar;
     
     *err = U_ILLEGAL_CHAR_FOUND;
@@ -751,8 +755,6 @@ U_CFUNC void T_UConverter_toUnicode_UTF16_BE (UConverterToUnicodeArgs * args,
   
   args->target += myTargetIndex;
   args->source += mySourceIndex;
-
-  return;
 }
 
 U_CFUNC void  T_UConverter_fromUnicode_UTF16_BE (UConverterFromUnicodeArgs * args,
@@ -793,9 +795,7 @@ U_CFUNC void  T_UConverter_fromUnicode_UTF16_BE (UConverterFromUnicodeArgs * arg
     }
 
   args->target += myTargetIndex;
-  args->source += mySourceIndex;;
-
-  return;
+  args->source += mySourceIndex;
 }
 
 U_CFUNC UChar32 T_UConverter_getNextUChar_UTF16_BE(UConverterToUnicodeArgs* args,
@@ -940,9 +940,6 @@ U_CFUNC void  T_UConverter_toUnicode_UTF16_LE (UConverterToUnicodeArgs * args,
   
   args->target += myTargetIndex;
   args->source += mySourceIndex;
-  
-
-  return;
 }
 
 U_CFUNC void   T_UConverter_fromUnicode_UTF16_LE (UConverterFromUnicodeArgs * args,
@@ -984,9 +981,7 @@ U_CFUNC void   T_UConverter_fromUnicode_UTF16_LE (UConverterFromUnicodeArgs * ar
     }
 
   args->target += myTargetIndex;
-  args->source += mySourceIndex;;
-
-  return;
+  args->source += mySourceIndex;
 }
 
 U_CFUNC UChar32 T_UConverter_getNextUChar_UTF16_LE(UConverterToUnicodeArgs* args,
