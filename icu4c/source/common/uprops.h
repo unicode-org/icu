@@ -25,9 +25,11 @@ enum {
     UPROPS_PROPS32_INDEX,
     UPROPS_EXCEPTIONS_INDEX,
     UPROPS_EXCEPTIONS_TOP_INDEX,
+
     UPROPS_ADDITIONAL_TRIE_INDEX,
     UPROPS_ADDITIONAL_VECTORS_INDEX,
     UPROPS_ADDITIONAL_VECTORS_COLUMNS_INDEX,
+
     UPROPS_RESERVED_INDEX,
 
     UPROPS_INDEX_COUNT=16
@@ -40,11 +42,19 @@ enum {
  * Properties in vector word 0
  * Bits
  * 31..24   DerivedAge version major/minor one nibble each
+ *  6.. 0   UScriptCode
  */
 
 /* derived age: one nibble each for major and minor version numbers */
 #define UPROPS_AGE_MASK         0xff000000
 #define UPROPS_AGE_SHIFT        24
+
+#define UPROPS_SCRIPT_MASK      0x7f
+
+/*
+ * Properties in vector word 1
+ * Bits
+ */
 
 /**
  * Get a properties vector word for a code point.
