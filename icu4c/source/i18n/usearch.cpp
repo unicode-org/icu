@@ -61,8 +61,10 @@ inline int hash(uint32_t ce)
 }
 
 /**
-* Initializing the fcd tables
-* @param status error status if any
+* Initializing the fcd tables.
+* Internal method, status assumed to be a success.
+* @param status output error if any, caller to check status before calling 
+*               method, status assumed to be success when passed in.
 */
 static
 inline void initializeFCD(UErrorCode *status) 
@@ -140,9 +142,11 @@ inline uint32_t getCE(const UStringSearch *strsrch, uint32_t sourcece)
 }
 
 /** 
-* Allocate a memory and returns NULL if it failed
+* Allocate a memory and returns NULL if it failed.
+* Internal method, status assumed to be a success.
 * @param size to allocate
-* @param status error status if any
+* @param status output error if any, caller to check status before calling 
+*               method, status assumed to be success when passed in.
 * @return newly allocated array, NULL otherwise
 */
 static
@@ -159,12 +163,16 @@ inline void * allocateMemory(uint32_t size, UErrorCode *status)
 * Adds a uint32_t value to a destination array.
 * Creates a new array if we run out of space. The caller will have to 
 * manually deallocate the newly allocated array.
+* Internal method, status assumed to be success, caller has to check status 
+* before calling this method. destination not to be NULL and has at least 
+* size destinationlength.
 * @param destination target array
 * @param offset destination offset to add value
 * @param destinationlength target array size, return value for the new size
 * @param value to be added
 * @param increments incremental size expected
-* @param status error status if any
+* @param status output error if any, caller to check status before calling 
+*               method, status assumed to be success when passed in.
 * @return new destination array, destination if there was no new allocation
 */
 static
@@ -175,16 +183,12 @@ inline uint32_t * addTouint32_tArray(uint32_t   *destination,
                                      uint32_t    increments, 
                                      UErrorCode *status) 
 {
-    if (U_FAILURE(*status)) {
-        return NULL;
-    }
-
     uint32_t newlength = *destinationlength;
     if (offset + 1 == newlength) {
         newlength += increments;
         uint32_t *temp = (uint32_t *)allocateMemory(
                                          sizeof(uint32_t) * newlength, status);
-        if (temp == NULL) {
+        if (U_FAILURE(*status)) {
             return NULL;
         }
         uprv_memcpy(temp, destination, sizeof(uint32_t) * offset);
@@ -201,95 +205,93 @@ inline uint32_t * addTouint32_tArray(uint32_t   *destination,
 * Table size will be estimated by the size of the pattern text. Table 
 * expansion will be perform as we go along. Adding 1 to ensure that the table 
 * size definitely increases.
+* Internal method, status assumed to be a success.
 * @param strsrch string search data
-* @param status error status if any
+* @param status output error if any, caller to check status before calling 
+*               method, status assumed to be success when passed in.
 * @return total number of expansions 
 */
 static
 inline uint16_t initializePatternCETable(UStringSearch *strsrch, 
                                          UErrorCode    *status)
 {
-    if (U_SUCCESS(*status)) {
-        UPattern *pattern            = &(strsrch->pattern);
-        uint32_t  cetablesize        = INITIAL_ARRAY_SIZE_;
-        uint32_t *cetable            = pattern->CEBuffer;
-        uint32_t  patternlength      = pattern->textLength;
-        UCollationElements *coleiter = strsrch->utilIter;
+    UPattern *pattern            = &(strsrch->pattern);
+    uint32_t  cetablesize        = INITIAL_ARRAY_SIZE_;
+    uint32_t *cetable            = pattern->CEBuffer;
+    uint32_t  patternlength      = pattern->textLength;
+    UCollationElements *coleiter = strsrch->utilIter;
             
-        if (coleiter == NULL) {
-            coleiter = ucol_openElements(strsrch->collator, 
-                                        pattern->text, patternlength, status);
-            strsrch->utilIter = coleiter;
-        }
-        else {
-            init_collIterate(strsrch->collator, pattern->text, 
-                             pattern->textLength, &coleiter->iteratordata_);
-        }
-        
-        if (pattern->CE != cetable && pattern->CE) {
-            uprv_free(pattern->CE);
-        }
-        
-        uint16_t  offset      = 0;
-        uint16_t  result      = 0;
-        uint32_t  ce;
-
-        while ((ce = ucol_next(coleiter, status)) != UCOL_NULLORDER) {
-            uint32_t newce = getCE(strsrch, ce);
-            if (newce) {
-                uint32_t *temp = addTouint32_tArray(cetable, offset, 
-                                                    &cetablesize, newce,
-                                  patternlength - ucol_getOffset(coleiter) + 1, 
-                                                    status);
-                if (U_FAILURE(*status)) {
-                    return 0;
-                }
-                offset ++;
-                if (cetable != temp && cetable != pattern->CEBuffer) {
-                    uprv_free(cetable);
-                }
-                cetable = temp;
-            }
-            result += ucol_getMaxExpansion(coleiter, ce) - 1;
-        }
-
-        cetable[offset]   = 0;
-        pattern->CE       = cetable;
-        pattern->CELength = offset;
-
-        return result;
+    if (coleiter == NULL) {
+        coleiter = ucol_openElements(strsrch->collator, pattern->text, 
+                                     patternlength, status);
+        // status will be checked in ucol_next(..) later and if it is an 
+        // error UCOL_NULLORDER the result of ucol_next(..) and 0 will be 
+        // returned.
+        strsrch->utilIter = coleiter;
     }
-    return 0;
+    else {
+        init_collIterate(strsrch->collator, pattern->text, pattern->textLength,
+                         &coleiter->iteratordata_);
+    }
+        
+    if (pattern->CE != cetable && pattern->CE) {
+        uprv_free(pattern->CE);
+    }
+        
+    uint16_t  offset      = 0;
+    uint16_t  result      = 0;
+    uint32_t  ce;
+
+    while ((ce = ucol_next(coleiter, status)) != UCOL_NULLORDER &&
+           U_SUCCESS(*status)) {
+        uint32_t newce = getCE(strsrch, ce);
+        if (newce) {
+            uint32_t *temp = addTouint32_tArray(cetable, offset, &cetablesize, 
+                                  newce,
+                                  patternlength - ucol_getOffset(coleiter) + 1, 
+                                  status);
+            if (U_FAILURE(*status)) {
+                return 0;
+            }
+            offset ++;
+            if (cetable != temp && cetable != pattern->CEBuffer) {
+                uprv_free(cetable);
+            }
+            cetable = temp;
+        }
+        result += ucol_getMaxExpansion(coleiter, ce) - 1;
+    }
+
+    cetable[offset]   = 0;
+    pattern->CE       = cetable;
+    pattern->CELength = offset;
+
+    return result;
 }
 
 /**
-* Initializes the pattern struct
-* @param strsrch       UStringSearch data storage
-* @param splitsize     array of size 2 containing 
-*                      1) the total number of characters from start to 
-*                         the last base character, including any contracting
-*                         accents of the last base character.
-*                      2) the total number of characters from the 
-*                         the first base character, to the end, including any 
-*                         contracting accents of the first base character.
-* @param status        for errors if it occurs
+* Initializes the pattern struct.
+* Internal method, status assumed to be success.
+* @param strsrch UStringSearch data storage
+* @param status output error if any, caller to check status before calling 
+*               method, status assumed to be success when passed in.
 * @return expansionsize the total expansion size of the pattern
 */ 
 static
 inline int16_t initializePattern(UStringSearch *strsrch, UErrorCode *status) 
 {
-         UPattern   *pattern     = &(strsrch->pattern);
-   const UChar      *patterntext = pattern->text;
-         int32_t     length      = pattern->textLength;
-         UTextOffset index       = 0;
+          UPattern   *pattern     = &(strsrch->pattern);
+    const UChar      *patterntext = pattern->text;
+          int32_t     length      = pattern->textLength;
+          UTextOffset index       = 0;
 
     pattern->hasPrefixAccents = getFCD(patterntext, &index, length) >> 
-                                                    SECOND_LAST_BYTE_SHIFT_;
+                                                     SECOND_LAST_BYTE_SHIFT_;
     index = length;
     UTF_BACK_1(patterntext, 0, index);
     pattern->hasSuffixAccents = getFCD(patterntext, &index, length) & 
                                                              LAST_BYTE_MASK_;
-    
+    // since intializePattern is an internal method status is a success.
     return initializePatternCETable(strsrch, status);   
 }
 
@@ -364,8 +366,10 @@ inline void setShiftTable(int16_t   shift[], int16_t backshift[],
 * for the default shift values and the backwards search will take the prefix
 * accents into consideration.
 * If pattern has no non-ignorable ce, we return a illegal argument error.
+* Internal method, status assumed to be success.
 * @param strsrch UStringSearch data storage
-* @param status  for errors if it occurs
+* @param status  for output errors if it occurs, status is assumed to be a
+*                success when it is passed in.
 */ 
 static
 inline void initialize(UStringSearch *strsrch, UErrorCode *status) 
@@ -375,15 +379,13 @@ inline void initialize(UStringSearch *strsrch, UErrorCode *status)
         UPattern *pattern = &strsrch->pattern;
         int32_t   cesize  = pattern->CELength;
 
-        int16_t minlength = cesize > expandlength ? cesize - expandlength : 
-                                                                           1;
+        int16_t minlength = cesize > expandlength ? cesize - expandlength : 1;
         pattern->defaultShiftSize    = minlength;
         setShiftTable(pattern->shift, pattern->backShift, pattern->CE,
-                          cesize, expandlength, minlength, minlength);
+                      cesize, expandlength, minlength, minlength);
+        return;
     }
-    else {
-        strsrch->pattern.defaultShiftSize = 0;
-    }
+    strsrch->pattern.defaultShiftSize = 0;
 }
 
 /**
@@ -480,12 +482,14 @@ inline UTextOffset getNextUStringSearchBaseOffset(UStringSearch *strsrch,
 * Shifting the collation element iterator position forward to prepare for
 * a following match. If the last character is a unsafe character, we'll only
 * shift by 1 to capture contractions, normalization etc.
+* Internal method, status assumed to be success.
 * @param text strsrch string search data
 * @param textoffset start text position to do search
 * @param ce the text ce which failed the match.
 * @param patternceindex index of the ce within the pattern ce buffer which
 *        failed the match
-* @param status error if any
+* @param status output error if any, caller to check status before calling 
+*               method, status assumed to be success when passed in.
 * @return final offset
 */
 static
@@ -495,41 +499,39 @@ inline UTextOffset shiftForward(UStringSearch *strsrch,
                                 int32_t        patternceindex,
                                 UErrorCode    *status)
 {
-    if (U_SUCCESS(*status)) {
-        if (strsrch->search->isOverlap) {
-            if (textoffset > 0) {
-                textoffset ++;
-            }
-            else {
-                textoffset = strsrch->pattern.defaultShiftSize;
-            }
+    if (strsrch->search->isOverlap) {
+        if (textoffset > 0) {
+            textoffset ++;
         }
         else {
-            if (ce != UCOL_NULLORDER) {
-                int32_t shift = strsrch->pattern.shift[hash(ce)];
-                // this is to adjust for characters in the middle of the substring 
-                // for matching that failed.
-                int32_t adjust = strsrch->pattern.CELength - patternceindex;
-                if (adjust > 1 && shift >= adjust) {
-                    shift -= adjust - 1;
-                }
-                textoffset += shift;
-            }
-            else {
-                textoffset += strsrch->pattern.defaultShiftSize;
-            }
+            textoffset = strsrch->pattern.defaultShiftSize;
         }
+    }
+    else {
+        if (ce != UCOL_NULLORDER) {
+            int32_t shift = strsrch->pattern.shift[hash(ce)];
+            // this is to adjust for characters in the middle of the 
+            // substring for matching that failed.
+            int32_t adjust = strsrch->pattern.CELength - patternceindex;
+            if (adjust > 1 && shift >= adjust) {
+                shift -= adjust - 1;
+            }
+            textoffset += shift;
+        }
+        else {
+            textoffset += strsrch->pattern.defaultShiftSize;
+        }
+    }
         
-        textoffset = getNextUStringSearchBaseOffset(strsrch, textoffset);
-        // check for unsafe characters
-        // * if it is the start or middle of a contraction: to be done after 
-        //   a initial match is found
-        // * thai or lao base consonant character: similar to contraction
-        // * high surrogate character: similar to contraction
-        // * next character is a accent: shift to the next base character
-        if (textoffset <= strsrch->search->textLength) {
-            ucol_setOffset(strsrch->textIter, textoffset, status);
-        }
+    textoffset = getNextUStringSearchBaseOffset(strsrch, textoffset);
+    // check for unsafe characters
+    // * if it is the start or middle of a contraction: to be done after 
+    //   a initial match is found
+    // * thai or lao base consonant character: similar to contraction
+    // * high surrogate character: similar to contraction
+    // * next character is a accent: shift to the next base character
+    if (textoffset <= strsrch->search->textLength) {
+        ucol_setOffset(strsrch->textIter, textoffset, status);
     }
     return textoffset;
 }
@@ -537,11 +539,12 @@ inline UTextOffset shiftForward(UStringSearch *strsrch,
 /**
 * sets match not found 
 * @param strsrch string search data
-* @param status error status if any
+* @param status output error status if any
 */
 static
 inline void setMatchNotFound(UStringSearch *strsrch, UErrorCode *status) 
 {
+    // this method resets the match result regardless of the error status.
     strsrch->search->matchedIndex = USEARCH_DONE;
     strsrch->search->matchedLength = 0;
     if (strsrch->search->isForwardSearching) {
@@ -591,16 +594,18 @@ inline UTextOffset getNextSafeOffset(const UCollator   *collator,
 * E.g. looking for \u0301 acute in \u01FA A ring above and acute, 
 * checkExtraMatchAccent should fail since there is a middle ring in \u01FA
 * Note here that accents checking are slow and cautioned in the API docs.
+* Internal method, status assumed to be a success, caller should check status
+* before calling this method
 * @param strsrch string search data
 * @param start index of the potential unfriendly composite character
 * @param end index of the potential unfriendly composite character
-* @param status error status if any
+* @param status output error status if any.
 * @return TRUE if there is non-ignorable accents before at the beginning
 *              of the match, FALSE otherwise.
 */
 
 static
-UBool checkExtraMatchAccents(const UStringSearch *strsrch, UTextOffset  start,
+UBool checkExtraMatchAccents(const UStringSearch *strsrch, UTextOffset start,
                                    UTextOffset    end,     
                                    UErrorCode    *status)
 {
@@ -613,8 +618,8 @@ UBool checkExtraMatchAccents(const UStringSearch *strsrch, UTextOffset  start,
         UTF_FWD_1(text, offset, length);
         // we are only concerned with the first composite character
         if (unorm_quickCheck(text, offset, UNORM_NFD, status) == UNORM_NO) {
-            UTextOffset safeoffset = getNextSafeOffset(
-                                  strsrch->collator, text, 0, length);
+            UTextOffset safeoffset = getNextSafeOffset(strsrch->collator, 
+                                                       text, 0, length);
             if (safeoffset != length) {
                 safeoffset ++;
             }
@@ -623,14 +628,21 @@ UBool checkExtraMatchAccents(const UStringSearch *strsrch, UTextOffset  start,
             int32_t  size = unorm_normalize(text, safeoffset, UNORM_NFD, 0, 
                                             buffer, INITIAL_ARRAY_SIZE_, 
                                             status);    
+            if (U_FAILURE(*status)) {
+                return FALSE;
+            }
             if (size >= INITIAL_ARRAY_SIZE_) {
                 norm = (UChar *)allocateMemory((size + 1) * sizeof(UChar),
                                                status);
-                if (norm == NULL) {
-                    return TRUE;
-                }
+                // if allocation failed, status will be set to 
+                // U_MEMORY_ALLOCATION_ERROR and unorm_normalize internally
+                // checks for it.
                 size = unorm_normalize(text, safeoffset, UNORM_NFD, 0, norm, 
                                        size, status);
+                if (U_FAILURE(*status) && norm != NULL) {
+                    uprv_free(norm);
+                    return FALSE;
+                }
             }
             else {
                 norm = buffer;
@@ -646,7 +658,7 @@ UBool checkExtraMatchAccents(const UStringSearch *strsrch, UTextOffset  start,
                 if (ce != firstce && ce != UCOL_IGNORABLE) {
                     ignorable = FALSE;
                 }
-                ce     = ucol_next(coleiter, status);
+                ce = ucol_next(coleiter, status);
             }
             UChar32 codepoint;
             UTF_PREV_CHAR(norm, 0, offset, codepoint);
@@ -695,6 +707,9 @@ UBool hasAccentsBeforeMatch(const UStringSearch *strsrch, UTextOffset start,
 
         ucol_setOffset(coleiter, start, &status);
         uint32_t ce  = getCE(strsrch, ucol_next(coleiter, &status));
+        if (U_FAILURE(status)) {
+            return TRUE;
+        }
         while (ce != firstce) {
             if (ce != UCOL_IGNORABLE) {
                 ignorable = FALSE;
@@ -782,6 +797,9 @@ UBool hasAccentsAfterMatch(const UStringSearch *strsrch, UTextOffset start,
                 count ++;
             }
             uint32_t ce = getCE(strsrch, ucol_next(coleiter, &status));
+            if (U_FAILURE(status)) {
+                return TRUE;
+            }
             if (ce != UCOL_NULLORDER && ce != UCOL_IGNORABLE) {
                 if (ucol_getOffset(coleiter) <= end) {
                     return TRUE;
@@ -887,11 +905,13 @@ inline UTextOffset getColElemIterOffset(const UCollationElements *coleiter,
 * Checks match for contraction. 
 * If the match ends with a partial contraction we fail.
 * If the match starts too far off (because of backwards iteration) we try to
-* chip off the extra characters
+* chip off the extra characters.
+* Internal method, error assumed to be success, caller has to check status 
+* before calling this method.
 * @param strsrch string search data
 * @param start offset of potential match, to be modified if necessary
 * @param end offset of potential match, to be modified if necessary
-* @param status error status if any
+* @param status output error status if any
 * @return TRUE if match passes the contraction test, FALSE otherwise
 */
 
@@ -912,7 +932,7 @@ UBool checkNextExactContractionMatch(UStringSearch *strsrch,
         int32_t expansion  = getExpansionPrefix(coleiter);
         UBool   expandflag = expansion > 0;
         ucol_setOffset(coleiter, *start, status);
-        while (expansion > 0) {
+        while (U_SUCCESS(*status) && expansion > 0) {
             // getting rid of the redundant ce, caused by setOffset.
             // since backward contraction/expansion may have extra ces if we 
             // are in the normalization buffer, hasAccentsBeforeMatch would 
@@ -926,6 +946,10 @@ UBool checkNextExactContractionMatch(UStringSearch *strsrch,
                 temp  = ucol_getOffset(coleiter);
             }
             expansion --;
+        }
+
+        if (U_FAILURE(*status)) {
+            return FALSE;
         }
 
         uint32_t *patternce       = strsrch->pattern.CE;
@@ -962,44 +986,41 @@ UBool checkNextExactContractionMatch(UStringSearch *strsrch,
 * <li> potential match does not end in the middle of a contraction
 * <\ul>
 * Otherwise the offset will be shifted to the next character.
+* Internal method, status assumed to be success, caller has to check status 
+* before calling this method.
 * @param strsrch string search data
 * @param textoffset offset in the collation element text. the returned value
 *        will be the truncated end offset of the match or the new start 
 *        search offset.
-* @param status error status if any
+* @param status output error status if any
 * @return TRUE if the match is valid, FALSE otherwise
 */
 static
 inline UBool checkNextExactMatch(UStringSearch *strsrch, 
                                  UTextOffset   *textoffset, UErrorCode *status)
 {
-    if (U_SUCCESS(*status)) { 
-        UCollationElements *coleiter = strsrch->textIter;
-        UTextOffset         start    = getColElemIterOffset(coleiter, FALSE);        
+    UCollationElements *coleiter = strsrch->textIter;
+    UTextOffset         start    = getColElemIterOffset(coleiter, FALSE);        
         
-        if (!checkNextExactContractionMatch(strsrch, &start, textoffset, 
-                                            status)) {
-            return FALSE;
-        }
-
-        // this totally matches, however we need to check if it is repeating
-        if (!isBreakUnit(strsrch, start, *textoffset) ||
-            checkRepeatedMatch(strsrch, start, *textoffset) || 
-            hasAccentsBeforeMatch(strsrch, start, *textoffset) || 
-            !checkIdentical(strsrch, start, *textoffset) ||
-            hasAccentsAfterMatch(strsrch, start, *textoffset)) {
-            (*textoffset) ++;
-            *textoffset = getNextUStringSearchBaseOffset(strsrch, *textoffset);  
-            return FALSE;
-        }
-        
-        // totally match, we will get rid of the ending ignorables.
-        strsrch->search->matchedIndex  = start;
-        strsrch->search->matchedLength = *textoffset - start;
-        return TRUE;
+    if (!checkNextExactContractionMatch(strsrch, &start, textoffset, status)) {
+        return FALSE;
     }
 
-    return FALSE;
+    // this totally matches, however we need to check if it is repeating
+    if (!isBreakUnit(strsrch, start, *textoffset) ||
+        checkRepeatedMatch(strsrch, start, *textoffset) || 
+        hasAccentsBeforeMatch(strsrch, start, *textoffset) || 
+        !checkIdentical(strsrch, start, *textoffset) ||
+        hasAccentsAfterMatch(strsrch, start, *textoffset)) {
+        (*textoffset) ++;
+        *textoffset = getNextUStringSearchBaseOffset(strsrch, *textoffset);  
+        return FALSE;
+    }
+        
+    // totally match, we will get rid of the ending ignorables.
+    strsrch->search->matchedIndex  = start;
+    strsrch->search->matchedLength = *textoffset - start;
+    return TRUE;
 }
 
 /**
@@ -1066,6 +1087,9 @@ inline int getUnblockedAccentIndex(UChar *accents, UTextOffset *accentsindex)
 * Appends 3 UChar arrays to a destination array.
 * Creates a new array if we run out of space. The caller will have to 
 * manually deallocate the newly allocated array.
+* Internal method, status assumed to be success, caller has to check status 
+* before calling this method. destination not to be NULL and has at least 
+* size destinationlength.
 * @param destination target array
 * @param destinationlength target array size, returning the appended length
 * @param source1 null-terminated first array
@@ -1084,10 +1108,6 @@ inline UChar * addToUCharArray(      UChar      *destination,
                                const UChar      *source3, 
                                      UErrorCode *status) 
 {
-    if (U_FAILURE(*status)) {
-        return NULL;
-    }
-
     int32_t source1length = source1 ? u_strlen(source1) : 0;
     int32_t source3length = source3 ? u_strlen(source3) : 0;            
     if (*destinationlength < source1length + source2length + source3length + 
@@ -1096,7 +1116,9 @@ inline UChar * addToUCharArray(      UChar      *destination,
         destination = (UChar *)allocateMemory(
           (source1length + source2length + source3length + 1) * sizeof(UChar),
           status);
-        if (destination == NULL) {
+        // if error allocating memory, status will be 
+        // U_MEMORY_ALLOCATION_ERROR
+        if (U_FAILURE(*status)) {
             *destinationlength = 0;
             return NULL;
         }
@@ -1153,11 +1175,13 @@ inline UBool checkCollationMatch(const UStringSearch      *strsrch,
 * step 1: split "\u030A\u0301" into 6 other type of potential accent substrings
 *         "\u030A", "\u0301", "\u0325", "\u030A\u0301", "\u030A\u0325", 
 *         "\u0301\u0325".
-* step 2: check if any of the generated substrings matches the pattern
+* step 2: check if any of the generated substrings matches the pattern.
+* Internal method, status is assumed to be success, caller has to check status
+* before calling this method.
 * @param strsrch string search match
 * @param start first offset of the accents to start searching
 * @param end start of the last accent set
-* @param status error status if any
+* @param status output error status if any
 * @return USEARCH_DONE if a match is not found, otherwise return the starting
 *         offset of the match. Note this start includes all preceding accents.
 */
@@ -1179,55 +1203,57 @@ UTextOffset doNextCanonicalPrefixMatch(UStringSearch *strsrch,
     UTextOffset offset = getNextBaseOffset(text, tempstart, textlength);
     start = getPreviousBaseOffset(text, tempstart);
 
-    if (U_SUCCESS(*status)) {
-        UChar       accents[INITIAL_ARRAY_SIZE_];
-        // normalizing the offensive string
-        unorm_normalize(text + start, offset - start, UNORM_NFD, 0, accents, 
-                        INITIAL_ARRAY_SIZE_, status);    
+    UChar       accents[INITIAL_ARRAY_SIZE_];
+    // normalizing the offensive string
+    unorm_normalize(text + start, offset - start, UNORM_NFD, 0, accents, 
+                    INITIAL_ARRAY_SIZE_, status);    
+    if (U_FAILURE(*status)) {
+        return USEARCH_DONE;
+    }
         
-        UTextOffset         accentsindex[INITIAL_ARRAY_SIZE_];      
-        UTextOffset         accentsize = getUnblockedAccentIndex(accents, 
+    UTextOffset         accentsindex[INITIAL_ARRAY_SIZE_];      
+    UTextOffset         accentsize = getUnblockedAccentIndex(accents, 
                                                                  accentsindex);
-        UTextOffset         count      = (2 << (accentsize - 1)) - 2;  
-        UChar               buffer[INITIAL_ARRAY_SIZE_];
-        UCollationElements *coleiter   = strsrch->utilIter;
-        while (U_SUCCESS(*status) && count > 0) {
-            UChar *rearrange = strsrch->canonicalPrefixAccents;
-            // copy the base characters
-            for (int k = 0; k < accentsindex[0]; k ++) {
-                *rearrange ++ = accents[k];
-            }
-            // forming all possible canonical rearrangement by dropping
-            // sets of accents
-            for (int i = 0; i <= accentsize - 1; i ++) {
-                UTextOffset mask = 1 << (accentsize - i - 1);
-                if (count & mask) {
-                    for (int j = accentsindex[i]; j < accentsindex[i + 1]; j ++) {
-                        *rearrange ++ = accents[j];
-                    }
+    UTextOffset         count      = (2 << (accentsize - 1)) - 2;  
+    UChar               buffer[INITIAL_ARRAY_SIZE_];
+    UCollationElements *coleiter   = strsrch->utilIter;
+    while (U_SUCCESS(*status) && count > 0) {
+        UChar *rearrange = strsrch->canonicalPrefixAccents;
+        // copy the base characters
+        for (int k = 0; k < accentsindex[0]; k ++) {
+            *rearrange ++ = accents[k];
+        }
+        // forming all possible canonical rearrangement by dropping
+        // sets of accents
+        for (int i = 0; i <= accentsize - 1; i ++) {
+            UTextOffset mask = 1 << (accentsize - i - 1);
+            if (count & mask) {
+                for (int j = accentsindex[i]; j < accentsindex[i + 1]; j ++) {
+                    *rearrange ++ = accents[j];
                 }
             }
-            *rearrange = 0;
-            int32_t  matchsize = INITIAL_ARRAY_SIZE_;
-            UChar   *match     = addToUCharArray(buffer, &matchsize,
+        }
+        *rearrange = 0;
+        int32_t  matchsize = INITIAL_ARRAY_SIZE_;
+        UChar   *match     = addToUCharArray(buffer, &matchsize,
                                            strsrch->canonicalPrefixAccents,
                                            strsrch->search->text + offset,
                                            end - offset,
                                            strsrch->canonicalSuffixAccents,
                                            status);
             
-            // run the collator iterator through this match
-            ucol_setText(coleiter, match, matchsize, status);
-            if (U_SUCCESS(*status)) {
-                if (checkCollationMatch(strsrch, coleiter)) {
-                    if (match != buffer) {
-                        uprv_free(match);
-                    }
-                    return start;
+        // if status is a failure, ucol_setText does nothing.
+        // run the collator iterator through this match
+        ucol_setText(coleiter, match, matchsize, status);
+        if (U_SUCCESS(*status)) {
+            if (checkCollationMatch(strsrch, coleiter)) {
+                if (match != buffer) {
+                    uprv_free(match);
                 }
+                return start;
             }
-            count --;
         }
+        count --;
     }
     return USEARCH_DONE;
 }
@@ -1282,9 +1308,11 @@ inline void cleanUpSafeText(const UStringSearch *strsrch, UChar *safetext,
 * tries matching again.
 * We allow skipping of the ends of the accent set if the ces do not match. 
 * However if the failure is found before the accent set, it fails.
+* Internal method, status assumed to be success, caller has to check status
+* before calling this method.
 * @param strsrch string search data
 * @param textoffset of the start of the rearranged accent
-* @param status error status if any
+* @param status output error status if any
 * @return USEARCH_DONE if a match is not found, otherwise return the starting
 *         offset of the match. Note this start includes all preceding accents.
 */
@@ -1317,8 +1345,10 @@ UTextOffset doNextCanonicalSuffixMatch(UStringSearch *strsrch,
         safetext       = strsrch->canonicalSuffixAccents;
     }
 
+    // if status is a failure, ucol_setText does nothing
     ucol_setText(coleiter, safetext, safetextlength, status);
-    
+    // status checked in loop below
+
     uint32_t *ce        = strsrch->pattern.CE;
     uint32_t  celength  = strsrch->pattern.CELength;
     int       ceindex   = celength - 1;
@@ -1326,6 +1356,12 @@ UTextOffset doNextCanonicalSuffixMatch(UStringSearch *strsrch,
     
     while (ceindex >= 0) {
         uint32_t textce = ucol_previous(coleiter, status);
+        if (U_FAILURE(*status)) {
+            if (isSafe) {
+                cleanUpSafeText(strsrch, safetext, safebuffer);
+            }
+            return USEARCH_DONE;
+        }
         if (textce == UCOL_NULLORDER) {
             // check if we have passed the safe buffer
             if (coleiter == strsrch->textIter) {
@@ -1336,6 +1372,7 @@ UTextOffset doNextCanonicalSuffixMatch(UStringSearch *strsrch,
             safetext = safebuffer;
             coleiter = strsrch->textIter;
             ucol_setOffset(coleiter, safeoffset, status);
+            // status checked at the start of the loop
             isSafe = FALSE;
             continue;
         }
@@ -1358,7 +1395,11 @@ UTextOffset doNextCanonicalSuffixMatch(UStringSearch *strsrch,
                 UTextOffset result = doNextCanonicalPrefixMatch(strsrch, 
                                         failedoffset, textoffset, status);
                 if (result != USEARCH_DONE) {
+                    // if status is a failure, ucol_setOffset does nothing
                     ucol_setOffset(strsrch->textIter, result, status);
+                }
+                if (U_FAILURE(*status)) {
+                    return USEARCH_DONE;
                 }
                 return result;
             }
@@ -1380,6 +1421,9 @@ UTextOffset doNextCanonicalSuffixMatch(UStringSearch *strsrch,
             result += safeoffset;
         }
         ucol_setOffset(strsrch->textIter, result, status);
+        if (U_FAILURE(*status)) {
+            return USEARCH_DONE;
+        }
         strsrch->textIter->iteratordata_.toReturn = 
                        setExpansionPrefix(strsrch->textIter, leftoverces);
         return result;
@@ -1399,7 +1443,9 @@ UTextOffset doNextCanonicalSuffixMatch(UStringSearch *strsrch,
 * step 1: split "\u030A\u0301" into 6 other type of potential accent substrings
 *         "\u030A", "\u0301", "\u0325", "\u030A\u0301", "\u030A\u0325", 
 *         "\u0301\u0325".
-* step 2: check if any of the generated substrings matches the pattern
+* step 2: check if any of the generated substrings matches the pattern.
+* Internal method, status assumed to be success, caller has to check status 
+* before calling this method.
 * @param strsrch string search data
 * @param textoffset end offset in the collation element text that ends with 
 *                   the accents to be rearranged
@@ -1420,7 +1466,7 @@ UBool doNextCanonicalMatch(UStringSearch *strsrch,
         if (strsrch->pattern.hasPrefixAccents) {
             offset = doNextCanonicalPrefixMatch(strsrch, offset, textoffset, 
                                                 status);
-            if (offset != USEARCH_DONE) {
+            if (U_SUCCESS(*status) && offset != USEARCH_DONE) {
                 ucol_setOffset(coleiter, offset, status);
                 return TRUE;
             }
@@ -1438,6 +1484,7 @@ UBool doNextCanonicalMatch(UStringSearch *strsrch,
     // normalizing the offensive string
     unorm_normalize(text + baseoffset, textoffset - baseoffset, UNORM_NFD, 
                                0, accents, INITIAL_ARRAY_SIZE_, status);    
+    // status checked in loop below
         
     UTextOffset accentsindex[INITIAL_ARRAY_SIZE_];
     UTextOffset size = getUnblockedAccentIndex(accents, accentsindex);
@@ -1499,10 +1546,12 @@ inline UTextOffset getPreviousUStringSearchBaseOffset(UStringSearch *strsrch,
 * If the match ends with a partial contraction we fail.
 * If the match starts too far off (because of backwards iteration) we try to
 * chip off the extra characters
+* Internal method, status assumed to be success, caller has to check status 
+* before calling this method.
 * @param strsrch string search data
 * @param start offset of potential match, to be modified if necessary
 * @param end offset of potential match, to be modified if necessary
-* @param status error status if any
+* @param status output error status if any
 * @return TRUE if match passes the contraction test, FALSE otherwise
 */
 static
@@ -1523,7 +1572,7 @@ UBool checkNextCanonicalContractionMatch(UStringSearch *strsrch,
         int32_t expansion  = getExpansionPrefix(coleiter);
         UBool   expandflag = expansion > 0;
         ucol_setOffset(coleiter, *start, status);
-        while (expansion > 0) {
+        while (U_SUCCESS(*status) && expansion > 0) {
             // getting rid of the redundant ce, caused by setOffset.
             // since backward contraction/expansion may have extra ces if we 
             // are in the normalization buffer, hasAccentsBeforeMatch would 
@@ -1539,12 +1588,18 @@ UBool checkNextCanonicalContractionMatch(UStringSearch *strsrch,
             expansion --;
         }
 
+        if (U_FAILURE(*status)) {
+            return FALSE;
+        }
+
         uint32_t *patternce       = strsrch->pattern.CE;
         int32_t   patterncelength = strsrch->pattern.CELength;
         int32_t   count           = 0;
         int32_t   textlength      = strsrch->search->textLength;
         while (count < patterncelength) {
             uint32_t ce = getCE(strsrch, ucol_next(coleiter, status));
+            // status checked below, note that if status is a failure
+            // ucol_next returns UCOL_NULLORDER
             if (ce == UCOL_IGNORABLE) {
                 continue;
             }
@@ -1560,7 +1615,8 @@ UBool checkNextCanonicalContractionMatch(UStringSearch *strsrch,
                 uint32_t expected = patternce[0]; 
                 if (getFCD(text, start, textlength) & LAST_BYTE_MASK_) {
                     ce = getCE(strsrch, ucol_next(coleiter, status));
-                    while (ce != expected && ce != UCOL_NULLORDER &&
+                    while (U_SUCCESS(*status) && ce != expected && 
+                           ce != UCOL_NULLORDER &&
                            ucol_getOffset(coleiter) <= *end) {
                         ce = getCE(strsrch, ucol_next(coleiter, status));
                     }
@@ -1587,11 +1643,13 @@ UBool checkNextCanonicalContractionMatch(UStringSearch *strsrch,
 * <li> identical matches
 * <\ul>
 * Otherwise the offset will be shifted to the next character.
+* Internal method, status assumed to be success, caller has to check the 
+* status before calling this method.
 * @param strsrch string search data
 * @param textoffset offset in the collation element text. the returned value
 *        will be the truncated end offset of the match or the new start 
 *        search offset.
-* @param status error status if any
+* @param status output error status if any
 * @return TRUE if the match is valid, FALSE otherwise
 */
 static
@@ -1600,10 +1658,6 @@ inline UBool checkNextCanonicalMatch(UStringSearch *strsrch,
                                      UErrorCode    *status)
 {
     // to ensure that the start and ends are not composite characters
-    if (U_FAILURE(*status)) { 
-        return FALSE;
-    }
-
     UCollationElements *coleiter = strsrch->textIter;
     // if we have a canonical accent match
     if ((strsrch->pattern.hasSuffixAccents && 
@@ -1620,7 +1674,7 @@ inline UBool checkNextCanonicalMatch(UStringSearch *strsrch,
 
     UTextOffset start = getColElemIterOffset(coleiter, FALSE);
     if (!checkNextCanonicalContractionMatch(strsrch, &start, textoffset, 
-                                            status)) {
+                                            status) || U_FAILURE(*status)) {
         return FALSE;
     }
     
@@ -1644,12 +1698,14 @@ inline UBool checkNextCanonicalMatch(UStringSearch *strsrch,
 * Shifting the collation element iterator position forward to prepare for
 * a preceding match. If the first character is a unsafe character, we'll only
 * shift by 1 to capture contractions, normalization etc.
+* Internal method, status assumed to be success, caller has to check status 
+* before calling this method.
 * @param text strsrch string search data
 * @param textoffset start text position to do search
 * @param ce the text ce which failed the match.
 * @param patternceindex index of the ce within the pattern ce buffer which
 *        failed the match
-* @param status error if any
+* @param status output error if any
 * @return final offset
 */
 static
@@ -1659,36 +1715,33 @@ inline UTextOffset reverseShift(UStringSearch *strsrch,
                                 int32_t        patternceindex,
                                 UErrorCode    *status)
 {         
-    if (U_SUCCESS(*status)) {
-        if (strsrch->search->isOverlap) {
-            if (textoffset != strsrch->search->textLength) {
-                textoffset --;
-            }
-            else {
-                textoffset -= strsrch->pattern.defaultShiftSize;
-            }
+    if (strsrch->search->isOverlap) {
+        if (textoffset != strsrch->search->textLength) {
+            textoffset --;
         }
         else {
-            if (ce != UCOL_NULLORDER) {
-                int32_t shift = strsrch->pattern.backShift[hash(ce)];
-            
-                // this is to adjust for characters in the middle of the substring 
-                // for matching that failed.
-                int32_t adjust = patternceindex;
-                if (adjust > 1 && shift > adjust) {
-                    shift -= adjust - 1;
-                }
-    
-                textoffset -= shift;
-            }
-            else {
-                textoffset -= strsrch->pattern.defaultShiftSize;
-            }
-        }        
-        textoffset = getPreviousUStringSearchBaseOffset(strsrch, textoffset);
-        if (textoffset >= 0) {
-            ucol_setOffset(strsrch->textIter, textoffset, status);
+            textoffset -= strsrch->pattern.defaultShiftSize;
         }
+    }
+    else {
+        if (ce != UCOL_NULLORDER) {
+            int32_t shift = strsrch->pattern.backShift[hash(ce)];
+            
+            // this is to adjust for characters in the middle of the substring 
+            // for matching that failed.
+            int32_t adjust = patternceindex;
+            if (adjust > 1 && shift > adjust) {
+                shift -= adjust - 1;
+            }
+            textoffset -= shift;
+        }
+        else {
+            textoffset -= strsrch->pattern.defaultShiftSize;
+        }
+    }        
+    textoffset = getPreviousUStringSearchBaseOffset(strsrch, textoffset);
+    if (textoffset >= 0) {
+        ucol_setOffset(strsrch->textIter, textoffset, status);
     }
     return textoffset;
 }
@@ -1696,10 +1749,12 @@ inline UTextOffset reverseShift(UStringSearch *strsrch,
 /**
 * Checks match for contraction. 
 * If the match starts with a partial contraction we fail.
+* Internal method, status assumed to be success, caller has to check status 
+* before calling this method.
 * @param strsrch string search data
 * @param start offset of potential match, to be modified if necessary
 * @param end offset of potential match, to be modified if necessary
-* @param status error status if any
+* @param status output error status if any
 * @return TRUE if match passes the contraction test, FALSE otherwise
 */
 static
@@ -1719,7 +1774,7 @@ UBool checkPreviousExactContractionMatch(UStringSearch *strsrch,
         int32_t expansion  = getExpansionSuffix(coleiter);
         UBool   expandflag = expansion > 0;
         ucol_setOffset(coleiter, *end, status);
-        while (expansion > 0) {
+        while (U_SUCCESS(*status) && expansion > 0) {
             // getting rid of the redundant ce
             // since forward contraction/expansion may have extra ces
             // if we are in the normalization buffer, hasAccentsBeforeMatch
@@ -1735,11 +1790,17 @@ UBool checkPreviousExactContractionMatch(UStringSearch *strsrch,
             expansion --;
         }
 
+        if (U_FAILURE(*status)) {
+            return FALSE;
+        }
+
         uint32_t *patternce       = strsrch->pattern.CE;
         int32_t   patterncelength = strsrch->pattern.CELength;
         int32_t   count           = patterncelength;
         while (count > 0) {
             uint32_t ce = getCE(strsrch, ucol_previous(coleiter, status));
+            // status checked below, note that if status is a failure
+            // ucol_previous returns UCOL_NULLORDER
             if (ce == UCOL_IGNORABLE) {
                 continue;
             }
@@ -1769,6 +1830,8 @@ UBool checkPreviousExactContractionMatch(UStringSearch *strsrch,
 * <li> identical matches
 * <\ul>
 * Otherwise the offset will be shifted to the preceding character.
+* Internal method, status assumed to be success, caller has to check status
+* before calling this method.
 * @param strsrch string search data
 * @param collator 
 * @param coleiter collation element iterator
@@ -1776,7 +1839,7 @@ UBool checkPreviousExactContractionMatch(UStringSearch *strsrch,
 * @param textoffset offset in the collation element text. the returned value
 *        will be the truncated start offset of the match or the new start 
 *        search offset.
-* @param status error status if any
+* @param status output error status if any
 * @return TRUE if the match is valid, FALSE otherwise
 */
 static
@@ -1785,30 +1848,27 @@ inline UBool checkPreviousExactMatch(UStringSearch *strsrch,
                                      UErrorCode    *status)
 {
     // to ensure that the start and ends are not composite characters
-    if (U_SUCCESS(*status)) { 
-        UTextOffset end = ucol_getOffset(strsrch->textIter);        
-        if (!checkPreviousExactContractionMatch(strsrch, textoffset, &end,
-            status)) {
+    UTextOffset end = ucol_getOffset(strsrch->textIter);        
+    if (!checkPreviousExactContractionMatch(strsrch, textoffset, &end, status)
+        || U_FAILURE(*status)) {
             return FALSE;
-        }
-        
-        // this totally matches, however we need to check if it is repeating
-        // the old match
-        if (checkRepeatedMatch(strsrch, *textoffset, end) || 
-            !isBreakUnit(strsrch, *textoffset, end) ||
-            hasAccentsBeforeMatch(strsrch, *textoffset, end) ||
-            !checkIdentical(strsrch, *textoffset, end) || 
-            hasAccentsAfterMatch(strsrch, *textoffset, end)) {
-            (*textoffset) --;
-            *textoffset = getPreviousBaseOffset(strsrch->search->text, 
-                                                *textoffset);
-            return FALSE;
-        }
-        strsrch->search->matchedIndex = *textoffset;
-        strsrch->search->matchedLength = end - *textoffset;
-        return TRUE;
     }
-    return FALSE;
+        
+    // this totally matches, however we need to check if it is repeating
+    // the old match
+    if (checkRepeatedMatch(strsrch, *textoffset, end) || 
+        !isBreakUnit(strsrch, *textoffset, end) ||
+        hasAccentsBeforeMatch(strsrch, *textoffset, end) ||
+        !checkIdentical(strsrch, *textoffset, end) || 
+        hasAccentsAfterMatch(strsrch, *textoffset, end)) {
+        (*textoffset) --;
+        *textoffset = getPreviousBaseOffset(strsrch->search->text, 
+                                            *textoffset);
+        return FALSE;
+    }
+    strsrch->search->matchedIndex = *textoffset;
+    strsrch->search->matchedLength = end - *textoffset;
+    return TRUE;
 }
 
 /**
@@ -1820,11 +1880,13 @@ inline UBool checkPreviousExactMatch(UStringSearch *strsrch,
 * step 1: split "\u030A\u0301" into 6 other type of potential accent substrings
 *         "\u030A", "\u0301", "\u0325", "\u030A\u0301", "\u030A\u0325", 
 *         "\u0301\u0325".
-* step 2: check if any of the generated substrings matches the pattern
+* step 2: check if any of the generated substrings matches the pattern.
+* Internal method, status assumed to be success, user has to check status 
+* before calling this method.
 * @param strsrch string search match
 * @param start offset of the first base character
 * @param end start of the last accent set
-* @param status error status if any
+* @param status only error status if any
 * @return USEARCH_DONE if a match is not found, otherwise return the ending
 *         offset of the match. Note this start includes all following accents.
 */
@@ -1884,6 +1946,7 @@ UTextOffset doPreviousCanonicalSuffixMatch(UStringSearch *strsrch,
                                            status);
             
             // run the collator iterator through this match
+            // if status is a failure ucol_setText does nothing
             ucol_setText(coleiter, match, matchsize, status);
             if (U_SUCCESS(*status)) {
                 if (checkCollationMatch(strsrch, coleiter)) {
@@ -1906,9 +1969,11 @@ UTextOffset doPreviousCanonicalSuffixMatch(UStringSearch *strsrch,
 * tries matching again.
 * We allow skipping of the ends of the accent set if the ces do not match. 
 * However if the failure is found before the accent set, it fails.
+* Internal method, status assumed to be success, caller has to check status 
+* before calling this method.
 * @param strsrch string search data
 * @param textoffset of the ends of the rearranged accent
-* @param status error status if any
+* @param status output error status if any
 * @return USEARCH_DONE if a match is not found, otherwise return the ending
 *         offset of the match. Note this start includes all following accents.
 */
@@ -1944,7 +2009,9 @@ UTextOffset doPreviousCanonicalPrefixMatch(UStringSearch *strsrch,
     }
 
     UCollationElements *coleiter = strsrch->utilIter;
+     // if status is a failure, ucol_setText does nothing
     ucol_setText(coleiter, safetext, safetextlength, status);
+    // status checked in loop below
     
     uint32_t *ce           = strsrch->pattern.CE;
     int32_t   celength     = strsrch->pattern.CELength;
@@ -1954,6 +2021,12 @@ UTextOffset doPreviousCanonicalPrefixMatch(UStringSearch *strsrch,
     
     while (ceindex < celength) {
         uint32_t textce = ucol_next(coleiter, status);
+        if (U_FAILURE(*status)) {
+            if (isSafe) {
+                cleanUpSafeText(strsrch, safetext, safebuffer);
+            }
+            return USEARCH_DONE;
+        }
         if (textce == UCOL_NULLORDER) {
             // check if we have passed the safe buffer
             if (coleiter == strsrch->textIter) {
@@ -1964,6 +2037,7 @@ UTextOffset doPreviousCanonicalPrefixMatch(UStringSearch *strsrch,
             safetext = safebuffer;
             coleiter = strsrch->textIter;
             ucol_setOffset(coleiter, safeoffset, status);
+            // status checked at the start of the loop
             isSafe = FALSE;
             continue;
         }
@@ -1986,7 +2060,11 @@ UTextOffset doPreviousCanonicalPrefixMatch(UStringSearch *strsrch,
                 UTextOffset result = doPreviousCanonicalSuffixMatch(strsrch, 
                                         textoffset, failedoffset, status);
                 if (result != USEARCH_DONE) {
+                    // if status is a failure, ucol_setOffset does nothing
                     ucol_setOffset(strsrch->textIter, result, status);
+                }
+                if (U_FAILURE(*status)) {
+                    return USEARCH_DONE;
                 }
                 return result;
             }
@@ -2008,6 +2086,9 @@ UTextOffset doPreviousCanonicalPrefixMatch(UStringSearch *strsrch,
             result = textoffset + (safeoffset - result);
         }
         ucol_setOffset(strsrch->textIter, result, status);
+        if (U_FAILURE(*status)) {
+            return USEARCH_DONE;
+        }
         setExpansionSuffix(strsrch->textIter, leftoverces);
         return result;
     }
@@ -2026,11 +2107,13 @@ UTextOffset doPreviousCanonicalPrefixMatch(UStringSearch *strsrch,
 * step 1: split "\u030A\u0301" into 6 other type of potential accent substrings
 *         "\u030A", "\u0301", "\u0325", "\u030A\u0301", "\u030A\u0325", 
 *         "\u0301\u0325".
-* step 2: check if any of the generated substrings matches the pattern
+* step 2: check if any of the generated substrings matches the pattern.
+* Internal method, status assumed to be success, caller has to check status
+* before calling this method.
 * @param strsrch string search data
 * @param textoffset start offset in the collation element text that starts 
 *                   with the accents to be rearranged
-* @param status error status if any
+* @param status output error status if any
 * @return TRUE if the match is valid, FALSE otherwise
 */
 static
@@ -2047,7 +2130,7 @@ UBool doPreviousCanonicalMatch(UStringSearch *strsrch,
         if (strsrch->pattern.hasSuffixAccents) {
             offset = doPreviousCanonicalSuffixMatch(strsrch, textoffset, 
                                                     offset, status);
-            if (offset != USEARCH_DONE) {
+            if (U_SUCCESS(*status) && offset != USEARCH_DONE) {
                 ucol_setOffset(coleiter, offset, status);
                 return TRUE;
             }
@@ -2065,6 +2148,7 @@ UBool doPreviousCanonicalMatch(UStringSearch *strsrch,
     // normalizing the offensive string
     unorm_normalize(text + textoffset, baseoffset - textoffset, UNORM_NFD, 
                                0, accents, INITIAL_ARRAY_SIZE_, status);    
+    // status checked in loop
         
     UTextOffset accentsindex[INITIAL_ARRAY_SIZE_];
     UTextOffset size = getUnblockedAccentIndex(accents, accentsindex);
@@ -2101,10 +2185,12 @@ UBool doPreviousCanonicalMatch(UStringSearch *strsrch,
 /**
 * Checks match for contraction. 
 * If the match starts with a partial contraction we fail.
+* Internal method, status assumed to be success, caller has to check status
+* before calling this method.
 * @param strsrch string search data
 * @param start offset of potential match, to be modified if necessary
 * @param end offset of potential match, to be modified if necessary
-* @param status error status if any
+* @param status only error status if any
 * @return TRUE if match passes the contraction test, FALSE otherwise
 */
 static
@@ -2124,7 +2210,7 @@ UBool checkPreviousCanonicalContractionMatch(UStringSearch *strsrch,
         int32_t expansion  = getExpansionSuffix(coleiter);
         UBool   expandflag = expansion > 0;
         ucol_setOffset(coleiter, *end, status);
-        while (expansion > 0) {
+        while (U_SUCCESS(*status) && expansion > 0) {
             // getting rid of the redundant ce
             // since forward contraction/expansion may have extra ces
             // if we are in the normalization buffer, hasAccentsBeforeMatch
@@ -2140,11 +2226,17 @@ UBool checkPreviousCanonicalContractionMatch(UStringSearch *strsrch,
             expansion --;
         }
 
+        if (U_FAILURE(*status)) {
+            return FALSE;
+        }
+
         uint32_t *patternce       = strsrch->pattern.CE;
         int32_t   patterncelength = strsrch->pattern.CELength;
         int32_t   count           = patterncelength;
         while (count > 0) {
             uint32_t ce = getCE(strsrch, ucol_previous(coleiter, status));
+            // status checked below, note that if status is a failure
+            // ucol_previous returns UCOL_NULLORDER
             if (ce == UCOL_IGNORABLE) {
                 continue;
             }
@@ -2161,7 +2253,8 @@ UBool checkPreviousCanonicalContractionMatch(UStringSearch *strsrch,
                 UTF_BACK_1(text, 0, *end);
                 if (getFCD(text, end, textlength) & LAST_BYTE_MASK_) {
                     ce = getCE(strsrch, ucol_previous(coleiter, status));
-                    while (ce != expected && ce != UCOL_NULLORDER &&
+                    while (U_SUCCESS(*status) && ce != expected && 
+                           ce != UCOL_NULLORDER &&
                            ucol_getOffset(coleiter) <= *start) {
                         ce = getCE(strsrch, ucol_previous(coleiter, status));
                     }
@@ -2188,11 +2281,13 @@ UBool checkPreviousCanonicalContractionMatch(UStringSearch *strsrch,
 * <li> identical matches
 * <\ul>
 * Otherwise the offset will be shifted to the next character.
+* Internal method, status assumed to be success, caller has to check status
+* before calling this method.
 * @param strsrch string search data
 * @param textoffset offset in the collation element text. the returned value
 *        will be the truncated start offset of the match or the new start 
 *        search offset.
-* @param status error status if any
+* @param status only error status if any
 * @return TRUE if the match is valid, FALSE otherwise
 */
 static
@@ -2201,10 +2296,6 @@ inline UBool checkPreviousCanonicalMatch(UStringSearch *strsrch,
                                          UErrorCode    *status)
 {
     // to ensure that the start and ends are not composite characters
-    if (U_FAILURE(*status)) { 
-        return FALSE;
-    }
-
     UCollationElements *coleiter = strsrch->textIter;
     // if we have a canonical accent match
     if ((strsrch->pattern.hasSuffixAccents && 
@@ -2221,7 +2312,8 @@ inline UBool checkPreviousCanonicalMatch(UStringSearch *strsrch,
 
     UTextOffset end = ucol_getOffset(coleiter);
     if (!checkPreviousCanonicalContractionMatch(strsrch, textoffset, &end,
-                                            status)) {
+                                                status) || 
+         U_FAILURE(*status)) {
         return FALSE;
     }
 
@@ -2254,6 +2346,7 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_open(const UChar *pattern,
     if (locale) {
         // ucol_open internally checks for status
         UCollator     *collator = ucol_open(locale, status);
+        // pattern, text checks are done in usearch_openFromCollator
         UStringSearch *result   = usearch_openFromCollator(pattern, 
                                               patternlength, text, textlength, 
                                               collator, breakiter, status);
@@ -2288,6 +2381,9 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_openFromCollator(
 
     if (U_SUCCESS(*status)) {
         initializeFCD(status);
+        if (U_FAILURE(*status)) {
+            return NULL;
+        }
 
         UStringSearch *result;
         if (textlength == -1) {
@@ -2318,7 +2414,18 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_openFromCollator(
                                                             UCOL_SHIFTED;
         result->variableTop = ucol_getVariableTop(collator, status);
 
+        if (U_FAILURE(*status)) {
+            uprv_free(result);
+            return NULL;
+        }
+
         result->search             = (USearch *)uprv_malloc(sizeof(USearch));
+        if (result->search == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            uprv_free(result);
+            return NULL;
+        }
+
         result->search->text       = text;
         result->search->textLength = textlength;
 
@@ -2336,6 +2443,11 @@ U_CAPI UStringSearch * U_EXPORT2 usearch_openFromCollator(
         result->search->matchedIndex  = USEARCH_DONE;
         result->textIter              = ucol_openElements(collator, text, 
                                                           textlength, status);
+        if (U_FAILURE(*status)) {
+            usearch_close(result);
+            return NULL;
+        }
+
         result->utilIter              = NULL;
 
         result->search->isOverlap          = FALSE;
@@ -2378,7 +2490,7 @@ U_CAPI void U_EXPORT2 usearch_setOffset(UStringSearch *strsrch,
                                         UTextOffset    position,
                                         UErrorCode    *status)
 {
-    if (strsrch) {
+    if (U_SUCCESS(*status) && strsrch) {
         if (isOutOfBounds(strsrch->search->textLength, position)) {
             *status = U_INDEX_OUTOFBOUNDS_ERROR;
         }
@@ -2408,7 +2520,7 @@ U_CAPI void U_EXPORT2 usearch_setAttribute(UStringSearch *strsrch,
                                  USearchAttributeValue value,
                                  UErrorCode *status)
 {
-    if (strsrch) {
+    if (U_SUCCESS(*status) && strsrch) {
         switch (attribute)
         {
         case USEARCH_OVERLAP :
@@ -2462,10 +2574,11 @@ U_CAPI int32_t U_EXPORT2 usearch_getMatchedText(const UStringSearch *strsrch,
                                             int32_t        resultCapacity, 
                                             UErrorCode    *status)
 {
-    if (status == NULL || U_FAILURE(*status)) {
+    if (U_FAILURE(*status)) {
         return USEARCH_DONE;
     }
-    if (strsrch == NULL || resultCapacity < 0 || (resultCapacity > 0 && result == NULL)) {
+    if (strsrch == NULL || resultCapacity < 0 || (resultCapacity > 0 && 
+        result == NULL)) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return USEARCH_DONE;
     }
@@ -2484,7 +2597,8 @@ U_CAPI int32_t U_EXPORT2 usearch_getMatchedText(const UStringSearch *strsrch,
         uprv_memcpy(result, strsrch->search->text + copyindex, 
                     copylength * sizeof(UChar));
     }
-    return u_terminateUChars(result, resultCapacity, strsrch->search->matchedLength, status);
+    return u_terminateUChars(result, resultCapacity, 
+                             strsrch->search->matchedLength, status);
 }
     
 U_CAPI int32_t U_EXPORT2 usearch_getMatchedLength(
@@ -2523,23 +2637,22 @@ U_CAPI void U_EXPORT2 usearch_setText(      UStringSearch *strsrch,
                                             int32_t        textlength,
                                             UErrorCode    *status)
 {
-    if (strsrch == NULL || text == NULL) {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-    }
-    else {
-        if (textlength == -1) {
-            textlength = u_strlen(text);
-        }
-        if (textlength == 0) {
+    if (U_SUCCESS(*status)) {
+        if (strsrch == NULL || text == NULL || textlength < -1 || 
+            textlength == 0) {
             *status = U_ILLEGAL_ARGUMENT_ERROR;
-            return;
         }
-        strsrch->search->text       = text;
-        strsrch->search->textLength = textlength;
-        ucol_setText(strsrch->textIter, text, textlength, status);
-        strsrch->search->matchedIndex  = USEARCH_DONE;
-        strsrch->search->matchedLength = 0;
-        strsrch->search->reset         = TRUE;
+        else {
+            if (textlength == -1) {
+                textlength = u_strlen(text);
+            }
+            strsrch->search->text       = text;
+            strsrch->search->textLength = textlength;
+            ucol_setText(strsrch->textIter, text, textlength, status);
+            strsrch->search->matchedIndex  = USEARCH_DONE;
+            strsrch->search->matchedLength = 0;
+            strsrch->search->reset         = TRUE;
+        }
     }
 }
 
@@ -2557,28 +2670,37 @@ U_CAPI void U_EXPORT2 usearch_setCollator(      UStringSearch *strsrch,
                                           const UCollator     *collator,
                                                 UErrorCode    *status)
 {
-    if (collator == NULL) {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-    }
-    if (strsrch && U_SUCCESS(*status)) {
-        if (strsrch->ownCollator) {
-            ucol_close((UCollator *)strsrch->collator);
+    if (U_SUCCESS(*status)) {
+        if (collator == NULL) {
+            *status = U_ILLEGAL_ARGUMENT_ERROR;
+            return;
         }
-        strsrch->collator    = collator;
-        strsrch->ownCollator = FALSE;
-        strsrch->strength    = ucol_getStrength(collator);
-        strsrch->toNormalize = ucol_getAttribute(collator, 
-                                                  UCOL_NORMALIZATION_MODE,
-                                                  status) == UCOL_ON;
-        strsrch->ceMask      = getMask(strsrch->strength);
-        strsrch->toShift     =  
-             ucol_getAttribute(collator, UCOL_ALTERNATE_HANDLING, status) == 
-                                                            UCOL_SHIFTED;
-        strsrch->variableTop = ucol_getVariableTop(collator, status);
-        initialize(strsrch, status);
-        init_collIterate(collator, strsrch->search->text, 
-                         strsrch->search->textLength, 
-                         &(strsrch->textIter->iteratordata_));
+        if (strsrch) {
+            if (strsrch->ownCollator) {
+                ucol_close((UCollator *)strsrch->collator);
+            }
+            strsrch->collator    = collator;
+            strsrch->ownCollator = FALSE;
+            strsrch->strength    = ucol_getStrength(collator);
+            strsrch->toNormalize = ucol_getAttribute(collator, 
+                                                      UCOL_NORMALIZATION_MODE,
+                                                      status) == UCOL_ON;
+            strsrch->ceMask      = getMask(strsrch->strength);
+            // if status is a failure, ucol_getAttribute returns UCOL_DEFAULT
+            strsrch->toShift     =  
+               ucol_getAttribute(collator, UCOL_ALTERNATE_HANDLING, status) == 
+                                                                UCOL_SHIFTED;
+            // if status is a failure, ucol_getVariableTop returns 0
+            strsrch->variableTop = ucol_getVariableTop(collator, status);
+            if (U_SUCCESS(*status)) {
+                initialize(strsrch, status);
+                if (U_SUCCESS(*status)) {
+                    init_collIterate(collator, strsrch->search->text, 
+                                     strsrch->search->textLength, 
+                                     &(strsrch->textIter->iteratordata_));
+                }
+            }
+        }
     }
 }
 
@@ -2595,20 +2717,22 @@ U_CAPI void U_EXPORT2 usearch_setPattern(      UStringSearch *strsrch,
                                                int32_t        patternlength,
                                                UErrorCode    *status)
 {
-    if (strsrch == NULL || pattern == NULL) {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-    }
     if (U_SUCCESS(*status)) {
-        if (patternlength == -1) {
-            patternlength = u_strlen(pattern);
-        }
-        if (patternlength == 0) {
+        if (strsrch == NULL || pattern == NULL) {
             *status = U_ILLEGAL_ARGUMENT_ERROR;
-            return;
         }
-        strsrch->pattern.text       = pattern;
-        strsrch->pattern.textLength = patternlength;
-        initialize(strsrch, status);
+        else {
+            if (patternlength == -1) {
+                patternlength = u_strlen(pattern);
+            }
+            if (patternlength == 0) {
+                *status = U_ILLEGAL_ARGUMENT_ERROR;
+                return;
+            }
+            strsrch->pattern.text       = pattern;
+            strsrch->pattern.textLength = patternlength;
+            initialize(strsrch, status);
+        }
     }
 }
 
@@ -2631,7 +2755,9 @@ U_CAPI UTextOffset U_EXPORT2 usearch_first(UStringSearch *strsrch,
     if (strsrch && U_SUCCESS(*status)) {
         strsrch->search->isForwardSearching = TRUE;
         usearch_setOffset(strsrch, 0, status);
-        return usearch_next(strsrch, status);
+        if (U_SUCCESS(*status)) {
+            return usearch_next(strsrch, status);
+        }
     }
     return USEARCH_DONE;
 }
@@ -2642,6 +2768,7 @@ U_CAPI UTextOffset U_EXPORT2 usearch_following(UStringSearch *strsrch,
 {
     if (strsrch && U_SUCCESS(*status)) {
         strsrch->search->isForwardSearching = TRUE;
+        // position checked in usearch_setOffset
         usearch_setOffset(strsrch, position, status);
         if (U_SUCCESS(*status)) {
             return usearch_next(strsrch, status);   
@@ -2656,7 +2783,9 @@ U_CAPI UTextOffset U_EXPORT2 usearch_last(UStringSearch *strsrch,
     if (strsrch && U_SUCCESS(*status)) {
         strsrch->search->isForwardSearching = FALSE;
         usearch_setOffset(strsrch, strsrch->search->textLength, status);
-        return usearch_previous(strsrch, status);
+        if (U_SUCCESS(*status)) {
+            return usearch_previous(strsrch, status);
+        }
     }
     return USEARCH_DONE;
 }
@@ -2667,6 +2796,7 @@ U_CAPI UTextOffset U_EXPORT2 usearch_preceding(UStringSearch *strsrch,
 {
     if (strsrch && U_SUCCESS(*status)) {
         strsrch->search->isForwardSearching = FALSE;
+        // position checked in usearch_setOffset
         usearch_setOffset(strsrch, position, status);
         if (U_SUCCESS(*status)) {
             return usearch_previous(strsrch, status);   
@@ -2743,6 +2873,7 @@ U_CAPI UTextOffset U_EXPORT2 usearch_next(UStringSearch *strsrch,
                 search->matchedLength = 0;
                 ucol_setOffset(strsrch->textIter, search->matchedIndex, 
                                status);
+                // status checked below
                 if (search->matchedIndex == textlength) {
                     search->matchedIndex = USEARCH_DONE;
                 }
@@ -2776,6 +2907,9 @@ U_CAPI UTextOffset U_EXPORT2 usearch_previous(UStringSearch *strsrch,
             search->isForwardSearching = FALSE;
             search->reset              = FALSE;
             ucol_setOffset(strsrch->textIter, offset, status);
+            if (U_FAILURE(*status)) {
+                return USEARCH_DONE;
+            }
         }
         else {
             offset = usearch_getOffset(strsrch);
@@ -2811,11 +2945,13 @@ U_CAPI UTextOffset U_EXPORT2 usearch_previous(UStringSearch *strsrch,
                       (matchedindex == USEARCH_DONE ? offset : matchedindex);
                 if (search->matchedIndex == 0) {
                     setMatchNotFound(strsrch, status);
+                    // status checked below
                 }
                 else { // move by codepoints
                     UTF_BACK_1(search->text, 0, search->matchedIndex);
                     ucol_setOffset(strsrch->textIter, search->matchedIndex, 
                                    status);
+                    // status checked below
                     search->matchedLength = 0;
                 }
             }
@@ -2823,9 +2959,11 @@ U_CAPI UTextOffset U_EXPORT2 usearch_previous(UStringSearch *strsrch,
                 if (strsrch->search->isCanonicalMatch) {
                     // can't use exact here since extra accents are allowed.
                     usearch_handlePreviousCanonical(strsrch, status);
+                    // status checked below
                 }
                 else {
                     usearch_handlePreviousExact(strsrch, status);
+                    // status checked below
                 }
             }
 
@@ -2858,6 +2996,11 @@ U_CAPI void U_EXPORT2 usearch_reset(UStringSearch *strsrch)
 
 UBool usearch_handleNextExact(UStringSearch *strsrch, UErrorCode *status)
 {
+    if (U_FAILURE(*status)) {
+        setMatchNotFound(strsrch, status);
+        return FALSE;
+    }
+
     UCollationElements *coleiter        = strsrch->textIter;
     int32_t             textlength      = strsrch->search->textLength;
     uint32_t           *patternce       = strsrch->pattern.CE;
@@ -2881,7 +3024,7 @@ UBool usearch_handleNextExact(UStringSearch *strsrch, UErrorCode *status)
         UBool       found          = FALSE;
         uint32_t    lastce         = UCOL_NULLORDER;
         
-        while (TRUE) {
+        while (U_SUCCESS(*status)) {
             // finding the last pattern ce match, imagine composite characters
             // for example: search for pattern A in text \u00C0
             // we'll have to skip \u0300 the grave first before we get to A
@@ -2917,7 +3060,7 @@ UBool usearch_handleNextExact(UStringSearch *strsrch, UErrorCode *status)
             if (targetce == UCOL_NULLORDER) {
                 found = FALSE;
                 break;
-             }
+            }
             targetce    = getCE(strsrch, targetce);
             if (targetce == UCOL_IGNORABLE) {
                 continue;
@@ -2927,14 +3070,20 @@ UBool usearch_handleNextExact(UStringSearch *strsrch, UErrorCode *status)
             found = found && targetce == patternce[patternceindex]; 
         }
 
+        if (U_FAILURE(*status)) {
+            break;
+        }
+
         if (!found) {
             textoffset = shiftForward(strsrch, textoffset, targetce, 
                                       patternceindex, status);
+            // status checked at loop.
             patternceindex = patterncelength;
             continue;
         }
         
         if (checkNextExactMatch(strsrch, &textoffset, status)) {
+            // status checked in ucol_setOffset
             ucol_setOffset(coleiter, textoffset, status);
             return TRUE;
         }
@@ -2948,6 +3097,11 @@ UBool usearch_handleNextExact(UStringSearch *strsrch, UErrorCode *status)
 
 UBool usearch_handleNextCanonical(UStringSearch *strsrch, UErrorCode *status)
 {
+    if (U_FAILURE(*status)) {
+        setMatchNotFound(strsrch, status);
+        return FALSE;
+    }
+
     UCollationElements *coleiter        = strsrch->textIter;
     int32_t             textlength      = strsrch->search->textLength;
     uint32_t           *patternce       = strsrch->pattern.CE;
@@ -2976,7 +3130,7 @@ UBool usearch_handleNextCanonical(UStringSearch *strsrch, UErrorCode *status)
         UBool       found          = FALSE;
         uint32_t    lastce         = UCOL_NULLORDER;
         
-        while (TRUE) {
+        while (U_SUCCESS(*status)) {
             // finding the last pattern ce match, imagine composite characters
             // for example: search for pattern A in text \u00C0
             // we'll have to skip \u0300 the grave first before we get to A
@@ -3016,16 +3170,24 @@ UBool usearch_handleNextCanonical(UStringSearch *strsrch, UErrorCode *status)
             found = found && targetce == patternce[patternceindex]; 
         }
 
+        if (U_FAILURE(*status)) {
+            break;
+        }
+
         // initializing the rearranged accent array
         if (hasPatternAccents && !found) {
             strsrch->canonicalPrefixAccents[0] = 0;
             strsrch->canonicalSuffixAccents[0] = 0;
             found = doNextCanonicalMatch(strsrch, textoffset, status);
+            if (U_FAILURE(*status)) {
+                break;
+            }
         }
 
         if (!found) {
             textoffset = shiftForward(strsrch, textoffset, targetce, 
                                       patternceindex, status);
+            // status checked at loop
             patternceindex = patterncelength;
             continue;
         }
@@ -3035,7 +3197,9 @@ UBool usearch_handleNextCanonical(UStringSearch *strsrch, UErrorCode *status)
             return TRUE;
         }
         if (textoffset <= textlength) {
+            // if status is a failure, ucol_setOffset does nothing
             ucol_setOffset(coleiter, textoffset, status);
+            // status checked at loop
         }
     }
     setMatchNotFound(strsrch, status);
@@ -3044,6 +3208,11 @@ UBool usearch_handleNextCanonical(UStringSearch *strsrch, UErrorCode *status)
 
 UBool usearch_handlePreviousExact(UStringSearch *strsrch, UErrorCode *status)
 {
+    if (U_FAILURE(*status)) {
+        setMatchNotFound(strsrch, status);
+        return FALSE;
+    }
+
     UCollationElements *coleiter        = strsrch->textIter;
     uint32_t           *patternce       = strsrch->pattern.CE;
     int32_t             patterncelength = strsrch->pattern.CELength;
@@ -3066,7 +3235,7 @@ UBool usearch_handlePreviousExact(UStringSearch *strsrch, UErrorCode *status)
         UBool       found          = FALSE;
         uint32_t    firstce        = UCOL_NULLORDER;
         
-        while (TRUE) {
+        while (U_SUCCESS(*status)) {
             // finding the first pattern ce match, imagine composite 
             // characters. for example: search for pattern \u0300 in text 
             // \u00C0, we'll have to skip A first before we get to 
@@ -3112,6 +3281,10 @@ UBool usearch_handlePreviousExact(UStringSearch *strsrch, UErrorCode *status)
             patternceindex ++;
         }
 
+        if (U_FAILURE(*status)) {
+            break;
+        }
+
         if (!found) {
             textoffset = reverseShift(strsrch, textoffset, targetce, 
                                       patternceindex, status);
@@ -3124,6 +3297,7 @@ UBool usearch_handlePreviousExact(UStringSearch *strsrch, UErrorCode *status)
             return TRUE;
         }
         if (textoffset >= 0) {
+            // if status is a failure, ucol_setOffset does nothing
             ucol_setOffset(coleiter, textoffset, status);
         }
     }
@@ -3134,6 +3308,11 @@ UBool usearch_handlePreviousExact(UStringSearch *strsrch, UErrorCode *status)
 UBool usearch_handlePreviousCanonical(UStringSearch *strsrch, 
                                       UErrorCode    *status)
 {
+    if (U_FAILURE(*status)) {
+        setMatchNotFound(strsrch, status);
+        return FALSE;
+    }
+
     UCollationElements *coleiter        = strsrch->textIter;
     uint32_t           *patternce       = strsrch->pattern.CE;
     int32_t             patterncelength = strsrch->pattern.CELength;
@@ -3160,7 +3339,7 @@ UBool usearch_handlePreviousCanonical(UStringSearch *strsrch,
         UBool       found          = FALSE;
         uint32_t    firstce        = UCOL_NULLORDER;
         
-        while (TRUE) {
+        while (U_SUCCESS(*status)) {
             // finding the first pattern ce match, imagine composite 
             // characters. for example: search for pattern \u0300 in text 
             // \u00C0, we'll have to skip A first before we get to 
@@ -3205,11 +3384,18 @@ UBool usearch_handlePreviousCanonical(UStringSearch *strsrch,
             patternceindex ++;
         }
 
+        if (U_FAILURE(*status)) {
+            break;
+        }
+
         // initializing the rearranged accent array
         if (hasPatternAccents && !found) {
             strsrch->canonicalPrefixAccents[0] = 0;
             strsrch->canonicalSuffixAccents[0] = 0;
             found = doPreviousCanonicalMatch(strsrch, textoffset, status);
+            if (U_FAILURE(*status)) {
+                break;
+            }
         }
 
         if (!found) {
