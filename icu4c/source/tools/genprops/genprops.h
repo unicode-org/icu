@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2002, International Business Machines
+*   Copyright (C) 1999-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -88,6 +88,9 @@ repeatProps(uint32_t first, uint32_t last, uint32_t props);
 
 U_CAPI uint32_t U_EXPORT2
 getFoldedPropsValue(UNewTrie *trie, UChar32 start, int32_t offset);
+
+extern void
+addCaseSensitive(UChar32 first, UChar32 last);
 
 extern void
 generateData(const char *dataDir);
