@@ -352,10 +352,10 @@ ucbuf_open(FileStream* in,const char* cp, UBool showWarning, UErrorCode* err){
         }
         buf->remaining=T_FileStream_size(in)-numRead;
         buf->buffer=(UChar*) uprv_malloc(sizeof(UChar)* MAX_U_BUF);
-		if (buf->buffer == NULL) {
-			*err = U_MEMORY_ALLOCATION_ERROR;
-			return NULL;
-		}
+        if (buf->buffer == NULL) {
+            *err = U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
+        }
         buf->currentPos=buf->buffer;
         buf->bufLimit=buf->buffer;
         if(U_FAILURE(*err)){

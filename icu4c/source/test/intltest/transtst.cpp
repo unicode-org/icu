@@ -2434,11 +2434,11 @@ void TransliteratorTest::TestTeluguLatinRT(){
     const int MAX_LEN=10;
     const char* const source[MAX_LEN] = {   
         "raghur\\u0101m vi\\u015Bvan\\u0101dha",                         /* Raghuram Viswanadha    */
-        "\\u0101nand vaddir\\u0101ju",                                   /* Anand Vaddiraju 	   */ 	   
-        "r\\u0101j\\u012Bv ka\\u015Barab\\u0101da",                      /* Rajeev Kasarabada      */ 
+        "\\u0101nand vaddir\\u0101ju",                                   /* Anand Vaddiraju        */
+        "r\\u0101j\\u012Bv ka\\u015Barab\\u0101da",                      /* Rajeev Kasarabada      */
         "san\\u0304j\\u012Bv ka\\u015Barab\\u0101da",                    /* sanjeev kasarabada     */
-        "san\\u0304j\\u012Bb sen'gupta",                                 /* sanjib sengupata 	   */ 	   
-        "amar\\u0113ndra hanum\\u0101nula",                              /* Amarendra hanumanula   */ 
+        "san\\u0304j\\u012Bb sen'gupta",                                 /* sanjib sengupata       */
+        "amar\\u0113ndra hanum\\u0101nula",                              /* Amarendra hanumanula   */
         "ravi kum\\u0101r vi\\u015Bvan\\u0101dha",                       /* Ravi Kumar Viswanadha  */
         "\\u0101ditya kandr\\u0113gula",                                 /* Aditya Kandregula      */
         "\\u015Br\\u012Bdhar ka\\u1E47\\u1E6Dama\\u015Be\\u1E6D\\u1E6Di",/* Shridhar Kantamsetty   */

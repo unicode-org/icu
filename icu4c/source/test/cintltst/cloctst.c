@@ -1,5 +1,5 @@
 /********************************************************************
- * COPYRIGHT: 
+ * COPYRIGHT:
  * Copyright (c) 1997-2001, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
@@ -8,7 +8,7 @@
 * File CLOCTST.C
 *
 * Modification History:
-*        Name                     Description            
+*        Name                     Description 
 *     Madhu Katragadda            Ported for C API
 *********************************************************************************
 */
@@ -171,7 +171,7 @@ static void TestBasicGetters() {
             log_err("ERROR: in uloc_getLanguage  %s\n", myErrorName(status));
         }
         if (0 !=strcmp(temp,rawData2[LANG][i]))    {
-            log_err("  Language code mismatch: %s versus  %s\n", temp, rawData2[LANG][i]); 
+            log_err("  Language code mismatch: %s versus  %s\n", temp, rawData2[LANG][i]);
         }
 
 
@@ -186,7 +186,7 @@ static void TestBasicGetters() {
         }
         if (0 != strcmp(temp, rawData2[CTRY][i])) {
             log_err(" Country code mismatch:  %s  versus   %s\n", temp, rawData2[CTRY][i]);
-            
+
           }
 
         cap=uloc_getVariant(testLocale, temp, cap, &status);
@@ -234,8 +234,8 @@ static void TestPrefixes() {
   int row = 0;
   int n;
   const char *loc;
-  
-  const char *testData[][5] = 
+
+  const char *testData[][5] =
   {
     {"sv", "FI", "AL", "sv-fi-al", "sv_FI_AL" },
     {"en", "GB", "", "en-gb", "en_GB" },
@@ -267,7 +267,7 @@ static void TestPrefixes() {
   for(row=0;testData[row][0][0] != 0;row++) {
     loc = testData[row][NAME];
     log_verbose("Test #%d: %s\n", row, loc);
-    
+
     err = U_ZERO_ERROR;
     len=0;
     buf[0]=0;
@@ -295,12 +295,12 @@ static void TestPrefixes() {
       case NAME+1:
         len = uloc_getName(loc, buf, PREFIXBUFSIZ, &err);
         break;
-        
+
       default:
         strcpy(buf, "**??");
         len=4;
       }
-      
+
       if(U_FAILURE(err)) {
         log_err("#%d: %s on %s: err %s\n",
                 row, testTitles[n], loc, u_errorName(err));
@@ -313,7 +313,7 @@ static void TestPrefixes() {
                 row, testTitles[n], loc, buf, len, strlen(buf)+1);
 
         }
-        
+
         /* see if they smashed something */
         if(buf[len+1] != '%') {
           log_err("#%d: %s on %s: -> [%s] - wrote [%X] out ofbounds!\n",
@@ -378,10 +378,10 @@ setUpDataTable();
 cleanUpDataTable();
 }
 
-static void TestDisplayNames() 
+static void TestDisplayNames()
 {
   /* sfb 990721 
-     Can't just save a pointer to the default locale.  
+     Can't just save a pointer to the default locale.
      Although the pointer won't change, the contents will, so the
      restore at the end doesn't actually restore the original.
   */
@@ -463,7 +463,7 @@ static void TestGetAvailableLocales()
         log_err("countAvailable() returned an empty list!\n");
 
     /* use something sensible w/o hardcoding the count */
-    else if(locCount < 0){ 
+    else if(locCount < 0){
         log_err("countAvailable() returned a wrong value!= %d\n", locCount);
     }
     else{
@@ -487,10 +487,10 @@ static void TestDataDirectory()
     log_verbose("Testing getDataDirectory()\n");
     temp = u_getDataDirectory();
     strcpy(oldDirectory, temp);
-        
+
     testValue1=uloc_getISO3Language("en_US");
     log_verbose("first fetch of language retrieved  %s\n", testValue1);
-    
+
     if (0 != strcmp(testValue1,"eng")){
         log_err("Initial check of ISO3 language failed: expected \"eng\", got  %s \n", testValue1);
     }
@@ -555,7 +555,7 @@ setUpDataTable();
     if (defaultIsFrench && 0 != strcmp(temp, "fr"))    {
         log_err("Default locale should be French, but it's really  %s\n", temp);
     }
-    else if (!defaultIsFrench && 0 != strcmp(temp, "en")){  
+    else if (!defaultIsFrench && 0 != strcmp(temp, "en")){
         log_err("Default locale should be English, but it's really  %s\n", temp);
     }
 
@@ -631,9 +631,9 @@ setUpDataTable();
             }
             if(U_FAILURE(status)){
                     log_err("Error in getDisplayName()  %s\n", myErrorName(status));
-                
+
             }
-           
+
         }
         else {
             maxresultsize=0;
@@ -667,7 +667,7 @@ setUpDataTable();
             if(U_FAILURE(status)){
                 log_err("Error in getDisplayCountry()  %s\n", myErrorName(status));
             }
-            
+
             maxresultsize=0;
             maxresultsize=uloc_getDisplayVariant(testLocale, inLocale, NULL, maxresultsize, &status);
             if(status==U_BUFFER_OVERFLOW_ERROR)
@@ -683,7 +683,7 @@ setUpDataTable();
             if(U_FAILURE(status)){
                     log_err("Error in getDisplayVariant()  %s\n", myErrorName(status));
             }
-            
+
             maxresultsize=0;
             maxresultsize=uloc_getDisplayName(testLocale, inLocale, NULL, maxresultsize, &status);
             if(status==U_BUFFER_OVERFLOW_ERROR)
@@ -741,7 +741,7 @@ setUpDataTable();
             log_err(" Display Variant mismatch: %s  versus  %s inLocale=%s\n", austrdup(testVar), austrdup(expectedVar), inLocale);
         }
 
-        if(0 != u_strcmp(testName, expectedName))    {    
+        if(0 != u_strcmp(testName, expectedName))    {
             log_err(" Display Name mismatch: %s  versus  %s inLocale=%s\n", austrdup(testName), austrdup(expectedName), inLocale);
         }
 
@@ -782,15 +782,20 @@ static void TestISOFunctions()
         {
             done = TRUE;
         }
-	else
-	{
-	  test = *(str+count-1);
-	  if(!strcmp(test,"in")) log_err("FAIL getISOLanguages() has obsolete language code %s\n", test);
-	  if(!strcmp(test,"iw")) log_err("FAIL getISOLanguages() has obsolete language code %s\n", test);
-	  if(!strcmp(test,"ji")) log_err("FAIL getISOLanguages() has obsolete language code %s\n", test);
-	  if(!strcmp(test,"jw")) log_err("FAIL getISOLanguages() has obsolete language code %s\n", test);
-	  if(!strcmp(test,"sh")) log_err("FAIL getISOLanguages() has obsolete language code %s\n", test);
-	}
+        else
+        {
+            test = *(str+count-1);
+            if(!strcmp(test,"in"))
+                log_err("FAIL getISOLanguages() has obsolete language code %s\n", test);
+            if(!strcmp(test,"iw"))
+                log_err("FAIL getISOLanguages() has obsolete language code %s\n", test);
+            if(!strcmp(test,"ji"))
+                log_err("FAIL getISOLanguages() has obsolete language code %s\n", test);
+            if(!strcmp(test,"jw"))
+                log_err("FAIL getISOLanguages() has obsolete language code %s\n", test);
+            if(!strcmp(test,"sh"))
+                log_err("FAIL getISOLanguages() has obsolete language code %s\n", test);
+        }
     }
     count--;
     expect = 437;
@@ -808,12 +813,14 @@ static void TestISOFunctions()
         {
             done=TRUE;
         }
-	else
-	{
-	  test = *(str1+count-1);
-	  if(!strcmp(test,"FX")) log_err("FAIL getISOCountries() has obsolete country code %s\n", test);
-	  if(!strcmp(test,"ZR")) log_err("FAIL getISOCountries() has obsolete country code %s\n", test);
-	}
+        else
+        {
+            test = *(str1+count-1);
+            if(!strcmp(test,"FX"))
+                log_err("FAIL getISOCountries() has obsolete country code %s\n", test);
+            if(!strcmp(test,"ZR"))
+                log_err("FAIL getISOCountries() has obsolete country code %s\n", test);
+        }
     }
     count--;
     expect=239;
@@ -854,7 +861,7 @@ static void cleanUpDataTable()
 /**
  * @bug 4011756 4011380
  */
-static void TestISO3Fallback() 
+static void TestISO3Fallback()
 {
     const char* test="xx_YY";
 
@@ -876,7 +883,7 @@ static void TestISO3Fallback()
 /**
  * @bug 4118587
  */
-static void TestSimpleDisplayNames() 
+static void TestSimpleDisplayNames()
 {
   /*
      This test is different from TestDisplayNames because TestDisplayNames checks
@@ -888,7 +895,7 @@ static void TestSimpleDisplayNames()
     const char* languageNames [] = { "Hebrew", "Indonesian", "Inukitut", "Uighur", "Yiddish",
                                "Zhuang" };
     UErrorCode status=U_ZERO_ERROR;
-    
+
     int32_t i;
     for (i = 0; i < 6; i++) {
         UChar *testLang=0;
@@ -903,28 +910,28 @@ static void TestSimpleDisplayNames()
         expectedLang=(UChar*)malloc(sizeof(UChar) * (strlen(languageNames[i])+1));
         u_uastrcpy(expectedLang, languageNames[i]);
         if (u_strcmp(testLang, expectedLang) != 0)
-            log_err("Got wrong display name for %s : Expected \"%s\", got \"%s\".\n", 
+            log_err("Got wrong display name for %s : Expected \"%s\", got \"%s\".\n",
                     languageCodes[i], languageNames[i], austrdup(testLang));
         free(testLang);
         free(expectedLang);
     }
-    
+
 }
 
 /**
  * @bug 4118595
  */
-static void TestUninstalledISO3Names() 
+static void TestUninstalledISO3Names()
 {
   /* This test checks to make sure getISO3Language and getISO3Country work right
      even for locales that are not installed. */
-    const char iso2Languages [][4] = {     "am", "ba", "fy", "mr", "rn", 
+    const char iso2Languages [][4] = {     "am", "ba", "fy", "mr", "rn",
                                         "ss", "tw", "zu" };
-    const char iso3Languages [][5] = {     "amh", "bak", "fry", "mar", "run", 
+    const char iso3Languages [][5] = {     "amh", "bak", "fry", "mar", "run",
                                         "ssw", "twi", "zul" };
-    char iso2Countries [][6] = {     "am_AF", "ba_BW", "fy_KZ", "mr_MO", "rn_MN", 
+    char iso2Countries [][6] = {     "am_AF", "ba_BW", "fy_KZ", "mr_MO", "rn_MN",
                                         "ss_SB", "tw_TC", "zu_ZW" };
-    char iso3Countries [][4] = {     "AFG", "BWA", "KAZ", "MAC", "MNG", 
+    char iso3Countries [][4] = {     "AFG", "BWA", "KAZ", "MAC", "MNG",
                                         "SLB", "TCA", "ZWE" };
     int32_t i;
 
@@ -933,7 +940,7 @@ static void TestUninstalledISO3Names()
       const char *test;
       test = uloc_getISO3Language(iso2Languages[i]);
       if(strcmp(test, iso3Languages[i]) !=0 || U_FAILURE(err))
-         log_err("Got wrong ISO3 code for %s : Expected \"%s\", got \"%s\". %s\n", 
+         log_err("Got wrong ISO3 code for %s : Expected \"%s\", got \"%s\". %s\n",
                      iso2Languages[i], iso3Languages[i], test, myErrorName(err));
     }
     for (i = 0; i < 8; i++) {
@@ -941,7 +948,7 @@ static void TestUninstalledISO3Names()
       const char *test;
       test = uloc_getISO3Country(iso2Countries[i]);
       if(strcmp(test, iso3Countries[i]) !=0 || U_FAILURE(err))
-         log_err("Got wrong ISO3 code for %s : Expected \"%s\", got \"%s\". %s\n", 
+         log_err("Got wrong ISO3 code for %s : Expected \"%s\", got \"%s\". %s\n",
                      iso2Countries[i], iso3Countries[i], test, myErrorName(err));
     }
 }
@@ -1047,7 +1054,7 @@ static void TestVariantParsing()
     if(strcmp(austrdup(got),"_FOO_")!=0) {
         log_err("FAIL: getDisplayVariant()  Wanted: _FOO_  Got: %s\n", austrdup(got));
     }
-    free(got);  
+    free(got);
 }
 
 
@@ -1056,7 +1063,7 @@ static void TestObsoleteNames(void)
     int32_t i;
     UErrorCode status = U_ZERO_ERROR;
     char buff[256];
-    
+
     struct
     {
         char locale[9];
@@ -1064,7 +1071,7 @@ static void TestObsoleteNames(void)
         char lang[6];
         char ctry3[6];
         char ctry[6];
-    } tests[] = 
+    } tests[] =
     {
         { "eng_USA", "eng", "en", "USA", "US" },
         { "kok",  "kok", "kok", "", "" },
@@ -1085,14 +1092,14 @@ static void TestObsoleteNames(void)
         { "sh", "srp", "sh", "", "" },
         { "", "", "", "", "" }
     };
-    
+
     for(i=0;tests[i].locale[0];i++)
     {
         const char *locale;
-        
+
         locale = tests[i].locale;
         log_verbose("** %s:\n", locale);
-        
+
         status = U_ZERO_ERROR;
         if(strcmp(tests[i].lang3,uloc_getISO3Language(locale)))
         {
@@ -1104,7 +1111,7 @@ static void TestObsoleteNames(void)
             log_verbose("   uloc_getISO3Language()==\t\"%s\"\n",
                 uloc_getISO3Language(locale) );
         }
-        
+
         status = U_ZERO_ERROR;
         uloc_getLanguage(locale, buff, 256, &status);
         if(U_FAILURE(status))
@@ -1133,7 +1140,7 @@ static void TestObsoleteNames(void)
             log_verbose("   uloc_getISO3Language()==\t\"%s\"\n",
                 uloc_getISO3Language(locale) );
         }
-        
+
         if(strcmp(tests[i].ctry3,uloc_getISO3Country(locale)))
         {
             log_err("FAIL: uloc_getISO3Country(%s)==\t\"%s\",\t expected \"%s\"\n",
@@ -1144,7 +1151,7 @@ static void TestObsoleteNames(void)
             log_verbose("   uloc_getISO3Country()==\t\"%s\"\n",
                 uloc_getISO3Country(locale) );
         }
-        
+
         status = U_ZERO_ERROR;
         uloc_getCountry(locale, buff, 256, &status);
         if(U_FAILURE(status))
@@ -1167,60 +1174,60 @@ static void TestObsoleteNames(void)
 
 #if 0
 
-	i = uloc_getLanguage("kok",NULL,0,&icu_err);
-	if(U_FAILURE(icu_err))
-	{
-	  log_err("FAIL: Got %s trying to do uloc_getLanguage(kok)\n", u_errorName(icu_err));
-	}
+    i = uloc_getLanguage("kok",NULL,0,&icu_err);
+    if(U_FAILURE(icu_err))
+    {
+        log_err("FAIL: Got %s trying to do uloc_getLanguage(kok)\n", u_errorName(icu_err));
+    }
 
-	icu_err = U_ZERO_ERROR;
-	uloc_getLanguage("kok",r1_buff,12,&icu_err);
-	if(U_FAILURE(icu_err))
-	{
-	  log_err("FAIL: Got %s trying to do uloc_getLanguage(kok, buff)\n", u_errorName(icu_err));
-	}
+    icu_err = U_ZERO_ERROR;
+    uloc_getLanguage("kok",r1_buff,12,&icu_err);
+    if(U_FAILURE(icu_err))
+    {
+        log_err("FAIL: Got %s trying to do uloc_getLanguage(kok, buff)\n", u_errorName(icu_err));
+    }
 
-	r1_addr = (char *)uloc_getISO3Language("kok");
+    r1_addr = (char *)uloc_getISO3Language("kok");
 
-	icu_err = U_ZERO_ERROR;
-	if (strcmp(r1_buff,"kok") != 0)
-	{
-		log_err("FAIL: uloc_getLanguage(kok)==%s not kok\n",r1_buff);
-		line--;
-	}
-	r1_addr = (char *)uloc_getISO3Language("in");
-	i = uloc_getLanguage(r1_addr,r1_buff,12,&icu_err);
-	if (strcmp(r1_buff,"id") != 0)
-	{
-		printf("uloc_getLanguage error (%s)\n",r1_buff);
-		line--;
-	}
-	r1_addr = (char *)uloc_getISO3Language("sh");
-	i = uloc_getLanguage(r1_addr,r1_buff,12,&icu_err);
-	if (strcmp(r1_buff,"sr") != 0)
-	{
-		printf("uloc_getLanguage error (%s)\n",r1_buff);
-		line--;
-	}
+    icu_err = U_ZERO_ERROR;
+    if (strcmp(r1_buff,"kok") != 0)
+    {
+        log_err("FAIL: uloc_getLanguage(kok)==%s not kok\n",r1_buff);
+        line--;
+    }
+    r1_addr = (char *)uloc_getISO3Language("in");
+    i = uloc_getLanguage(r1_addr,r1_buff,12,&icu_err);
+    if (strcmp(r1_buff,"id") != 0)
+    {
+        printf("uloc_getLanguage error (%s)\n",r1_buff);
+        line--;
+    }
+    r1_addr = (char *)uloc_getISO3Language("sh");
+    i = uloc_getLanguage(r1_addr,r1_buff,12,&icu_err);
+    if (strcmp(r1_buff,"sr") != 0)
+    {
+        printf("uloc_getLanguage error (%s)\n",r1_buff);
+        line--;
+    }
 
-	r1_addr = (char *)uloc_getISO3Country("zz_ZR");
-	strcpy(p1_buff,"zz_");
-	strcat(p1_buff,r1_addr);
-	i = uloc_getCountry(p1_buff,r1_buff,12,&icu_err);
-	if (strcmp(r1_buff,"ZR") != 0)
-	{
-		printf("uloc_getCountry error (%s)\n",r1_buff);
-		line--;
-	}
-	r1_addr = (char *)uloc_getISO3Country("zz_FX");
-	strcpy(p1_buff,"zz_");
-	strcat(p1_buff,r1_addr);
-	i = uloc_getCountry(p1_buff,r1_buff,12,&icu_err);
-	if (strcmp(r1_buff,"FX") != 0)
-	{
-		printf("uloc_getCountry error (%s)\n",r1_buff);
-		line--;
-	}
+    r1_addr = (char *)uloc_getISO3Country("zz_ZR");
+    strcpy(p1_buff,"zz_");
+    strcat(p1_buff,r1_addr);
+    i = uloc_getCountry(p1_buff,r1_buff,12,&icu_err);
+    if (strcmp(r1_buff,"ZR") != 0)
+    {
+        printf("uloc_getCountry error (%s)\n",r1_buff);
+        line--;
+    }
+    r1_addr = (char *)uloc_getISO3Country("zz_FX");
+    strcpy(p1_buff,"zz_");
+    strcat(p1_buff,r1_addr);
+    i = uloc_getCountry(p1_buff,r1_buff,12,&icu_err);
+    if (strcmp(r1_buff,"FX") != 0)
+    {
+        printf("uloc_getCountry error (%s)\n",r1_buff);
+        line--;
+    }
 
 #endif
 
@@ -1493,7 +1500,7 @@ TestKeyInRootRecursive(UResourceBundle *root, UResourceBundle *currentBundle, co
             /* The ures_* API does not do fallback of sub-resource bundles,
                So we can't do this now. */
             else if (strcmp(locale, "root") != 0 && errorCode == U_ZERO_ERROR) {
-            
+
                 const UChar *rootString = ures_getString(subRootBundle, &len, &errorCode);
                 if (U_FAILURE(errorCode) || rootString == NULL) {
                     log_err("Can't open a string with key \"%s\" in \"%s\" in root\n",
@@ -1809,7 +1816,7 @@ TestConsistentCountryInfo(void) {
 
     int32_t fromCountryLen, toCountryLen;
     char fromCountry[ULOC_FULLNAME_CAPACITY], toCountry[ULOC_FULLNAME_CAPACITY];
-    
+
     int32_t fromVariantLen, toVariantLen;
     char fromVariant[ULOC_FULLNAME_CAPACITY], toVariant[ULOC_FULLNAME_CAPACITY];
 
@@ -1834,7 +1841,7 @@ TestConsistentCountryInfo(void) {
         */
         for (toLocIndex = fromLocIndex + 1; toLocIndex < locCount; toLocIndex++) {
             const char *toLocale = uloc_getAvailable(toLocIndex);
-            
+
             toCountryLen = uloc_getCountry(toLocale, toCountry, ULOC_FULLNAME_CAPACITY, &errorCode);
             if(U_FAILURE(errorCode)) {
                 log_err("Unknown failure fromLocale=%s toLocale=%s errorCode=%s\n",

@@ -282,7 +282,7 @@ void CompoundTransliteratorTest::TestGetSetAdoptTransliterator(){
     if (transarray2[0] != 0) {
         ct1->adoptTransliterators(transarray2, 1);
     }
-	if(ct1->getCount() != 1 || ct1->getID() != ID3){
+    if(ct1->getCount() != 1 || ct1->getID() != ID3){
         errln((UnicodeString)"Error: adoptTransliterators() failed.\n\t Count:- expected->1" + (UnicodeString)".  got->" + ct1->getCount() +
                                                    (UnicodeString)"\n\tID   :- expected->" + ID3 + (UnicodeString)".  got->" + ct1->getID());
     }

@@ -101,7 +101,7 @@ static void TestTertiary( )
     myCollation = ucol_open("de_DE", &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
-	return;
+        return;
     }
     log_verbose("Testing German Collation with Tertiary strength\n");
     ucol_setNormalization(myCollation, UNORM_NFC);
@@ -121,7 +121,7 @@ static void TestPrimary()
     myCollation = ucol_open("de_DE", &status);
     if(U_FAILURE(status)){
         log_err("ERROR: %s: in creation of rule based collator: %s\n", __FILE__, myErrorName(status));
-	return;
+        return;
     }
     log_verbose("Testing German Collation with primary strength\n");
     ucol_setStrength(myCollation, UCOL_PRIMARY);

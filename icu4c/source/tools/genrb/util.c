@@ -24,7 +24,7 @@
 /* go from "/usr/local/include/curses.h" to "/usr/local/include" */
 void
 get_dirname(char *dirname,
-	    const char *filename)
+            const char *filename)
 {
   const char *lastSlash = uprv_strrchr(filename, U_FILE_SEP_CHAR) + 1;
 
@@ -39,7 +39,7 @@ get_dirname(char *dirname,
 /* go from "/usr/local/include/curses.h" to "curses" */
 void
 get_basename(char *basename,
-	     const char *filename)
+             const char *filename)
 {
   /* strip off any leading directory portions */
   const char *lastSlash = uprv_strrchr(filename, U_FILE_SEP_CHAR) + 1;

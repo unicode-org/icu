@@ -85,36 +85,36 @@ public:
     // noSpaces     - pointer to a UChar array for the text without spaces
     // noSpaceCount - the number of characters in the noSpaces array
     // verbose      - report all breaks if true, otherwise just report differences
-	ThaiWordbreakTest(const UChar *spaces, int32_t spaceCount, const UChar *noSpaces, int32_t noSpaceCount, UBool verbose);
-	~ThaiWordbreakTest();
+    ThaiWordbreakTest(const UChar *spaces, int32_t spaceCount, const UChar *noSpaces, int32_t noSpaceCount, UBool verbose);
+    ~ThaiWordbreakTest();
 
     // returns the number of breaks that are in the spaces array
     // but aren't found in the noSpaces array
-	int32_t getBreaksNotFound();
+    int32_t getBreaksNotFound();
 
     // returns the number of breaks which are found in the noSpaces
     // array but aren't in the spaces array
-	int32_t getInvalidBreaks();
+    int32_t getInvalidBreaks();
 
     // returns the number of words found in the spaces array
-	int32_t getWordCount();
+    int32_t getWordCount();
 
     // reads the input Unicode text file:
     // fileName  - the path name of the file
     // charCount - set to the number of UChars read from the file
     // returns   - the address of the UChar array containing the characters
-	static const UChar *readFile(char *fileName, int32_t &charCount);
+    static const UChar *readFile(char *fileName, int32_t &charCount);
 
     // removes spaces form the input UChar array:
     // spaces        - pointer to the input UChar array
     // count         - number of UChars in the spaces array
     // nonSpaceCount - the number of UChars in the result array
     // returns       - the address of the UChar array with spaces removed
-	static const UChar *crunchSpaces(const UChar *spaces, int32_t count, int32_t &nonSpaceCount);
+    static const UChar *crunchSpaces(const UChar *spaces, int32_t count, int32_t &nonSpaceCount);
 
 private:
     // The no arg constructor - private so clients can't call it
-	ThaiWordbreakTest();
+    ThaiWordbreakTest();
 
     // This does the actual comparison:
     // spaces - the address of the UChar array for the text with spaces
@@ -122,30 +122,30 @@ private:
     // noSpaces   - the address of the UChar array for the text without spaces
     // noSpaceCount - the number of UChars in the noSpaces array
     // returns      - true if all breaks match, false otherwise
-	UBool compareWordBreaks(const UChar *spaces, int32_t spaceCount,
+    UBool compareWordBreaks(const UChar *spaces, int32_t spaceCount,
                             const UChar *noSpaces, int32_t noSpaceCount);
 
     // helper method to report a break in the spaces
     // array that's not found in the noSpaces array
-	void breakNotFound(int32_t br);
+    void breakNotFound(int32_t br);
 
     // helper method to report a break that's found in
     // the noSpaces array that's not in the spaces array
-	void foundInvalidBreak(int32_t br);
+    void foundInvalidBreak(int32_t br);
 
     // count of breaks in the spaces array that
     // aren't found in the noSpaces array
-	int32_t fBreaksNotFound;
+    int32_t fBreaksNotFound;
 
     // count of breaks found in the noSpaces array
     // that aren't in the spaces array
-	int32_t fInvalidBreaks;
+    int32_t fInvalidBreaks;
 
     // number of words found in the spaces array
-	int32_t fWordCount;
+    int32_t fWordCount;
 
     // report all breaks if true, otherwise just report differences
-	UBool fVerbose;
+    UBool fVerbose;
 };
 
 /*
@@ -155,7 +155,7 @@ ThaiWordbreakTest::ThaiWordbreakTest(const UChar *spaces, int32_t spaceCount,
                                      const UChar *noSpaces, int32_t noSpaceCount, UBool verbose)
 : fBreaksNotFound(0), fInvalidBreaks(0), fWordCount(0), fVerbose(verbose)
 {
-	compareWordBreaks(spaces, spaceCount, noSpaces, noSpaceCount);
+    compareWordBreaks(spaces, spaceCount, noSpaces, noSpaceCount);
 }
 
 /*
@@ -163,7 +163,7 @@ ThaiWordbreakTest::ThaiWordbreakTest(const UChar *spaces, int32_t spaceCount,
  */
 ThaiWordbreakTest::ThaiWordbreakTest()
 {
-	// nothing
+    // nothing
 }
 
 /*
@@ -171,7 +171,7 @@ ThaiWordbreakTest::ThaiWordbreakTest()
  */
 ThaiWordbreakTest::~ThaiWordbreakTest()
 {
-	// nothing?
+    // nothing?
 }
 
 /*
@@ -180,7 +180,7 @@ ThaiWordbreakTest::~ThaiWordbreakTest()
  */
 inline int32_t ThaiWordbreakTest::getBreaksNotFound()
 {
-	return fBreaksNotFound;
+    return fBreaksNotFound;
 }
 
 /*
@@ -189,7 +189,7 @@ inline int32_t ThaiWordbreakTest::getBreaksNotFound()
  */
 inline int32_t ThaiWordbreakTest::getInvalidBreaks()
 {
-	return fInvalidBreaks;
+    return fInvalidBreaks;
 }
 
 /*
@@ -197,7 +197,7 @@ inline int32_t ThaiWordbreakTest::getInvalidBreaks()
  */
 inline int32_t ThaiWordbreakTest::getWordCount()
 {
-	return fWordCount;
+    return fWordCount;
 }
 
 /*
@@ -212,7 +212,7 @@ UBool ThaiWordbreakTest::compareWordBreaks(const UChar *spaces, int32_t spaceCou
     UBool result = true;
     Locale thai("th");
     UCharCharacterIterator *noSpaceIter = new UCharCharacterIterator(noSpaces, noSpaceCount);
-	UErrorCode status = U_ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR;
     
     BreakIterator *breakIter = BreakIterator::createWordInstance(thai, status);
     breakIter->adoptText(noSpaceIter);
@@ -369,13 +369,13 @@ const UChar *ThaiWordbreakTest::crunchSpaces(const UChar *spaces, int32_t count,
         }
     }
 
-	nonSpaceCount = count - spaceCount;
+    nonSpaceCount = count - spaceCount;
     UChar *noSpaces = new UChar[nonSpaceCount];
 
-	if (noSpaces == 0) {
-		fprintf(stderr, "Couldn't allocate memory for the space stripped text.\n");
-		return 0;
-	}
+    if (noSpaces == 0) {
+        fprintf(stderr, "Couldn't allocate memory for the space stripped text.\n");
+        return 0;
+    }
 
     for (out = 0, i = 0; i < count; i += 1) {
         if (spaces[i] != 0x0020 /*! Unicode::isSpaceChar(spaces[i])*/) {
@@ -383,7 +383,7 @@ const UChar *ThaiWordbreakTest::crunchSpaces(const UChar *spaces, int32_t count,
         }
     }
 
-	return noSpaces;
+    return noSpaces;
 }
 
 /*
@@ -410,7 +410,7 @@ int main(int argc, char **argv)
         return 1;
     }
 
-	int32_t spaceCount, nonSpaceCount;
+    int32_t spaceCount, nonSpaceCount;
     const UChar *spaces, *noSpaces;
 
     spaces = ThaiWordbreakTest::readFile(fileName, spaceCount);
@@ -421,15 +421,15 @@ int main(int argc, char **argv)
 
     noSpaces = ThaiWordbreakTest::crunchSpaces(spaces, spaceCount, nonSpaceCount);
 
-	if (noSpaces == 0) {
-		return 1;
-	}
+    if (noSpaces == 0) {
+        return 1;
+    }
 
     ThaiWordbreakTest test(spaces, spaceCount, noSpaces, nonSpaceCount, verbose);
 
-	printf("word count: %d\n", test.getWordCount());
-	printf("breaks not found: %d\n", test.getBreaksNotFound());
-	printf("invalid breaks found: %d\n", test.getInvalidBreaks());
+    printf("word count: %d\n", test.getWordCount());
+    printf("breaks not found: %d\n", test.getBreaksNotFound());
+    printf("invalid breaks found: %d\n", test.getInvalidBreaks());
 
     return 0;
 }

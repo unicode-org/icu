@@ -27,73 +27,73 @@ U_NAMESPACE_USE
 
 UBool compareResults(int32_t testNumber, TestResult *expected, TestResult *actual)
 {
-	/* NOTE: we'll stop on the first failure 'cause once there's one error, it may cascade... */
-	if (actual->glyphCount != expected->glyphCount) {
-		printf("incorrect glyph count: exptected %d, got %d\n", expected->glyphCount, actual->glyphCount);
-		return false;
-	}
+    /* NOTE: we'll stop on the first failure 'cause once there's one error, it may cascade... */
+    if (actual->glyphCount != expected->glyphCount) {
+        printf("incorrect glyph count: exptected %d, got %d\n", expected->glyphCount, actual->glyphCount);
+        return false;
+    }
 
-	int32_t i;
+    int32_t i;
 
-	for (i = 0; i < actual->glyphCount; i += 1) {
-		if (actual->glyphs[i] != expected->glyphs[i]) {
-			printf("incorrect id for glyph %d: expected %4X, got %4X\n", i, expected->glyphs[i], actual->glyphs[i]);
-			return false;
-		}
-	}
+    for (i = 0; i < actual->glyphCount; i += 1) {
+        if (actual->glyphs[i] != expected->glyphs[i]) {
+            printf("incorrect id for glyph %d: expected %4X, got %4X\n", i, expected->glyphs[i], actual->glyphs[i]);
+            return false;
+        }
+    }
 
-	for (i = 0; i < actual->glyphCount; i += 1) {
-		if (actual->indices[i] != expected->indices[i]) {
-			printf("incorrect index for glyph %d: expected %8X, got %8X\n", i, expected->indices[i], actual->indices[i]);
-			return false;
-		}
-	}
+    for (i = 0; i < actual->glyphCount; i += 1) {
+        if (actual->indices[i] != expected->indices[i]) {
+            printf("incorrect index for glyph %d: expected %8X, got %8X\n", i, expected->indices[i], actual->indices[i]);
+            return false;
+        }
+    }
 
-	for (i = 0; i <= actual->glyphCount; i += 1) {
-		double xError = fabs(actual->positions[i * 2] - expected->positions[i * 2]);
+    for (i = 0; i <= actual->glyphCount; i += 1) {
+        double xError = fabs(actual->positions[i * 2] - expected->positions[i * 2]);
 
-		if (xError > 0.0001) {
-			printf("incorrect x position for glyph %d: expected %f, got %f\n", i, expected->positions[i * 2], actual->positions[i * 2]);
-			return false;
-		}
+        if (xError > 0.0001) {
+            printf("incorrect x position for glyph %d: expected %f, got %f\n", i, expected->positions[i * 2], actual->positions[i * 2]);
+            return false;
+        }
 
-		double yError = fabs(actual->positions[i * 2 + 1] - expected->positions[i * 2 + 1]);
+        double yError = fabs(actual->positions[i * 2 + 1] - expected->positions[i * 2 + 1]);
 
-		if (yError < 0) {
-			yError = -yError;
-		}
+        if (yError < 0) {
+            yError = -yError;
+        }
 
-		if (yError > 0.0001) {
-			printf("incorrect y position for glyph %d: expected %f, got %f\n", i, expected->positions[i * 2 + 1], actual->positions[i * 2 + 1]);
-			return false;
-		}
-	}
+        if (yError > 0.0001) {
+            printf("incorrect y position for glyph %d: expected %f, got %f\n", i, expected->positions[i * 2 + 1], actual->positions[i * 2 + 1]);
+            return false;
+        }
+    }
 
-	return true;
+    return true;
 }
 
 int main(int argc, char *argv[])
 {
-	Locale dummyLocale;
-	int failures = 0;
+    Locale dummyLocale;
+    int failures = 0;
 
-	for (int test = 0; test < testCount; test += 1) {
+    for (int test = 0; test < testCount; test += 1) {
         PFIErrorCode fontStatus = PFI_NO_ERROR;
 
         printf("Test %d, font = %s... ", test, testInputs[test].fontName);
 
-		PortableFontInstance fontInstance(testInputs[test].fontName, 12, fontStatus);
+        PortableFontInstance fontInstance(testInputs[test].fontName, 12, fontStatus);
 
         if (LE_FAILURE(fontStatus)) {
             printf("could not open font.\n");
             continue;
         }
 
-		UErrorCode success = U_ZERO_ERROR;
-		ICULayoutEngine *engine = ICULayoutEngine::createInstance(&fontInstance, testInputs[test].scriptCode, dummyLocale, success);
-		int32_t textLength = testInputs[test].textLength;
-		UBool result;
-		TestResult actual;
+        UErrorCode success = U_ZERO_ERROR;
+        ICULayoutEngine *engine = ICULayoutEngine::createInstance(&fontInstance, testInputs[test].scriptCode, dummyLocale, success);
+        int32_t textLength = testInputs[test].textLength;
+        UBool result;
+        TestResult actual;
 
         if (LE_FAILURE(success)) {
             // would be nice to print the script name here, but
@@ -106,28 +106,28 @@ int main(int argc, char *argv[])
 
         actual.glyphCount = engine->layoutChars(testInputs[test].text, 0, textLength, textLength, testInputs[test].rightToLeft, 0, 0, success);
 
-		actual.glyphs = new uint16_t[actual.glyphCount];
-		actual.indices = new int32_t[actual.glyphCount];
-		actual.positions = new float[actual.glyphCount * 2 + 2];
+        actual.glyphs = new uint16_t[actual.glyphCount];
+        actual.indices = new int32_t[actual.glyphCount];
+        actual.positions = new float[actual.glyphCount * 2 + 2];
 
-		engine->getGlyphs(actual.glyphs, success);
-		engine->getCharIndices(actual.indices, success);
-		engine->getGlyphPositions(actual.positions, success);
+        engine->getGlyphs(actual.glyphs, success);
+        engine->getCharIndices(actual.indices, success);
+        engine->getGlyphPositions(actual.positions, success);
 
-		result = compareResults(test, &testResults[test], &actual);
+        result = compareResults(test, &testResults[test], &actual);
 
-		if (result) {
-			printf("passed.\n");
-		} else {
-			failures += 1;
-			printf("failed.\n");
-		}
+        if (result) {
+            printf("passed.\n");
+        } else {
+            failures += 1;
+            printf("failed.\n");
+        }
 
-		delete[] actual.positions;
-		delete[] actual.indices;
-		delete[] actual.glyphs;
-		delete engine;
-	}
+        delete[] actual.positions;
+        delete[] actual.indices;
+        delete[] actual.glyphs;
+        delete engine;
+    }
 
-	return failures;
+    return failures;
 }
