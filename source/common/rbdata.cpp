@@ -82,7 +82,7 @@ String2dList::getStaticClassID()
 
 TaggedList::TaggedList() {
     UErrorCode status = U_ZERO_ERROR;
-    hash = new Hashtable(status);
+    hash = new Hashtable(FALSE, status);
     hash->setValueDeleter(uhash_deleteUnicodeString);
 }
   
