@@ -2112,17 +2112,19 @@ static void TestDirectAccess(void) {
   t2 = ures_open(NULL, "sh", &status);
   if(U_FAILURE(status)) {
     log_err("Couldn't open 'sh' resource bundle, error %s\n", u_errorName(status));
-    status = U_ZERO_ERROR;
+    log_data_err("No 'sh', no test - you have bigger problems than testing direct access. You probably have no data! Aborting this test\n");
   }
 
-  t = ures_findSubResource(t2, "CollationElements/Sequence", t, &status);
-  if(U_FAILURE(status)) {
-    log_err("Couldn't access keyed resource, error %s\n", u_errorName(status));
-    status = U_ZERO_ERROR;
-  } else {
-    key = ures_getKey(t);
-    if(strcmp(key, "Sequence")!=0) {
-      log_err("Got a strange key, expected 'Sequence', got %s\n", key);
+  if(U_SUCCESS(status)) {
+    t = ures_findSubResource(t2, "CollationElements/Sequence", t, &status);
+    if(U_FAILURE(status)) {
+      log_err("Couldn't access keyed resource, error %s\n", u_errorName(status));
+      status = U_ZERO_ERROR;
+    } else {
+      key = ures_getKey(t);
+      if(strcmp(key, "Sequence")!=0) {
+        log_err("Got a strange key, expected 'Sequence', got %s\n", key);
+      }
     }
   }
 
