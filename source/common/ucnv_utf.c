@@ -66,7 +66,6 @@ static const int8_t bytesFromUTF8[256] = {
 /* static const unsigned char firstByteMark[7] = {0x00, 0x00, 0xC0, 0xE0, 0xF0, 0xF8, 0xFC};*/
 
 #define INVALID_UTF8_TAIL(utf8) (((utf8) & 0xC0) != 0x80)
-#define VALID_UTF8_TAIL(utf8) (((utf8) & 0xC0) == 0x80)
 
 /**
  * Calls invalid char callback when an invalid character sequence is encountered.
@@ -776,7 +775,7 @@ static const UConverterImpl _UTF8Impl={
     NULL
 };
 
-
+/* Todo: verify that UTF-8 == (ccsid (ibm-codepage) 1208) for unicode version 2.0 and 3.0 */
 const UConverterStaticData _UTF8StaticData={
   sizeof(UConverterStaticData),
 "UTF8",
@@ -955,6 +954,7 @@ static const UConverterImpl _UTF16BEImpl={
     NULL
 };
 
+/* Todo: verify that UTF-16BE == (ccsid (ibm-codepage) 1200) for unicode version 2.0 and 3.0 */
 const UConverterStaticData _UTF16BEStaticData={
   sizeof(UConverterStaticData),
 "UTF16_BigEndian",
@@ -1143,6 +1143,7 @@ static const UConverterImpl _UTF16LEImpl={
 };
 
 
+/* Todo: verify that UTF-16LE == (ccsid (ibm-codepage) 1200) for unicode version 2.0 and 3.0 */
 const UConverterStaticData _UTF16LEStaticData={
     sizeof(UConverterStaticData),
     "UTF16_LittleEndian",
