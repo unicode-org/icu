@@ -652,8 +652,7 @@ bidiClassLineFn(void *context,
                 char *fields[][2], int32_t fieldCount,
                 UErrorCode *pErrorCode) {
     char *s;
-    uint32_t oldStart, start, limit, props32;
-    int32_t value;
+    uint32_t oldStart, start, limit, value, props32;
     UBool didSet;
 
     /* get the code point range */
@@ -667,7 +666,7 @@ bidiClassLineFn(void *context,
     /* parse bidi class */
     s=trimTerminateField(fields[1][0], fields[1][1]);
     value=u_getPropertyValueEnum(UCHAR_BIDI_CLASS, s);
-    if(value<0) {
+    if((int32_t)value<0) {
         fprintf(stderr, "genprops error: unknown bidi class in DerivedBidiClass.txt field 1 at %s\n", s);
         exit(U_PARSE_ERROR);
     }
