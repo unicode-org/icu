@@ -487,7 +487,7 @@ IslamicCalendar::initializeSystemDefaultCentury()
   if (fgSystemDefaultCenturyStart == fgSystemDefaultCentury)
   {
     UErrorCode status = U_ZERO_ERROR;
-    IslamicCalendar calendar(Locale("ar@calendar=islamic-civil"),status);
+    IslamicCalendar calendar(Locale("@calendar=islamic-civil"),status);
     if (U_SUCCESS(status))
     {
       calendar.setTime(Calendar::getNow(), status);
