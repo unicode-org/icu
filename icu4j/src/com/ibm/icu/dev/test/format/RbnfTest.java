@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/RbnfTest.java,v $ 
- * $Date: 2002/08/02 20:54:37 $ 
- * $Revision: 1.13 $
+ * $Date: 2002/12/02 17:09:58 $ 
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -602,6 +602,11 @@ public class RbnfTest extends TestFmwk {
             { "21", "\u0e22\u0e35\u0e48\u0e2a\u0e34\u0e1a\u0e40\u0e2d\u0e47\u0e14" },
             { "101", "\u0e2b\u0e19\u0e36\u0e48\u0e07\u0e23\u0e49\u0e2d\u0e22\u0e2b\u0e19\u0e36\u0e48\u0e07" },
             { "1.234", "\u0e2b\u0e19\u0e36\u0e48\u0e07\u0e08\u0e38\u0e14\u0e2a\u0e2d\u0e07\u0e2a\u0e32\u0e21\u0e2a\u0e35\u0e48" },
+            { "21.45", "\u0e22\u0e35\u0e48\u0e2a\u0e34\u0e1a\u0e40\u0e2d\u0e47\u0e14\u0e08\u0e38\u0e14\u0e2a\u0e35\u0e48\u0e2b\u0e49\u0e32" },
+            { "22.45", "\u0e22\u0e35\u0e48\u0e2a\u0e34\u0e1a\u0e2a\u0e2d\u0e07\u0e08\u0e38\u0e14\u0e2a\u0e35\u0e48\u0e2b\u0e49\u0e32" },
+            { "23.45", "\u0e22\u0e35\u0e48\u0e2a\u0e34\u0e1a\u0e2a\u0e32\u0e21\u0e08\u0e38\u0e14\u0e2a\u0e35\u0e48\u0e2b\u0e49\u0e32" },
+            { "123.45", "\u0e2b\u0e19\u0e36\u0e48\u0e07\u0e23\u0e49\u0e2d\u0e22\u0e22\u0e35\u0e48\u0e2a\u0e34\u0e1a\u0e2a\u0e32\u0e21\u0e08\u0e38\u0e14\u0e2a\u0e35\u0e48\u0e2b\u0e49\u0e32" },
+            { "12,345.678", "\u0E2B\u0E19\u0E36\u0E48\u0E07\u0E2B\u0E21\u0E37\u0E48\u0E19\u0E2A\u0E2D\u0E07\u0E1E\u0E31\u0E19\u0E2A\u0E32\u0E21\u0E23\u0E49\u0E2D\u0E22\u0E2A\u0E35\u0E48\u0E2A\u0E34\u0E1A\u0E2B\u0E49\u0E32\u0E08\u0E38\u0E14\u0E2B\u0E01\u0E40\u0E08\u0E47\u0E14\u0E41\u0E1B\u0E14" },
         };
 
         doTest(formatter, testData, true);
@@ -720,8 +725,8 @@ public class RbnfTest extends TestFmwk {
                 String actualWords = formatter.format(num);
 
                 if (!actualWords.equals(expectedWords)) {
-                    errln("Spot check failed: for " + number + ", expected "
-                          + expectedWords + ", but got " +
+                    errln("Spot check failed: for " + number + ", expected\n    "
+                          + expectedWords + ", but got\n    " +
                           actualWords);
                 }
                 else if (testParsing) {
