@@ -44,7 +44,7 @@ CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n
 LIBS = $(LIBICUI18N) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
 
 ifeq ($(PKGDATA_OPTS),)
-PKGDATA_OPTS = -O $(top_builddir)/data/icupkg.inc
+PKGDATA_OPTS = -O pkgdata.inc
 endif
 
 ## generic settings for data - common.
