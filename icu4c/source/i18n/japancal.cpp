@@ -400,7 +400,7 @@ JapaneseCalendar::getGregorianYear(UErrorCode &status)  const
   }
   
   if ((era<0)||(era>kCurrentEra)) {
-      status = U_ILLEGAL_ARGUMENT_ERROR;
+      status = U_BRK_INIT_ERROR;
       return 0 ;
   }
   return year + kEraInfo[era].year - 1;
