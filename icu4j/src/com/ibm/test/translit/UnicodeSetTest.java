@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/UnicodeSetTest.java,v $ 
- * $Date: 2000/05/18 19:13:18 $ 
- * $Revision: 1.7 $
+ * $Date: 2000/05/24 22:03:39 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -181,18 +181,18 @@ public class UnicodeSetTest extends TestFmwk {
         set.clear();
         set.applyPattern("[A-Y 1-8 b-d l-y]");
         for (int i = 0; i<set.getRangeCount(); ++i) {
-            int a = set.getRangeStart(i);
-            int b = set.getRangeEnd(i);
+            char a = set.getRangeStart(i);
+            char b = set.getRangeEnd(i);
             if (!set.contains(a, b)) {
                 errln("FAIL, should contain " + (char)a + '-' + (char)b +
                       " but doesn't: " + set);
             }
-            if (set.contains(a-1, b)) {
+            if (set.contains((char)(a-1), b)) {
                 errln("FAIL, shouldn't contain " +
                       (char)(a-1) + '-' + (char)b +
                       " but does: " + set);
             }
-            if (set.contains(a, b+1)) {
+            if (set.contains(a, (char)(b+1))) {
                 errln("FAIL, shouldn't contain " +
                       (char)a + '-' + (char)(b+1) +
                       " but does: " + set);
@@ -200,37 +200,37 @@ public class UnicodeSetTest extends TestFmwk {
         }
 
         // Ported InversionList test.
-        UnicodeSet a = new UnicodeSet(3,10);
-        UnicodeSet b = new UnicodeSet(7,15);
+        UnicodeSet a = new UnicodeSet((char)3,(char)10);
+        UnicodeSet b = new UnicodeSet((char)7,(char)15);
         UnicodeSet c = new UnicodeSet();
 
         logln("a [3-10]: " + a);
         logln("b [7-15]: " + b);
-        c.set(a).addAll(b);
-        UnicodeSet exp = new UnicodeSet(3, 15);
+        c.set(a); c.addAll(b);
+        UnicodeSet exp = new UnicodeSet((char)3,(char)15);
         if (c.equals(exp)) {
             logln("c.set(a).add(b): " + c);
         } else {
             errln("FAIL: c.set(a).add(b) = " + c + ", expect " + exp);
         }
         c.complement();
-        exp.set(0, 2);
-        exp.add(16, UnicodeSet.MAX_VALUE);
+        exp.set((char)0, (char)2);
+        exp.add((char)16, UnicodeSet.MAX_VALUE);
         if (c.equals(exp)) {
             logln("c.complement(): " + c);
         } else {
             errln("FAIL: c.complement() = " + c + ", expect " + exp);
         }
         c.complement();
-        exp.set(3, 15);
+        exp.set((char)3, (char)15);
         if (c.equals(exp)) {
             logln("c.complement(): " + c);
         } else {
             errln("FAIL: c.complement() = " + c + ", expect " + exp);
         }
-        c.set(a).xorAll(b);
-        exp.set(3,6);
-        exp.add(11, 15);
+        c.set(a); c.xorAll(b);
+        exp.set((char)3,(char)6);
+        exp.add((char)11,(char) 15);
         if (c.equals(exp)) {
             logln("c.set(a).xor(b): " + c);
         } else {
@@ -250,12 +250,12 @@ public class UnicodeSetTest extends TestFmwk {
         // exhaustive tests. Simulate UnicodeSets with integers.
         // That gives us very solid tests (except for large memory tests).
 
-        int limit = 128;
+        char limit = (char)128;
 
-        for (int i = 0; i < limit; ++i) {
+        for (char i = 0; i < limit; ++i) {
             logln("Testing " + i + ", " + bitsToSet(i));
             _testComplement(i);
-            for (int j = 0; j < limit; ++j) {
+            for (char j = 0; j < limit; ++j) {
                 _testAdd(i,j);
                 _testXor(i,j);
                 _testRetain(i,j);
@@ -367,7 +367,7 @@ public class UnicodeSetTest extends TestFmwk {
         UnicodeSet result = new UnicodeSet();
         for (int i = 0; i < 32; ++i) {
             if ((a & (1<<i)) != 0) {
-                result.add(i,i);
+                result.add((char)i,(char)i);
             }
         }
         return result;
@@ -380,7 +380,7 @@ public class UnicodeSetTest extends TestFmwk {
     static int setToBits(UnicodeSet x) {
         int result = 0;
         for (int i = 0; i < 32; ++i) {
-            if (x.contains(i)) {
+            if (x.contains((char)i)) {
                 result |= (1<<i);
             }
         }
