@@ -503,6 +503,42 @@ conversion {
       // which - numeric UConverterUnicodeSet value
       Headers { "charset", "map", "mapnot", "which" }
       Cases {
+        // ISO-2022-KR
+        {
+          "ISO-2022-KR",
+          "[\x00-\x7f\xa1\xa4\xfe\u0111\u4e00\u4e01\uac00-\uac02\uffe6]",
+          "[\x80-\xa0\xa3\xa5\xff-\u0110\uac03\uffe7-\U0010ffff]",
+          :int{0}
+        }
+
+        // versions of ISO-2022-JP
+        {
+          "ISO-2022-JP",
+          "[\x00-\x7f\u0391-\u03a1\uff61-\uff9f\u4e00\u4e01\uffe5]",
+          "[\u0100-\u0113\u0385-\u038a\u4e02\u4e27-\u4e29\uffe6-\U0010ffff]",
+          :int{0}
+        }
+        {
+          "ISO-2022-JP-2",
+          "[\x00-\u0113\u0385-\u038a\u0390-\u03a1\uff61-\uff9f\u4e00-\u4e05\uffe6]",
+          "[\uffe7-\U0010ffff]",
+          :int{0}
+        }
+
+        // versions of ISO-2022-CN
+        {
+          "ISO-2022-CN",
+          "[\x00-\x7f\u4e00\u4e01\u9f98\ufe6b]",
+          "[\u4e29\uffe6-\U0010ffff]",
+          :int{0}
+        }
+        {
+          "ISO-2022-CN-EXT",
+          "[\x00-\x7f\u4e00-\u4e05\u9f98\ufe6b\u4e28-\u4e2b\U00020000\U00020003-\U00020005\U00029664]",
+          "[\U00020001\U00020002\U0002a6d7-\U0010ffff]",
+          :int{0}
+        }
+
         // DBCS-only
         {
           "ibm-971",
