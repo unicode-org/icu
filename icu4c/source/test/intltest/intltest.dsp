@@ -204,6 +204,10 @@ SOURCE=.\dadrcoll.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\datamap.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\dcfmapts.cpp
 # End Source File
 # Begin Source File
@@ -364,10 +368,6 @@ SOURCE=.\reptest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\resbtddr.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\restest.cpp
 # End Source File
 # Begin Source File
@@ -400,7 +400,7 @@ SOURCE=.\tchcfmt.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\tedadrvr.cpp
+SOURCE=.\testdata.cpp
 # End Source File
 # Begin Source File
 
@@ -470,6 +470,10 @@ SOURCE=.\tsnmfmt.cpp
 # Begin Source File
 
 SOURCE=.\tsputil.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\tstdtmod.cpp
 # End Source File
 # Begin Source File
 
@@ -570,6 +574,10 @@ SOURCE=.\dacoll.h
 # Begin Source File
 
 SOURCE=.\dadrcoll.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\datamap.h
 # End Source File
 # Begin Source File
 
@@ -733,10 +741,6 @@ SOURCE=.\reptest.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\resbtddr.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\restest.h
 # End Source File
 # Begin Source File
@@ -765,7 +769,7 @@ SOURCE=.\tchcfmt.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\tedadrvr.h
+SOURCE=.\testdata.h
 # End Source File
 # Begin Source File
 
@@ -834,6 +838,10 @@ SOURCE=.\tsnmfmt.h
 # Begin Source File
 
 SOURCE=.\tsputil.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\tstdtmod.h
 # End Source File
 # Begin Source File
 
