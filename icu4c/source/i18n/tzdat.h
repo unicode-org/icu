@@ -6,6 +6,7 @@
 *   Date        Name        Description
 *   11/24/99    aliu        Creation.
 *   12/13/1999  srl         Padded OffsetIndex to 4 byte values
+*   02/01/01    aliu        Added country index
 **********************************************************************
 */
 
@@ -48,23 +49,6 @@
  * data structure could be modified to index into the name table
  * directly.)
  *
- * In the following table, sizes are estimated sizes for a zone list
- * of about 200 standard and 200 DST zones, which is typical in 1999.
- *
- * [THIS IS OBSOLETE - Needs updating for format 3]
- *  0K    TZHeader
- *  2K    Standard zone table (StandardZone[])
- *  4K    DST zone table (Zone[])
- *  2K    Index table, sorted by name, 4 bytes / zone
- *        This is a list of 'count' deltas sorted in ascending
- *        lexicographic order of name string.
- *  1K    Index table, sorted by gmtOffset then name.  See
- *        OffsetIndex struct.
- *  6K    Name table - always last
- *        This is all the zone names, in lexicographic order,
- *        with zero bytes terminating each name.
- * 14K    TOTAL
- *
  * Any field with a name ending in "delta" is an offset value
  * from the first byte of the TZHeader structure, unless otherwise
  * specified.
@@ -91,7 +75,7 @@ static const uint8_t TZ_SIG_3 = 0x65; // e
 
 // This must match the version number at the top of tz.txt as
 // well as the version number in the udata header.
-static const int8_t TZ_FORMAT_VERSION = 3; // formatVersion[0]
+static const int8_t TZ_FORMAT_VERSION = 4; // formatVersion[0]
 
 struct TZHeader {    
     uint16_t versionYear;     // e.g. "1999j" -> 1999
@@ -101,6 +85,8 @@ struct TZHeader {
 
     uint32_t equivTableDelta;  // delta to equivalency group table
     uint32_t offsetIndexDelta; // delta to gmtOffset index table
+
+    uint32_t countryIndexDelta; // delta to country code index table
 
     uint32_t nameIndexDelta;   // delta to name index table
     // The name index table is an array of 'count' 32-bit offsets from
@@ -192,6 +178,26 @@ struct OffsetIndex {
     // Following the 'count' uint16_t's starting with zoneNumber,
     // there may be two bytes of padding to make the whole struct have
     // a size of 4n.  nextEntryDelta skips over any padding.
+};
+
+/**
+ * This variable-sized struct makes up the country index table.  To get
+ * from one table entry to the next, add the nextEntryDelta.  If the
+ * nextEntryDelta is zero then this is the last entry.  The country
+ * index table is designed for sequential access, not random access.
+ *
+ * The intcode is an integer representation of the two-letter country
+ * code.  It is computed as (c1-'A')*32 + (c0-'A') where the country
+ * code is a two-character string c1 c0, 'A' <= ci <= 'Z'.
+ *
+ * There are no 4-byte integers in this table, so we don't 4-align the
+ * entries.
+ */
+struct CountryIndex {
+    uint16_t  intcode; // see above
+    uint16_t  nextEntryDelta;
+    uint16_t  count;
+    uint16_t  zoneNumber; // There are actually 'count' uint16_t's here
 };
 
 #endif
