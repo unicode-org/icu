@@ -62,11 +62,50 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name writer
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name break
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name case
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name strsrch
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name uciter8
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ugrep
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "break"=..\break\break.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
 }}}
 
 ###############################################################################
 
 Project: "cal"=..\cal\cal.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "case"=..\case\case.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -186,7 +225,31 @@ Package=<4>
 
 ###############################################################################
 
+Project: "strsrch"=..\strsrch\strsrch.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "translit"=..\translit\translit.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "uciter8"=..\uciter8\uciter8.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -211,6 +274,18 @@ Package=<4>
 ###############################################################################
 
 Project: "ufortune"=..\ufortune\ufortune.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "ugrep"=..\ugrep\ugrep.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -247,18 +322,6 @@ Package=<4>
 ###############################################################################
 
 Project: "writer"=..\udata\writer.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "xml2txt"=..\xml2txt\xml2txt.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
