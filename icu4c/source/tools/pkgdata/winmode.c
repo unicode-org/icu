@@ -64,6 +64,7 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
   char tmp2[1024];
   const char *separator = o->icuroot[uprv_strlen(o->icuroot)-1]=='\\'?"":"\\";
   UBool isDll = (UBool)(uprv_strcmp(o->mode, "dll") == 0);
+  UBool isStatic = (UBool)(uprv_strcmp(o->mode, "static") == 0);
 
   if(U_FAILURE(*status)) { 
     return;
@@ -121,6 +122,60 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
       sprintf(tmp2, "# intermediate obj file:\nCMNOBJTARGET=%s\n\n", tmp);
       T_FileStream_writeLine(makefile, tmp2);
   }
+  else if (isStatic)
+  {
+      uprv_strcpy(tmp, LIB_PREFIX);
+      uprv_strcat(tmp, o->shortName);
+      uprv_strcat(tmp, UDATA_LIB_SUFFIX);
+
+      pkg_sttc_writeReadme(o, tmp, status);
+      fprintf(stdout, "HEY! wrote to readme. -> %s\n", u_errorName(*status));
+
+      if(U_FAILURE(*status))
+      {
+          return;
+      }
+
+      if(o->nooutput || o->verbose) {
+        fprintf(stdout, "# Output %s file: %s%s%s\n", UDATA_SO_SUFFIX, o->targetDir, U_FILE_SEP_STRING, tmp);
+      }
+
+      if(o->nooutput) {
+        *status = U_ZERO_ERROR;
+        return;
+      }
+
+      sprintf(tmp2, "# LIB file to make:\nDLLTARGET=%s\n\n", tmp);
+      T_FileStream_writeLine(makefile, tmp2);
+
+	  sprintf(tmp2, 
+		  "LINK32 = LIB.exe\n"
+		  "LINK32_FLAGS = /nologo /out:\"$(TARGETDIR)\\$(DLLTARGET)\" /EXPORT:\"%s\"\n",
+          o->shortName
+		);
+      T_FileStream_writeLine(makefile, tmp2);
+
+	  sprintf(tmp2,
+		  "GENCCODE = $(ICUROOT)%sbin\\genccode.exe\n",  separator);
+      T_FileStream_writeLine(makefile, tmp2);
+
+      T_FileStream_writeLine(makefile, "\n"
+          "# Windows specific LIB version information.\n"
+          "!IF EXISTS(\".\\icudata.res\")\n"
+          "DATA_VER_INFO=\".\\icudata.res\"\n"
+          "!ELSE\n"
+          "DATA_VER_INFO=\n"
+          "!ENDIF\n\n");
+
+
+      uprv_strcpy(tmp, UDATA_CMN_PREFIX);
+      uprv_strcat(tmp, o->shortName);
+      uprv_strcat(tmp, UDATA_CMN_INTERMEDIATE_SUFFIX);
+      uprv_strcat(tmp, OBJ_SUFFIX);
+
+      sprintf(tmp2, "# intermediate obj file:\nCMNOBJTARGET=%s\n\n", tmp);
+      T_FileStream_writeLine(makefile, tmp2);
+  }
   uprv_strcpy(tmp, UDATA_CMN_PREFIX);
   uprv_strcat(tmp, o->shortName);
   uprv_strcat(tmp, UDATA_CMN_SUFFIX);
@@ -140,12 +195,12 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
     T_FileStream_writeLine(makefile, tmp2);
 
 
-  if(isDll) {
+  if(isDll || isStatic) {
       sprintf(tmp, "all: \"$(TARGETDIR)\\$(DLLTARGET)\"\n\n");
       T_FileStream_writeLine(makefile, tmp);
 
       sprintf(tmp, "\"$(TARGETDIR)\\$(DLLTARGET)\": \"$(TARGETDIR)\\$(CMNOBJTARGET)\"\n"
-				    "\t@$(LINK32) $(LINK32_FLAGS) \"$(TARGETDIR)\\$(CMNOBJTARGET)\" $(DATA_VER_INFO)\n\n");
+				    "\t$(LINK32) $(LINK32_FLAGS) \"$(TARGETDIR)\\$(CMNOBJTARGET)\" $(DATA_VER_INFO)\n\n");
       T_FileStream_writeLine(makefile, tmp);
       sprintf(tmp, "\"$(TARGETDIR)\\$(CMNOBJTARGET)\": \"$(TARGETDIR)\\$(CMNTARGET)\"\n"
 				    "\t@\"$(GENCCODE)\" $(GENCOPTIONS) -e $(ENTRYPOINT) -o -d \"$(TARGETDIR)\" \"$(TARGETDIR)\\$(CMNTARGET)\"\n\n");
@@ -157,8 +212,7 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
           "\t-@erase \"$(TARGETDIR)\\$(CMNOBJTARGET)\"\n"
           "\t-@erase \"$(TARGETDIR)\\$(CMNTARGET)\"\n\n");
       T_FileStream_writeLine(makefile, tmp2);
-  } else {
-
+  } else { /* common */
       sprintf(tmp, "all: \"$(TARGETDIR)\\$(CMNTARGET)\"\n\n");
       T_FileStream_writeLine(makefile, tmp);
 

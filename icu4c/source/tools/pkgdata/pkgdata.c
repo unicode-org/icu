@@ -46,7 +46,8 @@ static struct
   { "files", 0, pkg_mode_files, "Uses raw data files (no effect). Installation copies all files to the target location." },
 #ifdef WIN32
   { "dll",    "library", pkg_mode_windows,    "Generates one common data file and one shared library, <package>.dll"},
-  { "common", "archive", pkg_mode_windows,    "Generates just the common file, <package>.dat"}
+  { "common", "archive", pkg_mode_windows,    "Generates just the common file, <package>.dat"},
+  { "static", "static",  pkg_mode_windows,    "Generates one statically linked library, " LIB_PREFIX "<package>" UDATA_LIB_SUFFIX }
 #else /*#ifdef WIN32*/
 #ifdef UDATA_SO_SUFFIX
   { "dll",    "library", pkg_mode_dll,    "Generates one shared library, <package>" UDATA_SO_SUFFIX },

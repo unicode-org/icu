@@ -121,6 +121,10 @@ SOURCE=.\pkgtypes.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\sttcmode.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\winmode.c
 # End Source File
 # End Group

@@ -100,6 +100,10 @@ U_CAPI UResourceBundle *u_wmsg_setPath(const char *path, UErrorCode *err)
   {
     UResourceBundle *b = NULL;
     b = ures_open(path, NULL, err);
+    if(U_FAILURE(*err))
+    {
+         return 0;
+    }
 
     gPath = uprv_strdup(path);
     gBundle = b;
