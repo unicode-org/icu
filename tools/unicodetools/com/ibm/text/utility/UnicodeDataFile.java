@@ -17,43 +17,53 @@ public class UnicodeDataFile {
     private String mostRecent;
     private String filename;
     private UnicodeDataFile(){};
+    private String fileType = ".txt";
     
     public static UnicodeDataFile openAndWriteHeader(String directory, String filename) throws IOException {
-        UnicodeDataFile result = new UnicodeDataFile();
-        result.newFile = directory + filename + UnicodeDataFile.getFileSuffix(true);
-        result.out = Utility.openPrintWriter(result.newFile, Utility.UTF8_UNIX);
-        String[] batName = {""};
-        result.mostRecent = UnicodeDataFile.generateBat(directory, filename, UnicodeDataFile.getFileSuffix(true), batName);
-        result.batName = batName[0];
-    	result.filename = filename;
+        return new UnicodeDataFile(directory, filename, false);
+    }
+    
+    public static UnicodeDataFile openHTMLAndWriteHeader(String directory, String filename) throws IOException {
+        return new UnicodeDataFile(directory, filename, true);
+    }
+    
+    private UnicodeDataFile (String directory, String filename, boolean isHTML) throws IOException {
+    	fileType = isHTML ? ".html" : ".txt";
+    	String newSuffix = UnicodeDataFile.getFileSuffix(true, fileType);
+        newFile = directory + filename + newSuffix;
+        out = Utility.openPrintWriter(newFile, Utility.UTF8_UNIX);
+        String[] batName2 = {""};
+        mostRecent = UnicodeDataFile.generateBat(directory, filename, newSuffix, fileType, batName2);
+        batName = batName2[0];
+    	filename = filename;
         
-        result.out.println("# " + filename + UnicodeDataFile.getFileSuffix(false));
-        result.out.println(generateDateLine());
-        result.out.println("#");        
-        result.out.println("# Unicode Character Database");        
-        result.out.println("# Copyright (c) 1991-" + Default.getYear() + " Unicode, Inc.");
-        result.out.println(
-            "# For terms of use, see http://www.unicode.org/terms_of_use.html");
-        result.out.println("# For documentation, see UCD.html");
+    	if (!isHTML) {
+	        out.println("# " + filename + UnicodeDataFile.getFileSuffix(false));
+	        out.println(generateDateLine());
+	        out.println("#");        
+	        out.println("# Unicode Character Database");        
+	        out.println("# Copyright (c) 1991-" + Default.getYear() + " Unicode, Inc.");
+	        out.println(
+	            "# For terms of use, see http://www.unicode.org/terms_of_use.html");
+	        out.println("# For documentation, see UCD.html");
+    	}
         try {
-            Utility.appendFile(filename + "Header.txt", Utility.LATIN1, result.out);
+            Utility.appendFile(filename + "Header" + fileType, Utility.UTF8_UNIX, out);
         } catch (FileNotFoundException e) {
             /*
-            result.out.println("# Unicode Character Database: Derived Property Data");
-            result.out.println("# Generated algorithmically from the Unicode Character Database");
-            result.out.println("# For documentation, see UCD.html");
-            result.out.println("# Note: Unassigned and Noncharacter codepoints may be omitted");
-            result.out.println("#       if they have default property values.");
-            result.out.println("# ================================================");
+            out.println("# Unicode Character Database: Derived Property Data");
+            out.println("# Generated algorithmically from the Unicode Character Database");
+            out.println("# For documentation, see UCD.html");
+            out.println("# Note: Unassigned and Noncharacter codepoints may be omitted");
+            out.println("#       if they have default property values.");
+            out.println("# ================================================");
             */
         }
-        
-        return result;
     }
     
     public void close() throws IOException {
         try {
-            Utility.appendFile(filename + "Footer.txt", Utility.LATIN1, out);
+            Utility.appendFile(filename + "Footer" + fileType, Utility.UTF8_UNIX, out);
         } catch (FileNotFoundException e) {}
         out.close();           
         Utility.renameIdentical(mostRecent, Utility.getOutputName(newFile), batName);
@@ -64,21 +74,20 @@ public class UnicodeDataFile {
     }
 
     public static String getHTMLFileSuffix(boolean withDVersion) {
-        return "-"
-            + Default.ucd().getVersion()
-            + ((withDVersion && MakeUnicodeFiles.dVersion >= 0)
-                ? ("d" + MakeUnicodeFiles.dVersion)
-                : "")
-            + ".html";
+        return getFileSuffix(withDVersion, ".html");
     }
 
     public static String getFileSuffix(boolean withDVersion) {
+    	return getFileSuffix(withDVersion, ".txt");
+    }
+
+    public static String getFileSuffix(boolean withDVersion, String suffix) {
         return "-"
             + Default.ucd().getVersion()
             + ((withDVersion && MakeUnicodeFiles.dVersion >= 0)
                 ? ("d" + MakeUnicodeFiles.dVersion)
                 : "")
-            + ".txt";
+            + suffix;
     }
 
     //Remove "d1" from DerivedJoiningGroup-3.1.0d1.txt type names
@@ -126,8 +135,8 @@ public class UnicodeDataFile {
         */
         // static final byte KEEP_SPECIAL = 0, SKIP_SPECIAL = 1;
         
-    public static String generateBat(String directory, String fileRoot, String suffix, String[] outputBatName) throws IOException {
-        String mostRecent = Utility.getMostRecentUnicodeDataFile(UnicodeDataFile.fixFile(fileRoot), Default.ucd().getVersion(), true, true);
+    public static String generateBat(String directory, String fileRoot, String suffix, String fileType, String[] outputBatName) throws IOException {
+        String mostRecent = Utility.getMostRecentUnicodeDataFile(UnicodeDataFile.fixFile(fileRoot), Default.ucd().getVersion(), true, true, fileType);
         if (mostRecent != null) {
             outputBatName[0] = UnicodeDataFile.generateBatAux(directory + "DIFF/Diff_" + fileRoot + suffix,
                 mostRecent, directory + fileRoot + suffix);

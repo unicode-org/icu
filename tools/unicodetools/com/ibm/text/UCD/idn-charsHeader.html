@@ -14,58 +14,83 @@
 .Non-XID       { background-color: #FFCCCC }
 .Decomposable       { background-color: #FFFFCC }
 .Pattern_Syntax       { background-color: #FFCCFF }
+.IDN-Remapped       { background-color: #FF6666 }
+.IDN-Deleted       { background-color: #66FF66 }
+.IDN-Illegal       { background-color: #6666FF }
 th           { text-align: left }
 -->
 </style>
 </head>
 
-<body>
+<body style="margin: 2em">
 
 <h1>IDN Character Categorization</h1>
-<p>$Date: 2005/03/29 18:31:15 $, MED</p>
+<p><i>$Date: 2005/03/30 17:19:32 $, MED</i></p>
 <p>This page lists all of the valid output IDN characters broken down by category. By &quot;output&quot; IDN 
 characters, we mean ones that can result from nameprep. Characters are grouped first by script, and 
 then by subcategory. Within each subcategory characters are sorted according to the default
-<a href="http://www.unicode.org/reports/tr10/">UCA</a> order. Tooltips provide the character code 
+<a href="http://www.unicode.org/reports/tr10/">UCA</a> order. Tool-tips provide the character code 
 and name (in enabled browsers).</p>
-<table border="1" cellpadding="2" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111" id="AutoNumber1">
-  <tr>
-    <th>Subcategory</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td class="Atomic">Atomic</td>
-    <td>Characters that don&#39;t fall into any of the following subcategories</td>
-  </tr>
-  <tr>
-    <td class="Atomic-no-uppercase">Atomic-no-uppercase</td>
-    <td>For bicameral scripts, Atomic characters without an uppercase.</td>
-  </tr>
-  <tr>
-    <td class="Pattern_Syntax">Pattern_Syntax</td>
-    <td>Characters recommended as a basis for syntax, as in
-    <a href="http://www.unicode.org/reports/tr31/tr31-5.html">UAX #31: Identifier and Pattern Syntax</a>. 
-    Excludes the word characters in <i>Section 4 Word Boundaries</i> of
-    <a href="http://www.unicode.org/reports/tr29/tr29-9.html#Word_Boundaries">UAX# 29</a>, in the 
-    Word_Break property and notes at the end of the section.&nbsp;&nbsp; </td>
-  </tr>
-  <tr>
-    <td class="Non-XID">Non-XID</td>
-    <td>Characters recommended as a basis for identifiers, as in
-    <a href="http://www.unicode.org/reports/tr31/tr31-5.html">UAX #31: Identifier and Pattern Syntax</a> 
-    (XID_Continue). Excludes the word characters in <i>Section 4 Word Boundaries</i> of
-    <a href="http://www.unicode.org/reports/tr29/tr29-9.html#Word_Boundaries">UAX# 29</a>, in the 
-    Word_Break property and notes at the end of the section.</td>
-  </tr>
-  <tr>
-    <td class="Decomposable">Decomposable</td>
-    <td>Characters with NFC decompositions.</td>
-  </tr>
-</table>
-<table>
-</table>
+<blockquote>
+  <table border="1" cellpadding="2" cellspacing="0" style="border-collapse: collapse">
+    <caption><b><font size="4">Key</font></b></caption>
+    <tr>
+      <th>Subcategory</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td class="Atomic">Atomic</td>
+      <td>Characters that don&#39;t fall into any of the following subcategories</td>
+    </tr>
+    <tr>
+      <td class="Atomic-no-uppercase">Atomic-no-uppercase</td>
+      <td>For bicameral scripts, Atomic characters without an uppercase.</td>
+    </tr>
+    <tr>
+      <td class="Pattern_Syntax">Pattern_Syntax</td>
+      <td>Characters recommended as a basis for use in pattern syntax.<p>Excludes the word 
+      characters in <i>Section 4 Word Boundaries</i> of
+      <a href="http://www.unicode.org/reports/tr29/tr29-9.html#Word_Boundaries">UAX# 29</a>, in the 
+      Word_Break property and notes at the end of the section.</p>
+      <p>See <a href="http://www.unicode.org/reports/tr31/tr31-5.html">UAX #31: Identifier and 
+      Pattern Syntax</a>. </td>
+    </tr>
+    <tr>
+      <td class="Non-XID">Non-XID</td>
+      <td>Characters not recommended as a basis for identifiers, excluding Pattern_Syntax and the 
+      word characters in <i>Section 4 Word Boundaries</i> of
+      <a href="http://www.unicode.org/reports/tr29/tr29-9.html#Word_Boundaries">UAX# 29</a>, in the 
+      Word_Break property and notes at the end of the section.<p>See
+      <a href="http://www.unicode.org/reports/tr31/tr31-5.html">UAX #31: Identifier and Pattern 
+      Syntax</a> (XID_Continue).</td>
+    </tr>
+    <tr>
+      <td class="Decomposable">Decomposable</td>
+      <td>Characters with NFC decompositions.</td>
+    </tr>
+    <tr>
+      <td class="IDN-Remapped">IDN-Remapped</td>
+      <td>Characters remapped by IDN.</td>
+    </tr>
+    <tr>
+      <td class="IDN-Deleted">IDN-Deleted</td>
+      <td>Characters deleted by IDN.</td>
+    </tr>
+    <tr>
+      <td class="IDN-Illegal">IDN-Illegal </td>
+      <td>Characters illegal in IDN (note: most of these are due to IDN's using an old version of Unicode).</td>
+    </tr>
+  </table>
+</blockquote>
+<p>The information in the categorization is also available in a plain-text file, at
+<a href="idn-chars.txt">idn-chars.txt</a>. It can be viewed as is, or loaded into a spreadsheet for 
+sorting and filtering to view the data in different ways. The format is:</p>
+<blockquote>
+  <p>code ; script ; subcategory # general-category (character) character-name</p>
+</blockquote>
+<p><i>Examples:</i></p>
+<pre>0061          ; LATIN ; Atomic # ; L&amp; (a) LATIN SMALL LETTER A
+2015          ; COMMON ; Pattern_Syntax # Pd (―) HORIZONTAL BAR
+058A          ; ARMENIAN ; Atomic-no-uppercase # ; Pd (֊) ARMENIAN HYPHEN
+20AC          ; COMMON ; Non-XID # ; Sc (€) EURO SIGN</pre>
 <h2>Categorization</h2>
-
-</body>
-
-</html>

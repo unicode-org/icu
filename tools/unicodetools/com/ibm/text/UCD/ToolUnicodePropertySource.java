@@ -123,7 +123,7 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
             public int getMaxWidth(boolean isShort) {
                 return 15;
             }
-        }.setValues(LONG_YES_NO, YES_NO)
+        }.setValues(LONG_YES_NO, YES_NO).swapFirst2ValueAliases()
 		.setMain("NFD_Quick_Check", "NFD_QC", UnicodeProperty.ENUMERATED, version));
         
         add(new UnicodeProperty.SimpleProperty() {
@@ -135,7 +135,7 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
             public int getMaxWidth(boolean isShort) {
                 return 15;
             }
-        }.setValues(LONG_YES_NO_MAYBE, YES_NO_MAYBE)
+        }.setValues(LONG_YES_NO_MAYBE, YES_NO_MAYBE).swapFirst2ValueAliases()
 		.setMain("NFC_Quick_Check", "NFC_QC", UnicodeProperty.ENUMERATED, version));
         
         add(new UnicodeProperty.SimpleProperty() {
@@ -147,7 +147,7 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
             public int getMaxWidth(boolean isShort) {
                 return 15;
             }
-        }.setValues(LONG_YES_NO, YES_NO)
+        }.setValues(LONG_YES_NO, YES_NO).swapFirst2ValueAliases()
 		.setMain("NFKD_Quick_Check", "NFKD_QC", UnicodeProperty.ENUMERATED, version));
         
         add(new UnicodeProperty.SimpleProperty() {
@@ -159,7 +159,7 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
             public int getMaxWidth(boolean isShort) {
                 return 15;
             }
-        }.setValues(LONG_YES_NO_MAYBE, YES_NO_MAYBE)
+        }.setValues(LONG_YES_NO_MAYBE, YES_NO_MAYBE).swapFirst2ValueAliases()
 		.setMain("NFKC_Quick_Check", "NFKC_QC", UnicodeProperty.ENUMERATED, version));
 
 
@@ -235,7 +235,12 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
         		unicodeMap.putAll(hangul.getSet("LVT"),"LVT");
         		unicodeMap.setMissing("Other");
         	}
-        }.setMain("Grapheme_Cluster_Break", "GCB", UnicodeProperty.ENUMERATED, version));
+        }.setMain("Grapheme_Cluster_Break", "GCB", UnicodeProperty.ENUMERATED, version)
+		.addValueAliases(new String[][] {
+				{"Control", "CN"},
+				{"Extend", "EX"},
+				{"Other", "XX"},
+		}).swapFirst2ValueAliases());
 
         add(new UnicodeProperty.UnicodeMapProperty() {
         	{
@@ -268,7 +273,17 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
         		unicodeMap.putAll(graphemeExtend, "Other"); // to verify that none of the above touch it.
         		unicodeMap.setMissing("Other");
         	}
-        }.setMain("Word_Break", "WB", UnicodeProperty.ENUMERATED, version));
+        }.setMain("Word_Break", "WB", UnicodeProperty.ENUMERATED, version)
+		.addValueAliases(new String[][] {
+				{"Format", "FO"},
+				{"Katakana", "KA"},
+				{"ALetter", "LE"},
+				{"MidLetter", "ML"},
+				{"MidNum", "MN"},
+				{"Numeric", "NU"},
+				{"ExtendNumLet", "EX"},
+				{"Other", "XX"},
+		}).swapFirst2ValueAliases());
 
         add(new UnicodeProperty.UnicodeMapProperty() {
         	{
@@ -307,7 +322,20 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
         		unicodeMap.putAll(graphemeExtend, "Other"); // to verify that none of the above touch it.
         		unicodeMap.setMissing("Other");
         	}
-        }.setMain("Sentence_Break", "SB", UnicodeProperty.ENUMERATED, version));
+        }.setMain("Sentence_Break", "SB", UnicodeProperty.ENUMERATED, version)
+		.addValueAliases(new String[][] {
+				{"Sep", "SE"},
+				{"Format", "FO"},
+				{"Sp", "SP"},
+				{"Lower", "LO"},
+				{"Upper", "UP"},
+				{"OLetter", "LE"},
+				{"Numeric", "NU"},
+				{"ATerm", "AT"},
+				{"STerm", "ST"},
+				{"Close", "CL"},
+				{"Other", "XX"},
+		}).swapFirst2ValueAliases());
     }
     
     static String[] YES_NO_MAYBE = {"N", "M", "Y"};
