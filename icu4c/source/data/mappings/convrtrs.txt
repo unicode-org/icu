@@ -62,7 +62,7 @@ LMBCS-19
 
 # Table-based
 
-ibm-367 usascii ascii ascii-7 us-ascii usascii ansi_x3.4-1968 ansi_x3.4-1986 iso_646.irv:1991 iso646-us us csASCII
+ibm-367 usascii ascii ascii-7 us-ascii usascii ansi_x3.4-1968 ansi_x3.4-1986 iso_646.irv:1991 iso646-us us csASCII 646
 
 # Special mapping for S/390 new line characters
 ebcdic-xml-us
