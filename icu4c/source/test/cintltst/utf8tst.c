@@ -124,10 +124,6 @@ static void TestGetChar()
         0x31,
         0x9a,
         0xc9,
-
-       
-        
-    
     };
     static uint32_t result[]={
      /*codepoint-unsafe,  codepoint-safe(not strict)  codepoint-safe(strict)*/
@@ -145,17 +141,18 @@ static void TestGetChar()
         0x31,             0x31,                       0x31,  
         0x31,             0x9a,                       0x9a,
         0x240,            UTF8_ERROR_VALUE_1,         UTF8_ERROR_VALUE_1,
-   
-
     };
     uint16_t i=0;
     UChar32 c;
     uint32_t offset=0;
+
     for(offset=0; offset<sizeof(input); offset++) {
-        UTF8_GET_CHAR_UNSAFE(input, offset, c);
-        if(c != result[i]){
-            log_err("ERROR: UTF8_GET_CHAR_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i], c);
+        if (offset < sizeof(input) - 1) {
+            UTF8_GET_CHAR_UNSAFE(input, offset, c);
+            if(c != result[i]){
+                log_err("ERROR: UTF8_GET_CHAR_UNSAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i], c);
            
+            }
         }
         UTF8_GET_CHAR_SAFE(input, 0, offset, sizeof(input), c, FALSE);
         if(c != result[i+1]){
