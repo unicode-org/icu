@@ -5,14 +5,16 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/AstroTest.java,v $ 
- * $Date: 2002/02/16 03:05:04 $ 
- * $Revision: 1.6 $
+ * $Date: 2002/08/08 22:02:27 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
 
 // AstroTest
+
+import java.util.Date;
 
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.util.*;
@@ -72,4 +74,49 @@ public class AstroTest extends TestFmwk {
         logln("result is " + result + ";  " + result.toHmsString());
     }
     
+    public void TestCoverage() {
+	GregorianCalendar cal = new GregorianCalendar(1958, Calendar.AUGUST, 15);
+	Date then = cal.getTime();
+	CalendarAstronomer myastro = new CalendarAstronomer(then);
+
+	//Latitude:  34 degrees 05' North  
+	//Longitude:  118 degrees 22' West  
+	double laLat = 34 + 5d/60, laLong = 360 - (118 + 22d/60);
+	CalendarAstronomer myastro2 = new CalendarAstronomer(laLong, laLat);
+
+	double eclLat = laLat * Math.PI / 360;
+	double eclLong = laLong * Math.PI / 360;
+	Ecliptic ecl = new Ecliptic(eclLat, eclLong);
+	logln("ecliptic: " + ecl);
+
+	CalendarAstronomer myastro3 = new CalendarAstronomer();
+	myastro3.setJulianDay((4713 + 2000) * 365.25);
+
+	CalendarAstronomer[] astronomers = {
+	    myastro, myastro2, myastro3, myastro2 // check cache
+	};
+
+	for (int i = 0; i < astronomers.length; ++i) {
+	    CalendarAstronomer astro = astronomers[i];
+
+	    logln("astro: " + astro);
+	    logln("   time: " + astro.getTime());
+	    logln("   date: " + astro.getDate());
+	    logln("   cent: " + astro.getJulianCentury());
+	    logln("   gw sidereal: " + astro.getGreenwichSidereal());
+	    logln("   loc sidereal: " + astro.getLocalSidereal());
+	    logln("   equ ecl: " + astro.eclipticToEquatorial(ecl));
+	    logln("   equ long: " + astro.eclipticToEquatorial(eclLong));
+	    logln("   horiz: " + astro.eclipticToHorizon(eclLong));
+	    logln("   sunrise: " + new Date(astro.getSunRiseSet(true)));
+	    logln("   sunset: " + new Date(astro.getSunRiseSet(false)));
+	    logln("   moon phase: " + astro.getMoonPhase());
+	    logln("   moonrise: " + new Date(astro.getMoonRiseSet(true)));
+	    logln("   moonset: " + new Date(astro.getMoonRiseSet(false)));
+	    logln("   prev summer solstice: " + new Date(astro.getSunTime(astro.SUMMER_SOLSTICE, false)));
+	    logln("   next summer solstice: " + new Date(astro.getSunTime(astro.SUMMER_SOLSTICE, true)));
+	    logln("   prev full moon: " + new Date(astro.getMoonTime(astro.FULL_MOON, false)));
+	    logln("   next full moon: " + new Date(astro.getMoonTime(astro.FULL_MOON, true)));
+	}
+    }
 }
