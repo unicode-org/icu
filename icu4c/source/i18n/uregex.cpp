@@ -621,6 +621,19 @@ static const UChar BACKSLASH  = 0x5c;
 static const UChar DOLLARSIGN = 0x24;
 
 //
+//  Move a character to an output buffer, with bounds checking on the index.
+//      Index advances even if capacity is exceeded, for preflight size computations.
+//      This little sequence is used a LOT.
+//
+static inline void appendToBuf(UChar c, int32_t *idx, UChar *buf, int32_t bufCapacity) {
+    if (*idx < bufCapacity) {
+        buf[*idx] = c;
+    }
+    (*idx)++;
+}
+
+
+//
 //  appendReplacement, the actual implementation.
 //
 int32_t RegexCImpl::appendReplacement(URegularExpression    *regexp,
@@ -659,9 +672,10 @@ int32_t RegexCImpl::appendReplacement(URegularExpression    *regexp,
         return 0;
     }
 
-    int32_t  resultLen         = 0;
-    int32_t  capacityRemaining = *destCapacity;
-    UChar   *dest              = *destBuf;
+    UChar    *dest             = *destBuf;
+    int32_t   capacity         = *destCapacity;
+    int32_t   destIdx          =  0;
+    int32_t   i;
     
     // If it wasn't supplied by the caller,  get the length of the replacement text.
     //   TODO:  slightly smarter logic in the copy loop could watch for the NUL on
@@ -671,19 +685,10 @@ int32_t RegexCImpl::appendReplacement(URegularExpression    *regexp,
     }
 
     // Copy input string from the end of previous match to start of current match
-    int32_t  startIdx = m->fLastMatchEnd;
-    int32_t  len = m->fMatchStart - startIdx;
-    if (len > 0) {
-        if (len < capacityRemaining) {
-            // TODO:  replace memcpy with inline loop
-            u_memcpy(&dest[resultLen], &regexp->fText[startIdx], len);
-            capacityRemaining -= len;
-        } else if (capacityRemaining > 0) {
-            u_memcpy(&dest[resultLen], &regexp->fText[startIdx], capacityRemaining);
-            capacityRemaining = 0;
-        }
-        resultLen += len;
+    for (i=m->fLastMatchEnd; i<m->fMatchStart; i++) {
+        appendToBuf(regexp->fText[i], &destIdx, dest, capacity);
     }
+
     
 
     // scan the replacement text, looking for substitutions ($n) and \escapes.
@@ -694,11 +699,7 @@ int32_t RegexCImpl::appendReplacement(URegularExpression    *regexp,
         if (c != DOLLARSIGN && c != BACKSLASH) {
             // Common case, no substitution, no escaping, 
             //  just copy the char to the dest buf.
-            if (capacityRemaining > 0) {
-                dest[resultLen] = c;
-                capacityRemaining--;
-            }
-            resultLen++;
+            appendToBuf(c, &destIdx, dest, capacity);
             continue;
         }
 
@@ -718,41 +719,25 @@ int32_t RegexCImpl::appendReplacement(URegularExpression    *regexp,
                 UChar32 escapedChar = 
                     u_unescapeAt(unescape_charAt,
                        &replIdx,                   // Index is updated by unescapeAt 
-                       replacementLength-replIdx,  // Remaining length of replacement text
+                       replacementLength,          // Length of replacement text
                        replacementText);
 
                 if (escapedChar != (UChar32)0xFFFFFFFF) {
                     if (escapedChar <= 0xffff) {
-                        if (capacityRemaining > 0) {
-                            dest[resultLen] = (UChar)escapedChar;
-                            capacityRemaining--;
-                        }
-                        resultLen++;
+                        appendToBuf((UChar)escapedChar, &destIdx, dest, capacity);
                     } else {
-                        if (capacityRemaining > 0) {
-                            dest[resultLen] = U16_LEAD(escapedChar);
-                            capacityRemaining--;
-                        }
-                        resultLen++;
-                        if (capacityRemaining > 0) {
-                            dest[resultLen] = U16_TRAIL(escapedChar);
-                            capacityRemaining--;
-                        }
-                        resultLen++;
+                        appendToBuf(U16_LEAD(escapedChar), &destIdx, dest, capacity);
+                        appendToBuf(U16_TRAIL(escapedChar), &destIdx, dest, capacity);
                     }
-
-                continue;
+                    continue;
                 }
                 // Note:  if the \u escape was invalid, just fall through and
                 //        treat it as a plain \<anything> escape.
             }
 
             // Plain backslash escape.  Just put out the escaped character.
-            if (capacityRemaining > 0) {
-                dest[resultLen] = c;
-                capacityRemaining--;
-            }
-            resultLen++;
+            appendToBuf(c, &destIdx, dest, capacity);
+
             replIdx++;
             continue;
         }
@@ -787,20 +772,16 @@ int32_t RegexCImpl::appendReplacement(URegularExpression    *regexp,
         if (numDigits == 0) {
             // The $ didn't introduce a group number at all.
             // Treat it as just part of the substitution text.
-            if (capacityRemaining > 0) {
-                dest[resultLen] = DOLLARSIGN;
-                capacityRemaining--;
-            }
-            resultLen++;
+            appendToBuf(DOLLARSIGN, &destIdx, dest, capacity);
             continue;
         }
 
         // Finally, append the capture group data to the destination.
-        resultLen += uregex_group(regexp, groupNum, dest+resultLen, capacityRemaining, status);
-        capacityRemaining = *destCapacity - resultLen;
+        int32_t  capacityRemaining = capacity - destIdx;
         if (capacityRemaining < 0) {
             capacityRemaining = 0;
         }
+        destIdx += uregex_group(regexp, groupNum, dest+destIdx, capacityRemaining, status);
         if (*status == U_BUFFER_OVERFLOW_ERROR) {
             // Ignore buffer overflow when extracting the group.  We need to
             //   continue on to get full size of the untruncated result.  We will
@@ -819,9 +800,9 @@ int32_t RegexCImpl::appendReplacement(URegularExpression    *regexp,
     //  Nul Terminate the dest buffer if possible.
     //  Set the appropriate buffer overflow or not terminated error, if needed.
     //
-    if (resultLen < *destCapacity) {
-        dest[resultLen] = 0;
-    } else if (resultLen == *destCapacity) {
+    if (destIdx < capacity) {
+        dest[destIdx] = 0;
+    } else if (destIdx == *destCapacity) {
         *status = U_STRING_NOT_TERMINATED_WARNING;
     } else {
         *status = U_BUFFER_OVERFLOW_ERROR;
@@ -830,13 +811,13 @@ int32_t RegexCImpl::appendReplacement(URegularExpression    *regexp,
     //
     // Return an updated dest buffer and capacity to the caller.
     //
-    if (resultLen > 0 &&  *destCapacity > 0) {
-        if (capacityRemaining == 0) {
-            *destBuf      += *destCapacity;
-            *destCapacity = 0;
+    if (destIdx > 0 &&  *destCapacity > 0) {
+        if (destIdx < capacity) {
+            *destBuf      += destIdx;
+            *destCapacity -= destIdx;
         } else {
-            *destBuf      += resultLen;
-            *destCapacity -= resultLen;
+            *destBuf      += capacity;
+            *destCapacity =  0;
         }
     }
 
@@ -847,7 +828,7 @@ int32_t RegexCImpl::appendReplacement(URegularExpression    *regexp,
         *status = U_BUFFER_OVERFLOW_ERROR;
     }
 
-    return resultLen;
+    return destIdx;
 }
 
 //
