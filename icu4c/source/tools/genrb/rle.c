@@ -169,16 +169,15 @@ usArrayToRLEString(const uint16_t* src,int32_t srcLen,uint16_t* buffer, int32_t 
                 }
             }
             buffer = encodeRunShort(buffer,bufLimit,(uint16_t)runValue, runLength,status);
-            return (buffer-saveBuf);
         }else{
             *status = U_BUFFER_OVERFLOW_ERROR;
-            return (int32_t) (buffer - saveBuf);
         }
-     }else{
+    }else{
         *status = U_BUFFER_OVERFLOW_ERROR;
-        return (int32_t) (buffer - saveBuf);
-     }
+    }
+    return (int32_t) (buffer - saveBuf);
 }
+
 /**
  * Construct a string representing a byte array.  Use run-length encoding.
  * Two bytes are packed into a single char, with a single extra zero byte at
@@ -225,16 +224,13 @@ byteArrayToRLEString(const uint8_t* src,int32_t srcLen, uint16_t* buffer,int32_t
             if (state[0] != 0) {
                 buffer = appendEncodedByte(buffer,bufLimit, 0, state ,status);
             }
-
-            return (int32_t) (buffer - saveBuf);
         }else{
             *status = U_BUFFER_OVERFLOW_ERROR;
-            return (int32_t) (buffer - saveBuf);
         }
-     }else{
+    }else{
         *status = U_BUFFER_OVERFLOW_ERROR;
-        return (int32_t) (buffer - saveBuf);
-     }
+    }
+    return (int32_t) (buffer - saveBuf);
 }
 
 
@@ -408,3 +404,4 @@ rleStringToByteArray(uint16_t* src, int32_t srcLen, uint8_t* target, int32_t tgt
 
     return ai;
 }
+
