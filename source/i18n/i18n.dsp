@@ -466,6 +466,10 @@ SOURCE=.\rbt_set.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\remtrans.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\simpletz.cpp
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
@@ -1410,6 +1414,10 @@ SOURCE=.\rbt_rule.h
 # Begin Source File
 
 SOURCE=.\rbt_set.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\remtrans.h
 # End Source File
 # Begin Source File
 
