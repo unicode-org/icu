@@ -180,6 +180,8 @@ protected:
      * If they were supplied by the client, the 
      * <code>add</code> method won't change the arrays
      * and the destructor won't delete them.
+     *
+     * @draft ICU 2.6
      */
     le_bool fClientArrays;
 
