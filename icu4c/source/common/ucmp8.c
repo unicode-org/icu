@@ -491,7 +491,7 @@ ucmp8_compact(CompactByteArray* this_obj,
     } /* endif (!this_obj->fCompact)*/
 }
 
-U_CAPI  uint32_t U_EXPORT2 uprv_mstrm_write_ucmp8 (UMemoryStream *MS, const CompactByteArray* array)
+U_CAPI  uint32_t U_EXPORT2 ucmp8_flattenMem (const CompactByteArray* array, UMemoryStream *MS)
 {
   int32_t size = 0;
 

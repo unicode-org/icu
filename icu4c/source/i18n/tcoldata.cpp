@@ -201,7 +201,12 @@ void TableCollationData::streamIn(UMemoryStream* is)
                 fBogus = TRUE;
                 return;
             }
-            ucmp32_streamMemIn(mapping, is);
+			int32_t len = 0;
+			const uint8_t *map = uprv_mstrm_getCurrentBuffer(is, &len);
+			UErrorCode status;
+			ucmp32_initFromData(mapping, &map, &status);
+			uprv_mstrm_jump(is, map);
+            // ucmp32_streamMemIn(mapping, is);
             if (mapping->fBogus) {
                 fBogus = TRUE;
                 ucmp32_close(mapping);
@@ -280,7 +285,8 @@ void TableCollationData::streamOut(UMemoryStream* os) const
         char isNull;
         isNull = (mapping == 0);
         uprv_mstrm_write(os, (uint8_t *)&isNull, sizeof(isNull));
-        if (!isNull) ucmp32_streamMemOut(mapping, os);
+        // if (!isNull) ucmp32_streamMemOut(mapping, os);
+        if (!isNull) ucmp32_flattenMem(mapping, os);
 
         isNull = (contractTable == 0);
         uprv_mstrm_write(os, (uint8_t *)&isNull, sizeof(isNull));

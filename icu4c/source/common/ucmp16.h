@@ -80,7 +80,7 @@
  * @see                CompactIntArray
  * @see                CompactCharArray
  * @see                CompactStringArray
- * @version            $Revision: 1.14 $ 8/25/98
+ * @version            $Revision: 1.15 $ 8/25/98
  * @author             Helena Shih
  */
 
@@ -259,7 +259,7 @@ U_CAPI  const uint16_t* U_EXPORT2 ucmp16_getIndex(const CompactShortArray* array
 
 
 /** INTERNAL USE ONLY **/
-U_CAPI  uint32_t U_EXPORT2 uprv_mstrm_write_ucmp16(UMemoryStream *MS, const CompactShortArray* array);
+U_CAPI  uint32_t U_EXPORT2 ucmp16_flattenMem(const CompactShortArray* array, UMemoryStream *MS);
 U_CAPI void U_EXPORT2 ucmp16_initFromData(CompactShortArray* array, const uint8_t **source,  UErrorCode *status);
 
 #endif

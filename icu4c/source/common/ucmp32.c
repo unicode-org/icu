@@ -515,7 +515,7 @@ void ucmp32_compact(CompactIntArray* this_obj, int32_t cycle) {
     } /* endif (!this_obj->fCompact)*/
 }
 
-U_CAPI  uint32_t U_EXPORT2 uprv_mstrm_write_ucmp32 (UMemoryStream *MS, const CompactIntArray* array)
+U_CAPI  uint32_t U_EXPORT2 ucmp32_flattenMem (const CompactIntArray* array, UMemoryStream *MS)
 {
   int32_t size = 0;
 
