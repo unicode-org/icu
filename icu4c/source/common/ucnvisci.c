@@ -25,6 +25,7 @@
 #include "unicode/ucnv.h"
 #include "ucnv_cnv.h"
 #include "unicode/ucnv_cb.h"
+#include "unicode/uset.h"
 #include "cstring.h"
 
 #define UCNV_OPTIONS_VERSION_MASK 0xf
@@ -1451,6 +1452,37 @@ _ISCII_SafeClone(const UConverter *cnv,
     return &localClone->cnv;
 }
 
+static void
+_ISCIIGetUnicodeSet(const UConverter *cnv,
+                    USet *set,
+                    UConverterUnicodeSet which,
+                    UErrorCode *pErrorCode)
+{
+    int32_t idx;
+    int32_t fromUnicodeDelta;
+    uint8_t offset;
+    if (cnv->options > MALAYALAM) {
+        /* sanity check */
+        *pErrorCode = U_UNSUPPORTED_ERROR;
+        return;
+    }
+    fromUnicodeDelta = ((UConverterDataISCII*)(cnv->extraInfo))->currentDeltaFromUnicode;
+    offset = (uint8_t)(cnv->options - (cnv->options >= KANNADA)); /* Kannada and Telegu are merged */
+
+    for (idx = 0; idx < DELTA; idx++) {
+        if ((validityTable[idx] << offset) & DELTA) {
+            uset_add(set, fromUnicodeTable[idx] + fromUnicodeDelta + INDIC_BLOCK_BEGIN - ASCII_END);
+        }
+    }
+    if (cnv->options <= ORIYA) {
+        uset_add(set, DANDA);
+        uset_add(set, DOUBLE_DANDA);
+    }
+    uset_addRange(set, 0, ASCII_END);
+    uset_add(set, ZWNJ);
+    uset_add(set, ZWJ);
+}
+
 static const UConverterImpl _ISCIIImpl={
 
     UCNV_ISCII,
@@ -1471,7 +1503,8 @@ static const UConverterImpl _ISCIIImpl={
     NULL,
     _ISCIIgetName,
     NULL,
-    _ISCII_SafeClone
+    _ISCII_SafeClone,
+    _ISCIIGetUnicodeSet
 };
 
 static const UConverterStaticData _ISCIIStaticData={
