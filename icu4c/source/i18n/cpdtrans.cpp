@@ -420,7 +420,15 @@ void CompoundTransliterator::handleTransliterate(Replaceable& text, UTransPositi
         
         // Adjust overall limit for insertions/deletions
         compoundLimit += index.limit - limit;
-        index.limit = index.start; // Move limit to end of committed text
+        
+        if (incremental) {
+            // In the incremental case, only allow subsequent
+            // transliterators to modify what has already been
+            // completely processed by prior transliterators.  In the
+            // non-incrmental case, allow each transliterator to
+            // process the entire text.
+            index.limit = index.start;
+        }
     }
 
     // Start is good where it is -- where the last transliterator left
