@@ -138,6 +138,11 @@ class TransliteratorTest : public IntlTest {
      */
     void TestFilterIDs(void);
 
+    /**
+     * Test the case mapping transliterators.
+     */
+    void TestCaseMap(void);
+
     //======================================================================
     // Support methods
     //======================================================================
