@@ -208,16 +208,43 @@ typedef struct {
   uint32_t limitContCE;
 } indirectBoundaries;
 
+/* these values are used for finding CE values for indirect positioning. */
+/* Indirect positioning is a mechanism for allowing resets on symbolic   */
+/* values. It only works for resets and you cannot tailor indirect names */
+/* An indirect name can define either an anchor point or a range. An     */
+/* anchor point behaves in exactly the same way as a code point in reset */
+/* would, except that it cannot be tailored. A range (we currently only  */
+/* know for the [top] range will explicitly set the upper bound for      */
+/* generated CEs, thus allowing for better control over how many CEs can */
+/* be squeezed between in the range without performance penalty.         */
+/* In that respect, we use [top] for tailoring of locales that use CJK   */
+/* characters. Other indirect values are currently a pure convenience,   */
+/* they can be used to assure that the CEs will be always positioned in  */
+/* the same place relative to a point with known properties (e.g. first  */
+/* primary ignorable). */
 static indirectBoundaries ucolIndirectBoundaries[] = {
-  { UCOL_RESET_TOP_VALUE, 0, UCOL_NEXT_TOP_VALUE, 0 },
-  { UCOL_FIRST_PRIMARY_IGNORABLE, 0, UCOL_NEXT_FIRST_PRIMARY_IGNORABLE, 0 },
-  { UCOL_LAST_PRIMARY_IGNORABLE, 0, UCOL_NEXT_LAST_PRIMARY_IGNORABLE, 0 },
-  { UCOL_FIRST_SECONDARY_IGNORABLE, 0, UCOL_NEXT_FIRST_SECONDARY_IGNORABLE, 0 },
-  { UCOL_LAST_SECONDARY_IGNORABLE, 0, UCOL_NEXT_LAST_SECONDARY_IGNORABLE, 0 },
-  { UCOL_FIRST_TERTIARY_IGNORABLE, 0, UCOL_NEXT_FIRST_TERTIARY_IGNORABLE, 0 },
-  { UCOL_LAST_TERTIARY_IGNORABLE, 0, UCOL_NEXT_LAST_TERTIARY_IGNORABLE, 0 },
-  { UCOL_FIRST_VARIABLE, 0, UCOL_NEXT_FIRST_VARIABLE, 0 },
-  { UCOL_LAST_VARIABLE, 0, UCOL_NEXT_LAST_VARIABLE, 0 },
+  { UCOL_RESET_TOP_VALUE,               0, 
+    UCOL_NEXT_TOP_VALUE,                0 },
+  { UCOL_FIRST_PRIMARY_IGNORABLE,       0, 
+    0,                                  0 },
+  { UCOL_LAST_PRIMARY_IGNORABLE,        UCOL_LAST_PRIMARY_IGNORABLE_CONT, 
+    0,                                  0 },
+  { UCOL_FIRST_SECONDARY_IGNORABLE,     0, 
+    0,                                  0 },
+  { UCOL_LAST_SECONDARY_IGNORABLE,      0, 
+    0,                                  0 },
+  { UCOL_FIRST_TERTIARY_IGNORABLE,      0, 
+    0,                                  0 },
+  { UCOL_LAST_TERTIARY_IGNORABLE,       0, 
+    0,                                  0 },
+  { UCOL_FIRST_VARIABLE,                0, 
+    0,                                  0 },
+  { UCOL_LAST_VARIABLE,                 0, 
+    0,                                  0 },
+  { UCOL_FIRST_NON_VARIABLE,            0, 
+    0,                                  0 },
+  { UCOL_LAST_NON_VARIABLE,             0, 
+    0,                                  0 },
 };
 
 #define UTOK_OPTION_COUNT 17
@@ -243,7 +270,7 @@ U_STRING_DECL(suboption_11, "primary",        7);
 U_STRING_DECL(suboption_12, "secondary",      9);
 U_STRING_DECL(suboption_13, "tertiary",       8);
 U_STRING_DECL(suboption_14, "variable",       8);
-U_STRING_DECL(suboption_15, "ignorable",      9);
+U_STRING_DECL(suboption_15, "non-ignorable", 13);
 
 U_STRING_DECL(option_00,    "undefined",      9);
 U_STRING_DECL(option_01,    "rearrange",      9);  
@@ -306,11 +333,12 @@ static const ucolTokSuboption strengthSub[5] = {
   {suboption_10, 1, UCOL_IDENTICAL},
 };
 
-static const ucolTokSuboption firstLastSub[4] = {
+static const ucolTokSuboption firstLastSub[5] = {
   {suboption_11, 7, UCOL_PRIMARY},
   {suboption_12, 9, UCOL_PRIMARY},
   {suboption_13, 8, UCOL_PRIMARY},
   {suboption_14, 8, UCOL_PRIMARY},
+  {suboption_15, 13, UCOL_PRIMARY},
 };
 
 static const ucolTokOption rulesOptions[UTOK_OPTION_COUNT] = {
@@ -325,8 +353,8 @@ static const ucolTokOption rulesOptions[UTOK_OPTION_COUNT] = {
  {option_01,  9, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"rearrange"      */
  {option_12,  6, beforeSub, 3, UCOL_ATTRIBUTE_COUNT}, /*"before"    */
  {option_05,  3, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"top"            */
- {option_15,  5, firstLastSub, 4, UCOL_ATTRIBUTE_COUNT}, /*"first" */
- {option_16,  4, firstLastSub, 4, UCOL_ATTRIBUTE_COUNT}, /*"last" */
+ {option_15,  5, firstLastSub, 5, UCOL_ATTRIBUTE_COUNT}, /*"first" */
+ {option_16,  4, firstLastSub, 5, UCOL_ATTRIBUTE_COUNT}, /*"last" */
  {option_00,  9, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"undefined"      */
  {option_09, 11, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"scriptOrder"    */
  {option_10, 11, NULL, 0, UCOL_ATTRIBUTE_COUNT}, /*"charsetname"    */
@@ -378,7 +406,7 @@ uint8_t ucol_uprv_tok_readAndSetOption(UColTokenParser *src, const UChar *end, U
     U_STRING_INIT(suboption_12, "secondary",      9);
     U_STRING_INIT(suboption_13, "tertiary",       8);
     U_STRING_INIT(suboption_14, "variable",       8);
-    U_STRING_INIT(suboption_15, "ignorable",      9);
+    U_STRING_INIT(suboption_15, "non-ignorable", 13);
 
 
     U_STRING_INIT(option_00, "undefined",      9);
@@ -1172,6 +1200,15 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
           sourceToken->debugExpansion = 0;
         }
       } else {
+        if(lastToken != NULL && lastStrength == UCOL_TOK_RESET) {
+          /* if the previous token was also a reset, */
+          /*this means that we have two consecutive resets */
+          /* and we want to remove the previous one if empty*/
+          if(ListList[src->resultLen-1].first == NULL) {
+            src->resultLen--;
+          }
+        }
+
         if(sourceToken == NULL) { /* this is a reset, but it might still be somewhere in the tailoring, in shorter form */
           uint32_t searchCharsLen = src->parsedToken.charsLen;
           while(searchCharsLen > 1 && sourceToken == NULL) {
@@ -1187,7 +1224,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
           }
         }
 
-        if((specs & UCOL_TOK_BEFORE) != 0) { /* we're doing before */
+        if((specs & UCOL_TOK_BEFORE) != 0 && top == FALSE) { /* we're doing before & there is no indirection */
           uint8_t strength = (specs & UCOL_TOK_BEFORE) - 1;
           if(sourceToken != NULL && sourceToken->strength != UCOL_TOK_RESET) { 
             /* this is a before that is already ordered in the UCA - so we need to get the previous with good strength */
@@ -1213,15 +1250,6 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
           }
         }
 
-
-        if(lastToken != NULL && lastStrength == UCOL_TOK_RESET) {
-          /* if the previous token was also a reset, */
-          /*this means that we have two consecutive resets */
-          /* and we want to remove the previous one if empty*/
-          if(ListList[src->resultLen-1].first == NULL) {
-            src->resultLen--;
-          }
-        }
 
       /*  5 If the relation is a reset: 
           If sourceToken is null 
@@ -1261,13 +1289,29 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
             sourceToken = ucol_tok_initAReset(src, expand, &expandNext, parseError, status);
           } else { /* top == TRUE */
             top = FALSE;
-            ListList[src->resultLen].baseCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].startCE;
-            ListList[src->resultLen].baseContCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE;
-            ListList[src->resultLen].nextCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].limitCE;
-            ListList[src->resultLen].nextContCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].limitContCE;
             ListList[src->resultLen].previousCE = 0;
             ListList[src->resultLen].previousContCE = 0;
             ListList[src->resultLen].indirect = TRUE;
+            if((specs & UCOL_TOK_BEFORE) == 0) { /* indirect without before */
+              /* just use the supplied values */
+              ListList[src->resultLen].baseCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].startCE;
+              ListList[src->resultLen].baseContCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE;
+              ListList[src->resultLen].nextCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].limitCE;
+              ListList[src->resultLen].nextContCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].limitContCE;
+            } else { /* there was a before */
+              /* we need to do slightly more work. we need to get the baseCE using the */
+              /* inverse UCA & getPrevious. The next bound is not set, and will be decided */
+              /* in ucol_bld */
+              uint8_t strength = (specs & UCOL_TOK_BEFORE) - 1;
+              uint32_t baseCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].startCE;
+              uint32_t baseContCE = ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE;//&0xFFFFFF3F;
+              uint32_t CE = UCOL_NOT_FOUND, SecondCE = UCOL_NOT_FOUND;
+              int32_t invPos = ucol_inv_getPrevCE(baseCE, baseContCE, &CE, &SecondCE, strength);
+              ListList[src->resultLen].baseCE = CE;
+              ListList[src->resultLen].baseContCE = SecondCE;
+              ListList[src->resultLen].nextCE = 0;
+              ListList[src->resultLen].nextContCE = 0;
+            }
 
             sourceToken = ucol_tok_initAReset(src, 0, &expandNext, parseError, status);
 

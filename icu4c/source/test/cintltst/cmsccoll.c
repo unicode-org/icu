@@ -3469,6 +3469,11 @@ static void TestRuleOptions() {
       "&[last tertiary ignorable]<<<w"
       "&[top]<u",
       {"\\ufffb",  "w", "y", "\\u20e3", "x", "\\u137c", "z", "u"}, 7 },
+    { "&[before 1][first tertiary ignorable]<<<k", 
+    { "\\u0000", "k"}, 2}, /* you cannot go before first tertiary ignorable */
+    /* - all befores here amount to zero */
+    { "&[before 3][last primary ignorable]<<<k",
+    { "k", "\\u20e3"}, 2},
   };
   uint32_t i;
 
