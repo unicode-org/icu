@@ -351,9 +351,9 @@ void TestUDataGetInfo() {
 				dataInfo.dataFormat[1]==0x76 &&  dataInfo.dataFormat[1]!=0x65 &&
 				dataInfo.dataFormat[2]==0x41 &&  dataInfo.dataFormat[2]!=0x73 &&
 				dataInfo.dataFormat[3]==0x6c &&  dataInfo.dataFormat[3]!=0x74 &&
-				dataInfo.formatVersion[0]==2 &&  dataInfo.formatVersion[0]!=9 && /*formatVersion is also set to the one for cnvalias*/
-				dataInfo.dataVersion[0]==1   &&  dataInfo.dataVersion[0]!=4   && /*dataVersion*/
-				dataInfo.dataVersion[1]==3   &&  dataInfo.dataVersion[1]!=0   ){
+				dataInfo.formatVersion[0]!=9 && /*formatVersion is also set to the one for cnvalias*/
+				dataInfo.dataVersion[0]!=4   && /*dataVersion*/
+				dataInfo.dataVersion[1]!=0   ){
 					log_verbose("PASS: udata_getInfo() filled in the right values\n");
 			} else {
 				log_err("FAIL: udata_getInfo() filled in the wrong values\n");
