@@ -63,6 +63,11 @@ public:
      */
     void TestUnlimitedArgsAndSubformats();
 
+    /**
+     * Test RBNF extensions to MessageFormat.
+     */
+    void TestRBNF();
+
     //
     /** 
      * ------------ API tests ----------
