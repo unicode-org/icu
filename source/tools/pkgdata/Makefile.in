@@ -58,7 +58,7 @@ endif
 LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
 LIBS = $(LIBICU-TOOLUTIL) $(LIBICU-UC) @LIBS@ @LIB_M@
 
-OBJECTS = pkgdata.o pkgtypes.o gmake.o dllmode.o cmnmode.o
+OBJECTS = pkgdata.o pkgtypes.o gmake.o dllmode.o cmnmode.o filemode.o
 
 DEPS = $(OBJECTS:.o=.d)
 

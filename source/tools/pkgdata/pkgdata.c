@@ -39,6 +39,8 @@ extern void pkg_mode_dll(UPKGOptions* o, FileStream *stream, UErrorCode *status)
 extern void pkg_mode_common(UPKGOptions* o, FileStream *stream, UErrorCode *status);
 #endif /*#ifdef WIN32*/
 
+extern void pkg_mode_files(UPKGOptions* o, FileStream *stream, UErrorCode *status);
+
 U_CDECL_END
 
 static int executeMakefile(const UPKGOptions *o);
@@ -52,6 +54,7 @@ static struct
   const char *desc;
 } modes[] = 
 {
+  { "files", pkg_mode_files, "Uses raw data files (no effect). Installation copies all files to the target location." },
 #ifdef WIN32
   { "dll",    pkg_mode_windows,    "Generates one common data file and one shared library, <package>.dll"},
   { "common", pkg_mode_windows,    "Generates just the common file, <package>.dat"}
