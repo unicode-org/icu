@@ -11,9 +11,6 @@
 .SH SYNOPSIS
 .B genprops
 [
-.BR "\-V\fP, \fB\-\-version"
-]
-[
 .BR "\-h\fP, \fB\-?\fP, \fB\-\-help"
 ]
 [
@@ -58,11 +55,6 @@ in their basename. For example, the file
 would be looked for under the name
 .BR UnicodeData\-\fIsuffix\fP.txt .
 .SH OPTIONS
-.TP
-.BR \-V\fP, \fB\-\-version
-Print the version of
-.B genuca
-and exit.
 .TP
 .BR \-h\fP, \fB\-?\fP, \fB\-\-help
 Print help about usage and exit.
