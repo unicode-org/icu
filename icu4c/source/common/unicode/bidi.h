@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999, International Business Machines
+*   Copyright (C) 1999-2000, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -55,6 +55,29 @@ public:
      */
     ~BiDi();
 
+    /**
+     * Modify the operation of the BiDi algorithm such that it
+     * approximates an "inverse BiDi" algorithm. This function
+     * must be called before <code>setPara()</code>.
+     *
+     * @param isInverse specifies "forward" or "inverse" BiDi operation
+     *
+     * @see setPara
+     * @see writeReordered
+     * @draft
+     */
+    void
+    setInverse(bool_t isInverse);
+
+    /**
+     * Is this BiDi object set to perform the inverse BiDi algorithm?
+     *
+     * @see setInverse
+     * @draft
+     */
+    bool_t
+    isInverse();
+
     /** @memo Set this object for one paragraph's text. 
      *  @stable
      */
@@ -77,6 +100,12 @@ public:
      */
     UBiDiDirection
     getDirection() const;
+
+    /** @memo Get the pointer to the text.
+     *  @draft
+     */
+    const UChar *
+    getText() const;
 
     /** @memo Get the length of the text. 
      *  @stable
@@ -169,6 +198,32 @@ public:
     static void
     invertMap(const UTextOffset *srcMap, UTextOffset *destMap, UTextOffset length);
 
+    /**
+     * Use the <code>BiDi</code> object containing the reordering
+     * information for one paragraph or line of text as set by
+     * <code>setPara()</code> or <code>setLine()</code> and
+     * write a reordered string to the destination buffer.
+     *
+     * @see ubidi_writeReordered
+     * @draft
+     */
+    UTextOffset
+    writeReordered(UChar *dest, int32_t destSize,
+                   uint16_t options,
+                   UErrorCode &rErrorCode);
+
+    /**
+     * Reverse a Right-To-Left run of Unicode text.
+     *
+     * @see ubidi_writeReverse
+     * @draft
+     */
+    static UTextOffset
+    writeReverse(const UChar *src, int32_t srcLength,
+                 UChar *dest, int32_t destSize,
+                 uint16_t options,
+                 UErrorCode &rErrorCode);
+
 protected:
     UBiDi *pBiDi;
 };
@@ -199,6 +254,16 @@ inline BiDi::~BiDi() {
     pBiDi=0;
 }
 
+inline void
+BiDi::setInverse(bool_t isInverse) {
+    ubidi_setInverse(pBiDi, isInverse);
+}
+
+inline bool_t
+BiDi::isInverse() {
+    return ubidi_isInverse(pBiDi);
+}
+
 inline BiDi &
 BiDi::setPara(const UChar *text, UTextOffset length,
         UBiDiLevel paraLevel, UBiDiLevel *embeddingLevels,
@@ -219,6 +284,11 @@ BiDi::setLine(const BiDi &rParaBiDi,
 inline UBiDiDirection
 BiDi::getDirection() const {
     return ubidi_getDirection(pBiDi);
+}
+
+inline const UChar *
+BiDi::getText() const {
+    return ubidi_getText(pBiDi);
 }
 
 inline UTextOffset
@@ -290,6 +360,21 @@ BiDi::reorderVisual(const UBiDiLevel *levels, UTextOffset length, UTextOffset *i
 inline void
 BiDi::invertMap(const UTextOffset *srcMap, UTextOffset *destMap, UTextOffset length) {
     ubidi_invertMap(srcMap, destMap, length);
+}
+
+inline UTextOffset
+BiDi::writeReordered(UChar *dest, int32_t destSize,
+                     uint16_t options,
+                     UErrorCode &rErrorCode) {
+    return ubidi_writeReordered(pBiDi, dest, destSize, options, &rErrorCode);
+}
+
+inline UTextOffset
+BiDi::writeReverse(const UChar *src, int32_t srcLength,
+                   UChar *dest, int32_t destSize,
+                   uint16_t options,
+                   UErrorCode &rErrorCode) {
+    return ubidi_writeReverse(src, srcLength, dest, destSize, options, &rErrorCode);
 }
 
 #endif
