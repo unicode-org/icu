@@ -55,4 +55,5 @@ zh.txt zh_CN.txt zh_HK.txt zh_TW.txt \
 $(TRANS)expcon.txt $(TRANS)kbdescl1.txt $(TRANS)larabic.txt \
 $(TRANS)ldevan.txt $(TRANS)lgreek.txt $(TRANS)lhalfwid.txt \
 $(TRANS)lhebrew.txt $(TRANS)lkana.txt $(TRANS)lrussian.txt \
-$(TRANS)quotes.txt $(TRANS)ucname.txt 
+$(TRANS)quotes.txt $(TRANS)ucname.txt \
+$(TEST)default.txt $(TEST)te.txt $(TEST)te_IN.txt
