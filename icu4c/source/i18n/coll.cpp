@@ -192,6 +192,17 @@ Collator::Collator(const Collator& /* other */)
 {
 }
 
+int32_t Collator::getBound(const uint8_t       *source,
+        int32_t             sourceLength,
+        UColBoundMode       boundType,
+        uint32_t            noOfLevels,
+        uint8_t             *result,
+        int32_t             resultLength,
+        UErrorCode          &status) {
+  return ucol_getBound(source, sourceLength, boundType, noOfLevels, result, resultLength, &status);
+}
+
+
 // UCollator private data members ----------------------------------------
 
 /* This is useless information */
