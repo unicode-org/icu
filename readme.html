@@ -29,11 +29,11 @@
 
   <body>
     <h1>International Components for Unicode<br>
-     <abbr title="International Components for Unicode">ICU</abbr> 2.4
+     <abbr title="International Components for Unicode">ICU</abbr> 2.6
     ReadMe</h1>
 
-    <p>Version: 2002-Dec-20<br>
-     Copyright &copy; 1997-2002 International Business Machines Corporation and
+    <p>Version: 2003-Jan-29<br>
+     Copyright &copy; 1997-2003 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
     <hr>
@@ -78,12 +78,12 @@
 
           <li><a href="#MakeICUSmaller">How to Make ICU Smaller</a></li>
 
+          <li><a href="#ImportantNotesDefaultCP">Using the Default
+          Codepage</a></li>
+
           <li><a href="#ImportantNotesWindows">Windows Platform</a></li>
 
           <li><a href="#ImportantNotesUnix">Unix Type Platforms</a></li>
-
-          <li><a href="#ImportantNotesDefaultCP">Using the Default
-          Codepage</a></li>
         </ul>
       </li>
 
@@ -213,38 +213,8 @@
     <p>The following list concentrates on <em>changes that affect existing
     applications migrating from previous ICU releases</em>. For more news about
     this release, see the <a href=
-    "http://oss.software.ibm.com/icu/download/2.4/">ICU 2.4 download
+    "http://oss.software.ibm.com/icu/download/2.6/">ICU 2.6 download
     page</a>.</p>
-
-    <h3>UnicodeString assignments</h3>
-
-    <p>ICU 2.4 changes the behavior of the <code>UnicodeString</code>
-    assignment operator and copy constructor for where the source string is a
-    readonly alias. For such strings, the copy used to also be a readonly alias
-    to the same buffer, but that was seen as too dangerous (see <a href=
-    "http://www.jtcsv.com/cgibin/icu-bugs?findid=2296">Jitterbug 2296</a>). The
-    new <code>fastCopyFrom()</code> member function provides the old assignment
-    behavior. It can be used explicitly when it is known to be safe to maintain
-    readonly aliases instead of cloning the buffer. For more information about
-    string aliasing and other <code>UnicodeString</code> storage models see the
-    <a href="http://oss.software.ibm.com/icu/userguide/strings.html">User Guide
-    Strings chapter</a>.</p>
-
-    <h3>Unicode-handling macros (utf*.h)</h3>
-
-    <p>The macros in <code>source/common/unicode/utf*.h</code> have been
-    revamped, improved, simplified, and renamed. The old macros continue to be
-    available. They are in <code>utf_old.h</code>, together with an explanation
-    of the change. <code>utf.h</code>, <code>utf8.h</code> and
-    <code>utf16.h</code> contain the new macros instead. The new macros are
-    intended to be more consistent, more useful, and less confusing. Some
-    macros were simply renamed for consistency with a new naming scheme.</p>
-
-    <p>A related change is that <code>UChar32</code> is not a
-    platform-dependent type any more, but is now always defined to be the same
-    as <code>int32_t</code>. This allows for consistent, more portable code and
-    C++ function overloading as well as negative values as sentinels on all
-    platforms. See the definition in <code>utf.h</code>.</p>
 
     <h3>ICU code library size</h3>
 
@@ -262,29 +232,6 @@
     for those in Unihan.txt) are now <a href=
     "http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/ucd_icu.html">
     available via direct APIs, and most via UnicodeSet</a>.</p>
-
-    <h3>Additional and modified converters</h3>
-
-    <p>New converter implementations are added for:</p>
-
-    <ul>
-      <li>UTF-16 and UTF-32 (detect/emit BOM according to IANA
-      registration)<br>
-       These and related names used to be aliases for UTF16_PlatformEndian and
-      UTF32_PlatformEndian but are now separate, IANA-registration-compliant
-      converters that detect and emit the respective Byte Order Mark. The
-      "platform endian" converters (without automatic BOM handling) are now
-      only available via their specific names.</li>
-
-      <li><a href="http://www.unicode.org/reports/tr26/">CESU-8</a> (while the
-      <a href="http://www.unicode.org/reports/tr28/#3_1_conformance">UTF-8 code
-      is tightened according to Unicode 3.2</a>)</li>
-
-      <li><a href=
-      "http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/conversion/bocu1/bocu1.html">
-      BOCU-1</a> (MIME-compatible compression of Unicode text that preserves
-      binary order)</li>
-    </ul>
 
     <h3>Flexible data loading</h3>
 
@@ -337,21 +284,6 @@
       <li>If you have a shared library file, you'll need to somehow get
       individual files and repackage them.</li>
     </ul>
-
-    <h3>Customizable memory management</h3>
-
-    <p>ICU 2.2 libraries do not use the global operators new and delete.
-    Instead, all C++ classes are derived from a common base class UObject which
-    implements new and delete operators for all of ICU's C++ classes. Users can
-    customize the ICU memory allocation by changing the functions in
-    source/common/cmemory.c that are used for non-class types and in UObject's
-    new and delete operators.</p>
-
-    <p>This also means that ICU libraries may safely use a different heap than
-    the application because all memory is consistently allocated and released
-    from within the libraries. On Windows it is now possible to link the
-    application with, for example, the static C runtime library even though ICU
-    libraries use the DLL-based runtime.</p>
 
     <h3>Experimental locales moved to new repository</h3>
 
@@ -1396,6 +1328,48 @@ del common/libicuuc.o
     href="http://oss.software.ibm.com/icu/userguide/">User Guide</a> "ICU Data"
     chapter.</p>
 
+    <h3><a name="ImportantNotesDefaultCP" href="#ImportantNotesDefaultCP">Using
+    the default codepage</a></h3>
+
+    <p>ICU has code to determine the default codepage of the system or process.
+    This default codepage can be used to convert <code>char *</code> strings to
+    and from Unicode.</p>
+
+    <p>Depending on system design, setup and APIs, it may not always be
+    possible to find a default codepage that fully works as expected. For
+    example,</p>
+
+    <ul>
+      <li>On Windows there are three encodings in use at the same time. Unicode
+      (UTF-16) is always used inside of Windows, while for <code>char *</code>
+      encodings there are two classes, called "ANSI" and "OEM" codepages. ICU
+      will use the ANSI codepage. Note that the OEM codepage is used by default
+      for console window output.</li>
+
+      <li>On some Unix-type systems, non-standard names are used for encodings,
+      or non-standard encodings are used altogether. Although ICU supports 200
+      encodings in its standard build and many more aliases for them, it will
+      not be able to recognize such non-standard names.</li>
+
+      <li>Some systems do not have a notion of a system or process codepage,
+      and may not have APIs for that.</li>
+    </ul>
+
+    <p>If you have means of detecting a default codepage name that are more
+    appropriate for your application, then you should set that name with
+    <code>ucnv_setDefaultName()</code> as the first ICU function call. This
+    makes sure that the internally cached default converter will be
+    instantiated from your preferred name.</p>
+
+    <p>Starting in ICU 2.0, when a converter for the default codepage cannot be
+    opened, a fallback default codepage name and converter will be used. On
+    most platforms, this will be US-ASCII. For z/OS (OS/390), ibm-1047-s390 is
+    the default fallback codepage. For AS/400 (iSeries), ibm-37 is the default
+    fallback codepage. This default fallback codepage is used when the
+    operating system is using a non-standard name for a default codepage, or
+    the converter was not packaged with ICU. The feature allows ICU to run in
+    unusual computing environments without completely failing.</p>
+
     <h3><a name="ImportantNotesWindows" href="#ImportantNotesWindows">Windows
     Platform</a></h3>
 
@@ -1465,48 +1439,6 @@ del common/libicuuc.o
     installation directory, as the older libraries will used during the build,
     instead of the new ones, likely leading to an incorrectly build ICU. (This
     is the proper behavior of rpath.)</p>
-
-    <h3><a name="ImportantNotesDefaultCP" href="#ImportantNotesDefaultCP">Using
-    the default codepage</a></h3>
-
-    <p>ICU has code to determine the default codepage of the system or process.
-    This default codepage can be used to convert <code>char *</code> strings to
-    and from Unicode.</p>
-
-    <p>Depending on system design, setup and APIs, it may not always be
-    possible to find a default codepage that fully works as expected. For
-    example,</p>
-
-    <ul>
-      <li>On Windows there are three encodings in use at the same time. Unicode
-      (UTF-16) is always used inside of Windows, while for <code>char *</code>
-      encodings there are two classes, called "ANSI" and "OEM" codepages. ICU
-      will use the ANSI codepage. Note that the OEM codepage is used by default
-      for console window output.</li>
-
-      <li>On some Unix-type systems, non-standard names are used for encodings,
-      or non-standard encodings are used altogether. Although ICU supports 200
-      encodings in its standard build and many more aliases for them, it will
-      not be able to recognize such non-standard names.</li>
-
-      <li>Some systems do not have a notion of a system or process codepage,
-      and may not have APIs for that.</li>
-    </ul>
-
-    <p>If you have means of detecting a default codepage name that are more
-    appropriate for your application, then you should set that name with
-    <code>ucnv_setDefaultName()</code> as the first ICU function call. This
-    makes sure that the internally cached default converter will be
-    instantiated from your preferred name.</p>
-
-    <p>Starting in ICU 2.0, when a converter for the default codepage cannot be
-    opened, a fallback default codepage name and converter will be used. On
-    most platforms, this will be US-ASCII. For z/OS (OS/390), ibm-1047-s390 is
-    the default fallback codepage. For AS/400 (iSeries), ibm-37 is the default
-    fallback codepage. This default fallback codepage is used when the
-    operating system is using a non-standard name for a default codepage, or
-    the converter was not packaged with ICU. The feature allows ICU to run in
-    unusual computing environments without completely failing.</p>
 
     <h2><a name="PlatformDependencies" href="#PlatformDependencies">Platform
     Dependencies</a></h2>
@@ -1638,11 +1570,12 @@ del common/libicuuc.o
     </ol>
     <hr>
 
-    <p>Copyright &copy; 1997-2002 International Business Machines Corporation
+    <p>Copyright &copy; 1997-2003 International Business Machines Corporation
     and others. All Rights Reserved.<br>
-     IBM Globalization Center of Competency - San Jose,<br>
-     5600 Cottle Road, San Jos&eacute;, CA 95193<br>
-     All rights reserved.</p>
+     IBM Globalization Center of Competency - San Jos&eacute;<br>
+     5600 Cottle Road<br>
+     San Jos&eacute;, CA 95193<br>
+     USA</p>
   </body>
 </html>
 
