@@ -1259,7 +1259,7 @@ u_strFromUTF8(UChar *dest,
               UErrorCode *pErrorCode);
 
 /**
- * Converts a sequence of UTF32 units to UChars
+ * Converts a sequence of UChars (UTF-16) to UTF32 units.
  *
  * @param dest          A buffer for the result string. The result will be zero-terminated if
  *                      the buffer is large enough.
@@ -1286,7 +1286,7 @@ u_strToUTF32(UChar32 *dest,
              UErrorCode *pErrorCode);
 
 /**
- * Converts a sequence of UChars to UTF32 units.
+ * Converts a sequence of UTF32 units to UChars (UTF-16)
  *
  * @param dest          A buffer for the result string. The result will be zero-terminated if
  *                      the buffer is large enough.
