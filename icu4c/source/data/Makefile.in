@@ -54,7 +54,7 @@ TOOLDIR=$(top_builddir)/tools
 .PHONY : all all-local all-recursive install install-local install-files install-dlls build-cmnfile build-dll		\
 install-recursive clean clean-local clean-recursive distclean		\
 distclean-local distclean-recursive dist dist-local dist-recursive	\
-check check-local check-recursive build-testdlls build-basetestdata build-local
+check check-local check-recursive build-testdlls build-basetestdata build-local clean-resindex
 
 ## Clear suffix list
 .SUFFIXES :
@@ -283,6 +283,9 @@ $(BUILDDIR)/res_index.txt: $(SRCLISTDEPS)
 	echo "    }" >> $@; \
 	echo "}" >> $@;
 
+clean-resindex:
+	-$(RMV) $(BUILDDIR)/res_index.txt $(BUILDDIR)/icudata.lst
+
 $(BUILDDIR)/$(ICUDT)%.res: $(INDEX_FILES) $(TOOLDIR)/genrb/genrb$(EXEEXT)
 	$(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(ICUDATA_PLATFORM_NAME) -i $(BUILDDIR) -d $(BUILDDIR) $(INDEX_FILES)
 
@@ -331,7 +334,7 @@ TEST_UCM_SOURCE= test1.ucm test3.ucm test4.ucm ibm9027.ucm
 TEST_UCM_FILES=$(TEST_UCM_SOURCE:%=$(TESTSRCDATADIR)/data/%)
 TEST_CNV_FILES=$(TEST_UCM_SOURCE:%.ucm=$(TESTBUILDDIR)/$(TESTDT)%.cnv)
 
-TEST_RES = casing.txt mc.txt root.txt te.txt te_IN.txt testtypes.txt testaliases.txt testempty.txt DataDrivenCollationTest.txt idna_rules.txt conversion.txt
+TEST_RES = casing.txt mc.txt root.txt te.txt te_IN.txt testtypes.txt testaliases.txt testempty.txt DataDrivenCollationTest.txt idna_rules.txt conversion.txt testtable32.txt
 TEST_RES_FILES=$(TEST_RES:%.txt=$(TESTBUILDDIR)/$(TESTDT)%.res) $(TESTBUILDDIR)/$(TESTDT)iscii.res
 
 ALL_TEST_FILES = $(TEST_DAT_FILES) $(TEST_BRK_FILES) $(TEST_CNV_FILES) $(TEST_RES_FILES) $(TESTOUTDIR)/$(TESTDT)nam.typ
@@ -351,6 +354,12 @@ build-testdata:  $(ALL_TEST_FILES) $(TESTBUILDDIR)/testdata.lst $(TESTBUILDDIR)/
 # test.icu
 $(TESTBUILDDIR)/$(TESTDT)test.icu: $(TOOLDIR)/gentest/gentest$(EXEEXT)
 	$(INVOKE) $(TOOLDIR)/gentest/gentest -d $(TESTBUILDDIR) 
+
+$(TESTBUILDDIR)/testtable32.txt:  $(TOOLDIR)/gentest/gentest$(EXEEXT)
+	$(INVOKE) $(TOOLDIR)/gentest/gentest -r -d $(TESTBUILDDIR) 
+
+$(TESTBUILDDIR)/$(TESTDT)testtable32.res: $(TESTBUILDDIR)/testtable32.txt $(TOOLDIR)/genrb/genrb$(EXEEXT)
+	$(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(TESTDATA) -q -s $(TESTBUILDDIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) $(<F)
 
 # Targets for nfscsi.spp
 $(TESTBUILDDIR)/$(TESTDT)nfscsi.spp: $(TOOLDIR)/gensprep/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_cs_prep_ci.txt
@@ -382,7 +391,6 @@ $(TESTBUILDDIR)/$(TESTDT)%.cnv: $(TESTSRCDATADIR)/%.ucm $(TOOLDIR)/makeconv/make
 
 $(TESTBUILDDIR)/$(TESTDT)%.res: $(TESTSRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT)
 	$(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(TESTDATA) -q -s $(TESTSRCDATADIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) $(<F)
-
 
 $(TESTBUILDDIR)/$(TESTDT)iscii.res:  $(TESTSRCDATADIR)/iscii.bin $(TOOLDIR)/genrb/genrb$(EXEEXT)
 	@echo Testing genrb -e option
