@@ -104,7 +104,7 @@ check-local:
 # We don't want to try to write over files that we are using.
 PKGDATA_INVOKE:=$(subst :$(top_builddir)/data/out,,$(INVOKE)) $(PKGDATA_INVOKE_OPTS)
 
-packagedata: icupkg.inc $(BUILDDIR)/icudata.lst 
+packagedata: icupkg.inc $(BUILDDIR)/icudata.lst build-local
 ifneq ($(ENABLE_STATIC),)
 # Move the shared library out of the way while creating the static library
 # to prevent name collisions.
@@ -217,7 +217,7 @@ $(BUILDDIR)/icudata.lst: $(SRCLISTDEPS)
 	  echo $$file >> $@; \
 	done;
 
-build-local: build-data build-testdata
+build-local: build-dir build-data build-testdata
 
 build-data: build-dir $(ALL_FILES) $(BUILDDIR)/icudata.lst $(OS390LIST)
 
@@ -404,7 +404,7 @@ $(TESTBUILDDIR)/$(TESTDT)nfsmxp.spp: $(TOOLDIR)/gensprep/gensprep$(EXEEXT) $(TES
 $(TESTBUILDDIR)/$(TESTDT)%.cnv: $(TESTSRCDATADIR)/%.ucm $(TOOLDIR)/makeconv/makeconv$(EXEEXT)
 	$(INVOKE) $(TOOLDIR)/makeconv/makeconv -p $(TESTDATA) -c -d $(TESTBUILDDIR) $(TESTSRCDATADIR)/$(<F)
 
-$(TESTBUILDDIR)/$(TESTDT)%.res: $(TESTSRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT)
+$(TESTBUILDDIR)/$(TESTDT)%.res: $(TESTSRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT) $(DAT_FILES)
 	$(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(TESTDATA) -q -s $(TESTSRCDATADIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) $(<F)
 
 $(TESTBUILDDIR)/$(TESTDT)iscii.res:  $(TESTSRCDATADIR)/iscii.bin $(TOOLDIR)/genrb/genrb$(EXEEXT)
