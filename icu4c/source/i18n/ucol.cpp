@@ -3756,7 +3756,7 @@ inline uint8_t *packFrench(uint8_t *primaries, uint8_t *secondaries, uint32_t *s
 }
 
 /* This is the sortkey work horse function */
-int32_t
+U_CFUNC int32_t
 ucol_calcSortKey(const    UCollator    *coll,
         const    UChar        *source,
         int32_t        sourceLength,
@@ -4321,7 +4321,7 @@ ucol_calcSortKey(const    UCollator    *coll,
 }
 
 
-int32_t
+U_CFUNC int32_t
 ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
         const    UChar        *source,
         int32_t        sourceLength,
