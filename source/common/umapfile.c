@@ -30,7 +30,7 @@
 #define MAP_FILE_STREAM 3
 #define MAP_390DLL      4
 
-#ifdef WIN32
+#ifdef U_WINDOWS
 #   define WIN32_LEAN_AND_MEAN
 #   define VC_EXTRALEAN
 #   define NOUSER

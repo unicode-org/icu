@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2004, International Business Machines
+*   Copyright (C) 1998-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -32,7 +32,7 @@
 #include "cstring.h"
 #include "cmemory.h"
 
-#ifdef WIN32
+#ifdef U_WINDOWS
 /* Windows likes to rename Unix-like functions */
 #define fileno _fileno
 #endif
@@ -51,7 +51,7 @@ u_finit(FILE        *f,
     uprv_memset(result, 0, sizeof(UFILE));
     result->fFileno = fileno(f);
 
-#ifdef WIN32
+#ifdef U_WINDOWS
     if (0 <= result->fFileno && result->fFileno <= 2) {
         /* stdin, stdout and stderr need to be special cased for Windows 98 */
         result->fFile = &_iob[_fileno(f)];

@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2004, International Business Machines
+*   Copyright (C) 1997-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -17,8 +17,8 @@
 */
 
 /* Define the platform we're on. */
-#ifndef WIN32
-#define WIN32
+#ifndef U_WINDOWS
+#define U_WINDOWS
 #endif
 
 #if defined(__BORLANDC__)

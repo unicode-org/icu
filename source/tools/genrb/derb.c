@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -30,7 +30,7 @@
 #include <stdio.h>
 #include <ctype.h>
 
-#if defined(WIN32) || defined(U_CYGWIN)
+#if defined(U_WINDOWS) || defined(U_CYGWIN)
 #include <io.h>
 #include <fcntl.h>
 #endif
@@ -94,7 +94,7 @@ main(int argc, char* argv[]) {
 
     /* Get the name of tool. */
     pname = uprv_strrchr(*argv, U_FILE_SEP_CHAR);
-#ifdef WIN32
+#ifdef U_WINDOWS
     if (!pname) {
         pname = uprv_strrchr(*argv, '/');
     }
@@ -222,7 +222,7 @@ main(int argc, char* argv[]) {
 
         if (!(fromICUData = !uprv_strcmp(inputDir, "-"))) {
             UBool absfilename = *arg == U_FILE_SEP_CHAR;
-#ifdef WIN32
+#ifdef U_WINDOWS
             if (!absfilename) {
                 absfilename = (uprv_strlen(arg) > 2 && isalpha(arg[0])
                   && arg[1] == ':' && arg[2] == U_FILE_SEP_CHAR);
@@ -255,7 +255,7 @@ main(int argc, char* argv[]) {
             if (!locale || !tostdout) {
                 filename = uprv_strrchr(arg, U_FILE_SEP_CHAR);
 
-#ifdef WIN32
+#ifdef U_WINDOWS
                 if (!filename) {
                     filename = uprv_strrchr(arg, '/');
                 }
@@ -273,7 +273,7 @@ main(int argc, char* argv[]) {
 
             if (tostdout) {
                 out = stdout;
-#if defined(WIN32) || defined(U_CYGWIN)
+#if defined(U_WINDOWS) || defined(U_CYGWIN)
                 if (_setmode(_fileno(out), _O_BINARY) == -1) {
                     fprintf(stderr, "%s: couldn't set standard output to binary mode\n", pname);
                     return 4;

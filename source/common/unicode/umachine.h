@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -298,7 +298,7 @@ typedef int8_t UBool;
 #       if (U_SIZEOF_WCHAR_T==4)
 #           define U_WCHAR_IS_UTF32
 #       endif
-#   elif defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+#   elif defined(U_WINDOWS)
 #       define U_WCHAR_IS_UTF16    
 #   endif
 #endif

@@ -140,7 +140,7 @@ typedef struct UPKGOptions_
 
 /* set up common defines for library naming */
 
-#ifdef WIN32
+#ifdef U_WINDOWS
 # ifndef UDATA_SO_SUFFIX
 #  define UDATA_SO_SUFFIX ".DLL"
 # endif

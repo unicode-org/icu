@@ -652,7 +652,7 @@ static int ucaTest(void *collator, const int object, const UChar *source, const 
 
 /*
 static int winTest(void *collator, const int object, const UChar *source, const int sLen, const UChar *target, const int tLen) {
-#ifdef WIN32
+#ifdef U_WINDOWS
   LCID lcid = (LCID)collator;
   return CompareString(lcid, 0, source, sLen, target, tLen);
 #else

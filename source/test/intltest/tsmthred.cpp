@@ -21,7 +21,7 @@
 #include "unicode/uloc.h"
 #include "unicode/locid.h"
 #include "putilimp.h"
-#if !defined(WIN32) && !defined(XP_MAC) && !defined(U_RHAPSODY)
+#if !defined(U_WINDOWS) && !defined(XP_MAC) && !defined(U_RHAPSODY)
 #define POSIX 1
 #endif
 
@@ -153,7 +153,7 @@ void SimpleThread::errorFunc() {
 
 
 
-#ifdef WIN32
+#ifdef U_WINDOWS
 #define HAVE_IMP
 
 #   define VC_EXTRALEAN

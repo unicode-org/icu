@@ -88,7 +88,7 @@ Int64ToUnicodeString(int64_t num)
     char buffer[64];    // nos changed from 10 to 64
     char danger = 'p';  // guard against overrunning the buffer (rtg)
 
-#ifdef WIN32
+#ifdef U_WINDOWS
     sprintf(buffer, "%I64d", num);
 #else
     sprintf(buffer, "%lld", num);
@@ -339,68 +339,6 @@ IntlTest::prettify(const UnicodeString &source, UBool parseBackslash)
     target += "\"";
 
     return target;
-}
-
-#if defined(_WIN32) || defined(WIN32) || defined(__OS2__) || defined(OS2)
-#define PREV_DIR ".."
-#else
-#define PREV_DIR "/../"
-#endif
-
-void
-IntlTest::pathnameInContext( char* fullname, int32_t maxsize, const char* relPath ) //nosmac
-{
-    const char* mainDir;
-    char  sepChar;
-    const char inpSepChar = '|';
-
-    // So what's going on is that ICU_DATA during tests points to:
-    //              ICU | source | data
-    //and we want   ICU | source |
-    //
-    // We'll add                 | test | testdata
-    //
-    // So, just add a .. here - back up one level
-
-    mainDir = u_getDataDirectory();
-    sepChar = U_FILE_SEP_CHAR;
-    char sepString[] = U_FILE_SEP_STRING;
-
-#if defined(XP_MAC)
-    Str255 volName;
-    int16_t volNum;
-    OSErr err = GetVol( volName, &volNum );
-    if (err != noErr)
-        volName[0] = 0;
-    mainDir = (char*) &(volName[1]);
-    mainDir[volName[0]] = 0;
-#else
-    char mainDirBuffer[255];
-    if(mainDir!=NULL) {
-        strcpy(mainDirBuffer, mainDir);
-        strcat(mainDirBuffer, PREV_DIR);
-    } else {
-        mainDirBuffer[0]='\0';
-    }
-    mainDir=mainDirBuffer;
-#endif
-
-    if (relPath[0] == '|')
-        relPath++;
-    int32_t lenMainDir = strlen(mainDir);
-    int32_t lenRelPath = strlen(relPath);
-    if (maxsize < lenMainDir + lenRelPath + 2) {
-        fullname[0] = 0;
-        return;
-    }
-    strcpy(fullname, mainDir);
-    strcat(fullname, sepString);
-    strcat(fullname, relPath);
-    char* tmp = strchr(fullname, inpSepChar);
-    while (tmp) {
-        *tmp = sepChar;
-        tmp = strchr(tmp+1, inpSepChar);
-    }
 }
 
 /*  IntlTest::setICU_DATA  - if the ICU_DATA environment variable is not already
