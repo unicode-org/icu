@@ -49,7 +49,7 @@ enum OptionsList {
  * be established. Currently, the mapping is from locale name to 
  * index.
  */
-static const char* locales[] = {
+static const char* const locales[] = {
 /* 00 - 09 */ "ar", "be", "bg", "ca", "cs", "da", "de", "de__PHONEBOOK", "el", "en",
 /* 10 - 19 */ "en_BE", "eo", "es", "es__TRADITIONAL", "et", "fa", "fa_AF", "fi", "fo", "fr",
 /* 20 - 29 */ "gu", "he", "hi", "hi__DIRECT", "hr", "hu", "is", "it", "ja", "kk",
@@ -59,7 +59,7 @@ static const char* locales[] = {
 /* 60 - 64 */ "zh_HK", "zh_MO", "zh_TW", "zh_TW_STROKE", "zh__PINYIN"
 };
 
-static const char* keywords[] = {
+static const char* const keywords[] = {
 /* 00 */ "",
 /* 01 */ "direct",
 /* 02 */ "phonebook",
@@ -88,7 +88,7 @@ static const char variantArg        = 'V';
 static const char RFC3066Arg        = 'X';
 static const char scriptArg         = 'Z';
 
-static const char *collationKeyword  = "@collation=";
+static const char collationKeyword[]  = "@collation=";
 
 static const int32_t locElementCount = 5;
 static const int32_t locElementCapacity = 32;
