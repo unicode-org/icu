@@ -29,8 +29,6 @@ zh_HK {
         "\u4E94",
         "\u516D",
     }
-    LocaleID:int { 0x0c04 }
-//    LocaleString { "zh_HK" }
     MonthAbbreviations { 
         "1\u6708",
         "2\u6708",
@@ -51,7 +49,6 @@ zh_HK {
         "#,##0%",
         "#E0",
     }
-//    ShortCountry { "HKG" }
     zoneStrings { 
         {
             "CTT",

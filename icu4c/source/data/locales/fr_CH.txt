@@ -22,8 +22,6 @@ fr_CH {
         "dd.MM.yy",
         "{1} {0}",
     }
-    LocaleID:int { 0x100c }
-//    LocaleString { "fr_CH" }
     NumberElements { 
         ".",
         "'",
@@ -44,16 +42,16 @@ fr_CH {
         "#,##0%",
         "#E0",
     }
-//    ShortCountry { "CHE" }
-    zoneStrings { 
-        {
-            "Africa/Casablanca",
-            "GMT",
-            "GMT",
-            "GMT",
-            "GMT",
-        }
-    }
+// Fall back to French
+//    zoneStrings { 
+//        {
+//            "Africa/Casablanca",
+//            "GMT",
+//            "GMT",
+//            "GMT",
+//            "GMT",
+//        }
+//    }
 
     //------------------------------------------------------------
     // Rule Based Number Format Support

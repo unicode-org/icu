@@ -48,8 +48,6 @@ vi {
         "Th\u1EE9 b\u1EA3y",
         "Ch\u1EE7 nh\u1EADt",
     }
-    LocaleID:int { 0x002A }
-//    LocaleString { "vi" }
     MonthAbbreviations {
         "Thg 1",
         "Thg 2",
@@ -92,13 +90,15 @@ vi {
         "\uFFFD",
         ",",
     }
+    Currencies {
+        VND { "\u20AB", "VND" } // Vietnamese Dong
+    }
     NumberPatterns {
         "#,##0.###;-#,##0.###",
         "#,##0.00 \u00A4;-#,##0.00 \u00A4",
         "#,##0%",
         "#E0",
     }
-//    ShortLanguage { "vie" }
 //    LocaleScript{ 
 //                "Latn",  // ISO 15924 Name 
 //    }
