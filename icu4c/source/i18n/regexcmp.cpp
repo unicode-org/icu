@@ -1089,11 +1089,17 @@ UBool RegexCompile::doParseActions(EParseAction action)
         break;
 
     case doBackslashB:
-        fRXPat->fCompiledPat->addElement(URX_BUILD(URX_BACKSLASH_B, 1), *fStatus);
+        {
+            int32_t op = (fModeFlags & UREGEX_UWORD)? URX_BACKSLASH_BU : URX_BACKSLASH_B;
+            fRXPat->fCompiledPat->addElement(URX_BUILD(op, 1), *fStatus);
+        }
         break;
 
     case doBackslashb:
-        fRXPat->fCompiledPat->addElement(URX_BUILD(URX_BACKSLASH_B, 0), *fStatus);
+        {
+            int32_t op = (fModeFlags & UREGEX_UWORD)? URX_BACKSLASH_BU : URX_BACKSLASH_B;
+            fRXPat->fCompiledPat->addElement(URX_BUILD(op, 0), *fStatus);
+        }
         break;
 
     case doBackslashD:
@@ -1325,6 +1331,7 @@ UBool RegexCompile::doParseActions(EParseAction action)
             case 0x69: /* 'i' */   bit = UREGEX_CASE_INSENSITIVE; break;
             case 0x6d: /* 'm' */   bit = UREGEX_MULTILINE;        break;
             case 0x73: /* 's' */   bit = UREGEX_DOTALL;           break;
+            case 0x77: /* 'w' */   bit = UREGEX_UWORD;            break;
             case 0x78: /* 'x' */   bit = UREGEX_COMMENTS;         break;
             case 0x2d: /* '-' */   fSetModeFlag = FALSE;          break;
             default:
@@ -1374,6 +1381,10 @@ UBool RegexCompile::doParseActions(EParseAction action)
             // Set the current mode flags to the new values.
             fModeFlags = fNewModeFlags;
         }
+        break;
+
+    case doBadModeFlag:
+        error(U_REGEX_INVALID_FLAG);
         break;
 
     case doSuppressComments:
@@ -2115,6 +2126,7 @@ void   RegexCompile::matchStartType() {
         case URX_START_CAPTURE:
         case URX_END_CAPTURE:
         case URX_BACKSLASH_B:
+        case URX_BACKSLASH_BU:
         case URX_BACKSLASH_G:
         case URX_BACKSLASH_Z:
         case URX_DOLLAR:
@@ -2585,6 +2597,7 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
         case URX_START_CAPTURE:
         case URX_END_CAPTURE:
         case URX_BACKSLASH_B:
+        case URX_BACKSLASH_BU:
         case URX_BACKSLASH_G:
         case URX_BACKSLASH_Z:
         case URX_CARET:
@@ -2824,6 +2837,7 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
         case URX_START_CAPTURE:
         case URX_END_CAPTURE:
         case URX_BACKSLASH_B:
+        case URX_BACKSLASH_BU:
         case URX_BACKSLASH_G:
         case URX_BACKSLASH_Z:
         case URX_CARET:
@@ -3077,6 +3091,7 @@ void RegexCompile::stripNOPs() {
         case URX_DOTANY:
         case URX_FAIL:
         case URX_BACKSLASH_B:
+        case URX_BACKSLASH_BU:
         case URX_BACKSLASH_G:
         case URX_BACKSLASH_X:
         case URX_BACKSLASH_Z:
