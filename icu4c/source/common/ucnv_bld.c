@@ -24,6 +24,7 @@
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
 #include "unicode/uloc.h"
+#include "utracimp.h"
 #include "ucnv_io.h"
 #include "ucnv_bld.h"
 #include "ucnvmbcs.h"
@@ -273,13 +274,19 @@ static UConverterSharedData *createConverterFromFile(UConverterLoadArgs *pArgs, 
     UDataMemory *data;
     UConverterSharedData *sharedData;
 
+    UTRACE_ENTRY_OC(UTRACE_UCNV_LOAD);
+
     if (err == NULL || U_FAILURE (*err)) {
+        UTRACE_EXIT_STATUS(*err);
         return NULL;
     }
+
+    UTRACE_DATA2(UTRACE_OPEN_CLOSE, "load converter %s from package %s", pArgs->name, pArgs->pkg);
 
     data = udata_openChoice(pArgs->pkg, DATA_TYPE, pArgs->name, isCnvAcceptable, NULL, err);
     if(U_FAILURE(*err))
     {
+        UTRACE_EXIT_STATUS(*err);
         return NULL;
     }
 
@@ -287,6 +294,7 @@ static UConverterSharedData *createConverterFromFile(UConverterLoadArgs *pArgs, 
     if(U_FAILURE(*err))
     {
         udata_close(data);
+        UTRACE_EXIT_STATUS(*err);
         return NULL;
     }
 
@@ -297,6 +305,7 @@ static UConverterSharedData *createConverterFromFile(UConverterLoadArgs *pArgs, 
      * in the first place, or just set the pkg field to "".
      */
 
+    UTRACE_EXIT_PTR_STATUS(sharedData, *err);
     return sharedData;
 }
 
@@ -439,8 +448,13 @@ ucnv_getSharedConverterData(const char *name)
 static UBool
 ucnv_deleteSharedConverterData(UConverterSharedData * deadSharedData)
 {
-    if (deadSharedData->referenceCounter > 0)
+    UTRACE_ENTRY_OC(UTRACE_UCNV_UNLOAD);
+    UTRACE_DATA2(UTRACE_OPEN_CLOSE, "unload converter %s shared data %p", deadSharedData->staticData->name, deadSharedData);
+
+    if (deadSharedData->referenceCounter > 0) {
+        UTRACE_EXIT_VALUE((int32_t)FALSE);
         return FALSE;
+    }
 
     if (deadSharedData->impl->unload != NULL) {
         deadSharedData->impl->unload(deadSharedData);
@@ -472,7 +486,8 @@ ucnv_deleteSharedConverterData(UConverterSharedData * deadSharedData)
 #endif
 
     uprv_free(deadSharedData);
-    
+
+    UTRACE_EXIT_VALUE((int32_t)TRUE);
     return TRUE;
 }
 
@@ -656,8 +671,14 @@ ucnv_createConverter(UConverter *myUConverter, const char *converterName, UError
     UConverterSharedData *mySharedConverterData = NULL;
     UErrorCode internalErrorCode = U_ZERO_ERROR;
     uint32_t options = 0;
-    if (U_FAILURE (*err))
-        return NULL;
+
+    UTRACE_ENTRY_OC(UTRACE_UCNV_OPEN);
+
+    if (U_FAILURE (*err)) {
+        goto exitError;
+    }
+
+    UTRACE_DATA1(UTRACE_OPEN_CLOSE, "open converter %s", converterName);
 
     locale[0] = 0;
 
@@ -666,7 +687,7 @@ ucnv_createConverter(UConverter *myUConverter, const char *converterName, UError
         realName = ucnv_io_getDefaultConverterName();
         if (realName == NULL) {
             *err = U_MISSING_RESOURCE_ERROR;
-            return NULL;
+            goto exitError;
         }
         /* the default converter name is already canonical */
     } else {
@@ -674,7 +695,7 @@ ucnv_createConverter(UConverter *myUConverter, const char *converterName, UError
         parseConverterOptions(converterName, cnvName, locale, &options, err);
         if (U_FAILURE(*err)) {
             /* Very bad name used. */
-            return NULL;
+            goto exitError;
         }
 
         /* get the canonical converter name */
@@ -716,7 +737,7 @@ ucnv_createConverter(UConverter *myUConverter, const char *converterName, UError
         umtx_unlock(&cnvCacheMutex);
         if (U_FAILURE (*err) || (mySharedConverterData == NULL))
         {
-            return NULL;
+            goto exitError;
         }
     }
 
@@ -734,10 +755,15 @@ ucnv_createConverter(UConverter *myUConverter, const char *converterName, UError
             --mySharedConverterData->referenceCounter;
             umtx_unlock(&cnvCacheMutex);
         }
-        return NULL;
+        goto exitError;
     }
 
+    UTRACE_EXIT_PTR_STATUS(myUConverter, *err);
     return myUConverter;
+
+exitError:
+    UTRACE_EXIT_STATUS(*err);
+    return NULL;
 }
 
 UConverter *
@@ -745,11 +771,16 @@ ucnv_createAlgorithmicConverter(UConverter *myUConverter,
                                 UConverterType type,
                                 const char *locale, uint32_t options,
                                 UErrorCode *err) {
+    UConverter *cnv;
     const UConverterSharedData *sharedData;
     UBool isAlgorithmicConverter;
 
+    UTRACE_ENTRY_OC(UTRACE_UCNV_OPEN_ALGORITHMIC);
+    UTRACE_DATA1(UTRACE_OPEN_CLOSE, "open algorithmic converter type %d", (int32_t)type);
+
     if(type<0 || UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES<=type) {
         *err = U_ILLEGAL_ARGUMENT_ERROR;
+        UTRACE_EXIT_STATUS(U_ILLEGAL_ARGUMENT_ERROR);
         return NULL;
     }
 
@@ -760,11 +791,15 @@ ucnv_createAlgorithmicConverter(UConverter *myUConverter,
     if (isAlgorithmicConverter) {
         /* not a valid type, or not an algorithmic converter */
         *err = U_ILLEGAL_ARGUMENT_ERROR;
+        UTRACE_EXIT_STATUS(U_ILLEGAL_ARGUMENT_ERROR);
         return NULL;
     }
 
-    return ucnv_createConverterFromSharedData(myUConverter, (UConverterSharedData *)sharedData, "",
+    cnv = ucnv_createConverterFromSharedData(myUConverter, (UConverterSharedData *)sharedData, "",
                 locale != NULL ? locale : "", options, err);
+
+    UTRACE_EXIT_PTR_STATUS(cnv, *err);
+    return cnv;
 }
 
 UConverter*
@@ -776,9 +811,14 @@ ucnv_createConverterFromPackage(const char *packageName, const char *converterNa
 
     UConverterLoadArgs args={ 0 };
 
+    UTRACE_ENTRY_OC(UTRACE_UCNV_OPEN_PACKAGE);
+
     if(U_FAILURE(*err)) {
+        UTRACE_EXIT_STATUS(*err);
         return NULL; 
     }
+
+    UTRACE_DATA2(UTRACE_OPEN_CLOSE, "open converter %s from package %s", converterName, packageName);
 
     args.size=sizeof(UConverterLoadArgs);
     args.nestedLoads=1;
@@ -788,6 +828,7 @@ ucnv_createConverterFromPackage(const char *packageName, const char *converterNa
     parseConverterOptions(converterName, cnvName, locale, &args.options, err);
     if (U_FAILURE(*err)) {
         /* Very bad name used. */
+        UTRACE_EXIT_STATUS(*err);
         return NULL;
     }
     args.name=cnvName;
@@ -796,6 +837,7 @@ ucnv_createConverterFromPackage(const char *packageName, const char *converterNa
     mySharedConverterData = createConverterFromFile(&args, err);
     
     if (U_FAILURE(*err)) {
+        UTRACE_EXIT_STATUS(*err);
         return NULL; 
     }
 
@@ -804,9 +846,11 @@ ucnv_createConverterFromPackage(const char *packageName, const char *converterNa
     
     if (U_FAILURE(*err)) {
         ucnv_close(myUConverter);
+        UTRACE_EXIT_STATUS(*err);
         return NULL; 
     }
     
+    UTRACE_EXIT_PTR_STATUS(myUConverter, *err);
     return myUConverter;
 }
 
@@ -870,14 +914,18 @@ ucnv_flushCache ()
     UErrorCode status = U_ILLEGAL_ARGUMENT_ERROR;
     int32_t i, remaining;
 
+    UTRACE_ENTRY_OC(UTRACE_UCNV_FLUSH_CACHE);
+
     /* Close the default converter without creating a new one so that everything will be flushed. */
     ucnv_close(u_getDefaultConverter(&status));
 
     /*if shared data hasn't even been lazy evaluated yet
     * return 0
     */
-    if (SHARED_DATA_HASHTABLE == NULL)
+    if (SHARED_DATA_HASHTABLE == NULL) {
+        UTRACE_EXIT_VALUE((int32_t)0);
         return 0;
+    }
 
     /*creates an enumeration to iterate through every element in the
     * table
@@ -923,6 +971,7 @@ ucnv_flushCache ()
 
     ucnv_io_flushAvailableConverterCache();
 
+    UTRACE_EXIT_VALUE(tableDeletedNum);
     return tableDeletedNum;
 }
 
