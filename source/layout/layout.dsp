@@ -282,10 +282,6 @@ SOURCE=.\LigatureSubstSubtables.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\loengine.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\LookupProcessor.cpp
 # End Source File
 # Begin Source File
@@ -982,53 +978,6 @@ SOURCE=.\LigatureSubstProc.h
 # Begin Source File
 
 SOURCE=.\LigatureSubstSubtables.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\unicode\loengine.h
-
-!IF  "$(CFG)" == "layout - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\loengine.h
-
-"..\..\include\unicode\loengine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "layout - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\loengine.h
-
-"..\..\include\unicode\loengine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "layout - Win64 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\loengine.h
-
-"..\..\include\unicode\loengine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "layout - Win64 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\loengine.h
-
-"..\..\include\unicode\loengine.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy  $(InputPath)  ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 

@@ -248,9 +248,6 @@
 				RelativePath=".\LigatureSubstSubtables.cpp">
 			</File>
 			<File
-				RelativePath=".\loengine.cpp">
-			</File>
-			<File
 				RelativePath=".\LookupProcessor.cpp">
 			</File>
 			<File
@@ -628,25 +625,6 @@
 			</File>
 			<File
 				RelativePath=".\LigatureSubstSubtables.h">
-			</File>
-			<File
-				RelativePath=".\unicode\loengine.h">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
-"
-						Outputs="..\..\include\unicode\$(InputFileName)"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode
-"
-						Outputs="..\..\include\unicode\$(InputFileName)"/>
-				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\LookupProcessor.h">
