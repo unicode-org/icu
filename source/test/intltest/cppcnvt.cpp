@@ -73,12 +73,12 @@ void ConvertTest::TestConvert()
                                 Checking Unicode -> ksc
      ******************************************************************/
 
-    const char*      CodePagesToTest[NUM_CODEPAGE]       =
+    const char*      CodePagesToTest[NUM_CODEPAGE] =
     {
        "IBM-949"
     };
 
-    const uint16_t CodePageNumberToTest[NUM_CODEPAGE]             =
+    const uint16_t CodePageNumberToTest[NUM_CODEPAGE] =
     {
         949
     };
@@ -105,10 +105,10 @@ void ConvertTest::TestConvert()
 
     const int16_t    CodePagesSubstitutionChars[NUM_CODEPAGE] =
     {
-        0xAFFEu
+        (int16_t)0xAFFEu
     };
 
-    const char*      CodePagesTestFiles[NUM_CODEPAGE]    =
+    const char*      CodePagesTestFiles[NUM_CODEPAGE] =
     {
         "uni-text.txt" 
     };
@@ -271,7 +271,7 @@ void ConvertTest::TestConvert()
         ucs_file_in = fopen(ucs_file_name, "rb");
         if (!ucs_file_in) 
         {
-    	    char  errmsg[UCS_FILE_NAME_SIZE + 128];
+            char  errmsg[UCS_FILE_NAME_SIZE + 128];
             sprintf(errmsg, "Couldn't open the Unicode file [%s]... Exiting...\n", ucs_file_name);
             errln(errmsg);
             return;
