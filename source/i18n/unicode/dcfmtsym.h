@@ -71,40 +71,40 @@ public:
      * @draft
      */
     enum ENumberFormatSymbol {
-      /** The decimal separator */
-      kDecimalSeparator,
-      /** The grouping separator */
-      kGroupingSeparator,
-      /** The pattern separator */
-      kPatternSeparator,
-      /** The percent sign */
-      kPercent,
-      /** Zero*/
-      kZeroDigit,
-      /** Character representing a digit in the pattern */
-      kDigit,
-      /** The minus sign */
-      kMinusSign,
-      /** The plus sign */
-      kPlusSign,
-      /** The currency symbol */
-      kCurrency,
-      /** The international currency symbol */
-      kIntlCurrency,
-      /** The monetary separator */
-      kMonetarySeparator,
-      /** The exponential symbol */
-      kExponential,
-      /** Per mill symbol */
-      kPermill,
-      /** Escape padding character */
-      kPadEscape,
-      /** Infinity symbol */
-      kInfinity,
-      /** Nan symbol */
-      kNaN,
-      /** count symbol constants */
-      kCount
+        /** The decimal separator */
+        kDecimalSeparatorSymbol,
+        /** The grouping separator */
+        kGroupingSeparatorSymbol,
+        /** The pattern separator */
+        kPatternSeparatorSymbol,
+        /** The percent sign */
+        kPercentSymbol,
+        /** Zero*/
+        kZeroDigitSymbol,
+        /** Character representing a digit in the pattern */
+        kDigitSymbol,
+        /** The minus sign */
+        kMinusSignSymbol,
+        /** The plus sign */
+        kPlusSignSymbol,
+        /** The currency symbol */
+        kCurrencySymbol,
+        /** The international currency symbol */
+        kIntlCurrencySymbol,
+        /** The monetary separator */
+        kMonetarySeparatorSymbol,
+        /** The exponential symbol */
+        kExponentialSymbol,
+        /** Per mill symbol */
+        kPermillSymbol,
+        /** Escape padding character */
+        kPadEscapeSymbol,
+        /** Infinity symbol */
+        kInfinitySymbol,
+        /** Nan symbol */
+        kNaNSymbol,
+        /** count symbol constants */
+        kFormatSymbolCount
     };
 
     /**
@@ -392,24 +392,13 @@ private:
      * The array must be of the correct size.
      */
     void initialize(const UnicodeString* numberElements, const UnicodeString* currencyElements);
-    
-    /**
-     * The resource tags we use to retrieve decimal format data from
-     * locale resource bundles.
-     */
-    static const char         *fgNumberElements;
-    static const char         *fgCurrencyElements;
-    static const int32_t         fgNumberElementsLength;
-    static const int32_t         fgCurrencyElementsLength;
-    static const UnicodeString     fgLastResortNumberElements[];
-    static const UnicodeString     fgLastResortCurrencyElements[];
-    static const UChar         fgLastResortPermill[];
-    static const UChar         fgLastResortInfinity[];
-    static const UChar         fgLastResortNaN[];
-    static const UChar         fgLastResortCurrency[];
-    static const UChar         fgLastResortIntlCurrency[];
 
-    UnicodeString fSymbols[ENumberFormatSymbol::kCount];
+    /**
+     * Initialize the symbols with default values.
+     */
+    void initialize();
+
+    UnicodeString fSymbols[kFormatSymbolCount];
 };
  
 
@@ -417,7 +406,7 @@ private:
  
 inline UnicodeString
 DecimalFormatSymbols::getSymbol(ENumberFormatSymbol symbol) const {
-    if(symbol<ENumberFormatSymbol::kCount) {
+    if(symbol<kFormatSymbolCount) {
         return fSymbols[symbol];
     } else {
         return UnicodeString();
@@ -428,7 +417,7 @@ DecimalFormatSymbols::getSymbol(ENumberFormatSymbol symbol) const {
  
 inline void
 DecimalFormatSymbols::setSymbol(ENumberFormatSymbol symbol, UnicodeString value) {
-    if(symbol<ENumberFormatSymbol::kCount) {
+    if(symbol<kFormatSymbolCount) {
         fSymbols[symbol]=value;
     }
 }
@@ -438,7 +427,7 @@ DecimalFormatSymbols::setSymbol(ENumberFormatSymbol symbol, UnicodeString value)
 inline UChar
 DecimalFormatSymbols::getZeroDigit() const
 {
-    return fSymbols[ENumberFormatSymbol::kZeroDigit].charAt(0);
+    return fSymbols[kZeroDigitSymbol].charAt(0);
 }
  
 // -------------------------------------
@@ -446,7 +435,7 @@ DecimalFormatSymbols::getZeroDigit() const
 inline void
 DecimalFormatSymbols::setZeroDigit(UChar zeroDigit)
 {
-    fSymbols[ENumberFormatSymbol::kZeroDigit] = zeroDigit;
+    fSymbols[kZeroDigitSymbol] = zeroDigit;
 }
  
 // -------------------------------------
@@ -454,7 +443,7 @@ DecimalFormatSymbols::setZeroDigit(UChar zeroDigit)
 inline UChar
 DecimalFormatSymbols::getGroupingSeparator() const
 {
-    return fSymbols[ENumberFormatSymbol::kGroupingSeparator].charAt(0);
+    return fSymbols[kGroupingSeparatorSymbol].charAt(0);
 }
  
 // -------------------------------------
@@ -462,7 +451,7 @@ DecimalFormatSymbols::getGroupingSeparator() const
 inline void
 DecimalFormatSymbols::setGroupingSeparator(UChar groupingSeparator)
 {
-    fSymbols[ENumberFormatSymbol::kGroupingSeparator] = groupingSeparator;
+    fSymbols[kGroupingSeparatorSymbol] = groupingSeparator;
 }
  
 // -------------------------------------
@@ -470,7 +459,7 @@ DecimalFormatSymbols::setGroupingSeparator(UChar groupingSeparator)
 inline UChar
 DecimalFormatSymbols::getDecimalSeparator() const
 {
-    return fSymbols[ENumberFormatSymbol::kDecimalSeparator].charAt(0);
+    return fSymbols[kDecimalSeparatorSymbol].charAt(0);
 }
  
 // -------------------------------------
@@ -478,7 +467,7 @@ DecimalFormatSymbols::getDecimalSeparator() const
 inline void
 DecimalFormatSymbols::setDecimalSeparator(UChar decimalSeparator)
 {
-    fSymbols[ENumberFormatSymbol::kDecimalSeparator] = decimalSeparator;
+    fSymbols[kDecimalSeparatorSymbol] = decimalSeparator;
 }
  
 // -------------------------------------
@@ -486,7 +475,7 @@ DecimalFormatSymbols::setDecimalSeparator(UChar decimalSeparator)
 inline UChar
 DecimalFormatSymbols::getPerMill() const
 {
-    return fSymbols[ENumberFormatSymbol::kPermill].charAt(0);
+    return fSymbols[kPermillSymbol].charAt(0);
 }
  
 // -------------------------------------
@@ -494,7 +483,7 @@ DecimalFormatSymbols::getPerMill() const
 inline void
 DecimalFormatSymbols::setPerMill(UChar permill)
 {
-    fSymbols[ENumberFormatSymbol::kPermill] = permill;
+    fSymbols[kPermillSymbol] = permill;
 }
  
 // -------------------------------------
@@ -502,7 +491,7 @@ DecimalFormatSymbols::setPerMill(UChar permill)
 inline UChar
 DecimalFormatSymbols::getPercent() const
 {
-    return fSymbols[ENumberFormatSymbol::kPercent].charAt(0);
+    return fSymbols[kPercentSymbol].charAt(0);
 }
  
 // -------------------------------------
@@ -510,7 +499,7 @@ DecimalFormatSymbols::getPercent() const
 inline void
 DecimalFormatSymbols::setPercent(UChar percent)
 {
-    fSymbols[ENumberFormatSymbol::kPercent] = percent;
+    fSymbols[kPercentSymbol] = percent;
 }
  
 // -------------------------------------
@@ -518,7 +507,7 @@ DecimalFormatSymbols::setPercent(UChar percent)
 inline UChar
 DecimalFormatSymbols::getDigit() const
 {
-    return fSymbols[ENumberFormatSymbol::kDigit].charAt(0);
+    return fSymbols[kDigitSymbol].charAt(0);
 }
  
 // -------------------------------------
@@ -526,7 +515,7 @@ DecimalFormatSymbols::getDigit() const
 inline void
 DecimalFormatSymbols::setDigit(UChar digit)
 {
-    fSymbols[ENumberFormatSymbol::kDigit] = digit;
+    fSymbols[kDigitSymbol] = digit;
 }
  
 // -------------------------------------
@@ -534,7 +523,7 @@ DecimalFormatSymbols::setDigit(UChar digit)
 inline UChar
 DecimalFormatSymbols::getPatternSeparator() const
 {
-    return fSymbols[ENumberFormatSymbol::kPatternSeparator].charAt(0);
+    return fSymbols[kPatternSeparatorSymbol].charAt(0);
 }
  
 // -------------------------------------
@@ -542,7 +531,7 @@ DecimalFormatSymbols::getPatternSeparator() const
 inline void
 DecimalFormatSymbols::setPatternSeparator(UChar patternSeparator)
 {
-    fSymbols[ENumberFormatSymbol::kPatternSeparator] = patternSeparator;
+    fSymbols[kPatternSeparatorSymbol] = patternSeparator;
 }
  
 // -------------------------------------
@@ -550,7 +539,7 @@ DecimalFormatSymbols::setPatternSeparator(UChar patternSeparator)
 inline UnicodeString&
 DecimalFormatSymbols::getInfinity(UnicodeString& result) const
 {
-    return result = fSymbols[ENumberFormatSymbol::kInfinity];
+    return result = fSymbols[kInfinitySymbol];
 }
  
 // -------------------------------------
@@ -558,7 +547,7 @@ DecimalFormatSymbols::getInfinity(UnicodeString& result) const
 inline void
 DecimalFormatSymbols::setInfinity(const UnicodeString& infinity)
 {
-    fSymbols[ENumberFormatSymbol::kInfinity] = infinity;
+    fSymbols[kInfinitySymbol] = infinity;
 }
  
 // -------------------------------------
@@ -566,7 +555,7 @@ DecimalFormatSymbols::setInfinity(const UnicodeString& infinity)
 inline UnicodeString&
 DecimalFormatSymbols::getNaN(UnicodeString& result) const
 {
-    return result = fSymbols[ENumberFormatSymbol::kNaN];
+    return result = fSymbols[kNaNSymbol];
 }
  
 // -------------------------------------
@@ -574,7 +563,7 @@ DecimalFormatSymbols::getNaN(UnicodeString& result) const
 inline void
 DecimalFormatSymbols::setNaN(const UnicodeString& NaN)
 {
-    fSymbols[ENumberFormatSymbol::kNaN] = NaN;
+    fSymbols[kNaNSymbol] = NaN;
 }
  
 // -------------------------------------
@@ -582,7 +571,7 @@ DecimalFormatSymbols::setNaN(const UnicodeString& NaN)
 inline UChar
 DecimalFormatSymbols::getPlusSign() const
 {
-    return fSymbols[ENumberFormatSymbol::kPlusSign].charAt(0);
+    return fSymbols[kPlusSignSymbol].charAt(0);
 }
  
 // -------------------------------------
@@ -590,7 +579,7 @@ DecimalFormatSymbols::getPlusSign() const
 inline void
 DecimalFormatSymbols::setPlusSign(UChar plusSign)
 {
-    fSymbols[ENumberFormatSymbol::kPlusSign] = plusSign;
+    fSymbols[kPlusSignSymbol] = plusSign;
 }
  
 // -------------------------------------
@@ -598,7 +587,7 @@ DecimalFormatSymbols::setPlusSign(UChar plusSign)
 inline UChar
 DecimalFormatSymbols::getMinusSign() const
 {
-    return fSymbols[ENumberFormatSymbol::kMinusSign].charAt(0);
+    return fSymbols[kMinusSignSymbol].charAt(0);
 }
  
 // -------------------------------------
@@ -606,7 +595,7 @@ DecimalFormatSymbols::getMinusSign() const
 inline void
 DecimalFormatSymbols::setMinusSign(UChar minusSign)
 {
-    fSymbols[ENumberFormatSymbol::kMinusSign] = minusSign;
+    fSymbols[kMinusSignSymbol] = minusSign;
 }
  
 // -------------------------------------
@@ -614,7 +603,7 @@ DecimalFormatSymbols::setMinusSign(UChar minusSign)
 inline UChar
 DecimalFormatSymbols::getExponentialSymbol(void) const
 {
-    return fSymbols[ENumberFormatSymbol::kExponential].charAt(0);
+    return fSymbols[kExponentialSymbol].charAt(0);
 }
  
 // -------------------------------------
@@ -622,7 +611,7 @@ DecimalFormatSymbols::getExponentialSymbol(void) const
 inline void
 DecimalFormatSymbols::setExponentialSymbol(UChar exponential)
 {
-    fSymbols[ENumberFormatSymbol::kExponential] = exponential;
+    fSymbols[kExponentialSymbol] = exponential;
 }
  
 // -------------------------------------
@@ -630,7 +619,7 @@ DecimalFormatSymbols::setExponentialSymbol(UChar exponential)
 inline UnicodeString&
 DecimalFormatSymbols::getCurrencySymbol(UnicodeString& result) const
 {
-    return result = fSymbols[ENumberFormatSymbol::kCurrency];
+    return result = fSymbols[kCurrencySymbol];
 }
  
 // -------------------------------------
@@ -638,7 +627,7 @@ DecimalFormatSymbols::getCurrencySymbol(UnicodeString& result) const
 inline void
 DecimalFormatSymbols::setCurrencySymbol(const UnicodeString& str)
 {
-    fSymbols[ENumberFormatSymbol::kCurrency] = str;
+    fSymbols[kCurrencySymbol] = str;
 }
  
 // -------------------------------------
@@ -646,7 +635,7 @@ DecimalFormatSymbols::setCurrencySymbol(const UnicodeString& str)
 inline UnicodeString&
 DecimalFormatSymbols::getInternationalCurrencySymbol(UnicodeString& result) const
 {
-    return result = fSymbols[ENumberFormatSymbol::kIntlCurrency];
+    return result = fSymbols[kIntlCurrencySymbol];
 }
  
 // -------------------------------------
@@ -654,7 +643,7 @@ DecimalFormatSymbols::getInternationalCurrencySymbol(UnicodeString& result) cons
 inline void
 DecimalFormatSymbols::setInternationalCurrencySymbol(const UnicodeString& str)
 {
-    fSymbols[ENumberFormatSymbol::kIntlCurrency] = str;
+    fSymbols[kIntlCurrencySymbol] = str;
 }
  
 // -------------------------------------
@@ -662,7 +651,7 @@ DecimalFormatSymbols::setInternationalCurrencySymbol(const UnicodeString& str)
 inline UChar
 DecimalFormatSymbols::getMonetaryDecimalSeparator(void) const
 {
-    return fSymbols[ENumberFormatSymbol::kMonetarySeparator].charAt(0);
+    return fSymbols[kMonetarySeparatorSymbol].charAt(0);
 }
  
 // -------------------------------------
@@ -670,15 +659,15 @@ DecimalFormatSymbols::getMonetaryDecimalSeparator(void) const
 inline void
 DecimalFormatSymbols::setMonetaryDecimalSeparator(UChar sep)
 {
-    fSymbols[ENumberFormatSymbol::kMonetarySeparator] = sep;
+    fSymbols[kMonetarySeparatorSymbol] = sep;
 }
  
 inline UChar DecimalFormatSymbols::getPadEscape(void) const {
-    return fSymbols[ENumberFormatSymbol::kPadEscape].charAt(0);
+    return fSymbols[kPadEscapeSymbol].charAt(0);
 }
 
 inline void DecimalFormatSymbols::setPadEscape(UChar c) {
-    fSymbols[ENumberFormatSymbol::kPadEscape] = c;
+    fSymbols[kPadEscapeSymbol] = c;
 }
 
 #endif // _DCFMTSYM
