@@ -505,7 +505,6 @@ uhash_hashUString(const void *parm)
     int32_t len         = u_strlen(key);
     int32_t hash         = UHASH_INVALID;
     const UChar *limit     = key + len;
-    int32_t inc         = (len >= 128 ? len/64 : 1);
 
     /*
       We compute the hash by iterating sparsely over 64 (at most) characters
@@ -515,17 +514,25 @@ uhash_hashUString(const void *parm)
       thus producing a pseudorandom deterministic value which should be well
       distributed over the output range. [LIU]
     */
-  
-    while(key < limit) {
-      hash = (hash * 37) + *key;
-      key += inc;
+
+    if(len<=64) {
+      while(key < limit) {
+        hash = (hash * 37) + *key++;
+      }
+    } else {
+      int32_t inc = (len+63)/64;
+
+      while(key < limit) {
+        hash = (hash * 37) + *key;
+        key += inc;
+      }
     }
   
+    hash &= 0x7FFFFFFF;
     if(hash == UHASH_INVALID) {
       hash = UHASH_EMPTY;
     }
-  
-    return hash & 0x7FFFFFFF;
+    return hash;
   } else {
     return UHASH_INVALID;
   }
@@ -539,7 +546,6 @@ uhash_hashString(const void *parm)
     int32_t len         = uprv_strlen(key);
     int32_t hash         = UHASH_INVALID;
     const char *limit     = key + len;
-    int32_t inc         = (len >= 128 ? len/64 : 1);
 
     /*
       We compute the hash by iterating sparsely over 64 (at most) characters
@@ -549,17 +555,59 @@ uhash_hashString(const void *parm)
       thus producing a pseudorandom deterministic value which should be well
       distributed over the output range. [LIU]
     */
-  
-    while(key < limit) {
-      hash = (hash * 37) + *key;
-      key += inc;
+
+    if(len<=64) {
+      while(key < limit) {
+        hash = (hash * 37) + *key++;
+      }
+    } else {
+      int32_t inc = (len+63)/64;
+
+      while(key < limit) {
+        hash = (hash * 37) + *key;
+        key += inc;
+      }
     }
   
+    hash &= 0x7FFFFFFF;
     if(hash == UHASH_INVALID) {
       hash = UHASH_EMPTY;
     }
-  
-    return hash & 0x7FFFFFFF;
+    return hash;
+  } else {
+    return UHASH_INVALID;
+  }
+}
+
+U_CAPI int32_t
+uhash_hashIString(const void *parm)
+{
+  if(parm != NULL) {
+    const char *key     = (const char*) parm;
+    int32_t len         = uprv_strlen(key);
+    int32_t hash         = UHASH_INVALID;
+    const char *limit     = key + len;
+
+    /* same as uhash_hashString(), but uses uprv_tolower(characters) */
+
+    if(len<=64) {
+      while(key < limit) {
+        hash = (hash * 37) + uprv_tolower(*key++);
+      }
+    } else {
+      int32_t inc = (len+63)/64;
+
+      while(key < limit) {
+        hash = (hash * 37) + uprv_tolower(*key);
+        key += inc;
+      }
+    }
+
+    hash &= 0x7FFFFFFF;
+    if(hash == UHASH_INVALID) {
+      hash = UHASH_EMPTY;
+    }
+    return hash;
   } else {
     return UHASH_INVALID;
   }
@@ -568,6 +616,9 @@ uhash_hashString(const void *parm)
 U_CAPI int32_t
 uhash_hashLong(const void *parm)
 {
-  int32_t hash = (int32_t) parm;
-  return (int32_t) (hash & 0x7FFFFFFF);
+  int32_t hash = (int32_t) parm & 0x7FFFFFFF;
+  if(hash == UHASH_INVALID) {
+    hash = UHASH_EMPTY;
+  }
+  return hash;
 }

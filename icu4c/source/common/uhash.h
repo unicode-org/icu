@@ -201,6 +201,16 @@ U_CAPI int32_t
 uhash_hashString(const void *parm);
 
 /**
+ * Generate a hash code for a null-terminated string in a case-insensitive way.
+ * If the string is not null-terminated the behavior of this
+ * function is undefined.
+ * @param parm The string (const char*) to hash.
+ * @return A hash code for parm.
+ */
+U_CAPI int32_t
+uhash_hashIString(const void *parm);
+
+/**
  * Generate a hash code for long integer.
  * @param parm The long (cast to void*) to hash.
  * @return A hash code for parm.
