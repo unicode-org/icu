@@ -162,10 +162,6 @@ SOURCE=.\hextouni.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\llong.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\msgfmt.cpp
 # End Source File
 # Begin Source File
@@ -777,10 +773,6 @@ InputPath=.\unicode\hextouni.h
 
 !ENDIF 
 
-# End Source File
-# Begin Source File
-
-SOURCE=.\llong.h
 # End Source File
 # Begin Source File
 
