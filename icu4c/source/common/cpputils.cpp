@@ -3,6 +3,10 @@
 #include "cstring.h"
 #include "ustring.h"
 
+/**********************************************************************
+ *   Copyright (C) 1999, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ **********************************************************************/
 
 
 /******************************************************
