@@ -71,7 +71,6 @@ static void help ( const char *argv0 );
  * @param ap vprintf style arg list
  */
 static void vlog_err(const char *prefix, const char *pattern, va_list ap);
-static void vlog_info(const char *prefix, const char *pattern, va_list ap);
 static void vlog_verbose(const char *prefix, const char *pattern, va_list ap);
 
 /* If we need to make the framework multi-thread safe
@@ -430,7 +429,7 @@ static void vlog_err(const char *prefix, const char *pattern, va_list ap)
     va_end(ap);
 }
 
-static void vlog_info(const char *prefix, const char *pattern, va_list ap)
+void vlog_info(const char *prefix, const char *pattern, va_list ap)
 {
     fprintf(stdout, "%-*s", INDENT_LEVEL," " );
     if(prefix) {
