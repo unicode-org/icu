@@ -125,10 +125,9 @@ static void TestFileFromICU(UFILE *myFile) {
     }
     u_fungetc(myUString[0], myFile);
     myUString[0] = u_fgetc(myFile);
-    *n = (int32_t)u_fgetcx(myFile); /* Mix getc and getcx and see what happens. */
-    myUString[1] = *n;
+    myUString[1] = (UChar)u_fgetcx(myFile); /* Mix getc and getcx and see what happens. */
     myUString[2] = u_fgetc(myFile);
-    if (myUString[0] != 0x53 /* S */ && *n != 0x69 /* i */ && myUString[2] != 0x6E /* n */) {
+    if (myUString[0] != 0x53 /* S */ && myUString[1] != 0x69 /* i */ && myUString[2] != 0x6E /* n */) {
         log_err("u_fgetcx returned \\u%04X\\u%04X\\u%04X. Expected 'Sin'.", myString[0], myString[1], myString[2]);
     }
     u_fungetc(myUString[2], myFile);
@@ -1535,142 +1534,160 @@ static void TestStringCompatibility() {
     }
 }
 
-#define TestSScanSetFormat(format, uValue, cValue) \
-    /* Reinitialize the buffer to verify null termination works. */\
-    u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));\
-    memset(buffer, 0x2a, sizeof(buffer)/sizeof(*buffer));\
-    \
-    uNumScanned = u_sscanf(uValue, NULL, format, uBuffer);\
-    u_austrncpy(compBuffer, uBuffer, sizeof(uBuffer)/sizeof(uBuffer[0]));\
-    cNumScanned = sscanf(cValue, format, buffer);\
-    if (strncmp(buffer, compBuffer, sizeof(uBuffer)/sizeof(uBuffer[0])) != 0) {\
-        log_err("%" format " Got: \"%s\", Expected: \"%s\"\n", compBuffer, buffer);\
-    }\
-    if (cNumScanned != uNumScanned) {\
-        log_err("%" format " number scanned Got: %d, Expected: %d\n", uNumScanned, cNumScanned);\
-    }\
-    if (uNumScanned > 0 && uBuffer[u_strlen(uBuffer)+1] != 0x2a) {\
-        log_err("%" format " too much stored\n");\
-    }\
-
-static void TestSScanf() {
-    static const UChar abcUChars[] = {0x61,0x62,0x63,0x63,0x64,0x65,0x66,0x67,0};
-    static const char abcChars[] = "abccdefg";
+static void TestSScanSetFormat(const char *format, const UChar *uValue, const char *cValue, UBool expectedToPass) {
     UChar uBuffer[256];
     char buffer[256];
     char compBuffer[256];
     int32_t uNumScanned;
     int32_t cNumScanned;
 
-    TestSScanSetFormat("%[bc]S", abcUChars, abcChars);
-    TestSScanSetFormat("%[cb]S", abcUChars, abcChars);
+    /* Reinitialize the buffer to verify null termination works. */
+    u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));
+    uBuffer[sizeof(uBuffer)/sizeof(*uBuffer)-1] = 0;
+    memset(buffer, 0x2a, sizeof(buffer)/sizeof(*buffer));
+    buffer[sizeof(buffer)/sizeof(*buffer)-1] = 0;
 
-    TestSScanSetFormat("%[ab]S", abcUChars, abcChars);
-    TestSScanSetFormat("%[ba]S", abcUChars, abcChars);
+    uNumScanned = u_sscanf(uValue, NULL, format, uBuffer);
+    if (expectedToPass) {
+        u_austrncpy(compBuffer, uBuffer, sizeof(uBuffer)/sizeof(uBuffer[0]));
+        cNumScanned = sscanf(cValue, format, buffer);
+        if (strncmp(buffer, compBuffer, sizeof(uBuffer)/sizeof(uBuffer[0])) != 0) {
+            log_err("%s Got: \"%s\", Expected: \"%s\"\n", format, compBuffer, buffer);
+        }
+        if (cNumScanned != uNumScanned) {
+            log_err("%s number scanned Got: %d, Expected: %d\n", format, uNumScanned, cNumScanned);
+        }
+        if (uNumScanned > 0 && uBuffer[u_strlen(uBuffer)+1] != 0x2a) {
+            log_err("%s too much stored\n", format);
+        }
+    }
+    else {
+        if (uNumScanned != 0 || uBuffer[0] != 0x2a || uBuffer[1] != 0x2a) {
+            log_err("%s too much stored on a failure\n", format);
+        }
+    }
+}
 
-    TestSScanSetFormat("%[ab]", abcUChars, abcChars);
-    TestSScanSetFormat("%[ba]", abcUChars, abcChars);
+static void TestSScanset() {
+    static const UChar abcUChars[] = {0x61,0x62,0x63,0x63,0x64,0x65,0x66,0x67,0};
+    static const char abcChars[] = "abccdefg";
 
-    TestSScanSetFormat("%[abcdefgh]", abcUChars, abcChars);
-    TestSScanSetFormat("%[;hgfedcba]", abcUChars, abcChars);
+    TestSScanSetFormat("%[bc]S", abcUChars, abcChars, TRUE);
+    TestSScanSetFormat("%[cb]S", abcUChars, abcChars, TRUE);
 
-    TestSScanSetFormat("%[a-f]", abcUChars, abcChars);
-    TestSScanSetFormat("%[f-a]", abcUChars, abcChars);
-    TestSScanSetFormat("%[a-c]", abcUChars, abcChars);
-    TestSScanSetFormat("%[c-a]", abcUChars, abcChars);
+    TestSScanSetFormat("%[ab]S", abcUChars, abcChars, TRUE);
+    TestSScanSetFormat("%[ba]S", abcUChars, abcChars, TRUE);
 
-    TestSScanSetFormat("%[^e-f]", abcUChars, abcChars);
+    TestSScanSetFormat("%[ab]", abcUChars, abcChars, TRUE);
+    TestSScanSetFormat("%[ba]", abcUChars, abcChars, TRUE);
 
-    TestSScanSetFormat("%[^a]", abcUChars, abcChars);
-    TestSScanSetFormat("%[^e]", abcUChars, abcChars);
-    TestSScanSetFormat("%[^ed]", abcUChars, abcChars);
-    TestSScanSetFormat("%[^dc]", abcUChars, abcChars);
-    TestSScanSetFormat("%[^e]  ", abcUChars, abcChars);
+    TestSScanSetFormat("%[abcdefgh]", abcUChars, abcChars, TRUE);
+    TestSScanSetFormat("%[;hgfedcba]", abcUChars, abcChars, TRUE);
 
-    TestSScanSetFormat("%[]  ", abcUChars, abcChars);
-    TestSScanSetFormat("%1[ab]  ", abcUChars, abcChars);
-    TestSScanSetFormat("%2[^f]", abcUChars, abcChars);
+    TestSScanSetFormat("%[a-f]", abcUChars, abcChars, TRUE);
+    TestSScanSetFormat("%[a-c]", abcUChars, abcChars, TRUE);
+
+    TestSScanSetFormat("%[^e-f]", abcUChars, abcChars, TRUE);
+
+    TestSScanSetFormat("%[^a]", abcUChars, abcChars, TRUE);
+    TestSScanSetFormat("%[^e]", abcUChars, abcChars, TRUE);
+    TestSScanSetFormat("%[^ed]", abcUChars, abcChars, TRUE);
+    TestSScanSetFormat("%[^dc]", abcUChars, abcChars, TRUE);
+    TestSScanSetFormat("%[^e]  ", abcUChars, abcChars, TRUE);
+
+    TestSScanSetFormat("%[]  ", abcUChars, abcChars, TRUE);
+    TestSScanSetFormat("%1[ab]  ", abcUChars, abcChars, TRUE);
+    TestSScanSetFormat("%2[^f]", abcUChars, abcChars, TRUE);
+    TestSScanSetFormat("%[a-]", abcUChars, abcChars, TRUE);
 
     /* Bad format */
-    TestSScanSetFormat("%[a", abcUChars, abcChars);
+    TestSScanSetFormat("%[a", abcUChars, abcChars, FALSE);
+    TestSScanSetFormat("%[f-a]", abcUChars, abcChars, FALSE);
+    TestSScanSetFormat("%[c-a]", abcUChars, abcChars, FALSE);
     /* The following is not deterministic on Windows */
 /*    TestSScanSetFormat("%[a-", abcUChars, abcChars);*/
-    TestSScanSetFormat("%[a-]", abcUChars, abcChars);
 
     /* TODO: Need to specify precision with a "*" */
 }
 
-#undef TestSScanSetFormat
 
-
-#define TestFScanSetFormat(format, uValue, cValue) \
-    myFile = u_fopen(STANDARD_TEST_FILE, "w", NULL, NULL);\
-    /* Reinitialize the buffer to verify null termination works. */\
-    u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));\
-    memset(buffer, 0x2a, sizeof(buffer)/sizeof(*buffer));\
-    \
-    u_fprintf(myFile, "%S", uValue);\
-    u_fclose(myFile);\
-    myFile = u_fopen(STANDARD_TEST_FILE, "r", "en_US_POSIX", NULL);\
-    uNumScanned = u_fscanf(myFile, format, uBuffer);\
-    u_fclose(myFile);\
-    u_austrncpy(compBuffer, uBuffer, sizeof(uBuffer)/sizeof(*uBuffer));\
-    cNumScanned = sscanf(cValue, format, buffer);\
-    if (strncmp(buffer, compBuffer, sizeof(uBuffer)/sizeof(*uBuffer)) != 0) {\
-        log_err("%" format " Got: \"%s\", Expected: \"%s\"\n", compBuffer, buffer);\
-    }\
-    if (cNumScanned != uNumScanned) {\
-        log_err("%" format " number printed Got: %d, Expected: %d\n", uNumScanned, cNumScanned);\
-    }\
-    if (uNumScanned > 0 && uBuffer[u_strlen(uBuffer)+1] != 0x2a) {\
-        log_err("%" format " too much stored\n");\
-    }\
-
-
-static void TestFScanf() {
+static void TestFScanSetFormat(const char *format, const UChar *uValue, const char *cValue, UBool expectedToPass) {
     UFILE *myFile;
-    static const UChar abcUChars[] = {0x61,0x62,0x63,0x63,0x64,0x65,0x66,0x67,0};
-    static const char abcChars[] = "abccdefg";
     UChar uBuffer[256];
     char buffer[256];
     char compBuffer[256];
     int32_t uNumScanned;
     int32_t cNumScanned;
 
-    TestFScanSetFormat("%[bc]S", abcUChars, abcChars);
-    TestFScanSetFormat("%[cb]S", abcUChars, abcChars);
+    myFile = u_fopen(STANDARD_TEST_FILE, "w", NULL, NULL);
+    /* Reinitialize the buffer to verify null termination works. */
+    u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));
+    uBuffer[sizeof(uBuffer)/sizeof(*uBuffer)-1] = 0;
+    memset(buffer, 0x2a, sizeof(buffer)/sizeof(*buffer));
+    buffer[sizeof(buffer)/sizeof(*buffer)-1] = 0;
+    
+    u_fprintf(myFile, "%S", uValue);
+    u_fclose(myFile);
+    myFile = u_fopen(STANDARD_TEST_FILE, "r", "en_US_POSIX", NULL);
+    uNumScanned = u_fscanf(myFile, format, uBuffer);
+    u_fclose(myFile);
+    if (expectedToPass) {
+        u_austrncpy(compBuffer, uBuffer, sizeof(uBuffer)/sizeof(*uBuffer));
+        cNumScanned = sscanf(cValue, format, buffer);
+        if (strncmp(buffer, compBuffer, sizeof(uBuffer)/sizeof(*uBuffer)) != 0) {
+            log_err("%s Got: \"%s\", Expected: \"%s\"\n", format, compBuffer, buffer);
+        }
+        if (cNumScanned != uNumScanned) {
+            log_err("%s number printed Got: %d, Expected: %d\n", format, uNumScanned, cNumScanned);
+        }
+        if (uNumScanned > 0 && uBuffer[u_strlen(uBuffer)+1] != 0x2a) {
+            log_err("%s too much stored\n", format);
+        }
+    }
+    else {
+        if (uNumScanned != 0 || uBuffer[0] != 0x2a || uBuffer[1] != 0x2a) {
+            log_err("%s too much stored on a failure\n", format);
+        }
+    }
+}
 
-    TestFScanSetFormat("%[ab]S", abcUChars, abcChars);
-    TestFScanSetFormat("%[ba]S", abcUChars, abcChars);
+static void TestFScanset() {
+    static const UChar abcUChars[] = {0x61,0x62,0x63,0x63,0x64,0x65,0x66,0x67,0};
+    static const char abcChars[] = "abccdefg";
 
-    TestFScanSetFormat("%[ab]", abcUChars, abcChars);
-    TestFScanSetFormat("%[ba]", abcUChars, abcChars);
+    TestFScanSetFormat("%[bc]S", abcUChars, abcChars, TRUE);
+    TestFScanSetFormat("%[cb]S", abcUChars, abcChars, TRUE);
 
-    TestFScanSetFormat("%[abcdefgh]", abcUChars, abcChars);
-    TestFScanSetFormat("%[;hgfedcba]", abcUChars, abcChars);
+    TestFScanSetFormat("%[ab]S", abcUChars, abcChars, TRUE);
+    TestFScanSetFormat("%[ba]S", abcUChars, abcChars, TRUE);
 
-    TestFScanSetFormat("%[a-f]", abcUChars, abcChars);
-    TestFScanSetFormat("%[f-a]", abcUChars, abcChars);
-    TestFScanSetFormat("%[a-c]", abcUChars, abcChars);
-    TestFScanSetFormat("%[c-a]", abcUChars, abcChars);
+    TestFScanSetFormat("%[ab]", abcUChars, abcChars, TRUE);
+    TestFScanSetFormat("%[ba]", abcUChars, abcChars, TRUE);
 
-    TestFScanSetFormat("%[^e-f]", abcUChars, abcChars);
+    TestFScanSetFormat("%[abcdefgh]", abcUChars, abcChars, TRUE);
+    TestFScanSetFormat("%[;hgfedcba]", abcUChars, abcChars, TRUE);
 
-    TestFScanSetFormat("%[^a]", abcUChars, abcChars);
-    TestFScanSetFormat("%[^e]", abcUChars, abcChars);
-    TestFScanSetFormat("%[^ed]", abcUChars, abcChars);
-    TestFScanSetFormat("%[^dc]", abcUChars, abcChars);
-    TestFScanSetFormat("%[^e]  ", abcUChars, abcChars);
+    TestFScanSetFormat("%[a-f]", abcUChars, abcChars, TRUE);
+    TestFScanSetFormat("%[a-c]", abcUChars, abcChars, TRUE);
 
-    TestFScanSetFormat("%[]  ", abcUChars, abcChars);
-    TestFScanSetFormat("%1[ab]  ", abcUChars, abcChars);
-    TestFScanSetFormat("%2[^f]", abcUChars, abcChars);
+    TestFScanSetFormat("%[^e-f]", abcUChars, abcChars, TRUE);
+
+    TestFScanSetFormat("%[^a]", abcUChars, abcChars, TRUE);
+    TestFScanSetFormat("%[^e]", abcUChars, abcChars, TRUE);
+    TestFScanSetFormat("%[^ed]", abcUChars, abcChars, TRUE);
+    TestFScanSetFormat("%[^dc]", abcUChars, abcChars, TRUE);
+    TestFScanSetFormat("%[^e]  ", abcUChars, abcChars, TRUE);
+
+    TestFScanSetFormat("%[]  ", abcUChars, abcChars, TRUE);
+    TestFScanSetFormat("%1[ab]  ", abcUChars, abcChars, TRUE);
+    TestFScanSetFormat("%2[^f]", abcUChars, abcChars, TRUE);
 
     /* Bad format */
-    TestFScanSetFormat("%[a", abcUChars, abcChars);
+    TestFScanSetFormat("%[f-a]", abcUChars, abcChars, FALSE);
+    TestFScanSetFormat("%[c-a]", abcUChars, abcChars, FALSE);
+    TestFScanSetFormat("%[a", abcUChars, abcChars, FALSE);
     /* The following is not deterministic on Windows */
 /*    TestFScanSetFormat("%[a-", abcUChars, abcChars);*/
-    TestFScanSetFormat("%[a-]", abcUChars, abcChars);
 
     /* TODO: Need to specify precision with a "*" */
 }
@@ -1896,14 +1913,14 @@ static void addAllTests(TestNode** root) {
     addTest(root, &TestfgetsLineCount, "file/TestfgetsLineCount");
     addTest(root, &TestfgetsNewLineHandling, "file/TestfgetsNewLineHandling");
     addTest(root, &TestFprintfFormat, "file/TestFprintfFormat");
-    addTest(root, &TestFScanf, "file/TestFScanf");
+    addTest(root, &TestFScanset, "file/TestFScanset");
     addTest(root, &TestCodepage, "file/TestCodepage");
     addTest(root, &TestFilePrintCompatibility, "file/TestFilePrintCompatibility");
 
     addTest(root, &TestString, "string/TestString");
     addTest(root, &TestSprintfFormat, "string/TestSprintfFormat");
     addTest(root, &TestSnprintf, "string/TestSnprintf");
-    addTest(root, &TestSScanf, "string/TestSScanf");
+    addTest(root, &TestSScanset, "string/TestSScanset");
     addTest(root, &TestStringCompatibility, "string/TestStringCompatibility");
     addTest(root, &TestStream, "stream/TestStream");
 

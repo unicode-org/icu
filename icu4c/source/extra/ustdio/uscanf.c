@@ -26,9 +26,9 @@
 #include "unicode/ustring.h"
 #include "unicode/unum.h"
 #include "unicode/udat.h"
+#include "unicode/uset.h"
 #include "uscanf.h"
 #include "uscanf_p.h"
-#include "uscanset.h"
 #include "ufile.h"
 #include "locbund.h"
 
@@ -776,16 +776,22 @@ u_scanf_scanset_handler(UFILE             *input,
                         const UChar        *fmt,
                         int32_t            *consumed)
 {
-    u_scanf_scanset scanset;
+    USet            *scanset;
     int32_t         len;
-    UBool           success;
-    UChar           c;
+    UErrorCode      status = U_ZERO_ERROR;
+    UChar32         c;
     UChar           *s     = (UChar*) (args[0].ptrValue);
     UChar           *alias, *limit;
 
 
     /* fill the input's internal buffer */
     ufile_fill_uchar_buffer(input);
+
+    /* Create an empty set */
+    scanset = uset_open(0, -1);
+
+    /* Back up one to get the [ */
+    fmt--;
 
     /* determine the size of the input's buffer */
     len = input->fUCLimit - input->fUCPos;
@@ -799,30 +805,37 @@ u_scanf_scanset_handler(UFILE             *input,
     limit = alias + len;
 
     /* parse the scanset from the fmt string */
-    *consumed = u_strlen(fmt);
-    success = u_scanf_scanset_init(&scanset, fmt, consumed);
+    *consumed = uset_applyPattern(scanset, fmt, u_strlen(fmt), 0, &status);
 
-    /* increment consumed by one to eat the final ']' */
-    ++(*consumed);
+    /* verify that the parse was successful */
+    if (U_SUCCESS(status)) {
 
-    /* verify that the parse was successful and the converter opened */
-    if(! success)
-        return -1;
+        /* grab characters one at a time and make sure they are in the scanset */
+        while(alias < limit) {
+            if((c = u_fgetcx(input)) != U_EOF && uset_contains(scanset, c)) {
+                int32_t idx = 0;
+                UBool isError = FALSE;
+                int32_t capacity = (int32_t)(1 + (limit - alias));
 
-    /* grab characters one at a time and make sure they are in the scanset */
-    while( (c = u_fgetc(input)) != U_EOF && alias < limit) {
-        if(u_scanf_scanset_in(&scanset, c)) {
-            *(alias++) = c;
+                U16_APPEND(alias, idx, capacity, c, isError);
+                alias += idx;
+                if (isError) {
+                    break;
+                }
+            }
+            else {
+                /* if the character's not in the scanset, break out */
+                break;
+            }
         }
-        else {
-            /* if the character's not in the scanset, break out */
-            break;
+
+        /* put the final character we read back on the input */
+        if(c != U_EOF) {
+            u_fungetc(c, input);
         }
     }
 
-    /* put the final character we read back on the input */
-    if(c != U_EOF)
-        u_fungetc(c, input);
+    uset_close(scanset);
 
     /* if we didn't match at least 1 character, fail */
     if(alias == s)

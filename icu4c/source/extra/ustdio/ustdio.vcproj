@@ -96,6 +96,7 @@
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;U_USTDIO_IMPLEMENTATION"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
+				BufferSecurityCheck="TRUE"
 				DisableLanguageExtensions="TRUE"
 				PrecompiledHeaderFile=".\Debug/ustdio.pch"
 				AssemblerListingLocation=".\Debug/"
@@ -184,9 +185,6 @@
 				RelativePath=".\uscanf_p.c">
 			</File>
 			<File
-				RelativePath=".\uscanset.c">
-			</File>
-			<File
 				RelativePath=".\ustdio.c">
 			</File>
 			<File
@@ -234,9 +232,6 @@
 			</File>
 			<File
 				RelativePath=".\uscanf_p.h">
-			</File>
-			<File
-				RelativePath=".\uscanset.h">
 			</File>
 			<File
 				RelativePath=".\unicode\ustdio.h">
