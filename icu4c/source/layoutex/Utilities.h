@@ -11,6 +11,8 @@
 
 #include "layout/LETypes.h"
 
+U_NAMESPACE_BEGIN
+
 class Utilities
 {
 public:
@@ -20,4 +22,5 @@ public:
     static void reverse(float array[], le_int32 count);
 };
 
+U_NAMESPACE_END
 #endif
