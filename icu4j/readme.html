@@ -11,8 +11,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/readme.html,v $
-* $Date: 2003/12/06 00:19:38 $
-* $Revision: 1.52 $
+* $Date: 2004/01/30 19:17:51 $
+* $Revision: 1.53 $
 *
 *******************************************************************************
 -->
@@ -25,7 +25,7 @@
 
 <hr size="2" width="100%" align="center">
     <p><b>Release Date</b><br>
-    November 3rd, 2003</p>
+    January 29th, 2004</p>
 
 <p>For the most recent
       release, see the <a href="http://oss.software.ibm.com/icu4j/download/index.html">
@@ -366,7 +366,7 @@ We strongly recommend using the Ant build system to build ICU4J:</p>
   <li>It's recommended to install both the JDK and Ant somewhere <em>outside</em> the ICU4J
     directory. For example, on Linux you might install these
     in /usr/local.</li>
-  <li>Install a recent JDK, version 1.3.x or 1.4.x will work.</li>
+  <li>Install a recent JDK, version 1.3.x or 1.4.x will work. Use 1.4.x to build docs.</li>
   <li><p>Next install the <a href="http://ant.apache.org/"><strong>Ant</strong></a> build
     system. Ant is a portable, Java-based build system similar to make. ICU4J uses Ant
     because it introduces no other dependencies, it's portable, and it's easier to manage than
@@ -376,7 +376,7 @@ We strongly recommend using the Ant build system to build ICU4J:</p>
     href="http://ant.apache.org/bindownload.cgi">http://ant.apache.org/bindownload.cgi</a>),
     extract it onto your system, set some environment variables, and add its bin directory to
     your path. For example:
-<pre>    set JAVA_HOME=C:\jdk1.3.1
+<pre>    set JAVA_HOME=C:\jdk1.4.1
     set ANT_HOME=C:\ant
     set PATH=%PATH%;%ANT_HOME%\bin</pre></p>
     <p>See the current Ant documentation for details.</p>
@@ -438,15 +438,12 @@ targets, see the build.xml file:</p>
     the main class files.</td>
   </tr>
   <tr>
-    <td>zip</td>
-    <td>Create a zip archive of the source, docs, and jar file for distribution. The zip file <strong>icu4jYYYYMMDD.zip</strong>
-    will be created in the directory <em>above</em> the root ICU4J directory, where YYYYMMDD
-    is today's date. Any existing file of that name will be overwritten.</td>
+    <td>jarSrc</td>
+    <td>Like the <strong>jar</strong> target, but containing only the source files.
   </tr>
   <tr>
-    <td>zipsrc</td>
-    <td>Like the <strong>zip</strong> target, without the docs and the jar file. The zip file <strong>icu4jsrcYYYYMMDD.zip</strong>
-    will be created in the directory <em>above</em> the root ICU4J directory.</td>
+    <td>jarDocs</td>
+    <td>Like the <strong>jar</strong> target, but containing only the docs.
   </tr>
   <tr>
     <td>richedit</td>
