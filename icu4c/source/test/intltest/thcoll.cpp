@@ -180,6 +180,7 @@ void CollationThaiTest::TestDictionary(void) {
     }
 
     logln((UnicodeString)"Words checked: " + wordCount);
+    T_FileStream_close(in);
 }
 
 /**
