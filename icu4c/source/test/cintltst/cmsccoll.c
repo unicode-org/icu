@@ -4380,7 +4380,7 @@ ucol_getFunctionalEquivalent(char* result, int32_t resultCapacity,
 
 /* supercedes TestJ784 */
 static void TestBeforePinyin(void) {
-    char rules[] = { 
+    const static char rules[] = { 
         "&[before 2]A << \\u0101  <<< \\u0100 << \\u00E1 <<< \\u00C1 << \\u01CE <<< \\u01CD << \\u00E0 <<< \\u00C0"
         "&[before 2]e << \\u0113 <<< \\u0112 << \\u00E9 <<< \\u00C9 << \\u011B <<< \\u011A << \\u00E8 <<< \\u00C8"
         "&[before 2] i << \\u012B <<< \\u012A << \\u00ED <<< \\u00CD << \\u01D0 <<< \\u01CF << \\u00EC <<< \\u00CC"
@@ -4388,17 +4388,19 @@ static void TestBeforePinyin(void) {
         "&[before 2]u << \\u016B <<< \\u016A << \\u00FA <<< \\u00DA << \\u01D4 <<< \\u01D3 << \\u00F9 <<< \\u00D9"
         "&U << \\u01D6 <<< \\u01D5 << \\u01D8 <<< \\u01D7 << \\u01DA <<< \\u01D9 << \\u01DC <<< \\u01DB << \\u00FC"
     };
-    char *test[] = {
-        "l\\u0101 ",
-        "la ",
-        "l\\u0101n ",
+
+    const static char *test[] = {
+        "l\\u0101",
+        "la",
+        "l\\u0101n",
         "lan ",
-        "l\\u0113 ",
-        "le ",
-        "l\\u0113n ",
-        "len "
+        "l\\u0113",
+        "le",
+        "l\\u0113n",
+        "len"
     };
-    char *test2[] = {
+
+    const static char *test2[] = {
         "x\\u0101",
         "x\\u0100",
         "X\\u0101",
@@ -4419,8 +4421,6 @@ static void TestBeforePinyin(void) {
         "xA",
         "Xa",
         "XA",
-
-
         "x\\u0101x",
         "x\\u0100x",
         "x\\u00E1x",
@@ -4432,10 +4432,9 @@ static void TestBeforePinyin(void) {
         "xax",
         "xAx"
     };
-/*
+
     genericRulesStarter(rules, test, sizeof(test)/sizeof(test[0]));
     genericLocaleStarter("zh", test, sizeof(test)/sizeof(test[0]));
-    */
     genericRulesStarter(rules, test2, sizeof(test2)/sizeof(test2[0]));
     genericLocaleStarter("zh", test2, sizeof(test2)/sizeof(test2[0]));
 }
