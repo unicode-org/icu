@@ -63,6 +63,15 @@ u_init(UErrorCode *status);
  * the ICU libraries (relatively uncommon), u_cleanup() should be called
  * just before the library unload.
  * <p>
+ * u_cleanup() also clears any ICU heap functions, mutex functions or
+ * trace functions that may have been set for the process.  
+ * This has the effect of restoring ICU to its initial condition, before
+ * any of these override functions were installed.  Refer to
+ * u_setMemoryFunctions(), u_setMutexFunctions and 
+ * utrace_setFunctions().  If ICU is to be reinitialized after after
+ * calling u_cleanup(), these runtime override functions will need to
+ * be set up again if they are still required.
+ * <p>
  * u_cleanup() is not thread safe.  All other threads should stop using ICU
  * before calling this function.
  * <p>
