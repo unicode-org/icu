@@ -22,7 +22,8 @@
 #include "unicode/ustring.h"
 #include "ucbuf.h"
 
-#define MAX_BUF 1000
+#define MAX_IN_BUF 1000
+#define MAX_U_BUF 1500
 
 /* Autodetects UTF8, UTF-16-BigEndian and UTF-16-LittleEndian BOMs*/
 U_CAPI UBool U_EXPORT2
@@ -59,25 +60,20 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
     int numRead=0;
     int offset=0;
 
-    cbuf =(char*)uprv_malloc(sizeof(char) * MAX_BUF);
-    if(buf->buffer==NULL){
-        /* allocate buffers */
-        pTarget = (UChar*) uprv_malloc(sizeof(UChar)* MAX_BUF);
-    }else{
-        pTarget = buf->buffer;
-        /* check if we arrived here without exhausting the buffer*/
-        if(buf->currentPos<buf->bufLimit){
-            offset= buf->bufLimit-buf->currentPos;
-            memmove(buf->buffer,buf->currentPos,offset* sizeof(UChar));
-            memset(pTarget+offset,0xff,sizeof(UChar)*(MAX_BUF-offset));
-        }else{
-            memset(pTarget,0xff,sizeof(UChar)*MAX_BUF);
-        }
-
+    cbuf =(char*)uprv_malloc(sizeof(char) * MAX_IN_BUF);
+    pTarget = buf->buffer;
+    /* check if we arrived here without exhausting the buffer*/
+    if(buf->currentPos<buf->bufLimit){
+        offset= buf->bufLimit-buf->currentPos;
+        memmove(buf->buffer,buf->currentPos,offset* sizeof(UChar));
     }
+
+#if DEBUG
+    memset(pTarget+offset,0xff,sizeof(UChar)*(MAX_IN_BUF-offset));
+#endif
     
     /* read the file */
-    numRead=T_FileStream_read(buf->in,cbuf,MAX_BUF-offset);
+    numRead=T_FileStream_read(buf->in,cbuf,MAX_IN_BUF-offset);
     buf->remaining-=numRead;
 
     target=pTarget;
@@ -93,9 +89,8 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
         }
     }else{
         u_charsToUChars(cbuf,target+offset,numRead);
-        numRead=((buf->remaining>MAX_BUF)? MAX_BUF:numRead+offset);
+        numRead=((buf->remaining>MAX_IN_BUF)? MAX_IN_BUF:numRead+offset);
     }
-    buf->buffer= pTarget;
     buf->currentPos = pTarget;
     buf->bufLimit=pTarget+numRead;
     uprv_free(cbuf);
@@ -183,11 +178,16 @@ ucbuf_open(FileStream* in, const char* cp,UErrorCode* err){
     if(buf){
         buf->in=in;
         buf->remaining=T_FileStream_size(in);
-        buf->buffer=NULL;
-        buf->currentPos=NULL;
-        buf->bufLimit=NULL;
+        buf->buffer=(UChar*) uprv_malloc(sizeof(UChar)* MAX_U_BUF);
+		if (buf->buffer == NULL) {
+			*err = U_MEMORY_ALLOCATION_ERROR;
+			return NULL;
+		}
+        buf->currentPos=buf->buffer;
+        buf->bufLimit=buf->buffer;
         if(*cp!='\0'){
             buf->conv=ucnv_open(cp,err);
+            buf->remaining-=3;
         }else{
             buf->conv=NULL;
         }
