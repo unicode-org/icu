@@ -31,7 +31,7 @@ StringMatcher::StringMatcher(const StringMatcher& o) :
     data(o.data),
     isSegment(o.isSegment),
     matchStart(o.matchStart),
-    matchLimit(o.matchStart)
+    matchLimit(o.matchLimit)
 {
 }
 
