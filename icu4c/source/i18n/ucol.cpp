@@ -429,6 +429,21 @@ clean:
 }
 
 U_CAPI void U_EXPORT2
+ucol_setReqValidLocales(UCollator *coll, char *requestedLocaleToAdopt, char *validLocaleToAdopt)
+{
+  if (coll) {
+    if (coll->validLocale) {
+      uprv_free(coll->validLocale);
+      coll->validLocale = validLocaleToAdopt;
+    }
+    if (coll->requestedLocale) { // should always have
+      uprv_free(coll->requestedLocale);
+      coll->requestedLocale = requestedLocaleToAdopt;
+    }
+  }
+}
+
+U_CAPI void U_EXPORT2
 ucol_close(UCollator *coll)
 {
   if(coll != NULL) {
