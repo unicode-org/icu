@@ -5,26 +5,253 @@
 // *
 // *******************************************************************************
 
+// Country names in de, de_AT, and de_CH are short names from the
+// list of names maintained by the German
+// Federal Permanent Committee for Geographic Names,
+// Sta"ndiger Ausschuss fu"r Geographische Namen (StAGN),
+// as published at its web site at
+// http://www.ifag.de/kartographie/Stagn/Staatennamen.htm
+// Date there: 1999-apr-19
+
 de {
-    Countries { 
-        DE { "Deutschland" }
-        AT { "\u00D6sterreich" }
-        US { "Vereinigte Staaten" }
-        DK { "D\u00E4nemark" }
-        GR { "Griechenland" }
-        ES { "Spanien" }
-        FI { "Finnland" }
-        IT { "Italien" }
-        CH { "Schweiz" }
+    Countries {
+        AF { "Afghanistan" }
+        EG { "\u00c4gypten" }
+        AL { "Albanien" }
+        DZ { "Algerien" }
+        AD { "Andorra" }
+        AO { "Angola" }
+        AG { "Antigua und Barbuda" }
+        GQ { "\u00c4quatorialguinea" }
+        AR { "Argentinien" }
+        AM { "Armenien" }
+        AZ { "Aserbaidschan" }
+        ET { "\u00c4thiopien" }
+        AU { "Australien" }
+        BS { "Bahamas" }
+        BH { "Bahrain" }
+        BD { "Bangladesch" }
+        BB { "Barbados" }
         BE { "Belgien" }
+        BZ { "Belize" }
+        BJ { "Benin" }
+        BT { "Bhutan" }
+        BO { "Bolivien" }
+        BA { "Bosnien und Herzegowina" }
+        BW { "Botsuana" }
+        BR { "Brasilien" }
+        BN { "Brunei Darussalam" }
+        BG { "Bulgarien" }
+        BF { "Burkina Faso" }
+        BI { "Burundi" }
+        CL { "Chile" }
+        CN { "China" }
+        CR { "Costa Rica" }
+        CI { "C\u00f4te d\u0092Ivoire" }
+        DK { "D\u00e4nemark" }
+        DE { "Deutschland" }
+        DM { "Dominica" }
+        DO { "Dominikanische Republik" }
+        DJ { "Dschibuti" }
+        EC { "Ecuador" }
+        SV { "El Salvador" }
+        ER { "Eritrea" }
+        EE { "Estland" }
+        FJ { "Fidschi" }
+        FI { "Finnland" }
+        FR { "Frankreich" }
+        GA { "Gabun" }
+        GM { "Gambia" }
+        GE { "Georgien" }
+        GH { "Ghana" }
+        GD { "Grenada" }
+        GR { "Griechenland" }
+        GT { "Guatemala" }
+        GN { "Guinea" }
+        GW { "Guinea-Bissau" }
+        GY { "Guyana" }
+        HT { "Haiti" }
+        HN { "Honduras" }
+        IN { "Indien" }
+        ID { "Indonesien" }
+        IQ { "Irak" }
+        IR { "Iran" }
+        IE { "Irland" }
+        IS { "Island" }
+        IL { "Israel" }
+        IT { "Italien" }
+        JM { "Jamaika" }
         JP { "Japan" }
-        GB { "Vereinigtes K\u00F6nigreich" }
+        YE { "Jemen" }
+        JO { "Jordanien" }
+        YU { "Jugoslawien" }
+        KH { "Kambodscha" }
+        CM { "Kamerun" }
         CA { "Kanada" }
+        CV { "Kap Verde" }
+        KZ { "Kasachstan" }
+        QA { "Katar" }
+        KE { "Kenia" }
+        KG { "Kirgisistan" }
+        KI { "Kiribati" }
+        CO { "Kolumbien" }
+        KM { "Komoren" }
+        CG { "Kongo" }
+        CD { "Demokratische Republik Kongo" }
+        KP { "Demokratische Volksrepublik Korea" }
+        KR { "Republik Korea" }
+        HR { "Kroatien" }
+        CU { "Kuba" }
+        KW { "Kuwait" }
+        LA { "Laos" }
+        LS { "Lesotho" }
+        LV { "Lettland" }
+        LB { "Libanon" }
+        LR { "Liberia" }
+        LY { "Libyen" }
+        LI { "Liechtenstein" }
+        LT { "Litauen" }
+        LU { "Luxemburg" }
+        MG { "Madagaskar" }
+        MW { "Malawi" }
+        MY { "Malaysia" }
+        MV { "Malediven" }
+        ML { "Mali" }
+        MT { "Malta" }
+        MA { "Marokko" }
+        MH { "Marshallinseln" }
+        MR { "Mauretanien" }
+        MU { "Mauritius" }
+        MK { "Mazedonien" }
+        MX { "Mexiko" }
+        FM { "Mikronesien" }
+        MD { "Moldawien" }
+        MC { "Monaco" }
+        MN { "Mongolei" }
+        MZ { "Mosambik" }
+        MM { "Myanmar" }
+        NA { "Namibia" }
+        NR { "Nauru" }
+        NP { "Nepal" }
+        NZ { "Neuseeland" }
+        NI { "Nicaragua" }
         NL { "Niederlande" }
+        NE { "Niger" }
+        NG { "Nigeria" }
         NO { "Norwegen" }
+        OM { "Oman" }
+        AT { "\u00d6sterreich" }
+        PK { "Pakistan" }
+        PW { "Palau" }
+        PA { "Panama" }
+        PG { "Papua-Neuguinea" }
+        PY { "Paraguay" }
+        PE { "Peru" }
+        PH { "Philippinen" }
+        PL { "Polen" }
         PT { "Portugal" }
+        RW { "Ruanda" }
+        RO { "Rum\u00e4nien" }
+        RU { "Russland" }
+        KN { "St. Kitts und Nevis" }
+        LC { "St. Lucia" }
+        VC { "St. Vincent und die Grenadinen" }
+        SB { "Salomonen" }
+        ZM { "Sambia" }
+        WS { "Samoa" }
+        SM { "San Marino" }
+        ST { "S\u00e3o Tom\u00e9 und Pr\u00edncipe" }
+        SA { "Saudi-Arabien" }
         SE { "Schweden" }
-        TR { "T\u00FCrkei" }
+        CH { "Schweiz" }
+        SN { "Senegal" }
+        SC { "Seychellen" }
+        SL { "Sierra Leone" }
+        ZW { "Simbabwe" }
+        SG { "Singapur" }
+        SK { "Slowakei" }
+        SI { "Slowenien" }
+        SO { "Somalia" }
+        ES { "Spanien" }
+        LK { "Sri Lanka" }
+        ZA { "S\u00fcdafrika" }
+        SD { "Sudan" }
+        SR { "Suriname" }
+        SZ { "Swasiland" }
+        SY { "Syrien" }
+        TJ { "Tadschikistan" }
+        TW { "Taiwan" }
+        TZ { "Tansania" }
+        TH { "Thailand" }
+        TG { "Togo" }
+        TO { "Tonga" }
+        TT { "Trinidad und Tobago" }
+        TD { "Tschad" }
+        CZ { "Tschechien" }
+        TN { "Tunesien" }
+        TR { "T\u00fcrkei" }
+        TM { "Turkmenistan" }
+        TV { "Tuvalu" }
+        UG { "Uganda" }
+        UA { "Ukraine" }
+        HU { "Ungarn" }
+        UY { "Uruguay" }
+        UZ { "Usbekistan" }
+        VU { "Vanuatu" }
+        VA { "Vatikanstadt" }
+        VE { "Venezuela" }
+        AE { "Vereinigte Arabische Emirate" }
+        GB { "Vereinigtes K\u00f6nigreich" }
+        US { "Vereinigte Staaten" }
+        VN { "Vietnam" }
+        BY { "Belarus" }
+        CF { "Zentralafrikanische Republik" }
+        CY { "Zypern" }
+
+        UM { "Amerikanisch-Ozeanien" }
+        AS { "Amerikanisch-Samoa" }
+        VI { "Amerikanische Jungferninseln" }
+        AI { "Anguilla" }
+        AQ { "Antarktis" }
+        AW { "Aruba" }
+        SH { "Ascension" }
+        SJ { "Svalbard und Jan Mayen" }
+        BM { "Bermuda" }
+        BV { "Bouvetinsel" }
+        VG { "Britische Jungferninseln" }
+        IO { "Britisches Territorium im Indischen Ozean" }
+        CK { "Cookinseln" }
+        FK { "Falklandinseln" }
+        FO { "F\u00e4r\u00f6er" }
+        GF { "Franz\u00f6sisch-Guayana" }
+        PF { "Franz\u00f6sisch-Polynesien" }
+        TF { "Franz\u00f6sische S\u00fcd- und Antarktisgebiete" }
+        GI { "Gibraltar" }
+        GL { "Gr\u00f6nland" }
+        GP { "Guadeloupe" }
+        GU { "Guam" }
+        HM { "Heard und McDonaldinseln" }
+        KY { "Kaimaninseln" }
+        CC { "Kokosinseln" }
+        MO { "Macau" }
+        MQ { "Martinique" }
+        YT { "Mayotte" }
+        MS { "Montserrat" }
+        NC { "Neukaledonien" }
+        AN { "Niederl\u00e4ndische Antillen" }
+        NU { "Niue" }
+        MP { "N\u00f6rdliche Marianen" }
+        NF { "Norfolkinsel" }
+        PN { "Pitcairn" }
+        PR { "Puerto Rico" }
+        RE { "R\u00e9union" }
+        SH { "St. Helena" }
+        PM { "St. Pierre und Miquelon" }
+        GS { "S\u00fcdgeorgien und die S\u00fcdlichen Sandwichinseln" }
+        TK { "Tokelau" }
+        TC { "Turks- und Caicosinseln" }
+        WF { "Wallis und Futuna" }
+        CX { "Weihnachtsinsel" }
     }
     DateTimeElements { 
             "2",
