@@ -458,7 +458,8 @@ UnicodeStringTest::TestCaseConversion()
         UnicodeString s;
 
         /* lowercase with root locale */
-        s=UnicodeString(FALSE, beforeLower, sizeof(beforeLower)/U_SIZEOF_UCHAR).toLower();
+        s=UnicodeString(FALSE, beforeLower, (int32_t)(sizeof(beforeLower)/U_SIZEOF_UCHAR));
+        s.toLower();
         if( s.length()!=(sizeof(lowerRoot)/U_SIZEOF_UCHAR) ||
             s!=UnicodeString(FALSE, lowerRoot, s.length())
         ) {
@@ -466,7 +467,8 @@ UnicodeStringTest::TestCaseConversion()
         }
 
         /* lowercase with turkish locale */
-        s=UnicodeString(FALSE, beforeLower, sizeof(beforeLower)/U_SIZEOF_UCHAR).setCharAt(0, beforeLower[0]).toLower(Locale("tr"));
+        s=UnicodeString(FALSE, beforeLower, (int32_t)(sizeof(beforeLower)/U_SIZEOF_UCHAR));
+        s.setCharAt(0, beforeLower[0]).toLower(Locale("tr"));
         if( s.length()!=(sizeof(lowerTurkish)/U_SIZEOF_UCHAR) ||
             s!=UnicodeString(FALSE, lowerTurkish, s.length())
         ) {
@@ -474,7 +476,8 @@ UnicodeStringTest::TestCaseConversion()
         }
 
         /* uppercase with root locale */
-        s=UnicodeString(FALSE, beforeUpper, sizeof(beforeUpper)/U_SIZEOF_UCHAR).setCharAt(0, beforeUpper[0]).toUpper();
+        s=UnicodeString(FALSE, beforeUpper, (int32_t)(sizeof(beforeUpper)/U_SIZEOF_UCHAR));
+        s.setCharAt(0, beforeUpper[0]).toUpper();
         if( s.length()!=(sizeof(upperRoot)/U_SIZEOF_UCHAR) ||
             s!=UnicodeString(FALSE, upperRoot, s.length())
         ) {
@@ -482,7 +485,8 @@ UnicodeStringTest::TestCaseConversion()
         }
 
         /* uppercase with turkish locale */
-        s=UnicodeString(FALSE, beforeUpper, sizeof(beforeUpper)/U_SIZEOF_UCHAR).toUpper(Locale("tr"));
+        s=UnicodeString(FALSE, beforeUpper, (int32_t)(sizeof(beforeUpper)/U_SIZEOF_UCHAR));
+        s.toUpper(Locale("tr"));
         if( s.length()!=(sizeof(upperTurkish)/U_SIZEOF_UCHAR) ||
             s!=UnicodeString(FALSE, upperTurkish, s.length())
         ) {
@@ -490,7 +494,8 @@ UnicodeStringTest::TestCaseConversion()
         }
 
         /* uppercase a short string with root locale */
-        s=UnicodeString(FALSE, beforeMiniUpper, sizeof(beforeMiniUpper)/U_SIZEOF_UCHAR).setCharAt(0, beforeMiniUpper[0]).toUpper();
+        s=UnicodeString(FALSE, beforeMiniUpper, (int32_t)(sizeof(beforeMiniUpper)/U_SIZEOF_UCHAR));
+        s.setCharAt(0, beforeMiniUpper[0]).toUpper();
         if( s.length()!=(sizeof(miniUpper)/U_SIZEOF_UCHAR) ||
             s!=UnicodeString(FALSE, miniUpper, s.length())
         ) {
