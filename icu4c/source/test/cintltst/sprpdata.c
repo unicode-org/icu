@@ -13,11 +13,12 @@
  *   created on: 2003jul11
  *   created by: Ram Viswanadha
  */
-#if !UCONFIG_NO_IDNA
-
 #define USPREP_TYPE_NAMES_ARRAY
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_IDNA
+
 #include "unicode/ustring.h"
 #include "cintltst.h"
 #include "unicode/usprep.h"

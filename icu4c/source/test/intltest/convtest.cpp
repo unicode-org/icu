@@ -17,6 +17,18 @@
 */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_LEGACY_CONVERSION
+/*
+ * Note: Turning off all of convtest.cpp if !UCONFIG_NO_LEGACY_CONVERSION
+ * is slightly unnecessary - it removes tests for Unicode charsets
+ * like UTF-8 that should work.
+ * However, there is no easy way for the test to detect whether a test case
+ * is for a Unicode charset, so it would be difficult to only exclude those.
+ * Also, regular testing of ICU is done with all modules on, therefore
+ * not testing conversion for a custom configuration like this should be ok.
+ */
+
 #include "unicode/ucnv.h"
 #include "unicode/unistr.h"
 #include "unicode/parsepos.h"
@@ -1214,3 +1226,5 @@ ConversionTest::checkFromUnicode(ConversionCase &cc, UConverter *cnv, const char
         return FALSE;
     }
 }
+
+#endif /* #if !UCONFIG_NO_LEGACY_CONVERSION */

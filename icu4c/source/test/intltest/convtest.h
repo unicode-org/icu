@@ -20,6 +20,9 @@
 #define __CONVTEST_H__
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_LEGACY_CONVERSION
+
 #include "unicode/ucnv.h"
 #include "intltest.h"
 
@@ -82,5 +85,7 @@ private:
     UConverter *
     cnv_open(const char *name, UErrorCode &errorCode);
 };
+
+#endif /* #if !UCONFIG_NO_LEGACY_CONVERSION */
 
 #endif

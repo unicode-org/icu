@@ -13,6 +13,9 @@
  *   created on: 2003jul11
  *   created by: Ram Viswanadha
  */
+
+#include "unicode/utypes.h"
+
 #if !UCONFIG_NO_IDNA
 
 #include "nfsprep.h"
