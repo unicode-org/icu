@@ -101,17 +101,7 @@ SOURCE=.\bidi.cpp
 # Begin Source File
 
 SOURCE=.\chariter.cpp
-
-!IF  "$(CFG)" == "common - Win32 Release"
-
 # ADD CPP /Ze
-
-!ELSEIF  "$(CFG)" == "common - Win32 Debug"
-
-# ADD CPP /Ze
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -121,47 +111,17 @@ SOURCE=.\compdata.cpp
 # Begin Source File
 
 SOURCE=.\compitr.cpp
-
-!IF  "$(CFG)" == "common - Win32 Release"
-
 # ADD CPP /Ze
-
-!ELSEIF  "$(CFG)" == "common - Win32 Debug"
-
-# ADD CPP /Ze
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\convert.cpp
-
-!IF  "$(CFG)" == "common - Win32 Release"
-
 # ADD CPP /Ze
-
-!ELSEIF  "$(CFG)" == "common - Win32 Debug"
-
-# ADD CPP /Ze
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\cpputils.cpp
-
-!IF  "$(CFG)" == "common - Win32 Release"
-
 # ADD CPP /Ze
-
-!ELSEIF  "$(CFG)" == "common - Win32 Debug"
-
-# ADD CPP /Ze
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -191,32 +151,12 @@ SOURCE=.\filestrm.c
 # Begin Source File
 
 SOURCE=.\locid.cpp
-
-!IF  "$(CFG)" == "common - Win32 Release"
-
 # ADD CPP /Ze
-
-!ELSEIF  "$(CFG)" == "common - Win32 Debug"
-
-# ADD CPP /Ze
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\locmap.cpp
-
-!IF  "$(CFG)" == "common - Win32 Release"
-
 # ADD CPP /Ze
-
-!ELSEIF  "$(CFG)" == "common - Win32 Debug"
-
-# ADD CPP /Ze
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -226,17 +166,7 @@ SOURCE=.\mutex.cpp
 # Begin Source File
 
 SOURCE=.\normlzr.cpp
-
-!IF  "$(CFG)" == "common - Win32 Release"
-
 # ADD CPP /Ze
-
-!ELSEIF  "$(CFG)" == "common - Win32 Debug"
-
-# ADD CPP /Ze
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -246,17 +176,7 @@ SOURCE=.\putil.c
 # Begin Source File
 
 SOURCE=.\rbdata.cpp
-
-!IF  "$(CFG)" == "common - Win32 Release"
-
 # ADD CPP /Ze
-
-!ELSEIF  "$(CFG)" == "common - Win32 Debug"
-
-# ADD CPP /Ze
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -266,17 +186,7 @@ SOURCE=.\resbund.cpp
 # Begin Source File
 
 SOURCE=.\schriter.cpp
-
-!IF  "$(CFG)" == "common - Win32 Release"
-
 # ADD CPP /Ze
-
-!ELSEIF  "$(CFG)" == "common - Win32 Debug"
-
-# ADD CPP /Ze
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -306,17 +216,7 @@ SOURCE=.\uchar.c
 # Begin Source File
 
 SOURCE=.\uchriter.cpp
-
-!IF  "$(CFG)" == "common - Win32 Release"
-
 # ADD CPP /Ze
-
-!ELSEIF  "$(CFG)" == "common - Win32 Debug"
-
-# ADD CPP /Ze
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -411,17 +311,7 @@ SOURCE=.\uhash.c
 # Begin Source File
 
 SOURCE=.\uhash_us.cpp
-
-!IF  "$(CFG)" == "common - Win32 Release"
-
 # ADD CPP /Ze
-
-!ELSEIF  "$(CFG)" == "common - Win32 Debug"
-
-# ADD CPP /Ze
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -451,32 +341,12 @@ SOURCE=.\unicode.cpp
 # Begin Source File
 
 SOURCE=.\unistr.cpp
-
-!IF  "$(CFG)" == "common - Win32 Release"
-
 # ADD CPP /Ze
-
-!ELSEIF  "$(CFG)" == "common - Win32 Debug"
-
-# ADD CPP /Ze
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=.\unorm.cpp
-
-!IF  "$(CFG)" == "common - Win32 Release"
-
 # ADD CPP /Ze
-
-!ELSEIF  "$(CFG)" == "common - Win32 Debug"
-
-# ADD CPP /Ze
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
@@ -1528,6 +1398,25 @@ InputPath=.\unicode\utypes.h
 # Begin Source File
 
 SOURCE=.\uvector.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\uversion.h
+
+!IF  "$(CFG)" == "common - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "common - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\uversion.h
+
+"..\..\include\unicode\uversion.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy    $(InputPath)    ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
 # End Source File
 # End Group
 # Begin Group "Resource Files"
