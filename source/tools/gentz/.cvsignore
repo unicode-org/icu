@@ -6,3 +6,4 @@ Makefile
 *.pdb
 gentz
 gentz.[0-9]
+*.plg
