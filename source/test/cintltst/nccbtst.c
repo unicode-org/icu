@@ -1383,52 +1383,29 @@ static void TestSingleByte(int32_t inputsize, int32_t outputsize)
 
 static void TestEBCDIC_STATEFUL_Sub(int32_t inputsize, int32_t outputsize)
 {
-      /*EBCDIC_STATEFUL*/
-        UChar ebcdic_inputTest[] = { 0x0061, 0x6d64, 0x0061, 0x00A2, 0x6d65 };
-        const uint8_t toIBM930[]= { 0x62, 0x0e, 0x5d, 0x63, 0x0f, 
-            0x62,  0xb1, 0x0e, 0xfe, 0xfe, 0x0f};
-        int32_t offset_930[]={0, 1, 1, 1, 2, 2, 3, 4, 4, 4, 4,};
+    /*EBCDIC_STATEFUL*/
+    UChar ebcdic_inputTest[] = { 0x0061, 0x6d64, 0x0061, 0x00A2, 0x6d65, 0x0061 };
+    const uint8_t toIBM930[]= { 0x62, 0x0e, 0x5d, 0x63, 0x0f, 0x62, 0xb1, 0x0e, 0xfe, 0xfe, 0x0f, 0x62 };
+    int32_t offset_930[]=     { 0,    1,    1,    1,    2,    2,    3,    4,    4,    4,    5,    5    };
+/*                              s     SO    doubl       SI    sng   s     SO    fe    fe    SI    s    */
 
-        const uint8_t toIBM930_maxbuffer[]= { 0x62, 0x0e, 0x5d, 0x63, 0x0f, 
-            0x62,  0xb1, 0xfe, 0xfe};
-        int32_t offset_930_maxbuffer[]={0, 1, 1, 1, 2, 2, 3, 4, 4, };
-/*                                      s  E  doubl F sng s  fe fe */
-        /*EBCDIC_STATEFUL with subChar=3f*/
-        const uint8_t toIBM930_subvaried[]= { 0x62, 0x0e, 0x5d, 0x63, 0x0f, 0x62,  0xb1, 0x3f};
-        int32_t offset_930_subvaried[]= {0, 1, 1, 1, 1, 2, 3, 4, };
-        const char mySubChar[]={ 0x3f};
+    /*EBCDIC_STATEFUL with subChar=3f*/
+    const uint8_t toIBM930_subvaried[]= { 0x62, 0x0e, 0x5d, 0x63, 0x0f, 0x62, 0xb1, 0x3f, 0x62 };
+    int32_t offset_930_subvaried[]=     { 0,    1,    1,    1,    2,    2,    3,    4,    5    };
+    const char mySubChar[]={ 0x3f};
 
-        const uint8_t toIBM930_subvaried_maxbuffer[]= { 0x62, 0x0e, 0x5d, 0x63, 0x0f, 0x62,  0xb1, 0x0f, 0x3f, 0x0e};
-        int32_t offset_930_subvaried_maxbuffer[]= {0, 1, 1, 1, 2, 2, 3, 4, 4, 4, 4,};
+    gInBufferSize = inputsize;
+    gOutBufferSize = outputsize;
 
-        gInBufferSize = inputsize;
-        gOutBufferSize = outputsize;
-
-        if(gInBufferSize == NEW_MAX_BUFFER && gOutBufferSize == NEW_MAX_BUFFER){
-            
-            if(!testConvertFromUnicode(ebcdic_inputTest, sizeof(ebcdic_inputTest)/sizeof(ebcdic_inputTest[0]),
-                toIBM930_maxbuffer, sizeof(toIBM930_maxbuffer), "ibm-930",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, offset_930_maxbuffer, NULL, 0 ))
-                    log_err("u-> ibm-930(EBCDIC_STATEFUL) with subst did not match.\n");
-
-            if(!testConvertFromUnicode(ebcdic_inputTest, sizeof(ebcdic_inputTest)/sizeof(ebcdic_inputTest[0]),
-                toIBM930_subvaried_maxbuffer, sizeof(toIBM930_subvaried_maxbuffer), "ibm-930",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, offset_930_subvaried_maxbuffer, mySubChar, 1 ))
-                    log_err("u-> ibm-930(EBCDIC_STATEFUL) with subst(setSubChar=0x3f) did not match.\n");
-        }else {
-
-            if(!testConvertFromUnicode(ebcdic_inputTest, sizeof(ebcdic_inputTest)/sizeof(ebcdic_inputTest[0]),
-                toIBM930, sizeof(toIBM930), "ibm-930",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, offset_930, NULL, 0 ))
-                    log_err("u-> ibm-930(EBCDIC_STATEFUL) with subst did not match.\n");
-            
-            if(!testConvertFromUnicode(ebcdic_inputTest, sizeof(ebcdic_inputTest)/sizeof(ebcdic_inputTest[0]),
-                toIBM930_subvaried, sizeof(toIBM930_subvaried), "ibm-930",
-                (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, offset_930_subvaried, mySubChar, 1 ))
-                    log_err("u-> ibm-930(EBCDIC_STATEFUL) with subst(setSubChar=0x3f) did not match.\n");
-        }
-
-
+    if(!testConvertFromUnicode(ebcdic_inputTest, sizeof(ebcdic_inputTest)/sizeof(ebcdic_inputTest[0]),
+        toIBM930, sizeof(toIBM930), "ibm-930",
+        (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, offset_930, NULL, 0 ))
+            log_err("u-> ibm-930(EBCDIC_STATEFUL) with subst did not match.\n");
+    
+    if(!testConvertFromUnicode(ebcdic_inputTest, sizeof(ebcdic_inputTest)/sizeof(ebcdic_inputTest[0]),
+        toIBM930_subvaried, sizeof(toIBM930_subvaried), "ibm-930",
+        (UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE, offset_930_subvaried, mySubChar, 1 ))
+            log_err("u-> ibm-930(EBCDIC_STATEFUL) with subst(setSubChar=0x3f) did not match.\n");
 }
 
 
