@@ -48,6 +48,7 @@ README text !eol
 *.spp -text
 *.tri2 -text
 
+icu4c/as_is/win32/msvc7.zip -text
 icu4c/source/data/brkitr/thaidict.brk -text
 icu4c/source/data/unidata/UCARules.txt -text
 icu4c/source/samples/ucnv/data02.bin -text
