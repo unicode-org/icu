@@ -1327,6 +1327,7 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
         
 
     }
+
     log_verbose("Testing fromUnicode for SCSU with UCNV_FROM_U_CALLBACK_SUBSTITUTE \n");
     {
         UChar SCSU_inputText[]={ 0x0041, 0xd801/*illegal*/, 0x0042, };
@@ -1355,16 +1356,68 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
         if(!testConvertFromUnicode(SCSU_inputText, sizeof(SCSU_inputText)/sizeof(SCSU_inputText[0]),
                 to_SCSU, sizeof(to_SCSU), "SCSU",
                 UCNV_FROM_U_CALLBACK_SUBSTITUTE, from_SCSUOffs, NULL, 0 ))
-            log_err("u-> SCSU with skip did not match.\n");
+            log_err("u-> SCSU with substitute did not match.\n");
                 
         if(!testConvertFromUnicodeWithContext(SCSU_inputText, sizeof(SCSU_inputText)/sizeof(SCSU_inputText[0]),
                 to_SCSU_1, sizeof(to_SCSU_1), "SCSU",
                 UCNV_FROM_U_CALLBACK_SUBSTITUTE, from_SCSUOffs_1, NULL, 0,"i",U_ILLEGAL_CHAR_FOUND ))
             log_err("u-> SCSU with substitute did not match.\n");
-
-    
     }
     
+    log_verbose("Testing fromUnicode for UTF-16 with UCNV_FROM_U_CALLBACK_SUBSTITUTE\n");
+    {
+        static const UChar in[]={ 0x0041, 0xfeff };
+
+        static const uint8_t out[]={
+#if U_IS_BIG_ENDIAN
+            0xfe, 0xff,
+            0x00, 0x41,
+            0xfe, 0xff
+#else
+            0xff, 0xfe,
+            0x41, 0x00,
+            0xff, 0xfe
+#endif
+        };
+        static const int32_t offsets[]={
+            -1, -1, 0, 0, 1, 1
+        };
+
+        if(!testConvertFromUnicode(in, ARRAY_LENGTH(in),
+                                   out, sizeof(out), "UTF-16",
+                                   UCNV_FROM_U_CALLBACK_SUBSTITUTE, offsets, NULL, 0)
+        ) {
+            log_err("u->UTF-16 with substitute did not match.\n");
+        }
+    }
+
+    log_verbose("Testing fromUnicode for UTF-32 with UCNV_FROM_U_CALLBACK_SUBSTITUTE\n");
+    {
+        static const UChar in[]={ 0x0041, 0xfeff };
+
+        static const uint8_t out[]={
+#if U_IS_BIG_ENDIAN
+            0x00, 0x00, 0xfe, 0xff,
+            0x00, 0x00, 0x00, 0x41,
+            0x00, 0x00, 0xfe, 0xff
+#else
+            0xff, 0xfe, 0x00, 0x00,
+            0x41, 0x00, 0x00, 0x00,
+            0xff, 0xfe, 0x00, 0x00
+#endif
+        };
+        static const int32_t offsets[]={
+            -1, -1, -1, -1, 0, 0, 0, 0, 1, 1, 1, 1
+        };
+
+        if(!testConvertFromUnicode(in, ARRAY_LENGTH(in),
+                                   out, sizeof(out), "UTF-32",
+                                   UCNV_FROM_U_CALLBACK_SUBSTITUTE, offsets, NULL, 0)
+        ) {
+            log_err("u->UTF-32 with substitute did not match.\n");
+        }
+    }
+
     /*to unicode*/
     if(!testConvertToUnicode(expsubIBM_949, sizeof(expsubIBM_949),
              IBM_949subtoUnicode, sizeof(IBM_949subtoUnicode)/sizeof(IBM_949subtoUnicode[0]),"ibm-949",
@@ -1510,7 +1563,7 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
         }
     }
 
-    log_verbose("Testing UTF-7 with substitute callbacks\n");
+    log_verbose("Testing UTF-7 toUnicode with substitute callbacks\n");
     {
         static const uint8_t utf7[]={
          /* a~            a+AB~                         a+AB\x0c                      a+AB-                         a+AB.                         a+. */
@@ -1527,6 +1580,87 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
                                  UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets, NULL, 0)
         ) {
             log_err("UTF-7->u with substitute did not match.\n");
+        }
+    }
+
+    log_verbose("Testing UTF-16 toUnicode with substitute callbacks\n");
+    {
+        static const uint8_t
+            in1[]={ 0xfe, 0xff, 0x4e, 0x00, 0xfe, 0xff },
+            in2[]={ 0xff, 0xfe, 0x4e, 0x00, 0xfe, 0xff },
+            in3[]={ 0xfe, 0xfd, 0x4e, 0x00, 0xfe, 0xff };
+
+        static const UChar
+            out1[]={ 0x4e00, 0xfeff },
+            out2[]={ 0x004e, 0xfffe },
+            out3[]={ 0xfefd, 0x4e00, 0xfeff };
+
+        static const int32_t
+            offsets1[]={ 2, 4 },
+            offsets2[]={ 2, 4 },
+            offsets3[]={ 0, 2, 4 };
+
+        if(!testConvertToUnicode(in1, ARRAY_LENGTH(in1), out1, ARRAY_LENGTH(out1), "UTF-16", 
+                                 UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets1, NULL, 0)
+        ) {
+            log_err("UTF-16 (BE BOM)->u with substitute did not match.\n");
+        }
+
+        if(!testConvertToUnicode(in2, ARRAY_LENGTH(in2), out2, ARRAY_LENGTH(out2), "UTF-16", 
+                                 UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets2, NULL, 0)
+        ) {
+            log_err("UTF-16 (LE BOM)->u with substitute did not match.\n");
+        }
+
+        if(!testConvertToUnicode(in3, ARRAY_LENGTH(in3), out3, ARRAY_LENGTH(out3), "UTF-16", 
+                                 UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets3, NULL, 0)
+        ) {
+            log_err("UTF-16 (no BOM)->u with substitute did not match.\n");
+        }
+    }
+
+    log_verbose("Testing UTF-32 toUnicode with substitute callbacks\n");
+    {
+        static const uint8_t
+            in1[]={ 0x00, 0x00, 0xfe, 0xff,   0x00, 0x10, 0x0f, 0x00,   0x00, 0x00, 0xfe, 0xff },
+            in2[]={ 0xff, 0xfe, 0x00, 0x00,   0x00, 0x10, 0x0f, 0x00,   0xfe, 0xff, 0x00, 0x00 },
+            in3[]={ 0x00, 0x00, 0xfe, 0xfe,   0x00, 0x10, 0x0f, 0x00,   0x00, 0x00, 0xd8, 0x40,   0x00, 0x00, 0xdc, 0x01 },
+            in4[]={ 0x00, 0x01, 0x02, 0x03,   0x00, 0x11, 0x12, 0x00,   0x00, 0x00, 0x4e, 0x00 };
+
+        static const UChar
+            out1[]={ UTF16_LEAD(0x100f00), UTF16_TRAIL(0x100f00), 0xfeff },
+            out2[]={ UTF16_LEAD(0x0f1000), UTF16_TRAIL(0x0f1000), 0xfffe },
+            out3[]={ 0xfefe, UTF16_LEAD(0x100f00), UTF16_TRAIL(0x100f00), 0xd840, 0xdc01 },
+            out4[]={ UTF16_LEAD(0x10203), UTF16_TRAIL(0x10203), 0xfffd, 0x4e00 };
+
+        static const int32_t
+            offsets1[]={ 4, 4, 8 },
+            offsets2[]={ 4, 4, 8 },
+            offsets3[]={ 0, 4, 4, 8, 12 },
+            offsets4[]={ 0, 0, 4, 8 };
+
+        if(!testConvertToUnicode(in1, ARRAY_LENGTH(in1), out1, ARRAY_LENGTH(out1), "UTF-32", 
+                                 UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets1, NULL, 0)
+        ) {
+            log_err("UTF-32 (BE BOM)->u with substitute did not match.\n");
+        }
+
+        if(!testConvertToUnicode(in2, ARRAY_LENGTH(in2), out2, ARRAY_LENGTH(out2), "UTF-32", 
+                                 UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets2, NULL, 0)
+        ) {
+            log_err("UTF-32 (LE BOM)->u with substitute did not match.\n");
+        }
+
+        if(!testConvertToUnicode(in3, ARRAY_LENGTH(in3), out3, ARRAY_LENGTH(out3), "UTF-32", 
+                                 UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets3, NULL, 0)
+        ) {
+            log_err("UTF-32 (no BOM)->u with substitute did not match.\n");
+        }
+
+        if(!testConvertToUnicode(in4, ARRAY_LENGTH(in4), out4, ARRAY_LENGTH(out4), "UTF-32", 
+                                 UCNV_TO_U_CALLBACK_SUBSTITUTE, offsets4, NULL, 0)
+        ) {
+            log_err("UTF-32 (no BOM, with error)->u with substitute did not match.\n");
         }
     }
 }
