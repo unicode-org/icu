@@ -62,7 +62,7 @@ typedef struct UConverterStaticData {   /* +offset: size */
     uint8_t hasFromUnicodeFallback; /* +78: 1 */
     uint8_t unicodeMask;            /* +79: 1  bit 0: has supplementary  bit 1: has single surrogates */
     uint8_t subChar1;               /* +80: 1  single-byte substitution character for IBM MBCS (0 if none) */
-    const uint8_t reserved[19];     /* +81: 19 to round out the structure */
+    uint8_t reserved[19];           /* +81: 19 to round out the structure */
                                     /* total size: 100 */
 } UConverterStaticData;
 
