@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2001/11/28 18:04:53 $ 
-* $Revision: 1.40 $
+* $Date: 2001/11/28 19:27:08 $ 
+* $Revision: 1.41 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -67,7 +67,7 @@
     </target>
       
     <target name="demos" depends="core,testData">
-        <javac includes="com/ibm/demo/**/*.java"
+        <javac includes="com/ibm/demo/**/*.java,com/ibm/icu/demo/**/*"
             excludes="**/CVS/**/*"
     	    srcdir="${src.dir}"
     	    destdir="${build.dir}" 
