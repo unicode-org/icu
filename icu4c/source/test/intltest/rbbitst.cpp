@@ -388,6 +388,29 @@ void RBBITest::TestMixedThaiLineBreak()
 
     ADD_DATACHUNK(thaiLineSelection, NULL, 0, status);           // Break at start of data
 
+
+    // @suwit -- Test Arabic numerals, Thai numerals, Punctuation and English characters
+	// start
+
+	ADD_DATACHUNK(thaiLineSelection, "\\u0E1B\\u0E35", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0E1E\\u0E38\\u0E17\\u0E18\\u0E28\\u0E31\\u0E01\\u0E23\\u0E32\\u0E0A ", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "2545 ", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0E40\\u0E1B\\u0E47\\u0E19", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0E1B\\u0E35", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0E09\\u0E25\\u0E2D\\u0E07", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0E04\\u0E23\\u0E1A", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0E23\\u0E2D\\u0E1A ", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\"\\u0E52\\u0E52\\u0E50 ", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0E1b\\u0E35\" ", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0E02\\u0E2d\\u0E07", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0E01\\u0E23\\u0E38\\u0E07", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "\\u0E23\\u0E31\\u0E15\\u0E19\\u0E42\\u0E01\\u0E2A\\u0E34\\u0E19\\u0E17\\u0E23\\u0E4C ", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "(\\u0E01\\u0E23\\u0E38\\u0E07\\u0E40\\u0E17\\u0E1e\\u0E2F", 0, status);
+	ADD_DATACHUNK(thaiLineSelection, "\\u0E2B\\u0E23\\u0E37\\u0E2D ", 0, status);
+    ADD_DATACHUNK(thaiLineSelection, "Bangkok)", 0, status);
+     
+    // @suwit - end of changes
+
     // Arabic numerals should always be separated from surrounding Thai text
 /*
         ADD_DATACHUNK(thaiLineSelection, "\\u0e04\\u0e48\\u0e32", 0, status);
@@ -426,6 +449,7 @@ ADD_DATACHUNK(thaiLineSelection, "(\\u0e1b\\u0e23\\u0e30\\u0e40\\u0e17\\u0e28\\u
         ADD_DATACHUNK(thaiLineSelection, "\\u0e15\\u0e31\\u0e27\"", 0, status);
 */
 
+    /*  remove the old data sample. 
     // The Unicode Linebreak TR says do not break before or after quotes.
     //    So this test is changed ot not break around the quote.
     //    TODO:  should Thai break around the around the quotes, like the original behavior here?
@@ -435,6 +459,7 @@ ADD_DATACHUNK(thaiLineSelection, "(\\u0e1b\\u0e23\\u0e30\\u0e40\\u0e17\\u0e28\\u
                                                          "\\u0e23\\u0e38\\u0e48\\u0e19", 0, status);
 
     ADD_DATACHUNK(thaiLineSelection, "\\u0e43\\u0e2b\\u0e21\\u0e48", 0, status);
+
     ADD_DATACHUNK(thaiLineSelection, "\\u0e40\\u0e14\\u0e37\\u0e2d\\u0e19\\u0e21\\u0e34.", 0, status);
     ADD_DATACHUNK(thaiLineSelection, "\\u0e22.", 0, status);
     ADD_DATACHUNK(thaiLineSelection, "\\u0e19\\u0e35\\u0e49", 0, status);
@@ -443,7 +468,7 @@ ADD_DATACHUNK(thaiLineSelection, "(\\u0e1b\\u0e23\\u0e30\\u0e40\\u0e17\\u0e28\\u
     ADD_DATACHUNK(thaiLineSelection, "\\u0e40\\u0e17\\u0e48\\u0e32", 0, status);
     ADD_DATACHUNK(thaiLineSelection, "\\u0e19\\u0e31\\u0e49\\u0e19 ", 0, status);
     ADD_DATACHUNK(thaiLineSelection, "(\"\\u0e2e\\u0e32\\u0e23\\u0e4c\\u0e14\\u0e14\\u0e34\\u0e2a\\u0e01\\u0e4c\").", 0, status);
-
+*/
     RuleBasedBreakIterator* e = (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale("th"), status);
     if (U_FAILURE(status))
     {
@@ -490,6 +515,23 @@ void RBBITest::TestThaiWordBreak() {
     BITestData   thaiWordSelection(status);
 
     ADD_DATACHUNK(thaiWordSelection, NULL, 0, status);           // Break at start of data
+
+
+	// @suwit -- Thai sample data from GVT Guideline
+	// start
+	ADD_DATACHUNK(thaiWordSelection, "\\u0E2B\\u0E19\\u0E36\\u0E48\\u0E07", 0, status); //5
+	ADD_DATACHUNK(thaiWordSelection, "\\u0E04\\u0E33", 0, status); //7
+	ADD_DATACHUNK(thaiWordSelection, "\\u0E44\\u0E17\\u0E22", 0, status); //10
+	ADD_DATACHUNK(thaiWordSelection, "\\u0E2A\\u0E32\\u0E21\\u0E32\\u0E23\\u0E16", 0, status); //16
+	ADD_DATACHUNK(thaiWordSelection, "\\u0E1B\\u0E23\\u0E30\\u0E01\\u0E2D\\u0E1A", 0, status); //22
+	ADD_DATACHUNK(thaiWordSelection, "\\u0E14\\u0E49\\u0E27\\u0E22", 0, status);  //26
+	ADD_DATACHUNK(thaiWordSelection, "\\u0e2b\\u0e25\\u0e32\\u0e22", 0, status);  //30
+	ADD_DATACHUNK(thaiWordSelection, "\\u0e1e\\u0e22\\u0e32\\u0e07\\u0e04\\u0e4c", 0, status);  //36
+
+    // @suwit - end of changes
+
+    /*  remove the old data sample because Thai translation of the Wizard of Oz is not good testcase for wordbreak API.
+			
     ADD_DATACHUNK(thaiWordSelection, "\\u0E1A\\u0E17", 0, status); //2
     ADD_DATACHUNK(thaiWordSelection, "\\u0E17\\u0E35\\u0E48", 0, status); //5
     ADD_DATACHUNK(thaiWordSelection, "\\u0E51", 0, status); //6
@@ -537,6 +579,7 @@ void RBBITest::TestThaiWordBreak() {
     // and this is what the dictionary does
     ADD_DATACHUNK(thaiWordSelection, "\\u0E40\\u0E2E", 0, status); // 65
     ADD_DATACHUNK(thaiWordSelection, "\\u0E19\\u0E23\\u0E35\\u0E0A\\u0E32\\u0E27\\u0E44\\u0E23\\u0E48\\u0E41\\u0E25\\u0E30", 0, status); //77
+    */
 
     RuleBasedBreakIterator* e = (RuleBasedBreakIterator *)BreakIterator::createWordInstance(
         Locale("th"), status);
