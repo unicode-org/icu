@@ -1379,10 +1379,12 @@ static uint16_t getExtName(uint32_t code, char *buffer, uint16_t bufferLength) {
                 WRITE_CHAR(buffer, bufferLength, length, catname[length - 1]);
             }
             WRITE_CHAR(buffer, bufferLength, length, '-');
-            for (cp = code, ndigits = 0; cp; ++ndigits, cp >>= 4);
-            if (ndigits < 4) ndigits = 4;
+            for (cp = code, ndigits = 0; cp; ++ndigits, cp >>= 4)
+                ;
+            if (ndigits < 4)
+                ndigits = 4;
             for (cp = code, i = ndigits; (cp || i > 0) && bufferLength; cp >>= 4, bufferLength--) {
-                uint8_t v = cp & 0xf;
+                uint8_t v = (uint8_t)(cp & 0xf);
                 buffer[--i] = (v < 10 ? '0' + v : 'A' + v - 10);
             }
             buffer += ndigits;
