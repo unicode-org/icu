@@ -274,11 +274,11 @@ mt {
 //CET: 
     zoneStrings { 
         {
-        "Europe/Malta", 
-        "\u0126in ta' L-Ewropa Centrali", 
         "CET", 
+        "\u0126in ta' L-Ewropa Centrali", 
+        "\u0126EC", 
         "\u0126in ta' L-Ewropa Centrali ta' sajf",
-        "CET-summer"
+        "\u0126EC-sajf"
         }
     }
 

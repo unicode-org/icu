@@ -69,6 +69,7 @@ fr {
         hr { "croate" }
         it { "italien" }
         ja { "japonais" }
+        mt { "maltais" }
         nl { "hollandais" } // ne'erlandais ?
         no { "norv\u00E9gien" }
         pt { "portugais" }
@@ -179,6 +180,9 @@ fr {
         }
 
 // http://www.elections.ca/gen_info/backgrounders/ec90815_f.html
+// http://lcweb.loc.gov/standards/iso639-2/frenchlangn.html
+// http://www.egt.ie/standards/iso3166/iso3166-1-fr.html
+
     }
 }
 
