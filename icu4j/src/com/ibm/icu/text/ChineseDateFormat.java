@@ -58,6 +58,7 @@ public class ChineseDateFormat extends SimpleDateFormat {
      * @param pattern the pattern
      * @param locale the locale
      * @draft ICU 3.2
+     * @deprecated This is a draft API and might change in a future release of ICU.
      */
    public ChineseDateFormat(String pattern, ULocale locale) {
        // TODO: convert CDFS to use ULocale

@@ -704,6 +704,7 @@ public abstract class NumberFormat extends UFormat {
          * @param formatType the type of format
          * @return the NumberFormat, or null.
          * @draft ICU 3.2
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public NumberFormat createFormat(ULocale loc, int formatType) {
             return createFormat(loc.toLocale(), formatType);
@@ -758,6 +759,7 @@ public abstract class NumberFormat extends UFormat {
 
         /**
          * @draft ICU 3.2
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public SimpleNumberFormatFactory(ULocale locale) {
             this(locale, true);
@@ -765,6 +767,7 @@ public abstract class NumberFormat extends UFormat {
         
         /**
          * @draft ICU 3.2
+	 * @deprecated This is a draft API and might change in a future release of ICU.
          */
         public SimpleNumberFormatFactory(ULocale locale, boolean visible) {
             localeNames = Collections.singleton(locale.getBaseName());
