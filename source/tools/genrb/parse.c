@@ -36,8 +36,10 @@ U_STRING_DECL(k_start_int, "int", 3);
 U_STRING_DECL(k_start_array, "array", 5);
 U_STRING_DECL(k_start_intvector, "intvector", 9);
 U_STRING_DECL(k_start_reserved, "reserved", 8);
+U_STRING_DECL(rootName, "root", 4);
 
 static UBool didInit=FALSE;
+static UBool didInitRoot=FALSE;
 
 /* Node IDs for the state transition table. */
 enum ENode {
@@ -310,6 +312,11 @@ parse(FileStream *f, const char *cp,
 			int32_t len = 0;
 			uint8_t *data = NULL;
 			UCollator *coll = NULL; 
+			const UChar *rules1 = NULL;
+			int32_t len1 = 0;
+			UCollator *tstColl = NULL;
+			const UChar *rules2 = NULL;
+			int32_t len2 = 0;
 			UChar *rules = NULL;
 			defaultRulesArray = ucol_getDefaultRulesArray(&defaultRulesArrayLength);
 			rules = uprv_malloc(sizeof(defaultRulesArray[0])*(defaultRulesArrayLength + token.fLength));
@@ -317,19 +324,21 @@ parse(FileStream *f, const char *cp,
 			uprv_memcpy(rules + defaultRulesArrayLength, token.fChars, token.fLength*sizeof(token.fChars[0]));
 			
 			coll = ucol_openRules(rules, defaultRulesArrayLength + token.fLength, 0, 0, status);
+			tstColl = ucol_open("da", status);
+			rules1 = ucol_getRules(coll, &len1);
+			rules2 = ucol_getRules(tstColl, &len2);
+
 			if(U_SUCCESS(*status) && coll !=NULL) {
                 /* This is just for testing & should be removed
 				temp1 = bin_open(bundle, "%%Collation", sizeof(defaultRulesArray[0])*(defaultRulesArrayLength + token.fLength), (uint8_t *) rules, status);
 				table_add(rootTable, temp1, status);
                 */
-/*
 				data = ucol_cloneRuleData(coll, &len, status);
 				if(U_SUCCESS(*status) && data != NULL) {
 					temp1 = bin_open(bundle, "%%Collation", len, data, status);
 					table_add(rootTable, temp1, status);
 					uprv_free(data);
 				}
-*/
 				ucol_close(coll);
 			}
 			uprv_free(rules);
@@ -446,6 +455,47 @@ parse(FileStream *f, const char *cp,
 	        goto finish;
         }
         bundle_setlocale(bundle, token.fChars, status);
+	if(didInitRoot == FALSE) {
+	  U_STRING_INIT(rootName, "root", 4);
+	  didInitRoot = TRUE;
+	}
+
+	if(u_strcmp(token.fChars, rootName) == 0) {
+			const UChar * defaultRulesArray;
+			uint32_t defaultRulesArrayLength = 0;
+			/* do the collation elements */
+			int32_t len = 0;
+			uint8_t *data = NULL;
+			uint8_t *data2 = NULL;
+			UCollator *coll = NULL; 
+			UCollator *tstColl = NULL;
+			const UChar *rules1 = NULL;
+			const UChar *rules2 = NULL;
+			int32_t len1 = 0;
+			int32_t len2 = 0;
+
+			UChar *rules = NULL;
+			defaultRulesArray = ucol_getDefaultRulesArray(&defaultRulesArrayLength);
+			rules = uprv_malloc(sizeof(defaultRulesArray[0])*(defaultRulesArrayLength));
+			uprv_memcpy(rules, defaultRulesArray, defaultRulesArrayLength*sizeof(defaultRulesArray[0]));
+			
+			coll = ucol_openRules(rules, defaultRulesArrayLength, 0, 0, status);
+			tstColl = ucol_open("root", status);
+			rules1 = ucol_getRules(coll, &len1);
+			rules2 = ucol_getRules(tstColl, &len2);
+
+			if(U_SUCCESS(*status) && coll !=NULL) {
+				data = ucol_cloneRuleData(coll, &len, status);
+				data2 = ucol_cloneRuleData(tstColl, &len2, status);
+				if(U_SUCCESS(*status) && data != NULL) {
+					temp1 = bin_open(bundle, "%%Collation", len, data, status);
+					table_add(rootTable, temp1, status);
+					uprv_free(data);
+				}
+				ucol_close(coll);
+			}
+			uprv_free(rules);
+	}
         if(U_FAILURE(*status)) goto finish;
         data = uhash_open(hashUString, compareUString, status);
         uhash_setKeyDeleter(data, freeUString);
