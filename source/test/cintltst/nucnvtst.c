@@ -74,7 +74,7 @@ static void TestConv(const uint16_t in[],
 static void TestRoundTrippingAllUTF(void);
 static void TestCoverageMBCS(void);
 static void TestJitterbug2346(void);
-
+static void TestJitterbug2411(void);
 void addTestNewConvert(TestNode** root);
 
 /* open a converter, using test data if it begins with '@' */
@@ -248,6 +248,7 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestCoverageMBCS, "tsconv/nucnvtst/TestCoverageMBCS");
    addTest(root, &TestRoundTrippingAllUTF, "tsconv/nucnvtst/TestRoundTrippingAllUTF");
    addTest(root, &TestJitterbug2346, "tsconv/nucnvtst/TestJitterbug2346");
+   addTest(root, &TestJitterbug2411, "tsconv/nucnvtst/TestJitterbug2411");
 
 }
 
@@ -3754,6 +3755,39 @@ TestISO_2022_KR_1() {
     free(uBuf);
     free(cBuf);
     free(offsets);
+}
+
+static void TestJitterbug2411(){
+    const char* source = "\x1b$)Ckknnjhpoiuyqwehg\n\x1b$)Cjasdfjasdfhoiuy\x1b$)C";
+    UConverter* kr=NULL, *kr1=NULL;
+    UErrorCode errorCode = U_ZERO_ERROR;
+    UChar tgt[100]={'\0'};
+    UChar* target = tgt;
+    UChar* targetLimit = target+100;
+    kr=ucnv_open("iso-2022-kr", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_data_err("Unable to open a iso-2022-kr converter: %s\n", u_errorName(errorCode));
+        return;
+    }
+    ucnv_toUnicode(kr,&target,targetLimit,&source,source+uprv_strlen(source),NULL,TRUE,&errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("iso-2022-kr cannot handle multiple escape sequences : %s\n", u_errorName(errorCode));
+        return;
+    }
+    kr1 = ucnv_open("ibm-25546", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_data_err("Unable to open a iso-2022-kr_1 converter: %s\n", u_errorName(errorCode));
+        return;
+    }
+    target = tgt;
+    targetLimit = target+100;
+    ucnv_toUnicode(kr,&target,targetLimit,&source,source+uprv_strlen(source),NULL,TRUE,&errorCode);
+       
+    if(U_FAILURE(errorCode)) {
+        log_err("iso-2022-kr_1 cannot handle multiple escape sequences : %s\n", u_errorName(errorCode));
+        return;
+    }
+    
 }
 
 static void
