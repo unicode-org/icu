@@ -6,3 +6,4 @@ icudefs.mk
 README
 bin
 lib
+Doxyfile
