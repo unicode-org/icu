@@ -177,6 +177,7 @@ distclean-local: clean-local
 
 $(TMPDATADIR)/icudata.lst: Makefile $(srcdir)/Makefile.in $(srcdir)/genrb/genrbfiles.mk $(srcdir)/makeconv/ucmfiles.mk
 	@echo Generating $@ list of data files
+	@$(mkinstalldirs) $(TMPDATADIR)
 	@-$(RMV) $(TMPDATADIR)/icudata.lst
 	@for file in $(DATAFILES); do \
 	  echo `pwd`/$$file >> $(TMPDATADIR)/icudata.lst; \
