@@ -87,10 +87,10 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 	list='$(SUBDIRS)'; for subdir in $$list; do \
 	  echo "Making $$target in $$subdir"; \
 	  if test "$$subdir" = "."; then \
-	    dot_seen=yes; \
-	    local_target="$$target-local"; \
+		dot_seen=yes; \
+		local_target="$$target-local"; \
 	  else \
-	    local_target="$$target"; \
+		local_target="$$target"; \
 	  fi; \
 	  (cd $$subdir && $(MAKE) $$local_target) || exit; \
 	done; \
@@ -119,8 +119,9 @@ $(OBJDATADIR)/%.brk: $(SRCDATADIR)/%LE.brk
 endif
 
 #include $(srcdir)/makeconv/ucmfiles.mk
+#-include $(srcdir)/makeconv/ucmebcdic.mk
 #-include $(srcdir)/makeconv/ucmlocal.mk
-ALL_UCM_SOURCE= $(UCM_SOURCE) $(UCM_SOURCE_LOCAL)
+ALL_UCM_SOURCE= $(UCM_SOURCE) $(UCM_EBCDIC_SOURCE) $(UCM_SOURCE_LOCAL)
 
 #include $(srcdir)/genrb/genrbfiles.mk
 #-include $(srcdir)/genrb/reslocal.mk
