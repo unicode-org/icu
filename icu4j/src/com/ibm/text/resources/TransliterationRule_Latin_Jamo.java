@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/TransliterationRule_Latin_Jamo.java,v $ 
- * $Date: 2000/04/21 21:17:08 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/04/27 22:17:47 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -26,8 +26,10 @@ public class TransliterationRule_Latin_Jamo extends ListResourceBundle {
   + "$initial=[\u1100-\u115F];"
   + "$medial=[\u1160-\u11A7];"
   + "$final=[\u11A8-\u11F9];" // added - aliu
-  + "$vowel=[aeiouwyAEIOUWY\u1160-\u11A7];"
-  + "$consonant=[bcdfghjklmnpqrstvxzBCDFGHJKLMNPQRSTVXZ$medial$final];"
+  + "$vowel=[aeiouwyAEIOUWY$medial];"
+              // following line used to read "..$medial$final]"
+              // assume this was a typo - liu
+  + "$consonant=[bcdfghjklmnpqrstvxzBCDFGHJKLMNPQRSTVXZ$initial$final];"
   + "$ye=[yeYE];"
   + "$ywe=[yweYWE];"
   + "$yw=[ywYW];"
