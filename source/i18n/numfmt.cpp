@@ -92,6 +92,7 @@ const UChar * const NumberFormat::fgLastResortNumberPatterns[] =
     gLastResortScientificPat
 };
 
+#if !UCONFIG_NO_SERVICE
 // -------------------------------------
 // SimpleNumberFormatFactory implementation
 NumberFormatFactory::~NumberFormatFactory() {}
@@ -117,7 +118,7 @@ SimpleNumberFormatFactory::getSupportedIDs(int32_t &count, UErrorCode& status) c
     count = 0;
     return NULL;
 }
-
+#endif /* #if !UCONFIG_NO_SERVICE */
 
 // -------------------------------------
 // default constructor
