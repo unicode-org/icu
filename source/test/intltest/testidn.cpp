@@ -353,8 +353,8 @@ compareMapping(uint32_t codepoint, uint32_t* mapping,int32_t mapLength,
         }
         int32_t realLength =0;
         /* figure out the real length */ 
-        for(int32_t i=0; i<mapLength; i++){
-            if(mapping[i] > 0xFFFF){
+        for(int32_t j=0; j<mapLength; j++){
+            if(mapping[j] > 0xFFFF){
                 realLength +=2;
             }else{
                 realLength++;
