@@ -135,7 +135,7 @@ public:
             Formattable&            result, 
             ParsePosition&          /* parsePosition */) const
     {
-        result.setLong(0L);
+        result.setLong((int32_t)0);
     }
   
     virtual void parse(    const UnicodeString&    text, 
