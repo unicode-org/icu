@@ -109,6 +109,9 @@ ctest:
 	  echo $$RES ; \
 	done
 
-distclean clean:
+clean:
 	-@rm -f *.h *.c *.cpp *.o *.junk
+
+distclean: clean
+	-@rm -f Makefile
 
