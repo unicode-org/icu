@@ -163,10 +163,10 @@ CalendarRegressionTest::test4028518()
 }
 
 void 
-CalendarRegressionTest::printdate(GregorianCalendar *cal, char *string)
+CalendarRegressionTest::printdate(GregorianCalendar *cal, const char *string)
 {
     UErrorCode status = U_ZERO_ERROR;
-    logln(UnicodeString(string));
+    logln(UnicodeString(string, ""));
     log(UnicodeString("") + cal->get(GregorianCalendar::MONTH, status)) ;
     failure(status, "cal->get");
     int32_t date = cal->get(GregorianCalendar::DATE, status) + 1 ;
