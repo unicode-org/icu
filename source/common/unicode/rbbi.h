@@ -365,6 +365,7 @@ public:
     * recently returned break position.  
     * <p>
     * The returned status value(s) are stored into an array provided by the caller.
+    * The values are stored in sorted (ascending) order.
     * If the capacity of the output array is insufficient to hold the data,
     *  the output will be truncated to the available length, and a
     *  U_BUFFER_OVERFLOW_ERROR will be signaled.
