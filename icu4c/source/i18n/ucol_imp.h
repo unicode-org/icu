@@ -495,8 +495,8 @@ typedef struct {
       /* all the offsets are in bytes */
       /* to get the address add to the header address and cast properly */
       uint32_t options; /* these are the default options for the collator */
-      uint32_t CEindex;          /* uint16_t *CEindex;              */
-      uint32_t CEvalues;         /* int32_t *CEvalues;              */
+      uint32_t contractionUCACombos;        /* this one is needed only for UCA, to copy the appropriate contractions */
+      uint32_t unusedReserved1;         /* reserved for future use */
       uint32_t mappingPosition;  /* const uint8_t *mappingPosition; */
       uint32_t expansion;        /* uint32_t *expansion;            */
       uint32_t contractionIndex; /* UChar *contractionIndex;        */

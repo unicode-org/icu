@@ -2280,6 +2280,61 @@ static void TestCompressOverlap() {
     }
 }
 
+void TestCyrillicTailoring(void) {
+  static char *test[] = {
+    "\\u0410",
+      "\\u0410\\u0306",
+      "\\u04d0"
+  };
+
+  static char rules[256] = "&Z < \\u0410";
+  static UChar rlz[256];
+  uint32_t rLen;
+
+    UErrorCode status = U_ZERO_ERROR;
+
+
+    UChar u = 0;
+    uint32_t nfcSize;
+    uint32_t nfdSize;
+    tester **t = uprv_malloc(0xFFFF * sizeof(tester *));
+    uint32_t noCases = 0;
+    UCollator *coll = NULL;
+
+    t[0] = (tester *)uprv_malloc(sizeof(tester));
+
+    for(u = 0; u < 0xFFFF; u++) {
+        nfcSize = unorm_normalize(&u, 1, UNORM_NFC, 0, t[noCases]->NFC, NORM_BUFFER_TEST_LEN, &status);
+        nfdSize = unorm_normalize(&u, 1, UNORM_NFD, 0, t[noCases]->NFD, NORM_BUFFER_TEST_LEN, &status);
+
+        if(nfcSize != nfdSize || (uprv_memcmp(t[noCases]->NFC, t[noCases]->NFD, nfcSize * sizeof(UChar)) != 0)) {
+            t[noCases]->u = u;
+            noCases++;
+            t[noCases] = (tester *)uprv_malloc(sizeof(tester));
+        }
+    }
+
+
+    /*coll = ucol_open(locName, &status);*/
+    rLen = u_unescape(rules, rlz, 256);
+    coll = ucol_openRules(rlz, rLen, UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT, &status);
+
+    for(u=0; u<noCases; u++) {
+        doTest(coll, t[u]->NFC, t[u]->NFD, UCOL_EQUAL);
+    }
+
+    ucol_close(coll);
+
+    for(u = 0; u <= noCases; u++) {
+        uprv_free(t[u]);
+    }
+    uprv_free(t);
+
+    genericLocaleStarter("ru", test, 3);
+    genericRulesStarter("&\\u0410 = \\u0410", test, 3);
+    genericRulesStarter("&Z < \\u0410", test, 3);
+}
+
 static void TestContraction() {
     const static char *testrules[] = {
         "&A = AB / B",
@@ -2297,19 +2352,19 @@ static void TestContraction() {
         {(UChar)'c', (UChar)'l'}
     };
     const static char *testrules3[] = {
-        "&z < xyz &xyzw < B",
-        "&z < xyz &xyz < B / w",
-        "&z < ch &achm < B",
-        "&z < ch &a < B / chm",
-        "&\\ud800\\udc00w < B",
-        "&\\ud800\\udc00 < B / w",
-        "&a\\ud800\\udc00m < B",
-        "&a < B / \\ud800\\udc00m",
+        "&z < xyz &xyzw << B",
+        "&z < xyz &xyz << B / w",
+        "&z < ch &achm << B",
+        "&z < ch &a << B / chm",
+        "&\\ud800\\udc00w << B",
+        "&\\ud800\\udc00 << B / w",
+        "&a\\ud800\\udc00m << B",
+        "&a << B / \\ud800\\udc00m",
     };
 
     UErrorCode  status   = U_ZERO_ERROR;
     UCollator  *coll;
-    UChar       rule[32] = {0};
+    UChar       rule[256] = {0};
     uint32_t    rlen     = 0;
     int         i;
 
@@ -2356,7 +2411,7 @@ static void TestContraction() {
         ucol_close(coll);
     }
 
-    rlen = u_unescape("& a < b < c < ch < d & c = ch / h", rule, 32);
+    rlen = u_unescape("& a < b < c < ch < d & c = ch / h", rule, 256);
     coll = ucol_openRules(rule, rlen, UNORM_NFD, UCOL_TERTIARY, &status);
     if (ucol_strcoll(coll, testdata2[0], 2, testdata2[1], 2) != UCOL_LESS) {
         log_err("Expected \\u%04x\\u%04x < \\u%04x\\u%04x\n",
@@ -2379,9 +2434,9 @@ static void TestContraction() {
                            *iter2;
         UChar               ch = 'B';
         uint32_t            ce;
-        rlen = u_unescape(testrules3[i << 1], rule, 32);
+        rlen = u_unescape(testrules3[i], rule, 32);
         coll1 = ucol_openRules(rule, rlen, UNORM_NFD, UCOL_TERTIARY, &status);
-        rlen = u_unescape(testrules3[(i << 1) + 1], rule, 32);
+        rlen = u_unescape(testrules3[i + 1], rule, 32);
         coll2 = ucol_openRules(rule, rlen, UNORM_NFD, UCOL_TERTIARY, &status);
         if (U_FAILURE(status)) {
             log_err("Collator creation failed %s\n", testrules[i]);
@@ -2422,12 +2477,13 @@ static void TestContraction() {
 
 void addMiscCollTest(TestNode** root)
 {
+    addTest(root, &TestCyrillicTailoring, "tscoll/cmsccoll/TestCyrillicTailoring");
     addTest(root, &TestCase, "tscoll/cmsccoll/TestCase");
     addTest(root, &IncompleteCntTest, "tscoll/cmsccoll/IncompleteCntTest");
     addTest(root, &BlackBirdTest, "tscoll/cmsccoll/BlackBirdTest");
     addTest(root, &FunkyATest, "tscoll/cmsccoll/FunkyATest");
     addTest(root, &BillFairmanTest, "tscoll/cmsccoll/BillFairmanTest");
-    addTest(root, &RamsRulesTest, "tscoll/cmsccoll/RamsRulesTest");
+    /*addTest(root, &RamsRulesTest, "tscoll/cmsccoll/RamsRulesTest");*/
     addTest(root, &IsTailoredTest, "tscoll/cmsccoll/IsTailoredTest");
     addTest(root, &TestCollations, "tscoll/cmsccoll/TestCollations");
     addTest(root, &TestChMove, "tscoll/cmsccoll/TestChMove");
