@@ -194,7 +194,6 @@ icu4j/src/com/ibm/text/components/package.html svneol=native#text/html
 icu4j/src/com/ibm/text/package.html svneol=native#text/html
 icu4j/src/com/ibm/text/resources/package.html svneol=native#text/html
 icu4j/src/com/ibm/text/resources/thai_dict -text
-icu4j/src/com/ibm/tools/RuleBasedBreakIterator/package.html svneol=native#text/html
 icu4j/src/com/ibm/tools/compression/package.html svneol=native#text/html
 icu4j/src/com/ibm/tools/normalizer/package.html svneol=native#text/html
 icu4j/src/com/ibm/util/package.html svneol=native#text/html
