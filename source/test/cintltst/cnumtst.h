@@ -33,6 +33,11 @@
      **/
     static void TestNumberFormatPadding(void);
 
+    /**
+     * The function used to test the Number format API with padding
+     **/
+    static void TestInt64Format(void);
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

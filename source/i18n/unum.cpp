@@ -154,11 +154,22 @@ unum_clone(const UNumberFormat *fmt,
 
 U_CAPI int32_t U_EXPORT2
 unum_format(    const    UNumberFormat*    fmt,
-        int32_t            number,
+        int32_t           number,
         UChar*            result,
-        int32_t            resultLength,
+        int32_t           resultLength,
         UFieldPosition    *pos,
-        UErrorCode*        status)
+        UErrorCode*       status)
+{
+        return unum_formatInt64(fmt, number, result, resultLength, pos, status);
+}
+
+U_CAPI int32_t U_EXPORT2
+unum_formatInt64(const UNumberFormat* fmt,
+        int64_t         number,
+        UChar*          result,
+        int32_t         resultLength,
+        UFieldPosition *pos,
+        UErrorCode*     status)
 {
     if(U_FAILURE(*status))
         return -1;
@@ -218,20 +229,20 @@ unum_formatDouble(    const    UNumberFormat*  fmt,
   return res.extract(result, resultLength, *status);
 }
 
-U_CAPI int32_t U_EXPORT2
-unum_parse(    const   UNumberFormat*  fmt,
+static void
+parseRes(Formattable& res,
+                const   UNumberFormat*  fmt,
         const   UChar*          text,
         int32_t         textLength,
         int32_t         *parsePos /* 0 = start */,
         UErrorCode      *status)
 {
     if(U_FAILURE(*status))
-        return 0;
+        return;
     
     int32_t len = (textLength == -1 ? u_strlen(text) : textLength);
     const UnicodeString src((UChar*)text, len, len);
     ParsePosition pp;
-    Formattable res;
     
     if(parsePos != 0)
         pp.setIndex(*parsePos);
@@ -246,11 +257,30 @@ unum_parse(    const   UNumberFormat*  fmt,
             *status = U_PARSE_ERROR;
         }
     }
-    
-    /* return the actual type of the result, cast to a long */
-    return (res.getType() == Formattable::kLong) 
-        ? res.getLong() 
-        : (int32_t) res.getDouble();
+}
+
+U_CAPI int32_t U_EXPORT2
+unum_parse(    const   UNumberFormat*  fmt,
+        const   UChar*          text,
+        int32_t         textLength,
+        int32_t         *parsePos /* 0 = start */,
+        UErrorCode      *status)
+{
+    Formattable res;
+    parseRes(res, fmt, text, textLength, parsePos, status);
+    return res.getLong(status);
+}
+
+U_CAPI int64_t U_EXPORT2
+unum_parseInt64(    const   UNumberFormat*  fmt,
+        const   UChar*          text,
+        int32_t         textLength,
+        int32_t         *parsePos /* 0 = start */,
+        UErrorCode      *status)
+{
+    Formattable res;
+    parseRes(res, fmt, text, textLength, parsePos, status);
+    return res.getInt64(status);
 }
 
 U_CAPI double U_EXPORT2
@@ -260,32 +290,17 @@ unum_parseDouble(    const   UNumberFormat*  fmt,
             int32_t         *parsePos /* 0 = start */,
             UErrorCode      *status)
 {
+    Formattable res;
+        parseRes(res, fmt, text, textLength, parsePos, status);
     if(U_FAILURE(*status))
         return 0;
-    
-    int32_t len = (textLength < 0 ? u_strlen(text) : textLength);
-    const UnicodeString src((UChar*)text, len, len);
-    ParsePosition pp;
-    Formattable res;
-    
-    if(parsePos != 0)
-        pp.setIndex(*parsePos);
-    
-    ((NumberFormat*)fmt)->parse(src, res, pp);
-    
-    if(parsePos != 0) {
-        if(pp.getErrorIndex() == -1)
-            *parsePos = pp.getIndex();
-        else {
-            *parsePos = pp.getErrorIndex();
-            *status = U_PARSE_ERROR;
+
+    switch(res.getType()) {
+        case Formattable::kLong: return (double)res.getLong();
+        case Formattable::kInt64: return (double)res.getInt64();
+        case Formattable::kDouble: return res.getDouble();
+        default: return 0;
         }
-    }
-    
-    /* return the actual type of the result, cast to a double */
-    return (res.getType() == Formattable::kDouble) 
-        ? res.getDouble() 
-        : (double) res.getLong();
 }
 
 U_CAPI const char* U_EXPORT2
