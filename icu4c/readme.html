@@ -1276,13 +1276,13 @@ del common/libicuuc.o
     products. Usually only the libraries need to be considered for
     packaging.</p>
 
-    <p>On Unix, you should have used "gmake install" to make make it easier to
+    <p>On Unix, you should have used "gmake install" to make it easier to
     develop and package ICU. The bin, lib and include directories are needed to
     develop applications that use ICU. When ICU is built on Windows, a similar
     directory structure is built.</p>
 
     <p>When changes have been made to the standard ICU distribution, it is
-    recommended that at least one of the following guidlines be followed for
+    recommended that at least one of the following guidelines be followed for
     special packaging.</p>
 
     <ol>
@@ -1298,7 +1298,9 @@ del common/libicuuc.o
     operating systems that do not have a standard C++ ABI (name mangling) for
     compilers, it is recommended to do this special packaging anyway. More
     details on customizing ICU are available in the <a href=
-    "http://oss.software.ibm.com/icu/userguide/">User's Guide</a>.</p>
+    "http://oss.software.ibm.com/icu/userguide/">User's Guide</a>. The <a href=
+    "#SourceCode">ICU Source Code Organization</a> section of this readme.html
+    gives a more complete description of the libraries.</p>
 
     <table border="1" cellpadding="3">
       <caption>
@@ -1322,7 +1324,10 @@ del common/libicuuc.o
 
         <td>libicudata.so.<i>XY</i>.<i>Z</i></td>
 
-        <td>Data required by the Common and I18n libraries</td>
+        <td>Data required by the Common and I18n libraries. There are many ways
+        to package and <a href=
+        "http://oss.software.ibm.com/icu/userguide/icudata.html">customize this
+        data</a>, but by default this is all you need.</td>
       </tr>
 
       <tr>
@@ -1352,7 +1357,7 @@ del common/libicuuc.o
 
         <td>libicule.so.<i>XY</i>.<i>Z</i></td>
 
-        <td>Contains an engine for doing font layout.</td>
+        <td>Contains an optional engine for doing font layout.</td>
       </tr>
 
       <tr>
@@ -1362,18 +1367,8 @@ del common/libicuuc.o
 
         <td>libustdio.so.<i>XY</i>.<i>Z</i></td>
 
-        <td>An unsupported library that provides a stdio like API with Unicode
-        support.</td>
-      </tr>
-
-      <tr>
-        <td>Tool Utility Library</td>
-
-        <td>icutu<i>XY</i>.dll</td>
-
-        <td>libicutoolutil.so.<i>XY</i>.<i>Z</i></td>
-
-        <td>Contains code required only by the ICU data building tools.</td>
+        <td>An unsupported optional library that provides a stdio like API with
+        Unicode support.</td>
       </tr>
     </table>
 
@@ -1417,7 +1412,7 @@ del common/libicuuc.o
     <p>For some environments, ICU "is too large". There are two ways to remove
     parts and make it smaller: Remove some of its library code modules from the
     build (reducing functionality), or remove some of its data (possibly
-    reducing only codepage/locale/etc. coverage without sacrifycing overall
+    reducing only codepage/locale/etc. coverage without sacrificing overall
     functionality). For details about reducing the data size see the <a href=
     "http://oss.software.ibm.com/icu/userguide/">User Guide</a> "ICU Data"
     chapter.</p>
