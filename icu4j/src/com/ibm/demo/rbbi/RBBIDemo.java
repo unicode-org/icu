@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/demo/rbbi/Attic/RBBIDemo.java,v $ 
- * $Date: 2001/10/30 02:42:48 $ 
- * $Revision: 1.3 $
+ * $Date: 2001/11/12 23:44:44 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -434,19 +434,20 @@ JTextArea text;
                 }
                 break;
             case KeyEvent.KEY_RELEASED :
+                // key detection for left and right buttons are removed
+                // to emulate the old release behaviour
                 int key = evt.getKeyCode();
-                System.out.println("control down " + isctrldown_);
-                System.out.println("key " + key);
-                if (key == KeyEvent.VK_RIGHT || 
-                    (key == KeyEvent.VK_N && isctrldown_)) {
+                if (key == KeyEvent.VK_N && isctrldown_) {
                     handleForward();
                 }
                 else 
-                if (key == KeyEvent.VK_LEFT || 
-                    (key == KeyEvent.VK_P && isctrldown_)) {
+                if (key == KeyEvent.VK_P && isctrldown_) {
                     handleBackward();
                 }
-                isctrldown_ = false;
+                else 
+                if (key == KeyEvent.VK_CONTROL) {
+                    isctrldown_ = false;
+                }
                 break;
         }
     }
