@@ -52,76 +52,77 @@ public:
      * or struct, then we no longer need this enum.
      * @draft ICU 2.4
      */
-                    enum ISDATE { kIsDate };
+    enum ISDATE { kIsDate };
 
     /**
      * Default constructor
      * @draft ICU 2.4
      */
-                    Formattable(); // Type kLong, value 0
+    Formattable(); // Type kLong, value 0
     /**
      * Creates a Formattable object with a UDate instance.
      * @param d the UDate instance.
      * @param ISDATE the flag to indicate this is a date.
      * @stable ICU 2.0  
      */
-                    Formattable(UDate d, ISDATE);
+    Formattable(UDate d, ISDATE);
     /**
      * Creates a Formattable object with a double number.
      * @param d the double number.
      * @stable ICU 2.0
      */
-                    Formattable(double d);
+    Formattable(double d);
     /**
      * Creates a Formattable object with a long number.
-     * @param d the long number.
+     * @param l the long number.
      * @stable ICU 2.0
      */
-                    Formattable(int32_t l);
+    Formattable(int32_t l);
     /**
      * Creates a Formattable object with a char string pointer.
      * Assumes that the char string is null terminated.
      * @param strToCopy the char string.
      * @stable ICU 2.0
      */
-                    Formattable(const char* strToCopy);
+    Formattable(const char* strToCopy);
     /**
      * Creates a Formattable object with a UnicodeString object to copy from.
      * @param strToCopy the UnicodeString string.
      * @stable ICU 2.0
      */
-                    Formattable(const UnicodeString& stringToCopy);
+    Formattable(const UnicodeString& strToCopy);
     /**
      * Creates a Formattable object with a UnicodeString object to adopt from.
      * @param strToAdopt the UnicodeString string.
      * @stable ICU 2.0
      */
-                    Formattable(UnicodeString* stringToAdopt);
+    Formattable(UnicodeString* strToAdopt);
     /**
      * Creates a Formattable object with an array of Formattable objects.
      * @param arrayToCopy the Formattable object array.
      * @param count the array count.
      * @stable ICU 2.0
      */
-                    Formattable(const Formattable* arrayToCopy, int32_t count);
+    Formattable(const Formattable* arrayToCopy, int32_t count);
 
     /**
      * Copy constructor.
      * @stable ICU 2.0
      */
-                    Formattable(const Formattable&);
+    Formattable(const Formattable&);
     /**
      * Assignment operator.
+     * @param rhs   The Formattable object to copy into this object.
      * @stable ICU 2.0
      */
-    Formattable&    operator=(const Formattable&);
+    Formattable&    operator=(const Formattable &rhs);
     /**
      * Equality comparison.
      * @param other    the object to be compared with.
      * @return        TRUE if other are equal to this, FALSE otherwise.
      * @stable ICU 2.0
      */
-    UBool          operator==(const Formattable&) const;
+    UBool          operator==(const Formattable &other) const;
     
     /** 
      * Equality operator.
