@@ -69,7 +69,9 @@ static const char NAME_PROP[] = "na"; // Unicode name property alias
 // TODO: Remove the following special-case code when
 // these four C99-compatibility properties are implemented
 // as enums/names.
-extern "C" typedef UBool (*_C99_Property_Function)(UChar32);
+extern "C" {
+    typedef UBool (*_C99_Property_Function)(UChar32);
+}
 struct _C99_Map {
     const char* name;
     _C99_Property_Function func;
