@@ -363,11 +363,11 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
 #define getExpansionCount(CE) ((CE)&0xF)
 
 #define UCA_DATA_TYPE "dat"
-#define UCA_DATA_NAME "UCATable"
+#define UCA_DATA_NAME "ucadata"
 #define UCOL_CASE_BIT_MASK 0x40
 #define UCOL_FLAG_BIT_MASK 0x80
 #define INVC_DATA_TYPE "dat"
-#define INVC_DATA_NAME "InvUCA"
+#define INVC_DATA_NAME "invuca"
 #define UCOL_COMMON_TOP2 0x81  
 #define UCOL_COMMON_BOT2 0x03  
 #define UCOL_TOP_COUNT2  0x40 

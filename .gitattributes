@@ -62,7 +62,6 @@ icu4c/data/wordBE.brk -text
 icu4c/data/wordLE.brk -text
 icu4c/data/word_thBE.brk -text
 icu4c/data/word_thLE.brk -text
-icu4c/source/data/UCATable.dat -text
 icu4c/source/data/brkitr/charBE.brk -text
 icu4c/source/data/brkitr/charLE.brk -text
 icu4c/source/data/brkitr/lineBE.brk -text

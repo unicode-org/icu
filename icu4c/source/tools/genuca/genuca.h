@@ -1,3 +1,24 @@
+/*
+*******************************************************************************
+*
+*   Copyright (C) 2000-2001, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  genuca.h
+*   encoding:   US-ASCII
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created at the end of XX century
+*   created by: Vladimir Weinstein
+*
+*   This program reads the Franctional UCA table and generates
+*   internal format for UCA table as well as inverse UCA table.
+*   It then writes binary files containing the data: ucadata.dat 
+*   & invuca.dat
+*/
+
 #ifndef UCADATA_H
 #define UCADATA_H
 
