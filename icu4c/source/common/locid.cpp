@@ -732,33 +732,31 @@ Locale::getAvailableLocales(int32_t& count)
     
     if (needInit) {
         int32_t locCount = uloc_countAvailable();
+        Locale *newLocaleList = 0;
         if(locCount) {
-          Locale *newLocaleList = new Locale[locCount];
-          if (newLocaleList == NULL) {
-              return NULL;
-          }
-        
-          count = locCount;
-        
-          while(--locCount >= 0) {
-              newLocaleList[locCount].setFromPOSIXID(uloc_getAvailable(locCount));
-          }
-        
-          umtx_lock(NULL);
-          if(availableLocaleList == 0) {
-              availableLocaleListCount = count;
-              availableLocaleList = newLocaleList;
-              newLocaleList = NULL;
-          }
-          umtx_unlock(NULL);
-          delete []newLocaleList;
-      }
-      count = availableLocaleListCount;
-      return availableLocaleList;
-    } else {
-      count = 0;
-      return NULL;
+           newLocaleList = new Locale[locCount];
+        }
+        if (newLocaleList == NULL) {
+            return NULL;
+        }
+      
+        count = locCount;
+      
+        while(--locCount >= 0) {
+            newLocaleList[locCount].setFromPOSIXID(uloc_getAvailable(locCount));
+        }
+      
+        umtx_lock(NULL);
+        if(availableLocaleList == 0) {
+            availableLocaleListCount = count;
+            availableLocaleList = newLocaleList;
+            newLocaleList = NULL;
+        }
+        umtx_unlock(NULL);
+        delete []newLocaleList;
     }
+    count = availableLocaleListCount;
+    return availableLocaleList;
 }
 
 const char* const* Locale::getISOCountries()
