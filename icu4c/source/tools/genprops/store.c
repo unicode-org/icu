@@ -1167,6 +1167,8 @@ allocProps(void) {
     return i;
 }
 
+#if 0
+    /* not currently used, avoid compiler warning */
 static uint16_t
 addUChars(const UChar *s, uint16_t length) {
     uint16_t top=(uint16_t)(ucharsTop+length+1);
@@ -1182,6 +1184,7 @@ addUChars(const UChar *s, uint16_t length) {
     ucharsTop=top;
     return (uint16_t)(p-uchars);
 }
+#endif
 
 /*
  * Hey, Emacs, please set the following:
