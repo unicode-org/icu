@@ -34,6 +34,7 @@
 #include "unicode/ustring.h"
 #include "uhash.h"
 #include "iculserv.h"
+#include "ucln_in.h"
 #include <float.h>
 
 // If no number pattern can be located for a locale, this is the last
@@ -417,20 +418,26 @@ static UMTX gnLock = 0;
 static ICULocaleService* 
 getService(void)
 {
-  if (gService == NULL) {
-    ICULocaleService * newservice = new ICUNumberFormatService();
-    if (newservice) {
-      Mutex mutex(&gnLock);
-      if (gService == NULL) {
-        gService = newservice;
-        newservice = NULL;
-      }
+    UBool needInit;
+    {
+        Mutex mutex(&gnLock);
+        needInit = (UBool)(gService == NULL);
     }
-    if (newservice) {
-      delete newservice;
+    if (needInit) {
+        ICULocaleService * newservice = new ICUNumberFormatService();
+        if (newservice) {
+            Mutex mutex(&gnLock);
+            if (gService == NULL) {
+                gService = newservice;
+                newservice = NULL;
+            }
+        }
+        if (newservice) {
+            delete newservice;
+        }
+        ucln_i18n_registerCleanup();
     }
-  }
-  return gService;
+    return gService;
 }
 
 // -------------------------------------

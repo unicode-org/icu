@@ -17,6 +17,7 @@
 #include "cstring.h"
 #include "uassert.h"
 #include "iculserv.h"
+#include "ucln_in.h"
 
 //------------------------------------------------------------
 // Constants
@@ -150,6 +151,9 @@ struct CReg {
       CReg* n = new CReg(_iso, _id);
       if (n) {
         Mutex mutex(&gLock);
+        if (!gHead) {
+            ucln_i18n_registerCleanup();
+        }
         n->next = gHead;
         gHead = n;
         return n;
