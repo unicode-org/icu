@@ -1231,7 +1231,7 @@ const char* IntlTest::getTestDataPath(UErrorCode& err) {
 }
 
 /* Returns the path to icu/source/test/testdata/ */
-const char *IntlTest::getSourceTestData(UErrorCode& err) {
+const char *IntlTest::getSourceTestData(UErrorCode& /*err*/) {
     const char *srcDataDir = NULL;
 #ifdef U_TOPSRCDIR
     srcDataDir = U_TOPSRCDIR U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING;

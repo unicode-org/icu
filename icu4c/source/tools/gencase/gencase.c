@@ -40,9 +40,7 @@
 
 /* data --------------------------------------------------------------------- */
 
-static UNewTrie *trie;
 uint32_t *pv;
-static int32_t pvCount;
 
 UBool beVerbose=FALSE, haveCopyright=TRUE;
 
@@ -347,7 +345,7 @@ isToken(const char *token, const char *s) {
     return FALSE;
 }
 
-U_CFUNC int32_t
+static int32_t
 getTokenIndex(const char *const tokens[], int32_t countTokens, const char *s) {
     const char *t, *z;
     int32_t i, j;
