@@ -29,7 +29,9 @@ _createTimeZone(const UChar* zoneID, int32_t len, UErrorCode* ec) {
         // behavior is by design and goes back to the JDK. The only
         // failure we will see is a memory allocation failure.
         int32_t l = (len<0 ? u_strlen(zoneID) : len);
-        zone = TimeZone::createTimeZone(UnicodeString(zoneID, l));
+        UnicodeString zoneStrID;
+        zoneStrID.setTo((UBool)(len < 0), zoneID, l); /* temporary read-only alias */
+        zone = TimeZone::createTimeZone(zoneStrID);
         if (zone == NULL) {
             *ec = U_MEMORY_ALLOCATION_ERROR;
         }
