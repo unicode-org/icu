@@ -664,6 +664,9 @@ void RBBITest::TestDefaultRuleBasedLineIteration()
       ADD_DATACHUNK(linedata, "\\ue000", 0, status);          // PUA
       ADD_DATACHUNK(linedata, "\\udb80\\udc01", 0, status);   // Extended PUA.  Treated as ideograph.
 
+      // Regression for bug 836
+      ADD_DATACHUNK(linedata, "AAA", 0, status);
+      ADD_DATACHUNK(linedata, "(AAA ", 0, status);
 
     generalIteratorTest(*lineIterDefault, linedata);
 
