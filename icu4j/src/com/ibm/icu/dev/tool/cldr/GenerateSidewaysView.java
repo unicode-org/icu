@@ -60,6 +60,7 @@ import com.ibm.icu.util.UResourceBundle;
  */public class GenerateSidewaysView {
     
     static boolean VALIDATING = false;
+    static final boolean SHOW_ADD = false;
 
     private static final int 
         HELP1 = 0,
@@ -459,8 +460,9 @@ import com.ibm.icu.util.UResourceBundle;
         public String toString(boolean path, boolean isZone) {
             StringBuffer buffer = new StringBuffer();
             for (Iterator it = contents.iterator(); it.hasNext();) {
-                SimpleAttribute a = getSkipping(it);
-                if (a == null) continue;
+                SimpleAttribute a = (SimpleAttribute) it.next();
+                //SimpleAttribute a = getSkipping(it);
+                //if (a == null) continue;
                 //SimpleAttribute a = (SimpleAttribute)it.next();
                 //if (path && IGNOREABLE.contains(a.name)) continue;
                 if (isZone && a.name.equals("type")) {
@@ -1217,8 +1219,8 @@ import com.ibm.icu.util.UResourceBundle;
     }
     
     ElementChain putData(ElementChain stack, String associatedData) {
+        if (SHOW_ADD) log.println("Adding: " + stack.toString(true,0) + "\t" + associatedData);
         ElementChain result = new ElementChain(stack);
-        // log.println("Adding: " + result.toString(true,0) + "\t" + associatedData);
         data.put(result, associatedData);
         return result;
     }
