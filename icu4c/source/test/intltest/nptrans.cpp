@@ -251,7 +251,10 @@ int32_t NamePrepTransform::process( const UChar* src, int32_t srcLength,
     }
 
     //satisfy 3
-    if(rightToLeft == TRUE && firstCharDir != direction  ){
+    if( rightToLeft == TRUE && 
+        !((firstCharDir == U_RIGHT_TO_LEFT || firstCharDir == U_RIGHT_TO_LEFT_ARABIC) &&
+          (direction == U_RIGHT_TO_LEFT || direction == U_RIGHT_TO_LEFT_ARABIC))
+       ){
         status = U_IDNA_CHECK_BIDI_ERROR;
         return FALSE;
     }
