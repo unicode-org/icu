@@ -4213,7 +4213,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN(UConverterToUnicodeArgs *args,
                                               UErrorCode* err){
     char tempBuf[3];
     int plane=0;
-    char* pBuf;
+    const char* pBuf;
     const char *mySource = ( char *) args->source;
     UChar *myTarget = args->target;
     char *tempLimit = &tempBuf[2]+1; 
@@ -4450,7 +4450,7 @@ U_CFUNC void UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeA
                                                             UErrorCode* err){
     char tempBuf[3];
     int plane=0;
-    char* pBuf;
+    const char* pBuf;
     const char *mySource = ( char *) args->source;
     UChar *myTarget = args->target;
     char *tempLimit = &tempBuf[3]; 
