@@ -215,6 +215,31 @@ u_charName(UChar32 code, UCharNameChoice nameChoice,
     return u_terminateChars(buffer, bufferLength, length, pErrorCode);
 }
 
+#define _U_ISO_COMMENT U_CHAR_NAME_CHOICE_COUNT
+
+U_CAPI int32_t U_EXPORT2
+u_getISOComment(UChar32 c,
+                char *dest, int32_t destCapacity,
+                UErrorCode *pErrorCode) {
+    int32_t length;
+
+    /* check the argument values */
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    } else if(destCapacity<0 || (destCapacity>0 && dest==NULL)) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    if((uint32_t)c>UCHAR_MAX_VALUE || !isDataLoaded(pErrorCode)) {
+        return u_terminateChars(dest, destCapacity, 0, pErrorCode);
+    }
+
+    /* the ISO comment is stored like a normal character name */
+    length=getName(uCharNames, (uint32_t)c, _U_ISO_COMMENT, dest, (uint16_t)destCapacity);
+    return u_terminateChars(dest, destCapacity, length, pErrorCode);
+}
+
 U_CAPI UChar32 U_EXPORT2
 u_charFromName(UCharNameChoice nameChoice,
                const char *name,
@@ -596,7 +621,7 @@ expandName(UCharNames *names,
     uint8_t *tokenStrings=(uint8_t *)names+names->tokenStringOffset;
     uint8_t c;
 
-    if(nameChoice==U_UNICODE_10_CHAR_NAME) {
+    if(nameChoice==U_UNICODE_10_CHAR_NAME || nameChoice==_U_ISO_COMMENT) {
         /*
          * skip the modern name if it is not requested _and_
          * if the semicolon byte value is a character, not a token number
@@ -606,6 +631,15 @@ expandName(UCharNames *names,
                 --nameLength;
                 if(*name++==';') {
                     break;
+                }
+            }
+            if(nameChoice==_U_ISO_COMMENT) {
+                /* skip the Unicode 1.0 name as well to get the ISO comment */
+                while(nameLength>0) {
+                    --nameLength;
+                    if(*name++==';') {
+                        break;
+                    }
                 }
             }
         } else {

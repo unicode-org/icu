@@ -16,7 +16,7 @@
 *   This program reads the Unicode character database text file,
 *   parses it, and extracts the character code,
 *   the "modern" character name, and optionally the
-*   Unicode 1.0 character name.
+*   Unicode 1.0 character name, and (starting with ICU 2.2) the ISO 10646 comment.
 *   It then tokenizes and compresses the names and builds
 *   compact binary tables for random-access lookup
 *   in a u_charName() API function.
@@ -52,6 +52,9 @@
 *       else
 *           tokenString=tokenStrings+token; (tokenStrings=start of names data + tokenStringOffset;)
 *           append zero-terminated tokenString;
+*
+*    Different strings for a code point - normal name, 1.0 name, and ISO comment -
+*    are separated by ';'.
 *
 * uint16_t groupCount;
 * struct {
@@ -242,7 +245,7 @@ static void
 countWord(Word *word);
 
 static void
-addLine(uint32_t code, char *name1, int16_t name1Length, char *name2, int16_t name2Length);
+addLine(uint32_t code, char *names[], int16_t lengths[], int16_t count);
 
 static void
 addGroup(uint32_t groupMSB, uint8_t *strings, int16_t length);
@@ -257,7 +260,7 @@ static void
 appendLineLengthNibble(uint8_t nibble);
 
 static uint8_t *
-allocLine(uint32_t length);
+allocLine(int32_t length);
 
 static uint8_t *
 allocWord(uint32_t length);
@@ -284,7 +287,7 @@ main(int argc, char* argv[]) {
 
     /* preset then read command line options */
     options[5].value=u_getDataDirectory();
-    options[6].value="3.1.1";
+    options[6].value="3.2";
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
 
     /* error handling, printing usage message */
@@ -355,10 +358,10 @@ static void
 lineFn(void *context,
        char *fields[][2], int32_t fieldCount,
        UErrorCode *pErrorCode) {
+    char *names[3];
+    int16_t lengths[3];
     static uint32_t prevCode=0;
     uint32_t code=0;
-    char *name1Start, *name2Start;
-    int16_t name1Length, name2Length;
 
     if(U_FAILURE(*pErrorCode)) {
         return;
@@ -367,25 +370,32 @@ lineFn(void *context,
     code=uprv_strtoul(fields[0][0], NULL, 16);
 
     /* get the character name */
-    name1Start=fields[1][0];
+    names[0]=fields[1][0];
     if(fields[1][0][0]!='<') {
-        name1Length=(int16_t)(fields[1][1]-name1Start);
+        lengths[0]=(int16_t)(fields[1][1]-names[0]);
     } else {
         /* do not store pseudo-names in <> brackets */
-        name1Length=0;
+        lengths[0]=0;
     }
 
     /* store 1.0 names */
     /* get the second character name, the one from Unicode 1.0 */
     /* do not store pseudo-names in <> brackets */
-    name2Start=fields[10][0];
+    names[1]=fields[10][0];
     if(*(UBool *)context && fields[10][0][0]!='<') {
-        name2Length=(int16_t)(fields[10][1]-name2Start);
+        lengths[1]=(int16_t)(fields[10][1]-names[1]);
     } else {
-        name2Length=0;
+        lengths[1]=0;
     }
 
-    if(name1Length+name2Length==0) {
+    /* get the ISO 10646 comment */
+    names[2]=fields[11][0];
+    lengths[2]=(int16_t)(fields[11][1]-names[2]);
+    if(lengths[2]!=0) {
+        char *s=names[2];
+    }
+
+    if(lengths[0]+lengths[1]+lengths[2]==0) {
         return;
     }
 
@@ -406,22 +416,27 @@ lineFn(void *context,
     }
     prevCode=code;
 
-    /* printf("%lx:%.*s(%.*s)\n", code, name1Length, line+name1Start, name2Length, line+name2Start); */
+    parseName(names[0], lengths[0]);
+    parseName(names[1], lengths[1]);
+    parseName(names[2], lengths[2]);
 
-    parseName(name1Start, name1Length);
-    parseName(name2Start, name2Length);
-
-    addLine(code, name1Start, name1Length, name2Start, name2Length);
+    /*
+     * set the count argument to
+     * 1: only store regular names
+     * 2: store regular and 1.0 names
+     * 3: store names and ISO 10646 comment
+     */
+    addLine(code, names, lengths, 3);
 }
 
 static void
 parseDB(const char *filename, UBool store10Names) {
-    char *fields[11][2];
+    char *fields[15][2];
     UErrorCode errorCode=U_ZERO_ERROR;
 
-    /* parsing the 11 fields 0..10 is enough for gennames */
-    u_parseDelimitedFile(filename, ';', fields, 11, lineFn, &store10Names, &errorCode);
+    u_parseDelimitedFile(filename, ';', fields, 15, lineFn, &store10Names, &errorCode);
     if(U_FAILURE(errorCode)) {
+        fprintf(stderr, "gennames parse error: %s\n", u_errorName(errorCode));
         exit(errorCode);
     }
 
@@ -482,17 +497,23 @@ parseName(char *name, int16_t length) {
     }
 }
 
+static U_INLINE
+isWordChar(char c) {
+    return ('A'<=c && c<='I') || /* EBCDIC-safe check for letters */
+           ('J'<=c && c<='R') ||
+           ('S'<=c && c<='Z') ||
+
+           ('a'<=c && c<='i') || /* lowercase letters for ISO comments */
+           ('j'<=c && c<='r') ||
+           ('s'<=c && c<='z') ||
+
+           ('0'<=c && c<='9');
+}
+
 static int16_t
 skipNoise(char *line, int16_t start, int16_t limit) {
-    char c;
-
     /* skip anything that is not part of a word in this sense */
-    while(start<limit &&
-          !(('A'<=(c=line[start]) && c<='I') || /* EBCDIC-safe check for letters */
-            ('J'<=c && c<='R') ||
-            ('S'<=c && c<='Z') ||
-            ('0'<=c && c<='9'))
-    ) {
+    while(start<limit && !isWordChar(line[start])) {
         ++start;
     }
 
@@ -504,17 +525,12 @@ getWord(char *line, int16_t start, int16_t limit) {
     char c=0; /* initialize to avoid a compiler warning although the code was safe */
 
     /* a unicode character name word consists of A-Z0-9 */
-    while(start<limit &&
-          (('A'<=(c=line[start]) && c<='I') || /* EBCDIC-safe check for letters */
-           ('J'<=c && c<='R') ||
-           ('S'<=c && c<='Z') ||
-           ('0'<=c && c<='9'))
-    ) {
+    while(start<limit && isWordChar(line[start])) {
         ++start;
     }
 
     /* include a following space or dash */
-    if(start<limit && (c==' ' || c=='-')) {
+    if(start<limit && ((c=line[start])==' ' || c=='-')) {
         ++start;
     }
 
@@ -1103,28 +1119,46 @@ countWord(Word *word) {
 }
 
 static void
-addLine(uint32_t code, char *name1, int16_t name1Length, char *name2, int16_t name2Length) {
+addLine(uint32_t code, char *names[], int16_t lengths[], int16_t count) {
     uint8_t *stringStart;
     Line *line;
-    int16_t length;
+    int16_t i, length;
 
     if(lineCount==MAX_LINE_COUNT) {
         fprintf(stderr, "gennames: too many lines\n");
         exit(U_BUFFER_OVERFLOW_ERROR);
     }
 
-    length=name1Length;
-    if(name2Length>0) {
-        length=(int16_t)(length+1+name2Length);
+    /* find the last non-empty name */
+    while(count>0 && lengths[count-1]==0) {
+        --count;
+    }
+    if(count==0) {
+        return; /* should not occur: caller should not have called */
     }
 
-    stringStart=allocLine(length);
-    if(name1Length>0) {
-        uprv_memcpy(stringStart, name1, name1Length);
+    /* there will be (count-1) separator characters */
+    i=count;
+    length=count-1;
+
+    /* add lengths of strings */
+    while(i>0) {
+        length+=lengths[--i];
     }
-    if(name2Length>0) {
-        stringStart[name1Length]=NAME_SEPARATOR_CHAR;
-        uprv_memcpy(stringStart+name1Length+1, name2, name2Length);
+
+    /* allocate line memory */
+    stringStart=allocLine(length);
+
+    /* copy all strings into the line memory */
+    length=0; /* number of chars copied so far */
+    for(i=0; i<count; ++i) {
+        if(i>0) {
+            stringStart[length++]=NAME_SEPARATOR_CHAR;
+        }
+        if(lengths[i]>0) {
+            uprv_memcpy(stringStart+length, names[i], lengths[i]);
+            length+=lengths[i];
+        }
     }
 
     line=lines+lineCount;
@@ -1201,7 +1235,7 @@ appendLineLengthNibble(uint8_t nibble) {
 }
 
 static uint8_t *
-allocLine(uint32_t length) {
+allocLine(int32_t length) {
     uint32_t top=lineTop+length;
     uint8_t *p;
 
