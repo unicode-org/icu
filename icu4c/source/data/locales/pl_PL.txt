@@ -18,4 +18,5 @@ pl_PL {
             "#,##0%",
     }
     ShortCountry { "POL" }
+    LocaleID { "0415" }
 }

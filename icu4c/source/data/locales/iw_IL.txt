@@ -18,4 +18,5 @@ iw_IL {
             "#,##0%",
     }
     ShortCountry { "ISR" }
+    LocaleID { "040d" }
 }

@@ -5,6 +5,7 @@
 //  -  Arundhati Bhowmick [IBM Cupertino]
 
 hi {
+    LocaleID { "39" }
       Version { "0.5" }
     ShortLanguage { hin }
     Languages {

@@ -18,4 +18,5 @@ es_ES {
             "#,##0%",
     }
     ShortCountry { "ESP" }
+    LocaleID { "0c0a" }
 }

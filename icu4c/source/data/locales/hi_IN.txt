@@ -30,5 +30,6 @@ hi_IN {
         "1"
     }
    Version { "0.3" }     
+   LocaleID { "0439" }
 
 }

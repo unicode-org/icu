@@ -13,4 +13,5 @@ ar_AE {
     }
     LocaleString { "ar_AE" }
     ShortCountry { "ARE" }
+    LocaleID { "3801" }
 }

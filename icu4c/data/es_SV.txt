@@ -22,7 +22,6 @@ es_SV {
             "MM-dd-yy",
             "{1} {0}",
     }
-    LocaleID { "" }
     LocaleString { "es_SV" }
     NumberElements { 
             ".",
@@ -38,4 +37,5 @@ es_SV {
             "\uFFFD",
     }
     ShortCountry { "SLV" }
+    LocaleID {"440a"}
 }

@@ -1,6 +1,7 @@
 // Copyright (c) 1998-2000 IBM, Inc.
 
 ta {
+   LocaleID { "49" }
     Version { "0.1" }
     ShortLanguage { tam }
     Languages {

@@ -18,4 +18,5 @@ ja_JP {
             "#,##0%",
     }
     ShortCountry { "JPN" }
+    LocaleID { "0411" }
 }

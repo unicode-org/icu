@@ -18,4 +18,5 @@ ko_KR {
             "#,##0%",
     }
     ShortCountry { "KOR" }
+    LocaleID { "0412" }
 }

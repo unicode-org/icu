@@ -18,4 +18,5 @@ be_BY {
             "#,##0%",
     }
     ShortCountry { "BLR" }
+    LocaleID { "0423" }
 }

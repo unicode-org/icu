@@ -18,4 +18,5 @@ sv_SE {
             "#,##0%",
     }
     ShortCountry { "SWE" }
+    LocaleID { "041d" }
 }

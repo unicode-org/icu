@@ -57,7 +57,7 @@ hu {
     Languages { 
         hu { "magyar" }
     }
-    LocaleID { "040e" }
+    LocaleID { "0e" }
     LocaleString { "hu" }
     MonthAbbreviations { 
             "jan.",

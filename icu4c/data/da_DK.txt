@@ -18,4 +18,5 @@ da_DK {
             "#,##0%",
     }
     ShortCountry { "DNK" }
+    LocaleID { "0406" }
 }

@@ -18,4 +18,5 @@ sk_SK {
             "#,##0%",
     }
     ShortCountry { "SVK" }
+    LocaleID { "041b" }
 }

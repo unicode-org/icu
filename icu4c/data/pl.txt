@@ -57,7 +57,7 @@ pl {
     Languages { 
         pl { "polski" }
     }
-    LocaleID { "0415" }
+    LocaleID { "15" }
     LocaleString { "pl" }
     MonthAbbreviations { 
             "sty",

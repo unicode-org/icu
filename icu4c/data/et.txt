@@ -52,7 +52,7 @@ et {
     Languages { 
         et { "Eesti" }
     }
-    LocaleID { "0425" }
+    LocaleID { "25" }
     LocaleString { "et" }
     MonthAbbreviations { 
             "Jaan",

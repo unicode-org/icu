@@ -68,7 +68,7 @@ es {
     Languages { 
         es { "espa\u00F1ol" }
     }
-    LocaleID { "0c0a" }
+    LocaleID { "0a" }
     LocaleString { "es" }
     MonthAbbreviations { 
             "ene",

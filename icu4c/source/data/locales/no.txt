@@ -52,7 +52,7 @@ no {
     Languages { 
         no { "norsk" }
     }
-    LocaleID { "0414" }
+    LocaleID { "14" }
     LocaleString { "no" }
     MonthAbbreviations { 
             "jan",

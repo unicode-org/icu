@@ -2,6 +2,7 @@
 // Tamil locale.  Based on Hindi locale
 
 ta_IN {
+   LocaleID { "449" }
     ShortCountry { IND }
 
     CurrencyElements {

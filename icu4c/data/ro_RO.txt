@@ -18,4 +18,5 @@ ro_RO {
             "#,##0%",
     }
     ShortCountry { "ROM" }
+    LocaleID { "0418" }
 }

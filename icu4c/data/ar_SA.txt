@@ -13,4 +13,5 @@ ar_SA {
     }
     LocaleString { "ar_SA" }
     ShortCountry { "SAU" }
+    LocaleID { "0401" }
 }
