@@ -633,7 +633,7 @@ static void TestFileStream(void){
 	stream=NULL;
 	uprv_strcpy(fileName,testdatapath);
 	uprv_strcat(fileName,".tmp");
-	stream = T_FileStream_open(fileName,"w+r");
+	stream = T_FileStream_open(fileName,"w+");
 	
 	if(stream == NULL){
 		log_data_err("Could not open %s for writing\n",fileName);
