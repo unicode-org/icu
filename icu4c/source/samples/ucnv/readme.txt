@@ -1,8 +1,8 @@
 convsamp: a sample program which demonstrates using ICU conversion
 
 This sample demonstrates
-         Opening and closing converters using the C and C++ api
-         String manipulation in C and C++
+         Opening and closing converters using the C api
+         String manipulation in C 
          Writing a custom conversion callback function
 
          

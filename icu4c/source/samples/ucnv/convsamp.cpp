@@ -35,11 +35,10 @@
 
 #include "unicode/utypes.h"   /* Basic ICU data types */
 #include "unicode/ucnv.h"     /* C   Converter API    */
-#include "unicode/convert.h"  /* C++ Converter API    */
 #include "unicode/ustring.h"  /* some more string fcns*/
 #include "unicode/uchar.h"    /* char names           */
 #include "unicode/uloc.h"
-
+#include "unicode/unistr.h"
 
 #include "flagcb.h"
 
@@ -122,17 +121,6 @@ void printUChars(const char  *name = "?",
   printf("\n");
 }
 
-void printString(const char *name, const UnicodeString& string)
-{
-  UChar *uch;
-  int32_t len = string.length();
-  uch = (UChar*)malloc(sizeof(UChar)*(len+1));
-  string.extract(0,len,uch,0);
-  uch[len]=0;
-  printUChars(name, uch, -1);
-  delete(uch);
-}
-
 void printBytes(const char  *name = "?", 
                  const char *uch  = "",
                  int32_t     len   = -1 )
@@ -178,14 +166,14 @@ void printUChar(UChar32 ch32)
 }
 
 /*******************************************************************
-  Very simple C++ sample to convert the word 'Moscow' in Russian in Unicode,
+  Very simple C sample to convert the word 'Moscow' in Russian in Unicode,
   followed by an exclamation mark (!) into the KOI8-R Russian code page.
 
-  This example first creates a UnicodeString out of the Unicode chars.
+  This example first creates a UChar String out of the Unicode chars.
 
   targetSize must be set to the amount of space available in the target
-  buffer. After UnicodeConverter::fromUnicodeString() is called, 
-  targetSize will contain the number of bytes in target[] which were
+  buffer. After fromUChars is called, 
+  len will contain the number of bytes in target[] which were
   used in the resulting codepage.  In this case, there is a 1:1 mapping
   between the input and output characters. The exclamation mark has the
   same value in both KOI8-R and Unicode.
@@ -199,44 +187,7 @@ void printUChar(UChar32 ch32)
    ch:                                '!' 
 
 
- */
-UErrorCode convsample_01()
-{
-  printf("\n\n==============================================\n"
-         "Sample 01: C++: simple Unicode -> koi8-r conversion\n");
-
-
-  // **************************** START SAMPLE *******************
-  // "Moscva!" in cyrillic letters, to be converted to the KOI8-R
-  // Russian code page.
-  UChar source[] = { 0x041C, 0x043E, 0x0441, 0x043A, 0x0432,
-                     0x0430, 0x0021, 0x0000 };
-  char target[100];
-  int32_t targetSize = sizeof(target);
-  UnicodeString myString(source);
-  UErrorCode status = U_ZERO_ERROR;
-
-  // set up the converter
-  UnicodeConverter conv("koi8-r", status);
-  U_ASSERT(status);
-
-  // convert to KOI8-R
-  conv.fromUnicodeString(target, targetSize, myString, status);
-  U_ASSERT(status);
-
-  // ***************************** END SAMPLE ********************
-  
-  // Print it out
-  printUChars("src", source);
-  printf("\n");
-  printBytes("targ", target, targetSize);
-
-  return U_ZERO_ERROR;
-}
-
-
-/******************************************************
-  Similar sample to the preceding one.  Converting FROM unicode 
+Converting FROM unicode 
   to koi8-r.
   You must call ucnv_close to clean up the memory used by the
   converter.
@@ -559,47 +510,7 @@ UErrorCode convsample_06()
 #undef BUFFERSIZE
 
 
-/*******************************************************************
-  Very simple C++ sample to convert a string into Unicode from SJIS
-
-  This example creates a UnicodeString out of the chars.
-
- */
-UErrorCode convsample_11()
-{
-  printf("\n\n==============================================\n"
-         "Sample 11: C++: simple sjis -> Unicode conversion\n");
-
-
-  // **************************** START SAMPLE *******************
-
-  char source[] = { 0x63, 0x61, 0x74, (char)0x94, 0x4C, (char)0x82, 0x6E, (char)0x82, 0x6A, 0x00 };
-  int32_t sourceSize = sizeof(source);
-  UnicodeString target;
-  UErrorCode status = U_ZERO_ERROR;
-
-  // set up the converter
-  UnicodeConverter conv("shift_jis", status);
-  assert(U_SUCCESS(status));
-
-  // convert from JIS
-  conv.toUnicodeString(target, source, sourceSize, status);
-  assert(U_SUCCESS(status));
-
-  // ***************************** END SAMPLE ********************
-  
-  // Print it out
-  printBytes("src", source, sourceSize);
-  printf("\n");
-  printString("targ", target );
-  printf("\n");
-
-  return U_ZERO_ERROR;
-}
-
-
 /******************************************************
-  Similar sample to the preceding one. 
   You must call ucnv_close to clean up the memory used by the
   converter.
 
@@ -1052,123 +963,16 @@ UErrorCode convsample_40()
 }
 #undef BUFFERSIZE
 
-//        convsample_41();  // C++, cp37 -> UTF16 [data02.bin -> data41.utf16]
-
-#define BUFFERSIZE 17 /* make it interesting :) */
-
-UErrorCode convsample_41()
-{
-  printf("\n\n==============================================\n"
-         "Sample 41: C++: convert data02.bin from cp37 to UTF16 [data41.utf16]\n");
-
-  FILE *f;
-  FILE *out;
-  int32_t count;
-  char inBuf[BUFFERSIZE];
-  const char *source;
-  const char *sourceLimit;
-  UChar *uBuf;
-  UChar *target;
-  UChar *targetLimit;
-  int32_t uBufSize = 0;
-  UnicodeConverter *conv;
-  UErrorCode status = U_ZERO_ERROR;
-  uint32_t inbytes=0, total=0;
-
-  f = fopen("data02.bin", "rb");
-  if(!f)
-  {
-    fprintf(stderr, "Couldn't open file 'data02.bin' (cp37 data file).\n");
-    return U_FILE_ACCESS_ERROR;
-  }
-
-  out = fopen("data41.utf16", "wb");
-  if(!out)
-  {
-    fprintf(stderr, "Couldn't create file 'data41.utf16'.\n");
-    return U_FILE_ACCESS_ERROR;
-  }
-
-  // **************************** START SAMPLE *******************
-  conv = new UnicodeConverter(37, UCNV_IBM, status);
-  assert(U_SUCCESS(status));
-
-  uBufSize = (BUFFERSIZE/conv->getMinBytesPerChar());
-  //uBufSize = 4;
-  printf("input bytes %d / min chars %d = %d UChars\n",
-         BUFFERSIZE, conv->getMinBytesPerChar(), uBufSize);
-  uBuf = (UChar*)malloc(uBufSize * sizeof(UChar));
-  assert(uBuf!=NULL);
-
-  // grab another buffer's worth
-  while((!feof(f)) && 
-        ((count=fread(inBuf, 1, BUFFERSIZE , f)) > 0) )
-  {
-    inbytes += count;
-
-    // Convert bytes to unicode
-    source = inBuf;
-    sourceLimit = inBuf + count;
-    
-    do
-    {
-        target = uBuf;
-        targetLimit = uBuf + uBufSize;
-        
-        conv->toUnicode( target, targetLimit, 
-                       source, sourceLimit, NULL,
-                       feof(f)?TRUE:FALSE,         /* pass 'flush' when eof */
-                                   /* is true (when no more data will come) */
-                         status);
-      
-        if(status == U_BUFFER_OVERFLOW_ERROR)
-        {
-          // simply ran out of space - we'll reset the target ptr the next
-          // time through the loop.
-          status = U_ZERO_ERROR;
-        }
-        else
-        {
-          //  Check other errors here.
-          assert(U_SUCCESS(status));
-          // Break out of the loop (by force)
-        }
-
-        // Process the Unicode
-        // Todo: handle UTF-16/surrogates
-        assert(fwrite(uBuf, sizeof(uBuf[0]), (target-uBuf), out) ==
-               (size_t)(target-uBuf));
-        total += (target-uBuf);
-
-        //fprintf(stderr, "srceft=Left=%d, wrote %d, err %s\n",
-        //sourceLimit - source, target-uBuf, u_errorName(status));
-
-    } while (source < sourceLimit); // while simply out of space
-  }
-
-  printf("%d bytes in,  %d UChars out.\n", inbytes, total);
-  
-  // ***************************** END SAMPLE ********************
-  delete conv;
-
-  fclose(f);
-  fclose(out);
-  printf("\n");
-
-  return U_ZERO_ERROR;
-}
-#undef BUFFERSIZE
 
 
-
-//  46-  C, UTF16 -> latin2 [data41.utf16 -> data46.out]
+//  46-  C, UTF16 -> latin2 [data40.utf16 -> data46.out]
 
 #define BUFFERSIZE 24 /* make it interesting :) */
 
 UErrorCode convsample_46()
 {
   printf("\n\n==============================================\n"
-    "Sample 46: C: convert data41.utf16 from UTF16 to latin2 [data46.out]\n");
+    "Sample 46: C: convert data40.utf16 from UTF16 to latin2 [data46.out]\n");
 
   FILE *f;
   FILE *out;
@@ -1185,10 +989,10 @@ UErrorCode convsample_46()
   UErrorCode status = U_ZERO_ERROR;
   uint32_t inchars=0, total=0;
 
-  f = fopen("data41.utf16", "rb");
+  f = fopen("data40.utf16", "rb");
   if(!f)
   {
-    fprintf(stderr, "Couldn't open file 'data41.utf16' (did you run convsample_41() ?)\n");
+    fprintf(stderr, "Couldn't open file 'data40.utf16' (did you run convsample_40() ?)\n");
     return U_FILE_ACCESS_ERROR;
   }
 
@@ -1265,105 +1069,6 @@ UErrorCode convsample_46()
 
 #define BUFFERSIZE 219
 
-UErrorCode convsample_47()
-{
-  printf("\n\n==============================================\n"
-         "Sample 47: C++: convert data40.utf16 from UTF16 to latin2 [data47.out]\n");
-
-  FILE *f;
-  FILE *out;
-  int32_t count;
-  UChar inBuf[BUFFERSIZE];
-  const UChar *source;
-  const UChar *sourceLimit;
-  char *buf;
-  char *target;
-  char *targetLimit;
-
-  int32_t bufSize = 0;
-  UnicodeConverter *conv = NULL;
-  UErrorCode status = U_ZERO_ERROR;
-  uint32_t inchars=0, total=0;
-
-  f = fopen("data40.utf16", "rb");
-  if(!f)
-  {
-    fprintf(stderr, "Couldn't open file 'data40.utf16' (Did you run convsample_40() ?)\n");
-    return U_FILE_ACCESS_ERROR;
-  }
-
-  out = fopen("data47.out", "wb");
-  if(!out)
-  {
-    fprintf(stderr, "Couldn't create file 'data47.out'.\n");
-    return U_FILE_ACCESS_ERROR;
-  }
-
-
-  // **************************** START SAMPLE *******************
-  conv = new UnicodeConverter( "iso-8859-2", status);
-  assert(U_SUCCESS(status));
-
-  bufSize = (BUFFERSIZE*conv->getMaxBytesPerChar());
-  printf("input UChars[16] %d * max charsize %d = %d bytes output buffer\n",
-         BUFFERSIZE, conv->getMaxBytesPerChar(), bufSize);
-  buf = (char*)malloc(bufSize * sizeof(char));
-  assert(buf!=NULL);
-
-  // grab another buffer's worth
-  while((!feof(f)) && 
-        ((count=fread(inBuf, sizeof(UChar), BUFFERSIZE , f)) > 0) )
-  {
-    inchars += count;
-
-    // Convert bytes to unicode
-    source = inBuf;
-    sourceLimit = inBuf + count;
-    
-    do
-    {
-        target = buf;
-        targetLimit = buf + bufSize;
-        
-        conv->fromUnicode( target, targetLimit, 
-                source, sourceLimit, NULL,
-                           feof(f)?TRUE:FALSE,         /* pass 'flush' when eof */
-                           /* is true (when no more data will come) */
-                           status);
-        
-        if(status == U_BUFFER_OVERFLOW_ERROR)
-        {
-          // simply ran out of space - we'll reset the target ptr the next
-          // time through the loop.
-          status = U_ZERO_ERROR;
-        }
-        else
-        {
-          //  Check other errors here.
-          assert(U_SUCCESS(status));
-          // Break out of the loop (by force)
-        }
-
-        // Process the Unicode
-        assert(fwrite(buf, sizeof(buf[0]), (target-buf), out) ==
-               (size_t)(target-buf));
-        total += (target-buf);
-    } while (source < sourceLimit); // while simply out of space
-  }
-
-  printf("%d Uchars (%d bytes) in, %d chars out.\n", inchars, inchars * sizeof(UChar), total);
-  
-  // ***************************** END SAMPLE ********************
-  delete conv;
-
-  fclose(f);
-  fclose(out);
-  printf("\n");
-
-  return U_ZERO_ERROR;
-}
-#undef BUFFERSIZE
-
 
 /* main */
 
@@ -1372,13 +1077,12 @@ int main()
 
   printf("Default Converter=%s\n", ucnv_getDefaultName() );
   
-  convsample_01();  // C++, u->koi8r, conv
   convsample_02();  // C  , u->koi8r, conv
   convsample_03();  // C,   iterate
-//   //  convsample_04();  /* not written yet */
+
   convsample_05();  // C,  utf8->u, getNextUChar
   convsample_06(); // C freq counter thingy
-  convsample_11();  // C++, sjis->u, conv
+
   convsample_12();  // C,  sjis->u, conv
   convsample_13();  // C,  big5->u, getNextU
   
@@ -1386,10 +1090,8 @@ int main()
   convsample_21();  // C, callback debug
   
   convsample_40();  // C,   cp37 -> UTF16 [data02.bin -> data40.utf16]
-  convsample_41();  // C++, cp37 -> UTF16 [data02.bin -> data41.utf16]
   
   convsample_46();  // C,  UTF16 -> latin3 [data41.utf16 -> data46.out]
-  convsample_47();  // C++,UTF16 -> latin3 [data40.utf16 -> data47.out]
   
   printf("End of converter samples.\n");
   
