@@ -658,7 +658,6 @@ static void TestBinaryCollationData(){
 
 static void TestAPI() {
     UErrorCode status=U_ZERO_ERROR;
-    const char*        directory=NULL;
     int32_t len=0;
     const char* key=NULL;
     const UChar* value=NULL;
@@ -783,7 +782,7 @@ static void TestAPI() {
 }
 
 static void TestErrorConditions(){
-    UErrorCode status;
+    UErrorCode status=U_ZERO_ERROR;
     const char*        directory=NULL;
     const char *key=NULL;
     const UChar *value=NULL;
@@ -814,9 +813,9 @@ static void TestErrorConditions(){
     status=U_ILLEGAL_ARGUMENT_ERROR;
     teRes=ures_openU(utestdatapath, "te", &status);
     if(U_FAILURE(status)){
-        log_verbose("ERROR: ures_openU() failed as expected path =%s with status != U_ZERO_ERROR", testdatapath);
+        log_verbose("ures_openU() failed as expected path =%s with status != U_ZERO_ERROR\n", testdatapath);
     }else{
-        log_err("ERROR: ures_openU() is supposed to fail path =%s with status != U_ZERO_ERROR", austrdup(utestdatapath));
+        log_err("ERROR: ures_openU() is supposed to fail path =%s with status != U_ZERO_ERROR\n", austrdup(utestdatapath));
         ures_close(teRes);
     }
     /*Test ures_openFillIn with UResourceBundle = NULL*/

@@ -82,7 +82,7 @@ static void TestUDataOpen(){
     char        *icuDataFilePath = 0;
     struct stat stat_buf;
     
-    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
+    const char* tdrelativepath = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
     char* testPath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdata") +1 +strlen(tdrelativepath)) );
 
     strcpy(testPath, u_getDataDirectory());
@@ -183,7 +183,7 @@ static void TestUDataOpen(){
      *  A test data file named testudata_nam.typ exists for the purpose of testing this.
      */
     log_verbose("Testing udata_open, with base_name.type style fallback to individual file.\n");
-    icuDataFilePath = (char *)malloc(strlen(u_getDataDirectory()) + 50);
+    icuDataFilePath = (char *)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + 50));
     strcpy(icuDataFilePath, u_getDataDirectory());
     strcat(icuDataFilePath,tdrelativepath);
     strcat(icuDataFilePath, "testudata");
@@ -250,7 +250,7 @@ static void TestUDataSetAppData(){
     size_t            i;
        
     /* Open the testdata.dat file, using normal   */
-    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
+    const char* tdrelativepath = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
     char* filePath=(char*)malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("testdata.dat") +1 +strlen(tdrelativepath)) );
 
     strcpy(filePath, u_getDataDirectory());
