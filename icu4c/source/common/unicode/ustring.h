@@ -292,12 +292,15 @@ u_strCompare(const UChar *s1, int32_t length1,
              const UChar *s2, int32_t length2,
              UBool codePointOrder);
 
+#ifndef U_COMPARE_CODE_POINT_ORDER
+/* see also unistr.h and unorm.h */
 /**
  * Option bit for u_strCaseCompare, u_strcasecmp, unorm_compare, etc:
  * Compare strings in code point order instead of code unit order.
  * @draft ICU 2.2
  */
 #define U_COMPARE_CODE_POINT_ORDER  0x8000
+#endif
 
 /**
  * Compare two strings case-insensitively using full case folding.
