@@ -7,9 +7,4 @@
 
 fr_FR_PREEURO {
     Version { "1.0" }
-    CurrencyElements { 
-        "F",
-        "FRF",
-        ",",
-    }
 }

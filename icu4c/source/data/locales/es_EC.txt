@@ -7,11 +7,6 @@
 
 es_EC {
     Version { "1.0" }
-    CurrencyElements { 
-        "S/.",
-        "ECS",
-        ",",
-    }
     DateTimePatterns { 
         "hh:mm:ss a z",
         "hh:mm:ss a z",
@@ -37,6 +32,7 @@ es_EC {
         "\u2030",
         "\u221E",
         "\uFFFD",
+        ",",
     }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

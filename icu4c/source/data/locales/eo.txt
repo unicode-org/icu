@@ -125,7 +125,7 @@ eo {
     }
     NumberElements { 
         ",",
-        "\u00a0",
+        "\u00A0",
         ";",
         "%",
         "0",
@@ -135,6 +135,7 @@ eo {
         "\u2030",
         "\u221E",
         "\uFFFD",
+        ",",
     }
 //    ShortLanguage { "epo" }
     localPatternChars { "GjMtkHmslTDUSnahKzJd" }

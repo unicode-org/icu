@@ -79,4 +79,9 @@ om{
         ET { "Itoophiyaa" }
         KE { "Keeniyaa" }
     }
+
+    // Currency display names
+    Currencies {
+        KES { "Ksh", "KES" }
+    }
 }

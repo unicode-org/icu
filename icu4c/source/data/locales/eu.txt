@@ -58,7 +58,7 @@ eu {
     }
     NumberElements {
         ",",
-        ".", // even if not used
+        ".",
         ";",
         "%",
         "0",
@@ -66,8 +66,9 @@ eu {
         "-",
         "E",
         "\u2030",
-        "\u221e",
-        "\ufffd",
+        "\u221E",
+        "\uFFFD",
+        ",",
     }
     LocaleID:int { 0x2D }
 //    LocaleScript{  
@@ -83,4 +84,9 @@ eu {
     // ShortLanguage { }
     // localPatternChars{}
     //
+
+    // Currency display names
+    Currencies {
+        ESP { "Pts", "ESP" }
+    }
 }

@@ -10,11 +10,6 @@
 
 sw_KE {
     Version { "1.1" }
-    CurrencyElements { 
-        "KSh",
-        "KES",
-        ".",
-    }
 //    LocaleString { "sw_KE" }
     NumberPatterns {
         "#,##0.###;-#,##0.###",

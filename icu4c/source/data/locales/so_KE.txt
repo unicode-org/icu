@@ -17,13 +17,6 @@ so_KE {
         "sn",
         "gn",
     }
-    // CountryISBNNumber { "404" }
-    // CountryNumber { "404" }
-    CurrencyElements {
-        "Ksh",
-        "KES",
-        ".",
-    }
     // Measurement { "Metric" }
 //    NumberElements {
 //        ".",

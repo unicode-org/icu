@@ -132,4 +132,9 @@ he {
         "2000: << \u05d0\u05dc\u05e3[ >>];\n"
         "1,000,000: =#,##0= (incomplete data);" 
     }
+
+    // Currency display names
+    Currencies {
+        ILS { "\u05E9\u0022\u05D7", "ILS" }
+    }
 }

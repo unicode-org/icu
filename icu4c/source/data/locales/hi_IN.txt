@@ -16,11 +16,6 @@ hi_IN {
         "#E0",
     }
 //    ShortCountry { IND }
-    CurrencyElements {
-        "\u0930\u0941",
-        "INR",  
-        "."
-    }
     DateTimePatterns {
         "h:mm:ss a z",
         "h:mm:ss a z",

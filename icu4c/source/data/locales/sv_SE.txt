@@ -7,11 +7,6 @@
 
 sv_SE {
     Version { "1.0" }
-    CurrencyElements { 
-        "kr",
-        "SEK",
-        ",",
-    }
 //    LocaleString { "sv_SE" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

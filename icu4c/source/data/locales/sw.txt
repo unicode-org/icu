@@ -93,4 +93,10 @@ sw {
 // NumberElements{}
 // AmPmMarkers{}
 // localPatternChars{}
+
+    // Currency display names
+    Currencies {
+        KES { "KSh", "KES" }
+        TZS { "TSh", "TZS" }
+    }
 }

@@ -7,11 +7,6 @@
 
 kl_GL {
     Version { "1.0" }
-    CurrencyElements {
-        "kr",
-        "DKK",
-        ",",
-    }
     DateTimePatterns {
         "h:mm:ss a",
         "h:mm:ss a",

@@ -7,11 +7,6 @@
 
 de_DE {
     Version { "1.0" }
-    CurrencyElements { 
-        "\u20AC",
-        "EUR",
-        ",",
-    }
 //    LocaleString { "de_DE" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

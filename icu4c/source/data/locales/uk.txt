@@ -129,6 +129,7 @@ uk {
         "\u2030",
         "\u221E",
         "\uFFFD",
+        ",",
     }
 //    ShortLanguage { "ukr" }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
@@ -145,4 +146,9 @@ uk {
         "Cyrl"      // ISO 15924 Name 
     }
     ExemplarCharacters { "[\u0430-\u0449 \u044e \u044c \u044f \u0454 \u0456 \u0457 \u0491]" }
+
+    // Currency display names
+    Currencies {
+        UAH { "\u0433\u0440\u043D.", "UAH" }
+    }
 }

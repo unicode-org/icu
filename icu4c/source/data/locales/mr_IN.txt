@@ -11,11 +11,6 @@ mr_IN {
     LocaleID:int { 0x044e }
 //    ShortCountry { IND }
 
-    CurrencyElements {
-        "\u0930\u0941",
-        "INR",  // Rs. ? No.
-        "."
-    }
     NumberPatterns {
         "##,##,##0.###;-##,##,##0.###",
         "\u00A4##,##,##0.00;-\u00A4##,##,##0.00",

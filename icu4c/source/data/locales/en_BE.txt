@@ -39,13 +39,9 @@ en_BE {
         "\u2030",
         "\u221E",
         "\uFFFD",
-    }
-//    ShortCountry { "BEL" }
-    CurrencyElements { 
-        "\u20AC",
-        "EUR",
         ",",
     }
+//    ShortCountry { "BEL" }
 
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

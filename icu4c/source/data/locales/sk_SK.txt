@@ -7,11 +7,6 @@
 
 sk_SK {
     Version{ "1.0" }
-    CurrencyElements { 
-        "Sk",
-        "SKK",
-        ",",
-    }
 //    LocaleString { "sk_SK" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

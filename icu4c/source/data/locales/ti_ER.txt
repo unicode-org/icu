@@ -59,13 +59,6 @@ ti_ER{
         "\u1295\u1309\u1206 \u1230\u12D3\u1270",
         "\u12F5\u1215\u122D \u1230\u12D3\u1275",
     }
-    // CountryISBNNumber { "231" }
-    // CountryNumber { "231" }
-    CurrencyElements {
-        "$",
-        "ETB",
-        ".",
-    }
     DateTimePatterns { 
         "h:mm:ss a",
         "h:mm:ss a",
@@ -96,5 +89,10 @@ ti_ER{
         "\u00A4#,##0.00;-\u00A4#,##0.00",
         "#,##0%",
         "#E0",
+    }
+
+    // Currency display names
+    Currencies {
+        ETB { "$", "ETB" }
     }
 }

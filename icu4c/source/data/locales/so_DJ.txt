@@ -13,13 +13,6 @@
 so_DJ {
     Version{ "1.0" }
 
-    // CountryISBNNumber { "262" }
-    // CountryNumber { "262" }
-    CurrencyElements {
-        "$",
-        "DJF",
-        ".",
-    }
 
     // Measurement { "Metric" }
 //    NumberElements {
@@ -46,4 +39,9 @@ so_DJ {
     //    Width { "210" }
     //    Units { "mm" }
     // }
+
+    // Currency display names
+    Currencies {
+        DJF { "$", "DJF" }
+    }
  }

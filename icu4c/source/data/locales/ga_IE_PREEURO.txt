@@ -7,9 +7,4 @@
 
 ga_IE_PREEURO {
     Version { "1.0" }
-    CurrencyElements {
-        "\u00a3",
-        "IEP",
-        ".",
-    }
 }

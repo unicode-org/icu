@@ -7,11 +7,6 @@
 
 ar_AE {
     Version{"1.0"}
-    CurrencyElements { 
-        "\u062F.\u0625.\u200F",
-        "AED",
-        ".",
-    }
 //    LocaleString { "ar_AE" }
 //    ShortCountry { "ARE" }
     LocaleID:int { 0x3801 }

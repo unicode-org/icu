@@ -12,11 +12,6 @@ en_MT {
 
 //    ShortCountry { MLT }
 
-    CurrencyElements {
-        "Lm",
-        MTL,
-        "."
-    }
 
     NumberPatterns {
         "#,##0.###;-#,##0.###",

@@ -97,6 +97,7 @@ be {
         "\u2030",
         "\u221E",
         "\uFFFD",
+        ",",
     }
 //    ShortLanguage { "bel" }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
@@ -113,4 +114,9 @@ be {
         "Cyrl",     // Abbreviation 
     }
     ExemplarCharacters { "[\u0430-\u0437 \u0439-\u0448 \u044b-\u044f \u2019\u0451\u0456\u045e {\u0434\u0436} {\u0434\u0437}]" }
+
+    // Currency display names
+    Currencies {
+        BYB { "\u0420\u0443\u0431", "BYB" }
+    }
 }

@@ -77,6 +77,7 @@ nn{
         "\u2030",
         "\u221E",
         "\uFFFD",
+        ",",
     }
 //    ShortLanguage { "nor" }
     Eras {
@@ -117,4 +118,9 @@ nn{
 //    LocaleScript{ 
 //        "Latn",  // ISO 15924 Name 
 //    }
+
+    // Currency display names
+    Currencies {
+        NOK { "kr", "NOK" }
+    }
 }

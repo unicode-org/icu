@@ -7,11 +7,6 @@
 
 fi_FI {
     Version { "1.0" }
-    CurrencyElements { 
-        "\u20AC",
-        "EUR",
-        ",",
-    }
 //    LocaleString { "fi_FI" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

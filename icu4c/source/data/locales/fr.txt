@@ -356,7 +356,7 @@ fr {
     }
     NumberElements { 
         ",",
-        "\u00A0",  // &nbsp;
+        "\u00A0",
         ";",
         "%",
         "0",
@@ -366,6 +366,7 @@ fr {
         "\u2030",
         "\u221E",
         "\uFFFD",
+        ",",
     }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",
@@ -460,5 +461,11 @@ fr {
         "    ; et-un; =%main=;\n" 
         "%%lenient-parse:\n"
         "    &\u0000 << ' ' << ',' << '-';\n"
+    }
+
+    // Currency display names
+    Currencies {
+        BEF { "FB", "BEF" }
+        CHF { "sFr.", "CHF" }
     }
 }

@@ -70,4 +70,9 @@ bn {
         "Beng"
     }
     ExemplarCharacters{"[[:Beng:]\u200c\u200d]"}
+
+    // Currency display names
+    Currencies {
+        INR { "\u099F\u09BE\u0995\u09BE", "INR" }
+    }
 }

@@ -13,13 +13,6 @@ am_ET {
         "\u1320\u12CB\u1275",
         "\u12A8\u1233\u12D3\u1275",
     }
-    // CountryISBNNumber { "231" }
-    // CountryNumber { "231" }
-    CurrencyElements {
-        "$",
-        "ETB",
-        ".",
-    }
     DateTimePatterns { 
         "hh:mm:ss a",
         "hh:mm:ss a",
@@ -56,4 +49,9 @@ am_ET {
     //    Width { "210" }
     //    Units { "mm" }
     // }
+
+    // Currency display names
+    Currencies {
+        ETB { "$", "ETB" }
+    }
  }

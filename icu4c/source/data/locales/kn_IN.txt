@@ -10,11 +10,6 @@ kn_IN {
     LocaleID:int { 0x044B }
 //    ShortCountry { IND }
 
-    CurrencyElements {
-        "\u0930\u0941",
-        "INR",  
-        "."
-    }
     DateTimePatterns {
         "hh:mm:ss a z",
         "hh:mm:ss a z",

@@ -7,11 +7,6 @@
 
 gl_ES_PREEURO {
     Version { "1.0" }
-    CurrencyElements { 
-        "Pta",
-        "ESP",
-        ",",
-    }
     NumberPatterns { 
         "#,#0.##;-#,#0.##",
         "\u00a4 #,##0;-\u00a4 #,##0",

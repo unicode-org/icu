@@ -21,13 +21,6 @@ om_KE {
         "WD",  // WD = Waaree Dura
         "WB",  // WD = Waaree Booda
     }
-    // CountryISBNNumber { "404" }
-    // CountryNumber { "404" }
-    CurrencyElements {
-        "Ksh",
-        "KES",
-        ".",
-    }
     DateTimePatterns { 
         "h:mm:ss a",
         "h:mm:ss a",

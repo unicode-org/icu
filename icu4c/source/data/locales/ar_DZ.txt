@@ -7,11 +7,6 @@
 
 ar_DZ {
     Version{"1.0"}
-    CurrencyElements { 
-        "\u062F.\u062C.\u200F",
-        "DZD",
-        ".",
-    }
 //    LocaleString { "ar_DZ" }
 //    ShortCountry { "DZA" }
     LocaleID:int { 0x1401 }

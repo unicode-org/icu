@@ -7,11 +7,6 @@
 
 es_PY {
     Version{ "1.1" }
-    CurrencyElements { 
-        "Gs",
-        "PYG",
-        ",",
-    }
     DateTimePatterns { 
         "hh:mm:ss a z",
         "hh:mm:ss a z",
@@ -35,6 +30,7 @@ es_PY {
         "\u2030",
         "\u221E",
         "\uFFFD",
+        ",",
     }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

@@ -2681,4 +2681,9 @@ ko {
         "\uD774\uD77C-\uD77D\uD781\uD788-\uD789\uD78C\uD790\uD798-\uD799"
         "\uD79B\uD79D]"
     }
+
+    // Currency display names
+    Currencies {
+        KRW { "\u20A9", "KRW" }
+    }
 }

@@ -13,13 +13,6 @@ ti_ET {
         "\u1295\u1309\u1206 \u1230\u12D3\u1270",
         "\u12F5\u1215\u122D \u1230\u12D3\u1275",
     }
-    // CountryISBNNumber { "231" }
-    // CountryNumber { "231" }
-    CurrencyElements {
-        "$",
-        "ETB",
-        ".",
-    }
     DateTimePatterns { 
         "h:mm:ss a",
         "h:mm:ss a",
@@ -56,4 +49,9 @@ ti_ET {
     //    Width { "210" }
     //    Units { "mm" }
     // }
+
+    // Currency display names
+    Currencies {
+        ETB { "$", "ETB" }
+    }
 }

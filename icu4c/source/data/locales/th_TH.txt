@@ -7,11 +7,6 @@
 
 th_TH {
     Version { "1.0" }
-    CurrencyElements { 
-        "\u0E3F",
-        "THB",
-        ".",
-    }
 //    LocaleString { "th_TH" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

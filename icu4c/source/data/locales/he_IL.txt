@@ -7,11 +7,6 @@
 
 he_IL {
     Version { "1.3" }
-    CurrencyElements { 
-        "\u05E9\u0022\u05D7",
-        "ILS",
-        ".",
-    }
 //    LocaleString { "he_IL" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

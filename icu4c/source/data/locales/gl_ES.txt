@@ -7,11 +7,6 @@
 
 gl_ES {
     Version { "1.0" }
-    CurrencyElements { 
-        "\u20AC",
-        "EUR",
-        ",",
-    }
     DateTimeElements:intvector {
         2,
         1,

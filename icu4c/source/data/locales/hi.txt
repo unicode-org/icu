@@ -310,8 +310,9 @@ hi {
         "-",
         "E",
         "\u2030",
-        "\u221e",
-        "\ufffd"
+        "\u221E",
+        "\uFFFD"
+        ".",
     }
 
 //    NumberPatterns {
@@ -335,5 +336,10 @@ hi {
         "Deva"        // ISO 15924 Name 
     }
     ExemplarCharacters{"[[:Deva:]\u200c\u200d]"}
+
+    // Currency display names
+    Currencies {
+        INR { "\u0930\u0941", "INR" }
+    }
 }
 

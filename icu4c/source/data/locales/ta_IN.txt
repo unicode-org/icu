@@ -12,11 +12,6 @@ ta_IN {
     LocaleID:int { 0x449 }
 //    ShortCountry { IND }
 
-    CurrencyElements {
-        "\u0bb0\u0bc2",
-        "INR",  // Rs. ? No.
-        "."
-    }
     NumberPatterns {
         "##,##,##0.###;-##,##,##0.###",
         "\u00A4##,##,##0.00;-\u00A4##,##,##0.00",

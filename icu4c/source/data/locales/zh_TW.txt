@@ -1305,11 +1305,6 @@ zh_TW {
         ZM { "尚比亞" }
         ZW { "辛巴威" }
     }
-    CurrencyElements { 
-        "NT$",
-        "TWD",
-        ".",
-    }
     DateTimePatterns { 
         "ahh'\u6642'mm'\u5206'ss'\u79D2' z",
         "ahh'\u6642'mm'\u5206'ss'\u79D2'",

@@ -11,11 +11,6 @@ kok_IN {
     LocaleID:int { 0x0457 }
 //    ShortCountry { IND }
 
-    CurrencyElements {
-        "\u0930\u0941",
-        "INR",  // Rs. ? No.
-        "."
-    }
     NumberPatterns {
         "##,##,##0.###;-##,##,##0.###",
         "\u00A4##,##,##0.00;-\u00A4##,##,##0.00",

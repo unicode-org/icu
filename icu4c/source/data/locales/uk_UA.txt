@@ -7,11 +7,6 @@
 
 uk_UA {
     Version { "1.0" }
-    CurrencyElements { 
-        "\u0433\u0440\u043D.",
-        "UAH",
-        ",",
-    }
 //    LocaleString { "uk_UA" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",

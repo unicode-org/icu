@@ -7,11 +7,6 @@
 
 es_PA {
     Version { "1.0" }
-    CurrencyElements { 
-        "B/",
-        "PAB",
-        ".",
-    }
     DateTimePatterns { 
         "hh:mm:ss a z",
         "hh:mm:ss a z",

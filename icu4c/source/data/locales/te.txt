@@ -88,4 +88,9 @@ te {
     // Eras{}
     // localPatternChars{}
     //
+
+    // Currency display names
+    Currencies {
+        INR { "\u0C30\u0C42.", "INR" }
+    }
 }

@@ -7,11 +7,6 @@
 
 vi_VN {
     Version{ "1.1" }
-    CurrencyElements {
-        "\u20AB",
-        "VND",
-        ",",
-    }
     LocaleID:int { 0x042A }
 //    LocaleString { "vi_VN" }
 //    ShortCountry { "VNM" }
