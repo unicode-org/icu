@@ -334,7 +334,7 @@ U_CAPI UTextOffset U_EXPORT2
 ubidi_countRuns(UBiDi *pBiDi, UErrorCode *pErrorCode) {
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return -1;
-    } else if(pBiDi==NULL || pBiDi->runCount<0 && !ubidi_getRuns(pBiDi)) {
+    } else if(pBiDi==NULL || (pBiDi->runCount<0 && !ubidi_getRuns(pBiDi))) {
         *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
         return -1;
     } else {
@@ -346,7 +346,7 @@ U_CAPI UBiDiDirection U_EXPORT2
 ubidi_getVisualRun(UBiDi *pBiDi, UTextOffset runIndex,
                    UTextOffset *pLogicalStart, UTextOffset *pLength) {
     if( pBiDi==NULL || runIndex<0 ||
-        pBiDi->runCount==-1 && !ubidi_getRuns(pBiDi) ||
+        (pBiDi->runCount==-1 && !ubidi_getRuns(pBiDi)) ||
         runIndex>=pBiDi->runCount
     ) {
         return UBIDI_LTR;

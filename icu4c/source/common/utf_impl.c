@@ -165,22 +165,22 @@ utf8_appendCharSafeBody(uint8_t *s, UTextOffset i, UTextOffset length, UChar32 c
     if((c)<=0x7ff) {
         if((i)+1<(length)) {
             (s)[(i)++]=(uint8_t)(((c)>>6)|0xc0);
-            (s)[(i)++]=(uint8_t)((c)&0x3f|0x80);
+            (s)[(i)++]=(uint8_t)(((c)&0x3f)|0x80);
             return i;
         }
     } else if((uint32_t)(c)<=0xffff) {
         if((i)+2<(length)) {
             (s)[(i)++]=(uint8_t)(((c)>>12)|0xe0);
-            (s)[(i)++]=(uint8_t)(((c)>>6)&0x3f|0x80);
-            (s)[(i)++]=(uint8_t)((c)&0x3f|0x80);
+            (s)[(i)++]=(uint8_t)((((c)>>6)&0x3f)|0x80);
+            (s)[(i)++]=(uint8_t)(((c)&0x3f)|0x80);
             return i;
         }
     } else if((uint32_t)(c)<=0x10ffff) {
         if((i)+3<(length)) {
             (s)[(i)++]=(uint8_t)(((c)>>18)|0xf0);
-            (s)[(i)++]=(uint8_t)(((c)>>12)&0x3f|0x80);
-            (s)[(i)++]=(uint8_t)(((c)>>6)&0x3f|0x80);
-            (s)[(i)++]=(uint8_t)((c)&0x3f|0x80);
+            (s)[(i)++]=(uint8_t)((((c)>>12)&0x3f)|0x80);
+            (s)[(i)++]=(uint8_t)((((c)>>6)&0x3f)|0x80);
+            (s)[(i)++]=(uint8_t)(((c)&0x3f)|0x80);
             return i;
         }
     }
@@ -228,9 +228,9 @@ utf8_prevCharSafeBody(const uint8_t *s, UTextOffset start, UTextOffset *pi, UCha
                     UTF8_MASK_LEAD_BYTE(b, count);
                     c|=(UChar32)b<<shift;
                     if( c>0x10ffff ||
-                        (strict) &&
+                        (strict &&
                             (UTF_IS_SURROGATE(c) ||
-                             count>=4 || (c)<utf8_minRegular[count] || ((c)&0xfffe)==0xfffe)
+                             count>=4 || c<utf8_minRegular[count] || (c&0xfffe)==0xfffe))
                     ) {
                         /* irregular sequence */
                         c=utf8_errorValue[count];
