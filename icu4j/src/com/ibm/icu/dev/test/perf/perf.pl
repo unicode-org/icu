@@ -13,9 +13,9 @@ my $TESTCLASS = 'com.ibm.icu.dev.test.perf.UnicodeSetPerf';
 
 # Methods to be tested.  Each pair represents a test method and
 # a baseline method which is used for comparison.
-my @METHODS  = (['UnicodeSetAdd', 'HashSetAdd']);#,
-#                ['UnicodeSetContains', 'HashSetContains'],
-#                ['UnicodeSetIterate', 'HashSetIterate']);
+my @METHODS  = (['UnicodeSetAdd', 'HashSetAdd'],
+                ['UnicodeSetContains', 'HashSetContains'],
+                ['UnicodeSetIterate', 'HashSetIterate']);
 
 # Patterns which define the set of characters used for testing.
 my @PATTERNS = ('[:Lt:]', '[:Cn:]');
