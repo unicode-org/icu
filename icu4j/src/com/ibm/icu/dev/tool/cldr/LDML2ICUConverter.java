@@ -1968,9 +1968,10 @@ public class LDML2ICUConverter {
  
         return wkend; 
     }
+
     private ICUResourceWriter.Resource parseDTE(Node root, StringBuffer xpath){
-        Node minDays = getVettedNode(root, LDMLConstants.MINDAYS,  xpath);
-        Node firstDay = getVettedNode(root, LDMLConstants.FIRSTDAY, xpath);
+        Node minDays = getVettedNode(root, LDMLConstants.MINDAYS);
+        Node firstDay = getVettedNode(root, LDMLConstants.FIRSTDAY);
         ICUResourceWriter.ResourceIntVector dte = null;
         
         if(minDays!=null && firstDay!=null){
@@ -2106,7 +2107,23 @@ public class LDML2ICUConverter {
         }
         return false;
     }
-        
+    private Node getVettedNode(Node context, String resToFetch){
+        NodeList list = LDMLUtilities.getChildNodes(context, resToFetch);
+        Node node =null;
+        if(list!=null){
+            for(int i =0; i<list.getLength(); i++){
+                node = list.item(i);
+                if(LDMLUtilities.isNodeDraft(node)){
+                    continue;
+                }
+                if(isAlternate(node)){
+                    continue;
+                }
+                return node;
+            }
+        }
+        return null;
+    }
     private Node getVettedNode(NodeList list, StringBuffer xpath){
         // A vetted node is one which is not draft and does not have alternate
         // attribute set

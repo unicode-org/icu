@@ -938,6 +938,19 @@ public class LDMLUtilities {
         return node;
     }
     /**
+     * 
+     * @param context
+     * @param resToFetch
+     * @param fullyResolved
+     * @param xpath
+     * @return
+     */
+    public static NodeList getChildNodes(Node context, String resToFetch){
+        String ctx = "./"+ resToFetch;
+        NodeList list = getNodeList(context, ctx);
+        return list;
+    }
+    /**
      * Fetches the node from the document that matches the given xpath.
      * The context namespace node is required if the xpath contains 
      * namespace elments
