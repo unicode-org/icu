@@ -32,7 +32,7 @@
 #include "cstring.h"
 #include "cmemory.h"
 
-#ifdef U_WINDOWS
+#if defined(U_WINDOWS) && !defined(fileno)
 /* Windows likes to rename Unix-like functions */
 #define fileno _fileno
 #endif
