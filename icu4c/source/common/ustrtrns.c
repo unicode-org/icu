@@ -57,6 +57,7 @@ u_growAnyBufferFromStatic(void *context,
 }
 
 #define _STACK_BUFFER_CAPACITY 1000
+#define _BUFFER_CAPACITY_MULTIPLIER 2
 
 U_CAPI UChar* U_EXPORT2 
 u_strFromUTF32(UChar   *dest,
@@ -487,7 +488,7 @@ _strToWCS(wchar_t *dest,
             
             /* we dont have enough room on the stack grow the buffer */
             if(!u_growAnyBufferFromStatic(stackBuffer,(void**) &tempBuf, &tempBufCapacity, 
-                (2*(srcLength)+100), count,sizeof(char))){
+                (_BUFFER_CAPACITY_MULTIPLIER * (srcLength)), count,sizeof(char))){
                 goto cleanup;
             }
           
@@ -522,7 +523,7 @@ _strToWCS(wchar_t *dest,
      * here we assume that every char requires 
      * no more than 2 wchar_ts
      */
-    intTargetCapacity =  (count*2+1) /*for null termination */;
+    intTargetCapacity =  (count * _BUFFER_CAPACITY_MULTIPLIER + 1) /*for null termination */;
     intTarget = (wchar_t*)uprv_malloc( intTargetCapacity * sizeof(wchar_t) );
 
     if(intTarget){
@@ -547,7 +548,7 @@ _strToWCS(wchar_t *dest,
                 int numWritten = (pIntTarget-intTarget);
                 u_growAnyBufferFromStatic(NULL,(void**) &intTarget,
                                           &intTargetCapacity,
-                                          intTargetCapacity*2,
+                                          intTargetCapacity * _BUFFER_CAPACITY_MULTIPLIER,
                                           numWritten,
                                           sizeof(wchar_t));
                 pIntTarget = intTarget;
@@ -696,7 +697,7 @@ _strFromWCS( UChar   *dest,
             }else if(retVal == cStackCap){
                 /* Should rarely occur */
                 u_growAnyBufferFromStatic(cStack,(void**)&pCSrc,&cStackCap,
-                    cStackCap*2,0,sizeof(char));
+                    cStackCap * _BUFFER_CAPACITY_MULTIPLIER, 0, sizeof(char));
                 pCSave = pCSrc;
             }else{
                 /* converted every thing */
@@ -729,7 +730,7 @@ _strFromWCS( UChar   *dest,
                     pCSrc = pCSave;
                     /* we do not have enough room so grow the buffer*/
                     u_growAnyBufferFromStatic(cStack,(void**)&pCSrc,&cStackCap,
-                           2*cStackCap+(nulLen*MB_CUR_MAX),len,sizeof(char));
+                           _BUFFER_CAPACITY_MULTIPLIER*cStackCap+(nulLen*MB_CUR_MAX),len,sizeof(char));
 
                     pCSave = pCSrc;
                     pCSrc = pCSave+len;
