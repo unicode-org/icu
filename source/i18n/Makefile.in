@@ -59,7 +59,7 @@ endif
 LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
 LIBS = $(LIBICUUC) @LIBS@
 
-OBJECTS = brkiter.o calendar.o choicfmt.o \
+OBJECTS = bocsu.o brkiter.o calendar.o choicfmt.o \
 coleitr.o coll.o cpdtrans.o datefmt.o dcfmtsym.o decimfmt.o \
 dtfmtsym.o fmtable.o format.o gregocal.o hextouni.o \
 msgfmt.o numfmt.o rbt.o rbt_data.o rbt_pars.o \
