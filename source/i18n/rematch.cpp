@@ -1202,6 +1202,8 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
                 if (sets[URX_GC_L]->contains(c))       goto GC_L;
                 if (sets[URX_GC_LV]->contains(c))      goto GC_V;
                 if (sets[URX_GC_LVT]->contains(c))     goto GC_T;
+                if (sets[URX_GC_V]->contains(c))       goto GC_V;
+                if (sets[URX_GC_T]->contains(c))       goto GC_T;
                 goto GC_Extend;
 
 
