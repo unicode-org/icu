@@ -1,14 +1,8 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2000, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2002, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/caniter.h,v $ 
- * $Date: 2002/03/20 05:08:57 $ 
- * $Revision: 1.4 $
- *
- *****************************************************************************************
  */
 
 #ifndef CANITER_H
