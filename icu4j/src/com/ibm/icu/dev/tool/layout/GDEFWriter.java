@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1998-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1998-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -17,13 +17,15 @@ import java.io.PrintStream;
 class GDEFWriter extends OpenTypeTableWriter
 {
     ClassTable classTable;
+    ClassTable markClassTable;
     String scriptName;
     
-    public GDEFWriter(String scriptName, ClassTable classTable)
+    public GDEFWriter(String scriptName, ClassTable classTable, ClassTable markClassTable)
     {
         super(1024);
-        this.classTable = classTable;
-        this.scriptName = scriptName;
+        this.classTable     = classTable;
+        this.markClassTable = markClassTable;
+        this.scriptName     = scriptName;
     }
     
     public void writeTable(PrintStream output)
@@ -40,9 +42,20 @@ class GDEFWriter extends OpenTypeTableWriter
         writeData(0); // ligCaretListOffset
         writeData(0); // markAttachClassDefOffset
         
-        fixOffset(classDefOffset, 0);
+        fixOffset(classDefOffset++, 0);
         
+        System.out.println("Writing glyph class definition table...");
         classTable.writeClassTable(this);
+        
+        // skip over attachListOffset, ligCaretListOffset
+        classDefOffset += 2;
+        
+        if (markClassTable != null) {
+            fixOffset(classDefOffset, 0);
+            
+            System.out.println("Writing mark attach class definition table...");
+            markClassTable.writeClassTable(this);
+        }
 
         output.print("const le_uint8 ");
         output.print(scriptName);
