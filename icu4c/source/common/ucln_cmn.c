@@ -101,67 +101,26 @@ u_cleanup(void)
  *
  *   ICU Initialization Function.  Force loading and/or initialization of
  *           any shared data that could potentially be used concurrently
- *           multiple threads.
+ *           by multiple threads.
  */
 
 U_CAPI void U_EXPORT2
 u_init(UErrorCode *status) {
-    /* Lock a private mutex for the duration of the initialization,
-     *  ensuring that there are no races through here, and to serve as
-     *  a memory barrier.  Don't use the global mutex, because of the 
-     *  possibility that some of the functions called within here might
-     *  use it.
-     *
-     * First use of a private mutex also forces global mutex into existance,
-     *   it it wasn't already set up.
+    /* Make sure the global mutex is initialized. */
+    umtx_lock(NULL);
+    umtx_unlock(NULL);
+
+    /* Do any required init for services that don't have open operations
+     * and use "only" the double-check initialization method for performance
+     * reasons (avoiding a mutex lock even for _checking_ whether the
+     * initialization had occurred).
      */
-    umtx_lock(&InitMutex);
-
-    /* Do any required init for services that don't have open operations. 
-     * TODO:  use of public APIs for the side effect of data initialization
-     *        is risky because implementation changes might inadvertantly
-     *        cause problems.
-     */
-
-
-    /* Locales */
-    uprv_getDefaultLocaleID();
-    uloc_countAvailable();
-
-
-#if !UCONFIG_NO_IDNA
-    /* IDNA.    */
-    {
-        UChar  nameSrc[] = {0x41, 0x42, 0x43, 0x00};
-        UChar  nameDst[100];
-        uidna_toASCII(nameSrc, 3, 
-                      nameDst, 100, UIDNA_DEFAULT,
-                      NULL,     /* UParseError pointer */
-                      status);
-    }
-#endif
-
 
     /* Char Properties */
     uprv_haveProperties(status);
-
-    /* Char Names.                         */
-    {
-        char buf[100];
-        u_charName(0x20, U_UNICODE_CHAR_NAME,  buf, 100,  status);
-    }
-
 
 #if !UCONFIG_NO_NORMALIZATION
     /*  Normalization  */
     unorm_haveData(status);
 #endif
-
-
-    /* Time Zone.  TODO:  move data loading from I18n lib to common, so we don't   */
-    /*                    have a dependency?                                       */
-    /*  TODO: an implementation();                                                 */
-
-
-    umtx_unlock(&InitMutex);
 }
