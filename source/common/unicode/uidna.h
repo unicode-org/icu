@@ -25,9 +25,9 @@
   
 /**
  *\file
- * UIDNA API implements the IDNA protocol as defined in the IDNA draft 
+ * UIDNA API implements the IDNA protocol as defined in the IDNA RFC 
  * (http://www.ietf.org/rfc/rfc3490.txt).
- * The draft defines 2 operations: ToASCII and ToUnicode. Domain labels 
+ * The RFC defines 2 operations: ToASCII and ToUnicode. Domain labels 
  * containing non-ASCII code points are required to be processed by
  * ToASCII operation before passing it to resolver libraries. Domain names
  * that are obtained from resolver libraries are required to be processed by
@@ -47,15 +47,34 @@
  *\end_file
  */
 
+/** 
+ * Option to prohibit processing of unassigned codepoints in the input and
+ * do not check if the input conforms to STD-3 ASCII rules.
+ * 
+ * @see  uidna_toASCII uidna_toUnicode
+ * @draft ICU 2.6
+ */
 #define UIDNA_DEFAULT          0x0000
+/** 
+ * Option to allow processing of unassigned codepoints in the input
+ * 
+ * @see  uidna_toASCII uidna_toUnicode
+ * @draft ICU 2.6
+ */
 #define UIDNA_ALLOW_UNASSIGNED 0x0001
+/** 
+ * Option to check if input conforms to STD-3 ASCII rules
+ * 
+ * @see  uidna_toASCII uidna_toUnicode
+ * @draft ICU 2.6
+ */
 #define UIDNA_USE_STD3_RULES   0x0002
     
 /**
- * This function implements the ToASCII operation as defined in the IDNA draft.
+ * This function implements the ToASCII operation as defined in the IDNA RFC.
  * This operation is done on <b>single labels</b> before sending it to something that expects
  * ASCII names. A label is an individual part of a domain name. Labels are usually
- * separated by dots; for e.g." "www.example.com" is composed of 3 labels 
+ * separated by dots; e.g." "www.example.com" is composed of 3 labels 
  * "www","example", and "com".
  *
  *
@@ -98,7 +117,7 @@ uidna_toASCII(const UChar* src, int32_t srcLength,
 
 
 /**
- * This function implements the ToUnicode operation as defined in the IDNA draft.
+ * This function implements the ToUnicode operation as defined in the IDNA RFC.
  * This operation is done on <b>single labels</b> before sending it to something that expects
  * Unicode names. A label is an individual part of a domain name. Labels are usually
  * separated by dots; for e.g." "www.example.com" is composed of 3 labels 
@@ -118,7 +137,7 @@ uidna_toASCII(const UChar* src, int32_t srcLength,
  *  - UIDNA_UNASSIGNED      Unassigned values can be converted to ASCII for query operations
  *                          If this option is set, the unassigned code points are in the input 
  *                          are treated as normal Unicode code points. <b> Note: </b> This option is 
- *                          required on toUnicode operation because the draft mandates 
+ *                          required on toUnicode operation because the RFC mandates 
  *                          verification of decoded ACE input by applying toASCII and comparing
  *                          its output with source
  *
@@ -148,13 +167,13 @@ uidna_toUnicode(const UChar* src, int32_t srcLength,
 
 
 /**
- * Convenience function that implements the IDNToASCII operation as defined in the IDNA draft.
+ * Convenience function that implements the IDNToASCII operation as defined in the IDNA RFC.
  * This operation is done on complete domain names, e.g: "www.example.com". 
  * It is important to note that this operation can fail. If it fails, then the input 
  * domain name cannot be used as an Internationalized Domain Name and the application
  * should have methods defined to deal with the failure.
  * 
- * <b>Note:</b> IDNA draft specifies that a conformant application should divide a domain name
+ * <b>Note:</b> IDNA RFC specifies that a conformant application should divide a domain name
  * into separate labels, decide whether to apply allowUnassigned and useSTD3ASCIIRules on each, 
  * and then convert. This function does not offer that level of granularity. The options once  
  * set will apply to all labels in the domain name
@@ -197,10 +216,10 @@ uidna_IDNToASCII(  const UChar* src, int32_t srcLength,
                    UErrorCode* status);
 
 /**
- * Convenience function that implements the IDNToUnicode operation as defined in the IDNA draft.
+ * Convenience function that implements the IDNToUnicode operation as defined in the IDNA RFC.
  * This operation is done on complete domain names, e.g: "www.example.com". 
  *
- * <b>Note:</b> IDNA draft specifies that a conformant application should divide a domain name
+ * <b>Note:</b> IDNA RFC specifies that a conformant application should divide a domain name
  * into separate labels, decide whether to apply allowUnassigned and useSTD3ASCIIRules on each, 
  * and then convert. This function does not offer that level of granularity. The options once  
  * set will apply to all labels in the domain name
@@ -245,7 +264,7 @@ uidna_IDNToUnicode(  const UChar* src, int32_t srcLength,
 /**
  * Compare two strings for IDNs for equivalence.
  * This function splits the domain names into labels and compares them.
- * According to IDN draft, whenever two labels are compared, they are 
+ * According to IDN RFC, whenever two labels are compared, they are 
  * considered equal if and only if their ASCII forms (obtained by 
  * applying toASCII) match using an case-insensitive ASCII comparison.
  * Two domain names are considered a match if and only if all labels 
