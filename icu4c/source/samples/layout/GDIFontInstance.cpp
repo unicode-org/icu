@@ -15,8 +15,8 @@
 
 #include "layout/LETypes.h"
 #include "layout/LESwaps.h"
+#include "layout/LEFontInstance.h"
 
-#include "RenderingFontInstance.h"
 #include "GDIFontInstance.h"
 #include "sfnt.h"
 #include "cmaps.h"
@@ -38,24 +38,23 @@ void GDISurface::setHDC(HDC theHDC)
     fCurrentFont = NULL;
 }
 
-void GDISurface::setFont(const RenderingFontInstance *font)
+void GDISurface::setFont(const GDIFontInstance *font)
 {
-    const GDIFontInstance *gFont = (const GDIFontInstance *) font;
-
 #if 0
     if (fCurrentFont != font) {
         fCurrentFont = font;
-        SelectObject(fHdc, gFont->getFont());
+        SelectObject(fHdc, font->getFont());
     }
 #else
-    SelectObject(fHdc, gFont->getFont());
+    SelectObject(fHdc, font->getFont());
 #endif
 }
 
-void GDISurface::drawGlyphs(const RenderingFontInstance *font, const LEGlyphID *glyphs, le_int32 count, const le_int32 *dx,
+void GDISurface::drawGlyphs(const LEFontInstance *font, const LEGlyphID *glyphs, le_int32 count, const float *positions,
     le_int32 x, le_int32 y, le_int32 width, le_int32 height)
 {
-    TTGlyphID *ttGlyphs = new TTGlyphID[count];
+    TTGlyphID *ttGlyphs = LE_NEW_ARRAY(TTGlyphID, count);
+    le_int32  *dx = LE_NEW_ARRAY(le_int32, count);
     RECT clip;
 
     clip.top    = 0;
@@ -65,18 +64,42 @@ void GDISurface::drawGlyphs(const RenderingFontInstance *font, const LEGlyphID *
 
     for (le_int32 g = 0; g < count; g += 1) {
         ttGlyphs[g] = (TTGlyphID) LE_GET_GLYPH(glyphs[g]);
+
+        if (ttGlyphs[g] == 0xFFFF || ttGlyphs[g] == 0xFFFE) {
+            ttGlyphs[g] = 0x0002;
+        }
+
+        dx[g] = (le_int32) (positions[g * 2 + 2] - positions[g * 2]);
     }
 
-    setFont(font);
+    le_int32 dyStart, dyEnd;
 
-    ExtTextOut(fHdc, x, y - font->getAscent(), ETO_CLIPPED | ETO_GLYPH_INDEX, &clip,
-        ttGlyphs, count, (INT *) dx);
+    setFont((GDIFontInstance *) font);
 
-    delete[] ttGlyphs;
+    dyStart = dyEnd = 0;
+
+    while (dyEnd < count) {
+        float yOffset = positions[dyStart * 2 + 1];
+        float xOffset = positions[dyStart * 2];
+
+        while (dyEnd < count && yOffset == positions[dyEnd * 2 + 1]) {
+            dyEnd += 1;
+        }
+
+        ExtTextOut(fHdc, x + (le_int32) xOffset, y + (le_int32) yOffset - font->getAscent(), ETO_CLIPPED | ETO_GLYPH_INDEX, &clip,
+            &ttGlyphs[dyStart], dyEnd - dyStart, (INT *) dx);
+
+        dyStart = dyEnd;
+    }
+
+    LE_DELETE_ARRAY(dx);
+    LE_DELETE_ARRAY(ttGlyphs);
 }
 
-GDIFontInstance::GDIFontInstance(GDISurface *surface, TCHAR *faceName, le_int16 pointSize, RFIErrorCode &status)
-  : fSurface(surface), fFont(NULL), RenderingFontInstance(surface, pointSize)
+GDIFontInstance::GDIFontInstance(GDISurface *surface, TCHAR *faceName, le_int16 pointSize, LEErrorCode &status)
+    : FontTableCache(), fSurface(surface), fFont(NULL),
+      fPointSize(pointSize), fUnitsPerEM(0), fAscent(0), fDescent(0), fLeading(0),
+      fDeviceScaleX(1), fDeviceScaleY(1), fMapper(NULL)
 {
     LOGFONT lf;
     FLOAT dpiX, dpiY;
@@ -126,7 +149,7 @@ GDIFontInstance::GDIFontInstance(GDISurface *surface, TCHAR *faceName, le_int16 
     fFont = CreateFontIndirect(&lf);
 
     if (fFont == NULL) {
-        status = RFI_FONT_FILE_NOT_FOUND_ERROR;
+        status = LE_FONT_FILE_NOT_FOUND_ERROR;
         return;
     }
 
@@ -135,7 +158,7 @@ GDIFontInstance::GDIFontInstance(GDISurface *surface, TCHAR *faceName, le_int16 
     UINT ret = GetOutlineTextMetrics(hdc, sizeof otm, &otm);
 
     if (ret == 0) {
-        status = RFI_MISSING_FONT_TABLE_ERROR;
+        status = LE_MISSING_FONT_TABLE_ERROR;
         goto restore;
     }
 
@@ -150,14 +173,18 @@ GDIFontInstance::GDIFontInstance(GDISurface *surface, TCHAR *faceName, le_int16 
         goto restore;
     }
 
+#if 0
     status = initFontTableCache();
+#endif
 
 restore:
     RestoreDC(hdc, -1);
 }
 
-GDIFontInstance::GDIFontInstance(GDISurface *surface, const char *faceName, le_int16 pointSize, RFIErrorCode &status)
-  : fSurface(surface), fFont(NULL), RenderingFontInstance(surface, pointSize)
+GDIFontInstance::GDIFontInstance(GDISurface *surface, const char *faceName, le_int16 pointSize, LEErrorCode &status)
+    : FontTableCache(), fSurface(surface), fFont(NULL),
+      fPointSize(pointSize), fUnitsPerEM(0), fAscent(0), fDescent(0), fLeading(0),
+      fDeviceScaleX(1), fDeviceScaleY(1), fMapper(NULL)
 {
     LOGFONTA lf;
     FLOAT dpiX, dpiY;
@@ -210,7 +237,7 @@ GDIFontInstance::GDIFontInstance(GDISurface *surface, const char *faceName, le_i
     fFont = CreateFontIndirectA(&lf);
 
     if (fFont == NULL) {
-        status = RFI_FONT_FILE_NOT_FOUND_ERROR;
+        status = LE_FONT_FILE_NOT_FOUND_ERROR;
         return;
     }
 
@@ -219,7 +246,7 @@ GDIFontInstance::GDIFontInstance(GDISurface *surface, const char *faceName, le_i
     UINT ret = GetOutlineTextMetrics(hdc, sizeof otm, &otm);
 
     if (ret == 0) {
-        status = RFI_MISSING_FONT_TABLE_ERROR;
+        status = LE_MISSING_FONT_TABLE_ERROR;
         goto restore;
     }
 
@@ -234,7 +261,9 @@ GDIFontInstance::GDIFontInstance(GDISurface *surface, const char *faceName, le_i
         goto restore;
     }
 
+#if 0
     status = initFontTableCache();
+#endif
 
 restore:
     RestoreDC(hdc, -1);
@@ -251,11 +280,37 @@ GDIFontInstance::~GDIFontInstance()
         // FIXME: call RemoveObject first?
         DeleteObject(fFont);
     }
+
+    delete fMapper;
+    fMapper = NULL;
+}
+
+LEErrorCode GDIFontInstance::initMapper()
+{
+    LETag cmapTag = 0x636D6170; // 'cmap'
+    const CMAPTable *cmap = (const CMAPTable *) readFontTable(cmapTag);
+
+    if (cmap == NULL) {
+        return LE_MISSING_FONT_TABLE_ERROR;
+    }
+
+    fMapper = CMAPMapper::createUnicodeMapper(cmap);
+
+    if (fMapper == NULL) {
+        return LE_MISSING_FONT_TABLE_ERROR;
+    }
+
+    return LE_NO_ERROR;
+}
+
+const void *GDIFontInstance::getFontTable(LETag tableTag) const
+{
+    return FontTableCache::find(tableTag);
 }
 
 const void *GDIFontInstance::readFontTable(LETag tableTag) const
 {
-    fSurface->setFont((RenderingFontInstance *) this);
+    fSurface->setFont(this);
 
     HDC   hdc    = fSurface->getHDC();
     DWORD stag   = SWAPL(tableTag);
@@ -285,7 +340,7 @@ void GDIFontInstance::getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) const
     MAT2 identity = {{0, 1}, {0, 0}, {0, 0}, {0, 1}};
     HDC hdc = fSurface->getHDC();
 
-    fSurface->setFont((RenderingFontInstance *) this);
+    fSurface->setFont(this);
 
     result = GetGlyphOutline(hdc, glyph, GGO_GLYPH_INDEX | GGO_METRICS, &metrics, 0, NULL, &identity);
 

@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2001, International Business Machines
+ *   Copyright (C) 1999-2003, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -14,10 +14,11 @@
 #define __PARAGRAPH_H
 
 #include "unicode/utypes.h"
-#include "unicode/uscript.h"
+
+#include "layout/LEFontInstance.h"
 
 #include "GUISupport.h"
-#include "RenderingFontInstance.h"
+#include "RenderingSurface.h"
 #include "FontMap.h"
 
 #include "ParagraphLayout.h"
@@ -26,14 +27,14 @@ U_NAMESPACE_USE
 
 #define MARGIN 10
 
+#if 0
 class LineInfo;
+#endif
 
 class Paragraph
 {
 public:
-    Paragraph(const LEUnicode chars[], le_int32 charCount,
-              const RenderingFontInstance *runFonts[], const UScriptCode runScripts[],
-              const le_int32 runLimits[], le_int32 runCount);
+    Paragraph(const LEUnicode chars[], le_int32 charCount, const FontRuns *fontRuns);
 
     ~Paragraph();
 
@@ -51,7 +52,8 @@ private:
     le_int32         fLineCount;
     le_int32         fLinesMax;
     le_int32         fLinesGrow;
-    LineInfo       **fLines;
+
+    const ParagraphLayout::Line **fLines;
 
     le_int32         fLineHeight;
     le_int32         fAscent;

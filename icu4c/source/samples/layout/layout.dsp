@@ -97,6 +97,10 @@ SOURCE=.\FontMap.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\FontTableCache.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\GDIFontInstance.cpp
 # End Source File
 # Begin Source File
@@ -129,6 +133,14 @@ SOURCE=.\RenderingFontInstance.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\RunArrays.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ScriptCompositeFontInstance.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\UnicodeReader.cpp
 # End Source File
 # Begin Source File
@@ -146,6 +158,10 @@ SOURCE=.\cmaps.h
 # Begin Source File
 
 SOURCE=.\FontMap.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\FontTableCache.h
 # End Source File
 # Begin Source File
 
@@ -173,11 +189,19 @@ SOURCE=.\ParagraphLayout.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\RenderingFontInstance.h
+SOURCE=.\RenderingSurface.h
 # End Source File
 # Begin Source File
 
 SOURCE=.\resource.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\RunArrays.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\ScriptCompositeFontInstance.h
 # End Source File
 # Begin Source File
 
