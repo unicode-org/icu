@@ -180,6 +180,8 @@ class TransliteratorTest : public IntlTest {
 
     void TestCompoundInverse(void);
 
+    void TestNFDChainRBT(void);
+
     //======================================================================
     // Support methods
     //======================================================================

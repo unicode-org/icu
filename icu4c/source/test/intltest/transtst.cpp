@@ -72,6 +72,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(35,TestQuantifier);
         TESTCASE(36,TestSTV);
         TESTCASE(37,TestCompoundInverse);
+        TESTCASE(38,TestNFDChainRBT);
         default: name = ""; break;
     }
 }
@@ -1747,6 +1748,19 @@ void TransliteratorTest::TestCompoundInverse(void) {
         errln("FAIL: inverse of \"Greek-Latin; Title()\" is \"" +
               t->getID() + "\", expected \"" + exp + "\"");
     }
+    delete t;
+}
+
+/**
+ * Test NFD chaining with RBT
+ */
+void TransliteratorTest::TestNFDChainRBT() {
+    UParseError pe;
+    UErrorCode ec = U_ZERO_ERROR;
+    Transliterator* t = Transliterator::createFromRules(
+                               "TEST", "::NFD; aa > Q; a > q;",
+                               UTRANS_FORWARD, pe, ec);
+    expect(*t, "aa", "Q");
     delete t;
 }
 
