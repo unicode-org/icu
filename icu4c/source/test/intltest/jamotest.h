@@ -27,6 +27,8 @@ class JamoTest : public TransliteratorTest {
     
     void TestRealText(void);
 
+    void TestPiecemeal(void);
+
     //======================================================================
     // Support methods
     //======================================================================

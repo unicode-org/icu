@@ -25,8 +25,6 @@
 #include "cpdtrtst.h"
 #include "unhxtrts.h"
 #include "hxuntrts.h"
-#include "jahatrts.h"
-#include "hajatrts.h"
 #include "ufltlgts.h"
 #include "transrt.h"
 #include "usettest.h"
@@ -50,12 +48,10 @@ void IntlTestTransliterator::runIndexedTest( int32_t index, UBool exec, const ch
         CASE(2, CompoundTransliteratorTest);
         CASE(3, UniToHexTransliteratorTest);
         CASE(4, HexToUniTransliteratorTest);
-        CASE(5, JamoToHangTransliteratorTest);
-        CASE(6, HangToJamoTransliteratorTest);
-        CASE(7, UnicodeFilterLogicTest);
-        CASE(8, TransliteratorRoundTripTest);
-        CASE(9, UnicodeSetTest);
-        CASE(10, JamoTest);
+        CASE(5, UnicodeFilterLogicTest);
+        CASE(6, TransliteratorRoundTripTest);
+        CASE(7, UnicodeSetTest);
+        CASE(8, JamoTest);
         default: name=""; break;
     }
 }
