@@ -1038,11 +1038,15 @@ void IntlTestTextBoundary::generalIteratorTest(BreakIterator& bi, Vector* expect
 
     logln("comparing forward and backward...");
     int errs = getErrors();
-    compareFragmentLists((UnicodeString)"forward iteration", (UnicodeString)"backward iteration", nextResults,
+	UnicodeString str1="forward iteration";
+	UnicodeString str2="backward iteration";
+    compareFragmentLists(str1, str2, nextResults,
                     previousResults);
     if (getErrors() == errs) {
         logln("comparing expected and actual...");
-        compareFragmentLists((UnicodeString)"expected result", (UnicodeString)"actual result", expectedResult,
+		str1="expected result";
+		str2="actual result";
+        compareFragmentLists(str1, str2, expectedResult,
                         nextResults);
     }
 
