@@ -288,7 +288,7 @@ _MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                  * 30..7  offset delta
                  *  6..0  next state
                  */
-                state=(uint8_t)entry&0x7f;
+                state=(uint8_t)(entry&0x7f);
                 offset+=entry>>7;
             } else {
                 /*
@@ -300,7 +300,7 @@ _MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                  */
 
                 /* set the next state early so that we can reuse the entry variable */
-                state=(uint8_t)entry&0x7f; /* typically 0 */
+                state=(uint8_t)(entry&0x7f); /* typically 0 */
 
                 /* switch per action code */
                 switch((uint32_t)entry>>27U) {
@@ -358,11 +358,11 @@ _MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                     /* bits 26..7 contain the Unicode surrogate code point minus 0x10000 */
                     entry=(entry>>7)&0xfffff;
                     /* output surrogate pair */
-                    *target++=0xd800|(UChar)(entry>>10);
+                    *target++=(UChar)(0xd800|(UChar)(entry>>10));
                     if(offsets!=NULL) {
                         *offsets++=sourceIndex;
                     }
-                    c=0xdc00|(UChar)(entry&0x3ff);
+                    c=(UChar)(0xdc00|(UChar)(entry&0x3ff));
                     if(target<targetLimit) {
                         *target++=c;
                         if(offsets!=NULL) {
@@ -507,7 +507,7 @@ output32:
                     if(offsets!=NULL) {
                         *offsets++=sourceIndex;
                     }
-                    c=0xdc00|(UChar)(entry&0x3ff);
+                    c=(UChar)(0xdc00|(UChar)(entry&0x3ff));
                     if(target<targetLimit) {
                         *target++=c;
                         if(offsets!=NULL) {
@@ -661,7 +661,7 @@ _MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
     while(pArgs->source<realLimit) {
         /* feed in one byte at a time to make sure to get only one character out */
         pArgs->sourceLimit=pArgs->source+1;
-        pArgs->flush= pArgs->sourceLimit==realLimit;
+        pArgs->flush= (UBool)(pArgs->sourceLimit==realLimit);
         _MBCSToUnicode(pArgs, pErrorCode);
         if(U_FAILURE(*pErrorCode) && *pErrorCode!=U_INDEX_OUTOFBOUNDS_ERROR) {
             return 0xffff;
@@ -718,7 +718,7 @@ _MBCSSimpleGetNextUChar(UConverterSharedData *sharedData,
              * 30..7  offset delta
              *  6..0  next state
              */
-            state=(uint8_t)entry&0x7f;
+            state=(uint8_t)(entry&0x7f);
             offset+=entry>>7;
         } else {
             /*
@@ -790,7 +790,7 @@ _MBCSSimpleGetNextUChar(UConverterSharedData *sharedData,
             }
 
             /* state change only - prepare for a new character */
-            state=(uint8_t)entry&0x7f; /* typically 0 */
+            state=(uint8_t)(entry&0x7f); /* typically 0 */
             offset=0;
         }
     } while(source<(const uint8_t *)sourceLimit);
@@ -1266,7 +1266,7 @@ _MBCSGetStarters(const UConverter* cnv,
 
     for(i=0; i<256; ++i) {
         /* all bytes that cause a state transition from state 0 are lead bytes */
-        starters[i]= state0[i]>=0;
+        starters[i]= (UBool)(state0[i]>=0);
     }
 }
 
@@ -1276,7 +1276,7 @@ _MBCSGetStarters(const UConverter* cnv,
  */
 U_CFUNC UBool
 _MBCSIsLeadByte(UConverterSharedData *sharedData, char byte) {
-    return sharedData->table->mbcs.stateTable[0][(uint8_t)byte]>=0;
+    return (UBool)(sharedData->table->mbcs.stateTable[0][(uint8_t)byte]>=0);
 }
 
 static const UConverterImpl _MBCSImpl={

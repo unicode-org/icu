@@ -155,7 +155,7 @@ ubidi_setLine(const UBiDi *pParaBiDi,
                 pLineBiDi->direction=(UBiDiDirection)(pLineBiDi->paraLevel&1);
             } else {
                 /* get the level of the first character */
-                level=levels[0]&1;
+                level=(UBiDiLevel)(levels[0]&1);
 
                 /* if there is anything of a different level, then the line is mixed */
                 if(trailingWSStart<length && (pLineBiDi->paraLevel&1)!=level) {
@@ -181,7 +181,7 @@ ubidi_setLine(const UBiDi *pParaBiDi,
             switch(pLineBiDi->direction) {
             case UBIDI_LTR:
                 /* make sure paraLevel is even */
-                pLineBiDi->paraLevel=(pLineBiDi->paraLevel+1)&~1;
+                pLineBiDi->paraLevel=(UBiDiLevel)((pLineBiDi->paraLevel+1)&~1);
 
                 /* all levels are implicitly at paraLevel (important for ubidi_getLevels()) */
                 pLineBiDi->trailingWSStart=0;

@@ -369,7 +369,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, UTextOffset length,
     switch(direction) {
     case UBIDI_LTR:
         /* make sure paraLevel is even */
-        pBiDi->paraLevel=(pBiDi->paraLevel+1)&~1;
+        pBiDi->paraLevel=(UBiDiLevel)((pBiDi->paraLevel+1)&~1);
 
         /* all levels are implicitly at paraLevel (important for ubidi_getLevels()) */
         pBiDi->trailingWSStart=0;
@@ -633,7 +633,7 @@ resolveExplicitLevels(UBiDi *pBiDi) {
             case LRE:
             case LRO:
                 /* (X3, X5) */
-                newLevel=(embeddingLevel+2)&~(UBIDI_LEVEL_OVERRIDE|1);    /* least greater even level */
+                newLevel=(UBiDiLevel)((embeddingLevel+2)&~(UBIDI_LEVEL_OVERRIDE|1)); /* least greater even level */
                 if(newLevel<=UBIDI_MAX_EXPLICIT_LEVEL) {
                     stack[stackTop]=embeddingLevel;
                     ++stackTop;
@@ -653,7 +653,7 @@ resolveExplicitLevels(UBiDi *pBiDi) {
             case RLE:
             case RLO:
                 /* (X2, X4) */
-                newLevel=((embeddingLevel&~UBIDI_LEVEL_OVERRIDE)+1)|1;    /* least greater odd level */
+                newLevel=(UBiDiLevel)(((embeddingLevel&~UBIDI_LEVEL_OVERRIDE)+1)|1); /* least greater odd level */
                 if(newLevel<=UBIDI_MAX_EXPLICIT_LEVEL) {
                     stack[stackTop]=embeddingLevel;
                     ++stackTop;
@@ -854,7 +854,7 @@ resolveImplicitLevels(UBiDi *pBiDi,
         }
     } else {
         /* normal BiDi: least greater even level */
-        numberLevel=(levels[start]+2)&~1;
+        numberLevel=(UBiDiLevel)((levels[start]+2)&~1);
     }
 
     /*

@@ -124,7 +124,7 @@ _res_findTableItem(const Resource *pRoot, const Resource res, const char *key) {
     /* do a binary search for the key */
     start=0;
     while(start<limit-1) {
-        i=(start+limit)/2;
+        i=(uint16_t)((start+limit)/2);
         if(uprv_strcmp(key, RES_GET_KEY(pRoot, p[i]))<0) {
             limit=i;
         } else {
@@ -151,7 +151,7 @@ _res_findTableIndex(const Resource *pRoot, const Resource res, const char *key) 
     /* do a binary search for the key */
     start=0;
     while(start<limit-1) {
-        i=(start+limit)/2;
+        i=(uint16_t)((start+limit)/2);
         if(uprv_strcmp(key, RES_GET_KEY(pRoot, p[i]))<0) {
             limit=i;
         } else {
@@ -174,7 +174,7 @@ static UBool
 isAcceptable(void *context,
              const char *type, const char *name,
              const UDataInfo *pInfo) {
-    return
+    return (UBool)(
         pInfo->size>=20 &&
         pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
         pInfo->charsetFamily==U_CHARSET_FAMILY &&
@@ -183,7 +183,7 @@ isAcceptable(void *context,
         pInfo->dataFormat[1]==0x65 &&
         pInfo->dataFormat[2]==0x73 &&
         pInfo->dataFormat[3]==0x42 &&
-        pInfo->formatVersion[0]==1;
+        pInfo->formatVersion[0]==1);
 }
 
 /* semi-public functions ---------------------------------------------------- */

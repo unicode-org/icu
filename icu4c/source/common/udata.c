@@ -912,7 +912,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
     const char *inBasename;
     char *basename, *suffix;
     UErrorCode errorCode=U_ZERO_ERROR;
-    UBool isICUData= path==NULL;
+    UBool isICUData= (UBool)(path==NULL);
 
     /* set up the ToC names for DLL and offset-ToC lookups */
     setEntryNames(type, name, tocEntryName, dllEntryName);

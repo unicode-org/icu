@@ -97,7 +97,7 @@ static UBool
 isCnvAcceptable(void *context,
              const char *type, const char *name,
              const UDataInfo *pInfo) {
-    return 
+    return (UBool)(
         pInfo->size>=20 &&
         pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
         pInfo->charsetFamily==U_CHARSET_FAMILY &&
@@ -106,7 +106,7 @@ isCnvAcceptable(void *context,
         pInfo->dataFormat[1]==0x6e &&
         pInfo->dataFormat[2]==0x76 &&
         pInfo->dataFormat[3]==0x74 &&
-        pInfo->formatVersion[0]==5;
+        pInfo->formatVersion[0]==5);
 }
 
 #define DATA_TYPE "cnv"

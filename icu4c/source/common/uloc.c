@@ -198,7 +198,7 @@ int16_t _findIndex(const char* list, int32_t listLength, const char* key)
     }
       list += tokenSize;
     }
-  if (found == TRUE) return ((list - anchor)/tokenSize);
+  if (found == TRUE) return (int16_t)((list - anchor)/tokenSize);
   else return -1;
 }
 
@@ -303,7 +303,7 @@ uloc_getLanguage(const char*    localeID,
     but only copies into the buffer as much as the buffer can bare*/
   while ((*localeID != '\0') && !_isIDSeparator(*localeID))
     {
-      if (languageCapacity > i) language[i] = tolower(*localeID);
+      if (languageCapacity > i) language[i] = (char)tolower(*localeID);
       i++;
       localeID++;
     }
@@ -341,7 +341,7 @@ int32_t uloc_getCountry(const char* localeID,
       ++localeID;
       while ((*localeID != '\0') && !_isIDSeparator(*localeID))
       {
-        if (countryCapacity > i) country[i] = toupper(*localeID);
+        if (countryCapacity > i) country[i] = (char)toupper(*localeID);
         i++;
         localeID++;
       }
@@ -376,7 +376,7 @@ int32_t uloc_getVariant(const char* localeID,
     but only copies into the buffer as much as the buffer can bare*/
       while (*localeID != '\0')
     {
-      if (variantCapacity > i) variant[i] = toupper(*localeID);
+      if (variantCapacity > i) variant[i] = (char)toupper(*localeID);
       i++;
       localeID++;
     }
