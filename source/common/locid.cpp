@@ -458,29 +458,6 @@ Locale::createFromName (const char *name)
     return l;
 }
 
-const char *
-Locale::getCountry() const
-{
-    return country;
-}
-
-const char *
-Locale::getLanguage() const
-{
-    return language;
-}
-
-const char *
-Locale::getVariant() const
-{
-    return variant;
-}
-
-const char * 
-Locale::getName() const
-{
-    return fullName;
-}
 
 const char *
 Locale::getISO3Language() const

@@ -39,8 +39,9 @@
 
 #include "unicode/unistr.h"
 
-typedef struct ULocale ULocale;
+#ifdef ICU_LOCID_USE_DEPRECATES
 typedef struct UHashtable UHashtable;
+#endif
 
 /**    
  *
@@ -348,21 +349,21 @@ public:
      * @return      An alias to the code
      * @draft
      */
-    const char *  getLanguage( ) const;
+    inline const char *  getLanguage( ) const;
 
     /**
      * Returns the locale's two-letter ISO-3166 country code.
      * @return      An alias to the code
      * @draft
      */
-    const char *  getCountry( ) const;
+    inline const char *  getCountry( ) const;
 
     /**
      * Returns the locale's variant code.
      * @return      An alias to the code
      * @draft
      */
-    const char *  getVariant( ) const;
+    inline const char *  getVariant( ) const;
 
     /**
      * Returns the programmatic name of the entire locale, with the language,
@@ -371,7 +372,7 @@ public:
      * "de__POSIX", "fr__MAC", "__MAC", "_MT", "_FR_EURO"
      * @return      A pointer to "name".
      */
-    const char * getName() const;
+    inline const char * getName() const;
 
     /**
      * returns the locale's three-letter language code, as specified
@@ -686,6 +687,30 @@ inline UBool
 Locale::operator!=(const    Locale&     other) const
 {
     return !operator==(other);
+}
+
+inline const char *
+Locale::getCountry() const
+{
+    return country;
+}
+
+inline const char *
+Locale::getLanguage() const
+{
+    return language;
+}
+
+inline const char *
+Locale::getVariant() const
+{
+    return variant;
+}
+
+inline const char * 
+Locale::getName() const
+{
+    return fullName;
 }
 
 #endif  /* XP_CPLUSPLUS */
