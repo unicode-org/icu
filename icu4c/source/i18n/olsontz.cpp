@@ -346,7 +346,7 @@ void OlsonTimeZone::getOffset(UDate date, UBool local, int32_t& rawoff,
     if (date >= finalMillis && finalZone != 0) {
         int32_t year, month, dom, dow;
         double millis;
-        double days = Math::floorDivide(date, U_MILLIS_PER_DAY, millis);
+        double days = Math::floorDivide(date, (double)U_MILLIS_PER_DAY, millis);
         
         Grego::dayToFields(days, year, month, dom, dow);
 
