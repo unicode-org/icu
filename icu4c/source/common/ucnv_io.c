@@ -971,7 +971,9 @@ ucnv_io_getDefaultConverterName() {
         UConverter *cnv = NULL;
         int32_t length = 0;
 
+        umtx_lock(NULL);
         name = uprv_getDefaultCodepage();
+        umtx_unlock(NULL);
 
         /* if the name is there, test it out and get the canonical name with options */
         if(name != NULL) {
