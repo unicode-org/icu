@@ -52,7 +52,7 @@ class NormalizerConformanceTest : public IntlTest {
      * @return true if the test passes
      */
     UBool checkConformance(const UnicodeString* field,
-                           const UnicodeString& line);
+                           const char *line);
 
     void iterativeNorm(const UnicodeString& str,
                        UNormalizationMode mode,
