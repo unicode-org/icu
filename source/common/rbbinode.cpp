@@ -292,7 +292,7 @@ static const char *nodeTypeNames[] = {
 
 void RBBINode::print() {
     printf("%10p  %12s  %10p  %10p  %10p      %4d     %6d   %d ",
-        this, nodeTypeNames[fType], fParent, fLeftChild, fRightChild,
+        (void *)this, nodeTypeNames[fType], (void *)fParent, (void *)fLeftChild, (void *)fRightChild,
         fSerialNum, fFirstPos, fVal);
     if (fType == varRef) {
         printUnicodeString(fText);

@@ -328,8 +328,8 @@ BreakIterator *  DictionaryBasedBreakIterator::createBufferClone(void *stackBuff
     //  Check the alignment and size of the user supplied buffer.
     //  Allocate heap memory if the user supplied memory is insufficient.
     //
-    char    *buf   = (char *)stackBuffer;
-    int32_t s      = bufferSize;
+    char     *buf   = (char *)stackBuffer;
+    uint32_t s      = bufferSize;
 
     if (stackBuffer == NULL) {
         s = 0;   // Ignore size, force allocation if user didn't give us a buffer.
