@@ -294,7 +294,8 @@ u_strpbrk(const UChar *string, const UChar *matchSet)
             {
                 UTF_GET_CHAR_SAFE(matchSet, 0, matchItr, matchLen, matchSetCh, TRUE);
                 if (stringCh == matchSetCh && (stringCh != UTF_ERROR_VALUE
-                    || string[strItr] == UTF_ERROR_VALUE))
+                    || string[strItr] == UTF_ERROR_VALUE
+					|| (matchSetCh == UTF_ERROR_VALUE && !UTF_IS_SINGLE(matchSet[matchItr]))))
                 {
                     return (UChar *)string + strItr;
                 }
@@ -369,7 +370,8 @@ u_strspn(const UChar *string, const UChar *matchSet)
             {
                 UTF_GET_CHAR_SAFE(matchSet, 0, matchItr, matchLen, matchSetCh, TRUE);
                 if (stringCh == matchSetCh && (stringCh != UTF_ERROR_VALUE
-                    || string[strItr] == UTF_ERROR_VALUE))
+                    || string[strItr] == UTF_ERROR_VALUE
+					|| (matchSetCh == UTF_ERROR_VALUE && !UTF_IS_SINGLE(matchSet[matchItr]))))
                 {
                     match = TRUE;
                     break;

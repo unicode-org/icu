@@ -772,12 +772,15 @@ cleanUpDataTable();
 static void TestStringSearching()
 {
     UChar ucharBuf[255];
-    const UChar testString[] = {0x0061, 0x0062, 0x0063, 0x0064, 0x0064, 0x0061, 0x0000};
-    const UChar testSurrogateString[] = {0xdbff, 0x0061, 0x0062, 0xdbff, 0xdfff, 0x0063, 0x0064, 0x0064, 0xdbff, 0xdfff, 0xdb00, 0xdf00, 0x0061, 0x0000};
-    const UChar surrMatchSet1[] = {0xdbff, 0xdfff, 0x0000};
-    const UChar surrMatchSet2[] = {0x0061, 0x0062, 0xdbff, 0xdfff, 0x0000};
-    const UChar surrMatchSet3[] = {0xdb00, 0xdf00, 0xdbff, 0xdfff, 0x0000};
+    const UChar testString[] = {0x0061, 0x0062, 0x0063, 0x0064, 0x0064, 0x0061, 0};
+    const UChar testSurrogateString[] = {0xdbff, 0x0061, 0x0062, 0xdbff, 0xdfff, 0x0063, 0x0064, 0x0064, 0xdbff, 0xdfff, 0xdb00, 0xdf00, 0x0061, 0};
+    const UChar surrMatchSet1[] = {0xdbff, 0xdfff, 0};
+    const UChar surrMatchSet2[] = {0x0061, 0x0062, 0xdbff, 0xdfff, 0};
+    const UChar surrMatchSet3[] = {0xdb00, 0xdf00, 0xdbff, 0xdfff, 0};
     const UChar surrMatchSet4[] = {0x0000};
+    const UChar surrMatchSetBad[] = {0xdbff, 0x0061, 0};
+    const UChar surrMatchSetBad2[] = {0x0061, 0xdbff, 0};
+    const UChar surrMatchSetBad3[] = {0xdbff, 0x0061, 0x0062, 0xdbff, 0xdfff, 0};   /* has partial surrogate */
 
     log_verbose("Testing u_strpbrk()");
 
@@ -830,13 +833,16 @@ static void TestStringSearching()
         log_err("u_strpbrk couldn't find \"0xdbff, 0xdfff\".\n");
     }
     if (u_strpbrk(testSurrogateString, surrMatchSet2) != &testSurrogateString[1]) {
-        log_err("u_strpbrk couldn't find \"a, b, 0xdbff, 0xdfff\".\n");
+        log_err("u_strpbrk couldn't find \"0xdbff, a, b, 0xdbff, 0xdfff\".\n");
     }
     if (u_strpbrk(testSurrogateString, surrMatchSet3) != &testSurrogateString[3]) {
         log_err("u_strpbrk couldn't find \"0xdb00, 0xdf00, 0xdbff, 0xdfff\".\n");
     }
     if (u_strpbrk(testSurrogateString, surrMatchSet4) != NULL) {
         log_err("u_strpbrk should have returned NULL for empty string.\n");
+    }
+    if (u_strpbrk(testSurrogateString, surrMatchSetBad) != &testSurrogateString[0]) {
+        log_err("u_strpbrk should have found bad surrogate.\n");
     }
 
     log_verbose("Testing u_strcspn()");
@@ -925,40 +931,32 @@ static void TestStringSearching()
     }
 
     log_verbose("Testing u_strspn() with surrogates");
-    {
-        const UChar surrogateStringWithoutIllegal[] = {0x0061, 0x0062, 0xdbff, 0xdfff, 0x0063, 0x0064, 0x0064, 0xdbff, 0xdfff, 0xdb00, 0xdf00, 0x0061, 0x0000};
-        const UChar skip1[] = {0x0061, 0x0062, 0xdbff, 0xdfff, 0x0000};
-
-        if (u_strspn(surrogateStringWithoutIllegal, u_uastrcpy(ucharBuf, "a")) != 1) {
-            log_err("u_strspn couldn't skip first letter a.\n");
-        }
-        if (u_strspn(surrogateStringWithoutIllegal, u_uastrcpy(ucharBuf, "ab")) != 2) {
-            log_err("u_strspn couldn't skip 0xdbff or a.\n");
-        }
-        if (u_strspn(surrogateStringWithoutIllegal, u_uastrcpy(ucharBuf, "ba")) != 2) {
-            log_err("u_strspn couldn't skip 0xdbff or a.\n");
-        }
-        if (u_strspn(surrogateStringWithoutIllegal, u_uastrcpy(ucharBuf, "f")) != 0) {
-            log_err("u_strspn couldn't skip d or c (skip first letter).\n");
-        }
-        if (u_strspn(surrogateStringWithoutIllegal, u_uastrcpy(ucharBuf, "dc")) != 0) {
-            log_err("u_strspn couldn't skip d or c (skip first letter).\n");
-        }
-        if (u_strspn(surrogateStringWithoutIllegal, u_uastrcpy(ucharBuf, "cd")) != 0) {
-            log_err("u_strspn couldn't skip d or c (skip first letter).\n");
-        }
-        if (u_strspn(surrogateStringWithoutIllegal, surrogateStringWithoutIllegal) != u_strlen(surrogateStringWithoutIllegal)) {
-            log_err("u_strspn couldn't skip whole string.\n");
-        }
-        if (u_strspn(surrogateStringWithoutIllegal, surrMatchSet1) != 0) {
-            log_err("u_strspn couldn't skip \"0xdbff, 0xdfff\" (get first letter).\n");
-        }
-        if (u_strspn(surrogateStringWithoutIllegal, surrMatchSet2) != 4) {
-            log_err("u_strspn couldn't skip \"a, b, 0xdbff, 0xdfff\".\n");
-        }
-        if (u_strspn(surrogateStringWithoutIllegal, surrMatchSet4) != 0) {
-            log_err("u_strspn should have returned 0 for empty string.\n");
-        }
+    if (u_strspn(testSurrogateString, surrMatchSetBad) != 2) {
+        log_err("u_strspn couldn't skip 0xdbff or a.\n");
+    }
+    if (u_strspn(testSurrogateString, surrMatchSetBad2) != 2) {
+        log_err("u_strspn couldn't skip 0xdbff or a.\n");
+    }
+    if (u_strspn(testSurrogateString, u_uastrcpy(ucharBuf, "f")) != 0) {
+        log_err("u_strspn couldn't skip d or c (skip first letter).\n");
+    }
+    if (u_strspn(testSurrogateString, u_uastrcpy(ucharBuf, "dc")) != 0) {
+        log_err("u_strspn couldn't skip d or c (skip first letter).\n");
+    }
+    if (u_strspn(testSurrogateString, u_uastrcpy(ucharBuf, "cd")) != 0) {
+        log_err("u_strspn couldn't skip d or c (skip first letter).\n");
+    }
+    if (u_strspn(testSurrogateString, testSurrogateString) != u_strlen(testSurrogateString)) {
+        log_err("u_strspn couldn't skip whole string.\n");
+    }
+    if (u_strspn(testSurrogateString, surrMatchSet1) != 0) {
+        log_err("u_strspn couldn't skip \"0xdbff, 0xdfff\" (get first letter).\n");
+    }
+    if (u_strspn(testSurrogateString, surrMatchSetBad3) != 5) {
+        log_err("u_strspn couldn't skip \"0xdbff, a, b, 0xdbff, 0xdfff\".\n");
+    }
+    if (u_strspn(testSurrogateString, surrMatchSet4) != 0) {
+        log_err("u_strspn should have returned 0 for empty string.\n");
     }
 }
 
