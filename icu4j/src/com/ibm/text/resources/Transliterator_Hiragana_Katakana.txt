@@ -6,7 +6,7 @@
 #--------------------------------------------------------------------
 
 # note: a global filter is more efficient, but MUST include all source chars
-:: [[:Hiragana:][:nonspacing mark:]ー] ;
+:: [\u0000-\u007E \u3001\u3002 \u3099-\u309C \u30A1-\u30FC \uFF61-\uFF9Fー[:Hiragana:] [:Katakana:] [:nonspacing mark:]] ;
 :: NFKC ();
 
 # Hiragana-Katakana
@@ -204,6 +204,6 @@ $xo = [ \
 :: (NFKC) ;
 
 # note: a global filter is more efficient, but MUST include all source chars!!
-:: ([\u0000-\u007E \u3001\u3002 \u3099-\u309C \u30A1-\u30FC \uFF61-\uFF9F [:Katakana:] [:nonspacing mark:]]);
+:: ([\u0000-\u007E \u3001\u3002 \u3099-\u309C \u30A1-\u30FC \uFF61-\uFF9Fー[:Hiragana:] [:Katakana:] [:nonspacing mark:]]);
 
 # eof
