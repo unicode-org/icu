@@ -1101,11 +1101,12 @@ zh_MO {
         "<\u9EA4<\u9F7E<\u9F49<\u9F98" }
     }
 
-//    CurrencyElements { 
-//            "HK$",
-//            "HKD",
-//            ".",
-//    }
+
+    CurrencyElements{
+      "P",
+      "MOP",
+      "."
+    }
     DateTimePatterns { 
             "ahh'\u6642'mm'\u5206'ss'\u79D2' z",
             "ahh'\u6642'mm'\u5206'ss'\u79D2'",
