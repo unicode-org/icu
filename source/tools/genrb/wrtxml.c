@@ -31,9 +31,6 @@
 #include "unicode/uchar.h"
 /*
 
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE resourceBundle
-  SYSTEM "http://oss.software.ibm.com/icu/dtd/resourceBundle.dtd">
 <resourceBundle name="eo">
   <table>
     <int key="a" val="2"/>
@@ -51,11 +48,11 @@
       <bin val="fe ff 0a b5"/>
       <intVector val="20 21 -1 0x7f"/>
       <importBin filename="/other.jpeg"/>
-      <str/><str val=""/><!-- two empty strings -->
-      <bin/><!-- empty binary -->
-      <intVector/><!-- empty integer vector -->
-      <array/><!-- empty array -->
-      <table/><!-- empty table -->
+      <str/><str val=""/>
+      <bin/>
+      <intVector/>
+      <array/>
+      <table/>
     </array>
     <array key="emptyArray"/>
     <bin key="b" val="fe ff 0a b5"/>
@@ -88,6 +85,7 @@ static void write_tabs(FileStream* os){
 static const char* xmlHeader = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n"
                         "<!DOCTYPE resourceBundle " 
                         "SYSTEM \"http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/resourceBundle.dtd\">\n";
+                       
 static const char* bundleStart = "<resourceBundle name=\"";
 static const char* bundleEnd   = "</resourceBundle>\n";
 
@@ -144,6 +142,10 @@ static char* convertAndEscape(char** pDest, int32_t destCap, int32_t* destLength
 						uprv_strcpy(dest+(destLen),"&apos;");
 						destLen+=uprv_strlen("&apos;");
 						break;
+                    case '\0':
+                        uprv_strcpy(dest+(destLen),"\\u0000;");
+						destLen+=uprv_strlen("&apos;");
+                        break;
 					default:
 						dest[destLen++]=(char)src[i];
 
@@ -209,7 +211,7 @@ string_write_xml(struct SResource *res,UErrorCode *status) {
 	}
 
 	if(res->fKey==0xFFFF || uprv_strcmp(srBundle->fKeys+res->fKey ,"")==0){
-		const char* valStrStart ="<string val=\"";
+		const char* valStrStart ="<str val=\"";
 		const char* valStrEnd   ="\"/>\n";
 		write_tabs(out);
 		T_FileStream_write(out,valStrStart, uprv_strlen(valStrStart));
@@ -223,7 +225,7 @@ string_write_xml(struct SResource *res,UErrorCode *status) {
 		T_FileStream_write(out,valStrEnd,uprv_strlen(valStrEnd));
 	}else{
 
-		const char* keyStrStart ="<string key=\"";
+		const char* keyStrStart ="<str key=\"";
 		const char* val			="\" val=\"";
 		const char* keyStrEnd   ="\"/>\n";
 		write_tabs(out);
@@ -250,7 +252,7 @@ static void
 alias_write_xml(struct SResource *res,UErrorCode *status) {
 	static const char* startKey    = "<alias key=\"";
 	static const char* val		   = " val=\"";
-	static const char* endKey      = "\">\n";
+	static const char* endKey      = "\">";
 	static const char* start    = "<alias";
 	static const char* end			= "</alias>\n";
 	char* buf = NULL;
@@ -272,7 +274,6 @@ alias_write_xml(struct SResource *res,UErrorCode *status) {
 	}
 	T_FileStream_write(out,buf,bufLen);
 	T_FileStream_write(out, endKey, uprv_strlen(endKey));
-	write_tabs(out);
     T_FileStream_write(out, end, uprv_strlen(end));
 	uprv_free(buf);
 
@@ -315,7 +316,7 @@ static void
 intvector_write_xml( struct SResource *res, UErrorCode *status) {
 	static const char* startKey    = "<intVector key=\"";
 	static const char* val		   = " val=\"";
-	static const char* endKey      = "\">\n";
+	static const char* endKey      = "\">";
 	static const char* start    = "<intVector";
 	static const char* end			= "</intVector>\n";
 	uint32_t i=0;
@@ -338,7 +339,6 @@ intvector_write_xml( struct SResource *res, UErrorCode *status) {
         T_FileStream_write(out," ",1);
     }
 	T_FileStream_write(out, endKey, uprv_strlen(endKey));
-	write_tabs(out);
     T_FileStream_write(out, end, uprv_strlen(end));
 
 }
@@ -347,7 +347,7 @@ static void
 int_write_xml(struct SResource *res,UErrorCode *status) {
 	static const char* startKey    = "<int key=\"";
 	static const char* val		   = " val=\"";
-	static const char* endKey      = "\">\n";
+	static const char* endKey      = "\">";
 	static const char* start    = "<int";
 	static const char* end			= "</int>\n";
 	uint32_t len=0;
@@ -366,7 +366,6 @@ int_write_xml(struct SResource *res,UErrorCode *status) {
     T_FileStream_write(out,buf,len);
     T_FileStream_write(out," ",1);
 	T_FileStream_write(out, endKey, uprv_strlen(endKey));
-	write_tabs(out);
     T_FileStream_write(out, end, uprv_strlen(end));
 	
 }
@@ -374,9 +373,10 @@ int_write_xml(struct SResource *res,UErrorCode *status) {
 static void 
 bin_write_xml( struct SResource *res, UErrorCode *status) {
     
-    const char* start= "<bin val=\"";
-    const char* end  =    "\"/>\n";
-    const char* importStart ="<importBin key=\"%s\" filename=\"%s\"/>\n";  
+    static const char* start    = "<bin key=\"";
+    static const char* val      = " val=\"";
+    static const char* end      = "\"/>\n";
+    static const char* importStart ="<importBin key=\"%s\" filename=\"%s\"/>\n";  
     char fileName[1024] ={0};
     char* fn =  (char*) uprv_malloc(sizeof(char) * (uprv_strlen(outDir)+1024 + 
                                                     (res->u.fBinaryValue.fFileName !=NULL ? 
@@ -385,68 +385,32 @@ bin_write_xml( struct SResource *res, UErrorCode *status) {
     const char* ext = NULL;
     fn[0]=0;
 
-    if(res->u.fBinaryValue.fLength>100){
+    if(res->u.fBinaryValue.fFileName!=NULL){
+        
+        buffer = (char*) uprv_malloc(sizeof(char) * ( uprv_strlen(importStart) + 
+                                                      uprv_strlen(srBundle->fKeys+res->fKey) +
+                                                      uprv_strlen(res->u.fBinaryValue.fFileName)
+                                                    ));
+         sprintf(buffer,importStart,srBundle->fKeys+res->fKey,fileName);
+         write_tabs(out);
+         T_FileStream_write(out, buffer, (int32_t)uprv_strlen(buffer));
 
-		write_tabs(out);
-        if(res->u.fBinaryValue.fFileName!=NULL){
-            
-            buffer = (char*) uprv_malloc(sizeof(char) * ( uprv_strlen(importStart) + 
-                                                          uprv_strlen(srBundle->fKeys+res->fKey) +
-                                                          uprv_strlen(res->u.fBinaryValue.fFileName)
-                                                        ));
-             sprintf(buffer,importStart,srBundle->fKeys+res->fKey,fileName);
-             write_tabs(out);
-             T_FileStream_write(out, buffer, (int32_t)uprv_strlen(buffer));
-
-        }else{
-
-            FileStream* datFile = NULL;
-            if(uprv_strcmp(srBundle->fKeys+res->fKey,"BreakDictionaryData")==0){
-                uprv_strcat(fileName,"BreakDictionaryData_");
-                ext = ".brk";
-            }else if(uprv_strcmp(srBundle->fKeys+res->fKey,"%%CollationBin")==0) {
-                uprv_strcat(fileName,"CollationElements_");
-                ext=".col";
-            }else{
-                ext =".bin";
-            }
-
-            uprv_strcat(fileName,srBundle->fLocale);
-            
-            uprv_strcat(fileName,ext);
-
-            uprv_strcat(fn,outDir);
-            if(outDir[uprv_strlen(outDir)-1]!=U_FILE_SEP_CHAR){
-                uprv_strcat(fn,U_FILE_SEP_STRING);
-            }
-            uprv_strcat(fn,fileName);
-            buffer = (char*) uprv_malloc(sizeof(char) * ( uprv_strlen(importStart) + 
-                                                          uprv_strlen(srBundle->fKeys+res->fKey) +
-                                                          uprv_strlen(fileName)
-                                                        ));
-            buffer[0]=0;
-
-            sprintf(buffer, importStart,srBundle->fKeys+res->fKey,fileName);
-
-            write_tabs(out);
-            T_FileStream_write(out, buffer, (int32_t)uprv_strlen(buffer));
-
-            datFile=T_FileStream_open(fn,"w");
-            T_FileStream_write(datFile, res->u.fBinaryValue.fData, res->u.fBinaryValue.fLength);
-            T_FileStream_close(datFile);
-       }
     }else{
+
         char temp[4] ={0};
         uint32_t i = 0;
         int32_t len=0;
 		write_tabs(out);
-        T_FileStream_write(out,start,uprv_strlen(start));
+        T_FileStream_write(out, start, (int32_t)uprv_strlen(start));
+		T_FileStream_write(out, srBundle->fKeys+res->fKey, (int32_t) uprv_strlen(srBundle->fKeys+res->fKey));
+		T_FileStream_write(out, "\"", 1);
+        T_FileStream_write(out, val, (int32_t)uprv_strlen(val));
         while(i <res->u.fBinaryValue.fLength){
             len = itostr(temp,res->u.fBinaryValue.fData[i],16,2);
             T_FileStream_write(out,temp,len);
 			i++;
         }
-        
+    
         T_FileStream_write(out,end,uprv_strlen(end));
     }
     uprv_free(fn);
