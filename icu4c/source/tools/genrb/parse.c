@@ -28,7 +28,6 @@
 #include "unicode/ustring.h"
 #include "unicode/putil.h"
 
-U_CAPI const UChar * U_EXPORT2 ucol_getDefaultRulesArray(uint32_t *size);
 
 U_STRING_DECL(k_start_string, "string", 6);
 U_STRING_DECL(k_start_binary, "binary", 6);
@@ -496,39 +495,6 @@ parse(FileStream *f, const char *cp, const char *inputDir,
             }
             temp = string_open(bundle, cTag, token.fChars, token.fLength, status);
             table_add(rootTable, temp, status);
-#if 0
-            if(colEl == TRUE) {
-                const UChar * defaultRulesArray;
-                UErrorCode intStatus = U_ZERO_ERROR;
-                uint32_t defaultRulesArrayLength = 0;
-                /* do the collation elements */
-                int32_t len = 0;
-                uint8_t *binColData = NULL;
-                UCollator *coll = NULL; 
-                UChar *rules = NULL;
-                defaultRulesArray = ucol_getDefaultRulesArray(&defaultRulesArrayLength);
-                rules = uprv_malloc(sizeof(defaultRulesArray[0])*(defaultRulesArrayLength + token.fLength));
-                uprv_memcpy(rules, defaultRulesArray, defaultRulesArrayLength*sizeof(defaultRulesArray[0]));
-                uprv_memcpy(rules + defaultRulesArrayLength, token.fChars, token.fLength*sizeof(token.fChars[0]));
-
-                coll = ucol_openRules(rules, defaultRulesArrayLength + token.fLength, UCOL_DECOMP_CAN, 0, &intStatus);
-
-                if(U_SUCCESS(intStatus) && coll !=NULL) {
-                    ucol_setNormalization(coll, UCOL_NO_NORMALIZATION);
-                    binColData = ucol_cloneRuleData(coll, &len, &intStatus);
-                    if(U_SUCCESS(*status) && data != NULL) {
-                        temp1 = bin_open(bundle, "%%Collation", len, binColData, status);
-                        table_add(rootTable, temp1, status);
-                        uprv_free(binColData);
-                    }
-                    ucol_close(coll);
-                } else {
-                    setErrorText("Warning: %%Collation could not be constructed from CollationElements - check context!");
-                }
-                uprv_free(rules);
-                colEl = FALSE;
-            }
-#endif
 
             /*uhash_put(data, tag.fChars, status);*/
             put(data, &tag, status);
@@ -655,7 +621,6 @@ parse(FileStream *f, const char *cp, const char *inputDir,
             }
             if (colEl && (uprv_strcmp(cSubTag, "Sequence") == 0))
             {
-                const UChar * defaultRulesArray;
                 UErrorCode intStatus = U_ZERO_ERROR;
                 uint32_t defaultRulesArrayLength = 0;
                 /* do the collation elements */
@@ -665,26 +630,17 @@ parse(FileStream *f, const char *cp, const char *inputDir,
                 UChar *rules = NULL;
                 struct UString newTag;
 
-                if (colOverride == FALSE)
-                {
-                    defaultRulesArray = ucol_getDefaultRulesArray(&defaultRulesArrayLength);
-                    rules = uprv_malloc(sizeof(defaultRulesArray[0])*(defaultRulesArrayLength + token.fLength));
-                    uprv_memcpy(rules, defaultRulesArray, defaultRulesArrayLength*sizeof(defaultRulesArray[0]));
-                    uprv_memcpy(rules + defaultRulesArrayLength, token.fChars, token.fLength*sizeof(token.fChars[0]));
-
-                    coll = ucol_openRules(rules, defaultRulesArrayLength + token.fLength, UCOL_DECOMP_CAN, 0, &intStatus);
-                } else {
-                    coll = ucol_openRules(token.fChars, token.fLength, UCOL_DECOMP_CAN, 0, &intStatus);
-                }
-
+                coll = ucol_openRules(token.fChars, token.fLength, UCOL_DECOMP_CAN, 0, &intStatus);
 
                 if(U_SUCCESS(intStatus) && coll !=NULL) {
                     ucol_setNormalization(coll, UCOL_NO_NORMALIZATION);
                     binColData = ucol_cloneRuleData(coll, &len, &intStatus);
                     if(U_SUCCESS(*status) && data != NULL) {
-                        temp1 = bin_open(bundle, "%%Collation", len, binColData, status);
+                        temp1 = bin_open(bundle, "%%CollationNew", len, binColData, status);
                         table_add(rootTable, temp1, status);
                         uprv_free(binColData);
+                    } else {
+                      setErrorText("Warning: could not obtain rules from collator");
                     }
                     ucol_close(coll);
                 } else {
@@ -726,42 +682,6 @@ parse(FileStream *f, const char *cp, const char *inputDir,
             }
             bundle_setlocale(bundle, token.fChars, status);
 
-/* trying to get rid of collation elements in other 'root' bundles */
-#if 0
-            if(didInitRoot == FALSE) {
-                U_STRING_INIT(rootName, "root", 4);
-                didInitRoot = TRUE;
-            }
-
-            if(u_strcmp(token.fChars, rootName) == 0) {
-                const UChar * defaultRulesArray;
-                uint32_t defaultRulesArrayLength = 0;
-                /* do the collation elements */
-                int32_t len = 0;
-/*                uint8_t *data = NULL;*/
-                uint8_t *data2 = NULL;
-                UCollator *coll = NULL; 
-
-                UChar *rules = NULL;
-                defaultRulesArray = ucol_getDefaultRulesArray(&defaultRulesArrayLength);
-                rules = uprv_malloc(sizeof(defaultRulesArray[0])*(defaultRulesArrayLength));
-                uprv_memcpy(rules, defaultRulesArray, defaultRulesArrayLength*sizeof(defaultRulesArray[0]));
-
-                coll = ucol_openRules(rules, defaultRulesArrayLength, UCOL_DECOMP_CAN, 0, status);
-                ucol_setNormalization(coll, UCOL_DEFAULT_NORMALIZATION);
-
-                if(U_SUCCESS(*status) && coll !=NULL) {
-                    data2 = ucol_cloneRuleData(coll, &len, status);
-                    if(U_SUCCESS(*status) && data2 != NULL) {
-                        temp1 = bin_open(bundle, "%%Collation", len, data2, status);
-                        table_add(rootTable, temp1, status);
-                        uprv_free(data2);
-                    }
-                    ucol_close(coll);
-                }
-                uprv_free(rules);
-            }
-#endif
             if(U_FAILURE(*status)) {
                 goto finish;
             }

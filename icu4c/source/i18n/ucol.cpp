@@ -9,6 +9,7 @@
 */
 #include "ucolimp.h"
 #include "ucoltok.h"
+#include "ucaelems.h"
 
 #include "unicode/uloc.h"
 #include "unicode/coll.h"
@@ -22,7 +23,11 @@
 #include "cpputils.h"
 #include "cstring.h"
 #include "ucmp32.h"
+#include "ucmp16.h"
 #include "umutex.h"
+#include "uhash.h"
+/* checkout this one - it might be replaceable by something faster */
+#include "dcmpdata.h"
 
 #include <stdio.h>
 
@@ -302,7 +307,14 @@ ucol_open(    const    char         *loc,
   } else if(U_SUCCESS(*status)) { /* otherwise, we'll pick a collation data that exists */
     int32_t len = 0;
     const uint8_t *inData = ures_getBinary(binary, &len, status);
-    result = ucol_initCollator((const UCATableHeader *)inData, result, status); 
+    if(len > sizeof(UCATableHeader)) {
+      result = ucol_initCollator((const UCATableHeader *)inData, result, status); 
+      result->hasRealData = TRUE;
+    } else {
+      result = ucol_initCollator(UCA->image, result, status); 
+      ucol_setOptionsFromHeader(result, (const UCATableHeader *)inData, status);
+      result->hasRealData = FALSE;
+    }
     result->rb = b;
 
     resB = ures_getByKey(result->rb,"CollationElements",NULL,status);
@@ -315,6 +327,9 @@ ucol_open(    const    char         *loc,
       result->trVersion=(uint8_t)trVInfo[0]; 
     }
     ures_close(resB);
+  } else { /* There is another error, and we're just gonna clean up */
+    ures_close(b);
+    return NULL;
   }
 
   ures_close(binary);
@@ -341,12 +356,6 @@ ucol_close(UCollator *coll)
   }
   uprv_free(coll);
 }
-
-typedef struct {
-uint8_t prims[128], *toAddP;
-uint8_t secs[128], *toAddS;
-uint8_t ters[128], *toAddT;
-} bufs;
 
 #define ucol_countBytes(value, noOfBytes)   \
 {                               \
@@ -454,7 +463,7 @@ U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t low, uint32_t 
   return g->current;
 }
 
-U_CFUNC void ucol_doCE(uint32_t *CEparts, UColToken *tok) {
+U_CFUNC void ucol_doCE(uint32_t *CEparts, UColToken *tok, UHashtable *tailored, UErrorCode *status) {
   /* this one makes the table and stuff */
   uint32_t noOfBytes[3];
   uint32_t i;
@@ -462,10 +471,55 @@ U_CFUNC void ucol_doCE(uint32_t *CEparts, UColToken *tok) {
   for(i = 0; i<3; i++) {
     ucol_countBytes(CEparts[i], noOfBytes[i]);
   }
-  fprintf(stderr, "str: %i, [%08X, %08X, %08X]\n", tok->strength, CEparts[0] >> (32-8*noOfBytes[0]), CEparts[1] >> (32-8*noOfBytes[1]), CEparts[2]>> (32-8*noOfBytes[2]));
+
+  /* Here we have to pack CEs from parts */
+
+  uint32_t CEi = 0;
+  uint32_t value = 0;
+
+  while(2*CEi<noOfBytes[0] || CEi<noOfBytes[1] || CEi<noOfBytes[2]) {
+    if(CEi > 0) {
+      value = 0x80; /* Continuation marker */
+    } else {
+      value = 0;
+    }
+    if(2*CEi<noOfBytes[0]) {
+      value |= ((CEparts[0]>>(32-16*(CEi+1))) & 0xFFFF) << 16;
+    }
+    if(CEi<noOfBytes[1]) {
+      value |= ((CEparts[1]>>(32-8*(CEi+1))) & 0xFF) << 8;
+    }
+    if(CEi<noOfBytes[2]) {
+      value |= ((CEparts[2]>>(32-8*(CEi+1))) & 0x3F);
+    }
+    tok->CEs[CEi] = value;
+    CEi++;
+  }
+  if(CEi == 0) { /* totally ignorable */
+    tok->noOfCEs = 1;
+    tok->CEs[0] = 0;
+  } else { /* there is at least something */
+    tok->noOfCEs = CEi;
+  }
+
+
+  /* We'll need to handle expansions slightly differently than in */
+  /* UCA generation since we don't know if the value for expansion is from UCA or is it tailored */
+
+  uhash_put(tailored, (void *)tok->source, tok, status);
+
+
+  /* and add them to a data table        */
+#if 0
+  fprintf(stderr, "str: %i, [%08X, %08X, %08X]: tok: ", tok->strength, CEparts[0] >> (32-8*noOfBytes[0]), CEparts[1] >> (32-8*noOfBytes[1]), CEparts[2]>> (32-8*noOfBytes[2]));
+  for(i = 0; i<tok->noOfCEs; i++) {
+    fprintf(stderr, "%08X ", tok->CEs[i]);
+  }
+  fprintf(stderr, "\n");
+#endif
 }
 
-U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status) {
+U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, UHashtable *tailored, UErrorCode *status) {
 
   ucolCEGenerator Gens[UCOL_CE_STRENGTH_LIMIT];
   uint32_t CEparts[UCOL_CE_STRENGTH_LIMIT];
@@ -515,13 +569,14 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status
 
   ucol_inv_getGapPositions(lh);
 
+#if 0
   fprintf(stderr, "BaseCE: %08X %08X\n", lh->baseCE, lh->baseContCE);
   int32_t j = 2;
   for(j = 2; j >= 0; j--) {
     fprintf(stderr, "gapsLo[%i] [%08X %08X %08X]\n", j, lh->gapsLo[j*3], lh->gapsLo[j*3+1], lh->gapsLo[j*3+2]);
     fprintf(stderr, "gapsHi[%i] [%08X %08X %08X]\n", j, lh->gapsHi[j*3], lh->gapsHi[j*3+1], lh->gapsHi[j*3+2]);
   }
-
+#endif
 
   /* I strongly believe that this code can be refactored and simplified. */
   /* have to do CE generation now, so let this soak a little bit */
@@ -537,7 +592,7 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status
     CEparts[2] = (UCOL_TERTIARYORDER(lh->baseCE)) << 24 | (UCOL_TERTIARYORDER(lh->baseContCE)) << 16;
 
     while(tok != NULL && tok->strength == UCOL_IDENTICAL) {
-      ucol_doCE(CEparts, tok);
+      ucol_doCE(CEparts, tok, tailored, status);
       tok = tok->next;
     }
 
@@ -550,7 +605,7 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status
         fStrength--;
       }
       if(lh->pos[fStrength] == -1) {
-        fprintf(stderr, "OH MY GOD! NO PLACE TO PUT CEs!\n");
+        fprintf(stderr, "OH MY GOD! NO PLACE TO PUT TERTIARIES!\n");
         exit(-1);
       }
     }
@@ -559,7 +614,7 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status
     CEparts[2] = ucol_getCEGenerator(&Gens[2], lh->gapsLo[fStrength*3+2], lh->gapsHi[fStrength*3+2], tok->toInsert); 
 
     while(tok != NULL && tok->strength >= UCOL_TERTIARY) {
-      ucol_doCE(CEparts, tok);
+      ucol_doCE(CEparts, tok, tailored, status);
       tok = tok->next;
 
       /* Treat identicals in starting tertiaries by NOT changing the tertiary value */
@@ -575,7 +630,7 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status
     if(lh->pos[1] == -1) {
       fStrength = 0;
       if(lh->pos[fStrength] == -1) {
-        fprintf(stderr, "OH MY GOD! NO PLACE TO PUT CEs!\n");
+        fprintf(stderr, "OH MY GOD! NO PLACE TO PUT SECONDARIES!\n");
         exit(-1);
       }
     }
@@ -591,13 +646,13 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status
         CEparts[2] = 0x03000000;
       }
     
-      ucol_doCE(CEparts, tok);
+      ucol_doCE(CEparts, tok, tailored, status);
       tok = tok->next;
 
       while(tok->next != NULL && tok->next->strength > 0) {
         if(tok->strength == UCOL_TERTIARY) {
           CEparts[2] = ucol_getNextGenerated(&Gens[2]);
-          ucol_doCE(CEparts, tok);
+          ucol_doCE(CEparts, tok, tailored, status);
         } else if(tok->strength == UCOL_SECONDARY) {
           CEparts[1] = ucol_getNextGenerated(&Gens[1]);
           if(tok->next->strength == UCOL_SECONDARY) {
@@ -605,9 +660,9 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status
           } else {
             CEparts[2] = ucol_getCEGenerator(&Gens[2], 0x02000000, 0xFF000000, tok->next->toInsert);
           }
-          ucol_doCE(CEparts, tok);
+          ucol_doCE(CEparts, tok, tailored, status);
         } else { /* Strength is identical */
-          ucol_doCE(CEparts, tok);
+          ucol_doCE(CEparts, tok, tailored, status);
         }
         tok = tok->next;
       }
@@ -620,13 +675,14 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status
         CEparts[2] = 0x03000000;
       }
       /* if the strength is identical, it will just repeat the last CE value */
-      ucol_doCE(CEparts, tok);
+      ucol_doCE(CEparts, tok, tailored, status);
       tok = tok->next;
     } else { /* only one secondary at the end of the rule fragment */
       CEparts[0] = lh->gapsLo[fStrength*3];
       CEparts[1] = lh->gapsLo[fStrength*3+1];
       CEparts[2] = lh->gapsLo[fStrength*3+2];
-      ucol_doCE(CEparts, tok);
+      ucol_doCE(CEparts, tok, tailored, status);
+      tok = NULL;
     }
   }
 
@@ -634,7 +690,7 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status
 
   if(tok != NULL) { /* regular primaries */
     if(lh->pos[0] == -1) {
-        fprintf(stderr, "OH MY GOD! NO PLACE TO PUT CEs!\n");
+        fprintf(stderr, "OH MY GOD! NO PLACE TO PUT PRIMARIES!\n");
         exit(-1);
     }
 
@@ -655,7 +711,7 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status
         }
       }
 
-      ucol_doCE(CEparts, tok);
+      ucol_doCE(CEparts, tok, tailored, status);
 
       tok = tok->next;
 
@@ -663,10 +719,10 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status
     /* Treat identicals*/
     /* < 1 = one = jedan < 2 = two = dva < 3 = three = tri ... */
         if(tok->strength == UCOL_IDENTICAL) {
-          ucol_doCE(CEparts, tok);
+          ucol_doCE(CEparts, tok, tailored, status);
         } else if(tok->strength == UCOL_TERTIARY) {
           CEparts[2] = ucol_getNextGenerated(&Gens[2]);
-          ucol_doCE(CEparts, tok);
+          ucol_doCE(CEparts, tok, tailored, status);
         } else if(tok->strength == UCOL_SECONDARY) {
           CEparts[1] = ucol_getNextGenerated(&Gens[1]);
           if(tok->next->strength == UCOL_TERTIARY) {
@@ -674,7 +730,7 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status
           } else { /* UCOL_SECONDARY */
             CEparts[2] = 0x03000000;
           }
-          ucol_doCE(CEparts, tok);
+          ucol_doCE(CEparts, tok, tailored, status);
         } else {
           CEparts[0] = ucol_getNextGenerated(&Gens[0]);
           if(tok->next->strength == UCOL_PRIMARY) {
@@ -688,7 +744,7 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status
             }
             CEparts[1] = ucol_getCEGenerator(&Gens[1], 0x02000000, 0xFF000000, tok->next->toInsert);
           }
-          ucol_doCE(CEparts, tok);
+          ucol_doCE(CEparts, tok, tailored, status);
         }
         tok = tok->next;
       }
@@ -704,15 +760,145 @@ U_CFUNC void ucol_initBuffers(UColTokListHeader *lh, bufs *b, UErrorCode *status
         CEparts[1] = 0x03000000;
         CEparts[2] = 0x03000000;
       } /* else it is identical and do nothing */
-      ucol_doCE(CEparts, tok);
+      ucol_doCE(CEparts, tok, tailored, status);
 
     } else { /* there is only one primary in this sequence and it ends with it */
       CEparts[0] = lh->gapsLo[0];
       CEparts[1] = lh->gapsLo[1];
       CEparts[2] = lh->gapsLo[2];
-      ucol_doCE(CEparts, tok);
+      ucol_doCE(CEparts, tok, tailored, status);
     }
   }
+}
+
+U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokListHeader *lh, UHashtable *tailored, UErrorCode *status) {
+  UCAElements el;
+  UColToken *tok = lh->first[UCOL_TOK_POLARITY_POSITIVE];
+  UColToken *expt = NULL;
+  uint32_t i = 0;
+
+  while(tok != NULL) {
+    /* first, check if there are any expansions */
+    if(tok->expansion != 0) {
+      if((expt = (UColToken *)uhash_get(tailored, (void *)tok->expansion)) != NULL) { /* expansion is tailored */
+        /* just copy CEs from tailored token to this one */
+        for(i = 0; i<expt->noOfCEs; i++) {
+          tok->expCEs[i] = expt->CEs[i];
+        }
+        tok->noOfExpCEs = expt->noOfCEs;
+      } else { /* need to pick it from the UCA */
+        /* first, get the UChars from the rules */
+        /* then pick CEs out until there is no more and stuff them into expansion */
+        UChar source[256];
+        collIterate s;
+        uint32_t order = 0;
+        uint32_t len = tok->expansion >> 24;
+        uprv_memcpy(source, (tok->expansion & 0x00FFFFFF) + src->source, len*sizeof(UChar));
+        init_collIterate(source, len, &s, FALSE);
+
+        for(;;) {
+          UCOL_GETNEXTCE(order, UCA, s, status);
+          if(order == UCOL_NO_MORE_CES) {
+              break;
+          }
+          tok->expCEs[tok->noOfExpCEs++] = order;
+        }
+      }
+    } else {
+      tok->noOfExpCEs = 0;
+    }
+
+    /* set the ucaelement with obtained values */
+    el.noOfCEs = tok->noOfCEs + tok->noOfExpCEs;
+    /* copy CEs */
+    for(i = 0; i<tok->noOfCEs; i++) {
+      el.CEs[i] = tok->CEs[i];
+    }
+    for(i = 0; i<tok->noOfExpCEs; i++) {
+      el.CEs[i+tok->noOfCEs] = tok->expCEs[i];
+    }
+
+    /* copy UChars */
+/*
+      key.source = newCharsLen << 24 | charsOffset;
+      key.expansion = newExtensionsLen << 24 | extensionOffset;
+*/
+    uprv_memcpy(el.uchars, (tok->source & 0x00FFFFFF) + src->source, (tok->source >> 24)*sizeof(UChar));
+    /* I think I don't want to have expansion chars in chars for UCAelement... HMMM! */
+    /*uprv_memcpy(el.uchars+(tok->source >> 24), (tok->expansion & 0x00FFFFFF) + src->source, (tok->expansion >> 24)*sizeof(UChar));*/
+    el.cSize = (tok->source >> 24); /* + (tok->expansion >> 24);*/
+    el.cPoints = el.uchars;
+    el.codepoint = el.cPoints[0];
+
+    el.caseBit = FALSE; /* how to see if there is case bit - pick it out from the UCA */
+    if(UCOL_ISTHAIPREVOWEL(el.codepoint)) {
+      el.isThai = TRUE;
+    } else {
+      el.isThai = FALSE;
+    }
+
+
+
+    /* and then, add it */
+    uprv_uca_addAnElement(t, &el, status);
+
+    tok = tok->next;
+  }
+
+}
+
+/* These are some normalizer constants */
+#define STR_INDEX_SHIFT  2 //Must agree with the constants used in NormalizerBuilder
+#define STR_LENGTH_MASK 0x0003
+
+int32_t uprv_ucol_decompose (UChar curChar, UChar *result) {
+    int32_t minDecomp = 0;
+    int32_t resSize = 0;
+    /* either 0 or MAX_COMPAT = 11177 if we want just canonical */
+    uint16_t offset = ucmp16_getu(DecompData::offsets, curChar);
+    uint16_t index  = (uint16_t)(offset & DecompData::DECOMP_MASK);
+
+    if (index > minDecomp) {
+        if ((offset & DecompData::DECOMP_RECURSE) != 0) {
+            // Let Normalizer::decompose() handle recursive decomp
+            UnicodeString temp(curChar);
+            UnicodeString res;
+            UErrorCode status = U_ZERO_ERROR;
+            Normalizer::decompose(temp, minDecomp > 0,
+                                  /*hangul ? Normalizer::IGNORE_HANGUL : 0,*/
+                                  Normalizer::IGNORE_HANGUL,
+                                  res, status);
+            T_fillOutputParams(&res, result, 356, &resSize, &status);
+
+        } else {
+          const UChar *source = DecompData::contents;
+            uint16_t ind = (int16_t)(index >> STR_INDEX_SHIFT);
+            uint16_t length = (int16_t)(index & STR_LENGTH_MASK);
+
+            if (length == 0) {
+                UChar ch;
+                while ((ch = source[ind++]) != 0x0000) {
+                    result[resSize++] = ch;
+                }
+            } else {
+                while (length-- > 0) {
+                    result[resSize++] = source[ind++];
+                }
+            }
+        }
+        return resSize;
+    } 
+#if 0
+    else if (hangul && curChar >= Normalizer::HANGUL_BASE && curChar < Normalizer::HANGUL_LIMIT) {
+        Normalizer::hangulToJamo(curChar, result, (uint16_t)minDecomp);
+        /* this has something to do with jamo hangul, check tomorrow */
+    } 
+#endif
+    else {
+        /*result += curChar;  this doesn't decompose */
+      return 0;
+    }
+
 }
 
 UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, uint32_t *resLen, UErrorCode *status) {
@@ -756,22 +942,101 @@ UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, uint32_t *resL
     boundaries except where there is only a single-byte primary. That is to 
     ensure that the script reordering will continue to work. 
 */
-  bufs b;
+  UHashtable *tailored = uhash_open(uhash_hashLong, uhash_compareLong, status);
 
   for(i = 0; i<src->resultLen; i++) {
     /* now we need to generate the CEs */ 
-    /* We have three char buffers:      */
-    /* primary,                         */
-    /* secondary,                       */
-    /* tertiary                         */
     /* We stuff the initial value in the buffers, and increase the appropriate buffer */
     /* According to strength                                                          */
-    ucol_initBuffers(&src->lh[i], &b, status);
-
+    ucol_initBuffers(&src->lh[i], tailored, status);
   }
 
-  *status = U_UNSUPPORTED_ERROR;
-  return NULL;
+  tempUCATable *t = uprv_uca_initTempTable(src->image, status);
+
+
+  /* After this, we have assigned CE values to all regular CEs      */
+  /* now we will go through list once more and resolve expansions,  */
+  /* make UCAElements structs and add them to table                 */
+  for(i = 0; i<src->resultLen; i++) {
+    /* now we need to generate the CEs */ 
+    /* We stuff the initial value in the buffers, and increase the appropriate buffer */
+    /* According to strength                                                          */
+    ucol_createElements(src, t, &src->lh[i], tailored, status);
+  }
+
+  UCATableHeader *myData = uprv_uca_assembleTable(t, status);  
+
+  /* produce canonical & compatibility closure */
+
+  {
+    UChar decomp[256];
+    uint32_t noOfDec = 0, i = 0, j = 0, CE = UCOL_NOT_FOUND;
+    uint32_t u = 0;
+    UCAElements el;
+    collIterate colIt;
+    UCollator *temp = ucol_initCollator(myData, NULL, status);
+
+    for(u = 0; u < 0x10000; u++) {
+      if((noOfDec = uprv_ucol_decompose (u, decomp)) > 1) {
+        for(i = 0; i<noOfDec; i++) {
+          if((CE = ucmp32_get(t->mapping, decomp[i])) != UCOL_NOT_FOUND) {
+            el.uchars[0] = u;
+            el.cPoints = el.uchars;
+            el.codepoint = u;
+            el.cSize = 1;
+            el.noOfCEs = 0;
+            init_collIterate(decomp, noOfDec, &colIt, TRUE);
+            while(CE != UCOL_NO_MORE_CES) {
+              CE = ucol_getNextCE(temp, &colIt, status);
+              /*UCOL_GETNEXTCE(CE, temp, colIt, status);*/
+              if(CE != UCOL_NO_MORE_CES) {
+                el.CEs[el.noOfCEs++] = CE;
+              }
+            }
+            uprv_uca_addAnElement(t, &el, status);
+            break;
+          }        
+        }
+      }
+    }
+  /* add latin-1 stuff */
+    for(u = 0; u<0x100; u++) {
+      if((CE = ucmp32_get(t->mapping, u)) == UCOL_NOT_FOUND) {
+        /* this test is for contractions that are missing the starting element. Looks like latin-1 should be done before assembling */
+        /* the table, even if it results in more false closure elements */
+/*
+        || ((isContraction(CE)) &&
+        ((*(temp->contractionCEs + ((UChar *)temp->image+getContractOffset(CE) - temp->contractionIndex))) == UCOL_NOT_FOUND))
+        ) {
+*/
+        decomp[0] = u;
+        el.uchars[0] = u;
+        el.cPoints = el.uchars;
+        el.codepoint = u;
+        el.cSize = 1;
+        el.noOfCEs = 0;
+        init_collIterate(decomp, 1, &colIt, TRUE);
+        while(CE != UCOL_NO_MORE_CES) {
+          CE = ucol_getNextCE(temp, &colIt, status);
+          /*UCOL_GETNEXTCE(CE, temp, colIt, status);*/
+          if(CE != UCOL_NO_MORE_CES) {
+            el.CEs[el.noOfCEs++] = CE;
+          }
+        }
+        uprv_uca_addAnElement(t, &el, status);
+      }
+    }
+  }
+
+
+
+
+  myData = uprv_uca_reassembleTable(t, myData, status);  
+
+  uhash_close(tailored);
+  uprv_uca_closeTempTable(t);    
+
+  return myData;
 }
 
 U_CAPI UCollator*
@@ -822,13 +1087,28 @@ ucol_openRules(    const    UChar                  *rules,
   src.resultLen = 0;
   src.lh = 0;
 
+  src.image = (UCATableHeader *)uprv_malloc(sizeof(UCATableHeader));
+
+
+  uprv_memcpy(src.image, UCA->image, sizeof(UCATableHeader));
+
   listLen = ucol_tok_assembleTokenList(&src, status);
-  if(U_FAILURE(*status) || src.lh == NULL) {
+  if(U_FAILURE(*status)) { 
     return NULL;
   }
+  UCollator *result = NULL;
+  UCATableHeader *table = NULL;
 
-  UCATableHeader *table = ucol_assembleTailoringTable(&src, &resLen, status);
-  UCollator *result = ucol_initCollator(table,0,status);
+  if(src.lh != NULL) { /* we have a set of rules, let's make something of it */
+    table = ucol_assembleTailoringTable(&src, &resLen, status);
+    result = ucol_initCollator(table,0,status);
+    result->hasRealData = TRUE;
+  } else { /* no rules, but no error either */
+    /* must be only options */
+    result = ucol_initCollator(UCA->image,0,status);
+    ucol_setOptionsFromHeader(result, src.image, status);
+    result->hasRealData = FALSE;
+  }
 
   if(U_SUCCESS(*status)) {
     result->rules = (UChar *)uprv_malloc((u_strlen(rules)+1)*sizeof(UChar));
@@ -851,8 +1131,43 @@ ucol_openRules(    const    UChar                  *rules,
 U_CAPI uint8_t *
 ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status)
 {
-  *length = 0;
-  return NULL;
+  uint8_t *result = NULL;
+  if(coll->hasRealData == TRUE) {
+    *length = coll->image->size;
+    result = (uint8_t *)uprv_malloc(*length);
+    uprv_memcpy(result, coll->image, *length);
+  } else {
+    *length = sizeof(UCATableHeader);
+    result = (uint8_t *)uprv_malloc(sizeof(UCATableHeader));
+    UCATableHeader *head = (UCATableHeader *)result;
+    ucol_putOptionsToHeader(coll, head, status);   
+  }
+  return result;
+}
+
+void ucol_setOptionsFromHeader(UCollator* result, const UCATableHeader * image, UErrorCode *status) {
+    result->caseFirst = image->caseFirst;
+    result->caseLevel = image->caseLevel;
+    result->frenchCollation = image->frenchCollation;
+    result->normalizationMode = image->normalizationMode;
+    result->strength = image->strength;
+    result->variableTopValue = image->variableTopValue;
+
+    result->caseFirstisDefault = TRUE;
+    result->caseLevelisDefault = TRUE;
+    result->frenchCollationisDefault = TRUE;
+    result->normalizationModeisDefault = TRUE;
+    result->strengthisDefault = TRUE;
+    result->variableTopValueisDefault = TRUE;
+}
+
+void ucol_putOptionsToHeader(UCollator* result, UCATableHeader * image, UErrorCode *status) {
+    image->caseFirst = result->caseFirst;
+    image->caseLevel = result->caseLevel;
+    image->frenchCollation = result->frenchCollation;
+    image->normalizationMode = result->normalizationMode;
+    image->strength = result->strength;
+    image->variableTopValue = result->variableTopValue;
 }
 
 UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UErrorCode *status) {
@@ -1623,17 +1938,18 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
     uint16_t primary = 0;
     uint8_t primary1 = 0;
     uint8_t primary2 = 0;
-    uint8_t primary3 = 0;
     uint32_t ce = 0;
     uint8_t secondary = 0;
     uint8_t tertiary = 0;
     int32_t caseShift = 0;
     uint32_t c2 = 0, c3 = 0, c4 = 0; /* variables for compression */
+    UBool wasShifted = FALSE;
+    UBool notIsContinuation = FALSE;
     
 
     for(;;) {
-          /*order = ucol_getNextCE(coll, s, &status);*/
-          UCOL_GETNEXTCE(order, coll, *s, &status);
+          order = ucol_getNextCE(coll, s, &status);
+          /*UCOL_GETNEXTCE(order, coll, *s, &status);*/
           
           if((order & 0xFFFFFFBF) == 0) {
             continue;
@@ -1645,11 +1961,11 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
 
           /* We're saving order in ce, since we will destroy order in order to get primary, secondary, tertiary in order ;)*/
           ce = order;
+          notIsContinuation = !isContinuation(ce);
 
 
           tertiary = (order & UCOL_TERTIARYORDERMASK);
           secondary = (order >>= 8) & 0xFF;
-          primary3 = 0; /* the third primary */
           primary2 = (order >>= 8) & 0xFF;;
           primary1 = order >>= 8;
 
@@ -1668,7 +1984,9 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
             /* however, it is not clear when */
           }
 
-          if(shifted && primary1 < variableMax1 && primary1 != 0) { 
+          if(shifted && ((notIsContinuation && primary1 <= variableMax1 && primary1 > 0 
+            && (primary1 < variableMax1 || primary1 == variableMax1 && primary2 < variableMax2)) 
+            || (!notIsContinuation && wasShifted))) { 
             if(c4 > 0) {
               currentSize += (c2/UCOL_BOT_COUNT4)+1;
               c4 = 0;
@@ -1677,7 +1995,9 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
             if(primary2 != 0) {
               currentSize++;
             }
+            wasShifted = TRUE;
           } else {
+            wasShifted = FALSE;
             /* Note: This code assumes that the table is well built i.e. not having 0 bytes where they are not supposed to be. */
             /* Usually, we'll have non-zero primary1 & primary2, except in cases of LatinOne and friends, when primary2 will   */
             /* be zero with non zero primary1. primary3 is different than 0 only for long primaries - see above.               */
@@ -1685,15 +2005,12 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
               currentSize++;
               if(primary2 != UCOL_NEW_IGNORABLE) {
                 currentSize++;
-                if(primary3 != UCOL_NEW_IGNORABLE) {
-                  currentSize++;
-                }
               }
             }               
 
             if(secondary > compareSec) { /* I think that != 0 test should be != IGNORABLE */
               if(!isFrenchSec){
-                if (secondary == UCOL_COMMON2) {
+                if (secondary == UCOL_COMMON2 && notIsContinuation) {
                   c2++;
                 } else {
                   if(c2 > 0) {
@@ -1722,7 +2039,7 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
             }
 
             if(tertiary > compareTer) { /* I think that != 0 test should be != IGNORABLE */
-              if (tertiary == UCOL_COMMON3) {
+              if (tertiary == UCOL_COMMON3 && notIsContinuation) {
                 c3++;
               } else {
                 if(c3 > 0) {
@@ -1737,7 +2054,7 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
               }
             }
 
-            if(shifted && primary1 > compareQuad) {
+            if(shifted  && notIsContinuation) {
               c4++;
             }
 
@@ -1842,9 +2159,7 @@ ucol_calcSortKey(const    UCollator    *coll,
 
     /* If we need to normalize, we'll do it all at once at the beggining! */
     UColAttributeValue normMode = coll->normalizationMode;
-    if((normMode != UCOL_OFF) 
-      /* && (unorm_quickCheck(source, len, UNORM_NFD, status) != UNORM_YES) 
-      && (unorm_quickCheck(source, len, UNORM_NFC, status) != UNORM_YES)) */
+    if((normMode != UCOL_OFF)
       /* changed by synwee */
       && !checkFCD(source, len, status))
     {

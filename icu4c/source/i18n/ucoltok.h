@@ -41,6 +41,10 @@ typedef struct  {
 struct UColToken {
   UChar debugSource;
   UChar debugExpansion;
+  uint32_t CEs[128];
+  uint32_t noOfCEs;
+  uint32_t expCEs[128];
+  uint32_t noOfExpCEs;
   uint32_t source;
   uint32_t expansion;
   uint32_t strength;
@@ -57,6 +61,7 @@ typedef struct {
   const UChar *current;
   const InverseTableHeader *invUCA;
   const UCollator *UCA;
+  UCATableHeader *image;
   uint32_t resultLen;
   UColTokListHeader *lh;
 } UColTokenParser;

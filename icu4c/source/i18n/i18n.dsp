@@ -137,16 +137,7 @@ SOURCE=.\choicfmt.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\colcache.cpp
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# ADD CPP /Ze
-
-!ENDIF 
-
+SOURCE=.\cnttable.cpp
 # End Source File
 # Begin Source File
 
@@ -164,19 +155,6 @@ SOURCE=.\coleitr.cpp
 # Begin Source File
 
 SOURCE=.\coll.cpp
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# ADD CPP /Ze
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\colrules.cpp
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
 
@@ -251,6 +229,10 @@ SOURCE=.\dcfmtsym.cpp
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=..\common\dcmpdata.cpp
 # End Source File
 # Begin Source File
 
@@ -358,19 +340,6 @@ SOURCE=.\jamohang.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\mergecol.cpp
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# ADD CPP /Ze
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\msgfmt.cpp
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
@@ -398,19 +367,6 @@ SOURCE=.\nultrans.cpp
 # Begin Source File
 
 SOURCE=.\numfmt.cpp
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# ADD CPP /Ze
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\ptnentry.cpp
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
 
@@ -553,33 +509,7 @@ SOURCE=.\sortkey.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\tables.cpp
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# ADD CPP /Ze
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\tblcoll.cpp
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# ADD CPP /Ze
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
-SOURCE=.\tcoldata.cpp
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
 
@@ -628,6 +558,10 @@ SOURCE=.\ubrk.cpp
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucaelems.cpp
 # End Source File
 # Begin Source File
 
@@ -849,6 +783,10 @@ InputPath=.\unicode\choicfmt.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\cnttable.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\colcache.h
 # End Source File
 # Begin Source File
@@ -904,10 +842,6 @@ InputPath=.\unicode\coll.h
 
 !ENDIF 
 
-# End Source File
-# Begin Source File
-
-SOURCE=.\colrules.h
 # End Source File
 # Begin Source File
 
@@ -1266,10 +1200,6 @@ InputPath=.\unicode\jamohang.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\mergecol.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\unicode\msgfmt.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
@@ -1402,10 +1332,6 @@ InputPath=.\unicode\parsepos.h
 
 !ENDIF 
 
-# End Source File
-# Begin Source File
-
-SOURCE=.\ptnentry.h
 # End Source File
 # Begin Source File
 
@@ -1564,10 +1490,6 @@ InputPath=.\unicode\sortkey.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\tables.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\unicode\tblcoll.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
@@ -1592,10 +1514,6 @@ InputPath=.\unicode\tblcoll.h
 
 !ENDIF 
 
-# End Source File
-# Begin Source File
-
-SOURCE=.\tcoldata.h
 # End Source File
 # Begin Source File
 
@@ -1677,6 +1595,10 @@ InputPath=.\unicode\ubrk.h
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucaelems.h
 # End Source File
 # Begin Source File
 

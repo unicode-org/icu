@@ -408,6 +408,7 @@ typedef struct {
       uint32_t expansion;        /* uint32_t *expansion;            */
       uint32_t contractionIndex; /* UChar *contractionIndex;        */
       uint32_t contractionCEs;   /* uint32_t *contractionCEs;       */
+      uint32_t contractionSize;  /* needed for various closures */
       uint32_t latinOneMapping;  /* fast track to latin1 chars      */
       CompactIntArray *mapping;
       int32_t CEcount;
@@ -455,6 +456,9 @@ struct UCollator {
     UBool caseLevelisDefault;         /* do we have an extra case level */
     UBool normalizationModeisDefault; /* attribute for normalization */
     UBool strengthisDefault;          /* attribute for strength */
+    UBool hasRealData;                /* some collators have only options, like French, no rules */
+                                      /* to speed up things, we use the UCA image, but we don't want it */
+                                      /* to run around */
     UChar *rules;
     UChar zero;
     UDataInfo dataInfo;               /* Data info of UCA table */
@@ -469,7 +473,11 @@ UChar incctx_appendChar(incrementalContext *ctx, UChar c);
 UCollationResult alternateIncrementalProcessing(const UCollator *coll, incrementalContext *srcCtx, incrementalContext *trgCtx);
 void ucol_initUCA(UErrorCode *status);
 void ucol_initInverseUCA(UErrorCode *status);
+
 UCollator* ucol_initCollator(const UCATableHeader *image, UCollator *fillIn, UErrorCode *status);
+void ucol_setOptionsFromHeader(UCollator* result, const UCATableHeader * image, UErrorCode *status);
+void ucol_putOptionsToHeader(UCollator* result, UCATableHeader * image, UErrorCode *status);
+
 uint32_t ucol_getIncrementalUCA(UChar ch, incrementalContext *collationSource, UErrorCode *status);
 int32_t ucol_getIncrementalSpecialCE(const UCollator *coll, incrementalContext *ctx, UErrorCode *status);
 
