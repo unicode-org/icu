@@ -22,6 +22,7 @@
 #include "unicode/udata.h"
 #include "unicode/uversion.h"
 #include "uhash.h"
+#include "ucln_cmn.h"
 
 #ifdef OS390
 #include <stdlib.h>
@@ -545,7 +546,7 @@ pointerTOCLookupFn(const UDataMemory *pData,
 
 /* common library functions ------------------------------------------------- */
 
-static UDataMemory commonICUData={ NULL };
+static UDataMemory commonICUData={ 0 };
 
 static UBool
 setCommonICUData(UDataMemory *pData) {
@@ -810,15 +811,19 @@ static void checkCommonData(UDataMemory *udm, UErrorCode *err) {
 }
 
 
-U_CAPI void U_EXPORT2
+U_CAPI UBool U_EXPORT2
 udata_cleanup()
 {
+    umtx_lock(NULL);
     if (gHashTable) {              /* Delete the cache of user data mappings.  */
         uhash_close(gHashTable);   /*   Table owns the contents, and will delete them. */
         gHashTable = 0;            /*   Cleanup is not thread safe.                */
     }
 
     udata_close(&commonICUData);   /* Clean up common ICU Data             */
+    umtx_unlock(NULL);
+
+    return TRUE;                   /* Everything was cleaned up */
 }
 
 
@@ -1021,7 +1026,7 @@ static UBool extendICUData()
     }
     
     umtx_unlock(NULL);
-    return U_SUCCESS(???);
+    return TRUE;  /* SUCCESS? */
 #endif  /* OS390 */
 }
 
@@ -1085,19 +1090,19 @@ udata_setAppData(const char *path, const void *data, UErrorCode *err)
     udm.pHeader = data;
     checkCommonData(&udm, err);
     udata_cacheDataItem(path, &udm, err);
-};
+}
 
-/*------------------------------------------------------------------------------*
- *                                                                              *
- *  checkDataItem     Given a freshly located/loaded data item, either          *
- *                    an entry in a common file or a separately loaded file,    *
- *                    sanity check its header, and see if the data is           *
- *                    acceptable to the app.                                    *
- *                    If the data is good, create and return a UDataMemory      *
- *                    object that can be returned to the application.           *
- *                    Return NULL on any sort of failure.                       *
- *                                                                              *
- *------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*
+ *                                                                            *
+ *  checkDataItem     Given a freshly located/loaded data item, either        *
+ *                    an entry in a common file or a separately loaded file,  *
+ *                    sanity check its header, and see if the data is         *
+ *                    acceptable to the app.                                  *
+ *                    If the data is good, create and return a UDataMemory    *
+ *                    object that can be returned to the application.         *
+ *                    Return NULL on any sort of failure.                     *
+ *                                                                            *
+ *----------------------------------------------------------------------------*/
 static UDataMemory *
 checkDataItem
 (
