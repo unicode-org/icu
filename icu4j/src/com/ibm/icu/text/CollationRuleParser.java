@@ -1824,7 +1824,7 @@ final class CollationRuleParser
                 && option.equalsIgnoreCase(rules.substring(start, 
                                                       start + optionlength))) {
                 if (optionend - start > optionlength) {
-                    m_optionarg_ = start + optionlength + 1; 
+                    m_optionarg_ = start + optionlength; 
                     // start of the options, skip space
                     while (m_optionarg_ < optionend && UCharacter.isWhitespace(rules.charAt(m_optionarg_))) 
                     {   // eat whitespace
