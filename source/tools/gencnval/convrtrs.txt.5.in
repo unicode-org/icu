@@ -1,0 +1,131 @@
+.\" Hey, Emacs! This is -*-nroff-*- you know...
+.\"
+.\" convrtrs.txt.5: manual page for the convrtrs.txt file
+.\"
+.\" Copyright (C) 2000-2002 IBM, Inc. and others.
+.\"
+.\" Manual page by Yves Arrouye <yves@realnames.com>.
+.\"
+.TH CONVRTRS.TXT 5 "22 July 2002" "ICU MANPAGE" "ICU @VERSION@ Manual"
+.SH NAME
+.B convrtrs.txt
+\- ICU converters aliases file
+.br
+.B cnvalias.icu
+\- binary ICU converters aliases file
+.SH DESCRIPTION
+The file
+.B convrtrs.txt
+lists the names of the converters that ICU can handle, along with
+their known aliases. ICU can open a converter given either its real name or
+any of its aliases.
+.B convrtrs.txt
+is read by
+.BR gencnval (1)
+in order to generate the binary data that ICU uses to represent the converters
+aliases information.
+.PP
+Each converter and its aliases are described on a separate lines; fields
+on each line are separated by white space. The order of records in
+.B convrtrs.txt
+is significant: if a given name appears multiple times, the last one prevails.
+Names of converters and aliases are compared without considering case; the
+characters dash (U+002D HYPHEN-MINUS), underscore (U+005F LOW LINE), and
+space (U+0020 SPACE) are also ignored during comparison
+(even though spaces cannot be used in
+.B convrtrs.txt
+since white space is significant as a field delimiter).
+Thus the names
+.BR UTF-8 ,
+.BR utf_8 ,
+and
+.BR "Utf 8"
+are equivalent converters names.
+.PP
+The format of
+.B convrtrs.txt
+can be described by the following BNF grammar:
+.PP
+.RS
+.nf
+converters ::= tags { converter }
+converter ::= name [ tags ] { alias }
+alias ::= name [ tags ]
+tags ::= '{' { tag } '}'
+tag ::= standard{*}
+comment ::= '#' \fIanything\fP
+.fi
+.RE
+.PP
+Line continuation and comment sytax are similar to the GNU make syntax.
+Any lines beginning with whitespace (e.g. U+0020 SPACE or U+0009 HORIZONTAL
+TABULATION) are presumed to be a continuation of the previous line.
+.PP
+The file must start with a list of recognized tags. These tags are used to
+get the correct converter implementation based on the defined standard tag.
+For instance, Shift-JIS on an IBM platform may be different from Shift-JIS
+on a Windows platform.
+.PP
+A
+.I name
+can use any character other than white space and the '{' and '#' delimiters.
+In practice, names are usually restricted to the set of uppercase and
+lowercase latin letters plus arabic digits, the dash, the underscore,
+and the colon characters. It is recommended to follow this convention
+when naming new converters or their aliases.
+.PP
+A
+.I comment
+starts with the pound character '#' and ends with the current
+line. Comments are ignored.
+.PP
+The
+.I name
+of a given
+.I converter
+must match its algorithmic name if the converter is algorithmic, or
+its file name if the converter is table-driven. The table for the
+converter
+.B ibm-912
+for example, is expected to be in the
+.B ibm-912.cnv
+file.
+An
+.I alias
+has no such restriction, as aliases are just arbitrary names
+associated to a given converter.
+.PP
+The presence of a
+.I tag
+after a converter or alias name means that this name is associated to
+a given standard set of names. Two well-known such standards are the
+.B MIME
+and
+.B IANA
+registries of names. The default ICU
+.B convrtrs.txt
+file already uses these tags.
+These tags must be declared at the beginning of the file.
+Names appropriate for a given standard can be retrieved
+programmatically by using the ucnv_getStandardName() or the
+ucnv_openStandardNames() function. The asterisk (U+002A) is
+used to note which standard name is the default, and the
+preceding alias is returned by ucnv_getStandardName(). A standard
+tag may have multiple aliases recognized by the same standard for
+the same converter name.
+.SH CAVEATS
+The
+.B convrtrs.txt
+file is not directly read by ICU. It must be transformed into a binary
+file by
+.BR gencnval (1)
+first. Also, depending on the way ICU was packaged, even the resulting
+.B cnvalias.icu
+file may not be read by ICU. Please refer to the ICU manual for more
+information on which files are effectively read by ICU at runtime, and
+how to produce them.
+.SH COPYRIGHT
+Copyright (C) 2000-2002 IBM, Inc. and others.
+.SH SEE ALSO
+.BR gencnval (1),
+.BR pkgdata (1)

@@ -1,0 +1,6 @@
+*.d
+intltest
+Debug
+Release
+Makefile
+*.plg

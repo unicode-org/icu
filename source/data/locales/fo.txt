@@ -1,0 +1,110 @@
+﻿// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2003, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+fo {
+    Version { "2.0" }
+    collations {
+      standard { 
+        Version { "2.0" }
+        Sequence { 
+            "&D<<đ<<<Đ<<ð<<<Ð "
+            "&t<<<þ/h"
+            "&T<<<Þ/H"
+            "&Y<<ü<<<Ü<<ű<<<Ű"
+            "&[before 1]ʒ<æ<<<Æ<<ä<<<Ä<<ę<<<Ę<ø<<<Ø<<ö<<<Ö<<ő<<<Ő<<œ<<<Œ<å<<<Å"
+            "<<<aa<<<Aa<<< AA"	// Danish, Faroese only            
+        }
+      }
+    }
+    Languages {
+        fo { "føroyskt" }
+    }
+    Countries {
+        FO { "Føroyar" }
+    }
+    DayAbbreviations { 
+        "sun",
+        "mán",
+        "týs",
+        "mik",
+        "hós",
+        "frí",
+        "ley",
+    }
+    DayNames { 
+        "sunnudagur",
+        "mánadagur",
+        "týsdagur",
+        "mikudagur",
+        "hósdagur",
+        "fríggjadagur",
+        "leygardagur",
+    }
+    MonthAbbreviations { 
+        "jan",
+        "feb",
+        "mar",
+        "apr",
+        "mai",
+        "jun",
+        "jul",
+        "aug",
+        "sep",
+        "okt",
+        "nov",
+        "des",
+    }
+    MonthNames { 
+        "januar",
+        "februar",
+        "mars",
+        "apríl",
+        "mai",
+        "juni",
+        "juli",
+        "august",
+        "september",
+        "oktober",
+        "november",
+        "desember",
+    }
+    NumberElements { 
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "‰",
+        "∞",
+        "�",
+        ",",
+        "+",
+    }
+    LocaleScript{ 
+        "Latn",  // ISO 15924 Name 
+    }
+    ExemplarCharacters { "[a-z \u00e1 \u00e6 \u00ed \u00f0 \u00f3 \u00f8 \u00fa \u00fd]" }
+
+    // Currency display names
+    Currencies {
+        DKK { "kr", "DKK" }
+    }
+    DateTimePatterns { 
+        "HH:mm:ss z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "EEEE dd MMMM yyyy",
+        "d. MMM yyyy",
+        "dd-MM-yyyy",
+        "dd-MM-yy",
+        "{1} {0}",
+    }
+}
