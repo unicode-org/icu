@@ -43,7 +43,7 @@
 #endif
 
 #ifdef U_HIDE_DEPRECATED_API
-#include "unicode/udeprcted.h"
+#include "unicode/udeprctd.h"
 #endif
 
 #ifdef U_HIDE_DEPRECATED_API
