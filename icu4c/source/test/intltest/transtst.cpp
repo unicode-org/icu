@@ -63,6 +63,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         CASE(19,TestHiraganaKatakana);
         CASE(20,TestCopyJ476);
         CASE(21,TestAnchors);
+        CASE(22,TestInterIndic);
         default: name = ""; break;
     }
 }
@@ -879,6 +880,27 @@ void TransliteratorTest::TestCopyJ476(void) {
     }
     expect(*t2, "abc", "ABc");
     delete t2;
+}
+
+/**
+ * Test inter-Indic transliterators.  These are composed.
+ * ICU4C Jitterbug 483.
+ */
+void TransliteratorTest::TestInterIndic(void) {
+    UnicodeString ID("Devanagari-Gujarati", "");
+    Transliterator* dg = Transliterator::createInstance(ID);
+    if (dg == 0) {
+        errln("FAIL: createInstance(" + ID + ") returned NULL");
+        return;
+    }
+    UnicodeString id = dg->getID();
+    if (id != ID) {
+        errln("FAIL: createInstance(" + ID + ")->getID() => " + id);
+    }
+    UnicodeString dev = CharsToUnicodeString("\\u0901\\u090B\\u0925");
+    UnicodeString guj = CharsToUnicodeString("\\u0A81\\u0A8B\\u0AA5");
+    expect(*dg, dev, guj);
+    delete dg;
 }
 
 //======================================================================

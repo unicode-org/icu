@@ -1,0 +1,106 @@
+﻿ // -*- Coding: utf-8; -*-
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// THIS IS A MACHINE-GENERATED FILE
+// Tool: dumpICUrules.bat
+// Source: \icu4j\src\com\ibm\text\resources/Transliterator_Gujarati_InterIndic.utf8.txt
+// Date: Thu Mar  1 20:03:54 2001
+//--------------------------------------------------------------------
+
+// Gujarati_InterIndic
+
+Gujarati_InterIndic {
+  Rule {
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// Date: Tue Jan 23 12:41:58 2001
+//--------------------------------------------------------------------
+
+// Gujarati-InterIndic
+
+"ઁ>\uE001;" // SIGN CANDRABINDU
+"ં>\uE002;" // SIGN ANUSVARA
+"ઃ>\uE003;" // SIGN VISARGA
+"અ>\uE005;" // LETTER A
+"આ>\uE006;" // LETTER AA
+"ઇ>\uE007;" // LETTER I
+"ઈ>\uE008;" // LETTER II
+"ઉ>\uE009;" // LETTER U
+"ઊ>\uE00A;" // LETTER UU
+"ઋ>\uE00B;" // LETTER VOCALIC R
+// ઍ>; // UNMAPPED Gujarati-InterIndic: VOWEL CANDRA E
+"એ>\uE081;" // LETTER E
+"ઐ>\uE010;" // LETTER AI
+// ઑ>; // UNMAPPED Gujarati-InterIndic: VOWEL CANDRA O
+"ઓ>\uE082;" // LETTER O
+"ઔ>\uE014;" // LETTER AU
+"ક>\uE015;" // LETTER KA
+"ખ>\uE016;" // LETTER KHA
+"ગ>\uE017;" // LETTER GA
+"ઘ>\uE018;" // LETTER GHA
+"ઙ>\uE019;" // LETTER NGA
+"ચ>\uE01A;" // LETTER CA
+"છ>\uE01B;" // LETTER CHA
+"જ>\uE01C;" // LETTER JA
+"ઝ>\uE01D;" // LETTER JHA
+"ઞ>\uE01E;" // LETTER NYA
+"ટ>\uE01F;" // LETTER TTA
+"ઠ>\uE020;" // LETTER TTHA
+"ડ>\uE021;" // LETTER DDA
+"ઢ>\uE022;" // LETTER DDHA
+"ણ>\uE023;" // LETTER NNA
+"ત>\uE024;" // LETTER TA
+"થ>\uE025;" // LETTER THA
+"દ>\uE026;" // LETTER DA
+"ધ>\uE027;" // LETTER DHA
+"ન>\uE028;" // LETTER NA
+"પ>\uE02A;" // LETTER PA
+"ફ>\uE02B;" // LETTER PHA
+"બ>\uE02C;" // LETTER BA
+"ભ>\uE02D;" // LETTER BHA
+"મ>\uE02E;" // LETTER MA
+"ય>\uE02F;" // LETTER YA
+"ર>\uE030;" // LETTER RA
+"લ>\uE032;" // LETTER LA
+"ળ>\uE033;" // LETTER LLA
+"વ>\uE035;" // LETTER VA
+"શ>\uE036;" // LETTER SHA
+"ષ>\uE037;" // LETTER SSA
+"સ>\uE038;" // LETTER SA
+"હ>\uE039;" // LETTER HA
+"઼>\uE03C;" // SIGN NUKTA
+"ઽ>\uE03D;" // SIGN AVAGRAHA
+"ા>\uE03E;" // VOWEL SIGN AA
+"િ>\uE03F;" // VOWEL SIGN I
+"ી>\uE040;" // VOWEL SIGN II
+"ુ>\uE041;" // VOWEL SIGN U
+"ૂ>\uE042;" // VOWEL SIGN UU
+"ૃ>\uE043;" // VOWEL SIGN VOCALIC R
+"ૄ>\uE044;" // VOWEL SIGN VOCALIC RR
+"ૅ>\uE045;" // VOWEL SIGN CANDRA E
+"ે>\uE084;" // VOWEL SIGN E
+"ૈ>\uE048;" // VOWEL SIGN AI
+"ૉ>\uE049;" // VOWEL SIGN CANDRA O
+"ો>\uE085;" // VOWEL SIGN O
+"ૌ>\uE04C;" // VOWEL SIGN AU
+"્>\uE04D;" // SIGN VIRAMA
+"ૐ>\uE050;" // OM
+"ૠ>\uE060;" // LETTER VOCALIC RR
+"૦>\uE066;" // DIGIT ZERO
+"૧>\uE067;" // DIGIT ONE
+"૨>\uE068;" // DIGIT TWO
+"૩>\uE069;" // DIGIT THREE
+"૪>\uE06A;" // DIGIT FOUR
+"૫>\uE06B;" // DIGIT FIVE
+"૬>\uE06C;" // DIGIT SIX
+"૭>\uE06D;" // DIGIT SEVEN
+"૮>\uE06E;" // DIGIT EIGHT
+"૯>\uE06F;" // DIGIT NINE
+
+// eof
+  }
+}

@@ -242,31 +242,19 @@ private:
     int32_t maximumContextLength;
 
     /**
-     * Dictionary of known transliterators.  Keys are <code>String</code>
-     * names, values are one of the following:
-     *
-     * <ul><li><code>Transliterator</code> objects
-     *
-     * <li><code>Class</code> objects.  Such objects must represent
-     * subclasses of <code>Transliterator</code>, and must satisfy the
-     * constraints described in <code>registerClass()</code>
-     *
-     * <li><code>RULE_BASED_PLACEHOLDER</code>, in which case the ID
-     * will have its first '-' removed and be appended to
-     * RB_RULE_BASED_PREFIX to form a resource bundle name from which
-     * the RB_RULE key is looked up to obtain the rule.
-     *
-     * <li><code>REVERSE_RULE_BASED_PLACEHOLDER</code>.  Like
-     * <code>RULE_BASED_PLACEHOLDER</code>, except the entity names in
-     * the ID are reversed, and the argument
-     * RuleBasedTransliterator.REVERSE is pased to the
-     * RuleBasedTransliterator constructor.
-     * </ul>
+     * Cache of public system transliterators.  Keys are UnicodeString
+     * names, values are CacheEntry objects.
      */
     static Hashtable* cache;
 
     /**
-     * The mutex controlling access to the cache.
+     * Like 'cache', but IDs are not public.  Internal transliterators
+     * are combined together and aliased to public IDs.
+     */
+    static Hashtable* internalCache;
+
+    /**
+     * The mutex controlling access to the caches.
      */
     static UMTX cacheMutex;
 
@@ -296,13 +284,16 @@ private:
      */
     struct CacheEntry {
         enum Type {
-            RULE_BASED_PLACEHOLDER,
-            REVERSE_RULE_BASED_PLACEHOLDER,
+            RULES_FORWARD,
+            RULES_REVERSE,
             PROTOTYPE,
             RBT_DATA,
+            ALIAS,
             NONE // Only used for uninitialized entries
         } entryType;
-        UnicodeString rbFile; // For *PLACEHOLDER
+        // NOTE: stringArg cannot go inside the union because
+        // it has a copy constructor
+        UnicodeString stringArg; // For RULES_*, ALIAS
         union {
             Transliterator* prototype; // For PROTOTYPE
             TransliterationRuleData* data; // For RBT_DATA

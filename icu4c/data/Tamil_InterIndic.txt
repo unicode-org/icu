@@ -1,0 +1,89 @@
+﻿ // -*- Coding: utf-8; -*-
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// THIS IS A MACHINE-GENERATED FILE
+// Tool: dumpICUrules.bat
+// Source: \icu4j\src\com\ibm\text\resources/Transliterator_Tamil_InterIndic.utf8.txt
+// Date: Thu Mar  1 20:03:55 2001
+//--------------------------------------------------------------------
+
+// Tamil_InterIndic
+
+Tamil_InterIndic {
+  Rule {
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// Date: Tue Jan 23 12:42:07 2001
+//--------------------------------------------------------------------
+
+// Tamil-InterIndic
+
+"ஂ>\uE002;" // SIGN ANUSVARA
+"ஃ>\uE003;" // SIGN VISARGA
+"அ>\uE005;" // LETTER A
+"ஆ>\uE006;" // LETTER AA
+"இ>\uE007;" // LETTER I
+"ஈ>\uE008;" // LETTER II
+"உ>\uE009;" // LETTER U
+"ஊ>\uE00A;" // LETTER UU
+"எ>\uE081;" // LETTER E
+"ஏ>\uE00F;" // LETTER EE
+"ஐ>\uE010;" // LETTER AI
+"ஒ>\uE082;" // LETTER O
+"ஓ>\uE013;" // LETTER OO
+"ஔ>\uE014;" // LETTER AU
+"க>\uE015;" // LETTER KA
+"ங>\uE019;" // LETTER NGA
+"ச>\uE01A;" // LETTER CA
+"ஜ>\uE01C;" // LETTER JA
+"ஞ>\uE01E;" // LETTER NYA
+"ட>\uE01F;" // LETTER TTA
+"ண>\uE023;" // LETTER NNA
+"த>\uE024;" // LETTER TA
+"ந>\uE028;" // LETTER NA
+"ன>\uE029;" // LETTER NNNA
+"ப>\uE02A;" // LETTER PA
+"ம>\uE02E;" // LETTER MA
+"ய>\uE02F;" // LETTER YA
+"ர>\uE030;" // LETTER RA
+"ற>\uE083;" // LETTER RRA
+"ல>\uE032;" // LETTER LA
+"ள>\uE033;" // LETTER LLA
+"ழ>\uE034;" // LETTER LLLA
+"வ>\uE035;" // LETTER VA
+"ஷ>\uE037;" // LETTER SSA
+"ஸ>\uE038;" // LETTER SA
+"ஹ>\uE039;" // LETTER HA
+"ா>\uE03E;" // VOWEL SIGN AA
+"ி>\uE03F;" // VOWEL SIGN I
+"ீ>\uE040;" // VOWEL SIGN II
+"ு>\uE041;" // VOWEL SIGN U
+"ூ>\uE042;" // VOWEL SIGN UU
+"ெ>\uE084;" // VOWEL SIGN E
+"ே>\uE047;" // VOWEL SIGN EE
+"ை>\uE048;" // VOWEL SIGN AI
+"ொ>\uE085;" // VOWEL SIGN O
+"ோ>\uE04B;" // VOWEL SIGN OO
+"ௌ>\uE04C;" // VOWEL SIGN AU
+"்>\uE04D;" // SIGN VIRAMA
+"ௗ>\uE057;" // AU LENGTH MARK
+"௧>\uE067;" // DIGIT ONE
+"௨>\uE068;" // DIGIT TWO
+"௩>\uE069;" // DIGIT THREE
+"௪>\uE06A;" // DIGIT FOUR
+"௫>\uE06B;" // DIGIT FIVE
+"௬>\uE06C;" // DIGIT SIX
+"௭>\uE06D;" // DIGIT SEVEN
+"௮>\uE06E;" // DIGIT EIGHT
+"௯>\uE06F;" // DIGIT NINE
+// ௰>; // UNMAPPED Tamil-InterIndic: NUMBER TEN
+// ௱>; // UNMAPPED Tamil-InterIndic: NUMBER ONE HUNDRED
+// ௲>; // UNMAPPED Tamil-InterIndic: NUMBER ONE THOUSAND
+
+// eof
+  }
+}

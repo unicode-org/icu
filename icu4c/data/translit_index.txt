@@ -1,47 +1,204 @@
 //--------------------------------------------------------------------
-//  Copyright (c) 2000, International Business Machines
-//  Corporation and others.  All Rights Reserved.
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
-//  Date        Name        Description
-//  01/13/2000  aliu        Creation.
+// THIS IS A MACHINE-GENERATED FILE
+// Tool: dumpICUrules.bat
+// Source: Transliterator_index.txt
+// Date: Fri Mar  2 12:50:49 2001
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+// N.B.: This file has been generated mechanically from the
+// corresponding ICU4J file, which is the master file that receives
+// primary updates.  The colon-delimited fields have been split into
+// separate strings.  For 'file' and 'internal' lines, the encoding
+// field has been deleted, since the encoding is processed at build
+// time in ICU4C.  Certain large rule sets not intended for general
+// use have been commented out with the notation "Java only".
 //--------------------------------------------------------------------
 
 translit_index {
-    // Map transliterator names to resource file names.  This
-    // mapping is required because transliterator names typically
-    // exceed the limits of 8.3 file names.
+  RuleBasedTransliteratorIDs {
+// Copyright (c) 2001, International Business Machines Corporation and
+// others. All Rights Reserved.
+// 
+// TRANSLITERATOR INDEX FILE.  This file lists the non-algorithmic
+// system transliterators.  It allows arbitrary mappings between
+// transliterator IDs and file names, and also allows the system to
+// define aliases for transliterators, so that "Latin-Hangul", for
+// example, can be implemented transparently as the compound
+// "Latin-Jamo;Jamo-Hangul".  Internal IDs may also be defined; these
+// are invisible to the user, but can be composed together by the
+// system to create visible transliterators.
+// 
+// Blank lines and lines beginning with '#' are ignored.
+// 
+// Lines in this file have one of the following forms (text not
+// enclosed by <> is literal):
+// 
+//   <id>:file:<resource>:<encoding>:<direction>
+//   <id>:internal:<resource>:<encoding>:<direction>
+//   <id>:alias:<getInstanceArg>
+//  
+// <id> is the ID of the system transliterator being defined.  These
+// are public IDs enumerated by Transliterator.getAvailableIDs(),
+// unless the second field is "internal".
+// 
+// <resource> is a ResourceReader resource name.  Currently these refer
+// to file names under com/ibm/text/resources.  This string is passed
+// directly to ResourceReader, together with <encoding>.
+// 
+// <encoding> is the character encoding to use when reading <resource>;
+// passed directly to ResourceReader.  E.g., "UTF8".
+// 
+// <direction> is either "FORWARD" or "REVERSE".
+// 
+// <getInstanceArg> is a string to be passed directly to
+// Transliterator.getInstance().  The returned Transliterator object
+// then has its ID changed to <id> and is returned.
 
-    RuleBasedTransliteratorIDs {
-        // This is an n x 3 array of strings that serves as an index
-        // to the system rule-based transliterator resource bundle
-        // data files.  If RBT files are installed or removed from the
-        // system this table must be updated.  For each of the n rows,
-        // the first item is the ID of the forward transliterator for
-        // the rule.  The second item is the ID of the reverse
-        // transliterator for the rule.  Some rule files only contain
-        // forward direction rules; for those, the second item is a
-        // zero-length string.  The third item is the name of the
-        // resource bundle file, a string of 8 or fewer lowercase
-        // letters or digits.  This file will be sought in the data
-        // directory within the subdirectory "translit".  IDs must
-        // have the form "From-To" or "SingleName" to work properly
-        // with the Transliterator code.
 
-        // Basic language rules
-        { "Fullwidth-Halfwidth", "Halfwidth-Fullwidth", "fullhalf" }
-        { "Latin-Arabic",        "Arabic-Latin",        "larabic"  }
-        { "Latin-Cyrillic",      "Cyrillic-Latin",      "lcyril"   }
-        { "Latin-Devanagari",    "Devanagari-Latin",    "ldevan"   }
-        { "Latin-Greek",         "Greek-Latin",         "lgreek"   }
-        { "Latin-Hebrew",        "Hebrew-Latin",        "lhebrew"  }
-        { "Latin-Jamo",          "Jamo-Latin",          "ljamo"    }
-        { "Latin-Kana",          "Kana-Latin",          "lkana"    }
-        { "Hiragana-Katakana",   "Katakana-Hiragana",   "kana"     }
+// Bidirectional rule files
 
-        // Other miscellaneous rules
-        { "StraightQuotes-CurlyQuotes", "CurlyQuotes-StraightQuotes",
-              "quotes" }
-        { "KeyboardEscape-Latin1", "", "kbdescl1" }
-        { "UnicodeName-UnicodeChar", "", "ucname" }
-    }
+{ "Fullwidth-Halfwidth", "file", "fullhalf", "FORWARD" },
+{ "Halfwidth-Fullwidth", "file", "fullhalf", "REVERSE" },
+
+{ "Latin-Arabic", "file", "larabic", "FORWARD" },
+{ "Arabic-Latin", "file", "larabic", "REVERSE" },
+
+{ "Latin-Cyrillic", "file", "lcyril", "FORWARD" },
+{ "Cyrillic-Latin", "file", "lcyril", "REVERSE" },
+
+{ "Latin-Devanagari", "file", "ldevan", "FORWARD" },
+{ "Devanagari-Latin", "file", "ldevan", "REVERSE" },
+
+{ "Latin-Greek", "file", "lgreek", "FORWARD" },
+{ "Greek-Latin", "file", "lgreek", "REVERSE" },
+
+{ "Latin-Hebrew", "file", "lhebrew", "FORWARD" },
+{ "Hebrew-Latin", "file", "lhebrew", "REVERSE" },
+
+{ "Latin-Jamo", "file", "ljamo", "FORWARD" },
+{ "Jamo-Latin", "file", "ljamo", "REVERSE" },
+
+{ "Latin-Kana", "file", "lkana", "FORWARD" },
+{ "Kana-Latin", "file", "lkana", "REVERSE" },
+
+{ "Hiragana-Katakana", "file", "kana", "FORWARD" },
+{ "Katakana-Hiragana", "file", "kana", "REVERSE" },
+
+{ "StraightQuotes-CurlyQuotes", "file", "quotes", "FORWARD" },
+{ "CurlyQuotes-StraightQuotes", "file", "quotes", "REVERSE" },
+
+// One way rules (forward only)
+
+// Java only: { "Han-Pinyin", "file", "-", "FORWARD" },
+// Java only: { "Kanji-English", "file", "-", "FORWARD" },
+// Java only: { "Kanji-OnRomaji", "file", "-", "FORWARD" },
+{ "KeyboardEscape-Latin1", "file", "kbdescl1", "FORWARD" },
+{ "UnicodeName-UnicodeChar", "file", "ucname", "FORWARD" },
+
+// Compound rules
+
+{ "Latin-Hangul", "alias", "Latin-Jamo;Jamo-Hangul", "" },
+{ "Hangul-Latin", "alias", "Hangul-Jamo;Jamo-Latin", "" },
+
+// Inter-Indic composed rules
+
+{ "Devanagari-InterIndic", "internal", "Devanagari_InterIndic", "FORWARD" },
+{ "Bengali-InterIndic", "internal", "Bengali_InterIndic", "FORWARD" },
+{ "Gurmukhi-InterIndic", "internal", "Gurmukhi_InterIndic", "FORWARD" },
+{ "Gujarati-InterIndic", "internal", "Gujarati_InterIndic", "FORWARD" },
+{ "Oriya-InterIndic", "internal", "Oriya_InterIndic", "FORWARD" },
+{ "Tamil-InterIndic", "internal", "Tamil_InterIndic", "FORWARD" },
+{ "Telugu-InterIndic", "internal", "Telugu_InterIndic", "FORWARD" },
+{ "Kannada-InterIndic", "internal", "Kannada_InterIndic", "FORWARD" },
+{ "Malayalam-InterIndic", "internal", "Malayalam_InterIndic", "FORWARD" },
+
+{ "InterIndic-Devanagari", "internal", "InterIndic_Devanagari", "FORWARD" },
+{ "InterIndic-Bengali", "internal", "InterIndic_Bengali", "FORWARD" },
+{ "InterIndic-Gurmukhi", "internal", "InterIndic_Gurmukhi", "FORWARD" },
+{ "InterIndic-Gujarati", "internal", "InterIndic_Gujarati", "FORWARD" },
+{ "InterIndic-Oriya", "internal", "InterIndic_Oriya", "FORWARD" },
+{ "InterIndic-Tamil", "internal", "InterIndic_Tamil", "FORWARD" },
+{ "InterIndic-Telugu", "internal", "InterIndic_Telugu", "FORWARD" },
+{ "InterIndic-Kannada", "internal", "InterIndic_Kannada", "FORWARD" },
+{ "InterIndic-Malayalam", "internal", "InterIndic_Malayalam", "FORWARD" },
+
+{ "Devanagari-Bengali", "alias", "Devanagari-InterIndic;InterIndic-Bengali", "" },
+{ "Devanagari-Gurmukhi", "alias", "Devanagari-InterIndic;InterIndic-Gurmukhi", "" },
+{ "Devanagari-Gujarati", "alias", "Devanagari-InterIndic;InterIndic-Gujarati", "" },
+{ "Devanagari-Oriya", "alias", "Devanagari-InterIndic;InterIndic-Oriya", "" },
+{ "Devanagari-Tamil", "alias", "Devanagari-InterIndic;InterIndic-Tamil", "" },
+{ "Devanagari-Telugu", "alias", "Devanagari-InterIndic;InterIndic-Telugu", "" },
+{ "Devanagari-Kannada", "alias", "Devanagari-InterIndic;InterIndic-Kannada", "" },
+{ "Devanagari-Malayalam", "alias", "Devanagari-InterIndic;InterIndic-Malayalam", "" },
+{ "Bengali-Devanagari", "alias", "Bengali-InterIndic;InterIndic-Devanagari", "" },
+{ "Bengali-Gurmukhi", "alias", "Bengali-InterIndic;InterIndic-Gurmukhi", "" },
+{ "Bengali-Gujarati", "alias", "Bengali-InterIndic;InterIndic-Gujarati", "" },
+{ "Bengali-Oriya", "alias", "Bengali-InterIndic;InterIndic-Oriya", "" },
+{ "Bengali-Tamil", "alias", "Bengali-InterIndic;InterIndic-Tamil", "" },
+{ "Bengali-Telugu", "alias", "Bengali-InterIndic;InterIndic-Telugu", "" },
+{ "Bengali-Kannada", "alias", "Bengali-InterIndic;InterIndic-Kannada", "" },
+{ "Bengali-Malayalam", "alias", "Bengali-InterIndic;InterIndic-Malayalam", "" },
+{ "Gurmukhi-Devanagari", "alias", "Gurmukhi-InterIndic;InterIndic-Devanagari", "" },
+{ "Gurmukhi-Bengali", "alias", "Gurmukhi-InterIndic;InterIndic-Bengali", "" },
+{ "Gurmukhi-Gujarati", "alias", "Gurmukhi-InterIndic;InterIndic-Gujarati", "" },
+{ "Gurmukhi-Oriya", "alias", "Gurmukhi-InterIndic;InterIndic-Oriya", "" },
+{ "Gurmukhi-Tamil", "alias", "Gurmukhi-InterIndic;InterIndic-Tamil", "" },
+{ "Gurmukhi-Telugu", "alias", "Gurmukhi-InterIndic;InterIndic-Telugu", "" },
+{ "Gurmukhi-Kannada", "alias", "Gurmukhi-InterIndic;InterIndic-Kannada", "" },
+{ "Gurmukhi-Malayalam", "alias", "Gurmukhi-InterIndic;InterIndic-Malayalam", "" },
+{ "Gujarati-Devanagari", "alias", "Gujarati-InterIndic;InterIndic-Devanagari", "" },
+{ "Gujarati-Bengali", "alias", "Gujarati-InterIndic;InterIndic-Bengali", "" },
+{ "Gujarati-Gurmukhi", "alias", "Gujarati-InterIndic;InterIndic-Gurmukhi", "" },
+{ "Gujarati-Oriya", "alias", "Gujarati-InterIndic;InterIndic-Oriya", "" },
+{ "Gujarati-Tamil", "alias", "Gujarati-InterIndic;InterIndic-Tamil", "" },
+{ "Gujarati-Telugu", "alias", "Gujarati-InterIndic;InterIndic-Telugu", "" },
+{ "Gujarati-Kannada", "alias", "Gujarati-InterIndic;InterIndic-Kannada", "" },
+{ "Gujarati-Malayalam", "alias", "Gujarati-InterIndic;InterIndic-Malayalam", "" },
+{ "Oriya-Devanagari", "alias", "Oriya-InterIndic;InterIndic-Devanagari", "" },
+{ "Oriya-Bengali", "alias", "Oriya-InterIndic;InterIndic-Bengali", "" },
+{ "Oriya-Gurmukhi", "alias", "Oriya-InterIndic;InterIndic-Gurmukhi", "" },
+{ "Oriya-Gujarati", "alias", "Oriya-InterIndic;InterIndic-Gujarati", "" },
+{ "Oriya-Tamil", "alias", "Oriya-InterIndic;InterIndic-Tamil", "" },
+{ "Oriya-Telugu", "alias", "Oriya-InterIndic;InterIndic-Telugu", "" },
+{ "Oriya-Kannada", "alias", "Oriya-InterIndic;InterIndic-Kannada", "" },
+{ "Oriya-Malayalam", "alias", "Oriya-InterIndic;InterIndic-Malayalam", "" },
+{ "Tamil-Devanagari", "alias", "Tamil-InterIndic;InterIndic-Devanagari", "" },
+{ "Tamil-Bengali", "alias", "Tamil-InterIndic;InterIndic-Bengali", "" },
+{ "Tamil-Gurmukhi", "alias", "Tamil-InterIndic;InterIndic-Gurmukhi", "" },
+{ "Tamil-Gujarati", "alias", "Tamil-InterIndic;InterIndic-Gujarati", "" },
+{ "Tamil-Oriya", "alias", "Tamil-InterIndic;InterIndic-Oriya", "" },
+{ "Tamil-Telugu", "alias", "Tamil-InterIndic;InterIndic-Telugu", "" },
+{ "Tamil-Kannada", "alias", "Tamil-InterIndic;InterIndic-Kannada", "" },
+{ "Tamil-Malayalam", "alias", "Tamil-InterIndic;InterIndic-Malayalam", "" },
+{ "Telugu-Devanagari", "alias", "Telugu-InterIndic;InterIndic-Devanagari", "" },
+{ "Telugu-Bengali", "alias", "Telugu-InterIndic;InterIndic-Bengali", "" },
+{ "Telugu-Gurmukhi", "alias", "Telugu-InterIndic;InterIndic-Gurmukhi", "" },
+{ "Telugu-Gujarati", "alias", "Telugu-InterIndic;InterIndic-Gujarati", "" },
+{ "Telugu-Oriya", "alias", "Telugu-InterIndic;InterIndic-Oriya", "" },
+{ "Telugu-Tamil", "alias", "Telugu-InterIndic;InterIndic-Tamil", "" },
+{ "Telugu-Kannada", "alias", "Telugu-InterIndic;InterIndic-Kannada", "" },
+{ "Telugu-Malayalam", "alias", "Telugu-InterIndic;InterIndic-Malayalam", "" },
+{ "Kannada-Devanagari", "alias", "Kannada-InterIndic;InterIndic-Devanagari", "" },
+{ "Kannada-Bengali", "alias", "Kannada-InterIndic;InterIndic-Bengali", "" },
+{ "Kannada-Gurmukhi", "alias", "Kannada-InterIndic;InterIndic-Gurmukhi", "" },
+{ "Kannada-Gujarati", "alias", "Kannada-InterIndic;InterIndic-Gujarati", "" },
+{ "Kannada-Oriya", "alias", "Kannada-InterIndic;InterIndic-Oriya", "" },
+{ "Kannada-Tamil", "alias", "Kannada-InterIndic;InterIndic-Tamil", "" },
+{ "Kannada-Telugu", "alias", "Kannada-InterIndic;InterIndic-Telugu", "" },
+{ "Kannada-Malayalam", "alias", "Kannada-InterIndic;InterIndic-Malayalam", "" },
+{ "Malayalam-Devanagari", "alias", "Malayalam-InterIndic;InterIndic-Devanagari", "" },
+{ "Malayalam-Bengali", "alias", "Malayalam-InterIndic;InterIndic-Bengali", "" },
+{ "Malayalam-Gurmukhi", "alias", "Malayalam-InterIndic;InterIndic-Gurmukhi", "" },
+{ "Malayalam-Gujarati", "alias", "Malayalam-InterIndic;InterIndic-Gujarati", "" },
+{ "Malayalam-Oriya", "alias", "Malayalam-InterIndic;InterIndic-Oriya", "" },
+{ "Malayalam-Tamil", "alias", "Malayalam-InterIndic;InterIndic-Tamil", "" },
+{ "Malayalam-Telugu", "alias", "Malayalam-InterIndic;InterIndic-Telugu", "" },
+{ "Malayalam-Kannada", "alias", "Malayalam-InterIndic;InterIndic-Kannada", "" },
+
+// eof
+  }
 }
