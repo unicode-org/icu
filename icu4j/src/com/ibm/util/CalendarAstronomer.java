@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/Attic/CalendarAstronomer.java,v $ 
- * $Date: 2000/03/10 04:17:57 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/11/18 00:33:16 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -790,7 +790,6 @@ public class CalendarAstronomer {
                              double periodDays, long epsilon, boolean next)
     {
         // Find the value of the function at the current time
-        long   lastTime  = time;
         double lastAngle = func.eval();
         
         // Find out how far we are from the desired angle
@@ -800,24 +799,55 @@ public class CalendarAstronomer {
         // which the desired angle occurs.
         double deltaT =  (deltaAngle + (next ? 0 : -PI2)) * (periodDays*DAY_MS) / PI2;
         
-        setTime(time + (long)deltaT);
+        double lastDeltaT = deltaT; // Liu
+        long startTime = time; // Liu
         
+        setTime(time + (long)deltaT);
+
         // Now iterate until we get the error below epsilon.  Throughout
         // this loop we use normPI to get values in the range -Pi to Pi,
         // since we're using them as correction factors rather than absolute angles.
         do {
             // Evaluate the function at the time we've estimated
             double angle = func.eval();
-            
+
             // Find the # of milliseconds per radian at this point on the curve
             double factor = Math.abs(deltaT / normPI(angle-lastAngle));
 
             // Correct the time estimate based on how far off the angle is
             deltaT = normPI(desired - angle) * factor;
             
-            lastTime  = time;
+            // HACK:
+            // 
+            // If abs(deltaT) begins to diverge we need to quit this loop.
+            // This only appears to happen when attempting to locate, for
+            // example, a new moon on the day of the new moon.  E.g.:
+            // 
+            // This result is correct:
+            //  newMoon(7508(Mon Jul 23 00:00:00 CST 1990,false)=Sun Jul 22 10:57:41 CST 1990
+            // 
+            // But attempting to make the same call a day earlier causes deltaT
+            // to diverge:
+            // CalendarAstronomer.timeOfAngle() diverging: 1.348508727575625E9 -> 1.3649828540224032E9
+            // newMoon(7507(Sun Jul 22 00:00:00 CST 1990,false)=Sun Jul 08 13:56:15 CST 1990
+            //
+            // As a temporary solution, we catch this specific condition and
+            // adjust our start time back by one quarter period days and try again.
+            // Liu 11/9/00
+            if (Math.abs(deltaT) > Math.abs(lastDeltaT)) {
+                if (!next) {
+                    setTime(startTime - (long) (periodDays * DAY_MS / 4));
+                    return timeOfAngle(func, desired, periodDays, epsilon, next);
+                } else {
+                    // We only have seen this with backward searches -- don't adjust
+                    // forward searches unless necessary.
+                    throw new RuntimeException("CalendarAstronomer.timeOfAngle diverging");
+                }
+            }
+
+            lastDeltaT = deltaT;
             lastAngle = angle;
-            
+
             setTime(time + (long)deltaT);
         }
         while (Math.abs(deltaT) > epsilon);
