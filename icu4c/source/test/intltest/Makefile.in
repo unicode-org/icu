@@ -36,7 +36,7 @@ tzregts.o tztest.o ucdtest.o usettest.o ustrtest.o strcase.o transtst.o strtest.
 itrbbi.o rbbiapts.o rbbitst.o ittrans.o transapi.o cpdtrtst.o unhxtrts.o hxuntrts.o \
 ufltlgts.o testutil.o transrt.o trnserr.o normconf.o sfwdchit.o \
 jamotest.o srchtest.o reptest.o biditst.o \
-itrbnf.o itrbnfrt.o
+itrbnf.o itrbnfrt.o tedadrvr.o resbtddr.o
 
 DEPS = $(OBJECTS:.o=.d)
 
