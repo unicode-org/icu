@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/TrieTest.java,v $ 
-* $Date: 2002/02/28 23:30:27 $ 
-* $Revision: 1.3 $
+* $Date: 2002/04/02 21:00:08 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -16,12 +16,16 @@ package com.ibm.icu.dev.test.util;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Trie;
 import com.ibm.icu.impl.IntTrie;
+import com.ibm.icu.impl.CharTrie;
+import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.lang.UCharacter;
 import java.io.ByteArrayInputStream;
 
 /**
-* Testing class for Trie
+* Testing class for Trie. Tests here will be simple, since both CharTrie and 
+* IntTrie are very similar and are heavily used in other parts of ICU4J.
+* Codes using Tries are expected to have detailed tests.
 * @author Syn Wee Quek
 * @since release 2.1 Jan 01 2002
 */
@@ -41,15 +45,47 @@ public final class TrieTest extends TestFmwk
     public static void main(String arg[]) 
     {
         TrieTest test = new TrieTest();
-        test.TestValues();
+        try {
+	        test.run(arg);
+        } catch (Exception e) {
+        	test.errln("Error testing trietest");
+        }
     }
     
-    public void TestValues()
+    /**
+     * Testing the constructors of the Tries
+     */
+    public void TestInit() 
     {
-        byte array[] = new byte[TRIE_1_DATA_.length << 1];
-        for (int i = 0; i < TRIE_1_DATA_.length; i ++) {
-            array[i << 1] = (byte)((TRIE_1_DATA_[i] >> 8) & 0xFF);
-            array[(i << 1) + 1] = (byte)(TRIE_1_DATA_[i] & 0xFF);
+    	byte array[] = new byte[INT_TRIE_DATA_.length << 1];
+        for (int i = 0; i < INT_TRIE_DATA_.length; i ++) {
+            array[i << 1] = (byte)((INT_TRIE_DATA_[i] >> 8) & 0xFF);
+            array[(i << 1) + 1] = (byte)(INT_TRIE_DATA_[i] & 0xFF);
+        }
+        ByteArrayInputStream inputStream    = new ByteArrayInputStream(
+                                                                     array);
+        IntDataManipulate    datamanipulate = new IntDataManipulate();
+        // chartrie should fail with int data
+        try {
+        	CharTrie chartrie = new CharTrie(inputStream, datamanipulate);
+        	errln("CharTrie should fail with Int data during construction");
+        } catch (Exception e) {
+        }
+        // inttrie should pass with int data
+        try {
+        	inputStream.reset();
+            IntTrie m_trie_ = new IntTrie(inputStream, datamanipulate);
+        } catch (Exception e) {
+            errln("Failed reading IntTrie data");
+        }	
+    }
+    
+    public void TestIntValues()
+    {
+        byte array[] = new byte[INT_TRIE_DATA_.length << 1];
+        for (int i = 0; i < INT_TRIE_DATA_.length; i ++) {
+            array[i << 1] = (byte)((INT_TRIE_DATA_[i] >> 8) & 0xFF);
+            array[(i << 1) + 1] = (byte)(INT_TRIE_DATA_[i] & 0xFF);
         }
         ByteArrayInputStream inputStream = new ByteArrayInputStream(array);
         IntTrie trie = null;
@@ -64,7 +100,7 @@ public final class TrieTest extends TestFmwk
         }
         String str      = buffer.toString();
         int    values[] = VALUE_1_;
-        internalTestValues(trie, str, values);
+        internalTestIntValues(trie, str, values);
         
         // testing invalid codepoints
         int result = 0;
@@ -72,6 +108,52 @@ public final class TrieTest extends TestFmwk
         if (result != 0) {
             errln("Error: Expected value for illegal codepoint should be 0");
         }
+        
+        for (int i = 0; i < 0xFFFF; i ++) {
+    		if (trie.getBMPValue((char)i) != trie.getCodePointValue(i)) {
+    			errln("For BMP codepoint, getBMPValue should be the same " +
+    			       "as getCodepointValue");
+    		}
+    	}
+    	for (int i = 0x10000; i < 0x10ffff; i ++) {
+    		char lead = UTF16.getLeadSurrogate(i);
+    		char trail = UTF16.getTrailSurrogate(i);
+    		int value = trie.getCodePointValue(i);
+    		if (value != trie.getSurrogateValue(lead, trail) ||
+    		    value != trie.getTrailValue(trie.getLeadValue(lead), 
+    		                                trail)) {
+    		    errln("For Non-BMP codepoints, getSurrogateValue should be "
+    		          + "the same s getCodepointValue and getTrailValue");
+    		}		
+    	}
+    }
+    
+    public void TestCharValues()
+    {
+    	CharTrie trie = null;
+    	try {
+		 	trie = UCharacterProperty.getInstance().m_trie_;
+    	} catch (Exception e) {
+    		errln("Error creating ucharacter trie");
+    	}
+    	
+    	for (int i = 0; i < 0xFFFF; i ++) {
+    		if (trie.getBMPValue((char)i) != trie.getCodePointValue(i)) {
+    			errln("For BMP codepoint, getBMPValue should be the same " +
+    			       "as getCodepointValue");
+    		}
+    	}
+    	for (int i = 0x10000; i < 0x10ffff; i ++) {
+    		char lead = UTF16.getLeadSurrogate(i);
+    		char trail = UTF16.getTrailSurrogate(i);
+    		char value = trie.getCodePointValue(i);
+    		if (value != trie.getSurrogateValue(lead, trail) ||
+    		    value != trie.getTrailValue(trie.getLeadValue(lead), 
+    		                                trail)) {
+    		    errln("For Non-BMP codepoints, getSurrogateValue should be "
+    		          + "the same s getCodepointValue and getTrailValue");
+    		}		
+    	}
     }
     
     // private class ------------------------------------------------
@@ -87,7 +169,7 @@ public final class TrieTest extends TestFmwk
     // private data members -----------------------------------------
    
     // trie data, generated from icu4c
-    private final char TRIE_1_DATA_[] = {
+    private final char INT_TRIE_DATA_[] = {
     0x5472, 0x6965, 0x0, 0x125, 0x0, 0x8c0, 0x0, 0x18c, 0x0, 0x8, 0x8, 0x8, 
 0x8, 0xf, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 
@@ -602,11 +684,11 @@ public final class TrieTest extends TestFmwk
                                      0xf0004, 0xf0006, 0xf0007, 0xf0020};
     private final int VALUE_1_[] = {0, 0x1234, 0, 0x6162, 0x3132, 0x27, 1, 
                                     0x6162, 0, 0xf, 0x10, 0x11, 0x12, 0};
-
     
     // private methods ----------------------------------------------
   
-    private void internalTestValues(IntTrie trie, String str, int values[]) 
+    private void internalTestIntValues(IntTrie trie, String str, 
+                                       int values[]) 
     {
         // try forward 
         int count = 0;
