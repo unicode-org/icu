@@ -7,6 +7,7 @@
 #include "ustrtest.h"
 #include "unicode/unistr.h"
 #include "unicode/locid.h"
+#include <iostream.h>
 #include <stdio.h>
 
 UnicodeStringTest::UnicodeStringTest()
@@ -645,10 +646,16 @@ UnicodeStringTest::TestMiscellaneous()
     if (test1 != test2)
         errln("getUChars() affected the string!");
 
+
     UTextOffset i;
-    for (i = 0; i < test2.length(); i++)
+    for (i = 0; i < test2.length(); i++){
         if (test2[i] != test4[i])
             errln(UnicodeString("getUChars() failed: strings differ at position ") + i);
+    }
+    logln("Testing the operator \"<<\" \n");
+    cout<<"Testing the \"<<\" operator---test1="<<test1<<". "<<test3<<"\n";
+    
+    
 }
 
 void
@@ -735,8 +742,18 @@ UnicodeStringTest::TestStackAllocation()
     if(!test->isBogus()) {
         errln("UnicodeString.setTo(unterminated readonly alias, length -1) does not result in isBogus()");
     }
-
+    
     delete test;
+     
+    test=new UnicodeString();
+    UChar buffer[]={0x0061, 0x0062, 0x20ac, 0x0043, 0x0042, 0x0000};
+    test->setTo(buffer, 4, 10);
+    if(test->length() !=4 || test->charAt(0) != 0x0061 || test->charAt(1) != 0x0062 ||
+        test->charAt(2) != 0x20ac || test->charAt(3) != 0x0043){
+        errln((UnicodeString)"UnicodeString.setTo(UChar*, length, capacity) does not work correctly\n" + prettify(*test));
+    }
+    delete test;
+
 
     // test the UChar32 constructor
     UnicodeString c32Test((UChar32)0x10ff2a);
