@@ -24,7 +24,7 @@ U_NAMESPACE_BEGIN
  *
  * Hashtable is an INTERNAL CLASS.
  */
-class U_COMMON_API Hashtable : public UObject {
+class U_COMMON_API Hashtable : public UMemory {
     UHashtable* hash;
 
 public:
@@ -70,27 +70,9 @@ public:
 
     const UHashElement* nextElement(int32_t& pos) const;
 
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 2.2
-     */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
-     * @draft ICU 2.2
-     */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
-
 private:
-
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
+    Hashtable(const Hashtable &other); // forbid copying of this class
+    Hashtable &operator=(const Hashtable &other); // forbid copying of this class
 };
 
 /*********************************************************************
