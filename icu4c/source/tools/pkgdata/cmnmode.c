@@ -78,11 +78,6 @@ void pkg_mode_common(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   T_FileStream_writeLine(makefile, "$(TARGET): $(CMNLIST) $(DATAFILEPATHS)\n"
                "\t$(TOOL) $(GENCMN) -n $(NAME) -c -d $(TARGETDIR) 10000000 $(CMNLIST)\n\n");
 
-#ifdef WIN32
-  T_FileStream_writeLine(makefile, "$(CMNLIST): $(LISTFILES)\n\n\n");
-# error How do I do this??
-#else
-
   if(o->hadStdin == FALSE) { /* shortcut */
     T_FileStream_writeLine(makefile, "$(CMNLIST): $(LISTFILES)\n"
                                    "\tcat $(LISTFILES) > $(CMNLIST)\n\n");
@@ -106,7 +101,4 @@ void pkg_mode_common(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
     T_FileStream_writeLine(makefile, tmp);
 
   }
-
-#endif
-
 }
