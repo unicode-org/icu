@@ -66,10 +66,10 @@ U_NAMESPACE_BEGIN
  * <pre>
  * \code
  *     // get the supported ids for GMT-08:00 (Pacific Standard Time)
- *     int32_t idsCount;
- *     const UnicodeString** ids = TimeZone::createAvailableIDs(-8 * 60 * 60 * 1000, idsCount);
+ *     UErrorCode success = U_ZERO_ERROR;
+ *     const StringEnumeration *ids = TimeZone::createEnumeration(-8 * 60 * 60 * 1000);
  *     // if no ids were returned, something is wrong. get out.
- *     if (idsCount == 0) {
+ *     if (ids == 0 || ids->count(success) == 0) {
  *         return;
  *     }
  *
@@ -77,7 +77,7 @@ U_NAMESPACE_BEGIN
  *     cout << "Current Time" << endl;
  *
  *     // create a Pacific Standard Time time zone
- *     SimpleTimeZone* pdt = new SimpleTimeZone(-8 * 60 * 60 * 1000, *(ids[0]));
+ *     SimpleTimeZone* pdt = new SimpleTimeZone(-8 * 60 * 60 * 1000, ids->unext(NULL, success)));
  *
  *     // set up rules for daylight savings time
  *     pdt->setStartRule(Calendar::APRIL, 1, Calendar::SUNDAY, 2 * 60 * 60 * 1000);
@@ -85,7 +85,6 @@ U_NAMESPACE_BEGIN
  *
  *     // create a GregorianCalendar with the Pacific Daylight time zone
  *     // and the current date and time
- *     UErrorCode success = U_ZERO_ERROR;
  *     Calendar* calendar = new GregorianCalendar( pdt, success );
  *
  *     // print out a bunch of interesting things
@@ -130,7 +129,11 @@ U_NAMESPACE_BEGIN
  *     cout << "ZONE_OFFSET: " << (calendar->get( Calendar::ZONE_OFFSET, success )/(60*60*1000)) << endl; // in hours
  *     cout << "DST_OFFSET: " << (calendar->get( Calendar::DST_OFFSET, success )/(60*60*1000)) << endl; // in hours
  *
- *     delete[] ids;
+ *     if (U_FAILURE(success)) {
+ *         cout << "An error occured. success=" << u_errorName(success) << endl;
+ *     }
+ *
+ *     delete ids;
  *     delete calendar; // also deletes pdt
  * \endcode
  * </pre>
