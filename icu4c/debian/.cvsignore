@@ -3,7 +3,7 @@ docs
 *files
 *.substvars
 libicu-dev
-libicu16
+libicu[0-9]*
 icu
 icu-locales
 icu-data
@@ -11,4 +11,4 @@ icu-i18ndata
 tmp
 icu.postinst
 icu.prerm
-libicu16.prerm
+libicu[0-9]*.p*

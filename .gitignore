@@ -25,8 +25,8 @@ icu4c/debian/icu-locales
 icu4c/debian/icu.postinst
 icu4c/debian/icu.prerm
 icu4c/debian/libicu-dev
-icu4c/debian/libicu16
-icu4c/debian/libicu16.prerm
+icu4c/debian/libicu[0-9]*
+icu4c/debian/libicu[0-9]*.p*
 icu4c/debian/tmp
 icu4c/source/Makefile
 icu4c/source/README

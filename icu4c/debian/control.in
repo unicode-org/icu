@@ -13,7 +13,7 @@ Description: International Components for Unicode (development files)
  ICU is a C++ and C library that provides robust and full-featured Unicode
  support. This package contains the development files for ICU.
  
-Package: libicu16
+Package: libicu@LIB_VERSION_MAJOR@
 Section: libs
 Architecture: any
 Depends: ${shlibs:Depends}
@@ -60,7 +60,7 @@ Description: Data for ICU (source files)
  also all the table-based converters provided in the ICU distribution.
  .
  This package contains uncompiled source data. Precompiled data are in the
- `libicu16' package.
+ `libicu@LIB_VERSION_MAJOR@' package.
 
 Package: icu-i18ndata
 Priority: extra
