@@ -264,8 +264,9 @@ int
 IEEETest::testZero(void)
 {
   int errCount = 0;
-  double        pzero           = 0.0;
-  double        nzero           = 0.0;
+  // volatile is used to fake out the compiler optimizer.  We really want to divide by 0.
+  volatile double        pzero           = 0.0;
+  volatile double        nzero           = 0.0;
 
   nzero *= -1;
 
