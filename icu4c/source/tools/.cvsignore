@@ -5,3 +5,4 @@ Makefile
 *.d
 *.pdb
 icupkg.inc
+*.plg

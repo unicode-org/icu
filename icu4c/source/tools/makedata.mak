@@ -108,7 +108,7 @@ RB_FILES = $(GENRB_SOURCE:.txt=.res)
 TRANSLIT_FILES = $(TRANSLIT_SOURCE:.txt=.res)
 
 # This target should build all the data files
-ALL : GODATA  test.dat base_test.dat test_dat.dll base_test_dat.dll base_dat.dll "$(TESTDATAOUT)\testdata.dll" "$(DLL_OUTPUT)\icudata.dll" test1.cnv test3.cnv test4.cnv GOBACK #icudata.dat
+ALL : GODATA  test.dat  "$(DLL_OUTPUT))\testdat1.dll" "$(DLL_OUTPUT))\testdat2.dll" "$(DLL_OUTPUT)\icudata.dll" test1.cnv test3.cnv test4.cnv GOBACK #icudata.dat
 	@echo All targets are up to date
 
 BRK_FILES = "$(ICUDATA)\sent.brk" "$(ICUDATA)\char.brk" "$(ICUDATA)\line.brk" "$(ICUDATA)\word.brk" "$(ICUDATA)\line_th.brk" "$(ICUDATA)\word_th.brk"
@@ -131,30 +131,25 @@ $(BRK_FILES:.brk" =.brk"
 )
 <<KEEP
 
-"$(TESTDATAOUT)\testdata.dll" :  "$(TESTDATA)\root.res" "$(TESTDATA)\te.res" "$(TESTDATA)\te_IN.res" "$(TESTDATA)\testtypes.res"
+"$(DLL_OUTPUT))\testdat1.dll" :  "$(TESTDATA)\root.res" "$(TESTDATA)\te.res" "$(TESTDATA)\te_IN.res" "$(TESTDATA)\testtypes.res" test.dat
 	@echo Building test data
- 	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -v -m dll -c -p testdata -O "$(PKGOPT)" -d "$(TESTDATAOUT)" -s "$(TESTDATA)" <<
+	@copy test.dat $(TESTDATAOUT)
+ 	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -v -m dll -c -p testdat1 -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -T "$(TESTDATAOUT)" -s "$(TESTDATA)" <<
 root.res
 te.res
 te_IN.res
 testtypes.res
-<<
-
-test_dat.dll :  test.dat
-	@echo Building test_dat.dll
- 	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -v -m dll -c -p test_dat -O "$(PKGOPT)" -d "$(ICUDATA)" -s "$(ICUDATA)" <<
 test.dat
 <<
 
-base_test_dat.dll : test.dat
-	@echo Building base_test_dat.dll
- 	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -v -m dll -c -p base_test_dat -O "$(PKGOPT)" -d "$(ICUDATA)" -s "$(ICUDATA)" <<
-test.dat
-<<
-
-base_dat.dll : test.dat
-	@echo Building base_dat.dll
- 	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -v -m dll -c -p base_dat -O "$(PKGOPT)" -d "$(ICUDATA)" -s "$(ICUDATA)" <<
+"$(DLL_OUTPUT))\testdat2.dll" :  "$(TESTDATA)\root.res" "$(TESTDATA)\te.res" "$(TESTDATA)\te_IN.res" "$(TESTDATA)\testtypes.res" test.dat
+	@echo Building test data
+	@copy test.dat $(TESTDATAOUT)
+ 	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -v -m dll -c -p testdat2 -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -T "$(TESTDATAOUT)" -s "$(TESTDATA)" <<
+root.res
+te.res
+te_IN.res
+testtypes.res
 test.dat
 <<
 
@@ -163,12 +158,6 @@ test.dat :
 	@echo Creating data file for test: $(ICUDATA) $(ICUP)
 	@set ICU_DATA=$(ICUDATA)
 	@"$(ICUTOOLS)\gentest\$(CFG)\gentest"
-
-#Targets for base_test.dat
-base_test.dat :
-	@echo Creating base data file test
-	@set ICU_DATA=$(ICUDATA)
-	@copy "$(ICUDATA)\test.dat" "$(ICUDATA)\base_test.dat"
 
 "$(ICUDATA)\sent.brk" : "$(ICUDATA)\sentLE.brk"
     copy "$(ICUDATA)\sentLE.brk" "$(ICUDATA)\sent.brk"
