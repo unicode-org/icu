@@ -697,6 +697,7 @@ DateFormatSymbols::initializeData(const Locale& locale, const char *type, UError
     }
     fShortWeekdaysCount++;
 cleanup:
+    ures_close(eras);
     ures_close(zoneRow);
     ures_close(zoneArray);
     ures_close(nonCalendarData);
