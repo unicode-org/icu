@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationParsedRuleBuilder.java,v $ 
-* $Date: 2002/11/22 01:32:57 $ 
-* $Revision: 1.11 $
+* $Date: 2002/12/11 07:13:26 $ 
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -1972,16 +1972,6 @@ final class CollationParsedRuleBuilder
 		    return finalizeAddition(t, element);  
 		}
 	}
-
-    /**
-     * Pads the argument value to a count of 4
-     * @param something value to pad
-     * @return padded something
-     */
-    private static final int paddedsize(int something) 
-    {
-    	return something + ((something % 4) != 0 ? 4 - (something % 4) : 0);
-    }    
     
     /**
      * Adds an expansion ce to the expansion vector
