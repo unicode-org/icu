@@ -83,6 +83,16 @@ typedef const char * (*UConverterGetName) (const UConverter *cnv);
  */
 typedef void (*UConverterWriteSub) (UConverterFromUnicodeArgs *pArgs, int32_t offsetIndex, UErrorCode *pErrorCode);
 
+/**
+ * For converter-specific safeClone processing
+ * If this function is not set, then ucnv_safeClone assumes that the converter has no private data that changes
+ * after the converter is done opening.
+ */
+typedef UConverter * (*UConverterSafeClone) (	const UConverter *cnv, 
+												void 			*stackBuffer,
+												int32_t 		*pBufferSize, 
+												UErrorCode 		*status);
+
 UBool CONVERSION_U_SUCCESS (UErrorCode err);
 
 void flushInternalUnicodeBuffer (UConverter * _this,
@@ -134,6 +144,7 @@ struct UConverterImpl {
     UConverterGetStarters getStarters;
     UConverterGetName getName;
     UConverterWriteSub writeSub;
+	UConverterSafeClone safeClone;
 };
 
 extern const UConverterSharedData

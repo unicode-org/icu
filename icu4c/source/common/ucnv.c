@@ -135,6 +135,63 @@ UConverter*  ucnv_openCCSID (int32_t codepage,
   return createConverter (myName, err);
 }
 
+/* Creating a temporary stack-based object that can be used in one thread, 
+and created from a converter that is shared across threads.
+*/
+
+UConverter *ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pBufferSize, UErrorCode *status)
+{
+    UConverter * localConverter;
+    int32_t bufferSizeNeeded;
+
+    if (status == NULL || U_FAILURE(*status)){
+        return 0;
+    }
+    if (!pBufferSize || !cnv){
+       *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    
+	if (cnv->sharedData->impl->safeClone != NULL) {
+			/* call the custom safeClone function for sizing */
+		bufferSizeNeeded = 0;
+		cnv->sharedData->impl->safeClone(cnv, stackBuffer, &bufferSizeNeeded, status);
+	}
+	else
+	{
+		bufferSizeNeeded = sizeof(UConverter);
+	}
+
+	if (*pBufferSize == 0){ /* 'preflighting' request - set needed size into *pBufferSize */
+		*pBufferSize = 	bufferSizeNeeded;
+		return 0;
+    }
+
+    if (*pBufferSize < bufferSizeNeeded || stackBuffer == NULL)
+    {
+		/* allocate one here...*/
+		localConverter = createConverter (ucnv_getName (cnv, status), status);
+		if (U_SUCCESS(*status))
+		{
+			*status = U_SAFECLONE_ALLOCATED_ERROR;
+		}
+    } else {
+		if (cnv->sharedData->impl->safeClone != NULL) {
+			/* call the custom safeClone function */
+			localConverter = cnv->sharedData->impl->safeClone(cnv, stackBuffer, pBufferSize, status);
+		}
+		else
+		{
+    		localConverter = (UConverter *)stackBuffer;
+    		memcpy(localConverter, cnv, sizeof(UConverter));
+			localConverter->isCopyLocal = TRUE;
+		}
+	}
+	return localConverter;    
+}
+
+
+
 /*Decreases the reference counter in the shared immutable section of the object
  *and frees the mutable part*/
 
@@ -163,7 +220,7 @@ void ucnv_close (UConverter * converter)
   };
   UErrorCode errorCode;
 
-  if (converter == NULL)
+  if (converter == NULL || converter->isCopyLocal)
   {
     return;
   }

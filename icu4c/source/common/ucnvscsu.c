@@ -55,6 +55,12 @@ U_CFUNC void
 _SCSUWriteSub(UConverterFromUnicodeArgs *pArgs,
                int32_t offsetIndex,
                UErrorCode *pErrorCode);
+U_CFUNC UConverter * 
+_SCSUSafeClone(const UConverter 	*cnv, 
+			  void *stackBuffer, 
+			  int32_t *pBufferSize, 
+			  UErrorCode *status);
+
 
 /* SCSU definitions --------------------------------------------------------- */
 
@@ -1361,6 +1367,46 @@ _SCSUWriteSub(UConverterFromUnicodeArgs *pArgs,
     }
 }
 
+/* structure for SafeClone calculations */
+struct cloneStruct
+{
+	UConverter cnv;
+	SCSUData mydata;
+};
+
+U_CFUNC UConverter * 
+_SCSUSafeClone(
+			const UConverter *cnv, 
+			void *stackBuffer, 
+			int32_t *pBufferSize, 
+			UErrorCode *status)
+{
+	struct cloneStruct * localClone;
+	int32_t bufferSizeNeeded = sizeof(struct cloneStruct);
+
+    if (U_FAILURE(*status)){
+        return 0;
+    }
+	
+	if (*pBufferSize == 0){ /* 'preflighting' request - set needed size into *pBufferSize */
+		*pBufferSize = 	bufferSizeNeeded;
+		return 0;
+    }
+
+    localClone = (struct cloneStruct *)stackBuffer;
+    memcpy(&localClone->cnv, cnv, sizeof(UConverter));
+	localClone->cnv.isCopyLocal = TRUE;
+	
+	memcpy(&localClone->mydata, cnv->extraInfo, sizeof(SCSUData));
+	localClone->cnv.extraInfo = &localClone->mydata;
+
+	return &localClone->cnv;
+}
+
+
+
+
+
 static const UConverterImpl _SCSUImpl={
     UCNV_SCSU,
 
@@ -1379,7 +1425,8 @@ static const UConverterImpl _SCSUImpl={
 
     NULL,
     _SCSUGetName,
-    _SCSUWriteSub
+    _SCSUWriteSub,
+	_SCSUSafeClone
 };
 
 static const UConverterStaticData _SCSUStaticData={

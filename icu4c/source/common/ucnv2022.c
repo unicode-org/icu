@@ -313,6 +313,7 @@ static void _ISO2022Close(UConverter *converter);
 static void _ISO2022Reset(UConverter *converter, UConverterResetChoice choice);
 static const char* _ISO2022getName(const UConverter* cnv);
 U_CFUNC void _ISO_2022_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorCode *err) ;
+U_CFUNC UConverter * _ISO_2022_SafeClone(const UConverter 	*cnv, void *stackBuffer, int32_t *pBufferSize, UErrorCode *status);
 /************ protos of functions for setting the initial state *********************/
 static void setInitialStateToUnicodeJPCN(UConverter* converter,UConverterDataISO2022 *myConverterData);
 static void setInitialStateFromUnicodeJPCN(UConverter* converter,UConverterDataISO2022 *myConverterData);
@@ -337,7 +338,9 @@ static const UConverterImpl _ISO2022Impl={
     T_UConverter_getNextUChar_ISO_2022,
     
     NULL,
-    _ISO2022getName
+    _ISO2022getName,
+	_ISO_2022_WriteSub,
+	_ISO_2022_SafeClone
 };
             
 const UConverterStaticData _ISO2022StaticData={
@@ -388,7 +391,8 @@ static const UConverterImpl _ISO2022JPImpl={
     
     NULL,
     _ISO2022getName,
-    _ISO_2022_WriteSub
+    _ISO_2022_WriteSub,
+	_ISO_2022_SafeClone
 };
 const UConverterStaticData _ISO2022JPStaticData={
     sizeof(UConverterStaticData),
@@ -436,7 +440,8 @@ static const UConverterImpl _ISO2022KRImpl={
     
     NULL,
     _ISO2022getName,
-    _ISO_2022_WriteSub
+    _ISO_2022_WriteSub,
+	_ISO_2022_SafeClone
 };
 const UConverterStaticData _ISO2022KRStaticData={
     sizeof(UConverterStaticData),
@@ -484,8 +489,8 @@ static const UConverterImpl _ISO2022CNImpl={
     
     NULL,
     _ISO2022getName,
-    _ISO_2022_WriteSub
-    
+    _ISO_2022_WriteSub,
+	_ISO_2022_SafeClone    
 };
 const UConverterStaticData _ISO2022CNStaticData={
     sizeof(UConverterStaticData),
@@ -3097,4 +3102,41 @@ _ISO_2022_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorC
     ucnv_cbFromUWriteBytes(args,
                            buffer, (int32_t)(p - buffer),
                            offsetIndex, err);
+}
+
+/* structure for SafeClone calculations */
+struct cloneStruct
+{
+	UConverter cnv;
+	UConverterDataISO2022 mydata;
+};
+
+
+U_CFUNC UConverter * 
+_ISO_2022_SafeClone(
+			const UConverter *cnv, 
+			void *stackBuffer, 
+			int32_t *pBufferSize, 
+			UErrorCode *status)
+{
+	struct cloneStruct * localClone;
+	int32_t bufferSizeNeeded = sizeof(struct cloneStruct);
+
+    if (U_FAILURE(*status)){
+        return 0;
+    }
+	
+	if (*pBufferSize == 0){ /* 'preflighting' request - set needed size into *pBufferSize */
+		*pBufferSize = 	bufferSizeNeeded;
+		return 0;
+    }
+
+    localClone = (struct cloneStruct *)stackBuffer;
+    memcpy(&localClone->cnv, cnv, sizeof(UConverter));
+	localClone->cnv.isCopyLocal = TRUE;
+	
+	memcpy(&localClone->mydata, cnv->extraInfo, sizeof(UConverterDataISO2022));
+	localClone->cnv.extraInfo = &localClone->mydata;
+
+	return &localClone->cnv;
 }
