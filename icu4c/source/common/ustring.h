@@ -201,7 +201,7 @@ U_CAPI char* U_EXPORT2 u_austrcpy(char *s1,
 #   define U_STRING_DECL(var, cs, length) static const UChar var[(length)+1]={ (const UChar *)cs }
 #   define U_STRING_INIT(var, cs, length)
 #else
-#   define U_STRING_DECL(var, cs, length) static const UChar var[(length)+1]
+#   define U_STRING_DECL(var, cs, length) static UChar var[(length)+1]
 #   define U_STRING_INIT(var, cs, length) u_charsToUChars(cs, var, length+1)
 #endif
 
