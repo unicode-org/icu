@@ -27,8 +27,6 @@ static void TestPUtilAPI(){
 
     double  n1=0.0, y1=0.0, expn1, expy1;
     double  value1 = 0.021;
-    int32_t hi=0;
-    uint32_t lo=0;
     UVersionInfo versionArray = {0x01, 0x00, 0x02, 0x02};
     char versionString[17]; /* xxx.xxx.xxx.xxx\0 */
     char *str=0;
@@ -403,6 +401,6 @@ addPUtilTest(TestNode** root)
 {
     addTest(root, &TestPUtilAPI,       "putiltst/TestPUtilAPI");
 /*    addTest(root, &testIEEEremainder,  "putiltst/testIEEEremainder"); */
-    addTest(root, &TestErrorName, "putiltst/TestErrorName()");
+    addTest(root, &TestErrorName, "putiltst/TestErrorName");
 }
 

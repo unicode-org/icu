@@ -41,5 +41,6 @@ void warning (uint32_t linenumber, const char *msg, ...);
 
 /* Show warnings? */
 U_CFUNC void setShowWarning(UBool val);
-U_CFUNC UBool getShowWarning();
+U_CFUNC UBool getShowWarning(void);
+
 #endif
