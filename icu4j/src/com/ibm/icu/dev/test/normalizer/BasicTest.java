@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/BasicTest.java,v $
- * $Date: 2003/06/03 18:49:30 $
- * $Revision: 1.31 $
+ * $Date: 2003/06/09 23:56:32 $
+ * $Revision: 1.32 $
  *
  *****************************************************************************************
  */
@@ -768,6 +768,33 @@ public class BasicTest extends TestFmwk {
                     + "' ("  + hex(new String(output)) + ")" );
             }
         }
+        output = new char[1];
+           for (int i = 0; i < tests.length; i++)
+           {
+               char[] input = Utility.unescape(tests[i][0]).toCharArray();
+               String expect = Utility.unescape(tests[i][outCol]);
+
+               logln("Normalizing '" + new String(input) + "' (" +
+                           hex(new String(input)) + ")" );
+               int reqLength=0;
+               while(true){
+                   try{
+                       reqLength=Normalizer.decompose(input,0,input.length,output,0,output.length, mode==Normalizer.NFKD,0);
+                       if(reqLength<=output.length ){
+                           break;
+                       }
+                   }catch(IndexOutOfBoundsException e){
+                       output= new char[Integer.parseInt(e.getMessage())];
+                       continue;
+                   }
+               }
+               if (!expect.equals(new String(output,0,reqLength))) {
+                   errln("FAIL: case " + i
+                       + " expected '" + expect + "' (" + hex(expect) + ")"
+                       + " but got '" + new String(output)
+                       + "' ("  + hex(new String(output)) + ")" );
+               }
+           }
     }
 
     private void composeTest(Normalizer.Mode mode,
@@ -799,6 +826,33 @@ public class BasicTest extends TestFmwk {
             while(true){
                 try{
                     reqLength=Normalizer.compose(input,output, mode==Normalizer.NFKC,0);
+                    if(reqLength<=output.length ){
+                        break;
+                    }
+                }catch(IndexOutOfBoundsException e){
+                    output= new char[Integer.parseInt(e.getMessage())];
+                    continue;
+                }
+            }
+            if (!expect.equals(new String(output,0,reqLength))) {
+                errln("FAIL: case " + i
+                    + " expected '" + expect + "' (" + hex(expect) + ")"
+                    + " but got '" + new String(output)
+                    + "' ("  + hex(new String(output)) + ")" );
+            }
+        }
+        output = new char[1];
+        for (int i = 0; i < tests.length; i++)
+        {
+            char[] input = Utility.unescape(tests[i][0]).toCharArray();
+            String expect = Utility.unescape(tests[i][outCol]);
+
+            logln("Normalizing '" + new String(input) + "' (" +
+                        hex(new String(input)) + ")" );
+            int reqLength=0;
+            while(true){
+                try{
+                    reqLength=Normalizer.compose(input,0,input.length, output, 0, output.length, mode==Normalizer.NFKC,0);
                     if(reqLength<=output.length ){
                         break;
                     }
@@ -1345,6 +1399,18 @@ public class BasicTest extends TestFmwk {
             if(!out.equals(s)) {
                 errln("error in Normalizer::normalize(UNORM_NONE)");
             }
+            ch = 0x1D15E;
+            String exp = "\\U0001D157\\U0001D165";
+            String ns = Normalizer.normalize(ch,Normalizer.NFC);
+            if(!ns.equals(Utility.unescape(exp))){
+                errln("error in Normalizer.normalize(int,Mode)");
+            }
+            ns = Normalizer.normalize(ch,Normalizer.NFC,0);
+            if(!ns.equals(Utility.unescape(exp))){
+                errln("error in Normalizer.normalize(int,Mode,int)");
+            }
+            
+            
         }catch(Exception e){
             throw e;
         }
@@ -1858,14 +1924,14 @@ public class BasicTest extends TestFmwk {
 	    int[] startEnd = new int[2];
 	    for(i=0; i<iI.length; ++i) {
 	        if(NormalizerImpl.getCanonStartSet(iI[i], sset)) {
-	            count=sset.countSerializedRanges();
+	            count=sset.countRanges();
 	            for(j=0; j<count; ++j) {
-	                sset.getSerializedRange(j, startEnd);
+	                sset.getRange(j, startEnd);
 	                set.add(startEnd[0], startEnd[1]);
 	            }
 	        }
 	    }
-	
+
 	    // test all of these precomposed characters
 	    UnicodeSetIterator it = new UnicodeSetIterator(set);
 	    while(it.nextRange() && it.codepoint!=UnicodeSetIterator.IS_STRING) {
@@ -1878,7 +1944,6 @@ public class BasicTest extends TestFmwk {
 //	                errln("Normalizer::decompose(U+%04x) failed: %s", start, u_errorName(errorCode));
 //	                return;
 //	            }
-	
 	            for(k=0; k<opt.length; ++k) {
 	                // test Normalizer::compare
 
@@ -1988,6 +2053,11 @@ public class BasicTest extends TestFmwk {
 	        // if a code point is in NFD but its case folding is not, then
 	        // unorm_compare will also fail
 	        if(isNFD && Normalizer.YES!=Normalizer.quickCheck(s, Normalizer.NFD,0)) {
+	            ++count;
+	            errln("U+"+hex(c)+": case-folding may un-FCD a string (folding options 0x"+hex(foldingOptions)+")");
+	        }
+	        // for improving coverage
+	        if(isNFD && Normalizer.YES!=Normalizer.quickCheck(s, Normalizer.NFD)) {
 	            ++count;
 	            errln("U+"+hex(c)+": case-folding may un-FCD a string (folding options 0x"+hex(foldingOptions)+")");
 	        }
@@ -2644,4 +2714,45 @@ public class BasicTest extends TestFmwk {
     		} 
     	}
     }  
+    
+    public void TestGetNX(){
+        UnicodeSet set = NormalizerImpl.getNX(1 /*NormalizerImpl.NX_HANGUL*/);
+        if(!set.contains(0xac01)){
+            errln("getNX did not return correct set for NX_HANGUL");
+        }
+        
+        set = NormalizerImpl.getNX(2/*NormalizerImpl.NX_CJK_COMPAT*/);
+        if(!set.contains('\uFA20')){
+            errln("getNX did not return correct set for NX_CJK_COMPAT");
+        }
+    }
+    public void TestSerializedSet(){
+        USerializedSet sset=new USerializedSet();
+        UnicodeSet set = new UnicodeSet();
+        int start, end;
+    
+        // collect all sets into one for contiguous output
+        int[] startEnd = new int[2];
+
+        if(NormalizerImpl.getCanonStartSet(0x0130, sset)) {
+            int count=sset.countRanges();
+            for(int j=0; j<count; ++j) {
+                sset.getRange(j, startEnd);
+                set.add(startEnd[0], startEnd[1]);
+            }
+        }
+       
+
+        // test all of these precomposed characters
+        UnicodeSetIterator it = new UnicodeSetIterator(set);
+        while(it.nextRange() && it.codepoint!=UnicodeSetIterator.IS_STRING) {
+            start=it.codepoint;
+            end=it.codepointEnd;
+            while(start<=end) {
+                if(!sset.contains(start)){
+                    errln("USerializedSet.contains failed for "+Utility.hex(start,8));
+                }
+            }
+        }
+    }
 }
