@@ -405,8 +405,8 @@ public class XMLComparator {
     
     public Document getFullyResolvedLocale(String localeName,String fileName){
         // here we assume that "_" is the delimiter
-        Document doc = parse(localeName);
-        String temp = localeName;    
+        Document doc = parse(fileName);
+        String temp = fileName;    
 		if((temp.indexOf("icu")>=0 ) || (temp.indexOf("jdk")>=0)){
 		    // OK we have a posix style locale data
 		    // merge all data in inheritence tree into goldDoc
@@ -417,16 +417,15 @@ public class XMLComparator {
 		           mergeElements(doc.getDocumentElement(),parentDoc.getDocumentElement());
 		        }
 		    }
-		}
-        
-        String rootFileName="" ;
-        if(fileName.lastIndexOf(File.pathSeparatorChar)!=-1){
-            rootFileName = fileName.substring(0,fileName.lastIndexOf(File.pathSeparatorChar)+1);
-        }
-        rootFileName = rootFileName+"root.xml";        
-		Document rootDoc = parse(rootFileName);
+            String rootFileName="" ;
+            if(fileName.lastIndexOf(File.separatorChar)!=-1){
+                rootFileName = fileName.substring(0,fileName.lastIndexOf(File.separatorChar)+1);
+            }
+            rootFileName = rootFileName+"root.xml";        
+            Document rootDoc = parse(rootFileName);
 
-		mergeElements(doc.getDocumentElement(),rootDoc.getDocumentElement());
+            mergeElements(doc.getDocumentElement(),rootDoc.getDocumentElement());
+		}
         return doc;
     }
     public boolean compare(String goldFileName, String goldKey, 
