@@ -11,11 +11,6 @@
 #include "uhash.h"
 #include "umemstrm.h"
 #include "unewdata.h"
-#ifdef WIN32
-#include <direct.h>
-#else
-#include <unistd.h>
-#endif
 
 #define paddedsize(something) ((something)+((((something)%4)!=0)?(4-(something)%4):0))
 
