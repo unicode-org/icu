@@ -47,6 +47,7 @@ protected:
      * returned by calls to next on the specified iterator
      */
     int32_t *getOrders(CollationElementIterator &iter, int32_t &orderLength);
+    UCollationResult compareUsingPartials(UCollator *coll, const UChar source[], int32_t sLen, const UChar target[], int32_t tLen, int32_t pieceSize, UErrorCode &status);
 
 };
 
