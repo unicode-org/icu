@@ -6,7 +6,7 @@
 // ***************************************************************************
 
 es__TRADITIONAL {
-    Version { "1.0" }
+    Version { "2.0" }
     CollationElements { 
         Version { "1.0" }
         Sequence { "& N < n\u0303<<< N\u0303"

@@ -6,7 +6,7 @@
 // ***************************************************************************
 
 ar_MA {
-    Version{ "1.0" }
+    Version{ "2.0" }
 //    LocaleString { "ar_MA" }
 //    ShortCountry { "MAR" }
     LocaleID:int { 0x1801 }

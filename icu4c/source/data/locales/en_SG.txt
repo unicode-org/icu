@@ -5,13 +5,13 @@
 // *
 // ***************************************************************************
 //
-// $Revision: 1.6 $ 
+// $Revision: 1.7 $ 
 // $Tag: 
 // Singapore English locale: Data By Syn Wee Quek
 
 en_SG {
 
-    Version { "1.0" }
+    Version { "2.0" }
     DateTimePatterns {
         "a hh:mm:ss",
         "a hh:mm:ss",

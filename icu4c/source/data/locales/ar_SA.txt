@@ -6,7 +6,7 @@
 // ***************************************************************************
 
 ar_SA {
-    Version{"1.0"}
+    Version{"2.0"}
 //    LocaleString { "ar_SA" }
 //    ShortCountry { "SAU" }
     LocaleID:int { 0x0401 }

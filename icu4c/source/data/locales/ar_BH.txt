@@ -6,7 +6,7 @@
 // ***************************************************************************
 
 ar_BH {
-    Version{"1.0"}
+    Version{"2.0"}
 //    LocaleString { "ar_BH" }
 //    ShortCountry { "BHR" }
     LocaleID:int { 0x3c01 }
