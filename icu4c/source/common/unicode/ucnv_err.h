@@ -77,7 +77,7 @@
 #define UCNV_ESCAPE_C         "C"
 #define UCNV_ESCAPE_XML_DEC   "D"
 #define UCNV_ESCAPE_XML_HEX   "X"
-#define UCNV_ESCAPE_CODEPOINT "U"
+#define UCNV_ESCAPE_UNICODE   "U"
 
 /** 
  * The process condition code to be used with the callbacks.  
