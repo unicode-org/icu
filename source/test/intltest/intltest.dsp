@@ -317,6 +317,10 @@ SOURCE=.\sfwdchit.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\srchtest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\strtest.cpp
 # End Source File
 # Begin Source File
@@ -646,6 +650,10 @@ SOURCE=.\sdtfmtts.h
 # Begin Source File
 
 SOURCE=.\sfwdchit.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\srchtest.h
 # End Source File
 # Begin Source File
 

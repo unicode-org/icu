@@ -37,6 +37,7 @@
 #include "tstnorm.h"
 #include "normconf.h"
 #include "thcoll.h"
+#include "srchtest.h"
 
 #include "lcukocol.h"
 
@@ -273,13 +274,23 @@ void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &n
         }
         break;
 
-        case 18: //all
+    case 18: //all
         name = "LotusCollationTest";
 
         name = "LotusCollationKoreanTest"; 
         if (exec) {
             logln("LotusCollationKoreanTest---"); logln("");
             LotusCollationKoreanTest test;
+            callTest( test, par );
+        }
+        break;
+
+    case 19:
+        name = "StringSearchTest"; 
+        if (exec) {
+            logln("StringSearchTest---"); 
+            
+            StringSearchTest test;
             callTest( test, par );
         }
         break;
