@@ -1,4 +1,5 @@
-# CaseFolding-4.txt
+# CaseFolding-3.2.0.txt
+# Date: 2002-03-22,20:54:33 GMT [MD]
 #
 # Case Folding Properties
 #
@@ -15,7 +16,7 @@
 #
 # NOTE: case folding does not preserve normalization formats!
 #
-# For information on case folding, see 
+# For information on case folding, see
 # UTR #21 Case Mappings, at http://www.unicode.org/unicode/reports/tr21/
 #
 # ================================================================================
@@ -29,15 +30,16 @@
 # C: common case folding, common mappings shared by both simple and full mappings.
 # F: full case folding, mappings that cause strings to grow in length. Multiple characters are separated by spaces.
 # S: simple case folding, mappings to single characters where different from F.
-# I: special case for dotted uppercase I and dotless lowercase i
-#    - If this mapping is included, the result is case-insensitive, but dotless and dotted I's are not distinguished.
-#    - If this mapping is excluded, the result is not fully case-insensitive, but dotless and dotted I's are distinguished.
+# T: special case for uppercase I and dotted uppercase I
+#    - For non-Turkic languages, this mapping is normally not used.
+#    - For Turkic languages (tr, az), this mapping can be used instead of the normal mapping for these characters.
 #
 # Usage:
-#  A. To do a simple case folding, use the mappings with status C + S + I.
-#  B. To do a full case folding, use the mappings with status C + F + I.
-#    The mappings with status I can be omitted depending on the desired case-folding
-#    behavior. (The default option is to retain them.)
+#  A. To do a simple case folding, use the mappings with status C + S.
+#  B. To do a full case folding, use the mappings with status C + F.
+#
+#    The mappings with status T can be used or omitted depending on the desired case-folding
+#    behavior. (The default option is to exclude them.)
 #
 # =================================================================
 
@@ -50,6 +52,7 @@
 0047; C; 0067; # LATIN CAPITAL LETTER G
 0048; C; 0068; # LATIN CAPITAL LETTER H
 0049; C; 0069; # LATIN CAPITAL LETTER I
+0049; T; 0131; # LATIN CAPITAL LETTER I
 004A; C; 006A; # LATIN CAPITAL LETTER J
 004B; C; 006B; # LATIN CAPITAL LETTER K
 004C; C; 006C; # LATIN CAPITAL LETTER L
@@ -123,8 +126,8 @@
 012A; C; 012B; # LATIN CAPITAL LETTER I WITH MACRON
 012C; C; 012D; # LATIN CAPITAL LETTER I WITH BREVE
 012E; C; 012F; # LATIN CAPITAL LETTER I WITH OGONEK
-0130; I; 0069; # LATIN CAPITAL LETTER I WITH DOT ABOVE
-0131; I; 0069; # LATIN SMALL LETTER DOTLESS I
+0130; F; 0069 0307; # LATIN CAPITAL LETTER I WITH DOT ABOVE
+0130; T; 0069; # LATIN CAPITAL LETTER I WITH DOT ABOVE
 0132; C; 0133; # LATIN CAPITAL LIGATURE IJ
 0134; C; 0135; # LATIN CAPITAL LETTER J WITH CIRCUMFLEX
 0136; C; 0137; # LATIN CAPITAL LETTER K WITH CEDILLA
@@ -250,6 +253,7 @@
 021A; C; 021B; # LATIN CAPITAL LETTER T WITH COMMA BELOW
 021C; C; 021D; # LATIN CAPITAL LETTER YOGH
 021E; C; 021F; # LATIN CAPITAL LETTER H WITH CARON
+0220; C; 019E; # LATIN CAPITAL LETTER N WITH LONG RIGHT LEG
 0222; C; 0223; # LATIN CAPITAL LETTER OU
 0224; C; 0225; # LATIN CAPITAL LETTER Z WITH HOOK
 0226; C; 0227; # LATIN CAPITAL LETTER A WITH DOT ABOVE
@@ -300,6 +304,7 @@
 03D1; C; 03B8; # GREEK THETA SYMBOL
 03D5; C; 03C6; # GREEK PHI SYMBOL
 03D6; C; 03C0; # GREEK PI SYMBOL
+03D8; C; 03D9; # GREEK LETTER ARCHAIC KOPPA
 03DA; C; 03DB; # GREEK LETTER STIGMA
 03DC; C; 03DD; # GREEK LETTER DIGAMMA
 03DE; C; 03DF; # GREEK LETTER KOPPA
@@ -381,6 +386,7 @@
 047C; C; 047D; # CYRILLIC CAPITAL LETTER OMEGA WITH TITLO
 047E; C; 047F; # CYRILLIC CAPITAL LETTER OT
 0480; C; 0481; # CYRILLIC CAPITAL LETTER KOPPA
+048A; C; 048B; # CYRILLIC CAPITAL LETTER SHORT I WITH TAIL
 048C; C; 048D; # CYRILLIC CAPITAL LETTER SEMISOFT SIGN
 048E; C; 048F; # CYRILLIC CAPITAL LETTER ER WITH TICK
 0490; C; 0491; # CYRILLIC CAPITAL LETTER GHE WITH UPTURN
@@ -409,8 +415,11 @@
 04BE; C; 04BF; # CYRILLIC CAPITAL LETTER ABKHASIAN CHE WITH DESCENDER
 04C1; C; 04C2; # CYRILLIC CAPITAL LETTER ZHE WITH BREVE
 04C3; C; 04C4; # CYRILLIC CAPITAL LETTER KA WITH HOOK
+04C5; C; 04C6; # CYRILLIC CAPITAL LETTER EL WITH TAIL
 04C7; C; 04C8; # CYRILLIC CAPITAL LETTER EN WITH HOOK
+04C9; C; 04CA; # CYRILLIC CAPITAL LETTER EN WITH TAIL
 04CB; C; 04CC; # CYRILLIC CAPITAL LETTER KHAKASSIAN CHE
+04CD; C; 04CE; # CYRILLIC CAPITAL LETTER EM WITH TAIL
 04D0; C; 04D1; # CYRILLIC CAPITAL LETTER A WITH BREVE
 04D2; C; 04D3; # CYRILLIC CAPITAL LETTER A WITH DIAERESIS
 04D4; C; 04D5; # CYRILLIC CAPITAL LIGATURE A IE
@@ -431,6 +440,14 @@
 04F2; C; 04F3; # CYRILLIC CAPITAL LETTER U WITH DOUBLE ACUTE
 04F4; C; 04F5; # CYRILLIC CAPITAL LETTER CHE WITH DIAERESIS
 04F8; C; 04F9; # CYRILLIC CAPITAL LETTER YERU WITH DIAERESIS
+0500; C; 0501; # CYRILLIC CAPITAL LETTER KOMI DE
+0502; C; 0503; # CYRILLIC CAPITAL LETTER KOMI DJE
+0504; C; 0505; # CYRILLIC CAPITAL LETTER KOMI ZJE
+0506; C; 0507; # CYRILLIC CAPITAL LETTER KOMI DZJE
+0508; C; 0509; # CYRILLIC CAPITAL LETTER KOMI LJE
+050A; C; 050B; # CYRILLIC CAPITAL LETTER KOMI NJE
+050C; C; 050D; # CYRILLIC CAPITAL LETTER KOMI SJE
+050E; C; 050F; # CYRILLIC CAPITAL LETTER KOMI TJE
 0531; C; 0561; # ARMENIAN CAPITAL LETTER AYB
 0532; C; 0562; # ARMENIAN CAPITAL LETTER BEN
 0533; C; 0563; # ARMENIAN CAPITAL LETTER GIM
