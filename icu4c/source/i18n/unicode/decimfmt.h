@@ -998,7 +998,7 @@ public:
                                        UParseError& parseError,
                                        UErrorCode& status);
 
-    /*
+    /**
      * Apply the given pattern to this Format object.
      *
      * @param pattern   The localized pattern to be applied.

@@ -62,12 +62,12 @@
  * <h2><a name="Module">Module List</h2>
  * <table border="1" cols="3" align="center">
  *   <tr>
- *     <td><strong>Description</strong></td>
+ *     <td><strong>Module Name</strong></td>
  *     <td><strong>C</strong></td>
  *     <td><strong>C++</strong></td>
  *   </tr>
  *   <tr>
- *     <td>Basic types and constants</td>
+ *     <td>Basic Types and Constants</td>
  *     <td>utypes.h</td>
  *     <td>utypes.h</td>
  *   </tr>
@@ -77,14 +77,19 @@
  *     <td>UnicodeString, CharacterIterator</td>
  *   </tr>
  *   <tr>
- *     <td>Unicode character<br>properties and names</td>
+ *     <td>Unicode Character<br>Properties and Names</td>
  *     <td>uchar.h</td>
- *     <td>uchar.h C API<br>(the C++ Unicode class is deprecated)</td>
+ *     <td>uchar.h C API</td>
  *   </tr>
  *   <tr>
- *     <td>Codepage conversion</td>
+ *     <td>Codepage Conversion</td>
  *     <td>ucnv.h</td>
- *     <td>ucnv.h C API<br>(UnicodeConverter is deprecated)</td>
+ *     <td>ucnv.h C API</td>
+ *   </tr>
+ *   <tr>
+ *     <td>Unicode Text Compression</td>
+ *     <td>ucnv.h<br>(encoding name "SCSU" or "BOCU-1")</td>
+ *     <td>ucnv.h C API</td>
  *   </tr>
  *   <tr>
  *     <td>Locales </td>
@@ -97,14 +102,19 @@
  *     <td>ResourceBundle</td>
  *   </tr>
  *   <tr>
- *     <td>Date and Time Formatting</td>
- *     <td>udat.h</td>
- *     <td>DateFormat</td>
+ *     <td>Normalization</td>
+ *     <td>unorm.h</td>
+ *     <td>Normalizer</td>
  *   </tr>
  *   <tr>
  *     <td>Calendars</td>
  *     <td>ucal.h</td>
  *     <td>Calendar</td>
+ *   </tr>
+ *   <tr>
+ *     <td>Date and Time Formatting</td>
+ *     <td>udat.h</td>
+ *     <td>DateFormat</td>
  *   </tr>
  *   <tr>
  *     <td>Message Formatting</td>
@@ -117,34 +127,19 @@
  *     <td>NumberFormat</td>
  *   </tr>
  *   <tr>
- *     <td>Normalization</td>
- *     <td>unorm.h</td>
- *     <td>Normalizer</td>
+ *     <td>Number Spellout<br>(Rule Based Number Formatting)</td>
+ *     <td>unum.h<br>(use UNUM_SPELLOUT)</td>
+ *     <td>RuleBasedNumberFormat</td>
  *   </tr>
  *   <tr>
- *     <td>Transliteration</td>
+ *     <td>Text Transformation<br>(Transliteration)</td>
  *     <td>utrans.h</td>
  *     <td>Transliterator</td>
  *   </tr>
  *   <tr>
  *     <td>Bidirectional Algorithm</td>
  *     <td>ubidi.h</td>
- *     <td>ubidi.h C API<br>(BiDi is deprecated)</td>
- *   </tr>
- *   <tr>
- *     <td>Collation and Searching</td>
- *     <td>ucol.h, usearch.h</td>
- *     <td>Collator, StringSearch</td>
- *   </tr>
- *   <tr>
- *     <td>Text boundary analysis<br>(Break Iteration)</td>
- *     <td>ubrk.h</td>
- *     <td>BreakIterator</td>
- *   </tr>
- *   <tr>
- *     <td>Unicode Text Compression</td>
- *     <td>ucnv.h<br>(encoding name "SCSU")<br>(scsu.h is deprecated)</td>
- *     <td>ucnv.h C API</td>
+ *     <td>ubidi.h C API</td>
  *   </tr>
  *   <tr>
  *     <td>Arabic Shaping</td>
@@ -152,12 +147,22 @@
  *     <td>ushape.h C API</td>
  *   </tr>
  *   <tr>
- *     <td>Number Spellout/Rule based number format</td>
- *     <td>unum.h using UNUM_SPELLOUT</td>
- *     <td>RuleBasedNumberFormat</td>
+ *     <td>Collation</td>
+ *     <td>ucol.h</td>
+ *     <td>Collator</td>
  *   </tr>
  *   <tr>
- *     <td>Unicode set</td>
+ *     <td>String Searching</td>
+ *     <td>usearch.h</td>
+ *     <td>StringSearch</td>
+ *   </tr>
+ *   <tr>
+ *     <td>Text Boundary Analysis<br>(Break Iteration)</td>
+ *     <td>ubrk.h</td>
+ *     <td>BreakIterator</td>
+ *   </tr>
+ *   <tr>
+ *     <td>Unicode Set</td>
  *     <td>uset.h</td>
  *     <td>UnicodeSet</td>
  *   </tr>
