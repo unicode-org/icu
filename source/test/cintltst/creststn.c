@@ -166,19 +166,21 @@ static void TestDecodedBundle(void);
 
 void addNEWResourceBundleTest(TestNode** root)
 {
-    addTest(root, &TestEmptyBundle,     "tsutil/creststn/TestEmptyBundle");
-    addTest(root, &TestConstruction1,   "tsutil/creststn/TestConstruction1");
-    addTest(root, &TestConstruction2,   "tsutil/creststn/TestConstruction2");
-    addTest(root, &TestResourceBundles, "tsutil/creststn/TestResourceBundle");
-    addTest(root, &TestFallback,        "tsutil/creststn/TestFallback");
-    addTest(root, &TestGetVersion,      "tsutil/creststn/TestGetVersion");
-    addTest(root, &TestAliasConflict,   "tsutil/creststn/TestAliasConflict");
-    addTest(root, &TestNewTypes,        "tsutil/creststn/TestNewTypes");
-    addTest(root, &TestEmptyTypes,      "tsutil/creststn/TestEmptyTypes");
-    addTest(root, &TestBinaryCollationData, "tsutil/creststn/TestBinaryCollationData");
-    addTest(root, &TestAPI,             "tsutil/creststn/TestAPI");
-    addTest(root, &TestErrorConditions, "tsutil/creststn/TestErrorConditions");
-    addTest(root, &TestDecodedBundle,   "tsutil/creststn/TestDecodedBundle");
+    addTest(root, &TestEmptyBundle,           "tsutil/creststn/TestEmptyBundle");
+    addTest(root, &TestConstruction1,         "tsutil/creststn/TestConstruction1");
+    addTest(root, &TestConstruction2,         "tsutil/creststn/TestConstruction2");
+    addTest(root, &TestResourceBundles,       "tsutil/creststn/TestResourceBundle");
+    addTest(root, &TestFallback,              "tsutil/creststn/TestFallback");
+    addTest(root, &TestGetVersion,            "tsutil/creststn/TestGetVersion");
+    addTest(root, &TestAliasConflict,         "tsutil/creststn/TestAliasConflict");
+    addTest(root, &TestNewTypes,              "tsutil/creststn/TestNewTypes");
+    addTest(root, &TestEmptyTypes,            "tsutil/creststn/TestEmptyTypes");
+    addTest(root, &TestBinaryCollationData,   "tsutil/creststn/TestBinaryCollationData");
+    addTest(root, &TestAPI,                   "tsutil/creststn/TestAPI");
+    addTest(root, &TestErrorConditions,       "tsutil/creststn/TestErrorConditions");
+    addTest(root, &TestDecodedBundle,         "tsutil/creststn/TestDecodedBundle");
+    addTest(root, &TestResourceLevelAliasing, "tsutil/creststn/TestResourceLevelAliasing");
+    addTest(root, &TestDirectAccess,          "tsutil/creststn/TestDirectAccess"); 
 }
 
 
@@ -1706,5 +1708,115 @@ static void printUChars(UChar* uchars){
     }
 }
 
+static void TestResourceLevelAliasing(void) {
+  UErrorCode status = U_ZERO_ERROR;
+  UResourceBundle *aliasB = NULL, *tb = NULL;
+  UResourceBundle *en = NULL, *uk = NULL, *testtypes = NULL;  
+  const char* testdatapath = NULL;
+  const UChar *string = NULL, *sequence = NULL;
+  const uint8_t *binary = NULL, *binSequence = NULL;
+  int32_t strLen = 0, seqLen = 0, binLen = 0, binSeqLen = 0;
+  testdatapath=loadTestData(&status);
+  if(U_FAILURE(status))
+  {
+      log_err("Could not load testdata.dat %s \n",myErrorName(status));
+      return;
+  }
 
+  aliasB = ures_open(testdatapath, "testaliases", &status);
 
+  /* this should fail - circular alias */
+  tb = ures_getByKey(aliasB, "aaa", tb, &status);
+  if(status != U_TOO_MANY_ALIASES_ERROR) {
+    log_err("Failed to detect circular alias\n");
+  } else {
+    status = U_ZERO_ERROR;
+  }
+  tb = ures_getByKey(aliasB, "aab", tb, &status);
+  if(status != U_TOO_MANY_ALIASES_ERROR) {
+    log_err("Failed to detect circular alias\n");
+  } else {
+    status = U_ZERO_ERROR;
+  }
+
+  /* testing aliasing to a non existing resource */
+  tb = ures_getByKey(aliasB, "nonexisting", tb, &status);
+  if(status != U_MISSING_RESOURCE_ERROR) {
+    log_err("Managed to find an alias to non-existing resource\n");
+  } else {
+    status = U_ZERO_ERROR;
+  }
+
+  /* testing referencing/composed alias */
+  uk = ures_findResource("uk/CollationElements/Sequence", uk, &status);
+  sequence = ures_getString(uk, &seqLen, &status);
+
+  tb = ures_getByKey(aliasB, "referencingalias", tb, &status);
+  string = ures_getString(tb, &strLen, &status);
+
+  if(seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
+    log_err("Referencing alias didn't get the right string\n");
+  }
+
+  tb = ures_getByKey(aliasB, "CollationElements", tb, &status);
+  tb = ures_getByKey(tb, "Sequence", tb, &status);
+  string = ures_getString(tb, &strLen, &status);
+
+  if(seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
+    log_err("Referencing alias didn't get the right string\n");
+  }
+
+  /* check whether the binary collation data is properly referenced by an alias */
+  uk = ures_findResource("uk/CollationElements/%%CollationBin", uk, &status);
+  binSequence = ures_getBinary(uk, &binSeqLen, &status);
+
+  tb = ures_getByKey(aliasB, "CollationElements", tb, &status);
+  tb = ures_getByKey(tb, "%%CollationBin", tb, &status);
+  binary = ures_getBinary(tb, &binLen, &status);
+
+  if(binSeqLen != binLen || uprv_memcmp(binSequence, binary, binSeqLen) != 0) {
+    log_err("Referencing alias didn't get the right string\n");
+  }
+
+  /* simple alias */
+  testtypes = ures_open(testdatapath, "testtypes", &status);
+  uk = ures_findSubResource(testtypes, "menu/file/open", uk, &status);
+  sequence = ures_getString(uk, &seqLen, &status);
+
+  tb = ures_getByKey(aliasB, "simplealias", tb, &status);
+  string = ures_getString(tb, &strLen, &status);
+
+  if(seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
+    log_err("Referencing alias didn't get the right string\n");
+  }
+
+  /* test indexed aliasing */
+
+  tb = ures_getByKey(aliasB, "zoneTests", tb, &status);
+  tb = ures_getByKey(tb, "zoneAlias2", tb, &status);
+  string = ures_getString(tb, &strLen, &status);
+
+  en = ures_findResource("en/zoneStrings/3/0", en, &status);
+  sequence = ures_getString(en, &seqLen, &status);
+
+  if(seqLen != strLen || u_strncmp(sequence, string, seqLen) != 0) {
+    log_err("Referencing alias didn't get the right string\n");
+  }
+
+  ures_close(aliasB);
+  ures_close(tb);
+  ures_close(en);
+  ures_close(uk);
+  ures_close(testtypes);
+}
+
+static void TestDirectAccess(void) {
+  UErrorCode status = U_ZERO_ERROR;
+  UResourceBundle *t = NULL, *t2 = NULL;
+
+  t = ures_findResource("en/zoneStrings/3/2", t, &status);
+  t = ures_findResource("en/timeZones/3", t, &status);
+  t = ures_findResource("sh/CollationElements/Sequence", t, &status);
+  t2 = ures_open(NULL, "sh", &status);
+  t = ures_findSubResource(t2, "CollationElements/Sequence", t, &status);
+}

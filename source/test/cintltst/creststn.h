@@ -52,6 +52,10 @@ static void TestGetVersion(void);
 
 static void TestEmptyBundle(void);
 
+static void TestDirectAccess(void);
+
+static void TestResourceLevelAliasing(void);
+
 /**
 * extensive subtests called by TestResourceBundles
 **/
