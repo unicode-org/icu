@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -83,9 +83,12 @@ public class UnicodeSetTest extends TestFmwk {
         
         s.clear();
         s.applyPropertyAlias("nv", "0.5");
-        expectToPattern(s, "[\\u00BD\\u0F2A]", null);
+        expectToPattern(s, "[\\u00BD\\u0F2A\\u2CFD\\U00010141\\U00010175\\U00010176]", null);
+        // Unicode 4.1 adds \u2CFD\U00010141\U00010175\U00010176 with numeric value 1/2
+
         s.clear();
         s.applyPropertyAlias("gc", "Lu");
+        // TODO expectToPattern(s, what?)
     }
 
     static String[] OTHER_TOPATTERN_TESTS = {

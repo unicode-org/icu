@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2004, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2005, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -96,6 +96,20 @@ public final class VersionInfo
     public static final VersionInfo UNICODE_4_0;
 
     /**
+     * Unicode 4.0.1 version
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final VersionInfo UNICODE_4_0_1;
+
+    /**
+     * Unicode 4.1 version
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final VersionInfo UNICODE_4_1;
+
+    /**
      * ICU4J current release version
      * @stable ICU 2.8
      */
@@ -107,7 +121,7 @@ public final class VersionInfo
      * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
-    public static final String ICU_DATA_VERSION = "32b";
+    public static final String ICU_DATA_VERSION = "33b";
 
     /**
      * ICU4J collator runtime version
@@ -428,7 +442,9 @@ public final class VersionInfo
         UNICODE_3_1_1 = getInstance(3, 1, 1, 0);
         UNICODE_3_2   = getInstance(3, 2, 0, 0);
         UNICODE_4_0   = getInstance(4, 0, 0, 0);
-        ICU_VERSION = getInstance(3, 2, 0, 0);
+        UNICODE_4_0_1 = getInstance(4, 0, 1, 0);
+        UNICODE_4_1   = getInstance(4, 1, 0, 0);
+        ICU_VERSION = getInstance(3, 3, 0, 0);
         UCOL_RUNTIME_VERSION = getInstance(5);
         UCOL_BUILDER_VERSION = getInstance(6);
         UCOL_TAILORINGS_VERSION = getInstance(1);

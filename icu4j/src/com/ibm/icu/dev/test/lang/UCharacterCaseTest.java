@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and    *
+* Copyright (C) 1996-2005, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -133,59 +133,58 @@ public final class UCharacterCaseTest extends TestFmwk
 
         // Test full string case folding with default option and separate
         // buffers
-        if (!FOLDING_DEFAULT_[0].equals(UCharacter.foldCase(FOLDING_MIXED_[0],
-                                                            true))) {
-            errln("FAIL: foldCase(" + hex(FOLDING_MIXED_[0]) +
-                  ", true) should be " + FOLDING_DEFAULT_[0]);
+        if (!FOLDING_DEFAULT_[0].equals(UCharacter.foldCase(FOLDING_MIXED_[0], true))) {
+            errln("FAIL: foldCase(" + prettify(FOLDING_MIXED_[0]) +
+                  ", true)=" + prettify(UCharacter.foldCase(FOLDING_MIXED_[0], true)) +
+                  " should be " + prettify(FOLDING_DEFAULT_[0]));
         }
         
-        if (!FOLDING_DEFAULT_[0].equals(UCharacter.foldCase(FOLDING_MIXED_[0],
-                                                            UCharacter.FOLD_CASE_DEFAULT))) {
-                    errln("FAIL: foldCase(" + hex(FOLDING_MIXED_[0]) +
-                          ", UCharacter.FOLD_CASE_DEFAULT) should be " 
-                          + FOLDING_DEFAULT_[0]);
+        if (!FOLDING_DEFAULT_[0].equals(UCharacter.foldCase(FOLDING_MIXED_[0], UCharacter.FOLD_CASE_DEFAULT))) {
+                    errln("FAIL: foldCase(" + prettify(FOLDING_MIXED_[0]) +
+                          ", UCharacter.FOLD_CASE_DEFAULT)=" + prettify(UCharacter.foldCase(FOLDING_MIXED_[0], UCharacter.FOLD_CASE_DEFAULT))
+                          + " should be " + prettify(FOLDING_DEFAULT_[0]));
                 }
 
         if (!FOLDING_EXCLUDE_SPECIAL_I_[0].equals(
                             UCharacter.foldCase(FOLDING_MIXED_[0], false))) {
-            errln("FAIL: foldCase(" + hex(FOLDING_MIXED_[0]) +
-                  ", false) should be " + FOLDING_EXCLUDE_SPECIAL_I_[0]);
+            errln("FAIL: foldCase(" + prettify(FOLDING_MIXED_[0]) +
+                  ", false)=" + prettify(UCharacter.foldCase(FOLDING_MIXED_[0], false))
+                  + " should be " + prettify(FOLDING_EXCLUDE_SPECIAL_I_[0]));
         }
         
         if (!FOLDING_EXCLUDE_SPECIAL_I_[0].equals(
-                                    UCharacter.foldCase(FOLDING_MIXED_[0], 
-                                    UCharacter.FOLD_CASE_EXCLUDE_SPECIAL_I))) {
-            errln("FAIL: foldCase(" + hex(FOLDING_MIXED_[0]) +
-                  ", UCharacter.FOLD_CASE_EXCLUDE_SPECIAL_I) should be " 
-                  + FOLDING_EXCLUDE_SPECIAL_I_[0]);
+                                    UCharacter.foldCase(FOLDING_MIXED_[0], UCharacter.FOLD_CASE_EXCLUDE_SPECIAL_I))) {
+            errln("FAIL: foldCase(" + prettify(FOLDING_MIXED_[0]) +
+                  ", UCharacter.FOLD_CASE_EXCLUDE_SPECIAL_I)=" + prettify(UCharacter.foldCase(FOLDING_MIXED_[0], UCharacter.FOLD_CASE_EXCLUDE_SPECIAL_I))
+                  + " should be " + prettify(FOLDING_EXCLUDE_SPECIAL_I_[0]));
         }
 
-        if (!FOLDING_DEFAULT_[1].equals(UCharacter.foldCase(FOLDING_MIXED_[1],
-                                                            true))) {
-           errln("FAIL: foldCase(" + hex(FOLDING_MIXED_[1]) +
-                 ", true) should be " + hex(FOLDING_DEFAULT_[1]));
+        if (!FOLDING_DEFAULT_[1].equals(UCharacter.foldCase(FOLDING_MIXED_[1], true))) {
+           errln("FAIL: foldCase(" + prettify(FOLDING_MIXED_[1]) +
+                 ", true)=" + prettify(UCharacter.foldCase(FOLDING_MIXED_[1], true))
+                 + " should be " + prettify(FOLDING_DEFAULT_[1]));
         }
 
-        if (!FOLDING_DEFAULT_[1].equals(UCharacter.foldCase(FOLDING_MIXED_[1],
-                                                            UCharacter.FOLD_CASE_DEFAULT))) {
-            errln("FAIL: foldCase(" + hex(FOLDING_MIXED_[1]) +
-                         ", UCharacter.FOLD_CASE_DEFAULT) should be " 
-                         + hex(FOLDING_DEFAULT_[1]));
+        if (!FOLDING_DEFAULT_[1].equals(UCharacter.foldCase(FOLDING_MIXED_[1], UCharacter.FOLD_CASE_DEFAULT))) {
+            errln("FAIL: foldCase(" + prettify(FOLDING_MIXED_[1]) +
+                         ", UCharacter.FOLD_CASE_DEFAULT)=" + prettify(UCharacter.foldCase(FOLDING_MIXED_[1], UCharacter.FOLD_CASE_DEFAULT))
+                         + " should be " + prettify(FOLDING_DEFAULT_[1]));
         }
         
         // alternate handling for dotted I/dotless i (U+0130, U+0131)
         if (!FOLDING_EXCLUDE_SPECIAL_I_[1].equals(
                         UCharacter.foldCase(FOLDING_MIXED_[1], false))) {
-            errln("FAIL: foldCase(" + hex(FOLDING_MIXED_[1]) +
-                  ", false) should be " + hex(FOLDING_EXCLUDE_SPECIAL_I_[1]));
+            errln("FAIL: foldCase(" + prettify(FOLDING_MIXED_[1]) +
+                  ", false)=" + prettify(UCharacter.foldCase(FOLDING_MIXED_[1], false))
+                  + " should be " + prettify(FOLDING_EXCLUDE_SPECIAL_I_[1]));
         }
         
         if (!FOLDING_EXCLUDE_SPECIAL_I_[1].equals(
-                                UCharacter.foldCase(FOLDING_MIXED_[1], 
-                                UCharacter.FOLD_CASE_EXCLUDE_SPECIAL_I))) {
-            errln("FAIL: foldCase(" + hex(FOLDING_MIXED_[1]) +
-                  ", UCharacter.FOLD_CASE_EXCLUDE_SPECIAL_I) should be "
-                  + hex(FOLDING_EXCLUDE_SPECIAL_I_[1]));
+                                UCharacter.foldCase(FOLDING_MIXED_[1], UCharacter.FOLD_CASE_EXCLUDE_SPECIAL_I))) {
+            errln("FAIL: foldCase(" + prettify(FOLDING_MIXED_[1]) +
+                  ", UCharacter.FOLD_CASE_EXCLUDE_SPECIAL_I)=" + prettify(UCharacter.foldCase(FOLDING_MIXED_[1], UCharacter.FOLD_CASE_EXCLUDE_SPECIAL_I))
+                  + " should be "
+                  + prettify(FOLDING_EXCLUDE_SPECIAL_I_[1]));
         }
     }
 
@@ -306,9 +305,9 @@ public final class UCharacterCaseTest extends TestFmwk
                 if (!expected.equals(
                     UCharacter.toTitleCase(test,
                                            TITLE_BREAKITERATORS_[i]))) {
-                    errln("error: titlecasing for " + hex(test) + " should be " +
-                          hex(expected) + " but got " +
-                          hex(UCharacter.toTitleCase(test,
+                    errln("error: titlecasing for " + prettify(test) + " should be " +
+                          prettify(expected) + " but got " +
+                          prettify(UCharacter.toTitleCase(test,
                                                      TITLE_BREAKITERATORS_[i])));
                 }
                 //cover toTitleCase(Locale, String, BreakIterator)
@@ -317,9 +316,9 @@ public final class UCharacterCaseTest extends TestFmwk
                 if (!expected.equals(
                     UCharacter.toTitleCase(def, data,
                                            TITLE_BREAKITERATORS_[i]))) {
-                    errln("error: titlecasing for " + hex(data) + " should be " +
-                          hex(expected) + " but got " +
-                          hex(UCharacter.toTitleCase(def, data,
+                    errln("error: titlecasing for " + prettify(data) + " should be " +
+                          prettify(expected) + " but got " +
+                          prettify(UCharacter.toTitleCase(def, data,
                                                      TITLE_BREAKITERATORS_[i])));
                 }                
             }

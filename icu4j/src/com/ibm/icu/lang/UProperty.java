@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2004, international Business Machines Corporation and    *
+* Copyright (C) 1996-2005, international Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -413,11 +413,29 @@ public interface UProperty
      */
     public static final int SEGMENT_STARTER = 41;
 
+    /**
+     * Binary property Pattern_Syntax (new in Unicode 4.1).
+     * See UAX #31 Identifier and Pattern Syntax
+     * (http://www.unicode.org/reports/tr31/)
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int PATTERN_SYNTAX = 42;
+
+    /**
+     * Binary property Pattern_White_Space (new in Unicode 4.1).
+     * See UAX #31 Identifier and Pattern Syntax
+     * (http://www.unicode.org/reports/tr31/)
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int PATTERN_WHITE_SPACE = 43;
+
     /** 
      * <p>One more than the last constant for binary Unicode properties.</p> 
      * @stable ICU 2.6
      */
-    public static final int BINARY_LIMIT = 42;
+    public static final int BINARY_LIMIT = 44;
     
     /** 
      * Enumerated property Bidi_Class.
@@ -567,12 +585,42 @@ public interface UProperty
      */
     public static final int TRAIL_CANONICAL_COMBINING_CLASS = 0x1011;
 
+    /**
+     * Enumerated property Grapheme_Cluster_Break (new in Unicode 4.1).
+     * Used in UAX #29: Text Boundaries
+     * (http://www.unicode.org/reports/tr29/)
+     * Returns UGraphemeClusterBreak values.
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int GRAPHEME_CLUSTER_BREAK = 0x1012;
+
+    /**
+     * Enumerated property Sentence_Break (new in Unicode 4.1).
+     * Used in UAX #29: Text Boundaries
+     * (http://www.unicode.org/reports/tr29/)
+     * Returns USentenceBreak values.
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int SENTENCE_BREAK = 0x1013;
+
+    /**
+     * Enumerated property Word_Break (new in Unicode 4.1).
+     * Used in UAX #29: Text Boundaries
+     * (http://www.unicode.org/reports/tr29/)
+     * Returns UWordBreakValues values.
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int WORD_BREAK = 0x1014;
+
     /** 
      * One more than the last constant for enumerated/integer Unicode 
      * properties. 
      * @stable ICU 2.4 
      */
-    public static final int INT_LIMIT = 0x1012;
+    public static final int INT_LIMIT = 0x1015;
 
     /** 
      * Bitmask property General_Category_Mask.

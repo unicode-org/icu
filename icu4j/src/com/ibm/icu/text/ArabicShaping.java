@@ -1,11 +1,15 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2004, International Business Machines
+*   Copyright (C) 2001-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
 
 package com.ibm.icu.text;
+
+import java.io.IOException;
+
+import com.ibm.icu.impl.UBiDiProps;
 
 import com.ibm.icu.lang.*;
 
@@ -565,12 +569,17 @@ public final class ArabicShaping {
                                                 int length,
                                                 char digitBase,
                                                 boolean lastStrongWasAL) {
-
+        UBiDiProps bdp;
+		try {
+			bdp=UBiDiProps.getSingleton();
+		} catch (IOException e) {
+			return;
+		}
         digitBase -= '0'; // move common adjustment out of loop
 
         for(int i = start + length; --i >= start;) {
             char ch = dest[i];
-            switch (UCharacter.getDirection(ch)) {
+            switch (bdp.getClass(ch)) {
             case UCharacterDirection.LEFT_TO_RIGHT:
             case UCharacterDirection.RIGHT_TO_LEFT:
                 lastStrongWasAL = false;

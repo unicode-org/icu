@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and   *
+* Copyright (C) 1996-2005, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -58,13 +58,7 @@ class UCharacterTypeIterator extends TrieIterator
     */
     protected int extract(int value)
     {
-        // this is needed because TrieIterator() gets called first and it
-        // in turn calls extract to instantiate this default value
-        // so sometimes m_property_ does not get assigned properly
-        if (m_property_ == null) {
-            m_property_ = UCharacterProperty.getInstance().m_property_;
-        }
-        return m_property_[value] & UCharacterProperty.TYPE_MASK;
+        return value & UCharacterProperty.TYPE_MASK;
     }
     
     // private data members ---------------------------------------------

@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and    *
+* Copyright (C) 1996-2005, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -41,7 +41,7 @@ import com.ibm.icu.util.VersionInfo;
 * @draft 2.1
 */
 
-public final class UCharacterProperty implements Trie.DataManipulate
+public final class UCharacterProperty
 {
     // public data members -----------------------------------------------
 
@@ -65,71 +65,9 @@ public final class UCharacterProperty implements Trie.DataManipulate
      */
     public int m_trieInitialValue_;
     /**
-    * Character property table
-    */
-    public int m_property_[];
-    /**
     * Unicode version
     */
     public VersionInfo m_unicodeVersion_;
-    /**
-     * Exception indicator for uppercase type
-     */
-    public static final int EXC_UPPERCASE_ = 0;
-    /**
-     * Exception indicator for lowercase type
-     */
-    public static final int EXC_LOWERCASE_ = 1;
-    /**
-     * Exception indicator for titlecase type
-     */
-    public static final int EXC_TITLECASE_ = 2;
-    /**
-     * Exception indicator for digit type
-     */
-    public static final int EXC_UNUSED_ = 3;
-    /**
-     * Exception indicator for numeric type
-     */
-    public static final int EXC_NUMERIC_VALUE_ = 4;
-    /**
-     * Exception indicator for denominator type
-     */
-    public static final int EXC_DENOMINATOR_VALUE_ = 5;
-    /**
-     * Exception indicator for mirror type
-     */
-    public static final int EXC_MIRROR_MAPPING_ = 6;
-    /**
-     * Exception indicator for special casing type
-     */
-    public static final int EXC_SPECIAL_CASING_ = 7;
-    /**
-     * Exception indicator for case folding type
-     */
-    public static final int EXC_CASE_FOLDING_ = 8;
-    /**
-     * EXC_COMBINING_CLASS_ is not found in ICU.
-     * Used to retrieve the combining class of the character in the exception
-     * value
-     */
-    public static final int EXC_COMBINING_CLASS_ = 9;
-    /**
-     * Maximum number of expansion for a case mapping
-     */
-    public static final int MAX_CASE_MAP_SIZE = 10;
-    /**
-    * Turkish ISO 639 2 character code
-    */
-    public static final String TURKISH_ = "tr";
-    /**
-    * Azerbaijani ISO 639 2 character code
-    */
-    public static final String AZERBAIJANI_ = "az";
-    /**
-    * Lithuanian ISO 639 2 character code
-    */
-    public static final String LITHUANIAN_ = "lt";
     /**
     * Latin capital letter i with dot above
     */
@@ -146,14 +84,27 @@ public final class UCharacterProperty implements Trie.DataManipulate
     * Character type mask
     */
     public static final int TYPE_MASK = 0x1F;
-    /**
-    * Exception test mask
-    */
-    public static final int EXCEPTION_MASK = 0x20;
-    /**
-    * Mirror test mask
-    */
-    public static final int MIRROR_MASK = 1 << 11;
+
+    // uprops.h enum UPropertySource --------------------------------------- ***
+
+    /** No source, not a supported property. */
+    public static final int SRC_NONE=0;
+    /** From uchar.c/uprops.icu main trie */
+    public static final int SRC_CHAR=1;
+    /** From uchar.c/uprops.icu properties vectors trie */
+    public static final int SRC_PROPSVEC=2;
+    /** Hangul_Syllable_Type, from uchar.c/uprops.icu */
+    public static final int SRC_HST=3;
+    /** From unames.c/unames.icu */
+    public static final int SRC_NAMES=4;
+    /** From unorm.cpp/unorm.icu */
+    public static final int SRC_NORM=5;
+    /** From ucase.c/ucase.icu */
+    public static final int SRC_CASE=6;
+    /** From ubidi_props.c/ubidi.icu */
+    public static final int SRC_BIDI=7;
+    /** One more than the highest UPropertySource (SRC_) constant. */
+    public static final int SRC_COUNT=8;
 
     // public methods ----------------------------------------------------
 
@@ -168,23 +119,6 @@ public final class UCharacterProperty implements Trie.DataManipulate
     }
 
     /**
-    * Called by com.ibm.icu.util.Trie to extract from a lead surrogate's
-    * data the index array offset of the indexes for that lead surrogate.
-    * @param value data value for a surrogate from the trie, including the
-    *        folding offset
-    * @return data offset or 0 if there is no data for the lead surrogate
-    */
-    public int getFoldingOffset(int value)
-    {
-        if ((value & SUPPLEMENTARY_FOLD_INDICATOR_MASK_) != 0) {
-            return (value & SUPPLEMENTARY_FOLD_OFFSET_MASK_);
-        }
-        else {
-            return 0;
-        }
-    }
-
-    /**
     * Gets the property value at the index.
     * This is optimized.
     * Note this is alittle different from CharTrie the index m_trieData_
@@ -192,45 +126,46 @@ public final class UCharacterProperty implements Trie.DataManipulate
     * @param ch code point whose property value is to be retrieved
     * @return property value of code point
     */
-    public int getProperty(int ch)
+    public final int getProperty(int ch)
     {
         if (ch < UTF16.LEAD_SURROGATE_MIN_VALUE
             || (ch > UTF16.LEAD_SURROGATE_MAX_VALUE
                 && ch < UTF16.SUPPLEMENTARY_MIN_VALUE)) {
-            // BMP codepoint
+            // BMP codepoint 0000..D7FF or DC00..FFFF
             // optimized
-            try {
-                return m_property_[
-                    m_trieData_[
+            try { // using try for ch < 0 is faster than using an if statement
+                return m_trieData_[
                     (m_trieIndex_[ch >> Trie.INDEX_STAGE_1_SHIFT_]
                           << Trie.INDEX_STAGE_2_SHIFT_)
-                    + (ch & Trie.INDEX_STAGE_3_MASK_)]];
+                    + (ch & Trie.INDEX_STAGE_3_MASK_)];
             } catch (ArrayIndexOutOfBoundsException e) {
-                return m_property_[m_trieInitialValue_];
+                return m_trieInitialValue_;
             }
         }
         if (ch <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
-            return m_property_[
-                    m_trieData_[
+            // lead surrogate D800..DBFF
+            return m_trieData_[
                     (m_trieIndex_[Trie.LEAD_INDEX_OFFSET_
                                   + (ch >> Trie.INDEX_STAGE_1_SHIFT_)]
                           << Trie.INDEX_STAGE_2_SHIFT_)
-                    + (ch & Trie.INDEX_STAGE_3_MASK_)]];
+                    + (ch & Trie.INDEX_STAGE_3_MASK_)];
         }
-        // for optimization
         if (ch <= UTF16.CODEPOINT_MAX_VALUE) {
+            // supplementary code point 10000..10FFFF
             // look at the construction of supplementary characters
             // trail forms the ends of it.
-            return m_property_[m_trie_.getSurrogateValue(
+            return m_trie_.getSurrogateValue(
                                           UTF16.getLeadSurrogate(ch),
-                                          (char)(ch & Trie.SURROGATE_MASK_))];
+                                          (char)(ch & Trie.SURROGATE_MASK_));
         }
+        // ch is out of bounds
         // return m_dataOffset_ if there is an error, in this case we return
         // the default value: m_initialValue_
         // we cannot assume that m_initialValue_ is at offset 0
         // this is for optimization.
-        return m_property_[m_trieInitialValue_];
-        // return m_property_[m_trie_.getCodePointValue(ch)];
+        return m_trieInitialValue_;
+
+        // this all is an inlined form of return m_trie_.getCodePointValue(ch);
     }
 
     /**
@@ -241,17 +176,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
     */
     public static int getSignedValue(int prop)
     {
-        return (prop >> VALUE_SHIFT_);
-    }
-
-    /**
-    * Getting the exception index for argument property
-    * @param prop character property
-    * @return exception index
-    */
-    public static int getExceptionIndex(int prop)
-    {
-        return (prop >> VALUE_SHIFT_) & UNSIGNED_VALUE_MASK_AFTER_SHIFT_;
+        return ((short)prop >> VALUE_SHIFT_);
     }
 
     /**
@@ -267,182 +192,10 @@ public final class UCharacterProperty implements Trie.DataManipulate
     }
     ///CLOVER:ON
 
-    /**
-    * Determines if the exception value passed in has the kind of information
-    * which the indicator wants, e.g if the exception value contains the digit
-    * value of the character
-    * @param index exception index
-    * @param indicator type indicator
-    * @return true if type value exist
-    */
-    public boolean hasExceptionValue(int index, int indicator)
-    {
-        return (m_exception_[index] & (1 << indicator)) != 0;
-    }
-
-    /**
-    * Gets the exception value for the argument properties, assuming that data
-    * type is available. -1 is returned if data is not available.
-    * Different from getException, this function tests if the type data is
-    * available.
-    * @param props property value
-    * @param etype exception type
-    * @return exception data type value at index
-    */
-    ///CLOVER:OFF
-    public int getExceptionValue(int props, int etype)
-    {
-        int index = getExceptionIndex(props);
-        if (hasExceptionValue(index, etype)) {
-            // contained in exception data
-            // return getException(index, etype);
-            if (etype == EXC_COMBINING_CLASS_) {
-                return m_exception_[index];
-            }
-            // contained in the exception digit address
-            index = addExceptionOffset(m_exception_[index], etype, ++ index);
-            return m_exception_[index];
-        }
-        return -1;
-    }
-    ///CLOVER:ON
-
-    /**
-    * Gets the exception value at the index, assuming that data type is
-    * available. Result is undefined if data is not available. Use
-    * hasExceptionValue() to determine data's availability.
-    * @param index
-    * @param etype exception data type
-    * @return exception data type value at index
-    */
-    public int getException(int index, int etype)
-    {
-        // contained in exception data
-        if (etype == EXC_COMBINING_CLASS_) {
-            return m_exception_[index];
-        }
-        // contained in the exception digit address
-        index = addExceptionOffset(m_exception_[index], etype, ++ index);
-        return m_exception_[index];
-    }
-
-    /**
-    * Gets the folded case value at the index
-    * @param index of the case value to be retrieved
-    * @return folded case value at index
-    */
-    /*
-     * Issue for canonical caseless match (UAX #21):
-     * Turkic casefolding (using "T" mappings in CaseFolding.txt) does not preserve
-     * canonical equivalence, unlike default-option casefolding.
-     * For example, I-grave and I + grave fold to strings that are not canonically
-     * equivalent.
-     * For more details, see the comment in unorm_compare() in unorm.cpp
-     * and the intermediate prototype changes for Jitterbug 2021.
-     * (For example, revision 1.104 of uchar.c and 1.4 of CaseFolding.txt.)
-     *
-     * This did not get fixed because it appears that it is not possible to fix
-     * it for uppercase and lowercase characters (I-grave vs. i-grave)
-     * together in a way that they still fold to common result strings.
-     */
-
-    public int getFoldCase(int index)
-    {
-        char single = m_case_[index];
-        if (UTF16.LEAD_SURROGATE_MIN_VALUE <= single &&
-            single <= UTF16.TRAIL_SURROGATE_MAX_VALUE) {
-        // Convert the UTF-16 surrogate pair if necessary.
-        // For simplicity in usage, and because the frequency of pairs is low,
-        // look both directions.
-
-            if (single <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
-                char trail = m_case_[index + 1];
-                if (UTF16.LEAD_SURROGATE_MIN_VALUE <= trail &&
-                    trail <= UTF16.TRAIL_SURROGATE_MAX_VALUE) {
-                    return getRawSupplementary(single, trail);
-                }
-            }
-            else
-            {
-                char lead = m_case_[index - 1];
-                if (UTF16.LEAD_SURROGATE_MIN_VALUE <= lead &&
-                    lead <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
-                    return getRawSupplementary(lead, single);
-                }
-            }
-        }
-        return single;
-    }
-
-    /**
-    * Gets the folded case value at the index
-    * @param index of the case value to be retrieved
-    * @param count number of characters to retrieve
-    * @param str string buffer to which to append the result
-    */
-    public void getFoldCase(int index, int count, StringBuffer str)
-    {
-        // first 2 chars are for the simple mappings
-        index += 2;
-        while (count > 0) {
-            str.append(m_case_[index]);
-            index ++;
-            count --;
-        }
-    }
-
-    /**
-    * Gets the upper case value at the index
-    * @param index of the case value to be retrieved
-    * @param buffer string buffer to add result to
-    */
-    public void getUpperCase(int index, StringBuffer buffer)
-    {
-        int count = m_case_[index];
-        // last 5 bits of the first char in m_case_ gives the position of the
-        // alternate uppercase characters
-        index += (count & LAST_5_BIT_MASK_) + 1;
-        count = (count >> SHIFT_5_) & LAST_5_BIT_MASK_;
-
-        for (int j = 0; j < count; j ++) {
-            buffer.append(m_case_[index + j]);
-        }
-    }
-
-    /**
-    * Gets the upper case value at the index
-    * @param index of the case value to be retrieved
-    * @param buffer string buffer to add result to
-    */
-    public void getTitleCase(int index, StringBuffer buffer)
-    {
-        int count = m_case_[index];
-        // last 5 bits of the first char in m_case_ gives the position of the
-        // alternate uppercase characters
-        index += (count & LAST_5_BIT_MASK_) + 1 +
-                 ((count >> SHIFT_5_) & LAST_5_BIT_MASK_);
-        count = (count >> SHIFT_10_) & LAST_5_BIT_MASK_;
-
-        for (int j = 0; j < count; j ++) {
-            buffer.append(m_case_[index + j]);
-        }
-    }
-
-    /**
-    * Gets the lower case value at the index
-    * @param index of the case value to be retrieved
-    * @param buffer string buffer to add result to
-    */
-    public void getLowerCase(int index, StringBuffer buffer)
-    {
-        int count = m_case_[index] & LAST_5_BIT_MASK_;
-        // last 5 bits of the first char in m_case_ gives the size of the
-        // lowercase characters
-        index ++;
-        for (int j = 0; j < count; j ++) {
-            buffer.append(m_case_[index + j]);
-        }
-    }
+    /* internal numeric pseudo-types for special encodings of numeric values */
+    public static final int NT_FRACTION=4; /* ==UCharacter.NumericType.COUNT, must not change unless binary format version changes */
+    public static final int NT_LARGE=5;
+    public static final int NT_COUNT=6;
 
     /**
      * Gets the unicode additional properties.
@@ -506,48 +259,50 @@ public final class UCharacterProperty implements Trie.DataManipulate
         * Must be in order of corresponding UProperty,
         * and there must be exacly one entry per binary UProperty.
         */
-       new BinaryProperties(  1, (  1 << ALPHABETIC_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << ASCII_HEX_DIGIT_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << BIDI_CONTROL_PROPERTY_) ),
-       new BinaryProperties( -1, (  1 << MIRROR_SHIFT_) ),
-       new BinaryProperties(  1, (  1 << DASH_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << DEFAULT_IGNORABLE_CODE_POINT_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << DEPRECATED_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << DIACRITIC_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << EXTENDER_PROPERTY_) ),
-       new BinaryProperties(  0, 0 ),                                  /* UCHAR_FULL_COMPOSITION_EXCLUSION */
-       new BinaryProperties(  1, (  1 << GRAPHEME_BASE_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << GRAPHEME_EXTEND_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << GRAPHEME_LINK_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << HEX_DIGIT_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << HYPHEN_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << ID_CONTINUE_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << ID_START_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << IDEOGRAPHIC_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << IDS_BINARY_OPERATOR_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << IDS_TRINARY_OPERATOR_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << JOIN_CONTROL_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << LOGICAL_ORDER_EXCEPTION_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << LOWERCASE_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << MATH_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << NONCHARACTER_CODE_POINT_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << QUOTATION_MARK_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << RADICAL_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << SOFT_DOTTED_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << TERMINAL_PUNCTUATION_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << UNIFIED_IDEOGRAPH_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << UPPERCASE_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << WHITE_SPACE_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << XID_CONTINUE_PROPERTY_) ),
-       new BinaryProperties(  1, (  1 << XID_START_PROPERTY_) ),
-       new BinaryProperties( -1, (  1 << CASE_SENSITIVE_SHIFT_) ),
-       new BinaryProperties(  2, (  1 << V2_S_TERM_PROPERTY_) ),
-       new BinaryProperties(  2, (  1 << V2_VARIATION_SELECTOR_PROPERTY_) ),
-       new BinaryProperties(  0, 0 ),                                  /* UCHAR_NFD_INERT */
-       new BinaryProperties(  0, 0 ),                                  /* UCHAR_NFKD_INERT */
-       new BinaryProperties(  0, 0 ),                                  /* UCHAR_NFC_INERT */
-       new BinaryProperties(  0, 0 ),                                  /* UCHAR_NFKC_INERT */
-       new BinaryProperties(  0, 0 ),                                  /* UCHAR_SEGMENT_STARTER */
+       new BinaryProperties(  1,                (  1 << ALPHABETIC_PROPERTY_) ),
+       new BinaryProperties(  1,                (  1 << ASCII_HEX_DIGIT_PROPERTY_) ),
+       new BinaryProperties( SRC_BIDI,   0 ),                                       /* UCHAR_BIDI_CONTROL */
+       new BinaryProperties( SRC_BIDI,   0 ),                                       /* UCHAR_BIDI_MIRRORED */
+       new BinaryProperties(  1,                (  1 << DASH_PROPERTY_) ),
+       new BinaryProperties(  1,                (  1 << DEFAULT_IGNORABLE_CODE_POINT_PROPERTY_) ),
+       new BinaryProperties(  1,                (  1 << DEPRECATED_PROPERTY_) ),
+       new BinaryProperties(  1,                (  1 << DIACRITIC_PROPERTY_) ),
+       new BinaryProperties(  1,                (  1 << EXTENDER_PROPERTY_) ),
+       new BinaryProperties( SRC_NORM,   0 ),                                       /* UCHAR_FULL_COMPOSITION_EXCLUSION */
+       new BinaryProperties(  1,                (  1 << GRAPHEME_BASE_PROPERTY_) ),
+       new BinaryProperties(  1,                (  1 << GRAPHEME_EXTEND_PROPERTY_) ),
+       new BinaryProperties(  1,                (  1 << GRAPHEME_LINK_PROPERTY_) ),
+       new BinaryProperties(  1,                (  1 << HEX_DIGIT_PROPERTY_) ),
+       new BinaryProperties(  1,                (  1 << HYPHEN_PROPERTY_) ),
+       new BinaryProperties(  1,                (  1 << ID_CONTINUE_PROPERTY_) ),
+       new BinaryProperties(  1,                (  1 << ID_START_PROPERTY_) ),
+       new BinaryProperties(  1,                (  1 << IDEOGRAPHIC_PROPERTY_) ),
+       new BinaryProperties(  1,                (  1 << IDS_BINARY_OPERATOR_PROPERTY_) ),
+       new BinaryProperties(  1,                (  1 << IDS_TRINARY_OPERATOR_PROPERTY_) ),
+       new BinaryProperties( SRC_BIDI,   0 ),                                       /* UCHAR_JOIN_CONTROL */
+       new BinaryProperties(  1,                (  1 << LOGICAL_ORDER_EXCEPTION_PROPERTY_) ),
+       new BinaryProperties( SRC_CASE,   0 ),                                       /* UCHAR_LOWERCASE */
+       new BinaryProperties(  1,                (  1 << MATH_PROPERTY_) ),
+       new BinaryProperties(  1,                (  1 << NONCHARACTER_CODE_POINT_PROPERTY_) ),
+       new BinaryProperties(  1,                (  1 << QUOTATION_MARK_PROPERTY_) ),
+       new BinaryProperties(  1,                (  1 << RADICAL_PROPERTY_) ),
+       new BinaryProperties( SRC_CASE,   0 ),                                       /* UCHAR_SOFT_DOTTED */
+       new BinaryProperties(  1,                (  1 << TERMINAL_PUNCTUATION_PROPERTY_) ),
+       new BinaryProperties(  1,                (  1 << UNIFIED_IDEOGRAPH_PROPERTY_) ),
+       new BinaryProperties( SRC_CASE,   0 ),                                       /* UCHAR_UPPERCASE */
+       new BinaryProperties(  1,                (  1 << WHITE_SPACE_PROPERTY_) ),
+       new BinaryProperties(  1,                (  1 << XID_CONTINUE_PROPERTY_) ),
+       new BinaryProperties(  1,                (  1 << XID_START_PROPERTY_) ),
+       new BinaryProperties( SRC_CASE,   0 ),                                       /* UCHAR_CASE_SENSITIVE */
+       new BinaryProperties(  2,                (  1 << V2_S_TERM_PROPERTY_) ),
+       new BinaryProperties(  2,                (  1 << V2_VARIATION_SELECTOR_PROPERTY_) ),
+       new BinaryProperties( SRC_NORM,   0 ),                                       /* UCHAR_NFD_INERT */
+       new BinaryProperties( SRC_NORM,   0 ),                                       /* UCHAR_NFKD_INERT */
+       new BinaryProperties( SRC_NORM,   0 ),                                       /* UCHAR_NFC_INERT */
+       new BinaryProperties( SRC_NORM,   0 ),                                       /* UCHAR_NFKC_INERT */
+       new BinaryProperties( SRC_NORM,   0 ),                                       /* UCHAR_SEGMENT_STARTER */
+       new BinaryProperties(  2,                (  1 << V2_PATTERN_SYNTAX) ),
+       new BinaryProperties(  2,                (  1 << V2_PATTERN_WHITE_SPACE) ),
    };
 
 
@@ -584,30 +339,148 @@ public final class UCharacterProperty implements Trie.DataManipulate
             return false;
         } else {
             long mask=binProps[property].mask;
+            int column=binProps[property].column;
             if(mask!=0) {
                 // systematic, directly stored properties
-                return ((UNSIGNED_INT_MASK & getAdditional(codepoint, binProps[property].column)) & mask)!=0;
+                return ((UNSIGNED_INT_MASK & getAdditional(codepoint, column)) & mask)!=0;
             } else {
-                /* normalization properties from unorm.icu */
-                switch(property) {
-                case UProperty.FULL_COMPOSITION_EXCLUSION:
-                    return NormalizerImpl.isFullCompositionExclusion(codepoint);
-                case UProperty.NFD_INERT:
-                    return Normalizer.isNFSkippable(codepoint, Normalizer.NFD);
-                case UProperty.NFKD_INERT:
-                    return Normalizer.isNFSkippable(codepoint, Normalizer.NFKD);
-                case UProperty.NFC_INERT:
-                    return Normalizer.isNFSkippable(codepoint, Normalizer.NFC);
-                case UProperty.NFKC_INERT:
-                    return Normalizer.isNFSkippable(codepoint, Normalizer.NFKC);
-                case UProperty.SEGMENT_STARTER:
-                    return NormalizerImpl.isCanonSafeStart(codepoint);
-                default:
-                    break;
+                if(column==SRC_CASE) {
+                    /* case mapping properties */
+                    UCaseProps csp;
+                    try {
+                        csp = UCaseProps.getSingleton();
+                    } catch (IOException e) {
+                        return false;
+                    }
+                    switch(property) {
+                    case UProperty.LOWERCASE:
+                        return UCaseProps.LOWER==csp.getType(codepoint);
+                    case UProperty.UPPERCASE:
+                        return UCaseProps.UPPER==csp.getType(codepoint);
+                    case UProperty.SOFT_DOTTED:
+                        return csp.isSoftDotted(codepoint);
+                    case UProperty.CASE_SENSITIVE:
+                        return csp.isCaseSensitive(codepoint);
+                    default:
+                        break;
+                    }
+                } else if(column==SRC_NORM) {
+                    /* normalization properties from unorm.icu */
+                    switch(property) {
+                    case UProperty.FULL_COMPOSITION_EXCLUSION:
+                        return NormalizerImpl.isFullCompositionExclusion(codepoint);
+                    case UProperty.NFD_INERT:
+                        return Normalizer.isNFSkippable(codepoint, Normalizer.NFD);
+                    case UProperty.NFKD_INERT:
+                        return Normalizer.isNFSkippable(codepoint, Normalizer.NFKD);
+                    case UProperty.NFC_INERT:
+                        return Normalizer.isNFSkippable(codepoint, Normalizer.NFC);
+                    case UProperty.NFKC_INERT:
+                        return Normalizer.isNFSkippable(codepoint, Normalizer.NFKC);
+                    case UProperty.SEGMENT_STARTER:
+                        return NormalizerImpl.isCanonSafeStart(codepoint);
+                    default:
+                        break;
+                    }
+                } else if(column==SRC_BIDI) {
+                    /* bidi/shaping properties */
+					UBiDiProps bdp;
+					try {
+						bdp = UBiDiProps.getSingleton();
+					} catch (IOException e) {
+						return false;
+					}
+                    switch(property) {
+                    case UProperty.BIDI_MIRRORED:
+                        return bdp.isMirrored(codepoint);
+                    case UProperty.BIDI_CONTROL:
+                        return bdp.isBidiControl(codepoint);
+                    case UProperty.JOIN_CONTROL:
+                        return bdp.isJoinControl(codepoint);
+                    default:
+                        break;
+                    }
                 }
             }
         }
         return false;
+    }
+
+    public final int getSource(int which) {
+        if(which<UProperty.BINARY_START) {
+            return SRC_NONE; /* undefined */
+        } else if(which<UProperty.BINARY_LIMIT) {
+            if(binProps[which].mask!=0) {
+                return SRC_PROPSVEC;
+            } else {
+                return binProps[which].column;
+            }
+        } else if(which<UProperty.INT_START) {
+            return SRC_NONE; /* undefined */
+        } else if(which<UProperty.INT_LIMIT) {
+            switch(which) {
+            case UProperty.GENERAL_CATEGORY:
+            case UProperty.NUMERIC_TYPE:
+                return SRC_CHAR;
+
+            case UProperty.HANGUL_SYLLABLE_TYPE:
+                return SRC_HST;
+
+            case UProperty.CANONICAL_COMBINING_CLASS:
+            case UProperty.NFD_QUICK_CHECK:
+            case UProperty.NFKD_QUICK_CHECK:
+            case UProperty.NFC_QUICK_CHECK:
+            case UProperty.NFKC_QUICK_CHECK:
+            case UProperty.LEAD_CANONICAL_COMBINING_CLASS:
+            case UProperty.TRAIL_CANONICAL_COMBINING_CLASS:
+                return SRC_NORM;
+
+            case UProperty.BIDI_CLASS:
+            case UProperty.JOINING_GROUP:
+            case UProperty.JOINING_TYPE:
+                return SRC_BIDI;
+
+            default:
+                return SRC_PROPSVEC;
+            }
+        } else if(which<UProperty.STRING_START) {
+            switch(which) {
+            case UProperty.GENERAL_CATEGORY_MASK:
+            case UProperty.NUMERIC_VALUE:
+                return SRC_CHAR;
+
+            default:
+                return SRC_NONE;
+            }
+        } else if(which<UProperty.STRING_LIMIT) {
+            switch(which) {
+            case UProperty.AGE:
+                return SRC_PROPSVEC;
+
+            case UProperty.BIDI_MIRRORING_GLYPH:
+                return SRC_BIDI;
+
+            case UProperty.CASE_FOLDING:
+            case UProperty.LOWERCASE_MAPPING:
+            case UProperty.SIMPLE_CASE_FOLDING:
+            case UProperty.SIMPLE_LOWERCASE_MAPPING:
+            case UProperty.SIMPLE_TITLECASE_MAPPING:
+            case UProperty.SIMPLE_UPPERCASE_MAPPING:
+            case UProperty.TITLECASE_MAPPING:
+            case UProperty.UPPERCASE_MAPPING:
+                return SRC_CASE;
+
+            case UProperty.ISO_COMMENT:
+            case UProperty.NAME:
+            case UProperty.UNICODE_1_NAME:
+                return SRC_NAMES;
+
+            default:
+                return SRC_NONE;
+            }
+        } else {
+            return SRC_NONE; /* undefined */
+        }
     }
 
     /**
@@ -639,518 +512,6 @@ public final class UCharacterProperty implements Trie.DataManipulate
         }
         return INSTANCE_;
     }
-
-    /**
-    * Special casing lowercase management
-    * @param locale current locale
-    * @param ch code point to convert
-    * @param index of exception containing special case information
-    * @param uchariter text iterator with index at position of ch
-    * @param buffer to add lowercase
-    * @return size of the lower case character in UTF16 format
-    */
-    public int getSpecialLowerCase(ULocale locale, int index, int ch,
-                                   UCharacterIterator uchariter,
-                                   StringBuffer buffer)
-    {
-        int exception = getException(index,
-                                     UCharacterProperty.EXC_SPECIAL_CASING_);
-        if (exception < 0) {
-            int offset = uchariter.getIndex();
-            // fill u and i with the case mapping result string
-            // use hardcoded conditions and mappings
-            // Test for conditional mappings first
-            // (otherwise the unconditional default mappings are always taken),
-            // then test for characters that have unconditional mappings in
-            // SpecialCasing.txt, then get the UnicodeData.txt mappings.
-            if (locale.getLanguage().equals(LITHUANIAN_) &&
-                // base characters, find accents above
-                (((ch == LATIN_CAPITAL_LETTER_I_ ||
-                   ch == LATIN_CAPITAL_LETTER_J_ ||
-                   ch == LATIN_CAPITAL_I_WITH_OGONEK_) &&
-                  isFollowedByMOREABOVE(uchariter, offset)) ||
-                  // precomposed with accent above, no need to find one
-                  (ch == LATIN_CAPITAL_I_WITH_GRAVE_ ||
-                   ch == LATIN_CAPITAL_I_WITH_ACUTE_ ||
-                   ch == LATIN_CAPITAL_I_WITH_TILDE_))) {
-                   // lithuanian: add a dot above if there are more accents
-                   // above (to always have the dot)
-                   // # Lithuanian
-                   // # Lithuanian retains the dot in a lowercase i when
-                   //   followed by accents.
-                   // # Introduce an explicit dot above when lowercasing
-                   // capital I's and J's
-                   // whenever there are more accents above.
-                   // (of the accents used in Lithuanian: grave, acute, tilde
-                   // above, and ogonek)
-                   // 0049; 0069 0307; 0049; 0049; lt More_Above;
-                   // # LATIN CAPITAL LETTER I
-                   // 004A; 006A 0307; 004A; 004A; lt More_Above;
-                   // # LATIN CAPITAL LETTER J
-                   // 012E; 012F 0307; 012E; 012E; lt More_Above;
-                   // # LATIN CAPITAL LETTER I WITH OGONEK
-                   // 00CC; 0069 0307 0300; 00CC; 00CC; lt;
-                   // # LATIN CAPITAL LETTER I WITH GRAVE
-                   // 00CD; 0069 0307 0301; 00CD; 00CD; lt;
-                   // # LATIN CAPITAL LETTER I WITH ACUTE
-                   // 0128; 0069 0307 0303; 0128; 0128; lt;
-                   // # LATIN CAPITAL LETTER I WITH TILDE
-                   switch(ch) {
-                   case LATIN_CAPITAL_LETTER_I_:
-                        buffer.append((char)LATIN_SMALL_LETTER_I_);
-                        buffer.append((char)COMBINING_DOT_ABOVE_);
-                        return 2;
-                   case LATIN_CAPITAL_LETTER_J_:
-                        buffer.append((char)LATIN_SMALL_LETTER_J_);
-                        buffer.append((char)COMBINING_DOT_ABOVE_);
-                        return 2;
-                   case LATIN_CAPITAL_I_WITH_OGONEK_:
-                        buffer.append((char)LATIN_SMALL_LETTER_I_WITH_OGONEK_);
-                        buffer.append((char)COMBINING_DOT_ABOVE_);
-                        return 2;
-                   case LATIN_CAPITAL_I_WITH_GRAVE_:
-                        buffer.append((char)LATIN_SMALL_LETTER_I_);
-                        buffer.append((char)COMBINING_DOT_ABOVE_);
-                        buffer.append((char)COMBINING_GRAVE_ACCENT_);
-                        return 3;
-                   case LATIN_CAPITAL_I_WITH_ACUTE_:
-                        buffer.append((char)LATIN_SMALL_LETTER_I_);
-                        buffer.append((char)COMBINING_DOT_ABOVE_);
-                        buffer.append((char)COMBINING_ACUTE_ACCENT_);
-                        return 3;
-                   case LATIN_CAPITAL_I_WITH_TILDE_:
-                        buffer.append((char)LATIN_SMALL_LETTER_I_);
-                        buffer.append((char)COMBINING_DOT_ABOVE_);
-                        buffer.append((char)COMBINING_TILDE_);
-                        return 3;
-                   }
-            }
-
-            String language = locale.getLanguage();
-            if (language.equals(TURKISH_) || language.equals(AZERBAIJANI_)) {
-                if (ch == 0x130) {
-                    // # I and i-dotless; I-dot and i are case pairs in Turkish
-                    // and Azeri
-                    // # The following rules handle those cases.
-                    // 0130; 0069; 0130; 0130; tr
-                    // # LATIN CAPITAL LETTER I WITH DOT ABOVE
-                    // 0130; 0069; 0130; 0130; az
-                    // # LATIN CAPITAL LETTER I WITH DOT ABOVE
-                    buffer.append(LATIN_SMALL_LETTER_I_);
-                    return 1;
-                }
-                if (ch == 0x307 && isPrecededByI(uchariter, offset)) {
-                    // ### TODO see comment above about isAfter_I()
-                    // # When lowercasing, remove dot_above in the sequence
-                    // I + dot_above, which will turn into i.
-                    // # This matches the behavior of the canonically
-                    // equivalent I-dot_above
-                    // 0307; ; 0307; 0307; tr After_I; # COMBINING DOT ABOVE
-                    // 0307; ; 0307; 0307; az After_I; # COMBINING DOT ABOVE
-                    return 0; // remove the dot (continue without output)
-
-                }
-                if (ch == LATIN_CAPITAL_LETTER_I_ &&
-                    !isFollowedByDotAbove(uchariter, offset)) {
-                    // turkish: I maps to dotless i
-                    // other languages or turkish with decomposed I+dot above:
-                    // I maps to i
-                    // # When lowercasing, unless an I is before a dot_above,
-                    // it turns into a dotless i.
-                    //  0049; 0131; 0049; 0049; tr Not_Before_Dot;
-                    // # LATIN CAPITAL LETTER I
-                    // 0049; 0131; 0049; 0049; az Not_Before_Dot;
-                    // # LATIN CAPITAL LETTER I
-                    buffer.append(LATIN_SMALL_LETTER_DOTLESS_I_);
-                    return 1;
-                }
-            }
-
-            if (ch == 0x130) {
-                // decomposed I+dot above becomes i (see handling of
-                // U+0049 for turkish) and removes the dot above
-                // # Preserve canonical equivalence for I with dot. Turkic is
-                // handled below.
-                // 0130; 0069 0307; 0130; 0130;
-                // # LATIN CAPITAL LETTER I WITH DOT ABOVE
-                buffer.append(LATIN_SMALL_LETTER_I_);
-                buffer.append(COMBINING_DOT_ABOVE_);
-                return 2; // remove the dot (continue without output)
-            }
-
-            if (ch == GREEK_CAPITAL_LETTER_SIGMA_ &&
-                isCFINAL(uchariter, offset) &&
-                isNotCINITIAL(uchariter, offset)) {
-                // greek capital sigma maps depending on surrounding cased
-                // letters
-                // greek capital sigma maps depending on surrounding cased
-                // letters (see SpecialCasing.txt) */
-                // # Special case for final form of sigma
-                // 03A3; 03C2; 03A3; 03A3; Final_Sigma;
-                // # GREEK CAPITAL LETTER SIGMA
-                buffer.append(GREEK_SMALL_LETTER_RHO_);
-                return 1;
-            }
-
-            // no known conditional special case mapping, use a normal mapping
-            if (hasExceptionValue(index, UCharacterProperty.EXC_LOWERCASE_)) {
-                int oldlength = buffer.length();
-                UTF16.append(buffer, getException(index,
-                                            UCharacterProperty.EXC_LOWERCASE_));
-                return buffer.length() - oldlength;
-            }
-
-            UTF16.append(buffer, ch);
-            return UTF16.getCharCount(ch);
-        }
-        else {
-            // get the special case mapping string from the data file
-            index = exception & LAST_CHAR_MASK_;
-            int oldlength = buffer.length();
-            getLowerCase(index, buffer);
-            return buffer.length() - oldlength;
-        }
-    }
-
-    /**
-     * Gets the lower case map of the argument codepoint
-     * @param locale locale which the lowercase is looked for
-     * @param ch codepoint whose lower case is to be matched
-     * @param uchariter text iterator positioned at the codepoint ch
-     * @param buffer buffer to store result string
-     * @return size of the lowercased codepoint in UTF16 format
-     */
-    public int toLowerCase(ULocale locale, int ch,
-               UCharacterIterator uchariter,
-               StringBuffer buffer)
-    {
-        int props = getProperty(ch);
-        if ((props & EXCEPTION_MASK) == 0) {
-            int type = props & TYPE_MASK;
-            if (type == UCharacterCategory.UPPERCASE_LETTER ||
-                type == UCharacterCategory.TITLECASE_LETTER) {
-                ch += UCharacterProperty.getSignedValue(props);
-            }
-        } else {
-            int index = UCharacterProperty.getExceptionIndex(props);
-            if (hasExceptionValue(index,
-                                UCharacterProperty.EXC_SPECIAL_CASING_)) {
-                return getSpecialLowerCase(locale, index, ch, uchariter,
-                                           buffer);
-            }
-            if (hasExceptionValue(index,
-                                       UCharacterProperty.EXC_LOWERCASE_)) {
-                ch = getException(index, UCharacterProperty.EXC_LOWERCASE_);
-            }
-        }
-        UTF16.append(buffer, ch);
-        return UTF16.getCharCount(ch);
-    }
-
-    /**
-     * Gets the lower case map of the argument codepoint
-     * @param locale locale which the lowercase is looked for
-     * @param ch codepoint whose lower case is to be matched
-     * @param uchariter text iterator positioned at the codepoint ch
-     * @param buffer array in which to store the result
-     * @return size oflowercased codepoint in UTF16 format
-     */
-    public int toLowerCase(ULocale locale, int ch,
-                           UCharacterIterator uchariter, char buffer[])
-    {
-        int props = getProperty(ch);
-        if ((props & EXCEPTION_MASK) == 0) {
-            int type = props & TYPE_MASK;
-            if (type == UCharacterCategory.UPPERCASE_LETTER ||
-                type == UCharacterCategory.TITLECASE_LETTER) {
-                ch += UCharacterProperty.getSignedValue(props);
-            }
-        } else {
-            int index = UCharacterProperty.getExceptionIndex(props);
-            if (hasExceptionValue(index,
-                                  UCharacterProperty.EXC_SPECIAL_CASING_)) {
-                StringBuffer strbuffer = new StringBuffer(1);
-                int result = getSpecialLowerCase(locale, index, ch, uchariter,
-                                                 strbuffer);
-                strbuffer.getChars(0, result, buffer, 0);
-                return result;
-            }
-            if (hasExceptionValue(index, UCharacterProperty.EXC_LOWERCASE_)) {
-                ch = getException(index, UCharacterProperty.EXC_LOWERCASE_);
-            }
-        }
-        if (ch < UTF16.SUPPLEMENTARY_MIN_VALUE) {
-            buffer[0] = (char)ch;
-            return 1;
-        }
-        buffer[0] = UTF16.getLeadSurrogate(ch);
-        buffer[1] = UTF16.getTrailSurrogate(ch);
-        return 2;
-    }
-
-    /**
-     * Gets the lower case mappings of the substring from index start to the
-     * character before end.
-     * @param locale locale which the mappings will be searched
-     * @param str string to map
-     * @param start start index of the substring to map
-     * @param limit one index pass the last character to map
-     * @param result string buffer to store lower case string
-     */
-    public void toLowerCase(ULocale locale, String str, int start, int limit,
-                            StringBuffer result)
-    {
-        UCharacterIterator ucharIter = UCharacterIterator.getInstance(str);
-        int                strIndex  = start;
-
-        while (strIndex < limit) {
-            ucharIter.setIndex(strIndex);
-            int ch = ucharIter.currentCodePoint();
-
-            toLowerCase(locale, ch, ucharIter, result);
-            strIndex ++;
-            if (ch >= UTF16.SUPPLEMENTARY_MIN_VALUE) {
-                strIndex ++;
-            }
-        }
-    }
-
-    /**
-    * Special casing uppercase management
-    * @param locale locale which the mappings will be based on
-    * @param index of exception containing special case information
-    * @param ch code point to convert
-    * @param uchariter text iterator which ch belongs to
-    * @param upperflag true if uppercase mapping is desired, false for title
-    *        casing
-    * @param buffer to add uppercase
-    * @return size of uppercased codepoint in UTF16 format
-    */
-    public int getSpecialUpperOrTitleCase(ULocale locale, int index, int ch,
-                                          UCharacterIterator uchariter,
-                                          boolean upperflag,
-                                          StringBuffer buffer)
-    {
-        int exception = getException(index,
-                                     UCharacterProperty.EXC_SPECIAL_CASING_);
-        if (exception < 0) {
-            String language = locale.getLanguage();
-            // use hardcoded conditions and mappings
-            if ((language.equals(TURKISH_) || language.equals(AZERBAIJANI_))
-                && ch == LATIN_SMALL_LETTER_I_) {
-                // turkish: i maps to dotted I
-                // # Turkish and Azeri
-                // # I and i-dotless; I-dot and i are case pairs in Turkish and Azeri
-                // # The following rules handle those cases.
-                // # When uppercasing, i turns into a dotted capital I
-                // 0069; 0069; 0130; 0130; tr; # LATIN SMALL LETTER I
-                // 0069; 0069; 0130; 0130; az; # LATIN SMALL LETTER I
-                buffer.append(LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE_);
-                return 1;
-            }
-
-            if (language.equals(LITHUANIAN_) && ch == COMBINING_DOT_ABOVE_
-                && isPrecededBySoftDotted(uchariter, uchariter.getIndex())) {
-                // # Lithuanian
-                // # Lithuanian retains the dot in a lowercase i when followed
-                // by accents.
-                // # Remove DOT ABOVE after "i" with upper or titlecase
-                // 0307; 0307; ; ; lt After_Soft_Dotted; # COMBINING DOT ABOVE
-                                // lithuanian: remove DOT ABOVE after U+0069 "i" with
-                // upper or titlecase
-                return 0; // remove the dot (continue without output)
-            }
-
-            // no known conditional special case mapping, use a normal mapping
-           if (!upperflag && hasExceptionValue(index,
-                                          UCharacterProperty.EXC_TITLECASE_)) {
-               ch = getException(index, UCharacterProperty.EXC_TITLECASE_);
-           }
-           else {
-               if (hasExceptionValue(index,
-                                     UCharacterProperty.EXC_UPPERCASE_)) {
-                   ch = getException(index, UCharacterProperty.EXC_UPPERCASE_);
-               }
-           }
-
-           UTF16.append(buffer, ch);
-           return UTF16.getCharCount(ch);
-        }
-
-        // get the special case mapping string from the data file
-        index = exception & LAST_CHAR_MASK_;
-        int oldlength = buffer.length();
-        if (upperflag) {
-            getUpperCase(index, buffer);
-        }
-        else {
-              getTitleCase(index, buffer);
-        }
-        return buffer.length() - oldlength;
-    }
-
-    /**
-     * Gets the upper or title case map of the codepoint
-     * @param locale locale which the mappings will be searched
-     * @param ch codepoint whose upper or title case will be mapped
-     * @param uchariter text iterator positioned at the codepoint
-     * @param upperflag flag true if uppercase is desired, false for title case
-     * @param buffer buffer to store result map
-     * @return size of uppercased codepoint in UTF16 format
-     */
-    public int toUpperOrTitleCase(ULocale locale, int ch,
-                                  UCharacterIterator uchariter,
-                                  boolean upperflag, StringBuffer buffer)
-    {
-        int props = getProperty(ch);
-        if ((props & EXCEPTION_MASK) == 0) {
-            int type = props & TYPE_MASK;
-            if (type == UCharacterCategory.LOWERCASE_LETTER) {
-                ch -= UCharacterProperty.getSignedValue(props);
-            }
-        } else {
-            int index = UCharacterProperty.getExceptionIndex(props);
-            if (hasExceptionValue(index,
-                                  UCharacterProperty.EXC_SPECIAL_CASING_)) {
-                return getSpecialUpperOrTitleCase(locale, index, ch, uchariter,
-                                                  upperflag, buffer);
-            }
-            if (!upperflag && hasExceptionValue(index,
-                                         UCharacterProperty.EXC_TITLECASE_)) {
-                ch = getException(index, UCharacterProperty.EXC_TITLECASE_);
-            }
-            else {
-                 if (hasExceptionValue(index,
-                                      UCharacterProperty.EXC_UPPERCASE_)) {
-                    ch = getException(index,
-                                      UCharacterProperty.EXC_UPPERCASE_);
-                }
-            }
-        }
-        UTF16.append(buffer, ch);
-        return UTF16.getCharCount(ch);
-    }
-
-    /**
-     * Gets the upper or title case map of the codepoint
-     * @param locale locale which the mappings will be searched
-     * @param ch codepoint whose upper or title case will be mapped
-     * @param uchariter text iterator positioned at the codepoint
-     * @param upperflag flag true if uppercase is desired, false for title case
-     * @param buffer buffer to store result map
-     * @return size of uppercased codepoint in UTF16 format
-     */
-    public int toUpperOrTitleCase(ULocale locale, int ch,
-                                  UCharacterIterator uchariter,
-                                  boolean upperflag, char buffer[])
-    {
-        int props = getProperty(ch);
-        if ((props & EXCEPTION_MASK) == 0) {
-            int type = props & TYPE_MASK;
-            if (type == UCharacterCategory.LOWERCASE_LETTER) {
-                ch -= UCharacterProperty.getSignedValue(props);
-            }
-        } else {
-            int index = UCharacterProperty.getExceptionIndex(props);
-            if (hasExceptionValue(index,
-                                  UCharacterProperty.EXC_SPECIAL_CASING_)) {
-                   StringBuffer strbuffer = new StringBuffer(1);
-                int result = getSpecialUpperOrTitleCase(locale, index, ch,
-                                                        uchariter, upperflag,
-                                                        strbuffer);
-                strbuffer.getChars(0, result, buffer, 0);
-                return result;
-            }
-            if (!upperflag && hasExceptionValue(index,
-                                         UCharacterProperty.EXC_TITLECASE_)) {
-                ch = getException(index, UCharacterProperty.EXC_TITLECASE_);
-            }
-            else {
-                 if (hasExceptionValue(index,
-                                      UCharacterProperty.EXC_UPPERCASE_)) {
-                    ch = getException(index,
-                                      UCharacterProperty.EXC_UPPERCASE_);
-                }
-            }
-        }
-        if (ch < UTF16.SUPPLEMENTARY_MIN_VALUE) {
-            buffer[0] = (char)ch;
-            return 1;
-        }
-        buffer[0] = UTF16.getLeadSurrogate(ch);
-        buffer[1] = UTF16.getTrailSurrogate(ch);
-        return 2;
-    }
-
-    /**
-     * Gets the uppercasing of the argument string.
-     * @param locale locale which the mappings will be searched
-     * @param str string to map
-     * @param start start index of the substring to map
-     * @param limit one index pass the last character to map
-     */
-    public String toUpperCase(ULocale locale, String str, int start, int limit)
-    {
-        UCharacterIterator ucharIter = UCharacterIterator.getInstance(str);
-        int                strIndex  = start;
-        StringBuffer       result    = new StringBuffer(limit - start);
-
-        while (strIndex < limit) {
-            ucharIter.setIndex(strIndex);
-            int ch = ucharIter.currentCodePoint();
-
-            toUpperOrTitleCase(locale, ch, ucharIter, true, result);
-            strIndex ++;
-            if (ch >= UTF16.SUPPLEMENTARY_MIN_VALUE) {
-                strIndex ++;
-            }
-        }
-        return result.toString();
-    }
-
-    /**
-    * <p>Gets the titlecase version of the argument string.</p>
-    * <p>Position for titlecasing is determined by the argument break
-    * iterator, hence the user can customized his break iterator for
-    * a specialized titlecasing. In this case only the forward iteration
-    * needs to be implemented.
-    * If the break iterator passed in is null, the default Unicode algorithm
-    * will be used to determine the titlecase positions.
-    * </p>
-    * <p>Only positions returned by the break iterator will be title cased,
-    * character in between the positions will all be in lower case.</p>
-    * <p>Casing is dependent on the default locale and context-sensitive</p>
-    * @param str source string to be performed on
-    * @param breakiter break iterator to determine the positions in which
-    *        the character should be title cased.
-    * @return lowercase version of the argument string
-    */
-     public String toTitleCase(ULocale locale, String str,
-                               BreakIterator breakiter)
-     {
-         UCharacterIterator ucharIter = UCharacterIterator.getInstance(str);
-        int                length    = str.length();
-        StringBuffer       result    = new StringBuffer();
-
-        breakiter.setText(str);
-
-        int                index     = breakiter.first();
-           // titlecasing loop
-        while (index != BreakIterator.DONE && index < length) {
-            // titlecase the character at the found index
-            int ch = UTF16.charAt(str, index);
-            ucharIter.setIndex(index);
-            index += UTF16.getCharCount(ch);
-            toUpperOrTitleCase(locale, ch, ucharIter, false, result);
-            int next = breakiter.next();
-            if (index != BreakIterator.DONE && index < next) {
-                // lowercase [prev..index]
-                toLowerCase(locale, str, index, next, result);
-            }
-            index = next;
-        }
-        return result.toString();
-     }
 
     /**
      * <p>
@@ -1274,15 +635,6 @@ public final class UCharacterProperty implements Trie.DataManipulate
     // protected variables -----------------------------------------------
 
     /**
-    * Case table
-    */
-    char m_case_[];
-
-    /**
-    * Exception property table
-    */
-    int m_exception_[];
-    /**
      * Extra property trie
      */
     CharTrie m_additionalTrie_;
@@ -1323,102 +675,19 @@ public final class UCharacterProperty implements Trie.DataManipulate
     private static final int DATA_BUFFER_SIZE_ = 25000;
 
     /**
-    * This, from what i infer is the max size of the indicators used for the
-    * exception values.
-    * Number of bits in an 8-bit integer value
-    */
-    private static final int EXC_GROUP_ = 8;
-
-    /**
-    * Mask to get the group
-    */
-    private static final int EXC_GROUP_MASK_ = 255;
-
-    /**
-    * Mask to get the digit value in the exception result
-    */
-    private static final int EXC_DIGIT_MASK_ = 0xFFFF;
-
-    /**
-    * Offset table for data in exception block.<br>
-    * Table formed by the number of bits used for the index, e.g. 0 = 0 bits,
-    * 1 = 1 bits.
-    */
-    private static final byte FLAGS_OFFSET_[] =
-    {
-        0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4,
-        1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
-        1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
-        2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
-        1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
-        2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
-        2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
-        3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7,
-        1, 2, 2, 3, 2, 3, 3, 4, 2, 3, 3, 4, 3, 4, 4, 5,
-        2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
-        2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
-        3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7,
-        2, 3, 3, 4, 3, 4, 4, 5, 3, 4, 4, 5, 4, 5, 5, 6,
-        3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7,
-        3, 4, 4, 5, 4, 5, 5, 6, 4, 5, 5, 6, 5, 6, 6, 7,
-        4, 5, 5, 6, 5, 6, 6, 7, 5, 6, 6, 7, 6, 7, 7, 8
-    };
-
-    /**
     * Numeric value shift
     */
-    private static final int VALUE_SHIFT_ = 20;
+    private static final int VALUE_SHIFT_ = 8;
 
     /**
     * Mask to be applied after shifting to obtain an unsigned numeric value
     */
-    private static final int UNSIGNED_VALUE_MASK_AFTER_SHIFT_ = 0x7FF;
-
-    /**
-     * Shift to get reserved value
-     */
-    private static final int RESERVED_SHIFT_ = 15;
+    private static final int UNSIGNED_VALUE_MASK_AFTER_SHIFT_ = 0xFF;
 
     /**
      *
      */
-    private static final int BIDI_SHIFT_ = 6;
-    /**
-     *
-     */
-    private static final int MIRROR_SHIFT_ = BIDI_SHIFT_ + 5;
-
-    /**
-     *
-     */
-    private static final int NUMERIC_TYPE_SHIFT = 12;
-    /**
-     *
-     */
-    private static final int CASE_SENSITIVE_SHIFT_= NUMERIC_TYPE_SHIFT+3;
-    /**
-     * Bit indicating exception
-     */
-      private static final int EXCEPTION_BIT = 1 << 5;
-
-      /**
-       * Bit to get the actual property value
-       */
-    private static final int VALUE_BITS_ = 0x10000 - VALUE_SHIFT_;
-
-    /**
-     * Minimum value of a property
-     */
-    private static final int MIN_VALUE_ = -(1 << (VALUE_BITS_ - 1));
-
-    /**
-     * Maximum value of a property
-     */
-    private static final int MAX_VALUE_ = (1 << (VALUE_BITS_ - 1)) - 1;
-    /**
-     * Maximum number of exceptions
-     */
-    private static int MAX_EXCEPTIONS_COUNT_ = 1 << VALUE_BITS_;
+    private static final int NUMERIC_TYPE_SHIFT = 5;
 
     /**
     * To get the last 5 bits out from a data type
@@ -1434,14 +703,6 @@ public final class UCharacterProperty implements Trie.DataManipulate
     */
     private static final int SHIFT_10_ = 10;
 
-    /**
-    * Folding indicator mask
-    */
-    private static final int SUPPLEMENTARY_FOLD_INDICATOR_MASK_ = 0x8000;
-    /**
-    * Folding offset mask
-    */
-    private static final int SUPPLEMENTARY_FOLD_OFFSET_MASK_ = 0x7FFF;
     /**
     * Shift value for lead surrogate to form a supplementary character.
     */
@@ -1546,12 +807,12 @@ public final class UCharacterProperty implements Trie.DataManipulate
     */
     private static final int SHIFT_16_ = 16;
 
-       // additional properties ----------------------------------------------
+    // additional properties ----------------------------------------------
 
-       /**
-        * Additional properties used in internal trie data
-        */
-       /*
+    /**
+     * Additional properties used in internal trie data
+     */
+    /*
      * Properties in vector word 1
      * Each bit encodes one binary property.
      * The following constants represent the bit number, use 1<<UPROPS_XYZ.
@@ -1612,6 +873,8 @@ public final class UCharacterProperty implements Trie.DataManipulate
     // boolean properties in vector word 2
     private static final int V2_S_TERM_PROPERTY_ = 24;
     private static final int V2_VARIATION_SELECTOR_PROPERTY_ = 25;
+    private static final int V2_PATTERN_SYNTAX = 26;                   /* new in ICU 3.4 and Unicode 4.1 */
+    private static final int V2_PATTERN_WHITE_SPACE = 27;
 
     // private constructors --------------------------------------------------
 
@@ -1633,368 +896,6 @@ public final class UCharacterProperty implements Trie.DataManipulate
 
     // private methods -------------------------------------------------------
 
-    /*
-     * This section contains helper functions that check for conditions
-     * in the input text surrounding the current code point
-     * according to SpecialCasing.txt.
-     *
-     * Starting with ICU 2.1, the "surrounding text" is passed in as an
-     * instance of UCharacterIterator to allow the core case mapping functions
-     * to be used inside transliterators (using Replaceable instead of String)
-     * etc.
-     *
-     * Each helper function gets the index
-     * - after the current code point if it looks at following text
-     * - before the current code point if it looks at preceding text
-     *
-     * Unicode 3.2 UAX 21 "Case Mappings" defines the conditions as follows:
-     *
-     * Final_Sigma
-     *   C is preceded by a sequence consisting of a cased letter and a
-     *   case-ignorable sequence, and C is not followed by a sequence
-     *   consisting of an ignorable sequence and then a cased letter.
-     *
-     * More_Above
-     *   C is followed by one or more characters of combining class 230 (ABOVE)
-     *   in the combining character sequence.
-     *
-     * After_Soft_Dotted
-     *   The last preceding character with combining class of zero before C
-     *   was Soft_Dotted,
-     *   and there is no intervening combining character class 230 (ABOVE).
-     *
-     * Before_Dot
-     *   C is followed by combining dot above (U+0307).
-     *   Any sequence of characters with a combining class that is neither 0
-     *   nor 230 may intervene between the current character and the combining
-     *   dot above.
-     *
-     * The erratum from 2002-10-31 adds the condition
-     *
-     * After_I
-     *   The last preceding base character was an uppercase I, and there is no
-     *   intervening combining character class 230 (ABOVE).
-     *
-     *   (See Jitterbug 2344 and the comments on After_I below.)
-     *
-     * Helper definitions in Unicode 3.2 UAX 21:
-     *
-     * D1. A character C is defined to be cased
-     *     if it meets any of the following criteria:
-     *
-     *   - The general category of C is Titlecase Letter (Lt)
-     *   - In [CoreProps], C has one of the properties Uppercase, or Lowercase
-     *   - Given D = NFD(C), then it is not the case that:
-     *     D = UCD_lower(D) = UCD_upper(D) = UCD_title(D)
-     *     (This third criterium does not add any characters to the list
-     *      for Unicode 3.2. Ignored.)
-     *
-     * D2. A character C is defined to be case-ignorable
-     *     if it meets either of the following criteria:
-     *
-     *   - The general category of C is
-     *     Nonspacing Mark (Mn), or Enclosing Mark (Me), or Format Control (Cf),
-     *     or Letter Modifier (Lm), or Symbol Modifier (Sk)
-     *   - C is one of the following characters
-     *     U+0027 APOSTROPHE
-     *     U+00AD SOFT HYPHEN (SHY)
-     *     U+2019 RIGHT SINGLE QUOTATION MARK
-     *            (the preferred character for apostrophe)
-     *
-     * D3. A case-ignorable sequence is a sequence of
-     *     zero or more case-ignorable characters.
-     */
-
-    /**
-    * Determines if a string at offset is preceded by any soft dotted character
-    * with no intervening character with combining class = 230
-    * @param uchariter text iterator to be determined
-    * @param offset offset in string to check
-    * @return true if some characters preceding the offset index belongs to
-    *         the set of soft dotted characters with no intervening character
-    * @see SpecialCasing.txt
-    */
-    private boolean isPrecededBySoftDotted(
-                                UCharacterIterator uchariter, int offset)
-    {
-        uchariter.setIndex(offset);
-
-        int ch = uchariter.previousCodePoint();
-
-        while (ch != UCharacterIterator.DONE) {
-            if (isSoftDotted(ch)) {
-                return true; // preceded by TYPE_i
-            }
-
-            int cc = NormalizerImpl.getCombiningClass(ch);
-            if (cc == 0 || cc == COMBINING_MARK_ABOVE_CLASS_) {
-                // preceded by different base character not TYPE_i), or
-                // intervening cc == 230
-                return false;
-            }
-            ch = uchariter.previousCodePoint();
-        }
-
-        return false; // not preceded by TYPE_i
-    }
-
-    /**
-    * Determines if codepoint at offset is not followed by a sequence
-    * consisting of an ignorable sequence and then a cased letter
-    * {Ll, Lu, Lt}.
-    * @param uchariter String iterator to determine
-    * @param offset codepoint offset in string to check
-    * @return false if any character after offset in src is a cased letter
-    * @see SpecialCasing.txt
-    */
-    private boolean isCFINAL(UCharacterIterator uchariter, int offset)
-    {
-        // iterator should have been determined to be not null by caller
-        uchariter.setIndex(offset);
-        uchariter.nextCodePoint(); // rid of current codepoint
-        int ch = uchariter.nextCodePoint(); // start checking
-
-        while (ch != UCharacterIterator.DONE) {
-            int cat = getProperty(ch) & TYPE_MASK;
-            if (isCased(ch, cat)) {
-                return false; // followed by cased letter
-            }
-            if (!isCaseIgnorable(ch, cat)) {
-                return true; // not ignorable
-            }
-            ch = uchariter.nextCodePoint();
-        }
-
-        return true;
-    }
-
-    /**
-    * Determines if codepoint at offset is not preceded by a sequence
-    * consisting of a cased letter {Ll, Lu, Lt} and an ignorable sequence.
-    * @param uchariter string iterator to determine
-    * @param offset codepoint offset in string to check
-    * @return true if any character before index in src is a cased letter
-    * @see SpecialCasing.txt
-    */
-    private boolean isNotCINITIAL(UCharacterIterator uchariter,
-                                         int offset)
-    {
-        uchariter.setIndex(offset);
-        int ch = uchariter.previousCodePoint();
-
-        while (ch != UCharacterIterator.DONE) {
-            int cat = getProperty(ch) & TYPE_MASK;
-            if (isCased(ch, cat)) {
-                return true; // preceded by cased letter
-            }
-            if (!isCaseIgnorable(ch, cat)) {
-                return false; // not ignorable
-            }
-            ch = uchariter.previousCodePoint();
-        }
-
-        return false;
-    }
-
-    /**
-     * <p>
-     * See Jitterbug 2344:
-     * The condition After_I for Turkic-lowercasing of U+0307 combining dot
-     * above is checked in ICU 2.0, 2.1, 2.6 but was not in 2.2 & 2.4 because
-     * we made those releases compatible with Unicode 3.2 which had not fixed
-     * a related but in SpecialCasing.txt.
-     * </p>
-     * <p>
-     * From the Jitterbug 2344 text:
-     * ... this bug is listed as a Unicode erratum
-     * from 2002-10-31 at http://www.unicode.org/uni2errata/UnicodeErrata.html
-     * </p>
-     * <quote>
-     * There are two errors in SpecialCasing.txt.
-     * 1. Missing semicolons on two lines. ... [irrelevant for ICU]
-     * 2. An incorrect context definition. Correct as follows:
-     * &lt; 0307; ; 0307; 0307; tr After_Soft_Dotted; # COMBINING DOT ABOVE
-     * &lt; 0307; ; 0307; 0307; az After_Soft_Dotted; # COMBINING DOT ABOVE
-     * ---
-     * &gtr; 0307; ; 0307; 0307; tr After_I; # COMBINING DOT ABOVE
-     * &gtr; 0307; ; 0307; 0307; az After_I; # COMBINING DOT ABOVE
-     * where the context After_I is defined as:
-     * The last preceding base character was an uppercase I, and there is no
-     * intervening combining character class 230 (ABOVE).
-     * </quote>
-     * <p>
-     * Note that SpecialCasing.txt even in Unicode 3.2 described the condition
-     * as:
-     * </p>
-     * <p>
-     * <ul>
-     * <li> When lowercasing, remove dot_above in the sequence I + dot_above,
-     *      which will turn into i.
-     * <li> This matches the behavior of the canonically equivalent I-dot_above
-     * </ul>
-     * See also the description in this place in older versions of uchar.c
-     * (revision 1.100).
-     * </p>
-     * Markus W. Scherer 2003-feb-15
-     */
-
-    /**
-     * Is preceded by base character 'I' with no intervening cc=230 ?
-     * @param uchariter string iterator to determine
-     * @param offset codepoint offset in string to check
-     */
-    private boolean isPrecededByI(UCharacterIterator uchariter, int offset)
-    {
-        uchariter.setIndex(offset);
-        for(;;) {
-            int c = uchariter.previousCodePoint();
-            if (c < 0) {
-                break;
-            }
-            if (c == LATIN_CAPITAL_LETTER_I_) {
-                return true; // preceded by I
-            }
-
-            int cc = NormalizerImpl.getCombiningClass(c);
-            if (cc == 0 || cc == COMBINING_MARK_ABOVE_CLASS_) {
-                // preceded by different base character (not I),
-                // or intervening cc==230
-                return false;
-            }
-        }
-
-        return false; // not preceded by I
-    }
-
-    /**
-    * Determines if a codepoint at offset in string is followed by one or
-    * more characters of combining class = 230.
-    * @param uchariter text iterator to be determined
-    * @param offset codepoint offset in string to check
-    * @return true if a string at offset is followed by one or more characters
-    *         of combining class = 230.
-    * @see SpecialCasing.txt
-    */
-    private static boolean isFollowedByMOREABOVE(UCharacterIterator uchariter,
-                                                 int offset)
-    {
-        uchariter.setIndex(offset);
-        uchariter.nextCodePoint(); // rid of current codepoint
-        int ch = uchariter.nextCodePoint(); // start checking
-
-        while (ch != UCharacterIterator.DONE) {
-            int cc = NormalizerImpl.getCombiningClass(ch);
-            if (cc == COMBINING_MARK_ABOVE_CLASS_) {
-                return true; // at least one cc==230 following
-            }
-            if (cc == 0) {
-                return false; // next base character, no more cc==230 following
-            }
-            ch = uchariter.nextCodePoint();
-        }
-
-        return false; // no more cc == 230 following
-    }
-
-    /**
-    * Determines if a codepoint at offset in string is followed by a dot
-    * above with no characters of combining class == 230 in between
-    * @param uchariter text iterator to be determined
-    * @param offset codepoint offset of the character in string to check
-    * @return true if a string at offset is followed by oa dot above
-    *         with no characters of combining class == 230 in between
-    * @see SpecialCasing.txt
-    */
-    private static boolean isFollowedByDotAbove(UCharacterIterator uchariter,
-                                                int offset)
-    {
-        uchariter.setIndex(offset);
-        uchariter.nextCodePoint(); // rid off current character
-        int ch = uchariter.nextCodePoint(); // start checking
-
-        while (ch != UCharacterIterator.DONE) {
-            if (ch == COMBINING_DOT_ABOVE_) {
-                return true;
-            }
-            int cc = NormalizerImpl.getCombiningClass(ch);
-            if (cc == 0 || cc == COMBINING_MARK_ABOVE_CLASS_) {
-                return false; // next base character or cc==230 in between
-            }
-            ch = uchariter.nextCodePoint();
-        }
-
-        return false; // no dot above following
-    }
-
-    /**
-    * Checks if the case ignorable
-    * @param ch codepoint
-    * @param cat category of the argument codepoint
-    * @return true if ch is case ignorable.
-    */
-    private static boolean isCaseIgnorable(int ch, int cat)
-    {
-        return cat == UCharacterCategory.NON_SPACING_MARK
-               || cat == UCharacterCategory.ENCLOSING_MARK
-               || cat == UCharacterCategory.FORMAT
-               || cat == UCharacterCategory.MODIFIER_LETTER
-               || cat == UCharacterCategory.MODIFIER_SYMBOL
-               || ch == 0x27 || ch == 0xad || ch == 0x2019;
-    }
-
-    /**
-     * Is this a "cased" character?
-     * @param ch codepoint
-     * @param cat category of the argument
-     * @return true if ch is a cased character
-     */
-    private boolean isCased(int ch, int cat)
-    {
-        // Lt + Uppercase + Lowercase = Lt + Lu + Ll
-        // + Other_Uppercase+Other_Lowercase
-
-        boolean result = (cat == UCharacterCategory.TITLECASE_LETTER
-               || cat == UCharacterCategory.UPPERCASE_LETTER
-               || cat == UCharacterCategory.LOWERCASE_LETTER);
-        if (result) {
-            return result;
-        }
-        int prop = getAdditional(ch, 1);
-        return compareAdditionalType(prop, UPPERCASE_PROPERTY_)
-               || compareAdditionalType(prop, LOWERCASE_PROPERTY_);
-    }
-
-    /**
-     * Is Soft_Dotted?
-     * @param ch codepoint
-     * @return true if ch is soft dotted
-     */
-    private boolean isSoftDotted(int ch) {
-        return compareAdditionalType(getAdditional(ch, 1),
-                                     SOFT_DOTTED_PROPERTY_);
-    }
-
-    /* Is followed by {case-ignorable}* cased  ? */
-    /**
-    * Getting the correct address for data in the exception value
-    * @param evalue exception value
-    * @param indicator type of data to retrieve
-    * @param address current address to move from
-    * @return the correct address
-    */
-    private int addExceptionOffset(int evalue, int indicator, int address)
-    {
-        int result = address;
-        if (indicator >= EXC_GROUP_) {
-        result += FLAGS_OFFSET_[evalue & EXC_GROUP_MASK_];
-        evalue >>= EXC_GROUP_;
-        indicator -= EXC_GROUP_;
-        }
-        int mask = (1 << indicator) - 1;
-        result += FLAGS_OFFSET_[evalue & mask];
-        return result;
-    }
-
     /**
      * Compare additional properties to see if it has argument type
      * @param property 32 bit properties
@@ -2006,14 +907,17 @@ public final class UCharacterProperty implements Trie.DataManipulate
         return (property & (1 << type)) != 0;
     }
 
+    // property starts for UnicodeSet -------------------------------------- ***
 
     private static final int TAB     = 0x0009;
     private static final int LF      = 0x000a;
     private static final int FF      = 0x000c;
     private static final int CR      = 0x000d;
     private static final int U_A     = 0x0041;
+    private static final int U_F     = 0x0046;
     private static final int U_Z     = 0x005a;
     private static final int U_a     = 0x0061;
+    private static final int U_f     = 0x0066;
     private static final int U_z     = 0x007a;
     private static final int DEL     = 0x007f;
     private static final int NL      = 0x0085;
@@ -2028,25 +932,68 @@ public final class UCharacterProperty implements Trie.DataManipulate
     private static final int WJ      = 0x2060;
     private static final int INHSWAP = 0x206a;
     private static final int NOMDIG  = 0x206f;
+    private static final int U_FW_A  = 0xff21;
+    private static final int U_FW_F  = 0xff26;
+    private static final int U_FW_Z  = 0xff3a;
+    private static final int U_FW_a  = 0xff41;
+    private static final int U_FW_f  = 0xff46;
+    private static final int U_FW_z  = 0xff5a;
     private static final int ZWNBSP  = 0xfeff;
+
+    /* for Hangul_Syllable_Type */
+    public void uhst_addPropertyStarts(UnicodeSet set) {
+        /* add code points with hardcoded properties, plus the ones following them */
+
+        /*
+         * Add Jamo type boundaries for UCHAR_HANGUL_SYLLABLE_TYPE.
+         * First, we add fixed boundaries for the blocks of Jamos.
+         * Then we check in loops to see where the current Unicode version
+         * actually stops assigning such Jamos. We start each loop
+         * at the end of the per-Jamo-block assignments in Unicode 4 or earlier.
+         * (These have not changed since Unicode 2.)
+         */
+        int c, value, value2;
+
+        set.add(0x1100);
+        value=UCharacter.HangulSyllableType.LEADING_JAMO;
+        for(c=0x115a; c<=0x115f; ++c) {
+            value2= UCharacter.getIntPropertyValue(c, UProperty.HANGUL_SYLLABLE_TYPE);
+            if(value!=value2) {
+                value=value2;
+                set.add(c);
+            }
+        }
+
+        set.add(0x1160);
+        value=UCharacter.HangulSyllableType.VOWEL_JAMO;
+        for(c=0x11a3; c<=0x11a7; ++c) {
+            value2=UCharacter.getIntPropertyValue(c, UProperty.HANGUL_SYLLABLE_TYPE);
+            if(value!=value2) {
+                value=value2;
+                set.add(c);
+            }
+        }
+
+        set.add(0x11a8);
+        value=UCharacter.HangulSyllableType.TRAILING_JAMO;
+        for(c=0x11fa; c<=0x11ff; ++c) {
+            value2=UCharacter.getIntPropertyValue(c, UProperty.HANGUL_SYLLABLE_TYPE);
+            if(value!=value2) {
+                value=value2;
+                set.add(c);
+            }
+        }
+    }
 
     public UnicodeSet addPropertyStarts(UnicodeSet set) {
         int c;
 
-        /* add the start code point of each same-value range of each trie */
-        //utrie_enum(&normTrie, NULL, _enumPropertyStartsRange, set);
+        /* add the start code point of each same-value range of the main trie */
         TrieIterator propsIter = new TrieIterator(m_trie_);
         RangeValueIterator.Element propsResult = new RangeValueIterator.Element();
           while(propsIter.next(propsResult)){
             set.add(propsResult.start);
         }
-        //utrie_enum(&propsVectorsTrie, NULL, _enumPropertyStartsRange, set);
-        TrieIterator propsVectorsIter = new TrieIterator(m_additionalTrie_);
-        RangeValueIterator.Element propsVectorsResult = new RangeValueIterator.Element();
-        while(propsVectorsIter.next(propsVectorsResult)){
-            set.add(propsVectorsResult.start);
-        }
-
 
         /* add code points with hardcoded properties, plus the ones following them */
 
@@ -2076,6 +1023,8 @@ public final class UCharacterProperty implements Trie.DataManipulate
         set.add(NNBSP+1);
 
         /* add for u_charDigitValue() */
+        // TODO remove when UCharacter.getHanNumericValue() is changed to just return
+        // Unicode numeric values 
         set.add(0x3007);
         set.add(0x3008);
         set.add(0x4e00);
@@ -2102,6 +1051,16 @@ public final class UCharacterProperty implements Trie.DataManipulate
         set.add(U_z+1);
         set.add(U_A);
         set.add(U_Z+1);
+        set.add(U_FW_a);
+        set.add(U_FW_z+1);
+        set.add(U_FW_A);
+        set.add(U_FW_Z+1);
+
+        /* add for u_isxdigit() */
+        set.add(U_f+1);
+        set.add(U_F+1);
+        set.add(U_FW_f+1);
+        set.add(U_FW_F+1);
 
         /* add for UCHAR_DEFAULT_IGNORABLE_CODE_POINT what was not added above */
         set.add(WJ); /* range WJ..NOMDIG */
@@ -2114,55 +1073,21 @@ public final class UCharacterProperty implements Trie.DataManipulate
         set.add(CGJ);
         set.add(CGJ+1);
 
-        /* add for UCHAR_JOINING_TYPE */
-        set.add(ZWNJ); /* range ZWNJ..ZWJ */
-        set.add(ZWJ+1);
-
-        /* add Jamo type boundaries for UCHAR_HANGUL_SYLLABLE_TYPE */
-        set.add(0x1100);
-        int value= UCharacter.HangulSyllableType.LEADING_JAMO;
-        int value2;
-        for(c=0x115a; c<=0x115f; ++c) {
-            value2= UCharacter.getIntPropertyValue(c, UProperty.HANGUL_SYLLABLE_TYPE);
-            if(value!=value2) {
-                value=value2;
-                set.add(c);
-            }
-        }
-
-        set.add(0x1160);
-        value=UCharacter.HangulSyllableType.VOWEL_JAMO;
-        for(c=0x11a3; c<=0x11a7; ++c) {
-            value2=UCharacter.getIntPropertyValue(c, UProperty.HANGUL_SYLLABLE_TYPE);
-            if(value!=value2) {
-                value=value2;
-                set.add(c);
-            }
-        }
-
-        set.add(0x11a8);
-        value=UCharacter.HangulSyllableType.TRAILING_JAMO;
-        for(c=0x11fa; c<=0x11ff; ++c) {
-            value2=UCharacter.getIntPropertyValue(c, UProperty.HANGUL_SYLLABLE_TYPE);
-            if(value!=value2) {
-                value=value2;
-                set.add(c);
-            }
-        }
-
-
-        /*
-         * Omit code points for u_charCellWidth() because
-         * - it is deprecated and not a real Unicode property
-         * - they are probably already set from the trie enumeration
-         */
-
-        /*
-         * Omit code points with hardcoded specialcasing properties
-         * because we do not build property UnicodeSets for them right now.
-         */
         return set; // for chaining
     }
+
+    public void upropsvec_addPropertyStarts(UnicodeSet set) {
+        /* add the start code point of each same-value range of the properties vectors trie */
+        if(m_additionalColumnsCount_>0) {
+            /* if m_additionalColumnsCount_==0 then the properties vectors trie may not be there at all */
+            TrieIterator propsVectorsIter = new TrieIterator(m_additionalTrie_);
+            RangeValueIterator.Element propsVectorsResult = new RangeValueIterator.Element();
+            while(propsVectorsIter.next(propsVectorsResult)){
+                set.add(propsVectorsResult.start);
+            }
+        }
+    }
+
 /*----------------------------------------------------------------
  * Inclusions list
  *----------------------------------------------------------------*/
@@ -2249,12 +1174,19 @@ public final class UCharacterProperty implements Trie.DataManipulate
      *
      * Do not use a UnicodeSet pattern because that causes infinite recursion;
      * UnicodeSet depends on the inclusions set.
+     *
+     * ---
+     *
+     * getInclusions() is commented out starting 2005-feb-12 because
+     * UnicodeSet now calls the uxyz_addPropertyStarts() directly,
+     * and only for the relevant property source.
      */
+    /*
     public UnicodeSet getInclusions() {
         UnicodeSet set = new UnicodeSet();
         NormalizerImpl.addPropertyStarts(set);
         addPropertyStarts(set);
         return set;
     }
-
+    */
 }

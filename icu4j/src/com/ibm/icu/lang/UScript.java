@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2001-2004, International Business Machines Corporation and         *
+* Copyright (C) 2001-2005, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -333,11 +333,56 @@ public final class UScript {
      */
     public static final int KATAKANA_OR_HIRAGANA = 54;  /*Hrkt */
 
+    /* New scripts in Unicode 4.1 @draft ICU 3.4 */
+
+    /**
+     * New script code in Unicode 4.1
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int BUGINESE = 55;           /* Bugi */
+    /**
+     * New script code in Unicode 4.1
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int GLAGOLITIC = 56;         /* Glag */
+    /**
+     * New script code in Unicode 4.1
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int KHAROSHTHI = 57;         /* Khar */
+    /**
+     * New script code in Unicode 4.1
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int SYLOTI_NAGRI = 58;       /* Sylo */
+    /**
+     * New script code in Unicode 4.1
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int NEW_TAI_LUE = 59;        /* Talu */
+    /**
+     * New script code in Unicode 4.1
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int TIFINAGH = 60;           /* Tfng */
+    /**
+     * New script code in Unicode 4.1
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static final int OLD_PERSIAN = 61;        /* Xpeo */
+
     /**
      * Limit
      * @stable ICU 2.4
      */
-    public static final int CODE_LIMIT   = 55;
+    public static final int CODE_LIMIT   = 62;
 
     private static final int SCRIPT_MASK   = 0x0000007f;
     private static final UCharacterProperty prop= UCharacterProperty.getInstance();

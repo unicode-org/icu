@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and    *
+* Copyright (C) 1996-2005, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -16,6 +16,7 @@ import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.util.ValueIterator;
 import com.ibm.icu.util.VersionInfo;
@@ -40,7 +41,7 @@ public final class UCharacterTest extends TestFmwk
     /**
     * ICU4J data version number
     */
-    private final VersionInfo VERSION_ = VersionInfo.getInstance("4.0.1.0");
+    private final VersionInfo VERSION_ = VersionInfo.getInstance("4.1.0.0");
 
     // constructor ===================================================
 
@@ -413,11 +414,31 @@ public final class UCharacterTest extends TestFmwk
               UCharacter.getMirror(0x5d) == 0x5b &&
               UCharacter.getMirror(0x208d) == 0x208e &&
               UCharacter.getMirror(0x3017) == 0x3016 &&
+
+              UCharacter.getMirror(0xbb) == 0xab &&
+              UCharacter.getMirror(0x2215) == 0x29F5 &&
+              UCharacter.getMirror(0x29F5) == 0x2215 && /* large delta between the code points */
+
               UCharacter.getMirror(0x2e) == 0x2e &&
               UCharacter.getMirror(0x6f3) == 0x6f3 &&
               UCharacter.getMirror(0x301c) == 0x301c &&
               UCharacter.getMirror(0xa4ab) == 0xa4ab)) {
             errln("getMirror() does not work correctly");
+        }
+
+        /* verify that Bidi_Mirroring_Glyph roundtrips */
+        UnicodeSet set=new UnicodeSet("[:Bidi_Mirrored:]");
+        UnicodeSetIterator iter=new UnicodeSetIterator(set);
+        int start, end, c2, c3;
+        while(iter.nextRange() && (start=iter.codepoint)>=0) {
+            end=iter.codepointEnd;
+            do {
+                c2=UCharacter.getMirror(start);
+                c3=UCharacter.getMirror(c2);
+                if(c3!=start) {
+                    errln("getMirror() does not roundtrip: U+"+hex(start)+"->U+"+hex(c2)+"->U+"+hex(c3));
+                }
+            } while(++start<=end);
         }
     }
 
@@ -1604,7 +1625,7 @@ public final class UCharacterTest extends TestFmwk
             { 0xfa11, UProperty.UNIFIED_IDEOGRAPH, 1 },
             { 0xfa12, UProperty.UNIFIED_IDEOGRAPH, 0 },
 
-            { -1, 0x401, 0 },
+            { -1, 0x401, 0 }, /* version break for Unicode 4.0.1 */
 
             { 0x002e, UProperty.S_TERM, 1 },
             { 0x0061, UProperty.S_TERM, 0 },
@@ -1617,7 +1638,7 @@ public final class UCharacterTest extends TestFmwk
             /* enum/integer type properties */
             /* test default Bidi classes for unassigned code points */
             { 0x0590, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
-            { 0x05a2, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
+            { 0x05c7, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
             { 0x05ed, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
             { 0x07f2, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
             { 0x08ba, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT },
@@ -1705,7 +1726,6 @@ public final class UCharacterTest extends TestFmwk
             { 0x232A, UProperty.LINE_BREAK, UCharacter.LineBreak.CLOSE_PUNCTUATION },
             { 0x3401, UProperty.LINE_BREAK, UCharacter.LineBreak.IDEOGRAPHIC },
             { 0x4e02, UProperty.LINE_BREAK, UCharacter.LineBreak.IDEOGRAPHIC },
-            { 0xac03, UProperty.LINE_BREAK, UCharacter.LineBreak.IDEOGRAPHIC },
             { 0x20004, UProperty.LINE_BREAK, UCharacter.LineBreak.IDEOGRAPHIC },
             { 0xf905, UProperty.LINE_BREAK, UCharacter.LineBreak.IDEOGRAPHIC },
             { 0xdb7e, UProperty.LINE_BREAK, UCharacter.LineBreak.SURROGATE },
@@ -1754,6 +1774,49 @@ public final class UCharacterTest extends TestFmwk
             { 0xd7a3, UProperty.HANGUL_SYLLABLE_TYPE, UCharacter.HangulSyllableType.LVT_SYLLABLE },
 
             { 0xd7a4, UProperty.HANGUL_SYLLABLE_TYPE, 0 },
+
+            { -1, 0x410, 0 }, /* version break for Unicode 4.1 */
+
+            { 0x00d7, UProperty.PATTERN_SYNTAX, 1 },
+            { 0xfe45, UProperty.PATTERN_SYNTAX, 1 },
+            { 0x0061, UProperty.PATTERN_SYNTAX, 0 },
+
+            { 0x0020, UProperty.PATTERN_WHITE_SPACE, 1 },
+            { 0x0085, UProperty.PATTERN_WHITE_SPACE, 1 },
+            { 0x200f, UProperty.PATTERN_WHITE_SPACE, 1 },
+            { 0x00a0, UProperty.PATTERN_WHITE_SPACE, 0 },
+            { 0x3000, UProperty.PATTERN_WHITE_SPACE, 0 },
+
+            { 0x1d200, UProperty.BLOCK, UCharacter.UnicodeBlock.ANCIENT_GREEK_MUSICAL_NOTATION_ID },
+            { 0x2c8e,  UProperty.BLOCK, UCharacter.UnicodeBlock.COPTIC_ID },
+            { 0xfe17,  UProperty.BLOCK, UCharacter.UnicodeBlock.VERTICAL_FORMS_ID },
+
+            { 0x1a00,  UProperty.SCRIPT, UScript.BUGINESE },
+            { 0x2cea,  UProperty.SCRIPT, UScript.COPTIC },
+            { 0xa82b,  UProperty.SCRIPT, UScript.SYLOTI_NAGRI },
+            { 0x103d0, UProperty.SCRIPT, UScript.OLD_PERSIAN },
+
+            { 0xcc28, UProperty.LINE_BREAK, UCharacter.LineBreak.H2 },
+            { 0xcc29, UProperty.LINE_BREAK, UCharacter.LineBreak.H3 },
+            { 0xac03, UProperty.LINE_BREAK, UCharacter.LineBreak.H3 },
+            { 0x115f, UProperty.LINE_BREAK, UCharacter.LineBreak.JL },
+            { 0x11aa, UProperty.LINE_BREAK, UCharacter.LineBreak.JT },
+            { 0x11a1, UProperty.LINE_BREAK, UCharacter.LineBreak.JV },
+
+            { 0xb2c9, UProperty.GRAPHEME_CLUSTER_BREAK, UCharacter.GraphemeClusterBreak.LVT },
+            { 0x036f, UProperty.GRAPHEME_CLUSTER_BREAK, UCharacter.GraphemeClusterBreak.EXTEND },
+            { 0x0000, UProperty.GRAPHEME_CLUSTER_BREAK, UCharacter.GraphemeClusterBreak.CONTROL },
+            { 0x1160, UProperty.GRAPHEME_CLUSTER_BREAK, UCharacter.GraphemeClusterBreak.V },
+
+            { 0x05f4, UProperty.WORD_BREAK, UCharacter.WordBreak.MIDLETTER },
+            { 0x4ef0, UProperty.WORD_BREAK, UCharacter.WordBreak.OTHER },
+            { 0x19d9, UProperty.WORD_BREAK, UCharacter.WordBreak.NUMERIC },
+            { 0x2044, UProperty.WORD_BREAK, UCharacter.WordBreak.MIDNUM },
+
+            { 0xfffd, UProperty.SENTENCE_BREAK, UCharacter.SentenceBreak.OTHER },
+            { 0x1ffc, UProperty.SENTENCE_BREAK, UCharacter.SentenceBreak.UPPER },
+            { 0xff63, UProperty.SENTENCE_BREAK, UCharacter.SentenceBreak.CLOSE },
+            { 0x2028, UProperty.SENTENCE_BREAK, UCharacter.SentenceBreak.SEP },
 
             /* undefined UProperty values */
             { 0x61, 0x4a7, 0 },

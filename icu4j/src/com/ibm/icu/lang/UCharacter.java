@@ -1,17 +1,20 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and    *
+* Copyright (C) 1996-2005, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
 
 package com.ibm.icu.lang;
 
+import java.io.IOException;
 import java.lang.ref.SoftReference;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import com.ibm.icu.impl.UBiDiProps;
+import com.ibm.icu.impl.UCaseProps;
 import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.UCharacterUtility;
 import com.ibm.icu.impl.UCharacterName;
@@ -767,6 +770,128 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final UnicodeBlock VARIATION_SELECTORS_SUPPLEMENT 
             = new UnicodeBlock("VARIATION_SELECTORS_SUPPLEMENT", 125);                                      
 
+        /* New blocks in Unicode 4.1 */
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final UnicodeBlock ANCIENT_GREEK_MUSICAL_NOTATION = new UnicodeBlock("ANCIENT_GREEK_MUSICAL_NOTATION", 126); /*[1D200]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final UnicodeBlock ANCIENT_GREEK_NUMBERS = new UnicodeBlock("ANCIENT_GREEK_NUMBERS", 127); /*[10140]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final UnicodeBlock ARABIC_SUPPLEMENT = new UnicodeBlock("ARABIC_SUPPLEMENT", 128); /*[0750]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final UnicodeBlock BUGINESE = new UnicodeBlock("BUGINESE", 129); /*[1A00]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final UnicodeBlock CJK_STROKES = new UnicodeBlock("CJK_STROKES", 130); /*[31C0]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final UnicodeBlock COMBINING_DIACRITICAL_MARKS_SUPPLEMENT = new UnicodeBlock("COMBINING_DIACRITICAL_MARKS_SUPPLEMENT", 131); /*[1DC0]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final UnicodeBlock COPTIC = new UnicodeBlock("COPTIC", 132); /*[2C80]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final UnicodeBlock ETHIOPIC_EXTENDED = new UnicodeBlock("ETHIOPIC_EXTENDED", 133); /*[2D80]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final UnicodeBlock ETHIOPIC_SUPPLEMENT = new UnicodeBlock("ETHIOPIC_SUPPLEMENT", 134); /*[1380]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final UnicodeBlock GEORGIAN_SUPPLEMENT = new UnicodeBlock("GEORGIAN_SUPPLEMENT", 135); /*[2D00]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final UnicodeBlock GLAGOLITIC = new UnicodeBlock("GLAGOLITIC", 136); /*[2C00]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final UnicodeBlock KHAROSHTHI = new UnicodeBlock("KHAROSHTHI", 137); /*[10A00]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final UnicodeBlock MODIFIER_TONE_LETTERS = new UnicodeBlock("MODIFIER_TONE_LETTERS", 138); /*[A700]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final UnicodeBlock NEW_TAI_LUE = new UnicodeBlock("NEW_TAI_LUE", 139); /*[1980]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final UnicodeBlock OLD_PERSIAN = new UnicodeBlock("OLD_PERSIAN", 140); /*[103A0]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final UnicodeBlock PHONETIC_EXTENSIONS_SUPPLEMENT = new UnicodeBlock("PHONETIC_EXTENSIONS_SUPPLEMENT", 141); /*[1D80]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final UnicodeBlock SUPPLEMENTAL_PUNCTUATION = new UnicodeBlock("SUPPLEMENTAL_PUNCTUATION", 142); /*[2E00]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final UnicodeBlock SYLOTI_NAGRI = new UnicodeBlock("SYLOTI_NAGRI", 143); /*[A800]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final UnicodeBlock TIFINAGH = new UnicodeBlock("TIFINAGH", 144); /*[2D30]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final UnicodeBlock VERTICAL_FORMS = new UnicodeBlock("VERTICAL_FORMS", 145); /*[FE10]*/
+
         /** 
          * @stable ICU 2.4 
          */
@@ -1309,10 +1434,133 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @stable ICU 2.6
          */
         public static final int VARIATION_SELECTORS_SUPPLEMENT_ID = 125; /*[E0100]*/
+
+        /* New blocks in Unicode 4.1 */
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int ANCIENT_GREEK_MUSICAL_NOTATION_ID = 126; /*[1D200]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int ANCIENT_GREEK_NUMBERS_ID = 127; /*[10140]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int ARABIC_SUPPLEMENT_ID = 128; /*[0750]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int BUGINESE_ID = 129; /*[1A00]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int CJK_STROKES_ID = 130; /*[31C0]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int COMBINING_DIACRITICAL_MARKS_SUPPLEMENT_ID = 131; /*[1DC0]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int COPTIC_ID = 132; /*[2C80]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int ETHIOPIC_EXTENDED_ID = 133; /*[2D80]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int ETHIOPIC_SUPPLEMENT_ID = 134; /*[1380]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int GEORGIAN_SUPPLEMENT_ID = 135; /*[2D00]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int GLAGOLITIC_ID = 136; /*[2C00]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int KHAROSHTHI_ID = 137; /*[10A00]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int MODIFIER_TONE_LETTERS_ID = 138; /*[A700]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int NEW_TAI_LUE_ID = 139; /*[1980]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int OLD_PERSIAN_ID = 140; /*[103A0]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int PHONETIC_EXTENSIONS_SUPPLEMENT_ID = 141; /*[1D80]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int SUPPLEMENTAL_PUNCTUATION_ID = 142; /*[2E00]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int SYLOTI_NAGRI_ID = 143; /*[A800]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int TIFINAGH_ID = 144; /*[2D30]*/
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int VERTICAL_FORMS_ID = 145; /*[FE10]*/
+
         /** 
          * @stable ICU 2.4 
          */
-        public static final int COUNT = 126;
+        public static final int COUNT = 146;
         
         // public methods --------------------------------------------------
         
@@ -1478,7 +1726,29 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             MISCELLANEOUS_SYMBOLS_AND_ARROWS, YIJING_HEXAGRAM_SYMBOLS,
             LINEAR_B_SYLLABARY, LINEAR_B_IDEOGRAMS, AEGEAN_NUMBERS,
             UGARITIC, SHAVIAN, OSMANYA, CYPRIOT_SYLLABARY,
-            TAI_XUAN_JING_SYMBOLS, VARIATION_SELECTORS_SUPPLEMENT                                      
+            TAI_XUAN_JING_SYMBOLS, VARIATION_SELECTORS_SUPPLEMENT,
+
+            /* New blocks in Unicode 4.1 */
+            ANCIENT_GREEK_MUSICAL_NOTATION,
+            ANCIENT_GREEK_NUMBERS,
+            ARABIC_SUPPLEMENT,
+            BUGINESE,
+            CJK_STROKES,
+            COMBINING_DIACRITICAL_MARKS_SUPPLEMENT,
+            COPTIC,
+            ETHIOPIC_EXTENDED,
+            ETHIOPIC_SUPPLEMENT,
+            GEORGIAN_SUPPLEMENT,
+            GLAGOLITIC,
+            KHAROSHTHI,
+            MODIFIER_TONE_LETTERS,
+            NEW_TAI_LUE,
+            OLD_PERSIAN,
+            PHONETIC_EXTENSIONS_SUPPLEMENT,
+            SUPPLEMENTAL_PUNCTUATION,
+            SYLOTI_NAGRI,
+            TIFINAGH,
+            VERTICAL_FORMS
         };
 
         static {
@@ -1894,7 +2164,189 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          */
         public static final int COUNT = 54;
     }
-    
+
+    /**
+     * Grapheme Cluster Break constants.
+     * @see UProperty#GRAPHEME_CLUSTER_BREAK
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static interface GraphemeClusterBreak {
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int OTHER = 0;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int CONTROL = 1;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int CR = 2;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int EXTEND = 3;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int L = 4;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int LF = 5;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int LV = 6;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int LVT = 7;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int T = 8;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int V = 9;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int COUNT = 10;
+    }
+
+    /**
+     * Word Break constants.
+     * @see UProperty#WORD_BREAK
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static interface WordBreak {
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int OTHER = 0;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int ALETTER = 1;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int FORMAT = 2;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int KATAKANA = 3;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int MIDLETTER = 4;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int MIDNUM = 5;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int NUMERIC = 6;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int COUNT = 7;
+    }
+
+    /**
+     * Sentence Break constants.
+     * @see UProperty#SENTENCE_BREAK
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public static interface SentenceBreak {
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int OTHER = 0;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int ATERM = 1;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int CLOSE = 2;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int FORMAT = 3;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int LOWER = 4;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int NUMERIC = 5;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int OLETTER = 6;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int SEP = 7;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int SP = 8;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int STERM = 9;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int UPPER = 10;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int COUNT = 11;
+    }
+
     /**
      * Line Break constants.
      * @see UProperty#LINE_BREAK
@@ -2036,10 +2488,38 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          */
         public static final int  WORD_JOINER = 30;      /*[WJ]*/
         
+        /* from here on: new in Unicode 4.1/ICU 3.4 */
+
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int  H2 = 31;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int  H3 = 32;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int  JL = 33;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int  JT = 34;
+        /**
+         * @draft ICU 3.4
+         * @deprecated This is a draft API and might change in a future release of ICU.
+         */
+        public static final int  JV = 35;
+
         /**
          * @stable ICU 2.4
          */
-        public static final int COUNT = 31;
+        public static final int COUNT = 36;
     }
     
     /**
@@ -2176,43 +2656,14 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static int digit(int ch, int radix)
     {
         // when ch is out of bounds getProperty == 0
-        int props = getProperty(ch);        
-        if (getNumericType(props) != NumericType.DECIMAL) {
-            return (radix <= 10) ? -1 : getEuropeanDigit(ch);
+        int props = getProperty(ch);
+        int value;        
+        if (getNumericType(props) == NumericType.DECIMAL) {
+            value = UCharacterProperty.getUnsignedValue(props);
+        } else {
+            value = getEuropeanDigit(ch);
         }
-        // if props == 0, it will just fall through and return -1
-        if (isNotExceptionIndicator(props)) {
-        // not contained in exception data
-            // getSignedValue is just shifting so we can check for the sign
-            // first
-            // Optimization
-            // int result = UCharacterProperty.getSignedValue(props);
-            // if (result >= 0) {
-            //    return result;
-            // }
-            if (props >= 0) {
-                return UCharacterProperty.getSignedValue(props);
-            }
-        }
-        else {
-            int index = UCharacterProperty.getExceptionIndex(props);
-        if (PROPERTY_.hasExceptionValue(index, 
-                        UCharacterProperty.EXC_NUMERIC_VALUE_)) {
-                int result = PROPERTY_.getException(index, 
-                            UCharacterProperty.EXC_NUMERIC_VALUE_);
-                if (result >= 0) {
-                    return result;
-                }  
-            }
-        }
-       
-        if (radix > 10) {
-            int result = getEuropeanDigit(ch);
-            if (result >= 0 && result < radix) {
-                return result;
-            }
-        }
-        return -1;
+        return (0 <= value && value < radix) ? value : -1;
     }
     
     /**
@@ -2230,7 +2681,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static int digit(int ch)
     {
-        return digit(ch, DECIMAL_RADIX_);
+        int props = getProperty(ch);
+        if (getNumericType(props) == NumericType.DECIMAL) {
+            return UCharacterProperty.getUnsignedValue(props);
+        } else {
+            return -1;
+        }
     }
 
     /** 
@@ -2249,31 +2705,68 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static int getNumericValue(int ch)
     {
-        int props = getProperty(ch);   
-        if ((props & NUMERIC_TYPE_MASK_) == NumericType.NONE) {
+        // slightly pruned version of getUnicodeNumericValue(), plus getEuropeanDigit()
+        int props = PROPERTY_.getProperty(ch);
+        int numericType = getNumericType(props);
+
+        if(numericType==0) {
             return getEuropeanDigit(ch);
         }
-        
-        // if props == 0, it will just fall through and return -1
-        if (isNotExceptionIndicator(props)) {
-            // not contained in exception data
-            return props >>> 20;
+        if(numericType==UCharacterProperty.NT_FRACTION || numericType>=UCharacterProperty.NT_COUNT) {
+            return -2;
         }
-            
-        int index = UCharacterProperty.getExceptionIndex(props);
-        if (!PROPERTY_.hasExceptionValue(index, 
-                     UCharacterProperty.EXC_DENOMINATOR_VALUE_) && 
-            PROPERTY_.hasExceptionValue(index, 
-                    UCharacterProperty.EXC_NUMERIC_VALUE_)) {
-            return PROPERTY_.getException(index, 
-                      UCharacterProperty.EXC_NUMERIC_VALUE_);
+
+        int numericValue = UCharacterProperty.getUnsignedValue(props);
+
+        if(numericType<NumericType.COUNT) {
+            /* normal type, the value is stored directly */
+            return numericValue;
+        } else /* numericType==NT_LARGE */ {
+            /* large value with exponent */
+            long numValue;
+            int mant, exp;
+
+            mant=numericValue>>LARGE_MANT_SHIFT;
+            exp=numericValue&LARGE_EXP_MASK;
+            if(mant==0) {
+                mant=1;
+                exp+=LARGE_EXP_OFFSET_EXTRA;
+            } else if(mant>9) {
+                return -2; /* reserved mantissa value */
+            } else {
+                exp+=LARGE_EXP_OFFSET;
+            }
+            if(exp>9) {
+                return -2;
+            }
+
+            numValue=mant;
+
+            /* multiply by 10^exp without math.h */
+            while(exp>=4) {
+                numValue*=10000.;
+                exp-=4;
+            }
+            switch(exp) {
+            case 3:
+                numValue*=1000.;
+                break;
+            case 2:
+                numValue*=100.;
+                break;
+            case 1:
+                numValue*=10.;
+                break;
+            case 0:
+            default:
+                break;
+            }
+            if(numValue<=Integer.MAX_VALUE) {
+                return (int)numValue;
+            } else {
+                return -2;
+            }
         }
-        
-        int europeannumeric = getEuropeanDigit(ch);
-        if (europeannumeric >= 0) {
-            return europeannumeric;
-        }
-        return -2;
     }
     
     /**
@@ -2297,57 +2790,67 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         // equivalent to c version double u_getNumericValue(UChar32 c)
         int props = PROPERTY_.getProperty(ch);
         int numericType = getNumericType(props);
-        if (numericType > NumericType.NONE && numericType < NumericType.COUNT) {
-            if (isNotExceptionIndicator(props)) {
-                return UCharacterProperty.getSignedValue(props);
-            } 
-            else {
-                int index = UCharacterProperty.getExceptionIndex(props);
-                boolean nex = false;
-                boolean dex = false;
-                double numerator = 0;
-                if (PROPERTY_.hasExceptionValue(index, 
-                        UCharacterProperty.EXC_NUMERIC_VALUE_)) {
-                    int num = PROPERTY_.getException(index, 
-                             UCharacterProperty.EXC_NUMERIC_VALUE_);
-                    // There are special values for huge numbers that are 
-                    // powers of ten. genprops/store.c documents:
-                    // if numericValue = 0x7fffff00 + x then 
-                    // numericValue = 10 ^ x
-                    if (num >= NUMERATOR_POWER_LIMIT_) {
-                        num &= 0xff;
-                        // 10^x without math.h
-                        numerator = Math.pow(10, num);
-                    } 
-                    else {
-                        numerator = num;
-                    }
-                    nex = true;
-                }
-                double denominator = 0;
-                if (PROPERTY_.hasExceptionValue(index, 
-                        UCharacterProperty.EXC_DENOMINATOR_VALUE_)) {
-                    denominator = PROPERTY_.getException(index, 
-                             UCharacterProperty.EXC_DENOMINATOR_VALUE_);
-                    // faster path not in c
-                    if (numerator != 0) {
-                        return numerator / denominator;
-                    }
-                    dex = true;
-                } 
-        
-                if (nex) {
-                    if (dex) {
-                        return numerator / denominator;
-                    } 
-                    return numerator;
-                }
-                if (dex) {
-                    return 1 / denominator;
-                }
-            }
+
+        if(numericType==0 || numericType>=UCharacterProperty.NT_COUNT) {
+            return NO_NUMERIC_VALUE;
         }
-        return NO_NUMERIC_VALUE;
+
+        int numericValue = UCharacterProperty.getUnsignedValue(props);
+
+        if(numericType<NumericType.COUNT) {
+            /* normal type, the value is stored directly */
+            return numericValue;
+        } else if(numericType==UCharacterProperty.NT_FRACTION) {
+            /* fraction value */
+            int numerator, denominator;
+
+            numerator=numericValue>>FRACTION_NUM_SHIFT;
+            denominator=(numericValue&FRACTION_DEN_MASK)+FRACTION_DEN_OFFSET;
+
+            if(numerator==0) {
+                numerator=-1;
+            }
+            return (double)numerator/(double)denominator;
+        } else /* numericType==NT_LARGE */ {
+            /* large value with exponent */
+            double numValue;
+            int mant, exp;
+
+            mant=numericValue>>LARGE_MANT_SHIFT;
+            exp=numericValue&LARGE_EXP_MASK;
+            if(mant==0) {
+                mant=1;
+                exp+=LARGE_EXP_OFFSET_EXTRA;
+            } else if(mant>9) {
+                return NO_NUMERIC_VALUE; /* reserved mantissa value */
+            } else {
+                exp+=LARGE_EXP_OFFSET;
+            }
+
+            numValue=mant;
+
+            /* multiply by 10^exp without math.h */
+            while(exp>=4) {
+                numValue*=10000.;
+                exp-=4;
+            }
+            switch(exp) {
+            case 3:
+                numValue*=1000.;
+                break;
+            case 2:
+                numValue*=100.;
+                break;
+            case 1:
+                numValue*=10.;
+                break;
+            case 0:
+            default:
+                break;
+            }
+
+            return numValue;
+        }
     }
   
     /**
@@ -2696,26 +3199,10 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @return the lowercase equivalent code point
      * @stable ICU 2.1
      */
-    public static int toLowerCase(int ch)
-    {
-        // when ch is out of bounds getProperty == 0   
-        int props = PROPERTY_.getProperty(ch);
-        // if props == 0, it will just fall through and return itself
-        if(isNotExceptionIndicator(props)) {
-            int cat = UCharacterProperty.TYPE_MASK & props;
-            if (cat == UCharacterCategory.UPPERCASE_LETTER || 
-                cat == UCharacterCategory.TITLECASE_LETTER) {
-                return ch + UCharacterProperty.getSignedValue(props);
-            }
-        } 
-        else 
-        {
-        int index = UCharacterProperty.getExceptionIndex(props);
-        if (PROPERTY_.hasExceptionValue(index, 
-                        UCharacterProperty.EXC_LOWERCASE_)) {
-            return PROPERTY_.getException(index, 
-                          UCharacterProperty.EXC_LOWERCASE_); 
-        }
+    public static int toLowerCase(int ch) {
+        try {
+            return UCaseProps.getSingleton().tolower(ch);
+        } catch(IOException e) {
         }
         return ch;
     }
@@ -2766,35 +3253,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @return titlecase code point
      * @stable ICU 2.1
      */
-    public static int toTitleCase(int ch)
-    {
-        // when ch is out of bounds getProperty == 0
-        int props = PROPERTY_.getProperty(ch);
-        // if props == 0, it will just fall through and return itself
-        if (isNotExceptionIndicator(props)) {
-            if ((UCharacterProperty.TYPE_MASK & props) == 
-                UCharacterCategory.LOWERCASE_LETTER) {
-                // here, titlecase is same as uppercase
-                return ch - UCharacterProperty.getSignedValue(props);
-            }
-        } 
-        else {
-            int index = UCharacterProperty.getExceptionIndex(props);
-            if (PROPERTY_.hasExceptionValue(index, 
-                        UCharacterProperty.EXC_TITLECASE_)) {
-                return PROPERTY_.getException(index,
-                          UCharacterProperty.EXC_TITLECASE_);
-            }
-            else {
-                // here, titlecase is same as uppercase
-                if (PROPERTY_.hasExceptionValue(index, 
-                        UCharacterProperty.EXC_UPPERCASE_)) {
-                    return PROPERTY_.getException(index, 
-                          UCharacterProperty.EXC_UPPERCASE_); 
-                }
-            }
+    public static int toTitleCase(int ch) {
+        try {
+            return UCaseProps.getSingleton().totitle(ch);
+        } catch(IOException e) {
         }
-        return ch; // no mapping - return c itself
+        return ch;
     }
        
     /**
@@ -2811,28 +3275,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @return uppercase code point
      * @stable ICU 2.1
      */
-    public static int toUpperCase(int ch)
-    {
-        // when ch is out of bounds getProperty == 0
-        int props = PROPERTY_.getProperty(ch);
-        // if props == 0, it will just fall through and return itself
-        if (isNotExceptionIndicator(props)) {
-            if ((UCharacterProperty.TYPE_MASK & props) == 
-                UCharacterCategory.LOWERCASE_LETTER) {
-                // here, titlecase is same as uppercase */
-                return ch - UCharacterProperty.getSignedValue(props);
-            }
+    public static int toUpperCase(int ch) {
+        try {
+            return UCaseProps.getSingleton().toupper(ch);
+        } catch(IOException e) {
         }
-        else 
-        {
-        int index = UCharacterProperty.getExceptionIndex(props);
-        if (PROPERTY_.hasExceptionValue(index, 
-                        UCharacterProperty.EXC_UPPERCASE_)) {
-            return PROPERTY_.getException(index, 
-                          UCharacterProperty.EXC_UPPERCASE_); 
-        }
-        }
-        return ch; // no mapping - return c itself
+        return ch;
     }
        
     // extra methods not in java.lang.Character --------------------------
@@ -2920,8 +3368,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static int getDirection(int ch)
     {
-        // when ch is out of bounds getProperty == 0
-        return (getProperty(ch) >> BIDI_SHIFT_) & BIDI_MASK_AFTER_SHIFT_;
+		try {
+			return UBiDiProps.getSingleton().getClass(ch);
+		} catch (IOException e) {
+		}
+        return UCharacterEnums.ECharacterDirection.LEFT_TO_RIGHT;
     }
 
     /**
@@ -2935,9 +3386,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static boolean isMirrored(int ch)
     {
-        // when ch is out of bounds getProperty == 0
-        return (PROPERTY_.getProperty(ch) & UCharacterProperty.MIRROR_MASK) 
-        != 0;
+        try {
+            return UBiDiProps.getSingleton().isMirrored(ch);
+        } catch (IOException e) {
+        }
+        return false;
     }
 
     /**
@@ -2956,22 +3409,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static int getMirror(int ch)
     {
-        // when ch is out of bounds getProperty == 0
-        int props = PROPERTY_.getProperty(ch);
-        // mirrored - the value is a mirror offset
-        // if props == 0, it will just fall through and return false
-        if ((props & UCharacterProperty.MIRROR_MASK) != 0) {
-            if(isNotExceptionIndicator(props)) {
-                return ch + UCharacterProperty.getSignedValue(props);
-            }
-            else 
-        {
-            int index = UCharacterProperty.getExceptionIndex(props);
-            if (PROPERTY_.hasExceptionValue(index, 
-                            UCharacterProperty.EXC_MIRROR_MAPPING_)) 
-            return PROPERTY_.getException(index, 
-                              UCharacterProperty.EXC_MIRROR_MAPPING_);   
-        }
+        try {
+            return UBiDiProps.getSingleton().getMirror(ch);
+        } catch (IOException e) {
         }
         return ch;
     }
@@ -3440,7 +3880,107 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
         throw new IllegalArgumentException("Illegal codepoint");
     }
-      
+
+    /**
+     * Implementation of UCaseProps.ContextIterator, iterates over a String.
+     * See ustrcase.c/utf16_caseContextIterator().
+     */
+    private static class StringContextIterator implements UCaseProps.ContextIterator {
+        /**
+         * Constructor.
+         * @param s String to iterate over. 
+         */
+        StringContextIterator(String s) {
+            this.s=s;
+            limit=s.length();
+            cpStart=cpLimit=index=0;
+            dir=0;
+        }
+
+        /**
+         * Set the iteration limit for nextCaseMapCP() to an index within the string.
+         * If the limit parameter is negative or past the string, then the
+         * string length is restored as the iteration limit.
+         *
+         * @param lim The iteration limit.
+         */
+        public void setLimit(int lim) {
+            if(0<=lim && lim<=s.length()) {
+                limit=lim;
+            } else {
+                limit=s.length();
+            }
+        }
+
+        /**
+         * Iterate forward through the string to fetch the next code point
+         * to be case-mapped, and set the context indexes for it.
+         * Performance optimization, to save on function calls and redundant
+         * tests. Combines UTF16.charAt(), UTF16.getCharCount(), and setIndex().
+         *
+         * @return The next code point to be case-mapped, or <0 when the iteration is done.
+         */
+        public int nextCaseMapCP() {
+            int c;
+            if(cpLimit<limit) {
+                cpStart=cpLimit;
+                c=s.charAt(cpLimit++);
+                if(UTF16.LEAD_SURROGATE_MIN_VALUE<=c || c<=UTF16.TRAIL_SURROGATE_MAX_VALUE) {
+                    char c2;
+                    if( c<=UTF16.LEAD_SURROGATE_MAX_VALUE && cpLimit<limit &&
+                        UTF16.TRAIL_SURROGATE_MIN_VALUE<=(c2=s.charAt(cpLimit)) && c2<=UTF16.TRAIL_SURROGATE_MAX_VALUE
+                    ) {
+                        // supplementary code point
+                        ++cpLimit;
+                        c=UCharacterProperty.getRawSupplementary((char)c, c2);
+                    // else unpaired surrogate code point
+                    }
+                // else BMP code point
+                }
+                return c;
+            } else {
+                return -1;
+            }
+        }
+
+        // implement UCaseProps.ContextIterator
+        public void reset(int dir) {
+            if(dir>0) {
+                /* reset for forward iteration */
+                this.dir=1;
+                index=cpLimit;
+            } else if(dir<0) {
+                /* reset for backward iteration */
+                this.dir=-1;
+                index=cpStart;
+            } else {
+                // not a valid direction
+                this.dir=0;
+                index=0;
+            }
+        }
+
+        public int next() {
+            int c;
+
+            if(dir>0 && index<limit) {
+                c=UTF16.charAt(s, index);
+                index+=UTF16.getCharCount(c);
+                return c;
+            } else if(dir<0 && index>0) {
+                c=UTF16.charAt(s, index-1);
+                index-=UTF16.getCharCount(c);
+                return c;
+            }
+            return -1;
+        }
+
+        // variables
+        protected String s;
+        protected int index, limit, cpStart, cpLimit;
+        protected int dir; // 0=initial state  >0=forward  <0=backward
+    }
+
     /**
      * Gets uppercase version of the argument string. 
      * Casing is dependent on the default locale and context-sensitive.
@@ -3510,14 +4050,45 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @draft ICU 3.2
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
-    public static String toUpperCase(ULocale locale, String str)
-    {
+    public static String toUpperCase(ULocale locale, String str) {
+        UCaseProps csp;
+        try {
+            csp=UCaseProps.getSingleton();
+        } catch (IOException e) {
+            return str;
+        }
+
+        StringContextIterator iter = new StringContextIterator(str);
+        StringBuffer result = new StringBuffer(str.length());
+        int[] locCache = new int[1];
+        int c;
+
         if (locale == null) {
             locale = ULocale.getDefault();
         }
-        return PROPERTY_.toUpperCase(locale, str, 0, str.length());
+        locCache[0]=0;
+
+        while((c=iter.nextCaseMapCP())>=0) {
+            c=csp.toFullUpper(c, iter, result, locale, locCache);
+
+            /* decode the result */
+            if(c<0) {
+                /* (not) original code point */
+                c=~c;
+            } else if(c<=UCaseProps.MAX_STRING_LENGTH) {
+                /* mapping already appended to result */
+                continue;
+            /* } else { append single-code point mapping */
+            }
+            if(c<=0xffff) {
+                result.append((char)c);
+            } else {
+                UTF16.append(result, c);
+            }
+        }
+        return result.toString();
     }
-      
+
     /**
      * Gets lowercase version of the argument string. 
      * Casing is dependent on the argument locale and context-sensitive
@@ -3540,17 +4111,45 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @draft ICU 3.2
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
-    public static String toLowerCase(ULocale locale, String str)
-    {
-        int length = str.length();
-        StringBuffer result = new StringBuffer(length);
+    public static String toLowerCase(ULocale locale, String str) {
+        UCaseProps csp;
+        try {
+            csp=UCaseProps.getSingleton();
+        } catch (IOException e) {
+            return str;
+        }
+
+        StringContextIterator iter = new StringContextIterator(str);
+        StringBuffer result = new StringBuffer(str.length());
+        int[] locCache = new int[1];
+        int c;
+
         if (locale == null) {
             locale = ULocale.getDefault();
         }
-        PROPERTY_.toLowerCase(locale, str, 0, length, result);
+        locCache[0]=0;
+
+        while((c=iter.nextCaseMapCP())>=0) {
+            c=csp.toFullLower(c, iter, result, locale, locCache);
+
+            /* decode the result */
+            if(c<0) {
+                /* (not) original code point */
+                c=~c;
+            } else if(c<=UCaseProps.MAX_STRING_LENGTH) {
+                /* mapping already appended to result */
+                continue;
+            /* } else { append single-code point mapping */
+            }
+            if(c<=0xffff) {
+                result.append((char)c);
+            } else {
+                UTF16.append(result, c);
+            }
+        }
         return result.toString();
     }
-    
+
     /**
      * <p>Gets the titlecase version of the argument string.</p>
      * <p>Position for titlecasing is determined by the argument break 
@@ -3597,17 +4196,99 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static String toTitleCase(ULocale locale, String str, 
-                                     BreakIterator breakiter)
-    {
-        if (breakiter == null) {
-            if (locale == null) {
-                locale = ULocale.getDefault();
-            }
-            breakiter = BreakIterator.getWordInstance(locale);
+                                     BreakIterator titleIter) {
+        UCaseProps csp;
+        try {
+            csp=UCaseProps.getSingleton();
+        } catch (IOException e) {
+            return str;
         }
-        return PROPERTY_.toTitleCase(locale, str, breakiter);
+
+        StringContextIterator iter = new StringContextIterator(str);
+        StringBuffer result = new StringBuffer(str.length());
+        int[] locCache = new int[1];
+        int c, srcLength = str.length();
+
+        if (locale == null) {
+            locale = ULocale.getDefault();
+        }
+        locCache[0]=0;
+
+        if(titleIter == null) {
+            titleIter = BreakIterator.getWordInstance(locale);
+        }
+        titleIter.setText(str);
+
+        int index;
+        boolean isFirstIndex;
+
+        /* set up local variables */
+        isFirstIndex=true;
+
+        /* titlecasing loop */
+        for(;;) {
+            /* find next index where to titlecase */
+            if(isFirstIndex) {
+                isFirstIndex=false;
+                index=titleIter.first();
+            } else {
+                index=titleIter.next();
+            }
+            if(index==BreakIterator.DONE || index>srcLength) {
+                index=srcLength;
+            }
+
+            /* lowercase up to index */
+            iter.setLimit(index);
+            while((c=iter.nextCaseMapCP())>=0) {
+                c=csp.toFullLower(c, iter, result, locale, locCache);
+
+                /* decode the result */
+                if(c<0) {
+                    /* (not) original code point */
+                    c=~c;
+                } else if(c<=UCaseProps.MAX_STRING_LENGTH) {
+                    /* mapping already appended to result */
+                    continue;
+                /* } else { append single-code point mapping */
+                }
+                if(c<=0xffff) {
+                    result.append((char)c);
+                } else {
+                    UTF16.append(result, c);
+                }
+            }
+
+            if(index>=srcLength) {
+                break;
+            }
+
+            /* titlecase the character at the found index */
+            iter.setLimit(srcLength);
+            c=iter.nextCaseMapCP();
+            if(c<0) {
+                break; // reached end of str
+            }
+            c=csp.toFullTitle(c, iter, result, locale, locCache);
+
+            /* decode the result */
+            if(c<0) {
+                /* (not) original code point */
+                c=~c;
+            } else if(c<=UCaseProps.MAX_STRING_LENGTH) {
+                /* mapping already appended to result */
+                continue;
+            /* } else { append single-code point mapping */
+            }
+            if(c<=0xffff) {
+                result.append((char)c);
+            } else {
+                UTF16.append(result, c);
+            }
+        }
+        return result.toString();
     }
-    
+
     /**
      * The given character is mapped to its case folding equivalent according 
      * to UnicodeData.txt and CaseFolding.txt; if the character has no case 
@@ -3625,101 +4306,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @see                  #foldCase(String, boolean)
      * @stable ICU 2.1
      */
-    public static int foldCase(int ch, boolean defaultmapping)
-    {
-        // Some special cases are hardcoded because their conditions cannot be
-        // parsed and processed from CaseFolding.txt.
-        // Unicode 3.2 CaseFolding.txt specifies for its status field:
-        // # C: common case folding, common mappings shared by both simple and 
-        // full mappings.
-        // # F: full case folding, mappings that cause strings to grow in 
-        // length. Multiple characters are separated by spaces.
-        // # S: simple case folding, mappings to single characters where 
-        // different from F.
-        // # T: special case for uppercase I and dotted uppercase I
-        // #    - For non-Turkic languages, this mapping is normally not used.
-        // #    - For Turkic languages (tr, az), this mapping can be used 
-        // instead of the normal mapping for these characters.
-        // # Usage:
-        // #  A. To do a simple case folding, use the mappings with status 
-        // C + S.
-        // #  B. To do a full case folding, use the mappings with status C + F.
-        // #    The mappings with status T can be used or omitted depending on 
-        // the desired case-folding behavior. 
-        // (The default option is to exclude them.)
-        // Unicode 3.2 has 'T' mappings as follows:
-        // 0049; T; 0131; # LATIN CAPITAL LETTER I
-        // 0130; T; 0069; # LATIN CAPITAL LETTER I WITH DOT ABOVE
-        // while the default mappings for these code points are:
-        // 0049; C; 0069; # LATIN CAPITAL LETTER I
-        // 0130; F; 0069 0307; # LATIN CAPITAL LETTER I WITH DOT ABOVE
-        // U+0130 is otherwise lowercased to U+0069 (UnicodeData.txt).
-        // In case this code is used with CaseFolding.txt from an older version 
-        // of Unicode where CaseFolding.txt contains mappings with a status of 
-        // 'I' that have the opposite polarity ('I' mappings are included by 
-        // default but excluded for Turkic), we must also hardcode the Unicode 
-        // 3.2 mappings for the code points with 'I' mappings. 
-        // Unicode 3.1.1 has 'I' mappings for U+0130 and U+0131.
-        // Unicode 3.2 has a 'T' mapping for U+0130, and lowercases U+0131 to 
-        // itself (see UnicodeData.txt).
-        // when ch is out of bounds getProperty == 0
-        int props = PROPERTY_.getProperty(ch);
-        if (isNotExceptionIndicator(props)) {
-            int type = UCharacterProperty.TYPE_MASK & props;
-            if (type == UCharacterCategory.UPPERCASE_LETTER ||
-                type == UCharacterCategory.TITLECASE_LETTER) {
-                return ch + UCharacterProperty.getSignedValue(props);
-            }
-        } 
-        else {
-            int index = UCharacterProperty.getExceptionIndex(props);
-            if (PROPERTY_.hasExceptionValue(index, 
-                        UCharacterProperty.EXC_CASE_FOLDING_)) {
-                int exception = PROPERTY_.getException(index, 
-                               UCharacterProperty.EXC_CASE_FOLDING_);
-                if (exception != 0) {
-                    int foldedcasech = 
-            PROPERTY_.getFoldCase(exception & LAST_CHAR_MASK_);
-                    if (foldedcasech != 0){
-                        return foldedcasech;
-                    }
-                }
-                else {
-                    // special case folding mappings, hardcoded
-                    if (defaultmapping) { 
-                        // default mappings
-                        if (ch == 0x49 || ch == 0x130) { 
-                            // 0049; C; 0069; # LATIN CAPITAL LETTER I */
-                            // no simple default mapping for U+0130, 
-                            // use UnicodeData.txt
-                            return UCharacterProperty.LATIN_SMALL_LETTER_I_;
-                        } 
-                    } 
-                    else {
-                        // Turkic mappings 
-                        if (ch == 0x49) {
-                            // 0049; T; 0131; # LATIN CAPITAL LETTER I
-                            return 0x131;
-                        } 
-                        else if (ch == 0x130) {
-                            // 0130; T; 0069; 
-                            // # LATIN CAPITAL LETTER I WITH DOT ABOVE
-                            return 0x69;
-                        }
-                    }
-                    // return ch itself because it is excluded from case folding
-                    return ch;
-                }                                  
-            }
-            if (PROPERTY_.hasExceptionValue(index, 
-                        UCharacterProperty.EXC_LOWERCASE_)) {  
-                // not else! - allow to fall through from above
-                return PROPERTY_.getException(index, 
-                          UCharacterProperty.EXC_LOWERCASE_);
-            }
-        }
-            
-        return ch; // no mapping - return the character itself
+    public static int foldCase(int ch, boolean defaultmapping) {
+        return foldCase(ch, defaultmapping ? FOLD_CASE_DEFAULT : FOLD_CASE_EXCLUDE_SPECIAL_I);
     }
 
     /**
@@ -3739,98 +4327,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @see                  #foldCase(int, boolean)
      * @stable ICU 2.1
      */
-    public static String foldCase(String str, boolean defaultmapping)
-    {
-        int          size   = str.length();
-        StringBuffer result = new StringBuffer(size);
-        int          offset  = 0;
-        int          ch;
-
-        // case mapping loop
-        while (offset < size) {
-            ch = UTF16.charAt(str, offset);
-            offset += UTF16.getCharCount(ch);
-            int props = PROPERTY_.getProperty(ch);
-            if (isNotExceptionIndicator(props)) {
-                int type = UCharacterProperty.TYPE_MASK & props;
-                if (type == UCharacterCategory.UPPERCASE_LETTER ||
-                    type == UCharacterCategory.TITLECASE_LETTER) {
-                    ch += UCharacterProperty.getSignedValue(props);
-                }
-            }  
-            else {
-                int index = UCharacterProperty.getExceptionIndex(props);
-                if (PROPERTY_.hasExceptionValue(index, 
-                        UCharacterProperty.EXC_CASE_FOLDING_)) {
-                    int exception = PROPERTY_.getException(index, 
-                               UCharacterProperty.EXC_CASE_FOLDING_);                             
-                    if (exception != 0) {
-                        PROPERTY_.getFoldCase(exception & LAST_CHAR_MASK_, 
-                          exception >> SHIFT_24_, result);
-                    } 
-                    else {
-                        // special case folding mappings, hardcoded
-                        if (ch != 0x49 && ch != 0x130) {
-                            // return ch itself because there is no special 
-                            // mapping for it
-                            UTF16.append(result, ch);
-                            continue;
-                        }
-                        if (defaultmapping) {
-                            // default mappings
-                            if (ch == 0x49) {
-                                // 0049; C; 0069; # LATIN CAPITAL LETTER I
-                                result.append(
-                          UCharacterProperty.LATIN_SMALL_LETTER_I_);
-                            }
-                            else if (ch == 0x130) {
-                                // 0130; F; 0069 0307; 
-                                // # LATIN CAPITAL LETTER I WITH DOT ABOVE
-                                result.append(
-                          UCharacterProperty.LATIN_SMALL_LETTER_I_);
-                                result.append((char)0x307);
-                            }
-                        }
-                        else {
-                            // Turkic mappings
-                            if (ch == 0x49) {
-                                // 0049; T; 0131; # LATIN CAPITAL LETTER I
-                                result.append((char)0x131);
-                            } 
-                            else if (ch == 0x130) {
-                                // 0130; T; 0069; 
-                                // # LATIN CAPITAL LETTER I WITH DOT ABOVE
-                                result.append(
-                          UCharacterProperty.LATIN_SMALL_LETTER_I_);
-                            }
-                        }
-                    }
-                    // do not fall through to the output of c
-                    continue;
-                } 
-                else {
-                    if (PROPERTY_.hasExceptionValue(index, 
-                            UCharacterProperty.EXC_LOWERCASE_)) {
-                        ch = PROPERTY_.getException(index, 
-                            UCharacterProperty.EXC_LOWERCASE_);
-                    }
-                }
-                
-            }
-
-            // handle 1:1 code point mappings from UnicodeData.txt
-            UTF16.append(result, ch);
-        }
-        
-        return result.toString();
+    public static String foldCase(String str, boolean defaultmapping) {
+        return foldCase(str, defaultmapping ? FOLD_CASE_DEFAULT : FOLD_CASE_EXCLUDE_SPECIAL_I);
     }
-    
-    /**
-     * Bit mask for getting just the options from a string compare options word
-     * that are relevant for case folding (of a single string or code point).
-     * @internal
-     */
-    private static final int FOLD_CASE_OPTIONS_MASK = 0xff;
     
     /**
      * Option value for case folding: use default mappings defined in CaseFolding.txt.
@@ -3859,80 +4358,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @see #foldCase(String, boolean)
      * @stable ICU 2.6
      */
-
-    /*
-     * Issue for canonical caseless match (UAX #21):
-     * Turkic casefolding (using "T" mappings in CaseFolding.txt) does not preserve
-     * canonical equivalence, unlike default-option casefolding.
-     * For example, I-grave and I + grave fold to strings that are not canonically
-     * equivalent.
-     * For more details, see the comment in Normalizer.compare() 
-     * and the intermediate prototype changes for Jitterbug 2021.
-     * (For example, revision 1.104 of uchar.c and 1.4 of CaseFolding.txt.)
-     *
-     * This did not get fixed because it appears that it is not possible to fix
-     * it for uppercase and lowercase characters (I-grave vs. i-grave)
-     * together in a way that they still fold to common result strings.
-     */
-    public static int foldCase(int ch, int options)
-    {
-        int props = PROPERTY_.getProperty(ch);
-        if (isNotExceptionIndicator(props)) {
-            int type = UCharacterProperty.TYPE_MASK & props;
-            if (type == UCharacterCategory.UPPERCASE_LETTER ||
-                type == UCharacterCategory.TITLECASE_LETTER) {
-                return ch + UCharacterProperty.getSignedValue(props);
-            }
-        } 
-        else {
-            int index = UCharacterProperty.getExceptionIndex(props);
-            if (PROPERTY_.hasExceptionValue(index, 
-                        UCharacterProperty.EXC_CASE_FOLDING_)) {
-                int exception = PROPERTY_.getException(index, 
-                               UCharacterProperty.EXC_CASE_FOLDING_);
-                if (exception != 0) {
-                    int foldedcasech = 
-            PROPERTY_.getFoldCase(exception & LAST_CHAR_MASK_);
-                    if (foldedcasech != 0){
-                        return foldedcasech;
-                    }
-                }
-                else {
-                    // special case folding mappings, hardcoded
-                    if ((options&FOLD_CASE_OPTIONS_MASK)== Normalizer.FOLD_CASE_DEFAULT) { 
-                        // default mappings
-                        if (ch == 0x49 || ch == 0x130) { 
-                            // 0049; C; 0069; # LATIN CAPITAL LETTER I */
-                            // no simple default mapping for U+0130, 
-                            // use UnicodeData.txt
-                            return UCharacterProperty.LATIN_SMALL_LETTER_I_;
-                        } 
-                    } 
-                    else {
-                        // Turkic mappings 
-                        if (ch == 0x49) {
-                            // 0049; T; 0131; # LATIN CAPITAL LETTER I
-                            return 0x131;
-                        } 
-                        else if (ch == 0x130) {
-                            // 0130; T; 0069; 
-                            // # LATIN CAPITAL LETTER I WITH DOT ABOVE
-                            return 0x69;
-                        }
-                    }
-                    // return ch itself because it is excluded from case folding
-                    return ch;
-                }                                  
-            }
-            if (PROPERTY_.hasExceptionValue(index, 
-                        UCharacterProperty.EXC_LOWERCASE_)) {  
-                // not else! - allow to fall through from above
-                return PROPERTY_.getException(index, 
-                          UCharacterProperty.EXC_LOWERCASE_);
-            }
-        }
-            
-        return ch; // no mapping - return the character itself
+    public static int foldCase(int ch, int options) {
+		try {
+			return UCaseProps.getSingleton().fold(ch, options);
+		} catch (IOException e) {
+		}
+        return ch;
     }
     
     /**
@@ -3950,96 +4381,47 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @see #foldCase(int, boolean)
      * @stable ICU 2.6
      */
-    public static final String foldCase(String str, int options){
-        int          size   = str.length();
-        StringBuffer result = new StringBuffer(size);
-        int          offset  = 0;
-        int          ch;
-
-        // case mapping loop
-        while (offset < size) {
-            ch = UTF16.charAt(str, offset);
-            offset += UTF16.getCharCount(ch);
-            int props = getProperty(ch);
-            if ((props & UCharacterProperty.EXCEPTION_MASK) == 0) {
-                int type = UCharacterProperty.TYPE_MASK & props;
-                if (type == UCharacterCategory.UPPERCASE_LETTER ||
-                    type == UCharacterCategory.TITLECASE_LETTER) {
-                    ch += UCharacterProperty.getSignedValue(props);
-                }
-            }  
-            else {
-                int index = UCharacterProperty.getExceptionIndex(props);
-                if (PROPERTY_.hasExceptionValue(index, 
-                        UCharacterProperty.EXC_CASE_FOLDING_)) {
-                    int exception = PROPERTY_.getException(index, 
-                               UCharacterProperty.EXC_CASE_FOLDING_);                             
-                    if (exception != 0) {
-                        PROPERTY_.getFoldCase(exception & LAST_CHAR_MASK_, 
-                          exception >> SHIFT_24_, result);
-                    } 
-                    else {
-                        // special case folding mappings, hardcoded
-                        if (ch != 0x49 && ch != 0x130) {
-                            // return ch itself because there is no special 
-                            // mapping for it
-                            UTF16.append(result, ch);
-                            continue;
-                        }
-                        if ((options&FOLD_CASE_OPTIONS_MASK)== Normalizer.FOLD_CASE_DEFAULT) {
-                            // default mappings
-                            if (ch == 0x49) {
-                                // 0049; C; 0069; # LATIN CAPITAL LETTER I
-                                result.append(
-                          UCharacterProperty.LATIN_SMALL_LETTER_I_);
-                            }
-                            else if (ch == 0x130) {
-                                // 0130; F; 0069 0307; 
-                                // # LATIN CAPITAL LETTER I WITH DOT ABOVE
-                                result.append(
-                          UCharacterProperty.LATIN_SMALL_LETTER_I_);
-                                result.append((char)0x307);
-                            }
-                        }
-                        else {
-                            // Turkic mappings
-                            if (ch == 0x49) {
-                                // 0049; T; 0131; # LATIN CAPITAL LETTER I
-                                result.append((char)0x131);
-                            } 
-                            else if (ch == 0x130) {
-                                // 0130; T; 0069; 
-                                // # LATIN CAPITAL LETTER I WITH DOT ABOVE
-                                result.append(
-                          UCharacterProperty.LATIN_SMALL_LETTER_I_);
-                            }
-                        }
-                    }
-                    // do not fall through to the output of c
-                    continue;
-                } 
-                else {
-                    if (PROPERTY_.hasExceptionValue(index, 
-                            UCharacterProperty.EXC_LOWERCASE_)) {
-                        ch = PROPERTY_.getException(index, 
-                            UCharacterProperty.EXC_LOWERCASE_);
-                    }
-                }
-                
-            }
-
-            // handle 1:1 code point mappings from UnicodeData.txt
-            UTF16.append(result, ch);
+    public static final String foldCase(String str, int options) {
+        UCaseProps csp;
+        try {
+            csp=UCaseProps.getSingleton();
+        } catch (IOException e) {
+            return str;
         }
-        
+
+        StringBuffer result = new StringBuffer(str.length());
+        int c, i, length;
+
+        length = str.length();
+        for(i=0; i<length;) {
+            c=UTF16.charAt(str, i);
+            i+=UTF16.getCharCount(c);
+            c=csp.toFullFolding(c, result, options);
+
+            /* decode the result */
+            if(c<0) {
+                /* (not) original code point */
+                c=~c;
+            } else if(c<=UCaseProps.MAX_STRING_LENGTH) {
+                /* mapping already appended to result */
+                continue;
+            /* } else { append single-code point mapping */
+            }
+            if(c<=0xffff) {
+                result.append((char)c);
+            } else {
+                UTF16.append(result, c);
+            }
+        }
         return result.toString();
     }
+
     /**
      * Return numeric value of Han code points.
      * <br> This returns the value of Han 'numeric' code points,
      * including those for zero, ten, hundred, thousand, ten thousand,
-     * and hundred million.  Unicode does not consider these to be
-     * numeric. This includes both the standard and 'checkwriting'
+     * and hundred million.
+     * This includes both the standard and 'checkwriting'
      * characters, the 'big circle' zero character, and the standard
      * zero character.
      * @param ch code point to query
@@ -4048,6 +4430,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static int getHanNumericValue(int ch)
     {
+        // TODO: Are these all covered by Unicode numeric value data?
         switch(ch)
         {
         case IDEOGRAPHIC_NUMBER_ZERO_ :
@@ -4376,54 +4759,26 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             case UProperty.GENERAL_CATEGORY:
                 return getType(ch);
             case UProperty.JOINING_GROUP:
-                return (PROPERTY_.getAdditional(ch, 2) 
-            & JOINING_GROUP_MASK_) >> JOINING_GROUP_SHIFT_;
+                try {
+                    return UBiDiProps.getSingleton().getJoiningGroup(ch);
+                } catch (IOException e) {
+                }
+                return 0;
             case UProperty.JOINING_TYPE:
-                return (int)(PROPERTY_.getAdditional(ch, 2)& JOINING_TYPE_MASK_)>> JOINING_TYPE_SHIFT_;
-                // ArabicShaping.txt:
-                // Note: Characters of joining type T and most characters of 
-                // joining type U are not explicitly listed in this file.
-                // Characters of joining type T can [be] derived by the following formula:
-                //   T = Mn + Cf - ZWNJ - ZWJ
-                /*
-          result = (PROPERTY_.getAdditional(ch, 2) 
-          & JOINING_TYPE_MASK_) >> JOINING_TYPE_SHIFT_;
-          if (result == 0 && ch != ZERO_WIDTH_NON_JOINER_ 
-          && ch != ZERO_WIDTH_JOINER_) {
-          int t = getType(ch);
-          if (t == UCharacterCategory.NON_SPACING_MARK
-          || t == UCharacterCategory.FORMAT) {
-          result = JoiningType.TRANSPARENT;
-          }
-          }
-          return result;
-                */
+                try {
+                    return UBiDiProps.getSingleton().getJoiningType(ch);
+                } catch (IOException e) {
+                }
+                return 0;
             case UProperty.LINE_BREAK:
                 return (int)(PROPERTY_.getAdditional(ch, 0)& LINE_BREAK_MASK_)>>LINE_BREAK_SHIFT_;
-                /*
-                 * LineBreak.txt:
-                 *  - Assigned characters that are not listed explicitly are given the value
-                 *    "AL".
-                 *  - Unassigned characters are given the value "XX".
-                 * ...
-                 * E000..F8FF;XX # <Private Use, First>..<Private Use, Last>
-                 * F0000..FFFFD;XX # <Plane 15 Private Use, First>..<Plane 15 Private Use, Last>
-                 * 100000..10FFFD;XX # <Plane 16 Private Use, First>..<Plane 16 Private Use, Last>
-                 */
-        /*
-          result = (PROPERTY_.getAdditional(ch, 0) 
-          & LINE_BREAK_MASK_) >> LINE_BREAK_SHIFT_;
-          if (result == 0) {
-          int t = getType(ch);
-          if (t != UCharacterCategory.UNASSIGNED 
-          && t != UCharacterCategory.PRIVATE_USE) {
-          result = LineBreak.ALPHABETIC;
-          }
-          }
-          return result;
-                */
             case UProperty.NUMERIC_TYPE:
-                return getNumericType(PROPERTY_.getProperty(ch));
+                type=getNumericType(PROPERTY_.getProperty(ch));
+                if(type>NumericType.NUMERIC) {
+                    /* keep internal variants of NumericType.NUMERIC from becoming visible */
+                    type=NumericType.NUMERIC;
+                }
+                return type;
             case UProperty.SCRIPT:
                 return UScript.getScript(ch);
             case UProperty.HANGUL_SYLLABLE_TYPE:
@@ -4465,6 +4820,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 return NormalizerImpl.getFCD16(ch)>>8;
             case UProperty.TRAIL_CANONICAL_COMBINING_CLASS:
                 return NormalizerImpl.getFCD16(ch)&0xff;
+            case UProperty.GRAPHEME_CLUSTER_BREAK:
+                return (int)(PROPERTY_.getAdditional(ch, 2)& GCB_MASK)>>GCB_SHIFT;
+            case UProperty.SENTENCE_BREAK:
+                return (int)(PROPERTY_.getAdditional(ch, 2)& SB_MASK)>>SB_SHIFT;
+            case UProperty.WORD_BREAK:
+                return (int)(PROPERTY_.getAdditional(ch, 2)& WB_MASK)>>WB_SHIFT;
             default:
                
         return 0; /* undefined */
@@ -4573,49 +4934,50 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
             return -1; // undefined
         } 
         else if (type < UProperty.INT_LIMIT) {
-            int max = 0;
             switch (type) {
             case UProperty.BIDI_CLASS:
-                return UCharacterDirection.CHAR_DIRECTION_COUNT - 1;
+            case UProperty.JOINING_GROUP:
+            case UProperty.JOINING_TYPE:
+                try {
+                    return UBiDiProps.getSingleton().getMaxValue(type);
+                } catch (IOException e) {
+                }
+                return 0;
             case UProperty.BLOCK:
-                max = (PROPERTY_.getMaxValues(0)
-               & BLOCK_MASK_) >> BLOCK_SHIFT_;
-                return (max!=0) ? max : UnicodeBlock.COUNT - 1;
+                return (PROPERTY_.getMaxValues(0) & BLOCK_MASK_) >> BLOCK_SHIFT_;
             case UProperty.CANONICAL_COMBINING_CLASS:
             case UProperty.LEAD_CANONICAL_COMBINING_CLASS:
             case UProperty.TRAIL_CANONICAL_COMBINING_CLASS:
                 return 0xff; // TODO do we need to be more precise, 
-        // getting the actual maximum?
+                             // getting the actual maximum?
             case UProperty.DECOMPOSITION_TYPE:
-                max=PROPERTY_.getMaxValues(2) & DECOMPOSITION_TYPE_MASK_;
-                return (max!=0) ? max : DecompositionType.COUNT - 1;
+                return PROPERTY_.getMaxValues(2) & DECOMPOSITION_TYPE_MASK_;
             case UProperty.EAST_ASIAN_WIDTH:
-                max=(PROPERTY_.getMaxValues(0) & EAST_ASIAN_MASK_) >> EAST_ASIAN_SHIFT_;
-                return (max!=0) ? max : EastAsianWidth.COUNT - 1;
+                return (PROPERTY_.getMaxValues(0) & EAST_ASIAN_MASK_) >> EAST_ASIAN_SHIFT_;
             case UProperty.GENERAL_CATEGORY:
                 return UCharacterCategory.CHAR_CATEGORY_COUNT - 1;
-            case UProperty.JOINING_GROUP:
-        max=(PROPERTY_.getMaxValues(2) & JOINING_GROUP_MASK_) >> JOINING_GROUP_SHIFT_;
-        return (max!=0) ? max : JoiningGroup.COUNT - 1;
-            case UProperty.JOINING_TYPE:
-                max=(PROPERTY_.getMaxValues(2) & JOINING_TYPE_MASK_) >> JOINING_TYPE_SHIFT_;
-                return (max!=0) ? max :  JoiningType.COUNT - 1;
             case UProperty.LINE_BREAK:
-                max=(PROPERTY_.getMaxValues(0) & LINE_BREAK_MASK_) >> LINE_BREAK_SHIFT_;
-                return (max!=0) ? max :  LineBreak.COUNT - 1;
+                return (PROPERTY_.getMaxValues(0) & LINE_BREAK_MASK_) >> LINE_BREAK_SHIFT_;
             case UProperty.NUMERIC_TYPE:
                 return NumericType.COUNT - 1;
             case UProperty.SCRIPT:
-                max = PROPERTY_.getMaxValues(0) & SCRIPT_MASK_;   
-                return (max!= 0)? max :  UScript.CODE_LIMIT - 1;
+                return PROPERTY_.getMaxValues(0) & SCRIPT_MASK_;   
             case UProperty.HANGUL_SYLLABLE_TYPE:
-        return HangulSyllableType.COUNT-1;
+                return HangulSyllableType.COUNT-1;
             case UProperty.NFD_QUICK_CHECK:
             case UProperty.NFKD_QUICK_CHECK:
                 return 1; // YES -- these are never "maybe", only "no" or "yes"
             case UProperty.NFC_QUICK_CHECK:
             case UProperty.NFKC_QUICK_CHECK:
                 return 2; // MAYBE
+            case UProperty.GRAPHEME_CLUSTER_BREAK:
+                return (PROPERTY_.getMaxValues(2) & GCB_MASK) >> GCB_SHIFT;
+            case UProperty.SENTENCE_BREAK:
+                return (PROPERTY_.getMaxValues(2) & SB_MASK) >> SB_SHIFT;
+            case UProperty.WORD_BREAK:
+                return (PROPERTY_.getMaxValues(2) & WB_MASK) >> WB_SHIFT;
+            default:
+                return -1; // undefined
             }
 
         }
@@ -5001,8 +5363,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static byte getDirectionality(int cp)
     {
-        // when ch is out of bounds getProperty == 0
-        return (byte)((getProperty(cp) >> BIDI_SHIFT_) & BIDI_MASK_AFTER_SHIFT_);
+        return (byte)getDirection(cp);
     }
 
     /**
@@ -5209,7 +5570,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     private static final char[] PROPERTY_TRIE_INDEX_;
     private static final char[] PROPERTY_TRIE_DATA_;
-    private static final int[] PROPERTY_DATA_;
     private static final int PROPERTY_INITIAL_VALUE_;
 
     // block to initialise character property database
@@ -5220,9 +5580,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         PROPERTY_ = UCharacterProperty.getInstance();
         PROPERTY_TRIE_INDEX_ = PROPERTY_.m_trieIndex_;
         PROPERTY_TRIE_DATA_ = PROPERTY_.m_trieData_;
-        PROPERTY_DATA_ = PROPERTY_.m_property_;
-        PROPERTY_INITIAL_VALUE_ 
-            = PROPERTY_DATA_[PROPERTY_.m_trieInitialValue_];
+        PROPERTY_INITIAL_VALUE_ = PROPERTY_.m_trieInitialValue_;
         }
         catch (Exception e)
         {
@@ -5341,20 +5699,33 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     /**
      * Shift to get numeric type
      */
-    private static final int NUMERIC_TYPE_SHIFT_ = 12;
+    private static final int NUMERIC_TYPE_SHIFT_ = 5;
     /**
      * Mask to get numeric type
      */
     private static final int NUMERIC_TYPE_MASK_ = 0x7 << NUMERIC_TYPE_SHIFT_;
-    /**
-     * Shift to get bidi bits
-     */
-    private static final int BIDI_SHIFT_ = 6;
       
-    /**
-     * Mask to be applied after shifting to get bidi bits
-     */
-    private static final int BIDI_MASK_AFTER_SHIFT_ = 0x1F;
+    /* encoding of fractional and large numbers */
+    private static final int MAX_SMALL_NUMBER=0xff;
+
+    private static final int FRACTION_NUM_SHIFT=3;        /* numerator: bits 7..3 */
+    private static final int FRACTION_DEN_MASK=7;         /* denominator: bits 2..0 */
+
+    private static final int FRACTION_MAX_NUM=31;
+    private static final int FRACTION_DEN_OFFSET=2;       /* denominator values are 2..9 */
+
+    private static final int FRACTION_MIN_DEN=FRACTION_DEN_OFFSET;
+    private static final int FRACTION_MAX_DEN=FRACTION_MIN_DEN+FRACTION_DEN_MASK;
+
+    private static final int LARGE_MANT_SHIFT=4;          /* mantissa: bits 7..4 */
+    private static final int LARGE_EXP_MASK=0xf;          /* exponent: bits 3..0 */
+    private static final int LARGE_EXP_OFFSET=2;          /* regular exponents 2..17 */
+    private static final int LARGE_EXP_OFFSET_EXTRA=18;   /* extra large exponents 18..33 */
+
+    private static final int LARGE_MIN_EXP=LARGE_EXP_OFFSET;
+    private static final int LARGE_MAX_EXP=LARGE_MIN_EXP+LARGE_EXP_MASK;
+    private static final int LARGE_MAX_EXP_EXTRA=LARGE_EXP_OFFSET_EXTRA+LARGE_EXP_MASK;
+
     /**
      * Han digit characters
      */
@@ -5376,38 +5747,53 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     private static final int CJK_IDEOGRAPH_COMPLEX_THOUSAND_ = 0x4edf;    
     private static final int CJK_IDEOGRAPH_TEN_THOUSAND_     = 0x824c;    
     private static final int CJK_IDEOGRAPH_HUNDRED_MILLION_  = 0x5104;
+
     /**
-     * <p>Numerator power limit.
-     * There are special values for huge numbers that are powers of ten.</p>
-     * <p>c version genprops/store.c documents:
-     * if numericValue = 0x7fffff00 + x then numericValue = 10 ^ x</p>
+     * Zero Width Non Joiner.
+     * Equivalent to icu4c ZWNJ.
      */
-    private static final int NUMERATOR_POWER_LIMIT_ = 0x7fffff00;
+    private static final int ZERO_WIDTH_NON_JOINER_ = 0x200c;
     /**
-     * Integer properties mask and shift values for joining type.
-     * Equivalent to icu4c UPROPS_JT_MASK. 
-     */    
-    private static final int JOINING_TYPE_MASK_ = 0x00003800;
-    /**
-     * Integer properties mask and shift values for joining type.
-     * Equivalent to icu4c UPROPS_JT_SHIFT. 
-     */    
-    private static final int JOINING_TYPE_SHIFT_ = 11;
-    /**
-     * Integer properties mask and shift values for joining group.
-     * Equivalent to icu4c UPROPS_JG_MASK. 
-     */    
-    private static final int JOINING_GROUP_MASK_ = 0x000007e0;
-    /**
-     * Integer properties mask and shift values for joining group.
-     * Equivalent to icu4c UPROPS_JG_SHIFT. 
-     */    
-    private static final int JOINING_GROUP_SHIFT_ = 5;
+     * Zero Width Joiner
+     * Equivalent to icu4c ZWJ. 
+     */
+    private static final int ZERO_WIDTH_JOINER_ = 0x200d;
+
+    /*
+     * Properties in vector word 2
+     * Bits
+     * 31..24   More binary properties (see UCharacterProperty)
+     * 23..19   reserved
+     * 18..14   Sentence Break
+     * 13..10   Word Break
+     *  9.. 5   Grapheme Cluster Break
+     *  4.. 0   Decomposition Type
+     */
+    private static final int SB_MASK          = 0x0007c000;
+    private static final int SB_SHIFT         = 14;
+
+    private static final int WB_MASK          = 0x00003c00;
+    private static final int WB_SHIFT         = 10;
+
+    private static final int GCB_MASK         = 0x000003e0;
+    private static final int GCB_SHIFT        = 5;
+
     /**
      * Integer properties mask for decomposition type.
      * Equivalent to icu4c UPROPS_DT_MASK. 
      */    
     private static final int DECOMPOSITION_TYPE_MASK_ = 0x0000001f;
+
+    /*
+     * Properties in vector word 0
+     * Bits
+     * 31..24   DerivedAge version major/minor one nibble each (see UCharacterProperty)
+     * 23..18   Line Break
+     * 17..15   East Asian Width
+     * 14.. 7   UBlockCode
+     *  6.. 0   UScriptCode
+     */
+
     /**
      * Integer properties mask and shift values for East Asian cell width.
      * Equivalent to icu4c UPROPS_EA_MASK 
@@ -5419,20 +5805,10 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */    
     private static final int EAST_ASIAN_SHIFT_ = 15;
     /**
-     * Zero Width Non Joiner.
-     * Equivalent to icu4c ZWNJ.
-     */
-    private static final int ZERO_WIDTH_NON_JOINER_ = 0x200c;
-    /**
-     * Zero Width Joiner
-     * Equivalent to icu4c ZWJ. 
-     */
-    private static final int ZERO_WIDTH_JOINER_ = 0x200d;
-    /**
      * Integer properties mask and shift values for line breaks.
      * Equivalent to icu4c UPROPS_LB_MASK 
      */    
-    private static final int LINE_BREAK_MASK_ = 0x007C0000;
+    private static final int LINE_BREAK_MASK_ = 0x00FC0000;
     /**
      * Integer properties mask and shift values for line breaks.
      * Equivalent to icu4c UPROPS_LB_SHIFT 
@@ -5502,17 +5878,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
     
     /**
-     * Checks if the property value has a exception indicator
-     * @param props 32 bit property value
-     * @return true if property does not have a exception indicator, false
-     *          otherwise
-     */     
-    private static boolean isNotExceptionIndicator(int props)
-    {
-    return (props & UCharacterProperty.EXCEPTION_MASK) == 0;
-    }
-         
-    /**
      * Gets the property value at the index.
      * This is optimized.
      * Note this is alittle different from CharTrie the index m_trieData_
@@ -5524,35 +5889,34 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @return property value of code point
      * @stable ICU 2.6
      */
-    private static int getProperty(int ch)
+    private static final int getProperty(int ch)
     {
         if (ch < UTF16.LEAD_SURROGATE_MIN_VALUE 
             || (ch > UTF16.LEAD_SURROGATE_MAX_VALUE 
                 && ch < UTF16.SUPPLEMENTARY_MIN_VALUE)) {
-            // BMP codepoint
-            try { // using try for < 0 ch is faster than using an if statement
-                return PROPERTY_DATA_[
-                      PROPERTY_TRIE_DATA_[
+            // BMP codepoint 0000..D7FF or DC00..FFFF
+            try { // using try for ch < 0 is faster than using an if statement
+                return PROPERTY_TRIE_DATA_[
                               (PROPERTY_TRIE_INDEX_[ch >> 5] << 2) 
-                              + (ch & 0x1f)]];
+                              + (ch & 0x1f)];
             } catch (ArrayIndexOutOfBoundsException e) {
                 return PROPERTY_INITIAL_VALUE_;
             }
         }
         if (ch <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
-            // surrogate 
-            return PROPERTY_DATA_[
-                  PROPERTY_TRIE_DATA_[
+            // lead surrogate D800..DBFF
+            return PROPERTY_TRIE_DATA_[
                               (PROPERTY_TRIE_INDEX_[(0x2800 >> 5) + (ch >> 5)] << 2) 
-                              + (ch & 0x1f)]];
+                              + (ch & 0x1f)];
         }
         // for optimization
         if (ch <= UTF16.CODEPOINT_MAX_VALUE) {
+            // supplementary code point 10000..10FFFF
             // look at the construction of supplementary characters
             // trail forms the ends of it.
-            return PROPERTY_DATA_[PROPERTY_.m_trie_.getSurrogateValue(
+            return PROPERTY_.m_trie_.getSurrogateValue(
                                       UTF16.getLeadSurrogate(ch), 
-                                      (char)(ch & 0x3ff))];
+                                      (char)(ch & 0x3ff));
         }
         // return m_dataOffset_ if there is an error, in this case we return 
         // the default value: m_initialValue_
@@ -5561,4 +5925,3 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         return PROPERTY_INITIAL_VALUE_;
     }
 }
-
