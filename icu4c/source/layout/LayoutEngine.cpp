@@ -114,6 +114,25 @@ void LayoutEngine::getCharIndices(le_int32 charIndices[], le_int32 indexBase, LE
     }
 }
 
+void LayoutEngine::getCharIndices(le_int32 charIndices[], LEErrorCode &success) const
+{
+    if LE_FAILURE(success) {
+      return;
+    }
+    
+    if (charIndices == NULL) {
+      success = LE_ILLEGAL_ARGUMENT_ERROR;
+      return;
+    }
+    
+    if (fCharIndices == NULL) {
+      success = LE_NO_LAYOUT_ERROR;
+      return;
+    }
+    
+    LE_ARRAY_COPY(charIndices, fCharIndices, fGlyphCount);
+}
+
 // Copy the glyphs into caller's (32-bit) glyph array, OR in extraBits
 void LayoutEngine::getGlyphs(le_uint32 glyphs[], le_uint32 extraBits, LEErrorCode &success) const
 {
@@ -136,7 +155,66 @@ void LayoutEngine::getGlyphs(le_uint32 glyphs[], le_uint32 extraBits, LEErrorCod
     for (i = 0; i < fGlyphCount; i += 1) {
         glyphs[i] = fGlyphs[i] | extraBits;
     }
-};
+}
+
+void LayoutEngine::getGlyphs(LEGlyphID glyphs[], LEErrorCode &success) const
+{
+    if (LE_FAILURE(success)) {
+      return;
+    }
+    
+    if (glyphs == NULL) {
+      success = LE_ILLEGAL_ARGUMENT_ERROR;
+      return;
+    }
+    
+    if (fGlyphs == NULL) {
+      success = LE_NO_LAYOUT_ERROR;
+    }
+    
+    LE_ARRAY_COPY(glyphs, fGlyphs, fGlyphCount);
+}
+
+
+void LayoutEngine::getGlyphPositions(float positions[], LEErrorCode &success) const
+{
+    if LE_FAILURE(success) {
+      return;
+    }
+  
+    if (positions == NULL) {
+      success = LE_ILLEGAL_ARGUMENT_ERROR;
+      return;
+    }
+    
+    if (fPositions == NULL) {
+      success = LE_NO_LAYOUT_ERROR;
+      return;
+    }
+    
+    LE_ARRAY_COPY(positions, fPositions, fGlyphCount * 2 + 2);
+}
+
+void LayoutEngine::getGlyphPosition(le_int32 glyphIndex, float &x, float &y, LEErrorCode &success) const
+{
+    if (LE_FAILURE(success)) {
+      return;
+    }
+    
+    if (glyphIndex > fGlyphCount) {
+      success = LE_INDEX_OUT_OF_BOUNDS_ERROR;
+      return;
+    }
+    
+    if (fPositions == NULL) {
+      success = LE_NO_LAYOUT_ERROR;
+      return;
+    }
+    
+    x = fPositions[glyphIndex * 2];
+    y = fPositions[glyphIndex * 2 + 1];
+}
+
 
 le_int32 LayoutEngine::computeGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
                                             LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success)

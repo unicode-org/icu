@@ -351,23 +351,7 @@ public:
      *
      * @draft ICU 2.2
      */
-    void getGlyphs(LEGlyphID glyphs[], LEErrorCode &success) const
-    {
-        if (LE_FAILURE(success)) {
-            return;
-        }
-
-        if (glyphs == NULL) {
-            success = LE_ILLEGAL_ARGUMENT_ERROR;
-            return;
-        }
-
-        if (fGlyphs == NULL) {
-            success = LE_NO_LAYOUT_ERROR;
-        }
-
-        LE_ARRAY_COPY(glyphs, fGlyphs, fGlyphCount);
-    };
+    void getGlyphs(LEGlyphID glyphs[], LEErrorCode &success) const;
 
     /**
      * This method copies the glyph array into a caller supplied array,
@@ -393,24 +377,7 @@ public:
      *
      * @draft ICU 2.2
      */
-    void getCharIndices(le_int32 charIndices[], LEErrorCode &success) const
-    {
-        if LE_FAILURE(success) {
-            return;
-        }
-
-        if (charIndices == NULL) {
-            success = LE_ILLEGAL_ARGUMENT_ERROR;
-            return;
-        }
-
-        if (fCharIndices == NULL) {
-            success = LE_NO_LAYOUT_ERROR;
-            return;
-        }
-
-        LE_ARRAY_COPY(charIndices, fCharIndices, fGlyphCount);
-    };
+    void getCharIndices(le_int32 charIndices[], LEErrorCode &success) const;
 
     /**
      * This method copies the character index array into a caller supplied array.
@@ -436,24 +403,7 @@ public:
      *
      * @draft ICU 2.2
      */
-    void getGlyphPositions(float positions[], LEErrorCode &success) const
-    {
-        if LE_FAILURE(success) {
-            return;
-        }
-
-        if (positions == NULL) {
-            success = LE_ILLEGAL_ARGUMENT_ERROR;
-            return;
-        }
-
-        if (fPositions == NULL) {
-            success = LE_NO_LAYOUT_ERROR;
-            return;
-        }
-
-        LE_ARRAY_COPY(positions, fPositions, fGlyphCount * 2 + 2);
-    };
+    void getGlyphPositions(float positions[], LEErrorCode &success) const;
 
     /**
      * This method returns the X and Y position of the glyph at
@@ -469,25 +419,7 @@ public:
      *
      * @draft ICU 2.2
      */
-    void getGlyphPosition(le_int32 glyphIndex, float &x, float &y, LEErrorCode &success) const
-    {
-        if (LE_FAILURE(success)) {
-            return;
-        }
-
-        if (glyphIndex > fGlyphCount) {
-            success = LE_INDEX_OUT_OF_BOUNDS_ERROR;
-            return;
-        }
-
-        if (fPositions == NULL) {
-            success = LE_NO_LAYOUT_ERROR;
-            return;
-        }
-
-        x = fPositions[glyphIndex * 2];
-        y = fPositions[glyphIndex * 2 + 1];
-    };
+    void getGlyphPosition(le_int32 glyphIndex, float &x, float &y, LEErrorCode &success) const;
 
     /**
      * This method frees the glyph, character index and position arrays
