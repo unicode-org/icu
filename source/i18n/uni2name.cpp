@@ -23,8 +23,6 @@ U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UnicodeNameTransliterator)
 
-static const char CURR_ID[] = "Any-Name";
-
 static const UChar OPEN_DELIM[] = {92,78,123,0}; // "\N{"
 static const UChar CLOSE_DELIM  = 125; // "}"
 #define OPEN_DELIM_LEN 3
@@ -33,7 +31,7 @@ static const UChar CLOSE_DELIM  = 125; // "}"
  * Constructs a transliterator.
  */
 UnicodeNameTransliterator::UnicodeNameTransliterator(UnicodeFilter* adoptedFilter) :
-    Transliterator(UnicodeString(CURR_ID, ""), adoptedFilter) {
+    Transliterator(UNICODE_STRING("Any-Name", 8), adoptedFilter) {
 }
 
 /**
