@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/TransliterationRuleSet.java,v $
- * $Date: 2001/11/06 05:06:26 $
- * $Revision: 1.17 $
+ * $Date: 2001/11/27 21:57:05 $
+ * $Revision: 1.18 $
  *
  *****************************************************************************************
  */
@@ -27,7 +27,7 @@ import java.util.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.17 $ $Date: 2001/11/06 05:06:26 $
+ * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.18 $ $Date: 2001/11/27 21:57:05 $
  */
 class TransliterationRuleSet {
     /**
@@ -91,8 +91,7 @@ class TransliterationRuleSet {
 
     /**
      * Close this rule set to further additions, check it for masked rules,
-     * and index it to optimize performance.  Once this method is called,
-     * addRule() can no longer be called.
+     * and index it to optimize performance.
      * @exception IllegalArgumentException if some rules are masked
      */
     public void freeze() {
@@ -287,9 +286,12 @@ class TransliterationRuleSet {
 }
 
 /* $Log: TransliterationRuleSet.java,v $
- * Revision 1.17  2001/11/06 05:06:26  alan
- * jitterbug 60: make toRules() read from original vector
+ * Revision 1.18  2001/11/27 21:57:05  alan
+ * jitterbug 1389: incorporate Mark's review comments - comments only
  *
+/* Revision 1.17  2001/11/06 05:06:26  alan
+/* jitterbug 60: make toRules() read from original vector
+/*
 /* Revision 1.16  2001/11/05 18:55:54  alan
 /* jitterbug 60: elide duplicate rules in toRules()
 /*
