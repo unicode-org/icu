@@ -76,6 +76,7 @@ struct collIterate {
   uint32_t CEs[UCOL_EXPAND_CE_BUFFER_SIZE]; /* This is where we store CEs */
   UBool isThai; /* Have we already encountered a Thai prevowel */
   UBool isWritable; /* is the source buffer writable? */
+  UBool isUsingWritable; /* are we currently using writable buffer */
   UChar stackWritableBuffer[UCOL_WRITABLE_BUFFER_SIZE]; /* A writable buffer. */
   UChar *writableBuffer;
   const UCollator *coll;
@@ -222,6 +223,7 @@ struct incrementalContext {
 	(s)->isWritable = (isSourceWritable); \
 	(s)->writableBuffer = (s)->stackWritableBuffer; \
     (s)->coll = (collator); \
+(s)->isUsingWritable = FALSE; \
 }
 
 /* a macro that gets a simple CE */
@@ -267,7 +269,10 @@ struct incrementalContext {
     }                                                                        \
   }                                                                          \
   else {                                                                     \
-    if ((data).pos == (data).string || (data).pos == (data).writableBuffer) {\
+    /* weiv tentatively */\
+    /*if ((data).pos == (data).string || (data).pos == (data).writableBuffer) {*/\
+    if (((data).pos <= (data).string && (data).isUsingWritable == FALSE) || \
+        ((data).pos <= (data).writableBuffer && (data).isUsingWritable = TRUE)) {\
       (order) = UCOL_NO_MORE_CES;                                            \
     }                                                                        \
     else {                                                                   \
