@@ -26,6 +26,11 @@ public:
     static const UChar ID[]; // public for Transliterator
 
     /**
+     * ID for this transliterator.
+     */
+    static const UChar SHORT_ID[]; // public for Transliterator
+
+    /**
      * Constructs a transliterator.
      */
     NullTransliterator();

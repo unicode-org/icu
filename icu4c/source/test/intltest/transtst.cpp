@@ -1532,12 +1532,17 @@ void TransliteratorTest::TestQuantifier() {
            "xxx(ac)",
            &pos);
 
-    // Make sure @ past post context doesn't enter post context
+    // Make sure @ past post context doesn't pass limit
     UTransPosition pos2 = {0, 4, 0, 2};
     expect("{b} a+ > c @@ |; x > y; a > A;",
            "baxx",
            "caxx",
            &pos2);
+
+    // Make sure @ past post context doesn't enter post context
+    expect("{b} a+ > c @@ |; x > y; a > A;",
+           "baxx",
+           "cayy");
 
     expect("(ab)? c > d;",
            "c abc ababc",

@@ -702,8 +702,8 @@ UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
             isOpen = new UBool[2*SEGMENTS_COUNT];
         }
         for (i=0; i<2*SEGMENTS_COUNT; i+=2) {
-            isOpen[SEGMENTS_NUM(i)] = TRUE;
-            isOpen[SEGMENTS_NUM(i+1)] = FALSE;
+            isOpen[SEGMENTS_NUM(i)  -FIRST_SEG_POS_INDEX] = TRUE;
+            isOpen[SEGMENTS_NUM(i+1)-FIRST_SEG_POS_INDEX] = FALSE;
         }
         nextSeg = segments[++iseg];
     }

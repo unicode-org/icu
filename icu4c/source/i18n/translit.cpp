@@ -13,6 +13,7 @@
 #include "mutex.h"
 #include "rbt_data.h"
 #include "rbt_pars.h"
+#include "transreg.h"
 #include "unicode/cpdtrans.h"
 #include "unicode/hangjamo.h"
 #include "unicode/hextouni.h"
@@ -35,6 +36,7 @@
 #include "unicode/unifilt.h"
 #include "unicode/uniset.h"
 #include "unicode/unitohex.h"
+#include "unicode/uscript.h"
 
 // keep in sync with CompoundTransliterator
 static const UChar ID_SEP      = 0x002D; /*-*/
@@ -43,45 +45,15 @@ static const UChar VARIANT_SEP = 0x002F; // '/'
 static const UChar OPEN_PAREN  = 40;
 static const UChar CLOSE_PAREN = 41;
 
-static Hashtable _cache(TRUE); // TRUE = keys are case insensitive
-static Hashtable _internalCache(TRUE); // TRUE = keys are case insensitive
-
-// Map of source name to (Hashtable mapping target to (UVector of
-// target names).
-static Hashtable sourceMap(TRUE);
+/**
+ * The mutex controlling access to registry object.
+ */
+static UMTX registryMutex = 0;
 
 /**
- * Cache of public system transliterators.  Keys are UnicodeString
- * names, values are CacheEntry objects.
+ * System transliterator registry; non-null when initialized.
  */
-Hashtable* Transliterator::cache = &_cache;
-
-/**
- * Like 'cache', but IDs are not public.  Internal transliterators are
- * combined together and aliased to public IDs.
- */
-Hashtable* Transliterator::internalCache = &_internalCache;
-
-/**
- * The mutex controlling access to the cache.
- */
-UMTX Transliterator::cacheMutex = NULL;
-
-/**
- * When set to TRUE, the cache has been initialized.  Any code must
- * check this boolean before accessing the cache, and if the boolean
- * is FALSE, it must call initializeCache().  We do this form of lazy
- * evaluation for two reasons: (1) so we don't initialize if we don't
- * have to (i.e., if no one is using Transliterator, but has included
- * the code as part of a shared library, and (2) to avoid static
- * intialization problems.
- */
-UBool Transliterator::cacheInitialized = FALSE;
-
-/**
- * Vector of registered IDs.
- */
-UVector Transliterator::cacheIDs;
+static TransliteratorRegistry* registry = 0;
 
 /**
  * Prefix for resource bundle key for the display name for a
@@ -112,11 +84,6 @@ static const char* RB_DISPLAY_NAME_PATTERN = "TransliteratorNamePattern";
  * to obtain the class name in which the RB_RULE key will be sought.
  */
 static const char* RB_RULE_BASED_IDS = "RuleBasedTransliteratorIDs";
-
-/**
- * Resource bundle key for the RuleBasedTransliterator rule.
- */
-static const char* RB_RULE = "Rule";
 
 /**
  * Class identifier for subclasses of Transliterator that do not
@@ -545,14 +512,10 @@ UnicodeString& Transliterator::getDisplayName(const UnicodeString& ID,
     int32_t length=(int32_t)uprv_strlen(RB_DISPLAY_NAME_PREFIX);
     key[length + ID.extract(0, (int32_t)(sizeof(key)-length-1), key+length, "")]=0;
 
-    // Try to retrieve a UnicodeString* from the bundle.  The result,
-    // if any, should NOT be deleted.
-    /*const UnicodeString* resString = bundle.getString(key, status);*/
+    // Try to retrieve a UnicodeString from the bundle.
     UnicodeString resString = bundle.getStringEx(key, status);
 
-    /*if (U_SUCCESS(status) && resString != 0) {*/
     if (U_SUCCESS(status) && resString.length() != 0) {
-        /*return result = *resString; // [sic] assign & return*/
         return result = resString; // [sic] assign & return
     }
 
@@ -563,12 +526,9 @@ UnicodeString& Transliterator::getDisplayName(const UnicodeString& ID,
     // name from the ID.
 
     status = U_ZERO_ERROR;
-    /*resString = bundle.getString(RB_DISPLAY_NAME_PATTERN, status);*/
     resString = bundle.getStringEx(RB_DISPLAY_NAME_PATTERN, status);
 
-    /*if (U_SUCCESS(status) && resString != 0) {*/
     if (U_SUCCESS(status) && resString.length() != 0) {
-        /*MessageFormat msg(*resString, inLocale, status);*/
         MessageFormat msg(resString, inLocale, status);
         // Suspend checking status until later...
 
@@ -599,11 +559,9 @@ UnicodeString& Transliterator::getDisplayName(const UnicodeString& ID,
             args[j].getString(s);
             key[length + s.extract(0, sizeof(key)-length-1, key+length, "")]=0;
 
-            /*resString = bundle.getString(key, status);*/
             resString = bundle.getStringEx(key, status);
 
             if (U_SUCCESS(status)) {
-                /*args[j] = *resString;*/
                 args[j] = resString;
             }
         }
@@ -771,7 +729,7 @@ Transliterator* Transliterator::createFromRules(const UnicodeString& ID,
         return 0;
     }
 
-    // NOTE: The logic here matches that in _createInstance().
+    // NOTE: The logic here matches that in TransliteratorRegistry.
     if (idBlock.length() == 0) {
         if (data == 0) {
             // No idBlock, no data -- this is just an
@@ -1013,8 +971,15 @@ Transliterator* Transliterator::parseID(const UnicodeString& ID,
     // an abbreviation for "Any-Foo", consider the inverse to be
     // "Foo-Any".
     int32_t sep = id.indexOf(ID_SEP);
-    if (sep < 0 && id.caseCompare(NullTransliterator::ID,
+    if (sep < 0 && id.caseCompare(NullTransliterator::SHORT_ID,
                                   U_FOLD_CASE_DEFAULT) == 0) {
+        // Handle "Null"
+        sep = id.length();
+    } else if (dir == UTRANS_REVERSE &&
+               id.caseCompare(NullTransliterator::ID,
+                              U_FOLD_CASE_DEFAULT) == 0) {
+        // Reverse of "Any-Null" => "Null"
+        id.removeBetween(0, sep+1);
         sep = id.length();
     } else if (dir == UTRANS_REVERSE && revStart < 0) {
         if (sep >= 0) {
@@ -1045,27 +1010,30 @@ Transliterator* Transliterator::parseID(const UnicodeString& ID,
     }
 
     else {
-        // Create the actual transliterator by calling _createInstance.
-        // Upon return the 'alias' parameter ('str' here) is non-empty if
-        // _createInstance() the given ID refers to an alias.  The reason
-        // _createInstance() doesn't call createInstance() directly is to
-        // avoid deadlock (_createInstance is holding the cache mutex, so
-        // it has to return before anyone else can do anything).  There
-        // are other ways to do this but this is one of the more efficient
-        // ways.
-        str.truncate(0);
-        t = _createInstance(id, str /*alias*/, parseError);
-        if (str.length() > 0) {
-            // The given id refers to an alias (now in 'str').  As long as
-            // the alias is not to itself we can safely call
-            // createInstance() here.  If there is a circular alias, we'll
-            // enter and infinite loop here.
-            // assert(t==0);
-            t = createInstance(str, UTRANS_FORWARD, parseError);
+        // Create the actual transliterator from the registry
+        if (parseError != 0) {
+            parseError->code = parseError->line = parseError->offset = 0;
+            parseError->preContext[0] = parseError->postContext[0] = 0;
+        }
+        if (registry == 0) {
+            initializeRegistry();
+        }
+        {
+            Mutex lock(&registryMutex);
+            str.truncate(0);
+            t = registry->get(id, str, parseError);
+            // Need to enclose this in a block to prevent deadlock when
+            // instantiating aliases (below).
         }
         
+        if (str.length() != 0) {
+            // assert(t==0);
+            // Instantiate an alias
+            t = createInstance(str, UTRANS_FORWARD, parseError);
+        }
+
         if (t == 0) {
-            // Creation failed; the ID is invalid
+            // Creation failed; the ID is invalid or is an alias
             delete filter;
             return 0;
         }
@@ -1205,162 +1173,21 @@ void Transliterator::skipSpaces(const UnicodeString& str,
     }
 }
 
-/**
- * Returns a transliterator object given its ID.  Unlike getInstance(),
- * this method returns null if it cannot make use of the given ID.
- * @param aliasReturn if ID is an alias transliterator this is set
- * the the parameter to be passed to createInstance() and 0 is
- * returned; otherwise, this is unchanged
- */
-Transliterator* Transliterator::_createInstance(const UnicodeString& ID,
-                                                UnicodeString& aliasReturn,
-                                                UParseError* parseError) {
-    if (!cacheInitialized) {
-        initializeCache();
-    }
-
-    Mutex lock(&cacheMutex);
-
-    CacheEntry* entry = (CacheEntry*) cache->get(ID);
-    if (entry == 0) {
-        entry = (CacheEntry*) internalCache->get(ID);
-        if (entry == 0) {
-            return 0; // out of memory
-        }
-    }
-
-    UErrorCode status = U_ZERO_ERROR;
-
-    for (;;) {
-        if (entry->entryType == CacheEntry::RBT_DATA) {
-            return new RuleBasedTransliterator(ID, entry->u.data);
-        } else if (entry->entryType == CacheEntry::PROTOTYPE) {
-            return entry->u.prototype->clone();
-        } else if (entry->entryType == CacheEntry::ALIAS) {
-            // We can't call createInstance() here because of deadlock.
-            aliasReturn = entry->stringArg;
-            return 0;
-        } else if (entry->entryType == CacheEntry::FACTORY) {
-            return entry->u.factory();
-        } else if (entry->entryType == CacheEntry::COMPOUND_RBT) {
-            UnicodeString id("_", "");
-            Transliterator *t = new RuleBasedTransliterator(id, entry->u.data);
-            t = new CompoundTransliterator(ID, entry->stringArg,
-                                           entry->intArg, t, status);
-            if (U_FAILURE(status)) {
-                delete t;
-                t = 0;
-                _unregister(ID);
-            }
-            return t;
-        }
-
-        // At this point entry type must be either RULES_FORWARD or
-        // RULES_REVERSE.  We process the rule data into a
-        // TransliteratorRuleData object, and possibly also into an
-        // ::id header and/or footer.  Then we modify the cache with
-        // the parsed data and retry.
-        UBool isReverse = (entry->entryType == CacheEntry::RULES_REVERSE);
-
-        // We use the file name, taken from another resource bundle
-        // 2-d array at static init time, as a locale language.  We're
-        // just using the locale mechanism to map through to a file
-        // name; this in no way represents an actual locale.
-
-        char *ch = new char[entry->stringArg.length() + 1];
-        ch[entry->stringArg.extract(0, 0x7fffffff, ch, "")] = 0;
-        Locale fakeLocale(ch);
-        delete [] ch;
-
-        ResourceBundle bundle((char *)0, fakeLocale, status);
-        UnicodeString rules = bundle.getStringEx(RB_RULE, status);
-
-        // If the status indicates a failure, then we don't have any
-        // rules -- there is probably an installation error.  The list
-        // in the root locale should correspond to all the installed
-        // transliterators; if it lists something that's not
-        // installed, we'll get an error from ResourceBundle.
-
-        TransliteratorParser::parse(rules, isReverse ?
-                                    UTRANS_REVERSE : UTRANS_FORWARD,
-                                    entry->u.data,
-                                    entry->stringArg,
-                                    entry->intArg,
-                                    parseError,
-                                    status);
-
-        if (U_FAILURE(status)) {
-            // We have a failure of some kind.  Remove the ID from the
-            // cache so we don't keep trying.  NOTE: This will throw off
-            // anyone who is, at the moment, trying to iterate over the
-            // available IDs.  That's acceptable since we should never
-            // really get here except under installation, configuration,
-            // or unrecoverable run time memory failures.
-            _unregister(ID);
-            break;
-        }
-
-        // Reset entry->entryType to something that we process at the
-        // top of the loop, then loop back to the top.  As long as we
-        // do this, we only loop through twice at most.
-        // NOTE: The logic here matches that in createFromRules().
-        if (entry->stringArg.length() == 0) {
-            if (entry->u.data == 0) {
-                // No idBlock, no data -- this is just an
-                // alias for Null
-                entry->entryType = CacheEntry::ALIAS;
-                entry->stringArg = NullTransliterator::ID;
-            } else {
-                // No idBlock, data != 0 -- this is an
-                // ordinary RBT_DATA
-                entry->entryType = CacheEntry::RBT_DATA;
-            }
-        } else {
-            if (entry->u.data == 0) {
-                // idBlock, no data -- this is an alias
-                entry->entryType = CacheEntry::ALIAS;
-            } else {
-                // idBlock and data -- this is a compound
-                // RBT
-                entry->entryType = CacheEntry::COMPOUND_RBT;
-            }
-        }
-    }
-
-    return 0; // failed
-}
-
 // For public consumption
 void Transliterator::registerFactory(const UnicodeString& id,
-                                     Transliterator::Factory factory,
-                                     UErrorCode &status) {
-    if (U_FAILURE(status)) {
-        return;
+                                     Transliterator::Factory factory) {
+    if (registry == 0) {
+        initializeRegistry();
     }
-    if (!cacheInitialized) {
-        initializeCache();
-    }
-    Mutex lock(&cacheMutex);
-    _registerFactory(id, factory, status);
+    Mutex lock(&registryMutex);
+    _registerFactory(id, factory);
 }
 
 // To be called only by Transliterator subclasses that are called
-// to register themselves by initializeCache().
+// to register themselves by initializeRegistry().
 void Transliterator::_registerFactory(const UnicodeString& id,
-                                      Transliterator::Factory factory,
-                                      UErrorCode &status) {
-    if (U_FAILURE(status)) {
-        return;
-    }
-
-    CacheEntry* entry = (CacheEntry*) cache->get(id);
-    if (entry == 0) {
-        _registerID(id);
-        entry = new CacheEntry();
-    }
-    entry->setFactory(factory);
-
-    cache->put(id, entry, status);
+                                      Transliterator::Factory factory) {
+    registry->put(id, factory, TRUE);
 }
 
 /**
@@ -1376,38 +1203,12 @@ void Transliterator::_registerFactory(const UnicodeString& id,
  * @see #getInstance
  * @see #unregister
  */
-void Transliterator::registerInstance(Transliterator* adoptedPrototype,
-                                      UErrorCode &status) {
-    if (!cacheInitialized) {
-        initializeCache();
+void Transliterator::registerInstance(Transliterator* adoptedPrototype) {
+    if (registry == 0) {
+        initializeRegistry();
     }
-
-    Mutex lock(&cacheMutex);
-    _registerInstance(adoptedPrototype, status);
-}
-
-/**
- * This internal method registers a prototype instance in the cache.
- * The CALLER MUST MUTEX using cacheMutex before calling this method.
- */
-void Transliterator::_registerInstance(Transliterator* adoptedPrototype,
-                                       UErrorCode &status) {
-    if (U_FAILURE(status)) {
-        delete adoptedPrototype;
-        return;
-    }
-
-    const UnicodeString& id = adoptedPrototype->getID();
-
-    CacheEntry* entry = (CacheEntry*) cache->get(id);
-    if (entry == 0) {
-        _registerID(id);
-        entry = new CacheEntry();
-    }
-
-    entry->adoptPrototype(adoptedPrototype);
-
-    cache->put(id, entry, status);
+    Mutex lock(&registryMutex);
+    registry->put(adoptedPrototype, TRUE);
 }
 
 /**
@@ -1419,25 +1220,11 @@ void Transliterator::_registerInstance(Transliterator* adoptedPrototype,
 
  */
 void Transliterator::unregister(const UnicodeString& ID) {
-    if (!cacheInitialized) {
-        initializeCache();
+    if (registry == 0) {
+        initializeRegistry();
     }
-    Mutex lock(&cacheMutex);
-    _unregister(ID);
-}
-
-/**
- * Unregisters a transliterator or class.  Internal method.
- * Prerequisites: The cache must be initialized, and the
- * caller must own the cacheMutex.
- */
-void Transliterator::_unregister(const UnicodeString& ID) {
-    cacheIDs.removeElement((void*) &ID);
-    CacheEntry* entry = (CacheEntry*) cache->get(ID);
-    if (entry != 0) {
-        cache->remove(ID);
-        delete entry;
-    }
+    Mutex lock(&registryMutex);
+    registry->remove(ID);
 }
 
 /**
@@ -1446,11 +1233,11 @@ void Transliterator::_unregister(const UnicodeString& ID) {
  * i from 0 to countAvailableIDs() - 1.
  */
 int32_t Transliterator::countAvailableIDs(void) {
-    if (!cacheInitialized) {
-        initializeCache();
+    if (registry == 0) {
+        initializeRegistry();
     }
-    Mutex lock(&cacheMutex);
-    return cacheIDs.size();
+    Mutex lock(&registryMutex);
+    return registry->countAvailableIDs();
 }
 
 /**
@@ -1459,122 +1246,66 @@ int32_t Transliterator::countAvailableIDs(void) {
  * range, the result of getAvailableID(0) is returned.
  */
 const UnicodeString& Transliterator::getAvailableID(int32_t index) {
-    if (index < 0 || index >= cacheIDs.size()) {
-        index = 0;
+    if (registry == 0) {
+        initializeRegistry();
     }
-    if (!cacheInitialized) {
-        initializeCache();
-    }
-    Mutex lock(&cacheMutex);
-    return *(const UnicodeString*) cacheIDs[index];
+    Mutex lock(&registryMutex);
+    return registry->getAvailableID(index);
 }
 
 int32_t Transliterator::countAvailableSources(void) {
-    if (!cacheInitialized) {
-        initializeCache();
+    if (registry == 0) {
+        initializeRegistry();
     }
-    Mutex lock(&cacheMutex);
-    return sourceMap.count();
+    Mutex lock(&registryMutex);
+    return registry->countAvailableSources();
 }
 
 UnicodeString& Transliterator::getAvailableSource(int32_t index,
                                                   UnicodeString& result) {
-    if (!cacheInitialized) {
-        initializeCache();
+    if (registry == 0) {
+        initializeRegistry();
     }
-    Mutex lock(&cacheMutex);
-    int32_t pos = -1;
-    const UHashElement *e = 0;
-    while (index-- >= 0) {
-        e = sourceMap.nextElement(pos);
-        if (e == 0) {
-            break;
-        }
-    }
-    if (e == 0) {
-        result.truncate(0);
-    } else {
-        result = *(UnicodeString*) e->key.pointer;
-    }
-    return result;
+    Mutex lock(&registryMutex);
+    return registry->getAvailableSource(index, result);
 }
 
 int32_t Transliterator::countAvailableTargets(const UnicodeString& source) {
-    if (!cacheInitialized) {
-        initializeCache();
+    if (registry == 0) {
+        initializeRegistry();
     }
-    Mutex lock(&cacheMutex);
-    Hashtable *targets = (Hashtable*) sourceMap.get(source);
-    return (targets == 0) ? 0 : targets->count();
+    Mutex lock(&registryMutex);
+    return registry->countAvailableTargets(source);
 }
 
 UnicodeString& Transliterator::getAvailableTarget(int32_t index,
                                                   const UnicodeString& source,
                                                   UnicodeString& result) {
-    if (!cacheInitialized) {
-        initializeCache();
+    if (registry == 0) {
+        initializeRegistry();
     }
-    Mutex lock(&cacheMutex);
-    Hashtable *targets = (Hashtable*) sourceMap.get(source);
-    if (targets == 0) {
-        result.truncate(0); // invalid source
-        return result;
-    }
-    int32_t pos = -1;
-    const UHashElement *e = 0;
-    while (index-- >= 0) {
-        e = targets->nextElement(pos);
-        if (e == 0) {
-            break;
-        }
-    }
-    if (e == 0) {
-        result.truncate(0); // invalid index
-    } else {
-        result = *(UnicodeString*) e->key.pointer;
-    }
-    return result;
+    Mutex lock(&registryMutex);
+    return registry->getAvailableTarget(index, source, result);
 }
 
 int32_t Transliterator::countAvailableVariants(const UnicodeString& source,
                                                const UnicodeString& target) {
-    if (!cacheInitialized) {
-        initializeCache();
+    if (registry == 0) {
+        initializeRegistry();
     }
-    Mutex lock(&cacheMutex);
-    Hashtable *targets = (Hashtable*) sourceMap.get(source);
-    if (targets == 0) {
-        return 0;
-    }
-    UVector *variants = (UVector*) targets->get(target);
-    return (variants == 0) ? 0 : variants->size();
+    Mutex lock(&registryMutex);
+    return registry->countAvailableVariants(source, target);
 }
 
 UnicodeString& Transliterator::getAvailableVariant(int32_t index,
                                                    const UnicodeString& source,
                                                    const UnicodeString& target,
                                                    UnicodeString& result) {
-    if (!cacheInitialized) {
-        initializeCache();
+    if (registry == 0) {
+        initializeRegistry();
     }
-    Mutex lock(&cacheMutex);
-    Hashtable *targets = (Hashtable*) sourceMap.get(source);
-    if (targets == 0) {
-        result.truncate(0); // invalid source
-        return result;
-    }
-    UVector *variants = (UVector*) targets->get(target);
-    if (variants == 0) {
-        result.truncate(0); // invalid target
-        return result;
-    }
-    UnicodeString *v = (UnicodeString*) variants->elementAt(index);
-    if (v == 0) {
-        result.truncate(0); // invalid index
-    } else {
-        result = *v;
-    }
-    return result;
+    Mutex lock(&registryMutex);
+    return registry->getAvailableVariant(index, source, target, result);
 }
 
 /**
@@ -1590,84 +1321,20 @@ UChar Transliterator::filteredCharAt(const Replaceable& text, int32_t i) const {
         (localFilter->contains(c = text.charAt(i)) ? c : (UChar)0xFFFE);
 }
 
-/**
- * Register an ID (with no whitespace in it, no inline filter, and
- * not compound) in the Source-Target/Variant record.
- */
-void Transliterator::_registerID(const UnicodeString& id) {
-    // cacheMutex must already be held (by caller)
-    cacheIDs.addElement((void*) new UnicodeString(id));
-
-    UnicodeString source, target, variant;
-    int32_t dash = id.indexOf(ID_SEP);
-    int32_t stroke = id.indexOf(VARIANT_SEP);
-    int32_t start = 0;
-    int32_t limit = id.length();
-    if (dash < 0) {
-        source = UnicodeString("Any", "");
-    } else {
-        id.extractBetween(0, dash, source);
-        start = dash + 1;
-    }
-    if (stroke >= 0) {
-        id.extractBetween(stroke + 1, id.length(), variant);
-        limit = stroke;
-    }
-    id.extractBetween(start, limit, target);
-    _registerSTV(source, target, variant);
-}
-
-/**
- * Register a source-target/variant in the Source-Target/Variant record.
- * Variant may be empty, but source and target must not be.
- */
-void Transliterator::_registerSTV(const UnicodeString& source,
-                                  const UnicodeString& target,
-                                  const UnicodeString& variant) {
-    // cacheMutex must already be held (by caller)
-    // assert(source.length() > 0);
-    // assert(target.length() > 0);
-    UErrorCode status = U_ZERO_ERROR;
-    Hashtable *targets = (Hashtable*) sourceMap.get(source);
-    if (targets == 0) {
-        targets = new Hashtable(TRUE);
-        if (targets == 0) {
-            return;
-        }
-        targets->setValueDeleter(uhash_deleteUVector);
-        sourceMap.put(source, targets, status);
-    }
-    UVector *variants = (UVector*) targets->get(target);
-    if (variants == 0) {
-        variants = new UVector(uhash_deleteUnicodeString,
-                               uhash_compareCaselessUnicodeString);
-        if (variants == 0) {
-            return;
-        }
-        targets->put(target, variants, status);
-    }
-    if (variant.length() > 0 &&
-        !variants->contains((void*) &variant)) {
-        variants->addElement(new UnicodeString(variant));
-    }
-}
-
-void Transliterator::initializeCache(void) {
-    // Lock first, check init boolean second
-    Mutex lock(&cacheMutex);
-    if (cacheInitialized) {
+void Transliterator::initializeRegistry(void) {
+    // Lock first, check registry pointer second
+    Mutex lock(&registryMutex);
+    if (registry != 0) {
+        // We were blocked by another thread in initializeRegistry()
         return;
     }
 
+    registry = new TransliteratorRegistry();
+    if (registry == 0) {
+        return; // out of memory, no recovery
+    }
+
     UErrorCode status = U_ZERO_ERROR;
-
-    // Before looking for the resource, construct our cache.
-    // That way if the resource is absent, we will at least
-    // have a valid cache object.
-    cacheIDs.setDeleter(uhash_deleteUnicodeString);
-    cacheIDs.setComparer(uhash_compareCaselessUnicodeString);
-
-    sourceMap.setValueDeleter(uhash_deleteHashtable);
 
     /* The following code parses the index table located in
      * icu/data/translit_index.txt.  The index is an n x 4 table
@@ -1709,31 +1376,27 @@ void Transliterator::initializeCache(void) {
             if (U_SUCCESS(status) && colBund.getSize() == 4) {
                 UnicodeString id(colBund.getStringEx((int32_t)0, status));
                 UChar type = colBund.getStringEx(1, status).charAt(0);
-                UnicodeString resource(colBund.getStringEx(2, status));
+                UnicodeString resString(colBund.getStringEx(2, status));
 
                 if (U_SUCCESS(status)) {
-                    CacheEntry* entry = new CacheEntry();
-                    UBool isInternal = FALSE;
-                    if (type == 0x0066 || type == 0x0069) { // 'f', 'i'
-                        // 'file' or 'internal'; row[2]=resource, row[3]=direction
-                        isInternal = (type == 0x0069/*i*/);
-                        if ((colBund.getStringEx(3, status).charAt(0)) == 0x0052) {// 'R'
-                            entry->entryType = CacheEntry::RULES_REVERSE;
-                        } else {
-                            entry->entryType = CacheEntry::RULES_FORWARD;
+                    switch (type) {
+                    case 0x66: // 'f'
+                    case 0x69: // 'i'
+                        // 'file' or 'internal';
+                        // row[2]=resource, row[3]=direction
+                        {
+                            UBool visible = (type == 0x0066 /*f*/);
+                            UTransDirection dir = 
+                                (colBund.getStringEx(3, status).charAt(0) ==
+                                 0x0046 /*F*/) ?
+                                UTRANS_FORWARD : UTRANS_REVERSE;
+                            registry->put(id, resString, dir, visible);
                         }
-                    } else { // assert(type == 0x0061 /*a*/)
+                        break;
+                    case 0x61: // 'a'
                         // 'alias'; row[2]=createInstance argument
-                        entry->entryType = CacheEntry::ALIAS;
-                    }
-                    entry->stringArg = resource;
-
-                    // Use internalCache for 'internal' entries
-                    Hashtable* c = isInternal ? internalCache : cache;
-                    c->put(id, entry, status);
-
-                    if (!isInternal) {
-                        _registerID(id);
+                        registry->put(id, resString, TRUE);
+                        break;
                     }
                 }
             }
@@ -1743,46 +1406,18 @@ void Transliterator::initializeCache(void) {
     // cache.  This is how new non-rule-based transliterators are
     // added to the system.
 
-    status = U_ZERO_ERROR; // Reset status for following calls
-    _registerInstance(new HexToUnicodeTransliterator(), status);
-    _registerInstance(new UnicodeToHexTransliterator(), status);
-    _registerInstance(new JamoHangulTransliterator(), status);
-    _registerInstance(new HangulJamoTransliterator(), status);
-    _registerInstance(new NullTransliterator(), status);
-    _registerInstance(new RemoveTransliterator(), status);
-    _registerInstance(new LowercaseTransliterator(), status);
-    _registerInstance(new UppercaseTransliterator(), status);
-    _registerInstance(new TitlecaseTransliterator(), status);
-    _registerInstance(new UnicodeNameTransliterator(), status);
-    _registerInstance(new NameUnicodeTransliterator(), status);
+    registry->put(new HexToUnicodeTransliterator(), TRUE);
+    registry->put(new UnicodeToHexTransliterator(), TRUE);
+    registry->put(new JamoHangulTransliterator(), TRUE);
+    registry->put(new HangulJamoTransliterator(), TRUE);
+    registry->put(new NullTransliterator(), TRUE);
+    registry->put(new RemoveTransliterator(), TRUE);
+    registry->put(new LowercaseTransliterator(), TRUE);
+    registry->put(new UppercaseTransliterator(), TRUE);
+    registry->put(new TitlecaseTransliterator(), TRUE);
+    registry->put(new UnicodeNameTransliterator(), TRUE);
+    registry->put(new NameUnicodeTransliterator(), TRUE);
     NormalizationTransliterator::registerIDs();
-
-    cacheInitialized = TRUE;
 }
 
-Transliterator::CacheEntry::CacheEntry() {
-    u.prototype = 0;
-    entryType = NONE;
-}
-
-Transliterator::CacheEntry::~CacheEntry() {
-    if (entryType == PROTOTYPE) {
-        delete u.prototype;
-    }
-}
-
-void Transliterator::CacheEntry::adoptPrototype(Transliterator* adopted) {
-    if (entryType == PROTOTYPE) {
-        delete u.prototype;
-    }
-    entryType = PROTOTYPE;
-    u.prototype = adopted;
-}
-
-void Transliterator::CacheEntry::setFactory(Transliterator::Factory factory) {
-    if (entryType == PROTOTYPE) {
-        delete u.prototype;
-    }
-    entryType = FACTORY;
-    u.factory = factory;
-}
+//eof
