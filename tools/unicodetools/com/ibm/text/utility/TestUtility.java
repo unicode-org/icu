@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/TestUtility.java,v $
-* $Date: 2002/07/14 22:04:49 $
-* $Revision: 1.2 $
+* $Date: 2005/03/04 02:50:26 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -18,7 +18,7 @@ import java.text.*;
 import java.io.*;
 
 public class TestUtility {
-    
+    /*
     static public class MyEnum extends EnumBase {
         public static MyEnum
             ZEROED = (MyEnum) makeNext(myEnum.getClass()),
@@ -38,5 +38,5 @@ public class TestUtility {
             System.out.println(i.getValue());
         }
     }
-    
+    */
 }
