@@ -324,7 +324,7 @@ U_CAPI UBool U_EXPORT2
 u_isalpha(UChar32 c) {
     uint32_t props;
     GET_PROPS(c, props);
-    return (UBool)((U_MASK(GET_CATEGORY(props))&U_GC_L_MASK)!=0);
+    return (UBool)((CAT_MASK(props)&U_GC_L_MASK)!=0);
 }
 
 /* Checks if ch is a letter or a decimal digit */
@@ -332,7 +332,7 @@ U_CAPI UBool U_EXPORT2
 u_isalnum(UChar32 c) {
     uint32_t props;
     GET_PROPS(c, props);
-    return (UBool)((U_MASK(GET_CATEGORY(props))&(U_GC_L_MASK|U_GC_ND_MASK))!=0);
+    return (UBool)((CAT_MASK(props)&(U_GC_L_MASK|U_GC_ND_MASK))!=0);
 }
 
 /* Checks if ch is a unicode character with assigned character type.*/
@@ -348,7 +348,7 @@ U_CAPI UBool U_EXPORT2
 u_isbase(UChar32 c) {
     uint32_t props;
     GET_PROPS(c, props);
-    return (UBool)((U_MASK(GET_CATEGORY(props))&(U_GC_L_MASK|U_GC_N_MASK|U_GC_MC_MASK|U_GC_ME_MASK))!=0);
+    return (UBool)((CAT_MASK(props)&(U_GC_L_MASK|U_GC_N_MASK|U_GC_MC_MASK|U_GC_ME_MASK))!=0);
 }
 
 /* Checks if the Unicode character is a control character.*/
@@ -356,10 +356,7 @@ U_CAPI UBool U_EXPORT2
 u_iscntrl(UChar32 c) {
     uint32_t props;
     GET_PROPS(c, props);
-    return (UBool)(
-           ((1UL<<GET_CATEGORY(props))&
-            (1UL<<U_CONTROL_CHAR|1UL<<U_FORMAT_CHAR|1UL<<U_LINE_SEPARATOR|1UL<<U_PARAGRAPH_SEPARATOR)
-           )!=0);
+    return (UBool)((CAT_MASK(props)&(U_GC_CC_MASK|U_GC_CF_MASK|U_GC_ZL_MASK|U_GC_ZP_MASK))!=0);
 }
 
 U_CAPI UBool U_EXPORT2
@@ -369,23 +366,21 @@ u_isISOControl(UChar32 c) {
 
 /* Some control characters that are used as space. */
 #define IS_THAT_CONTROL_SPACE(c) \
-    ((c>=TAB && c<=CR) || (c>=0x1c && c <=0x1f) || c==NL)
+    (c<=0x9f && ((c>=TAB && c<=CR) || (c>=0x1c && c <=0x1f) || c==NL))
 
 /* Checks if the Unicode character is a space character.*/
 U_CAPI UBool U_EXPORT2
 u_isspace(UChar32 c) {
     uint32_t props;
     GET_PROPS(c, props);
-    return (UBool)((((1UL<<GET_CATEGORY(props))&
-            (1UL<<U_SPACE_SEPARATOR|1UL<<U_LINE_SEPARATOR|1UL<<U_PARAGRAPH_SEPARATOR)
-           )!=0) || IS_THAT_CONTROL_SPACE(c));
+    return (UBool)((CAT_MASK(props)&U_GC_Z_MASK)!=0 || IS_THAT_CONTROL_SPACE(c));
 }
 
 U_CAPI UBool U_EXPORT2
 u_isJavaSpaceChar(UChar32 c) {
     uint32_t props;
     GET_PROPS(c, props);
-    return (UBool)((U_MASK(GET_CATEGORY(props))&U_GC_Z_MASK)!=0);
+    return (UBool)((CAT_MASK(props)&U_GC_Z_MASK)!=0);
 }
 
 /* Checks if the Unicode character is a whitespace character.*/
@@ -394,7 +389,7 @@ u_isWhitespace(UChar32 c) {
     uint32_t props;
     GET_PROPS(c, props);
     return (UBool)(
-                ((U_MASK(GET_CATEGORY(props))&U_GC_Z_MASK)!=0 &&
+                ((CAT_MASK(props)&U_GC_Z_MASK)!=0 &&
                     c!=NBSP && c!=FIGURESP && c!=NNBSP) || /* exclude no-break spaces */
                 IS_THAT_CONTROL_SPACE(c)
            );
@@ -405,13 +400,8 @@ U_CAPI UBool U_EXPORT2
 u_isprint(UChar32 c) {
     uint32_t props;
     GET_PROPS(c, props);
-    /* ### TODO comparing ==0 returns FALSE for the categories mentioned */
-    return (UBool)(
-            ((1UL<<GET_CATEGORY(props))&
-            ~(1UL<<U_UNASSIGNED|
-              1UL<<U_CONTROL_CHAR|1UL<<U_FORMAT_CHAR|1UL<<U_PRIVATE_USE_CHAR|1UL<<U_SURROGATE|
-              1UL<<U_GENERAL_OTHER_TYPES|1UL<<31)
-           )!=0);
+    /* comparing ==0 returns FALSE for the categories mentioned */
+    return (UBool)((CAT_MASK(props)&U_GC_C_MASK)==0);
 }
 
 /* Checks if the Unicode character can start a Unicode identifier.*/
@@ -420,7 +410,7 @@ u_isIDStart(UChar32 c) {
     /* same as u_isalpha() */
     uint32_t props;
     GET_PROPS(c, props);
-    return (UBool)((U_MASK(GET_CATEGORY(props))&(U_GC_L_MASK|U_GC_NL_MASK))!=0);
+    return (UBool)((CAT_MASK(props)&(U_GC_L_MASK|U_GC_NL_MASK))!=0);
 }
 
 /* Checks if the Unicode character can be a Unicode identifier part other than starting the
@@ -430,10 +420,10 @@ u_isIDPart(UChar32 c) {
     uint32_t props;
     GET_PROPS(c, props);
     return (UBool)(
-           ((1UL<<GET_CATEGORY(props))&
-            (1UL<<U_DECIMAL_DIGIT_NUMBER|1UL<<U_LETTER_NUMBER|
-             1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER|
-             1UL<<U_CONNECTOR_PUNCTUATION|1UL<<U_COMBINING_SPACING_MARK|1UL<<U_NON_SPACING_MARK)
+           (CAT_MASK(props)&
+            (U_GC_ND_MASK|U_GC_NL_MASK|
+             U_GC_L_MASK|
+             U_GC_PC_MASK|U_GC_MC_MASK|U_GC_MN_MASK)
            )!=0 ||
            u_isIDIgnorable(c));
 }
@@ -455,11 +445,7 @@ U_CAPI UBool U_EXPORT2
 u_isJavaIDStart(UChar32 c) {
     uint32_t props;
     GET_PROPS(c, props);
-    return (UBool)(
-           ((1UL<<GET_CATEGORY(props))&
-            (1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER|
-             1UL<<U_CURRENCY_SYMBOL|1UL<<U_CONNECTOR_PUNCTUATION)
-           )!=0);
+    return (UBool)((CAT_MASK(props)&(U_GC_L_MASK|U_GC_SC_MASK|U_GC_PC_MASK))!=0);
 }
 
 /*Checks if the Unicode character can be a Java identifier part other than starting the
@@ -470,11 +456,11 @@ u_isJavaIDPart(UChar32 c) {
     uint32_t props;
     GET_PROPS(c, props);
     return (UBool)(
-           ((1UL<<GET_CATEGORY(props))&
-            (1UL<<U_DECIMAL_DIGIT_NUMBER|1UL<<U_LETTER_NUMBER|
-             1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER|
-             1UL<<U_CURRENCY_SYMBOL|1UL<<U_CONNECTOR_PUNCTUATION|
-             1UL<<U_COMBINING_SPACING_MARK|1UL<<U_NON_SPACING_MARK)
+           (CAT_MASK(props)&
+            (U_GC_ND_MASK|U_GC_NL_MASK|
+             U_GC_L_MASK|
+             U_GC_SC_MASK|U_GC_PC_MASK|
+             U_GC_MC_MASK|U_GC_MN_MASK)
            )!=0 ||
            u_isIDIgnorable(c));
 }
@@ -485,7 +471,7 @@ u_tolower(UChar32 c) {
     uint32_t props;
     GET_PROPS(c, props);
     if(!PROPS_VALUE_IS_EXCEPTION(props)) {
-        if((1UL<<GET_CATEGORY(props))&(1UL<<U_UPPERCASE_LETTER|1UL<<U_TITLECASE_LETTER)) {
+        if(CAT_MASK(props)&(U_GC_LU_MASK|U_GC_LT_MASK)) {
             return c+GET_SIGNED_VALUE(props);
         }
     } else {
@@ -1302,7 +1288,7 @@ u_internalToLower(UChar32 c, UCharIterator *iter,
     result=c;
     GET_PROPS(c, props);
     if(!PROPS_VALUE_IS_EXCEPTION(props)) {
-        if((1UL<<GET_CATEGORY(props))&(1UL<<U_UPPERCASE_LETTER|1UL<<U_TITLECASE_LETTER)) {
+        if(CAT_MASK(props)&(U_GC_LU_MASK|U_GC_LT_MASK)) {
             result=c+GET_SIGNED_VALUE(props);
         }
     } else {
@@ -1506,7 +1492,7 @@ u_internalStrToLower(UChar *dest, int32_t destCapacity,
         UTF_NEXT_CHAR(src, srcIndex, srcLimit, c);
         GET_PROPS_UNSAFE(c, props);
         if(!PROPS_VALUE_IS_EXCEPTION(props)) {
-            if((1UL<<GET_CATEGORY(props))&(1UL<<U_UPPERCASE_LETTER|1UL<<U_TITLECASE_LETTER)) {
+            if(CAT_MASK(props)&(U_GC_LU_MASK|U_GC_LT_MASK)) {
                 c+=GET_SIGNED_VALUE(props);
             }
 
@@ -1817,7 +1803,7 @@ u_foldCase(UChar32 c, uint32_t options) {
     uint32_t props;
     GET_PROPS(c, props);
     if(!PROPS_VALUE_IS_EXCEPTION(props)) {
-        if((1UL<<GET_CATEGORY(props))&(1UL<<U_UPPERCASE_LETTER|1UL<<U_TITLECASE_LETTER)) {
+        if(CAT_MASK(props)&(U_GC_LU_MASK|U_GC_LT_MASK)) {
             return c+GET_SIGNED_VALUE(props);
         }
     } else {
@@ -1888,7 +1874,7 @@ u_internalFoldCase(UChar32 c,
     result=c;
     GET_PROPS_UNSAFE(c, props);
     if(!PROPS_VALUE_IS_EXCEPTION(props)) {
-        if((1UL<<GET_CATEGORY(props))&(1UL<<U_UPPERCASE_LETTER|1UL<<U_TITLECASE_LETTER)) {
+        if(CAT_MASK(props)&(U_GC_LU_MASK|U_GC_LT_MASK)) {
             /* same as lowercase */
             result=c+GET_SIGNED_VALUE(props);
         }
@@ -1984,7 +1970,7 @@ u_internalStrFoldCase(UChar *dest, int32_t destCapacity,
         UTF_NEXT_CHAR(src, srcIndex, srcLength, c);
         GET_PROPS_UNSAFE(c, props);
         if(!PROPS_VALUE_IS_EXCEPTION(props)) {
-            if((1UL<<GET_CATEGORY(props))&(1UL<<U_UPPERCASE_LETTER|1UL<<U_TITLECASE_LETTER)) {
+            if(CAT_MASK(props)&(U_GC_LU_MASK|U_GC_LT_MASK)) {
                 c+=GET_SIGNED_VALUE(props);
             }
 
