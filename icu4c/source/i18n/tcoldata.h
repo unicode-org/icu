@@ -149,6 +149,12 @@ private:
         int32_t            sourceLength,
         const    UChar        *target,
         int32_t            targetLength);
+  friend int32_t ucol_getSortKeySize(const UCollator *coll, 
+        collIterate *s, 
+        int32_t currentSize, 
+        UColAttributeValue strength, 
+        int32_t len);
+
 
     UBool                      isFrenchSec;
     int16_t                     maxSecOrder;
