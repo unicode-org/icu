@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ValueIterator.java,v $
-* $Date: 2002/04/05 00:12:09 $
-* $Revision: 1.6 $
+* $Date: 2002/04/05 01:38:11 $
+* $Revision: 1.7 $
 *
 ******************************************************************************
 */
@@ -69,7 +69,7 @@ public interface ValueIterator
     * true if we are not at the end of the iteration, false otherwise.</p>
     * <p>If the return boolean is a false, the contents of elements will not
     * be updated.</p>
-    * @param element for storing the result range and value
+    * @param element for storing the result index and value
     * @return true if we are not at the end of the iteration, false otherwise.
     * @see Element
     * @draft 2.1
@@ -85,17 +85,19 @@ public interface ValueIterator
     public void reset();
     
     /**
-     * <p>Restricts the range of integers to iterate.</p>
-     * <p>If setRange() is not performed before next() is called, the 
-     * iteration will start from the integer.Integer.MIN_VALUE and ends at a 
-     * maximum integer index that is determined by the specific implementation
-     * of ValueIterator.</p>
-     * <p>For instance the Unicode character name iterator provided by
-     * com.ibm.icu.lang.UCharacter.getNameIterator() will iterate the names 
-     * from UCharacter.MIN_VALUE to UCharacter.MAX_VALUE if setRange() was 
-     * never called.</p>
+     * <p>Restricts the range of integers to iterate and resets the iteration 
+     * to begin at the index argument start.</p>
+     * <p>If setRange(start, end) is not performed before next(element) is 
+     * called, the iteration will start from the integer index 
+     * Integer.MIN_VALUE and end at Integer.MAX_VALUE.</p>
+     * <p>
+     * If this range is set outside the meaningful range specified by the 
+     * implementation, next(element) will always return false.
+     * </p>
      * @param start first integer in range to iterate
      * @param limit 1 integer after the last integer in range 
+     * @exception IllegalArgumentException thrown when attempting to set an 
+     *            illegal range. E.g limit <= start
      * @draft 2.1
      */
     public void setRange(int start, int end);

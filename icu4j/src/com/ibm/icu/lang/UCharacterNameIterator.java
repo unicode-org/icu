@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacterNameIterator.java,v $
-* $Date: 2002/03/13 01:09:33 $
-* $Revision: 1.2 $
+* $Date: 2002/04/05 01:38:15 $
+* $Revision: 1.3 $
 *
 ******************************************************************************
 */
@@ -16,10 +16,10 @@ package com.ibm.icu.lang;
 import com.ibm.icu.util.ValueIterator;
 
 /**
- * Class enabling iteration of the codepoints and their names.
- * Result of each iteration contains a valid codepoints that have the result 
- * name.
- * See UCharacter.getNameIterator() for an example of use.
+ * <p>Class enabling iteration of the codepoints and their names.</p>
+ * <p>Result of each iteration contains a valid codepoint that has valid 
+ * name.</p>
+ * <p>See UCharacter.getNameIterator() for an example of use.</p>
  * @author synwee
  * @since release 2.1, March 5 2002
  */
@@ -32,7 +32,7 @@ class UCharacterNameIterator implements ValueIterator
     * true if we are not at the end of the iteration, false otherwise.</p>
     * <p>If the return boolean is a false, the contents of elements will not
     * be updated.</p>
-    * @param element for storing the result range and value
+    * @param element for storing the result codepoint and name
     * @return true if we are not at the end of the iteration, false otherwise.
     * @see Element
     * @draft 2.1
@@ -108,7 +108,9 @@ class UCharacterNameIterator implements ValueIterator
     }
     
     /**
-    * Resets the iterator to the beginning of the iteration.
+    * <p>Resets the iterator to start iterating from the integer index 
+    * UCharacter.MIN_VALUE or X if a setRange(X, Y) has been called previously.
+    * </p>
     * @draft 2.1
     */
     public void reset()
@@ -119,22 +121,41 @@ class UCharacterNameIterator implements ValueIterator
     }
     
     /**
-     * Sets the range for iteration
-     * @param start first codepoint to iterate
-     * @param limit one codepoint after the last codepoint to iterate
-     * @exception IllegalArgumentException thrown when start or limit exceed
-     *            the Unicode codepoint bounds or when start > limit.
+     * <p>Restricts the range of integers to iterate and resets the iteration 
+     * to begin at the index argument start.</p>
+     * <p>If setRange(start, end) is not performed before next(element) is 
+     * called, the iteration will start from the integer index 
+     * UCharacter.MIN_VALUE and end at UCharacter.MAX_VALUE.</p>
+     * <p>
+     * If this range is set outside the range of UCharacter.MIN_VALUE and 
+     * UCharacter.MAX_VALUE, next(element) will always return false.
+     * </p>
+     * @param start first integer in range to iterate
+     * @param limit 1 integer after the last integer in range 
+     * @exception IllegalArgumentException thrown when attempting to set an 
+     *            illegal range. E.g limit <= start
+     * @draft 2.1
      */
     public void setRange(int start, int limit)
     {
-    	if (start > limit || start < UCharacter.MIN_VALUE || 
-    	    limit > UCharacter.MAX_VALUE + 1) {
+    	if (start >= limit) {
     	    throw new IllegalArgumentException(
-    	        "start or limit has to be valid Unicode codepoints and start <= limit");
+    	        "start or limit has to be valid Unicode codepoints and start < limit");
     	}
-    	m_start_   = start;
-    	m_limit_   = limit;
-    	m_current_ = start;
+    	if (start < UCharacter.MIN_VALUE) {
+    		m_start_ = UCharacter.MIN_VALUE;
+    	} 
+    	else {
+    		m_start_ = start;
+    	}
+    	
+    	if (limit > UCharacter.MAX_VALUE + 1) {
+    		m_limit_ = UCharacter.MAX_VALUE + 1;
+    	}
+    	else {
+    		m_limit_ = limit;
+    	}
+    	m_current_ = m_start_;
     }
     
 	// protected constructor ---------------------------------------------

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/04/04 22:38:13 $ 
-* $Revision: 1.38 $
+* $Date: 2002/04/05 01:38:15 $ 
+* $Revision: 1.39 $
 *
 *******************************************************************************
 */
@@ -1415,6 +1415,7 @@ public final class UCharacter
     *                        " has the name " + (String)element.value);
     * }
     * </pre>
+    * <p>The maximal range which the name iterator iterates is from 
     * @return an iterator 
     * @draft 2.1
     */
@@ -1439,6 +1440,7 @@ public final class UCharacter
     *                        " has the name " + (String)element.value);
     * }
     * </pre>
+    * <p>The maximal range which the name iterator iterates is from 
     * @return an iterator 
     * @draft 2.1
     */
