@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (c) 1996-2001, International Business Machines Corporation
+* Copyright (c) 1996-2003, International Business Machines Corporation
 *               and others. All Rights Reserved.
 *******************************************************************************
 * File unorm.h
@@ -139,54 +139,35 @@ typedef enum {
 
   /** One more than the highest normalization mode constant. @stable ICU 2.0 */
   UNORM_MODE_COUNT
-
-  /* *** The rest of this enum is obsolete. *** */
-
-#ifdef ICU_UNORM_USE_DEPRECATES
-  /**
-   * No decomposition/composition
-   * @obsolete ICU 2.4. Use UNORM_NONE instead since this API will be removed in that release.
-   */
-  ,UCOL_NO_NORMALIZATION = 1,
-  /**
-   * Canonical decomposition
-   * @obsolete ICU 2.4. Use UNORM_NFD instead since this API will be removed in that release.
-   */
-  UCOL_DECOMP_CAN = 2,
-  /**
-   * Compatibility decomposition
-   * @obsolete ICU 2.4. Use UNORM_NFKD instead since this API will be removed in that release.
-   */
-  UCOL_DECOMP_COMPAT = 3,
-  /**
-   * Default normalization
-   * @obsolete ICU 2.4. Use UNORM_NFKD or UNORM_DEFAULT instead since this API will be removed in that release.
-   */
-  UCOL_DEFAULT_NORMALIZATION = UCOL_DECOMP_COMPAT, 
-  /**
-   * Canonical decomposition followed by canonical composition
-   * @obsolete ICU 2.4. Use UNORM_NFC instead since this API will be removed in that release.
-   */
-  UCOL_DECOMP_CAN_COMP_COMPAT = 4,
-  /**
-   * Compatibility decomposition followed by canonical composition
-   * @obsolete ICU 2.4. Use UNORM_NFKC instead since this API will be removed in that release.
-   */
-  UCOL_DECOMP_COMPAT_COMP_CAN =5,
-#endif /* ICU_UNORM_USE_DEPRECATES */
 } UNormalizationMode;
+
+/**
+ * Constants for options flags for normalization.
+ * Use 0 for default options,
+ * including normalization according to the Unicode version
+ * that is currently supported by ICU (see u_getUnicodeVersion).
+ * @draft ICU 2.6
+ */
+enum {
+    /**
+     * Options bit set value to select Unicode 3.2 normalization
+     * (except NormalizationCorrections).
+     * At most one Unicode version can be selected at a time.
+     * @draft ICU 2.6
+     */
+    UNORM_UNICODE_3_2=0x20
+};
 
 /**
  * Normalize a string.
  * The string will be normalized according the specified normalization mode
- * and options (there are currently no options defined).
+ * and options.
  *
  * @param source The string to normalize.
  * @param sourceLength The length of source, or -1 if NUL-terminated.
  * @param mode The normalization mode; one of UNORM_NONE, 
  *             UNORM_NFD, UNORM_NFC, UNORM_NFKC, UNORM_NFKD, UNORM_DEFAULT.
- * @param options The normalization options, ORed together (0 for no options);
- *                currently there is no option defined.
+ * @param options The normalization options, ORed together (0 for no options).
  * @param result A pointer to a buffer to receive the result string.
  *               The result string is NUL-terminated if possible.
  * @param resultLength The maximum size of result.
@@ -257,6 +238,27 @@ unorm_quickCheck(const UChar *source, int32_t sourcelength,
                  UErrorCode *status);
 
 /**
+ * Performing quick check on a string; same as unorm_quickCheck but
+ * takes an extra options parameter like most normalization functions.
+ *
+ * @param src        String that is to be tested if it is in a normalization format.
+ * @param srcLength  Length of source to test, or -1 if NUL-terminated.
+ * @paran mode       Which normalization form to test for.
+ * @param options    The normalization options, ORed together (0 for no options).
+ * @param pErrorCode ICU error code in/out parameter.
+ *                   Must fulfill U_SUCCESS before the function call.
+ * @return UNORM_YES, UNORM_NO or UNORM_MAYBE
+ *
+ * @see unorm_quickCheck
+ * @see unorm_isNormalized
+ * @draft ICU 2.6
+ */
+U_CAPI UNormalizationCheckResult U_EXPORT2
+unorm_quickCheckWithOptions(const UChar *src, int32_t srcLength, 
+                            UNormalizationMode mode, int32_t options,
+                            UErrorCode *pErrorCode);
+
+/**
  * Test if a string is in a given normalization form.
  * This is semantically equivalent to source.equals(normalize(source, mode)) .
  *
@@ -281,6 +283,28 @@ U_CAPI UBool U_EXPORT2
 unorm_isNormalized(const UChar *src, int32_t srcLength,
                    UNormalizationMode mode,
                    UErrorCode *pErrorCode);
+
+/**
+ * Test if a string is in a given normalization form; same as unorm_isNormalized but
+ * takes an extra options parameter like most normalization functions.
+ *
+ * @param src        String that is to be tested if it is in a normalization format.
+ * @param srcLength  Length of source to test, or -1 if NUL-terminated.
+ * @paran mode       Which normalization form to test for.
+ * @param options    The normalization options, ORed together (0 for no options).
+ * @param pErrorCode ICU error code in/out parameter.
+ *                   Must fulfill U_SUCCESS before the function call.
+ * @return Boolean value indicating whether the source string is in the
+ *         "mode/options" normalization form.
+ *
+ * @see unorm_quickCheck
+ * @see unorm_isNormalized
+ * @draft ICU 2.6
+ */
+U_CAPI UBool U_EXPORT2
+unorm_isNormalizedWithOptions(const UChar *src, int32_t srcLength,
+                              UNormalizationMode mode, int32_t options,
+                              UErrorCode *pErrorCode);
 
 /**
  * Iterative normalization forward.
@@ -339,7 +363,7 @@ unorm_isNormalized(const UChar *src, int32_t srcLength,
  * @param dest The output buffer; can be NULL if destCapacity==0 for pure preflighting.
  * @param destCapacity The number of UChars that fit into dest.
  * @param mode The normalization mode.
- * @param options A bit set of normalization options.
+ * @param options The normalization options, ORed together (0 for no options).
  * @param doNormalize Indicates if the source text up to the next boundary
  *                    is to be normalized (TRUE) or just copied (FALSE).
  * @param pNeededToNormalize Output flag indicating if the normalization resulted in
@@ -353,7 +377,7 @@ unorm_isNormalized(const UChar *src, int32_t srcLength,
  * @see unorm_previous
  * @see unorm_normalize
  *
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 U_CAPI int32_t U_EXPORT2
 unorm_next(UCharIterator *src,
@@ -372,7 +396,7 @@ unorm_next(UCharIterator *src,
  * @param dest The output buffer; can be NULL if destCapacity==0 for pure preflighting.
  * @param destCapacity The number of UChars that fit into dest.
  * @param mode The normalization mode.
- * @param options A bit set of normalization options.
+ * @param options The normalization options, ORed together (0 for no options).
  * @param doNormalize Indicates if the source text up to the next boundary
  *                    is to be normalized (TRUE) or just copied (FALSE).
  * @param pNeededToNormalize Output flag indicating if the normalization resulted in
@@ -386,7 +410,7 @@ unorm_next(UCharIterator *src,
  * @see unorm_next
  * @see unorm_normalize
  *
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 U_CAPI int32_t U_EXPORT2
 unorm_previous(UCharIterator *src,
@@ -399,11 +423,11 @@ unorm_previous(UCharIterator *src,
  * Concatenate normalized strings, making sure that the result is normalized as well.
  *
  * If both the left and the right strings are in
- * the normalization form according to "mode",
+ * the normalization form according to "mode/options",
  * then the result will be
  *
  * \code
- *     dest=normalize(left+right, mode)
+ *     dest=normalize(left+right, mode, options)
  * \endcode
  *
  * With the input strings already being normalized,
@@ -421,7 +445,7 @@ unorm_previous(UCharIterator *src,
  * @param dest The output buffer; can be NULL if destCapacity==0 for pure preflighting.
  * @param destCapacity The number of UChars that fit into dest.
  * @param mode The normalization mode.
- * @param options A bit set of normalization options.
+ * @param options The normalization options, ORed together (0 for no options).
  * @param pErrorCode ICU error code in/out parameter.
  *                   Must fulfill U_SUCCESS before the function call.
  * @return Length of output (number of UChars) when successful or buffer overflow.
@@ -430,7 +454,7 @@ unorm_previous(UCharIterator *src,
  * @see unorm_next
  * @see unorm_previous
  *
- * @draft ICU 2.1
+ * @stable ICU 2.1
  */
 U_CAPI int32_t U_EXPORT2
 unorm_concatenate(const UChar *left, int32_t leftLength,
@@ -464,6 +488,23 @@ unorm_concatenate(const UChar *left, int32_t leftLength,
 #endif
 
 /**
+ * Lowest-order bit number of unorm_compare() options bits corresponding to
+ * normalization options bits.
+ *
+ * The options parameter for unorm_compare() uses most bits for
+ * itself and for various comparison and folding flags.
+ * The most significant bits, however, are shifted down and passed on
+ * to the normalization implementation.
+ * (That is, from unorm_compare(..., options, ...),
+ * options>>UNORM_COMPARE_NORM_OPTIONS_SHIFT will be passed on to the
+ * internal normalization functions.)
+ *
+ * @see unorm_compare
+ * @draft ICU 2.6
+ */
+#define UNORM_COMPARE_NORM_OPTIONS_SHIFT 20
+
+/**
  * Compare two strings for canonical equivalence.
  * Further options include case-insensitive comparison and
  * code point order (as opposed to code unit order).
@@ -480,7 +521,7 @@ unorm_concatenate(const UChar *left, int32_t leftLength,
  * For FCD strings and short non-FCD strings there is no memory allocation.
  *
  * Semantically, this is equivalent to
- *   strcmp[CodePointOrder](NFD(foldCase(s1)), NFD(foldCase(s2)))
+ *   strcmp[CodePointOrder](NFD(foldCase(NFD(s1))), NFD(foldCase(NFD(s2))))
  * where code point order and foldCase are all optional.
  *
  * UAX 21 2.5 Caseless Matching specifies that for a canonical caseless match
@@ -515,6 +556,8 @@ unorm_concatenate(const UChar *left, int32_t leftLength,
  *
  *   - U_FOLD_CASE_EXCLUDE_SPECIAL_I
  *    (see u_strCaseCompare for details)
+ *
+ *   - regular normalization options shifted left by UNORM_COMPARE_NORM_OPTIONS_SHIFT
  *
  * @param pErrorCode ICU error code in/out parameter.
  *                   Must fulfill U_SUCCESS before the function call.
