@@ -1617,11 +1617,9 @@ void NumberFormatTest::expectCurrency(NumberFormat& nf, const Locale& locale,
     u_strcpy(curr, DEFAULT_CURR);
     if (*locale.getLanguage() != 0) {
         ucurr_forLocale(locale.getName(), curr, 4, &ec);
-        if (U_FAILURE(ec)) {
-            errln("FAIL: UCurrency::forLocale");
-            return;
-        }
-        fmt.setCurrency(curr);
+        assertSuccess("ucurr_forLocale", ec);
+        fmt.setCurrency(curr, ec);
+        assertSuccess("DecimalFormat::setCurrency", ec);
     }
     UnicodeString s;
     fmt.format(value, s);
