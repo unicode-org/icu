@@ -446,7 +446,7 @@ UBool OlsonTimeZone::useDaylightTime() const {
     // DST is in use in the current year (at any point in the year)
     // and returns TRUE if so.
 
-    int32_t days = Math::floorDivide(uprv_getUTCtime(), SECONDS_PER_DAY); // epoch days
+    int32_t days = (int32_t)Math::floorDivide(uprv_getUTCtime(), (double)U_MILLIS_PER_DAY); // epoch days
 
     int32_t year, month, dom, dow;
     

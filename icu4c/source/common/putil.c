@@ -214,7 +214,7 @@ u_bottomNBytesOfDouble(double* d, int n)
   ---------------------------------------------------------------------------*/
 
 /* Get UTC (GMT) time measured in seconds since 0:00 on 1/1/70.*/
-U_CAPI int32_t U_EXPORT2
+U_CAPI UDate U_EXPORT2
 uprv_getUTCtime()
 {
 #ifdef XP_MAC
@@ -230,11 +230,11 @@ uprv_getUTCtime()
     time(&t);
     uprv_memcpy( &tmrec, gmtime(&t), sizeof(tmrec) );
     t2 = mktime(&tmrec);    /* seconds of current GMT*/
-    return t2 - t1;         /* GMT (or UTC) in seconds since 1970*/
+    return (UDate)(t2 - t1) * U_MILLIS_PER_SECOND;         /* GMT (or UTC) in seconds since 1970*/
 #else
     time_t epochtime;
     time(&epochtime);
-    return epochtime;
+    return (UDate)epochtime * U_MILLIS_PER_SECOND;
 #endif
 }
 

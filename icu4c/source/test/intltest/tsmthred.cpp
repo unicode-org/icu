@@ -643,7 +643,7 @@ public:
 public:
     TestMutexThread1 & fOtherThread;
     UBool fDone, fErr;
-    int32_t fElapsed;
+    UDate fElapsed;
 private:
     /**
      * The assignment operator has no real implementation.
@@ -687,7 +687,7 @@ void MultithreadTest::TestMutex()
         {
             if(thread2.fErr)
                 errln("Thread 2 says: thread1 didn't run before I aquired the mutex.");
-            logln("took %lu seconds for thread2 to aquire the mutex.", thread2.fElapsed);
+            logln("took %lu seconds for thread2 to aquire the mutex.", (int)(thread2.fElapsed/U_MILLIS_PER_DAY));
             return;
         }
         SimpleThread::sleep(1000);

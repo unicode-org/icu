@@ -238,11 +238,11 @@ U_STABLE int32_t  U_EXPORT2 uprv_timezone(void);
 U_INTERNAL const char* U_EXPORT2 uprv_tzname(int n);
 
 /**
- * Get UTC (GMT) time measured in seconds since 0:00 on 1/1/70.
- * @return the UTC time measured in seconds 
+ * Get UTC (GMT) time measured in milliseconds since 0:00 on 1/1/1970.
+ * @return the UTC time measured in milliseconds 
  * @internal
  */
-U_INTERNAL int32_t  U_EXPORT2 uprv_getUTCtime(void);
+U_INTERNAL UDate U_EXPORT2 uprv_getUTCtime(void);
 
 /**
  * Return the ICU data directory. 
