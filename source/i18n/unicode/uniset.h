@@ -623,6 +623,32 @@ public:
      */
     virtual void compact();
 
+    /**
+     * Return the class ID for this class.  This is useful only for
+     * comparing to a return value from getDynamicClassID().  For example:
+     * <pre>
+     * .      Base* polymorphic_pointer = createPolymorphicObject();
+     * .      if (polymorphic_pointer->getDynamicClassID() ==
+     * .          Derived::getStaticClassID()) ...
+     * </pre>
+     * @return          The class ID for all objects of this class.
+     * @stable
+     */
+    static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
+
+    /**
+     * Implement UnicodeMatcher API.
+     *
+     * @return The class ID for this object. All objects of a given
+     * class have the same class ID.  Objects of other classes have
+     * different class IDs.
+     */
+    virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); };
+
+private:
+
+    static const char fgClassID;
+
 private:
 
     //----------------------------------------------------------------
