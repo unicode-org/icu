@@ -278,7 +278,7 @@ public:
   const Locale locale;
 
   DNCache(const Locale& _locale) 
-    : cache(FALSE), locale(_locale) 
+    : cache(), locale(_locale) 
   {
     // cache.setKeyDeleter(uhash_deleteUnicodeString);
   }
@@ -449,7 +449,7 @@ ICUService::getKey(ICUServiceKey& key, UnicodeString* actualReturn, const ICUSer
     XMutex(&ncthis->lock, factory != NULL);
 
     if (serviceCache == NULL) {
-      ncthis->serviceCache = new Hashtable(FALSE, status);
+      ncthis->serviceCache = new Hashtable(status);
       if (U_FAILURE(status)) {
         delete serviceCache;
         return NULL;
@@ -658,7 +658,7 @@ ICUService::getVisibleIDMap(UErrorCode& status) const {
 
   ICUService* ncthis = (ICUService*)this; // cast away semantic const
   if (idCache == NULL) {
-    ncthis->idCache = new Hashtable();
+    ncthis->idCache = new Hashtable(status);
     if (idCache == NULL) {
       status = U_MEMORY_ALLOCATION_ERROR;
     } else if (factories != NULL) {

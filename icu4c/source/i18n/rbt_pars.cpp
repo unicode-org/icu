@@ -953,7 +953,7 @@ void TransliteratorParser::parseRules(const UnicodeString& rule,
             int32_t p = pos;
             
             TransliteratorIDParser::SingleID* id =
-                TransliteratorIDParser::parseSingleID(rule, p, direction);
+                TransliteratorIDParser::parseSingleID(rule, p, direction, status);
             if (p != pos && ICU_Utility::parseChar(rule, p, END_OF_RULE)) {
                 // Successful ::ID parse.
                 

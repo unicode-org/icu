@@ -1203,7 +1203,8 @@ void Transliterator::_registerFactory(const UnicodeString& id,
 void Transliterator::_registerSpecialInverse(const UnicodeString& target,
                                              const UnicodeString& inverseTarget,
                                              UBool bidirectional) {
-    TransliteratorIDParser::registerSpecialInverse(target, inverseTarget, bidirectional);
+    UErrorCode status = U_ZERO_ERROR;
+    TransliteratorIDParser::registerSpecialInverse(target, inverseTarget, bidirectional, status);
 }
 
 /**

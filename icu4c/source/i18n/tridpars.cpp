@@ -105,7 +105,7 @@ Transliterator* TransliteratorIDParser::SingleID::createInstance() {
  */
 TransliteratorIDParser::SingleID*
 TransliteratorIDParser::parseSingleID(const UnicodeString& id, int32_t& pos,
-                                      int32_t dir) {
+                                      int32_t dir, UErrorCode& status) {
 
     int32_t start = pos;
 
@@ -167,7 +167,7 @@ TransliteratorIDParser::parseSingleID(const UnicodeString& id, int32_t& pos,
         if (dir == FORWARD) {
             single = specsToID(specsA, FORWARD);
         } else {
-            single = specsToSpecialInverse(*specsA);
+            single = specsToSpecialInverse(*specsA, status);
             if (single == NULL) {
                 single = specsToID(specsA, REVERSE);
             }
@@ -360,7 +360,7 @@ UBool TransliteratorIDParser::parseCompoundID(const UnicodeString& id, int32_t d
 
     UBool sawDelimiter = TRUE;
     for (;;) {
-        SingleID* single = parseSingleID(id, pos, dir);
+        SingleID* single = parseSingleID(id, pos, dir, ec);
         if (single == NULL) {
             break;
         }
@@ -637,8 +637,12 @@ void TransliteratorIDParser::STVtoID(const UnicodeString& source,
  */
 void TransliteratorIDParser::registerSpecialInverse(const UnicodeString& target,
                                                     const UnicodeString& inverseTarget,
-                                                    UBool bidirectional) {
-    init();
+                                                    UBool bidirectional,
+                                                    UErrorCode &status) {
+    init(status);
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     // If target == inverseTarget then force bidirectional => FALSE
     if (bidirectional && 0==target.caseCompare(inverseTarget, U_FOLD_CASE_DEFAULT)) {
@@ -649,9 +653,9 @@ void TransliteratorIDParser::registerSpecialInverse(const UnicodeString& target,
     Mutex lock(&LOCK);
 
     UErrorCode ec = U_ZERO_ERROR;
-    SPECIAL_INVERSES->put(target, new UnicodeString(inverseTarget), ec);
+    SPECIAL_INVERSES->put(target, new UnicodeString(inverseTarget), status);
     if (bidirectional) {
-        SPECIAL_INVERSES->put(inverseTarget, new UnicodeString(target), ec);
+        SPECIAL_INVERSES->put(inverseTarget, new UnicodeString(target), status);
     }
 }
 
@@ -830,11 +834,11 @@ TransliteratorIDParser::specsToID(const Specs* specs, int32_t dir) {
  * 'filter' field of NULL.
  */
 TransliteratorIDParser::SingleID*
-TransliteratorIDParser::specsToSpecialInverse(const Specs& specs) {
+TransliteratorIDParser::specsToSpecialInverse(const Specs& specs, UErrorCode &status) {
     if (0!=specs.source.caseCompare(ANY, U_FOLD_CASE_DEFAULT)) {
         return NULL;
     }
-    init();
+    init(status);
 
     UnicodeString* inverseTarget;
 
@@ -880,12 +884,12 @@ Transliterator* TransliteratorIDParser::createBasicInstance(const UnicodeString&
 /**
  * Initialize static memory.
  */
-void TransliteratorIDParser::init() {
+void TransliteratorIDParser::init(UErrorCode &status) {
     if (SPECIAL_INVERSES != NULL) {
         return;
     }
 
-    Hashtable* special_inverses = new Hashtable(TRUE);
+    Hashtable* special_inverses = new Hashtable(TRUE, status);
     special_inverses->setValueDeleter(uhash_deleteUnicodeString);
 
     umtx_init(&LOCK);
