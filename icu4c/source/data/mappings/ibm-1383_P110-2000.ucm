@@ -1,32 +1,27 @@
 # *******************************************************************************
 # *
-# *   Copyright (C) 1995-2000, International Business Machines
+# *   Copyright (C) 1995-2001, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # *
 # *******************************************************************************
 #
-# File created on Fri Nov 10 15:04:28 2000
-#
-# File created by dtcocm version 3.00
+# File created by rptp2ucm (compiled on Feb 23 2001)
 # from source files 34B00567.RPMAP110 and 056734B0.TPMAP100
 #
-# Table Version : 1.01
-#
-<code_set_name>               "IBM-1383"
+<code_set_name>               "ibm-1383_P110-2000"
 <char_name_mask>              "AXXXX"
 <mb_cur_max>                  2
 <mb_cur_min>                  1
 <uconv_class>                 "MBCS"
 <subchar>                     \xA1\xA1
-#<subchar1>                   \x1A
+<subchar1>                    \x1A
+<icu:charsetFamily>           "ASCII"
+<icu:alias>                   "ibm-1383_VPUA"
+
 <icu:state>                   0-9f, a1-fe:1
 <icu:state>                   a1-fe
-#
+
 CHARMAP
-#
-#
-#ISO 10646      IBM-1383
-#_________      _________
 <U0000> \x00 |0
 <U0001> \x01 |0
 <U0002> \x02 |0
@@ -628,7 +623,7 @@ CHARMAP
 <U2606> \xA1\xEE |0
 <U2640> \xA1\xE2 |0
 <U2642> \xA1\xE1 |0
-<U3000> \xA1\xA1 |2
+<U3000> \xA1\xA1 |0
 <U3001> \xA1\xA2 |0
 <U3002> \xA1\xA3 |0
 <U3003> \xA1\xA8 |0
@@ -9101,5 +9096,4 @@ CHARMAP
 <UFFE3> \xA3\xFE |0
 <UFFE4> \xFE\xEB |0
 <UFFE5> \xA3\xA4 |0
-<UFFFD> \xA1\xA1 |2
 END CHARMAP
