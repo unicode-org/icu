@@ -438,7 +438,7 @@ static void TestLetterNumber()
         decimalValues=uset_openPattern(decimalValuesPattern, 24, &errorCode);
 
         if(U_SUCCESS(errorCode)) {
-            compareUSets(digits, decimalValues, "[:Nd:]", "[:Numeric_Type=Decimal:]", FALSE);
+            compareUSets(digits, decimalValues, "[:Nd:]", "[:Numeric_Type=Decimal:]", TRUE);
         }
 
         uset_close(digits);
@@ -2466,7 +2466,7 @@ TestNumericProperties(void) {
         { 0x0031, U_NT_DECIMAL, 1. },
         { 0x10320, U_NT_NUMERIC, 1. },
         { 0x0F2B, U_NT_NUMERIC, 3./2. },
-        { 0x00B2, U_NT_DECIMAL, 2. },
+        { 0x00B2, U_NT_DIGIT, 2. },
         { 0x1813, U_NT_DECIMAL, 3. },
         { 0x2173, U_NT_NUMERIC, 4. },
         { 0x278E, U_NT_DIGIT, 5. },
