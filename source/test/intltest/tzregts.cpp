@@ -126,7 +126,7 @@ void TimeZoneRegressionTest:: Test4073215()
 {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString str, str2;
-    SimpleTimeZone *z = (SimpleTimeZone*) TimeZone::createTimeZone("GMT");
+    SimpleTimeZone *z = new SimpleTimeZone(0, "GMT");
     if (z->useDaylightTime())
         errln("Fail: Fix test to start with non-DST zone");
     z->setStartRule(UCAL_FEBRUARY, 1, UCAL_SUNDAY, 0, status);
@@ -844,9 +844,10 @@ TimeZoneRegressionTest::Test4162593()
       0, 0, 0 };
 
     int32_t DATA_INT [] [5] = {
-        {98, UCAL_SEPTEMBER, 30, 22, 0},
-        {100, UCAL_FEBRUARY, 28, 22, 0},
-        {100, UCAL_FEBRUARY, 29, 22, 0},
+        // These years must be AFTER the Gregorian cutover
+        {1998, UCAL_SEPTEMBER, 30, 22, 0},
+        {2000, UCAL_FEBRUARY, 28, 22, 0},
+        {2000, UCAL_FEBRUARY, 29, 22, 0},
      };
 
     UBool DATA_BOOL [] = {
@@ -985,8 +986,29 @@ void TimeZoneRegressionTest::TestJ449() {
 void
 TimeZoneRegressionTest::TestJDK12API()
 {
-    TimeZone *pst = TimeZone::createTimeZone("PST");
-    TimeZone *cst1 = TimeZone::createTimeZone("CST");
+    // TimeZone *pst = TimeZone::createTimeZone("PST");
+    // TimeZone *cst1 = TimeZone::createTimeZone("CST");
+    UErrorCode ec = U_ZERO_ERROR;
+    //d,-28800,3,1,-1,120,w,9,-1,1,120,w,60
+    TimeZone *pst = new SimpleTimeZone(-28800*U_MILLIS_PER_SECOND,
+                                       "PST",
+                                       3,1,-1,120*U_MILLIS_PER_MINUTE,
+                                       SimpleTimeZone::WALL_TIME,
+                                       9,-1,1,120*U_MILLIS_PER_MINUTE,
+                                       SimpleTimeZone::WALL_TIME,
+                                       60*U_MILLIS_PER_MINUTE,ec);
+    //d,-21600,3,1,-1,120,w,9,-1,1,120,w,60
+    TimeZone *cst1 = new SimpleTimeZone(-21600*U_MILLIS_PER_SECOND,
+                                       "CST",
+                                       3,1,-1,120*U_MILLIS_PER_MINUTE,
+                                       SimpleTimeZone::WALL_TIME,
+                                       9,-1,1,120*U_MILLIS_PER_MINUTE,
+                                       SimpleTimeZone::WALL_TIME,
+                                       60*U_MILLIS_PER_MINUTE,ec);
+    if (U_FAILURE(ec)) {
+        errln("FAIL: SimpleTimeZone constructor");
+        return;
+    }
 
     SimpleTimeZone *cst = 0;
 
