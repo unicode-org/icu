@@ -55,26 +55,19 @@ ucnv_createConverterFromSharedData(UConverter *myUConverter, UConverterSharedDat
 UConverter* ucnv_createConverterFromPackage(const char *packageName, const char *converterName,  
                                             UErrorCode *err);
 
-/* Stores the shared data in the SHARED_DATA_HASHTABLE
- * @param data The shared data
+/**
+ * This may unload the shared data in a thread safe manner.
+ * This will only unload the data if no other converters are sharing it.
  */
-void ucnv_shareConverterData (UConverterSharedData * data);
+void
+ucnv_unloadSharedDataIfReady(UConverterSharedData *sharedData);
 
-/* gets the shared data from the SHARED_DATA_HASHTABLE (might return NULL if it isn't there)
- * @param name The name of the shared data
- * @return the shared data from the SHARED_DATA_HASHTABLE
+/**
+ * This is a thread safe way to increment the reference count.
  */
-UConverterSharedData *ucnv_getSharedConverterData (const char *name);
+void
+ucnv_incrementRefCount(UConverterSharedData *sharedData);
 
-/* Deletes (frees) the Shared data it's passed. first it checks the referenceCounter to
- * see if anyone is using it, if not it frees all the memory stemming from sharedConverterData and
- * returns TRUE,
- * otherwise returns FALSE
- * @param sharedConverterData The shared data
- * @return if not it frees all the memory stemming from sharedConverterData and
- * returns TRUE, otherwise returns FALSE
- */
-UBool ucnv_deleteSharedConverterData (UConverterSharedData * sharedConverterData);
 
 /* returns true if "name" is in algorithmicConverterNames
  * @param name The converter name.
