@@ -77,6 +77,20 @@ U_CAPI UChar * U_EXPORT2
 u_strstr(const UChar *s, const UChar *substring);
 
 /**
+ * Find the first occurence of a specified code point in a string.
+ *
+ * @param s The string to search.
+ * @param c The code point (0..0x10ffff) to find.
+ * @return A pointer to the first occurrence of <code>c</code> in <code>s</code>,
+ * or a <code>NULL</code> pointer if there is no such character.
+ * If <code>c</code> is represented with several UChars, then the returned
+ * pointer will point to the first of them.
+ * @draft
+ */
+U_CAPI UChar * U_EXPORT2
+u_strchr32(const UChar *s, UChar32 c);
+
+/**
  * Compare two ustrings for bitwise equality.
  *
  * @param s1 A string to compare.
