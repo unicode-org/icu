@@ -6,7 +6,6 @@
  */
 package com.ibm.icu.text;
 
-import com.ibm.icu.impl.data.ResourceReader;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.UtilityExtensions;
@@ -1751,78 +1750,86 @@ public abstract class Transliterator {
                                                          String target) {
         return registry.getAvailableVariants(source, target);
     }
-
+    private static final String INDEX = "index",
+                                RB_RULE_BASED_IDS ="RuleBasedTransliteratorIDs";
     static {
         registry = new TransliteratorRegistry();
 
         // The display name cache starts out empty
         displayNameCache = new Hashtable();
+        /* The following code parses the index table located in
+         * icu/data/translit/root.txt.  The index is an n x 4 table
+         * that follows this format:
+         *  <id>{
+         *      file{
+         *          resource{"<resource>"}
+         *          direction{"<direction>"}
+         *      }
+         *  }
+         *  <id>{
+         *      internal{
+         *          resource{"<resource>"}
+         *          direction{"<direction"}
+         *       }
+         *  }
+         *  <id>{
+         *      alias{"<getInstanceArg"}
+         *  }
+         * <id> is the ID of the system transliterator being defined.  These
+         * are public IDs enumerated by Transliterator.getAvailableIDs(),
+         * unless the second field is "internal".
+         * 
+         * <resource> is a ResourceReader resource name.  Currently these refer
+         * to file names under com/ibm/text/resources.  This string is passed
+         * directly to ResourceReader, together with <encoding>.
+         * 
+         * <direction> is either "FORWARD" or "REVERSE".
+         * 
+         * <getInstanceArg> is a string to be passed directly to
+         * Transliterator.getInstance().  The returned Transliterator object
+         * then has its ID changed to <id> and is returned.
+         *
+         * The extra blank field on "alias" lines is to make the array square.
+         */
+        ICUResourceBundle bundle, transIDs, colBund;
+        bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_TRANSLIT_BASE_NAME, INDEX);
+        transIDs = bundle.get(RB_RULE_BASED_IDS);
 
-        // Read the index file and populate the registry.  Each line
-        // of the index file is either blank, a '#' comment, or a
-        // colon-delimited line.  In the latter case the format is one
-        // of the following:
-        //#   <id>:file:<resource>:<encoding>:<direction>
-        //#   <id>:internal:<resource>:<encoding>:<direction>
-        //#   <id>:alias:<getInstanceArg>
-        ResourceReader r = new ResourceReader("Transliterator_index.txt");
-        for (;;) {
-            String line = null;
-            try {
-                line = r.readLine();
-                if (line == null) {
+        int row, maxRows;
+        maxRows = transIDs.getSize();
+        for (row = 0; row < maxRows; row++) {
+            colBund = transIDs.get(row);
+            String ID = colBund.getKey();
+            ICUResourceBundle res = colBund.get(0);
+            String type = res.getKey();
+            if (type.equals("file") || type.equals("internal")) {
+                // Rest of line is <resource>:<encoding>:<direction>
+                //                pos       colon      c2
+                String resString = res.getString("resource");
+                int dir;
+                String direction = res.getString("direction");
+                switch (direction.charAt(0)) {
+                case 'F':
+                    dir = FORWARD;
                     break;
+                case 'R':
+                    dir = REVERSE;
+                    break;
+                default:
+                    throw new RuntimeException("Can't parse direction: " + direction);
                 }
-                // Skip over whitespace
-                int pos = 0;
-                while (pos < line.length() &&
-                       UCharacterProperty.isRuleWhiteSpace(line.charAt(pos))) {
-                    ++pos;
-                }
-                // Ignore blank lines and comments
-                if (pos == line.length() || line.charAt(pos) == '#') {
-                    continue;
-                }
-                // Parse colon-delimited line
-                int colon = line.indexOf(':', pos);
-                String ID = line.substring(pos, colon);
-                pos = colon+1;
-                colon = line.indexOf(':', pos);
-                String type = line.substring(pos, colon);
-                pos = colon+1;
-
-                if (type.equals("file") || type.equals("internal")) {
-                    // Rest of line is <resource>:<encoding>:<direction>
-                    //                pos       colon      c2
-                    colon = line.indexOf(':', pos);
-                    int c2 = line.indexOf(':', colon+1);
-                    int dir;
-                    switch (line.charAt(c2+1)) {
-                    case 'F':
-                        dir = FORWARD;
-                        break;
-                    case 'R':
-                        dir = REVERSE;
-                        break;
-                    default:
-                        throw new RuntimeException("Can't parse line: " + line);
-                    }
-                    registry.put(ID,
-                                 line.substring(pos, colon), // resource
-                                 line.substring(colon+1, c2), // encoding
-                                 dir,
-                                 !type.equals("internal"));
-                } else if (type.equals("alias")) {
-                    // Rest of line is the <getInstanceArg>
-                    registry.put(ID, line.substring(pos), true);
-                } else {
-                    // Unknown type
-                    throw new RuntimeException("Can't parse line: " + line);
-                }
-            } catch (StringIndexOutOfBoundsException e) {
-                throw new RuntimeException("Can't parse line: " + line);
-            } catch (java.io.IOException e2) {
-                throw new RuntimeException("Can't read Transliterator_index.txt");
+                registry.put(ID,
+                             resString, // resource
+                             "UTF-16", // encoding
+                             dir,
+                             !type.equals("internal"));
+            } else if (type.equals("alias")) {
+                //'alias'; row[2]=createInstance argument
+                String resString = res.getString();
+                registry.put(ID, resString, true);
+            } else {
+                // Unknown type
+                throw new RuntimeException("Unknow type: " + type);
             }
         }
 

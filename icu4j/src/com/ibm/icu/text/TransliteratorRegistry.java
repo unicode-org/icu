@@ -13,12 +13,11 @@ package com.ibm.icu.text;
 //import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.LocaleUtility;
-import com.ibm.icu.impl.data.ResourceReader;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.util.CaseInsensitiveString;
 import com.ibm.icu.util.UResourceBundle;
 
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Locale;
@@ -211,11 +210,11 @@ class TransliteratorRegistry {
     //----------------------------------------------------------------------
 
     static class ResourceEntry {
-        public String resourceName;
+        public String resource;
         public String encoding;
         public int direction;
         public ResourceEntry(String n, String enc, int d) {
-            resourceName = n;
+            resource = n;
             encoding = enc;
             direction = d;
         }
@@ -832,16 +831,28 @@ class TransliteratorRegistry {
             TransliteratorParser parser = new TransliteratorParser();
 
             try {
+               
                 ResourceEntry re = (ResourceEntry) entry;
-                ResourceReader r = null;
                 try {
-                    r = new ResourceReader(re.resourceName, re.encoding);
-                } catch (UnsupportedEncodingException e) {
-                    // This should never happen; UTF8 is always supported
-                    throw new RuntimeException(e.getMessage());
+                    /*
+                    ResourceReader r = null;
+                    try {
+                        r = new ResourceReader(re.resourceName, re.encoding);
+                    } catch (UnsupportedEncodingException e) {
+                        // This should never happen; UTF8 is always supported
+                        throw new RuntimeException(e.getMessage());
+                    }
+                    */
+                    OutputStreamWriter writer = new OutputStreamWriter( new FileOutputStream("\\work\\temp\\out.txt"), "UTF-8");
+                    writer.write(re.resource);
+                    writer.flush(); 
+                    writer.close();
+                } catch (Exception e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
                 }
-
-                parser.parse(r, re.direction);
+                parser.parse(re.resource, re.direction);
+                
             } catch (ClassCastException e) {
                 // If we pull a rule from a locale resource bundle it will
                 // be a LocaleEntry.
