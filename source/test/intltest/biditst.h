@@ -65,7 +65,6 @@ typedef struct {
 
 
 
-static const char *levelString="...............................................................";
 
 
 class BiDiTest: public IntlTest{

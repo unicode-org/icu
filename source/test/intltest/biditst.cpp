@@ -15,6 +15,8 @@
 #include "biditst.h"
 #include "cmemory.h"    
 
+static const char levelString[]="...............................................................";
+
 static const char *dirPropNames[dirPropCount]={
     "L", "R", "EN", "ES", "ET", "AN", "CS", "B", "S", "WS", "ON",
     "LRE", "LRO", "AL", "RLE", "RLO", "PDF", "NSM", "BN"
