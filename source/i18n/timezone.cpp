@@ -175,60 +175,60 @@ static UBool getOlsonMeta() {
 static int32_t findInStringArray(UResourceBundle* array, const UnicodeString& id, UErrorCode &status)
 {
 #if 1
-  UResourceBundle *n = NULL;
-  UnicodeString copy = id;
-  const UChar* buf = copy.getTerminatedBuffer();
-  int32_t myLen = copy.length();
-  const UChar* u = NULL;
-
-  int32_t count = ures_getSize(array);
-  int32_t start = 0;
-  int32_t i;
-  int32_t len;
-  int32_t limit = count;
-  if(U_FAILURE(status) || (count < 1)) { 
+    UResourceBundle *n = NULL;
+    UnicodeString copy = id;
+    const UChar* buf = copy.getTerminatedBuffer();
+    int32_t myLen = copy.length();
+    const UChar* u = NULL;
+    
+    int32_t count = ures_getSize(array);
+    int32_t start = 0;
+    int32_t i;
+    int32_t len;
+    int32_t limit = count;
+    if(U_FAILURE(status) || (count < 1)) { 
+        return -1;
+    }
+    U_DEBUG_TZ_MSG(("fisa: Looking for %s, between %d and %d\n", U_DEBUG_TZ_STR(buf), start, limit));
+    
+    while(U_SUCCESS(status) && (start<limit-1)) {
+        i = (int32_t)((start+limit)/2);
+        u = ures_getStringByIndex(array, i, &len, &status);
+        U_DEBUG_TZ_MSG(("tz: compare to %s, %d .. [%d] .. %d\n", U_DEBUG_TZ_STR(u), start, i, limit));
+        int r = u_strcmp(buf,u);
+        if((r==0) && U_SUCCESS(status)) {
+            U_DEBUG_TZ_MSG(("fisa: found at %d\n", i));
+            return i;
+        } else if(r<0) {
+            limit = i;
+        } else {
+            start = i;
+        }
+    }
+    u = ures_getStringByIndex(array, start, &len, &status);
+    if(u_strcmp(buf,u)==0) {
+        U_DEBUG_TZ_MSG(("fisa: finally found at %d\n", start));
+        return start;
+    }
+    U_DEBUG_TZ_MSG(("fisa: not found\n"));
     return -1;
-  }
-  U_DEBUG_TZ_MSG(("fisa: Looking for %s, between %d and %d\n", U_DEBUG_TZ_STR(buf), start, limit));
-
-  while(U_SUCCESS(status) && (start<limit-1)) {
-    i = (int32_t)((start+limit)/2);
-    u = ures_getStringByIndex(array, i, &len, &status);
-    U_DEBUG_TZ_MSG(("tz: compare to %s, %d .. [%d] .. %d\n", U_DEBUG_TZ_STR(u), start, i, limit));
-    int r = u_strcmp(buf,u);
-    if((r==0) && U_SUCCESS(status)) {
-      U_DEBUG_TZ_MSG(("fisa: found at %d\n", i));
-      return i;
-    } else if(r<0) {
-      limit = i;
-    } else {
-      start = i;
-    }
-  }
-  u = ures_getStringByIndex(array, start, &len, &status);
-  if(u_strcmp(buf,u)==0) {
-    U_DEBUG_TZ_MSG(("fisa: finally found at %d\n", start));
-    return start;
-  }
-  U_DEBUG_TZ_MSG(("fisa: not found\n"));
-  return -1;
- 
+    
 #else
-  // Linear search
-  if(U_FAILURE(status)) return -1;
-  int32_t idx=0;
-  UnicodeString check;
-  const char *key;
-  while(U_SUCCESS(status)) {
-    check = ures_getNextUnicodeString(array, &key, &status);
-    if(check==id) {
-      U_DEBUG_TZ_MSG(("fisa: %d\n", idx));
-      return idx;
+    // Linear search
+    if(U_FAILURE(status)) return -1;
+    int32_t idx=0;
+    UnicodeString check;
+    const char *key;
+    while(U_SUCCESS(status)) {
+        check = ures_getNextUnicodeString(array, &key, &status);
+        if(check==id) {
+            U_DEBUG_TZ_MSG(("fisa: %d\n", idx));
+            return idx;
+        }
+        idx++;
     }
-    idx++;
-  }
-  U_DEBUG_TZ_MSG(("fisa: -1\n"));
-  return -1;
+    U_DEBUG_TZ_MSG(("fisa: -1\n"));
+    return -1;
 #endif
 }
 
@@ -240,43 +240,43 @@ static int32_t findInStringArray(UResourceBundle* array, const UnicodeString& id
  * @return the zone's bundle if found, or undefined if error.  Reuses oldbundle.
  */
 static UResourceBundle* getZoneByName(const UResourceBundle* top, const UnicodeString& id, UResourceBundle *oldbundle, UErrorCode& status) {
-  // load the Rules object
-  UResourceBundle *tmp = ures_getByKey(top, kNAMES, NULL, &status);
-
-  // search for the string
-  int32_t idx = findInStringArray(tmp, id, status);
-
-  if((idx == -1) && U_SUCCESS(status)) {
-    // not found 
-    status = U_MISSING_RESOURCE_ERROR;
-    //ures_close(oldbundle);
-    //oldbundle = NULL;
-  } else {
-    U_DEBUG_TZ_MSG(("gzbn: oldbundle= size %d, type %d, %s\n", ures_getSize(tmp), ures_getType(tmp), u_errorName(status)));
-    tmp = ures_getByKey(top, kZONES, tmp, &status); // get Zones object from top
-    U_DEBUG_TZ_MSG(("gzbn: loaded ZONES, size %d, type %d, path %s %s\n", ures_getSize(tmp), ures_getType(tmp), ures_getPath(tmp), u_errorName(status)));
-    oldbundle = ures_getByIndex(tmp, idx, oldbundle, &status); // get nth Zone object
-    U_DEBUG_TZ_MSG(("gzbn: loaded z#%d, size %d, type %d, path %s, %s\n", idx, ures_getSize(oldbundle), ures_getType(oldbundle), ures_getPath(oldbundle),  u_errorName(status)));
-  }
-  ures_close(tmp);
-  if(U_FAILURE(status)) { 
-    //ures_close(oldbundle);
-    return NULL;
-  } else {
-    return oldbundle;
-  }
+    // load the Rules object
+    UResourceBundle *tmp = ures_getByKey(top, kNAMES, NULL, &status);
+    
+    // search for the string
+    int32_t idx = findInStringArray(tmp, id, status);
+    
+    if((idx == -1) && U_SUCCESS(status)) {
+        // not found 
+        status = U_MISSING_RESOURCE_ERROR;
+        //ures_close(oldbundle);
+        //oldbundle = NULL;
+    } else {
+        U_DEBUG_TZ_MSG(("gzbn: oldbundle= size %d, type %d, %s\n", ures_getSize(tmp), ures_getType(tmp), u_errorName(status)));
+        tmp = ures_getByKey(top, kZONES, tmp, &status); // get Zones object from top
+        U_DEBUG_TZ_MSG(("gzbn: loaded ZONES, size %d, type %d, path %s %s\n", ures_getSize(tmp), ures_getType(tmp), ures_getPath(tmp), u_errorName(status)));
+        oldbundle = ures_getByIndex(tmp, idx, oldbundle, &status); // get nth Zone object
+        U_DEBUG_TZ_MSG(("gzbn: loaded z#%d, size %d, type %d, path %s, %s\n", idx, ures_getSize(oldbundle), ures_getType(oldbundle), ures_getPath(oldbundle),  u_errorName(status)));
+    }
+    ures_close(tmp);
+    if(U_FAILURE(status)) { 
+        //ures_close(oldbundle);
+        return NULL;
+    } else {
+        return oldbundle;
+    }
 }
 
 
 UResourceBundle* TimeZone::loadRule(const UResourceBundle* top, const UnicodeString& ruleid, UResourceBundle* oldbundle, UErrorCode& status) {
-  char key[64];
-  ruleid.extract(0, sizeof(key)-1, key, sizeof(key)-1, "");
-  U_DEBUG_TZ_MSG(("loadRule(%s)\n", key));
-  UResourceBundle *r = ures_getByKey(top, kRULES, oldbundle, &status);
-  U_DEBUG_TZ_MSG(("loadRule(%s) -> kRULES [%s]\n", key, u_errorName(status)));
-  r = ures_getByKey(r, key, r, &status);
-  U_DEBUG_TZ_MSG(("loadRule(%s) -> item [%s]\n", key, u_errorName(status)));
-  return r;
+    char key[64];
+    ruleid.extract(0, sizeof(key)-1, key, sizeof(key)-1, "");
+    U_DEBUG_TZ_MSG(("loadRule(%s)\n", key));
+    UResourceBundle *r = ures_getByKey(top, kRULES, oldbundle, &status);
+    U_DEBUG_TZ_MSG(("loadRule(%s) -> kRULES [%s]\n", key, u_errorName(status)));
+    r = ures_getByKey(r, key, r, &status);
+    U_DEBUG_TZ_MSG(("loadRule(%s) -> item [%s]\n", key, u_errorName(status)));
+    return r;
 }
 
 /**
@@ -289,9 +289,12 @@ UResourceBundle* TimeZone::loadRule(const UResourceBundle* top, const UnicodeStr
  */
 static UResourceBundle* openOlsonResource(const UnicodeString& id,
                                           UResourceBundle& res,
-                                          UErrorCode& ec) {
+                                          UErrorCode& ec)
+{
+#if U_DEBUG_TZ
     char buf[128];
     id.extract(0, sizeof(buf)-1, buf, sizeof(buf), "");
+#endif
     UResourceBundle *top = ures_openDirect(0, kZONEINFO, &ec);
     U_DEBUG_TZ_MSG(("pre: res sz=%d\n", ures_getSize(&res)));
     UResourceBundle *newRes = getZoneByName(top, id, &res, ec);
@@ -300,14 +303,14 @@ static UResourceBundle* openOlsonResource(const UnicodeString& id,
     // but it is 0 in 2.8 (?).
     U_DEBUG_TZ_MSG(("Loading zone '%s' (%s, size %d) - %s\n", buf, ures_getKey((UResourceBundle*)&res), ures_getSize(&res), u_errorName(ec)));
     if (ures_getSize(&res) <= 1 && getOlsonMeta(top)) {
-      int32_t deref = ures_getInt(&res, &ec) + 0;
-      U_DEBUG_TZ_MSG(("getInt: %s - type is %d\n", u_errorName(ec), ures_getType(&res)));
-      UResourceBundle *ares = ures_getByKey(top, kZONES, NULL, &ec); // dereference Zones section
-      ures_getByIndex(ares, deref, &res, &ec);
-      ures_close(ares);
-      U_DEBUG_TZ_MSG(("alias to #%d (%s) - %s\n", deref, "??", u_errorName(ec)));
+        int32_t deref = ures_getInt(&res, &ec) + 0;
+        U_DEBUG_TZ_MSG(("getInt: %s - type is %d\n", u_errorName(ec), ures_getType(&res)));
+        UResourceBundle *ares = ures_getByKey(top, kZONES, NULL, &ec); // dereference Zones section
+        ures_getByIndex(ares, deref, &res, &ec);
+        ures_close(ares);
+        U_DEBUG_TZ_MSG(("alias to #%d (%s) - %s\n", deref, "??", u_errorName(ec)));
     } else {
-      U_DEBUG_TZ_MSG(("not an alias - size %d\n", ures_getSize(&res)));
+        U_DEBUG_TZ_MSG(("not an alias - size %d\n", ures_getSize(&res)));
     }
     U_DEBUG_TZ_MSG(("%s - final status is %s\n", buf, u_errorName(ec)));
     return top;
