@@ -4,6 +4,9 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#include "unicode/utypes.h"
+#include "cstring.h"
+#include "unicode/normlzr.h"
 #include "tstnorm.h"
 
 #define ARRAY_LENGTH(array) ((int32_t)(sizeof (array) / sizeof (*array)))
@@ -33,6 +36,7 @@ void BasicNormalizerTest::runIndexedTest(int32_t index, UBool exec,
         CASE(8,TestCompositionExclusion);
         CASE(9,TestZeroIndex);
         CASE(10,TestVerisign);
+        CASE(11,TestPreviousNext);
         default: name = ""; break;
     }
 }
@@ -550,5 +554,131 @@ void BasicNormalizerTest::assertEqual(const UnicodeString&    input,
         errln(errPrefix + "normalized " + hex(input) + "\n"
             + "                expected " + hex(expected) + "\n"
             + "             iterate got " + hex(result) );
+    }
+}
+
+// helper class for TestPreviousNext()
+// simple UTF-32 character iterator
+class UChar32Iterator {
+public:
+    UChar32Iterator(const UChar32 *text, int32_t len, int32_t index) :
+        s(text), length(len), i(index) {}
+
+    UChar32 current() {
+        if(i<length) {
+            return s[i];
+        } else {
+            return 0xffff;
+        }
+    }
+
+    UChar32 next() {
+        if(i<length) {
+            return s[i++];
+        } else {
+            return 0xffff;
+        }
+    }
+
+    UChar32 previous() {
+        if(i>0) {
+            return s[--i];
+        } else {
+            return 0xffff;
+        }
+    }
+
+    int32_t getIndex() {
+        return i;
+    }
+private:
+    const UChar32 *s;
+    int32_t length, i;
+};
+
+void
+BasicNormalizerTest::TestPreviousNext() {
+    // src and expect strings
+    static const UChar src[]={
+        UTF16_LEAD(0x2f999), UTF16_TRAIL(0x2f999),
+        UTF16_LEAD(0x1d15f), UTF16_TRAIL(0x1d15f),
+        0xc4,
+        0x1ed0
+    };
+    static const UChar32 expect[]={
+        0x831d,
+        0x1d158, 0x1d165,
+        0x41, 0x308,
+        0x4f, 0x302, 0x301
+    };
+
+    // expected src indexes corresponding to expect indexes
+    static const int32_t expectIndex[]={
+        0,
+        2, 2,
+        4, 4,
+        5, 5, 5,
+        6 // behind last character
+    };
+
+    // initial indexes into the src and expect strings
+    enum {
+        SRC_MIDDLE=4,
+        EXPECT_MIDDLE=3
+    };
+
+    // movement vector
+    // - for previous(), 0 for current(), + for next()
+    // not const so that we can terminate it below for the error message
+    static char *moves="0+0+0--0-0-+++0--+++++++0--------";
+
+    // iterators
+    Normalizer iter(src, sizeof(src)/U_SIZEOF_UCHAR, Normalizer::DECOMP);
+    UChar32Iterator iter32(expect, sizeof(expect)/4, EXPECT_MIDDLE);
+
+    UChar32 c1, c2;
+    char m;
+
+    // initially set the indexes into the middle of the strings
+    iter.setIndexOnly(SRC_MIDDLE);
+
+    // move around and compare the iteration code points with
+    // the expected ones
+    char *move=moves;
+    while((m=*move++)!=0) {
+        if(m=='-') {
+            c1=iter.previous();
+            c2=iter32.previous();
+        } else if(m=='0') {
+            c1=iter.current();
+            c2=iter32.current();
+        } else /* m=='+' */ {
+            c1=iter.next();
+            c2=iter32.next();
+        }
+
+        // compare results
+        if(c1!=c2) {
+            // copy the moves until the current (m) move, and terminate
+            char history[64];
+            uprv_strcpy(history, moves);
+            history[move-moves]=0;
+            errln("error: mismatch in Normalizer iteration at %s: "
+                  "got c1=U+%04lx != expected c2=U+%04lx\n",
+                  history, c1, c2);
+            break;
+        }
+
+        // compare indexes
+        if(iter.getIndex()!=expectIndex[iter32.getIndex()]) {
+            // copy the moves until the current (m) move, and terminate
+            char history[64];
+            uprv_strcpy(history, moves);
+            history[move-moves]=0;
+            errln("error: index mismatch in Normalizer iteration at %s: "
+                  "Normalizer index %ld expected %ld\n",
+                  history, iter.getIndex(), expectIndex[iter32.getIndex()]);
+            break;
+        }
     }
 }
