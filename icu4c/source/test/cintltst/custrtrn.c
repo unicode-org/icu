@@ -650,7 +650,7 @@ static void Test_UChar_WCHART_API(void){
     }
 } 
 
-void Test_widestrs()
+static void Test_widestrs()
 {
         wchar_t ws[100];
         UChar rts[100];
@@ -687,7 +687,8 @@ void Test_widestrs()
             log_err("u_strFromWCS: wcs = %S, wl = %d,rts = %s, rtl = %d!\n", wcs, wl, u_austrcpy(astr, rts), rtl);
         }
 }
-void
+
+static void
 Test_WCHART_LongString(){
     UErrorCode status = U_ZERO_ERROR;
     const char* testdatapath=loadTestData(&status);
