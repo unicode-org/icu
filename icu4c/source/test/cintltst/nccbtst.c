@@ -239,16 +239,18 @@ void TestSubWithValue(int32_t inputsize, int32_t outputsize)
 	
 	const char sampleTxtToU[]= { (char)0x00, (char)0x9f, (char)0xaf, (char)0xff, (char)0x89, (char)0xd3 };
 	
-	UChar IBM_943toUnicode[] = { 0x0000, 0x6D63, '%', 'X', 'F', 'F', 0x6D66};
+	UChar IBM_943toUnicode[] = { 0x0000, 0x6D63, 0x25, 0x58, 0x46, 0x46, 0x6D66};
 	
 	int32_t  fromIBM943Offs [] = 	{ 0, 1, 3, 3, 3, 3, 4};
     
 	
 	const char expsubwvalIBM_949[]=	{ 
-        (char)0x00, (char)0xb0, (char)0xa1, (char)0xb0, (char)0xa2, '%', 'U', 'E', 'F', '6', '7', (char)0xc8, (char)0xd3 }; 
+        (char)0x00, (char)0xb0, (char)0xa1, (char)0xb0, (char)0xa2,
+        (char)0x25, (char)0x55, (char)0x45, (char)0x46, (char)0x36, (char)0x37, (char)0xc8, (char)0xd3 }; 
     
     const char expsubwvalIBM_943[]=	{ 
-        (char)0x9f, (char)0xaf, (char)0x9f, (char)0xb1, '%', 'U', '6', 'D', '6', '5', (char)0x89, (char)0x59 };
+        (char)0x9f, (char)0xaf, (char)0x9f, (char)0xb1,
+        (char)0x25, (char)0x55, (char)0x36, (char)0x44, (char)0x36, (char)0x35, (char)0x89, (char)0x59 };
 	
     const char expsubwvalIBM_930[] = {
         (char)0x0e, (char)0x5d, (char)0x5f, (char)0x5d, (char)0x63, (char)0x0f, (char)0x6c, (char)0xe4, (char)0xf6, (char)0xc4, (char)0xf6, (char)0xf5, (char)0x46, (char)0x6b };
@@ -291,7 +293,7 @@ void TestLegalAndOthers(int32_t inputsize, int32_t outputsize)
     
 
     const char text943[] = {
-        (char)0x82, (char)0xa9, (char)0x82, (char)0x20, /*(char)0xc8,*/  'a', (char)0x8a, (char)0xbf, (char)0x8e, (char)0x9a };
+        (char)0x82, (char)0xa9, (char)0x82, (char)0x20, /*(char)0xc8,*/  (char)0x61, (char)0x8a, (char)0xbf, (char)0x8e, (char)0x9a };
         UChar toUnicode943sub[] = { 0x304b, 0xfffd, /*0xff88,*/ 0x0061, 0x6f22,  0x5b57};
 		UChar toUnicode943skip[]= { 0x304b, /*0xff88,*/ 0x0061, 0x6f22,  0x5b57};
 		UChar toUnicode943stop[]= { 0x304b};
@@ -328,7 +330,9 @@ void TestLegalAndOthers(int32_t inputsize, int32_t outputsize)
 }
 void TestSingleByte(int32_t inputsize, int32_t outputsize)
 {
-	const char sampleText[] = {(char)0x82, (char)0xa9, 'a', 'b', 'c' , (char)0x82, (char)0xff, /*(char)0x82, (char)0xa9,*/ '2', '3'};
+	const char sampleText[] = {
+        (char)0x82, (char)0xa9, (char)0x61, (char)0x62, (char)0x63 , (char)0x82,
+        (char)0xff, /*(char)0x82, (char)0xa9,*/ (char)0x32, (char)0x33};
 	UChar toUnicode943sub[] = {0x304b, 0x0061, 0x0062, 0x0063,  0xfffd,/*0x304b,*/ 0x0032, 0x0033};
 	int32_t  fromIBM943Offssub[]  = {0, 2, 3, 4, 5, 7, 8};
 	/*checking illegal value for ibm-943 with substitute*/ 

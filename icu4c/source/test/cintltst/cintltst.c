@@ -51,17 +51,14 @@ int main ( int argc, const char **argv )
 void 
 ctest_pathnameInContext( char* fullname, int32_t maxsize, const char* relPath ) 
 {
+    char mainDirBuffer[200];
     char* mainDir;
-    char  sepChar;
-
     const char inpSepChar = '|';
     char* tmp;
-    char sepString[2] ;
     int32_t lenMainDir;
     int32_t lenRelPath ;   
 
 #if defined(_WIN32) || defined(WIN32) || defined(__OS2__) || defined(OS2)
-        char mainDirBuffer[200];
         mainDir = getenv("ICU_DATA");
         if(mainDir!=NULL) {
             strcpy(mainDirBuffer, mainDir);
@@ -70,14 +67,6 @@ ctest_pathnameInContext( char* fullname, int32_t maxsize, const char* relPath )
             mainDirBuffer[0]='\0';
         }
         mainDir=mainDirBuffer;
-        sepChar = '\\';
-    #elif defined(_AIX) || defined(SOLARIS) || defined(LINUX) || defined(HPUX) || defined(POSIX)
-        char mainDirBuffer[200];
-        strcpy(mainDirBuffer, u_getDataDirectory());
-        strcat(mainDirBuffer, "/../");
-        mainDir = mainDirBuffer;
-        sepChar = '/';
-    
 #elif defined(XP_MAC)
         Str255 volName;
         int16_t volNum;
@@ -85,29 +74,32 @@ ctest_pathnameInContext( char* fullname, int32_t maxsize, const char* relPath )
         if (err != noErr) volName[0] = 0;
         mainDir = (char*) &(volName[1]);
         mainDir[volName[0]] = 0;
-        sepChar = ':';
 #else
-        mainDir = "";
-        sepChar = '/';
+        strcpy(mainDirBuffer, u_getDataDirectory());
+        strcat(mainDirBuffer, ".." U_FILE_SEP_STRING);
+        mainDir = mainDirBuffer;
 #endif
-    sepString[0] = sepChar;
-    sepString[1] = 0;
-    if (relPath[0] == '|') relPath++;
 
     lenMainDir = strlen( mainDir );
-    
-      lenRelPath = strlen( relPath );
+    if(lenMainDir > 0 && mainDir[lenMainDir - 1] != U_FILE_SEP_CHAR) {
+        mainDir[lenMainDir++] = U_FILE_SEP_CHAR;
+        mainDir[lenMainDir] = 0;
+    }
+
+    if (relPath[0] == '|') relPath++;
+    lenRelPath = strlen( relPath );
     if (maxsize < lenMainDir + lenRelPath + 2) { fullname[0] = 0; return; }
     strcpy( fullname, mainDir );
-    strcat( fullname, sepString );
+    strcat( fullname, U_FILE_SEP_STRING );
     strcat( fullname, relPath );
     strchr( fullname, inpSepChar );
     tmp = strchr(fullname, inpSepChar);
     while (tmp) {
-        *tmp = sepChar;
+        *tmp = U_FILE_SEP_CHAR;
         tmp = strchr( tmp+1, inpSepChar );
     }
 }
+
 const char*
 ctest_getTestDirectory()
 {

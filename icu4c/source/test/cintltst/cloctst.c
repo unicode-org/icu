@@ -20,6 +20,7 @@
 #include <string.h>
 #include "unicode/ustring.h"
 #include "cintltst.h"
+#include "ccolltst.h"
 
 void PrintDataTable();
 
@@ -628,13 +629,13 @@ static  char* rawData2[23][5] = {
     {   "English (United States)", "French (France)", "Croatian (Croatia)", "Greek (Greece)", "Norwegian (Norway, Nynorsk)" },
 
     /* display langage (French) */
-    {   "anglais",  "français",   "", "grec",    "norvégien" },
+    {   "anglais",  "fran\\u00E7ais",   "", "grec",    "norv\\u00E9gien" },
     /* display country (French) */
-    {   "États-Unis",    "France",   "",  "Grèce",   "Norvège"    },
+    {   "\\u00C9tats-Unis",    "France",   "",  "Gr\\u00E8ce",   "Norv\\u00E8ge"    },
     /* display variant (French) */
     {   "",     "",     "",     "",     "Nynorsk"    },
     /* display name (French) */
-    {   "anglais (États-Unis)", "français (France)", "", "grec (Grèce)", "norvégien (Norvège, Nynorsk)" },
+    {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "", "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, Nynorsk)" },
 
     /* display langage (Croatian) */
     {   "",  "", "hrvatski", "",    "" },
@@ -658,7 +659,7 @@ static  char* rawData2[23][5] = {
 static UChar greekDisplayLanguage[] = { 0x03b5, 0x03bb, 0x03bb, 0x03b7, 0x03bd, 0x03b9, 0x03ba, 0x03ac, 0 };
 static UChar greekDisplayCountry[] = { 0x0395, 0x03bb, 0x03bb, 0x03ac, 0x03b4, 0x03b1, 0 };
 static UChar greekDisplayName[] = { 0x03b5, 0x03bb, 0x03bb, 0x03b7, 0x03bd, 0x03b9, 0x03ba,
-    0x03ac, ' ', '(', 0x0395, 0x03bb, 0x03bb, 0x03ac, 0x03b4, 0x03b1, ')', 0 };
+    0x03ac, 0x20, 0x28, 0x0395, 0x03bb, 0x03bb, 0x03ac, 0x03b4, 0x03b1, 0x29, 0 };
     
 
 void setUpDataTable()
@@ -669,8 +670,7 @@ void setUpDataTable()
         for (i = 0; i < 23; i++) {
           dataTable[i] = calloc(sizeof(UChar*),5);
             for (j = 0; j < 5; j++){
-                dataTable[i][j] = (UChar*) malloc(sizeof(UChar)*(strlen(rawData2[i][j])+1));
-                u_uastrcpy(dataTable[i][j],rawData2[i][j]);
+                dataTable[i][j] = CharsToUChars(rawData2[i][j]);
             }
         }
         dataTable[DLANG_EL][GREEKS]=(UChar*)realloc(dataTable[DLANG_EL][GREEKS],sizeof(UChar)*(u_strlen(greekDisplayLanguage)+1)); 
