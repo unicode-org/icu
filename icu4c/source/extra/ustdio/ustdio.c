@@ -78,7 +78,7 @@ u_file_write(    const UChar     *chars,
                  &mySource,
                  mySourceEnd,
                  NULL,
-                 (UBool)(feof(f->fFile) != 0),
+                 FALSE,     /* TODO: This must be true when we are closing the file */
                  &status);
       } else { /*weiv: do the invariant conversion */
           u_UCharsToChars(mySource, myTarget, count);
