@@ -1,0 +1,37 @@
+// Copyright (c) 1998-2001 IBM, Inc. and Others
+// English, Malta locale
+// srl@monkey.sbay.org
+
+en_MT {
+    // No version  here - bump the parent.
+
+    ShortCountry { MLT }
+
+    CurrencyElements {
+        "Lm",
+        MTL,
+        "."
+    }
+
+    NumberPatterns {
+        "#,##0.###;-#,##0.###",
+        "\u00A4#,##0.00;(\u00A4#,##0.00)",
+        "#,##0%"
+    }
+
+    DateTimePatterns {
+            "HH:mm:ss z",
+            "HH:mm:ss z",
+            "HH:mm:ss",
+            "HH:mm",
+            "dd MMMM yyyy",
+            "dd MMMM yyyy",
+            "dd-MMM-yy",
+            "dd/MM/yy",
+            "{1} {0}",
+    }
+
+
+//    LocaleID {"043A"}  ??
+
+}
