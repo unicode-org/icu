@@ -69,30 +69,41 @@ U_CDECL_BEGIN
  * @stable ICU 2.0
  */
 typedef struct {
-    /** @memo sizeof(UDataInfo) */
+    /** @memo sizeof(UDataInfo)
+     *  @stable ICU 2.0 */
     uint16_t size;
 
-    /** @memo unused, set to 0 */
+    /** @memo unused, set to 0 
+     *  @stable ICU 2.0*/
     uint16_t reservedWord;
 
     /* platform data properties */
-    /** @memo 0 for little-endian machine, 1 for big-endian */
+    /** @memo 0 for little-endian machine, 1 for big-endian
+     *  @stable ICU 2.0 */
     uint8_t isBigEndian;
 
-    /** @memo see U_CHARSET_FAMILY values in utypes.h */
+    /** @memo see U_CHARSET_FAMILY values in utypes.h 
+     *  @stable ICU 2.0*/
     uint8_t charsetFamily;
 
-    /** @memo sizeof(UChar), one of { 1, 2, 4 } */
+    /** @memo sizeof(UChar), one of { 1, 2, 4 } 
+     *  @stable ICU 2.0*/
     uint8_t sizeofUChar;
 
-    /** @memo unused, set to 0 */
+    /** @memo unused, set to 0 
+     *  @stable ICU 2.0*/
     uint8_t reservedByte;
 
-    /** @memo data format identifier */
+    /** @memo data format identifier 
+     *  @stable ICU 2.0*/
     uint8_t dataFormat[4];
 
-    /** @memo versions: [0] major [1] minor [2] milli [3] micro */
+    /** @memo versions: [0] major [1] minor [2] milli [3] micro 
+     *  @stable ICU 2.0*/
     uint8_t formatVersion[4];
+
+    /** @memo versions: [0] major [1] minor [2] milli [3] micro 
+     *  @stable ICU 2.0*/
     uint8_t dataVersion[4];
 } UDataInfo;
 
