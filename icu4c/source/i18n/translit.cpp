@@ -1,0 +1,879 @@
+/*
+**********************************************************************
+*   Copyright (C) 1999, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+**********************************************************************
+*   Date        Name        Description
+*   11/17/99    aliu        Creation.
+**********************************************************************
+*/
+#include "translit.h"
+#include "cmemory.h"
+#include "cstring.h"
+#include "hextouni.h"
+#include "locid.h"
+#include "msgfmt.h"
+#include "mutex.h"
+#include "rbt_data.h"
+#include "rbt_pars.h"
+#include "rep.h"
+#include "resbund.h"
+#include "uhash.h"
+#include "unifilt.h"
+#include "unitohex.h"
+
+/**
+ * Dictionary of known transliterators.  Keys are <code>String</code>
+ * names, values are one of the following:
+ *
+ * <ul><li><code>Transliterator</code> objects
+ *
+ * <li><code>RULE_BASED_PLACEHOLDER</code>, in which case the ID
+ * will have its first '-' removed and be appended to
+ * RB_RULE_BASED_PREFIX to form a resource bundle name from which
+ * the RB_RULE key is looked up to obtain the rule.
+ *
+ * <li><code>REVERSE_RULE_BASED_PLACEHOLDER</code>.  Like
+ * <code>RULE_BASED_PLACEHOLDER</code>, except the entity names in
+ * the ID are reversed, and the argument
+ * RuleBasedTransliterator.REVERSE is pased to the
+ * RuleBasedTransliterator constructor.
+ * </ul>
+ */
+UHashtable* Transliterator::cache = 0;
+
+/**
+ * The mutex controlling access to the cache.
+ */
+UMTX Transliterator::cacheMutex = NULL;
+
+/**
+ * When set to TRUE, the cache has been initialized.  Any code must
+ * check this boolean before accessing the cache, and if the boolean
+ * is FALSE, it must call initializeCache().  We do this form of lazy
+ * evaluation for two reasons: (1) so we don't initialize if we don't
+ * have to (i.e., if no one is using Transliterator, but has included
+ * the code as part of a shared library, and (2) to avoid static
+ * intialization problems.
+ */
+bool_t Transliterator::cacheInitialized = FALSE;
+
+/**
+ * Prefix for resource bundle key for the display name for a
+ * transliterator.  The ID is appended to this to form the key.
+ * The resource bundle value should be a String.
+ */
+const char* Transliterator::RB_DISPLAY_NAME_PREFIX = "T:";
+
+/**
+ * Resource bundle key for display name pattern.
+ * The resource bundle value should be a String forming a
+ * MessageFormat pattern, e.g.:
+ * "{0,choice,0#|1#{1} Transliterator|2#{1} to {2} Transliterator}".
+ */
+const char* Transliterator::RB_DISPLAY_NAME_PATTERN =
+    "TransliteratorNamePattern";
+
+/**
+ * Resource bundle key for the list of RuleBasedTransliterator IDs.
+ * The resource bundle value should be a String[] with each element
+ * being a valid ID.  The ID will be appended to RB_RULE_BASED_PREFIX
+ * to obtain the class name in which the RB_RULE key will be sought.
+ */
+const char* Transliterator::RB_RULE_BASED_IDS =
+    "RuleBasedTransliteratorIDs";
+
+/**
+ * Resource bundle key for the RuleBasedTransliterator rule.
+ */
+const char* Transliterator::RB_RULE = "Rule";
+
+/**
+ * Default constructor.
+ * @param theID the string identifier for this transliterator
+ * @param theFilter the filter.  Any character for which
+ * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+ * altered by this transliterator.  If <tt>filter</tt> is
+ * <tt>null</tt> then no filtering is applied.
+ */
+Transliterator::Transliterator(const UnicodeString& theID,
+                               UnicodeFilter* adoptedFilter) :
+    ID(theID), filter(adoptedFilter) {}
+
+/**
+ * Destructor.
+ */
+Transliterator::~Transliterator() {
+    delete filter;
+}
+
+/**
+ * Copy constructor.
+ */
+Transliterator::Transliterator(const Transliterator& other) :
+    ID(other.ID), filter(0) {
+    if (other.filter != 0) {
+        // We own the filter, so we must have our own copy
+        filter = other.filter->clone();
+    }
+}
+
+/**
+ * Assignment operator.
+ */
+Transliterator& Transliterator::operator=(const Transliterator& other) {
+    ID = other.ID;
+    filter = (other.filter == 0) ?
+        0 : other.filter->clone();
+    return *this;
+}
+
+/**
+ * Transliterates the segment of a string that begins at the character
+ * at offset <code>start</code> and extends to the character at offset
+ * <code>limit - 1</code>.  A default implementation is provided here;
+ * subclasses should provide a more efficient implementation if
+ * possible.
+ * @param text the string to be transliterated
+ * @param start the beginning index, inclusive; <code>0 <= start
+ * <= limit</code>.
+ * @param limit the ending index, exclusive; <code>start <= limit
+ * <= text.length()</code>.
+ * @param result buffer to receive the transliterated text; previous
+ * contents are discarded
+ */
+void Transliterator::transliterate(const UnicodeString& text,
+                                   int32_t start, int32_t limit,
+                                   UnicodeString& result) const {
+    /* This is a default implementation that should be replaced by
+     * a more efficient subclass implementation if possible.
+     */
+    text.extractBetween(start, limit, result);
+    transliterate(result);
+}
+
+/**
+ * Transliterates an entire string. Convenience method.
+ * @param text the string to be transliterated
+ * @param result buffer to receive the transliterated text; previous
+ * contents are discarded
+ */
+void Transliterator::transliterate(const UnicodeString& text,
+                                   UnicodeString& result) const {
+    transliterate(text, 0, text.length(), result);
+}
+
+/**
+ * Transliterates an entire string in place. Convenience method.
+ * @param text the string to be transliterated
+ */
+void Transliterator::transliterate(Replaceable& text) const {
+    transliterate(text, 0, text.length());
+}
+
+/**
+ * Transliterates the portion of the text buffer that can be
+ * transliterated unambiguosly after new text has been inserted,
+ * typically as a result of a keyboard event.  The new text in
+ * <code>insertion</code> will be inserted into <code>text</code>
+ * at <code>index[LIMIT]</code>, advancing
+ * <code>index[LIMIT]</code> by <code>insertion.length()</code>.
+ * Then the transliterator will try to transliterate characters of
+ * <code>text</code> between <code>index[CURSOR]</code> and
+ * <code>index[LIMIT]</code>.  Characters before
+ * <code>index[CURSOR]</code> will not be changed.
+ *
+ * <p>Upon return, values in <code>index[]</code> will be updated.
+ * <code>index[START]</code> will be advanced to the first
+ * character that future calls to this method will read.
+ * <code>index[CURSOR]</code> and <code>index[LIMIT]</code> will
+ * be adjusted to delimit the range of text that future calls to
+ * this method may change.
+ *
+ * <p>Typical usage of this method begins with an initial call
+ * with <code>index[START]</code> and <code>index[LIMIT]</code>
+ * set to indicate the portion of <code>text</code> to be
+ * transliterated, and <code>index[CURSOR] == index[START]</code>.
+ * Thereafter, <code>index[]</code> can be used without
+ * modification in future calls, provided that all changes to
+ * <code>text</code> are made via this method.
+ *
+ * <p>This method assumes that future calls may be made that will
+ * insert new text into the buffer.  As a result, it only performs
+ * unambiguous transliterations.  After the last call to this
+ * method, there may be untransliterated text that is waiting for
+ * more input to resolve an ambiguity.  In order to perform these
+ * pending transliterations, clients should call {@link
+ * #finishKeyboardTransliteration} after the last call to this
+ * method has been made.
+ * 
+ * @param text the buffer holding transliterated and untransliterated text
+ * @param index an array of three integers.
+ *
+ * <ul><li><code>index[START]</code>: the beginning index,
+ * inclusive; <code>0 <= index[START] <= index[LIMIT]</code>.
+ *
+ * <li><code>index[LIMIT]</code>: the ending index, exclusive;
+ * <code>index[START] <= index[LIMIT] <= text.length()</code>.
+ * <code>insertion</code> is inserted at
+ * <code>index[LIMIT]</code>.
+ *
+ * <li><code>index[CURSOR]</code>: the next character to be
+ * considered for transliteration; <code>index[START] <=
+ * index[CURSOR] <= index[LIMIT]</code>.  Characters before
+ * <code>index[CURSOR]</code> will not be changed by future calls
+ * to this method.</ul>
+ *
+ * @param insertion text to be inserted and possibly
+ * transliterated into the translation buffer at
+ * <code>index[LIMIT]</code>.  If <code>null</code> then no text
+ * is inserted.
+ * @see #START
+ * @see #LIMIT
+ * @see #CURSOR
+ * @see #handleKeyboardTransliterate
+ * @exception IllegalArgumentException if <code>index[]</code>
+ * is invalid
+ */
+void Transliterator::keyboardTransliterate(Replaceable& text,
+                                           int32_t index[3],
+                                           const UnicodeString& insertion,
+                                           UErrorCode &status) const {
+    _keyboardTransliterate(text, index, &insertion, status);
+}
+
+/**
+ * Transliterates the portion of the text buffer that can be
+ * transliterated unambiguosly after a new character has been
+ * inserted, typically as a result of a keyboard event.  This is a
+ * convenience method; see {@link
+ * #keyboardTransliterate(Replaceable, int[], String)} for details.
+ * @param text the buffer holding transliterated and
+ * untransliterated text
+ * @param index an array of three integers.  See {@link
+ * #keyboardTransliterate(Replaceable, int[], String)}.
+ * @param insertion text to be inserted and possibly
+ * transliterated into the translation buffer at
+ * <code>index[LIMIT]</code>.
+ * @see #keyboardTransliterate(Replaceable, int[], String)
+ */
+void Transliterator::keyboardTransliterate(Replaceable& text,
+                                           int32_t index[3],
+                                           UChar insertion,
+                                           UErrorCode& status) const {
+    UnicodeString str(insertion);
+    _keyboardTransliterate(text, index, &str, status);
+}
+
+/**
+ * Transliterates the portion of the text buffer that can be
+ * transliterated unambiguosly.  This is a convenience method; see
+ * {@link #keyboardTransliterate(Replaceable, int[], String)} for
+ * details.
+ * @param text the buffer holding transliterated and
+ * untransliterated text
+ * @param index an array of three integers.  See {@link
+ * #keyboardTransliterate(Replaceable, int[], String)}.
+ * @see #keyboardTransliterate(Replaceable, int[], String)
+ */
+void Transliterator::keyboardTransliterate(Replaceable& text,
+                                           int32_t index[3],
+                                           UErrorCode& status) const {
+    _keyboardTransliterate(text, index, 0, status);
+}
+
+/**
+ * Finishes any pending transliterations that were waiting for
+ * more characters.  Clients should call this method as the last
+ * call after a sequence of one or more calls to
+ * <code>keyboardTransliterate()</code>.
+ * @param text the buffer holding transliterated and
+ * untransliterated text.
+ * @param index the array of indices previously passed to {@link
+ * #keyboardTransliterate}
+ */
+void Transliterator::finishKeyboardTransliteration(Replaceable& text,
+                                                   int32_t index[3]) const {
+    transliterate(text, index[START], index[LIMIT]);
+}
+
+/**
+ * This internal method does keyboard transliteration.  If the
+ * 'insertion' is non-null then we append it to 'text' before
+ * proceeding.  This method calls through to the pure virtual
+ * framework method handleKeyboardTransliterate() to do the actual
+ * work.
+ */
+void Transliterator::_keyboardTransliterate(Replaceable& text,
+                                            int32_t index[3],
+                                            const UnicodeString* insertion,
+                                            UErrorCode &status) const {
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    if (index[START] < 0 ||
+        index[LIMIT] > text.length() ||
+        index[CURSOR] < index[START] ||
+        index[CURSOR] > index[LIMIT]) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    int32_t originalStart = index[START];
+    if (insertion != 0) {
+        text.handleReplaceBetween(index[LIMIT], index[LIMIT], *insertion);
+        index[LIMIT] += insertion->length();
+    }
+
+    handleKeyboardTransliterate(text, index);
+
+    index[START] = icu_max(index[CURSOR] - getMaximumContextLength(),
+                           originalStart);
+}
+
+/**
+ * Returns the length of the longest context required by this transliterator.
+ * This is <em>preceding</em> context.  The default implementation supplied
+ * by <code>Transliterator</code> returns zero; subclasses
+ * that use preceding context should override this method to return the
+ * correct value.  For example, if a transliterator translates "ddd" (where
+ * d is any digit) to "555" when preceded by "(ddd)", then the preceding
+ * context length is 5, the length of "(ddd)".
+ *
+ * @return The maximum number of preceding context characters this
+ * transliterator needs to examine
+ */
+int32_t Transliterator::getMaximumContextLength() const {
+    return 0;
+}
+
+/**
+ * Returns a programmatic identifier for this transliterator.
+ * If this identifier is passed to <code>getInstance()</code>, it
+ * will return this object, if it has been registered.
+ * @see #registerInstance
+ * @see #getAvailableIDs
+ */
+const UnicodeString& Transliterator::getID() const {
+    return ID;
+}
+
+/**
+ * Returns a name for this transliterator that is appropriate for
+ * display to the user in the default locale.  See {@link
+ * #getDisplayName(Locale)} for details.
+ */
+UnicodeString& Transliterator::getDisplayName(UnicodeString& result) const {
+    return getDisplayName(Locale::getDefault(), result);
+}
+
+/**
+ * Returns a name for this transliterator that is appropriate for
+ * display to the user in the given locale.  This name is taken
+ * from the locale resource data in the standard manner of the
+ * <code>java.text</code> package.
+ *
+ * <p>If no localized names exist in the system resource bundles,
+ * a name is synthesized using a localized
+ * <code>MessageFormat</code> pattern from the resource data.  The
+ * arguments to this pattern are an integer followed by one or two
+ * strings.  The integer is the number of strings, either 1 or 2.
+ * The strings are formed by splitting the ID for this
+ * transliterator at the first '-'.  If there is no '-', then the
+ * entire ID forms the only string.
+ * @param inLocale the Locale in which the display name should be
+ * localized.
+ * @see java.text.MessageFormat
+ */
+UnicodeString& Transliterator::getDisplayName(const Locale& inLocale,
+                                              UnicodeString& result) const {
+    UErrorCode status = U_ZERO_ERROR;
+    ResourceBundle bundle(Locale::getDataDirectory(), inLocale, status);
+    // Suspend checking status until later...
+
+    UnicodeString key(RB_DISPLAY_NAME_PREFIX);
+    key.append(ID);
+
+    // Try to retrieve a UnicodeString* from the bundle.  The result,
+    // if any, should NOT be deleted.
+    const UnicodeString* resString = bundle.getString(key, status);
+
+    if (U_SUCCESS(status) && resString != 0) {
+        return result = *resString; // [sic] assign & return
+    }
+
+    // We have failed to get a name from the locale data.  This is
+    // typical, since most transliterators will not have localized
+    // name data.  The next step is to retrieve the MessageFormat
+    // pattern from the locale data and to use it to synthesize the
+    // name from the ID.
+
+    status = U_ZERO_ERROR;
+    resString = bundle.getString(RB_DISPLAY_NAME_PATTERN, status);
+
+    if (U_SUCCESS(status) && resString != 0) {
+        MessageFormat msg(*resString, inLocale, status);
+        // Suspend checking status until later...
+
+        // We pass either 2 or 3 Formattable objects to msg.
+        Formattable args[3];
+        int32_t i = ID.indexOf((UChar)'-');
+        int32_t nargs;
+        if (i < 0) {
+            args[0].setLong(1); // # of args to follow
+            args[1].setString(ID);
+            nargs = 2;
+        } else {
+            UnicodeString left, right;
+            ID.extractBetween(0, i, left);
+            ID.extractBetween(i+1, ID.length(), right);
+            args[0].setLong(2); // # of args to follow
+            args[1].setString(left);
+            args[2].setString(right);
+            nargs = 3;
+        }
+        FieldPosition pos; // ignored by msg
+        msg.format(args, nargs, result, pos, status);
+        if (U_SUCCESS(status)) {
+            return result;
+        }
+    }
+
+    // We should not reach this point unless there is something
+    // wrong with the build or the RB_DISPLAY_NAME_PATTERN has
+    // been deleted from the root RB_LOCALE_ELEMENTS resource.
+    result = ID;
+    return result;
+}
+
+/**
+ * Returns the filter used by this transliterator, or <tt>null</tt>
+ * if this transliterator uses no filter.  Caller musn't delete
+ * the result!
+ */
+const UnicodeFilter* Transliterator::getFilter() const {
+    return filter;
+}
+
+/**
+ * Changes the filter used by this transliterator.  If the filter
+ * is set to <tt>null</tt> then no filtering will occur.
+ *
+ * <p>Callers must take care if a transliterator is in use by
+ * multiple threads.  The filter should not be changed by one
+ * thread while another thread may be transliterating.
+ */
+void Transliterator::adoptFilter(UnicodeFilter* filterToAdopt) {
+    delete filter;
+    filter = filterToAdopt;
+}
+
+/**
+ * Returns this transliterator's inverse.  See the class
+ * documentation for details.  This implementation simply inverts
+ * the two entities in the ID and attempts to retrieve the
+ * resulting transliterator.  That is, if <code>getID()</code>
+ * returns "A-B", then this method will return the result of
+ * <code>getInstance("B-A")</code>, or <code>null</code> if that
+ * call fails.
+ *
+ * <p>This method does not take filtering into account.  The
+ * returned transliterator will have no filter.
+ *
+ * <p>Subclasses with knowledge of their inverse may wish to
+ * override this method.
+ *
+ * @return a transliterator that is an inverse, not necessarily
+ * exact, of this transliterator, or <code>null</code> if no such
+ * transliterator is registered.
+ * @see #registerInstance
+ */
+Transliterator* Transliterator::createInverse() const {
+    int32_t i = ID.indexOf((UChar)'-');
+    if (i >= 0) {
+        UnicodeString inverseID, right;
+        ID.extractBetween(i+1, ID.length(), inverseID);
+        ID.extractBetween(0, i, right);
+        inverseID.append((UChar)'-').append(right);
+        return _createInstance(inverseID);
+    }
+    return 0;
+}
+
+/**
+ * Returns a <code>Transliterator</code> object given its ID.
+ * The ID must be either a system transliterator ID or a ID registered
+ * using <code>registerInstance()</code>.
+ *
+ * @param ID a valid ID, as enumerated by <code>getAvailableIDs()</code>
+ * @return A <code>Transliterator</code> object with the given ID
+ * @exception IllegalArgumentException if the given ID is invalid.
+ * @see #registerInstance
+ * @see #getAvailableIDs
+ * @see #getID
+ */
+Transliterator* Transliterator::createInstance(const UnicodeString& ID) {
+    Transliterator* t = _createInstance(ID);
+    return t;
+}
+
+/**
+ * This is the path to the subdirectory within the locale data
+ * directory that contains the rule-based transliterator resource
+ * bundle files.  This is constructed dynamically the first time
+ * Transliterator::getDataDirectory() is called.
+ */
+char* Transliterator::DATA_DIR = 0;
+
+/**
+ * This is the name of a subdirectory within the locale data directory
+ * that contains the rule-based transliterator resource bundle files.
+ */
+const char* Transliterator::RESOURCE_SUB_DIR = "translit";
+
+/**
+ * Returns the directory in which the transliterator resource bundle
+ * files are located.  This is a subdirectory, named RESOURCE_SUB_DIR,
+ * under Locale::getDataDirectory().  It ends in a path separator.
+ */
+const char* Transliterator::getDataDirectory() {
+    if (DATA_DIR == 0) {
+        Mutex lock; // Okay to use the global mutex here
+        if (DATA_DIR == 0) {
+            /* Construct the transliterator data directory path.  This
+             * is a subdirectory of the locale data directory.  For
+             * now, we get the separator from the data directory
+             * assuming a path separator of one character.  In the
+             * future we might add API to get the separator.
+             *
+             * TODO: Fix this to get the path separator in some better
+             * way.  File an rfe for this.
+             */
+            const char* data = Locale::getDataDirectory();
+            int32_t len = icu_strlen(data);
+            char sep[2];
+            sep[0] = data[len-1];
+            sep[1] = 0;
+            DATA_DIR = (char*) icu_malloc(
+                                 len + icu_strlen(RESOURCE_SUB_DIR) + 2);
+            if (DATA_DIR == 0) {
+                // This is a fatal unrecoverable error -- what should we do?
+            }
+            icu_strcpy(DATA_DIR, data);
+            icu_strcat(DATA_DIR, RESOURCE_SUB_DIR);
+            icu_strcat(DATA_DIR, sep);
+        }
+    }
+    return DATA_DIR;
+}
+
+inline int32_t Transliterator::hash(const UnicodeString& str) {
+    return str.hashCode() & 0x7FFFFFFF;
+}
+
+/**
+ * Returns a transliterator object given its ID.  Unlike getInstance(),
+ * this method returns null if it cannot make use of the given ID.
+ */
+Transliterator* Transliterator::_createInstance(const UnicodeString& ID) {
+    UErrorCode status = U_ZERO_ERROR;
+
+    if (!cacheInitialized) {
+        initializeCache();
+    }
+
+    Mutex lock(&cacheMutex);
+
+    CacheEntry* entry = (CacheEntry*) uhash_get(cache, hash(ID));
+    TransliterationRuleData* data = 0;
+
+    if (entry == 0) {
+        return 0;
+    }
+
+    if (entry->entryType == CacheEntry::RBT_DATA) {
+        data = entry->u.data;
+        // Fall through to construct transliterator from cached Data object.
+    } else if (entry->entryType == CacheEntry::PROTOTYPE) {
+        return entry->u.prototype->clone();
+    } else {
+        // At this point entry type must be either RULE_BASED_PLACEHOLDER
+        // or REVERSE_RULE_BASED_PLACEHOLDER.
+        bool_t isReverse =
+            (entry->entryType ==
+             CacheEntry::REVERSE_RULE_BASED_PLACEHOLDER);
+        
+        // We use the file name, taken from another resource bundle
+        // 2-d array at static init time, as a locale language.  We're
+        // just using the locale mechanism to map through to a file
+        // name; this in no way represents an actual locale.
+        Locale fakeLocale(entry->rbFile);
+
+        ResourceBundle bundle(Transliterator::getDataDirectory(),
+                              fakeLocale, status);
+        
+        // Call RBT to parse the rules from the resource bundle
+
+        // We don't own the rules - 'rules' is an alias pointer to
+        // a string in the RB cache.
+        const UnicodeString* rules = bundle.getString(RB_RULE, status);
+
+        // If rules == 0 at this piont, or if the status indicates a
+        // failure, then we don't have any rules -- there is probably
+        // an installation error.  The list in the root locale should
+        // correspond to all the installed transliterators; if it
+        // lists something that's not installed, we'll get a null
+        // pointer here.
+        if (rules != 0 && U_SUCCESS(status)) {
+
+            data = TransliterationRuleParser::parse(*rules, isReverse
+                                                    ? RuleBasedTransliterator.REVERSE
+                                                    : RuleBasedTransliterator.FORWARD);
+            
+            // Double check to see if someone has modified the entry
+            // since we last looked at it.
+            if (entry->entryType != CacheEntry::RBT_DATA) {
+                entry->entryType = CacheEntry::RBT_DATA;
+                entry->u.data = data;
+            } else {
+                // Oops!  Another thread has updated this cache entry
+                // already to point to a data object.  Discard the
+                // one we just created and use the one in the cache
+                // instead.
+                delete data;
+                data = entry->u.data;
+            }
+        }
+    }
+
+    if (data != 0) {
+        return new RuleBasedTransliterator(ID, data);
+    } else {
+        // We have a failure of some kind.  Remove the ID from the
+        // cache so we don't keep trying.  NOTE: This will throw off
+        // anyone who is, at the moment, trying to iterate over the
+        // available IDs.  That's acceptable since we should never
+        // really get here except under installation, configuration,
+        // or unrecoverable run time memory failures.
+        _unregister(ID);
+        return 0;
+    }
+}
+
+/**
+ * Registers a instance <tt>obj</tt> of a subclass of
+ * <code>Transliterator</code> with the system.  This object must
+ * implement the <tt>clone()</tt> method.  When
+ * <tt>getInstance()</tt> is called with an ID string that is
+ * equal to <tt>obj.getID()</tt>, then <tt>obj.clone()</tt> is
+ * returned.
+ *
+ * @param obj an instance of subclass of
+ * <code>Transliterator</code> that defines <tt>clone()</tt>
+ * @see #getInstance
+ * @see #unregister
+ */
+void Transliterator::registerInstance(Transliterator* adoptedPrototype,
+                                      UErrorCode &status) {    
+    if (!cacheInitialized) {
+        initializeCache();
+    }
+
+    Mutex lock(&cacheMutex);
+    _registerInstance(adoptedPrototype, status);
+}
+
+/**
+ * This internal method registers a prototype instance in the cache.
+ * The CALLER MUST MUTEX using cacheMutex before calling this method.
+ */
+void Transliterator::_registerInstance(Transliterator* adoptedPrototype,
+                                       UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    int32_t hashCode = hash(adoptedPrototype->getID());
+
+    // This needs explaining: The string reference that getID returns
+    // is to the ID data member of Transliterator.  As long as the
+    // Transliterator object exists, this reference is valid, and in
+    // fact we can take its address and store it in IDS.  No problem
+    // there.  The only thing we have to be sure of is that before we
+    // remove the prototype (via unregister()), we remove the ID
+    // entry.
+    cacheIDs.addElement((void*) &adoptedPrototype->getID());
+
+    CacheEntry* entry = (CacheEntry*) uhash_get(cache, hashCode);
+    if (entry == 0) {
+        entry = new CacheEntry();
+    }
+
+    entry->adoptPrototype(adoptedPrototype);
+
+    uhash_putKey(cache, hashCode, entry, &status);
+}
+
+/**
+ * Unregisters a transliterator or class.  This may be either
+ * a system transliterator or a user transliterator or class.
+ * 
+ * @param ID the ID of the transliterator or class
+ * @see #registerInstance
+ */
+void Transliterator::unregister(const UnicodeString& ID) {
+    if (!cacheInitialized) {
+        initializeCache();
+    }
+    Mutex lock(&cacheMutex);
+    _unregister(ID);
+}
+
+/**
+ * Unregisters a transliterator or class.  Internal method.
+ * Prerequisites: The cache must be initialized, and the
+ * caller must own the cacheMutex.
+ */
+void Transliterator::_unregister(const UnicodeString& ID) {
+    cacheIDs.removeElement((void*) &ID);
+	int32_t hc = hash(ID);
+    CacheEntry* entry = (CacheEntry*) uhash_get(cache, hc);
+	if (entry != 0) {
+		UErrorCode status = U_ZERO_ERROR;
+		uhash_remove(cache, hc, &status);
+		delete entry;
+	}
+}
+
+/**
+ * Vector of registered IDs.
+ */
+UVector Transliterator::cacheIDs;
+
+/**
+ * Return the number of IDs currently registered with the system.
+ * To retrieve the actual IDs, call getAvailableID(i) with
+ * i from 0 to countAvailableIDs() - 1.
+ */
+int32_t Transliterator::countAvailableIDs() {
+    if (!cacheInitialized) {
+        initializeCache();
+    }
+    Mutex lock(&cacheMutex);
+    return cacheIDs.size();
+}
+
+/**
+ * Return the index-th available ID.  index must be between 0
+ * and countAvailableIDs() - 1, inclusive.  If index is out of
+ * range, the result of getAvailableID(0) is returned.
+ */
+const UnicodeString& Transliterator::getAvailableID(int32_t index) {
+    if (index < 0 || index >= cacheIDs.size()) {
+        index = 0;
+    }
+    if (!cacheInitialized) {
+        initializeCache();
+    }
+    Mutex lock(&cacheMutex);
+    return *(const UnicodeString*) cacheIDs[index];
+}
+
+/**
+ * Comparison function for UVector.  Compares two UnicodeString
+ * objects given void* pointers to them.
+ */
+bool_t Transliterator::compareIDs(void* a, void* b) {
+    const UnicodeString* aa = (const UnicodeString*) a;
+    const UnicodeString* bb = (const UnicodeString*) b;
+    return *aa == *bb;
+}
+
+void Transliterator::initializeCache() {
+    // Lock first, check init boolean second
+    Mutex lock(&cacheMutex);
+    if (cacheInitialized) {
+        return;
+    }
+        
+    UErrorCode status = U_ZERO_ERROR;
+
+    // Before looking for the resource, construct our cache.
+    // That way if the resource is absent, we will at least
+    // have a valid cache object.
+    cache = uhash_open(uhash_hashUString, &status);
+    cacheIDs.setComparer(compareIDs);
+
+    /* The following code is assuming an n x 3 table
+     * that looks like this:
+     *
+     * RuleBasedTransliteratorIDs {
+     *     { "Latin-Arabic", "Arabic-Latin", "larabic" }
+     *     { "KeyboardEscape-Latin1", "", "keyescl1" }
+     *     ...
+     * }
+     */
+
+    ResourceBundle bundle(Locale::getDataDirectory(),
+                          Locale::getDefault(),
+                          status);
+    int32_t rows, cols;
+    const UnicodeString** ruleBasedIDs =
+        bundle.get2dArray(RB_RULE_BASED_IDS, rows, cols, status);
+        
+    if (U_SUCCESS(status) && (cols == 3)) {
+        for (int32_t i=0; i<rows; ++i) {
+            const UnicodeString* row = ruleBasedIDs[i];
+            for (int32_t col=0; col<2; ++col) {
+                
+                if (row[col].length() > 0) {
+                    CacheEntry* entry = new CacheEntry();
+                    entry->entryType = (col == 0) ?
+                        CacheEntry::RULE_BASED_PLACEHOLDER :
+                        CacheEntry::REVERSE_RULE_BASED_PLACEHOLDER;
+                    entry->rbFile = row[2];
+                    uhash_putKey(cache, hash(row[col]), entry, &status);
+
+                    /* It's okay to take the address of the string
+                     * from the resource bundle under the assumption
+                     * that the RB is caching these, and that they
+                     * stay around forever.  If this changes, what we
+                     * need to do is change the id vector so that it
+                     * owns its strings and create a copy here.
+                     */
+                    cacheIDs.addElement((void*) &row[col]);
+                }
+            }
+        }
+    }
+
+    // Manually add prototypes that the system knows about to the
+    // cache.  This is how new non-rule-based transliterators are
+    // added to the system.
+
+    status = U_ZERO_ERROR; // Reset status for following calls
+    _registerInstance(new HexToUnicodeTransliterator(), status);
+    _registerInstance(new UnicodeToHexTransliterator(), status);
+
+    cacheInitialized = TRUE;
+}
+
+Transliterator::CacheEntry::CacheEntry() {
+    u.prototype = 0;
+    entryType = NONE;
+}
+
+Transliterator::CacheEntry::~CacheEntry() {
+    if (entryType == PROTOTYPE) {
+        delete u.prototype;
+    }
+}
+
+void Transliterator::CacheEntry::adoptPrototype(Transliterator* adopted) {
+    if (entryType == PROTOTYPE) {
+        delete u.prototype;
+    }
+    entryType = PROTOTYPE;
+    u.prototype = adopted;
+}
