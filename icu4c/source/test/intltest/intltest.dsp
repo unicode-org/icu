@@ -960,14 +960,6 @@ SOURCE=.\cpdtrtst.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\hxuntrts.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\hxuntrts.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\ittrans.cpp
 # End Source File
 # Begin Source File
@@ -1013,22 +1005,6 @@ SOURCE=.\trnserr.cpp
 # Begin Source File
 
 SOURCE=.\trnserr.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\ufltlgts.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\ufltlgts.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\unhxtrts.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\unhxtrts.h
 # End Source File
 # End Group
 # End Target

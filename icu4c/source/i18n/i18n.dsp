@@ -670,22 +670,6 @@ SOURCE=.\usrchimp.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\buddhcal.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\buddhcal.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\islamcal.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\islamcal.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\astro.cpp
 # End Source File
 # Begin Source File
@@ -694,23 +678,15 @@ SOURCE=.\astro.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\buddhcal.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\buddhcal.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\calendar.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\chnsecal.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\chnsecal.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\hebrwcal.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\hebrwcal.h
 # End Source File
 # Begin Source File
 
@@ -758,6 +734,14 @@ InputPath=.\unicode\calendar.h
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\chnsecal.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\chnsecal.h
 # End Source File
 # Begin Source File
 
@@ -1229,6 +1213,22 @@ SOURCE=.\gregoimp.cpp
 # Begin Source File
 
 SOURCE=.\gregoimp.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\hebrwcal.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\hebrwcal.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\islamcal.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\islamcal.h
 # End Source File
 # Begin Source File
 
@@ -1982,14 +1982,6 @@ SOURCE=.\funcrepl.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\hextouni.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\hextouni.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\name2uni.cpp
 # End Source File
 # Begin Source File
@@ -2189,57 +2181,6 @@ SOURCE=.\uni2name.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\unifltlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\unicode\unifltlg.h
-
-!IF  "$(CFG)" == "i18n - Win32 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\unifltlg.h
-
-"..\..\include\unicode\unifltlg.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\unifltlg.h
-
-"..\..\include\unicode\unifltlg.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Release"
-
-# Begin Custom Build
-InputPath=.\unicode\unifltlg.h
-
-"..\..\include\unicode\unifltlg.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "i18n - Win64 Debug"
-
-# Begin Custom Build
-InputPath=.\unicode\unifltlg.h
-
-"..\..\include\unicode\unifltlg.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy    $(InputPath)    ..\..\include\unicode
-
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
-# Begin Source File
-
 SOURCE=.\unicode\unirepl.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
@@ -2284,14 +2225,6 @@ InputPath=.\unicode\unirepl.h
 
 !ENDIF 
 
-# End Source File
-# Begin Source File
-
-SOURCE=.\unitohex.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\unitohex.h
 # End Source File
 # Begin Source File
 
