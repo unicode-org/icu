@@ -70,7 +70,7 @@ ucol_open(    const    char         *loc,
   if(loc == 0) 
     col = Collator::createInstance(*status);
   else
-    col = Collator::createInstance(Locale().init(loc), *status);
+    col = Collator::createInstance(Locale(loc), *status);
 
   if(col == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;
@@ -248,7 +248,7 @@ ucol_getDisplayName(    const    char        *objLoc,
   if(U_FAILURE(*status)) return -1;
 
   UnicodeString dst(result, resultLength, resultLength);
-  Collator::getDisplayName(Locale().init(objLoc), Locale().init(dispLoc), dst);
+  Collator::getDisplayName(Locale(objLoc), Locale(dispLoc), dst);
   int32_t actLen;
   T_fillOutputParams(&dst, result, resultLength, &actLen, status);
   return actLen;
