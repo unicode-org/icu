@@ -68,6 +68,8 @@ static void TestAppData(void);
 static void TestICUDataName(void);
 static void TestSwapData(void);
 static void PointerTableOfContents(void);
+static void SetBadCommonData(void);
+
 
 void addUDataTest(TestNode** root);
 
@@ -85,6 +87,7 @@ addUDataTest(TestNode** root)
     addTest(root, &TestICUDataName, "udatatst/TestICUDataName" );
     addTest(root, &TestSwapData, "udatatst/TestSwapData" );
     addTest(root, &PointerTableOfContents, "udatatst/PointerTableOfContents" );
+    addTest(root, &SetBadCommonData, "udatatst/SetBadCommonData" );
 }
 
 #if 0
@@ -1442,3 +1445,30 @@ static void PointerTableOfContents() {
     udata_close(dataItem);
 
 }
+
+static void SetBadCommonData(void) {
+    /* It's difficult to test that udata_setCommonData really works within the test framework.
+       So we just test that foolish people can't do bad things. */
+    UErrorCode status;
+
+    /* Check that we don't do anything */
+    status = U_FILE_ACCESS_ERROR;
+    udata_setCommonData(&gOffsetTOCAppData_dat, &status);
+    if (status != U_FILE_ACCESS_ERROR) {
+        log_err("FAIL: udata_setCommonData changed the failure code.\n");
+    }
+    /* Check that we fail correctly */
+    status = U_ZERO_ERROR;
+    udata_setCommonData(NULL, &status);
+    if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("FAIL: udata_setCommonData did not fail with bad arguments.\n");
+    }
+    /* Check that we don't change the common data. Many ICU tests will fail after this test, if this works. */
+    /* We could do a better test, if we called u_cleanup and udata_setCommonData returned the last value. */
+    status = U_ZERO_ERROR;
+    udata_setCommonData(&gOffsetTOCAppData_dat, &status);
+    if (status != U_USING_DEFAULT_WARNING) {
+        log_err("FAIL: udata_setCommonData allowed the data to be changed after initialization!\n");
+    }
+}
+
