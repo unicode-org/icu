@@ -582,7 +582,9 @@
                 <include name="**/pnames.icu"/>
                 <include name="**/*.res"/>
                 <include name="**/*.brk"/>
-                <exclude name="**/coll/*.*"/>
+                <exclude name="**/coll/*.res"/>
+                <exclude name="**/translit/*.res"/>
+                <exclude name="**/rbnf/*.res"/>
             </patternset>
         </unjar>
         <touch file="${build.dir}/${icu4j.data.path}/uprops.icu"/>
@@ -624,6 +626,8 @@
                 <include name="**/unames.icu"/>
                 <include name="**/*.res"/>
                 <exclude name="**/coll/*.res"/>
+                <exclude name="**/translit/*.res"/>
+                <exclude name="**/rbnf/*.res"/>
             </patternset>
         </unjar>
         <touch file="${build.dir}/${icu4j.data.path}/uprops.icu"/>
@@ -651,6 +655,7 @@
                 <!-- arrgh, includes attributes of patternset does not work here in ant 1.5.3 -->
                 <include name="**/*.icu"/>
                 <include name="**/*.res"/>
+                <exclude name="**/translit/*.res"/>
             </patternset>
         </unjar>
         <touch file="${build.dir}/${icu4j.data.path}/uprops.icu"/>
