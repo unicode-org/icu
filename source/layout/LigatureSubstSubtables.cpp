@@ -33,7 +33,7 @@ le_uint32 LigatureSubstitutionSubtable::process(GlyphIterator *glyphIterator, co
             TTGlyphID ligGlyph = SWAPW(ligTable->ligGlyph);
             le_uint16 comp;
 
-            if (filter != NULL && ! filter->accept(ligGlyph)) {
+            if (filter != NULL && ! filter->accept(LE_SET_GLYPH(glyph, ligGlyph))) {
                 continue;
             }
 
@@ -49,7 +49,7 @@ le_uint32 LigatureSubstitutionSubtable::process(GlyphIterator *glyphIterator, co
 
             if (comp == compCount) {
                 GlyphIterator tempIterator(*glyphIterator);
-                LEGlyphID deletedGlyph = tempIterator.ignoresMarks()? 0xFFFE : 0xFFFF;
+                TTGlyphID deletedGlyph = tempIterator.ignoresMarks()? 0xFFFE : 0xFFFF;
 
                 while (comp > 0) {
                     tempIterator.setCurrGlyphID(deletedGlyph);

@@ -30,7 +30,7 @@ const LookupSegment *BinarySearchLookupTable::lookupSegment(const LookupSegment 
     le_int16  unity = SWAPW(unitSize);
     le_int16  probe = SWAPW(searchRange);
     le_int16  extra = SWAPW(rangeShift);
-    TTGlyphID ttGlyph = LE_GET_GLYPH(glyph);
+    TTGlyphID ttGlyph = (TTGlyphID) LE_GET_GLYPH(glyph);
     const LookupSegment *entry = segments;
     const LookupSegment *trial = (const LookupSegment *) ((char *) entry + extra);
 
@@ -59,7 +59,7 @@ const LookupSingle *BinarySearchLookupTable::lookupSingle(const LookupSingle *en
     le_int16  unity = SWAPW(unitSize);
     le_int16  probe = SWAPW(searchRange);
     le_int16  extra = SWAPW(rangeShift);
-    TTGlyphID ttGlyph = LE_GET_GLYPH(glyph);
+    TTGlyphID ttGlyph = (TTGlyphID) LE_GET_GLYPH(glyph);
     const LookupSingle *entry = entries;
     const LookupSingle *trial = (const LookupSingle *) ((char *) entry + extra);
 

@@ -58,7 +58,7 @@ le_uint32 PairPositioningFormat1Subtable::process(GlyphIterator *glyphIterator, 
         le_int16 recordSize = sizeof(PairValueRecord) - sizeof(ValueRecord) + valueRecord1Size + valueRecord2Size;
         LEGlyphID secondGlyph = glyphIterator->getCurrGlyphID();
         const PairValueRecord *pairValueRecord =
-            findPairValueRecord(secondGlyph, pairSetTable->pairValueRecordArray, SWAPW(pairSetTable->pairValueCount), recordSize);
+            findPairValueRecord((TTGlyphID) LE_GET_GLYPH(secondGlyph), pairSetTable->pairValueRecordArray, SWAPW(pairSetTable->pairValueCount), recordSize);
 
         if (pairValueRecord == NULL) {
             return 0;
