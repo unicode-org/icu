@@ -273,7 +273,6 @@ u_vformatMessage(    const    char        *locale,
   if(U_FAILURE(*status)) return -1;
 
   int32_t patLen = (patternLength == -1 ? u_strlen(pattern) : patternLength);
-  int32_t actLen;
 
   // ========================================
   // Begin pseudo-parser
@@ -416,8 +415,7 @@ u_vformatMessage(    const    char        *locale,
   FieldPosition fp;
   fmt.format(args, count, res, fp, *status);
 
-  T_fillOutputParams(&res, result, resultLength, &actLen, status);
-  return actLen;
+  return uprv_fillOutputString(res, result, resultLength, status);
 }
 
 // For parse, do the reverse of format:
