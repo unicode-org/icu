@@ -38,8 +38,8 @@ static void TestFileFromICU(UFILE *myFile) {
     U_STRING_INIT(myStringOrig, "My-String", 9);
     u_memset(myUString, 0x2a, sizeof(myUString)/sizeof(*myUString));
     u_memset(uStringBuf, 0x2a, sizeof(uStringBuf)/sizeof(*uStringBuf));
-    memset(myString, 0x2a, sizeof(myString)/sizeof(*myString));
-    memset(testBuf, 0x2a, sizeof(testBuf)/sizeof(*testBuf));
+    memset(myString, '*', sizeof(myString)/sizeof(*myString));
+    memset(testBuf, '*', sizeof(testBuf)/sizeof(*testBuf));
 
     if (myFile == NULL) {
         log_err("Can't write test file.\n");
@@ -874,7 +874,7 @@ static void TestFilePrintCompatibility(void) {
     }\
     /* Reinitialize the buffer to verify null termination works. */\
     u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));\
-    memset(buffer, 0x2a, sizeof(buffer)/sizeof(*buffer));\
+    memset(buffer, '*', sizeof(buffer)/sizeof(*buffer));\
     \
     uNumPrinted = u_fprintf(myFile, uFormat, uValue);\
     u_fclose(myFile);\
@@ -1012,7 +1012,7 @@ static void TestFprintfFormat(void) {
     myFile = u_fopen(STANDARD_TEST_FILE, "w", "en_US_POSIX", NULL);
     /* Reinitialize the buffer to verify null termination works. */
     u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));
-    memset(buffer, 0x2a, sizeof(buffer)/sizeof(*buffer));
+    memset(buffer, '*', sizeof(buffer)/sizeof(*buffer));
     
     uNumPrinted = u_fprintf(myFile, "%d % d %d", -1234, 1234, 1234);
     u_fclose(myFile);
@@ -1050,7 +1050,7 @@ static void TestFScanSetFormat(const char *format, const UChar *uValue, const ch
     /* Reinitialize the buffer to verify null termination works. */
     u_memset(uBuffer, 0x2a, sizeof(uBuffer)/sizeof(*uBuffer));
     uBuffer[sizeof(uBuffer)/sizeof(*uBuffer)-1] = 0;
-    memset(buffer, 0x2a, sizeof(buffer)/sizeof(*buffer));
+    memset(buffer, '*', sizeof(buffer)/sizeof(*buffer));
     buffer[sizeof(buffer)/sizeof(*buffer)-1] = 0;
     
     u_fprintf(myFile, "%S", uValue);
@@ -1061,7 +1061,7 @@ static void TestFScanSetFormat(const char *format, const UChar *uValue, const ch
     if (expectedToPass) {
         u_austrncpy(compBuffer, uBuffer, sizeof(uBuffer)/sizeof(*uBuffer));
         cNumScanned = sscanf(cValue, format, buffer);
-        if (strncmp(buffer, compBuffer, sizeof(uBuffer)/sizeof(*uBuffer)) != 0) {
+        if (strncmp(buffer, compBuffer, sizeof(buffer)/sizeof(*buffer)) != 0) {
             log_err("%s Got: \"%s\", Expected: \"%s\"\n", format, compBuffer, buffer);
         }
         if (cNumScanned != uNumScanned) {
