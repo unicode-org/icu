@@ -283,7 +283,7 @@ typedef struct {
 
 #if MAP_IMPLEMENTATION==MAP_WIN32
     static bool_t
-    MAP_FILE(UDataMemory *pData, const char *path, const char *basename) {
+    uprv_mapFile(UDataMemory *pData, const char *path, const char *basename) {
         char buffer[100];
         HANDLE map;
 
@@ -325,7 +325,7 @@ typedef struct {
     }
 
     static void
-    UNMAP_FILE(UDataMemory *pData) {
+    uprv_unmapFile(UDataMemory *pData) {
         if(pData!=NULL && pData->map!=NULL) {
             UnmapViewOfFile(pData->pHeader);
             CloseHandle(pData->map);
@@ -336,7 +336,7 @@ typedef struct {
 
 #elif MAP_IMPLEMENTATION==MAP_POSIX
     static bool_t
-    MAP_FILE(UDataMemory *pData, const char *path, const char *basename) {
+    uprv_mapFile(UDataMemory *pData, const char *path, const char *basename) {
         int fd;
         int length;
         const char *dataDir;
@@ -375,7 +375,7 @@ typedef struct {
     }
 
     static void
-    UNMAP_FILE(UDataMemory *pData) {
+    uprv_unmapFile(UDataMemory *pData) {
         if(pData!=NULL && pData->map>0) {
             if(munmap(pData->pHeader, pData->map)==-1) {
                 perror("munmap");
@@ -387,7 +387,7 @@ typedef struct {
 
 #elif MAP_IMPLEMENTATION==MAP_FILE_STREAM
     static bool_t
-    MAP_FILE(UDataMemory *pData, const char *path, const char *basename) {
+    uprv_mapFile(UDataMemory *pData, const char *path, const char *basename) {
         FileStream *file;
         int32_t fileLength;
         void *p;
@@ -427,7 +427,7 @@ typedef struct {
     }
 
     static void
-    UNMAP_FILE(UDataMemory *pData) {
+    uprv_unmapFile(UDataMemory *pData) {
         if(pData!=NULL && pData->map!=NULL) {
             uprv_free(pData->map);
             pData->map=NULL;
@@ -732,7 +732,7 @@ openCommonData(UDataMemory *pData,
     uprv_strcpy(suffix, "." DATA_TYPE);
 
     /* try path/basename first, then basename only */
-    if(MAP_FILE(pData, pathBuffer, basename) || MAP_FILE(pData, basename, basename)) {
+    if(uprv_mapFile(pData, pathBuffer, basename) || uprv_mapFile(pData, basename, basename)) {
         const DataHeader *pHeader;
         *basename=0;
 
@@ -747,7 +747,7 @@ openCommonData(UDataMemory *pData,
              pHeader->info.dataFormat[3]==0x44 &&
              pHeader->info.formatVersion[0]==1)
         ) {
-            UNMAP_FILE(pData);
+            uprv_unmapFile(pData);
             pData->flags=0;
             *pErrorCode=U_INVALID_FORMAT_ERROR;
             return NULL;
@@ -941,7 +941,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
         *suffix++='_';
         uprv_strcpy(suffix, tocEntryName);
 
-        if(MAP_FILE(&dataMemory, pathBuffer, basename) || MAP_FILE(&dataMemory, basename, basename)) {
+        if(uprv_mapFile(&dataMemory, pathBuffer, basename) || uprv_mapFile(&dataMemory, basename, basename)) {
             pHeader=dataMemory.pHeader;
             if(pHeader->dataHeader.magic1==0xda && pHeader->dataHeader.magic2==0x27 &&
                pHeader->info.isBigEndian==U_IS_BIG_ENDIAN &&
@@ -950,7 +950,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
                 /* acceptable */
                 pEntryData=(UDataMemory *)uprv_malloc(sizeof(UDataMemory));
                 if(pEntryData==NULL) {
-                    UNMAP_FILE(&dataMemory);
+                    uprv_unmapFile(&dataMemory);
                     *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
                     return NULL;
                 }
@@ -959,7 +959,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
                 return pEntryData;
             } else {
                 /* the data is not acceptable, look further */
-                UNMAP_FILE(&dataMemory);
+                uprv_unmapFile(&dataMemory);
                 errorCode=U_INVALID_FORMAT_ERROR;
             }
         }
@@ -967,7 +967,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
 
     /* try path+entryName next */
     uprv_strcpy(basename, tocEntryName);
-    if(MAP_FILE(&dataMemory, pathBuffer, basename) || MAP_FILE(&dataMemory, basename, basename)) {
+    if(uprv_mapFile(&dataMemory, pathBuffer, basename) || uprv_mapFile(&dataMemory, basename, basename)) {
         pHeader=dataMemory.pHeader;
         if(pHeader->dataHeader.magic1==0xda && pHeader->dataHeader.magic2==0x27 &&
            pHeader->info.isBigEndian==U_IS_BIG_ENDIAN &&
@@ -976,7 +976,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
             /* acceptable */
             pEntryData=(UDataMemory *)uprv_malloc(sizeof(UDataMemory));
             if(pEntryData==NULL) {
-                UNMAP_FILE(&dataMemory);
+                uprv_unmapFile(&dataMemory);
                 *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
                 return NULL;
             }
@@ -985,7 +985,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
             return pEntryData;
         } else {
             /* the data is not acceptable, look further */
-            UNMAP_FILE(&dataMemory);
+            uprv_unmapFile(&dataMemory);
             errorCode=U_INVALID_FORMAT_ERROR;
         }
     }
@@ -1009,7 +1009,7 @@ unloadDataMemory(UDataMemory *pData) {
         switch(pData->flags&DATA_MEMORY_TYPE_MASK) {
         case FLAT_DATA_MEMORY:
             if(IS_MAP(pData->map)) {
-                UNMAP_FILE(pData);
+                uprv_unmapFile(pData);
             }
             break;
         case DLL_DATA_MEMORY:
