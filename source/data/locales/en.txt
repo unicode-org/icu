@@ -502,7 +502,7 @@ en {
         is  { "Icelandic" }
         it  { "Italian" }
         iu  { "Inuktitut" }
-        iw  { "Hebrew" }  // Use he instead
+        //iw  { "Hebrew" }  // Use he instead
         ja  { "Japanese" }
         //ji  { "Yiddish" } // Use yi instead
         jpr { "Judeo-Persian" }

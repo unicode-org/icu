@@ -259,7 +259,6 @@ ca {
         gu { "gujarati" }
         ha { "hausa" }
         he { "hebreu" }
-        iw { "hebreu" }
         hi { "hindi" }
         hu { "hongar\u00E8s" }
         is { "island\u00E8s" }
