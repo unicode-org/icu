@@ -175,62 +175,6 @@ writeUCDFilename(char *basename, const char *filename, const char *suffix) {
     uprv_strcpy(basename+length, ".txt");
 }
 
-/*
- * parse a list of code points
- * store them as a string in dest[destSize] with the string length in dest[0]
- * set the first code point in *pFirst
- * return the number of code points
- */
-static int32_t
-parseCodePoints(const char *s,
-                UChar *dest, int32_t destSize,
-                uint32_t *pFirst,
-                UErrorCode *pErrorCode) {
-    char *end;
-    uint32_t value;
-    int32_t i, count;
-
-    if(pFirst!=NULL) {
-        *pFirst=0xffff;
-    }
-
-    count=0;
-    i=1; /* leave dest[0] for the length value */
-    for(;;) {
-        s=u_skipWhitespace(s);
-        if(*s==';' || *s==0) {
-            dest[0]=(UChar)(i-1);
-            return count;
-        }
-
-        /* read one code point */
-        value=(uint32_t)uprv_strtoul(s, &end, 16);
-        if(end<=s || (*end!=' ' && *end!='\t' && *end!=';') || value>=0x110000) {
-            fprintf(stderr, "genprops: syntax error parsing code point at %s\n", s);
-            *pErrorCode=U_PARSE_ERROR;
-            return -1;
-        }
-
-        /* store the first code point */
-        if(++count==1 && pFirst!=NULL) {
-            *pFirst=value;
-        }
-
-        /* append it to the destination array */
-        UTF_APPEND_CHAR(dest, i, destSize, value);
-
-        /* overflow? */
-        if(i>=destSize) {
-            fprintf(stderr, "genprops: code point sequence too long at at %s\n", s);
-            *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-            return -1;
-        }
-
-        /* go to the following characters */
-        s=end;
-    }
-}
-
 /* parser for BidiMirroring.txt --------------------------------------------- */
 
 #define MAX_MIRROR_COUNT 2000
@@ -321,9 +265,12 @@ specialCasingLineFn(void *context,
     } else {
         /* just set the "complex" flag and get the case mappings */
         specialCasings[specialCasingCount].isComplex=FALSE;
-        parseCodePoints(fields[1][0], specialCasings[specialCasingCount].lowerCase, 32, NULL, pErrorCode);
-        parseCodePoints(fields[3][0], specialCasings[specialCasingCount].upperCase, 32, NULL, pErrorCode);
-        parseCodePoints(fields[2][0], specialCasings[specialCasingCount].titleCase, 32, NULL, pErrorCode);
+        specialCasings[specialCasingCount].lowerCase[0]=
+            (UChar)u_parseString(fields[1][0], specialCasings[specialCasingCount].lowerCase+1, 31, NULL, pErrorCode);
+        specialCasings[specialCasingCount].upperCase[0]=
+            (UChar)u_parseString(fields[3][0], specialCasings[specialCasingCount].upperCase+1, 31, NULL, pErrorCode);
+        specialCasings[specialCasingCount].titleCase[0]=
+            (UChar)u_parseString(fields[2][0], specialCasings[specialCasingCount].titleCase+1, 31, NULL, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
             fprintf(stderr, "genprops: error parsing special casing at %s\n", fields[0][0]);
             exit(*pErrorCode);
@@ -418,14 +365,15 @@ caseFoldingLineFn(void *context,
     }
 
     /* get the mapping */
-    count=parseCodePoints(fields[2][0], caseFoldings[caseFoldingCount].full, 32, &caseFoldings[caseFoldingCount].simple, pErrorCode);
+    count=caseFoldings[caseFoldingCount].full[0]=
+        (UChar)u_parseString(fields[2][0], caseFoldings[caseFoldingCount].full+1, 31, &caseFoldings[caseFoldingCount].simple, pErrorCode);
     if(U_FAILURE(*pErrorCode)) {
         fprintf(stderr, "genprops: error parsing CaseFolding.txt mapping at %s\n", fields[0][0]);
         exit(*pErrorCode);
     }
 
-    /* there is a simple mapping only if there is exactly one code point */
-    if(count!=1) {
+    /* there is a simple mapping only if there is exactly one code point (count is in UChars) */
+    if(count==0 || count>2 || (count==2 && UTF_IS_SINGLE(caseFoldings[caseFoldingCount].full[1]))) {
         caseFoldings[caseFoldingCount].simple=0;
     }
 
