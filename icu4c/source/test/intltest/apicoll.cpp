@@ -1396,48 +1396,165 @@ void CollationAPITest::TestGetLocale() {
   const char *rules = "&a<x<y<z";
   UChar rlz[256] = {0};
   uint32_t rlzLen = u_unescape(rules, rlz, 256);
-  rlz[rlzLen] = 0;
 
-  const char *openLoc[] = {
-  /* opening from a nonexistent locale should get root */
-    "blahehe",
-  /* opening from down the tree should get a first locale with data */
-      "sr_YU",
-      "ar_KW",
-      "fr_FR_nonexistent",
-  };
-
-  const char *expectLoc[] = {
-    "root",
-      "root",
-      "ar",
-      "fr",
-  };
-
-  int32_t i = 0;
-  Collator *coll  = NULL;
+  Collator *coll = NULL;
   Locale locale;
 
-  for(i = 0; i<sizeof(openLoc)/sizeof(openLoc[0]); i++) {
-    coll  = Collator::createInstance(openLoc[i], status);
-    locale = coll->getLocale(status);
-    if(locale != expectLoc[i]) {
-      errln("Bad locale: expected %s, got %s", expectLoc[i], locale);
+  int32_t i = 0;
+
+  struct {
+    char* requestedLocale;
+    char* validLocale;
+    char* actualLocale;
+  } testStruct[] = {
+    { "sr_YU", "sr_YU", "root" },
+    { "sh_YU", "sh_YU", "sh" },
+    { "en_US_CALIFORNIA", "en_US", "root" },
+    { "fr_FR_NONEXISTANT", "fr_FR", "fr" }
+  };
+
+  /* test opening collators for different locales */
+  for(i = 0; i<sizeof(testStruct)/sizeof(testStruct[0]); i++) {
+    status = U_ZERO_ERROR;
+    coll = Collator::createInstance(testStruct[i].requestedLocale, status);
+    if(U_FAILURE(status)) {
+      log("Failed to open collator for %s with %s\n", testStruct[i].requestedLocale, u_errorName(status));
+      delete coll;
+      continue;
     }
-    if(locale.isBogus() == TRUE) {
-      errln("Collators instanitated from a locale should not return a bogus locale");
+    locale = coll->getLocale(ULOC_REQUESTED_LOCALE, status);
+    if(locale != testStruct[i].requestedLocale) {
+      log("[Coll %s]: Error in requested locale, expected %s, got %s\n", testStruct[i].requestedLocale, testStruct[i].requestedLocale, locale);
+    }
+    locale = coll->getLocale(ULOC_VALID_LOCALE, status);
+    if(locale != testStruct[i].validLocale) {
+      log("[Coll %s]: Error in valid locale, expected %s, got %s\n", testStruct[i].requestedLocale, testStruct[i].validLocale, locale);
+    }
+    locale = coll->getLocale(ULOC_ACTUAL_LOCALE, status);
+    if(locale != testStruct[i].actualLocale) {
+      log("[Coll %s]: Error in actual locale, expected %s, got %s\n", testStruct[i].requestedLocale, testStruct[i].actualLocale, locale);
     }
     delete coll;
   }
 
-  /* opening from rules should get us NULL locale */
+  /* completely non-existant locale for collator should get a default collator */
+  {
+    Collator *defaultColl = Collator::createInstance(NULL, status);
+    coll = Collator::createInstance("blahaha", status);
+    if(coll->getLocale(ULOC_REQUESTED_LOCALE, status) != "blahaha") {
+      log("Nonexisting locale didn't preserve the requested locale\n");
+    }
+    if(coll->getLocale(ULOC_VALID_LOCALE, status) !=
+      defaultColl->getLocale(ULOC_VALID_LOCALE, status)) {
+      log("Valid locale for nonexisting locale locale collator differs "
+        "from valid locale for default collator\n");
+    }
+    if(coll->getLocale(ULOC_ACTUAL_LOCALE, status) != 
+      defaultColl->getLocale(ULOC_ACTUAL_LOCALE, status)) {
+      log("Actual locale for nonexisting locale locale collator differs "
+        "from actual locale for default collator\n");
+    }
+    delete coll;
+    delete defaultColl;
+  }
+
+    
+
+  /* collator instantiated from rules should have all three locales NULL */
   coll = new RuleBasedCollator(rlz, status);
-  locale = coll->getLocale(status);
-  if(locale.isBogus() != TRUE) {
-    errln("Rule instantiated collator should return bogus locale");
+  locale = coll->getLocale(ULOC_REQUESTED_LOCALE, status);
+  if(!locale.isBogus()) {
+    log("For collator instantiated from rules, requested locale is not bogus\n", locale);
+  }
+  locale = coll->getLocale(ULOC_VALID_LOCALE, status);
+  if(!locale.isBogus()) {
+    log("For collator instantiated from rules,  valid locale is not bogus\n", locale);
+  }
+  locale = coll->getLocale(ULOC_ACTUAL_LOCALE, status);
+  if(!locale.isBogus()) {
+    log("For collator instantiated from rules, actual locale is not bogus\n", locale);
   }
   delete coll;
 }
+
+#include "unicode/caniter.h"
+#include "unicode/translit.h"
+#include "unicode/uniset.h"
+#include "hash.h"
+
+void CollationAPITest::TestCanonicalIterator() {
+    const char* testCharArray[] = {
+      "\\ud800\\udc00af",
+        "Åd\\u0307\\u0327",
+        "\\u010d\\u017E",
+        "x\\u0307\\u0327",
+    };
+
+    UnicodeString testArray[] = {
+      CharsToUnicodeString(""),
+      CharsToUnicodeString("\\ud800\\udc00af"),
+      CharsToUnicodeString("Åd\\u0307\\u0327"),
+      CharsToUnicodeString("\\u010d\\u017E"),
+      CharsToUnicodeString("x\\u0307\\u0327"),
+    };
+
+    UErrorCode status = U_ZERO_ERROR;
+
+    // set up for readable display
+    Transliterator *name = Transliterator::createInstance("name", UTRANS_FORWARD, status);
+    Transliterator *hex = Transliterator::createInstance("hex", UTRANS_FORWARD, status);
+    
+    // check build
+/*
+    UnicodeSet *ss = CanonicalIterator::getSafeStart(status);
+    ss->toPattern(pattern, TRUE);
+    logln("Safe Start: " + pattern);
+    logln();
+
+    UnicodeSet *ss = CanonicalIterator::getStarts('d', status);
+    UnicodeString pattern;
+    ss->toPattern(pattern, TRUE);
+    logln("Characters with 'a' at the start of their decomposition: " + pattern);
+*/
+    /*
+    // check permute
+    Hashtable *permutations = CanonicalIterator::permute(CharsToUnicodeString("\\ud800\\udc00af"), status);
+    const UHashElement *ne = NULL;
+    int32_t el = -1;
+    UnicodeString permutation;
+
+    ne = permutations->nextElement(el);
+    while (ne != NULL) {
+        permutation += *((UnicodeString *)(ne->value.pointer));
+        permutation += " ";
+        //if (PROGRESS) System.out.println("  Piece: " + piece);
+        ne = permutations->nextElement(el);
+    }
+
+    logln(permutation);
+    */
+    // try samples
+    for (int i = 0; i < sizeof(testArray)/sizeof(testArray[0]); ++i) {
+        logln();
+        UnicodeString testName = testArray[i];
+        name->transliterate(testName);
+        logln("Results for: " + testName);
+        CanonicalIterator it(testArray[i], status);
+        int32_t counter = 0;
+        while (TRUE) {
+            UnicodeString result = it.next();
+            if (result == "") break;
+            testName = result;
+            hex->transliterate(testName);
+            logln(/*++counter + */": " + testName);
+            name->transliterate(result);
+            logln(" = " + result);
+        }
+    }
+    delete name;
+    delete hex;
+}
+
 
 void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par */)
 {
@@ -1462,6 +1579,7 @@ void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &n
         case 15: name = "TestVariableTopSetting"; if (exec) TestVariableTopSetting(); break;
         case 16: name = "TestRules"; if (exec) TestRules(); break;
         case 17: name = "TestGetLocale"; if (exec) TestGetLocale(); break;
+        case 18: name = "TestCanonicalIterator"; if (exec) TestCanonicalIterator(); break;
         default: name = ""; break;
     }
 }
