@@ -278,7 +278,7 @@ static void doTestVariant(UCollator* myCollation, const UChar source[], const UC
         if(U_SUCCESS(status)) { /* probably buffer is not big enough */
           UCollationResult compareResultUTF8 = result, compareResultUTF8Norm = result;
           UCharIterator sIter, tIter;
-          //log_verbose("Strings converted to UTF-8:%s, %s\n", aescstrdup(source,-1), aescstrdup(target,-1));
+          /*log_verbose("Strings converted to UTF-8:%s, %s\n", aescstrdup(source,-1), aescstrdup(target,-1));*/
           uiter_setUTF8(&sIter, utf8Source, utf8SourceLen);
           uiter_setUTF8(&tIter, utf8Target, utf8TargetLen);
        /*uiter_setString(&sIter, source, sLen);
