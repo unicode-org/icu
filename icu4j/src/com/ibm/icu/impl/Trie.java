@@ -214,12 +214,25 @@ public abstract class Trie
     */
     protected static final int INDEX_STAGE_2_SHIFT_ = 2;
     /**
+     * Number of data values in a stage 2 (data array) block.
+     */
+    protected static final int DATA_BLOCK_LENGTH=1<<INDEX_STAGE_1_SHIFT_;
+    /**
     * Mask for getting the lower bits from the input index.
-    * DATA_BLOCK_LENGTH_ - 1.
+    * DATA_BLOCK_LENGTH - 1.
     * @draft 2.1
     */
-    protected static final int INDEX_STAGE_3_MASK_ =
-                                              (1 << INDEX_STAGE_1_SHIFT_) - 1;
+    protected static final int INDEX_STAGE_3_MASK_ = DATA_BLOCK_LENGTH - 1;
+    /** Number of bits of a trail surrogate that are used in index table lookups. */
+    protected static final int SURROGATE_BLOCK_BITS=10-INDEX_STAGE_1_SHIFT_;
+    /**
+     * Number of index (stage 1) entries per lead surrogate.
+     * Same as number of index entries for 1024 trail surrogates,
+     * ==0x400>>INDEX_STAGE_1_SHIFT_
+     */
+    protected static final int SURROGATE_BLOCK_COUNT=(1<<SURROGATE_BLOCK_BITS);
+    /** Length of the BMP portion of the index (stage 1) array. */
+    protected static final int BMP_INDEX_LENGTH=0x10000>>INDEX_STAGE_1_SHIFT_;
     /**
     * Surrogate mask to use when shifting offset to retrieve supplementary
     * values
@@ -421,7 +434,7 @@ public abstract class Trie
     /**
     * Latin 1 option mask
     */
-    private static final int HEADER_OPTIONS_LATIN1_IS_LINEAR_MASK_ = 0x200;
+    protected static final int HEADER_OPTIONS_LATIN1_IS_LINEAR_MASK_ = 0x200;
     /**
     * Constant number to authenticate the byte block
     */
@@ -431,7 +444,7 @@ public abstract class Trie
     */
     private static final int HEADER_OPTIONS_SHIFT_MASK_ = 0xF;
     private static final int HEADER_OPTIONS_INDEX_SHIFT_ = 4;
-    private static final int HEADER_OPTIONS_DATA_IS_32_BIT_ = 0x100;
+    protected static final int HEADER_OPTIONS_DATA_IS_32_BIT_ = 0x100;
     
     /**
     * Flag indicator for Latin quick access data block
