@@ -1950,8 +1950,8 @@ static void TestIncrementalNormalize() {
     UCollationResult result;
 
     {
-        // Test 1.  Run very long unnormalized strings, to force overflow of
-        //          most buffers along the way.
+        /* Test 1.  Run very long unnormalized strings, to force overflow of*/
+        /*          most buffers along the way.*/
         UChar            *strA;
         UChar            *strB;
         
@@ -1972,9 +1972,9 @@ static void TestIncrementalNormalize() {
             strA[sLen]   = 0;
             strB[sLen]   = 0;
             
-            ucol_setStrength(coll, UCOL_TERTIARY);   // Do test with default strength, which runs
-            doTest(coll, strA, strB, UCOL_EQUAL);    //   optimized functions in the impl
-            ucol_setStrength(coll, UCOL_IDENTICAL);   // Do again with the slow, general impl.
+            ucol_setStrength(coll, UCOL_TERTIARY);   /* Do test with default strength, which runs*/
+            doTest(coll, strA, strB, UCOL_EQUAL);    /*   optimized functions in the impl*/
+            ucol_setStrength(coll, UCOL_IDENTICAL);   /* Do again with the slow, general impl.*/
             doTest(coll, strA, strB, UCOL_EQUAL);
         }
         uprv_free(strA);
@@ -1982,9 +1982,9 @@ static void TestIncrementalNormalize() {
     }
 
 
-    //  Test 2:  Non-normal sequence in a string that extends to the last character
-    //         of the string.  Checks a couple of edge cases.
-    //
+    /*  Test 2:  Non-normal sequence in a string that extends to the last character*/
+    /*         of the string.  Checks a couple of edge cases.*/
+    
     {
         UChar strA[] = {0x41, 0x41, 0x300, 0x316, 0};   
         UChar strB[] = {0x41, 0xc0, 0x316, 0};   
@@ -1992,8 +1992,8 @@ static void TestIncrementalNormalize() {
         doTest(coll, strA, strB, UCOL_EQUAL);
     }
 
-    //  Test 3:  Non-normal sequence is terminated by a surrogate pair.
-    //
+    /*  Test 3:  Non-normal sequence is terminated by a surrogate pair.*/
+    
     {
         UChar strA[] = {0x41, 0x41, 0x300, 0x316, 0xD801, 0xDC00, 0};
         UChar strB[] = {0x41, 0xc0, 0x316, 0xD800, 0xDC00, 0};
@@ -2001,8 +2001,8 @@ static void TestIncrementalNormalize() {
         doTest(coll, strA, strB, UCOL_GREATER);
     }
 
-    //  Test 4:  Imbedded nulls do not terminate a string when length is specified.
-    //
+    /*  Test 4:  Imbedded nulls do not terminate a string when length is specified.*/
+    
     {
         UChar strA[] = {0x41, 0x00, 0x42, 0x00};
         UChar strB[] = {0x41, 0x00, 0x00, 0x00};
@@ -2060,9 +2060,9 @@ static void TestIncrementalNormalize() {
         ucol_setStrength(coll, UCOL_TERTIARY);
     }
 
-    //
-    //  Test 5:  Null characters in non-normal source strings.
-    //
+    
+    /*  Test 5:  Null characters in non-normal source strings.*/
+    
     {
         UChar strA[] = {0x41, 0x41, 0x300, 0x316, 0x00, 0x42, 0x00};
         UChar strB[] = {0x41, 0x41, 0x300, 0x316, 0x00, 0x00, 0x00};
@@ -2120,9 +2120,9 @@ static void TestIncrementalNormalize() {
         ucol_setStrength(coll, UCOL_TERTIARY);
     }
 
-    //
-    //  Test 6:  Null character as base of a non-normal combining sequence.
-    //
+    
+    /*  Test 6:  Null character as base of a non-normal combining sequence.*/
+    
     {
         UChar strA[] = {0x41, 0x0, 0x300, 0x316, 0x41, 0x302, 0x00};
         UChar strB[] = {0x41, 0x0, 0x302, 0x316, 0x41, 0x300, 0x00};
