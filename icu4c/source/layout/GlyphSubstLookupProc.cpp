@@ -19,6 +19,7 @@
 #include "AlternateSubstSubtables.h"
 #include "LigatureSubstSubtables.h"
 #include "ContextualSubstSubtables.h"
+#include "ExtensionSubtables.h"
 #include "LookupProcessor.h"
 #include "GlyphSubstLookupProc.h"
 #include "LESwaps.h"
@@ -97,6 +98,14 @@ le_uint32 GlyphSubstitutionLookupProcessor::applySubtable(const LookupSubtable *
         const ChainingContextualSubstitutionSubtable *subtable = (const ChainingContextualSubstitutionSubtable *) lookupSubtable;
 
         delta = subtable->process(this, glyphIterator, fontInstance);
+        break;
+    }
+
+    case gsstExtension:
+    {
+        const ExtensionSubtable *subtable = (const ExtensionSubtable *) lookupSubtable;
+
+        delta = subtable->process(this, lookupType, glyphIterator, fontInstance);
         break;
     }
 

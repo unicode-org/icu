@@ -21,6 +21,7 @@
 #include "MarkToMarkPosnSubtables.h"
 //#include "ContextualPositioningSubtables.h"
 #include "ContextualSubstSubtables.h"
+#include "ExtensionSubtables.h"
 #include "LookupProcessor.h"
 #include "GlyphPosnLookupProc.h"
 #include "LESwaps.h"
@@ -121,6 +122,14 @@ le_uint32 GlyphPositioningLookupProcessor::applySubtable(const LookupSubtable *l
         const ChainingContextualPositioningSubtable *subtable = (const ChainingContextualPositioningSubtable *) lookupSubtable;
 
         delta = subtable->process(this, glyphIterator, fontInstance);
+        break;
+    }
+
+    case gpstExtension:
+    {
+        const ExtensionSubtable *subtable = (const ExtensionSubtable *) lookupSubtable;
+
+        delta = subtable->process(this, lookupType, glyphIterator, fontInstance);
         break;
     }
 
