@@ -41,13 +41,13 @@ public:
     void TestCompatDecomp(void);
     void TestCanonCompose(void);
     void TestCompatCompose(void);
-
+    void TestTibetan(void);
+    void TestCompositionExclusion(void);
 
 private:
     static UnicodeString canonTests[][3];
     static UnicodeString compatTests[][3];
     static UnicodeString hangulCanon[][3];
-    static UnicodeString hangulCompat[][3];
 
 
     //------------------------------------------------------------------------
