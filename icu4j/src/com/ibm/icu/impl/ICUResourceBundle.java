@@ -9,6 +9,7 @@ package com.ibm.icu.impl;
 
 import java.io.File;
 import java.lang.ref.SoftReference;
+import java.net.JarURLConnection;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.Vector;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import com.ibm.icu.util.StringTokenizer;
 import com.ibm.icu.util.ULocale;
@@ -788,22 +791,55 @@ public abstract class ICUResourceBundle extends UResourceBundle{
     }
 
     private static final ArrayList createFullLocaleNameArray(String baseName, ClassLoader root){
+        ArrayList list = new ArrayList();
+        
         URL url = root.getResource(baseName);
         File file = new File(url.getPath());
         File[] files = file.listFiles();
-        ArrayList list = new ArrayList();
-        
-        if(files!=null){
-            for(int i=0; i<files.length; i++){
-                if(!files[i].isDirectory()){
+        if (files != null) {
+	    // then it's a directory...
+            for (int i = 0; i < files.length; i++){
+                if (!files[i].isDirectory()) {
                     String name = files[i].getName();
-                    if(name.indexOf("res_index")<0){
+                    if (name.indexOf("res_index") < 0) {
                         name = name.substring(0, name.lastIndexOf('.'));
                         list.add(name);
                     }
                 }
             }
-        }
+        } else {
+	    // otherwise assume its a jar file...
+	    try {
+		String fileName = url.getPath();
+		int ix = fileName.indexOf("!/");
+		if (ix >= 0) {
+		    fileName = fileName.substring(ix + 2); // truncate after "!/"
+		}
+		JarURLConnection conn = (JarURLConnection)url.openConnection();
+		JarFile jarFile = conn.getJarFile();
+		Enumeration entries = jarFile.entries();
+		while (entries.hasMoreElements()) {
+		    JarEntry entry = (JarEntry)entries.nextElement();
+		    if (!entry.isDirectory()) {
+			String name = entry.getName();
+			if (name.startsWith(fileName)) {
+			    name = name.substring(fileName.length() + 1);
+			    if (name.indexOf('/') == -1 && name.endsWith(".res")) {
+				name = name.substring(0, name.lastIndexOf('.'));
+				list.add(name);
+			    }
+			}
+		    }
+		}
+	    }
+	    catch (Exception e) {
+		if (DEBUG){
+		    System.out.println("icurb jar error: " + e);
+		    Thread.dumpStack();
+		}
+	    }
+	}
+		    
         return list;
     }
 
