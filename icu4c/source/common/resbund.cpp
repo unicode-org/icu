@@ -194,7 +194,7 @@ const char* ResourceBundle::kIndexTag           = "InstalledLocales";
 // character long.
 const char*         ResourceBundle::kDefaultMinorVersion    = "0";
 const char*         ResourceBundle::kVersionSeparator       = ".";
-const UnicodeString ResourceBundle::kVersionTag("Version");
+const char*         ResourceBundle::kVersionTag             = "Version";
 
 ResourceBundleCache*    ResourceBundle::fgUserCache = new ResourceBundleCache();
 VisitedFileCache*       ResourceBundle::fgUserVisitedFiles = new VisitedFileCache();
@@ -581,7 +581,7 @@ ResourceBundle::parseIfUnparsed(const PathInfo& path,
  * locales.  
  */
 const ResourceBundleData* 
-ResourceBundle::getDataForTag(const UnicodeString& tag,
+ResourceBundle::getDataForTag(const char *tag,
 			      UErrorCode& err) const
 {
   err = U_ZERO_ERROR; /* just to make sure there's no fallback/etc left over */
@@ -606,7 +606,7 @@ ResourceBundle::getDataForTag(const UnicodeString& tag,
     if(fData[i] != 0) {
       const ResourceBundleData* s = 
 	(const ResourceBundleData*)uhash_get(fData[i], 
-					     tag.hashCode() & 0x7FFFFFFF);
+					     UnicodeString(tag, "").hashCode() & 0x7FFFFFFF);
       if(s != 0) {
 	err = fDataStatus[i];  /* restore the error from the original lookup. */
 	return s;
@@ -623,7 +623,7 @@ ResourceBundle::getDataForTag(const UnicodeString& tag,
 }
 
 void
-ResourceBundle::getString(  const UnicodeString&    resourceTag,
+ResourceBundle::getString(  const char             *resourceTag,
                             UnicodeString&          theString,
                             UErrorCode&              err) const
 {
@@ -636,7 +636,7 @@ ResourceBundle::getString(  const UnicodeString&    resourceTag,
 }
 
 const UnicodeString*
-ResourceBundle::getString(  const UnicodeString&    resourceTag,
+ResourceBundle::getString(  const char              *resourceTag,
                             UErrorCode&              err) const
 {
   if(U_FAILURE(err)) 
@@ -653,7 +653,7 @@ ResourceBundle::getString(  const UnicodeString&    resourceTag,
 }
 
 const UnicodeString*
-ResourceBundle::getStringArray( const UnicodeString&    resourceTag,
+ResourceBundle::getStringArray( const char             *resourceTag,
                                 int32_t&                count,
                                 UErrorCode&              err) const
 {
@@ -671,7 +671,7 @@ ResourceBundle::getStringArray( const UnicodeString&    resourceTag,
 }
 
 void
-ResourceBundle::getArrayItem(   const UnicodeString&    resourceTag,
+ResourceBundle::getArrayItem(   const char             *resourceTag,
                                 int32_t                 index,
                                 UnicodeString&          theArrayItem,
                                 UErrorCode&              err) const
@@ -685,7 +685,7 @@ ResourceBundle::getArrayItem(   const UnicodeString&    resourceTag,
 }
 
 const UnicodeString*
-ResourceBundle::getArrayItem(   const UnicodeString&    resourceTag,
+ResourceBundle::getArrayItem(   const char             *resourceTag,
                                 int32_t                 index,
                                 UErrorCode&              err) const
 {
@@ -708,7 +708,7 @@ ResourceBundle::getArrayItem(   const UnicodeString&    resourceTag,
 }
 
 const UnicodeString** 
-ResourceBundle::get2dArray(const UnicodeString&   resourceTag,
+ResourceBundle::get2dArray(const char *resourceTag,
 			   int32_t&             rowCount,
 			   int32_t&             columnCount,
 			   UErrorCode&           err) const
@@ -730,7 +730,7 @@ ResourceBundle::get2dArray(const UnicodeString&   resourceTag,
 }
 
 void
-ResourceBundle::get2dArrayItem(const UnicodeString&    resourceTag,
+ResourceBundle::get2dArrayItem(const char *resourceTag,
 			       int32_t              rowIndex,
 			       int32_t              columnIndex,
 			       UnicodeString&       theArrayItem,
@@ -747,7 +747,7 @@ ResourceBundle::get2dArrayItem(const UnicodeString&    resourceTag,
 }
 
 const UnicodeString*
-ResourceBundle::get2dArrayItem(const UnicodeString&    resourceTag,
+ResourceBundle::get2dArrayItem(const char *resourceTag,
 			       int32_t              rowIndex,
 			       int32_t              columnIndex,
 			       UErrorCode&           err) const
@@ -773,7 +773,7 @@ ResourceBundle::get2dArrayItem(const UnicodeString&    resourceTag,
 }
 
 void
-ResourceBundle::getTaggedArrayItem( const UnicodeString&    resourceTag,
+ResourceBundle::getTaggedArrayItem( const char             *resourceTag,
                                     const UnicodeString&    itemTag,
                                     UnicodeString&          theArrayItem,
                                     UErrorCode&              err) const
@@ -788,7 +788,7 @@ ResourceBundle::getTaggedArrayItem( const UnicodeString&    resourceTag,
 }
 
 const UnicodeString*
-ResourceBundle::getTaggedArrayItem( const UnicodeString&    resourceTag,
+ResourceBundle::getTaggedArrayItem( const char             *resourceTag,
                                     const UnicodeString&    itemTag,
                                     UErrorCode&              err) const
 {
@@ -809,7 +809,7 @@ ResourceBundle::getTaggedArrayItem( const UnicodeString&    resourceTag,
 
 extern "C" void 
 T_ResourceBundle_getTaggedArrayUChars(const ResourceBundle*   bundle,
-				      const UnicodeString&    resourceTag,
+				      const char           *resourceTag,
 				      UChar const**         itemTags,
 				      UChar const**         items,
 				      int32_t                    maxItems,
@@ -829,7 +829,7 @@ T_ResourceBundle_getTaggedArrayUChars(const ResourceBundle*   bundle,
 
 void 
 getTaggedArrayUCharsImplementation( const ResourceBundle*   bundle,
-				    const UnicodeString&    resourceTag,
+				    const char           *resourceTag,
 				    UChar const**         itemTags,
 				    UChar const**     items,
 				    int32_t        maxItems,
@@ -867,7 +867,7 @@ getTaggedArrayUCharsImplementation( const ResourceBundle*   bundle,
 }
 
 void
-ResourceBundle::getTaggedArray( const UnicodeString&    resourceTag,
+ResourceBundle::getTaggedArray( const char             *resourceTag,
                                 UnicodeString*&         itemTags,
                                 UnicodeString*&         items,
                                 int32_t&                numItems,

@@ -1406,8 +1406,7 @@ void NumberFormatRegressionTest::Test4122840()
         // will return the localized symbol, not \00a4
         //
         int32_t resCount = 0;
-        const UnicodeString *numPatterns = rb->getStringArray(UnicodeString("NumberPatterns"),
-            resCount, status);
+        const UnicodeString *numPatterns = rb->getStringArray("NumberPatterns", resCount, status);
         failure(status, "rb->getStringArray");
         UnicodeString pattern = numPatterns[1];
         
