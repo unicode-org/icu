@@ -3798,6 +3798,10 @@ unorm_compare(const UChar *s1, int32_t length1,
     f1=f2=d1=d2=0;
     options|=_COMPARE_EQUIV;
     result=0;
+    
+    if(!_haveData(*pErrorCode) || !uprv_haveProperties()) {
+        return 0;
+    }
 
     if(!(options&UNORM_INPUT_IS_FCD)) {
         int32_t _len1, _len2;
