@@ -33,17 +33,36 @@
  ustdio.
 
  * The const char* format specification should use unescape
+ * ufile_locale2codepage should not be used.  Using one of putil.c's functions
+    would be better or some new API would be better.
  * %D and %T printf uses the current timezone, but the scanf version uses GMT.
  * %p should be deprecated. Pointers are 2-16 bytes big and scanf should
     really read them.
- * The format specification should use int32_t and ICU variants instead of
-    compiler dependent int.
+ * The format specification should use int32_t and ICU type variants instead of
+    the compiler dependent int.
  * We should consider using Microsoft's wprintf and wscanf format
     specification.
  * + in printf format specification is incomplete.
+ * Make sure that #, blank and precision in the printf format specification
+    works.
+ * Make sure that * in the scanf format specification works.
  * e and g should lowercase the scientific notation.
  * E and F should uppercase the scientific notation.
+ * Each UFILE takes up at least 2KB. This should be really reduced.
+ * This library does buffering. The OS should do this for us already. Check on
+    this, and remove it from this library, if this is the case. Double buffering
+    wastes a lot of time and space.
+ * There is a locale cache.  It needs to be cleaned up when the library unloads.
+ * Make sure that surrogates are supported.
  * More testing is needed.
+ * #include <iostream> from common/unicode/unistr.h should go into a new
+    separate header (uios.h or ustream.h?) in the ustdio library.  Plenty of
+    people do not use the iostream functionality for Unicode strings, and it
+    will vastly speed up compilation time of .cpp files for those people that
+    don't use it. In some cases, libraries that use ICU should not include
+    iostream.  This new header file should also include operator<< and
+    operator>> for UDate (not double) and UChar *.
+ * fprintf/fscanf should use sprintf/sscanf in order to make testing easier.
 */
 
 
@@ -531,7 +550,7 @@ u_vsnprintf(UChar     *buffer,
  */
 U_CAPI int32_t U_EXPORT2
 u_sprintf_u(UChar      *buffer,
-        const UChar    *locale,
+        const char     *locale,
         const UChar    *patternSpecification,
         ... );
 
@@ -553,9 +572,9 @@ u_sprintf_u(UChar      *buffer,
  * @draft
  */
 U_CAPI int32_t U_EXPORT2
-u_snprintf_u(UChar      *buffer,
-        int32_t       count,
-        const UChar    *locale,
+u_snprintf_u(UChar     *buffer,
+        int32_t        count,
+        const char     *locale,
         const UChar    *patternSpecification,
         ... );
 
@@ -577,7 +596,7 @@ u_snprintf_u(UChar      *buffer,
  */
 U_CAPI int32_t U_EXPORT2
 u_vsprintf_u(UChar     *buffer,
-        const UChar    *locale,
+        const char    *locale,
         const UChar    *patternSpecification,
         va_list        ap);
 
@@ -603,10 +622,10 @@ u_vsprintf_u(UChar     *buffer,
  */
 U_CAPI int32_t U_EXPORT2
 u_vsnprintf_u(UChar     *buffer,
-        int32_t       count,
-        const UChar    *locale,
-        const UChar    *patternSpecification,
-        va_list        ap);
+        int32_t         count,
+        const char     *locale,
+        const UChar     *patternSpecification,
+        va_list         ap);
 
 /* Input string functions */
 
@@ -624,7 +643,7 @@ u_vsnprintf_u(UChar     *buffer,
  */
 U_CAPI int32_t U_EXPORT2
 u_sscanf(UChar         *buffer,
-        const char    *locale,
+        const char     *locale,
         const char     *patternSpecification,
         ... );
 
@@ -646,7 +665,7 @@ u_sscanf(UChar         *buffer,
  */
 U_CAPI int32_t U_EXPORT2
 u_vsscanf(UChar        *buffer,
-        const char    *locale,
+        const char     *locale,
         const char     *patternSpecification,
         va_list        ap);
 
@@ -664,7 +683,7 @@ u_vsscanf(UChar        *buffer,
  */
 U_CAPI int32_t U_EXPORT2
 u_sscanf_u(UChar        *buffer,
-        const UChar     *locale,
+        const char      *locale,
         const UChar     *patternSpecification,
         ... );
 
@@ -686,7 +705,7 @@ u_sscanf_u(UChar        *buffer,
  */
 U_CAPI int32_t U_EXPORT2
 u_vsscanf_u(UChar       *buffer,
-        const UChar     *locale,
+        const char      *locale,
         const UChar     *patternSpecification,
         va_list         ap);
 
