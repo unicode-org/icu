@@ -110,6 +110,7 @@ term-var-ref:
 #                 trailing '*', '?', '+'
 #
 expr-mod:
+    white_space          n  expr-mod
     '*'                  n  expr-cont                               doUnaryOpStar
     '+'                  n  expr-cont                               doUnaryOpPlus
     '?'                  n  expr-cont                               doUnaryOpQuestion
