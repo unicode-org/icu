@@ -79,7 +79,12 @@ void Test4029195()
 
     
     fmdt = myFormatit(df, today);
-    log_verbose("today: %s\n", austrdup(fmdt));
+    if(fmdt) {
+      log_verbose("today: %s\n", austrdup(fmdt));
+    } else {
+      log_data_err("ERROR: couldn't format, exitting test");
+      return;
+    }
     
     temp=(UChar*)malloc(sizeof(UChar) * 10);
     u_uastrcpy(temp, "M yyyy dd");
@@ -411,6 +416,10 @@ void Test4073003()
             
             result =myFormatit(fmt, d);
             result2 =myFormatit(fmt, dd);
+            if(!result || !result2) {
+              log_data_err("Fail: could not format - exitting test");
+              return;
+            }
             if (u_strcmp(result, result2)!=0){
                 log_err("Fail: %s != %s\n", austrdup(result), austrdup(result2) );
                  }
@@ -473,6 +482,10 @@ void Test714(void)
         return;
     }
     result =myFormatit(fmt, d);
+    if(!result) {
+      log_data_err("Fail: could not format - exitting test\n");
+      return;
+    }
     u_uastrcpy(temp, expect);
     if (u_strcmp(result, temp)!=0){
       log_err("Fail: %s != %s\n", austrdup(result), expect);
