@@ -39,7 +39,7 @@ void uprv_growTable(ContractionTable *tbl, UErrorCode *status) {
     }
 }
 
-CntTable *uprv_cnttab_open(CompactIntArray *mapping, UErrorCode *status) {
+CntTable *uprv_cnttab_open(CompactEIntArray *mapping, UErrorCode *status) {
     if(U_FAILURE(*status)) {
         return 0;
     }
@@ -151,11 +151,11 @@ int32_t uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorC
 
 
     uint32_t CE;
-    for(i = 0; i<=0xFFFF; i++) {
-        CE = ucmp32_get(table->mapping, i);
+    for(i = 0; i<=0x10FFFF; i++) {
+        CE = ucmpe32_get(table->mapping, i);
         if(isContraction(CE)) {
             CE = constructContractCE(table->offsets[getContractOffset(CE)]);
-            ucmp32_set(table->mapping, (UChar)i, CE);
+            ucmpe32_set(table->mapping, i, CE);
         }
     }
 
