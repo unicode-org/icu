@@ -42,6 +42,9 @@ Package=<4>
     Project_Dep_Name gennorm
     End Project Dependency
     Begin Project Dependency
+    Project_Dep_Name genpname
+    End Project Dependency
+    Begin Project Dependency
     Project_Dep_Name genprops
     End Project Dependency
     Begin Project Dependency
@@ -318,6 +321,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "genpname"=..\tools\genpname\genpname.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "genprops"=..\tools\genprops\genprops.dsp - Package Owner=<4>
 
 Package=<5>
@@ -529,6 +544,9 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name gennorm
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name genpname
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name genprops
