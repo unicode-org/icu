@@ -25,7 +25,6 @@
 
 #include "unicode/udata.h"
 #include "unicode/ucnv.h"
-#include "unicode/ucnv_err.h"
 #include "unicode/uloc.h"
 #include "utracimp.h"
 #include "ucnv_io.h"
@@ -39,7 +38,7 @@
 #include "cstring.h"
 #include "cmemory.h"
 #include "ucln_cmn.h"
-#include "ustr_imp.h"
+#include "ustr_cnv.h"
 
 
 

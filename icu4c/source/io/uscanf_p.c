@@ -31,7 +31,7 @@
 #include "locbund.h"
 
 #include "cmemory.h"
-#include "ustr_imp.h"
+#include "ustr_cnv.h"
 
 /* flag characters for u_scanf */
 #define FLAG_ASTERISK 0x002A
