@@ -787,8 +787,6 @@ static void TestConvert()
         }
         else
             log_verbose(" ucnv_fromUChars() o.k.\n");
-        /*the codepage intermediate buffer should be null terminated */
-        output_cp_buffer[targetcapacity]='\0';
 
         /*test the conversion routine */
         log_verbose("\n---Testing ucnv_toUChars()\n");
@@ -805,10 +803,10 @@ static void TestConvert()
         if(err==U_BUFFER_OVERFLOW_ERROR)
         {
             err=U_ZERO_ERROR;
-            uchar2=(UChar*)malloc((targetsize) * sizeof(UChar));
+            uchar2=(UChar*)malloc((targetsize+1) * sizeof(UChar));
             targetsize = ucnv_toUChars(myConverter, 
                    uchar2,
-                   targetsize, 
+                   targetsize+1,
                    output_cp_buffer,
                    strlen(output_cp_buffer),
                    &err);
@@ -819,7 +817,7 @@ static void TestConvert()
                 log_verbose(" ucnv_toUChars() o.k.\n");
 
             if(u_strcmp(uchar1,uchar2)!=0) 
-                log_err("equality test failed with convertion routine\n");
+                log_err("equality test failed with conversion routine\n");
         }
         else
         {
@@ -842,12 +840,12 @@ static void TestConvert()
         log_verbose("\n---Testing ucnv_fromUChars() with sourceLength = 0\n");
         targetcapacity = ucnv_fromUChars(myConverter, output_cp_buffer, testLong1,  uchar1, 0, &err);
         if (targetcapacity !=0) {
-            log_err("\nFAILURE: ucnv_fromUChars with sourceLength is expected to fail and return 0\n");
+            log_err("\nFAILURE: ucnv_fromUChars with sourceLength 0 is expected to return 0\n");
         }
-        log_verbose("\n---Testing ucnv_fromUChars() with targetLenth = 0\n");
+        log_verbose("\n---Testing ucnv_fromUChars() with targetLength = 0\n");
         targetcapacity = ucnv_fromUChars(myConverter, output_cp_buffer, 0,  uchar1, -1, &err);
         if (err != U_BUFFER_OVERFLOW_ERROR) {
-            log_err("\nFAILURE: ucnv_fromUChars with targetLength is expected to fail and throw U_BUFFER_OVERFLOW_ERROR\n");
+            log_err("\nFAILURE: ucnv_fromUChars with targetLength 0 is expected to fail and throw U_BUFFER_OVERFLOW_ERROR\n");
         }
         /*toUChars with error conditions*/
         targetsize = ucnv_toUChars(myConverter, uchar2, targetsize, output_cp_buffer, strlen(output_cp_buffer), &err);
@@ -862,12 +860,13 @@ static void TestConvert()
         err=U_ZERO_ERROR;
         targetsize = ucnv_toUChars(myConverter, uchar2, 0, output_cp_buffer, 0, &err);
         if (targetsize !=0) {
-            log_err("\nFAILURE: ucnv_toUChars with sourceLength is expected to fail and return 0\n");
+            log_err("\nFAILURE: ucnv_toUChars with sourceLength 0 is expected to return 0\n");
         }
         targetcapacity2=0; 
         targetsize = ucnv_toUChars(myConverter, NULL, targetcapacity2, output_cp_buffer,  strlen(output_cp_buffer), &err);
-        if (err != U_BUFFER_OVERFLOW_ERROR) {
-            log_err("\nFAILURE: ucnv_toUChars with targetLength is expected to fail and throw U_BUFFER_OVERFLOW_ERROR\n");
+        if (err != U_STRING_NOT_TERMINATED_WARNING) {
+            log_err("\nFAILURE: ucnv_toUChars(targetLength)->%s instead of U_STRING_NOT_TERMINATED_WARNING\n",
+                    u_errorName(err));
         }
         err=U_ZERO_ERROR;
         /*-----*/
