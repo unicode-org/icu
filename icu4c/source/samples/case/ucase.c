@@ -20,7 +20,7 @@
 
 int c_main(UFILE *out)
 {
-  UChar ch;
+  UChar32 ch;
   UErrorCode errorCode = U_ZERO_ERROR;
   static const UChar upper[] = {0x61, 0x42, 0x49, 0}; /* upper = "aBI" */
   static const UChar lower[] = {0x61, 0x42, 0x69, 0}; /* lower = "abi" */
@@ -42,7 +42,7 @@ int c_main(UFILE *out)
   ch = u_totitle(char_k); /* ch = 'K' */
   u_fprintf(out, "totitle(%K) = %K\n", char_k, ch);
   ch = u_foldCase(char_K, U_FOLD_CASE_DEFAULT); /* ch = 'k' */
-  u_fprintf(out, "u_foldCase(%K, U_FOLD_CASE_DEFAULT) = %K\n", char_K, ch);
+  u_fprintf(out, "u_foldCase(%K, U_FOLD_CASE_DEFAULT) = %K\n", char_K, (UChar) ch);
 
   /* ustring.h APIs, UChar * string case mapping with a Turkish locale */
   /* result buffer = "ab?" latin small letter a, latin small letter b, latin
@@ -80,4 +80,6 @@ int c_main(UFILE *out)
   }
   u_fprintf(out, "u_strFoldCase(%U, U_FOLD_CASE_DEFAULT) -> %U\n", unfold, buffer);
   u_fprintf(out, "\n** end of C sample\n");
+
+  return 0;
 }
