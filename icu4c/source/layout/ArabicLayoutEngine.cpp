@@ -24,37 +24,18 @@
 
 U_NAMESPACE_BEGIN
 
-class CharSubstitutionFilter : public UObject, public LEGlyphFilter
+class CharSubstitutionFilter : public UMemory, public LEGlyphFilter
 {
 private:
     const LEFontInstance *fFontInstance;
 
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
+    CharSubstitutionFilter(const CharSubstitutionFilter &other); // forbid copying of this class
+    CharSubstitutionFilter &operator=(const CharSubstitutionFilter &other); // forbid copying of this class
 
 public:
     CharSubstitutionFilter(const LEFontInstance *fontInstance);
     le_bool accept(LEGlyphID glyph) const;
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 2.2
-     */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
-     * @draft ICU 2.2
-     */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
 };
-
-const char CharSubstitutionFilter::fgClassID=0;
 
 CharSubstitutionFilter::CharSubstitutionFilter(const LEFontInstance *fontInstance)
   : fFontInstance(fontInstance)
@@ -176,7 +157,7 @@ UnicodeArabicOpenTypeLayoutEngine::UnicodeArabicOpenTypeLayoutEngine(const LEFon
 
 UnicodeArabicOpenTypeLayoutEngine::~UnicodeArabicOpenTypeLayoutEngine()
 {
-    delete (CharSubstitutionFilter *)fSubstitutionFilter;
+    delete fSubstitutionFilter;
 }
 
 // "glyphs", "indices" -> glyphs, indices

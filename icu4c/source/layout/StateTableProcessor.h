@@ -43,6 +43,10 @@ protected:
     le_int16 lastGlyph;
 
     const MorphStateTableHeader *stateTableHeader;
+
+private:
+    StateTableProcessor(const StateTableProcessor &other); // forbid copying of this class
+    StateTableProcessor &operator=(const StateTableProcessor &other); // forbid copying of this class
 };
 
 U_NAMESPACE_END

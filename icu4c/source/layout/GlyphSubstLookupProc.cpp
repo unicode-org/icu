@@ -25,8 +25,6 @@
 
 U_NAMESPACE_BEGIN
 
-const char GlyphSubstitutionLookupProcessor::fgClassID=0;
-
 GlyphSubstitutionLookupProcessor::GlyphSubstitutionLookupProcessor(
         const GlyphSubstitutionTableHeader *glyphSubstitutionTableHeader,
         LETag scriptTag, LETag languageTag, const LEGlyphFilter *filter, const LETag *featureOrder)

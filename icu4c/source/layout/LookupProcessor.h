@@ -19,7 +19,7 @@
 
 U_NAMESPACE_BEGIN
 
-class LookupProcessor : public UObject {
+class LookupProcessor : public UMemory {
 public:
     static const LETag notSelected;
     static const LETag defaultFeature;
@@ -35,20 +35,6 @@ public:
         GlyphIterator *glyphIterator, const LEFontInstance *fontInstance) const = 0;
 
     virtual ~LookupProcessor();
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 2.2
-     */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
-     * @draft ICU 2.2
-     */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
 
 protected:
     LookupProcessor(const char *baseAddress,
@@ -70,11 +56,8 @@ protected:
 
 private:
 
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
+    LookupProcessor(const LookupProcessor &other); // forbid copying of this class
+    LookupProcessor &operator=(const LookupProcessor &other); // forbid copying of this class
 };
 
 U_NAMESPACE_END
