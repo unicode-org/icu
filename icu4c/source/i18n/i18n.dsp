@@ -1135,6 +1135,14 @@ SOURCE=.\unicode\search.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
 
+# Begin Custom Build
+InputPath=.\unicode\search.h
+
+"..\..\include\unicode\search.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy               unicode\search.h                ..\..\include\unicode
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
 
 # Begin Custom Build
@@ -1238,6 +1246,14 @@ SOURCE=.\strmatch.h
 SOURCE=.\unicode\stsearch.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\stsearch.h
+
+"..\..\include\unicode\stsearch.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy               unicode\stsearch.h                ..\..\include\unicode
+
+# End Custom Build
 
 !ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
 
@@ -1729,6 +1745,14 @@ InputPath=.\unicode\unum.h
 SOURCE=.\unicode\usearch.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\usearch.h
+
+"..\..\include\unicode\usearch.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy                unicode\usearch.h                ..\..\include\unicode
+
+# End Custom Build
 
 !ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
 
