@@ -93,6 +93,7 @@ class CollationElementIterator;
  * this subject see the <a href="http://oss.software.ibm.com/icu/userguide/Collate_Customization.html">
  * Collation customization</a> section of the users guide.
  * <p>
+ * Note, RuleBasedCollator is not to be subclassed.
  * @see        Collator
  * @version    2.0 11/15/2001
  */
