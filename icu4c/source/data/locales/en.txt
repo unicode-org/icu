@@ -1198,60 +1198,62 @@ en {
         "#E0",
     }
     Scripts {
-        ARAB { "Arabic" }
-        ARMN { "Armenian" }
-        BENG { "Bengali" }
-        BOPO { "Bopomofo" }
-        BRAI { "Braille" }
-        BUHD { "Buhid" }
-        CANS { "Unified Canadian Aboriginal Symbols" }
-        CHER { "Cherokee" }
-        CPRT { "Cypriot" }
-        CYRL { "Cyrillic" }
-        DEVA { "Devanagari" }
-        DSRT { "Deseret" }
-        ETHI { "Ethiopic" }
-        GEOR { "Georgian" }
-        GOTH { "Gothic" }
-        GREK { "Greek" }
-        GUJR { "Gujarati" }
-        GURU { "Gurmukhi" }
-        HANG { "Hangul" }
-        HANO { "Hanunoo" }
-        HANI { "Han" }
-        HEBR { "Hebrew" }
-        HIRA { "Hiragana" }
-        ITAL { "Old_italic" }
-        KANA { "Katakana" }
-        KHMR { "Khmer" }
-        KNDA { "Kannada" }
-        LAOO { "Lao" }
-        LATN { "Latin" }
-        LIMB { "Limbu" }
-        LINB { "Linear B" }
-        MLYM { "Malayalam" }
-        MONG { "Mongolian" }
-        MYMR { "Myanmar" }
-        OGAM { "Ogham" }
-        ORYA { "Oriya" }
-        OSMA { "Osmanya" }
-        QAAC { "Coptic" }
-        QAAI { "Inherited" }
-        RUNR { "Runic" }
-        SHAW { "Shavian" }
-        SINH { "Sinhala" }
-        SYRC { "Syriac" }
-        TAGB { "Tagbanwa" }
-        TALE { "Tai Le" }
-        TAML { "Tamil" }
-        TELU { "Telugu" }
-        TGLG { "Tagalog" }
-        THAA { "Thana" }
-        THAI { "Thai" }
-        TIBT { "Tibetan" }
-        UGAR { "Ugaritic" }
-        YIII { "Yi" }
-        ZYYY { "Common" }
+        Arab { "Arabic" }
+        Armn { "Armenian" }
+        Beng { "Bengali" }
+        Bopo { "Bopomofo" }
+        Brai { "Braille" }
+        Buhd { "Buhid" }
+        Cans { "Unified Canadian Aboriginal Symbols" }
+        Cher { "Cherokee" }
+        Cprt { "Cypriot" }
+        Cyrl { "Cyrillic" }
+        Deva { "Devanagari" }
+        Dsrt { "Deseret" }
+        Ethi { "Ethiopic" }
+        Geor { "Georgian" }
+        Goth { "Gothic" }
+        Grek { "Greek" }
+        Gujr { "Gujarati" }
+        Guru { "Gurmukhi" }
+        Hang { "Hangul" }
+        Hano { "Hanunoo" }
+        Hani { "Han" }
+        Hans { "Simplified Han" } // Not a formal part of ISO-15924 yet
+        Hant { "Traditional Han" } // Not a formal part of ISO-15924 yet
+        Hebr { "Hebrew" }
+        Hira { "Hiragana" }
+        Ital { "Old_italic" }
+        Kana { "Katakana" }
+        Khmr { "Khmer" }
+        Knda { "Kannada" }
+        Laoo { "Lao" }
+        Latn { "Latin" }
+        Limb { "Limbu" }
+        Linb { "Linear B" }
+        Mlym { "Malayalam" }
+        Mong { "Mongolian" }
+        Mymr { "Myanmar" }
+        Ogam { "Ogham" }
+        Orya { "Oriya" }
+        Osma { "Osmanya" }
+        Qaac { "Coptic" }
+        Qaai { "Inherited" }
+        Runr { "Runic" }
+        Shaw { "Shavian" }
+        Sinh { "Sinhala" }
+        Syrc { "Syriac" }
+        Tagb { "Tagbanwa" }
+        Tale { "Tai Le" }
+        Taml { "Tamil" }
+        Telu { "Telugu" }
+        Tglg { "Tagalog" }
+        Thaa { "Thana" }
+        //Thai { "Thai" } // Just happens to be a duplicate
+        Tibt { "Tibetan" }
+        Ugar { "Ugaritic" }
+        Yiii { "Yi" }
+        Zyyy { "Common" }
     }
 
     //------------------------------------------------------------
