@@ -224,7 +224,7 @@ main(int argc, char* argv[]) {
             "Usage: %s [-options] [suffix]\n"
             "\n"
             "read the UnicodeData.txt file and other Unicode properties files and\n"
-            "create a binary file " UCASE_DATA_NAME "." UCASE_DATA_TYPE " with the character properties\n"
+            "create a binary file " UCASE_DATA_NAME "." UCASE_DATA_TYPE " with the case mapping properties\n"
             "\n",
             argv[0]);
         fprintf(stderr,
@@ -345,6 +345,34 @@ isToken(const char *token, const char *s) {
     }
 
     return FALSE;
+}
+
+U_CFUNC int32_t
+getTokenIndex(const char *const tokens[], int32_t countTokens, const char *s) {
+    const char *t, *z;
+    int32_t i, j;
+
+    s=u_skipWhitespace(s);
+    for(i=0; i<countTokens; ++i) {
+        t=tokens[i];
+        if(t!=NULL) {
+            for(j=0;; ++j) {
+                if(t[j]!=0) {
+                    if(s[j]!=t[j]) {
+                        break;
+                    }
+                } else {
+                    z=u_skipWhitespace(s+j);
+                    if(*z==';' || *z==0 || *z=='#' || *z=='\r' || *z=='\n') {
+                        return i;
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    return -1;
 }
 
 static void
@@ -596,6 +624,19 @@ parseCaseFolding(const char *filename, UErrorCode *pErrorCode) {
 
 /* parser for UnicodeData.txt ----------------------------------------------- */
 
+/* general categories */
+const char *const
+genCategoryNames[U_CHAR_CATEGORY_COUNT]={
+    "Cn",
+    "Lu", "Ll", "Lt", "Lm", "Lo", "Mn", "Me",
+    "Mc", "Nd", "Nl", "No",
+    "Zs", "Zl", "Zp",
+    "Cc", "Cf", "Co", "Cs",
+    "Pd", "Ps", "Pe", "Pc", "Po",
+    "Sm", "Sc", "Sk", "So",
+    "Pi", "Pf"
+};
+
 static int32_t specialCasingIndex=0, caseFoldingIndex=0;
 
 static void U_CALLCONV
@@ -606,7 +647,7 @@ unicodeDataLineFn(void *context,
     char *end;
     static UChar32 prevCode=0;
     UChar32 value;
-    UBool something=FALSE;
+    int32_t i;
 
     /* reset the properties */
     uprv_memset(&p, 0, sizeof(Props));
@@ -620,9 +661,14 @@ unicodeDataLineFn(void *context,
     }
 
     /* get general category, field 2 */
-    if(isToken("Lt", fields[2][0])) {
-        p.isTitle=TRUE;
-        something=TRUE;
+    i=getTokenIndex(genCategoryNames, U_CHAR_CATEGORY_COUNT, fields[2][0]);
+    if(i>=0) {
+        p.gc=(uint8_t)i;
+    } else {
+        fprintf(stderr, "gencase: unknown general category \"%s\" at code 0x%lx\n",
+            fields[2][0], (unsigned long)p.code);
+        *pErrorCode=U_PARSE_ERROR;
+        exit(U_PARSE_ERROR);
     }
 
     /* get canonical combining class, field 3 */
@@ -632,10 +678,7 @@ unicodeDataLineFn(void *context,
         *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
-    if(value>0) {
-        p.cc=(uint8_t)value;
-        something=TRUE;
-    }
+    p.cc=(uint8_t)value;
 
     /* get uppercase mapping, field 12 */
     value=(UChar32)uprv_strtoul(fields[12][0], &end, 16);
@@ -649,7 +692,6 @@ unicodeDataLineFn(void *context,
         p.upperCase=value;
         uset_add(caseSensitive, p.code);
         uset_add(caseSensitive, value);
-        something=TRUE;
     }
 
     /* get lowercase value, field 13 */
@@ -664,7 +706,6 @@ unicodeDataLineFn(void *context,
         p.lowerCase=value;
         uset_add(caseSensitive, p.code);
         uset_add(caseSensitive, value);
-        something=TRUE;
     }
 
     /* get titlecase value, field 14 */
@@ -679,19 +720,16 @@ unicodeDataLineFn(void *context,
         p.titleCase=value;
         uset_add(caseSensitive, p.code);
         uset_add(caseSensitive, value);
-        something=TRUE;
     }
 
     /* set additional properties from previously parsed files */
     if(specialCasingIndex<specialCasingCount && p.code==specialCasings[specialCasingIndex].code) {
         p.specialCasing=specialCasings+specialCasingIndex++;
-        something=TRUE;
     } else {
         p.specialCasing=NULL;
     }
     if(caseFoldingIndex<caseFoldingCount && p.code==caseFoldings[caseFoldingIndex].code) {
         p.caseFolding=caseFoldings+caseFoldingIndex++;
-        something=TRUE;
 
         /* ignore "Common" mappings (simple==full) that map to the same code point as the regular lowercase mapping */
         if( p.caseFolding->status=='C' &&
@@ -720,9 +758,7 @@ unicodeDataLineFn(void *context,
     }
 
     /* properties for a single code point */
-    if(something) {
-        setProps(&p);
-    }
+    setProps(&p);
 
     prevCode=p.code;
 }
