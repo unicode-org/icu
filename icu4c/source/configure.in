@@ -369,6 +369,22 @@ AC_OUTPUT([Makefile \
 		samples/Makefile samples/date/Makefile samples/cal/Makefile \
 		samples/XMLConverter/Makefile])
 
+dnl create the data directory
+if test -d data
+then
+    :
+else
+    echo creating data
+    mkdir data
+fi
+if test -d data/translit
+then
+    :
+else
+    echo creating data/translit
+    mkdir data/translit
+fi
+
 if test $ICU_USE_THREADS = 0; then
   echo  " *** Note: configuring the ICU without pthread support or testing. If this isn't what you want, then run configure with --enable-threads=yes or check the messages [above] to see why we couldn't find pthread_create()" 1>&6
 fi

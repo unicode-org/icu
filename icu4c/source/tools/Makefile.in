@@ -33,7 +33,8 @@ pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 
 ICUDATADIR=$(pkgdatadir)/$(VERSION)
-SRCDATADIR=$(top_builddir)/../data
+SRCDATADIR=$(top_srcdir)/../data
+OBJDATADIR=$(top_builddir)/data
 
 ## Build directory information
 top_builddir = ..
@@ -98,26 +99,26 @@ all-local: build-local
 DAT_FILES=unames.dat cnvalias.dat tz.dat
 BRK_FILES=char.brk line.brk line_th.brk sent.brk word.brk word_th.brk
 
-DATAFILESD=$(DAT_FILES:%=$(SRCDATADIR)/%)
-DATAFILESB=$(BRK_FILES:%=$(SRCDATADIR)/%)
+DATAFILESD=$(DAT_FILES:%=$(OBJDATADIR)/%)
+DATAFILESB=$(BRK_FILES:%=$(OBJDATADIR)/%)
 
 # copy the right endianness
 
 ifeq (@U_IS_BIG_ENDIAN@,1)
-%.brk: %BE.brk
+%.brk: $(SRCDATADIR)/%BE.brk
 	cp $< $@
 else
-%.brk: %LE.brk
+%.brk: $(SRCDATADIR)/%LE.brk
 	cp $< $@
 endif
 
-include makeconv/ucmfiles.mk
--include makeconv/ucmlocal.mk
+include $(srcdir)/makeconv/ucmfiles.mk
+-include $(srcdir)/makeconv/ucmlocal.mk
 ALL_UCM_SOURCE= $(UCM_SOURCE) $(UCM_SOURCE_LOCAL)
 
 
 UCM_FILES = $(ALL_UCM_SOURCE:%=$(top_srcdir)/../data/%)
-CNV_FILES = $(UCM_FILES:.ucm=.cnv)
+CNV_FILES = $(UCM_FILES:$(top_srcdir)/../data/%.ucm=$(OBJDATADIR)/%.cnv)
 DATAFILESC=$(CNV_FILES)
 
 
@@ -131,8 +132,8 @@ SRCDATAFILES=$(SRCDATAFILESD) $(SRCDATAFILESC) $(SRCDATAFILESB)
 
 
 OBJDATAFILES=$(SRCDATAFILES:%.c=%.o)
-COMMONFILE=$(SRCDATADIR)/icudata.dat
-COMMONDLL=$(SRCDATADIR)/libicudata.$(SO)
+COMMONFILE=$(OBJDATADIR)/icudata.dat
+COMMONDLL=$(OBJDATADIR)/libicudata.$(SO)
 
 # the files to be installed -- the COMMON ones + any stragglers
 UDATA_FILES=icudata.dat
@@ -165,7 +166,7 @@ $(COMMONFILE):	$(DATAFILES)
 	@echo -n Generating common file $(COMMONFILE).  Number of files:
 	-@wc -l gencmn/mkmap.tmp
 	-rm -f $(COMMONFILE)
-	@(cd gencmn ; ICU_DATA=../$(SRCDATADIR)	./gencmn 1000000 mkmap.tmp )
+	@(cd gencmn ; ICU_DATA=$(OBJDATADIR)	./gencmn 1000000 mkmap.tmp )
 	-@ls -l $(COMMONFILE)
 
 build-dll: $(COMMONDLL)
@@ -208,14 +209,14 @@ install-everything: install-files install-dlls
 
 install-files:
 	@for file in $(UDATA_FILES); do \
-	  echo $(INSTALL_DATA) $(top_builddir)/../data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
-	  $(INSTALL_DATA) $(top_builddir)/../data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
+	  echo $(INSTALL_DATA) $(top_builddir)/data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
+	  $(INSTALL_DATA) $(top_builddir)/data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
 	done
 
 install-dlls:
 	@for file in $(UDATA_DLLS); do \
-	  echo $(INSTALL_DATA) $(top_builddir)/../data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
-	  $(INSTALL_DATA) $(top_builddir)/../data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
+	  echo $(INSTALL_DATA) $(top_builddir)/data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
+	  $(INSTALL_DATA) $(top_builddir)/data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
 	done
 
 
