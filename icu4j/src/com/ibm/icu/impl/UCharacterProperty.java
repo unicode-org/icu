@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2002/07/22 23:28:21 $ 
-* $Revision: 1.14 $
+* $Date: 2002/07/30 02:32:55 $ 
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -26,7 +26,7 @@ import com.ibm.icu.text.BreakIterator;
 
 /**
 * <p>Internal class used for Unicode character property database.</p>
-* <p>This classes store binary data read from uprops.dat. 
+* <p>This classes store binary data read from uprops.icu. 
 * It does not have the capability to parse the data into more high-level 
 * information. It only returns bytes of information when required.</p>
 * <p>Due to the form most commonly used for retrieval, array of char is used
@@ -1391,7 +1391,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
     /**
     * Default name of the datafile
     */
-    private static final String DATA_FILE_NAME_ = "data/uprops.dat";
+    private static final String DATA_FILE_NAME_ = "data/uprops.icu";
       
     /**
     * Default buffer size of datafile

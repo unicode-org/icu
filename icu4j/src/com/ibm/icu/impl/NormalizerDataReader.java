@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerDataReader.java,v $
- * $Date: 2002/07/16 00:18:34 $
- * $Revision: 1.5 $
+ * $Date: 2002/07/30 02:32:56 $
+ * $Revision: 1.6 $
  *******************************************************************************
  */
  
@@ -20,7 +20,7 @@ import com.ibm.icu.impl.ICUDebug;
  */
 
 	/*
-	 * Description of the format of unorm.dat version 2.1.
+	 * Description of the format of unorm.icu version 2.1.
 	 *
 	 * Main change from version 1 to version 2:
 	 * Use of new, common Trie instead of normalization-specific tries.
@@ -34,7 +34,7 @@ import com.ibm.icu.impl.ICUDebug;
 	 *
 	 * - Overall partition
 	 *
-	 * unorm.dat customarily begins with a UDataInfo structure, see udata.h and .c.
+	 * unorm.icu customarily begins with a UDataInfo structure, see udata.h and .c.
 	 * After that there are the following structures:
 	 *
 	 * char indexes[INDEX_TOP];           		-- INDEX_TOP=32, see enum in this file
@@ -77,7 +77,7 @@ import com.ibm.icu.impl.ICUDebug;
 	 * See Trie.h and Trie.c.
 	 *
 	 *
-	 * - Tries in unorm.dat
+	 * - Tries in unorm.icu
 	 *
 	 * The first trie (normTrie above)
 	 * provides data for the NF* quick checks and normalization.
@@ -310,7 +310,7 @@ final class NormalizerDataReader {
         return indexes;
     } 
     /**
-    * <p>Reads uprops.dat, parse it into blocks of data to be stored in
+    * <p>Reads unorm.icu, parse it into blocks of data to be stored in
     * NormalizerImpl.</P
     * @param normBytes
     * @param fcdBytes
