@@ -488,7 +488,7 @@ void   T_UConverter_fromUnicode_MBCS_OFFSETS_LOGIC (UConverter * _this,
   return;
 }
 
-UChar T_UConverter_getNextUChar_MBCS(UConverter* converter,
+UChar32 T_UConverter_getNextUChar_MBCS(UConverter* converter,
                                                const char** source,
                                                const char* sourceLimit,
                                                UErrorCode* err)

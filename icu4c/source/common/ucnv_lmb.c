@@ -64,10 +64,10 @@ typedef uint8_t ulmbcs_grp_t;
 
 
 /* special return values for FindLMBCSUniRange */
-#define ULMBCS_AMBIGUOUS_SBCS   0x80   // could fit in more than one 
-                                       // LMBCS sbcs native encoding (example: most accented latin)
-#define ULMBCS_AMBIGUOUS_MBCS   0x81   // could fit in more than one 
-                                       //LMBCS mbcs native encoding (example: Unihan)
+#define ULMBCS_AMBIGUOUS_SBCS   0x80   /* could fit in more than one 
+                                          LMBCS sbcs native encoding (example: most accented latin) */
+#define ULMBCS_AMBIGUOUS_MBCS   0x81   /* could fit in more than one 
+                                          LMBCS mbcs native encoding (example: Unihan) */
 
 /* macro to check compatibility of groups */
 #define ULMBCS_AMBIGUOUS_MATCH(agroup, xgroup) \
@@ -173,7 +173,7 @@ ulmbcs_grp_t FindLMBCSUniRange(UChar uniChar, UErrorCode*    err)
 }
    
 #if 0 
-// JSGTODO (by Brendan?) some incomplete source data from Brendan to be integrated
+/* JSGTODO (by Brendan?) some incomplete source data from Brendan to be integrated */
 
          0xFE30,  ULMBCS_GRP_JA,       ULMBCS_FLAGS_CONTINUE,
          0xFA2E,  ULMBCS_GRP_UNICODE,  ULMBCS_FLAGS_UNICODE,
@@ -233,7 +233,7 @@ int LMBCSConversionWorker (
 
    if (*mbChar == xcnv->subChar[0] || U_FAILURE(localErr) || !bytesConverted )
    {
-      // JSGTODO: are there some local failure modes that ought to be bubbled up in some other way?
+      /* JSGTODO: are there some local failure modes that ought to be bubbled up in some other way? */
       groups_tried[group] = TRUE;
       return 0;
    }
@@ -246,7 +246,7 @@ int LMBCSConversionWorker (
       Uncomment this assert to find them.
    */
 
-   // MyAssert((*pmbChar <= ULMBCS_C0END) || (*pmbChar >= ULMBCS_C1START) || (group == ULMBCS_GRP_EXCEPT));
+   /* MyAssert((*pmbChar <= ULMBCS_C0END) || (*pmbChar >= ULMBCS_C1START) || (group == ULMBCS_GRP_EXCEPT)); */
    
    /* use converted data: first write 0, 1 or two group bytes */
    if (group != ULMBCS_GRP_EXCEPT && extraInfo->OptGroup != group)
@@ -477,14 +477,14 @@ void _LMBCSFromUnicode(UConverter*     _this,
 
 
 /* Return the Unicode representation for the current LMBCS character */
-UChar _LMBCSGetNextUChar(UConverter*   _this,
+UChar32 _LMBCSGetNextUChar(UConverter*   _this,
                          const char**  source,
                          const char*   sourceLimit,
                          UErrorCode*   err)
 {
-   uint8_t  CurByte; // A byte from the input stream
-   UChar uniChar;    // an output UNICODE char
-   UChar mbChar;  // an intermediate multi-byte value (mbcs or LMBCS)
+   uint8_t  CurByte; /* A byte from the input stream */
+   UChar32 uniChar;    /* an output UNICODE char */
+   UChar mbChar;  /* an intermediate multi-byte value (mbcs or LMBCS) */
    CompactShortArray *MyCArray = NULL;
    UConverterDataLMBCS * extraInfo = (UConverterDataLMBCS *) _this->extraInfo;
    ulmbcs_grp_t group = 0; 
@@ -494,16 +494,18 @@ UChar _LMBCSGetNextUChar(UConverter*   _this,
       CurByte = *((uint8_t *) (*source)++);
       uniChar = 0;
 
-      // at entry of each if clause:
-      // 1. 'CurByte' points at the first byte of a LMBCS character
-      // 2. '*source'points to the next byte of the source stream after 'CurByte' 
-
-      // the job of each if clause is:
-      // 1. set '*source' to point at the beginning of next char (nop if LMBCS char is only 1 byte)
-      // 2. set 'uniChar' up with the right Unicode value, or set 'err' appropriately
-    
+      /*
+       * at entry of each if clause:
+       * 1. 'CurByte' points at the first byte of a LMBCS character
+       * 2. '*source'points to the next byte of the source stream after 'CurByte' 
+       *
+       * the job of each if clause is:
+       * 1. set '*source' to point at the beginning of next char (nop if LMBCS char is only 1 byte)
+       * 2. set 'uniChar' up with the right Unicode value, or set 'err' appropriately
+       */
       
-      // First lets check the simple fixed values. 
+      /* First lets check the simple fixed values. */
+      /* JSGTODO (from markus): a switch would be much faster here */
       if (CurByte == 0 || CurByte == ULMBCS_HT || CurByte == ULMBCS_CR || 
           CurByte == ULMBCS_LF || CurByte == ULMBCS_123SYSTEMRANGE || 
           ((CurByte >= ULMBCS_CTRLOFFSET) && (CurByte < ULMBCS_C1START)))
@@ -513,6 +515,13 @@ UChar _LMBCSGetNextUChar(UConverter*   _this,
       else 
       if (CurByte == ULMBCS_GRP_CTRL)  /* Control character group - no opt group update */
       {
+        /* JSGTODO (from markus): please make sure your error code returns are consistent with
+           those of the other converters; the utf implementations return truncated only when
+           the input is too short; if there is nothing at all, then they set index out of bounds.
+           see unicode in here.
+           (and, please, come to a common indentation - brendan 2, you 3??)
+           (plus, no // comments in c code - it breaks many c compilers!)
+         */
          if (*source >= sourceLimit)
          {
             *err = U_TRUNCATED_CHAR_FOUND;
@@ -528,17 +537,70 @@ UChar _LMBCSGetNextUChar(UConverter*   _this,
       {
         uint8_t HighCh, LowCh;
         
- 
-        HighCh = *(*source)++; /* Big-endian Unicode in LMBCs compatibility group*/
-        LowCh = *(*source)++;
-
-        if (HighCh == ULMBCS_UNICOMPATZERO ) 
+        if (*source + 2 > sourceLimit)
         {
-           HighCh = LowCh;
-           LowCh = 0; /* zero-byte in LSB special character */
+          if (*source >= sourceLimit)
+          {
+            *err = U_INDEX_OUTOFBOUNDS_ERROR;
+          }
+          else
+          {
+            *err = U_TRUNCATED_CHAR_FOUND;
+          }
         }
+        else
+        {
+          HighCh = *(*source)++; /* Big-endian Unicode in LMBCS compatibility group*/
+          LowCh = *(*source)++;
 
-        uniChar = (HighCh << 8) | LowCh;
+          if (HighCh == ULMBCS_UNICOMPATZERO ) 
+          {
+             HighCh = LowCh;
+             LowCh = 0; /* zero-byte in LSB special character */
+          }
+
+          uniChar = (HighCh << 8) | LowCh;
+
+          /* UTF-16 means that there may be a surrogate pair */
+          if(UTF_IS_FIRST_SURROGATE(uniChar))
+          {
+            /* assume that single surrogates only occur in Unicode LMBCS sequences */
+            if (*source >= sourceLimit)
+            {
+              *err = U_TRUNCATED_CHAR_FOUND;
+            }
+            else
+            /* is there really Unicode, and a second surrogate?
+               if not, then we ignore it without error
+             */
+            if(**source == ULMBCS_GRP_UNICODE)
+            {
+              if (*source + 3 > sourceLimit)
+              {
+                *err = U_TRUNCATED_CHAR_FOUND;
+              }
+              else
+              {
+                uint16_t second;
+                HighCh = *(*source + 1); /* Big-endian Unicode in LMBCS compatibility group*/
+                LowCh = *(*source + 2);
+
+                if (HighCh == ULMBCS_UNICOMPATZERO ) 
+                {
+                   HighCh = LowCh;
+                   LowCh = 0; /* zero-byte in LSB special character */
+                }
+
+                second = (HighCh << 8) | LowCh;
+                if(UTF_IS_SECOND_SURROGATE(second))
+                {
+                  uniChar = UTF16_GET_PAIR_VALUE(uniChar, second);
+                  *source += 3;
+                }
+              }
+            }
+          }
+        }
                        
       }
       
@@ -601,8 +663,8 @@ UChar _LMBCSGetNextUChar(UConverter*   _this,
          {
             uint8_t HighCh, LowCh;
          
-            // JSGTODO need to deal with case of single byte G1
-            // chars in mbcs groups
+            /* JSGTODO need to deal with case of single byte G1
+               chars in mbcs groups */
 
             HighCh = CurByte;
             LowCh = *(*source)++;
@@ -620,11 +682,29 @@ UChar _LMBCSGetNextUChar(UConverter*   _this,
       else
       {
 #if DEBUG
-         // JSGTODO: assert here: we should never get here.
+         /* JSGTODO: assert here: we should never get here. */
 #endif
          
       }
-// JSGTODO: need to correctly deal with partial chars
+      /* JSGTODO: need to correctly deal with partial chars */
+      /* JSGTODO (from markus :-) - deal with surrogate pairs;
+         see UTF-8/16BE/16LE implementations,
+         http://oss.software.ibm.com/icu/archives/icu/icu.0002/msg00043.html
+
+         behavior: uniChar is now declared UChar32;
+         if(UTF_IS_FIRST_SURROGATE(uniChar)) then check for more input length
+         if too short, then error
+         else get another 16-bit unit
+              if(UTF_IS_SECOND_SURROGATE(second unit)) then
+                  uniChar=UTF16_GET_PAIR_VALUE(uniChar, second unit);
+
+         You may need to do this only when the following LMBCS byte indicates
+         embedded Unicode (ULMBCS_GRP_UNICODE), and get the following surrogate directly
+         from the following two bytes like the UTF-16BE implementation.
+
+         actually, just for the embedded Unicode, i did this. if no other groups
+         in LMBCS can carry single surrogates, then we may be done with my changes.
+       */
       return uniChar;
 }
 
@@ -639,7 +719,7 @@ void _LMBCSToUnicodeWithOffsets(UConverter*    _this,
                      bool_t         flush,
                      UErrorCode*    err)
 {
-   UChar uniChar;    // an output UNICODE char
+   UChar32 uniChar;    /* an output UNICODE char */
    CompactShortArray *MyCArray = NULL;
    UConverterDataLMBCS * extraInfo = (UConverterDataLMBCS *) _this->extraInfo;
    ulmbcs_grp_t group = 0; 
@@ -656,7 +736,7 @@ void _LMBCSToUnicodeWithOffsets(UConverter*    _this,
       return;
    }
 
-#if 0 // JSGTODOD - restore incomplete char handling      
+#if 0 /* JSGTODOD - restore incomplete char handling      */
 
    /* Have we arrived here from a prior conversion ending with a partial char?
       The only possible configurations are:
@@ -717,11 +797,19 @@ void _LMBCSToUnicodeWithOffsets(UConverter*    _this,
       uniChar = _LMBCSGetNextUChar(_this, source, sourceLimit, err);
 
       
-      // last step is always to move the new value into the buffer
+      /* last step is always to move the new value into the buffer */
       if (U_SUCCESS(*err) && uniChar != missingUCharMarker)
       {
-         // JSGTODO  deal with missingUCharMarker case for error/info reporting. 
-         *(*target)++ = uniChar;
+         /* JSGTODO  deal with missingUCharMarker case for error/info reporting. */
+         if(!UTF_NEED_MULTIPLE_UCHAR(uniChar)) {
+            *(*target)++ = (UChar)uniChar;
+         } else {
+            /* JSGTODO (from markus)
+               write several UChar's for this UChar32;
+               you may need to use macros like UTF_APPEND_CHAR() or similar (from utf.h)
+               what does this mean for the target range check and for the offsets?
+             */
+         }
          if(offsets)
          {
             offsets++;
@@ -730,7 +818,7 @@ void _LMBCSToUnicodeWithOffsets(UConverter*    _this,
        }
    }
 #if 0
-   // JSGTODO restore partial char handling 
+   /* JSGTODO restore partial char handling */
    /* Check to see if we've fallen through because of a partial char */
    if (*err == U_TRUNCATED_CHAR_FOUND)
    {
