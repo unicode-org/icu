@@ -104,8 +104,10 @@ struct UConverterSharedData {
 
 struct UConverter {
     uint32_t toUnicodeStatus;           /* Used to internalize stream status information */
+    uint8_t toUBytes[7];                /* more "toU status"; keeps the bytes of the current character */
+    int8_t toULength;                   /* number of bytes in toUBytes */
     uint32_t fromUnicodeStatus;
-    UChar    fromUSurrogateLead;
+    UChar    fromUSurrogateLead;        /* similar to toUBytes; keeps the lead surrogate of the current character */
     int32_t mode;
     UBool  useFallback;
 
@@ -116,10 +118,10 @@ struct UConverter {
     int8_t UCharErrorBufferLength;      /* number of valid UChars in charErrorBuffer */
 
     uint8_t subChar[UCNV_MAX_SUBCHAR_LEN];              /* codepage specific character sequence */
-    char invalidCharBuffer[UCNV_MAX_SUBCHAR_LEN];
+    char invalidCharBuffer[UCNV_MAX_SUBCHAR_LEN];       /* bytes from last error/callback situation */
     uint8_t charErrorBuffer[UCNV_ERROR_BUFFER_LENGTH];  /* codepage output from Error functions */
 
-    UChar invalidUCharBuffer[3];
+    UChar invalidUCharBuffer[3];                        /* UChars from last error/callback situation */
     UChar UCharErrorBuffer[UCNV_ERROR_BUFFER_LENGTH];   /* unicode output from Error functions */
 
     /*
