@@ -119,8 +119,8 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
     case UCHAR_DEFAULT_IGNORABLE_CODE_POINT:
         /* Cf+Cc+Cs+Other_Default_Ignorable_Code_Point-White_Space */
         return (FLAG(u_charType(c))&(_Cf|_Cc|_Cs))!=0 ||
-                (u_getUnicodeProperties(c, 1)&
-                    (FLAG(UPROPS_OTHER_DEFAULT_IGNORABLE_CODE_POINT)|FLAG(UPROPS_WHITE_SPACE))==
+                ((u_getUnicodeProperties(c, 1)&
+                    (FLAG(UPROPS_OTHER_DEFAULT_IGNORABLE_CODE_POINT)|FLAG(UPROPS_WHITE_SPACE)))==
                 FLAG(UPROPS_OTHER_DEFAULT_IGNORABLE_CODE_POINT));
     case UCHAR_DEPRECATED:
         return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_DEPRECATED))!=0;
@@ -139,13 +139,13 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
          * u_charType(c out of range) returns Cn so we need not check for the range
          */
         return (FLAG(u_charType(c))&(_Cc|_Cf|_Cs|_Co|_Cn|_Zl|_Zp|_Me|_Mn|_Mc))==0 &&
-                (u_getUnicodeProperties(c, 1)&
-                    (FLAG(UPROPS_GRAPHEME_LINK)|FLAG(UPROPS_OTHER_GRAPHEME_EXTEND))==0);
+                ((u_getUnicodeProperties(c, 1)&
+                    (FLAG(UPROPS_GRAPHEME_LINK)|FLAG(UPROPS_OTHER_GRAPHEME_EXTEND)))==0);
     case UCHAR_GRAPHEME_EXTEND:
         /* Me+Mn+Mc+Other_Grapheme_Extend-Grapheme_Link */
         return (FLAG(u_charType(c))&(_Me|_Mn|_Mc))!=0 ||
-                (u_getUnicodeProperties(c, 1)&
-                    (FLAG(UPROPS_OTHER_GRAPHEME_EXTEND)|FLAG(UPROPS_GRAPHEME_LINK))==
+                ((u_getUnicodeProperties(c, 1)&
+                    (FLAG(UPROPS_OTHER_GRAPHEME_EXTEND)|FLAG(UPROPS_GRAPHEME_LINK)))==
                 FLAG(UPROPS_OTHER_GRAPHEME_EXTEND));
     case UCHAR_GRAPHEME_LINK:
         return (u_getUnicodeProperties(c, 1)&FLAG(UPROPS_GRAPHEME_LINK))!=0;
