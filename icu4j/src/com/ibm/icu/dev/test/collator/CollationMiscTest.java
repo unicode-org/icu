@@ -18,10 +18,7 @@ import com.ibm.icu.text.*;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Utility;
-//import com.ibm.icu.impl.ICULocaleData;
-//import com.ibm.icu.impl.ICUListResourceBundle;
 import java.util.Locale;
-//import java.util.ResourceBundle;
 
 public class CollationMiscTest extends TestFmwk{
 
@@ -559,7 +556,7 @@ public class CollationMiscTest extends TestFmwk{
         }
         // logln("Test non characters");
         
-        genericOrderingTestWithResult((RuleBasedCollator)coll, test, 0);
+        genericOrderingTestWithResult(coll, test, 0);
     }
     
     public void TestExtremeCompression() {
@@ -1590,7 +1587,7 @@ public class CollationMiscTest extends TestFmwk{
         for (int i = 0; i < locale.length; i ++) {
             Locale l = locale[i];
             try {
-                ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,l);
+                ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_COLLATION_BASE_NAME,l);
                 String collkey 
                     = (String)rb.getObjectWithFallback("collations/default"); 
                 ICUResourceBundle elements 
@@ -1658,7 +1655,7 @@ public class CollationMiscTest extends TestFmwk{
             String strA = "AA\u0300\u0316\uD800\uDC01";
             String strB = "A\u00c0\u0316\uD800\uDC00";
             coll.setStrength(Collator.IDENTICAL);
-            CollationTest.doTest(this, (RuleBasedCollator)coll, strA, strB, 1);
+            CollationTest.doTest(this, coll, strA, strB, 1);
         } catch (Exception e) {
             errln(e.getMessage());
         }
@@ -1887,6 +1884,9 @@ public class CollationMiscTest extends TestFmwk{
         String rule = "&x < a &z < a";
         try {
             RuleBasedCollator coll = new RuleBasedCollator(rule);
+            if(coll!=null){
+                errln("Did not get the expected exception");   
+            }
         } catch (Exception e) {
             errln("Error creating RuleBasedCollator with " + rule + " failed");
         }
