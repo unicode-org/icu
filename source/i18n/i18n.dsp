@@ -1066,6 +1066,14 @@ SOURCE=.\unicode\rbnf.h
 
 !IF  "$(CFG)" == "i18n - Win32 Release"
 
+# Begin Custom Build
+InputPath=.\unicode\rbnf.h
+
+"..\..\include\unicode\rbnf.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy                unicode\rbnf.h                ..\..\include\unicode
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
 
 # Begin Custom Build
