@@ -128,7 +128,7 @@ udata_getMemory(UDataMemory *pData) {
  * @internal Currently used only in cintltst/udatatst.c
  */
 U_CAPI int32_t U_EXPORT2
-udata_getLength(UDataMemory *pData) {
+udata_getLength(const UDataMemory *pData) {
     if(pData!=NULL && pData->pHeader!=NULL && pData->length>=0) {
         /*
          * subtract the header size,
@@ -146,7 +146,7 @@ udata_getLength(UDataMemory *pData) {
  * @internal
  */
 U_CAPI const void * U_EXPORT2
-udata_getRawMemory(UDataMemory *pData) {
+udata_getRawMemory(const UDataMemory *pData) {
     if(pData!=NULL && pData->pHeader!=NULL) {
         return pData->pHeader;
     } else {
