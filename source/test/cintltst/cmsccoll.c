@@ -4535,12 +4535,12 @@ static void TestMoreBefore(void) {
         { "r","R","x","X","q","Q","s","z","n" }, 9},
         { "&[before 3] s <<< x <<< X << q <<< Q < z", 
         { "r","R","x","X","s","q","Q","z","n" }, 9},
-        { "&[before 1] \u24DC < x <<< X << q <<< Q < z",
-        { "x","X","q","Q","z","n","m","\u24DC","M" }, 9},
-        { "&[before 2] \u24DC << x <<< X << q <<< Q < z",
-        { "x","X","q","Q","m","\u24DC","M","z","n" }, 9},
-        { "&[before 3] \u24DC <<< x <<< X << q <<< Q < z",
-        { "m","x","X","\u24DC","M","q","Q","z","n" }, 9}
+        { "&[before 1] \\u24DC < x <<< X << q <<< Q < z",
+        { "x","X","q","Q","z","n","m","\\u24DC","M" }, 9},
+        { "&[before 2] \\u24DC << x <<< X << q <<< Q < z",
+        { "x","X","q","Q","m","\\u24DC","M","z","n" }, 9},
+        { "&[before 3] \\u24DC <<< x <<< X << q <<< Q < z",
+        { "m","x","X","\\u24DC","M","q","Q","z","n" }, 9}
     };
 
     int32_t i = 0;
