@@ -219,7 +219,7 @@ RuleBasedBreakIterator::operator==(const BreakIterator& that) const {
     const RuleBasedBreakIterator& that2 = (const RuleBasedBreakIterator&) that;
     if (fText == that2.fText ||
         (fText != NULL && that2.fText != NULL && *that2.fText == *fText)) {
-        if (that2.fData == fData || 
+        if (that2.fData == fData ||
             (fData != NULL && that2.fData != NULL && *that2.fData == *fData)) {
             r = TRUE;
         }
@@ -475,12 +475,12 @@ int32_t RuleBasedBreakIterator::following(int32_t offset) {
     // otherwise, set our internal iteration position (temporarily)
     // to the position passed in.  If this is the _beginning_ position,
     // then we can just use next() to get our return value
-    
+
     int32_t result = 0;
 
     if (fData->fSafeRevTable != NULL) {
         // new rule syntax
-        /// todo synwee 
+        /// todo synwee
         fText->setIndex(offset);
         // move forward one codepoint to prepare for moving back to a
         // safe point.
@@ -500,9 +500,9 @@ int32_t RuleBasedBreakIterator::following(int32_t offset) {
         fText->previous32();
         // handle next will give result >= offset
         handleNext(fData->fSafeFwdTable);
-        // previous will give result 0 or 1 boundary away from offset, 
+        // previous will give result 0 or 1 boundary away from offset,
         // most of the time
-        // we have to 
+        // we have to
         int32_t oldresult = previous();
         while (oldresult > offset) {
             int32_t result = previous();
@@ -584,9 +584,9 @@ int32_t RuleBasedBreakIterator::preceding(int32_t offset) {
         // handle previous will give result <= offset
         handlePrevious(fData->fSafeRevTable);
 
-        // next will give result 0 or 1 boundary away from offset, 
+        // next will give result 0 or 1 boundary away from offset,
         // most of the time
-        // we have to 
+        // we have to
         int32_t oldresult = next();
         while (oldresult < offset) {
             int32_t result = next();
@@ -779,8 +779,8 @@ int32_t RuleBasedBreakIterator::handleNext(const RBBIStateTable *statetable) {
         }
 
         if (row->fLookAhead != 0) {
-            if (lookaheadStatus != 0 
-                && row->fAccepting == lookaheadStatus) { 
+            if (lookaheadStatus != 0
+                && row->fAccepting == lookaheadStatus) {
                 // Lookahead match is completed.  Set the result accordingly, but only
                 // if no other rule has matched further in the mean time.
                 result               = lookaheadResult;
@@ -817,7 +817,7 @@ continueOn:
             // We have advanced through the string until it is certain that no
             //   longer match is possible, no matter what characters follow.
             break;
-        } 
+        }
     }
 
     // The state machine is done.  Check whether it found a match...
@@ -839,6 +839,13 @@ continueOn:
     return result;
 }
 
+
+//----------------------------------------------------------------
+//
+//   handlePrevious(void)     This is the variant used with old style rules
+//                            (Overshoot to a safe point, then move forward)
+//
+//----------------------------------------------------------------
 int32_t RuleBasedBreakIterator::handlePrevious(void) {
     if (fText == NULL || fData == NULL) {
         return 0;
@@ -991,10 +998,10 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
     int32_t            state              = START_STATE;
     int32_t            category;
     int32_t            lastCategory       = 0;
-    UBool              hasPassedStartText = !fText->hasPrevious(); 
+    UBool              hasPassedStartText = !fText->hasPrevious();
     UChar32            c                  = fText->previous32();
     // previous character
-    int32_t            result             = fText->getIndex(); 
+    int32_t            result             = fText->getIndex();
     int32_t            lookaheadStatus    = 0;
     int32_t            lookaheadResult    = 0;
     int32_t            lookaheadTagIdx    = 0;
@@ -1017,7 +1024,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
     // loop until we reach the beginning of the text or transition to state 0
     for (;;) {
         // if (c == CharacterIterator::DONE && fText->hasPrevious()==FALSE) {
-        if (hasPassedStartText) { 
+        if (hasPassedStartText) {
             // if we have already considered the start of the text
             if (row->fLookAhead != 0 && lookaheadResult == 0) {
                 result = 0;
@@ -1052,7 +1059,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
         state = row->fNextState[category];
         row = (RBBIStateTableRow *)
             (statetable->fTableData + (state * statetable->fRowLen));
-    
+
         if (row->fAccepting == -1) {
             // Match found, common case, could have lookahead so we move on to check it
             result = fText->getIndex();
@@ -1061,8 +1068,8 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
         }
 
         if (row->fLookAhead != 0) {
-            if (lookaheadStatus != 0 
-                && row->fAccepting == lookaheadStatus) { 
+            if (lookaheadStatus != 0
+                && row->fAccepting == lookaheadStatus) {
                 // Lookahead match is completed.  Set the result accordingly, but only
                 // if no other rule has matched further in the mean time.
                 result               = lookaheadResult;
@@ -1085,7 +1092,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
                 }
                 category = lastCategory;
                 fText->setIndex(result);
-              
+
                 goto continueOn;
             }
 
@@ -1105,12 +1112,12 @@ int32_t RuleBasedBreakIterator::handlePrevious(const RBBIStateTable *statetable)
         lookaheadStatus = 0;     // clear out any pending look-ahead matches.
 
 continueOn:
-        if (state == STOP_STATE) { 
+        if (state == STOP_STATE) {
             break;
         }
 
         // then advance one character backwards
-        hasPassedStartText = !fText->hasPrevious(); 
+        hasPassedStartText = !fText->hasPrevious();
         c = fText->previous32();
     }
 
@@ -1186,7 +1193,7 @@ int32_t  RuleBasedBreakIterator::getRuleStatus() const {
 
 
 int32_t RuleBasedBreakIterator::getRuleStatusVec(
-             int32_t *fillInVec, int32_t capacity, UErrorCode &status) 
+             int32_t *fillInVec, int32_t capacity, UErrorCode &status)
 {
     if (U_FAILURE(status)) {
         return 0;
@@ -1197,7 +1204,7 @@ int32_t RuleBasedBreakIterator::getRuleStatusVec(
     int32_t  numVals = fData->fRuleStatusTable[fLastRuleStatusIndex];
     int32_t  numValsToCopy = numVals;
     if (numVals > capacity) {
-        status = U_BUFFER_OVERFLOW_ERROR;   
+        status = U_BUFFER_OVERFLOW_ERROR;
         numValsToCopy = capacity;
     }
     int i;
