@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2003/02/28 17:19:50 $
-* $Revision: 1.66 $
+* $Date: 2003/05/07 15:57:01 $
+* $Revision: 1.67 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -182,8 +182,9 @@
 
     <target name ="coreData" depends="init">
         <copy todir="${build.dir}/com/ibm/icu/impl/data">
-        <fileset dir="${src.dir}/com/ibm/icu/impl/data"
-                 includes="Transliterator_*.txt,*.icu"/>
+              <fileset dir="${src.dir}/com/ibm/icu/impl/data"
+                 includes="Transliterator_*.txt,*.icu"
+                 excludes="**/CVS/**/*,Transliterator_Han_Latin_*.txt"/>
         </copy>
     </target>
 
@@ -502,10 +503,12 @@
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
          <copy todir="${build.dir}/com/ibm/icu/impl/data">
-              <fileset dir="${src.dir}/com/ibm/icu/impl/data" includes="Transliterator_*.txt"/>
-              <fileset dir="${src.dir}/com/ibm/icu/impl/data/" includes="unames.icu,unorm.icu" />
+              <fileset dir="${src.dir}/com/ibm/icu/impl/data" includes="Transliterator_*.txt"
+                                excludes="Transliterator_Han_Latin_*.txt"/>
+              <fileset dir="${src.dir}/com/ibm/icu/impl/data/" includes="unames.icu,unorm.icu"/>
          </copy>
-        <!-- Calendar does not require Collation data, BreakIterator data -->
+
+        <!-- Transliterator does not require Collation data, BreakIterator data -->
         <delete>
             <fileset dir="${build.dir}/com/ibm/icu/impl/data/" includes="*.col,*.brk,*.utf8"/>
         </delete>
@@ -568,5 +571,12 @@
             debug="on" deprecation="off"/>
         <copy file="${src.dir}/com/ibm/icu/dev/data/th18057.txt"
             todir="${build.dir}/com/ibm/icu/dev/data/"/>
+    </target>
+    
+    <!-- build the extra Transliterator data pertaining to Han-Latin transliteration -->
+    <target name="extraTransliteratorData" depends="init">
+        <copy todir="${build.dir}/com/ibm/icu/impl/data">
+              <fileset dir="${src.dir}/com/ibm/icu/impl/data" includes="Transliterator_Han_Latin_*.txt"/>
+        </copy>
     </target>
 </project>
