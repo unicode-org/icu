@@ -107,11 +107,6 @@ RBBINode::~RBBINode() {
         // Storage ownership of children handled elsewhere.  Don't delete here.
         break;
 
-    case uset:
-        delete fLeftChild;
-        // For usets, don't delete the right child; it's used to form a linked list of usets.
-        break;
-
     default:
         delete        fLeftChild;
         fLeftChild =   NULL;
@@ -258,7 +253,7 @@ void   RBBINode::findNodes(UVector *dest, RBBINode::NodeType kind, UErrorCode &s
     if (fLeftChild != NULL) {
         fLeftChild->findNodes(dest, kind, status);
     }
-    if (fRightChild !=NULL && fType != RBBINode::uset) {
+    if (fRightChild != NULL) {
         fRightChild->findNodes(dest, kind, status);
     }
 }
@@ -331,9 +326,7 @@ void RBBINode::printTree(UBool printHeading, UBool doVars) {
             fLeftChild->printTree(FALSE);
         }
 
-        // Note:  The right child field of uset nodes is borrowed to link them into a list
-        //        They are actually a leaf node as far as the tree is concerned.
-        if (fRightChild != NULL  && this->fType != RBBINode::uset) {
+        if (fRightChild != NULL) {
             fRightChild->printTree(FALSE);
         }
     }
