@@ -29,6 +29,7 @@ static void printUSeq(const UChar* a, int len);
 void TestNewConvertWithBufferSizes(int32_t osize, int32_t isize) ;
 void TestConverterTypesAndStarters(void);
 void TestAmbiguous(void);
+void TestLatin1(void);
 void TestUTF8(void);
 void TestLMBCS(void);
 void TestJitterbug255(void);
@@ -106,6 +107,7 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestOutBufSizes, "tsconv/nucnvtst/TestOutBufSizes");
    addTest(root, &TestConverterTypesAndStarters, "tsconv/nucnvtst/TestConverterTypesAndStarters");
    addTest(root, &TestAmbiguous, "tsconv/nucnvtst/TestAmbiguous");
+   addTest(root, &TestLatin1, "tsconv/nucnvtst/TestLatin1");
    addTest(root, &TestUTF8, "tsconv/nucnvtst/TestUTF8");
    addTest(root, &TestLMBCS, "tsconv/nucnvtst/TestLMBCS");
    addTest(root, &TestJitterbug255, "tsconv/nucnvtst/TestJitterbug255");
@@ -705,6 +707,50 @@ void TestAmbiguous()
     ucnv_close(ascii_cnv);
 }
   
+void
+TestLatin1() {
+    /* test input */
+    static const uint8_t in[]={
+        0x61, 0, 0xe9, 0x5c
+    };
+
+    /* expected test results */
+    static const uint32_t results[]={
+        /* number of bytes read, code point */
+        1, 0x61,
+        1, 0,
+        1, 0xe9,
+        1, 0x5c
+    };
+
+    const char *s=(const char *)in, *s0, *limit=(const char *)in+sizeof(in);
+    const uint32_t *r=results;
+
+    UErrorCode errorCode=U_ZERO_ERROR;
+    uint32_t c;
+
+    UConverter *cnv=ucnv_open("ISO-8859-1", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("Unable to open an ISO-8859-1 converter: %s\n", u_errorName(errorCode));
+    }
+
+    while(s<limit) {
+        s0=s;
+        c=ucnv_getNextUChar(cnv, &s, limit, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            log_err("ISO-8859-1 ucnv_getNextUChar() failed: %s\n", u_errorName(errorCode));
+            break;
+        } else if((uint32_t)(s-s0)!=*r || c!=(UChar32)*(r+1)) {
+            log_err("ISO-8859-1 ucnv_getNextUChar() result %lx from %d bytes, should have been %lx from %d bytes.\n",
+                c, (s-s0), *(r+1), *r);
+            break;
+        }
+        r+=2;
+    }
+
+    ucnv_close(cnv);
+}
+
 void
 TestUTF8() {
     /* test input */
