@@ -17,6 +17,9 @@
 
 const UChar TransliterationRule::ETHER = 0xFFFF;
 
+static const UChar APOSTROPHE = 0x0027; // '
+static const UChar BACKSLASH  = 0x005C; // \
+
 /**
  * Construct a new rule with the given input, output text, and other
  * attributes.  A cursor position may be specified for the output text.
@@ -486,10 +489,37 @@ void TransliterationRule::_appendToRule(UnicodeString& rule,
     if (isLiteral ||
         (escapeUnprintable && UnicodeSet::_isUnprintable(c))) {
         if (quoteBuf.length() > 0) {
-            rule.append((UChar) 0x0027 /*'*/);
-            rule.append(quoteBuf);
-            rule.append((UChar) 0x0027 /*'*/);
-            quoteBuf.truncate(0);
+            // We prefer backslash APOSTROPHE to double APOSTROPHE
+            // (more readable, less similar to ") so if there are
+            // double APOSTROPHEs at the ends, we pull them outside
+            // of the quote.
+
+            // If the first thing in the quoteBuf is APOSTROPHE
+            // (doubled) then pull it out.
+            while (quoteBuf.length() >= 2 &&
+                   quoteBuf.charAt(0) == APOSTROPHE &&
+                   quoteBuf.charAt(1) == APOSTROPHE) {
+                rule.append(BACKSLASH).append(APOSTROPHE);
+                quoteBuf.remove(0, 2);
+            }
+            // If the last thing in the quoteBuf is APOSTROPHE
+            // (doubled) then remove and count it and add it after.
+            int32_t trailingCount = 0;
+            while (quoteBuf.length() >= 2 &&
+                   quoteBuf.charAt(quoteBuf.length()-2) == APOSTROPHE &&
+                   quoteBuf.charAt(quoteBuf.length()-1) == APOSTROPHE) {
+                quoteBuf.truncate(quoteBuf.length()-2);
+                ++trailingCount;
+            }
+            if (quoteBuf.length() > 0) {
+                rule.append(APOSTROPHE);
+                rule.append(quoteBuf);
+                rule.append(APOSTROPHE);
+                quoteBuf.truncate(0);
+            }
+            while (trailingCount-- > 0) {
+                rule.append(BACKSLASH).append(APOSTROPHE);
+            }
         }
         if (!escapeUnprintable || !UnicodeSet::_escapeUnprintable(rule, c)) {
             rule.append(c);
@@ -497,10 +527,9 @@ void TransliterationRule::_appendToRule(UnicodeString& rule,
     }
 
     // Escape ' and '\' and don't begin a quote just for them
-    else  if (quoteBuf.length() == 0 &&
-              (c == (UChar) 0x0027 /*'*/ ||
-               c == (UChar) 0x005C /*\*/)) {
-        rule.append((UChar) 0x005C);
+    else if (quoteBuf.length() == 0 &&
+             (c == APOSTROPHE || c == BACKSLASH)) {
+        rule.append(BACKSLASH);
         rule.append(c);
     }
 
@@ -515,7 +544,7 @@ void TransliterationRule::_appendToRule(UnicodeString& rule,
              quoteBuf.length() > 0) {
         quoteBuf.append(c);
         // Double ' within a quote
-        if (c == (UChar) 0x0027 /*'*/) {
+        if (c == APOSTROPHE) {
             quoteBuf.append(c);
         }
     }
