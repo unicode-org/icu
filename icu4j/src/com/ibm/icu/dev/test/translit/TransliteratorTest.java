@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $ 
- * $Date: 2000/06/28 20:36:59 $ 
- * $Revision: 1.22 $
+ * $Date: 2000/06/29 21:59:36 $ 
+ * $Revision: 1.23 $
  *
  *****************************************************************************************
  */
@@ -392,49 +392,49 @@ public class TransliteratorTest extends TestFmwk {
         }
     }
 
-/**
- * Regression test for bugs found in Greek transliteration.
- */
-public void TestJ277() {
-    Transliterator gl = Transliterator.getInstance("Greek-Latin");
+    /**
+     * Regression test for bugs found in Greek transliteration.
+     */
+    public void TestJ277() {
+        Transliterator gl = Transliterator.getInstance("Greek-Latin");
+        
+        char sigma = (char)0x3C3;
+        char upsilon = (char)0x3C5;
+        char nu = (char)0x3BD;
+        char PHI = (char)0x3A6;
+        char alpha = (char)0x3B1;
+        char omega = (char)0x3C9;
+        char omicron = (char)0x3BF;
+        char epsilon = (char)0x3B5;
 
-    char sigma = (char)0x3C3;
-    char upsilon = (char)0x3C5;
-    char nu = (char)0x3BD;
-    char PHI = (char)0x3A6;
-    char alpha = (char)0x3B1;
-    char omega = (char)0x3C9;
-    char omicron = (char)0x3BF;
-    char epsilon = (char)0x3B5;
+        // sigma upsilon nu -> syn
+        StringBuffer buf = new StringBuffer();
+        buf.append(sigma).append(upsilon).append(nu);
+        String syn = buf.toString();
+        expect(gl, syn, "syn");
 
-    // sigma upsilon nu -> syn
-    StringBuffer buf = new StringBuffer();
-    buf.append(sigma).append(upsilon).append(nu);
-    String syn = buf.toString();
-    expect(gl, syn, "syn");
+        // sigma alpha upsilon nu -> saun
+        buf.setLength(0);
+        buf.append(sigma).append(alpha).append(upsilon).append(nu);
+        String sayn = buf.toString();
+        expect(gl, sayn, "saun");
 
-    // sigma alpha upsilon nu -> saun
-    buf.setLength(0);
-    buf.append(sigma).append(alpha).append(upsilon).append(nu);
-    String sayn = buf.toString();
-    expect(gl, sayn, "saun");
-
-    // Again, using a smaller rule set
-    String rules =
-                "$alpha   = \u03B1;" +
-                "$nu      = \u03BD;" +
-                "$sigma   = \u03C3;" +
-                "$ypsilon = \u03C5;" +
-                "$vowel   = [aeiouAEIOU$alpha$ypsilon];" +
-                "s <>           $sigma;" +
-                "a <>           $alpha;" +
-                "u <>  $vowel { $ypsilon;" +
-                "y <>           $ypsilon;" +
-                "n <>           $nu;";
-    RuleBasedTransliterator mini = new RuleBasedTransliterator
-        ("mini", rules, Transliterator.REVERSE, null);
-    expect(mini, syn, "syn");
-    expect(mini, sayn, "saun");
+        // Again, using a smaller rule set
+        String rules =
+                    "$alpha   = \u03B1;" +
+                    "$nu      = \u03BD;" +
+                    "$sigma   = \u03C3;" +
+                    "$ypsilon = \u03C5;" +
+                    "$vowel   = [aeiouAEIOU$alpha$ypsilon];" +
+                    "s <>           $sigma;" +
+                    "a <>           $alpha;" +
+                    "u <>  $vowel { $ypsilon;" +
+                    "y <>           $ypsilon;" +
+                    "n <>           $nu;";
+        RuleBasedTransliterator mini = new RuleBasedTransliterator
+            ("mini", rules, Transliterator.REVERSE, null);
+        expect(mini, syn, "syn");
+        expect(mini, sayn, "saun");
 
 //|    // Transliterate the Greek locale data
 //|    Locale el("el");
@@ -555,6 +555,52 @@ public void TestJ277() {
             logln("Pattern: " + Utility.escape(DATA[i]));
             Transliterator t = new RuleBasedTransliterator("<ID>", DATA[i]);
             expect(t, DATA[i+1], DATA[i+2]);
+        }
+    }
+
+    /**
+     * Confirm that the contextStart, contextLimit, start, and limit
+     * behave correctly.
+     */
+    public void TestPositionHandling() {
+        // Array of 3n items
+        // Each item is <rules>, <input>, <expected output>
+        String[] DATA = {
+            "a{t} > SS ; {t}b > UU ; {t} > TT ;",
+            "xtat txtb", // pos 0,9,0,9
+            "xTTaSS TTxUUb",
+
+            "a{t} > SS ; {t}b > UU ; {t} > TT ;",
+            "xtat txtb", // pos 2,9,3,8
+            "xtaSS TTxUUb",
+
+            "a{t} > SS ; {t}b > UU ; {t} > TT ;",
+            "xtat txtb", // pos 3,8,3,8
+            "xtaTT TTxTTb",
+        };
+
+        // Array of 4n positions -- these go with the DATA array
+        // They are: contextStart, contextLimit, start, limit
+        int[] POS = {
+            0, 9, 0, 9,
+            2, 9, 3, 8,
+            3, 8, 3, 8,
+        };
+
+        int n = DATA.length/3;
+        for (int i=0; i<n; i++) {
+            Transliterator t = new RuleBasedTransliterator("<ID>", DATA[3*i]);
+            Transliterator.Position pos = new Transliterator.Position(
+                POS[4*i], POS[4*i+1], POS[4*i+2], POS[4*i+3]);
+            ReplaceableString rsource = new ReplaceableString(DATA[3*i+1]);
+            t.transliterate(rsource, pos);
+            t.finishTransliteration(rsource, pos);
+            String result = rsource.toString();
+            String exp = DATA[3*i+2];
+            expectAux(Utility.escape(DATA[3*i]),
+                      DATA[3*i+1] + " -> " + result,
+                      result.equals(exp),
+                      exp);
         }
     }
 
