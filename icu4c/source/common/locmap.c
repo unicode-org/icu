@@ -278,6 +278,11 @@ static const ILcidPosixElement de[] = {
     {0x10407,"de__PHONEBOOK"}  /*This is really de_DE_PHONEBOOK on Windows, maybe 10007*/
 };
 
+static const ILcidPosixElement div_MV[] = {
+    {0x65,   "div"},
+    {0x0465, "div_MV"},
+};
+
 ILCID_POSIX_ELEMENT_ARRAY(0x0408, el, el_GR)
 
 static const ILcidPosixElement en[] = {
@@ -292,10 +297,14 @@ static const ILcidPosixElement en[] = {
     {0x3409, "en_PH"},
     {0x2C09, "en_TT"},    /*Todo: Data does not exist*/
     {0x0409, "en_US"},
-/*        {0x007f, "en_US_POSIX"},  // Need to verify*/
+    {0x007f, "en_US_POSIX"}, /* duplicate for roundtripping */
     {0x2409, "en_VI"},
     {0x1c09, "en_ZA"},
     {0x3009, "en_ZW"}
+};
+
+static const ILcidPosixElement en_US_POSIX[] = {
+    {0x007f, "en_US_POSIX"}, /* duplicate for roundtripping */
 };
 
 static const ILcidPosixElement es[] = {
@@ -338,6 +347,7 @@ static const ILcidPosixElement fr[] = {
     {0x180c, "fr_MC"}    /*Todo: Data does not exist*/
 };
 
+ILCID_POSIX_ELEMENT_ARRAY(0x0456, gl, gl_ES)
 ILCID_POSIX_ELEMENT_ARRAY(0x0447, gu, gu_IN)    /*Todo: Data does not exist*/
 ILCID_POSIX_ELEMENT_ARRAY(0x040d, he, he_IL)
 ILCID_POSIX_ELEMENT_ARRAY(0x0439, hi, hi_IN)
@@ -377,10 +387,12 @@ static const ILcidPosixElement ko[] = {
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0457, kok, kok_IN)
 ILCID_POSIX_ELEMENT_ARRAY(0x0460, ks,  ks_IN)   /*Todo: Data does not exist*/
+ILCID_POSIX_ELEMENT_ARRAY(0x0440, ky,  ky_KG)   /*Todo: Data does not exist*/
 ILCID_POSIX_ELEMENT_ARRAY(0x0427, lt,  lt_LT)
 ILCID_POSIX_ELEMENT_ARRAY(0x0426, lv,  lv_LV)
 ILCID_POSIX_ELEMENT_ARRAY(0x042f, mk,  mk_MK)
 ILCID_POSIX_ELEMENT_ARRAY(0x044c, ml,  ml_IN)   /*Todo: Data does not exist*/
+ILCID_POSIX_ELEMENT_ARRAY(0x0450, mn,  mn_MN)   /*Todo: Data does not exist*/
 ILCID_POSIX_ELEMENT_ARRAY(0x0458, mni, mni_IN)  /*Todo: Data does not exist*/
 ILCID_POSIX_ELEMENT_ARRAY(0x044e, mr,  mr_IN)
 
@@ -448,6 +460,7 @@ static const ILcidPosixElement sv[] = {
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0441, sw, sw_KE)/*According to the MSJDK documentation*/
+ILCID_POSIX_ELEMENT_ARRAY(0x045A, syr, syr_SY)
 ILCID_POSIX_ELEMENT_ARRAY(0x0449, ta, ta_IN)
 ILCID_POSIX_ELEMENT_ARRAY(0x044a, te, te_IN)
 ILCID_POSIX_ELEMENT_ARRAY(0x041e, th, th_TH)
@@ -475,7 +488,8 @@ static const ILcidPosixElement zh[] = {
     {0x0c04, "zh_HK"},
     {0x1404, "zh_MO"},
     {0x1004, "zh_SG"},
-    {0x0404, "zh_TW"}
+    {0x0404, "zh_TW"},  /* Should this be 0x30404 for Bopomofo? */
+    {0x0404, "zh_TW_STROKE"}
 };
 
 /* This must be static and grouped by LCID. */
@@ -491,8 +505,10 @@ static const ILcidPosixMap gPosixIDmap[] = {
     ILCID_POSIX_MAP(cs),    /*  cs  Czech                     0x05 */
     ILCID_POSIX_MAP(da),    /*  da  Danish                    0x06 */
     ILCID_POSIX_MAP(de),    /*  de  German                    0x07 */
+    ILCID_POSIX_MAP(div_MV),/*  div Divehi                    0x65 */
     ILCID_POSIX_MAP(el),    /*  el  Greek                     0x08 */
     ILCID_POSIX_MAP(en),    /*  en  English                   0x09 */
+    ILCID_POSIX_MAP(en_US_POSIX), /*    invariant             0x7f */
     ILCID_POSIX_MAP(es),    /*  es  Spanish                   0x0a */
     ILCID_POSIX_MAP(et),    /*  et  Estonian                  0x25 */
     ILCID_POSIX_MAP(eu),    /*  eu  Basque                    0x2d */
@@ -500,6 +516,7 @@ static const ILcidPosixMap gPosixIDmap[] = {
     ILCID_POSIX_MAP(fi),    /*  fi  Finnish                   0x0b */
     ILCID_POSIX_MAP(fo),    /*  fo  Faroese                   0x38 */
     ILCID_POSIX_MAP(fr),    /*  fr  French                    0x0c */
+    ILCID_POSIX_MAP(gl),    /*  gl  Galician                  0x56 */
     ILCID_POSIX_MAP(gu),    /*  gu  Gujarati                  0x47 */
     ILCID_POSIX_MAP(he),    /*  he  Hebrew (formerly iw)      0x0d */
     ILCID_POSIX_MAP(hi),    /*  hi  Hindi                     0x39 */
@@ -515,6 +532,7 @@ static const ILcidPosixMap gPosixIDmap[] = {
     ILCID_POSIX_MAP(ka),    /*  ka  Georgian                  0x37 */
     ILCID_POSIX_MAP(kk),    /*  kk  Kazakh                    0x3f */
     ILCID_POSIX_MAP(kn),    /*  kn  Kannada                   0x4b */
+    ILCID_POSIX_MAP(ky),    /*  ky  Kyrgyz                    0x40 */
     ILCID_POSIX_MAP(ko),    /*  ko  Korean                    0x12 */
     ILCID_POSIX_MAP(kok),   /*  kok Konkani                   0x57 */
     ILCID_POSIX_MAP(ks),    /*  ks  Kashmiri                  0x60 */
@@ -522,6 +540,7 @@ static const ILcidPosixMap gPosixIDmap[] = {
     ILCID_POSIX_MAP(lv),    /*  lv  Latvian, Lettish          0x26 */
     ILCID_POSIX_MAP(mk),    /*  mk  Macedonian                0x2f */
     ILCID_POSIX_MAP(ml),    /*  ml  Malayalam                 0x4c */
+    ILCID_POSIX_MAP(mn),    /*  mn  Mongolian                 0x50 */
     ILCID_POSIX_MAP(mni),   /*  mni Manipuri                  0x58 */
     ILCID_POSIX_MAP(mr),    /*  mr  Marathi                   0x4e */
     ILCID_POSIX_MAP(ms),    /*  ms  Malay                     0x3e */
@@ -547,6 +566,7 @@ static const ILcidPosixMap gPosixIDmap[] = {
 /*        ILCID_POSIX_MAP(sr),    //  sr  Serbian                   0x1a */
     ILCID_POSIX_MAP(sv),    /*  sv  Swedish                   0x1d */
     ILCID_POSIX_MAP(sw),    /*  sw  Swahili                   0x41 */
+    ILCID_POSIX_MAP(syr),   /*  syr Syriac                    0x5A */
     ILCID_POSIX_MAP(ta),    /*  ta  Tamil                     0x49 */
     ILCID_POSIX_MAP(te),    /*  te  Telugu                    0x4a */
     ILCID_POSIX_MAP(th),    /*  th  Thai                      0x1e */
