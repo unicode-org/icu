@@ -586,7 +586,7 @@ class U_COMMON_API ICUService : public ICUNotifier {
      * A convenience override of registerObject(Object, String, boolean)
      * that defaults visible to true.  The service adopts the object.
      */
-    const Factory* registerObject(UObject* objToAdopt, const UnicodeString& id);
+    const Factory* registerObject(UObject* objToAdopt, const UnicodeString& id, UErrorCode& status);
 
     /**
      * Register an object with the provided id.  The id will be 
@@ -594,14 +594,14 @@ class U_COMMON_API ICUService : public ICUNotifier {
      * getVisibleIDs if visible is true.  This wraps the object
      * using createSimpleFactory and calls registerFactory.
      */
-    virtual const Factory* registerObject(UObject* obj, const UnicodeString& id, UBool visible);
+    virtual const Factory* registerObject(UObject* obj, const UnicodeString& id, UBool visible, UErrorCode& status);
 
     /**
      * Register a Factory.  Returns the factory if the service accepts
      * the factory, otherwise returns null.  The default implementation
      * accepts all factories.  The service owns the factories. 
      */
-    virtual const Factory* registerFactory(Factory* factoryToAdopt);
+    virtual const Factory* registerFactory(Factory* factoryToAdopt, UErrorCode& status);
 
     /**
      * Unregister a factory.  The first matching registered factory will
@@ -609,7 +609,7 @@ class U_COMMON_API ICUService : public ICUNotifier {
      * found.  If not found, factory is not deleted, but this is typically an
      * error.
      */
-    virtual UBool unregisterFactory(Factory* factory);
+    virtual UBool unregisterFactory(Factory* factory, UErrorCode& status);
 
     /**
      * Reset the service to the default factories.  The factory
@@ -628,7 +628,7 @@ class U_COMMON_API ICUService : public ICUNotifier {
      * Subclasses can override to define more useful keys appropriate
      * to the factories they accept.  If id is null, returns null.
      */
-    virtual Key* createKey(const UnicodeString* id) const;
+    virtual Key* createKey(const UnicodeString* id, UErrorCode& status) const;
 
     /**
      * Clone object so that caller can own the copy.  UObject doesn't yet implement
@@ -643,7 +643,7 @@ class U_COMMON_API ICUService : public ICUNotifier {
      * Create a factory that wraps a singleton object.
      * Default is an instance of SimpleFactory.
      */
-    virtual Factory* createSimpleFactory(UObject* objToAdopt, const UnicodeString& id, UBool visible);
+    virtual Factory* createSimpleFactory(UObject* objToAdopt, const UnicodeString& id, UBool visible, UErrorCode& status);
 
     /**
      * Reinitialize the factory list to its default state.  By default
@@ -701,13 +701,14 @@ class U_COMMON_API ICUService : public ICUNotifier {
      */
     virtual int32_t getTimestamp() const;
 
- private:
-
-    friend class ICUServiceTest;
     /**
-     * Return the number of factories, used for testing.
+     * Return the number of factories.
      */
     int32_t countFactories() const;
+
+private:
+
+    friend class ICUServiceTest; // give tests access to countFactories.
 };
 
 U_NAMESPACE_END
