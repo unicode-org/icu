@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2003/02/11 00:48:59 $ 
-* $Revision: 1.22 $
+* $Date: 2003/02/19 19:13:30 $ 
+* $Revision: 1.23 $
 *
 *******************************************************************************
 */
@@ -876,16 +876,14 @@ public final class UCharacterProperty implements Trie.DataManipulate
                     buffer.append(LATIN_SMALL_LETTER_I_);
                     return 1;
                 } 
-                if (ch == 0x307 && isPrecededBySoftDotted(uchariter, offset)) {
+                if (ch == 0x307 && isPrecededByI(uchariter, offset)) {
                     // ### TODO see comment above about isAfter_I()
                     // # When lowercasing, remove dot_above in the sequence 
                     // I + dot_above, which will turn into i.
                     // # This matches the behavior of the canonically
                     // equivalent I-dot_above
-                    // 0307; ; 0307; 0307; tr After_Soft_Dotted; 
-                    // # COMBINING DOT ABOVE
-                    // 0307; ; 0307; 0307; az After_Soft_Dotted; 
-                    // # COMBINING DOT ABOVE
+                    // 0307; ; 0307; 0307; tr After_I; # COMBINING DOT ABOVE
+                    // 0307; ; 0307; 0307; az After_I; # COMBINING DOT ABOVE
                     return 0; // remove the dot (continue without output)
 
                 }
@@ -1722,14 +1720,26 @@ public final class UCharacterProperty implements Trie.DataManipulate
                                      
 	// private methods -------------------------------------------------------
     
-    /**
+    /*
+     * This section contains helper functions that check for conditions
+     * in the input text surrounding the current code point
+     * according to SpecialCasing.txt.
+     *
+     * Starting with ICU 2.1, the "surrounding text" is passed in as an 
+     * instance of UCharacterIterator to allow the core case mapping functions
+     * to be used inside transliterators (using Replaceable instead of String)
+     * etc.
+     *
+     * Each helper function gets the index
+     * - after the current code point if it looks at following text
+     * - before the current code point if it looks at preceding text
+     *
      * Unicode 3.2 UAX 21 "Case Mappings" defines the conditions as follows:
      *
      * Final_Sigma
-     *   C is preceded by a sequence consisting of
-     *     a cased letter and a case-ignorable sequence,
-     *   and C is not followed by a sequence consisting of
-     *     an ignorable sequence and then a cased letter.
+     *   C is preceded by a sequence consisting of a cased letter and a 
+     *   case-ignorable sequence, and C is not followed by a sequence 
+     *   consisting of an ignorable sequence and then a cased letter.
      *
      * More_Above
      *   C is followed by one or more characters of combining class 230 (ABOVE)
@@ -1745,6 +1755,14 @@ public final class UCharacterProperty implements Trie.DataManipulate
      *   Any sequence of characters with a combining class that is neither 0 
      *   nor 230 may intervene between the current character and the combining 
      *   dot above.
+     *
+     * The erratum from 2002-10-31 adds the condition
+     *
+     * After_I
+     *   The last preceding base character was an uppercase I, and there is no
+     *   intervening combining character class 230 (ABOVE).
+     *
+     *   (See Jitterbug 2344 and the comments on After_I below.)
      *
      * Helper definitions in Unicode 3.2 UAX 21:
      *
@@ -1762,8 +1780,8 @@ public final class UCharacterProperty implements Trie.DataManipulate
      *     if it meets either of the following criteria:
      *
      *   - The general category of C is
-     *     Nonspacing Mark (Mn), or Enclosing Mark (Me), or Format Control (Cf), or
-     *     Letter Modifier (Lm), or Symbol Modifier (Sk)
+     *     Nonspacing Mark (Mn), or Enclosing Mark (Me), or Format Control (Cf), 
+     *     or Letter Modifier (Lm), or Symbol Modifier (Sk)
      *   - C is one of the following characters 
      *     U+0027 APOSTROPHE
      *     U+00AD SOFT HYPHEN (SHY)
@@ -1863,6 +1881,76 @@ public final class UCharacterProperty implements Trie.DataManipulate
         }
 
         return false; 
+    }
+    
+    /**
+     * <p>
+     * See Jitterbug 2344:
+     * The condition After_I for Turkic-lowercasing of U+0307 combining dot 
+     * above is checked in ICU 2.0, 2.1, 2.6 but was not in 2.2 & 2.4 because
+     * we made those releases compatible with Unicode 3.2 which had not fixed
+     * a related but in SpecialCasing.txt.
+     * </p>
+     * <p>
+     * From the Jitterbug 2344 text:
+     * ... this bug is listed as a Unicode erratum
+     * from 2002-10-31 at http://www.unicode.org/uni2errata/UnicodeErrata.html
+     * </p>
+     * <quote>
+     * There are two errors in SpecialCasing.txt.
+     * 1. Missing semicolons on two lines. ... [irrelevant for ICU]
+     * 2. An incorrect context definition. Correct as follows:
+     * &lt; 0307; ; 0307; 0307; tr After_Soft_Dotted; # COMBINING DOT ABOVE
+     * &lt; 0307; ; 0307; 0307; az After_Soft_Dotted; # COMBINING DOT ABOVE
+     * ---
+     * &gtr; 0307; ; 0307; 0307; tr After_I; # COMBINING DOT ABOVE
+     * &gtr; 0307; ; 0307; 0307; az After_I; # COMBINING DOT ABOVE
+     * where the context After_I is defined as:
+     * The last preceding base character was an uppercase I, and there is no
+     * intervening combining character class 230 (ABOVE).
+     * </quote>
+     * <p>
+     * Note that SpecialCasing.txt even in Unicode 3.2 described the condition 
+     * as:
+     * </p>
+     * <p>
+     * <ul>
+     * <li> When lowercasing, remove dot_above in the sequence I + dot_above, 
+     *      which will turn into i.
+     * <li> This matches the behavior of the canonically equivalent I-dot_above
+     * </ul>
+     * See also the description in this place in older versions of uchar.c 
+     * (revision 1.100).
+     * </p>
+     * Markus W. Scherer 2003-feb-15
+     */
+    
+    /** 
+     * Is preceded by base character 'I' with no intervening cc=230 ? 
+     * @param uchariter string iterator to determine
+     * @param offset codepoint offset in string to check
+     */
+    private boolean isPrecededByI(UCharacterIterator uchariter, int offset) 
+    {
+        uchariter.setIndex(offset);
+        for(;;) {
+            int c = uchariter.previousCodePoint();
+            if (c < 0) {
+                break;
+            }
+            if (c == LATIN_CAPITAL_LETTER_I_) {
+                return true; // preceded by I
+            }
+    
+            int cc = NormalizerImpl.getCombiningClass(c);
+            if (cc == 0 || cc == COMBINING_MARK_ABOVE_CLASS_) {
+                // preceded by different base character (not I), 
+                // or intervening cc==230
+                return false; 
+            }
+        }
+    
+        return false; // not preceded by I
     }
 
     /** 

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterCaseTest.java,v $
-* $Date: 2003/01/28 18:55:33 $ 
-* $Revision: 1.8 $
+* $Date: 2003/02/19 19:13:31 $ 
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -415,7 +415,15 @@ public final class UCharacterCaseTest extends TestFmwk
                                 lang = locale.getLanguage();
                             }
                             if (lang.equals("tr") || lang.equals("az")) {
-                                upperbuffer.insert(0, '\u0130');
+                                // this is to be removed when 4.0 data comes out
+                                // and upperbuffer.insert uncommented
+                                // see jitterbug 2344
+                                chstr[i] = "After_I";
+                                strbuffer.deleteCharAt(0);
+                                lowerbuffer.deleteCharAt(0);
+                                i --;
+                                continue;
+                                // upperbuffer.insert(0, '\u0130');
                             }
                             else {
                                 upperbuffer.insert(0, 'I');
@@ -426,6 +434,17 @@ public final class UCharacterCaseTest extends TestFmwk
                             strbuffer.insert(0, 'c');
                             lowerbuffer.insert(0, 'c');
                             upperbuffer.insert(0, 'C');
+                    }
+                    else if (condition.compareToIgnoreCase("After_I") == 0) {
+                            strbuffer.insert(0, 'I');
+                            lowerbuffer.insert(0, 'i');
+                            String lang = "";
+                            if (locale != null) {
+                                lang = locale.getLanguage();
+                            }
+                            if (lang.equals("tr") || lang.equals("az")) {
+                                upperbuffer.insert(0, 'I');
+                            }
                     }
                 }
                 chstr[0] = strbuffer.toString();
@@ -701,7 +720,7 @@ public final class UCharacterCaseTest extends TestFmwk
     private static final String SPECIAL_DOTTED_ =
             "I \u0130 I\u0307 I\u0327\u0307 I\u0301\u0307 I\u0327\u0307\u0301";
     private static final String SPECIAL_DOTTED_LOWER_TURKISH_ =
-            "\u0131 i i\u0307 i\u0327\u0307 \u0131\u0301\u0307 i\u0327\u0307\u0301";
+            "\u0131 i i i\u0327 \u0131\u0301\u0307 i\u0327\u0301";
     private static final String SPECIAL_DOTTED_LOWER_GERMAN_ =
             "i i\u0307 i\u0307 i\u0327\u0307 i\u0301\u0307 i\u0327\u0307\u0301";
     private static final String SPECIAL_DOT_ABOVE_ =
