@@ -26,28 +26,28 @@ static const UChar EMPTY[] = {0}; // ""
 /**
  * Factory methods
  */
-Transliterator* EscapeTransliterator::_createUnicode(const UnicodeString& ID, Token context) {
+Transliterator* EscapeTransliterator::_createUnicode(const UnicodeString& ID, Token /*context*/) {
     // Unicode: "U+10FFFF" hex, min=4, max=6
     return new EscapeTransliterator(ID, UNIPRE, EMPTY, 16, 4, TRUE, NULL);
 }
-Transliterator* EscapeTransliterator::_createJava(const UnicodeString& ID, Token context) {
+Transliterator* EscapeTransliterator::_createJava(const UnicodeString& ID, Token /*context*/) {
     // Java: "\\uFFFF" hex, min=4, max=4
     return new EscapeTransliterator(ID, BS_u, EMPTY, 16, 4, FALSE, NULL);
 }
-Transliterator* EscapeTransliterator::_createC(const UnicodeString& ID, Token context) {
+Transliterator* EscapeTransliterator::_createC(const UnicodeString& ID, Token /*context*/) {
     // C: "\\uFFFF" hex, min=4, max=4; \\U0010FFFF hex, min=8, max=8
     return new EscapeTransliterator(ID, BS_u, EMPTY, 16, 4, TRUE,
              new EscapeTransliterator(EMPTY, BS_U, EMPTY, 16, 8, TRUE, NULL));
 }
-Transliterator* EscapeTransliterator::_createXML(const UnicodeString& ID, Token context) {
+Transliterator* EscapeTransliterator::_createXML(const UnicodeString& ID, Token /*context*/) {
     // XML: "&#x10FFFF;" hex, min=1, max=6
     return new EscapeTransliterator(ID, XMLPRE, SEMI, 16, 1, TRUE, NULL);
 }
-Transliterator* EscapeTransliterator::_createXML10(const UnicodeString& ID, Token context) {
+Transliterator* EscapeTransliterator::_createXML10(const UnicodeString& ID, Token /*context*/) {
     // XML10: "&1114111;" dec, min=1, max=7 (not really "Any-Hex")
     return new EscapeTransliterator(ID, XML10PRE, SEMI, 10, 1, TRUE, NULL);
 }
-Transliterator* EscapeTransliterator::_createPerl(const UnicodeString& ID, Token context) {
+Transliterator* EscapeTransliterator::_createPerl(const UnicodeString& ID, Token /*context*/) {
     // Perl: "\\x{263A}" hex, min=1, max=6
     return new EscapeTransliterator(ID, PERLPRE, RBRACE, 16, 1, TRUE, NULL);
 }
