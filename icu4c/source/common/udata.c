@@ -711,6 +711,11 @@ doOpenChoice(const char *path, const char *type, const char *name,
     MappedData *p;
     UErrorCode errorCode=U_ZERO_ERROR;
 
+#ifdef OS390BATCH
+    /* Try DD:ICUDATA first */
+    char *c;
+    char tmpPathName[23];
+#endif
     /* set up path and basename */
     if(path==NULL) {
         isICUData=TRUE;
@@ -833,6 +838,43 @@ doOpenChoice(const char *path, const char *type, const char *name,
     /* try the common data first */
     p=NULL;
 
+#ifdef OS390BATCH
+    /*
+    Try DD:ICUDATA first.
+    */
+    uprv_strcpy(tmpPathName, "//DD:ICUDATA(");
+    /*
+    Delete the '-' character from the file name. It is not a vaild 
+    charater for a MVS data set name. 
+    We could convert it to '@', but because icu supports 9 character   
+    converter file name(for example, ibm-12712.cnv), it's better to
+    delete it(member name of a PDS must be <= 8 characters).
+    */
+    c = uprv_strstr(name, "-");
+    if (c != NULL) {
+	uprv_strncat(tmpPathName, name, c-name);
+	uprv_strcat(tmpPathName, c+1);
+    }
+    else
+	uprv_strcat(tmpPathName, name);
+    uprv_strcat(tmpPathName, ")");
+    lib=LOAD_LIBRARY(tmpPathName, name, FALSE);
+
+    if(IS_LIBRARY(lib)) {
+        /* look for the entry point */
+#       ifdef UDATA_MAP
+            /* entryName passed as NULL: prevent TOC lookup for single, mapped files */
+            p=getChoice(lib, NULL, type, name, isAcceptable, context, &errorCode);
+#       else
+            p=getChoice(lib, entryName, type, name, isAcceptable, context, &errorCode);
+#       endif
+        if(p==NULL) 
+            UNLOAD_LIBRARY(lib);
+    }
+
+    if(p==NULL) {
+
+#endif
 #   ifdef UDATA_INDIRECT
         if(hasBasename) {
             /* get the common data */
@@ -889,6 +931,9 @@ doOpenChoice(const char *path, const char *type, const char *name,
         }
 #   endif
 
+#ifdef OS390BATCH
+    }
+#endif
     /* if the data is not found in the common data, then look for a separate library */
 
     /* try basename+"_"+entryName[+LIB_SUFFIX] first */
