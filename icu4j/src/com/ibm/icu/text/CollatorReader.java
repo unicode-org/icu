@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollatorReader.java,v $ 
-* $Date: 2002/10/09 23:53:24 $ 
-* $Revision: 1.7 $
+* $Date: 2002/10/10 03:48:04 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -32,18 +32,8 @@ import com.ibm.icu.impl.IntTrie;
 * @draft 2.2
 */
 
-final class CollatorReader implements ICUBinary.Authenticate
-{   
-    // public methods ----------------------------------------------------
-    
-    public boolean isDataVersionAcceptable(byte version[])
-    {
-        return version[0] == DATA_FORMAT_VERSION_[0] 
-               && version[1] == DATA_FORMAT_VERSION_[1] 
-               && version[2] == DATA_FORMAT_VERSION_[2] 
-               && version[3] == DATA_FORMAT_VERSION_[3];
-    }
-       
+final class CollatorReader
+{          
     // protected constructor ---------------------------------------------
     
     /**
@@ -54,7 +44,7 @@ final class CollatorReader implements ICUBinary.Authenticate
     */
     protected CollatorReader(InputStream inputStream) throws IOException
     {
-        ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, this);
+        ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, AUTHENTICATE_);
         m_dataInputStream_ = new DataInputStream(inputStream);
     }
     
@@ -69,7 +59,7 @@ final class CollatorReader implements ICUBinary.Authenticate
     														throws IOException
     {
     	if (readICUHeader) {
-        	ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, this);
+        	ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, AUTHENTICATE_);
     	}
         m_dataInputStream_ = new DataInputStream(inputStream);
     }
@@ -348,11 +338,12 @@ final class CollatorReader implements ICUBinary.Authenticate
      * @exception IOException thrown when error occurs while reading the 
      *            inverse uca
      */
-    protected CollationParsedRuleBuilder.InverseUCA readInverseUCA(
+    protected static CollationParsedRuleBuilder.InverseUCA readInverseUCA(
                                                       InputStream inputStream)
                                                       throws IOException
     {
-        ICUBinary.readHeader(inputStream, INVERSE_UCA_DATA_FORMAT_ID_, this);
+        ICUBinary.readHeader(inputStream, INVERSE_UCA_DATA_FORMAT_ID_, 
+                             AUTHENTICATE_);
         CollationParsedRuleBuilder.InverseUCA result = 
                                   new CollationParsedRuleBuilder.InverseUCA();
         DataInputStream input = new DataInputStream(inputStream);        
@@ -378,6 +369,20 @@ final class CollatorReader implements ICUBinary.Authenticate
     // private inner class -----------------------------------------------
     
     // private variables -------------------------------------------------
+    
+    /**
+     * Authenticate data format version
+     */
+    private static final ICUBinary.Authenticate AUTHENTICATE_ 
+                = new ICUBinary.Authenticate() {
+                        public boolean isDataVersionAcceptable(byte version[])
+                        {
+                            return version[0] == DATA_FORMAT_VERSION_[0] 
+                                   && version[1] == DATA_FORMAT_VERSION_[1] 
+                                   && version[2] == DATA_FORMAT_VERSION_[2] 
+                                   && version[3] == DATA_FORMAT_VERSION_[3];
+                        }
+                };
   
     /**
     * Data input stream for uca.icu 
