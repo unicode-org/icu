@@ -90,14 +90,13 @@ DateFormat::operator==(const Format& other) const
     // which have confirmed that the other object being compared against is
     // an instance of a sublcass of DateFormat.  THIS IS IMPORTANT.
 
-    // We only dereference this pointer after we have confirmed below that
-    // 'other' is a DateFormat subclass.
+    // Format::operator== guarantees that this cast is safe
     DateFormat* fmt = (DateFormat*)&other;
 
     return (this == fmt) ||
-        ((getDynamicClassID() == other.getDynamicClassID()) &&
+        (Format::operator==(other) &&
          fCalendar&&(fCalendar->isEquivalentTo(*fmt->fCalendar)) &&
-         (fNumberFormat&&(*fNumberFormat == *fmt->fNumberFormat)) );
+         (fNumberFormat && *fNumberFormat == *fmt->fNumberFormat));
 }
 
 //----------------------------------------------------------------------

@@ -132,10 +132,10 @@ Format::parseObject(const UnicodeString& source,
 // -------------------------------------
 
 UBool
-Format::operator==(const Format& /*that*/) const
+Format::operator==(const Format& that) const
 {
-    // Add this implementation to make linker happy.
-    return TRUE;
+    // Subclasses: Call this method and then add more specific checks.
+    return getDynamicClassID() == that.getDynamicClassID();
 }
 //---------------------------------------
 

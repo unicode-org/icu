@@ -249,9 +249,8 @@ SimpleDateFormat::clone() const
 UBool
 SimpleDateFormat::operator==(const Format& other) const
 {
-    if (DateFormat::operator==(other) &&
-        other.getDynamicClassID() == getStaticClassID())
-    {
+    if (DateFormat::operator==(other)) {
+        // DateFormat::operator== guarantees following cast is safe
         SimpleDateFormat* that = (SimpleDateFormat*)&other;
         return     (fPattern             == that->fPattern &&
                 fSymbols             != NULL && // Check for pathological object
