@@ -1268,6 +1268,10 @@ InputPath=.\unicode\unorm.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\unormimp.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\unicode\urep.h
 
 !IF  "$(CFG)" == "common - Win32 Release"

@@ -137,7 +137,7 @@ testdata: ucadata.dat $(RB_FILES) {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe
 BRK_FILES = "$(ICUDBLD)\sent.brk" "$(ICUDBLD)\char.brk" "$(ICUDBLD)\line.brk" "$(ICUDBLD)\word.brk" "$(ICUDBLD)\line_th.brk" "$(ICUDBLD)\word_th.brk"
 
 #invoke pkgdata
-"$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" :  $(CNV_FILES) $(BRK_FILES) qchk.dat fchk.dat uprops.dat unames.dat cnvalias.dat tz.dat ucadata.dat invuca.dat $(ALL_RES) icudata.res
+"$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" :  $(CNV_FILES) $(BRK_FILES) qchk.dat fchk.dat uprops.dat unames.dat unorm.dat cnvalias.dat tz.dat ucadata.dat invuca.dat $(ALL_RES) icudata.res
 	@echo Building icu data
 	@cd "$(ICUDBLD)"
  	"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -e icudata -v -T . -m dll -c -p $(U_ICUDATA_NAME) -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -s . <<pkgdatain.txt
@@ -145,6 +145,7 @@ qchk.dat
 fchk.dat
 uprops.dat
 unames.dat
+unorm.dat
 cnvalias.dat
 tz.dat
 ucadata.dat
@@ -196,6 +197,7 @@ CLEAN :
 	-@erase "fchk*.*"
 	-@erase "uprops*.*"
 	-@erase "unames*.*"
+	-@erase "unorm*.*"
 	-@erase "cnvalias*.*"
 	-@erase "tz*.*"
 	-@erase "ibm*_cnv.c"
@@ -266,13 +268,19 @@ fchk.dat: "$(ICUDATA)\unidata\FCDCheck.txt" "$(ICUTOOLS)\genfchk\$(CFG)\genfchk.
 unames.dat: {"$(ICUDATA)"}\unidata\UnicodeData.txt "$(ICUTOOLS)\gennames\$(CFG)\gennames.exe"
 	@echo Creating data file for Unicode Names
 	@set ICU_DATA=$(ICUDBLD)
-	@"$(ICUTOOLS)\gennames\$(CFG)\gennames" $(ICUDATA)\unidata\UnicodeData.txt
+	@"$(ICUTOOLS)\gennames\$(CFG)\gennames" -1 $(ICUDATA)\unidata\UnicodeData.txt
 
 # Targets for uprops.dat
 uprops.dat: "$(ICUDATA)\unidata\UnicodeData.txt" "$(ICUTOOLS)\genprops\$(CFG)\genprops.exe"
 	@echo Creating data file for Unicode Character Properties
 	@set ICU_DATA=$(ICUDBLD)
 	@"$(ICUTOOLS)\genprops\$(CFG)\genprops" -s "$(ICUDATA)\unidata"
+
+# Targets for unorm.dat
+unorm.dat: "$(ICUDATA)\unidata\UnicodeData.txt" "$(ICUDATA)\unidata\DerivedNormalizationProperties.txt" "$(ICUTOOLS)\gennorm\$(CFG)\gennorm.exe"
+	@echo Creating data file for Unicode Normalization
+	@set ICU_DATA=$(ICUDBLD)
+	@"$(ICUTOOLS)\gennorm\$(CFG)\gennorm" -s "$(ICUDATA)\unidata"
 
 # Targets for converters
 cnvalias.dat : {"$(ICUDATA)"}\convrtrs.txt "$(ICUTOOLS)\gencnval\$(CFG)\gencnval.exe"
@@ -294,18 +302,18 @@ ucadata.dat: "$(ICUDATA)\unidata\FractionalUCA.txt" "$(ICUTOOLS)\genuca\$(CFG)\g
 
 invuca.dat: ucadata.dat
 
-{"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe : ucadata.dat qchk.dat fchk.dat uprops.dat
+{"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe : ucadata.dat qchk.dat fchk.dat uprops.dat unorm.dat
 
-ucadata.dat : uprops.dat qchk.dat fchk.dat uprops.dat
+ucadata.dat : uprops.dat qchk.dat fchk.dat unorm.dat
 
 # Dependencies on the tools
 convrtrs.txt : {"$(ICUTOOLS)\gencnval\$(CFG)"}gencnval.exe
 
 tz.txt : {"$(ICUTOOLS)\gentz\$(CFG)"}gentz.exe
 
-uprops.dat unames.dat cnvalias.dat tz.dat ucadata.dat invuca.dat: {"$(ICUTOOLS)\genccode\$(CFG)"}genccode.exe
+uprops.dat unames.dat unorm.dat cnvalias.dat tz.dat ucadata.dat invuca.dat: {"$(ICUTOOLS)\genccode\$(CFG)"}genccode.exe
 
 
-$(TRANSLIT_SOURCE) $(GENRB_SOURCE) : {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe ucadata.dat qchk.dat fchk.dat uprops.dat
+$(TRANSLIT_SOURCE) $(GENRB_SOURCE) : {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe ucadata.dat qchk.dat fchk.dat uprops.dat unorm.dat
 
 $(UCM_SOURCE) : {"$(ICUTOOLS)\makeconv\$(CFG)"}makeconv.exe {"$(ICUTOOLS)\genccode\$(CFG)"}genccode.exe

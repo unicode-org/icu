@@ -29,6 +29,11 @@
 #include "unicode/unicode.h"
 #include "mutex.h"
 
+/* ### TODO: new implementation */
+#include "unormimp.h"
+
+
+
 
 #define ARRAY_LENGTH(array) (sizeof (array) / sizeof (*array))
 /**
@@ -666,6 +671,25 @@ Normalizer::decompose(const UnicodeString& source,
                       UnicodeString& result, 
                       UErrorCode &status)
 {
+    /* ### TODO: begin new implementation */
+    if(unorm_usesNewImplementation()) {
+        if(source.isBogus()) {
+            result.setToBogus();
+        } else {
+            /* make sure that we do not operate on the same buffer in source and result */
+            result.cloneArrayIfNeeded(-1, source.length()+20, FALSE);
+            result.fLength=unorm_decompose(result.fArray, result.fCapacity,
+                                           source.fArray, source.fLength,
+                                           compat, (options&IGNORE_HANGUL)!=0,
+                                           UnicodeString::growBuffer, &result,
+                                           &status);
+            if(U_FAILURE(status)) {
+                result.setToBogus();
+            }
+        }
+        return;
+    }
+    /* ### end new implementation */
     if (U_FAILURE(status)) {
         return;
     }
