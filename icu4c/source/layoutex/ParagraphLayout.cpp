@@ -14,7 +14,7 @@
 #include "unicode/uchriter.h"
 #include "unicode/brkiter.h"
 
-#include "Utilities.h"
+#include "LXUtilities.h"
 #include "usc_impl.h" /* this is currently private! */
 #include "cstring.h"  /* this too! */
 
@@ -307,10 +307,10 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
         }
 
         if ((fStyleRunInfo[run].level & 1) != 0) {
-            Utilities::reverse(&fGlyphWidths[glyphBase], glyphCount);
-            Utilities::reverse(&fGlyphToCharMap[glyphBase], glyphCount);
+            LXUtilities::reverse(&fGlyphWidths[glyphBase], glyphCount);
+            LXUtilities::reverse(&fGlyphToCharMap[glyphBase], glyphCount);
 
-            // Utilities::reverse(&fCharToGlyphMap[runStart], fStyleRunLimits[run] - runStart);
+            // LXUtilities::reverse(&fCharToGlyphMap[runStart], fStyleRunLimits[run] - runStart);
             // convert from visual to logical glyph indices
             for (glyph = glyphBase; glyph < glyphBase + glyphCount; glyph += 1) {
                 le_int32 ch = fGlyphToCharMap[glyph];

@@ -44,7 +44,7 @@ LIBS = $(LIBICUUC) $(LIBICULE) $(DEFAULT_LIBS)
 
 OBJECTS =  ParagraphLayout.o \
 RunArrays.o \
-Utilities.o  
+LXUtilities.o  
 
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 
