@@ -608,7 +608,7 @@ root {
         is  { "is"  }
         it  { "it"  }
         iu  { "iu"  }
-        iw  { "iw"  }
+        //iw  { "iw"  }
         ja  { "ja"  }
 
         jpr { "jpr" }

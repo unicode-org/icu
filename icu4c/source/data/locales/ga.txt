@@ -801,7 +801,7 @@ ga{
         is  { "Íoslainnais" }
         it  { "Iodáilis" }
         iu  { "Ionúitis" } // acmhainn
-        iw  { "Eabhrais" }  // Use he instead
+        //iw  { "Eabhrais" }  // Use he instead
         ja  { "Seapáinis" }
         jv  { "Iávais" } //??
         ka  { "Seoirsis" } //?? Grúisis
