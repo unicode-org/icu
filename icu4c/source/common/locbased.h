@@ -18,7 +18,11 @@
 
 U_NAMESPACE_BEGIN
 
-class LocaleBased {
+class U_COMMON_API LocaleBased {
+    // Hmm.  This is an internal class (which may very well go away
+    // altogether soon) and it is ONLY constructed on the stack.
+    // It has no vtable BY DESIGN.  For this reason, I'm not inheriting
+    // from UObject or UMemory.  aliu 2004-01-20
 
  public:
 
