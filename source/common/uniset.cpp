@@ -23,6 +23,24 @@
 #include "uassert.h"
 #include "hash.h"
 
+// Define UChar constants using hex for EBCDIC compatibility
+// Used #define to reduce private static exports and memory access time.
+#define SET_OPEN        ((UChar)0x005B) /*[*/
+#define SET_CLOSE       ((UChar)0x005D) /*]*/
+#define HYPHEN          ((UChar)0x002D) /*-*/
+#define COMPLEMENT      ((UChar)0x005E) /*^*/
+#define COLON           ((UChar)0x003A) /*:*/
+#define BACKSLASH       ((UChar)0x005C) /*\*/
+#define INTERSECTION    ((UChar)0x0026) /*&*/
+#define UPPER_U         ((UChar)0x0055) /*U*/
+#define LOWER_U         ((UChar)0x0075) /*u*/
+#define OPEN_BRACE      ((UChar)123)    /*{*/
+#define CLOSE_BRACE     ((UChar)125)    /*}*/
+#define UPPER_P         ((UChar)0x0050) /*P*/
+#define LOWER_P         ((UChar)0x0070) /*p*/
+#define UPPER_N         ((UChar)78)     /*N*/
+#define EQUALS          ((UChar)0x003D) /*=*/
+
 // HIGH_VALUE > all valid values. 110000 for codepoints
 #define UNICODESET_HIGH 0x0110000
 
@@ -1644,5 +1662,173 @@ void UnicodeSet::retain(const UChar32* other, int32_t otherLen, int8_t polarity)
     swapBuffers();
     pat.truncate(0);
 }
+
+/**
+ * Append the <code>toPattern()</code> representation of a
+ * string to the given <code>StringBuffer</code>.
+ */
+void UnicodeSet::_appendToPat(UnicodeString& buf, const UnicodeString& s, UBool
+escapeUnprintable) {
+    UChar32 cp;
+    for (int32_t i = 0; i < s.length(); i += UTF_CHAR_LENGTH(cp)) {
+        _appendToPat(buf, cp = s.char32At(i), escapeUnprintable);
+    }
+}
+
+/**
+ * Append the <code>toPattern()</code> representation of a
+ * character to the given <code>StringBuffer</code>.
+ */
+void UnicodeSet::_appendToPat(UnicodeString& buf, UChar32 c, UBool
+escapeUnprintable) {
+    if (escapeUnprintable && ICU_Utility::isUnprintable(c)) {
+        // Use hex escape notation (\uxxxx or \Uxxxxxxxx) for anything
+        // unprintable
+        if (ICU_Utility::escapeUnprintable(buf, c)) {
+            return;
+        }
+    }
+    // Okay to let ':' pass through
+    switch (c) {
+    case SET_OPEN:
+    case SET_CLOSE:
+    case HYPHEN:
+    case COMPLEMENT:
+    case INTERSECTION:
+    case BACKSLASH:
+    case OPEN_BRACE:
+    case CLOSE_BRACE:
+    case COLON:
+    case SymbolTable::SYMBOL_REF:
+        buf.append(BACKSLASH);
+        break;
+    default:
+        // Escape whitespace
+        if (uprv_isRuleWhiteSpace(c)) {
+            buf.append(BACKSLASH);
+        }
+        break;
+    }
+    buf.append(c);
+}
+
+/**
+ * Append a string representation of this set to result.  This will be
+ * a cleaned version of the string passed to applyPattern(), if there
+ * is one.  Otherwise it will be generated.
+ */
+UnicodeString& UnicodeSet::_toPattern(UnicodeString& result,
+                                      UBool escapeUnprintable) const {
+    if (pat.length() > 0) {
+        int32_t i;
+        int32_t backslashCount = 0;
+        for (i=0; i<pat.length(); ) {
+            UChar32 c = pat.char32At(i);
+            i += UTF_CHAR_LENGTH(c);
+            if (escapeUnprintable && ICU_Utility::isUnprintable(c)) {
+                // If the unprintable character is preceded by an odd
+                // number of backslashes, then it has been escaped.
+                // Before unescaping it, we delete the final
+                // backslash.
+                if ((backslashCount % 2) == 1) {
+                    result.truncate(result.length() - 1);
+                }
+                ICU_Utility::escapeUnprintable(result, c);
+                backslashCount = 0;
+            } else {
+                result.append(c);
+                if (c == BACKSLASH) {
+                    ++backslashCount;
+                } else {
+                    backslashCount = 0;
+                }
+            }
+        }
+        return result;
+    }
+    
+    return _generatePattern(result, escapeUnprintable);
+}
+
+/**
+ * Returns a string representation of this set.  If the result of
+ * calling this function is passed to a UnicodeSet constructor, it
+ * will produce another set that is equal to this one.
+ */
+UnicodeString& UnicodeSet::toPattern(UnicodeString& result,
+                                     UBool escapeUnprintable) const {
+    result.truncate(0);
+    return _toPattern(result, escapeUnprintable);
+}
+
+/**
+ * Generate and append a string representation of this set to result.
+ * This does not use this.pat, the cleaned up copy of the string
+ * passed to applyPattern().
+ */
+UnicodeString& UnicodeSet::_generatePattern(UnicodeString& result,
+                                            UBool escapeUnprintable) const {
+    result.append(SET_OPEN);
+
+//  // Check against the predefined categories.  We implicitly build
+//  // up ALL category sets the first time toPattern() is called.
+//  for (int8_t cat=0; cat<Unicode::GENERAL_TYPES_COUNT; ++cat) {
+//      if (*this == getCategorySet(cat)) {
+//          result.append(COLON);
+//          result.append(CATEGORY_NAMES, cat*2, 2);
+//          return result.append(CATEGORY_CLOSE);
+//      }
+//  }
+
+    int32_t count = getRangeCount();
+
+    // If the set contains at least 2 intervals and includes both
+    // MIN_VALUE and MAX_VALUE, then the inverse representation will
+    // be more economical.
+    if (count > 1 &&
+        getRangeStart(0) == MIN_VALUE &&
+        getRangeEnd(count-1) == MAX_VALUE) {
+
+        // Emit the inverse
+        result.append(COMPLEMENT);
+
+        for (int32_t i = 1; i < count; ++i) {
+            UChar32 start = getRangeEnd(i-1)+1;
+            UChar32 end = getRangeStart(i)-1;
+            _appendToPat(result, start, escapeUnprintable);
+            if (start != end) {
+                if ((start+1) != end) {
+                    result.append(HYPHEN);
+                }
+                _appendToPat(result, end, escapeUnprintable);
+            }
+        }
+    }
+
+    // Default; emit the ranges as pairs
+    else {
+        for (int32_t i = 0; i < count; ++i) {
+            UChar32 start = getRangeStart(i);
+            UChar32 end = getRangeEnd(i);
+            _appendToPat(result, start, escapeUnprintable);
+            if (start != end) {
+                if ((start+1) != end) {
+                    result.append(HYPHEN);
+                }
+                _appendToPat(result, end, escapeUnprintable);
+            }
+        }
+    }
+    
+    for (int32_t i = 0; i<strings->size(); ++i) {
+        result.append(OPEN_BRACE);
+        _appendToPat(result,
+                     *(const UnicodeString*) strings->elementAt(i),
+                     escapeUnprintable);
+        result.append(CLOSE_BRACE);
+    }
+    return result.append(SET_CLOSE);
+}
+
 
 U_NAMESPACE_END

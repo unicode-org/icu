@@ -142,30 +142,6 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
     return FALSE;
 }
 
-U_CAPI UBool U_EXPORT2
-uprv_isRuleWhiteSpace(UChar32 c) {
-    /* "white space" in the sense of ICU rule parsers
-       This is a FIXED LIST that is NOT DEPENDENT ON UNICODE PROPERTIES.
-       See UTR #31: http://www.unicode.org/reports/tr31/.
-       U+0009..U+000D, U+0020, U+0085, U+200E..U+200F, and U+2028..U+2029
-    */
-    return (c >= 0x0009 && c <= 0x2029 &&
-            (c <= 0x000D || c == 0x0020 || c == 0x0085 ||
-             c == 0x200E || c == 0x200F || c >= 0x2028));
-}
-
-static const UChar _PATTERN[] = {
-    /* "[[:Cf:][:WSpace:]]" */
-    91, 91, 58, 67, 102, 58, 93, 91, 58, 87,
-    83, 112, 97, 99, 101, 58, 93, 93, 0
-};
-
-U_CAPI USet* U_EXPORT2
-uprv_openRuleWhiteSpaceSet(UErrorCode* ec) {
-    return uset_openPattern(_PATTERN,
-                            sizeof(_PATTERN)/sizeof(_PATTERN[0])-1, ec);
-}
-
 U_CAPI int32_t U_EXPORT2
 u_getIntPropertyValue(UChar32 c, UProperty which) {
     UErrorCode errorCode;

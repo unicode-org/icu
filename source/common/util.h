@@ -231,6 +231,13 @@ private:
     ICU_Utility();
 };
 
+/**
+ * Is this character a "white space" in the sense of ICU rule parsers?
+ * @internal
+ */
+U_CAPI UBool U_EXPORT2
+uprv_isRuleWhiteSpace(UChar32 c);
+
 U_NAMESPACE_END
 
 #endif
