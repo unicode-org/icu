@@ -66,7 +66,7 @@ public:
         return s;
     }
 
-    void extractBetween(UTextOffset start, UTextOffset limit, UnicodeString result) {
+    void extractBetween(UTextOffset start, UTextOffset limit, UnicodeString& result) const {
         chars.extractBetween(start, limit, result);
     }
 
