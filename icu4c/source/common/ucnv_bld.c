@@ -57,44 +57,44 @@ static struct {
   const char *name;
   const UConverterType type;
 } const cnvNameType[] = {
-  { "ISO88591", UCNV_LATIN_1 },
-  { "UTF8", UCNV_UTF8 },
-  { "UTF16BE", UCNV_UTF16_BigEndian },
-  { "UTF16LE", UCNV_UTF16_LittleEndian },
+  { "ISO-8859-1", UCNV_LATIN_1 },
+  { "UTF-8", UCNV_UTF8 },
+  { "UTF-16BE", UCNV_UTF16_BigEndian },
+  { "UTF-16LE", UCNV_UTF16_LittleEndian },
 #if U_IS_BIG_ENDIAN
-  { "UTF16", UCNV_UTF16_BigEndian },
+  { "UTF-16", UCNV_UTF16_BigEndian },
   { "UTF16_OppositeEndian", UCNV_UTF16_LittleEndian },
 #else
-  { "UTF16", UCNV_UTF16_LittleEndian },
+  { "UTF-16", UCNV_UTF16_LittleEndian },
   { "UTF16_OppositeEndian", UCNV_UTF16_BigEndian},
 #endif
-  { "UTF32BE", UCNV_UTF32_BigEndian },
-  { "UTF32LE", UCNV_UTF32_LittleEndian },
+  { "UTF-32BE", UCNV_UTF32_BigEndian },
+  { "UTF-32LE", UCNV_UTF32_LittleEndian },
 #if U_IS_BIG_ENDIAN
-  { "UTF32", UCNV_UTF32_BigEndian },
+  { "UTF-32", UCNV_UTF32_BigEndian },
   { "UTF32_OppositeEndian", UCNV_UTF32_LittleEndian },
 #else
-  { "UTF32", UCNV_UTF32_LittleEndian },
+  { "UTF-32", UCNV_UTF32_LittleEndian },
   { "UTF32_OppositeEndian", UCNV_UTF32_BigEndian},
 #endif
   { "ISO_2022", UCNV_ISO_2022 },
-  { "LMBCS1", UCNV_LMBCS_1 },
-  { "LMBCS2", UCNV_LMBCS_2 },
-  { "LMBCS3", UCNV_LMBCS_3 },
-  { "LMBCS4", UCNV_LMBCS_4 },
-  { "LMBCS5", UCNV_LMBCS_5 },
-  { "LMBCS6", UCNV_LMBCS_6 },
-  { "LMBCS8", UCNV_LMBCS_8 },
-  { "LMBCS11",UCNV_LMBCS_11 },
-  { "LMBCS16",UCNV_LMBCS_16 },
-  { "LMBCS17",UCNV_LMBCS_17 },
-  { "LMBCS18",UCNV_LMBCS_18 },
-  { "LMBCS19",UCNV_LMBCS_19 },
+  { "LMBCS-1", UCNV_LMBCS_1 },
+  { "LMBCS-2", UCNV_LMBCS_2 },
+  { "LMBCS-3", UCNV_LMBCS_3 },
+  { "LMBCS-4", UCNV_LMBCS_4 },
+  { "LMBCS-5", UCNV_LMBCS_5 },
+  { "LMBCS-6", UCNV_LMBCS_6 },
+  { "LMBCS-8", UCNV_LMBCS_8 },
+  { "LMBCS-11",UCNV_LMBCS_11 },
+  { "LMBCS-16",UCNV_LMBCS_16 },
+  { "LMBCS-17",UCNV_LMBCS_17 },
+  { "LMBCS-18",UCNV_LMBCS_18 },
+  { "LMBCS-19",UCNV_LMBCS_19 },
   { "HZ",UCNV_HZ },
   { "SCSU", UCNV_SCSU },
   { "ISCII", UCNV_ISCII },
-  { "USASCII", UCNV_US_ASCII },
-  { "UTF7", UCNV_UTF7 }
+  { "US-ASCII", UCNV_US_ASCII },
+  { "UTF-7", UCNV_UTF7 }
 };
 
 
