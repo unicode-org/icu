@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $
- * $Date: 2001/11/29 07:49:53 $
- * $Revision: 1.84 $
+ * $Date: 2001/11/29 17:27:43 $
+ * $Revision: 1.85 $
  *
  *****************************************************************************************
  */
@@ -2159,6 +2159,10 @@ public class TransliteratorTest extends TestFmwk {
     static final String DESERET_dee = UTF16.valueOf(0x1043C);
     
     static final String[][] testCases = {
+        // NORMALIZATION, not in C
+        {"NFC", "a\u0300", "\u00E0"},
+        {"NFD", "\u00E0", "a\u0300"},
+        
         // mp -> b BUG
         {"Greek-Latin/UNGEGN", "(\u03BC\u03C0)", "(b)"},
         {"Greek-Latin/FAKE", "(\u03BC\u03C0)", "(b)"},
@@ -2267,21 +2271,34 @@ public class TransliteratorTest extends TestFmwk {
 
         Transliterator.Position index = null;
         if (pos == null) {
-            index = new Transliterator.Position();
+            index = new Transliterator.Position(0, source.length(), 0, source.length());
         } else {
             index = new Transliterator.Position(pos.contextStart, pos.contextLimit,
                                                 pos.start, pos.limit);
         }
 
         ReplaceableString rsource = new ReplaceableString(source);
-        if (pos == null) {
-            t.transliterate(rsource);
-        } else {
-            // Do it all at once -- below we do it incrementally
-            t.finishTransliteration(rsource, pos);
+        
+       // NOT YET IN C
+            
+        t.finishTransliteration(rsource, index);
+        // Do it all at once -- below we do it incrementally
+            
+        if (index.start != index.limit) {
+            expectAux(t.getID() + ":UNFINISHED", source, 
+                "start: " + index.start + ", limit: " + index.limit, false, expectedResult);
+            return;
         }
         String result = rsource.toString();
         if (!expectAux(t.getID() + ":Replaceable", source, result, expectedResult)) return;
+        
+        
+        if (pos == null) {
+            index = new Transliterator.Position();
+        } else {
+            index = new Transliterator.Position(pos.contextStart, pos.contextLimit,
+                                                pos.start, pos.limit);
+        }
 
         // Test incremental transliteration -- this result
         // must be the same after we finalize (see below).
