@@ -71,9 +71,9 @@ typedef enum UTraceLevel UTraceLevel;
 #ifdef UTRACE_IMPL
 U_EXPORT int32_t
 #else
-U_IMPORT int32_t
+U_CFUNC U_IMPORT int32_t 
 #endif
-utrace_level; 
+utrace_level;
 
 /**
  * Boolean expression to see if ICU tracing is turned on.
