@@ -652,15 +652,10 @@ struct {
     }
 
 
-#if 0
-#endif
-
-
-
-  int32_t surrogateCount = 0;
+    int32_t surrogateCount = 0;
     while(!feof(data)) {
         if(U_FAILURE(*status)) {
-            fprintf(stderr, "Something returned an error %i (%s) while processing line %i of $s. Exiting...\n",
+            fprintf(stderr, "Something returned an error %i (%s) while processing line %i of %s. Exiting...\n",
                 *status, u_errorName(*status), line, filename);
             exit(*status);
         }

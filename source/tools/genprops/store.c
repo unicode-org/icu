@@ -779,7 +779,7 @@ generateData(const char *dataDir) {
 
     trieSize=utrie_serialize(pTrie, trieBlock, sizeof(trieBlock), getFoldedPropsValue, TRUE, &errorCode);
     if(U_FAILURE(errorCode)) {
-        fprintf(stderr, "error: utrie_serialize failed: %s (length %ld)\n", u_errorName(errorCode), trieSize);
+        fprintf(stderr, "error: utrie_serialize failed: %s (length %ld)\n", u_errorName(errorCode), (long)trieSize);
         exit(errorCode);
     }
 

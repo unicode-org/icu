@@ -985,7 +985,7 @@ struct teststruct {
     uint8_t key[256];
   } ;
 
-int compare_teststruct(const void *string1, const void *string2) {
+static int compare_teststruct(const void *string1, const void *string2) {
   return(strcmp(((struct teststruct *)string1)->key, ((struct teststruct *)string2)->key));
 }
 
@@ -1072,7 +1072,6 @@ void TestBounds() {
 
 
   int32_t i = 0, j = 0, k = 0, buffSize = 0, skSize = 0, lowerSize = 0, upperSize = 0;
-  int32_t lowerRND = 0, upperRND = 0;
   int32_t arraySize = sizeof(tests)/sizeof(tests[0]);
 
   for(i = 0; i<arraySize; i++) {
@@ -1139,3 +1138,4 @@ void TestBounds() {
   }
   ucol_close(coll);
 }
+
