@@ -27,13 +27,9 @@
  * ANSI C headers:
  * stddef.h defines wchar_t
  * limits.h defines CHAR_MAX
- *
- * Typical, though not ANSI, headers:
- * wchar.h defines WCHAR_MAX
  */
 #include <stddef.h>
 #include <limits.h>
-#include <wchar.h>
 #include "unicode/umachine.h"
 /* include the utfXX.h after the following definitions */
 
@@ -44,21 +40,14 @@
 
 #define U_SIZEOF_UCHAR (UTF_SIZE>>3)
 
-/* U_SIZEOF_WCHAR_T==sizeof(wchar_t) */
-#ifndef U_SIZEOF_WCHAR_T
-#   ifdef WCHAR_MAX
-#       if WCHAR_MAX<=255
-#           define U_SIZEOF_WCHAR_T 1
-#       elif WCHAR_MAX==65535
-#           define U_SIZEOF_WCHAR_T 2
-#       elif WCHAR_MAX>=0x10ffff
-#           define U_SIZEOF_WCHAR_T 4
-#       else
-#           error unexpected value of WCHAR_MAX
-#       endif
-#   else
-#       define U_SIZEOF_WCHAR_T 4
-#   endif
+/* Do we have wchar.h on this platform? It is there on most platforms. */
+#ifndef U_HAVE_WCHAR_H
+#   define U_HAVE_WCHAR_H 1
+#endif
+
+/* U_SIZEOF_WCHAR_T==sizeof(wchar_t) (0 means it is not defined or autoconf could not set it) */
+#if U_SIZEOF_WCHAR_T==0
+#   define U_SIZEOF_WCHAR_T 4
 #endif
 
 /* Define UChar32 to be compatible with wchar_t if possible. */
