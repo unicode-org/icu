@@ -321,7 +321,8 @@ static UDataMemory *udata_cacheDataItem(const char *path, UDataMemory *item, UEr
  *                                                                      *
  *----------------------------------------------------------------------*/
 
-#define U_DATA_PATHITER_BUFSIZ  1024   /* paths can't be longer than this */
+#define U_DATA_PATHITER_BUFSIZ  128        /* Size of local buffer for paths         */
+                                           /*   Overflow causes malloc of larger buf */
 
 typedef struct 
 {
@@ -330,12 +331,17 @@ typedef struct
     const char *basename;                          /* item's basename (icudt22e_mt.res)*/
     const char *suffix;                            /* item suffix (can be null) */
 
-    uint32_t     basenameLen;                      /* length of basename */
-    char        itemPath[U_DATA_PATHITER_BUFSIZ];  /* path passed in with item name */
+    uint32_t    basenameLen;                       /* length of basename */
 
-    char        pathBuffer[U_DATA_PATHITER_BUFSIZ];  /* output path for this it'ion */
+    char       *itemPath;                          /* path passed in with item name */
+    char        itemPathBuf[U_DATA_PATHITER_BUFSIZ];
 
-    UBool       checkLastFour;                       /* if TRUE then allow paths such as '/foo/myapp.dat'  to match, checks last 4 chars of suffix with last 4 of path, then previous chars. */
+    char       *pathBuffer;                        /* output path for this it'ion */
+    char        pathBufferA[U_DATA_PATHITER_BUFSIZ];
+
+    UBool       checkLastFour;                     /* if TRUE then allow paths such as '/foo/myapp.dat'
+                                                    * to match, checks last 4 chars of suffix with
+                                                    * last 4 of path, then previous chars. */
     
 }  UDataPathIterator;
 
@@ -346,9 +352,12 @@ typedef struct
  * @param iter  The iterator to be initialized. Its current state does not matter. 
  * @param path  The full pathname to be iterated over.  If NULL, defaults to U_ICUDATA_NAME 
  * @param item  Item to be searched for.  Can include full path, such as /a/b/foo.dat 
- * @param suffix  Optional item suffix, if not-null (ex. ".dat") then 'path' can contain 'item' explicitly. Ex:   'stuff.dat' would be found in '/a/foo:/tmp/stuff.dat:/bar/baz' as item #2.   '/blarg/stuff.dat' would also be found.
+ * @param suffix  Optional item suffix, if not-null (ex. ".dat") then 'path' can contain 'item' explicitly.
+ *               Ex:   'stuff.dat' would be found in '/a/foo:/tmp/stuff.dat:/bar/baz' as item #2.   
+ *                     '/blarg/stuff.dat' would also be found.
  */
-static void udata_pathiter_init(UDataPathIterator *iter, const char *path, const char *item, const char *suffix, UBool doCheckLastFour)
+static void udata_pathiter_init(UDataPathIterator *iter, const char *path,
+                                const char *item, const char *suffix, UBool doCheckLastFour)
 {
 #ifdef UDATA_DEBUG
         fprintf(stderr, "SUFFIX1=%s [%p]\n", suffix, suffix);
@@ -370,26 +379,53 @@ static void udata_pathiter_init(UDataPathIterator *iter, const char *path, const
     }
 
     /** Item path **/
+    iter->itemPath   = iter->itemPathBuf;
     if(iter->basename == item) {
         iter->itemPath[0] = 0;
         iter->nextPath = iter->path;
     } else { 
-        uprv_strncpy(iter->itemPath, item, iter->basename - item);
-        iter->itemPath[iter->basename-item]=0;
+        int32_t  itemPathLen = iter->basename-item;
+        if (itemPathLen >= U_DATA_PATHITER_BUFSIZ) {
+            char *t = (char *)uprv_malloc(itemPathLen+1);
+            if (t != NULL) {
+                iter->itemPath = t;
+            } else {
+                // Malloc failed.  Ignore the itemPath.
+                itemPathLen = 0;
+            }
+        }
+        uprv_strncpy(iter->itemPath, item, itemPathLen);
+        iter->itemPath[itemPathLen]=0;
         iter->nextPath = iter->itemPath;
     }
 #ifdef UDATA_DEBUG
-        fprintf(stderr, "SUFFIX=%s [%p]\n", suffix, suffix);
+    fprintf(stderr, "SUFFIX=%s [%p]\n", suffix, suffix);
 #endif
     
+    /** Suffix  **/
     if(suffix != NULL) {
         iter->suffix = suffix;
     } else {
         iter->suffix = "";
     }
-
+    
     iter->checkLastFour = doCheckLastFour;
     
+    /* pathBuffer will hold the output path strings returned by the this iterator
+     *   Get an upper bound of possible string size, and make sure that the buffer
+     *   is big enough (sum of length of each piece, 2 extra delimiters, + trailing NULL) */
+    {
+        int32_t  maxPathLen = uprv_strlen(iter->path) + uprv_strlen(item) + uprv_strlen(iter->suffix) + 2;  
+        iter->pathBuffer = iter->pathBufferA;
+        if (maxPathLen >= U_DATA_PATHITER_BUFSIZ) {
+            iter->pathBuffer = (char *)uprv_malloc(maxPathLen);
+            if (iter->pathBuffer == NULL) {
+                iter->pathBuffer = iter->pathBufferA;
+                iter->path = "";
+            }
+        }
+    }
+
 #ifdef UDATA_DEBUG
     fprintf(stderr, "%p: init %s -> [path=%s], [base=%s], [suff=%s], [itempath=%s], [nextpath=%s], [checklast4=%s]\n",
             iter,
@@ -531,6 +567,20 @@ static const char *udata_pathiter_next(UDataPathIterator *iter, int32_t *outPath
 }
 
 
+/*
+ *   Path Iterator Destructor.  Clean up any allocated storage
+ */
+static void udata_pathiter_dt(UDataPathIterator *iter) {
+     if (iter->itemPath != iter->itemPathBuf) {
+         uprv_free(iter->itemPath);
+         iter->itemPath = NULL;
+     }
+     if (iter->pathBuffer != iter->pathBufferA) {
+         uprv_free(iter->pathBuffer);
+         iter->pathBuffer = NULL;
+     }
+}
+
 /* ==================================================================================*/
 
 
@@ -562,7 +612,6 @@ openCommonData(const char *path,          /*  Path from OpenCHoice?          */
     UDataMemory tData;
     UDataPathIterator iter;
     const char *pathBuffer;
-    int32_t pathLen;
     const char *inBasename;
 
     if (U_FAILURE(*pErrorCode)) {
@@ -621,7 +670,7 @@ openCommonData(const char *path,          /*  Path from OpenCHoice?          */
     udata_pathiter_init(&iter, u_getDataDirectory(), path, ".dat", TRUE);
 
     while((UDataMemory_isLoaded(&tData)==FALSE) && 
-          (pathBuffer = udata_pathiter_next(&iter, &pathLen)) != NULL)
+          (pathBuffer = udata_pathiter_next(&iter, NULL)) != NULL)
     {
 #ifdef UDATA_DEBUG
         fprintf(stderr, "ocd: trying path %s - ", pathBuffer);
@@ -631,6 +680,7 @@ openCommonData(const char *path,          /*  Path from OpenCHoice?          */
         fprintf(stderr, "%s\n", UDataMemory_isLoaded(&tData)?"LOADED":"not loaded");
 #endif
     }
+    udata_pathiter_dt(&iter);    /* Note:  this call may invalidate "pathBuffer" */
 
 #if defined(OS390_STUBDATA) && defined(OS390BATCH)
     if (!UDataMemory_isLoaded(&tData)) {
@@ -883,7 +933,6 @@ doOpenChoice(const char *path, const char *type, const char *name,
 {
     UDataPathIterator iter;
     const char *pathBuffer;
-    int32_t pathLen;
 
     char                tocEntryName[100];
     char                oldStylePath[1024];
@@ -969,7 +1018,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
     /* init path iterator for individual files */
     udata_pathiter_init(&iter, dataPath, path, tocEntrySuffix, FALSE);
     
-    while((pathBuffer = udata_pathiter_next(&iter, &pathLen)))
+    while((pathBuffer = udata_pathiter_next(&iter, NULL)))
     {
 #ifdef UDATA_DEBUG
         fprintf(stderr, "UDATA: trying individual file %s\n", pathBuffer);
@@ -988,6 +1037,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
 #ifdef UDATA_DEBUG
                 fprintf(stderr, "** Mapped file: %s\n", pathBuffer);
 #endif
+                udata_pathiter_dt(&iter);
                 return pEntryData;
             }
             
@@ -996,6 +1046,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
             
             /* If we had a nasty error, bail out completely.  */
             if (U_FAILURE(*pErrorCode)) {
+                udata_pathiter_dt(&iter);
                 return NULL;
             }
             
@@ -1006,6 +1057,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
         fprintf(stderr, "%s\n", UDataMemory_isLoaded(&dataMemory)?"LOADED":"not loaded");
 #endif
     }
+    udata_pathiter_dt(&iter);
 
     /* #2 */
 
