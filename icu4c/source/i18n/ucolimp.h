@@ -232,28 +232,29 @@ struct incrementalContext {
 * For more complicated CEs it resorts to getComplicatedCE.
 */
 #define UCOL_GETPREVCE(order, coll, data, length, status) {                  \
-  if (data.CEpos > data.CEs) {                                               \
-    (order) = *(data.toReturn --);                                           \
-    if (data.CEs == data.toReturn) {                                         \
-      data.CEpos = data.toReturn = data.CEs;                                 \
+  if ((data).CEpos > (data).CEs) {                                           \
+    (data).toReturn --;                                                      \
+    (order) = *((data).toReturn);                                            \
+    if ((data).CEs == (data).toReturn) {                                     \
+      (data).CEpos = (data).toReturn = (data).CEs;                           \
     }                                                                        \
   }                                                                          \
   else {                                                                     \
-    if (data.len - data.pos == length) {                                     \
+    if ((data).len - (data).pos == length) {                                 \
       (order) = UCOL_NO_MORE_CES;                                            \
     }                                                                        \
     else {                                                                   \
       UChar ch;                                                              \
-      if (data.pos != data.writableBuffer) {                                 \
-        data.pos --;                                                         \
+      if ((data).pos != (data).writableBuffer) {                             \
+        (data).pos --;                                                       \
       }                                                                      \
       else {                                                                 \
-        data.pos = data.string +                                             \
-                            (length - (data.len - data.writableBuffer));     \
-        data.len = data.string + length;                                     \
-        data.isThai = TRUE;                                                  \
+        (data).pos = (data).string +                                         \
+                            (length - ((data).len - (data).writableBuffer)); \
+        (data).len = (data).string + length;                                 \
+        (data).isThai = TRUE;                                                \
       }                                                                      \
-      ch = *(data.pos);                                                      \
+      ch = *((data).pos);                                                    \
       if (ch <= 0xFF) {                                                      \
         (order) = (coll)->latinOneMapping[ch];                               \
       }                                                                      \
@@ -342,9 +343,9 @@ ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
 #define UCOL_TERTIARYMASK   0x000000FF
 
 /** 
+ * Internal.
  * This indicates the last element in a UCollationElements has been consumed. 
- * Compare with the older UCOL_NULLORDER, UCOL_NULLORDER is returned if error
- * occurs.
+ * Compare with the UCOL_NULLORDER, UCOL_NULLORDER is returned if error occurs.
  */
 #define UCOL_NO_MORE_CES        0x00010101
 

@@ -112,12 +112,6 @@ public:
   */
   static int32_t const NULLORDER;
 
-  /**
-  * NO_MORE_CES indicates that the iterator has consumed the last element.
-  * Constant is actually the bitwise seperator of the collation elements.
-  */
-  static int32_t const NO_MORE_CES;
-
   // CollationElementIterator public constructor/destructor -------------------
 
   /**
@@ -151,8 +145,7 @@ public:
   * Gets the ordering priority of the next character in the string.
   * @param status the error code status.
   * @return the next character's ordering. otherwise returns NULLORDER if an 
-  *         error has occured or NO_MORE_CES if the end of string has been 
-  *         reached
+  *         error has occured or if the end of string has been reached
   */
   int32_t next(UErrorCode& status);
 
@@ -160,8 +153,7 @@ public:
   * Get the ordering priority of the previous collation element in the string.
   * @param status the error code status.
   * @return the previous element's ordering. otherwise returns NULLORDER if an 
-  *         error has occured or NO_MORE_CES if the start of string has been 
-  *         reached
+  *         error has occured or if the start of string has been reached
   */
   int32_t previous(UErrorCode& status);
 
