@@ -34,17 +34,22 @@ public class TestUScriptRun extends TestFmwk
         }
     };
     
-    private static final RunTestData[] testData = {
-        new RunTestData("\u0020\u0946\u0939\u093F\u0928\u094D\u0926\u0940\u0020", UScript.DEVANAGARI),
-        new RunTestData("\u0627\u0644\u0639\u0631\u0628\u064A\u0629\u0020", UScript.ARABIC),
-        new RunTestData("\u0420\u0443\u0441\u0441\u043A\u0438\u0439\u0020", UScript.CYRILLIC),
-        new RunTestData("English (", UScript.LATIN),
-        new RunTestData("\u0E44\u0E17\u0E22", UScript.THAI),
-        new RunTestData(") ", UScript.LATIN),
-        new RunTestData("\u6F22\u5B75", UScript.HAN),
-        new RunTestData("\u3068\u3072\u3089\u304C\u306A\u3068", UScript.HIRAGANA),
-        new RunTestData("\u30AB\u30BF\u30AB\u30CA", UScript.KATAKANA),
-        new RunTestData("\uD801\uDC00\uD801\uDC01\uD801\uDC02\uD801\uDC03", UScript.DESERET)
+    private static final RunTestData[][] testData = {
+        {
+            new RunTestData("\u0020\u0946\u0939\u093F\u0928\u094D\u0926\u0940\u0020", UScript.DEVANAGARI),
+            new RunTestData("\u0627\u0644\u0639\u0631\u0628\u064A\u0629\u0020", UScript.ARABIC),
+            new RunTestData("\u0420\u0443\u0441\u0441\u043A\u0438\u0439\u0020", UScript.CYRILLIC),
+            new RunTestData("English (", UScript.LATIN),
+            new RunTestData("\u0E44\u0E17\u0E22", UScript.THAI),
+            new RunTestData(") ", UScript.LATIN),
+            new RunTestData("\u6F22\u5B75", UScript.HAN),
+            new RunTestData("\u3068\u3072\u3089\u304C\u306A\u3068", UScript.HIRAGANA),
+            new RunTestData("\u30AB\u30BF\u30AB\u30CA", UScript.KATAKANA),
+            new RunTestData("\uD801\uDC00\uD801\uDC01\uD801\uDC02\uD801\uDC03", UScript.DESERET),
+        },
+        {
+            new RunTestData("((((((((((abc))))))))))", UScript.LATIN)
+        }
     };
     
     private void CheckScriptRuns(UScriptRun scriptRun, int[] runStarts, RunTestData[] testData)
@@ -272,73 +277,76 @@ public class TestUScriptRun extends TestFmwk
     
     public void TestRuns()
     {
-        int stringLimit = 0;
-        int[] runStarts = new int[testData.length + 1];
-        String testString = "";
-        UScriptRun scriptRun = null;
+        for (int i = 0; i < testData.length; i += 1) {
+            RunTestData[] test = testData[i];
+            int stringLimit = 0;
+            int[] runStarts = new int[test.length + 1];
+            String testString = "";
+            UScriptRun scriptRun = null;
         
-        /*
-         * Fill in the test string and the runStarts array.
-         */
-        for (int run = 0; run < testData.length; run += 1) {
-            runStarts[run] = stringLimit;
-            stringLimit += testData[run].runText.length();
-            testString  += testData[run].runText;
-        }
-
-        /* The limit of the last run */ 
-        runStarts[testData.length] = stringLimit;
-        
-        try {
-            scriptRun = new UScriptRun(testString);
-            CheckScriptRuns(scriptRun, runStarts, testData);
-        } catch (IllegalArgumentException iae) {
-            errln("new UScriptRun(testString) produced an IllegalArgumentException!");
-        }
-        
-        try {
-            scriptRun.reset();
-            CheckScriptRuns(scriptRun, runStarts, testData);
-        } catch (IllegalArgumentException iae) {
-            errln("scriptRun.reset() on a valid UScriptRun produced an IllegalArgumentException!");
-        }
-        
-        try {
-            scriptRun = new UScriptRun(testString.toCharArray());
-            CheckScriptRuns(scriptRun, runStarts, testData);
-        } catch (IllegalArgumentException iae) {
-            errln("new UScriptRun(testString.toCharArray()) produced an IllegalArgumentException!");
-        }
-        
-        try {
-            scriptRun.reset();
-            CheckScriptRuns(scriptRun, runStarts, testData);
-        } catch (IllegalArgumentException iae) {
-            errln("scriptRun.reset() on a valid UScriptRun produced an IllegalArgumentException!");
-        }
-        
-        try {
-            scriptRun = new UScriptRun();
-            
-            if (scriptRun.next()) {
-                errln("scriptRun.next() on an empty UScriptRun returned true!");
+            /*
+             * Fill in the test string and the runStarts array.
+             */
+            for (int run = 0; run < test.length; run += 1) {
+                runStarts[run] = stringLimit;
+                stringLimit += test[run].runText.length();
+                testString  += test[run].runText;
             }
-        } catch (IllegalArgumentException iae) {
-            errln("new UScriptRun() produced an IllegalArgumentException!");
-        }
-        
-        try {
-            scriptRun.reset(testString, 0, testString.length());
-            CheckScriptRuns(scriptRun, runStarts, testData);
-        } catch (IllegalArgumentException iae) {
-            errln("scriptRun.reset(testString.toCharArray(), 0, testString.length) produced an IllegalArgumentException!");
-        }
 
-        try {
-            scriptRun.reset(testString.toCharArray(), 0, testString.length());
-            CheckScriptRuns(scriptRun, runStarts, testData);
-        } catch (IllegalArgumentException iae) {
-            errln("scriptRun.reset(testString.toCharArray(), 0, testString.length) produced an IllegalArgumentException!");
+            /* The limit of the last run */ 
+            runStarts[test.length] = stringLimit;
+        
+            try {
+                scriptRun = new UScriptRun(testString);
+                CheckScriptRuns(scriptRun, runStarts, test);
+            } catch (IllegalArgumentException iae) {
+                errln("new UScriptRun(testString) produced an IllegalArgumentException!");
+            }
+        
+            try {
+                scriptRun.reset();
+                CheckScriptRuns(scriptRun, runStarts, test);
+            } catch (IllegalArgumentException iae) {
+                errln("scriptRun.reset() on a valid UScriptRun produced an IllegalArgumentException!");
+            }
+        
+            try {
+                scriptRun = new UScriptRun(testString.toCharArray());
+                CheckScriptRuns(scriptRun, runStarts, test);
+            } catch (IllegalArgumentException iae) {
+                errln("new UScriptRun(testString.toCharArray()) produced an IllegalArgumentException!");
+            }
+        
+            try {
+                scriptRun.reset();
+                CheckScriptRuns(scriptRun, runStarts, test);
+            } catch (IllegalArgumentException iae) {
+                errln("scriptRun.reset() on a valid UScriptRun produced an IllegalArgumentException!");
+            }
+        
+            try {
+                scriptRun = new UScriptRun();
+            
+                if (scriptRun.next()) {
+                    errln("scriptRun.next() on an empty UScriptRun returned true!");
+                }
+            } catch (IllegalArgumentException iae) {
+                errln("new UScriptRun() produced an IllegalArgumentException!");
+            }
+        
+            try {
+                scriptRun.reset(testString, 0, testString.length());
+                CheckScriptRuns(scriptRun, runStarts, test);
+            } catch (IllegalArgumentException iae) {
+                errln("scriptRun.reset(testString.toCharArray(), 0, testString.length) produced an IllegalArgumentException!");
+            }
+
+            try {
+                scriptRun.reset(testString.toCharArray(), 0, testString.length());
+                CheckScriptRuns(scriptRun, runStarts, test);
+            } catch (IllegalArgumentException iae) {
+                errln("scriptRun.reset(testString.toCharArray(), 0, testString.length) produced an IllegalArgumentException!");
+            }
         }
     }
 }

@@ -134,10 +134,19 @@ public final class UScriptRun
      */
     public final void reset()
     {
+        // empty any old parenStack contents.
+        // NOTE: this is not the most efficient way
+        // to do this, but it's the easiest to write...
+        while (stackIsNotEmpty()) {
+            pop();
+        }
+        
         scriptStart = textStart;
         scriptLimit = textStart;
         scriptCode  = UScript.INVALID_CODE;
         parenSP     = -1;
+        pushCount   =  0;
+        fixupCount  =  0;
         
         text.setToStart();
     }
@@ -303,8 +312,6 @@ public final class UScriptRun
      */
     public final boolean next()
 	{
-		int startSP  = parenSP;  // used to find the first new open character
-
 		// if we've fallen off the end of the text, we're done
 		if (scriptLimit >= textLimit) {
 			return false;
@@ -312,6 +319,8 @@ public final class UScriptRun
     
 		scriptCode  = UScript.COMMON;
         scriptStart = scriptLimit;
+        
+        syncFixup();
         
         int ch;
         
@@ -327,32 +336,16 @@ public final class UScriptRun
 			// characters above it on the stack will be poped.
 			if (pairIndex >= 0) {
 				if ((pairIndex & 1) == 0) {
-				    
-                    /*
-                     * If the paren stack is full, empty it. This
-                     * means that deeply nested paired punctuation
-                     * characters will be ignored, but that's an unusual
-                     * case, and it's better to ignore them than to
-                     * write off the end of the stack...
-                     */
-				    if (++parenSP >= PAREN_STACK_DEPTH) {
-				        parenSP = 0;
-				    }
-				    
-				    parenStack[parenSP] = new ParenStackEntry(pairIndex, scriptCode);
-				} else if (parenSP >= 0) {
+                    push(pairIndex, scriptCode);
+				} else {
 					int pi = pairIndex & ~1;
 
-					while (parenSP >= 0 && parenStack[parenSP].pairIndex != pi) {
-						parenStack[parenSP--] = null;
+					while (stackIsNotEmpty() && top().pairIndex != pi) {
+						pop();
 					}
 
-					if (parenSP < startSP) {
-						startSP = parenSP;
-					}
-
-					if (parenSP >= 0) {
-						sc = parenStack[parenSP].scriptCode;
+					if (stackIsNotEmpty()) {
+						sc = top().scriptCode;
 					}
 				}
 			}
@@ -361,21 +354,13 @@ public final class UScriptRun
 				if (scriptCode <= UScript.INHERITED && sc > UScript.INHERITED) {
 					scriptCode = sc;
 
-					// now that we have a final script code, fix any open
-					// characters we pushed before we knew the script code.
-					while (startSP < parenSP) {
-						parenStack[++startSP].scriptCode = scriptCode;
-					}
+					fixup(scriptCode);
 				}
 
 				// if this character is a close paired character,
-				// pop it from the stack
-				if (pairIndex >= 0 && (pairIndex & 1) != 0 && parenSP >= 0) {
-                    parenStack[parenSP--] = null;
-                    
-                    if (parenSP < startSP) {
-                        startSP = parenSP;
-                    }
+				// pop the matching open character from the stack
+				if (pairIndex >= 0 && (pairIndex & 1) != 0) {
+                    pop();
 				}
 			} else {
 			    // We've just seen the first character of
@@ -417,7 +402,103 @@ public final class UScriptRun
 		    pairIndex  = thePairIndex;
 		    scriptCode = theScriptCode;
 		}
-    };
+    }
+    
+    private static final int mod(int sp)
+    {
+        return sp % PAREN_STACK_DEPTH;
+    }
+    
+    private static final int inc(int sp, int count)
+    {
+        return mod(sp + count);
+    }
+    
+    private static final int inc(int sp)
+    {
+        return inc(sp, 1);
+    }
+    
+    private static final int dec(int sp, int count)
+    {
+        return mod(sp + PAREN_STACK_DEPTH - count);
+    }
+    
+    private static final int dec(int sp)
+    {
+        return dec(sp, 1);
+    }
+    
+    private static final int limitInc(int count)
+    {
+        if (count < PAREN_STACK_DEPTH) {
+            count += 1;
+        }
+        
+        return count;
+    }
+    
+    private final boolean stackIsEmpty()
+    {
+        return pushCount <= 0;
+    }
+    
+    private final boolean stackIsNotEmpty()
+    {
+        return ! stackIsEmpty();
+    }
+    
+    private final void push(int pairIndex, int scriptCode)
+    {
+        pushCount  = limitInc(pushCount);
+        fixupCount = limitInc(fixupCount);
+        
+        parenSP = inc(parenSP);
+        parenStack[parenSP] = new ParenStackEntry(pairIndex, scriptCode);
+    }
+    
+    private final void pop()
+    {
+        
+        if (stackIsEmpty()) {
+            return;
+        }
+        
+        parenStack[parenSP] = null;
+        
+        if (fixupCount > 0) {
+            fixupCount -= 1;
+        }
+        
+        pushCount -= 1;
+        parenSP = dec(parenSP);
+        
+        // If the stack is now empty, reset the stack
+        // pointers to their initial values.
+        if (stackIsEmpty()) {
+            parenSP = -1;
+        }
+    }
+    
+    private final ParenStackEntry top()
+    {
+        return parenStack[parenSP];
+    }
+    
+    private final void syncFixup()
+    {
+        fixupCount = 0;
+    }
+    
+    private final void fixup(int scriptCode)
+    {
+        int fixupSP = dec(parenSP, fixupCount);
+        
+        while (fixupCount-- > 0) {
+            fixupSP = inc(fixupSP);
+            parenStack[fixupSP].scriptCode = scriptCode;
+        }
+    }
     
     private char[] emptyCharArray = {};
 
@@ -430,9 +511,11 @@ public final class UScriptRun
     private int  scriptLimit;
     private int  scriptCode;
 
-    private static int PAREN_STACK_DEPTH = 128;
+    private static int PAREN_STACK_DEPTH = 32;
     private static ParenStackEntry parenStack[] = new ParenStackEntry[PAREN_STACK_DEPTH];
-    private int  parenSP;
+    private int parenSP = -1;
+    private int pushCount = 0;
+    private int fixupCount = 0;
 
     /**
      * Find the highest bit that's set in a word. Uses a binary search through
