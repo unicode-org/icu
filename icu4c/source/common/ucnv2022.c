@@ -540,6 +540,7 @@ static void _ISO2022Open(UConverter *cnv, const char *name, const char *locale,u
         myConverterData->currentType= ASCII1;
         myConverterData->plane = -1;
         myConverterData->key =0;
+        myConverterData->isFirstBuffer = TRUE;
         cnv->fromUnicodeStatus =FALSE;
         if(locale){
             uprv_strcpy(myLocale,locale);
@@ -673,6 +674,7 @@ _ISO2022Reset(UConverter *converter, UConverterResetChoice choice) {
     UConverterDataISO2022 *myConverterData=(UConverterDataISO2022 *) (converter->extraInfo);
     if(! myConverterData->isLocaleSpecified){
         if(choice<=UCNV_RESET_TO_UNICODE) {
+            myConverterData->isFirstBuffer = TRUE;
             if (converter->mode == UCNV_SO){
                 ucnv_close (myConverterData->currentConverter);
                 myConverterData->currentConverter=NULL;
@@ -1074,7 +1076,7 @@ static const char* getEndOfBuffer_2022(const char** source,
             if ((value == VALID_NON_TERMINAL_2022)&&(!flush) ) 
                 return sourceLimit;
         }
-    }while (mySource++ < sourceLimit);
+    }while (++mySource < sourceLimit);
 
     return sourceLimit;
 }
