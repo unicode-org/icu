@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Attic/ByteTrie.java,v $ 
-* $Date: 2002/03/02 02:20:01 $ 
-* $Revision: 1.5 $
+* $Date: 2002/08/10 02:59:17 $ 
+* $Revision: 1.6 $
 *
 ******************************************************************************
 */
@@ -43,10 +43,11 @@ import com.ibm.icu.lang.UCharacter;
 *   int thirdindex = index2[secondindex] + ch & LAST_FOUR_BITS_MASK;<br>    
 *   f(ch) = value[thirdindex];<br>
 * </p>
-* @version            $Revision: 1.5 $
+* @version            $Revision: 1.6 $
 * @author             Syn Wee Quek
 * @deprecated release 2.1, since icu4c has written their own tool
 */
+///CLOVER:OFF
 public final class ByteTrie
 {
   // constructors -----------------------------------------------------
