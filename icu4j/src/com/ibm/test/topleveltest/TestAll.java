@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/topleveltest/Attic/TestAll.java,v $ 
- * $Date: 2000/03/10 03:47:47 $ 
- * $Revision: 1.8 $
+ * $Date: 2000/03/14 19:54:51 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -16,8 +16,7 @@ import java.text.*;
 import java.util.*;
 
 /**
- * @test
- * @summary General test of UnicodeSet
+ * Top level test used to run all other tests as a batch.
  */
  
 public class TestAll extends TestFmwk {
