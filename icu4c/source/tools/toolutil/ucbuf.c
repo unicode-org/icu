@@ -530,9 +530,9 @@ ucbuf_ungetc(int32_t c,UCHARBUF* buf){
     UChar escaped[8] ={'\0'};
     int32_t len =0;
     if(c > 0xFFFF){
-        len = uprv_itou(escaped,c,16,8);
+        len = uprv_itou(escaped,8,c,16,8);
     }else{
-        len=uprv_itou(escaped,c,16,4);
+        len=uprv_itou(escaped,8,c,16,4);
     }
     if(buf->currentPos!=buf->buffer){
         if(*(buf->currentPos-1)==c){
