@@ -165,6 +165,13 @@ icu4c/source/test/intltest/Debug
 icu4c/source/test/intltest/Makefile
 icu4c/source/test/intltest/Release
 icu4c/source/test/intltest/intltest
+icu4c/source/test/iotest/*.d
+icu4c/source/test/iotest/*.ncb
+icu4c/source/test/iotest/*.opt
+icu4c/source/test/iotest/*.plg
+icu4c/source/test/iotest/Debug
+icu4c/source/test/iotest/Makefile
+icu4c/source/test/iotest/Release
 icu4c/source/test/letest/Makefile
 icu4c/source/test/testdata/Makefile
 icu4c/source/test/testdata/out
