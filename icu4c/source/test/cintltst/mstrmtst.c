@@ -13,10 +13,11 @@
 *******************************************************************************
 */
 
+#include <stdio.h>
+#include <memory.h>
 #include "unicode/utypes.h"
 #include "cintltst.h"
 #include "umemstrm.h"
-#include <stdio.h>
 
 void TestMemoryStreamAPI();
 static void printUSeqErr(const uint8_t *a, int len);

@@ -13,12 +13,13 @@
 *******************************************************************************
 */
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include "unicode/utypes.h"
 #include "cintltst.h"
 #include "unicode/putil.h"
 #include "unicode/ustring.h"
-#include <stdio.h>
-#include <string.h>
 
 void TestPUtilAPI();
 void testIEEEremainder();

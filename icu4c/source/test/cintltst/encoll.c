@@ -18,6 +18,8 @@
  * collation rules as its sorting sequence.
  */
 
+#include <stdlib.h>
+#include <string.h>
 #include "unicode/utypes.h"
 #include "unicode/ucol.h"
 #include "unicode/uloc.h"
@@ -25,7 +27,6 @@
 #include "encoll.h"
 #include "ccolltst.h"
 #include "unicode/ustring.h"
-#include <string.h>
 
 static UCollator *myCollation = NULL;
 const static UChar testSourceCases[][MAX_TOKEN_LEN] = {

@@ -13,6 +13,8 @@
 *********************************************************************************
 */
 
+#include <memory.h>
+#include <stdlib.h>
 #include "unicode/utypes.h"
 #include "unicode/ucol.h"
 #include "unicode/uloc.h"
@@ -101,11 +103,11 @@ void currTest()
             sortklen=ucol_getSortKey(c, source, u_strlen(source),  NULL, 0);
             sortKey1=(uint8_t*)malloc(sizeof(uint8_t) * (sortklen+1));
             ucol_getSortKey(c, source, u_strlen(source), sortKey1, sortklen+1);
-    
+
             sortklen=ucol_getSortKey(c, target, u_strlen(target),  NULL, 0);
             sortKey2=(uint8_t*)malloc(sizeof(uint8_t) * (sortklen+1));
             ucol_getSortKey(c, target, u_strlen(target), sortKey2, sortklen+1);
-    
+
             res = memcmp(sortKey1, sortKey2, sortklen);
             if (res < 0) keyResult = (UCollationResult)-1;
             else if (res > 0) keyResult = (UCollationResult)1;

@@ -15,6 +15,7 @@
 
 /* FormatTest is a medium top level test for everything in the  C FORMAT API */
 
+#include <stdlib.h>
 #include "cintltst.h"
 #include "cformtst.h"
 
@@ -29,17 +30,17 @@ void addDtFrDepTest(TestNode**);
 
 void checkHeap()
 {
-  int i;
-  void *n[2048];
+    int i;
+    void *n[2048];
 
-  log_info("checkHeap...");
+    log_info("checkHeap...");
 
-  
-  for(i=0;i<1;i++)
+
+    for(i=0;i<1;i++)
     {
-            n[i]= malloc(i+15); 
+        n[i]= malloc(i+15); 
     }
-  
+
   /*  for(i=0;i<2048;i++)
     {
       free(n[i]);
@@ -67,8 +68,8 @@ void addFormatTest(TestNode** root)
     addMsgForTest(root);
     addDateForRgrTest(root);
     addDtFrDepTest(root);
-    
-    
+
+
 }
 /*INternal functions used*/
 
@@ -78,7 +79,7 @@ UChar* myDateFormat(UDateFormat* dat, UDate d1)
     int32_t resultlength, resultlengthneeded;
     UFieldPosition pos;
     UErrorCode status = U_ZERO_ERROR;
-    
+
 
     resultlength=0;
     resultlengthneeded=udat_format(dat, d1, NULL, resultlength, &pos, &status);

@@ -16,6 +16,8 @@
  * (Let me reiterate my position...)
  */
 
+#include <memory.h>
+#include <stdlib.h>
 #include "unicode/utypes.h"
 #include "unicode/ucol.h"
 #include "unicode/uloc.h"
@@ -31,14 +33,14 @@ UCollator *en_us=0;
 
 void addCollIterTest(TestNode** root)
 {
-    
-   
+
+
     addTest(root, &TestPrevious, "tscoll/citertst/TestPrevious");
     addTest(root, &TestOffset, "tscoll/citertst/TestOffset");
     addTest(root, &TestSetText, "tscoll/citertst/TestSetText");
     addTest(root, &TestMaxExpansion, "tscoll/citertst/TestMaxExpansion");
-   
-    
+
+
 }
 
 
@@ -60,7 +62,7 @@ void TestPrevious()
     u_uastrcpy(test1, "What subset of all possible test cases?");
     u_uastrcpy(test2, "has the highest probability of detecting");
     en_us = ucol_open("en_US", &status);
-    
+
     iter=ucol_openElements(en_us, test1, u_strlen(test1), &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n", 
@@ -192,7 +194,7 @@ void TestOffset()
     {
         assertEqual(iter, pristine);
     }
-       
+
     ucol_closeElements(pristine);
     ucol_closeElements(iter);
     free(orders);
@@ -290,7 +292,7 @@ void backAndForth(UCollationElements *iter)
 
     if (index != 0)
     {
-        
+
         log_err("Didn't get back to beginning - index is %d\n", index);
 
         ucol_reset(iter);
@@ -336,17 +338,17 @@ void TestMaxExpansion()
         0x65, 2,
         0x66, 4
     };
-   
+
     u_uastrcpy(rule1, "< a & ae = ");
     u_strcat(rule1, singleUChar);
     u_uastrcpy(temp, " < b < e");
     u_strcat(rule1, temp);
     verifyExpansion(rule1, test1, ARRAY_LENGTH(test1));
-    
+
     /* Now a more complicated one:
         "a1" --> "ae"
         "z" --> "aeef" */
-    
+
     u_uastrcpy(rule1, "");
     u_uastrcpy(rule1, "< a & ae = a1 & aeef = z < b < e < f");
     verifyExpansion(rule1, test2, ARRAY_LENGTH(test2));
@@ -387,8 +389,8 @@ void verifyExpansion(UChar* rules, const UChar expansionTests[], int32_t testCou
         /* First get the collation key that the test string expands to */
         UChar test[2] = { 0, 0} ;
 
-	test[0] = expansionTests[i+0];
-        
+        test[0] = expansionTests[i+0];
+
         ucol_setText(iter, test, u_strlen(test), &status);
         if (U_FAILURE(status)) {
             log_err("call to ucol_setText(iter, test, length) failed.");
@@ -400,15 +402,15 @@ void verifyExpansion(UChar* rules, const UChar expansionTests[], int32_t testCou
             log_err("call to iter->next() failed.");
             return;
         }
-        
+
         /*if (order == UCOL_NULLORDER || ucol_next(iter, &status) != UCOL_NULLORDER) {
             ucol_reset(iter);
             log_err("verifyExpansion: \'%s\' has multiple orders\n", austrdup(test));
         }*/
-        
+
         expansion = ucol_getMaxExpansion(iter, order);
         expect = expansionTests[i+1];
-        
+
         if (expansion != expect) {
             log_err("Expansion for \'%s\' is wrong. Expected %d, Got %d\n", austrdup(test), expect, expansion); 
         }
@@ -431,8 +433,8 @@ int32_t* getOrders(UCollationElements *iter, int32_t *orderLength)
     int32_t *orders =(int32_t*)malloc(sizeof(int32_t) * maxSize);
     status= U_ZERO_ERROR;
 
-   
-    
+
+
     while ((order=ucol_next(iter, &status)) != UCOL_NULLORDER)
     {
         if (size == maxSize)
@@ -445,21 +447,21 @@ int32_t* getOrders(UCollationElements *iter, int32_t *orderLength)
             orders = temp;
             
         }
-        
+
         orders[size++] = order;
-        
-        
-        
+
+
+
     }
 
     if (maxSize > size)
     {
         temp = (int32_t*)malloc(sizeof(int32_t) * size);
-        
+
         memcpy(temp, orders, size * sizeof(int32_t));
         free(orders);
         orders = temp;
-       
+
 
     }
 /*     ucol_previous(iter, &status); */
@@ -478,7 +480,7 @@ void assertEqual(UCollationElements *i1, UCollationElements *i2)
     {
         c1 = ucol_next(i1, &status);
         c2 = ucol_next(i2, &status);
-     
+
         if (c1 != c2)
         {
             log_err("Error in iteration %d assetEqual between\n  %d  and   %d, they are not equal\n", count, c1, c2);

@@ -14,6 +14,9 @@
 
 /* C API AND FUNCTIONALITY TEST FOR CALENDAR (ucol.h)*/
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 #include "unicode/uloc.h"
 #include "unicode/utypes.h"
 #include "unicode/ucal.h"
@@ -21,8 +24,6 @@
 #include "unicode/ustring.h"
 #include "cintltst.h"
 #include "ccaltst.h"
-#include <stdio.h>
-#include <string.h>
 #include "cformtst.h"
 
 
@@ -156,7 +157,7 @@ void TestCalendar()
     }
     else{    
         log_verbose("PASS: getting the time zone display name successful : %s, %d needed \n",
-		    u_errorName(status), resultlengthneeded);
+            u_errorName(status), resultlengthneeded);
     }
     
 
