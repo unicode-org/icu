@@ -315,11 +315,14 @@ static void
 _MBCSSingleFromBMPWithOffsets(UConverterFromUnicodeArgs *pArgs,
                               UErrorCode *pErrorCode);
 
-static void
-fromUCallback(UConverter *cnv,
-              const void *context, UConverterFromUnicodeArgs *pArgs,
-              UChar32 codePoint,
-              UConverterCallbackReason reason, UErrorCode *pErrorCode);
+static UChar32
+_extFromU(UConverter *cnv, const UConverterSharedData *sharedData,
+          UChar32 cp,
+          const UChar **source, const UChar *sourceLimit,
+          char **target, const char *targetLimit,
+          int32_t **offsets, int32_t sourceIndex,
+          UBool useFallback, UBool flush,
+          UErrorCode *pErrorCode);
 
 static void
 toUCallback(UConverter *cnv,
@@ -819,7 +822,7 @@ _MBCSOpen(UConverter *cnv,
     cnv->toULength=0;           /* byteIndex */
 
     /* fromUnicode */
-    cnv->fromUSurrogateLead=0;
+    cnv->fromUChar32=0;
     cnv->fromUnicodeStatus=1;   /* prevLength */
 #endif
 }
@@ -2141,7 +2144,6 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
 
     int32_t prevSourceIndex, sourceIndex, nextSourceIndex;
 
-    UConverterCallbackReason reason;
     uint32_t stage2Entry;
     uint32_t value;
     int32_t length, prevLength;
@@ -2178,7 +2180,7 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     }
 
     /* get the converter state from UConverter */
-    c=cnv->fromUSurrogateLead;
+    c=cnv->fromUChar32;
     prevLength=cnv->fromUnicodeStatus;
 
     /* sourceIndex=-1 if the current character began in the previous buffer */
@@ -2246,9 +2248,8 @@ getTrail:
                         } else {
                             /* this is an unmatched lead code unit (1st surrogate) */
                             /* callback(illegal) */
-                            reason=UCNV_ILLEGAL;
                             *pErrorCode=U_ILLEGAL_CHAR_FOUND;
-                            goto callback;
+                            break;
                         }
                     } else {
                         /* no more input */
@@ -2257,9 +2258,8 @@ getTrail:
                 } else {
                     /* this is an unmatched trail code unit (2nd surrogate) */
                     /* callback(illegal) */
-                    reason=UCNV_ILLEGAL;
                     *pErrorCode=U_ILLEGAL_CHAR_FOUND;
-                    goto callback;
+                    break;
                 }
             }
 
@@ -2422,8 +2422,32 @@ getTrail:
                  * There is no way with this data structure for fallback output
                  * for other than U+0000 to be a zero byte.
                  */
-                /* callback(unassigned) */
-                goto unassigned;
+
+unassigned:
+                /* try an extension mapping */
+                pArgs->source=source;
+                c=_extFromU(cnv, cnv->sharedData,
+                            c, &source, sourceLimit,
+                            (char **)&target, (char *)target+targetCapacity,
+                            &offsets, sourceIndex,
+                            (UBool)UCNV_FROM_U_USE_FALLBACK(cnv, c), pArgs->flush,
+                            pErrorCode);
+                nextSourceIndex+=(int32_t)(source-pArgs->source);
+                prevLength=cnv->fromUnicodeStatus; /* restore SISO state */
+
+                if(U_FAILURE(*pErrorCode)) {
+                    /* not mappable or buffer overflow */
+                    break;
+                } else {
+                    /* a mapping was written to the target, continue */
+
+                    /* normal end of conversion: prepare for a new character */
+                    if(offsets!=NULL) {
+                        prevSourceIndex=sourceIndex;
+                        sourceIndex=nextSourceIndex;
+                    }
+                    continue;
+                }
             }
 
             /* write the output character bytes from value and length */
@@ -2529,69 +2553,6 @@ getTrail:
                 sourceIndex=nextSourceIndex;
             }
             continue;
-
-            /*
-             * This is the same ugly trick as in ToUnicode(), for the
-             * same reasons...
-             */
-unassigned:
-            reason=UCNV_UNASSIGNED;
-            *pErrorCode=U_INVALID_CHAR_FOUND;
-callback:
-            /* call the callback function with all the preparations and post-processing */
-            /* update the arguments structure */
-            pArgs->source=source;
-            pArgs->target=(char *)target;
-            pArgs->offsets=offsets;
-
-            /* set the converter state in UConverter to deal with the next character */
-            cnv->fromUSurrogateLead=0;
-            /*
-             * Do not save the prevLength SISO state because prevLength is set for
-             * the character that is now not output because it is unassigned or it is
-             * a fallback that is not taken.
-             * The above branch for MBCS_OUTPUT_2_SISO has saved the previous state already.
-             * See comments there.
-             */
-            prevSourceIndex=sourceIndex;
-
-            /* call the callback function */
-            fromUCallback(cnv, cnv->fromUContext, pArgs, c, reason, pErrorCode);
-
-            /* get the converter state from UConverter */
-            c=cnv->fromUSurrogateLead;
-            prevLength=cnv->fromUnicodeStatus;
-
-            /* update target and deal with offsets if necessary */
-            offsets=ucnv_updateCallbackOffsets(offsets, ((uint8_t *)pArgs->target)-target, sourceIndex);
-            target=(uint8_t *)pArgs->target;
-
-            /* update the source pointer and index */
-            sourceIndex=nextSourceIndex+(pArgs->source-source);
-            source=pArgs->source;
-            targetCapacity=(uint8_t *)pArgs->targetLimit-target;
-
-            /*
-             * If the callback overflowed the target, then we need to
-             * stop here with an overflow indication.
-             */
-            if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
-                break;
-            } else if(U_FAILURE(*pErrorCode)) {
-                /* break on error */
-                c=0;
-                break;
-            } else if(cnv->charErrorBufferLength>0) {
-                /* target is full */
-                *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-                break;
-            }
-
-            /*
-             * We do not need to repeat the statements from the normal
-             * end of the conversion because we already updated all the
-             * necessary variables.
-             */
         } else {
             /* target is full */
             *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
@@ -2630,7 +2591,7 @@ callback:
     }
 
     /* set the converter state back into UConverter */
-    cnv->fromUSurrogateLead=(UChar)c;
+    cnv->fromUChar32=c;
     cnv->fromUnicodeStatus=prevLength;
 
     /* write back the updated pointers */
@@ -2656,7 +2617,6 @@ _MBCSDoubleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
 
     int32_t sourceIndex, nextSourceIndex;
 
-    UConverterCallbackReason reason;
     uint32_t stage2Entry;
     uint32_t value;
     int32_t length, prevLength;
@@ -2681,7 +2641,7 @@ _MBCSDoubleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     }
 
     /* get the converter state from UConverter */
-    c=cnv->fromUSurrogateLead;
+    c=cnv->fromUChar32;
     prevLength=cnv->fromUnicodeStatus;
 
     /* sourceIndex=-1 if the current character began in the previous buffer */
@@ -2735,9 +2695,8 @@ getTrail:
                         } else {
                             /* this is an unmatched lead code unit (1st surrogate) */
                             /* callback(illegal) */
-                            reason=UCNV_ILLEGAL;
                             *pErrorCode=U_ILLEGAL_CHAR_FOUND;
-                            goto callback;
+                            break;
                         }
                     } else {
                         /* no more input */
@@ -2746,9 +2705,8 @@ getTrail:
                 } else {
                     /* this is an unmatched trail code unit (2nd surrogate) */
                     /* callback(illegal) */
-                    reason=UCNV_ILLEGAL;
                     *pErrorCode=U_ILLEGAL_CHAR_FOUND;
-                    goto callback;
+                    break;
                 }
             }
 
@@ -2774,8 +2732,28 @@ getTrail:
                  * There is no way with this data structure for fallback output
                  * for other than U+0000 to be a zero byte.
                  */
-                /* callback(unassigned) */
-                goto unassigned;
+
+unassigned:
+                /* try an extension mapping */
+                pArgs->source=source;
+                c=_extFromU(cnv, cnv->sharedData,
+                            c, &source, sourceLimit,
+                            (char **)&target, (char *)target+targetCapacity,
+                            &offsets, sourceIndex,
+                            (UBool)UCNV_FROM_U_USE_FALLBACK(cnv, c), pArgs->flush,
+                            pErrorCode);
+                nextSourceIndex+=(int32_t)(source-pArgs->source);
+
+                if(U_FAILURE(*pErrorCode)) {
+                    /* not mappable or buffer overflow */
+                    break;
+                } else {
+                    /* a mapping was written to the target, continue */
+
+                    /* normal end of conversion: prepare for a new character */
+                    sourceIndex=nextSourceIndex;
+                    continue;
+                }
             }
 
             /* write the output character bytes from value and length */
@@ -2815,62 +2793,6 @@ getTrail:
             c=0;
             sourceIndex=nextSourceIndex;
             continue;
-
-            /*
-             * This is the same ugly trick as in ToUnicode(), for the
-             * same reasons...
-             */
-unassigned:
-            reason=UCNV_UNASSIGNED;
-            *pErrorCode=U_INVALID_CHAR_FOUND;
-callback:
-            /* call the callback function with all the preparations and post-processing */
-            /* update the arguments structure */
-            pArgs->source=source;
-            pArgs->target=(char *)target;
-            pArgs->offsets=offsets;
-
-            /* set the converter state in UConverter to deal with the next character */
-            cnv->fromUSurrogateLead=0;
-            cnv->fromUnicodeStatus=prevLength;
-
-            /* call the callback function */
-            fromUCallback(cnv, cnv->fromUContext, pArgs, c, reason, pErrorCode);
-
-            /* get the converter state from UConverter */
-            c=cnv->fromUSurrogateLead;
-            prevLength=cnv->fromUnicodeStatus;
-
-            /* update target and deal with offsets if necessary */
-            offsets=ucnv_updateCallbackOffsets(offsets, ((uint8_t *)pArgs->target)-target, sourceIndex);
-            target=(uint8_t *)pArgs->target;
-
-            /* update the source pointer and index */
-            sourceIndex=nextSourceIndex+(pArgs->source-source);
-            source=pArgs->source;
-            targetCapacity=(uint8_t *)pArgs->targetLimit-target;
-
-            /*
-             * If the callback overflowed the target, then we need to
-             * stop here with an overflow indication.
-             */
-            if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
-                break;
-            } else if(U_FAILURE(*pErrorCode)) {
-                /* break on error */
-                c=0;
-                break;
-            } else if(cnv->charErrorBufferLength>0) {
-                /* target is full */
-                *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-                break;
-            }
-
-            /*
-             * We do not need to repeat the statements from the normal
-             * end of the conversion because we already updated all the
-             * necessary variables.
-             */
         } else {
             /* target is full */
             *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
@@ -2879,7 +2801,7 @@ callback:
     }
 
     /* set the converter state back into UConverter */
-    cnv->fromUSurrogateLead=(UChar)c;
+    cnv->fromUChar32=c;
     cnv->fromUnicodeStatus=prevLength;
 
     /* write back the updated pointers */
@@ -2905,7 +2827,6 @@ _MBCSSingleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
 
     int32_t sourceIndex, nextSourceIndex;
 
-    UConverterCallbackReason reason;
     uint16_t value, minValue;
     UBool hasSupplementary;
 
@@ -2934,7 +2855,7 @@ _MBCSSingleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     hasSupplementary=(UBool)(cnv->sharedData->table->mbcs.unicodeMask&UCNV_HAS_SUPPLEMENTARY);
 
     /* get the converter state from UConverter */
-    c=cnv->fromUSurrogateLead;
+    c=cnv->fromUChar32;
 
     /* sourceIndex=-1 if the current character began in the previous buffer */
     sourceIndex= c==0 ? 0 : -1;
@@ -2982,9 +2903,8 @@ getTrail:
                         } else {
                             /* this is an unmatched lead code unit (1st surrogate) */
                             /* callback(illegal) */
-                            reason=UCNV_ILLEGAL;
                             *pErrorCode=U_ILLEGAL_CHAR_FOUND;
-                            goto callback;
+                            break;
                         }
                     } else {
                         /* no more input */
@@ -2993,9 +2913,8 @@ getTrail:
                 } else {
                     /* this is an unmatched trail code unit (2nd surrogate) */
                     /* callback(illegal) */
-                    reason=UCNV_ILLEGAL;
                     *pErrorCode=U_ILLEGAL_CHAR_FOUND;
-                    goto callback;
+                    break;
                 }
             }
 
@@ -3016,65 +2935,28 @@ getTrail:
                 /* normal end of conversion: prepare for a new character */
                 c=0;
                 sourceIndex=nextSourceIndex;
-                continue;
             } else { /* unassigned */
-                /*
-                 * We allow a 0 byte output if the Unicode code point is
-                 * U+0000 and also if the "assigned" bit is set for this entry.
-                 * There is no way with this data structure for fallback output
-                 * for other than U+0000 to be a zero byte.
-                 */
-                /* callback(unassigned) */
-            }
 unassigned:
-            reason=UCNV_UNASSIGNED;
-            *pErrorCode=U_INVALID_CHAR_FOUND;
-callback:
-            /* call the callback function with all the preparations and post-processing */
-            /* update the arguments structure */
-            pArgs->source=source;
-            pArgs->target=(char *)target;
-            pArgs->offsets=offsets;
+                /* try an extension mapping */
+                pArgs->source=source;
+                c=_extFromU(cnv, cnv->sharedData,
+                            c, &source, sourceLimit,
+                            (char **)&target, (char *)target+targetCapacity,
+                            &offsets, sourceIndex,
+                            (UBool)UCNV_FROM_U_USE_FALLBACK(cnv, c), pArgs->flush,
+                            pErrorCode);
+                nextSourceIndex+=(int32_t)(source-pArgs->source);
 
-            /* set the converter state in UConverter to deal with the next character */
-            cnv->fromUSurrogateLead=0;
+                if(U_FAILURE(*pErrorCode)) {
+                    /* not mappable or buffer overflow */
+                    break;
+                } else {
+                    /* a mapping was written to the target, continue */
 
-            /* call the callback function */
-            fromUCallback(cnv, cnv->fromUContext, pArgs, c, reason, pErrorCode);
-
-            /* get the converter state from UConverter */
-            c=cnv->fromUSurrogateLead;
-
-            /* update target and deal with offsets if necessary */
-            offsets=ucnv_updateCallbackOffsets(offsets, ((uint8_t *)pArgs->target)-target, sourceIndex);
-            target=(uint8_t *)pArgs->target;
-
-            /* update the source pointer and index */
-            sourceIndex=nextSourceIndex+(pArgs->source-source);
-            source=pArgs->source;
-            targetCapacity=(uint8_t *)pArgs->targetLimit-target;
-
-            /*
-             * If the callback overflowed the target, then we need to
-             * stop here with an overflow indication.
-             */
-            if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
-                break;
-            } else if(U_FAILURE(*pErrorCode)) {
-                /* break on error */
-                c=0;
-                break;
-            } else if(cnv->charErrorBufferLength>0) {
-                /* target is full */
-                *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-                break;
+                    /* normal end of conversion: prepare for a new character */
+                    sourceIndex=nextSourceIndex;
+                }
             }
-
-            /*
-             * We do not need to repeat the statements from the normal
-             * end of the conversion because we already updated all the
-             * necessary variables.
-             */
         } else {
             /* target is full */
             *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
@@ -3083,7 +2965,7 @@ callback:
     }
 
     /* set the converter state back into UConverter */
-    cnv->fromUSurrogateLead=(UChar)c;
+    cnv->fromUChar32=c;
 
     /* write back the updated pointers */
     pArgs->source=source;
@@ -3113,7 +2995,6 @@ _MBCSSingleFromBMPWithOffsets(UConverterFromUnicodeArgs *pArgs,
 
     int32_t sourceIndex;
 
-    UConverterCallbackReason reason;
     uint16_t value, minValue;
 
     /* set up the local pointers */
@@ -3140,7 +3021,7 @@ _MBCSSingleFromBMPWithOffsets(UConverterFromUnicodeArgs *pArgs,
     }
 
     /* get the converter state from UConverter */
-    c=cnv->fromUSurrogateLead;
+    c=cnv->fromUChar32;
 
     /* sourceIndex=-1 if the current character began in the previous buffer */
     sourceIndex= c==0 ? 0 : -1;
@@ -3237,15 +3118,6 @@ unrolled:
             continue;
         } else if(!UTF_IS_SURROGATE(c)) {
             /* normal, unassigned BMP character */
-            /*
-             * We allow a 0 byte output if the Unicode code point is
-             * U+0000 and also if the "assigned" bit is set for this entry.
-             * There is no way with this data structure for fallback output
-             * for other than U+0000 to be a zero byte.
-             */
-            /* callback(unassigned) */
-            reason=UCNV_UNASSIGNED;
-            *pErrorCode=U_INVALID_CHAR_FOUND;
         } else if(UTF_IS_SURROGATE_FIRST(c)) {
 getTrail:
             if(source<sourceLimit) {
@@ -3256,13 +3128,11 @@ getTrail:
                     c=UTF16_GET_PAIR_VALUE(c, trail);
                     /* this codepage does not map supplementary code points */
                     /* callback(unassigned) */
-                    reason=UCNV_UNASSIGNED;
-                    *pErrorCode=U_INVALID_CHAR_FOUND;
                 } else {
                     /* this is an unmatched lead code unit (1st surrogate) */
                     /* callback(illegal) */
-                    reason=UCNV_ILLEGAL;
                     *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+                    break;
                 }
             } else {
                 /* no more input */
@@ -3271,69 +3141,45 @@ getTrail:
         } else {
             /* this is an unmatched trail code unit (2nd surrogate) */
             /* callback(illegal) */
-            reason=UCNV_ILLEGAL;
             *pErrorCode=U_ILLEGAL_CHAR_FOUND;
+            break;
         }
 
-        /* call the callback function with all the preparations and post-processing */
-        /* get the number of code units for c to correctly advance sourceIndex after the callback call */
-        length=UTF_CHAR_LENGTH(c);
+        /* c does not have a mapping */
 
-        /* set offsets since the start or the last callback */
+        /* get the number of code units for c to correctly advance sourceIndex */
+        length=U16_LENGTH(c);
+
+        /* set offsets since the start or the last extension */
         if(offsets!=NULL) {
             int32_t count=(int32_t)(source-lastSource);
 
-            /* do not set the offset for the callback-causing character */
+            /* do not set the offset for this character */
             count-=length;
 
             while(count>0) {
                 *offsets++=sourceIndex++;
                 --count;
             }
-            /* offset and sourceIndex are now set for the current character */
+            /* offsets and sourceIndex are now set for the current character */
         }
 
-        /* update the arguments structure */
-        pArgs->source=source;
-        pArgs->target=(char *)target;
-        pArgs->offsets=offsets;
+        /* try an extension mapping */
+        lastSource=source;
+        c=_extFromU(cnv, cnv->sharedData,
+                    c, &source, sourceLimit,
+                    (char **)&target, (char *)target+targetCapacity,
+                    &offsets, sourceIndex,
+                    (UBool)UCNV_FROM_U_USE_FALLBACK(cnv, c), pArgs->flush,
+                    pErrorCode);
+        sourceIndex+=length+(int32_t)(source-lastSource);
+        lastSource=source;
 
-        /* set the converter state in UConverter to deal with the next character */
-        cnv->fromUSurrogateLead=0;
-
-        /* call the callback function */
-        fromUCallback(cnv, cnv->fromUContext, pArgs, c, reason, pErrorCode);
-
-        /* get the converter state from UConverter */
-        c=cnv->fromUSurrogateLead;
-
-        /* update target and deal with offsets if necessary */
-        offsets=ucnv_updateCallbackOffsets(offsets, ((uint8_t *)pArgs->target)-target, sourceIndex);
-        target=(uint8_t *)pArgs->target;
-
-        /* update the source pointer and index */
-        sourceIndex+=length+(pArgs->source-source);
-        source=lastSource=pArgs->source;
-        targetCapacity=(uint8_t *)pArgs->targetLimit-target;
-        length=sourceLimit-source;
-        if(length<targetCapacity) {
-            targetCapacity=length;
-        }
-
-        /*
-         * If the callback overflowed the target, then we need to
-         * stop here with an overflow indication.
-         */
-        if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+        if(U_FAILURE(*pErrorCode)) {
+            /* not mappable or buffer overflow */
             break;
-        } else if(U_FAILURE(*pErrorCode)) {
-            /* break on error */
-            c=0;
-            break;
-        } else if(cnv->charErrorBufferLength>0) {
-            /* target is full */
-            *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-            break;
+        } else {
+            /* a mapping was written to the target, continue */
         }
 
 #if MBCS_UNROLL_SINGLE_FROM_BMP
@@ -3357,7 +3203,7 @@ getTrail:
     }
 
     /* set the converter state back into UConverter */
-    cnv->fromUSurrogateLead=(UChar)c;
+    cnv->fromUChar32=c;
 
     /* write back the updated pointers */
     pArgs->source=source;
@@ -3672,35 +3518,53 @@ const UConverterSharedData _MBCSData={
     0
 };
 
-/* GB 18030 special handling ------------------------------------------------ */
+/* conversion extensions for input not in the main table -------------------- */
 
-/* definition of LINEAR macros and gb18030Ranges see near the beginning of the file */
+/*
+ * Hardcoded extension handling for GB 18030.
+ * Definition of LINEAR macros and gb18030Ranges see near the beginning of the file.
+ *
+ * In the future, conversion extensions may handle m:n mappings and delta tables,
+ * see http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/conversion/conversion_extensions.html
+ *
+ * If an input character cannot be mapped, then these functions set an error
+ * code. The framework will then call the callback function.
+ */
 
-/* the callback functions handle GB 18030 specially */
-static void
-fromUCallback(UConverter *cnv,
-              const void *context, UConverterFromUnicodeArgs *pArgs,
-              UChar32 codePoint,
-              UConverterCallbackReason reason, UErrorCode *pErrorCode) {
-    int32_t i;
+/*
+ * TODO when implementing real extensions, review whether the useFallback parameter
+ * should get cnv->useFallback or the full resolution considering cp as well
+ */
 
-    if((cnv->options&_MBCS_OPTION_GB18030)!=0 && reason==UCNV_UNASSIGNED) {
+/*
+ * @return if(U_FAILURE) return the code point for cnv->fromUChar32
+ *         else return 0 after output has been written to the target
+ */
+static UChar32
+_extFromU(UConverter *cnv, const UConverterSharedData *sharedData,
+          UChar32 cp,
+          const UChar **source, const UChar *sourceLimit,
+          char **target, const char *targetLimit,
+          int32_t **offsets, int32_t sourceIndex,
+          UBool useFallback, UBool flush,
+          UErrorCode *pErrorCode) {
+    /* GB 18030 */
+    if(cnv!=NULL && (cnv->options&_MBCS_OPTION_GB18030)!=0) {
         const uint32_t *range;
+        int32_t i;
 
         range=gb18030Ranges[0];
         for(i=0; i<sizeof(gb18030Ranges)/sizeof(gb18030Ranges[0]); range+=4, ++i) {
-            if(range[0]<=(uint32_t)codePoint && (uint32_t)codePoint<=range[1]) {
+            if(range[0]<=(uint32_t)cp && (uint32_t)cp<=range[1]) {
+                /* found the Unicode code point, output the four-byte sequence for it */
                 uint32_t linear;
                 char bytes[4];
-
-                /* found the Unicode code point, output the four-byte sequence for it */
-                *pErrorCode=U_ZERO_ERROR;
 
                 /* get the linear value of the first GB 18030 code in this range */
                 linear=range[2]-LINEAR_18030_BASE;
 
                 /* add the offset from the beginning of the range */
-                linear+=((uint32_t)codePoint-range[0]);
+                linear+=((uint32_t)cp-range[0]);
 
                 /* turn this into a four-byte sequence */
                 bytes[3]=(char)(0x30+linear%10); linear/=10;
@@ -3709,20 +3573,20 @@ fromUCallback(UConverter *cnv,
                 bytes[0]=(char)(0x81+linear);
 
                 /* output this sequence */
-                ucnv_cbFromUWriteBytes(pArgs, bytes, 4, 0, pErrorCode);
-                return;
+                ucnv_fromUWriteBytes(cnv,
+                                     bytes, 4, target, targetLimit,
+                                     offsets, sourceIndex, pErrorCode);
+                return 0;
             }
         }
     }
 
-    /* write the code point as code units */
-    i=0;
-    UTF_APPEND_CHAR_UNSAFE(cnv->invalidUCharBuffer, i, codePoint);
-    cnv->invalidUCharLength=(int8_t)i;
-
-    /* call the normal callback function */
-    cnv->fromUCharErrorBehaviour(context, pArgs, cnv->invalidUCharBuffer, i, codePoint, reason, pErrorCode);
+    /* no mapping */
+    *pErrorCode=U_INVALID_CHAR_FOUND;
+    return cp;
 }
+
+/* GB 18030 special handling ------------------------------------------------ */
 
 static void
 toUCallback(UConverter *cnv,

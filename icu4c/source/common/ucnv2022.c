@@ -1280,70 +1280,6 @@ getEndOfBuffer_2022(const char** source,
 }
 
 /*
- * From Unicode Callback helper function
- */
-static void 
-fromUnicodeCallback(UConverterFromUnicodeArgs* args,const UChar32 sourceChar,const UChar** pSource,
-                    unsigned char** pTarget,int32_t** pOffsets,UConverterCallbackReason reason, UErrorCode* err){
-                
-    /*variables for callback */
-    const UChar* saveSource =NULL;
-    char* saveTarget =NULL;
-    int32_t* saveOffsets =NULL;
-    int currentOffset =0;
-    int saveIndex =0;
-    int32_t* offsets = *pOffsets;
-    const UChar* source = *pSource;
-    unsigned char* target = *pTarget;
-
-    args->converter->invalidUCharLength = 0;
-    
-    if(sourceChar>0xffff){
-        args->converter->invalidUCharBuffer[args->converter->invalidUCharLength++] =(uint16_t)(((sourceChar)>>10)+0xd7c0);
-        args->converter->invalidUCharBuffer[args->converter->invalidUCharLength++] =(uint16_t)(((sourceChar)&0x3ff)|0xdc00);
-    }
-    else{
-        args->converter->invalidUCharBuffer[args->converter->invalidUCharLength++] =(UChar)sourceChar;
-    }
-    if(offsets)
-        currentOffset = *(offsets-1)+1;
-
-    saveSource = args->source;
-    saveTarget = args->target;
-    saveOffsets = args->offsets;
-    args->target = (char*)target;
-    args->source = source;
-    args->offsets = offsets;
-
-    /*copies current values for the ErrorFunctor to update */
-    /*Calls the ErrorFunctor */
-    args->converter->fromUCharErrorBehaviour ( args->converter->fromUContext, 
-                  args, 
-                  args->converter->invalidUCharBuffer, 
-                  args->converter->invalidUCharLength, 
-                 (UChar32) (sourceChar), 
-                  reason, 
-                  err);
-
-    saveIndex = args->target - (char*)target;
-    if(args->offsets){
-        args->offsets = saveOffsets;
-        while(saveIndex-->0){
-             *offsets = currentOffset;
-              offsets++;
-        }
-    }
-    target = (unsigned char*)args->target;
-    *pTarget=target;
-    *pOffsets=offsets;
-    args->source=saveSource;
-    args->target=saveTarget;
-    args->offsets=saveOffsets;
-    args->converter->fromUSurrogateLead=0x00;
-
-}
-
-/*
  * To Unicode Callback helper function
  */
 static void 
@@ -1528,7 +1464,6 @@ UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
     UChar32 sourceChar  =0x0000;
     const char* escSeq = NULL;
     int len =0; /*length of escSeq chars*/
-    UConverterCallbackReason reason;
     UConverterSharedData* sharedData=NULL;
     UBool useFallback; 
 
@@ -1556,7 +1491,7 @@ UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
     currentType         = &converterData->currentType;
     
     /* check if the last codepoint of previous buffer was a lead surrogate*/
-    if(args->converter->fromUSurrogateLead!=0 && target< targetLimit) {
+    if((sourceChar = args->converter->fromUChar32)!=0 && target< targetLimit) {
         goto getTrail;
     }
     
@@ -1700,17 +1635,13 @@ UConverter_fromUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
                 }
             }
             else{
-
                 /* if we cannot find the character after checking all codepages 
                  * then this is an error
                  */
-                reason = UCNV_UNASSIGNED;
-                *err = U_INVALID_CHAR_FOUND;
 
                 /*check if the char is a First surrogate*/
                 if(UTF_IS_SURROGATE(sourceChar)) {
                     if(UTF_IS_SURROGATE_FIRST(sourceChar)) {
-                        args->converter->fromUSurrogateLead=(UChar)sourceChar;
 getTrail:
                         /*look ahead to find the trail surrogate*/
                         if(source <  sourceLimit) {
@@ -1718,36 +1649,31 @@ getTrail:
                             UChar trail=(UChar) *source;
                             if(UTF_IS_SECOND_SURROGATE(trail)) {
                                 source++;
-                                sourceChar=UTF16_GET_PAIR_VALUE(args->converter->fromUSurrogateLead, trail);
-                                args->converter->fromUSurrogateLead=0x00;
-                                reason =UCNV_UNASSIGNED;
+                                sourceChar=UTF16_GET_PAIR_VALUE(sourceChar, trail);
                                 *err = U_INVALID_CHAR_FOUND;
                                 /* convert this surrogate code point */
                                 /* exit this condition tree */
                             } else {
                                 /* this is an unmatched lead code unit (1st surrogate) */
                                 /* callback(illegal) */
-                                reason=UCNV_ILLEGAL;
                                 *err=U_ILLEGAL_CHAR_FOUND;
                             }
                         } else {
                             /* no more input */
                             *err = U_ZERO_ERROR;
-                            break;
                         }
                     } else {
                         /* this is an unmatched trail code unit (2nd surrogate) */
                         /* callback(illegal) */
-                        reason=UCNV_ILLEGAL;
                         *err=U_ILLEGAL_CHAR_FOUND;
                     }
+                } else {
+                    /* callback(unassigned) for a BMP code point */
+                    *err = U_INVALID_CHAR_FOUND;
                 }
-                /* Call the callback function*/
-                fromUnicodeCallback(args,sourceChar,&source,&target,&offsets,reason,err);
-                initIterState = *currentState;
-                if (U_FAILURE (*err)){
-                    break;
-                }
+
+                args->converter->fromUChar32=sourceChar;
+                break;
             }
         } /* end if(myTargetIndex<myTargetLength) */
         else{
@@ -2045,7 +1971,6 @@ UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
     UBool isTargetByteDBCS;
     UBool oldIsTargetByteDBCS;
     UConverterDataISO2022 *converterData;
-    UConverterCallbackReason reason;
     UConverterSharedData* sharedData;
     UBool useFallback;
     int32_t length =0;
@@ -2070,7 +1995,7 @@ UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
     }
     
     isTargetByteDBCS   = (UBool) args->converter->fromUnicodeStatus;
-    if(args->converter->fromUSurrogateLead!=0 && target <targetLimit) {
+    if((sourceChar = args->converter->fromUChar32)!=0 && target <targetLimit) {
         goto getTrail;
     }
     while(source < sourceLimit){
@@ -2140,13 +2065,10 @@ UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
                 /* oops.. the code point is unassingned
                  * set the error and reason
                  */
-                reason =UCNV_UNASSIGNED;
-                *err =U_INVALID_CHAR_FOUND;
 
                 /*check if the char is a First surrogate*/
                 if(UTF_IS_SURROGATE(sourceChar)) {
                     if(UTF_IS_SURROGATE_FIRST(sourceChar)) {
-                        args->converter->fromUSurrogateLead=(UChar)sourceChar;
 getTrail:
                         /*look ahead to find the trail surrogate*/
                         if(source <  sourceLimit) {
@@ -2154,38 +2076,32 @@ getTrail:
                             UChar trail=(UChar) *source;
                             if(UTF_IS_SECOND_SURROGATE(trail)) {
                                 source++;
-                                sourceChar=UTF16_GET_PAIR_VALUE(args->converter->fromUSurrogateLead, trail);
-                                args->converter->fromUSurrogateLead=0x00;
+                                sourceChar=UTF16_GET_PAIR_VALUE(sourceChar, trail);
                                 *err = U_INVALID_CHAR_FOUND;
-                                reason =UCNV_UNASSIGNED;
                                 /* convert this surrogate code point */
                                 /* exit this condition tree */
                             } else {
                                 /* this is an unmatched lead code unit (1st surrogate) */
                                 /* callback(illegal) */
-                                reason=UCNV_ILLEGAL;
                                 *err=U_ILLEGAL_CHAR_FOUND;
                             }
                         } else {
                             /* no more input */
                             *err = U_ZERO_ERROR;
-                            break;
                         }
                     } else {
                         /* this is an unmatched trail code unit (2nd surrogate) */
                         /* callback(illegal) */
-                        reason=UCNV_ILLEGAL;
                         *err=U_ILLEGAL_CHAR_FOUND;
                     }
+                } else {
+                    /* callback(unassigned) for a BMP code point */
+                    *err = U_INVALID_CHAR_FOUND;
                 }
-                args->converter->fromUnicodeStatus = (int32_t)isTargetByteDBCS;
-                /* Call the callback function*/
-                fromUnicodeCallback(args,sourceChar,&source,&target,&offsets,reason,err);
-                isTargetByteDBCS=(UBool)args->converter->fromUnicodeStatus;
 
-                if (U_FAILURE (*err)){
-                    break;
-                }
+                args->converter->fromUChar32=sourceChar;
+                args->converter->fromUnicodeStatus = (int32_t)isTargetByteDBCS;
+                break;
             }
         } /* end if(myTargetIndex<myTargetLength) */
         else{
@@ -2542,7 +2458,6 @@ UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
     int len =0; /*length of escSeq chars*/
     uint32_t targetValue=0;
     uint8_t planeVal=0;
-    UConverterCallbackReason reason;
     UConverterSharedData* sharedData=NULL;
     UBool useFallback;
 
@@ -2575,7 +2490,7 @@ UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
     sharedData        = (*currentConverter)->sharedData;
 
     /* check if the last codepoint of previous buffer was a lead surrogate*/
-    if(args->converter->fromUSurrogateLead!=0 && target< targetLimit) {
+    if((sourceChar = args->converter->fromUChar32)!=0 && target< targetLimit) {
         goto getTrail;
     }
 
@@ -2591,7 +2506,6 @@ UConverter_fromUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterFromUnicodeArgs* args
             /*check if the char is a First surrogate*/
              if(UTF_IS_SURROGATE(sourceChar)) {
                 if(UTF_IS_SURROGATE_FIRST(sourceChar)) {
-                    args->converter->fromUSurrogateLead=(UChar)sourceChar;
 getTrail:
                     /*look ahead to find the trail surrogate*/
                     if(source < sourceLimit) {
@@ -2599,28 +2513,28 @@ getTrail:
                         UChar trail=(UChar) *source;
                         if(UTF_IS_SECOND_SURROGATE(trail)) {
                             source++;
-                            /*(((args->converter->fromUSurrogateLead)<<10L)+(trail)-((0xd800<<10L)+0xdc00-0x10000))*/
-                            sourceChar=UTF16_GET_PAIR_VALUE(args->converter->fromUSurrogateLead, trail);
-                            args->converter->fromUSurrogateLead=0x00;
-                            /* convert this surrogate code point */
+                            sourceChar=UTF16_GET_PAIR_VALUE(sourceChar, trail);
+                            args->converter->fromUChar32=0x00;
+                            /* convert this supplementary code point */
                             /* exit this condition tree */
                         } else {
                             /* this is an unmatched lead code unit (1st surrogate) */
                             /* callback(illegal) */
-                            reason=UCNV_ILLEGAL;
                             *err=U_ILLEGAL_CHAR_FOUND;
-                            goto callback;
+                            args->converter->fromUChar32=sourceChar;
+                            break;
                         }
                     } else {
                         /* no more input */
+                        args->converter->fromUChar32=sourceChar;
                         break;
                     }
                 } else {
                     /* this is an unmatched trail code unit (2nd surrogate) */
                     /* callback(illegal) */
-                    reason=UCNV_ILLEGAL;
                     *err=U_ILLEGAL_CHAR_FOUND;
-                    goto callback;
+                    args->converter->fromUChar32=sourceChar;
+                    break;
                 }
             }
 
@@ -2755,20 +2669,12 @@ getTrail:
 
             }
             else{
-
                 /* if we cannot find the character after checking all codepages 
                  * then this is an error
                  */
-                reason = UCNV_UNASSIGNED;
                 *err = U_INVALID_CHAR_FOUND;
-callback:
-
-                fromUnicodeCallback(args,sourceChar,&source,&target,&offsets,reason,err);
-                initIterState = *currentState;
-               
-                if (U_FAILURE (*err)){
-                    break;
-                }
+                args->converter->fromUChar32=sourceChar;
+                break;
             }
         } /* end if(myTargetIndex<myTargetLength) */
         else{
