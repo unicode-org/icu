@@ -46,7 +46,11 @@
 
 /* This writable buffer is used if we encounter Thai and need to reorder the string on the fly */
 /* Sometimes we already have a writable buffer (like in case of normalized strings). */
-/* you can change this value if you need memory - it will affect the performance, though, since we're going to malloc */
+/* 
+you can change this value to any value >= 3 if you need memory - 
+it will affect the performance, though, since we're going to malloc.
+Note 3 is the minimum value for Thai collation to work correctly. 
+*/
 #define UCOL_WRITABLE_BUFFER_SIZE 256
 
 /* This is the size of the buffer for expansion CE's */
