@@ -60,6 +60,8 @@ static void TestErrorCodes(void);
 
 static void TestJB3763(void);
 
+static void TestXPath(void);
+
 /**
 * extensive subtests called by TestResourceBundles
 **/
