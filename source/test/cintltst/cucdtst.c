@@ -317,9 +317,21 @@ void TestUnicodeData()
     char*   bufferPtr = 0, *dirPtr = 0;
     int32_t unicode;
     char newPath[256];
+    const char *expectVersion = "3.0.0";  /* NOTE: this purposely breaks to force the tests to stay in sync with the unicodedata */
+    char expectString[256];
 
     strcpy(newPath,icu_getDefaultDataDirectory());
-    strcat(newPath, "UnicodeData-3.0.0.txt");
+    strcat(newPath, "UnicodeData-");
+    strcat(newPath, expectVersion);
+    strcat(newPath, ".txt");
+
+    strcpy(expectString, "Unicode Version ");
+    strcat(expectString, expectVersion);
+
+    if(strcmp(u_getVersion(), expectString) != 0)
+      {
+	log_err("Testing u_getVersion() - expected %s got %s\n", expectString, u_getVersion());
+      }
     
     input = fopen(newPath, "r");
 
