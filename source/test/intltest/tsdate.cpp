@@ -9,6 +9,7 @@
 #include "unicode/smpdtfmt.h"
 #include "tsdate.h"
 
+#include <float.h>
 #include <stdlib.h>
 
 const double IntlTestDateFormat::ONEYEAR = 365.25 * ONEDAY; // Approximate
@@ -115,6 +116,7 @@ void IntlTestDateFormat::testFormat(/* char* par */)
     tryDate(0);
     tryDate(1278161801778.0);
     tryDate(5264498352317.0);   // Sunday, October 28, 2136 8:39:12 AM PST
+    tryDate(9516987689250.0);   // In the year 2271
     tryDate(now);
     // Shift 6 months into the future, AT THE SAME TIME OF DAY.
     // This will test the DST handling.
@@ -213,22 +215,26 @@ double IntlTestDateFormat::randDouble()
     uint32_t i;
     char* poke = (char*)&d;
     do {
-        for (i=0; i < sizeof(double); ++i)
-        {
-            poke[i] = (char)(rand() & 0xFF);
-        }
-    } while (uprv_isNaN(d) || uprv_isInfinite(d));
+        do {
+            for (i=0; i < sizeof(double); ++i)
+            {
+                poke[i] = (char)(rand() & 0xFF);
+            }
+        } while (uprv_isNaN(d) || uprv_isInfinite(d));
 
-    if (d < 0.0)
-        d = -d;
-    if (d > 0.0)
-    {
-        double e = uprv_floor(uprv_log10(d));
-        if (e < -2.0)
-            d *= uprv_pow10((int32_t)(-e-2));
-        else if (e > -1.0)
-            d /= uprv_pow10((int32_t)(e+1));
-    }
+        if (d < 0.0)
+            d = -d;
+        if (d > 0.0)
+        {
+            double e = uprv_floor(uprv_log10(d));
+            if (e < -2.0)
+                d *= uprv_pow10((int32_t)(-e-2));
+            else if (e > -1.0)
+                d /= uprv_pow10((int32_t)(e+1));
+        }
+    // While this is not a real normalized number make another one.
+    } while (uprv_isNaN(d) || uprv_isInfinite(d)
+        || !((-DBL_MAX < d && d < DBL_MAX) || (-DBL_MIN < d && d < DBL_MIN)));
     return d;
 }
 
