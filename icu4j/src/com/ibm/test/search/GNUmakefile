@@ -1,9 +1,9 @@
 #
-# @(#)$RCSfile: GNUmakefile,v $ $Revision: 1.1 $ $Date: 2000/02/26 22:00:56 $
+# @(#)$RCSfile: GNUmakefile,v $ $Revision: 1.2 $ $Date: 2000/02/29 19:51:41 $
 #
 
 TOPDIR=		../../../../..
-PACKAGE=	com.ibm.test.bnf
+PACKAGE=	com.ibm.test.search
 
 include $(TOPDIR)/src/build/defs.gmk
 
