@@ -37,8 +37,8 @@ public class NormalizerData {
     * Returns the composite of the two characters. If the two
     * characters don't combine, returns NOT_COMPOSITE.
     * @param   first   first character (e.g. 'c')
-    * @param   first   second character (e.g. '¸' cedilla)
-    * @return          composite (e.g. 'ç')
+    * @param   first   second character (e.g. \u0327 cedilla)
+    * @return          composite (e.g. \u00C7 c cedilla)
     */
     public int getPairwiseComposition(int first, int second) {
         return compose.get(((long)first << 32) | second);

@@ -10,7 +10,7 @@ import com.ibm.icu.dev.test.UTF16Util;
 /**
  * Builds the normalization tables. This is a separate class so that it
  * can be unloaded once not needed.<br>
- * Copyright ? 1998-2002 Unicode, Inc. All Rights Reserved.<br>
+ * Copyright (C) 1998-2002 Unicode, Inc. All Rights Reserved.<br>
  * The Unicode Consortium makes no expressed or implied warranty of any
  * kind, and assumes no liability for errors or omissions.
  * No liability is assumed for incidental and consequential damages
@@ -20,7 +20,7 @@ import com.ibm.icu.dev.test.UTF16Util;
  * Vladimir Weinstein & Markus Scherer
  */
 class NormalizerBuilder {
-    static final String copyright = "Copyright ? 1998-1999 Unicode, Inc.";
+    static final String copyright = "Copyright (C) 1998-1999 Unicode, Inc.";
 
     /**
      * Testing flags
