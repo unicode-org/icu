@@ -21,7 +21,6 @@
 #include "tsmutex.h"
 #include "tsmthred.h"
 #include "tsputil.h"
-#include "biditst.h"
 #include "uobjtest.h"
 //#include "custrtest.h"
 //#include "ccitrtst.h"
