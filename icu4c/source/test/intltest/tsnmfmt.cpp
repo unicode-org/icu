@@ -9,7 +9,6 @@
 
 #include "unicode/decimfmt.h"
 
-#include <limits.h>
 
 static const char * formattableTypeName(Formattable::Type t)
 {
@@ -114,7 +113,6 @@ IntlTestNumberFormat::testFormat(/* char* par */)
     DecimalFormat *s = (DecimalFormat*)fFormat;
     logln((UnicodeString)"  Pattern " + s->toPattern(str));
 
-#if 1
 #ifdef OS390
     tryIt(-2.02147304840132e-68);
     tryIt(3.88057859588817e-68); // Test rounding when only some digits are shown because exponent is close to -maxfrac
@@ -126,9 +124,7 @@ IntlTestNumberFormat::testFormat(/* char* par */)
     tryIt(-2.64651110485945e+306); // Overflows to +INF when shown as a percent
     tryIt(9.29526819488338e+250); // Ok -- used to fail?
 #endif
-#endif
 
-#if 1
     // These PASS now, with the sprintf/atof based format-parse.
 
     // These fail due to round-off
@@ -141,11 +137,9 @@ IntlTestNumberFormat::testFormat(/* char* par */)
     tryIt(-9.18228054496402e+255);
     tryIt(-9.69413034454191e+273);
 #endif
-#endif
 
-#if 1
-    tryIt((int32_t)251887531);
 #ifndef OS390
+    tryIt(1.234e-200);
     tryIt(-2.3e-168);
 
     tryIt(uprv_getNaN());
@@ -153,21 +147,19 @@ IntlTestNumberFormat::testFormat(/* char* par */)
     tryIt(-uprv_getInfinity());
 #endif
 
+    tryIt((int32_t)251887531);
     tryIt(5e-20 / 9);
     tryIt(5e20 / 9);
-#ifndef OS390
-    tryIt(1.234e-200);
-#endif
     tryIt(1.234e-50);
     tryIt(9.99999999999996);
     tryIt(9.999999999999996);
 
     tryIt((int32_t)INT32_MIN);
     tryIt((int32_t)INT32_MAX);
-    tryIt((double)LONG_MIN);
-    tryIt((double)LONG_MAX);
-    tryIt((double)LONG_MIN - 1.0);
-    tryIt((double)LONG_MAX + 1.0);
+    tryIt((double)INT32_MIN);
+    tryIt((double)INT32_MAX);
+    tryIt((double)INT32_MIN - 1.0);
+    tryIt((double)INT32_MAX + 1.0);
 
     tryIt(5.0 / 9.0 * 1e-20);
     tryIt(4.0 / 9.0 * 1e-20);
@@ -184,9 +176,7 @@ IntlTestNumberFormat::testFormat(/* char* par */)
     tryIt((int32_t)-10);
     tryIt((int32_t)-100);
     tryIt((int32_t)-1913860352);
-#endif
 
-#if 1
     for (int32_t z=0; z<10; ++z)
     {
         double d = randFraction() * 2e10 - 1e10;
@@ -204,13 +194,12 @@ IntlTestNumberFormat::testFormat(/* char* par */)
     tryIt(it);
     tryIt((int32_t)uprv_floor(it));
 
-#ifndef OS390
-    // try again with very larget numbers
+    // try again with very large numbers
     it = randDouble() * 10000000000.0;
     tryIt(it);
+    it = randDouble() * INT32_MAX;
+    tryIt(it);
     tryIt((int32_t)uprv_floor(it));
-#endif
-#endif
 
     delete fFormat;
 }
