@@ -158,7 +158,7 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   T_FileStream_writeLine(makefile, tmp);
   sprintf(tmp, "TOCOBJ= %s_dat%s \n\n", o->shortName,OBJ_SUFFIX);
   T_FileStream_writeLine(makefile, tmp);
-  sprintf(tmp, "TOCSYM= %s_dat \n\n", o->shortName);
+  sprintf(tmp, "TOCSYM= %s_dat \n\n", o->entryName); /* entrypoint not always shortname! */
   T_FileStream_writeLine(makefile, tmp);
 
   T_FileStream_writeLine(makefile, "BASE_OBJECTS= $(TOCOBJ) ");
