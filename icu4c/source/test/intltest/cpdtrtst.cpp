@@ -12,15 +12,11 @@
 
 #if !UCONFIG_NO_TRANSLITERATION
 
-#include "ittrans.h"
 #include "cpdtrtst.h"
 #include "unicode/utypes.h"
 #include "unicode/translit.h"
 #include "cpdtrans.h"
-#include "intltest.h"
 #include "cmemory.h"
-#include <string.h>
-#include <stdio.h>
 
 //---------------------------------------------
 // runIndexedTest

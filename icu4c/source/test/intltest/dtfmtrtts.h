@@ -7,8 +7,6 @@
 #ifndef _DATEFORMATROUNDTRIPTEST_
 #define _DATEFORMATROUNDTRIPTEST_
  
-#include <stdlib.h>
-
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING

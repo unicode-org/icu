@@ -20,7 +20,7 @@
 #if !UCONFIG_NO_COLLATION
 
 #include "unicode/uchar.h"
-
+#include "unicode/ustring.h"
 
 #include "dadrcoll.h"
 

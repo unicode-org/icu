@@ -21,7 +21,6 @@
 
 #if !UCONFIG_NO_IDNA && !UCONFIG_NO_TRANSLITERATION
 
-#include "sprpimpl.h"
 #include "intltest.h"
 #include "unicode/parseerr.h"
 

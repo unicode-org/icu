@@ -16,7 +16,9 @@
 #include "cstring.h"
 #include "canittst.h"
 #include "unicode/caniter.h"
+#include "unicode/normlzr.h"
 #include "unicode/uchar.h"
+#include "hash.h"
 
 #define ARRAY_LENGTH(array) ((int32_t)(sizeof (array) / sizeof (*array)))
 

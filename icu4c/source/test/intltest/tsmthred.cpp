@@ -11,8 +11,11 @@
 #endif
 
 #include "unicode/utypes.h"
+#include "unicode/ustring.h"
 #include "umutex.h"
 #include "cmemory.h"
+#include "cstring.h"
+#include "uparse.h"
 
 
 #if !defined(WIN32) && !defined(XP_MAC) && !defined(U_RHAPSODY)
