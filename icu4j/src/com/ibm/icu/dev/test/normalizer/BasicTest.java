@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/BasicTest.java,v $
- * $Date: 2002/09/26 23:01:57 $
- * $Revision: 1.17 $
+ * $Date: 2002/10/29 18:59:05 $
+ * $Revision: 1.18 $
  *
  *****************************************************************************************
  */
@@ -972,7 +972,7 @@ public class BasicTest extends TestFmwk {
                        "' (" + hex(ch) + ")" + " at index " + index);
                 break;
             }
-            got.append(UTF16.toString(ch));
+            got.append(UCharacter.toString(ch));
             index++;
         }
         if (!expected.equals(got.toString())) {
@@ -994,7 +994,7 @@ public class BasicTest extends TestFmwk {
                                + "' (" + hex(ch) + ")" + " at index " + index);
                 break;
             }
-            got.append(UTF16.toString(ch));
+            got.append(UCharacter.toString(ch));
         }
         if (!expectedReverse.equals(got.toString())) {
                 errln("FAIL: " +  "got '" +got+ "' (" + hex(got) + ")"
@@ -1567,7 +1567,9 @@ public class BasicTest extends TestFmwk {
          t2 = Normalizer.decompose(r2, false);
 
 	    if((options&Normalizer.COMPARE_CODE_POINT_ORDER)!=0) {
-            UTF16.StringComparator comp = new UTF16.StringComparator();
+            UTF16.StringComparator comp 
+                    = new UTF16.StringComparator(true, false, 
+                                     UTF16.StringComparator.FOLD_CASE_DEFAULT);
 	        return comp.compare(t1,t2);
 	    } else {
 	        return t1.compareTo(t2);
@@ -1596,7 +1598,9 @@ public class BasicTest extends TestFmwk {
 	    t2 = UCharacter.foldCase(t2,((options&Normalizer.FOLD_CASE_EXCLUDE_SPECIAL_I)==0));
 
         if((options&Normalizer.COMPARE_CODE_POINT_ORDER)!=0) {
-            UTF16.StringComparator comp = new UTF16.StringComparator();
+            UTF16.StringComparator comp 
+                    = new UTF16.StringComparator(true, false,
+                                    UTF16.StringComparator.FOLD_CASE_DEFAULT);
             return comp.compare(t1,t2);
         } else {
             return t1.compareTo(t2);
@@ -1756,7 +1760,8 @@ public class BasicTest extends TestFmwk {
         for(i=0; i<count; ++i) {
             s[i]=Utility.unescape(strings[i]);
         }
-        StringComparator comp = new StringComparator();
+        UTF16.StringComparator comp = new UTF16.StringComparator(true, false, 
+                                     UTF16.StringComparator.FOLD_CASE_DEFAULT);
         // test them each with each other
 
         i = 15;
@@ -1772,7 +1777,15 @@ public class BasicTest extends TestFmwk {
         // test UnicodeString::caseCompare - same internal implementation function
          if(0!=(opt[k].options&Normalizer.COMPARE_IGNORE_CASE)) {
         //    result=s[i]. (s[j], opt[k].options);
-            result=comp.caseCompare(s[i],s[j], opt[k].options);
+            if ((opt[k].options & Normalizer.FOLD_CASE_EXCLUDE_SPECIAL_I) == 0)
+            {
+                comp.setIgnoreCase(true, UTF16.StringComparator.FOLD_CASE_DEFAULT);
+            }
+            else {
+                comp.setIgnoreCase(true, UTF16.StringComparator.FOLD_CASE_EXCLUDE_SPECIAL_I);
+            }
+            
+            result=comp.compare(s[i],s[j]);
             refResult=ref_case_compare(s[i], s[j], opt[k].options);
             if(sign(result)!=sign(refResult)) {
                       errln("Normalizer::compare( " + i +", "+j + ", "+k+"( " +opt[k].name+"))=" + result +" should be same sign as " + refResult);
@@ -1784,135 +1797,6 @@ public class BasicTest extends TestFmwk {
             if(Normalizer.compare(value1,value2,Normalizer.COMPARE_IGNORE_CASE)==0){
 
             }
-        }
-    }
-
-
-    /**
-    * Compare strings using Unicode code point order, instead of UTF-16 code
-    * unit order.
-    */
-    public static final class StringComparator implements java.util.Comparator
-    {
-        /**
-        * Standard String compare. Only one small section is different, marked in
-        * the code.
-        */
-        public int compare(Object a, Object b)
-        {
-            if (a == b) {
-                return 0;
-            }
-            if (a == null) {
-                return -1;
-            }
-            if (b == null) {
-                return 1;
-            }
-
-            String sa = (String) a;
-            String sb = (String) b;
-            int lena = sa.length();
-            int lenb = sb.length();
-            int len = lena;
-            if (len > lenb) {
-                len = lenb;
-            }
-
-            for (int i = 0; i < len; ++i)
-            {
-                char ca = sa.charAt(i);
-                char cb = sb.charAt(i);
-                if (ca == cb) {
-                    continue; // skip remap if equal
-                }
-
-                // start of only different section
-                // if either code unit is below 0xd800, i.e., below the
-                // surrogate range, then nothing needs to be done
-
-                // if both are >=0xd800 then special code adjusts code unit
-                // values so that all BMP code points (including single
-                // surrogate code points) sort below supplementary ones
-
-                // this is necessary because surrogates are not at the end of
-                // the code unit range
-                if (ca >= UTF16.LEAD_SURROGATE_MIN_VALUE
-                    && cb >= UTF16.LEAD_SURROGATE_MIN_VALUE) {
-                    // subtract 0x2800 from BMP code points to make them
-                    // smaller than supplementary ones
-                    if ((ca <= UTF16.LEAD_SURROGATE_MAX_VALUE && (i + 1) < lena
-                        && UTF16.isTrailSurrogate(sa.charAt(i + 1)))
-                        || (UTF16.isTrailSurrogate(ca) && i > 0
-                            && UTF16.isLeadSurrogate(sa.charAt(i - 1)))) {
-                        // part of a surrogate pair, leave >=d800
-                    }
-                    else {
-                        // BMP code point - may be surrogate code point - make
-                        // <d800
-                        ca -= 0x2800;
-                    }
-
-                    if ((cb <= UTF16.LEAD_SURROGATE_MAX_VALUE && (i + 1) < lenb
-                        && UTF16.isTrailSurrogate(sb.charAt(i + 1)))
-                        || (UTF16.isTrailSurrogate(cb) && i > 0
-                            && UTF16.isLeadSurrogate(sb.charAt(i - 1)))) {
-                        // part of a surrogate pair, leave >=d800
-                    }
-                    else {
-                        // BMP code point - may be surrogate code point - make
-                        // < d800
-                        cb -= 0x2800;
-                    }
-                }
-
-                // end of only different section
-
-                if (ca < cb) {
-                    return -1;
-                }
-
-                return 1; // wasn't equal, so return 1
-            }
-
-            if (lena < lenb) {
-                return -1;
-            }
-
-            if (lena > lenb) {
-                return 1;
-            }
-
-            return 0;
-        }
-
-        public int caseCompare(Object a, Object b, int options){
-            if (a == b) {
-                return 0;
-            }
-            if (a == null) {
-                return -1;
-            }
-            if (b == null) {
-                return 1;
-            }
-            String sa = (String) a;
-            String sb = (String) b;
-            int la = sa.length();
-            int lb = sb.length();
-            if( sa != sb ){
-                int result = NormalizerImpl.cmpEquivFold(sa,sb,
-                                         options|Normalizer.COMPARE_IGNORE_CASE);
-                if(result!=0) {
-                  return (int)((byte)(result >> 24 | 1));
-                }
-
-            }else{
-                if(la != lb){
-                    return (int)((byte)((la-lb) >> 24 | 1));
-                }
-            }
-            return 0;
         }
     }
 
@@ -1939,7 +1823,7 @@ public class BasicTest extends TestFmwk {
 	    for(i=0; i<count; ++i) {
 	        s[i]=Utility.unescape(strings[i]);
 	    }
-	    StringComparator comp = new StringComparator();
+	    UTF16.StringComparator comp = new UTF16.StringComparator();
 	    // test them each with each other
 	    for(i=0; i<count; ++i) {
 	        for(j=i; j<count; ++j) {
@@ -1953,8 +1837,18 @@ public class BasicTest extends TestFmwk {
 
 	                // test UnicodeString::caseCompare - same internal implementation function
 	                 if(0!=(opt[k].options&Normalizer.COMPARE_IGNORE_CASE)) {
-	                //    result=s[i]. (s[j], opt[k].options);
-                        result=comp.caseCompare(s[i],s[j], opt[k].options);
+	                    //    result=s[i]. (s[j], opt[k].options);
+                        if ((opt[k].options & Normalizer.FOLD_CASE_EXCLUDE_SPECIAL_I) == 0)
+                        {
+                            comp.setIgnoreCase(true, UTF16.StringComparator.FOLD_CASE_DEFAULT);
+                        }
+                        else {
+                            comp.setIgnoreCase(true, UTF16.StringComparator.FOLD_CASE_EXCLUDE_SPECIAL_I);
+                        }
+                        
+                        comp.setCodePointCompare((opt[k].options & Normalizer.COMPARE_CODE_POINT_ORDER) != 0);
+                        // result=comp.caseCompare(s[i],s[j], opt[k].options);
+                        result=comp.compare(s[i],s[j]);
 	                    refResult=ref_case_compare(s[i], s[j], opt[k].options);
 	                    if(sign(result)!=sign(refResult)) {
 	                              errln("Normalizer::compare( " + i +", "+j + ", "+k+"( " +opt[k].name+"))=" + result +" should be same sign as " + refResult);
@@ -2121,9 +2015,7 @@ public class BasicTest extends TestFmwk {
         };
     
 
-        int i, length;
-    
-        for(i=0; i<tests.length; ++i) {
+        for(int i = 0; i < tests.length; ++ i) {
             String result=Normalizer.getFC_NFKC_Closure(tests[i].c);
             if(!result.equals(new String(tests[i].s))) {
                 errln("getFC_NFKC_Closure(U+"+Integer.toHexString(tests[i].c)+") is wrong");
@@ -2132,7 +2024,7 @@ public class BasicTest extends TestFmwk {
     
         /* error handling */
 
-        length=Normalizer.getFC_NFKC_Closure(0x5c, null);
+        int length=Normalizer.getFC_NFKC_Closure(0x5c, null);
 
 
     }

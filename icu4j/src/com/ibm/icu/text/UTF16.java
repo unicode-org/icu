@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UTF16.java,v $ 
-* $Date: 2002/10/28 21:59:22 $ 
-* $Revision: 1.24 $
+* $Date: 2002/10/29 18:59:04 $ 
+* $Revision: 1.25 $
 *
 *******************************************************************************
 */
@@ -2501,6 +2501,7 @@ public final class UTF16
             }
             else if (length1 > length2) {
                 result = 1;
+                minlength = length2;
             }
                 
             char c1 = 0;
