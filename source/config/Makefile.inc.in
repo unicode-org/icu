@@ -2,7 +2,7 @@
 #******************************************************************************
 #   Copyright (C) 1999, International Business Machines
 #   Corporation and others.  All Rights Reserved.
-# $Revision: 1.12 $
+# $Revision: 1.13 $
 #******************************************************************************
 # This Makefile is designed to be included into projects which make use
 # of the ICU.
@@ -14,7 +14,11 @@ CPPFLAGS = @CPPFLAGS@ $(LIBCPPFLAGS) -I$(prefix)/include
 CXXFLAGS = @CXXFLAGS@ 
 FFLAGS = @FFLAGS@
 DEFS = @DEFS@ 
-LDFLAGS = @LDFLAGS@ -L$(prefix)/lib $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
+ENABLE_RPATH = @ENABLE_RPATH@
+ifeq ($(ENABLE_RPATH),YES)
+RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
+endif
+LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
 LIBS = @LIBS@ 
 ICUPREFIX = icu
 ICULIBS = $(LIBS) -l$(ICUPREFIX)uc -l$(ICUPREFIX)i18n
