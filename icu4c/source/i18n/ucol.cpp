@@ -603,9 +603,6 @@ void ucol_initUCA(UErrorCode *status) {
   }
 }
 
-
-
-
 /*    collIterNormalize     Incremental Normalization happens here.                       */
 /*                          pick up the range of chars identifed by FCD,                  */
 /*                          normalize it into the collIterate's writable buffer,          */
@@ -620,6 +617,15 @@ void collIterNormalize(collIterate *collationSource)
 
     normLen = unorm_normalize(srcP, endP-srcP, UNORM_NFD, 0, collationSource->writableBuffer,
                               collationSource->writableBufSize, &status);
+    if (normLen == collationSource->writableBufSize) {
+        UChar *temp = (UChar *)uprv_malloc((normLen+1)*sizeof(UChar));
+        uprv_memcpy(temp, collationSource->writableBuffer, normLen * sizeof(UChar));
+        temp[normLen] = 0;
+        if (collationSource->writableBuffer != collationSource->stackWritableBuffer) {
+            uprv_free( collationSource->writableBuffer);
+        }
+        collationSource->writableBuffer = temp;
+    }
     if (U_FAILURE(status)) { /* This would be buffer overflow */
         if (status == U_BUFFER_OVERFLOW_ERROR) {
             if (collationSource->writableBuffer != collationSource->stackWritableBuffer) {
@@ -636,6 +642,7 @@ void collIterNormalize(collIterate *collationSource)
             return;
         }
     }
+
     collationSource->pos        = collationSource->writableBuffer;
     collationSource->origFlags  = collationSource->flags;
     collationSource->flags     |= UCOL_ITER_INNORMBUF;
@@ -656,7 +663,7 @@ void collIterNormalize(collIterate *collationSource)
 /*          the trailing combining class of the previous char was zero.                   */
 /*          True because the previous call to this function will have always exited       */
 /*          that way, and we get called for every char where cc might be non-zero.        */
-inline void collIterFCD(collIterate *collationSource) {
+inline UBool collIterFCD(collIterate *collationSource) {
     UChar32     codepoint;
     UChar       *srcP;
     int         length;
@@ -710,21 +717,15 @@ inline void collIterFCD(collIterate *collationSource) {
         }
     }
 
-    collationSource->fcdPosition = srcP + count;
+    collationSource->fcdPosition = srcP + (count - 1);
     if (codepoint == 0 && (collationSource->flags & UCOL_ITER_HASLEN)==0) {
         // We checked the string's trailing null, which would advance fcdPosition past the null.
         //   back it up to point to the null.
         collationSource->fcdPosition--;
     }
 
-    if (needNormalize) {
-        collIterNormalize(collationSource);
-    }
+    return needNormalize;
 }
-
-
-
-
 
 /****************************************************************************/
 /* Following are the CE retrieval functions                                 */
@@ -827,7 +828,9 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
         }
 
         // Need a more complete FCD check and possible normalization.
-        collIterFCD(collationSource);
+        if (collIterFCD(collationSource)) {
+            collIterNormalize(collationSource);
+        }
         if ((collationSource->flags & UCOL_ITER_INNORMBUF) == 0) {
             //  No normalization was needed.  Go ahead and process the char we already had.
             break;
@@ -875,7 +878,7 @@ U_CAPI uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSour
 void collPrevIterNormalize(collIterate *data)
 {
     UErrorCode status  = U_ZERO_ERROR;
-    UChar      *pEnd   = data->pos + 1;         /* End normalize + 1 */
+    UChar      *pEnd   = data->pos;         /* End normalize + 1 */
     UChar      *pStart;
     uint32_t    normLen;
     UChar      *pStartNorm;
@@ -888,8 +891,9 @@ void collPrevIterNormalize(collIterate *data)
         pStart = data->fcdPosition + 1;
     }
 
-    normLen = unorm_normalize(pStart, pEnd - pStart, UNORM_NFD, 0,
+    normLen = unorm_normalize(pStart, (pEnd - pStart) + 1, UNORM_NFD, 0,
                               data->writableBuffer, 0, &status);
+    
     if (data->writableBufSize <= normLen) {
             if (data->writableBuffer != data->stackWritableBuffer) {
                 uprv_free( data->writableBuffer);
@@ -906,8 +910,8 @@ void collPrevIterNormalize(collIterate *data)
     */
     pStartNorm = data->writableBuffer + (data->writableBufSize - normLen);
     *(pStartNorm - 1) = 0;
-    unorm_normalize(pStart, pEnd - pStart, UNORM_NFD, 0, pStartNorm, normLen, 
-                    &status);
+    unorm_normalize(pStart, (pEnd - pStart) + 1, UNORM_NFD, 0, pStartNorm, 
+                    normLen, &status);
 
     data->pos        = data->writableBuffer + data->writableBufSize;
     data->origFlags  = data->flags;
@@ -1326,13 +1330,14 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
         //*(collationSource->CEpos++) = 0x04000080 | (ch & 0x001F) << 27;
       }
 
-      // we must skip all 00, 01, 02 bytes, so most bytes have 253 values
-      // we must leave a gap of 01 between all values of the last byte, so the last byte has 126 values (3 byte case)
-      // we shift so that HAN all has the same first primary, for compression.
-      // for the 4 byte case, we make the gap as large as we can fit.
-      // Three byte forms are EC xx xx, ED xx xx, EE xx xx (with a gap of 1)
-      // Four byte forms (most supplementaries) are EF xx xx xx (with a gap of LAST2_MULTIPLIER == 14)
-      
+      /* 
+      we must skip all 00, 01, 02 bytes, so most bytes have 253 values
+      we must leave a gap of 01 between all values of the last byte, so the last byte has 126 values (3 byte case)
+      we shift so that HAN all has the same first primary, for compression.
+      for the 4 byte case, we make the gap as large as we can fit.
+      Three byte forms are EC xx xx, ED xx xx, EE xx xx (with a gap of 1)
+      Four byte forms (most supplementaries) are EF xx xx xx (with a gap of LAST2_MULTIPLIER == 14)
+      */
       int32_t last0 = cp - IMPLICIT_BOUNDARY_;
       uint32_t r = 0;
 
@@ -1527,12 +1532,200 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
   return order; /* return the CE */
 }
 
+/**
+* Inserts the argument character into the end of the buffer pushing back the 
+* null terminator.
+* @param data collation element iterator data
+* @param ch character to be appended
+*/
+inline void insertBufferEnd(collIterate *data, UChar ch) 
+{
+          uint32_t  size    = data->writableBufSize;
+          uint32_t  strlen  = u_strlen(data->writableBuffer);
+          UChar    *newbuffer;
+    const uint32_t  incsize = 5;
+
+    if (size > strlen) {
+        UChar *end = data->writableBuffer + strlen;
+        *end = ch;
+        *(end + 1) = 0;
+        return;
+    }
+
+    /* 
+    buffer will always be null terminated at the end.
+    giving extra space since it is likely that more characters will be added.
+    */
+    size += incsize;
+    newbuffer = (UChar *)uprv_malloc(sizeof(UChar) * size);
+    uprv_memcpy(newbuffer, data->writableBuffer, 
+                data->writableBufSize * sizeof(UChar));
+    newbuffer        = newbuffer + data->writableBufSize;
+    *newbuffer       = ch;
+    *(newbuffer + 1) = 0;
+
+    if (data->writableBuffer != data->stackWritableBuffer) {
+        uprv_free(data->writableBuffer);
+    }
+
+    data->writableBufSize = size;
+    data->writableBuffer  = newbuffer;
+}
+
+/**
+* Special normalization function for contraction in the forwards iterator.
+* This normalization sequence will place the current character at source->pos
+* and its following normalized sequence into the buffer.
+* The fcd position, pos will be changed. 
+* pos will now point to positions in the buffer.
+* Flags will be changed accordingly.
+* @param data collation iterator data
+*/
+inline void normalizeNextContraction(collIterate *data)
+{ 
+    UChar      *buffer     = data->writableBuffer;
+    uint32_t    buffersize = data->writableBufSize;
+    uint32_t    strsize;
+    UErrorCode  status     = U_ZERO_ERROR;
+    /* data->pos - 1 is already in buffer */
+    UChar      *pStart     = data->pos; 
+    UChar      *pEnd;
+    uint32_t    normLen;
+    UChar      *pStartNorm;
+
+    if (data->flags & UCOL_ITER_HASLEN) {
+        *data->writableBuffer = *(pStart - 1);
+        strsize               = 1;
+    }
+    else {
+        strsize = u_strlen(data->writableBuffer);
+    }
+
+    pEnd = data->fcdPosition; 
+    
+    normLen = unorm_normalize(pStart, pEnd - pStart, UNORM_NFD, 0, buffer, 0, 
+                              &status);
+
+    if (buffersize <= normLen + strsize) {
+        uint32_t  size = strsize + normLen + 1;
+        UChar    *temp = (UChar *)uprv_malloc(size * sizeof(UChar));
+        uprv_memcpy(temp, buffer, sizeof(UChar) * strsize);
+        if (data->writableBuffer != data->stackWritableBuffer) {
+            uprv_free(buffer);
+        }
+        data->writableBuffer = temp;
+        data->writableBufSize = size;
+    }
+
+    status            = U_ZERO_ERROR;
+    pStartNorm        = buffer + strsize;
+    /* null-termination will be added here */
+    unorm_normalize(pStart, pEnd - pStart, UNORM_NFD, 0, pStartNorm, normLen, 
+                    &status);
+    
+    data->pos        = data->writableBuffer + strsize;
+    data->origFlags  = data->flags;
+    data->flags     |= UCOL_ITER_INNORMBUF;
+    data->flags     &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
+}
+
+/**
+* Contraction character management function that returns the next character
+* for the forwards iterator.
+* Does nothing if the next character is in buffer and not the first character 
+* in it.
+* Else it checks next character in data string to see if it is normalizable.
+* If it is not, the character is simply copied into the buffer, else
+* the whole normalized substring is copied into the buffer, including the 
+* current character.
+* @param data collation element iterator data
+* @return next character
+*/
+inline UChar getNextNormalizedChar(collIterate *data) 
+{
+    UChar  nextch = 0;
+    UChar  ch;
+    if ((data->flags & UCOL_ITER_NORM) == 0 || 
+        ((data->flags & UCOL_ITER_INNORMBUF) && *data->pos != 0)) {
+        /* 
+        if no normalization.
+        if next character is in normalized buffer, no further normalization
+        is required
+        */
+        return *(data->pos ++);
+    }
+    
+    ch = *(data->pos);
+
+    if (data->flags & UCOL_ITER_HASLEN) {
+        /* in data string */
+        if (data->pos + 1 == data->endp) {
+            data->pos ++;
+            return ch;
+        }
+        nextch = *(data->pos + 1);
+    }
+    else {
+        if (data->flags & UCOL_ITER_INNORMBUF) {
+            /* 
+            in writable buffer, at this point fcdPosition can not be 
+            pointing to the end of the data string. see contracting tag.
+            */
+            if (data->fcdPosition == data->endp - 1) {
+                /* at the end of the string, just dump it into the normalizer */
+                insertBufferEnd(data, *(data->fcdPosition));
+                data->pos = data->endp;
+                return *(data->fcdPosition);
+            }
+            data->pos = data->fcdPosition;
+        }
+        else {
+            if (*(data->pos + 1) == 0) {
+                return *(data->pos ++);
+            }
+        }
+        ch     = *(data->pos);
+        nextch = *(data->pos + 1);
+    }
+
+    
+    /* 
+    * if the current character is not fcd.
+    * Trailing combining class == 0.
+    */
+    if (data->fcdPosition < data->pos && 
+        (nextch >= NFC_ZERO_CC_BLOCK_LIMIT_ ||
+         ch >= NFC_ZERO_CC_BLOCK_LIMIT_) && collIterFCD(data)) {
+            /* 
+            Need a more complete FCD check and possible normalization. 
+            normalize substring will be appended to buffer 
+            */
+            normalizeNextContraction(data);
+            data->pos ++;
+            return ch;
+    }
+
+    if (data->flags & UCOL_ITER_INNORMBUF) {
+        /* 
+        no normalization is to be done hence only one character will be 
+        appended to the buffer.
+        */
+        insertBufferEnd(data, ch);
+    }
+    
+    /* points back to the pos in string */
+    data->pos ++;
+    return ch;
+}
+
 /* This function handles the special CEs like contractions, expansions, surrogates, Thai */
 /* It is called by both getNextCE and getNextUCA                                         */
 uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, UErrorCode *status) {
   uint32_t i = 0; /* general counter */
   uint32_t firstCE = UCOL_NOT_FOUND;
   UChar   *firstUChar = source->pos;
+  collIterateState state;
+  backupState(source, &state);
   //uint32_t CE = *source->CEpos;
   for (;;) {
     const uint32_t *CEOffset = NULL;
@@ -1581,16 +1774,19 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
         /* First we position ourselves at the begining of contraction sequence */
         const UChar *ContractionStart = UCharOffset = (UChar *)coll->image+getContractOffset(CE);
 
-        if ((source->flags & UCOL_ITER_HASLEN) && source->pos>=source->endp) {
+        if (((source->flags & UCOL_ITER_HASLEN) && source->pos>=source->endp) 
+            || ((source->flags & UCOL_ITER_INNORMBUF) && *source->pos == 0 &&
+                source->fcdPosition >= source->endp)) {
                                            /* this is the end of string.  (Null terminated handled later,
                                             when the null doesn't match the contraction sequence.)     */
           {
             CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex)); /* So we'll pick whatever we have at the point... */
             if (CE == UCOL_NOT_FOUND) {
-              source->pos = firstUChar; /* spit all the not found chars, which led us in this contraction */
+              // source->pos = firstUChar; /* spit all the not found chars, which led us in this contraction */
               if(firstCE != UCOL_NOT_FOUND) {
                 CE = firstCE;
               }
+              loadState(source, &state);
             }
           }
           break;
@@ -1601,7 +1797,7 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
         UCharOffset++; /* skip the backward offset, see above */
 
 
-        schar = *source->pos++;
+        schar = getNextNormalizedChar(source);
         while(schar > (tchar = *UCharOffset)) { /* since the contraction codepoints should be ordered, we skip all that are smaller */
           UCharOffset++;
         }
@@ -1613,7 +1809,8 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
         CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
 
         if(CE == UCOL_NOT_FOUND) {
-          source->pos   = firstUChar; /* spit all the not found chars, which led us in this contraction */
+          // source->pos   = firstUChar; /* spit all the not found chars, which led us in this contraction */
+          loadState(source, &state);
           if(firstCE != UCOL_NOT_FOUND) {
             CE = firstCE;
           }
@@ -1624,7 +1821,8 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
           uint32_t tempCE = *(coll->contractionCEs + (ContractionStart - coll->contractionIndex));
           if(tempCE != UCOL_NOT_FOUND) {
             firstCE = *(coll->contractionCEs + (ContractionStart - coll->contractionIndex));
-            firstUChar = source->pos-1;
+            /* firstUChar = source->pos-1; */
+            backupState(source, &state);
           }
         } else {
           break;
@@ -1664,8 +1862,6 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
 /**
 * Inserts the argument character into the front of the buffer replacing the 
 * front null terminator.
-* Repoints the pos pointer to the next character in the writablebuffer.
-* Changes the flags up to date.
 * @param data collation element iterator data
 * @param ch character to be appended
 */
@@ -1680,7 +1876,9 @@ inline void insertBufferFront(collIterate *data, UChar ch)
         if (*end == 0) {
             *end       = ch;
             *(end - 1) = 0;
+            return;
         }
+        end --;
     }
 
     /* 
@@ -1798,7 +1996,7 @@ inline UChar getPrevNormalizedChar(collIterate *data)
     UChar  ch;
     UChar *start;
     if ((data->flags & UCOL_ITER_NORM) == 0 || 
-        (data->flags & UCOL_ITER_INNORMBUF) || *(data->pos - 1) != 0) {
+        ((data->flags & UCOL_ITER_INNORMBUF) && *(data->pos - 1) != 0)) {
         /* 
         if no normalization.
         if previous character is in normalized buffer, no further normalization
@@ -1959,8 +2157,10 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
               /* this is the start of string */
               CE = *(coll->contractionCEs +
                      (UCharOffset - coll->contractionIndex));
-              if (CE == UCOL_NOT_FOUND && firstCE != UCOL_NOT_FOUND) {
-                CE            = firstCE;
+              if (CE == UCOL_NOT_FOUND) {
+                  if (firstCE != UCOL_NOT_FOUND) {
+                      CE            = firstCE;
+                  }
                 loadState(source, &state);
               }
 
