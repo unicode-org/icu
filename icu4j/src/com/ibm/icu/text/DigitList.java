@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DigitList.java,v $ 
- * $Date: 2003/12/01 22:00:44 $ 
- * $Revision: 1.14 $
+ * $Date: 2004/02/19 01:07:21 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -430,7 +430,7 @@ final class DigitList {
         // [bnf] rewritten to fix 4179818
         if (maximumDigits > 0 && maximumDigits < count) {
             if (shouldRoundUp(maximumDigits)) {
-                // Rounding up involved incrementing digits from LSD to MSD.
+                // Rounding up involves incrementing digits from LSD to MSD.
                 // In most cases this is simple, but in a worst case situation
                 // (9999..99) we have to adjust the decimalAt value.
                 for (;;)
