@@ -102,7 +102,7 @@ class TransliteratorIDParser {
      * 'filter' may be null, if there is none, or non-null and
      * non-empty.
      */
-    public static class SingleID {
+    static class SingleID {
         public String canonID;
         public String basicID;
         public String filter;

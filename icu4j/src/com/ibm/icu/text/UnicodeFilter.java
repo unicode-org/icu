@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeFilter.java,v $ 
- * $Date: 2002/12/05 01:23:06 $ 
- * $Revision: 1.14 $
+ * $Date: 2003/05/26 17:35:54 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -62,4 +62,14 @@ public abstract class UnicodeFilter implements UnicodeMatcher {
         }
         return U_MISMATCH;
     }
+
+    /**
+     * (This should not be here; it is declared to make CheckTags
+     * happy.  Java inserts a synthetic constructor and CheckTags
+     * can't tell that it's synthetic.)
+     *
+     * TODO Remove this when the JDK property implements MemberDoc.isSynthetic
+     * @internal
+     */
+    protected UnicodeFilter() {}
 }

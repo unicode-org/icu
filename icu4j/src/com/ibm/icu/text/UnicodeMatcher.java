@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeMatcher.java,v $
- * $Date: 2003/01/28 18:55:42 $
- * $Revision: 1.9 $
+ * $Date: 2003/05/26 17:35:54 $
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -55,6 +55,7 @@ public interface UnicodeMatcher {
      * is ETHER.  This allows explicit matching by rules and UnicodeSets
      * of text outside the context.  In traditional terms, this allows anchoring
      * at the start and/or end.
+     * @stable ICU 2.0
      */
     static final char ETHER = '\uFFFF';
 
