@@ -52,16 +52,17 @@ UnicodeSetTest::runIndexedTest(int32_t index, UBool exec,
         CASE(10,TestToPattern);
         CASE(11,TestIndexOf);
         CASE(12,TestStrings);
-        CASE(13,TestStringPatterns);
-        CASE(14,Testj2268);
-        CASE(15,TestCloseOver);
-        CASE(16,TestEscapePattern);
-        CASE(17,TestInvalidCodePoint);
-        CASE(18,TestSymbolTable);
-        CASE(19,TestSurrogate);
+        CASE(13,Testj2268);
+        CASE(14,TestCloseOver);
+        CASE(15,TestEscapePattern);
+        CASE(16,TestInvalidCodePoint);
+        CASE(17,TestSymbolTable);
+        CASE(18,TestSurrogate);
         default: name = ""; break;
     }
 }
+
+static const char NOT[] = "%%%%";
 
 /** 
  * UVector was improperly copying contents
@@ -76,42 +77,97 @@ void UnicodeSetTest::Testj2268() {
 }
 
 /**
- * Test that toPattern() round trips with syntax characters and
- * whitespace.
+ * Test toPattern().
  */
 void UnicodeSetTest::TestToPattern() {
-    static const char* OTHER_TOPATTERN_TESTS[] = {
-        "[[:latin:]&[:greek:]]", 
-        "[[:latin:]-[:greek:]]",
-        "[:nonspacing mark:]",
-        NULL
-    };
+    UErrorCode ec = U_ZERO_ERROR;
 
-    for (int32_t j=0; OTHER_TOPATTERN_TESTS[j]!=NULL; ++j) {
-        UErrorCode ec = U_ZERO_ERROR;
-        UnicodeSet s(OTHER_TOPATTERN_TESTS[j], ec);
-        if (U_FAILURE(ec)) {
-            errln((UnicodeString)"FAIL: bad pattern " + OTHER_TOPATTERN_TESTS[j]);
-            continue;
+    // Test that toPattern() round trips with syntax characters and
+    // whitespace.
+    {
+        static const char* OTHER_TOPATTERN_TESTS[] = {
+            "[[:latin:]&[:greek:]]", 
+            "[[:latin:]-[:greek:]]",
+            "[:nonspacing mark:]",
+            NULL
+        };
+
+        for (int32_t j=0; OTHER_TOPATTERN_TESTS[j]!=NULL; ++j) {
+            ec = U_ZERO_ERROR;
+            UnicodeSet s(OTHER_TOPATTERN_TESTS[j], ec);
+            if (U_FAILURE(ec)) {
+                errln((UnicodeString)"FAIL: bad pattern " + OTHER_TOPATTERN_TESTS[j]);
+                continue;
+            }
+            checkPat(OTHER_TOPATTERN_TESTS[j], s);
         }
-        checkPat(OTHER_TOPATTERN_TESTS[j], s);
-    }
     
-    for (UChar32 i = 0; i <= 0x10FFFF; ++i) {
-        if ((i <= 0xFF && !u_isalpha(i)) || u_isspace(i)) {
+        for (UChar32 i = 0; i <= 0x10FFFF; ++i) {
+            if ((i <= 0xFF && !u_isalpha(i)) || u_isspace(i)) {
 
-            // check various combinations to make sure they all work.
-            if (i != 0 && !toPatternAux(i, i)){
-                continue;
-            }
-            if (!toPatternAux(0, i)){
-                continue;
-            }
-            if (!toPatternAux(i, 0xFFFF)){
-                continue;
+                // check various combinations to make sure they all work.
+                if (i != 0 && !toPatternAux(i, i)){
+                    continue;
+                }
+                if (!toPatternAux(0, i)){
+                    continue;
+                }
+                if (!toPatternAux(i, 0xFFFF)){
+                    continue;
+                }
             }
         }
     }
+
+    // Test pattern behavior of multicharacter strings.
+    {
+        ec = U_ZERO_ERROR;
+        UnicodeSet* s = new UnicodeSet("[a-z {aa} {ab}]", ec);
+
+        // This loop isn't a loop.  It's here to make the compiler happy.
+        // If you're curious, try removing it and changing the 'break'
+        // statements (except for the last) to goto's.
+        for (;;) {
+            if (U_FAILURE(ec)) break;
+            const char* exp1[] = {"aa", "ab", NOT, "ac", NULL};
+            expectToPattern(*s, "[a-z{aa}{ab}]", exp1);
+
+            s->add("ac");
+            const char* exp2[] = {"aa", "ab", "ac", NOT, "xy", NULL};
+            expectToPattern(*s, "[a-z{aa}{ab}{ac}]", exp2);
+
+            s->applyPattern("[a-z {\\{l} {r\\}}]", ec);
+            if (U_FAILURE(ec)) break;
+            const char* exp3[] = {"{l", "r}", NOT, "xy", NULL};
+            expectToPattern(*s, "[a-z{r\\}}{\\{l}]", exp3);
+
+            s->add("[]");
+            const char* exp4[] = {"{l", "r}", "[]", NOT, "xy", NULL};
+            expectToPattern(*s, "[a-z{\\[\\]}{r\\}}{\\{l}]", exp4);
+
+            s->applyPattern("[a-z {\\u4E01\\u4E02}{\\n\\r}]", ec);
+            if (U_FAILURE(ec)) break;
+            const char* exp5[] = {"\\u4E01\\u4E02", "\n\r", NULL};
+            expectToPattern(*s, "[a-z{\\u000A\\u000D}{\\u4E01\\u4E02}]", exp5);
+
+            // j2189
+            s->clear();
+            s->add(UnicodeString("abc", ""));
+            s->add(UnicodeString("abc", ""));
+            const char* exp6[] = {"abc", NOT, "ab", NULL};
+            expectToPattern(*s, "[{abc}]", exp6);
+
+            break;
+        }
+
+        if (U_FAILURE(ec)) errln("FAIL: pattern parse error");
+        delete s;
+    }
+ 
+    // JB#3400: For 2 character ranges prefer [ab] to [a-b]
+    UnicodeSet s;
+    s.add((UChar)97, (UChar)98); // 'a', 'b'
+    expectToPattern(s, "[ab]", NULL);
 }
     
 UBool UnicodeSetTest::toPatternAux(UChar32 start, UChar32 end) {
@@ -642,55 +698,6 @@ void UnicodeSetTest::TestStrings() {
         delete testList[i];
         delete testList[i+1];
     }        
-}
-
-static const char NOT[] = "%%%%";
-
-/**
- * Test pattern behavior of multicharacter strings.
- */
-void UnicodeSetTest::TestStringPatterns() {
-    UErrorCode ec = U_ZERO_ERROR;
-    UnicodeSet* s = new UnicodeSet("[a-z {aa} {ab}]", ec);
-
-    // This loop isn't a loop.  It's here to make the compiler happy.
-    // If you're curious, try removing it and changing the 'break'
-    // statements (except for the last) to goto's.
-    for (;;) {
-        if (U_FAILURE(ec)) break;
-        const char* exp1[] = {"aa", "ab", NOT, "ac", NULL};
-        expectToPattern(*s, "[a-z{aa}{ab}]", exp1);
-
-        s->add("ac");
-        const char* exp2[] = {"aa", "ab", "ac", NOT, "xy", NULL};
-        expectToPattern(*s, "[a-z{aa}{ab}{ac}]", exp2);
-
-        s->applyPattern("[a-z {\\{l} {r\\}}]", ec);
-        if (U_FAILURE(ec)) break;
-        const char* exp3[] = {"{l", "r}", NOT, "xy", NULL};
-        expectToPattern(*s, "[a-z{r\\}}{\\{l}]", exp3);
-
-        s->add("[]");
-        const char* exp4[] = {"{l", "r}", "[]", NOT, "xy", NULL};
-        expectToPattern(*s, "[a-z{\\[\\]}{r\\}}{\\{l}]", exp4);
-
-        s->applyPattern("[a-z {\\u4E01\\u4E02}{\\n\\r}]", ec);
-        if (U_FAILURE(ec)) break;
-        const char* exp5[] = {"\\u4E01\\u4E02", "\n\r", NULL};
-        expectToPattern(*s, "[a-z{\\u000A\\u000D}{\\u4E01\\u4E02}]", exp5);
-
-        // j2189
-        s->clear();
-        s->add(UnicodeString("abc", ""));
-        s->add(UnicodeString("abc", ""));
-        const char* exp6[] = {"abc", NOT, "ab", NULL};
-        expectToPattern(*s, "[{abc}]", exp6);
-
-        break;
-    }
-
-    if (U_FAILURE(ec)) errln("FAIL: pattern parse error");
-    delete s;
 }
 
 /**
@@ -1671,6 +1678,9 @@ void UnicodeSetTest::expectToPattern(const UnicodeSet& set,
         logln((UnicodeString)"Ok:   toPattern() => \"" + pat + "\"");
     } else {
         errln((UnicodeString)"FAIL: toPattern() => \"" + pat + "\", expected \"" + expPat + "\"");
+        return;
+    }
+    if (expStrings == NULL) {
         return;
     }
     UBool in = TRUE;

@@ -49,8 +49,6 @@ private:
 
     void TestStrings(void);
 
-    void TestStringPatterns(void);
-
     void TestScriptSet(void);
 
     /**
