@@ -3071,8 +3071,21 @@ static void TestNewJapanese() {
     "\\u30d1\\u30d1", /* K\\u309cK\\u309c */
   };
 
+  static const char *test3[] = {
+    "\\u3071\\u309d", /* H\\u309c\\u309d */
+    "\\u30d1\\u30fd", /* K\\u309c\\u30fd */
+    "\\u3074\\u309d",
+    "\\u30d4\\u30fd",
+    "\\u3077\\u309d",
+    "\\u30d7\\u30fd",
+    "\\u307a\\u309d",
+    "\\u30da\\u30fd",
+  };
   genericLocaleStarter("ja_JP_JIS", test1, sizeof(test1)/sizeof(test1[0]));
- /*genericLocaleStarter("ja_JP_JIS", test2, sizeof(test2)/sizeof(test2[0]));*/
+  genericLocaleStarter("ja_JP_JIS", test2, sizeof(test2)/sizeof(test2[0]));
+  /*
+  genericLocaleStarter("ja_JP_JIS", test3, sizeof(test3)/sizeof(test3[0]));
+  */
 }
 /* this peace of code should be in some sort of verbose mode     */
 /* it gets the collation elements for elements and prints them   */
