@@ -84,7 +84,7 @@ sv {
         TN { "Tunisien" }
         TR { "Turkiet" }
         UA { "Ukraina" }
-        US { "USA" }
+//        US { "USA" }
         YE { "Jemen" }
         ZA { "Sydafrika" }
     }
