@@ -90,9 +90,6 @@ ulocdata_getPaperSize(const char* localeID, int32_t *height, int32_t *width, UEr
     if(U_SUCCESS(*status)){
         if(len < 2){
             *status = U_INTERNAL_PROGRAM_ERROR;
-            ures_close(bundle);
-            ures_close(paperSizeBundle);
-            return;
         }else{
             *height = paperSize[0];
             *width  = paperSize[1];
