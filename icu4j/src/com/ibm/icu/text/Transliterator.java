@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2004/02/25 01:28:42 $
- * $Revision: 1.95 $
+ * $Date: 2004/03/05 01:12:17 $
+ * $Revision: 1.96 $
  *
  *****************************************************************************************
  */
@@ -257,8 +257,6 @@ public abstract class Transliterator {
      * e.g., the forward rules of a RuleBasedTransliterator.  An "A-B"
      * transliterator transliterates A to B when operating in the forward
      * direction, and B to A when operating in the reverse direction.
-     * @see RuleBasedTransliterator
-     * @see CompoundTransliterator
      * @stable ICU 2.0
      */
     public static final int FORWARD = 0;
@@ -268,8 +266,6 @@ public abstract class Transliterator {
      * e.g., the reverse rules of a RuleBasedTransliterator.  An "A-B"
      * transliterator transliterates A to B when operating in the forward
      * direction, and B to A when operating in the reverse direction.
-     * @see RuleBasedTransliterator
-     * @see CompoundTransliterator
      * @stable ICU 2.0
      */
     public static final int REVERSE = 1;
