@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/NormalizerImpl.java,v $
- * $Date: 2002/07/25 21:27:00 $
- * $Revision: 1.8 $
+ * $Date: 2002/07/30 02:32:56 $
+ * $Revision: 1.9 $
  *******************************************************************************
  */
  
@@ -22,7 +22,7 @@ import com.ibm.icu.lang.UCharacter;
  */
 public final class NormalizerImpl {
 	// Static block for the class to initialize its own self 
-	static NormalizerImpl IMPL=null;
+	static final NormalizerImpl IMPL;
 	
 	static
     {
@@ -40,10 +40,10 @@ public final class NormalizerImpl {
 	static final long UNSIGNED_INT_MASK = 0xffffffffL;
 	/*
 	 * This new implementation of the normalization code loads its data from
-	 * unorm.dat, which is generated with the gennorm tool.
+	 * unorm.icu, which is generated with the gennorm tool.
 	 * The format of that file is described at the end of this file.
 	 */
-	private static final String DATA_FILE_NAME = "data/unorm.dat";
+	private static final String DATA_FILE_NAME = "data/unorm.icu";
 	
 	// norm32 value constants 
 	

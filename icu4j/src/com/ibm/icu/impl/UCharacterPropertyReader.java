@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/UCharacterPropertyReader.java,v $ 
-* $Date: 2002/07/08 23:52:14 $ 
-* $Revision: 1.4 $
+* $Date: 2002/07/30 02:32:55 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -18,16 +18,16 @@ import java.io.IOException;
 import com.ibm.icu.util.VersionInfo;
 
 /**
-* <p>Internal reader class for ICU data file uprops.dat containing 
+* <p>Internal reader class for ICU data file uprops.icu containing 
 * Unicode codepoint data.</p> 
-* <p>This class simply reads uprops.dat, authenticates that it is a valid
+* <p>This class simply reads uprops.icu, authenticates that it is a valid
 * ICU data file and split its contents up into blocks of data for use in
 * <a href=UCharacterProperty.html>com.ibm.icu.impl.UCharacterProperty</a>.
 * </p> 
-* <p>For more information about the format of uprops.dat refer to
+* <p>For more information about the format of uprops.icu refer to
 * <a href=oss.software.ibm.com/icu4j/icu4jhtml/com/ibm/icu/lang/readme.html>
 * ReadMe</a>.<\p>
-* <p>uprops.dat which is in big-endian format is jared together with this 
+* <p>uprops.icu which is in big-endian format is jared together with this 
 * package.</p>
 * @author Syn Wee Quek
 * @since release 2.1, February 1st 2002
@@ -55,7 +55,7 @@ final class UCharacterPropertyReader
     // protected methods -------------------------------------------------
       
     /**
-    * <p>Reads uprops.dat, parse it into blocks of data to be stored in
+    * <p>Reads uprops.icu, parse it into blocks of data to be stored in
     * UCharacterProperty.</P
     * @param ucharppty UCharacterProperty instance
     * @exception thrown when data reading fails
