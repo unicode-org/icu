@@ -60,10 +60,11 @@
  * into the string table for the tag name. The index of this list is
  * also used by other sections, which are mentioned later on.
  *
- * 3) This section contains a list of sorted list of unique aliases. This
+ * 3) This section contains a list of sorted unique aliases. This
  * list contains indexes into the string table for the alias name. The
- * index of this list is also used by other sections, which are mentioned
- * later on.
+ * index of this list is also used by other sections, like the 4th section.
+ * The index for the 3rd and 4th section can be used to get the
+ * alias <-> converter name mapping.
  *
  * 4) This section contains a list of mapped converter names. Consider this
  * as a table that maps the 3rd section to the 1st section. This list contains
@@ -143,8 +144,11 @@
  *      
  */
 
+/**
+ * Used by the UEnumeration API
+ */
 typedef struct UAliasContext {
-    uint32_t stanardNum;
+    uint32_t standardNum;
     uint32_t convNum;
     uint32_t listIdx;
 } UAliasContext;
@@ -218,6 +222,7 @@ haveAliasData(UErrorCode *pErrorCode) {
         tableStart      = ((const uint32_t *)(table))[0];
         if (tableStart < 8) {
             *pErrorCode = U_INVALID_FORMAT_ERROR;
+            udata_close(data);
             return FALSE;
         }
 
@@ -431,7 +436,7 @@ static int32_t U_CALLCONV
 ucnv_io_countStandardAliases(UEnumeration *enumerator, UErrorCode *pErrorCode) {
     int32_t value = 0;
     UAliasContext *myContext = (UAliasContext *)(enumerator->context);
-    uint32_t listOffset = taggedAliasArray[myContext->stanardNum*converterListNum + myContext->convNum];
+    uint32_t listOffset = taggedAliasArray[myContext->standardNum*converterListNum + myContext->convNum];
 
     if (listOffset) {
         value = taggedAliasLists[listOffset];
@@ -445,7 +450,7 @@ ucnv_io_nextStandardAliases(UEnumeration *enumerator,
                             UErrorCode *pErrorCode)
 {
     UAliasContext *myContext = (UAliasContext *)(enumerator->context);
-    uint32_t listOffset = taggedAliasArray[myContext->stanardNum*converterListNum + myContext->convNum];
+    uint32_t listOffset = taggedAliasArray[myContext->standardNum*converterListNum + myContext->convNum];
 
     if (listOffset) {
         uint32_t listCount = taggedAliasLists[listOffset];
@@ -506,7 +511,7 @@ ucnv_openStandardNames(const char *convName,
                 return NULL;
             }
             myEnum->context = myContext;
-            myContext->stanardNum = tagNum;
+            myContext->standardNum = tagNum;
             myContext->convNum = convNum;
             myContext->listIdx = 0;
         }
@@ -634,6 +639,7 @@ ucnv_getStandardName(const char *alias, const char *standard, UErrorCode *pError
                             if (currList[currAlias]
                                 && ucnv_compareNames(alias, GET_STRING(currList[currAlias]))==0)
                             {
+                                /* Get the preferred name from this list */
                                 if (currList[0]) {
                                     return GET_STRING(currList[0]);
                                 }
