@@ -345,7 +345,7 @@ UBool StringSearchTest::assertEqual(const SearchData *search)
     
     Collator      *collator = getCollator(search->collator);
     BreakIterator *breaker  = getBreakIterator(search->breaker);
-    StringSearch  *strsrch; 
+    StringSearch  *strsrch, *strsrch2;
     UChar          temp[128];
     
 #if UCONFIG_NO_BREAK_ITERATION
@@ -378,6 +378,19 @@ UBool StringSearchTest::assertEqual(const SearchData *search)
         delete strsrch;
         return FALSE;
     }
+
+    strsrch2 = strsrch->clone();
+    if( strsrch2 == strsrch || *strsrch2 != *strsrch ||
+        !assertEqualWithStringSearch(strsrch2, search)
+    ) {
+        errln("failure with StringSearch.clone()");
+        collator->setStrength(getECollationStrength(UCOL_TERTIARY));
+        delete strsrch;
+        delete strsrch2;
+        return FALSE;
+    }
+    delete strsrch2;
+
     collator->setStrength(getECollationStrength(UCOL_TERTIARY));
     delete strsrch;
     return TRUE;
