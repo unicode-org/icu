@@ -57,7 +57,7 @@ endif
 LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
 LDFLAGS = @LDFLAGS@ \
 
-LIBS = $(LIBICU-UC) @LIBS@ @LIB_M@
+LIBS = $(LIBICUUC) @LIBS@ @LIB_M@
 
 OBJECTS = read.o parse.o uprint.o
 

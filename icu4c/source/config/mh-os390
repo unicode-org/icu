@@ -64,7 +64,8 @@ MIDDLE_SO_TARGET =
 
 ###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
 ## Prefix for the ICU library names
-LIBICU = libicu
+ICUPREFIX = icu
+LIBICU = lib$(ICUPREFIX)
 ## Shared object suffix (switch to dll for shared library build)
 SO=		dll
 ## Non-shared intermediate object suffix
@@ -77,10 +78,10 @@ INSTALL-S = $(INSTALL_PROGRAM)
 INSTALL-L = $(INSTALL_DATA)
 
 ## Link commands to link to ICU libs
-LIBICU-UC= 	$(top_builddir)/common/libicuuc.x
-LIBICU-I18N= 	$(top_builddir)/i18n/libicui18n.x
+LIBICUUC= 	$(top_builddir)/common/libicuuc.x
+LIBICUI18N= 	$(top_builddir)/i18n/libicui18n.x
 LIBCTESTFW= 	$(top_builddir)/tools/ctestfw/libctestfw.x
-LIBICU-TOOLUTIL=$(top_builddir)/tools/toolutil/libicutoolutil.x
+LIBICUTOOLUTIL=$(top_builddir)/tools/toolutil/libicutoolutil.x
 LIBUSTDIO=      $(top_builddir)/extra/ustdio/libustdio.x
 
 ## Special 390 rules

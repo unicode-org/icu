@@ -70,7 +70,7 @@ RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
 endif
 LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
 INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/common:$(top_builddir)/i18n:$(top_builddir)/tools/toolutil:$(top_builddir)/extra/ustdio:$$$(LDLIBRARYPATH_ENVVAR)
-LIBS = $(LIBUSTDIO) $(LIBICU-I18N) $(LIBICU-TOOLUTIL) $(LIBICU-UC) @LIBS@ @LIB_M@ 
+LIBS = $(LIBUSTDIO) $(LIBICUI18N) $(LIBICUTOOLUTIL) $(LIBICUUC) @LIBS@ @LIB_M@ 
 
 ##OBJECTS = error.o genrb.o ustr.o parse.o read.o write.o list.o	\
 ##rblist.o  util.o

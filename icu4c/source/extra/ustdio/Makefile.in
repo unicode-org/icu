@@ -81,7 +81,7 @@ ifeq ($(ENABLE_RPATH),YES)
 RPATHLDFLAGS = $(LD_RPATH)$(LD_RPATH_PRE)$(libdir)
 endif
 LDFLAGS = @LDFLAGS@ $(RPATHLDFLAGS)
-LIBS = $(LIBICU-UC) $(LIBICU-I18N) @LIBS@
+LIBS = $(LIBICUUC) $(LIBICUI18N) @LIBS@
 
 OBJECTS = locbund.o loccache.o ufile.o ufmt_cmn.o uprintf.o uprntf_p.o	\
 uscanf.o uscanf_p.o uscanset.o ustdio.o

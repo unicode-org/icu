@@ -35,7 +35,8 @@ MIDDLE_SO_TARGET =
 
 ###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
 ## Prefix for the ICU library names
-LIBICU = libicu
+ICUPREFIX = icu
+LIBICU = lib$(ICUPREFIX)
 ##  object suffix
 TO=		o
 
@@ -51,10 +52,10 @@ INSTALL-S =  cp -fph
 INSTALL-L = $(INSTALL-S)
 
 ## Link commands to link to ICU service programs
-LIBICU-UC = $(top_srcdir)/common/libicuuc.o
-LIBICU-I18N = $(top_srcdir)/i18n/libicui18n.o
+LIBICUUC = $(top_srcdir)/common/libicuuc.o
+LIBICUI18N = $(top_srcdir)/i18n/libicui18n.o
 LIBCTESTFW = $(top_srcdir)/tools/ctestfw/libctestfw.o
-LIBICU-TOOLUTIL = $(top_srcdir)/tools/toolutil/libicutoolutil.o
+LIBICUTOOLUTIL = $(top_srcdir)/tools/toolutil/libicutoolutil.o
 LIBUSTDIO=      $(top_builddir)/extra/ustdio/libustdio.o
 
 ## Special OS400 rules
