@@ -272,6 +272,41 @@ public:
   static UNormalizationCheckResult
   quickCheck(const UnicodeString &source, UNormalizationMode mode, UErrorCode &status);
 
+  /*
+   * Concatenate normalized strings, making sure that the result is normalized as well.
+   *
+   * If both the left and the right strings are in
+   * the normalization form according to "mode",
+   * then the result will be
+   *
+   * \code
+   *     dest=normalize(left+right, mode)
+   * \endcode
+   *
+   * For details see unorm_concatenate in unorm.h.
+   *
+   * @param left Left source string.
+   * @param right Right source string.
+   * @param dest The output string.
+   * @param mode The normalization mode.
+   * @param options A bit set of normalization options.
+   * @param pErrorCode ICU error code in/out parameter.
+   *                   Must fulfill U_SUCCESS before the function call.
+   * @return result
+   *
+   * @see unorm_concatenate
+   * @see normalize
+   * @see unorm_next
+   * @see unorm_previous
+   *
+   * @draft ICU 2.1
+   */
+  static UnicodeString &
+  concatenate(UnicodeString &left, UnicodeString &right,
+              UnicodeString &result,
+              UNormalizationMode mode, int32_t options,
+              UErrorCode &errorCode);
+
   //-------------------------------------------------------------------------
   // Iteration API
   //-------------------------------------------------------------------------
