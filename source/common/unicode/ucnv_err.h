@@ -81,6 +81,8 @@
 
 /** 
  * The process condition code to be used with the callbacks.  
+ * Codes which are greater than UCNV_IRREGULAR should be 
+ * passed on to any chained callbacks.
  * @stable
  */
 typedef enum {
@@ -102,8 +104,17 @@ typedef enum {
     UCNV_RESET = 3,       /**< The callback is called with this reason when a
                              'reset' has occured. Callback should reset all
                              state. */
-    UCNV_CLOSE = 4        /**< Called when the converter is closed. The
+    UCNV_CLOSE = 4,        /**< Called when the converter is closed. The
                              callback should release any allocated memory.*/
+    UCNV_CLONE = 5         /**< Called when ucnv_safeClone() is called on the
+                              converter. the pointer available as the
+                              'context' is an alias to the original converters'
+                              context pointer. If the context must be owned
+                              by the new converter, the callback must clone 
+                              the data and call ucnv_setFromUCallback 
+                              (or setToUCallback) with the correct pointer.
+                              @draft ICU 2.2
+                           */
 } UConverterCallbackReason;
 
 
