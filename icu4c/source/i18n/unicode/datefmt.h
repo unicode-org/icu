@@ -265,8 +265,40 @@ public:
                                   UErrorCode& status) const;
 
     /**
-     * Formats a UDate into a date/time string. This is an abstract method which
+     * Formats a date into a date/time string. This is an abstract method which
      * concrete subclasses must implement.
+     * <P>
+     * On input, the FieldPosition parameter may have its "field" member filled with
+     * an enum value specifying a field.  On output, the FieldPosition will be filled
+     * in with the text offsets for that field.  
+     * <P> For example, given a time text
+     * "1996.07.10 AD at 15:08:56 PDT", if the given fieldPosition.field is
+     * DateFormat::kYearField, the offsets fieldPosition.beginIndex and
+     * statfieldPositionus.getEndIndex will be set to 0 and 4, respectively. 
+     * <P> Notice
+     * that if the same time field appears more than once in a pattern, the status will
+     * be set for the first occurence of that time field. For instance,
+     * formatting a UDate to the time string "1 PM PDT (Pacific Daylight Time)"
+     * using the pattern "h a z (zzzz)" and the alignment field
+     * DateFormat::TIMEZONE_FIELD, the offsets fieldPosition.beginIndex and
+     * fieldPosition.getEndIndex will be set to 5 and 8, respectively, for the first
+     * occurence of the timezone pattern character 'z'.
+     *
+     * @param cal           a Calendar set to the date and time to be formatted
+     *                      into a date/time string.
+     * @param toAppendTo    the result of the formatting operation is appended to
+     *                      the end of this string.
+     * @param fieldPosition On input: an alignment field, if desired (see examples above)
+     *                      On output: the offsets of the alignment field (see examples above)
+     * @return              A reference to 'toAppendTo'.
+     * @draft ICU 2.1
+     */
+    virtual UnicodeString& format(  Calendar& cal,
+                                    UnicodeString& toAppendTo,
+                                    FieldPosition& fieldPosition) const = 0;
+
+    /**
+     * Formats a UDate into a date/time string.
      * <P>
      * On input, the FieldPosition parameter may have its "field" member filled with
      * an enum value specifying a field.  On output, the FieldPosition will be filled
@@ -292,9 +324,9 @@ public:
      * @return              A reference to 'toAppendTo'.
      * @stable
      */
-    virtual UnicodeString& format(  UDate date,
-                                    UnicodeString& toAppendTo,
-                                    FieldPosition& fieldPosition) const = 0;
+    UnicodeString& format(  UDate date,
+                            UnicodeString& toAppendTo,
+                            FieldPosition& fieldPosition) const;
 
     /**
      * Formats a UDate into a date/time string. If there is a problem, you won't
@@ -346,10 +378,33 @@ public:
      *              output, the position at which parsing terminated, or the
      *              start position if the parse failed.
      * @return      A valid UDate if the input could be parsed.
+     * @draft ICU 2.1
+     */
+    virtual void parse( const UnicodeString& text,
+                        Calendar& cal,
+                        ParsePosition& pos) const = 0;
+
+    /**
+     * Parse a date/time string beginning at the given parse position. For
+     * example, a time text "07/10/96 4:5 PM, PDT" will be parsed into a Date
+     * that is equivalent to Date(837039928046).
+     * <P>
+     * By default, parsing is lenient: If the input is not in the form used by
+     * this object's format method but can still be parsed as a date, then the
+     * parse succeeds. Clients may insist on strict adherence to the format by
+     * calling setLenient(false).
+     *
+     * @see DateFormat::setLenient(boolean)
+     *
+     * @param text  The date/time string to be parsed
+     * @param pos   On input, the position at which to start parsing; on
+     *              output, the position at which parsing terminated, or the
+     *              start position if the parse failed.
+     * @return      A valid UDate if the input could be parsed.
      * @stable
      */
-    virtual UDate parse( const UnicodeString& text,
-                        ParsePosition& pos) const = 0;
+    UDate parse( const UnicodeString& text,
+                 ParsePosition& pos) const;
 
     /**
      * Parse a string to produce an object. This methods handles parsing of
