@@ -84,15 +84,13 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CaseMapTransliterator)
 /**
  * Constructs a transliterator.
  */
-CaseMapTransliterator::CaseMapTransliterator(const Locale &loc, const UnicodeString &id, UCaseMapFull *map) : 
+CaseMapTransliterator::CaseMapTransliterator(const UnicodeString &id, UCaseMapFull *map) : 
     Transliterator(id, 0),
-    fLoc(loc), fLocName(NULL),
     fCsp(NULL),
     fMap(map)
 {
     UErrorCode errorCode = U_ZERO_ERROR;
     fCsp = ucase_getSingleton(&errorCode); // expect to get NULL if failure
-    fLocName=fLoc.getName();
 
     // TODO test incremental mode with context-sensitive text (e.g. greek sigma)
     // TODO need to call setMaximumContextLength()?!
@@ -109,9 +107,8 @@ CaseMapTransliterator::~CaseMapTransliterator() {
  */
 CaseMapTransliterator::CaseMapTransliterator(const CaseMapTransliterator& o) :
     Transliterator(o),
-    fLoc(o.fLoc), fLocName(NULL), fCsp(o.fCsp), fMap(o.fMap)
+    fCsp(o.fCsp), fMap(o.fMap)
 {
-    fLocName=fLoc.getName();
 }
 
 /**
@@ -119,8 +116,6 @@ CaseMapTransliterator::CaseMapTransliterator(const CaseMapTransliterator& o) :
  */
 CaseMapTransliterator& CaseMapTransliterator::operator=(const CaseMapTransliterator& o) {
     Transliterator::operator=(o);
-    fLoc = o.fLoc;
-    fLocName = fLoc.getName();
     fCsp = o.fCsp;
     fMap = o.fMap;
     return *this;
@@ -160,7 +155,7 @@ void CaseMapTransliterator::handleTransliterate(Replaceable& text,
         c=text.char32At(textPos);
         csc.cpLimit=textPos+=U16_LENGTH(c);
 
-        result=fMap(fCsp, c, utrans_rep_caseContextIterator, &csc, &s, fLocName, &locCache);
+        result=fMap(fCsp, c, utrans_rep_caseContextIterator, &csc, &s, "", &locCache);
 
         if(csc.b1 && isIncremental) {
             // fMap() tried to look beyond the context limit

@@ -25,8 +25,8 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(LowercaseTransliterator)
 /**
  * Constructs a transliterator.
  */
-LowercaseTransliterator::LowercaseTransliterator(const Locale& theLoc) : 
-    CaseMapTransliterator(theLoc, UNICODE_STRING("Any-Lower", 9), ucase_toFullLower)
+LowercaseTransliterator::LowercaseTransliterator() : 
+    CaseMapTransliterator(UNICODE_STRING("Any-Lower", 9), ucase_toFullLower)
 {
 }
 
