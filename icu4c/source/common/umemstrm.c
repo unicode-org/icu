@@ -46,13 +46,13 @@ U_CAPI UMemoryStream * U_EXPORT2 uprv_mstrm_openNew(int32_t size) {
     return MS;
 }
 
-U_CAPI UMemoryStream * U_EXPORT2 uprv_mstrm_openBuffer(uint8_t *buffer, int32_t len){
+U_CAPI UMemoryStream * U_EXPORT2 uprv_mstrm_openBuffer(const uint8_t *buffer, int32_t len){
     UMemoryStream *MS = (UMemoryStream *)uprv_malloc(sizeof(UMemoryStream));
     if(MS == NULL) {
         return NULL;
     }
     MS->fReadOnly = TRUE;
-    MS->fStart = buffer;
+    MS->fStart = (uint8_t *)buffer; /*functions themselves take care about constness of buffer - see above line*/
     MS->fPos = len;
     MS->fReadPos = 0;
     MS->fError = FALSE;
@@ -89,6 +89,7 @@ U_CAPI int32_t U_EXPORT2 uprv_mstrm_read(UMemoryStream *MS, void* addr, int32_t 
         }
 
         uprv_memcpy(addr, MS->fStart+MS->fReadPos, len);
+	MS->fReadPos+=len;
 
         return len;
     } else {
