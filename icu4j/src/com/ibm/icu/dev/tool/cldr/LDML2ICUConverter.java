@@ -1796,7 +1796,7 @@ public class LDML2ICUConverter {
 
         if(map.size()>0){
             for(int i=0; i<map.size(); i++){
-               String key = Integer.toString(i+1);
+               String key = Integer.toString(i);
                ICUResourceWriter.ResourceString res = new ICUResourceWriter.ResourceString();
                res.val = (String)map.get(key);
                //TODO: fix this!!

@@ -34,7 +34,12 @@ import org.w3c.dom.Text;
 // Needed JAXP classes
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 // SAX2 imports
 import org.xml.sax.ErrorHandler;
@@ -959,6 +964,7 @@ public class LDMLUtilities {
         // Always set namespaces on
         dfactory.setNamespaceAware(true);
         dfactory.setValidating(true);
+        dfactory.setIgnoringComments(false);
         // Set other attributes here as needed
         //applyAttributes(dfactory, attributes);
         
@@ -1058,96 +1064,25 @@ public class LDMLUtilities {
      * Prints the specified node, recursively. 
      * @param node
      * @param out
+     * @throws IOException
      */
-    public static void printDOMTree(Node node, PrintWriter out) 
+    public static void printDOMTree(Node node, PrintWriter out) throws IOException 
     {
-      int type = node.getNodeType();
-      switch (type)
-      {
-        // print the document element
-        case Node.DOCUMENT_NODE: 
-          {
-            printDOMTree(((Document)node).getDocumentElement(), out);
-            break;
-          }
-
-          // print element with attributes
-        case Node.ELEMENT_NODE: 
-          {
-            out.print("<");
-            out.print(node.getNodeName());
-            NamedNodeMap attrs = node.getAttributes();
-            for (int i = 0; i < attrs.getLength(); i++)
-            {
-              Node attr = attrs.item(i);
-              String name = attr.getNodeName();
-              String value = attr.getNodeValue();
-              boolean isTypeStandard = (name.equals("type")&& value.equals("standard"));
-              if(!isTypeStandard){
-                  out.print(" " + name + 
-                            "=\"" + value + 
-                            "\"");
-              }
-            }
-            out.print(">");
-
-            NodeList children = node.getChildNodes();
-            if (children != null)
-            {
-              int len = children.getLength();
-              for (int i = 0; i < len; i++)
-                printDOMTree(children.item(i), out);
-            }
-
-            break;
-          }
-
-          // handle entity reference nodes
-        case Node.ENTITY_REFERENCE_NODE: 
-          {
-            out.print("&");
-            out.print(node.getNodeName());
-            out.print(";");
-            break;
-          }
-
-          // print cdata sections
-        case Node.CDATA_SECTION_NODE: 
-          {
-            out.print("<![CDATA[");
-            out.print(node.getNodeValue());
-            out.print("]]>");
-            break;
-          }
-
-          // print text
-        case Node.TEXT_NODE: 
-          {
-            out.print(escapeForXML(node.getNodeValue()));
-            break;
-          }
-
-          // print processing instruction
-        case Node.PROCESSING_INSTRUCTION_NODE: 
-          {
-            out.print("<?");
-            out.print(node.getNodeName());
-            String data = node.getNodeValue();
-            {
-              out.print(" ");
-              out.print(data);
-            }
-            out.print("?>");
-            break;
-          }
-      }
-
-      if (type == Node.ELEMENT_NODE)
-      {
-        out.print("</");
-        out.print(node.getNodeName());
-        out.print('>');
-      }
+         try {
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+            transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/ldml.dtd");
+            //transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, XLIFF_PUBLIC_NAME);
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            transformer.transform(new DOMSource(node), new StreamResult(out));
+        }
+        catch (TransformerException te) {
+            throw new IOException(te.getMessage());
+        }
+        
+        //out.close();
     } // printDOMTree(Node, PrintWriter)
     
     private static String escapeForXML(String string){
