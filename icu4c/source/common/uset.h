@@ -25,9 +25,14 @@
 struct USet;
 typedef struct USet USet;
 
+enum {
+    USET_SERIALIZED_STATIC_ARRAY_CAPACITY=8     /**< enough for any single-code point set */
+};
+
 struct USerializedSet {
     const uint16_t *array;
     int32_t bmpLength, length;
+    uint16_t staticArray[USET_SERIALIZED_STATIC_ARRAY_CAPACITY];
 };
 typedef struct USerializedSet USerializedSet;
 
@@ -49,6 +54,14 @@ uset_isEmpty(const USet *set);
 U_CAPI UBool U_EXPORT2
 uset_contains(const USet *set, UChar32 c);
 
+/**
+ * Check if the set contains exactly one code point.
+ *
+ * @return The code point if the set contains exactly one, otherwise -1.
+ */
+U_CAPI int32_t U_EXPORT2
+uset_containsOne(const USet *set);
+
 U_CAPI int32_t U_EXPORT2
 uset_countRanges(const USet *set);
 
@@ -61,6 +74,12 @@ uset_serialize(const USet *set, uint16_t *dest, int32_t destCapacity, UErrorCode
 
 U_CAPI UBool U_EXPORT2
 uset_getSerializedSet(USerializedSet *fillSet, const uint16_t *src, int32_t srcCapacity);
+
+/**
+ * Set the USerializedSet to contain exactly c.
+ */
+U_CAPI void U_EXPORT2
+uset_setSerializedToOne(USerializedSet *fillSet, UChar32 c);
 
 U_CAPI UBool U_EXPORT2
 uset_serializedContains(const USerializedSet *set, UChar32 c);

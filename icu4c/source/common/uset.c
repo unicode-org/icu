@@ -212,6 +212,18 @@ uset_contains(const USet *set, UChar32 c) {
 }
 
 U_CAPI int32_t U_EXPORT2
+uset_containsOne(const USet *set) {
+    if( set!=NULL &&
+        ((set->length==2 && set->array[0]==(set->array[1]-1)) ||
+         (set->length==1 && set->array[0]==0x10ffff))
+    ) {
+        return (int32_t)set->array[0];
+    } else {
+        return -1;
+    }
+}
+
+U_CAPI int32_t U_EXPORT2
 uset_countRanges(const USet *set) {
     if(set==NULL) {
         return 0;
@@ -370,6 +382,39 @@ uset_getSerializedSet(USerializedSet *fillSet, const uint16_t *src, int32_t srcC
     fillSet->array=src;
     fillSet->length=length;
     return TRUE;
+}
+
+U_CAPI void U_EXPORT2
+uset_setSerializedToOne(USerializedSet *fillSet, UChar32 c) {
+    if(fillSet==NULL || (uint32_t)c>0x10ffff) {
+        return;
+    }
+
+    fillSet->array=fillSet->staticArray;
+    if(c<0xffff) {
+        fillSet->bmpLength=fillSet->length=2;
+        fillSet->staticArray[0]=(uint16_t)c;
+        fillSet->staticArray[1]=(uint16_t)c+1;
+    } else if(c==0xffff) {
+        fillSet->bmpLength=1;
+        fillSet->length=3;
+        fillSet->staticArray[0]=0xffff;
+        fillSet->staticArray[1]=1;
+        fillSet->staticArray[2]=0;
+    } else if(c<0x10ffff) {
+        fillSet->bmpLength=0;
+        fillSet->length=4;
+        fillSet->staticArray[0]=(uint16_t)(c>>16);
+        fillSet->staticArray[1]=(uint16_t)c;
+        ++c;
+        fillSet->staticArray[2]=(uint16_t)(c>>16);
+        fillSet->staticArray[3]=(uint16_t)c;
+    } else /* c==0x10ffff */ {
+        fillSet->bmpLength=0;
+        fillSet->length=2;
+        fillSet->staticArray[0]=0x10;
+        fillSet->staticArray[1]=0xffff;
+    }
 }
 
 U_CAPI UBool U_EXPORT2
