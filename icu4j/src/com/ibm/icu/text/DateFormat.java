@@ -689,9 +689,9 @@ public abstract class DateFormat extends Format {
      *
      * @param locale The locale for which the date format is desired.
      */
-    static public DateFormat getDateInstance(Calendar cal, int dateStyle, Locale locale)
+    static final public DateFormat getDateInstance(Calendar cal, int dateStyle, Locale locale)
     {
-        return getDateTimeInstance(cal, locale, dateStyle, -1);
+        return getDateTimeInstance(cal, dateStyle, -1, locale);
     }
     
     /**
@@ -711,9 +711,9 @@ public abstract class DateFormat extends Format {
      *
      * @see DateFormat#getTimeInstance
      */
-    static public DateFormat getTimeInstance(Calendar cal, int timeStyle, Locale locale)
+    static final public DateFormat getTimeInstance(Calendar cal, int timeStyle, Locale locale)
     {
-        return getDateTimeInstance(cal, locale, -1, timeStyle);
+        return getDateTimeInstance(cal, -1, timeStyle, locale);
     }
     
     /**
@@ -738,39 +738,43 @@ public abstract class DateFormat extends Format {
      * @see DateFormat#getDateTimeInstance
      */
     static public DateFormat getDateTimeInstance(Calendar cal, int dateStyle,
-                                        int timeStyle, Locale locale)
+                                                 int timeStyle, Locale locale)
     {
-        return getDateTimeInstance(cal, locale, dateStyle, timeStyle);
+        return cal.getDateTimeFormat(dateStyle, timeStyle, locale);
     }
 
     /**
-     * Private utility method to retrive a date and/or time format
-     * for the specified calendar and locale.  This method has knowledge of
-     * (and is partly copied from) the corresponding code in SimpleDateFormat,
-     * but it knows how to find the right resource bundle based on the calendar class.
-     * <p>
-     * @param cal       The calendar system whose date/time format is desired.
-     *
-     * @param timeStyle The type of time format desired.  This can be
-     *                  <code>DateFormat.SHORT</code>, etc, or -1 if the time
-     *                  of day should not be included in the format.
-     *
-     * @param dateStyle The type of date format desired.  This can be
-     *                  <code>DateFormat.SHORT</code>, etc, or -1 if the date
-     *                  should not be included in the format.
-     *
-     * @param loc       The locale for which the date/time format is desired.
-     *
-     * @see DateFormat#getDateTimeInstance
+     * Convenience overload
      */
-    static private DateFormat getDateTimeInstance(Calendar cal, Locale loc,
-                                            int dateStyle, int timeStyle)
-    {
-        //if (cal instanceof com.ibm.util.Calendar) {
-        //    return ((com.ibm.util.Calendar)cal).getDateTimeFormat(dateStyle,timeStyle,loc);
-        //} else {
-        //    return formatHelper(cal, loc, dateStyle, timeStyle);
-        //}
-        return cal.getDateTimeFormat(dateStyle,timeStyle,loc);
+    static final public DateFormat getInstance(Calendar cal, Locale locale) {
+        return getDateTimeInstance(cal, SHORT, SHORT, locale);
+    }
+
+    /**
+     * Convenience overload
+     */
+    static final public DateFormat getInstance(Calendar cal) {
+        return getInstance(cal, Locale.getDefault());
+    }
+
+    /**
+     * Convenience overload
+     */
+    static final public DateFormat getDateInstance(Calendar cal, int dateStyle) {
+        return getDateInstance(cal, dateStyle, Locale.getDefault());
+    }
+
+    /**
+     * Convenience overload
+     */
+    static final public DateFormat getTimeInstance(Calendar cal, int timeStyle) {
+        return getTimeInstance(cal, timeStyle, Locale.getDefault());
+    }
+
+    /**
+     * Convenience overload
+     */
+    static final public DateFormat getDateTimeInstance(Calendar cal, int dateStyle, int timeStyle) {
+        return getDateTimeInstance(cal, dateStyle, timeStyle, Locale.getDefault());
     }
 }
