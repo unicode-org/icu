@@ -745,7 +745,9 @@ ucol_getTailoredSet(const UCollator *coll, UErrorCode *status);
 /********************************* Deprecated API ********************************/
 /* This is the C API wrapper for CollationIterator that got booted out from here, including just for */
 /* include backward compatibility */
-/* @deprecated remove after nov-2002 */
+/**
+ * TODO: Remove after Nov 2002
+ */
 #include "unicode/ucoleitr.h"
 
 /**
@@ -767,7 +769,7 @@ ucol_getTailoredSet(const UCollator *coll, UErrorCode *status);
  *
  * @see ucol_open
  * @see ucol_getVersion
- * @deprecated to be removed by nov-2002. Use support for running multiple versions of ICU
+ * @obsolete ICU 2.4. Use support for running multiple versions of ICU instead since this API will be removed in that release.
  */
 U_CAPI UCollator * U_EXPORT2
 ucol_openVersion(const char *loc,
@@ -780,7 +782,7 @@ ucol_openVersion(const char *loc,
  * @param coll The UCollator to query.
  * @return The normalization mode, UNORM_NONE or UNORM_NFD.
  * @see ucol_setNormalization
- * @deprecated To be removed after 2002-sep-30; use ucol_getAttribute().
+ * @obsolete ICu 2.4. Use ucol_getAttribute() instead since this API will be removed in that release.
  */
 U_CAPI UNormalizationMode U_EXPORT2 
 ucol_getNormalization(const UCollator* coll);
@@ -793,14 +795,14 @@ ucol_getNormalization(const UCollator* coll);
  *             UNORM_NONE (expect the text to not need normalization),
  *             UNORM_NFD (normalize)
  * @see ucol_getNormalization
- * @deprecated To be removed after 2002-sep-30; use ucol_setAttribute().
+ * @obsolete ICU 2.4. Use ucol_setAttribute() instead since this API will be removed in that release.
  */
 U_CAPI void U_EXPORT2 
 ucol_setNormalization(  UCollator        *coll,
             UNormalizationMode    mode);
 
 /**
- *@deprecated Remove after Aug 2002
+ * TODO: Remove after Aug 2002
  */
 #if ((U_ICU_VERSION_MAJOR_NUM != 2) || (U_ICU_VERSION_MINOR_NUM != 2))
 #   error "ICU version has changed. Please redefine the macros under U_USE_DEPRECATED_FORMAT_API pre-processor definition"

@@ -120,8 +120,7 @@ public:
     /**
      * The GMT zone has a raw offset of zero and does not use daylight
      * savings time.
-     * @deprecated To be removed after 2002-aug-16.  Use getGMT() instead.  This variable can be improperly intialized when used during
-     * the static initialization process.
+     * @obsolete ICU 2.4. Use getGMT() instead since this variable will be removed in that release.
      */
     static const TimeZone* GMT;
 #endif
@@ -208,7 +207,7 @@ public:
      *                   a time zone ID for a time zone with the given GMT offset.  If
      *                   there is no timezone that matches the GMT offset
      *                   specified, NULL is returned.
-     * @deprecated To be removed after 2003-Nov-8.  Use createEnumeration(int32_t) instead.
+     * @obsolete ICU 2.8.  Use createEnumeration(int32_t) instead since this API will be removed in that release.
      */
     static const UnicodeString** createAvailableIDs(int32_t rawOffset, int32_t& numIDs);
 
@@ -231,7 +230,7 @@ public:
      * UnicodeString is a time zone ID for a time zone with the given
      * country.  If there is no timezone that matches the country
      * specified, NULL is returned.
-     * @deprecated To be removed after 2003-Nov-8.  Use createEnumeration(const char*) instead.
+     * @obsolete ICU 2.8.  Use createEnumeration(const char*) instead since this API will be removed in that release.
      */
     static const UnicodeString** createAvailableIDs(const char* country,
                                                           int32_t& numIDs);
@@ -247,7 +246,7 @@ public:
      * @param numIDs  Receives the number of zone IDs returned.
      * @return        An array of UnicodeString pointers, where each is a time zone ID
      *                supported by the TimeZone class.
-     * @deprecated To be removed after 2003-Nov-8.  Use createEnumeration(void) instead.
+     * @obsolete ICU 2.8.  Use createEnumeration(void) instead since this API will be removed in that release.
      */
     static const UnicodeString** createAvailableIDs(int32_t& numIDs);
 
@@ -370,7 +369,7 @@ public:
 
 #ifdef ICU_TIMEZONE_USE_DEPRECATES
     /**
-     * @deprecated Remove after 2000-dec-31. Use the other getOffset().
+     * @obsolete ICU 1.8. Use the other getOffset() since this API will be removed in that release.
      */
     virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                               uint8_t dayOfWeek, int32_t millis) const = 0;
@@ -523,7 +522,7 @@ public:
      * @param status Output param filled in with success/error code.
      * @return true if the given date is in daylight savings time,
      * false, otherwise.
-     * @deprecated since ICU 2.4. Use Calendar::inDaylightTime() instead.
+     * @deprecated ICU 2.4. Use Calendar::inDaylightTime() instead.
      */
     virtual UBool inDaylightTime(UDate date, UErrorCode& status) const = 0;
 
