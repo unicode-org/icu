@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2002/03/13 19:52:34 $ 
- * $Revision: 1.26 $
+ * $Date: 2002/03/18 01:08:46 $ 
+ * $Revision: 1.27 $
  *
  *****************************************************************************************
  */
@@ -960,15 +960,10 @@ public class UnicodeSetTest extends TestFmwk {
     
     void checkRoundTrip(UnicodeSet s) {
         String pat = s.toPattern(false);
-    	UnicodeSet t = new UnicodeSet();
-    	UnicodeSetIterator it = new UnicodeSetIterator(s);
-    	while (it.next()) {
-    		if (it.codepoint != UnicodeSetIterator.IS_STRING) {
-    			t.add(it.codepoint);
-    		} else {
-    			t.add(it.string);
-    		}
-    	}
+        UnicodeSet t = copyWithIterator(s, false);
+        checkEqual(s, t, "iterator roundtrip");
+
+        t = copyWithIterator(s, true); // try range
         checkEqual(s, t, "iterator roundtrip");
         
         t = new UnicodeSet(pat);
@@ -977,6 +972,29 @@ public class UnicodeSetTest extends TestFmwk {
         pat = s.toPattern(true);
         t = new UnicodeSet(pat);
         checkEqual(s, t, "toPattern(true)");
+    }
+    
+    UnicodeSet copyWithIterator(UnicodeSet s, boolean withRange) {
+    	UnicodeSet t = new UnicodeSet();
+    	UnicodeSetIterator it = new UnicodeSetIterator(s);
+    	if (withRange) {
+    		while (it.nextRange()) {
+    			if (it.codepoint == UnicodeSetIterator.IS_STRING) {
+    				t.add(it.string);
+    			} else {
+    				t.add(it.codepoint, it.codepointEnd);
+    			}
+    		}
+    	} else {
+    		while (it.next()) {
+    			if (it.codepoint == UnicodeSetIterator.IS_STRING) {
+    				t.add(it.string);
+    			} else {
+    				t.add(it.codepoint);
+    			}
+    		}
+    	}
+    	return t;
     }
     
     boolean checkEqual(UnicodeSet s, UnicodeSet t, String message) {
