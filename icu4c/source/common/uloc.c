@@ -1313,7 +1313,7 @@ static void _lazyEvaluate_installedLocales()
     UResourceBundle *index = NULL;
     UResourceBundle installed;
     UErrorCode status = U_ZERO_ERROR;
-    const char ** temp;
+    char ** temp;
     int32_t i = 0;
     int32_t localeCount;
     
@@ -1327,7 +1327,7 @@ static void _lazyEvaluate_installedLocales()
 
         ures_resetIterator(&installed);
         while(ures_hasNext(&installed)) {
-            ures_getNextString(&installed, NULL, &temp[i++], &status);
+            ures_getNextString(&installed, NULL, (const char **)&temp[i++], &status);
         }
         temp[i] = NULL;
 
