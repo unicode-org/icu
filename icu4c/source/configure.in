@@ -376,12 +376,36 @@ AC_ARG_WITH(data-packaging,
 	[  --with-data-packaging=type specify how to package ICU data (files, archive, library, auto) [default=auto]],
 	[case "${withval}" in
                 files|archive|library) datapackaging=$withval ;;
-		auto) datapackaging= ;;
+		auto) datapackaging=$withval ;;
 		*) AC_MSG_ERROR(bad value ${withval} for --with-iostream) ;;
 		esac], 
         [datapackaging=])
 
-if test x"$datapackaging" = x; then
+dnl Deprecated support for --enable-mapped
+
+AC_ARG_ENABLE(mapped,,
+       [case "${enableval}" in
+               yes) mapped=archive ;;
+               no)  mapped=library ;;
+               *) AC_MSG_ERROR(bad value ${enableval} for --enable-mapped; use --with-data-packaging now) ;;
+	esac],
+       [mapped=])
+
+if test x"$mapped" != x; then
+    case $mapped in
+	archive)
+    	    AC_MSG_WARN(use --with-data-packaging=archive instead of --enable-mapped)
+	    ;;
+	library)
+    	    AC_MSG_WARN(use --with-data-packaging=library instead of --disable-mapped)
+	    ;;
+    esac
+    if test x"$datapackaging" != x -a x"$mapped" != x"$datapackaging"; then
+	AC_MSG_ERROR(conflicting values used for --with-data-packaging and deprecated --enable-mapped)
+    fi
+fi
+
+if test x"$datapackaging" = x -o x"$datapackaging" = xauto; then
     if test "$HAVE_DLOPEN" -eq 1; then
 	datapackaging=library
     else
