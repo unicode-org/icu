@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2002/07/08 23:52:14 $
- * $Revision: 1.25 $
+ * $Date: 2002/07/17 23:48:06 $
+ * $Revision: 1.26 $
  *
  *****************************************************************************************
  */
@@ -1445,7 +1445,8 @@ public final class Utility {
                 }
                 if (quoteBuf.length() > 0) {
                     rule.append(APOSTROPHE);
-                    rule.append(quoteBuf);
+                    // jdk 1.3.1 does not have append(StringBuffer) yet
+                    rule.append(quoteBuf.toString());
                     rule.append(APOSTROPHE);
                     quoteBuf.setLength(0);
                 }

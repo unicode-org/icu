@@ -872,7 +872,8 @@ public final class CollationElementIterator
         backup.m_isCodePointHiragana_ = m_isCodePointHiragana_;
         backup.m_bufferOffset_ = m_bufferOffset_;
         if (m_bufferOffset_ >= 0) {
-            backup.m_buffer_.append(m_buffer_);
+            // jdk 1.3.1 does not have append(StringBuffer) yet
+            backup.m_buffer_.append(m_buffer_.toString());
         }
     }
                 
@@ -889,7 +890,8 @@ public final class CollationElementIterator
         m_FCDStart_ = backup.m_FCDStart_;
         m_buffer_.delete(0, m_buffer_.length());
         if (m_bufferOffset_ >= 0) {
-            m_buffer_.append(backup.m_buffer_);
+            // jdk 1.3.1 does not have append(StringBuffer) yet
+            m_buffer_.append(backup.m_buffer_.toString());
         }
     }
         
