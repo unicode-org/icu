@@ -150,6 +150,14 @@ private:
 
 protected:
     /**
+     * A list of "default" features. The default characterProcessing method
+     * will apply all of these tags to every glyph.
+     *
+     * @internal
+     */
+    const LETag *fFeatureList;
+
+    /**
      * A list of tags in the order in which the features in
      * the font should be applied, as opposed to using the
      * order of the lookups in the font.
@@ -206,7 +214,7 @@ protected:
     /**
      * This method does the OpenType character processing. It assigns the OpenType feature
      * tags to the characters, and may generate output characters that differ from the input
-     * charcters dueto insertions, deletions, or reorderings. In such cases, it will also
+     * charcters due to insertions, deletions, or reorderings. In such cases, it will also
      * generate an output character index array reflecting these changes.
      *
      * Subclasses must override this method.

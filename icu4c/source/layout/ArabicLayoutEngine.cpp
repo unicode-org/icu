@@ -13,6 +13,7 @@
 #include "OpenTypeLayoutEngine.h"
 #include "ArabicLayoutEngine.h"
 #include "ScriptAndLanguageTags.h"
+#include "CharSubstitutionFilter.h"
 
 #include "GlyphSubstitutionTables.h"
 #include "GlyphDefinitionTables.h"
@@ -24,33 +25,6 @@
 #include "HebrewShaping.h"
 
 U_NAMESPACE_BEGIN
-
-class CharSubstitutionFilter : public UMemory, public LEGlyphFilter
-{
-private:
-    const LEFontInstance *fFontInstance;
-
-    CharSubstitutionFilter(const CharSubstitutionFilter &other); // forbid copying of this class
-    CharSubstitutionFilter &operator=(const CharSubstitutionFilter &other); // forbid copying of this class
-
-public:
-    CharSubstitutionFilter(const LEFontInstance *fontInstance);
-    ~CharSubstitutionFilter();
-
-    le_bool accept(LEGlyphID glyph) const;
-};
-
-CharSubstitutionFilter::CharSubstitutionFilter(const LEFontInstance *fontInstance)
-  : fFontInstance(fontInstance)
-{
-    // nothing to do
-}
-
-CharSubstitutionFilter::~CharSubstitutionFilter()
-{
-    // nothing to do
-}
-
 
 le_bool CharSubstitutionFilter::accept(LEGlyphID glyph) const
 {

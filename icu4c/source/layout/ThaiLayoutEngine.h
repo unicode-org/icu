@@ -99,11 +99,10 @@ protected:
      * @param offset - the index of the first character to process
      * @param count - the number of characters to process
      * @param max - the number of characters in the input context
-     * @param rightToLeft - TRUE if the text is in a right to left directional run
+     * @param rightToLeft - <code>TRUE</code> if the text is in a right to left directional run
+     * @param glyphStorage - the glyph storage object. The glyph and char index arrays will be set.
      *
      * Output parameters:
-     * @param glyphs - the glyph index array
-     * @param charIndices - the character index array
      * @param success - set to an error code if the operation fails
      *
      * @return the number of glyphs in the glyph index array

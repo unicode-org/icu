@@ -164,6 +164,9 @@
 				RelativePath=".\ArabicShaping.cpp">
 			</File>
 			<File
+				RelativePath=".\CanonData.cpp">
+			</File>
+			<File
 				RelativePath=".\ClassDefinitionTables.cpp">
 			</File>
 			<File
@@ -366,6 +369,12 @@
 				RelativePath=".\AttachmentPosnSubtables.h">
 			</File>
 			<File
+				RelativePath=".\CanonShaping.h">
+			</File>
+			<File
+				RelativePath=".\CharSubstitutionFilter.h">
+			</File>
+			<File
 				RelativePath=".\ClassDefinitionTables.h">
 			</File>
 			<File
@@ -511,9 +520,41 @@
 			</File>
 			<File
 				RelativePath=".\LEGlyphStorage.h">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout
+"
+						Outputs="..\..\include\layout\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout
+"
+						Outputs="..\..\include\layout\$(InputFileName)"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\LEInsertionList.h">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout
+"
+						Outputs="..\..\include\layout\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout
+"
+						Outputs="..\..\include\layout\$(InputFileName)"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\LELanguages.h">

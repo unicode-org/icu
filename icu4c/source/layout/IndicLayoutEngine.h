@@ -108,12 +108,11 @@ protected:
      * @param offset - the index of the first character to process
      * @param count - the number of characters to process
      * @param max - the number of characters in the input context
-     * @param rightToLeft - TRUE if the characters are in a right to left directional run
+     * @param rightToLeft - <code>TRUE</code> if the characters are in a right to left directional run
+     * @param glyphStorage - the glyph storage object. The glyph and character index arrays will be set.
+     *                       the auxillary data array will be set to the feature tags.
      *
      * Output parameters:
-     * @param outChars - the output character arrayt
-     * @param charIndices - the output character index array
-     * @param featureTags - the output feature tag array
      * @param success - set to an error code if the operation fails
      *
      * @return the output character count
@@ -137,12 +136,11 @@ protected:
      * @param offset - the index of the first character to process
      * @param count - the number of characters to process
      * @param max - the number of characters in the input context
-     * @param rightToLeft - TRUE if the characters are in a right to left directional run
+     * @param rightToLeft - <code>TRUE</code> if the characters are in a right to left directional run
      * @param featureTags - the feature tag array
+     * @param glyphStorage - the glyph storage object. The glyph and char index arrays will be set.
      *
      * Output parameters:
-     * @param glyphs - the output glyph index array
-     * @param charIndices - the output character index array
      * @param success - set to an error code if the operation fails
      *
      * @return the number of glyphs in the output glyph index array

@@ -12,11 +12,13 @@
 
 #include "LayoutEngine.h"
 #include "ArabicLayoutEngine.h"
+#include "CanonShaping.h"
 #include "HanLayoutEngine.h"
 #include "IndicLayoutEngine.h"
 #include "ThaiLayoutEngine.h"
 #include "GXLayoutEngine.h"
 #include "ScriptAndLanguageTags.h"
+#include "CharSubstitutionFilter.h"
 
 #include "LEGlyphStorage.h"
 
@@ -92,7 +94,25 @@ LEGlyphFilter::~LEGlyphFilter()
 	// nothing to do
 }
 
+CharSubstitutionFilter::CharSubstitutionFilter(const LEFontInstance *fontInstance)
+  : fFontInstance(fontInstance)
+{
+    // nothing to do
+}
+
+CharSubstitutionFilter::~CharSubstitutionFilter()
+{
+    // nothing to do
+}
+
+
 const char LayoutEngine::fgClassID=0;
+
+const LETag emptyTag = 0x00000000;
+
+const LETag ccmpFeatureTag = LE_CCMP_FEATURE_TAG;
+
+const LETag canonFeatures[] = {ccmpFeatureTag, emptyTag};
 
 LayoutEngine::LayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode)
     : fGlyphStorage(NULL), fFontInstance(fontInstance), fScriptCode(scriptCode), fLanguageCode(languageCode)
@@ -137,6 +157,55 @@ void LayoutEngine::getGlyphPosition(le_int32 glyphIndex, float &x, float &y, LEE
 	fGlyphStorage->getGlyphPosition(glyphIndex, x, y, success);
 }
 
+le_int32 LayoutEngine::characterProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
+				LEUnicode *&outChars, LEGlyphStorage &glyphStorage, LEErrorCode &success)
+{
+    if (LE_FAILURE(success)) {
+        return 0;
+    }
+
+    if (offset < 0 || count < 0 || max < 0 || offset >= max || offset + count > max) {
+        success = LE_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    const GlyphSubstitutionTableHeader *canonGSUBTable = (GlyphSubstitutionTableHeader *) CanonShaping::glyphSubstitutionTable;
+    LETag scriptTag  = OpenTypeLayoutEngine::getScriptTag(fScriptCode);
+    LETag langSysTag = OpenTypeLayoutEngine::getLangSysTag(fLanguageCode);
+    le_int32 i, dir = 1, out = 0, outCharCount = count;
+
+    if (rightToLeft) {
+        out = count - 1;
+        dir = -1;
+    }
+
+    if (canonGSUBTable->coversScript(scriptTag)) {
+        CharSubstitutionFilter *substitutionFilter = new CharSubstitutionFilter(fFontInstance);
+
+        glyphStorage.allocateGlyphArray(count, rightToLeft, success);
+        glyphStorage.allocateAuxData(success);
+
+        if (LE_FAILURE(success)) {
+            return 0;
+        }
+
+        for (i = 0; i < count; i += 1, out += dir) {
+            glyphStorage[i] = (LEGlyphID) chars[offset + i];
+            glyphStorage.setAuxData(i, (void *) canonFeatures, success);
+        }
+
+        outCharCount = canonGSUBTable->process(glyphStorage, rightToLeft, scriptTag, langSysTag, NULL, substitutionFilter, NULL);
+
+        outChars = LE_NEW_ARRAY(LEUnicode, outCharCount);
+        for (i = 0; i < outCharCount; i += 1) {
+            outChars[i] = (LEUnicode) LE_GET_GLYPH(glyphStorage[i]);
+        }
+
+        delete substitutionFilter;
+    }
+
+    return outCharCount;
+}
 
 le_int32 LayoutEngine::computeGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
                                             LEGlyphStorage &glyphStorage, LEErrorCode &success)
@@ -150,7 +219,15 @@ le_int32 LayoutEngine::computeGlyphs(const LEUnicode chars[], le_int32 offset, l
         return 0;
     }
 
-    mapCharsToGlyphs(chars, offset, count, rightToLeft, rightToLeft, glyphStorage, success);
+    LEUnicode *outChars = NULL;
+    le_int32 outCharCount = characterProcessing(chars, offset, count, max, rightToLeft, outChars, glyphStorage, success);
+
+    if (outChars != NULL) {
+        mapCharsToGlyphs(outChars, 0, outCharCount, rightToLeft, rightToLeft, glyphStorage, success);
+        LE_DELETE_ARRAY(outChars); // FIXME: a subclass may have allocated this, in which case this delete might not work...
+    } else {
+        mapCharsToGlyphs(chars, offset, count, rightToLeft, rightToLeft, glyphStorage, success);
+    }
 
 	return glyphStorage.getGlyphCount();
 }
