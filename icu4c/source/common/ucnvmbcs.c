@@ -32,9 +32,11 @@
 
 #include "unicode/utypes.h"
 #include "unicode/ucnv.h"
+#include "unicode/ucnv_cb.h"
 #include "ucnv_bld.h"
 #include "ucnvmbcs.h"
 #include "ucnv_cnv.h"
+#include "cstring.h"
 
 /*
  * Converting stateless codepage data
@@ -165,6 +167,23 @@
  * appropriate state tables (especially EBCDIC_STATEFUL!).
  */
 
+/* prototypes --------------------------------------------------------------- */
+
+static const uint32_t
+gb18030Ranges[13][4];
+
+static void
+fromUCallback(UConverter *cnv,
+              void *context, UConverterFromUnicodeArgs *pArgs,
+              const UChar *codeUnits, int32_t length, UChar32 codePoint,
+              UConverterCallbackReason reason, UErrorCode *pErrorCode);
+
+static void
+toUCallback(UConverter *cnv,
+            void *context, UConverterToUnicodeArgs *pArgs,
+            const char *codeUnits, int32_t length,
+            UConverterCallbackReason reason, UErrorCode *pErrorCode);
+
 /* MBCS setup functions ----------------------------------------------------- */
 
 U_CFUNC void
@@ -207,6 +226,10 @@ _MBCSOpen(UConverter *cnv,
           const char *locale,
           UErrorCode *pErrorCode) {
     _MBCSReset(cnv);
+    if(uprv_strstr(name, "gb18030")!=NULL || uprv_strstr(name, "GB18030")!=NULL) {
+        /* set a flag for GB 18030 mode, which changes the callback behavior */
+        cnv->extraInfo=(void *)gb18030Ranges;
+    }
 }
 
 /* MBCS-to-Unicode conversion functions ------------------------------------- */
@@ -554,7 +577,7 @@ callback:
                 cnv->toULength=0;
 
                 /* call the callback function */
-                cnv->fromCharErrorBehaviour(cnv->toUContext, pArgs, (const char *)bytes, byteIndex, reason, pErrorCode);
+                toUCallback(cnv, cnv->toUContext, pArgs, (const char *)bytes, byteIndex, reason, pErrorCode);
 
                 /* get the converter state from UConverter */
                 offset=cnv->toUnicodeStatus;
@@ -1205,7 +1228,7 @@ callback:
             cnv->invalidUCharLength=(int8_t)i;
 
             /* call the callback function */
-            cnv->fromUCharErrorBehaviour(cnv->fromUContext, pArgs, cnv->invalidUCharBuffer, i, c, reason, pErrorCode);
+            fromUCallback(cnv, cnv->fromUContext, pArgs, cnv->invalidUCharBuffer, i, c, reason, pErrorCode);
 
             /* get the converter state from UConverter */
             c=cnv->fromUSurrogateLead;
@@ -1480,3 +1503,113 @@ const UConverterSharedData _MBCSData={
     NULL, NULL, NULL, FALSE, &_MBCSImpl, 
     0
 };
+
+/* GB 18030 special handling ------------------------------------------------ */
+
+/* ### IMPORTANT: THIS IS ALPHA-VERSION SUPPORT CODE FOR GB 18030 AND MAY CHANGE WITHOUT NOTICE */
+
+/*
+ * Some ranges of GB 18030 where both the Unicode code points and the
+ * GB four-byte sequences are contiguous and are handled algorithmically by
+ * the special callback functions below.
+ * The values are start & end of Unicode & GB codes.
+ */
+static const uint32_t
+gb18030Ranges[13][4]={
+    0x10000, 0x10ffff, 0x90308130, 0xe3329a35,
+    0x9fa6, 0xdfff, 0x82358f34, 0x83389837,
+    0x0452, 0x200f, 0x8130d239, 0x8136a530,
+    0xe865, 0xf92b, 0x83389838, 0x8431cc32,
+    0x2643, 0x2e80, 0x8137a838, 0x8138fd37,
+    0xfa2a, 0xfe2f, 0x8431e336, 0x8432cc35,
+    0x3ce1, 0x4055, 0x8231d439, 0x8232af33,
+    0x361b, 0x3917, 0x8230a634, 0x8230f238,
+    0x49b8, 0x4c76, 0x8234a132, 0x8234e734,
+    0x4160, 0x4336, 0x8232c938, 0x8232f838,
+    0x478e, 0x4946, 0x8233e839, 0x82349639,
+    0x44d7, 0x464b, 0x8233a430, 0x8233c932,
+    0xffe6, 0xffff, 0x8432e932, 0x8432eb37
+};
+
+#define LINEAR_18030(a, b, c, d) ((((a)*10+(b))*126L+(c))*10L+(d))
+
+/* the callback functions handle GB 18030 specially */
+static void
+fromUCallback(UConverter *cnv,
+              void *context, UConverterFromUnicodeArgs *pArgs,
+              const UChar *codeUnits, int32_t length, UChar32 codePoint,
+              UConverterCallbackReason reason, UErrorCode *pErrorCode) {
+    if(cnv->extraInfo==gb18030Ranges && (reason==UCNV_UNASSIGNED || reason==UCNV_ILLEGAL)) {
+        const uint32_t *range;
+        int i;
+
+        range=gb18030Ranges[0];
+        for(i=0; i<sizeof(gb18030Ranges)/sizeof(gb18030Ranges[0]); ++range, ++i) {
+            if(range[0]<=(uint32_t)codePoint && (uint32_t)codePoint<=range[1]) {
+                uint32_t b;
+                char bytes[4];
+
+                /* found the Unicode code point, output the four-byte sequence for it */
+                *pErrorCode=U_ZERO_ERROR;
+
+                /* get the linear value of the first GB 18030 code in this range */
+                b=range[2];
+                b=LINEAR_18030((uint8_t)(b>>24), (uint8_t)(b>>16), (uint8_t)(b>>8), (uint8_t)b);
+
+                /* add the offset from the beginning of the range */
+                b+=((uint32_t)codePoint-range[0]);
+
+                /* turn this into a four-byte sequence again */
+                bytes[3]=(const char)(0x30+b%10); b/=10;
+                bytes[2]=(const char)(0x81+b%126); b/=126;
+                bytes[1]=(const char)(0x30+b%10); b/=10;
+                bytes[0]=(const char)(0x81+b);
+
+                /* output this sequence */
+                ucnv_cbFromUWriteBytes(pArgs, bytes, 4, 0, pErrorCode);
+                return;
+            }
+        }
+    }
+
+    /* call the normal callback function */
+    cnv->fromUCharErrorBehaviour(context, pArgs, codeUnits, length, codePoint, reason, pErrorCode);
+}
+
+static void
+toUCallback(UConverter *cnv,
+            void *context, UConverterToUnicodeArgs *pArgs,
+            const char *codeUnits, int32_t length,
+            UConverterCallbackReason reason, UErrorCode *pErrorCode) {
+    if(cnv->extraInfo==gb18030Ranges && reason==UCNV_UNASSIGNED && length==4) {
+        const uint32_t *range;
+        uint32_t b;
+        int i;
+
+        b=(uint8_t)codeUnits[0]<<24UL | (uint8_t)codeUnits[1]<<16UL | (uint8_t)codeUnits[2]<<8UL | (uint8_t)codeUnits[3];
+        range=gb18030Ranges[0];
+        for(i=0; i<sizeof(gb18030Ranges)/sizeof(gb18030Ranges[0]); ++range, ++i) {
+            if(range[2]<=b && b<=range[3]) {
+                UChar u[UTF_MAX_CHAR_LENGTH];
+
+                /* found the sequence, output the Unicode code point for it */
+                *pErrorCode=U_ZERO_ERROR;
+
+                /* add the linear difference between the input and start sequences to the start code point */
+                b=range[2];
+                b=  range[0]+
+                    LINEAR_18030((uint8_t)codeUnits[0], (uint8_t)codeUnits[1], (uint8_t)codeUnits[2], (uint8_t)codeUnits[3])-
+                    LINEAR_18030(b>>24, (b>>16)&0xff, (b>>8)&0xff, b&0xff);
+
+                /* write the result as UChars and output */
+                i=0;
+                UTF_APPEND_CHAR_UNSAFE(u, i, b);
+                ucnv_cbToUWriteUChars(pArgs, u, i, 0, pErrorCode);
+                return;
+            }
+        }
+    }
+
+    /* call the normal callback function */
+    cnv->fromCharErrorBehaviour(context, pArgs, codeUnits, length, reason, pErrorCode);
+}
