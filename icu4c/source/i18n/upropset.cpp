@@ -1,11 +1,7 @@
 /*
 **********************************************************************
-*   Copyright (c) 2001, International Business Machines
+*   Copyright (c) 2001-2002, International Business Machines
 *   Corporation and others.  All Rights Reserved.
-**********************************************************************
-* $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/upropset.cpp,v $
-* $Date: 2002/03/01 03:41:39 $
-* $Revision: 1.14 $
 **********************************************************************
 */
 #include "upropset.h"
