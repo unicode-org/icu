@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2004/02/07 01:01:14 $
-* $Revision: 1.34 $
+* $Date: 2004/10/14 17:54:56 $
+* $Revision: 1.35 $
 *
 *******************************************************************************
 */
@@ -169,7 +169,7 @@ public final class Main implements UCD_Types {
                 else if (arg.equalsIgnoreCase("JavascriptProperties")) WriteJavaScriptInfo.assigned();
                 else if (arg.equalsIgnoreCase("TestDirectoryIterator")) DirectoryIterator.test();
                 else if (arg.equalsIgnoreCase("checkIdentical")) GenerateData.handleIdentical();
-                else if (arg.equalsIgnoreCase("testnameuniqueness")) TestNameUniqueness.test();
+                else if (arg.equalsIgnoreCase("testnameuniqueness")) TestNameUniqueness.checkNameList();
                 else if (arg.equalsIgnoreCase("checkDifferences")) GenerateData.checkDifferences("3.2.0");
                 
                 else if (arg.equalsIgnoreCase("Compare14652")) Compare14652.main(null);

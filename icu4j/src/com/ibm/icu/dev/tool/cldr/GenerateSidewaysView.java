@@ -8,6 +8,7 @@
 */
 package com.ibm.icu.dev.tool.cldr;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -37,6 +38,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import com.ibm.icu.dev.test.util.BagFormatter;
 import com.ibm.icu.dev.tool.UOption;
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
@@ -102,6 +104,32 @@ import com.ibm.icu.util.UResourceBundle;
         } finally {
             log.close();
        }
+    }
+    
+    public static class TimeZoneAliases {        
+    	static Map map = null;
+        static void init() {
+            map = new HashMap();
+        	try {
+				BufferedReader br = BagFormatter.openUTF8Reader("C:\\ICU4J\\icu4j\\src\\com\\ibm\\icu\\dev\\tool\\cldr\\", "timezone_aliases.txt");
+				String[] pieces = new String[2];
+				while (true) {
+					String line = br.readLine();
+				    if (line == null) break;
+				    Utility.split(line,';', pieces);
+				    map.put(pieces[0].trim(), pieces[1].trim());
+				}
+				br.close();
+                map.put("","EMPTY-REMOVE");
+			} catch (IOException e) {
+                throw new RuntimeException(e);
+			}
+        }
+        
+        public static String get(String id) {
+            if (map == null) init();
+        	return (String) map.get(id);
+        }
     }
 
     static MapComparator elementOrdering = new MapComparator();
@@ -185,6 +213,31 @@ import com.ibm.icu.util.UResourceBundle;
             GenerateSidewaysView temp = getCLDR(current);
             this.removeAll(temp);
        }
+        detectAliases(filename);
+    }
+    
+    private void detectAliases(String filename) {
+        Set problems = new TreeSet();
+        for (Iterator it = data.iterator(); it.hasNext();) {
+            ElementChain key = (ElementChain) it.next();
+            for (int i = 0; i < key.contexts.size(); ++i) {
+            	Element e = (Element) key.contexts.get(i);
+                if (!e.elementName.equals("zone")) continue;
+                for (Iterator q = e.attributes.contents.iterator(); q.hasNext(); ) {
+                    SimpleAttribute a = (SimpleAttribute)q.next();
+                    if (!a.name.equals("type")) continue;
+                    String other = TimeZoneAliases.get(a.value);
+                    if (other != null) {
+                        problems.add(a.value);
+                    }
+                }
+            }
+        }
+        for (Iterator it = problems.iterator(); it.hasNext();) {
+            String oldOne = (String)it.next();
+            String newOne = TimeZoneAliases.get(oldOne);
+        	log.println("Fix Timezone Alias: " + filename + "\t" + oldOne + " => " + newOne);
+        }
     }
     
     private void removeAll(GenerateSidewaysView temp) {
@@ -246,6 +299,7 @@ import com.ibm.icu.util.UResourceBundle;
         public int hashCode() {
             return name.hashCode() ^ value.hashCode();
         }
+        public String toString() {return toString(true);}
         public String toString(boolean path) {
             if (path) {
             	return "@" + name + "=\"" + BagFormatter.toHTML.transliterate(value) + "\"";
@@ -286,6 +340,7 @@ import com.ibm.icu.util.UResourceBundle;
             }
         }
         
+        public String toString() {return toString(true);}
         public String toString(boolean path) {
             StringBuffer buffer = new StringBuffer();
             for (Iterator it = contents.iterator(); it.hasNext();) {
@@ -353,6 +408,7 @@ import com.ibm.icu.util.UResourceBundle;
             this.elementName = other.elementName;
             this.attributes = new SimpleAttributes(other.attributes, elementName);
         }
+        public String toString() {return toString(true);}
         public String toString(boolean path) {
             return toString(START_VALUE, path);
         }
@@ -422,6 +478,7 @@ import com.ibm.icu.util.UResourceBundle;
             contexts.remove(last);
         }
         
+        public String toString() {return toString(true);}
         public String toString(boolean path) {
             StringBuffer buffer = new StringBuffer();
             for (int i = 0; i < contexts.size(); ++i) {

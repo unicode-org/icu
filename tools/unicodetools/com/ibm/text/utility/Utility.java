@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2004/06/26 00:26:16 $
-* $Revision: 1.43 $
+* $Date: 2004/10/14 17:54:56 $
+* $Revision: 1.44 $
 *
 *******************************************************************************
 */
@@ -1083,7 +1083,11 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
     }
     
     public static String replace(String source, String[][] replacements) {
-        for (int i = 0; i < replacements.length; ++i) {
+        return replace(source, replacements, replacements.length);
+    }    
+    
+    public static String replace(String source, String[][] replacements, int count) {
+        for (int i = 0; i < count; ++i) {
             source = replace(source, replacements[i][0], replacements[i][1]);
         }
         return source;

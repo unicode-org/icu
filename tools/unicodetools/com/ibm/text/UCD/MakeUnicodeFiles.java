@@ -1188,9 +1188,11 @@ public class MakeUnicodeFiles {
         }
     }
     
-    static final UnicodeSet INVARIANT_RELATIONS = new UnicodeSet("[\\= \\! \\? \\< \\> \u2264 \u2265 \u2282 \u2286 \u2283 \u2287]");
+    static final UnicodeSet INVARIANT_RELATIONS = new UnicodeSet("[\\~ \\= \\! \\? \\< \\> \u2264 \u2265 \u2282 \u2286 \u2283 \u2287]");
     
     public static void testInvariants() throws IOException {
+        String[][] variables = new String[100][2];
+        int variableCount = 0;
         PrintWriter out = BagFormatter.openUTF8Writer(UCD_Types.GEN_DIR, "UnicodeInvariantResults.txt");
         out.write('\uFEFF'); // BOM
         BufferedReader in = BagFormatter.openUTF8Reader("", "UnicodeInvariants.txt");
@@ -1202,8 +1204,6 @@ public class MakeUnicodeFiles {
         int parseErrorCount = 0;
         int testFailureCount = 0;
         while (true) {
-            String rightSide = null;
-            String leftSide = null;
             String line = in.readLine();
             if (line == null) break;
             if (line.startsWith("\uFEFF")) line = line.substring(1);
@@ -1213,7 +1213,24 @@ public class MakeUnicodeFiles {
             if (pos >= 0) line = line.substring(0,pos).trim();
             if (line.length() == 0) continue;
 
+            // fix all the variables
+            String oldLine = line;
+            line = Utility.replace(line, variables, variableCount);
+
+            // detect variables
+            if (line.startsWith("Let")) {
+                int x = line.indexOf('=');
+                variables[variableCount][0] = line.substring(3,x).trim();
+                variables[variableCount][1] = line.substring(x+1).trim();
+                variableCount++;
+                System.out.println("Added variable: <" + variables[variableCount-1][0] + "><"
+                         + variables[variableCount-1][1] + ">");
+                continue;
+            }
+
             char relation = 0;
+            String rightSide = null;
+            String leftSide = null;
             UnicodeSet leftSet = null;
             UnicodeSet rightSet = null;
             try {
