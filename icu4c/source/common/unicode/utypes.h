@@ -441,6 +441,9 @@ enum UErrorCode {
     U_INVALID_RBT_SYNTAX,
     U_INVALID_PROPERTY_PATTERN,
     U_MALFORMED_PRAGMA,
+    U_UNCLOSED_SEGMENT,
+    U_ILLEGAL_CHAR_IN_SEGMENT,
+    U_VARIABLE_RANGE_EXHAUSTED,
     U_PARSE_ERROR_LIMIT,                /**< end of Transliterator specific parse Errors */
 
     /* 
