@@ -332,7 +332,7 @@ void CompoundTransliteratorTest::TestTransliterate(){
              "Latin-Kana;Kana-Latin",                   CharsToUnicodeString("VAVIVUVEVOhuZIZUZONYINYUNYAsesuzezu"), 
                                                                  CharsToUnicodeString("VAVIVUVEVOhuZIZUZONYINYUNYAsesuzezu"),  
     };
-    int i;
+    uint32_t i;
     for(i=0; i<sizeof(Data)/sizeof(Data[0]); i=i+3){
         UErrorCode status = U_ZERO_ERROR;
         CompoundTransliterator *ct2=new CompoundTransliterator(Data[i+0], status);
