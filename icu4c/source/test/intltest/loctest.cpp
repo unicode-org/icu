@@ -1034,6 +1034,12 @@ LocaleTest::TestThaiCurrencyFormat()
                     Locale("th", "TH"), status);
     UChar posPrefix = 0x0e3f;
     UnicodeString temp;
+
+    if(U_FAILURE(status) || !thaiCurrency)
+    {
+        errln("Couldn't get th_TH currency -> " + UnicodeString(u_errorName(status)));
+        return;
+    }
     if (thaiCurrency->getPositivePrefix(temp) != UnicodeString(&posPrefix, 1, 1))
         errln("Thai currency prefix wrong: expected 0x0e3f, got \"" +
                         thaiCurrency->getPositivePrefix(temp) + "\"");

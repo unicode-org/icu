@@ -64,7 +64,7 @@ DEPS = $(OBJECTS:.o=.d)
 
 ALL_UCM = $(UCM_SOURCE) $(UCM_SOURCE_LOCAL)
 UCM_FILES = $(ALL_UCM:%=$(top_srcdir)/../data/%)
-CNV_FILES = $(UCM_FILES:$(top_srcdir)/../data/%.ucm=$(top_builddir)/data/%.cnv)
+CNV_FILES = $(ALL_UCM:%.ucm=@DATABUILDDIR@/%.cnv)
 
 ## List of phony targets
 .PHONY : all all-local install install-local clean clean-local		\
@@ -120,9 +120,9 @@ $(TARGET) : $(OBJECTS)
 	$(LINK.c) -o $@ $^ $(LIBS)
 
 # Rule to build a compiled cnv file
-$(top_builddir)/data/%.cnv : $(top_srcdir)/../data/%.ucm
+@DATABUILDDIR@/%.cnv : $(top_srcdir)/../data/%.ucm
 	@echo -n "$< -> "
-	@ICU_DATA=$(top_builddir)/data ./makeconv $<
+	@ICU_DATA=@DATABUILDDIR@/ ./makeconv $<
 
 ifneq ($(MAKECMDGOALS),distclean)
 -include $(DEPS)
