@@ -356,8 +356,11 @@ ucol_open(const char *loc,
   UCollator *result = NULL;
 
   u_init(status);
+#if !UCONFIG_NO_SERVICE
   result = Collator::createUCollator(loc, status);
-  if (result == NULL) {
+  if (result == NULL)
+#endif
+  {
     result = ucol_open_internal(loc, status);
   }
   UTRACE_EXIT_PTR_STATUS(result, *status);
@@ -7541,6 +7544,7 @@ ucol_countAvailable()
   return uloc_countAvailable();
 }
 
+#if !UCONFIG_NO_SERVICE
 U_CAPI UEnumeration* U_EXPORT2
 ucol_openAvailableLocales(UErrorCode *status) {
     // This is a wrapper over Collator::getAvailableLocales()
@@ -7554,6 +7558,7 @@ ucol_openAvailableLocales(UErrorCode *status) {
     }
     return uenum_openStringEnumeration(s, status);
 }
+#endif
 
 // Note: KEYWORDS[0] != RESOURCE_NAME - alan
 

@@ -19,7 +19,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "uassert.h"
-#include "iculserv.h"
+#include "mutex.h"
 #include "ucln_in.h"
 
 //------------------------------------------------------------
@@ -142,6 +142,33 @@ _findMetaData(const UChar* currency, UErrorCode& ec) {
     return data;
 }
 
+// -------------------------------------
+
+/**
+ * @see VARIANT_IS_EURO
+ * @see VARIANT_IS_PREEURO
+ */
+static uint32_t
+idForLocale(const char* locale, char* countryAndVariant, int capacity, UErrorCode* ec)
+{
+    uint32_t variantType = 0;
+    // !!! this is internal only, assumes buffer is not null and capacity is sufficient
+    // Extract the country name and variant name.  We only
+    // recognize two variant names, EURO and PREEURO.
+    char variant[ULOC_FULLNAME_CAPACITY];
+    uloc_getCountry(locale, countryAndVariant, capacity, ec);
+    uloc_getVariant(locale, variant, sizeof(variant), ec);
+    if (variant[0] != 0) {
+        variantType = (0 == uprv_strcmp(variant, VAR_EURO))
+                   | ((0 == uprv_strcmp(variant, VAR_PRE_EURO)) << 1);
+        if (variantType)
+        {
+            uprv_strcat(countryAndVariant, VAR_DELIM);
+            uprv_strcat(countryAndVariant, variant);
+        }
+    }
+    return variantType;
+}
 
 // ------------------------------------------
 //
@@ -151,6 +178,7 @@ _findMetaData(const UChar* currency, UErrorCode& ec) {
 
 // don't use ICUService since we don't need fallback
 
+#if !UCONFIG_NO_SERVICE
 struct CReg;
 
 /* Remember to call umtx_init(&gCRegLock) before using it! */
@@ -245,34 +273,6 @@ struct CReg : public UMemory {
 
 // -------------------------------------
 
-/**
- * @see VARIANT_IS_EURO
- * @see VARIANT_IS_PREEURO
- */
-static uint32_t
-idForLocale(const char* locale, char* countryAndVariant, int capacity, UErrorCode* ec)
-{
-    uint32_t variantType = 0;
-    // !!! this is internal only, assumes buffer is not null and capacity is sufficient
-    // Extract the country name and variant name.  We only
-    // recognize two variant names, EURO and PREEURO.
-    char variant[ULOC_FULLNAME_CAPACITY];
-    uloc_getCountry(locale, countryAndVariant, capacity, ec);
-    uloc_getVariant(locale, variant, sizeof(variant), ec);
-    if (variant[0] != 0) {
-        variantType = (0 == uprv_strcmp(variant, VAR_EURO))
-                   | ((0 == uprv_strcmp(variant, VAR_PRE_EURO)) << 1);
-        if (variantType)
-        {
-            uprv_strcat(countryAndVariant, VAR_DELIM);
-            uprv_strcat(countryAndVariant, variant);
-        }
-    }
-    return variantType;
-}
-
-// -------------------------------------
-
 U_CAPI UCurrRegistryKey U_EXPORT2
 ucurr_register(const UChar* isoCode, const char* locale, UErrorCode *status)
 {
@@ -294,6 +294,7 @@ ucurr_unregister(UCurrRegistryKey key, UErrorCode* status)
     }
     return FALSE;
 }
+#endif /* UCONFIG_NO_SERVICE */
 
 // -------------------------------------
 
@@ -322,6 +323,7 @@ ucurr_forLocale(const char* locale,
                     return 0;
                 }
 
+#if !UCONFIG_NO_SERVICE
                 const UChar* result = CReg::get(id);
                 if (result) {
                     if(buffCapacity > u_strlen(result)) {
@@ -329,6 +331,7 @@ ucurr_forLocale(const char* locale,
                     }
                     return u_strlen(result);
                 }
+#endif
 
                 // Look up the CurrencyMap element in the root bundle.
                 UResourceBundle *rb = ures_open(NULL, "", &localStatus);
@@ -685,7 +688,9 @@ ucurr_getRoundingIncrement(const UChar* currency, UErrorCode* ec) {
  * Release all static memory held by currency.
  */
 U_CFUNC UBool currency_cleanup(void) {
+#if !UCONFIG_NO_SERVICE
     CReg::cleanup();
+#endif
     return TRUE;
 }
 

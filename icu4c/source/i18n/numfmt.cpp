@@ -455,6 +455,7 @@ NumberFormat::getAvailableLocales(int32_t& count)
 //
 //-------------------------------------------
 
+#if !UCONFIG_NO_SERVICE
 static ICULocaleService* gService = NULL;
 
 // -------------------------------------
@@ -587,22 +588,6 @@ getNumberFormatService(void)
 
 // -------------------------------------
 
-NumberFormat*
-NumberFormat::createInstance(const Locale& loc, EStyles kind, UErrorCode& status)
-{
-    umtx_lock(NULL);
-    UBool haveService = gService != NULL;
-    umtx_unlock(NULL);
-    if (haveService) {
-        return (NumberFormat*)gService->get(loc, kind, status);
-    } else {
-        return makeInstance(loc, kind, status);
-  }
-}
-
-
-// -------------------------------------
-
 URegistryKey 
 NumberFormat::registerFactory(NumberFormatFactory* toAdopt, UErrorCode& status)
 {
@@ -641,6 +626,26 @@ NumberFormat::getAvailableLocales(void)
   }
   return NULL; // no way to return error condition
 }
+#endif /* UCONFIG_NO_SERVICE */
+// -------------------------------------
+
+NumberFormat*
+NumberFormat::createInstance(const Locale& loc, EStyles kind, UErrorCode& status)
+{
+#if !UCONFIG_NO_SERVICE
+    umtx_lock(NULL);
+    UBool haveService = gService != NULL;
+    umtx_unlock(NULL);
+    if (haveService) {
+        return (NumberFormat*)gService->get(loc, kind, status);
+    }
+    else
+#endif
+    {
+        return makeInstance(loc, kind, status);
+    }
+}
+
 
 // -------------------------------------
 // Checks if the thousand/10 thousand grouping is used in the
@@ -915,10 +920,12 @@ U_NAMESPACE_END
  * Release all static memory held by numberformat.  
  */
 U_CFUNC UBool numfmt_cleanup(void) {
+#if !UCONFIG_NO_SERVICE
   if (gService) {
     delete gService;
     gService = NULL;
   }
+#endif
   return TRUE;
 }
 

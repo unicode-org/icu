@@ -52,6 +52,7 @@
 
 U_NAMESPACE_BEGIN
 
+#if !UCONFIG_NO_SERVICE
 // ------------------------------------------
 //
 // Registration
@@ -222,6 +223,7 @@ Collator::createUCollator(const char *loc,
     }
     return result;
 }
+#endif /* UCONFIG_NO_SERVICE */
 
 // Collator public methods -----------------------------------------------
 
@@ -238,6 +240,7 @@ Collator* Collator::createInstance(const Locale& desiredLocale,
     if (U_FAILURE(status)) 
         return 0;
     
+#if !UCONFIG_NO_SERVICE
     if (hasService()) {
         Locale actualLoc;
         Collator *result =
@@ -253,6 +256,7 @@ Collator* Collator::createInstance(const Locale& desiredLocale,
         }
         return result;
     }
+#endif
     return makeInstance(desiredLocale, status);
 }
 
@@ -384,9 +388,11 @@ UnicodeString& Collator::getDisplayName(const Locale& objectLocale,
                                         const Locale& displayLocale,
                                         UnicodeString& name)
 {
+#if !UCONFIG_NO_SERVICE
     if (hasService()) {
         return gService->getDisplayName(objectLocale.getName(), name, displayLocale);
     }
+#endif
     return objectLocale.getDisplayName(displayLocale, name);
 }
 
@@ -477,6 +483,7 @@ UnicodeSet *Collator::getTailoredSet(UErrorCode &status) const
 
 // -------------------------------------
 
+#if !UCONFIG_NO_SERVICE
 URegistryKey
 Collator::registerInstance(Collator* toAdopt, const Locale& locale, UErrorCode& status) 
 {
@@ -601,6 +608,7 @@ Collator::getAvailableLocales(void)
 {
     return getService()->getAvailableLocales();
 }
+#endif /* UCONFIG_NO_SERVICE */
 
 StringEnumeration*
 Collator::getKeywords(UErrorCode& status) {
@@ -652,10 +660,12 @@ U_NAMESPACE_END
  * Release all static memory held by collator.
  */
 U_CFUNC UBool collator_cleanup(void) {
+#if !UCONFIG_NO_SERVICE
     if (gService) {
         delete gService;
         gService = NULL;
     }
+#endif
     return TRUE;
 }
 
