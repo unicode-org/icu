@@ -559,14 +559,14 @@ char* rawData[27][7] = {
         //{   "English (United States)", "French (France)", "Croatian (Croatia)", "Greek (Greece)", "Norwegian (Norway,NY)", "Italian", "xx (YY)" },
 
         // display langage (French)
-        {   "anglais",  "français",   "", "grec",    "norvégien",    "italien", "xx" },
+        {   "anglais",  "fran\\u00E7ais",   "", "grec",    "norv\\u00E9gien",    "italien", "xx" },
         // display country (French)
-        {   "États-Unis",    "France",   "",  "Grèce",   "Norvège", "",     "YY" },
+        {   "\\u00C9tats-Unis",    "France",   "",  "Gr\\u00E8ce",   "Norv\\u00E8ge", "",     "YY" },
         // display variant (French)
         {   "",     "",     "",     "",     "Nynorsk",     "",     "" },
         // display name (French)
         //{   "anglais (États-Unis)", "français (France)", "", "grec (Grèce)", "norvégien (Norvège,Nynorsk)", "italien", "xx (YY)" },
-        {   "anglais (États-Unis)", "français (France)", "", "grec (Grèce)", "norvégien (Norvège, Nynorsk)", "italien", "xx (YY)" },
+        {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "", "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, Nynorsk)", "italien", "xx (YY)" },
 
         // display langage (Croatian)
         {   "",  "", "hrvatski", "",    "", "", "xx" },
@@ -600,7 +600,7 @@ char* rawData[27][7] = {
 UChar greekDisplayLanguage[] = { 0x03b5, 0x03bb, 0x03bb, 0x03b7, 0x03bd, 0x03b9, 0x03ba, 0x03ac, 0 };
 UChar greekDisplayCountry[] = { 0x0395, 0x03bb, 0x03bb, 0x03ac, 0x03b4, 0x03b1, 0 };
 UChar greekDisplayName[] = { 0x03b5, 0x03bb, 0x03bb, 0x03b7, 0x03bd, 0x03b9, 0x03ba,
-    0x03ac, ' ', '(', 0x0395, 0x03bb, 0x03bb, 0x03ac, 0x03b4, 0x03b1, ')', 0 };
+    0x03ac, 0x20, 0x28, 0x0395, 0x03bb, 0x03bb, 0x03ac, 0x03b4, 0x03b1, 0x29, 0 };
     
 void LocaleTest::setUpDataTable()
 {
@@ -609,15 +609,15 @@ void LocaleTest::setUpDataTable()
 
         for (int32_t i = 0; i < 27; i++) {
             dataTable[i] = new UnicodeString[7];
-            for (int32_t j = 0; j < 7; j++)
-                dataTable[i][j] = rawData[i][j];
+            for (int32_t j = 0; j < 7; j++) {
+                dataTable[i][j] = CharsToUnicodeString(rawData[i][j]);
+            }
         }
         dataTable[DLANG_EL][GREEK] = greekDisplayLanguage;
         dataTable[DCTRY_EL][GREEK] = greekDisplayCountry;
         dataTable[DNAME_EL][GREEK] = greekDisplayName;
     }
 }
-
 
 // ====================
 
@@ -937,7 +937,7 @@ LocaleTest::TestAtypicalLocales()
                                      "anglais (France)",
                                      "espagnol (Allemagne)",
                                     "Croatia",
-                                    "Suède",
+                                    CharsToUnicodeString("Su\\u00E8de"),
                                     "Dominican Republic",
                                     "Belgique" };
     UnicodeString rus("Russian (M");

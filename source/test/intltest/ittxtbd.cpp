@@ -109,26 +109,6 @@ public:
 #include <string.h>
 #include "unicode/schriter.h"
 
-// [HSYS] Just to make it easier to use with UChar array.
-UnicodeString CharsToUnicodeString2(const char* chars)
-{
-    int len = strlen(chars);
-    int i;
-    UnicodeString buffer;
-    for (i = 0; i < len;) {
-        if ((chars[i] == '\\') && (i+1 < len) && (chars[i+1] == 'u')) {
-            int unicode;
-            sscanf(&(chars[i+2]), "%4X", &unicode);
-            buffer += (UChar)unicode;
-            i += 6;
-        } else {
-            buffer += (UChar)chars[i++];
-        }
-    }
-    return buffer;
-}
- 
-
 const UChar IntlTestTextBoundary::cannedTestArray[] = {
     0x0001, 0x0002, 0x0003, 0x0004, ' ', '!', '\\', '"', '#', '$', '%', '&', '(', ')', '+', '-', '0', '1', 
     '2', '3', '4', '<', '=', '>', 'A', 'B', 'C', 'D', 'E', '[', ']', '^', '_', '`', 'a', 'b', 'c', 'd', 'e', '{', 
@@ -251,7 +231,7 @@ void IntlTestTextBoundary::addTestWordData()
     wordSelectionData->addElement(" ");
 
     // to test for bug #4097779
-    wordSelectionData->addElement(CharsToUnicodeString2("aa\\u0300a"));
+    wordSelectionData->addElement(CharsToUnicodeString("aa\\u0300a"));
     wordSelectionData->addElement(" ");
 
     // to test for bug #4098467
@@ -260,28 +240,28 @@ void IntlTestTextBoundary::addTestWordData()
     // it correctly), first as precomposed syllables, and then as conjoining jamo.
     // Both sequences should be semantically identical and break the same way.
     // precomposed syllables...
-    wordSelectionData->addElement(CharsToUnicodeString2("\\uc0c1\\ud56d"));
+    wordSelectionData->addElement(CharsToUnicodeString("\\uc0c1\\ud56d"));
     wordSelectionData->addElement(" ");
-    wordSelectionData->addElement(CharsToUnicodeString2("\\ud55c\\uc778"));
+    wordSelectionData->addElement(CharsToUnicodeString("\\ud55c\\uc778"));
     wordSelectionData->addElement(" ");
-    wordSelectionData->addElement(CharsToUnicodeString2("\\uc5f0\\ud569"));
+    wordSelectionData->addElement(CharsToUnicodeString("\\uc5f0\\ud569"));
     wordSelectionData->addElement(" ");
-    wordSelectionData->addElement(CharsToUnicodeString2("\\uc7a5\\ub85c\\uad50\\ud68c"));
+    wordSelectionData->addElement(CharsToUnicodeString("\\uc7a5\\ub85c\\uad50\\ud68c"));
     wordSelectionData->addElement(" ");
     // conjoining jamo...
-    wordSelectionData->addElement(CharsToUnicodeString2("\\u1109\\u1161\\u11bc\\u1112\\u1161\\u11bc"));
+    wordSelectionData->addElement(CharsToUnicodeString("\\u1109\\u1161\\u11bc\\u1112\\u1161\\u11bc"));
     wordSelectionData->addElement(" ");
-    wordSelectionData->addElement(CharsToUnicodeString2("\\u1112\\u1161\\u11ab\\u110b\\u1175\\u11ab"));
+    wordSelectionData->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11ab\\u110b\\u1175\\u11ab"));
     wordSelectionData->addElement(" ");
-    wordSelectionData->addElement(CharsToUnicodeString2("\\u110b\\u1167\\u11ab\\u1112\\u1161\\u11b8"));
+    wordSelectionData->addElement(CharsToUnicodeString("\\u110b\\u1167\\u11ab\\u1112\\u1161\\u11b8"));
     wordSelectionData->addElement(" ");
-    wordSelectionData->addElement(CharsToUnicodeString2("\\u110c\\u1161\\u11bc\\u1105\\u1169\\u1100\\u116d\\u1112\\u116c"));
+    wordSelectionData->addElement(CharsToUnicodeString("\\u110c\\u1161\\u11bc\\u1105\\u1169\\u1100\\u116d\\u1112\\u116c"));
     wordSelectionData->addElement(" ");
 
     // this is a test for bug #4117554: the ideographic iteration mark (U+3005) should
     // count as a Kanji character for the purposes of word breaking
     wordSelectionData->addElement("abc");
-    wordSelectionData->addElement(CharsToUnicodeString2("\\u4e01\\u4e02\\u3005\\u4e03\\u4e03"));
+    wordSelectionData->addElement(CharsToUnicodeString("\\u4e01\\u4e02\\u3005\\u4e03\\u4e03"));
     wordSelectionData->addElement("abc");
 
     
@@ -326,64 +306,64 @@ void IntlTestTextBoundary::addTestSentenceData()
     sentenceSelectionData->addElement("Yes, I am definatelly 12\" tall!!");
 
     // test for bug #4113835: \n and \r count as spaces, not as paragraph breaks
-    sentenceSelectionData->addElement(CharsToUnicodeString2("Now\ris\nthe\r\ntime\n\rfor\r\rall\\u2029"));
+    sentenceSelectionData->addElement(CharsToUnicodeString("Now\ris\nthe\r\ntime\n\rfor\r\rall\\u2029"));
 
     // test for bug #4111338: Don't break sentences at the boundary between CJK
     // and other letters
-    sentenceSelectionData->addElement(CharsToUnicodeString2("\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165:\"JAVA\\u821c")
-        + CharsToUnicodeString2("\\u8165\\u7fc8\\u51ce\\u306d,\\u2494\\u56d8\\u4ec0\\u60b1\\u8560\\u51ba")
-        + CharsToUnicodeString2("\\u611d\\u57b6\\u2510\\u5d46\".\\u2029"));
-    sentenceSelectionData->addElement(CharsToUnicodeString2("\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165\\u9de8")
-        + CharsToUnicodeString2("\\u97e4JAVA\\u821c\\u8165\\u7fc8\\u51ce\\u306d\\ue30b\\u2494\\u56d8\\u4ec0")
-        + CharsToUnicodeString2("\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u2029"));
-    sentenceSelectionData->addElement(CharsToUnicodeString2("\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165\\u9de8\\u97e4")
-        + CharsToUnicodeString2("\\u6470\\u8790JAVA\\u821c\\u8165\\u7fc8\\u51ce\\u306d\\ue30b\\u2494\\u56d8")
-        + CharsToUnicodeString2("\\u4ec0\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u2029"));
-    sentenceSelectionData->addElement(CharsToUnicodeString2("He said, \"I can go there.\"\\u2029"));
+    sentenceSelectionData->addElement(CharsToUnicodeString("\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165:\"JAVA\\u821c")
+        + CharsToUnicodeString("\\u8165\\u7fc8\\u51ce\\u306d,\\u2494\\u56d8\\u4ec0\\u60b1\\u8560\\u51ba")
+        + CharsToUnicodeString("\\u611d\\u57b6\\u2510\\u5d46\".\\u2029"));
+    sentenceSelectionData->addElement(CharsToUnicodeString("\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165\\u9de8")
+        + CharsToUnicodeString("\\u97e4JAVA\\u821c\\u8165\\u7fc8\\u51ce\\u306d\\ue30b\\u2494\\u56d8\\u4ec0")
+        + CharsToUnicodeString("\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u2029"));
+    sentenceSelectionData->addElement(CharsToUnicodeString("\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165\\u9de8\\u97e4")
+        + CharsToUnicodeString("\\u6470\\u8790JAVA\\u821c\\u8165\\u7fc8\\u51ce\\u306d\\ue30b\\u2494\\u56d8")
+        + CharsToUnicodeString("\\u4ec0\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u2029"));
+    sentenceSelectionData->addElement(CharsToUnicodeString("He said, \"I can go there.\"\\u2029"));
 
     // test for bug #4117554: Treat fullwidth variants of .!? the same as their
     // normal counterparts
-    sentenceSelectionData->addElement(CharsToUnicodeString2("I know I'm right\\uff0e "));
-    sentenceSelectionData->addElement(CharsToUnicodeString2("Right\\uff1f "));
-    sentenceSelectionData->addElement(CharsToUnicodeString2("Right\\uff01 "));
+    sentenceSelectionData->addElement(CharsToUnicodeString("I know I'm right\\uff0e "));
+    sentenceSelectionData->addElement(CharsToUnicodeString("Right\\uff1f "));
+    sentenceSelectionData->addElement(CharsToUnicodeString("Right\\uff01 "));
 
     // test for bug #4117554: Don't break sentences at boundary between CJK and digits
-    sentenceSelectionData->addElement(CharsToUnicodeString2("\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165\\u9de8")
-        + CharsToUnicodeString2("\\u97e48888\\u821c\\u8165\\u7fc8\\u51ce\\u306d\\ue30b\\u2494\\u56d8\\u4ec0")
-        + CharsToUnicodeString2("\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u2029"));
+    sentenceSelectionData->addElement(CharsToUnicodeString("\\u5487\\u67ff\\ue591\\u5017\\u61b3\\u60a1\\u9510\\u8165\\u9de8")
+        + CharsToUnicodeString("\\u97e48888\\u821c\\u8165\\u7fc8\\u51ce\\u306d\\ue30b\\u2494\\u56d8\\u4ec0")
+        + CharsToUnicodeString("\\u60b1\\u8560\\u51ba\\u611d\\u57b6\\u2510\\u5d46\\u97e5\\u7751\\u2029"));
 
     // test for bug #4117554: Break sentence between a sentence terminator and
     // opening punctuation
     sentenceSelectionData->addElement("no?");
-    sentenceSelectionData->addElement("(yes)" + CharsToUnicodeString2("\\u2029"));
+    sentenceSelectionData->addElement("(yes)" + CharsToUnicodeString("\\u2029"));
 
     // test for bug #4158381: Don't break sentence after period if it isn't
     // followed by a space
     sentenceSelectionData->addElement("Test <code>Flags.Flag</code> class.  ");
-    sentenceSelectionData->addElement("Another test." + CharsToUnicodeString2("\\u2029"));
+    sentenceSelectionData->addElement("Another test." + CharsToUnicodeString("\\u2029"));
 
     // test for bug #4158381: No breaks when there are no terminators around
     sentenceSelectionData->addElement("<P>Provides a set of &quot;lightweight&quot; (all-java<FONT SIZE=\"-2\"><SUP>TM</SUP></FONT> language) components that, to the maximum degree possible, work the same on all platforms.  ");
-    sentenceSelectionData->addElement("Another test." + CharsToUnicodeString2("\\u2029"));
+    sentenceSelectionData->addElement("Another test." + CharsToUnicodeString("\\u2029"));
 
     // test for bug #4143071: Make sure sentences that end with digits
     // work right
     sentenceSelectionData->addElement("Today is the 27th of May, 1998.  ");
     sentenceSelectionData->addElement("Tomorrow with be 28 May 1998.  ");
     sentenceSelectionData->addElement("The day after will be the 30th." 
-                                        + CharsToUnicodeString2("\\u2029"));
+                                        + CharsToUnicodeString("\\u2029"));
 
     // test for bug #4152416: Make sure sentences ending with a capital
     // letter are treated correctly
     sentenceSelectionData->addElement("The type of all primitive <code>boolean</code> values accessed in the target VM.  ");
-    sentenceSelectionData->addElement("Calls to xxx will return an implementor of this interface." + CharsToUnicodeString2("\\u2029"));
+    sentenceSelectionData->addElement("Calls to xxx will return an implementor of this interface." + CharsToUnicodeString("\\u2029"));
 
     // test for bug #4152117: Make sure sentence breaking is handling
     // punctuation correctly [COULD NOT REPRODUCE THIS BUG, BUT TEST IS
     // HERE TO MAKE SURE IT DOESN'T CROP UP]
     sentenceSelectionData->addElement("Constructs a randomly generated BigInteger, uniformly distributed over the range <tt>0</tt> to <tt>(2<sup>numBits</sup> - 1)</tt>, inclusive.  ");
     sentenceSelectionData->addElement("The uniformity of the distribution assumes that a fair source of random bits is provided in <tt>rnd</tt>.  ");
-    sentenceSelectionData->addElement("Note that this constructor always constructs a non-negative BigInteger." + CharsToUnicodeString2("\\u2029"));
+    sentenceSelectionData->addElement("Note that this constructor always constructs a non-negative BigInteger." + CharsToUnicodeString("\\u2029"));
 
 }
 
@@ -424,18 +404,18 @@ void IntlTestTextBoundary::addTestLineData()
     lineSelectionData->addElement("all");
 
     // to test for bug #4068133
-    lineSelectionData->addElement(CharsToUnicodeString2("\\u96f6"));
-    lineSelectionData->addElement(CharsToUnicodeString2("\\u4e00\\u3002"));
-    lineSelectionData->addElement(CharsToUnicodeString2("\\u4e8c\\u3001"));
-    lineSelectionData->addElement(CharsToUnicodeString2("\\u4e09\\u3002\\u3001"));
-    lineSelectionData->addElement(CharsToUnicodeString2("\\u56db\\u3001\\u3002\\u3001"));
-    lineSelectionData->addElement(CharsToUnicodeString2("\\u4e94,"));
-    lineSelectionData->addElement(CharsToUnicodeString2("\\u516d."));
-    lineSelectionData->addElement(CharsToUnicodeString2("\\u4e03.\\u3001,\\u3002"));
-    lineSelectionData->addElement(CharsToUnicodeString2("\\u516b"));
+    lineSelectionData->addElement(CharsToUnicodeString("\\u96f6"));
+    lineSelectionData->addElement(CharsToUnicodeString("\\u4e00\\u3002"));
+    lineSelectionData->addElement(CharsToUnicodeString("\\u4e8c\\u3001"));
+    lineSelectionData->addElement(CharsToUnicodeString("\\u4e09\\u3002\\u3001"));
+    lineSelectionData->addElement(CharsToUnicodeString("\\u56db\\u3001\\u3002\\u3001"));
+    lineSelectionData->addElement(CharsToUnicodeString("\\u4e94,"));
+    lineSelectionData->addElement(CharsToUnicodeString("\\u516d."));
+    lineSelectionData->addElement(CharsToUnicodeString("\\u4e03.\\u3001,\\u3002"));
+    lineSelectionData->addElement(CharsToUnicodeString("\\u516b"));
 
     // to test for bug #4086052
-    lineSelectionData->addElement(CharsToUnicodeString2("foo\\u00a0bar "));
+    lineSelectionData->addElement(CharsToUnicodeString("foo\\u00a0bar "));
 //        lineSelectionData->addElement("foo\\ufeffbar");
 
     // to test for bug #4097920
@@ -459,20 +439,20 @@ void IntlTestTextBoundary::addTestLineData()
     // it correctly), first as precomposed syllables, and then as conjoining jamo.
     // Both sequences should be semantically identical and break the same way.
     // precomposed syllables...
-    lineSelectionData->addElement(CharsToUnicodeString2("\\uc0c1\\ud56d "));
-    lineSelectionData->addElement(CharsToUnicodeString2("\\ud55c\\uc778 "));
-    lineSelectionData->addElement(CharsToUnicodeString2("\\uc5f0\\ud569 "));
-    lineSelectionData->addElement(CharsToUnicodeString2("\\uc7a5\\ub85c\\uad50\\ud68c "));
+    lineSelectionData->addElement(CharsToUnicodeString("\\uc0c1\\ud56d "));
+    lineSelectionData->addElement(CharsToUnicodeString("\\ud55c\\uc778 "));
+    lineSelectionData->addElement(CharsToUnicodeString("\\uc5f0\\ud569 "));
+    lineSelectionData->addElement(CharsToUnicodeString("\\uc7a5\\ub85c\\uad50\\ud68c "));
     // conjoining jamo...
-    lineSelectionData->addElement(CharsToUnicodeString2("\\u1109\\u1161\\u11bc\\u1112\\u1161\\u11bc "));
-    lineSelectionData->addElement(CharsToUnicodeString2("\\u1112\\u1161\\u11ab\\u110b\\u1175\\u11ab "));
-    lineSelectionData->addElement(CharsToUnicodeString2("\\u110b\\u1167\\u11ab\\u1112\\u1161\\u11b8 "));
-    lineSelectionData->addElement(CharsToUnicodeString2("\\u110c\\u1161\\u11bc\\u1105\\u1169\\u1100\\u116d\\u1112\\u116c"));
+    lineSelectionData->addElement(CharsToUnicodeString("\\u1109\\u1161\\u11bc\\u1112\\u1161\\u11bc "));
+    lineSelectionData->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11ab\\u110b\\u1175\\u11ab "));
+    lineSelectionData->addElement(CharsToUnicodeString("\\u110b\\u1167\\u11ab\\u1112\\u1161\\u11b8 "));
+    lineSelectionData->addElement(CharsToUnicodeString("\\u110c\\u1161\\u11bc\\u1105\\u1169\\u1100\\u116d\\u1112\\u116c"));
 
     // to test for bug #4117554: Fullwidth .!? should be treated as postJwrd
-    lineSelectionData->addElement(CharsToUnicodeString2("\\u4e01\\uff0e"));
-    lineSelectionData->addElement(CharsToUnicodeString2("\\u4e02\\uff01"));
-    lineSelectionData->addElement(CharsToUnicodeString2("\\u4e03\\uff1f"));
+    lineSelectionData->addElement(CharsToUnicodeString("\\u4e01\\uff0e"));
+    lineSelectionData->addElement(CharsToUnicodeString("\\u4e02\\uff01"));
+    lineSelectionData->addElement(CharsToUnicodeString("\\u4e03\\uff1f"));
 
 }
 
@@ -521,34 +501,34 @@ void IntlTestTextBoundary::addTestCharacterData()
     // it correctly), first as precomposed syllables, and then as conjoining jamo.
     // Both sequences should be semantically identical and break the same way.
     // precomposed syllables...
-    characterSelectionData->addElement(CharsToUnicodeString2("\\uc0c1"));
-    characterSelectionData->addElement(CharsToUnicodeString2("\\ud56d"));
+    characterSelectionData->addElement(CharsToUnicodeString("\\uc0c1"));
+    characterSelectionData->addElement(CharsToUnicodeString("\\ud56d"));
     characterSelectionData->addElement(" ");
-    characterSelectionData->addElement(CharsToUnicodeString2("\\ud55c"));
-    characterSelectionData->addElement(CharsToUnicodeString2("\\uc778"));
+    characterSelectionData->addElement(CharsToUnicodeString("\\ud55c"));
+    characterSelectionData->addElement(CharsToUnicodeString("\\uc778"));
     characterSelectionData->addElement(" ");
-    characterSelectionData->addElement(CharsToUnicodeString2("\\uc5f0"));
-    characterSelectionData->addElement(CharsToUnicodeString2("\\ud569"));
+    characterSelectionData->addElement(CharsToUnicodeString("\\uc5f0"));
+    characterSelectionData->addElement(CharsToUnicodeString("\\ud569"));
     characterSelectionData->addElement(" ");
-    characterSelectionData->addElement(CharsToUnicodeString2("\\uc7a5"));
-    characterSelectionData->addElement(CharsToUnicodeString2("\\ub85c"));
-    characterSelectionData->addElement(CharsToUnicodeString2("\\uad50"));
-    characterSelectionData->addElement(CharsToUnicodeString2("\\ud68c"));
+    characterSelectionData->addElement(CharsToUnicodeString("\\uc7a5"));
+    characterSelectionData->addElement(CharsToUnicodeString("\\ub85c"));
+    characterSelectionData->addElement(CharsToUnicodeString("\\uad50"));
+    characterSelectionData->addElement(CharsToUnicodeString("\\ud68c"));
     characterSelectionData->addElement(" ");
     // conjoining jamo...
-    characterSelectionData->addElement(CharsToUnicodeString2("\\u1109\\u1161\\u11bc"));
-    characterSelectionData->addElement(CharsToUnicodeString2("\\u1112\\u1161\\u11bc"));
+    characterSelectionData->addElement(CharsToUnicodeString("\\u1109\\u1161\\u11bc"));
+    characterSelectionData->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11bc"));
     characterSelectionData->addElement(" ");
-    characterSelectionData->addElement(CharsToUnicodeString2("\\u1112\\u1161\\u11ab"));
-    characterSelectionData->addElement(CharsToUnicodeString2("\\u110b\\u1175\\u11ab"));
+    characterSelectionData->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11ab"));
+    characterSelectionData->addElement(CharsToUnicodeString("\\u110b\\u1175\\u11ab"));
     characterSelectionData->addElement(" ");
-    characterSelectionData->addElement(CharsToUnicodeString2("\\u110b\\u1167\\u11ab"));
-    characterSelectionData->addElement(CharsToUnicodeString2("\\u1112\\u1161\\u11b8"));
+    characterSelectionData->addElement(CharsToUnicodeString("\\u110b\\u1167\\u11ab"));
+    characterSelectionData->addElement(CharsToUnicodeString("\\u1112\\u1161\\u11b8"));
     characterSelectionData->addElement(" ");
-    characterSelectionData->addElement(CharsToUnicodeString2("\\u110c\\u1161\\u11bc"));
-    characterSelectionData->addElement(CharsToUnicodeString2("\\u1105\\u1169"));
-    characterSelectionData->addElement(CharsToUnicodeString2("\\u1100\\u116d"));
-    characterSelectionData->addElement(CharsToUnicodeString2("\\u1112\\u116c"));
+    characterSelectionData->addElement(CharsToUnicodeString("\\u110c\\u1161\\u11bc"));
+    characterSelectionData->addElement(CharsToUnicodeString("\\u1105\\u1169"));
+    characterSelectionData->addElement(CharsToUnicodeString("\\u1100\\u116d"));
+    characterSelectionData->addElement(CharsToUnicodeString("\\u1112\\u116c"));
 
 }
 
@@ -588,7 +568,7 @@ void IntlTestTextBoundary::TestSentenceInvariants()
         errln("Failed to create the BreakIterator for default locale in TestSentenceInvariant.\n");
         return;
     }
-    UnicodeString s = *cannedTestChars + CharsToUnicodeString2(".,\\u3001\\u3002\\u3041\\u3042\\u3043\\ufeff");
+    UnicodeString s = *cannedTestChars + CharsToUnicodeString(".,\\u3001\\u3002\\u3041\\u3042\\u3043\\ufeff");
     doOtherInvariantTest(*e, s);
     delete e;
 }
@@ -616,9 +596,9 @@ void IntlTestTextBoundary::TestWordInvariants()
         errln("Failed to create the BreakIterator for default locale in TestWordInvariants.\n");
         return;
     }
-    UnicodeString s = *cannedTestChars + CharsToUnicodeString2("\',.\\u3041\\u3042\\u3043\\u309b\\u309c\\u30a1\\u30a2\\u30a3\\u4e00\\u4e01\\u4e02");
+    UnicodeString s = *cannedTestChars + CharsToUnicodeString("\',.\\u3041\\u3042\\u3043\\u309b\\u309c\\u30a1\\u30a2\\u30a3\\u4e00\\u4e01\\u4e02");
     doBreakInvariantTest(*e, s);
-    s = *cannedTestChars + CharsToUnicodeString2("\',.\\u3041\\u3042\\u3043\\u309b\\u309c\\u30a1\\u30a2\\u30a3\\u4e00\\u4e01\\u4e02");
+    s = *cannedTestChars + CharsToUnicodeString("\',.\\u3041\\u3042\\u3043\\u309b\\u309c\\u30a1\\u30a2\\u30a3\\u4e00\\u4e01\\u4e02");
     doOtherInvariantTest(*e, s);
     delete e;
 }
@@ -647,9 +627,9 @@ void IntlTestTextBoundary::TestCharacterInvariants()
         errln("Failed to create the BreakIterator for default locale in TestCharacterInvariants.\n");
         return;
     }
-    UnicodeString s = *cannedTestChars + CharsToUnicodeString2("\\u1100\\u1101\\u1102\\u1160\\u1161\\u1162\\u11a8\\u11a9\\u11aa");
+    UnicodeString s = *cannedTestChars + CharsToUnicodeString("\\u1100\\u1101\\u1102\\u1160\\u1161\\u1162\\u11a8\\u11a9\\u11aa");
     doBreakInvariantTest(*e, s);
-    s = *cannedTestChars + CharsToUnicodeString2("\\u1100\\u1101\\u1102\\u1160\\u1161\\u1162\\u11a8\\u11a9\\u11aa");
+    s = *cannedTestChars + CharsToUnicodeString("\\u1100\\u1101\\u1102\\u1160\\u1161\\u1162\\u11a8\\u11a9\\u11aa");
     doOtherInvariantTest(*e, s);
     delete e;
 }
@@ -677,7 +657,7 @@ void IntlTestTextBoundary::TestLineInvariants()
         errln("Failed to create the BreakIterator for default locale in TestLineInvariants.\n");
         return;
     }
-    UnicodeString s = CharsToUnicodeString2(".,;:\\u3001\\u3002\\u3041\\u3042\\u3043\\u3044\\u3045\\u30a3\\u4e00\\u4e01\\u4e02");
+    UnicodeString s = CharsToUnicodeString(".,;:\\u3001\\u3002\\u3041\\u3042\\u3043\\u3044\\u3045\\u30a3\\u4e00\\u4e01\\u4e02");
     UnicodeString testChars = *cannedTestChars + s;
     doBreakInvariantTest(*e, testChars);
     doOtherInvariantTest(*e, testChars);
@@ -687,7 +667,7 @@ void IntlTestTextBoundary::TestLineInvariants()
 
     // in addition to the other invariants, a line-break iterator should make sure that:
     // it doesn't break around the non-breaking characters
-    UnicodeString noBreak = CharsToUnicodeString2("\\u00a0\\u2007\\u2011\\ufeff");
+    UnicodeString noBreak = CharsToUnicodeString("\\u00a0\\u2007\\u2011\\ufeff");
     UnicodeString work("aaa");
     for (i = 0; i < testChars.length(); i++) {
         UChar c = testChars[i];
@@ -713,7 +693,7 @@ void IntlTestTextBoundary::TestLineInvariants()
 
     // it does break after hyphens (unless they're followed by a digit, a non-spacing mark,
     // a currency symbol, a non-breaking space, or a line or paragraph separator)
-    UnicodeString dashes = CharsToUnicodeString2("-\\u00ad\\u2010\\u2012\\u2013\\u2014");
+    UnicodeString dashes = CharsToUnicodeString("-\\u00ad\\u2010\\u2012\\u2013\\u2014");
     for (i = 0; i < testChars.length(); i++) {
         work[0] = testChars[i];
         for (j = 0; j < dashes.length(); j++) {
@@ -761,27 +741,27 @@ void IntlTestTextBoundary::TestThaiLineBreak() {
         // the end of the word and not treated as an independent punctuation mark.
         
 
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e2a\\u0e16\\u0e32\\u0e19\\u0e35\\u0e2f"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e08\\u0e30"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e23\\u0e30\\u0e14\\u0e21"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e40\\u0e08\\u0e49\\u0e32"));
-//        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e2b\\u0e19\\u0e49\\u0e32"));
-//        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e17\\u0e35\\u0e48"));
-thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e2b\\u0e19\\u0e49\\u0e32\\u0e17\\u0e35\\u0e48"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e2a\\u0e16\\u0e32\\u0e19\\u0e35\\u0e2f"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e08\\u0e30"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e23\\u0e30\\u0e14\\u0e21"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e40\\u0e08\\u0e49\\u0e32"));
+//        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e2b\\u0e19\\u0e49\\u0e32"));
+//        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e17\\u0e35\\u0e48"));
+thaiLineSelection->addElement(CharsToUnicodeString("\\u0e2b\\u0e19\\u0e49\\u0e32\\u0e17\\u0e35\\u0e48"));
 // the commented-out lines (I think) are the preferred result; this line is what our current dictionary is giving us
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e2d\\u0e2d\\u0e01"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e21\\u0e32"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e40\\u0e23\\u0e48\\u0e07"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e23\\u0e30\\u0e1a\\u0e32\\u0e22"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e2d\\u0e22\\u0e48\\u0e32\\u0e07"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e40\\u0e15\\u0e47\\u0e21"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e2d\\u0e2d\\u0e01"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e21\\u0e32"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e40\\u0e23\\u0e48\\u0e07"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e23\\u0e30\\u0e1a\\u0e32\\u0e22"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e2d\\u0e22\\u0e48\\u0e32\\u0e07"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e40\\u0e15\\u0e47\\u0e21"));
 
         // the one time where the paiyannoi occurs somewhere other than at the end
         // of a word is in the Thai abbrevation for "etc.", which both begins and
         // ends with a paiyannoi
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e2f\\u0e25\\u0e2f"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e17\\u0e35\\u0e48"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e19\\u0e31\\u0e49\\u0e19"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e2f\\u0e25\\u0e2f"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e17\\u0e35\\u0e48"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e19\\u0e31\\u0e49\\u0e19"));
 
 	    BreakIterator* e = BreakIterator::createLineInstance(
                                                 Locale(UnicodeString("th", (char*)0)), status); 
@@ -803,52 +783,52 @@ void IntlTestTextBoundary::TestMixedThaiLineBreak()
 
         // Arabic numerals should always be separated from surrounding Thai text
 /*
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e04\\u0e48\\u0e32"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e40\\u0e07\\u0e34\\u0e19"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e1a\\u0e32\\u0e17"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e41\\u0e15\\u0e30"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e23\\u0e30\\u0e14\\u0e31\\u0e1a"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e04\\u0e48\\u0e32"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e40\\u0e07\\u0e34\\u0e19"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e1a\\u0e32\\u0e17"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e41\\u0e15\\u0e30"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e23\\u0e30\\u0e14\\u0e31\\u0e1a"));
         thaiLineSelection->addElement("39");
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e1a\\u0e32\\u0e17 "));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e1a\\u0e32\\u0e17 "));
 
         // words in non-Thai scripts should always be separated from surrounding Thai text
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e17\\u0e14"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e2a\\u0e2d\\u0e1a"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e17\\u0e14"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e2a\\u0e2d\\u0e1a"));
         thaiLineSelection->addElement("Java");
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e1a\\u0e19"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e40\\u0e04\\u0e23\\u0e37\\u0e48\\u0e2d\\u0e07"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e44\\u0e2d\\u0e1a\\u0e35\\u0e40\\u0e2d\\u0e47\\u0e21 "));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e1a\\u0e19"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e40\\u0e04\\u0e23\\u0e37\\u0e48\\u0e2d\\u0e07"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e44\\u0e2d\\u0e1a\\u0e35\\u0e40\\u0e2d\\u0e47\\u0e21 "));
 
         // Thai numerals should always be separated from the text surrounding them
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e04\\u0e48\\u0e32"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e40\\u0e07\\u0e34\\u0e19"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e1a\\u0e32\\u0e17"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e41\\u0e15\\u0e30"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e23\\u0e30\\u0e14\\u0e31\\u0e1a"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e53\\u0e59"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e1a\\u0e32\\u0e17 "));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e04\\u0e48\\u0e32"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e40\\u0e07\\u0e34\\u0e19"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e1a\\u0e32\\u0e17"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e41\\u0e15\\u0e30"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e23\\u0e30\\u0e14\\u0e31\\u0e1a"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e53\\u0e59"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e1a\\u0e32\\u0e17 "));
 
         // Thai text should interact correctly with punctuation and symbols
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e44\\u0e2d\\u0e1a\\u0e35\\u0e40\\u0e2d\\u0e47\\u0e21"));
-//        thaiLineSelection->addElement(CharsToUnicodeString2("(\\u0e1b\\u0e23\\u0e30\\u0e40\\u0e17\\u0e28"));
-//        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e44\\u0e17\\u0e22)"));
-thaiLineSelection->addElement(CharsToUnicodeString2("(\\u0e1b\\u0e23\\u0e30\\u0e40\\u0e17\\u0e28\\u0e44\\u0e17\\u0e22)"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e44\\u0e2d\\u0e1a\\u0e35\\u0e40\\u0e2d\\u0e47\\u0e21"));
+//        thaiLineSelection->addElement(CharsToUnicodeString("(\\u0e1b\\u0e23\\u0e30\\u0e40\\u0e17\\u0e28"));
+//        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e44\\u0e17\\u0e22)"));
+thaiLineSelection->addElement(CharsToUnicodeString("(\\u0e1b\\u0e23\\u0e30\\u0e40\\u0e17\\u0e28\\u0e44\\u0e17\\u0e22)"));
 // I believe the commented-out reading above to be the correct one, but this is what passes with our current dictionary
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e08\\u0e33\\u0e01\\u0e31\\u0e14"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e40\\u0e1b\\u0e34\\u0e14"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e15\\u0e31\\u0e27\""));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e08\\u0e33\\u0e01\\u0e31\\u0e14"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e40\\u0e1b\\u0e34\\u0e14"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e15\\u0e31\\u0e27\""));
 */
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e2e\\u0e32\\u0e23\\u0e4c\\u0e14\\u0e14\\u0e34\\u0e2a\\u0e01\\u0e4c\""));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e23\\u0e38\\u0e48\\u0e19"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e43\\u0e2b\\u0e21\\u0e48"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e40\\u0e14\\u0e37\\u0e2d\\u0e19\\u0e21\\u0e34."));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e22."));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e19\\u0e35\\u0e49"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e23\\u0e32\\u0e04\\u0e32"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e2e\\u0e32\\u0e23\\u0e4c\\u0e14\\u0e14\\u0e34\\u0e2a\\u0e01\\u0e4c\""));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e23\\u0e38\\u0e48\\u0e19"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e43\\u0e2b\\u0e21\\u0e48"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e40\\u0e14\\u0e37\\u0e2d\\u0e19\\u0e21\\u0e34."));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e22."));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e19\\u0e35\\u0e49"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e23\\u0e32\\u0e04\\u0e32"));
         thaiLineSelection->addElement("$200");
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e40\\u0e17\\u0e48\\u0e32"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e19\\u0e31\\u0e49\\u0e19 "));
-        thaiLineSelection->addElement(CharsToUnicodeString2("(\"\\u0e2e\\u0e32\\u0e23\\u0e4c\\u0e14\\u0e14\\u0e34\\u0e2a\\u0e01\\u0e4c\")."));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e40\\u0e17\\u0e48\\u0e32"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e19\\u0e31\\u0e49\\u0e19 "));
+        thaiLineSelection->addElement(CharsToUnicodeString("(\"\\u0e2e\\u0e32\\u0e23\\u0e4c\\u0e14\\u0e14\\u0e34\\u0e2a\\u0e01\\u0e4c\")."));
 
 	    BreakIterator* e = BreakIterator::createLineInstance(
                                                 Locale(UnicodeString("th", (char*)0)), status); 
@@ -872,13 +852,13 @@ void IntlTestTextBoundary::TestMaiyamok()
         // the Thai maiyamok character is a shorthand symbol that means "repeat the previous
         // word".  Instead of appearing as a word unto itself, however, it's kept together
         // with the word before it
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e44\\u0e1b\\u0e46"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e21\\u0e32\\u0e46"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e23\\u0e30\\u0e2b\\u0e27\\u0e48\\u0e32\\u0e07"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e01\\u0e23\\u0e38\\u0e07\\u0e40\\u0e17\\u0e1e"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e41\\u0e25\\u0e30"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e40\\u0e03\\u0e35\\u0e22\\u0e07"));
-        thaiLineSelection->addElement(CharsToUnicodeString2("\\u0e43\\u0e2b\\u0e21\\u0e48"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e44\\u0e1b\\u0e46"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e21\\u0e32\\u0e46"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e23\\u0e30\\u0e2b\\u0e27\\u0e48\\u0e32\\u0e07"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e01\\u0e23\\u0e38\\u0e07\\u0e40\\u0e17\\u0e1e"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e41\\u0e25\\u0e30"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e40\\u0e03\\u0e35\\u0e22\\u0e07"));
+        thaiLineSelection->addElement(CharsToUnicodeString("\\u0e43\\u0e2b\\u0e21\\u0e48"));
 
 	    BreakIterator* e = BreakIterator::createLineInstance(
                                                 Locale(UnicodeString("th", (char*)0)), status); 
@@ -900,9 +880,9 @@ void IntlTestTextBoundary::TestMaiyamok()
 void IntlTestTextBoundary::TestJapaneseLineBreak()
 {
     UErrorCode status = U_ZERO_ERROR;
-    UnicodeString testString = CharsToUnicodeString2("\\u4e00x\\u4e8c");
-    UnicodeString precedingChars = CharsToUnicodeString2("([{\\u00ab$\\u00a5\\u00a3\\u00a4\\u2018\\u201a\\u201c\\u201e\\u201b\\u201f");
-    UnicodeString followingChars = CharsToUnicodeString2(")]}\\u00bb!%,.\\u3001\\u3002\\u3063\\u3083\\u3085\\u3087\\u30c3\\u30e3\\u30e5\\u30e7\\u30fc:;\\u309b\\u309c\\u3005\\u309d\\u309e\\u30fd\\u30fe\\u2019\\u201d\\u00b0\\u2032\\u2033\\u2034\\u2030\\u2031\\u2103\\u2109\\u00a2\\u0300\\u0301\\u0302");
+    UnicodeString testString = CharsToUnicodeString("\\u4e00x\\u4e8c");
+    UnicodeString precedingChars = CharsToUnicodeString("([{\\u00ab$\\u00a5\\u00a3\\u00a4\\u2018\\u201a\\u201c\\u201e\\u201b\\u201f");
+    UnicodeString followingChars = CharsToUnicodeString(")]}\\u00bb!%,.\\u3001\\u3002\\u3063\\u3083\\u3085\\u3087\\u30c3\\u30e3\\u30e5\\u30e7\\u30fc:;\\u309b\\u309c\\u3005\\u309d\\u309e\\u30fd\\u30fe\\u2019\\u201d\\u00b0\\u2032\\u2033\\u2034\\u2030\\u2031\\u2103\\u2109\\u00a2\\u0300\\u0301\\u0302");
     BreakIterator *iter = BreakIterator::createLineInstance(Locale::JAPAN, status);
 
     UTextOffset i;
@@ -1376,7 +1356,7 @@ void IntlTestTextBoundary::doBreakInvariantTest(BreakIterator& tb, UnicodeString
     int errorCount = 0;
 
     // a break should always occur after CR (unless followed by LF), LF, PS, and LS
-    UnicodeString breaks = CharsToUnicodeString2("\r\n\\u2029\\u2028");
+    UnicodeString breaks = CharsToUnicodeString("\r\n\\u2029\\u2028");
     UTextOffset i, j;
 
     for (i = 0; i < breaks.length(); i++) {

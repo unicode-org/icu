@@ -211,6 +211,13 @@ void SimpleThread::sleep(int32_t millis)
    useconds_t m = millis * 1000;
    if (m > 1000000) m = 1000000;
    usleep(m); 
+#elif defined(OS390)
+   millis *= 1000;
+   while(millis > 1000000) {
+       usleep(999999);
+       millis -= 1000000;
+   }
+   usleep(millis);
 #else
    usleep(millis * 1000);
 #endif
@@ -441,26 +448,6 @@ void MultithreadTest::TestMutex()
 
 #include <string.h>
 
-// [HSYS] Just to make it easier to use with UChar array.
-// ripped off from ittxtbd.cpp::CharsToUnicodeString
-UnicodeString UEscapeString(const char* chars)
-{
-    int len = strlen(chars);
-    int i;
-    UnicodeString buffer;
-    for (i = 0; i < len;) {
-        if ((chars[i] == '\\') && (i+1 < len) && (chars[i+1] == 'u')) {
-            int unicode;
-            sscanf(&(chars[i+2]), "%4X", &unicode);
-            buffer += (UChar)unicode;
-            i += 6;
-        } else {
-            buffer += (UChar)chars[i++];
-        }
-    }
-    return buffer;
-}
-
 // * Show exactly where the string's differences lie.
 UnicodeString showDifference(const UnicodeString& expected, const UnicodeString& result)
 {
@@ -543,8 +530,8 @@ FormatThreadTestData kPercentFormatTestData[] =
    FormatThreadTestData((double)5., UnicodeString("500%")),
    FormatThreadTestData( 1, "100%" ),
    FormatThreadTestData( 0.26, "26%" ),
-   FormatThreadTestData( 16384.99, UEscapeString("1\\u00a0638\\u00a0499%") ), // U+00a0 = NBSP
-   FormatThreadTestData( 81890.23, UEscapeString("8\\u00a0189\\u00a0023%" )),
+   FormatThreadTestData( 16384.99, CharsToUnicodeString("1\\u00a0638\\u00a0499%") ), // U+00a0 = NBSP
+   FormatThreadTestData( 81890.23, CharsToUnicodeString("8\\u00a0189\\u00a0023%" )),
 };
 int32_t kPercentFormatTestDataLength = sizeof(kPercentFormatTestData) / sizeof(kPercentFormatTestData[0]);
 
@@ -685,7 +672,7 @@ public:
                 messageLocale=                      Locale("de","AT"); // Austrian German
                 countryToCheck=                     Locale("","US"); // hmm
                 currencyToCheck=                    40193.12;
-                expected=                           UEscapeString("2:user in Vereinigte Staaten is receiving a #7 error - U_MEMORY_ALLOCATION_ERROR. They insist they just spent \\u00f6S 40.193,12 on memory.");
+                expected=                           CharsToUnicodeString("2:user in Vereinigte Staaten is receiving a #7 error - U_MEMORY_ALLOCATION_ERROR. They insist they just spent \\u00f6S 40.193,12 on memory.");
                 break;
             }
 

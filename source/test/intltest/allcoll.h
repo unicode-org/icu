@@ -55,9 +55,6 @@ public:
     void TestExtra( char* par );
 
 private:
-    static const UChar testCases[][MAX_TOKEN_LEN];
-    static const UChar testSourceCases[][MAX_TOKEN_LEN];
-    static const UChar testTargetCases[][MAX_TOKEN_LEN];
     static const Collator::EComparisonResult results[];
 
     RuleBasedCollator *myCollation;

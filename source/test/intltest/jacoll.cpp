@@ -37,9 +37,9 @@ CollationKanaTest::~CollationKanaTest()
 }
 
 const UChar CollationKanaTest::testSourceCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
-    {'A', 0x0300, 0x0301, 0},
-    {'A', 0x0300, 0x0316, 0},
-    {'A', 0x0300, 0},
+    {0x41, 0x0300, 0x0301, 0},
+    {0x41, 0x0300, 0x0316, 0},
+    {0x41, 0x0300, 0},
     {0x00C0, 0x0301, 0},
     {0x00C0, 0x0316, 0},
     {0xff9E, 0},
@@ -51,11 +51,11 @@ const UChar CollationKanaTest::testSourceCases[][CollationKanaTest::MAX_TOKEN_LE
 };
 
 const UChar CollationKanaTest::testTargetCases[][CollationKanaTest::MAX_TOKEN_LEN] = {
-    {'A', 0x0301, 0x0300, 0},
-    {'A', 0x0316, 0x0300, 0},
+    {0x41, 0x0301, 0x0300, 0},
+    {0x41, 0x0316, 0x0300, 0},
     {0x00C0, 0},
-    {'A', 0x0301, 0x0300, 0},
-    {'A', 0x0316, 0x0300, 0},
+    {0x41, 0x0301, 0x0300, 0},
+    {0x41, 0x0316, 0x0300, 0},
     {0xFF9F, 0},
     {0x30A2, 0},
     {0x3042, 0x3042, 0},

@@ -19,24 +19,6 @@
 #include <stdio.h>
 #include "unicode/rep.h"
 
-//Just to make it easier to use with UChar array.
-static UnicodeString CharsToUnicodeString(const char* chars)
-{
-    int len = strlen(chars);
-    int i;
-    UnicodeString buffer;
-    for (i = 0; i < len;) {
-        if ((chars[i] == '\\') && (i+1 < len) && (chars[i+1] == 'u')) {
-            int unicode;
-            sscanf(&(chars[i+2]), "%4X", &unicode);
-            buffer += (UChar)unicode;
-            i += 6;
-        } else {
-            buffer += (UChar)chars[i++];
-        }
-    }
-    return buffer;
-}
 int32_t getInt(UnicodeString str)
 {
 	int len=str.length();

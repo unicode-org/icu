@@ -37,19 +37,19 @@ CollationFinnishTest::~CollationFinnishTest()
 }
 
 const UChar CollationFinnishTest::testSourceCases[][CollationFinnishTest::MAX_TOKEN_LEN] = {
-    {'w', 'a', 't', 0},
-    {'v', 'a', 't', 0},
-    {'a', 0x00FC, 'b', 'e', 'c', 'k', 0},
-    {'L', 0x00E5, 'v', 'i', 0},
-    {'w', 'a', 't', 0}
+    {0x77, 0x61, 0x74, 0},
+    {0x76, 0x61, 0x74, 0},
+    {0x61, 0x00FC, 0x62, 0x65, 0x63, 0x6b, 0},
+    {0x4c, 0x00E5, 0x76, 0x69, 0},
+    {0x77, 0x61, 0x74, 0}
 };
 
 const UChar CollationFinnishTest::testTargetCases[][CollationFinnishTest::MAX_TOKEN_LEN] = {
-    {'v', 'a', 't', 0},
-    {'w', 'a', 'y', 0},
-    {'a', 'x', 'b', 'e', 'c', 'k', 0},
-    {'L', 0x00E4, 'w', 'e', 0},
-    {'v', 'a', 't', 0}
+    {0x76, 0x61, 0x74, 0},
+    {0x77, 0x61, 0x79, 0},
+    {0x61, 0x78, 0x62, 0x65, 0x63, 0x6b, 0},
+    {0x4c, 0x00E4, 0x77, 0x65, 0},
+    {0x76, 0x61, 0x74, 0}
 };
 
 const Collator::EComparisonResult CollationFinnishTest::results[] = {

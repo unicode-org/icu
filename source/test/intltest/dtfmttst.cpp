@@ -257,7 +257,7 @@ DateFormatTest::TestFieldPosition(void)
         "", "1997", "August", "", "", "13", "", "Wednesday", "", "PM", "2", "", 
         "34", "12", "", "PDT", "", 
         /* Following two added by weiv for two new fields */ "", "", 
-        "", "1997", "ao\373t",/* 373 = 0xFB */  "", "", "13", "", "mercredi", 
+        "", "1997", "#",/* # is a marker for "ao\xfbt" == "aou^t" */  "", "", "13", "", "mercredi", 
         "", "", "", "14", "34", "", "", "GMT-07:00", "", 
         /* Following two added by weiv for two new fields */ "", "", 
         "AD", "97", "8", "33", "3", "13", "225", "Wed", "2", "PM", "2", 
@@ -287,7 +287,14 @@ DateFormatTest::TestFieldPosition(void)
         for (int32_t i = 0; i < Calendar::FIELD_COUNT;++i) {
             UnicodeString field;
             getFieldText(df, i, someDate, field);
-            UnicodeString expStr(expected[exp]);
+            UnicodeString expStr;
+            if(expected[exp][0]!='#') {
+                expStr=UnicodeString(expected[exp]);
+            } else {
+                /* we cannot have latin-1 characters in source code, therefore we fix up the string for "aou^t" */
+                expStr.append(0x61).append(0x6f).append(0xfb).append(0x74);
+            }
+            
             if (!(field == expStr)) errln(UnicodeString("FAIL: field #") + i + " " +
                 fieldNames[i] + " = \"" + escape(field) + "\", expected \"" + escape(expStr) + "\"");
             ++exp;
