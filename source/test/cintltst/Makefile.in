@@ -29,7 +29,7 @@ else
 LINK = $(LINK.c)
 endif
 
-BUILDDIR := $(shell pwd)/../..
+BUILDDIR := $(shell pwd)/../../
 
 # we define ICU_UNICODE_VERSION so we can test it
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/tools/ctestfw -I$(top_srcdir)/tools/toolutil
