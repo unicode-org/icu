@@ -116,7 +116,7 @@ ALL : GODATA $(RB_FILES) $(CNV_FILES) $(COL_FILES) icudata.dll test.dat base_tes
 BRK_FILES = $(ICUDATA)\sent.brk $(ICUDATA)\char.brk $(ICUDATA)\line.brk $(ICUDATA)\word.brk $(ICUDATA)\line_th.brk $(ICUDATA)\word_th.brk
 BRK_CSOURCES = $(BRK_FILES:.brk=_brk.c)
 
-CPP_SOURCES = $(C_CNV_FILES) unames_dat.c cnvalias_dat.c tz_dat.c $(BRK_CSOURCES)
+CPP_SOURCES = $(C_CNV_FILES) uprops_dat.c unames_dat.c cnvalias_dat.c tz_dat.c $(BRK_CSOURCES)
 LINK32_OBJS = $(CPP_SOURCES:.c=.obj)
 
 # target for DLL
@@ -199,10 +199,11 @@ $(ICUDATA)\word_th.brk : $(ICUDATA)\word_thLE.brk
     copy $(ICUDATA)\word_thLE.brk $(ICUDATA)\word_th.brk
 
 # target for memory mapped file
-icudata.dat : $(CNV_FILES) unames.dat cnvalias.dat tz.dat
+icudata.dat : $(CNV_FILES) uprops.dat unames.dat cnvalias.dat tz.dat
 	@echo Creating memory-mapped file
 	@cd $(ICUDATA)
  	@$(ICUTOOLS)\gencmn\$(CFG)\gencmn -c 1000000 <<
+$(ICUDATA)\uprops.dat
 $(ICUDATA)\unames.dat
 $(ICUDATA)\cnvalias.dat
 $(ICUDATA)\tz.dat
@@ -241,6 +242,7 @@ CLEAN :
 	-@erase "*.res"
 	-@erase "$(TRANS)*.res"
 	-@erase "*.col"
+	-@erase "uprops*.*"
 	-@erase "unames*.*"
 	-@erase "cnvalias*.*"
 	-@erase "tz*.*"
@@ -289,11 +291,22 @@ CLEAN :
 $(CPP_FLAGS) $<
 <<
 
+# Targets for uprops.dat
+uprops.dat : unidata\UnicodeData.txt unidata\Mirror.txt $(ICUTOOLS)\genprops\$(CFG)\genprops.exe
+	@echo Creating data file for Unicode Character Properties
+	@set ICU_DATA=$(ICUDATA)
+	@$(ICUTOOLS)\genprops\$(CFG)\genprops -s $(ICUDATA)\unidata
+
+uprops_dat.c : uprops.dat
+	@echo Creating C source file for Unicode Character Properties
+	@set ICU_DATA=$(ICUDATA)
+	@$(ICUTOOLS)\genccode\$(CFG)\genccode $(ICUDATA)\$?
+
 # Targets for unames.dat
-unames.dat : UnicodeData-3.0.0.txt
+unames.dat : unidata\UnicodeData.txt $(ICUTOOLS)\gennames\$(CFG)\gennames.exe
 	@echo Creating data file for Unicode Names
 	@set ICU_DATA=$(ICUDATA)
-	@$(ICUTOOLS)\gennames\$(CFG)\gennames UnicodeData-3.0.0.txt
+	@$(ICUTOOLS)\gennames\$(CFG)\gennames unidata\UnicodeData.txt
 
 unames_dat.c : unames.dat
 	@echo Creating C source file for Unicode Names
@@ -301,7 +314,7 @@ unames_dat.c : unames.dat
 	@$(ICUTOOLS)\genccode\$(CFG)\genccode $(ICUDATA)\$?
 
 # Targets for converters
-cnvalias.dat : convrtrs.txt
+cnvalias.dat : convrtrs.txt $(ICUTOOLS)\gencnval\$(CFG)\gencnval.exe
 	@echo Creating data file for Converter Aliases
 	@set ICU_DATA=$(ICUDATA)
 	@$(ICUTOOLS)\gencnval\$(CFG)\gencnval
@@ -311,7 +324,7 @@ cnvalias_dat.c : cnvalias.dat
 	@$(ICUTOOLS)\genccode\$(CFG)\genccode $(ICUDATA)\$?
 
 # Targets for tz
-tz.dat : {$(ICUTOOLS)\gentz}tz.txt
+tz.dat : {$(ICUTOOLS)\gentz}tz.txt {$(ICUTOOLS)\gentz\$(CFG)}gentz.exe
 	@echo Creating data file for Timezones
 	@set ICU_DATA=$(ICUDATA)
 	@$(ICUTOOLS)\gentz\$(CFG)\gentz $(ICUTOOLS)\gentz\tz.txt
@@ -321,13 +334,11 @@ tz_dat.c : tz.dat
 	@$(ICUTOOLS)\genccode\$(CFG)\genccode $(ICUDATA)\$?
 
 # Dependencies on the tools
-UnicodeData-3.0.0.txt : {$(ICUTOOLS)\gennames\$(CFG)}gennames.exe
-
 convrtrs.txt : {$(ICUTOOLS)\gencnval\$(CFG)}gencnval.exe
 
 tz.txt : {$(ICUTOOLS)\gentz\$(CFG)}gentz.exe
 
-unames.dat cnvalias.dat tz.dat : {$(ICUTOOLS)\genccode\$(CFG)}genccode.exe
+uprops.dat unames.dat cnvalias.dat tz.dat : {$(ICUTOOLS)\genccode\$(CFG)}genccode.exe
 
 $(GENRB_SOURCE) $(GENCOL_SOURCE) : {$(ICUTOOLS)\genrb\$(CFG)}genrb.exe
 
