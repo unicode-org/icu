@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/CompoundTransliterator.java,v $ 
- * $Date: 2000/06/28 20:36:32 $ 
- * $Revision: 1.10 $
+ * $Date: 2000/06/28 20:49:54 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -35,7 +35,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.10 $ $Date: 2000/06/28 20:36:32 $
+ * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.11 $ $Date: 2000/06/28 20:49:54 $
  */
 public class CompoundTransliterator extends Transliterator {
 
@@ -274,7 +274,7 @@ public class CompoundTransliterator extends Transliterator {
          *    S C L
          */
         int cursor = index.start;
-        int limit = index.contextLimit;
+        int limit = index.limit;
         int globalLimit = limit;
         /* globalLimit is the overall limit.  We keep track of this
          * since we overwrite index.contextLimit with the previous
@@ -284,7 +284,7 @@ public class CompoundTransliterator extends Transliterator {
 
         for (int i=0; i<trans.length; ++i) {
             index.start = cursor; // Reset cursor
-            index.contextLimit = limit;
+            index.limit = limit;
 
             if (DEBUG) {
                 System.out.print(Utility.escape(i + ": \"" +
@@ -303,13 +303,13 @@ public class CompoundTransliterator extends Transliterator {
             }
 
             // Adjust overall limit for insertions/deletions
-            globalLimit += index.contextLimit - limit;
+            globalLimit += index.limit - limit;
             limit = index.start; // Move limit to end of committed text
         }
         // Cursor is good where it is -- where the last
         // transliterator left it.  Limit needs to be put back
         // where it was, modulo adjustments for deletions/insertions.
-        index.contextLimit = globalLimit;
+        index.limit = globalLimit;
     }
 
     /**

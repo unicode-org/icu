@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $ 
- * $Date: 2000/06/28 20:36:32 $ 
- * $Revision: 1.18 $
+ * $Date: 2000/06/28 20:49:54 $ 
+ * $Revision: 1.19 $
  *
  *****************************************************************************************
  */
@@ -210,7 +210,7 @@ import java.text.MessageFormat;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.18 $ $Date: 2000/06/28 20:36:32 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.19 $ $Date: 2000/06/28 20:49:54 $
  */
 public abstract class Transliterator {
     /**
@@ -536,7 +536,8 @@ public abstract class Transliterator {
 
         int originalStart = index.contextStart;
         if (insertion != null) {
-            text.replace(index.contextLimit, index.contextLimit, insertion);
+            text.replace(index.limit, index.limit, insertion);
+            index.limit += insertion.length();
             index.contextLimit += insertion.length();
         }
 
@@ -593,19 +594,9 @@ public abstract class Transliterator {
      */
     public final void finishTransliteration(Replaceable text,
                                             Position index) {
-        if (index.contextStart < 0 ||
-            index.contextLimit > text.length() ||
-            index.start < index.contextStart ||
-            index.start > index.contextLimit) {
-            throw new IllegalArgumentException("Invalid index");
-        }
-
-        int originalStart = index.contextStart;
-
-        handleTransliterate(text, index, false);
-
-        index.contextStart = Math.max(index.start - getMaximumContextLength(),
-                               originalStart);
+        int limit = transliterate(text, index.start, index.limit);
+        index.contextLimit += limit - index.limit;
+        index.start = index.limit = limit;
     }
 
     /**

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/HexToUnicodeTransliterator.java,v $ 
- * $Date: 2000/06/28 20:36:32 $ 
- * $Revision: 1.7 $
+ * $Date: 2000/06/28 20:49:54 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -23,7 +23,7 @@ import java.util.*;
  * applyPattern() for details.
  *
  * @author Alan Liu
- * @version $RCSfile: HexToUnicodeTransliterator.java,v $ $Revision: 1.7 $ $Date: 2000/06/28 20:36:32 $
+ * @version $RCSfile: HexToUnicodeTransliterator.java,v $ $Revision: 1.8 $ $Date: 2000/06/28 20:49:54 $
  */
 public class HexToUnicodeTransliterator extends Transliterator {
     private static final String COPYRIGHT =
@@ -268,7 +268,7 @@ public class HexToUnicodeTransliterator extends Transliterator {
     protected void handleTransliterate(Replaceable text,
                                        Position offsets, boolean isIncremental) {
         int cursor = offsets.start;
-        int limit = offsets.contextLimit;
+        int limit = offsets.limit;
         int i, j, ipat;
 
       loop:
@@ -373,7 +373,8 @@ public class HexToUnicodeTransliterator extends Transliterator {
             ++cursor;
         }
 
-        offsets.contextLimit = limit;
+        offsets.contextLimit += limit - offsets.limit;
+        offsets.limit = limit;
         offsets.start = cursor;
     }
 }
