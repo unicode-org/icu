@@ -19,14 +19,13 @@
 #include "ucmp32.h"
 #include "cmemory.h"
 #include "cintltst.h"
-#include <stdio.h>
-
 
 
 static void TestUCMP16API(void);
 static void TestUCMP8API(void);
 static void TestUCMP32API(void);
 
+void addCompactArrayTest(TestNode** root);
 
 
 void

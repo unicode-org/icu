@@ -17,10 +17,9 @@
 #include "cstring.h"
 #include "cintltst.h"
 
-#include <stdio.h>
-
 static void TestStandardNames(void);
 
+void addStandardNamesTest(TestNode** root);
 
 
 void

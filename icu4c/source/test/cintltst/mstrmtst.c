@@ -22,6 +22,8 @@
 static void TestMemoryStreamAPI(void);
 static void printUSeqErr(const uint8_t *a, int len);
 
+void addMemoryStreamTest(TestNode** root);
+
 static void printUSeqErr(const uint8_t *a, int len)
 {
     int i=0;

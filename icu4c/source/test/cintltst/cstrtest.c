@@ -19,6 +19,7 @@
 #include "cmemory.h"
 
 static void TestAPI(void);
+void addCStringTest(TestNode** root);
 
 void addCStringTest(TestNode** root) {
    
