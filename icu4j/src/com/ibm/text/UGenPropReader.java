@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UGenPropReader.java,v $ 
-* $Date: 2001/02/28 20:59:44 $ 
-* $Revision: 1.1 $
+* $Date: 2001/03/07 02:52:05 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -14,6 +14,7 @@ package com.ibm.text;
 
 import java.io.DataInputStream;
 import java.util.Arrays;
+import java.io.IOException;
 
 /**
 * Internal reader class reading binary data from uprops.dat created by ICU 
@@ -66,6 +67,12 @@ final class UGenPropReader extends UGenReader
                                                  (byte)0x72, (byte)0x6F};
   private static final byte DATA_FORMAT_VERSION_[] = 
                                   {(byte)0x1, (byte)0x2, (byte)0x0, (byte)0x0};
+                                  
+  /**
+  * Corrupted error string
+  */
+  private static final String CORRUPTED_DATA_ERROR_ =
+                             "Data corrupted in character property data file";
      
   // constructor =============================================
   
@@ -83,13 +90,12 @@ final class UGenPropReader extends UGenReader
   * If unsuccessful false will be returned
   * @param input data stream
   * @param data data instance
-  * @return true if successfully filled
   * @exception thrown when data reading fails
   */
-  protected boolean read(DataInputStream input, UCharacterPropertyDB data)
-                    throws Exception
+  protected void read(DataInputStream input, UCharacterPropertyDB data)
+                                                          throws IOException
   {
-    if (super.read(input, data) &&
+    if (!(super.read(input, data) &&
       // read the indexes
       readIndex(input, data) && 
       // read the stages block
@@ -99,9 +105,9 @@ final class UGenPropReader extends UGenReader
       // read the exception data
       readException(input, data) &&
       // read the case data
-      readCase(input,data))
-        return true;
-    return false;
+      readCase(input,data))) {
+      throw new IOException(CORRUPTED_DATA_ERROR_);   
+    }
   }
   
   /**
@@ -143,10 +149,10 @@ final class UGenPropReader extends UGenReader
   * @param input data stream
   * @param data instance of UCharacterPropertyDB
   * @return true if successfully read
-  * @exception thrown when data reading fails
+  * @exception thrown when there's an IOException
   */
-  private boolean readIndex(DataInputStream input, UCharacterPropertyDB data) 
-                  throws Exception
+  private boolean readIndex(DataInputStream input, UCharacterPropertyDB data)
+                                                          throws IOException
   {
     int count = INDEX_SIZE_;
     m_stage2indexsize_ = input.readChar();
@@ -180,7 +186,7 @@ final class UGenPropReader extends UGenReader
   * @exception thrown when data reading fails
   */
   private boolean readStage(DataInputStream input, UCharacterPropertyDB data) 
-                  throws Exception
+                  throws IOException
   {  
     // size of the 3 stages
     int stagesize = (m_prop_ << 1) - INDEX_SIZE_;
@@ -193,22 +199,18 @@ final class UGenPropReader extends UGenReader
     for (int count = 0; count < stagesize; count ++)
     {
       array[count] = (char)(input.readChar() - INDEX_SIZE_);
-      if (max < array[count] && count < 0x448)
+      if (max < array[count] && count < 0x448) {
         max = array[count];
+      }
       
       // setting up the property index for stage 3
       // uprops.dat contain data that includes the address from the top of 
       // index to property data. since the blocks are split up, so now i have 
       // to subtract the excess address from it.
-      if (count >= m_stage3_ - INDEX_SIZE_)
+      if (count >= m_stage3_ - INDEX_SIZE_) {
         array[count] -= props;    
+      }
     }
-    
-    // synwee : hmm... gaps in stage 2.
-    /*
-    System.out.println("stage 3 " + (int)m_stage3_);
-    System.out.println("stage  2 top " + (max - 0x440 - INDEX_SIZE_));
-    */
     
     // setting up the stages block in the instance of UCharacterPropertyDB
     return data.setStage(array);
@@ -223,13 +225,14 @@ final class UGenPropReader extends UGenReader
   * @exception thrown when data reading fails
   */
   private boolean readProperty(DataInputStream input, 
-                               UCharacterPropertyDB data) throws Exception
+                               UCharacterPropertyDB data) throws IOException
   {  
     // getting size of the property block
     int size = m_exception_ - m_prop_;
     int ppty[] = new int[size];
-    for (int i = 0; i < size; i ++)
+    for (int i = 0; i < size; i ++) {
       ppty[i] = input.readInt();     
+    }
        
     // setting up the property block in the instance of UCharacterPropertyDB
     return data.setProperty(ppty);
@@ -244,13 +247,14 @@ final class UGenPropReader extends UGenReader
   * @exception thrown when data reading fails
   */
   private boolean readCase(DataInputStream input, 
-                           UCharacterPropertyDB data) throws Exception
+                           UCharacterPropertyDB data) throws IOException
   {  
     // getting size of the case block
     int size = (m_end_ - m_case_) << 1;
     char casetable[] = new char[size];
-    for (int i = 0; i < size; i ++)
+    for (int i = 0; i < size; i ++) {
       casetable[i] = input.readChar();     
+    }
          
     // setting up the case block in the instance of UCharacterPropertyDB
     return data.setCase(casetable);
@@ -265,12 +269,13 @@ final class UGenPropReader extends UGenReader
   * @exception thrown when data reading fails
   */
   private boolean readException(DataInputStream input, 
-                                UCharacterPropertyDB data) throws Exception
+                                UCharacterPropertyDB data) throws IOException
   {  
     int size = m_case_ - m_exception_;
     int exception[] = new int[size];
-    for (int i = 0; i < size; i ++)
-      exception[i] = input.readInt();     
+    for (int i = 0; i < size; i ++) {
+      exception[i] = input.readInt();
+    }
        
     // setting up the property block in the instance of UCharacterPropertyDB
     return data.setException(exception);

@@ -5,14 +5,15 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UGenNameReader.java,v $ 
-* $Date: 2001/02/28 20:59:44 $ 
-* $Revision: 1.1 $
+* $Date: 2001/03/07 02:52:05 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
 package com.ibm.text;
 
 import java.io.DataInputStream;
+import java.io.IOException;
 
 /**
 * Internal reader class reading binary data from unames.dat created by ICU 
@@ -63,6 +64,12 @@ final class UGenNameReader extends UGenReader
                                   {(byte)0x1, (byte)0x0, (byte)0x0, (byte)0x0};
   private static final byte DATA_FORMAT_ID_[] = {(byte)0x75, (byte)0x6E, 
                                                  (byte)0x61, (byte)0x6D};
+                                                 
+  /**
+  * Corrupted error string
+  */
+  private static final String CORRUPTED_DATA_ERROR_ =
+                               "Data corrupted in character name data file";
   
   // constructor ==================================================
   
@@ -81,20 +88,16 @@ final class UGenNameReader extends UGenReader
   * If unsuccessful false will be returned.
   * @param input data input stream
   * @param data instance of datablock
-  * @return true if successfully filled UCharacterNameDB
-  * @exception thrown if there is a failure reading file
+  * @exception thrown when there's a data error.
   */
-  protected boolean read(DataInputStream input, UCharacterNameDB data)
-                    throws Exception
+  protected void read(DataInputStream input, UCharacterNameDB data)
+                                                            throws IOException
   {
-    if (super.read(input, data))
-    {
-      // read the indexes
-      if (readIndex(input) && readToken(input, data) && readGroup(input, data)
-          && readAlg(input, data))
-        return true;
+    if (!(super.read(input, data) && readIndex(input) && 
+          readToken(input, data) && readGroup(input, data) && 
+          readAlg(input, data))) {
+      throw new IOException(CORRUPTED_DATA_ERROR_);
     }
-    return false;
   }
   
   /**
@@ -107,13 +110,17 @@ final class UGenNameReader extends UGenReader
                                  byte dataformatversion[])
   {
     int size = DATA_FORMAT_ID_.length;
-    for (int i = 0; i < size; i ++)
-      if (DATA_FORMAT_ID_[i] != dataformatid[i])
+    for (int i = 0; i < size; i ++) {
+      if (DATA_FORMAT_ID_[i] != dataformatid[i]) {
         return false;
+      }
+    }
     size = DATA_FORMAT_VERSION_.length;
-    for (int i = 0; i < size; i ++)
-      if (DATA_FORMAT_VERSION_[i] != dataformatversion[i])
+    for (int i = 0; i < size; i ++) {
+      if (DATA_FORMAT_VERSION_[i] != dataformatversion[i]) {
         return false;
+      }
+    }
     return true;
   }
   
@@ -143,7 +150,7 @@ final class UGenNameReader extends UGenReader
   * @return true if successfully read
   * @exception thrown when data reading fails
   */
-  private boolean readIndex(DataInputStream input) throws Exception
+  private boolean readIndex(DataInputStream input) throws IOException
   {
     m_tokenstringindex_ = input.readInt();
     m_groupindex_ = input.readInt();
@@ -160,12 +167,13 @@ final class UGenNameReader extends UGenReader
   * @exception thrown when data reading fails
   */
   private boolean readToken(DataInputStream input, UCharacterNameDB data) 
-                  throws Exception
+                  throws IOException
   {
     char count = input.readChar();
     char token[] = new char[count];
-    for (char i = 0; i < count; i ++)
+    for (char i = 0; i < count; i ++) {
       token[i] = input.readChar();
+    }
     
     int size = m_groupindex_ - m_tokenstringindex_;
     byte tokenstr[] = new byte[size];
@@ -181,15 +189,16 @@ final class UGenNameReader extends UGenReader
   * @exception thrown when data reading fails
   */
   private boolean readGroup(DataInputStream input, UCharacterNameDB data) 
-                  throws Exception
+                  throws IOException
   {
     // reading the group information records
     int count = input.readChar();
     data.setGroupCountSize(count, GROUP_INFO_SIZE_);
     count *= GROUP_INFO_SIZE_;
     char group[] = new char[count];
-    for (int i = 0; i < count; i ++)
+    for (int i = 0; i < count; i ++) {
       group[i] = input.readChar();
+    }
     
     int size = m_algnamesindex_ - m_groupstringindex_;
     byte groupstring[] = new byte[size];
@@ -205,7 +214,7 @@ final class UGenNameReader extends UGenReader
   * @exception thrown when data reading fails
   */
   private boolean readAlg(DataInputStream input, UCharacterNameDB data) 
-                  throws Exception
+                  throws IOException
   {
     int count = input.readInt();
     UCharacterNameDB.AlgorithmName alg[] = 
@@ -214,8 +223,9 @@ final class UGenNameReader extends UGenReader
     for (int i = 0; i < count; i ++)
     {
       UCharacterNameDB.AlgorithmName an = readAlg(input);
-      if (an == null)
+      if (an == null) {
         return false;
+      }
       alg[i] = an;
     }
     data.setAlgorithm(alg);
@@ -229,7 +239,7 @@ final class UGenNameReader extends UGenReader
   * @exception thrown when file read error occurs or data is corrupted
   */
   private UCharacterNameDB.AlgorithmName readAlg(DataInputStream input) 
-                                         throws Exception
+                                         throws IOException
   {
     UCharacterNameDB.AlgorithmName result = 
                                           new UCharacterNameDB.AlgorithmName();
@@ -237,15 +247,17 @@ final class UGenNameReader extends UGenReader
     int rangeend = input.readInt();
     byte type = input.readByte();
     byte variant = input.readByte();
-    if (!result.setInfo(rangestart, rangeend, type, variant))
+    if (!result.setInfo(rangestart, rangeend, type, variant)) {
       return null;
+    }
                      
     int size = input.readChar();
     if (type == UCharacterNameDB.AlgorithmName.TYPE_1_)
     {
       char factor[] = new char[variant];
-      for (int j = 0; j < variant; j ++)
+      for (int j = 0; j < variant; j ++) {
         factor[j] = input.readChar();
+      }
           
       result.setFactor(factor);
       size -= (variant << 1);

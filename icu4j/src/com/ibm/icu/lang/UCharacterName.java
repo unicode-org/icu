@@ -6,8 +6,8 @@
 *
 * $Source: 
 *     /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterName.java $ 
-* $Date: 2001/02/28 20:59:44 $ 
-* $Revision: 1.1 $
+* $Date: 2001/03/07 02:52:05 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -75,8 +75,9 @@ final class UCharacterName
   protected static String getName(int ch, int choice)
   {
     if (ch < 0 || ch > 0x1ffff || 
-        choice >= UCharacterNameChoice.U_CHAR_NAME_CHOICE_COUNT)
+        choice >= UCharacterNameChoice.U_CHAR_NAME_CHOICE_COUNT) {
       return null;
+    }
       
     String result = "";
     
@@ -84,13 +85,15 @@ final class UCharacterName
     // the same as the modern ones, extension A was only introduced with 
     // Unicode 3.0, and the Hangul syllable block was moved and changed around 
     // Unicode 1.1.5.
-    if (choice == UCharacterNameChoice.U_UNICODE_CHAR_NAME) 
+    if (choice == UCharacterNameChoice.U_UNICODE_CHAR_NAME) {
       // try getting algorithmic name first
       result = getAlgName(ch);
+    }
     
     // getting normal character name
-    if (result == null || result.length() == 0)
+    if (result == null || result.length() == 0) {
       result = NAME_DB_.getGroupName(ch, choice);
+    }
       
     return result;
   }
@@ -106,13 +109,15 @@ final class UCharacterName
   {
     // checks for illegal arguments
     if (choice >= UCharacterNameChoice.U_CHAR_NAME_CHOICE_COUNT || 
-        name == null || name.length() == 0) 
+        name == null || name.length() == 0) {
         return -1;
+    }
    
     // try algorithmic names first, if fails then try group names
     int result = getAlgorithmChar(choice, name);
-    if (result >= 0)
+    if (result >= 0) {
       return result;
+    }
     return getGroupChar(name, choice);
   }
   
@@ -129,8 +134,7 @@ final class UCharacterName
     StringBuffer s = new StringBuffer();
     
     int index = NAME_DB_.getAlgorithmIndex(ch);
-    if (index >= 0)
-    {
+    if (index >= 0) {
       NAME_DB_.appendAlgorithmName(index, ch, s);
       return s.toString();
     }
@@ -145,14 +149,15 @@ final class UCharacterName
   private static int getAlgorithmChar(int choice, String name) 
   {
     // 1.0 has no algorithmic names
-    if (choice != UCharacterNameChoice.U_UNICODE_CHAR_NAME)
+    if (choice != UCharacterNameChoice.U_UNICODE_CHAR_NAME) {
       return -1;
+    }
     int result;
-    for (int count = NAME_DB_.countAlgorithm() - 1; count >= 0; count --) 
-    {
+    for (int count = NAME_DB_.countAlgorithm() - 1; count >= 0; count --) {
       result = NAME_DB_.getAlgorithmChar(count, name); 
-      if (result >= 0)
+      if (result >= 0) {
         return result;
+      }
     }
     return -1;
   }
@@ -168,11 +173,11 @@ final class UCharacterName
     int groupcount = NAME_DB_.countGroup();
     int result = 0;
     
-    for (int i = 0; i < groupcount; i ++)
-    {
+    for (int i = 0; i < groupcount; i ++) {
       result = NAME_DB_.getGroupChar(i, name, choice);
-      if (result != -1)
+      if (result != -1) {
         return result;
+      }
     }
     return -1;
   }

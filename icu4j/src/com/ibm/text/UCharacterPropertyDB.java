@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2001/02/28 20:59:44 $ 
-* $Revision: 1.1 $
+* $Date: 2001/03/07 02:52:05 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -17,6 +17,7 @@ package com.ibm.text;
 import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.BufferedInputStream;
+import java.io.IOException;
 
 /**
 * Internal class used for Unicode character property database.
@@ -189,15 +190,14 @@ final class  UCharacterPropertyDB extends UCharacterDB
   * Constructor
   * @exception thrown when data reading fails or data corrupted
   */
-  protected UCharacterPropertyDB() throws Exception
+  protected UCharacterPropertyDB() throws IOException
   {
     UGenPropReader reader = new UGenPropReader();
     
     InputStream i = getClass().getResourceAsStream(DATA_FILE_NAME_);
     BufferedInputStream b = new BufferedInputStream(i, DATA_BUFFER_SIZE_);
     DataInputStream d = new DataInputStream(b);
-    if (!reader.read(d, this))
-      throw new Exception("Data corrupted in " + DATA_FILE_NAME_);
+    reader.read(d, this);
     d.close(); 
   }
   
@@ -263,8 +263,9 @@ final class  UCharacterPropertyDB extends UCharacterDB
   */
   protected boolean setStage(char stages[])
   {
-    if (stages == null || stages.length <= 0)
+    if (stages == null || stages.length <= 0) {
       return false;
+    }
     m_stages_ = stages;
     return true;
   }
@@ -276,8 +277,9 @@ final class  UCharacterPropertyDB extends UCharacterDB
   */
   protected boolean setProperty(int property[])
   {
-    if (property == null || property.length <= 0)
+    if (property == null || property.length <= 0) {
       return false;
+    }
     m_property_ = property;
     return true;
   }
@@ -289,8 +291,9 @@ final class  UCharacterPropertyDB extends UCharacterDB
   */
   protected boolean setCase(char casetable[])
   {
-    if (casetable == null || casetable.length <= 0)
+    if (casetable == null || casetable.length == 0) {
       return false;
+    }
     m_case_ = casetable;
     return true;
   }
@@ -303,8 +306,9 @@ final class  UCharacterPropertyDB extends UCharacterDB
   */
   protected boolean setException(int exception[])
   {
-    if (exception == null || exception.length <= 0)
+    if (exception == null || exception.length <= 0) {
       return false;
+    }
     m_exception_ = exception;
     return true;
   }
@@ -340,8 +344,9 @@ final class  UCharacterPropertyDB extends UCharacterDB
     index += (count & LAST_5_BIT_MASK_) + 1;
     count = (count >> SHIFT_5_) & LAST_5_BIT_MASK_;
             
-    for (int j = 0; j < count; j ++)
+    for (int j = 0; j < count; j ++) {
       buffer.append(m_case_[index + j]);
+    }
   }
   
   /**
@@ -355,8 +360,9 @@ final class  UCharacterPropertyDB extends UCharacterDB
     // last 5 bits of the first char in m_case_ gives the size of the 
     // lowercase characters
     index ++;
-    for (int j = 0; j < count; j ++)
+    for (int j = 0; j < count; j ++) {
       buffer.append(m_case_[index + j]);
+    }
   }
   
   /**
@@ -419,8 +425,9 @@ final class  UCharacterPropertyDB extends UCharacterDB
   */
   protected static boolean isExceptionIndicator(int props)
   {
-    if ((props & EXCEPTION_MASK_) != 0)
+    if ((props & EXCEPTION_MASK_) != 0) {
       return true;
+    }
     return false;
   }
   
@@ -487,8 +494,9 @@ final class  UCharacterPropertyDB extends UCharacterDB
   private int addExceptionOffset(int evalue, int indicator, int address) 
   { 
     int result = address;
-    if (indicator >= EXC_GROUP_) 
+    if (indicator >= EXC_GROUP_) {
       result += (FLAGS_OFFSET_[evalue & EXC_GROUP_MASK_] << 1); 
+    }
       // evalue >>= EXC_GROUP_; 
       // indicator -= EXC_GROUP_; 
     else 

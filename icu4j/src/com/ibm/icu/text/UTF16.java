@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UTF16.java,v $ 
-* $Date: 2001/02/28 20:59:44 $ 
-* $Revision: 1.1 $
+* $Date: 2001/03/07 02:52:05 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -149,7 +149,7 @@ public final class UTF16
   * <code>UTF16.getCharCount()</code>, as well as random access. If a validity 
   * check is required, use <code><a href="../UCharacter.html#isLegal(char)">
   * UCharacter.isLegal()</a></code> on the return value.
-  * If tbe char retrieved is part of a surrogate pair, its supplementary 
+  * If the char retrieved is part of a surrogate pair, its supplementary 
   * character will be returned. If a complete supplementary character is not
   * found the incomplete character will be returned
   * @param source array of UTF-16 chars
@@ -161,7 +161,7 @@ public final class UTF16
   */
   public static int charAt(String source, int offset16) 
   {
-    if (offset16 >= source.length())
+    if (offset16 < 0 || offset16 >= source.length())
       return -1;
       
     char single = source.charAt(offset16);
@@ -211,9 +211,9 @@ public final class UTF16
   * @param offset32 UTF-32 offset to the start of the character.
   * @return a single UTF32 value, otherwise -1 if there's an error
   */
-  public static int charAtCPOffset(String source, int offset32) 
+  public static int charAtCodePointOffset(String source, int offset32) 
   {
-    int offset16 = findOffsetFromCP(source, offset32);
+    int offset16 = findOffsetFromCodePoint(source, offset32);
     return charAt(source, offset16);
   }
   
@@ -227,8 +227,9 @@ public final class UTF16
   */
   public static int getCharCount(int char32) 
   {
-    if (char32 < UCharacter.SUPPLEMENTARY_MIN_VALUE) 
+    if (char32 < UCharacter.SUPPLEMENTARY_MIN_VALUE) {
       return 1;
+    }
     return 2;
   }
   
@@ -260,13 +261,15 @@ public final class UTF16
       if (isLeadSurrogate(ch)) 
       {
        if (++ offset16 < source.length() && 
-           isTrailSurrogate(source.charAt(offset16))) 
+           isTrailSurrogate(source.charAt(offset16))) {
          return LEAD_SURROGATE_BOUNDARY;
+       }
       } 
       else 
         // isTrailSurrogate(ch), so
-        if (-- offset16 >= 0 && isLeadSurrogate(source.charAt(offset16))) 
+        if (-- offset16 >= 0 && isLeadSurrogate(source.charAt(offset16))) {
           return TRAIL_SURROGATE_BOUNDARY;
+        }
           
     return SINGLE_CHAR_BOUNDARY;
   }
@@ -292,9 +295,9 @@ public final class UTF16
   *         [offset32 - (value >> 2), offset32 + (value & 3)].
   * @exception StringIndexOutOfBoundsException if offset32 is out of bounds.
   */
-  public static int boundsAtCPOffset(String source, int offset32) 
+  public static int boundsAtCodePointOffset(String source, int offset32) 
   {
-    int offset16 = findOffsetFromCP(source, offset32);
+    int offset16 = findOffsetFromCodePoint(source, offset32);
     return bounds(source, offset16);
   }
 
@@ -342,9 +345,10 @@ public final class UTF16
   */
   public static int getLeadSurrogate(int char32) 
   {
-    if (char32 >= UCharacter.SUPPLEMENTARY_MIN_VALUE)
+    if (char32 >= UCharacter.SUPPLEMENTARY_MIN_VALUE) {
       return LEAD_SURROGATE_OFFSET_ + 
              (char32 >> UCharacter.LEAD_SURROGATE_SHIFT_);
+    }
         
     return 0;
   }
@@ -360,9 +364,10 @@ public final class UTF16
   */
   public static int getTrailSurrogate(int char32) 
   {
-    if (char32 >= UCharacter.SUPPLEMENTARY_MIN_VALUE)
+    if (char32 >= UCharacter.SUPPLEMENTARY_MIN_VALUE) {
       return TRAIL_SURROGATE_MIN_VALUE_ + (char32 & 
              UCharacter.TRAIL_SURROGATE_MASK_);       
+    }
       
     return (char)char32;
   }
@@ -379,10 +384,12 @@ public final class UTF16
   */
   public static String valueOf(int char32)
   {
-    if (char32 < UCharacter.MIN_VALUE || char32 > UCharacter.MAX_VALUE) 
+    if (char32 < UCharacter.MIN_VALUE || char32 > UCharacter.MAX_VALUE) {
       throw new IllegalArgumentException("Illegal codepoint");
-    if (char32 < UCharacter.SUPPLEMENTARY_MIN_VALUE) 
+    }
+    if (char32 < UCharacter.SUPPLEMENTARY_MIN_VALUE) {
       return String.valueOf((char)char32);
+    }
     char str[] = new char[2];   
     str[0] = (char)(LEAD_SURROGATE_OFFSET_ + 
                     (char32 >> UCharacter.LEAD_SURROGATE_SHIFT_));
@@ -400,7 +407,7 @@ public final class UTF16
   * @return UTF-16 offset 
   * @exception StringIndexOutOfBoundsException if offset32 is out of bounds.
   */
-  public static int findOffsetFromCP(String source, int offset32) 
+  public static int findOffsetFromCodePoint(String source, int offset32) 
   {
     char ch;
     int size = source.length(),
@@ -410,14 +417,16 @@ public final class UTF16
     {
       ch = source.charAt(result);
       if (isLeadSurrogate(ch) && ((result + 1) < size) && 
-          isTrailSurrogate(source.charAt(result + 1)))
+          isTrailSurrogate(source.charAt(result + 1))) {
         result ++;
+      }
         
       count --;
       result ++;
     }
-    if (result >= size)
+    if (result >= size) {
       throw new StringIndexOutOfBoundsException(offset32);
+    }
     return result;
   }
   
@@ -440,10 +449,11 @@ public final class UTF16
   * @return UTF-32 offset
   * @exception StringIndexOutOfBoundsException if offset16 is out of bounds.
   */
-  public static int findCPOffset(String source, int offset16) 
+  public static int findCodePointOffset(String source, int offset16) 
   {
-    if (offset16 >= source.length())
-     throw new StringIndexOutOfBoundsException(offset16);
+    if (offset16 >= source.length()) {
+      throw new StringIndexOutOfBoundsException(offset16);
+    }
      
     int result = 0;
     char ch;
@@ -452,8 +462,9 @@ public final class UTF16
     for (int i = 0; i < offset16; ++ i) 
     {
       ch = source.charAt(i);
-      if (hadLeadSurrogate && isTrailSurrogate(ch))
+      if (hadLeadSurrogate && isTrailSurrogate(ch)) {
         hadLeadSurrogate = false;           // count valid trail as zero
+      }
       else
       {
         hadLeadSurrogate = isLeadSurrogate(ch);
@@ -462,8 +473,9 @@ public final class UTF16
     }
     // end of source being a supplementary character
     // shift result back to the start of the supplementary character
-    if (hadLeadSurrogate && isTrailSurrogate(source.charAt(offset16)))
+    if (hadLeadSurrogate && isTrailSurrogate(source.charAt(offset16))) {
       result --;
+    }
       
     return result;
   }
@@ -480,8 +492,9 @@ public final class UTF16
   public static StringBuffer append(StringBuffer target, int char32)
   {
     // Check for irregular values
-    if (char32 < UCharacter.MIN_VALUE || char32 > UCharacter.MAX_VALUE) 
+    if (char32 < UCharacter.MIN_VALUE || char32 > UCharacter.MAX_VALUE) {
       throw new IllegalArgumentException("Illegal codepoint");
+    }
         
     // Write the UTF-16 values
     if (char32 >= UCharacter.SUPPLEMENTARY_MIN_VALUE) 
@@ -491,8 +504,9 @@ public final class UTF16
 	    target.append((char)(TRAIL_SURROGATE_MIN_VALUE_ + 
                     (char32 & UCharacter.TRAIL_SURROGATE_MASK_)));
 	  } 
-	  else 
+	  else {
 	    target.append((char)char32);
+	  }
 	  return target;
 	}
     
@@ -508,49 +522,59 @@ public final class UTF16
     */
     public int compare(Object a, Object b) 
     {
-	    if (a == b) 
+	    if (a == b) {
 	      return 0;
-      if (a == null)
+	    }
+      if (a == null) {
         return -1;
-      if (b == null)
+      }
+      if (b == null) {
         return 1;
+      }
           
       String sa = (String) a;
       String sb = (String) b;
       int lena = sa.length();
       int lenb = sb.length();
       int len = lena;
-      if (len > lenb) 
+      if (len > lenb) {
         len = lenb;
+      }
         
       for (int i = 0; i < len; ++i) 
       {
         char ca = sa.charAt(i);
         char cb = sb.charAt(i);
-        if (ca == cb) 
+        if (ca == cb) {
           continue; // skip remap if equal
+        }
                 
         // start of only different section
         // what this part does is to rearrange the characters 0xE000 to 0xFFFF
         // to the region starting from 0xD800
         // and shift the surrogate characters to above this region
-        if (ca >= LEAD_SURROGATE_MIN_VALUE_) 
+        if (ca >= LEAD_SURROGATE_MIN_VALUE_) {
           ca += (ca <= TRAIL_SURROGATE_MAX_VALUE_) ? 0x2000 : -0x800;
-        if (cb >= LEAD_SURROGATE_MIN_VALUE_)
+        }
+        if (cb >= LEAD_SURROGATE_MIN_VALUE_) {
           cb += (cb <= TRAIL_SURROGATE_MAX_VALUE_) ? 0x2000 : -0x800;
+        }
         // end of only different section
                 
-        if (ca < cb) 
+        if (ca < cb) {
           return -1;
+        }
           
         return 1; // wasn't equal, so return 1
       }
       
-      if (lena < lenb) 
+      if (lena < lenb) {
         return -1;
+      }
         
-      if (lena > lenb) 
+      if (lena > lenb) {
         return 1;
+      }
             
       return 0;
     }
@@ -561,9 +585,9 @@ public final class UTF16
   * @param s UTF16 string
   * @return number of codepoint in string
   */
-  public static int countCP(String s)
+  public static int countCodePoint(String s)
   {
-    return findCPOffset(s, s.length() - 1) + 1;
+    return findCodePointOffset(s, s.length() - 1) + 1;
   }
   
   /**
@@ -572,10 +596,10 @@ public final class UTF16
   * @param offset32 UTF32 position to insert into
   * @param char32 code point
   */
-  public static void setCharAtCPOffset(StringBuffer str, int offset32, 
+  public static void setCharAtCodePointOffset(StringBuffer str, int offset32, 
                                        int char32)
   {
-    int offset16 = findOffsetFromCP(str.toString(), offset32);
+    int offset16 = findOffsetFromCodePoint(str.toString(), offset32);
     setCharAt(str, offset16, char32);
   }
   
@@ -587,9 +611,6 @@ public final class UTF16
   */
   public static void setCharAt(StringBuffer source, int offset16, int char32)
   {
-    if (offset16 >= source.length())
-      throw new StringIndexOutOfBoundsException(offset16);
-      
     int count = 1;
       
     char single = source.charAt(offset16);
@@ -598,9 +619,10 @@ public final class UTF16
     {
       // pairs of the surrogate with offset16 at the lead char found
       if (isLeadSurrogate(single) && (source.length() > offset16 + 1) &&
-          isTrailSurrogate(source.charAt(offset16 + 1)))
+          isTrailSurrogate(source.charAt(offset16 + 1))) {
 	      count ++;
-	    else 
+	    }
+	    else {
 	      // pairs of the surrogate with offset16 at the trail char found
 	      if (isTrailSurrogate(single) && (offset16 > 0) &&
 	          isLeadSurrogate(source.charAt(offset16 -1)))
@@ -608,6 +630,7 @@ public final class UTF16
 	        offset16 --;
 	        count ++;
 	      }
+	    }
 	  }
 	  source.replace(offset16, offset16 + count, valueOf(char32));
 	}

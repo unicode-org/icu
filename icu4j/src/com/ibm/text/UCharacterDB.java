@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UCharacterDB.java,v $ 
-* $Date: 2001/02/28 20:59:44 $ 
-* $Revision: 1.1 $
+* $Date: 2001/03/07 02:52:05 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -55,14 +55,6 @@ class UCharacterDB
   public String toString()
   {
     StringBuffer result = new StringBuffer();
-    /*for (int i = 0; i < size; i ++)
-    {
-      result.append(" ");
-      result.append(0x0000FFFF & m_db_[i]);
-    }
-    
-    result.append('\n');
-    */
     result.append("\nunicode version number ");
     result.append(m_unicodeversion_);
     
@@ -79,21 +71,24 @@ class UCharacterDB
   protected boolean setUnicodeVersion(byte[] version)
   {
     int size = 0;
-    if (version != null)
+    if (version != null) {
       size = version.length;
+    }
     boolean result = false;
     StringBuffer s = new StringBuffer(size);
-    for (int i = 0; i < size; i++)
-    {
+    for (int i = 0; i < size; i++) {
       s.append((int)version[i]);
       s.append('.');
-      if (version[i] < 0 || version[i] > 9)
+      if (version[i] < 0 || version[i] > 9) {
         return false;
-      if (version[i] != 0)
+      }
+      if (version[i] != 0) {
         result = true;
+      }
     }
-    if (result)
+    if (result) {
       m_unicodeversion_ = s.substring(0, (size << 1) - 1);
+    }
     return true;
   }
 }

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UCharacterUtil.java,v $ 
-* $Date: 2001/02/28 20:59:44 $ 
-* $Revision: 1.1 $
+* $Date: 2001/03/07 02:52:05 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -51,10 +51,12 @@ final class UCharacterUtil
   */
   protected static char toChar(byte bytes[])
   {
-    if (bytes == null || bytes.length == 0)
+    if (bytes == null || bytes.length == 0) {
       return 0;
-    if (bytes.length == 1)
+    }
+    if (bytes.length == 1) {
       return toChar(bytes[0]);
+    }
       
     char firstbyte = (char)(toChar(bytes[0]) << 8);
     char secondbyte = toChar(bytes[1]);
@@ -141,8 +143,9 @@ final class UCharacterUtil
     while (b != 0)
     {
       b = array[index];
-      if (b != 0)
+      if (b != 0) {
         str.append((char)(b & 0x00FF));
+      }
       index ++;
     }
     return index;
@@ -170,12 +173,14 @@ final class UCharacterUtil
     {
       b = array[aindex];  
       aindex ++;
-      if (b == 0)
+      if (b == 0) {
         break;
+      }
       // if we have reached the end of the string and yet the array has not 
       // reached the end of their substring yet, abort
-      if (strindex == length || (str.charAt(strindex) != (char)(b & 0xFF)))
+      if (strindex == length || (str.charAt(strindex) != (char)(b & 0xFF))) {
         return -1;
+      }
       strindex ++;
     }
     return strindex;
@@ -255,8 +260,9 @@ final class UCharacterUtil
     {
       b = array[index + result];
       result ++;
-      if (b == skipend)
+      if (b == skipend) {
         break;
+      }
     }
     
     return result;
