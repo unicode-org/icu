@@ -365,13 +365,13 @@ void TestConvert()
        encode the Latin characters (U+0041, ...), and therefore are
        highly unlikely to be chosen as system default codepages */
 
-    someConverters[0] = ucnv_open("ibm-1038", &err);
-    if (U_FAILURE(err)) { log_err("FAILURE!  %s\n", myErrorName(err)); }
+    someConverters[0] = ucnv_open("ibm-1047", &err);
+    if (U_FAILURE(err)) { log_err("FAILURE! %s\n", myErrorName(err)); }
 
-    someConverters[1] = ucnv_open("ibm-1038", &err);
-    if (U_FAILURE(err)) { log_err("FAILURE!  %s\n", myErrorName(err)); }
+    someConverters[1] = ucnv_open("ibm-1047", &err);
+    if (U_FAILURE(err)) { log_err("FAILURE! %s\n", myErrorName(err)); }
 
-    someConverters[2] = ucnv_open("ibm-1038", &err);
+    someConverters[2] = ucnv_open("ibm-1047", &err);
     if (U_FAILURE(err)) { log_err("FAILURE! %s\n", myErrorName(err)); }
 
     someConverters[3] = ucnv_open("ibm-834", &err);
