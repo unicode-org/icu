@@ -228,7 +228,7 @@ pkg_mak_writeStanza(FileStream *f, const UPKGOptions *o,
                     CharList* parents,
                     CharList* commands)
 {
-    T_FileStream_write(f, target, strlen(target));
+    T_FileStream_write(f, target, uprv_strlen(target));
     T_FileStream_write(f, " : ", 3);
     pkg_writeCharList(f, parents, " ",0);
     T_FileStream_write(f, "\n", 1);
@@ -320,13 +320,13 @@ pkg_mak_writeObjRules(UPKGOptions *o,  FileStream *makefile, CharList **objects,
       *objects = pkg_appendToList(*objects, &oTail, uprv_strdup(tmp + genFileOffset)); /* Offset for AS/400 */
       
       /* write source list */
-      strcpy(cfile,tmp);
-      strcpy(cfile+strlen(cfile)-strlen(objSuffix), ".c" ); /* replace .o with .c */
+      uprv_strcpy(cfile,tmp);
+      uprv_strcpy(cfile+uprv_strlen(cfile)-uprv_strlen(objSuffix), ".c" ); /* replace .o with .c */
       
       /* Make up parents.. */
       if(!o->embed) {
         char *parentPath;
-        parentPath = uprv_malloc(strlen(baseName) + uprv_strlen("$(SRCDIR)/"));
+        parentPath = uprv_malloc(1+uprv_strlen(baseName) + uprv_strlen("$(SRCDIR)/"));
         sprintf(parentPath, "$(SRCDIR)/%s", baseName);
         parents = pkg_appendToList(parents, NULL, parentPath);
       } else {
