@@ -39,11 +39,11 @@ class UnicodeString;
  * <p>To iterate over code point ranges, use a loop like this:
  * <pre>
  * UnicodeSetIterator it(set);
- * while (set.nextRange()) {
- *   if (set.isString()) {
- *     processString(set.getString());
+ * while (it.nextRange()) {
+ *   if (it.isString()) {
+ *     processString(it.getString());
  *   } else {
- *     processCodepointRange(set.getCodepoint(), set.getCodepointEnd());
+ *     processCodepointRange(it.getCodepoint(), it.getCodepointEnd());
  *   }
  * }
  * </pre>
