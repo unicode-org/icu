@@ -598,7 +598,7 @@ UBool UnicodeSet::matchesIndexValue(uint8_t v) const {
 UMatchDegree UnicodeSet::matches(const Replaceable& text,
                                  int32_t& offset,
                                  int32_t limit,
-                                 UBool incremental) const {
+                                 UBool incremental) {
     if (offset == limit) {
         if (contains(TransliterationRule::ETHER)) {
             return incremental ? U_PARTIAL_MATCH : U_MATCH;
