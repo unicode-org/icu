@@ -129,9 +129,7 @@ void TestMessageFormat::testBug3()
         success = U_ZERO_ERROR;
         ParsePosition parsePos;
         form->parse(buffer, result, parsePos);
-#ifdef _DEBUG
-        it_out << " -> " /*<< dec*/ /*<< result*/ << "[supposed output for result]" <<endl;
-#endif
+        logln(UnicodeString(" -> ") /* + << dec*/ + toString(result) + UnicodeString("[supposed output for result]"));
         if (U_FAILURE(success)) {
             errln("Err: Number Format parse");
             logln("Number format parse failed.");
