@@ -8,6 +8,9 @@
 **********************************************************************
 */
 
+#ifndef CHARSTRING_H
+#define CHARSTRING_H
+
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
@@ -78,4 +81,5 @@ inline CharString::~CharString() {
 
 U_NAMESPACE_END
 
+#endif
 //eof

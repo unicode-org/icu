@@ -534,7 +534,7 @@ public:
      * U+000A, U+0020..U+007E.
      * @stable ICU 2.0
      */
-    UnicodeString& toPattern(UnicodeString& result,
+    virtual UnicodeString& toPattern(UnicodeString& result,
                              UBool escapeUnprintable = FALSE) const;
 
     /**

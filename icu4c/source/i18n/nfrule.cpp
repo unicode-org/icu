@@ -25,7 +25,7 @@
 #include "nfrlist.h"
 #include "nfsubs.h"
 
-#include "uprops.h"
+#include "util.h"
 
 U_NAMESPACE_BEGIN
 

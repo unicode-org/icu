@@ -48,4 +48,13 @@ typedef struct USetAdder USetAdder;
 
 U_CDECL_END
 
+/**
+ * Get the set of "white space" characters in the sense of ICU rule
+ * parsers.  Caller must close/delete result.
+ * @internal
+ */
+U_CAPI USet* U_EXPORT2
+uprv_openRuleWhiteSpaceSet(UErrorCode* ec);
+
 #endif
+

@@ -50,7 +50,7 @@
 #include "unicode/uchar.h"
 #include "unicode/curramt.h"
 #include "ucurrimp.h"
-#include "uprops.h"
+#include "util.h"
 #include "digitlst.h"
 #include "cmemory.h"
 #include "cstring.h"

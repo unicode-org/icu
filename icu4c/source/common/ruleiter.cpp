@@ -12,7 +12,7 @@
 #include "unicode/parsepos.h"
 #include "unicode/unistr.h"
 #include "unicode/symtable.h"
-#include "uprops.h"
+#include "util.h"
 
 U_NAMESPACE_BEGIN
 

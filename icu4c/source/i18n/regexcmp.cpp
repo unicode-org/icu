@@ -21,7 +21,7 @@
 #include "unicode/parsepos.h"
 #include "unicode/parseerr.h"
 #include "unicode/regex.h"
-#include "uprops.h"
+#include "util.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "uvectr32.h"
