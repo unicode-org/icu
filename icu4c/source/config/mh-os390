@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os390,v 1.41 2002/06/27 20:42:48 grhoten-oss Exp $
+## $Id: mh-os390,v 1.42 2002/07/12 02:24:04 grhoten-oss Exp $
 
 ###################################################################
 #                    IMPORTANT NOTE                               #
@@ -55,7 +55,7 @@ GEN_DEPS.cc=	makedep
 ## Commands to compile
 # _CXX_STEPS="-1" is a prelink step when compiling C and C++, and
 # it's only needed for long function names
-COMPILE.c       = _CXX_CXXSUFFIX="cpp" $(CXX) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
+COMPILE.c       = $(CXX) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
 COMPILE.cc      = _CXX_CXXSUFFIX="cpp" $(CXX) $(DEFS) $(CPPFLAGS) $(CFLAGS) -c
 
 LDFLAGS += -Wl,dll
