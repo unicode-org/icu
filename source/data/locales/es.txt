@@ -104,7 +104,7 @@ es {
         1,
     }
     DateTimePatterns { 
-        "HH'H'mm'' z",
+        "HH'H'mm'ss' z",
         "HH:mm:ss z",
         "HH:mm:ss",
         "HH:mm",
