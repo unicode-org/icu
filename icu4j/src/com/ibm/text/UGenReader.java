@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UGenReader.java,v $ 
-* $Date: 2001/02/28 20:59:44 $ 
-* $Revision: 1.1 $
+* $Date: 2001/03/07 02:52:05 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -72,45 +72,49 @@ abstract class UGenReader
   * @param input data stream
   * @param data data instance
   * @return true if successfully filled
-  * @exception thrown when error reading data
   */
-  protected boolean read(DataInputStream input, UCharacterDB data) 
-                    throws Exception
+  protected boolean read(DataInputStream input, UCharacterDB data)
   {
-    char headersize = input.readChar();
-    headersize -= 2;
-    //reading the header format
-    byte magic1 = input.readByte();
-    headersize --;
-    byte magic2 = input.readByte();
-    headersize --;
-    input.skipBytes(SKIP_BYTES_);
-    headersize -= SKIP_BYTES_;
-    if (authenticate(magic1, magic2))
+    try
     {
-      byte bigendian = input.readByte();
+      char headersize = input.readChar();
+      headersize -= 2;
+      //reading the header format
+      byte magic1 = input.readByte();
       headersize --;
-      byte charset = input.readByte();
+      byte magic2 = input.readByte();
       headersize --;
-      byte charsize = input.readByte();
-      headersize --;
-      byte reserved = input.readByte();
-      headersize --;
-      
-      byte dataformatid[] = new byte[getFileFormatIDSize()];
-      input.readFully(dataformatid);
-      headersize -= getFileFormatIDSize();
-      byte dataformatversion[] = new byte[getFileFormatVersionSize()];
-      input.readFully(dataformatversion);
-      headersize -= getFileFormatVersionSize();
-      byte unicodeversion[] = new byte[UNICODE_VERSION_.length];
-      input.readFully(unicodeversion);
-      headersize -= UNICODE_VERSION_.length;
-      input.skipBytes(headersize);
-      
-      if (authenticate(bigendian, charset, charsize, unicodeversion) && 
-          authenticate(dataformatid, dataformatversion))
-        return setUCharacterDB(data, unicodeversion);
+      input.skipBytes(SKIP_BYTES_);
+      headersize -= SKIP_BYTES_;
+      if (authenticate(magic1, magic2))
+      {
+        byte bigendian = input.readByte();
+        headersize --;
+        byte charset = input.readByte();
+        headersize --;
+        byte charsize = input.readByte();
+        headersize --;
+        byte reserved = input.readByte();
+        headersize --;
+        
+        byte dataformatid[] = new byte[getFileFormatIDSize()];
+        input.readFully(dataformatid);
+        headersize -= getFileFormatIDSize();
+        byte dataformatversion[] = new byte[getFileFormatVersionSize()];
+        input.readFully(dataformatversion);
+        headersize -= getFileFormatVersionSize();
+        byte unicodeversion[] = new byte[UNICODE_VERSION_.length];
+        input.readFully(unicodeversion);
+        headersize -= UNICODE_VERSION_.length;
+        input.skipBytes(headersize);
+        
+        if (authenticate(bigendian, charset, charsize, unicodeversion) && 
+            authenticate(dataformatid, dataformatversion)) {
+          return setUCharacterDB(data, unicodeversion);
+        }
+      }
+    } 
+    catch (Exception e) {
     }
     return false;
   }
@@ -146,8 +150,9 @@ abstract class UGenReader
   */
   private boolean authenticate(byte m1, byte m2)
   {
-    if (m1 == MAGIC1 && m2 == MAGIC2)
+    if (m1 == MAGIC1 && m2 == MAGIC2) {
       return true;
+    }
     return false;
   }
   
@@ -167,8 +172,9 @@ abstract class UGenReader
                                byte unicodeversion[])
   {
     if (bigendian != BIG_ENDIAN_ || charset != CHAR_SET_ || 
-        charsize != CHAR_SIZE_)
+        charsize != CHAR_SIZE_) {
       return false;
+    }
     return Arrays.equals(UNICODE_VERSION_, unicodeversion);
   }
   

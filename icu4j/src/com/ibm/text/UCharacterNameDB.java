@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UCharacterNameDB.java,v $ 
-* $Date: 2001/02/28 20:59:44 $ 
-* $Revision: 1.1 $
+* $Date: 2001/03/07 02:52:05 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -16,6 +16,7 @@ package com.ibm.text;
 import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.BufferedInputStream;
+import java.io.IOException;
 
 /**
 * Internal class used for Unicode character name database.
@@ -106,14 +107,13 @@ final class UCharacterNameDB extends UCharacterDB
   * protected constructor
   * @exception thrown when data reading fails or when data has been corrupted
   */
-  protected UCharacterNameDB() throws Exception
+  protected UCharacterNameDB() throws IOException
   {
     UGenNameReader reader = new UGenNameReader();
     InputStream i = getClass().getResourceAsStream(NAME_FILE_NAME_);
     BufferedInputStream b = new BufferedInputStream(i, NAME_BUFFER_SIZE_);
     DataInputStream d = new DataInputStream(b);
-    if (!reader.read(d, this))
-      throw new Exception("Data corrupted in " + NAME_FILE_NAME_);
+    reader.read(d, this);
     d.close();
     UNICODE_1_  = (';' >= m_tokentable_.length) || 
                   (m_tokentable_[(int)';'] == 0xFFFF);
@@ -156,8 +156,7 @@ final class UCharacterNameDB extends UCharacterDB
   protected boolean setToken(char token[], byte tokenstring[])
   {
     if (token != null && tokenstring != null && token.length > 0 &&
-        tokenstring.length > 0)
-    {
+        tokenstring.length > 0) {
       m_tokentable_ = token;
       m_tokenstring_ = tokenstring;
       return true;
@@ -173,8 +172,9 @@ final class UCharacterNameDB extends UCharacterDB
   */
   protected boolean setGroupCountSize(int count, int size)
   {
-    if (count <= 0 || size <= 0)
+    if (count <= 0 || size <= 0) {
       return false;
+    }
     m_groupcount_ = count;
     m_groupsize_ = size;
     return true;
@@ -189,8 +189,7 @@ final class UCharacterNameDB extends UCharacterDB
   protected boolean setGroup(char group[], byte groupstring[])
   {
     if (group != null && groupstring != null && group.length > 0 &&
-        groupstring.length > 0)
-    {
+        groupstring.length > 0) {
       m_groupinfo_ = group;
       m_groupstring_ = groupstring;
       return true;
@@ -216,18 +215,18 @@ final class UCharacterNameDB extends UCharacterDB
         gindex = 0;
         
     // binary search for the group of names that contains the one for code
-    for (start = 0; start < end - 1;) 
-    {
+    for (start = 0; start < end - 1;) {
       gindex = (start + end) >> 1;
-      if (msb < getGroupMSB(gindex)) 
+      if (msb < getGroupMSB(gindex)) {
         end = gindex;
-      else 
+      }
+      else {
         start = gindex;
+      }
     }
 
     // return this if it is an exact match
-    if (msb == getGroupMSB(start))
-    {
+    if (msb == getGroupMSB(start)) {
       start = start * m_groupsize_;
       return UCharacterUtil.toInt(m_groupinfo_[start + OFFSET_HIGH_OFFSET_], 
                                   m_groupinfo_[start + OFFSET_LOW_OFFSET_]);
@@ -251,11 +250,12 @@ final class UCharacterNameDB extends UCharacterDB
   */
   protected String getGroupName(int ch, int choice) 
   {
-    if (choice != UCharacterNameChoice.U_UNICODE_CHAR_NAME && !UNICODE_1_)
+    if (choice != UCharacterNameChoice.U_UNICODE_CHAR_NAME && !UNICODE_1_) {
       // if not modern name requested and semicolon byte value is a character, 
       // not a token number, otherwise since only modern names are stored in 
       // unames.dat and there is no such requested Unicode 1.0 name here
       return null;
+    }
         
     // gets the msb
     int msb = ch >> GROUP_SHIFT_,
@@ -264,18 +264,18 @@ final class UCharacterNameDB extends UCharacterDB
         gindex = 0;
     
     // binary search for the group of names that contains the one for code
-    for (start = 0; start < end - 1;) 
-    {
+    for (start = 0; start < end - 1;) {
       gindex = (start + end) >> 1;
-      if (msb < getGroupMSB(gindex)) 
+      if (msb < getGroupMSB(gindex)) {
         end = gindex;
-      else 
+      }
+      else {
         start = gindex;
+      }
     }
 
     // return this if it is an exact match
-    if (msb == getGroupMSB(start))
-    {
+    if (msb == getGroupMSB(start)) {
       char offsets[] = new char[LINES_PER_GROUP_ + 1];
       char lengths[] = new char[LINES_PER_GROUP_ + 1];
                 
@@ -298,11 +298,12 @@ final class UCharacterNameDB extends UCharacterDB
   protected int getGroupChar(int index, String name, int choice) 
   {
     if (choice != UCharacterNameChoice.U_UNICODE_CHAR_NAME && 
-        !UNICODE_1_) 
+        !UNICODE_1_) {
       // semicolon byte value is a token number , therefore only modern 
       // names are stored in unames.dat and there is no such requested 
       // Unicode 1.0 name here
       return -1;
+    }
             
     // populating the data set of grouptable
     char offsets[] = new char[LINES_PER_GROUP_ + 1];
@@ -311,8 +312,9 @@ final class UCharacterNameDB extends UCharacterDB
       
     // shift out to function
     int result = getGroupChar(startgpstrindex, lengths, name, choice);
-    if (result != -1)
+    if (result != -1) {
       return (getGroupMSB(index) << GROUP_SHIFT_) | result;
+    }
     return -1;
   }
    
@@ -323,8 +325,7 @@ final class UCharacterNameDB extends UCharacterDB
   */
   protected boolean setAlgorithm(AlgorithmName alg[])
   {
-    if (alg != null && alg.length != 0)
-    {
+    if (alg != null && alg.length != 0) {
       m_algorithm_ = alg;
       return true;
     }
@@ -337,8 +338,9 @@ final class UCharacterNameDB extends UCharacterDB
   */
   protected int countAlgorithm()
   {
-    if (m_algorithm_ == null)
+    if (m_algorithm_ == null) {
       return 0;
+    }
     return m_algorithm_.length;
   }
   
@@ -350,9 +352,11 @@ final class UCharacterNameDB extends UCharacterDB
   */
   protected int getAlgorithmIndex(int ch)
   {
-    for (int index = m_algorithm_.length - 1; index >= 0; index --)
-      if (m_algorithm_[index].contains(ch))
+    for (int index = m_algorithm_.length - 1; index >= 0; index --) {
+      if (m_algorithm_[index].contains(ch)) {
         return index;
+      }
+    }
     return -1;
   }
   
@@ -421,26 +425,27 @@ final class UCharacterNameDB extends UCharacterDB
     offsets[0] = 0;
     
     // all 32 lengths must be read to get the offset of the first group string
-    for (int i = 0; i < LINES_PER_GROUP_; stringoffset ++) 
-    {
+    for (int i = 0; i < LINES_PER_GROUP_; stringoffset ++) {
       b = m_groupstring_[stringoffset];
       shift = 4;
       
-      while (shift >= 0)
-      {
+      while (shift >= 0) {
         // getting nibble
         n = (byte)((b >> shift) & 0x0F);   
-        if (length == 0xffff && n > SINGLE_NIBBLE_MAX_)
+        if (length == 0xffff && n > SINGLE_NIBBLE_MAX_) {
           length = (char)((n - 12) << 4);
-        else
-        {
-          if (length != 0xffff)
+        }
+        else {
+          if (length != 0xffff) {
             lengths[i] = (char)((length | n) + 12);
-          else
+          }
+          else {
             lengths[i] = (char)n;
+          }
             
-          if (i < LINES_PER_GROUP_)
+          if (i < LINES_PER_GROUP_) {
             offsets[i + 1] = (char)(offsets[i] + lengths[i]);
+          }
             
           length = 0xffff;
           i ++;
@@ -461,8 +466,7 @@ final class UCharacterNameDB extends UCharacterDB
   */
   private String getGroupName(int index, int length, int choice) 
   {
-    if (choice != UCharacterNameChoice.U_UNICODE_CHAR_NAME)
-    {
+    if (choice != UCharacterNameChoice.U_UNICODE_CHAR_NAME) {
       int oldindex = index;
       index += UCharacterUtil.skipByteSubString(m_groupstring_, index, length, 
                                                 (byte)';');
@@ -472,39 +476,38 @@ final class UCharacterNameDB extends UCharacterDB
     StringBuffer s = new StringBuffer();
     byte b;
     char token;
-    for (int i = 0; i < length;)
-    {
+    for (int i = 0; i < length;) {
       b = m_groupstring_[index + i];
       i ++;
       
-      if (b >= m_tokentable_.length) 
-      {
-        if (b == ';') 
+      if (b >= m_tokentable_.length) {
+        if (b == ';') {
           break;
+        }
         s.append(b); // implicit letter
       }
-      else 
-      {
+      else {
         token = m_tokentable_[b & 0x00ff];
-        if (token == 0xFFFE) 
-        {
+        if (token == 0xFFFE) {
           // this is a lead byte for a double-byte token
           token = m_tokentable_[b << 8 | (m_groupstring_[index + i] & 0x00ff)];
           i ++;
         }
-        if (token == 0xFFFF) 
-        {
-          if (b == ';')
+        if (token == 0xFFFF) {
+          if (b == ';') {
             break;
+          }
           s.append((char)(b & 0x00ff)); // explicit letter
         }
-        else // write token word
+        else { // write token word
           UCharacterUtil.getNullTermByteSubString(s, m_tokenstring_, token);
+        }
       }
     }
 
-    if (s.length() == 0)
+    if (s.length() == 0) {
       return null;
+    }
     return s.toString();
   }
   
@@ -527,13 +530,11 @@ final class UCharacterNameDB extends UCharacterDB
     int nindex;
     int count;
     
-    for (int result = 0; result <= LINES_PER_GROUP_; result ++)
-    {
+    for (int result = 0; result <= LINES_PER_GROUP_; result ++) {
       nindex = 0;
       len = length[result];
       
-      if (choice != UCharacterNameChoice.U_UNICODE_CHAR_NAME)
-      {
+      if (choice != UCharacterNameChoice.U_UNICODE_CHAR_NAME) {
         int oldindex = index;
         index += UCharacterUtil.skipByteSubString(m_groupstring_, index, len, 
                                                   (byte)';');
@@ -542,41 +543,40 @@ final class UCharacterNameDB extends UCharacterDB
         
       // number of tokens is > the length of the name
       // write each letter directly, and write a token word per token
-      for (count = 0; count < len && nindex != -1 && nindex < namelen;)
-      {
+      for (count = 0; count < len && nindex != -1 && nindex < namelen;) {
         b = m_groupstring_[index + count];
         count ++;
            
-        if (b >= m_tokentable_.length) 
-        {
-          if (name.charAt(nindex ++) != (b & 0xFF)) 
+        if (b >= m_tokentable_.length) {
+          if (name.charAt(nindex ++) != (b & 0xFF)) {
             nindex = -1;
+          }
         }
-        else 
-        {
+        else {
           token = m_tokentable_[b & 0xFF];
-          if (token == 0xFFFE) 
-          {
+          if (token == 0xFFFE) {
             // this is a lead byte for a double-byte token
             token = m_tokentable_[b << 8 | 
                                   (m_groupstring_[index + count] & 0x00ff)];
             count ++;
           }
-          if (token == 0xFFFF) 
-          {
-            if (name.charAt(nindex ++) != (b & 0xFF))
+          if (token == 0xFFFF) {
+            if (name.charAt(nindex ++) != (b & 0xFF)) {
               nindex = -1;
+            }
           }
-          else 
+          else {
             // compare token with name
             nindex = UCharacterUtil.compareNullTermByteSubString(name, 
                      m_tokenstring_, nindex, token);
+          }
         }
       }
 
       if (namelen == nindex && 
-          (count == len || m_groupstring_[index + count] == ';'))
+          (count == len || m_groupstring_[index + count] == ';')) {
         return result;
+          }
         
       index += len;
     }
@@ -637,8 +637,7 @@ final class UCharacterNameDB extends UCharacterDB
     {
       if (rangestart >= UCharacter.MIN_VALUE && rangestart <= rangeend &&
           rangeend <= UCharacter.MAX_VALUE && 
-          (type == TYPE_0_ || type == TYPE_1_))
-      {
+          (type == TYPE_0_ || type == TYPE_1_)) {
         m_rangestart_ = rangestart;
         m_rangeend_ = rangeend;
         m_type_ = type;
@@ -655,8 +654,7 @@ final class UCharacterNameDB extends UCharacterDB
     */
     protected boolean setFactor(char factor[])
     {
-      if (factor.length == m_variant_)
-      {
+      if (factor.length == m_variant_) {
         m_factor_ = factor;
         return true;
       }
@@ -670,8 +668,7 @@ final class UCharacterNameDB extends UCharacterDB
     */
     protected boolean setPrefix(String prefix)
     {
-      if (prefix != null && prefix.length() > 0)
-      {
+      if (prefix != null && prefix.length() > 0) {
         m_prefix_ = prefix;
         return true;
       }
@@ -755,8 +752,9 @@ final class UCharacterNameDB extends UCharacterDB
     {
       int prefixlen = m_prefix_.length();
       if (name.length() < prefixlen || 
-          !m_prefix_.equals(name.substring(0, prefixlen)))
+          !m_prefix_.equals(name.substring(0, prefixlen))) {
         return -1;
+      }
         
       switch (m_type_) 
       {
@@ -765,8 +763,9 @@ final class UCharacterNameDB extends UCharacterDB
           {
             int result = Integer.parseInt(name.substring(prefixlen), 16);
             // does it fit into the range?
-            if (m_rangestart_ <= result && result <= m_rangeend_)
+            if (m_rangestart_ <= result && result <= m_rangeend_) {
               return result;
+            }
           }
           catch (NumberFormatException e)
           {
@@ -795,8 +794,9 @@ final class UCharacterNameDB extends UCharacterDB
             indexes[0] = offset;
 
             // joining up the factorized strings 
-            if (compareFactorString(indexes, name.substring(prefixlen)))
+            if (compareFactorString(indexes, name.substring(prefixlen))) {
               return ch;
+            }
           }
       }
 
@@ -813,24 +813,25 @@ final class UCharacterNameDB extends UCharacterDB
     private String[] getFactorString(int index[])
     {
       int size = m_factor_.length;
-      if (index == null || index.length != size)
+      if (index == null || index.length != size) {
         return null;
+      }
         
       String result[] = new String[size];
       StringBuffer str = new StringBuffer();
       int count = 0;
       int factor;
       size --;
-      for (int i = 0; i <= size; i ++)
-      {
+      for (int i = 0; i <= size; i ++) {
         factor = m_factor_[i];
         count = UCharacterUtil.skipNullTermByteSubString(m_factorstring_, 
                                                          count, index[i]);
         count = UCharacterUtil.getNullTermByteSubString(str, m_factorstring_, 
                                                         count);
-        if (i != size)
+        if (i != size) {
           count = UCharacterUtil.skipNullTermByteSubString(m_factorstring_, 
                                                  count, factor - index[i] - 1);
+        }
         result[i] = str.toString();
         str.delete(0, str.length());
       }
@@ -861,15 +862,18 @@ final class UCharacterNameDB extends UCharacterDB
                                                          count, index[i]);
         strcount = UCharacterUtil.compareNullTermByteSubString(str, 
                                              m_factorstring_, strcount, count);
-        if (strcount < 0)
+        if (strcount < 0) {
           return false;
+        }
           
-        if (i != size)
+        if (i != size) {
           count = UCharacterUtil.skipNullTermByteSubString(m_factorstring_, 
                                                  count, factor - index[i]);
+        }
       }
-      if (strcount != str.length())
+      if (strcount != str.length()) {
         return false;
+      }
       return true;
     }
   }
