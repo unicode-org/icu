@@ -1,0 +1,216 @@
+#--------------------------------------------------------------------
+# Copyright (c) 1999-2001, International Business Machines
+# Corporation and others.  All Rights Reserved.
+#--------------------------------------------------------------------
+# Date: Tue Jan 23 12:42:06 2001
+#--------------------------------------------------------------------
+
+# Latin-Hebrew
+
+
+# Variable names, derived from the Unicode names.
+### $POINT_SHEVA=ְ;
+### $POINT_HATAF_SEGOL=ֱ;
+### $POINT_HATAF_PATAH=ֲ;
+### $POINT_HATAF_QAMATS=ֳ;
+### $POINT_HIRIQ=ִ;
+### $POINT_TSERE=ֵ;
+### $POINT_SEGOL=ֶ;
+### $POINT_PATAH=ַ;
+### $POINT_QAMATS=ָ;
+### $POINT_HOLAM=ֹ;
+### $POINT_QUBUTS=ֻ;
+### $POINT_DAGESH_OR_MAPIQ=ּ;
+### $POINT_METEG=ֽ;
+### $PUNCTUATION_MAQAF=־;
+### $POINT_RAFE=ֿ;
+### $PUNCTUATION_PASEQ=׀;
+### $POINT_SHIN_DOT=ׁ;
+### $POINT_SIN_DOT=ׂ;
+### $PUNCTUATION_SOF_PASUQ=׃;
+### $ALEF=א;
+### $BET=ב;
+### $GIMEL=ג;
+### $DALET=ד;
+### $HE=ה;
+### $VAV=ו;
+### $ZAYIN=ז;
+### $HET=ח;
+### $TET=ט;
+### $YOD=י;
+### $FINAL_KAF=ך;
+### $KAF=כ;
+### $LAMED=ל;
+### $FINAL_MEM=ם;
+### $MEM=מ;
+### $FINAL_NUN=ן;
+### $NUN=נ;
+### $SAMEKH=ס;
+### $AYIN=ע;
+### $FINAL_PE=ף;
+### $PE=פ;
+### $FINAL_TSADI=ץ;
+### $TSADI=צ;
+### $QOF=ק;
+### $RESH=ר;
+### $SHIN=ש;
+### $TAV=ת;
+### $YIDDISH_DOUBLE_VAV=װ;
+### $YIDDISH_VAV_YOD=ױ;
+### $YIDDISH_DOUBLE_YOD=ײ;
+### $PUNCTUATION_GERESH=׳;
+### $PUNCTUATION_GERSHAYIM=״;
+
+$letter=[a-zA-Z];
+$softvowel=[eiyEIY];
+$vowellike=[אעיו];
+$hebrew=[֐-׿]; # the whole block -liu
+
+# [Why is this a special case? -liu]
+k''h <> כ ה ;
+
+# Mark non-final forms in final position as x~ -liu
+k    <  כ   } $hebrew ;
+m    <  מ   } $hebrew ;
+n    <  נ   } $hebrew ;
+p    <  פ    } $hebrew ;
+ts   <  צ } $hebrew ;
+k'~' <> כ   ;
+m'~' <> מ   ;
+n'~' <> נ   ;
+p'~' <> פ    ;
+ts'~'<> צ ;
+
+# Mark final forms in non-final position as x^ -liu
+k'^' <> ך   } $hebrew ;
+m'^' <> ם   } $hebrew ;
+n'^' <> ן   } $hebrew ;
+p'^' <> ף    } $hebrew ;
+ts'^'<> ץ } $hebrew ;
+k    <  ך;
+m    <  ם;
+n    <  ן;
+p    <  ף;
+ts   <  ץ;
+
+# Main rules
+a<>א;
+A>א;
+
+b<>ב;
+B>ב;
+
+c}$softvowel>ס;
+C}$softvowel>ס;
+c}$letter>כ;
+C}$letter>כ;
+c>ך;
+C>ך;
+
+d<>ד;
+D>ד;
+
+e<>ע;
+E>ע;
+
+f}$letter>פ;
+f>ף;
+F}$letter>פ;
+F>ף;
+
+g<>ג;
+G>ג;
+
+h<>ה;
+H>ה;
+
+i>י;
+I>י;
+
+j>דש;
+J>דש;
+
+kh<>ח;
+kH>ח;
+Kh>ח;
+KH>ח;
+k}$letter>כ;
+K}$letter>כ;
+k>ך;
+K>ך;
+
+l<>ל;
+L>ל;
+
+m}$letter>מ;
+m>ם;
+M}$letter>מ;
+M>ם;
+
+n}$letter>נ;
+n>ן;
+N}$letter>נ;
+N>ן;
+
+o>ו;
+O>ו;
+
+p}$letter>פ;
+p>ף;
+P}$letter>פ;
+P>ף;
+
+q<>ק;
+Q>ק;
+
+r<>ר;
+R>ר;
+
+sh<>ש;
+sH>ש;
+Sh>ש;
+SH>ש;
+s''<ס}ה;
+s<>ס;
+S>ס;
+
+th<>ת;
+tH>ת;
+Th>ת;
+TH>ת;
+tS}$letter>צ;
+ts}$letter>צ;
+Ts}$letter>צ;
+TS}$letter>צ;
+tS>ץ;
+ts>ץ;
+Ts>ץ;
+TS>ץ;
+t''<ט}[ה ס ש];
+t<>ט;
+T>ט;
+
+v<ו}$vowellike;
+u<>ו;
+U>ו;
+
+v>ו;
+V>ו;
+
+w>ו;
+W>ו;
+
+x>כס;
+X>כס;
+
+y<>י;
+Y>י;
+
+z<>ז;
+Z>ז;
+
+# Delete stray apostrophes
+''>;
+<'';
+
+# eof
