@@ -37,9 +37,9 @@
  * @version 1.0
  */
 
-char  StringSearch::fgClassID = 0; // Value is irrelevant       // class id
+char  ::StringSearch::fgClassID = 0; // Value is irrelevant       // class id
 /* to be removed */
-void StringSearch::dumpTables() {
+void ::StringSearch::dumpTables() {
     int i;
     for (i = 0; i < 256; i++) {
         if (shiftTable[i] != minLen) {
@@ -53,7 +53,7 @@ void StringSearch::dumpTables() {
     }
 }
 
-StringSearch::StringSearch(const UnicodeString& pat, 
+::StringSearch::StringSearch(const UnicodeString& pat, 
                 CharacterIterator* target,
                 RuleBasedCollator* coll, 
                 BreakIterator* breaker,
@@ -88,7 +88,7 @@ StringSearch::StringSearch(const UnicodeString& pat,
  *                  language-sensitive comparison rules used to determine 
  *                  whether text in the pattern and target matches.
  */
-StringSearch::StringSearch(const UnicodeString& pat,
+::StringSearch::StringSearch(const UnicodeString& pat,
                  CharacterIterator* target,
                  RuleBasedCollator* collator,
                  UErrorCode& status) :
@@ -124,7 +124,7 @@ StringSearch::StringSearch(const UnicodeString& pat,
  * @exception       ClassCastException thrown if the collator for the specified
  *                  locale is not a RuleBasedCollator.
  */
-StringSearch::StringSearch(const StringSearch& that) :
+::StringSearch::StringSearch(const StringSearch& that) :
     SearchIterator(that),    
     iter(NULL),
     collator(that.collator),
@@ -142,7 +142,7 @@ StringSearch::StringSearch(const StringSearch& that) :
     it = that.collator->createCollationElementIterator(that.pattern);
 }
 
-StringSearch::StringSearch(const UnicodeString& pat, 
+::StringSearch::StringSearch(const UnicodeString& pat, 
                  CharacterIterator* target, 
                  const Locale& loc,
                  UErrorCode& status) :
@@ -166,7 +166,7 @@ StringSearch::StringSearch(const UnicodeString& pat,
 }
 
 UBool
-StringSearch::operator==(const SearchIterator& that) const
+::StringSearch::operator==(const SearchIterator& that) const
 {
     if (that.getDynamicClassID() != getDynamicClassID())
         return FALSE;
@@ -186,7 +186,7 @@ StringSearch::operator==(const SearchIterator& that) const
 }
 
 SearchIterator* 
-StringSearch::clone(void) const
+::StringSearch::clone(void) const
 {
     return new StringSearch(*this);
 }
@@ -203,7 +203,7 @@ StringSearch::clone(void) const
  *                  language-sensitive comparison rules used to determine 
  *                  whether text in the pattern and target matches.
  */
-StringSearch::StringSearch(const UnicodeString& pat, 
+::StringSearch::StringSearch(const UnicodeString& pat, 
                  const UnicodeString& newText,
                  UErrorCode& status) :
     SearchIterator(),
@@ -223,7 +223,7 @@ StringSearch::StringSearch(const UnicodeString& pat,
     initialize(status);
 }
 
-StringSearch::~StringSearch(void)
+::StringSearch::~StringSearch(void)
 {
     if (valueList != NULL) {
         delete [] valueList;
@@ -262,7 +262,7 @@ StringSearch::~StringSearch(void)
  * @see Collator#TERTIARY
  * @see Collator#IDENTICAL
  */
-void StringSearch::setStrength(Collator::ECollationStrength newStrength, UErrorCode& status) {
+void ::StringSearch::setStrength(Collator::ECollationStrength newStrength, UErrorCode& status) {
     if (U_FAILURE(status))
     {
         return;
@@ -280,16 +280,6 @@ void StringSearch::setStrength(Collator::ECollationStrength newStrength, UErrorC
 }
 
 
-/**
- * Returns this object's strength property, which indicates what level
- * of differences are considered significant during a search.
- * <p>
- * @see #setStrength
- */
-Collator::ECollationStrength StringSearch::getStrength() const
-{
-    return strength;
-}
 
 /**
  * Set the collator to be used for this string search.  Also changes
@@ -300,7 +290,7 @@ Collator::ECollationStrength StringSearch::getStrength() const
  * <p>
  * @see #getCollator
  */
-void StringSearch::setCollator(const RuleBasedCollator *coll, UErrorCode& status) 
+void ::StringSearch::setCollator(const RuleBasedCollator *coll, UErrorCode& status) 
 {
     delete iter;
     delete collator;
@@ -314,7 +304,7 @@ void StringSearch::setCollator(const RuleBasedCollator *coll, UErrorCode& status
 /**
  * Return the RuleBasedCollator being used for this string search.
  */
-const RuleBasedCollator& StringSearch::getCollator(void) const 
+const RuleBasedCollator& ::StringSearch::getCollator(void) const 
 {
     return *collator;
 }
@@ -324,7 +314,7 @@ const RuleBasedCollator& StringSearch::getCollator(void) const
  * This method causes internal data such as Boyer-Moore shift tables
  * to be recalculated, but the iterator's position is unchanged.
  */
-void StringSearch::setPattern(const UnicodeString& pat, UErrorCode& status) 
+void ::StringSearch::setPattern(const UnicodeString& pat, UErrorCode& status) 
 {
     pattern = pat;
     initialize(status);
@@ -333,7 +323,7 @@ void StringSearch::setPattern(const UnicodeString& pat, UErrorCode& status)
 /**
  * Returns the pattern for which this object is searching.
  */
-const UnicodeString& StringSearch::getPattern() const
+const UnicodeString& ::StringSearch::getPattern() const
 {
     return pattern;
 }
@@ -344,7 +334,7 @@ const UnicodeString& StringSearch::getPattern() const
  * This method is useful if you want to re-use an iterator to
  * search for the same pattern within a different body of text.
  */
-void StringSearch::adoptTarget(CharacterIterator* target) 
+void ::StringSearch::adoptTarget(CharacterIterator* target) 
 {
     UErrorCode status = U_ZERO_ERROR;
     SearchIterator::adoptTarget(target);
@@ -353,7 +343,7 @@ void StringSearch::adoptTarget(CharacterIterator* target)
     // Since we're caching a CollationElementIterator, recreate it
     iter->setText(*target, status);
 }
-void StringSearch::setTarget(const UnicodeString& newText) 
+void ::StringSearch::setTarget(const UnicodeString& newText) 
 {
     UErrorCode status = U_ZERO_ERROR;
     SearchIterator::setTarget(newText);
@@ -361,7 +351,7 @@ void StringSearch::setTarget(const UnicodeString& newText)
     iter->setText(newText, status);
 }
 
-void StringSearch::reset(void)
+void ::StringSearch::reset(void)
 {
     SearchIterator::reset();
     iter->reset();
@@ -388,7 +378,7 @@ void StringSearch::reset(void)
  * @see SearchIterator#next
  * @see SearchIterator#DONE
  */
-int32_t StringSearch::handleNext(int32_t start, UErrorCode& status)
+int32_t ::StringSearch::handleNext(int32_t start, UErrorCode& status)
 {
     if (U_FAILURE(status)) 
     { 
@@ -501,7 +491,7 @@ int32_t StringSearch::handleNext(int32_t start, UErrorCode& status)
  * @see SearchIterator#previous
  * @see SearchIterator#DONE
  */
-int32_t StringSearch::handlePrev(int32_t start, UErrorCode& status)
+int32_t ::StringSearch::handlePrev(int32_t start, UErrorCode& status)
 {
     if (U_FAILURE(status))
     {
@@ -593,7 +583,7 @@ int32_t StringSearch::handlePrev(int32_t start, UErrorCode& status)
  * Return a bitmask that will select only the portions of a collation 
  * element that are significant at the given strength level.
  */
-int32_t StringSearch::getMask(Collator::ECollationStrength strength)  
+int32_t ::StringSearch::getMask(Collator::ECollationStrength strength)  
 {
     switch (strength) {
     case Collator::PRIMARY:
@@ -606,7 +596,7 @@ int32_t StringSearch::getMask(Collator::ECollationStrength strength)
 }
 
 
-void StringSearch::initialize(UErrorCode& status) {
+void ::StringSearch::initialize(UErrorCode& status) {
     /*
     if (DEBUG)  {
         debug("-------------------------initialize-----------------------------------");
@@ -711,7 +701,7 @@ void StringSearch::initialize(UErrorCode& status) {
  * @param curIndex  The index in the pattern at which we failed to match
  *                  curValue in the target text.
  */
-int32_t StringSearch::getShift( int32_t curValue, int32_t curIndex ) const
+int32_t ::StringSearch::getShift( int32_t curValue, int32_t curIndex ) const
 {
     int32_t shiftAmt = shiftTable[hash(curValue)];
 
@@ -733,7 +723,7 @@ int32_t StringSearch::getShift( int32_t curValue, int32_t curIndex ) const
  * @param curIndex  The index in the pattern at which we failed to match
  *                  curValue in the target text.
  */
-int32_t StringSearch::getBackShift( int32_t curValue, int32_t curIndex ) const 
+int32_t ::StringSearch::getBackShift( int32_t curValue, int32_t curIndex ) const 
 {
     int shiftAmt = backShiftTable[hash(curValue)];
 
@@ -757,7 +747,7 @@ int32_t StringSearch::getBackShift( int32_t curValue, int32_t curIndex ) const
  * on multilingual text.  I doubt it will have much effect on
  * performance, though.
  */
-int32_t StringSearch::hash(int32_t order) 
+int32_t ::StringSearch::hash(int32_t order) 
 {
     return CollationElementIterator::primaryOrder(order) % 256;
 }
