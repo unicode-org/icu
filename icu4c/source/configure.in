@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.110 2001/06/22 16:01:27 yves Exp $
+dnl $Id: configure.in,v 1.111 2001/06/22 16:50:43 yves Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -15,9 +15,19 @@ AC_SUBST(PACKAGE)
 
 AC_MSG_CHECKING(for ICU version numbers)
 
-dnl Get the ICU version from uversion.h
 changequote(<<, >>)dnl
-VERSION=`sed -n 's/^[ 	]*#[ 	]*define[ 	]*U_ICU_VERSION[ 	]*"\([^"]*\)".*/\1/p' $srcdir/common/unicode/uversion.h`
+
+dnl Get the ICU version from uversion.h or other headers
+geticuversion() {
+    sed -n 's/^[ 	]*#[ 	]*define[ 	]*U_ICU_VERSION[ 	]*"\([^"]*\)".*/\1/p,q' "$@"
+}
+VERSION=`geticuversion $srcdir/common/unicode/uversion.h`
+if test x"$VERSION" = x; then
+    VERSION=`geticuversion $srcdir/common/unicode/*.h`
+    if test x"$VERSION" = x; then
+        AC_MSG_ERROR(Cannot determine ICU version number from header files)
+    fi
+fi
 dnl Compute a reasonable library version from the release version. This is
 dnl very bad, but that's wanted... We want to make sure that the LIB_VERSION
 dnl has at least a dot in it, so we'll add a .0 if needed.
