@@ -254,9 +254,9 @@ static void TestNullDefault() {
     char original[ULOC_FULLNAME_CAPACITY];
 
     uprv_strcpy(original, uloc_getDefault());
-    uloc_setDefault("qq_BLAH", &status);
-    if (uprv_strcmp(uloc_getDefault(), "qq_BLAH") != 0) {
-        log_err(" Mismatch in uloc_setDefault:  qq_BLAH  versus   %s\n", uloc_getDefault());
+    uloc_setDefault("qq_BLA", &status);
+    if (uprv_strcmp(uloc_getDefault(), "qq_BLA") != 0) {
+        log_err(" Mismatch in uloc_setDefault:  qq_BLA  versus   %s\n", uloc_getDefault());
     }
     uloc_setDefault(NULL, &status);
     if (uprv_strcmp(uloc_getDefault(), original) != 0) {
