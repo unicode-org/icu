@@ -30,7 +30,7 @@
      <abbr title="International Components for Unicode">ICU</abbr> 2.8
     ReadMe</h1>
 
-    <p>Version: 2004-Jan-08<br>
+    <p>Version: 2004-Apr-01<br>
      Copyright &copy; 1997-2004 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -58,6 +58,8 @@
           <li><a href="#HowToBuildWindows">Windows</a></li>
 
           <li><a href="#HowToBuildWindowsXP64">Windows XP on IA64</a></li>
+
+          <li><a href="#HowToBuildCygwin">Cygwin</a></li>
 
           <li><a href="#HowToBuildUNIX">UNIX</a></li>
 
@@ -638,6 +640,14 @@
       </tr>
 
       <tr>
+        <td>Windows 2000 with CygWin</td>
+
+        <td>Microsoft Visual C++ 6.0</td>
+
+        <td>Regularly tested</td>
+      </tr>
+
+      <tr>
         <td>Mac OS X (10.2)</td>
 
         <td>gcc 3.1<br>
@@ -740,14 +750,6 @@
         <td>CygWin</td>
 
         <td>gcc 2.95.3</td>
-
-        <td>Rarely tested</td>
-      </tr>
-
-      <tr>
-        <td>CygWin</td>
-
-        <td>Microsoft Visual C++ 6.0</td>
 
         <td>Rarely tested</td>
       </tr>
@@ -959,6 +961,69 @@
 
       <li>Follow the last step in the <a href="#HowToBuildWindows">in the
       previous section</a>.</li>
+    </ol>
+
+    <h3><a name="HowToBuildCygwin" href="#HowToBuildCygwin">How To
+    Build And Install On Windows with Cygwin</a></h3>
+
+    <p>Building International Components for Unicode with this configuration
+    requires:</p>
+
+    <ul>
+      <li>Microsoft NT 4.0 or above, or Windows 98 or above</li>
+
+      <li>Microsoft Visual C++ 6.0 or above (when gcc isn't used).</li>
+
+      <li>Cygwin with the following installed:
+      <ul>
+        <li>bash</li>
+
+        <li>GNU make</li>
+
+        <li>man (if you plan to look at the man pages)</li>
+      </ul>
+      </li>
+    </ul>
+
+    <p>There are two ways you can build ICU with Cygwin. You can build with gcc
+    or Microsoft Visual C++. If you use gcc,
+    the resulting libraries and tools will depend on the Cygwin environment. If you use
+    Microsoft Visual C++, the resulting libraries and tools do not depend
+    on Cygwin and can be more easily distributed to other Windows computers
+    (the generated man pages and shell scripts still need Cygwin).
+    To build with gcc, please follow the 
+    "<a href="#HowToBuildUNIX">How To Build And Install On UNIX</a>"
+    instructions, while you are inside a Cygwin bash shell.
+    To build with Microsoft Visual C++, please use the following instructions:</p>
+
+    <ol>
+      <li>Start the Windows "Command Prompt" window (this is different
+      from the gcc build, which requires the Cygwin Bash Shell).</li>
+
+      <li>If the computer isn't set up to use Visual C++ from the command
+      line, you need to run VCVARS32.BAT (for example:
+      "<tt>C:\Program Files\Microsoft Visual Studio\VC98\Bin\VCVARS32.BAT</tt>").</li>
+
+      <li>Unzip the icu-XXXX.zip file into any convenient location. Using
+      command line zip, type "unzip -a icu-XXXX.zip -d drive:\directory", or
+      just use WinZip.</li>
+
+      <li>Change directory to "icu/source", which is where you unzipped ICU.</li>
+
+      <li>Run "<tt>bash <a href="source/runConfigureICU">./runConfigureICU</a> Cygwin/MSVC</tt>"
+      (See <a href="#HowToConfigureICU">configuration note</a> below).</li>
+
+      <li>Type <tt>"make"</tt> to compile the libraries and all the data files.
+      This make command should be GNU make.</li>
+
+      <li>Optionally, type <tt>"make check"</tt> to run the test suite, which
+      checks for ICU's functionality integrity (See <a href=
+      "#HowToTestWithoutGmake">testing note</a> below).</li>
+
+      <li>Type <tt>"make install"</tt> to install ICU. If you used the
+      --prefix= option on configure or runConfigureICU, ICU will be installed
+      to the directory you specified. (See <a href=
+      "#HowToInstallICU">installation note</a> below).</li>
     </ol>
 
     <h3><a name="HowToBuildUNIX" href="#HowToBuildUNIX">How To Build And
