@@ -111,9 +111,12 @@ void IntlTestDateFormat::testFormat(/* char* par */)
         return;
     }
 
+    describeTest();
+
     UDate now = Calendar::getNow();
     tryDate(0);
     tryDate(1278161801778.0);
+    tryDate(5264498352317.0);   // Sunday, October 28, 2136 8:39:12 AM PST
     tryDate(now);
     // Shift 6 months into the future, AT THE SAME TIME OF DAY.
     // This will test the DST handling.
@@ -189,7 +192,7 @@ void IntlTestDateFormat::tryDate(UDate theDate)
     {
         describeTest();
         errln((UnicodeString)"**** FAIL: No string and/or date match within " + fLimit
-            + " iterations for the Date " + string[0] + " (" + theDate + ").");
+            + " iterations for the Date " + string[0] + "\t(" + theDate + ").");
         dump = TRUE;
     }
 
@@ -256,9 +259,9 @@ void IntlTestDateFormat::monsterTest(/*char *par*/)
     const Locale* locales = DateFormat::getAvailableLocales(count);
     if (locales && count)
     {
-        if (quick && count > 2) {
-            logln("quick test: testing just 2 locales!");
-            count = 2;
+        if (quick && count > 3) {
+            logln("quick test: testing just 3 locales!");
+            count = 3;
         }
         for (int32_t i=0; i<count; ++i)
         {
