@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/upropset.cpp,v $
-* $Date: 2001/11/19 21:25:34 $
-* $Revision: 1.6 $
+* $Date: 2001/11/20 00:46:44 $
+* $Revision: 1.7 $
 **********************************************************************
 */
 #include "upropset.h"
@@ -354,7 +354,7 @@ const UnicodeSet& UnicodePropertySet::getScriptSet(UScriptCode script) {
 }
 
 /**
- * Given a string, munge it to lost the whitespace.  So "General
+ * Given a string, munge it to lose the whitespace.  So "General
  * Category " becomes "GeneralCategory".  We munge all type and value
  * strings, and store all type and value keys pre-munged.  NOTE:
  * Unlike the Java version, we do not modify the case, since we use a
