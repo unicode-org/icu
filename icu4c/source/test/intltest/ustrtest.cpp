@@ -952,11 +952,15 @@ UnicodeStringTest::TestMiscellaneous()
         errln("hashCode() failed");
 
     // test getBuffer(minCapacity) and releaseBuffer()
+    test1=UnicodeString(); // make sure that it starts with its stackBuffer
     UChar *p=test1.getBuffer(20);
+    if(test1.getCapacity()<20) {
+        errln("UnicodeString::getBuffer(20).getCapacity()<20");
+    }
+
     test1.append((UChar)7); // must not be able to modify the string here
     test1.setCharAt(3, 7);
     test1.reverse();
-
     if( test1.length()!=0 ||
         test1.charAt(0)!=0xffff || test1.charAt(3)!=0xffff ||
         test1.getBuffer(10)!=0 || test1.getBuffer()!=0
@@ -996,15 +1000,13 @@ UnicodeStringTest::TestMiscellaneous()
         errln("UnicodeString::releaseBuffer(-1) does not properly set the length of the UnicodeString");
     }
 
-    // test releaseBuffer() with a NUL-terminated buffer
-    enum { capacity=254 };  // assume that this will be the actual UnicodeString capacity - getCapacity() is private
-
-    p=test1.getBuffer(capacity);
-    for(int32_t i=0; i<capacity; ++i) {
+    // test releaseBuffer() with a non-NUL-terminated buffer
+    p=test1.getBuffer(256);
+    for(int32_t i=0; i<test1.getCapacity(); ++i) {
         p[i]=(UChar)1;      // fill the buffer with all non-NUL code units
     }
     test1.releaseBuffer();  // implicit -1
-    if(test1.length()!=capacity || test1.charAt(1)!=1 || test1.charAt(100)!=1 || test1.charAt(capacity-1)!=1) {
+    if(test1.length()!=test1.getCapacity() || test1.charAt(1)!=1 || test1.charAt(100)!=1 || test1.charAt(test1.getCapacity()-1)!=1) {
         errln("UnicodeString::releaseBuffer(-1 but no NUL) does not properly set the length of the UnicodeString");
     }
 
