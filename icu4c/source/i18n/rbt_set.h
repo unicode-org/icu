@@ -156,5 +156,14 @@ public:
                                               const TransliterationRuleData& data,
                                               UBool& isPartial,
                                               const UnicodeFilter* filter) const;
+
+    /**
+     * Create rule strings that represents this rule set.
+     * @param result string to receive the rule strings.  Current
+     * contents will be deleted.
+     */
+    virtual UnicodeString& toRules(UnicodeString& result,
+                                   const TransliterationRuleData& data,
+                                   UBool escapeUnprintable) const;
 };
 #endif

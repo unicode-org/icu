@@ -12,6 +12,7 @@
 #include "rbt_data.h"
 #include "unicode/unifilt.h"
 #include "unicode/uniset.h"
+#include "unicode/unicode.h"
 #include "cmemory.h"
 
 const UChar TransliterationRule::ETHER = 0xFFFF;
@@ -484,24 +485,190 @@ UBool TransliterationRule::charMatches(UChar keyChar, const Replaceable& text,
 }
 
 /**
- * Return true if the given key matches the given text.  This method
- * accounts for the fact that the key character may represent a character
- * set.  Note that the key and text characters may not be interchanged
- * without altering the results.
- * @param keyChar a character in the match key
- * @param textChar a character in the text being transliterated
- * @param data a dictionary of variables mapping <code>Character</code>
- * to <code>UnicodeSet</code>
- * @param filter the filter.  Any character for which
- * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
- * altered by this transliterator.  If <tt>filter</tt> is
- * <tt>null</tt> then no filtering is applied.
+ * Append a character to a rule that is being built up.
+ * @param rule the string to append the character to
+ * @param c the character to append
+ * @param isLiteral if true, then the given character should not be
+ * quoted or escaped.  Usually this means it is a syntactic element
+ * such as > or $
+ * @param escapeUnprintable if true, then unprintable characters
+ * should be escaped using \uxxxx or \Uxxxxxxxx.  These escapes will
+ * appear outside of quotes.
+ * @param quoteBuf a buffer which is used to build up quoted
+ * substrings.  The caller should initially supply an empty buffer,
+ * and thereafter should not modify the buffer.  The buffer should be
+ * cleared out by, at the end, calling this method with a literal
+ * character.
  */
-//[ANCHOR]UBool TransliterationRule::charMatches(UChar keyChar, UChar textChar,
-//[ANCHOR]                                        const TransliterationRuleData& data,
-//[ANCHOR]                                        const UnicodeFilter* filter) const {
-//[ANCHOR]    const UnicodeSet* set = 0;
-//[ANCHOR]    return (filter == 0 || filter->contains(textChar)) &&
-//[ANCHOR]        (((set = data.lookupSet(keyChar)) == 0) ?
-//[ANCHOR]         keyChar == textChar : set->contains(textChar));
-//[ANCHOR]}
+void TransliterationRule::_appendToRule(UnicodeString& rule,
+                                        UChar32 c,
+                                        UBool isLiteral,
+                                        UBool escapeUnprintable,
+                                        UnicodeString& quoteBuf) {
+    // If we are escaping unprintables, then escape them outside
+    // quotes.  \u and \U are not recognized within quotes.  The same
+    // logic applies to literals, but literals are never escaped.
+    if (isLiteral ||
+        (escapeUnprintable && UnicodeSet::_isUnprintable(c))) {
+        if (quoteBuf.length() > 0) {
+            rule.append((UChar) 0x0027 /*'*/);
+            rule.append(quoteBuf);
+            rule.append((UChar) 0x0027 /*'*/);
+            quoteBuf.truncate(0);
+        }
+        if (!UnicodeSet::_escapeUnprintable(rule, c)) {
+            // Literals should be printable and should get appended
+            // here.
+            rule.append(c);
+        }
+    }
+
+    // Double ' and '\' and don't begin a quote just for them
+    else  if (quoteBuf.length() == 0 &&
+              (c == (UChar) 0x0027 /*'*/ ||
+               c == (UChar) 0x005C /*\*/)) {
+        rule.append(c);
+        rule.append(c);
+    }
+
+    // Specials (printable ascii that isn't [0-9a-zA-Z]) and
+    // whitespace need quoting.  Also append stuff to quotes if we are
+    // building up a quoted substring already.
+    else if ((c >= 0x0021 && c <= 0x007E &&
+              !((c >= 0x0030/*'0'*/ && c <= 0x0039/*'9'*/) ||
+                (c >= 0x0041/*'A'*/ && c <= 0x005A/*'Z'*/) ||
+                (c >= 0x0061/*'a'*/ && c <= 0x007A/*'z'*/))) ||
+             Unicode::isWhitespace(c) ||
+             quoteBuf.length() > 0) {
+        quoteBuf.append(c);
+        // Double ' within a quote
+        if (c == (UChar) 0x0027 /*'*/) {
+            quoteBuf.append(c);
+        }
+    }
+    
+    // Otherwise just append
+    else {
+        rule.append(c);
+    }
+}
+
+void TransliterationRule::_appendToRule(UnicodeString& rule,
+                                        const UnicodeString& text,
+                                        UBool isLiteral,
+                                        UBool escapeUnprintable,
+                                        UnicodeString& quoteBuf) {
+    for (int32_t i=0; i<text.length(); ++i) {
+        _appendToRule(rule, text[i], isLiteral, escapeUnprintable, quoteBuf);
+    }
+}
+
+/**
+ * Create a source string that represents this rule.  Append it to the
+ * given string.
+ */
+UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
+                                           const TransliterationRuleData& data,
+                                           UBool escapeUnprintable) const {
+    int32_t i;
+
+    int32_t iseg = 0;
+    int32_t nextSeg = -1;
+    if (segments != 0) {
+        nextSeg = segments[iseg++];
+    }
+
+    // Accumulate special characters (and non-specials following them)
+    // into quoteBuf.  Append quoteBuf, within single quotes, when
+    // a non-quoted element must be inserted.
+    UnicodeString str, quoteBuf;
+
+    // Do not emit the braces '{' '}' around the pattern if there
+    // is neither anteContext nor postContext.
+    UBool emitBraces =
+        (anteContextLength != 0) || (keyLength != pattern.length());
+
+    // Emit the input pattern
+    for (i=0; i<pattern.length(); ++i) {
+        if (emitBraces && i == anteContextLength) {
+            _appendToRule(rule, (UChar) 0x007B /*{*/, TRUE, escapeUnprintable, quoteBuf);
+        }
+
+        // Append either '(' or ')' if we are at a segment index
+        if (i == nextSeg) {
+            _appendToRule(rule, ((iseg % 2) == 0) ?
+                             (UChar)0x0029 : (UChar)0x0028,
+                             TRUE, escapeUnprintable, quoteBuf);
+            nextSeg = segments[iseg++];
+        }
+
+        if (emitBraces && i == (anteContextLength + keyLength)) {
+            _appendToRule(rule, (UChar) 0x007D /*}*/, TRUE, escapeUnprintable, quoteBuf);
+        }
+
+        UChar c = pattern.charAt(i);
+        const UnicodeSet *set = data.lookupSet(c);
+        if (set == 0) {
+            _appendToRule(rule, c, FALSE, escapeUnprintable, quoteBuf);
+        } else {
+            _appendToRule(rule, set->toPattern(str, escapeUnprintable),
+                          TRUE, escapeUnprintable, quoteBuf);
+        }
+    }
+
+    if (i == nextSeg) {
+        // assert((iseg % 2) == 0);
+        _appendToRule(rule, (UChar)0x0029 /*)*/, TRUE, escapeUnprintable, quoteBuf);
+    }
+
+    if (emitBraces && i == (anteContextLength + keyLength)) {
+        _appendToRule(rule, (UChar)0x007D /*}*/, TRUE, escapeUnprintable, quoteBuf);
+    }
+
+    _appendToRule(rule, UnicodeString(" > ", ""), TRUE, escapeUnprintable, quoteBuf);
+
+    // Emit the output pattern
+
+    // Handle a cursor preceding the output
+    int32_t cursor = cursorPos;
+    if (cursor < 0) {
+        while (cursor++ < 0) {
+            _appendToRule(rule, (UChar) 0x0040 /*@*/, TRUE, escapeUnprintable, quoteBuf);
+        }
+        // Fall through and append '|' below
+    }
+
+    for (i=0; i<output.length(); ++i) {
+        if (i == cursor) {
+            _appendToRule(rule, (UChar) 0x007C /*|*/, TRUE, escapeUnprintable, quoteBuf);
+        }
+        UChar c = output.charAt(i);
+        int32_t seg = data.lookupSegmentReference(c);
+        if (seg < 0) {
+            _appendToRule(rule, c, FALSE, escapeUnprintable, quoteBuf);
+        } else {
+            UChar segRef[4] = {
+                0x0020 /* */,
+                0x0024 /*$*/,
+                (0x0031 + seg) /*0..9*/,
+                0x0020 /* */
+            };
+            _appendToRule(rule, UnicodeString(FALSE, segRef, 4), TRUE, escapeUnprintable, quoteBuf);
+        }
+    }
+
+    // Handle a cursor after the output.  Use > rather than >= because
+    // if cursor == output.length() it is at the end of the output,
+    // which is the default position, so we need not emit it.
+    if (cursor > output.length()) {
+        cursor -= output.length();
+        while (cursor-- > 0) {
+            _appendToRule(rule, (UChar) 0x0040 /*@*/, TRUE, escapeUnprintable, quoteBuf);
+        }
+        _appendToRule(rule, (UChar) 0x007C /*|*/, TRUE, escapeUnprintable, quoteBuf);
+    }
+
+    _appendToRule(rule, (UChar) 0x003B /*;*/, TRUE, escapeUnprintable, quoteBuf);
+
+    return rule;
+}

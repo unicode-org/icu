@@ -362,23 +362,12 @@ public:
                               const UnicodeFilter* filter) const;
 
     /**
-     * Return true if the given key matches the given text.  This method
-     * accounts for the fact that the key character may represent a character
-     * set.  Note that the key and text characters may not be interchanged
-     * without altering the results.
-     * @param keyChar a character in the match key
-     * @param textChar a character in the text being transliterated
-     * @param data a dictionary of variables mapping <code>Character</code>
-     * to <code>UnicodeSet</code>
-     * @param filter the filter.  Any character for which
-     * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
-     * altered by this transliterator.  If <tt>filter</tt> is
-     * <tt>null</tt> then no filtering is applied.
+     * Create a rule string that represents this rule object.  Append
+     * it to the given string.
      */
-//[ANCHOR]    virtual UBool charMatches(UChar keyChar, UChar textChar,
-//[ANCHOR]                               const TransliterationRuleData& data,
-//[ANCHOR]                               const UnicodeFilter* filter) const;
-
+    virtual UnicodeString& toRule(UnicodeString& pat,
+                                  const TransliterationRuleData& data,
+                                  UBool escapeUnprintable) const;
 private:
 
     void init(const UnicodeString& input,
@@ -389,6 +378,17 @@ private:
               UBool anchorStart, UBool anchorEnd,
               UErrorCode& status);
 
+    static void _appendToRule(UnicodeString& rule,
+                              UChar32 c,
+                              UBool isLiteral,
+                              UBool escapeUnprintable,
+                              UnicodeString& quoteBuf);
+
+    static void _appendToRule(UnicodeString& rule,
+                              const UnicodeString& text,
+                              UBool isLiteral,
+                              UBool escapeUnprintable,
+                              UnicodeString& quoteBuf);
 };
 
 #endif
