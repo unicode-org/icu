@@ -346,14 +346,14 @@ main(int argc, char* argv[]) {
             "        {0, 0, 0, 0}\n"
             "    },\n"
             "    \"\", %lu, 0, {\n",
-            32-4-sizeof(UDataInfo),
-            fileCount,
+            (unsigned long)32-4-sizeof(UDataInfo),
+            (unsigned long)fileCount,
             entrypointName,
-            sizeof(UDataInfo),
+            (unsigned long)sizeof(UDataInfo),
             U_IS_BIG_ENDIAN,
             U_CHARSET_FAMILY,
             U_SIZEOF_UCHAR,
-            fileCount
+            (unsigned long)fileCount
         );
         T_FileStream_writeLine(out, buffer);
 
