@@ -3018,46 +3018,23 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
                 // Process the prefix / suffix characters
                 // Process unquoted characters seen in prefix or suffix
                 // subpart.
-                if (pattern.compare(pos, digitLen, digit) == 0) {
-                    // Any of these characters implicitly begins the
-                    // next subpart if we are in the prefix
+
+                // Several syntax characters implicitly begins the
+                // next subpart if we are in the prefix; otherwise
+                // they are illegal if unquoted.
+                if (!pattern.compare(pos, digitLen, digit) ||
+                    !pattern.compare(pos, groupSepLen, groupingSeparator) ||
+                    !pattern.compare(pos, decimalSepLen, decimalSeparator) ||
+                    (ch >= zeroDigit && ch <= nineDigit)) {
                     if (subpart == 1) { // prefix subpart
                         subpart = 0; // pattern proper subpart
                         sub0Start = pos; // Reprocess this character
                         continue;
+                    } else {
+                        status = U_UNQUOTED_SPECIAL;
+                        syntaxError(pattern,pos,parseError);
+                        return;
                     }
-                    pos += digitLen;
-                    // Fall through to append(ch)
-                } else if (pattern.compare(pos, groupSepLen, groupingSeparator) == 0) {
-                    // Any of these characters implicitly begins the
-                    // next subpart if we are in the prefix
-                    if (subpart == 1) { // prefix subpart
-                        subpart = 0; // pattern proper subpart
-                        sub0Start = pos; // Reprocess this character
-                        continue;
-                    }
-                    pos += groupSepLen;
-                    // Fall through to append(ch)
-                } else if (pattern.compare(pos, decimalSepLen, decimalSeparator) == 0) {
-                    // Any of these characters implicitly begins the
-                    // next subpart if we are in the prefix
-                    if (subpart == 1) { // prefix subpart
-                        subpart = 0; // pattern proper subpart
-                        sub0Start = pos; // Reprocess this character
-                        continue;
-                    }
-                    pos += decimalSepLen;
-                    // Fall through to append(ch)
-                } else if (ch >= zeroDigit && ch <= nineDigit) {
-                    // Any of these characters implicitly begins the
-                    // next subpart if we are in the prefix
-                    if (subpart == 1) { // prefix subpart
-                        subpart = 0; // pattern proper subpart
-                        sub0Start = pos; // Reprocess this character
-                        continue;
-                    }
-                    pos++;
-                    // Fall through to append(ch)
                 } else if (ch == kCurrencySign) {
                     // Use lookahead to determine if the currency sign is
                     // doubled or not.
