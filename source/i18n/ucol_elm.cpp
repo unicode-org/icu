@@ -556,6 +556,8 @@ static void uprv_uca_unsafeCPAddCCNZ(tempUCATable *t) {
     }
 }
 
+#include <stdio.h>
+
 uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE, 
                                  UCAElements *element, UErrorCode *status) {
   // currently the longest prefix we're supporting in Japanese is two characters
@@ -573,6 +575,15 @@ uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE,
 
     // here, we will normalize & add prefix to the table.
     uint32_t j = 0;
+    for(j=0; j<element->cSize; j++) {
+      fprintf(stdout, "CP: %04X ", element->cPoints[j]);
+    }
+    fprintf(stdout, "El: %08X Pref: ", CE);
+    for(j=0; j<element->prefixSize; j++) {
+      fprintf(stdout, "%04X ", element->prefix[j]);
+    }
+    fprintf(stdout, "%08X ", element->mapCE);
+
     for (j = 1; j<element->prefixSize; j++) {   /* First add NFD prefix chars to unsafe CP hash table */
       // Unless it is a trail surrogate, which is handled algoritmically and 
       // shouldn't take up space in the table.
@@ -596,11 +607,20 @@ uint32_t uprv_uca_addPrefix(tempUCATable *t, uint32_t CE,
     element->prefixSize = nfcSize;
 #endif
 
-    for(j = 0; j < /*nfcSize*/element->prefixSize; j++) { // prefixes are going to be looked up backwards
+    UChar tempPrefix = 0;
+
+    for(j = 0; j < /*nfcSize*/element->prefixSize/2; j++) { // prefixes are going to be looked up backwards
       // therefore, we will promptly reverse the prefix buffer...
-      element->prefix[j] = *(/*nfcBuffer*/element->prefix+element->prefixSize-j-1);
+      tempPrefix = *(/*nfcBuffer*/element->prefix+element->prefixSize-j-1);
+      *(/*nfcBuffer*/element->prefix+element->prefixSize-j-1) = element->prefix[j];
+      element->prefix[j] = tempPrefix;
     }
 
+    fprintf(stdout, "Reversed: ");
+    for(j=0; j<element->prefixSize; j++) {
+      fprintf(stdout, "%04X ", element->prefix[j]);
+    }
+    fprintf(stdout, "%08X\n", element->mapCE);
     // the first codepoint is also unsafe, as it forms a 'contraction' with the prefix
     if(!(UTF_IS_TRAIL(element->cPoints[0]))) {
       unsafeCPSet(t->unsafeCP, element->cPoints[0]);
