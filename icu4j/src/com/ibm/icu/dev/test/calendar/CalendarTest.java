@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/CalendarTest.java,v $ 
- * $Date: 2002/02/16 03:05:05 $ 
- * $Revision: 1.12 $
+ * $Date: 2003/01/21 18:11:52 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -169,6 +169,7 @@ public class CalendarTest extends TestFmwk {
             } else {
                 cal.set(test[0], test[1], test[2]);
             }
+            double day0 = getJulianDay(cal);
             if (roll) {
                 cal.roll(test[3], test[4]);
             } else {
@@ -180,11 +181,13 @@ public class CalendarTest extends TestFmwk {
                     || cal.get(DATE) != test[7])
             {
                 errln("Fail: " + name + " "+ ymdToString(test[0], test[1], test[2])
+                    + " (" + day0 + ")"
                     + " " + FIELD_NAME[test[3]] + " by " + test[4]
                     + ": expected " + ymdToString(test[5], test[6], test[7])
                     + ", got " + ymdToString(cal));
             } else if (isVerbose()) {
                 logln("OK: " + name + " "+ ymdToString(test[0], test[1], test[2])
+                    + " (" + day0 + ")"
                     + " " + FIELD_NAME[test[3]] + " by " + test[4]
                     + ": got " + ymdToString(cal));
             }
@@ -348,13 +351,22 @@ public class CalendarTest extends TestFmwk {
      * Convert year,month,day values to the form "year/month/day".
      */
     static public String ymdToString(Calendar cal) {
+        double day = getJulianDay(cal);
         if (cal instanceof ChineseCalendar) {
             return "" + cal.get(Calendar.EXTENDED_YEAR) + "/" +
                 (cal.get(Calendar.MONTH)+1) +
                 (cal.get(ChineseCalendar.IS_LEAP_MONTH)==1?"(leap)":"") + "/" +
-                cal.get(Calendar.DATE);
+                cal.get(Calendar.DATE) + " (" + day + ")";
         }
         return ymdToString(cal.get(Calendar.EXTENDED_YEAR),
-                           cal.get(MONTH), cal.get(DATE));
+                            cal.get(MONTH), cal.get(DATE)) +
+                            " (" + day + ")";
     }
+
+    static double getJulianDay(Calendar cal) {
+        return (cal.getTime().getTime() - JULIAN_EPOCH) / DAY_MS;
+    }
+
+    static final double DAY_MS = 24*60*60*1000.0;
+    static final long JULIAN_EPOCH = -210866760000000L;   // 1/1/4713 BC 12:00
 }
