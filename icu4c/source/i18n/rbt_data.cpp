@@ -43,6 +43,14 @@ TransliterationRuleData::defineVariable(const UnicodeString& name,
                                         UChar standIn,
                                         UnicodeSet* adoptedSet,
                                         UErrorCode& status) {
+    defineVariable(name, standIn, status);
+    defineSet(standIn, adoptedSet, status);
+}
+
+void
+TransliterationRuleData::defineSet(UChar standIn,
+                                   UnicodeSet* adoptedSet,
+                                   UErrorCode& status) {
     if (U_FAILURE(status)) {
         return;
     }
@@ -50,9 +58,6 @@ TransliterationRuleData::defineVariable(const UnicodeString& name,
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    uhash_putKey(variableNames, name.hashCode() & 0x7FFFFFFF,
-                 (void*) standIn,
-                 &status);
     uhash_putKey(setVariables, (int32_t) (standIn & 0x7FFFFFFF),
                  adoptedSet,
                  &status);

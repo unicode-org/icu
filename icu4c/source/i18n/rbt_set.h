@@ -30,14 +30,29 @@ class UnicodeString;
  */
 class TransliterationRuleSet {
     /**
-     * Vector of rules, in the order added.
+     * Vector of rules, in the order added.  This is only used while the rule
+     * set is getting built.  After that, freeze() reorders and indexes the
+     * rules, and this Vector is freed.
      */
-    UVector rules;
+    UVector* ruleVector;
 
     /**
      * Length of the longest preceding context
      */
     int32_t maxContextLength;
+
+    /**
+     * Sorted and indexed table of rules.  This is created by freeze() from
+     * the rules in ruleVector.
+     */
+    TransliterationRule** rules;
+
+    /**
+     * Index table.  For text having a first character c, compute x = c&0xFF.
+     * Now use rules[index[x]..index[x+1]-1].  This index table is created by
+     * freeze().
+     */
+    int32_t index[257];
 
 public:
 
@@ -45,6 +60,11 @@ public:
      * Construct a new empty rule set.
      */
     TransliterationRuleSet();
+
+    /**
+     * Destructor.
+     */
+    virtual ~TransliterationRuleSet();
 
     /**
      * Return the maximum context length.
@@ -57,16 +77,19 @@ public:
      * significant.
      *
      * <p>Once freeze() is called, this method must not be called.
-     * @param rule the rule to add
+     * @param adoptedRule the rule to add
      */
     virtual void addRule(TransliterationRule* adoptedRule,
                          UErrorCode& status);
 
     /**
-     * Free up space.  Once this method is called, addRule() must NOT
-     * be called again.
+     * Close this rule set to further additions, check it for masked rules,
+     * and index it to optimize performance.  Once this method is called,
+     * addRule() can no longer be called.
+     * @exception IllegalArgumentException if some rules are masked
      */
-    virtual void freeze(void);
+    virtual void freeze(const TransliterationRuleData& data,
+                        UErrorCode& status);
 
     /**
      * Attempt to find a matching rule at the specified point in the text.  The
