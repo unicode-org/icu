@@ -43,22 +43,19 @@
 #include "tzdat.h"
 #include "cstring.h"
 
-#ifdef _DEBUG
-#include "unistrm.h"
-#endif
-
 // static initialization
 char                TimeZone::fgClassID = 0; // Value is irrelevant
 
 TimeZone*           TimeZone::fgDefaultZone = NULL;
 
-static const UnicodeString _internalTimeZoneGMT_ID = UNICODE_STRING("GMT", 3);
-const UnicodeString TimeZone::GMT_ID        = ::_internalTimeZoneGMT_ID;
+const UChar         TimeZone::GMT_ID[] = {0x47, 0x4D, 0x54, 0x00}; /* "GMT" */
 const int32_t       TimeZone::GMT_ID_LENGTH = 3;
-const UnicodeString TimeZone::CUSTOM_ID     = UNICODE_STRING("Custom", 6);
+const UChar         TimeZone::CUSTOM_ID[] = 
+{
+    0x43, 0x75, 0x73, 0x74, 0x6F, 0x6D, 0x00 /* "Custom" */
+};
 
-static const SimpleTimeZone _internalTimeZoneGMT(0, ::_internalTimeZoneGMT_ID);
-const TimeZone*     TimeZone::GMT = &::_internalTimeZoneGMT;
+const TimeZone*     TimeZone::GMT = getGMT();
 
 // See header file for documentation of the following
 const TZHeader *    TimeZone::DATA = 0;
@@ -69,6 +66,15 @@ UnicodeString*      TimeZone::ZONE_IDS = 0;
 UBool               TimeZone::DATA_LOADED = FALSE;
 UDataMemory*        TimeZone::UDATA_POINTER = 0;
 UMTX                TimeZone::LOCK;
+
+// -------------------------------------
+
+const TimeZone*
+TimeZone::getGMT(void)
+{
+    static const SimpleTimeZone SIMPLE_GMT(0, GMT_ID);
+    return &SIMPLE_GMT;
+}
 
 /**
  * Attempt to load the system zone data from icudata.dll (or its
