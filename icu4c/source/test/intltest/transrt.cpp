@@ -598,7 +598,9 @@ void RTTest::test2(UBool quick) {
     Transliterator* targetToSource = sourceToTarget->createInverse(status);
     if (targetToSource == NULL) {
         log->errln("Fail: " + transliteratorID +
-                   ".createInverse() returned NULL");
+                   ".createInverse() returned NULL. Error:" + u_errorName(status)          
+                   + "\n\tpreContext : " + prettify(parseError.preContext) 
+                   + "\n\tpostContext : " + prettify(parseError.postContext));
         delete sourceToTarget;
         return;
     }
@@ -1050,10 +1052,65 @@ void TransliteratorRoundTripTest::TestCyrillic() {
 
 
 // Inter-Indic Tests ----------------------------------
+class LegalIndic :public Legal{
+    UnicodeSet vowelSignSet;
+    UnicodeSet avagraha;
+    UnicodeSet nukta;
+    UnicodeSet virama;
+    UnicodeSet sanskritStressSigns;
+    
+public:        
+    LegalIndic(){
+        UErrorCode status = U_ZERO_ERROR;
+        vowelSignSet.addAll( UnicodeSet("[\\u0902\\u0903\\u093e-\\u094c\\u0962\\u0963]",status));/* Devanagari */
+        vowelSignSet.addAll( UnicodeSet("[\\u0982\\u0983\\u09be-\\u09cc\\u09e2\\u09e3\\u09D7]",status));/* Bengali */
+        vowelSignSet.addAll( UnicodeSet("[\\u0a02\\u0a03\\u0a3e-\\u0a4c\\u0a62\\u0a63\\u0a70\\u0a71]",status));/* Gurmukhi */
+        vowelSignSet.addAll( UnicodeSet("[\\u0a82\\u0a83\\u0abe-\\u0acc\\u0ae2\\u0ae3]",status));/* Gujarati */
+        vowelSignSet.addAll( UnicodeSet("[\\u0b02\\u0b03\\u0b3e-\\u0b4c\\u0b62\\u0b63\\u0b56\\u0b57]",status));/* Oriya */
+        vowelSignSet.addAll( UnicodeSet("[\\u0b82\\u0b83\\u0bbe-\\u0bcc\\u0be2\\u0be3\\u0bd7]",status));/* Tamil */
+        vowelSignSet.addAll( UnicodeSet("[\\u0c02\\u0c03\\u0c3e-\\u0c4c\\u0c62\\u0c63\\u0c55\\u0c56]",status));/* Telugu */
+        vowelSignSet.addAll( UnicodeSet("[\\u0c82\\u0c83\\u0cbe-\\u0ccc\\u0ce2\\u0ce3\\u0cd5\\u0cd6]",status));/* Kannada */
+        vowelSignSet.addAll( UnicodeSet("[\\u0d02\\u0d03\\u0d3e-\\u0d4c\\u0d62\\u0d63\\u0d57]",status));/* Malayalam */
 
+        avagraha.addAll(UnicodeSet("[\\u093d\\u0abd\\u0b3d]",status));
+        nukta.addAll(UnicodeSet("[\\u093c\\u09bc\\u0a3c\\u0abc\\u0b3c]",status));
+        virama.addAll(UnicodeSet("[\\u094d\\u09cd\\u0a4d\\u0acd\\u0b4d\\u0bcd\\u0c4d\\u0ccd\\u0d4d]",status));
+        sanskritStressSigns.addAll(UnicodeSet("[\\u0951\\u0952\\u0953\\u0954]",status));
+
+    }
+    virtual UBool is(const UnicodeString& sourceString) const;
+    virtual ~LegalIndic() {};
+};
+UBool LegalIndic::is(const UnicodeString& sourceString) const{
+    int cp=sourceString.charAt(0);
+    
+    // A vowel sign cannot be the first char
+    if(vowelSignSet.contains(cp)){
+        return FALSE;
+    }else if(avagraha.contains(cp)){
+        return FALSE;
+    }else if(virama.contains(cp)){
+        return FALSE;
+    }else if(nukta.contains(cp)){
+        return FALSE;
+    }else if(sanskritStressSigns.contains(cp)){
+        return FALSE;
+    }
+    return TRUE;
+}
 void TransliteratorRoundTripTest::TestDevanagariLatin() {
-    RTTest test("Latin-DEVANAGARI");
-    Legal *legal = new Legal();
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        Transliterator* t1 = Transliterator::createInstance("[\\u0000-\\u00FE \\u0982\\u0983 [:Bengali:][:nonspacing mark:]];NFD;Bengali-InterIndic;InterIndic-Gujarati;NFC;( [ \\u0000-\\u00FE [:Gujarati:][[:nonspacing mark:]])",UTRANS_FORWARD, status);
+        if(t1){
+            t1->createInverse(status);
+            if(U_FAILURE(status)){
+                errln("could not create the Inverse:-( \n");
+            }
+        }
+    }
+    RTTest test("Latin-Devanagari");
+    Legal *legal = new LegalIndic();
     test.test(UnicodeString("[a-zA-Z]", ""), 
               UnicodeString("[:Devanagari:]", ""), NULL, this, quick, 
               legal);
@@ -1158,7 +1215,7 @@ static const char * array[][4] = {
     "[\\u0ab3\\u0ab6\\u0A70\\u0a71\\u0a82\\u0a83\\u0ac3\\u0ac4\\u0ac5\\u0ac9\\u0a5c\\u0a72\\u0a73\\u0a74\\u0a8b\\u0a8d\\u0a91\\u0ab7\\u0abd\\u0ad0\\u0ae0]"}, /*roundtrip exclusions*/
 
     {"ORIYA-GURMUKHI", "[:ORIYA:]", "[:GURMUKHI:]", 
-    "[\\u0a21\\u0a47\\u0a71\\u0b02\\u0b03\\u0b33\\u0b36\\u0b43\\u0b56\\u0b57\\u0B0B\\u0B0C\\u0B37\\u0B3D\\u0B5F\\u0B60\\u0B61\\u0a35\\u0a72\\u0a73\\u0a74]"}, /*roundtrip exclusions*/
+    "[\\u0a5c\\u0a21\\u0a47\\u0a71\\u0b02\\u0b03\\u0b33\\u0b36\\u0b43\\u0b56\\u0b57\\u0B0B\\u0B0C\\u0B37\\u0B3D\\u0B5F\\u0B60\\u0B61\\u0a35\\u0a72\\u0a73\\u0a74]"}, /*roundtrip exclusions*/
 
     {"GURMUKHI-ORIYA", "[:GURMUKHI:]", "[:ORIYA:]",
     "[\\u0a71\\u0b02\\u0b03\\u0b33\\u0b36\\u0b43\\u0b56\\u0b57\\u0B0B\\u0B0C\\u0B37\\u0B3D\\u0B5F\\u0B60\\u0B61]"}, /*roundtrip exclusions*/
@@ -1275,18 +1332,43 @@ static const char * array[][4] = {
     "[\\u0cc4\\u0cc6\\u0cca\\u0ccc\\u0ccb\\u0cd5\\u0cd6\\u0cDe]"}, /*roundtrip exclusions*/
 
     {"KANNADA-MALAYALAM", "[:KANNADA:]", "[:MALAYALAM:]",
-    "[\\u0d4c\\u0d57\\u0d46\\u0D34]"} /*roundtrip exclusions*/
+    "[\\u0d4c\\u0d57\\u0d46\\u0D34]"}, /*roundtrip exclusions*/
+    
+    {"Latin-Bengali","[a-zA-Z]", "[:Bengali:]", 
+    "[\\u09f0\\u09f1]" /*roundtrip exclusions*/ },
+    
+    {"Latin-Gurmukhi", "[a-zA-Z]", "[:Gurmukhi:]", 
+    "[\\u0a72\\u0a73\\u0a74]" /*roundtrip exclusions*/},
+    
+    {"Latin-Gujarati","[a-zA-Z]", "[:Gujarati:]", 
+    NULL /*roundtrip exclusions*/},
+    
+    {"Latin-Oriya","[a-zA-Z]", "[:Oriya:]", 
+    NULL /*roundtrip exclusions*/},
+    
+    {"Latin-Tamil","[a-zA-Z]", "[:Tamil:]", 
+    NULL /*roundtrip exclusions*/},
+    
+    {"Latin-Telugu","[a-zA-Z]", "[:Telugu:]", 
+    NULL /*roundtrip exclusions*/},
+    
+    {"Latin-Kannada","[a-zA-Z]", "[:Kannada:]", 
+    NULL /*roundtrip exclusions*/},
+    
+    {"Latin-Malayalam","[a-zA-Z]", "[:Malayalam:]", 
+    NULL /*roundtrip exclusions*/}  
+
 };
 
 void TransliteratorRoundTripTest::TestInterIndic() {
-    int num = sizeof(array) / 4;
+    int num = sizeof(array)/(4*sizeof(char*));
     if(quick==TRUE){
         logln("Testing only 5 of %i. Skipping rest (use -e for exhaustive)",num);
         num = 5;
     }
-    for(int i = 0; i < num;i ++){
+    for(int i = 0; i < num;i++){
         RTTest test(array[i][0]);
-        Legal *legal = new Legal();
+        Legal *legal = new LegalIndic();
         test.test(UnicodeString(array[i][1], ""), 
                   UnicodeString(array[i][2], ""), 
                   array[i][3], /* roundtrip exclusions */

@@ -311,7 +311,7 @@ void TransliteratorAPITest::TestTransliterate2(){
          "Hex-Any",         CharsToUnicodeString("\\u0068\\u0065\\u006C\\u006C\\u006F\\u0021\\u0020"), "0", "5",  "hello", "hello! "  ,
        //  "Contracted-Expanded", CharsToUnicodeString("\\u00C0\\u00C1\\u0042"),        "1", "2",  CharsToUnicodeString("\\u0041\\u0301"), CharsToUnicodeString("\\u00C0\\u0041\\u0301\\u0042") ,
          "Devanagari-Latin",    CharsToUnicodeString("\\u092D\\u093E\\u0930\\u0924"), "0", "1",  "bha", CharsToUnicodeString("bha\\u093E\\u0930\\u0924") ,
-         "Devanagari-Latin",    CharsToUnicodeString("\\u092D\\u093E\\u0930\\u0924"), "1", "2",  "\\u0101", CharsToUnicodeString("\\u092D\\u0101\\u0930\\u0924")  
+         "Devanagari-Latin",    CharsToUnicodeString("\\u092D\\u093E\\u0930\\u0924"), "1", "2",  "\\u0314\\u0101", CharsToUnicodeString("\\u092D\\u0314\\u0101\\u0930\\u0924")  
 
     };
     logln("\n   Testing transliterate(String, int, int, StringBuffer)");
