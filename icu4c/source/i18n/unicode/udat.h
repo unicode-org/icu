@@ -357,10 +357,10 @@ typedef enum UDateFormatField {
  * Open a new UDateFormat for formatting and parsing dates and times.
  * A UDateFormat may be used to format dates in calls to \Ref{udat_format},
  * and to parse dates in calls to \Ref{udat_parse}.
- * @param timeStyle The style used to format times; one of UDAT_FULL_STYLE, UDAT_LONG_STYLE,
- * UDAT_MEDIUM_STYLE, UDAT_SHORT_STYLE, or UDAT_DEFAULT_STYLE
- * @param dateStyle The style used to format dates; one of UDAT_FULL_STYLE, UDAT_LONG_STYLE,
- * UDAT_MEDIUM_STYLE, UDAT_SHORT_STYLE, or UDAT_DEFAULT_STYLE
+ * @param timeStyle The style used to format times; one of UDAT_FULL, UDAT_LONG,
+ * UDAT_MEDIUM, UDAT_SHORT, or UDAT_DEFAULT
+ * @param dateStyle The style used to format dates; one of UDAT_FULL, UDAT_LONG,
+ * UDAT_MEDIUM, UDAT_SHORT, or UDAT_DEFAULT
  * @param locale The locale specifying the formatting conventions
  * @param tzID A timezone ID specifying the timezone to use.  If 0, use
  * the default timezone.
