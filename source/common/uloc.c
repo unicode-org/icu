@@ -1925,23 +1925,7 @@ uloc_getDisplayKeyword(const char* keyword,
                                status);
 
 }
-/**
- * Modify the given locale name by removing the rightmost _-delimited
- * element.  If there is none, empty the string ("" == root).
- * NOTE: The string "root" is not recognized; do not use it.
- * @return TRUE if the fallback happened; FALSE if locale is already
- * root ("").
- */
-static UBool fallback(char *loc) {
-    UErrorCode status = U_ZERO_ERROR;
-    
-    if (!*loc) {
-        return FALSE;
-    }
-    uloc_getParent(loc, loc, uprv_strlen(loc), &status);
 
-    return TRUE;
-}
 
 #define UCURRENCY_DISPLAY_NAME_INDEX 1
 
@@ -1953,8 +1937,7 @@ uloc_getDisplayKeywordValue(   const char* locale,
                                int32_t destCapacity,
                                UErrorCode* status){
 
-    char loc[ULOC_FULLNAME_CAPACITY*4];
-    int32_t locLen = 0;
+
     char keywordValue[ULOC_FULLNAME_CAPACITY*4];
     int32_t capacity = ULOC_FULLNAME_CAPACITY*4;
     int32_t keywordValueLen =0;
@@ -1978,31 +1961,29 @@ uloc_getDisplayKeywordValue(   const char* locale,
      */
     if(uprv_stricmp(keyword, _kCurrency)==0){
 
-        UErrorCode ec2 = U_ZERO_ERROR;
         int32_t dispNameLen = 0;
         const UChar *dispName = NULL;
-
-        for (;;) {
-            UResourceBundle* rb = ures_open(NULL, displayLocale, &ec2);
-            UResourceBundle* curr = ures_getByKey(rb, _kCurrencies, NULL, &ec2);
-            UResourceBundle* names = ures_getByKey(curr, keywordValue, NULL, &ec2);
-                        
-            dispName = ures_getStringByIndex(names, UCURRENCY_DISPLAY_NAME_INDEX, &dispNameLen, &ec2);
-            ures_close(names);
-            ures_close(curr);
-            ures_close(rb);
-
-            /* If we've succeeded we're done.  Otherwise, try to fallback.
-             * If that fails (because we are already at root) then exit.
-             */
-            if (U_SUCCESS(ec2) || !fallback(loc)) {
-                break;
+        
+        UResourceBundle *bundle     = ures_open(NULL, displayLocale, status);
+        UResourceBundle *currencies = ures_getByKey(bundle, _kCurrencies, NULL, status);
+        UResourceBundle *currency   = ures_getByKeyWithFallback(currencies, keywordValue, NULL, status);
+        
+		dispName = ures_getStringByIndex(currency, UCURRENCY_DISPLAY_NAME_INDEX, &dispNameLen, status);
+        
+		/*close the bundles */
+        ures_close(currency);
+        ures_close(currencies);
+        ures_close(bundle);
+        
+        if(U_FAILURE(*status)){
+            if(*status == U_MISSING_RESOURCE_ERROR){
+                /* we just want to write the value over if nothing is available */
+                *status = U_ZERO_ERROR;
+            }else{
+                return 0;
             }
         }
-        if(U_FAILURE(ec2)){
-            *status = ec2;
-            return 0;
-        }
+
         /* now copy the dispName over if not NULL */
         if(dispName != NULL){
             if(dispNameLen <= destCapacity){
