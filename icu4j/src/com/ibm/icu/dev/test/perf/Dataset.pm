@@ -1,13 +1,7 @@
 #/**
 # *******************************************************************************
-# * Copyright (C) 2002-2002, International Business Machines Corporation and    *
+# * Copyright (C) 2002-2004, International Business Machines Corporation and    *
 # * others. All Rights Reserved.                                                *
-# *******************************************************************************
-# *
-# * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/perf/Dataset.pm,v $
-# * $Date: 2002/12/18 03:56:40 $
-# * $Revision: 1.2 $
-# *
 # *******************************************************************************
 # */
 package Dataset;

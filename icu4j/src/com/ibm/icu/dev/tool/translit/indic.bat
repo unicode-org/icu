@@ -1,13 +1,7 @@
 REM /**
 REM *******************************************************************************
-REM * Copyright (C) 2002-2002, International Business Machines Corporation and    *
+REM * Copyright (C) 2002-2004, International Business Machines Corporation and    *
 REM * others. All Rights Reserved.                                                *
-REM *******************************************************************************
-REM *
-REM * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/translit/indic.bat,v $
-REM * $Date: 2002/12/18 03:56:41 $
-REM * $Revision: 1.2 $
-REM *
 REM *******************************************************************************
 REM */
 
