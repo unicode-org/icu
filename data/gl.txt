@@ -58,7 +58,8 @@ gl {
     }
     NumberElements { 
             ",",
-            "",
+            ".",
+ // not used - but cannot be empty
             ";",
             "%",
             "0",
