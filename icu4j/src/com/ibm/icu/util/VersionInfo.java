@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/VersionInfo.java,v $ 
- * $Date: 2004/01/14 21:49:20 $ 
- * $Revision: 1.18 $
+ * $Date: 2004/01/22 06:39:31 $ 
+ * $Revision: 1.19 $
  *
  * jitterbug 1741
  *****************************************************************************************
@@ -380,8 +380,8 @@ public final class VersionInfo
         UNICODE_3_2   = getInstance(3, 2, 0, 0);
         UNICODE_4_0   = getInstance(4, 0, 0, 0);
         ICU_VERSION = getInstance(2, 8, 0, 0);
-        UCOL_RUNTIME_VERSION = getInstance(4);
-        UCOL_BUILDER_VERSION = getInstance(5);
+        UCOL_RUNTIME_VERSION = getInstance(5);
+        UCOL_BUILDER_VERSION = getInstance(6);
 		UCOL_TAILORINGS_VERSION = getInstance(1);
     }
     
