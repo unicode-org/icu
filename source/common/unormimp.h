@@ -330,6 +330,13 @@ U_NAMESPACE_END
 #endif
 
 /**
+ * internal API, used by StringPrep
+ * @internal
+ */
+U_CAPI void U_EXPORT2
+unorm_getUnicodeVersion(UVersionInfo *versionInfo, UErrorCode *pErrorCode);
+
+/**
  * internal API, used by the canonical iterator
  * @internal
  */

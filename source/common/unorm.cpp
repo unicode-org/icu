@@ -931,6 +931,14 @@ unorm_isCanonSafeStart(UChar32 c) {
     }
 }
 
+U_CAPI void U_EXPORT2
+unorm_getUnicodeVersion(UVersionInfo *versionInfo, UErrorCode *pErrorCode){
+    if(unorm_haveData(pErrorCode)){
+        uprv_memcpy(*versionInfo, dataVersion, 4);
+    }
+}
+
+
 U_CAPI UBool U_EXPORT2
 unorm_getCanonStartSet(UChar32 c, USerializedSet *fillSet) {
     UErrorCode errorCode=U_ZERO_ERROR;
