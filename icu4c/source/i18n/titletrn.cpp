@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2004, International Business Machines
+*   Copyright (C) 2001-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -134,7 +134,8 @@ void TitlecaseTransliterator::handleTransliterate(
             if(csc.b1 && isIncremental) {
                 // fMap() tried to look beyond the context limit
                 // wait for more input
-                break;
+                offsets.start=csc.cpStart;
+                return;
             }
 
             if(result>=0) {
