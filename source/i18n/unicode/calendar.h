@@ -1722,7 +1722,7 @@ protected:
     /**
      * Adjust the specified field so that it is within
      * the allowable range for the date to which this calendar is set.
-     * For example, in a Gregorian calendar pinning the {@link #DAY_OF_MONTH DAY_OF_MONTH}
+     * For example, in a Gregorian calendar pinning the {@link #UCalendarDateFields DAY_OF_MONTH}
      * field for a calendar set to April 31 would cause it to be set
      * to April 30.
      * <p>
@@ -1772,17 +1772,17 @@ protected:
      * of the week is not known but the day number and day of week for some other
      * day in the period (e.g. the current date) <em>is</em> known.
      * <p>
-     * @param desiredDay    The {@link #DAY_OF_YEAR DAY_OF_YEAR} or
-     *              {@link #DAY_OF_MONTH DAY_OF_MONTH} whose week number is desired.
+     * @param desiredDay    The {@link #UCalendarDateFields DAY_OF_YEAR} or
+     *              {@link #UCalendarDateFields DAY_OF_MONTH} whose week number is desired.
      *              Should be 1 for the first day of the period.
      *
-     * @param dayOfPeriod   The {@link #DAY_OF_YEAR DAY_OF_YEAR}
-     *              or {@link #DAY_OF_MONTH DAY_OF_MONTH} for a day in the period whose
-     *              {@link #DAY_OF_WEEK DAY_OF_WEEK} is specified by the
+     * @param dayOfPeriod   The {@link #UCalendarDateFields DAY_OF_YEAR}
+     *              or {@link #UCalendarDateFields DAY_OF_MONTH} for a day in the period whose
+     *              {@link #UCalendarDateFields DAY_OF_WEEK} is specified by the
      *              <code>knownDayOfWeek</code> parameter.
      *              Should be 1 for first day of period.
      *
-     * @param dayOfWeek  The {@link #DAY_OF_WEEK DAY_OF_WEEK} for the day
+     * @param dayOfWeek  The {@link #UCalendarDateFields DAY_OF_WEEK} for the day
      *              corresponding to the <code>knownDayOfPeriod</code> parameter.
      *              1-based with 1=Sunday.
      *
@@ -1810,11 +1810,11 @@ protected:
      * It is often useful in {@link #getActualMinimum getActualMinimum} and
      * {@link #getActualMaximum getActualMaximum} as well.
      * <p>
-     * @param dayOfPeriod   The {@link #DAY_OF_YEAR DAY_OF_YEAR} or
-     *                      {@link #DAY_OF_MONTH DAY_OF_MONTH} whose week number is desired.
+     * @param dayOfPeriod   The {@link #UCalendarDateFields DAY_OF_YEAR} or
+     *                      {@link #UCalendarDateFields DAY_OF_MONTH} whose week number is desired.
      *                      Should be 1 for the first day of the period.
      *
-     * @param dayOfWeek     The {@link #DAY_OF_WEEK DAY_OF_WEEK} for the day
+     * @param dayOfWeek     The {@link #UCalendarDateFields DAY_OF_WEEK} for the day
      *                      corresponding to the <code>dayOfPeriod</code> parameter.
      *                      1-based with 1=Sunday.
      *
