@@ -229,12 +229,12 @@ void UnicodeToHexTransliterator::handleTransliterate(Replaceable& text, UTransPo
     int32_t cursor = offsets.start;
     int32_t limit = offsets.limit;
 
-    const UnicodeFilter* filter = getFilter();
+    const UnicodeFilter* localFilter = getFilter();
     UnicodeString hex;
 
     while (cursor < limit) {
         UChar c = text.charAt(cursor);
-        if (filter != 0 && !filter->contains(c)) {
+        if (localFilter != 0 && !localFilter->contains(c)) {
             ++cursor;
             continue;
         }

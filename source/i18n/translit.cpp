@@ -749,12 +749,12 @@ void Transliterator::unregister(const UnicodeString& ID) {
  */
 void Transliterator::_unregister(const UnicodeString& ID) {
     cacheIDs.removeElement((void*) &ID);
-	//int32_t hc = hash(ID);
+    //int32_t hc = hash(ID);
     CacheEntry* entry = (CacheEntry*) cache->get(ID);
-	if (entry != 0) {
-		cache->remove(ID);
-		delete entry;
-	}
+    if (entry != 0) {
+        cache->remove(ID);
+        delete entry;
+    }
 }
 
 /**
@@ -797,9 +797,9 @@ const UnicodeString& Transliterator::getAvailableID(int32_t index) {
  */
 UChar Transliterator::filteredCharAt(const Replaceable& text, int32_t i) const {
     UChar c;
-    const UnicodeFilter* filter = getFilter();
-    return (filter == 0) ? text.charAt(i) :
-        (filter->contains(c = text.charAt(i)) ? c : (UChar)0xFFFE);
+    const UnicodeFilter* localFilter = getFilter();
+    return (localFilter == 0) ? text.charAt(i) :
+        (localFilter->contains(c = text.charAt(i)) ? c : (UChar)0xFFFE);
 }
 
 /**
