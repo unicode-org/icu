@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Normalizer.java,v $ 
- * $Date: 2000/07/21 21:26:34 $ 
- * $Revision: 1.8 $
+ * $Date: 2000/07/26 16:20:40 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -352,8 +352,8 @@ public final class Normalizer {
      */
     public static String normalize(String str, Mode mode, int options) {
         if (mode.compose()) {
-            // compose() implicitly decomposes its input before
-            // composing starts.  No need to call decompose() first.
+            // compose() handles decomposition and reordering;
+            // don't call decompose() first.
             return compose(str, mode.compat(), options);
         }
         if (mode.decomp()) {
@@ -434,10 +434,12 @@ public final class Normalizer {
                 basePos = result.length();
                 result.append(ch);
             }
-            // Index is always > 0 for COMBINING chars
-            else if (type == ComposeData.COMBINING /*&& index > 0*/)
+            else if (type == ComposeData.COMBINING)
             {
+                // assert(index > 0);
                 int cclass = ComposeData.typeBit[index];
+                // typeBit is a bit value from 0..63, indicating the class.
+                // We use a bit mask of 2 32-bit ints.
                 boolean seen = 0 != ((cclass < 32) ?
                     (classesSeenL & (1 << cclass)) :
                     (classesSeenH & (1 << (cclass & 31))));
@@ -560,23 +562,23 @@ public final class Normalizer {
     }
 
     /**
-     * Decompose starting with current input character and continuing
+     * Compose starting with current input character and continuing
      * until just before the next base char.
      * <p>
      * <b>Input</b>:
      * <ul>
-     *  <li>underlying char iter points to first character to decompose
+     *  <li>underlying char iter points to first character to compose
      * </ul>
      * <p>
      * <b>Output:</b>
      * <ul>
-     *  <li>returns first char of decomposition or DONE if at end
+     *  <li>returns first char of composition or DONE if at end
      *  <li>Underlying char iter is pointing at next base char or past end
      * </ul>
      */
     private char nextCompose()
     {
-        if (DEBUG) System.out.println("--------------- top of nextCompose() --------------------");
+        if (DEBUG) System.out.println("--------------- top of nextCompose() ---------------");
 
         int     explodePos = EMPTY;         // Position in input buffer
         int     basePos = 0;                // Position of last base in output string
@@ -606,7 +608,7 @@ public final class Normalizer {
             int type = charInfo & ComposeData.TYPE_MASK;
             int index = charInfo >>> ComposeData.INDEX_SHIFT;
 
-            if (type == ComposeData.BASE || type == ComposeData.NON_COMPOSING_COMBINING && index < minExplode) {
+            if (type == ComposeData.BASE || (type == ComposeData.NON_COMPOSING_COMBINING && index < minExplode)) {
                 if (buffer.length() > 0 && chFromText && explodePos == EMPTY) {
                     // When we hit a base char in the source text, we can return the text
                     // that's been composed so far.  We'll re-process this char next time through.
@@ -620,8 +622,9 @@ public final class Normalizer {
                 if (DEBUG) System.out.println("got BASE char " + hex(ch) + ", type=" + type + ", index=" + index);
                 lastBase = ch;
             }
-            else if (type == ComposeData.COMBINING && index > 0)
+            else if (type == ComposeData.COMBINING)
             {
+                // assert(index > 0);
                 int cclass = ComposeData.typeBit[index];
                 boolean seen = 0 != ((cclass < 32) ?
                     (classesSeenL & (1 << cclass)) :
@@ -751,22 +754,11 @@ public final class Normalizer {
                 ch = text.next();
                 chFromText = true;
             } else {
-                // NOTE: I added the following if() block to catch a case that was
-                // happening during test runs.  charAt() was being called (below)
-                // with an out-of-range index.  This fix makes the tests run and
-                // pass, but this clearly isn't the right way to fix this.  Someone
-                // needs to come back and clean this up later. - liu 7/13/00
-                if (explodePos >= explodeBuf.length()) { // fix
-                    explodePos = EMPTY;                  // fix
-                    explodeBuf.setLength(0);             // fix
-                    ch = DONE;                           // fix
-                } else {                                 // fix
-                    ch = explodeBuf.charAt(explodePos++);
-                    if (explodePos >= explodeBuf.length()) {
-                        explodePos = EMPTY;
-                        explodeBuf.setLength(0);
-                    }
-                }                                        // fix
+                ch = explodeBuf.charAt(explodePos++);
+                if (explodePos >= explodeBuf.length()) {
+                    explodePos = EMPTY;
+                    explodeBuf.setLength(0);
+                }
                 chFromText = false;
             }
         }
@@ -796,6 +788,10 @@ public final class Normalizer {
      * </ul>
      */
     private char prevCompose() {
+        if (DEBUG) System.out.println("--------------- top of prevCompose() ---------------");
+
+        // Compatibility explosions have lower indices; skip them if necessary
+        int minExplode = mode.compat() ? 0 : ComposeData.MAX_COMPAT;
 
         initBuffer();
 
@@ -807,9 +803,16 @@ public final class Normalizer {
             // Get the basic info for the character
             int charInfo = composeLookup(ch);
             int type = charInfo & ComposeData.TYPE_MASK;
+            int index = charInfo >>> ComposeData.INDEX_SHIFT;
 
-            if (type == ComposeData.BASE || type == ComposeData.NON_COMPOSING_COMBINING || type == ComposeData.HANGUL
-                || type == ComposeData.INITIAL_JAMO || type == ComposeData.IGNORE)
+            if (DEBUG) System.out.println("prevCompose got char " + hex(ch) +
+                                          ", type=" + type + ", index=" + index +
+                                          ", minExplode=" + minExplode);
+
+            if (type == ComposeData.BASE
+                || (type == ComposeData.NON_COMPOSING_COMBINING && index < minExplode)
+                || type == ComposeData.HANGUL
+                || type == ComposeData.INITIAL_JAMO)
             {
                 break;
             }
@@ -819,6 +822,8 @@ public final class Normalizer {
             // TODO: The performance of this is awful; add a way to compose
             // a StringBuffer in place.
             String composed = compose(buffer.toString(), mode.compat(), options);
+            if (DEBUG) System.out.println("prevCompose called compose(" + hex(buffer) +
+                                          ")->" + hex(composed));            
             buffer.setLength(0);
             buffer.append(composed);
 
@@ -833,6 +838,7 @@ public final class Normalizer {
             ch = DONE;
         }
 
+        if (DEBUG) System.out.println("prevCompose returning " + hex(ch));
         return ch;
     }
 
@@ -912,9 +918,11 @@ public final class Normalizer {
      */
     public static String decompose(String source, boolean compat, int options)
     {
-        boolean hangul = (options & IGNORE_HANGUL) == 0;
-        int     limit  = compat ? 0 : DecompData.MAX_COMPAT;
+        if (DEBUG) System.out.println("--------------- top of decompose() ---------------");
 
+        boolean hangul = (options & IGNORE_HANGUL) == 0;
+        int minDecomp = compat ? 0 : DecompData.MAX_COMPAT;
+ 
         StringBuffer result = new StringBuffer();
         StringBuffer buffer = null;
 
@@ -936,8 +944,11 @@ public final class Normalizer {
             int offset = DecompData.offsets.elementAt(ch);
             int index = offset & DecompData.DECOMP_MASK;
 
-            if (index > limit) {
+            if (DEBUG) System.out.println("decompose got " + hex(ch));
+
+            if (index > minDecomp) {
                 if ((offset & DecompData.DECOMP_RECURSE) != 0) {
+                    if (DEBUG) System.out.println(" " + hex(ch) + " has RECURSIVE decomposition, index=" + index);
                     if (buffer == null) {
                         buffer = new StringBuffer();
                     } else {
@@ -946,10 +957,11 @@ public final class Normalizer {
                     doAppend(DecompData.contents, index, buffer);
                     bufPtr = 0;
                 } else {
+                    if (DEBUG) System.out.println(" " + hex(ch) + " has decomposition, index=" + index);
                     doAppend(DecompData.contents, index, result);
                 }
             } else if (ch >= HANGUL_BASE && ch < HANGUL_LIMIT && hangul) {
-                hangulToJamo(ch, result, limit);
+                hangulToJamo(ch, result, minDecomp);
             } else {
                 result.append(ch);
             }
@@ -975,6 +987,8 @@ public final class Normalizer {
      */
     private char nextDecomp()
     {
+        if (DEBUG) System.out.println("--------------- top of nextDecomp() ---------------");
+
         boolean hangul = (options & IGNORE_HANGUL) == 0;
         char ch = curForward();
 
@@ -1008,14 +1022,17 @@ public final class Normalizer {
             // Any other combining chacters that immediately follow the decomposed
             // character must be included in the buffer too, because they're
             // conceptually part of the same logical character.
-            //
-            // TODO: Some of these might need to be decomposed too.
-            //
             while ((ch = text.next()) != DONE
                 && DecompData.canonClass.elementAt(ch) != DecompData.BASE)
             {
                 needToReorder = true;
-                buffer.append(ch);
+                // Decompose any of these characters that need it - Liu
+                index = DecompData.offsets.elementAt(ch) & DecompData.DECOMP_MASK;
+                if (index > minDecomp) {
+                    doAppend(DecompData.contents, index, buffer);
+                } else {
+                    buffer.append(ch);
+                }
             }
 
             if (buffer.length() > 1 && needToReorder) {
@@ -1039,7 +1056,7 @@ public final class Normalizer {
                 ch = buffer.charAt(0);
             }
         }
-        //if (DEBUG) System.out.println(" nextDecomp returning " + hex(ch) + ", text index=" + text.getIndex());
+        if (DEBUG) System.out.println(" nextDecomp returning " + hex(ch) + ", text index=" + text.getIndex());
         return ch;
     }
 
@@ -1059,6 +1076,8 @@ public final class Normalizer {
      * </ul>
      */
     private char prevDecomp() {
+        if (DEBUG) System.out.println("--------------- top of prevDecomp() ---------------");
+
         boolean hangul = (options & IGNORE_HANGUL) == 0;
 
         char ch = curBackward();
@@ -1066,42 +1085,45 @@ public final class Normalizer {
         int offset = DecompData.offsets.elementAt(ch);
         int index = offset & DecompData.DECOMP_MASK;
 
-        if (DEBUG) System.out.println("prevDecomp got input char " + ch);
+        if (DEBUG) System.out.println("prevDecomp got input char " + hex(ch));
 
         if (index > minDecomp || DecompData.canonClass.elementAt(ch) != DecompData.BASE)
         {
             initBuffer();
 
-            // Slurp up any combining characters till we get to a base char.
-            while (ch != DONE && DecompData.canonClass.elementAt(ch) != DecompData.BASE) {
+            // This method rewritten to pass conformance tests. - Liu
+            // Collect all characters up to the previous base char
+            while (ch != DONE) {
                 buffer.insert(0, ch);
+                if (DecompData.canonClass.elementAt(ch) == DecompData.BASE) break;
                 ch = text.previous();
             }
 
-            // Now decompose this base character
-            offset = DecompData.offsets.elementAt(ch);
-            index = offset & DecompData.DECOMP_MASK;
+            if (DEBUG) System.out.println("prevDecomp buffer: " + hex(buffer));
 
-            if (index > minDecomp) {
-                if (DEBUG) System.out.println(" " + hex(ch) + " has decomposition, index=" + index);
+            // Decompose the buffer
+            for (int i = 0; i < buffer.length(); i++) {
+                ch = buffer.charAt(i);
+                offset = DecompData.offsets.elementAt(ch);
+                index = offset & DecompData.DECOMP_MASK;                
 
-                int len = doInsert(DecompData.contents, index, buffer, 0);
-
-                if ((offset & DecompData.DECOMP_RECURSE) != 0) {
-                    // Need to decompose this recursively
-                    for (int i = 0; i < len; i++) {
-                        ch = buffer.charAt(i);
-                        index = DecompData.offsets.elementAt(ch) & DecompData.DECOMP_MASK;
-                        if (index > minDecomp) {
-                            i += doReplace(DecompData.contents, index, buffer, i);
+                if (index > minDecomp) {
+                    int j = doReplace(DecompData.contents, index, buffer, i);
+                    if ((offset & DecompData.DECOMP_RECURSE) != 0) {
+                        // Need to decompose this recursively
+                        for (; i < j; ++i) {
+                            ch = buffer.charAt(i);
+                            index = DecompData.offsets.elementAt(ch) & DecompData.DECOMP_MASK;
+                            if (index > minDecomp) {
+                                i += doReplace(DecompData.contents, index, buffer, i);
+                            }
                         }
                     }
+                    i = j;
                 }
-            } else {
-                // This is a base character that doesn't decompose
-                // and isn't involved in reordering, so throw it back
-                text.next();
             }
+            
+            if (DEBUG) System.out.println("prevDecomp buffer after decomp: " + hex(buffer));
 
             if (buffer.length() > 1) {
                 // If there is more than one combining character in the buffer,
@@ -1436,16 +1458,14 @@ public final class Normalizer {
         int index = offset >>> STR_INDEX_SHIFT;
         int length = offset & STR_LENGTH_MASK;
 
+        dest.setCharAt(pos++, DecompData.contents.charAt(index++));
         if (length == 0) {
-            dest.setCharAt(pos++, DecompData.contents.charAt(index++));
-
             char ch;
             while ((ch = DecompData.contents.charAt(index++)) != 0x0000) {
                 dest.insert(pos++, ch);
                 length++;
             }
         } else {
-            dest.setCharAt(pos++, DecompData.contents.charAt(index++));
             for (int i = 1; i < length; i++) {
                 dest.insert(pos++, DecompData.contents.charAt(index++));
             }
@@ -1626,6 +1646,9 @@ public final class Normalizer {
 
     static final String hex(char ch) {
         return UInfo.hex(ch);
+    }
+    static final String hex(String s) {
+        return UInfo.hex(s);
     }
     static final String hex(StringBuffer s) {
         return UInfo.hex(s.toString());
