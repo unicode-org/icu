@@ -143,34 +143,6 @@ uprv_compareEBCDICPropertyNames(const char *name1, const char *name2) {
 
 /* API functions ------------------------------------------------------------ */
 
-U_CAPI void U_EXPORT2
-u_charAge(UChar32 c, UVersionInfo versionArray) {
-    if(versionArray!=NULL) {
-        uint32_t version=u_getUnicodeProperties(c, 0)>>UPROPS_AGE_SHIFT;
-        versionArray[0]=(uint8_t)(version>>4);
-        versionArray[1]=(uint8_t)(version&0xf);
-        versionArray[2]=versionArray[3]=0;
-    }
-}
-
-U_CAPI UScriptCode U_EXPORT2
-uscript_getScript(UChar32 c, UErrorCode *pErrorCode) {
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
-    if((uint32_t)c>0x10ffff) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-
-    return (UScriptCode)(u_getUnicodeProperties(c, 0)&UPROPS_SCRIPT_MASK);
-}
-
-U_CAPI UBlockCode U_EXPORT2
-ublock_getCode(UChar32 c) {
-    return (UBlockCode)((u_getUnicodeProperties(c, 0)&UPROPS_BLOCK_MASK)>>UPROPS_BLOCK_SHIFT);
-}
-
 static const struct {
     int32_t column;
     uint32_t mask;
@@ -279,26 +251,6 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
 }
 
 U_CAPI UBool U_EXPORT2
-u_isUAlphabetic(UChar32 c) {
-    return u_hasBinaryProperty(c, UCHAR_ALPHABETIC);
-}
-
-U_CAPI UBool U_EXPORT2
-u_isULowercase(UChar32 c) {
-    return u_hasBinaryProperty(c, UCHAR_LOWERCASE);
-}
-
-U_CAPI UBool U_EXPORT2
-u_isUUppercase(UChar32 c) {
-    return u_hasBinaryProperty(c, UCHAR_UPPERCASE);
-}
-
-U_CAPI UBool U_EXPORT2
-u_isUWhiteSpace(UChar32 c) {
-    return u_hasBinaryProperty(c, UCHAR_WHITE_SPACE);
-}
-
-U_CAPI UBool U_EXPORT2
 uprv_isRuleWhiteSpace(UChar32 c) {
     /* "white space" in the sense of ICU rule parsers
        This is a FIXED LIST that is NOT DEPENDENT ON UNICODE PROPERTIES.
@@ -362,34 +314,7 @@ u_getIntPropertyValue(UChar32 c, UProperty which) {
             errorCode=U_ZERO_ERROR;
             return (int32_t)uscript_getScript(c, &errorCode);
         case UCHAR_HANGUL_SYLLABLE_TYPE:
-            /* purely algorithmic; hardcode known characters, check for assigned new ones */
-            if(c<JAMO_L_BASE) {
-                /* U_HST_NOT_APPLICABLE */
-            } else if(c<=0x11ff) {
-                /* Jamo range */
-                if(c<=0x115f) {
-                    /* Jamo L range, HANGUL CHOSEONG ... */
-                    if(c==0x115f || c<=0x1159 || u_charType(c)==U_OTHER_LETTER) {
-                        return U_HST_LEADING_JAMO;
-                    }
-                } else if(c<=0x11a7) {
-                    /* Jamo V range, HANGUL JUNGSEONG ... */
-                    if(c<=0x11a2 || u_charType(c)==U_OTHER_LETTER) {
-                        return U_HST_VOWEL_JAMO;
-                    }
-                } else {
-                    /* Jamo T range */
-                    if(c<=0x11f9 || u_charType(c)==U_OTHER_LETTER) {
-                        return U_HST_TRAILING_JAMO;
-                    }
-                }
-            } else if((c-=HANGUL_BASE)<0) {
-                /* U_HST_NOT_APPLICABLE */
-            } else if(c<HANGUL_COUNT) {
-                /* Hangul syllable */
-                return c%JAMO_T_COUNT==0 ? U_HST_LV_SYLLABLE : U_HST_LVT_SYLLABLE;
-            }
-            return U_HST_NOT_APPLICABLE;
+            return uchar_getHST(c);
 #if !UCONFIG_NO_NORMALIZATION
         case UCHAR_NFD_QUICK_CHECK:
         case UCHAR_NFKD_QUICK_CHECK:
@@ -564,20 +489,6 @@ u_getIntPropertyMaxValue(UProperty which) {
  * Do not use a UnicodeSet pattern because that causes infinite recursion;
  * UnicodeSet depends on the inclusions set.
  */
-#ifdef DEBUG 
-static uint32_t 
-strrch(const char* source,uint32_t sourceLen,char find){
-    const char* tSourceEnd =source + (sourceLen-1);
-    while(tSourceEnd>= source){
-        if(*tSourceEnd==find){
-            return (uint32_t)(tSourceEnd-source);
-        }
-        tSourceEnd--;
-    }
-    return (uint32_t)(tSourceEnd-source);
-}
-#endif
-
 U_CAPI void U_EXPORT2
 uprv_getInclusions(USetAdder *sa, UErrorCode *pErrorCode) {
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {

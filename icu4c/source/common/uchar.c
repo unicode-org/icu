@@ -21,12 +21,14 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
+#include "unicode/uscript.h"
 #include "unicode/udata.h"
 #include "umutex.h"
 #include "cmemory.h"
 #include "ucln_cmn.h"
 #include "utrie.h"
 #include "udataswp.h"
+#include "unormimp.h" /* JAMO_L_BASE etc. */
 #include "uprops.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
@@ -533,6 +535,11 @@ u_isalpha(UChar32 c) {
     return (UBool)((CAT_MASK(props)&U_GC_L_MASK)!=0);
 }
 
+U_CAPI UBool U_EXPORT2
+u_isUAlphabetic(UChar32 c) {
+    return (u_getUnicodeProperties(c, 1)&U_MASK(UPROPS_ALPHABETIC))!=0;
+}
+
 /* Checks if ch is a letter or a decimal digit */
 U_CAPI UBool U_EXPORT2
 u_isalnum(UChar32 c) {
@@ -609,6 +616,11 @@ u_isblank(UChar32 c) {
         /* White_Space but not LS (Zl) or PS (Zp) */
         return u_isUWhiteSpace(c) && ((c&0xfffffffe)!=0x2028);
     }
+}
+
+U_CAPI UBool U_EXPORT2
+u_isUWhiteSpace(UChar32 c) {
+    return (u_getUnicodeProperties(c, 1)&U_MASK(UPROPS_WHITE_SPACE))!=0;
 }
 
 /* Checks if the Unicode character is printable.*/
@@ -973,6 +985,73 @@ uprv_getMaxValues(int32_t column) {
     }
 }
 
+/*
+ * get Hangul Syllable Type
+ * implemented here so that uchar.c (uchar_addPropertyStarts())
+ * does not depend on uprops.c (u_getIntPropertyValue(c, UCHAR_HANGUL_SYLLABLE_TYPE))
+ */
+U_CFUNC UHangulSyllableType
+uchar_getHST(UChar32 c) {
+    /* purely algorithmic; hardcode known characters, check for assigned new ones */
+    if(c<JAMO_L_BASE) {
+        /* U_HST_NOT_APPLICABLE */
+    } else if(c<=0x11ff) {
+        /* Jamo range */
+        if(c<=0x115f) {
+            /* Jamo L range, HANGUL CHOSEONG ... */
+            if(c==0x115f || c<=0x1159 || u_charType(c)==U_OTHER_LETTER) {
+                return U_HST_LEADING_JAMO;
+            }
+        } else if(c<=0x11a7) {
+            /* Jamo V range, HANGUL JUNGSEONG ... */
+            if(c<=0x11a2 || u_charType(c)==U_OTHER_LETTER) {
+                return U_HST_VOWEL_JAMO;
+            }
+        } else {
+            /* Jamo T range */
+            if(c<=0x11f9 || u_charType(c)==U_OTHER_LETTER) {
+                return U_HST_TRAILING_JAMO;
+            }
+        }
+    } else if((c-=HANGUL_BASE)<0) {
+        /* U_HST_NOT_APPLICABLE */
+    } else if(c<HANGUL_COUNT) {
+        /* Hangul syllable */
+        return c%JAMO_T_COUNT==0 ? U_HST_LV_SYLLABLE : U_HST_LVT_SYLLABLE;
+    }
+    return U_HST_NOT_APPLICABLE;
+}
+
+U_CAPI void U_EXPORT2
+u_charAge(UChar32 c, UVersionInfo versionArray) {
+    if(versionArray!=NULL) {
+        uint32_t version=u_getUnicodeProperties(c, 0)>>UPROPS_AGE_SHIFT;
+        versionArray[0]=(uint8_t)(version>>4);
+        versionArray[1]=(uint8_t)(version&0xf);
+        versionArray[2]=versionArray[3]=0;
+    }
+}
+
+U_CAPI UScriptCode U_EXPORT2
+uscript_getScript(UChar32 c, UErrorCode *pErrorCode) {
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+    if((uint32_t)c>0x10ffff) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    return (UScriptCode)(u_getUnicodeProperties(c, 0)&UPROPS_SCRIPT_MASK);
+}
+
+U_CAPI UBlockCode U_EXPORT2
+ublock_getCode(UChar32 c) {
+    return (UBlockCode)((u_getUnicodeProperties(c, 0)&UPROPS_BLOCK_MASK)>>UPROPS_BLOCK_SHIFT);
+}
+
+/* property starts for UnicodeSet ------------------------------------------- */
+
 static UBool U_CALLCONV
 _enumPropertyStartsRange(const void *context, UChar32 start, UChar32 limit, uint32_t value) {
     /* add the start code point to the USet */
@@ -1062,7 +1141,7 @@ uchar_addPropertyStarts(USetAdder *sa, UErrorCode *pErrorCode) {
     sa->add(sa->set, 0x1100);
     value=U_HST_LEADING_JAMO;
     for(c=0x115a; c<=0x115f; ++c) {
-        value2=u_getIntPropertyValue(c, UCHAR_HANGUL_SYLLABLE_TYPE);
+        value2=uchar_getHST(c);
         if(value!=value2) {
             value=value2;
             sa->add(sa->set, c);
@@ -1072,7 +1151,7 @@ uchar_addPropertyStarts(USetAdder *sa, UErrorCode *pErrorCode) {
     sa->add(sa->set, 0x1160);
     value=U_HST_VOWEL_JAMO;
     for(c=0x11a3; c<=0x11a7; ++c) {
-        value2=u_getIntPropertyValue(c, UCHAR_HANGUL_SYLLABLE_TYPE);
+        value2=uchar_getHST(c);
         if(value!=value2) {
             value=value2;
             sa->add(sa->set, c);
@@ -1082,7 +1161,7 @@ uchar_addPropertyStarts(USetAdder *sa, UErrorCode *pErrorCode) {
     sa->add(sa->set, 0x11a8);
     value=U_HST_TRAILING_JAMO;
     for(c=0x11fa; c<=0x11ff; ++c) {
-        value2=u_getIntPropertyValue(c, UCHAR_HANGUL_SYLLABLE_TYPE);
+        value2=uchar_getHST(c);
         if(value!=value2) {
             value=value2;
             sa->add(sa->set, c);
