@@ -1,3 +1,9 @@
+icu (2.0-2.0.1pre-1) unstable; urgency=low
+
+  * Prerelease of 2.0.1 with a working upgraded uconv(1).
+
+ -- Yves Arrouye <yves@debian.org>  Thu, 31 Jan 2002 16:55:26 -0800
+
 icu (2.0-3) unstable; urgency=low
 
   * Renamed doc-base to icu-doc.doc-base. Closes: 127487
