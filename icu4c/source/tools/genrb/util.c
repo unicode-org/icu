@@ -15,10 +15,10 @@
 *******************************************************************************
 */
 
+#include "unicode/putil.h"
 #include "util.h"
 #include "cmemory.h"
 #include "cstring.h"
-#include "unicode/putil.h"
 
 
 /* go from "/usr/local/include/curses.h" to "/usr/local/include" */

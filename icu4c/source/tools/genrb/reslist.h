@@ -29,6 +29,8 @@
 #include "cstring.h"
 #include "unewdata.h"
 
+U_CDECL_BEGIN
+
 /* Resource bundle root table */
 struct SRBRoot {
   char *fLocale;
@@ -121,4 +123,5 @@ struct SResource {
 
 void res_close(struct SResource *res, UErrorCode *status);
 
+U_CDECL_END
 #endif /* #ifndef RESLIST_H */
