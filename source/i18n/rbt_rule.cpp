@@ -14,49 +14,6 @@
 #include "unicode/uniset.h"
 
 /**
- * Construct a new rule with the given key, output text, and other
- * attributes.  Zero, one, or two context strings may be specified.  A
- * cursor position may be specified for the output text.
- * @param key the string to match
- * @param output the string to produce when the <code>key</code> is seen
- * @param anteContext if not null and not empty, then it must be matched
- * before the <code>key</code>
- * @param postContext if not null and not empty, then it must be matched
- * after the <code>key</code>
- * @param cursorPos a position for the cursor after the <code>output</code>
- * is emitted.  If less than zero, then the cursor is placed after the
-
- * <code>output</code>; that is, -1 is equivalent to
- * <code>output.length()</code>.  If greater than
- * <code>output.length()</code> then an exception is thrown.
- * @exception IllegalArgumentException if the cursor position is out of
- * range.
- */
-TransliterationRule::TransliterationRule(const UnicodeString& theKey,
-                                         const UnicodeString& theOutput,
-                                         const UnicodeString& theAnteContext,
-                                         const UnicodeString& thePostContext,
-                                         int32_t theCursorPos,
-                                         UErrorCode &status) :
-    output(theOutput),
-    cursorPos(theCursorPos)
-{
-    if (U_FAILURE(status)) {
-        return;
-    }
-    anteContextLength = theAnteContext.length();
-    keyLength = theKey.length();
-    pattern = theAnteContext;
-    pattern.append(theKey).append(thePostContext);
-    if (cursorPos < 0) {
-        cursorPos = output.length();
-    }
-    if (cursorPos > output.length()) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-    }
-}
-
-/**
  * Construct a new rule with the given input, output text, and other
  * attributes.  A cursor position may be specified for the output text.
  * @param input input string, including key and optional ante and
