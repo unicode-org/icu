@@ -14,7 +14,7 @@
 */
 #ifndef USCRIPT_H
 #define USCRIPT_H
-#include "utypes.h"
+#include "unicode/utypes.h"
 
 /**
  * Constants for Unicode script values from ScriptNames.txt .
