@@ -284,7 +284,7 @@ void TestConvert()
   
     /*Testing ucnv_getDefaultName() and ucnv_setDefaultNAme()*/
 #ifdef WIN32
-    if(strcmp(ucnv_getDefaultName(), "cp1252")==0)
+    if(strcmp(ucnv_getDefaultName(), "ibm-1252")==0)
       log_verbose("getDefaultName o.k.\n");
     else
       log_err("getDefaultName failed \n");
