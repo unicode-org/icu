@@ -28,10 +28,12 @@
 #include "unicode/locid.h"
 #include "unicode/numfmt.h"
 #include "unicode/unistr.h"
+#include "unicode/strenum.h"
 
 U_NAMESPACE_BEGIN
 
 class NFRuleSet;
+class LocalizationInfo;
 
 /**
  * Tags for the predefined rulesets.
@@ -473,6 +475,24 @@ class Collator;
  * subclasses, such code will not necessarily work and will not be
  * guaranteed to work stably from release to release.
  *
+ * <p><b>Localizations</b></p>
+ * <p>Constructors are available that allow the specification of localizations for the
+ * public rule sets (and also allow more control over what public rule sets are available).
+ * Localization data is represented as a textual description.  The description represents
+ * an array of arrays of string.  The first element is an array of the public rule set names,
+ * each of these must be one of the public rule set names that appear in the rules.  Only
+ * names in this array will be treated as public rule set names by the API.  Each subsequent
+ * element is an array of localizations of these names.  The first element of one of these
+ * subarrays is the locale name, and the remaining elements are localizations of the
+ * public rule set names, in the same order as they were listed in the first arrray.</p>
+ * <p>In the syntax, angle brackets '<', '>' are used to delimit the arrays, and comma ',' is used
+ * to separate elements of an array.  Whitespace is ignored, unless quoted.</p>
+ * <p>For example:<blockquote>
+ * < < %foo, %bar, %baz >, 
+ *   < en, Foo, Bar, Baz >, 
+ *   < fr, 'le Foo', 'le Bar', 'le Baz' > 
+ *   < zh, \u7532, \u4e59, \u4e19 > >
+ * </blockquote></p>
  * @author Richard Gillam
  * @see NumberFormat
  * @see DecimalFormat
@@ -485,6 +505,44 @@ public:
   // constructors
   //-----------------------------------------------------------------------
 
+    /**
+     * Creates a RuleBasedNumberFormat that behaves according to the description
+     * passed in.  The formatter uses the default locale.
+     * @param rules A description of the formatter's desired behavior.
+     * See the class documentation for a complete explanation of the description
+     * syntax.
+     * @param perror The parse error if an error was encountered.
+     * @param status The status indicating whether the constructor succeeded.
+     * @draft ICU 3.2
+     */
+    RuleBasedNumberFormat(const UnicodeString& rules, UParseError& perror, UErrorCode& status);
+
+    /**
+     * Creates a RuleBasedNumberFormat that behaves according to the description
+     * passed in.  The formatter uses the default locale.  
+     * <p>
+     * The localizations data provides information about the public
+     * rule sets and their localized display names for different
+     * locales. The first element in the list is an array of the names
+     * of the public rule sets.  The first element in this array is
+     * the initial default ruleset.  The remaining elements in the
+     * list are arrays of localizations of the names of the public
+     * rule sets.  Each of these is one longer than the initial array,
+     * with the first String being the ULocale ID, and the remaining
+     * Strings being the localizations of the rule set names, in the
+     * same order as the initial array.  Arrays are NULL-terminated.
+     * @param description A description of the formatter's desired behavior.
+     * See the class documentation for a complete explanation of the description
+     * syntax.
+     * @param localizations the localization information.
+     * names in the description.  These will be copied by the constructor.
+     * @param perror The parse error if an error was encountered.
+     * @param status The status indicating whether the constructor succeeded.
+     * @draft ICU 3.2
+     */
+    RuleBasedNumberFormat(const UnicodeString& rules, const UnicodeString& localizations,
+                        UParseError& perror, UErrorCode& status);
+
   /**
    * Creates a RuleBasedNumberFormat that behaves according to the rules
    * passed in.  The formatter uses the specified locale to determine the
@@ -493,8 +551,8 @@ public:
    * @param rules The formatter rules.
    * See the class documentation for a complete explanation of the rule
    * syntax.
-   * @param locale A locale, that governs which characters are used for
-   * formatting values in numerals, and which characters are equivalent in
+   * @param locale A locale that governs which characters are used for
+   * formatting values in numerals and which characters are equivalent in
    * lenient parsing.
    * @param perror The parse error if an error was encountered.
    * @param status The status indicating whether the constructor succeeded.
@@ -502,6 +560,35 @@ public:
    */
   RuleBasedNumberFormat(const UnicodeString& rules, const Locale& locale,
                         UParseError& perror, UErrorCode& status);
+
+    /**
+     * Creates a RuleBasedNumberFormat that behaves according to the description
+     * passed in.  The formatter uses the default locale.  
+     * <p>
+     * The localizations data provides information about the public
+     * rule sets and their localized display names for different
+     * locales. The first element in the list is an array of the names
+     * of the public rule sets.  The first element in this array is
+     * the initial default ruleset.  The remaining elements in the
+     * list are arrays of localizations of the names of the public
+     * rule sets.  Each of these is one longer than the initial array,
+     * with the first String being the ULocale ID, and the remaining
+     * Strings being the localizations of the rule set names, in the
+     * same order as the initial array.  Arrays are NULL-terminated.
+     * @param rules A description of the formatter's desired behavior.
+     * See the class documentation for a complete explanation of the description
+     * syntax.
+     * @param localizations a list of localizations for the rule set
+     * names in the description.  These will be copied by the constructor.
+     * @param locale A locale that governs which characters are used for
+     * formatting values in numerals and which characters are equivalent in
+     * lenient parsing.
+     * @param perror The parse error if an error was encountered.
+     * @param status The status indicating whether the constructor succeeded.
+     * @draft ICU 3.2
+     */
+    RuleBasedNumberFormat(const UnicodeString& rules, const UnicodeString& localizations,
+                        const Locale& locale, UParseError& perror, UErrorCode& status);
 
   /**
    * Creates a RuleBasedNumberFormat from a predefined ruleset.  The selector
@@ -571,6 +658,13 @@ public:
   virtual UnicodeString getRules() const;
 
   /**
+   * Return the number of public rule set names.
+   * @return the number of public rule set names.
+   * @stable ICU 2.0
+   */
+  virtual int32_t getNumberOfRuleSetNames() const;
+
+  /**
    * Return the name of the index'th public ruleSet.  If index is not valid,
    * the function returns null.
    * @param index the index of the ruleset
@@ -580,11 +674,47 @@ public:
   virtual UnicodeString getRuleSetName(int32_t index) const;
 
   /**
-   * Return the number of public rule set names.
-   * @return the number of public rule set names.
-   * @stable ICU 2.0
+   * Return the number of locales for which we have localized rule set display names.
+   * @return the number of locales for which we have localized rule set display names.
+   * @draft ICU 3.2
    */
-  virtual int32_t getNumberOfRuleSetNames() const;
+  virtual int32_t getNumberOfRuleSetDisplayNameLocales(void) const;
+
+  /**
+   * Return the index'th display name locale.
+   * @param index the index of the locale
+   * @param return the locale
+   * @see #getNumberOfRuleSetDisplayNameLocales
+   * @draft ICU 3.2
+   */
+  virtual Locale getRuleSetDisplayNameLocale(int32_t index, UErrorCode& status) const;
+
+    /**
+     * Return the rule set display names for the provided locale.  These are in the same order
+     * as those returned by getRuleSetName.  The locale is matched against the locales for
+     * which there is display name data, using normal fallback rules.  If no locale matches, 
+     * the default display names are returned.  (These are the internal rule set names minus
+     * the leading '%'.)
+     * @param index the index of the rule set
+     * @param locale the locale (returned by getRuleSetDisplayNameLocales) for which the localized
+     * display name is desired
+     * @return the display name for the given index, which might be bogus if there is an error
+     * @see #getRuleSetName
+     * @draft ICU 3.2
+     */
+  virtual UnicodeString getRuleSetDisplayName(int32_t index, 
+					      const Locale& locale = Locale::getDefault());
+
+    /**
+     * Return the rule set display name for the provided rule set and locale.  
+     * The locale is matched against the locales for which there is display name data, using
+     * normal fallback rules.  If no locale matches, the default display name is returned.
+     * @return the display name for the rule set
+     * @draft ICU 3.2
+     * @see #getRuleSetDisplayNames
+     */
+  virtual UnicodeString getRuleSetDisplayName(const UnicodeString& ruleSetName, 
+					      const Locale& locale = Locale::getDefault());
 
   /**
    * Formats the specified 32-bit number using the default ruleset.
@@ -829,7 +959,12 @@ public:
 private:
     RuleBasedNumberFormat(); // default constructor not implemented
 
-    void init(const UnicodeString& rules, UParseError& perror, UErrorCode& status);
+    // this will ref the localizations if they are not NULL
+    // caller must deref to get adoption 
+    RuleBasedNumberFormat(const UnicodeString& description, LocalizationInfo* localizations, 
+			  const Locale& locale, UParseError& perror, UErrorCode& status);
+
+    void init(const UnicodeString& rules, LocalizationInfo* localizations, UParseError& perror, UErrorCode& status);
     void dispose();
     void stripWhitespace(UnicodeString& src);
     void initDefaultRuleSet();
@@ -853,9 +988,43 @@ private:
     DecimalFormatSymbols* decimalFormatSymbols;
     UBool lenient;
     UnicodeString* lenientParseRules;
+    LocalizationInfo* localizations;
 };
 
 // ---------------
+
+inline
+RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description, 
+					     UParseError& perror, 
+					     UErrorCode& status) 
+  : ruleSets(NULL)
+  , defaultRuleSet(NULL)
+  , locale(Locale::getDefault())
+  , collator(NULL)
+  , decimalFormatSymbols(NULL)
+  , lenient(FALSE)
+  , lenientParseRules(NULL)
+  , localizations(NULL)
+{
+    init(description, NULL, perror, status);
+}
+
+inline
+RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description, 
+					     const Locale& aLocale,
+					     UParseError& perror, 
+					     UErrorCode& status) 
+  : ruleSets(NULL)
+  , defaultRuleSet(NULL)
+  , locale(aLocale)
+  , collator(NULL)
+  , decimalFormatSymbols(NULL)
+  , lenient(FALSE)
+  , lenientParseRules(NULL)
+  , localizations(NULL)
+{
+    init(description, NULL, perror, status);
+}
 
 inline UnicodeString&
 RuleBasedNumberFormat::format(const Formattable& obj,

@@ -59,6 +59,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
         TESTCASE(11, TestSwedishSpellout);
         TESTCASE(12, TestBelgianFrenchSpellout);
         TESTCASE(13, TestSmallValues);
+        TESTCASE(14, TestLocalizations);
 #else
         TESTCASE(0, TestRBNFDisabled);
 #endif
@@ -1477,6 +1478,135 @@ IntlTestRBNF::TestSmallValues()
 }
 
 void 
+IntlTestRBNF::TestLocalizations(void)
+{
+    UnicodeString rules("%main:0:no;1:some;100:a lot;1000:tons;\n"
+        "%other:0:nada;1:yah, some;100:plenty;1000:more'n you'll ever need");
+
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError perror;
+    RuleBasedNumberFormat formatter(rules, perror, status);
+    if (U_FAILURE(status)) {
+        errln("FAIL: could not construct formatter");           
+    } else {
+        {
+            static const char* testData[][2] = {
+                { "0", "nada" },
+                { "5", "yah, some" },
+                { "423", "plenty" },
+                { "12345", "more'n you'll ever need" },
+                { NULL, NULL }
+            };
+            doTest(&formatter, testData, FALSE);
+        }
+
+        {
+            UnicodeString loc("<<%main, %other>,<en, Main, Other>,<fr, leMain, leOther>,<de, 'das Main', 'etwas anderes'>>");
+            static const char* testData[][2] = {
+                { "0", "no" },
+                { "5", "some" },
+                { "423", "a lot" },
+                { "12345", "tons" },
+                { NULL, NULL }
+            };
+            RuleBasedNumberFormat formatter0(rules, loc, perror, status);
+            if (U_FAILURE(status)) {
+                errln("failed to build second formatter");
+            } else {
+                doTest(&formatter0, testData, FALSE);
+
+                {
+                // exercise localization info
+                    Locale locale0("en__VALLEY@turkey=gobblegobble");
+                    Locale locale1("de_DE_FOO");
+                    Locale locale2("ja_JP");
+                    logln(formatter0.getRuleSetDisplayName(0, locale0));
+                    logln(formatter0.getRuleSetDisplayName(0, locale1));
+                    logln(formatter0.getRuleSetDisplayName(0, locale2));
+                    // TODO: check against intended result
+                }
+
+                for (int i = 0; i < formatter0.getNumberOfRuleSetDisplayNameLocales(); ++i) {
+                    Locale locale = formatter0.getRuleSetDisplayNameLocale(i, status);
+                    if (U_SUCCESS(status)) {
+                        for (int j = 0; j < formatter0.getNumberOfRuleSetNames(); ++j) {
+                            UnicodeString name = formatter0.getRuleSetName(j);
+                            UnicodeString lname = formatter0.getRuleSetDisplayName(j, locale);
+                            UnicodeString msg = locale.getName();
+                            msg.append(": ");
+                            msg.append(name);
+                            msg.append(" = ");
+                            msg.append(lname);
+                            logln(msg);
+                        }
+                    }
+                }
+            }
+        }
+
+        {
+            static const char* goodLocs[] = {
+                "", // zero-length ok, same as providing no localization data
+                "<<>>", // no public rule sets ok
+                "<<%main>>", // no localizations ok
+                "<<%main,>,<en, Main,>>", // comma before close angle ok
+                "<<%main>,<en, ',<>\" '>>", // quotes everything until next quote
+                "<<%main>,<'en', \"it's ok\">>", // double quotes work too
+                "  \n <\n  <\n  %main\n  >\n  , \t <\t   en\t  ,  \tfoo \t\t > \n\n >  \n ", // rule whitespace ok
+           }; 
+            int32_t goodLocsLen = sizeof(goodLocs)/sizeof(goodLocs[0]);
+
+            static const char* badLocs[] = {
+                " ", // non-zero length
+                "<>", // empty array
+                "<", // unclosed outer array
+                "<<", // unclosed inner array
+                "<<,>>", // unexpected comma
+                "<<''>>", // empty string
+                "  x<<%main>>", // first non space char not open angle bracket
+                "<%main>", // missing inner array
+                "<<%main %other>>", // elements missing separating commma (spaces must be quoted)
+                "<<%main><en, Main>>", // arrays missing separating comma
+                "<<%main>,<en, main, foo>>", // too many elements in locale data
+                "<<%main>,<en>>", // too few elements in locale data
+                "<<<%main>>>", // unexpected open angle
+                "<<%main<>>>", // unexpected open angle
+                "<<%main, %other>,<en,,>>", // implicit empty strings
+                "<<%main>,<en,''>>", // empty string
+                "<<%main>, < en, '>>", // unterminated quote
+                "<<%main>, < en, \"<>>", // unterminated quote
+                "<<%main\">>", // quote in string
+                "<<%main'>>", // quote in string
+                "<<%main<>>", // open angle in string
+                "<<%main>> x", // extra non-space text at end
+
+            };
+            int32_t badLocsLen = sizeof(badLocs)/sizeof(badLocs[0]);
+
+            for (int i = 0; i < goodLocsLen; ++i) {
+                logln("[%d] '%s'", i, goodLocs[i]);
+                UErrorCode status = U_ZERO_ERROR;
+                UnicodeString loc(goodLocs[i]);
+                RuleBasedNumberFormat fmt(rules, loc, perror, status);
+                if (U_FAILURE(status)) {
+                    errln("Failed parse of good localization string: '%s'", goodLocs[i]);
+                }
+            }
+
+            for (int i = 0; i < badLocsLen; ++i) {
+                logln("[%d] '%s'", i, badLocs[i]);
+                UErrorCode status = U_ZERO_ERROR;
+                UnicodeString loc(badLocs[i]);
+                RuleBasedNumberFormat fmt(rules, loc, perror, status);
+                if (U_SUCCESS(status)) {
+                    errln("Successful parse of bad localization string: '%s'", badLocs[i]);
+                }
+            }
+        }
+    }
+}
+
+void 
 IntlTestRBNF::doTest(RuleBasedNumberFormat* formatter, const char* testData[][2], UBool testParsing) 
 {
   // man, error reporting would be easier with printf-style syntax for unicode string and formattable
@@ -1491,7 +1621,7 @@ IntlTestRBNF::doTest(RuleBasedNumberFormat* formatter, const char* testData[][2]
             const char* numString = testData[i][0];
             const char* expectedWords = testData[i][1];
 
-            logln("%i: %s\n", i, numString);
+            log("[%i] %s = ", i, numString);
             Formattable expectedNumber;
             decFmt->parse(numString, expectedNumber, status);
             if (U_FAILURE(status)) {
@@ -1517,26 +1647,29 @@ IntlTestRBNF::doTest(RuleBasedNumberFormat* formatter, const char* testData[][2]
                         msg.append(actualString);
                         errln(msg);
                         break;
-                    } else if (testParsing) {
-                        Formattable parsedNumber;
-                        formatter->parse(actualString, parsedNumber, status);
-                        if (U_FAILURE(status)) {
-                            UnicodeString msg = "FAIL: formatter could not parse ";
-                            msg.append(actualString);
-                            msg.append(" status code: " );
-                            msg.append(u_errorName(status));
-                            errln(msg);
-                            break;
-                        } else {
-                            if (parsedNumber != expectedNumber) {
-                                UnicodeString msg = "FAIL: parse failed for ";
+                    } else {
+                        logln(actualString);
+                        if (testParsing) {
+                            Formattable parsedNumber;
+                            formatter->parse(actualString, parsedNumber, status);
+                            if (U_FAILURE(status)) {
+                                UnicodeString msg = "FAIL: formatter could not parse ";
                                 msg.append(actualString);
-                                msg.append(", expected ");
-                                decFmt->format(expectedNumber, msg, status);
-                                msg.append(", but got ");
-                                decFmt->format(parsedNumber, msg, status);
+                                msg.append(" status code: " );
+                                msg.append(u_errorName(status));
                                 errln(msg);
                                 break;
+                            } else {
+                                if (parsedNumber != expectedNumber) {
+                                    UnicodeString msg = "FAIL: parse failed for ";
+                                    msg.append(actualString);
+                                    msg.append(", expected ");
+                                    decFmt->format(expectedNumber, msg, status);
+                                    msg.append(", but got ");
+                                    decFmt->format(parsedNumber, msg, status);
+                                    errln(msg);
+                                    break;
+                                }
                             }
                         }
                     }

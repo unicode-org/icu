@@ -102,6 +102,11 @@ class IntlTestRBNF : public IntlTest {
    */
   virtual void TestSmallValues();
 
+  /**
+   * Test localizations using string data.
+   */
+  virtual void TestLocalizations();
+
  protected:
   virtual void doTest(RuleBasedNumberFormat* formatter, const char* testData[][2], UBool testParsing);
   virtual void doLenientParseTest(RuleBasedNumberFormat* formatter, const char* testData[][2]);
