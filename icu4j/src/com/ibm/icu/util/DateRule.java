@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/DateRule.java,v $ 
- * $Date: 2003/12/20 03:07:07 $ 
- * $Revision: 1.6 $
- *
- *****************************************************************************************
  */
 
 package com.ibm.icu.util;

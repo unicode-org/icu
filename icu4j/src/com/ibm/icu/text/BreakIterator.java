@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakIterator.java,v $
- * $Date: 2004/01/23 23:15:18 $
- * $Revision: 1.29 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.text;
 

@@ -3,10 +3,6 @@
 *   Copyright (c) 2001-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliteratorParser.java,v $
-* $Date: 2003/06/11 22:29:37 $
-* $Revision: 1.27 $
-**********************************************************************
 */
 package com.ibm.icu.text;
 

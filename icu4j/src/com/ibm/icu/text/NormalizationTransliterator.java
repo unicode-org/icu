@@ -13,7 +13,6 @@ import com.ibm.icu.lang.*;
 
 /**
  * @author Alan Liu
- * @version $RCSfile: NormalizationTransliterator.java,v $ $Revision: 1.22 $ $Date: 2004/02/20 00:16:34 $
  */
 final class NormalizationTransliterator extends Transliterator {
     

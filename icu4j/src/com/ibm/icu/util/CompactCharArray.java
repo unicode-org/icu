@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2000, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/CompactCharArray.java,v $ 
- * $Date: 2002/12/03 22:04:17 $ 
- * $Revision: 1.10 $
- *
- *****************************************************************************************
  */
 
 package com.ibm.icu.util;

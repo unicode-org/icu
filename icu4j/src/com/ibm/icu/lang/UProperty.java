@@ -3,13 +3,6 @@
 * Copyright (C) 1996-2003, international Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
-*
-* $Source: 
-*      /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterCategory.java $ 
-* $Date: 2003/06/03 18:49:33 $ 
-* $Revision: 1.14 $
-*
-*******************************************************************************
 */
 
 package com.ibm.icu.lang;

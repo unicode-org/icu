@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CompoundTransliterator.java,v $
- * $Date: 2004/02/25 01:26:23 $
- * $Revision: 1.35 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.text;
 import com.ibm.icu.impl.Utility;

@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2000, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/LowercaseTransliterator.java,v $ 
- * $Date: 2002/10/31 22:36:49 $ 
- * $Revision: 1.13 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.text;
 import java.util.*;

@@ -3,11 +3,6 @@
  * Copyright (C) 2003-2004, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/IDNA.java,v $
- * $Date: 2004/02/06 21:54:03 $
- * $Revision: 1.6 $ 
- *
- *****************************************************************************************
  */
 package com.ibm.icu.text;
 

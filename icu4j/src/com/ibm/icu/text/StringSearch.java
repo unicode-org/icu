@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringSearch.java,v $ 
- * $Date: 2003/12/02 01:34:31 $ 
- * $Revision: 1.28 $
- *
- *****************************************************************************************
  */
 
 package com.ibm.icu.text;

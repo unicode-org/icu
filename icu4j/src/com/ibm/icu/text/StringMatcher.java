@@ -3,12 +3,6 @@
  * Copyright (C) 2001, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringMatcher.java,v $ 
- * $Date: 2002/06/28 19:18:05 $ 
- * $Revision: 1.12 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.text;
 import com.ibm.icu.impl.Utility;

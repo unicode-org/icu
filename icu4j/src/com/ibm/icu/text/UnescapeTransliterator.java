@@ -19,7 +19,6 @@ import com.ibm.icu.lang.*;
  * variants with the system which are then accessed via their IDs.
  *
  * @author Alan Liu
- * @version $RCSfile: UnescapeTransliterator.java,v $ $Revision: 1.7 $ $Date: 2003/06/03 18:49:35 $
  */
 class UnescapeTransliterator extends Transliterator {
 

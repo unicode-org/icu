@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ByteArrayWrapper.java,v $ 
- * $Date: 2004/01/23 20:33:39 $ 
- * $Revision: 1.4 $
- *
- *******************************************************************************
  */
 
 package com.ibm.icu.util;

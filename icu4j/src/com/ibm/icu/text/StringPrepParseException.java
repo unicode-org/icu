@@ -3,11 +3,6 @@
  * Copyright (C) 2003-2004, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringPrepParseException.java,v $
- * $Date: 2003/11/21 22:43:40 $
- * $Revision: 1.2 $ 
- *
- *****************************************************************************************
  */
 package com.ibm.icu.text;
 

@@ -3,12 +3,6 @@
  * Copyright (C) 2004, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/ImplicitCEGenerator.java,v $
- * $Date: 2004/01/29 19:17:14 $
- * $Revision: 1.3 $
- *
- *******************************************************************************
  */
 package com.ibm.icu.text;
 

@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/HebrewCalendar.java,v $ 
- * $Date: 2004/02/25 00:03:13 $ 
- * $Revision: 1.21 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.util;
 import com.ibm.icu.util.TimeZone;

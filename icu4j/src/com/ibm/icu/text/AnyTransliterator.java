@@ -3,9 +3,6 @@
 * Copyright (c) 2002-2003, International Business Machines Corporation
 * and others.  All Rights Reserved.
 *****************************************************************
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/AnyTransliterator.java,v $
-* $Revision: 1.3 $
-*****************************************************************
 * Date        Name        Description
 * 06/06/2002  aliu        Creation.
 *****************************************************************

@@ -3,12 +3,6 @@
  * Copyright (C) 2003, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UFormat.java,v $ 
- * $Date: 2004/04/01 03:11:45 $ 
- * $Revision: 1.8 $
- *
- *******************************************************************************
  */
 package com.ibm.icu.text;
 

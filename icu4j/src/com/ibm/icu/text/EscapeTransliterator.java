@@ -32,7 +32,6 @@ import com.ibm.icu.impl.Utility;
  * variants with the system which are then accessed via their IDs.
  *
  * @author Alan Liu
- * @version $RCSfile: EscapeTransliterator.java,v $ $Revision: 1.5 $ $Date: 2002/02/25 22:43:58 $
  */
 class EscapeTransliterator extends Transliterator {
 

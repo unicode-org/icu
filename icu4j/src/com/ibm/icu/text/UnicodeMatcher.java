@@ -3,12 +3,6 @@
  * Copyright (C) 2001-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeMatcher.java,v $
- * $Date: 2003/11/22 01:05:45 $
- * $Revision: 1.12 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.text;
 
