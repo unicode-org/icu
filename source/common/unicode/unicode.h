@@ -864,6 +864,8 @@ public:
      * @see #EDirectionProperty
      *
      * @deprecated See the Unicode class description.
+     * @param ch The character to be tested
+     * @return the linguistic direction property of a character
      */
     static inline EDirectionProperty characterDirection(UChar32 ch);
 
@@ -903,6 +905,8 @@ public:
      * Returns the script associated with a character.
      * @see #EUnicodeScript
      * @draft
+     * @param ch The character to be tested
+     * @return the script associated with a character
      */
     static inline EUnicodeScript getScript(UChar32 ch);
 
@@ -957,6 +961,7 @@ public:
      * conventions.
      *
      * @deprecated See the Unicode class description.
+     * @return a value indicating the display-cell width of the character
      */
     static inline uint16_t getCellWidth(UChar32 ch);
 
@@ -1091,8 +1096,15 @@ protected:
     // They should be private to prevent anyone from instantiating or
     // subclassing Unicode.
     Unicode();
+    /* copy constructor
+     * @param other The object to be copied
+     */
     Unicode(const Unicode &other);
     ~Unicode();
+    /* assignment operator
+     * @param other The object to be copied
+     * @return the newly created object
+     */
     const Unicode &operator=(const Unicode &other);
 };
 

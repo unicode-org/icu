@@ -115,6 +115,18 @@ UDataMemoryIsAcceptable(void *context,
  * This function works the same as <code>udata_openChoice</code>
  * except that any data that matches the type and name
  * is assumed to be acceptable.
+ * @param path Specifies an absolute path and/or a basename for the
+ *             finding of the data in the file system.
+ *             <code>NULL</code> for ICU data.
+ * @param type A string that specifies the type of data to be loaded.
+ *             For example, resource bundles are loaded with type "res",
+ *             conversion tables with type "cnv".
+ *             This may be <code>NULL</code> or empty.
+ * @param name A string that specifies the name of the data.
+ * @param pErrorCode An ICU UErrorCode parameter. It must not be <code>NULL</code>.
+ * @return A pointer (handle) to a data memory object, or <code>NULL</code>
+ *         if an error occurs. Call <code>udata_getMemory()</code>
+ *         to get a pointer to the actual data.
  * @stable
  */
 U_CAPI UDataMemory * U_EXPORT2
@@ -188,6 +200,7 @@ udata_openChoice(const char *path, const char *type, const char *name,
  * Close the data memory.
  * This function must be called to allow the system to
  * release resources associated with this data memory.
+ * @param pData The pointer to data memory object
  * @stable
  */
 U_CAPI void U_EXPORT2
@@ -196,6 +209,7 @@ udata_close(UDataMemory *pData);
 /**
  * Get the pointer to the actual data inside the data memory.
  * The data is read-only.
+ * @param pData The pointer to data memory object
  * @stable
  */
 U_CAPI const void * U_EXPORT2

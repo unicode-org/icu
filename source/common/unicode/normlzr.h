@@ -161,6 +161,7 @@ public:
 
   /**
    * Copy constructor.
+   * @param copy The object to be copied.
    * @stable
    */
   Normalizer(const Normalizer& copy);
@@ -312,7 +313,7 @@ public:
    *
    * @param left Left source string.
    * @param right Right source string.
-   * @param dest The output string.
+   * @param result The output string.
    * @param mode The normalization mode.
    * @param options A bit set of normalization options.
    * @param pErrorCode ICU error code in/out parameter.
@@ -553,7 +554,7 @@ public:
   /**
    * Returns a pointer to a new Normalizer that is a clone of this one.
    * The caller is responsible for deleting the new clone.
-   *
+   * @return a pointer to a new Normalizer 
    * @stable
    */
   Normalizer*        clone(void) const;
@@ -674,14 +675,14 @@ public:
 
   /**
    * ICU "poor man's RTTI", returns a UClassID for the actual class.
-   *
+   * @return a UClassID for the actual class.
    * @draft ICU 2.2
    */
   virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
 
   /**
    * ICU "poor man's RTTI", returns a UClassID for this class.
-   *
+   * @returns a UClassID for this class.
    * @draft ICU 2.2
    */
   static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
@@ -931,7 +932,7 @@ public:
    * <p>
    * @param source    the input string to be normalized.
    *
-   * @param aMode     the normalization mode
+   * @param Mode     the normalization mode
    *
    * @param options   the optional features to be enabled.
    *

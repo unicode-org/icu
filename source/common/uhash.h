@@ -225,6 +225,7 @@ uhash_close(UHashtable *hash);
 
 /**
  * Set the function used to hash keys.
+ * @param hash The UHashtable to set
  * @param fn the function to be used hash keys; must not be NULL
  * @return the previous key hasher; non-NULL
  */
@@ -234,6 +235,7 @@ uhash_setKeyHasher(UHashtable *hash, UHashFunction fn);
 /**
  * Set the function used to compare keys.  The default comparison is a
  * void* pointer comparison.
+ * @param hash The UHashtable to set
  * @param fn the function to be used compare keys; must not be NULL
  * @return the previous key comparator; non-NULL
  */
@@ -246,6 +248,7 @@ uhash_setKeyComparator(UHashtable *hash, UKeyComparator fn);
  * hashtable does delete keys.  This function should be set once
  * before any elements are added to the hashtable and should not be
  * changed thereafter.
+ * @param hash The UHashtable to set
  * @param fn the function to be used delete keys, or NULL
  * @return the previous key deleter; may be NULL
  */
@@ -258,6 +261,7 @@ uhash_setKeyDeleter(UHashtable *hash, UObjectDeleter fn);
  * this hashtable does delete values.  This function should be set
  * once before any elements are added to the hashtable and should not
  * be changed thereafter.
+ * @param hash The UHashtable to set
  * @param fn the function to be used delete values, or NULL
  * @return the previous value deleter; may be NULL
  */
@@ -268,6 +272,8 @@ uhash_setValueDeleter(UHashtable *hash, UObjectDeleter fn);
  * Specify whether or not, and how, the hastable resizes itself.
  * By default, tables grow but do not shrink (policy U_GROW).
  * See enum UHashResizePolicy.
+ * @param hash The UHashtable to set
+ * @param policy The way the hashtable resizes itself, {U_GROW, U_GROW_AND_SHRINK, U_FIXED}
  */
 U_CAPI void U_EXPORT2 
 uhash_setResizePolicy(UHashtable *hash, enum UHashResizePolicy policy);
@@ -456,12 +462,16 @@ uhash_removeElement(UHashtable *hash, const UHashElement* e);
 
 /**
  * Return a UHashTok for an integer.
+ * @param i The given integer
+ * @return a UHashTok for an integer.
  */
 U_CAPI UHashTok U_EXPORT2 
 uhash_toki(int32_t i);
 
 /**
  * Return a UHashTok for a pointer.
+ * @param p The given pointer
+ * @return a UHashTok for a pointer.
  */
 U_CAPI UHashTok U_EXPORT2 
 uhash_tokp(void* p);
@@ -507,6 +517,9 @@ uhash_hashIChars(const UHashTok key);
 /**
  * Comparator for null-terminated UChar* strings.  Use together with
  * uhash_hashUChars.
+ * @param key1 The string for comparison
+ * @param key2 The string for comparison
+ * @return true if key1 and key2 are equal, return false otherwise.
  */
 U_CAPI UBool U_EXPORT2 
 uhash_compareUChars(const UHashTok key1, const UHashTok key2);
@@ -514,6 +527,9 @@ uhash_compareUChars(const UHashTok key1, const UHashTok key2);
 /**
  * Comparator for null-terminated char* strings.  Use together with
  * uhash_hashChars.
+ * @param key1 The string for comparison
+ * @param key2 The string for comparison
+ * @return true if key1 and key2 are equal, return false otherwise.
  */
 U_CAPI UBool U_EXPORT2 
 uhash_compareChars(const UHashTok key1, const UHashTok key2);
@@ -521,6 +537,9 @@ uhash_compareChars(const UHashTok key1, const UHashTok key2);
 /**
  * Case-insensitive comparator for null-terminated char* strings.  Use
  * together with uhash_hashIChars.
+ * @param key1 The string for comparison
+ * @param key2 The string for comparison
+ * @return true if key1 and key2 are equal, return false otherwise.
  */
 U_CAPI UBool U_EXPORT2 
 uhash_compareIChars(const UHashTok key1, const UHashTok key2);
@@ -531,6 +550,8 @@ uhash_compareIChars(const UHashTok key1, const UHashTok key2);
 
 /**
  * Hash function for UnicodeString* keys.
+ * @param key The string (const char*) to hash.
+ * @return A hash code for the key.
  */
 U_CAPI int32_t U_EXPORT2 
 uhash_hashUnicodeString(const UHashTok key);
@@ -538,12 +559,17 @@ uhash_hashUnicodeString(const UHashTok key);
 /**
  * Hash function for UnicodeString* keys (case insensitive).
  * Make sure to use together with uhash_compareCaselessUnicodeString.
+ * @param key The string (const char*) to hash.
+ * @return A hash code for the key.
  */
 U_CAPI int32_t U_EXPORT2 
 uhash_hashCaselessUnicodeString(const UHashTok key);
 
 /**
  * Comparator function for UnicodeString* keys.
+ * @param key1 The string for comparison
+ * @param key2 The string for comparison
+ * @return true if key1 and key2 are equal, return false otherwise.
  */
 U_CAPI UBool U_EXPORT2 
 uhash_compareUnicodeString(const UHashTok key1, const UHashTok key2);
@@ -551,12 +577,16 @@ uhash_compareUnicodeString(const UHashTok key1, const UHashTok key2);
 /**
  * Comparator function for UnicodeString* keys (case insensitive).
  * Make sure to use together with uhash_hashCaselessUnicodeString.
+ * @param key1 The string for comparison
+ * @param key2 The string for comparison
+ * @return true if key1 and key2 are equal, return false otherwise.
  */
 U_CAPI UBool U_EXPORT2 
 uhash_compareCaselessUnicodeString(const UHashTok key1, const UHashTok key2);
 
 /**
  * Deleter function for UnicodeString* keys or values.
+ * @param obj The object to be deleted
  */
 U_CAPI void U_EXPORT2 
 uhash_deleteUnicodeString(void *obj);
@@ -567,12 +597,17 @@ uhash_deleteUnicodeString(void *obj);
 
 /**
  * Hash function for 32-bit integer keys.
+ * @param key The string (const char*) to hash.
+ * @return A hash code for the key.
  */
 U_CAPI int32_t U_EXPORT2 
 uhash_hashLong(const UHashTok key);
 
 /**
  * Comparator function for 32-bit integer keys.
+ * @param key1 The integer for comparison
+ * @param Key2 The integer for comparison
+ * @return true if key1 and key2 are equal, return false otherwise
  */
 U_CAPI UBool U_EXPORT2 
 uhash_compareLong(const UHashTok key1, const UHashTok key2);
@@ -583,12 +618,14 @@ uhash_compareLong(const UHashTok key1, const UHashTok key2);
 
 /**
  * Deleter for Hashtable objects.
+ * @param obj The object to be deleted
  */
 U_CAPI void U_EXPORT2 
 uhash_deleteHashtable(void *obj);
 
 /**
  * Deleter for UVector objects.
+ * @param obj The object to be deleted
  */
 U_CAPI void U_EXPORT2 
 uhash_deleteUVector(void *obj);
@@ -596,6 +633,7 @@ uhash_deleteUVector(void *obj);
 /**
  * Deleter for any key or value allocated using uprv_malloc.  Calls
  * uprv_free.
+ * @param obj The object to be deleted
  */
 U_CAPI void U_EXPORT2 
 uhash_freeBlock(void *obj);

@@ -4,7 +4,7 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/common/unicode/usetiter.h,v $ 
-* $Revision: 1.3 $
+* $Revision: 1.4 $
 **********************************************************************
 */
 #ifndef USETITER_H
@@ -54,19 +54,19 @@ class UnicodeString;
 class U_COMMON_API UnicodeSetIterator : public UObject {
 
  protected:
-	
+    
     /**
      * Value of <tt>codepoint</tt> if the iterator points to a string.
      * If <tt>codepoint == IS_STRING</tt>, then examine
      * <tt>string</tt> for the current iteration result.
      */
-	enum { IS_STRING = -1 };
+    enum { IS_STRING = -1 };
 
-	/**
+    /**
      * Current code point, or the special value <tt>IS_STRING</tt>, if
      * the iterator points to a string.
      */
-	UChar32 codepoint;
+    UChar32 codepoint;
 
     /**
      * When iterating over ranges using <tt>nextRange()</tt>,
@@ -76,14 +76,14 @@ class U_COMMON_API UnicodeSetIterator : public UObject {
      * <tt>codepoint == IS_STRING</tt>, then the value of
      * <tt>codepointEnd</tt> is undefined.
      */
-	UChar32 codepointEnd;
+    UChar32 codepointEnd;
 
     /**
      * If <tt>codepoint == IS_STRING</tt>, then <tt>string</tt> points
      * to the current string.  If <tt>codepoint != IS_STRING</tt>, the
      * value of <tt>string</tt> is undefined.
      */
-	const UnicodeString* string;
+    const UnicodeString* string;
 
  public:
 

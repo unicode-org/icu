@@ -199,6 +199,8 @@ public:
 
     /**
      * Returns the complement of the result of operator==
+     * @param ths The BreakIterator to be compared for inequality
+     * @return the complement of the result of operator==
      * @stable
      */
     UBool operator!=(const BreakIterator& rhs) const { return !operator==(rhs); }
@@ -241,6 +243,7 @@ public:
     /**
      * Change the text over which this operates. The text boundary is
      * reset to the start.
+     * @param text The UnicodeString used to change the text.
      * @stable
      */
     virtual void  setText(const UnicodeString &text) = 0;
@@ -248,6 +251,7 @@ public:
     /**
      * Change the text over which this operates. The text boundary is
      * reset to the start.
+     * @param it The CharacterIterator used to change the text.
      * @stable
      */
     virtual void  adoptText(CharacterIterator* it) = 0;
@@ -362,7 +366,8 @@ public:
      * breaks are logically possible line breaks, actual line breaks are
      * usually determined based on display width.
      * LineBreak is useful for word wrapping text.
-     * @param where the locale. .
+     * @param where the locale.
+     * @param status The error code.
      * @return A BreakIterator for line-breaks.  The UErrorCode& status 
      * parameter is used to return status information to the user.
      * To check whether the construction succeeded or not, you should check
@@ -384,6 +389,7 @@ public:
      * Returns an instance of a BreakIterator implementing character breaks.
      * Character breaks are boundaries of combining character sequences.
      * @param where the locale. 
+     * @param status The error code.
      * @return A BreakIterator for character-breaks.  The UErrorCode& status 
      * parameter is used to return status information to the user.
      * To check whether the construction succeeded or not, you should check
@@ -404,6 +410,7 @@ public:
      * Create BreakIterator for sentence-breaks using specified locale
      * Returns an instance of a BreakIterator implementing sentence breaks.
      * @param where the locale. 
+     * @param status The error code.
      * @return A BreakIterator for sentence-breaks.  The UErrorCode& status 
      * parameter is used to return status information to the user.
      * To check whether the construction succeeded or not, you should check
@@ -424,6 +431,7 @@ public:
      * Create BreakIterator for title-casing breaks using the specified locale
      * Returns an instance of a BreakIterator implementing title breaks.
      * @param where the locale. 
+     * @param status The error code.
      * @return A BreakIterator for title-breaks.  The UErrorCode& status 
      * parameter is used to return status information to the user.
      * To check whether the construction succeeded or not, you should check

@@ -133,6 +133,7 @@ u_strchr(const UChar     *s,
  * Find the first occurrence of a substring in a string.
  *
  * @param s The string to search.
+ * @param substring The substring to find
  * @return A pointer to the first occurrence of <TT>substring</TT> in 
  * <TT>s</TT>, or a null pointer if <TT>substring</TT>
  * is not in <TT>s</TT>.
@@ -349,8 +350,8 @@ u_strCaseCompare(const UChar *s1, int32_t length1,
  * Compare two ustrings for bitwise equality. 
  * Compares at most <TT>n</TT> characters.
  *
- * @param s1 A string to compare.
- * @param s2 A string to compare.
+ * @param ucs1 A string to compare.
+ * @param ucs2 A string to compare.
  * @param n The maximum number of characters to compare.
  * @return 0 if <TT>s1</TT> and <TT>s2</TT> are bitwise equal; a negative
  * value if <TT>s1</TT> is bitwise less than <TT>s2,/TT>; a positive
@@ -431,7 +432,7 @@ u_strncasecmp(const UChar *s1, const UChar *s2, int32_t n, uint32_t options);
  *
  * @param s1 A string to compare.
  * @param s2 A string to compare.
- * @param n The number of characters in each string to case-fold and then compare.
+ * @param length The number of characters in each string to case-fold and then compare.
  * @param options A bit set of options:
  *   - U_FOLD_CASE_DEFAULT or 0 is used for default options:
  *     Comparison in code unit order with default case folding.
@@ -536,6 +537,10 @@ U_CAPI char* U_EXPORT2 u_austrncpy(char *dst,
 
 /**
  * Synonym for memcpy(), but with UChars only.
+ * @param dest The destination string
+ * @param src The source string
+ * @param count The number of characters to copy
+ * @return A pointer to <TT>dest</TT>
  * @stable
  */
 U_CAPI UChar* U_EXPORT2
@@ -543,6 +548,10 @@ u_memcpy(UChar *dest, const UChar *src, int32_t count);
 
 /**
  * Synonym for memmove(), but with UChars only.
+ * @param dest The destination string
+ * @param src The source string
+ * @param count The number of characters to move
+ * @return A pointer to <TT>dest</TT>
  * @stable
  */
 U_CAPI UChar* U_EXPORT2
@@ -581,7 +590,7 @@ u_memcmp(const UChar *buf1, const UChar *buf2, int32_t count);
  *
  * @param s1 A string to compare.
  * @param s2 A string to compare.
- * @param n The maximum number of characters to compare.
+ * @param count The maximum number of characters to compare.
  * @return a negative/zero/positive integer corresponding to whether
  * the first string is less than/equal to/greater than the second one
  * in code point order
@@ -734,6 +743,10 @@ u_unescape(const char *src,
  * the source text given an offset and a context pointer.  The context
  * pointer will be whatever is passed into u_unescapeAt().
  *
+ * @param offset pointer to the offset that will be passed to u_unescapeAt().
+ * @context an opaque pointer passed directly into u_unescapeAt()
+ * @return the character represented by the escape sequence at
+ * offset
  * @see u_unescapeAt
  * @stable
  */

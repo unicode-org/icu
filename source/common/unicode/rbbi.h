@@ -187,6 +187,7 @@ protected:
     /**
      * Copy constructor.  Will produce a break iterator with the same behavior,
      * and which iterates over the same text, as the one passed in.
+     * @param that The RuleBasedBreakIterator passed to be copied
      */
     RuleBasedBreakIterator(const RuleBasedBreakIterator& that);
 
@@ -204,11 +205,16 @@ protected:
     /**
      * Assignment operator.  Sets this iterator to have the same behavior,
      * and iterate over the same text, as the one passed in.
+     * @param that The RuleBasedBreakItertor passed in
+     * @return the newly created RuleBasedBreakIterator
      */
     RuleBasedBreakIterator& operator=(const RuleBasedBreakIterator& that);
 
     /**
      * Equality operator.  Returns TRUE if both BreakIterators are of the
+     * same class, have the same behavior, and iterate over the same text.
+     * @param that The BreakIterator to be compared for equality
+     * @Return TRUE if both BreakIterators are of the
      * same class, have the same behavior, and iterate over the same text.
      */
     virtual UBool operator==(const BreakIterator& that) const;
@@ -216,6 +222,8 @@ protected:
     /**
      * Not-equal operator.  If operator== returns TRUE, this returns FALSE,
      * and vice versa.
+     * @param that The BreakIterator to be compared for inequality
+     * @return TRUE if both BreakIterators are not same.
      */
     UBool operator!=(const BreakIterator& that) const;
 
@@ -235,6 +243,7 @@ protected:
 
     /**
      * Returns the description used to create this iterator
+     * @return the description used to create this iterator
      */
     virtual const UnicodeString& getRules(void) const;
 
@@ -307,7 +316,7 @@ protected:
     /**
      * Sets the iterator to refer to the first boundary position following
      * the specified position.
-     * @offset The position from which to begin searching for a break position.
+     * @param offset The position from which to begin searching for a break position.
      * @return The position of the first break after the current position.
      */
     virtual int32_t following(int32_t offset);
@@ -315,7 +324,7 @@ protected:
     /**
      * Sets the iterator to refer to the last boundary position before the
      * specified position.
-     * @offset The position to begin searching for a break from.
+     * @param offset The position to begin searching for a break from.
      * @return The position of the last boundary before the starting position.
      */
     virtual int32_t preceding(int32_t offset);
@@ -341,6 +350,8 @@ protected:
      * returned break position.  The values appear in the rule source
      * within brackets, {123}, for example.  For rules that do not specify a
      * status, a default value of 0 is returned.
+     * @return the status from the break rule that determined the most recently
+     * returned break position.
      */
     virtual int32_t getRuleStatus() const;
 
@@ -428,6 +439,8 @@ protected:
       * Return true if the category lookup for this char
       * indicates that it is in the set of dictionary lookup chars.
       * This function is intended for use by dictionary based break iterators.
+      * @return true if the category lookup for this char
+      * indicates that it is in the set of dictionary lookup chars.
       */
     virtual UBool isDictionaryChar(UChar32);
 

@@ -11,7 +11,7 @@
 * Modification History:
 *
 *   Date        Name        Description
-*   05/17/99    stephen	    Creation (ported from java UnicodeCompressor.java)
+*   05/17/99    stephen        Creation (ported from java UnicodeCompressor.java)
 *   09/21/99    stephen     Updated to handle data splits on decompression.
 ******************************************************************************
 */
@@ -73,6 +73,7 @@ typedef struct UnicodeCompressor UnicodeCompressor;
 /**
  * Initialize a UnicodeCompressor.
  * Sets all windows to their default values.
+ * @param comp The UnicodeCompressor to init.
  * @see #reset
  * @stable
  * @deprecated To be replaced by scsu encoding converter
@@ -115,11 +116,11 @@ U_CAPI void U_EXPORT2 scsu_reset(UnicodeCompressor *comp);
  * @deprecated To be replaced by scsu encoding converter
  */
 U_CAPI void U_EXPORT2 scsu_compress(UnicodeCompressor *comp,
-			uint8_t           **target,
-			const uint8_t     *targetLimit,
-			const UChar       **source,
-			const UChar       *sourceLimit,
-			UErrorCode        *status);
+            uint8_t           **target,
+            const uint8_t     *targetLimit,
+            const UChar       **source,
+            const UChar       *sourceLimit,
+            UErrorCode        *status);
 
 /**
  * Decompress a byte array into a Unicode character array.
@@ -151,11 +152,11 @@ U_CAPI void U_EXPORT2 scsu_compress(UnicodeCompressor *comp,
  * @deprecated To be replaced by scsu encoding converter
  */
 U_CAPI void U_EXPORT2 scsu_decompress(UnicodeCompressor *comp,
-			  UChar             **target,
-			  const UChar       *targetLimit,
-			  const uint8_t     **source,
-			  const uint8_t     *sourceLimit,
-			  UErrorCode        *status);
+              UChar             **target,
+              const UChar       *targetLimit,
+              const uint8_t     **source,
+              const uint8_t     *sourceLimit,
+              UErrorCode        *status);
 
 #endif
 

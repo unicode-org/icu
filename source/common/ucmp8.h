@@ -72,6 +72,7 @@ U_CAPI  CompactByteArray* U_EXPORT2 ucmp8_open(int8_t defaultValue);
  * @param indexArray the index array to be adopted
  * @param newValues the value array to be adopted
  * @param count the number of entries in the value array
+ * @return the newly constructed ComapctByteArray
  * @see compact
  */
 U_CAPI  CompactByteArray* U_EXPORT2 ucmp8_openAdopt(uint16_t* indexArray, 
@@ -88,6 +89,7 @@ U_CAPI  CompactByteArray* U_EXPORT2 ucmp8_openAdopt(uint16_t* indexArray,
  * @param indexArray the index array to be adopted
  * @param newValues the value array to be adopted
  * @param count the number of entries in the value array
+ * @return the newly constructed CompactByteArray
  * @see compact
  */
 U_CAPI  CompactByteArray* U_EXPORT2 ucmp8_openAlias(uint16_t* indexArray, 
@@ -125,9 +127,11 @@ U_CAPI  void U_EXPORT2 ucmp8_initBogus(CompactByteArray* array);
  * may re-use blocks at any position in the values array. The indexArray and newValues
  * will be uprv_free'd when ucmp16_close() is called.
  *
+ * @param this_obj An uninitialized CompactByteArray
  * @param indexArray the index array to be adopted
  * @param newValues the value array to be adopted
  * @param count the number of entries in the value array
+ * @return the pointer refers to the CompactByteArray
  * @see compact
  */
 U_CAPI  CompactByteArray* U_EXPORT2 ucmp8_initAdopt(CompactByteArray *this_obj,
@@ -142,9 +146,11 @@ U_CAPI  CompactByteArray* U_EXPORT2 ucmp8_initAdopt(CompactByteArray *this_obj,
  * that are on a block boundary. The pre-computed arrays passed in to this constructor
  * may re-use blocks at any position in the values array.
  *
+ * @param this_obj An uninitialized CompactByteArray
  * @param indexArray the index array to be adopted
  * @param newValues the value array to be adopted
  * @param count the number of entries in the value array
+ * @return the pointer refers to the CompactByteArray
  * @see compact
  */
 U_CAPI  CompactByteArray* U_EXPORT2 ucmp8_initAlias(CompactByteArray *this_obj,
@@ -163,6 +169,8 @@ U_CAPI  void U_EXPORT2 ucmp8_close(CompactByteArray* array);
 
 /**
  * Returns TRUE if the creation of the compact array fails.
+ * @param array The CompactByteArray to be created.
+ * @return TRUE if the creation of the compact array fails.
  */
 U_CAPI  UBool U_EXPORT2 ucmp8_isBogus(const CompactByteArray* array);
 
@@ -181,6 +189,7 @@ U_CAPI  UBool U_EXPORT2 ucmp8_isBogus(const CompactByteArray* array);
  * Set a new value for a Unicode character.
  * Set automatically expands the array if it is compacted.
  *
+ * @param array the CompactByteArray to be set
  * @param character the character to set the mapped value with
  * @param value the new mapped value
  */
@@ -191,6 +200,7 @@ U_CAPI  void U_EXPORT2 ucmp8_set(CompactByteArray* array,
 /**
  * Set new values for a range of Unicode character.
  *
+ * @param array the CompactByteArray to be set
  * @param start the starting offset of the range
  * @param end the ending offset of the range
  * @param value the new mapped value
@@ -211,11 +221,14 @@ U_CAPI  const uint16_t* U_EXPORT2 ucmp8_getIndex(const CompactByteArray* array);
  * If values stored in the array tend to repeat in cycles of, say, 16,
  * then using that will be faster than cycle = 1, and get almost the
  * same compression.
+ * @param array The CompactByteArray to be compacted
+ * @param cycle The value determines how large the overlap can be.
  */
 U_CAPI  void U_EXPORT2 ucmp8_compact(CompactByteArray* array, 
                  uint32_t cycle);
 
 /** Expanded takes the array back to a 65536 element array*/
+/*  @param array The CompactByteArray to be expanded*/
 U_CAPI  void U_EXPORT2 ucmp8_expand(CompactByteArray* array);
 
 /** (more) INTERNAL USE ONLY **/

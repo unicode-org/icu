@@ -592,7 +592,7 @@ public:
      * present.  If this set already contains the multicharacter,
      * the call leaves this set unchanged.
      * Thus "ch" => {"ch"}
-	 * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
+     * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
      * @param s the source string
      * @return this object, for chaining
      */
@@ -643,7 +643,7 @@ public:
 
     /**
      * Makes a set from a multicharacter string. Thus "ch" => {"ch"}
-	 * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
+     * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
      * @param s the source string
      * @return a newly created set containing the given string.
      * The caller owns the return object and is responsible for deleting it.
