@@ -17,31 +17,24 @@
  * (Let me reiterate my position...)
  */
 
-#include <memory.h>
-#include <stdlib.h>
 #include "unicode/utypes.h"
 #include "unicode/ucol.h"
 #include "unicode/uloc.h"
 #include "unicode/uchar.h"
-#include "cintltst.h"
-#include "citertst.h"
 #include "unicode/ustring.h"
 #include "cmemory.h"
-
-#define ARRAY_LENGTH(array) (sizeof array / sizeof array[0])
-
+#include "cintltst.h"
+#include "citertst.h"
+#include "ccolltst.h"
 
 
 void addCollIterTest(TestNode** root)
 {
-
-
     addTest(root, &TestPrevious, "tscoll/citertst/TestPrevious");
     addTest(root, &TestOffset, "tscoll/citertst/TestOffset");
     addTest(root, &TestSetText, "tscoll/citertst/TestSetText");
     addTest(root, &TestMaxExpansion, "tscoll/citertst/TestMaxExpansion");
     addTest(root, &TestUnicodeChar, "tscoll/citertst/TestUnicodeChar");
-
 }
 
 /**
