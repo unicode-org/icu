@@ -646,6 +646,18 @@
 			<File
 				RelativePath=".\testutil.h">
 			</File>
+			<File
+				RelativePath=".\textfile.cpp">
+			</File>
+			<File
+				RelativePath=".\textfile.h">
+			</File>
+			<File
+				RelativePath=".\tokiter.cpp">
+			</File>
+			<File
+				RelativePath=".\tokiter.h">
+			</File>
 		</Filter>
 		<Filter
 			Name="normalization"
