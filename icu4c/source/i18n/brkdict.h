@@ -12,7 +12,7 @@
 #define BRKDICT_H
 
 #include "ucmp8.h"
-#include "filestrm.h"
+#include "umemstrm.h"
 
 /**
  * This is the class that represents the list of known words used by
@@ -111,7 +111,7 @@ public:
      * Reads the dictionary file on the disk and constructs the appropriate in-memory
      * representation.
      */
-    void readDictionaryFile(FileStream* in);
+    void readDictionaryFile(UMemoryStream* in);
 
     //=================================================================================
     // access to the words
