@@ -266,6 +266,8 @@ public class TestFmwk extends AbstractTestLog {
                 if (!validate()) {
                     params.writeTestInvalid(name);
                 } else {
+		    Runtime rt = Runtime.getRuntime();
+		    System.out.println("free: " + rt.freeMemory() + ", total: " + rt.totalMemory());
                     params.push(name, getDescription(), f == 1);
                     execute();
                     params.pop();
@@ -1329,50 +1331,98 @@ public class TestFmwk extends AbstractTestLog {
         return checkArray(msg, strs, expected);
     }
 
-    /**
-     * JUnit-like assertions.
-     */
+    // JUnit-like assertions.
+
     protected boolean assertTrue(String message, boolean condition) {
-        if (!condition) {
-            errln("assertTrue() failed: " + message);
-        } else if (VERBOSE_ASSERTIONS) {
-            logln("Ok: " + message);
-        }
-        return condition;
+	return handleAssert(condition, message, "true", null);
     }
+
     protected boolean assertFalse(String message, boolean condition) {
-        if (condition) {
-            errln("assertFalse() failed: " + message);
-        } else if (VERBOSE_ASSERTIONS) {
-            logln("Ok: " + message);
-        }
-        return !condition;
+	return handleAssert(!condition, message, "false", null);
     }
-    protected boolean assertEquals(String message,
-                                   Object expected, Object actual) {
-        if (!expected.equals(actual)) {
-            if (actual instanceof String) {
-                // display quotes around string objects, for clarity
-                actual = "\"" + actual + '"';
-                expected = "\"" + expected + '"';
-            }
-            errln(message + "; got " + actual +
-                  "; expected " + expected);
-            return false;
-        } else if (VERBOSE_ASSERTIONS) {
-            if (actual instanceof String) {
-                // display quotes around string objects, for clarity
-                actual = "\"" + actual + '"';
-            }
-            logln("Ok: " + message + "; got " + actual);
-        }
-        return true;
+
+    protected boolean assertEquals(String message, boolean expected, boolean actual) {
+	return handleAssert(expected == actual, message, "" + expected, "" + actual);
     }
+
+    protected boolean assertEquals(String message, long expected, long actual) {
+	return handleAssert(expected == actual, message, "" + expected, "" + actual);
+    }
+
+    // do NaN and range calculations to precision of float, don't rely on promotion to double
+    protected boolean assertEquals(String message, float expected, float actual, double error) {
+	boolean result = Float.isInfinite(expected) 
+	    ? expected == actual
+	    : !(Math.abs(expected - actual) > error); // handles NaN
+	return handleAssert(result, message,
+			    "" + expected + (error == 0 ? "" : " (within " + error + ")"), 
+			    "" + actual);
+    }
+
+    protected boolean assertEquals(String message, double expected, double actual, double error) {
+	boolean result = Double.isInfinite(expected) 
+	    ? expected == actual
+	    : !(Math.abs(expected - actual) > error); // handles NaN
+	return handleAssert(result, message,
+			    "" + expected + (error == 0 ? "" : " (within " + error + ")"), 
+			    "" + actual);
+    }
+
+    protected boolean assertEquals(String message, Object expected, Object actual) {
+	boolean result = expected == null ? actual == null : expected.equals(actual);
+	return handleAssert(result, message, stringFor(expected), stringFor(actual));
+    }
+
+    protected boolean assertNotEquals(String message, Object expected, Object actual) {
+	boolean result = !(expected == null ? actual == null : expected.equals(actual));
+	return handleAssert(result, message, stringFor(expected), stringFor(actual), "not equal to", true);
+    }
+
+    protected boolean assertSame(String message, Object expected, Object actual) {
+	return handleAssert(expected == actual, message, stringFor(expected), stringFor(actual), "==", false);
+    }
+
+    protected boolean assertNotSame(String message, Object expected, Object actual) {
+	return handleAssert(expected != actual, message, stringFor(expected), stringFor(actual), "!=", true);
+    }
+
+    protected boolean assertNull(String message, Object actual) {
+	return handleAssert(actual == null, message, null, stringFor(actual));
+    }
+
+    protected boolean assertNotNull(String message, Object actual) {
+	return handleAssert(actual != null, message, null, stringFor(actual), "!=", true);
+    }
+
     protected void fail(String message) {
         errln(message);
     }
 
-    private static final boolean VERBOSE_ASSERTIONS = true;
+    private boolean handleAssert(boolean result, String message, String expected, String actual) {
+	return handleAssert(result, message, expected, actual, null, false);
+    }
+
+    private boolean handleAssert(boolean result, String message, String expected, String actual, String relation, boolean flip) {
+	if (!result || isVerbose()) {
+	    message = message == null ? "" : " " + message;
+	    relation = relation == null ? ", got " : " " + relation + " ";
+	    if (result) {
+		logln("OK" + message + ": " + (flip ? expected + relation + actual : expected));
+	    } else {
+		errln(message + ": expected" + (flip ? relation + expected : " " + 
+						expected + (actual != null ? relation + actual : "")));
+	    }
+	}
+	return result;
+    }
+
+    private final String stringFor(Object obj) {
+	if (obj == null) return "null";
+	if (obj instanceof String) return "\"" + obj + '"';
+	return obj.getClass().getName() + "<" + obj + ">";
+    }
+
+    // End JUnit-like assertions
 
     protected TestParams params = null;
 
