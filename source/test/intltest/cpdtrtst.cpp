@@ -15,6 +15,7 @@
 #include "cpdtrtst.h"
 #include "unicode/utypes.h"
 #include "unicode/translit.h"
+#include "unicode/uniset.h"
 #include "cpdtrans.h"
 #include "cmemory.h"
 
@@ -205,6 +206,23 @@ void CompoundTransliteratorTest::TestGetCount(){
         ct5->getCount() == ct2->getCount() || ct5->getCount() == ct3->getCount()  ) {
         errln("Error: getCount() failed");
     }
+
+    /* Quick test getTargetSet(), only test that it doesn't die.  TODO:  a better test. */
+    UnicodeSet ts;
+    UnicodeSet *retUS = NULL;
+    retUS = &ct1->getTargetSet(ts);
+    if (retUS != &ts || ts.size() == 0) {
+        errln("CompoundTransliterator::getTargetSet() failed.\n");
+    }
+
+    /* Quick test getSourceSet(), only test that it doesn't die.  TODO:  a better test. */
+    UnicodeSet ss;
+    retUS = NULL;
+    retUS = &ct1->getSourceSet(ss);
+    if (retUS != &ss || ss.size() == 0) {
+        errln("CompoundTransliterator::getSourceSet() failed.\n");
+    }
+
     delete ct1;
     delete ct2;
     delete ct4;

@@ -650,18 +650,6 @@ public:
 
 
    /**
-    *   Return TRUE of the most recent attempted match or match touched
-    *   the end of the input string.  For failed matches, this normally
-    *   means thta some amount of additional input, appended to the
-    *   existing input string, could have resulted in a match
-    *   @return  True if the most recently attempted match reached the
-    *            end of the input string.
-    *   @draft   ICU 2.8
-    */
-    virtual UBool touchedEnd();
-
-
-   /**
     *   Resets this matcher.  The effect is to remove any memory of previous matches,
     *       and to cause subsequent find() operations to begin at the beginning of
     *       the input string.
@@ -895,9 +883,6 @@ private:
 
     UErrorCode          fDeferredStatus;   // Save error state if that cannot be immediately
                                            //   reported, or that permanently disables this matcher.
-
-    UBool               fTouchedEnd;       // Set true if match engine reaches eof on input
-                                           //   while attempting a match.
 
     RuleBasedBreakIterator  *fWordBreakItr;
 
