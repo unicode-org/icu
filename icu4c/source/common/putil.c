@@ -784,6 +784,9 @@ uprv_tzname(int n)
 /* Get and set the ICU data directory --------------------------------------- */
 
 static char *gDataDirectory = NULL;
+#if U_POSIX_LOCALE
+ static char *gCorrectedPOSIXLocale = NULL; /* Heap allocated */
+#endif
 
 UBool putil_cleanup(void)
 {
@@ -791,6 +794,12 @@ UBool putil_cleanup(void)
         uprv_free(gDataDirectory);
         gDataDirectory = NULL;
     }
+#if U_POSIX_LOCALE
+    if (gCorrectedPOSIXLocale) {
+        uprv_free(gCorrectedPOSIXLocale);
+        gCorrectedPOSIXLocale = NULL;
+    }
+#endif
     return TRUE;
 }
 
@@ -1109,6 +1118,10 @@ The leftmost codepage (.xxx) wins.
       l = lang, C = ctry, M = charmap, V = variant
     */
 
+    if(gCorrectedPOSIXLocale != NULL) {
+      return gCorrectedPOSIXLocale; 
+    }
+
     if((p = uprv_strchr(posixID, '.')) != NULL)
     {
         /* assume new locale can't be larger than old one? */
@@ -1175,6 +1188,17 @@ The leftmost codepage (.xxx) wins.
     if(correctedPOSIXLocale != NULL) 
     {
         posixID = correctedPOSIXLocale;
+    }
+
+    umtx_lock(NULL);
+      if(gCorrectedPOSIXLocale == NULL) {
+        gCorrectedPOSIXLocale = correctedPOSIXLocale;
+        correctedPOSIXLocale = NULL;
+      }
+    umtx_unlock(NULL);
+
+    if(correctedPOSIXLocale != NULL) {  /* Was already set - clean up. */
+      uprv_free(correctedPOSIXLocale); 
     }
 
     return posixID;
