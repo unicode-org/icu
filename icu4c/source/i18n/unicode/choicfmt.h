@@ -131,9 +131,9 @@ class MessageFormat;
  * <code>X</code> and and index value <code>j</code> in the range
  * <code>0..n-1</code>, where <code>n</code> is the number of ranges:</p>
  * 
- * <blockquote><code>X</code> matches <code>j</code> if and only if
+ * \htmlonly<blockquote>\endhtmlonly<code>X</code> matches <code>j</code> if and only if
  * <code>limit[j] &lt;= X &lt; limit[j+1]</code>
- * </blockquote>
+ * \htmlonly</blockquote>\endhtmlonly
  * 
  * <p>(This assumes that all closures are <code>FALSE</code>.  If some
  * closures are <code>TRUE</code> then the relations must be changed to

@@ -53,11 +53,11 @@ class StringEnumeration;
  * with a time zone ID. For instance, the time zone ID for the Pacific
  * Standard Time zone is "PST". So, you can get a PST <code>TimeZone</code> object
  * with:
- * <blockquote>
+ * \htmlonly<blockquote>\endhtmlonly
  * <pre>
  * TimeZone *tz = TimeZone::createTimeZone("PST");
  * </pre>
- * </blockquote>
+ * \htmlonly</blockquote>\endhtmlonly
  * You can use <code>getAvailableIDs</code> method to iterate through
  * all the supported time zone IDs. You can then choose a
  * supported ID to get a <code>TimeZone</code>.
@@ -65,11 +65,11 @@ class StringEnumeration;
  * supported IDs, then you can create a custom time zone ID with
  * the following syntax:
  *
- * <blockquote>
+ * \htmlonly<blockquote>\endhtmlonly
  * <pre>
  * GMT[+|-]hh[[:]mm]
  * </pre>
- * </blockquote>
+ * \htmlonly</blockquote>\endhtmlonly
  *
  * For example, you might specify GMT+14:00 as a custom
  * time zone ID.  The <code>TimeZone</code> that is returned
@@ -450,7 +450,7 @@ public:
      * blockquote><pre>
      * .     TimeZone* foo = TimeZone::createTimeZone("America/New_York");
      * .     foo.setID("America/Los_Angeles");
-     * </pre></blockquote>
+     * </pre>\htmlonly</blockquote>\endhtmlonly
      * the time zone's GMT offset and daylight-savings rules don't change to those for
      * Los Angeles.  They're still those for New York.  Only the ID has changed.)
      *
