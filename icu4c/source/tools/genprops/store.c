@@ -204,6 +204,7 @@ bit
  5      has denominator value
  6      has a mirror-image Unicode code point
  7      has SpecialCasing.txt entries
+ 8      has CaseFolding.txt entries
 
 According to the flags in this word, one or more uint32_t words follow it
 in the sequence of the bit flags in the flags word; if a flag is not set,
@@ -245,6 +246,19 @@ One UChar value with lengths as follows:
 
 Followed by the UChars for lowercase, uppercase, titlecase mappings in this order.
 
+For case folding mappings, the 32-bit exception word contains:
+31..24  number of UChars used for the full mapping
+23..16  reserved
+15.. 0  UChar offset from the beginning of the UChars array where the
+        UChars for the special case mappings are stored in the following format:
+
+Format of case folding UChars:
+Two UChars contain the simple mapping as follows:
+    0,  0   no simple mapping
+    BMP,0   a simple mapping to a BMP code point
+    s1, s2  a simple mapping to a supplementary code point stored as two surrogates
+This is followed by the UChars for the full case folding mappings.
+
 Example:
 U+2160, ROMAN NUMERAL ONE, needs an exception because it has a lowercase
 mapping and a numeric value.
@@ -267,7 +281,7 @@ static UDataInfo dataInfo={
     0,
 
     0x55, 0x50, 0x72, 0x6f,     /* dataFormat="UPro" */
-    1, 2, 0, 0,                 /* formatVersion */
+    1, 3, 0, 0,                 /* formatVersion */
     3, 0, 0, 0                  /* dataVersion */
 };
 
@@ -365,35 +379,10 @@ addUChars(const UChar *s, uint32_t length);
 
 /* -------------------------------------------------------------------------- */
 
-/* ### this must become public in putil.c */
-static void
-__versionFromString(UVersionInfo versionArray, const char *versionString) {
-    char *end;
-    uint16_t part=0;
-
-    if(versionArray==NULL) {
-        return;
-    }
-
-    if(versionString!=NULL) {
-        for(;;) {
-            versionArray[part]=(uint8_t)uprv_strtoul(versionString, &end, 10);
-            if(end==versionString || ++part==U_MAX_VERSION_LENGTH || *end!=U_VERSION_DELIMITER) {
-                break;
-            }
-            versionString=end+1;
-        }
-    }
-
-    while(part<U_MAX_VERSION_LENGTH) {
-        versionArray[part++]=0;
-    }
-}
-
 extern void
 setUnicodeVersion(const char *v) {
     UVersionInfo version;
-    __versionFromString(version, v);
+    u_versionFromString(version, v);
     uprv_memcpy(dataInfo.dataVersion, version, 4);
 }
 
@@ -529,6 +518,10 @@ addProps(Props *p) {
         x=EXCEPTION_BIT;
         ++count;
     }
+    if(p->caseFolding!=NULL) {
+        x=EXCEPTION_BIT;
+        ++count;
+    }
 
     /* handle exceptions */
     if(count>1 || x!=0 || value<MIN_VALUE || MAX_VALUE<value) {
@@ -598,9 +591,9 @@ addProps(Props *p) {
                 exceptions[value+length++]=p->mirrorMapping;
             }
             if(p->specialCasing!=NULL) {
+                first|=0x80;
                 if(p->specialCasing->isComplex) {
                     /* complex special casing */
-                    first|=0x80;
                     exceptions[value+length++]=0x80000000;
                 } else {
                     /* unconditional special casing */
@@ -630,8 +623,31 @@ addProps(Props *p) {
                     }
                     u[0]=entry;
 
-                    first|=0x80;
                     exceptions[value+length++]=(i<<24)|addUChars(u, i);
+                }
+            }
+            if(p->caseFolding!=NULL) {
+                first|=0x100;
+                if(p->caseFolding->simple==0 && p->caseFolding->full[0]==0) {
+                    /* special case folding, store only a marker */
+                    exceptions[value+length++]=0;
+                } else {
+                    /* normal case folding with a simple and a full mapping */
+                    UChar u[128];
+                    uint16_t i;
+
+                    /* store the simple mapping into the first two UChars */
+                    i=0;
+                    u[1]=0;
+                    UTF_APPEND_CHAR_UNSAFE(u, i, p->caseFolding->simple);
+
+                    /* store the full mapping after that */
+                    i=p->caseFolding->full[0];
+                    if(i>0) {
+                        uprv_memcpy(u+2, p->caseFolding->full+1, 2*i);
+                    }
+
+                    exceptions[value+length++]=(i<<24)|addUChars(u, 2+i);
                 }
             }
             exceptions[value]=first;

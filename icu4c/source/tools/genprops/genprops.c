@@ -50,6 +50,9 @@ static void
 parseSpecialCasing(const char *filename, UErrorCode *pErrorCode);
 
 static void
+parseCaseFolding(const char *filename, UErrorCode *pErrorCode);
+
+static void
 parseDB(const char *filename, UErrorCode *pErrorCode);
 
 /* -------------------------------------------------------------------------- */
@@ -149,6 +152,17 @@ main(int argc, char* argv[]) {
     }
     parseSpecialCasing(filename, &errorCode);
 
+    /* process CaseFolding.txt */
+    if(suffix==NULL) {
+        uprv_strcpy(basename, "CaseFolding.txt");
+    } else {
+        uprv_strcpy(basename, "CaseFolding");
+        basename[11]='-';
+        uprv_strcpy(basename+12, suffix);
+        uprv_strcat(basename+12, ".txt");
+    }
+    parseCaseFolding(filename, &errorCode);
+
     /* process UnicodeData.txt */
     if(suffix==NULL) {
         uprv_strcpy(basename, "UnicodeData.txt");
@@ -186,20 +200,32 @@ skipWhitespace(const char *s) {
     return s;
 }
 
-static void
+/*
+ * parse a list of code points
+ * store them as a string in dest[destSize] with the string length in dest[0]
+ * set the first code point in *pFirst
+ * return the number of code points
+ */
+static int32_t
 parseCodePoints(const char *s,
                 UChar *dest, int32_t destSize,
+                uint32_t *pFirst,
                 UErrorCode *pErrorCode) {
     char *end;
     uint32_t value;
-    int32_t i;
+    int32_t i, count;
 
+    if(pFirst!=NULL) {
+        *pFirst=0xffff;
+    }
+
+    count=0;
     i=1; /* leave dest[0] for the length value */
     for(;;) {
         s=skipWhitespace(s);
         if(*s==';' || *s==0) {
             dest[0]=(UChar)(i-1);
-            return;
+            return count;
         }
 
         /* read one code point */
@@ -207,7 +233,12 @@ parseCodePoints(const char *s,
         if(end<=s || (*end!=' ' && *end!='\t' && *end!=';') || value>=0x110000) {
             fprintf(stderr, "genprops: syntax error parsing code point at %s\n", s);
             *pErrorCode=U_PARSE_ERROR;
-            return;
+            return -1;
+        }
+
+        /* store the first code point */
+        if(++count==1 && pFirst!=NULL) {
+            *pFirst=value;
         }
 
         /* append it to the destination array */
@@ -217,7 +248,7 @@ parseCodePoints(const char *s,
         if(i>=destSize) {
             fprintf(stderr, "genprops: code point sequence too long at at %s\n", s);
             *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-            return;
+            return -1;
         }
 
         /* go to the following characters */
@@ -281,7 +312,6 @@ static void
 specialCasingLineFn(void *context,
                     char *fields[][2], int32_t fieldCount,
                     UErrorCode *pErrorCode) {
-    static int32_t mirrorIndex=0;
     char *end;
 
     /* get code point */
@@ -305,9 +335,9 @@ specialCasingLineFn(void *context,
     } else {
         /* just set the "complex" flag and get the case mappings */
         specialCasings[specialCasingCount].isComplex=FALSE;
-        parseCodePoints(fields[1][0], specialCasings[specialCasingCount].lowerCase, 32, pErrorCode);
-        parseCodePoints(fields[3][0], specialCasings[specialCasingCount].upperCase, 32, pErrorCode);
-        parseCodePoints(fields[2][0], specialCasings[specialCasingCount].titleCase, 32, pErrorCode);
+        parseCodePoints(fields[1][0], specialCasings[specialCasingCount].lowerCase, 32, NULL, pErrorCode);
+        parseCodePoints(fields[3][0], specialCasings[specialCasingCount].upperCase, 32, NULL, pErrorCode);
+        parseCodePoints(fields[2][0], specialCasings[specialCasingCount].titleCase, 32, NULL, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
             fprintf(stderr, "genprops: error parsing special casing at %s\n", fields[0][0]);
             exit(*pErrorCode);
@@ -363,6 +393,100 @@ parseSpecialCasing(const char *filename, UErrorCode *pErrorCode) {
     }
 }
 
+/* parser for CaseFolding.txt ----------------------------------------------- */
+
+#define MAX_CASE_FOLDING_COUNT 500
+
+static CaseFolding caseFoldings[MAX_CASE_FOLDING_COUNT];
+static int32_t caseFoldingCount=0;
+
+static void
+caseFoldingLineFn(void *context,
+                  char *fields[][2], int32_t fieldCount,
+                  UErrorCode *pErrorCode) {
+    char *end;
+    int32_t count;
+    char status;
+
+    /* get code point */
+    caseFoldings[caseFoldingCount].code=uprv_strtoul(skipWhitespace(fields[0][0]), &end, 16);
+    end=(char *)skipWhitespace(end);
+    if(end<=fields[0][0] || end!=fields[0][1]) {
+        fprintf(stderr, "genprops: syntax error in CaseFolding.txt field 0 at %s\n", fields[0][0]);
+        *pErrorCode = U_PARSE_ERROR;
+        exit(U_PARSE_ERROR);
+    }
+
+    /* get the status of this mapping */
+    caseFoldings[caseFoldingCount].status=status=*skipWhitespace(fields[1][0]);
+    if(status!='L' && status!='E' && status!='C' && status!='S' && status!='F' && status!='I') {
+        fprintf(stderr, "genprops: unrecognized status field in CaseFolding.txt at %s\n", fields[0][0]);
+        *pErrorCode = U_PARSE_ERROR;
+        exit(U_PARSE_ERROR);
+    }
+
+    /* ignore all case folding mappings that are the same as the UnicodeData.txt lowercase mappings */
+    if(status=='L') {
+        return;
+    }
+
+    /* get the mapping */
+    count=parseCodePoints(fields[2][0], caseFoldings[caseFoldingCount].full, 32, &caseFoldings[caseFoldingCount].simple, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        fprintf(stderr, "genprops: error parsing CaseFolding.txt mapping at %s\n", fields[0][0]);
+        exit(*pErrorCode);
+    }
+
+    /* there is a simple mapping only if there is exactly one code point */
+    if(count!=1) {
+        caseFoldings[caseFoldingCount].simple=0;
+    }
+
+    /* check the status */
+    if(status=='S') {
+        /* check if there was a full mapping for this code point before */
+        if( caseFoldingCount>0 &&
+            caseFoldings[caseFoldingCount-1].code==caseFoldings[caseFoldingCount].code &&
+            caseFoldings[caseFoldingCount-1].status=='F'
+        ) {
+            /* merge the two entries */
+            caseFoldings[caseFoldingCount-1].simple=caseFoldings[caseFoldingCount].simple;
+            return;
+        }
+    } else if(status=='F') {
+        /* check if there was a simple mapping for this code point before */
+        if( caseFoldingCount>0 &&
+            caseFoldings[caseFoldingCount-1].code==caseFoldings[caseFoldingCount].code &&
+            caseFoldings[caseFoldingCount-1].status=='S'
+        ) {
+            /* merge the two entries */
+            uprv_memcpy(caseFoldings[caseFoldingCount-1].full, caseFoldings[caseFoldingCount].full, 32*U_SIZEOF_UCHAR);
+            return;
+        }
+    } else if(status=='I') {
+        /* store only a marker for special handling for cases like dotless i */
+        caseFoldings[caseFoldingCount].simple=0;
+        caseFoldings[caseFoldingCount].full[0]=0;
+    }
+
+    if(++caseFoldingCount==MAX_CASE_FOLDING_COUNT) {
+        fprintf(stderr, "genprops: too many case folding mappings\n");
+        *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
+        exit(U_INDEX_OUTOFBOUNDS_ERROR);
+    }
+}
+
+static void
+parseCaseFolding(const char *filename, UErrorCode *pErrorCode) {
+    char *fields[3][2];
+
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return;
+    }
+
+    u_parseDelimitedFile(filename, ';', fields, 3, caseFoldingLineFn, NULL, pErrorCode);
+}
+
 /* parser for UnicodeData.txt ----------------------------------------------- */
 
 /* general categories */
@@ -406,7 +530,7 @@ static void
 unicodeDataLineFn(void *context,
                   char *fields[][2], int32_t fieldCount,
                   UErrorCode *pErrorCode) {
-    static int32_t mirrorIndex=0, specialCasingIndex=0;
+    static int32_t mirrorIndex=0, specialCasingIndex=0, caseFoldingIndex=0;
     Props p;
     char *end;
     uint32_t value;
@@ -557,6 +681,18 @@ unicodeDataLineFn(void *context,
         p.specialCasing=specialCasings+specialCasingIndex++;
     } else {
         p.specialCasing=NULL;
+    }
+    if(caseFoldingIndex<caseFoldingCount && p.code==caseFoldings[caseFoldingIndex].code) {
+        p.caseFolding=caseFoldings+caseFoldingIndex++;
+
+        /* ignore "Common" mappings (simple==full) that map to the same code point as the regular lowercase mapping */
+        if( p.caseFolding->status=='C' &&
+            p.caseFolding->simple==p.lowerCase
+        ) {
+            p.caseFolding=NULL;
+        }
+    } else {
+        p.caseFolding=NULL;
     }
 
     addProps(&p);

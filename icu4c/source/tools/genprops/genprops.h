@@ -30,6 +30,13 @@ typedef struct {
     UChar lowerCase[32], upperCase[32], titleCase[32];
 } SpecialCasing;
 
+/* case folding data */
+typedef struct {
+    uint32_t code, simple;
+    char status;
+    UChar full[32];
+} CaseFolding;
+
 /* character properties */
 typedef struct {
     uint32_t code, lowerCase, upperCase, titleCase, mirrorMapping;
@@ -38,6 +45,7 @@ typedef struct {
     uint32_t denominator; /* 0: no value */
     uint8_t generalCategory, canonicalCombining, bidi, isMirrored, hasNumericValue;
     SpecialCasing *specialCasing;
+    CaseFolding *caseFolding;
 } Props;
 
 /* global flags */
