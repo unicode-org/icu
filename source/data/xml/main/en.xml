@@ -1,460 +1,430 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:10 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="0009">Windows</correspondsTo>
-	</identity  >
-	<timeZoneNames>
-		<zone id="PST" default="true">
-			<long>
-				<generic>Pacific Standard Time</generic>
-				<standard>Pacific Daylight Time</standard>
-				<daylight>Los Angeles</daylight>
-			</long>
-			<short>
-				<generic>PST</generic>
-				<standard>PST</standard>
-				<daylight>PDT</daylight>
-			</short>
-			<city>Los Angeles</city>
-		</zone>
-		<zone id="America/Los_Angeles" >
-			<long>
-				<generic>Pacific Standard Time</generic>
-				<standard>Pacific Daylight Time</standard>
-				<daylight>Los Angeles</daylight>
-			</long>
-			<short>
-				<generic>America/Los_Angeles</generic>
-				<standard>PST</standard>
-				<daylight>PDT</daylight>
-			</short>
-			<city>Los Angeles</city>
-		</zone>
-		<zone id="MST" >
-			<long>
-				<generic>Mountain Standard Time</generic>
-				<standard>Mountain Daylight Time</standard>
-				<daylight>Denver</daylight>
-			</long>
-			<short>
-				<generic>MST</generic>
-				<standard>MST</standard>
-				<daylight>MDT</daylight>
-			</short>
-			<city>Denver</city>
-		</zone>
-		<zone id="America/Denver" >
-			<long>
-				<generic>Mountain Standard Time</generic>
-				<standard>Mountain Daylight Time</standard>
-				<daylight>Denver</daylight>
-			</long>
-			<short>
-				<generic>America/Denver</generic>
-				<standard>MST</standard>
-				<daylight>MDT</daylight>
-			</short>
-			<city>Denver</city>
-		</zone>
-		<zone id="PNT" >
-			<long>
-				<generic>Mountain Standard Time</generic>
-				<standard>Mountain Standard Time</standard>
-				<daylight>Phoenix</daylight>
-			</long>
-			<short>
-				<generic>PNT</generic>
-				<standard>MST</standard>
-				<daylight>MST</daylight>
-			</short>
-			<city>Phoenix</city>
-		</zone>
-		<zone id="America/Phoenix" >
-			<long>
-				<generic>Mountain Standard Time</generic>
-				<standard>Mountain Standard Time</standard>
-				<daylight>Phoenix</daylight>
-			</long>
-			<short>
-				<generic>America/Phoenix</generic>
-				<standard>MST</standard>
-				<daylight>MST</daylight>
-			</short>
-			<city>Phoenix</city>
-		</zone>
-		<zone id="CST" >
-			<long>
-				<generic>Central Standard Time</generic>
-				<standard>Central Daylight Time</standard>
-				<daylight>Chicago</daylight>
-			</long>
-			<short>
-				<generic>CST</generic>
-				<standard>CST</standard>
-				<daylight>CDT</daylight>
-			</short>
-			<city>Chicago</city>
-		</zone>
-		<zone id="America/Chicago" >
-			<long>
-				<generic>Central Standard Time</generic>
-				<standard>Central Daylight Time</standard>
-				<daylight>Chicago</daylight>
-			</long>
-			<short>
-				<generic>America/Chicago</generic>
-				<standard>CST</standard>
-				<daylight>CDT</daylight>
-			</short>
-			<city>Chicago</city>
-		</zone>
-		<zone id="EST" >
-			<long>
-				<generic>Eastern Standard Time</generic>
-				<standard>Eastern Daylight Time</standard>
-				<daylight>New York</daylight>
-			</long>
-			<short>
-				<generic>EST</generic>
-				<standard>EST</standard>
-				<daylight>EDT</daylight>
-			</short>
-			<city>New York</city>
-		</zone>
-		<zone id="America/New_York" >
-			<long>
-				<generic>Eastern Standard Time</generic>
-				<standard>Eastern Daylight Time</standard>
-				<daylight>New York</daylight>
-			</long>
-			<short>
-				<generic>America/New_York</generic>
-				<standard>EST</standard>
-				<daylight>EDT</daylight>
-			</short>
-			<city>New York</city>
-		</zone>
-		<zone id="IET" >
-			<long>
-				<generic>Eastern Standard Time</generic>
-				<standard>Eastern Standard Time</standard>
-				<daylight>Indianapolis</daylight>
-			</long>
-			<short>
-				<generic>IET</generic>
-				<standard>EST</standard>
-				<daylight>EST</daylight>
-			</short>
-			<city>Indianapolis</city>
-		</zone>
-		<zone id="America/Indianapolis" >
-			<long>
-				<generic>Eastern Standard Time</generic>
-				<standard>Eastern Standard Time</standard>
-				<daylight>Indianapolis</daylight>
-			</long>
-			<short>
-				<generic>America/Indianapolis</generic>
-				<standard>EST</standard>
-				<daylight>EST</daylight>
-			</short>
-			<city>Indianapolis</city>
-		</zone>
-		<zone id="HST" >
-			<long>
-				<generic>Hawaii Standard Time</generic>
-				<standard>Hawaii Standard Time</standard>
-				<daylight>Honolulu</daylight>
-			</long>
-			<short>
-				<generic>HST</generic>
-				<standard>HST</standard>
-				<daylight>HST</daylight>
-			</short>
-			<city>Honolulu</city>
-		</zone>
-		<zone id="Pacific/Honolulu" >
-			<long>
-				<generic>Hawaii Standard Time</generic>
-				<standard>Hawaii Standard Time</standard>
-				<daylight>Honolulu</daylight>
-			</long>
-			<short>
-				<generic>Pacific/Honolulu</generic>
-				<standard>HST</standard>
-				<daylight>HST</daylight>
-			</short>
-			<city>Honolulu</city>
-		</zone>
-		<zone id="AST" >
-			<long>
-				<generic>Alaska Standard Time</generic>
-				<standard>Alaska Daylight Time</standard>
-				<daylight>Anchorage</daylight>
-			</long>
-			<short>
-				<generic>AST</generic>
-				<standard>AST</standard>
-				<daylight>ADT</daylight>
-			</short>
-			<city>Anchorage</city>
-		</zone>
-		<zone id="America/Anchorage" >
-			<long>
-				<generic>Alaska Standard Time</generic>
-				<standard>Alaska Daylight Time</standard>
-				<daylight>Anchorage</daylight>
-			</long>
-			<short>
-				<generic>America/Anchorage</generic>
-				<standard>AST</standard>
-				<daylight>ADT</daylight>
-			</short>
-			<city>Anchorage</city>
-		</zone>
-		<zone id="America/Halifax" >
-			<long>
-				<generic>Atlantic Standard Time</generic>
-				<standard>Atlantic Daylight Time</standard>
-				<daylight>Halifax</daylight>
-			</long>
-			<short>
-				<generic>America/Halifax</generic>
-				<standard>AST</standard>
-				<daylight>ADT</daylight>
-			</short>
-			<city>Halifax</city>
-		</zone>
-		<zone id="CNT" >
-			<long>
-				<generic>Newfoundland Standard Time</generic>
-				<standard>Newfoundland Daylight Time</standard>
-				<daylight>St. Johns</daylight>
-			</long>
-			<short>
-				<generic>CNT</generic>
-				<standard>CNT</standard>
-				<daylight>CDT</daylight>
-			</short>
-			<city>St. Johns</city>
-		</zone>
-		<zone id="America/St_Johns" >
-			<long>
-				<generic>Newfoundland Standard Time</generic>
-				<standard>Newfoundland Daylight Time</standard>
-				<daylight>St. Johns</daylight>
-			</long>
-			<short>
-				<generic>America/St_Johns</generic>
-				<standard>CNT</standard>
-				<daylight>CDT</daylight>
-			</short>
-			<city>St. Johns</city>
-		</zone>
-		<zone id="ECT" >
-			<long>
-				<generic>Central European Standard Time</generic>
-				<standard>Central European Daylight Time</standard>
-				<daylight>Paris</daylight>
-			</long>
-			<short>
-				<generic>ECT</generic>
-				<standard>CET</standard>
-				<daylight>CEST</daylight>
-			</short>
-			<city>Paris</city>
-		</zone>
-		<zone id="Europe/Paris" >
-			<long>
-				<generic>Central European Standard Time</generic>
-				<standard>Central European Daylight Time</standard>
-				<daylight>Paris</daylight>
-			</long>
-			<short>
-				<generic>Europe/Paris</generic>
-				<standard>CET</standard>
-				<daylight>CEST</daylight>
-			</short>
-			<city>Paris</city>
-		</zone>
-		<zone id="GMT" >
-			<long>
-				<generic>Greenwich Mean Time</generic>
-				<standard>Greenwich Mean Time</standard>
-				<daylight>London</daylight>
-			</long>
-			<short>
-				<generic>GMT</generic>
-				<standard>GMT</standard>
-				<daylight>GMT</daylight>
-			</short>
-			<city>London</city>
-		</zone>
-		<zone id="Africa/Casablanca" >
-			<long>
-				<generic>Greenwich Mean Time</generic>
-				<standard>Greenwich Mean Time</standard>
-				<daylight>Casablanca</daylight>
-			</long>
-			<short>
-				<generic>Africa/Casablanca</generic>
-				<standard>GMT</standard>
-				<daylight>GMT</daylight>
-			</short>
-			<city>Casablanca</city>
-		</zone>
-		<zone id="Asia/Jerusalem" >
-			<long>
-				<generic>Israel Standard Time</generic>
-				<standard>Israel Daylight Time</standard>
-				<daylight>Jerusalem</daylight>
-			</long>
-			<short>
-				<generic>Asia/Jerusalem</generic>
-				<standard>IST</standard>
-				<daylight>IDT</daylight>
-			</short>
-			<city>Jerusalem</city>
-		</zone>
-		<zone id="JST" >
-			<long>
-				<generic>Japan Standard Time</generic>
-				<standard>Japan Standard Time</standard>
-				<daylight>Tokyo</daylight>
-			</long>
-			<short>
-				<generic>JST</generic>
-				<standard>JST</standard>
-				<daylight>JST</daylight>
-			</short>
-			<city>Tokyo</city>
-		</zone>
-		<zone id="Asia/Tokyo" >
-			<long>
-				<generic>Japan Standard Time</generic>
-				<standard>Japan Standard Time</standard>
-				<daylight>Tokyo</daylight>
-			</long>
-			<short>
-				<generic>Asia/Tokyo</generic>
-				<standard>JST</standard>
-				<daylight>JST</daylight>
-			</short>
-			<city>Tokyo</city>
-		</zone>
-		<zone id="Europe/Bucharest" >
-			<long>
-				<generic>Eastern European Standard Time</generic>
-				<standard>Eastern European Daylight Time</standard>
-				<daylight>Bucharest</daylight>
-			</long>
-			<short>
-				<generic>Europe/Bucharest</generic>
-				<standard>EET</standard>
-				<daylight>EEST</daylight>
-			</short>
-			<city>Bucharest</city>
-		</zone>
-		<zone id="CTT" >
-			<long>
-				<generic>China Standard Time</generic>
-				<standard>China Standard Time</standard>
-				<daylight>Shanghai</daylight>
-			</long>
-			<short>
-				<generic>CTT</generic>
-				<standard>CTT</standard>
-				<daylight>CDT</daylight>
-			</short>
-			<city>Shanghai</city>
-		</zone>
-		<zone id="Asia/Shanghai" >
-			<long>
-				<generic>China Standard Time</generic>
-				<standard>China Standard Time</standard>
-				<daylight>Shanghai</daylight>
-			</long>
-			<short>
-				<generic>Asia/Shanghai</generic>
-				<standard>CTT</standard>
-				<daylight>CDT</daylight>
-			</short>
-			<city>Shanghai</city>
-		</zone>
-	</timeZoneNames>
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">January</month>
-				<month id="2">February</month>
-				<month id="3">March</month>
-				<month id="4">April</month>
-				<month id="5">May</month>
-				<month id="6">June</month>
-				<month id="7">July</month>
-				<month id="8">August</month>
-				<month id="9">September</month>
-				<month id="10">October</month>
-				<month id="11">November</month>
-				<month id="12">December</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">Jan</month>
-				<month id="2">Feb</month>
-				<month id="3">Mar</month>
-				<month id="4">Apr</month>
-				<month id="5">May</month>
-				<month id="6">Jun</month>
-				<month id="7">Jul</month>
-				<month id="8">Aug</month>
-				<month id="9">Sep</month>
-				<month id="10">Oct</month>
-				<month id="11">Nov</month>
-				<month id="12">Dec</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">Sunday </day>
-				<day id="2">Monday </day>
-				<day id="3">Tuesday </day>
-				<day id="4">Wednesday </day>
-				<day id="5">Thursday </day>
-				<day id="6">Friday </day>
-				<day id="7">Saturday </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">Sun </day>
-				<day id="2">Mon </day>
-				<day id="3">Tue </day>
-				<day id="4">Wed </day>
-				<day id="5">Thu </day>
-				<day id="6">Fri </day>
-				<day id="7">Sat </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">BC</era>
-				<era id="1">AD</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-		</calendar>
-	</calendars>
-	<numberFormat class="decimal" default="true"> 
-		<patterns> 
-			<decimal>#,##0.###;-#,##0.###</decimal>
-			<percent>#,##0%</percent>
-			<scientific>#E0</scientific>
-		</patterns>
-	</numberFormat> 
-	<TransliteratorNamePattern>{0,choice,0#|1#{1}|2#{1} to {2}} </TransliteratorNamePattern> 
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="en"></language>
+	</identity>
+	<localeDisplayNames>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+		<dates>
+			<calendars>
+				<default type="gregorian"/>
+				<calendar type="gregorian">
+				</calendar>
+			</calendars>
+			<timeZoneNames>
+				<zone type="Los Angeles">
+					<long>
+						<generic>Pacific Standard Time</generic>
+						<standard>Pacific Standard Time</standard>
+						<daylight>Pacific Daylight Time</daylight>
+					</long>
+					<short>
+						<generic>PST</generic>
+						<standard>PST</standard>
+						<daylight>PDT</daylight>
+					</short>
+					<exemplarCity>Los Angeles</exemplarCity>
+				</zone>
+				<zone type="Los Angeles">
+					<long>
+						<generic>Pacific Standard Time</generic>
+						<standard>Pacific Standard Time</standard>
+						<daylight>Pacific Daylight Time</daylight>
+					</long>
+					<short>
+						<generic>America/Los_Angeles</generic>
+						<standard>PST</standard>
+						<daylight>PDT</daylight>
+					</short>
+					<exemplarCity>Los Angeles</exemplarCity>
+				</zone>
+				<zone type="Denver">
+					<long>
+						<generic>Mountain Standard Time</generic>
+						<standard>Mountain Standard Time</standard>
+						<daylight>Mountain Daylight Time</daylight>
+					</long>
+					<short>
+						<generic>MST</generic>
+						<standard>MST</standard>
+						<daylight>MDT</daylight>
+					</short>
+					<exemplarCity>Denver</exemplarCity>
+				</zone>
+				<zone type="Denver">
+					<long>
+						<generic>Mountain Standard Time</generic>
+						<standard>Mountain Standard Time</standard>
+						<daylight>Mountain Daylight Time</daylight>
+					</long>
+					<short>
+						<generic>America/Denver</generic>
+						<standard>MST</standard>
+						<daylight>MDT</daylight>
+					</short>
+					<exemplarCity>Denver</exemplarCity>
+				</zone>
+				<zone type="Phoenix">
+					<long>
+						<generic>Mountain Standard Time</generic>
+						<standard>Mountain Standard Time</standard>
+						<daylight>Mountain Standard Time</daylight>
+					</long>
+					<short>
+						<generic>PNT</generic>
+						<standard>MST</standard>
+						<daylight>MST</daylight>
+					</short>
+					<exemplarCity>Phoenix</exemplarCity>
+				</zone>
+				<zone type="Phoenix">
+					<long>
+						<generic>Mountain Standard Time</generic>
+						<standard>Mountain Standard Time</standard>
+						<daylight>Mountain Standard Time</daylight>
+					</long>
+					<short>
+						<generic>America/Phoenix</generic>
+						<standard>MST</standard>
+						<daylight>MST</daylight>
+					</short>
+					<exemplarCity>Phoenix</exemplarCity>
+				</zone>
+				<zone type="Chicago">
+					<long>
+						<generic>Central Standard Time</generic>
+						<standard>Central Standard Time</standard>
+						<daylight>Central Daylight Time</daylight>
+					</long>
+					<short>
+						<generic>CST</generic>
+						<standard>CST</standard>
+						<daylight>CDT</daylight>
+					</short>
+					<exemplarCity>Chicago</exemplarCity>
+				</zone>
+				<zone type="Chicago">
+					<long>
+						<generic>Central Standard Time</generic>
+						<standard>Central Standard Time</standard>
+						<daylight>Central Daylight Time</daylight>
+					</long>
+					<short>
+						<generic>America/Chicago</generic>
+						<standard>CST</standard>
+						<daylight>CDT</daylight>
+					</short>
+					<exemplarCity>Chicago</exemplarCity>
+				</zone>
+				<zone type="New York">
+					<long>
+						<generic>Eastern Standard Time</generic>
+						<standard>Eastern Standard Time</standard>
+						<daylight>Eastern Daylight Time</daylight>
+					</long>
+					<short>
+						<generic>EST</generic>
+						<standard>EST</standard>
+						<daylight>EDT</daylight>
+					</short>
+					<exemplarCity>New York</exemplarCity>
+				</zone>
+				<zone type="New York">
+					<long>
+						<generic>Eastern Standard Time</generic>
+						<standard>Eastern Standard Time</standard>
+						<daylight>Eastern Daylight Time</daylight>
+					</long>
+					<short>
+						<generic>America/New_York</generic>
+						<standard>EST</standard>
+						<daylight>EDT</daylight>
+					</short>
+					<exemplarCity>New York</exemplarCity>
+				</zone>
+				<zone type="Indianapolis">
+					<long>
+						<generic>Eastern Standard Time</generic>
+						<standard>Eastern Standard Time</standard>
+						<daylight>Eastern Standard Time</daylight>
+					</long>
+					<short>
+						<generic>IET</generic>
+						<standard>EST</standard>
+						<daylight>EST</daylight>
+					</short>
+					<exemplarCity>Indianapolis</exemplarCity>
+				</zone>
+				<zone type="Indianapolis">
+					<long>
+						<generic>Eastern Standard Time</generic>
+						<standard>Eastern Standard Time</standard>
+						<daylight>Eastern Standard Time</daylight>
+					</long>
+					<short>
+						<generic>America/Indianapolis</generic>
+						<standard>EST</standard>
+						<daylight>EST</daylight>
+					</short>
+					<exemplarCity>Indianapolis</exemplarCity>
+				</zone>
+				<zone type="Honolulu">
+					<long>
+						<generic>Hawaii Standard Time</generic>
+						<standard>Hawaii Standard Time</standard>
+						<daylight>Hawaii Standard Time</daylight>
+					</long>
+					<short>
+						<generic>HST</generic>
+						<standard>HST</standard>
+						<daylight>HST</daylight>
+					</short>
+					<exemplarCity>Honolulu</exemplarCity>
+				</zone>
+				<zone type="Honolulu">
+					<long>
+						<generic>Hawaii Standard Time</generic>
+						<standard>Hawaii Standard Time</standard>
+						<daylight>Hawaii Standard Time</daylight>
+					</long>
+					<short>
+						<generic>Pacific/Honolulu</generic>
+						<standard>HST</standard>
+						<daylight>HST</daylight>
+					</short>
+					<exemplarCity>Honolulu</exemplarCity>
+				</zone>
+				<zone type="Anchorage">
+					<long>
+						<generic>Alaska Standard Time</generic>
+						<standard>Alaska Standard Time</standard>
+						<daylight>Alaska Daylight Time</daylight>
+					</long>
+					<short>
+						<generic>AST</generic>
+						<standard>AST</standard>
+						<daylight>ADT</daylight>
+					</short>
+					<exemplarCity>Anchorage</exemplarCity>
+				</zone>
+				<zone type="Anchorage">
+					<long>
+						<generic>Alaska Standard Time</generic>
+						<standard>Alaska Standard Time</standard>
+						<daylight>Alaska Daylight Time</daylight>
+					</long>
+					<short>
+						<generic>America/Anchorage</generic>
+						<standard>AST</standard>
+						<daylight>ADT</daylight>
+					</short>
+					<exemplarCity>Anchorage</exemplarCity>
+				</zone>
+				<zone type="Halifax">
+					<long>
+						<generic>Atlantic Standard Time</generic>
+						<standard>Atlantic Standard Time</standard>
+						<daylight>Atlantic Daylight Time</daylight>
+					</long>
+					<short>
+						<generic>America/Halifax</generic>
+						<standard>AST</standard>
+						<daylight>ADT</daylight>
+					</short>
+					<exemplarCity>Halifax</exemplarCity>
+				</zone>
+				<zone type="St. Johns">
+					<long>
+						<generic>Newfoundland Standard Time</generic>
+						<standard>Newfoundland Standard Time</standard>
+						<daylight>Newfoundland Daylight Time</daylight>
+					</long>
+					<short>
+						<generic>CNT</generic>
+						<standard>CNT</standard>
+						<daylight>CDT</daylight>
+					</short>
+					<exemplarCity>St. Johns</exemplarCity>
+				</zone>
+				<zone type="St. Johns">
+					<long>
+						<generic>Newfoundland Standard Time</generic>
+						<standard>Newfoundland Standard Time</standard>
+						<daylight>Newfoundland Daylight Time</daylight>
+					</long>
+					<short>
+						<generic>America/St_Johns</generic>
+						<standard>CNT</standard>
+						<daylight>CDT</daylight>
+					</short>
+					<exemplarCity>St. Johns</exemplarCity>
+				</zone>
+				<zone type="Paris">
+					<long>
+						<generic>Central European Standard Time</generic>
+						<standard>Central European Standard Time</standard>
+						<daylight>Central European Daylight Time</daylight>
+					</long>
+					<short>
+						<generic>ECT</generic>
+						<standard>CET</standard>
+						<daylight>CEST</daylight>
+					</short>
+					<exemplarCity>Paris</exemplarCity>
+				</zone>
+				<zone type="Paris">
+					<long>
+						<generic>Central European Standard Time</generic>
+						<standard>Central European Standard Time</standard>
+						<daylight>Central European Daylight Time</daylight>
+					</long>
+					<short>
+						<generic>Europe/Paris</generic>
+						<standard>CET</standard>
+						<daylight>CEST</daylight>
+					</short>
+					<exemplarCity>Paris</exemplarCity>
+				</zone>
+				<zone type="London">
+					<long>
+						<generic>Greenwich Mean Time</generic>
+						<standard>Greenwich Mean Time</standard>
+						<daylight>Greenwich Mean Time</daylight>
+					</long>
+					<short>
+						<generic>GMT</generic>
+						<standard>GMT</standard>
+						<daylight>GMT</daylight>
+					</short>
+					<exemplarCity>London</exemplarCity>
+				</zone>
+				<zone type="Casablanca">
+					<long>
+						<generic>Greenwich Mean Time</generic>
+						<standard>Greenwich Mean Time</standard>
+						<daylight>Greenwich Mean Time</daylight>
+					</long>
+					<short>
+						<generic>Africa/Casablanca</generic>
+						<standard>GMT</standard>
+						<daylight>GMT</daylight>
+					</short>
+					<exemplarCity>Casablanca</exemplarCity>
+				</zone>
+				<zone type="Jerusalem">
+					<long>
+						<generic>Israel Standard Time</generic>
+						<standard>Israel Standard Time</standard>
+						<daylight>Israel Daylight Time</daylight>
+					</long>
+					<short>
+						<generic>Asia/Jerusalem</generic>
+						<standard>IST</standard>
+						<daylight>IDT</daylight>
+					</short>
+					<exemplarCity>Jerusalem</exemplarCity>
+				</zone>
+				<zone type="Tokyo">
+					<long>
+						<generic>Japan Standard Time</generic>
+						<standard>Japan Standard Time</standard>
+						<daylight>Japan Standard Time</daylight>
+					</long>
+					<short>
+						<generic>JST</generic>
+						<standard>JST</standard>
+						<daylight>JST</daylight>
+					</short>
+					<exemplarCity>Tokyo</exemplarCity>
+				</zone>
+				<zone type="Tokyo">
+					<long>
+						<generic>Japan Standard Time</generic>
+						<standard>Japan Standard Time</standard>
+						<daylight>Japan Standard Time</daylight>
+					</long>
+					<short>
+						<generic>Asia/Tokyo</generic>
+						<standard>JST</standard>
+						<daylight>JST</daylight>
+					</short>
+					<exemplarCity>Tokyo</exemplarCity>
+				</zone>
+				<zone type="Bucharest">
+					<long>
+						<generic>Eastern European Standard Time</generic>
+						<standard>Eastern European Standard Time</standard>
+						<daylight>Eastern European Daylight Time</daylight>
+					</long>
+					<short>
+						<generic>Europe/Bucharest</generic>
+						<standard>EET</standard>
+						<daylight>EEST</daylight>
+					</short>
+					<exemplarCity>Bucharest</exemplarCity>
+				</zone>
+				<zone type="Shanghai">
+					<long>
+						<generic>China Standard Time</generic>
+						<standard>China Standard Time</standard>
+						<daylight>China Standard Time</daylight>
+					</long>
+					<short>
+						<generic>CTT</generic>
+						<standard>CTT</standard>
+						<daylight>CDT</daylight>
+					</short>
+					<exemplarCity>Shanghai</exemplarCity>
+				</zone>
+				<zone type="Shanghai">
+					<long>
+						<generic>China Standard Time</generic>
+						<standard>China Standard Time</standard>
+						<daylight>China Standard Time</daylight>
+					</long>
+					<short>
+						<generic>Asia/Shanghai</generic>
+						<standard>CTT</standard>
+						<daylight>CDT</daylight>
+					</short>
+					<exemplarCity>Shanghai</exemplarCity>
+				</zone>
+			</timeZoneNames>
+		</dates>
+		<numbers>
+			<numberFormats>
+				<default type="decimal"/>
+				<numberFormat type="decimal">
+					<pattern>#,##0.###</pattern>
+					<pattern>-#,##0.###</pattern>
+				</numberFormat>
+				<numberFormat type="currency">
+					<pattern>¤#,##0.00</pattern>
+					<pattern>-¤#,##0.00</pattern>
+				</numberFormat>
+				<numberFormat type="percent">
+					<pattern>#,##0%</pattern>
+				</numberFormat>
+				<numberFormat type="scientific">
+					<pattern>#E0</pattern>
+				</numberFormat>
+			</numberFormats>
+		</numbers>
+		<special owner="http://oss.software.ibm.com/icu/"  >
+			<ruleBasedNumberFormats>
+				<ruleBasedNumberFormat type="spellout">%simplified:<cp hex="000A" />    -x: minus &gt;&gt;;<cp hex="000A" />    x.x: &lt;&lt; point &gt;&gt;;<cp hex="000A" />    zero; one; two; three; four; five; six; seven; eight; nine;<cp hex="000A" />    ten; eleven; twelve; thirteen; fourteen; fifteen; sixteen;<cp hex="000A" />        seventeen; eighteen; nineteen;<cp hex="000A" />    20: twenty[-&gt;&gt;];<cp hex="000A" />    30: thirty[-&gt;&gt;];<cp hex="000A" />    40: forty[-&gt;&gt;];<cp hex="000A" />    50: fifty[-&gt;&gt;];<cp hex="000A" />    60: sixty[-&gt;&gt;];<cp hex="000A" />    70: seventy[-&gt;&gt;];<cp hex="000A" />    80: eighty[-&gt;&gt;];<cp hex="000A" />    90: ninety[-&gt;&gt;];<cp hex="000A" />    100: &lt;&lt; hundred[ &gt;&gt;];<cp hex="000A" />    1000: &lt;&lt; thousand[ &gt;&gt;];<cp hex="000A" />    1,000,000: &lt;&lt; million[ &gt;&gt;];<cp hex="000A" />    1,000,000,000: &lt;&lt; billion[ &gt;&gt;];<cp hex="000A" />    1,000,000,000,000: &lt;&lt; trillion[ &gt;&gt;];<cp hex="000A" />    1,000,000,000,000,000: =#,##0=;<cp hex="000A" />%default:<cp hex="000A" />    -x: minus &gt;&gt;;<cp hex="000A" />    x.x: &lt;&lt; point &gt;&gt;;<cp hex="000A" />    =%simplified=;<cp hex="000A" />    100: &lt;&lt; hundred[ &gt;%%and&gt;];<cp hex="000A" />    1000: &lt;&lt; thousand[ &gt;%%and&gt;];<cp hex="000A" />    100,000&gt;&gt;: &lt;&lt; thousand[&gt;%%commas&gt;];<cp hex="000A" />    1,000,000: &lt;&lt; million[&gt;%%commas&gt;];<cp hex="000A" />    1,000,000,000: &lt;&lt; billion[&gt;%%commas&gt;];<cp hex="000A" />    1,000,000,000,000: &lt;&lt; trillion[&gt;%%commas&gt;];<cp hex="000A" />    1,000,000,000,000,000: =#,##0=;<cp hex="000A" />%%and:<cp hex="000A" />    and =%default=;<cp hex="000A" />    100: =%default=;<cp hex="000A" />%%commas:<cp hex="000A" />    ' and =%default=;<cp hex="000A" />    100: , =%default=;<cp hex="000A" />    1000: , &lt;%default&lt; thousand, &gt;%default&gt;;<cp hex="000A" />    1,000,000: , =%default=;%%lenient-parse:<cp hex="000A" />   &amp;<cp hex="0000" /> &lt;&lt; ' ' &lt;&lt; ',' &lt;&lt; '-'; <cp hex="000A" /></ruleBasedNumberFormat>
+				<ruleBasedNumberFormat type="ordinal">%main:<cp hex="000A" />    =#,##0==%%abbrev=;<cp hex="000A" />%%abbrev:<cp hex="000A" />    th; st; nd; rd; th;<cp hex="000A" />    20: &gt;&gt;;<cp hex="000A" />    100: &gt;&gt;;<cp hex="000A" /></ruleBasedNumberFormat>
+				<ruleBasedNumberFormat type="duration">%with-words:<cp hex="000A" />    0 seconds; 1 second; =0= seconds;<cp hex="000A" />    60/60: &lt;%%min&lt;[, &gt;&gt;];<cp hex="000A" />    3600/60: &lt;%%hr&lt;[, &gt;&gt;&gt;];<cp hex="000A" />%%min:<cp hex="000A" />    0 minutes; 1 minute; =0= minutes;<cp hex="000A" />%%hr:<cp hex="000A" />    0 hours; 1 hour; =0= hours;<cp hex="000A" />%in-numerals:<cp hex="000A" />    =0= sec.;<cp hex="000A" />    60: =%%min-sec=;<cp hex="000A" />    3600: =%%hr-min-sec=;<cp hex="000A" />%%min-sec:<cp hex="000A" />    0: :=00=;<cp hex="000A" />    60/60: &lt;0&lt;&gt;&gt;;<cp hex="000A" />%%hr-min-sec:<cp hex="000A" />    0: :=00=;<cp hex="000A" />    60/60: &lt;00&lt;&gt;&gt;;<cp hex="000A" />    3600/60: &lt;#,##0&lt;:&gt;&gt;&gt;;<cp hex="000A" />%%lenient-parse:<cp hex="000A" />    &amp; ':' = '.' = ' ' = '-';<cp hex="000A" /></ruleBasedNumberFormat>
+			</ruleBasedNumberFormats>
+		</special>
 </localeData>

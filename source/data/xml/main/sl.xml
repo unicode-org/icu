@@ -1,125 +1,135 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:32 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="0024">Windows</correspondsTo>
-	</identity  >
-
-	<displayNames >
-		<languages >
-			<language id="sl" >Slovenščina</language>
-		</languages >
-		<countries  >
-			<country id="SI">Slovenija</country>
-		</countries  >
-
-	</displayNames >
-	<timeZoneNames>
-		<zone id="Africa/Casablanca" default="true">
-			<long>
-				<generic>GMT</generic>
-				<standard>GMT</standard>
-			</long>
-			<short>
-				<generic>Africa/Casablanca</generic>
-				<standard>GMT</standard>
-				<daylight>GMT</daylight>
-			</short>
-		</zone>
-	</timeZoneNames>
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">januar</month>
-				<month id="2">februar</month>
-				<month id="3">marec</month>
-				<month id="4">april</month>
-				<month id="5">maj</month>
-				<month id="6">junij</month>
-				<month id="7">julij</month>
-				<month id="8">avgust</month>
-				<month id="9">september</month>
-				<month id="10">oktober</month>
-				<month id="11">november</month>
-				<month id="12">december</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">jan</month>
-				<month id="2">feb</month>
-				<month id="3">mar</month>
-				<month id="4">apr</month>
-				<month id="5">maj</month>
-				<month id="6">jun</month>
-				<month id="7">jul</month>
-				<month id="8">avg</month>
-				<month id="9">sep</month>
-				<month id="10">okt</month>
-				<month id="11">nov</month>
-				<month id="12">dec</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">nedelja </day>
-				<day id="2">ponedeljek </day>
-				<day id="3">torek </day>
-				<day id="4">sreda </day>
-				<day id="5">četrtek </day>
-				<day id="6">petek </day>
-				<day id="7">sobota </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">ned </day>
-				<day id="2">pon </day>
-				<day id="3">tor </day>
-				<day id="4">sre </day>
-				<day id="5">čet </day>
-				<day id="6">pet </day>
-				<day id="7">sob </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">pr.n.š.</era>
-				<era id="1">po Kr.</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-			<patterns> 
-				<chars>GanjkHmsSEDFwWxhKzAe</chars>
-				<time>
-					<full>H:mm:ss z</full>
-					<long>H:mm:ss z</long>
-					<medium>H:mm:ss</medium>
-					<short>H:mm</short>
-				</time>
-				<date>
-					<full>EEEE, dd. MMMM yyyy</full>
-					<long>dd. MMMM yyyy</long>
-					<medium>yyyy.M.d</medium>
-					<short>yy.M.d</short>
-				</date>
- 				<dateTime>{1} {0} </dateTime>
-			</patterns>
-		</calendar>
-	</calendars>
-	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
-		<collationElements>
-		<after>C</after>
-		<gt1>č</gt1>
-		<gt3>Č</gt3>
-		<after>S</after>
-		<gt1>š</gt1>
-		<gt3>Š</gt3>
-		<after>Z</after>
-		<gt1>ž</gt1>
-		<gt3>Ž</gt3>
-		</collationElements>
-	</collation>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="sl"></language>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="sl">Slovenščina</language>
+		</languages>
+		<territories>
+			<territory type="SI">Slovenija</territory>
+		</territories>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+	<encodings>
+		<exemplarCharacters>[a-p r-v z č š ž]</exemplarCharacters>
+	</encodings>
+	<dates>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">januar</month>
+					<month type="2">februar</month>
+					<month type="3">marec</month>
+					<month type="4">april</month>
+					<month type="5">maj</month>
+					<month type="6">junij</month>
+					<month type="7">julij</month>
+					<month type="8">avgust</month>
+					<month type="9">september</month>
+					<month type="10">oktober</month>
+					<month type="11">november</month>
+					<month type="12">december</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">jan</month>
+					<month type="2">feb</month>
+					<month type="3">mar</month>
+					<month type="4">apr</month>
+					<month type="5">maj</month>
+					<month type="6">jun</month>
+					<month type="7">jul</month>
+					<month type="8">avg</month>
+					<month type="9">sep</month>
+					<month type="10">okt</month>
+					<month type="11">nov</month>
+					<month type="12">dec</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">nedelja</day>
+					<day type="mon">ponedeljek</day>
+					<day type="tue">torek</day>
+					<day type="wed">sreda</day>
+					<day type="thu">četrtek</day>
+					<day type="fri">petek</day>
+					<day type="sat">sobota</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">ned</day>
+					<day type="mon">pon</day>
+					<day type="tue">tor</day>
+					<day type="wed">sre</day>
+					<day type="thu">čet</day>
+					<day type="fri">pet</day>
+					<day type="sat">sob</day>
+				</dayAbbr>
+				<eras>
+					<era type="1">pr.n.š.</era>
+					<era type="2">po Kr.</era>
+				</eras>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormat type="full">
+						<pattern>EEEE, dd. MMMM yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="long">
+						<pattern>dd. MMMM yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="medium">
+						<pattern>yyyy.M.d</pattern>
+					</dateFormat>
+					<dateFormat type="short">
+						<pattern>yy.M.d</pattern>
+					</dateFormat>
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormat type="full">
+						<pattern>H:mm:ss z</pattern>
+					</timeFormat>
+					<timeFormat type="long">
+						<pattern>H:mm:ss z</pattern>
+					</timeFormat>
+					<timeFormat type="medium">
+						<pattern>H:mm:ss</pattern>
+					</timeFormat>
+					<timeFormat type="short">
+						<pattern>H:mm</pattern>
+					</timeFormat>
+				</timeFormats>
+				<dateTimeFormat>
+					<pattern>{1} {0}</pattern>
+				</dateTimeFormat>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+		</timeZoneNames>
+	</dates>
+		<collations>
+			<collation  >
+				<rules>
+					<reset>C</reset>
+					<p>č</p>
+					<t>Č</t>
+					<reset>S</reset>
+					<p>š</p>
+					<t>Š</t>
+					<reset>Z</reset>
+					<p>ž</p>
+				</rules>
+				<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
+			</collation  >
+		</collations>
 </localeData>

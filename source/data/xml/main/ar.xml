@@ -1,275 +1,178 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:04 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="0001">Windows</correspondsTo>
-	</identity  >
-
-	<displayNames >
-		<languages >
-			<language id="ar" >العربية</language>
-		</languages >
-		<countries  >
-			<country id="AE">الإمارات</country>
-			<country id="BH">البحرين</country>
-			<country id="DZ">الجزائر</country>
-			<country id="EG">مصر</country>
-			<country id="IQ">العراق</country>
-			<country id="JO">الأردن</country>
-			<country id="KW">الكويت</country>
-			<country id="LB">لبنان</country>
-			<country id="LY">ليبيا</country>
-			<country id="MA">المغرب</country>
-			<country id="OM">سلطنة عمان</country>
-			<country id="QA">قطر</country>
-			<country id="SA">السعودية</country>
-			<country id="SD">السودان</country>
-			<country id="SY">سوريا</country>
-			<country id="TN">تونس</country>
-			<country id="YE">اليمن</country>
-		</countries  >
-
-	</displayNames >
-	<timeZoneNames>
-		<zone id="Africa/Casablanca" default="true">
-			<long>
-				<generic>GMT</generic>
-				<standard>GMT</standard>
-			</long>
-			<short>
-				<generic>Africa/Casablanca</generic>
-				<standard>GMT</standard>
-				<daylight>GMT</daylight>
-			</short>
-		</zone>
-	</timeZoneNames>
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">يناير</month>
-				<month id="2">فبراير</month>
-				<month id="3">مارس</month>
-				<month id="4">أبريل</month>
-				<month id="5">مايو</month>
-				<month id="6">يونيو</month>
-				<month id="7">يوليو</month>
-				<month id="8">أغسطس</month>
-				<month id="9">سبتمبر</month>
-				<month id="10">أكتوبر</month>
-				<month id="11">نوفمبر</month>
-				<month id="12">ديسمبر</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">ينا</month>
-				<month id="2">فبر</month>
-				<month id="3">مار</month>
-				<month id="4">أبر</month>
-				<month id="5">ماي</month>
-				<month id="6">يون</month>
-				<month id="7">يول</month>
-				<month id="8">أغس</month>
-				<month id="9">سبت</month>
-				<month id="10">أكت</month>
-				<month id="11">نوف</month>
-				<month id="12">ديس</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">الأحد </day>
-				<day id="2">الاثنين </day>
-				<day id="3">الثلاثاء </day>
-				<day id="4">الأربعاء </day>
-				<day id="5">الخميس </day>
-				<day id="6">الجمعة </day>
-				<day id="7">السبت </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">ح </day>
-				<day id="2">ن </day>
-				<day id="3">ث </day>
-				<day id="4">ر </day>
-				<day id="5">خ </day>
-				<day id="6">ج </day>
-				<day id="7">س </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">ق.م</era>
-				<era id="1">م</era>
-			</eras>
-			<am>ص</am><pm>م</pm>
-			<patterns> 
-				<chars>GanjkHmsSEDFwWxhKzAe</chars>
-				<time>
-					<full>z h:mm:ss a</full>
-					<long>z h:mm:ss a</long>
-					<medium>h:mm:ss a</medium>
-					<short>h:mm a</short>
-				</time>
-				<date>
-					<full>EEEE, d MMMM, yyyy</full>
-					<long>d MMMM, yyyy</long>
-					<medium>dd/MM/yyyy</medium>
-					<short>dd/MM/yy</short>
-				</date>
- 				<dateTime>{1} {0} </dateTime>
-			</patterns>
-		</calendar>
-	</calendars>
-	<numberFormat class="decimal" default="true"> 
-		<patterns> 
-			<decimal>#,##0.###;#,##0.###-</decimal>
-			<percent>#,##0%</percent>
-			<scientific>#E0</scientific>
-		</patterns>
-	</numberFormat> 
-	<collation version="2.0" accentOrder="FORWARD" override="FALSE">
-		<collationElements>
-		<normalization>OFF</normalization>
-		<after>Z</after>
-		<gt1>ء</gt1>
-		<gt2>آ</gt2>
-		<gt2>أ</gt2>
-		<gt2>ؤ</gt2>
-		<gt2>إ</gt2>
-		<gt2>ئ</gt2>
-		<gt1>ا</gt1>
-		<gt1>ب</gt1>
-		<gt1>پ</gt1>
-		<gt1>ة</gt1>
-		<eq>ت</eq>
-		<gt1>ث</gt1>
-		<gt1>ج</gt1>
-		<gt1>چ</gt1>
-		<gt1>ح</gt1>
-		<gt1>خ</gt1>
-		<gt1>د</gt1>
-		<gt1>ذ</gt1>
-		<gt1>ر</gt1>
-		<gt1>ز</gt1>
-		<gt1>ژ</gt1>
-		<gt1>س</gt1>
-		<gt1>ش</gt1>
-		<gt1>ص</gt1>
-		<gt1>ض</gt1>
-		<gt1>ط</gt1>
-		<gt1>ظ</gt1>
-		<gt1>ع</gt1>
-		<gt1>غ</gt1>
-		<gt1>ف</gt1>
-		<gt1>ق</gt1>
-		<gt1>ك</gt1>
-		<gt1>گ</gt1>
-		<gt1>ل</gt1>
-		<gt1>م</gt1>
-		<gt1>ن</gt1>
-		<gt1>ه</gt1>
-		<gt1>و</gt1>
-		<gt1>ى</gt1>
-		<gt2>ي</gt2>
-		<gt1>ٰ</gt1>
-		<gt1>ٱ</gt1>
-		<gt1>ٲ</gt1>
-		<gt1>ٳ</gt1>
-		<gt1>ٴ</gt1>
-		<gt1>ٵ</gt1>
-		<gt1>ٶ</gt1>
-		<gt1>ٷ</gt1>
-		<gt1>ٸ</gt1>
-		<gt1>ٹ</gt1>
-		<gt1>ٺ</gt1>
-		<gt1>ٻ</gt1>
-		<gt1>ټ</gt1>
-		<gt1>ٽ</gt1>
-		<gt1>ٿ</gt1>
-		<gt1>ڀ</gt1>
-		<gt1>ځ</gt1>
-		<gt1>ڂ</gt1>
-		<gt1>ڃ</gt1>
-		<gt1>ڄ</gt1>
-		<gt1>څ</gt1>
-		<gt1>ڇ</gt1>
-		<gt1>ڈ</gt1>
-		<gt1>ډ</gt1>
-		<gt1>ڊ</gt1>
-		<gt1>ڋ</gt1>
-		<gt1>ڌ</gt1>
-		<gt1>ڍ</gt1>
-		<gt1>ڎ</gt1>
-		<gt1>ڏ</gt1>
-		<gt1>ڐ</gt1>
-		<gt1>ڑ</gt1>
-		<gt1>ڒ</gt1>
-		<gt1>ړ</gt1>
-		<gt1>ڔ</gt1>
-		<gt1>ڕ</gt1>
-		<gt1>ږ</gt1>
-		<gt1>ڗ</gt1>
-		<gt1>ڙ</gt1>
-		<gt1>ښ</gt1>
-		<gt1>ڛ</gt1>
-		<gt1>ڜ</gt1>
-		<gt1>ڝ</gt1>
-		<gt1>ڞ</gt1>
-		<gt1>ڟ</gt1>
-		<gt1>ڠ</gt1>
-		<gt1>ڡ</gt1>
-		<gt1>ڢ</gt1>
-		<gt1>ڣ</gt1>
-		<gt1>ڤ</gt1>
-		<gt1>ڥ</gt1>
-		<gt1>ڦ</gt1>
-		<gt1>ڧ</gt1>
-		<gt1>ڨ</gt1>
-		<gt1>ک</gt1>
-		<gt1>ڪ</gt1>
-		<gt1>ګ</gt1>
-		<gt1>ڬ</gt1>
-		<gt1>ڭ</gt1>
-		<gt1>ڮ</gt1>
-		<gt1>ڰ</gt1>
-		<gt1>ڱ</gt1>
-		<gt1>ڲ</gt1>
-		<gt1>ڳ</gt1>
-		<gt1>ڴ</gt1>
-		<gt1>ڵ</gt1>
-		<gt1>ڶ</gt1>
-		<gt1>ڷ</gt1>
-		<gt1>ں</gt1>
-		<gt1>ڻ</gt1>
-		<gt1>ڼ</gt1>
-		<gt1>ڽ</gt1>
-		<gt1>ھ</gt1>
-		<gt1>ۀ</gt1>
-		<gt1>ہ</gt1>
-		<gt1>ۂ</gt1>
-		<gt1>ۃ</gt1>
-		<gt1>ۄ</gt1>
-		<gt1>ۅ</gt1>
-		<gt1>ۆ</gt1>
-		<gt1>ۇ</gt1>
-		<gt1>ۈ</gt1>
-		<gt1>ۉ</gt1>
-		<gt1>ۊ</gt1>
-		<gt1>ۋ</gt1>
-		<gt1>ی</gt1>
-		<gt1>ۍ</gt1>
-		<gt1>ێ</gt1>
-		<gt1>ې</gt1>
-		<gt1>ۑ</gt1>
-		<gt1>ے</gt1>
-		<gt1>ۓ</gt1>
-		<gt1>ە</gt1>
-		<gt1>ّ</gt1>
-		</collationElements>
-	</collation>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="ar"></language>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="ar">العربية</language>
+		</languages>
+		<territories>
+			<territory type="AE">الإمارات</territory>
+			<territory type="BH">البحرين</territory>
+			<territory type="DZ">الجزائر</territory>
+			<territory type="EG">مصر</territory>
+			<territory type="IN">الهند</territory>
+			<territory type="IQ">العراق</territory>
+			<territory type="JO">الأردن</territory>
+			<territory type="KW">الكويت</territory>
+			<territory type="LB">لبنان</territory>
+			<territory type="LY">ليبيا</territory>
+			<territory type="MA">المغرب</territory>
+			<territory type="OM">سلطنة عمان</territory>
+			<territory type="QA">قطر</territory>
+			<territory type="SA">السعودية</territory>
+			<territory type="SD">السودان</territory>
+			<territory type="SY">سوريا</territory>
+			<territory type="TN">تونس</territory>
+			<territory type="YE">اليمن</territory>
+		</territories>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="right-to-left" />
+	</layout>
+	<encodings>
+		<exemplarCharacters>[ء ا-غ ف-يّ ٓ-ٕ ٰ-ڷ ں-ھ ہ ۃ-ێ ې-ے]</exemplarCharacters>
+	</encodings>
+	<dates>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">يناير</month>
+					<month type="2">فبراير</month>
+					<month type="3">مارس</month>
+					<month type="4">أبريل</month>
+					<month type="5">مايو</month>
+					<month type="6">يونيو</month>
+					<month type="7">يوليو</month>
+					<month type="8">أغسطس</month>
+					<month type="9">سبتمبر</month>
+					<month type="10">أكتوبر</month>
+					<month type="11">نوفمبر</month>
+					<month type="12">ديسمبر</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">ينا</month>
+					<month type="2">فبر</month>
+					<month type="3">مار</month>
+					<month type="4">أبر</month>
+					<month type="5">ماي</month>
+					<month type="6">يون</month>
+					<month type="7">يول</month>
+					<month type="8">أغس</month>
+					<month type="9">سبت</month>
+					<month type="10">أكت</month>
+					<month type="11">نوف</month>
+					<month type="12">ديس</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">الأحد</day>
+					<day type="mon">الاثنين</day>
+					<day type="tue">الثلاثاء</day>
+					<day type="wed">الأربعاء</day>
+					<day type="thu">الخميس</day>
+					<day type="fri">الجمعة</day>
+					<day type="sat">السبت</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">ح</day>
+					<day type="mon">ن</day>
+					<day type="tue">ث</day>
+					<day type="wed">ر</day>
+					<day type="thu">خ</day>
+					<day type="fri">ج</day>
+					<day type="sat">س</day>
+				</dayAbbr>
+				<week>
+					<minDays count="7"/>
+					<firstDay day="mon"/>
+				</week>
+				<eras>
+					<era type="1">ق.م</era>
+					<era type="2">م</era>
+				</eras>
+				<am>ص</am>
+				<pm>م</pm>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormat type="full">
+						<pattern>EEEE, d MMMM, yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="long">
+						<pattern>d MMMM, yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="medium">
+						<pattern>dd/MM/yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="short">
+						<pattern>dd/MM/yy</pattern>
+					</dateFormat>
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormat type="full">
+						<pattern>z h:mm:ss a</pattern>
+					</timeFormat>
+					<timeFormat type="long">
+						<pattern>z h:mm:ss a</pattern>
+					</timeFormat>
+					<timeFormat type="medium">
+						<pattern>h:mm:ss a</pattern>
+					</timeFormat>
+					<timeFormat type="short">
+						<pattern>h:mm a</pattern>
+					</timeFormat>
+				</timeFormats>
+				<dateTimeFormat>
+					<pattern>{1} {0}</pattern>
+				</dateTimeFormat>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<numberFormats>
+			<default type="decimal"/>
+			<numberFormat type="decimal">
+				<pattern>#,##0.###</pattern>
+				<pattern>#,##0.###-</pattern>
+			</numberFormat>
+			<numberFormat type="currency">
+				<pattern>¤ #,##0.00</pattern>
+				<pattern>¤ #,##0.00-</pattern>
+			</numberFormat>
+			<numberFormat type="percent">
+				<pattern>#,##0%</pattern>
+			</numberFormat>
+			<numberFormat type="scientific">
+				<pattern>#E0</pattern>
+			</numberFormat>
+		</numberFormats>
+	</numbers>
+		<collations>
+			<collation  >
+				<settings normalization="on"/>
+				<rules>
+					<reset>Z</reset>
+					<p>ء</p>
+					<sc>آأؤإئ</sc>
+					<pc>ابپة</pc>
+					<i>ت</i>
+					<pc>ثجچحخدذرزژسشصضطظعغفقكگلمنهوى</pc>
+					<s>ي</s>
+					<pc>ٰٱٲٳٴٵٶٷٸٹٺٻټٽٿڀځڂڃڄڅڇڈډڊڋڌڍڎڏڐڑڒړڔڕږڗڙښڛڜڝڞڟڠڡڢڣڤڥڦڧڨکڪګڬڭڮڰڱڲڳڴڵڶڷںڻڼڽھۀہۂۃۄۅۆۇۈۉۊۋیۍێېۑےۓە</pc>
+				</rules>
+				<special owner="http://oss.software.ibm.com/icu/" version="2.0" />
+			</collation  >
+		</collations>
 </localeData>

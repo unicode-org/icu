@@ -1,43 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:09 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<country id="LI" />
-		<correspondsTo vendor="1407">Windows</correspondsTo>
-	</identity  >
-	<numberFormat class="decimal" default="true"> 
-		<symbols>
-			<decimal>.</decimal>
-			<group>'</group>
-			<list>;</list>
-			<percentSign>%</percentSign>
-			<nativeZeroDigit>0</nativeZeroDigit>
-			<patternDigit>#</patternDigit>
-			<plusSign>+</plusSign>
-			<minusSign>-</minusSign>
-			<exponential>E</exponential>
-			<perMille>‰</perMille>
-			<infinity>∞</infinity>
-			<nan>�</nan>
-		</symbols>
-	</numberFormat> 
-	<currencies>
-		<currency id="CHF" default="true">
-			<symbol>CHF</symbol>
-			<name>CHF</name>
-			<decimal>.</decimal>
-			<pattern>¤ #,##0.00;-¤ #,##0.00</pattern>
-		</currency>
-	</currencies>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="de"></language>
+		<territory type="LIE">LI</territory>
+	</identity>
+	<localeDisplayNames>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+		<dates>
+			<calendars>
+				<default type="gregorian"/>
+				<calendar type="gregorian">
+				</calendar>
+			</calendars>
+		</dates>
+		<numbers>
+			<currencies>
+				<default type="CHF"/>
+				<currency type="CHF">
+					<symbol>CHF</symbol>
+					<displayName>CHF</displayName>
+					<decimal>.</decimal>
+				</currency>
+			</currencies>
+		</numbers>
 </localeData>

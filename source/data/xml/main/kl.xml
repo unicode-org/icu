@@ -1,73 +1,74 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:23 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="0000">Windows</correspondsTo>
-	</identity  >
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">januari</month>
-				<month id="2">februari</month>
-				<month id="3">martsi</month>
-				<month id="4">aprili</month>
-				<month id="5">maji</month>
-				<month id="6">juni</month>
-				<month id="7">juli</month>
-				<month id="8">augustusi</month>
-				<month id="9">septemberi</month>
-				<month id="10">oktoberi</month>
-				<month id="11">novemberi</month>
-				<month id="12">decemberi</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">jan</month>
-				<month id="2">feb</month>
-				<month id="3">mar</month>
-				<month id="4">apr</month>
-				<month id="5">maj</month>
-				<month id="6">jun</month>
-				<month id="7">jul</month>
-				<month id="8">aug</month>
-				<month id="9">sep</month>
-				<month id="10">okt</month>
-				<month id="11">nov</month>
-				<month id="12">dec</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">sabaat </day>
-				<day id="2">ataasinngorneq </day>
-				<day id="3">marlunngorneq </day>
-				<day id="4">pingasunngorneq </day>
-				<day id="5">sisamanngorneq </day>
-				<day id="6">tallimanngorneq </day>
-				<day id="7">arfininngorneq </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">sab </day>
-				<day id="2">ata </day>
-				<day id="3">mar </day>
-				<day id="4">pin </day>
-				<day id="5">sis </day>
-				<day id="6">tal </day>
-				<day id="7">arf </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">BC</era>
-				<era id="1">AD</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-		</calendar>
-	</calendars>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="kl"></language>
+	</identity>
+	<localeDisplayNames>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+	<encodings>
+		<exemplarCharacters>[a-z á é í ú â ê î ô û æ å ø ã ĩ ũ ĸ]</exemplarCharacters>
+	</encodings>
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">januari</month>
+					<month type="2">februari</month>
+					<month type="3">martsi</month>
+					<month type="4">aprili</month>
+					<month type="5">maji</month>
+					<month type="6">juni</month>
+					<month type="7">juli</month>
+					<month type="8">augustusi</month>
+					<month type="9">septemberi</month>
+					<month type="10">oktoberi</month>
+					<month type="11">novemberi</month>
+					<month type="12">decemberi</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">jan</month>
+					<month type="2">feb</month>
+					<month type="3">mar</month>
+					<month type="4">apr</month>
+					<month type="5">maj</month>
+					<month type="6">jun</month>
+					<month type="7">jul</month>
+					<month type="8">aug</month>
+					<month type="9">sep</month>
+					<month type="10">okt</month>
+					<month type="11">nov</month>
+					<month type="12">dec</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">sabaat</day>
+					<day type="mon">ataasinngorneq</day>
+					<day type="tue">marlunngorneq</day>
+					<day type="wed">pingasunngorneq</day>
+					<day type="thu">sisamanngorneq</day>
+					<day type="fri">tallimanngorneq</day>
+					<day type="sat">arfininngorneq</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">sab</day>
+					<day type="mon">ata</day>
+					<day type="tue">mar</day>
+					<day type="wed">pin</day>
+					<day type="thu">sis</day>
+					<day type="fri">tal</day>
+					<day type="sat">arf</day>
+				</dayAbbr>
+			</calendar>
+		</calendars>
+	</dates>
 </localeData>

@@ -1,75 +1,74 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:06 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<country id="SY" />
-		<correspondsTo vendor="2801">Windows</correspondsTo>
-	</identity  >
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">كانون الثاني</month>
-				<month id="2">شباط</month>
-				<month id="3">آذار</month>
-				<month id="4">نيسان</month>
-				<month id="5">نواران</month>
-				<month id="6">حزير</month>
-				<month id="7">تموز</month>
-				<month id="8">آب</month>
-				<month id="9">أيلول</month>
-				<month id="10">تشرين الأول</month>
-				<month id="11">تشرين الثاني</month>
-				<month id="12">كانون الأول</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">كانون الثاني</month>
-				<month id="2">شباط</month>
-				<month id="3">آذار</month>
-				<month id="4">نيسان</month>
-				<month id="5">نوار</month>
-				<month id="6">حزيران</month>
-				<month id="7">تموز</month>
-				<month id="8">آب</month>
-				<month id="9">أيلول</month>
-				<month id="10">تشرين الأول</month>
-				<month id="11">تشرين الثاني</month>
-				<month id="12">كانون الأول</month>
-			</monthAbbr>
-			<dayAbbr>
-				<day id="1">الأحد </day>
-				<day id="2">الاثنين </day>
-				<day id="3">الثلاثاء </day>
-				<day id="4">الأربعاء </day>
-				<day id="5">الخميس </day>
-				<day id="6">الجمعة </day>
-				<day id="7">السبت </day>
-			</dayAbbr>
-		</calendar>
-	</calendars>
-	<numberFormat class="decimal" default="true"> 
-		<patterns> 
-			<decimal>#,##0.###;#,##0.###-</decimal>
-			<percent>#,##0%</percent>
-			<scientific>#E0</scientific>
-		</patterns>
-	</numberFormat> 
-	<currencies>
-		<currency id="SYP" default="true">
-			<symbol>ل.س.‏</symbol>
-			<name>SYP</name>
-			<decimal>.</decimal>
-			<pattern>¤ #,##0.00;¤ #,##0.00-</pattern>
-		</currency>
-	</currencies>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="ar"></language>
+		<territory type="SYR">SY</territory>
+	</identity>
+	<localeDisplayNames>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+		<dates>
+			<calendars>
+				<default type="gregorian"/>
+				<calendar type="gregorian">
+					<monthNames>
+						<month type="1">كانون الثاني</month>
+						<month type="2">شباط</month>
+						<month type="3">آذار</month>
+						<month type="4">نيسان</month>
+						<month type="5">نواران</month>
+						<month type="6">حزير</month>
+						<month type="7">تموز</month>
+						<month type="8">آب</month>
+						<month type="9">أيلول</month>
+						<month type="10">تشرين الأول</month>
+						<month type="11">تشرين الثاني</month>
+						<month type="12">كانون الأول</month>
+					</monthNames>
+					<monthAbbr>
+						<month type="1">كانون الثاني</month>
+						<month type="2">شباط</month>
+						<month type="3">آذار</month>
+						<month type="4">نيسان</month>
+						<month type="5">نوار</month>
+						<month type="6">حزيران</month>
+						<month type="7">تموز</month>
+						<month type="8">آب</month>
+						<month type="9">أيلول</month>
+						<month type="10">تشرين الأول</month>
+						<month type="11">تشرين الثاني</month>
+						<month type="12">كانون الأول</month>
+					</monthAbbr>
+					<dayAbbr>
+						<day type="sun">الأحد</day>
+						<day type="mon">الاثنين</day>
+						<day type="tue">الثلاثاء</day>
+						<day type="wed">الأربعاء</day>
+						<day type="thu">الخميس</day>
+						<day type="fri">الجمعة</day>
+						<day type="sat">السبت</day>
+					</dayAbbr>
+					<week>
+						<minDays count="5"/>
+						<firstDay day="mon"/>
+					</week>
+				</calendar>
+			</calendars>
+		</dates>
+		<numbers>
+			<currencies>
+				<default type="SYP"/>
+				<currency type="SYP">
+					<symbol>ل.س.‏</symbol>
+					<displayName>SYP</displayName>
+					<decimal>.</decimal>
+				</currency>
+			</currencies>
+		</numbers>
 </localeData>

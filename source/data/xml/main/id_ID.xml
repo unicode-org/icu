@@ -1,57 +1,66 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:21 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<country id="ID" />
-		<correspondsTo vendor="0421">Windows</correspondsTo>
-	</identity  >
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<eras>
-				<era id="0">BC</era>
-				<era id="1">AD</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-			<patterns> 
-				<time>
-					<full>h:mm:ss a</full>
-					<long>h:mm:ss a</long>
-					<medium>h:mm:ss a</medium>
-					<short>h:mm a</short>
-				</time>
-				<date>
-					<full>EEEE dd MMMM yyyy</full>
-					<long>dd MMMM yyyy</long>
-					<medium>MMM dd,yy</medium>
-					<short>dd/MM/yy</short>
-				</date>
- 				<dateTime>{1} {0} </dateTime>
-			</patterns>
-		</calendar>
-	</calendars>
-	<numberFormat class="decimal" default="true"> 
-		<patterns> 
-			<decimal>#,##0.###;-#,##0.###</decimal>
-			<percent>#,##0%</percent>
-			<scientific>#E0</scientific>
-		</patterns>
-	</numberFormat> 
-	<currencies>
-		<currency id="IDR" default="true">
-			<symbol>Rp</symbol>
-			<name>IDR</name>
-			<decimal>,</decimal>
-		</currency>
-	</currencies>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="id"></language>
+		<territory type="IDN">ID</territory>
+	</identity>
+	<localeDisplayNames>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+		<dates>
+			<calendars>
+				<default type="gregorian"/>
+				<calendar type="gregorian">
+					<dateFormats>
+						<default type="medium"/>
+						<dateFormat type="full">
+							<pattern>EEEE dd MMMM yyyy</pattern>
+						</dateFormat>
+						<dateFormat type="long">
+							<pattern>dd MMMM yyyy</pattern>
+						</dateFormat>
+						<dateFormat type="medium">
+							<pattern>MMM dd,yy</pattern>
+						</dateFormat>
+						<dateFormat type="short">
+							<pattern>dd/MM/yy</pattern>
+						</dateFormat>
+					</dateFormats>
+					<timeFormats>
+						<default type="medium"/>
+						<timeFormat type="full">
+							<pattern>h:mm:ss a</pattern>
+						</timeFormat>
+						<timeFormat type="long">
+							<pattern>h:mm:ss a</pattern>
+						</timeFormat>
+						<timeFormat type="medium">
+							<pattern>h:mm:ss a</pattern>
+						</timeFormat>
+						<timeFormat type="short">
+							<pattern>h:mm a</pattern>
+						</timeFormat>
+					</timeFormats>
+					<dateTimeFormat>
+						<pattern>{1} {0}</pattern>
+					</dateTimeFormat>
+				</calendar>
+			</calendars>
+		</dates>
+		<numbers>
+			<currencies>
+				<default type="IDR"/>
+				<currency type="IDR">
+					<symbol>Rp</symbol>
+					<displayName>IDR</displayName>
+					<decimal>,</decimal>
+				</currency>
+			</currencies>
+		</numbers>
 </localeData>

@@ -1,73 +1,130 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:18 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="0000">Windows</correspondsTo>
-	</identity  >
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">Eanáir</month>
-				<month id="2">Feabhra</month>
-				<month id="3">Márta</month>
-				<month id="4">Aibreán</month>
-				<month id="5">Mí na Bealtaine</month>
-				<month id="6">Meith</month>
-				<month id="7">Iúil</month>
-				<month id="8">Lúnasa</month>
-				<month id="9">Meán Fómhair</month>
-				<month id="10">Deireadh Fómhair</month>
-				<month id="11">Mí na Samhna</month>
-				<month id="12">Mí na Nollag</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">Ean</month>
-				<month id="2">Feabh</month>
-				<month id="3">Márta</month>
-				<month id="4">Aib</month>
-				<month id="5">Beal</month>
-				<month id="6">Meith</month>
-				<month id="7">Iúil</month>
-				<month id="8">Lún</month>
-				<month id="9">MFómh</month>
-				<month id="10">DFómh</month>
-				<month id="11">Samh</month>
-				<month id="12">Noll</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">Dé Domhnaigh </day>
-				<day id="2">Dé Luain </day>
-				<day id="3">Dé Máirt </day>
-				<day id="4">Dé Céadaoin </day>
-				<day id="5">Déardaoin </day>
-				<day id="6">Dé hAoine </day>
-				<day id="7">Dé Sathairn </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">Domh </day>
-				<day id="2">Luan </day>
-				<day id="3">Máirt </day>
-				<day id="4">Céad </day>
-				<day id="5">Déar </day>
-				<day id="6">Aoine </day>
-				<day id="7">Sath </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">BC</era>
-				<era id="1">AD</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-		</calendar>
-	</calendars>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="ga"></language>
+	</identity>
+	<localeDisplayNames>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+	<encodings>
+		<exemplarCharacters>[a-z á é í ó ú]</exemplarCharacters>
+	</encodings>
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">Eanáir</month>
+					<month type="2">Feabhra</month>
+					<month type="3">Márta</month>
+					<month type="4">Aibreán</month>
+					<month type="5">Bealtaine</month>
+					<month type="6">Meith</month>
+					<month type="7">Iúil</month>
+					<month type="8">Lúnasa</month>
+					<month type="9">Meán Fómhair</month>
+					<month type="10">Deireadh Fómhair</month>
+					<month type="11">Samhain</month>
+					<month type="12">Nollaig</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">Ean</month>
+					<month type="2">Feabh</month>
+					<month type="3">Márta</month>
+					<month type="4">Aib</month>
+					<month type="5">Beal</month>
+					<month type="6">Meith</month>
+					<month type="7">Iúil</month>
+					<month type="8">Lún</month>
+					<month type="9">MFómh</month>
+					<month type="10">DFómh</month>
+					<month type="11">Samh</month>
+					<month type="12">Noll</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">Dé Domhnaigh</day>
+					<day type="mon">Dé Luain</day>
+					<day type="tue">Dé Máirt</day>
+					<day type="wed">Dé Céadaoin</day>
+					<day type="thu">Déardaoin</day>
+					<day type="fri">Dé hAoine</day>
+					<day type="sat">Dé Sathairn</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">Domh</day>
+					<day type="mon">Luan</day>
+					<day type="tue">Máirt</day>
+					<day type="wed">Céad</day>
+					<day type="thu">Déar</day>
+					<day type="fri">Aoine</day>
+					<day type="sat">Sath</day>
+				</dayAbbr>
+				<week>
+					<minDays count="2"/>
+					<firstDay day="mon"/>
+				</week>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormat type="full">
+						<pattern>EEEE dd MMMM yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="long">
+						<pattern>dd MMMM yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="medium">
+						<pattern>dd MMMM yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="short">
+						<pattern>dd/MM/yy</pattern>
+					</dateFormat>
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormat type="full">
+						<pattern>HH:mm:ss z</pattern>
+					</timeFormat>
+					<timeFormat type="long">
+						<pattern>HH:mm:ss z</pattern>
+					</timeFormat>
+					<timeFormat type="medium">
+						<pattern>HH:mm:ss</pattern>
+					</timeFormat>
+					<timeFormat type="short">
+						<pattern>HH:mm</pattern>
+					</timeFormat>
+				</timeFormats>
+				<dateTimeFormat>
+					<pattern>{1} {0}</pattern>
+				</dateTimeFormat>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<numberFormats>
+			<default type="decimal"/>
+			<numberFormat type="decimal">
+				<pattern>#,##0.###</pattern>
+				<pattern>-#,##0.###</pattern>
+			</numberFormat>
+			<numberFormat type="currency">
+				<pattern>¤#,##0.00</pattern>
+				<pattern>-¤#,##0.00</pattern>
+			</numberFormat>
+			<numberFormat type="percent">
+				<pattern>#,##0%</pattern>
+			</numberFormat>
+			<numberFormat type="scientific">
+				<pattern>#E0</pattern>
+			</numberFormat>
+		</numberFormats>
+	</numbers>
 </localeData>

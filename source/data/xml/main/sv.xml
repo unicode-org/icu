@@ -1,237 +1,401 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:33 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="001D">Windows</correspondsTo>
-	</identity  >
-
-	<displayNames >
-		<languages >
-			<language id="ar" >arabiska</language>
-			<language id="ba" >baskiska</language>
-			<language id="be" >vitryska</language>
-			<language id="bg" >bulgariska</language>
-			<language id="ca" >katalanska</language>
-			<language id="cs" >tjeckiska</language>
-			<language id="da" >danska</language>
-			<language id="de" >tyska</language>
-			<language id="el" >grekiska</language>
-			<language id="en" >engelska</language>
-			<language id="es" >spanska</language>
-			<language id="et" >estniska</language>
-			<language id="fi" >finska</language>
-			<language id="fr" >franska</language>
-			<language id="he" >hebreiska</language>
-			<language id="hr" >kroatiska</language>
-			<language id="hu" >ungerska</language>
-			<language id="it" >italienska</language>
-			<language id="ja" >apanska</language>
-			<language id="ko" >koreanska</language>
-			<language id="lt" >litauiska</language>
-			<language id="lv" >lettiska</language>
-			<language id="mk" >makedonskt</language>
-			<language id="nl" >nederländskt</language>
-			<language id="no" >norska</language>
-			<language id="pl" >polska</language>
-			<language id="pt" >portugisiskt</language>
-			<language id="ro" >rumänskt</language>
-			<language id="ru" >ryska</language>
-			<language id="sk" >slovakiska</language>
-			<language id="sl" >slovenskt</language>
-			<language id="sq" >albanska</language>
-			<language id="sr" >serbiska</language>
-			<language id="sv" >svenska</language>
-			<language id="th" >thailändska</language>
-			<language id="tr" >turkiska</language>
-			<language id="uk" >ukrainska</language>
-			<language id="zh" >kinesiska</language>
-		</languages >
-		<countries  >
-			<country id="AE">Förenade Arabemiraten</country>
-			<country id="AL">Albanien</country>
-			<country id="AS">Asien</country>
-			<country id="AT">Österrike</country>
-			<country id="AU">Australien</country>
-			<country id="BA">Bosnien</country>
-			<country id="BE">Belgien</country>
-			<country id="BG">Bulgarien</country>
-			<country id="BR">Brasilien</country>
-			<country id="BY">Vitryssland</country>
-			<country id="CA">Kanada</country>
-			<country id="CH">Schweiz</country>
-			<country id="CN">Kina (folkrepubliken)</country>
-			<country id="CZ">Tjeckien</country>
-			<country id="DE">Tyskland</country>
-			<country id="DK">Danmark</country>
-			<country id="DO">Dominikanska republiken</country>
-			<country id="DZ">Algeriet</country>
-			<country id="EE">Estland</country>
-			<country id="EG">Egypten</country>
-			<country id="ES">Spanien</country>
-			<country id="FR">Frankrike</country>
-			<country id="GB">Storbritannien</country>
-			<country id="GR">Grekland</country>
-			<country id="HR">Kroatien</country>
-			<country id="HU">Ungern</country>
-			<country id="ID">Indonesien</country>
-			<country id="IE">Irland</country>
-			<country id="IN">Indien</country>
-			<country id="IS">Island</country>
-			<country id="IT">Italien</country>
-			<country id="JO">Jordanien</country>
-			<country id="KR">Korea</country>
-			<country id="LA">LatinAmerika</country>
-			<country id="LB">Libanon</country>
-			<country id="LI">Lichtenstein</country>
-			<country id="LT">Litauen</country>
-			<country id="LU">Luxemburg</country>
-			<country id="LV">Lettland</country>
-			<country id="MA">Marocko</country>
-			<country id="MK">Makedonien</country>
-			<country id="MX">Mexiko</country>
-			<country id="NL">Nederländerna</country>
-			<country id="NO">Norge</country>
-			<country id="NZ">Nya Zeeland</country>
-			<country id="PL">Polen</country>
-			<country id="RO">Rumänien</country>
-			<country id="RU">Ryssland</country>
-			<country id="SA">Saudiarabien</country>
-			<country id="SE">Sverige</country>
-			<country id="SI">Slovenien</country>
-			<country id="SK">Slovakien</country>
-			<country id="SP">Serbien</country>
-			<country id="SY">Syrien</country>
-			<country id="TN">Tunisien</country>
-			<country id="TR">Turkiet</country>
-			<country id="UA">Ukraina</country>
-			<country id="YE">Jemen</country>
-			<country id="ZA">Sydafrika</country>
-		</countries  >
-
-	</displayNames >
-	<timeZoneNames>
-		<zone id="Europe/Stockholm" default="true">
-			<long>
-				<generic>Central European Time</generic>
-				<standard>Central European Time (DST)</standard>
-				<daylight>Stockholm</daylight>
-			</long>
-			<short>
-				<generic>Europe/Stockholm</generic>
-				<standard>MET</standard>
-				<daylight>MET</daylight>
-			</short>
-			<city>Stockholm</city>
-		</zone>
-	</timeZoneNames>
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">januari</month>
-				<month id="2">februari</month>
-				<month id="3">mars</month>
-				<month id="4">april</month>
-				<month id="5">maj</month>
-				<month id="6">juni</month>
-				<month id="7">juli</month>
-				<month id="8">augusti</month>
-				<month id="9">september</month>
-				<month id="10">oktober</month>
-				<month id="11">november</month>
-				<month id="12">december</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">jan</month>
-				<month id="2">feb</month>
-				<month id="3">mar</month>
-				<month id="4">apr</month>
-				<month id="5">maj</month>
-				<month id="6">jun</month>
-				<month id="7">jul</month>
-				<month id="8">aug</month>
-				<month id="9">sep</month>
-				<month id="10">okt</month>
-				<month id="11">nov</month>
-				<month id="12">dec</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">söndag </day>
-				<day id="2">måndag </day>
-				<day id="3">tisdag </day>
-				<day id="4">onsdag </day>
-				<day id="5">torsdag </day>
-				<day id="6">fredag </day>
-				<day id="7">lördag </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">sö </day>
-				<day id="2">må </day>
-				<day id="3">ti </day>
-				<day id="4">on </day>
-				<day id="5">to </day>
-				<day id="6">fr </day>
-				<day id="7">lö </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">f.Kr.</era>
-				<era id="1">e.Kr.</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-			<patterns> 
-				<time>
-					<full>'kl 'H:mm z</full>
-					<long>HH:mm:ss z</long>
-					<medium>HH:mm:ss</medium>
-					<short>HH:mm</short>
-				</time>
-				<date>
-					<full>'den 'd MMMM yyyy</full>
-					<long>'den 'd MMMM yyyy</long>
-					<medium>yyyy-MMM-dd</medium>
-					<short>yyyy-MM-dd</short>
-				</date>
- 				<dateTime>{1} {0} </dateTime>
-			</patterns>
-		</calendar>
-	</calendars>
-	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
-		<collationElements>
-		<after>Z</after>
-		<gt1>æ</gt1>
-		<gt3>Æ</gt3>
-		<gt1>å</gt1>
-		<gt3>Å</gt3>
-		<gt3>aa</gt3>
-		<gt3>aA</gt3>
-		<gt3>Aa</gt3>
-		<gt3>AA</gt3>
-		<gt1>ä</gt1>
-		<gt3>Ä</gt3>
-		<gt1>ö</gt1>
-		<gt3>Ö</gt3>
-		<gt2>ű</gt2>
-		<gt3>Ű</gt3>
-		<gt1>ő</gt1>
-		<gt3>Ő</gt3>
-		<gt2>ø</gt2>
-		<gt3>Ø</gt3>
-		<after>V</after>
-		<gt2>w</gt2>
-		<gt3>W</gt3>
-		<after>Y</after>
-		<gt3>ü</gt3>
-		<gt3>Ü</gt3>
-		</collationElements>
-	</collation>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="sv"></language>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="aa">afar</language>
+			<language type="ab">abkhasiska</language>
+			<language type="ae">avestiska</language>
+			<language type="af">afrikaans</language>
+			<language type="am">amhariska</language>
+			<language type="ar">arabiska</language>
+			<language type="as">assami</language>
+			<language type="ay">aymara</language>
+			<language type="az">azerbajdzjanska</language>
+			<language type="ba">basjkiriska</language>
+			<language type="be">vitryska</language>
+			<language type="bg">bulgariska</language>
+			<language type="bh">bihari</language>
+			<language type="bi">bislama</language>
+			<language type="bn">bengali</language>
+			<language type="bo">tibetanska</language>
+			<language type="br">bretonska</language>
+			<language type="bs">bosniska</language>
+			<language type="ca">katalanska</language>
+			<language type="ce">tjetjenska</language>
+			<language type="ch">chamorro</language>
+			<language type="co">korsikanska</language>
+			<language type="cs">tjeckiska</language>
+			<language type="cu">fornkyrkoslaviska</language>
+			<language type="cv">tjuvasjiska</language>
+			<language type="cy">walesiska</language>
+			<language type="da">danska</language>
+			<language type="de">tyska</language>
+			<language type="dz">bhutanesiska</language>
+			<language type="el">grekiska</language>
+			<language type="en">engelska</language>
+			<language type="eo">esperanto</language>
+			<language type="es">spanska</language>
+			<language type="et">estniska</language>
+			<language type="eu">baskiska</language>
+			<language type="fa">persiska</language>
+			<language type="fi">finska</language>
+			<language type="fj">djianska</language>
+			<language type="fo">färöiska</language>
+			<language type="fr">franska</language>
+			<language type="fy">frisiska</language>
+			<language type="ga">irländska</language>
+			<language type="gd">skotska</language>
+			<language type="gl">galiciska</language>
+			<language type="gn">guarani</language>
+			<language type="gu">gujarati</language>
+			<language type="gv">manx</language>
+			<language type="ha">haussa</language>
+			<language type="he">hebreiska</language>
+			<language type="hi">hindi</language>
+			<language type="ho">hirimotu</language>
+			<language type="hr">kroatiska</language>
+			<language type="hu">ungerska</language>
+			<language type="hy">armeniska</language>
+			<language type="hz">herero</language>
+			<language type="ia">interlingua</language>
+			<language type="id">indonesiska</language>
+			<language type="ie">interlingue</language>
+			<language type="ik">inupiaq</language>
+			<language type="is">isländska</language>
+			<language type="it">italienska</language>
+			<language type="iu">inuktitut</language>
+			<language type="ja">japanska</language>
+			<language type="jw">javanesiska</language>
+			<language type="ka">georgiska</language>
+			<language type="ki">kikuyu</language>
+			<language type="kk">kazakiska</language>
+			<language type="kl">grönländska</language>
+			<language type="km">kambodjanska</language>
+			<language type="kn">kanaresiska (kannada)</language>
+			<language type="ko">koreanska</language>
+			<language type="ks">kashmiri</language>
+			<language type="ku">kurdiska</language>
+			<language type="kv">komi</language>
+			<language type="kw">corniska</language>
+			<language type="ky">kirgisiska</language>
+			<language type="la">latin</language>
+			<language type="lb">luxemburgska</language>
+			<language type="ln">lingala</language>
+			<language type="lo">laotiska</language>
+			<language type="lt">litauiska</language>
+			<language type="lv">lettiska</language>
+			<language type="mg">malagassiska</language>
+			<language type="mh">marshall</language>
+			<language type="mi">maori</language>
+			<language type="mk">makedoniska</language>
+			<language type="ml">malayalam</language>
+			<language type="mn">mongoliska</language>
+			<language type="mo">moldaviska</language>
+			<language type="mr">marathi</language>
+			<language type="ms">malajiska</language>
+			<language type="mt">maltesiska</language>
+			<language type="my">burmesiska</language>
+			<language type="na">nauriska</language>
+			<language type="nb">bokmål (norska)</language>
+			<language type="nd">ndebele (nord)</language>
+			<language type="ne">nepaliska</language>
+			<language type="ng">ndonga</language>
+			<language type="nl">nederländska</language>
+			<language type="nn">nynorska</language>
+			<language type="no">norska</language>
+			<language type="nr">ndebele (syd)</language>
+			<language type="nv">navaho</language>
+			<language type="ny">nyanja</language>
+			<language type="oc">occitanska</language>
+			<language type="om">afan oromoo</language>
+			<language type="or">oriya</language>
+			<language type="os">ossetiska</language>
+			<language type="pa">punjabi</language>
+			<language type="pi">pali</language>
+			<language type="pl">polska</language>
+			<language type="ps">pashto</language>
+			<language type="pt">portugisiska</language>
+			<language type="qu">quechua</language>
+			<language type="rm">rätoromanska</language>
+			<language type="rn">rundi</language>
+			<language type="ro">rumänska</language>
+			<language type="ru">ryska</language>
+			<language type="rw">rwanda</language>
+			<language type="sa">sanskrit</language>
+			<language type="sc">sardiska</language>
+			<language type="sd">sindhi</language>
+			<language type="se">nordsamiska</language>
+			<language type="sg">sango</language>
+			<language type="si">singalesiska</language>
+			<language type="sk">slovakisk</language>
+			<language type="sl">slovenska</language>
+			<language type="sm">samoanska</language>
+			<language type="sn">shona</language>
+			<language type="so">somaliska</language>
+			<language type="sq">albanska</language>
+			<language type="sr">serbiska</language>
+			<language type="ss">siswati</language>
+			<language type="st">sotho</language>
+			<language type="su">sundanesiska</language>
+			<language type="sv">svenska</language>
+			<language type="sw">swahili</language>
+			<language type="ta">tamil</language>
+			<language type="te">telugo</language>
+			<language type="tg">tadjikiska</language>
+			<language type="th">thailändska</language>
+			<language type="ti">tigrinya</language>
+			<language type="tk">turkmeniska</language>
+			<language type="tl">tagalog</language>
+			<language type="tn">tswana</language>
+			<language type="to">tonga</language>
+			<language type="tr">turkiska</language>
+			<language type="ts">tsonga</language>
+			<language type="tt">tatariska</language>
+			<language type="tw">twi</language>
+			<language type="ty">tahitiska</language>
+			<language type="ug">uigriska</language>
+			<language type="uk">ukrainska</language>
+			<language type="ur">urdu</language>
+			<language type="uz">uzbekiska</language>
+			<language type="vi">vietnamesiska</language>
+			<language type="vo">volapük</language>
+			<language type="wo">wolof</language>
+			<language type="xh">xhosa</language>
+			<language type="yi">jiddisch</language>
+			<language type="yo">yoruba</language>
+			<language type="za">zhuang</language>
+			<language type="zh">kinesiska</language>
+			<language type="zu">zulu</language>
+		</languages>
+		<territories>
+			<territory type="AE">Förenade Arabemiraten</territory>
+			<territory type="AL">Albanien</territory>
+			<territory type="AM">Armenien</territory>
+			<territory type="AN">Nederländska Antillerna</territory>
+			<territory type="AS">Amerikanska Samoa</territory>
+			<territory type="AT">Österrike</territory>
+			<territory type="AU">Australien</territory>
+			<territory type="AZ">Azerbajdzjan</territory>
+			<territory type="BA">Bosnien Hercegovina</territory>
+			<territory type="BE">Belgien</territory>
+			<territory type="BG">Bulgarien</territory>
+			<territory type="BR">Brasilien</territory>
+			<territory type="BY">Vitryssland</territory>
+			<territory type="BZ">Belice</territory>
+			<territory type="CA">Kanada</territory>
+			<territory type="CC">Coco Islands</territory>
+			<territory type="CF">Centralafrika</territory>
+			<territory type="CG">Kongo</territory>
+			<territory type="CH">Schweiz</territory>
+			<territory type="CI">Elfenbenskusten</territory>
+			<territory type="CM">Kamerun, republiken</territory>
+			<territory type="CN">Kina (folkrepubliken)</territory>
+			<territory type="CU">Kuba</territory>
+			<territory type="CX">Julön</territory>
+			<territory type="CY">Cypern</territory>
+			<territory type="CZ">Tjeckien</territory>
+			<territory type="DE">Tyskland</territory>
+			<territory type="DK">Danmark</territory>
+			<territory type="DO">Dominikanska republiken</territory>
+			<territory type="DZ">Algeriet</territory>
+			<territory type="EE">Estland</territory>
+			<territory type="EG">Egypten</territory>
+			<territory type="ES">Spanien</territory>
+			<territory type="ET">Etiopien</territory>
+			<territory type="FR">Frankrike</territory>
+			<territory type="GB">Storbritannien</territory>
+			<territory type="GR">Grekland</territory>
+			<territory type="HR">Kroatien</territory>
+			<territory type="HU">Ungern</territory>
+			<territory type="ID">Indonesien</territory>
+			<territory type="IE">Irland</territory>
+			<territory type="IN">Indien</territory>
+			<territory type="IS">Island</territory>
+			<territory type="IT">Italien</territory>
+			<territory type="JO">Jordanien</territory>
+			<territory type="KR">Korea</territory>
+			<territory type="LA">LatinAmerika</territory>
+			<territory type="LB">Libanon</territory>
+			<territory type="LI">Lichtenstein</territory>
+			<territory type="LT">Litauen</territory>
+			<territory type="LU">Luxemburg</territory>
+			<territory type="LV">Lettland</territory>
+			<territory type="MA">Marocko</territory>
+			<territory type="MK">Makedonien</territory>
+			<territory type="MX">Mexiko</territory>
+			<territory type="NL">Nederländerna</territory>
+			<territory type="NO">Norge</territory>
+			<territory type="NZ">Nya Zeeland</territory>
+			<territory type="PL">Polen</territory>
+			<territory type="RO">Rumänien</territory>
+			<territory type="RU">Ryssland</territory>
+			<territory type="SA">Saudiarabien</territory>
+			<territory type="SE">Sverige</territory>
+			<territory type="SI">Slovenien</territory>
+			<territory type="SK">Slovakien</territory>
+			<territory type="SP">Serbien</territory>
+			<territory type="SY">Syrien</territory>
+			<territory type="TN">Tunisien</territory>
+			<territory type="TR">Turkiet</territory>
+			<territory type="UA">Ukraina</territory>
+			<territory type="YE">Jemen</territory>
+			<territory type="ZA">Sydafrika</territory>
+		</territories>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+	<encodings>
+		<exemplarCharacters>[a-z ä ö å á é ë ü]</exemplarCharacters>
+	</encodings>
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">januari</month>
+					<month type="2">februari</month>
+					<month type="3">mars</month>
+					<month type="4">april</month>
+					<month type="5">maj</month>
+					<month type="6">juni</month>
+					<month type="7">juli</month>
+					<month type="8">augusti</month>
+					<month type="9">september</month>
+					<month type="10">oktober</month>
+					<month type="11">november</month>
+					<month type="12">december</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">jan</month>
+					<month type="2">feb</month>
+					<month type="3">mar</month>
+					<month type="4">apr</month>
+					<month type="5">maj</month>
+					<month type="6">jun</month>
+					<month type="7">jul</month>
+					<month type="8">aug</month>
+					<month type="9">sep</month>
+					<month type="10">okt</month>
+					<month type="11">nov</month>
+					<month type="12">dec</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">söndag</day>
+					<day type="mon">måndag</day>
+					<day type="tue">tisdag</day>
+					<day type="wed">onsdag</day>
+					<day type="thu">torsdag</day>
+					<day type="fri">fredag</day>
+					<day type="sat">lördag</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">sö</day>
+					<day type="mon">må</day>
+					<day type="tue">ti</day>
+					<day type="wed">on</day>
+					<day type="thu">to</day>
+					<day type="fri">fr</day>
+					<day type="sat">lö</day>
+				</dayAbbr>
+				<week>
+					<minDays count="2"/>
+					<firstDay day="thu"/>
+				</week>
+				<eras>
+					<era type="1">f.Kr.</era>
+					<era type="2">e.Kr.</era>
+				</eras>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormat type="full">
+						<pattern>'den 'd MMMM yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="long">
+						<pattern>'den 'd MMMM yyyy</pattern>
+					</dateFormat>
+					<dateFormat type="medium">
+						<pattern>yyyy-MMM-dd</pattern>
+					</dateFormat>
+					<dateFormat type="short">
+						<pattern>yyyy-MM-dd</pattern>
+					</dateFormat>
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormat type="full">
+						<pattern>'kl 'H:mm z</pattern>
+					</timeFormat>
+					<timeFormat type="long">
+						<pattern>HH:mm:ss z</pattern>
+					</timeFormat>
+					<timeFormat type="medium">
+						<pattern>HH:mm:ss</pattern>
+					</timeFormat>
+					<timeFormat type="short">
+						<pattern>HH:mm</pattern>
+					</timeFormat>
+				</timeFormats>
+				<dateTimeFormat>
+					<pattern>{1} {0}</pattern>
+				</dateTimeFormat>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+			<zone type="Stockholm">
+				<long>
+					<generic>Central European Time</generic>
+					<standard>Central European Time</standard>
+					<daylight>Central European Time (DST)</daylight>
+				</long>
+				<short>
+					<generic>Europe/Stockholm</generic>
+					<standard>MET</standard>
+					<daylight>MET</daylight>
+				</short>
+				<exemplarCity>Stockholm</exemplarCity>
+			</zone>
+		</timeZoneNames>
+	</dates>
+	<special owner="http://oss.software.ibm.com/icu/"  >
+		<ruleBasedNumberFormats>
+			<ruleBasedNumberFormat type="spellout">%year:<cp hex="000A" />=%neutrum=;<cp hex="000A" />1000&gt;: &lt;%neutrum&lt;hundra[­&gt;&gt;];<cp hex="000A" />10,000: =%neutrum=;<cp hex="000A" />%neutrum:<cp hex="000A" />-x: minus &gt;&gt;;<cp hex="000A" />x.x: &lt;&lt; komma &gt;&gt;;<cp hex="000A" />noll; ett; två; tre; fyra; fem; sex; sju; åtta; nio;<cp hex="000A" />tio; elva; tolv; tretton; fjorton; femton; sexton; sjutton; arton; nitton;<cp hex="000A" />20: tjugo[&gt;&gt;];<cp hex="000A" />30: trettio[&gt;&gt;];<cp hex="000A" />40: fyrtio[&gt;&gt;];<cp hex="000A" />50: femtio[&gt;&gt;];<cp hex="000A" />60: sextio[&gt;&gt;];<cp hex="000A" />70: sjuttio[&gt;&gt;];<cp hex="000A" />80: åttio[&gt;&gt;];<cp hex="000A" />90: nittio[&gt;&gt;];<cp hex="000A" />100: &lt;&lt;hundra[­&gt;&gt;];<cp hex="000A" />1000: ettusen[ &gt;&gt;];<cp hex="000A" />2000: &lt;%default&lt;­tusen[ &gt;&gt;];<cp hex="000A" />1,000,000: en miljon[ &gt;&gt;];<cp hex="000A" />2,000,000: &lt;%default&lt; miljoner[ &gt;&gt;];<cp hex="000A" />1,000,000,000: en miljard[ &gt;&gt;];<cp hex="000A" />2,000,000,000: &lt;%default&lt; miljarder[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000: en biljon[ &gt;&gt;];<cp hex="000A" />2,000,000,000,000: &lt;%default&lt; biljoner[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000,000: en triljon[ &gt;&gt;];<cp hex="000A" />2,000,000,000,000,000: &lt;%default&lt; triljoner[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000,000,000: =#,##0=;<cp hex="000A" />%default:<cp hex="000A" /> -x: minus &gt;&gt;;<cp hex="000A" />x.x: &lt;&lt; komma &gt;&gt;;<cp hex="000A" />noll; en; två; tre; fyra; fem; sex; sju; åtta; nio;<cp hex="000A" />tio; elva; tolv; tretton; fjorton; femton; sexton; sjutton; arton; nitton;<cp hex="000A" />20: tjugo[&gt;&gt;];<cp hex="000A" />30: trettio[&gt;&gt;];<cp hex="000A" />40: fyrtio[&gt;&gt;];<cp hex="000A" />50: femtio[&gt;&gt;];<cp hex="000A" />60: sextio[&gt;&gt;];<cp hex="000A" />70: sjuttio[&gt;&gt;];<cp hex="000A" />80: åttio[&gt;&gt;];<cp hex="000A" />90: nittio[&gt;&gt;];<cp hex="000A" />100: etthundra[­&gt;&gt;];<cp hex="000A" />200: &lt;&lt;hundra[­&gt;&gt;];<cp hex="000A" />1000: ettusen[ &gt;&gt;];<cp hex="000A" />2000: &lt;&lt;­tusen[ &gt;&gt;];<cp hex="000A" />1,000,000: en miljon[ &gt;&gt;];<cp hex="000A" />2,000,000: &lt;&lt; miljoner[ &gt;&gt;];<cp hex="000A" />1,000,000,000: en miljard[ &gt;&gt;];<cp hex="000A" />2,000,000,000: &lt;&lt; miljarder[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000: en biljon[ &gt;&gt;];<cp hex="000A" />2,000,000,000,000: &lt;&lt; biljoner[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000,000: en triljon[ &gt;&gt;];<cp hex="000A" />2,000,000,000,000,000: &lt;&lt; triljoner[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000,000,000: =#,##0=;<cp hex="000A" /></ruleBasedNumberFormat>
+		</ruleBasedNumberFormats>
+	</special>
+	<collations>
+		<collation  >
+			<rules>
+				<reset>Z</reset>
+				<p>æ</p>
+				<t>Æ</t>
+				<p>å</p>
+				<tc>ÅaaaAAaAA</tc>
+				<p>ä</p>
+				<t>Ä</t>
+				<p>ö</p>
+				<t>Ö</t>
+				<s>ű</s>
+				<t>Ű</t>
+				<p>ő</p>
+				<t>Ő</t>
+				<s>ø</s>
+				<t>Ø</t>
+				<reset>V</reset>
+				<tc>wW</tc>
+				<reset>Y</reset>
+				<t>ü</t>
+			</rules>
+			<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
+		</collation  >
+	</collations>
 </localeData>

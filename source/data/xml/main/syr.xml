@@ -1,78 +1,85 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:33 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="005A">Windows</correspondsTo>
-	</identity  >
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">ܟܢܘܢ ܐܚܪܝ</month>
-				<month id="2">ܫܒܛ</month>
-				<month id="3">ܐܕܪ</month>
-				<month id="4">ܢܝܣܢ</month>
-				<month id="5">ܐܝܪ</month>
-				<month id="6">ܚܙܝܪܢ</month>
-				<month id="7">ܬܡܘܙ</month>
-				<month id="8">ܐܒ</month>
-				<month id="9">ܐܝܠܘܠ</month>
-				<month id="10">ܬܫܪܝ ܩܕܝܡ</month>
-				<month id="11">ܬܫܪܝ ܐܚܪܝ</month>
-				<month id="12">ܟܢܘܢ ܩܕܝܡ</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">܏ܟܢ ܏ܒ</month>
-				<month id="2">ܫܒܛ</month>
-				<month id="3">ܐܕܪ</month>
-				<month id="4">ܢܝܣܢ</month>
-				<month id="5">ܐܝܪ</month>
-				<month id="6">ܚܙܝܪܢ</month>
-				<month id="7">ܬܡܘܙ</month>
-				<month id="8">ܐܒ</month>
-				<month id="9">ܐܝܠܘܠ</month>
-				<month id="10">܏ܬܫ ܏ܐ</month>
-				<month id="11">܏ܬܫ ܏ܒ</month>
-				<month id="12">܏ܟܢ ܏ܐ</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">ܚܕ ܒܫܒܐ </day>
-				<day id="2">ܬܪܝܢ ܒܫܒܐ </day>
-				<day id="3">ܬܠܬܐ ܒܫܒܐ </day>
-				<day id="4">ܐܪܒܥܐ ܒܫܒܐ </day>
-				<day id="5">ܚܡܫܐ ܒܫܒܐ </day>
-				<day id="6">ܥܪܘܒܬܐ </day>
-				<day id="7">ܫܒܬܐ </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">܏ܐ ܏ܒܫ </day>
-				<day id="2">܏ܒ ܏ܒܫ </day>
-				<day id="3">܏ܓ ܏ܒܫ </day>
-				<day id="4">܏ܕ ܏ܒܫ </day>
-				<day id="5">܏ܗ ܏ܒܫ </day>
-				<day id="6">܏ܥܪܘܒ </day>
-				<day id="7">܏ܫܒ </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">BC</era>
-				<era id="1">AD</era>
-			</eras>
-			<am>ܩ.ܛ</am><pm>ܒ.ܛ</pm>
-		</calendar>
-	</calendars>
-	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
-		<collationElements>
-		<normalization>OFF</normalization>
-		</collationElements>
-	</collation>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="syr"></language>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="syr">ܣܘܪܝܝܐ</language>
+		</languages>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+	<encodings>
+		<exemplarCharacters>[:Syrc:]</exemplarCharacters>
+	</encodings>
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">ܟܢܘܢ ܐܚܪܝ</month>
+					<month type="2">ܫܒܛ</month>
+					<month type="3">ܐܕܪ</month>
+					<month type="4">ܢܝܣܢ</month>
+					<month type="5">ܐܝܪ</month>
+					<month type="6">ܚܙܝܪܢ</month>
+					<month type="7">ܬܡܘܙ</month>
+					<month type="8">ܐܒ</month>
+					<month type="9">ܐܝܠܘܠ</month>
+					<month type="10">ܬܫܪܝ ܩܕܝܡ</month>
+					<month type="11">ܬܫܪܝ ܐܚܪܝ</month>
+					<month type="12">ܟܢܘܢ ܩܕܝܡ</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">܏ܟܢ ܏ܒ</month>
+					<month type="2">ܫܒܛ</month>
+					<month type="3">ܐܕܪ</month>
+					<month type="4">ܢܝܣܢ</month>
+					<month type="5">ܐܝܪ</month>
+					<month type="6">ܚܙܝܪܢ</month>
+					<month type="7">ܬܡܘܙ</month>
+					<month type="8">ܐܒ</month>
+					<month type="9">ܐܝܠܘܠ</month>
+					<month type="10">܏ܬܫ ܏ܐ</month>
+					<month type="11">܏ܬܫ ܏ܒ</month>
+					<month type="12">܏ܟܢ ܏ܐ</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">ܚܕ ܒܫܒܐ</day>
+					<day type="mon">ܬܪܝܢ ܒܫܒܐ</day>
+					<day type="tue">ܬܠܬܐ ܒܫܒܐ</day>
+					<day type="wed">ܐܪܒܥܐ ܒܫܒܐ</day>
+					<day type="thu">ܚܡܫܐ ܒܫܒܐ</day>
+					<day type="fri">ܥܪܘܒܬܐ</day>
+					<day type="sat">ܫܒܬܐ</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">܏ܐ ܏ܒܫ</day>
+					<day type="mon">܏ܒ ܏ܒܫ</day>
+					<day type="tue">܏ܓ ܏ܒܫ</day>
+					<day type="wed">܏ܕ ܏ܒܫ</day>
+					<day type="thu">܏ܗ ܏ܒܫ</day>
+					<day type="fri">܏ܥܪܘܒ</day>
+					<day type="sat">܏ܫܒ</day>
+				</dayAbbr>
+				<am>ܩ.ܛ</am>
+				<pm>ܒ.ܛ</pm>
+			</calendar>
+		</calendars>
+	</dates>
+		<collations>
+			<collation  >
+				<settings normalization="on"/>
+				<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
+			</collation  >
+		</collations>
 </localeData>

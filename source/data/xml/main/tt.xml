@@ -1,78 +1,83 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:35 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="0044">Windows</correspondsTo>
-	</identity  >
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">Гыйнварь</month>
-				<month id="2">Февраль</month>
-				<month id="3">Март</month>
-				<month id="4">Апрель</month>
-				<month id="5">Май</month>
-				<month id="6">Июнь</month>
-				<month id="7">Июль</month>
-				<month id="8">Август</month>
-				<month id="9">Сентябрь</month>
-				<month id="10">Октябрь</month>
-				<month id="11">Ноябрь</month>
-				<month id="12">Декабрь</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">Гыйнв</month>
-				<month id="2">Фев</month>
-				<month id="3">Мар</month>
-				<month id="4">Апр</month>
-				<month id="5">Май</month>
-				<month id="6">Июн</month>
-				<month id="7">Июл</month>
-				<month id="8">Авг</month>
-				<month id="9">Сен</month>
-				<month id="10">Окт</month>
-				<month id="11">Ноя</month>
-				<month id="12">Дек</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">Якшәмбе </day>
-				<day id="2">Дүшәмбе </day>
-				<day id="3">Сишәмбе </day>
-				<day id="4">Чәршәмбе </day>
-				<day id="5">Пәнҗешәмбе </day>
-				<day id="6">Җомга </day>
-				<day id="7">Шимбә </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">Якш </day>
-				<day id="2">Дүш </day>
-				<day id="3">Сиш </day>
-				<day id="4">Чәрш </day>
-				<day id="5">Пәнҗ </day>
-				<day id="6">Җом </day>
-				<day id="7">Шим </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">BC</era>
-				<era id="1">AD</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-		</calendar>
-	</calendars>
-	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
-		<collationElements>
-		<normalization>OFF</normalization>
-		</collationElements>
-	</collation>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="tt"></language>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="tt">Татар</language>
+		</languages>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+	<encodings>
+		<exemplarCharacters>[а-я ё і ѣ ѳ ѵ]</exemplarCharacters>
+	</encodings>
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">Гыйнварь</month>
+					<month type="2">Февраль</month>
+					<month type="3">Март</month>
+					<month type="4">Апрель</month>
+					<month type="5">Май</month>
+					<month type="6">Июнь</month>
+					<month type="7">Июль</month>
+					<month type="8">Август</month>
+					<month type="9">Сентябрь</month>
+					<month type="10">Октябрь</month>
+					<month type="11">Ноябрь</month>
+					<month type="12">Декабрь</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">Гыйнв</month>
+					<month type="2">Фев</month>
+					<month type="3">Мар</month>
+					<month type="4">Апр</month>
+					<month type="5">Май</month>
+					<month type="6">Июн</month>
+					<month type="7">Июл</month>
+					<month type="8">Авг</month>
+					<month type="9">Сен</month>
+					<month type="10">Окт</month>
+					<month type="11">Ноя</month>
+					<month type="12">Дек</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">Якшәмбе</day>
+					<day type="mon">Дүшәмбе</day>
+					<day type="tue">Сишәмбе</day>
+					<day type="wed">Чәршәмбе</day>
+					<day type="thu">Пәнҗешәмбе</day>
+					<day type="fri">Җомга</day>
+					<day type="sat">Шимбә</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">Якш</day>
+					<day type="mon">Дүш</day>
+					<day type="tue">Сиш</day>
+					<day type="wed">Чәрш</day>
+					<day type="thu">Пәнҗ</day>
+					<day type="fri">Җом</day>
+					<day type="sat">Шим</day>
+				</dayAbbr>
+			</calendar>
+		</calendars>
+	</dates>
+		<collations>
+			<collation  >
+				<settings normalization="on"/>
+				<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
+			</collation  >
+		</collations>
 </localeData>

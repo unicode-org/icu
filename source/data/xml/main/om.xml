@@ -1,84 +1,86 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:29 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="0000">Windows</correspondsTo>
-	</identity  >
-
-	<displayNames >
-		<languages >
-			<language id="om" >Oromoo</language>
-		</languages >
-		<countries  >
-			<country id="ET">Itoophiyaa</country>
-			<country id="KE">Keeniyaa</country>
-		</countries  >
-
-	</displayNames >
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">Amajjii</month>
-				<month id="2">Guraandhala</month>
-				<month id="3">Bitooteessa</month>
-				<month id="4">Elba</month>
-				<month id="5">Caamsa</month>
-				<month id="6">Waxabajjii</month>
-				<month id="7">Adooleessa</month>
-				<month id="8">Hagayya</month>
-				<month id="9">Fuulbana</month>
-				<month id="10">Onkololeessa</month>
-				<month id="11">Sadaasa</month>
-				<month id="12">Muddee</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">Ama</month>
-				<month id="2">Gur</month>
-				<month id="3">Bit</month>
-				<month id="4">Elb</month>
-				<month id="5">Cam</month>
-				<month id="6">Wax</month>
-				<month id="7">Ado</month>
-				<month id="8">Hag</month>
-				<month id="9">Ful</month>
-				<month id="10">Onk</month>
-				<month id="11">Sad</month>
-				<month id="12">Mud</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">Dilbata </day>
-				<day id="2">Wiixata </day>
-				<day id="3">Qibxata </day>
-				<day id="4">Roobii </day>
-				<day id="5">Kamiisa </day>
-				<day id="6">Jimaata </day>
-				<day id="7">Sanbata </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">Dil </day>
-				<day id="2">Wix </day>
-				<day id="3">Qib </day>
-				<day id="4">Rob </day>
-				<day id="5">Kam </day>
-				<day id="6">Jim </day>
-				<day id="7">San </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">KD</era>
-				<era id="1">KB</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-		</calendar>
-	</calendars>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="om"></language>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="om">Oromoo</language>
+		</languages>
+		<territories>
+			<territory type="ET">Itoophiyaa</territory>
+			<territory type="KE">Keeniyaa</territory>
+		</territories>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+		<dates>
+			<calendars>
+				<default type="gregorian"/>
+				<calendar type="gregorian">
+					<monthNames>
+						<month type="1">Amajjii</month>
+						<month type="2">Guraandhala</month>
+						<month type="3">Bitooteessa</month>
+						<month type="4">Elba</month>
+						<month type="5">Caamsa</month>
+						<month type="6">Waxabajjii</month>
+						<month type="7">Adooleessa</month>
+						<month type="8">Hagayya</month>
+						<month type="9">Fuulbana</month>
+						<month type="10">Onkololeessa</month>
+						<month type="11">Sadaasa</month>
+						<month type="12">Muddee</month>
+					</monthNames>
+					<monthAbbr>
+						<month type="1">Ama</month>
+						<month type="2">Gur</month>
+						<month type="3">Bit</month>
+						<month type="4">Elb</month>
+						<month type="5">Cam</month>
+						<month type="6">Wax</month>
+						<month type="7">Ado</month>
+						<month type="8">Hag</month>
+						<month type="9">Ful</month>
+						<month type="10">Onk</month>
+						<month type="11">Sad</month>
+						<month type="12">Mud</month>
+					</monthAbbr>
+					<dayNames>
+						<day type="sun">Dilbata</day>
+						<day type="mon">Wiixata</day>
+						<day type="tue">Qibxata</day>
+						<day type="wed">Roobii</day>
+						<day type="thu">Kamiisa</day>
+						<day type="fri">Jimaata</day>
+						<day type="sat">Sanbata</day>
+					</dayNames>
+					<dayAbbr>
+						<day type="sun">Dil</day>
+						<day type="mon">Wix</day>
+						<day type="tue">Qib</day>
+						<day type="wed">Rob</day>
+						<day type="thu">Kam</day>
+						<day type="fri">Jim</day>
+						<day type="sat">San</day>
+					</dayAbbr>
+					<week>
+						<minDays count="7"/>
+						<firstDay day="mon"/>
+					</week>
+					<eras>
+						<era type="1">KD</era>
+						<era type="2">KB</era>
+					</eras>
+				</calendar>
+			</calendars>
+		</dates>
 </localeData>

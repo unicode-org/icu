@@ -1,85 +1,104 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:31 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="004F">Windows</correspondsTo>
-	</identity  >
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">जनवरी</month>
-				<month id="2">फरवरी</month>
-				<month id="3">मार्च</month>
-				<month id="4">अप्रैल</month>
-				<month id="5">मई</month>
-				<month id="6">जून</month>
-				<month id="7">जुलाई</month>
-				<month id="8">अगस्त</month>
-				<month id="9">सितम्बर</month>
-				<month id="10">अक्तूबर</month>
-				<month id="11">नवम्बर</month>
-				<month id="12">दिसम्बर</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">जनवरी</month>
-				<month id="2">फरवरी</month>
-				<month id="3">मार्च</month>
-				<month id="4">अप्रैल</month>
-				<month id="5">मई</month>
-				<month id="6">जून</month>
-				<month id="7">जुलाई</month>
-				<month id="8">अगस्त</month>
-				<month id="9">सितम्बर</month>
-				<month id="10">अक्तूबर</month>
-				<month id="11">नवम्बर</month>
-				<month id="12">दिसम्बर</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">रविवासरः </day>
-				<day id="2">सोमवासरः </day>
-				<day id="3">मङ्गलवासरः </day>
-				<day id="4">बुधवासरः </day>
-				<day id="5">गुरुवासरः </day>
-				<day id="6">शुक्रवासरः </day>
-				<day id="7">शनिवासरः </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">रविवासरः </day>
-				<day id="2">सोमवासरः </day>
-				<day id="3">मङ्गलवासरः </day>
-				<day id="4">बुधवासरः </day>
-				<day id="5">गुरुवासरः </day>
-				<day id="6">शुक्रवासरः </day>
-				<day id="7">शनिवासरः </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">BC</era>
-				<era id="1">AD</era>
-			</eras>
-			<am>पूर्वाह्न</am><pm>अपराह्न</pm>
-		</calendar>
-	</calendars>
-	<numberFormat class="decimal" default="true"> 
-		<patterns> 
-			<decimal>##,##,##0.###;-##,##,##0.###</decimal>
-			<percent>##,##,##0%</percent>
-			<scientific>#E0</scientific>
-		</patterns>
-	</numberFormat> 
-	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
-		<collationElements>
-		<normalization>OFF</normalization>
-		</collationElements>
-	</collation>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="sa"></language>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="sa">संस्कृत</language>
+		</languages>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+	<encodings>
+		<exemplarCharacters>[[[:Deva:][॑-॔]]-[क़-य़]]</exemplarCharacters>
+	</encodings>
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">जनवरी</month>
+					<month type="2">फरवरी</month>
+					<month type="3">मार्च</month>
+					<month type="4">अप्रैल</month>
+					<month type="5">मई</month>
+					<month type="6">जून</month>
+					<month type="7">जुलाई</month>
+					<month type="8">अगस्त</month>
+					<month type="9">सितम्बर</month>
+					<month type="10">अक्तूबर</month>
+					<month type="11">नवम्बर</month>
+					<month type="12">दिसम्बर</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">जनवरी</month>
+					<month type="2">फरवरी</month>
+					<month type="3">मार्च</month>
+					<month type="4">अप्रैल</month>
+					<month type="5">मई</month>
+					<month type="6">जून</month>
+					<month type="7">जुलाई</month>
+					<month type="8">अगस्त</month>
+					<month type="9">सितम्बर</month>
+					<month type="10">अक्तूबर</month>
+					<month type="11">नवम्बर</month>
+					<month type="12">दिसम्बर</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">रविवासरः</day>
+					<day type="mon">सोमवासरः</day>
+					<day type="tue">मङ्गलवासरः</day>
+					<day type="wed">बुधवासरः</day>
+					<day type="thu">गुरुवासरः</day>
+					<day type="fri">शुक्रवासरः</day>
+					<day type="sat">शनिवासरः</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">रविवासरः</day>
+					<day type="mon">सोमवासरः</day>
+					<day type="tue">मङ्गलवासरः</day>
+					<day type="wed">बुधवासरः</day>
+					<day type="thu">गुरुवासरः</day>
+					<day type="fri">शुक्रवासरः</day>
+					<day type="sat">शनिवासरः</day>
+				</dayAbbr>
+				<am>पूर्वाह्न</am>
+				<pm>अपराह्न</pm>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<numberFormats>
+			<default type="decimal"/>
+			<numberFormat type="decimal">
+				<pattern>##,##,##0.###</pattern>
+				<pattern>-##,##,##0.###</pattern>
+			</numberFormat>
+			<numberFormat type="currency">
+				<pattern>¤ ##,##,##0.00</pattern>
+				<pattern>-¤ ##,##,##0.00</pattern>
+			</numberFormat>
+			<numberFormat type="percent">
+				<pattern>##,##,##0%</pattern>
+			</numberFormat>
+			<numberFormat type="scientific">
+				<pattern>#E0</pattern>
+			</numberFormat>
+		</numberFormats>
+	</numbers>
+		<collations>
+			<collation  >
+				<settings normalization="on"/>
+				<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
+			</collation  >
+		</collations>
 </localeData>

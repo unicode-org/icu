@@ -1,154 +1,161 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:20 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="000E">Windows</correspondsTo>
-	</identity  >
-
-	<displayNames >
-		<languages >
-			<language id="hu" >magyar</language>
-		</languages >
-		<countries  >
-			<country id="HU">Magyarország</country>
-		</countries  >
-
-	</displayNames >
-	<timeZoneNames>
-		<zone id="Africa/Casablanca" default="true">
-			<long>
-				<generic>GMT</generic>
-				<standard>GMT</standard>
-			</long>
-			<short>
-				<generic>Africa/Casablanca</generic>
-				<standard>GMT</standard>
-				<daylight>GMT</daylight>
-			</short>
-		</zone>
-	</timeZoneNames>
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">január</month>
-				<month id="2">február</month>
-				<month id="3">március</month>
-				<month id="4">április</month>
-				<month id="5">május</month>
-				<month id="6">június</month>
-				<month id="7">július</month>
-				<month id="8">augusztus</month>
-				<month id="9">szeptember</month>
-				<month id="10">október</month>
-				<month id="11">november</month>
-				<month id="12">december</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">jan.</month>
-				<month id="2">febr.</month>
-				<month id="3">márc.</month>
-				<month id="4">ápr.</month>
-				<month id="5">máj.</month>
-				<month id="6">jún.</month>
-				<month id="7">júl.</month>
-				<month id="8">aug.</month>
-				<month id="9">szept.</month>
-				<month id="10">okt.</month>
-				<month id="11">nov.</month>
-				<month id="12">dec.</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">vasárnap </day>
-				<day id="2">hétfő </day>
-				<day id="3">kedd </day>
-				<day id="4">szerda </day>
-				<day id="5">csütörtök </day>
-				<day id="6">péntek </day>
-				<day id="7">szombat </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">V </day>
-				<day id="2">H </day>
-				<day id="3">K </day>
-				<day id="4">Sze </day>
-				<day id="5">Cs </day>
-				<day id="6">P </day>
-				<day id="7">Szo </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">i.e.</era>
-				<era id="1">i.u.</era>
-			</eras>
-			<am>DE</am><pm>DU</pm>
-			<patterns> 
-				<chars>GanjkHmsSEDFwWxhKzAe</chars>
-				<time>
-					<full>H:mm:ss z</full>
-					<long>H:mm:ss z</long>
-					<medium>H:mm:ss</medium>
-					<short>H:mm</short>
-				</time>
-				<date>
-					<full>yyyy. MMMM d.</full>
-					<long>yyyy. MMMM d.</long>
-					<medium>yyyy.MM.dd.</medium>
-					<short>yyyy.MM.dd.</short>
-				</date>
- 				<dateTime>{1} {0} </dateTime>
-			</patterns>
-		</calendar>
-	</calendars>
-	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
-		<collationElements>
-		<after>C</after>
-		<gt1>cs</gt1>
-		<gt3>cS</gt3>
-		<gt3>Cs</gt3>
-		<gt3>CS</gt3>
-		<after>D</after>
-		<gt1>đ</gt1>
-		<gt3>Đ</gt3>
-		<after>G</after>
-		<gt1>gy</gt1>
-		<gt3>gY</gt3>
-		<gt3>Gy</gt3>
-		<gt3>GY</gt3>
-		<after>L</after>
-		<gt1>ly</gt1>
-		<gt3>lY</gt3>
-		<gt3>Ly</gt3>
-		<gt3>LY</gt3>
-		<after>O</after>
-		<gt1>ö</gt1>
-		<gt3>Ö</gt3>
-		<gt1>ő</gt1>
-		<gt3>Ő</gt3>
-		<after>S</after>
-		<gt1>sz</gt1>
-		<gt3>sZ</gt3>
-		<gt3>Sz</gt3>
-		<gt3>SZ</gt3>
-		<after>U</after>
-		<gt1>ü</gt1>
-		<gt3>Ü</gt3>
-		<gt1>ű</gt1>
-		<gt3>Ű</gt3>
-		<after>Z</after>
-		<gt1>zs</gt1>
-		<gt3>zS</gt3>
-		<gt3>Zs</gt3>
-		<gt3>ZS</gt3>
-		</collationElements>
-	</collation>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="hu"></language>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="hu">magyar</language>
+		</languages>
+		<territories>
+			<territory type="HU">Magyarország</territory>
+		</territories>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+	<encodings>
+		<exemplarCharacters>[a-z á é í ó ú ö ü ő ű]</exemplarCharacters>
+	</encodings>
+	<dates>
+		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<monthNames>
+					<month type="1">január</month>
+					<month type="2">február</month>
+					<month type="3">március</month>
+					<month type="4">április</month>
+					<month type="5">május</month>
+					<month type="6">június</month>
+					<month type="7">július</month>
+					<month type="8">augusztus</month>
+					<month type="9">szeptember</month>
+					<month type="10">október</month>
+					<month type="11">november</month>
+					<month type="12">december</month>
+				</monthNames>
+				<monthAbbr>
+					<month type="1">jan.</month>
+					<month type="2">febr.</month>
+					<month type="3">márc.</month>
+					<month type="4">ápr.</month>
+					<month type="5">máj.</month>
+					<month type="6">jún.</month>
+					<month type="7">júl.</month>
+					<month type="8">aug.</month>
+					<month type="9">szept.</month>
+					<month type="10">okt.</month>
+					<month type="11">nov.</month>
+					<month type="12">dec.</month>
+				</monthAbbr>
+				<dayNames>
+					<day type="sun">vasárnap</day>
+					<day type="mon">hétfő</day>
+					<day type="tue">kedd</day>
+					<day type="wed">szerda</day>
+					<day type="thu">csütörtök</day>
+					<day type="fri">péntek</day>
+					<day type="sat">szombat</day>
+				</dayNames>
+				<dayAbbr>
+					<day type="sun">V</day>
+					<day type="mon">H</day>
+					<day type="tue">K</day>
+					<day type="wed">Sze</day>
+					<day type="thu">Cs</day>
+					<day type="fri">P</day>
+					<day type="sat">Szo</day>
+				</dayAbbr>
+				<week>
+					<minDays count="2"/>
+					<firstDay day="mon"/>
+				</week>
+				<eras>
+					<era type="1">i.e.</era>
+					<era type="2">i.u.</era>
+				</eras>
+				<am>DE</am>
+				<pm>DU</pm>
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormat type="full">
+						<pattern>yyyy. MMMM d.</pattern>
+					</dateFormat>
+					<dateFormat type="long">
+						<pattern>yyyy. MMMM d.</pattern>
+					</dateFormat>
+					<dateFormat type="medium">
+						<pattern>yyyy.MM.dd.</pattern>
+					</dateFormat>
+					<dateFormat type="short">
+						<pattern>yyyy.MM.dd.</pattern>
+					</dateFormat>
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormat type="full">
+						<pattern>H:mm:ss z</pattern>
+					</timeFormat>
+					<timeFormat type="long">
+						<pattern>H:mm:ss z</pattern>
+					</timeFormat>
+					<timeFormat type="medium">
+						<pattern>H:mm:ss</pattern>
+					</timeFormat>
+					<timeFormat type="short">
+						<pattern>H:mm</pattern>
+					</timeFormat>
+				</timeFormats>
+				<dateTimeFormat>
+					<pattern>{1} {0}</pattern>
+				</dateTimeFormat>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+		</timeZoneNames>
+	</dates>
+		<collations>
+			<collation  >
+				<rules>
+					<reset>C</reset>
+					<p>cs</p>
+					<tc>cSCsCS</tc>
+					<reset>D</reset>
+					<p>đ</p>
+					<t>Đ</t>
+					<reset>G</reset>
+					<p>gy</p>
+					<tc>gYGyGY</tc>
+					<reset>L</reset>
+					<p>ly</p>
+					<tc>lYLyLY</tc>
+					<reset>O</reset>
+					<p>ö</p>
+					<t>Ö</t>
+					<p>ő</p>
+					<t>Ő</t>
+					<reset>S</reset>
+					<p>sz</p>
+					<tc>sZSzSZ</tc>
+					<reset>U</reset>
+					<p>ü</p>
+					<t>Ü</t>
+					<p>ű</p>
+					<t>Ű</t>
+					<reset>Z</reset>
+					<p>zs</p>
+					<tc>zSZs</tc>
+				</rules>
+				<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
+			</collation  >
+		</collations>
 </localeData>

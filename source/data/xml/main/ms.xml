@@ -1,73 +1,71 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:27 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<correspondsTo vendor="003E">Windows</correspondsTo>
-	</identity  >
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<monthNames>
-				<month id="1">Januari</month>
-				<month id="2">Februari</month>
-				<month id="3">Mac</month>
-				<month id="4">April</month>
-				<month id="5">Mei</month>
-				<month id="6">Jun</month>
-				<month id="7">Julai</month>
-				<month id="8">Ogos</month>
-				<month id="9">September</month>
-				<month id="10">Oktober</month>
-				<month id="11">November</month>
-				<month id="12">Disember</month>
-			</monthNames>
-			<monthAbbr>
-				<month id="1">Jan</month>
-				<month id="2">Feb</month>
-				<month id="3">Mac</month>
-				<month id="4">Apr</month>
-				<month id="5">Mei</month>
-				<month id="6">Jun</month>
-				<month id="7">Jul</month>
-				<month id="8">Ogos</month>
-				<month id="9">Sep</month>
-				<month id="10">Okt</month>
-				<month id="11">Nov</month>
-				<month id="12">Dis</month>
-			</monthAbbr>
-			<dayNames>
-				<day id="1">Ahad </day>
-				<day id="2">Isnin </day>
-				<day id="3">Selasa </day>
-				<day id="4">Rahu </day>
-				<day id="5">Khamis </day>
-				<day id="6">Jumaat </day>
-				<day id="7">Sabtu </day>
-			</dayNames>
-			<dayAbbr>
-				<day id="1">Aha </day>
-				<day id="2">Isn </day>
-				<day id="3">Sei </day>
-				<day id="4">Rab </day>
-				<day id="5">Kha </day>
-				<day id="6">Jum </day>
-				<day id="7">Sab </day>
-			</dayAbbr>
-			<eras>
-				<era id="0">BC</era>
-				<era id="1">AD</era>
-			</eras>
-			<am>AM</am><pm>PM</pm>
-		</calendar>
-	</calendars>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="ms"></language>
+	</identity>
+	<localeDisplayNames>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+	<layout>
+		<orientation lines="top-to-bottom" characters="left-to-right" />
+	</layout>
+		<dates>
+			<calendars>
+				<default type="gregorian"/>
+				<calendar type="gregorian">
+					<monthNames>
+						<month type="1">Januari</month>
+						<month type="2">Februari</month>
+						<month type="3">Mac</month>
+						<month type="4">April</month>
+						<month type="5">Mei</month>
+						<month type="6">Jun</month>
+						<month type="7">Julai</month>
+						<month type="8">Ogos</month>
+						<month type="9">September</month>
+						<month type="10">Oktober</month>
+						<month type="11">November</month>
+						<month type="12">Disember</month>
+					</monthNames>
+					<monthAbbr>
+						<month type="1">Jan</month>
+						<month type="2">Feb</month>
+						<month type="3">Mac</month>
+						<month type="4">Apr</month>
+						<month type="5">Mei</month>
+						<month type="6">Jun</month>
+						<month type="7">Jul</month>
+						<month type="8">Ogos</month>
+						<month type="9">Sep</month>
+						<month type="10">Okt</month>
+						<month type="11">Nov</month>
+						<month type="12">Dis</month>
+					</monthAbbr>
+					<dayNames>
+						<day type="sun">Ahad</day>
+						<day type="mon">Isnin</day>
+						<day type="tue">Selasa</day>
+						<day type="wed">Rahu</day>
+						<day type="thu">Khamis</day>
+						<day type="fri">Jumaat</day>
+						<day type="sat">Sabtu</day>
+					</dayNames>
+					<dayAbbr>
+						<day type="sun">Aha</day>
+						<day type="mon">Isn</day>
+						<day type="tue">Sei</day>
+						<day type="wed">Rab</day>
+						<day type="thu">Kha</day>
+						<day type="fri">Jum</day>
+						<day type="sat">Sab</day>
+					</dayAbbr>
+				</calendar>
+			</calendars>
+		</dates>
 </localeData>

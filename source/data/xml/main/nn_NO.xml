@@ -1,38 +1,50 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-
-<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
-
-<!-- 
-	Copyright (C) 2000-2003, International Business Machines 
-	Corporation and others.  All Rights Reserved.
- -->
-
+<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
 <localeData>
-	<versioning  >
- 		<version number="1.0" date="Tue Jun 11 15:06:28 2002">Various notes and changes in version 1.0</version>
-	</versioning  >
- 	<identity  >
-		<country id="NO" />
-		<correspondsTo vendor="0814">Windows</correspondsTo>
-	</identity  >
-	<calendars>
-		<calendar class="gregorian" default="true">
-			<am>AM</am><pm>PM</pm>
-		</calendar>
-	</calendars>
-	<numberFormat class="decimal" default="true"> 
-		<patterns> 
-			<decimal>#,##0.###;-#,##0.###</decimal>
-			<percent>#,##0%</percent>
-			<scientific>#E0</scientific>
-		</patterns>
-	</numberFormat> 
-	<currencies>
-		<currency id="NOK" default="true">
-			<symbol>kr</symbol>
-			<name>NOK</name>
-			<decimal>,</decimal>
-		</currency>
-	</currencies>
-
+	<identity>
+		<version number="1.0">Various notes and changes in version 1.0</version>
+		<generation date="2003-01-07" />
+		<language type="nn"></language>
+		<territory type="NOR">NO</territory>
+	</identity>
+	<localeDisplayNames>
+		<keys>
+			<key type="collation">collation</key>
+			<key type="calendar">calendar</key>
+		</keys>
+	</localeDisplayNames>
+		<dates>
+			<calendars>
+				<default type="gregorian"/>
+				<calendar type="gregorian">
+				</calendar>
+			</calendars>
+		</dates>
+		<numbers>
+			<numberFormats>
+				<default type="decimal"/>
+				<numberFormat type="decimal">
+					<pattern>#,##0.###</pattern>
+					<pattern>-#,##0.###</pattern>
+				</numberFormat>
+				<numberFormat type="currency">
+					<pattern>¤ #,##0.00</pattern>
+					<pattern>¤ -#,##0.00</pattern>
+				</numberFormat>
+				<numberFormat type="percent">
+					<pattern>#,##0%</pattern>
+				</numberFormat>
+				<numberFormat type="scientific">
+					<pattern>#E0</pattern>
+				</numberFormat>
+			</numberFormats>
+			<currencies>
+				<default type="NOK"/>
+				<currency type="NOK">
+					<symbol>kr</symbol>
+					<displayName>NOK</displayName>
+					<decimal>,</decimal>
+				</currency>
+			</currencies>
+		</numbers>
 </localeData>
