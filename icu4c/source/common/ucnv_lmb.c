@@ -660,7 +660,7 @@ _LMBCSSafeClone(const UConverter *cnv,
     return &newLMBCS->cnv;
 }
 
-U_CFUNC void
+static void
 _LMBCSGetUnicodeSet(const UConverter *cnv,
                    USet *set,
                    UConverterUnicodeSet which,
