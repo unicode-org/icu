@@ -38,7 +38,7 @@
  * for a description of the file format, see icu/source/tools/genprops/store.c
  */
 static const char DATA_NAME[] = "uprops";
-static const char DATA_TYPE[] = "dat";
+static const char DATA_TYPE[] = "icu";
 
 static UDataMemory *propsData=NULL;
 
