@@ -16,7 +16,7 @@
 #include "unicode/unorm.h"
 
 struct UCharIterator;
-typedef struct UCharIterator UCharIterator;
+typedef struct UCharIterator UCharIterator; /**< C typedef for struct UCharIterator. @draft ICU 2.1 */
 
 U_NAMESPACE_BEGIN
 /**
