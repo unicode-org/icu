@@ -128,12 +128,24 @@ U_CDECL_END
 
 /* This is the default implementation for uenum_unext().
  * It automatically converts the char * string to UChar *.
- * Don't call this directly. Only uenum_unext should be calling this.
+ * Don't call this directly.  This is called internally by uenum_unext
+ * when a UEnumeration is defined with 'uNext' pointing to this
+ * function.
  */
 U_CAPI const UChar* U_EXPORT2
 uenum_unextDefault(UEnumeration* en,
             int32_t* resultLength,
             UErrorCode* status);
 
+/* This is the default implementation for uenum_next().
+ * It automatically converts the UChar * string to char *.
+ * Don't call this directly.  This is called internally by uenum_next
+ * when a UEnumeration is defined with 'next' pointing to this
+ * function.
+ */
+U_CAPI const char* U_EXPORT2
+uenum_nextDefault(UEnumeration* en,
+            int32_t* resultLength,
+            UErrorCode* status);
 
 #endif
