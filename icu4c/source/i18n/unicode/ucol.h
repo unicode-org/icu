@@ -146,6 +146,9 @@ enum UNormalizationOption {
   /** Do not normalize Hangul */
   UCOL_IGNORE_HANGUL    = 1
 };
+
+typedef enum UCollationOptions UCollationOptions;
+
 typedef enum UNormalizationOption UNormalizationOption;
     /**
      * Base letter represents a primary difference.  Set comparison
@@ -451,6 +454,12 @@ ucol_getStrength(const UCollator *coll);
 U_CAPI void
 ucol_setStrength(    UCollator            *coll,
             UCollationStrength        strength);
+
+U_CAPI UCollationOptions ucol_getDirection(const UCollator *coll);
+
+U_CAPI void ucol_setDirection(    UCollator            *coll,
+            UCollationOptions        direction);
+
 
 /**
  * Get the normalization mode used in a UCollator.
