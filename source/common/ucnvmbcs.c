@@ -1816,6 +1816,18 @@ _MBCSSingleGetNextUChar(UConverterToUnicodeArgs *pArgs,
     return 0xffff;
 }
 
+/*
+ * Version of _MBCSToUnicodeWithOffsets() optimized for single-character
+ * conversion without offset handling.
+ *
+ * When a character does not have a mapping to Unicode, then we return to the
+ * generic ucnv_getNextUChar() code for extension/GB 18030 and error/callback
+ * handling.
+ * We also defer to the generic code in other complicated cases and have them
+ * ultimately handled by _MBCSToUnicodeWithOffsets() itself.
+ *
+ * All normal mappings and errors are handled here.
+ */
 static UChar32
 _MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
                   UErrorCode *pErrorCode) {
@@ -1835,11 +1847,10 @@ _MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
     /* use optimized function if possible */
     cnv=pArgs->converter;
 
-    /* ### TODO extension */
-    if(cnv->sharedData->table->mbcs.extIndexes!=NULL) {
+    if(cnv->preToULength>0) {
+        /* use the generic code in ucnv_getNextUChar() to continue with a partial match */
         return UCNV_GET_NEXT_UCHAR_USE_TO_U;
     }
-    /* ### TODO end cheap-trick extension */
 
     if(cnv->sharedData->table->mbcs.unicodeMask&UCNV_HAS_SURROGATES) {
         /*

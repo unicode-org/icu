@@ -918,6 +918,12 @@ ucnv_setFromUCallBack (UConverter * converter,
  *  consumed. At that point, the caller should reset the source and
  *  sourceLimit pointers to point to the next chunk.
  * 
+ * At the end of the stream (flush==TRUE), the input is completely consumed
+ * when *source==sourceLimit and no error code is set.
+ * The converter object is then automatically reset by this function.
+ * (This means that a converter need not be reset explicitly between data
+ * streams if it finishes the previous stream without errors.)
+ * 
  * This is a <I>stateful</I> conversion. Additionally, even when all source data has
  * been consumed, some data may be in the converters' internal state.
  * Call this function repeatedly, updating the target pointers with
@@ -980,6 +986,12 @@ ucnv_fromUnicode (UConverter * converter,
  * returned, it means that all of the source buffer has been
  *  consumed. At that point, the caller should reset the source and
  *  sourceLimit pointers to point to the next chunk.
+ *
+ * At the end of the stream (flush==TRUE), the input is completely consumed
+ * when *source==sourceLimit and no error code is set
+ * The converter object is then automatically reset by this function.
+ * (This means that a converter need not be reset explicitly between data
+ * streams if it finishes the previous stream without errors.)
  * 
  * This is a <I>stateful</I> conversion. Additionally, even when all source data has
  * been consumed, some data may be in the converters' internal state.
@@ -1091,6 +1103,7 @@ ucnv_toUChars(UConverter *cnv,
 
 /**
  * Convert a codepage buffer into Unicode one character at a time.
+ * The input is completely consumed when the U_INDEX_OUTOFBOUNDS_ERROR is set.
  *
  * Advantage compared to ucnv_toUnicode() or ucnv_toUChars():
  * - Faster for small amounts of data, for most converters, e.g.,
