@@ -41,6 +41,7 @@ extern void pkg_mode_common(UPKGOptions* o, FileStream *stream, UErrorCode *stat
 
 U_CDECL_END
 
+static int executeMakefile(const UPKGOptions *o);
 static void loadLists(UPKGOptions *o, UErrorCode *status);
 
 /* This sets the modes that are available */
@@ -303,53 +304,55 @@ main(int argc, char* argv[]) {
     return 0; /* nothing to do. */
   }
   
-  /* POSIX - execute makefile */
-  {
-    char cmd[1024];
-    /*char pwd[1024];*/
-    char *make;
-    int rc;
+  return executeMakefile(&o);
+}
+
+/* POSIX - execute makefile */
+static int executeMakefile(const UPKGOptions *o)
+{
+  char cmd[1024];
+  /*char pwd[1024];*/
+  char *make;
+  int rc;
     
-    make = getenv("MAKE");
+  make = getenv("MAKE");
 
-    if(!make || !make[0]) {
-      make = U_MAKE;
-    }
-
-    /*getcwd(pwd, 1024);*/
-#ifdef WIN32
-    sprintf(cmd, "%s %s%s -f \"%s\" %s %s %s",
-            make,
-            o.install ? "INSTALLTO=" : "",
-            o.install ? o.install    : "",
-            o.makeFile,
-            o.clean   ? "clean"      : "",
-            o.rebuild ? "rebuild"    : "",
-            o.install ? "install"    : "");
-#else
-    sprintf(cmd, "%s %s%s -f %s %s %s %s",
-            make,
-            o.install ? "INSTALLTO=" : "",
-            o.install ? o.install    : "",
-            o.makeFile,
-            o.clean   ? "clean"      : "",
-            o.rebuild ? "rebuild"    : "",
-            o.install ? "install"    : "");
-#endif
-    if(o.verbose) {
-      puts(cmd);
-    }
-
-    rc = system(cmd);
-    
-    if(rc < 0) {
-      fprintf(stderr, "# Failed, rc=%d\n", rc);
-    }
-    return rc < 128 ? rc : (rc >> 8);
+  if(!make || !make[0]) {
+    make = U_MAKE;
   }
 
-  return 0;
+  /*getcwd(pwd, 1024);*/
+#ifdef WIN32
+  sprintf(cmd, "%s %s%s -f \"%s\" %s %s %s",
+          make,
+          o->install ? "INSTALLTO=" : "",
+          o->install ? o->install    : "",
+          o->makeFile,
+          o->clean   ? "clean"      : "",
+          o->rebuild ? "rebuild"    : "",
+          o->install ? "install"    : "");
+#else
+  sprintf(cmd, "%s %s%s -f %s %s %s %s",
+          make,
+          o->install ? "INSTALLTO=" : "",
+          o->install ? o->install    : "",
+          o->makeFile,
+          o->clean   ? "clean"      : "",
+          o->rebuild ? "rebuild"    : "",
+          o->install ? "install"    : "");
+#endif
+  if(o->verbose) {
+    puts(cmd);
+  }
+
+  rc = system(cmd);
+    
+  if(rc < 0) {
+    fprintf(stderr, "# Failed, rc=%d\n", rc);
+  }
+  return rc < 128 ? rc : (rc >> 8);
 }
+
 
 static void loadLists(UPKGOptions *o, UErrorCode *status)
 {
