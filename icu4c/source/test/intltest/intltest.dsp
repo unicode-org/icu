@@ -185,10 +185,6 @@ SOURCE=.\g7coll.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\hajatrts.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\hxuntrts.cpp
 # End Source File
 # Begin Source File
@@ -230,10 +226,6 @@ SOURCE=.\itutil.cpp
 # Begin Source File
 
 SOURCE=.\jacoll.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\jahatrts.cpp
 # End Source File
 # Begin Source File
 
@@ -517,10 +509,6 @@ SOURCE=.\g7coll.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\hajatrts.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\hxuntrts.h
 # End Source File
 # Begin Source File
@@ -562,10 +550,6 @@ SOURCE=.\itutil.h
 # Begin Source File
 
 SOURCE=.\jacoll.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\jahatrts.h
 # End Source File
 # Begin Source File
 
