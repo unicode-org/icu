@@ -56,8 +56,8 @@ VERSION = @VERSION@
 ## Files to remove for 'make clean'
 CLEANFILES = *~
 
-SUBDIRS = ctestfw makeconv genrb gencol rbdump \
-toolutil genccode gennames gencmn gencnval gentz
+SUBDIRS = ctestfw toolutil makeconv genrb gencol rbdump \
+genccode gennames gencmn gencnval gentz
 
 ## List of phony targets
 .PHONY : all all-local all-recursive install install-local install-everything install-files install-dlls build-data build-cmnfile build-dll		\
