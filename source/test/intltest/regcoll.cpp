@@ -782,17 +782,22 @@ void CollationRegressionTest::Test4114076(char *par)
     c->setDecomposition(Normalizer::DECOMP);
     compareArray(*c, test1, ARRAY_LENGTH(test1));
 
-    //
-    // With Full decomposition, it should go all the way down to
-    // conjoining Jamo characters.
-    //
-    static const UChar test2[][CollationRegressionTest::MAX_TOKEN_LEN] =
-    {
-        {0xd4db, 0}, {0x3d, 0}, {0x1111, 0x116e, 0x1175, 0x11af, 0x11c2, 0}
-    };
+    // From UTR #15:
+    // *In earlier versions of Unicode, jamo characters like ksf
+    //  had compatibility mappings to kf + sf. These mappings were 
+    //  removed in Unicode 2.1.9 to ensure that Hangul syllables are maintained.)
+    // That is, the following test is obsolete as of 2.1.9
 
-    c->setDecomposition(Normalizer::DECOMP_COMPAT);
-    compareArray(*c, test2, ARRAY_LENGTH(test2));
+//obsolete-    // With Full decomposition, it should go all the way down to
+//obsolete-    // conjoining Jamo characters.
+//obsolete-    //
+//obsolete-    static const UChar test2[][CollationRegressionTest::MAX_TOKEN_LEN] =
+//obsolete-    {
+//obsolete-        {0xd4db, 0}, {0x3d, 0}, {0x1111, 0x116e, 0x1175, 0x11af, 0x11c2, 0}
+//obsolete-    };
+//obsolete-
+//obsolete-    c->setDecomposition(Normalizer::DECOMP_COMPAT);
+//obsolete-    compareArray(*c, test2, ARRAY_LENGTH(test2));
 
     delete c;
 }

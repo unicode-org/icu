@@ -1,22 +1,27 @@
 /*
- *   Copyright (C) 1997-1999, International Business Machines
- *   Corporation and others.  All Rights Reserved.
- */
-
-
+************************************************************************
+*   Copyright (c) 1997-2000, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+************************************************************************
+* > THIS FILE WAS MACHINE GENERATED <
+* >       DO NOT EDIT BY HAND       <
+* >      RUN TOOL TO REGENERATE     <
+* Tool: com.ibm.text.Normalizer
+* Creation date: Wed Jul 12 12:31:02 PDT 2000
+*/
 #include "unicode/utypes.h"
 #include "ucmp8.h"
 #include "ucmp16.h"
 
 struct ComposeData {
-    enum { BASE_COUNT = 805 };
-    enum { COMBINING_COUNT = 59 };
-    enum { MAX_COMPAT = 4215 };
-    enum { MAX_CANONICAL = 4882 };
-    enum { MAX_COMPOSED = 0xFB4E };
-    enum { MAX_INDEX = 8704 };
-    enum { INITIAL_JAMO_INDEX = 8705 };
-    enum { MEDIAL_JAMO_INDEX = 8706 };
+    enum { BASE_COUNT = 773 };
+    enum { COMBINING_COUNT = 61 };
+    enum { MAX_COMPAT = 4341 };
+    enum { MAX_CANONICAL = 5124 };
+    enum { MAX_COMPOSED = 0xFB1D };
+    enum { MAX_INDEX = 8899 };
+    enum { INITIAL_JAMO_INDEX = 8900 };
+    enum { MEDIAL_JAMO_INDEX = 8901 };
     enum { MAX_BASES = 1024 };
     enum { MAX_COMBINE = 64 };
     enum { TYPE_MASK = 0x7 };
