@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2003/11/21 22:43:40 $
- * $Revision: 1.102 $
+ * $Date: 2003/11/22 01:05:45 $
+ * $Revision: 1.103 $
  *
  *****************************************************************************************
  */
@@ -878,7 +878,7 @@ public class UnicodeSet extends UnicodeFilter {
      * characters that may be matched by this object into the given
      * set.
      * @param toUnionTo the set into which to union the source characters
-     * @stable
+     * @stable ICU 2.2
      */
     public void addMatchSetTo(UnicodeSet toUnionTo) {
         toUnionTo.addAll(this);
@@ -2340,8 +2340,13 @@ public class UnicodeSet extends UnicodeFilter {
 
     /**
      * Add the contents of the collection (as strings) into this UnicodeSet.
+<<<<<<< UnicodeSet.java
+     * @param source the collection to add
+     * @draft ICU 2.8
+=======
      * @param source
      * @draft ICU 2.8
+>>>>>>> 1.102
      */
     public void addAll(Collection source) {
         Iterator it = source.iterator();

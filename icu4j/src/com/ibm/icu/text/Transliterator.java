@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2003/06/03 18:49:35 $
- * $Revision: 1.91 $
+ * $Date: 2003/11/22 01:07:24 $
+ * $Revision: 1.92 $
  *
  *****************************************************************************************
  */
@@ -1486,7 +1486,7 @@ public abstract class Transliterator {
      * use by tests, tools, or utilities.
      * @see #getTargetSet
      * @see #handleGetSourceSet
-     * @draft ICU 2.2
+     * @stable ICU 2.2
      */
     public final UnicodeSet getSourceSet() {
         UnicodeSet set = handleGetSourceSet();
@@ -1516,7 +1516,7 @@ public abstract class Transliterator {
      * newly-created object.
      * @see #getSourceSet
      * @see #getTargetSet
-     * @draft ICU 2.2
+     * @stable ICU 2.2
      */
     protected UnicodeSet handleGetSourceSet() {
         return new UnicodeSet();
@@ -1531,7 +1531,7 @@ public abstract class Transliterator {
      * use by tests, tools, or utilities requiring such
      * meta-information.
      * @see #getTargetSet
-     * @draft ICU 2.2
+     * @stable ICU 2.2
      */
     public UnicodeSet getTargetSet() {
         return new UnicodeSet();
@@ -1594,7 +1594,7 @@ public abstract class Transliterator {
      * Register a Transliterator object with the given ID.
      * @param ID the ID of this transliterator
      * @param trans the Transliterator object
-     * @draft ICU 2.2
+     * @stable ICU 2.2
      */
     public static void registerInstance(Transliterator trans) {
         registry.put(trans.getID(), trans, true);

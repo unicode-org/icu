@@ -74,6 +74,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
     /**
      * Default constructor.  (For invocation by subclass constructors,
      * typically implicit.)
+     * @draft ICU 2.8
      */
     public TimeZone() {
     }
