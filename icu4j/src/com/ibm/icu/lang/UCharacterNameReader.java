@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/Attic/UCharacterNameReader.java,v $ 
-* $Date: 2002/07/08 23:52:13 $ 
-* $Revision: 1.9 $
+* $Date: 2002/07/30 02:38:11 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -21,14 +21,14 @@ import com.ibm.icu.impl.ICUBinary;
 /**
 * <p>Internal reader class for ICU data file uname.dat containing 
 * Unicode codepoint name data.</p> 
-* <p>This class simply reads unames.dat, authenticates that it is a valid
+* <p>This class simply reads unames.icu, authenticates that it is a valid
 * ICU data file and split its contents up into blocks of data for use in
 * <a href=UCharacterName.html>com.ibm.icu.lang.UCharacterName</a>.
 * </p> 
-* <p>For more information about the format of unames.dat refer to
+* <p>For more information about the format of unames.icu refer to
 * <a href=oss.software.ibm.com/icu4j/icu4jhtml/com/ibm/icu/lang/readme.html>
 * ReadMe</a>.<\p>
-* <p>unames.dat which is in big-endian format is jared together with this 
+* <p>unames.icu which is in big-endian format is jared together with this 
 * package.</p>
 * @author Syn Wee Quek
 * @since release 2.1, February 1st 2002
@@ -104,7 +104,7 @@ final class UCharacterNameReader
         {
             UCharacterName.AlgorithmName an = readAlg();
             if (an == null) {
-                throw new IOException("unames.dat read error: Algorithmic names creation error");
+                throw new IOException("unames.icu read error: Algorithmic names creation error");
             }
             alg[i] = an;
         }
