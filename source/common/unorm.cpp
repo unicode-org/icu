@@ -2394,6 +2394,18 @@ unorm_previous(UCharIterator *src,
     int32_t startIndex, bufferLength, bufferCapacity, destLength;
     UChar minC;
 
+    /* check argument values */
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+
+    if( destCapacity<0 || (dest==NULL && destCapacity>0) ||
+        src==NULL
+    ) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
     if(!_haveData(*pErrorCode)) {
         return 0;
     }
@@ -2480,7 +2492,7 @@ unorm_previous(UCharIterator *src,
             destLength=u_terminateUChars(dest, destCapacity, bufferLength, pErrorCode);
         }
     } else {
-        destLength=0;
+        destLength=u_terminateUChars(dest, destCapacity, 0, pErrorCode);
     }
 
     /* cleanup */
@@ -2632,6 +2644,18 @@ unorm_next(UCharIterator *src,
     int32_t bufferLength, bufferCapacity, destLength;
     UChar minC;
 
+    /* check argument values */
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+
+    if( destCapacity<0 || (dest==NULL && destCapacity>0) ||
+        src==NULL
+    ) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
     if(!_haveData(*pErrorCode)) {
         return 0;
     }
@@ -2717,7 +2741,7 @@ unorm_next(UCharIterator *src,
             destLength=u_terminateUChars(dest, destCapacity, bufferLength, pErrorCode);
         }
     } else {
-        destLength=0;
+        destLength=u_terminateUChars(dest, destCapacity, 0, pErrorCode);
     }
 
     /* cleanup */
@@ -2733,3 +2757,143 @@ unorm_next(UCharIterator *src,
  * and if not, how hard it would be to improve it.
  * For example, see _findSafeFCD().
  */
+
+/* Concatenation of normalized strings -------------------------------------- */
+
+U_CAPI int32_t U_EXPORT2
+unorm_concatenate(const UChar *left, int32_t leftLength,
+                  const UChar *right, int32_t rightLength,
+                  UChar *dest, int32_t destCapacity,
+                  UNormalizationMode mode, int32_t options,
+                  UErrorCode *pErrorCode) {
+    UChar stackBuffer[100];
+    UChar *buffer;
+    int32_t bufferLength, bufferCapacity;
+
+    UCharIterator iter;
+    int32_t leftBoundary, rightBoundary, destLength;
+
+    /* check argument values */
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+
+    if( destCapacity<0 || (dest==NULL && destCapacity>0) ||
+        left==NULL || leftLength<-1 ||
+        right==NULL || rightLength<-1
+    ) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    /* check for overlapping right and destination */
+    if( dest!=NULL &&
+        ((right>=dest && right<(dest+destCapacity)) ||
+         (rightLength>0 && dest>=right && dest<(right+rightLength)))
+    ) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    /* allow left==dest */
+
+    /* set up intermediate buffer */
+    buffer=stackBuffer;
+    bufferCapacity=(int32_t)(sizeof(stackBuffer)/U_SIZEOF_UCHAR);
+
+    /*
+     * Input: left[0..leftLength[ + right[0..rightLength[
+     *
+     * Find normalization-safe boundaries leftBoundary and rightBoundary
+     * and copy the end parts together:
+     * buffer=left[leftBoundary..leftLength[ + right[0..rightBoundary[
+     *
+     * dest=left[0..leftBoundary[ +
+     *      normalize(buffer) +
+     *      right[rightBoundary..rightLength[
+     */
+
+    /*
+     * find a normalization boundary at the end of the left string
+     * and copy the end part into the buffer
+     */
+    uiter_setString(&iter, left, leftLength);
+    iter.index=leftLength=iter.length; /* end of left string */
+
+    bufferLength=unorm_previous(&iter, buffer, bufferCapacity,
+                                mode, options,
+                                FALSE, NULL,
+                                pErrorCode);
+    leftBoundary=iter.index;
+    if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+        if(!u_growBufferFromStatic(stackBuffer, &buffer, &bufferCapacity, 2*bufferLength, 0)) {
+            *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
+        }
+
+        /* just copy from the left string: we know the boundary already */
+        uprv_memcpy(buffer, left+leftBoundary, bufferLength*U_SIZEOF_UCHAR);
+    }
+    if(U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+
+    /*
+     * find a normalization boundary at the beginning of the right string
+     * and concatenate the beginning part to the buffer
+     */
+    uiter_setString(&iter, right, rightLength);
+    rightLength=iter.length; /* in case it was -1 */
+
+    rightBoundary=unorm_next(&iter, buffer+bufferLength, bufferCapacity-bufferLength,
+                             mode, options,
+                             FALSE, NULL,
+                             pErrorCode);
+    if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+        if(!u_growBufferFromStatic(stackBuffer, &buffer, &bufferCapacity, bufferLength+rightBoundary, 0)) {
+            *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
+        }
+
+        /* just copy from the right string: we know the boundary already */
+        uprv_memcpy(buffer+bufferLength, right, rightBoundary*U_SIZEOF_UCHAR);
+    }
+    if(U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+    bufferLength+=rightBoundary;
+
+    /* copy left[0..leftBoundary[ to dest */
+    if(left!=dest && leftBoundary>0 && destCapacity>0) {
+        uprv_memcpy(dest, left, uprv_min(leftBoundary, destCapacity)*U_SIZEOF_UCHAR);
+    }
+    destLength=leftBoundary;
+
+    /* concatenate the normalization of the buffer to dest */
+    if(destCapacity>destLength) {
+        destLength+=unorm_internalNormalize(dest+destLength, destCapacity-destLength,
+                                            buffer, bufferLength,
+                                            mode, (UBool)((options&(UNORM_IGNORE_HANGUL|1))!=0),
+                                            pErrorCode);
+    } else {
+        destLength+=unorm_internalNormalize(NULL, 0,
+                                            buffer, bufferLength,
+                                            mode, (UBool)((options&(UNORM_IGNORE_HANGUL|1))!=0),
+                                            pErrorCode);
+    }
+
+    /* concatenate right[rightBoundary..rightLength[ to dest */
+    right+=rightBoundary;
+    rightLength-=rightBoundary;
+    if(rightLength>0 && destCapacity>destLength) {
+        uprv_memcpy(dest+destLength, right, uprv_min(rightLength, destCapacity-destLength)*U_SIZEOF_UCHAR);
+    }
+    destLength+=rightLength;
+
+    /* cleanup */
+    if(buffer!=stackBuffer) {
+        uprv_free(buffer);
+    }
+
+    return u_terminateUChars(dest, destCapacity, destLength, pErrorCode);
+}

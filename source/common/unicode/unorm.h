@@ -16,6 +16,7 @@
 #define UNORM_H
 
 #include "unicode/utypes.h"
+#include "unicode/uiter.h"
 
 /**
  * \file
@@ -372,5 +373,49 @@ unorm_previous(UCharIterator *src,
                UNormalizationMode mode, int32_t options,
                UBool doNormalize, UBool *pNeededToNormalize,
                UErrorCode *pErrorCode);
+
+/*
+ * Concatenate normalized strings, making sure that the result is normalized as well.
+ *
+ * If both the left and the right strings are in
+ * the normalization form according to "mode",
+ * then the result will be
+ *
+ * \code
+ *     dest=normalize(left+right, mode)
+ * \endcode
+ *
+ * With the input strings already being normalized,
+ * this function will use unorm_next() and unorm_previous()
+ * to find the adjacent end pieces of the input strings.
+ * Only the concatenation of these end pieces will be normalized and
+ * then concatenated with the remaining parts of the input strings.
+ *
+ * It is allowed to have dest==left to avoid copying the entire left string.
+ *
+ * @param left Left source string, may be same as dest.
+ * @param leftLength Length of left source string, or -1 if NUL-terminated.
+ * @param right Right source string.
+ * @param rightLength Length of right source string, or -1 if NUL-terminated.
+ * @param dest The output buffer; can be NULL if destCapacity==0 for pure preflighting.
+ * @param destCapacity The number of UChars that fit into dest.
+ * @param mode The normalization mode.
+ * @param options A bit set of normalization options.
+ * @param pErrorCode ICU error code in/out parameter.
+ *                   Must fulfill U_SUCCESS before the function call.
+ * @return Length of output (number of UChars) when successful or buffer overflow.
+ *
+ * @see unorm_normalize
+ * @see unorm_next
+ * @see unorm_previous
+ *
+ * @draft ICU 2.1
+ */
+U_CAPI int32_t U_EXPORT2
+unorm_concatenate(const UChar *left, int32_t leftLength,
+                  const UChar *right, int32_t rightLength,
+                  UChar *dest, int32_t destCapacity,
+                  UNormalizationMode mode, int32_t options,
+                  UErrorCode *pErrorCode);
 
 #endif
