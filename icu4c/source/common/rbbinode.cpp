@@ -269,7 +269,7 @@ void   RBBINode::findNodes(UVector *dest, RBBINode::NodeType kind, UErrorCode &s
 //    print.         Print out a single node, for debugging.
 //
 //-------------------------------------------------------------------------
-static const char *nodeTypeNames[] = {
+static const char * const nodeTypeNames[] = {
             "setRef",
             "uset",
             "varRef",
