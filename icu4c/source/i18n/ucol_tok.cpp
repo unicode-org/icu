@@ -542,7 +542,7 @@ int32_t ucol_uprv_tok_readOption(const UChar *start, const UChar *end, const UCh
 static
 uint8_t ucol_uprv_tok_readAndSetOption(UColTokenParser *src, UErrorCode *status) {
   const UChar* start = src->current;
-  uint32_t i = 0;
+  int32_t i = 0;
   int32_t j=0;
   const UChar *optionArg = NULL;
 
@@ -1533,37 +1533,43 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
   
   // first we need to find options that don't like to be normalized,
   // like copy and remove...
-  const UChar *openBrace = rules;
+  //const UChar *openBrace = rules;
   int32_t optionNumber = -1;
   const UChar *setStart;
-  while((openBrace = u_strchr(openBrace, 0x005B)) != NULL) { // find open braces
-    optionNumber = ucol_uprv_tok_readOption(openBrace+1, rules+rulesLength, &setStart);
-    if(optionNumber == 13) { /* copy - parts of UCA to tailoring */
-      USet *newSet = ucol_uprv_tok_readAndSetUnicodeSet(setStart, rules+rulesLength, status);
-      if(U_SUCCESS(*status)) {
-        if(src->copySet == NULL) {
-          src->copySet = newSet;
+  uint32_t i = 0;
+  while(i < rulesLength) {
+    if(rules[i] == 0x005B) {
+      // while((openBrace = u_strchr(openBrace, 0x005B)) != NULL) { // find open braces
+      //optionNumber = ucol_uprv_tok_readOption(openBrace+1, rules+rulesLength, &setStart);
+      optionNumber = ucol_uprv_tok_readOption(rules+i+1, rules+rulesLength, &setStart);
+      if(optionNumber == 13) { /* copy - parts of UCA to tailoring */
+        USet *newSet = ucol_uprv_tok_readAndSetUnicodeSet(setStart, rules+rulesLength, status);
+        if(U_SUCCESS(*status)) {
+          if(src->copySet == NULL) {
+            src->copySet = newSet;
+          } else {
+            ((UnicodeSet *)src->copySet)->addAll(*((UnicodeSet *)newSet));
+            uset_close(newSet);
+          }
         } else {
-          ((UnicodeSet *)src->copySet)->addAll(*((UnicodeSet *)newSet));
-          uset_close(newSet);
+          return;
         }
-      } else {
-        return;
-      }
-    } else if(optionNumber == 14) {
-      USet *newSet = ucol_uprv_tok_readAndSetUnicodeSet(setStart, rules+rulesLength, status);
-      if(U_SUCCESS(*status)) {
-        if(src->removeSet == NULL) {
-          src->removeSet = newSet;
+      } else if(optionNumber == 14) {
+        USet *newSet = ucol_uprv_tok_readAndSetUnicodeSet(setStart, rules+rulesLength, status);
+        if(U_SUCCESS(*status)) {
+          if(src->removeSet == NULL) {
+            src->removeSet = newSet;
+          } else {
+            ((UnicodeSet *)src->removeSet)->addAll(*((UnicodeSet *)newSet));
+            uset_close(newSet);
+          }
         } else {
-          ((UnicodeSet *)src->removeSet)->addAll(*((UnicodeSet *)newSet));
-          uset_close(newSet);
+          return;
         }
-      } else {
-        return;
       }
     }
-    openBrace++;
+    //openBrace++;
+    i++;
   }
 
   src->source = (UChar *)uprv_malloc(estimatedSize*sizeof(UChar));
