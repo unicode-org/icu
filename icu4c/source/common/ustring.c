@@ -615,7 +615,7 @@ U_CAPI int32_t U_EXPORT2
 u_strcasecmp(const UChar *s1, const UChar *s2, uint32_t options) {
     UChar t1[32], t2[32]; /* temporary buffers holding case-folded parts of s1 and s2 */
     UChar32 c;
-    UChar c2;
+    UChar uc;
     int32_t pos1, pos2, len1, len2, result;
 
     if(!uprv_haveProperties()) {
@@ -644,8 +644,8 @@ u_strcasecmp(const UChar *s1, const UChar *s2, uint32_t options) {
         if(pos1>=len1) {
             c=*s1++;
             if(c!=0) {
-                if(UTF_IS_FIRST_SURROGATE(c) && UTF_IS_SECOND_SURROGATE(c2=*s1)) {
-                    c=UTF16_GET_PAIR_VALUE(c, c2);
+                if(UTF_IS_FIRST_SURROGATE(c) && UTF_IS_SECOND_SURROGATE(uc=*s1)) {
+                    c=UTF16_GET_PAIR_VALUE(c, uc);
                     ++s1;
                 }
                 len1=u_internalFoldCase(c, t1, options);
@@ -659,8 +659,8 @@ u_strcasecmp(const UChar *s1, const UChar *s2, uint32_t options) {
         if(pos2>=len2) {
             c=*s2++;
             if(c!=0) {
-                if(UTF_IS_FIRST_SURROGATE(c) && UTF_IS_SECOND_SURROGATE(c2=*s2)) {
-                    c=UTF16_GET_PAIR_VALUE(c, c2);
+                if(UTF_IS_FIRST_SURROGATE(c) && UTF_IS_SECOND_SURROGATE(uc=*s2)) {
+                    c=UTF16_GET_PAIR_VALUE(c, uc);
                     ++s2;
                 }
                 len2=u_internalFoldCase(c, t2, options);
@@ -684,7 +684,7 @@ u_internalStrcasecmp(const UChar *s1, int32_t length1,
                      uint32_t options) {
     UChar t1[32], t2[32]; /* temporary buffers holding case-folded parts of s1 and s2 */
     UChar32 c;
-    UChar c2;
+    UChar uc;
     int32_t pos1, pos2, len1, len2, result;
 
     if(!uprv_haveProperties()) {
@@ -726,8 +726,8 @@ u_internalStrcasecmp(const UChar *s1, int32_t length1,
         if(pos1>=len1) {
             if(length1>0) {
                 c=*s1++;
-                if(UTF_IS_FIRST_SURROGATE(c) && UTF_IS_SECOND_SURROGATE(c2=*s1)) {
-                    c=UTF16_GET_PAIR_VALUE(c, c2);
+                if(UTF_IS_FIRST_SURROGATE(c) && UTF_IS_SECOND_SURROGATE(uc=*s1)) {
+                    c=UTF16_GET_PAIR_VALUE(c, uc);
                     ++s1;
                     length1-=2;
                 } else {
@@ -744,8 +744,8 @@ u_internalStrcasecmp(const UChar *s1, int32_t length1,
         if(pos2>=len2) {
             if(length2>0) {
                 c=*s2++;
-                if(UTF_IS_FIRST_SURROGATE(c) && UTF_IS_SECOND_SURROGATE(c2=*s2)) {
-                    c=UTF16_GET_PAIR_VALUE(c, c2);
+                if(UTF_IS_FIRST_SURROGATE(c) && UTF_IS_SECOND_SURROGATE(uc=*s2)) {
+                    c=UTF16_GET_PAIR_VALUE(c, uc);
                     ++s2;
                     length2-=2;
                 } else {
