@@ -779,12 +779,18 @@ int main(int argc, char **argv)
 
     int verbose = 0;
 
-    // Prettify pname.
-    for (pname = *argv + strlen(*argv) - 1;
-        pname != *argv && *pname != U_FILE_SEP_CHAR; --pname)
-            ;
-    if (*pname == U_FILE_SEP_CHAR)
+    // Get and prettify pname.
+    pname = uprv_strrchr(*argv, U_FILE_SEP_CHAR);
+#ifdef WIN32
+    if (!pname) {
+        pname = uprv_strrchr(*argv, '/');
+    }
+#endif
+    if (!pname) {
+        pname = *argv;
+    } else {
         ++pname;
+    }
 
     // First, get the arguments from command-line
     // to know the codepages to convert between
