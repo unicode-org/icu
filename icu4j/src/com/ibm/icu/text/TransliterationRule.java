@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRule.java,v $ 
- * $Date: 2000/08/30 20:40:30 $ 
- * $Revision: 1.24 $
+ * $Date: 2000/11/29 19:12:32 $ 
+ * $Revision: 1.25 $
  *
  *****************************************************************************************
  */
@@ -44,7 +44,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.24 $ $Date: 2000/08/30 20:40:30 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.25 $ $Date: 2000/11/29 19:12:32 $
  */
 class TransliterationRule {
     /**
@@ -152,7 +152,9 @@ class TransliterationRule {
      * <code>output.length()</code> then an exception is thrown.
      * @param cursorOffset an offset to be added to cursorPos to position the
      * cursor either in the ante context, if < 0, or in the post context, if >
-     * 0.
+     * 0.  For example, the rule "abc{def} > | @@@ xyz;" changes "def" to
+     * "xyz" and moves the cursor to before "a".  It would have a cursorOffset
+     * of -3.
      * @param segs array of 2n integers.  Each of n pairs consists of offset,
      * limit for a segment of the input string.  Characters in the output string
      * refer to these segments if they are in a special range determined by the
@@ -599,6 +601,9 @@ class TransliterationRule {
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.25  2000/11/29 19:12:32  alan4j
+ * Update docs
+ *
  * Revision 1.24  2000/08/30 20:40:30  alan4j
  * Implement anchors.
  *
