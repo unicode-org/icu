@@ -85,9 +85,12 @@ class U_COMMON_API ICUNotifier : public UMemory  {
    }
 
  virtual ~ICUNotifier(void) {
-   Mutex lmx(&notifyLock);
-   delete listeners;
-   listeners = NULL;
+   {
+     Mutex lmx(&notifyLock);
+     delete listeners;
+     listeners = NULL;
+   }
+   umtx_destroy(&notifyLock);
  }
 
  /**

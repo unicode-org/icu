@@ -637,7 +637,6 @@ ICUServiceTest::testAPI_Two()
         service.registerFactory(f, status);
     }
 
-
     // iterate over the visual ids returned by the multiple factory
     {
         UErrorCode status = U_ZERO_ERROR;
@@ -648,6 +647,7 @@ ICUServiceTest::testAPI_Two()
             UnicodeString* result = (UnicodeString*)service.get(*id, status);
             if (result) {
                 logln("  " + *id + " --> " + *result);
+                delete result;
             } else {
                 errln("could not find " + *id);
             }
@@ -1360,6 +1360,8 @@ void ICUServiceTest::testCoverage()
     }
     delete obj;
   }
+
+  delete key;
 
 #if 0
   // ResourceBundleFactory
