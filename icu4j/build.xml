@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2000/04/13 23:08:38 $ 
-* $Revision: 1.6 $
+* $Date: 2000/04/14 00:20:03 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -20,6 +20,7 @@
     <property name="src.dir" value="src"/>
     <property name="doc.dir" value="doc"/>
     <property name="build.dir" value="classes"/>
+    <property name="jar.file" value="icu4j.jar"/>
     <property name="classpath" value="${build.dir}"/>
     <property name="build.compiler" value="classic"/>
   </target>
@@ -86,13 +87,15 @@
   </target>
 
   <target name="jar" depends="core">
-     <jar jarfile="ICU4J.jar" basedir="${build.dir}"/>
+     <jar jarfile="${jar.file}"
+          includes="com/ibm/util/**/*,com/ibm/text/**/*,com/ibm/math/**/*"
+          basedir="${build.dir}"/>
   </target>
 
   <target name="clean">
     <deltree dir="${build.dir}"/>
     <deltree dir="${doc.dir}"/>
-    <deltree dir="ICU4J.jar"/>
+    <delete  file="${jar.file}"/>
   </target>
 
 </project>
