@@ -25,8 +25,8 @@ import java.util.Locale;
 public class CollationMiscTest extends TestFmwk{
 
     public static void main(String[] args) throws Exception {
-        // new CollationMiscTest().run(args);
-        new CollationMiscTest().TestRuleOptions();
+        new CollationMiscTest().run(args);
+        // new CollationMiscTest().TestRuleOptions();
     }
     
     public void TestRuleOptions() {
@@ -1416,7 +1416,7 @@ public class CollationMiscTest extends TestFmwk{
         String[] testrules = {
             "&A = AB / B",
             "&A = A\\u0306/\\u0306",
-            "&c = ch / h"
+            "&c = ch / h",
         };
         String[] testdata = {
             "AB", "AB", "A\u0306", "ch"
@@ -1563,5 +1563,19 @@ public class CollationMiscTest extends TestFmwk{
             }
         }
     }
-
+    
+    public void TestContractionEndCompare()
+    {
+        String rules = "&b=ch";
+        String src = "bec";
+        String tgt = "bech";
+        Collator coll = null;
+        try {
+            coll = new RuleBasedCollator(rules);
+        } catch (Exception e) {
+            errln("Collator creation failed " + rules);
+            return;
+        }
+        doTest(coll, src, tgt, 1);
+    }
 }
