@@ -163,13 +163,17 @@ static const UDataInfo dataInfo={
 void writeConverterData(UConverterSharedData *mySharedData, const char *cName, UErrorCode *status)
 {
   UNewDataMemory *mem;
-  void *data;
-  const char *cnvName;
+  const char *cnvName, *cnvName2;
 
-  uint32_t sz ;
   uint32_t sz2;
 
   cnvName = icu_strrchr(cName, '/');
+  cnvName2 = icu_strrchr(cName, '\\'); /* aliu - this is for Windows - what we
+                                          really need is a platform-independent
+                                          call to get the path separator */
+  if (cnvName2 > cnvName) {
+      cnvName = cnvName2; /* assume unix names don't contain '\\'! */
+  }
   if(cnvName)
     {
       cnvName++;
@@ -181,9 +185,6 @@ void writeConverterData(UConverterSharedData *mySharedData, const char *cName, U
   mem = udata_create("cnv", cnvName, &dataInfo, UCNV_COPYRIGHT_STRING, status);
   
   WriteConverterSharedData(mem, mySharedData);
-
-  // Temporarily disabled -- sz and data are uninitialized! -aliu
-  //udata_writeBlock(mem, data, sz);
 
   sz2 = udata_finish(mem, status);
   
