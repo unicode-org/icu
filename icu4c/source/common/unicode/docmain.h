@@ -174,10 +174,15 @@
  *     <td>usprep.h</td>
  *     <td>usprep.h C API</td>
  *   </tr>
-  *   <tr>
+ *   <tr>
  *     <td>International Domain Names in Applications</td>
  *     <td>uidna.h</td>
  *     <td>uidna.h C API</td>
+ *   </tr>
+ *   <tr>
+ *     <td>Universal Time Scale</td>
+ *     <td>utmscale.h</td>
+ *     <td>utmscale.h C API</td>
  *   </tr>
  * </table>
  */
