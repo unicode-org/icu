@@ -111,11 +111,6 @@ utrace_level;
  * In C code, must be placed immediately after the last variable declaration.
  * Must be matched with UTRACE_EXIT() at all function exit points.
  *
- * Tracing should start with UTRACE_ENTRY after checking for
- * U_FAILURE at function entry, so that if a function returns immediately
- * because of a pre-existing error condition, it does not show up in the trace,
- * consistent with ICU's error handling model.
- *
  * @param fnNumber The UTraceFunctionNumber for the current function.
  * @internal
  */
