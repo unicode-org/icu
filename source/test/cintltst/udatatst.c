@@ -28,7 +28,7 @@ void TestUDataOpenChoiceDemo1();
 void TestUDataOpenChoiceDemo2(); 
 void TestUDataGetInfo();
 void TestUDataGetMemory();
-
+void TestErrorConditions();
 
 void
 addUDataTest(TestNode** root)
@@ -38,6 +38,8 @@ addUDataTest(TestNode** root)
   addTest(root, &TestUDataOpenChoiceDemo2, "udatatst/TestUDataOpenChoiceDemo2"); 
   addTest(root, &TestUDataGetInfo,    "udatatst/TestUDataGetInfo"   );
   addTest(root, &TestUDataGetMemory,  "udatatst/TestUDataGetMemory" );
+  addTest(root, &TestErrorConditions, "udatatst/TestErrorConditions");
+
 
 }
 
@@ -443,6 +445,122 @@ void TestUDataGetMemory() {
 
 	 free(testPath);
  }
+void TestErrorConditions(){
+   
+   UDataMemory *result=NULL;
+   UErrorCode status=U_ZERO_ERROR;
+   uint16_t* intValue=0;
+   static UDataInfo dataInfo={
+    30,    /*sizeof(UDataInfo),*/
+    0,
+
+    U_IS_BIG_ENDIAN,
+    U_CHARSET_FAMILY,
+    sizeof(UChar),
+    0,
+
+    0x54, 0x65, 0x73, 0x74,     /* dataFormat="Test" */
+    9, 0, 0, 0,                 /* formatVersion */
+    4, 0, 0, 0                  /* dataVersion */
+	};
+
+   const char* name = "test";
+   const char* type="dat";
+   
+   char* path=malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("icudata") +1 ) );
+   char* testPath=malloc(sizeof(char) * (strlen(u_getDataDirectory()) + strlen("base") +1 ) );
+
+   strcat(strcpy(path, u_getDataDirectory()), "icudata");
+   strcat(strcpy(testPath, u_getDataDirectory()), "base");
+
+   status = U_ILLEGAL_ARGUMENT_ERROR;
+   /*Try udata_open with status != U_ZERO_ERROR*/
+   log_verbose("Testing udata_open() with status != U_ZERO_ERROR\n");
+   result=udata_open(testPath, type, name, &status);
+   if(result != NULL){
+ 	  log_err("FAIL: udata_open() is supposed to fail for path = %s, name=%s, type=%s, \n errorcode !=U_ZERO_ERROR\n", testPath, name, type);
+      udata_close(result);
+ 
+   } else {
+	   log_verbose("PASS: udata_open with errorCode != U_ZERO_ERROR failed as expected\n");
+   }
+   
+   /*Try udata_open with data name=NULL*/
+   log_verbose("Testing udata_open() with data name=NULL\n");
+   status=U_ZERO_ERROR;
+   result=udata_open(testPath, type, NULL, &status);
+   if(U_FAILURE(status)){
+       if(status != U_ILLEGAL_ARGUMENT_ERROR || result != NULL){
+            log_err("FAIL: udata_open() with name=NULL should return NULL and errocode U_ILLEGAL_ARGUMENT_ERROR, GOT: errorcode=%s\n", myErrorName(status));
+       }else{
+            log_verbose("PASS: udata_open with name=NULL failed as expected and errorcode = %s as expected\n", myErrorName(status));
+       }    
+   }else{
+       log_err("FAIL: udata_open() with data name=NULL is supposed to fail for path = %s, name=NULL type=%s errorcode=U_ZERO_ERROR \n", testPath, type);
+       udata_close(result);
+   }
 
 
+     /*Try udata_openChoice with status != U_ZERO_ERROR*/
+   log_verbose("Testing udata_openChoice() with status != U_ZERO_ERROR\n");
+   status=U_ILLEGAL_ARGUMENT_ERROR;
+   result=udata_openChoice(testPath, type, name, isAcceptable3, NULL, &status);
+   if(result != NULL){
+ 	  log_err("FAIL: udata_openChoice() is supposed to fail for path = %s, name=%s, type=%s, \n errorcode != U_ZERO_ERROR\n", testPath, name, type);
+      udata_close(result);
+ 
+   } else {
+	   log_verbose("PASS: udata_openChoice() with errorCode != U_ZERO_ERROR failed as expected\n");
+   }
+
+   /*Try udata_open with data name=NULL*/
+   log_verbose("Testing udata_openChoice() with data name=NULL\n");
+   status=U_ZERO_ERROR;
+   result=udata_openChoice(testPath, type, NULL, isAcceptable3, NULL, &status);
+   if(U_FAILURE(status)){
+       if(status != U_ILLEGAL_ARGUMENT_ERROR || result != NULL){
+            log_err("FAIL: udata_openChoice() with name=NULL should return NULL and errocode U_ILLEGAL_ARGUMENT_ERROR, GOT: errorcode=%s\n", myErrorName(status));
+       }else{
+            log_verbose("PASS: udata_openChoice with name=NULL failed as expected and errorcode = %s as expected\n", myErrorName(status));
+       }    
+   }else{
+       log_err("FAIL: udata_openChoice() with data name=NULL is supposed to fail for path = %s, name=NULL type=%s errorcode=U_ZERO_ERROR \n", testPath, type);
+       udata_close(result);
+   }
+
+   /*Try udata_getMemory with UDataMemory=NULL*/
+   log_verbose("Testing udata_getMemory with UDataMemory=NULL\n");
+   intValue=(uint16_t*)udata_getMemory(NULL);
+   if(intValue != NULL){
+       log_err("FAIL: udata_getMemory with UDataMemory = NULL is supposed to fail\n");
+   }
+  
+   /*Try udata_getInfo with UDataMemory=NULL*/
+   status=U_ZERO_ERROR;
+   udata_getInfo(NULL, &dataInfo);
+   if(dataInfo.size != 0){
+       log_err("FAIL : udata_getInfo with UDataMemory = NULL us supposed to fail\n");
+   }
+
+   /*Try udata_openChoice with a non existing binary file*/
+   log_verbose("Testing udata_openChoice() with a non existing binary file\n");
+   result=udata_openChoice(testPath, "tst", "nonexist", isAcceptable3, NULL, &status);
+   if(status==U_FILE_ACCESS_ERROR){
+	  log_verbose("Opening udata_openChoice with non-existing file handled correctly.\n");
+	  status=U_ZERO_ERROR;
+   } else {
+	  log_err("calling udata_open with non-existing file not handled correctly\n.  Expected: U_FILE_ACCESS_ERROR, Got: %s\n", myErrorName(status));
+		 if(U_SUCCESS(status)) {
+			udata_close(result);
+         }
+   }
+
+   if(result != NULL){
+	  log_err("calling udata_open with non-existing file didn't return a null value\n");
+   } else {
+		log_verbose("calling udat_open with non-existing file returned null as expected\n");
+   }
+   
+      
+}
 
