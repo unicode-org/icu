@@ -384,6 +384,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         if (x.hashCode() != z.hashCode()) 
             errln("FAIL: identical objects have different hashcodes");
         
+	/* These are not errors
         y.setLocale(ULocale.FRENCH);
         if (x.hashCode() == y.hashCode()) 
             errln("FAIL: different objects have same hashcodes. Locale ignored");
@@ -391,7 +392,8 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         z.applyPattern("There are {0} files on {1} the disk");
         if (x.hashCode() == z.hashCode()) 
             errln("FAIL: different objects have same hashcodes. Pattern ignored");
-            
+	*/
+  
         ULocale.setDefault(save);
     }
     
