@@ -1252,7 +1252,7 @@ en {
         Taml { "Tamil" }
         Telu { "Telugu" }
         Tglg { "Tagalog" }
-        Thaa { "Thana" }
+        Thaa { "Thaana" }
         //Thai { "Thai" } // Just happens to be a duplicate
         Tibt { "Tibetan" }
         Ugar { "Ugaritic" }
