@@ -279,8 +279,8 @@ static const u_sscanf_info g_u_sscanf_infos[108] = {
 #define USCANF_BASE_FMT_HANDLERS 0x20
 
 int32_t 
-u_sscanf(UChar         *buffer,
-         const char     *locale,
+u_sscanf(const UChar   *buffer,
+         const char    *locale,
          const char    *patternSpecification,
          ... )
 {
@@ -295,7 +295,7 @@ u_sscanf(UChar         *buffer,
 }
 
 int32_t 
-u_sscanf_u(UChar         *buffer,
+u_sscanf_u(const UChar    *buffer,
            const char     *locale,
            const UChar    *patternSpecification,
            ... )
@@ -311,8 +311,8 @@ u_sscanf_u(UChar         *buffer,
 }
 
 U_CAPI int32_t  U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
-u_vsscanf(UChar         *buffer,
-          const char     *locale,
+u_vsscanf(const UChar   *buffer,
+          const char    *locale,
           const char    *patternSpecification,
           va_list        ap)
 {
@@ -1196,25 +1196,25 @@ u_sscanf_scanset_handler(u_localized_string    *input,
 #define UP_PERCENT 0x0025
 
 U_CAPI int32_t  U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
-u_vsscanf_u(UChar         *buffer,
+u_vsscanf_u(const UChar    *buffer,
             const char     *locale,
             const UChar    *patternSpecification,
             va_list        ap)
 {
-    const UChar         *alias;
+    const UChar     *alias;
     int32_t         count, converted, temp;
-    uint16_t      handlerNum;
+    uint16_t        handlerNum;
 
     ufmt_args       args;
     u_localized_string inStr;
-    u_sscanf_spec         spec;
-    ufmt_type_info    info;
+    u_sscanf_spec   spec;
+    ufmt_type_info  info;
     u_sscanf_handler handler;
 
     /* alias the pattern */
     alias = patternSpecification;
 
-    inStr.str = buffer;
+    inStr.str = (UChar *)buffer;
     inStr.len = u_strlen(buffer);
     inStr.pos = 0;
 
