@@ -232,6 +232,10 @@ SOURCE=.\cstrtest.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\ctstdep.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\cturtst.c
 # End Source File
 # Begin Source File
