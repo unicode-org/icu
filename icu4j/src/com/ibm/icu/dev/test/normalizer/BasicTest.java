@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/BasicTest.java,v $ 
- * $Date: 2000/07/18 18:21:27 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/07/18 18:41:22 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -302,16 +302,24 @@ public class BasicTest extends TestFmwk {
 //      }
     }
 
-    public void TestComposeCompat() {
+    /**
+     * Test for a problem that showed up just before ICU 1.6 release
+     * having to do with combining characters with an index of zero.
+     * Such characters do not participate in any canonical
+     * decompositions.  However, having an index of zero means that
+     * they all share one typeMask[] entry, that is, they all have to
+     * map to the same canonical class, which is not the case, in
+     * reality.
+     */
+    public void TestZeroIndex() {
         String[] DATA = {
             // Expect col1 x COMPOSE_COMPAT => col2
             // Expect col2 x DECOMP => col3
             "A\u0316\u0300", "\u00C0\u0316", "A\u0316\u0300",
             "A\u0300\u0316", "\u00C0\u0316", "A\u0316\u0300",
-            "\u00C0\u0316",  "\u00C0\u0316", "A\u0316\u0300",
-            "A\u0300",       "\u00C0",       "A\u0300",
             "A\u0327\u0300", "\u00C0\u0327", "A\u0327\u0300",
             "c\u0321\u0327", "c\u0321\u0327", "c\u0321\u0327",
+            "c\u0327\u0321", "\u00E7\u0321", "c\u0327\u0321",
         };
 
         for (int i=0; i<DATA.length; i+=3) {
