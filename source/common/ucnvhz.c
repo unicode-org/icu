@@ -325,18 +325,6 @@ SAVE_STATE:
             break;
         }
     }
-    if((args->flush==TRUE)
-        && (mySource == mySourceLimit) 
-        && ( args->converter->toUnicodeStatus !=0x00)){
-            *err = U_TRUNCATED_CHAR_FOUND;
-            args->converter->toUnicodeStatus = 0x00;
-    }
-    /* Reset the state of converter if we consumed 
-     * the source and flush is true
-     */
-    if( (mySource == mySourceLimit) && args->flush){
-         _HZReset(args->converter, UCNV_RESET_TO_UNICODE);
-    }
 
     args->target = myTarget;
     args->source = mySource;
@@ -557,19 +545,6 @@ getTrail:
             break;
         }
         targetUniChar=missingCharMarker;
-    }
-    /*If at the end of conversion we are still carrying state information
-     *flush is TRUE, we can deduce that the input stream is truncated
-     */
-    if (args->converter->fromUSurrogateLead !=0 && (mySourceIndex == mySourceLength) && args->flush){
-        *err = U_TRUNCATED_CHAR_FOUND;
-        args->converter->toUnicodeStatus = 0x00;
-    }
-    /* Reset the state of converter if we consumed 
-     * the source and flush is true
-     */
-    if( (mySourceIndex == mySourceLength) && args->flush){
-        _HZReset(args->converter, UCNV_RESET_FROM_UNICODE);
     }
 
     args->target += myTargetIndex;

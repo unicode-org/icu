@@ -59,11 +59,11 @@ typedef enum UConverterResetChoice {
 
 typedef void (*UConverterReset) (UConverter *cnv, UConverterResetChoice choice);
 
-typedef void (*T_ToUnicodeFunction) (UConverterToUnicodeArgs *, UErrorCode *);
+typedef void (*UConverterToUnicode) (UConverterToUnicodeArgs *, UErrorCode *);
 
-typedef void (*T_FromUnicodeFunction) (UConverterFromUnicodeArgs *, UErrorCode *);
+typedef void (*UConverterFromUnicode) (UConverterFromUnicodeArgs *, UErrorCode *);
 
-typedef UChar32 (*T_GetNextUCharFunction) (UConverterToUnicodeArgs *, UErrorCode *);
+typedef UChar32 (*UConverterGetNextUChar) (UConverterToUnicodeArgs *, UErrorCode *);
 
 typedef void (*UConverterGetStarters)(const UConverter* converter,
                                       UBool starters[256],
@@ -116,20 +116,6 @@ typedef void (*UConverterGetUnicodeSet) (const UConverter *cnv,
 
 UBool CONVERSION_U_SUCCESS (UErrorCode err);
 
-void ucnv_flushInternalUnicodeBuffer (UConverter * _this,
-                                 UChar * myTarget,
-                                 int32_t * myTargetIndex,
-                                 int32_t targetLength,
-                                 int32_t** offsets,
-                                 UErrorCode * err);
-
-void ucnv_flushInternalCharBuffer (UConverter * _this,
-                              char *myTarget,
-                              int32_t * myTargetIndex,
-                              int32_t targetLength,
-                              int32_t** offsets,
-                              UErrorCode * err);
-
 /**
  * UConverterImpl contains all the data and functions for a converter type.
  * Its function pointers work much like a C++ vtable.
@@ -156,11 +142,11 @@ struct UConverterImpl {
     UConverterClose close;
     UConverterReset reset;
 
-    T_ToUnicodeFunction toUnicode;
-    T_ToUnicodeFunction toUnicodeWithOffsets;
-    T_FromUnicodeFunction fromUnicode;
-    T_FromUnicodeFunction fromUnicodeWithOffsets;
-    T_GetNextUCharFunction getNextUChar;
+    UConverterToUnicode toUnicode;
+    UConverterToUnicode toUnicodeWithOffsets;
+    UConverterFromUnicode fromUnicode;
+    UConverterFromUnicode fromUnicodeWithOffsets;
+    UConverterGetNextUChar getNextUChar;
 
     UConverterGetStarters getStarters;
     UConverterGetName getName;
@@ -224,30 +210,12 @@ ucnv_updateCallbackOffsets(int32_t *offsets, int32_t length, int32_t sourceIndex
 #define UCNV_FROM_U_USE_FALLBACK(cnv, c) FROM_U_USE_FALLBACK((cnv)->useFallback, c)
 
 /**
- * This is a simple implementation of ucnv_getNextUChar() that uses the
- * converter's toUnicode() function.
- *
- * \par
- * A surrogate pair from a single byte sequence is always
- * combined to a supplementary code point.
- * A surrogate pair from consecutive byte sequences is only combined
- * if collectPairs is set. This is necessary for SCSU
- * but not allowed for most legacy codepages.
- *
- * @param pArgs The argument structure supplied by ucnv_getNextUChar()
- * @param toU   A function pointer to the converter's toUnicode() function
- * @param collectPairs indicates whether separate surrogate results from
- *                     consecutive byte sequences should be combined into
- *                     a single code point
- * @param pErrorCode An ICU error code parameter
- * @return The Unicode code point as a result of a conversion of a minimal
- *         number of input bytes
+ * Magic number for ucnv_getNextUChar(), returned by a
+ * getNextUChar() implementation to indicate to use the converter's toUnicode()
+ * instead of the native function.
+ * @internal
  */
-U_CFUNC UChar32
-ucnv_getNextUCharFromToUImpl(UConverterToUnicodeArgs *pArgs,
-                             T_ToUnicodeFunction toU,
-                             UBool collectPairs,
-                             UErrorCode *pErrorCode);
+#define UCNV_GET_NEXT_UCHAR_USE_TO_U -9
 
 U_CFUNC void
 ucnv_getCompleteUnicodeSet(const UConverter *cnv,

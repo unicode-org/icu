@@ -115,6 +115,7 @@ T_UConverter_toUnicode_InvalidChar_Callback(UConverterToUnicodeArgs * args,
                 converter->toUBytes,
                 converter->toULength);
     converter->invalidCharLength = converter->toULength;
+    converter->toULength = 0;
 
     /* Call the ErrorFunction */
     args->converter->fromCharErrorBehaviour(converter->toUContext,
@@ -200,19 +201,10 @@ morebytes:
                 }
                 else
                 {
-                    if (args->flush)
-                    {
-                        if (U_SUCCESS(*err))
-                        {
-                            *err = U_TRUNCATED_CHAR_FOUND;
-                        }
-                    }
-                    else
-                    {    /* stores a partially calculated target*/
-                        args->converter->toUnicodeStatus = ch;
-                        args->converter->mode = inBytes;
-                        args->converter->toULength = (int8_t) i;
-                    }
+                    /* stores a partially calculated target*/
+                    args->converter->toUnicodeStatus = ch;
+                    args->converter->mode = inBytes;
+                    args->converter->toULength = (int8_t) i;
                     goto donefornow;
                 }
             }
@@ -236,6 +228,7 @@ morebytes:
                 (isCESU8 ? i <= 3 : !UTF_IS_SURROGATE(ch)))
             {
                 /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
+                args->converter->toULength = 0;
                 if (ch <= MAXIMUM_UCS2) 
                 {
                     /* fits in 16 bits */
@@ -350,20 +343,9 @@ morebytes:
                 }
                 else
                 {
-                    if (args->flush)
-                    {
-                        if (U_SUCCESS(*err)) 
-                        {
-                            *err = U_TRUNCATED_CHAR_FOUND;
-                            args->converter->toUnicodeStatus = 0;
-                        }
-                    }
-                    else
-                    {
-                        args->converter->toUnicodeStatus = ch;
-                        args->converter->mode = inBytes;
-                        args->converter->toULength = (int8_t)i;
-                    }
+                    args->converter->toUnicodeStatus = ch;
+                    args->converter->mode = inBytes;
+                    args->converter->toULength = (int8_t)i;
                     goto donefornow;
                 }
             }
@@ -387,6 +369,7 @@ morebytes:
                 (isCESU8 ? i <= 3 : !UTF_IS_SURROGATE(ch)))
             {
                 /* Normal valid byte when the loop has not prematurely terminated (i < inBytes) */
+                args->converter->toULength = 0;
                 if (ch <= MAXIMUM_UCS2) 
                 {
                     /* fits in 16 bits */
@@ -604,11 +587,6 @@ lowsurrogate:
     {
         *err = U_BUFFER_OVERFLOW_ERROR;
     }
-    if(args->flush && mySource >= sourceLimit && cnv->fromUSurrogateLead != 0 && U_SUCCESS(*err)) {
-        /* a Unicode code point remains incomplete (only a first surrogate) */
-        *err = U_TRUNCATED_CHAR_FOUND;
-        cnv->fromUSurrogateLead = 0;
-    }
 
     args->target = (char *) myTarget;
     args->source = mySource;
@@ -786,11 +764,6 @@ lowsurrogate:
     if (mySource < sourceLimit && myTarget >= targetLimit && U_SUCCESS(*err))
     {
         *err = U_BUFFER_OVERFLOW_ERROR;
-    }
-    if(args->flush && mySource >= sourceLimit && cnv->fromUSurrogateLead != 0 && U_SUCCESS(*err)) {
-        /* a Unicode code point remains incomplete (only a first surrogate) */
-        *err = U_TRUNCATED_CHAR_FOUND;
-        cnv->fromUSurrogateLead = 0;
     }
 
     args->target = (char *) myTarget;
