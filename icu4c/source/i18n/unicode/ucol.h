@@ -479,29 +479,62 @@ U_STABLE int32_t U_EXPORT2
 ucol_countAvailable(void);
 
 /**
- * Create a string enumerator, owned by the caller, of all locales for
- * which a collator may be opened.
+ * Create a string enumerator of all locales for which a collator may
+ * be opened.
  * @param status input-output error code
- * @return a string enumeration over locale strings
+ * @return a string enumeration over locale strings. The caller is
+ * responsible for closing the result.
  * @draft ICU 3.0
  */
 U_DRAFT UEnumeration* U_EXPORT2
 ucol_openAvailableLocales(UErrorCode *status);
 
 /**
- * Given a keyword, return a string enumeration of all possible values
+ * Create a string enumerator of all keywords that are relevant to
+ * collation. At this point, the only recognized keyword for this
+ * service is "collation".
+ * @param status input-output error code
+ * @return a string enumeration over locale strings. The caller is
+ * responsible for closing the result.
+ * @draft ICU 3.0
+ */
+U_DRAFT UEnumeration* U_EXPORT2
+ucol_getKeywords(UErrorCode *status);
+
+/**
+ * Given a keyword, create a string enumeration of all possible values
  * for that keyword.
- * @param keyword a particular keyword to consider. At this point, the
- * only recognized keyword for this service is "collation". If any
- * other keyword is passed in, *status is set to
- * U_ILLEGAL_ARGUMENT_ERROR.
+ * @param keyword a particular keyword as enumerated by
+ * ucol_getKeywords. If any other keyword is passed in, *status is set
+ * to U_ILLEGAL_ARGUMENT_ERROR.
  * @param status input-output error code
  * @return a string enumeration over collation keyword values, or NULL
- * upon error
+ * upon error. The caller is responsible for closing the result.
  * @draft ICU 3.0
  */
 U_DRAFT UEnumeration* U_EXPORT2
 ucol_getKeywordValues(const char *keyword, UErrorCode *status);
+
+/**
+ * Return a functionally equivalent collation locale for the given
+ * requested locale.
+ * @param result fillin for the functionally equivalent locale
+ * @param resultCapacity capacity of the fillin buffer
+ * @param locale the requested locale
+ * @param isAvailable if non-NULL, pointer to a fillin parameter that
+ * indicates whether the requested locale was 'available' to the
+ * collation service. A locale is defined as 'available' if it
+ * physically exists within the collation locale data.
+ * @param status pointer to input-output error code
+ * @return the actual buffer size needed for the locale.  If greater
+ * than resultCapacity, the returned full name will be truncated and
+ * an error code will be returned.
+ * @draft ICU 3.0
+ */
+U_DRAFT int32_t U_EXPORT2
+ucol_getFunctionalEquivalent(char* result, int32_t resultCapacity,
+                             const char* locale, UBool* isAvailable,
+                             UErrorCode* status);
 
 /**
  * Get the collation rules from a UCollator.
