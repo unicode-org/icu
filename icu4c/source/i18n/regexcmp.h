@@ -99,6 +99,7 @@ private:
                                                      //   a reference to a UnicodeSet.
     void        compileInterval(int32_t InitOp,      // Generate the code for a {min,max} quantifier.
                                int32_t LoopOp);
+    UBool       compileInlineInterval();             // Generate inline code for a {min,max} quantifier
     void        literalChar(UChar32 c);              // Compile a literal char
     void        fixLiterals(UBool split=FALSE);      // Fix literal strings.
     void        insertOp(int32_t where);             // Open up a slot for a new op in the

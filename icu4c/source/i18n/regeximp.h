@@ -157,7 +157,13 @@ enum {
      URX_LBN_END       = 48,   // Negative LookBehind end
                                //   Parameter is the data location.
                                //   Check that the match ended at the right spot.
-     URX_STAT_SETREF_N = 49    // Operand is index of set in array of sets.   
+     URX_STAT_SETREF_N = 49,   // Reference to a prebuilt set (e.g. \w), negated  
+                               //   Operand is index of set in array of sets.
+     URX_LOOP_SR_I     = 50,   // Init a [set]* loop.
+                               //   Operand is the sets index in array of user sets.
+     URX_LOOP_C        = 51    // Continue a [set]* or OneChar* loop.
+                               //   Operand is a matcher static data location.
+                               //   Must always immediately follow  LOOP_x_I instruction.
 
 };           
 
@@ -213,7 +219,9 @@ enum {
         "LB_END",              \
         "LBN_CONT",            \
         "LBN_END",             \
-        "STAT_SETREF_N"        \
+        "STAT_SETREF_N",       \
+        "LOOP_SR_I",           \
+        "LOOP_C"
 
 
 //
@@ -287,11 +295,17 @@ enum StartOfMatch {
 //  8 bit set, to fast-path latin-1 set membership tests.
 //
 struct Regex8BitSet {
+    inline Regex8BitSet();
+    inline void operator = (const Regex8BitSet &s);
     inline void init(const UnicodeSet *src);
     inline UBool contains(UChar32 c);
     inline void  add(UChar32 c);
     int8_t d[32];
 };
+
+inline Regex8BitSet::Regex8BitSet() {
+    uprv_memset(d, 0, sizeof(d));
+}
 
 inline UBool Regex8BitSet::contains(UChar32 c) {
     // No bounds checking!  This is deliberate.
@@ -303,7 +317,6 @@ inline void  Regex8BitSet::add(UChar32 c) {
 };
 
 inline void Regex8BitSet::init(const UnicodeSet *s) {
-    uprv_memset(d, 0, sizeof(d));
     if (s != NULL) {
         for (int i=0; i<255; i++) {
             if (s->contains(i)) {
@@ -311,6 +324,10 @@ inline void Regex8BitSet::init(const UnicodeSet *s) {
             }
         }
     }
+}
+
+inline void Regex8BitSet::operator = (const Regex8BitSet &s) {
+   uprv_memcpy(d, s.d, sizeof(d));
 }
 
 

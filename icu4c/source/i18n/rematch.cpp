@@ -1922,6 +1922,87 @@ GC_Done:
             break;
 
 
+        case URX_LOOP_SR_I:
+            // Loop Initialization for the optimized implementation of
+            //     [some character set]*
+            //   This op scans through all matching input.
+            //   The following LOOP_C op emulates stack unwinding if the following pattern fails.
+            {
+                U_ASSERT(opValue > 0 && opValue < sets->size());
+                Regex8BitSet *s8 = &fPattern->fSets8[opValue];
+                UnicodeSet   *s  = (UnicodeSet *)sets->elementAt(opValue);
+
+                // Loop through input, until either the input is exhausted or
+                //   we reach a character that is not a member of the set.
+                int32_t ix = fp->fInputIdx;
+                for (;;) {
+                    if (ix >= inputLen) {
+                        break;
+                    }
+                    UChar32   c;
+                    U16_NEXT(inputBuf, ix, inputLen, c);
+                    if (c<256) {
+                        if (s8->contains(c) == FALSE) {
+                            U16_BACK_1(inputBuf, 0, ix);
+                            break;
+                        }
+                    } else {
+                        if (s->contains(c) == FALSE) {
+                            U16_BACK_1(inputBuf, 0, ix);
+                            break;
+                        }
+                    }
+                }
+
+                // If there were no matching characters, skip over the loop altogether.
+                //   The loop doesn't run at all, a * op always succeeds.
+                if (ix == fp->fInputIdx) {
+                    fp->fPatIdx++;   // skip the URX_LOOP_C op.
+                    break;
+                }
+
+                // Peek ahead in the compiled pattern, to the URX_LOOP_C that
+                //   must follow.  It's operand is the stack location
+                //   that holds the starting input index for the match of this [set]*
+                int32_t loopcOp = pat[fp->fPatIdx];
+                U_ASSERT(URX_TYPE(loopcOp) == URX_LOOP_C);
+                int32_t stackLoc = URX_VAL(loopcOp);
+                U_ASSERT(stackLoc >= 0 && stackLoc < frameSize);
+                fp->fExtra[stackLoc] = fp->fInputIdx;
+                fp->fInputIdx = ix;
+
+                // Save State to the URX_LOOP_C op that follows this one,
+                //   so that match failures in the following code will return to there.
+                //   Then bump the pattern idx so the LOOP_C is skipped on the way out of here.
+                fp = StateSave(fp, fp->fPatIdx, frameSize, status);
+                fp->fPatIdx++;
+            }
+            break;
+
+
+        case URX_LOOP_C:
+            {
+                U_ASSERT(opValue>=0 && opValue<frameSize);
+                int32_t   terminalIdx =  fp->fExtra[opValue];
+                U_ASSERT(terminalIdx <= fp->fInputIdx);
+                if (terminalIdx == fp->fInputIdx) {
+                    // We've backed up the input idx to the point that the loop started.
+                    // The loop is done.  Leave here without saving state.   
+                    //  Subsequent failures won't come back here.
+                    break;
+                }
+                // Set up for the next iteration of the loop, with input index
+                //   backed up by one from the last time through,
+                //   and a state save to this instruction in case the following code fails again.
+                //   (We're going backwards because this loop emulates stack unwinding, not
+                //    the initial scan forward.)
+                U_ASSERT(fp->fInputIdx > 0);
+                U16_BACK_1(inputBuf, 0, fp->fInputIdx);
+                fp = StateSave(fp, fp->fPatIdx-1, frameSize, status);
+            }
+            break;
+
+
 
         default:
             // Trouble.  The compiled pattern contains an entry with an
