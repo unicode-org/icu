@@ -754,6 +754,7 @@ void TestForwardWordSelection()
 /*    sample(e, testWordText); */
     log_verbose("Testing forward word selection.....\n");
     doForwardSelectionTest(e, testWordText, wordSelectionData);
+    doForwardSelectionTest(e, testWordText, wordSelectionData);
     ubrk_close(e);
     free(wordSelectionData);
 }
