@@ -544,65 +544,66 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
           {
             /* got almost everything, let's try to open */
             /* first, open the bundle with real data */
-            UResourceBundle *mainRes = ures_openDirect(path, locale, status); 
-            UResourceBundle *result = NULL;
+            UResourceBundle *result = resB;
             const char* temp = NULL;
-
-            if(keyPath == NULL) {
-              /* no key path. This means that we are going to 
-               * to use the corresponding resource from
-               * another bundle
-               */
-              /* first, we are going to get a corresponding parent 
-               * resource to the one we are searching.
-               */
-              const char* aKey = parent->fResPath;
-              if(aKey) {
-                r = res_findResource(&(mainRes->fResData), mainRes->fRes, &aKey, &temp);
-              } else {
-                r = mainRes->fRes;
-              }
-              if(key) {
-              /* we need to make keyPath from parents fResPath and 
-               * current key, if there is a key associated
-               */
-                aKey = key;
-                r = res_findResource(&(mainRes->fResData), r, &aKey, &temp);
-              } else if(index != -1) {
-              /* if there is no key, but there is an index, try to get by the index */
-              /* here we have either a table or an array, so get the element */
-                if(RES_GET_TYPE(r) == RES_TABLE) {
-                  r = res_getTableItemByIndex(&(mainRes->fResData), r, index, &aKey);
-                } else { /* array */
-                  r = res_getArrayItem(&(mainRes->fResData), r, index);
+            UResourceBundle *mainRes = ures_openDirect(path, locale, status); 
+            if(U_SUCCESS(*status)) {
+              if(keyPath == NULL) {
+                /* no key path. This means that we are going to 
+                 * to use the corresponding resource from
+                 * another bundle
+                 */
+                /* first, we are going to get a corresponding parent 
+                 * resource to the one we are searching.
+                 */
+                const char* aKey = parent->fResPath;
+                if(aKey) {
+                  r = res_findResource(&(mainRes->fResData), mainRes->fRes, &aKey, &temp);
+                } else {
+                  r = mainRes->fRes;
                 }
-              }
-              if(r != RES_BOGUS) {
-                result = init_resb_result(&(mainRes->fResData), r, key, -1, mainRes->fData, parent, noAlias+1, resB, status);
-              } else {
-                *status = U_MISSING_RESOURCE_ERROR;
-                result = resB;
-              }
-            } else {
-              /* this one is a bit trickier. 
-               * we start finding keys, but after we resolve one alias, the path might continue.
-               * Consider: 
-               *     aliastest:alias { "testtypes/anotheralias/Sequence" }
-               *     anotheralias:alias { "/ICUDATA/sh/CollationElements" }
-               * aliastest resource should finally have the sequence, not collation elements.
-               */
-              result = mainRes;
-              while(*keyPath) {
-                r = res_findResource(&(result->fResData), result->fRes, (const char**)&keyPath, &temp);
-                if(r == RES_BOGUS) {
+                if(key) {
+                /* we need to make keyPath from parents fResPath and 
+                 * current key, if there is a key associated
+                 */
+                  aKey = key;
+                  r = res_findResource(&(mainRes->fResData), r, &aKey, &temp);
+                } else if(index != -1) {
+                /* if there is no key, but there is an index, try to get by the index */
+                /* here we have either a table or an array, so get the element */
+                  if(RES_GET_TYPE(r) == RES_TABLE) {
+                    r = res_getTableItemByIndex(&(mainRes->fResData), r, index, &aKey);
+                  } else { /* array */
+                    r = res_getArrayItem(&(mainRes->fResData), r, index);
+                  }
+                }
+                if(r != RES_BOGUS) {
+                  result = init_resb_result(&(mainRes->fResData), r, key, -1, mainRes->fData, parent, noAlias+1, resB, status);
+                } else {
                   *status = U_MISSING_RESOURCE_ERROR;
                   result = resB;
-                  break;
                 }
-                resB = init_resb_result(&(result->fResData), r, key, -1, result->fData, parent, noAlias+1, resB, status);
-                result = resB;
+              } else {
+                /* this one is a bit trickier. 
+                 * we start finding keys, but after we resolve one alias, the path might continue.
+                 * Consider: 
+                 *     aliastest:alias { "testtypes/anotheralias/Sequence" }
+                 *     anotheralias:alias { "/ICUDATA/sh/CollationElements" }
+                 * aliastest resource should finally have the sequence, not collation elements.
+                 */
+                result = mainRes;
+                while(*keyPath && U_SUCCESS(*status)) {
+                  r = res_findResource(&(result->fResData), result->fRes, (const char**)&keyPath, &temp);
+                  if(r == RES_BOGUS) {
+                    *status = U_MISSING_RESOURCE_ERROR;
+                    result = resB;
+                    break;
+                  }
+                  resB = init_resb_result(&(result->fResData), r, key, -1, result->fData, parent, noAlias+1, resB, status);
+                  result = resB;
+                }
               }
-          }
+            }
             uprv_free(chAlias);
             ures_close(mainRes);
             return result;
