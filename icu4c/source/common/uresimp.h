@@ -129,7 +129,7 @@ ures_findResource(const char* pathToResource,
  */
 U_CAPI UResourceBundle* U_EXPORT2
 ures_findSubResource(const UResourceBundle *resB, 
-                     const char* pathToResource, 
+                     char* pathToResource, 
                      UResourceBundle *fillIn, UErrorCode *status);
 
 #endif /*URESIMP_H*/

@@ -572,21 +572,54 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
         const UChar *alias = res_getAlias(rdata, r, &len);   
         if(len > 0) {
           /* we have an alias, now let's cut it up */
+          char stackAlias[200];
           char *chAlias = NULL, *path = NULL, *locale = NULL, *keyPath = NULL;
-          chAlias = (char *)uprv_malloc((len+1)*sizeof(char));
-          /* test for NULL */
-          if(chAlias == NULL) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
+          int32_t capacity;
+
+          /*
+           * Allocate enough space for both the char * version
+           * of the alias and parent->fResPath.
+           *
+           * We do this so that res_findResource() can modify the path,
+           * which allows us to remove redundant _res_findResource() variants
+           * in uresdata.c.
+           * res_findResource() now NUL-terminates each segment so that table keys
+           * can always be compared with strcmp() instead of strncmp().
+           * Saves code there and simplifies testing and code coverage.
+           *
+           * markus 2003oct17
+           */
+          ++len; /* count the terminating NUL */
+          if(parent != NULL && parent->fResPath != NULL) {
+            capacity = uprv_strlen(parent->fResPath) + 1;
+          } else {
+            capacity = 0;
+          }
+          if(capacity < len) {
+            capacity = len;
+          }
+          if(capacity <= sizeof(stackAlias)) {
+            capacity = sizeof(stackAlias);
+            chAlias = stackAlias;
+          } else {
+            chAlias = (char *)uprv_malloc(capacity);
+            /* test for NULL */
+            if(chAlias == NULL) {
+              *status = U_MEMORY_ALLOCATION_ERROR;
+              return NULL;
             }
+          }
           u_UCharsToChars(alias, chAlias, len);
-          chAlias[len] = 0;
 
           if(*chAlias == RES_PATH_SEPARATOR) {
             /* there is a path included */
             locale = uprv_strchr(chAlias+1, RES_PATH_SEPARATOR);
-            *locale = 0;
-            locale++;
+            if(locale == NULL) {
+                locale = uprv_strchr(chAlias, 0); /* avoid locale == NULL to make code below work */
+            } else {
+                *locale = 0;
+                locale++;
+            }
             path = chAlias+1;
             if(uprv_strcmp(path, "ICUDATA") == 0) { /* want ICU data */
               path = NULL;
@@ -617,17 +650,34 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
                 /* first, we are going to get a corresponding parent 
                  * resource to the one we are searching.
                  */
-                const char* aKey = parent->fResPath;
+                char *aKey = parent->fResPath;
                 if(aKey) {
+                  uprv_strcpy(chAlias, aKey); /* allocated large enough above */
+                  aKey = chAlias;
                   r = res_findResource(&(mainRes->fResData), mainRes->fRes, &aKey, &temp);
                 } else {
                   r = mainRes->fRes;
                 }
                 if(key) {
-                /* we need to make keyPath from parents fResPath and 
-                 * current key, if there is a key associated
-                 */
-                  aKey = key;
+                  /* we need to make keyPath from parent's fResPath and
+                   * current key, if there is a key associated
+                   */
+                  len = uprv_strlen(key) + 1;
+                  if(len > capacity) {
+                    capacity = len;
+                    if(chAlias == stackAlias) {
+                      chAlias = (char *)uprv_malloc(capacity);
+                    } else {
+                      chAlias = (char *)uprv_realloc(chAlias, capacity);
+                    }
+                    if(chAlias == NULL) {
+                      ures_close(mainRes);
+                      *status = U_MEMORY_ALLOCATION_ERROR;
+                      return NULL;
+                    }
+                  }
+                  uprv_memcpy(chAlias, key, len);
+                  aKey = chAlias;
                   r = res_findResource(&(mainRes->fResData), r, &aKey, &temp);
                 } else if(index != -1) {
                 /* if there is no key, but there is an index, try to get by the index */
@@ -654,7 +704,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
                  */
                 result = mainRes;
                 while(*keyPath && U_SUCCESS(*status)) {
-                  r = res_findResource(&(result->fResData), result->fRes, (const char**)&keyPath, &temp);
+                  r = res_findResource(&(result->fResData), result->fRes, &keyPath, &temp);
                   if(r == RES_BOGUS) {
                     *status = U_MISSING_RESOURCE_ERROR;
                     result = resB;
@@ -667,8 +717,12 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
             } else { /* we failed to open the resource we're aliasing to */
               *status = intStatus;
             }
-            uprv_free(chAlias);
-            ures_close(mainRes);
+            if(chAlias != stackAlias) {
+              uprv_free(chAlias);
+            }
+            if(mainRes != result) {
+              ures_close(mainRes);
+            }
             return result;
           }
         } else {
@@ -1133,16 +1187,21 @@ ures_findResource(const char* path, UResourceBundle *fillIn, UErrorCode *status)
   char *packageName = NULL;
   char *pathToResource = NULL;
   char *locale = NULL, *localeEnd = NULL;
+  int32_t length;
+
   if(status == NULL || U_FAILURE(*status)) {
     return result;
   }
-  pathToResource = (char *)uprv_malloc((uprv_strlen(path)+1)*sizeof(char));
+
+  length = uprv_strlen(path)+1;
+  pathToResource = (char *)uprv_malloc(length*sizeof(char));
   /* test for NULL */
   if(pathToResource == NULL) {
     *status = U_MEMORY_ALLOCATION_ERROR;
     return result;
-    }
-  uprv_strcpy(pathToResource, path);
+  }
+  uprv_memcpy(pathToResource, path, length);
+
   locale = pathToResource;
   if(*pathToResource == RES_PATH_SEPARATOR) { /* there is a path specification */
     pathToResource++;
@@ -1176,11 +1235,10 @@ ures_findResource(const char* path, UResourceBundle *fillIn, UErrorCode *status)
 }
 
 U_CAPI UResourceBundle* U_EXPORT2
-ures_findSubResource(const UResourceBundle *resB, const char* path, UResourceBundle *fillIn, UErrorCode *status) 
+ures_findSubResource(const UResourceBundle *resB, char* path, UResourceBundle *fillIn, UErrorCode *status) 
 {
   Resource res = RES_BOGUS;
   UResourceBundle *result = fillIn;
-  const char *pathToResource = path;
   const char *key;
 
   if(status == NULL || U_FAILURE(*status)) {
@@ -1189,7 +1247,7 @@ ures_findSubResource(const UResourceBundle *resB, const char* path, UResourceBun
 
   /* here we do looping and circular alias checking */
 
-  res = res_findResource(&(resB->fResData), resB->fRes, &pathToResource, &key); 
+  res = res_findResource(&(resB->fResData), resB->fRes, &path, &key); 
 
   if(res != RES_BOGUS) {
     result = init_resb_result(&(resB->fResData), res, key, -1, resB->fData, resB, 0, fillIn, status);

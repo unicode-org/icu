@@ -1905,6 +1905,10 @@ static void TestResourceLevelAliasing(void) {
   const UChar *string = NULL, *sequence = NULL;
   const uint8_t *binary = NULL, *binSequence = NULL;
   int32_t strLen = 0, seqLen = 0, binLen = 0, binSeqLen = 0;
+
+  char buffer[100];
+  char *s;
+
   testdatapath=loadTestData(&status);
   if(U_FAILURE(status))
   {
@@ -1990,7 +1994,9 @@ static void TestResourceLevelAliasing(void) {
 
     /* simple alias */
     testtypes = ures_open(testdatapath, "testtypes", &status);
-    uk = ures_findSubResource(testtypes, "menu/file/open", uk, &status);
+    strcpy(buffer, "menu/file/open");
+    s = buffer;
+    uk = ures_findSubResource(testtypes, s, uk, &status);
     sequence = ures_getString(uk, &seqLen, &status);
 
     tb = ures_getByKey(aliasB, "simplealias", tb, &status);
@@ -2092,6 +2098,9 @@ static void TestDirectAccess(void) {
   UResourceBundle *t = NULL, *t2 = NULL;
   const char* key = NULL;
 
+  char buffer[100];
+  char *s;
+
   t = ures_findResource("en/zoneStrings/3/2", t, &status);
   if(U_FAILURE(status)) {
     log_err("Couldn't access indexed resource, error %s\n", u_errorName(status));
@@ -2131,7 +2140,9 @@ static void TestDirectAccess(void) {
   }
 
   if(U_SUCCESS(status)) {
-    t = ures_findSubResource(t2, "CollationElements/Sequence", t, &status);
+    strcpy(buffer, "CollationElements/Sequence");
+    s = buffer;
+    t = ures_findSubResource(t2, s, t, &status);
     if(U_FAILURE(status)) {
       log_err("Couldn't access keyed resource, error %s\n", u_errorName(status));
       status = U_ZERO_ERROR;
