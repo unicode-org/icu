@@ -682,7 +682,7 @@ static void TestStream(void) {
     strncpy(defConvName, ucnv_getDefaultName(), sizeof(defConvName)/sizeof(defConvName[0]));
     ucnv_setDefaultName("UTF-8");
 
-    outTestStream << "Beginning of test ";
+    outTestStream << "\x42\x65\x67\x69\x6E\x6E\x69\x6E\x67\x20\x6F\x66\x20\x74\x65\x73\x74\x20";
     outTestStream << str1 << "\x20\x20" << str2 << str3 << 3 << "\x32\x20" << 1.0 << C_NEW_LINE << str4 << ends;
     if (strcmp(testStreamBuf, testStr) != 0) {
         log_err("Got: \"%s\", Expected: \"%s\"\n", testStreamBuf, testStr);
