@@ -47,6 +47,7 @@
 #define ANCHOR_START       ((UChar)0x005E) /*^*/
 #define KLEENE_STAR        ((UChar)0x002A) /***/
 #define ONE_OR_MORE        ((UChar)0x002B) /*+*/
+#define ZERO_OR_ONE        ((UChar)0x003F) /*?*/
 
 // By definition, the ANCHOR_END special character is a
 // trailing SymbolTable.SYMBOL_REF character.
@@ -138,6 +139,204 @@ UnicodeString ParseData::parseReference(const UnicodeString& text,
 }
 
 //----------------------------------------------------------------------
+// Segments
+//----------------------------------------------------------------------
+
+class Segments {
+    UVector offsets;
+    UVector isOpenParen;
+public:
+    Segments();
+    ~Segments();
+    void addParenthesisAt(int32_t offset, UBool isOpenParen);
+    int32_t getLastParenOffset(UBool& isOpenParen) const;
+    UBool extractLastParenSubstring(int32_t& start, int32_t& limit);
+    int32_t* createArray() const;
+    UBool validate() const;
+    int32_t count() const; // number of segments
+private:
+    int32_t offset(int32_t i) const;
+    UBool isOpen(int32_t i) const;
+    int32_t size() const; // size of the UVectors
+};
+
+// Store int32_t as a void* in a UVector.  DO NOT ASSUME sizeof(void*)
+// is 32.  Assume sizeof(void*) >= 32.
+inline void* _int32_to_voidPtr(int32_t x) {
+    void* a = 0; // May be > 32 bits
+    *(int32_t*)&a = x; // Careful here...
+    return a;
+}
+inline int32_t _voidPtr_to_int32(void* x) {
+    void* a = x; // Copy to stack (portability)
+    return *(int32_t*)&a; // Careful here...
+}
+
+int32_t Segments::offset(int32_t i) const {
+    return _voidPtr_to_int32(offsets.elementAt(i));
+}
+
+UBool Segments::isOpen(int32_t i) const {
+    return _voidPtr_to_int32(isOpenParen.elementAt(i)) != 0;
+}
+
+int32_t Segments::size() const {
+    // assert(offset.size() == isOpenParen.size());
+    return offsets.size();
+}
+
+Segments::Segments() {}
+Segments::~Segments() {}
+
+void Segments::addParenthesisAt(int32_t offset, UBool isOpen) {
+    offsets.addElement(_int32_to_voidPtr(offset));
+    isOpenParen.addElement(_int32_to_voidPtr(isOpen ? 1 : 0));
+}
+
+int32_t Segments::getLastParenOffset(UBool& isOpenParen) const {
+    if (size() == 0) {
+        return -1;
+    }
+    isOpenParen = isOpen(size()-1);
+    return offset(size()-1);
+}
+
+// Remove the last (rightmost) segment.  Store its offsets in start
+// and limit, and then convert all offsets at or after start to be
+// equal to start.  Upon failure, return FALSE.  Assume that the
+// caller has already called getLastParenOffset() and validated that
+// there is at least one parenthesis and that the last one is a close
+// paren.
+UBool Segments::extractLastParenSubstring(int32_t& start, int32_t& limit) {
+    // assert(offsets.size() > 0);
+    // assert(isOpenParen.elementAt(isOpenParen.size()-1) == 0);
+    int32_t i = size() - 1;
+    int32_t n = 1; // count of close parens we need to match
+    // Record position of the last close paren
+    limit = offset(i);
+    --i; // back up to the one before the last one
+    while (i >= 0 && n != 0) {
+        n += isOpen(i) ? -1 : 1;
+    }
+    if (n != 0) {
+        return FALSE;
+    }
+    // assert(i>=0);
+    start = offset(i);
+    // Reset all segment pairs from i to size() - 1 to [start, start+1).
+    while (i<size()) {
+        int32_t o = isOpen(i) ? start : (start+1);
+        offsets.setElementAt(_int32_to_voidPtr(o), i);
+        ++i;
+    }
+    return TRUE;
+}
+
+// Assume caller has already gotten a TRUE validate().
+int32_t* Segments::createArray() const {
+    /**
+     * >>> Duplicated in rbt_pars.cpp and rbt_rule.h <<<
+     *
+     * The segments array encodes information about parentheses-
+     * enclosed regions of the input string.  These are referenced in
+     * the output string using the notation $1, $2, etc.  Numbering is
+     * in order of appearance of the left parenthesis.  Number is
+     * one-based.  Segments are defined as start, limit pairs.
+     * Segments may nest.
+     * 
+     * In order two avoid allocating two subobjects, the segments
+     * array actually comprises two arrays.  The first is gives the
+     * index values of the open and close parentheses in the order
+     * they appear.  The second maps segment numbers to the indices of
+     * the first array.  The two arrays have the same length.
+     *
+     * Example:  (a b(c d)e f)
+     *            0 1 2 3 4 5 6
+     *
+     * First array: Indices are 0, 2, 4, and 6.
+
+     * Second array: $1 is at 0 and 6, and $2 is at 2 and 4, so the
+     * second array is 0, 3, 1 2 -- these give the indices in the
+     * first array at which $1:open, $1:close, $2:open, and $2:close
+     * occur.
+     *
+     * The final array is: 2, 7, 0, 2, 4, 6, -1, 2, 5, 3, 4, -1
+     *
+     * Each subarray is terminated with a -1, and two leading entries
+     * give the number of segments and the offset to the first entry
+     * of the second array.  In addition, the second array value are
+     * all offset by 2 so they index directly into the final array.
+     * The total array size is 4*segments[0] + 4.  The second index is
+     * 2*segments[0] + 3.
+     *
+     * In the output string, a segment reference is indicated by a
+     * character in a special range, as defined by
+     * RuleBasedTransliterator.Data.
+     *
+     * Most rules have no segments, in which case segments is null, and the
+     * output string need not be checked for segment reference characters.
+     */
+    int32_t c = count(); // number of segments
+    int32_t arrayLen = 4*c + 4;
+    int32_t *array = new int32_t[arrayLen];
+    int32_t a2offset = 2*c + 3; // offset to array 2
+    array[0] = c;
+    array[1] = a2offset;
+    int32_t i;
+    for (i=0; i<2*c; ++i) {
+        array[2+i] = offset(i);
+    }
+    array[a2offset-1] = -1;
+    array[arrayLen-1] = -1;
+    // Now walk through and match up segment numbers with parentheses.
+    // Number segments from 0.  We're going to offset all entries by 2
+    // to skip the first two elements, array[0] and array[1].
+    UStack stack;
+    int32_t nextOpen = 0; // seg # of next open, 0-based
+    int32_t j = a2offset; // index of start of array 2
+    for (i=0; i<2*c; ++i) {
+        UBool open = isOpen(i);
+        // Let seg be the zero-based segment number.
+        // Open parens are at 2*seg in array 2.
+        // Close parens are at 2*seg+1 in array 2.
+        if (open) {
+            array[a2offset + 2*nextOpen] = 2+i;
+            stack.push(_int32_to_voidPtr(nextOpen));
+            ++nextOpen;
+        } else {
+            int32_t nextClose = _voidPtr_to_int32(stack.pop());
+            array[a2offset + 2*nextClose+1] = 2+i;
+        }
+    }
+    // assert(stack.empty());
+    return array;
+}
+
+UBool Segments::validate() const {
+    // want number of parens >= 2
+    // want number of parens to be even
+    // want first paren '('
+    // want parens to match up in the end
+    if ((size() < 2) || (size() % 2 != 0) || !isOpen(0)) {
+        return FALSE;
+    }
+    int32_t n = 0;
+    for (int32_t i=0; i<size(); ++i) {
+        n += isOpen(i) ? 1 : -1;
+        if (n < 0) {
+            return FALSE;
+        }
+    }
+    return n == 0;
+}
+
+// Assume caller has already gotten a TRUE validate().
+int32_t Segments::count() const {
+    // assert(validate());
+    return size() / 2;
+}
+
+//----------------------------------------------------------------------
 // BEGIN RuleHalf
 //----------------------------------------------------------------------
 
@@ -159,8 +358,8 @@ public:
     // Record the position of the segment substrings and references.  A
     // given side should have segments or segment references, but not
     // both.
-    UVector* segments; // ref substring start,limits
-    int32_t maxRef;       // index of largest ref (1..9)
+    Segments* segments;
+    int32_t maxRef;       // index of largest ref ($n) on the right
 
     // Record the offset to the cursor either to the left or to the
     // right of the key.  This is indicated by characters on the output
@@ -213,18 +412,6 @@ private:
     RuleHalf(const RuleHalf&);
     RuleHalf& operator=(const RuleHalf&);
 };
-
-// Store int32_t as a void* in a UVector.  DO NOT ASSUME sizeof(void*)
-// is 32.  Assume sizeof(void*) >= 32.
-inline void* _int32_to_voidPtr(int32_t x) {
-    void* a = 0; // May be > 32 bits
-    *(int32_t*)&a = x; // Careful here...
-    return a;
-}
-inline int32_t _voidPtr_to_int32(void* x) {
-    void* a = x; // Copy to stack (portability)
-    return *(int32_t*)&a; // Careful here...
-}
 
 const UnicodeString RuleHalf::gOperators = OPERATORS;
 
@@ -335,14 +522,9 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
             // Handle segment definitions "(" and ")"
             // Parse "(", ")"
             if (segments == NULL) {
-                segments = new UVector();
+                segments = new Segments();
             }
-            if ((c == SEGMENT_OPEN) !=
-                (segments->size() % 2 == 0)) {
-                return syntaxError(RuleBasedTransliterator::MISMATCHED_SEGMENT_DELIMITERS,
-                                   rule, start);
-            }
-            segments->addElement(_int32_to_voidPtr(buf.length()));
+            segments->addParenthesisAt(buf.length(), c == SEGMENT_OPEN);
             break;
         case END_OF_RULE:
             --pos; // Backup to point to END_OF_RULE
@@ -361,15 +543,28 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
                     anchorEnd = TRUE;
                     break;
                 }
-                // Parse "$1" "$2" .. "$9"
+                // Parse "$1" "$2" .. "$9" .. (no upper limit)
                 c = rule.charAt(pos);
-                int32_t r = Unicode::digit(c, 10);
+                int32_t r = u_charDigitValue(c);
                 if (r >= 1 && r <= 9) {
+                    ++pos;
+                    for (;;) {
+                        c = rule.charAt(pos);
+                        int32_t d = u_charDigitValue(c);
+                        if (d < 0) {
+                            break;
+                        }
+                        if (r > 214748364 ||
+                            (r == 214748364 && d > 7)) {
+                            return syntaxError(RuleBasedTransliterator::UNDEFINED_SEGMENT_REFERENCE,
+                                               rule, start);
+                        }
+                        r = 10*r + d;
+                    }
                     if (r > maxRef) {
                         maxRef = r;
                     }
-                    buf.append(parser.data->getSegmentStandin(r));
-                    ++pos;
+                    buf.append(parser.getSegmentStandin(r));
                 } else {
                     pp.setIndex(pos);
                     UnicodeString name = parser.parseData->
@@ -444,6 +639,7 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
             break;
         case KLEENE_STAR:
         case ONE_OR_MORE:
+        case ZERO_OR_ONE:
             // Quantifiers.  We handle single characters, quoted strings,
             // variable references, and segments.
             //  a+      matches  aaa
@@ -452,15 +648,18 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
             //  (seg)+  matches  segsegseg
             {
                 int32_t start, limit;
+                UBool isOpenParen;
+                UBool isSegment = FALSE;
                 if (segments != 0 &&
-                    segments->size() >= 2 &&
-                    segments->size() % 2 == 0 &&
-                    _voidPtr_to_int32(segments->elementAt(segments->size()-1)) == buf.length()) {
+                    segments->getLastParenOffset(isOpenParen) == buf.length()) {
                     // The */+ immediately follows a segment
-                    int32_t len = segments->size();
-                    start = _voidPtr_to_int32(segments->elementAt(len - 2));
-                    limit = _voidPtr_to_int32(segments->elementAt(len - 1));
-                    segments->setElementAt(_int32_to_voidPtr(start+1), len-1);
+                    if (isOpenParen) {
+                        return syntaxError(RuleBasedTransliterator::MISPLACED_QUANTIFIER, rule, start);
+                    }
+                    if (!segments->extractLastParenSubstring(start, limit)) {
+                        return syntaxError(RuleBasedTransliterator::MISMATCHED_SEGMENT_DELIMITERS, rule, start);
+                    }
+                    isSegment = TRUE;
                 } else {
                     // The */+ follows an isolated character or quote
                     // or variable reference
@@ -479,8 +678,21 @@ int32_t RuleHalf::parse(const UnicodeString& rule, int32_t pos, int32_t limit) {
                     }
                 }
                 UnicodeMatcher *m =
-                    new StringMatcher(buf, start, limit, *parser.data);
-                m = new Quantifier(m, (c == ONE_OR_MORE)?1:0, 0x7FFFFFFF);
+                    new StringMatcher(buf, start, limit, isSegment, *parser.data);
+                int32_t min = 0;
+                int32_t max = Quantifier::MAX;
+                switch (c) {
+                case ONE_OR_MORE:
+                    min = 1;
+                    break;
+                case ZERO_OR_ONE:
+                    min = 0;
+                    max = 1;
+                    break;
+                // case KLEENE_STAR:
+                //    do nothing -- min, max already set
+                }
+                m = new Quantifier(m, min, max);
                 buf.truncate(start);
                 buf.append(parser.generateStandInFor(m));
             }
@@ -528,16 +740,7 @@ void RuleHalf::removeContext() {
  * Create and return an int32_t[] array of segments.
  */
 int32_t* RuleHalf::createSegments() const {
-    if (segments == NULL) {
-        return NULL;
-    }
-    int32_t len = segments->size();
-    int32_t* result = new int32_t[len + 1];
-    for (int32_t i=0; i<len; ++i) {
-        result[i] = _voidPtr_to_int32(segments->elementAt(i));
-    }
-    result[len] = -1; // end marker
-    return result;
+    return (segments == 0) ? 0 : segments->createArray();
 }
 
 //----------------------------------------------------------------------
@@ -888,11 +1091,10 @@ int32_t TransliteratorParser::parseRule(int32_t pos, int32_t limit) {
     // segment's start must have a corresponding limit, and the
     // references must not refer to segments that do not exist.
     if (left->segments != NULL) {
-        int n = left->segments->size();
-        if (n % 2 != 0) {
+        if (!left->segments->validate()) {
             return syntaxError(RuleBasedTransliterator::MISSING_SEGMENT_CLOSE, rule, start);
         }
-        n /= 2;
+        int32_t n = left->segments->count();
         if (right->maxRef > n) {
             return syntaxError(RuleBasedTransliterator::UNDEFINED_SEGMENT_REFERENCE, rule, start);
         }
@@ -999,6 +1201,18 @@ void TransliteratorParser::appendVariableDef(const UnicodeString& name,
     }
 }
 
+UChar TransliteratorParser::getSegmentStandin(int32_t r) {
+    // assert(r>=1);
+    if (r > data->segmentCount) {
+        data->segmentCount = r;
+        variableLimit = data->segmentBase - r + 1;
+        if (variableNext >= variableLimit) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+        }
+    }
+    return data->getSegmentStandin(r);
+}
+
 /**
  * Determines what part of the private use region of Unicode we can use for
  * variable stand-ins.  The correct way to do this is as follows: Parse each
@@ -1015,9 +1229,11 @@ void TransliteratorParser::determineVariableRange(void) {
     data->variablesBase = variableNext = variableLimit = (UChar) 0;
     
     if (r != 0) {
-        // Allocate 9 characters for segment references 1 through 9
-        data->segmentBase = r->start;
-        data->variablesBase = variableNext = (UChar) (data->segmentBase + 9);
+        // Segment references work down; variables work up.  We don't
+        // know how many of each we will need.
+        data->segmentBase = (UChar) (r->start + r->length - 1);
+        data->segmentCount = 0;
+        data->variablesBase = variableNext = (UChar) r->start;
         variableLimit = (UChar) (r->start + r->length);
         delete r;
     }
