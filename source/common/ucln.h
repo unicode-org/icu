@@ -23,7 +23,7 @@
  * functions.  Each library should define a single library register function
  * to call this API.  In the i18n library, it is ucln_i18n_registerCleanup().
  *
- * None of the cleanup functions should not use a mutex to clean up an API's
+ * None of the cleanup functions should use a mutex to clean up an API's
  * allocated memory because a cleanup function is not meant to be thread safe,
  * and plenty of data cannot be reference counted in order to make sure that
  * no one else needs the allocated data.
