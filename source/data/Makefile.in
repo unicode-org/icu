@@ -32,6 +32,8 @@ CLEANFILES = *~ $(SPECIALTESTDATA)
 DOCDIRS = 
 SUBDIRS = build
 
+#lib icu data for link
+LIB_ICUDATA_NAME=lib$(ICUDATA_NAME)
 ## Extra files to install [nothing at present]
 SPECIALTESTDATA=test1.cnv test3.cnv test4.cnv
 TESTDATAOBJDIR=../test/testdata
@@ -102,7 +104,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 		&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 packagedata: build/icudata.lst $(top_builddir)/tools/pkgdata/icupkg.inc
-	( cd build ; $(INVOKE) $(PKGDATA) -e icudata -s . -T . -p $(ICUDATA_NAME) icudata.lst )
+	( cd build ; $(INVOKE) $(PKGDATA) -e icudata -s . -T . -p lib$(ICUDATA_NAME) icudata.lst )
 
 packagetest: $(TESTDATAOBJDIR)/testdata.lst $(top_builddir)/tools/pkgdata/icupkg.inc
 	( cd $(TESTDATAOBJDIR) ; $(INVOKE) $(PKGDATA) -T . -s . -p testdata testdata.lst )
@@ -118,7 +120,7 @@ install-local:  build/icudata.lst $(top_builddir)/tools/pkgdata/icupkg.inc insta
 	$(MKINSTALLDIRS) $(TMPDATADIR) $(DESTDIR)$(ICUDATA_DIR)/$(VERSION)
 	( cd build ; $(INVOKE) $(PKGDATA) -e icudata -T . -s . -p $(ICUDATA_NAME) icudata.lst -I $(DESTDIR)$(ICUDATA_DIR)/$(VERSION) )
 ifeq ($(strip $(PKGDATA_MODE)),dll)
-	(cd $(DESTDIR)$(ICUDATA_DIR)/$(VERSION); $(RM) icudata.$(SO) && ln -s $(ICUDATA_NAME).$(SO) icudata.$(SO))
+	(cd $(DESTDIR)$(ICUDATA_DIR)/$(VERSION); $(RM) icudata.$(SO) && ln -s $(LIB_ICUDATA_NAME).$(SO) icudata.$(SO))
 endif
 
 install-convrtrstxt: $(top_srcdir)/../data/convrtrs.txt
