@@ -310,8 +310,12 @@ typedef void* UClassID;
 enum UErrorCode {
     U_ERROR_INFO_START        = -128,   /**< Start of information results (semantically successful) */
     U_USING_FALLBACK_ERROR    = -128,   /**< A resource bundle lookup returned a fallback result (not an error) */
+    U_USING_FALLBACK_WARNING  = -128,   /**< A resource bundle lookup returned a fallback result (not an error) */
     U_USING_DEFAULT_ERROR     = -127,   /**< A resource bundle lookup returned a result from the root locale (not an error) */
+    U_USING_DEFAULT_WARNING   = -127,   /**< A resource bundle lookup returned a result from the root locale (not an error) */
     U_SAFECLONE_ALLOCATED_ERROR = -126, /**< A SafeClone operation required allocating memory (informational only) */
+    U_SAFECLONE_ALLOCATED_WARNING = -126, /**< A SafeClone operation required allocating memory (informational only) */
+    U_STATE_OLD_WARNING       = -125,   /**< ICU has to use compatibility layer to construct the service. Expect performance/memory usage degradation. Consider upgrading */
     U_ERROR_INFO_LIMIT,                 /**< This must always be the last warning value to indicate the limit for UErrorCode warnings (last warning code +1) */
 
     U_ZERO_ERROR              =  0,     /**< No error, no warning. */
@@ -338,6 +342,7 @@ enum UErrorCode {
     U_NO_SPACE_AVAILABLE      = 20,     /**< No space available for in-buffer expansion for Arabic shaping */
     U_CE_NOT_FOUND_ERROR      = 21,     /**< Currently used only while setting variable top, but can be used generally */
     U_PRIMARY_TOO_LONG_ERROR  = 22,     /**< User tried to set variable top to a primary that is longer than two bytes */
+    U_STATE_TOO_OLD_ERROR     = 23,     /**< ICU cannot construct a service from this state, as it is no longer supported */
     U_ERROR_LIMIT                       /**< This must always be the last value to indicate the limit for UErrorCode (last error code +1) */
 };
 
