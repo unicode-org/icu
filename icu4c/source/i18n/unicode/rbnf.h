@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2002, International Business Machines Corporation and others.
+* Copyright (C) 1997-2003, International Business Machines Corporation and others.
 * All Rights Reserved.
 *******************************************************************************
 */
@@ -509,17 +509,20 @@ public:
   /**
    * Copy constructor
    * @param rhs    the object to be copied from.
+   * @stable ICU 2.6
    */
   RuleBasedNumberFormat(const RuleBasedNumberFormat& rhs);
 
   /**
    * Assignment operator
    * @param rhs    the object to be copied from.
+   * @stable ICU 2.6
    */
   RuleBasedNumberFormat& operator=(const RuleBasedNumberFormat& rhs);
 
   /**
    * Release memory allocated for a RuleBasedNumberFormat when you are finished with it.
+   * @stable ICU 2.6
    */
   virtual ~RuleBasedNumberFormat();
 
@@ -527,6 +530,7 @@ public:
    * Clone this object polymorphically.  The caller is responsible
    * for deleting the result when done.
    * @return  A copy of the object.
+   * @stable ICU 2.6
    */
   virtual Format* clone(void) const;
 
@@ -534,7 +538,8 @@ public:
    * Return true if the given Format objects are semantically equal.
    * Objects of different subclasses are considered unequal.
    * @param other    the object to be compared with.
-   * @ return        true if the given Format objects are semantically equal.
+   * @return        true if the given Format objects are semantically equal.
+   * @stable ICU 2.6
    */
   virtual UBool operator==(const Format& other) const;
 
@@ -777,6 +782,7 @@ public:
    * to the initial default rule set.  If the rule set is not a public rule set name,
    * U_ILLEGAL_ARGUMENT_ERROR is returned in status.
    * @param ruleSetName the name of the rule set, or null to reset the initial default.
+   * @draft ICU 2.6
    */
   virtual void setDefaultRuleSet(const UnicodeString& ruleSetName, UErrorCode& status);
 
