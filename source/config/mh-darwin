@@ -20,12 +20,12 @@ LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
 LINK.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 
 ## Commands to make a shared library
-SHLIB.c=	$(CC) -dynamiclib -dynamic $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) -shared -framework System
-SHLIB.cc=	$(CXX) -dynamiclib -dynamic $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -framework System
+SHLIB.c=	$(CC) -dynamiclib -dynamic $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
+SHLIB.cc=	$(CXX) -dynamiclib -dynamic $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 
 ## Compiler switch to embed a runtime search path
-LD_RPATH=	
-LD_RPATH_PRE=	-Wl,-rpath,
+LD_RPATH=	-L
+LD_RPATH_PRE=	
 
 ###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
 ## Prefix for the ICU library names
