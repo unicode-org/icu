@@ -4,6 +4,7 @@
 * COPYRIGHT:                                                                   *
 *   (C) Copyright Taligent, Inc.,  1997                                        *
 *   (C) Copyright International Business Machines Corporation,  1997-1999      *
+*   Copyright (C) 1999 Alan Liu and others. All rights reserved.               *
 *   Licensed Material - Program-Property of IBM - All Rights Reserved.         *
 *   US Government Users Restricted Rights - Use, duplication, or disclosure    *
 *   restricted by GSA ADP Schedule Contract with IBM Corp.                     *
@@ -274,6 +275,13 @@ public:
     UnicodeString& format(UDate date, UnicodeString& result) const;
 
     /**
+     * Redeclared Format method.
+     */
+    UnicodeString& format(const Formattable& obj,
+                          UnicodeString& result,
+                          UErrorCode& status) const;
+
+    /**
      * Parse a date/time string.
      *
      * @param text      The string to be parsed into a UDate value.
@@ -519,6 +527,13 @@ private:
      */
     static const Locale*    fgLocales;
 };
+
+inline UnicodeString&
+DateFormat::format(const Formattable& obj,
+                   UnicodeString& result,
+                   UErrorCode& status) const {
+    return Format::format(obj, result, status);
+}
 
 #endif // _DATEFMT
 //eof
