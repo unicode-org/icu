@@ -161,11 +161,6 @@ static double * const fgNan = &gNan;
 static double * const fgInf = &gInf;
 #endif
 
-/* prototypes */
-static char* u_topNBytesOfDouble(double* d, int n);
-static char* u_bottomNBytesOfDouble(double* d, int n);
-
-
 /*---------------------------------------------------------------------------
   Platform utilities
   Our general strategy is to assume we're on a POSIX platform.  Platforms which
@@ -189,6 +184,27 @@ static char* u_bottomNBytesOfDouble(double* d, int n);
 #if U_HAVE_NL_LANGINFO_CODESET
 #include <langinfo.h>
 #endif
+
+/* Utilities to get the bits from a double */
+static char*
+u_topNBytesOfDouble(double* d, int n)
+{
+#if U_IS_BIG_ENDIAN
+    return (char*)d;
+#else
+    return (char*)(d + 1) - n;
+#endif
+}
+
+static char*
+u_bottomNBytesOfDouble(double* d, int n)
+{
+#if U_IS_BIG_ENDIAN
+    return (char*)(d + 1) - n;
+#else
+    return (char*)d;
+#endif
+}
 
 /*---------------------------------------------------------------------------
   Universal Implementations
@@ -629,25 +645,6 @@ uprv_digitsAfterDecimal(double x)
         return 0;
     }
     return numDigits;
-}
-
-static char*
-u_topNBytesOfDouble(double* d, int n)
-{
-#if U_IS_BIG_ENDIAN
-    return (char*)d;
-#else
-    return (char*)(d + 1) - n;
-#endif
-}
-
-static char* u_bottomNBytesOfDouble(double* d, int n)
-{
-#if U_IS_BIG_ENDIAN
-    return (char*)(d + 1) - n;
-#else
-    return (char*)d;
-#endif
 }
 
 /*---------------------------------------------------------------------------
@@ -1630,7 +1627,7 @@ The leftmost codepage (.xxx) wins.
 #elif defined(WIN32)
     UErrorCode status = U_ZERO_ERROR;
     LCID id = GetThreadLocale();
-    const char* locID = T_convertToPosix(id, &status);
+    const char* locID = uprv_convertToPosix(id, &status);
 
     if (U_FAILURE(status)) {
         locID = "en_US";
