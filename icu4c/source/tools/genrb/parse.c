@@ -60,7 +60,7 @@ enum EResourceType
     RT_ARRAY,
     RT_INTVECTOR,
     RT_IMPORT,
-    RT_RESERVED,
+    RT_RESERVED
 };
 
 /* only used for debugging */
