@@ -44,6 +44,10 @@
 
 #include "unicode/gregocal.h"
 #include "unicode/smpdtfmt.h"  /* for the public field (!) SimpleDateFormat::fgSystemDefaultCentury */
+#include "mutex.h"
+
+#include <stdio.h>
+
 
 // *****************************************************************************
 // class GregorianCalendar
@@ -718,6 +722,7 @@ GregorianCalendar::pinDayOfMonth()
 
 // -------------------------------------
 
+
 UBool
 GregorianCalendar::validateFields() const
 {
@@ -727,7 +732,7 @@ GregorianCalendar::validateFields() const
             field != UCAL_DAY_OF_YEAR &&
             isSet((UCalendarDateFields)field) &&
             ! boundsCheck(internalGet((UCalendarDateFields)field), (UCalendarDateFields)field))
-
+          fprintf(stderr, " field %d set to %d but out of bounds\n", field, internalGet((UCalendarDateFields)field));fflush(stderr);
             return FALSE;
     }
 
@@ -737,21 +742,26 @@ GregorianCalendar::validateFields() const
         int32_t date = internalGet(UCAL_DATE);
         if (date < getMinimum(UCAL_DATE) ||
             date > monthLength(internalGet(UCAL_MONTH))) {
+          fprintf(stderr, " date %d out of bounds\n", internalGet(UCAL_DATE));fflush(stderr);
             return FALSE;
         }
     }
 
     if (isSet(UCAL_DAY_OF_YEAR)) {
         int32_t days = internalGet(UCAL_DAY_OF_YEAR);
-        if (days < 1 || days > yearLength()) 
+        if (days < 1 || days > yearLength()) {
+          fprintf(stderr, " doy %d out of bounds\n", internalGet(UCAL_DAY_OF_YEAR));fflush(stderr);
             return FALSE;
+        }
     }
 
     // Handle DAY_OF_WEEK_IN_MONTH, which must not have the value zero.
     // We've checked against minimum and maximum above already.
     if (isSet(UCAL_DAY_OF_WEEK_IN_MONTH) &&
-        0 == internalGet(UCAL_DAY_OF_WEEK_IN_MONTH)) 
+        0 == internalGet(UCAL_DAY_OF_WEEK_IN_MONTH)) {
+            fprintf(stderr, " DOWIM == %d, should be 0\n", internalGet(UCAL_DAY_OF_WEEK_IN_MONTH));fflush(stderr);
             return FALSE;
+    }
 
     return TRUE;
 }
@@ -792,6 +802,7 @@ GregorianCalendar::getGregorianYear(UErrorCode &status) const
             year = 1 - year;
         // Even in lenient mode we disallow ERA values other than AD & BC
         else if (era != AD) {
+            fprintf(stderr,"Era = %d, not AD/BC\n", era); fflush(stderr);
             status = U_ILLEGAL_ARGUMENT_ERROR;
             return kEpochYear;
         }
@@ -806,6 +817,7 @@ GregorianCalendar::computeTime(UErrorCode& status)
         return;
 
     if (! isLenient() && ! validateFields()) {
+      fprintf(stderr,"validate failed\n"); fflush(stderr);
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
@@ -1224,7 +1236,7 @@ GregorianCalendar::computeJulianDay(UBool isGregorian, int32_t year)
             // week of the first day of the month, ignoring minimal days in
             // first week.
             date = 1 - fdm + ((fStamp[UCAL_DAY_OF_WEEK] != kUnset) ?
-                              (internalGet(UCAL_DAY_OF_WEEK) - getFirstDayOfWeek()) : 0);
+                              ((internalGet(UCAL_DAY_OF_WEEK) - getFirstDayOfWeek() + 7)%7) : 0);
 
             if (bestStamp == womStamp) {
                 // Adjust for minimal days in first week.
@@ -2111,9 +2123,16 @@ UDate
 GregorianCalendar::internalGetDefaultCenturyStart() const
 {
   // lazy-evaluate systemDefaultCenturyStart
-  if (fgSystemDefaultCenturyStart == SimpleDateFormat::fgSystemDefaultCentury)
+  UBool needsUpdate;
+  { 
+    Mutex m;
+    needsUpdate = (fgSystemDefaultCenturyStart == SimpleDateFormat::fgSystemDefaultCentury);
+  }
+
+  if (needsUpdate) {
     initializeSystemDefaultCentury();
-  
+  }
+
   // use defaultCenturyStart unless it's the flag value;
   // then use systemDefaultCenturyStart
   
@@ -2123,14 +2142,21 @@ GregorianCalendar::internalGetDefaultCenturyStart() const
 int32_t
 GregorianCalendar::internalGetDefaultCenturyStartYear() const
 {
-    // lazy-evaluate systemDefaultCenturyStartYear
-  if (fgSystemDefaultCenturyStart == SimpleDateFormat::fgSystemDefaultCentury)
-        initializeSystemDefaultCentury();
+  // lazy-evaluate systemDefaultCenturyStartYear
+  UBool needsUpdate;
+  { 
+    Mutex m;
+    needsUpdate = (fgSystemDefaultCenturyStart == SimpleDateFormat::fgSystemDefaultCentury);
+  }
 
-    // use defaultCenturyStart unless it's the flag value;
-    // then use systemDefaultCenturyStartYear
+  if (needsUpdate) {
+    initializeSystemDefaultCentury();
+  }
 
-    return    fgSystemDefaultCenturyStartYear;
+  // use defaultCenturyStart unless it's the flag value;
+  // then use systemDefaultCenturyStartYear
+  
+  return    fgSystemDefaultCenturyStartYear;
 }
 
 void
@@ -2148,8 +2174,14 @@ GregorianCalendar::initializeSystemDefaultCentury()
     {
       calendar->setTime(Calendar::getNow(), status);
       calendar->add(UCAL_YEAR, -80, status);
-      fgSystemDefaultCenturyStart = calendar->getTime(status);
-      fgSystemDefaultCenturyStartYear = calendar->get(UCAL_YEAR, status);
+
+      UDate    newStart =  calendar->getTime(status);
+      int32_t  newYear  =  calendar->get(UCAL_YEAR, status);
+      {
+        Mutex m;
+        fgSystemDefaultCenturyStart = newStart;
+        fgSystemDefaultCenturyStartYear = newYear;
+      }
       delete calendar;
     }
     // We have no recourse upon failure unless we want to propagate the failure
