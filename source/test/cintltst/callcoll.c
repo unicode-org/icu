@@ -141,6 +141,27 @@ void addAllCollTest(TestNode** root)
 
    }
 
+UBool hasCollationElements(const char *locName) {
+
+  UErrorCode status = U_ZERO_ERROR;
+  UResourceBundle *ColEl = NULL;
+
+  UResourceBundle *loc = ures_open(NULL, locName, &status);;
+
+  if(U_SUCCESS(status)) {
+    status = U_ZERO_ERROR;
+    ColEl = ures_getByKey(loc, "collations", ColEl, &status);
+    if(status == U_ZERO_ERROR) { /* do the test - there are real elements */
+      ures_close(ColEl);
+      ures_close(loc);
+      return TRUE;
+    }
+    ures_close(ColEl);
+    ures_close(loc);
+  }
+  return FALSE;
+}
+
 static UCollationResult compareUsingPartials(UCollator *coll, const UChar source[], int32_t sLen, const UChar target[], int32_t tLen, int32_t pieceSize, UErrorCode *status) {
   int32_t partialSKResult = 0;
   UCharIterator sIter, tIter;
@@ -163,9 +184,9 @@ static UCollationResult compareUsingPartials(UCollator *coll, const UChar source
     tSize = ucol_nextSortKeyPart(coll, &tIter, tState, tBuf, pieceSize, status);
     
     if(sState[0] != 0 || tState[0] != 0) {
-      log_verbose("State != 0 : %08X %08X\n", sState[0], tState[0]);
+      /*log_verbose("State != 0 : %08X %08X\n", sState[0], tState[0]);*/
     }
-    log_verbose("%i ", i++);
+    /*log_verbose("%i ", i++);*/
     
     partialSKResult = memcmp(sBuf, tBuf, pieceSize);
   }
@@ -246,10 +267,10 @@ static void doTestVariant(UCollator* myCollation, const UChar source[], const UC
       if(QUICK <= 0) {
         partialSizesSize = 7;
       }
-      log_verbose("partial sortkey test piecesize=");
+      /*log_verbose("partial sortkey test piecesize=");*/
       for(i = 0; i < partialSizesSize; i++) {
         UCollationResult partialSKResult = result, partialNormalizedSKResult = result;
-        log_verbose("%i ", partialSizes[i]);
+        /*log_verbose("%i ", partialSizes[i]);*/
 
         partialSKResult = compareUsingPartials(myCollation, source, sLen, target, tLen, partialSizes[i], &status);
         if(partialSKResult != result) {
@@ -258,7 +279,7 @@ static void doTestVariant(UCollator* myCollation, const UChar source[], const UC
         }
 
         if(QUICK <= 0 && norm != UCOL_ON) {
-          log_verbose("N ");
+          /*log_verbose("N ");*/
           ucol_setAttribute(myCollation, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
           partialNormalizedSKResult = compareUsingPartials(myCollation, source, sLen, target, tLen, partialSizes[i], &status);
           ucol_setAttribute(myCollation, UCOL_NORMALIZATION_MODE, norm, &status);
@@ -268,7 +289,7 @@ static void doTestVariant(UCollator* myCollation, const UChar source[], const UC
           }
         }
       }
-      log_verbose("\n");
+      /*log_verbose("\n");*/
     }
 
     
