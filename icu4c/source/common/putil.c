@@ -1511,6 +1511,8 @@ static const char *uprv_getPOSIXID(void)
 U_CAPI const char* U_EXPORT2
 uprv_getDefaultLocaleID()
 {
+    umtx_lock(NULL);
+    {
 #if U_POSIX_LOCALE
 /*
   Note that:  (a '!' means the ID is improper somehow)
@@ -1776,12 +1778,15 @@ The leftmost codepage (.xxx) wins.
 
     return correctedLocale;
 #endif
-
+    }
+    umtx_unlock(NULL);
 }
 
 U_CAPI const char*  U_EXPORT2
 uprv_getDefaultCodepage()
 {
+    umtx_lock(NULL);
+    {
 #if defined(OS400)
     uint32_t ccsid = 37; /* Default to ibm-37 */
     static char codepage[64];
@@ -1894,6 +1899,8 @@ uprv_getDefaultCodepage()
 #else
     return "US-ASCII";
 #endif
+    }
+    umtx_unlock(NULL);
 }
 
 #if U_CHARSET_FAMILY==U_EBCDIC_FAMILY
