@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding = "Windows-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.00"
@@ -24,7 +24,7 @@
 				ImproveFloatingPointConsistency="TRUE"
 				OptimizeForProcessor="2"
 				AdditionalIncludeDirectories="..\..\include,..\common"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;LAYOUT_EXPORTS;U_LAYOUT_IMPLEMENTATION"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;U_LAYOUT_IMPLEMENTATION"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
 				DisableLanguageExtensions="TRUE"
@@ -48,6 +48,7 @@
 				SuppressStartupBanner="TRUE"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\..\..\lib/icule28d.pdb"
+				BaseAddress="0x4ac00000"
 				ImportLibrary="..\..\lib\iculed.lib"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -85,7 +86,7 @@
 				InlineFunctionExpansion="2"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="..\..\include,..\common"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;LAYOUT_EXPORTS;U_LAYOUT_IMPLEMENTATION"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;U_LAYOUT_IMPLEMENTATION"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
@@ -107,6 +108,7 @@
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				ProgramDatabaseFile=".\..\..\lib/icule28.pdb"
+				BaseAddress="0x4ac00000"
 				ImportLibrary="..\..\lib\icule.lib"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -179,9 +181,6 @@
 				RelativePath=".\GDEFMarkFilter.cpp">
 			</File>
 			<File
-				RelativePath=".\GXLayoutEngine.cpp">
-			</File>
-			<File
 				RelativePath=".\GlyphDefinitionTables.cpp">
 			</File>
 			<File
@@ -194,10 +193,13 @@
 				RelativePath=".\GlyphPosnLookupProc.cpp">
 			</File>
 			<File
+				RelativePath=".\GlyphSubstitutionTables.cpp">
+			</File>
+			<File
 				RelativePath=".\GlyphSubstLookupProc.cpp">
 			</File>
 			<File
-				RelativePath=".\GlyphSubstitutionTables.cpp">
+				RelativePath=".\GXLayoutEngine.cpp">
 			</File>
 			<File
 				RelativePath=".\HanLayoutEngine.cpp">
@@ -221,10 +223,10 @@
 				RelativePath=".\IndicReordering.cpp">
 			</File>
 			<File
-				RelativePath=".\LEFontInstance.cpp">
+				RelativePath=".\LayoutEngine.cpp">
 			</File>
 			<File
-				RelativePath=".\LayoutEngine.cpp">
+				RelativePath=".\LEFontInstance.cpp">
 			</File>
 			<File
 				RelativePath=".\LigatureSubstProc.cpp">
@@ -233,16 +235,16 @@
 				RelativePath=".\LigatureSubstSubtables.cpp">
 			</File>
 			<File
-				RelativePath=".\LookupProcessor.cpp">
+				RelativePath=".\loengine.cpp">
 			</File>
 			<File
-				RelativePath=".\LookupTables.cpp">
+				RelativePath=".\LookupProcessor.cpp">
 			</File>
 			<File
 				RelativePath=".\Lookups.cpp">
 			</File>
 			<File
-				RelativePath=".\MPreFixups.cpp">
+				RelativePath=".\LookupTables.cpp">
 			</File>
 			<File
 				RelativePath=".\MarkArrays.cpp">
@@ -258,6 +260,9 @@
 			</File>
 			<File
 				RelativePath=".\MorphTables.cpp">
+			</File>
+			<File
+				RelativePath=".\MPreFixups.cpp">
 			</File>
 			<File
 				RelativePath=".\MultipleSubstSubtables.cpp">
@@ -322,9 +327,6 @@
 			<File
 				RelativePath=".\ValueRecords.cpp">
 			</File>
-			<File
-				RelativePath=".\loengine.cpp">
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -351,10 +353,10 @@
 				RelativePath=".\ContextualGlyphInsertion.h">
 			</File>
 			<File
-				RelativePath=".\ContextualGlyphSubstProc.h">
+				RelativePath=".\ContextualGlyphSubstitution.h">
 			</File>
 			<File
-				RelativePath=".\ContextualGlyphSubstitution.h">
+				RelativePath=".\ContextualGlyphSubstProc.h">
 			</File>
 			<File
 				RelativePath=".\ContextualSubstSubtables.h">
@@ -381,9 +383,6 @@
 				RelativePath=".\GDEFMarkFilter.h">
 			</File>
 			<File
-				RelativePath=".\GXLayoutEngine.h">
-			</File>
-			<File
 				RelativePath=".\GlyphDefinitionTables.h">
 			</File>
 			<File
@@ -399,10 +398,13 @@
 				RelativePath=".\GlyphPosnLookupProc.h">
 			</File>
 			<File
+				RelativePath=".\GlyphSubstitutionTables.h">
+			</File>
+			<File
 				RelativePath=".\GlyphSubstLookupProc.h">
 			</File>
 			<File
-				RelativePath=".\GlyphSubstitutionTables.h">
+				RelativePath=".\GXLayoutEngine.h">
 			</File>
 			<File
 				RelativePath=".\HanLayoutEngine.h">
@@ -426,22 +428,40 @@
 				RelativePath=".\IndicReordering.h">
 			</File>
 			<File
-				RelativePath=".\LEFontInstance.h">
+				RelativePath=".\LayoutEngine.h">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy  $(InputPath)  ..\..\include\layout
-"
-						Outputs="..\..\include\layout\LEFontInstance.h"/>
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
+						Outputs="..\..\include\layout\$(InputFileName)"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy  $(InputPath)  ..\..\include\layout
-"
-						Outputs="..\..\include\layout\LEFontInstance.h"/>
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
+						Outputs="..\..\include\layout\$(InputFileName)"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\LayoutTables.h">
+			</File>
+			<File
+				RelativePath=".\LEFontInstance.h">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
+						Outputs="..\..\include\layout\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
+						Outputs="..\..\include\layout\$(InputFileName)"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -450,17 +470,15 @@
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy  $(InputPath)  ..\..\include\layout
-"
-						Outputs="..\..\include\layout\LEGlyphFilter.h"/>
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
+						Outputs="..\..\include\layout\$(InputFileName)"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy  $(InputPath)  ..\..\include\layout
-"
-						Outputs="..\..\include\layout\LEGlyphFilter.h"/>
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
+						Outputs="..\..\include\layout\$(InputFileName)"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -469,17 +487,15 @@
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy  $(InputPath)  ..\..\include\layout
-"
-						Outputs="..\..\include\layout\LELanguages.h"/>
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
+						Outputs="..\..\include\layout\$(InputFileName)"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy  $(InputPath)  ..\..\include\layout
-"
-						Outputs="..\..\include\layout\LELanguages.h"/>
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
+						Outputs="..\..\include\layout\$(InputFileName)"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -488,17 +504,15 @@
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy  $(InputPath)  ..\..\include\layout
-"
-						Outputs="..\..\include\layout\LEScripts.h"/>
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
+						Outputs="..\..\include\layout\$(InputFileName)"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy  $(InputPath)  ..\..\include\layout
-"
-						Outputs="..\..\include\layout\LEScripts.h"/>
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
+						Outputs="..\..\include\layout\$(InputFileName)"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -507,17 +521,15 @@
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy  $(InputPath)  ..\..\include\layout
-"
-						Outputs="..\..\include\layout\LESwaps.h"/>
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
+						Outputs="..\..\include\layout\$(InputFileName)"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy  $(InputPath)  ..\..\include\layout
-"
-						Outputs="..\..\include\layout\LESwaps.h"/>
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
+						Outputs="..\..\include\layout\$(InputFileName)"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -526,40 +538,19 @@
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy  $(InputPath)  ..\..\include\layout
-"
-						Outputs="..\..\include\layout\LETypes.h"/>
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
+						Outputs="..\..\include\layout\$(InputFileName)"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="copy  $(InputPath)  ..\..\include\layout
-"
-						Outputs="..\..\include\layout\LETypes.h"/>
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\layout"
+						Outputs="..\..\include\layout\$(InputFileName)"/>
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\LayoutEngine.h">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy  $(InputPath)  ..\..\include\layout
-"
-						Outputs="..\..\include\layout\LayoutEngine.h"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy  $(InputPath)  ..\..\include\layout
-"
-						Outputs="..\..\include\layout\LayoutEngine.h"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath=".\LayoutTables.h">
+				RelativePath=".\LigatureSubstitution.h">
 			</File>
 			<File
 				RelativePath=".\LigatureSubstProc.h">
@@ -568,19 +559,30 @@
 				RelativePath=".\LigatureSubstSubtables.h">
 			</File>
 			<File
-				RelativePath=".\LigatureSubstitution.h">
+				RelativePath=".\unicode\loengine.h">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="copy &quot;$(InputPath)&quot; ..\..\include\unicode"
+						Outputs="..\..\include\unicode\$(InputFileName)"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath=".\LookupProcessor.h">
 			</File>
 			<File
-				RelativePath=".\LookupTables.h">
-			</File>
-			<File
 				RelativePath=".\Lookups.h">
 			</File>
 			<File
-				RelativePath=".\MPreFixups.h">
+				RelativePath=".\LookupTables.h">
 			</File>
 			<File
 				RelativePath=".\MarkArrays.h">
@@ -599,6 +601,9 @@
 			</File>
 			<File
 				RelativePath=".\MorphTables.h">
+			</File>
+			<File
+				RelativePath=".\MPreFixups.h">
 			</File>
 			<File
 				RelativePath=".\MultipleSubstSubtables.h">
@@ -668,25 +673,6 @@
 			</File>
 			<File
 				RelativePath=".\ValueRecords.h">
-			</File>
-			<File
-				RelativePath=".\unicode\loengine.h">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy  $(InputPath)  ..\..\include\unicode
-"
-						Outputs="..\..\include\unicode\loengine.h"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						CommandLine="copy  $(InputPath)  ..\..\include\unicode
-"
-						Outputs="..\..\include\unicode\loengine.h"/>
-				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
