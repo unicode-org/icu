@@ -427,17 +427,16 @@ Locale::setDefault( const   Locale&     newLocale,
 Locale
 Locale::createFromName (const char *name)
 {
+    UErrorCode status = U_ZERO_ERROR;
     char stack[128];
     char *heap = NULL;
     char *buf = stack;
     int32_t buflen = 128;
-    UErrorCode status;
-
-    status = U_ZERO_ERROR;
+    int32_t namelen = (int32_t)uprv_strlen(name);
 
     /* for some reason */
-    if(uprv_strlen(name) > buflen) {
-        buflen = (int32_t)uprv_strlen(name)+1;
+    if(namelen > buflen) {
+        buflen = namelen+1;
         heap = (char*)uprv_malloc(buflen);
         buf = heap;
     }

@@ -53,10 +53,6 @@ void UCNV_DEBUG_LOG(char *what, char *who, void *p, int l)
 
 #define CHUNK_SIZE 5*1024
 
-/* Internal function : begin */
-static int32_t ucnv_getAmbiguousCCSID (const UConverter* cnv);
-/* Internal function : end */
-
 static void T_UConverter_fromCodepageToCodepage (UConverter * outConverter,
                                                  UConverter * inConverter,
                                                  char **target,
