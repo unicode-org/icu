@@ -104,7 +104,8 @@ offsetTOCLookupFn(const UDataMemory *pData,
     const UDataOffsetTOC  *toc = (UDataOffsetTOC *)pData->toc;
     if(toc!=NULL) {
         const char *base=(const char *)pData->toc;
-        uint32_t start, limit, number;
+        uint32_t start, limit, number, lastNumber;
+        int32_t strResult;
 
         /* perform a binary search for the data in the common data's table of contents */
 #if defined (UDATA_DEBUG_DUMP)
@@ -116,36 +117,40 @@ offsetTOCLookupFn(const UDataMemory *pData,
 
         start=0;
         limit=toc->count;         /* number of names in this table of contents */
+        lastNumber=limit;
         if (limit == 0) {         /* Stub common data library used during build is empty. */
             return NULL;
         }
-        while(start<limit-1) {
-            number=(start+limit)/2;
-            if(uprv_strcmp(tocEntryName, &base[toc->entry[number].nameOffset])<0) {
+        for (;;) {
+            number = (start+limit)/2;
+            if (lastNumber == number) {	/* Have we moved? */
+                break;	/* We haven't moved, and it wasn't found. */
+            }
+            lastNumber = number;
+            strResult = uprv_strcmp(tocEntryName, &base[toc->entry[number].nameOffset]);
+            if(strResult<0) {
                 limit=number;
-            } else {
+            } else if (strResult>0) {
                 start=number;
             }
-        }
-
-        if(uprv_strcmp(tocEntryName, &base[toc->entry[start].nameOffset])==0) {
-            /* found it */
+            else {
+                /* found it */
 #ifdef UDATA_DEBUG
-          /* fprintf(stderr, "Found: %p\n",(base+toc[2*start+1])); */
-          fprintf(stderr, "%s: Found.\n", tocEntryName);
+                /* fprintf(stderr, "Found: %p\n",(base+toc[2*start+1])); */
+                fprintf(stderr, "%s: Found.\n", tocEntryName);
 #endif
-            if((start+1)<toc->count) {
-                *pLength=(int32_t)(toc->entry[start+1].dataOffset-toc->entry[start].dataOffset);
-            } else {
-                *pLength=-1;
+                if((number+1)<toc->count) {
+                    *pLength=(int32_t)(toc->entry[number+1].dataOffset-toc->entry[number].dataOffset);
+                } else {
+                    *pLength=-1;
+                }
+                return (const DataHeader *)&base[toc->entry[number].dataOffset];
             }
-            return (const DataHeader *)&base[toc->entry[start].dataOffset];
-        } else {
-#ifdef UDATA_DEBUG
-       fprintf(stderr, "%s: Not found.\n", tocEntryName);
-#endif
-            return NULL;
         }
+#ifdef UDATA_DEBUG
+        fprintf(stderr, "%s: Not found.\n", tocEntryName);
+#endif
+        return NULL;
     } else {
 #ifdef UDATA_DEBUG
         fprintf(stderr, "returning header\n");
