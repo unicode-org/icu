@@ -16,34 +16,36 @@ public class RoundTripTest extends TestFmwk {
     }
 
     public void TestHiragana() throws IOException, ParseException {
-        new Test("Latin-Kana", 
+        new Test("Latin-Hiragana", 
           TestUtility.LATIN_SCRIPT, TestUtility.HIRAGANA_SCRIPT)
           .test("[a-z]", "[\u3040-\u3094]", this);
     }
 
     public void TestKatakana() throws IOException, ParseException {
-        new Test("Latin-Kana", 
+        new Test("Latin-Katakana", 
           TestUtility.LATIN_SCRIPT, TestUtility.KATAKANA_SCRIPT)
-          .test("[A-Z]", "[\u30A1-\u30FA]", this);
+          .test("[a-z]", "[\u30A1-\u30FA]", this);
     }
 
-    public void TestArabic() throws IOException, ParseException {
-        new Test("Latin-Arabic", 
-          TestUtility.LATIN_SCRIPT, TestUtility.ARABIC_SCRIPT)
-          .test("[a-z]", "[\u0620-\u065F-[\u0640]]", this);
-    }
+// Some transliterators removed for 2.0
 
-    public void TestHebrew() throws IOException, ParseException {
-        new Test("Latin-Hebrew", 
-          TestUtility.LATIN_SCRIPT, TestUtility.HEBREW_SCRIPT)
-          .test(null, "[\u05D0-\u05EF]", this);
-    }
+//  public void TestArabic() throws IOException, ParseException {
+//      new Test("Latin-Arabic", 
+//        TestUtility.LATIN_SCRIPT, TestUtility.ARABIC_SCRIPT)
+//        .test("[a-z]", "[\u0620-\u065F-[\u0640]]", this);
+//  }
 
-    public void TestHangul() throws IOException, ParseException {
-        Test t = new TestHangul();
-        t.setPairLimit(30); // Don't run full test -- too long
-        t.test(null, null, this);
-    }
+//  public void TestHebrew() throws IOException, ParseException {
+//      new Test("Latin-Hebrew", 
+//        TestUtility.LATIN_SCRIPT, TestUtility.HEBREW_SCRIPT)
+//        .test(null, "[\u05D0-\u05EF]", this);
+//  }
+
+//  public void TestHangul() throws IOException, ParseException {
+//      Test t = new TestHangul();
+//      t.setPairLimit(30); // Don't run full test -- too long
+//      t.test(null, null, this);
+//  }
 
     public void TestJamo() throws IOException, ParseException {
         Test t = new Test("Latin-Jamo", 
@@ -333,16 +335,16 @@ public class RoundTripTest extends TestFmwk {
         }
     }
 
-    static class TestHangul extends Test {
-        TestHangul () {
-            super("Jamo-Hangul", TestUtility.JAMO_SCRIPT, TestUtility.HANGUL_SCRIPT);
-        }
-  
-        public boolean isSource(char c) {
-            if (0x1113 <= c && c <= 0x1160) return false;
-            if (0x1176 <= c && c <= 0x11F9) return false;
-            if (0x3131 <= c && c <= 0x318E) return false;
-            return super.isSource(c);
-        }
-    }
+//  static class TestHangul extends Test {
+//      TestHangul () {
+//          super("Jamo-Hangul", TestUtility.JAMO_SCRIPT, TestUtility.HANGUL_SCRIPT);
+//      }
+//
+//      public boolean isSource(char c) {
+//          if (0x1113 <= c && c <= 0x1160) return false;
+//          if (0x1176 <= c && c <= 0x11F9) return false;
+//          if (0x3131 <= c && c <= 0x318E) return false;
+//          return super.isSource(c);
+//      }
+//  }
 }

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/CompoundTransliteratorTest.java,v $ 
- * $Date: 2001/09/24 19:56:41 $ 
- * $Revision: 1.3 $
+ * $Date: 2001/10/19 00:35:59 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -170,17 +170,17 @@ public class CompoundTransliteratorTest extends TestFmwk {
              "Any-Hex;Hex-Any;Any-Hex",     "hello",  "\\u0068\\u0065\\u006C\\u006C\\u006F", 
              "Any-Hex;Hex-Any",                 "hello! How are you?",  "hello! How are you?",
              "Devanagari-Latin;Latin-Devanagari",       "\u092D\u0948'\u0930'\u0935",  "\u092D\u0948\u0930\u0935", // quotes lost
-             "Latin-Cyrillic;Cyrillic-Latin",           "a'b'k'd'e'f'g'h'i'j'Shch'shch'zh'h", "abkdefghijShchshchzhh",
+             "Latin-Cyrillic;Cyrillic-Latin",           "a'b'k'd'e'f'g'h'i'j'Shch'shch'zh'h", "a'b'k'd'e'f'g'h'i'j'Shch'shch'zh'h",
              "Latin-Greek;Greek-Latin",                 "ABGabgAKLMN", "ABGabgAKLMN",
-             "Latin-Arabic;Arabic-Latin",               "Ad'r'a'b'i'k'dh'dd'gh", "Adrabikdhddgh",
+             //"Latin-Arabic;Arabic-Latin",               "Ad'r'a'b'i'k'dh'dd'gh", "Adrabikdhddgh",
              "Hiragana-Katakana",                       "\u3041\u308f\u3099\u306e\u304b\u3092\u3099", 
                                                                  "\u30A1\u30f7\u30ce\u30ab\u30fa",  
              "Hiragana-Katakana;Katakana-Hiragana",     "\u3041\u308f\u3099\u306e\u304b\u3051", 
                                                                  "\u3041\u308f\u3099\u306e\u304b\u3051",
              "Katakana-Hiragana;Hiragana-Katakana",     "\u30A1\u30f7\u30ce\u30f5\u30f6", 
                                                                  "\u30A1\u30f7\u30ce\u30ab\u30b1",  
-             "Latin-Kana;Kana-Latin",                   "VAVIVUVEVOhuZIZUZONINUNAsesuzezu", 
-                                                                 "VAVIVUVEVOhuZIZUZONINUNAsesuzezu",  
+             "Latin-Katakana;Katakana-Latin",                   "vavivuvevohuzizuzoninunasesuzezu", 
+                                                                 "vavivuvevohuzizuzoninunasesuzezu",  
         };
         CompoundTransliterator ct2=null;
         for(int i=0; i<Data.length; i+=3){
