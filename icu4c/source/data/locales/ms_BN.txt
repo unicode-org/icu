@@ -13,6 +13,19 @@ ms_BN{
         "BND",
         ","
     }
+    NumberElements { 
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+    }
 // ShortCountry{
 //  "BRN"
 // }
