@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2003-2004, International Business Machines
+ *   Copyright (C) 2003-2005, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -54,7 +54,7 @@ public:
      *
      * @stable ICU 3.2
      */
-    RunArray(const le_int32 *limits, le_int32 count);
+    inline RunArray(const le_int32 *limits, le_int32 count);
 
     /**
      * Construct an empty <code>RunArray</code> object. Clients can add limit
@@ -83,7 +83,7 @@ public:
      *
      * @stable ICU 3.2
      */
-    le_int32 getCount() const;
+    inline le_int32 getCount() const;
 
     /**
      * Get the last limit index. This is the number of characters in
@@ -93,7 +93,7 @@ public:
      *
      * @stable ICU 3.2
      */
-    le_int32 getLimit() const;
+    inline le_int32 getLimit() const;
 
     /**
      * Get the limit index for a particular run of text.
@@ -104,7 +104,7 @@ public:
      *
      * @stable ICU 3.2
      */
-    le_int32 getLimit(le_int32 run) const;
+    inline le_int32 getLimit(le_int32 run) const;
 
     /**
      * Add a limit index to the limit indices array and return the run index
@@ -195,9 +195,9 @@ private:
 
     le_int32 ensureCapacity();
 
-    RunArray();
-    RunArray(const RunArray & /*other*/);
-    RunArray &operator=(const RunArray & /*other*/) { return *this; };
+    inline RunArray();
+    inline RunArray(const RunArray & /*other*/);
+    inline RunArray &operator=(const RunArray & /*other*/) { return *this; };
 
     const le_int32 *fLimits;
           le_int32  fCount;
@@ -265,7 +265,7 @@ public:
      *
      * @stable ICU 3.2
      */
-    FontRuns(const LEFontInstance **fonts, const le_int32 *limits, le_int32 count);
+    inline FontRuns(const LEFontInstance **fonts, const le_int32 *limits, le_int32 count);
 
     /**
      * Construct an empty <code>FontRuns</code> object. Clients can add font and limit
@@ -347,9 +347,9 @@ protected:
 
 private:
 
-    FontRuns();
-    FontRuns(const FontRuns &other);
-    FontRuns &operator=(const FontRuns & /*other*/) { return *this; };
+    inline FontRuns();
+    inline FontRuns(const FontRuns &other);
+    inline FontRuns &operator=(const FontRuns & /*other*/) { return *this; };
 
     /**
      * The address of this static class variable serves as this class's ID
@@ -402,7 +402,7 @@ public:
      *
      * @stable ICU 3.2
      */
-    LocaleRuns(const Locale **locales, const le_int32 *limits, le_int32 count);
+    inline LocaleRuns(const Locale **locales, const le_int32 *limits, le_int32 count);
 
     /**
      * Construct an empty <code>LocaleRuns</code> object. Clients can add locale and limit
@@ -484,9 +484,9 @@ protected:
 
 private:
 
-    LocaleRuns();
-    LocaleRuns(const LocaleRuns &other);
-    LocaleRuns &operator=(const LocaleRuns & /*other*/) { return *this; };
+    inline LocaleRuns();
+    inline LocaleRuns(const LocaleRuns &other);
+    inline LocaleRuns &operator=(const LocaleRuns & /*other*/) { return *this; };
 
     /**
      * The address of this static class variable serves as this class's ID
@@ -537,7 +537,7 @@ public:
      *
      * @stable ICU 3.2
      */
-    ValueRuns(const le_int32 *values, const le_int32 *limits, le_int32 count);
+    inline ValueRuns(const le_int32 *values, const le_int32 *limits, le_int32 count);
 
     /**
      * Construct an empty <code>ValueRuns</code> object. Clients can add value and limit
@@ -618,9 +618,9 @@ protected:
 
 private:
 
-    ValueRuns();
-    ValueRuns(const ValueRuns &other);
-    ValueRuns &operator=(const ValueRuns & /*other*/) { return *this; };
+    inline ValueRuns();
+    inline ValueRuns(const ValueRuns &other);
+    inline ValueRuns &operator=(const ValueRuns & /*other*/) { return *this; };
 
     /**
      * The address of this static class variable serves as this class's ID

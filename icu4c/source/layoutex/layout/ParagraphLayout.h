@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2002-2004, International Business Machines
+ *   Copyright (C) 2002-2005, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -72,7 +72,7 @@ public:
          *
          * @stable ICU 3.2
          */
-        le_int32 countRuns() const;
+        inline le_int32 countRuns() const;
 
         /**
          * Get the ascent of the line. This is the maximum ascent
@@ -165,9 +165,9 @@ public:
 
         VisualRun **fRuns;
 
-        Line();
-        Line(const Line &other);
-        Line &operator=(const Line & /*other*/) { return *this; };
+        inline Line();
+        inline Line(const Line &other);
+        inline Line &operator=(const Line & /*other*/) { return *this; };
 
         void computeMetrics();
 
@@ -205,7 +205,7 @@ public:
          *
          * @stable ICU 3.2
          */
-        const LEFontInstance *getFont() const;
+        inline const LEFontInstance *getFont() const;
 
         /**
          * Get the direction of the visual run.
@@ -215,7 +215,7 @@ public:
          *
          * @stable ICU 3.2
          */
-        UBiDiDirection getDirection() const;
+        inline UBiDiDirection getDirection() const;
 
         /**
          * Get the number of glyphs in the visual run.
@@ -224,7 +224,7 @@ public:
          *
          * @stable ICU 3.2
          */
-        le_int32 getGlyphCount() const;
+        inline le_int32 getGlyphCount() const;
 
         /**
          * Get the glyphs in the visual run. Glyphs with the values <code>0xFFFE</code> and
@@ -236,7 +236,7 @@ public:
          *
          * @stable ICU 3.2
          */
-        const LEGlyphID *getGlyphs() const;
+        inline const LEGlyphID *getGlyphs() const;
 
         /**
          * Get the (x, y) positions of the glyphs in the visual run. To simplify storage
@@ -251,7 +251,7 @@ public:
          *
          * @stable ICU 3.2
          */
-        const float *getPositions() const;
+        inline const float *getPositions() const;
 
         /**
          * Get the glyph-to-character map for this visual run. This maps the indices into
@@ -263,7 +263,7 @@ public:
          *
          * @stable ICU 3.2
          */
-        const le_int32 *getGlyphToCharMap() const;
+        inline const le_int32 *getGlyphToCharMap() const;
 
         /**
          * A convenience method which returns the ascent value for the font
@@ -273,7 +273,7 @@ public:
          *
          * @stable ICU 3.2
          */
-        le_int32 getAscent() const;
+        inline le_int32 getAscent() const;
 
         /**
          * A convenience method which returns the descent value for the font
@@ -283,7 +283,7 @@ public:
          *
          * @stable ICU 3.2
          */
-        le_int32 getDescent() const;
+        inline le_int32 getDescent() const;
 
         /**
          * A convenience method which returns the leading value for the font
@@ -293,7 +293,7 @@ public:
          *
          * @stable ICU 3.2
          */
-        le_int32 getLeading() const;
+        inline le_int32 getLeading() const;
 
         /**
          * ICU "poor man's RTTI", returns a UClassID for this class.
@@ -328,11 +328,11 @@ public:
 
         friend class Line;
 
-        VisualRun();
-        VisualRun(const VisualRun &other);
-        VisualRun &operator=(const VisualRun &other) { return *this; };
+        inline VisualRun();
+        inline VisualRun(const VisualRun &other);
+        inline VisualRun &operator=(const VisualRun &other) { return *this; };
 
-        VisualRun(const LEFontInstance *font, UBiDiDirection direction, le_int32 glyphCount,
+        inline VisualRun(const LEFontInstance *font, UBiDiDirection direction, le_int32 glyphCount,
                   const LEGlyphID glyphs[], const float positions[], const le_int32 glyphToCharMap[]);
 
         ~VisualRun();
@@ -443,7 +443,7 @@ public:
      *
      * @stable ICU 3.2
      */
-    UBiDiLevel getParagraphLevel();
+    inline UBiDiLevel getParagraphLevel();
 
     /**
      * Return the directionality of the text in the paragraph.
@@ -454,7 +454,7 @@ public:
      *
      * @stable ICU 3.2
      */
-    UBiDiDirection getTextDirection();
+    inline UBiDiDirection getTextDirection();
 
     /**
      * Return the max ascent value for all the fonts
@@ -492,7 +492,7 @@ public:
      *
      * @stable ICU 3.2
      */
-    void reflow();
+    inline void reflow();
 
     /**
      * Return a <code>ParagraphLayout::Line</code> object which represents next line
@@ -553,7 +553,7 @@ private:
 
     ParagraphLayout() {};
     ParagraphLayout(const ParagraphLayout & /*other*/) : UObject( ){};
-    ParagraphLayout &operator=(const ParagraphLayout & /*other*/) { return *this; };
+    inline ParagraphLayout &operator=(const ParagraphLayout & /*other*/) { return *this; };
 
     void computeLevels(UBiDiLevel paragraphLevel);
 
