@@ -351,6 +351,31 @@ uprv_pow10(int32_t x)
 #endif
 }
 
+/**
+ * Computes the remainder of an implied division of its operands, as
+ * defined by the IEEE 754 standard.  Commonly used to bring a value
+ * into range without losing accuracy; e.g., bringing a large argument
+ * to sin() into range.
+ *
+ * Returns r, where x = n * p + r.  Here n is the integer nearest to
+ * x / p.  If two integers are equidistant from x / p, n is the even
+ * integer.  If r is zero, then it should have the same sign as the
+ * dividend x.
+ *
+ * The IEEE remainder may be negative or positive.
+ * IEEEremainder(5,3) = -1.  IEEEremainder(4,3) = 1.
+ *
+ * The IEEE remainder r is always less than or equal to p/2 in
+ * absolute value.  That is, |r| <= |p/2|.  By comparison, fmod()
+ * returns a remainder r such that |r| <= |p|.
+ *
+ * Some floating point processors can compute this value in hardware.
+ * We provide two implementations here, one that manipulates the IEEE
+ * bit pattern directly, and one that is built upon other floating
+ * point operations.  The former implementation has superior accuracy
+ * and is preferred; the latter may work on platforms where the former
+ * fails, but will introduce inaccuracies.
+ */
 double 
 uprv_IEEEremainder(double x, double p)
 {
@@ -405,12 +430,13 @@ uprv_IEEEremainder(double x, double p)
   
   return x;
 #else
-    /* Portable implementation of IEEEremainder.  This implementation
-     * should work on platforms that do not have IEEE bit layouts.
-     * Deficiencies of this implementation are that it does not
-     * attempt to handle NaN or infinite parameters and it returns the
-     * dividend if the divisor is zero.  This is probably not an issue
-     * on non-IEEE platforms. - aliu
+    /* INACCURATE but portable implementation of IEEEremainder.  This
+     * implementation should work on platforms that do not have IEEE
+     * bit layouts.  Deficiencies of this implementation are its
+     * inaccuracy and that it does not attempt to handle NaN or
+     * infinite parameters and it returns the dividend if the divisor
+     * is zero.  This is probably not an issue on non-IEEE
+     * platforms. - aliu
      */
     if (p == 0.0) { // zero divisor
         return x;
