@@ -437,7 +437,7 @@ struct SResource *int_open(struct SRBRoot *bundle, char *tag, int32_t value, UEr
     return res;
 }
 
-struct SResource *bin_open(struct SRBRoot *bundle, char *tag, uint32_t length, uint8_t *data, UErrorCode *status) {
+struct SResource *bin_open(struct SRBRoot *bundle, const char *tag, uint32_t length, uint8_t *data, UErrorCode *status) {
 
     struct SResource *res;
 
@@ -753,7 +753,7 @@ void bundle_setlocale(struct SRBRoot *bundle, UChar *locale, UErrorCode *status)
 
 }
 
-uint16_t bundle_addtag(struct SRBRoot *bundle, char *tag, UErrorCode *status) {
+uint16_t bundle_addtag(struct SRBRoot *bundle, const char *tag, UErrorCode *status) {
     uint16_t keypos;
 
     if(U_FAILURE(*status)) {
