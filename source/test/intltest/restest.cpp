@@ -346,7 +346,7 @@ ResourceBundleTest::testTag(const char* frag,
                             UBool in_te,
                             UBool in_te_IN)
 {
-    UBool failOrig = fail;
+    int32_t failOrig = fail;
 
     // Make array from input params
 
