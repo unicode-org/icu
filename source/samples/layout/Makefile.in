@@ -23,7 +23,7 @@ CLEANFILES = *~ $(DEPS)
 TARGET = gnomelayout
 
 DEFS = @DEFS@
-CPPFLAGS = @CPPFLAGS@ `gnome-config --cflags gnomeui` -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/layout -I$(top_srcdir)
+CPPFLAGS = @CPPFLAGS@ `gnome-config --cflags gnomeui` -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(top_srcdir)/layout -I$(top_srcdir)/extra/scrptrun -I$(top_srcdir)
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
 ENABLE_RPATH = @ENABLE_RPATH@
@@ -72,6 +72,19 @@ check-local: all-local
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
+
+# The following two rules make it possible to
+# compile scrptrun.cpp from the extra/scrptrun directory.
+# they were copied from the default rules in mh-linux which
+# is probably OK because this sample will only run on Linux...
+scrptrun.d: $(top_srcdir)/extra/scrptrun/scrptrun.cpp
+	@echo "Generating dependency information for $<"
+	@$(SHELL) -ec '$(GEN_DEPS.cc) $< \
+		| sed '\''s%\($*\)\.o[ :]*%\1.o $@ : %g'\'' > $@; \
+		[ -s $@ ] || rm -f $@'
+
+scrptrun.o: $(top_srcdir)/extra/scrptrun/scrptrun.cpp
+	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<
 
 $(TARGET) : $(OBJECTS)
 	$(LINK.cc) -o $@ $^ $(LIBS)
