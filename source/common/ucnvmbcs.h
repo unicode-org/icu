@@ -42,6 +42,14 @@
  * If it is present, then an ICU version reading header versions 4.0 or 4.1
  * will be able to use the base table and ignore the extension.
  *
+ * The unicodeMask in the static data is part of the base table data structure.
+ * Especially, the UCNV_HAS_SUPPLEMENTARY flag determines the length of the
+ * fromUnicode stage 1 array.
+ * The static data unicodeMask refers only to the base table's properties if
+ * a base table is included.
+ * In an extension-only file, the static data unicodeMask is 0.
+ * The extension data indexes have a separate field with the unicodeMask flags.
+ *
  * MBCS-style data structure following the static data.
  * Offsets are counted in bytes from the beginning of the MBCS header structure.
  * Details about usage in comments in ucnvmbcs.c.
