@@ -41,7 +41,7 @@ struct SRBRoot {
 };
 
 struct SRBRoot *bundle_open(UErrorCode *status);
-void bundle_write(struct SRBRoot *bundle, const char *outputDir, char *writtenFilename, int writtenFilenameLen, UErrorCode *status);
+void bundle_write(struct SRBRoot *bundle, const char *outputDir, const char *outputPkg, char *writtenFilename, int writtenFilenameLen, UErrorCode *status);
 
 /* write a java resource file */
 void bundle_write_java(struct SRBRoot *bundle, const char *outputDir, const char* outputEnc, char *writtenFilename, 

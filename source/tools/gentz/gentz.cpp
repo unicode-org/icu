@@ -187,7 +187,7 @@ int gentz::MMain(int argc, char* argv[]) {
     if(argc<0 || options[0].doesOccur || options[1].doesOccur) {
         fprintf(stderr,
             "usage: %s [-options] timezone-file\n"
-            "\tread the timezone file produced by tz.pl and create " TZ_DATA_NAME "." TZ_DATA_TYPE "\n"
+            "\tread the timezone file produced by tz.pl and create " U_ICUDATA_NAME "_" TZ_DATA_NAME "." TZ_DATA_TYPE "\n"
             "options:\n"
             "\t-h or -? or --help  this usage text\n"
             "\t-v or --verbose     turn on verbose output\n"
@@ -224,7 +224,7 @@ int gentz::MMain(int argc, char* argv[]) {
     int32_t wlen = writeTzDatFile(options[3].value);
     if (verbose) {
         fprintf(stdout, "Output file: %s.%s, %ld bytes\n",
-            TZ_DATA_NAME, TZ_DATA_TYPE, (long)wlen);
+            U_ICUDATA_NAME "_" TZ_DATA_NAME, TZ_DATA_TYPE, (long)wlen);
     }
 
     return 0; // success
@@ -266,7 +266,7 @@ int32_t gentz::writeTzDatFile(const char *destdir) {
     *(uint16_t*)&(dataInfo.dataVersion[0]) = header.versionYear;
     *(uint16_t*)&(dataInfo.dataVersion[2]) = header.versionSuffix;
 
-    pdata = udata_create(destdir, TZ_DATA_TYPE, TZ_DATA_NAME, &dataInfo,
+    pdata = udata_create(destdir, TZ_DATA_TYPE, U_ICUDATA_NAME "_" TZ_DATA_NAME, &dataInfo,
                          useCopyright ? U_COPYRIGHT_STRING : 0, &status);
     if (U_FAILURE(status)) {
         die("Unable to create data memory");

@@ -88,7 +88,7 @@ static UOption options[]={
 /*9*/ UOPTION_DEF( "entrypoint", 'e', UOPT_REQUIRES_ARG)
 };
 
-static char *symPrefix;
+static char *symPrefix = NULL;
 
 extern int
 main(int argc, char* argv[]) {
@@ -323,6 +323,8 @@ main(int argc, char* argv[]) {
             entrypointName = options[6].value;
         }
 
+
+#if 0
         symPrefix = (char *) uprv_malloc(uprv_strlen(entrypointName) + 2);
 
         /* test for NULL */
@@ -333,6 +335,7 @@ main(int argc, char* argv[]) {
 
         uprv_strcpy(symPrefix, entrypointName);
         uprv_strcat(symPrefix, "_");
+#endif
 
         /* write the source file */
         sprintf(buffer,
@@ -347,10 +350,10 @@ main(int argc, char* argv[]) {
             options[6].value, options[7].value);
         T_FileStream_writeLine(out, buffer);
 
-        sprintf(buffer, "extern const char\n    %s%s[]", symPrefix, files[0].pathname);
+        sprintf(buffer, "extern const char\n    %s%s[]", symPrefix?symPrefix:"", files[0].pathname);
         T_FileStream_writeLine(out, buffer);
         for(i=1; i<fileCount; ++i) {
-            sprintf(buffer, ",\n    %s%s[]", symPrefix, files[i].pathname);
+            sprintf(buffer, ",\n    %s%s[]", symPrefix?symPrefix:"", files[i].pathname);
             T_FileStream_writeLine(out, buffer);
         }
         T_FileStream_writeLine(out, ";\n\n");
@@ -387,10 +390,10 @@ main(int argc, char* argv[]) {
         );
         T_FileStream_writeLine(out, buffer);
 
-        sprintf(buffer, "        { \"%s\", %s%s }", files[0].basename, symPrefix, files[0].pathname);
+        sprintf(buffer, "        { \"%s\", %s%s }", files[0].basename, symPrefix?symPrefix:"", files[0].pathname);
         T_FileStream_writeLine(out, buffer);
         for(i=1; i<fileCount; ++i) {
-            sprintf(buffer, ",\n        { \"%s\", %s%s }", files[i].basename, symPrefix, files[i].pathname);
+            sprintf(buffer, ",\n        { \"%s\", %s%s }", files[i].basename, symPrefix?symPrefix:"", files[i].pathname);
             T_FileStream_writeLine(out, buffer);
         }
 

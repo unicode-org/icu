@@ -7,24 +7,30 @@
 
 .SUFFIXES : .res .txt
 
+TESTPKG=testdata
+TESTDT=$(TESTPKG)_
+
 
 ALL : "$(TESTDATAOUT)\testdata.dat" 
 	@echo Test data is built.
 
-"$(TESTDATAOUT)\testdata.dat" : "$(TESTDATABLD)\ja_data.res" "$(TESTDATABLD)\casing.res" "$(TESTDATABLD)\root.res" "$(TESTDATABLD)\te.res" "$(TESTDATABLD)\te_IN.res" "$(TESTDATABLD)\testaliases.res" "$(TESTDATABLD)\testtypes.res" "$(TESTDATABLD)\testempty.res" "$(TESTDATABLD)\ja_data.res" "$(TESTDATAOUT)\DataDrivenCollationTest.res" $(TESTDATAOUT)test.dat
+"$(TESTDATAOUT)\testdata.dat" : "$(TESTDATABLD)\casing.res" "$(TESTDATABLD)\root.res" "$(TESTDATABLD)\te.res" "$(TESTDATABLD)\te_IN.res" "$(TESTDATABLD)\testaliases.res" "$(TESTDATABLD)\testtypes.res" "$(TESTDATABLD)\testempty.res" "$(TESTDATABLD)\ja_data.res" "$(TESTDATABLD)\DataDrivenCollationTest.res" $(TESTDATABLD)\testdata_test.dat "$(TESTDATABLD)\testdata_test1.cnv" "$(TESTDATABLD)\testdata_test3.cnv" "$(TESTDATABLD)\testdata_test4.cnv" 
 	@echo Building test data
-	copy "$(TESTDATABLD)\te.res" "$(TESTDATAOUT)\testudata_nam.typ"
-	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -v -m common -c -p testdata -O "$(PKGOPT)" -d "$(TESTDATAOUT)" -T "$(TESTDATABLD)" -s "$(TESTDATABLD)" <<
-casing.res
-root.res
-te.res
-te_IN.res
-testtypes.res
-testempty.res
-testaliases.res
-ja_data.res
-DataDrivenCollationTest.res
-test.dat
+	copy "$(TESTDATABLD)\testdata_te.res" "$(TESTDATAOUT)\testdata_nam.typ"
+	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -v -m common -c -p"$(TESTPKG)"  -O "$(PKGOPT)" -d "$(TESTDATAOUT)" -T "$(TESTDATABLD)" -s "$(TESTDATABLD)" <<
+testdata_casing.res
+testdata_root.res
+testdata_te.res
+testdata_te_IN.res
+testdata_testtypes.res
+testdata_testempty.res
+testdata_testaliases.res
+testdata_ja_data.res
+testdata_DataDrivenCollationTest.res
+testdata_test.dat
+testdata_test1.cnv
+testdata_test3.cnv
+testdata_test4.cnv
 <<
 
 
@@ -32,12 +38,24 @@ test.dat
 # Some test data resource bundles are known to have warnings and bad data.
 # The -q option is there on purpose, so we don't see it normally.
 {$(TESTDATA)}.txt.res:: 
-	@echo Making Test Resource Bundle files
-	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -q -s"$(TESTDATA)" -d"$(TESTDATABLD)" $<
+	@echo Making Test Resource Bundle files $<
+	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -t -p"$(TESTPKG)" -q -s"$(TESTDATA)" -d"$(TESTDATABLD)" $<
 
 "$(TESTDATABLD)\ja_data.res":
 	@echo Making Test Resource Bundle file with encoding ISO-2022-JP
-	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -q -s"$(TESTDATA)" -eISO_2022_JP -d"$(TESTDATABLD)" ja_data.bin 
+	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -t -p"$(TESTPKG)" -q -s"$(TESTDATA)" -eISO_2022_JP -d"$(TESTDATABLD)" ja_data.bin 
 
-$(TESTDATAOUT)test.dat : {"$(ICUTOOLS)\gentest\$(CFG)"}gentest.exe
+$(TESTDATABLD)\testdata_test.dat : {"$(ICUTOOLS)\gentest\$(CFG)"}gentest.exe
 	"$(ICUTOOLS)\gentest\$(CFG)\gentest" -d"$(TESTDATABLD)"
+
+
+
+# Targets for test converter data
+"$(TESTDATABLD)\testdata_test1.cnv": "$(TESTDATA)\test1.ucm"
+	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" -d"$(TESTDATABLD)" -t -p testdata  $**
+
+"$(TESTDATABLD)\testdata_test3.cnv": "$(TESTDATA)\test3.ucm"
+	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv"  -d"$(TESTDATABLD)" -t -p testdata  $**
+
+"$(TESTDATABLD)\testdata_test4.cnv": "$(TESTDATA)\test4.ucm"
+	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv"  -d"$(TESTDATABLD)" -t -p testdata $**
