@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberRegression.java,v $ 
- * $Date: 2002/02/19 04:10:24 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/03/07 05:13:36 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  **/
@@ -1391,17 +1391,17 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
         // FIXME 
-        /*
+        
         //Make the mins bigger than maxs
-        bytes[879] = (byte) 0x22; //setMinimumIntegerDigits
-        bytes[878] = (byte) 0x01;    
-        bytes[869] = (byte) 0x21; //setMaximumIntegerDigits
-        bytes[868] = (byte) 0x01;
-        bytes[875] = (byte) 0x24; //setMinimumFractionDigits
-        bytes[874] = (byte) 0x01;    
-        bytes[865] = (byte) 0x23; //setMaximumFractionDigits
-        bytes[864] = (byte) 0x01;
-        */
+        bytes[891] = (byte) 0x22; //setMinimumIntegerDigits
+        bytes[890] = (byte) 0x01;    
+        bytes[881] = (byte) 0x21; //setMaximumIntegerDigits
+        bytes[880] = (byte) 0x01;
+        bytes[887] = (byte) 0x24; //setMinimumFractionDigits
+        bytes[886] = (byte) 0x01;    
+        bytes[877] = (byte) 0x23; //setMaximumFractionDigits
+        bytes[876] = (byte) 0x01;
+        
         {
             ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
             try {
@@ -1413,17 +1413,17 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
         // FIXME 
-        /*
+        
         //the values are too big for a DecimalFormat
-        bytes[879] = (byte) 0x11; //setMinimumIntegerDigits
-        bytes[878] = (byte) 0x03;    
-        bytes[869] = (byte) 0x12; //setMaximumIntegerDigits
-        bytes[868] = (byte) 0x03;
-        bytes[875] = (byte) 0x13; //setMinimumFractionDigits
-        bytes[874] = (byte) 0x03;    
-        bytes[865] = (byte) 0x14; //setMaximumFractionDigits
-        bytes[864] = (byte) 0x03;
-        */
+        bytes[891] = (byte) 0x11; //setMinimumIntegerDigits
+        bytes[890] = (byte) 0x03;    
+        bytes[881] = (byte) 0x12; //setMaximumIntegerDigits
+        bytes[880] = (byte) 0x03;
+        bytes[887] = (byte) 0x13; //setMinimumFractionDigits
+        bytes[886] = (byte) 0x03;    
+        bytes[877] = (byte) 0x14; //setMaximumFractionDigits
+        bytes[876] = (byte) 0x03;
+        
         {
             ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(bytes));
             NumberFormat format = (NumberFormat) ois.readObject();
