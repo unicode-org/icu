@@ -19,7 +19,6 @@
 #include "unicode/udata.h"
 #include "rbbidata.h"
 #include "rbbirb.h"
-#include "filestrm.h"
 #include "cmemory.h"
 #include "cstring.h"
 
