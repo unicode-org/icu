@@ -153,7 +153,8 @@ UnicodeSetTest::TestCloneEqualHash(void) {
     delete set1;
     delete set1copy;
     delete set2;
-
+    delete set1clone;
+    delete set2clone;
 
 
 }
@@ -421,7 +422,7 @@ void UnicodeSetTest::_testComplement(int32_t a, UnicodeSet& x, UnicodeSet& z) {
         errln((UnicodeString)"FAILED: add: ~" + x +  " != " + z);
         errln((UnicodeString)"FAILED: add: ~" + a + " != " + c);
     }
-    checkCanonicalRep(z, "complement " + a);
+    checkCanonicalRep(z, (UnicodeString)"complement " + a);
 }
 
 void UnicodeSetTest::_testAdd(int32_t a, int32_t b, UnicodeSet& x, UnicodeSet& y, UnicodeSet& z) {
