@@ -249,8 +249,11 @@ public:
     virtual UBool isModulusSubstitution() const;
     
 private:
+    NFSubstitution(const NFSubstitution &other); // forbid copying of this class
+    NFSubstitution &operator=(const NFSubstitution &other); // forbid copying of this class
+
     static const char fgClassID;
-    
+
 public:
     static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
     virtual UClassID getDynamicClassID(void) const;
