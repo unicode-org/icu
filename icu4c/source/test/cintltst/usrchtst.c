@@ -44,13 +44,13 @@ static void open()
     
         ucol_close(DE_);
 
-        DE_ = ucol_openRules(rules, u_strlen(rules), UNORM_NFD, UCOL_TERTIARY,
+        DE_ = ucol_openRules(rules, u_strlen(rules), UCOL_ON, UCOL_TERTIARY,
                              (UParseError *)NULL, &status);
         u_strcpy(rules, ucol_getRules(ES_, &rulelength));
         u_unescape(EXTRACOLLATIONRULE, rules + rulelength, 1024 - rulelength);
     
         ucol_close(ES_);
-        ES_ = ucol_openRules(rules, u_strlen(rules), UNORM_NFD, UCOL_TERTIARY,
+        ES_ = ucol_openRules(rules, u_strlen(rules), UCOL_ON, UCOL_TERTIARY,
                              NULL, &status); 
         EN_WORDBREAKER_     = ubrk_open(UBRK_WORD, "en_US", NULL, 0, &status);
         EN_CHARACTERBREAKER_ = ubrk_open(UBRK_CHARACTER, "en_US", NULL, 0, 
@@ -739,7 +739,7 @@ static void TestCollator()
     }
     
     u_unescape(TESTCOLLATORRULE, rules, 32);
-    tailored = ucol_openRules(rules, -1, UNORM_NFD, COLLATOR[1].strength, 
+    tailored = ucol_openRules(rules, -1, UCOL_ON, COLLATOR[1].strength, 
                               NULL, &status);
     if (U_FAILURE(status)) {
         log_err("Error opening rule based collator %s\n", u_errorName(status));
@@ -1369,7 +1369,7 @@ static void TestContraction()
     UStringSearch *strsrch;
 
     u_unescape(CONTRACTIONRULE, rules, 128);
-    collator = ucol_openRules(rules, u_strlen(rules), UNORM_NFD, 
+    collator = ucol_openRules(rules, u_strlen(rules), UCOL_ON, 
                               UCOL_TERTIARY, NULL, &status); 
     if (U_FAILURE(status)) {
         log_err("Error opening collator %s\n", u_errorName(status));
@@ -1405,7 +1405,7 @@ static void TestIgnorable()
     uint32_t       count = 0;
 
     u_unescape(IGNORABLERULE, rules, 128);
-    collator = ucol_openRules(rules, u_strlen(rules), UNORM_NFD, 
+    collator = ucol_openRules(rules, u_strlen(rules), UCOL_ON, 
                               IGNORABLE[count].strength, NULL, &status); 
     if (U_FAILURE(status)) {
         log_err("Error opening collator %s\n", u_errorName(status));
@@ -1647,7 +1647,7 @@ static void TestCollatorCanonical()
     }
     
     u_unescape(TESTCOLLATORRULE, rules, 32);
-    tailored = ucol_openRules(rules, -1, UNORM_NFD, 
+    tailored = ucol_openRules(rules, -1, UCOL_ON, 
                               COLLATORCANONICAL[1].strength, NULL, &status);
     if (U_FAILURE(status)) {
         log_err("Error opening rule based collator %s\n", u_errorName(status));
@@ -1938,7 +1938,7 @@ static void TestContractionCanonical()
     UStringSearch *strsrch;
 
     u_unescape(CONTRACTIONRULE, rules, 128);
-    collator = ucol_openRules(rules, u_strlen(rules), UNORM_NFD, 
+    collator = ucol_openRules(rules, u_strlen(rules), UCOL_ON,
                               UCOL_TERTIARY, NULL, &status); 
     if (U_FAILURE(status)) {
         log_err("Error opening collator %s\n", u_errorName(status));
