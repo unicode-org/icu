@@ -10,13 +10,14 @@
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
 
-include $(top_srcdir)/icudefs.mk
-
-## Build directory information
 top_builddir = .
-subdir = .
+
+include $(top_builddir)/icudefs.mk
 
 ##
+
+## Build directory information
+subdir = .
 
 AUTOCONF = @AUTOCONF@
 
@@ -114,7 +115,7 @@ clean-local:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
 
 distclean-local: clean-local
-	$(RMV) Makefile icudefs.mk config/Makefile
+	$(RMV) Makefile README icudefs.mk config/Makefile
 	$(RMV) $(top_builddir)/config/Makefile.inc
 	$(RMV) config.cache config.log config.status
 	$(RMV) common/unicode/platform.h common/icucfg.h
