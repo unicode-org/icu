@@ -13,6 +13,71 @@
                      }
     }
     TestData {
+        TestShiftedIgnorable {
+            Info {
+                Description { "New UCA states that primary ignorables should be completely "
+                              "ignorable when following a shifted code point."
+                            }
+            }
+            Settings {
+                {
+                    TestLocale { "root" }
+                    Arguments { "[alternate shifted][strength 4]" }
+                }
+            }
+            Cases {
+                "a' 'b="
+                "a' '\u0300b="
+                "a' '\u0301b<"
+                "a_b="
+                "a_\u0300b="
+                "a_\u0301b<"
+                "A' 'b="
+                "A' '\u0300b="
+                "A' '\u0301b<"
+                "A_b="
+                "A_\u0300b="
+                "A_\u0301b<"
+                "a\u0301b<"
+                "A\u0301b<"
+                "a\u0300b<"
+                "A\u0300b"
+
+            }
+        }
+
+        TestNShiftedIgnorable {
+            Info {
+                Description { "New UCA states that primary ignorables should be completely "
+                              "ignorable when following a shifted code point."
+                            }
+            }
+            Settings {
+                {
+                    TestLocale { "root" }
+                    Arguments { "[alternate non-ignorable][strength 3]" }
+                }
+            }
+            Cases {
+                "a' 'b<"
+                "A' 'b<"
+                "a' '\u0301b<"
+                "A' '\u0301b<"
+                "a' '\u0300b<"
+                "A' '\u0300b<"
+                "a_b<"
+                "A_b<"
+                "a_\u0301b<"
+                "A_\u0301b<"
+                "a_\u0300b<"
+                "A_\u0300b<"
+                "a\u0301b<"
+                "A\u0301b<"
+                "a\u0300b<"
+                "A\u0300b<"
+            }
+        }
+
         TestSafeSurrogates {
             Info {
                 Description { "It turned out that surrogates were not skipped properly "
