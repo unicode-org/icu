@@ -19,6 +19,8 @@ CFG=gennorm - Win32 Debug
 !MESSAGE 
 !MESSAGE "gennorm - Win32 Release" (based on "Win32 (x86) Console Application")
 !MESSAGE "gennorm - Win32 Debug" (based on "Win32 (x86) Console Application")
+!MESSAGE "gennorm - Win64 Release" (based on "Win32 (x86) Console Application")
+!MESSAGE "gennorm - Win64 Debug" (based on "Win32 (x86) Console Application")
 !MESSAGE 
 
 # Begin Project
@@ -41,8 +43,8 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /MD /Za /W3 /GX /O2 /I "..\toolutil" /I "..\..\common" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
+# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
+# ADD CPP /nologo /MD /Za /W3 /GX /O2 /I "..\toolutil" /I "..\..\common" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -75,8 +77,8 @@ SOURCE="$(InputPath)"
 # PROP Intermediate_Dir "Debug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /Za /W3 /Gm /GX /ZI /Od /I "..\toolutil" /I "..\..\common" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FR /YX /FD /GZ /c
+# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
+# ADD CPP /nologo /MDd /Za /W3 /Gm /GX /ZI /Od /I "..\toolutil" /I "..\..\common" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FR  /FD /GZ /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -96,12 +98,82 @@ SOURCE="$(InputPath)"
 
 # End Custom Build
 
+!ELSEIF  "$(CFG)" == "gennorm - Win64 Release"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "Release"
+# PROP BASE Intermediate_Dir "Release"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "Release"
+# PROP Intermediate_Dir "Release"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN64" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /c
+# ADD CPP /nologo /MD /Za /W3   /I "..\toolutil" /I "..\..\common" /D"WIN64" /D"NDEBUG" /D"_CONSOLE" /D"_MBCS"  /FD /c /O2 /GX /Op /QIA64_fmaopt /D"_IA64_" /Zi /D"WIN64" /D"WIN32" /D"_AFX_NO_DAO_SUPPORT" /Wp64 /Zm600
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:IA64
+# ADD LINK32 icutu.lib /nologo /subsystem:console /machine:IA64 /libpath:"..\toolutil\Release" /libpath:"..\..\..\lib\Release" /libpath:"..\..\..\lib" /incremental:no
+# Begin Custom Build
+TargetPath=.\Release\gennorm.exe
+InputPath=.\Release\gennorm.exe
+InputName=gennorm
+SOURCE="$(InputPath)"
+
+"..\..\..\bin\$(InputName).exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(TargetPath) ..\..\..\bin
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "gennorm - Win64 Debug"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "Debug"
+# PROP BASE Intermediate_Dir "Debug"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "Debug"
+# PROP Intermediate_Dir "Debug"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN64" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS"  /FD /GZ /c
+# ADD CPP /nologo /MDd /Za /W3 /Gm    /I "..\toolutil" /I "..\..\common" /D"WIN64" /D"_DEBUG" /D"_CONSOLE" /D"_MBCS" /FR  /FD /GZ /c /Od /GX /Op /QIA64_fmaopt /D"_IA64_" /Zi /D"WIN64" /D"WIN32" /D"_AFX_NO_DAO_SUPPORT" /Wp64 /Zm600
+# ADD BASE RSC /l 0x409 /d "_DEBUG"
+# ADD RSC /l 0x409 /d "_DEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:IA64 /pdbtype:sept
+# ADD LINK32 icutud.lib /nologo /subsystem:console /debug /machine:IA64 /pdbtype:sept /libpath:"..\toolutil\Debug" /libpath:"..\..\..\lib\Debug" /libpath:"..\..\..\lib" /incremental:no
+# Begin Custom Build
+TargetPath=.\Debug\gennorm.exe
+InputPath=.\Debug\gennorm.exe
+InputName=gennorm
+SOURCE="$(InputPath)"
+
+"..\..\..\bin\$(InputName).exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(TargetPath) ..\..\..\bin
+
+# End Custom Build
+
 !ENDIF 
 
 # Begin Target
 
 # Name "gennorm - Win32 Release"
 # Name "gennorm - Win32 Debug"
+# Name "gennorm - Win64 Release"
+# Name "gennorm - Win64 Debug"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "c;cpp;rc"

@@ -19,6 +19,8 @@ CFG=ustdio - Win32 Debug
 !MESSAGE 
 !MESSAGE "ustdio - Win32 Release" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE "ustdio - Win32 Debug" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "ustdio - Win64 Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "ustdio - Win64 Debug" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE 
 
 # Begin Project
@@ -42,8 +44,8 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "USTDIO_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /G6 /MD /Za /W3 /GX /O2 /Ob2 /I "..\..\..\include" /I "..\..\common" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "USTDIO_EXPORTS" /D "U_USTDIO_IMPLEMENTATION" /YX /FD /GF /c
+# ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "USTDIO_EXPORTS"  /FD /c
+# ADD CPP /nologo /G6 /MD /Za /W3 /GX /O2 /Ob2 /I "..\..\..\include" /I "..\..\common" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "USTDIO_EXPORTS" /D "U_USTDIO_IMPLEMENTATION"  /FD /GF /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -69,8 +71,8 @@ LINK32=link.exe
 # PROP Intermediate_Dir "Debug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "USTDIO_EXPORTS" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /Za /W3 /Gm /GX /ZI /Od /I "..\..\..\include" /I "..\..\common" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "USTDIO_EXPORTS" /D "U_USTDIO_IMPLEMENTATION" /FR /YX /FD /GF /GZ /c
+# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "USTDIO_EXPORTS"  /FD /GZ /c
+# ADD CPP /nologo /MDd /Za /W3 /Gm /GX /ZI /Od /I "..\..\..\include" /I "..\..\common" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "USTDIO_EXPORTS" /D "U_USTDIO_IMPLEMENTATION" /FR  /FD /GF /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -83,12 +85,68 @@ LINK32=link.exe
 # ADD LINK32 icuucd.lib icuind.lib /nologo /dll /debug /machine:I386 /out:"..\..\..\bin\icuio21d.dll" /implib:"..\..\..\lib\icuiod.lib" /pdbtype:sept /libpath:"debug" /libpath:"..\..\..\lib\\"
 # SUBTRACT LINK32 /pdb:none
 
+!ELSEIF  "$(CFG)" == "ustdio - Win64 Release"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "Release"
+# PROP BASE Intermediate_Dir "Release"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "..\..\..\lib"
+# PROP Intermediate_Dir "Release"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN64" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "USTDIO_EXPORTS"  /FD /c
+# ADD CPP /nologo  /MD /Za /W3    /I "..\..\..\include" /I "..\..\common" /D"WIN64" /D"NDEBUG" /D"_WINDOWS" /D"_MBCS" /D"_USRDLL" /D"USTDIO_EXPORTS" /D"U_USTDIO_IMPLEMENTATION"  /FD /GF /c /O2 /GX /Op /QIA64_fmaopt /D"_IA64_" /Zi /D"WIN64" /D"WIN32" /D"_AFX_NO_DAO_SUPPORT" /Wp64 /Zm600
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win64
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win64
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /i "..\..\common" /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:IA64
+# ADD LINK32 icuuc.lib icuin.lib /nologo /dll /machine:IA64 /out:"..\..\..\bin\icuio21.dll" /implib:"..\..\..\lib/icuio.lib" /libpath:"..\..\..\lib\\" /incremental:no
+# SUBTRACT LINK32 
+
+!ELSEIF  "$(CFG)" == "ustdio - Win64 Debug"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "Debug"
+# PROP BASE Intermediate_Dir "Debug"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "..\..\..\lib"
+# PROP Intermediate_Dir "Debug"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /D "WIN64" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "USTDIO_EXPORTS"  /FD /GZ /c
+# ADD CPP /nologo /MDd /Za /W3 /Gm    /I "..\..\..\include" /I "..\..\common" /D"WIN64" /D"_DEBUG" /D"_WINDOWS" /D"_MBCS" /D"_USRDLL" /D"USTDIO_EXPORTS" /D"U_USTDIO_IMPLEMENTATION" /FR  /FD /GF /GZ /c /Od /GX /Op /QIA64_fmaopt /D"_IA64_" /Zi /D"WIN64" /D"WIN32" /D"_AFX_NO_DAO_SUPPORT" /Wp64 /Zm600
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win64
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win64
+# ADD BASE RSC /l 0x409 /d "_DEBUG"
+# ADD RSC /l 0x409 /i "..\..\common" /d "_DEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:IA64 /pdbtype:sept
+# ADD LINK32 icuucd.lib icuind.lib /nologo /dll /debug /machine:IA64 /out:"..\..\..\bin\icuio21d.dll" /implib:"..\..\..\lib\icuiod.lib" /pdbtype:sept /libpath:"debug" /libpath:"..\..\..\lib\\" /incremental:no
+# SUBTRACT LINK32 
+
 !ENDIF 
 
 # Begin Target
 
 # Name "ustdio - Win32 Release"
 # Name "ustdio - Win32 Debug"
+# Name "ustdio - Win64 Release"
+# Name "ustdio - Win64 Debug"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
@@ -219,7 +277,7 @@ SOURCE=.\unicode\ustdio.h
 InputPath=.\unicode\ustdio.h
 
 "..\..\..\include\unicode\ustdio.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy unicode\ustdio.h ..\..\..\include\unicode
+	copy $(InputPath) ..\..\..\include\unicode
 
 # End Custom Build
 
@@ -229,7 +287,27 @@ InputPath=.\unicode\ustdio.h
 InputPath=.\unicode\ustdio.h
 
 "..\..\..\include\unicode\ustdio.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy unicode\ustdio.h ..\..\..\include\unicode
+	copy $(InputPath) ..\..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ustdio - Win64 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\ustdio.h
+
+"..\..\..\include\unicode\ustdio.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ustdio - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\ustdio.h
+
+"..\..\..\include\unicode\ustdio.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\..\..\include\unicode
 
 # End Custom Build
 
@@ -246,7 +324,7 @@ SOURCE=.\unicode\ustream.h
 InputPath=.\unicode\ustream.h
 
 "..\..\..\include\unicode\ustream.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy unicode\ustream.h ..\..\..\include\unicode
+	copy $(InputPath) ..\..\..\include\unicode
 
 # End Custom Build
 
@@ -256,7 +334,27 @@ InputPath=.\unicode\ustream.h
 InputPath=.\unicode\ustream.h
 
 "..\..\..\include\unicode\ustream.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy unicode\ustream.h ..\..\..\include\unicode
+	copy $(InputPath) ..\..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ustdio - Win64 Release"
+
+# Begin Custom Build
+InputPath=.\unicode\ustream.h
+
+"..\..\..\include\unicode\ustream.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\..\..\include\unicode
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "ustdio - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\ustream.h
+
+"..\..\..\include\unicode\ustream.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy $(InputPath) ..\..\..\include\unicode
 
 # End Custom Build
 

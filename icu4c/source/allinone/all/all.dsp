@@ -19,6 +19,8 @@ CFG=ALL - WIN32 DEBUG
 !MESSAGE 
 !MESSAGE "all - Win32 Release" (based on "Win32 (x86) Generic Project")
 !MESSAGE "all - Win32 Debug" (based on "Win32 (x86) Generic Project")
+!MESSAGE "all - Win64 Release" (based on "Win32 (x86) Generic Project")
+!MESSAGE "all - Win64 Debug" (based on "Win32 (x86) Generic Project")
 !MESSAGE 
 
 # Begin Project
@@ -53,11 +55,39 @@ MTL=midl.exe
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 
+!ELSEIF  "$(CFG)" == "all - Win64 Release"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "Release"
+# PROP BASE Intermediate_Dir "Release"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "Release"
+# PROP Intermediate_Dir "Release"
+# PROP Target_Dir ""
+
+!ELSEIF  "$(CFG)" == "all - Win64 Debug"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "Debug"
+# PROP BASE Intermediate_Dir "Debug"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "Debug"
+# PROP Intermediate_Dir "Debug"
+# PROP Target_Dir ""
+
 !ENDIF 
 
 # Begin Target
 
 # Name "all - Win32 Release"
 # Name "all - Win32 Debug"
+# Name "all - Win64 Release"
+# Name "all - Win64 Debug"
 # End Target
 # End Project
