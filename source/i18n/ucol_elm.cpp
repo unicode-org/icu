@@ -71,6 +71,7 @@ prefixLookupComp(const UHashTok e1, const UHashTok e2) {
 }
 U_CDECL_END
 
+/*
 static void uprv_uca_reverseElement(UCAElements *el) {
     uint32_t i = 0;
     UChar temp;
@@ -81,6 +82,7 @@ static void uprv_uca_reverseElement(UCAElements *el) {
         el->cPoints[el->cSize-i-1] = temp;
     }
 }
+*/
 
 static int32_t uprv_uca_addExpansion(ExpansionTable *expansions, uint32_t value, UErrorCode *status) {
     if(U_FAILURE(*status)) {
@@ -882,9 +884,7 @@ static uint32_t uprv_uca_finalizeAddition(tempUCATable *t, UCAElements *element,
 
 /* This adds a read element, while testing for existence */
 uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status) {
-  CompactEIntArray *mapping = t->mapping;
   ExpansionTable *expansions = t->expansions;
-  CntTable *contractions = t->contractions; 
 
   uint32_t i = 1;
   uint32_t expansion = 0;
