@@ -5035,35 +5035,6 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
     return sortKeySize;
 }
 
-
-enum {
-  UCOL_PSK_PRIMARY = 0,
-    UCOL_PSK_SECONDARY = 1,
-    UCOL_PSK_CASE = 2,
-    UCOL_PSK_TERTIARY = 3,
-    UCOL_PSK_QUATERNARY = 4,
-    UCOL_PSK_QUIN = 5,
-    UCOL_PSK_IDENTICAL = 6,
-    UCOL_PSK_NULL = 7,
-    UCOL_PSK_LIMIT
-};
-
-enum {
-    UCOL_PSK_LEVEL_SHIFT = 0,
-    UCOL_PSK_LEVEL_MASK = 7,
-    UCOL_PSK_BYTE_COUNT_SHIFT = 3,
-    UCOL_PSK_BYTE_COUNT_MASK = 1,
-    UCOL_PSK_WAS_SHIFTED_SHIFT = 4,
-    UCOL_PSK_WAS_SHIFTED_MASK = 1,
-    UCOL_PSK_USED_FRENCH_SHIFT = 5,
-    UCOL_PSK_USED_FRENCH_MASK = 3,
-    UCOL_PSK_USED_ELEMENTS_SHIFT = 7,
-    UCOL_PSK_USED_ELEMENTS_MASK = 0x3FF,
-    UCOL_PSK_ITER_SKIP_SHIFT = 17,
-    UCOL_PSK_ITER_SKIP_MASK = 0x7FFF
-};
-
-
 static inline
 UBool isShiftedCE(uint32_t CE, uint32_t LVT, UBool *wasShifted) {
   UBool notIsContinuation = !isContinuation(CE);
@@ -5085,6 +5056,44 @@ UBool isShiftedCE(uint32_t CE, uint32_t LVT, UBool *wasShifted) {
   }
 }
 
+/** enumeration of level identifiers for partial sort key generation */
+enum {
+  UCOL_PSK_PRIMARY = 0,
+    UCOL_PSK_SECONDARY = 1,
+    UCOL_PSK_CASE = 2,
+    UCOL_PSK_TERTIARY = 3,
+    UCOL_PSK_QUATERNARY = 4,
+    UCOL_PSK_QUIN = 5,      /** This is an extra level, not used - but we have three bits to blow */
+    UCOL_PSK_IDENTICAL = 6,
+    UCOL_PSK_NULL = 7,      /** level for the end of sort key. Will just produce zeros */
+    UCOL_PSK_LIMIT
+};
+
+/** collation state enum. *_SHIFT value is how much to shift right 
+ *  to get the state piece to the right. *_MASK value should be 
+ *  ANDed with the shifted state. This data is stored in state[1]
+ *  field.
+ */
+enum {
+    UCOL_PSK_LEVEL_SHIFT = 0,      /** level identificator. stores an enum value from above */
+    UCOL_PSK_LEVEL_MASK = 7,       /** three bits */
+    UCOL_PSK_BYTE_COUNT_SHIFT = 3, /** number of bytes of primary already written */
+    UCOL_PSK_BYTE_COUNT_MASK = 1,  /** can be only 0 or 1, since we get up to two bytes from primary */
+    UCOL_PSK_WAS_SHIFTED_SHIFT = 4,/** was the last value shifted */
+    UCOL_PSK_WAS_SHIFTED_MASK = 1, /** can be 0 or 1 (Boolean) */
+    UCOL_PSK_USED_FRENCH_SHIFT = 5,/** how many French bytes have we already written */
+    UCOL_PSK_USED_FRENCH_MASK = 3, /** up to 4 bytes. See comment just below */
+    /** When we do French we need to reverse secondary values. However, continuations
+     *  need to stay the same. So if you had abc1c2c3de, you need to have edc1c2c3ba 
+     */
+    UCOL_PSK_USED_ELEMENTS_SHIFT = 7,
+    UCOL_PSK_USED_ELEMENTS_MASK = 0x3FF,
+    UCOL_PSK_ITER_SKIP_SHIFT = 17,
+    UCOL_PSK_ITER_SKIP_MASK = 0x7FFF
+};
+
+
+/** main sortkey part procedure */
 U_CAPI int32_t U_EXPORT2 
 ucol_nextSortKeyPart(UCollator *coll,
                      UCharIterator *iter,
