@@ -16,6 +16,7 @@
 */
 
 #include "unicode/utypes.h"
+#include "unicode/uchar.h"
 #include "unicode/ustring.h"
 #include "unicode/putil.h"
 #include "unicode/ucnv.h"
@@ -32,7 +33,11 @@ static UConverter *gDefaultConverter = NULL;
 
 /* ANSI string.h - style functions ------------------------------------------ */
 
+/* maximum string length for u_uastrcpy() and u_austrcpy() implementations */
 #define MAX_STRLEN 0x0FFFFFFF
+
+/* U+ffff is the highest BMP code point, the highest one that fits into a 16-bit UChar */
+#define U_BMP_MAX 0xffff
 
 /* Forward binary string search functions ----------------------------------- */
 
@@ -220,10 +225,10 @@ u_strchr(const UChar *s, UChar c) {
 
 U_CAPI UChar * U_EXPORT2
 u_strchr32(const UChar *s, UChar32 c) {
-    if((uint32_t)c<=0xffff) {
+    if((uint32_t)c<=U_BMP_MAX) {
         /* find BMP code point */
         return u_strchr(s, (UChar)c);
-    } else if((uint32_t)c<=0x10ffff) {
+    } else if((uint32_t)c<=UCHAR_MAX_VALUE) {
         /* find supplementary code point as surrogate pair */
         UChar cs, lead=U16_LEAD(c), trail=U16_TRAIL(c);
 
@@ -260,13 +265,13 @@ u_memchr(const UChar *s, UChar c, int32_t count) {
 
 U_CAPI UChar * U_EXPORT2
 u_memchr32(const UChar *s, UChar32 c, int32_t count) {
-    if((uint32_t)c<=0xffff) {
+    if((uint32_t)c<=U_BMP_MAX) {
         /* find BMP code point */
         return u_memchr(s, (UChar)c, count);
     } else if(count<2) {
         /* too short for a surrogate pair */
         return NULL;
-    } else if((uint32_t)c<=0x10ffff) {
+    } else if((uint32_t)c<=UCHAR_MAX_VALUE) {
         /* find supplementary code point as surrogate pair */
         const UChar *limit=s+count-1; /* -1 so that we do not need a separate check for the trail unit */
         UChar lead=U16_LEAD(c), trail=U16_TRAIL(c);
@@ -394,10 +399,10 @@ u_strrchr(const UChar *s, UChar c) {
 
 U_CAPI UChar * U_EXPORT2
 u_strrchr32(const UChar *s, UChar32 c) {
-    if((uint32_t)c<=0xffff) {
+    if((uint32_t)c<=U_BMP_MAX) {
         /* find BMP code point */
         return u_strrchr(s, (UChar)c);
-    } else if((uint32_t)c<=0x10ffff) {
+    } else if((uint32_t)c<=UCHAR_MAX_VALUE) {
         /* find supplementary code point as surrogate pair */
         const UChar *result=NULL;
         UChar cs, lead=U16_LEAD(c), trail=U16_TRAIL(c);
@@ -435,13 +440,13 @@ u_memrchr(const UChar *s, UChar c, int32_t count) {
 
 U_CAPI UChar * U_EXPORT2
 u_memrchr32(const UChar *s, UChar32 c, int32_t count) {
-    if((uint32_t)c<=0xffff) {
+    if((uint32_t)c<=U_BMP_MAX) {
         /* find BMP code point */
         return u_memrchr(s, (UChar)c, count);
     } else if(count<2) {
         /* too short for a surrogate pair */
         return NULL;
-    } else if((uint32_t)c<=0x10ffff) {
+    } else if((uint32_t)c<=UCHAR_MAX_VALUE) {
         /* find supplementary code point as surrogate pair */
         const UChar *limit=s+count-1;
         UChar lead=U16_LEAD(c), trail=U16_TRAIL(c);
