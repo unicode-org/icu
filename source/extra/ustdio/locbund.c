@@ -20,7 +20,7 @@
 */
 
 #include "locbund.h"
-
+#include "string.h"
 #include "ustring.h"
 #include "uloc.h"
 

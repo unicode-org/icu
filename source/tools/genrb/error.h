@@ -19,6 +19,6 @@
 #define ERROR_H 1
 
 void setErrorText(const char *s);
-const char* getErrorText();
+const char* getErrorText(void);
 
 #endif

@@ -76,13 +76,13 @@ public:
     /**
      * Transliterator API.
      */
-    virtual Transliterator* clone() const;
+    virtual Transliterator* clone(void) const;
 
     /**
      * Returns the string that precedes the four hex digits.
      * @return prefix string
      */
-    virtual const UnicodeString& getPrefix() const;
+    virtual const UnicodeString& getPrefix(void) const;
 
     /**
      * Sets the string that precedes the four hex digits.
@@ -97,7 +97,7 @@ public:
     /**
      * Returns true if this transliterator outputs uppercase hex digits.
      */
-    virtual bool_t isUppercase() const;
+    virtual bool_t isUppercase(void) const;
 
     /**
      * Sets if this transliterator outputs uppercase hex digits.
@@ -134,7 +134,7 @@ public:
      * @return maximum number of preceding context characters this
      * transliterator needs to examine
      */
-    virtual int32_t getMaximumContextLength();
+    virtual int32_t getMaximumContextLength(void);
 
 private:
 

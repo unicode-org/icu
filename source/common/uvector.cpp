@@ -95,7 +95,7 @@ bool_t UVector::removeElement(void* obj) {
     return FALSE;
 }
 
-void UVector::removeAllElements() {
+void UVector::removeAllElements(void) {
     if (deleter != 0) {
         for (int32_t i=0; i<count; ++i) {
             if (elements[i] != 0) {
@@ -147,7 +147,7 @@ UVector::Comparer UVector::setComparer(Comparer d) {
     return old;
 }
 
-bool_t UVector::isOutOfMemory() {
+bool_t UVector::isOutOfMemory(void) {
     return outOfMemory;
 }
 
@@ -181,7 +181,7 @@ UStack::UStack(Deleter d, Comparer c, int32_t initialCapacity) :
     UVector(d, c, initialCapacity) {
 }
 
-void* UStack::pop() {
+void* UStack::pop(void) {
     void* obj = lastElement();
     if (obj != 0) {
         removeElementAt(size() - 1);

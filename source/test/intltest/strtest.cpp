@@ -24,7 +24,7 @@
 #include "strtest.h"
 #include "ustring.h"
 
-void StringTest::TestEndian() {
+void StringTest::TestEndian(void) {
     union {
         uint8_t byte;
         uint16_t word;
@@ -35,13 +35,13 @@ void StringTest::TestEndian() {
     }
 }
 
-void StringTest::TestSizeofWCharT() {
+void StringTest::TestSizeofWCharT(void) {
     if(U_SIZEOF_WCHAR_T!=sizeof(wchar_t)) {
         errln("TestSizeofWCharT: U_SIZEOF_WCHAR_T!=sizeof(wchar_t) - U_SIZEOF_WCHAR_T needs to be fixed in platform.h");
     }
 }
 
-void StringTest::TestCharsetFamily() {
+void StringTest::TestCharsetFamily(void) {
     unsigned char c='A';
     if( U_CHARSET_FAMILY==U_ASCII_FAMILY && c!=0x41 ||
         U_CHARSET_FAMILY==U_EBCDIC_FAMILY && c!=0xc1

@@ -259,7 +259,7 @@ public:
      * @return A newly-constructed RuleBasedBreakIterator with the same
      * behavior as this one.
      */
-    virtual Object clone();
+    virtual Object clone(void);
 
     /**
      * Returns true if both BreakIterators are of the same class, have the same
@@ -270,13 +270,13 @@ public:
     /**
      * Returns the description used to create this iterator
      */
-    virtual UnicodeString toString();
+    virtual UnicodeString toString(void);
 
     /**
      * Compute a hashcode for this BreakIterator
      * @return A hash code
      */
-    virtual int32_t hashCode();
+    virtual int32_t hashCode(void);
     //=======================================================================
     // BreakIterator overrides
     //=======================================================================
@@ -285,14 +285,14 @@ public:
      * (i.e., the CharacterIterator's starting offset).
      * @return The offset of the beginning of the text.
      */
-    virtual int32_t first();
+    virtual int32_t first(void);
 
     /**
      * Sets the current iteration position to the end of the text.
      * (i.e., the CharacterIterator's ending offset).
      * @return The text's past-the-end offset.
      */
-    virtual int32_t last();
+    virtual int32_t last(void);
 
     /**
      * Advances the iterator either forward or backward the specified number of steps.
@@ -309,13 +309,13 @@ public:
      * Advances the iterator to the next boundary position.
      * @return The position of the first boundary after this one.
      */
-    virtual int32_t next();
+    virtual int32_t next(void);
 
     /**
      * Advances the iterator backwards, to the last boundary preceding this one.
      * @return The position of the last boundary position preceding this one.
      */
-    virtual int32_t previous();
+    virtual int32_t previous(void);
 
     /**
      * Sets the iterator to refer to the first boundary position following
@@ -346,7 +346,7 @@ public:
      * Returns the current iteration position.
      * @return The current iteration position.
      */
-    virtual int32_t current();
+    virtual int32_t current(void);
 
     /**
      * Return a CharacterIterator over the text being analyzed.  This version
@@ -355,7 +355,7 @@ public:
      * you need to change it, clone it first.
      * @return An iterator over the text being analyzed.
      */
-    virtual CharacterIterator getText();
+    virtual CharacterIterator getText(void);
 
     /**
      * Set the iterator to analyze a new piece of text.  This function resets
@@ -375,7 +375,7 @@ protected:
      * of the text or the state machine transitions to state 0.  We update our return
      * value every time the state machine passes through a possible end state.
      */
-    virtual int32_t handleNext();
+    virtual int32_t handleNext(void);
 
     /**
      * This method backs the iterator back up to a "safe position" in the text.
@@ -384,7 +384,7 @@ protected:
      * the appropriate position to return.  (For more information, see the description
      * of buildBackwardsStateTable() in RuleBasedBreakIterator.Builder.)
      */
-    virtual int32_t handlePrevious();
+    virtual int32_t handlePrevious(void);
 
     /**
      * Looks up a character's category (i.e., its category for breaking purposes,

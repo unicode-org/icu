@@ -310,10 +310,10 @@ static void
 setProps(uint32_t c, uint32_t x, uint16_t *pI1, uint16_t *pI2, uint16_t *pI3);
 
 static uint16_t
-allocStage2();
+allocStage2(void);
 
 static uint16_t
-allocProps();
+allocProps(void);
 
 static uint16_t
 addUChars(const UChar *s, uint16_t length);
@@ -489,7 +489,7 @@ addProps(Props *p) {
 /* areas of same properties ------------------------------------------------- */
 
 extern void
-repeatProps() {
+repeatProps(void) {
     /* first and last code points in repetitive areas */
     static const uint32_t areas[][2]={
         { 0x3400, 0x4db5 },     /* CJK ext. A */
@@ -696,7 +696,7 @@ repeatFromStage3(uint16_t i2, uint16_t j3, uint32_t x) {
 /* compacting --------------------------------------------------------------- */
 
 extern void
-compactStage2() {
+compactStage2(void) {
     uint16_t newTop=compactStage(stage2, stage2Top, STAGE_2_BLOCK, stage1, STAGE_1_BLOCK);
 
     /* we saved some space */
@@ -716,7 +716,7 @@ compactStage2() {
 }
 
 extern void
-compactStage3() {
+compactStage3(void) {
     uint16_t newTop=compactStage(stage3, stage3Top, STAGE_3_BLOCK, stage2, stage2Top);
 
     /* we saved some space */
@@ -795,7 +795,7 @@ compactStage(uint16_t *stage, uint16_t stageTop, uint16_t blockSize,
 }
 
 extern void
-compactProps() {
+compactProps(void) {
     /*
      * At this point, all the propsTop properties are in props[], but they
      * are not all unique.
@@ -881,7 +881,7 @@ compareProps(const void *l, const void *r) {
 /* generate output data ----------------------------------------------------- */
 
 extern void
-generateData() {
+generateData(void) {
     static uint16_t indexes[8]={
         STAGE_2_BITS, STAGE_3_BITS,
         0, 0,
@@ -1004,7 +1004,7 @@ setProps(uint32_t c, uint32_t x, uint16_t *pI1, uint16_t *pI2, uint16_t *pI3) {
 }
 
 static uint16_t
-allocStage2() {
+allocStage2(void) {
     uint16_t i=stage2Top;
     stage2Top+=STAGE_2_BLOCK;
     if(stage2Top>=MAX_STAGE_2_COUNT) {
@@ -1015,7 +1015,7 @@ allocStage2() {
 }
 
 static uint16_t
-allocProps() {
+allocProps(void) {
     uint16_t i=propsTop;
     propsTop+=STAGE_3_BLOCK;
     if(propsTop>=MAX_PROPS_COUNT) {

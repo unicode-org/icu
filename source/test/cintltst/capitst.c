@@ -24,7 +24,6 @@
 #include "cintltst.h"
 #include "capitst.h"
 #include "ustring.h"
-#include <memory.h>
 #include <string.h>
 
 void addCollAPITest(TestNode** root)

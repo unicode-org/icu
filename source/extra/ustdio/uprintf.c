@@ -1434,7 +1434,7 @@ u_printf_spellout_handler(UFILE             *stream,
 }
 
 void
-u_printf_init()
+u_printf_init(void)
 {
   int32_t i;
   /*Mutex *lock;*/

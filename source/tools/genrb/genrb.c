@@ -36,8 +36,8 @@ U_CDECL_END
 #include "uloc.h"
 
 /* Protos */
-static void usage();
-static void version();
+static void usage(void);
+static void version(void);
 static void processFile(const char *filename, const char* cp, UErrorCode *status);
 static char* make_res_filename(const char *filename, UErrorCode *status);
 static char* make_col_filename(const char *filename, UErrorCode *status);
@@ -155,7 +155,7 @@ usage()
 static void
 version()
 {
-  printf("genrb version %s (ICU version %s), by Stephen F. Booth.\n", 
+  printf("genrb version %s (ICU version %s).\n", 
 	 GENRB_VERSION, ICU_VERSION);
   puts(U_COPYRIGHT_STRING);
 }

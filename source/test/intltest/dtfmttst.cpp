@@ -161,7 +161,7 @@ DateFormatTest::TestEquals()
  * Test the parsing of 2-digit years.
  */
 void
-DateFormatTest::TestTwoDigitYearDSTParse()
+DateFormatTest::TestTwoDigitYearDSTParse(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     SimpleDateFormat* fullFmt = new SimpleDateFormat("EEE MMM dd HH:mm:ss.SSS zzz yyyy G", status);

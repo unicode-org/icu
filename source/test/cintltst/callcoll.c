@@ -31,7 +31,7 @@
 #include "callcoll.h"
 #include "ustring.h"
 #include <string.h>
-#include <memory.h>
+
 static UCollator *myCollation;
 static const UChar DEFAULTRULEARRAY[] =
 {

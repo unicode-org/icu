@@ -103,9 +103,9 @@ public:
 
     void* elementAt(int32_t index) const;
 
-    void* firstElement() const;
+    void* firstElement(void) const;
 
-    void* lastElement() const;
+    void* lastElement(void) const;
 
     int32_t indexOf(void* obj, int32_t startIndex = 0) const;
 
@@ -117,9 +117,9 @@ public:
 
     void removeAllElements();
 
-    int32_t size() const;
+    int32_t size(void) const;
 
-    bool_t isEmpty() const;
+    bool_t isEmpty(void) const;
 
     bool_t ensureCapacity(int32_t minimumCapacity);
 
@@ -131,7 +131,7 @@ public:
 
     Comparer setComparer(Comparer c);
 
-    static bool_t isOutOfMemory();
+    static bool_t isOutOfMemory(void);
 
     void* operator[](int32_t index) const;
 
@@ -182,11 +182,11 @@ public:
     // It's okay not to have a virtual destructor (in UVector)
     // because UStack has no special cleanup to do.
 
-    bool_t empty() const;
+    bool_t empty(void) const;
 
-    void* peek() const;
+    void* peek(void) const;
     
-    void* pop();
+    void* pop(void);
     
     void* push(void* obj);
 
@@ -203,11 +203,11 @@ private:
 
 // UVector inlines
 
-inline int32_t UVector::size() const {
+inline int32_t UVector::size(void) const {
     return count;
 }
 
-inline bool_t UVector::isEmpty() const {
+inline bool_t UVector::isEmpty(void) const {
     return count == 0;
 }
 
@@ -215,11 +215,11 @@ inline bool_t UVector::contains(void* obj) const {
     return indexOf(obj) >= 0;
 }
 
-inline void* UVector::firstElement() const {
+inline void* UVector::firstElement(void) const {
     return elementAt(0);
 }
 
-inline void* UVector::lastElement() const {
+inline void* UVector::lastElement(void) const {
     return elementAt(count-1);
 }
 
@@ -238,11 +238,11 @@ inline UVector& UVector::operator=(const UVector&) {
 
 // UStack inlines
 
-inline bool_t UStack::empty() const {
+inline bool_t UStack::empty(void) const {
     return isEmpty();
 }
 
-inline void* UStack::peek() const {
+inline void* UStack::peek(void) const {
     return lastElement();
 }
 

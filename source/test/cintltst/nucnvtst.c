@@ -33,7 +33,7 @@ static void printSeq(const unsigned char* a, int len);
 static void printUSeq(const UChar* a, int len);
 
 void TestNewConvertWithBufferSizes(int32_t osize, int32_t isize) ;
-void TestConverterTypesAndStarters();
+void TestConverterTypesAndStarters(void);
 
 #define NEW_MAX_BUFFER 999
 
@@ -73,7 +73,7 @@ void printUSeqErr(const UChar* a, int len)
 	fprintf(stderr,"}\n");
 }
 
-void TestInBufSizes()
+void TestInBufSizes(void)
 {
   TestNewConvertWithBufferSizes(NEW_MAX_BUFFER,1);
 #if 0
@@ -88,7 +88,7 @@ void TestInBufSizes()
 #endif
 }
 
-void TestOutBufSizes()
+void TestOutBufSizes(void)
 {
 #if 0
   TestNewConvertWithBufferSizes(NEW_MAX_BUFFER,NEW_MAX_BUFFER);

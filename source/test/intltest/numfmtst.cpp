@@ -53,7 +53,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, bool_t exec, char* &name, 
 
 // Test various patterns
 void
-NumberFormatTest::TestPatterns()
+NumberFormatTest::TestPatterns(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols sym(Locale::US, status);
@@ -87,7 +87,7 @@ NumberFormatTest::TestPatterns()
 
 // Test exponential pattern
 void
-NumberFormatTest::TestExponential()
+NumberFormatTest::TestExponential(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols sym(Locale::US, status);
@@ -197,7 +197,7 @@ NumberFormatTest::TestExponential()
 
 // Test the handling of quotes
 void
-NumberFormatTest::TestQuotes()
+NumberFormatTest::TestQuotes(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString *pat;
@@ -231,7 +231,7 @@ NumberFormatTest::TestQuotes()
  * Test the handling of the currency symbol in patterns.
  */
 void
-NumberFormatTest::TestCurrencySign()
+NumberFormatTest::TestCurrencySign(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols* sym = new DecimalFormatSymbols(Locale::US, status);
@@ -291,7 +291,7 @@ NumberFormatTest::escape(UnicodeString& s)
  * Test localized currency patterns.
  */
 void
-NumberFormatTest::TestCurrency()
+NumberFormatTest::TestCurrency(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat* currencyFmt = NumberFormat::createCurrencyInstance(Locale::CANADA_FRENCH, status);
@@ -320,7 +320,7 @@ NumberFormatTest::TestCurrency()
  * Do rudimentary testing of parsing.
  */
 void
-NumberFormatTest::TestParse()
+NumberFormatTest::TestParse(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString arg("0");
@@ -344,7 +344,7 @@ NumberFormatTest::TestParse()
  * Test proper rounding by the format method.
  */
 void
-NumberFormatTest::TestRounding487()
+NumberFormatTest::TestRounding487(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     NumberFormat *nf = NumberFormat::createInstance(status);
@@ -426,7 +426,7 @@ void NumberFormatTest::expect(NumberFormat* fmt, const Formattable& n,
 /**
  * Upgrade to alphaWorks
  */
-void NumberFormatTest::TestExponent() {
+void NumberFormatTest::TestExponent(void) {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols US(Locale::US, status);
     CHECK(status, "DecimalFormatSymbols constructor");
@@ -445,7 +445,7 @@ void NumberFormatTest::TestExponent() {
 /**
  * Upgrade to alphaWorks
  */
-void NumberFormatTest::TestScientific() {
+void NumberFormatTest::TestScientific(void) {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols US(Locale::US, status);
     CHECK(status, "DecimalFormatSymbols constructor");
@@ -613,7 +613,7 @@ void NumberFormatTest::TestScientific() {
 /**
  * Upgrade to alphaWorks
  */
-void NumberFormatTest::TestPad() {
+void NumberFormatTest::TestPad(void) {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols US(Locale::US, status);
     CHECK(status, "DecimalFormatSymbols constructor");
@@ -635,7 +635,7 @@ void NumberFormatTest::TestPad() {
 /**
  * Upgrade to alphaWorks
  */
-void NumberFormatTest::TestPatterns2() {
+void NumberFormatTest::TestPatterns2(void) {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols US(Locale::US, status);
     CHECK(status, "DecimalFormatSymbols constructor");

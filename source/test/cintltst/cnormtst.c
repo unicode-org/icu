@@ -25,7 +25,6 @@
 #include "cnormtst.h"
 #include "ccolltst.h"
 #include "ustring.h"
-#include <memory.h>
 #define ARRAY_LENGTH(array) (sizeof (array) / sizeof (*array))
 
 

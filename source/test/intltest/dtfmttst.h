@@ -37,7 +37,7 @@ public:
     /**
      * Test the parsing of 2-digit years.
      */
-    virtual void TestTwoDigitYearDSTParse();
+    virtual void TestTwoDigitYearDSTParse(void);
  
 public: // package
     // internal utility routine (genrates escape sequences for characters)

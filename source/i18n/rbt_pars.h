@@ -97,7 +97,7 @@ private:
      * @exception IllegalArgumentException if there is a syntax error in the
      * rules
      */
-    void parseRules();
+    void parseRules(void);
 
     /**
      * Parse the given substring as a rule, and append it to the rules currently
@@ -242,7 +242,7 @@ private:
      * When done, everything not in the hash is available for use.  In practice,
      * this method may employ some other algorithm for improved speed.
      */
-    void determineVariableRange();
+    void determineVariableRange(void);
 
     /**
      * Returns the index of the first character in a set, ignoring quoted text.

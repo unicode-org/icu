@@ -622,6 +622,7 @@ icu_timezone()
   time_t t, t1, t2;
   struct tm tmrec;
   bool_t dst_checked;
+  int32_t tdiff = 0;
   
   time(&t);
   memcpy( &tmrec, localtime(&t), sizeof(tmrec) );
@@ -629,7 +630,7 @@ icu_timezone()
   t1 = mktime(&tmrec);                 /* local time in seconds*/
   memcpy( &tmrec, gmtime(&t), sizeof(tmrec) );
   t2 = mktime(&tmrec);                 /* GMT (or UTC) in seconds*/
-  int32_t tdiff = t2 - t1;
+  tdiff = t2 - t1;
   /* imitate NT behaviour, which returns same timezone offset to GMT for 
      winter and summer*/
   if (dst_checked) tdiff += 3600;

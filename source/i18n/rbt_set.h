@@ -50,7 +50,7 @@ public:
      * Return the maximum context length.
      * @return the length of the longest preceding context.
      */
-    virtual int32_t getMaximumContextLength() const;
+    virtual int32_t getMaximumContextLength(void) const;
 
     /**
      * Add a rule to this set.  Rules are added in order, and order is
@@ -66,7 +66,7 @@ public:
      * Free up space.  Once this method is called, addRule() must NOT
      * be called again.
      */
-    virtual void freeze();
+    virtual void freeze(void);
 
     /**
      * Attempt to find a matching rule at the specified point in the text.  The

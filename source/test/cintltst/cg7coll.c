@@ -49,7 +49,6 @@
 #include "ustring.h"
 #include <string.h>
 #include <stdio.h>
-#include <memory.h>
 
 
 const char* locales[8] = {

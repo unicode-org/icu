@@ -76,7 +76,7 @@ TransliterationRule::~TransliterationRule() {
  * Return the length of the key.  Equivalent to <code>getKey().length()</code>.
  * @return the length of the match key.
  */
-int32_t TransliterationRule::getKeyLength() const {
+int32_t TransliterationRule::getKeyLength(void) const {
     return key.length();
 }
 
@@ -84,7 +84,7 @@ int32_t TransliterationRule::getKeyLength() const {
  * Return the key.
  * @return the match key.
  */
-const UnicodeString& TransliterationRule::getKey() const {
+const UnicodeString& TransliterationRule::getKey(void) const {
     return key;
 }
 
@@ -92,7 +92,7 @@ const UnicodeString& TransliterationRule::getKey() const {
  * Return the output string.
  * @return the output string.
  */
-const UnicodeString& TransliterationRule::getOutput() const {
+const UnicodeString& TransliterationRule::getOutput(void) const {
     return output;
 }
 
@@ -100,7 +100,7 @@ const UnicodeString& TransliterationRule::getOutput() const {
  * Return the position of the cursor within the output string.
  * @return a value from 0 to <code>getOutput().length()</code>, inclusive.
  */
-int32_t TransliterationRule::getCursorPos() const {
+int32_t TransliterationRule::getCursorPos(void) const {
     return cursorPos;
 }
 
@@ -109,7 +109,7 @@ int32_t TransliterationRule::getCursorPos() const {
  * support the <code>Transliterator</code> method
  * <code>getMaximumContextLength()</code>.
  */
-int32_t TransliterationRule::getAnteContextLength() const {
+int32_t TransliterationRule::getAnteContextLength(void) const {
     return anteContext.length();
 }
 
@@ -152,7 +152,7 @@ bool_t TransliterationRule::masks(const TransliterationRule& r2) const {
  * Free up space.  Once this method is called, masks() must NOT be called.
  * If it is called, an exception will be thrown.
  */
-void TransliterationRule::freeze() {
+void TransliterationRule::freeze(void) {
     delete maskKey;
     maskKey = 0;
 }

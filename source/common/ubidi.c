@@ -135,7 +135,8 @@ adjustWSLevels(UBiDi *pBiDi);
 /* UBiDi object management -------------------------------------------------- */
 
 U_CAPI UBiDi * U_EXPORT2
-ubidi_open() {
+ubidi_open(void) 
+{
     UErrorCode errorCode=U_ZERO_ERROR;
     return ubidi_openSized(0, 0, &errorCode);
 }

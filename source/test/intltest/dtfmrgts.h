@@ -50,8 +50,8 @@ public:
     void Test4151631(void);
     void Test4151706(void);
     void Test4162071(void);
-    void Test4182066();
-    void Test4210209();
+    void Test4182066(void);
+    void Test4210209(void);
  };
  
 #endif // _DATEFORMATREGRESSIONTEST_
