@@ -68,7 +68,7 @@ read_ustring(FileStream *rb,
 
     /* Read the next chunk of data */
     readLen = icu_min(BUF_SIZE, remain);
-    memset(buf, 0, readLen*sizeof(UChar));
+    icu_memset(buf, 0, readLen*sizeof(UChar));
     T_FileStream_read(rb, buf, sizeof(UChar) * readLen);
 
     /* Append the chunk to the string */

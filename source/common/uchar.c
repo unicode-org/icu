@@ -5233,7 +5233,7 @@ createDirTables()
 const char* u_getVersion()
 {
 	int32_t len=strlen(UNICODE_VERSION) + strlen("Unicode Version ");
-	_ucdVersion=(char*)realloc(_ucdVersion, sizeof(char) * len );
+	_ucdVersion=(char*)icu_realloc(_ucdVersion, len + 1 );
 	strcpy(_ucdVersion, "Unicode Version ");
 	strcat(_ucdVersion, UNICODE_VERSION);
 	return _ucdVersion;
