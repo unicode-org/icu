@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/tools/normalizer/Attic/QuickCheckBuilder.java,v $ 
-* $Date: 2001/05/18 20:45:10 $ 
-* $Revision: 1.4 $
+* $Date: 2001/08/23 02:22:38 $ 
+* $Revision: 1.5 $
 *
 ******************************************************************************
 */
@@ -212,8 +212,7 @@ public class QuickCheckBuilder
     int startcp,
         endcp;
     // read in normalization format and its corresponding value
-    String token,
-           nf,
+    String nf,
            check;
     
     try
@@ -241,6 +240,7 @@ public class QuickCheckBuilder
     }
     catch(EOFException e)
     {
+        return result;
     }
     
     return result;
@@ -278,8 +278,7 @@ public class QuickCheckBuilder
     int startcp,
         endcp;
     // read in normalization format and its corresponding value
-    String token,
-           nf,
+    String nf,
            check;
     byte temp;
     
@@ -342,6 +341,7 @@ public class QuickCheckBuilder
     }
     catch(EOFException e)
     {
+        return true;
     }
     return true;
   }
@@ -360,7 +360,6 @@ public class QuickCheckBuilder
   {
     int result[] = {UCharacter.MAX_VALUE, UCharacter.MAX_VALUE, 
                     UCharacter.MAX_VALUE, UCharacter.MAX_VALUE};
-    int length = quickcheck.length;
     byte value;
     for (int codepoint = 0; codepoint < UCharacter.MAX_VALUE; codepoint ++)
     {

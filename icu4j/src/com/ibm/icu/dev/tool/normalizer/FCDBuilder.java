@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/normalizer/Attic/FCDBuilder.java,v $ 
-* $Date: 2001/03/28 00:01:13 $ 
-* $Revision: 1.4 $
+* $Date: 2001/08/23 02:22:38 $ 
+* $Revision: 1.5 $
 *
 ******************************************************************************
 */
@@ -58,8 +58,6 @@ public class FCDBuilder
   {
     char result[] = new char[UCharacter.MAX_VALUE + 1];
     
-    String cstr,
-           nfd;
     for (int ch = UCharacter.MIN_VALUE; ch <= UCharacter.MAX_VALUE; ch ++) {
       result[ch] = getFCD(ch);
     }
