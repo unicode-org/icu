@@ -1,13 +1,13 @@
-<!-- 
+<!--
 /*
 *******************************************************************************
 * Copyright (C) 1997-2001, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
-* $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2002/03/31 06:37:10 $ 
-* $Revision: 1.51 $
+* $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
+* $Date: 2002/07/26 00:24:33 $
+* $Revision: 1.52 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -15,6 +15,32 @@
 -->
 
 <project name="ICU4J" default="core" basedir=".">
+
+    <!-- ### begin clover setup ### -->
+    <property name="clover.initstring" value="tmp/icu4j.db"/>
+    <path id="clover.classpath">
+	<!-- ***** you will need to change the paths below to point
+	           to clover.jar and velocity.jar on your filesystem ***** -->
+	<pathelement path="/work/devicu4j/coverage/clover-0.6b/lib/clover.jar"/>
+	<pathelement path="/work/devicu4j/coverage/clover-0.6b/lib/velocity.jar"/>
+    </path>
+
+    <!-- target to switch Clover on -->
+    <target name="with.clover">
+		<property name="build.compiler" value="org.apache.tools.ant.taskdefs.CloverCompilerAdapter"/>
+
+		<!-- instruct clover to use a class-based instrumentation strategy when instrumenting SimpleTimeZone.java -->
+		<property name="clover.useclass.includes" value="**/SimpleTimeZone.java"/>
+    </target>
+
+    <!-- target to generate a Clover html report -->
+    <target name="clover.report">
+	<java classname="com.cortexeb.tools.clover.reporters.html.HtmlReporter" fork="yes">
+	    <arg line="--outputdir tmp/icu4j_html --showSrc --initstring ${clover.initstring} --title 'icu4j core'"/>
+	    <classpath refid="clover.classpath"/>
+	</java>
+    </target>
+    <!-- ### end clover setup ### -->
 
     <target name="init">
         <tstamp/>
@@ -26,7 +52,12 @@
         <property name="icu4j.manifest" value="${src.dir}/com/ibm/icu/manifest.stub"/>
         <property name="zipbin.file" value="../icu4jbin${DSTAMP}.zip"/>
         <property name="zip.file" value="../icu4j${DSTAMP}.zip"/>
-        <property name="classpath" value="${build.dir}"/>
+
+	<path id="build.classpath">
+	    <pathelement path="${build.dir}"/>
+	    <path refid="clover.classpath"/>
+	</path>
+
         <property name="richedit.dist.dir" value="richeditDist"/>
         <property name="richedit.cont.dir" value="richedit"/>
         <property name="richedit.archive.dir" value="${richedit.dist.dir}/${richedit.cont.dir}"/>
@@ -41,7 +72,7 @@
 	    <srcfiles dir="${build.dir}" includes="com/ibm/icu/impl/data/LocaleElements_index.class"/>
 	</uptodate>
 	<property name="doc.params" value=""/>
-	<condition property="doc.params" 
+	<condition property="doc.params"
 	    value="-breakiterator -tag draft:a:&quot;Draft&quot; -tag internal:X:&quot;Internal&quot;">
 	    <equals arg1="${ant.java.version}" arg2="1.4"/>
 	</condition>
@@ -63,48 +94,48 @@
 
     <target name="core" depends="init,coreData,_resources">
         <copy file="${src.dir}/com/ibm/icu/impl/data/thai_dict"
-            todir="${build.dir}/com/ibm/icu/impl/data/"/>
-        <javac includes="com/ibm/icu/dev/tool/**/*.java,com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java,com/ibm/icu/math/**/*.java,com/ibm/icu/impl/**/*.java,com/ibm/icu/lang/*.java"
+            todir="${build.dir}/com/ibm/icu/impl/data/"/><!-- only needed if you are using html reporter -->
+        <javac includes="com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java,com/ibm/icu/math/**/*.java,com/ibm/icu/impl/**/*.java,com/ibm/icu/lang/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
-    	    destdir="${build.dir}" 
-    	    classpath="${classpath}"
+    	    destdir="${build.dir}"
+    	    classpathref="build.classpath"
             debug="on" deprecation="off"/>
     </target>
-      
+
     <target name="tests" depends="core,testData">
         <javac includes="com/ibm/icu/dev/test/**/*.java"
             excludes="**/CVS/**/*"
     	    srcdir="${src.dir}"
-    	    destdir="${build.dir}" 
-    	    classpath="${classpath}"
+    	    destdir="${build.dir}"
+    	    classpathref="build.classpath"
             debug="on" deprecation="off"/>
     </target>
-    
+
     <target name="richtext" depends="core,testData,tests">
         <javac includes="com/ibm/richtext/**/*.java,com/ibm/richtext/textlayout/**/*.java"
             excludes="**/CVS/**/*"
     	    srcdir="${src.dir}"
-    	    destdir="${build.dir}" 
-    	    classpath="${classpath}"
+    	    destdir="${build.dir}"
+    	    classpathref="build.classpath"
             debug="on" deprecation="off"/>
     </target>
-      
+
     <target name="demos" depends="core,testData">
         <javac includes="com/ibm/icu/dev/demo/**/*.java"
             excludes="**/CVS/**/*"
     	    srcdir="${src.dir}"
-    	    destdir="${build.dir}" 
-    	    classpath="${classpath}"
+    	    destdir="${build.dir}"
+    	    classpathref="build.classpath"
             debug="on" deprecation="off"/>
     </target>
-      
+
     <target name="tools" depends="core">
         <javac includes="com/ibm/icu/dev/tool/**/*.java"
             excludes="**/CVS/**/*"
     	    srcdir="${src.dir}"
-    	    destdir="${build.dir}" 
-    	    classpath="${classpath}"
+    	    destdir="${build.dir}"
+    	    classpathref="build.classpath"
             debug="on" deprecation="off"/>
     </target>
 
@@ -120,7 +151,7 @@
 	    docencoding="iso-8859-1"
 	    bottom="&lt;font size=-1>Copyright (c) 2001 IBM Corporation and others.&lt;/font>"
 	    additionalparam="${doc.params}"
-        />    	
+        />
     </target>
 
     <target name ="coreData" depends="init">
@@ -133,8 +164,14 @@
     <target name ="testData" depends="init">
         <copy file="${src.dir}/com/ibm/icu/dev/data/rbbi/english.dict"
     	      todir="${build.dir}/com/ibm/icu/dev/data/rbbi"/>
+    	<javac includes="com/ibm/icu/dev/data/*.java"
+		            excludes="**/CVS/**/*"
+		    	    srcdir="${src.dir}"
+		    	    destdir="${build.dir}"
+		    	    classpathref="build.classpath"
+            debug="on" deprecation="off"/>
     </target>
-      
+
     <target name="jar" depends="core">
         <jar jarfile="${jar.file}"
             compress="false"
@@ -151,13 +188,13 @@
             manifest="${richedit.manifest}"/>
     </target>
 
-    <!-- 
+    <!--
         Note:  I used to use -linkoffline http://java.sun.com/products/jdk/1.2/docs/api/ C:\jdk1.2.2\docs\api
         This links to core docs on Sun's site - a very nice feature.  But it requires the 1.2 docs to be
         on the build machine at a known location.
     -->
 
-    <target name="richeditDocs" depends="init">  
+    <target name="richeditDocs" depends="init">
         <mkdir dir="${richedit.doc.dir}"/>
         <javadoc  packagenames="com.ibm.richtext.awtui,com.ibm.richtext.swingui,com.ibm.richtext.textpanel,com.ibm.richtext.styledtext,com.ibm.textlayout.attributes,com.ibm.richtext.print"
             sourcepath="${src.dir}"
@@ -168,7 +205,7 @@
 	        encoding="iso-8859-1"
 	        docencoding="iso-8859-1"
 	        bottom="&lt;font size=-1>Copyright (c) 1998-2001 IBM Corporation and others.&lt;/font>"
-    		    />    		  
+    		    />
     </target>
 
     <target name="richeditZip" depends="richeditJar,richeditDocs">
@@ -177,7 +214,7 @@
             basedir="${richedit.dist.dir}"
             includes="${richedit.cont.dir}/**/*"/>
     </target>
-      
+
     <target name="zipbin" depends="docs,jar">
         <!--Create a zip archive of the source, docs, and jar file for
         distribution.  The zip file will be created in the directory above
