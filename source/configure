@@ -2152,8 +2152,8 @@ fi
 
 
 GENCCODE_ASSEMBLY=
-if test "$ac_cv_prog_gcc" = yes; then
-        GENCCODE_ASSEMBLY=-a gcc
+if test "$GCC" = yes; then
+        GENCCODE_ASSEMBLY="-a gcc"
 fi
 
 
@@ -4024,15 +4024,6 @@ then
     CPPFLAGS="$CPPFLAGS \$(THREADSCPPFLAGS)"
     CFLAGS="$CFLAGS \$(THREADSCFLAGS)"
     CXXFLAGS="$CXXFLAGS \$(THREADSCXXFLAGS)"
-fi
-
-if test "$ac_cv_lib_dld_shl_load" = "yes"; then
-	CPPFLAGS="${CPPFLAGS} -DICU_USE_SHL_LOAD"
-fi
-
-
-if test "$ac_cv_func_dllload" = "yes"; then
-    CPPFLAGS="${CPPFLAGS} -DICU_USE_SHL_LOAD"
 fi
 
 trap '' 1 2 15
