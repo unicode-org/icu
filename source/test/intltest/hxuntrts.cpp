@@ -58,7 +58,9 @@ void HexToUniTransliteratorTest::runIndexedTest( int32_t index, UBool exec, cons
 /**
  * Used by TestConstruction() and TestTransliterate.
  */
+uint32_t gTestHexFilterClassID = 0;
 class TestHexFilter : public UnicodeFilter {
+  virtual UClassID getDynamicClassID() const { return &gTestHexFilterClassID; }
     virtual UnicodeFunctor* clone() const {
         return new TestHexFilter(*this);
     }

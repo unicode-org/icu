@@ -606,6 +606,7 @@ void TransliteratorTest::TestCompoundHex(void) {
     delete b;
 }
 
+int gTestFilterClassID = 0;
 /**
  * Used by TestFiltering().
  */
@@ -625,6 +626,8 @@ class TestFilter : public UnicodeFilter {
         return FALSE;
     }
     virtual void addMatchSetTo(UnicodeSet& toUnionTo) const {}
+public:
+    UClassID getDynamicClassID() const { return (UClassID)&gTestFilterClassID; }
 };
 
 /**
