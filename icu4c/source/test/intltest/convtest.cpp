@@ -159,8 +159,9 @@ ConversionTest::TestFromUnicode() {
     TestDataModule *dataModule;
     TestData *testData;
     const DataMap *testCase;
+    const UChar *p;
     UErrorCode errorCode;
-    int32_t i;
+    int32_t i, length;
 
     errorCode=U_ZERO_ERROR;
     dataModule=TestDataModule::getTestDataModule("conversion", testLog, errorCode);
@@ -204,6 +205,31 @@ ConversionTest::TestFromUnicode() {
                 }
 
                 s=testCase->getString("callback", errorCode);
+
+                // read NUL-separated subchar first, if any
+                length=u_strlen(p=s.getTerminatedBuffer());
+                if(++length<s.length()) {
+                    // copy the subchar from Latin-1 characters
+                    // start after the NUL
+                    p+=length;
+                    length=s.length()-length;
+                    if(length>=sizeof(cc.subchar)) {
+                        errorCode=U_ILLEGAL_ARGUMENT_ERROR;
+                    } else {
+                        for(i=0; i<length; ++i) {
+                            cc.subchar[i]=(char)p[i];
+                        }
+                        // NUL-terminate the subchar
+                        cc.subchar[i]=0;
+                    }
+
+                    // remove the NUL and subchar from s
+                    s.truncate(u_strlen(s.getBuffer()));
+                } else {
+                    // no subchar
+                    cc.subchar[0]=0;
+                }
+
                 s.extract(0, 0x7fffffff, cbopt, sizeof(cbopt), "");
                 cc.cbopt=cbopt;
                 switch(cbopt[0]) {
@@ -774,6 +800,19 @@ ConversionTest::FromUnicodeCase(ConversionCase &cc, UConverterFromUCallback call
     // set the fallbacks flag
     // TODO change with Jitterbug 2401, then add a similar call for toUnicode too
     ucnv_setFallback(cnv, cc.fallbacks);
+
+    // set the subchar
+    int32_t length;
+
+    if((length=strlen(cc.subchar))!=0) {
+        ucnv_setSubstChars(cnv, cc.subchar, (int8_t)length, &errorCode);
+        if(U_FAILURE(errorCode)) {
+            errln("fromUnicode[%d](%s cb=\"%s\" fb=%d flush=%d) ucnv_setSubChars() failed - %s",
+                    cc.caseNr, cc.charset, cc.cbopt, cc.fallbacks, cc.finalFlush, u_errorName(errorCode));
+            ucnv_close(cnv);
+            return FALSE;
+        }
+    }
 
     int32_t resultOffsets[200];
     char result[200];

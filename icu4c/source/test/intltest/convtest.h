@@ -26,6 +26,7 @@
 struct ConversionCase {
     int32_t caseNr;
     const char *charset, *cbopt, *name;
+    char subchar[8];
 
     const uint8_t *bytes;
     int32_t bytesLength;
