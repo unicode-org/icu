@@ -66,7 +66,7 @@ StringCaseTest::TestCaseConversion()
 
     UnicodeString   test4(test3);
     test4.toLower();
-    expectedResult = "istanbul, not constantinople!";
+    expectedResult = UnicodeString("i\\u0307stanbul, not constantinople!", "").unescape();
     if (test4 != expectedResult)
         errln("1. toLower failed: expected \"" + expectedResult + "\", got \"" + test4 + "\".");
 
@@ -200,7 +200,7 @@ StringCaseTest::TestCaseConversion()
 
         UnicodeString
             ljInput=UnicodeString("ab'cD \\uFB00i\\u0131I\\u0130 \\u01C7\\u01C8\\u01C9 \\U0001043C\\U00010414", "").unescape(),
-            ljLower=UnicodeString("ab'cd \\uFB00i\\u0131ii \\u01C9\\u01C9\\u01C9 \\U0001043C\\U0001043C", "").unescape(),
+            ljLower=UnicodeString("ab'cd \\uFB00i\\u0131ii\\u0307 \\u01C9\\u01C9\\u01C9 \\U0001043C\\U0001043C", "").unescape(),
             ljUpper=UnicodeString("AB'CD FFIII\\u0130 \\u01C7\\u01C7\\u01C7 \\U00010414\\U00010414", "").unescape();
         (t=ljInput).toLower("en");
         if(t!=ljLower) {
@@ -236,8 +236,8 @@ StringCaseTest::TestCaseConversion()
         // remove dot above if there was a capital I before and there are no more accents above
         UnicodeString
             dots=UnicodeString("I \\u0130 I\\u0307 I\\u0327\\u0307 I\\u0301\\u0307 I\\u0327\\u0307\\u0301", "").unescape(),
-            dotsTurkish=UnicodeString("\\u0131 i i i\\u0327 \\u0131\\u0301\\u0307 i\\u0327\\u0307\\u0301", "").unescape(),
-            dotsDefault=UnicodeString("i i i i\\u0327 i\\u0301\\u0307 i\\u0327\\u0307\\u0301", "").unescape();
+            dotsTurkish=UnicodeString("\\u0131 i i\\u0307 i\\u0327\\u0307 \\u0131\\u0301\\u0307 i\\u0327\\u0307\\u0301", "").unescape(),
+            dotsDefault=UnicodeString("i i\\u0307 i\\u0307 i\\u0327\\u0307 i\\u0301\\u0307 i\\u0327\\u0307\\u0301", "").unescape();
 
         (t=dots).toLower("tr");
         if(t!=dotsTurkish) {
