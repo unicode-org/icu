@@ -348,7 +348,7 @@ u_strFindLast(const UChar *s, int32_t length,
             q=subLimit;
             for(;;) {
                 if(q==sub) {
-                    if(isMatchAtCPBoundary(start, p, limit+1, s+length)) {
+                    if(isMatchAtCPBoundary(start, p, limit+1, start+length)) {
                         return (UChar *)p; /* well-formed match */
                     } else {
                         break; /* no match because surrogate pair is split */
@@ -363,6 +363,11 @@ u_strFindLast(const UChar *s, int32_t length,
 
     /* not found */
     return NULL;
+}
+
+U_CAPI UChar * U_EXPORT2
+u_strrstr(const UChar *s, const UChar *substring) {
+    return u_strFindLast(s, -1, substring, -1);
 }
 
 U_CAPI UChar * U_EXPORT2
