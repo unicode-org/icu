@@ -6,8 +6,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/HexToUnicodeTransliteratorTest.java,v $ 
- * $Date: 2000/10/06 21:42:22 $ 
- * $Revision: 1.1 $
+ * $Date: 2000/10/09 16:32:07 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -43,12 +43,8 @@ public class HexToUnicodeTransliteratorTest extends TestFmwk {
 
     public void TestConstruction(){
         logln("Testing the construction HexToUnicodeTransliterator()");
-        HexToUnicodeTransliterator trans1=null;
-        try{
-            trans1=new HexToUnicodeTransliterator();
-        }catch(Exception ex1) {
-            errln("FAIL: HexToUnicodeTransliterator construction failed. " + ex1.toString());
-        }
+        HexToUnicodeTransliterator trans1=new HexToUnicodeTransliterator();
+       
 
         logln("Testing the cosntruction HexToUnicodeTransliterator(pattern)");
         String pattern="\\\\U+0000abc";
@@ -62,7 +58,7 @@ public class HexToUnicodeTransliteratorTest extends TestFmwk {
         String pattern2="\\X+";
         try{
             trans1=new HexToUnicodeTransliterator(pattern2);
-        }catch(Exception ex3) {
+        }catch(IllegalArgumentException ex3) {
             logln("OK: construction with Illegal pattern handled correctly");
         }  
         
@@ -84,20 +80,15 @@ public class HexToUnicodeTransliteratorTest extends TestFmwk {
     public void TestPattern(){
         logln("Testing the applyPattern() and toPattern() API of HexToUnicodeTransliterator");
         /*default transliterator has pattern \\u0000*/
-        HexToUnicodeTransliterator transdefault=null;
-        try{
-            transdefault=new HexToUnicodeTransliterator();
-        }catch(Exception ex1) {
-            errln("FAIL: HexToUnicodeTransliterator construction failed. " + ex1.toString());
-        }
-        
+        HexToUnicodeTransliterator transdefault=new HexToUnicodeTransliterator();
+                
         String defaultpattern=transdefault.toPattern();
         String pattern1="\\\\U+0000";
         
         HexToUnicodeTransliterator trans1=null;
         try{
             trans1=new HexToUnicodeTransliterator(pattern1, null);
-        }catch(Exception ex1) {
+        }catch(IllegalArgumentException ex1) {
             errln("FAIL: HexToUnicodeTransliterator construction failed with pattern =" + pattern1 +
                    "Exception:" + ex1.toString());
         }
@@ -140,12 +131,8 @@ public class HexToUnicodeTransliteratorTest extends TestFmwk {
         expectTranslit(trans1, ":Replaceable ", source,  1, source.length(), 2, expected); 
         expect(trans1, "", "\\U+0048\\U+0065\\U+006C\\U+006C\\U+006F", expected);
 
-        HexToUnicodeTransliterator transdefault=null;
-        try{
-            transdefault=new HexToUnicodeTransliterator();
-        }catch(Exception ex1) {
-            errln("FAIL: HexToUnicodeTransliterator construction failed. " + ex1.toString());
-        }
+        HexToUnicodeTransliterator transdefault=new HexToUnicodeTransliterator();
+        
         HexToUnicodeTransliterator trans2=null;
         try{
             trans2=new HexToUnicodeTransliterator(transdefault.toPattern(), HexFilter);

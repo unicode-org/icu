@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/UnicodeToHexTransliteratorTest.java,v $ 
- * $Date: 2000/10/06 21:42:22 $ 
- * $Revision: 1.1 $
+ * $Date: 2000/10/09 16:32:07 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -42,12 +42,8 @@ public class UnicodeToHexTransliteratorTest extends TestFmwk {
 
     public void TestConstruction(){
         logln("Testing the construction UnicodeToHexTransliterator()");
-        UnicodeToHexTransliterator trans1=null;
-        try{
-            trans1=new UnicodeToHexTransliterator();
-        }catch(Exception ex1) {
-            errln("FAIL: UnicodeToHexTransliterator construction failed. " + ex1.toString());
-        }
+        UnicodeToHexTransliterator trans1=new UnicodeToHexTransliterator();
+        
 
         logln("Testing the cosntruction UnicodeToHexTransliterator(pattern)");
         String pattern="\\\\U+0000abc";
@@ -61,7 +57,7 @@ public class UnicodeToHexTransliteratorTest extends TestFmwk {
         String pattern2="\\X+";
         try{
             trans1=new UnicodeToHexTransliterator(pattern2);
-        }catch(Exception ex3) {
+        }catch(IllegalArgumentException ex3) {
             logln("OK: construction with Illegal pattern handled correctly");
         }  
         
@@ -85,12 +81,7 @@ public class UnicodeToHexTransliteratorTest extends TestFmwk {
         logln("Testing the isUppercase() and setUppercase() API of UnicodeToHexTransliterator");
         String str="abk";
         /*default transliterator has upper case TRUE*/
-        UnicodeToHexTransliterator transdefault=null;
-        try{
-            transdefault=new UnicodeToHexTransliterator();
-        }catch(Exception ex1) {
-            errln("FAIL: UnicodeToHexTransliterator() construction failed. " + ex1.toString());
-        }
+        UnicodeToHexTransliterator transdefault=new UnicodeToHexTransliterator();
         expect(transdefault, "where uppercase=default", str, "\\u0061\\u0062\\u006B");
 
         String pattern="\\\\u0000";
@@ -131,20 +122,15 @@ public class UnicodeToHexTransliteratorTest extends TestFmwk {
     public void TestPattern(){
         logln("Testing the applyPattern() and toPattern() API of UnicodeToHexTransliterator");
         /*default transliterator has pattern \\u0000*/
-        UnicodeToHexTransliterator transdefault=null;
-        try{
-            transdefault=new UnicodeToHexTransliterator();
-        }catch(Exception ex1) {
-            errln("FAIL: UnicodeToHexTransliterator construction failed. " + ex1.toString());
-        }
-        
+        UnicodeToHexTransliterator transdefault=new UnicodeToHexTransliterator();
+                
         String defaultpattern=transdefault.toPattern();
         String pattern1="\\\\U+0000";
         
         UnicodeToHexTransliterator trans1=null;
         try{
             trans1=new UnicodeToHexTransliterator(pattern1, true, null);
-        }catch(Exception ex1) {
+        }catch(IlegalArgumentException ex1) {
             errln("FAIL: UnicodeToHexTransliterator construction failed with pattern =" + pattern1 +
                    "Exception:" + ex1.toString());
         }
