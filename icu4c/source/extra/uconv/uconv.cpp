@@ -37,8 +37,7 @@
 
 #include "unicode/uwmsg.h"
 
-#ifdef WIN32
-#include <string.h>
+#if defined(WIN32) || defined(U_CYGWIN)
 #include <io.h>
 #include <fcntl.h>
 #endif
