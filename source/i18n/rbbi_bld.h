@@ -2,8 +2,7 @@
 * Copyright © {1999}, International Business Machines Corporation and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
-*   10/22/99    alan        Creation.  This is an internal header; it
-*                           shall not be exported.
+*   12/15/99    rgillam     Port from Java.
 **********************************************************************
 */
 
@@ -11,8 +10,11 @@
 #define RBBI_BLD_H
 
 #include "rbbi.h"
+#include "rbbi_tbl.h"
 #include "unicode/uniset.h"
 #include "uvector.h"
+
+class ExpressionList;
 
 //=======================================================================
 // RuleBasedBreakIterator.Builder
@@ -42,7 +44,21 @@
 class RuleBasedBreakIteratorBuilder {
 
 protected:
+    /**
+     * The iterator we're constructing.
+     */
+    RuleBasedBreakIterator& iterator;
 
+    /**
+     * The tables object for the iterator we're constructing.
+     */
+    RuleBasedBreakIteratorTables* tables;
+
+    /**
+     * A temporary place to hold the rules as they're being processed.
+     */
+    UVector tempRuleList;
+    
     /**
      * A temporary holding place used for calculating the character categories.
      * This object contains UnicodeSet objects.
@@ -50,10 +66,15 @@ protected:
     UVector categories;
 
     /**
+     * The number of categories (and thus the number of columns in the finished state tables)
+     */
+    int32_t numCategories;
+
+    /**
      * A table used to map parts of regexp text to lists of character categories,
      * rather than having to figure them out from scratch each time
      */
-    Hashtable expressions;
+    ExpressionList* expressions;
 
     /**
      * A temporary holding place for the list of ignore characters
@@ -104,18 +125,56 @@ protected:
      */
     bool_t clearLoopingStates;
 
+    /**
+     * A place where an error message can be stored if we get a parse error.
+     * The error message is never displayed anywhere, so this is useful pretty
+     * much only in conjunction with a debugger.
+     */
+    UnicodeString errorMessage;
+
+    /**
+     * A bit mask used to indicate a bit in the table's flags column that marks a
+     * state as an accepting state.
+     */
+    static const int32_t END_STATE_FLAG /*= 0x8000*/;
+
+    /**
+     * A bit mask used to indicate a bit in the table's flags column that marks a
+     * state as one the builder shouldn't loop to any looping states
+     */
+    static const int32_t DONT_LOOP_FLAG /*= 0x4000*/;
+
+    /**
+     * A bit mask used to indicate a bit in the table's flags column that marks a
+     * state as a lookahead state.
+     */
+    static const int32_t LOOKAHEAD_STATE_FLAG /*= 0x2000*/;
+
+    /**
+     * A bit mask representing the union of the mask values listed above.
+     * Used for clearing or masking off the flag bits.
+     */
+    static const int32_t ALL_FLAGS /*= END_STATE_FLAG | LOOKAHEAD_STATE_FLAG
+            | DONT_LOOP_FLAG*/;
+
 public:
 
     /**
-     * No special construction is required for the Builder.
+     * The Builder class contains a reference to the iterator it's supposed to build.
      */
-    RuleBasedBreakIteratorBuilder();
+    RuleBasedBreakIteratorBuilder(RuleBasedBreakIterator& iteratorToBuild);
+
+    /**
+     * Destructor.
+     */
+    ~RuleBasedBreakIteratorBuilder();
 
     /**
      * This is the main function for setting up the BreakIterator's tables.  It
-     * just UVectors different parts of the job off to other functions.
+     * just vectors different parts of the job off to other functions.
      */
-    virtual void buildBreakIterator(void);
+    virtual void buildBreakIterator(const UnicodeString&    description,
+                                    UErrorCode& err);
 
 private:
 
@@ -127,7 +186,8 @@ private:
      * <li>Perform variable-name substitutions (so that no one else sees variable names)
      * </ul>
      */
-    virtual UVector buildRuleList(UnicodeString description);
+    virtual void buildRuleList(UnicodeString& description,
+                               UErrorCode& err);
 
 protected:
 
@@ -138,8 +198,11 @@ protected:
      * find-and-replace of the variable name with its text.  (The variable text
      * must be enclosed in either [] or () for this to work.)
      */
-    virtual UnicodeString processSubstitution(UnicodeString substitutionRule, UnicodeString description,
-                    int32_t startPos);
+    virtual void processSubstitution(UnicodeString& description,
+                                     UTextOffset ruleStart,
+                                     UTextOffset ruleEnd,
+                                     UTextOffset startPos,
+                                     UErrorCode& err);
 
     /**
      * This function defines a protocol for handling substitution names that
@@ -150,8 +213,17 @@ protected:
      * that which is done by the normal substitution-processing code is done
      * here.
      */
-    virtual void handleSpecialSubstitution(UnicodeString replace, UnicodeString replaceWith,
-                int32_t startPos, UnicodeString description);
+    virtual void handleSpecialSubstitution(const UnicodeString& replace,
+                                           const UnicodeString& replaceWith,
+                                           int32_t startPos,
+                                           const UnicodeString& description,
+                                           UErrorCode& err);
+
+    /**
+     * This function provides a hook for subclasses to mess with the character
+     * category table.
+     */
+    virtual void mungeExpressionList();
 
     /**
      * This function builds the character category table.  On entry,
@@ -161,7 +233,7 @@ protected:
      * character category numbers everywhere a literal character or a [] expression
      * originally occurred.
      */
-    virtual void buildCharCategories(UVector tempRuleList);
+    virtual void buildCharCategories(UErrorCode& err);
 
 private:
 
@@ -170,7 +242,7 @@ private:
      * work is done in parseRule(), which is called once for each rule in the
      * description.
      */
-    virtual void buildStateTable(UVector tempRuleList);
+    virtual void buildStateTable(UErrorCode& err);
 
     /**
      * This is where most of the work really happens.  This routine parses a single
@@ -179,7 +251,8 @@ private:
      * throughout the whole operation, although some ugly postprocessing is needed
      * to handle the *? token.
      */
-    virtual void parseRule(UnicodeString rule, bool_t forward);
+    virtual void parseRule(const UnicodeString& rule,
+                           bool_t               forward);
 
     /**
      * Update entries in the state table, and merge states when necessary to keep
@@ -189,9 +262,9 @@ private:
      * list of the columns that need updating.
      * @param newValue Update the cells specfied above to contain this value
      */
-    virtual void updateStateTable(UVector rows,
-                                  UnicodeString pendingChars,
-                                  int16_t newValue);
+    virtual void updateStateTable(const UVector&       rows,
+                                  const UnicodeString& pendingChars,
+                                  int16_t              newValue);
 
     /**
      * The real work of making the state table deterministic happens here.  This function
@@ -213,9 +286,9 @@ private:
      * (itself a copy of the decision point list from parseRule()).  Newly-created
      * states get added to the decision point list if their "parents" were on it.
      */
-    virtual void mergeStates(int32_t rowNum,
+    virtual void mergeStates(int32_t  rowNum,
                              int16_t* newValues,
-                             UVector rowsBeingUpdated);
+                             const UVector& rowsBeingUpdated);
 
     /**
      * The merge list is a list of pairs of rows that have been merged somewhere in
@@ -236,7 +309,8 @@ private:
      * @param endStates The list of states to treat as end states (states that
      * can exit the loop).
      */
-    virtual void setLoopingStates(UVector newLoopingStates, UVector endStates);
+    virtual void setLoopingStates(const UVector* newLoopingStates,
+                                  const UVector& endStates);
 
     /**
      * This removes "ending states" and states reachable from them from the
@@ -264,7 +338,7 @@ private:
      * table and any additional rules (identified by the ! on the front)
      * supplied in the description
      */
-    virtual void buildBackwardsStateTable(UVector tempRuleList);
+    virtual void buildBackwardsStateTable(UErrorCode& err);
 
 protected:
 
@@ -276,7 +350,9 @@ protected:
      * discovered
      * @param context The string containing the error
      */
-    virtual void error(UnicodeString message, int32_t position, UnicodeString context);
+    virtual void setUpErrorMessage(const UnicodeString& message,
+                                   int32_t position,
+                                   const UnicodeString& context);
 };
 
 #endif

@@ -3,11 +3,17 @@
 **********************************************************************
 *   Date        Name        Description
 *   10/22/99    alan        Creation.
+*   11/11/99    rgillam     Complete port from Java.
 **********************************************************************
 */
 
 #ifndef RBBI_H
 #define RBBI_H
+
+#include "utypes.h"
+#include "rbbi_tbl.h"
+#include "unicode/brkiter.h"
+#include "filestrm.h"
 
 /**
  * <p>A subclass of BreakIterator whose behavior is specified using a list of rules.</p>
@@ -173,17 +179,15 @@
  *
  * @author Richard Gillam
  */
-class RuleBasedBreakIterator {
+class U_I18N_API RuleBasedBreakIterator : public BreakIterator {
 
-protected:
-
+public:
     /**
      * A token used as a character-category value to identify ignore characters
      */
     static int8_t IGNORE;
 
 private:
-
     /**
      * The state number of the starting state
      */
@@ -194,92 +198,130 @@ private:
      */
     static int16_t STOP_STATE;
 
-    /**
-     * The textual description this iterator was created from
-     */
-    UnicodeString description;
-
-    /**
-     * A table that indexes from character values to character category numbers
-     */
-    CompactByteArray charCategoryTable;
-
-    /**
-     * The table of state transitions used for forward iteration
-     */
-    int16_t* stateTable;
-
-    /**
-     * The table of state transitions used to sync up the iterator with the
-     * text in backwards and random-access iteration
-     */
-    int16_t* backwardsStateTable;
-
-    /**
-     * A list of flags indicating which states in the state table are accepting
-     * ("end") states
-     */
-    bool_t* endStates;
-
-    /**
-     * The number of character categories (and, thus, the number of columns in
-     * the state tables)
-     */
-    int32_t numCategories;
-
+protected:
     /**
      * The character iterator through which this BreakIterator accesses the text
      */
-    CharacterIterator text;
+    CharacterIterator* text;
 
+    /**
+     * The data tables this iterator uses to determine the break positions
+     */
+    RuleBasedBreakIteratorTables* tables;
+
+private:
+    /**
+     * Class ID
+     */
+    static char fgClassID;
+
+public:
     //=======================================================================
     // constructors
     //=======================================================================
-
-public:
+    
+// This constructor uses the udata interface to create a BreakIterator whose
+// internal tables live in a memory-mapped file.  "image" is a pointer to the
+// beginning of that file.
+RuleBasedBreakIterator(const void* image);
 
     /**
-     * Constructs a RuleBasedBreakIterator according to the description
-     * provided.  If the description is malformed, throws an
-     * IllegalArgumentException.  Normally, instead of constructing a
-     * RuleBasedBreakIterator directory, you'll use the factory methods
-     * on BreakIterator to create one indirectly from a description
-     * in the framework's resource files.  You'd use this when you want
-     * special behavior not provided by the built-in iterators.
+     * Copy constructor.  Will produce a collator with the same behavior,
+     * and which iterates over the same text, as the one passed in.
      */
-    RuleBasedBreakIterator(UnicodeString description);
+    RuleBasedBreakIterator(const RuleBasedBreakIterator& that);
 
     //=======================================================================
     // boilerplate
     //=======================================================================
-public:
 
     /**
-     * Clones this iterator.
-     * @return A newly-constructed RuleBasedBreakIterator with the same
-     * behavior as this one.
+     * Destructor
      */
-    virtual Object clone(void);
+    virtual ~RuleBasedBreakIterator();
 
     /**
-     * Returns true if both BreakIterators are of the same class, have the same
-     * rules, and iterate over the same text.
+     * Assignment operator.  Sets this iterator to have the same behavior,
+     * and iterate over the same text, as the one passed in.
      */
-    virtual bool_t equals(Object that);
+    RuleBasedBreakIterator& operator=(const RuleBasedBreakIterator& that);
+
+    /**
+     * Equality operator.  Returns TRUE if both BreakIterators are of the
+     * same class, have the same behavior, and iterate over the same text.
+     */
+    virtual bool_t operator==(const BreakIterator& that) const;
+
+    /**
+     * Not-equal operator.  If operator== returns TRUE, this returns FALSE,
+     * and vice versa.
+     */
+    bool_t operator!=(const BreakIterator& that) const;
+
+    /**
+     * Returns a newly-constructed RuleBasedBreakIterator with the same
+     * behavior, and iterating over the same text, as this one.
+     */
+    virtual BreakIterator* clone(void) const;
+
+    /**
+     * Compute a hash code for this BreakIterator
+     * @return A hash code
+     */
+    virtual int32_t hashCode() const;
 
     /**
      * Returns the description used to create this iterator
      */
-    virtual UnicodeString toString(void);
+    virtual const UnicodeString& getRules() const;
 
-    /**
-     * Compute a hashcode for this BreakIterator
-     * @return A hash code
-     */
-    virtual int32_t hashCode(void);
     //=======================================================================
     // BreakIterator overrides
     //=======================================================================
+
+    /**
+     * Return a CharacterIterator over the text being analyzed.  This version
+     * of this method returns the actual CharacterIterator we're using internally.
+     * Changing the state of this iterator can have undefined consequences.  If
+     * you need to change it, clone it first.
+     * @return An iterator over the text being analyzed.
+     */
+    virtual const CharacterIterator& getText() const;
+
+    /**
+     * Returns a newly-created CharacterIterator that the caller is to take
+     * ownership of.
+     * THIS FUNCTION SHOULD NOT BE HERE.  IT'S HERE BECAUSE BreakIterator DEFINES
+     * IT AS PURE VIRTUAL, FORCING RBBI TO IMPLEMENT IT.  IT SHOULD BE REMOVED
+     * FROM *BOTH* CLASSES.
+     */
+    virtual CharacterIterator* createText() const;
+
+    /**
+     * Set the iterator to analyze a new piece of text.  This function resets
+     * the current iteration position to the beginning of the text.
+     * @param newText An iterator over the text to analyze.  The BreakIterator
+     * takes ownership of the character iterator.  The caller MUST NOT delete it!
+     */
+    virtual void adoptText(CharacterIterator* newText);
+
+    /**
+     * Set the iterator to analyze a new piece of text.  This function resets
+     * the current iteration position to the beginning of the text.
+     * @param newText The text to analyze.
+     */
+    virtual void setText(const UnicodeString& newText);
+
+    /**
+     * Set the iterator to analyze a new piece of text.  This function resets
+     * the current iteration position to the beginning of the text.
+     * @param newText The text to analyze.
+     * THIS FUNCTION SHOULD NOT BE HERE.  IT'S HERE BECAUSE BreakIterator DEFINES
+     * IT AS PURE VIRTUAL, FORCING RBBI TO IMPLEMENT IT.  IT SHOULD BE REMOVED
+     * FROM *BOTH* CLASSES.
+     */
+    virtual void setText(const UnicodeString* newText);
+
     /**
      * Sets the current iteration position to the beginning of the text.
      * (i.e., the CharacterIterator's starting offset).
@@ -346,28 +388,36 @@ public:
      * Returns the current iteration position.
      * @return The current iteration position.
      */
-    virtual int32_t current(void);
+    virtual int32_t current(void) const;
 
     /**
-     * Return a CharacterIterator over the text being analyzed.  This version
-     * of this method returns the actual CharacterIterator we're using internally.
-     * Changing the state of this iterator can have undefined consequences.  If
-     * you need to change it, clone it first.
-     * @return An iterator over the text being analyzed.
+     * Returns a unique class ID POLYMORPHICALLY.  Pure virtual override.
+     * This method is to implement a simple version of RTTI, since not all
+     * C++ compilers support genuine RTTI.  Polymorphic operator==() and
+     * clone() methods call this method.
+     *
+     * @return          The class ID for this object. All objects of a
+     *                  given class have the same class ID.  Objects of
+     *                  other classes have different class IDs.
      */
-    virtual CharacterIterator getText(void);
+    virtual UClassID getDynamicClassID() const;
 
     /**
-     * Set the iterator to analyze a new piece of text.  This function resets
-     * the current iteration position to the beginning of the text.
-     * @param newText An iterator over the text to analyze.
+     * Returns the class ID for this class.  This is useful only for
+     * comparing to a return value from getDynamicClassID().  For example:
+     *
+     *      Base* polymorphic_pointer = createPolymorphicObject();
+     *      if (polymorphic_pointer->getDynamicClassID() ==
+     *          Derived::getStaticClassID()) ...
+     *
+     * @return          The class ID for all objects of this class.
      */
-    virtual void setText(CharacterIterator newText);
+    static UClassID getStaticClassID();
+
+protected:
     //=======================================================================
     // implementation
     //=======================================================================
-protected:
-
     /**
      * This method is the actual implementation of the next() method.  All iteration
      * vectors through here.  This method initializes the state machine to state 1
@@ -387,22 +437,33 @@ protected:
     virtual int32_t handlePrevious(void);
 
     /**
-     * Looks up a character's category (i.e., its category for breaking purposes,
-     * not its Unicode category)
+     * Dumps caches and performs other actions associated with a complete change
+     * in text or iteration position.  This function is a no-op in RuleBasedBreakIterator,
+     * but subclasses can and do override it.
      */
-    virtual int32_t lookupCategory(UChar c);
+    virtual void reset();
+
+private:
 
     /**
-     * Given a current state and a character category, looks up the
-     * next state to transition to in the state table.
+     * Constructs a RuleBasedBreakIterator that uses the already-created
+     * tables object that is passed in as a parameter.
      */
-    virtual int32_t lookupState(int32_t state, int32_t category);
+    RuleBasedBreakIterator(RuleBasedBreakIteratorTables* tables);
 
-    /**
-     * Given a current state and a character category, looks up the
-     * next state to transition to in the backwards state table.
-     */
-    virtual int32_t lookupBackwardState(int32_t state, int32_t category);
+    friend class BreakIterator;
 };
+
+inline bool_t RuleBasedBreakIterator::operator!=(const BreakIterator& that) const {
+    return !operator==(that);
+}
+
+inline UClassID RuleBasedBreakIterator::getDynamicClassID() const {
+    return RuleBasedBreakIterator::getStaticClassID();
+}
+
+inline UClassID RuleBasedBreakIterator::getStaticClassID() {
+    return (UClassID)(&fgClassID);
+}
 
 #endif

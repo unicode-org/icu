@@ -142,6 +142,15 @@ UCharCharacterIterator::getIndex() const
     return pos;
 }
 
+void UCharCharacterIterator::setText(const UChar* newText,
+                                     int32_t      newTextLength)
+{
+    text = newText;
+    begin = 0;
+    end = newTextLength;
+    pos = begin;
+}
+
 void
 UCharCharacterIterator::getText(UnicodeString& result)
 {

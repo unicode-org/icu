@@ -227,15 +227,6 @@ inline void* UVector::operator[](int32_t index) const {
     return elementAt(index);
 }
 
-// Dummy implementation - disallowed method
-inline UVector::UVector(const UVector&) {}
-
-// Dummy implementation - disallowed method
-inline UVector& UVector::operator=(const UVector&) {
-    return *this;
-}
-
-
 // UStack inlines
 
 inline bool_t UStack::empty(void) const {
@@ -249,14 +240,6 @@ inline void* UStack::peek(void) const {
 inline void* UStack::push(void* obj) {
     addElement(obj);
     return obj;
-}
-
-// Dummy implementation - disallowed method
-inline UStack::UStack(const UStack&) {}
-
-// Dummy implementation - disallowed method
-inline UStack& UStack::operator=(const UStack&) {
-    return *this;
 }
 
 #endif
