@@ -153,7 +153,7 @@ SimpleFactory::updateVisibleIDs(Hashtable& result, UErrorCode& status) const
 }
 
 UnicodeString& 
-SimpleFactory::getDisplayName(const UnicodeString& id, const Locale& locale, UnicodeString& result) const 
+SimpleFactory::getDisplayName(const UnicodeString& id, const Locale& /* locale */, UnicodeString& result) const 
 {
   if (_visible && _id == id) {
     result = _id;
