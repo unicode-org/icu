@@ -230,10 +230,10 @@ static void TestSurrogateBehaviour(){
         /*iso-2022-kr*/
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expected, sizeof(expected), "iso-2022-kr", 0 , TRUE, U_ZERO_ERROR))
-            log_err("u-> ibm-1362 [UCNV_DBCS] not match.\n");
+            log_err("u-> iso-2022-kr [UCNV_DBCS] not match.\n");
         if(!convertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
                 expected, sizeof(expected), "iso-2022-kr", offsets , TRUE, U_ZERO_ERROR))
-            log_err("u-> ibm-1362 [UCNV_DBCS] not match.\n");
+            log_err("u-> iso-2022-kr [UCNV_DBCS] not match.\n");
     }
         log_verbose("Testing for HZ\n");
     {
