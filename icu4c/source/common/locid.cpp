@@ -247,16 +247,20 @@ Locale::~Locale()
         uprv_free(fullName);
         fullName = NULL;
     }
+    if (baseName && baseName != baseNameBuffer) {
+      uprv_free(baseName);
+      baseName = NULL;
+    }
 }
 
 Locale::Locale()
-    : UObject(), fullName(fullNameBuffer)
+    : UObject(), fullName(fullNameBuffer), baseName(NULL)
 {
     init(NULL);
 }
 
 Locale::Locale(Locale::ELocaleType t) 
-    : UObject(), fullName(fullNameBuffer)
+    : UObject(), fullName(fullNameBuffer), baseName(NULL)
 {
     setToBogus();
 }
@@ -266,7 +270,7 @@ Locale::Locale( const   char * newLanguage,
                 const   char * newCountry, 
                 const   char * newVariant,
                 const   char * newKeywords) 
-    : UObject(), fullName(fullNameBuffer)
+    : UObject(), fullName(fullNameBuffer), baseName(NULL)
 {
     if( (newLanguage==NULL) && (newCountry == NULL) && (newVariant == NULL) )
     {
@@ -386,7 +390,7 @@ Locale::Locale( const   char * newLanguage,
 }
 
 Locale::Locale(const Locale &other)
-    : UObject(other), fullName(fullNameBuffer)
+    : UObject(other), fullName(fullNameBuffer), baseName(NULL)
 {
     *this = other;
 }
@@ -408,13 +412,25 @@ Locale &Locale::operator=(const Locale &other)
         fullName = fullNameBuffer;
     }
 
+    if(baseName && baseName != baseNameBuffer) {
+      uprv_free(baseName);
+      baseName = NULL;
+    }
+
     /* Allocate the full name if necessary */
     if(other.fullName != other.fullNameBuffer) {
         fullName = (char *)uprv_malloc(sizeof(char)*(uprv_strlen(other.fullName)+1));
     }
-
     /* Copy the full name */
     uprv_strcpy(fullName, other.fullName);
+
+    if(other.baseName) {
+      if(other.baseName != other.baseNameBuffer) {
+        baseName = (char *)uprv_malloc(sizeof(char)*(uprv_strlen(other.fullName)+1));
+      }
+      uprv_strcpy(baseName, other.baseName);
+    }
+
 
     /* Copy the language and country fields */
     uprv_strcpy(language, other.language);
@@ -446,6 +462,11 @@ Locale& Locale::init(const char* localeID)
     if(fullName != fullNameBuffer) {
         uprv_free(fullName);
         fullName = fullNameBuffer;
+    }
+
+    if(baseName && baseName != baseNameBuffer) {
+      uprv_free(baseName);
+      baseName = NULL;
     }
 
     // not a loop:
@@ -1188,7 +1209,7 @@ public:
 const char KeywordEnumeration::fgClassID = '\0';
 
 StringEnumeration * 
-Locale::getKeywords(UErrorCode &status) const
+Locale::createKeywords(UErrorCode &status) const
 {
   char keywords[256];
   int32_t keywordCapacity = 256;
@@ -1214,6 +1235,25 @@ Locale::getKeywordValue(const char* keywordName, char *buffer, int32_t bufLen, U
 {
   return uloc_getKeywordValue(fullName, keywordName, buffer, bufLen, &status);
 }
+
+const char * 
+Locale::getBaseName() const
+{
+  // lazy init
+  UErrorCode status = U_ZERO_ERROR;
+  // semantically const
+  if(baseName == 0) {
+    ((Locale *)this)->baseName = ((Locale *)this)->baseNameBuffer;
+    int32_t baseNameSize = uloc_getBaseName(fullName, baseName, ULOC_FULLNAME_CAPACITY, &status);
+    if(baseNameSize >= ULOC_FULLNAME_CAPACITY) {
+      ((Locale *)this)->baseName = (char *)malloc(sizeof(char) * baseNameSize + 1);
+      uloc_getBaseName(fullName, baseName, baseNameSize+1, &status);
+    } 
+    baseName[baseNameSize] = 0;
+  }
+  return baseName;
+}
+
 
 //eof
 U_NAMESPACE_END
