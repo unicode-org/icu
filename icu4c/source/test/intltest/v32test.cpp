@@ -414,16 +414,6 @@ void UVector32Test::UVector32_API() {
 
 
     //
-    //  RTTI
-    //
-    status = U_ZERO_ERROR;
-    a = new UVector32(status);
-    TEST_ASSERT(a->getDynamicClassID() == UVector32::getStaticClassID());
-    TEST_ASSERT(a->getDynamicClassID() != UVector::getStaticClassID());
-    TEST_CHECK_STATUS(status);
-    delete a;
-
-    //
     //  empty
     //
     status = U_ZERO_ERROR;

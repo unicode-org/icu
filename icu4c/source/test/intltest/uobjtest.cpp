@@ -150,6 +150,7 @@ UObject *UObjectTest::testClass(UObject *obj,
 #include "unesctrn.h"
 #include "uni2name.h"
 #include "uvector.h"
+#include "uvectr32.h"
 #include "currfmt.h"
 #include "buddhcal.h"
 #include "islamcal.h"
@@ -329,6 +330,7 @@ void UObjectTest::testIDs()
     TESTCLASSID_CTOR(UnicodeSetIterator,(UnicodeSet(0,1)));
     TESTCLASSID_CTOR(UStack, (status));
     TESTCLASSID_CTOR(UVector, (status));
+    TESTCLASSID_CTOR(UVector32, (status));
 
 #if !UCONFIG_NO_SERVICE
     TESTCLASSID_CTOR(SimpleFactory, (NULL, UnicodeString("foo")));
