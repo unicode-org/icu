@@ -33,7 +33,6 @@ U_NAMESPACE_BEGIN
 class Locale;               // unicode/locid.h
 class UCharReference;
 class UnicodeConverter;     // unicode/convert.h
-class Normalizer;
 class StringCharacterIterator;
 class SearchIterator;
 class StringSearch;
@@ -2747,7 +2746,6 @@ private:
   };
 
   friend class UnicodeConverter;
-  friend class Normalizer;
 
   friend class StringCharacterIterator;
   friend class SearchIterator;
