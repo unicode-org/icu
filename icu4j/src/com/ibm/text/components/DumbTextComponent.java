@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/components/Attic/DumbTextComponent.java,v $ 
- * $Date: 2001/11/21 00:53:40 $ 
- * $Revision: 1.3 $
+ * $Date: 2001/11/25 23:18:03 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -22,7 +22,7 @@ public class DumbTextComponent extends Canvas
   {
     private transient static final String copyright =
       "Copyright \u00A9 1998, Mark Davis. All Rights Reserved.";
-    private transient static boolean DEBUG = true;
+    private transient static boolean DEBUG = false;
 
     private String contents = "";
     private Selection selection = new Selection();
