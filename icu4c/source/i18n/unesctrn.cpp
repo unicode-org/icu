@@ -118,10 +118,11 @@ void UnescapeTransliterator::registerIDs() {
 /**
  * Constructor.  Takes the encoded spec array.
  */
-UnescapeTransliterator::UnescapeTransliterator(const UnicodeString& ID,
-                                               const UChar *spec) :
-    Transliterator(ID, NULL) {
-    this->spec = copySpec(spec);
+UnescapeTransliterator::UnescapeTransliterator(const UnicodeString& newID,
+                                               const UChar *newSpec) :
+    Transliterator(newID, NULL)
+{
+    this->spec = copySpec(newSpec);
 }
 
 /**
