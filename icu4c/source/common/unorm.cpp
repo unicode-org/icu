@@ -1010,6 +1010,92 @@ unorm_quickCheck(const UChar *src,
 
 /* make NFD & NFKD ---------------------------------------------------------- */
 
+U_CAPI int32_t U_EXPORT2
+unorm_getDecomposition(UChar32 c, UBool compat,
+                       UChar *dest, int32_t destCapacity) {
+    UErrorCode errorCode=U_ZERO_ERROR;
+    if( (uint32_t)c<=0x10ffff &&
+        _haveData(errorCode) &&
+        ((dest!=NULL && destCapacity>0) || destCapacity==0)
+    ) {
+        uint32_t norm32, qcMask;
+        UChar32 minNoMaybe;
+        int32_t length;
+
+        /* initialize */
+        if(!compat) {
+            minNoMaybe=(UChar32)indexes[_NORM_INDEX_MIN_NFD_NO_MAYBE];
+            qcMask=_NORM_QC_NFD;
+        } else {
+            minNoMaybe=(UChar32)indexes[_NORM_INDEX_MIN_NFKD_NO_MAYBE];
+            qcMask=_NORM_QC_NFKD;
+        }
+
+        if(c<minNoMaybe) {
+            /* trivial case */
+            if(destCapacity>0) {
+                dest[0]=(UChar)c;
+            }
+            return -1;
+        }
+
+        /* data lookup */
+        UTRIE_GET32(&normTrie, c, norm32);
+        if((norm32&qcMask)==0) {
+            /* simple case: no decomposition */
+            if(c<=0xffff) {
+                if(destCapacity>0) {
+                    dest[0]=(UChar)c;
+                }
+                return -1;
+            } else {
+                if(destCapacity>=2) {
+                    dest[0]=UTF16_LEAD(c);
+                    dest[1]=UTF16_TRAIL(c);
+                }
+                return -2;
+            }
+        } else if(isNorm32HangulOrJamo(norm32)) {
+            /* Hangul syllable: decompose algorithmically */
+            UChar c2;
+
+            c-=HANGUL_BASE;
+
+            c2=(UChar)(c%JAMO_T_COUNT);
+            c/=JAMO_T_COUNT;
+            if(c2>0) {
+                if(destCapacity>=3) {
+                    dest[2]=(UChar)(JAMO_T_BASE+c2);
+                }
+                length=3;
+            } else {
+                length=2;
+            }
+
+            if(destCapacity>=2) {
+                dest[1]=(UChar)(JAMO_V_BASE+c%JAMO_V_COUNT);
+                dest[0]=(UChar)(JAMO_L_BASE+c/JAMO_V_COUNT);
+            }
+            return length;
+        } else {
+            /* c decomposes, get everything from the variable-length extra data */
+            const UChar *p, *limit;
+            uint8_t cc, trailCC;
+
+            p=_decompose(norm32, qcMask, length, cc, trailCC);
+            if(length<=destCapacity) {
+                limit=p+length;
+                do {
+                    *dest++=*p++;
+                } while(p<limit);
+            }
+            return length;
+        }
+    } else {
+        return 0;
+    }
+}
+
 static int32_t
 _decompose(UChar *dest, int32_t destCapacity,
            const UChar *src, int32_t srcLength,
