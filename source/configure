@@ -3142,7 +3142,7 @@ trap 'rm -fr `echo "Makefile \
 		extra/Makefile extra/ustdio/Makefile \
 		tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile \
 		tools/genrb/Makefile  \
-		tools/pkgdata/Makefile tools/icupkg.inc \
+		tools/pkgdata/Makefile tools/pkgdata/icupkg.inc \
 		tools/rbdump/Makefile tools/genccode/Makefile tools/gencmn/Makefile tools/gencnval/Makefile tools/gentz/Makefile \
 	        tools/gennames/Makefile tools/toolutil/Makefile tools/gentest/Makefile tools/genprops/Makefile \
 		test/Makefile test/intltest/Makefile test/cintltst/Makefile \
@@ -3278,7 +3278,7 @@ CONFIG_FILES=\${CONFIG_FILES-"Makefile \
 		extra/Makefile extra/ustdio/Makefile \
 		tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile \
 		tools/genrb/Makefile  \
-		tools/pkgdata/Makefile tools/icupkg.inc \
+		tools/pkgdata/Makefile tools/pkgdata/icupkg.inc \
 		tools/rbdump/Makefile tools/genccode/Makefile tools/gencmn/Makefile tools/gencnval/Makefile tools/gentz/Makefile \
 	        tools/gennames/Makefile tools/toolutil/Makefile tools/gentest/Makefile tools/genprops/Makefile \
 		test/Makefile test/intltest/Makefile test/cintltst/Makefile \

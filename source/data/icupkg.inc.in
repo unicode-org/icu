@@ -9,9 +9,13 @@
 
 PLATFORM=@platform@
 
+top_srcdir=@top_srcdir@
+srcdir=@srcdir@
+top_builddir=../..
+
 SHELL=@SHELL@
 CFLAGS=@CFLAGS@ 
-CPPFLAGS=@CPPFLAGS@ -I../../../source/common
+CPPFLAGS=@CPPFLAGS@ -I$(top_builddir)/common -I$(top_srcdir)/common
 CXXFLAGS=@CXXFLAGS@ 
 FFLAGS=@FFLAGS@
 DEFS=@DEFS@ 
@@ -79,13 +83,15 @@ ld_rpath_suf=@ld_rpath_suf@
 @host_frag@
 # end host fragment
 
+top_builddir = ../..
+subdir = tools/tmp
+
 ##### Add the following to source/config/Makefile.in
 
-GENCCODE=../genccode/genccode
-GENCMN=../gencmn/gencmn
+GENCCODE=$(top_builddir)/tools/genccode/genccode
+GENCMN=$(top_builddir)/tools/gencmn/gencmn
 
-LPATHS=../../source/common:../../source/i18n:../../source/tools/toolutil 
-#LPATHS=../source/common:../source/i18n:../source/tools/toolutil 
+LPATHS=$(top_builddir)/common:$(top_builddir)/i18n:$(top_builddir)/tools/toolutil
 
 TOOL=env LD_LIBRARY_PATH=$(LPATHS) LIBPATH=$(LPATHS) 
 
