@@ -38,6 +38,8 @@ U_NAMESPACE_BEGIN
  * class of a genuine hierarchy, and that would clean up the code that
  * currently must explicitly check for type, but that seems like overkill at
  * this point.
+ *
+ * The Formattable class is not suitable for subclassing.
  */
 class U_I18N_API Formattable : public UObject {
 public:
@@ -152,6 +154,19 @@ public:
      * @stable ICU 2.0
      */
     virtual         ~Formattable();
+
+    /**
+     * Clone this object.
+     * Clones can be used concurrently in multiple threads.
+     * If an error occurs, then NULL is returned.
+     * The caller must delete the clone.
+     *
+     * @return a clone of this object
+     *
+     * @see getDynamicClassID
+     * @draft ICU 2.8
+     */
+    Formattable *clone() const;
 
     /** 
      * The list of possible data types of this Formattable object.
