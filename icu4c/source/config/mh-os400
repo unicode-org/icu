@@ -3,18 +3,14 @@
 ## Copyright (c) 1999-2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os400,v 1.15 2002/01/04 23:48:43 yves-oss Exp $
+## $Id: mh-os400,v 1.16 2002/01/11 17:33:52 grhoten-oss Exp $
 
 GEN_DEPS.c=	$(CC1) -E -M $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX1) -E -M $(DEFS) $(CPPFLAGS)
 
 ## Commands to compile
-COMPILE.c=	$(CC) $(DEFS) -DOS400 -D_MULTI_THREADED $(CPPFLAGS) $(CFLAGS) -c
-COMPILE.cc=	$(CXX) $(DEFS) -DOS400 -D_MULTI_THREADED $(CPPFLAGS) $(CXXFLAGS) -c
-
-## Special macro separator for compiling C++
-## e.g. -D'U_SRCDATADIR=$(MACRO_SEPARATOR)"$(top_srcdir)/../data/"'
-MACRO_SEPARATOR=\x40
+COMPILE.c=	$(CC) $(DEFS) -DOS400 -D_MULTI_THREADED $(CPPFLAGS) $(CFLAGS) -c -qTERASPACE=*YES -qSTGMDL=*INHERIT
+COMPILE.cc=	$(CXX) $(DEFS) -DOS400 -D_MULTI_THREADED $(CPPFLAGS) $(CXXFLAGS) -c -qTERASPACE=*YES -qSTGMDL=*INHERIT
 
 ## Commands to link
 ## We need to use the C++ linker, even when linking C programs, since
@@ -62,7 +58,7 @@ LIBICUDT = $(top_builddir)/data/libicudata.o
 LIBICUUC = $(top_builddir)/common/libicuuc.o
 LIBICUI18N = $(top_builddir)/i18n/libicui18n.o
 LIBICULE = $(top_builddir)/layout/libicule.o
-LIBCTESTFW = $(top_builddir)/tools/ctestfw/libctestfw.o
+LIBCTESTFW = $(top_builddir)/tools/ctestfw/libicuctestfw.o
 LIBICUTOOLUTIL = $(top_builddir)/tools/toolutil/libicutoolutil.o
 LIBUSTDIO=      $(top_builddir)/extra/ustdio/libustdio.o
 
