@@ -77,9 +77,10 @@ static const UDataInfo invUcaDataInfo={
 /* This writable buffer is used if we encounter Thai and need to reorder the string on the fly */
 /* Sometimes we already have a writable buffer (like in case of normalized strings). */
 /*
-you can change this value to any value >= 3 if you need memory -
+you can change this value to any value >= 4 if you need memory -
 it will affect the performance, though, since we're going to malloc.
-Note 3 is the minimum value for Thai collation to work correctly.
+Note 3 is the minimum value for Thai collation and 4 is the
+minimum number for special Jamo
 */
 #define UCOL_WRITABLE_BUFFER_SIZE 256
 

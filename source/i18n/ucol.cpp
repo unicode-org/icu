@@ -2103,9 +2103,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
       }
       return CE;
       }
-    /* TODO: */
     /* various implicits optimization */
-    /* need to fill out the collation table for them to work */
     case CJK_IMPLICIT_TAG:    /* 0x3400-0x4DB5, 0x4E00-0x9FA5, 0xF900-0xFA2D*/
       return getImplicit(cp, source, 0x04000000);
     case IMPLICIT_TAG:        /* everything that is not defined otherwise */
@@ -2163,15 +2161,9 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
           return ucmpe32_get(UCA->mapping, L); // return first one
 
         } else { // Jamo is Special
-          // TODO: if we are already in the normalization buffer,
-          // and we encounter a Hangul with Jamo special set to 
-          // TRUE, we currently fallback to old implementation.
-          // What needs to be done is to replace the Hangul by 
-          // 2 or 3 Jamos and move the rest of the normalization
-          // buffer accordingly. 
-          // But Markus says it is guaranteed that we won't be in
-          // the normalization buffer if something like this happens,
-          // so I will remove the bail out case
+	  // Since Hanguls pass the FCD check, it is 
+          // guaranteed that we won't be in
+          // the normalization buffer if something like this happens
           // Move Jamos into normalization buffer
           source->writableBuffer[0] = (UChar)L;
           source->writableBuffer[1] = (UChar)V;
@@ -2721,15 +2713,9 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
           source->toReturn = source->CEpos - 1;
           return *(source->toReturn);
         } else {
-          // TODO: if we are already in the normalization buffer,
-          // and we encounter a Hangul with Jamo special set to 
-          // TRUE, we currently fallback to old implementation.
-          // What needs to be done is to replace the Hangul by 
-          // 2 or 3 Jamos and move the rest of the normalization
-          // buffer accordingly. 
-          // But Markus says it is guaranteed that we won't be in
-          // the normalization buffer if something like this happens,
-          // so I will remove the bail out case
+	  // Since Hanguls pass the FCD check, it is 
+          // guaranteed that we won't be in
+          // the normalization buffer if something like this happens
           // Move Jamos into normalization buffer
           /*
           Move the Jamos into the
@@ -3325,7 +3311,7 @@ ucol_calcSortKey(const    UCollator    *coll,
         int32_t        sourceLength,
         uint8_t        **result,
         uint32_t        resultLength,
-        UBool allocatePrimary,
+        UBool allocateSKBuffer,
         UErrorCode *status)
 {
     uint32_t i = 0; /* general purpose counter */
@@ -3339,7 +3325,7 @@ ucol_calcSortKey(const    UCollator    *coll,
       return 0;
     }
 
-    if(primaries == NULL && allocatePrimary == TRUE) {
+    if(primaries == NULL && allocateSKBuffer == TRUE) {
         primaries = *result = prim;
         resultLength = UCOL_PRIMARY_MAX_BUFFER;
     }
@@ -3683,7 +3669,7 @@ ucol_calcSortKey(const    UCollator    *coll,
 
             if(primaries > primarySafeEnd) { /* We have stepped over the primary buffer */
               int32_t sks = sortKeySize+(primaries - primStart)+(secondaries - secStart)+(tertiaries - terStart)+(cases-caseStart)+(quads-quadStart);
-              if(allocatePrimary == FALSE) { /* need to save our butts if we cannot reallocate */
+              if(allocateSKBuffer == FALSE) { /* need to save our butts if we cannot reallocate */
                 resultOverflow = TRUE;
                 sortKeySize = ucol_getSortKeySize(coll, &s, sks, strength, len);
                 *status = U_MEMORY_ALLOCATION_ERROR;
@@ -3735,7 +3721,7 @@ ucol_calcSortKey(const    UCollator    *coll,
             primaries += secsize;
           }
         } else {
-          if(allocatePrimary == TRUE) { /* need to save our butts if we cannot reallocate */
+          if(allocateSKBuffer == TRUE) { /* need to save our butts if we cannot reallocate */
             primStart = reallocateBuffer(&primaries, *result, prim, &resultLength, 2*sortKeySize, status);
             *result = primStart;
             if(isFrenchSec) { /* do the reverse copy */
@@ -3760,7 +3746,7 @@ ucol_calcSortKey(const    UCollator    *coll,
           uprv_memcpy(primaries, caseStart, casesize);
           primaries += casesize;
         } else {
-          if(allocatePrimary == TRUE) {
+          if(allocateSKBuffer == TRUE) {
             primStart = reallocateBuffer(&primaries, *result, prim, &resultLength, 2*sortKeySize, status);
             *result = primStart;
             uprv_memcpy(primaries, caseStart, casesize);
@@ -3807,7 +3793,7 @@ ucol_calcSortKey(const    UCollator    *coll,
                 uprv_memcpy(primaries, quadStart, quadsize);
                 primaries += quadsize;
               } else {
-                if(allocatePrimary == TRUE) {
+                if(allocateSKBuffer == TRUE) {
                   primStart = reallocateBuffer(&primaries, *result, prim, &resultLength, 2*sortKeySize, status);
                   *result = primStart;
                   uprv_memcpy(primaries, quadStart, quadsize);
@@ -3817,7 +3803,7 @@ ucol_calcSortKey(const    UCollator    *coll,
               }
           }
         } else {
-          if(allocatePrimary == TRUE) {
+          if(allocateSKBuffer == TRUE) {
             primStart = reallocateBuffer(&primaries, *result, prim, &resultLength, 2*sortKeySize, status);
             *result = primStart;
             uprv_memcpy(primaries, terStart, tersize);
@@ -3832,7 +3818,7 @@ ucol_calcSortKey(const    UCollator    *coll,
           if(sortKeySize <= resultLength) {
             primaries += u_writeIdenticalLevelRun(s.string, len, primaries);
           } else {
-            if(allocatePrimary == TRUE) {
+            if(allocateSKBuffer == TRUE) {
               primStart = reallocateBuffer(&primaries, *result, prim, &resultLength, sortKeySize, status);
               *result = primStart;
               u_writeIdenticalLevelRun(s.string, len, primaries);            } else {
@@ -3856,7 +3842,7 @@ ucol_calcSortKey(const    UCollator    *coll,
         uprv_free(normSource);
     }
 
-    if(allocatePrimary == TRUE) {
+    if(allocateSKBuffer == TRUE) {
       *result = (uint8_t*)uprv_malloc(sortKeySize);
       uprv_memcpy(*result, primStart, sortKeySize);
       if(primStart != prim) {
@@ -3874,7 +3860,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
         int32_t        sourceLength,
         uint8_t        **result,
         uint32_t        resultLength,
-        UBool allocatePrimary,
+        UBool allocateSKBuffer,
         UErrorCode *status)
 {
     U_ALIGN_CODE(16);
@@ -3889,7 +3875,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
       return 0;
     }
 
-    if(primaries == NULL && allocatePrimary == TRUE) {
+    if(primaries == NULL && allocateSKBuffer == TRUE) {
         primaries = *result = prim;
         resultLength = UCOL_PRIMARY_MAX_BUFFER;
     }
@@ -4096,7 +4082,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
 
             if(primaries > primarySafeEnd) { /* We have stepped over the primary buffer */
               int32_t sks = sortKeySize+(primaries - primStart)+(secondaries - secStart)+(tertiaries - terStart);
-              if(allocatePrimary == FALSE) { /* need to save our butts if we cannot reallocate */
+              if(allocateSKBuffer == FALSE) { /* need to save our butts if we cannot reallocate */
                 resultOverflow = TRUE;
                 sortKeySize = ucol_getSortKeySize(coll, &s, sks, coll->strength, len);
                 *status = U_MEMORY_ALLOCATION_ERROR;
@@ -4136,7 +4122,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
         uprv_memcpy(primaries, secStart, secsize);
         primaries += secsize;
       } else {
-        if(allocatePrimary == TRUE) {
+        if(allocateSKBuffer == TRUE) {
           primStart = reallocateBuffer(&primaries, *result, prim, &resultLength, 2*sortKeySize, status);
           *result = primStart;
           uprv_memcpy(primaries, secStart, secsize);
@@ -4167,7 +4153,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
         uprv_memcpy(primaries, terStart, tersize);
         primaries += tersize;
       } else {
-        if(allocatePrimary == TRUE) {
+        if(allocateSKBuffer == TRUE) {
           primStart = reallocateBuffer(&primaries, *result, prim, &resultLength, 2*sortKeySize, status);
           *result = primStart;
           uprv_memcpy(primaries, terStart, tersize);
@@ -4188,7 +4174,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
         uprv_free(normSource);
     }
 
-    if(allocatePrimary == TRUE) {
+    if(allocateSKBuffer == TRUE) {
       *result = (uint8_t*)uprv_malloc(sortKeySize);
       uprv_memcpy(*result, primStart, sortKeySize);
       if(primStart != prim) {
