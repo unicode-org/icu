@@ -1796,7 +1796,7 @@ static void TestUScriptCodeAPI(){
     "CYRILLIC","DESERET","DEVANAGARI","ETHIOPIC","GEORGIAN", 
     "GOTHIC",  "GREEK",  "GUJARATI", 
     /* test lower case names */
-    "malayalam", "mongolian", "myanmar", "ogham", "old_italic",
+    "malayalam", "mongolian", "myanmar", "ogham", "old-italic",
     "oriya",     "runic",     "sinhala", "syriac","tamil",     
     "telugu",    "thaana",    "thai",    "tibetan", 
     /* test the bounds*/
@@ -1905,5 +1905,82 @@ static void TestUScriptCodeAPI(){
         }
 
     }
+    /* now test uscript_getScript() API */
+    {
+#define MAX_ARRAY_SIZE 23
+        uint32_t codepoints[] = {
+                0x0000FF9D, 
+                0x0000FFBE, 
+                0x0000FFC7, 
+                0x0000FFCF, 
+                0x0000FFD7, 
+                0x0000FFDC, 
+                0x00010300,
+                0x00010330,
+                0x0001034A,
+                0x00010400,
+                0x00010428,
+                0x0001D167,
+                0x0001D17B,
+                0x0001D185,
+                0x0001D1AA,
+                0x00020000,
+                0x00000D02,
+                0x00000D00,
+                0x00000000,
+                0x0001D169, 
+                0x0001D182, 
+                0x0001D18B, 
+                0x0001D1AD, 
+        };
 
-}
+        UScriptCode expected[] = {
+                USCRIPT_KATAKANA ,
+                USCRIPT_HANGUL ,
+                USCRIPT_HANGUL ,
+                USCRIPT_HANGUL ,
+                USCRIPT_HANGUL ,
+                USCRIPT_HANGUL ,
+                USCRIPT_OLD_ITALIC, 
+                USCRIPT_GOTHIC ,
+                USCRIPT_GOTHIC ,
+                USCRIPT_DESERET ,
+                USCRIPT_DESERET ,
+                USCRIPT_INHERITED,
+                USCRIPT_INHERITED,
+                USCRIPT_INHERITED,
+                USCRIPT_INHERITED,
+                USCRIPT_HAN ,
+                USCRIPT_MALAYALAM,
+                USCRIPT_INVALID_CODE,
+                USCRIPT_COMMON,
+                USCRIPT_INHERITED ,
+                USCRIPT_INHERITED ,
+                USCRIPT_INHERITED ,
+                USCRIPT_INHERITED ,
+        };
+        int32_t i =0;
+        UScriptCode code = USCRIPT_INVALID_CODE;
+        UErrorCode status = U_ZERO_ERROR;
+        UBool passed = TRUE;
+
+        while(i< MAX_ARRAY_SIZE){
+            code = uscript_getScript(codepoints[i],&status);
+            if(U_SUCCESS(status)){
+                if(code != expected[i]){
+                    log_verbose("uscript_getScript for codepoint \\U%08X failed\n",codepoints[i]);
+                    passed = FALSE;
+                }
+            }else{
+                log_err("uscript_getScript for codepoint \\U%08X failed. Error: %s\n", 
+                         codepoints[i],u_errorName(status));
+                break;
+            }
+            i++;
+        }
+        
+        if(passed==FALSE){
+           log_err("uscript_getScript failed.\n");
+        }      
+    }
+ }
