@@ -78,6 +78,7 @@ void TransliteratorAPITest::TestgetID() {
     }
     int i;
     for (i=0; i<Transliterator::countAvailableIDs(); i++){
+        status = U_ZERO_ERROR;
         ID = (UnicodeString) Transliterator::getAvailableID(i);
         t = Transliterator::createInstance(ID, UTRANS_FORWARD, parseError, status);
         if(t == 0){
