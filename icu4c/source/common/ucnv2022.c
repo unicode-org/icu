@@ -2646,9 +2646,10 @@ getTrail:
                 reason = UCNV_UNASSIGNED;
                 *err = U_INVALID_CHAR_FOUND;
 callback:
-                *currentState= initIterState = ASCII_1;
+
                 fromUnicodeCallback(args,sourceChar,&source,&target,&offsets,reason,err);
-                *isEscapeAppended =FALSE;
+                initIterState = *currentState;
+               
                 if (U_FAILURE (*err)){
                     break;
                 }
