@@ -113,7 +113,7 @@ public:
         if (actualID) {
             lkey.canonicalID(*actualID);
         }
-        Locale loc;
+        Locale loc("");
         lkey.canonicalLocale(loc);
         return Collator::makeInstance(loc, status);
     }
@@ -126,8 +126,8 @@ public:
         Collator* result = (Collator*)ICULocaleService::getKey(key, actualReturn, status);
         if (result) {
             const LocaleKey& lkey = (const LocaleKey&)key;
-            Locale canonicalLocale;
-            Locale currentLocale;
+            Locale canonicalLocale("");
+            Locale currentLocale("");
             
             result->setLocales(lkey.canonicalLocale(canonicalLocale), 
                 LocaleUtility::initLocaleFromName(*actualReturn, currentLocale));
