@@ -1873,6 +1873,17 @@ TestCharNames() {
     UChar32 c;
     int i;
 
+    log_verbose("Testing uprv_getMaxCharNameLength()\n");
+    length=uprv_getMaxCharNameLength();
+    if(length==0) {
+        /* no names data available */
+        return;
+    }
+    if(length<83) { /* Unicode 3.2 max char name length */
+        log_err("uprv_getMaxCharNameLength()=%d is too short");
+    }
+    /* ### TODO same tests for max ISO comment length as for max name length */
+
     log_verbose("Testing u_charName()\n");
     for(i=0; i<sizeof(names)/sizeof(names[0]); ++i) {
         /* modern Unicode character name */
@@ -1942,56 +1953,73 @@ TestCharNames() {
     }
 
     /* Test getCharNameCharacters */
-    {
+    if(!QUICK) {
         enum { BUFSIZE = 256 };
         UErrorCode ec = U_ZERO_ERROR;
         char buf[BUFSIZE];
-        int32_t i;
+        int32_t i, maxLength;
         UChar32 cp;
         UChar pat[BUFSIZE], dumbPat[BUFSIZE];
         int32_t l1, l2;
         UBool map[256];
+        UBool ok;
 
         USet* set = uset_open(1, 0); /* empty set */
         USet* dumb = uset_open(1, 0); /* empty set */
+
+        /*
+         * uprv_getCharNameCharacters() will likely return more lowercase
+         * letters than actual character names contain because
+         * it includes all the characters in lowercased names of
+         * general categories, for the full possible set of extended names.
+         */
         uprv_getCharNameCharacters(set);
 
         /* build set the dumb (but sure-fire) way */
         for (i=0; i<256; ++i) map[i] = FALSE;
 
+        maxLength=0;
         for (cp=0; cp<0x110000; ++cp) {
-            int32_t choice;
-            for (choice=0; choice<3; ++choice) {
-                int32_t len = u_charName(cp, (UCharNameChoice) choice,
-                                         buf, BUFSIZE, &ec);
-                if (U_FAILURE(ec)) {
-                    log_err("FAIL: u_charName failed when it shouldn't\n");
-                    uset_close(set);
-                    uset_close(dumb);
-                    return;
-                }
+            int32_t len = u_charName(cp, U_EXTENDED_CHAR_NAME,
+                                     buf, BUFSIZE, &ec);
+            if (U_FAILURE(ec)) {
+                log_err("FAIL: u_charName failed when it shouldn't\n");
+                uset_close(set);
+                uset_close(dumb);
+                return;
+            }
+            if(len>maxLength) {
+                maxLength=len;
+            }
 
-                for (i=0; i<len; ++i) {
-                    if (!map[(uint8_t) buf[i]]) {
-                        uset_add(dumb, (UChar32)u_charToUChar(buf[i]));
-                        map[(uint8_t) buf[i]] = TRUE;
-                    }
+            for (i=0; i<len; ++i) {
+                if (!map[(uint8_t) buf[i]]) {
+                    uset_add(dumb, (UChar32)u_charToUChar(buf[i]));
+                    map[(uint8_t) buf[i]] = TRUE;
                 }
             }
         }
 
-        /* add all lowers, uppers, and #s to the dumb set */
-        for (i=u_charToUChar('A'); i<=u_charToUChar('Z'); ++i) {
-            uset_add(dumb, (UChar32)i);
-        }
-        for (i=u_charToUChar('a'); i<=u_charToUChar('z'); ++i) {
-            uset_add(dumb, (UChar32)i);
-        }
-        for (i=u_charToUChar('0'); i<=u_charToUChar('9'); ++i) {
-            uset_add(dumb, (UChar32)i);
+        length=uprv_getMaxCharNameLength();
+        if(length!=maxLength) {
+            log_err("uprv_getMaxCharNameLength()=%d differs from the maximum length %d of all extended names\n",
+                    length, maxLength);
         }
 
         /* compare the sets.  Where is my uset_equals?!! */
+        ok=TRUE;
+        for(i=0; i<256; ++i) {
+            if(uset_contains(set, i)!=uset_contains(dumb, i)) {
+                if(0x61<=i && i<=0x7a /* a-z */ && uset_contains(set, i) && !uset_contains(dumb, i)) {
+                    /* ignore lowercase a-z that are in set but not in dumb */
+                    ok=TRUE;
+                } else {
+                    ok=FALSE;
+                    break;
+                }
+            }
+        }
+
         l1 = uset_toPattern(set, pat, BUFSIZE, TRUE, &ec);
         l2 = uset_toPattern(dumb, dumbPat, BUFSIZE, TRUE, &ec);
         if (U_FAILURE(ec)) {
@@ -2010,13 +2038,12 @@ TestCharNames() {
             dumbPat[l2] = 0;
         }
 
-        if (l1 != l2 ||
-            0 != u_strcmp(pat, dumbPat)) {
+        if (!ok) {
             char c1[256], c2[256];
             u_UCharsToChars(pat, c1, l1);
             u_UCharsToChars(dumbPat, c2, l2);
             c1[l1] = c2[l2] = 0;
-            log_err("FAIL: uprv_getCharNameCharacters() returned %s, expected %s\n",
+            log_err("FAIL: uprv_getCharNameCharacters() returned %s, expected %s (too many lowercase a-z are ok)\n",
                     c1, c2);
         } else {
             char c1[256];
@@ -2029,7 +2056,6 @@ TestCharNames() {
         uset_close(set);
         uset_close(dumb);
     }
-
 
     /* ### TODO: test error cases and other interesting things */
 }
