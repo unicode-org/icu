@@ -75,13 +75,13 @@ public class IBMCalendarTest extends CalendarTest {
                 Calendar.MONDAY,   Calendar.WEEKDAY,
                 Calendar.FRIDAY,   Calendar.WEEKDAY,
                 Calendar.SATURDAY, Calendar.WEEKEND,
-                Calendar.SUNDAY,   Calendar.WEEKEND,
+                Calendar.SUNDAY,   Calendar.WEEKEND_CEASE,
             },
             new Locale("ar", "BH"), new int[] { // Thursday:Friday
                 Calendar.WEDNESDAY,Calendar.WEEKDAY,
                 Calendar.SATURDAY, Calendar.WEEKDAY,
                 Calendar.THURSDAY, Calendar.WEEKEND,
-                Calendar.FRIDAY,   Calendar.WEEKEND,
+                Calendar.FRIDAY,   Calendar.WEEKEND_CEASE,
             },
         };
 

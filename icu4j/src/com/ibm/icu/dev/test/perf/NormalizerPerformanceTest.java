@@ -19,57 +19,13 @@ public class NormalizerPerformanceTest extends PerfTest {
     }
     
     protected void setup(String[] args) {
-        if (args.length < 2) {
-            printUsage();
-        }
-        
-        String path = "";
-        String encoding = "UTF-8";
-        String fileName = "";
-        boolean bulkMode = false;
-        boolean lineMode = false;
-        for (int i = 0; i < args.length; i++) {
-            if (args[i].equalsIgnoreCase("-f") || args[i].equalsIgnoreCase("--fileName")) {
-                if (((i + 1) >= args.length) || (args[i+1].charAt(0) == '-')) {
-                    printUsage();
-                } else {
-                    fileName = args[i+1];
-                }
-            }
-            if (args[i].equalsIgnoreCase("-s") || args[i].equalsIgnoreCase("--sourceDir") ) {
-                if (((i + 1) >= args.length) || (args[i+1].charAt(0) == '-')) {
-                    printUsage();
-                } else {
-                    path = args[i+1];
-                    String fileseparator = System.getProperty("file.separator", "/");
-                    if (path.charAt(path.length() - 1) != fileseparator.charAt(0)) {
-                        path = path + fileseparator;
-                    }
-                }
-            }
-            if (args[i].equalsIgnoreCase("-e") || args[i].equalsIgnoreCase("--encoding")) {
-                if (((i + 1) >= args.length) || (args[i+1].charAt(0) == '-')) {
-                    printUsage();
-                } else {
-                    encoding = args[i+1];
-                }
-            }
-            if (args[i].equalsIgnoreCase("-b") || args[i].equalsIgnoreCase("--bulkMode")) {
-                bulkMode = true;
-                lineMode = false;
-            }
-            if (args[i].equalsIgnoreCase("-l") || args[i].equalsIgnoreCase("--lineMode")) {
-                bulkMode = false;
-                lineMode = true;
-            }
-        }
-        if(lineMode == bulkMode){
+        if(bulk_mode == line_mode){
             printUsage();
         }
         if (fileName.equalsIgnoreCase("")){
             printUsage();
         }
-        fileLines = readLines(path + fileName, encoding, bulkMode);
+        fileLines = readLines(fileName, encoding, bulk_mode);
         NFDFileLines = normalizeInput(fileLines, Normalizer.NFD);
         NFCFileLines = normalizeInput(fileLines, Normalizer.NFC);
     }

@@ -522,7 +522,8 @@ public class ChineseTest extends CalendarTest {
 
     public void TestCoverage() {
         ChineseCalendar cal = new ChineseCalendar();
-        ChineseDateFormat fmt = (ChineseDateFormat)DateFormat.getInstance(cal);
+        DateFormat format = DateFormat.getInstance(cal);
+        ChineseDateFormat fmt = (ChineseDateFormat)format;
         fmt.applyPattern("llyyll");
         Date time = getDate(2100, Calendar.JANUARY, 1);
         String str = fmt.format(time);

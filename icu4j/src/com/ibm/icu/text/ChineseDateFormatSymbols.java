@@ -89,6 +89,6 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
      */
     protected void initializeData(ULocale loc, CalendarData calData) {
         super.initializeData(loc, calData);
-        isLeapMonth = calData.getStringArray("IsLeapMonth");
+        isLeapMonth = calData.getStringArray("isLeapMonth");
     }
 }

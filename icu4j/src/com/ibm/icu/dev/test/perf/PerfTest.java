@@ -246,15 +246,13 @@ public abstract class PerfTest {
         //bufferLen = 0;
         verbose = false;
         bulk_mode = false;
-        passes = 3; // default
-        iterations = 0;
-        time = 3; // default
+        passes = iterations = time = 0;
         locale = null;
 
         UOption[] options = getOptions();
         int remainingArgc = UOption.parseArgs(args, options);
         
-        if(options[HELP1].doesOccur || options[HELP2].doesOccur) {
+        if(args.length==0 || options[HELP1].doesOccur || options[HELP2].doesOccur) {
             throw new UsageException();
         }
 
@@ -320,6 +318,7 @@ public abstract class PerfTest {
 
         int i, j;
         for (i=0; i<remainingArgc; ++i) {
+
             // is args[i] a method name?
             Method m = getTestMethod(args[i]);
             if (m != null) {
@@ -333,12 +332,7 @@ public abstract class PerfTest {
             break;
         }
 
-        if (methodList.size() < 1) { // default to all methods
-            System.out.println("running all methods");
-            methodList.addAll(getAvailableTests().values());
-        }
-
-        if (options[LIST].doesOccur) {
+        if (methodList.size() < 1 || options[LIST].doesOccur) {
             System.err.println("Available tests:");
             Iterator methods = getAvailableTests().values().iterator();
             TreeSet methodNames = new TreeSet();
@@ -349,7 +343,10 @@ public abstract class PerfTest {
             while (tests.hasNext()) {
                 System.err.println(" " + tests.next());
             }
-            return;
+            if (options[LIST].doesOccur) {
+                System.exit(0);
+            }
+            throw new UsageException("Must specify at least one method name");
         }
 
         // Pass remaining arguments, if any, through to the subclass
@@ -381,37 +378,80 @@ public abstract class PerfTest {
                 throw new RuntimeException(meth.getName() + " returned an illegal operations/iteration()");
             }
 
-            // System.out.println("passes: " + passes + " iterations: " + iterations);
             int n;
             long t;
-            for (j=0; j<passes; ++j) {
+            // ---------------------------------------------------------------------------------------------------
+            //The rest of this method is modified by GCL Shanghai. To synchronize this class with ICU4C's uperf.cpp
+            //----------------------------------------------------------------------------------------------------
+            long loops = 0;
+            //for (j=0; j<passes; ++j) {
                 if (iterations > 0) {
                     // Run specified number of iterations
-                    System.out.println("= " + meth.getName() + " begin " + iterations + " iterations");
-                    t = testFunction.time(iterations);
-                    System.out.println("= " + meth.getName() + " end " + (t/1000.0) + " " + testFunction.getOperationsPerIteration());
+                    loops = iterations;
+//                    System.out.println("= " + meth.getName() + " begin " + iterations + " iterations");
+//                    t = testFunction.time(iterations);
+//                    System.out.println("= " + meth.getName() + " end " + (t/1000.0) + " " + testFunction.getOperationsPerIteration());
                 } else {
                     // Run for specified duration in seconds
-                    System.out.println("= " + meth.getName() + " begin " + time + " seconds");
+                    //first calibrate to determine iterations/pass
+                    if (verbose) {
+                    	System.out.println("= " + meth.getName() + " calibrating " + time + " seconds" );
+                    }
                     n = time * 1000; // s => ms
                     //System.out.println("# " + meth.getName() + " " + n + " sec");                            
-                    int loops = 0;
+                    
                     int failsafe = 1; // last resort for very fast methods
                     t = 0;
-                    while (t < n) {
-                        if (t < 100) {
+                    while (t < (int)(n * 0.9)) { // 90% is close enough
+                        if (loops == 0 || t == 0) {
                             loops = failsafe;
-                            failsafe *= 2;
+                            failsafe *= 10;
                         } else {
                             //System.out.println("# " + meth.getName() + " x " + loops + " = " + t);                            
-                            loops = Math.max(loops+1, (int)((double)n / t * loops + 0.5));
+                            loops = (int)((double)n / t * loops + 0.5);
+                            if (loops == 0) {
+                                throw new RuntimeException("Unable to converge on desired duration");
+                            }
                         }
                         //System.out.println("# " + meth.getName() + " x " + loops);
                         t = testFunction.time(loops);
                     }
-                    System.out.println("= " + meth.getName() + " end " + (t/1000.0) + " " + testFunction.getOperationsPerIteration() +
-                                       " " + loops);
+                    
                 }
+            //}   
+			for (j=0; j<passes; ++j) {
+				long events = -1;
+				if (verbose) {
+					if (iterations > 0) {
+						System.out.println("= " + meth.getName() + " begin " + iterations);
+					} else {
+						System.out.println("= " + meth.getName() + " begin " + time + " seconds");	
+					}					
+				} else {
+					System.out.println("= " + meth.getName() + " begin " );
+				}
+				
+				t = testFunction.time(loops);	//ms
+				events = testFunction.getEventsPerIteration();
+				
+				if (verbose) {
+					if (events == -1){
+						System.out.println("= " + meth.getName() + " end " + (t/1000.0) + " loops: " + loops +
+												" operations: " + testFunction.getOperationsPerIteration());
+					} else {
+						System.out.println("= " + meth.getName() + " end " + (t/1000.0) + " loops: " + loops +
+										        " operations: " + testFunction.getOperationsPerIteration() +" events: " + events);
+					}
+				} else {
+					if (events == -1){
+						System.out.println("= " + meth.getName() + " end " + (t/1000.0) + " " + loops +
+												" " + testFunction.getOperationsPerIteration());
+					} else {
+						System.out.println("= " + meth.getName() + " end " + (t/1000.0) + " " + loops +
+												" " + testFunction.getOperationsPerIteration() + " " + events);
+					}
+				}
+				
             }
         }
     }

@@ -556,8 +556,7 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
         infinity = numberElements[9];
         NaN = numberElements[10];
         
-        // TODO Temporarily hard code; retrieve from resource later
-        plusSign  = DecimalFormat.PATTERN_PLUS_SIGN;
+        plusSign  =numberElements[11].charAt(0);
         padEscape = DecimalFormat.PATTERN_PAD_ESCAPE;
         sigDigit  = DecimalFormat.PATTERN_SIGNIFICANT_DIGIT;
         
@@ -582,9 +581,9 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
             currencySymbol = "\u00A4"; // 'OX' currency symbol
         }
         // If there is a currency decimal, use it.
-//        monetarySeparator =
-//            numberElements[numberElements.length >= 12 ? 11 : 0].charAt(0);
-        monetarySeparator = numberElements[11].charAt(0);
+        monetarySeparator =
+            numberElements[0].charAt(0);
+        //monetarySeparator = numberElements[11].charAt(0);
     }
 
     /**

@@ -119,7 +119,7 @@ class TransliteratorRegistry {
                 // If 'top' is not a script name, try a locale lookup
                 if (script == UScript.INVALID_CODE) {
                     Locale toploc = LocaleUtility.getLocaleFromName(top);
-                    res  = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,toploc);
+                    res  = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_TRANSLIT_BASE_NAME,toploc);
                     // Make sure we got the bundle we wanted; otherwise, don't use it
                     if (res!=null && LocaleUtility.isFallbackOf(res.getULocale().toString(), top)) {
                         isSpecLocale = true;

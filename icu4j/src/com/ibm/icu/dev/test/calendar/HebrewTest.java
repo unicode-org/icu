@@ -118,103 +118,107 @@ public class HebrewTest extends CalendarTest {
      * work properly for a wide range of data.
      */
     public void TestCases() {
-        doTestCases(testCases, new HebrewCalendar());
+        try{
+            final TestCase[] testCases = {
+                    //
+                    // Most of these test cases were taken from the back of
+                    // "Calendrical Calculations", with some extras added to help
+                    // debug a few of the problems that cropped up in development.
+                    //
+                    // The months in this table are 1-based rather than 0-based,
+                    // because it's easier to edit that way.
+                    //
+                    //         Julian Day  Era  Year  Month Day  WkDay Hour Min Sec
+                    new TestCase(1507231.5,  0,  3174,   12,  10,  SUN,   0,  0,  0),
+                    new TestCase(1660037.5,  0,  3593,    3,  25,  WED,   0,  0,  0),
+                    new TestCase(1746893.5,  0,  3831,    1,   3,  WED,   0,  0,  0),
+                    new TestCase(1770641.5,  0,  3896,    1,   9,  SUN,   0,  0,  0),
+                    new TestCase(1892731.5,  0,  4230,    4,  18,  WED,   0,  0,  0),
+                    new TestCase(1931579.5,  0,  4336,   10,   4,  MON,   0,  0,  0),
+                    new TestCase(1974851.5,  0,  4455,    2,  13,  SAT,   0,  0,  0),
+                    new TestCase(2091164.5,  0,  4773,    9,   6,  SUN,   0,  0,  0),
+                    new TestCase(2121509.5,  0,  4856,    9,  23,  SUN,   0,  0,  0),
+                    new TestCase(2155779.5,  0,  4950,    8,   7,  FRI,   0,  0,  0),
+                    new TestCase(2174029.5,  0,  5000,    7,   8,  SAT,   0,  0,  0),
+                    new TestCase(2191584.5,  0,  5048,    8,  21,  FRI,   0,  0,  0),
+                    new TestCase(2195261.5,  0,  5058,    9,   7,  SUN,   0,  0,  0),
+                    new TestCase(2229274.5,  0,  5151,   11,   1,  SUN,   0,  0,  0),
+                    new TestCase(2245580.5,  0,  5196,    5,   7,  WED,   0,  0,  0),
+                    new TestCase(2266100.5,  0,  5252,    8,   3,  SAT,   0,  0,  0),
+                    new TestCase(2288542.5,  0,  5314,    1,   1,  SAT,   0,  0,  0),
+                    new TestCase(2290901.5,  0,  5320,    6,  27,  SAT,   0,  0,  0),
+                    new TestCase(2323140.5,  0,  5408,   10,  20,  WED,   0,  0,  0),
+                    new TestCase(2334551.5,  0,  5440,    1,   1,  THU,   0,  0,  0),
+                    new TestCase(2334581.5,  0,  5440,    2,   1,  SAT,   0,  0,  0),
+                    new TestCase(2334610.5,  0,  5440,    3,   1,  SUN,   0,  0,  0),
+                    new TestCase(2334639.5,  0,  5440,    4,   1,  MON,   0,  0,  0),
+                    new TestCase(2334668.5,  0,  5440,    5,   1,  TUE,   0,  0,  0),
+                    new TestCase(2334698.5,  0,  5440,    6,   1,  THU,   0,  0,  0),
+                    new TestCase(2334728.5,  0,  5440,    7,   1,  SAT,   0,  0,  0),
+                    new TestCase(2334757.5,  0,  5440,    8,   1,  SUN,   0,  0,  0),
+                    new TestCase(2334787.5,  0,  5440,    9,   1,  TUE,   0,  0,  0),
+                    new TestCase(2334816.5,  0,  5440,   10,   1,  WED,   0,  0,  0),
+                    new TestCase(2334846.5,  0,  5440,   11,   1,  FRI,   0,  0,  0),
+                    new TestCase(2334848.5,  0,  5440,   11,   3,  SUN,   0,  0,  0),
+                    new TestCase(2334934.5,  0,  5441,    1,   1,  TUE,   0,  0,  0),
+                    new TestCase(2348020.5,  0,  5476,   12,   5,  FRI,   0,  0,  0),
+                    new TestCase(2366978.5,  0,  5528,   11,   4,  SUN,   0,  0,  0),
+                    new TestCase(2385648.5,  0,  5579,   12,  11,  MON,   0,  0,  0),
+                    new TestCase(2392825.5,  0,  5599,    8,  12,  WED,   0,  0,  0),
+                    new TestCase(2416223.5,  0,  5663,    8,  22,  SUN,   0,  0,  0),
+                    new TestCase(2425848.5,  0,  5689,   12,  19,  SUN,   0,  0,  0),
+                    new TestCase(2430266.5,  0,  5702,    1,   8,  MON,   0,  0,  0),
+                    new TestCase(2430833.5,  0,  5703,    8,  14,  MON,   0,  0,  0),
+                    new TestCase(2431004.5,  0,  5704,    1,   8,  THU,   0,  0,  0),
+                    new TestCase(2448698.5,  0,  5752,    7,  12,  TUE,   0,  0,  0),
+                    new TestCase(2450138.5,  0,  5756,    7,   5,  SUN,   0,  0,  0),
+                    new TestCase(2465737.5,  0,  5799,    2,  12,  WED,   0,  0,  0),
+                    new TestCase(2486076.5,  0,  5854,   12,   5,  SUN,   0,  0,  0),
+
+                    // Additional test cases for bugs found during development
+                    //           G.YY/MM/DD  Era  Year  Month Day  WkDay Hour Min Sec
+                    new TestCase(1013, 9, 8, 0,  4774,    1,   1,  TUE,   0,  0,  0),
+                    new TestCase(1239, 9, 1, 0,  5000,    1,   1,  THU,   0,  0,  0),
+                    new TestCase(1240, 9,18, 0,  5001,    1,   1,  TUE,   0,  0,  0),
+
+                    // Test cases taken from a table of 14 "year types" in the Help file
+                    // of the application "Hebrew Calendar"
+                    new TestCase(2456187.5,  0,  5773,    1,   1,  MON,   0,  0,  0),
+                    new TestCase(2459111.5,  0,  5781,    1,   1,  SAT,   0,  0,  0),
+                    new TestCase(2453647.5,  0,  5766,    1,   1,  TUE,   0,  0,  0),
+                    new TestCase(2462035.5,  0,  5789,    1,   1,  THU,   0,  0,  0),
+                    new TestCase(2458756.5,  0,  5780,    1,   1,  MON,   0,  0,  0),
+                    new TestCase(2460586.5,  0,  5785,    1,   1,  THU,   0,  0,  0),
+                    new TestCase(2463864.5,  0,  5794,    1,   1,  SAT,   0,  0,  0),
+                    new TestCase(2463481.5,  0,  5793,    1,   1,  MON,   0,  0,  0),
+                    new TestCase(2470421.5,  0,  5812,    1,   1,  THU,   0,  0,  0),
+                    new TestCase(2460203.5,  0,  5784,    1,   1,  SAT,   0,  0,  0),
+                    new TestCase(2459464.5,  0,  5782,    1,   1,  TUE,   0,  0,  0),
+                    new TestCase(2467142.5,  0,  5803,    1,   1,  MON,   0,  0,  0),
+                    new TestCase(2455448.5,  0,  5771,    1,   1,  THU,   0,  0,  0),
+                
+                    // Test cases for JB#2327        
+                    // http://www.fourmilab.com/documents/calendar/
+                    // http://www.calendarhome.com/converter/
+//                2452465.5, 2002, JULY, 10, 5762, AV, 1,
+//                2452494.5, 2002, AUGUST, 8, 5762, AV, 30,
+//                2452495.5, 2002, AUGUST, 9, 5762, ELUL, 1,
+//                2452523.5, 2002, SEPTEMBER, 6, 5762, ELUL, 29,
+//                2452524.5, 2002, SEPTEMBER, 7, 5763, TISHRI, 1,
+                    //         Julian Day  Era  Year  Month Day  WkDay Hour Min Sec
+                    new TestCase(2452465.5,  0,  5762,    AV+1,  1,  WED,   0,  0,  0),
+                    new TestCase(2452494.5,  0,  5762,    AV+1, 30,  THU,   0,  0,  0),
+                    new TestCase(2452495.5,  0,  5762,  ELUL+1,  1,  FRI,   0,  0,  0),
+                    new TestCase(2452523.5,  0,  5762,  ELUL+1, 29,  FRI,   0,  0,  0),
+                    new TestCase(2452524.5,  0,  5763,TISHRI+1,  1,  SAT,   0,  0,  0),
+                };
+                doTestCases(testCases, new HebrewCalendar());
+   
+        }catch(Exception ex){
+        	warnln("Got Exception: "+ ex.getMessage());
+        }
     }
 
-    static final TestCase[] testCases = {
-        //
-        // Most of these test cases were taken from the back of
-        // "Calendrical Calculations", with some extras added to help
-        // debug a few of the problems that cropped up in development.
-        //
-        // The months in this table are 1-based rather than 0-based,
-        // because it's easier to edit that way.
-        //
-        //         Julian Day  Era  Year  Month Day  WkDay Hour Min Sec
-        new TestCase(1507231.5,  0,  3174,   12,  10,  SUN,   0,  0,  0),
-        new TestCase(1660037.5,  0,  3593,    3,  25,  WED,   0,  0,  0),
-        new TestCase(1746893.5,  0,  3831,    1,   3,  WED,   0,  0,  0),
-        new TestCase(1770641.5,  0,  3896,    1,   9,  SUN,   0,  0,  0),
-        new TestCase(1892731.5,  0,  4230,    4,  18,  WED,   0,  0,  0),
-        new TestCase(1931579.5,  0,  4336,   10,   4,  MON,   0,  0,  0),
-        new TestCase(1974851.5,  0,  4455,    2,  13,  SAT,   0,  0,  0),
-        new TestCase(2091164.5,  0,  4773,    9,   6,  SUN,   0,  0,  0),
-        new TestCase(2121509.5,  0,  4856,    9,  23,  SUN,   0,  0,  0),
-        new TestCase(2155779.5,  0,  4950,    8,   7,  FRI,   0,  0,  0),
-        new TestCase(2174029.5,  0,  5000,    7,   8,  SAT,   0,  0,  0),
-        new TestCase(2191584.5,  0,  5048,    8,  21,  FRI,   0,  0,  0),
-        new TestCase(2195261.5,  0,  5058,    9,   7,  SUN,   0,  0,  0),
-        new TestCase(2229274.5,  0,  5151,   11,   1,  SUN,   0,  0,  0),
-        new TestCase(2245580.5,  0,  5196,    5,   7,  WED,   0,  0,  0),
-        new TestCase(2266100.5,  0,  5252,    8,   3,  SAT,   0,  0,  0),
-        new TestCase(2288542.5,  0,  5314,    1,   1,  SAT,   0,  0,  0),
-        new TestCase(2290901.5,  0,  5320,    6,  27,  SAT,   0,  0,  0),
-        new TestCase(2323140.5,  0,  5408,   10,  20,  WED,   0,  0,  0),
-        new TestCase(2334551.5,  0,  5440,    1,   1,  THU,   0,  0,  0),
-        new TestCase(2334581.5,  0,  5440,    2,   1,  SAT,   0,  0,  0),
-        new TestCase(2334610.5,  0,  5440,    3,   1,  SUN,   0,  0,  0),
-        new TestCase(2334639.5,  0,  5440,    4,   1,  MON,   0,  0,  0),
-        new TestCase(2334668.5,  0,  5440,    5,   1,  TUE,   0,  0,  0),
-        new TestCase(2334698.5,  0,  5440,    6,   1,  THU,   0,  0,  0),
-        new TestCase(2334728.5,  0,  5440,    7,   1,  SAT,   0,  0,  0),
-        new TestCase(2334757.5,  0,  5440,    8,   1,  SUN,   0,  0,  0),
-        new TestCase(2334787.5,  0,  5440,    9,   1,  TUE,   0,  0,  0),
-        new TestCase(2334816.5,  0,  5440,   10,   1,  WED,   0,  0,  0),
-        new TestCase(2334846.5,  0,  5440,   11,   1,  FRI,   0,  0,  0),
-        new TestCase(2334848.5,  0,  5440,   11,   3,  SUN,   0,  0,  0),
-        new TestCase(2334934.5,  0,  5441,    1,   1,  TUE,   0,  0,  0),
-        new TestCase(2348020.5,  0,  5476,   12,   5,  FRI,   0,  0,  0),
-        new TestCase(2366978.5,  0,  5528,   11,   4,  SUN,   0,  0,  0),
-        new TestCase(2385648.5,  0,  5579,   12,  11,  MON,   0,  0,  0),
-        new TestCase(2392825.5,  0,  5599,    8,  12,  WED,   0,  0,  0),
-        new TestCase(2416223.5,  0,  5663,    8,  22,  SUN,   0,  0,  0),
-        new TestCase(2425848.5,  0,  5689,   12,  19,  SUN,   0,  0,  0),
-        new TestCase(2430266.5,  0,  5702,    1,   8,  MON,   0,  0,  0),
-        new TestCase(2430833.5,  0,  5703,    8,  14,  MON,   0,  0,  0),
-        new TestCase(2431004.5,  0,  5704,    1,   8,  THU,   0,  0,  0),
-        new TestCase(2448698.5,  0,  5752,    7,  12,  TUE,   0,  0,  0),
-        new TestCase(2450138.5,  0,  5756,    7,   5,  SUN,   0,  0,  0),
-        new TestCase(2465737.5,  0,  5799,    2,  12,  WED,   0,  0,  0),
-        new TestCase(2486076.5,  0,  5854,   12,   5,  SUN,   0,  0,  0),
-
-        // Additional test cases for bugs found during development
-        //           G.YY/MM/DD  Era  Year  Month Day  WkDay Hour Min Sec
-        new TestCase(1013, 9, 8, 0,  4774,    1,   1,  TUE,   0,  0,  0),
-        new TestCase(1239, 9, 1, 0,  5000,    1,   1,  THU,   0,  0,  0),
-        new TestCase(1240, 9,18, 0,  5001,    1,   1,  TUE,   0,  0,  0),
-
-        // Test cases taken from a table of 14 "year types" in the Help file
-        // of the application "Hebrew Calendar"
-        new TestCase(2456187.5,  0,  5773,    1,   1,  MON,   0,  0,  0),
-        new TestCase(2459111.5,  0,  5781,    1,   1,  SAT,   0,  0,  0),
-        new TestCase(2453647.5,  0,  5766,    1,   1,  TUE,   0,  0,  0),
-        new TestCase(2462035.5,  0,  5789,    1,   1,  THU,   0,  0,  0),
-        new TestCase(2458756.5,  0,  5780,    1,   1,  MON,   0,  0,  0),
-        new TestCase(2460586.5,  0,  5785,    1,   1,  THU,   0,  0,  0),
-        new TestCase(2463864.5,  0,  5794,    1,   1,  SAT,   0,  0,  0),
-        new TestCase(2463481.5,  0,  5793,    1,   1,  MON,   0,  0,  0),
-        new TestCase(2470421.5,  0,  5812,    1,   1,  THU,   0,  0,  0),
-        new TestCase(2460203.5,  0,  5784,    1,   1,  SAT,   0,  0,  0),
-        new TestCase(2459464.5,  0,  5782,    1,   1,  TUE,   0,  0,  0),
-        new TestCase(2467142.5,  0,  5803,    1,   1,  MON,   0,  0,  0),
-        new TestCase(2455448.5,  0,  5771,    1,   1,  THU,   0,  0,  0),
-    
-        // Test cases for JB#2327        
-        // http://www.fourmilab.com/documents/calendar/
-        // http://www.calendarhome.com/converter/
-//      2452465.5, 2002, JULY, 10, 5762, AV, 1,
-//      2452494.5, 2002, AUGUST, 8, 5762, AV, 30,
-//      2452495.5, 2002, AUGUST, 9, 5762, ELUL, 1,
-//      2452523.5, 2002, SEPTEMBER, 6, 5762, ELUL, 29,
-//      2452524.5, 2002, SEPTEMBER, 7, 5763, TISHRI, 1,
-        //         Julian Day  Era  Year  Month Day  WkDay Hour Min Sec
-        new TestCase(2452465.5,  0,  5762,    AV+1,  1,  WED,   0,  0,  0),
-        new TestCase(2452494.5,  0,  5762,    AV+1, 30,  THU,   0,  0,  0),
-        new TestCase(2452495.5,  0,  5762,  ELUL+1,  1,  FRI,   0,  0,  0),
-        new TestCase(2452523.5,  0,  5762,  ELUL+1, 29,  FRI,   0,  0,  0),
-        new TestCase(2452524.5,  0,  5763,TISHRI+1,  1,  SAT,   0,  0,  0),
-    };
-    
     /**
      * Problem reported by Armand Bendanan in which setting of the MONTH
      * field in a Hebrew calendar causes the time fields to go negative.

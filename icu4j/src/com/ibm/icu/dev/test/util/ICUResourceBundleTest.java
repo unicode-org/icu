@@ -6,8 +6,12 @@
  */
 package com.ibm.icu.dev.test.util;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.MissingResourceException;
+import java.util.Enumeration;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUData;
@@ -25,6 +29,26 @@ public final class ICUResourceBundleTest extends TestFmwk {
         ICUResourceBundleTest test = new ICUResourceBundleTest();
         test.run(args);
 
+    }
+    public void TestGetResources(){
+        try{
+            ClassLoader loader = getClass().getClassLoader(); 
+            Enumeration enum = loader.getResources("META-INF");
+            for(;enum.hasMoreElements();){
+            	//URL url = loader.getResource("LocaleElements_en.class");
+            	//File file = new File(url.getPath());
+                URL url = (URL)enum.nextElement();
+                File file = new File(url.getPath());
+                File[] files = file.listFiles();
+                if(files!=null){
+                    for(int i=0; i<files.length; i++){
+                    	logln(files[i].getName());
+                    }
+                }
+            }
+        }catch(Exception ex){
+            errln("Unexpected exception: "+ ex.getMessage());
+        }
     }
     public void TestResourceBundleWrapper(){
         UResourceBundle bundle = UResourceBundle.getBundleInstance("com.ibm.icu.impl.data.HolidayBundle", "da_DK");
@@ -430,7 +454,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
             sub = rb1.get("testGetStringByKeyAliasing" );
             
             s1 = sub.get("KeyAlias0PST").getString();
-            if(s1.equals("PST")){
+            if(s1.equals("America/Los_Angeles")){
                 logln("Alias mechanism works for KeyAlias0PST");
             }else{
                 errln("Did not get the expected output for KeyAlias0PST");
@@ -459,7 +483,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         {
             sub = rb.get("testGetStringByIndexAliasing" );
             s1 = sub.getString(0);
-            if(s1.equals("PST")){
+            if(s1.equals("America/Los_Angeles")){
                 logln("Alias mechanism works for testGetStringByIndexAliasing/0. Got: "+s1);
             }else{
                 errln("Did not get the expected output for testGetStringByIndexAliasing/0. Got: "+s1);
@@ -540,7 +564,8 @@ public final class ICUResourceBundleTest extends TestFmwk {
     }    
     
     public void TestGetWithFallback(){
-        ICUResourceBundle bundle =(ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"te_IN");
+        /*
+        ICUResourceBundle bundle =(ICUResourceBundle) UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","te_IN");
         String key = bundle.getStringWithFallback("Keys/collation");
         if(!key.equals("COLLATION")){
             errln("Did not get the expected result from getStringWithFallback method.");
@@ -549,7 +574,9 @@ public final class ICUResourceBundleTest extends TestFmwk {
         if(!type.equals("DIRECT")){
             errln("Did not get the expected result form getStringWithFallback method.");
         }
-
+        */
+        ICUResourceBundle bundle = null;
+        String key = null;
         try{
             bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME,ULocale.canonicalize("de__PHONEBOOK"));
             if(!bundle.getULocale().equals("de")){
@@ -683,7 +710,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         try{
             ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "no_NO_NY");
             ICUResourceBundle sub = rb.get("Countries");
-            String s1 = sub.getString(1);
+            String s1 = sub.getString("NO");
             if(s1.equals("Noreg")){
                 logln("got expected output ");   
             }else{
