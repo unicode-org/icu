@@ -166,6 +166,7 @@ icu4c/source/stubdata/Debug
 icu4c/source/stubdata/Makefile
 icu4c/source/stubdata/Release
 icu4c/source/stubdata/libicu*.*
+icu4c/source/stubdata/stubdatabuilt.txt
 icu4c/source/test/Makefile
 icu4c/source/test/cintltst/*.d
 icu4c/source/test/cintltst/*.plg

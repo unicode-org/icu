@@ -5,4 +5,5 @@ Release
 Makefile
 *.ao
 *.plg
+stubdatabuilt.txt
 
