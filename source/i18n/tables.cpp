@@ -78,6 +78,26 @@ void EntryPair::streamIn(FileStream* is)
     }
 }
 
+void EntryPair::streamOut(UMemoryStream* os) const
+{
+    if (!uprv_mstrm_error(os))
+    {
+        UnicodeStringStreamer::streamOut(&entryName, os);
+        uprv_mstrm_write(os, (uint8_t *)&value, sizeof(value));
+        uprv_mstrm_write(os, (uint8_t *)&fwd, sizeof(fwd));
+    }
+}
+
+void EntryPair::streamIn(UMemoryStream* is)
+{
+    if (!uprv_mstrm_error(is))
+    {
+        UnicodeStringStreamer::streamIn(&entryName, is);
+        uprv_mstrm_read(is, &value, sizeof(value));
+        uprv_mstrm_read(is, &fwd, sizeof(fwd));
+    }
+}
+
 //=======================================================================================
 // METHODS ON VectorOfInt
 //=======================================================================================
@@ -297,6 +317,29 @@ VectorOfInt::streamIn(FileStream* is)
         resize(newSize);
         if (fBogus) return;
         T_FileStream_read(is, fElements, sizeof(*fElements) * newSize);
+    }
+}
+
+void
+VectorOfInt::streamOut(UMemoryStream* os) const
+{
+    if (!uprv_mstrm_error(os))
+    {
+        uprv_mstrm_write(os, (uint8_t *)&fSize, sizeof(fSize));
+        uprv_mstrm_write(os, (uint8_t *)fElements, sizeof(*fElements) * fSize);
+    }
+}
+
+void
+VectorOfInt::streamIn(UMemoryStream* is)
+{
+    if (!uprv_mstrm_error(is))
+    {
+        int32_t newSize;
+        uprv_mstrm_read(is, &newSize, sizeof(newSize));
+        resize(newSize);
+        if (fBogus) return;
+        uprv_mstrm_read(is, fElements, sizeof(*fElements) * newSize);
     }
 }
 
@@ -703,6 +746,54 @@ VectorOfPToExpandTable::streamIn(FileStream* is)
     }
 }
 
+void
+VectorOfPToExpandTable::streamOut(UMemoryStream* os) const
+{
+    if (!uprv_mstrm_error(os))
+    {
+        uprv_mstrm_write(os, (uint8_t *)&fSize, sizeof(fSize));
+        int32_t i;
+        for (i=0; i<fSize; ++i)
+        {
+            char isNull = (fElements[i] == 0);
+            uprv_mstrm_write(os, (uint8_t *)&isNull, sizeof(isNull));
+            if (!isNull) fElements[i]->streamOut(os);
+        }
+    }
+}
+
+void
+VectorOfPToExpandTable::streamIn(UMemoryStream* is)
+{
+    if (!uprv_mstrm_error(is))
+    {
+        int32_t newSize;
+        uprv_mstrm_read(is, &newSize, sizeof(newSize));
+        resize(newSize);
+        if (fBogus) return;
+        int32_t i;
+        for (i=0; i<newSize; ++i)
+        {
+            char isNull;
+            uprv_mstrm_read(is, &isNull, sizeof(isNull));
+            if (isNull)
+            {
+                delete fElements[i];
+                fElements[i] = 0;
+            }
+            else
+            {
+                if (fElements[i] == 0) fElements[i] = new VectorOfInt;
+                fElements[i]->streamIn(is);
+                if (fElements[i]->isBogus()) {
+                    fBogus = TRUE;
+                    return;
+                }
+            }
+        }
+    }
+}
+
 //=======================================================================================
 // METHODS ON VectorOfPToContractElement
 //=======================================================================================
@@ -934,6 +1025,50 @@ VectorOfPToContractElement::streamIn(FileStream* is)
     }
 }
 
+void
+VectorOfPToContractElement::streamOut(UMemoryStream* os) const
+{
+    if (!uprv_mstrm_error(os))
+    {
+        uprv_mstrm_write(os, (uint8_t *)&fSize, sizeof(fSize));
+        int32_t i;
+        for (i=0; i<fSize; ++i)
+        {
+            char isNull = (fElements[i] == 0);
+            uprv_mstrm_write(os,  (uint8_t *)&isNull, sizeof(isNull));
+            if (!isNull) fElements[i]->streamOut(os);
+        }
+    }
+}
+
+void
+VectorOfPToContractElement::streamIn(UMemoryStream* is)
+{
+    if (!uprv_mstrm_error(is))
+    {
+        int32_t newSize;
+        uprv_mstrm_read(is, &newSize, sizeof(newSize));
+        resize(newSize);
+        if (fBogus) return;
+        int32_t i;
+        for (i=0; i<newSize; ++i)
+        {
+            char isNull;
+            uprv_mstrm_read(is, &isNull, sizeof(isNull));
+            if (isNull)
+            {
+                delete fElements[i];
+                fElements[i] = 0;
+            }
+            else
+            {
+                if (fElements[i] == 0) fElements[i] = new EntryPair;
+                fElements[i]->streamIn(is);
+            }
+        }
+    }
+}
+
 //=======================================================================================
 // METHODS ON VectorOfPToContractTable
 //=======================================================================================
@@ -1147,6 +1282,50 @@ VectorOfPToContractTable::streamIn(FileStream* is)
         {
             char isNull;
             T_FileStream_read(is, &isNull, sizeof(isNull));
+            if (isNull)
+            {
+                delete fElements[i];
+                fElements[i] = 0;
+            }
+            else
+            {
+                if (fElements[i] == 0) fElements[i] = new VectorOfPToContractElement;
+                fElements[i]->streamIn(is);
+            }
+        }
+    }
+}
+
+void
+VectorOfPToContractTable::streamOut(UMemoryStream* os) const
+{
+    if (!uprv_mstrm_error(os))
+    {
+        uprv_mstrm_write(os, (uint8_t *)&fSize, sizeof(fSize));
+        int32_t i;
+        for (i=0; i<fSize; ++i)
+        {
+            char isNull = (fElements[i] == 0);
+            uprv_mstrm_write(os, (uint8_t *)&isNull, sizeof(isNull));
+            if (!isNull) fElements[i]->streamOut(os);
+        }
+    }
+}
+
+void
+VectorOfPToContractTable::streamIn(UMemoryStream* is)
+{
+    if (!uprv_mstrm_error(is))
+    {
+        int32_t newSize;
+        uprv_mstrm_read(is, &newSize, sizeof(newSize));
+        resize(newSize);
+        if (fBogus) return;
+        int32_t i;
+        for (i=0; i<newSize; ++i)
+        {
+            char isNull;
+            uprv_mstrm_read(is, &isNull, sizeof(isNull));
             if (isNull)
             {
                 delete fElements[i];

@@ -33,6 +33,7 @@
 
 
 #include "filestrm.h"
+#include "umemstrm.h"
 #include "unicode/unistr.h"
 
 
@@ -62,6 +63,9 @@ public:
      */
     void streamOut(FileStream* os) const;
     void streamIn(FileStream* is);
+
+    void streamOut(UMemoryStream* os) const;
+    void streamIn(UMemoryStream* is);
 };
 
 
@@ -168,6 +172,9 @@ class VectorOfInt {
          */
         void                    streamOut(FileStream* os) const;
         void                    streamIn(FileStream* is);
+
+        void                    streamOut(UMemoryStream* os) const;
+        void                    streamIn(UMemoryStream* is);
 
     private:
         /**
@@ -475,6 +482,9 @@ class VectorOfPToExpandTable {
         void                streamOut(FileStream* os) const;
         void                streamIn(FileStream* is);
 
+        void                streamOut(UMemoryStream* os) const;
+        void                streamIn(UMemoryStream* is);
+
     private:
         /**
          * Resizes the vector if necessary when compared to a new size.
@@ -650,6 +660,8 @@ class VectorOfPToContractElement {
          */
         void                streamOut(FileStream* os) const;
         void                streamIn(FileStream* is);
+        void                streamOut(UMemoryStream* os) const;
+        void                streamIn(UMemoryStream* is);
 
     private:
         /**
@@ -809,6 +821,9 @@ class VectorOfPToContractTable {
          */
         void                streamOut(FileStream* os) const;
         void                streamIn(FileStream* is);
+
+        void                streamOut(UMemoryStream* os) const;
+        void                streamIn(UMemoryStream* is);
 
     private:
         /**

@@ -179,6 +179,127 @@ void TableCollationData::streamOut(FileStream* os) const
     }
 }
 
+void TableCollationData::streamIn(UMemoryStream* is)
+{
+    if (!uprv_mstrm_error(is))
+    {
+        // Stream in large objects
+        char isNull;
+        uprv_mstrm_read(is, &isNull, sizeof(isNull));
+        if (isNull)
+        {
+            ucmp32_close(mapping);
+            mapping = 0;
+        }
+        else
+        {
+            // Slight ugliness: We are a friend of TableCollation solely so
+            // we can access the constant UNMAPPED here.  In fact, this code
+            // path shouldn't really happen, because mapping should always != 0.
+            if (mapping == 0) mapping = ucmp32_open(RuleBasedCollator::UNMAPPED);
+            if (mapping->fBogus ){
+                fBogus = TRUE;
+                return;
+            }
+            ucmp32_streamMemIn(mapping, is);
+            if (mapping->fBogus) {
+                fBogus = TRUE;
+                ucmp32_close(mapping);
+                mapping = 0;
+                return;
+            }
+        }
+
+        uprv_mstrm_read(is, &isNull, sizeof(isNull));
+        if (isNull)
+        {
+            delete contractTable;
+            contractTable = 0;
+        }
+        else
+        {
+            if (contractTable == 0) contractTable = new VectorOfPToContractTable;
+            if (contractTable->isBogus()) {
+                fBogus = TRUE;
+                return;
+            }
+            contractTable->streamIn(is);
+            if (contractTable->isBogus()) {
+                fBogus = TRUE;
+                ucmp32_close(mapping);
+                mapping = 0;
+                delete contractTable;
+                contractTable = 0;
+                return;
+            }
+        }
+
+        uprv_mstrm_read(is, &isNull, sizeof(isNull));
+        if (isNull)
+        {
+            delete expandTable;
+            expandTable = 0;
+        }
+        else
+        {
+            if (expandTable == 0) expandTable = new VectorOfPToExpandTable;
+            if (expandTable->isBogus()) {
+                fBogus = TRUE;
+                return;
+            }
+            expandTable->streamIn(is);
+            if (expandTable->isBogus()) {
+                fBogus = TRUE;
+                ucmp32_close(mapping);
+                mapping = 0;
+                delete contractTable;
+                contractTable = 0;
+                delete expandTable;
+                expandTable = 0;
+                return;
+            }
+        }
+
+        // We don't stream in or out the rule table, in order to keep
+        // binary files small.  We reconstruct rules on the fly.
+        ruleTable.remove();
+        isRuleTableLoaded = FALSE;
+
+        // Stream in the small objects
+        uprv_mstrm_read(is, &isFrenchSec, sizeof(isFrenchSec));
+        uprv_mstrm_read(is, &maxSecOrder, sizeof(maxSecOrder));
+        uprv_mstrm_read(is, &maxTerOrder, sizeof(maxTerOrder));
+    }
+}
+
+void TableCollationData::streamOut(UMemoryStream* os) const
+{
+    if (!uprv_mstrm_error(os))
+    {
+        // Stream out the large objects
+        char isNull;
+        isNull = (mapping == 0);
+        uprv_mstrm_write(os, (uint8_t *)&isNull, sizeof(isNull));
+        if (!isNull) ucmp32_streamMemOut(mapping, os);
+
+        isNull = (contractTable == 0);
+        uprv_mstrm_write(os, (uint8_t *)&isNull, sizeof(isNull));
+        if (!isNull) contractTable->streamOut(os);
+
+        isNull = (expandTable == 0);
+        uprv_mstrm_write(os, (uint8_t *)&isNull, sizeof(isNull));
+        if (!isNull) expandTable->streamOut(os);
+
+        // We don't stream out the rule table, in order to keep
+        // binary files small.  We reconstruct rules on the fly.
+
+        // Stream out the small objects
+        uprv_mstrm_write(os, (uint8_t *)&isFrenchSec, sizeof(isFrenchSec));
+        uprv_mstrm_write(os, (uint8_t *)&maxSecOrder, sizeof(maxSecOrder));
+        uprv_mstrm_write(os, (uint8_t *)&maxTerOrder, sizeof(maxTerOrder));
+    }
+}
+
 void TableCollationData::addToCache(const UnicodeString& key, TableCollationData* collation)
 {
     Mutex lock;
@@ -192,3 +313,5 @@ TableCollationData* TableCollationData::findInCache(const UnicodeString& key)
 }
 
 //eof
+
+
