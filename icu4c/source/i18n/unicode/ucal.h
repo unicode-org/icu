@@ -256,7 +256,7 @@ enum UCalendarDateFields {
    */
   UCAL_DOW_LOCAL,
   /**
-   * Year of this calendar system, encompassing all supra-year fields. For example, in Gregorian/Julian calendars, positive Extended Year values indicate years AD,  1 BC = -1 extended, 2 BC = -2 extended, and so on. 
+   * Year of this calendar system, encompassing all supra-year fields. For example, in Gregorian/Julian calendars, positive Extended Year values indicate years AD,  1 BC = 0 extended, 2 BC = -1 extended, and so on. 
    * @draft ICU 2.8 
    */
   UCAL_EXTENDED_YEAR,       
@@ -277,7 +277,7 @@ enum UCalendarDateFields {
   UCAL_FIELD_COUNT,
 
   /**
-   * Synonym for UCAL_DATE - 
+   * Synonym for UCAL_DATE
    * @draft ICU 2.8
    **/
   UCAL_DAY_OF_MONTH=UCAL_DATE

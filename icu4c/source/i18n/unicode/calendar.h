@@ -192,7 +192,7 @@ public:
         YEAR_WOY,             // 'Y' Example: 1..big number - Year of Week of Year 
         DOW_LOCAL,            // 'e' Example: 1..7 - Day of Week / Localized
 
-        FIELD_COUNT = UCAL_FIELD_COUNT
+        FIELD_COUNT = UCAL_FIELD_COUNT // See ucal.h for other fields.
     };
 
     /**
@@ -1320,15 +1320,15 @@ protected:
     virtual void prepareGetActual(UCalendarDateFields field, UBool isMinimum, UErrorCode &status);
     
     /**
-     * Limit enums. Not in sync with UCalendarLimitTypes
+     * Limit enums. Not in sync with UCalendarLimitTypes (refers to internal fields).
      * @internal  
      */
     enum ELimitType { 
-      U_CAL_LIMIT_MINIMUM = 0, 
-      U_CAL_LIMIT_GREATEST_MINIMUM, 
-      U_CAL_LIMIT_LEAST_MAXIMUM, 
-      U_CAL_LIMIT_MAXIMUM, 
-      U_CAL_LIMIT_COUNT
+      UCAL_LIMIT_MINIMUM = 0, 
+      UCAL_LIMIT_GREATEST_MINIMUM, 
+      UCAL_LIMIT_LEAST_MAXIMUM, 
+      UCAL_LIMIT_MAXIMUM, 
+      UCAL_LIMIT_COUNT
     };
     
     /**
@@ -1361,7 +1361,7 @@ protected:
      * @see #ELimitType
      * @internal
      */
-    int32_t getLimit(UCalendarDateFields field, ELimitType limitType) const;
+    virtual int32_t getLimit(UCalendarDateFields field, ELimitType limitType) const;
 
 
     /**
@@ -1467,11 +1467,16 @@ protected:
     int32_t newestStamp(UCalendarDateFields start, UCalendarDateFields end, int32_t bestSoFar) const;
 
     /**
-     * Value to be bitwised "ORed" against resolve table field values for remapping.
+     * Values for field resolution tables
      * @see #resolveFields
      * @internal
      */
-    static const int32_t kResolveRemap;
+    enum {
+      /** Marker for end of resolve set (row or group). */
+      kResolveSTOP = -1,
+      /** Value to be bitwised "ORed" against resolve table field values for remapping.  Example: (UCAL_DATE | kResolveRemap) in 1st column will cause 'UCAL_DATE' to be returned, but will not examine the value of UCAL_DATE.  */
+      kResolveRemap = 32
+    };
 
     /**
      * Precedence table for Dates
@@ -1496,7 +1501,7 @@ protected:
 
     /**
      * Given a precedence table, return the newest field combination in
-     * the table, or -1 if none is found.
+     * the table, or -1 (kResolveSTOP) if none is found.
      *
      * <p>The precedence table is a 3-dimensional array of integers.  It
      * may be thought of as an array of groups.  Each group is an array of
@@ -1510,7 +1515,7 @@ protected:
      * <p>In some cases, it may be desirable to map a line to field that
      * whose stamp is NOT examined.  For example, if the best field is
      * DAY_OF_WEEK then the DAY_OF_WEEK_IN_MONTH algorithm may be used.  In
-     * order to do this, insert the value <code>REMAP_RESOLVE | F</code> at
+     * order to do this, insert the value <code>kResolveRemap | F</code> at
      * the start of the line, where <code>F</code> is the desired return
      * field value.  This field will NOT be examined; it only determines
      * the return value if the other fields in the line are the newest.

@@ -33,6 +33,9 @@
 #include "gregoimp.h"
 #include "buddhcal.h"
 #include "japancal.h"
+#if defined(SRL_HAVE_ISLAMIC)
+#include "islamcal.h"
+#endif
 #include "unicode/calendar.h"
 #include "cpputils.h"
 #include "iculserv.h"
@@ -157,6 +160,13 @@ protected:
     return new JapaneseCalendar(canLoc, status);
   } else if(!uprv_strcmp(fType, "buddhist")) {
     return new BuddhistCalendar(canLoc, status);
+#if defined (SRL_HAVE_ISLAMIC)
+  } else if(!uprv_strcmp(fType, "islamic-civil")) {
+    return new IslamicCalendar(canLoc, status);
+  } else if(!uprv_strcmp(fType, "islamic")) {
+    IslamicCalendar *i = new IslamicCalendar(canLoc, status);
+    i->setCivil(FALSE, status);
+#endif
   } else { 
     status = U_UNSUPPORTED_ERROR;
     return NULL;
@@ -322,6 +332,10 @@ getService(void)
     newservice->registerFactory(new BasicCalendarFactory("japanese"),status);
     newservice->registerFactory(new BasicCalendarFactory("buddhist"),status);
     newservice->registerFactory(new BasicCalendarFactory("gregorian"),status);
+#if defined (SRL_HAVE_ISLAMIC)
+    newservice->registerFactory(new BasicCalendarFactory("islamic"),status);
+    newservice->registerFactory(new BasicCalendarFactory("islamic-civil"),status);
+#endif
 
 #ifdef U_DEBUG_CALSVC
     fprintf(stderr, "Done..\n");
@@ -350,6 +364,15 @@ getService(void)
     }
   }
   return gService;
+}
+
+URegistryKey Calendar::registerFactory(ICUServiceFactory* toAdopt, UErrorCode& status)
+{
+  return getService()->registerFactory(toAdopt, status);
+}
+
+UBool Calendar::unregister(URegistryKey key, UErrorCode& status) {
+  return getService()->unregister(key, status);
 }
 
 // -------------------------------------
@@ -441,7 +464,7 @@ Calendar::Calendar(UErrorCode& success)
     fIsTimeSet(FALSE),
     fAreFieldsSet(FALSE),
     fAreAllFieldsSet(FALSE),
-    fNextStamp(kMinimumUserStamp),
+    fNextStamp((int32_t)kMinimumUserStamp),
     fTime(0),
     fLenient(TRUE),
     fZone(0)
@@ -458,7 +481,7 @@ Calendar::Calendar(TimeZone* zone, const Locale& aLocale, UErrorCode& success)
     fIsTimeSet(FALSE),
     fAreFieldsSet(FALSE),
     fAreAllFieldsSet(FALSE),
-    fNextStamp(kMinimumUserStamp),
+    fNextStamp((int32_t)kMinimumUserStamp),
     fTime(0),
     fLenient(TRUE),
     fZone(0)
@@ -485,7 +508,7 @@ Calendar::Calendar(const TimeZone& zone, const Locale& aLocale, UErrorCode& succ
     fIsTimeSet(FALSE),
     fAreFieldsSet(FALSE),
     fAreAllFieldsSet(FALSE),
-    fNextStamp(kMinimumUserStamp),
+    fNextStamp((int32_t)kMinimumUserStamp),
     fTime(0),
     fLenient(TRUE),
     fZone(0)
@@ -613,13 +636,16 @@ Calendar::createInstance(TimeZone* zone, const Locale& aLocale, UErrorCode& succ
     if(c->getDynamicClassID() == UnicodeString::getStaticClassID()) {
       // recursed! Second lookup returned a UnicodeString. 
       // Perhaps DefaultCalendar{} was set to another locale.
+#ifdef U_DEBUG_CALSVC
+      fprintf(stderr, "err - recursed, 2nd lookup was unistring\n");
+#endif
       success = U_MISSING_RESOURCE_ERROR;  // requested a calendar type which could NOT be found.
       delete c;
       delete zone;
       return NULL;
     }
 #ifdef U_DEBUG_CALSVC
-    fprintf(stderr, "setting to locale %s\n", (const char*)aLocale.getName());
+    fprintf(stderr, "%p: setting to locale %s\n", c, (const char*)aLocale.getName());
 #endif
     c->setWeekCountData(aLocale, success);  // set the correct locale (this was an indirected calendar)
   } else {
@@ -974,7 +1000,7 @@ void Calendar::computeFields(UErrorCode &ec)
   // JULIAN_DAY field and also removes some inelegant code. - Liu
   // 11/6/00
   
-  int32_t days =  (int32_t)Math::floorDivide(localMillis, kOneDay);
+  int32_t days =  (int32_t)Math::floorDivide(localMillis, (double)kOneDay);
 
   internalSet(UCAL_JULIAN_DAY,days + kEpochStartAsJulianDay);
 
@@ -1851,52 +1877,52 @@ Calendar::getMinimalDaysInFirstWeek() const
 
 int32_t 
 Calendar::getMinimum(EDateFields field) const {
-    return getLimit((UCalendarDateFields) field,U_CAL_LIMIT_MINIMUM);
+    return getLimit((UCalendarDateFields) field,UCAL_LIMIT_MINIMUM);
 }
 
 int32_t
 Calendar::getMinimum(UCalendarDateFields field) const
 {
-    return getLimit(field,U_CAL_LIMIT_MINIMUM);
+    return getLimit(field,UCAL_LIMIT_MINIMUM);
 }
 
 // -------------------------------------
 int32_t
 Calendar::getMaximum(EDateFields field) const
 {
-    return getLimit((UCalendarDateFields) field,U_CAL_LIMIT_MAXIMUM);
+    return getLimit((UCalendarDateFields) field,UCAL_LIMIT_MAXIMUM);
 }
 
 int32_t
 Calendar::getMaximum(UCalendarDateFields field) const
 {
-    return getLimit(field,U_CAL_LIMIT_MAXIMUM);
+    return getLimit(field,UCAL_LIMIT_MAXIMUM);
 }
 
 // -------------------------------------
 int32_t
 Calendar::getGreatestMinimum(EDateFields field) const
 {
-    return getLimit((UCalendarDateFields)field,U_CAL_LIMIT_GREATEST_MINIMUM);
+    return getLimit((UCalendarDateFields)field,UCAL_LIMIT_GREATEST_MINIMUM);
 }
 
 int32_t
 Calendar::getGreatestMinimum(UCalendarDateFields field) const
 {
-    return getLimit(field,U_CAL_LIMIT_GREATEST_MINIMUM);
+    return getLimit(field,UCAL_LIMIT_GREATEST_MINIMUM);
 }
 
 // -------------------------------------
 int32_t
 Calendar::getLeastMaximum(EDateFields field) const
 {
-    return getLimit((UCalendarDateFields) field,U_CAL_LIMIT_LEAST_MAXIMUM);
+    return getLimit((UCalendarDateFields) field,UCAL_LIMIT_LEAST_MAXIMUM);
 }
 
 int32_t
 Calendar::getLeastMaximum(UCalendarDateFields field) const
 {
-    return getLimit( field,U_CAL_LIMIT_LEAST_MAXIMUM);
+    return getLimit( field,UCAL_LIMIT_LEAST_MAXIMUM);
 }
 
 // -------------------------------------
@@ -2088,55 +2114,53 @@ UCalendarDateFields Calendar::resolveFields(const UFieldResolutionTable* precede
   return (UCalendarDateFields)( (bestField>=kResolveRemap)?(bestField&(kResolveRemap-1)):bestField  );
 }
 
-const int32_t Calendar::kResolveRemap = 32;
-
 const UFieldResolutionTable Calendar::kDatePrecedence[] =
   { 
     {
-      { UCAL_DAY_OF_MONTH, -1 },
-      { UCAL_WEEK_OF_YEAR, UCAL_DAY_OF_WEEK, -1 },
-      { UCAL_WEEK_OF_MONTH, UCAL_DAY_OF_WEEK, -1 },
-      { UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_DAY_OF_WEEK, -1 },
-      { UCAL_WEEK_OF_YEAR, UCAL_DOW_LOCAL, -1 },
-      { UCAL_WEEK_OF_MONTH, UCAL_DOW_LOCAL, -1 },
-      { UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_DOW_LOCAL, -1 },
-      { UCAL_DAY_OF_YEAR, -1 },
-      { kResolveRemap | UCAL_DAY_OF_MONTH, UCAL_YEAR, -1 },  // if YEAR is set over YEAR_WOY use DAY_OF_MONTH
-      { kResolveRemap | UCAL_WEEK_OF_YEAR, UCAL_YEAR_WOY, -1 },  // if YEAR_WOY is set,  calc based on WEEK_OF_YEAR
-      { -1 }
+      { UCAL_DAY_OF_MONTH, kResolveSTOP },
+      { UCAL_WEEK_OF_YEAR, UCAL_DAY_OF_WEEK, kResolveSTOP },
+      { UCAL_WEEK_OF_MONTH, UCAL_DAY_OF_WEEK, kResolveSTOP },
+      { UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_DAY_OF_WEEK, kResolveSTOP },
+      { UCAL_WEEK_OF_YEAR, UCAL_DOW_LOCAL, kResolveSTOP },
+      { UCAL_WEEK_OF_MONTH, UCAL_DOW_LOCAL, kResolveSTOP },
+      { UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_DOW_LOCAL, kResolveSTOP },
+      { UCAL_DAY_OF_YEAR, kResolveSTOP },
+      { kResolveRemap | UCAL_DAY_OF_MONTH, UCAL_YEAR, kResolveSTOP },  // if YEAR is set over YEAR_WOY use DAY_OF_MONTH
+      { kResolveRemap | UCAL_WEEK_OF_YEAR, UCAL_YEAR_WOY, kResolveSTOP },  // if YEAR_WOY is set,  calc based on WEEK_OF_YEAR
+      { kResolveSTOP }
     },
     {
-      { UCAL_WEEK_OF_YEAR, -1 },
-      { UCAL_WEEK_OF_MONTH, -1 },
-      { UCAL_DAY_OF_WEEK_IN_MONTH, -1 },
-      { kResolveRemap | UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_DAY_OF_WEEK, -1 },
-      { kResolveRemap | UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_DOW_LOCAL, -1 },
-      { -1 }
+      { UCAL_WEEK_OF_YEAR, kResolveSTOP },
+      { UCAL_WEEK_OF_MONTH, kResolveSTOP },
+      { UCAL_DAY_OF_WEEK_IN_MONTH, kResolveSTOP },
+      { kResolveRemap | UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_DAY_OF_WEEK, kResolveSTOP },
+      { kResolveRemap | UCAL_DAY_OF_WEEK_IN_MONTH, UCAL_DOW_LOCAL, kResolveSTOP },
+      { kResolveSTOP }
     }, 
-    {{-1}}
+    {{kResolveSTOP}}
   };
 
 
 const UFieldResolutionTable Calendar::kDOWPrecedence[] = 
 {
   {
-    { UCAL_DAY_OF_WEEK,-1, -1 },
-    { UCAL_DOW_LOCAL,-1, -1 },
-    {-1}
+    { UCAL_DAY_OF_WEEK,kResolveSTOP, kResolveSTOP },
+    { UCAL_DOW_LOCAL,kResolveSTOP, kResolveSTOP },
+    {kResolveSTOP}
   },
-  {{-1}}
+  {{kResolveSTOP}}
 };
 
 // precedence for calculating a year
 const UFieldResolutionTable Calendar::kYearPrecedence[] = 
 {
   {
-    { UCAL_YEAR, -1 },
-    { UCAL_EXTENDED_YEAR, -1 },
-    { UCAL_YEAR_WOY, UCAL_WEEK_OF_YEAR, -1 },  // YEAR_WOY is useless without WEEK_OF_YEAR
-    { -1 }
+    { UCAL_YEAR, kResolveSTOP },
+    { UCAL_EXTENDED_YEAR, kResolveSTOP },
+    { UCAL_YEAR_WOY, UCAL_WEEK_OF_YEAR, kResolveSTOP },  // YEAR_WOY is useless without WEEK_OF_YEAR
+    { kResolveSTOP }
   },
-  {{-1}}
+  {{kResolveSTOP}}
 };
 
 
@@ -2169,7 +2193,7 @@ void Calendar::computeTime(UErrorCode& status) {
   // time and call clear(MONTH) to reset the MONTH to January.  This
   // is legacy behavior.  Without this, clear(MONTH) has no effect,
   // since the internally set JULIAN_DAY is used.
-  if (fStamp[UCAL_MILLISECONDS_IN_DAY] >= kMinimumUserStamp &&
+  if (fStamp[UCAL_MILLISECONDS_IN_DAY] >= ((int32_t)kMinimumUserStamp) &&
       newestStamp(UCAL_AM_PM, UCAL_MILLISECOND, kUnset) <= fStamp[UCAL_MILLISECONDS_IN_DAY]) {
     millisInDay = internalGet(UCAL_MILLISECONDS_IN_DAY);
   } else {
@@ -2189,8 +2213,8 @@ void Calendar::computeTime(UErrorCode& status) {
   //    Again, we assume standard time.
   // We use the TimeZone object, unless the user has explicitly set the ZONE_OFFSET
   // or DST_OFFSET fields; then we use those fields.
-  if (fStamp[UCAL_ZONE_OFFSET] >= kMinimumUserStamp ||
-      fStamp[UCAL_DST_OFFSET] >= kMinimumUserStamp) {
+  if (fStamp[UCAL_ZONE_OFFSET] >= ((int32_t)kMinimumUserStamp) ||
+      fStamp[UCAL_DST_OFFSET] >= ((int32_t)kMinimumUserStamp)) {
     millisInDay -= internalGet(UCAL_ZONE_OFFSET) + internalGet(UCAL_DST_OFFSET);
   } else {
     millisInDay -= computeZoneOffset(millis, millisInDay,status);
@@ -2271,7 +2295,7 @@ int32_t Calendar::computeJulianDay()
   // to January.  This is legacy behavior.  Without this,
   // clear(MONTH) has no effect, since the internally set JULIAN_DAY
   // is used.
-  if (fStamp[UCAL_JULIAN_DAY] >= kMinimumUserStamp) {
+  if (fStamp[UCAL_JULIAN_DAY] >= (int32_t)kMinimumUserStamp) {
     int32_t bestStamp = newestStamp(UCAL_ERA, UCAL_DAY_OF_WEEK_IN_MONTH, kUnset);
     bestStamp = newestStamp(UCAL_YEAR_WOY, UCAL_EXTENDED_YEAR, bestStamp);
     if (bestStamp <= fStamp[UCAL_JULIAN_DAY]) {

@@ -63,6 +63,28 @@ class U_I18N_API Math {
                                int32_t& remainder);
 };
 
+// Useful millisecond constants
+#define kOneDay    (1.0 * U_MILLIS_PER_DAY)       //  86,400,000
+#define kOneHour   (60*60*1000)
+#define kOneMinute 60000
+#define kOneSecond 1000
+#define kOneMillisecond  1
+#define kOneWeek   (7.0 * kOneDay) // 604,800,000
+
+// Epoch constants
+#define kJan1_1JulianDay  1721426 // January 1, year 1 (Gregorian)
+
+#define kEpochStartAsJulianDay  2440588 // January 1, 1970 (Gregorian)
+
+#define kEpochYear              1970
+
+
+#define kEarliestViableMillis  -185331720384000000.0  // minimum representable by julian day  -1e17
+
+#define kLatestViableMillis     185753453990400000.0  // max representable by julian day      +1e17
+
+
+
 /**
  * A utility class providing proleptic Gregorian calendar functions
  * used by time zone and calendar code.  Do not instantiate.
@@ -146,6 +168,13 @@ class U_I18N_API Grego {
      */
     static inline int32_t millisToJulianDay(double millis);
 
+    /** 
+     * Calculates the Gregorian day shift value for an extended year.
+     * @param eyear Extended year 
+     * @returns number of days to ADD to Julian in order to convert from J->G
+     */
+    static inline int32_t gregorianShift(int32_t eyear);
+
  private:
     static const int16_t DAYS_BEFORE[24];
     static const int8_t MONTH_LENGTH[24];
@@ -176,32 +205,20 @@ inline void Grego::dayToFields(double day, int32_t& year, int32_t& month,
   dayToFields(day,year,month,dom,dow,doy_unused);
 }
 
-// Useful millisecond constants
-static const double  kOneDay      = U_MILLIS_PER_DAY;       //  86,400,000
-static const int32_t  kOneHour   = 60*60*1000;
-#define kOneMinute 60000
-#define kOneSecond 1000
-#define kOneMillisecond 1
-static const double  kOneWeek   = 7.0 * U_MILLIS_PER_DAY; // 604,800,000
-
-static const int32_t kJan1_1JulianDay = 1721426; // January 1, year 1 (Gregorian)
-
-static const int32_t kEpochStartAsJulianDay    = 2440588; // January 1, 1970 (Gregorian)
-
-static const int32_t kEpochYear             = 1970;
-
 inline double Grego::julianDayToMillis(int32_t julian)
 {
   return (julian - kEpochStartAsJulianDay) * kOneDay;
 }
 
 inline int32_t Grego::millisToJulianDay(double millis) {
-  return (int32_t) (kEpochStartAsJulianDay + Math::floorDivide(millis, kOneDay));
+  return (int32_t) (kEpochStartAsJulianDay + Math::floorDivide(millis, (double)kOneDay));
 }
 
-static const double kEarliestViableMillis = -185331720384000000.0;  // minimum representable by julian day  -1e17
-
-static const double kLatestViableMillis    = 185753453990400000.0;  // max representable by julian day      +1e17
+inline int32_t Grego::gregorianShift(int32_t eyear) {
+  int32_t y = eyear-1;
+  int32_t gregShift = Math::floorDivide(y, 400) - Math::floorDivide(y, 100) + 2;
+  return gregShift;
+}
 
 
 U_NAMESPACE_END
