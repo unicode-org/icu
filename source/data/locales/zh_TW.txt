@@ -266,10 +266,16 @@ zh_TW {
         "\u6C11\u570B",
     }
     Languages {
+        //aa  { "\u963F\u6CD5\u6587" } // Same as zh
         ab { "\u963F\u5E03\u54C8\u897F\u4E9E\u6587" }
+        ae  { "\u963F\u7DEF\u65AF\u9640\u6587" }
         af { "\u5357\u975E\u8377\u862D\u6587" }
+        ak  { "\u963F\u574E\u6587" }
+        //am  { "\u963F\u59C6\u54C8\u62C9\u6587" } // Same as zh
+        an  { "\u963F\u62C9\u8CA2\u6587" }
         //ar { "\u963F\u62C9\u4F2F\u6587" } // Same as zh
         as { "\u963F\u85A9\u59C6\u6587" }
+        av  { "\u963F\u6CD5\u6587" }
         ay { "\u827E\u99AC\u62C9\u6587" }
         az { "\u4E9E\u585E\u62DC\u7136\u6587" }
         ba { "\u5DF4\u4EC0\u5BA2\u723E\u6587" }
@@ -277,16 +283,34 @@ zh_TW {
         bg { "\u4FDD\u52A0\u5229\u4E9E\u6587" }
         bh { "\u6BD4\u54C8\u723E\u6587" }
         bi { "\u6BD4\u65AF\u62C9\u99AC\u6587" }
+        //bm  { "\u73ED\u5DF4\u62C9\u6587" } // Same as zh
+        //bn  { "\u5B5F\u52A0\u62C9\u6587" } // Same as zh
+        bo  { "\u85CF\u6587" }
+        //br  { "\u5E03\u91CC\u591A\u5C3C\u6587" } // Same as zh
+        bs  { "\u6CE2\u58EB\u5C3C\u4E9E\u6587" }
+        //byn { "\u5E03\u6797\u6587" } // Same as zh
         ca { "\u52A0\u6CF0\u7F85\u5C3C\u4E9E\u6587" }
+        ce  { "\u8ECA\u81E3\u6587" }
+        ch  { "\u67E5\u83AB\u6D1B\u6587" }
+        //co  { "\u79D1\u897F\u5609\u6587" } // Same as zh
+        cr  { "\u514B\u88E1\u6587" }
         //cs { "\u6377\u514B\u6587" } // Same as zh
+        //cu  { "\u5B97\u6559\u65AF\u62C9\u592B\u6587" } // Same as zh
+        cv  { "\u695A\u74E6\u751A\u6587" }
         cy { "\u5A01\u723E\u58EB\u6587" }
         da { "\u4E39\u9EA5\u6587" }
         //de { "\u5FB7\u6587" } // Same as zh
+        dv  { "\u8FEA\u7DAD\u897F\u6587" }
+        //dz  { "\u4E0D\u4E39\u6587" } // Same as zh
+        ee  { "\u57C3\u7DEF\u6587" }
         el { "\u5E0C\u81D8\u6587" }
         //en { "\u82F1\u6587" } // Same as zh
         eo { "\u4E16\u754C\u8A9E" }
         //es { "\u897F\u73ED\u7259\u6587" } // Same as zh
         et { "\u611B\u6C99\u5C3C\u4E9E\u6587" }
+        //eu  { "\u5DF4\u65AF\u514B\u6587" } // Same as zh
+        //fa  { "\u6CE2\u65AF\u6587" } // Same as zh
+        ff  { "\u5BCC\u62C9\u6587" }
         fi { "\u82AC\u862D\u6587" }
         fj { "\u6590\u6FDF\u6587" }
         fo { "\u6CD5\u7F85\u6587" }
@@ -294,39 +318,63 @@ zh_TW {
         fy { "\u5F17\u91CC\u65AF\u862D\u6587" }
         ga { "\u611B\u723E\u862D\u6587" }
         gd { "\u8607\u683C\u862D - \u84CB\u723E\u6587" }
+        gez { "\u5409\u8332\u6587" }
         gl { "\u52A0\u91CC\u897F\u4E9E\u6587" }
+        //gn  { "\u74DC\u62C9\u5C3C\u6587" } // Same as zh
         gu { "\u5409\u4E9E\u62C9\u5854\u6587" }
         gv { "\u66FC\u5CF6\u6587" }
+        //ha  { "\u8C6A\u6492\u6587" } // Same as zh
+        //haw { "\u590F\u5A01\u5937\u6587" } // Same as zh
         he { "\u5E0C\u4F2F\u4F86\u6587" }
         hi { "\u5317\u5370\u5EA6\u6587" }
+        ho  { "\u897F\u91CC\u83AB\u5716\u571F\u6587" }
         hr { "\u514B\u7F85\u57C3\u897F\u4E9E\u6587" }
+        ht  { "\u6D77\u5730\u4EBA" }
         //hu { "\u5308\u7259\u5229\u6587" } // Same as zh
         hy { "\u4E9E\u7F8E\u5C3C\u4E9E\u6587" }
+        hz  { "\u8D6B\u96F7\u7F85\u6587" }
         ia { "\u62C9\u4E01\u570B\u969B\u6587" }
         id { "\u5370\u5C3C\u6587" }
         ie { "\u62C9\u4E01\u570B\u969B\u6587" }
+        ig  { "\u4F0A\u5E03\u6587" }
+        ii  { "\u56DB\u5DDD\u8A71" }
         ik { "\u4F9D\u5974\u76AE\u7DAD\u514B\u6587" }
+        io  { "\u4F0A\u6717\u6587" }
         is { "\u51B0\u5CF6\u6587" }
         it { "\u7FA9\u5927\u5229\u6587" }
         iu { "\u56E0\u7D10\u7279\u6587" }
         //ja { "\u65E5\u6587" } // Same as zh
+        //jv  { "\u722A\u54C7\u6587" } // Same as zh
         ka { "\u55AC\u6CBB\u4E9E\u6587" }
+        kg  { "\u525B\u679C\u6587" }
+        ki  { "\u5409\u5EAB\u5C24\u4EBA" }
+        kj  { "\u5EE3\u4E9E\u99AC\u6587" }
         kk { "\u54C8\u85A9\u514B\u6587" }
         kl { "\u683C\u9675\u862D\u6587" }
         km { "\u9AD8\u68C9\u6587" }
         kn { "\u574E\u90A3\u9054\u6587" }
         ko { "\u97D3\u6587" }
+        kr  { "\u5361\u52AA\u88E1\u6587" }
         ks { "\u514B\u4EC0\u7C73\u723E\u6587" }
         ku { "\u5EAB\u723E\u5FB7\u6587" }
+        //kv  { "\u79D1\u7C73\u6587" } // Same as zh 
         kw { "\u5EB7\u74E6\u8033\u6587" }
         ky { "\u5409\u723E\u5409\u65AF\u6587" }
+        //la  { "\u62C9\u4E01\u6587" } // Same as zh
+        lb  { "\u76E7\u68EE\u5821\u6587" }
+        lg  { "\u5E72\u9054\u6587" }
+        li  { "\u6797\u5821\u6587" }
         //ln { "\u6797\u52A0\u62C9\u6587" } // Same as zh
         lo { "\u5BEE\u570B\u6587" }
         //lt { "\u7ACB\u9676\u5B9B\u6587" } // Same as zh
+        lu  { "\u9B6F\u5DF4\u52A0\u4E39\u52A0\u6587" }
         //lv { "\u62C9\u812B\u7DAD\u4E9E\u6587" } // Same as zh
         mg { "\u99AC\u723E\u52A0\u4EC0\u6587" }
+        mh  { "\u99AC\u7D39\u723E\u6587"}
+        //mi  { "\u6BDB\u5229\u6587" } // Same as zh
         mk { "\u99AC\u5176\u9813\u6587" }
         ml { "\u99AC\u4F86\u4E9E\u62C9\u59C6\u6587" }
+        //mn  { "\u8499\u53E4\u6587" } // Same as zh
         mo { "\u6469\u723E\u591A\u74E6\u6587" }
         mr { "\u99AC\u62C9\u5730\u6587" }
         ms { "\u99AC\u4F86\u6587" }
@@ -334,24 +382,39 @@ zh_TW {
         my { "\u7DEC\u7538\u6587" }
         na { "\u8AFE\u9B6F\u6587" }
         nb { "\u632A\u5A01\u6CE2\u514B\u9ED8\u723E\u6587" }
+        nd  { "\u5317\u5730\u7562\u5217\u6587" }
         ne { "\u5C3C\u6CCA\u723E\u6587" }
+        ng  { "\u6069\u6771\u52A0\u6587" }
         nl { "\u8377\u862D\u6587" }
         nn { "\u65B0\u632A\u5A01\u6587" }
         //no { "\u632A\u5A01\u6587" } // Same as zh
+        nr  { "\u5357\u5730\u7562\u5217\u6587" }
+        nv  { "\u7D0D\u74E6\u7D04\u6587"}
+        ny  { "\u5C3C\u63DA\u8CC8\u6587" }
         oc { "\u5967\u897F\u5766\u6587" }
+        oj  { "\u5967\u6770\u5E03\u74E6\u6587" }
+        //om  { "\u963F\u66FC\u6587" } // Same as zh
         or { "\u6B50\u91CC\u4E9E\u6587" }
+        os  { "\u5967\u585E\u63D0\u6587" }
         //pa { "\u65C1\u906E\u666E\u6587" } // Same as zh
+        pi  { "\u5DF4\u5229\u6587" }
         pl { "\u6CE2\u862D\u6587" }
         ps { "\u666E\u4EC0\u5716\u6587" }
         //pt { "\u8461\u8404\u7259\u6587" } // Same as zh
         qu { "\u84CB\u4E18\u4E9E\u6587" }
         rm { "\u91CC\u6258\u7F85\u66FC\u65AF\u6587" }
+        //rn  { "\u57FA\u9686\u8FEA\u6587" } // Same as zh
         ro { "\u7F85\u99AC\u5C3C\u4E9E\u6587" }
         //ru { "\u4FC4\u6587" } // Same as zh
         rw { "\u76E7\u5B89\u9054\u6587" }
+        //sa  { "\u68B5\u6587" } //same as zh
+        sc  { "\u6492\u4E01\u6587" }
         sd { "\u8607\u4E39\u6587" }
+        se  { "\u5317\u65B9\u85A9\u7C73\u6587" }
+        //sg  { "\u6851\u6208\u6587" } // Same as zh
         sh { "\u585E\u723E\u7DAD\u4E9E\u514B\u7F85\u57C3\u897F\u4E9E\u6587" }
         si { "\u50E7\u4F3D\u7F85\u6587" }
+        sid { "\u5E0C\u9054\u6469\u6587" }
         //sk { "\u65AF\u6D1B\u4F10\u514B\u6587" } // Same as zh
         sl { "\u65AF\u6D1B\u7DAD\u5C3C\u4E9E\u6587" }
         sm { "\u85A9\u6469\u4E9E\u6587" }
@@ -359,29 +422,41 @@ zh_TW {
         so { "\u7D22\u99AC\u5229\u6587" }
         sq { "\u963F\u723E\u5DF4\u5C3C\u4E9E\u6587" }
         sr { "\u585E\u723E\u7DAD\u4E9E\u6587" }
+        //ss  { "\u8F9B\u8F9B\u90A3\u63D0\u6587" } // Same as zh
+        //st  { "\u585E\u7D22\u6258\u6587" } // Same as zh
         su { "\u8607\u4E39\u6587" }
         //sv { "\u745E\u5178\u6587" } // Same as zh
         sw { "\u53F2\u74E6\u5E0C\u91CC\u6587" }
+        syr { "\u53E4\u6558\u5229\u4E9E\u6587" }
         ta { "\u5766\u7C73\u723E\u6587" }
         te { "\u6CF0\u76E7\u56FA\u6587" }
+        //tg  { "\u5854\u5409\u514B\u6587" } // Same as zh
+        //th  { "\u6CF0\u6587" } // Same as zh
         ti { "\u63D0\u683C\u5229\u5C3C\u4E9E\u6587" }
+        tig { "\u8482\u683C\u96F7\u6587" }
         tk { "\u571F\u5EAB\u66FC\u6587" }
         //tl { "\u5854\u52A0\u8DEF\u65CF\u6587" } // Same as zh
         tn { "\u7A81\u5C3C\u897F\u4E9E\u6587" }
         to { "\u6771\u52A0\u6587" }
         //tr { "\u571F\u8033\u5176\u6587" } // Same as zh
+        //ts  { "\u7279\u677E\u52A0\u6587" } // Same as zh
         tt { "\u97C3\u977C\u6587" }
         tw { "\u7E41\u9AD4\u4E2D\u6587" }
+        ty  { "\u5927\u6EAA\u5730\u6587" }
         ug { "\u7DAD\u543E\u723E\u6587" }
         uk { "\u70CF\u514B\u862D\u6587" }
         ur { "\u70CF\u723E\u90FD\u6587" }
         uz { "\u70CF\u8332\u5225\u514B\u6587" }
+        ve  { "\u6EAB\u9054\u6587" }
+        //vi  { "\u8D8A\u5357\u6587" } // Same as zh
+        //vo  { "\u6C83\u62C9\u666E\u514B\u6587" }   // Same as zh                        
+        wa  { "\u74E6\u9686\u6587" }
         wo { "\u6C83\u723E\u592B\u6587" }
         xh { "\u73ED\u5716\u6587" }
+        yi  { "\u610F\u7B2C\u7DD2\u6587" }
         yo { "\u7D04\u9B6F\u5DF4\u6587" }
+        za  { "\u58EF\u6587" }
         //zh { "\u4E2D\u6587" } // Same as zh
-        //zh_cn { "\u4E2D\u6587 (\u7C21\u9AD4)" }
-        //zh_tw { "\u4E2D\u6587 (\u7E41\u9AD4)" }
         zu { "\u7956\u9B6F\u6587" }
     }
     NumberPatterns { 
@@ -389,6 +464,64 @@ zh_TW {
         "\u00A4#,##0.00;-\u00A4#,##0.00",
         "#,##0%",
         "#E0",
+    }
+   Scripts {
+        Arab { "\u963F\u62C9\u4F2F\u6587" }
+        Armn { "\u4E9E\u7F8E\u5C3C\u4E9E\u6587" }
+        Beng { "\u5B5F\u52A0\u62C9\u6587" }
+        Bopo { "\u6F22\u8A9E\u6CE8\u97F3\u7B26\u865F" }
+        Brai { "\u76F2\u4EBA\u7528\u9EDE\u5B57\u6CD5" }
+        //Buhd { "Buhid \u6587" }
+        Cans { "\u52A0\u62FF\u5927\u539F\u4F4F\u6C11\u901A\u7528\u5B57\u7B26" }
+        Cher { "\u67F4\u7F85\u57FA\u6587" }
+        Cprt { "\u585E\u6D66\u8DEF\u65AF\u6587" }
+        Cyrl { "\u65AF\u62C9\u592B\u8A9E\u7CFB" }
+        //Deva { "\u68B5\u6587" } // Duplicate of zh
+        Dsrt { "\u5FB7\u745F\u96F7\u7279\u6587" }
+        Ethi { "\u8863\u7D22\u5339\u4E9E\u6587" }
+        Geor { "\u55AC\u6CBB\u4E9E\u6587" }
+        Goth { "\u6B4C\u5FB7\u6587" }
+        Grek { "\u5E0C\u81D8\u6587" }
+        Gujr { "\u5409\u4E9E\u62C9\u5854\u6587" }
+        Guru { "\u53E4\u723E\u7A46\u5947\u6587" }
+        Hang { "\u8AFA\u6587" }
+        Hano { "\u54C8\u52AA\u52AA\u6587" }
+        Hani { "\u6F22\u8A9E" }
+        Hans { "\u7C21\u9AD4\u6F22\u8A9E" } // Not a formal part of ISO-15924 yet
+        Hant { "\u7E41\u9AD4\u6F22\u8A9E" } // Not a formal part of ISO-15924 yet
+        Hebr { "\u5E0C\u4F2F\u4F86\u6587" }
+        //Hira { "\u5E73\u5047\u540D" } // Duplicate of zh
+        Ital { "\u53E4\u610F\u5927\u5229\u6587" }
+        //Kana { "\u7247\u5047\u540D" } // Duplicate of zh
+        Khmr { "\u9AD8\u68C9\u6587" }
+        Knda { "\u574E\u90A3\u9054\u6587" }
+        Laoo { "\u5BEE\u570B\u6587" }
+        Latn { "\u62C9\u4E01\u6587" }
+        Limb { "\u6797\u4F48\u6587" }
+        //Linb { "B \u985E\u7DDA\u5F62\u6587\u5B57" }
+        Mlym { "\u99AC\u4F86\u4E9E\u62C9\u59C6\u6587" }
+        Mong { "\u8499\u53E4\u6587" }
+        Mymr { "\u7DEC\u7538\u6587" }
+        Ogam { "\u6B50\u7518\u6587" }
+        Orya { "\u6B50\u5229\u4E9E\u6587" }
+        Osma { "\u6B50\u65AF\u66FC\u4E9E\u6587" }
+        Qaac { "\u79D1\u666E\u7279\u6587" } // Coptic is not a formal part of ISO-15924 yet
+        //Qaai { "\u7E7C\u627F\u6587" } // PUA
+        Runr { "\u53E4\u5317\u6B50\u6587\u5B57" }
+        Shaw { "\u7C2B\u67CF\u7D0D\u5B57\u7B26" }
+        Sinh { "\u932B\u862D\u6587" }
+        Syrc { "\u654D\u5229\u4E9E\u6587" }
+        Tagb { "\u5357\u5CF6\u6587" }
+        //Tale { "Tai Le" }
+        Taml { "\u5766\u7C73\u723E\u6587" }
+        Telu { "\u6CF0\u9B6F\u53E4\u6587" }
+        Tglg { "\u5854\u52A0\u62C9\u6587" }
+        Thaa { "\u5854\u5B89\u90A3\u6587" }
+        Thai { "\u6CF0\u6587" } // Just happens to be a duplicate
+        Tibt { "\u897F\u85CF\u6587" }
+        Ugar { "\u70CF\u52A0\u5217\u6587" }
+        Yiii { "\u5F5E\u6587" }
+        //Zyyy { "\u672A\u78BA\u5B9A\u7684\u8A9E\u7CFB" } // This may need to become "undetermined script"
     }
     LocaleScript { "Hani" , "Bopo" }
     ExemplarCharacters{
@@ -550,15 +683,29 @@ zh_TW {
         "\u9F52\u9F61\u9F8D\u9F9C]"
    
     }   
-    // Keys{
-    //   collation { "" }
-    //   calendar  { "" }
-    // }
+    Keys{
+         collation { "\u6821\u5C0D" }
+         calendar  { "\u66C6\u6CD5" }
+         currency  { "\u8CA8\u5E63" }
+    }
     Types{
         collation{
+            direct      { "\u76F4\u63A5\u9806\u5E8F" }
+            phonebook   { "\u96FB\u8A71\u7C3F\u9806\u5E8F" }
+            pinyin      { "\u62FC\u97F3\u9806\u5E8F" }
             stroke      { "\u7B46\u5283\u987a\u5e8f" }   // Traditional Chinese.
             traditional { "\u50B3\u7D71\u66C6\u6CD5" }
         }
+        calendar{
+            japanese      { "\u65E5\u672C\u66C6\u6CD5" }
+            buddhist      { "\u4F5B\u6559\u66C6\u6CD5" }
+            islamic       { "\u4F0A\u65AF\u862D\u66C6\u6CD5" }
+            islamic-civil { "\u4F0A\u65AF\u862D\u57CE\u5E02\u66C6\u6CD5" }
+            hebrew        { "\u5E0C\u4F2F\u4F86\u66C6\u6CD5" }
+            chinese       { "\u8FB2\u66C6" }
+            gregorian     { "\u516C\u66C6" }
+        }
+
     }
     Variants{
         // EURO    { "\u6B50\u5143" }
