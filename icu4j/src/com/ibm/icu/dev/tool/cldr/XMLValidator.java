@@ -31,6 +31,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 // SAX2 imports
 import org.xml.sax.ErrorHandler;
+import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -150,6 +151,7 @@ public class XMLValidator {
             // First, attempt to parse as XML (preferred)...
             DocumentBuilder docBuilder = dfactory.newDocumentBuilder();
             docBuilder.setErrorHandler(nullHandler);
+            docBuilder.setEntityResolver(new CachingEntityResolver());
             //if(docBuilder.isValidating()){
             //System.out.println("The parser is a validating parser");
             //}
