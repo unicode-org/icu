@@ -31,6 +31,9 @@
 #include "creststn.h"
 #include "unicode/ctest.h"
 
+static int32_t pass;
+static int32_t fail;
+
 /*****************************************************************************/
 /**
  * Return a random unsigned long l where 0N <= l <= ULONG_MAX.
@@ -155,8 +158,6 @@ static int32_t bundles_count = sizeof(param) / sizeof(param[0]);
 
 static void printUChars(UChar*);
 
-static void TestGetVersion(void);
-static void TestEmptyBundle(void);
 /***************************************************************************************/
 
 /* Array of our test objects */
@@ -171,6 +172,7 @@ void addNEWResourceBundleTest(TestNode** root)
     addTest(root, &TestGetVersion,      "tsutil/creststn/TestGetVersion");
     addTest(root, &TestAliasConflict,   "tsutil/creststn/TestAlias");
     addTest(root, &TestNewTypes,        "tsutil/creststn/TestNewTypes");
+    addTest(root, &TestEmptyTypes,      "tsutil/creststn/TestEmptyTypes");
     addTest(root, &TestBinaryCollationData, "tsutil/creststn/TestBinaryCollationData");
     addTest(root, &TestAPI,             "tsutil/creststn/TestAPI");
     addTest(root, &TestErrorConditions, "tsutil/creststn/TestErrorConditions");
@@ -324,6 +326,153 @@ static void TestNewTypes() {
     ures_close(res);
     ures_close(theBundle);
 
+}
+
+static void TestEmptyTypes() {
+    UResourceBundle* theBundle = NULL;
+    char action[256];
+    char testdatapath[256];
+    const char *directory= u_getDataDirectory();
+    UErrorCode status = U_ZERO_ERROR;
+    UResourceBundle* res = NULL;
+    UResourceBundle* resArray = NULL;
+    const uint8_t *binResult = NULL;
+    int32_t len = 0;
+    int32_t i = 0;
+    int32_t intResult = 0;
+    const UChar *zeroString;
+    const int32_t *zeroIntVect;
+    strcpy(action, "Construction of testtypes bundle");
+
+    strcpy(testdatapath, directory);
+    strcat(testdatapath, "testdata");
+    theBundle = ures_open(testdatapath, "testtypes", &status);
+
+    CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+
+    CONFIRM_INT_NE(theBundle, NULL);
+
+    /* This test reads the string "abc\u0000def" from the bundle   */
+    /* if everything is working correctly, the size of this string */
+    /* should be 7. Everything else is a wrong answer, esp. 3 and 6*/
+
+    status = U_ZERO_ERROR;
+    strcpy(action, "getting and testing of explicit string of zero length string");
+    res = ures_getByKey(theBundle, "emptyexplicitstring", res, &status);
+    CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+    CONFIRM_INT_EQ(ures_getType(res), RES_STRING);
+    zeroString=ures_getString(res, &len, &status);
+    if(U_SUCCESS(status)){
+        CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+        CONFIRM_INT_EQ(len, 0);
+        CONFIRM_INT_EQ(u_strlen(zeroString), 0);
+//        ures_close(res);
+    }
+    else {
+        log_err("Couldn't get emptyexplicitstring\n");
+    }
+
+    status = U_ZERO_ERROR;
+    strcpy(action, "getting and testing of normal string of zero length string");
+    res = ures_getByKey(theBundle, "emptystring", res, &status);
+    CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+    CONFIRM_INT_EQ(ures_getType(res), RES_STRING);
+    zeroString=ures_getString(res, &len, &status);
+    if(U_SUCCESS(status)){
+        CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+        CONFIRM_INT_EQ(len, 0);
+        CONFIRM_INT_EQ(u_strlen(zeroString), 0);
+//        ures_close(res);
+    }
+    else {
+        log_err("Couldn't get emptystring\n");
+    }
+
+    status = U_ZERO_ERROR;
+    strcpy(action, "getting and testing of empty int");
+    res = ures_getByKey(theBundle, "emptyint", res, &status);
+    CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+    CONFIRM_INT_EQ(ures_getType(res), RES_INT);
+    intResult=ures_getInt(res, &status);
+    if(U_SUCCESS(status)){
+        CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+        CONFIRM_INT_EQ(intResult, 0);
+//        ures_close(res);
+    }
+    else {
+        log_err("Couldn't get emptystring\n");
+    }
+
+    status = U_ZERO_ERROR;
+    strcpy(action, "getting and testing of zero length intvector");
+    res = ures_getByKey(theBundle, "emptyintv", res, &status);
+    CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+    CONFIRM_INT_EQ(ures_getType(res), RES_INT_VECTOR);
+
+    if(U_FAILURE(status)){
+        log_err("Couldn't get emptyintv key %s\n", u_errorName(status));
+    }
+    else {
+        zeroIntVect=ures_getIntVector(res, &len, &status);
+        if(U_SUCCESS(status) || resArray != NULL || len != 0) {
+            log_err("Shouldn't get emptyintv\n");
+        }
+//        ures_close(res);
+    }
+
+    status = U_ZERO_ERROR;
+    strcpy(action, "getting and testing of zero length emptybin");
+    res = ures_getByKey(theBundle, "emptybin", res, &status);
+    CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+    CONFIRM_INT_EQ(ures_getType(res), RES_BINARY);
+
+    if(U_FAILURE(status)){
+        log_err("Couldn't get emptybin key %s\n", u_errorName(status));
+    }
+    else {
+        binResult=ures_getBinary(res, &len, &status);
+        if(U_SUCCESS(status) || binResult != NULL || len != 0) {
+            log_err("Shouldn't get emptybin\n");
+        }
+//        ures_close(res);
+    }
+
+    status = U_ZERO_ERROR;
+    strcpy(action, "getting and testing of zero length emptyarray");
+    res = ures_getByKey(theBundle, "emptyarray", res, &status);
+    CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+    CONFIRM_INT_EQ(ures_getType(res), RES_ARRAY);
+
+    if(U_FAILURE(status)){
+        log_err("Couldn't get emptyarray key %s\n", u_errorName(status));
+    }
+    else {
+        resArray=ures_getByIndex(res, 0, resArray, &status);
+        if(U_SUCCESS(status) || resArray != NULL){
+            log_err("Shouldn't get emptyarray\n");
+        }
+//        ures_close(res);
+    }
+
+    status = U_ZERO_ERROR;
+    strcpy(action, "getting and testing of zero length emptytable");
+    res = ures_getByKey(theBundle, "emptytable", res, &status);
+    CONFIRM_ErrorCode(status, U_ZERO_ERROR);
+    CONFIRM_INT_EQ(ures_getType(res), RES_TABLE);
+
+    if(U_FAILURE(status)){
+        log_err("Couldn't get emptytable key %s\n", u_errorName(status));
+    }
+    else {
+        resArray=ures_getByIndex(res, 0, resArray, &status);
+        if(U_SUCCESS(status) || resArray != NULL){
+            log_err("Shouldn't get emptytable\n");
+        }
+//        ures_close(res);
+    }
+
+    ures_close(res);
+    ures_close(theBundle);
 }
 
 static void TestEmptyBundle(){

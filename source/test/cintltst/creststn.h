@@ -21,43 +21,44 @@
 
 
 
-    void addNEWResourceBundleTest(TestNode**);
+void addNEWResourceBundleTest(TestNode**);
 
- /**
- *Perform several extensive tests using the subtest routine testTag
- */
-    static void TestResourceBundles(void);
-    /** 
-     * Test construction of ResourceBundle accessing a custom test resource-file
-     **/
-    static void TestConstruction1(void);
+/**
+*Perform several extensive tests using the subtest routine testTag
+*/
+static void TestResourceBundles(void);
+/** 
+* Test construction of ResourceBundle accessing a custom test resource-file
+**/
+static void TestConstruction1(void);
 
-    static void TestConstruction2(void);
+static void TestConstruction2(void);
 
-    static void TestAliasConflict(void);
+static void TestAliasConflict(void);
 
-    static void TestFallback(void);
+static void TestFallback(void);
 
-    static void TestBinaryCollationData(void);
+static void TestBinaryCollationData(void);
 
-    static void TestNewTypes(void);
+static void TestNewTypes(void);
 
-    static void TestAPI(void);
+static void TestEmptyTypes(void);
 
-    static void TestErrorConditions(void);
-   
-    
-    
-    /**
-     * extensive subtests called by TestResourceBundles
-     **/
-    static UBool testTag(const char* frag, UBool in_Root, UBool in_te, UBool in_te_IN);
+static void TestAPI(void);
 
-    static void record_pass(void);
-    static void record_fail(void);
+static void TestErrorConditions(void);
 
-    
-    static int32_t pass;
-    static int32_t fail;
+static void TestGetVersion(void);
+
+static void TestEmptyBundle(void);
+
+/**
+* extensive subtests called by TestResourceBundles
+**/
+static UBool testTag(const char* frag, UBool in_Root, UBool in_te, UBool in_te_IN);
+
+static void record_pass(void);
+static void record_fail(void);
+
 
 #endif

@@ -866,27 +866,34 @@ parseBinary(char *tag, uint32_t startline, UErrorCode *status)
 
     count = uprv_strlen(string);
     /* AHHH!  Can't have count == 0 */
-    value = uprv_malloc(sizeof(uint8_t) * count);
-
-    if (value == NULL)
+    if (count > 0)
     {
-        uprv_free(string);
-        *status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
+        value = uprv_malloc(sizeof(uint8_t) * count);
+
+        if (value == NULL)
+        {
+            uprv_free(string);
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
+        }
+
+        for (i = 0; i < count; i += 2)
+        {
+            toConv[0] = string[i];
+            toConv[1] = string[i + 1];
+
+            value[i >> 1] = (uint8_t) uprv_strtoul(toConv, NULL, 16);
+        }
+
+        result = bin_open(bundle, tag, (i >> 1), value, status);
+
+        uprv_free(value);
     }
-
-    for (i = 0; i < count; i += 2)
-    {
-        toConv[0] = string[i];
-        toConv[1] = string[i + 1];
-
-        value[i >> 1] = (uint8_t) uprv_strtoul(toConv, NULL, 16);
+    else {
+        result = bin_open(bundle, tag, 0, NULL, status);
     }
-
-    result = bin_open(bundle, tag, (i >> 1), value, status);
 
     uprv_free(string);
-    uprv_free(value);
 
     return result;
 }
