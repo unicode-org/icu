@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2003/05/07 15:57:01 $
-* $Revision: 1.67 $
+* $Date: 2003/05/16 19:44:21 $
+* $Revision: 1.68 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -214,7 +214,7 @@
 
     <target name="jar" depends="core">
         <jar jarfile="${jar.file}"
-            compress="false"
+            compress="true"
             includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*"
             basedir="${build.dir}"
             manifest="${icu4j.manifest}"/>
@@ -328,12 +328,12 @@
             todir="${build.dir}/com/ibm/icu/impl/data/"/>
         <copy file="${src.dir}/com/ibm/icu/impl/data/uprops.icu"
             todir="${build.dir}/com/ibm/icu/impl/data/"/>
-        <!-- For basic support names data is not needed
+        <!-- with introduction of back level normalization
+             we need the below data files to support it -->    
         <copy file="${src.dir}/com/ibm/icu/impl/data/unames.icu"
             todir="${build.dir}/com/ibm/icu/impl/data/"/>
         <copy file="${src.dir}/com/ibm/icu/impl/data/pnames.icu"
             todir="${build.dir}/com/ibm/icu/impl/data/"/>
-        -->
     </target>
 
     <target name="copyICUPropsData" depends="init">
@@ -353,13 +353,13 @@
               <fileset dir="${src.dir}/com/ibm/icu/impl/data"
                           includes="*.icu"/>
          </copy>
-         <!-- For basic support names data is not neede -->
+         <!-- For basic support names data is not needed -->
          <delete file="${build.dir}/com/ibm/icu/impl/data/unames.icu"/>
     </target>
 
     <target name="moduleJar" depends="init">
         <jar jarfile="${jar.file}"
-            compress="false"
+            compress="true"
             includes="com/ibm/icu/util/**/*,com/ibm/icu/text/**/*,com/ibm/icu/math/**/*,com/ibm/icu/impl/**/*,com/ibm/icu/lang/**/*"
             basedir="${build.dir}"
             manifest="${icu4j.manifest}"/>
