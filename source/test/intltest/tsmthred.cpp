@@ -396,8 +396,19 @@ int32_t SimpleThread::start()
 #else
     if (attrIsInitialized == FALSE) {
         rc = pthread_attr_init(&attr);
+#if defined(OS390)
+        {
+            int detachstate = 0;  /* jdc30: detach state of zero causes
+                                  threads created with this attr to be in
+                                  an undetached state.  An undetached
+                                  thread will keep its resources after
+                                  termination.   */
+            pthread_attr_setdetachstate(&attr, &detachstate);
+        }
+#else
         // pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
         pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+#endif
         attrIsInitialized = TRUE;
     }
     rc = pthread_create(&(imp->fThread),&attr,&SimpleThreadProc,(void*)this);
