@@ -511,6 +511,20 @@ int32_t JapaneseCalendar::handleGetLimit(UCalendarDateFields field, ELimitType l
   case UCAL_ERA:
     return gJapanCalendarLimits[field][limitType];
 
+  case UCAL_EXTENDED_YEAR:  // extended year limits
+    switch(limitType) {
+    case UCAL_LIMIT_GREATEST_MINIMUM:
+    case UCAL_LIMIT_MINIMUM:
+      return kEraInfo[0].year;  /* minimum is 1st era year */
+
+    case UCAL_LIMIT_LEAST_MAXIMUM:
+    case UCAL_LIMIT_MAXIMUM:
+      /* use Gregorian calendar max */
+    default:
+      return GregorianCalendar::handleGetLimit(field,limitType);
+    }
+    break;
+
   default:
     return GregorianCalendar::handleGetLimit(field,limitType);
   }
