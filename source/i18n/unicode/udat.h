@@ -187,7 +187,7 @@ udat_open(UDateFormatStyle  timeStyle,
 /**
 * Close a UDateFormat.
 * Once closed, a UDateFormat may no longer be used.
-* @param fmt The formatter to close.
+* @param format The formatter to close.
 * @stable ICU 2.0
 */
 U_CAPI void U_EXPORT2 
