@@ -47,9 +47,9 @@ static const UDataInfo dataInfo={
     sizeof(UChar),
     0,
 
-    0x55, 0x43, 0x6f, 0x6c,     /* dataFormat="UCol"            */
-    1, 0, 0, 0,                 /* formatVersion                */
-    3, 0, 0, 0                  /* dataVersion = Unicode Version*/
+    {0x55, 0x43, 0x6f, 0x6c},     /* dataFormat="UCol"            */
+    {1, 0, 0, 0},                 /* formatVersion                */
+    {3, 0, 0, 0}                  /* dataVersion = Unicode Version*/
 };
 
 /* UDataInfo for inverse UCA table */
@@ -62,9 +62,9 @@ static const UDataInfo invDataInfo={
     sizeof(UChar),
     0,
 
-    0x49, 0x6E, 0x76, 0x43,     /* dataFormat="InvC"            */
-    1, 0, 0, 0,                 /* formatVersion                */
-    3, 0, 0, 0                  /* dataVersion = Unicode Version*/
+    {0x49, 0x6E, 0x76, 0x43},     /* dataFormat="InvC"            */
+    {1, 0, 0, 0},                 /* formatVersion                */
+    {3, 0, 0, 0}                  /* dataVersion = Unicode Version*/
 };
 
 
