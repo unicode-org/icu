@@ -100,7 +100,7 @@ LocaleUtility::getAvailableLocaleNames(const UnicodeString& bundleID)
             UErrorCode status = U_ZERO_ERROR;
             int32_t count = uloc_countAvailable();
             for (int32_t i = 0; i < count; ++i) {
-                UnicodeString temp(uloc_getAvailable(i));
+                UnicodeString temp(uloc_getAvailable(i), "");
                 result->put(temp, (void*)result, status);
                 if (U_FAILURE(status)) {
                     delete result;
@@ -577,7 +577,7 @@ ICULocaleService::get(const Locale& locale, int32_t kind, Locale* actualReturn, 
         return result;
     }
 
-    UnicodeString locName(locale.getName());
+    UnicodeString locName(locale.getName(), "");
     if (locName.isBogus()) {
         status = U_MEMORY_ALLOCATION_ERROR;
     } else {
