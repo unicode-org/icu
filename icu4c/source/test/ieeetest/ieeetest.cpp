@@ -147,6 +147,10 @@ IEEETest::testNaN(void)
 {
   int errCount = 0;
 
+  log("NaN tests may show that the expected NaN!=NaN etc. is not true on some").logln();
+  log("platforms; however, ICU does not rely on them because it defines").logln();
+  log("and uses uprv_isNaN(). Therefore, most failing NaN tests only report warnings.").logln();
+
   errCount += runTest("isNaN", &IEEETest::testIsNaN);
   errCount += runTest("NaN >", &IEEETest::NaNGT);
   errCount += runTest("NaN <", &IEEETest::NaNLT);
@@ -154,7 +158,9 @@ IEEETest::testNaN(void)
   errCount += runTest("NaN <=", &IEEETest::NaNLTE);
   errCount += runTest("NaN ==", &IEEETest::NaNE);
   errCount += runTest("NaN !=", &IEEETest::NaNNE);
-	
+
+  log("End of NaN tests.").logln();
+
   return errCount;
 }
 
@@ -364,23 +370,19 @@ IEEETest::NaNGT(void)
   int numErrors	= 0;
 
   if(nan > nan != FALSE) {
-    err("FAIL: NaN > NaN returned TRUE, should be FALSE").errln();
-    numErrors++;
+    log("WARNING: NaN > NaN returned TRUE, should be FALSE").logln();
   }
 
   if(nan > pinf != FALSE) {
-    err("FAIL: NaN > +Infinity returned TRUE, should be FALSE").errln();
-    numErrors++;
+    log("WARNING: NaN > +Infinity returned TRUE, should be FALSE").logln();
   }
 
   if(nan > ninf != FALSE) {
-    err("FAIL: NaN > -Infinity returned TRUE, should be FALSE").errln();
-    numErrors++;
+    log("WARNING: NaN > -Infinity returned TRUE, should be FALSE").logln();
   }
 
   if(nan > ten != FALSE) {
-    err("FAIL: NaN > 10.0 returned TRUE, should be FALSE").errln();
-    numErrors++;
+    log("WARNING: NaN > 10.0 returned TRUE, should be FALSE").logln();
   }
 
   return numErrors;
@@ -398,23 +400,19 @@ IEEETest::NaNLT(void)
   int numErrors	= 0;
 
   if(nan < nan != FALSE) {
-    err("FAIL: NaN < NaN returned TRUE, should be FALSE").errln();
-    numErrors++;
+    log("WARNING: NaN < NaN returned TRUE, should be FALSE").logln();
   }
 
   if(nan < pinf != FALSE) {
-    err("FAIL: NaN < +Infinity returned TRUE, should be FALSE").errln();
-    numErrors++;
+    log("WARNING: NaN < +Infinity returned TRUE, should be FALSE").logln();
   }
 
   if(nan < ninf != FALSE) {
-    err("FAIL: NaN < -Infinity returned TRUE, should be FALSE").errln();
-    numErrors++;
+    log("WARNING: NaN < -Infinity returned TRUE, should be FALSE").logln();
   }
 
   if(nan < ten != FALSE) {
-    err("FAIL: NaN < 10.0 returned TRUE, should be FALSE").errln();
-    numErrors++;
+    log("WARNING: NaN < 10.0 returned TRUE, should be FALSE").logln();
   }
 
   return numErrors;
@@ -432,23 +430,19 @@ IEEETest::NaNGTE(void)
   int numErrors	= 0;
 
   if(nan >= nan != FALSE) {
-    err("FAIL: NaN >= NaN returned TRUE, should be FALSE").errln();
-    numErrors++;
+    log("WARNING: NaN >= NaN returned TRUE, should be FALSE").logln();
   }
 
   if(nan >= pinf != FALSE) {
-    err("FAIL: NaN >= +Infinity returned TRUE, should be FALSE").errln();
-    numErrors++;
+    log("WARNING: NaN >= +Infinity returned TRUE, should be FALSE").logln();
   }
 
   if(nan >= ninf != FALSE) {
-    err("FAIL: NaN >= -Infinity returned TRUE, should be FALSE").errln();
-    numErrors++;
+    log("WARNING: NaN >= -Infinity returned TRUE, should be FALSE").logln();
   }
 
   if(nan >= ten != FALSE) {
-    err("FAIL: NaN >= 10.0 returned TRUE, should be FALSE").errln();
-    numErrors++;
+    log("WARNING: NaN >= 10.0 returned TRUE, should be FALSE").logln();
   }
 
   return numErrors;
@@ -466,23 +460,19 @@ IEEETest::NaNLTE(void)
   int numErrors	= 0;
 
   if(nan <= nan != FALSE) {
-    err("FAIL: NaN <= NaN returned TRUE, should be FALSE").errln();
-    numErrors++;
+    log("WARNING: NaN <= NaN returned TRUE, should be FALSE").logln();
   }
 
   if(nan <= pinf != FALSE) {
-    err("FAIL: NaN <= +Infinity returned TRUE, should be FALSE").errln();
-    numErrors++;
+    log("WARNING: NaN <= +Infinity returned TRUE, should be FALSE").logln();
   }
 
   if(nan <= ninf != FALSE) {
-    err("FAIL: NaN <= -Infinity returned TRUE, should be FALSE").errln();
-    numErrors++;
+    log("WARNING: NaN <= -Infinity returned TRUE, should be FALSE").logln();
   }
 
   if(nan <= ten != FALSE) {
-    err("FAIL: NaN <= 10.0 returned TRUE, should be FALSE").errln();
-    numErrors++;
+    log("WARNING: NaN <= 10.0 returned TRUE, should be FALSE").logln();
   }
 
   return numErrors;
@@ -500,23 +490,19 @@ IEEETest::NaNE(void)
   int numErrors	= 0;
 
   if(nan == nan != FALSE) {
-    err("FAIL: NaN == NaN returned TRUE, should be FALSE").errln();
-    numErrors++;
+    log("WARNING: NaN == NaN returned TRUE, should be FALSE").logln();
   }
 
   if(nan == pinf != FALSE) {
-    err("FAIL: NaN == +Infinity returned TRUE, should be FALSE").errln();
-    numErrors++;
+    log("WARNING: NaN == +Infinity returned TRUE, should be FALSE").logln();
   }
 
   if(nan == ninf != FALSE) {
-    err("FAIL: NaN == -Infinity returned TRUE, should be FALSE").errln();
-    numErrors++;
+    log("WARNING: NaN == -Infinity returned TRUE, should be FALSE").logln();
   }
 
   if(nan == ten != FALSE) {
-    err("FAIL: NaN == 10.0 returned TRUE, should be FALSE").errln();
-    numErrors++;
+    log("WARNING: NaN == 10.0 returned TRUE, should be FALSE").logln();
   }
 
   return numErrors;
@@ -534,23 +520,19 @@ IEEETest::NaNNE(void)
   int numErrors	= 0;
 
   if(nan != nan != TRUE) {
-    err("FAIL: NaN != NaN returned FALSE, should be TRUE").errln();
-    numErrors++;
+    log("WARNING: NaN != NaN returned FALSE, should be TRUE").logln();
   }
 
   if(nan != pinf != TRUE) {
-    err("FAIL: NaN != +Infinity returned FALSE, should be TRUE").errln();
-    numErrors++;
+    log("WARNING: NaN != +Infinity returned FALSE, should be TRUE").logln();
   }
 
   if(nan != ninf != TRUE) {
-    err("FAIL: NaN != -Infinity returned FALSE, should be TRUE").errln();
-    numErrors++;
+    log("WARNING: NaN != -Infinity returned FALSE, should be TRUE").logln();
   }
 
   if(nan != ten != TRUE) {
-    err("FAIL: NaN != 10.0 returned FALSE, should be TRUE").errln();
-    numErrors++;
+    log("WARNING: NaN != 10.0 returned FALSE, should be TRUE").logln();
   }
 
   return numErrors;
