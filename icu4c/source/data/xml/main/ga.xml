@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:18 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="0000">Windows</correspondsTo>
+	</identity  >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">Eanáir</month>
+				<month id="2">Feabhra</month>
+				<month id="3">Márta</month>
+				<month id="4">Aibreán</month>
+				<month id="5">Mí na Bealtaine</month>
+				<month id="6">Meith</month>
+				<month id="7">Iúil</month>
+				<month id="8">Lúnasa</month>
+				<month id="9">Meán Fómhair</month>
+				<month id="10">Deireadh Fómhair</month>
+				<month id="11">Mí na Samhna</month>
+				<month id="12">Mí na Nollag</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">Ean</month>
+				<month id="2">Feabh</month>
+				<month id="3">Márta</month>
+				<month id="4">Aib</month>
+				<month id="5">Beal</month>
+				<month id="6">Meith</month>
+				<month id="7">Iúil</month>
+				<month id="8">Lún</month>
+				<month id="9">MFómh</month>
+				<month id="10">DFómh</month>
+				<month id="11">Samh</month>
+				<month id="12">Noll</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">Dé Domhnaigh </day>
+				<day id="2">Dé Luain </day>
+				<day id="3">Dé Máirt </day>
+				<day id="4">Dé Céadaoin </day>
+				<day id="5">Déardaoin </day>
+				<day id="6">Dé hAoine </day>
+				<day id="7">Dé Sathairn </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">Domh </day>
+				<day id="2">Luan </day>
+				<day id="3">Máirt </day>
+				<day id="4">Céad </day>
+				<day id="5">Déar </day>
+				<day id="6">Aoine </day>
+				<day id="7">Sath </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">BC</era>
+				<era id="1">AD</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+		</calendar>
+	</calendars>
+
+</localeData>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:30 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<country id="BR" />
+		<correspondsTo vendor="0416">Windows</correspondsTo>
+	</identity  >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<eras>
+				<era id="0">BC</era>
+				<era id="1">AD</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+			<patterns> 
+				<time>
+					<full>HH'h'mm'min'ss's' z</full>
+					<long>H'h'm'min's's' z</long>
+					<medium>HH:mm:ss</medium>
+					<short>HH:mm</short>
+				</time>
+				<date>
+					<full>EEEE, d' de 'MMMM' de 'yyyy</full>
+					<long>d' de 'MMMM' de 'yyyy</long>
+					<medium>dd/MM/yyyy</medium>
+					<short>dd/MM/yy</short>
+				</date>
+ 				<dateTime>{1} {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+	<currencies>
+		<currency id="BRL" default="true">
+			<symbol>R$</symbol>
+			<name>BRL</name>
+			<decimal>,</decimal>
+		</currency>
+	</currencies>
+
+</localeData>

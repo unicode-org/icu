@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:41 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<country id="SG" />
+		<correspondsTo vendor="1004">Windows</correspondsTo>
+	</identity  >
+
+	<displayNames >
+		<languages >
+			<language id="ko" >韩文</language>
+			<language id="root" >根 源</language>
+			<language id="sh" >塞尔维亚克罗地亚文</language>
+		</languages >
+		<countries  >
+			<country id="AU">澳洲</country>
+			<country id="CZ">捷克</country>
+			<country id="GL">格陵兰</country>
+			<country id="ID">印尼</country>
+			<country id="KR">南韩</country>
+			<country id="MK">马其顿</country>
+			<country id="NZ">纽西兰</country>
+			<country id="PR">波多黎各</country>
+			<country id="SA">沙地阿拉伯</country>
+		</countries  >
+
+	</displayNames >
+	<timeZoneNames>
+		<zone id="SST" default="true">
+			<long>
+				<generic>Singapore Standard Time</generic>
+				<standard>Singapore Standard Time</standard>
+			</long>
+			<short>
+				<generic>SST</generic>
+				<standard>SST</standard>
+				<daylight>SST</daylight>
+			</short>
+		</zone>
+	</timeZoneNames>
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<patterns> 
+				<time>
+					<full>a hh:mm:ss</full>
+					<long>a hh:mm:ss</long>
+					<medium>a hh:mm</medium>
+					<short>a hh:mm</short>
+				</time>
+				<date>
+					<full>dd MMMM yyyy</full>
+					<long>dd MMM yyyy</long>
+					<medium>dd-MMM-yy</medium>
+					<short>dd/MM/yy</short>
+				</date>
+ 				<dateTime>{1} {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+	<numberFormat class="decimal" default="true"> 
+		<patterns> 
+			<decimal>#,##0.###;-#,##0.###</decimal>
+			<percent>#,##0%</percent>
+			<scientific>#E0</scientific>
+		</patterns>
+	</numberFormat> 
+	<currencies>
+		<currency id="SGD" default="true">
+			<symbol>S$</symbol>
+			<name>SGD</name>
+			<decimal>.</decimal>
+			<pattern>¤#,##0.00;-¤#,##0.00</pattern>
+		</currency>
+	</currencies>
+
+</localeData>

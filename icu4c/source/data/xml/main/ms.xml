@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:27 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="003E">Windows</correspondsTo>
+	</identity  >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">Januari</month>
+				<month id="2">Februari</month>
+				<month id="3">Mac</month>
+				<month id="4">April</month>
+				<month id="5">Mei</month>
+				<month id="6">Jun</month>
+				<month id="7">Julai</month>
+				<month id="8">Ogos</month>
+				<month id="9">September</month>
+				<month id="10">Oktober</month>
+				<month id="11">November</month>
+				<month id="12">Disember</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">Jan</month>
+				<month id="2">Feb</month>
+				<month id="3">Mac</month>
+				<month id="4">Apr</month>
+				<month id="5">Mei</month>
+				<month id="6">Jun</month>
+				<month id="7">Jul</month>
+				<month id="8">Ogos</month>
+				<month id="9">Sep</month>
+				<month id="10">Okt</month>
+				<month id="11">Nov</month>
+				<month id="12">Dis</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">Ahad </day>
+				<day id="2">Isnin </day>
+				<day id="3">Selasa </day>
+				<day id="4">Rahu </day>
+				<day id="5">Khamis </day>
+				<day id="6">Jumaat </day>
+				<day id="7">Sabtu </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">Aha </day>
+				<day id="2">Isn </day>
+				<day id="3">Sei </day>
+				<day id="4">Rab </day>
+				<day id="5">Kha </day>
+				<day id="6">Jum </day>
+				<day id="7">Sab </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">BC</era>
+				<era id="1">AD</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+		</calendar>
+	</calendars>
+
+</localeData>

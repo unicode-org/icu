@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:29 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="0046">Windows</correspondsTo>
+	</identity  >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">ਜਨਵਰੀ</month>
+				<month id="2">ਫ਼ਰਵਰੀ</month>
+				<month id="3">ਮਾਰਚ</month>
+				<month id="4">ਅਪ੍ਰੈਲ</month>
+				<month id="5">ਮਈ</month>
+				<month id="6">ਜੂਨ</month>
+				<month id="7">ਜੁਲਾਈ</month>
+				<month id="8">ਅਗਸਤ</month>
+				<month id="9">ਸਤੰਬਰ</month>
+				<month id="10">ਅਕਤੂਬਰ</month>
+				<month id="11">ਨਵੰਬਰ</month>
+				<month id="12">ਦਸੰਬਰ</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">ਜਨਵਰੀ</month>
+				<month id="2">ਫ਼ਰਵਰੀ</month>
+				<month id="3">ਮਾਰਚ</month>
+				<month id="4">ਅਪ੍ਰੈਲ</month>
+				<month id="5">ਮਈ</month>
+				<month id="6">ਜੂਨ</month>
+				<month id="7">ਜੁਲਾਈ</month>
+				<month id="8">ਅਗਸਤ</month>
+				<month id="9">ਸਤੰਬਰ</month>
+				<month id="10">ਅਕਤੂਬਰ</month>
+				<month id="11">ਨਵੰਬਰ</month>
+				<month id="12">ਦਸੰਬਰ</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">ਐਤਵਾਰ </day>
+				<day id="2">ਸੋਮਵਾਰ </day>
+				<day id="3">ਮੰਗਲਵਾਰ </day>
+				<day id="4">ਬੁਧਵਾਰ </day>
+				<day id="5">ਵੀਰਵਾਰ </day>
+				<day id="6">ਸ਼ੁੱਕਰਵਾਰ </day>
+				<day id="7">ਸ਼ਨੀਚਰਵਾਰ </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">ਐਤ. </day>
+				<day id="2">ਸੋਮ. </day>
+				<day id="3">ਮੰਗਲ. </day>
+				<day id="4">ਬੁਧ. </day>
+				<day id="5">ਵੀਰ. </day>
+				<day id="6">ਸ਼ੁਕਰ. </day>
+				<day id="7">ਸ਼ਨੀ. </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">BC</era>
+				<era id="1">AD</era>
+			</eras>
+			<am>ਸਵੇਰੇ</am><pm>ਸ਼ਾਮ</pm>
+		</calendar>
+	</calendars>
+	<numberFormat class="decimal" default="true"> 
+		<patterns> 
+			<decimal>##,##,##0.###;-##,##,##0.###</decimal>
+			<percent>##,##,##0%</percent>
+			<scientific>#E0</scientific>
+		</patterns>
+	</numberFormat> 
+	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
+		<collationElements>
+		<normalization>OFF</normalization>
+		</collationElements>
+	</collation>
+
+</localeData>

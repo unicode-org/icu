@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:17 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<country id="CA" />
+		<correspondsTo vendor="0C0C">Windows</correspondsTo>
+	</identity  >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<am>AM</am><pm>PM</pm>
+			<patterns> 
+				<time>
+					<full>HH' h 'mm' min 'ss' s 'z</full>
+					<long>HH:mm:ss z</long>
+					<medium>HH:mm:ss</medium>
+					<short>HH:mm</short>
+				</time>
+				<date>
+					<full>EEEE d MMMM yyyy</full>
+					<long>d MMMM yyyy</long>
+					<medium>yy-MM-dd</medium>
+					<short>yy-MM-dd</short>
+				</date>
+ 				<dateTime>{1} {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+	<numberFormat class="decimal" default="true"> 
+		<patterns> 
+			<decimal>#,##0.###;-#,##0.###</decimal>
+			<percent>#,##0%</percent>
+			<scientific>#E0</scientific>
+		</patterns>
+	</numberFormat> 
+	<currencies>
+		<currency id="CAD" default="true">
+			<symbol>$</symbol>
+			<name>CAD</name>
+			<decimal>,</decimal>
+		</currency>
+	</currencies>
+
+</localeData>

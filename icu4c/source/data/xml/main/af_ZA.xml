@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:03 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<country id="ZA" />
+		<correspondsTo vendor="0436">Windows</correspondsTo>
+	</identity  >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<eras>
+				<era id="0">BC</era>
+				<era id="1">AD</era>
+			</eras>
+			<patterns> 
+				<time>
+					<full>h:mm:ss a</full>
+					<long>h:mm:ss a</long>
+					<medium>h:mm:ss a</medium>
+					<short>h:mm a</short>
+				</time>
+				<date>
+					<full>EEEE dd MMMM yyyy</full>
+					<long>dd MMMM yyyy</long>
+					<medium>dd MMM yyyy</medium>
+					<short>yyyy/MM/dd</short>
+				</date>
+ 				<dateTime>{1} {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+	<numberFormat class="decimal" default="true"> 
+		<patterns> 
+			<decimal>#,##0.###;-#,##0.###</decimal>
+			<percent>#,##0%</percent>
+			<scientific>#E0</scientific>
+		</patterns>
+	</numberFormat> 
+	<currencies>
+		<currency id="ZAR" default="true">
+			<symbol>R</symbol>
+			<name>ZAR</name>
+			<decimal>.</decimal>
+			<pattern>¤#,##0.00;-¤#,##0.00</pattern>
+		</currency>
+	</currencies>
+
+</localeData>

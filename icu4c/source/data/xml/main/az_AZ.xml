@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:06 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<country id="AZ" />
+		<correspondsTo vendor="082C">Windows</correspondsTo>
+	</identity  >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<eras>
+				<era id="0">BC</era>
+				<era id="1">AD</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+			<patterns> 
+				<time>
+					<full>hh:mm:ss a</full>
+					<long>hh:mm:ss a</long>
+					<medium>H:mm:ss</medium>
+					<short>H:mm:ss</short>
+				</time>
+				<date>
+					<full>d MMMM yyyy</full>
+					<long>d MMMM yyyy</long>
+					<medium>dd.MM.yyyy</medium>
+					<short>dd.MM.yyyy</short>
+				</date>
+ 				<dateTime>{1} {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+	<currencies>
+		<currency id="AZM" default="true">
+			<symbol>ман.</symbol>
+			<name>AZM</name>
+			<decimal>,</decimal>
+		</currency>
+	</currencies>
+
+</localeData>

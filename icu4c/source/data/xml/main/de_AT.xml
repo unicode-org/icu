@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:08 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<country id="AT" />
+		<correspondsTo vendor="0C07">Windows</correspondsTo>
+	</identity  >
+	<timeZoneNames>
+		<zone id="Africa/Casablanca" default="true">
+			<long>
+				<generic>GMT</generic>
+				<standard>GMT</standard>
+			</long>
+			<short>
+				<generic>Africa/Casablanca</generic>
+				<standard>GMT</standard>
+				<daylight>GMT</daylight>
+			</short>
+		</zone>
+	</timeZoneNames>
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">Jänner</month>
+				<month id="2">Februar</month>
+				<month id="3">März</month>
+				<month id="4">April</month>
+				<month id="5">Mai</month>
+				<month id="6">Juni</month>
+				<month id="7">Juli</month>
+				<month id="8">August</month>
+				<month id="9">September</month>
+				<month id="10">Oktober</month>
+				<month id="11">November</month>
+				<month id="12">Dezember</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">Jän</month>
+				<month id="2">Feb</month>
+				<month id="3">Mär</month>
+				<month id="4">Apr</month>
+				<month id="5">Mai</month>
+				<month id="6">Jun</month>
+				<month id="7">Jul</month>
+				<month id="8">Aug</month>
+				<month id="9">Sep</month>
+				<month id="10">Okt</month>
+				<month id="11">Nov</month>
+				<month id="12">Dez</month>
+			</monthAbbr>
+			<patterns> 
+				<time>
+					<full>HH:mm' Uhr 'z</full>
+					<long>HH:mm:ss z</long>
+					<medium>HH:mm:ss</medium>
+					<short>HH:mm</short>
+				</time>
+				<date>
+					<full>EEEE, dd. MMMM yyyy</full>
+					<long>dd. MMMM yyyy</long>
+					<medium>dd.MM.yyyy</medium>
+					<short>dd.MM.yy</short>
+				</date>
+ 				<dateTime>{1} {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+	<currencies>
+		<currency id="EUR" default="true">
+			<symbol>€</symbol>
+			<name>EUR</name>
+			<decimal>,</decimal>
+		</currency>
+	</currencies>
+
+</localeData>

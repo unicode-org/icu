@@ -1,0 +1,621 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:27 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="003A">Windows</correspondsTo>
+	</identity  >
+
+	<displayNames >
+		<languages >
+			<language id="ab" >Abkażjan</language>
+			<language id="ace" >Aċiniż</language>
+			<language id="ach" >Akoli</language>
+			<language id="af" >Afrikans</language>
+			<language id="afa" >Afro-Asjatiku (Oħra)</language>
+			<language id="afh" >Afriħili</language>
+			<language id="akk" >Akkadjen</language>
+			<language id="alg" >Lingwi Algonqwinjani</language>
+			<language id="am" >Amħariku</language>
+			<language id="ang" >Ingliż, Antik (ca.450-1100)</language>
+			<language id="apa" >Lingwi Apaċi</language>
+			<language id="ar" >Għarbi</language>
+			<language id="arc" >Aramajk</language>
+			<language id="arn" >Arawkanjan</language>
+			<language id="arp" >Arapaħo</language>
+			<language id="art" >Artifiċjali (Oħra)</language>
+			<language id="ath" >Lingwi Atabaskani</language>
+			<language id="aus" >Lingwi Awstraljani</language>
+			<language id="ava" >Avarik</language>
+			<language id="awa" >Awadħi</language>
+			<language id="ay" >Ajmara</language>
+			<language id="az" >Ażerbajġani</language>
+			<language id="ba" >Baxkir</language>
+			<language id="bai" >Lingwi Bamileke</language>
+			<language id="bal" >Baluċi</language>
+			<language id="ban" >Baliniż</language>
+			<language id="bat" >Baltiku (Oħra)</language>
+			<language id="be" >Belarussu</language>
+			<language id="bg" >Bulgaru</language>
+			<language id="bh" >Biħari</language>
+			<language id="bho" >Bojpuri</language>
+			<language id="bo" >Tibetjan</language>
+			<language id="bs" >Bosnijan</language>
+			<language id="bua" >Burjat</language>
+			<language id="bug" >Buginiż</language>
+			<language id="ca" >Katalan</language>
+			<language id="cad" >Kaddo</language>
+			<language id="cai" >Amerika Ċentrali (Oħra)</language>
+			<language id="car" >Karib</language>
+			<language id="cau" >Kawkasu (Oħra)</language>
+			<language id="ce" >Ċeċen</language>
+			<language id="ceb" >Sibwano</language>
+			<language id="cel" >Keltiku (Oħra)</language>
+			<language id="ch" >Ċamorro</language>
+			<language id="chb" >Ċibċa</language>
+			<language id="chg" >Ċagataj</language>
+			<language id="chk" >Ċukese</language>
+			<language id="chn" >Ġargon taċ-Ċinuk</language>
+			<language id="cho" >Ċostaw</language>
+			<language id="chp" >Ċipewjan</language>
+			<language id="chr" >Ċerokij</language>
+			<language id="chy" >Xajenn</language>
+			<language id="cmc" >Lingwi Ċamiki</language>
+			<language id="co" >Korsiku</language>
+			<language id="cop" >Koptiku</language>
+			<language id="cpe" >Kreoli u Piġini, Bbażat fuq l-Ingliż (Oħra)</language>
+			<language id="cpf" >Kreoli u Piġini, Bbażat fuq il-Franċiż (Oħra)</language>
+			<language id="cre" >Krij</language>
+			<language id="crp" >Kreoli u Piġini (Oħra)</language>
+			<language id="cs" >Ċek</language>
+			<language id="cu" >Slaviku tal-Knisja</language>
+			<language id="cus" >Kuxtiku (Oħra)</language>
+			<language id="cv" >Ċuvax</language>
+			<language id="cy" >Welx</language>
+			<language id="da" >Daniż</language>
+			<language id="day" >Dajak</language>
+			<language id="de" >Ġermaniż</language>
+			<language id="del" >Delawerjan</language>
+			<language id="den" >Slav</language>
+			<language id="div" >Diveħi</language>
+			<language id="dra" >Dravidjan (Oħra)</language>
+			<language id="dua" >Dwala</language>
+			<language id="dum" >Olandiż, Medjevali (ca. 1050-1350)</language>
+			<language id="dyu" >Djula</language>
+			<language id="dz" >Vutani</language>
+			<language id="dzo" >Dżongka</language>
+			<language id="egy" >Eġizzjan (Antik)</language>
+			<language id="el" >Grieg</language>
+			<language id="elx" >Elamit</language>
+			<language id="en" >Ingliż</language>
+			<language id="enm" >Ingliż, Medjevali (1100-1500)</language>
+			<language id="es" >Spanjol</language>
+			<language id="et" >Estonjan</language>
+			<language id="eu" >Bask</language>
+			<language id="fa" >Persjan</language>
+			<language id="fi" >Finlandiż</language>
+			<language id="fiu" >Finno - Ugrijan</language>
+			<language id="fj" >Fiġi</language>
+			<language id="fo" >Fawriż</language>
+			<language id="fr" >Franċiż</language>
+			<language id="frm" >Franċiż, Medjevali (ca. 1400-1600)</language>
+			<language id="fro" >Franċiż, Antik (842-ca. 1400)</language>
+			<language id="ful" >Fulaħ</language>
+			<language id="fur" >Frijuljan</language>
+			<language id="fy" >Friżjan</language>
+			<language id="ga" >Irlandiż</language>
+			<language id="gay" >Gajo</language>
+			<language id="gba" >Gbaja</language>
+			<language id="gd" >Galliku Skoċċiż</language>
+			<language id="gem" >Ġermaniku (Oħra)</language>
+			<language id="gil" >Gilbertjan</language>
+			<language id="gl" >Gallegjan</language>
+			<language id="gla" >Galliku (Skoċċiż)</language>
+			<language id="gmh" >Ġermaniku, Medjevali Pulit (ca. 1050-1500)</language>
+			<language id="gn" >Gwarani</language>
+			<language id="goh" >Ġermaniku, Antik Pulit (ca. 750-1050)</language>
+			<language id="got" >Gotiku</language>
+			<language id="grb" >Ġerbo</language>
+			<language id="grc" >Grieg, Antik (to 1453)</language>
+			<language id="gu" >Guġarati</language>
+			<language id="gv" >Manks</language>
+			<language id="gwi" >Gwiċin</language>
+			<language id="ha" >Ħawsa</language>
+			<language id="hai" >Ħajda</language>
+			<language id="haw" >Ħawajjan</language>
+			<language id="he" >Ebrajk</language>
+			<language id="hi" >Ħindi</language>
+			<language id="him" >Ħimaċali</language>
+			<language id="hit" >Ħittit</language>
+			<language id="hmn" >Ħmong</language>
+			<language id="ho" >Ħiri Motu</language>
+			<language id="hr" >Kroat</language>
+			<language id="hu" >Ungeriż</language>
+			<language id="hup" >Ħupa</language>
+			<language id="hy" >Armenjan</language>
+			<language id="hz" >Ħerero</language>
+			<language id="id" >Indoneżjan</language>
+			<language id="ijo" >Iġo</language>
+			<language id="ik" >Inupjak</language>
+			<language id="inc" >Indjan (Oħra)</language>
+			<language id="ine" >Indo-Ewropew</language>
+			<language id="ira" >Iranjan</language>
+			<language id="iro" >Lingwi Irogwjani</language>
+			<language id="is" >Iżlandiż</language>
+			<language id="it" >Taljan</language>
+			<language id="ja" >Ġappuniż</language>
+			<language id="jpr" >Lhudi-Persjan</language>
+			<language id="jrb" >Lhudi-Għarbi</language>
+			<language id="jw" >Ġavaniż</language>
+			<language id="ka" >Ġorġjan</language>
+			<language id="kab" >Kabuljan</language>
+			<language id="kac" >Kaċin</language>
+			<language id="kha" >Kasi</language>
+			<language id="khi" >Kojsan</language>
+			<language id="kho" >Kotaniż</language>
+			<language id="ki" >Kikuju</language>
+			<language id="kk" >Każak</language>
+			<language id="kl" >Kalallisut</language>
+			<language id="km" >Kmer</language>
+			<language id="ko" >Korejan</language>
+			<language id="kos" >Kosrejan</language>
+			<language id="kru" >Kurusk</language>
+			<language id="ks" >Kaxmiri</language>
+			<language id="ku" >Kurdiż</language>
+			<language id="kum" >Kumiku</language>
+			<language id="kut" >Kutenaj</language>
+			<language id="kw" >Korniku</language>
+			<language id="ky" >Kirgiż</language>
+			<language id="lah" >Landa</language>
+			<language id="lb" >Letżburgiż</language>
+			<language id="lez" >Leżgjan</language>
+			<language id="lin" >Lingaljan</language>
+			<language id="lit" >Litwanjan</language>
+			<language id="ln" >Lingaljan</language>
+			<language id="loz" >Lożi</language>
+			<language id="lt" >Litwanjan</language>
+			<language id="lua" >Luba-Luluwa</language>
+			<language id="lui" >Luwisinuż</language>
+			<language id="luo" >Luwa</language>
+			<language id="lus" >Luxaj</language>
+			<language id="lv" >Latvjan (Lettix)</language>
+			<language id="mad" >Maduriż</language>
+			<language id="mag" >Magaħi</language>
+			<language id="mai" >Majtili</language>
+			<language id="man" >Mandingwan</language>
+			<language id="map" >Awstronesjan</language>
+			<language id="mas" >Masaj</language>
+			<language id="mg" >Malagażi</language>
+			<language id="mga" >Irlandiż, Medjevali (900-1200)</language>
+			<language id="mh" >Marxall</language>
+			<language id="mic" >Mikmek</language>
+			<language id="min" >Minangkabaw</language>
+			<language id="mis" >Lingwi Oħra</language>
+			<language id="mk" >Maċedonjan</language>
+			<language id="mkh" >Mon-Kmer (Oħra)</language>
+			<language id="ml" >Malajalam</language>
+			<language id="mn" >Mongoljan</language>
+			<language id="mnc" >Manċurjan</language>
+			<language id="mno" >Lingwi Manobo</language>
+			<language id="mo" >Moldavjan</language>
+			<language id="moh" >Moħak</language>
+			<language id="mr" >Marati</language>
+			<language id="ms" >Malajan</language>
+			<language id="mt" >Malti</language>
+			<language id="mul" >Lingwi Diversi</language>
+			<language id="mun" >Lingwi tal-Munda</language>
+			<language id="mus" >Kriek</language>
+			<language id="my" >Burmiż</language>
+			<language id="myn" >Majan</language>
+			<language id="na" >Nawuru</language>
+			<language id="nah" >Naħwatil</language>
+			<language id="nai" >Indjan tal-Amerika ta' Fuq (Oħra)</language>
+			<language id="nb" >Bokmahal Norveġiż</language>
+			<language id="nd" >Ndebele, ta' Fuq</language>
+			<language id="nds" >Ġermaniż Komuni; Sassonu Komuni</language>
+			<language id="ne" >Nepaliż</language>
+			<language id="nia" >Nijas</language>
+			<language id="nic" >Niġerjan - Kordofanjan</language>
+			<language id="niu" >Nijuwejan</language>
+			<language id="nl" >Olandiż</language>
+			<language id="nn" >Ninorsk Norveġiż</language>
+			<language id="no" >Norveġiż</language>
+			<language id="non" >Skandinav, Antik</language>
+			<language id="nr" >Ndebele, t'Isfel</language>
+			<language id="nso" >Soto, ta' Fuq</language>
+			<language id="nub" >Lingwi Nubjani</language>
+			<language id="nv" >Navaħo</language>
+			<language id="ny" >Ċiċewa; Njanġa</language>
+			<language id="nym" >Njamweżi</language>
+			<language id="nyo" >Njoro</language>
+			<language id="nzi" >Nżima</language>
+			<language id="oc" >Provenzal (wara 1500)</language>
+			<language id="oji" >Oġibwa</language>
+			<language id="or" >Orija</language>
+			<language id="os" >Ossettiku</language>
+			<language id="osa" >Osaġjan</language>
+			<language id="ota" >Tork (Imperu Ottoman)</language>
+			<language id="oto" >Lingwi Otomjani</language>
+			<language id="pa" >Punġabi</language>
+			<language id="paa" >Papwan (Oħra)</language>
+			<language id="pag" >Pangasinjan</language>
+			<language id="pal" >Paħlavi</language>
+			<language id="pam" >Pampamga</language>
+			<language id="pap" >Papjamento</language>
+			<language id="pau" >Palawjan</language>
+			<language id="peo" >Persjan Antik (ca. 600-400 Q.K.)</language>
+			<language id="phi" >Filippin (Oħra)</language>
+			<language id="phn" >Feniċju</language>
+			<language id="pl" >Pollakk</language>
+			<language id="pon" >Ponpejan</language>
+			<language id="pra" >Lingwi Prakriti</language>
+			<language id="pro" >Provenzal, Antik (sa l-1500)</language>
+			<language id="ps" >Paxtun</language>
+			<language id="pt" >Portugiż</language>
+			<language id="qu" >Keċwa</language>
+			<language id="raj" >Raġastani</language>
+			<language id="rap" >Rapanwi</language>
+			<language id="rar" >Rarotongani</language>
+			<language id="rm" >Reto-Romanz</language>
+			<language id="ro" >Rumen</language>
+			<language id="roa" >Romanz (Oħra)</language>
+			<language id="rom" >Żingaru</language>
+			<language id="root" >Għerq</language>
+			<language id="ru" >Russu</language>
+			<language id="rw" >Kinjarwanda</language>
+			<language id="sah" >Jakut</language>
+			<language id="sai" >Indjan tal-Amerika t'Isfel (Oħra)</language>
+			<language id="sal" >Salixan</language>
+			<language id="sc" >Sardinjan</language>
+			<language id="sco" >Skoċċiż</language>
+			<language id="sd" >Sindi</language>
+			<language id="se" >Sami ta' Fuq</language>
+			<language id="sem" >Semitiku</language>
+			<language id="sga" >Irlandiż, Antik (sa l-900)</language>
+			<language id="sgn" >Lingwa tas-Sinjali</language>
+			<language id="sh" >Serbo-Kroat</language>
+			<language id="shn" >Xan</language>
+			<language id="si" >Sinħaliż</language>
+			<language id="sio" >Lingwi Suwjani</language>
+			<language id="sit" >Sino-Tibetjani (Oħra)</language>
+			<language id="sk" >Slovakk</language>
+			<language id="sl" >Slav</language>
+			<language id="sm" >Samojan</language>
+			<language id="sn" >Xona</language>
+			<language id="son" >Songaj</language>
+			<language id="sq" >Albaniż</language>
+			<language id="sr" >Serb</language>
+			<language id="ssa" >Nilo-Saħaram</language>
+			<language id="st" >Soto, t'Isfel</language>
+			<language id="su" >Sundaniż</language>
+			<language id="sux" >Sumerjan</language>
+			<language id="sv" >Svediż</language>
+			<language id="sw" >Swaħili</language>
+			<language id="syr" >Sirjan</language>
+			<language id="tai" >Tai (Oħra)</language>
+			<language id="tg" >Taġik</language>
+			<language id="th" >Tajlandiż</language>
+			<language id="ti" >Tigrinja</language>
+			<language id="tk" >Turkmeni</language>
+			<language id="tmh" >Tamaxek</language>
+			<language id="tn" >Zwana</language>
+			<language id="to" >Tongan (Gżejjer ta' Tonga)</language>
+			<language id="tog" >Tonga (Njasa)</language>
+			<language id="tr" >Tork</language>
+			<language id="tsi" >Zimxjan</language>
+			<language id="tur" >Tork</language>
+			<language id="tut" >Altajk (Oħra)</language>
+			<language id="ty" >Taħitjan</language>
+			<language id="tyv" >Tuvinjan</language>
+			<language id="ug" >Wigur</language>
+			<language id="uga" >Ugaritiku</language>
+			<language id="uk" >Ukranjan</language>
+			<language id="und" >Indeterminat</language>
+			<language id="uz" >Użbek</language>
+			<language id="vi" >Vjetnamiż</language>
+			<language id="vot" >Votik</language>
+			<language id="wak" >Lingwi Wakaxani</language>
+			<language id="war" >Waraj</language>
+			<language id="was" >Waxo</language>
+			<language id="wen" >Lingwi Sorbjani</language>
+			<language id="xh" >Ħoża</language>
+			<language id="yao" >Jao</language>
+			<language id="yap" >Japese</language>
+			<language id="yi" >Jiddix</language>
+			<language id="yo" >Joruba</language>
+			<language id="ypk" >Lingwi Jupiċi</language>
+			<language id="za" >Żwang</language>
+			<language id="zap" >Żapotek</language>
+			<language id="zen" >Żenaga</language>
+			<language id="zh" >Ċiniż</language>
+			<language id="znd" >Żande</language>
+			<language id="zu" >Żulu</language>
+			<language id="zun" >Żuni</language>
+		</languages >
+		<countries  >
+			<country id="AE">Emirati Għarab Maqgħuda</country>
+			<country id="AF">Afganistan</country>
+			<country id="AI">Angwilla</country>
+			<country id="AL">Albanija</country>
+			<country id="AM">Armenja</country>
+			<country id="AN">Antilles Olandiżi</country>
+			<country id="AR">Arġentina</country>
+			<country id="AS">Samoa Amerikana</country>
+			<country id="AT">Awstrija</country>
+			<country id="AU">Awstralja</country>
+			<country id="AZ">Ażerbajġan</country>
+			<country id="BA">Bożnija Ħerżegovina</country>
+			<country id="BD">Bangladexx</country>
+			<country id="BE">Belġju</country>
+			<country id="BG">Bulgarija</country>
+			<country id="BH">Baħrajn</country>
+			<country id="BN">Brunej</country>
+			<country id="BO">Bolivja</country>
+			<country id="BR">Brażil</country>
+			<country id="BS">Baħamas</country>
+			<country id="BT">Butan</country>
+			<country id="BY">Bjelorussja</country>
+			<country id="BZ">Beliże</country>
+			<country id="CA">Kanada</country>
+			<country id="CF">Repubblika Afrikana Ċentrali</country>
+			<country id="CG">Kongo</country>
+			<country id="CH">Svizzera</country>
+			<country id="CI">Kosta ta' l-Avorju</country>
+			<country id="CL">Ċili</country>
+			<country id="CM">Kamerun</country>
+			<country id="CN">Ċina</country>
+			<country id="CO">Kolumbja</country>
+			<country id="CR">Kosta Rika</country>
+			<country id="CU">Kuba</country>
+			<country id="CV">Kape Verde</country>
+			<country id="CY">Ċipru</country>
+			<country id="CZ">Repubblika Ċeka</country>
+			<country id="DE">Ġermanja</country>
+			<country id="DJ">Ġibuti</country>
+			<country id="DK">Danimarka</country>
+			<country id="DM">Dominika</country>
+			<country id="DO">Republikka Domenikana</country>
+			<country id="DZ">Alġerija</country>
+			<country id="EC">Ekwador</country>
+			<country id="EE">Estonja</country>
+			<country id="EG">Eġittu</country>
+			<country id="EH">Sahara tal-Punent</country>
+			<country id="ER">Eritreja</country>
+			<country id="ES">Spanja</country>
+			<country id="ET">Etijopja</country>
+			<country id="FI">Finlandja</country>
+			<country id="FJ">Fiġi</country>
+			<country id="FM">Mikronesja</country>
+			<country id="FO">Gżejjer Faroe</country>
+			<country id="FR">Franza</country>
+			<country id="GB">Ingilterra</country>
+			<country id="GE">Ġorġja</country>
+			<country id="GF">Gujana Franċiża</country>
+			<country id="GH">Gana</country>
+			<country id="GL">Grinlandja</country>
+			<country id="GM">Gambja</country>
+			<country id="GN">Gineja</country>
+			<country id="GP">Gwadelupe</country>
+			<country id="GQ">Ginea Ekwatorjali</country>
+			<country id="GR">Greċja</country>
+			<country id="GT">Gwatemala</country>
+			<country id="GU">Gwam</country>
+			<country id="GW">Ginea-Bissaw</country>
+			<country id="GY">Gujana</country>
+			<country id="HK">Ħong Kong S.A.R., Ċina</country>
+			<country id="HN">Ħonduras</country>
+			<country id="HR">Kroazja</country>
+			<country id="HT">Ħaiti</country>
+			<country id="HU">Ungerija</country>
+			<country id="ID">Indoneżja</country>
+			<country id="IE">Irlanda</country>
+			<country id="IL">Iżrael</country>
+			<country id="IN">Indja</country>
+			<country id="IS">Islanda</country>
+			<country id="IT">Italja</country>
+			<country id="JM">Ġamajka</country>
+			<country id="JO">Ġordan</country>
+			<country id="JP">Ġappun</country>
+			<country id="KE">Kenja</country>
+			<country id="KG">Kirgistan</country>
+			<country id="KH">Kambodja</country>
+			<country id="KM">Komoros</country>
+			<country id="KP">Koreja ta' Fuq</country>
+			<country id="KR">Koreja t'Isfel</country>
+			<country id="KW">Kuwajt</country>
+			<country id="KZ">Każakstan</country>
+			<country id="LB">Libanu</country>
+			<country id="LR">Liberja</country>
+			<country id="LS">Lesoto</country>
+			<country id="LT">Litwanja</country>
+			<country id="LU">Lussemburgu</country>
+			<country id="LV">Latvja</country>
+			<country id="LY">Libja</country>
+			<country id="MA">Marokk</country>
+			<country id="MC">Monako</country>
+			<country id="MD">Maldova</country>
+			<country id="MG">Madagaskar</country>
+			<country id="MH">Gżejjer ta' Marshall</country>
+			<country id="MK">Maċedonja</country>
+			<country id="MM">Mjanmar</country>
+			<country id="MN">Mongolja</country>
+			<country id="MP">Gżejjer Marjana ta' Fuq</country>
+			<country id="MQ">Martinik</country>
+			<country id="MR">Mawritanja</country>
+			<country id="MU">Mawrizju</country>
+			<country id="MX">Messiku</country>
+			<country id="MY">Malasja</country>
+			<country id="MZ">Możambik</country>
+			<country id="NA">Namibja</country>
+			<country id="NE">Niġer</country>
+			<country id="NG">Niġerja</country>
+			<country id="NI">Nikaragwa</country>
+			<country id="NL">Olanda</country>
+			<country id="NO">Norveġja</country>
+			<country id="PF">Polinesja Franċiża</country>
+			<country id="PG">Papwa-Ginea Ġdida</country>
+			<country id="PH">Filippini</country>
+			<country id="PL">Polonja</country>
+			<country id="PT">Portugall</country>
+			<country id="PY">Paragwaj</country>
+			<country id="RO">Rumanija</country>
+			<country id="RU">Russja</country>
+			<country id="SA">Għarabja Sawdita</country>
+			<country id="SE">Żvezja</country>
+			<country id="SG">Singapor</country>
+			<country id="SI">Slovenja</country>
+			<country id="SK">Slovakkja</country>
+			<country id="SO">Somalja</country>
+			<country id="SP">Serbja</country>
+			<country id="SR">Surinam</country>
+			<country id="SY">Sirja</country>
+			<country id="SZ">Sważiland</country>
+			<country id="TD">Ċad</country>
+			<country id="TF">Territorji Franċiżi ta' Nofsinhar</country>
+			<country id="TH">Tajlandja</country>
+			<country id="TJ">Taġikistan</country>
+			<country id="TK">Tokelaw</country>
+			<country id="TL">Timor tal-Lvant</country>
+			<country id="TN">Tuneż</country>
+			<country id="TR">Turkija</country>
+			<country id="TT">Trinidad u Tobago</country>
+			<country id="TW">Tajwan</country>
+			<country id="TZ">Tanżanija</country>
+			<country id="UA">Ukraina</country>
+			<country id="US">Stati Uniti</country>
+			<country id="UY">Urugwaj</country>
+			<country id="UZ">Użbekistan</country>
+			<country id="VA">Vatikan</country>
+			<country id="VE">Venezwela</country>
+			<country id="VN">Vjetnam</country>
+			<country id="VU">Vanwatu</country>
+			<country id="YE">Jemen</country>
+			<country id="YT">Majotte</country>
+			<country id="YU">Jugoslavja</country>
+			<country id="ZA">Afrika t'Isfel</country>
+			<country id="ZM">Żambja</country>
+			<country id="ZR">Żaire</country>
+			<country id="ZW">Żimbabwe</country>
+		</countries  >
+
+	</displayNames >
+	<timeZoneNames>
+		<zone id="CET" default="true">
+			<long>
+				<generic>Ħin ta' L-Ewropa Ċentrali</generic>
+				<standard>Ħin tas-Sajf fl-Ewropa Ċentrali</standard>
+			</long>
+			<short>
+				<generic>CET</generic>
+				<standard>CET</standard>
+				<daylight>CEST</daylight>
+			</short>
+		</zone>
+	</timeZoneNames>
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">Jannar</month>
+				<month id="2">Frar</month>
+				<month id="3">Marzu</month>
+				<month id="4">April</month>
+				<month id="5">Mejju</month>
+				<month id="6">Ġunju</month>
+				<month id="7">Lulju</month>
+				<month id="8">Awissu</month>
+				<month id="9">Settembru</month>
+				<month id="10">Ottubru</month>
+				<month id="11">Novembru</month>
+				<month id="12">Diċembru</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">Jan</month>
+				<month id="2">Fra</month>
+				<month id="3">Mar</month>
+				<month id="4">Apr</month>
+				<month id="5">Mej</month>
+				<month id="6">Ġun</month>
+				<month id="7">Lul</month>
+				<month id="8">Awi</month>
+				<month id="9">Set</month>
+				<month id="10">Ott</month>
+				<month id="11">Nov</month>
+				<month id="12">Diċ</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">Il-Ħadd </day>
+				<day id="2">It-Tnejn </day>
+				<day id="3">It-Tlieta </day>
+				<day id="4">L-Erbgħa </day>
+				<day id="5">Il-Ħamis </day>
+				<day id="6">Il-Ġimgħa </day>
+				<day id="7">Is-Sibt </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">Ħad </day>
+				<day id="2">Tne </day>
+				<day id="3">Tli </day>
+				<day id="4">Erb </day>
+				<day id="5">Ħam </day>
+				<day id="6">Ġim </day>
+				<day id="7">Sib </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">QK</era>
+				<era id="1">WK</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+			<patterns> 
+				<time>
+					<full>h:mm:ss a z</full>
+					<long>h:mm:ss a z</long>
+					<medium>h:mm:ss a</medium>
+					<short>h:mm a</short>
+				</time>
+				<date>
+					<full>EEEE, d 'ta''' MMMM, yyyy</full>
+					<long>d 'ta''' MMMM yyyy</long>
+					<medium>dd-MMM-yyyy</medium>
+					<short>dd/MM/yy</short>
+				</date>
+ 				<dateTime>{1} {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
+		<collationElements>
+		<after>B</after>
+		<gt1>ċ</gt1>
+		<gt3>Ċ</gt3>
+		<gt1>c</gt1>
+		<gt3>C</gt3>
+		<after>F</after>
+		<gt1>ġ</gt1>
+		<gt3>Ġ</gt3>
+		<gt1>g</gt1>
+		<gt3>G</gt3>
+		<gt1>għ</gt1>
+		<gt3>gĦ</gt3>
+		<gt3>Għ</gt3>
+		<gt3>GĦ</gt3>
+		<after>H</after>
+		<gt1>ħ</gt1>
+		<gt3>Ħ</gt3>
+		<after>Y</after>
+		<gt1>ż</gt1>
+		<gt3>Ż</gt3>
+		<gt1>z</gt1>
+		<gt3>Z</gt3>
+		</collationElements>
+	</collation>
+
+</localeData>

@@ -1,0 +1,31 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 2001-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+mn_MN{
+    Version{ "x0.1" }
+    LocaleID:int { 0x0450 }
+//    ShortCountry{
+//        "MNG"
+//    }
+    CurrencyElements{
+        "\u20AE",
+        "MNT",
+        ","
+    }
+
+    DateTimePatterns{
+        "h:mm:ss aa",
+        "H:mm:ss",
+        "H:mm:ss",
+        "H:mm:ss",
+        "yyyy '\u043E\u043D\u044B' MMMM d",
+        "yyyy '\u043E\u043D\u044B' MMMM d",
+        "yyyy.MM.dd",
+        "yy.MM.dd",
+        "{1} {0}",
+    }
+}

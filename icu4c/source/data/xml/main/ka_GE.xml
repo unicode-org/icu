@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:23 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<country id="GE" />
+		<correspondsTo vendor="0437">Windows</correspondsTo>
+	</identity  >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<eras>
+				<era id="0">BC</era>
+				<era id="1">AD</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+			<patterns> 
+				<time>
+					<full>hh:mm:ss aa</full>
+					<long>H:mm:ss</long>
+					<medium>H:mm:ss</medium>
+					<short>HH:mm:ss</short>
+				</time>
+				<date>
+					<full>yyyy 'წლის' dd MM</full>
+					<long>yyyy 'წლის' dd MM, EEEE</long>
+					<medium>dd.MM.yyyy</medium>
+					<short>dd.MM.yy</short>
+				</date>
+ 				<dateTime>{1} {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+	<currencies>
+		<currency id="GEL" default="true">
+			<symbol>Lari</symbol>
+			<name>GEL</name>
+			<decimal>,</decimal>
+		</currency>
+	</currencies>
+
+</localeData>

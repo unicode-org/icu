@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:26 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="002F">Windows</correspondsTo>
+	</identity  >
+
+	<displayNames >
+		<languages >
+			<language id="mk" >македонски</language>
+		</languages >
+		<countries  >
+			<country id="MK">Македонија</country>
+		</countries  >
+
+	</displayNames >
+	<timeZoneNames>
+		<zone id="Africa/Casablanca" default="true">
+			<long>
+				<generic>GMT</generic>
+				<standard>GMT</standard>
+			</long>
+			<short>
+				<generic>Africa/Casablanca</generic>
+				<standard>GMT</standard>
+				<daylight>GMT</daylight>
+			</short>
+		</zone>
+	</timeZoneNames>
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">јануари</month>
+				<month id="2">февруари</month>
+				<month id="3">март</month>
+				<month id="4">април</month>
+				<month id="5">мај</month>
+				<month id="6">јуни</month>
+				<month id="7">јули</month>
+				<month id="8">август</month>
+				<month id="9">септември</month>
+				<month id="10">октомври</month>
+				<month id="11">ноември</month>
+				<month id="12">декември</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">јан.</month>
+				<month id="2">фев.</month>
+				<month id="3">мар.</month>
+				<month id="4">апр.</month>
+				<month id="5">мај.</month>
+				<month id="6">јун.</month>
+				<month id="7">јул.</month>
+				<month id="8">авг.</month>
+				<month id="9">септ.</month>
+				<month id="10">окт.</month>
+				<month id="11">ноем.</month>
+				<month id="12">декем.</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">недела </day>
+				<day id="2">понеделник </day>
+				<day id="3">вторник </day>
+				<day id="4">среда </day>
+				<day id="5">четврток </day>
+				<day id="6">петок </day>
+				<day id="7">сабота </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">нед. </day>
+				<day id="2">пон. </day>
+				<day id="3">вт. </day>
+				<day id="4">сре. </day>
+				<day id="5">чет. </day>
+				<day id="6">пет. </day>
+				<day id="7">саб. </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">пр.н.е.</era>
+				<era id="1">ае.</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+			<patterns> 
+				<chars>GuMtkHmsSEDFwWahKzUe</chars>
+				<time>
+					<full>HH:mm:ss z</full>
+					<long>HH:mm:ss z</long>
+					<medium>HH:mm:ss</medium>
+					<short>HH:mm</short>
+				</time>
+				<date>
+					<full>EEEE, d, MMMM yyyy</full>
+					<long>d, MMMM yyyy</long>
+					<medium>d.M.yyyy</medium>
+					<short>d.M.yy</short>
+				</date>
+ 				<dateTime>{1} {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+
+</localeData>

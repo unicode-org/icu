@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:33 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="0041">Windows</correspondsTo>
+	</identity  >
+
+	<displayNames >
+		<languages >
+			<language id="sw" >Kiswahili</language>
+		</languages >
+
+	</displayNames >
+	<timeZoneNames>
+		<zone id="Africa/Nairobi" default="true">
+			<long>
+				<generic>Saa za Africa Mashariki</generic>
+				<standard>Saa za Africa Mashariki</standard>
+				<daylight>Nairobi</daylight>
+			</long>
+			<short>
+				<generic>Africa/Nairobi</generic>
+				<standard>EAT</standard>
+				<daylight>EAT</daylight>
+			</short>
+			<city>Nairobi</city>
+		</zone>
+	</timeZoneNames>
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">Januari</month>
+				<month id="2">Februari</month>
+				<month id="3">Machi</month>
+				<month id="4">Aprili</month>
+				<month id="5">Mei</month>
+				<month id="6">Juni</month>
+				<month id="7">Julai</month>
+				<month id="8">Agosti</month>
+				<month id="9">Septemba</month>
+				<month id="10">Oktoba</month>
+				<month id="11">Novemba</month>
+				<month id="12">Desemba</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">Jan</month>
+				<month id="2">Feb</month>
+				<month id="3">Mar</month>
+				<month id="4">Apr</month>
+				<month id="5">Mei</month>
+				<month id="6">Jun</month>
+				<month id="7">Jul</month>
+				<month id="8">Ago</month>
+				<month id="9">Sep</month>
+				<month id="10">Okt</month>
+				<month id="11">Nov</month>
+				<month id="12">Des</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">Jumapili </day>
+				<day id="2">Jumatatu </day>
+				<day id="3">Jumanne </day>
+				<day id="4">Jumatano </day>
+				<day id="5">Alhamisi </day>
+				<day id="6">Ijumaa </day>
+				<day id="7">Jumamosi </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">Jpi </day>
+				<day id="2">Jtt </day>
+				<day id="3">Jnn </day>
+				<day id="4">Jtn </day>
+				<day id="5">Alh </day>
+				<day id="6">Iju </day>
+				<day id="7">Jmo </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">KK</era>
+				<era id="1">BK</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+		</calendar>
+	</calendars>
+
+</localeData>

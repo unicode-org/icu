@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:09 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="0008">Windows</correspondsTo>
+	</identity  >
+
+	<displayNames >
+		<languages >
+			<language id="ar" >Αραβικά</language>
+			<language id="bg" >Βουλγαρικά</language>
+			<language id="ca" >Καταλανικά</language>
+			<language id="cs" >Τσέχικα</language>
+			<language id="da" >Δανέζικα</language>
+			<language id="de" >Γερμανικά</language>
+			<language id="el" >ελληνικά</language>
+			<language id="en" >Αγγλικά</language>
+			<language id="es" >Ισπανικά</language>
+			<language id="fi" >Φινλανδικά</language>
+			<language id="fr" >Γαλλικά</language>
+			<language id="he" >Εβραϊκά</language>
+			<language id="hr" >Κροατικά</language>
+			<language id="hu" >Ουγγρικά</language>
+			<language id="it" >Ιταλικά</language>
+			<language id="mk" >Σλαβομακεδονικά</language>
+			<language id="nl" >Ολλανδικά</language>
+			<language id="no" >Νορβηγικά</language>
+			<language id="pl" >Πολωνικά</language>
+			<language id="pt" >Πορτογαλικά</language>
+			<language id="ro" >Ρουμανικά</language>
+			<language id="ru" >Ρωσικά</language>
+			<language id="sk" >Σλοβακικά</language>
+			<language id="sl" >Σλοβενικά</language>
+			<language id="sq" >Αλβανικά</language>
+			<language id="sr" >Σερβικά</language>
+			<language id="sv" >Σουηδικά</language>
+		</languages >
+		<countries  >
+			<country id="AL">Αλβανία</country>
+			<country id="AS">Ασία (Αγγλικά)</country>
+			<country id="AT">Αυστρία</country>
+			<country id="AU">Αυστραλία (Αγγλικά)</country>
+			<country id="BA">Βοσνία</country>
+			<country id="BE">Βέλγιο</country>
+			<country id="BG">Βουλγαρία</country>
+			<country id="BR">Βραζιλία</country>
+			<country id="CA">Καναδάς</country>
+			<country id="CH">Ελβετία</country>
+			<country id="CN">Κίνα (Λ.Δ.Κ.)</country>
+			<country id="CZ">Τσεχία</country>
+			<country id="DE">Γερμανία</country>
+			<country id="DK">Δανία</country>
+			<country id="EE">Εσθονία</country>
+			<country id="ES">Ισπανία</country>
+			<country id="FI">Φινλανδία</country>
+			<country id="FR">Γαλλία</country>
+			<country id="GB">Ηνωμένο Βασίλειο</country>
+			<country id="GR">Ελλάδα</country>
+			<country id="HR">Κροατία</country>
+			<country id="HU">Ουγγαρία</country>
+			<country id="IE">Ιρλανδία</country>
+			<country id="IL">Ισραήλ</country>
+			<country id="IS">Ισλανδία</country>
+			<country id="IT">Ιταλία</country>
+			<country id="JP">Ιαπωνία</country>
+			<country id="KR">Κορέα</country>
+			<country id="LA">Λατινική Αμερική</country>
+			<country id="LT">Λιθουανία</country>
+			<country id="LV">Λετονία</country>
+			<country id="MK">ΠΓΔ Μακεδονίας</country>
+			<country id="NL">Ολλανδία</country>
+			<country id="NO">Νορβηγία</country>
+			<country id="NZ">Νέα Ζηλανδία</country>
+			<country id="PL">Πολωνία</country>
+			<country id="PT">Πορτογαλία</country>
+			<country id="RO">Ρουμανία</country>
+			<country id="RU">Ρωσία</country>
+			<country id="SE">Σουηδία</country>
+			<country id="SI">Σλοβενία</country>
+			<country id="SK">Σλοβακία</country>
+			<country id="SP">Σερβία</country>
+			<country id="TH">Ταϊλάνδη</country>
+			<country id="TR">Τουρκία</country>
+			<country id="TW">Ταϊβάν (Δ.Κ.)</country>
+			<country id="US">Ηνωμένες Πολιτείες Αμερικής</country>
+			<country id="ZA">Νότιος Αφρική</country>
+		</countries  >
+
+	</displayNames >
+	<timeZoneNames>
+		<zone id="Africa/Casablanca" default="true">
+			<long>
+				<generic>GMT</generic>
+				<standard>GMT</standard>
+			</long>
+			<short>
+				<generic>Africa/Casablanca</generic>
+				<standard>GMT</standard>
+				<daylight>GMT</daylight>
+			</short>
+		</zone>
+	</timeZoneNames>
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">Ιανουάριος</month>
+				<month id="2">Φεβρουάριος</month>
+				<month id="3">Μάρτιος</month>
+				<month id="4">Απρίλιος</month>
+				<month id="5">Μάϊος</month>
+				<month id="6">Ιούνιος</month>
+				<month id="7">Ιούλιος</month>
+				<month id="8">Αύγουστος</month>
+				<month id="9">Σεπτέμβριος</month>
+				<month id="10">Οκτώβριος</month>
+				<month id="11">Νοέμβριος</month>
+				<month id="12">Δεκέμβριος</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">Ιαν</month>
+				<month id="2">Φεβ</month>
+				<month id="3">Μαρ</month>
+				<month id="4">Απρ</month>
+				<month id="5">Μαϊ</month>
+				<month id="6">Ιουν</month>
+				<month id="7">Ιουλ</month>
+				<month id="8">Αυγ</month>
+				<month id="9">Σεπ</month>
+				<month id="10">Οκτ</month>
+				<month id="11">Νοε</month>
+				<month id="12">Δεκ</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">Κυριακή </day>
+				<day id="2">Δευτέρα </day>
+				<day id="3">Τρίτη </day>
+				<day id="4">Τετάρτη </day>
+				<day id="5">Πέμπτη </day>
+				<day id="6">Παρασκευή </day>
+				<day id="7">Σάββατο </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">Κυρ </day>
+				<day id="2">Δευ </day>
+				<day id="3">Τρι </day>
+				<day id="4">Τετ </day>
+				<day id="5">Πεμ </day>
+				<day id="6">Παρ </day>
+				<day id="7">Σαβ </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">BC</era>
+				<era id="1">AD</era>
+			</eras>
+			<am>πμ</am><pm>μμ</pm>
+			<patterns> 
+				<chars>GanjkHmsSEDFwWxhKzAe</chars>
+				<time>
+					<full>h:mm:ss a z</full>
+					<long>h:mm:ss a z</long>
+					<medium>h:mm:ss a</medium>
+					<short>h:mm a</short>
+				</time>
+				<date>
+					<full>EEEE, d MMMM yyyy</full>
+					<long>d MMMM yyyy</long>
+					<medium>d MMM yyyy</medium>
+					<short>d/M/yyyy</short>
+				</date>
+ 				<dateTime>{1} {0} </dateTime>
+			</patterns>
+		</calendar>
+	</calendars>
+	<collation version="2.0" accentOrder="FORWARD" override="FALSE">
+		<collationElements>
+		<normalization>OFF</normalization>
+		</collationElements>
+	</collation>
+
+</localeData>

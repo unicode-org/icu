@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:03 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="0000">Windows</correspondsTo>
+	</identity  >
+
+	<displayNames >
+		<languages >
+			<language id="am" >አማርኛ</language>
+		</languages >
+		<countries  >
+			<country id="ET">ኢትዮጵያ</country>
+		</countries  >
+
+	</displayNames >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">ጃንዩወሪ</month>
+				<month id="2">ፌብሩወሪ</month>
+				<month id="3">ማርች</month>
+				<month id="4">ኤፕረል</month>
+				<month id="5">ሜይ</month>
+				<month id="6">ጁን</month>
+				<month id="7">ጁላይ</month>
+				<month id="8">ኦገስት</month>
+				<month id="9">ሴፕቴምበር</month>
+				<month id="10">ኦክተውበር</month>
+				<month id="11">ኖቬምበር</month>
+				<month id="12">ዲሴምበር</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">ጃንዩ</month>
+				<month id="2">ፌብሩ</month>
+				<month id="3">ማርች</month>
+				<month id="4">ኤፕረ</month>
+				<month id="5">ሜይ</month>
+				<month id="6">ጁን</month>
+				<month id="7">ጁላይ</month>
+				<month id="8">ኦገስ</month>
+				<month id="9">ሴፕቴ</month>
+				<month id="10">ኦክተ</month>
+				<month id="11">ኖቬም</month>
+				<month id="12">ዲሴም</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">እሑድ </day>
+				<day id="2">ሰኞ </day>
+				<day id="3">ማክሰኞ </day>
+				<day id="4">ረቡዕ </day>
+				<day id="5">ሐሙስ </day>
+				<day id="6">ዓርብ </day>
+				<day id="7">ቅዳሜ </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">እሑድ </day>
+				<day id="2">ሰኞ </day>
+				<day id="3">ማክሰኞ </day>
+				<day id="4">ረቡዕ </day>
+				<day id="5">ሐሙስ </day>
+				<day id="6">ዓርብ </day>
+				<day id="7">ቅዳሜ </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">ዓ/ዓ</era>
+				<era id="1">ዓ/ም</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+		</calendar>
+	</calendars>
+
+</localeData>

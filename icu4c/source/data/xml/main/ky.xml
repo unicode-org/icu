@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE localeData SYSTEM "./LocaleElements.dtd" >
+
+<!-- 
+	Copyright (C) 2000-2003, International Business Machines 
+	Corporation and others.  All Rights Reserved.
+ -->
+
+<localeData>
+	<versioning  >
+ 		<version number="1.0" date="Tue Jun 11 15:06:26 2002">Various notes and changes in version 1.0</version>
+	</versioning  >
+ 	<identity  >
+		<correspondsTo vendor="0040">Windows</correspondsTo>
+	</identity  >
+	<calendars>
+		<calendar class="gregorian" default="true">
+			<monthNames>
+				<month id="1">Январь</month>
+				<month id="2">Февраль</month>
+				<month id="3">Март</month>
+				<month id="4">Апрель</month>
+				<month id="5">Май</month>
+				<month id="6">Июнь</month>
+				<month id="7">Июль</month>
+				<month id="8">Август</month>
+				<month id="9">Сентябрь</month>
+				<month id="10">Октябрь</month>
+				<month id="11">Ноябрь</month>
+				<month id="12">Декабрь</month>
+			</monthNames>
+			<monthAbbr>
+				<month id="1">Янв</month>
+				<month id="2">Фев</month>
+				<month id="3">Мар</month>
+				<month id="4">Апр</month>
+				<month id="5">Май</month>
+				<month id="6">Июн</month>
+				<month id="7">Июл</month>
+				<month id="8">Авг</month>
+				<month id="9">Сен</month>
+				<month id="10">Окт</month>
+				<month id="11">Ноя</month>
+				<month id="12">Дек</month>
+			</monthAbbr>
+			<dayNames>
+				<day id="1">Жекшемби </day>
+				<day id="2">Дүйшөмбү </day>
+				<day id="3">Шейшемби </day>
+				<day id="4">Шаршемби </day>
+				<day id="5">Бейшемби </day>
+				<day id="6">Жума </day>
+				<day id="7">Ишемби </day>
+			</dayNames>
+			<dayAbbr>
+				<day id="1">Жш </day>
+				<day id="2">Дш </day>
+				<day id="3">Шш </day>
+				<day id="4">Шр </day>
+				<day id="5">Бш </day>
+				<day id="6">Жм </day>
+				<day id="7">Иш </day>
+			</dayAbbr>
+			<eras>
+				<era id="0">BC</era>
+				<era id="1">AD</era>
+			</eras>
+			<am>AM</am><pm>PM</pm>
+		</calendar>
+	</calendars>
+	<collation version="1.0" accentOrder="FORWARD" override="FALSE">
+		<collationElements>
+		<normalization>OFF</normalization>
+		</collationElements>
+	</collation>
+
+</localeData>
