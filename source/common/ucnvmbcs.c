@@ -314,15 +314,18 @@ _MBCSLoad(UConverterSharedData *sharedData,
 }
 
 U_CFUNC void
-_MBCSReset(UConverter *cnv) {
-    /* toUnicode */
-    cnv->toUnicodeStatus=0;     /* offset */
-    cnv->mode=0;                /* state */
-    cnv->toULength=0;           /* byteIndex */
-
-    /* fromUnicode */
-    cnv->fromUSurrogateLead=0;
-    cnv->fromUnicodeStatus=1;   /* prevLength */
+_MBCSReset(UConverter *cnv, UConverterResetChoice choice) {
+    if(choice<=UCNV_RESET_TO_UNICODE) {
+        /* toUnicode */
+        cnv->toUnicodeStatus=0;     /* offset */
+        cnv->mode=0;                /* state */
+        cnv->toULength=0;           /* byteIndex */
+    }
+    if(choice!=UCNV_RESET_TO_UNICODE) {
+        /* fromUnicode */
+        cnv->fromUSurrogateLead=0;
+        cnv->fromUnicodeStatus=1;   /* prevLength */
+    }
 }
 
 U_CFUNC void
@@ -331,7 +334,7 @@ _MBCSOpen(UConverter *cnv,
           const char *locale,
           uint32_t options,
           UErrorCode *pErrorCode) {
-    _MBCSReset(cnv);
+    _MBCSReset(cnv, UCNV_RESET_BOTH);
     if(uprv_strstr(name, "gb18030")!=NULL || uprv_strstr(name, "GB18030")!=NULL) {
         /* set a flag for GB 18030 mode, which changes the callback behavior */
         cnv->extraInfo=(void *)gb18030Ranges;
