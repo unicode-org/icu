@@ -550,18 +550,24 @@ void UnicodeSetTest::TestAPI() {
 
     exp.applyPattern("[a-z]", status);
     if (U_FAILURE(status)) { errln("FAIL"); return; }
-    if (set.containsNone(exp)) { errln("FAIL: containsNone(UnicodeSet)"); return; }
+    if (set.containsNone(exp)) { errln("FAIL: containsNone(UnicodeSet)"); }
+    if (!set.containsSome(exp)) { errln("FAIL: containsSome(UnicodeSet)"); }
     exp.applyPattern("[aln]", status);
     if (U_FAILURE(status)) { errln("FAIL"); return; }
-    if (!set.containsNone(exp)) { errln("FAIL: containsNone(UnicodeSet)"); return; }
+    if (!set.containsNone(exp)) { errln("FAIL: containsNone(UnicodeSet)"); }
+    if (set.containsSome(exp)) { errln("FAIL: containsSome(UnicodeSet)"); }
 
     if (set.containsNone((UChar32)0x61, (UChar32)0x7A)) {
         errln("FAIL: containsNone(UChar32, UChar32)");
-        return;
+    }
+    if (!set.containsSome((UChar32)0x61, (UChar32)0x7A)) {
+        errln("FAIL: containsSome(UChar32, UChar32)");
     }
     if (!set.containsNone((UChar32)0x41, (UChar32)0x5A)) {
         errln("FAIL: containsNone(UChar32, UChar32)");
-        return;
+    }
+    if (set.containsSome((UChar32)0x41, (UChar32)0x5A)) {
+        errln("FAIL: containsSome(UChar32, UChar32)");
     }
 
     set.removeAll("liu");
