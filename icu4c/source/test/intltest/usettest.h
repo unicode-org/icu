@@ -54,6 +54,8 @@ private:
 
     void TestClone(void);
 
+    void TestIndexOf(void);
+
     void TestExhaustive(void);
 
 private:
