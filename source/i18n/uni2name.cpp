@@ -77,7 +77,6 @@ void UnicodeNameTransliterator::handleTransliterate(Replaceable& text, UTransPos
     int32_t cursor = offsets.start;
     int32_t limit = offsets.limit;
 
-    const UnicodeFilter* filt = getFilter();
     UnicodeString str(openDelimiter);
     UErrorCode status;
     UTextOffset len;
@@ -85,8 +84,7 @@ void UnicodeNameTransliterator::handleTransliterate(Replaceable& text, UTransPos
     while (cursor < limit) {
         status = U_ZERO_ERROR;
         UChar c = text.charAt(cursor);
-        if ((filt == 0 || filt->contains(c)) &&
-            (len=u_charName(c, U_UNICODE_CHAR_NAME, buf, sizeof(buf), &status)) > 0 &&
+        if ((len=u_charName(c, U_UNICODE_CHAR_NAME, buf, sizeof(buf), &status)) > 0 &&
             !U_FAILURE(status)) {
             
             str.truncate(1);

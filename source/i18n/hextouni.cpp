@@ -276,7 +276,7 @@ void HexToUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPo
                         break;
                     }
                 }
-                UChar c = filteredCharAt(text, curs++);
+                UChar c = text.charAt(curs++);
                 if (c != affixes.charAt(ipat + i)) {
                     match = FALSE;
                     break;
@@ -294,7 +294,7 @@ void HexToUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPo
                         }
                         break;
                     }
-                    int8_t digit = Unicode::digit(filteredCharAt(text, curs), 16);
+                    int8_t digit = Unicode::digit(text.charAt(curs), 16);
                     if (digit < 0) {
                         break;
                     }
@@ -318,7 +318,7 @@ void HexToUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPo
                             match = FALSE;
                             break;
                         }
-                        UChar c = filteredCharAt(text, curs++);
+                        UChar c = text.charAt(curs++);
                         if (c != affixes.charAt(ipat + prefixLen + i)) {
                             match = FALSE;
                             break;

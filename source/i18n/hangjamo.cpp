@@ -69,7 +69,7 @@ void HangulJamoTransliterator::handleTransliterate(Replaceable& text, UTransPosi
 
     UnicodeString replacement;
     while (cursor < limit) {
-        UChar c = filteredCharAt(text, cursor);
+        UChar c = text.charAt(cursor);
         if (decomposeHangul(c, replacement)) {
             text.handleReplaceBetween(cursor, cursor+1, replacement);
             int32_t len = replacement.length();

@@ -56,14 +56,6 @@ void TitlecaseTransliterator::handleTransliterate(
                                   Replaceable& text, UTransPosition& offsets,
                                   UBool isIncremental) const {
 
-    // The way a filter is supposed to work isn't precisely
-    // specified by Transliterator yet.  We interpret the filter
-    // as masking characters completely -- they do not get
-    // modified, and they are also _invisible for the purposes of
-    // context_.  We are a little inconsistent about this -- we
-    // don't filter characters in the range contextStart..start-1
-    // (the left context).
-
     // NOTE: This method contains some special case code to handle
     // apostrophes between alpha characters.  We want to have
     // "can't" => "Can't" (not "Can'T").  This may be incorrect
@@ -94,7 +86,7 @@ void TitlecaseTransliterator::handleTransliterate(
         // non-letter, and this character is a letter, then apply
         // the titlecase transformation.  Otherwise apply the
         // lowercase transformation.
-        UChar32 c = filteredCharAt(text, start);
+        UChar32 c = text.charAt(start);
         if (u_isalpha(c)) {
             UChar32 newChar;
             if (wasLastCharALetter) {

@@ -62,11 +62,11 @@ void JamoHangulTransliterator::handleTransliterate(Replaceable& text, UTransPosi
 
     int32_t count;
 
-    UChar last = filteredCharAt(text, cursor++);
+    UChar last = text.charAt(cursor++);
     UnicodeString str("a", 1);
     while (cursor <= limit) {
         UChar next = 0xFFFE; // go over end of string, just in case
-        if (cursor < limit) next = filteredCharAt(text, cursor);
+        if (cursor < limit) next = text.charAt(cursor);
         UChar replacement = composeHangul(last, next, count);
         if (replacement != last) {
             str[0] = replacement;

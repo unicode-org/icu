@@ -624,6 +624,18 @@ protected:
      * of <code>index.cursor</code>.  <code>index.start</code>
      * should <em>not</em> be changed.
      *
+     * <p>Subclasses may safely assume that all characters in
+     * [index.start, index.limit) are unfiltered.  In other words, the
+     * filter has already been applied by the time this method is
+     * called.  See filteredTransliterate().
+     *
+     * <p>This method is <b>not</b> for public consumption.  Calling
+     * this method directly will transliterate [index.start,
+     * index.limit) without applying the filter.  End user code that
+     * wants to call this method should be calling transliterate().
+     * Subclass code that wants to call this method should probably be
+     * calling filteredTransliterate().
+     * 
      * @param text the buffer holding transliterated and
      * untransliterated text
      * @param index an array of three integers.  See {@link
@@ -634,10 +646,21 @@ protected:
                                      UTransPosition& index,
                                      UBool incremental) const = 0;
 
-    // C++ requires this friend declaration so CompoundTransliterator
-    // can access handleTransliterate.  Alternatively, we could
-    // make handleTransliterate public.
-    friend class CompoundTransliterator;
+    /**
+     * Core transliteration method called by all other methods in
+     * Tranliterator.  This method splits up the input text into
+     * segments of unfiltered text and passes those to
+     * handleTransliterate().  For most subclasses this is convenient
+     * and efficient.  Subclasses that can more efficiently handle the
+     * filter logic on their own (rare) can override
+     * filteredTransliterate().  Such subclasses must still implement
+     * handleTransliterate() but they can do so with an empty body,
+     * since filteredTransliterate() is the only method that calls
+     * handleTransliterate().
+     */
+    virtual void filteredTransliterate(Replaceable& text,
+                                       UTransPosition& index,
+                                       UBool incremental) const;
 
 public:
 
@@ -714,7 +737,7 @@ public:
      * if this transliterator uses no filter.
      * @draft
      */
-    virtual const UnicodeFilter* getFilter(void) const;
+    const UnicodeFilter* getFilter(void) const;
 
     /**
      * Returns the filter used by this transliterator, or <tt>NULL</tt> if this
