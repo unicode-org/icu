@@ -4328,7 +4328,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                    return ch%NormalizerImpl.JAMO_T_COUNT==0 ? HangulSyllableType.LV_SYLLABLE : HangulSyllableType.LVT_SYLLABLE; 
                } 
                return 0; /* NA */ 
-            
+
+            case UProperty.NFD_QUICK_CHECK:
+            case UProperty.NFKD_QUICK_CHECK:
+            case UProperty.NFC_QUICK_CHECK:
+            case UProperty.NFKC_QUICK_CHECK:
+                return NormalizerImpl.quickCheck(ch, (type-UProperty.NFD_QUICK_CHECK)+2); // 2=UNORM_NFD
             default:
                
                                 return 0; /* undefined */
@@ -4436,6 +4441,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 return (max!= 0)? max :  UScript.CODE_LIMIT - 1;
             case UProperty.HANGUL_SYLLABLE_TYPE:
                  return HangulSyllableType.COUNT-1;
+            case UProperty.NFD_QUICK_CHECK:
+            case UProperty.NFKD_QUICK_CHECK:
+                return 1; // YES -- these are never "maybe", only "no" or "yes"
+            case UProperty.NFC_QUICK_CHECK:
+            case UProperty.NFKC_QUICK_CHECK:
+                return 2; // MAYBE
             }
 
         }

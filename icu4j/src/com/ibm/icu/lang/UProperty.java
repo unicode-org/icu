@@ -378,12 +378,36 @@ public interface UProperty
      * @draft ICU 2.6 
      * */
     public static final int HANGUL_SYLLABLE_TYPE = 0x100B;
+    /**
+     * Enumerated property NFD_Quick_Check.
+     * Returns numeric values compatible with Normalizer.QuickCheckResult.
+     * @draft ICU 3.0
+     */
+    public static final int NFD_QUICK_CHECK = 0x100C;
+    /**
+     * Enumerated property NFKD_Quick_Check.
+     * Returns numeric values compatible with Normalizer.QuickCheckResult.
+     * @draft ICU 3.0
+     */
+    public static final int NFKD_QUICK_CHECK = 0x100D;
+    /**
+     * Enumerated property NFC_Quick_Check.
+     * Returns numeric values compatible with Normalizer.QuickCheckResult.
+     * @draft ICU 3.0
+     */
+    public static final int NFC_QUICK_CHECK = 0x100E;
+    /**
+     * Enumerated property NFKC_Quick_Check.
+     * Returns numeric values compatible with Normalizer.QuickCheckResult.
+     * @draft ICU 3.0
+     */
+    public static final int NFKC_QUICK_CHECK = 0x100F;
     /** 
      * One more than the last constant for enumerated/integer Unicode 
      * properties. 
      * @draft ICU 2.4 
      */
-    public static final int INT_LIMIT = 0x100C;
+    public static final int INT_LIMIT = 0x1010;
 
     /** 
      * Bitmask property General_Category_Mask.

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2003, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2004, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -14,6 +14,7 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.USerializedSet;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.lang.*;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.text.Normalizer;
@@ -634,6 +635,89 @@ public class BasicTest extends TestFmwk {
             }
         }
     }
+
+    static final int qcToInt(Normalizer.QuickCheckResult qc) {
+        if(qc==Normalizer.NO) {
+            return 0;
+        } else if(qc==Normalizer.YES) {
+            return 1;
+        } else /* Normalizer.MAYBE */ {
+            return 2;
+        }
+    }
+
+    public void TestQuickCheckPerCP() {
+        int c, lead, trail;
+        String s, nfd;
+        //int lccc1, lccc2, tccc1, tccc2;
+        int qc1, qc2;
+
+        if(
+            UCharacter.getIntPropertyMaxValue(UProperty.NFD_QUICK_CHECK)!=1 || // YES
+            UCharacter.getIntPropertyMaxValue(UProperty.NFKD_QUICK_CHECK)!=1 ||
+            UCharacter.getIntPropertyMaxValue(UProperty.NFC_QUICK_CHECK)!=2 || // MAYBE
+            UCharacter.getIntPropertyMaxValue(UProperty.NFKC_QUICK_CHECK)!=2/* ||
+            UCharacter.getIntPropertyMaxValue(UProperty.LEAD_CANONICAL_COMBINING_CLASS)!=u_getIntPropertyMaxValue(UCHAR_CANONICAL_COMBINING_CLASS) ||
+            UCharacter.getIntPropertyMaxValue(UProperty.TRAIL_CANONICAL_COMBINING_CLASS)!=u_getIntPropertyMaxValue(UCHAR_CANONICAL_COMBINING_CLASS)*/
+        ) {
+            errln("wrong result from one of the u_getIntPropertyMaxValue(UCHAR_NF*_QUICK_CHECK) or UCHAR_*_CANONICAL_COMBINING_CLASS");
+        }
+
+        /*
+         * compare the quick check property values for some code points
+         * to the quick check results for checking same-code point strings
+         */
+        c=0;
+        while(c<0x110000) {
+            s=UTF16.valueOf(c);
+
+            qc1=UCharacter.getIntPropertyValue(c, UProperty.NFC_QUICK_CHECK);
+            qc2=qcToInt(Normalizer.quickCheck(s, Normalizer.NFC));
+            if(qc1!=qc2) {
+                errln("getIntPropertyValue(NFC)="+qc1+" != "+qc2+"=quickCheck(NFC) for U+"+Integer.toHexString(c));
+            }
+
+            qc1=UCharacter.getIntPropertyValue(c, UProperty.NFD_QUICK_CHECK);
+            qc2=qcToInt(Normalizer.quickCheck(s, Normalizer.NFD));
+            if(qc1!=qc2) {
+                errln("getIntPropertyValue(NFD)="+qc1+" != "+qc2+"=quickCheck(NFD) for U+"+Integer.toHexString(c));
+            }
+
+            qc1=UCharacter.getIntPropertyValue(c, UProperty.NFKC_QUICK_CHECK);
+            qc2=qcToInt(Normalizer.quickCheck(s, Normalizer.NFKC));
+            if(qc1!=qc2) {
+                errln("getIntPropertyValue(NFKC)="+qc1+" != "+qc2+"=quickCheck(NFKC) for U+"+Integer.toHexString(c));
+            }
+
+            qc1=UCharacter.getIntPropertyValue(c, UProperty.NFKD_QUICK_CHECK);
+            qc2=qcToInt(Normalizer.quickCheck(s, Normalizer.NFKD));
+            if(qc1!=qc2) {
+                errln("getIntPropertyValue(NFKD)="+qc1+" != "+qc2+"=quickCheck(NFKD) for U+"+Integer.toHexString(c));
+            }
+/*
+            length=unorm_normalize(s, length, UNORM_NFD, 0, nfd, LENGTHOF(nfd), &errorCode);
+            U16_GET(nfd, 0, 0, length, lead);
+            U16_GET(nfd, 0, length-1, length, trail);
+
+            lccc1=u_getIntPropertyValue(c, UCHAR_LEAD_CANONICAL_COMBINING_CLASS);
+            lccc2=u_getCombiningClass(lead);
+            tccc1=u_getIntPropertyValue(c, UCHAR_TRAIL_CANONICAL_COMBINING_CLASS);
+            tccc2=u_getCombiningClass(trail);
+
+            if(lccc1!=lccc2) {
+                log_err("u_getIntPropertyValue(lccc)=%d != %d=u_getCombiningClass(lead) for U+%04x\n",
+                        lccc1, lccc2, c);
+            }
+            if(tccc1!=tccc2) {
+                log_err("u_getIntPropertyValue(tccc)=%d != %d=u_getCombiningClass(trail) for U+%04x\n",
+                        tccc1, tccc2, c);
+            }
+*/
+            /* skip some code points */
+            c=(20*c)/19+1;
+        }
+    }
+
     //------------------------------------------------------------------------
     // Internal utilities
     //
