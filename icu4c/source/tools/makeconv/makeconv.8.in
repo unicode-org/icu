@@ -44,8 +44,10 @@ for incorporation into a larger archive or library.
 .PP
 The
 .I convertertable
-must be in the IBM NLTC ucmap format in order to be understood by
+must be in the ICU ucm (Unicode Codepage Mapping) format in order to
+be understood by
 .BR makeconv .
+The ICU ucm format is similar to the IBM NLTC upmap/tpmap/rpmap files.
 Comments in the
 .I convertable
 are handled as follows. If a comment (starting with a `#' sign) that
