@@ -14,7 +14,6 @@
 #include "unicode/uobject.h"
 #include "rbbirb.h"
 #include "uvector.h"
-#include "uhash.h"
 
 struct  UNewTrie;
 
