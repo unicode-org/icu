@@ -157,5 +157,15 @@ public class LDMLConstants {
     public static final String BEFORE          = "before";
     public static final String CONTEXT         = "context";
     public static final String EXTEND          = "extend";
+    // supplemental data
+    public static final String SUPPLEMENTAL_DATA = "supplementalData";
+    public static final String CURRENCY_DATA     = "currencyData";
+    public static final String FRACTIONS         = "fractions";
+    public static final String INFO              = "info";
+    public static final String ISO_4217          = "iso4217";
+    public static final String DIGITS            = "digits";
+    public static final String REGION            = "region";
+    public static final String ISO_3166          = "iso3166";
+    
     
 }

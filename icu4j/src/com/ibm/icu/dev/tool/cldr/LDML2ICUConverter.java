@@ -136,10 +136,10 @@ public class LDML2ICUConverter {
         }
         
         for (int i = 0; i < remainingArgc; i++) {
+            long start = System.currentTimeMillis();
             int lastIndex = args[i].lastIndexOf(File.separator, args[i].length()) + 1 /* add  1 to skip past the separator */; 
             fileName = args[i].substring(lastIndex, args[i].length());
             String xmlfileName = getFullPath(false,args[i]);
-            System.out.println("Processing file: "+xmlfileName);
             /*
              * debugging code
              * 
@@ -155,11 +155,12 @@ public class LDML2ICUConverter {
              * }
              */ 
             // TODO : uncomment 
+            System.out.println("INFO: Creating fully resolved LDML document for: " + sourceDir+File.separator+ args[i]);
             fullyResolvedDoc =  LDMLUtilities.getFullyResolvedLDML(sourceDir, args[i], false, false, false);
             if(specialsDir!=null){
                 locName = args[i];
-                
-                specialsDoc = LDMLUtilities.parse(sourceDir+File.separator+ args[i]);
+                System.out.println("INFO: Parsing LDML document for: " + specialsDir+File.separator+ args[i]);
+                specialsDoc = LDMLUtilities.parseAndResolveAliases(args[i], specialsDir, true);
                 int index = locName.indexOf(".xml");
                 if(index > -1){
                     locName = locName.substring(0,index);
@@ -176,6 +177,8 @@ public class LDML2ICUConverter {
                 */
             }
             createResourceBundle(xmlfileName);
+            long stop = System.currentTimeMillis();
+            System.out.println("Time taken: "+ (stop-start));
         }
     }
     private String getFullPath(boolean fileType, String fName){
@@ -215,8 +218,10 @@ public class LDML2ICUConverter {
     } 
 
     private void createResourceBundle(String xmlfileName) {
-       
          try {
+
+             System.out.println("INFO: Parsing LDML document for: "+xmlfileName);
+             
              Document doc = LDMLUtilities.parse(xmlfileName);
              // Create the Resource linked list which will hold the
              // data after parsing
@@ -233,9 +238,8 @@ public class LDML2ICUConverter {
          catch (Throwable se) {
              System.err.println("ERROR: " + se.toString());
              se.printStackTrace();
-             
              System.exit(1);
-         }        
+         }    
     }
     private void writeAliasedResource(){
         if(locName==null || writeDeprecated==false){
@@ -299,13 +303,61 @@ public class LDML2ICUConverter {
         
         //TODO: "FX",  "RO",  "TP",  "ZR",   /* obsolete country codes */      
     }
-    private ICUResourceWriter.Resource setNext(ICUResourceWriter.Resource current, ICUResourceWriter.ResourceTable table, ICUResourceWriter.Resource toSet){
-        if(current == null){
-            current = table.first = toSet;
-        }else{
-            current.next = toSet;
+    private ICUResourceWriter.Resource parseSupplemental(Node root){
+        ICUResourceWriter.ResourceTable table = null;
+        ICUResourceWriter.Resource current = null;
+        StringBuffer xpath = new StringBuffer();
+        xpath.append("//");
+        xpath.append(LDMLConstants.SUPPLEMENTAL_DATA);
+        
+        int savedLength = xpath.length();
+        for(Node node=root.getFirstChild(); node!=null; node=node.getNextSibling()){
+            if(node.getNodeType()!=Node.ELEMENT_NODE){
+                continue;
+            }
+            String name = node.getNodeName();
+            ICUResourceWriter.Resource res = null;
+            if(name.equals(LDMLConstants.SUPPLEMENTAL_DATA) ){
+                if(LDMLUtilities.isNodeDraft(node) && writeDraft==false){
+                    System.err.println("WARNING: The LDML file "+sourceDir+File.separator+locName+".xml is marked draft! Not producing ICU file. ");
+                    System.exit(-1);
+                }
+                node=node.getFirstChild();
+                continue;
+            }else if (name.equals(LDMLConstants.SPECIAL)){
+                /*
+                 * IGNORE SPECIALS
+                 * FOR NOW
+                 */
+                node=node.getFirstChild();
+                continue;
+            }else if(name.equals(LDMLConstants.CURRENCY_DATA)){
+                res = parseCurrencyData(node, xpath);
+            
+            }else if(name.indexOf("icu:")>-1|| name.indexOf("openOffice:")>-1){
+                //TODO: these are specials .. ignore for now ... figure out
+                // what to do later
+            }else{
+                System.err.println("Encountered unknown element: "+name);
+                System.exit(-1);
+            }
+            if(res!=null){
+                if(current == null){
+                    table.first = res;
+                    current = findLast(res);
+                }else{
+                    current.next = res;
+                    current = findLast(res);
+                }
+                res = null;
+            }
+            xpath.delete(savedLength,xpath.length());
         }
-        return current.next;
+
+        return table;
+    }
+    private ICUResourceWriter.Resource parseCurrencyData(Node root, StringBuffer xpath){
+        return null;
     }
     private ICUResourceWriter.Resource parseBundle(Node root){
         ICUResourceWriter.ResourceTable table = null;
@@ -330,7 +382,7 @@ public class LDML2ICUConverter {
                 current = findLast(table.first);
                 continue;
             }else if(name.equals(LDMLConstants.LDML) ){
-                if(LDMLUtilities.isDraft(node, xpath) && writeDraft==false){
+                if(LDMLUtilities.isNodeDraft(node) && writeDraft==false){
                     System.err.println("WARNING: The LDML file "+sourceDir+File.separator+locName+".xml is marked draft! Not producing ICU file. ");
                     System.exit(-1);
                 }
@@ -413,9 +465,6 @@ public class LDML2ICUConverter {
             current = current.next;
         }
         return current;
-    }
-    private boolean isDraft(Node current, StringBuffer xpath){
-        return false;
     }
     
     private ICUResourceWriter.Resource parseAliasResource(Node node, StringBuffer xpath){
@@ -2594,7 +2643,7 @@ public class LDML2ICUConverter {
             
             FileOutputStream file = new FileOutputStream(outputFileName);
             BufferedOutputStream writer = new BufferedOutputStream(file);
-            System.out.println("Creating file: "+outputFileName);
+            System.out.println("INFO: Creating ICU ResourceBundle: "+outputFileName);
             //TODO: fix me
             writeHeader(writer,sourceFileName);
             

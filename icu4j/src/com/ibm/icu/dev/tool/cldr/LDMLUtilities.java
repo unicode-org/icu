@@ -344,6 +344,12 @@ public class LDMLUtilities {
         // element node :(
         throw new IllegalArgumentException("Unknown Xpath fragment: " + token);
     }
+    /**
+     * 
+     * @param token XPath token fragment
+     * @param attrib attribute whose value must be fetched
+     * @return
+     */
     private static String getAttributeValue(String token, String attrib){
         int attribStart = token.indexOf(attrib);
         int valStart = token.indexOf('=', attribStart)+1/*skip past the separtor*/;
@@ -387,7 +393,7 @@ public class LDMLUtilities {
      * @param overide
      * @return the merged document
      */
-    public static Node mergeLDMLDocuments(Document source, Node overide, StringBuffer xpath, 
+    private static Node mergeLDMLDocuments(Document source, Node overide, StringBuffer xpath, 
                                           String thisName, String sourceDir){
     	if(source==null){
     		return overide;
@@ -449,7 +455,7 @@ public class LDMLUtilities {
                 Node childToImport = source.importNode(child,true);
                 parentNodeInSource.replaceChild(childToImport, nodeInSource);
             }else{
-                if(areChildrenElementNodes(child)){
+                if(areChildrenElementNodes(child) &&  areChildrenElementNodes(nodeInSource)){
                     //recurse to pickup any children!
                     mergeLDMLDocuments(source, child, xpath, thisName, sourceDir);
                 }else{
@@ -613,7 +619,7 @@ public class LDMLUtilities {
         // the default value is false if none specified
         return false;
     }
-    public boolean isNodeDraft(Node node){
+    public static boolean isNodeDraft(Node node){
         String draft = getAttributeValue(node, LDMLConstants.DRAFT);
         if(draft!=null ){
             if(draft.equals("true")){
@@ -636,6 +642,7 @@ public class LDMLUtilities {
                     return false;
                 }
             }
+            current = current.getParentNode();
         }
         return false;
     }
@@ -811,14 +818,10 @@ public class LDMLUtilities {
      */
     public static String getAttributeValue(Node sNode, String attribName){
         String value=null;
-        Node node = sNode;
-
-        NamedNodeMap attributes = node.getAttributes();
-        Node attr = attributes.getNamedItem(attribName);
+        Node attr = sNode.getAttributes().getNamedItem(attribName);
         if(attr!=null){
             value = attr.getNodeValue();
         }
-
         return value;
     }
     /**
@@ -853,7 +856,28 @@ public class LDMLUtilities {
         String docURI = filenameToURL(filename);
         return parse(new InputSource(docURI),filename);
     }
-    
+    public static Document parseAndResolveAliases(String locale, String sourceDir, boolean ignoreError){
+        try{
+            Document full = parse(sourceDir+File.separator+ "root.xml");
+            if(full!=null){
+                full = resolveAliases(full, sourceDir, "root");
+            }
+           /*
+            * Debugging
+            *
+            Node[] list = getNodeArray(full, LDMLConstants.ALIAS);
+            if(list.length>0){
+                System.err.println("Aliases not resolved!. list.getLength() returned "+ list.length);
+            }*/
+            return full;
+        }catch(RuntimeException ex){
+            if(!ignoreError){
+                throw ex;
+            }
+        }
+        return null;
+
+    }
     public static Document parse(InputSource docSrc, String filename){
         
         DocumentBuilderFactory dfactory = DocumentBuilderFactory.newInstance();
