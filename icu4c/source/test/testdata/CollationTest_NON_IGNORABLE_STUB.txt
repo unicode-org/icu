@@ -1,3 +1,12 @@
+# Copyright (c) 2003 International Business Machines
+# Corporation and others. All Rights Reserved.
+# This is a stub file
+# for complete test file, go to:
+# http://oss.software.ibm.com/cvs/icu4j/unicodetools/com/ibm/text/data/
+# based on:
+# VERSION: UCA=4.0.0d5, UCD=4.0.1
+# 2003-08-21,20:20:20 GMT [MD]
+
 0334 06E0;	06E0
 0592 0334;	0592
 06E7 0334;	06E7
