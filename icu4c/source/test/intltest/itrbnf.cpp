@@ -17,6 +17,7 @@
 #include "unicode/coleitr.h"
 #include "unicode/ures.h"
 #include "unicode/ustring.h"
+#include "unicode/decimfmt.h"
 //#include "llong.h"
 
 #include <string.h>
@@ -56,6 +57,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
         TESTCASE(10, TestFractionalRuleSet);
         TESTCASE(11, TestSwedishSpellout);
         TESTCASE(12, TestBelgianFrenchSpellout);
+        TESTCASE(13, TestSmallValues);
 #else
         TESTCASE(0, TestRBNFDisabled);
 #endif
@@ -1422,6 +1424,56 @@ IntlTestRBNF::TestSwedishSpellout()
     delete formatter;
 }
 
+void
+IntlTestRBNF::TestSmallValues()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    RuleBasedNumberFormat* formatter
+        = new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale("en_US"), status);
+
+    if (U_FAILURE(status)) {
+        errln("FAIL: could not construct formatter");
+    } else {
+        static const char* testDataDefault[][2] = {
+	    { "0.001", "zero point zero zero one" },
+	    { "0.0001", "zero point zero zero zero one" },
+	    { "0.00001", "zero point zero zero zero zero one" },
+	    { "0.000001", "zero point zero zero zero zero zero one" },
+	    { "0.0000001", "zero point zero zero zero zero zero zero one" },
+	    { "0.00000001", "zero point zero zero zero zero zero zero zero one" },
+	    { "0.000000001", "zero point zero zero zero zero zero zero zero zero one" },
+	    { "0.0000000001", "zero point zero zero zero zero zero zero zero zero zero one" },
+	    { "0.00000000001", "zero point zero zero zero zero zero zero zero zero zero zero one" },
+	    { "0.000000000001", "zero point zero zero zero zero zero zero zero zero zero zero zero one" },
+	    { "0.0000000000001", "zero point zero zero zero zero zero zero zero zero zero zero zero zero one" },
+	    { "0.00000000000001", "zero point zero zero zero zero zero zero zero zero zero zero zero zero zero one" },
+	    { "0.000000000000001", "zero point zero zero zero zero zero zero zero zero zero zero zero zero zero zero one" },
+	    { "10,000,000.001", "ten million point zero zero one" },
+	    { "10,000,000.0001", "ten million point zero zero zero one" },
+	    { "10,000,000.00001", "ten million point zero zero zero zero one" },
+	    { "10,000,000.000001", "ten million point zero zero zero zero zero one" },
+	    { "10,000,000.0000001", "ten million point zero zero zero zero zero zero one" },
+//        { "10,000,000.00000001", "ten million point zero zero zero zero zero zero zero one" },
+//        { "10,000,000.000000002", "ten million point zero zero zero zero zero zero zero zero two" },
+	    { "10,000,000", "ten million" },
+//        { "1,234,567,890.0987654", "one billion, two hundred and thirty-four million, five hundred and sixty-seven thousand, eight hundred and ninety point zero nine eight seven six five four" },
+//        { "123,456,789.9876543", "one hundred and twenty-three million, four hundred and fifty-six thousand, seven hundred and eighty-nine point nine eight seven six five four three" },
+//        { "12,345,678.87654321", "twelve million, three hundred and forty-five thousand, six hundred and seventy-eight point eight seven six five four three two one" },
+	    { "1,234,567.7654321", "one million, two hundred and thirty-four thousand, five hundred and sixty-seven point seven six five four three two one" },
+	    { "123,456.654321", "one hundred and twenty-three thousand, four hundred and fifty-six point six five four three two one" },
+	    { "12,345.54321", "twelve thousand three hundred and forty-five point five four three two one" },
+	    { "1,234.4321", "one thousand two hundred and thirty-four point four three two one" },
+	    { "123.321", "one hundred and twenty-three point three two one" },
+	    { "0.0000000011754944", "zero point zero zero zero zero zero zero zero zero one one seven five four nine four four" },
+	    { "0.000001175494351", "zero point zero zero zero zero zero one one seven five four nine four three five one" },
+            { NULL, NULL }
+	};
+
+        doTest(formatter, testDataDefault, TRUE);
+
+	delete formatter;
+    }
+}
 
 void 
 IntlTestRBNF::doTest(RuleBasedNumberFormat* formatter, const char* testData[][2], UBool testParsing) 
@@ -1429,7 +1481,8 @@ IntlTestRBNF::doTest(RuleBasedNumberFormat* formatter, const char* testData[][2]
   // man, error reporting would be easier with printf-style syntax for unicode string and formattable
 
     UErrorCode status = U_ZERO_ERROR;
-    NumberFormat* decFmt = NumberFormat::createInstance(Locale::getUS(), status);
+    // NumberFormat* decFmt = NumberFormat::createInstance(Locale::getUS(), status);
+    NumberFormat* decFmt = new DecimalFormat("#,###.################", status);
     if (U_FAILURE(status)) {
         errln("FAIL: could not create NumberFormat");
     } else {
@@ -1437,6 +1490,7 @@ IntlTestRBNF::doTest(RuleBasedNumberFormat* formatter, const char* testData[][2]
             const char* numString = testData[i][0];
             const char* expectedWords = testData[i][1];
 
+            logln("%i: %s\n", i, numString);
             Formattable expectedNumber;
             decFmt->parse(numString, expectedNumber, status);
             if (U_FAILURE(status)) {

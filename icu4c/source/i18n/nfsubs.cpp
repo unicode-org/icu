@@ -14,6 +14,9 @@
 */
 
 #include "nfsubs.h"
+#include "digitlst.h"
+
+#include <stdio.h>
 
 #if U_HAVE_RBNF
 
@@ -747,35 +750,63 @@ FractionalPartSubstitution::FractionalPartSubstitution(int32_t _pos,
 void
 FractionalPartSubstitution::doSubstitution(double number, UnicodeString& toInsertInto, int32_t _pos) const
 {
-    // if we're not in "byDigits" mode, just use the inherited
-    // doSubstitution() routine
-    if (!byDigits) {
-        NFSubstitution::doSubstitution(number, toInsertInto, _pos);
+  // if we're not in "byDigits" mode, just use the inherited
+  // doSubstitution() routine
+  if (!byDigits) {
+    NFSubstitution::doSubstitution(number, toInsertInto, _pos);
 
-        // if we're in "byDigits" mode, transform the value into an integer
-        // by moving the decimal point eight places to the right and
-        // pulling digits off the right one at a time, formatting each digit
-        // as an integer using this substitution's owning rule set
-        // (this is slower, but more accurate, than doing it from the
-        // other end)
-    } else {
-        int32_t numberToFormat = (int32_t)uprv_round(transformNumber(number) * uprv_pow(10, kMaxDecimalDigits));
-        // this flag keeps us from formatting trailing zeros.  It starts
-        // out false because we're pulling from the right, and switches
-        // to true the first time we encounter a non-zero digit
-        UBool doZeros = FALSE;
-        for (int32_t i = 0; i < kMaxDecimalDigits; i++) {
-            int64_t digit = numberToFormat % 10;
-            if (digit != 0 || doZeros) {
-                if (doZeros && useSpaces) {
-                    toInsertInto.insert(_pos + getPos(), gSpace);
-                }
-                doZeros = TRUE;
-                getRuleSet()->format(digit, toInsertInto, _pos + getPos());
-            }
-            numberToFormat /= 10;
-        }
+    // if we're in "byDigits" mode, transform the value into an integer
+    // by moving the decimal point eight places to the right and
+    // pulling digits off the right one at a time, formatting each digit
+    // as an integer using this substitution's owning rule set
+    // (this is slower, but more accurate, than doing it from the
+    // other end)
+  } else {
+    //          int32_t numberToFormat = (int32_t)uprv_round(transformNumber(number) * uprv_pow(10, kMaxDecimalDigits));
+    //          // this flag keeps us from formatting trailing zeros.  It starts
+    //          // out false because we're pulling from the right, and switches
+    //          // to true the first time we encounter a non-zero digit
+    //          UBool doZeros = FALSE;
+    //          for (int32_t i = 0; i < kMaxDecimalDigits; i++) {
+    //              int64_t digit = numberToFormat % 10;
+    //              if (digit != 0 || doZeros) {
+    //                  if (doZeros && useSpaces) {
+    //                      toInsertInto.insert(_pos + getPos(), gSpace);
+    //                  }
+    //                  doZeros = TRUE;
+    //                  getRuleSet()->format(digit, toInsertInto, _pos + getPos());
+    //              }
+    //              numberToFormat /= 10;
+    //          }
+
+    DigitList dl;
+    dl.set(number, 20, TRUE);
+    
+    UBool pad = false;
+    while (dl.fCount > (dl.fDecimalAt <= 0 ? 0 : dl.fDecimalAt)) {
+      if (pad && useSpaces) {
+        toInsertInto.insert(_pos + getPos(), gSpace);
+      } else {
+        pad = TRUE;
+      }
+      getRuleSet()->format((int64_t)(dl.fDigits[--dl.fCount] - gZero), toInsertInto, _pos + getPos());
     }
+    while (dl.fDecimalAt < 0) {
+      if (pad && useSpaces) {
+        toInsertInto.insert(_pos + getPos(), gSpace);
+      } else {
+        pad = TRUE;
+      }
+      getRuleSet()->format((int64_t)0, toInsertInto, _pos + getPos());
+      ++dl.fDecimalAt;
+    }
+
+    if (!pad) {
+      // hack around lack of precision in digitlist. if we would end up with
+      // "foo point" make sure we add a " zero" to the end.
+      getRuleSet()->format((int64_t)0, toInsertInto, _pos + getPos());
+    }
+  }
 }
 
 //-----------------------------------------------------------------------
@@ -821,8 +852,9 @@ FractionalPartSubstitution::doParse(const UnicodeString& text,
         ParsePosition workPos(1);
         double result = 0;
         int32_t digit;
-        double p10 = 0.1;
+//          double p10 = 0.1;
 
+	DigitList dl;
         NumberFormat* fmt = NULL;
         while (workText.length() > 0 && workPos.getIndex() != 0) {
             workPos.setIndex(0);
@@ -850,8 +882,9 @@ FractionalPartSubstitution::doParse(const UnicodeString& text,
             }
 
             if (workPos.getIndex() != 0) {
-                result += digit * p10;
-                p10 /= 10;
+		dl.append((char)('0' + digit));
+//                  result += digit * p10;
+//                  p10 /= 10;
                 parsePosition.setIndex(parsePosition.getIndex() + workPos.getIndex());
                 workText.removeBetween(0, workPos.getIndex());
                 while (workText.length() > 0 && workText.charAt(0) == gSpace) {
@@ -861,6 +894,7 @@ FractionalPartSubstitution::doParse(const UnicodeString& text,
             }
         }
         delete fmt;
+	result = dl.fCount == 0 ? 0 : dl.getDouble();
 
         result = composeRuleValue(result, baseValue);
         resVal.setDouble(result);
