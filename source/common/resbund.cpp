@@ -371,6 +371,16 @@ ResourceBundle ResourceBundle::get(const char* key, UErrorCode& status) const {
     return res;
 }
 
+ResourceBundle ResourceBundle::getWithFallback(const char* key, UErrorCode& status){
+    UResourceBundle r;
+    ures_initStackObject(&r);
+    ures_getByKeyWithFallback(fResource, key, &r, &status);
+    ResourceBundle res(&r, status);
+    if(U_SUCCESS(status)){
+        ures_close(&r);
+    }
+    return res;
+}
 UnicodeString ResourceBundle::getStringEx(const char* key, UErrorCode& status) const {
     int32_t len = 0;
     const UChar* r = ures_getStringByKey(fResource, key, &len, &status);
