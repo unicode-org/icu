@@ -17,10 +17,9 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "cintltst.h"
 #include "unicode/utypes.h"
-#include "cmemory.h"
 #include "unicode/ustring.h"
+#include "cintltst.h"
 
 #define LENGTHOF(array) (sizeof(array)/sizeof((array)[0]))
 
