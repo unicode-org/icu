@@ -675,22 +675,65 @@ uint8_t ucol_uprv_tok_readAndSetOption(UColTokenParser *src, UErrorCode *status)
   return result;
 }
 
-inline UBool ucol_tok_doSetTop(UColTokenParser *src) {
+
+inline void ucol_tok_addToExtraCurrent(UColTokenParser *src, const UChar *stuff, int32_t len, UErrorCode *status) {
+      if(src->extraCurrent+len >= src->extraEnd) {
+        /* reallocate */
+        UChar *newSrc = (UChar *)uprv_realloc(src->source, (src->extraEnd-src->source)*2*sizeof(UChar));
+        if(newSrc != NULL) {
+          src->current = newSrc + (src->current - src->source);
+          src->extraCurrent = newSrc + (src->extraCurrent - src->source);
+          src->end = newSrc + (src->end - src->source);
+          src->extraEnd = newSrc + (src->extraEnd-src->source)*2;
+          src->sourceCurrent = newSrc + (src->sourceCurrent-src->source);
+          src->source = newSrc;
+        } else {
+          *status = U_MEMORY_ALLOCATION_ERROR;
+        }
+      }
+      if(len == 1) {
+          *src->extraCurrent++ = *stuff;
+      } else {
+        uprv_memcpy(src->extraCurrent, stuff, len*sizeof(UChar));
+        src->extraCurrent += len;
+      }
+
+          
+}
+
+inline UBool ucol_tok_doSetTop(UColTokenParser *src, UErrorCode *status) {
   /*
   top = TRUE;
   */
+  UChar buff[5];
   src->parsedToken.charsOffset = (uint32_t)(src->extraCurrent - src->source);
-  *src->extraCurrent++ = 0xFFFE;
-  *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startCE >> 16);
-  *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startCE & 0xFFFF);
+  buff[0] = 0xFFFE;
+  buff[1] = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startCE >> 16);
+  buff[2] = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startCE & 0xFFFF);
   if(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE == 0) {
     src->parsedToken.charsLen = 3;
+    ucol_tok_addToExtraCurrent(src, buff, 3, status);
   } else {
-    *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE >> 16);
-    *src->extraCurrent++ = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE & 0xFFFF);
+    buff[3] = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE >> 16);
+    buff[4] = (UChar)(ucolIndirectBoundaries[src->parsedToken.indirectIndex].startContCE & 0xFFFF);
     src->parsedToken.charsLen = 5;
+    ucol_tok_addToExtraCurrent(src, buff, 5, status);
   } 
   return TRUE;
+}
+
+static UBool isCharNewLine(UChar c){
+    switch(c){
+    case 0x000A: /* LF  */
+    case 0x000D: /* CR  */
+    case 0x000C: /* FF  */
+    case 0x0085: /* NEL */
+    case 0x2028: /* LS  */
+    case 0x2029: /* PS  */
+        return TRUE;
+    default:
+        return FALSE;
+    }
 }
 
 U_CAPI const UChar* U_EXPORT2
@@ -714,6 +757,7 @@ ucol_tok_parseNextToken(UColTokenParser *src,
   uint32_t newExtensionLen = 0;
   uint32_t extensionOffset = 0;
   uint32_t newStrength = UCOL_TOK_UNSET; 
+  UChar buff[10];
 
   src->parsedToken.charsOffset = 0;  src->parsedToken.charsLen = 0;
   src->parsedToken.prefixOffset = 0; src->parsedToken.prefixLen = 0;
@@ -772,7 +816,7 @@ ucol_tok_parseNextToken(UColTokenParser *src,
             /* if we start with strength, we'll reset to top */
             if(startOfRules == TRUE) {
               src->parsedToken.indirectIndex = 5;
-              top = ucol_tok_doSetTop(src);
+              top = ucol_tok_doSetTop(src, status);
               newStrength = UCOL_TOK_RESET;
               goto EndOfLoop;
             }
@@ -787,7 +831,7 @@ ucol_tok_parseNextToken(UColTokenParser *src,
             /* if we start with strength, we'll reset to top */
             if(startOfRules == TRUE) {
               src->parsedToken.indirectIndex = 5;
-              top = ucol_tok_doSetTop(src);
+              top = ucol_tok_doSetTop(src, status);
               newStrength = UCOL_TOK_RESET;
               goto EndOfLoop;
             }
@@ -802,7 +846,7 @@ ucol_tok_parseNextToken(UColTokenParser *src,
             /* if we start with strength, we'll reset to top */
             if(startOfRules == TRUE) {
               src->parsedToken.indirectIndex = 5;
-              top = ucol_tok_doSetTop(src);
+              top = ucol_tok_doSetTop(src, status);
               newStrength = UCOL_TOK_RESET;
               goto EndOfLoop;
             }
@@ -817,7 +861,7 @@ ucol_tok_parseNextToken(UColTokenParser *src,
             /* if we start with strength, we'll reset to top */
             if(startOfRules == TRUE) {
               src->parsedToken.indirectIndex = 5;
-              top = ucol_tok_doSetTop(src);
+              top = ucol_tok_doSetTop(src, status);
               newStrength = UCOL_TOK_RESET;
               goto EndOfLoop;
             }
@@ -853,11 +897,12 @@ ucol_tok_parseNextToken(UColTokenParser *src,
               if(U_SUCCESS(*status)) {
                 if(result & UCOL_TOK_TOP) {
                   if(newStrength == UCOL_TOK_RESET) { 
-                    top = ucol_tok_doSetTop(src);
+                    top = ucol_tok_doSetTop(src, status);
                     if(before) { // This is a combination of before and indirection like '&[before 2][first regular]<b'
-                      *src->extraCurrent++ = 0x002d;
-                      *src->extraCurrent++ = before;
                       src->parsedToken.charsLen+=2;
+                      buff[0] = 0x002d;
+                      buff[1] = before;
+                      ucol_tok_addToExtraCurrent(src, buff, 2, status);
                     }
 
                     src->current++;
@@ -871,7 +916,8 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                     variableTop = TRUE;
                     src->parsedToken.charsOffset = (uint32_t)(src->extraCurrent - src->source);
                     src->parsedToken.charsLen = 1;
-                    *src->extraCurrent++ = 0xFFFF;
+                    buff[0] = 0xFFFF;
+                    ucol_tok_addToExtraCurrent(src, buff, 1, status);
                     src->current++;
                     goto EndOfLoop;
                   } else {
@@ -920,8 +966,7 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                 src->parsedToken.charsOffset = (uint32_t)(src->extraCurrent - src->source);
               }
               if (src->parsedToken.charsLen != 0) {
-                  uprv_memcpy(src->extraCurrent, src->current - src->parsedToken.charsLen, src->parsedToken.charsLen*sizeof(UChar));
-                  src->extraCurrent += src->parsedToken.charsLen;
+                  ucol_tok_addToExtraCurrent(src, src->current - src->parsedToken.charsLen, src->parsedToken.charsLen, status);
               }
               src->parsedToken.charsLen++;
             } else { /* we're doing an expansion */
@@ -929,8 +974,7 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                 extensionOffset = (uint32_t)(src->extraCurrent - src->source);
               }
               if (newExtensionLen != 0) {
-                uprv_memcpy(src->extraCurrent, src->current - newExtensionLen, newExtensionLen*sizeof(UChar));
-                src->extraCurrent += newExtensionLen;
+                ucol_tok_addToExtraCurrent(src, src->current - newExtensionLen, newExtensionLen, status);
               }
               newExtensionLen++;
             }
@@ -939,7 +983,7 @@ ucol_tok_parseNextToken(UColTokenParser *src,
 
             ch = *(++(src->current)); 
             if(ch == 0x0027) { /* copy the double quote */
-              *src->extraCurrent++ = ch;
+              ucol_tok_addToExtraCurrent(src, &ch, 1, status);
               inQuote = FALSE;
             }
             break;
@@ -966,8 +1010,7 @@ ucol_tok_parseNextToken(UColTokenParser *src,
                 src->parsedToken.charsOffset = (uint32_t)(src->extraCurrent - src->source);
               }
               if (src->parsedToken.charsLen != 0) {
-                  uprv_memcpy(src->extraCurrent, src->current - src->parsedToken.charsLen, src->parsedToken.charsLen*sizeof(UChar));
-                  src->extraCurrent += src->parsedToken.charsLen;
+                  ucol_tok_addToExtraCurrent(src, src->current - src->parsedToken.charsLen, src->parsedToken.charsLen, status);
               }
               src->parsedToken.charsLen++;
             }
@@ -984,6 +1027,12 @@ ucol_tok_parseNextToken(UColTokenParser *src,
             //newCharsLen = 0;
             //break; // We want to store the whole prefix/character sequence. If we break
                      // the '|' is going to get lost.
+          case 0x0023 /*#*/: /* this is a comment, skip everything through the end of line */
+            do {
+                ch = *(++(src->current));
+            } while (!isCharNewLine(ch));
+
+            break;
           default:
             if (newStrength == UCOL_TOK_UNSET) {
 			  *status = U_INVALID_FORMAT_ERROR;
@@ -1020,22 +1069,9 @@ ucol_tok_parseNextToken(UColTokenParser *src,
 
     if(wasInQuote) {
       if(ch != 0x27) {
-        *src->extraCurrent++ = ch;
-      }
-      if(src->extraCurrent > src->extraEnd) {
-        /* reallocate */
-        UChar *newSrc = (UChar *)uprv_realloc(src->source, (src->extraEnd-src->source)*2*sizeof(UChar));
-        if(newSrc != NULL) {
-          src->current = newSrc + (src->current - src->source);
-          src->extraCurrent = newSrc + (src->extraCurrent - src->source);
-          src->end = newSrc + (src->end - src->source);
-          src->extraEnd = newSrc + (src->extraEnd-src->source)*2;
-          src->sourceCurrent = newSrc + (src->sourceCurrent-src->source);
-          src->source = newSrc;
-        } else {
-          *status = U_MEMORY_ALLOCATION_ERROR;
-          return NULL;
-        }
+          if(inQuote || !uprv_isRuleWhiteSpace(ch)) {
+            ucol_tok_addToExtraCurrent(src, &ch, 1, status);
+          }
       }
     }
 
