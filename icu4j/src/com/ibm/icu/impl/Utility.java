@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2002/09/09 16:05:09 $
- * $Revision: 1.31 $
+ * $Date: 2002/11/01 14:45:10 $
+ * $Revision: 1.32 $
  *
  *****************************************************************************************
  */
@@ -661,6 +661,7 @@ public final class Utility {
         /*\   0x5C, 0x5C */
         /*a*/ 0x61, 0x07,
         /*b*/ 0x62, 0x08,
+        /*e*/ 0x65, 0x1b,
         /*f*/ 0x66, 0x0c,
         /*n*/ 0x6E, 0x0a,
         /*r*/ 0x72, 0x0d,
@@ -753,6 +754,13 @@ public final class Utility {
             } else if (c < UNESCAPE_MAP[i]) {
                 break;
             }
+        }
+
+        /* Map \cX to control-X: X & 0x1F */
+        if (c == 'c' && offset < length) {
+            c = UTF16.charAt(s, offset);
+            offset16[0] = offset + UTF16.getCharCount(c);
+            return 0x1F & c;
         }
 
         /* If no special forms are recognized, then consider
