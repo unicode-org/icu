@@ -24,7 +24,7 @@
 
 
 #include "ucbuf.h"
-#include "error.h"
+#include "errmsg.h"
 #include "parse.h"
 #include "util.h"
 #include "reslist.h"
