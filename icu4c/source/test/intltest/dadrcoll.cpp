@@ -34,7 +34,8 @@ DataDrivenCollatorTest::DataDrivenCollatorTest()
   purpose(NULL),
   currentTest(NULL),
   testData(NULL),
-  testBundle(NULL)
+  testBundle(NULL),
+  numberOfTests(0)
 {
   UErrorCode status = U_ZERO_ERROR;
   dataTestValid = TRUE;
@@ -68,7 +69,12 @@ void DataDrivenCollatorTest::runIndexedTest( int32_t index, UBool exec, const ch
       logln("TestSuite Collator: ");
   }
 
-  if(!dataTestValid || index >= numberOfTests) {
+  if(!dataTestValid) {
+    errln("Test data is invalid!");
+    numberOfTests = 0;
+  }
+
+  if(index >= numberOfTests) {
     name = "";
   } else {
     UErrorCode status = U_ZERO_ERROR;
@@ -180,6 +186,7 @@ DataDrivenCollatorTest::setTestSequence(const UnicodeString &setSequence, Unicod
   return getNextInSequence(source, relation, status);
 }
 
+// Parses the sequence to be tested
 UBool 
 DataDrivenCollatorTest::getNextInSequence(UnicodeString &source, Collator::EComparisonResult &relation, UErrorCode &status) {
   source.truncate(0);
@@ -238,10 +245,10 @@ DataDrivenCollatorTest::getNextInSequence(UnicodeString &source, Collator::EComp
   return seq.hasNext();
 }
 
+// Reads the options string and sets appropriate attributes in collator
 void 
-DataDrivenCollatorTest::processArguments(Collator *col, const UnicodeString &options, UErrorCode &status) {
-  const UChar *start = options.getBuffer();
-  const UChar *end = start+options.length();
+DataDrivenCollatorTest::processArguments(Collator *col, const UChar *start, int32_t optLen, UErrorCode &status) {
+  const UChar *end = start+optLen;
   UColAttribute attrib;
   UColAttributeValue value;
 
@@ -254,56 +261,94 @@ DataDrivenCollatorTest::processArguments(Collator *col, const UnicodeString &opt
   }
 }
 
+// Goes through the list of sequences
+// and runs test for each sequence
+void
+DataDrivenCollatorTest::processReadyCollator(UResourceBundle *test, Collator *col, UErrorCode &status) {
+  UResourceBundle *testData = ures_getByKey(test, "TestData", NULL, &status);
+  const char *key = NULL;
+  UnicodeString sequence;
+  if(status == U_ZERO_ERROR) {
+    while(ures_hasNext(testData)) {
+      sequence = ures_getNextUnicodeString(testData, &key, &status);
+      processSequence(col, sequence, status);
+    }
+    ures_close(testData);
+  } else {
+    errln("Unable to get test data!");
+  }
+}
+
+// Goes through the list of options and executes test data for each individual option.
+// If there are no options, just does the test data.
+void
+DataDrivenCollatorTest::processCollatorTests(UResourceBundle *test, Collator *col, UErrorCode &status) {
+  const UChar *options = NULL;
+  const char *key = NULL;
+  int32_t len = 0;
+  status = U_ZERO_ERROR;
+  UResourceBundle *optionsRes = ures_getByKey(test, "Arguments", NULL, &status);
+  if(status == U_ZERO_ERROR) {
+    while(ures_hasNext(optionsRes)) {
+      options = ures_getNextString(optionsRes, &len, &key, &status);
+      processArguments(col, options, len, status);
+      if(U_SUCCESS(status)) {
+        processReadyCollator(test, col, status);      
+      } else {
+        errln("Error processing arguments!");
+      }
+    } 
+    ures_close(optionsRes);
+  } else {
+    processReadyCollator(test, col, status);      
+  }
+}
+
+
 void 
 DataDrivenCollatorTest::processTest(UResourceBundle *test, UErrorCode &status) {
-  UResourceBundle *type = ures_getByKey(test, "TestLocale", NULL, &status);
   Collator *col = NULL;
   const UChar *colString = NULL;
+  const char* key = NULL;
   int32_t len = 0;
-
+  //int32_t i = 0;
+  UResourceBundle *type = ures_getByKey(test, "TestLocale", NULL, &status);
   if(status == U_ZERO_ERROR) {
     // this is a case where we have locale
-    UnicodeString locale = ures_getUnicodeString(type, &status);
-    char localeName[256];
-    locale.extract(0, locale.length(), localeName, "");
-    col = Collator::createInstance(localeName, status);
-  } else {
-    status = U_ZERO_ERROR;
-    type = ures_getByKey(test, "TestRules", type, &status);
-    colString = ures_getString(type, &len, &status);
-    col = new RuleBasedCollator(colString, status);
+    //for(i = 0; i < ures_getSize(type); i++) {
+    while(ures_hasNext(type)) {
+      //UnicodeString locale = ures_getUnicodeStringByIndex(type, i, &status);
+      UnicodeString locale = ures_getNextUnicodeString(type, &key, &status);
+      char localeName[256];
+      locale.extract(0, locale.length(), localeName, "");
+      col = Collator::createInstance(localeName, status);
+      if(U_SUCCESS(status)) {
+        logln("Testing collator for locale "+locale);
+        processCollatorTests(test, col, status);
+        delete col;
+      } else {
+        errln("Unable to instantiate collator for locale "+locale);
+      }
+    }
+  }
+  status = U_ZERO_ERROR;
+  type = ures_getByKey(test, "TestRules", type, &status);
+  if(status == U_ZERO_ERROR) {
+    //for(i = 0; i < ures_getSize(type); i++) {
+    while(ures_hasNext(type)) {
+      //colString = ures_getStringByIndex(type, i, &len, &status);
+      colString = ures_getNextString(type, &len, &key, &status);
+      col = new RuleBasedCollator(colString, status);
+      if(U_SUCCESS(status)) {
+        logln("Testing collator for rules "+UnicodeString(colString));
+        processCollatorTests(test, col, status);
+        delete col;
+      } else {
+        errln("Unable to instantiate collator for rules "+UnicodeString(colString));
+      }
+    }
   }
   ures_close(type);
-
-  if(U_SUCCESS(status)) {
-    status = U_ZERO_ERROR;
-    UnicodeString options = ures_getStringByKey(test, "Arguments", NULL, &status);
-    if(status == U_ZERO_ERROR) {
-      processArguments(col, options, status);
-    }
-    if(U_SUCCESS(status)) {
-      UResourceBundle *testData = ures_getByKey(test, "TestData", NULL, &status);
-      const char *key = NULL;
-      UnicodeString sequence;
-      if(status == U_ZERO_ERROR) {
-        while(ures_hasNext(testData)) {
-          sequence = ures_getNextUnicodeString(testData, &key, &status);
-          processSequence(col, sequence, status);
-        }
-        ures_close(testData);
-      } else {
-        errln("Unable to get test data!");
-      }
-    } else {
-      errln("Error processing arguments!");
-    }
-  }
-
-  if(col != NULL) {
-    delete col;
-  }
-
-
 }
 
 void 
