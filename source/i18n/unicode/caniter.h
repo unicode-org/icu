@@ -48,42 +48,55 @@ Results for: {LATIN CAPITAL LETTER A WITH RING ABOVE}{LATIN SMALL LETTER D}{COMB
  = {ANGSTROM SIGN}{LATIN SMALL LETTER D WITH CEDILLA}{COMBINING DOT ABOVE}
  *<br>Note: the code is intended for use with small strings, and is not suitable for larger ones,
  * since it has not been optimized for that situation.
- *@author M. Davis
- *@draft
+ * Note, CanonicalIterator is not intended to be subclassed.
+ * @author M. Davis
+ * @author C++ port by V. Weinstein
+ * @draft ICU 2.4
  */
 class U_I18N_API CanonicalIterator : public UObject {
 public:
     /**
-     *@param source    string to get results for
-     *@param status    Fill-in parameter which receives the status of this operation.
+     * Construct a CanonicalIterator object
+     * @param source    string to get results for
+     * @param status    Fill-in parameter which receives the status of this operation.
+     * @draft ICU 2.4
      */
     CanonicalIterator(const UnicodeString &source, UErrorCode &status);    
 
     /** Destructor
      *  Cleans pieces
+     * @draft ICU 2.4
      */
     ~CanonicalIterator();
 
     /**
-     *@return gets the source: NOTE: it is the NFD form of source
+     * Gets the NFD form of the current source we are iterating over.
+     * @return gets the source: NOTE: it is the NFD form of source
+     * @draft ICU 2.4
      */
     UnicodeString getSource();    
 
     /**
      * Resets the iterator so that one can start again from the beginning.
+     * @draft ICU 2.4
      */
     void reset();    
 
     /**
-     *@return the next string that is canonically equivalent. The value null is returned when
+     * Get the next canonically equivalent string.
+	 * <br><b>Warning: The strings are not guaranteed to be in any particular order.</b>
+     * @return the next string that is canonically equivalent. A bogus string is returned when
      * the iteration is done.
+     * @draft ICU 2.4
      */
     UnicodeString next();    
 
     /**
-     *@param newSource     the source string to iterate against. This allows the same iterator to be used
+     * Set a new source for this iterator. Allows object reuse.
+     * @param newSource     the source string to iterate against. This allows the same iterator to be used
      *                     while changing the source string, saving object creation.
-     *@param status        Fill-in parameter which receives the status of this operation.
+     * @param status        Fill-in parameter which receives the status of this operation.
+     * @draft ICU 2.4
      */
     void setSource(const UnicodeString &newSource, UErrorCode &status);    
 
@@ -94,6 +107,7 @@ public:
      * @param skipZeros  determine if skip zeros
      * @param result     the results in a set.
      * @param status       Fill-in parameter which receives the status of this operation.
+     * @internal 
      */
     static void permute(UnicodeString &source, UBool skipZeros, Hashtable *result, UErrorCode &status);     
     
@@ -113,6 +127,8 @@ public:
 
 private:
     // ===================== PRIVATES ==============================
+    // private default constructor
+    CanonicalIterator();       
     
     // fields
     UnicodeString source;
