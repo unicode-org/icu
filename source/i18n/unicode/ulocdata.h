@@ -43,19 +43,14 @@ ulocdata_getExemplarSet(USet *fillIn, const char *localeID, UErrorCode *status);
 
 
 /**
- * @draft ICU 2.8
- */
-typedef enum UMeasurementSystem UMeasurementSystem;
-
-/**
  * Enumeration for representing the measurement systems.
  * @draft ICU 2.8
  */
-enum UMeasurementSystem {
+typedef enum UMeasurementSystem {
     UMS_SI,     /** Measurement system specified by SI otherwise known as Metric system. */
     UMS_US,     /** Measurement system followed in the United States of America. */ 
     UMS_LIMIT
-};
+} UMeasurementSystem;
 
 /**
  * Returns the measurement system used in the locale specified by the localeID.
