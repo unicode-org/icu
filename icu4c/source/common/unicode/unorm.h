@@ -432,6 +432,16 @@ unorm_concatenate(const UChar *left, int32_t leftLength,
  */
 #define U_COMPARE_IGNORE_CASE       0x10000
 
+#ifndef U_COMPARE_CODE_POINT_ORDER
+/* see also unistr.h and ustring.h */
+/**
+ * Option bit for u_strCaseCompare, u_strcasecmp, unorm_compare, etc:
+ * Compare strings in code point order instead of code unit order.
+ * @draft ICU 2.2
+ */
+#define U_COMPARE_CODE_POINT_ORDER  0x8000
+#endif
+
 /**
  * Compare two strings for canonical equivalence.
  * Further options include case-insensitive comparison and

@@ -27,6 +27,16 @@
 struct UConverter;          // unicode/ucnv.h
 class  StringThreadTest;
 
+#ifndef U_COMPARE_CODE_POINT_ORDER
+/* see also ustring.h and unorm.h */
+/**
+ * Option bit for u_strCaseCompare, u_strcasecmp, unorm_compare, etc:
+ * Compare strings in code point order instead of code unit order.
+ * @draft ICU 2.2
+ */
+#define U_COMPARE_CODE_POINT_ORDER  0x8000
+#endif
+
 U_NAMESPACE_BEGIN
 
 class Locale;               // unicode/locid.h
