@@ -244,7 +244,8 @@ utrans_close(UTransliterator* trans);
  * @param trans the transliterator to return the ID of.
  * @param resultLength pointer to an output variable receiving the length
  *        of the ID string; can be NULL
- * @return the NUL-terminated ID string
+ * @return the NUL-terminated ID string. This pointer remains
+ * valid until utrans_close() is called on this transliterator.
  *
  * @draft ICU 2.8
  */
