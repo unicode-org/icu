@@ -200,7 +200,7 @@ main(int argc, char *argv[]) {
 
     /* do we want to show the comment, and is there a comment? */
     if (options[4].doesOccur && *(uint16_t *)buffer>4+info->size) {
-        printf("%s\n", buffer+4+info->size);
+        printf("%s\n", (const char *)(buffer+4+info->size));
         return 0;
     }
 
