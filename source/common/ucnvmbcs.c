@@ -181,12 +181,12 @@ _MBCSLoad(UConverterSharedData *sharedData,
 
     mbcsTable->countStates=(uint8_t)header->countStates;
     mbcsTable->countToUFallbacks=header->countToUFallbacks;
-    mbcsTable->stateTable=(int32_t (*)[256])(raw+sizeof(_MBCSHeader));
-    mbcsTable->toUFallbacks=(_MBCSToUFallback *)(mbcsTable->stateTable+header->countStates);
-    mbcsTable->unicodeCodeUnits=(uint16_t *)(raw+header->offsetToUCodeUnits);
+    mbcsTable->stateTable=(const int32_t (*)[256])(raw+sizeof(_MBCSHeader));
+    mbcsTable->toUFallbacks=(const _MBCSToUFallback *)(mbcsTable->stateTable+header->countStates);
+    mbcsTable->unicodeCodeUnits=(const uint16_t *)(raw+header->offsetToUCodeUnits);
 
-    mbcsTable->fromUnicodeTable=(uint16_t *)(raw+header->offsetFromUTable);
-    mbcsTable->fromUnicodeBytes=(uint8_t *)(raw+header->offsetFromUBytes);
+    mbcsTable->fromUnicodeTable=(const uint16_t *)(raw+header->offsetFromUTable);
+    mbcsTable->fromUnicodeBytes=(const uint8_t *)(raw+header->offsetFromUBytes);
     mbcsTable->outputType=(uint8_t)header->flags;
 }
 
