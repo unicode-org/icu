@@ -460,8 +460,6 @@ de {
         // ? za { "Zhuang" }
         // same as in root?? zu { "Zulu" }
     }
-    LocaleID:int { 0x07 }
-//    LocaleString { "de" }
     MonthAbbreviations { 
         "Jan",
         "Feb",
@@ -504,7 +502,6 @@ de {
         "\uFFFD",
         ",",
     }
-//    ShortLanguage { "deu" }
     localPatternChars { "GjMtkHmsSEDFwWahKzJe" }
     zoneStrings { 
         {

@@ -642,8 +642,6 @@ sv {
         zu   {"zulu"}
         zun  {"zu\u00F1i"}
     }
-
-    LocaleID:int { 0x1d }
     MonthAbbreviations { 
         "jan",
         "feb",

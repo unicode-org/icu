@@ -18,8 +18,6 @@ es_PE {
         "dd/MM/yy",
         "{1} {0}",
     }
-    LocaleID:int { 0x280a }
-//    LocaleString { "es_PE" }
 //    NumberElements { 
 //        ".",
 //        ",",
@@ -39,5 +37,4 @@ es_PE {
         "#,##0%",
         "#E0",
     }
-//    ShortCountry { "PER" }
 }

@@ -67,7 +67,6 @@ gl {
         "�",
         ",",
     }
-    LocaleID:int { 0x56 }
 //    LocaleScript{ 
 //        "Latn",  // ISO 15924 Name 
 //    }

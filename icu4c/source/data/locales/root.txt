@@ -913,9 +913,6 @@ root {
         XPF:intvector { 0, 0 } // CFP Franc: FRENCH POLYNESIA (PF), NEW CALEDONIA (NC), WALLIS AND FUTUNA (WF)
         DEFAULT:intvector { 2, 0 } // (All currencies not listed)
     }
-
-    LocaleID:int { 0x0000 }
-//    LocaleString { "en" }
     MonthAbbreviations { 
         "Jan",
         "Feb",
@@ -964,8 +961,6 @@ root {
         "#,##0%",
         "#E0",
     }
-//    ShortCountry { "" }
-//    ShortLanguage { "eng" }
     localPatternChars { "GyMdkHmsSEDFwWahKzYe" }
     zoneStrings { 
         {

@@ -57,8 +57,6 @@ it {
     Languages { 
         it { "italiano" }
     }
-    LocaleID:int { 0x10 }
-//    LocaleString { "it" }
     MonthAbbreviations { 
         "gen",
         "feb",
@@ -101,7 +99,6 @@ it {
         "\uFFFD",
         ",",
     }
-//    ShortLanguage { "ita" }
     zoneStrings { 
         {
             "Europe/Rome",

@@ -7,8 +7,6 @@
 
 kok {
     Version { "2.0" }
-    LocaleID:int { 0x57 }
-//    ShortLanguage { kok }
     Languages {
         aa { "\u0905\u092b\u093e\u0930" }
         ab { "\u0905\u092c\u0916\u0947\u091c\u093c\u093f\u092f\u0928" }

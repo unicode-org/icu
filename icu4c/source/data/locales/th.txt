@@ -535,8 +535,6 @@ th {
         za { "\u0e08\u0e27\u0e07" }
         zu { "\u0e0b\u0e39\u0e25\u0e39" }
     }
-    LocaleID:int { 0x1e }
-//    LocaleString { "th" }
     MonthAbbreviations { 
         "\u0E21.\u0E04.",
         "\u0E01.\u0E1E.",
@@ -565,7 +563,6 @@ th {
         "\u0E1E\u0E24\u0E28\u0E08\u0E34\u0E01\u0E32\u0E22\u0E19",
         "\u0E18\u0E31\u0E19\u0E27\u0E32\u0E04\u0E21",
     }
-//    ShortLanguage { "tha" }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {

@@ -47,8 +47,6 @@ nl {
     Languages { 
         nl { "Nederlands" }
     }
-    LocaleID:int { 0x13 }
-//    LocaleString { "nl" }
     MonthAbbreviations { 
         "jan",
         "feb",
@@ -91,7 +89,6 @@ nl {
         "\uFFFD",
         ",",
     }
-//    ShortLanguage { "nld" }
     zoneStrings { 
         {
             "Africa/Casablanca",

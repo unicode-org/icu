@@ -15,7 +15,6 @@ hi_IN {
         "##,##,##0%",
         "#E0",
     }
-//    ShortCountry { IND }
     DateTimePatterns {
         "h:mm:ss a z",
         "h:mm:ss a z",
@@ -31,5 +30,4 @@ hi_IN {
 //        "1",
 //        "1"
 //    }
-    LocaleID:int { 0x0439 }
 }

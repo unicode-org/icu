@@ -87,8 +87,6 @@ uk {
     Languages { 
         uk { "\u0443\u043A\u0440\u0430\u0457\u043D\u0441\u044C\u043A\u0430" }
     }
-    LocaleID:int { 0x22 }
-//    LocaleString { "uk" }
     MonthAbbreviations { 
         "\u0441\u0456\u0447",
         "\u043B\u044E\u0442",
@@ -131,7 +129,6 @@ uk {
         "\uFFFD",
         ",",
     }
-//    ShortLanguage { "ukr" }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {

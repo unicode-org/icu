@@ -13,7 +13,6 @@ fa_IR {
         7,      // Saturday
         1,
     }
-    LocaleID:int { 0x0429 }
     NumberPatterns { 
         "#,##0.###;\u2212#,##0.###",
         "#,##0 \u00a4;\u2212#,##0 \u00a4",

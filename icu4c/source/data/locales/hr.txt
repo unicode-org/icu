@@ -52,8 +52,6 @@ hr {
     Languages { 
         hr { "hrvatski" }
     }
-    LocaleID:int { 0x1a }
-//    LocaleString { "hr" }
     MonthAbbreviations { 
         "sij",
         "vel",
@@ -96,7 +94,6 @@ hr {
         "\uFFFD",
         ",",
     }
-//    ShortLanguage { "hrv" }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {

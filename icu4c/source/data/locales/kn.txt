@@ -7,7 +7,6 @@
 
 kn {
     Version{ "2.0" }
-    LocaleID:int { 0x4B }
     Countries {
         IN { "\u0cad\u0cbe\u0cb0\u0ca4" }
     }
@@ -18,13 +17,6 @@ kn {
         "\u0CAA\u0CC2\u0CB0\u0CCD\u0CB5\u0CBE\u0CB9\u0CCD\u0CA8",
         "\u0C85\u0CAA\u0CB0\u0CBE\u0CB9\u0CCD\u0CA8"
     }
-//    ShortLanguage{
-//        "KAN"
-//    }
-//    Language {
-//        "Kannada"
-//    }
-
     DayNames{
         "\u0CB0\u0CB5\u0CBF\u0CB5\u0CBE\u0CB0",
         "\u0CB8\u0CCB\u0CAE\u0CB5\u0CBE\u0CB0",
@@ -34,7 +26,6 @@ kn {
         "\u0CB6\u0CC1\u0C95\u0CCD\u0CB0\u0CB5\u0CBE\u0CB0",
         "\u0CB6\u0CA8\u0CBF\u0CB5\u0CBE\u0CB0"
     }
-
     DayAbbreviations{
         "\u0CB0.",
         "\u0CB8\u0CCB.",
@@ -59,7 +50,6 @@ kn {
         "\u0CA8\u0CB5\u0CC6\u0C82\u0CAC\u0CB0\u0CCD",
         "\u0CA1\u0CBF\u0CB8\u0CC6\u0C82\u0CAC\u0CB0\u0CCD",
     }
-
     MonthAbbreviations{
         "\u0C9C\u0CA8\u0CB5\u0CB0\u0CC0",
         "\u0CAB\u0CC6\u0CAC\u0CCD\u0CB0\u0CB5\u0CB0\u0CC0",

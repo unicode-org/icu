@@ -10,9 +10,6 @@
 en_MT {
     Version{ "2.0" }
 
-//    ShortCountry { MLT }
-
-
     NumberPatterns {
         "#,##0.###;-#,##0.###",
         "\u00A4#,##0.00;(\u00A4#,##0.00)",
@@ -31,8 +28,5 @@ en_MT {
         "dd/MM/yy",
         "{1} {0}",
     }
-
-
-//    LocaleID {"043A"}  ??
 
 }

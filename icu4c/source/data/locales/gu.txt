@@ -7,7 +7,6 @@
 
 gu {
     Version{ "2.0" }
-    LocaleID:int { 0x47 }
     Languages {
         gu { "\u0A97\u0AC1\u0A9C\u0AB0\u0ABE\u0AA4\u0AC0" }
     }
@@ -18,9 +17,6 @@ gu {
         "\u0AAA\u0AC2\u0AB0\u0ACD\u0AB5\u00A0\u0AAE\u0AA7\u0ACD\u0AAF\u0ABE\u0AB9\u0ACD\u0AA8",
         "\u0A89\u0AA4\u0ACD\u0AA4\u0AB0\u00A0\u0AAE\u0AA7\u0ACD\u0AAF\u0ABE\u0AB9\u0ACD\u0AA8"
     }
-//    ShortLanguage{
-//        "GUJ"
-//    }
     DayNames{
         "\u0AB0\u0AB5\u0ABF\u0AB5\u0ABE\u0AB0",
         "\u0AB8\u0ACB\u0AAE\u0AB5\u0ABE\u0AB0",

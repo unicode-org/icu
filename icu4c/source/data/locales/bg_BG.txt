@@ -7,13 +7,10 @@
 
 bg_BG {
     Version { "2.0" }
-//    LocaleString { "bg_BG" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",
         "\u00A4#,##0.00;-\u00A4#,##0.00",
         "#,##0%",
         "#E0",
     }
-//    ShortCountry { "BGR" }
-    LocaleID:int { 0x0402 }
 }

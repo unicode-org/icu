@@ -54,8 +54,6 @@ he {
         he { "\u05E2\u05D1\u05E8\u05D9\u05EA" }
         //iw { "\u05E2\u05D1\u05E8\u05D9\u05EA" } //Use he instead
     }
-    LocaleID:int { 0x0d }
-//    LocaleString { "he" }
     MonthAbbreviations { 
         "\u05D9\u05E0\u05D5",
         "\u05E4\u05D1\u05E8",
@@ -84,7 +82,6 @@ he {
         "\u05E0\u05D5\u05D1\u05DE\u05D1\u05E8",
         "\u05D3\u05E6\u05DE\u05D1\u05E8",
     }
-//    ShortLanguage { "heb" }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {

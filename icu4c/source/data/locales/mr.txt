@@ -7,7 +7,6 @@
 
 mr {
     Version { "2.0" }
-//    ShortLanguage { mar }
     Languages {
         root { "\u092e\u0930\u093e\u0920\u0940" }
 
@@ -236,8 +235,6 @@ mr {
             "IST"
         }
     }
-
-    LocaleID:int { 0x4e }
     CollationElements {
         Version { "1.0" }
         Sequence { 

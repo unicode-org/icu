@@ -10,10 +10,10 @@ ru {
     // Using the new options in rules in order to 
     // improve the performance for Cyrillic chars.
     CollationElements { 
-      Version { "1.1" }
-      Sequence { 
-        "[suppressContractions [\u0400-\u045f]]"
-      }
+        Version { "1.1" }
+        Sequence { 
+            "[suppressContractions [\u0400-\u045f]]"
+        }
     }
     Countries { 
         AL { "\u0410\u043b\u0431\u0430\u043d\u0438\u044f" }
@@ -246,8 +246,6 @@ ru {
         za { "\u0417\u0443\u0430\u043d\u0433" }
         zu { "\u0417\u0443\u043b\u0443\u0441\u0441\u043a\u0438\u0439" }
     }
-    LocaleID:int { 0x19 }
-//    LocaleString { "ru" }
     MonthAbbreviations { 
         "\u044F\u043D\u0432",
         "\u0444\u0435\u0432",
@@ -276,7 +274,6 @@ ru {
         "\u041D\u043E\u044F\u0431\u0440\u044C",
         "\u0414\u0435\u043A\u0430\u0431\u0440\u044C",
     }
-//    ShortLanguage { "rus" }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {

@@ -61,8 +61,6 @@ pl {
     Languages { 
         pl { "polski" }
     }
-    LocaleID:int { 0x15 }
-//    LocaleString { "pl" }
     MonthAbbreviations { 
         "sty",
         "lut",
@@ -105,7 +103,6 @@ pl {
         "\uFFFD",
         ",",
     }
-//    ShortLanguage { "pol" }
     zoneStrings { 
         {
             "Africa/Casablanca",

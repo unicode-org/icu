@@ -18,8 +18,6 @@ es_DO {
         "dd/MM/yy",
         "{1} {0}",
     }
-    LocaleID:int { 0x1c0a }
-//    LocaleString { "es_DO" }
 //    NumberElements {
 //        ".",
 //        ",",
@@ -33,5 +31,4 @@ es_DO {
 //        "\u221E",
 //        "\uFFFD",
 //    }
-//    ShortCountry { "DOM" }
 }

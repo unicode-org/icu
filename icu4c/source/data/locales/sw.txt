@@ -44,8 +44,6 @@ sw {
     Languages { 
         sw  { "Kiswahili" }
     }
-    LocaleID:int { 0x0041 }
-//    LocaleString { "sw" }
     MonthAbbreviations { 
         "Jan",
         "Feb",
@@ -74,7 +72,6 @@ sw {
         "Novemba",
         "Desemba",
     }
-//    ShortLanguage { "swa" }
     zoneStrings { 
         {
             "Africa/Nairobi",

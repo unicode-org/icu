@@ -32,10 +32,6 @@ es_AR {
         "\uFFFD",
         ",",
     }
-    LocaleID:int { 0x2c0a }
-//    LocaleString { "es_AR" }
-//    ShortCountry { "ARG" }
-
     // Currency display names
     Currencies {
         ARS { "$", "Peso Argentino" }

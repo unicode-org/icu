@@ -93,8 +93,6 @@ eo {
         sv { "sveda" }
         tr { "turka" }
     }
-    //LocaleID { "07e0" }
-//    LocaleString { "eo" }
     MonthAbbreviations { 
         "jan",
         "feb",
@@ -137,7 +135,6 @@ eo {
         "\uFFFD",
         ",",
     }
-//    ShortLanguage { "epo" }
     localPatternChars { "GjMtkHmslTDUSnahKzJd" }
 //    LocaleScript{ 
 //        "Latn",  // ISO 15924 Name 

@@ -33,12 +33,10 @@ te_IN {
         "##,##,##0%",
         "#E0",
     }
-//    ShortLanguage { "tel" }
     //PaperSize {
     //    Height { "297" }
     //    Width { "210" }
     //    Units { "mm" }
     //}
-    LocaleID:int { 0x44a }
 }
 

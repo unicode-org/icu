@@ -18,8 +18,6 @@ es_VE {
         "dd/MM/yy",
         "{1} {0}",
     }
-    LocaleID:int { 0x200a }
-//    LocaleString { "es_VE" }
     NumberElements {
         ",",
         ".",
@@ -40,5 +38,4 @@ es_VE {
         "#,##0%",
         "#E0",
     }
-//    ShortCountry { "VEN" }
 }

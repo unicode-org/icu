@@ -7,7 +7,4 @@
 
 ar_DZ {
     Version{"2.0"}
-//    LocaleString { "ar_DZ" }
-//    ShortCountry { "DZA" }
-    LocaleID:int { 0x1401 }
 }

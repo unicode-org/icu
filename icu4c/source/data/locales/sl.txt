@@ -54,8 +54,6 @@ sl {
     Languages { 
         sl { "Sloven\u0161\u010Dina" }
     }
-    LocaleID:int { 0x24 }
-//    LocaleString { "sl" }
     MonthAbbreviations { 
         "jan",
         "feb",
@@ -98,7 +96,6 @@ sl {
         "\uFFFD",
         ",",
     }
-//    ShortLanguage { "slv" }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {

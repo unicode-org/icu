@@ -52,8 +52,6 @@ da {
     Languages { 
         da { "dansk" }
     }
-    LocaleID:int { 0x06 }
-//    LocaleString { "da" }
     MonthAbbreviations { 
         "jan",
         "feb",
@@ -96,7 +94,6 @@ da {
         "\uFFFD",
         ",",
     }
-//    ShortLanguage { "dan" }
     localPatternChars { "GuMtkHmsSEDFwWahKzUe" }
     Eras { 
         "f.Kr.",

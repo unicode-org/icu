@@ -7,14 +7,6 @@
 
 en_ZA {
     Version { "2.0" }
-//    Duplicated in parent
-//    Countries { 
-//        US { "United States" }
-//        GB { "United Kingdom" }
-//        CA { "Canada" }
-//        IE { "Ireland" }
-//        ZA { "South Africa" }
-//    }
     DateTimePatterns { 
         "h:mm:ss a",
         "h:mm:ss a",
@@ -26,17 +18,10 @@ en_ZA {
         "yyyy/MM/dd",
         "{1} {0}",
     }
-//    Duplicated in parent
-//    Languages { 
-//        en { "English" }
-//    }
-    LocaleID:int { 0x1c09 }
-//    LocaleString { "en_ZA" }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",
         "\u00A4#,##0.00;-\u00A4#,##0.00",
         "#,##0%",
         "#E0",
     }
-//    ShortCountry { "ZAF" }
 }

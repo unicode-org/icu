@@ -53,8 +53,6 @@ sk {
     Languages { 
         sk { "Sloven\u010Dina" }
     }
-    LocaleID:int { 0x1b }
-//    LocaleString { "sk" }
     MonthAbbreviations { 
         "jan",
         "feb",
@@ -97,7 +95,6 @@ sk {
         "\uFFFD",
         ",",
     }
-//    ShortLanguage { "slk" }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {

@@ -13,6 +13,4 @@ sv_FI {
         "#,##0%",
         "#E0",
     }
-//    ShortCountry { "FIN" }
-    LocaleID:int { 0x081d }
 }

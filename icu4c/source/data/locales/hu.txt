@@ -62,8 +62,6 @@ hu {
     Languages { 
         hu { "magyar" }
     }
-    LocaleID:int { 0x0e }
-//    LocaleString { "hu" }
     MonthAbbreviations { 
         "jan.",
         "febr.",
@@ -106,7 +104,6 @@ hu {
         "\uFFFD",
         ",",
     }
-//    ShortLanguage { "hun" }
     localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {

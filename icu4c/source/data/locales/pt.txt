@@ -169,8 +169,6 @@ pt {
         uz { "Usbeque" }
         zh { "Chin\u00eas" }
     }
-    LocaleID:int { 0x16 }
-//    LocaleString { "pt" }
     MonthAbbreviations { 
         "Jan",
         "Fev",
@@ -213,7 +211,6 @@ pt {
         "\uFFFD",
         ",",
     }
-//    ShortLanguage { "por" }
     zoneStrings { 
         {
             "Africa/Casablanca",

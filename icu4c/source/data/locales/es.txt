@@ -219,8 +219,6 @@ es {
         zh { "chino" }
         zu { "zul\u00FA" }
     }
-    LocaleID:int { 0x0a }
-//    LocaleString { "es" }
     MonthAbbreviations { 
         "ene",
         "feb",
@@ -255,7 +253,6 @@ es {
         "#,##0%",
         "#E0",
     }
-//    ShortLanguage { "spa" }
     localPatternChars { "GuMtkHmsSEDFwWahKzUe" }
     zoneStrings { 
         {

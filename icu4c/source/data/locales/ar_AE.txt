@@ -7,7 +7,4 @@
 
 ar_AE {
     Version{"2.0"}
-//    LocaleString { "ar_AE" }
-//    ShortCountry { "ARE" }
-    LocaleID:int { 0x3801 }
 }

@@ -18,8 +18,6 @@ es_PR {
         "MM/dd/yy",
         "{1} {0}",
     }
-    LocaleID:int { 0x500a }
-//    LocaleString { "es_PR" }
 //    NumberElements { 
 //        ".",
 //        ",",
@@ -33,8 +31,6 @@ es_PR {
 //        "\u221E",
 //        "\uFFFD",
 //    }
-//    ShortCountry { "PRI" }
-
     // Currency display names
     Currencies {
         USD { "$", "D\u00F3lar Americano" }
