@@ -531,7 +531,7 @@ unorm_getCanonStartSet(UChar32 c, USerializedSet *fillSet);
  *
  * Strings are either stored as a single code unit or as the length
  * followed by that many units.
- *   const UChar *s=extraData+(index from auxTrie data bits 29..20);
+ *   const UChar *s=extraData+(index from auxTrie data bits 9..0);
  *   int32_t length;
  *   if(*s<0xff00) {
  *     // s points to the single-unit string
