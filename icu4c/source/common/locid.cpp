@@ -425,7 +425,7 @@ Locale& Locale::init(const char* localeID)
             /* there is a country field */
             length = separator - fullName;
             if(length > 0) {
-                if(length >= sizeof(language)) {
+                if(length >= (int32_t)sizeof(language)) {
                     break;
                 }
                 uprv_memcpy(language, fullName, length);
@@ -438,7 +438,7 @@ Locale& Locale::init(const char* localeID)
                 /* there is a variant field */
                 length = separator - prev;
                 if(length > 0) {
-                    if(length >= sizeof(country)) {
+                    if(length >= (int32_t)sizeof(country)) {
                         break;
                     }
                     uprv_memcpy(country, prev, length);
@@ -448,14 +448,14 @@ Locale& Locale::init(const char* localeID)
                 variantBegin = (separator + 1) - fullName;
             } else {
                 /* variantBegin==strlen(fullName), length==strlen(language)==prev-1-fullName */
-                if((variantBegin - length - 1) >= sizeof(country)) {
+                if((variantBegin - length - 1) >= (int32_t)sizeof(country)) {
                     break;
                 }
                 uprv_strcpy(country, prev);
             }
         } else {
             /* variantBegin==strlen(fullName) */
-            if(variantBegin >= sizeof(language)) {
+            if(variantBegin >= (int32_t)sizeof(language)) {
                 break;
             }
             uprv_strcpy(language, fullName);
