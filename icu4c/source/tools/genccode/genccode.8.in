@@ -4,14 +4,17 @@
 .\"
 .\" Copyright (C) 2003 IBM, Inc. and others.
 .\"
-.TH GENCCODE 8 "17 July 2003" "ICU MANPAGE" "ICU @VERSION@ Manual"
+.TH GENCCODE 8 "11 March 2004" "ICU MANPAGE" "ICU @VERSION@ Manual"
 .SH NAME
 .B genccode
-\- generate C code from an ICU data file
+\- generate C or platform specific assembly code from an ICU data file.
 .SH SYNOPSIS
 .B genccode
 [
 .BR "\-h\fP, \fB\-?\fP, \fB\-\-help"
+]
+[
+.BI "\-a\fP, \fB\-\-assembly" " name"
 ]
 [
 .BI "\-d\fP, \fB\-\-destdir" " destination"
@@ -40,6 +43,15 @@ replacing dots by underscores, and adding a
 .I .c
 file extension.
 .PP
+If the \fB-a\fP option is used, platform specific assembly
+code is generated instead of C code.
+Most C compilers will accept both C and assembly files.
+Instead of writing a filename with a
+.I .c
+file extension, a filename with a
+.I .s
+will be written instead.
+.PP
 If
 .B genccode
 is called with no
@@ -49,6 +61,11 @@ it terminates gracefully.
 .TP
 .BR "\-h\fP, \fB\-?\fP, \fB\-\-help"
 Print help about usage and exit.
+.TP
+.BI "\-a\fP, \fB\-\-assembly" " name"
+Output assembly code instead of C code.
+Use \fB-h\fP to see the list of available types of assembly to generate and
+to specify for this option.
 .TP
 .BI "\-d\fP, \fB\-\-destdir" " destination"
 Set the destination directory to
@@ -86,4 +103,4 @@ option).
 .SH VERSION
 @VERSION@
 .SH COPYRIGHT
-Copyright (C) 2000-2003 IBM, Inc. and others.
+Copyright (C) 2000-2004 IBM, Inc. and others.
