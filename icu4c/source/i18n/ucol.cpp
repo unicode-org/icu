@@ -3971,6 +3971,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
 		uint32_t digIndx = 0;
 		uint32_t endIndex = 0;
 		uint32_t leadingZeroIndex = 0;
+		uint32_t trailingZeroCount = 0;
 
 		uint32_t primWeight = 0;
 
@@ -4019,11 +4020,10 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
       			uprv_realloc(numTempBuf, numTempBufSize);
       	}
 
-			// Skipping over "trailing" zeroes but we still add to digIndx.
-      		if (digVal != 0 || nonZeroValReached){
-				if (digVal != 0 && !nonZeroValReached)
+			// Skip over trailing zeroes, and keep a count of them.
+			if (digVal != 0)
 					nonZeroValReached = TRUE;
-
+      		if (nonZeroValReached){
 				/*
 					We parse the digit string into base 100 numbers (this fits into a byte).
 				 	We only add to the buffer in twos, thus if we are parsing an odd character,
@@ -4037,23 +4037,41 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
 				 	ones place and the second digit encountered into the tens place.
 				 */
 
-				if (digIndx % 2 == 1){
+				if ((digIndx + trailingZeroCount) % 2 == 1){
+					// High-order digit case (tens place)
 					collateVal += (uint8_t)(digVal * 10);
 
-					 // This removes leading zeroes.
-					if (collateVal == 0 && !leadingZeroIndex)
-						leadingZeroIndex = ((digIndx-1)/2) + 2;
-					else if (leadingZeroIndex)
+					// We cannot set leadingZeroIndex unless it has been set for the
+					// low-order digit. Therefore, all we can do for the high-order
+					// digit is turn it off, never on.
+					// The only time we will have a high digit without a low is for
+					// the very first non-zero digit, so no zero check is necessary.
+					if (collateVal != 0)
 						leadingZeroIndex = 0;
 
-					numTempBuf[((digIndx-1)/2) + 2] = collateVal*2 + 6;
+					numTempBuf[(digIndx/2) + 2] = collateVal*2 + 6;
 					collateVal = 0;
 				}
 				else{
+					// Low-order digit case (ones place)
 					collateVal = (uint8_t)digVal;
+
+					// Check for leading zeroes.
+					if (collateVal == 0)
+					{
+						if (!leadingZeroIndex)
+							leadingZeroIndex = (digIndx/2) + 2;
+					}
+					else
+						leadingZeroIndex = 0;
+					
+					// No need to write to buffer; the case of a last odd digit
+					// is handled below.
 				}
+      			++digIndx;
       		}
-      		digIndx++;
+      		else
+      			++trailingZeroCount;
 
       		if (!collIter_bos(source)){
 				ch = getPrevNormalizedChar(source);
@@ -4092,24 +4110,22 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
 
 		if (nonZeroValReached == FALSE){
 			digIndx = 2;
+			trailingZeroCount = 0;
 			numTempBuf[2] = 6;
 		}
 
-		if (digIndx % 2 != 0){
-            if (collateVal == 0 && leadingZeroIndex == 0) {
-                // This removes the leading 0 in a odd number sequence of
-                // numbers e.g. avery001
-                leadingZeroIndex = ((digIndx - 1) >> 1) + 2;
-            }
-            else {
-                // this is not a leading 0, we add it in
+		if ((digIndx + trailingZeroCount) % 2 != 0){
                 numTempBuf[((digIndx)/2) + 2] = collateVal*2 + 6;
-                digIndx += 1;
+			digIndx += 1;		// The implicit leading zero
             }
+		if (trailingZeroCount % 2 != 0){
+			// We had to consume one trailing zero for the low digit
+			// of the least significant byte
+			digIndx += 1;		// The trailing zero not in the exponent
+			trailingZeroCount -= 1;
         }
 
 		endIndex = leadingZeroIndex ? leadingZeroIndex : ((digIndx/2) + 2) ;
-        digIndx = ((endIndex - 2) << 1) + 1; // removing initial zeros
 
 		// Subtract one off of the last byte. Really the first byte here, but it's reversed...
 		numTempBuf[2] -= 1;
@@ -4118,9 +4134,14 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
 			We want to skip over the first two slots in the buffer. The first slot
 			is reserved for the header byte UCOL_CODAN_PLACEHOLDER. The second slot is for the
 			sign/exponent byte: 0x80 + (decimalPos/2) & 7f.
+			The exponent must be adjusted by the number of leading zeroes, and the number of
+			trailing zeroes.
 		*/
 		numTempBuf[0] = UCOL_CODAN_PLACEHOLDER;
-		numTempBuf[1] = (uint8_t)(0x80 + ((digIndx/2) & 0x7F));
+		uint32_t exponent = (digIndx+trailingZeroCount)/2;
+		if (leadingZeroIndex)
+			exponent -= ((digIndx/2) + 2 - leadingZeroIndex);
+		numTempBuf[1] = (uint8_t)(0x80 + (exponent & 0x7F));
 
 		// Now transfer the collation key to our collIterate struct.
 		// The total size for our collation key is endIndx bumped up to the next largest even value divided by two.
