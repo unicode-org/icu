@@ -257,13 +257,14 @@ NewResourceBundleTest::TestConstruction()
 {
     {
         UErrorCode   err = U_ZERO_ERROR;
-        const char   *directory;
         char testdatapath[256];
         Locale       locale("te", "IN");
 
-        directory=u_getDataDirectory();
-        uprv_strcpy(testdatapath, directory);
-        uprv_strcat(testdatapath, "testdata");
+        const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
+
+        strcpy(testdatapath, u_getDataDirectory());
+        strcat(testdatapath,tdrelativepath);
+        strcat(testdatapath, "testdata");
 
         ResourceBundle  test1((UnicodeString)testdatapath, err);
         ResourceBundle  test2(testdatapath, locale, err);
@@ -307,13 +308,14 @@ NewResourceBundleTest::TestConstruction()
     }
     {
         UErrorCode   err = U_ZERO_ERROR;
-        const char   *directory;
         char testdatapath[256];
         Locale       locale("te", "IN");
 
-        directory=u_getDataDirectory();
-        uprv_strcpy(testdatapath, directory);
-        uprv_strcat(testdatapath, "testdata");
+        const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
+
+        strcpy(testdatapath, u_getDataDirectory());
+        strcat(testdatapath,tdrelativepath);
+        strcat(testdatapath, "testdata");
 
 
         wchar_t* wideDirectory = new wchar_t[256];
@@ -341,7 +343,6 @@ void
 NewResourceBundleTest::TestIteration()
 {
     UErrorCode   err = U_ZERO_ERROR;
-    const char   *directory;
     char testdatapath[256];
     const char* data[]={
         "string_in_Root_te_te_IN",   "1",
@@ -351,9 +352,11 @@ NewResourceBundleTest::TestIteration()
 
     Locale       *locale=new Locale("te_IN");
 
-    directory=u_getDataDirectory();
-    uprv_strcpy(testdatapath, directory);
-    uprv_strcat(testdatapath, "testdata");
+    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
+
+    strcpy(testdatapath, u_getDataDirectory());
+    strcat(testdatapath,tdrelativepath);
+    strcat(testdatapath, "testdata");
 
     ResourceBundle  test1(testdatapath, *locale, err);
     if(U_FAILURE(err)){
@@ -451,13 +454,13 @@ NewResourceBundleTest::TestIteration()
 void
 NewResourceBundleTest::TestOtherAPI(){
     UErrorCode   err = U_ZERO_ERROR;
-    const char   *directory;
     char testdatapath[256];
     Locale       *locale=new Locale("te_IN");
-   
-    directory=u_getDataDirectory();
-    uprv_strcpy(testdatapath, directory);
-    uprv_strcat(testdatapath, "testdata");
+    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
+
+    strcpy(testdatapath, u_getDataDirectory());
+    strcat(testdatapath,tdrelativepath);
+    strcat(testdatapath, "testdata");
 
     ResourceBundle  test1(testdatapath, *locale, err);
     if(U_FAILURE(err)){
@@ -631,12 +634,13 @@ NewResourceBundleTest::testTag(const char* frag,
 
     int32_t i,j,row,col, actual_bundle;
     int32_t index;
-    const char *directory;
     char testdatapath[256];
 
-    directory=u_getDataDirectory();
-    uprv_strcpy(testdatapath, directory);
-    uprv_strcat(testdatapath, "testdata");
+    const char* tdrelativepath = ".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"out"U_FILE_SEP_STRING;
+
+    strcpy(testdatapath, u_getDataDirectory());
+    strcat(testdatapath,tdrelativepath);
+    strcat(testdatapath, "testdata");
 
     for (i=0; i<bundles_count; ++i)
     {
