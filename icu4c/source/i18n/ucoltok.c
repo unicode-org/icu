@@ -131,6 +131,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
   UColToken *lastToken = NULL;
   uint32_t newCharsLen = 0, newExtensionsLen = 0;
   uint32_t charsOffset = 0, extensionOffset = 0;
+  uint32_t expandNext = 0;
 
   uint32_t newStrength = UCOL_TOK_UNSET; 
 
@@ -305,9 +306,14 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
           sourceToken->expansion = newExtensionsLen << 24 | extensionOffset;
 
           sourceToken->debugSource = *(src->source + charsOffset);
-          sourceToken->debugExpansion = *(src->source + extensionOffset);
+          if(newExtensionsLen > 0) {
+            sourceToken->debugExpansion = *(src->source + extensionOffset);
+          } else {
+            sourceToken->debugExpansion = 0;
+          }
 
-          sourceToken->polarity = 1; /* TODO: this should also handle reverse */
+
+          sourceToken->polarity = UCOL_TOK_POLARITY_POSITIVE; /* TODO: this should also handle reverse */
           sourceToken->next = NULL;
           sourceToken->previous = NULL;
           uhash_put(uchars2tokens, sourceToken, sourceToken, status);
@@ -330,23 +336,38 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
         }
 
         sourceToken->strength = newStrength;
-        sourceToken->listHeader = &ListList[listPosition-1];
+        sourceToken->listHeader = lastToken->listHeader;
+        /*
+        1.	Find the strongest strength in each list, and set strongestP and strongestN 
+        accordingly in the headers. 
+        */
+        if(sourceToken->listHeader->strongest[sourceToken->polarity] > sourceToken->strength) {
+          sourceToken->listHeader->strongest[sourceToken->polarity] = sourceToken->strength;
+        }
 
         if(lastToken->strength == UCOL_TOK_RESET) {
         /* If LAST is a reset 
               insert sourceToken at the head of either the positive list or the negative 
               list, depending on the polarity of relation. 
               set the polarity of sourceToken to be the same as the list you put it in. */
-          sourceToken->listHeader->first[sourceToken->polarity] = sourceToken;
-          sourceToken->listHeader->last[sourceToken->polarity] = sourceToken;
+          if(sourceToken->listHeader->first[sourceToken->polarity] == 0) {
+            sourceToken->listHeader->first[sourceToken->polarity] = sourceToken;
+            sourceToken->listHeader->last[sourceToken->polarity] = sourceToken;
+          } else {
+            sourceToken->listHeader->first[sourceToken->polarity]->previous = sourceToken;
+            sourceToken->next = sourceToken->listHeader->first[sourceToken->polarity];
+            sourceToken->listHeader->first[sourceToken->polarity] = sourceToken;
+          }
+
           /*
             If "xy" doesn't occur earlier in the list or in the UCA, convert &xy * c * 
             d * ... into &x * c/y * d * ... 
           */
-          if(lastToken->expandNext != 0 && sourceToken->expansion == 0) {
-            sourceToken->expansion = lastToken->expandNext;
+          if(expandNext != 0 && sourceToken->expansion == 0) {
+            sourceToken->expansion = expandNext;
+            sourceToken->debugExpansion = *(src->source + (expandNext & 0xFFFFFF));
+            expandNext = 0;
           }
-
 
         } else {
         /* Otherwise (when LAST is not a reset) 
@@ -385,6 +406,12 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
         uint32_t CE = UCOL_NOT_FOUND, SecondCE = UCOL_NOT_FOUND;
         collIterate s;
 
+        if(newCharsLen > 1) {
+          expandNext = ((newCharsLen-1)<<24) | (charsOffset + 1);
+        } else {
+          expandNext = 0;
+        }
+
       /*  5 If the relation is a reset: 
           If sourceToken is null 
             Create new list, create new sourceToken, make the baseCE from source, put 
@@ -407,12 +434,11 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
           sourceToken->debugExpansion = *(src->source + extensionOffset);
 
 
-          sourceToken->polarity = 1; /* TODO: this should also handle reverse */
+          sourceToken->polarity = UCOL_TOK_POLARITY_POSITIVE; /* TODO: this should also handle reverse */
           sourceToken->strength = UCOL_TOK_RESET;
           sourceToken->next = NULL;
           sourceToken->previous = NULL;
           sourceToken->listHeader = &ListList[listPosition];
-
           /*
             3 Consider each item: relation, source, and expansion: e.g. ...< x / y ... 
               First convert all expansions into normal form. Examples: 
@@ -423,12 +449,8 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
                 earlier in the list. 
           */
           if(newCharsLen > 1) {
-            sourceToken->expandNext = sourceToken->source+0xFF000001;
-            sourceToken->source = sourceToken->source & 0x01FFFFFF;
-            /* same as -0x01000000+1 0r -0x00FFFFFF */
-          } else {
-            sourceToken->expandNext = 0;
-          }
+            sourceToken->source = 0x01000000 | charsOffset;
+          } 
 
  
           init_collIterate(src->source+charsOffset, newCharsLen, &s, FALSE);
@@ -440,10 +462,12 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UErrorCode *status) {
           /*UCOL_GETNEXTCE(SecondCE, src->UCA, s, &status);*/
     
           ListList[listPosition].baseCE = CE;
-          ListList[listPosition].first[UCOL_TOK_DIR_NEGATIVE] = NULL;
-          ListList[listPosition].last[UCOL_TOK_DIR_NEGATIVE] = NULL;
-          ListList[listPosition].first[UCOL_TOK_DIR_POSITIVE] = NULL;
-          ListList[listPosition].last[UCOL_TOK_DIR_POSITIVE] = NULL;
+          ListList[listPosition].first[UCOL_TOK_POLARITY_NEGATIVE] = NULL;
+          ListList[listPosition].last[UCOL_TOK_POLARITY_NEGATIVE] = NULL;
+          ListList[listPosition].first[UCOL_TOK_POLARITY_POSITIVE] = NULL;
+          ListList[listPosition].last[UCOL_TOK_POLARITY_POSITIVE] = NULL;
+          ListList[listPosition].strongest[UCOL_TOK_POLARITY_NEGATIVE] = UCOL_TOK_UNSET;
+          ListList[listPosition].strongest[UCOL_TOK_POLARITY_POSITIVE] = UCOL_TOK_UNSET;
 
           ListList[listPosition].reset = sourceToken;
 

@@ -3,10 +3,10 @@
 
 #include "ucolimp.h"
 
-typedef struct UColToken UColToken;
+#define UCOL_TOK_POLARITY_NEGATIVE 0
+#define UCOL_TOK_POLARITY_POSITIVE 1
 
-#define UCOL_TOK_DIR_NEGATIVE 0
-#define UCOL_TOK_DIR_POSITIVE 1
+typedef struct UColToken UColToken;
 
 typedef struct  {
   UColToken* first[2];
@@ -21,8 +21,11 @@ typedef struct  {
   uint32_t baseCE;
   uint32_t nextCE;
   uint32_t previousCE;
+  uint32_t strongest[2];
+/*
   UColAttributeValue strongestP;
   UColAttributeValue strongestN;
+*/
 } UColTokListHeader;
 
 struct UColToken {
@@ -30,15 +33,12 @@ struct UColToken {
   UChar debugExpansion;
   uint32_t source;
   uint32_t expansion;
-  uint32_t expandNext;
-  int32_t strength;
-  int32_t polarity; /* 1 for <, <<, <<<, , ; and -1 for >, >>, >>> */
+  uint32_t strength;
+  uint32_t polarity; /* 1 for <, <<, <<<, , ; and -1 for >, >>, >>> */
   UColTokListHeader *listHeader;
   UColToken* previous;
   UColToken* next;
 };
-
-
 
 typedef struct {
   const UChar *source;
