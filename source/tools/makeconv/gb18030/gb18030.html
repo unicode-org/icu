@@ -67,11 +67,12 @@ This section is most useful for understanding the genesis and structure of GB 18
         This is not official at this point!</li>
     <li>You should arrive at data like <a href="gbkuni30.txt">gbkuni30.txt</a>.
         This file has the following simplified format on each line:<br>
-        <code>unicode (':' | '>') gb ['*']</code><br>
+        <code>unicode (':' | '>') gb ['*' ['*']]</code><br>
         The left column contains the Unicode code point, the right column the byte sequence in GB 18030.
         The delimiter is either a colon for roundtrip mappings or a greater-than sign
         for fallbacks from Unicode to the codepage.
-        I have marked mappings of the appendix E characters with a star.</li>
+        I have marked mappings of the appendix E characters with a star.
+        In addition, I have marked one pair of mappings that <em>should be</em> in appendix E with a double star.</li>
     <li>Now compile <a href="gbmake4.c">gbmake4</a> and run it with the above file as stdin input.
         You will get as output all the four-byte mappings for all
         BMP code points that do not have a one-byte or two-byte mapping.</li>
