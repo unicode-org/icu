@@ -18,11 +18,11 @@
 //      C++ Wrappers for Unicode
 //  CHANGES BY
 //      Madhu Katragadda
-//   5/20/99     Madhu		Added the function getVersion()
+//   5/20/99     Madhu      Added the function getVersion()
 //  11/22/99     aliu       Added MIN_RADIX, MAX_RADIX, digit, forDigit
 //********************************************************************************************
-   
-         
+
+
 
 #ifndef UNICODE_H
 #define UNICODE_H
@@ -124,14 +124,14 @@ public:
         DASH_PUNCTUATION        = 19,
         START_PUNCTUATION       = 20,
         END_PUNCTUATION         = 21,
-		CONNECTOR_PUNCTUATION   = 22,
+        CONNECTOR_PUNCTUATION   = 22,
         OTHER_PUNCTUATION       = 23,
         MATH_SYMBOL             = 24,
         CURRENCY_SYMBOL         = 25,
         MODIFIER_SYMBOL         = 26,
         OTHER_SYMBOL            = 27,
-		INITIAL_PUNCTUATION     = 28,
-		FINAL_PUNCTUATION       = 29,
+        INITIAL_PUNCTUATION     = 28,
+        FINAL_PUNCTUATION       = 29,
         GENERAL_TYPES_COUNT     = 30
     };
 
@@ -213,26 +213,26 @@ public:
      */
     enum EDirectionProperty { 
         LEFT_TO_RIGHT               = 0, 
-		RIGHT_TO_LEFT               = 1, 
-		EUROPEAN_NUMBER             = 2,
-		EUROPEAN_NUMBER_SEPARATOR   = 3,
-		EUROPEAN_NUMBER_TERMINATOR  = 4,
-		ARABIC_NUMBER               = 5,
-		COMMON_NUMBER_SEPARATOR     = 6,
-		BLOCK_SEPARATOR             = 7,
-		SEGMENT_SEPARATOR           = 8,
-		WHITE_SPACE_NEUTRAL         = 9, 
-		OTHER_NEUTRAL               = 10, 
-		LEFT_TO_RIGHT_EMBEDDING     = 11,
-		LEFT_TO_RIGHT_OVERRIDE      = 12,
-		RIGHT_TO_LEFT_ARABIC        = 13,
-		RIGHT_TO_LEFT_EMBEDDING     = 14,
-		RIGHT_TO_LEFT_OVERRIDE      = 15,
-		POP_DIRECTIONAL_FORMAT      = 16,
-		DIR_NON_SPACING_MARK        = 17,
-		BOUNDARY_NEUTRAL            = 18
+        RIGHT_TO_LEFT               = 1, 
+        EUROPEAN_NUMBER             = 2,
+        EUROPEAN_NUMBER_SEPARATOR   = 3,
+        EUROPEAN_NUMBER_TERMINATOR  = 4,
+        ARABIC_NUMBER               = 5,
+        COMMON_NUMBER_SEPARATOR     = 6,
+        BLOCK_SEPARATOR             = 7,
+        SEGMENT_SEPARATOR           = 8,
+        WHITE_SPACE_NEUTRAL         = 9, 
+        OTHER_NEUTRAL               = 10, 
+        LEFT_TO_RIGHT_EMBEDDING     = 11,
+        LEFT_TO_RIGHT_OVERRIDE      = 12,
+        RIGHT_TO_LEFT_ARABIC        = 13,
+        RIGHT_TO_LEFT_EMBEDDING     = 14,
+        RIGHT_TO_LEFT_OVERRIDE      = 15,
+        POP_DIRECTIONAL_FORMAT      = 16,
+        DIR_NON_SPACING_MARK        = 17,
+        BOUNDARY_NEUTRAL            = 18
     };
-    
+
     /**
      * Values returned by the getCellWidth() function.
      * @see Unicode#getCellWidth
@@ -702,7 +702,7 @@ public:
      * Note: This method corresponds to the Java method
      * <tt>java.lang.Character.isWhitespace()</tt>.
      *
-     * @param   ch	the character to be tested.
+     * @param   ch  the character to be tested.
      * @return  true if the character is an ICU whitespace character;
      *          false otherwise.
      * @see     #isSpaceChar
@@ -885,7 +885,7 @@ public:
      * @see     Unicode#digit
      * @see     Unicode#forDigit
      * @see     Unicode#isDigit
-     * @deprecated HSYS: use Unicode::digit instead.
+     * @deprecated HSYS: use Unicode::digit instead. Remove after 2000-dec-31
      */
     static inline int32_t digitValue(UChar32 ch);     
 
@@ -927,7 +927,7 @@ public:
      * @draft
      */
     static inline int8_t digit(UChar32 ch, int8_t radix);
-	
+
     /**
      * Determines the character representation for a specific digit in 
      * the specified radix. If the value of <code>radix</code> is not a 
@@ -962,7 +962,7 @@ public:
      * @param info the version # information, the result will be filled in
      * @draft
      */
-	static void getUnicodeVersion(UVersionInfo info);
+    static void getUnicodeVersion(UVersionInfo info);
 
 protected:
     // These constructors, destructor, and assignment operator must
@@ -1230,7 +1230,7 @@ Unicode::forDigit(int32_t digit, int8_t radix) {
 
 inline void
 Unicode::getUnicodeVersion(UVersionInfo versionArray) {
-	u_getUnicodeVersion(versionArray);
+    u_getUnicodeVersion(versionArray);
 }
 
 #endif

@@ -210,14 +210,14 @@ public:
 
     /**
      * Get the text for which this object is finding the boundaries.
-     * @deprecated This will be removed after 2000-Dec-31.
+     * @deprecated This will be removed after 2000-Dec-31. Use getText() instead.
      */
     virtual CharacterIterator* createText(void) const = 0;
 
     /**
      * Change the text over which this operates. The text boundary is
      * reset to the start.
-     * @deprecated This function should be modified to take a const UnicodeString& argument.
+     * @deprecated Use setText(const UnicodeString&) instead.
      */
     virtual void  setText(const UnicodeString* it) = 0;
 

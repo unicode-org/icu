@@ -15,7 +15,7 @@
 *   04/15/99    Madhu       Updated Javadoc  
 *   06/14/99    stephen     Removed functions taking a filename suffix.
 *   07/20/99    stephen     Language-independent ypedef to void*
-*   11/09/99	weiv		Added ures_getLocale()
+*   11/09/99    weiv        Added ures_getLocale()
 *******************************************************************************
 */
 
@@ -193,8 +193,8 @@ typedef enum {
  * @draft
  */
 U_CAPI UResourceBundle*  U_EXPORT2 ures_open(const char*    path,   /* NULL if none */
-					   const char*  locale, /* NULL if none */
-					   UErrorCode*     status);
+                                           const char*  locale, /* NULL if none */
+                                           UErrorCode*     status);
 
 
 /**
@@ -238,7 +238,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_openU(const UChar* path,
  * @see ures_getArrayItem
  * @see ures_get2dArrayItem
  * @see ures_getTaggedItem
- * @deprecated
+ * @deprecated Remove after 2000-dec-31. Use ures_getStringByKey instead.
  */
 U_CAPI const UChar* U_EXPORT2 ures_get(const UResourceBundle*    resourceBundle,
                const char*              resourceTag,
@@ -261,7 +261,7 @@ U_CAPI const UChar* U_EXPORT2 ures_get(const UResourceBundle*    resourceBundle,
  * @see ures_get
  * @see ures_get2dArrayItem
  * @see ures_getTaggedItem
- * @deprecated
+ * @deprecated Remove after 2000-dec-31. Use ures_getByKey and ures_getByIndex instead.
  */
 U_CAPI const UChar* U_EXPORT2 ures_getArrayItem(const UResourceBundle*     resourceBundle,
                     const char*               resourceTag,
@@ -286,9 +286,8 @@ U_CAPI const UChar* U_EXPORT2 ures_getArrayItem(const UResourceBundle*     resou
  * @see ures_get
  * @see ures_getArrayItem
  * @see ures_getTaggedItem
- * @deprecated
+ * @deprecated Remove after 2000-dec-31. Use ures_getBinary instead.
  */
-
 U_CAPI const UChar* U_EXPORT2 ures_get2dArrayItem(const UResourceBundle*   resourceBundle,
                       const char*             resourceTag,
                       int32_t                 rowIndex,
@@ -311,9 +310,8 @@ U_CAPI const UChar* U_EXPORT2 ures_get2dArrayItem(const UResourceBundle*   resou
  * @see ures_get
  * @see ures_getArrayItem
  * @see ures_get2dItem
- * @deprecated
+ * @deprecated Remove after 2000-dec-31. Use ures_getByKey and ures_getByIndex instead.
  */
-
 U_CAPI const UChar* U_EXPORT2 ures_getTaggedArrayItem(const UResourceBundle*   resourceBundle,
                       const char*             resourceTag,
                       const char*             itemTag,
@@ -339,7 +337,6 @@ U_CAPI const UChar* U_EXPORT2 ures_getTaggedArrayItem(const UResourceBundle*   r
  *@see ures_get2dArrayItem
  *@draft
  */
-
 U_CAPI int32_t U_EXPORT2 ures_countArrayItems(const UResourceBundle* resourceBundle,
                   const char* resourceKey,
                   UErrorCode* err);
@@ -376,7 +373,6 @@ U_CAPI void U_EXPORT2 ures_close(UResourceBundle*    resourceBundle);
  *          string.
  * @draft
  */
-
 U_CAPI const char* U_EXPORT2 ures_getVersionNumber(const UResourceBundle*   resourceBundle);
 
 U_CAPI void U_EXPORT2 ures_getVersion(const UResourceBundle* resB, UVersionInfo versionInfo);

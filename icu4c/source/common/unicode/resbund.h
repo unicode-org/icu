@@ -39,7 +39,7 @@
 *                           Reworked to use new binary format.
 *                           Cleaned up.
 * 06/14/99      stephen     Removed methods taking a filename suffix.
-* 11/09/99		weiv		Added getLocale(), fRealLocale, removed fRealLocaleID
+* 11/09/99      weiv        Added getLocale(), fRealLocale, removed fRealLocaleID
 *******************************************************************************
 */
 
@@ -180,13 +180,13 @@ public:
                                         UErrorCode&              err);
                         ResourceBundle( const UnicodeString&    path,
                                         UErrorCode&              err);
-			ResourceBundle(UErrorCode &err);
+                        ResourceBundle(UErrorCode &err);
                         ResourceBundle( const wchar_t* path,
                                         const Locale& locale,
                                         UErrorCode& err);
-			ResourceBundle( const char* path,
-					const Locale& locale,
-					UErrorCode& err);
+                        ResourceBundle( const char* path,
+                                        const Locale& locale,
+                                        UErrorCode& err);
                         ResourceBundle(const ResourceBundle &original);
                         ResourceBundle(UResourceBundle *res, UErrorCode &status);
 
@@ -329,7 +329,7 @@ public:
      *                     specified tag couldn't be found.
      * @return A pointer to the string from the resource bundle, or NULL if there was
      *           an error.(its lifetime is that of the resource bundle.)
-     * @deprecated to be removed in first release in 2001
+     * @deprecated to be removed in first release in 2001. Use getStringEx() instead.
      */
     const UnicodeString*    getString(  const char                *resourceTag,
                                         UErrorCode&                err) const;
@@ -351,7 +351,7 @@ public:
      * @return               The resource requested, as a pointer to an array of
      *                       UnicodeStrings. The caller does not own the storage and
      *                       must not delete it. (its lifetime is that of the resource bundle.)
-     * @deprecated to be removed in first release in 2001
+     * @deprecated to be removed in first release in 2001. Use getStringEx() instead.
      */
     const UnicodeString*    getStringArray( const char             *resourceTag,
                                             int32_t&                numArrayItems,
@@ -371,7 +371,7 @@ public:
      *                      specified tag couldn't be found, or if the index was out of range.
      * @return A pointer to the text of the array item, or NULL is there was an error. 
      *                      (its lifetime is that of the resource bundle.)
-     * @deprecated to be removed in first release in 2001
+     * @deprecated to be removed in first release in 2001. Use getStringEx() instead.
      */
     const UnicodeString*    getArrayItem(   const char                *resourceTag,
                                             int32_t                    index,
@@ -394,7 +394,7 @@ public:
      * @return             The resource requested, as a UnicodeStrings**. The caller
      *                     does not own the storage and must not delete it. (its lifetime 
      *                      is that of the resource bundle.)
-     * @deprecated to be removed in first release in 2001
+     * @deprecated to be removed in first release in 2001. Use ures_getBinary instead.
      */
     const UnicodeString**   get2dArray(const char          *resourceTag,
                                        int32_t&             rowCount,
@@ -418,7 +418,7 @@ public:
      *                      the wrong format, or if either index is out of bounds.
      * @return A pointer to the text of the array item, or NULL is there was an error.
      *                      (its lifetime is that of the resource bundle.)
-     * @deprecated to be removed in first release in 2001
+     * @deprecated to be removed in first release in 2001. Use ures_getBinary instead.
      */
     const UnicodeString*    get2dArrayItem( const char                *resourceTag,
                                             int32_t                    rowIndex,
@@ -440,7 +440,7 @@ public:
      *                      with the specified item tag coldn't be found in the resource.
      * @return A pointer to the text of the array item, or NULL is there was an error.
      *                      (its lifetime is that of the resource bundle.)
-     * @deprecated to be removed in first release in 2001
+     * @deprecated to be removed in first release in 2001. Use getStringEx() instead.
      */
     const UnicodeString*    getTaggedArrayItem( const char             *resourceTag,
                                                 const UnicodeString&    itemTag,
@@ -467,7 +467,7 @@ public:
      *                      items and itemTags.
      * @param err           Set to U_MISSING_RESOURCE_ERROR if a resource with the
      *                      specified tag couldn't be found.
-     * @deprecated to be removed in first release in 2001
+     * @deprecated to be removed in first release in 2001. Use getStringEx() instead.
      */
     void                getTaggedArray( const char             *resourceTag,
                                         UnicodeString*&         itemTags,
@@ -498,13 +498,13 @@ public:
 
     void getVersion(UVersionInfo versionInfo) const;
 
-	/**
-	 * Return the Locale associated with this ResourceBundle. 
-	 *
-	 * @return a Locale object
+    /**
+     * Return the Locale associated with this ResourceBundle. 
+     *
+     * @return a Locale object
      * @draft
-	 */
-	const Locale &getLocale(void) const ;
+     */
+    const Locale &getLocale(void) const ;
 
 private:
     UResourceBundle *resource;
@@ -525,9 +525,9 @@ private:
 
 private:
     static void U_CALLCONV deleteValue(void* value);
-	Locale					fRealLocale;
+    Locale                      fRealLocale;
 
-    UHashtable*          fItemCache;
+    UHashtable*                 fItemCache;
     static const char*          kDefaultSuffix;
     static const int32_t        kDefaultSuffixLen;
     static const char*          kDefaultFilename;
