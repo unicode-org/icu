@@ -1735,7 +1735,7 @@ static void TestShortString(void)
         {"LDE_Kphonebook","KPHONEBOOK_LDE", "de@collation=phonebook", U_ZERO_ERROR, 0, 0 },
         {"Xqde_DE@collation=phonebookq_S3_EX","KPHONEBOOK_LDE", "de@collation=phonebook", U_USING_FALLBACK_WARNING, 0, 0 },
         {"LFR_FO", "LFR", NULL, U_ZERO_ERROR, 0, 0 },
-        {"SO_LX_AS", "", NULL, U_ILLEGAL_ARGUMENT_ERROR, 9, 0 },
+        {"SO_LX_AS", "", NULL, U_ILLEGAL_ARGUMENT_ERROR, 8, 0 },
         {"S3_ASS_MMM", "", NULL, U_ILLEGAL_ARGUMENT_ERROR, 5, 0 }
     };
 
