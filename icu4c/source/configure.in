@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.133 2001/10/31 21:24:49 grhoten-oss Exp $
+dnl $Id: configure.in,v 1.134 2001/11/01 17:28:18 grhoten-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -750,7 +750,7 @@ case "${host}" in
 	*-*-hpux*) 	platform=HPUX ;;
 	*-dec-osf*) 	platform=U_OSF ;;
 	*-*-irix*)      platform=IRIX ;;
-	*-*-os390*)	platform=OS390
+	*-*ibm-openedition*|*-*-os390*)	platform=OS390
 			ICUDATA_CHAR="e" ;;
 	*-*-os400*)	platform=OS400
 			ICUDATA_CHAR="e" ;;
@@ -773,7 +773,7 @@ case "${host}" in
 	*-sequent-*)	ld_rpath_suf="" ;;
 	*-*-hpux*) 	ld_rpath_suf=":" ;;
 	*-*-irix*)      ld_rpath_suf=" " ;;
-	*-*-os390*)	ld_rpath_suf="" ;;
+	*-*ibm-openedition*|*-*-os390*)	ld_rpath_suf="" ;;
 	*-*-os400*)	ld_rpath_suf=" " ;;
 	*) 		ld_rpath_suf="" ;;
 esac
