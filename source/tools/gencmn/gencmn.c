@@ -114,6 +114,9 @@ compareFiles(const void *file1, const void *file2);
 static char * 
 pathToFullPath(const char *path);
 
+/* map non-tree separator (such as '\') to tree separator ('/') inplace. */
+static void
+fixDirToTreePath(char *s);
 /* -------------------------------------------------------------------------- */
 
 static UOption options[]={
@@ -504,6 +507,7 @@ addFile(const char *filename, UBool sourceTOC, UBool verbose) {
         }
 
         /* get the basename */
+        fixDirToTreePath(s);
         files[fileCount].basename=s;
         files[fileCount].basenameLength=length;
 
@@ -547,13 +551,14 @@ addFile(const char *filename, UBool sourceTOC, UBool verbose) {
           length = (uint32_t)(uprv_strlen(filename) + 1 + uprv_strlen(options[6].value) + 1);
           s=allocString(length);
           uprv_strcpy(s, options[6].value);
-          uprv_strcat(s, "/");
+          uprv_strcat(s, U_TREE_SEPARATOR_STRING);
           uprv_strcat(s, filename);
         } else {
           length = (uint32_t)(uprv_strlen(filename) + 1);
           s=allocString(length);
           uprv_memcpy(s, filename, length);
         }
+        fixDirToTreePath(s);
         files[fileCount].basename=s;
 
 
@@ -625,6 +630,23 @@ compareFiles(const void *file1, const void *file2) {
     return uprv_strcmp(((File *)file1)->basename, ((File *)file2)->basename);
 }
 
+static void
+fixDirToTreePath(char *s)
+{
+  char *t;
+#if (U_FILE_SEP_CHAR != U_TREE_SEPARATOR)
+  for(t=s;t=uprv_strchr(t,U_FILE_SEP_CHAR);) {
+    *t = U_TREE_SEPARATOR;
+  }
+#endif
+#if (U_FILE_ALT_SEP_CHAR != U_FILE_SEP_CHAR)
+#if (U_FILE_ALT_SEP_CHAR != U_TREE_SEPARATOR)
+  for(t=s;t=uprv_strchr(t,U_FILE_ALT_SEP_CHAR);) {
+    *t = U_TREE_SEPARATOR;
+  }
+#endif
+#endif
+}
 /*
  * Hey, Emacs, please set the following:
  *
