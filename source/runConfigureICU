@@ -210,10 +210,14 @@ case $platform in
     ALPHA/LINUXGCC)
         THE_OS="Linux"
         THE_COMP="the GNU C++"
+        CC=gcc; export CC
+        CXX=g++; export CXX
         ;;
     LinuxRedHat*)
         THE_OS="Linux"
         THE_COMP="the GNU C++"
+        CC=gcc; export CC
+        CXX=g++; export CXX
         ;;
     CygWin)
         THE_OS="CygWin"
@@ -226,6 +230,8 @@ case $platform in
     *BSD)
         THE_OS="BSD"
         THE_COMP="the GNU C++"
+        CC=gcc; export CC
+        CXX=g++; export CXX
         ;;
     zOS/cxx)
         THE_OS="z/OS"
