@@ -22,14 +22,13 @@
 
 /* UTF-7 -------------------------------------------------------------------- */
 
-/* ### TODO: in convrtrs.txt and user guide, document version option (=1 for escaping set O characters) */
-/* TODO: version=1 is not really for IMAP, fix documentation; consider version=2 for IMAP */
+/* ### TODO: in user guide, document version option (=1 for escaping set O characters) */
 /*
- * UTF-7 is a stateful encoding of Unicode, somewhat like UTF7.
- * It is defined in RFC 2152  http://www.imc.org/rfc2152 .
+ * UTF-7 is a stateful encoding of Unicode.
+ * It is defined in RFC 2152. (http://www.ietf.org/rfc/rfc2152.txt)
  * It was intended for use in Internet email systems, using in its bytewise
  * encoding only a subset of 7-bit US-ASCII.
- * UTF-7 is deprecated in favor of UTF-8/16/32 and UTF7, but still
+ * UTF-7 is deprecated in favor of UTF-8/16/32 and SCSU, but still
  * occasionally used.
  *
  * For converting Unicode to UTF-7, the RFC allows to encode some US-ASCII
@@ -40,6 +39,8 @@
  * By choosing the option "version=1", set O will be escaped instead.
  * For example:
  *     utf7Converter=ucnv_open("UTF-7,version=1");
+ *
+ * For details about email headers see RFC 2047.
  */
 
 /*
