@@ -528,6 +528,9 @@
 		<Filter
 			Name="regex"
 			Filter="">
+			<File
+				RelativePath=".\reapits.c">
+			</File>
 		</Filter>
 		<Filter
 			Name="sprep &amp; idna"
