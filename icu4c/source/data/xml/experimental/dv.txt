@@ -11,6 +11,9 @@ div {
     Languages {
         div { "\u078B\u07A8\u0788\u07AC\u0780\u07A8\u0784\u07A6\u0790\u07B0" }
     }
+    Countries {
+        MV { "\u078B\u07A8\u0788\u07AC\u0780\u07A8 \u0783\u07A7\u0787\u07B0\u0796\u07AC" }
+    }
     AmPmMarkers{
         "\u0789\u0786",
         "\u0789\u078A"

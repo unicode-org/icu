@@ -57,7 +57,7 @@ mt {
         //as	{ "Assamese" }	// Assamese
         ath	{ "Lingwi Atabaskani" }	// Athapaskan Languages
         aus	{ "Lingwi Awstraljani" }// Australian Languages
-        ava	{ "Avarik" }	// Avaric
+        av	{ "Avarik" }	// Avaric
         awa	{ "Awadħi" }	// Awadhi
         ay	{ "Ajmara" }	// Aymara
         az	{ "Ażerbajġani" }	// Azerbaijani
@@ -112,7 +112,7 @@ mt {
         cop	{ "Koptiku" }	// Coptic
         cpe	{ "Kreoli u Piġini, Bbażat fuq l-Ingliż (Oħra)" }	// Creoles and Pidgins, English-based (Other)
         cpf	{ "Kreoli u Piġini, Bbażat fuq il-Franċiż (Oħra)" }	// Creoles and Pidgins, French-based (Other)
-        cre	{ "Krij" }	// Cree
+        cr	{ "Krij" }	// Cree
         crp	{ "Kreoli u Piġini (Oħra)" }	// Creoles and Pidgins (Other)
         cs	{ "Ċek" }	// Czech
         cu	{ "Slaviku tal-Knisja" }	// Church Slavic
@@ -127,14 +127,14 @@ mt {
         den	{ "Slav" }	// Slave
         //dgr	{ "Dogrib" }	// Dogrib
         //din	{ "Dinka" }	// Dinka
-        div	{ "Diveħi" }	// Divehi
+        dv	{ "Diveħi" }	// Divehi
         //doi	{ "Dogri" }	// Dogri
         dra	{ "Dravidjan (Oħra)" }	// Dravidian (Other)
         dua	{ "Dwala" }	// Duala
         dum	{ "Olandiż, Medjevali (ca. 1050-1350)" }	// Dutch, Middle (ca. 1050-1350)
         dyu	{ "Djula" }	// Dyula
-        dz	{ "Vutani" }	// Bhutani
-        dzo	{ "Dżongka" }	// Dzongkha
+        //dz	{ "Vutani" }	// Bhutani
+        dz	{ "Dżongka" }	// Dzongkha
         //efi	{ "Efik" }	// Efik
         egy	{ "Eġizzjan (Antik)" }	// Egyptian (Ancient)
         //eka	{ "Ekajuk" }	// Ekajuk
@@ -151,6 +151,7 @@ mt {
         fa	{ "Persjan" }	// Persian
         //fan	{ "Fang" }	// Fang
         //fat	{ "Fanti" }	// Fanti
+        ff	{ "Fulaħ" }	// Fulah
         fi	{ "Finlandiż" }	// Finnish
         fiu	{ "Finno - Ugrijan" }	// Finno - Ugrian
         fj	{ "Fiġi" }	// Fiji
@@ -159,7 +160,6 @@ mt {
         fr	{ "Franċiż" }	// French
         frm	{ "Franċiż, Medjevali (ca. 1400-1600)" }	// French, Middle (ca.1400-1600)
         fro	{ "Franċiż, Antik (842-ca. 1400)" }	// French, Old (842-ca.1400)
-        ful	{ "Fulaħ" }	// Fulah
         fur	{ "Frijuljan" }	// Friulian
         fy	{ "Friżjan" }	// Frisian
         ga	{ "Irlandiż" }	// Irish
@@ -214,7 +214,7 @@ mt {
         ja	{ "Ġappuniż" }	// Japanese
         jpr	{ "Lhudi-Persjan" }	// Judeo-Persian
         jrb	{ "Lhudi-Għarbi" }	// Judeo-Arabic
-        jw	{ "Ġavaniż" }	// Javanese
+        jv	{ "Ġavaniż" }	// Javanese
         ka	{ "Ġorġjan" }	// Georgian
         //kaa	{ "Kara-Kalpak" }	// Kara-Kalpak
         kab	{ "Kabuljan" }	// Kabyle
@@ -327,7 +327,7 @@ mt {
         nyo	{ "Njoro" }	// Nyoro
         nzi	{ "Nżima" }	// Nzima
         oc	{ "Provenzal (wara 1500)" }	// Provençal; Occitan (post 1500)
-        oji	{ "Oġibwa" }	// Ojibwa
+        oj	{ "Oġibwa" }	// Ojibwa
         //om	{ "Oromo (Afan)" }	// Oromo (Afan)
         or	{ "Orija" }	// Oriya
         os	{ "Ossettiku" }	// Ossetic

@@ -1604,7 +1604,8 @@ ja {
         ga { "\u30a2\u30a4\u30eb\u30e9\u30f3\u30c9\u8a9e" }
         it { "\u30a4\u30bf\u30ea\u30a2\u8a9e" }
         ja { "\u65e5\u672c\u8a9e" }
-        jw { "\u30b8\u30e3\u30ef\u8a9e" }
+        jv { "\u30b8\u30e3\u30ef\u8a9e" }
+        //jw { "\u30b8\u30e3\u30ef\u8a9e" } // Use jv instead
         kn { "\u30ab\u30f3\u30ca\u30c0\u8a9e" }
         ks { "\u30ab\u30b7\u30df\u30fc\u30eb\u8a9e" }
         kk { "\u30ab\u30b6\u30d5\u8a9e" }

@@ -257,7 +257,7 @@ ILCID_POSIX_ELEMENT_ARRAY(0x044d, as, as_IN)    /*Todo: Data does not exist*/
 static const ILcidPosixElement az[] = {
     {0x2c,   "az"},
     {0x082c, "az_AZ"},  /* Cyrillic based */
-    {0x042c, "az_AZ_L"} /* Latin based */
+    {0x042c, "az_AZ_LATN"} /* Latin based */
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0423, be, be_BY)
@@ -297,7 +297,7 @@ static const ILcidPosixElement en[] = {
     {0x2C09, "en_TT"},
     {0x0409, "en_US"},
     {0x007f, "en_US_POSIX"}, /* duplicate for roundtripping */
-    {0x2409, "en_VI"},
+    {0x2409, "en_VI"},  /* Virgin Islands AKA Caribbean Islands (en_CB). */
     {0x1c09, "en_ZA"},
     {0x3009, "en_ZW"}
 };
@@ -386,7 +386,7 @@ static const ILcidPosixElement ko[] = {
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0457, kok, kok_IN)
 ILCID_POSIX_ELEMENT_ARRAY(0x0460, ks,  ks_IN)   /*Todo: Data does not exist*/
-ILCID_POSIX_ELEMENT_ARRAY(0x0440, ky,  ky_KG)
+ILCID_POSIX_ELEMENT_ARRAY(0x0440, ky,  ky_KG)   /* Kyrgyz is spoken in Kyrgyzstan */
 ILCID_POSIX_ELEMENT_ARRAY(0x0427, lt,  lt_LT)
 ILCID_POSIX_ELEMENT_ARRAY(0x0426, lv,  lv_LV)
 ILCID_POSIX_ELEMENT_ARRAY(0x042f, mk,  mk_MK)
@@ -458,7 +458,7 @@ static const ILcidPosixElement sv[] = {
     {0x041d, "sv_SE"}
 };
 
-ILCID_POSIX_ELEMENT_ARRAY(0x0441, sw, sw_KE)/*According to the MSJDK documentation*/
+ILCID_POSIX_ELEMENT_ARRAY(0x0441, sw, sw_KE)
 ILCID_POSIX_ELEMENT_ARRAY(0x045A, syr, syr_SY)
 ILCID_POSIX_ELEMENT_ARRAY(0x0449, ta, ta_IN)
 ILCID_POSIX_ELEMENT_ARRAY(0x044a, te, te_IN)
@@ -476,7 +476,7 @@ static const ILcidPosixElement ur[] = {
 static const ILcidPosixElement uz[] = {
     {0x43,   "uz"},
     {0x0843, "uz_UZ"},  /* Cyrillic based */
-    {0x0443, "uz_UZ_L"} /* Latin based */
+    {0x0443, "uz_UZ_LATN"} /* Latin based */
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x042a, vi, vi_VN)
@@ -487,8 +487,9 @@ static const ILcidPosixElement zh[] = {
     {0x0c04, "zh_HK"},
     {0x1404, "zh_MO"},
     {0x1004, "zh_SG"},
-    {0x0404, "zh_TW"},  /* Should this be 0x30404 for Bopomofo? */
-    {0x0404, "zh_TW_STROKE"}
+    {0x0404, "zh_TW"},
+    {0x30404,"zh_TW"},
+    {0x20404,"zh_TW_STROKE"}
 };
 
 /* This must be static and grouped by LCID. */

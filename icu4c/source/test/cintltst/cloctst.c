@@ -815,7 +815,7 @@ static void TestISOFunctions()
         }
     }
     count--;
-    expect = 437;
+    expect = 450;
 
     if(count!=expect) {
         log_err("There is an error in getISOLanguages, got %d, expected %d\n", count, expect);

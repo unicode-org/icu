@@ -11,6 +11,9 @@ sa {
     Languages {
         sa { "\u0938\u0902\u0938\u094D\u0915\u0943\u0924" }
     }
+    Countries {
+        MV { "\u092D\u093E\u0930\u0924\u092E\u094D" }
+    }
     AmPmMarkers{
         "\u092A\u0942\u0930\u094D\u0935\u093E\u0939\u094D\u0928",
         "\u0905\u092A\u0930\u093E\u0939\u094D\u0928"

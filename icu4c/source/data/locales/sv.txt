@@ -288,7 +288,7 @@ sv {
 	ada  {"adangme"}
 	ae   {"avestiska"}
 	af   {"afrikaans"}
-	aka  {"akan"}
+	ak   {"akan"}
 	akk  {"akkadiska"}
 	ale  {"aleutiska"}
 	am   {"amhariska"}
@@ -299,7 +299,7 @@ sv {
 	arw  {"arawakiska"}
 	as   {"assami"}
 	// ast  {"asturiska"}
-	ava  {"avariska"}
+	av   {"avariska"}
 	awa  {"awadhi"}
 	ay   {"aymara"}
 	az   {"azerbadzjanska"}
@@ -343,7 +343,7 @@ sv {
 	chy  {"cheyenne"}
 	co   {"korsiska"}
 	cop  {"koptiska"}
-	cre  {"cree"}
+	cr   {"cree"}
 	cs   {"tjeckiska"}
 	cv   {"tjuvasjiska"}
 	cy   {"walesiska"}
@@ -354,11 +354,12 @@ sv {
 	del  {"delaware"}
 	dgr  {"dogrib"}
 	din  {"dinka"}
-	div  {"maldiviska"}
 	doi  {"dogri"}
 	dua  {"duala"}
+	dv   {"maldiviska"}
 	dyu  {"dyula"}
 	dz   {"dzongkha"}
+	ee   {"ewe"}
 	efi  {"efik"}
 	eka  {"ekajuk"}
 	el   {"grekiska"}
@@ -368,17 +369,16 @@ sv {
 	es   {"spanska"}
 	et   {"estniska"}
 	eu   {"baskiska"}
-	ewe  {"ewe"}
 	ewo  {"ewondo"}
 	fa   {"farsi"}
 	fan  {"fang"}
 	fat  {"fanti"}
+	ff   {"fulani"}
 	fi   {"finska"}
 	fj   {"fidjianska"}
 	fo   {"f\u00E4r\u00F6iska"}
 	fon  {"fon"}
 	fr   {"franska"}
-	ful  {"fulani"}
 	fur  {"friuilian"}
 	fy   {"frisiska"}
 	ga   {"irl\u00E4ndsk gaeliska"}
@@ -428,8 +428,8 @@ sv {
 	kac  {"kachin"}
 	kam  {"kamba"}
 	kar  {"karen"}
-	kau  {"kanuri"}
 	kaw  {"kawi"}
+	kg   {"kikongo"}
 	kha  {"khasi"}
 	kho  {"sakiska"}
 	ki   {"kikuyu"}
@@ -441,9 +441,9 @@ sv {
 	kn   {"kanaresiska; kannada"}
 	ko   {"koreanska"}
 	kok  {"konkani"}
-	kon  {"kikongo"}
 	kos  {"kosreanska"}
 	kpe  {"kpelle"}
+	kr   {"kanuri"}
 	kro  {"kru"}
 	kru  {"kurukh"}
 	ks   {"kashmiri"}
@@ -458,15 +458,15 @@ sv {
 	lam  {"lamba"}
 	lb   {"luxemburgiska"}
 	lez  {"lezghien"}
+	lg   {"luganda"}
 	// li   {"limburgiska"}
 	ln   {"lingala"}
 	lo   {"laotiska"}
 	lol  {"lolo; mongo"}
 	loz  {"lozi"}
 	lt   {"litauiska"}
+	lu  {"luba-katanga"}
 	lua  {"luba-lulua"}
-	lub  {"luba-katanga"}
-	lug  {"luganda"}
 	lui  {"luise\u00F1o"}
 	lun  {"lunda"}
 	luo  {"luo"}
@@ -521,7 +521,7 @@ sv {
 	nyo  {"nyoro"}
 	nzi  {"nzima"}
 	oc   {"provensalska"}
-	oji  {"odjibwa; chippewa"}
+	oj   {"odjibwa; chippewa"}
 	om   {"oromo; galla"}
 	or   {"oriya"}
 	os   {"ossetiska"}
@@ -621,7 +621,7 @@ sv {
 	ur   {"urdu"}
 	uz   {"uzbekiska"}
 	vai  {"vai"}
-	ven  {"venda"}
+	ve   {"venda"}
 	vi   {"vietnamesiska"}
 	vot  {"votiska"}
 	// wa   {"walloon"}
