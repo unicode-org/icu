@@ -518,10 +518,10 @@ UBool UnicodeSet::resemblesPattern(const UnicodeString& pattern, int32_t pos) {
  * Append the <code>toPattern()</code> representation of a
  * string to the given <code>StringBuffer</code>.
  */
-void UnicodeSet::_appendToPat(UnicodeString& buf, const UnicodeString& s, UBool useHexEscape) {
+void UnicodeSet::_appendToPat(UnicodeString& buf, const UnicodeString& s, UBool escapeUnprintable) {
     UChar32 cp;
     for (int32_t i = 0; i < s.length(); i += UTF_CHAR_LENGTH(cp)) {
-        _appendToPat(buf, cp = s.char32At(i), useHexEscape);
+        _appendToPat(buf, cp = s.char32At(i), escapeUnprintable);
     }
 }
 
@@ -529,8 +529,8 @@ void UnicodeSet::_appendToPat(UnicodeString& buf, const UnicodeString& s, UBool 
  * Append the <code>toPattern()</code> representation of a
  * character to the given <code>StringBuffer</code>.
  */
-void UnicodeSet::_appendToPat(UnicodeString& buf, UChar32 c, UBool useHexEscape) {
-    if (useHexEscape) {
+void UnicodeSet::_appendToPat(UnicodeString& buf, UChar32 c, UBool escapeUnprintable) {
+    if (escapeUnprintable && ICU_Utility::isUnprintable(c)) {
         // Use hex escape notation (\uxxxx or \Uxxxxxxxx) for anything
         // unprintable
         if (ICU_Utility::escapeUnprintable(buf, c)) {
@@ -558,7 +558,7 @@ void UnicodeSet::_appendToPat(UnicodeString& buf, UChar32 c, UBool useHexEscape)
         }
         break;
     }
-    buf.append((UChar) c);
+    buf.append(c);
 }
 
 /**
