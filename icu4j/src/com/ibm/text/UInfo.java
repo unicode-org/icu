@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UInfo.java,v $ 
- * $Date: 2000/07/18 18:16:36 $ 
- * $Revision: 1.6 $
+ * $Date: 2000/09/21 22:37:41 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -15,6 +15,7 @@ package com.ibm.text;
 
 import java.io.*;
 import java.util.*;
+import com.ibm.util.Utility;
 
 public final class UInfo {
     static final boolean DEBUG = false;
@@ -407,7 +408,7 @@ public final class UInfo {
                 if (line.length() == 0) continue;
                 char ch = charFrom(line.substring(0,4));
                 if (DEBUG) if ((count % 100) == 0)
-                    System.out.println("[" + count + "," + hex(ch) + ']');
+                    System.out.println("[" + count + "," + Utility.hex(ch) + ']');
                 cache[ch] = line;
             }
 
@@ -468,13 +469,13 @@ public final class UInfo {
     private CharData updateCache(String line) {
         try {
             String[] parts = new String[30];
-            split(line,';',parts);
+            Utility.split(line,';',parts);
             CharData info = new CharData();
             char ch = charFrom(parts[0]);
             info.name = parts[1];
-            info.category = (byte)lookup(parts[2], CATEGORY_TABLE);
+            info.category = (byte)Utility.lookup(parts[2], CATEGORY_TABLE);
             info.canonical = shortFrom(parts[3]);
-            info.bidi = (byte)lookup(parts[4], BIDI_TABLE);
+            info.bidi = (byte)Utility.lookup(parts[4], BIDI_TABLE);
             info.decomposition = parts[5];
             info.decimal = shortFrom(parts[6]);
             info.digit = shortFrom(parts[7]);
@@ -488,7 +489,7 @@ public final class UInfo {
             if (info.lowercase == 0) info.lowercase = ch;
             info.titlecase = charFrom(parts[14]);
             if (info.titlecase == 0) info.titlecase = info.uppercase;
-            String trial = hex(ch) + ";" + info;
+            String trial = Utility.hex(ch) + ";" + info;
             if (DEBUG) if (!trial.equals(line)) {
                 System.out.println("Difference between:");
                 System.out.println(line);
@@ -604,64 +605,4 @@ public final class UInfo {
 
 
     private Object[] cache = new Object[65536];
-
-    //-------------------------------------------------------------------------
-    // Static utility methods....
-    //-------------------------------------------------------------------------
-    public static String hex(char ch) {
-        StringBuffer temp = new StringBuffer();
-        return hex(ch, temp).toString();
-    }
-
-    public static String hex(String s) {
-        StringBuffer temp = new StringBuffer();
-        return hex(s, temp).toString();
-    }
-
-    public static StringBuffer hex(char ch, StringBuffer output) {
-        String foo = Integer.toString(ch,16).toUpperCase();
-        for (int i = foo.length(); i < 4; ++i) {
-            output.append('0');
-        }
-        output.append(foo);
-        return output;
-    }
-
-    public static StringBuffer hex(String s, StringBuffer result) {
-        for (int i = 0; i < s.length(); ++i) {
-            if (i != 0) result.append(',');
-            result.append(hex(s.charAt(i)));
-        }
-        return result;
-    }
-
-    /**
-     * Split a string into pieces based on the given divider character
-     */
-    private static void split(String s, char divider, String[] output) {
-        int last = 0;
-        int current = 0;
-        int i;
-        for (i = 0; i < s.length(); ++i) {
-            if (s.charAt(i) == divider) {
-                output[current++] = s.substring(last,i);
-                last = i+1;
-            }
-        }
-        output[current++] = s.substring(last,i);
-        while (current < output.length) {
-            output[current++] = "";
-        }
-    }
-
-    /**
-     * Look up a given string in a string array.  Returns the index at which the
-     * string was found in the array, or -1 if it was not found.
-     */
-    private static int lookup(String source, String[] target) {
-        for (int i = 0; i < target.length; ++i) {
-            if (source.equals(target[i])) return i;
-        }
-        return -1;
-    }
 }
