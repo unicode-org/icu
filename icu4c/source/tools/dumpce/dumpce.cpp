@@ -248,6 +248,7 @@ void serialize(FILE *f, UChar *rule, int rlen, UBool contractiononly,
           UBool            rstart   = TRUE;
           UColTokenParser  src;
           UColOptionSet    opts;
+          UParseError      parseError;
           UErrorCode       error    = U_ZERO_ERROR;
     
     src.opts = &opts;
@@ -259,7 +260,8 @@ void serialize(FILE *f, UChar *rule, int rlen, UBool contractiononly,
         
     while ((current = ucol_tok_parseNextToken(&src, &strength, &chOffset, 
                                               &chLen, &exOffset, &exLen,
-                                              &specs, rstart, &error)) 
+                                              &specs, rstart, &parseError,
+                                              &error)) 
                                               != NULL) {
         // contractions handled here
         if (!contractiononly || chLen > 1) {
@@ -609,9 +611,10 @@ CLOSETAILOR :
         }
 
         fprintf(stdout, "Rules\n");
-        UErrorCode error = U_ZERO_ERROR;
+        UErrorCode  error = U_ZERO_ERROR;
+        UParseError parseError;
         COLLATOR_ = ucol_openRules(rule, u_strlen(rule), NORMALIZATION_, 
-                                   UCOL_DEFAULT_STRENGTH, &error);
+                                   UCOL_DEFAULT_STRENGTH, &parseError, &error);
         if (U_FAILURE(error)) {
             fprintf(stdout, "Collator creation failed:");
             fprintf(stdout, u_errorName(error));
