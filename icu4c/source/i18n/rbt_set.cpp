@@ -99,11 +99,9 @@ UnicodeString& _escape(const UnicodeString &source,
     }
     return target;
 }
-#endif
 
 inline void _debugOut(const char* msg, TransliterationRule* rule,
                       const Replaceable& theText, UTransPosition& pos) {
-#ifdef DEBUG_RBT
     UnicodeString buf(msg, "");
     if (rule) {
         UnicodeString r;
@@ -117,8 +115,11 @@ inline void _debugOut(const char* msg, TransliterationRule* rule,
     _escape(buf, esc);
     CharString cbuf(esc);
     printf("%s\n", (char*) cbuf);
-#endif
 }
+
+#else
+#define _debugOut(msg, rule, theText, pos)
+#endif
 
 //----------------------------------------------------------------------
 // END Debugging support
