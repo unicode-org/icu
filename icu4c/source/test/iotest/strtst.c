@@ -564,7 +564,7 @@ static void TestStringCompatibility(void) {
         sprintf(testBuf, "%c", num);
         u_sprintf(uStringBuf, "%c", num);
         u_austrncpy(myString, uStringBuf, sizeof(myString)/sizeof(myString[0]));
-        if (testBuf[0] != uStringBuf[0] || uStringBuf[0] != num) {
+        if (testBuf[0] != myString[0] || myString[0] != num) {
             log_err("%%c Got: 0x%x, Expected: 0x%x\n", myString[0], testBuf[0]);
         }
     }
