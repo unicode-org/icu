@@ -91,7 +91,7 @@ ISO_2022                         ISO-2022 { MIME } 2022 cp2022
 ISO_2022,locale=ja,version=0     ISO-2022-JP { IANA MIME } csISO2022JP
 ISO_2022,locale=ja,version=1     ISO-2022-JP-1 JIS JIS_Encoding { IANA }
 ISO_2022,locale=ja,version=2     ISO-2022-JP-2 { IANA MIME } csISO2022JP2
-ISO_2022,locale=ja,version=3     JIS7
+ISO_2022,locale=ja,version=3     JIS7 csJISEncoding
 ISO_2022,locale=ja,version=4     JIS8
 ISO_2022,locale=ko,version=0     ISO-2022-KR { IANA MIME } csISO2022KR
 ISO_2022,locale=ko,version=1     ibm-25546 ibm-25546_P100 25546
@@ -110,6 +110,15 @@ LMBCS-16
 LMBCS-17
 LMBCS-18
 LMBCS-19
+ISCII,version=0           iscii-dev
+ISCII,version=1           iscii-bng
+ISCII,version=2           iscii-gur
+ISCII,version=3           iscii-guj
+ISCII,version=4           iscii-ori
+ISCII,version=5           iscii-tml
+ISCII,version=6           iscii-tlg
+ISCII,version=7           iscii-knd
+ISCII,version=8           iscii-mlm
 
 # Table-based
 
@@ -140,7 +149,7 @@ ibm-1386                gbk cp936 zh_cn # Chinese GBK removed
 ibm-33722               EUC-JP { MIME } ibm-eucJP eucjis extended_unix_code_packed_format_for_japanese cseucpkdfmtjapanese X-EUC-JP  cp33722 33722# Japan EUC
 ibm-970                 EUC-KR { IANA MIME } ibm-eucKR csEUCKR                       # Korean EUC
 ibm-964                 EUC-TW { MIME } ibm-eucTW cns11643              # Taiwan EUC
-ibm-1383                EUC-CN { MIME } ibm-eucCN GB_2312-80 { IANA } chinese gb iso-ir-58 csISO58GB231280 GB2312 { MIME } gb2312-1980 cp1383 1383  # China EUC
+ibm-1383                EUC-CN { MIME } ibm-eucCN GB_2312-80 { IANA } chinese gb iso-ir-58 csISO58GB231280 GB2312 { MIME } gb2312-1980 cp1383 1383  csGB2312# China EUC
 ibm-1162                tis-620 cp874 windows-874 { MIME } ms874 cp9066 874 # Thai (w/ euro update)
 ibm-874                 ibm-1161 # Same as 1162 (w/o euro update)
 
