@@ -139,6 +139,11 @@ uprops.dat: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/Mirror.txt $(TOO
 	@echo Creating uprops.dat
 	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genprops/genprops -s $(UNICODEDATADIR) -d . -u $(UNICODE_VERSION)
 
+# ucadata.dat
+ucadata.dat: $(UNICODEDATADIR)/FractionalUCA.txt $(TOOLDIR)/genuca/genuca
+	@echo Creating ucadata.dat and invuca.dat
+	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genuca/genuca -s $(UNICODEDATADIR) -d .
+
 # unames.dat
 unames.dat: $(UNICODEDATADIR)/UnicodeData.txt $(TOOLDIR)/gennames/gennames
 	@echo Creating unames.dat
@@ -189,7 +194,7 @@ endif
 $(TESTOBJDATADIR)/%.res: $(TESTSRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb
 	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -s $(TESTSRCDATADIR) -d $(TESTOBJDATADIR) $(<F)
 
-%.res: $(SRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb
+%.res: $(SRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb ucadata.dat
 	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -s $(SRCDATADIR) -d . $(<F)
 
 
