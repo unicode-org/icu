@@ -48,7 +48,7 @@ DateFormatMiscTests::failure(UErrorCode status, const char* msg)
 }
 
 /*
- * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.13 $ $Date: 2001/03/21 20:09:55 $
+ * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.14 $ $Date: 2001/12/03 23:16:04 $
  *
  * @bug 4097450
  */
@@ -140,7 +140,7 @@ DateFormatMiscTests::test4097450()
 }
 
 /*
- * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.13 $ $Date: 2001/03/21 20:09:55 $
+ * @test @(#)$RCSfile: miscdtfm.cpp,v $ $Revision: 1.14 $ $Date: 2001/12/03 23:16:04 $
  *
  * @bug 4099975
  */
@@ -148,19 +148,134 @@ DateFormatMiscTests::test4097450()
 void
 DateFormatMiscTests::test4099975()
 {
-    UErrorCode status = U_ZERO_ERROR;
-    DateFormatSymbols *symbols = new DateFormatSymbols(status);
-    failure(status, "new DateFormatSymbols");
-    SimpleDateFormat *df = new SimpleDateFormat(UnicodeString("E hh:mm"), symbols, status);
-    failure(status, "new SimpleDateFormat");
-    UnicodeString res;
-    logln(df->toLocalizedPattern(res, status));
-    failure(status, "df->toLocalizedPattern");
-    symbols->setLocalPatternChars(UnicodeString("abcdefghijklmonpqr")); // change value of field
-    logln(df->toLocalizedPattern(res, status));
-    failure(status, "df->toLocalizedPattern");
+    /** 
+     * Test Constructor SimpleDateFormat::SimpleDateFormat (const UnicodeString & pattern, 
+     *                                    const DateFormatSymbols & formatData, UErrorCode & status )
+     * The DateFormatSymbols object is NOT adopted; Modifying the original DateFormatSymbols
+     * should not change the SimpleDateFormat's behavior.
+     */
+    UDate* d = new UDate();
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        DateFormatSymbols* symbols = new DateFormatSymbols(Locale::US, status);
+        failure(status, "new DateFormatSymbols");
+        SimpleDateFormat *df = new SimpleDateFormat(UnicodeString("E hh:mm"), *symbols, status);
+        failure(status, "new SimpleDateFormat");
+        UnicodeString format0;
+        format0 = df->format(*d, format0);
+        UnicodeString localizedPattern0;
+        localizedPattern0 = df->toLocalizedPattern(localizedPattern0, status);
+        failure(status, "df->toLocalizedPattern");
+        symbols->setLocalPatternChars(UnicodeString("abcdefghijklmonpqr")); // change value of field
+        UnicodeString format1;
+        format1 = df->format(*d, format1);
+        if (format0 != format1) {
+            errln(UnicodeString("Formats are different. format0: ") + format0 
+                + UnicodeString("; format1: ") + format1);
+        }
+        UnicodeString localizedPattern1;
+        localizedPattern1 = df->toLocalizedPattern(localizedPattern1, status);
+        failure(status, "df->toLocalizedPattern");
+        if (localizedPattern0 != localizedPattern1) {
+            errln(UnicodeString("Pattern has been changed. localizedPattern0: ") + localizedPattern0 
+                + UnicodeString("; localizedPattern1: ") + localizedPattern1);
+        }
+        delete symbols;
+        delete df;
+    }
+    /*
+     * Test void SimpleDateFormat::setDateFormatSymbols (  const DateFormatSymbols & newFormatSymbols ) 
+     * Modifying the original DateFormatSymbols should not change the SimpleDateFormat's behavior.
+     */
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        DateFormatSymbols* symbols = new DateFormatSymbols(Locale::US, status);
+        failure(status, "new DateFormatSymbols");
+        SimpleDateFormat *df = new SimpleDateFormat(UnicodeString("E hh:mm"), status);
+        failure(status, "new SimpleDateFormat");
+        df->setDateFormatSymbols(*symbols);
+        UnicodeString format0;
+        format0 = df->format(*d, format0);
+        UnicodeString localizedPattern0;
+        localizedPattern0 = df->toLocalizedPattern(localizedPattern0, status);
+        failure(status, "df->toLocalizedPattern");
+        symbols->setLocalPatternChars(UnicodeString("abcdefghijklmonpqr")); // change value of field
+        UnicodeString format1;
+        format1 = df->format(*d, format1);
+        if (format0 != format1) {
+            errln(UnicodeString("Formats are different. format0: ") + format0 
+                + UnicodeString("; format1: ") + format1);
+        }
+        UnicodeString localizedPattern1;
+        localizedPattern1 = df->toLocalizedPattern(localizedPattern1, status);
+        failure(status, "df->toLocalizedPattern");
+        if (localizedPattern0 != localizedPattern1) {
+            errln(UnicodeString("Pattern has been changed. localizedPattern0: ") + localizedPattern0 
+                + UnicodeString("; localizedPattern1: ") + localizedPattern1);
+        }
+        delete symbols;
+        delete df;
 
-    delete df;
+    }
+    //Test the pointer version of the constructor (and the adoptDateFormatSymbols method)
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        DateFormatSymbols* symbols = new DateFormatSymbols(Locale::US, status);
+        failure(status, "new DateFormatSymbols");
+        SimpleDateFormat *df = new SimpleDateFormat(UnicodeString("E hh:mm"), symbols, status);
+        failure(status, "new SimpleDateFormat");
+        UnicodeString format0;
+        format0 = df->format(*d, format0);
+        UnicodeString localizedPattern0;
+        localizedPattern0 = df->toLocalizedPattern(localizedPattern0, status);
+        failure(status, "df->toLocalizedPattern");
+        symbols->setLocalPatternChars(UnicodeString("abcdefghijklmonpqr")); // change value of field
+        UnicodeString format1;
+        format1 = df->format(*d, format1);
+        if (format0 != format1) {
+            errln(UnicodeString("Formats are different. format0: ") + format0 
+                + UnicodeString("; format1: ") + format1);
+        }
+        UnicodeString localizedPattern1;
+        localizedPattern1 = df->toLocalizedPattern(localizedPattern1, status);
+        failure(status, "df->toLocalizedPattern");
+        if (localizedPattern0 == localizedPattern1) {
+            errln(UnicodeString("Pattern should have been changed. localizedPattern0: ") + localizedPattern0 
+                + UnicodeString("; localizedPattern1: ") + localizedPattern1);
+        }
+        //delete symbols; the caller is no longer responsible for deleting the symbols
+        delete df;
+    }
+    //
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        DateFormatSymbols* symbols = new DateFormatSymbols(Locale::US, status);
+        failure(status, "new DateFormatSymbols");
+        SimpleDateFormat *df = new SimpleDateFormat(UnicodeString("E hh:mm"), status);
+        failure(status, "new SimpleDateFormat");
+        df-> adoptDateFormatSymbols(symbols);
+        UnicodeString format0;
+        format0 = df->format(*d, format0);
+        UnicodeString localizedPattern0;
+        localizedPattern0 = df->toLocalizedPattern(localizedPattern0, status);
+        failure(status, "df->toLocalizedPattern");
+        symbols->setLocalPatternChars(UnicodeString("abcdefghijklmonpqr")); // change value of field
+        UnicodeString format1;
+        format1 = df->format(*d, format1);
+        if (format0 != format1) {
+            errln(UnicodeString("Formats are different. format0: ") + format0 
+                + UnicodeString("; format1: ") + format1);
+        }
+        UnicodeString localizedPattern1;
+        localizedPattern1 = df->toLocalizedPattern(localizedPattern1, status);
+        failure(status, "df->toLocalizedPattern");
+        if (localizedPattern0 == localizedPattern1) {
+            errln(UnicodeString("Pattern should have been changed. localizedPattern0: ") + localizedPattern0 
+                + UnicodeString("; localizedPattern1: ") + localizedPattern1);
+        }
+        //delete symbols; the caller is no longer responsible for deleting the symbols
+        delete df;
+    }
 }
 
 /*
