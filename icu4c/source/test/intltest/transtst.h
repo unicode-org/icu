@@ -86,6 +86,11 @@ class TransliteratorTest : public IntlTest {
      */
     void TestJ277(void);
 
+    /**
+     * Prefix, suffix support in hex transliterators.
+     */
+    void TestJ243(void);
+
     //======================================================================
     // Support methods
     //======================================================================

@@ -16,34 +16,57 @@
  */
 const char* UnicodeToHexTransliterator::_ID = "Unicode-Hex";
 
-const char* UnicodeToHexTransliterator::DEFAULT_PREFIX = "\\u";
+const UChar UnicodeToHexTransliterator::HEX_DIGITS[32] = {
+    // Use Unicode hex values for EBCDIC compatibility
+    0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, // 01234567
+    0x38, 0x39, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, // 89abcdef
+    0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, // 01234567
+    0x38, 0x39, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, // 89ABCDEF
+};
 
 /**
  * Constructs a transliterator.
- * @param prefix the string that will precede the four hex
- * digits for UNICODE_HEX transliterators.  Ignored
- * if direction is HEX_UNICODE.
- * @param uppercase if true, the four hex digits will be
- * converted to uppercase; otherwise they will be lowercase.
- * Ignored if direction is HEX_UNICODE.
  */
 UnicodeToHexTransliterator::UnicodeToHexTransliterator(
-                                const UnicodeString& hexPrefix,
+                                const UnicodeString& thePattern,
                                 bool_t isUppercase,
-                                UnicodeFilter* adoptedFilter) :
+                                UnicodeFilter* adoptedFilter,
+                                UErrorCode& status) :
     Transliterator(_ID, adoptedFilter),
-    prefix(hexPrefix),
     uppercase(isUppercase) {
+
+    if (U_FAILURE(status)) {
+        return;
+    }
+    applyPattern(thePattern, status);
+}
+
+/**
+ * Constructs a transliterator.
+ */
+UnicodeToHexTransliterator::UnicodeToHexTransliterator(
+                                const UnicodeString& thePattern,
+                                UErrorCode& status) :
+    Transliterator(_ID, 0),
+    uppercase(TRUE) {
+
+    if (U_FAILURE(status)) {
+        return;
+    }
+    applyPattern(thePattern, status);
 }
 
 /**
  * Constructs a transliterator with the default prefix "&#092;u"
- * that outputs uppercase hex digits.
+ * that outputs four uppercase hex digits.
  */
 UnicodeToHexTransliterator::UnicodeToHexTransliterator(
                                 UnicodeFilter* adoptedFilter) :
     Transliterator(_ID, adoptedFilter),
-    prefix(DEFAULT_PREFIX),
+    pattern("\\\\u0000"),
+    prefix("\\u", 2),
+    suffix(),
+    minDigits(4),
     uppercase(TRUE) {
 }
 
@@ -52,7 +75,11 @@ UnicodeToHexTransliterator::UnicodeToHexTransliterator(
  */
 UnicodeToHexTransliterator::UnicodeToHexTransliterator(
                                 const UnicodeToHexTransliterator& other) :
-    Transliterator(other), prefix(other.prefix),
+    Transliterator(other),
+    pattern(other.pattern),
+    prefix(other.prefix),
+    suffix(other.suffix),
+    minDigits(other.minDigits),
     uppercase(other.uppercase) {
 }
 
@@ -62,7 +89,10 @@ UnicodeToHexTransliterator::UnicodeToHexTransliterator(
 UnicodeToHexTransliterator&
 UnicodeToHexTransliterator::operator=(const UnicodeToHexTransliterator& other) {
     Transliterator::operator=(other);
+    pattern = other.pattern;
     prefix = other.prefix;
+    suffix = other.suffix;
+    minDigits = other.minDigits;
     uppercase = other.uppercase;
     return *this;
 }
@@ -72,24 +102,98 @@ UnicodeToHexTransliterator::clone(void) const {
     return new UnicodeToHexTransliterator(*this);
 }
 
-/**
- * Returns the string that precedes the four hex digits.
- * @return prefix string
- */
-const UnicodeString& UnicodeToHexTransliterator::getPrefix(void) const {
-    return prefix;
+void UnicodeToHexTransliterator::applyPattern(const UnicodeString& thePattern,
+                                              UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    // POSSIBILE FUTURE MODIFICATION
+    // Parse thePattern, and if this succeeds, set pattern to thePattern.
+    // If it fails, call applyPattern(pattern) to restore the original
+    // conditions.
+
+    pattern = thePattern;
+    prefix.truncate(0);
+    suffix.truncate(0);
+    minDigits = 0;
+    int32_t maxDigits = 0;
+
+    /* The mode specifies where we are in each spec.
+     * mode 0 = in prefix
+     * mode 1 = in optional digits (#)
+     * mode 2 = in required digits (0)
+     * mode 3 = in suffix
+     */
+    int32_t mode = 0;
+
+    for (int32_t i=0; i<pattern.length(); ++i) {
+        UChar c = pattern.charAt(i);
+        bool_t isLiteral = FALSE;
+        if (c == BACKSLASH) {
+            if ((i+1)<pattern.length()) {
+                isLiteral = TRUE;
+                c = pattern.charAt(++i);
+            } else {
+                // Trailing '\\'
+                status = U_ILLEGAL_ARGUMENT_ERROR;
+                return;
+            }
+        }
+
+        if (!isLiteral) {
+            switch (c) {
+            case POUND:
+                // Seeing a '#' moves us from mode 0 (prefix) to mode 1
+                // (optional digits).
+                if (mode == 0) {
+                    ++mode;
+                } else if (mode != 1) {
+                    // Unquoted '#'
+                    status = U_ILLEGAL_ARGUMENT_ERROR;
+                    return;
+                }
+                ++maxDigits;
+                break;
+            case ZERO:
+                // Seeing a '0' moves us to mode 2 (required digits)
+                if (mode < 2) {
+                    mode = 2;
+                } else if (mode != 2) {
+                    // Unquoted '0'
+                    status = U_ILLEGAL_ARGUMENT_ERROR;
+                    return;
+                }
+                ++minDigits;
+                ++maxDigits;
+                break;
+            default:
+                isLiteral = TRUE;
+                break;
+            }
+        }
+
+        if (isLiteral) {
+            if (mode == 0) {
+                prefix.append(c);
+            } else {
+                // Any literal outside the prefix moves us into mode 3
+                // (suffix)
+                mode = 3;
+                suffix.append(c);
+            }
+        }
+    }
+
+    if (minDigits < 1 || maxDigits > 4) {
+        // Invalid min/max digit count
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
 }
 
-/**
- * Sets the string that precedes the four hex digits.
- *
- * <p>Callers must take care if a transliterator is in use by
- * multiple threads.  The prefix should not be changed by one
- * thread while another thread may be transliterating.
- * @param prefix prefix string
- */
-void UnicodeToHexTransliterator::setPrefix(const UnicodeString& hexPrefix) {
-    prefix = hexPrefix;
+const UnicodeString& UnicodeToHexTransliterator::toPattern(void) const {
+    return pattern;
 }
 
 /**
@@ -134,7 +238,18 @@ void UnicodeToHexTransliterator::handleTransliterate(Replaceable& text, Position
             ++cursor;
             continue;
         }
-        toHex(hex, c);
+
+        hex = prefix;
+        bool_t showRest = FALSE;
+        for (int32_t i=3; i>=0; --i) {
+            int32_t d = (c >> (i*4)) & 0xF;
+            if (showRest || (d != 0) || minDigits > i) {
+                hex.append(HEX_DIGITS[uppercase ? (d|16) : d]);
+                showRest = TRUE;
+            }
+        }
+        hex.append(suffix);
+
         text.handleReplaceBetween(cursor, cursor+1, hex);
         int32_t len = hex.length();
         cursor += len; // Advance cursor by 1 and adjust for new text
@@ -144,33 +259,4 @@ void UnicodeToHexTransliterator::handleTransliterate(Replaceable& text, Position
 
     offsets.limit = limit;
     offsets.cursor = cursor;
-}
-
-UChar UnicodeToHexTransliterator::HEX_DIGITS[32] = {
-    // If necessary, replace these character constants with their hex values
-    '0', '1', '2', '3', '4', '5', '6', '7',
-    '8', '9', 'a', 'b', 'c', 'd', 'e', 'f',
-    '0', '1', '2', '3', '4', '5', '6', '7',
-    '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
-};
-
-/**
- * Given an integer, return its least significant hex digit.
- */
-UChar UnicodeToHexTransliterator::itoh(int32_t i) const {
-    i &= 0xF;
-    return HEX_DIGITS[uppercase ? (i|16) : i];
-}
-
-/**
- * Form escape sequence.
- */
-UnicodeString& UnicodeToHexTransliterator::toHex(UnicodeString& result,
-                                                 UChar c) const {
-    result = prefix;
-    result.append(itoh(c >> 12));
-    result.append(itoh(c >> 8));
-    result.append(itoh(c >> 4));
-    result.append(itoh(c));
-    return result;
 }

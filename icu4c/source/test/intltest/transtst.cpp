@@ -14,6 +14,8 @@
 #include "unicode/unifilt.h"
 #include "unicode/cpdtrans.h"
 #include "unicode/dtfmtsym.h"
+#include "unicode/hextouni.h"
+#include "unicode/unitohex.h"
 
 // Define character constants thusly to be EBCDIC-friendly
 
@@ -48,6 +50,7 @@ TransliteratorTest::runIndexedTest(int32_t index, bool_t exec,
         CASE(10,TestInlineSet);
         CASE(11,TestPatternQuoting);
         CASE(12,TestJ277);
+        CASE(13,TestJ243);
         default: name = ""; break;
     }
 }
@@ -548,6 +551,30 @@ void TransliteratorTest::TestJ277(void) {
     }
 
     delete gl;
+}
+
+/**
+ * Prefix, suffix support in hex transliterators
+ */
+void TransliteratorTest::TestJ243(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    
+    // Test default Hex-Unicode, which should handle
+    // \u, \U, u+, and U+
+    HexToUnicodeTransliterator hex;
+    expect(hex, "\\u0041+\\U0042,u+0043uu+0044z", "A+B,CuDz");
+
+    // Try a custom Hex-Unicode
+    // \uXXXX and &#xXXXX;
+    status = U_ZERO_ERROR;
+    HexToUnicodeTransliterator hex2("\\\\u###0;&\\#x###0\\;", status); 
+    expect(hex2, "\\u61\\u062\\u0063\\u00645\\u66x&#x30;&#x031;&#x0032;&#x00033;",
+           "abcd5fx012&#x00033;");
+
+    // Try custom Unicode-Hex (default is tested elsewhere)
+    status = U_ZERO_ERROR;
+    UnicodeToHexTransliterator hex3("&\\#x###0;", status);
+    expect(hex3, "012", "&#x30;&#x31;&#x32;");
 }
 
 //======================================================================
