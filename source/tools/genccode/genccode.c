@@ -61,9 +61,10 @@ static UOption options[]={
      UOPTION_HELP_QUESTION_MARK,
      UOPTION_DESTDIR,
      UOPTION_DEF("name", 'n', UOPT_REQUIRES_ARG),
-     UOPTION_DEF( "entrypoint", 'e', UOPT_REQUIRES_ARG)
+UOPTION_DEF( "entrypoint", 'e', UOPT_REQUIRES_ARG),
+/*5*/  UOPTION_DEF( "revision", 'r', UOPT_REQUIRES_ARG),
 #ifdef CAN_GENERATE_OBJECTS
-/*5*/, UOPTION_DEF("object", 'o', UOPT_NO_ARG)
+/*6*/, UOPTION_DEF("object", 'o', UOPT_NO_ARG)
 #endif
 
 };
@@ -80,21 +81,37 @@ main(int argc, char* argv[]) {
 
     /* read command line options */
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
-
-#ifndef U_HAVE_BIND_INTERNAL_REFERENCES
-
-    if( (options[3].doesOccur) && uprv_strcmp(options[3].value, U_ICUDATA_NAME)) /* be consistent with gencmn! */
+    
+    if( options[3].doesOccur ) /* be consistent with gencmn! */
     {
       uprv_strcpy(symPrefix, options[3].value);
-      uprv_strcat(symPrefix, "_");
     }
     else
     {
       symPrefix[0] = 0;
     }
-#else
-    symPrefix[0] = 0;
-#endif
+
+    if( options[5].doesOccur )
+    {
+      int len;
+      int i;
+      uprv_strcat(symPrefix, options[5].value); 
+      /* Convert non alpha numeric symbols to underscores */
+
+      /* turn dots in the entry name into underscores */
+      len=uprv_strlen(symPrefix);
+      for(i=0; i<len; ++i) {
+        if(symPrefix[i]=='.') {
+          symPrefix[i]='_';
+        }
+      }
+    }
+
+    /* add an underscore to the prefix if non empty */
+    if(symPrefix[0] != 0)
+    {
+      uprv_strcat(symPrefix, "_");
+    }
 
     /* error handling, printing usage message */
     if(argc<0) {
@@ -112,6 +129,7 @@ main(int argc, char* argv[]) {
             "\t-d or --destdir     destination directory, followed by the path\n"
             "\t-n or --name        symbol prefix, followed by the prefix\n"
             "\t-e or --entrypoint  entry point name, followed by the name\n"
+	    "\t-r or --revision    Specify a version\n"
 #ifdef CAN_GENERATE_OBJECTS
             "\t-o or --object      write a .obj file instead of .c\n"
 #endif
@@ -120,7 +138,7 @@ main(int argc, char* argv[]) {
         const char *message, *filename;
         void (*writeCode)(const char *, const char *);
 #ifdef CAN_GENERATE_OBJECTS
-        if(options[5].doesOccur) {
+        if(options[6].doesOccur) {
             message="generating object code for %s\n";
             writeCode=&writeObjectCode;
         } else
