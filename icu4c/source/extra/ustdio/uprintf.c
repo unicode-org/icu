@@ -473,7 +473,6 @@ u_printf_octal_handler(UFILE                 *stream,
                const u_printf_spec_info     *info,
                const ufmt_args            *args)
 {
-  int32_t         written     = 0;
   long            num         = (long) (args[0].intValue);
   UChar            result         [UFPRINTF_BUFFER_SIZE];
   int32_t         len        = UFPRINTF_BUFFER_SIZE;
