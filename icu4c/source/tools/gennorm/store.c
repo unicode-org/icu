@@ -65,7 +65,7 @@ static uint16_t indexes[_NORM_INDEX_TOP]={ 0 };
 typedef struct UToolMemory {
     char name[64];
     uint32_t count, size, index;
-    uint32_t array[1];
+    double array[1];
 } UToolMemory;
 
 static UToolMemory *
