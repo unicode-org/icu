@@ -93,8 +93,10 @@ enum {
 
      URX_STO_SP        = 32,   // Store the stack ptr.  Operand is location within
                                //   matcher data (not stack data) to store it.
-     URX_LD_SP         = 33    // Load the stack pointer.  Operand is location
+     URX_LD_SP         = 33,   // Load the stack pointer.  Operand is location
                                //   to load from.
+     URX_BACKREF       = 34    // Back Reference.  Parameter is the index of the
+                               //   capture group variables in the state stack frame.
 };
 
 // Keep this list of opcode names in sync with the above enum
@@ -133,7 +135,8 @@ enum {
         "CTR_LOOP_P",          \
         "RELOC_OPRND",         \
         "STO_SP",              \
-        "LD_SP" 
+        "LD_SP",               \
+        "BACKREF"
 
 //
 //  Convenience macros for assembling and disassembling a compiled operation.

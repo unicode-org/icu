@@ -1246,6 +1246,15 @@ void RegexTest::Extended() {
 
     // Possessive ?+
     REGEX_FIND("c?+ddd", "<0>cddd</0>");
+    REGEX_FIND("c?+cddd", "cddd");
+    REGEX_FIND("c?cddd",  "<0>cddd</0>");
+
+    // Back Reference
+    REGEX_FIND("(?:ab(..)cd\\1)*", "<0>ab23cd23ab<1>ww</1>cdww</0>abxxcdyy");
+    REGEX_FIND("ab(?:c|(d?))(\\1)", "<0>abc<2></2></0>");
+    REGEX_FIND("ab(?:c|(d?))(\\1)", "<0>ab<1>d</1><2>d</2></0>");
+    REGEX_FIND("ab(?:c|(d?))(\\1)", "<0>ab<1></1><2></2></0>e");
+    REGEX_FIND("ab(?:c|(d?))(\\1)", "<0>ab<1></1><2></2></0>");
 
 }
 
@@ -1258,7 +1267,6 @@ void RegexTest::Extended() {
 //---------------------------------------------------------------------------
 void RegexTest::Errors() {
     // \escape sequences that aren't implemented yet.
-    REGEX_ERR("No (support) for \\1 BackReferences yet.", 1, 19,  U_REGEX_UNIMPLEMENTED);
     REGEX_ERR("named chars \\N{GREEK CAPITAL LETTER ALPHA} not implementd", 1, 14, U_REGEX_UNIMPLEMENTED);
     REGEX_ERR("hex format \\x{abcd} not implemented", 1, 13, U_REGEX_UNIMPLEMENTED);
 

@@ -30,6 +30,7 @@ enum Regex_PatternParseAction {
     doRuleError,
     doIntevalLowerDigit,
     doBackslashs,
+    doOctal,
     doNGOpt,
     doNamedChar,
     doBackslashw,
@@ -108,7 +109,7 @@ static const struct RegexTableEl gRuleParseStateTable[] = {
     , {doDollar, 36 /* $ */, 2,0,  TRUE}     //  8 
     , {doNOP, 92 /* \ */, 70,0,  TRUE}     //  9 
     , {doPatFinish, 253, 2,0,  FALSE}     //  10 
-    , {doRuleError, 255, 90,0,  FALSE}     //  11 
+    , {doRuleError, 255, 91,0,  FALSE}     //  11 
     , {doNOP, 42 /* * */, 48,0,  TRUE}     //  12      expr-quant
     , {doNOP, 43 /* + */, 51,0,  TRUE}     //  13 
     , {doNOP, 63 /* ? */, 54,0,  TRUE}     //  14 
@@ -130,12 +131,12 @@ static const struct RegexTableEl gRuleParseStateTable[] = {
     , {doMatchMode, 115 /* s */, 40,0,  TRUE}     //  30 
     , {doMatchMode, 109 /* m */, 40,0,  TRUE}     //  31 
     , {doMatchMode, 45 /* - */, 40,0,  TRUE}     //  32 
-    , {doBadOpenParenType, 255, 90,0,  FALSE}     //  33 
+    , {doBadOpenParenType, 255, 91,0,  FALSE}     //  33 
     , {doOpenLookBehind, 61 /* = */, 2, 17, TRUE}     //  34      open-paren-lookbehind
     , {doOpenLookBehindNeg, 33 /* ! */, 2, 17, TRUE}     //  35 
-    , {doBadOpenParenType, 255, 90,0,  FALSE}     //  36 
+    , {doBadOpenParenType, 255, 91,0,  FALSE}     //  36 
     , {doNOP, 41 /* ) */, 2,0,  TRUE}     //  37      paren-comment
-    , {doMismatchedParenErr, 253, 90,0,  FALSE}     //  38 
+    , {doMismatchedParenErr, 253, 91,0,  FALSE}     //  38 
     , {doNOP, 255, 37,0,  TRUE}     //  39 
     , {doMatchMode, 105 /* i */, 40,0,  TRUE}     //  40      paren-flag
     , {doMatchMode, 115 /* s */, 40,0,  TRUE}     //  41 
@@ -144,7 +145,7 @@ static const struct RegexTableEl gRuleParseStateTable[] = {
     , {doMatchMode, 45 /* - */, 40,0,  TRUE}     //  44 
     , {doNOP, 41 /* ) */, 2,0,  TRUE}     //  45 
     , {doOpenNonCaptureParen, 58 /* : */, 2, 12, TRUE}     //  46 
-    , {doNOP, 255, 90,0,  FALSE}     //  47 
+    , {doNOP, 255, 91,0,  FALSE}     //  47 
     , {doNGStar, 63 /* ? */, 17,0,  TRUE}     //  48      quant-star
     , {doPossesiveStar, 43 /* + */, 17,0,  TRUE}     //  49 
     , {doStar, 255, 17,0,  FALSE}     //  50 
@@ -156,14 +157,14 @@ static const struct RegexTableEl gRuleParseStateTable[] = {
     , {doOpt, 255, 17,0,  FALSE}     //  56 
     , {doNOP, 129, 57,0,  TRUE}     //  57      interval-open
     , {doNOP, 128, 60,0,  FALSE}     //  58 
-    , {doIntervalError, 255, 90,0,  FALSE}     //  59 
+    , {doIntervalError, 255, 91,0,  FALSE}     //  59 
     , {doIntevalLowerDigit, 128, 60,0,  TRUE}     //  60      interval-lower
     , {doNOP, 44 /* , */, 64,0,  TRUE}     //  61 
     , {doIntervalSame, 125 /* } */, 67,0,  TRUE}     //  62 
-    , {doIntervalError, 255, 90,0,  FALSE}     //  63 
+    , {doIntervalError, 255, 91,0,  FALSE}     //  63 
     , {doIntervalUpperDigit, 128, 64,0,  TRUE}     //  64      interval-upper
     , {doNOP, 125 /* } */, 67,0,  TRUE}     //  65 
-    , {doIntervalError, 255, 90,0,  FALSE}     //  66 
+    , {doIntervalError, 255, 91,0,  FALSE}     //  66 
     , {doNGInterval, 63 /* ? */, 17,0,  TRUE}     //  67      interval-type
     , {doPossesiveInterval, 43 /* + */, 17,0,  TRUE}     //  68 
     , {doInterval, 255, 17,0,  FALSE}     //  69 
@@ -185,9 +186,10 @@ static const struct RegexTableEl gRuleParseStateTable[] = {
     , {doBackslashx, 120 /* x */, 12,0,  TRUE}     //  85 
     , {doBackslashZ, 90 /* Z */, 2,0,  TRUE}     //  86 
     , {doBackslashz, 122 /* z */, 2,0,  TRUE}     //  87 
-    , {doBackRef, 128, 12,0,  TRUE}     //  88 
-    , {doLiteralChar, 255, 12,0,  TRUE}     //  89 
-    , {doExit, 255, 90,0,  TRUE}     //  90      errorDeath
+    , {doOctal, 48 /* 0 */, 12,0,  TRUE}     //  88 
+    , {doBackRef, 128, 12,0,  TRUE}     //  89 
+    , {doLiteralChar, 255, 12,0,  TRUE}     //  90 
+    , {doExit, 255, 91,0,  TRUE}     //  91      errorDeath
  };
 static const char * const RegexStateNames[] = {    0,
      "start",
@@ -260,6 +262,7 @@ static const char * const RegexStateNames[] = {    0,
     0,
     0,
      "backslash",
+    0,
     0,
     0,
     0,

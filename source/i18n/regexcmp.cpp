@@ -64,6 +64,7 @@ static const UChar gRuleSet_rule_char_pattern[]       = {
 static const UChar gRuleSet_digit_char_pattern[] = {
 //    [    0      -    9     ]
     0x5b, 0x30, 0x2d, 0x39, 0x5d, 0};
+static const UnicodeSet *gRuleDigits = NULL;
 
 
 static UnicodeSet  *gRuleSets[10];         // Array of ptrs to the actual UnicodeSet objects.
@@ -175,6 +176,7 @@ RegexCompile::RegexCompile(UErrorCode &status) : fParenStack(status)
     ThreadSafeUnicodeSetInit(&gRuleSets[kRuleSet_rule_char-128],   gRuleSet_rule_char_pattern,  status);
     ThreadSafeUnicodeSetInit(&gRuleSets[kRuleSet_white_space-128], gRuleWhiteSpacePattern,      status);
     ThreadSafeUnicodeSetInit(&gRuleSets[kRuleSet_digit_char-128],  gRuleSet_digit_char_pattern, status);
+    gRuleDigits = gRuleSets[kRuleSet_digit_char-128];
     ThreadSafeUnicodeSetInit(&gUnescapeCharSet,                    gUnescapeCharPattern,        status);
     ThreadSafeUnicodeSetInit(&gPropSets[URX_ISWORD_SET],           gIsWordPattern,              status);
     ThreadSafeUnicodeSetInit(&gPropSets[URX_ISSPACE_SET],          gIsSpacePattern,             status);    
@@ -919,9 +921,47 @@ UBool RegexCompile::doParseActions(EParseAction action)
         break;
 
     case doBackRef:
-        //  TODO:  implement back references.
+        // BackReference.  Somewhat unusual in that the front-end can not completely parse
+        //                 the regular expression, because the number of digits to be consumed
+        //                 depends on the number of capture groups that have been defined.  So
+        //                 we have to do it here instead.
+        {
+            int32_t  numCaptureGroups = fRXPat->fGroupMap->size();
+            int32_t  groupNum = 0;
+            UChar32  c        = fC.fChar;
+            int32_t  t;
+
+            for (t=numCaptureGroups; t>0; t=t/10) {
+                // Loop once per digit, for max allowed number of digits in a back reference.
+                groupNum = groupNum * 10 + u_charDigitValue(c);
+                if (groupNum >= numCaptureGroups) {
+                    break;
+                }
+                UChar32 c = peekCharLL();
+                if (gRuleDigits->contains(c) == FALSE) {
+                    break;
+                }
+                nextCharLL();
+            }
+            if (groupNum > numCaptureGroups) {
+                error(U_REGEX_INVALID_BACK_REF);
+                break;
+            }
+
+            // Scan of the back reference in the source regexp is complete.  Now generate
+            //  the compiled code for it.
+            U_ASSERT(groupNum > 0);
+            int32_t  varsLoc = fRXPat->fGroupMap->elementAti(groupNum-1);
+            int32_t  op = URX_BUILD(URX_BACKREF, varsLoc);
+            fRXPat->fCompiledPat->addElement(op, *fStatus);
+        }
+        break;
+
+
+    case doOctal:
         error(U_REGEX_UNIMPLEMENTED);
         break;
+
 
     case doNamedChar:            // \N{NAMED_CHAR}
         //  TODO:  implement
@@ -972,7 +1012,7 @@ UBool RegexCompile::doParseActions(EParseAction action)
         //       4.   JMP          2
         //       5.   LD_SP        loc
         //       6    ...
-        //
+        // TODO:  do something to cut back the state stack each time through the loop.
         {
             // Reserve two slots at the top of the block.
             int32_t   topLoc = blockTopLoc(TRUE);
