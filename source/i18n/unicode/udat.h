@@ -133,7 +133,7 @@
 typedef void* UDateFormat;
 
 /** The possible date/time format styles */
-enum UDateFormatStyle {
+typedef enum UDateFormatStyle {
     /** Full style */
     UDAT_FULL,
     /** Long style */
@@ -149,8 +149,7 @@ enum UDateFormatStyle {
     /** for internal API use only */
     UDAT_IGNORE = -2
 
-};
-typedef enum UDateFormatStyle UDateFormatStyle;
+} UDateFormatStyle;
 
 /**
  * Open a new UDateFormat for formatting and parsing dates and times.
@@ -436,7 +435,7 @@ udat_applyPattern(            UDateFormat     *format,
                             int32_t         patternLength);
 
 /** The possible types of date format symbols */
-enum UDateFormatSymbolType {
+typedef enum UDateFormatSymbolType {
     /** The era names, for example AD */
     UDAT_ERAS,
     /** The month names, for example February */
@@ -451,8 +450,7 @@ enum UDateFormatSymbolType {
     UDAT_AM_PMS,
     /** The localized characters */
     UDAT_LOCALIZED_CHARS
-};
-typedef enum UDateFormatSymbolType UDateFormatSymbolType;
+} UDateFormatSymbolType;
 
 /** Date format symbols.
  *  For usage in C programs.
