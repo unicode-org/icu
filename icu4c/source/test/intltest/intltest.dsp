@@ -799,14 +799,6 @@ SOURCE=.\tstnorm.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\ucdtest.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\ucdtest.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\usettest.cpp
 # End Source File
 # Begin Source File
