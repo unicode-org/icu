@@ -391,7 +391,7 @@ public:
    * @see Locale
    */
   RuleBasedCollator(const UnicodeString& rules,
-                    Normalizer::EMode decompositionMode,
+                    UColAttributeValue decompositionMode,
                     UErrorCode& status);
 
   /**
@@ -406,7 +406,7 @@ public:
    */
   RuleBasedCollator(const UnicodeString& rules,
                     ECollationStrength collationStrength,
-                    Normalizer::EMode decompositionMode,
+                    UColAttributeValue decompositionMode,
                     UErrorCode& status);
 
   /**
@@ -763,11 +763,44 @@ public:
   */
   virtual void setStrength(ECollationStrength newStrength);
 
+  // deprecated functions ---------------------------------------------------
+
+  /**
+   * RuleBasedCollator constructor. This takes the table rules and builds a
+   * collation table out of them. Please see RuleBasedCollator class
+   * description for more details on the collation rule syntax.
+   * @param rules the collation rules to build the collation table from.
+   * @param decompositionMode the normalisation mode
+   * @param status reporting a success or an error.
+   * @see Locale
+   * @deprecated To be removed after 2002-sep-30, specify the decomposition mode with a UColAttributeValue.
+   */
+  RuleBasedCollator(const UnicodeString& rules,
+                    Normalizer::EMode decompositionMode,
+                    UErrorCode& status);
+
+  /**
+   * RuleBasedCollator constructor. This takes the table rules and builds a
+   * collation table out of them. Please see RuleBasedCollator class
+   * description for more details on the collation rule syntax.
+   * @param rules the collation rules to build the collation table from.
+   * @param collationStrength default strength for comparison
+   * @param decompositionMode the normalisation mode
+   * @param status reporting a success or an error.
+   * @see Locale
+   * @deprecated To be removed after 2002-sep-30, specify the decomposition mode with a UColAttributeValue.
+   */
+  RuleBasedCollator(const UnicodeString& rules,
+                    ECollationStrength collationStrength,
+                    Normalizer::EMode decompositionMode,
+                    UErrorCode& status);
+
   /**
   * Set the decomposition mode of the Collator object. success is equal to
   * U_ILLEGAL_ARGUMENT_ERROR if error occurs.
   * @param the new decomposition mode
   * @see Collator#getDecomposition
+  * @deprecated To be removed after 2002-sep-30; use setAttribute().
   */
   virtual void setDecomposition(Normalizer::EMode  mode);
 
@@ -775,6 +808,7 @@ public:
   * Get the decomposition mode of the Collator object.
   * @return the decomposition mode
   * @see Collator#setDecomposition
+  * @deprecated To be removed after 2002-sep-30; use getAttribute().
   */
   virtual Normalizer::EMode getDecomposition(void) const;
 
@@ -878,6 +912,13 @@ private:
    * @param status error code status
    */
   RuleBasedCollator(const Locale& desiredLocale, UErrorCode& status);
+
+  /** common constructor implementation */
+  void
+  construct(const UnicodeString& rules,
+            UColAttributeValue collationStrength,
+            UColAttributeValue decompositionMode,
+            UErrorCode& status);
 
   // private methods -------------------------------------------------------
 

@@ -115,143 +115,80 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
                                            UErrorCode& status) :
                                            dataIsOwned(FALSE)
 {
-  if (U_FAILURE(status))
-    return;
-
-  int32_t length = rules.length();
-
-  UChar ucharrules[STACK_BUFFER_LENGTH_];
-  UChar *pucharrules = ucharrules;
-
-  if (length >= STACK_BUFFER_LENGTH_)
-    pucharrules = new UChar[length + 1];
-
-  rules.extract(0, length, pucharrules);
-  pucharrules[length] = 0;
-
-  ucollator = ucol_openRules(pucharrules, length, UCOL_DEFAULT_NORMALIZATION,
-                             UCOL_DEFAULT_STRENGTH, NULL, &status);
-
-  if (U_SUCCESS(status))
-  {
-    const UChar *r = ucol_getRules(ucollator, &length);
-    if (length > 0) {
-        urulestring = new UnicodeString(r, length);
-    }
-    else {
-        urulestring = new UnicodeString();
-    }
-
-    dataIsOwned = TRUE;
-  }
-
-  if (pucharrules != ucharrules)
-    delete[] pucharrules;
+  construct(rules,
+            UCOL_DEFAULT_STRENGTH,
+            UCOL_DEFAULT,
+            status);
 }
 
 RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
                       ECollationStrength collationStrength,
                       UErrorCode& status) : dataIsOwned(FALSE)
 {
-  if (U_FAILURE(status))
-    return;
-
-  int32_t length = rules.length();
-
-  UChar ucharrules[STACK_BUFFER_LENGTH_];
-  UChar *pucharrules = ucharrules;
-
-  if (length >= STACK_BUFFER_LENGTH_)
-    pucharrules = new UChar[length + 1];
-
-  rules.extract(0, length, pucharrules);
-  pucharrules[length] = 0;
-
-  UCollationStrength strength = getUCollationStrength(collationStrength);
-  ucollator = ucol_openRules(pucharrules, length, UCOL_DEFAULT_NORMALIZATION,
-                             strength, NULL,&status);
-
-  if (U_SUCCESS(status))
-  {
-    const UChar *r = ucol_getRules(ucollator, &length);
-    if (length > 0) {
-        urulestring = new UnicodeString(r, length);
-    }
-    else {
-        urulestring = new UnicodeString();
-    }
-    dataIsOwned = TRUE;
-  }
-
-  if (pucharrules != ucharrules)
-    delete[] pucharrules;
+  construct(rules,
+            getUCollationStrength(collationStrength),
+            UCOL_DEFAULT,
+            status);
 }
 
+// TODO this is a deprecated constructor, remove >2002-sep-30
 RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
                                      Normalizer::EMode decompositionMode,
                                      UErrorCode& status) :
                                      dataIsOwned(FALSE)
 {
-  if (U_FAILURE(status))
-    return;
-
-  int32_t length = rules.length();
-
-  UChar ucharrules[STACK_BUFFER_LENGTH_];
-  UChar *pucharrules = ucharrules;
-
-  if (length >= STACK_BUFFER_LENGTH_)
-    pucharrules = new UChar[length + 1];
-
-  rules.extract(0, length, pucharrules);
-  pucharrules[length] = 0;
-
-  UNormalizationMode mode = Normalizer::getUNormalizationMode(
-                                                   decompositionMode, status);
-  ucollator = ucol_openRules(pucharrules, length, mode,
-                             UCOL_DEFAULT_STRENGTH, NULL, &status);
-
-  if (U_SUCCESS(status))
-  {
-    const UChar *r = ucol_getRules(ucollator, &length);
-    if (length > 0) {
-        urulestring = new UnicodeString(r, length);    
-    }
-    else {
-        urulestring = new UnicodeString();
-    }
-    dataIsOwned = TRUE;
-  }
-
-  if (pucharrules != ucharrules)
-    delete[] pucharrules;
+  construct(rules,
+            UCOL_DEFAULT_STRENGTH,
+            (UColAttributeValue)Normalizer::getUNormalizationMode(decompositionMode, status),
+            status);
 }
 
+RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
+                                     UColAttributeValue decompositionMode,
+                                     UErrorCode& status) :
+                                     dataIsOwned(FALSE)
+{
+  construct(rules,
+            UCOL_DEFAULT_STRENGTH,
+            decompositionMode,
+            status);
+}
+
+// TODO this is a deprecated constructor, remove >2002-sep-30
 RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
                       ECollationStrength collationStrength,
                       Normalizer::EMode decompositionMode,
                       UErrorCode& status) : dataIsOwned(FALSE)
 {
-  if (U_FAILURE(status))
-    return;
+  construct(rules,
+            getUCollationStrength(collationStrength),
+            (UColAttributeValue)Normalizer::getUNormalizationMode(decompositionMode, status),
+            status);
+}
 
-  int32_t length = rules.length();
+RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
+                      ECollationStrength collationStrength,
+                      UColAttributeValue decompositionMode,
+                      UErrorCode& status) : dataIsOwned(FALSE)
+{
+  construct(rules,
+            getUCollationStrength(collationStrength),
+            decompositionMode,
+            status);
+}
 
-  UChar ucharrules[STACK_BUFFER_LENGTH_];
-  UChar *pucharrules = ucharrules;
-
-  if (length >= STACK_BUFFER_LENGTH_)
-    pucharrules = new UChar[length + 1];
-
-  rules.extract(0, length, pucharrules);
-  pucharrules[length] = 0;
-
-  UCollationStrength strength = getUCollationStrength(collationStrength);
-  UNormalizationMode mode = Normalizer::getUNormalizationMode(
-                                                   decompositionMode, status);
-  ucollator = ucol_openRules(pucharrules, length, mode, strength,NULL, &status);
+void
+RuleBasedCollator::construct(const UnicodeString& rules,
+                             UColAttributeValue collationStrength,
+                             UColAttributeValue decompositionMode,
+                             UErrorCode& status)
+{
+  ucollator = ucol_openRules(rules.getBuffer(), rules.length(),
+                             decompositionMode, collationStrength,
+                             NULL, &status);
   if (U_SUCCESS(status))
   {
+    int32_t length;
     const UChar *r = ucol_getRules(ucollator, &length);
     if (length > 0) {
         urulestring = new UnicodeString(r, length);
@@ -261,12 +198,7 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
     }
     dataIsOwned = TRUE;
   }
-
-  if (pucharrules != ucharrules)
-    delete[] pucharrules;
 }
-
-
 
 /* RuleBasedCollator public destructor ----------------------------------- */
 
@@ -277,7 +209,8 @@ RuleBasedCollator::~RuleBasedCollator()
     ucol_close(ucollator);
     delete urulestring;
   }
-  ucollator = NULL;
+  ucollator = 0;
+  urulestring = 0;
 }
 
 /* RuleBaseCollator public methods --------------------------------------- */
