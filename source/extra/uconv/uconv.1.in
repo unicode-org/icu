@@ -116,6 +116,22 @@ The
 can be either a list of semicolon-separated transliterator names,
 or an arbitrary complex set of rules in the ICU transliteration
 rules format.
+.PP
+For transcoding purposes,
+.B uconv
+options are compatible with those of
+.BR iconv (1),
+making it easy to replace it in scripts. It is not necessary the case,
+however, that the encoding names used by
+.B uconv
+and ICU are the same as the ones used by
+.BR iconv (1).
+Also, options that provide informational data, such as the
+.B \-l\fP, \fB\-\-list
+one offered by some 
+.BR iconv (1)
+variants such as GNU's, produce data in a slightly different and
+easier to parse format.
 .SH OPTIONS
 .TP
 .BR "\-h\fP, \fB\-?\fP, \fB\-\-help"
@@ -385,7 +401,23 @@ and map Katakana to Hiragana:
 .B \fR$ \fPuconv \-f utf-8 \-t utf-8 \e
 .br
 .B "      \-x '::nfkc; [:Cc:] >; ::katakana-hiragana;'"
-
+.SH CAVEATS AND BUGS
+.B uconv
+does report errors as occuring at the first invalid byte
+encountered. This may be confusing to users of GNU
+.BR iconv (1),
+which reports errors as occuring at the first byte of an invalid
+sequence. For multi-byte character sets or encodings, this means that
+.BR uconv
+error positions may be at a later offset in the input stream than
+would be the case with GNU
+.BR iconv (1).
+.PP
+The reporting of error positions when a transliterator is used may be
+inaccurate or unavailable, in which case
+.BR uconv
+will report the offset in the output stream at which the error
+occured.
 .SH FILES
 .TP 15
 .B @thepkgicudatadir@/@PACKAGE@/@VERSION@/uconvmsg.dat
@@ -402,4 +434,5 @@ Yves Arrouye <yves@realnames.com>
 Copyright (C) 2001 IBM, Inc. and others.
 .SH SEE ALSO
 .BR convrtrs.txt (5)
-
+.br
+.BR iconv (1)
