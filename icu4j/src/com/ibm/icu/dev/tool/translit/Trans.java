@@ -12,27 +12,63 @@ public class Trans {
     public static void main(String[] args) throws Exception {
         boolean isHTML = false;
         int pos = 0;
-        if (args.length < 3) { usage(); }
-        if (args[pos].equals("-html")) {
+
+        String transName = null; // first untagged string is this
+        String inText = null; // all other untagged strings are this
+        String inName = null;
+        String outName = null;
+
+        while (pos < args.length) {
+            if (args[pos].equals("-html")) {
+                isHTML = true;
+            } else if (args[pos].equals("-i")) {
+                if (++pos == args.length) usage();
+                inName = args[pos];
+            } else if (args[pos].equals("-o")) {
+                if (++pos == args.length) usage();
+                outName = args[pos];
+            } else if (transName == null) {
+                transName = args[pos];
+            } else {
+                if (inText == null) {
+                    inText = args[pos];
+                } else {
+                    inText = inText + " " + args[pos];
+                }
+            }
             ++pos;
-            isHTML = true;
         }
-        if ((args.length-pos) != 3) { usage(); }
-        String transName = args[pos++];
-        String inName = args[pos++];
-        String outName = args[pos++];
+
+        if (inText != null && inName != null) {
+            usage();
+        }
+
         Transliterator trans = Transliterator.getInstance(transName);
-        BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(inName), "UTF8"));
-        PrintWriter out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(outName), "UTF8"));
-        trans(trans, in, out, isHTML);
+        BufferedReader in = null;
+        if (inName != null) {
+            in = new BufferedReader(new InputStreamReader(new FileInputStream(inName), "UTF8"));
+        }
+        PrintWriter out = null;
+        if (outName != null) {
+            out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(outName), "UTF8"));
+        } else {
+            out = new PrintWriter(System.out);
+        }
+        trans(trans, inText, in, out, isHTML);
         out.close();
     }
 
-    static void trans(Transliterator trans,
+    static void trans(Transliterator trans, String inText,
                       BufferedReader in, PrintWriter out, boolean isHTML) throws IOException {
         boolean inTag = false; // If true, we are within a <tag>
         for (;;) {
-            String line = in.readLine();
+            String line = null;
+            if (inText != null) {
+                line = inText;
+                inText = null;
+            } else if (in != null) {
+                line = in.readLine();
+            }
             if (line == null) {
                 break;
             }
@@ -85,11 +121,14 @@ public class Trans {
      * Emit usage and die.
      */
     static void usage() {
-        System.out.println("Usage: java com.ibm.icu.dev.tool.translit.Trans [-html] <trans> <infile> <outfile>");
+        System.out.println("Usage: java com.ibm.icu.dev.tool.translit.Trans [-html] <trans> ( <input> | -i <infile>) [ -o <outfile> ]");
         System.out.println("<trans>   Name of transliterator");
+        System.out.println("<input>   Text to transliterate");
         System.out.println("<infile>  Name of input file");
         System.out.println("<outfile> Name of output file");
         System.out.println("-html     Only transliterate text outside of <tags>");
+        System.out.println("Input may come from the command line or a file.\n");
+        System.out.println("Ouput may go to stdout or a file.\n");
         System.exit(0);
     }
 }
