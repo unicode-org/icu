@@ -1,4 +1,4 @@
-		#******************************************************************************
+#******************************************************************************
 #
 #   Copyright (C) 1999, International Business Machines
 #   Corporation and others.  All Rights Reserved.
@@ -106,7 +106,7 @@ install-local: install-headers install-library
 
 install-library: all-local
 	$(mkinstalldirs) $(DESTDIR)$(libdir)
-	$(INSTALL) $(TARGET) $(DESTDIR)$(libdir)/$(TARGET)
+	$(INSTALL-S) $(TARGET) $(DESTDIR)$(libdir)/$(TARGET)
 
 install-headers:
 	$(mkinstalldirs) $(DESTDIR)$(includedir)/unicode
@@ -118,11 +118,11 @@ install-headers:
 dist-local:
 
 clean-local:
-	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
-	rm -f $(OBJECTS) $(TARGET)
+	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
+	$(RMV) $(OBJECTS) $(TARGET)
 
 distclean-local: clean-local
-	rm -f Makefile $(DEPS)
+	$(RMV) Makefile $(DEPS)
 
 check-local:
 

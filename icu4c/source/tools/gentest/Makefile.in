@@ -99,11 +99,11 @@ $(ICUDATADIR)/test.dat: $(TARGET)
 dist-local:
 
 clean-local: 
-	test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
-	rm -f $(TARGET) $(OBJECTS)
+	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
+	$(RMV) $(TARGET) $(OBJECTS)
 
 distclean-local: clean-local
-	rm -f Makefile $(DEPS) $(RES_FILES) $(TEST_FILES)
+	$(RMV) Makefile $(DEPS) $(RES_FILES) $(TEST_FILES)
 
 check-local:
 
