@@ -21,23 +21,49 @@ public final class ICUDebug {
     }
 
     public static final String javaVersionString = System.getProperty("java.version");
-
     public static final boolean isJDK14OrHigher;
     public static final VersionInfo javaVersion;
-    static {
-		String vs = javaVersionString;
-		int index = vs.indexOf('-');
-		if (index != -1) {
-		    vs = vs.substring(0, index);
+
+    public static VersionInfo getInstanceLenient(String s) {
+	// clean string
+	// preserve only digits, separated by single '.' 
+	// ignore over 4 digit sequences
+	// does not test < 255, very odd...
+
+	char[] chars = s.toCharArray();
+	int r = 0, w = 0, count = 0;
+	boolean numeric = false; // ignore leading non-numerics
+	while (r < chars.length) {
+	    char c = chars[r++];
+	    if (c < '0' || c > '9') {
+		if (numeric) {
+		    if (count == 3) {
+			// only four digit strings allowed
+			break;
+		    }
+		    numeric = false;
+		    chars[w++] = '.';
+		    ++count;
 		}
-		index = vs.indexOf('b'); // 'beta'
-		if (index != -1) {
-		    vs = vs.substring(0, index);
-		}
+	    } else {
+		numeric = true;
+		chars[w++] = c;
+	    }
+	}
+	while (w > 0 && chars[w-1] == '.') {
+	    --w;
+	}
 	
-		vs = vs.replace('_', '.');
-		javaVersion = VersionInfo.getInstance(vs);
+	String vs = new String(chars, 0, w);
+
+	return VersionInfo.getInstance(vs);
+    }
+
+    static {
+	javaVersion = getInstanceLenient(javaVersionString);
+
         VersionInfo java14Version = VersionInfo.getInstance("1.4.0");
+
         isJDK14OrHigher = javaVersion.compareTo(java14Version) >= 0;
     }
 
@@ -71,5 +97,20 @@ public final class ICUDebug {
 	    if (help) System.out.println("\nICUDebug.value(" + arg + ") = " + result);
 	}
 	return result;
+    }
+
+    static public void main(String[] args) {
+	// test
+	String[] tests = {
+	    "1.3.0",
+	    "1.3.0_02",
+	    "1.3.1ea",
+	    "1.4.1b43",
+	    "___41___5",
+	    "x1.4.51xx89ea.7f"
+	};
+	for (int i = 0; i < tests.length; ++i) {
+	    System.out.println(tests[i] + " => " + getInstanceLenient(tests[i]));
+	}
     }
 }
