@@ -4662,44 +4662,43 @@ TestLMBCS() {
        UChar * OutLimit = Out + sizeof(pszUnicode)/sizeof(UChar);
 
 
-      cnv = ucnv_open(NAME_LMBCS_1, &errorCode);
-      if(U_FAILURE(errorCode)) {
-         log_err("Unable to open a LMBCS-1 converter: %s\n", u_errorName(errorCode));
-         return;
-      }
-
-
+       cnv = ucnv_open(NAME_LMBCS_1, &errorCode);
+       if(U_FAILURE(errorCode)) {
+           log_err("Unable to open a LMBCS-1 converter: %s\n", u_errorName(errorCode));
+           return;
+       }
+       
+       
        while ((pSource < sourceLimit) && U_SUCCESS (errorCode))
        {
-
-         ucnv_toUnicode (cnv,
-                      &pOut,
-                      OutLimit,
-                      (const char **)&pSource,
-                      (const char *)(pSource+1), /* claim that this is a 1- byte buffer */
-                      NULL,
-                      FALSE,    /* FALSE means there might be more chars in the next buffer */
-                      &errorCode);
-
-         if (U_SUCCESS (errorCode))
-         {
-            if ((pSource - (const uint8_t *)pszLMBCS) == offsets [codepointCount+1])
-            {
-               /* we are on to the next code point: check value */
-
-               if (Out[0] != pszUnicode[codepointCount]){
-                  log_err("LMBCS->Uni result %lx should have been %lx \n",
-                   Out[0], pszUnicode[codepointCount]);
+           ucnv_toUnicode (cnv,
+               &pOut,
+               OutLimit,
+               (const char **)&pSource,
+               (const char *)(pSource+1), /* claim that this is a 1- byte buffer */
+               NULL,
+               FALSE,    /* FALSE means there might be more chars in the next buffer */
+               &errorCode);
+           
+           if (U_SUCCESS (errorCode))
+           {
+               if ((pSource - (const uint8_t *)pszLMBCS) == offsets [codepointCount+1])
+               {
+                   /* we are on to the next code point: check value */
+                   
+                   if (Out[0] != pszUnicode[codepointCount]){
+                       log_err("LMBCS->Uni result %lx should have been %lx \n",
+                           Out[0], pszUnicode[codepointCount]);
+                   }
+                   
+                   pOut = Out; /* reset for accumulating next code point */
+                   codepointCount++;
                }
-
-               pOut = Out; /* reset for accumulating next code point */
-               codepointCount++;
-            }
-         }
-         else
-         {
-            log_err("Unexpected Error on toUnicode: %s\n", u_errorName(errorCode));
-         }
+           }
+           else
+           {
+               log_err("Unexpected Error on toUnicode: %s\n", u_errorName(errorCode));
+           }
        }
        {
          /* limits & surrogate error testing */
