@@ -323,10 +323,13 @@ public class ArabicShapingRegTest extends TestFmwk {
 
             Exception ex = null;
             String result = null;
+            char src[] = null;
+            int len = 0;
             ArabicShaping shaper = null;
+            
             try {
                 shaper = new ArabicShaping(test.flags);
-                // result = shaper.shape(test.source);
+
                 switch (test.type) {
                 case TestData.STANDARD:
                     result = shaper.shape(test.source);
@@ -336,8 +339,8 @@ public class ArabicShapingRegTest extends TestFmwk {
                     break;
                     
                 case TestData.PREFLIGHT:
-                    char src[] = test.source.toCharArray();
-                    int len = shaper.shape(src, 0, test.source.length(), null, 0, 0);
+                    src = test.source.toCharArray();
+                    len = shaper.shape(src, 0, src.length, null, 0, 0);
                     
                     if (test.length != len) {
                         reportTestFailure(i, test, shaper, test.source, ex);
@@ -345,9 +348,11 @@ public class ArabicShapingRegTest extends TestFmwk {
                     break;
 
                 case TestData.ERROR:
-                    result = shaper.shape(test.source);
+                    src = test.source.toCharArray();
+                    shaper.shape(src, 0, src.length);
+                    
                     if (!test.error.isInstance(ex)) {
-                        reportTestFailure(i, test, shaper, result, ex);
+                        reportTestFailure(i, test, shaper, test.source, ex);
                     }
                     break;
                 }
