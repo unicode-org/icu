@@ -15,10 +15,10 @@
 #include "unicode/unicode.h"
 #include "cmemory.h"
 #include "strmatch.h"
+#include "strrepl.h"
 #include "util.h"
 
-static const UChar APOSTROPHE = 0x0027; // '\''
-static const UChar BACKSLASH  = 0x005C; // '\' 
+static const UChar FORWARD_OP[] = {32,62,32,0}; // " > "
 
 U_NAMESPACE_BEGIN
 
@@ -40,7 +40,7 @@ const UChar TransliterationRule::ETHER = 0xFFFF;
  * <code>output</code>; that is, -1 is equivalent to
  * <code>output.length()</code>.  If greater than
  * <code>output.length()</code> then an exception is thrown.
- * @param segs array of UnicodeMatcher corresponding to input pattern
+ * @param segs array of UnicodeFunctors corresponding to input pattern
  * segments, or null if there are none.  The array itself is adopted,
  * but the pointers within it are not.
  * @param segsCount number of elements in segs[]
@@ -53,7 +53,7 @@ TransliterationRule::TransliterationRule(const UnicodeString& input,
                                          int32_t anteContextPos, int32_t postContextPos,
                                          const UnicodeString& outputStr,
                                          int32_t cursorPosition, int32_t cursorOffset,
-                                         UnicodeMatcher** segs,
+                                         UnicodeFunctor** segs,
                                          int32_t segsCount,
                                          UBool anchorStart, UBool anchorEnd,
                                          const TransliterationRuleData* theData,
@@ -93,8 +93,6 @@ TransliterationRule::TransliterationRule(const UnicodeString& input,
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
-    this->cursorPos = cursorPosition + cursorOffset;
-    this->output = outputStr;
     // We don't validate the segments array.  The caller must
     // guarantee that the segments are well-formed (that is, that
     // all $n references in the output refer to indices of this
@@ -129,6 +127,8 @@ TransliterationRule::TransliterationRule(const UnicodeString& input,
         postContext = new StringMatcher(pattern, anteContextLength + keyLength, pattern.length(),
                                         FALSE, *data);
     }
+
+    this->output = new StringReplacer(outputStr, cursorPosition + cursorOffset, data);
 }
 
 /**
@@ -139,17 +139,15 @@ TransliterationRule::TransliterationRule(TransliterationRule& other) :
     key(NULL),
     postContext(NULL),
     pattern(other.pattern),
-    output(other.output),
     anteContextLength(other.anteContextLength),
     keyLength(other.keyLength),
-    cursorPos(other.cursorPos),
     flags(other.flags),
     data(other.data) {
 
     segments = NULL;
     segmentsCount = 0;
     if (other.segmentsCount > 0) {
-        segments = new UnicodeMatcher*[other.segmentsCount];
+        segments = new UnicodeFunctor*[other.segmentsCount];
         uprv_memcpy(segments, other.segments, other.segmentsCount*sizeof(segments[0]));
     }
 
@@ -162,6 +160,7 @@ TransliterationRule::TransliterationRule(TransliterationRule& other) :
     if (other.postContext != NULL) {
         postContext = (StringMatcher*) other.postContext->clone();
     }
+    output = other.output->clone();
 }
 
 TransliterationRule::~TransliterationRule() {
@@ -169,14 +168,7 @@ TransliterationRule::~TransliterationRule() {
     delete anteContext;
     delete key;
     delete postContext;
-}
-
-/**
- * Return the position of the cursor within the output string.
- * @return a value from 0 to <code>getOutput().length()</code>, inclusive.
- */
-int32_t TransliterationRule::getCursorPos(void) const {
-    return cursorPos;
+    delete output;
 }
 
 /**
@@ -205,7 +197,7 @@ int16_t TransliterationRule::getIndexValue() const {
         return -1;
     }
     UChar32 c = pattern.char32At(anteContextLength);
-    return (int16_t)(data->lookup(c) == NULL ? (c & 0xFF) : -1);
+    return (int16_t)(data->lookupMatcher(c) == NULL ? (c & 0xFF) : -1);
 }
 
 /**
@@ -346,7 +338,8 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
         }
     }
 
-    int32_t lenDelta, keyLimit;
+//    int32_t lenDelta, keyLimit;
+    int32_t keyLimit;
 
     // ------------------------ Ante Context ------------------------
 
@@ -354,7 +347,7 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
     // is an outright U_MISMATCH regardless of whether we are
     // incremental or not.
     int32_t oText; // offset into 'text'
-    int32_t newStart = 0;
+//    int32_t newStart = 0;
     int32_t minOText;
 
     // Note (1): We process text in 16-bit code units, rather than
@@ -428,102 +421,10 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
     // We have a full match.  The key is between pos.start and
     // keyLimit.
 
-    if (segments == NULL) {
-        text.handleReplaceBetween(pos.start, keyLimit, output);
-        lenDelta = output.length() - (keyLimit - pos.start);
-        if (cursorPos >= 0 && cursorPos <= output.length()) {
-            // Within the output string, the cursor refers to 16-bit code units
-            newStart = pos.start + cursorPos;
-        } else {
-            newStart = pos.start;
-            int32_t n = cursorPos;
-            // Outside the output string, cursorPos counts code points
-            while (n > 0) {
-                newStart += UTF_CHAR_LENGTH(text.char32At(newStart));
-                --n;
-            }
-            while (n < 0) {
-                newStart -= UTF_CHAR_LENGTH(text.char32At(newStart-1));
-                ++n;
-            }
-        }
-    } else {
-        /* When there are segments to be copied, use the Replaceable.copy()
-         * API in order to retain out-of-band data.  Copy everything to the
-         * point after the key, then delete the key.  That is, copy things
-         * into offset + keyLength, then replace offset .. offset +
-         * keyLength with the empty string.
-         *
-         * Minimize the number of calls to Replaceable.replace() and
-         * Replaceable.copy().
-         */
-        int32_t dest = keyLimit; // copy new text to here
-        UnicodeString buf;
-        int oOutput; // offset into 'output'
-        for (oOutput=0; oOutput<output.length(); ) {
-            if (oOutput == cursorPos) {
-                // Record the position of the cursor
-                newStart = dest - (keyLimit - pos.start);
-            }
-            UChar32 c = output.char32At(oOutput);
-            int32_t b = data->lookupSegmentReference(c);
-            if (b < 0) {
-                // Accumulate straight (non-segment) text.
-                buf.append(c);
-            } else {
-                // Insert any accumulated straight text.
-                if (buf.length() > 0) {
-                    text.handleReplaceBetween(dest, dest, buf);
-                    dest += buf.length();
-                    buf.remove();
-                }
-                // Copy segment with out-of-band data 
-                StringMatcher* m = (StringMatcher*) segments[b];
-                int32_t start = m->getMatchStart();
-                int32_t limit = m->getMatchLimit();
-                // If there was no match, that means that a quantifier
-                // matched zero-length.  E.g., x (a)* y matched "xy".
-                if (start >= 0) {
-                    if (start != limit) {
-                        // Adjust indices for segments in post context
-                        // for any inserted text between the key and
-                        // the post context.
-                        if (start >= keyLimit) {
-                            start += dest - keyLimit;
-                            limit += dest - keyLimit;
-                        }
-                        text.copy(start, limit, dest);
-                        dest += limit - start;
-                    }
-                }
-            }
-            oOutput += UTF_CHAR_LENGTH(c);
-        }
-        // Insert any accumulated straight text.
-        if (buf.length() > 0) {
-            text.handleReplaceBetween(dest, dest, buf);
-            dest += buf.length();
-        }
-        if (oOutput == cursorPos) {
-            // Record the position of the cursor
-            newStart = dest - (keyLimit - pos.start);
-        }
-        // Delete the key
-        buf.remove();
-        text.handleReplaceBetween(pos.start, keyLimit, buf);
-        lenDelta = dest - keyLimit - (keyLimit - pos.start);
-        // Handle cursor in postContext
-        if (cursorPos > output.length()) {
-            newStart = pos.start + (dest - keyLimit);
-            int32_t n = cursorPos - output.length();
-            // cursorPos counts code points
-            while (n > 0) {
-                newStart += UTF_CHAR_LENGTH(text.char32At(newStart));
-                n--;
-            }
-        }
-    }
-    
+    int32_t newStart;
+    int32_t newLength = output->toReplacer()->replace(text, pos.start, keyLimit, newStart);
+    int32_t lenDelta = newLength - (keyLimit - pos.start);
+
     oText += lenDelta;
     pos.limit += lenDelta;
     pos.contextLimit += lenDelta;
@@ -533,134 +434,11 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
 }
 
 /**
- * Append a character to a rule that is being built up.  To flush
- * the quoteBuf to rule, make one final call with isLiteral == TRUE.
- * If there is no final character, pass in (UChar32)-1 as c.
- * @param rule the string to append the character to
- * @param c the character to append, or (UChar32)-1 if none.
- * @param isLiteral if true, then the given character should not be
- * quoted or escaped.  Usually this means it is a syntactic element
- * such as > or $
- * @param escapeUnprintable if true, then unprintable characters
- * should be escaped using \uxxxx or \Uxxxxxxxx.  These escapes will
- * appear outside of quotes.
- * @param quoteBuf a buffer which is used to build up quoted
- * substrings.  The caller should initially supply an empty buffer,
- * and thereafter should not modify the buffer.  The buffer should be
- * cleared out by, at the end, calling this method with a literal
- * character.
- */
-void TransliterationRule::appendToRule(UnicodeString& rule,
-                                        UChar32 c,
-                                        UBool isLiteral,
-                                        UBool escapeUnprintable,
-                                        UnicodeString& quoteBuf) {
-    // If we are escaping unprintables, then escape them outside
-    // quotes.  \u and \U are not recognized within quotes.  The same
-    // logic applies to literals, but literals are never escaped.
-    if (isLiteral ||
-        (escapeUnprintable && ICU_Utility::isUnprintable(c))) {
-        if (quoteBuf.length() > 0) {
-            // We prefer backslash APOSTROPHE to double APOSTROPHE
-            // (more readable, less similar to ") so if there are
-            // double APOSTROPHEs at the ends, we pull them outside
-            // of the quote.
-
-            // If the first thing in the quoteBuf is APOSTROPHE
-            // (doubled) then pull it out.
-            while (quoteBuf.length() >= 2 &&
-                   quoteBuf.charAt(0) == APOSTROPHE &&
-                   quoteBuf.charAt(1) == APOSTROPHE) {
-                rule.append(BACKSLASH).append(APOSTROPHE);
-                quoteBuf.remove(0, 2);
-            }
-            // If the last thing in the quoteBuf is APOSTROPHE
-            // (doubled) then remove and count it and add it after.
-            int32_t trailingCount = 0;
-            while (quoteBuf.length() >= 2 &&
-                   quoteBuf.charAt(quoteBuf.length()-2) == APOSTROPHE &&
-                   quoteBuf.charAt(quoteBuf.length()-1) == APOSTROPHE) {
-                quoteBuf.truncate(quoteBuf.length()-2);
-                ++trailingCount;
-            }
-            if (quoteBuf.length() > 0) {
-                rule.append(APOSTROPHE);
-                rule.append(quoteBuf);
-                rule.append(APOSTROPHE);
-                quoteBuf.truncate(0);
-            }
-            while (trailingCount-- > 0) {
-                rule.append(BACKSLASH).append(APOSTROPHE);
-            }
-        }
-        if (c != (UChar32)-1) {
-            if (!escapeUnprintable || !ICU_Utility::escapeUnprintable(rule, c)) {
-                rule.append(c);
-            }
-        }
-    }
-
-    // Escape ' and '\' and don't begin a quote just for them
-    else if (quoteBuf.length() == 0 &&
-             (c == APOSTROPHE || c == BACKSLASH)) {
-        rule.append(BACKSLASH);
-        rule.append(c);
-    }
-
-    // Specials (printable ascii that isn't [0-9a-zA-Z]) and
-    // whitespace need quoting.  Also append stuff to quotes if we are
-    // building up a quoted substring already.
-    else if (quoteBuf.length() > 0 ||
-             (c >= 0x0021 && c <= 0x007E &&
-              !((c >= 0x0030/*'0'*/ && c <= 0x0039/*'9'*/) ||
-                (c >= 0x0041/*'A'*/ && c <= 0x005A/*'Z'*/) ||
-                (c >= 0x0061/*'a'*/ && c <= 0x007A/*'z'*/))) ||
-             Unicode::isWhitespace(c)) {
-        quoteBuf.append(c);
-        // Double ' within a quote
-        if (c == APOSTROPHE) {
-            quoteBuf.append(c);
-        }
-    }
-    
-    // Otherwise just append
-    else {
-        rule.append(c);
-    }
-}
-
-void TransliterationRule::appendToRule(UnicodeString& rule,
-                                        const UnicodeString& text,
-                                        UBool isLiteral,
-                                        UBool escapeUnprintable,
-                                        UnicodeString& quoteBuf) {
-    for (int32_t i=0; i<text.length(); ++i) {
-        appendToRule(rule, text[i], isLiteral, escapeUnprintable, quoteBuf);
-    }
-}
-
-/**
- * Given a matcher reference, which may be null, append its
- * pattern as a literal to the given rule.
- */
-void TransliterationRule::appendToRule(UnicodeString& rule,
-                                       const UnicodeMatcher* matcher,
-                                       UBool escapeUnprintable,
-                                       UnicodeString& quoteBuf) {
-    if (matcher != NULL) {
-        UnicodeString pat;
-        appendToRule(rule, matcher->toPattern(pat, escapeUnprintable),
-                     TRUE, escapeUnprintable, quoteBuf);
-    }
-}
-
-/**
  * Create a source string that represents this rule.  Append it to the
  * given string.
  */
 UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
                                            UBool escapeUnprintable) const {
-    int32_t i;
 
     // Accumulate special characters (and non-specials following them)
     // into quoteBuf.  Append quoteBuf, within single quotes, when
@@ -678,67 +456,33 @@ UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
     }
 
     // Emit the input pattern
-    appendToRule(rule, anteContext, escapeUnprintable, quoteBuf);
+    ICU_Utility::appendToRule(rule, anteContext, escapeUnprintable, quoteBuf);
 
     if (emitBraces) {
-        appendToRule(rule, (UChar) 0x007B /*{*/, TRUE, escapeUnprintable, quoteBuf);
+        ICU_Utility::appendToRule(rule, (UChar) 0x007B /*{*/, TRUE, escapeUnprintable, quoteBuf);
     }
 
-    appendToRule(rule, key, escapeUnprintable, quoteBuf);
+    ICU_Utility::appendToRule(rule, key, escapeUnprintable, quoteBuf);
 
     if (emitBraces) {
-        appendToRule(rule, (UChar) 0x007D /*}*/, TRUE, escapeUnprintable, quoteBuf);
+        ICU_Utility::appendToRule(rule, (UChar) 0x007D /*}*/, TRUE, escapeUnprintable, quoteBuf);
     }
 
-    appendToRule(rule, postContext, escapeUnprintable, quoteBuf);
+    ICU_Utility::appendToRule(rule, postContext, escapeUnprintable, quoteBuf);
 
     // Emit end anchor
     if ((flags & ANCHOR_END) != 0) {
         rule.append((UChar)36/*$*/);
     }
 
-    appendToRule(rule, UNICODE_STRING_SIMPLE(" > "), TRUE, escapeUnprintable, quoteBuf);
+    ICU_Utility::appendToRule(rule, FORWARD_OP, TRUE, escapeUnprintable, quoteBuf);
 
     // Emit the output pattern
 
-    // Handle a cursor preceding the output
-    int32_t cursor = cursorPos;
-    if (cursor < 0) {
-        while (cursor++ < 0) {
-            appendToRule(rule, (UChar) 0x0040 /*@*/, TRUE, escapeUnprintable, quoteBuf);
-        }
-        // Fall through and append '|' below
-    }
+    ICU_Utility::appendToRule(rule, output->toReplacer()->toReplacerPattern(str, escapeUnprintable),
+                              TRUE, escapeUnprintable, quoteBuf);
 
-    for (i=0; i<output.length(); ++i) {
-        if (i == cursor) {
-            appendToRule(rule, (UChar) 0x007C /*|*/, TRUE, escapeUnprintable, quoteBuf);
-        }
-        UChar c = output.charAt(i);
-        int32_t seg = data->lookupSegmentReference(c);
-        if (seg < 0) {
-            appendToRule(rule, c, FALSE, escapeUnprintable, quoteBuf);
-        } else {
-            ++seg; // make 1-based
-            appendToRule(rule, (UChar)0x20, TRUE, escapeUnprintable, quoteBuf);
-            rule.append((UChar)0x24 /*$*/);
-            ICU_Utility::appendNumber(rule, seg, 10, 1);
-            rule.append((UChar)0x20);
-        }
-    }
-
-    // Handle a cursor after the output.  Use > rather than >= because
-    // if cursor == output.length() it is at the end of the output,
-    // which is the default position, so we need not emit it.
-    if (cursor > output.length()) {
-        cursor -= output.length();
-        while (cursor-- > 0) {
-            appendToRule(rule, (UChar) 0x0040 /*@*/, TRUE, escapeUnprintable, quoteBuf);
-        }
-        appendToRule(rule, (UChar) 0x007C /*|*/, TRUE, escapeUnprintable, quoteBuf);
-    }
-
-    appendToRule(rule, (UChar) 0x003B /*;*/, TRUE, escapeUnprintable, quoteBuf);
+    ICU_Utility::appendToRule(rule, (UChar) 0x003B /*;*/, TRUE, escapeUnprintable, quoteBuf);
 
     return rule;
 }
