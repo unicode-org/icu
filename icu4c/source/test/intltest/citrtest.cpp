@@ -36,7 +36,7 @@ public:
         text = newText;
     }
 
-    virtual void getText(UnicodeString& result){
+    virtual void getText(UnicodeString& result) const {
         text.extract(0,text.length(),result);
     }
     virtual UClassID getDynamicClassID(void) const{ 
@@ -58,7 +58,7 @@ public:
     }
     virtual UChar nextPostInc(void){ return text.charAt(pos++);}
     virtual UChar32 next32PostInc(void){return text.char32At(pos++);}
-    virtual UBool hasNext(){ return TRUE;};
+    virtual UBool hasNext() const { return TRUE;};
     virtual UChar first(){return DONE;};
     virtual UChar32 first32(){return DONE;};
     virtual UChar last(){return DONE;};
@@ -121,7 +121,7 @@ public:
 
         return pos;
     };
-    virtual UBool hasPrevious(){return TRUE;};
+    virtual UBool hasPrevious() const {return TRUE;};
 
   SCharacterIterator&  operator=(const SCharacterIterator&    that){
      text = that.text;
@@ -974,7 +974,7 @@ public:
         }
     }
 
-    virtual UBool hasNext() {
+    virtual UBool hasNext() const {
         return pos<LENGTHOF(s);
     }
 
@@ -1053,11 +1053,11 @@ public:
         }
     }
 
-    virtual UBool hasPrevious() {
+    virtual UBool hasPrevious() const {
         return pos>0;
     }
 
-    virtual void getText(UnicodeString &result) {
+    virtual void getText(UnicodeString &result) const {
         result.setTo(s, LENGTHOF(s));
     }
 
