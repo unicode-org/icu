@@ -388,6 +388,12 @@
 			Name="formatting"
 			Filter="">
 			<File
+				RelativePath=".\buddhcal.cpp">
+			</File>
+			<File
+				RelativePath=".\buddhcal.h">
+			</File>
+			<File
 				RelativePath=".\calendar.cpp">
 			</File>
 			<File
@@ -603,6 +609,12 @@
 "
 						Outputs="..\..\include\unicode\gregocal.h"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\japancal.cpp">
+			</File>
+			<File
+				RelativePath=".\japancal.h">
 			</File>
 			<File
 				RelativePath=".\msgfmt.cpp">
