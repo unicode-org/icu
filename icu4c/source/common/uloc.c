@@ -1822,11 +1822,18 @@ uloc_getKeywordValue(const char* localeID,
       }
       /* we actually found the keyword. Copy the value */
       if(startSearchHere && startSearchHere - nextSeparator < bufferCapacity) {
+        while(*(startSearchHere-1) == ' ') {
+          startSearchHere--;
+        }
         uprv_strncpy(buffer, nextSeparator, startSearchHere - nextSeparator);
         result = u_terminateChars(buffer, bufferCapacity, startSearchHere - nextSeparator, status);
       } else if(!startSearchHere && (int32_t)uprv_strlen(nextSeparator) < bufferCapacity) { /* last item in string */
-        uprv_strcpy(buffer, nextSeparator);
-        result = u_terminateChars(buffer, bufferCapacity, uprv_strlen(nextSeparator), status);
+        i = uprv_strlen(nextSeparator);
+        while(nextSeparator[i - 1] == ' ') {
+          i--;
+        }
+        uprv_strncpy(buffer, nextSeparator, i);
+        result = u_terminateChars(buffer, bufferCapacity, i, status);
       } else {
         /* give a bigger buffer, please */
         *status = U_BUFFER_OVERFLOW_ERROR;
