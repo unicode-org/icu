@@ -315,7 +315,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
  * @internal INTERNAL USE ONLY
  */
 U_CAPI uint8_t *
-ucol_cloneRuleData(UCollator *coll, int32_t *length, UErrorCode *status);
+ucol_cloneRuleData(const UCollator *coll, int32_t *length, UErrorCode *status);
 
 #define UCOL_SPECIAL_FLAG 0xF0000000
 #define UCOL_TAG_SHIFT 24
@@ -513,7 +513,7 @@ typedef struct {
   uint8_t type;
   /* more stuff to come, keep it on 16 byte boundary */
   uint8_t reserved[7];
-} UStatusStruct;
+} UStateStruct;
 
 /* This structure follows UStatusStruct */
 /* and contains data specific for the collators */
@@ -553,7 +553,7 @@ typedef struct {
   uint32_t /*UColAttributeValue*/ strength;
   /* to be immediately 16 byte aligned */
   uint8_t reserved[12];
-} UColStatusStruct;
+} UColStateStruct;
 
 #define UCOL_INV_SIZEMASK 0xFFF00000
 #define UCOL_INV_OFFSETMASK 0x000FFFFF

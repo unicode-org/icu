@@ -640,7 +640,7 @@ typedef enum {
  * @draft
  */
 int32_t ucol_getState(const UCollator *coll, UColStateEnum contents, 
-                      uint8_t *buffer, const int32_t buflen, 
+                      uint8_t *buffer, int32_t buflen, 
                       UErrorCode *status);
 
 /**
