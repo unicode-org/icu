@@ -1261,7 +1261,7 @@ static void TestConvertSafeCloneCallback()
     TSCCContext from1, to1;
     TSCCContext *from2, *from3, *to2, *to3;
     char hunk[8192];
-    uint32_t hunkSize = 8192;
+    int32_t hunkSize = 8192;
     UConverterFromUCallback junkFrom;
     UConverterToUCallback junkTo;
     UConverter *conv1, *conv2 = NULL;
