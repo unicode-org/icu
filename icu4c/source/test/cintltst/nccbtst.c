@@ -636,7 +636,7 @@ void TestSubWithValue(int32_t inputsize, int32_t outputsize)
 
 	int32_t toIBM949Offs [] ={ 0, 1, 1, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4};
 	int32_t toIBM943Offs [] = { 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3};
-	int32_t toIBM930Offs [] = { 0, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3};
+	int32_t toIBM930Offs [] = { 0, 0, 0, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3}; /* last item: 3,3,3 because there's a shift plus a doublebyter .. */
 
 	gInBufferSize = inputsize;
 	gOutBufferSize = outputsize;
@@ -655,7 +655,7 @@ void TestSubWithValue(int32_t inputsize, int32_t outputsize)
 	if(!testConvertFromUnicode(sampleText2, sizeof(sampleText2)/sizeof(sampleText2[0]),
 			expsubwvalIBM_930, sizeof(expsubwvalIBM_930), "ibm-930", 
 			(UConverterFromUCallback)UCNV_FROM_U_CALLBACK_ESCAPE, toIBM930Offs ))
-		log_err("u-> ibm-930 with subst with value did not match.\n(needs fix for j344 and general callback cleanup.)\n");
+		log_err("u-> ibm-930 with subst with value did not match.\n");
   
 
     log_verbose("Testing fromUnicode with UCNV_FROM_U_CALLBACK_ESCAPE  \n");
