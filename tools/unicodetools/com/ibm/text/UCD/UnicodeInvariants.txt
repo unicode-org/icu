@@ -65,6 +65,7 @@ $Alphabetic ⊃ [$Uppercase $Lowercase]
 
 $ID_Start ⊇ $×ID_Start
 $ID_Continue ⊇ $×ID_Continue
+[$Decomposition_Type:Canonical - $Full_Composition_Exclusion] = [$×Decomposition_Type:Canonical - $×Full_Composition_Exclusion]
 
 #$age:4.0.1 = $age4.0.0
 
