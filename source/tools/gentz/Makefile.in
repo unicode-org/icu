@@ -7,6 +7,7 @@ VERSION = @VERSION@
 
 ICUDATADIR=$(top_builddir)/../data/
 TZFILE=tz.txt
+TZALIAS=tz.alias
 
 ## Install directory information
 srcdir = @srcdir@
@@ -89,8 +90,8 @@ build-data: $(ICUDATADIR)/tz.dat
 
 # we set the ICU_DATA directory here so that tz.dat ends up in 
 # icu/data rather than PREFIX/share/icu/VERSION/
-$(ICUDATADIR)/tz.dat: $(TZFILE) $(TARGET)
-	ICU_DATA=$(ICUDATADIR) ./$(TARGET) $(TZFILE) tz.dat
+$(ICUDATADIR)/tz.dat: $(TZFILE) $(TZALIAS) $(TARGET)
+	ICU_DATA=$(ICUDATADIR) ./$(TARGET) $(TZFILE)
 
 dist-local:
 
