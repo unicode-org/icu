@@ -13,6 +13,7 @@
 #include "unicode/gregocal.h"
 #include "unicode/simpletz.h"
 #include "unicode/smpdtfmt.h"
+#include "unicode/strenum.h"
 #include "cmemory.h"
 
 #include <float.h>
@@ -192,10 +193,10 @@ CalendarRegressionTest::test4031502()
     // require the host zone to be set; it can be set in Java.
     UErrorCode status = U_ZERO_ERROR;
     int32_t count = 0;
-    const UnicodeString **ids = TimeZone::createAvailableIDs(count);
+    StringEnumeration* ids = TimeZone::createEnumeration();
     UBool bad = FALSE;
-    for (int32_t i=0; i<count; ++i) {
-        TimeZone *zone = TimeZone::createTimeZone(*ids[i]);
+    for (int32_t i=0; i<ids->count(status); ++i) {
+        TimeZone *zone = TimeZone::createTimeZone(*ids->snext(status));
         GregorianCalendar *cal = new GregorianCalendar(zone, status);
         failure(status, "new GregorianCalendar");
         cal->clear();
@@ -214,7 +215,7 @@ CalendarRegressionTest::test4031502()
     if (bad) 
         errln("TimeZone problems with GC");
     // delete [] ids;  // TODO: bad APIs
-    uprv_free(ids);
+    delete ids;
 }
 
 /**
@@ -242,9 +243,10 @@ void CalendarRegressionTest::test4035301()
 void CalendarRegressionTest::test4040996() 
 {
     int32_t count = 0;
-    const UnicodeString **ids = TimeZone::createAvailableIDs(-8 * 60 * 60 * 1000, count);
-    SimpleTimeZone *pdt = new SimpleTimeZone(-8 * 60 * 60 * 1000, *ids[0]);
-    UErrorCode status = U_ZERO_ERROR;
+    StringEnumeration* ids = TimeZone::createEnumeration(-8 * 60 * 60 * 1000);
+    UErrorCode status = U_ZERO_ERROR;    
+    count = ids->count(status);
+    SimpleTimeZone *pdt = new SimpleTimeZone(-8 * 60 * 60 * 1000, *ids->snext(status));
     pdt->setStartRule(Calendar::APRIL, 1, Calendar::SUNDAY, 2 * 60 * 60 * 1000, status);
     pdt->setEndRule(Calendar::OCTOBER, -1, Calendar::SUNDAY, 2 * 60 * 60 * 1000, status);
     Calendar *calendar = new GregorianCalendar(pdt, status);
@@ -274,7 +276,7 @@ void CalendarRegressionTest::test4040996()
         errln(UnicodeString("Fail: Calendar::add misbehaves"));
 
     delete calendar;
-    uprv_free(ids);
+    delete ids;
     // delete ids;   // TODO:  BAD API
 }
 

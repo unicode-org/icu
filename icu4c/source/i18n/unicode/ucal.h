@@ -7,6 +7,7 @@
 #define UCAL_H
 
 #include "unicode/utypes.h"
+#include "unicode/uenum.h"
 
 #if !UCONFIG_NO_FORMATTING
 
@@ -280,6 +281,19 @@ enum UCalendarAMPMs {
 typedef enum UCalendarAMPMs UCalendarAMPMs;
 
 /**
+ * Create a UEnumeration over the recognized time zone IDs with the
+ * given raw offset.
+ * @param rawOffset the desired GMT offset, not including the effects
+ * of daylight savings time
+ * @return an enumeration object that the caller must dispose of using
+ * uenum_close()
+ * @draft ICU 2.4
+ */
+U_CAPI UEnumeration* U_EXPORT2
+ucal_openTimeZoneEnumeration(int32_t rawOffset,
+                             UErrorCode* status);
+
+/**
 * Get an available TimeZone ID.
 * A Timezone ID is a string of the form "America/Los Angeles".
 * @param rawOffset The desired GMT offset
@@ -287,7 +301,7 @@ typedef enum UCalendarAMPMs UCalendarAMPMs;
 * @param status A pointer to an UErrorCode to receive any errors
 * @return The requested TimeZone ID, or 0 if not found
 * @see ucal_countAvailableTZIDs
-* @stable
+* @deprecated To be removed after 2003-Nov-8.  Use ucal_openTimeZoneEnumeration instead.
 */
 U_CAPI const UChar* U_EXPORT2 
 ucal_getAvailableTZIDs(        int32_t         rawOffset,
@@ -301,7 +315,7 @@ ucal_getAvailableTZIDs(        int32_t         rawOffset,
 * @param rawOffset The desired GMT offset.
 * @return The number of TimeZones with rawOffset.
 * @see ucal_getAvailableTZIDs
-* @stable
+* @deprecated To be removed after 2003-Nov-8.  Use ucal_openTimeZoneEnumeration instead.
 */
 U_CAPI int32_t U_EXPORT2 
 ucal_countAvailableTZIDs(int32_t rawOffset);

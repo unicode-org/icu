@@ -35,6 +35,8 @@
 
 U_NAMESPACE_BEGIN
 
+class StringEnumeration;
+
 /**
  * <code>TimeZone</code> represents a time zone offset, and also figures out daylight
  * savings.
@@ -146,6 +148,46 @@ public:
     static TimeZone* createTimeZone(const UnicodeString& ID);
 
     /**
+     * Returns an enumeration over all recognized time zone IDs, i.e.,
+     * all strings that createTimeZone() accepts.
+     *
+     * @return an enumeration object, owned by the caller.
+     * @draft ICU 2.4
+     */
+    static StringEnumeration* createEnumeration();
+
+    /**
+     * Returns an enumeration over time zone IDs with a given raw
+     * offset from GMT.  There may be several times zones with the
+     * same GMT offset that differ in the way they handle daylight
+     * savings time.  For example, the state of Arizona doesn't
+     * observe daylight savings time.  If you ask for the time zone
+     * IDs corresponding to GMT-7:00, you'll get back an enumeration
+     * over two time zone IDs: "America/Denver," which corresponds to
+     * Mountain Standard Time in the winter and Mountain Daylight Time
+     * in the summer, and "America/Phoenix", which corresponds to
+     * Mountain Standard Time year-round, even in the summer.
+     *
+     * @param rawOffset an offset from GMT in milliseconds, ignoring
+     * the effect of daylight savings time, if any
+     * @return an enumeration object, owned by the caller 
+     * @draft ICU 2.4
+     */
+    static StringEnumeration* createEnumeration(int32_t rawOffset);
+
+    /**
+     * Returns an enumeration over time zone IDs associated with the
+     * given country.  Some zones are affiliated with no country
+     * (e.g., "UTC"); these may also be retrieved, as a group.
+     *
+     * @param country The ISO 3166 two-letter country code, or NULL to
+     * retrieve zones not affiliated with any country.
+     * @return an enumeration object, owned by the caller 
+     * @draft ICU 2.4
+     */
+    static StringEnumeration* createEnumeration(const char* country);
+
+    /**
      * Returns a list of time zone IDs, one for each time zone with a given GMT offset.
      * The return value is a list because there may be several times zones with the same
      * GMT offset that differ in the way they handle daylight savings time.  For example,
@@ -156,7 +198,9 @@ public:
      * Mountain Standard Time year-round, even in the summer.
      * <P>
      * The caller owns the list that is returned, but does not own the strings contained
-     * in that list.  Delete the array with free() (not operator delete), but DON'T delete the elements in the array.
+     * in that list.  Delete the array with uprv_free(), but DON'T delete the elements in the array.
+     *
+     * <p>NOTE: uprv_free() is declared in the private header source/cmemory.h.
      *
      * @param rawOffset  An offset from GMT in milliseconds.
      * @param numIDs     Receives the number of items in the array that is returned.
@@ -164,7 +208,7 @@ public:
      *                   a time zone ID for a time zone with the given GMT offset.  If
      *                   there is no timezone that matches the GMT offset
      *                   specified, NULL is returned.
-     * @stable
+     * @deprecated To be removed after 2003-Nov-8.  Use createAvailableIDs(int32_t) instead.
      */
     static const UnicodeString** createAvailableIDs(int32_t rawOffset, int32_t& numIDs);
 
@@ -174,8 +218,10 @@ public:
      * "UTC"); these may also be retrieved, as a group.
      *
      * <P>The caller owns the list that is returned, but does not own
-     * the strings contained in that list.  Delete the array with free() (not operator delete), but
+     * the strings contained in that list.  Delete the array with uprv_free(), but
      * <b>DON'T</b> delete the elements in the array.
+     *
+     * <p>NOTE: uprv_free() is declared in the private header source/cmemory.h.
      *
      * @param country The ISO 3166 two-letter country code, or NULL to
      * retrieve zones not affiliated with any country.
@@ -185,6 +231,7 @@ public:
      * UnicodeString is a time zone ID for a time zone with the given
      * country.  If there is no timezone that matches the country
      * specified, NULL is returned.
+     * @deprecated To be removed after 2003-Nov-8.  Use createAvailableIDs(const char*) instead.
      */
     static const UnicodeString** createAvailableIDs(const char* country,
                                                           int32_t& numIDs);
@@ -192,13 +239,15 @@ public:
     /**
      * Returns a list of all time zone IDs supported by the TimeZone class (i.e., all
      * IDs that it's legal to pass to createTimeZone()).  The caller owns the list that
-     * is returned, but does not own the strings contained in that list.  Delete the array with free() (not operator delete),
+     * is returned, but does not own the strings contained in that list.  Delete the array with uprv_free(),
      * but DON'T delete the elements in the array.
+     *
+     * <p>NOTE: uprv_free() is declared in the private header source/cmemory.h.
      *
      * @param numIDs  Receives the number of zone IDs returned.
      * @return        An array of UnicodeString pointers, where each is a time zone ID
      *                supported by the TimeZone class.
-     * @stable
+     * @deprecated To be removed after 2003-Nov-8.  Use createAvailableIDs(void) instead.
      */
     static const UnicodeString** createAvailableIDs(int32_t& numIDs);
 

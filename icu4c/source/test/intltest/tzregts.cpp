@@ -10,6 +10,7 @@
 
 #include "unicode/simpletz.h"
 #include "unicode/smpdtfmt.h"
+#include "unicode/strenum.h"
 #include "tzregts.h"
 #include "calregts.h"
 #include "cmemory.h"
@@ -472,12 +473,14 @@ void TimeZoneRegressionTest:: Test4151406() {
             (hh/2) + ':' +
             ((hh%2==0) ? "00" : "30");
         //try {
+            UErrorCode ec = U_ZERO_ERROR;
             int32_t count;
-            const UnicodeString **ids = TimeZone::createAvailableIDs(rawoffset, count);
+            StringEnumeration* ids = TimeZone::createEnumeration(rawoffset);
+            count = ids->count(ec);
             if (count> max) 
                 max = count;
             logln(hname + ' ' + count +
-                  ((count > 0) ? (" e.g. " + *ids[0]) : UnicodeString("")));
+                  ((count > 0) ? (" e.g. " + *ids->snext(ec)) : UnicodeString("")));
             // delete [] ids;
             uprv_free(ids);
         /*} catch (Exception e) {

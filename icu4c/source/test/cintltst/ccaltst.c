@@ -48,6 +48,7 @@ static const UChar fgGMTID [] = { 0x0047, 0x004d, 0x0054, 0x0000 };
 static void TestCalendar()
 {
     UCalendar *caldef = 0, *caldef2 = 0, *calfr = 0, *calit = 0;
+    UEnumeration* uenum = NULL;
     int32_t count, count2, offset,i;
     UChar *tzID = 0;
     UChar *tzdname = 0;
@@ -60,31 +61,64 @@ static void TestCalendar()
 
     /*Testing countAvailableTimeZones*/
     offset=0;
-    log_verbose("\nTesting countAvialableTimeZoneIds\n");
+    log_verbose("\nTesting ucal_countAvailableTZIDs\n");
     count=ucal_countAvailableTZIDs(offset);
     log_verbose("The number of timezone id's present with offset 0 are %d:\n", count);
     if(count < 5) /* Don't hard code an exact == test here! */
-        log_err("FAIL: error in the countAvailableTZIDs - got %d expected at least 5 total\n", count);
+        log_err("FAIL: error in the ucal_countAvailableTZIDs - got %d expected at least 5 total\n", count);
 
-    /*Testing getAvialableTZIDs*/
-    log_verbose("\nTesting getAvailableTimezoneids");
+    /*Testing getAvailableTZIDs*/
+    log_verbose("\nTesting ucal_getAvailableTZIDs");
     for(i=0;i<count;i++){
         ucal_getAvailableTZIDs(offset, i, &status);
         if(U_FAILURE(status)){
-            log_err("FAIL: There is an error in the getAvialableTZIDs the error is %s\n", myErrorName(status));
+            log_err("FAIL: ucal_getAvailableTZIDs returned %s\n", myErrorName(status));
         }
         log_verbose("%s\n", u_austrcpy(tempMsgBuf, ucal_getAvailableTZIDs(offset, i, &status)));
     }
     /*get Illegal TZID where index >= count*/
     ucal_getAvailableTZIDs(offset, i, &status);
-    if(U_SUCCESS(status)){
-        log_err("FAIL: Expected U_INDEX_OUTOFBOUNDS_ERROR where index > count for TZID's");
-    }
     if(status != U_INDEX_OUTOFBOUNDS_ERROR){
-        log_err("FAIL:for TZID index > count Expected INDEX_OUTOFBOUNDS_ERROR Got %s\n", myErrorName(status));
+        log_err("FAIL:for TZID index >= count Expected INDEX_OUTOFBOUNDS_ERROR Got %s\n", myErrorName(status));
     }
     status=U_ZERO_ERROR;
     
+    /*Test ucal_openTimeZoneEnumeration*/
+    offset=0;
+    uenum = ucal_openTimeZoneEnumeration(offset, &status);
+    if (U_FAILURE(status)) {
+        log_err("FAIL: ucal_openTimeZoneEnumeration failed with %s",
+                myErrorName(status));
+    } else {
+        const char* id;
+        int32_t len;
+        count = uenum_count(uenum, &status);
+        log_verbose("The number of timezone id's present with offset 0 is %d\n", count);
+        if (count < 5) { /* Don't hard code an exact == test here! */
+            log_err("FAIL: in ucal_openTimeZoneEnumeration, got %d, expected at least 5 for rawOffset 0\n", count);
+        }
+        uenum_reset(uenum, &status);    
+        if (U_FAILURE(status)){
+            log_err("FAIL: uenum_reset for ucal_openTimeZoneEnumeration returned %s\n",
+                    myErrorName(status));
+        }
+        for (i=0; i<count; i++) {
+            id = uenum_next(uenum, &len, &status);
+            if (U_FAILURE(status)){
+                log_err("FAIL: uenum_next for ucal_openTimeZoneEnumeration returned %s\n",
+                        myErrorName(status));
+            } else {
+                log_verbose("%s\n", id);
+            }
+        }
+        /* Next one should be NULL */
+        id = uenum_next(uenum, &len, &status);
+        if (id != NULL) {
+            log_err("FAIL: uenum_next for ucal_openTimeZoneEnumeration returned %s, expected NULL\n",
+                    id);
+        }
+    }
+    uenum_close(uenum);
 
     /*Testing the  ucal_open() function*/
     log_verbose("\nTesting the ucal_open()\n");
@@ -115,7 +149,7 @@ static void TestCalendar()
     count=ucal_countAvailable();
     /* use something sensible w/o hardcoding the count */
     if(count > 0){
-        log_verbose("PASS: ucal_countAvialable() works fine\n");
+        log_verbose("PASS: ucal_countAvailable() works fine\n");
         log_verbose("The no: of locales for which calendars are avilable are %d\n", count);
     }
     else
