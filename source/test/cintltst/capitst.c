@@ -1494,6 +1494,13 @@ static int tMemCmp(const uint8_t *first, const uint8_t *second) {
   int32_t secondLen = uprv_strlen((const char *)second);
   return uprv_memcmp(first, second, uprv_min(firstLen, secondLen));
 }
+static const char * strengthsC[] = {
+    "UCOL_PRIMARY",
+    "UCOL_SECONDARY",
+    "UCOL_TERTIARY",
+    "UCOL_QUATERNARY",
+    "UCOL_IDENTICAL"
+};
 
 void TestMergeSortKeys(void) {
   UErrorCode status = U_ZERO_ERROR;

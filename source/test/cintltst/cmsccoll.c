@@ -401,7 +401,8 @@ UColAttributeValue strengths[] = {
     UCOL_IDENTICAL
 };
 
-const char * strengthsC[] = {
+#if 0
+static const char * strengthsC[] = {
     "UCOL_PRIMARY",
     "UCOL_SECONDARY",
     "UCOL_TERTIARY",
@@ -409,7 +410,6 @@ const char * strengthsC[] = {
     "UCOL_IDENTICAL"
 };
 
-#if 0
 static const char * caseFirstC[] = {
     "UCOL_OFF",
     "UCOL_LOWER_FIRST",
