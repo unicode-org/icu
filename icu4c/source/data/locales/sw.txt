@@ -16,7 +16,7 @@ sw {
 //        TZ { "Tanzania" }
 //    }
     DateTimeElements:intvector { 
-        2,
+        7,
         1,
     }
     DayAbbreviations {  // The DayNames are correct, but DayAbbreviations are only guesses.
