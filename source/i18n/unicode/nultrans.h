@@ -17,6 +17,7 @@
  * @author Alan Liu
  */
 class U_I18N_API NullTransliterator : public Transliterator {
+    static const char* _ID;
 
 public:
 
