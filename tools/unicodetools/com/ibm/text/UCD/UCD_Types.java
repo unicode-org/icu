@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Types.java,v $
-* $Date: 2002/03/15 00:34:46 $
-* $Revision: 1.9 $
+* $Date: 2002/03/20 00:21:42 $
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -15,7 +15,7 @@ package com.ibm.text.UCD;
 
 public interface UCD_Types {
     
-    public static final int dVersion = 7; // change to fix the generated file D version. If less than zero, no "d"
+    public static final int dVersion = 8; // change to fix the generated file D version. If less than zero, no "d"
     
     public static final String BASE_DIR = "C:\\DATA\\";
     public static final String UCD_DIR = BASE_DIR + "UCD\\";
@@ -23,7 +23,7 @@ public interface UCD_Types {
     public static final String GEN_DIR = BASE_DIR + "GEN\\";
 
 
-    static final byte BINARY_FORMAT = 5; // bumped if binary format of UCD changes
+    static final byte BINARY_FORMAT = 6; // bumped if binary format of UCD changes
     
     // Unicode Property Types
     static final byte 
@@ -188,7 +188,7 @@ public interface UCD_Types {
         IDS_TrinaryOperator = 24,
         Radical = 25,
         UnifiedIdeograph = 26,
-        Reserved_Cf_Code_Point = 27,
+        Other_Default_Ignorable_Code_Point = 27,
         Deprecated = 28,
         Soft_Dotted = 29,
         Logical_Order_Exception = 30,
@@ -407,13 +407,14 @@ public static byte
     TEH_MARBUTA = 41,
     TETH = 42,
     WAW = 43,
-    YEH = 44,
-    YEH_BARREE = 45,
-    YEH_WITH_TAIL = 46,
-    YUDH = 47,
-    YUDH_HE = 48,
-    ZAIN = 49,
-    LIMIT_JOINING_GROUP = 50;
+    SYRIAC_WAW = 44,
+    YEH = 45,
+    YEH_BARREE = 46,
+    YEH_WITH_TAIL = 47,
+    YUDH = 48,
+    YUDH_HE = 49,
+    ZAIN = 50,
+    LIMIT_JOINING_GROUP = 51;
     
     static final byte NFD = 0, NFC = 1, NFKD = 2, NFKC = 3;    
     public static final int

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedProperty.java,v $
-* $Date: 2002/03/15 01:57:01 $
-* $Revision: 1.11 $
+* $Date: 2002/03/20 00:21:43 $
+* $Revision: 1.12 $
 *
 *******************************************************************************
 */
@@ -285,6 +285,11 @@ public final class DerivedProperty implements UCD_Types {
             else if (nfx.isTrailing(cp)) return MAYBE;
             else return "";
         }
+        
+		public String getListingValue(int cp) {
+    		return getValue(cp, LONG);
+    	}
+        
         boolean hasValue(int cp) { return getValue(cp).length() != 0; }
     };
 
@@ -460,6 +465,12 @@ of characters, the first of which has a non-zero combining class.
                 if (isCompEx(cp)) return true;
                 return false;
             }
+            /*
+			public String getListingValue(int cp) {
+        		if (getValueType() != BINARY) return getValue(cp, SHORT);
+        		return getProperty(SHORT);
+			}
+			*/
         };
         
         dprops[FullCompInclusion] = new UnicodeProperty() {
@@ -537,37 +548,15 @@ of characters, the first of which has a non-zero combining class.
                 hasUnassigned = true;
                 shortName = "DI";
                 header = header = "# Derived Property: " + name
-                    + "\r\n#  Generated from Other_Default_Ignorable_Code_Point + Cf + Cc + Cs - White_Space";
+                    + "\r\n#  Generated from <2060..206F, FFF0..FFFB, E0000..E0FFF>"
+                    + "\r\n#    + Other_Default_Ignorable_Code_Point + (Cf + Cc + Cs - White_Space)";
             }
             boolean hasValue(int cp) {
+            	if (0x2060 <= cp && cp <= 0x206F || 0xFFF0 <= cp && cp <= 0xFFFB || 0xE0000 <= cp && cp <= 0xE0FFF) return true;
+                if (ucdData.getBinaryProperty(cp,Other_Default_Ignorable_Code_Point)) return true;
                 if (ucdData.getBinaryProperty(cp, White_space)) return false;
                 byte cat = ucdData.getCategory(cp);
-                if (cat == Cf || cat == Cs || cat == Cc
-                || ucdData.getBinaryProperty(cp,Reserved_Cf_Code_Point)) return true;
-                return false;
-            }
-        };
-
-/*
-        GraphemeExtend = 27,
-        GraphemeBase = 28,
-# GraphemeExtend := Me + Mn + Mc + Other_GraphemeExtend - GraphemeLink
-# GraphemeBase := 
-
-*/
-        dprops[GraphemeExtend] = new UnicodeProperty() {
-            {
-                type = DERIVED_CORE;
-                name = "Grapheme_Extend";
-                shortName = "GrExt";
-                header = header = "# Derived Property: " + name
-                    + "\r\n#  Generated from: Me + Mn + Mc + Other_Grapheme_Extend - Grapheme_Link";
-            }
-            boolean hasValue(int cp) {
-                if (ucdData.getBinaryProperty(cp, GraphemeExtend)) return false;
-                byte cat = ucdData.getCategory(cp);
-                if (cat == Me || cat == Mn || cat == Mc
-                || ucdData.getBinaryProperty(cp,Other_GraphemeExtend)) return true;
+                if (cat == Cf || cat == Cs || cat == Cc) return true;
                 return false;
             }
         };
@@ -576,6 +565,7 @@ of characters, the first of which has a non-zero combining class.
             {
                 name = "Other_Case_Ignorable";
                 shortName = "OCI";
+                isStandard = false;
                 
                 header = header = "# Binary Property";
             }
@@ -608,7 +598,7 @@ of characters, the first of which has a non-zero combining class.
             }
             boolean hasValue(int cp) {
                 if (hasSoftDot(cp)) return true;
-                if (!Main.nfkd.hasDecomposition(cp)) return false;
+                if (!Main.nfkd.normalizationDiffers(cp)) return false;
                 String decomp = Main.nfd.normalize(cp);
                 boolean ok = false;
                 for (int i = decomp.length()-1; i >= 0; --i) {
@@ -630,6 +620,7 @@ of characters, the first of which has a non-zero combining class.
         dprops[Case_Ignorable] = new UnicodeProperty() {
             {
                 name = "Case_Ignorable";
+                isStandard = false;
                 shortName = "CI";
                 header = header = "# Derived Property: " + name
                     + "\r\n#  Generated from: Other_Case_Ignorable + Lm + Mn + Me + Cf";
@@ -642,6 +633,33 @@ of characters, the first of which has a non-zero combining class.
             }
         };
         
+/*
+        GraphemeExtend = 27,
+        GraphemeBase = 28,
+# GraphemeExtend := Me + Mn + Mc + Other_GraphemeExtend - GraphemeLink
+# GraphemeBase := 
+
+*/
+        dprops[GraphemeExtend] = new UnicodeProperty() {
+            {
+                type = DERIVED_CORE;
+                name = "Grapheme_Extend";
+                shortName = "GrExt";
+                header = header = "# Derived Property: " + name
+                    + "\r\n#  Generated from: Me + Mn + Mc + Other_Grapheme_Extend - Grapheme_Link - CGJ"
+                    + "\r\n#  (CGJ = U+034F)";
+                     
+            }
+            boolean hasValue(int cp) {
+            	if (cp == 0x034F) return false;
+                if (ucdData.getBinaryProperty(cp, GraphemeLink)) return false;
+                byte cat = ucdData.getCategory(cp);
+                if (cat == Me || cat == Mn || cat == Mc
+                || ucdData.getBinaryProperty(cp,Other_GraphemeExtend)) return true;
+                return false;
+            }
+        };
+
         dprops[GraphemeBase] = new UnicodeProperty() {
             {
                 type = DERIVED_CORE;
@@ -649,9 +667,11 @@ of characters, the first of which has a non-zero combining class.
                 shortName = "GrBase";
                 
                 header = header = "# Derived Property: " + name
-                    + "\r\n#  Generated from: [0..10FFFF] - Cc - Cf - Cs - Co - Cn - Zl - Zp - Grapheme_Link - Grapheme_Extend";
+                    + "\r\n#  Generated from: [0..10FFFF] - Cc - Cf - Cs - Co - Cn - Zl - Zp"
+                    + "\r\n#    - Grapheme_Extend - Grapheme_Link - CGJ";
             }
             boolean hasValue(int cp) {
+            	if (cp == 0x034F) return false;
                 byte cat = ucdData.getCategory(cp);
                 if (cat == Cc || cat == Cf || cat == Cs || cat == Co || cat == Cn || cat == Zl || cat == Zp
                 || ucdData.getBinaryProperty(cp,GraphemeLink)) return false;

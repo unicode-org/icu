@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2001/12/13 23:35:57 $
-* $Revision: 1.9 $
+* $Date: 2002/03/20 00:21:42 $
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -1027,6 +1027,19 @@ to guarantee identifier closure.
     }
 
     private void fillFromFile(String version) {
+    	try {
+    		fillFromFile2(version);
+    	} catch (ChainException e) {
+    		try {
+    			ConvertUCD.main(new String[]{version});
+    		} catch (Exception e2) {
+            	throw new ChainException("Can't build data file for {0}", new Object[]{version}, e2);
+    		}
+    		fillFromFile2(version);
+    	}
+    }
+    
+    private void fillFromFile2(String version) {
         DataInputStream dataIn = null;
         String fileName = BIN_DIR + "UCD_Data" + version + ".bin";
         int uDataFileCount = 0;
