@@ -93,9 +93,16 @@ class RBBINode : public UMemory {
         void         flattenSets();
         void         findNodes(UVector *dest, RBBINode::NodeType kind, UErrorCode &status);
 
-        void        print();
-        void        printTree(UBool withHeading=TRUE, UBool doVars=FALSE);
-        static void printUnicodeString(const UnicodeString &s, int minWidth=0);
+#ifdef RBBI_DEBUG
+        void        printNode();
+        void        printTree(UBool withHeading);
+#else
+        // Do-nothing inline functions for non-debug builds.  Can't make empty defines for member
+        //   functions - they won't compile at the call sites.
+        int         fakeField;
+        #define printNode() fakeField=0;
+        #define printTree(withHeading) fakeField=0;
+#endif
 
     private:
         RBBINode &operator = (const RBBINode &other); // No defs.
@@ -104,6 +111,12 @@ class RBBINode : public UMemory {
         int           fSerialNum;           //  Debugging aids.
         static int    gLastSerial;
 };
+
+#ifdef RBBI_DEBUG
+U_CFUNC void 
+RBBI_DEBUG_printUnicodeString(const UnicodeString &s, int minWidth=0);
+#endif
+
 U_NAMESPACE_END
 
 #endif

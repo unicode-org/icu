@@ -263,8 +263,8 @@ void   RBBINode::findNodes(UVector *dest, RBBINode::NodeType kind, UErrorCode &s
 //    print.         Print out a single node, for debugging.
 //
 //-------------------------------------------------------------------------
-void RBBINode::print() {
 #ifdef RBBI_DEBUG
+void RBBINode::printNode() {
     static const char * const nodeTypeNames[] = {
                 "setRef",
                 "uset",
@@ -291,18 +291,16 @@ void RBBINode::print() {
             (void *)this, nodeTypeNames[fType], (void *)fParent, (void *)fLeftChild, (void *)fRightChild,
             fSerialNum, fFirstPos, fVal);
         if (fType == varRef) {
-            printUnicodeString(fText);
+            RBBI_DEBUG_printUnicodeString(fText);
         }
     }
     RBBIDebugPrintf("\n");
-#endif
 }
+#endif
 
 
 #ifdef RBBI_DEBUG
-void RBBINode::printUnicodeString(const UnicodeString &, int) {}
-#else
-void RBBINode::printUnicodeString(const UnicodeString &s, int minWidth)
+U_CFUNC void RBBI_DEBUG_printUnicodeString(const UnicodeString &s, int minWidth)
 {
     int i;
     for (i=0; i<s.length(); i++) {
@@ -321,20 +319,18 @@ void RBBINode::printUnicodeString(const UnicodeString &s, int minWidth)
 //    print.         Print out the tree of nodes rooted at "this"
 //
 //-------------------------------------------------------------------------
-#ifndef RBBI_DEBUG
-void RBBINode::printTree(UBool, UBool) {}
-#else
-void RBBINode::printTree(UBool printHeading, UBool doVars) {
+#ifdef RBBI_DEBUG
+void RBBINode::printTree(UBool printHeading) {
     if (printHeading) {
         RBBIDebugPrintf( "-------------------------------------------------------------------\n"
                          "    Address       type         Parent   LeftChild  RightChild    serial  position value\n"
               );
     }
-    this->print();
+    this->printNode();
     if (this != NULL) {
         // Only dump the definition under a variable reference if asked to.
         // Unconditinally dump children of all other node types.
-        if (fType != varRef || doVars) {
+        if (fType != varRef) {
             if (fLeftChild != NULL) {
                 fLeftChild->printTree(FALSE);
             }
