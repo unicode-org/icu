@@ -1,5 +1,5 @@
 /********************************************************************
- * COPYRIGHT: 
+ * COPYRIGHT:
  * Copyright (c) 1997-2001, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
@@ -50,8 +50,8 @@ UCharToUnicodeString(UChar c)
 { return UnicodeString(c); }
 
 // [LIU] Just to get things working
-UnicodeString 
-operator+(const UnicodeString& left, 
+UnicodeString
+operator+(const UnicodeString& left,
       const UnicodeString& right)
 {
     UnicodeString str(left);
@@ -60,8 +60,8 @@ operator+(const UnicodeString& left,
 }
 
 // [rtg] Just to get things working
-UnicodeString 
-operator+(const UnicodeString& left, 
+UnicodeString
+operator+(const UnicodeString& left,
       long num)
 {
     char buffer[64];    // nos changed from 10 to 64
@@ -73,8 +73,8 @@ operator+(const UnicodeString& left,
     return left + buffer;
 }
 
-UnicodeString 
-operator+(const UnicodeString& left, 
+UnicodeString
+operator+(const UnicodeString& left,
       unsigned long num)
 {
     char buffer[64];    // nos changed from 10 to 64
@@ -88,7 +88,7 @@ operator+(const UnicodeString& left,
 
 // [LIU] Just to get things working
 UnicodeString
-operator+(const UnicodeString& left, 
+operator+(const UnicodeString& left,
       double num)
 {
     char buffer[64];   // was 32, made it arbitrarily bigger (rtg)
@@ -152,26 +152,26 @@ UnicodeString toString(const Formattable& f) {
 }
 
 // stephen - cleaned up 05/05/99
-UnicodeString operator+(const UnicodeString& left, char num)  
+UnicodeString operator+(const UnicodeString& left, char num)
 { return left + (long)num; }
-UnicodeString operator+(const UnicodeString& left, short num)  
+UnicodeString operator+(const UnicodeString& left, short num)
 { return left + (long)num; }
-UnicodeString operator+(const UnicodeString& left, int num)      
+UnicodeString operator+(const UnicodeString& left, int num)
 { return left + (long)num; }
-UnicodeString operator+(const UnicodeString& left, unsigned char num)  
+UnicodeString operator+(const UnicodeString& left, unsigned char num)
 { return left + (unsigned long)num; }
-UnicodeString operator+(const UnicodeString& left, unsigned short num)  
+UnicodeString operator+(const UnicodeString& left, unsigned short num)
 { return left + (unsigned long)num; }
-UnicodeString operator+(const UnicodeString& left, unsigned int num)      
+UnicodeString operator+(const UnicodeString& left, unsigned int num)
 { return left + (unsigned long)num; }
-UnicodeString operator+(const UnicodeString& left, float num)      
+UnicodeString operator+(const UnicodeString& left, float num)
 { return left + (double)num; }
 
-//------------------  
+//------------------
 
 // used for collation result reporting, defined here for convenience
 // (maybe moved later)
-void 
+void
 IntlTest::reportCResult( UnicodeString &source, UnicodeString &target,
              CollationKey &sourceKey, CollationKey &targetKey,
              Collator::EComparisonResult compareResult,
@@ -184,7 +184,7 @@ IntlTest::reportCResult( UnicodeString &source, UnicodeString &target,
         errln("***** invalid call to reportCResult ****");
         return;
     }
-  
+
     UBool ok1 = (compareResult == expectedResult);
     UBool ok2 = (keyResult == expectedResult);
     UBool ok3 = (incResult == expectedResult);
@@ -197,12 +197,12 @@ IntlTest::reportCResult( UnicodeString &source, UnicodeString &target,
         UnicodeString msg1(ok1 ? "Ok: compare(" : "FAIL: compare(");
         UnicodeString msg2(", "), msg3(") returned "), msg4("; expected ");
         UnicodeString prettySource, prettyTarget, sExpect, sResult;
-      
+
         prettify(source, prettySource);
         prettify(target, prettyTarget);
         appendCompareResult(compareResult, sResult);
         appendCompareResult(expectedResult, sExpect);
-      
+
         if (ok1) {
             logln(msg1 + prettySource + msg2 + prettyTarget + msg3 + sResult);
         } else {
@@ -212,20 +212,20 @@ IntlTest::reportCResult( UnicodeString &source, UnicodeString &target,
         msg1 = UnicodeString(ok2 ? "Ok: key(" : "FAIL: key(");
         msg2 = ").compareTo(key(";
         msg3 = ")) returned ";
-      
+
         appendCompareResult(keyResult, sResult);
-      
+
         if (ok2) {
             logln(msg1 + prettySource + msg2 + prettyTarget + msg3 + sResult);
         } else {
             errln(msg1 + prettySource + msg2 + prettyTarget + msg3 + sResult + msg4 + sExpect);
-      
+
             msg1 = "  ";
             msg2 = " vs. ";
-      
+
             prettify(sourceKey, prettySource);
             prettify(targetKey, prettyTarget);
-      
+
             errln(msg1 + prettySource + msg2 + prettyTarget);
         }
         msg1 = UnicodeString (ok3 ? "Ok: incCompare(" : "FAIL: incCompare(");
@@ -243,9 +243,9 @@ IntlTest::reportCResult( UnicodeString &source, UnicodeString &target,
 }
 
 // Append a hex string to the target
-UnicodeString& 
-IntlTest::appendHex(uint32_t number, 
-            int8_t digits, 
+UnicodeString&
+IntlTest::appendHex(uint32_t number,
+            int8_t digits,
             UnicodeString& target)
 {
     static const UChar digitString[] = {
@@ -278,8 +278,8 @@ IntlTest::appendHex(uint32_t number,
     return target;
 }
 
-UnicodeString& 
-IntlTest::appendCompareResult(Collator::EComparisonResult result, 
+UnicodeString&
+IntlTest::appendCompareResult(Collator::EComparisonResult result,
                   UnicodeString& target)
 {
     if (result == Collator::LESS)
@@ -305,8 +305,8 @@ IntlTest::appendCompareResult(Collator::EComparisonResult result,
 }
 
 // Replace nonprintable characters with unicode escapes
-UnicodeString& 
-IntlTest::prettify(const UnicodeString &source, 
+UnicodeString&
+IntlTest::prettify(const UnicodeString &source,
            UnicodeString &target)
 {
     int32_t i;
@@ -341,7 +341,7 @@ IntlTest::prettify(const UnicodeString &source,
 }
 
 // Replace nonprintable characters with unicode escapes
-UnicodeString 
+UnicodeString
 IntlTest::prettify(const UnicodeString &source, UBool parseBackslash)
 {
     int32_t i;
@@ -425,9 +425,9 @@ IntlTest::pathnameInContext( char* fullname, int32_t maxsize, const char* relPat
     const char inpSepChar = '|';
 
     // So what's going on is that ICU_DATA during tests points to:
-    //              ICU | source | data 
-    //and we want   ICU | source | 
-    // 
+    //              ICU | source | data
+    //and we want   ICU | source |
+    //
     // We'll add                 | test | testdata
     //
     // So, just add a .. here - back up one level
@@ -454,7 +454,7 @@ IntlTest::pathnameInContext( char* fullname, int32_t maxsize, const char* relPat
     }
     mainDir=mainDirBuffer;
 #endif
-    
+
     if (relPath[0] == '|')
         relPath++;
     int32_t lenMainDir = strlen(mainDir);
@@ -480,7 +480,7 @@ IntlTest::pathnameInContext( char* fullname, int32_t maxsize, const char* relPat
 const char*
 IntlTest::getTestDirectory()
 {
-    if (_testDirectory == NULL) 
+    if (_testDirectory == NULL)
     {
       setTestDirectory("test|testdata|");
     }
@@ -488,10 +488,10 @@ IntlTest::getTestDirectory()
 }
 
 void
-IntlTest::setTestDirectory(const char* newDir) 
+IntlTest::setTestDirectory(const char* newDir)
 {
     char newTestDir[256];
-    IntlTest::pathnameInContext(newTestDir, sizeof(newTestDir), newDir); 
+    IntlTest::pathnameInContext(newTestDir, sizeof(newTestDir), newDir);
     if(_testDirectory != NULL)
         delete _testDirectory;
     _testDirectory = new char[strlen(newTestDir) + 1];
@@ -521,27 +521,27 @@ void IntlTest::setICU_DATA() {
         return;
     }
 
-    /* U_SRCDATADIR is set by the makefiles on UNIXes when building cintltst and intltst 
-     *              to point to the right place, "wherever/icu/source/data"              
+    /* U_SRCDATADIR is set by the makefiles on UNIXes when building cintltst and intltst
+     *              to point to the right place, "wherever/icu/source/data"
      *   The value is complete with quotes, so it can be used as-is as a string constant.
      */
-#if defined (U_SRCDATADIR) 
+#if defined (U_SRCDATADIR)
     {
-        static const char* env_string = "ICU_DATA=" U_SRCDATADIR;
+        static char env_string[] = "ICU_DATA=" U_SRCDATADIR;
         putenv(env_string);
         return;
     }
 #endif
 
-    /* On Windows, the file name obtained from __FILE__ includes a full path.      
-     *             This file is "wherever\icu\source\test\cintltst\cintltst.c"  
-     *             Change to    "wherever\icu\source\data"     
+    /* On Windows, the file name obtained from __FILE__ includes a full path.
+     *             This file is "wherever\icu\source\test\cintltst\cintltst.c"
+     *             Change to    "wherever\icu\source\data"
      */
     {
         char *p;
         char *pBackSlash;
         int i;
-        
+
         p = new char [strlen("ICU_DATA=\\data") + strlen(__FILE__) + 1];  //  <<< LEAK
         strcpy(p, "ICU_DATA=");
         strcat(p, __FILE__);
@@ -555,7 +555,7 @@ void IntlTest::setICU_DATA() {
         }
 
         if (pBackSlash != NULL) {
-            /* We found and truncated three names from the path.         
+            /* We found and truncated three names from the path.
              *  Now append "source\data" and set the environment
              */
             strcpy(pBackSlash, "\\data");
@@ -584,31 +584,31 @@ void it_log( UnicodeString message )
     if (IntlTest::gTest)
         IntlTest::gTest->log( message );
 }
-    
+
 void it_logln( UnicodeString message )
 {
     if (IntlTest::gTest)
         IntlTest::gTest->logln( message );
 }
-    
+
 void it_logln( void )
 {
     if (IntlTest::gTest)
         IntlTest::gTest->logln();
 }
-    
+
 void it_err()
 {
     if (IntlTest::gTest)
         IntlTest::gTest->err();
 }
-        
+
 void it_err( UnicodeString message )
 {
     if (IntlTest::gTest)
         IntlTest::gTest->err( message );
 }
-    
+
 void it_errln( UnicodeString message )
 {
     if (IntlTest::gTest) IntlTest::gTest->errln( message );
@@ -778,7 +778,7 @@ UBool IntlTest::runTestLoop( char* testname, char* par )
     int32_t    lastErrorCount;
     UBool  rval = FALSE;
     UBool   lastTestFailed;
-    
+
     IntlTest* saveTest = gTest;
     gTest = this;
     do {
@@ -811,11 +811,11 @@ UBool IntlTest::runTestLoop( char* testname, char* par )
             }
             LL_indentlevel -= 3;
             if (lastTestFailed) {
-                LL_message( "", TRUE); 
+                LL_message( "", TRUE);
             }
-            LL_message( msg, TRUE); 
+            LL_message( msg, TRUE);
             if (lastTestFailed) {
-                LL_message( "", TRUE); 
+                LL_message( "", TRUE);
             }
             LL_indentlevel += 3;
         }
@@ -865,7 +865,7 @@ int32_t IntlTest::IncErrorCount( void )
 void IntlTest::err() {
     IncErrorCount();
 }
-    
+
 void IntlTest::err( const UnicodeString &message )
 {
     IncErrorCount();
@@ -970,7 +970,7 @@ void IntlTest::LL_message( UnicodeString message, UBool newline )
         fwrite(&newLine, sizeof(newLine), 1, testoutfp);
     }
 
-    // A newline usually flushes the buffer, but 
+    // A newline usually flushes the buffer, but
     // flush the message just in case of a core dump.
     fflush(testoutfp);
 }
@@ -996,7 +996,7 @@ void IntlTest::usage( void )
 }
 
 
-// memory leak reporting software will be able to take advantage of the testsuite 
+// memory leak reporting software will be able to take advantage of the testsuite
 // being run a second time local to a specific method in order to report only actual leaks
 UBool
 IntlTest::run_phase2( char* name, char* par ) // supports reporting memory leaks
@@ -1066,7 +1066,7 @@ main(int argc, char* argv[])
 
     if (all && name) syntax = TRUE;
     if (!all && !name) syntax = TRUE;
- 
+
     if (syntax) {
         fprintf(stdout,
                 "### Syntax:\n"
@@ -1149,7 +1149,7 @@ main(int argc, char* argv[])
     if (all) {
         major.runTest();
         if (leaks) {
-            major.run_phase2( NULL, NULL );    
+            major.run_phase2( NULL, NULL );
         }
     }else{
         for (int i = 1; i < argc; ++i) {

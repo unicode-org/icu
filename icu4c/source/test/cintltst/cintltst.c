@@ -1,5 +1,5 @@
 /********************************************************************
- * COPYRIGHT: 
+ * COPYRIGHT:
  * Copyright (c) 1997-2001, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
@@ -128,8 +128,8 @@ int main(int argc, const char* const argv[])
     return nerrors ? 1 : 0;
 }
 
-void 
-ctest_pathnameInContext( char* fullname, int32_t maxsize, const char* relPath ) 
+void
+ctest_pathnameInContext( char* fullname, int32_t maxsize, const char* relPath )
 {
     char mainDirBuffer[1024];
     char* mainDir = NULL;
@@ -184,7 +184,7 @@ ctest_pathnameInContext( char* fullname, int32_t maxsize, const char* relPath )
 const char*
 ctest_getTestDirectory()
 {
-    if (_testDirectory == NULL) 
+    if (_testDirectory == NULL)
     {
         /* always relative to icu/source/data/.. */
         ctest_setTestDirectory("test|testdata|");
@@ -193,10 +193,10 @@ ctest_getTestDirectory()
 }
 
 void
-ctest_setTestDirectory(const char* newDir) 
+ctest_setTestDirectory(const char* newDir)
 {
     char newTestDir[256];
-    ctest_pathnameInContext(newTestDir, (int32_t)sizeof(newTestDir), newDir); 
+    ctest_pathnameInContext(newTestDir, (int32_t)sizeof(newTestDir), newDir);
     if(_testDirectory != NULL)
         free(_testDirectory);
     _testDirectory = (char*) malloc(sizeof(char*) * (strlen(newTestDir) + 1));
@@ -223,27 +223,27 @@ void ctest_setICU_DATA() {
         return;
     }
 
-    /* U_SRCDATADIR is set by the makefiles on UNIXes when building cintltst and intltst 
-     *              to point to the right place, "wherever/icu/source/data"              
+    /* U_SRCDATADIR is set by the makefiles on UNIXes when building cintltst and intltst
+     *              to point to the right place, "wherever/icu/source/data"
      *   The value is complete with quotes, so it can be used as-is as a string constant.
      */
-#if defined (U_SRCDATADIR) 
+#if defined (U_SRCDATADIR)
     {
-        static const char* env_string = "ICU_DATA=" U_SRCDATADIR;
+        static char env_string[] = "ICU_DATA=" U_SRCDATADIR;
         putenv(env_string);
         return;
     }
 #endif
 
-    /* On Windows, the file name obtained from __FILE__ includes a full path.      
-     *             This file is "wherever\icu\source\test\cintltst\cintltst.c"  
-     *             Change to    "wherever\icu\source\data"     
+    /* On Windows, the file name obtained from __FILE__ includes a full path.
+     *             This file is "wherever\icu\source\test\cintltst\cintltst.c"
+     *             Change to    "wherever\icu\source\data"
      */
     {
         char *p;
         char *pBackSlash;
         int i;
-        
+
         p = ctst_malloc(strlen("ICU_DATA=\\data") + strlen(__FILE__) + 1);
         strcpy(p, "ICU_DATA=");
         strcat(p, __FILE__);
@@ -257,7 +257,7 @@ void ctest_setICU_DATA() {
         }
 
         if (pBackSlash != NULL) {
-            /* We found and truncated three names from the path.         
+            /* We found and truncated three names from the path.
              *  Now append "source\data" and set the environment
              */
             strcpy(pBackSlash, "\\data");
