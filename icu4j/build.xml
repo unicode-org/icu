@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2001/10/19 22:15:37 $ 
-* $Revision: 1.37 $
+* $Date: 2001/10/23 20:56:32 $ 
+* $Revision: 1.38 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -52,7 +52,7 @@
   
   <target name="tests" depends="core,testData">
     <javac includes="com/ibm/test/**/*.java,com/ibm/icu/test/**/*.java"
-           excludes="**/CVS/**/*,com/ibm/icu/test/format/DateFormatRegressionTestJ.java"
+           excludes="**/CVS/**/*"
     	   srcdir="${src.dir}"
     	   destdir="${build.dir}" 
     	   classpath="${classpath}"
