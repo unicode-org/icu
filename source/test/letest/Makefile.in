@@ -23,7 +23,7 @@ CLEANFILES = *~ $(DEPS)
 TESTTARGET = letest
 GENTARGET  = gendata
 
-CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/layout -I$(top_srcdir)
+CPPFLAGS += -DLE_USE_CMEMORY -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/layout -I$(top_srcdir)
 LIBS = $(LIBICULE) $(LIBICUUC) @LIBS@ @LIB_M@
 
 COMMONOBJECTS = cmaps.o FontTableCache.o PortableFontInstance.o
