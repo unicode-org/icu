@@ -340,7 +340,9 @@ void bundle_write(struct SRBRoot *bundle, const char *outputDir, const char *out
     }
 
     mem = udata_create(outputDir, "res", dataName, &dataInfo, (gIncludeCopyright==TRUE)? U_COPYRIGHT_STRING:NULL, status);
-
+    if(U_FAILURE(status)){
+        return;
+    }
     pad = calcPadding(bundle->fKeyPoint);
 
     usedOffset = sizeof(uint32_t) + bundle->fKeyPoint + pad ; /*this is how much root and keys are taking up*/
@@ -459,7 +461,7 @@ struct SResource *string_open(struct SRBRoot *bundle, char *tag, UChar *value, i
     }
 
     uprv_memcpy(res->u.fString.fChars, value, sizeof(UChar) * (len + 1));
-    res->fSize = sizeof(int32_t) + sizeof(UChar) * (len + 1);
+    res->fSize = sizeof(int32_t) + sizeof(UChar) * (len);
 
     return res;
 }
@@ -598,7 +600,7 @@ struct SResource *bin_open(struct SRBRoot *bundle, const char *tag, uint32_t len
     res->u.fBinaryValue.fLength = length;
     res->u.fBinaryValue.fFileName = NULL;
     if(fileName!=NULL && uprv_strcmp(fileName, "") !=0){
-        res->u.fBinaryValue.fFileName = (char*) uprv_malloc(sizeof(char) * uprv_strlen(fileName));
+        res->u.fBinaryValue.fFileName = (char*) uprv_malloc(sizeof(char) * (uprv_strlen(fileName)+1));
         uprv_strcpy(res->u.fBinaryValue.fFileName,fileName);
     }
     if (length > 0) {

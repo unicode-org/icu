@@ -701,7 +701,7 @@ static struct SResource *
 realParseTable(struct SResource *table, char *tag, uint32_t startline, UErrorCode *status)
 {
     struct SResource  *member = NULL;
-    struct UString    *tokenValue;
+    struct UString    *tokenValue=NULL;
     enum   ETokenType token;
     char              subtag[1024];
     uint32_t          line;
@@ -1121,7 +1121,7 @@ parseImport(char *tag, uint32_t startline, UErrorCode *status)
     char             *filename;
     uint32_t          line;
     char     *fullname = NULL;
-
+    int32_t numRead = 0;
     filename = getInvariantString(&line, status);
 
     if (U_FAILURE(*status))
@@ -1196,8 +1196,8 @@ parseImport(char *tag, uint32_t startline, UErrorCode *status)
     }
 
     len  = T_FileStream_size(file);
-    data = uprv_malloc(len);
-
+    data = (uint8_t*)uprv_malloc(len* sizeof(uint8_t)* 3);
+    uprv_memset(data,0xFF, len *3);
     /* test for NULL */
     if(data == NULL)
     {
@@ -1206,7 +1206,7 @@ parseImport(char *tag, uint32_t startline, UErrorCode *status)
         return NULL;
     }
 
-    T_FileStream_read  (file, data, len);
+    numRead = T_FileStream_read  (file, data, len);
     T_FileStream_close (file);
 
     result = bin_open(bundle, tag, len, data, fullname, status);
