@@ -412,7 +412,7 @@ typedef enum UCharCategory
  * This specifies the language directional property of a character set.
  * @stable
  */
-enum UCharDirection   { 
+typedef enum UCharDirection { 
     /** L @stable */
     U_LEFT_TO_RIGHT               = 0, 
     /** R @stable */
@@ -453,9 +453,7 @@ enum UCharDirection   {
     U_BOUNDARY_NEUTRAL            = 18,
     /** @stable */
     U_CHAR_DIRECTION_COUNT
-};
-
-typedef enum UCharDirection UCharDirection;
+} UCharDirection;
 
 /**
  * Constants for Unicode blocks, generated from Unicode Data file Blocks.txt
