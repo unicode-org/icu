@@ -23,11 +23,11 @@
 // *****************************************************************************
 // class Formattable
 // *****************************************************************************
- 
+
 // -------------------------------------
 // default constructor.
 // Creates a formattable object with a long value 0.
- 
+
 Formattable::Formattable()
     :   fType(kLong)
 {
@@ -51,7 +51,7 @@ Formattable::Formattable(double value)
 {
     fValue.fDouble = value;
 }
- 
+
 // -------------------------------------
 // Creates a formattable object with a long value.
 
@@ -60,25 +60,25 @@ Formattable::Formattable(int32_t value)
 {
     fValue.fLong = value;
 }
- 
+
 // -------------------------------------
 // Creates a formattable object with a char* string.
- 
+
 Formattable::Formattable(const char* stringToCopy)
     :   fType(kString)
 {
     fValue.fString = new UnicodeString(stringToCopy);
 }
- 
+
 // -------------------------------------
 // Creates a formattable object with a UnicodeString instance.
- 
+
 Formattable::Formattable(const UnicodeString& stringToCopy)
     :   fType(kString)
 {
     fValue.fString = new UnicodeString(stringToCopy);
 }
- 
+
 // -------------------------------------
 // Creates a formattable object with a UnicodeString* value.
 // (adopting symantics)
@@ -88,7 +88,7 @@ Formattable::Formattable(UnicodeString* stringToAdopt)
 {
     fValue.fString = stringToAdopt;
 }
- 
+
 // -------------------------------------
 
 Formattable::Formattable(const Formattable* arrayToCopy, int32_t count)
@@ -181,7 +181,7 @@ Formattable::operator==(const Formattable& that) const
     }
     return TRUE;
 }
- 
+
 // -------------------------------------
 
 Formattable::~Formattable()
@@ -201,6 +201,10 @@ void Formattable::dispose()
     case kArray:
         delete[] fValue.fArrayAndCount.fArray;
         break;
+    case kDate:
+    case kDouble:
+    case kLong:
+        break;
     }
 }
 
@@ -211,10 +215,10 @@ Formattable::getType() const
 {
     return fType;
 }
- 
+
 // -------------------------------------
 // Sets the value to a double value d.
- 
+
 void
 Formattable::setDouble(double d)
 {
@@ -222,10 +226,10 @@ Formattable::setDouble(double d)
     fType = kDouble;
     fValue.fDouble = d;
 }
- 
+
 // -------------------------------------
 // Sets the value to a long value l.
- 
+
 void
 Formattable::setLong(int32_t l)
 {
@@ -233,10 +237,10 @@ Formattable::setLong(int32_t l)
     fType = kLong;
     fValue.fLong = l;
 }
- 
+
 // -------------------------------------
 // Sets the value to a Date instance d.
- 
+
 void
 Formattable::setDate(UDate d)
 {
@@ -244,10 +248,10 @@ Formattable::setDate(UDate d)
     fType = kDate;
     fValue.fDate = d;
 }
- 
+
 // -------------------------------------
 // Sets the value to a string value stringToCopy.
- 
+
 void
 Formattable::setString(const UnicodeString& stringToCopy)
 {
@@ -255,7 +259,7 @@ Formattable::setString(const UnicodeString& stringToCopy)
     fType = kString;
     fValue.fString = new UnicodeString(stringToCopy);
 }
- 
+
 // -------------------------------------
 // Sets the value to an array of Formattable objects.
 
@@ -266,11 +270,11 @@ Formattable::setArray(const Formattable* array, int32_t count)
     fType = kArray;
     fValue.fArrayAndCount.fArray = createArrayCopy(array, count);
     fValue.fArrayAndCount.fCount = count;
-} 
+}
 
 // -------------------------------------
 // Adopts the stringToAdopt value.
- 
+
 void
 Formattable::adoptString(UnicodeString* stringToAdopt)
 {
@@ -278,10 +282,10 @@ Formattable::adoptString(UnicodeString* stringToAdopt)
     fType = kString;
     fValue.fString = stringToAdopt;
 }
- 
+
 // -------------------------------------
 // Adopts the array value and its count.
- 
+
 void
 Formattable::adoptArray(Formattable* array, int32_t count)
 {
@@ -289,7 +293,7 @@ Formattable::adoptArray(Formattable* array, int32_t count)
     fType = kArray;
     fValue.fArrayAndCount.fArray = array;
     fValue.fArrayAndCount.fCount = count;
-} 
+}
 
 #if 0
 //----------------------------------------------------
