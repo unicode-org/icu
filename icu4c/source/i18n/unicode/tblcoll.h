@@ -65,11 +65,11 @@
 U_NAMESPACE_BEGIN
 
 /**
-* @stable
+* @stable ICU 2.0
 */
 class StringSearch;
 /**
-* @stable
+* @stable ICU 2.0
 */
 class CollationElementIterator;
 
@@ -114,7 +114,7 @@ public:
    * @param rules the collation rules to build the collation table from.
    * @param status reporting a success or an error.
    * @see Locale
-   * @stable
+   * @stable ICU 2.0
    */
     RuleBasedCollator(const UnicodeString& rules, UErrorCode& status);
 
@@ -126,7 +126,7 @@ public:
    * @param collationStrength default strength for comparison
    * @param status reporting a success or an error.
    * @see Locale
-   * @stable
+   * @stable ICU 2.0
    */
   RuleBasedCollator(const UnicodeString& rules,
                        ECollationStrength collationStrength,
@@ -140,7 +140,7 @@ public:
    * @param decompositionMode the normalisation mode
    * @param status reporting a success or an error.
    * @see Locale
-   * @stable
+   * @stable ICU 2.0
    */
   RuleBasedCollator(const UnicodeString& rules,
                     UColAttributeValue decompositionMode,
@@ -155,7 +155,7 @@ public:
    * @param decompositionMode the normalisation mode
    * @param status reporting a success or an error.
    * @see Locale
-   * @stable
+   * @stable ICU 2.0
    */
   RuleBasedCollator(const UnicodeString& rules,
                     ECollationStrength collationStrength,
@@ -166,7 +166,7 @@ public:
    * Copy constructor.
    * @param the RuleBasedCollator object to be copied
    * @see Locale
-   * @stable
+   * @stable ICU 2.0
    */
     RuleBasedCollator(const RuleBasedCollator& other);
 
@@ -174,7 +174,7 @@ public:
 
   /**
    * Destructor.
-   * @stable
+   * @stable ICU 2.0
    */
     virtual ~RuleBasedCollator();
 
@@ -183,7 +183,7 @@ public:
   /**
    * Assignment operator.
    * @param other other RuleBasedCollator object to compare with.
-   * @stable
+   * @stable ICU 2.0
    */
     RuleBasedCollator& operator=(const RuleBasedCollator& other);
 
@@ -191,7 +191,7 @@ public:
    * Returns true if argument is the same as this object.
    * @param other Collator object to be compared.
    * @return true if arguments is the same as this object.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UBool operator==(const Collator& other) const;
 
@@ -199,7 +199,7 @@ public:
    * Returns true if argument is not the same as this object.
    * @param other Collator object to be compared
    * @return returns true if argument is not the same as this object.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UBool operator!=(const Collator& other) const;
 
@@ -207,7 +207,7 @@ public:
    * Makes a deep copy of the object.
    * The caller owns the returned object.
    * @return the cloned object.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual Collator* clone(void) const;
 
@@ -246,7 +246,7 @@ public:
    * @return the comparison result. GREATER if the source string is greater
    *         than the target string, LESS if the source is less than the
    *         target. Otherwise, returns EQUAL.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual EComparisonResult compare(const UnicodeString& source,
                                     const UnicodeString& target) const;
@@ -263,7 +263,7 @@ public:
    * @return the comparison result. GREATER if the source string is greater
    *         than the target string, LESS if the source is less than the
    *         target. Otherwise, returns EQUAL.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual EComparisonResult compare(const UnicodeString& source,
                                     const UnicodeString&  target,
@@ -316,7 +316,7 @@ public:
   * @param status the error code status.
   * @return the transformed key.
   * @see CollationKey
-  * @stable
+  * @stable ICU 2.0
   */
   virtual CollationKey& getCollationKey(const UnicodeString& source,
                                         CollationKey& key,
@@ -332,7 +332,7 @@ public:
   * @param status the error code status.
   * @return the transformed key.
   * @see CollationKey
-  * @stable
+  * @stable ICU 2.0
   */
   virtual CollationKey& getCollationKey(const UChar *source,
                                         int32_t sourceLength,
@@ -342,7 +342,7 @@ public:
   /**
    * Generates the hash code for the rule-based collation object.
    * @return the hash code.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual int32_t hashCode(void) const;
 
@@ -362,14 +362,14 @@ public:
    * Gets the table-based rules for the collation object.
    * @return returns the collation rules that the table collation object was
    *         created from.
-   * @stable
+   * @stable ICU 2.0
    */
   const UnicodeString& getRules(void) const;
 
   /**
    * Gets the version information for a Collator. 
    * @param info the version # information, the result will be filled in
-   * @stable
+   * @stable ICU 2.0
    */
   virtual void getVersion(UVersionInfo info) const;
 
@@ -381,7 +381,7 @@ public:
    *         element or 1 if collation element does not occur at the end of
    *         any expansion sequence
    * @see CollationElementIterator#getMaxExpansion
-   * @stable
+   * @stable ICU 2.0
    */
   int32_t getMaxExpansion(int32_t order) const;
 
@@ -393,7 +393,7 @@ public:
    * @return The class ID for this object. All objects of a given class have
    *         the same class ID. Objects of other classes have different class
    *         IDs.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual UClassID getDynamicClassID(void) const
   {
@@ -409,7 +409,7 @@ public:
    *                                          Derived::getStaticClassID()) ...
    * </pre>
    * @return The class ID for all objects of this class.
-   * @stable
+   * @stable ICU 2.0
    */
   static UClassID getStaticClassID(void)
   {
@@ -463,7 +463,7 @@ public:
    *    U_CE_NOT_FOUND_ERROR if more than one character was passed and there is no such a contraction<br>
    *    U_PRIMARY_TOO_LONG_ERROR if the primary for the variable top has more than two bytes
    * @return a 32 bit value containing the value of the variable top in upper 16 bits. Lower 16 bits are undefined
-   * @stable
+   * @stable ICU 2.0
    */
   virtual uint32_t setVariableTop(const UChar *varTop, int32_t len, UErrorCode &status);
 
@@ -474,7 +474,7 @@ public:
    *    U_CE_NOT_FOUND_ERROR if more than one character was passed and there is no such a contraction<br>
    *    U_PRIMARY_TOO_LONG_ERROR if the primary for the variable top has more than two bytes
    * @return a 32 bit value containing the value of the variable top in upper 16 bits. Lower 16 bits are undefined
-   * @stable
+   * @stable ICU 2.0
    */
   virtual uint32_t setVariableTop(const UnicodeString varTop, UErrorCode &status);
 
@@ -483,7 +483,7 @@ public:
    * Lower 16 bits are ignored.
    * @param varTop CE value, as returned by setVariableTop or ucol)getVariableTop
    * @param status error code (not changed by function)
-   * @stable
+   * @stable ICU 2.0
    */
   virtual void setVariableTop(const uint32_t varTop, UErrorCode &status);
 
@@ -491,7 +491,7 @@ public:
    * Gets the variable top value of a Collator. 
    * Lower 16 bits are undefined and should be ignored.
    * @param status error code (not changed by function). If error code is set, the return value is undefined.
-   * @stable
+   * @stable ICU 2.0
    */
   virtual uint32_t getVariableTop(UErrorCode &status) const;
 
@@ -521,7 +521,7 @@ public:
    * @param resultLength length of the result buffer. If if not enough the
    *        buffer will be filled to capacity.
    * @return Number of bytes needed for storing the sort key
-   * @stable
+   * @stable ICU 2.0
    */
   virtual int32_t getSortKey(const UnicodeString& source, uint8_t *result,
                              int32_t resultLength) const;
@@ -549,7 +549,7 @@ public:
   * are ignored.
   * @return the current comparison level.
   * @see RuleBasedCollator#setStrength
-  * @stable
+  * @stable ICU 2.0
   */
   virtual ECollationStrength getStrength(void) const;
 
@@ -557,7 +557,7 @@ public:
   * Sets the minimum strength to be used in comparison or transformation.
   * @see RuleBasedCollator#getStrength
   * @param newStrength the new comparison level.
-  * @stable
+  * @stable ICU 2.0
   */
   virtual void setStrength(ECollationStrength newStrength);
 

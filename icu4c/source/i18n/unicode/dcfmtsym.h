@@ -77,7 +77,7 @@ class U_I18N_API DecimalFormatSymbols : public UObject {
 public:
     /**
      * Constants for specifying a number format symbol.
-     * @stable
+     * @stable ICU 2.0
      */
     enum ENumberFormatSymbol {
         /** The decimal separator */
@@ -122,7 +122,7 @@ public:
      * @param locale    The locale to get symbols for.
      * @param status    Input/output parameter, set to success or
      *                  failure code upon return.
-     * @stable
+     * @stable ICU 2.0
      */
     DecimalFormatSymbols(const Locale& locale, UErrorCode& status);
 
@@ -134,25 +134,25 @@ public:
      *
      * @param status    Input/output parameter, set to success or
      *                  failure code upon return.
-     * @stable
+     * @stable ICU 2.0
      */
     DecimalFormatSymbols( UErrorCode& status);
 
     /**
      * Copy constructor.
-     * @stable
+     * @stable ICU 2.0
      */
     DecimalFormatSymbols(const DecimalFormatSymbols&);
 
     /**
      * Assignment operator.
-     * @stable
+     * @stable ICU 2.0
      */
     DecimalFormatSymbols& operator=(const DecimalFormatSymbols&);
 
     /**
      * Destructor.
-     * @stable
+     * @stable ICU 2.0
      */
     ~DecimalFormatSymbols();
 
@@ -161,7 +161,7 @@ public:
      *
      * @param other    the object to be compared with.
      * @return         true if another object is semantically equal to this one.
-     * @stable
+     * @stable ICU 2.0
      */
     UBool operator==(const DecimalFormatSymbols& other) const;
 
@@ -170,7 +170,7 @@ public:
      *
      * @param other    the object to be compared with.
      * @return         true if another object is semantically unequal to this one.
-     * @stable
+     * @stable ICU 2.0
      */
     UBool operator!=(const DecimalFormatSymbols& other) const { return !operator==(other); }
 
@@ -181,7 +181,7 @@ public:
      *
      * @param symbol    Constant to indicate a number format symbol.
      * @return    the format symbols by the param 'symbol'
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString getSymbol(ENumberFormatSymbol symbol) const;
 
@@ -192,7 +192,7 @@ public:
      *
      * @param symbol    Constant to indicate a number format symbol.
      * @param value     value of the format sybmol
-     * @stable
+     * @stable ICU 2.0
      */
     void setSymbol(ENumberFormatSymbol symbol, UnicodeString value);
 

@@ -197,7 +197,7 @@
  * @return The total buffer size needed; if greater than resultLength, the
  * output was truncated.
  * @see u_parseMessage
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2 
 u_formatMessage(const char  *locale,
@@ -248,7 +248,7 @@ u_vformatMessage(   const char  *locale,
  * @param ... A variable-length argument list containing the arguments
  * specified in pattern.
  * @see u_formatMessage
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 
 u_parseMessage( const char   *locale,
@@ -425,7 +425,7 @@ umsg_open(  const UChar     *pattern,
  * Close a UMessageFormat.
  * Once closed, a UMessageFormat may no longer be used.
  * @param format The formatter to close.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 
 umsg_close(UMessageFormat* format);
@@ -436,7 +436,7 @@ umsg_close(UMessageFormat* format);
  * @param fmt The formatter to copy
  * @param status A pointer to an UErrorCode to receive any errors.
  * @return A pointer to a UDateFormat identical to fmt.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI UMessageFormat U_EXPORT2 
 umsg_clone(const UMessageFormat *fmt,
@@ -457,7 +457,7 @@ umsg_setLocale(UMessageFormat *fmt,
  * format information.
  * @param fmt The formatter to querry
  * @return the locale.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI const char*  U_EXPORT2 
 umsg_getLocale(UMessageFormat *fmt);
@@ -511,7 +511,7 @@ umsg_toPattern(UMessageFormat *fmt,
  *                      specified in pattern.
  * @return              The total buffer size needed; if greater than resultLength, 
  *                      the output was truncated.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI int32_t U_EXPORT2 
 umsg_format(    UMessageFormat *fmt,
@@ -553,7 +553,7 @@ umsg_vformat(   UMessageFormat *fmt,
  * @param status        A pointer to an UErrorCode to receive any errors
  * @param ...           A variable-length argument list containing the arguments
  *                      specified in pattern.
- * @stable
+ * @stable ICU 2.0
  */
 U_CAPI void U_EXPORT2 
 umsg_parse( UMessageFormat *fmt,

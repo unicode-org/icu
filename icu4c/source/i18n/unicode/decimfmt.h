@@ -211,7 +211,7 @@ public:
      * locale.
      * @param status    Output param set to success/failure code. If the
      *                  pattern is invalid this will be set to a failure code.
-     * @stable
+     * @stable ICU 2.0
      */
     DecimalFormat(UErrorCode& status);
 
@@ -227,7 +227,7 @@ public:
      * @param pattern   A non-localized pattern string.
      * @param status    Output param set to success/failure code. If the
      *                  pattern is invalid this will be set to a failure code.
-     * @stable
+     * @stable ICU 2.0
      */
     DecimalFormat(const UnicodeString& pattern,
                   UErrorCode& status);
@@ -248,7 +248,7 @@ public:
      *                          delete this object after making this call.
      * @param status            Output param set to success/failure code. If the
      *                          pattern is invalid this will be set to a failure code.
-     * @stable
+     * @stable ICU 2.0
      */
     DecimalFormat(  const UnicodeString& pattern,
                     DecimalFormatSymbols* symbolsToAdopt,
@@ -292,7 +292,7 @@ public:
      * @param symbols   the set of symbols to be used
      * @param status            Output param set to success/failure code. If the
      *                          pattern is invalid this will be set to a failure code.
-     * @stable
+     * @stable ICU 2.0
      */
     DecimalFormat(  const UnicodeString& pattern,
                     const DecimalFormatSymbols& symbols,
@@ -302,7 +302,7 @@ public:
      * Copy constructor.
      * 
      * @param source    the DecimalFormat object to be copied from.
-     * @stable
+     * @stable ICU 2.0
      */
     DecimalFormat(const DecimalFormat& source);
 
@@ -310,13 +310,13 @@ public:
      * Assignment operator.
      *
      * @param rhs    the DecimalFormat object to be copied.
-     * @stable
+     * @stable ICU 2.0
      */
     DecimalFormat& operator=(const DecimalFormat& rhs);
 
     /**
      * Destructor.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual ~DecimalFormat();
 
@@ -325,7 +325,7 @@ public:
      * result and should delete it when done.
      *
      * @return    a polymorphic copy of this DecimalFormat.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual Format* clone(void) const;
 
@@ -335,7 +335,7 @@ public:
      *
      * @param other    the object to be compared with.
      * @return         true if the given Format objects are semantically equal.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UBool operator==(const Format& other) const;
 
@@ -348,7 +348,7 @@ public:
      * @param pos       On input: an alignment field, if desired.
      *                  On output: the offsets of the alignment field.
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
     */
     virtual UnicodeString& format(double number,
                                   UnicodeString& appendTo,
@@ -362,7 +362,7 @@ public:
      * @param pos       On input: an alignment field, if desired.
      *                  On output: the offsets of the alignment field.
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeString& format(int32_t number,
                                   UnicodeString& appendTo,
@@ -377,7 +377,7 @@ public:
      *                  On output: the offsets of the alignment field.
      * @param status    Error code indicating success or failure.
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeString& format(const Formattable& obj,
                                   UnicodeString& appendTo,
@@ -393,7 +393,7 @@ public:
      *                  Result is appended to existing contents.
      * @param status    Output parameter filled in with success or failure status.
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString& format(const Formattable& obj,
                           UnicodeString& appendTo,
@@ -407,7 +407,7 @@ public:
      * @param appendTo  Output parameter to receive result.
      *                  Result is appended to existing contents.
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString& format(double number,
                           UnicodeString& appendTo) const;
@@ -421,7 +421,7 @@ public:
      * @param appendTo  Output parameter to receive result.
      *                  Result is appended to existing contents.
      * @return          Reference to 'appendTo' parameter.
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString& format(int32_t number,
                           UnicodeString& appendTo) const;
@@ -443,7 +443,7 @@ public:
     *                       On output, moved to after the last successfully
     *                       parse character. On parse failure, does not change.
     * @see Formattable
-    * @stable
+    * @stable ICU 2.0
     */
     virtual void parse(const UnicodeString& text,
                        Formattable& result,
@@ -456,7 +456,7 @@ public:
      * @param text           The text to be parsed.
      * @param result         Formattable to be set to the parse result.
      * @param status    Output parameter filled in with success or failure status.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void parse(const UnicodeString& text, 
                        Formattable& result, 
@@ -467,7 +467,7 @@ public:
      * by the programmer or user.
      * @return desired DecimalFormatSymbols
      * @see DecimalFormatSymbols
-     * @stable
+     * @stable ICU 2.0
      */
     virtual const DecimalFormatSymbols* getDecimalFormatSymbols(void) const;
 
@@ -475,7 +475,7 @@ public:
      * Sets the decimal format symbols, which is generally not changed
      * by the programmer or user.
      * @param symbolsToAdopt DecimalFormatSymbols to be adopted.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void adoptDecimalFormatSymbols(DecimalFormatSymbols* symbolsToAdopt);
 
@@ -483,7 +483,7 @@ public:
      * Sets the decimal format symbols, which is generally not changed
      * by the programmer or user.
      * @param symbols DecimalFormatSymbols.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setDecimalFormatSymbols(const DecimalFormatSymbols& symbols);
 
@@ -494,7 +494,7 @@ public:
      * @param result    Output param which will receive the positive prefix.
      * @return          A reference to 'result'.
      * Examples: +123, $123, sFr123
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString& getPositivePrefix(UnicodeString& result) const;
 
@@ -503,7 +503,7 @@ public:
      *
      * @param newValue    the new value of the the positive prefix to be set.
      * Examples: +123, $123, sFr123
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setPositivePrefix(const UnicodeString& newValue);
 
@@ -513,7 +513,7 @@ public:
      * @param result    Output param which will receive the negative prefix.
      * @return          A reference to 'result'.
      * Examples: -123, ($123) (with negative suffix), sFr-123
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString& getNegativePrefix(UnicodeString& result) const;
 
@@ -522,7 +522,7 @@ public:
      *
      * @param newValue    the new value of the the negative prefix to be set.
      * Examples: -123, ($123) (with negative suffix), sFr-123
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setNegativePrefix(const UnicodeString& newValue);
 
@@ -532,7 +532,7 @@ public:
      * @param result    Output param which will receive the positive suffix.
      * @return          A reference to 'result'.
      * Example: 123%
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString& getPositiveSuffix(UnicodeString& result) const;
 
@@ -541,7 +541,7 @@ public:
      *
      * @param newValue    the new value of the positive suffix to be set.
      * Example: 123%
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setPositiveSuffix(const UnicodeString& newValue);
 
@@ -551,7 +551,7 @@ public:
      * @param result    Output param which will receive the negative suffix.
      * @return          A reference to 'result'.
      * Examples: -123%, ($123) (with positive suffixes)
-     * @stable
+     * @stable ICU 2.0
      */
     UnicodeString& getNegativeSuffix(UnicodeString& result) const;
 
@@ -560,7 +560,7 @@ public:
      *
      * @param newValue    the new value of the negative suffix to be set.
      * Examples: 123%
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setNegativeSuffix(const UnicodeString& newValue);
 
@@ -572,7 +572,7 @@ public:
      *
      * @return    the multiplier for use in percent, permill, etc.
      * Examples: with 100, 1.23 -> "123", and "123" -> 1.23
-     * @stable
+     * @stable ICU 2.0
      */
     int32_t getMultiplier(void) const;
 
@@ -584,7 +584,7 @@ public:
      *
      * @param newValue    the new value of the multiplier for use in percent, permill, etc.
      * Examples: with 100, 1.23 -> "123", and "123" -> 1.23
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setMultiplier(int32_t newValue);
 
@@ -595,7 +595,7 @@ public:
      * @see #setRoundingIncrement
      * @see #getRoundingMode
      * @see #setRoundingMode
-     * @stable
+     * @stable ICU 2.0
      */
     virtual double getRoundingIncrement(void);
 
@@ -607,7 +607,7 @@ public:
      * @see #getRoundingIncrement
      * @see #getRoundingMode
      * @see #setRoundingMode
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setRoundingIncrement(double newValue);
 
@@ -617,7 +617,7 @@ public:
      * @see #setRoundingIncrement
      * @see #getRoundingIncrement
      * @see #setRoundingMode
-     * @stable
+     * @stable ICU 2.0
      */
     virtual ERoundingMode getRoundingMode(void);
 
@@ -628,7 +628,7 @@ public:
      * @see #setRoundingIncrement
      * @see #getRoundingIncrement
      * @see #getRoundingMode
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setRoundingMode(ERoundingMode roundingMode);
 
@@ -640,7 +640,7 @@ public:
      * @see #setPadCharacter
      * @see #getPadPosition
      * @see #setPadPosition
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t getFormatWidth(void);
 
@@ -655,7 +655,7 @@ public:
      * @see #setPadCharacter
      * @see #getPadPosition
      * @see #setPadPosition
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setFormatWidth(int32_t width);
 
@@ -670,7 +670,7 @@ public:
      * @see #setPadCharacter
      * @see #getPadPosition
      * @see #setPadPosition
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeString getPadCharacterString();
 
@@ -686,7 +686,7 @@ public:
      * @see #getPadCharacter
      * @see #getPadPosition
      * @see #setPadPosition
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setPadCharacter(UnicodeString padChar);
 
@@ -706,7 +706,7 @@ public:
      * @see #kPadAfterPrefix
      * @see #kPadBeforeSuffix
      * @see #kPadAfterSuffix
-     * @stable
+     * @stable ICU 2.0
      */
     virtual EPadPosition getPadPosition(void);
 
@@ -728,7 +728,7 @@ public:
      * @see #kPadAfterPrefix
      * @see #kPadBeforeSuffix
      * @see #kPadAfterSuffix
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setPadPosition(EPadPosition padPos);
 
@@ -740,7 +740,7 @@ public:
      * @see #setMinimumExponentDigits
      * @see #isExponentSignAlwaysShown
      * @see #setExponentSignAlwaysShown
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UBool isScientificNotation(void);
 
@@ -753,7 +753,7 @@ public:
      * @see #setMinimumExponentDigits
      * @see #isExponentSignAlwaysShown
      * @see #setExponentSignAlwaysShown
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setScientificNotation(UBool useScientific);
 
@@ -765,7 +765,7 @@ public:
      * @see #setMinimumExponentDigits
      * @see #isExponentSignAlwaysShown
      * @see #setExponentSignAlwaysShown
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int8_t getMinimumExponentDigits(void);
 
@@ -779,7 +779,7 @@ public:
      * @see #getMinimumExponentDigits
      * @see #isExponentSignAlwaysShown
      * @see #setExponentSignAlwaysShown
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setMinimumExponentDigits(int8_t minExpDig);
 
@@ -793,7 +793,7 @@ public:
      * @see #setMinimumExponentDigits
      * @see #getMinimumExponentDigits
      * @see #setExponentSignAlwaysShown
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UBool isExponentSignAlwaysShown(void);
 
@@ -808,7 +808,7 @@ public:
      * @see #setMinimumExponentDigits
      * @see #getMinimumExponentDigits
      * @see #isExponentSignAlwaysShown
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setExponentSignAlwaysShown(UBool expSignAlways);
 
@@ -821,7 +821,7 @@ public:
      * @see setGroupingSize
      * @see NumberFormat::isGroupingUsed
      * @see DecimalFormatSymbols::getGroupingSeparator
-     * @stable
+     * @stable ICU 2.0
      */
     int32_t getGroupingSize(void) const;
 
@@ -834,7 +834,7 @@ public:
      * @see getGroupingSize
      * @see NumberFormat::setGroupingUsed
      * @see DecimalFormatSymbols::setGroupingSeparator
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setGroupingSize(int32_t newValue);
 
@@ -875,7 +875,7 @@ public:
      *
      * @return    TRUE if the decimal separator always appear with decimals.
      * Example: Decimal ON: 12345 -> 12345.; OFF: 12345 -> 12345
-     * @stable
+     * @stable ICU 2.0
      */
     UBool isDecimalSeparatorAlwaysShown(void) const;
 
@@ -885,7 +885,7 @@ public:
      *
      * @param newValue    set TRUE if the decimal separator will always appear with decimals.
      * Example: Decimal ON: 12345 -> 12345.; OFF: 12345 -> 12345
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setDecimalSeparatorAlwaysShown(UBool newValue);
 
@@ -897,7 +897,7 @@ public:
      *                  Previous contents are deleted.
      * @return          A reference to 'result'.
      * @see applyPattern
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeString& toPattern(UnicodeString& result) const;
 
@@ -909,7 +909,7 @@ public:
      *                  Previous contents are deleted.
      * @return          A reference to 'result'.
      * @see applyPattern
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UnicodeString& toLocalizedPattern(UnicodeString& result) const;
  
@@ -951,7 +951,7 @@ public:
      * @param status    Output param set to success/failure code on
      *                  exit. If the pattern is invalid, this will be
      *                  set to a failure result.
-     * @stable
+     * @stable ICU 2.0
      */  
     virtual void applyPattern(const UnicodeString& pattern,
                              UErrorCode& status);
@@ -997,7 +997,7 @@ public:
      * @param status    Output param set to success/failure code on
      *                  exit. If the pattern is invalid, this will be
      *                  set to a failure result.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void applyLocalizedPattern(const UnicodeString& pattern,
                                        UErrorCode& status);
@@ -1010,7 +1010,7 @@ public:
      * @param newValue    the new value of the maximum number of digits 
      *                      allowed in the integer portion of a number.
      * @see NumberFormat#setMaximumIntegerDigits
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setMaximumIntegerDigits(int32_t newValue);
 
@@ -1021,7 +1021,7 @@ public:
      * @param newValue    the new value of the minimum number of digits 
      *                      allowed in the integer portion of a number.
      * @see NumberFormat#setMinimumIntegerDigits
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setMinimumIntegerDigits(int32_t newValue);
 
@@ -1032,7 +1032,7 @@ public:
      * @param newValue    the new value of the maximum number of digits 
      *                    allowed in the fraction portion of a number.
      * @see NumberFormat#setMaximumFractionDigits
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setMaximumFractionDigits(int32_t newValue);
 
@@ -1043,7 +1043,7 @@ public:
      * @param newValue    the new value of the minimum number of digits 
      *                    allowed in the fraction portion of a number.
      * @see NumberFormat#setMinimumFractionDigits
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void setMinimumFractionDigits(int32_t newValue);
 
@@ -1076,7 +1076,7 @@ public:
     /**
      * The resource tags we use to retrieve decimal format data from
      * locale resource bundles.
-     * @stable
+     * @stable ICU 2.0
      */
     static const char fgNumberPatterns[];
 
@@ -1091,7 +1091,7 @@ public:
      * .          Derived::getStaticClassID()) ...
      * </pre>
      * @return          The class ID for all objects of this class.
-     * @stable
+     * @stable ICU 2.0
      */
     static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
 
@@ -1104,7 +1104,7 @@ public:
      * @return          The class ID for this object. All objects of a
      *                  given class have the same class ID.  Objects of
      *                  other classes have different class IDs.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UClassID getDynamicClassID(void) const { return getStaticClassID(); }
 

@@ -105,7 +105,7 @@ public:
 
     /**
      * Creates a FieldPosition object with a non-specified field.
-     * @stable
+     * @stable ICU 2.0
      */
     FieldPosition() 
         : UObject(), fField(DONT_CARE), fBeginIndex(0), fEndIndex(0) {}
@@ -119,7 +119,7 @@ public:
      * @see NumberFormat#FRACTION_FIELD
      * @see DateFormat#YEAR_FIELD
      * @see DateFormat#MONTH_FIELD
-     * @stable
+     * @stable ICU 2.0
      */
     FieldPosition(int32_t field) 
         : UObject(), fField(field), fBeginIndex(0), fEndIndex(0) {}
@@ -127,21 +127,21 @@ public:
     /**
      * Copy constructor
      * @param copy the object to be copied from.
-     * @stable
+     * @stable ICU 2.0
      */
     FieldPosition(const FieldPosition& copy) 
         : UObject(copy), fField(copy.fField), fBeginIndex(copy.fBeginIndex), fEndIndex(copy.fEndIndex) {}
 
     /**
      * Destructor
-     * @stable
+     * @stable ICU 2.0
      */
     ~FieldPosition() {}
 
     /**
      * Assignment operator
      * @param copy the object to be copied from.
-     * @stable
+     * @stable ICU 2.0
      */
     FieldPosition&      operator=(const FieldPosition& copy);
 
@@ -149,7 +149,7 @@ public:
      * Equality operator.
      * @param that    the object to be compared with.
      * @return        TRUE if the two field positions are equal, FALSE otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     UBool              operator==(const FieldPosition& that) const;
 
@@ -157,21 +157,21 @@ public:
      * Equality operator.
      * @param that    the object to be compared with.
      * @return        TRUE if the two field positions are not equal, FALSE otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     UBool              operator!=(const FieldPosition& that) const;
 
     /**
      * Retrieve the field identifier.
      * @return    the field identifier.
-     * @stable
+     * @stable ICU 2.0
      */
     int32_t getField(void) const { return fField; }
 
     /**
      * Retrieve the index of the first character in the requested field.
      * @return    the index of the first character in the requested field.
-     * @stable
+     * @stable ICU 2.0
      */
     int32_t getBeginIndex(void) const { return fBeginIndex; }
 
@@ -180,28 +180,28 @@ public:
      * requested field.
      * @return    the index of the character following the last character in the
      *            requested field.
-     * @stable
+     * @stable ICU 2.0
      */
     int32_t getEndIndex(void) const { return fEndIndex; }
  
     /**
      * Set the field.
      * @param f    the new value of the field.
-     * @stable
+     * @stable ICU 2.0
      */
     void setField(int32_t f) { fField = f; }
 
     /**
      * Set the begin index.  For use by subclasses of Format.
      * @param bi    the new value of the begin index
-     * @stable
+     * @stable ICU 2.0
      */
     void setBeginIndex(int32_t bi) { fBeginIndex = bi; }
 
     /**
      * Set the end index.  For use by subclasses of Format.
      * @param ei    the new value of the end index
-     * @stable
+     * @stable ICU 2.0
      */
     void setEndIndex(int32_t ei) { fEndIndex = ei; }
     

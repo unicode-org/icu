@@ -134,14 +134,14 @@ U_NAMESPACE_BEGIN
  *     delete calendar; // also deletes pdt
  * \endcode
  * </pre>
- * @stable
+ * @stable ICU 2.0
  */
 class U_I18N_API GregorianCalendar: public Calendar {
 public:
 
     /**
      * Useful constants for GregorianCalendar and TimeZone.
-     * @stable
+     * @stable ICU 2.0
      */
     enum EEras {
         BC,
@@ -154,7 +154,7 @@ public:
      *
      * @param success  Indicates the status of GregorianCalendar object construction.
      *                 Returns U_ZERO_ERROR if constructed successfully.
-     * @stable
+     * @stable ICU 2.0
      */
     GregorianCalendar(UErrorCode& success);
 
@@ -166,7 +166,7 @@ public:
      * @param zoneToAdopt     The given timezone.
      * @param success  Indicates the status of GregorianCalendar object construction.
      *                 Returns U_ZERO_ERROR if constructed successfully.
-     * @stable
+     * @stable ICU 2.0
      */
     GregorianCalendar(TimeZone* zoneToAdopt, UErrorCode& success);
 
@@ -177,7 +177,7 @@ public:
      * @param zone     The given timezone.
      * @param success  Indicates the status of GregorianCalendar object construction.
      *                 Returns U_ZERO_ERROR if constructed successfully.
-     * @stable
+     * @stable ICU 2.0
      */
     GregorianCalendar(const TimeZone& zone, UErrorCode& success);
 
@@ -188,7 +188,7 @@ public:
      * @param aLocale  The given locale.
      * @param success  Indicates the status of GregorianCalendar object construction.
      *                 Returns U_ZERO_ERROR if constructed successfully.
-     * @stable
+     * @stable ICU 2.0
      */
     GregorianCalendar(const Locale& aLocale, UErrorCode& success);
 
@@ -201,7 +201,7 @@ public:
      * @param aLocale  The given locale.
      * @param success  Indicates the status of GregorianCalendar object construction.
      *                 Returns U_ZERO_ERROR if constructed successfully.
-     * @stable
+     * @stable ICU 2.0
      */
     GregorianCalendar(TimeZone* zoneToAdopt, const Locale& aLocale, UErrorCode& success);
 
@@ -213,7 +213,7 @@ public:
      * @param aLocale  The given locale.
      * @param success  Indicates the status of GregorianCalendar object construction.
      *                 Returns U_ZERO_ERROR if constructed successfully.
-     * @stable
+     * @stable ICU 2.0
      */
     GregorianCalendar(const TimeZone& zone, const Locale& aLocale, UErrorCode& success);
 
@@ -227,7 +227,7 @@ public:
      * @param date     The value used to set the DATE time field in the calendar.
      * @param success  Indicates the status of GregorianCalendar object construction.
      *                 Returns U_ZERO_ERROR if constructed successfully.
-     * @stable
+     * @stable ICU 2.0
      */
     GregorianCalendar(int32_t year, int32_t month, int32_t date, UErrorCode& success);
 
@@ -243,7 +243,7 @@ public:
      * @param minute   The value used to set the MINUTE time field in the calendar.
      * @param success  Indicates the status of GregorianCalendar object construction.
      *                 Returns U_ZERO_ERROR if constructed successfully.
-     * @stable
+     * @stable ICU 2.0
      */
     GregorianCalendar(int32_t year, int32_t month, int32_t date, int32_t hour, int32_t minute, UErrorCode& success);
 
@@ -260,34 +260,34 @@ public:
      * @param second   The value used to set the SECOND time field in the calendar.
      * @param success  Indicates the status of GregorianCalendar object construction.
      *                 Returns U_ZERO_ERROR if constructed successfully.
-     * @stable
+     * @stable ICU 2.0
      */
     GregorianCalendar(int32_t year, int32_t month, int32_t date, int32_t hour, int32_t minute, int32_t second, UErrorCode& success);
 
     /**
      * Destructor
-     * @stable
+     * @stable ICU 2.0
      */
     virtual ~GregorianCalendar();
 
     /**
      * Copy constructor
      * @param source    the object to be copied.
-     * @stable
+     * @stable ICU 2.0
      */
     GregorianCalendar(const GregorianCalendar& source);
 
     /**
      * Default assignment operator
      * @param right    the object to be copied.
-     * @stable
+     * @stable ICU 2.0
      */
     GregorianCalendar& operator=(const GregorianCalendar& right);
 
     /**
      * Create and return a polymorphic copy of this calendar.
      * @return    return a polymorphic copy of this calendar.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual Calendar* clone(void) const;
 
@@ -298,7 +298,7 @@ public:
      *
      * @param date     The given Gregorian cutover date.
      * @param success  Output param set to success/failure code on exit.
-     * @stable
+     * @stable ICU 2.0
      */
     void setGregorianChange(UDate date, UErrorCode& success);
 
@@ -308,7 +308,7 @@ public:
      * 15, 1582. Previous to this time and date will be Julian dates.
      *
      * @return   The Gregorian cutover time for this calendar.
-     * @stable
+     * @stable ICU 2.0
      */
     UDate getGregorianChange(void) const;
 
@@ -325,7 +325,7 @@ public:
      *
      * @param year  The given year.
      * @return      True if the given year is a leap year; false otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     UBool isLeapYear(int32_t year) const;
 
@@ -348,7 +348,7 @@ public:
      * @param status  Output param set to success/failure code on exit. If any value
      *                previously set in the time field is invalid, this will be set to
      *                an error status.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void add(EDateFields field, int32_t amount, UErrorCode& status);
 
@@ -361,7 +361,7 @@ public:
      * @param status  Output param set to success/failure code on exit. If any value
      *                previously set in the time field is invalid, this will be set to
      *                an error status.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void roll(EDateFields field, int32_t amount, UErrorCode& status);
 
@@ -370,7 +370,7 @@ public:
      * Gregorian DAY_OF_MONTH, 1.
      * @param field    the time field.
      * @return         minimum value for the given field
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t getMinimum(EDateFields field) const;
 
@@ -379,7 +379,7 @@ public:
      * Gregorian DAY_OF_MONTH, 31.
      * @param field    the time field.
      * @return         maximum value for the given field
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t getMaximum(EDateFields field) const;
 
@@ -389,7 +389,7 @@ public:
      * @param field    the time field.
      * @return         highest minimum value for the given field if varies.
      *                 Otherwise same as getMinimum().
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t getGreatestMinimum(EDateFields field) const;
 
@@ -399,7 +399,7 @@ public:
      * @param field    the time field.
      * @return         lowest maximum value for the given field if varies.
      *                 Otherwise same as getMaximum(). 
-     * @stable
+     * @stable ICU 2.0
      */
     virtual int32_t getLeastMaximum(EDateFields field) const;
 
@@ -408,7 +408,7 @@ public:
      * For the Gregorian calendar, this is the same as getMinimum() and getGreatestMinimum().
      * @param field    the time field.
      * @return         the minimum value that this field could have, given the current date.
-     * @stable
+     * @stable ICU 2.0
      */
     int32_t getActualMinimum(EDateFields field) const;
 
@@ -419,7 +419,7 @@ public:
      * for some years the actual maximum for MONTH is 12, and for others 13.
      * @param field    the time field.
      * @return         the maximum value that this field could have, given the current date.
-     * @stable
+     * @stable ICU 2.0
      */
     int32_t getActualMaximum(EDateFields field) const;
 
@@ -430,7 +430,7 @@ public:
      * @param status Fill-in parameter which receives the status of this operation.
      * @return   True if the current date for this Calendar is in Daylight Savings Time,
      *           false, otherwise.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UBool inDaylightTime(UErrorCode& status) const;
 
@@ -444,7 +444,7 @@ public:
      *
      * @return   The class ID for this object. All objects of a given class have the
      *           same class ID. Objects of other classes have different class IDs.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual UClassID getDynamicClassID(void) const { return (UClassID)&fgClassID; }
 
@@ -457,7 +457,7 @@ public:
      *          Derived::getStaticClassID()) ...
      *
      * @return   The class ID for all objects of this class.
-     * @stable
+     * @stable ICU 2.0
      */
     static UClassID getStaticClassID(void) { return (UClassID)&fgClassID; }
 
@@ -466,7 +466,7 @@ protected:
     /**
      * (Overrides Calendar) Converts GMT as milliseconds to time field values.
      * @param status Fill-in parameter which receives the status of this operation.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void computeFields(UErrorCode& status);
 
@@ -477,7 +477,7 @@ protected:
      * @param status  Output param set to success/failure code on exit. If any value
      *                previously set in the time field is invalid, this will be set to
      *                an error status.
-     * @stable
+     * @stable ICU 2.0
      */
     virtual void computeTime(UErrorCode& status);
 
