@@ -65,8 +65,7 @@ void TestGetDefaultRules(){
     const UChar * defaultRulesArray=ucol_getDefaultRulesArray(&size);
     log_verbose("Test the function ucol_getDefaultRulesArray()\n");
 
-    coll = ucol_openRules(defaultRulesArray, size, UCOL_DECOMP_CAN, UCOL_PRIMARY, &status);
-    ucol_setNormalization(coll, UCOL_DEFAULT_NORMALIZATION);
+    coll = ucol_openRules(defaultRulesArray, size, UCOL_ON, UCOL_PRIMARY, &status);
     if(U_SUCCESS(status) && coll !=NULL) {
         binColData = (uint8_t*)ucol_cloneRuleData(coll, &len1, &status);
         
@@ -219,10 +218,10 @@ void TestProperty()
     doAssert( (ucol_getStrength(col) == UCOL_SECONDARY), "collation object has the wrong strength");
 
     log_verbose("testing ucol_setDecomposition() method ...\n");
-    ucol_setNormalization(col, UCOL_NO_NORMALIZATION);
-    doAssert( (ucol_getNormalization(col) != UCOL_DECOMP_CAN_COMP_COMPAT), "collation object's normalization mode is Canonical decomposition followed by canonical composition");
-    doAssert( (ucol_getNormalization(col) != UCOL_DECOMP_CAN), "collation object's normalization mode is canonical decomposition");
-    doAssert( (ucol_getNormalization(col) == UCOL_NO_NORMALIZATION), "collation object has the wrong normalization mode");
+    ucol_setNormalization(col, UNORM_NONE);
+    doAssert( (ucol_getNormalization(col) != UNORM_NFC), "collation object's normalization mode is Canonical decomposition followed by canonical composition");
+    doAssert( (ucol_getNormalization(col) != UNORM_NFD), "collation object's normalization mode is canonical decomposition");
+    doAssert( (ucol_getNormalization(col) == UNORM_NONE), "collation object has the wrong normalization mode");
 
     
     log_verbose("Get display name for the default collation in German : \n");
@@ -328,7 +327,7 @@ void TestRuleBasedColl()
     u_uastrcpy(ruleset1, "&9 < a, A < b, B < c, C; ch, cH, Ch, CH < d, D, e, E");
     u_uastrcpy(ruleset2, "&9 < a, A < b, B < c, C < d, D, e, E");
     
-    col1 = ucol_openRules(ruleset1, u_strlen(ruleset1), UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT_STRENGTH, NULL,&status);
+    col1 = ucol_openRules(ruleset1, u_strlen(ruleset1), UCOL_DEFAULT, UCOL_DEFAULT_STRENGTH, NULL,&status);
     if (U_FAILURE(status)) {
         log_err("RuleBased Collator creation failed.: %s\n", myErrorName(status));
         return;
@@ -337,7 +336,7 @@ void TestRuleBasedColl()
         log_verbose("PASS: RuleBased Collator creation passed\n");
     
     status = U_ZERO_ERROR;
-    col2 = ucol_openRules(ruleset2, u_strlen(ruleset2),  UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT_STRENGTH, NULL, &status);
+    col2 = ucol_openRules(ruleset2, u_strlen(ruleset2),  UCOL_DEFAULT, UCOL_DEFAULT_STRENGTH, NULL, &status);
     if (U_FAILURE(status)) {
         log_err("RuleBased Collator creation failed.: %s\n", myErrorName(status));
         return;
@@ -363,7 +362,7 @@ void TestRuleBasedColl()
     doAssert((u_strcmp(rule2, rule3) != 0), "Default collator getRules failed");
     doAssert((u_strcmp(rule1, rule3) != 0), "Default collator getRules failed");
     
-    col4=ucol_openRules(rule2, u_strlen(rule2), UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT_STRENGTH, NULL, &status);
+    col4=ucol_openRules(rule2, u_strlen(rule2), UCOL_DEFAULT, UCOL_DEFAULT_STRENGTH, NULL, &status);
     if (U_FAILURE(status)) {
         log_err("RuleBased Collator creation failed.: %s\n", myErrorName(status));
         return;
@@ -441,12 +440,12 @@ void TestDecomposition() {
     }
 
     /* there is no reason to have canonical decomposition in en_US OR default locale */
-    if(ucol_getNormalization(vi_VN) != UCOL_DECOMP_CAN)
+    if(ucol_getNormalization(vi_VN) != UNORM_NFD)
       {
         log_err("ERROR: vi_VN collation did not have cannonical decomposition for normalization!\n");
       }
 
-    if(ucol_getNormalization(el_GR) != UCOL_DECOMP_CAN)
+    if(ucol_getNormalization(el_GR) != UNORM_NFD)
       {
         log_err("ERROR: el_GR collation did not have cannonical decomposition for normalization!\n");
       }
@@ -778,7 +777,7 @@ void TestElemIter()
     UErrorCode status = U_ZERO_ERROR;
     log_verbose("testing UCollatorElements begins...\n");
     col = ucol_open("en_US", &status);
-    ucol_setNormalization(col, UCOL_NO_NORMALIZATION);
+    ucol_setNormalization(col, UNORM_NONE);
     if (U_FAILURE(status)) {
         log_err("ERROR: Default collation creation failed.: %s\n", myErrorName(status));
         return;
