@@ -398,22 +398,6 @@ static void _lazyEvaluate_installedLocales(void);
 *******************************************************************************/
 
 
-/*Works like strchr with '_' pr '-'*/
-static const char* _findCharSeparator(const char* string)
-{
-    if (string != NULL) {
-        /*Keeps iterating until an ID separator is found*/
-        while (*string) {
-            if (_isIDSeparator(*string)) {
-                return string;
-            }
-            string++;
-        }
-    }
-    return NULL;
-}
-
-
 static int16_t _findIndex(const char* const* list, const char* key)
 {
     const char* const* anchor = list;

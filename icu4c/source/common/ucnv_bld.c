@@ -31,7 +31,6 @@
 #include "umutex.h"
 #include "cstring.h"
 #include "cmemory.h"
-#include "filestrm.h"
 #include "ucln_cmn.h"
 
 

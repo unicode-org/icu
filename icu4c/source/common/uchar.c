@@ -25,7 +25,6 @@
 #include "unicode/uloc.h"
 #include "umutex.h"
 #include "cmemory.h"
-#include "cstring.h"
 #include "ustr_imp.h"
 #include "ucln_cmn.h"
 

@@ -18,9 +18,7 @@
  *----------------------------------------------------------------------------------*/
 
 #include "unicode/utypes.h"
-#include "unicode/putil.h"
 #include "cmemory.h"
-#include "cstring.h"
 #include "unicode/udata.h"
 
 #include "udatamem.h"
