@@ -1644,7 +1644,7 @@ TestLMBCS() {
          UChar UIn [sizeof(pszUnicode)];
          const UChar * pUIn = UIn;
          
-         int off [sizeof(offsets)];
+         int32_t off [sizeof(offsets)];
          UChar32 uniChar;
 
           /* negative source request should always return U_ILLEGAL_ARGUMENT_ERROR */
