@@ -85,6 +85,7 @@ void UVector::insertElementAt(void* obj, int32_t index, UErrorCode &status) {
             elements[i] = elements[i-1];
         }
         elements[index].pointer = obj;
+		++count;
     }
     /* else index out of range */
 }
