@@ -73,8 +73,7 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
   T_FileStream_writeLine(makefile, tmp2);
 
   sprintf(tmp2,
-	  "GENCMN = $(ICUROOT)%ssource\\tools\\gencmn\\%s\\gencmn.exe\n",
-	  separator, WINBUILDMODE);
+      "GENCMN = $(ICUROOT)%sbin\\gencmn.exe\n", separator);
   T_FileStream_writeLine(makefile, tmp2);
 
   if(isDll) {
@@ -102,8 +101,7 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
       T_FileStream_writeLine(makefile, tmp2);
 
 	  sprintf(tmp2,
-		  "GENCCODE = $(ICUROOT)%ssource\\tools\\genccode\\%s\\genccode.exe\n",
-		  separator, WINBUILDMODE);
+		  "GENCCODE = $(ICUROOT)%sbin\\genccode.exe\n",  separator);
       T_FileStream_writeLine(makefile, tmp2);
 
       T_FileStream_writeLine(makefile, "\n"
