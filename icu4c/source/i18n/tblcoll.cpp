@@ -1413,7 +1413,7 @@ RuleBasedCollator::build(const UnicodeString&   pattern,
 
             // check if french secondary needs to be turned on
             if ((groupChars.size() > 1) &&
-                (groupChars[groupChars.size()-(T_INT32(1))] == '@'))
+                (groupChars[groupChars.size()-(T_INT32(1))] == 0x0040))
             {
                 data->isFrenchSec = TRUE;
                 groupChars.remove(groupChars.size()-(T_INT32(1)));
@@ -2201,7 +2201,7 @@ RuleBasedCollator::chopLocale(UnicodeString& localeName)
 
     for (i = size - 1; i > 0; i--)
     {
-        if (localeName[i] == '_')
+        if (localeName[i] == 0x005F)
         {
             break;
         }

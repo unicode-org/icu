@@ -92,13 +92,14 @@ CharTypeBuilder::getByteArray(FILE* input)
 				if (unicode == LAST_CHAR_CODE_IN_FILE)
 					break;
 			}
+            /* Check the database to see if this needs to be updated!!! */
+			ucmp8_setRange(charTypeArray, 0x3401, 0x4db4, ucmp8_get(charTypeArray, 0x3400));
 			ucmp8_setRange(charTypeArray, 0x4e01, 0x9fa4, ucmp8_get(charTypeArray, 0x4e00));
 			ucmp8_setRange(charTypeArray, 0xac01, 0xd7a2, ucmp8_get(charTypeArray, 0xac00));
 			ucmp8_setRange(charTypeArray, 0xd801, 0xdb7e, ucmp8_get(charTypeArray, 0xd800));
 			ucmp8_setRange(charTypeArray, 0xdb81, 0xdbfe, ucmp8_get(charTypeArray, 0xdb80));
 			ucmp8_setRange(charTypeArray, 0xdc01, 0xdffe, ucmp8_get(charTypeArray, 0xdc00));
 			ucmp8_setRange(charTypeArray, 0xe001, 0xf8fe, ucmp8_get(charTypeArray, 0xe000));
-			ucmp8_setRange(charTypeArray, 0xf901, 0xfa2c, ucmp8_get(charTypeArray, 0xf900));
 
 			if (input) fclose(input);
 			ucmp8_compact(charTypeArray, 1);

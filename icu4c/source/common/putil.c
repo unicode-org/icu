@@ -678,12 +678,16 @@ icu_getDefaultDataDirectory()
 #endif
 
 #ifdef WIN32
-  return "\\icu\\data\\";
+  char * dpath;
+  dpath = getenv("ICU_DATA");
+  if (!dpath || !*dpath)
+      return "\\icu\\data\\";
+  return dpath;
 #endif
 
 #ifdef OS2
   char * dpath;
-  dpath = getenv("ICUPATH");
+  dpath = getenv("ICU_DATA");
   if (!dpath || !*dpath)
       return "\\icu\\data\\";
   return dpath;

@@ -404,10 +404,15 @@ void   shareConverterData (UConverterSharedData * data)
 
   if (SHARED_DATA_HASHTABLE == NULL)
     {
-      umtx_lock (NULL);
-      SHARED_DATA_HASHTABLE = uhash_open ((UHashFunction) uhash_hashSharedData, &err);
-      umtx_unlock (NULL);
+      UHashtable* myHT = uhash_openSize ((UHashFunction) uhash_hashSharedData, 
+					 AVAILABLE_CONVERTERS,
+					 &err);
       if (FAILURE (err)) return;
+      umtx_lock (NULL);
+      if (SHARED_DATA_HASHTABLE == NULL) SHARED_DATA_HASHTABLE = myHT;
+      else uhash_close(myHT);
+      umtx_unlock (NULL);
+      
     }
   umtx_lock (NULL);
   uhash_put(SHARED_DATA_HASHTABLE,
@@ -493,32 +498,43 @@ bool_t   isDataBasedConverter (const char *name)
   /*Lazy evaluates the hashtable */
   if (ALGORITHMIC_CONVERTERS_HASHTABLE == NULL)
     {
-      umtx_lock (NULL);
-      ALGORITHMIC_CONVERTERS_HASHTABLE = uhash_open ((UHashFunction)uhash_hashIString, &err);
-      if (FAILURE (err))return FALSE;
-      while (algorithmicConverterNames[i][0] != '\0')
-	{
-	  /*Stores in the hashtable a pointer to the statically init'ed array containing
-	   *the names
-	   */
+      UHashtable* myHT;
+      
+      {
+	  myHT = uhash_open (uhash_hashIString, &err);
 	  
-	  uhash_put (ALGORITHMIC_CONVERTERS_HASHTABLE,
-		     (void *) algorithmicConverterNames[i],
-		     &err);
-	  i++;			/*Some Compilers (Solaris WSpro and MSVC-Release Mode
-				 *don't differentiate between i++ and ++i
-				 *so we have to increment in a line by itself
-				 */
-	}
+	  if (FAILURE (err)) return FALSE;
+	  while (algorithmicConverterNames[i][0] != '\0')
+	    {
+	      /*Stores in the hashtable a pointer to the statically init'ed array containing
+	       *the names
+	       */
+	      
+	      uhash_put (myHT,
+			 (void *) algorithmicConverterNames[i],
+			 &err);
+	      i++;			/*Some Compilers (Solaris WSpro and MSVC-Release Mode
+					 *don't differentiate between i++ and ++i
+					 *so we have to increment in a line by itself
+					 */
+	    }
+      }
+      
+      umtx_lock (NULL);
+      if (ALGORITHMIC_CONVERTERS_HASHTABLE == NULL) ALGORITHMIC_CONVERTERS_HASHTABLE = myHT;
+      else uhash_close(myHT);      
       umtx_unlock (NULL);
+      
+      
     }
-
+    
+  
   if (uhash_get (ALGORITHMIC_CONVERTERS_HASHTABLE,
 		 uhash_hashIString (name)) == NULL)
     {
       result = TRUE;
     }
-
+  
 
   return result;
 }
