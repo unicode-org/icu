@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2001/11/28 04:49:08 $
- * $Revision: 1.81 $
+ * $Date: 2001/11/28 17:40:40 $
+ * $Revision: 1.82 $
  *
  *****************************************************************************************
  */
@@ -2290,7 +2290,7 @@ public class TransliteratorTest extends TestFmwk {
         String result = rsource.toString();
         if (!expectAux(t.getID() + ":Replaceable", source, result, expectedResult)) return;
 
-        // Test keyboard (incremental) transliteration -- this result
+        // Test incremental transliteration -- this result
         // must be the same after we finalize (see below).
         Vector v = new Vector();
         v.add(source);
@@ -2305,7 +2305,9 @@ public class TransliteratorTest extends TestFmwk {
                 //v.add(i == 0 ? "" : " + " + source.charAt(i) + "");
                 //log.append(source.charAt(i)).append(" -> "));
                 t.transliterate(rsource, index, source.charAt(i));
-                v.add(formatInput(rsource, index) + source.substring(i+1));
+                //v.add(formatInput(rsource, index) + source.substring(i+1));
+                v.add(formatInput(rsource, index) +
+                      ((i<source.length()-1)?(" + '" + source.charAt(i+1) + "' ->"):" =>"));
             }
         }
 
@@ -2319,7 +2321,7 @@ public class TransliteratorTest extends TestFmwk {
 
         String[] results = new String[v.size()];
         v.copyInto(results);
-        expectAux(t.getID() + ":Keyboard", results,
+        expectAux(t.getID() + ":Incremental", results,
                   result.equals(expectedResult),
                   expectedResult);
     }
@@ -2364,8 +2366,6 @@ public class TransliteratorTest extends TestFmwk {
         return appendTo;
     }
     
-    static final String lineSeparator = System.getProperty("line.separator") + "\t";
-
     boolean expectAux(String tag, String source,
                    String result, String expectedResult) {
         return expectAux(tag, new String[] {source, result},
@@ -2391,7 +2391,8 @@ public class TransliteratorTest extends TestFmwk {
 
     boolean expectAux(String tag, String[] results, boolean pass,
                    String expectedResult) {
-        String result = "";
+        logln((pass?"(":"FAIL: (")+tag+")", pass);
+
         for (int i = 0; i < results.length; ++i) {
             String label;
             if (i == 0) {
@@ -2399,19 +2400,12 @@ public class TransliteratorTest extends TestFmwk {
             } else if (i == results.length - 1) {
                 label = "result:   ";
             } else {
-                if (!isVerbose()) continue;
+                if (!isVerbose() && pass) continue;
                 label = "interm" + i + ":  ";
             }
-            result += lineSeparator + label + Utility.escape(results[i]);
+            logln("    " + label + results[i], pass, false);
         }
-        if (pass) {
-            logln("("+tag+") "
-                  + result);
-        } else {
-            errln("FAIL: ("+tag+") "
-                  + result
-                  + lineSeparator + "expected: " + Utility.escape(expectedResult));
-        }
+
         return pass;
     }
 }
