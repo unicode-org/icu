@@ -6752,7 +6752,7 @@ ucol_setUpLatinOne(UCollator *coll, UErrorCode *status) {
           do {
               CE = *(coll->contractionCEs +
                   (UCharOffset - coll->contractionIndex));
-              if(getCETag(CE) == EXPANSION_TAG) {
+              if(CE > UCOL_NOT_FOUND && getCETag(CE) == EXPANSION_TAG) {
                 uint32_t size;
                 uint32_t i;    /* general counter */
                 uint32_t *CEOffset = (uint32_t *)coll->image+getExpansionOffset(CE); /* find the offset to expansion table */
