@@ -125,11 +125,11 @@ SOURCE=.\unicode\uwmsg.h
 # PROP Default_Filter "txt"
 # Begin Source File
 
-SOURCE=.\bundles\fr.txt
+SOURCE=.\resources\fr.txt
 # End Source File
 # Begin Source File
 
-SOURCE=.\bundles\root.txt
+SOURCE=.\resources\root.txt
 # End Source File
 # End Group
 # Begin Group "Build Scripts"
