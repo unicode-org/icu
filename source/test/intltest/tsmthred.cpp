@@ -1043,7 +1043,7 @@ void MultithreadTest::TestCollators()
       log("%i ", j);
       spawnResult = tests[j].start();
       if(spawnResult != 0) {
-	logln("Couldn't spawn more than %i threads", noSpawned);
+	infoln("THREAD INFO: Couldn't spawn more than %i threads", noSpawned);
 	break;
       }
       noSpawned++;
@@ -1080,7 +1080,7 @@ void MultithreadTest::TestCollators()
 
         if(completed == noSpawned)
         {
-            logln("Done!");
+            logln("Done! All %i tests are finished", noSpawned);
 
             if(terrs)
             {
