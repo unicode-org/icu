@@ -117,7 +117,7 @@ ValueRecords.o
 
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 
-DEPS = $(LAYOUT_OBJS:.o=.d)
+DEPS = $(OBJECTS:.o=.d)
 
 ## Header files to install
 HEADERS= $(srcdir)/*LayoutEngine.h $(srcdir)/LE*.h
