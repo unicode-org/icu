@@ -233,6 +233,8 @@ static const u_sprintf_info g_u_sprintf_infos[108] = {
 #define USPRINTF_BUFFER_SIZE 1024
 #define USPRINTF_EXP_BUFFER_SIZE 8
 
+static UChar gNullStr[] = {0x28, 0x6E, 0x75, 0x6C, 0x6C, 0x29, 0}; /* (null) */
+
 int32_t 
 u_sprintf(UChar       *buffer,
           const char    *locale,
@@ -421,7 +423,11 @@ u_sprintf_string_handler(u_localized_string *output,
     const char *arg = (const char*)(args[0].ptrValue);
     
     /* convert from the default codepage to Unicode */
-    s = ufmt_defaultCPToUnicode(arg, strlen(arg));
+    if (arg)
+        s = ufmt_defaultCPToUnicode(arg, strlen(arg));
+    else {
+        s = gNullStr;
+    }
     if(s == 0) {
         return 0;
     }
@@ -441,7 +447,9 @@ u_sprintf_string_handler(u_localized_string *output,
     }
     
     /* clean up */
-    uprv_free(s);
+    if (gNullStr != s) {
+        uprv_free(s);
+    }
     
     return written;
 }
@@ -1038,6 +1046,9 @@ u_sprintf_ustring_handler(u_localized_string *output,
     const UChar *arg = (const UChar*)(args[0].ptrValue);
     
     /* allocate enough space for the buffer */
+    if (!arg) {
+        arg = gNullStr;
+    }
     len = u_strlen(arg);
     
     /* width = minimum # of characters to write */
@@ -1380,7 +1391,7 @@ u_vsnprintf_u(UChar    *buffer,
         alias += patCount;
     }
   
-    // Release the cloned bundle, if we cloned it.
+    /* Release the cloned bundle, if we cloned it. */
     if(outStr.fOwnBundle) {
         u_locbund_delete(outStr.fBundle);
         outStr.fBundle = NULL;

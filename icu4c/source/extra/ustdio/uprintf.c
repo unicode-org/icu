@@ -233,6 +233,8 @@ static const u_printf_info g_u_printf_infos[108] = {
 #define UFPRINTF_BUFFER_SIZE 1024
 #define UFPRINTF_EXP_BUFFER_SIZE 8
 
+static UChar gNullStr[] = {0x28, 0x6E, 0x75, 0x6C, 0x6C, 0x29, 0}; /* (null) */
+
 int32_t
 u_fprintf(    UFILE        *f,
           const char    *patternSpecification,
@@ -340,13 +342,18 @@ u_printf_string_handler(UFILE                 *stream,
                         const u_printf_spec_info     *info,
                         const ufmt_args            *args)
 {
-    UChar *s;
+    UChar *s = NULL;
     int32_t len, written;
     const char *arg = (const char*)(args[0].ptrValue);
 
     /* convert from the default codepage to Unicode */
-    s = ufmt_defaultCPToUnicode(arg, strlen(arg));
-    if(s == 0) {
+    if (arg) {
+        s = ufmt_defaultCPToUnicode(arg, strlen(arg));
+    }
+    else {
+        s = gNullStr;
+    }
+    if(s == NULL) {
         return 0;
     }
     len = u_strlen(s);
@@ -365,7 +372,9 @@ u_printf_string_handler(UFILE                 *stream,
     }
 
     /* clean up */
-    uprv_free(s);
+    if (gNullStr != s) {
+        uprv_free(s);
+    }
 
     return written;
 }
@@ -957,10 +966,13 @@ u_printf_ustring_handler(UFILE                 *stream,
                          const u_printf_spec_info     *info,
                          const ufmt_args         *args)
 {
-    int32_t len, written;
+    int32_t len = 0, written;
     const UChar *arg = (const UChar*)(args[0].ptrValue);
 
     /* allocate enough space for the buffer */
+    if (arg == NULL) {
+        arg = gNullStr;
+    }
     len = u_strlen(arg);
 
     /* width = minimum # of characters to write */
