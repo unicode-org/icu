@@ -624,6 +624,14 @@ public:
      */
     virtual Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
 
+    /** Get the locale for this numeric format object. You can choose between valid and actual locale.
+     *  @param type type of the locale we're looking for (valid or actual) 
+     *  @param status error code for the operation
+     *  @return the locale
+     *  @internal
+     */
+    virtual const char* getLocaleInternal(ULocDataLocaleType type, UErrorCode &status) const;
+
 public:
 
     /**
@@ -664,6 +672,9 @@ private:
     static const int32_t fgMinIntegerDigits;
 
 private:
+
+    char validLocale[50];
+    char actualLocale[50];
 
     enum EStyles {
         kNumberStyle,

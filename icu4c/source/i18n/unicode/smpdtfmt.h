@@ -583,6 +583,22 @@ public:
      */
     virtual void adoptCalendar(Calendar* calendarToAdopt);
 
+    /** Get the locale for this date format object. You can choose between valid and actual locale.
+     *  @param type type of the locale we're looking for (valid or actual) 
+     *  @param status error code for the operation
+     *  @return the locale
+     *  @draft ICU 2.8
+     */
+    virtual Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
+
+    /** Get the locale for this date format object. You can choose between valid and actual locale.
+     *  @param type type of the locale we're looking for (valid or actual) 
+     *  @param status error code for the operation
+     *  @return the locale
+     *  @internal
+     */
+    virtual const char* getLocaleInternal(ULocDataLocaleType type, UErrorCode &status) const;
+
 private:
     friend class DateFormat;
 

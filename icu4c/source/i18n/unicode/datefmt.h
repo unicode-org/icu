@@ -609,7 +609,7 @@ public:
      *  @return the locale
      *  @draft ICU 2.8
      */
-    virtual Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
+    virtual Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const = 0;
 
 protected:
     /**
