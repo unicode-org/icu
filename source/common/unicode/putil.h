@@ -302,13 +302,29 @@ u_getVersion(UVersionInfo versionArray);
  * - avoid wrapping around at high addresses
  * - make sure that the returned pointer is not farther from base than 0x7fffffff
  *
- * For some architectures (like AS/400), a custom macro must be defined in platform.h.in or similar.
- *
  * @param base The beginning of a buffer to find the maximum offset from
  * @internal
  */
 #ifndef U_MAX_PTR
-#   define U_MAX_PTR(base) ((void *)(((char *)(base)+0x7fffffff)>(char *)(base) ? ((char *)(base)+0x7fffffff) : (char *)-1))
+#  ifdef OS390
+#    define U_MAX_PTR(base) ((void *)(((char *)(base)+0x3fffffff) < (char *)0x7fffffff ? ((char *)(base)+0x3fffffff) : (char *)0x7fffffff))
+#  elif defined(OS400)
+/*
+ * With the provided macro we should never be out of range of a given segment
+ * (a traditional/typical segment that is).  Our segments have 5 bytes for the id
+ * and 3 bytes for the offset.  The key is that the casting takes care of only
+ * retrieving the offset portion minus x1000.  Hence, the smallest offset seen in
+ * a program is x001000 and when casted to an int would be 0.  That's why we can
+ * only add 0xffefff.  Otherwise, we would exceed the segment.
+ *
+ * Currently, 16MB is the current addressing limitation on as/400.  This macro
+ * may eventually be changed to use 2GB addressability for the newer version of
+ * as/400 machines.
+ */
+#    define U_MAX_PTR(base) ((void *)(((char *)base)-((int32_t)(base))+((int32_t)0xffefff)))
+#  else
+#    define U_MAX_PTR(base) ((void *)(((char *)(base)+0x7fffffff) > (char *)(base) ? ((char *)(base)+0x7fffffff) : (char *)-1))
+#  endif
 #endif
 
 #endif
