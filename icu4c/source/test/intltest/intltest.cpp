@@ -33,6 +33,7 @@
 #include "umutex.h"
 #include "uassert.h"
 #include "cmemory.h"
+#include "uoptions.h"
 
 #ifdef XP_MAC_CONSOLE
 #include <console.h>
@@ -968,27 +969,12 @@ main(int argc, char* argv[])
     UBool name = FALSE;
     UBool leaks = FALSE;
     UBool warnOnMissingData = FALSE;
+    UBool defaultDataFound = FALSE;
     UErrorCode errorCode = U_ZERO_ERROR;
     UConverter *cnv = NULL;
     const char *warnOrErr = "Failure";
 
-#ifdef XP_MAC_CONSOLE
-    argc = ccommand( &argv );
-#endif
-
-    /* Initialize ICU */
-    IntlTest::setICU_DATA();   // Must set data directory before u_init() is called.
-    u_init(&errorCode);
-    if (U_FAILURE(errorCode)) {
-        fprintf(stderr,
-                "#### %s: u_init() failed, error is \"%s\".\n"
-                "#### Most commonly indicates that the ICU data is not accesible.\n"
-                "#### Check setting of ICU_DATA, or check that ICU data library is available\n"
-                "#### ICU_DATA is currently set to \"%s\"\n", argv[0], u_errorName(errorCode), u_getDataDirectory());
-        u_cleanup();
-        return 1;
-    }
-
+    U_MAIN_INIT_ARGS(argc, argv);
 
     for (int i = 1; i < argc; ++i) {
         if (argv[i][0] == '-') {
@@ -1065,19 +1051,41 @@ main(int argc, char* argv[])
     fprintf(stdout, "   Leaks (l)             : %s\n", (leaks?      "On" : "Off"));
     fprintf(stdout, "-----------------------------------------------\n");
 
-    // Check that u_init() works
-    errorCode = U_ZERO_ERROR;
+    /* Check whether ICU will initialize without forcing the build data directory into
+     *  the ICU_DATA path.  Success here means either the data dll contains data, or that
+     *  this test program was run with ICU_DATA set externally.  Failure of this check
+     *  is normal when ICU data is not packaged into a shared library.
+     *
+     *  Whether or not this test succeeds, we want to cleanup and reinitialize
+     *  with a data path so that data loading from individual files can be tested.
+     */
     u_init(&errorCode);
     if (U_FAILURE(errorCode)) {
-        fprintf(stdout,
-            "*** u_init() failed with error code = %s\n"
-                "*** Check the ICU_DATA environment variable and\n"
-                "*** check that the data files are present.\n",
-                u_errorName(errorCode));
-        if(!warnOnMissingData) {
-          fprintf(stdout, "*** Exiting.  Use the '-w' option if data files were\n*** purposely removed, to continue test anyway.\n");
-          return 1;
-        }
+        fprintf(stderr,
+            "#### Note:  ICU Init without build-specific setDataDirectory() failed.\n");
+        defaultDataFound = FALSE;
+    }
+    else {
+        defaultDataFound = TRUE;
+    }
+    u_cleanup();
+    errorCode = U_ZERO_ERROR;
+
+    /* Initialize ICU */
+    if (!defaultDataFound) {
+        IntlTest::setICU_DATA();   // Must set data directory before u_init() is called.
+    }
+    u_init(&errorCode);
+    if (U_FAILURE(errorCode)) {
+        fprintf(stderr,
+            "#### ERROR! %s: u_init() failed with status = \"%s\".\n"
+            "*** Check the ICU_DATA environment variable and \n"
+            "*** check that the data files are present.\n", argv[0], u_errorName(errorCode));
+            if(warnOnMissingData == 0) {
+                fprintf(stderr, "*** Exiting.  Use the '-w' option if data files were\n*** purposely removed, to continue test anyway.\n");
+                u_cleanup();
+                return 1;
+            }
     }
 
 
