@@ -162,7 +162,7 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
 
 U_CAPI int32_t U_EXPORT2
 u_getIntPropertyValue(UChar32 c, UProperty which) {
-    UErrorCode errorCode;
+    UErrorCode errorCode=U_ZERO_ERROR;
 
     if(which<UCHAR_BINARY_START) {
         return 0; /* undefined */
@@ -190,7 +190,6 @@ u_getIntPropertyValue(UChar32 c, UProperty which) {
             return (int32_t)u_charType(c);
         case UCHAR_JOINING_GROUP:
             {
-                UErrorCode errorCode=U_ZERO_ERROR;
                 UBiDiProps *bdp=ubidi_getSingleton(&errorCode);
                 if(bdp!=NULL) {
                     return ubidi_getJoiningGroup(bdp, c);
@@ -200,7 +199,6 @@ u_getIntPropertyValue(UChar32 c, UProperty which) {
             }
         case UCHAR_JOINING_TYPE:
             {
-                UErrorCode errorCode=U_ZERO_ERROR;
                 UBiDiProps *bdp=ubidi_getSingleton(&errorCode);
                 if(bdp!=NULL) {
                     return ubidi_getJoiningType(bdp, c);
@@ -213,7 +211,6 @@ u_getIntPropertyValue(UChar32 c, UProperty which) {
         case UCHAR_NUMERIC_TYPE:
             return (int32_t)GET_NUMERIC_TYPE(u_getUnicodeProperties(c, -1));
         case UCHAR_SCRIPT:
-            errorCode=U_ZERO_ERROR;
             return (int32_t)uscript_getScript(c, &errorCode);
         case UCHAR_HANGUL_SYLLABLE_TYPE:
             return uchar_getHST(c);

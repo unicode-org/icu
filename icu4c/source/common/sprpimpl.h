@@ -88,7 +88,7 @@ struct UStringPrepProfile{
     UTrie sprepTrie;
     const uint16_t* mappingData;
     UDataMemory* sprepData;
-    UBiDiProps *bdp; // used only if checkBiDi is set
+    UBiDiProps *bdp; /* used only if checkBiDi is set */
     UBool isDataLoaded;
     int32_t refCount;
     UBool doNFKC;
