@@ -10,7 +10,7 @@
 #include <cstring.h>
 
 #include "unicode/decimfmt.h"
-//#include "unicode/datefmt.h"
+#include "unicode/ucurr.h"
 #include "unicode/smpdtfmt.h"
 
 const char* rawData[27][7] = {
@@ -1077,6 +1077,8 @@ LocaleTest::TestEuroSupport()
                             "el_GR",
                             "en_BE",
                             "en_IE",
+                            "en_GB_EURO",
+                            "en_US_EURO",
                             "es_ES",
                             "eu_ES",
                             "fi_FI",
@@ -1100,24 +1102,51 @@ LocaleTest::TestEuroSupport()
     for (;*locales!=NULL;locales++) {
         Locale loc (*locales);
         UnicodeString temp;
-            NumberFormat *nf = NumberFormat::createCurrencyInstance(loc, status);
-            UnicodeString pos;
-            nf->format(271828.182845, pos);
-            UnicodeString neg;
-            nf->format(-271828.182845, neg);
-            if (pos.indexOf(EURO_CURRENCY) >= 0 &&
-                neg.indexOf(EURO_CURRENCY) >= 0) {
-                logln("Ok: " + (temp=loc.getName()) +
-                      ": " + pos + " / " + neg);
-            }
-            else {
-                errln("Fail: " + (temp=loc.getName()) +
-                      " formats without " + EURO_CURRENCY +
-                      ": " + pos + " / " + neg +
-                      "\n*** THIS FAILURE MAY ONLY MEAN THAT LOCALE DATA HAS CHANGED ***");
-            }
+        NumberFormat *nf = NumberFormat::createCurrencyInstance(loc, status);
+        UnicodeString pos;
+        nf->format(271828.182845, pos);
+        UnicodeString neg;
+        nf->format(-271828.182845, neg);
+        if (pos.indexOf(EURO_CURRENCY) >= 0 &&
+            neg.indexOf(EURO_CURRENCY) >= 0) {
+            logln("Ok: " + (temp=loc.getName()) +
+                ": " + pos + " / " + neg);
+        }
+        else {
+            errln("Fail: " + (temp=loc.getName()) +
+                " formats without " + EURO_CURRENCY +
+                ": " + pos + " / " + neg +
+                "\n*** THIS FAILURE MAY ONLY MEAN THAT LOCALE DATA HAS CHANGED ***");
+        }
         
-            delete nf;
+        delete nf;
+    }
+
+    UnicodeString dollarStr("USD", ""), euroStr("EUR", ""), genericStr((UChar)0x00a4), resultStr;
+    status = U_ZERO_ERROR;
+
+    resultStr = ucurr_forLocale("en_US", &status);
+    if (dollarStr != resultStr) {
+        errln("Fail: en_US didn't return USD");
+    }
+    resultStr = ucurr_forLocale("en_US_EURO", &status);
+    if (euroStr != resultStr) {
+        errln("Fail: en_US_EURO didn't return EUR");
+    }
+    resultStr = ucurr_forLocale("en_GB_EURO", &status);
+    if (euroStr != resultStr) {
+        errln("Fail: en_GB_EURO didn't return EUR");
+    }
+    resultStr = ucurr_forLocale("en_US_PREEURO", &status);
+    if (dollarStr != resultStr) {
+        errln("Fail: en_US_PREEURO didn't fallback to en_US");
+    }
+    resultStr = ucurr_forLocale("en_US_Q", &status);
+    if (dollarStr != resultStr) {
+        errln("Fail: en_US_Q didn't fallback to en_US");
+    }
+    if (NULL != ucurr_forLocale("en_QQ", &status) || U_SUCCESS(status)) {
+        errln("Fail: en_QQ didn't return NULL");
     }
 }
 
