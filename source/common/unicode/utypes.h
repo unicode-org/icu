@@ -188,12 +188,19 @@ typedef void* UClassID;
 #ifdef U_COMMON_IMPLEMENTATION
 #define U_COMMON_API  U_EXPORT
 #define U_I18N_API    U_IMPORT
+#define U_LAYOUT_API  U_IMPORT
 #elif defined(U_I18N_IMPLEMENTATION)
 #define U_COMMON_API  U_IMPORT
 #define U_I18N_API    U_EXPORT
+#define U_LAYOUT_API  U_IMPORT
+#elif defined(U_LAYOUT_IMPLEMENTATION)
+#define U_COMMON_API  U_IMPORT
+#define U_I18N_API    U_IMPORT
+#define U_LAYOUT_API  U_EXPORT
 #else
 #define U_COMMON_API  U_IMPORT
 #define U_I18N_API    U_IMPORT
+#define U_LAYOUT_API  U_IMPORT
 #endif
 /*===========================================================================*/
 /* UErrorCode */
