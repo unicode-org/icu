@@ -529,15 +529,17 @@ u_fgets(UChar        *s,
                 count++;
                 *(sItr++) = *(alias++);
             }
-            currDelim = 0;
+            currDelim = 1;  /* This isn't a newline, but it's used to say
+                            that we should break later. We've checked all
+                            possible newline combinations even across buffer
+                            boundaries. */
         }
 
         /* update the current buffer position */
         str->fPos = alias;
 
         /* if we found a delimiter */
-        if (alias < str->fLimit && !currDelim) {
-
+        if (currDelim == 1) {
             /* break out */
             break;
         }
