@@ -1505,6 +1505,9 @@ u_vfprintf_u(    UFILE        *f,
           case ufmt_date:
             args.dateValue = va_arg(ap, UDate);
             break;
+
+          default:
+            break;  /* Should never get here */
           }
         }
 

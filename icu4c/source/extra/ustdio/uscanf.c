@@ -175,6 +175,10 @@ u_scanf_scanset_handler(UFILE             *stream,
             const UChar        *fmt,
             int32_t            *consumed);
 
+int32_t
+u_scanf_skip_leading_ws(UFILE     *stream,
+            UChar     pad);
+
 /* ANSI style formatting */
 /* Use US-ASCII characters only for formatting */
 
@@ -1311,6 +1315,9 @@ u_vfscanf_u(    UFILE        *f,
           case ufmt_ustring:
             args.ptrValue = va_arg(ap, UChar*);
             break;
+
+          default:
+            break;  /* Should never get here */
           }
         }
         /* call the handler function */

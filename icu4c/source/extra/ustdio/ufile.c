@@ -123,7 +123,7 @@ ufile_lookup_codepage(const char *locale)
   return 0;
 }
 
-UBool hasICUData(const char *cp) {
+static UBool hasICUData(const char *cp) {
     UErrorCode status = U_ZERO_ERROR;
     UConverter *cnv = NULL;
 #if 0
