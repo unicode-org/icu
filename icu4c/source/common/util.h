@@ -87,6 +87,27 @@ class U_COMMON_API ICU_Utility /* not : public UObject because all methods are s
                                   UBool advance = FALSE);
 
     /**
+     * Skip over whitespace in a Replaceable.  Whitespace is defined by
+     * uprv_isRuleWhiteSpace().  Skipping may be done in the forward or
+     * reverse direction.  In either case, the leftmost index will be
+     * inclusive, and the rightmost index will be exclusive.  That is,
+     * given a range defined as [start, limit), the call
+     * skipWhitespace(text, start, limit) will advance start past leading
+     * whitespace, whereas the call skipWhitespace(text, limit, start),
+     * will back up limit past trailing whitespace.
+     * @param text the text to be analyzed
+     * @param pos either the start or limit of a range of 'text', to skip
+     * leading or trailing whitespace, respectively
+     * @param stop either the limit or start of a range of 'text', to skip
+     * leading or trailing whitespace, respectively
+     * @return the new start or limit, depending on what was passed in to
+     * 'pos'
+     */
+//?FOR FUTURE USE.  DISABLE FOR NOW for coverage reasons.
+//?    static int32_t skipWhitespace(const Replaceable& text,
+//?                                  int32_t pos, int32_t stop);
+
+    /**
      * Parse a single non-whitespace character 'ch', optionally
      * preceded by whitespace.
      * @param id the string to be parsed
@@ -122,6 +143,27 @@ class U_COMMON_API ICU_Utility /* not : public UObject because all methods are s
     static int32_t parsePattern(const UnicodeString& rule, int32_t pos, int32_t limit,
                                 const UnicodeString& pattern, int32_t* parsedInts);
         
+    /**
+     * Parse a pattern string within the given Replaceable and a parsing
+     * pattern.  Characters are matched literally and case-sensitively
+     * except for the following special characters:
+     *
+     * ~  zero or more uprv_isRuleWhiteSpace chars
+     *
+     * If end of pattern is reached with all matches along the way,
+     * pos is advanced to the first unparsed index and returned.
+     * Otherwise -1 is returned.
+     * @param pat pattern that controls parsing
+     * @param text text to be parsed, starting at index
+     * @param index offset to first character to parse
+     * @param limit offset after last character to parse
+     * @return index after last parsed character, or -1 on parse failure.
+     */
+    static int32_t parsePattern(const UnicodeString& pat,
+                                const Replaceable& text,
+                                int32_t index,
+                                int32_t limit);
+
     /**
      * Parse an integer at pos, either of the form \d+ or of the form
      * 0x[0-9A-Fa-f]+ or 0[0-7]+, that is, in standard decimal, hex,
