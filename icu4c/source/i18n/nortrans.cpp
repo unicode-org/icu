@@ -18,6 +18,11 @@
 U_NAMESPACE_BEGIN
 
 /**
+ * Mutex for statics IN THIS FILE
+ */
+static UMTX MUTEX = 0;
+
+/**
  * Generated in unicodetools, NFSkippable
  */
 static UnicodeSet* SKIPPABLES = NULL;
@@ -318,7 +323,7 @@ void NormalizationTransliterator::handleTransliterate(Replaceable& text, UTransP
 
 void NormalizationTransliterator::initStatics() {
     if (SKIPPABLES == NULL) {
-        Mutex lock;
+        Mutex lock(&MUTEX);
         if (SKIPPABLES == NULL) {
             SKIPPABLES = new UnicodeSet[4];
             UErrorCode ec = U_ZERO_ERROR;
@@ -651,6 +656,7 @@ void NormalizationTransliterator::cleanup() {
     if (SKIPPABLES != NULL) {
         delete[] SKIPPABLES;
         SKIPPABLES = NULL;
+        umtx_destroy(&MUTEX);
     }
 }
 
