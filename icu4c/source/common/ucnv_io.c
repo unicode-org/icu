@@ -460,7 +460,17 @@ findTaggedAliasListsOffset(const char *alias, const char *standard, UErrorCode *
                         if (currList[currAlias]
                             && ucnv_compareNames(alias, GET_STRING(currList[currAlias]))==0)
                         {
-                            return listOffset;
+                            /*return listOffset;*/
+                            uint32_t currTagNum = idx/gConverterListSize;
+                            uint32_t currConvNum = (idx - currTagNum*gConverterListSize);
+                            uint32_t tempListOffset = gTaggedAliasArray[tagNum*gConverterListSize + currConvNum];
+                            if (tempListOffset && gTaggedAliasLists[tempListOffset + 1]) {
+                                return tempListOffset;
+                            }
+                            /* else keep on looking */
+                            /* We could speed this up by starting on the next row
+                               because an alias is unique per row, right now.
+                               This would change if alias versioning appears. */
                         }
                     }
                 }
@@ -555,6 +565,9 @@ ucnv_openStandardNames(const char *convName,
     if (haveAliasData(pErrorCode) && isAlias(convName, pErrorCode)) {
         uint32_t listOffset = findTaggedAliasListsOffset(convName, standard, pErrorCode);
 
+        /* When listOffset == 0, we want to acknowledge that the
+           converter name and standard are okay, but there
+           is nothing to enumerate. */
         if (listOffset < gTaggedAliasListsSize) {
             UAliasContext *myContext;
 
@@ -674,7 +687,7 @@ ucnv_getStandardName(const char *alias, const char *standard, UErrorCode *pError
     if (haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
         uint32_t listOffset = findTaggedAliasListsOffset(alias, standard, pErrorCode);
 
-        if (listOffset < gTaggedAliasListsSize) {
+        if (0 < listOffset && listOffset < gTaggedAliasListsSize) {
             const uint16_t *currList = gTaggedAliasLists + listOffset + 1;
 
             /* Get the preferred name from this list */
