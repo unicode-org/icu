@@ -64,7 +64,7 @@ LINK32=link.exe
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\..\lib\"
+# PROP Output_Dir "..\..\lib\debug"
 # PROP Intermediate_Dir "Debug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
@@ -331,6 +331,10 @@ SOURCE=.\ucnv_utf.c
 # Begin Source File
 
 SOURCE=.\ucnvebdc.c
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucnvhz.c
 # End Source File
 # Begin Source File
 
