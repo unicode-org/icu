@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedNumberFormat.java,v $ 
- * $Date: 2002/12/05 01:22:20 $ 
- * $Revision: 1.11 $
+ * $Date: 2003/04/15 14:58:17 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -472,7 +472,7 @@ import java.util.Vector;
  * using these features.</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.11 $ $Date: 2002/12/05 01:22:20 $
+ * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.12 $ $Date: 2003/04/15 14:58:17 $
  * @see NumberFormat
  * @see DecimalFormat
  * @stable ICU 2.0
@@ -1207,7 +1207,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
      */
     private String stripWhitespace(String description) {
         // since we don't have a method that deletes characters (why?!!)
-        // create a nwe StringBuffer to copy the text into
+        // create a new StringBuffer to copy the text into
         StringBuffer result = new StringBuffer();
 
         // iterate through the characters...
@@ -1219,7 +1219,13 @@ public final class RuleBasedNumberFormat extends NumberFormat {
                 ++start;
             }
 
-            // locate the next semicolon in the text and copyt he text from
+            //if the first non-whitespace character is semicolon, skip it and continue
+            if (start < description.length() && description.charAt(start) == ';') {
+                start += 1;
+                continue;
+            }
+
+            // locate the next semicolon in the text and copy the text from
             // our current position up to that semicolon into the result
             int p;
             p = description.indexOf(';', start);
