@@ -326,11 +326,10 @@ ucnv_io_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode) {
 }
 
 U_CAPI uint16_t U_EXPORT2
-ucnv_countStandards(void) {
-    UErrorCode errorCode = U_ZERO_ERROR;
-    if (haveAliasData(&errorCode)) {
+ucnv_countStandards(UErrorCode *pErrorCode) {
+    if (haveAliasData(pErrorCode)) {
         if (!tagTable) {
-            /* errorCode = U_INVALID_FORMAT_ERROR; */
+            *pErrorCode = U_INVALID_FORMAT_ERROR;
             return 0;
         }
 
