@@ -57,6 +57,7 @@ struct collIterate {
   uint32_t CEs[UCOL_EXPAND_CE_BUFFER_SIZE]; /* This is where we store CEs */
   UBool isThai; /* Have we already encountered a Thai prevowel */
   UBool isWritable; /* is the source buffer writable? */
+  UBool JamoSpecial;
   UChar stackWritableBuffer[UCOL_WRITABLE_BUFFER_SIZE]; /* A writable buffer. */
   UChar *writableBuffer;
 };
@@ -73,6 +74,7 @@ struct incrementalContext {
     uint32_t *toReturn; /* This is the CE from CEs buffer that should be returned */
     uint32_t *CEpos; /* This is the position to which we have stored processed CEs */
     uint32_t CEs[UCOL_EXPAND_CE_BUFFER_SIZE]; /* This is where we store CEs */
+    UBool JamoSpecial;
     UBool panic; /* can't handle it any more - we have to call the cavalry */
 };
 
@@ -174,6 +176,7 @@ static uint8_t utf16fixup[32] = {
 	(s)->isThai = TRUE; \
 	(s)->isWritable = (isSourceWritable); \
 	(s)->writableBuffer = (s)->stackWritableBuffer; \
+    (s)->JamoSpecial = FALSE; \
 }
 
 /* a macro that gets a simple CE */
