@@ -25,6 +25,7 @@
 static void TestNextUChar(UConverter* cnv, const char* source, const char* limit, const uint32_t results[], const char* message);
 static void TestNextUCharError(UConverter* cnv, const char* source, const char* limit, UErrorCode expected, const char* message);
 static void TestJitterbug981();
+static void TestJitterbug1293();
 static void TestNewConvertWithBufferSizes(int32_t osize, int32_t isize) ;
 static void TestConverterTypesAndStarters(void);
 static void TestAmbiguous(void);
@@ -215,6 +216,7 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestEBCDICUS4XML, "tsconv/nucnvtst/TestEBCDICUS4XML");
    addTest(root, &TestISCII, "tsconv/nucnvtst/TestISCII");
    addTest(root, &TestJitterbug981, "tsconv/nucnvtst/TestJitterbug981");
+   addTest(root, &TestJitterbug1293, "tsconv/nucnvtst/TestJitterbug1293");
 
 }
 
@@ -4289,6 +4291,35 @@ static void TestJitterbug981(){
       numNeeded = bytes_needed;
   } while (status == U_BUFFER_OVERFLOW_ERROR);
   ucol_close(myCollator);
+  ucnv_close(utf8cnv);
 }
 
+static void TestJitterbug1293(){
+    UChar src[] = {0x30DE, 0x30A4, 0x5E83, 0x544A, 0x30BF, 0x30A4, 0x30D7,0x000};
+    char target[256];
+    UErrorCode status = U_ZERO_ERROR;
+    UConverter* conv=NULL;
+    int32_t target_cap, bytes_needed, numNeeded = 0;
+    conv = ucnv_open("shift-jis",&status);
+    if(U_FAILURE(status)){
+      log_err("Could not open Shift-Jis converter. Error: %s", u_errorName(status));
+      return;
+    }
+
+    do{
+        target_cap =0;
+        bytes_needed = ucnv_fromUChars(conv,target,256,src,u_strlen(src),&status);
+        target_cap = (bytes_needed > target_cap) ? bytes_needed : target_cap +1;
+        if(numNeeded!=0 && numNeeded!= bytes_needed){
+          log_err("ucnv_fromUChars returns different values for required capacity in pre-flight and conversion modes");
+        }
+        numNeeded = bytes_needed;
+    } while (status == U_BUFFER_OVERFLOW_ERROR);
+    if(U_FAILURE(status)){
+      log_err("An error occured in ucnv_fromUChars. Error: %s", u_errorName(status));
+      return;
+    }
+    ucnv_close(conv);
+}
+    
 #endif
