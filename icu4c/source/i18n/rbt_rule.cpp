@@ -367,7 +367,8 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
     // A mismatch in the ante context, or with the start anchor,
     // is an outright U_MISMATCH regardless of whether we are
     // incremental or not.
-    int32_t cursor = pos.start - 1;
+    int32_t cursor = pos.start - UTF_CHAR_LENGTH(text.char32At(pos.start-1));
+    int32_t newStart = 0;
     int32_t i;
     for (i=anteContextLength-1; i>=0; --i) {
         while (i == nextSegPos) {
@@ -389,6 +390,10 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
                 != U_MATCH) {
                 return U_MISMATCH;
             }
+        }
+        if (cursorPos == (i - anteContextLength)) {
+            // Record the position of the cursor
+            newStart = cursor;
         }
     }
 
@@ -474,7 +479,9 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
     if (segments == NULL) {
         text.handleReplaceBetween(pos.start, keyLimit, output);
         lenDelta = output.length() - (keyLimit - pos.start);
-        pos.start += cursorPos;
+        if (cursorPos >= 0) {
+            newStart = pos.start + cursorPos;
+        }
     } else {
         /* When there are segments to be copied, use the Replaceable.copy()
          * API in order to retain out-of-band data.  Copy everything to the
@@ -490,7 +497,7 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
         for (i=0; i<output.length(); ) {
             if (i == cursorPos) {
                 // Record the position of the cursor
-                cursor = dest;
+                newStart = dest - (keyLimit - pos.start);
             }
             UChar32 c = output.char32At(i);
             int32_t b = data.lookupSegmentReference(c);
@@ -518,17 +525,17 @@ UMatchDegree TransliterationRule::matchAndReplace(Replaceable& text,
         }
         if (i == cursorPos) {
             // Record the position of the cursor
-            cursor = dest;
+            newStart = dest - (keyLimit - pos.start);
         }
         // Delete the key
         buf.remove();
         text.handleReplaceBetween(pos.start, keyLimit, buf);
         lenDelta = dest - keyLimit - (keyLimit - pos.start);
-        pos.start = cursor - (keyLimit - pos.start);
     }
     
     pos.limit += lenDelta;
     pos.contextLimit += lenDelta;
+    pos.start = newStart;
     
     return U_MATCH;
 }
