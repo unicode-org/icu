@@ -1,5 +1,5 @@
 /*
- * $RCSfile: BreakIteratorTest.java,v $ $Revision: 1.2 $ $Date: 2000/03/02 00:38:29 $
+ * $RCSfile: BreakIteratorTest.java,v $ $Revision: 1.3 $ $Date: 2000/03/09 00:22:06 $
 */
 /*
  * (C) IBM Corp. 1997-1998.  All Rights Reserved.
@@ -60,8 +60,8 @@ System.out.println("Finished creating sentence iterator...");
 
         bi.setText(text);
 
-        Vector nextResults = testFirstAndNext(bi, text);
-        Vector previousResults = testLastAndPrevious(bi, text);
+        Vector nextResults = _testFirstAndNext(bi, text);
+        Vector previousResults = _testLastAndPrevious(bi, text);
 
         logln("comparing forward and backward...");
         int errs = getErrorCount();
@@ -81,14 +81,14 @@ System.out.println("Finished creating sentence iterator...");
                             length();
         boundaries[boundaries.length - 1] = BreakIterator.DONE;
 
-        testFollowing(bi, text, boundaries);
-        testPreceding(bi, text, boundaries);
-        testIsBoundary(bi, text, boundaries);
+        _testFollowing(bi, text, boundaries);
+        _testPreceding(bi, text, boundaries);
+        _testIsBoundary(bi, text, boundaries);
 
         doMultipleSelectionTest(bi, text);
     }
 
-    private Vector testFirstAndNext(BreakIterator bi, String text) {
+    private Vector _testFirstAndNext(BreakIterator bi, String text) {
         int p = bi.first();
         int lastP = p;
         Vector result = new Vector();
@@ -114,7 +114,7 @@ System.out.println("Finished creating sentence iterator...");
         return result;
     }
 
-    private Vector testLastAndPrevious(BreakIterator bi, String text) {
+    private Vector _testLastAndPrevious(BreakIterator bi, String text) {
         int p = bi.last();
         int lastP = p;
         Vector result = new Vector();
@@ -194,7 +194,7 @@ System.out.println("Finished creating sentence iterator...");
         }
     }
 
-    private void testFollowing(BreakIterator bi, String text, int[] boundaries) {
+    private void _testFollowing(BreakIterator bi, String text, int[] boundaries) {
         logln("testFollowing():");
         int p = 2;
         for (int i = 0; i <= text.length(); i++) {
@@ -209,7 +209,7 @@ System.out.println("Finished creating sentence iterator...");
         }
     }
 
-    private void testPreceding(BreakIterator bi, String text, int[] boundaries) {
+    private void _testPreceding(BreakIterator bi, String text, int[] boundaries) {
         logln("testPreceding():");
         int p = 0;
         for (int i = 0; i <= text.length(); i++) {
@@ -224,7 +224,7 @@ System.out.println("Finished creating sentence iterator...");
         }
     }
 
-    private void testIsBoundary(BreakIterator bi, String text, int[] boundaries) {
+    private void _testIsBoundary(BreakIterator bi, String text, int[] boundaries) {
         logln("testIsBoundary():");
         int p = 1;
         boolean isB;
