@@ -18,6 +18,14 @@
 #include "uenumimp.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "unicode/ustring.h"
+
+static char quikBuf[256];
+static char* quikU2C(const UChar* str, int32_t len) {
+    u_UCharsToChars(str, quikBuf, len);
+    quikBuf[len] = 0;
+    return quikBuf;
+}
 
 static const char* test1[] = {
     "first",
@@ -121,6 +129,70 @@ static const UEnumeration emptyPartialEnumerator = {
     NULL,
 };
 
+/********************************************************************/
+static const UChar _first[] = {102,105,114,115,116,0};    /* "first"  */
+static const UChar _second[]= {115,101,99,111,110,100,0}; /* "second" */
+static const UChar _third[] = {116,104,105,114,100,0};    /* "third"  */
+static const UChar _fourth[]= {102,111,117,114,116,104,0};/* "fourth" */
+
+static const UChar* test2[] = {
+    _first, _second, _third, _fourth
+};
+
+struct uchArrayContext {
+    int32_t currIndex;
+    int32_t maxIndex;
+    UChar *currUChar;
+    UChar **array;
+};
+
+typedef struct uchArrayContext uchArrayContext;
+
+#define ucont ((uchArrayContext *)en->context)
+
+static void U_CALLCONV
+uchArrayClose(UEnumeration *en) {
+    free(en);
+}
+
+static int32_t U_CALLCONV
+uchArrayCount(UEnumeration *en, UErrorCode *status) {
+    return ucont->maxIndex;
+}
+
+static const UChar* U_CALLCONV
+uchArrayUNext(UEnumeration *en, int32_t *resultLength, UErrorCode *status) {
+    if(ucont->currIndex >= ucont->maxIndex) {
+        return NULL;
+    }
+    
+    ucont->currUChar = (ucont->array)[ucont->currIndex];
+    *resultLength = u_strlen(ucont->currUChar);
+    ucont->currIndex++;
+    return ucont->currUChar;
+}
+
+static void U_CALLCONV
+uchArrayReset(UEnumeration *en, UErrorCode *status) {
+    ucont->currIndex = 0;
+}
+
+uchArrayContext myUCont = {
+    0, 0,
+    NULL, NULL
+};
+
+UEnumeration uchEnum = {
+    NULL,
+    &myUCont,
+    uchArrayClose,
+    uchArrayCount,
+    uchArrayUNext,
+    uenum_nextDefault,
+    uchArrayReset
+};
+
+/********************************************************************/
 
 static UEnumeration *getchArrayEnum(const char** source, int32_t size) {
     UEnumeration *en = (UEnumeration *)malloc(sizeof(UEnumeration));
@@ -137,11 +209,11 @@ static void EnumerationTest(void) {
     const char *string = NULL;
     const UChar *uString = NULL;
     while ((string = uenum_next(en, &len, &status))) {
-        log_verbose("read %s, length %i\n", string, len);
+        log_verbose("read \"%s\", length %i\n", string, len);
     }
     uenum_reset(en, &status);
     while ((uString = uenum_unext(en, &len, &status))) {
-        log_verbose("read uchar of len %i\n", len);
+        log_verbose("read \"%s\" (UChar), length %i\n", quikU2C(uString, len), len);
     }
     
     uenum_close(en);
@@ -193,10 +265,42 @@ static void EmptyEnumerationTest(void) {
     uenum_close(emptyEnum);
 }
 
+static UEnumeration *getuchArrayEnum(const UChar** source, int32_t size) {
+    UEnumeration *en = (UEnumeration *)malloc(sizeof(UEnumeration));
+    memcpy(en, &uchEnum, sizeof(UEnumeration));
+    ucont->array = (UChar **)source;
+    ucont->maxIndex = size;
+    return en;
+}
+
+static void DefaultNextTest(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t len = 0;
+    UEnumeration *en = getuchArrayEnum(test2, sizeof(test2)/sizeof(test2[0]));
+    const char *string = NULL;
+    const UChar *uString = NULL;
+    while ((uString = uenum_unext(en, &len, &status))) {
+        log_verbose("read \"%s\" (UChar), length %i\n", quikU2C(uString, len), len);
+    }
+    if (U_FAILURE(status)) {
+        log_err("FAIL: uenum_unext => %s\n", u_errorName(status));
+    }
+    uenum_reset(en, &status);
+    while ((string = uenum_next(en, &len, &status))) {
+        log_verbose("read \"%s\", length %i\n", string, len);
+    }
+    if (U_FAILURE(status)) {
+        log_err("FAIL: uenum_next => %s\n", u_errorName(status));
+    }
+    
+    uenum_close(en);
+}
+
 void addEnumerationTest(TestNode** root);
 
 void addEnumerationTest(TestNode** root)
 {
     addTest(root, &EnumerationTest, "tsutil/uenumtst/EnumerationTest");
     addTest(root, &EmptyEnumerationTest, "tsutil/uenumtst/EmptyEnumerationTest");
+    addTest(root, &DefaultNextTest, "tsutil/uenumtst/DefaultNextTest");
 }
