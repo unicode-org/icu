@@ -523,7 +523,7 @@ unorm_quickCheck(const UChar             *source,
   if (sourcelength >= 0) {
     psource = source;
     pend    = source + sourcelength;
-    while (true) {
+    for (;;) {
       if (psource >= pend) {
         return UNORM_YES;
       }
@@ -537,7 +537,7 @@ unorm_quickCheck(const UChar             *source,
   }
   else {
     psource = source;
-    while (true) {
+    for (;;) {
       if (*psource == 0) {
         return UNORM_YES;
       }
@@ -551,7 +551,7 @@ unorm_quickCheck(const UChar             *source,
   }
 
   if (sourcelength >= 0) {
-    while (true) {
+    for (;;) {
       int count = 0;
 
       if (psource >= pend) {
@@ -587,7 +587,7 @@ unorm_quickCheck(const UChar             *source,
     }
   }
   else {
-    while (true) {
+    for (;;) {
       int count = 0;
       UTF_NEXT_CHAR(psource, count, pend - psource, codepoint);      
       if (codepoint == 0) {
@@ -997,7 +997,7 @@ static const uint8_t FCD_STAGE_3_[] =
 * @param sourcelength length of source to test
 * @paran mode         normalization format from the enum UNormalizationMode
 * @param status       A pointer to an UErrorCode to receive any errors
-* @return true if source is in FCD format, false otherwise
+* @return TRUE if source is in FCD format, FALSE otherwise
 */
 U_CAPI UBool 
 checkFCD(const UChar* source, int32_t sourcelength, UErrorCode* status)
@@ -1014,7 +1014,7 @@ checkFCD(const UChar* source, int32_t sourcelength, UErrorCode* status)
   if (sourcelength >= 0) {
     psource = source;
     pend    = source + sourcelength;
-    while (true) {
+    for (;;) {
       if (psource >= pend) {
         return TRUE;
       }
@@ -1029,7 +1029,7 @@ checkFCD(const UChar* source, int32_t sourcelength, UErrorCode* status)
   }
   else {
     psource = source;
-    while (true) {
+    for (;;) {
       if (*psource == 0) {
         return TRUE;
       }
@@ -1043,7 +1043,7 @@ checkFCD(const UChar* source, int32_t sourcelength, UErrorCode* status)
   }
 
   if (sourcelength >= 0) {
-    while (true) {
+    for (;;) {
       int count = 0;
 
       if (psource >= pend) {
@@ -1067,7 +1067,7 @@ checkFCD(const UChar* source, int32_t sourcelength, UErrorCode* status)
     }
   }
   else {
-    while (true) {
+    for (;;) {
       int count = 0;
       UTF_NEXT_CHAR(psource, count, pend - psource, codepoint);
       if (codepoint == 0) {
