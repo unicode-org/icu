@@ -19,6 +19,7 @@
 
 #include <stdio.h>
 #include "unicode/utypes.h"
+#include "unicode/uscript.h"
 #include "cstring.h"
 #include "cmemory.h"
 #include "utrie.h"
@@ -38,6 +39,9 @@ static int32_t pvCount;
 static void
 parseAge(const char *filename, uint32_t *pv, UErrorCode *pErrorCode);
 
+static void
+parseScripts(const char *filename, uint32_t *pv, UErrorCode *pErrorCode);
+
 /* -------------------------------------------------------------------------- */
 
 U_CFUNC void
@@ -48,9 +52,12 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
 
     pv=upvec_open(UPROPS_VECTOR_WORDS, 20000);
 
-    /* process DerivedAge.txt */
+    /* process various UCD .txt files */
     writeUCDFilename(basename, "DerivedAge", suffix);
     parseAge(filename, pv, pErrorCode);
+
+    writeUCDFilename(basename, "Scripts", suffix);
+    parseScripts(filename, pv, pErrorCode);
 
     trie=utrie_open(NULL, NULL, 50000, 0, FALSE);
     if(trie==NULL) {
@@ -65,6 +72,8 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
         exit(*pErrorCode);
     }
 }
+
+/* DerivedAge.txt ----------------------------------------------------------- */
 
 static void
 ageLineFn(void *context,
@@ -120,6 +129,80 @@ parseAge(const char *filename, uint32_t *pv, UErrorCode *pErrorCode) {
     u_parseDelimitedFile(filename, ';', fields, 2, ageLineFn, pv, pErrorCode);
 }
 
+/* Scripts.txt -------------------------------------------------------------- */
+
+static void
+scriptsLineFn(void *context,
+              char *fields[][2], int32_t fieldCount,
+              UErrorCode *pErrorCode) {
+    uint32_t *pv=(uint32_t *)context;
+    char *s, *end;
+    uint32_t start, limit;
+    UScriptCode script;
+
+    u_parseCodePointRange(fields[0][0], &start, &limit, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        fprintf(stderr, "genprops: syntax error in Scripts.txt field 0 at %s\n", fields[0][0]);
+        exit(*pErrorCode);
+    }
+    ++limit;
+
+    /* parse script name */
+    s=(char *)u_skipWhitespace(fields[1][0]);
+
+    /* trim trailing whitespace */
+    end=fields[1][1];
+    while(s<end && (*(end-1)==' ' || *(end-1)=='\t')) {
+        --end;
+    }
+    *end=0;
+    if( 1!=uscript_getCode(s, &script, 1, pErrorCode) ||
+        U_FAILURE(*pErrorCode) ||
+        script<=USCRIPT_INVALID_CODE
+    ) {
+        fprintf(stderr, "genprops: syntax error in Scripts.txt field 1 at %s\n", fields[1][0]);
+        if(U_SUCCESS(*pErrorCode)) {
+            *pErrorCode=U_PARSE_ERROR;
+        }
+        exit(*pErrorCode);
+    }
+
+    if(!upvec_setValue(pv, start, limit, 0, (uint32_t)script, UPROPS_SCRIPT_MASK, pErrorCode)) {
+        fprintf(stderr, "genprops: unable to set script code: %s\n", u_errorName(*pErrorCode));
+        exit(*pErrorCode);
+    }
+}
+
+static void
+parseScripts(const char *filename, uint32_t *pv, UErrorCode *pErrorCode) {
+    char *fields[2][2];
+
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return;
+    }
+
+    /*
+     * UTR 24 says:
+     * Section 2:
+     *   "Common - For characters that may be used
+     *             within multiple scripts,
+     *             or any unassigned code points."
+     *
+     * Section 4:
+     *   "The value COMMON is the default value,
+     *    given to all code points that are not
+     *    explicitly mentioned in the data file."
+     */
+    if(!upvec_setValue(pv, 0, 0x110000, 0, (uint32_t)USCRIPT_COMMON, UPROPS_SCRIPT_MASK, pErrorCode)) {
+        fprintf(stderr, "genprops: unable to set script code: %s\n", u_errorName(*pErrorCode));
+        exit(*pErrorCode);
+    }
+
+    u_parseDelimitedFile(filename, ';', fields, 2, scriptsLineFn, pv, pErrorCode);
+}
+
+/* data serialization ------------------------------------------------------- */
+
 U_CFUNC int32_t
 writeAdditionalData(uint8_t *p, int32_t capacity, int32_t indexes[UPROPS_INDEX_COUNT]) {
     int32_t length;
@@ -141,9 +224,9 @@ writeAdditionalData(uint8_t *p, int32_t capacity, int32_t indexes[UPROPS_INDEX_C
         /* set indexes */
         indexes[UPROPS_ADDITIONAL_VECTORS_INDEX]=
             indexes[UPROPS_ADDITIONAL_TRIE_INDEX]+length/4;
-        indexes[UPROPS_ADDITIONAL_VECTORS_COLUMNS_INDEX]=
-            indexes[UPROPS_ADDITIONAL_VECTORS_INDEX]+pvCount;
         indexes[UPROPS_ADDITIONAL_VECTORS_COLUMNS_INDEX]=UPROPS_VECTOR_WORDS;
+        indexes[UPROPS_RESERVED_INDEX]=
+            indexes[UPROPS_ADDITIONAL_VECTORS_INDEX]+pvCount;
     }
 
     if(p!=NULL && (pvCount*4)<=capacity) {
