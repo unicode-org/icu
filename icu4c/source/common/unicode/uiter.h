@@ -242,6 +242,10 @@ UCharIteratorReserved(UCharIterator *iter, int32_t something);
  * to save and restore the iterator position more efficiently than with
  * getIndex()/move().
  *
+ * The iterator state is defined as a uint32_t value because it is designed
+ * for use in ucol_nextSortKeyPart() which provides 32 bits to store the state
+ * of the character iterator.
+ *
  * With some UCharIterator implementations (e.g., UTF-8),
  * getting and setting the UTF-16 index with existing functions
  * (getIndex(UITER_CURRENT) followed by move(pos, UITER_ZERO)) is possible but
@@ -316,6 +320,15 @@ UCharIteratorSetState(UCharIterator *iter, uint32_t state, UErrorCode *pErrorCod
  * Implementations of such C APIs are "callers" of UCharIterator functions;
  * they only use the "public" function pointers and never access the "protected"
  * fields directly.
+ *
+ * The current() and next() functions only check the current index against the
+ * limit, and previous() only checks the current index against the start,
+ * to see if the iterator already reached the end of the iteration range.
+ *
+ * The assumption - in all iterators - is that the index is moved via the API,
+ * which means it won't go out of bounds, or the index is modified by
+ * user code that knows enough about the iterator implementation to set valid
+ * index values.
  *
  * UCharIterator functions return code unit values 0..0xffff,
  * or U_SENTINEL if the iteration bounds are reached.
