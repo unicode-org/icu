@@ -16,7 +16,7 @@
 
 /**
  * \file
- * \brief Description of NumberFormat C API
+ * \brief C API: NumberFormat
  *
  * <h2> Number Format C API </h2>
  *
