@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $ 
- * $Date: 2001/04/03 18:21:57 $ 
- * $Revision: 1.33 $
+ * $Date: 2001/04/04 18:07:08 $ 
+ * $Revision: 1.34 $
  *
  *****************************************************************************************
  */
@@ -742,6 +742,11 @@ public class TransliteratorTest extends TestFmwk {
             "Null[abc]",
             "xyz",
             "xyz",
+            
+            "Remove[abc]",
+            "Remove[abc]",
+            "axbycz",
+            "xyz",
         };
         
         for (int i=0; i<DATA.length; i+=4) {
@@ -765,6 +770,15 @@ public class TransliteratorTest extends TestFmwk {
                       u.getID() + ", expected " + uID);
             }
         }
+    }
+
+    /**
+     * Test the "Remove" transliterator.
+     */
+    public void TestRemove() {
+        Transliterator t = Transliterator.getInstance("Remove[aeiou]");
+        expect(t, "The quick brown fox.",
+               "Th qck brwn fx.");
     }
 
     //======================================================================
