@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_InterIndic_Gujarati.txt,v $
-# $Date: 2002/09/19 18:11:23 $
-# $Revision: 1.10 $
+# $Date: 2004/05/07 02:57:41 $
+# $Revision: 1.11 $
 #--------------------------------------------------------------------
 
 # InterIndic-Gujarati
@@ -12,6 +12,7 @@
 \ue001>\u0a81; # SIGN CANDRABINDU
 \ue002>\u0a82; # SIGN ANUSVARA
 \ue003>\u0a83; # SIGN VISARGA
+\uE004>\u0a85; # FALLBACK TO LETTER A
 \ue005>\u0a85; # LETTER A
 \ue006>\u0a86; # LETTER AA
 \ue007>\u0a87; # LETTER I
@@ -19,7 +20,7 @@
 \ue009>\u0a89; # LETTER U
 \ue00a>\u0a8a; # LETTER UU
 \ue00b>\u0a8b; # LETTER VOCALIC R
-\ue00c>\u0ab2\u0ac3; # REMAP (indicExceptions.txt): \u0a8c>\u0ab2\u0ac3 = LETTER VOCALIC L>LETTER LA.VOWEL SIGN VOCALIC R
+\ue00c>\u0a8c; # LETTER VOCALIC L
 \ue00d>\u0a8d; # GUJARATI VOWEL CANDRA E
 \ue00e>\u0a8f; # FALLBACK
 \ue00f>\u0a8f; #  InterIndic-Gujarati: LETTER EE (\u0a8f = LETTER E)
@@ -100,7 +101,7 @@
 \ue05e>\u0aab\u0abc; # REMAP (indicExceptions.txt): \u0ade>\u0aab\u0abc = LETTER FA>LETTER PHA.SIGN NUKTA
 \ue05f>\u0aaf\u0abc; # REMAP (indicExceptions.txt): \u0adf>\u0aaf\u0abc = LETTER YYA>LETTER YA.SIGN NUKTA
 \ue060>\u0ae0; # LETTER VOCALIC RR
-\ue061>\u0ab2\u0ac3; # REMAP (indicExceptions.txt): \u0ae1>\u0ab2\u0ac3 = LETTER VOCALIC LL>LETTER LA.VOWEL SIGN VOCALIC R
+\ue061>\u0ae1; # LETTER VOCALIC LL
 \ue062>\u0abf\u0abc; # REMAP (indicExceptions.txt): \u0ae2>\u0abf\u0abc = VOWEL SIGN VOCALIC L>VOWEL SIGN I.SIGN NUKTA
 \ue063>\u0ac0\u0abc; # REMAP (indicExceptions.txt): \u0ae3>\u0ac0\u0abc = VOWEL SIGN VOCALIC LL>VOWEL SIGN II.SIGN NUKTA
 \uE064>\u0964;          # DANDA
@@ -132,6 +133,7 @@
 \uE07E>;           # IRI
 \uE07F>;           # URA
 \uE080>;           # EK ONKAR
+\uE081>\u0ab5;      # FALLBACK FOR ORIYA LETTER WA 
 0 > \u0ae6;       # FALLBACK FOR TAMIL
 1 > \u0ae7;
 

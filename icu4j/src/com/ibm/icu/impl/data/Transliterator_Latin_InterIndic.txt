@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Latin_InterIndic.txt,v $
-# $Date: 2002/03/02 00:27:26 $
-# $Revision: 1.7 $
+# $Date: 2004/05/07 02:57:40 $
+# $Revision: 1.8 $
 #--------------------------------------------------------------------
 
 # Latin-InterIndic
@@ -65,6 +65,7 @@
     $lla=\ue033; 
     $ela=\ue034; #compatibility
     $va=\ue035;
+    $vva=\ue081;
     $sha=\ue036;
     $ssa=\ue037;
     $sa=\ue038;
@@ -283,6 +284,7 @@
     l\u0323>$lla|$virama;
     l>$la|$virama;
     v>$va|$virama;
+    w\u0307>$vva|$virama;
     w>$va|$virama;
     sh>$sha|$virama;
     ss>$ssa|$virama;

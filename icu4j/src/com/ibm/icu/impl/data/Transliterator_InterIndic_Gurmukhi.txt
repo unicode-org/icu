@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_InterIndic_Gurmukhi.txt,v $
-# $Date: 2002/09/19 18:11:23 $
-# $Revision: 1.10 $
+# $Date: 2004/05/07 02:57:40 $
+# $Revision: 1.11 $
 #--------------------------------------------------------------------
 
 # InterIndic-Gurmukhi
@@ -21,7 +21,8 @@ $vowel{\ue002>\u0a02; # SIGN ANUSVARA (\u0a02 = SIGN BINDI)
 $consonant{\ue002>\u0a70; # SIGN TIPPI
 \ue002>\u0a02;
 
-\ue003>; # FALLBACK BLOW AWAY SIGN VISARGA
+\ue003>;       # FALLBACK BLOW AWAY SIGN VISARGA
+\uE004>\u0a05; # FALLBACK TO LETTER A
 \ue005>\u0a05; # LETTER A
 \ue006>\u0a06; # LETTER AA
 \ue007>\u0a07; # LETTER I
@@ -110,7 +111,7 @@ $consonant{\ue002>\u0a70; # SIGN TIPPI
 \ue05e>\u0a5e; # LETTER FA
 \ue05f>\u0a2f\u0a3c; # REMAP (indicExceptions.txt): \u0a5f>\u0a2f = LETTER YYA>LETTER YA
 \ue060>\u0a30\u0a3f; # REMAP (indicExceptions.txt): \u0a60>\u0a30\u0a3f = LETTER VOCALIC RR>LETTER RA.VOWEL SIGN I
-\ue061>\u0a33\u0a3c; # 
+\ue061>\u0a32\u0a3c; # 
 \ue062>\u0a3f\u0a3c; # REMAP (indicExceptions.txt): \u0a62>\u0a3f\u0a3c = VOWEL SIGN VOCALIC L>VOWEL SIGN I.SIGN NUKTA
 \ue063>\u0a40\u0a3c; # REMAP (indicExceptions.txt): \u0a63>\u0a40\u0a3c = VOWEL SIGN VOCALIC LL>VOWEL SIGN II.SIGN NUKTA
 \uE064>\u0964;          # DANDA
@@ -142,7 +143,7 @@ $consonant{\ue002>\u0a70; # SIGN TIPPI
 \uE07E>\u0a72;     # IRI
 \uE07F>\u0a73;     # URA
 \uE080>\u0a74;     # EK ONKAR
-
+\uE081>\u0a35;      # FALLBACK FOR ORIYA LETTER WA 
 
 0 > \u0a66;       # FALLBACK FOR TAMIL
 1 > \u0a67;

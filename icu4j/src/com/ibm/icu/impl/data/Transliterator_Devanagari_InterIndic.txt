@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Devanagari_InterIndic.txt,v $
-# $Date: 2002/09/19 18:11:23 $
-# $Revision: 1.10 $
+# $Date: 2004/05/07 02:57:40 $
+# $Revision: 1.11 $
 #--------------------------------------------------------------------
 
 # Devanagari-InterIndic
@@ -15,6 +15,7 @@
  \u0901>\uE001;  # SIGN CANDRABINDU
  \u0902>\uE002;  # SIGN ANUSVARA
  \u0903>\uE003;  # SIGN VISARGA
+ \u0904>\uE004;  # SIGN SHORT A
  \u0905>\uE005;  # LETTER A
  \u0906>\uE006;  # LETTER AA
  \u0907>\uE007;  # LETTER I

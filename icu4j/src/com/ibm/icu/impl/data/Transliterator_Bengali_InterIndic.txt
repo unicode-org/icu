@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Bengali_InterIndic.txt,v $
-# $Date: 2002/09/19 18:11:23 $
-# $Revision: 1.11 $
+# $Date: 2004/05/07 02:57:41 $
+# $Revision: 1.12 $
 #--------------------------------------------------------------------
 
 # Bengali-InterIndic
@@ -59,6 +59,7 @@
 \u09B8>\uE038; # LETTER SA
 \u09B9>\uE039; # LETTER HA
 \u09BC>\uE03C; # SIGN NUKTA
+\u09BD>\uE03D; # SIGN AVAGRAHA
 \u09BE>\uE03E; # VOWEL SIGN AA
 \u09BF>\uE03F; # VOWEL SIGN I
 \u09C0>\uE040; # VOWEL SIGN II

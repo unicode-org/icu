@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Kannada_InterIndic.txt,v $
-# $Date: 2002/09/19 18:11:23 $
-# $Revision: 1.6 $
+# $Date: 2004/05/07 02:57:40 $
+# $Revision: 1.7 $
 #--------------------------------------------------------------------
 
 # Kannada-InterIndic
@@ -66,6 +66,8 @@
 \u0CB7>\uE037;              # LETTER SSA
 \u0CB8>\uE038;              # LETTER SA
 \u0CB9>\uE039;              # LETTER HA
+\u0CBC>\uE03C;				# SIGN NUKTA
+\u0CBD>\uE03D;              # AVAGRAHA
 \u0CBE>\uE03E;              # VOWEL SIGN AA
 \u0CBF>\uE03F;              # VOWEL SIGN I
 \u0CC1>\uE041;              # VOWEL SIGN U
