@@ -173,6 +173,18 @@ void CollationIteratorTest::TestPrevious(/* char* par */)
 void CollationIteratorTest::TestOffset(/* char* par */)
 {
     CollationElementIterator *iter = en_us->createCollationElementIterator(test1);
+    UErrorCode status = U_ZERO_ERROR;
+    // testing boundaries
+    iter->setOffset(0, status);
+    if (U_FAILURE(status) || iter->previous(status) != UCOL_NULLORDER) {
+        errln("Error: After setting offset to 0, we should be at the end "
+                "of the backwards iteration");
+    }
+    iter->setOffset(test1.length(), status);
+    if (U_FAILURE(status) || iter->next(status) != UCOL_NULLORDER) {
+        errln("Error: After setting offset to end of the string, we should "
+                "be at the end of the backwards iteration");
+    }
 
     // Run all the way through the iterator, then get the offset
     int32_t orderLength = 0;
@@ -190,7 +202,6 @@ void CollationIteratorTest::TestOffset(/* char* par */)
 
     // Now set the offset back to the beginning and see if it works
     CollationElementIterator *pristine = en_us->createCollationElementIterator(test1);
-    UErrorCode status = U_ZERO_ERROR;
 
     iter->setOffset(0, status);
 

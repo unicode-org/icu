@@ -98,8 +98,7 @@ UBool CollationElementIterator::operator==(
     }
 
     // option comparison
-    if (!(m_data_->reset_ == that.m_data_->reset_ 
-          && m_data_->iteratordata_.coll == that.m_data_->iteratordata_.coll))
+    if (m_data_->iteratordata_.coll != that.m_data_->iteratordata_.coll)
     {
         return FALSE;
     }
