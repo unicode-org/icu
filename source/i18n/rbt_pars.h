@@ -9,7 +9,6 @@
 #define RBT_PARS_H
 
 #include "unicode/rbt.h"
-#include "uvector.h"
 #include "unicode/parseerr.h"
 
 U_NAMESPACE_BEGIN
@@ -19,18 +18,48 @@ class UnicodeMatcher;
 class ParseData;
 class RuleHalf;
 class ParsePosition;
+class UVector;
 
 class TransliteratorParser {
 
+ public:
+
     /**
-     * This is a reference to external data we don't own.  This works because
-     * we only hold this for the duration of the call to parse().
+     * PUBLIC data member containing the parsed data object, or null if
+     * there were no rules.
      */
-    const UnicodeString& rules;
+    TransliterationRuleData* data;
+
+    /**
+     * PUBLIC data member.
+     * The block of ::IDs, both at the top and at the bottom.
+     * Inserted into these may be additional rules at the
+     * idSplitPoint.
+     */
+    UnicodeString idBlock;
+
+    /**
+     * PUBLIC data member.
+     * In a compound RBT, the index at which the RBT rules are
+     * inserted into the ID block.  Index 0 means before any IDs
+     * in the block.  Index idBlock.length() means after all IDs
+     * in the block.  Index is a string index.
+     */
+    int32_t idSplitPoint;
+
+    /**
+     * PUBLIC data member containing the parsed compound filter, if any.
+     */
+    UnicodeSet* compoundFilter;
+
+ private:
+
+    // The number of rules parsed.  This tells us if there were
+    // any actual transliterator rules, or if there were just ::ID
+    // block IDs.
+    int32_t ruleCount;
 
     UTransDirection direction;
-
-    TransliterationRuleData* data;
 
     /**
      * We use a single error code during parsing.  Rather than pass it
@@ -39,10 +68,9 @@ class TransliteratorParser {
     UErrorCode status;
 
     /**
-     * Pointer to user structure in which to return parse error information.
-     * May be NULL.
+     * Parse error information.
      */
-    UParseError& parseError;
+    UParseError parseError;
 
     /**
      * Temporary symbol table used during parsing.
@@ -54,7 +82,7 @@ class TransliteratorParser {
      * is copied into the array data.variables.  As with data.variables,
      * element 0 corresponds to character data.variablesBase.
      */
-    UVector variablesVector;
+    UVector* variablesVector;
 
     /**
      * The next available stand-in for variables.  This starts at some point in
@@ -82,44 +110,10 @@ class TransliteratorParser {
 
 public:
 
-    static TransliterationRuleData*
-        parse(const UnicodeString& rules,
-              UTransDirection direction,
-              UParseError& parseError,
-              UErrorCode& ec);
-
     /**
-     * Parse a given set of rules.  Return up to three pieces of
-     * parsed data.  These are the header ::id block, the rule block,
-     * and the footer ::id block.  Any or all of these may be empty.
-     * If the ::id blocks are empty, their corresponding parameters
-     * are returned as the empty string.  If there are no rules, the
-     * TransliterationRuleData result is 0.
-     * @param ruleDataResult caller owns the pointer stored here.
-     * May be NULL.
-     * @param headerRule string including semicolons for the header
-     * ::id block.  May be empty.
-     * @param footerRule string including semicolons for the footer
-     * ::id block.  May be empty.
+     * Constructor.
      */
-    static void parse(const UnicodeString& rules,
-                      UTransDirection direction,
-                      TransliterationRuleData*& ruleDataResult,
-                      UnicodeString& idBlockResult,
-                      int32_t& idSplitPointResult,
-                      UParseError& parseError,
-                      UErrorCode& ec);
-
-private:
-
-    /**
-     * @param rules list of rules, separated by newline characters
-     * @exception IllegalArgumentException if there is a syntax error in the
-     * rules
-     */
-    TransliteratorParser(const UnicodeString& rules,
-                              UTransDirection direction,
-                              UParseError& parseError);
+    TransliteratorParser();
 
     /**
      * Destructor.
@@ -130,12 +124,32 @@ private:
      * Parse the given string as a sequence of rules, separated by newline
      * characters ('\n'), and cause this object to implement those rules.  Any
      * previous rules are discarded.  Typically this method is called exactly
-     * once, during construction.
-     * @exception IllegalArgumentException if there is a syntax error in the
-     * rules
+     * once after construction.
+     *
+     * Parse the given rules, in the given direction.  After this call
+     * returns, query the public data members for results.  The caller
+     * owns the 'data' and 'compoundFilter' data members after this
+     * call returns.
      */
-    void parseRules(UnicodeString& idBlockResult, int32_t& idSplitPointResult,
-                    int32_t& ruleCount);
+    void parse(const UnicodeString& rules,
+               UTransDirection direction,
+               UParseError& pe,
+               UErrorCode& ec);
+
+    /**
+     * Return the compound filter parsed by parse().  Caller owns result.
+     */ 
+    UnicodeSet* orphanCompoundFilter();
+
+    /**
+     * Return the data object parsed by parse().  Caller owns result.
+     */
+    TransliterationRuleData* orphanData();
+
+private:
+
+    void parseRules(const UnicodeString& rules,
+                    UTransDirection direction);
 
     /**
      * MAIN PARSER.  Parse the next rule in the given rule string, starting
@@ -150,7 +164,7 @@ private:
      * indicators.  Once it does a lexical breakdown of the rule at pos, it
      * creates a rule object and adds it to our rule list.
      */
-    int32_t parseRule(int32_t pos, int32_t limit);
+    int32_t parseRule(const UnicodeString& rule, int32_t pos, int32_t limit);
 
     /**
      * Called by main parser upon syntax error.  Search the rule string
@@ -198,7 +212,7 @@ private:
      * When done, everything not in the hash is available for use.  In practice,
      * this method may employ some other algorithm for improved speed.
      */
-    void determineVariableRange(void);
+    void determineVariableRange(const UnicodeString&);
 
     /**
      * Returns the index of a character, ignoring quoted text.

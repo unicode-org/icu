@@ -16,6 +16,7 @@
 #include "unicode/rbt.h"
 #include "unicode/resbund.h"
 #include "unicode/translit.h"
+#include "unicode/uniset.h"
 #include "unicode/uscript.h"
 
 // UChar constants
@@ -77,11 +78,13 @@ TransliteratorAlias::TransliteratorAlias(const UnicodeString& theAliasID) :
 TransliteratorAlias::TransliteratorAlias(const UnicodeString& theID,
                                          const UnicodeString& idBlock,
                                          Transliterator* adopted,
-                                         int32_t theIDSplitPoint) :
+                                         int32_t theIDSplitPoint,
+                                         const UnicodeSet* cpdFilter) :
     ID(theID),
     aliasID(idBlock),
     trans(adopted),
-    idSplitPoint(theIDSplitPoint) {
+    idSplitPoint(theIDSplitPoint),
+    compoundFilter(cpdFilter) {
 }
 
 TransliteratorAlias::~TransliteratorAlias() {
@@ -90,16 +93,19 @@ TransliteratorAlias::~TransliteratorAlias() {
 
 
 Transliterator* TransliteratorAlias::create(UParseError& pe,
-                                                      UErrorCode& ec) {
+                                            UErrorCode& ec) {
+    Transliterator *t;
     if (trans == 0) {
-        return Transliterator::createInstance(aliasID, UTRANS_FORWARD, pe, ec);
+        t = Transliterator::createInstance(aliasID, UTRANS_FORWARD, pe, ec);
     } else {
-        Transliterator *t = trans;
+        t = new CompoundTransliterator(ID, aliasID, idSplitPoint,
+                                       trans, pe, ec);
         trans = 0; // so we don't delete it later
-        return new CompoundTransliterator(ID, aliasID, idSplitPoint,
-                                          t, pe, ec);
-
+        if (compoundFilter) {
+            t->adoptFilter((UnicodeSet*) compoundFilter->clone());
+        }
     }
+    return t;
 }
 
 //----------------------------------------------------------------------
@@ -277,6 +283,7 @@ public:
     // it has a copy constructor
     UnicodeString stringArg; // For RULES_*, ALIAS, COMPOUND_RBT
     int32_t intArg; // For COMPOUND_RBT
+    UnicodeSet* compoundFilter; // For COMPOUND_RBT
     union {
         Transliterator* prototype; // For PROTOTYPE
         TransliterationRuleData* data; // For RBT_DATA, COMPOUND_RBT
@@ -290,6 +297,7 @@ public:
 
 Entry::Entry() {
     u.prototype = 0;
+    compoundFilter = NULL;
     entryType = NONE;
 }
 
@@ -303,6 +311,7 @@ Entry::~Entry() {
         // invalidates any RBTs that the user has instantiated.
         delete u.data;
     }
+    delete compoundFilter;
 }
 
 void Entry::adoptPrototype(Transliterator* adopted) {
@@ -906,7 +915,7 @@ Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID
         } else if (entry->entryType == Entry::COMPOUND_RBT) {
             UnicodeString id("_", "");
             Transliterator *t = new RuleBasedTransliterator(id, entry->u.data);
-            aliasReturn = new TransliteratorAlias(ID, entry->stringArg, t, entry->intArg);
+            aliasReturn = new TransliteratorAlias(ID, entry->stringArg, t, entry->intArg, entry->compoundFilter);
             return 0;
         }
 
@@ -935,13 +944,9 @@ Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID
         // transliterators; if it lists something that's not
         // installed, we'll get an error from ResourceBundle.
 
-        TransliteratorParser::parse(rules, isReverse ?
-                                    UTRANS_REVERSE : UTRANS_FORWARD,
-                                    entry->u.data,
-                                    entry->stringArg,
-                                    entry->intArg,
-                                    parseError,
-                                    status);
+        TransliteratorParser parser;
+        parser.parse(rules, isReverse ? UTRANS_REVERSE : UTRANS_FORWARD,
+                     parseError, status);
 
         if (U_FAILURE(status)) {
             // We have a failure of some kind.  Remove the ID from the
@@ -953,6 +958,11 @@ Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID
             remove(ID);
             break;
         }
+
+        entry->u.data = parser.orphanData();
+        entry->stringArg = parser.idBlock;
+        entry->intArg = parser.idSplitPoint;
+        entry->compoundFilter = parser.orphanCompoundFilter();
 
         // Reset entry->entryType to something that we process at the
         // top of the loop, then loop back to the top.  As long as we
