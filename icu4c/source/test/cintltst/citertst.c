@@ -1754,10 +1754,16 @@ static void TestCEValidity()
             src.extraCurrent = src.end;
             src.extraEnd = src.end + UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
 
-            while ((current = ucol_tok_parseNextToken(&src, &strength,
-                                     &chOffset, &chLen, &exOffset, &exLen,
-                                     &prefixOffset, &prefixLen,
-                                     &specs, startOfRules, &parseError,&status)) != NULL) {
+            while ((current = ucol_tok_parseNextToken(&src, startOfRules, &parseError,&status)) != NULL) {
+              strength = src.parsedToken.strength;
+              chOffset = src.parsedToken.charsOffset;
+              chLen = src.parsedToken.charsLen;
+              exOffset = src.parsedToken.extensionOffset;
+              exLen = src.parsedToken.extensionLen;
+              prefixOffset = src.parsedToken.prefixOffset;
+              prefixLen = src.parsedToken.prefixLen;
+              specs = src.parsedToken.flags;
+
                 startOfRules = FALSE;
                 uprv_memcpy(codepoints, rules + chOffset,
                                                        chLen * sizeof(UChar));
@@ -1928,10 +1934,16 @@ static void TestSortKeyValidity(void)
             src.extraCurrent = src.end;
             src.extraEnd = src.end + UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
 
-            while ((current = ucol_tok_parseNextToken(&src, &strength,
-                                     &chOffset, &chLen, &exOffset, &exLen,
-                                     &prefixOffset, &prefixLen,
-                                     &specs, startOfRules,&parseError, &status)) != NULL) {
+            while ((current = ucol_tok_parseNextToken(&src, startOfRules,&parseError, &status)) != NULL) {
+                strength = src.parsedToken.strength;
+                chOffset = src.parsedToken.charsOffset;
+                chLen = src.parsedToken.charsLen;
+                exOffset = src.parsedToken.extensionOffset;
+                exLen = src.parsedToken.extensionLen;
+                prefixOffset = src.parsedToken.prefixOffset;
+                prefixLen = src.parsedToken.prefixLen;
+                specs = src.parsedToken.flags;
+
                 startOfRules = FALSE;
                 uprv_memcpy(codepoints, rules + chOffset,
                                                        chLen * sizeof(UChar));
