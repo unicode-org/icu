@@ -321,19 +321,28 @@ u_vsscanf(const UChar   *buffer,
 {
     int32_t converted;
     UChar *pattern;
+    UChar patBuffer[UFMT_DEFAULT_BUFFER_SIZE];
+    int32_t size = (int32_t)strlen(patternSpecification) + 1;
 
     /* convert from the default codepage to Unicode */
-    pattern = ufmt_defaultCPToUnicode(patternSpecification,
-        strlen(patternSpecification)+1);
-    if(pattern == 0) {
-        return 0;
+    if (size >= MAX_UCHAR_BUFFER_SIZE(patBuffer)) {
+        pattern = (UChar *)uprv_malloc(size * sizeof(UChar));
+        if(pattern == 0) {
+            return 0;
+        }
     }
+    else {
+        pattern = patBuffer;
+    }
+    ufmt_defaultCPToUnicode(patternSpecification, size, pattern, size);
 
     /* do the work */
     converted = u_vsscanf_u(buffer, locale, pattern, ap);
 
     /* clean up */
-    uprv_free(pattern);
+    if (pattern != patBuffer) {
+        uprv_free(pattern);
+    }
 
     return converted;
 }
