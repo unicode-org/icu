@@ -34,6 +34,8 @@ class IntlTestRBNF : public IntlTest {
    * Perform API tests on llong
    */
   virtual void TestLLong();
+  virtual void TestLLongConstructors();
+  virtual void TestLLongSimpleOperators();
 
   /**
    * Perform a simple spot check on the English spellout rules
