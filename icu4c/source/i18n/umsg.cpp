@@ -364,6 +364,24 @@ umsg_format(    UMessageFormat *fmt,
     return actLen;
 }
 
+U_NAMESPACE_BEGIN
+/**
+ * This class isolates our access to private internal methods of
+ * MessageFormat.  It is never instantiated; it exists only for C++
+ * access management.
+ */
+class MessageFormatAdapter {
+public:
+    static const Formattable::Type* getArgTypeList(const MessageFormat& m,
+                                                   int32_t& count);
+};
+const Formattable::Type*
+MessageFormatAdapter::getArgTypeList(const MessageFormat& m,
+                                     int32_t& count) {
+    return m.getArgTypeList(count);
+}
+U_NAMESPACE_END
+
 U_CAPI int32_t U_EXPORT2
 umsg_vformat(   UMessageFormat *fmt,
                 UChar          *result,
@@ -382,8 +400,11 @@ umsg_vformat(   UMessageFormat *fmt,
     }
 
     int32_t count =0;
-    const Formattable::Type* argTypes = ((MessageFormat*)fmt)->getFormatTypeList(count);
-    Formattable args[MessageFormat::kMaxFormat];
+    const Formattable::Type* argTypes =
+        MessageFormatAdapter::getArgTypeList(*(MessageFormat*)fmt, count);
+    // Allocate at least one element.  Allocating an array of length
+    // zero causes problems on some platforms (e.g. Win32).
+    Formattable* args = new Formattable[count ? count : 1];
 
     // iterate through the vararg list, and get the arguments out
     for(int32_t i = 0; i < count; ++i) {
@@ -433,6 +454,8 @@ umsg_vformat(   UMessageFormat *fmt,
     
     /* format the message */
     ((MessageFormat*)fmt)->format(args,count,resultStr,fieldPosition,*status);
+
+    delete[] args;
 
     if(U_FAILURE(*status)){
         return -1;
