@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $
- * $Date: 2004/01/11 20:20:25 $
- * $Revision: 1.57 $
+ * $Date: 2004/01/12 21:13:00 $
+ * $Revision: 1.58 $
  *
  *****************************************************************************************
  */
@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.io.PrintStream;
+import java.io.ByteArrayOutputStream;
 import java.io.Writer;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -334,13 +336,10 @@ public class TestFmwk extends AbstractTestLog {
                 } catch( IllegalAccessException e ) {
                     errln("Can't access test method " + testMethod.getName());
                 } catch( InvocationTargetException e ) {
-                    ByteArrayOutputStream bs = new ByteArrayOutputStream();
-                    PrintStream ps = new PrintStream(bs);
-                    e.getTargetException().printStackTrace(ps);
-                    String msg = "Uncaught exception " + bs.toString()
-                        +" thrown in test method " + testMethod.getName()
-                        +" accessed under name " + name;
-                    if (params.nothrow) {
+                    
+                    String msg = "Uncaught exception " + getStackTrace(e);
+                    
+		    if (params.nothrow) {
                         errln(msg);
                     } else {
                         e.getTargetException().printStackTrace(System.out);
@@ -348,6 +347,12 @@ public class TestFmwk extends AbstractTestLog {
                     }
                 }
             }
+        }
+        private String getStackTrace(InvocationTargetException e){
+            ByteArrayOutputStream bs = new ByteArrayOutputStream();
+            PrintStream ps = new PrintStream(bs);
+            e.getTargetException().printStackTrace(ps);
+            return bs.toString();
         }
     }
 
