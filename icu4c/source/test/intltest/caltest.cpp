@@ -661,7 +661,7 @@ CalendarTest::test4064654(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_
                                                   cal->get(Calendar::MONTH, status),
                                                   cal->get(Calendar::DATE, status),
                                                   (uint8_t)cal->get(Calendar::DAY_OF_WEEK, status),
-                                                  cal->get(Calendar::MILLISECOND, status));
+                                                  cal->get(Calendar::MILLISECOND, status), status);
     if (U_FAILURE(status)) { errln("Calendar::get failed"); return; }
     logln("offset for " + dateToString(date, str) + "= " + (offset / 1000 / 60 / 60.0) + "hr");
     int32_t utc = ((cal->get(Calendar::HOUR_OF_DAY, status) * 60 +

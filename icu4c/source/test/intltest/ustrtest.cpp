@@ -1137,7 +1137,7 @@ UnicodeStringTest::TestStackAllocation()
 
     // test the UChar32 constructor
     UnicodeString c32Test((UChar32)0x10ff2a);
-    if( c32Test.length() != Unicode::charLength(0x10ff2a) ||
+    if( c32Test.length() != UTF_CHAR_LENGTH(0x10ff2a) ||
         c32Test.char32At(c32Test.length() - 1) != 0x10ff2a
     ) {
         errln("The UnicodeString(UChar32) constructor does not work with a 0x10ff2a filler");
@@ -1145,7 +1145,7 @@ UnicodeStringTest::TestStackAllocation()
 
     // test the (new) capacity constructor
     UnicodeString capTest(5, (UChar32)0x2a, 5);
-    if( capTest.length() != 5 * Unicode::charLength(0x2a) ||
+    if( capTest.length() != 5 * UTF_CHAR_LENGTH(0x2a) ||
         capTest.char32At(0) != 0x2a ||
         capTest.char32At(4) != 0x2a
     ) {
@@ -1153,7 +1153,7 @@ UnicodeStringTest::TestStackAllocation()
     }
 
     capTest = UnicodeString(5, (UChar32)0x10ff2a, 5);
-    if( capTest.length() != 5 * Unicode::charLength(0x10ff2a) ||
+    if( capTest.length() != 5 * UTF_CHAR_LENGTH(0x10ff2a) ||
         capTest.char32At(0) != 0x10ff2a ||
         capTest.char32At(4) != 0x10ff2a
     ) {

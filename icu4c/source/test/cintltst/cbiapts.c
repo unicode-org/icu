@@ -371,7 +371,7 @@ static void TestBreakIteratorSafeClone(void)
             ubrk_close(brk);
         /* size one byte too small - should allocate & let us know */
         --bufferSize;
-        if (0 == (brk = ubrk_safeClone(someIterators[i], 0, &bufferSize, &status)) || status != U_SAFECLONE_ALLOCATED_ERROR)
+        if (0 == (brk = ubrk_safeClone(someIterators[i], 0, &bufferSize, &status)) || status != U_SAFECLONE_ALLOCATED_WARNING)
         {
             log_err("FAIL: Cloned Iterator failed to deal correctly with too-small buffer size\n");
         }
@@ -381,7 +381,7 @@ static void TestBreakIteratorSafeClone(void)
         bufferSize = U_BRK_SAFECLONE_BUFFERSIZE;
 
         /* Null buffer pointer - return Iterator & set error to U_SAFECLONE_ALLOCATED_ERROR */
-        if (0 == (brk = ubrk_safeClone(someIterators[i], 0, &bufferSize, &status)) || status != U_SAFECLONE_ALLOCATED_ERROR)
+        if (0 == (brk = ubrk_safeClone(someIterators[i], 0, &bufferSize, &status)) || status != U_SAFECLONE_ALLOCATED_WARNING)
         {
             log_err("FAIL: Cloned Iterator failed to deal correctly with null buffer pointer\n");
         }
@@ -399,7 +399,7 @@ static void TestBreakIteratorSafeClone(void)
             if (U_FAILURE(status) || brk == 0) {
                 log_err("FAIL: Cloned Iterator failed with misaligned buffer pointer\n");
             }
-            if (status == U_SAFECLONE_ALLOCATED_ERROR) {
+            if (status == U_SAFECLONE_ALLOCATED_WARNING) {
                 log_err("FAIL: Cloned Iterator allocated when using a mis-aligned buffer.\n");
             }
             offset = (int32_t)((char *)&p-(char*)brk);

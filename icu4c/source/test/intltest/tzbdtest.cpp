@@ -197,7 +197,8 @@ TimeZoneBoundaryTest::verifyDST(UDate d, TimeZone* time_zone, UBool expUseDaylig
     int32_t offset = time_zone->getOffset((uint8_t)gc->get(gc->ERA, status),
         gc->get(gc->YEAR, status), gc->get(gc->MONTH, status),
         gc->get(gc->DAY_OF_MONTH, status), (uint8_t)gc->get(gc->DAY_OF_WEEK, status),
-        ((gc->get(gc->HOUR_OF_DAY, status) * 60 + gc->get(gc->MINUTE, status)) * 60 + gc->get(gc->SECOND, status)) * 1000 + gc->get(gc->MILLISECOND, status));
+        ((gc->get(gc->HOUR_OF_DAY, status) * 60 + gc->get(gc->MINUTE, status)) * 60 + gc->get(gc->SECOND, status)) * 1000 + gc->get(gc->MILLISECOND, status),
+        status);
     if (failure(status, "GregorianCalendar::get")) return;
     if (offset == expDSTOffset) logln(UnicodeString("PASS: getOffset() = ") + (offset / ONE_HOUR));
     else errln(UnicodeString("FAIL: getOffset() = ") + (offset / ONE_HOUR) + "; expected " + (expDSTOffset / ONE_HOUR));

@@ -121,6 +121,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
             }
             break;
 
+#ifdef ICU_UBIDI_USE_DEPRECATES
         case 10:
             name = "BiDiTest";
             if(exec){
@@ -129,7 +130,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
                callTest(test,par);
             }
             break;
-
+#endif
         /*
         case 8:
             name = "LocaleTest"; 

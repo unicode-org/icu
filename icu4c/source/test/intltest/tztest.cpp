@@ -267,7 +267,7 @@ TimeZoneTest::TestVariousAPI518()
     gc->setTime(d, status);
     if (U_FAILURE(status)) { errln("FAIL: GregorianCalendar::setTime failed"); return; }
     if (time_zone->getOffset(gc->AD, gc->get(gc->YEAR, status), gc->get(gc->MONTH, status),
-        gc->get(gc->DAY_OF_MONTH, status), (uint8_t)gc->get(gc->DAY_OF_WEEK, status), 0) != - 7 * millisPerHour)
+        gc->get(gc->DAY_OF_MONTH, status), (uint8_t)gc->get(gc->DAY_OF_WEEK, status), 0, status) != - 7 * millisPerHour)
         errln("FAIL: getOffset returned wrong value");
     if (U_FAILURE(status)) { errln("FAIL: GregorianCalendar::set failed"); return; }
     delete gc;

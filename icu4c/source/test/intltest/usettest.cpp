@@ -182,7 +182,7 @@ UnicodeSetTest::TestCategories(void) {
     set.applyPattern("[:L:]", status);
     if (U_FAILURE(status)) { errln("FAIL"); return; }
     for (i=0; i<0x200; ++i) {
-        UBool l = Unicode::isLetter((UChar)i);
+        UBool l = u_isalpha((UChar)i);
         if (l != set.contains(i)) {
             errln((UnicodeString)"FAIL: L contains " + (unsigned short)i + " = " + 
                   set.contains(i));
@@ -193,7 +193,7 @@ UnicodeSetTest::TestCategories(void) {
     set.applyPattern("[:Lu:]", status);
     if (U_FAILURE(status)) { errln("FAIL"); return; }
     for (i=0; i<0x200; ++i) {
-        UBool lu = (Unicode::getType((UChar)i) == Unicode::UPPERCASE_LETTER);
+        UBool lu = (u_charType((UChar)i) == U_UPPERCASE_LETTER);
         if (lu != set.contains(i)) {
             errln((UnicodeString)"FAIL: Lu contains " + (unsigned short)i + " = " + 
                   set.contains(i));
@@ -204,14 +204,14 @@ UnicodeSetTest::TestCategories(void) {
 void
 UnicodeSetTest::TestCloneEqualHash(void) {
     UErrorCode status = U_ZERO_ERROR;
-    int8_t category=Unicode::LOWERCASE_LETTER;
+    int8_t category=U_LOWERCASE_LETTER;
     UnicodeSet *set1=new UnicodeSet(category, status); //  :Ll: Letter, lowercase
     UnicodeSet *set1a=new UnicodeSet("[:Ll:]", status); //  Letter, lowercase
     if (U_FAILURE(status)){
         errln((UnicodeString)"FAIL: Can't construst set with category->Ll");
         return;
     }
-    category=Unicode::DECIMAL_DIGIT_NUMBER;
+    category=U_DECIMAL_DIGIT_NUMBER;
     UnicodeSet *set2=new UnicodeSet(category, status);   //Number, Decimal digit
     UnicodeSet *set2a=new UnicodeSet("[:Nd:]", status);   //Number, Decimal digit
     if (U_FAILURE(status)){

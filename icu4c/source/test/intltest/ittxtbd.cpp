@@ -739,16 +739,16 @@ void IntlTestTextBoundary::TestLineInvariants()
             UChar c1 = work[1] = dashes[j];
             for (k = 0; k < testCharsLen; k++) {
                 UChar c2 = work[2] = testChars[k];
-                int8_t type = Unicode::getType(c2);
-                if (type == Unicode::DECIMAL_DIGIT_NUMBER ||
-                    type == Unicode::OTHER_NUMBER ||
-                    type == Unicode::NON_SPACING_MARK ||
-                    type == Unicode::ENCLOSING_MARK ||
-                    type == Unicode::CURRENCY_SYMBOL ||
-                    type == Unicode::SPACE_SEPARATOR ||
-                    type == Unicode::DASH_PUNCTUATION ||
-                    type == Unicode::CONTROL ||
-                    type == Unicode::FORMAT ||
+                int8_t type = u_charType(c2);
+                if (type == U_DECIMAL_DIGIT_NUMBER ||
+                    type == U_OTHER_NUMBER ||
+                    type == U_NON_SPACING_MARK ||
+                    type == U_ENCLOSING_MARK ||
+                    type == U_CURRENCY_SYMBOL ||
+                    type == U_SPACE_SEPARATOR ||
+                    type == U_DASH_PUNCTUATION ||
+                    type == U_CONTROL_CHAR ||
+                    type == U_FORMAT_CHAR ||
                     c2 == '\n'   || c2 == '\r'   || c2 == 0x2028 || c2 == 0x2029 ||
                     c2 == 0x0003 || c2 == 0x00a0 || c2 == 0x2007 || c2 == 0x2011 ||
                     c2 == 0xfeff)
@@ -1626,9 +1626,9 @@ void IntlTestTextBoundary::doOtherInvariantTest(BreakIterator& tb, UnicodeString
         work[1] = c1;
         for (j = 0; j < testCharsLen; j++) {
             UChar c2 = testChars[j];
-            type = Unicode::getType(c2);
-            if ((type != Unicode::NON_SPACING_MARK) && 
-                (type != Unicode::ENCLOSING_MARK)) {
+            type = u_charType(c2);
+            if ((type != U_NON_SPACING_MARK) && 
+                (type != U_ENCLOSING_MARK)) {
                 continue;
             }
             work[2] = c2;

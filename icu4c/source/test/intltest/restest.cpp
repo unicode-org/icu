@@ -103,9 +103,9 @@ param[] =
     { "root",       NULL,   U_ZERO_ERROR,             e_Root,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } },
     { "te",         NULL,   U_ZERO_ERROR,             e_te,        { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE } },
     { "te_IN",      NULL,   U_ZERO_ERROR,             e_te_IN,     { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE } },
-    { "te_NE",      NULL,   U_USING_FALLBACK_ERROR,   e_te,        { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE } },
-    { "te_IN_NE",   NULL,   U_USING_FALLBACK_ERROR,   e_te_IN,     { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE } },
-    { "ne",         NULL,   U_USING_DEFAULT_ERROR,    e_Root,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } }
+    { "te_NE",      NULL,   U_USING_FALLBACK_WARNING, e_te,        { FALSE, TRUE, FALSE }, { TRUE, TRUE, FALSE } },
+    { "te_IN_NE",   NULL,   U_USING_FALLBACK_WARNING, e_te_IN,     { FALSE, FALSE, TRUE }, { TRUE, TRUE, TRUE } },
+    { "ne",         NULL,   U_USING_DEFAULT_WARNING,  e_Root,      { TRUE, FALSE, FALSE }, { TRUE, FALSE, FALSE } }
 };
 
 int32_t bundles_count = sizeof(param) / sizeof(param[0]);
@@ -358,9 +358,9 @@ ResourceBundleTest::testTag(const char* frag,
                 if(j == actual_bundle) /* it's in the same bundle OR it's a nonexistent=default bundle (5) */
                   expected_resource_status = U_ZERO_ERROR;
                 else if(j == 0)
-                  expected_resource_status = U_USING_DEFAULT_ERROR;
+                  expected_resource_status = U_USING_DEFAULT_WARNING;
                 else
-                  expected_resource_status = U_USING_FALLBACK_ERROR;
+                  expected_resource_status = U_USING_FALLBACK_WARNING;
                 
                 break;
             }

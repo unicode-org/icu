@@ -23,6 +23,7 @@
 #include "cintltst.h"
 #include "unicode/utypes.h"
 #include "unicode/ucol.h"
+#include "unicode/ucoleitr.h"
 
 #define MAX_TOKEN_LEN 16
 

@@ -145,11 +145,14 @@ CollationAPITest::TestProperty(/* char* par */)
     doAssert((col->getStrength() != Collator::PRIMARY), "collation object's strength is primary difference");
     doAssert((col->getStrength() == Collator::SECONDARY), "collation object has the wrong strength");
 
+#ifdef ICU_NORMALIZER_USE_DEPRECATES
+/* The replacement API is tested in TestAttribute() */
     logln("testing Collator::setDecomposition() method ...");
     col->setDecomposition(Normalizer::NO_OP);
     doAssert((col->getDecomposition() != Normalizer::DECOMP), "collation object's strength is secondary difference");
     doAssert((col->getDecomposition() != Normalizer::DECOMP_COMPAT), "collation object's strength is primary difference");
     doAssert((col->getDecomposition() == Normalizer::NO_OP), "collation object has the wrong strength");
+#endif
 
     UnicodeString name;
 
@@ -374,6 +377,7 @@ CollationAPITest::TestDecomposition() {
     return;
   }
 
+#ifdef ICU_NORMALIZER_USE_DEPRECATES
   /* there is no reason to have canonical decomposition in en_US OR default locale */
   if (vi_VN->getDecomposition() != Normalizer::DECOMP)
   {
@@ -389,6 +393,23 @@ CollationAPITest::TestDecomposition() {
   {
     errln("ERROR: en_US collation had cannonical decomposition for normalization!\n");
   }
+#else
+  /* there is no reason to have canonical decomposition in en_US OR default locale */
+  if (vi_VN->getAttribute(UCOL_NORMALIZATION_MODE, status) != UCOL_ON)
+  {
+    errln("ERROR: vi_VN collation did not have cannonical decomposition for normalization!\n");
+  }
+
+  if (el_GR->getAttribute(UCOL_NORMALIZATION_MODE, status) != UCOL_ON)
+  {
+    errln("ERROR: el_GR collation did not have cannonical decomposition for normalization!\n");
+  }
+
+  if (en_US->getAttribute(UCOL_NORMALIZATION_MODE, status) != UCOL_OFF)
+  {
+    errln("ERROR: en_US collation had cannonical decomposition for normalization!\n");
+  }
+#endif
 
   delete en_US;
   delete el_GR;
@@ -859,13 +880,13 @@ CollationAPITest::TestOperators(/* char* par */)
         return;
     }
     success = U_ZERO_ERROR;
-    RuleBasedCollator *col8 = new RuleBasedCollator(ruleset2, Normalizer::NO_OP, success);
+    RuleBasedCollator *col8 = new RuleBasedCollator(ruleset2, UCOL_OFF, success);
     if (U_FAILURE(success)) {
         errln("The RuleBasedCollator constructor failed when building with the 2nd rule set with Normalizer::NO_OP.");
         return;
     }
     success = U_ZERO_ERROR;
-    RuleBasedCollator *col9 = new RuleBasedCollator(ruleset2, Collator::PRIMARY, Normalizer::DECOMP_COMPAT, success);
+    RuleBasedCollator *col9 = new RuleBasedCollator(ruleset2, Collator::PRIMARY, UCOL_ON, success);
     if (U_FAILURE(success)) {
         errln("The RuleBasedCollator constructor failed when building with the 2nd rule set with tertiary strength and Normalizer::NO_OP.");
         return;
