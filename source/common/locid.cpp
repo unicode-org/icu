@@ -84,34 +84,34 @@ const Locale  Locale::CANADA    ("en", "CA");
 const Locale  Locale::CANADA_FRENCH("fr", "CA");
 
 
-    /**
-     * Table mapping ISO country codes to the ISO language codes of the languages spoken
-     * in those countries.
-     * (Because the Java VM specification for building arrays and hashtables causes
-     * code that builds the tables element by element to be produces, we compress the data
-     * into a single encoded String, and lazy evaluate the table from it.)
-     */
-    UHashtable* Locale::ctry2LangMapping = 0;
-    const UnicodeString Locale::compressedCtry2LangMapping = UnicodeString(
-        "ADfresAEarenAFpsAGenAIrnALsqAMhyruANnlenAOptAResASensmATdeAUenAWnlenAZazhyru"
-        "BAsrshhrslmksqBBenBDbnhibhenBEfrnldeBFfrBGbgtrBHarenBIrnfrswBJfrBMenBNmsenzh"
-        "BOesayquBRptBSenBTdzenneBVnoBWentnBYberuBZenesCAenfrCCenCFfrsgCGfrCHfrdeitrm"
-        "CIfrCKmienCLesCMenfrCNzhboCOesCResCUesCVptCXenCYeltrenCZcsskDEdeDJarfrsoDKda"
-        "DMenfrDOesDZarfrECesquEEetruEGarenfrEHarfritERamtiarenitESeseucaglETamaren"
-        "FIfisvFJenfjhiFKenFMenFOfodaFRfreubrcoFXfrGAfrGBengdcyGDenfrGEkahyruGFfrGHen"
-        "GIenesGLdaikklGMenwoGNfrGPfrenGQesGRelGTesGUenGWptGYenhiurHKzhenHNesHRhrHTfr"
-        "HUhuIDinennlIEengaILiwarjiINhienguknksmlmrneorpasatateIOenIQarkutkIRfaarku"
-        "ISisITitfrdeJMenJOarJPjaKEenswKGkyKHkmKIenKMfrarKNenKPkoKRkoKWarenKYenKZkkru"
-        "LAlofrLBarenfrLCenfrLIdeLKtasienLRenLSstenLTltruplLUfrdeLVlvltruLYarenit"
-        "MAarfresMCfrenitMDmorobgMGmgenfrMKmkshtrMLfrMMmyMNmnruMOzhptMQfrMRarfrMSen"
-        "MTmtenitMUenfrhiMWenMXesMYmsenMZptNAenafdeNEfrhaNFenNGenhayoNIesNLnlfyNOno"
-        "NPneNRnaenNUenNZenmiOMarenPAesenPEesquayPFfrPGenPHentlesPKurenpspasdPLplPMfren"
-        "PNenPResenPTptPWenPYesgnQAarenREfrtaROrohuRUruRWenfrrwSAarSBenSCenfrSDarsu"
-        "SEsvSGzhenmstaSHenSIslSJnoSKskhuplshSLenSMitSNfrSOarenitsoSRnleneshiSTptSVes"
-        "SYarSZenssTCenTDfrarTFfrTGfrTHthTJtgruuzTKenmiTMtkruTNarTOentoTRtrkuTTenTVen"
-        "TWzhTZenswUAukruUGenswUMenUSenesUYesUZuzruVAlaitVCenVEesVGenVIenVNvizhfr"
-        "VUenfrbiWFfrWSensmYEarYTfrmgswYUsrshmkhuZAafenZMenZRfrswZWensn",
-        "");
+/**
+ * Table mapping ISO country codes to the ISO language codes of the languages spoken
+ * in those countries.
+ * (Because the Java VM specification for building arrays and hashtables causes
+ * code that builds the tables element by element to be produces, we compress the data
+ * into a single encoded String, and lazy evaluate the table from it.)
+ */
+UHashtable* Locale::ctry2LangMapping = 0;
+const UnicodeString Locale::compressedCtry2LangMapping = UnicodeString(
+    "ADfresAEarenAFpsAGenAIrnALsqAMhyruANnlenAOptAResASensmATdeAUenAWnlenAZazhyru"
+    "BAsrshhrslmksqBBenBDbnhibhenBEfrnldeBFfrBGbgtrBHarenBIrnfrswBJfrBMenBNmsenzh"
+    "BOesayquBRptBSenBTdzenneBVnoBWentnBYberuBZenesCAenfrCCenCFfrsgCGfrCHfrdeitrm"
+    "CIfrCKmienCLesCMenfrCNzhboCOesCResCUesCVptCXenCYeltrenCZcsskDEdeDJarfrsoDKda"
+    "DMenfrDOesDZarfrECesquEEetruEGarenfrEHarfritERamtiarenitESeseucaglETamaren"
+    "FIfisvFJenfjhiFKenFMenFOfodaFRfreubrcoFXfrGAfrGBengdcyGDenfrGEkahyruGFfrGHen"
+    "GIenesGLdaikklGMenwoGNfrGPfrenGQesGRelGTesGUenGWptGYenhiurHKzhenHNesHRhrHTfr"
+    "HUhuIDinennlIEengaILiwarjiINhienguknksmlmrneorpasatateIOenIQarkutkIRfaarku"
+    "ISisITitfrdeJMenJOarJPjaKEenswKGkyKHkmKIenKMfrarKNenKPkoKRkoKWarenKYenKZkkru"
+    "LAlofrLBarenfrLCenfrLIdeLKtasienLRenLSstenLTltruplLUfrdeLVlvltruLYarenit"
+    "MAarfresMCfrenitMDmorobgMGmgenfrMKmkshtrMLfrMMmyMNmnruMOzhptMQfrMRarfrMSen"
+    "MTmtenitMUenfrhiMWenMXesMYmsenMZptNAenafdeNEfrhaNFenNGenhayoNIesNLnlfyNOno"
+    "NPneNRnaenNUenNZenmiOMarenPAesenPEesquayPFfrPGenPHentlesPKurenpspasdPLplPMfren"
+    "PNenPResenPTptPWenPYesgnQAarenREfrtaROrohuRUruRWenfrrwSAarSBenSCenfrSDarsu"
+    "SEsvSGzhenmstaSHenSIslSJnoSKskhuplshSLenSMitSNfrSOarenitsoSRnleneshiSTptSVes"
+    "SYarSZenssTCenTDfrarTFfrTGfrTHthTJtgruuzTKenmiTMtkruTNarTOentoTRtrkuTTenTVen"
+    "TWzhTZenswUAukruUGenswUMenUSenesUYesUZuzruVAlaitVCenVEesVGenVIenVNvizhfr"
+    "VUenfrbiWFfrWSensmYEarYTfrmgswYUsrshmkhuZAafenZMenZRfrswZWensn",
+    "");
 
 /*Used for stack allocation of temporary buffers
  *can be tweaked  for speed and likelihood of resorting to heap allocation*/ 
@@ -123,10 +123,10 @@ const char sepchar = '_'; // In the platform codepage.
 
 Locale::~Locale()
 {   
-  /*if fullName is on the heap, we delete it*/
-  if (fullName != fullNameBuffer) 
+    /*if fullName is on the heap, we delete it*/
+    if (fullName != fullNameBuffer) 
     {
-      delete []fullName;
+        delete []fullName;
     }
 }
 
@@ -139,202 +139,200 @@ Locale::Locale( const   char * newLanguage,
                 const   char * newCountry, 
                 const   char * newVariant) 
 {
-  char togo_stack[ULOC_FULLNAME_CAPACITY];
-  char *togo;
-  char *togo_heap = NULL;
-  int32_t size = 0;
-  int32_t lsize = 0;
-  int32_t csize = 0;
-  int32_t vsize = 0;
-  char    *p;
+    char togo_stack[ULOC_FULLNAME_CAPACITY];
+    char *togo;
+    char *togo_heap = NULL;
+    int32_t size = 0;
+    int32_t lsize = 0;
+    int32_t csize = 0;
+    int32_t vsize = 0;
+    char    *p;
 
-  if( (newLanguage==NULL) && (newCountry == NULL) && (newVariant == NULL) )
-  {
-    init(NULL); /* shortcut */
-  }
-  else
-  {
-    // Calculate the size of the resulting string.
-    
-    // Language
-    if ( newLanguage != NULL )
-      {
-        lsize = uprv_strlen(newLanguage);
-        size = lsize;
-      }
-    
-    // _Country
-    if ( newCountry != NULL )
-      {
-        csize = uprv_strlen(newCountry);
-        size += csize;
-      }
-
-    // _Variant
-    if ( newVariant != NULL )
-      {
-        // remove leading _'s
-        while(newVariant[0] == sepchar)
-          {
-            newVariant++;
-          }
-    
-        // remove trailing _'s
-        vsize = uprv_strlen(newVariant);
-        while( (vsize>1) && (newVariant[vsize-1] == sepchar) )
-          {
-            vsize--;
-          }
-      }
-
-    if( vsize > 0 )
-      {
-        size += vsize;
-      }
-  
-    // Separator rules:
-    if ( vsize > 0 )
-      {
-        size += 2;  // at least: __v 
-      }
-    else if ( csize > 0 )
-      {
-        size += 1;  // at least: _v 
-      }
-
-    //  NOW we have the full locale string..
-
-  /*if the whole string is longer than our internal limit, we need
-  to go to the heap for temporary buffers*/
-    if (size > ULOC_FULLNAME_CAPACITY)
-      {
-        togo_heap = new char[size+1];
-        togo = togo_heap;
-      }
+    if( (newLanguage==NULL) && (newCountry == NULL) && (newVariant == NULL) )
+    {
+        init(NULL); /* shortcut */
+    }
     else
-      {
-        togo = togo_stack;
-      }
+    {
+        // Calculate the size of the resulting string.
 
-    togo[0] = 0;
+        // Language
+        if ( newLanguage != NULL )
+        {
+            lsize = (int32_t)uprv_strlen(newLanguage);
+            size = lsize;
+        }
 
-    // Now, copy it back.
-    p = togo;
-    if ( lsize != 0 )
-      {
-        uprv_strcpy(p, newLanguage);
-        p += lsize;
-      }
+        // _Country
+        if ( newCountry != NULL )
+        {
+            csize = (int32_t)uprv_strlen(newCountry);
+            size += csize;
+        }
 
-    if ( ( vsize != 0 ) || (csize != 0) )  // at least:  __v
-      {                                      //            ^
-        *p++ = sepchar;
-      }
+        // _Variant
+        if ( newVariant != NULL )
+        {
+            // remove leading _'s
+            while(newVariant[0] == sepchar)
+            {
+                newVariant++;
+            }
+            
+            // remove trailing _'s
+            vsize = (int32_t)uprv_strlen(newVariant);
+            while( (vsize>1) && (newVariant[vsize-1] == sepchar) )
+            {
+                vsize--;
+            }
+        }
 
-    if ( csize != 0 )
-      { 
+        if( vsize > 0 )
+        {
+            size += vsize;
+        }
 
-        uprv_strcpy(p, newCountry);
-        p += csize;
-      }
+        // Separator rules:
+        if ( vsize > 0 )
+        {
+            size += 2;  // at least: __v 
+        }
+        else if ( csize > 0 )
+        {
+            size += 1;  // at least: _v 
+        }
 
-    if ( vsize != 0)
-      {
-        *p++ = sepchar; // at least: __v
+        //  NOW we have the full locale string..
 
-        uprv_strncpy(p, newVariant, vsize);  // Must use strncpy because 
-        p += vsize;                          // of trimming (above).
-        *p = 0; // terminate
-      }
+        /*if the whole string is longer than our internal limit, we need
+        to go to the heap for temporary buffers*/
+        if (size > ULOC_FULLNAME_CAPACITY)
+        {
+            togo_heap = new char[size+1];
+            togo = togo_heap;
+        }
+        else
+        {
+            togo = togo_stack;
+        }
 
-    // Parse it, because for example 'language' might really be a complete 
-    // string.
-    init(togo);
+        togo[0] = 0;
 
-    delete [] togo_heap; /* If it was needed */
-  }
+        // Now, copy it back.
+        p = togo;
+        if ( lsize != 0 )
+        {
+            uprv_strcpy(p, newLanguage);
+            p += lsize;
+        }
+
+        if ( ( vsize != 0 ) || (csize != 0) )  // at least:  __v
+        {                                      //            ^
+            *p++ = sepchar;
+        }
+
+        if ( csize != 0 )
+        { 
+            
+            uprv_strcpy(p, newCountry);
+            p += csize;
+        }
+
+        if ( vsize != 0)
+        {
+            *p++ = sepchar; // at least: __v
+
+            uprv_strncpy(p, newVariant, vsize);  // Must use strncpy because 
+            p += vsize;                          // of trimming (above).
+            *p = 0; // terminate
+        }
+
+        // Parse it, because for example 'language' might really be a complete
+        // string.
+        init(togo);
+
+        delete [] togo_heap; /* If it was needed */
+    }
 }
 
 Locale::Locale(const    Locale& other)
 
 {
-  int j;
+    int j;
     /*Copy the language and country fields*/
-  uprv_strcpy(language, other.language);
-  uprv_strcpy(country, other.country);
-  
-  /*make fullName point to the heap if necessary*/
-  if ((j=uprv_strlen(other.fullName)) > ULOC_FULLNAME_CAPACITY)
+    uprv_strcpy(language, other.language);
+    uprv_strcpy(country, other.country);
+
+    /*make fullName point to the heap if necessary*/
+    if ((j=(int)uprv_strlen(other.fullName)) > ULOC_FULLNAME_CAPACITY)
     {
-      fullName = new char[j+1];
+        fullName = new char[j+1];
     }
-  else fullName = fullNameBuffer;
-  
-  uprv_strcpy(fullName, other.fullName);
-    
+    else
+        fullName = fullNameBuffer;
+
+    uprv_strcpy(fullName, other.fullName);
+
     /*Make the variant point to the same offset as the copied*/
-  variant = fullName + (other.variant - other.fullName) ;
+    variant = fullName + (other.variant - other.fullName) ;
 }
 
 UBool
 Locale::operator==( const   Locale& other) const
 {
-  if (uprv_strcmp(other.language, language) == 0)    
-  {
-    if (uprv_strcmp(other.country, country) == 0)    
+    if (uprv_strcmp(other.language, language) == 0
+        && uprv_strcmp(other.country, country) == 0
+        && uprv_strcmp(other.variant, variant) == 0)
     {
-      if (uprv_strcmp(other.variant, variant) == 0)    return TRUE;
+        return TRUE;
     }
-  }
-  
-  return FALSE;
-  
+
+    return FALSE;
 }
 
 /*This function initializes a Locale from a C locale ID*/
 Locale& Locale::init(const char* localeID)
 {
-  int k,l;
-  UErrorCode err = U_ZERO_ERROR;
+    int k,l;
+    UErrorCode err = U_ZERO_ERROR;
 
-  if (localeID == NULL) localeID = uloc_getDefault();
-  l = uloc_getLanguage(localeID, 
-               this->language,
-               ULOC_LANG_CAPACITY,
-               &err);
- 
-  l += k = uloc_getCountry(localeID,
-              this->country,
-              ULOC_COUNTRY_CAPACITY,
-              &err);
-  
-  l--; //adjust for the 2 zero terminators
-  
-  /*Go to heap for the fullName if necessary*/
-  int j;
-  if ((j=uprv_strlen(localeID)) > ULOC_FULLNAME_CAPACITY)
+    if (localeID == NULL) localeID = uloc_getDefault();
+    l = uloc_getLanguage(localeID, 
+        this->language,
+        ULOC_LANG_CAPACITY,
+        &err);
+
+    l += k = uloc_getCountry(localeID,
+        this->country,
+        ULOC_COUNTRY_CAPACITY,
+        &err);
+
+    l--; //adjust for the 2 zero terminators
+
+    /*Go to heap for the fullName if necessary*/
+    int j;
+    if ((j=(int)uprv_strlen(localeID)) > ULOC_FULLNAME_CAPACITY)
     {
-      this->fullName = new char[j+1];
+        this->fullName = new char[j+1];
     }
-  else this->fullName = this->fullNameBuffer;
-  
-  uprv_strcpy(this->fullName, localeID);
-      
-  /*Setting up the variant:
+    else this->fullName = this->fullNameBuffer;
+
+    uprv_strcpy(this->fullName, localeID);
+
+    /*Setting up the variant:
     -point to the zero terminator of fullName if there is none
     -point to the first character of the variant if ther is one
     */
-  if (k > 1)  
+    if (k > 1)  
     {
-      if (this->fullName[l] == '\0') this->variant = this->fullName + l;
-      else this->variant = this->fullName + l + 1 ;
+        if (this->fullName[l] == '\0') this->variant = this->fullName + l;
+        else this->variant = this->fullName + l + 1 ;
     }
-  else this->variant = this->fullName + l - 1;
+    else
+        this->variant = this->fullName + l - 1;
 
-  return *this;
+    return *this;
 }
-
-
 
 Locale& Locale::operator=(const Locale& other)
 {
@@ -388,7 +386,8 @@ void
 Locale::setDefault( const   Locale&     newLocale, 
                             UErrorCode&  status) 
 {
-    if (U_FAILURE(status)) return;
+    if (U_FAILURE(status))
+        return;
 
     uloc_setDefault(newLocale.fullName, &status);
     
@@ -398,47 +397,47 @@ Locale::setDefault( const   Locale&     newLocale,
 Locale
 Locale::createFromName (const char *name)
 {
-  char stack[128];
-  char *heap = NULL;
-  char *buf = stack;
-  size_t buflen = 128;
-  UErrorCode status;
+    char stack[128];
+    char *heap = NULL;
+    char *buf = stack;
+    int32_t buflen = 128;
+    UErrorCode status;
 
-  status = U_ZERO_ERROR;
+    status = U_ZERO_ERROR;
 
-  /* for some reason */
-  if(uprv_strlen(name) > buflen) {
-    buflen = uprv_strlen(name)+1;
-    heap = (char*)uprv_malloc(buflen);
-    buf = heap;
-  }
-  
-  uloc_getName(name, buf, buflen, &status);
-  
-  Locale l(buf);
-  if(heap != NULL)
-  {
-    free(heap);
-  }
-  return l;
+    /* for some reason */
+    if(uprv_strlen(name) > buflen) {
+        buflen = (int32_t)uprv_strlen(name)+1;
+        heap = (char*)uprv_malloc(buflen);
+        buf = heap;
+    }
+
+    uloc_getName(name, buf, buflen, &status);
+
+    Locale l(buf);
+    if(heap != NULL)
+    {
+        free(heap);
+    }
+    return l;
 }
 
 const char *
 Locale::getCountry() const
 {
-  return country;
+    return country;
 }
 
 const char *
 Locale::getLanguage() const
 {
-  return language;
+    return language;
 }
 
 const char *
 Locale::getVariant() const
 {
-  return variant;
+    return variant;
 }
 
 #ifdef ICU_LOCID_USE_DEPRECATES
@@ -474,20 +473,20 @@ Locale::getName(UnicodeString& name) const
 const char * 
 Locale::getName() const
 {
-  return fullName;
+    return fullName;
 }
 
 const char *
 Locale::getISO3Language() const
 {
-  return uloc_getISO3Language(fullName);
+    return uloc_getISO3Language(fullName);
 }
 
 
 const char *
 Locale::getISO3Country() const
 {
-  return uloc_getISO3Country(fullName);
+    return uloc_getISO3Country(fullName);
 }
 
 #ifdef ICU_LOCID_USE_DEPRECATES
@@ -547,37 +546,38 @@ UnicodeString&
 Locale::getDisplayLanguage( const   Locale&         inLocale,
                 UnicodeString&  dispLang) const
 {
-  UErrorCode status = U_ZERO_ERROR;
-  UChar bufBuffer[BUFFER_SIZE];
-  UChar* buf = bufBuffer;
-  
-  //  dispLang = "result";
-  //  return dispLang;
-  int size = uloc_getDisplayLanguage(fullName,
-                     inLocale.fullName,
-                     buf,
-                     BUFFER_SIZE,
-                     &status);
-  
-
-  if (status == U_BUFFER_OVERFLOW_ERROR)
+    UErrorCode status = U_ZERO_ERROR;
+    UChar bufBuffer[BUFFER_SIZE];
+    UChar* buf = bufBuffer;
+    
+    //  dispLang = "result";
+    //  return dispLang;
+    int size = uloc_getDisplayLanguage(fullName,
+        inLocale.fullName,
+        buf,
+        BUFFER_SIZE,
+        &status);
+    
+    
+    if (status == U_BUFFER_OVERFLOW_ERROR)
     {
-      status = U_ZERO_ERROR;
-      buf = new UChar[size];
-      
-      uloc_getDisplayLanguage(fullName,
-                  inLocale.fullName,
-                  buf,
-                  size,
-                  &status);
-      
+        status = U_ZERO_ERROR;
+        buf = new UChar[size];
+        
+        uloc_getDisplayLanguage(fullName,
+            inLocale.fullName,
+            buf,
+            size,
+            &status);
+        
     }
-  
-  dispLang = buf;
-
-  if (buf != bufBuffer) delete []buf;
-  
-  return dispLang;
+    
+    dispLang = buf;
+    
+    if (buf != bufBuffer)
+        delete []buf;
+    
+    return dispLang;
 }
 
 UnicodeString& 
@@ -590,77 +590,71 @@ UnicodeString&
 Locale::getDisplayCountry(  const   Locale&         inLocale,
                                     UnicodeString&  dispCntry) const
 {
-  UErrorCode status = U_ZERO_ERROR;
-  UChar bufBuffer[BUFFER_SIZE];
-  UChar* buf = bufBuffer;
-  
-  
-  int size = uloc_getDisplayCountry(fullName,
-                    inLocale.fullName,
-                    buf,
-                    BUFFER_SIZE,
-                    &status);
-  
-  if (status == U_BUFFER_OVERFLOW_ERROR)
+    UErrorCode status = U_ZERO_ERROR;
+    UChar bufBuffer[BUFFER_SIZE];
+    UChar* buf = bufBuffer;
+
+    int size = uloc_getDisplayCountry(fullName,
+        inLocale.fullName,
+        buf,
+        BUFFER_SIZE,
+        &status);
+
+    if (status == U_BUFFER_OVERFLOW_ERROR)
     {
-      status = U_ZERO_ERROR;
-      buf = new UChar[size];
-      uloc_getDisplayCountry(fullName,
-                 inLocale.fullName,
-                 buf,
-                 size,
-                 &status);
-      
-      
+        status = U_ZERO_ERROR;
+        buf = new UChar[size];
+        uloc_getDisplayCountry(fullName,
+            inLocale.fullName,
+            buf,
+            size,
+            &status);
     }
 
-  
-  dispCntry = buf;
+    dispCntry = buf;
 
-  if (buf != bufBuffer) delete []buf;
-  
-  return dispCntry;
+    if (buf != bufBuffer)
+        delete []buf;
+
+    return dispCntry;
 }
 
 UnicodeString& 
 Locale::getDisplayVariant(UnicodeString& dispVar) const
 {
-  return this->getDisplayVariant(getDefault(), dispVar);
-  
+    return this->getDisplayVariant(getDefault(), dispVar);
 }
 
 UnicodeString& Locale::getDisplayVariant(const Locale& inLocale,
                      UnicodeString& dispVar) const
 {
-  UErrorCode status = U_ZERO_ERROR;
-  UChar bufBuffer[BUFFER_SIZE];
-  UChar* buf = bufBuffer;
-  
+    UErrorCode status = U_ZERO_ERROR;
+    UChar bufBuffer[BUFFER_SIZE];
+    UChar* buf = bufBuffer;
 
-  int size = uloc_getDisplayVariant(fullName,
-                    inLocale.fullName,
-                    buf,
-                    BUFFER_SIZE,
-                    &status);
-  
-  if (status == U_BUFFER_OVERFLOW_ERROR)
+    int size = uloc_getDisplayVariant(fullName,
+        inLocale.fullName,
+        buf,
+        BUFFER_SIZE,
+        &status);
+
+    if (status == U_BUFFER_OVERFLOW_ERROR)
     {
-      status = U_ZERO_ERROR;
-      buf = new UChar[size];
-      uloc_getDisplayVariant(fullName,
-                 inLocale.fullName,
-                 buf,
-                 size,
-                 &status);
-      
+        status = U_ZERO_ERROR;
+        buf = new UChar[size];
+        uloc_getDisplayVariant(fullName,
+            inLocale.fullName,
+            buf,
+            size,
+            &status);
     }
-  
- 
-  dispVar = buf;
-  
-  if (buf != bufBuffer) delete []buf;
-  
-  return dispVar;
+
+    dispVar = buf;
+
+    if (buf != bufBuffer)
+        delete []buf;
+
+    return dispVar;
 }
 
 UnicodeString& 
@@ -673,81 +667,83 @@ UnicodeString&
 Locale::getDisplayName( const   Locale&     inLocale,
             UnicodeString& result) const
 {
-  UErrorCode status = U_ZERO_ERROR;
-  UChar bufBuffer[BUFFER_SIZE];
-  UChar* buf = bufBuffer;
-  
-  int size = uloc_getDisplayName(fullName,
-                 inLocale.fullName,
-                 buf,
-                 BUFFER_SIZE,
-                 &status);
-  
-  if (status == U_BUFFER_OVERFLOW_ERROR)
+    UErrorCode status = U_ZERO_ERROR;
+    UChar bufBuffer[BUFFER_SIZE];
+    UChar* buf = bufBuffer;
+
+    int size = uloc_getDisplayName(fullName,
+        inLocale.fullName,
+        buf,
+        BUFFER_SIZE,
+        &status);
+
+    if (status == U_BUFFER_OVERFLOW_ERROR)
     {
-      status = U_ZERO_ERROR;
-      
-      buf = new UChar[size];
-      uloc_getDisplayName(fullName,
-              inLocale.fullName,
-              buf,
-              size,
-              &status);    
+        status = U_ZERO_ERROR;
+        
+        buf = new UChar[size];
+        uloc_getDisplayName(fullName,
+            inLocale.fullName,
+            buf,
+            size,
+            &status);
     }
 
     result = buf;
-  
-  if (buf != bufBuffer) {delete []buf;}
-  
-  return result;
+
+    if (buf != bufBuffer) {
+        delete []buf;
+    }
+
+    return result;
 }
 
 const Locale*
 Locale::getAvailableLocales(int32_t& count) 
 {
-  // for now, there is a hardcoded list, so just walk through that list and set it up.
-  if (localeList == 0) {
-      UErrorCode status = U_ZERO_ERROR;
-      ResourceBundle index(UnicodeString(""), Locale(kIndexLocaleName), status);
-      ResourceBundle locales = index.get(kIndexTag, status);
+    // for now, there is a hardcoded list, so just walk through that list and set it up.
+    if (localeList == 0) {
+        UErrorCode status = U_ZERO_ERROR;
+        ResourceBundle index(UnicodeString(""), Locale(kIndexLocaleName), status);
+        ResourceBundle locales = index.get(kIndexTag, status);
 
-      char name[96];
-      locales.resetIterator();
+        char name[96];
+        locales.resetIterator();
 
-      count = locales.getSize();
+        count = locales.getSize();
 
-      Locale *newLocaleList = new Locale[count];
+        Locale *newLocaleList = new Locale[count];
 
-      int32_t i = 0;
-      UnicodeString temp;
-      while(locales.hasNext()) {
-          temp = locales.getNextString(status);
-          temp.extract(0, temp.length(), name);
-          name[temp.length()] = '\0';
-          newLocaleList[i++].setFromPOSIXID(name);
-      }
+        int32_t i = 0;
+        UnicodeString temp;
+        while(locales.hasNext()) {
+            temp = locales.getNextString(status);
+            temp.extract(0, temp.length(), name);
+            name[temp.length()] = '\0';
+            newLocaleList[i++].setFromPOSIXID(name);
+        }
 
-      Mutex mutex;
-      if(localeList != 0) {
-    delete []newLocaleList;
-      }
-      else {
-    localeListCount = count;
+        Mutex mutex;
+        if(localeList != 0) {
+            delete []newLocaleList;
+        }
+        else {
+            localeListCount = count;
             localeList = newLocaleList;
-      }
+        }
     }
-  count = localeListCount;
-  return localeList;
+    count = localeListCount;
+    return localeList;
 }
 
 const char* const* Locale::getISOCountries()
 {
-  return uloc_getISOCountries();
+    return uloc_getISOCountries();
 }
 
 const char* const* Locale::getISOLanguages()
 {
-  return uloc_getISOLanguages();
+    return uloc_getISOLanguages();
 }
 
 
@@ -838,55 +834,55 @@ Locale::getISOLanguages(int32_t& count)
 const UnicodeString* 
 Locale::getLanguagesForCountry(const UnicodeString& country, int32_t& count) 
 {
-  // To save on the size of a static array in the .class file, we keep the
-  // data around encoded into a String.  The first time this function is called,
-  // the String s parsed to produce a Hashtable, which is then used for all
-  // lookups.
-  if(ctry2LangMapping == 0) {
-    UErrorCode err = U_ZERO_ERROR;
-    UHashtable *temp = uhash_open(uhash_hashUnicodeString, uhash_compareUnicodeString, &err);
-    if (U_FAILURE(err)) 
-      {
-        count = 0;
-        return NULL;
-      }
+    // To save on the size of a static array in the .class file, we keep the
+    // data around encoded into a String.  The first time this function is called,
+    // the String s parsed to produce a Hashtable, which is then used for all
+    // lookups.
+    if(ctry2LangMapping == 0) {
+        UErrorCode err = U_ZERO_ERROR;
+        UHashtable *temp = uhash_open(uhash_hashUnicodeString, uhash_compareUnicodeString, &err);
+        if (U_FAILURE(err)) 
+        {
+            count = 0;
+            return NULL;
+        }
 
-    uhash_setKeyDeleter(temp, uhash_deleteUnicodeString);
+        uhash_setKeyDeleter(temp, uhash_deleteUnicodeString);
 
-    int32_t i = 0;
-    int32_t j;
-    int32_t count = sizeof(compressedCtry2LangMapping) / sizeof(compressedCtry2LangMapping[0]);
-    while (i < count) {
-      UnicodeString key;
-      compressedCtry2LangMapping.extractBetween(i, i + 2, key);
-      i += 2;
-      for(j = i; j < count; j += 2)
-        if(Unicode::isUpperCase(compressedCtry2LangMapping[j]))
-          break;
-      UnicodeString compressedValues;
-      compressedCtry2LangMapping.extractBetween(i, j, compressedValues);
-      UnicodeString *values = new UnicodeString[compressedValues.length() / 2];
-      int32_t valLen = sizeof(values) / sizeof(values[0]);
-      for (int32_t k = 0; k < valLen; ++k)
-        compressedValues.extractBetween(k * 2, (k * 2) + 2, values[k]);
-      uhash_put(temp, new UnicodeString(key), values, &err);
-      i = j;
+        int32_t i = 0;
+        int32_t j;
+        int32_t count = (int32_t)(sizeof(compressedCtry2LangMapping) / sizeof(compressedCtry2LangMapping[0]));
+        while (i < count) {
+            UnicodeString key;
+            compressedCtry2LangMapping.extractBetween(i, i + 2, key);
+            i += 2;
+            for(j = i; j < count; j += 2)
+                if(Unicode::isUpperCase(compressedCtry2LangMapping[j]))
+                    break;
+                UnicodeString compressedValues;
+                compressedCtry2LangMapping.extractBetween(i, j, compressedValues);
+                UnicodeString *values = new UnicodeString[compressedValues.length() / 2];
+                int32_t valLen = (int32_t)(sizeof(values) / sizeof(values[0]));
+                for (int32_t k = 0; k < valLen; ++k)
+                    compressedValues.extractBetween(k * 2, (k * 2) + 2, values[k]);
+                uhash_put(temp, new UnicodeString(key), values, &err);
+                i = j;
+        }
+
+        Mutex mutex;
+        if(ctry2LangMapping != 0)
+            uhash_close(temp);
+        else
+            ctry2LangMapping = temp;
     }
-    
-    Mutex mutex;
-    if(ctry2LangMapping != 0)
-      uhash_close(temp);
-    else
-      ctry2LangMapping = temp;
-  }
 
-  const UnicodeString *result = (const UnicodeString*)uhash_get(ctry2LangMapping, &country);
-  if(result == 0)
-    count = 0;
-  else
-    count = sizeof(result) / sizeof(result[0]);
-  
-  return result;
+    const UnicodeString *result = (const UnicodeString*)uhash_get(ctry2LangMapping, &country);
+    if(result == 0)
+        count = 0;
+    else
+        count = (int32_t)(sizeof(result) / sizeof(result[0]));
+
+    return result;
 }
 
 
@@ -898,7 +894,7 @@ Locale::getLanguagesForCountry(const UnicodeString& country, int32_t& count)
 // Set the locale's data based on a posix id. 
 void Locale::setFromPOSIXID(const char *posixID)
 {
-  init(posixID);  
+    init(posixID);
 }
 
 #ifdef ICU_LOCID_USE_DEPRECATES
