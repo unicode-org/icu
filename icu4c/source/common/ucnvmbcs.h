@@ -46,13 +46,16 @@ enum {
  * mostly how many bytes are stored per entry.
  */
 enum {
-    MBCS_OUTPUT_1,
-    MBCS_OUTPUT_2,
-    MBCS_OUTPUT_3,
-    MBCS_OUTPUT_4,
+    MBCS_OUTPUT_1,          /* 0 */
+    MBCS_OUTPUT_2,          /* 1 */
+    MBCS_OUTPUT_3,          /* 2 */
+    MBCS_OUTPUT_4,          /* 3 */
 
-    MBCS_OUTPUT_3_EUC=8,
-    MBCS_OUTPUT_4_EUC
+    MBCS_OUTPUT_3_EUC=8,    /* 8 */
+    MBCS_OUTPUT_4_EUC,      /* 9 */
+
+    MBCS_OUTPUT_2_SISO=12,  /* c */
+    MBCS_OUTPUT_2_HZ        /* d */
 };
 
 /**
