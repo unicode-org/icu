@@ -42,6 +42,13 @@ private:
      */
     void TestCornerCases(void);
     
+    /**
+     * Read the external names list, and confirms that the collator 
+     * gets the same results when comparing lines one to another
+     * using regular and iterative comparison.
+     */
+    void TestNamesList(void);
+
 private:
 
     void compareArray(const Collator& c, const char* tests[],
