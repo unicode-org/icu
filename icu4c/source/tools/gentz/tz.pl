@@ -108,7 +108,7 @@ use strict;
 use Getopt::Long;
 use vars qw(@FILES $YEAR $DATA_DIR $OUT $SEP @MONTH
             $VERSION_YEAR $VERSION_SUFFIX $RAW_VERSION
-            $TZ_ALIAS $TZ_DEFAULT $URL $HTML_FILE
+            $TZ_ALIAS $TZ_DEFAULT $URL $HTML_FILE $JAVA_FILE
             $TZ_TXT_VERSION %ZONE_ID_TO_INDEX $END_MARKER);
 require 'dumpvar.pl';
 use tzparse;
@@ -166,8 +166,8 @@ if ($DATA_DIR =~ /(tzdata(\d{4})(\w?))/) {
     $VERSION_YEAR = $2;
     $VERSION_SUFFIX = $3;
     if ($YEAR != $VERSION_YEAR) {
-        print STDERR "WARNING: You appear to be building $VERSION_YEAR data. Don't you want to use current $YEAR data?\n";
-        usage(); # Add an override option for this check, if needed
+        print STDERR "WARNING: You appear to be building $VERSION_YEAR data. Don't you want to use current $YEAR data?\n\n";
+        #usage(); # Add an override option for this check, if needed
     }
     $VERSION_SUFFIX =~ tr/a-z/A-Z/;
     if ($VERSION_SUFFIX =~ /[A-Z]/) {
@@ -186,6 +186,13 @@ if ($DATA_DIR =~ /(tzdata(\d{4})(\w?))/) {
 
 $HTML_FILE = shift;
 
+if ($HTML_FILE =~ /\.java$/i) {
+    $JAVA_FILE = $HTML_FILE;
+    $HTML_FILE = shift;
+} else {
+    $JAVA_FILE = shift;
+}
+
 @MONTH = qw(jan feb mar apr may jun
             jul aug sep oct nov dec);
 
@@ -193,7 +200,7 @@ main();
 exit();
 
 sub usage {
-    print STDERR "Usage: $0 data_dir [html_out]\n\n";
+    print STDERR "Usage: $0 data_dir [html_out] [java_out]\n\n";
     print STDERR "data_dir contains the unpacked files from\n";
     print STDERR "$URL/tzdataYYYYR,\n";
     print STDERR "where YYYY is the year and R is the revision\n";
@@ -203,6 +210,7 @@ sub usage {
     print STDERR join(", ", @FILES), "\n";
     print STDERR "\n";
     print STDERR "[html_out] optional name of HTML file to output\n";
+    print STDERR "[java_out] optional name of Java file to output\n";
     exit 1;
 }
 
@@ -416,6 +424,12 @@ sub main {
     close(OUT);
     print "$OUT written.\n";
 
+    # Emit the Java file
+    if ($JAVA_FILE) {
+        emitJava($JAVA_FILE, \%ZONES, \%RULES, \@EQUIV, $offsetIndex, $aliases);
+        print "$JAVA_FILE written.\n";
+    }
+
     # Emit the HTML file
     if ($HTML_FILE) {
         emitHTML($HTML_FILE, \%ZONES, \%RULES, \@EQUIV, $offsetIndex, $aliases);
@@ -564,6 +578,211 @@ sub isDefault {
     my $offsetIndex = shift;
     my $aref = $offsetIndex->{TZ::ParseOffset($offset)};
     return ($aref->[0] eq $name);
+}
+
+# Emit a Java file that contains data for the system time zones.
+# Param: File name
+# Param: ref to zone hash
+# Param: ref to rule hash
+# Param: ref to equiv table
+# Param: ref to offset index
+# Param: ref to alias hash
+sub emitJava {
+    my $file = shift;
+    my $zones = shift;
+    my $rules = shift;
+    my $equiv = shift;
+    my $offsetIndex = shift;
+    my $aliases = shift;
+
+    my $_indent = "        ";
+    
+    #############################################################
+    # Zone table
+    my $_IDS;
+    foreach my $z (sort keys %$zones) {
+        $_IDS .= "$_indent\"$z\",\n";
+    }
+
+    #############################################################
+    # Equivalency table
+    # - While we output this, keep track of a mapping from equivalency table ID
+    #   (a value from, e.g., 0..114) to equivalency int[] array index (e.g.,
+    #   0, 15, 30, 34, etc.).
+    my $_DATA;
+
+    my %equiv_id_to_index;
+    my $i = 0;
+    my $index = 0;
+    foreach my $aref (@$equiv) {
+        $equiv_id_to_index{$i} = $index;
+
+        # $aref is an array ref; the array is full of zone IDs
+        # Use the ID of the first array element
+        my $z = $aref->[0];
+
+        $_DATA .= $_indent; # Indent
+
+        # Output either 's' or 'd' to indicate standard or DST
+        my $isStd = ($zones->{$z}->{rule} eq $TZ::STANDARD);
+        $_DATA .= $isStd ? '0/*s*/,' : '1/*d*/,';
+        
+        # Format the zone
+        my ($spec, $notes) = formatZone($z, $zones->{$z}, $rules);
+
+        # Now add the equivalency list
+        push @$spec, scalar @$aref;
+        push @$notes, "[";
+        my $min = -1;
+        foreach $z (@$aref) {
+            my $index = $ZONE_ID_TO_INDEX{$z};
+            # Make sure they are in order
+            die("Unsorted equiv table indices") if ($index <= $min);
+            $min = $index;
+            push @$spec, $index;
+            push @$notes, $z;
+        }
+        push @$notes, "]";
+        
+        unshift @$notes, $i++; # Insert index of this group at front
+
+        # Convert to Java constants:
+        # 'w' -> 0, 's' -> 1, 'u' -> 2
+        foreach (@$spec) {
+            if (/^w$/) {
+                $_ = "0/*w*/";
+            } elsif (/^s$/) {
+                $_ = "1/*s*/";
+            } elsif (/^u$/) {
+                $_ = "2/*u*/";
+            }
+        }
+
+        $_DATA .= join($SEP, @$spec) . ", // " . join(' ', @$notes) . "\n";
+        $index += (scalar @$spec) + 1; # +1 for s/d
+    }
+
+    #############################################################
+    # Zone->Equivalency mapping
+    my $_INDEX_BY_NAME;
+    foreach my $z (sort keys %$zones) {
+        $_INDEX_BY_NAME .=
+            $_indent .
+            $equiv_id_to_index{equivIndexOf($z, $equiv)} .
+            ", // $z\n";
+    }
+
+    #############################################################
+    # Index by offset
+    # Create a hash mapping zone name -> integer, from 0..n-1.
+    # Create an array mapping zone number -> name.
+    my $_INDEX_BY_OFFSET;
+    my %zoneNumber;
+    my @zoneName;
+    $i = 0;
+    foreach (sort keys %$zones) {
+        $zoneName[$i] = $_;
+        $zoneNumber{$_} = $i++;
+    }
+    # Emit offset index
+    foreach (sort {$a <=> $b} keys %{$offsetIndex}) {
+        my $aref = $offsetIndex->{$_};
+        my $def = $aref->[0];
+        # Make a slice of 1..n
+        my @b = @{$aref}[1..$#{$aref}];
+        $_INDEX_BY_OFFSET .=
+            $_indent . $_ . "," . $zoneNumber{$def} . "," .
+            scalar @b . "," .
+            join(",", map($zoneNumber{$_}, @b)) .
+            ", // " . formatOffset($_) . " d=" . $def . " " .
+            join(" ", @b) . "\n";
+    }
+    
+############################################################
+# BEGIN JAVA TEMPLATE
+############################################################
+    my $java = <<"END";
+// Instructions: Build against icu4j. Run and save output.
+// Paste output into icu4j/src/com/ibm/util/TimeZoneData.java
+import com.ibm.util.Utility;
+import java.util.Date;
+public class tz {
+    public static void main(String[] args) {
+        System.out.println("    // BEGIN GENERATED SOURCE CODE");
+        System.out.println("    // Date: " + new Date());
+        System.out.println("    // Version: $RAW_VERSION from $URL");
+        System.out.println("    // Tool: icu/source/tools/gentz");
+        System.out.println("    // See: icu/source/tools/gentz/readme.txt");
+        System.out.println("    // DO NOT EDIT THIS SECTION");
+        System.out.println();
+
+        System.out.println("    /**");
+        System.out.println("     * Array of IDs in lexicographic order.  The INDEX_BY_OFFSET and DATA");
+        System.out.println("     * arrays refer to zones using indices into this array.  To map from ID");
+        System.out.println("     * to equivalency group, use the INDEX_BY_NAME Hashtable.");
+        System.out.println("     * >> GENERATED DATA: DO NOT EDIT <<");
+        System.out.println("     */");
+        System.out.println("    static final String[] IDS = {");
+        for (int i=0;i<IDS.length;++i) {
+            System.out.println("        \\\"" + IDS[i] + "\\\",");
+        }
+        System.out.println("    };\\n");
+
+        System.out.println("    /**");
+        System.out.println("     * RLE encoded form of DATA.");
+        System.out.println("     * \@see com.ibm.util.Utility.RLEStringToIntArray");
+        System.out.println("     * >> GENERATED DATA: DO NOT EDIT <<");
+        System.out.println("     */");
+        System.out.println("    static final String DATA_RLE =");
+        System.out.println(Utility.formatForSource(Utility.arrayToRLEString(DATA)));
+        System.out.println("        ;\\n");
+
+        System.out.println("    /**");
+        System.out.println("     * RLE encoded form of INDEX_BY_NAME_ARRAY.");
+        System.out.println("     * \@see com.ibm.util.Utility.RLEStringToIntArray");
+        System.out.println("     * >> GENERATED DATA: DO NOT EDIT <<");
+        System.out.println("     */");
+        System.out.println("    static final String INDEX_BY_NAME_ARRAY_RLE =");
+        System.out.println(Utility.formatForSource(Utility.arrayToRLEString(INDEX_BY_NAME_ARRAY)));
+        System.out.println("        ;\\n");
+
+        System.out.println("    /**");
+        System.out.println("     * RLE encoded form of INDEX_BY_OFFSET.");
+        System.out.println("     * \@see com.ibm.util.Utility.RLEStringToIntArray");
+        System.out.println("     * >> GENERATED DATA: DO NOT EDIT <<");
+        System.out.println("     */");
+        System.out.println("    static final String INDEX_BY_OFFSET_RLE =");
+        System.out.println(Utility.formatForSource(Utility.arrayToRLEString(INDEX_BY_OFFSET)));
+        System.out.println("        ;\\n");
+
+        System.out.println("    // END GENERATED SOURCE CODE");
+    }
+
+    static final String[] IDS = {
+$_IDS
+    };
+
+    static final int[] DATA = {
+$_DATA
+    };
+
+    static int[] INDEX_BY_NAME_ARRAY = { // not final!
+$_INDEX_BY_NAME
+    };
+
+    static final int[] INDEX_BY_OFFSET = {
+        // gmt_offset,default_id,id_count,id_list
+$_INDEX_BY_OFFSET
+    };
+}
+END
+############################################################
+# END JAVA TEMPLATE
+############################################################
+
+    open(OUT, ">$file") or die "Can't open $file for writing: $!";
+    print OUT $java;
+    close(OUT);
 }
 
 # Emit an HTML file that contains a description of the system zones.

@@ -1,4 +1,4 @@
-Copyright (C) 1999-2000, International Business Machines Corporation 
+Copyright (C) 1999-2001, International Business Machines Corporation 
 and others.  All Rights Reserved.
 
 Readme file for ICU time zone data (source/tools/gentz)
@@ -40,12 +40,38 @@ the following steps.
    As the second argument, pass in "tz.htm".  This will generate an
    html documentation file that goes into the icu/docs directory.
 
+   As the third argument, pass in "tz.java".  This will generate a
+   java source file that will be used to update the ICU4J data.
+
 4. Run source/tools/makedata on Windows.  On UNIX systems the
    equivalent build steps are performed by 'make' and 'make install'.
 
-The tz.txt file is typically checked into CVS, whereas the raw data
-files are not, since they are readily available from the URL listed
-above.
+The tz.txt and tz.htm files and typically checked into CVS, whereas
+the raw data files are not, since they are readily available from the
+URL listed above.
+
+Additional steps are required to update the ICU4J data.  First you
+must have a current, working installation of icu4j.  These instructions
+will assume it is in directory "/icu4j".
+
+5. Copy the tz.java file generated in step 3 to /icu4j/tz.java.
+
+6. Change to the /icu4j directory and compile the tz.java file, with
+   /icu4j/classes on the classpath.
+
+7. Run the resulting java program (again with /icu4j/classes on the
+   classpath) and capture the output in a file named tz.tmp.
+
+8. Open /icu4j/src/com/ibm/util/TimeZoneData.java.  Delete the section
+   that starts with the line "BEGIN GENERATED SOURCE CODE" and ends
+   with the line "END GENERATED SOURCE CODE".  Replace it with the
+   contents of tz.tmp.  If there are extraneous control-M characters
+   or other similar problems, fix them.
+
+9. Rebuild icu4j and make sure there are no build errors.  Rerun all
+   the tests in /icu4j/src/com/ibm/test/timezone and make sure they
+   all pass.  If all is well, check the new TimeZoneData.java into
+   CVS.
 
 
 ALIAS TABLE
