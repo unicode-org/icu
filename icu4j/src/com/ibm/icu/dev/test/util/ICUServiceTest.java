@@ -105,7 +105,7 @@ public class ICUServiceTest extends TestFmwk
 	}
     }
 
-    public void testAPI() {
+    public void TestAPI() {
 	// create a service using locale keys,
 	ICUService service = new TestService();
 
@@ -317,7 +317,10 @@ public class ICUServiceTest extends TestFmwk
 
 		displayName = service.getDisplayName(id, Locale.US);
 		logln("found query: " + gal + " with display name: " + displayName);
-		confirmBoolean("31) found display name for query", displayName == null);
+		// this is no longer a bug, we want to return display names for anything
+		// that a factory handles.  since we handle it, we should return a display
+		// name.  see jb3549
+		// confirmBoolean("31) found display name for query", displayName == null);
 	    } else {
 		errln("30) service could not find entry for " + id);
 	    }
@@ -332,7 +335,8 @@ public class ICUServiceTest extends TestFmwk
 
 		displayName = service.getDisplayName(id, Locale.US);
 		logln("found actual: " + bozo + " with display name: " + displayName);
-		confirmBoolean("33) found display name for query", displayName == null);
+		// see above and jb3549
+		// confirmBoolean("33) found display name for query", displayName == null);
 	    } else {
 		errln("32) service could not find entry for " + id);
 	    }

@@ -552,6 +552,7 @@ public class TestFmwk extends AbstractTestLog {
             }
         }
         catch (Exception e) {
+	    e.printStackTrace();
             System.out.println(e.getMessage());
             System.out.println("encountered exception, exiting");
         }
@@ -1155,7 +1156,9 @@ public class TestFmwk extends AbstractTestLog {
 //              msg("***" + name + "*** not found or not valid.", WARN, true, true);
             if (inDocMode()) {
                 if (!warnings) {
-                    stack.flush();
+                    if (stack != null) {
+			stack.flush();
+		    }
                     log.println(" *** Target not found or not valid.");
                     log.flush();
                     needLineFeed = false;
