@@ -237,7 +237,7 @@ da {
         //UA { "Ukraine" }
         //UG { "Uganda" }
         UM { "De Mindre Amerikanske Overs\u00f8iske \u00d8er" }
-        US { "USA" } // This is a bad translation!
+        US { "Amerikas Forenede Stater" }
         //UY { "Uruguay" }
         UZ { "Usbekistan" }
         VA { "Vatikanstaten" }
