@@ -1,0 +1,353 @@
+/*
+**********************************************************************
+* Copyright (c) 2002, International Business Machines
+* Corporation and others.  All Rights Reserved.
+**********************************************************************
+**********************************************************************
+*/
+#ifndef _NORMPERF_H
+#define _NORMPERF_H
+
+#include "uperf.h"
+#include "unicode/unorm.h"
+#include "unicode/ustring.h"
+
+//  Stubs for Windows API functions when building on UNIXes.
+//
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+// do nothing
+#else
+#define _UNICODE
+typedef int DWORD;
+inline int FoldStringW(DWORD dwMapFlags, const UChar* lpSrcStr,int cchSrc, UChar* lpDestStr,int cchDest);
+#endif
+
+#define DEST_BUFFER_CAPACITY 6000
+typedef int32_t (*NormFn)(const UChar* src,int32_t srcLen, UChar* dest,int32_t dstLen, UErrorCode* status);
+typedef int32_t (*QuickCheckFn)(const UChar* src,int32_t srcLen, UNormalizationMode mode, UErrorCode* status);
+
+class QuickCheckPerfFunction : public UPerfFunction{
+private:
+    ULine* lines;
+    int32_t numLines;
+    UErrorCode status;
+    QuickCheckFn fn;
+    UNormalizationMode mode;
+    int32_t retVal;
+    UBool uselen;
+    const UChar* src;
+    int32_t srcLen;
+    UBool line_mode;
+public:
+    virtual void call(){
+        if(line_mode==TRUE){
+            if(uselen){
+                for(int32_t i = 0; i< numLines; i++){
+                    retVal =  (*fn)(lines[i].name,lines[i].len,mode,&status);
+                }
+            }else{
+                for(int32_t i = 0; i< numLines; i++){
+                    retVal =  (*fn)(lines[i].name,-1,mode,&status);
+                }
+            }
+        }else{
+            if(uselen){
+                for(int32_t i = 0; i< numLines; i++){
+                    retVal =  (*fn)(src,srcLen,mode,&status);
+                }
+            }else{
+                for(int32_t i = 0; i< numLines; i++){
+                    retVal =  (*fn)(src,-1,mode,&status);
+                }
+            }
+        }
+
+    }
+    virtual long getOperationsPerIteration(){
+        if(line_mode==TRUE){
+            int32_t totalChars=0;
+            for(int32_t i =0; i< numLines; i++){
+                totalChars+= lines[i].len;
+            }
+            return totalChars;
+        }else{
+            return srcLen;
+        }
+    }
+    virtual long getEventsPerIteration(){
+        return -1;
+    }
+    UErrorCode getStatus(){
+        return status;
+    }
+    QuickCheckPerfFunction(QuickCheckFn func, ULine* srcLines,int32_t srcNumLines, UNormalizationMode _mode, UBool _uselen){
+        fn = func;
+        lines = srcLines;
+        numLines = srcNumLines;
+        uselen = _uselen;
+        mode = _mode;
+        status = U_ZERO_ERROR;
+        src = NULL;
+        srcLen = 0;
+        line_mode = TRUE;
+    }
+    QuickCheckPerfFunction(QuickCheckFn func, const UChar* source,int32_t sourceLen, UNormalizationMode _mode, UBool _uselen){
+        fn = func;
+        lines = NULL;
+        numLines = 0;
+        uselen = _uselen;
+        mode = _mode;
+        status = U_ZERO_ERROR;
+        src = source;
+        srcLen = sourceLen;
+        line_mode = FALSE;
+    }
+};
+
+
+class NormPerfFunction : public UPerfFunction{
+private:
+    ULine* lines;
+    int32_t numLines;
+    UChar dest[DEST_BUFFER_CAPACITY];
+    int32_t destLen;
+    UErrorCode status;
+    NormFn fn;
+    int32_t retVal;
+    UBool uselen;
+    const UChar* src;
+    int32_t srcLen;
+    UBool line_mode;
+
+public:
+    virtual void call(){
+        if(line_mode==TRUE){
+            if(uselen){
+                for(int32_t i = 0; i< numLines; i++){
+                    retVal =  (*fn)(lines[i].name,lines[i].len,dest,destLen,&status);
+                }
+            }else{
+                for(int32_t i = 0; i< numLines; i++){
+                    retVal =  (*fn)(lines[i].name,-1,dest,destLen,&status);
+                }
+            }
+        }else{
+            if(uselen){
+                retVal =  (*fn)(src,srcLen,dest,destLen,&status);
+            }else{
+                retVal =  (*fn)(src,-1,dest,destLen,&status);
+            }
+        }
+    }
+    virtual long getOperationsPerIteration(){
+        if(line_mode ==TRUE){
+            int32_t totalChars=0;
+            for(int32_t i =0; i< numLines; i++){
+                totalChars+= lines[i].len;
+            }
+            return totalChars;
+        }else{
+            return srcLen;
+        }
+    }
+    virtual long getEventsPerIteration(){
+        return -1;
+    }
+    UErrorCode getStatus(){
+        return status;
+    }
+    NormPerfFunction(NormFn func,ULine* srcLines,int32_t srcNumLines,UBool _uselen){
+        fn = func;
+        lines = srcLines;
+        numLines = srcNumLines;
+        uselen = _uselen;
+        destLen = DEST_BUFFER_CAPACITY;
+        status = U_ZERO_ERROR;
+        src = NULL;
+        srcLen = 0;
+        line_mode = TRUE;
+    }
+    NormPerfFunction(NormFn func,const UChar* source,int32_t sourceLen,UBool _uselen){
+        fn = func;
+        lines = NULL;
+        numLines = 0;
+        uselen = _uselen;
+        destLen = DEST_BUFFER_CAPACITY;
+        status = U_ZERO_ERROR;
+        src = source;
+        srcLen = sourceLen;
+        line_mode = FALSE;
+    }   
+};
+
+
+
+class  NormalizerPerformanceTest : public UPerfTest{
+private:
+    ULine* NFDFileLines;
+    ULine* NFCFileLines;
+    UChar* NFDBuffer;
+    UChar* NFCBuffer;
+    int32_t NFDBufferLen;
+    int32_t NFCBufferLen;
+
+    void normalizeInput(ULine* dest,const UChar* src ,int32_t srcLen,UNormalizationMode mode);
+    UChar* normalizeInput(int32_t& len, const UChar* src ,int32_t srcLen,UNormalizationMode mode);
+
+public:
+
+    NormalizerPerformanceTest(int32_t argc, const char* argv[], UErrorCode& status);
+    ~NormalizerPerformanceTest();
+    virtual UPerfFunction* runIndexedTest(int32_t index, UBool exec,const char* &name, char* par = NULL);     
+    /* NFC performance */
+    UPerfFunction* TestICU_NFC_NFD_Text();
+    UPerfFunction* TestICU_NFC_NFC_Text();
+    UPerfFunction* TestICU_NFC_Orig_Text();
+    
+    /* NFD performance */
+    UPerfFunction* TestICU_NFD_NFD_Text();
+    UPerfFunction* TestICU_NFD_NFC_Text();
+    UPerfFunction* TestICU_NFD_Orig_Text();
+
+    /* FCD performance */
+    UPerfFunction* TestICU_FCD_NFD_Text();
+    UPerfFunction* TestICU_FCD_NFC_Text();
+    UPerfFunction* TestICU_FCD_Orig_Text();
+    
+    /*Win NFC performance */
+    UPerfFunction* TestWin_NFC_NFD_Text();
+    UPerfFunction* TestWin_NFC_NFC_Text();
+    UPerfFunction* TestWin_NFC_Orig_Text();
+    
+    /* Win NFD performance */
+    UPerfFunction* TestWin_NFD_NFD_Text();
+    UPerfFunction* TestWin_NFD_NFC_Text();
+    UPerfFunction* TestWin_NFD_Orig_Text();
+    
+    /* Quick check performance */
+    UPerfFunction* TestQC_NFC_NFD_Text();
+    UPerfFunction* TestQC_NFC_NFC_Text();
+    UPerfFunction* TestQC_NFC_Orig_Text();
+
+    UPerfFunction* TestQC_NFD_NFD_Text();
+    UPerfFunction* TestQC_NFD_NFC_Text();
+    UPerfFunction* TestQC_NFD_Orig_Text();
+
+    UPerfFunction* TestQC_FCD_NFD_Text();
+    UPerfFunction* TestQC_FCD_NFC_Text();
+    UPerfFunction* TestQC_FCD_Orig_Text();
+
+    /* IsNormalized performnace */
+    UPerfFunction* TestIsNormalized_NFC_NFD_Text();
+    UPerfFunction* TestIsNormalized_NFC_NFC_Text();
+    UPerfFunction* TestIsNormalized_NFC_Orig_Text();
+
+    UPerfFunction* TestIsNormalized_NFD_NFD_Text();
+    UPerfFunction* TestIsNormalized_NFD_NFC_Text();
+    UPerfFunction* TestIsNormalized_NFD_Orig_Text();
+
+    UPerfFunction* TestIsNormalized_FCD_NFD_Text();
+    UPerfFunction* TestIsNormalized_FCD_NFC_Text();
+    UPerfFunction* TestIsNormalized_FCD_Orig_Text();
+
+};
+
+//---------------------------------------------------------------------------------------
+// Platform / ICU version specific proto-types
+//---------------------------------------------------------------------------------------
+
+
+#if (U_ICU_VERSION_MAJOR_NUM > 1 ) || ((U_ICU_VERSION_MAJOR_NUM == 1 )&&(U_ICU_VERSION_MINOR_NUM > 8) && (U_ICU_VERSION_PATCHLEVEL_NUM >=1))
+
+int32_t ICUNormNFD(const UChar* src, int32_t srcLen,UChar* dest, int32_t dstLen,UErrorCode* status) {
+    return unorm_normalize(src,srcLen,UNORM_NFD,0,dest,dstLen,status);
+}
+
+int32_t ICUNormNFC(const UChar* src, int32_t srcLen,UChar* dest, int32_t dstLen,UErrorCode* status) {
+    return unorm_normalize(src,srcLen,UNORM_NFC,0,dest,dstLen,status);
+}
+
+int32_t ICUNormNFKD(const UChar* src, int32_t srcLen,UChar* dest, int32_t dstLen,UErrorCode* status) {
+    return unorm_normalize(src,srcLen,UNORM_NFKD,0,dest,dstLen,status);
+}
+int32_t ICUNormNFKC(const UChar* src, int32_t srcLen,UChar* dest, int32_t dstLen,UErrorCode* status) {
+    return unorm_normalize(src,srcLen,UNORM_NFKC,0,dest,dstLen,status);
+}
+
+int32_t ICUNormFCD(const UChar* src, int32_t srcLen,UChar* dest, int32_t dstLen,UErrorCode* status) {
+    return unorm_normalize(src,srcLen,UNORM_FCD,0,dest,dstLen,status);
+}
+
+int32_t ICUQuickCheck(const UChar* src,int32_t srcLen, UNormalizationMode mode, UErrorCode* status){
+    return unorm_quickCheck(src,srcLen,mode,status);
+}
+int32_t ICUIsNormalized(const UChar* src,int32_t srcLen, UNormalizationMode mode, UErrorCode* status){
+    return unorm_isNormalized(src,srcLen,mode,status);
+}
+
+
+#else
+
+int32_t ICUNormNFD(const UChar* src, int32_t srcLen,UChar* dest, int32_t dstLen,UErrorCode* status) {
+    return unorm_normalize(src,srcLen,UCOL_DECOMP_CAN,0,dest,dstLen,status);
+}
+
+int32_t ICUNormNFC(const UChar* src, int32_t srcLen,UChar* dest, int32_t dstLen,UErrorCode* status) {
+    return unorm_normalize(src,srcLen,UCOL_COMPOSE_CAN,0,dest,dstLen,status);
+}
+
+int32_t ICUNormNFKD(const UChar* src, int32_t srcLen,UChar* dest, int32_t dstLen,UErrorCode* status) {
+    return unorm_normalize(src,srcLen,UCOL_DECOMP_COMPAT,0,dest,dstLen,status);
+}
+int32_t ICUNormNFKC(const UChar* src, int32_t srcLen,UChar* dest, int32_t dstLen,UErrorCode* status) {
+    return unorm_normalize(src,srcLen,UCOL_COMPOSE_COMPAT,0,dest,dstLen,status);
+}
+
+int32_t ICUNormFCD(const UChar* src, int32_t srcLen,UChar* dest, int32_t dstLen,UErrorCode* status) {
+    return unorm_normalize(src,srcLen,UNORM_FCD,0,dest,dstLen,status);
+}
+
+int32_t ICUQuickCheck(const UChar* src,int32_t srcLen, UNormalizationMode mode, UErrorCode* status){
+    return unorm_quickCheck(src,srcLen,mode,status);
+}
+
+int32_t ICUIsNormalized(const UChar* src,int32_t srcLen, UNormalizationMode mode, UErrorCode* status){
+    return 0;
+}
+#endif
+
+#if defined(WIN32) || defined(_WIN32) || defined(WIN64) || defined(_WIN64)
+
+int32_t WinNormNFD(const UChar* src, int32_t srcLen, UChar* dest, int32_t dstLen, UErrorCode* status) {
+    return FoldStringW(MAP_COMPOSITE,src,srcLen,dest,dstLen);
+}
+
+int32_t WinNormNFC(const UChar* src, int32_t srcLen, UChar* dest, int32_t dstLen, UErrorCode* status) {
+    return FoldStringW(MAP_PRECOMPOSED,src,srcLen,dest,dstLen);
+}
+
+int32_t WinNormNFKD(const UChar* src, int32_t srcLen, UChar* dest, int32_t dstLen, UErrorCode* status) {
+    return FoldStringW(MAP_COMPOSITE+MAP_FOLDCZONE,src,srcLen,dest,dstLen);
+}
+int32_t WinNormNFKC(const UChar* src, int32_t srcLen, UChar* dest, int32_t dstLen, UErrorCode* status) {
+    return FoldStringW(MAP_FOLDCZONE,src,srcLen,dest,dstLen);
+}
+#else
+int32_t WinNormNFD(const UChar* src, int32_t srcLen, UChar* dest, int32_t dstLen, UErrorCode* status) {
+    return 0 ;
+}
+
+int32_t WinNormNFC(const UChar* src, int32_t srcLen, UChar* dest, int32_t dstLen, UErrorCode* status) {
+    return 0;
+}
+
+int32_t WinNormNFKD(const UChar* src, int32_t srcLen, UChar* dest, int32_t dstLen, UErrorCode* status) {
+    return 0;
+}
+int32_t WinNormNFKC(const UChar* src, int32_t srcLen, UChar* dest, int32_t dstLen, UErrorCode* status) {
+    return 0;
+}
+#endif
+
+
+#endif // NORMPERF_H
