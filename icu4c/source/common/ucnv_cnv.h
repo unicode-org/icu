@@ -38,7 +38,7 @@ U_CDECL_BEGIN
 /*
  * #define missingUCharMarker 0xfffe
  *
- * there are actually two values used in toUnicode tables:
+ * commented out because there are actually two values used in toUnicode tables:
  * U+fffe "unassigned"
  * U+ffff "illegal"
  */
@@ -59,10 +59,54 @@ typedef enum UConverterResetChoice {
 
 typedef void (*UConverterReset) (UConverter *cnv, UConverterResetChoice choice);
 
+/*
+ * Converter implementation function(s) for ucnv_toUnicode().
+ * If the toUnicodeWithOffsets function pointer is NULL,
+ * then the toUnicode function will be used and the offsets will be set to -1.
+ *
+ * Must maintain state across buffers. Use toUBytes[toULength] for partial input
+ * sequences; it will be checked in ucnv.c at the end of the input stream
+ * to detect truncated input.
+ * Some converters may need additional detection and may then set U_TRUNCATED_CHAR_FOUND.
+ *
+ * The toUnicodeWithOffsets must write exactly as many offset values as target
+ * units. Write offset values of -1 for when the source index corresponding to
+ * the output unit is not known (e.g., the character started in an earlier buffer).
+ * The pArgs->offsets pointer need not be moved forward.
+ *
+ * At function return, either one of the following conditions must be true:
+ * - U_BUFFER_OVERFLOW_ERROR and the target is full: target==targetLimit
+ * - another error code with toUBytes[toULength] set to the offending input
+ * - no error, and the source is consumed: source==sourceLimit
+ *
+ * The ucnv.c code will handle the end of the input (reset)
+ * (reset, and truncation detection) and callbacks.
+ */
 typedef void (*UConverterToUnicode) (UConverterToUnicodeArgs *, UErrorCode *);
 
+/* same rules as for UConverterToUnicode */
 typedef void (*UConverterFromUnicode) (UConverterFromUnicodeArgs *, UErrorCode *);
 
+/*
+ * Converter implementation function for ucnv_getNextUChar().
+ * If the function pointer is NULL, then the toUnicode function will be used.
+ *
+ * Will be called at a character boundary (toULength==0).
+ * May return with
+ * - U_INDEX_OUTOFBOUNDS_ERROR if there was no output for the input
+ *   (the return value will be ignored)
+ * - U_TRUNCATED_CHAR_FOUND or another error code (never U_BUFFER_OVERFLOW_ERROR!)
+ *   with toUBytes[toULength] set to the offending input
+ *   (the return value will be ignored)
+ * - return UCNV_GET_NEXT_UCHAR_USE_TO_U, without moving the source pointer,
+ *   to indicate that the ucnv.c code shall call the toUnicode function instead
+ * - return a real code point result
+ *
+ * Unless UCNV_GET_NEXT_UCHAR_USE_TO_U is returned, the source bytes must be consumed.
+ *
+ * The ucnv.c code will handle the end of the input (reset)
+ * (except for truncation detection!) and callbacks.
+ */
 typedef UChar32 (*UConverterGetNextUChar) (UConverterToUnicodeArgs *, UErrorCode *);
 
 typedef void (*UConverterGetStarters)(const UConverter* converter,
@@ -166,40 +210,6 @@ extern const UConverterSharedData
 
 U_CDECL_END
 
-/**
- * This function is useful for implementations of getNextUChar().
- * After a call to a callback function or to toUnicode(), an output buffer
- * begins with a Unicode code point that needs to be returned as UChar32,
- * and all following code units must be prepended to the - potentially
- * prefilled - overflow buffer in the UConverter.
- * The buffer should be at least of capacity UTF_MAX_CHAR_LENGTH so that a
- * complete UChar32's UChars fit into it.
- *
- * @param cnv    The converter that will get remaining UChars copied to its overflow area.
- * @param buffer An array of UChars that was passed into a callback function
- *               or a toUnicode() function.
- * @param length The number of code units (UChars) that are actually in the buffer.
- *               This must be >0.
- * @return The code point from the first UChars in the buffer.
- */
-U_CFUNC UChar32
-ucnv_getUChar32KeepOverflow(UConverter *cnv, const UChar *buffer, int32_t length);
-
-/**
- * This helper function updates the offsets array after a callback function call.
- * It adds the sourceIndex to each offsets item, or sets each of them to -1 if
- * sourceIndex==-1.
- *
- * @param offsets The pointer to offsets entry that corresponds to the first target
- *                unit that the callback wrote.
- * @param length  The number of output units that the callback wrote.
- * @param sourceIndex The sourceIndex of the input sequence that the callback
- *                    function was called for.
- * @return offsets+length if offsets!=NULL, otherwise NULL
- */
-U_CFUNC int32_t *
-ucnv_updateCallbackOffsets(int32_t *offsets, int32_t length, int32_t sourceIndex);
-
 /** Always use fallbacks from codepage to Unicode */
 #define TO_U_USE_FALLBACK(useFallback) TRUE
 #define UCNV_TO_U_USE_FALLBACK(cnv) TRUE
@@ -236,5 +246,13 @@ ucnv_fromUWriteBytes(UConverter *cnv,
                      int32_t **offsets,
                      int32_t sourceIndex,
                      UErrorCode *pErrorCode);
+
+U_CFUNC void
+ucnv_toUWriteCodePoint(UConverter *cnv,
+                       UChar32 c,
+                       UChar **target, const UChar *targetLimit,
+                       int32_t **offsets,
+                       int32_t sourceIndex,
+                       UErrorCode *pErrorCode);
 
 #endif /* UCNV_CNV */
