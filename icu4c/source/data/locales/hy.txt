@@ -95,7 +95,7 @@ hy{
         "HH:mm:ss z",
         "HH:mm:ss",
         "HH:mm",
-        "EEEE,MMMM d, yyyy",
+        "EEEE, MMMM d, yyyy",
         "MMMM dd, yyyy",
         "MMM d, yyyy",
         "MM/dd/yy",
