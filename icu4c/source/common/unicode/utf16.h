@@ -183,8 +183,8 @@
         (s)[(i)++]=(uint16_t)(c); \
     } else if((uint32_t)(c)<=0x10ffff) { \
         if((i)+1<(length)) { \
-            (s)[(i)++]=(uint16_t)((c)>>10)+0xd7c0; \
-            (s)[(i)++]=(uint16_t)(c)&0x3ff|0xdc00; \
+            (s)[(i)++]=(uint16_t)(((c)>>10)+0xd7c0); \
+            (s)[(i)++]=(uint16_t)((c)&0x3ff|0xdc00); \
         } else /* not enough space */ { \
             (s)[(i)++]=UTF_ERROR_VALUE; \
         } \
