@@ -1378,7 +1378,7 @@ typedef enum UNumericType {
  * @param which UProperty selector constant, identifies which binary property to check.
  *        Must be UCHAR_BINARY_START<=which<UCHAR_BINARY_LIMIT.
  * @return TRUE or FALSE according to the binary Unicode property value for c.
- *         Also FALSE if which is out of bounds or if the Unicode version
+ *         Also FALSE if 'which' is out of bounds or if the Unicode version
  *         does not have data for the property at all, or not for this code point.
  *
  * @see UProperty
@@ -1457,7 +1457,7 @@ u_isUWhiteSpace(UChar32 c);
 
 /**
  * Get the property value for an enumerated or integer Unicode property for a code point.
- * Also returns binary property values.
+ * Also returns binary and mask property values.
  *
  * Unicode, especially in version 3.2, defines many more properties than the
  * original set in UnicodeData.txt.
@@ -1481,7 +1481,8 @@ u_isUWhiteSpace(UChar32 c);
  *         constant of the respective property value enumeration type
  *         (cast to enum type if necessary).
  *         Returns 0 or 1 (for FALSE/TRUE) for binary Unicode properties.
- *         Returns 0 if which is out of bounds or if the Unicode version
+ *         Returns a bit-mask for mask properties.
+ *         Returns 0 if 'which' is out of bounds or if the Unicode version
  *         does not have data for the property at all, or not for this code point.
  *
  * @see UProperty
