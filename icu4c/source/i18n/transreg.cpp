@@ -482,18 +482,16 @@ TransliteratorRegistry::~TransliteratorRegistry() {
 
 Transliterator* TransliteratorRegistry::get(const UnicodeString& ID,
                                             TransliteratorAlias*& aliasReturn,
-                                            UParseError& parseError,
                                             UErrorCode& status) {
     U_ASSERT(aliasReturn == NULL);
     Entry *entry = find(ID);
     return (entry == 0) ? 0
-        : instantiateEntry(ID, entry, aliasReturn, parseError,status);
+        : instantiateEntry(ID, entry, aliasReturn, status);
 }
 
 Transliterator* TransliteratorRegistry::reget(const UnicodeString& ID,
                                               TransliteratorParser& parser,
                                               TransliteratorAlias*& aliasReturn,
-                                              UParseError& parseError,
                                               UErrorCode& status) {
     U_ASSERT(aliasReturn == NULL);
     Entry *entry = find(ID);
@@ -559,7 +557,7 @@ Transliterator* TransliteratorRegistry::reget(const UnicodeString& ID,
     }
 
     Transliterator *t =
-        instantiateEntry(ID, entry, aliasReturn, parseError,status);
+        instantiateEntry(ID, entry, aliasReturn, status);
     return t;
 }
 
@@ -1145,7 +1143,6 @@ Entry* TransliteratorRegistry::find(UnicodeString& source,
 Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID,
                                                          Entry *entry,
                                                          TransliteratorAlias* &aliasReturn,
-                                                         UParseError& parseError,
                                                          UErrorCode& status) {
     Transliterator *t = 0;
     U_ASSERT(aliasReturn == 0);
@@ -1177,7 +1174,7 @@ Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID
         return t;
     case Entry::COMPOUND_RBT:
         {
-            UnicodeString id("_", "");
+            UnicodeString id((UChar)0x005F);    /* "_" */
             Transliterator *t = new RuleBasedTransliterator(id, entry->u.data);
             if (t == 0) {
                 status = U_MEMORY_ALLOCATION_ERROR;
@@ -1213,15 +1210,15 @@ Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID
             UnicodeString rules = entry->stringArg;
             //ures_close(bundle);
             
-            if (U_FAILURE(status)) {
+            //if (U_FAILURE(status)) {
                 // We have a failure of some kind.  Remove the ID from the
                 // registry so we don't keep trying.  NOTE: This will throw off
                 // anyone who is, at the moment, trying to iterate over the
                 // available IDs.  That's acceptable since we should never
                 // really get here except under installation, configuration,
                 // or unrecoverable run time memory failures.
-                remove(ID);
-            } else {
+            //    remove(ID);
+            //} else {
                 
                 // If the status indicates a failure, then we don't have any
                 // rules -- there is probably an installation error.  The list
@@ -1234,7 +1231,7 @@ Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID
                 if (aliasReturn == 0) {
                     status = U_MEMORY_ALLOCATION_ERROR;
                 }
-            }
+            //}
         }
         return 0;
     default:

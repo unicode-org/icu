@@ -965,7 +965,7 @@ Transliterator* Transliterator::createBasicInstance(const UnicodeString& id,
     umtx_init(&registryMutex);
     umtx_lock(&registryMutex);
     if (HAVE_REGISTRY) {
-        t = registry->get(id, alias, pe, ec);
+        t = registry->get(id, alias, ec);
     }
     umtx_unlock(&registryMutex);
 
@@ -997,7 +997,7 @@ Transliterator* Transliterator::createBasicInstance(const UnicodeString& id,
             // Step 2. reget
             umtx_lock(&registryMutex);
             if (HAVE_REGISTRY) {
-                t = registry->reget(id, parser, alias, pe, ec);
+                t = registry->reget(id, parser, alias, ec);
             }
             umtx_unlock(&registryMutex);
 
