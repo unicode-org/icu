@@ -28,7 +28,7 @@ public:
     virtual ~GlyphSubstitutionLookupProcessor();
 
     virtual le_uint32 applySubtable(LookupSubtable *lookupSubtable, le_uint16 lookupType, GlyphIterator *glyphIterator,
-        LEFontInstance *fontInstance);
+        const LEFontInstance *fontInstance);
 
 protected:
     GlyphSubstitutionLookupProcessor();

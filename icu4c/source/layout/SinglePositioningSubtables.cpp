@@ -15,7 +15,7 @@
 #include "GlyphPositionAdjustments.h"
 #include "LESwaps.h"
 
-le_uint32 SinglePositioningSubtable::process(GlyphIterator *glyphIterator, LEFontInstance *fontInstance)
+le_uint32 SinglePositioningSubtable::process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance)
 {
     switch(SWAPW(subtableFormat))
     {
@@ -41,7 +41,7 @@ le_uint32 SinglePositioningSubtable::process(GlyphIterator *glyphIterator, LEFon
     }
 }
 
-le_uint32 SinglePositioningFormat1Subtable::process(GlyphIterator *glyphIterator, LEFontInstance *fontInstance)
+le_uint32 SinglePositioningFormat1Subtable::process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance)
 {
     LEGlyphID glyph = (LEGlyphID) glyphIterator->getCurrGlyphID();
     le_int32 coverageIndex = getGlyphCoverage(glyph);
@@ -62,7 +62,7 @@ le_uint32 SinglePositioningFormat1Subtable::process(GlyphIterator *glyphIterator
     return 0;
 }
 
-le_uint32 SinglePositioningFormat2Subtable::process(GlyphIterator *glyphIterator, LEFontInstance *fontInstance)
+le_uint32 SinglePositioningFormat2Subtable::process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance)
 {
     LEGlyphID glyph = (LEGlyphID) glyphIterator->getCurrGlyphID();
     le_int16 coverageIndex = (le_int16) getGlyphCoverage(glyph);

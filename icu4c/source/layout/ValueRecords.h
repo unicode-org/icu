@@ -24,9 +24,9 @@ struct ValueRecord
     le_int16   getFieldValue(ValueFormat valueFormat, ValueRecordField field);
     le_int16   getFieldValue(le_int16 index, ValueFormat valueFormat, ValueRecordField field);
     void    adjustPosition(ValueFormat valueFormat, char *base, GlyphPositionAdjustment &positionAdjustment,
-                LEFontInstance *fontInstance);
+                const LEFontInstance *fontInstance);
     void    adjustPosition(le_int16 index, ValueFormat valueFormat, char *base, GlyphPositionAdjustment &positionAdjustment,
-                LEFontInstance *fontInstance);
+                const LEFontInstance *fontInstance);
 
     static le_int16    getSize(ValueFormat valueFormat);
 

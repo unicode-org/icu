@@ -34,7 +34,7 @@ struct PairPositioningSubtable : GlyphPositioningSubtable
     ValueFormat valueFormat1;
     ValueFormat valueFormat2;
 
-    le_uint32  process(GlyphIterator *glyphIterator, LEFontInstance *fontInstance);
+    le_uint32  process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance);
 };
 
 struct PairPositioningFormat1Subtable : PairPositioningSubtable
@@ -42,7 +42,7 @@ struct PairPositioningFormat1Subtable : PairPositioningSubtable
     le_uint16   pairSetCount;
     Offset      pairSetTableOffsetArray[ANY_NUMBER];
 
-    le_uint32  process(GlyphIterator *glyphIterator, LEFontInstance *fontInstance);
+    le_uint32  process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance);
 
 private:
     PairValueRecord *findPairValueRecord(LEGlyphID glyphID, PairValueRecord *records,
@@ -69,7 +69,7 @@ struct PairPositioningFormat2Subtable : PairPositioningSubtable
     le_uint16    class2Count;
     Class1Record class1RecordArray[ANY_NUMBER];
 
-    le_uint32  process(GlyphIterator *glyphIterator, LEFontInstance *fontInstance);
+    le_uint32  process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance);
 };
 
 #endif

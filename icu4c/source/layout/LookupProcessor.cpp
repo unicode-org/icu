@@ -21,7 +21,7 @@ LETag LookupProcessor::defaultFeature = 0xFFFFFFFF;
 
 
 le_uint32 LookupProcessor::applyLookupTable(LookupTable *lookupTable, GlyphIterator *glyphIterator,
-                                         LEFontInstance *fontInstance)
+                                         const LEFontInstance *fontInstance)
 {
     le_uint16 lookupType = SWAPW(lookupTable->lookupType);
     le_uint16 subtableCount = SWAPW(lookupTable->subTableCount);
@@ -45,7 +45,7 @@ le_uint32 LookupProcessor::applyLookupTable(LookupTable *lookupTable, GlyphItera
 
 void LookupProcessor::process(LEGlyphID *glyphs, GlyphPositionAdjustment *glyphPositionAdjustments, const LETag **glyphTags, le_int32 glyphCount,
                               le_bool rightToLeft, GlyphDefinitionTableHeader *glyphDefinitionTableHeader,
-                              LEFontInstance *fontInstance)
+                              const LEFontInstance *fontInstance)
 {
     if (lookupSelectArray == NULL) {
         return;
@@ -75,7 +75,7 @@ void LookupProcessor::process(LEGlyphID *glyphs, GlyphPositionAdjustment *glyphP
 }
 
 le_uint32 LookupProcessor::applySingleLookup(le_uint16 lookupTableIndex, GlyphIterator *glyphIterator,
-                                          LEFontInstance *fontInstance)
+                                          const LEFontInstance *fontInstance)
 {
     LookupTable *lookupTable = lookupListTable->getLookupTable(lookupTableIndex);
     le_uint16 lookupFlags = SWAPW(lookupTable->lookupFlags);

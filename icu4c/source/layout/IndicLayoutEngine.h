@@ -48,7 +48,7 @@ public:
 	 * @see OpenTypeLayoutEngine
 	 * @see ScriptAndLangaugeTags.h for script and language codes
 	 */
-    IndicOpenTypeLayoutEngine(LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
+    IndicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
                             GlyphSubstitutionTableHeader *gsubTable);
 
 	/**
@@ -62,7 +62,7 @@ public:
 	 * @see OpenTypeLayoutEngine
 	 * @see ScriptAndLangaugeTags.h for script and language codes
 	 */
-    IndicOpenTypeLayoutEngine(LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode);
+    IndicOpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode);
 
  	/**
 	 * The destructor, virtual for correct polymorphic invocation.
@@ -88,11 +88,12 @@ protected:
 	 * @param outChars - the output character arrayt
 	 * @param charIndices - the output character index array
 	 * @param featureTags - the output feature tag array
+	 * @param success - set to an error code if the operation fails
 	 *
 	 * @return the output character count
 	 */
     virtual le_int32 characterProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
-            LEUnicode *&outChars, le_int32 *&charIndices, const LETag **&featureTags);
+            LEUnicode *&outChars, le_int32 *&charIndices, const LETag **&featureTags, LEErrorCode &success);
 
 	/**
 	 * This method does character to glyph mapping, applies the GSUB table and applies
@@ -114,6 +115,7 @@ protected:
 	 * Output parameters:
 	 * @param glyphs - the output glyph index array
 	 * @param charIndices - the output character index array
+	 * @param success - set to an error code if the operation fails
 	 *
 	 * @return the number of glyphs in the output glyph index array
 	 *
@@ -123,84 +125,8 @@ protected:
     // Input: characters, tags
     // Output: glyphs, char indices
     virtual le_int32 glyphProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
-            const LETag **featureTags, LEGlyphID *&glyphs, le_int32 *&charIndices);
+            const LETag **featureTags, LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success);
 };
-
-#if 0
-/**
- * This class implements Indic OpenType layout for CDAC fonts. Since CDAC fonts don't contain
- * a GSUB table, it uses a canned GSUB table, using logical glyph indices. Each logical glyph
- * may be rendered with several physical glyphs in the CDAC font. It uses the CDACLayout class
- * to do the layout.
- *
- * @see CDACLayout
- * @see IndicOpenTypeLayout
- */
-class CDACOpenTypeLayoutEngine : public IndicOpenTypeLayoutEngine
-{
-public:
-	/**
-	 * This constructs an instance of CDACOpenTypeLayoutEngine for a specific font, script and
-	 * language. The scriptInfo parameter contains the information that CDACLayout needs to
-	 * layout using the font, including the character to logical glyph mapping information,
-	 * the canned GSUB table, and the map from logical to physical glyphs. This will be obtained
-	 * by LayoutEngine::layoutEngineFactory to determine if the font is a CDAC font.
-	 *
-	 * @param fontInstance - the font
-	 * @param scriptCode - the script
-	 * @param languageCode - the language
-	 * @param scriptInfo - the CDAC script information
-	 *
-	 * @see LEFontInstance
-	 * @see CDACLayout
-	 * @see ScriptAndLanguageTags.h for script and language codes
-	 */
-    CDACOpenTypeLayoutEngine(LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
-        const CDACLayout::ScriptInfo *scriptInfo);
-
- 	/**
-	 * The destructor, virtual for correct polymorphic invocation.
-	 */
-    virtual ~CDACOpenTypeLayoutEngine();
-
-protected:
-    const CDACLayout::ScriptInfo *fScriptInfo;
-
-	/**
-	 * This method converts logical glyph indices to physical glyph indices.
-	 *
-	 * Input paramters:
-	 * @param tempGlyphs - the input "fake" glyph index array
-	 * @param tempCharIndices - the input "fake" character index array
-	 * @param tempGlyphCount - the number of "fake" glyph indices
-	 *
-	 * Output parameters:
-	 * @param glyphs - the output glyph index array
-	 * @param charIndices - the output character index array
-	 *
-	 * @return the number of glyph indices in the output glyph index array
-	 */
-    virtual le_int32 glyphPostProcessing(LEGlyphID tempGlyphs[], le_int32 tempCharIndices[], le_int32 tempGlyphCount,
-                    LEGlyphID *&glyphs, le_int32 *&charIndices);
-
-	/**
-	 * This method maps charcters to logical glyph indices.
-	 *
-	 * Input parameters:
-	 * @param chars - the input character context
-	 * @param offset - the offset of the first character to be mapped
-	 * @param count - the number of characters to be mapped
-	 * @param reverse - if true, the output should be in reverse order
-	 * @param mirror - if true, map characters like parenthesis to their mirror image
-	 *
-	 * Output parameters:
-	 * @param glyphs - the glyph array
-	 * @param charIndices - the character index array
-	 */
-    virtual void mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, le_bool mirror,
-        LEGlyphID *&glyphs, le_int32 *&charIndices);
-};
-#endif
 
 #endif
 

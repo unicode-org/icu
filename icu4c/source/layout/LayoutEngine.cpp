@@ -47,7 +47,7 @@ public:
         // nada
     };
 
-    LEUnicode32 mapChar(LEUnicode32 ch);
+    LEUnicode32 mapChar(LEUnicode32 ch) const;
 };
 
 LEUnicode32 DefaultCharMapper::controlChars[] = {
@@ -81,10 +81,10 @@ LEUnicode32 DefaultCharMapper::mirroredChars[] = {
 
 const le_int32 DefaultCharMapper::mirroredCharsCount = ARRAY_SIZE(mirroredChars);
 
-LEUnicode32 DefaultCharMapper::mapChar(LEUnicode32 ch)
+LEUnicode32 DefaultCharMapper::mapChar(LEUnicode32 ch) const
 {
     if (fFilterControls) {
-        le_int32 index = OpenTypeUtilities::search(ch, controlChars, controlCharsCount);
+        le_int32 index = OpenTypeUtilities::search((le_uint32)ch, (le_uint32 *)controlChars, controlCharsCount);
 
         if (controlChars[index] == ch) {
             return 0xFFFF;
@@ -92,7 +92,7 @@ LEUnicode32 DefaultCharMapper::mapChar(LEUnicode32 ch)
     }
 
     if (fMirror) {
-        le_int32 index = OpenTypeUtilities::search(ch, mirroredChars, mirroredCharsCount);
+        le_int32 index = OpenTypeUtilities::search((le_uint32) ch, (le_uint32 *)mirroredChars, mirroredCharsCount);
 
         if (mirroredChars[index] == ch) {
             le_int32 mirrorOffset = ((index & 1) == 0) ? 1 : -1;
@@ -104,16 +104,30 @@ LEUnicode32 DefaultCharMapper::mapChar(LEUnicode32 ch)
     return ch;
 }
 
-LayoutEngine::LayoutEngine(LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode)
+LayoutEngine::LayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode)
     : fGlyphCount(0), fGlyphs(NULL), fCharIndices(NULL), fPositions(NULL),
       fFontInstance(fontInstance), fScriptCode(scriptCode), fLanguageCode(languageCode)
 {
     // nothing else to do?
 }
 
-void LayoutEngine::getCharIndices(le_int32 charIndices[], le_int32 indexBase)
+void LayoutEngine::getCharIndices(le_int32 charIndices[], le_int32 indexBase, LEErrorCode &success) const
 {
 	le_int32 i;
+
+	if LE_FAILURE(success) {
+		return;
+	}
+
+	if (charIndices == NULL) {
+		success = LE_ILLEGAL_ARGUMENT_ERROR;
+		return;
+	}
+
+	if (fCharIndices == NULL) {
+		success = LE_NO_LAYOUT_ERROR;
+		return;
+	}
 
 	for (i = 0; i < fGlyphCount; i += 1) {
 		charIndices[i] = fCharIndices[i] + indexBase;
@@ -121,29 +135,65 @@ void LayoutEngine::getCharIndices(le_int32 charIndices[], le_int32 indexBase)
 }
 
 // Copy the glyphs into caller's (32-bit) glyph array, OR in extraBits
-void LayoutEngine::getGlyphs(le_uint32 glyphs[], le_uint32 extraBits)
+void LayoutEngine::getGlyphs(le_uint32 glyphs[], le_uint32 extraBits, LEErrorCode &success) const
 {
     le_int32 i;
     
+	if (LE_FAILURE(success)) {
+		return;
+	}
+
+	if (glyphs == NULL) {
+		success = LE_ILLEGAL_ARGUMENT_ERROR;
+		return;
+	}
+
+	if (fGlyphs == NULL) {
+		success = LE_NO_LAYOUT_ERROR;
+	}
+
     for (i = 0; i < fGlyphCount; i += 1) {
         glyphs[i] = fGlyphs[i] | extraBits;
     }
 };
 
 le_int32 LayoutEngine::computeGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
-                                            LEGlyphID *&glyphs, le_int32 *&charIndices)
+                                            LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success)
 {
-    mapCharsToGlyphs(chars, offset, count, rightToLeft, rightToLeft, glyphs, charIndices);
+	if (LE_FAILURE(success)) {
+		return 0;
+	}
+
+	if (chars == NULL || offset < 0 || count < 0 || max < 0 || offset >= max || offset + count > max) {
+		success = LE_ILLEGAL_ARGUMENT_ERROR;
+		return 0;
+	}
+
+    mapCharsToGlyphs(chars, offset, count, rightToLeft, rightToLeft, glyphs, charIndices, success);
 
     return count;
 }
 
 // Input: glyphs
 // Output: positions
-void LayoutEngine::positionGlyphs(const LEGlyphID glyphs[], le_int32 glyphCount, float x, float y, float *&positions)
+void LayoutEngine::positionGlyphs(const LEGlyphID glyphs[], le_int32 glyphCount, float x, float y, float *&positions, LEErrorCode &success)
 {
+	if (LE_FAILURE(success)) {
+		return;
+	}
+
+	if (glyphCount < 0) {
+		success = LE_ILLEGAL_ARGUMENT_ERROR;
+		return;
+	}
+
     if (positions == NULL) {
         positions = new float[2 * (glyphCount + 1)];
+
+		if (positions == NULL) {
+			success = LE_MEMORY_ALLOCATION_ERROR;
+			return;
+		}
     }
 
     le_int32 i;
@@ -164,11 +214,20 @@ void LayoutEngine::positionGlyphs(const LEGlyphID glyphs[], le_int32 glyphCount,
 }
 
 void LayoutEngine::adjustMarkGlyphs(const LEGlyphID glyphs[], le_int32 glyphCount, le_bool reverse, LEGlyphFilter *markFilter,
-                                    float positions[])
+                                    float positions[], LEErrorCode &success)
 {
     float xAdjust = 0;
     le_int32 g = 0, direction = 1;
     le_int32 p;
+
+	if (LE_FAILURE(success)) {
+		return;
+	}
+
+	if (positions == NULL || markFilter == NULL) {
+		success = LE_ILLEGAL_ARGUMENT_ERROR;
+		return;
+	}
 
     if (reverse) {
         g = glyphCount - 1;
@@ -188,11 +247,30 @@ void LayoutEngine::adjustMarkGlyphs(const LEGlyphID glyphs[], le_int32 glyphCoun
     positions[glyphCount * 2] += xAdjust;
 }
 
-void LayoutEngine::mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, le_bool mirror,
-                                    LEGlyphID *&glyphs, le_int32 *&charIndices)
+const void *LayoutEngine::getFontTable(LETag tableTag) const
 {
+	return fFontInstance->getFontTable(tableTag);
+}
+
+void LayoutEngine::mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, le_bool mirror,
+                                    LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success)
+{
+	if (LE_FAILURE(success)) {
+		return;
+	}
+
+	if (chars == NULL || offset < 0 || count < 0) {
+		success = LE_ILLEGAL_ARGUMENT_ERROR;
+		return;
+	}
+
     if (glyphs == NULL) {
         glyphs = new LEGlyphID[count];
+
+		if (glyphs == NULL) {
+			success = LE_MEMORY_ALLOCATION_ERROR;
+			return;
+		}
     }
 
     if (charIndices == NULL) {
@@ -204,6 +282,11 @@ void LayoutEngine::mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le
         }
 
         charIndices = new le_int32[count];
+
+		if (charIndices == NULL) {
+			success = LE_MEMORY_ALLOCATION_ERROR;
+			return;
+		}
 
         for (i = 0; i < count; i += 1, out += dir) {
             charIndices[out] = i;
@@ -219,11 +302,20 @@ void LayoutEngine::mapCharsToGlyphs(const LEUnicode chars[], le_int32 offset, le
 // Output: glyphs, positions, char indices
 // Returns: number of glyphs
 le_int32 LayoutEngine::layoutChars(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft,
-                              float x, float y)
+                              float x, float y, LEErrorCode &success)
 {
-    fGlyphCount = computeGlyphs(chars, offset, count, max, rightToLeft, fGlyphs, fCharIndices);
-    positionGlyphs(fGlyphs, fGlyphCount, x, y, fPositions);
-    adjustGlyphPositions(chars, offset, count, rightToLeft, fGlyphs, fGlyphCount, fPositions);
+	if (LE_FAILURE(success)) {
+		return 0;
+	}
+
+	if (chars == NULL || offset < 0 || count < 0 || max < 0 || offset >= max || offset + count > max) {
+		success = LE_ILLEGAL_ARGUMENT_ERROR;
+		return 0;
+	}
+
+    fGlyphCount = computeGlyphs(chars, offset, count, max, rightToLeft, fGlyphs, fCharIndices, success);
+    positionGlyphs(fGlyphs, fGlyphCount, x, y, fPositions, success);
+    adjustGlyphPositions(chars, offset, count, rightToLeft, fGlyphs, fGlyphCount, fPositions, success);
 
     return fGlyphCount;
 }
@@ -248,11 +340,17 @@ void LayoutEngine::reset()
     }
 }
     
-LayoutEngine *LayoutEngine::layoutEngineFactory(LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode)
+LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, LEErrorCode &success)
 {
     static le_uint32 gsubTableTag = 0x47535542; // "GSUB"
     static le_uint32 mortTableTag = 0x6D6F7274; // 'mort'
+
+	if (LE_FAILURE(success)) {
+		return NULL;
+	}
+
     GlyphSubstitutionTableHeader *gsubTable = (GlyphSubstitutionTableHeader *) fontInstance->getFontTable(gsubTableTag);
+	LayoutEngine *result = NULL;
 
     if (gsubTable != NULL && gsubTable->coversScript(OpenTypeLayoutEngine::getScriptTag(scriptCode))) {
         switch (scriptCode) {
@@ -265,20 +363,22 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(LEFontInstance *fontInstance, le
         case punjScriptCode:
         case tamlScriptCode:
         case teluScriptCode:
-            return new IndicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, gsubTable);
+            result = new IndicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, gsubTable);
+			break;
 
         case arabScriptCode:
-            return new ArabicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, gsubTable);
+            result = new ArabicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, gsubTable);
+			break;
 
         default:
-			return new OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, gsubTable);
+			result = new OpenTypeLayoutEngine(fontInstance, scriptCode, languageCode, gsubTable);
             break;
         }
     } else {
         MorphTableHeader *morphTable = (MorphTableHeader *) fontInstance->getFontTable(mortTableTag);
 
         if (morphTable != NULL) {
-            return new GXLayoutEngine(fontInstance, scriptCode, languageCode, morphTable);
+            result = new GXLayoutEngine(fontInstance, scriptCode, languageCode, morphTable);
         } else {
             switch (scriptCode) {
             case bengScriptCode:
@@ -291,26 +391,34 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(LEFontInstance *fontInstance, le
             case tamlScriptCode:
             case teluScriptCode:
             {
-                return new IndicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode);
+                result = new IndicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode);
+				break;
             }
 
             case arabScriptCode:
 			case hebrScriptCode:
-                return new UnicodeArabicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode);
+                result = new UnicodeArabicOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode);
+				break;
 
 			//case hebrScriptCode:
 			//	return new HebrewOpenTypeLayoutEngine(fontInstance, scriptCode, languageCode);
 
             case thaiScriptCode:
-                return new ThaiLayoutEngine(fontInstance, scriptCode, languageCode);
+                result = new ThaiLayoutEngine(fontInstance, scriptCode, languageCode);
+				break;
 
             default:
+				result = new LayoutEngine(fontInstance, scriptCode, languageCode);
                 break;
             }
         }
     }
 
-    return new LayoutEngine(fontInstance, scriptCode, languageCode);
+	if (result == NULL) {
+		success = LE_MEMORY_ALLOCATION_ERROR;
+	}
+
+    return result;
 }
 
 LayoutEngine::~LayoutEngine() {

@@ -12,7 +12,7 @@
 #include "MarkArrays.h"
 #include "LESwaps.h"
 
-le_int32 MarkArray::getMarkClass(LEGlyphID glyphID, le_int32 coverageIndex, LEFontInstance *fontInstance,
+le_int32 MarkArray::getMarkClass(LEGlyphID glyphID, le_int32 coverageIndex, const LEFontInstance *fontInstance,
                               LEPoint &anchor)
 {
     le_int32 markClass = -1;

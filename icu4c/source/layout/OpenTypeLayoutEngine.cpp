@@ -17,7 +17,7 @@
 
 #include "GDEFMarkFilter.h"
 
-OpenTypeLayoutEngine::OpenTypeLayoutEngine(LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
+OpenTypeLayoutEngine::OpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode,
                         GlyphSubstitutionTableHeader *gsubTable)
     : LayoutEngine(fontInstance, scriptCode, languageCode), fFeatureTags(NULL), fGSUBTable(gsubTable), fSubstitutionFilter(NULL)
 {
@@ -48,7 +48,7 @@ void OpenTypeLayoutEngine::reset()
     }
 }
 
-OpenTypeLayoutEngine::OpenTypeLayoutEngine(LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode)
+OpenTypeLayoutEngine::OpenTypeLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode)
     : LayoutEngine(fontInstance, scriptCode, languageCode), fFeatureTags(NULL), fGSUBTable(NULL), fGDEFTable(NULL), fGPOSTable(NULL),
       fSubstitutionFilter(NULL)
 {
@@ -115,9 +115,22 @@ void OpenTypeLayoutEngine::setScriptAndLanguageTags()
 // Input: characters, tags
 // Output: glyphs, char indices
 le_int32 OpenTypeLayoutEngine::glyphProcessing(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft, const LETag **featureTags,
-                LEGlyphID *&glyphs, le_int32 *&charIndices)
+                LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success)
 {
-    mapCharsToGlyphs(chars, offset, count, rightToLeft, rightToLeft, glyphs, charIndices);
+	if (LE_FAILURE(success)) {
+		return 0;
+	}
+
+	if (chars == NULL || offset < 0 || count < 0) {
+		success = LE_ILLEGAL_ARGUMENT_ERROR;
+		return 0;
+	}
+
+    mapCharsToGlyphs(chars, offset, count, rightToLeft, rightToLeft, glyphs, charIndices, success);
+
+	if (LE_FAILURE(success)) {
+		return 0;
+	}
 
     if (fGSUBTable != NULL) {
         fGSUBTable->process(glyphs, featureTags, count, rightToLeft, fScriptTag, fLangSysTag, fGDEFTable, fSubstitutionFilter);
@@ -126,24 +139,33 @@ le_int32 OpenTypeLayoutEngine::glyphProcessing(const LEUnicode chars[], le_int32
     return count;
 }
 
-le_int32 OpenTypeLayoutEngine::computeGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft, LEGlyphID *&glyphs, le_int32 *&charIndices)
+le_int32 OpenTypeLayoutEngine::computeGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft, LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success)
 {
     LEUnicode *outChars = NULL;
     LEGlyphID *fakeGlyphs = NULL;
     le_int32 *tempCharIndices = NULL;
     le_int32 outCharCount, outGlyphCount, fakeGlyphCount;
 
-    outCharCount   = characterProcessing(chars, offset, count, max, rightToLeft, outChars, tempCharIndices, fFeatureTags);
+	if (LE_FAILURE(success)) {
+		return 0;
+	}
+
+	if (chars == NULL || offset < 0 || count < 0 || max < 0 || offset >= max || offset + count > max) {
+		success = LE_ILLEGAL_ARGUMENT_ERROR;
+		return 0;
+	}
+
+    outCharCount   = characterProcessing(chars, offset, count, max, rightToLeft, outChars, tempCharIndices, fFeatureTags, success);
 
     if (outChars != NULL) {
-        fakeGlyphCount = glyphProcessing(outChars, 0, outCharCount, outCharCount, rightToLeft, fFeatureTags, fakeGlyphs, tempCharIndices);
+        fakeGlyphCount = glyphProcessing(outChars, 0, outCharCount, outCharCount, rightToLeft, fFeatureTags, fakeGlyphs, tempCharIndices, success);
         //adjustGlyphs(outChars, 0, outCharCount, rightToLeft, fakeGlyphs, fakeGlyphCount);
     } else {
-        fakeGlyphCount = glyphProcessing(chars, offset, count, max, rightToLeft, fFeatureTags, fakeGlyphs, tempCharIndices);
+        fakeGlyphCount = glyphProcessing(chars, offset, count, max, rightToLeft, fFeatureTags, fakeGlyphs, tempCharIndices, success);
         //adjustGlyphs(chars, offset, count, rightToLeft, fakeGlyphs, fakeGlyphCount);
     }
 
-    outGlyphCount  = glyphPostProcessing(fakeGlyphs, tempCharIndices, fakeGlyphCount, glyphs, charIndices);
+    outGlyphCount  = glyphPostProcessing(fakeGlyphs, tempCharIndices, fakeGlyphCount, glyphs, charIndices, success);
 
     if (outChars != chars) {
         delete[] outChars;
@@ -162,10 +184,24 @@ le_int32 OpenTypeLayoutEngine::computeGlyphs(const LEUnicode chars[], le_int32 o
 
 // apply GPOS table, if any
 void OpenTypeLayoutEngine::adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse,
-                                                LEGlyphID glyphs[], le_int32 glyphCount, float positions[])
+                                                LEGlyphID glyphs[], le_int32 glyphCount, float positions[], LEErrorCode &success)
 {
+	if (LE_FAILURE(success)) {
+		return;
+	}
+
+	if (chars == NULL || glyphs == NULL || positions == NULL || offset < 0 || count < 0) {
+		success = LE_ILLEGAL_ARGUMENT_ERROR;
+		return;
+	}
+
     if (fGPOSTable != NULL) {
         GlyphPositionAdjustment *adjustments = new GlyphPositionAdjustment[glyphCount];
+
+		if (adjustments == NULL) {
+			success = LE_MEMORY_ALLOCATION_ERROR;
+			return;
+		}
 
         fGPOSTable->process(glyphs, adjustments, fFeatureTags, glyphCount, reverse, fScriptTag, fLangSysTag, fGDEFTable, fFontInstance);
 

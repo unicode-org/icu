@@ -24,14 +24,14 @@ public:
     static LETag defaultFeature;
 
     void process(LEGlyphID *glyphs, GlyphPositionAdjustment *glyphPositionAdjustments, const LETag **glyphTags, le_int32 glyphCount,
-                 le_bool rightToLeft, GlyphDefinitionTableHeader *glyphDefinitionTableHeader, LEFontInstance *fontInstance);
+                 le_bool rightToLeft, GlyphDefinitionTableHeader *glyphDefinitionTableHeader, const LEFontInstance *fontInstance);
 
-    le_uint32 applyLookupTable(LookupTable *lookupTable, GlyphIterator *glyphIterator, LEFontInstance *fontInstance);
+    le_uint32 applyLookupTable(LookupTable *lookupTable, GlyphIterator *glyphIterator, const LEFontInstance *fontInstance);
 
-    le_uint32 applySingleLookup(le_uint16 lookupTableIndex, GlyphIterator *glyphIterator, LEFontInstance *fontInstance);
+    le_uint32 applySingleLookup(le_uint16 lookupTableIndex, GlyphIterator *glyphIterator, const LEFontInstance *fontInstance);
 
     virtual le_uint32 applySubtable(LookupSubtable *lookupSubtable, le_uint16 subtableType,
-        GlyphIterator *glyphIterator, LEFontInstance *fontInstance) = 0;
+        GlyphIterator *glyphIterator, const LEFontInstance *fontInstance) = 0;
 
     virtual ~LookupProcessor();
 

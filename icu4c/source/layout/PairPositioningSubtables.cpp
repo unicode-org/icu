@@ -16,7 +16,7 @@
 #include "OpenTypeUtilities.h"
 #include "LESwaps.h"
 
-le_uint32 PairPositioningSubtable::process(GlyphIterator *glyphIterator, LEFontInstance *fontInstance)
+le_uint32 PairPositioningSubtable::process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance)
 {
     switch(SWAPW(subtableFormat))
     {
@@ -42,7 +42,7 @@ le_uint32 PairPositioningSubtable::process(GlyphIterator *glyphIterator, LEFontI
     }
 }
 
-le_uint32 PairPositioningFormat1Subtable::process(GlyphIterator *glyphIterator, LEFontInstance *fontInstance)
+le_uint32 PairPositioningFormat1Subtable::process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance)
 {
     LEGlyphID firstGlyph = (LEGlyphID) glyphIterator->getCurrGlyphID();
     le_int32 coverageIndex = getGlyphCoverage(firstGlyph);
@@ -85,7 +85,7 @@ le_uint32 PairPositioningFormat1Subtable::process(GlyphIterator *glyphIterator, 
     return 0;
 }
 
-le_uint32 PairPositioningFormat2Subtable::process(GlyphIterator *glyphIterator, LEFontInstance *fontInstance)
+le_uint32 PairPositioningFormat2Subtable::process(GlyphIterator *glyphIterator, const LEFontInstance *fontInstance)
 {
     LEGlyphID firstGlyph = (LEGlyphID) glyphIterator->getCurrGlyphID();
     le_int32 coverageIndex = getGlyphCoverage(firstGlyph);

@@ -39,13 +39,13 @@ struct ContextualSubstitutionBase : GlyphSubstitutionSubtable
         SubstitutionLookupRecord *substLookupRecordArray,
         le_uint16 substCount,
         GlyphIterator *glyphIterator,
-        LEFontInstance *fontInstance,
+        const LEFontInstance *fontInstance,
         le_int32 position);
 };
 
 struct ContextualSubstitutionSubtable : ContextualSubstitutionBase
 {
-    le_uint32  process(LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator, LEFontInstance *fontInstance);
+    le_uint32  process(LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator, const LEFontInstance *fontInstance);
 };
 
 struct ContextualSubstitutionFormat1Subtable : ContextualSubstitutionSubtable
@@ -53,7 +53,7 @@ struct ContextualSubstitutionFormat1Subtable : ContextualSubstitutionSubtable
     le_uint16  subRuleSetCount;
     Offset  subRuleSetTableOffsetArray[ANY_NUMBER];
 
-    le_uint32  process(LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator, LEFontInstance *fontInstance);
+    le_uint32  process(LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator, const LEFontInstance *fontInstance);
 };
 
 struct SubRuleSetTable
@@ -78,7 +78,7 @@ struct ContextualSubstitutionFormat2Subtable : ContextualSubstitutionSubtable
     le_uint16  subClassSetCount;
     Offset  subClassSetTableOffsetArray[ANY_NUMBER];
 
-    le_uint32  process(LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator, LEFontInstance *fontInstance);
+    le_uint32  process(LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator, const LEFontInstance *fontInstance);
 };
 
 struct SubClassSetTable
@@ -108,12 +108,12 @@ struct ContextualSubstitutionFormat3Subtable
     Offset  coverageTableOffsetArray[ANY_NUMBER];
   //SubstitutionLookupRecord substLookupRecord[ANY_NUMBER];
 
-    le_uint32  process(LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator, LEFontInstance *fontInstance);
+    le_uint32  process(LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator, const LEFontInstance *fontInstance);
 };
 
 struct ChainingContextualSubstitutionSubtable : ContextualSubstitutionBase
 {
-    le_uint32  process(LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator, LEFontInstance *fontInstance);
+    le_uint32  process(LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator, const LEFontInstance *fontInstance);
 };
 
 struct ChainingContextualSubstitutionFormat1Subtable : ChainingContextualSubstitutionSubtable
@@ -121,7 +121,7 @@ struct ChainingContextualSubstitutionFormat1Subtable : ChainingContextualSubstit
     le_uint16  chainSubRuleSetCount;
     Offset  chainSubRuleSetTableOffsetArray[ANY_NUMBER];
 
-    le_uint32  process(LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator, LEFontInstance *fontInstance);
+    le_uint32  process(LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator, const LEFontInstance *fontInstance);
 };
 
 struct ChainSubRuleSetTable
@@ -152,7 +152,7 @@ struct ChainingContextualSubstitutionFormat2Subtable : ChainingContextualSubstit
     le_uint16  chainSubClassSetCount;
     Offset  chainSubClassSetTableOffsetArray[ANY_NUMBER];
 
-    le_uint32  process(LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator, LEFontInstance *fontInstance);
+    le_uint32  process(LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator, const LEFontInstance *fontInstance);
 };
 
 struct ChainSubClassSetTable
@@ -190,7 +190,7 @@ struct ChainingContextualSubstitutionFormat3Subtable
   //le_uint16  substCount;
   //SubstitutionLookupRecord substLookupRecord[ANY_NUMBER];
 
-    le_uint32  process(LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator, LEFontInstance *fontInstance);
+    le_uint32  process(LookupProcessor *lookupProcessor, GlyphIterator *glyphIterator, const LEFontInstance *fontInstance);
 };
 
 #endif
