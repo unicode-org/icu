@@ -9,6 +9,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+enum {
+    U_SPACE=0x20,
+    U_DQUOTE=0x22,
+    U_COMMA=0x2c,
+    U_LEFT_SQUARE_BRACKET=0x5b,
+    U_BACKSLASH=0x5c,
+    U_RIGHT_SQUARE_BRACKET=0x5d,
+    U_SMALL_U=0x75
+};
+
 // Verify that a UErrorCode is successful; exit(1) if not
 void check(UErrorCode& status, const char* msg) {
     if (U_FAILURE(status)) {
@@ -22,9 +32,10 @@ void check(UErrorCode& status, const char* msg) {
 static UnicodeString& appendHex(uint32_t number, 
                          int8_t digits, 
                          UnicodeString& target) {
-    static const UnicodeString DIGIT_STRING("0123456789ABCDEF");
+    uint32_t digit;
     while (digits > 0) {
-        target += DIGIT_STRING[(number >> ((--digits) * 4)) & 0xF];
+        digit = (number >> ((--digits) * 4)) & 0xF;
+        target += (UChar)(digit < 10 ? 0x30 + digit : 0x41 - 10 + digit);
     }
     return target;
 }
@@ -33,34 +44,36 @@ static UnicodeString& appendHex(uint32_t number,
 UnicodeString escape(const UnicodeString &source) {
     int32_t i;
     UnicodeString target;
-    target += "\"";
+    target += (UChar)U_DQUOTE;
     for (i=0; i<source.length(); ++i) {
         UChar ch = source[i];
-        if (ch < 0x09 || (ch > 0x0A && ch < 0x20) || ch > 0x7E) {
-            target += "\\u";
+        if (ch < 0x09 || (ch > 0x0D && ch < 0x20) || ch > 0x7E) {
+            (target += (UChar)U_BACKSLASH) += (UChar)U_SMALL_U;
             appendHex(ch, 4, target);
         } else {
             target += ch;
         }
     }
-    target += "\"";
+    target += (UChar)U_DQUOTE;
     return target;
 }
 
-// Print the given string to stdout
+// Print the given string to stdout using the UTF-8 converter
 void uprintf(const UnicodeString &str) {
+    char stackBuffer[100];
     char *buf = 0;
-    int32_t len = str.length();
-    // int32_t bufLen = str.extract(0, len, buf); // Preflight
-    /* Preflighting seems to be broken now, so assume 1-1 conversion,
-       plus some slop. */
-    int32_t bufLen = len + 16;
-	int32_t actualLen;
-    buf = new char[bufLen + 1];
-    actualLen = str.extract(0, len, buf/*, bufLen*/); // Default codepage conversion
-    buf[actualLen] = 0;
+
+    int32_t bufLen = str.extract(0, 0x7fffffff, stackBuffer, sizeof(stackBuffer), "UTF-8");
+    if(bufLen < sizeof(stackBuffer)) {
+        buf = stackBuffer;
+    } else {
+        buf = new char[bufLen + 1];
+        bufLen = str.extract(0, 0x7fffffff, buf, bufLen + 1, "UTF-8");
+    }
     printf("%s", buf);
-    delete buf;
+    if(buf != stackBuffer) {
+        delete buf;
+    }
 }
 
 // Create a display string for a formattable
@@ -68,36 +81,36 @@ UnicodeString formattableToString(const Formattable& f) {
     switch (f.getType()) {
     case Formattable::kDate:
         // TODO: Finish implementing this
-        return UnicodeString("Formattable_DATE_TBD");
+        return UNICODE_STRING_SIMPLE("Formattable_DATE_TBD");
     case Formattable::kDouble:
         {
             char buf[256];
             sprintf(buf, "%gD", f.getDouble());
-            return UnicodeString(buf);
+            return UnicodeString(buf, "");
         }
     case Formattable::kLong:
         {
             char buf[256];
             sprintf(buf, "%ldL", f.getLong());
-            return UnicodeString(buf);
+            return UnicodeString(buf, "");
         }
     case Formattable::kString:
-        return UnicodeString("\"").append(f.getString()).append("\"");
+        return UnicodeString((UChar)U_DQUOTE).append(f.getString()).append((UChar)U_DQUOTE);
     case Formattable::kArray:
         {
             int32_t i, count;
             const Formattable* array = f.getArray(count);
-            UnicodeString result("[");
+            UnicodeString result((UChar)U_LEFT_SQUARE_BRACKET);
             for (i=0; i<count; ++i) {
                 if (i > 0) {
-                    result += ", ";
+                    (result += (UChar)U_COMMA) += (UChar)U_SPACE;
                 }
                 result += formattableToString(array[i]);
             }
-            result += "]";
+            result += (UChar)U_RIGHT_SQUARE_BRACKET;
             return result;
         }
     default:
-        return UnicodeString("INVALID_Formattable");
+        return UNICODE_STRING_SIMPLE("INVALID_Formattable");
     }
 }
