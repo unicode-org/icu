@@ -3049,7 +3049,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
 		uint32_t digVal = 0;		
 		uint8_t	collateVal = 0;
 		
-		UBool nonZeroValReached = false;
+		UBool nonZeroValReached = FALSE;
 
 		uint8_t *numTempBuf;
 		uint8_t stackNumTempBuf[UCOL_MAX_BUFFER]; // I just need a temporary place to store my generated CEs.
@@ -3171,7 +3171,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
             }
 		}
 		
-		if (nonZeroValReached == false){
+		if (nonZeroValReached == FALSE){
 			digIndx = 2;
 			numTempBuf[2] = 6;
 		}
@@ -3729,7 +3729,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
 		uint32_t digVal = 0;		
 		uint8_t	collateVal = 0;
 		
-		UBool nonZeroValReached = false;
+		UBool nonZeroValReached = FALSE;
 
 		uint8_t *numTempBuf;
 		uint8_t stackNumTempBuf[UCOL_MAX_BUFFER]; // I just need a temporary place to store my generated CEs.
@@ -3842,7 +3842,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
 				break;
 		}
 
-		if (nonZeroValReached == false){
+		if (nonZeroValReached == FALSE){
 			digIndx = 2;
 			numTempBuf[2] = 6;
 		}
