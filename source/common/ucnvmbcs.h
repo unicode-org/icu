@@ -158,7 +158,7 @@ _MBCSSingleSimpleGetNextUChar(UConverterSharedData *sharedData,
  * returns fallback values.
  */
 #define _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(sharedData, b) \
-    (UChar)(((sharedData)->table->mbcs.stateTable[0][b])>>7)
+    (UChar)(((sharedData)->table->mbcs.stateTable[0][(uint8_t)(b)])>>7)
 
 /**
  * This is an internal function that allows other converter implementations

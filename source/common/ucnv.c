@@ -21,8 +21,6 @@
 #include "umutex.h"
 #include "unicode/ures.h"
 #include "uhash.h"
-#include "ucmp16.h"
-#include "ucmp8.h"
 #include "ucnv_io.h"
 #include "unicode/ucnv_err.h"
 #include "ucnv_cnv.h"
@@ -1198,7 +1196,14 @@ int32_t  ucnv_convert(const char *toConverterName,
 
 UConverterType ucnv_getType(const UConverter* converter)
 {
-  return (UConverterType)converter->sharedData->staticData->conversionType;
+    int8_t type = converter->sharedData->staticData->conversionType;
+    if(type == UCNV_MBCS) {
+        /* SBCS is replaced by MBCS, but here we cheat a little */
+        if(converter->sharedData->table->mbcs.countStates == 1) {
+            return (UConverterType)UCNV_SBCS;
+        }
+    }
+    return (UConverterType)type;
 }
 
 void ucnv_getStarters(const UConverter* converter, 

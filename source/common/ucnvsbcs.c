@@ -21,11 +21,14 @@
 #include "unicode/utypes.h"
 #include "cmemory.h"
 #include "ucmp16.h"
-#include "ucmp8.h"
+/* SBCS needed: #include "ucmp8.h" */
 #include "unicode/ucnv_err.h"
 #include "ucnv_bld.h"
 #include "unicode/ucnv.h"
 #include "ucnv_cnv.h"
+
+#if 0
+/* SBCS replaced by MBCS 2000dec20 */
 
 /* SBCS --------------------------------------------------------------------- */
 
@@ -358,14 +361,15 @@ static const UConverterImpl _SBCSImpl={
     NULL
 };
 
+#endif
 
 /* Static data is in tools/makeconv/ucnvstat.c for data-based
  * converters. Be sure to update it as well.
  */
 
 const UConverterSharedData _SBCSData={
-    sizeof(UConverterSharedData), 1,
-    NULL, NULL, NULL, FALSE, &_SBCSImpl, 
+    sizeof(UConverterSharedData), 0 /* ### 1 to be operational */,
+    NULL, NULL, NULL, FALSE, NULL /* ### &_SBCSImpl */,
     0
 };
 

@@ -20,7 +20,7 @@ static const UConverterStaticData _SBCSStaticData={
     sizeof(UConverterStaticData),
     "SBCS",
     0, UCNV_IBM, UCNV_SBCS, 1, 1,
-    { 0, 0, 0, 0 }, 1, FALSE, FALSE,
+    { 0x1a, 0, 0, 0 }, 1, FALSE, FALSE,
     0,
     { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
@@ -30,7 +30,7 @@ static const UConverterStaticData _DBCSStaticData={
     sizeof(UConverterStaticData),
     "DBCS",
     0, UCNV_IBM, UCNV_DBCS, 2, 2,
-    { 0, 0, 0, 0 },1, FALSE, FALSE, /* subchar */
+    { 0, 0, 0, 0 },0, FALSE, FALSE, /* subchar */
     0,
     { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
@@ -39,7 +39,7 @@ static const UConverterStaticData _MBCSStaticData={
     sizeof(UConverterStaticData),
     "MBCS",
     0, UCNV_IBM, UCNV_MBCS, 1, 1,
-    { 0, 0, 0, 0 }, 1, FALSE, FALSE,
+    { 0x1a, 0, 0, 0 }, 1, FALSE, FALSE,
     0,
     { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
@@ -48,7 +48,7 @@ static const UConverterStaticData _EBCDICStatefulStaticData={
     sizeof(UConverterStaticData),
     "EBCDICStateful",
     0, UCNV_IBM, UCNV_EBCDIC_STATEFUL, 1, 1,
-    { 0, 0, 0, 0 },1, FALSE, FALSE,
+    { 0, 0, 0, 0 },0, FALSE, FALSE,
     0,
     { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
@@ -60,4 +60,3 @@ const UConverterStaticData *ucnv_converterStaticData[UCNV_NUMBER_OF_SUPPORTED_CO
     NULL/*ISO2022*/,
     /* LMBCS */ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
 };
-
