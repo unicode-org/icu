@@ -7,6 +7,7 @@
 
 zh_TW {
     Version{ "2.0" }
+    "%%STROKE" { "\u7B46\u5283\u987a\u5e8f" }   // Traditional Chinese.
     CollationElements { 
         Version { "1.0" }
         Sequence { "&[top]<\u5159<\u515B<\u515E<\u515D<\u5161<\u5163<\u55E7<\u74E9<\u7CCE<\u4E00<\u4E59"
