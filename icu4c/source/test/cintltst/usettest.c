@@ -92,11 +92,11 @@ static void TestAPI() {
     ec = U_ZERO_ERROR;
     set = uset_openPattern(PAT, PAT_LEN, &ec);
     if(U_FAILURE(ec)) {
-        log_data_err("uset_openPattern([a-c{ab}]) failed - %s\n", u_errorName(ec));
+        log_err("uset_openPattern([a-c{ab}]) failed - %s\n", u_errorName(ec));
         return;
     }
     if(!uset_resemblesPattern(PAT, PAT_LEN, 0)) {
-        log_data_err("uset_resemblesPattern of PAT failed\n");
+        log_err("uset_resemblesPattern of PAT failed\n");
     }
     expect(set, "abc{ab}", "def{bc}", &ec);
 
@@ -131,11 +131,11 @@ static void TestAPI() {
     expect(set, "ghijkl", "de{bc}", NULL);
 
     if (uset_indexOf(set, 0x0067) != 0) {
-        log_data_err("uset_indexOf failed finding correct index of 'g'\n");
+        log_err("uset_indexOf failed finding correct index of 'g'\n");
     }
 
     if (uset_charAt(set, 0) != 0x0067) {
-        log_data_err("uset_charAt failed finding correct char 'g' at index 0\n");
+        log_err("uset_charAt failed finding correct char 'g' at index 0\n");
     }
 
     /* How to test this one...? */
@@ -148,7 +148,7 @@ static void TestAPI() {
     /* UCHAR_ASCII_HEX_DIGIT */
     uset_applyIntPropertyValue(set, UCHAR_ASCII_HEX_DIGIT, 1, &ec);
     if(U_FAILURE(ec)) {
-        log_data_err("uset_applyIntPropertyValue([UCHAR_ASCII_HEX_DIGIT]) failed - %s\n", u_errorName(ec));
+        log_err("uset_applyIntPropertyValue([UCHAR_ASCII_HEX_DIGIT]) failed - %s\n", u_errorName(ec));
         return;
     }
     expect(set, "0123456789ABCDEFabcdef", "GHIjkl{bc}", NULL);
@@ -460,7 +460,7 @@ TestSerialized() {
     errorCode=U_ZERO_ERROR;
     set=uset_openPattern(pattern, -1, &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_data_err("uset_openPattern([:Cf:]) failed - %s\n", u_errorName(errorCode));
+        log_err("uset_openPattern([:Cf:]) failed - %s\n", u_errorName(errorCode));
         return;
     }
 
