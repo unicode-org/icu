@@ -111,7 +111,7 @@ void NormalizerConformanceTest::TestConformance(void) {
             ++failCount;
         }
         if ((count % 1000) == 0) {
-            logln((UnicodeString)"Line " + (count+1));
+            logln((UnicodeString)"Line " + count);
         }
     }
 
@@ -123,6 +123,20 @@ void NormalizerConformanceTest::TestConformance(void) {
     } else {
         logln((UnicodeString)"Total: " + passCount + " lines passed");
     }
+
+    /*
+     * ### TODO: test that all assigned characters that are not mentioned
+     * as single code points in column 1
+     * do not change under any normalization.
+     * I.e., keep a list (UnicodeSet?) of all single code points in c1,
+     * then test that for all in (assigned-list) it is
+     * c1==NFC(c1)==NFD(c1)==NFKC(c1)==NFKD(c1)==FCD(c1)
+     *
+     * ### TODO: test FCD
+     * Idea: since FCD is not a normalization form with guaranteed results,
+     * test that quickCheck(NF*D(c1), isFCD)==TRUE and that quickCheck(FCD(NF*D(c1)), isNF*D)==TRUE.
+     * Also test special, controlled cases.
+     */
 }
 
 /**
@@ -147,46 +161,36 @@ UBool NormalizerConformanceTest::checkConformance(const UnicodeString* field,
     UnicodeString out;
     int32_t fieldNum;
 
-    /* ### TODO: reenable iterativeNorm() tests!! ### ### ### ### ### ### */
-
     for (int32_t i=0; i<FIELD_COUNT; ++i) {
         fieldNum = i+1;
         if (i<3) {
             Normalizer::normalize(field[i], Normalizer::COMPOSE, 0, out, status);
             pass &= assertEqual("C", field[i], out, field[1], "c2!=C(c", fieldNum);
-#if 0
             iterativeNorm(field[i], Normalizer::COMPOSE, out, +1);
             pass &= assertEqual("C(+1)", field[i], out, field[1], "c2!=C(c", fieldNum);
             iterativeNorm(field[i], Normalizer::COMPOSE, out, -1);
             pass &= assertEqual("C(-1)", field[i], out, field[1], "c2!=C(c", fieldNum);
-#endif
 
             Normalizer::normalize(field[i], Normalizer::DECOMP, 0, out, status);
             pass &= assertEqual("D", field[i], out, field[2], "c3!=D(c", fieldNum);
-#if 0
             iterativeNorm(field[i], Normalizer::DECOMP, out, +1);
             pass &= assertEqual("D(+1)", field[i], out, field[2], "c3!=D(c", fieldNum);
             iterativeNorm(field[i], Normalizer::DECOMP, out, -1);
             pass &= assertEqual("D(-1)", field[i], out, field[2], "c3!=D(c", fieldNum);
-#endif
         }
         Normalizer::normalize(field[i], Normalizer::COMPOSE_COMPAT, 0, out, status);
         pass &= assertEqual("KC", field[i], out, field[3], "c4!=KC(c", fieldNum);
-#if 0
         iterativeNorm(field[i], Normalizer::COMPOSE_COMPAT, out, +1);
         pass &= assertEqual("KC(+1)", field[i], out, field[3], "c4!=KC(c", fieldNum);
         iterativeNorm(field[i], Normalizer::COMPOSE_COMPAT, out, -1);
         pass &= assertEqual("KC(-1)", field[i], out, field[3], "c4!=KC(c", fieldNum);
-#endif
 
         Normalizer::normalize(field[i], Normalizer::DECOMP_COMPAT, 0, out, status);
         pass &= assertEqual("KD", field[i], out, field[4], "c5!=KD(c", fieldNum);
-#if 0
         iterativeNorm(field[i], Normalizer::DECOMP_COMPAT, out, +1);
         pass &= assertEqual("KD(+1)", field[i], out, field[4], "c5!=KD(c", fieldNum);
         iterativeNorm(field[i], Normalizer::DECOMP_COMPAT, out, -1);
         pass &= assertEqual("KD(-1)", field[i], out, field[4], "c5!=KD(c", fieldNum);
-#endif
     }
     if (U_FAILURE(status)) {
         errln("Normalizer::normalize returned error status");
