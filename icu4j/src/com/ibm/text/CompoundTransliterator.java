@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/CompoundTransliterator.java,v $ 
- * $Date: 2000/06/28 20:31:43 $ 
- * $Revision: 1.9 $
+ * $Date: 2000/06/28 20:36:32 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -35,7 +35,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.9 $ $Date: 2000/06/28 20:31:43 $
+ * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.10 $ $Date: 2000/06/28 20:36:32 $
  */
 public class CompoundTransliterator extends Transliterator {
 
@@ -273,23 +273,23 @@ public class CompoundTransliterator extends Transliterator {
          *    abc/u0041/u0041/u    
          *    S C L
          */
-        int cursor = index.__start;
-        int limit = index.__contextLimit;
+        int cursor = index.start;
+        int limit = index.contextLimit;
         int globalLimit = limit;
         /* globalLimit is the overall limit.  We keep track of this
-         * since we overwrite index.__contextLimit with the previous
-         * index.__start.  After each transliteration, we update
+         * since we overwrite index.contextLimit with the previous
+         * index.start.  After each transliteration, we update
          * globalLimit for insertions or deletions that have happened.
          */
 
         for (int i=0; i<trans.length; ++i) {
-            index.__start = cursor; // Reset cursor
-            index.__contextLimit = limit;
+            index.start = cursor; // Reset cursor
+            index.contextLimit = limit;
 
             if (DEBUG) {
                 System.out.print(Utility.escape(i + ": \"" +
-                    substring(text, index.__contextStart, index.__start) + '|' +
-                    substring(text, index.__start, index.__contextLimit) +
+                    substring(text, index.contextStart, index.start) + '|' +
+                    substring(text, index.start, index.contextLimit) +
                     "\" -> \""));
             }
 
@@ -297,19 +297,19 @@ public class CompoundTransliterator extends Transliterator {
 
             if (DEBUG) {
                 System.out.println(Utility.escape(
-                    substring(text, index.__contextStart, index.__start) + '|' +
-                    substring(text, index.__start, index.__contextLimit) +
+                    substring(text, index.contextStart, index.start) + '|' +
+                    substring(text, index.start, index.contextLimit) +
                     '"'));
             }
 
             // Adjust overall limit for insertions/deletions
-            globalLimit += index.__contextLimit - limit;
-            limit = index.__start; // Move limit to end of committed text
+            globalLimit += index.contextLimit - limit;
+            limit = index.start; // Move limit to end of committed text
         }
         // Cursor is good where it is -- where the last
         // transliterator left it.  Limit needs to be put back
         // where it was, modulo adjustments for deletions/insertions.
-        index.__contextLimit = globalLimit;
+        index.contextLimit = globalLimit;
     }
 
     /**

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/HangulJamoTransliterator.java,v $ 
- * $Date: 2000/06/28 20:31:43 $ 
- * $Revision: 1.5 $
+ * $Date: 2000/06/28 20:36:32 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -19,7 +19,7 @@ import java.util.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Mark Davis
- * @version $RCSfile: HangulJamoTransliterator.java,v $ $Revision: 1.5 $ $Date: 2000/06/28 20:31:43 $
+ * @version $RCSfile: HangulJamoTransliterator.java,v $ $Revision: 1.6 $ $Date: 2000/06/28 20:36:32 $
  */
 public class HangulJamoTransliterator extends Transliterator {
     private static final String COPYRIGHT =
@@ -42,8 +42,8 @@ public class HangulJamoTransliterator extends Transliterator {
      */
     protected void handleTransliterate(Replaceable text,
                                        Position offsets, boolean incremental) {
-        int cursor = offsets.__start;
-        int limit = offsets.__contextLimit;
+        int cursor = offsets.start;
+        int limit = offsets.contextLimit;
 
         StringBuffer replacement = new StringBuffer();
         while (cursor < limit) {
@@ -57,8 +57,8 @@ public class HangulJamoTransliterator extends Transliterator {
             }
         }
 
-        offsets.__contextLimit = limit;
-        offsets.__start = cursor;
+        offsets.contextLimit = limit;
+        offsets.start = cursor;
     }
 
 
