@@ -127,13 +127,13 @@ public class LDMLComparator {
     public static void main(String[] args){
         LDMLComparator comparator = new LDMLComparator();
         comparator.processArgs(args);    
-        
     }
                         
     Hashtable optionTable = new Hashtable();
     private String sourceFolder = ".";
     private String destFolder = ".";  
     private String localeStr;    
+    private String ourCvsVersion = "";
     private Calendar cal = Calendar.getInstance();
     private Hashtable colorHash = new Hashtable();
     private String goldFileName; 
@@ -169,6 +169,7 @@ public class LDMLComparator {
         String parentNode;
         String type;
         Hashtable platformData = new Hashtable();
+        String referenceUrl;
     }
     			 
     //PN added
@@ -269,11 +270,28 @@ public class LDMLComparator {
                 if((m_totalCount == 0) && m_Vetting) { // only  optional for vetting.
                     //System.out.println("INFO:  no file created (nothing to write..) " + fileName);
                 } else {
+                    ourCvsVersion = "";
+                    getCvsVersion();
                     OutputStreamWriter os = new OutputStreamWriter(new FileOutputStream(fileName),encoding);
                     System.out.println("INFO: Writing: " + fileName + "\t(" + m_totalCount + " items)");
-                    
                     PrintWriter writer = new PrintWriter(os);
                     printHTML(writer, localeStr);
+                    {
+                        ULocale ourLocale = new ULocale(localeStr);
+                        String idxFileName = destFolder+File.separator+ourLocale.getDisplayLanguage()+"_"+ourLocale.getDisplayCountry()+"_"+localeStr+".idx";
+                        OutputStreamWriter is = new OutputStreamWriter(new FileOutputStream(idxFileName),"utf-8");
+                        PrintWriter indexwriter = new PrintWriter(is);
+                        indexwriter.println("<tr>");
+                        indexwriter.println(" <td>" +
+                                localeStr +
+                                "</td>");
+                        indexwriter.println(" <td><a href=\"" + localeStr+".html" + "\">" +
+                            ourLocale.getDisplayName() + "</a></td>");
+                        indexwriter.println(" <td>" + m_totalCount + "</td>");
+                        indexwriter.println(" <td>" + ourCvsVersion + "</td>");
+                        indexwriter.println("</tr>");
+                        is.close();
+                    }
                 }
             }
         }catch(Exception e)
@@ -702,6 +720,9 @@ public class LDMLComparator {
                                     "<input type=submit value=\"" + "Test" + "\"/>" +
                                     "</form>");
                             }
+                    if(m_Vetting && element.referenceUrl != null) {
+                        writer.print("<br><div align='right'><a href=\"" + element.referenceUrl + "\"><i>(Ref)</i></a></div>");
+                    }
                     writer.print("</td>");
                     if(altText!=null) { 
                         writer.print("        <td bgcolor="+ALT_COLOR+">"+altText);
@@ -786,6 +807,9 @@ public class LDMLComparator {
                                     "<a href=\"http://oss.software.ibm.com/cgi-bin/icu/lx/en/?_="+localeStr+"\">Demo</a>, "+
                                     "<a href=\"./index.html\">Main and About</a>, "+
                                     "</b></p>\n");                                    
+                  if((ourCvsVersion!=null) && (ourCvsVersion.length()>0)) {
+                    writer.println("<h3><tt>"+localeStr + ".xml version " + ourCvsVersion + "</tt></h3>");
+                  } 
                   writer.print(         "        <table>\n");
         }
 
@@ -952,8 +976,13 @@ public class LDMLComparator {
       
     }
 
-    private void addElement(String childNode, String parentNode, String id, String index, 
+    private final void addElement(String childNode, String parentNode, String id, String index, 
                             String platformValue, String platformName){
+        addElement(childNode,parentNode,id,index,platformValue,platformName,null);
+    }
+    
+    private void addElement(String childNode, String parentNode, String id, String index, 
+                            String platformValue, String platformName, String referenceUrl){
         m_totalCount++;       
         Object obj = compareMap.get(id);
         CompareElement element;
@@ -963,6 +992,7 @@ public class LDMLComparator {
             element.index = index;
             element.parentNode = parentNode;
             element.node = childNode;
+            element.referenceUrl = referenceUrl;
             // add the element to the compare map
             compareMap.put(id, element);
         }else{
@@ -1024,22 +1054,30 @@ public class LDMLComparator {
     private boolean extractMergeData(Node node,String key, boolean parentDraft){
         Node childOfSource;
         for(childOfSource = node.getFirstChild(); childOfSource != null; childOfSource = childOfSource.getNextSibling()) {
-             if (childOfSource.getNodeType() != Node.ELEMENT_NODE) {
+            if (childOfSource.getNodeType() != Node.ELEMENT_NODE) {
                  continue;
-             }
-             String altText = null;
-             Node altForChild = null;
-             boolean subDraft = parentDraft;
-             String childOfSourceName = childOfSource.getNodeName();
-             //Ignore collation and special tags
-             if(childOfSourceName.equals("collations")|| childOfSource.equals("special")
+            }
+            String altText = null;
+//            String altReferenceUrl = null;
+            Node altForChild = null;
+            boolean subDraft = parentDraft;
+            String childOfSourceName = childOfSource.getNodeName();
+            //Ignore collation and special tags
+            if(childOfSourceName.equals("collations")|| childOfSource.equals("special")
                 || childOfSourceName.indexOf(":")>-1){
                  continue;
-             }
+            }
              
-             if(m_Vetting && LDMLUtilities.isNodeDraft(childOfSource)) {
+            if(m_Vetting && LDMLUtilities.isNodeDraft(childOfSource)) {
                 if(!subDraft) {
                     subDraft = true;
+                }
+            }
+            String referenceUrl = null;
+            if(m_Vetting) {
+                referenceUrl = LDMLUtilities.getAttributeValue(childOfSource, LDMLConstants.REFERENCES);
+                if((referenceUrl!=null)&&(referenceUrl.length()==0)) {
+                    referenceUrl = null;
                 }
             }
             
@@ -1054,6 +1092,10 @@ public class LDMLComparator {
                         if(altForChild == null) {
                             throw new IllegalArgumentException("ERR: can't find a node like this one: " + childOfSource.toString());
                         }
+//                        altReferenceUrl = LDMLUtilities.getAttributeValue(altForChild, LDMLConstants.REFERENCES);
+//                        if((altReferenceUrl!=null)&&(altReferenceUrl.length()==0)) {
+//                            altReferenceUrl = null;
+//                        }
                     } else if(subDraft) { /* don't care about nondraft */
                         String type = LDMLUtilities.getAttributeValue(childOfSource, LDMLConstants.TYPE);
                         if(type==null) {
@@ -1230,18 +1272,18 @@ public class LDMLComparator {
                      if(!index.equals("")){
                          if(!index.equals(nodeValue) && !index.equals("Fallback")){
                             if(!m_Vetting || subDraft) {                         
-                                addElement(childNodeName, parentNodeName, id, index, nodeValue, key);
+                                addElement(childNodeName, parentNodeName, id, index, nodeValue, key,referenceUrl);
                                 if(altText!=null) {
-                                    addElement(childNodeName, parentNodeName, id, index, altText, "ALT");
+                                addElement(childNodeName, parentNodeName, id, index, altText, "ALT",null /* altReferenceUrl */);
                                 }
                             }
                          } 
                      }else{
                          if(!type.equals(nodeValue) && !type.equals("Fallback")){
                             if(!m_Vetting || subDraft) {                         
-                                addElement(childNodeName, parentNodeName, id, type, nodeValue, key);
+                                addElement(childNodeName, parentNodeName, id, type, nodeValue, key,referenceUrl);
                                 if(altText!=null) {
-                                    addElement(childNodeName, parentNodeName, id, index, altText, "ALT");
+                                    addElement(childNodeName, parentNodeName, id, index, altText, "ALT",null /* altReferenceUrl */);
                                 }
                             }
                          }
@@ -1271,7 +1313,7 @@ public class LDMLComparator {
                              if(altForChild!=null) {
                                 subAltText="?";
                                 System.err.println(parentNodeName + "/" + childNodeName + " alt?? : " + altText); 
-                                throw new IllegalArgumentException("UNKNOWN ALT SUBTAG THINGY + " + parentNodeName + "/" + childNodeName + " alt?? : " + altText + " not " + subNodeValue);
+                                throw new IllegalArgumentException("UNKNOWN ALT SUBTAG + " + parentNodeName + "/" + childNodeName + " alt?? : " + altText + " not " + subNodeValue);
                              }
                              if(!index.equals("")){
                                  addElement(childNodeName, parentNodeName, id, index, subNodeValue, key);
@@ -1743,4 +1785,38 @@ public class LDMLComparator {
         
         writer.print("      </table>\n");   
     }    
+    
+    private void getCvsVersion()
+    {
+    //    private String localeStr;    
+      //  private String ourCvsVersion = null;
+       // sourceFolder
+       //                localeStr  = goldFileName.substring(goldFileName.lastIndexOf(File.separatorChar)+1,goldFileName.lastIndexOf('.'));
+         int index = goldFileName.lastIndexOf(File.separatorChar);
+         String sourceDir = goldFileName.substring(0, index);
+
+       File entriesFile = new File(sourceDir + File.separatorChar + "CVS","Entries");
+       if(!entriesFile.exists() || !entriesFile.canRead()) {
+        System.out.println("Can't read, won't try to get CVS " + entriesFile.toString());
+        return;
+       }
+       
+        try {
+            BufferedReader r = new BufferedReader(new FileReader(entriesFile.getPath()));
+            String s;
+            while((s=r.readLine())!=null) {
+                String lookFor = "/"+localeStr+".xml/";
+                if(s.startsWith(lookFor)) {
+                    String ver = s.substring(lookFor.length());
+                    ver = ver.substring(0,ver.indexOf('/'));
+                    ourCvsVersion = ver;
+                }
+            }
+            r.close();
+        } catch ( Throwable th ) {
+            System.err.println(th.toString() + " trying to read CVS Entries file " + entriesFile.getPath());
+            return;
+        }
+
+    }
 } //end of class definition/declaration
