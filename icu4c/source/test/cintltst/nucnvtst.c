@@ -1308,6 +1308,136 @@ TestISO_2022_JP_Next() {
    
 }
 void
+TestSmallTargetBuffer(const uint16_t* source, const UChar* sourceLimit,UConverter* cnv, char* cnvName){
+    const UChar* uSource;
+	const UChar* uSourceLimit;
+	const char* cSource;
+	const char* cSourceLimit;
+	UChar *uTargetLimit =NULL;
+	UChar *uTarget;
+	char *cTarget;
+	const char *cTargetLimit;
+	char *cBuf; 
+	UChar *uBuf,*test;
+    int32_t uBufSize = 120;
+    int len=0;
+    UErrorCode errorCode=U_ZERO_ERROR;
+	uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
+	cBuf =(char*)malloc(uBufSize * sizeof(char) * 10);
+	uSource = (UChar*) source;
+	uSourceLimit=(const UChar*)sourceLimit;
+	cTarget = cBuf;
+    uTarget = uBuf;
+	cSource = cBuf;
+    cTargetLimit = cBuf;
+    uTargetLimit = uBuf;
+
+
+    do{
+       
+	    cTargetLimit = cTargetLimit+ 1;
+	    ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,NULL,FALSE, &errorCode);
+        if(errorCode==U_BUFFER_OVERFLOW_ERROR){
+           errorCode=U_ZERO_ERROR;
+            continue;
+        }
+
+	    if(U_FAILURE(errorCode)){
+            log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
+            return;
+        }
+
+    }while (uSource<uSourceLimit);
+
+    cSourceLimit =cTarget;
+    do{
+        uTargetLimit=uTargetLimit+1;
+         ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,NULL,FALSE,&errorCode);
+        if(errorCode==U_BUFFER_OVERFLOW_ERROR){
+           errorCode=U_ZERO_ERROR;
+            continue;
+        }
+        if(U_FAILURE(errorCode)){
+               log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
+                return;
+        }
+    }while(cSource<cSourceLimit);
+    uSource = source;
+    test =uBuf;
+    for(len;len<(int)(source - sourceLimit);len++){
+   		if(uBuf[len]!=uSource[len]){
+			log_err("Expected : \\u%04X \t Got: \\u%04X\n",uSource[len],(int)uBuf[len]) ;
+		}
+    }
+    free(uBuf);
+	free(cBuf);
+}
+void TestSmallSourceBuffer(const uint16_t* source, const UChar* sourceLimit,UConverter* cnv, char* cnvName){
+    const UChar* uSource;
+	const UChar* uSourceLimit;
+	const char* cSource;
+	const char* cSourceLimit;
+	UChar *uTargetLimit =NULL;
+	UChar *uTarget;
+	char *cTarget;
+	const char *cTargetLimit;
+	char *cBuf; 
+	UChar *uBuf,*test;
+    int32_t uBufSize = 120;
+    int len=0;
+    const UChar *temp = sourceLimit;
+    UErrorCode errorCode=U_ZERO_ERROR;
+	uBuf =  (UChar*)malloc(uBufSize * sizeof(UChar)*5);
+	cBuf =(char*)malloc(uBufSize * sizeof(char) * 10);
+	uSource = (UChar*) source;
+	cTarget = cBuf;
+    uTarget = uBuf;
+	cSource = cBuf;
+    cTargetLimit = cBuf;
+    uTargetLimit = uBuf+uBufSize*5;
+    cTargetLimit = cTargetLimit+uBufSize*10;
+    uSourceLimit=uSource;
+    do{
+       
+        uSourceLimit = uSourceLimit+1;
+	    ucnv_fromUnicode( cnv , &cTarget, cTargetLimit,&uSource,uSourceLimit,NULL,FALSE, &errorCode);
+        if(errorCode==U_BUFFER_OVERFLOW_ERROR){
+           errorCode=U_ZERO_ERROR;
+            continue;
+        }
+
+	    if(U_FAILURE(errorCode)){
+            log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
+            return;
+        }
+
+    }while (uSource<temp);
+
+    cSourceLimit =cBuf;
+    do{
+        cSourceLimit =cSourceLimit+1;
+        ucnv_toUnicode(cnv,&uTarget,uTargetLimit,&cSource,cSourceLimit,NULL,FALSE,&errorCode);
+        if(errorCode==U_BUFFER_OVERFLOW_ERROR){
+           errorCode=U_ZERO_ERROR;
+            continue;
+        }
+        if(U_FAILURE(errorCode)){
+               log_err("ucnv_toUnicode conversion failed reason %s\n", u_errorName(errorCode));
+                return;
+        }
+    }while(cSource<cTarget);
+
+    uSource = source;
+    test =uBuf;
+    for(len;len<(int)(source - sourceLimit);len++){
+   		if(uBuf[len]!=uSource[len]){
+			log_err("Expected : \\u%04X \t Got: \\u%04X\n",uSource[len],(int)uBuf[len]) ;
+		}
+    }
+    free(uBuf);
+	free(cBuf);
+}
+void
 TestHZ() {
     /* test input */
     static const uint16_t in[]={
@@ -1374,11 +1504,14 @@ TestHZ() {
 		*uSource++;
 		*test++;
 	}
-
+    TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"HZ");
+    TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"HZ");
 	ucnv_close(cnv);
 	free(uBuf);
 	free(cBuf);
 }
+
+
 
 void
 TestISO_2022_JP() {
@@ -1454,7 +1587,8 @@ TestISO_2022_JP() {
 		*uSource++;
 		*test++;
 	}
-
+    TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=jp");
+    TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=jp");
 	ucnv_close(cnv);
 	free(uBuf);
 	free(cBuf);
@@ -1520,7 +1654,8 @@ TestISO_2022_KR() {
 		*uSource++;
 		*test++;
 	}
-
+    TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=kr");
+    TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=kr");
 	ucnv_close(cnv);
 	free(uBuf);
 	free(cBuf);
@@ -1601,7 +1736,8 @@ TestISO_2022_CN() {
 		*uSource++;
 		*test++;
 	}
-
+    TestSmallTargetBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=zh");
+    TestSmallSourceBuffer(&in[0],(const UChar*)&in[sizeof(in)/2],cnv,"iso-2022,locale=zh");
 	ucnv_close(cnv);
 	free(uBuf);
 	free(cBuf);
