@@ -38,10 +38,10 @@ public:
     void doTest( UnicodeString source, UnicodeString target, Collator::EComparisonResult result);
 
     // perform tests with strength PRIMARY
-    void TestPrimary( char* par );
+    void TestPrimary(/* char* par */);
 
     // perform test with strength TERTIARY
-    void TestTertiary( char* par );
+    void TestTertiary(/* char* par */);
 
 private:
     static const UChar testSourceCases[][MAX_TOKEN_LEN];

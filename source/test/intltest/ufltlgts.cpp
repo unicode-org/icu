@@ -24,7 +24,7 @@
 // runIndexedTest
 //---------------------------------------------
 
-void UnicodeFilterLogicTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void UnicodeFilterLogicTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln((UnicodeString)"TestSuite UnicodeFilterLogic API ");
     switch (index) {

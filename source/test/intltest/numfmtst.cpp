@@ -22,7 +22,7 @@
 
 #define CHECK(status,str) if (U_FAILURE(status)) { errln(UnicodeString("FAIL: ") + str); return; }
 
-void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     // if (exec) logln((UnicodeString)"TestSuite DateFormatTest");
     switch (index) {
@@ -206,8 +206,10 @@ NumberFormatTest::TestExponential(void)
                 useEpsilon = TRUE;
 #endif
             }
-            else
+            else {
                 errln((UnicodeString)"FAIL: Non-numeric Formattable returned");
+                continue;
+            }
             if (pos.getIndex() == s.length())
             {
                 logln((UnicodeString)"  -parse-> " + a);

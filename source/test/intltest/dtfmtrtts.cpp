@@ -33,7 +33,7 @@ int32_t DateFormatRoundTripTest::DEPTH = 5;
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
 
 void 
-DateFormatRoundTripTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+DateFormatRoundTripTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     // if (exec) logln((UnicodeString)"TestSuite NumberFormatRegressionTest");
     switch (index) {

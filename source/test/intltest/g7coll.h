@@ -63,21 +63,21 @@ public:
     void doTest( Collator* col, UnicodeString source, UnicodeString target, Collator::EComparisonResult result);
 
     // perform test for G7 locales
-    void TestG7Locales( char* par );
+    void TestG7Locales(/* char* par */);
 
     // perform test with added rules " & Z < p, P"
-    void TestDemo1( char* par );
+    void TestDemo1(/* char* par */);
 
     // perorm test with added rules "& C < ch , cH, Ch, CH"
-    void TestDemo2( char* par );
+    void TestDemo2(/* char* par */);
 
     // perform test with added rules 
     // "& Question'-'mark ; '?' & Hash'-'mark ; '#' & Ampersand ; '&'"
-    void TestDemo3( char* par );
+    void TestDemo3(/* char* par */);
 
     // perform test with added rules 
     // " & aa ; a'-' & ee ; e'-' & ii ; i'-' & oo ; o'-' & uu ; u'-' "
-    void TestDemo4( char* par );
+    void TestDemo4(/* char* par */);
 
 private:
     static const UChar testCases[][MAX_TOKEN_LEN];

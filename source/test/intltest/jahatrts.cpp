@@ -36,7 +36,7 @@ static int32_t getInt(UnicodeString str)
 // runIndexedTest
 //---------------------------------------------
 
-void JamoToHangTransliteratorTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void JamoToHangTransliteratorTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln((UnicodeString)"TestSuite JamoToHangul Transliterator API ");
     switch (index) {

@@ -915,7 +915,7 @@ void RBBITest::TestAbbrRuleBasedWordIteration()
 // runIndexedTest
 //---------------------------------------------
 
-void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite RuleBasedBreakIterator: ");
     switch (index) {

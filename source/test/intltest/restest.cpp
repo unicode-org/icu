@@ -174,7 +174,7 @@ ResourceBundleTest::~ResourceBundleTest()
 {
 }
 
-void ResourceBundleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void ResourceBundleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite ResourceBundleTest: ");
     switch (index) {

@@ -29,7 +29,7 @@ UnicodeString operator+(const UnicodeString& left, const UnicodeSet& set) {
 
 void
 UnicodeSetTest::runIndexedTest(int32_t index, UBool exec,
-                               const char* &name, char* par) {
+                               const char* &name, char* /*par*/) {
     // if (exec) logln((UnicodeString)"TestSuite UnicodeSetTest");
     switch (index) {
         CASE(0,TestPatterns);

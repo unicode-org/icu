@@ -15,7 +15,7 @@
 // try to test the full functionality.  It just calls each function in the class and
 // verifies that it works on a basic level.
 
-void IntlTestSimpleDateFormatAPI::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void IntlTestSimpleDateFormatAPI::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite SimpleDateFormatAPI");
     switch (index) {
@@ -27,7 +27,7 @@ void IntlTestSimpleDateFormatAPI::runIndexedTest( int32_t index, UBool exec, con
                     if(U_FAILURE(status)) {
                         errln("ERROR: Could not set default locale, test may not give correct results");
                     }
-                    testAPI(par);
+                    testAPI(/*par*/);
                 }
                 break;
 
@@ -38,7 +38,7 @@ void IntlTestSimpleDateFormatAPI::runIndexedTest( int32_t index, UBool exec, con
 /**
  * Test various generic API methods of SimpleDateFormat for API coverage.
  */
-void IntlTestSimpleDateFormatAPI::testAPI(char *par)
+void IntlTestSimpleDateFormatAPI::testAPI(/*char *par*/)
 {
     UErrorCode status = U_ZERO_ERROR;
 

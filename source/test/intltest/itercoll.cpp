@@ -49,7 +49,7 @@ CollationIteratorTest::~CollationIteratorTest()
  * @bug 4108758 - Make sure it works with contracting characters
  * 
  */
-void CollationIteratorTest::TestPrevious(char *par)
+void CollationIteratorTest::TestPrevious(/* char* par */)
 {
     UErrorCode status = U_ZERO_ERROR;
     CollationElementIterator *iter = en_us->createCollationElementIterator(test1);
@@ -139,7 +139,7 @@ void CollationIteratorTest::TestPrevious(char *par)
 /**
  * Test for getOffset() and setOffset()
  */
-void CollationIteratorTest::TestOffset(char *par)
+void CollationIteratorTest::TestOffset(/* char* par */)
 {
     CollationElementIterator *iter = en_us->createCollationElementIterator(test1);
 
@@ -182,7 +182,7 @@ void CollationIteratorTest::TestOffset(char *par)
 /**
  * Test for setText()
  */
-void CollationIteratorTest::TestSetText(char *par)
+void CollationIteratorTest::TestSetText(/* char* par */)
 {
     CollationElementIterator *iter1 = en_us->createCollationElementIterator(test1);
     CollationElementIterator *iter2 = en_us->createCollationElementIterator(test2);
@@ -235,7 +235,7 @@ void CollationIteratorTest::TestSetText(char *par)
 /** @bug 4108762
  * Test for getMaxExpansion()
  */
-void CollationIteratorTest::TestMaxExpansion(char *par)
+void CollationIteratorTest::TestMaxExpansion(/* char* par */)
 {
     // Try a simple one first:
     // The only expansion ends with 'e' and has length 2
@@ -268,7 +268,7 @@ void CollationIteratorTest::TestMaxExpansion(char *par)
 /*
  * @bug 4157299
  */
-void CollationIteratorTest::TestClearBuffers(char *par)
+void CollationIteratorTest::TestClearBuffers(/* char* par */)
 {
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedCollator *c = NULL;
@@ -571,7 +571,7 @@ void CollationIteratorTest::assertEqual(CollationElementIterator &i1, CollationE
     while (c1 != CollationElementIterator::NULLORDER);
 }
 
-void CollationIteratorTest::runIndexedTest(int32_t index, UBool exec, const char* &name, char* par)
+void CollationIteratorTest::runIndexedTest(int32_t index, UBool exec, const char* &name, char* /*par*/)
 {
     if (exec)
     {
@@ -580,11 +580,11 @@ void CollationIteratorTest::runIndexedTest(int32_t index, UBool exec, const char
 
     switch (index)
     {
-        case  0: name = "TestPrevious";        if (exec) TestPrevious(par);     break;
-        case  1: name = "TestOffset";        if (exec) TestOffset(par);         break;
-        case  2: name = "TestSetText";        if (exec) TestSetText(par);         break;
-        case  3: name = "TestMaxExpansion";    if (exec) TestMaxExpansion(par); break;
-        case  4: name = "TestClearBuffers"; if (exec) TestClearBuffers(par); break;
+        case  0: name = "TestPrevious";        if (exec) TestPrevious(/* par */);     break;
+        case  1: name = "TestOffset";        if (exec) TestOffset(/* par */);         break;
+        case  2: name = "TestSetText";        if (exec) TestSetText(/* par */);         break;
+        case  3: name = "TestMaxExpansion";    if (exec) TestMaxExpansion(/* par */); break;
+        case  4: name = "TestClearBuffers"; if (exec) TestClearBuffers(/* par */); break;
         default: name = ""; break;
     }
 }

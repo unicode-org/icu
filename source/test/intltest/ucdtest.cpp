@@ -19,7 +19,7 @@ UnicodeTest::~UnicodeTest()
 {
 }
 
-void UnicodeTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void UnicodeTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite UnicodeTest: ");
     switch (index) {

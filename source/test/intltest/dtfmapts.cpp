@@ -19,7 +19,7 @@
 // try to test the full functionality.  It just calls each function in the class and
 // verifies that it works on a basic level.
 
-void IntlTestDateFormatAPI::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void IntlTestDateFormatAPI::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite DateFormatAPI");
     switch (index) {
@@ -31,7 +31,7 @@ void IntlTestDateFormatAPI::runIndexedTest( int32_t index, UBool exec, const cha
                     if(U_FAILURE(status)) {
                         errln("ERROR: Could not set default locale, test may not give correct results");
                     }
-                    testAPI(par);
+                    testAPI(/*par*/);
                 }
                 break;
 
@@ -85,7 +85,7 @@ void IntlTestDateFormatAPI::TestEquals(void)
  * This test checks various generic API methods in DateFormat to achieve 100%
  * API coverage.
  */
-void IntlTestDateFormatAPI::testAPI(char *par)
+void IntlTestDateFormatAPI::testAPI(/* char* par */)
 {
     UErrorCode status = U_ZERO_ERROR;
 

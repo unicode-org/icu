@@ -38,7 +38,7 @@ public:
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
 
     // test proper comparing for 3774 entries of ISO 14651 characters
-    void TestAll( char* par );
+    void TestAll(/* char* par */);
 
 private:
     void quickSort(CollationKey** keyArray, int *indexes, int lo0, int hi0);
