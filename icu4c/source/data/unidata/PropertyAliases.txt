@@ -1,5 +1,5 @@
 # PropertyAliases-4.0.0.txt
-# Date: 2003-02-14,16:50:05 GMT [MD]
+# Date: 2003-02-28,18:56:44 GMT [MD]
 #
 # This file contains aliases for properties used in the UCD.
 # These names can be used for XML formats of UCD data, for regular-expression
@@ -13,7 +13,7 @@
 #
 # Each line has two fields, separated by semicolons.
 #
-# First Field: The first field is an abbreviated name for the property
+# First Field: The first field is an abbreviated name for the property.
 #
 # Second Field: The second field is a long name
 #
@@ -58,6 +58,7 @@ stc       ; Simple_Titlecase_Mapping
 suc       ; Simple_Uppercase_Mapping
 tc        ; Titlecase_Mapping
 uc        ; Uppercase_Mapping
+URS       ; Unicode_Radical_Stroke
 
 # ================================================
 # Enumerated Non-Binary Properties
@@ -72,7 +73,9 @@ jg        ; Joining_Group
 jt        ; Joining_Type
 lb        ; Line_Break
 NFC_QC    ; NFC_Quick_Check
+NFD_QC    ; NFD_Quick_Check
 NFKC_QC   ; NFKC_Quick_Check
+NFKD_QC   ; NFKD_Quick_Check
 nt        ; Numeric_Type
 sc        ; Script
 
@@ -106,8 +109,6 @@ LOE       ; Logical_Order_Exception
 Lower     ; Lowercase
 Math      ; Math
 NChar     ; Noncharacter_Code_Point
-NFD_QC    ; NFD_Quick_Check
-NFKD_QC   ; NFKD_Quick_Check
 OAlpha    ; Other_Alphabetic
 ODI       ; Other_Default_Ignorable_Code_Point
 OGr_Ext   ; Other_Grapheme_Extend

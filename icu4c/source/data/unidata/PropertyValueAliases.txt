@@ -1,5 +1,5 @@
 # PropertyValueAliases-4.0.0.txt
-# Date: 2003-02-20,17:14:28 GMT [MD]
+# Date: 2003-03-03, 23:54:40 GMT [MD]
 #
 # This file contains aliases for property values used in the UCD.
 # These names can be used for XML formats of UCD data, for regular-expression
@@ -369,6 +369,7 @@ lb ; ID        ; Ideographic
 lb ; IN        ; Inseperable
 lb ; IS        ; Infix_Numeric
 lb ; LF        ; Line_Feed
+lb ; NL        ; Next_Line
 lb ; NS        ; Nonstarter
 lb ; NU        ; Numeric
 lb ; OP        ; Open_Punctuation
@@ -379,6 +380,7 @@ lb ; SA        ; Complex_Context
 lb ; SG        ; Surrogate
 lb ; SP        ; Space
 lb ; SY        ; Break_Symbols
+lb ; WJ        ; Word_Joiner
 lb ; XX        ; Unknown
 lb ; ZW        ; ZWSpace
 
@@ -426,14 +428,14 @@ sc ; Mong      ; Mongolian
 sc ; Mymr      ; Myanmar
 sc ; Ogam      ; Ogham
 sc ; Orya      ; Oriya
-sc ; OSMANYA   ; Osmanya
+sc ; Osma      ; Osmanya
 sc ; Qaai      ; Inherited
 sc ; Runr      ; Runic
-sc ; SHAVIAN   ; Shavian
+sc ; Shaw      ; Shavian
 sc ; Sinh      ; Sinhala
 sc ; Syrc      ; Syriac
 sc ; Tagb      ; Tagbanwa
-sc ; TAI_LE    ; Tai_Le
+sc ; Tale      ; Tai_Le
 sc ; Taml      ; Tamil
 sc ; Telu      ; Telugu
 sc ; Tglg      ; Tagalog

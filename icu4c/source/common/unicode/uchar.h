@@ -1216,7 +1216,9 @@ typedef enum ULineBreak {
     U_LB_SPACE,             /*[SP]*/
     U_LB_BREAK_SYMBOLS,     /*[SY]*/
     U_LB_ZWSPACE,           /*[ZW]*/
-    U_LB_COUNT /* 29 */
+    U_LB_NEXT_LINE,         /*[NL]*/ /* new in Unicode 4/ICU 2.6 */
+    U_LB_WORD_JOINER,       /*[WJ]*/
+    U_LB_COUNT
 } ULineBreak;
 
 /**
