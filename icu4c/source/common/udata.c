@@ -149,6 +149,7 @@ findBasename(const char *path) {
     }
 }
 
+#ifdef UDATA_DEBUG
 static const char *
 packageNameFromPath(const char *path)
 {
@@ -164,7 +165,7 @@ packageNameFromPath(const char *path)
 
     return path;
 }
-
+#endif
 
 /*----------------------------------------------------------------------*
  *                                                                      *
