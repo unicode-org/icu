@@ -45,24 +45,26 @@ static void TestLMBCSMaxChar(void);
 static void TestConvertSafeCloneCallback(void);
 static void TestEBCDICSwapLFNL(void);
 static void TestConvertEx(void);
+static void TestConvertAlgorithmic(void);
 
 void addTestConvert(TestNode** root);
 
 void addTestConvert(TestNode** root)
 {
-    addTest(root, &ListNames, "tsconv/ccapitst/ListNames");
-    addTest(root, &TestConvert, "tsconv/ccapitst/TestConvert");
-    addTest(root, &TestFlushCache,   "tsconv/ccapitst/TestFlushCache"); 
-    addTest(root, &TestAlias,   "tsconv/ccapitst/TestAlias"); 
-    addTest(root, &TestDuplicateAlias,   "tsconv/ccapitst/TestDuplicateAlias"); 
-    addTest(root, &TestConvertSafeClone,   "tsconv/ccapitst/TestConvertSafeClone"); 
-    addTest(root, &TestConvertSafeCloneCallback,   "tsconv/ccapitst/TestConvertSafeCloneCallback"); 
-    addTest(root, &TestCCSID,   "tsconv/ccapitst/TestCCSID"); 
-    addTest(root, &TestJ932,   "tsconv/ccapitst/TestJ932");
-    addTest(root, &TestJ1968,   "tsconv/ccapitst/TestJ1968");
-    addTest(root, &TestLMBCSMaxChar,   "tsconv/ccapitst/TestLMBCSMaxChar");
-    addTest(root, &TestEBCDICSwapLFNL,   "tsconv/ccapitst/TestEBCDICSwapLFNL");
-    addTest(root, &TestConvertEx,   "tsconv/ccapitst/TestConvertEx");
+    addTest(root, &ListNames,                   "tsconv/ccapitst/ListNames");
+    addTest(root, &TestConvert,                 "tsconv/ccapitst/TestConvert");
+    addTest(root, &TestFlushCache,              "tsconv/ccapitst/TestFlushCache"); 
+    addTest(root, &TestAlias,                   "tsconv/ccapitst/TestAlias"); 
+    addTest(root, &TestDuplicateAlias,          "tsconv/ccapitst/TestDuplicateAlias"); 
+    addTest(root, &TestConvertSafeClone,        "tsconv/ccapitst/TestConvertSafeClone"); 
+    addTest(root, &TestConvertSafeCloneCallback,"tsconv/ccapitst/TestConvertSafeCloneCallback"); 
+    addTest(root, &TestCCSID,                   "tsconv/ccapitst/TestCCSID"); 
+    addTest(root, &TestJ932,                    "tsconv/ccapitst/TestJ932");
+    addTest(root, &TestJ1968,                   "tsconv/ccapitst/TestJ1968");
+    addTest(root, &TestLMBCSMaxChar,            "tsconv/ccapitst/TestLMBCSMaxChar");
+    addTest(root, &TestEBCDICSwapLFNL,          "tsconv/ccapitst/TestEBCDICSwapLFNL");
+    addTest(root, &TestConvertEx,               "tsconv/ccapitst/TestConvertEx");
+    addTest(root, &TestConvertAlgorithmic,      "tsconv/ccapitst/TestConvertAlgorithmic");
 }
 
 static void ListNames(void) {
@@ -450,20 +452,27 @@ static void TestConvert()
                     log_data_err("FAIL: ucnv_convert(ibm-1363->ibm-1364) failed.at index \n i=%d,  Expected: %lx Got: %lx\n", i, (UChar)expectedTarget[i], (uint8_t)target[i]);
                 }
             }
+
+            i=ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , (const char*)source+1, -1, &err);
+            if(U_FAILURE(err) || i!=6){
+                log_data_err("FAILURE! ucnv_convert() with sourceLimit=-1 failed: %s, returned %d instead of 6\n",
+                    u_errorName(err), i);
+            }
+
             /*Test error conditions*/
+            err=U_ZERO_ERROR;
             i=ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , (const char*)source, 0, &err);
             if(i !=0){
                 log_data_err("FAILURE! ucnv_convert() with sourceLimit=0 is expected to return 0\n");
             }
-            ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , (const char*)source, -1, &err);
-            if(!(U_FAILURE(err) && err==U_ILLEGAL_ARGUMENT_ERROR)){
-                log_data_err("FAILURE! ucnv_convert() with sourceLimit=-1 is expected to fail\n");
-            }
+
+            err=U_ILLEGAL_ARGUMENT_ERROR;
             sourceLimit=sizeof(source)/sizeof(source[0]);
             i=ucnv_convert("ibm-1364", "ibm-1363", target, targetLimit , (const char*)source, sourceLimit, &err);
             if(i !=0 ){
                 log_data_err("FAILURE! ucnv_convert() with err=U_ILLEGAL_ARGUMENT_ERROR is expected to return 0\n");
             }
+
             err=U_ZERO_ERROR;
             sourceLimit=sizeof(source)/sizeof(source[0]);
             targetLimit=0;
@@ -2079,12 +2088,14 @@ static void TestConvertEx() {
     cnv1=ucnv_open("UTF-8", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("unable to open a UTF-8 converter - %s\n", u_errorName(errorCode));
+        return;
     }
 
     cnv2=ucnv_open("Shift-JIS", &errorCode);
     if(U_FAILURE(errorCode)) {
         log_data_err("unable to open a Shift-JIS converter - %s\n", u_errorName(errorCode));
         ucnv_close(cnv1);
+        return;
     }
 
     /* test ucnv_convertEx() with streaming conversion style */
@@ -2172,6 +2183,129 @@ static void TestConvertEx() {
                    pivotBuffer, &pivotSource, &pivotTarget, pivotBuffer+1, TRUE, TRUE, &errorCode);
     if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
         log_err("ucnv_convertEx(*source==NULL) sets %s\n", u_errorName(errorCode));
+    }
+}
+
+static void
+TestConvertAlgorithmic() {
+    static const uint8_t
+    utf8[]={
+        /* 4e00           30a1              ff61              0410 */
+        0xe4, 0xb8, 0x80, 0xe3, 0x82, 0xa1, 0xef, 0xbd, 0xa1, 0xd0, 0x90
+    },
+    shiftJIS[]={
+        0x88, 0xea, 0x83, 0x40, 0xa1, 0x84, 0x40
+    },
+    errorTarget[]={
+        /*
+         * expected output when converting shiftJIS[] from UTF-8 to Shift-JIS:
+         * SUB, SUB, 0x40, SUB, SUB, 0x40
+         */
+        0x81, 0xa1, 0x81, 0xa1, 0x40, 0x81, 0xa1, 0x81, 0xa1, 0x40
+    },
+    utf16[]={
+        0xfe, 0xff /* BOM only, no text */
+    },
+    utf32[]={
+        0xff, 0xfe, 0, 0 /* BOM only, no text */
+    };
+
+    char target[100], utf8NUL[100], shiftJISNUL[100];
+
+    UConverter *cnv;
+    UErrorCode errorCode;
+
+    int32_t length;
+
+    errorCode=U_ZERO_ERROR;
+    cnv=ucnv_open("Shift-JIS", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_data_err("unable to open a Shift-JIS converter - %s\n", u_errorName(errorCode));
+        ucnv_close(cnv);
+        return;
+    }
+
+    memcpy(utf8NUL, utf8, sizeof(utf8));
+    utf8NUL[sizeof(utf8)]=0;
+    memcpy(shiftJISNUL, shiftJIS, sizeof(shiftJIS));
+    shiftJISNUL[sizeof(shiftJIS)]=0;
+
+    /*
+     * The to/from algorithmic convenience functions share a common implementation,
+     * so we need not test all permutations of them.
+     */
+
+    /* length in, not terminated out */
+    errorCode=U_ZERO_ERROR;
+    length=ucnv_fromAlgorithmic(cnv, UCNV_UTF8, target, sizeof(shiftJIS), (const char *)utf8, sizeof(utf8), &errorCode);
+    if( errorCode!=U_STRING_NOT_TERMINATED_WARNING ||
+        length!=sizeof(shiftJIS) ||
+        memcmp(target, shiftJIS, length)!=0
+    ) {
+        log_err("ucnv_fromAlgorithmic(UTF-8 -> Shift-JIS) fails (%s expect U_STRING_NOT_TERMINATED_WARNING), returns %d expect %d\n",
+                u_errorName(errorCode), length, sizeof(shiftJIS));
+    }
+
+    /* terminated in and out */
+    memset(target, 0x55, sizeof(target));
+    errorCode=U_STRING_NOT_TERMINATED_WARNING;
+    length=ucnv_toAlgorithmic(UCNV_UTF8, cnv, target, sizeof(target), shiftJISNUL, -1, &errorCode);
+    if( errorCode!=U_ZERO_ERROR ||
+        length!=sizeof(utf8) ||
+        memcmp(target, utf8, length)!=0
+    ) {
+        log_err("ucnv_toAlgorithmic(Shift-JIS -> UTF-8) fails (%s expect U_ZERO_ERROR), returns %d expect %d\n",
+                u_errorName(errorCode), length, sizeof(shiftJIS));
+    }
+
+    /* empty string, some target buffer */
+    errorCode=U_STRING_NOT_TERMINATED_WARNING;
+    length=ucnv_toAlgorithmic(UCNV_UTF8, cnv, target, sizeof(target), shiftJISNUL, 0, &errorCode);
+    if( errorCode!=U_ZERO_ERROR ||
+        length!=0
+    ) {
+        log_err("ucnv_toAlgorithmic(empty string -> UTF-8) fails (%s expect U_ZERO_ERROR), returns %d expect 0\n",
+                u_errorName(errorCode), length);
+    }
+
+    /* pseudo-empty string, no target buffer */
+    errorCode=U_ZERO_ERROR;
+    length=ucnv_fromAlgorithmic(cnv, UCNV_UTF16, target, 0, (const char *)utf16, 2, &errorCode);
+    if( errorCode!=U_STRING_NOT_TERMINATED_WARNING ||
+        length!=0
+    ) {
+        log_err("ucnv_fromAlgorithmic(UTF-16 only BOM -> Shift-JIS) fails (%s expect U_STRING_NOT_TERMINATED_WARNING), returns %d expect 0\n",
+                u_errorName(errorCode), length);
+    }
+
+    errorCode=U_ZERO_ERROR;
+    length=ucnv_fromAlgorithmic(cnv, UCNV_UTF32, target, 0, (const char *)utf32, 4, &errorCode);
+    if( errorCode!=U_STRING_NOT_TERMINATED_WARNING ||
+        length!=0
+    ) {
+        log_err("ucnv_fromAlgorithmic(UTF-32 only BOM -> Shift-JIS) fails (%s expect U_STRING_NOT_TERMINATED_WARNING), returns %d expect 0\n",
+                u_errorName(errorCode), length);
+    }
+
+    /* bad arguments */
+    errorCode=U_MESSAGE_PARSE_ERROR;
+    length=ucnv_fromAlgorithmic(cnv, UCNV_UTF16, target, 0, (const char *)utf16, 2, &errorCode);
+    if(errorCode!=U_MESSAGE_PARSE_ERROR) {
+        log_err("ucnv_fromAlgorithmic(U_MESSAGE_PARSE_ERROR) sets %s\n", u_errorName(errorCode));
+    }
+
+    /* source==NULL */
+    errorCode=U_ZERO_ERROR;
+    length=ucnv_fromAlgorithmic(cnv, UCNV_UTF16, target, 0, NULL, 2, &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("ucnv_fromAlgorithmic(source==NULL) sets %s\n", u_errorName(errorCode));
+    }
+
+    /* illegal alg. type */
+    errorCode=U_ZERO_ERROR;
+    length=ucnv_fromAlgorithmic(cnv, (UConverterType)99, target, 0, (const char *)utf16, 2, &errorCode);
+    if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("ucnv_fromAlgorithmic(illegal alg. type) sets %s\n", u_errorName(errorCode));
     }
 }
 
