@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormatSymbols.java,v $ 
- * $Date: 2003/06/03 18:49:34 $ 
- * $Revision: 1.11 $
+ * $Date: 2003/11/21 08:11:49 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -14,6 +14,8 @@ package com.ibm.icu.text;
 
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.ULocale;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
@@ -482,6 +484,9 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
             cachedLocaleData.put(locale, data);
         }
         numberElements = data[0];
+        
+        ResourceBundle r = ICULocaleData.getLocaleElements(locale);
+        validLocale = new ULocale(r.getLocale());
 
 	// {dlf} clean up below now that we have our own resource data
         decimalSeparator = numberElements[0].charAt(0);
@@ -751,4 +756,11 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
      * cache to hold the NumberElements of a Locale.
      */
     private static final Hashtable cachedLocaleData = new Hashtable(3);
+    
+    private ULocale validLocale;
+    
+    ULocale getLocale(ULocale.ULocaleDataType type) {
+    	return (ULocale)validLocale.clone();
+    }
+    
 }

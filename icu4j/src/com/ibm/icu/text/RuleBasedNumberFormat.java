@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedNumberFormat.java,v $ 
- * $Date: 2003/06/03 18:49:35 $ 
- * $Revision: 1.16 $
+ * $Date: 2003/11/21 08:11:49 $ 
+ * $Revision: 1.17 $
  *
  *****************************************************************************************
  */
@@ -15,6 +15,7 @@ package com.ibm.icu.text;
 
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.UCharacterProperty;
+import com.ibm.icu.util.ULocale;
 
 import java.math.BigInteger;
 import java.text.FieldPosition;
@@ -474,7 +475,7 @@ import java.util.ResourceBundle;
  * using these features.</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.16 $ $Date: 2003/06/03 18:49:35 $
+ * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.17 $ $Date: 2003/11/21 08:11:49 $
  * @see NumberFormat
  * @see DecimalFormat
  * @stable ICU 2.0
@@ -555,6 +556,8 @@ public final class RuleBasedNumberFormat extends NumberFormat {
      */
     private String lenientParseRules = null;
 
+	private ULocale validLocale;
+
     //-----------------------------------------------------------------------
     // constructors
     //-----------------------------------------------------------------------
@@ -609,6 +612,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
         // from the specified locale
 	//        ResourceBundle bundle = ICULocaleData.getResourceBundle("NumberFormatRules", locale);
         ResourceBundle bundle = ICULocaleData.getResourceBundle("LocaleElements", locale);
+        validLocale = new ULocale(bundle.getLocale());
         String description = "";
 
         // pick a description from the resource bundle based on the
@@ -1109,6 +1113,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
      * in the class docs.
      */
     private void init(String description) {
+    	validLocale = new ULocale(Locale.getDefault());
         // start by stripping the trailing whitespace from all the rules
         // (this is all the whitespace follwing each semicolon in the
         // description).  This allows us to look for rule-set boundaries
@@ -1334,5 +1339,14 @@ public final class RuleBasedNumberFormat extends NumberFormat {
         }
         throw new IllegalArgumentException("No rule set named " + name);
     }
+	/** Get the locale for this date format object. You can choose between valid and actual locale.
+	 *  @param type type of the locale we're looking for (valid or actual) 
+	 *  @return the locale
+	 *  @draft ICU 2.8
+	 */
+	public ULocale getLocale(ULocale.ULocaleDataType type) {
+		return (ULocale)validLocale.clone();		
+	}
+    
 }
 
