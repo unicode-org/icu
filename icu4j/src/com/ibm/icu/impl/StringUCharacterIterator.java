@@ -5,21 +5,22 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/StringUCharacterIterator.java,v $ 
- * $Date: 2003/12/20 03:06:55 $ 
- * $Revision: 1.2 $
+ * $Date: 2004/01/09 03:07:13 $ 
+ * $Revision: 1.3 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.impl;
 
 import com.ibm.icu.text.UCharacterIterator;
-import com.ibm.icu.text.UTF16;    
 
 /**
  * Used by Collation. UCharacterIterator on Strings. Can't use 
  * ReplaceableUCharacterIterator because it is not easy to do a fast setText. 
  * @author synwee
  */
+// TODO: Investivate if setText is a feature required by users so that we can 
+// move this method to the base class!
 public final class StringUCharacterIterator extends UCharacterIterator 
 {
 
@@ -54,6 +55,7 @@ public final class StringUCharacterIterator extends UCharacterIterator
      * <code>String</code>object
      * @return copy of this iterator
      */
+    ///CLOVER:OFF
     public Object clone()
     {
 		try {
@@ -62,7 +64,7 @@ public final class StringUCharacterIterator extends UCharacterIterator
 		    return null; // never invoked
 		}
     }
-    
+    ///CLOVER:ON
     /**
      * Returns the current UTF16 character.
      * @return current UTF16 character
@@ -75,38 +77,6 @@ public final class StringUCharacterIterator extends UCharacterIterator
         return DONE;
     }
     
-    /**
-     * Returns the current codepoint
-     * @return current codepoint
-     */
-    public int currentCodePoint()
-    {
-        // cannot use charAt due to it different 
-        // behaviour when index is pointing at a
-        // trail surrogate, check for surrogates
-         
-        if (m_currentIndex_ >= m_text_.length()) {
-            return DONE;
-        }
-        char ch = m_text_.charAt(m_currentIndex_);
-        if (UTF16.isLeadSurrogate(ch)) {
-            // advance the index to get the next code point
-            m_currentIndex_ ++;
-            if (m_currentIndex_ < m_text_.length()) {
-                // due to post increment semantics current() after next() 
-                // actually returns the next char which is what we want
-                char ch2 = m_text_.charAt(m_currentIndex_);
-                
-                if (UTF16.isTrailSurrogate(ch2)) {
-                    // we found a surrogate pair
-                    return UCharacterProperty.getRawSupplementary(ch, ch2);
-                }
-            }
-            // current should never change the current index so back off
-            m_currentIndex_ --;
-        }
-        return ch;
-    }
     
     /**
      * Returns the length of the text
@@ -213,6 +183,7 @@ public final class StringUCharacterIterator extends UCharacterIterator
      * @exception IndexOutOfBounds exception if there is not enough
      *            room after offset in the array, or if offset &lt; 0.
      */
+    ///CLOVER: OFF
     public int getText(char[] fillIn, int offset)
     {
     	int length = m_text_.length();
@@ -222,7 +193,7 @@ public final class StringUCharacterIterator extends UCharacterIterator
         m_text_.getChars(0, length, fillIn, offset);
         return length;
     }
-    
+    ///CLOVER: ON
     /**
      * Convenience method for returning the underlying text storage as as 
      * string

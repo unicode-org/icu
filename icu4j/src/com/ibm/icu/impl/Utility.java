@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2003/10/07 18:11:01 $
- * $Revision: 1.48 $
+ * $Date: 2004/01/09 03:07:11 $
+ * $Revision: 1.49 $
  *
  *****************************************************************************************
  */
@@ -14,7 +14,8 @@ package com.ibm.icu.impl;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.impl.UCharacterProperty;
-
+// This class contains utility functions so testing not needed
+///CLOVER:OFF
 public final class Utility {
 
     private static final char APOSTROPHE = '\'';
@@ -424,7 +425,7 @@ public final class Utility {
             state[1] = value;
         }
     }
-
+    ///CLOVER:OFF
     /**
      * Construct an array of ints from a run-length encoded string.
      */
@@ -463,7 +464,7 @@ public final class Utility {
     static final int getInt(String s, int i) {
         return (((int) s.charAt(2*i)) << 16) | (int) s.charAt(2*i+1);
     }
-
+    ///CLOVER:ON
 
     /**
      * Construct an array of shorts from a run-length encoded string.
@@ -1732,4 +1733,19 @@ public final class Utility {
 
         return bit;
     }
+    /**
+     * Utility method to take a int[] containing codepoints and return
+     * a string representation with code units. 
+     * TODO: Investigate why this method is not on UTF16 class
+     * @param source
+     * @return
+     */
+    public static String valueOf(int[]source){
+        StringBuffer result = new StringBuffer(source.length);
+        for(int i=0; i<source.length; i++){
+            UTF16.append(result,source[i]);
+        }
+        return result.toString();
+    }
 }
+///CLOVER:ON

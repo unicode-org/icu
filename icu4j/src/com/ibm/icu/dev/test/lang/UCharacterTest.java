@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $
-* $Date: 2003/10/04 00:37:16 $
-* $Revision: 1.62 $
+* $Date: 2004/01/09 03:06:37 $
+* $Revision: 1.63 $
 *
 *******************************************************************************
 */
@@ -795,16 +795,32 @@ public final class UCharacterTest extends TestFmwk
             }
             // ### TODO same tests for max ISO comment length as for max name length
 
-            int c[] = {0x0061, 0x000284, 0x003401, 0x007fed, 0x00ac00, 0x00d7a3,
-                       0x00d800, 0x00dc00, 0xff08, 0x00ffe5, 0x00ffff,
-                       0x0023456};
-            String name[] = {"LATIN SMALL LETTER A",
-                         "LATIN SMALL LETTER DOTLESS J WITH STROKE AND HOOK",
-                         "CJK UNIFIED IDEOGRAPH-3401",
-                         "CJK UNIFIED IDEOGRAPH-7FED", "HANGUL SYLLABLE GA",
-                         "HANGUL SYLLABLE HIH", "", "",
-                         "FULLWIDTH LEFT PARENTHESIS",
-                         "FULLWIDTH YEN SIGN", "", "CJK UNIFIED IDEOGRAPH-23456"};
+            int c[] = {0x0061,                //LATIN SMALL LETTER A
+                       0x000284,              //LATIN SMALL LETTER DOTLESS J WITH STROKE AND HOOK
+                       0x003401,              //CJK UNIFIED IDEOGRAPH-3401
+                       0x007fed,              //CJK UNIFIED IDEOGRAPH-7FED
+                       0x00ac00,              //HANGUL SYLLABLE GA
+                       0x00d7a3,              //HANGUL SYLLABLE HIH
+                       0x00d800, 0x00dc00,    //LINEAR B SYLLABLE B008 A
+                       0xff08,                //FULLWIDTH LEFT PARENTHESIS
+                       0x00ffe5,              //FULLWIDTH YEN SIGN
+                       0x00ffff,              //null
+                       0x0023456              //CJK UNIFIED IDEOGRAPH-23456
+                       };
+            String name[] = {
+                             "LATIN SMALL LETTER A",
+                             "LATIN SMALL LETTER DOTLESS J WITH STROKE AND HOOK",
+                             "CJK UNIFIED IDEOGRAPH-3401",
+                             "CJK UNIFIED IDEOGRAPH-7FED",
+                             "HANGUL SYLLABLE GA",
+                             "HANGUL SYLLABLE HIH", 
+                             "",
+                             "",
+                             "FULLWIDTH LEFT PARENTHESIS",
+                             "FULLWIDTH YEN SIGN", 
+                             "", 
+                             "CJK UNIFIED IDEOGRAPH-23456"
+                             };
             String oldname[] = {"", "LATIN SMALL LETTER DOTLESS J BAR HOOK", "",
                             "",
                             "", "", "", "", "FULLWIDTH OPENING PARENTHESIS", "",
@@ -972,6 +988,20 @@ public final class UCharacterTest extends TestFmwk
                     logln("Ok: getCharNameCharacters() returned " + pattern1);
                 }
             }
+            // improve code coverage
+           String expected = "LATIN SMALL LETTER A|LATIN SMALL LETTER DOTLESS J WITH STROKE AND HOOK|"+
+                             "CJK UNIFIED IDEOGRAPH-3401|CJK UNIFIED IDEOGRAPH-7FED|HANGUL SYLLABLE GA|"+
+                             "HANGUL SYLLABLE HIH|LINEAR B SYLLABLE B008 A|FULLWIDTH LEFT PARENTHESIS|"+
+                             "FULLWIDTH YEN SIGN|"+
+                             "null|"+ // getName returns null because 0xFFFF does not have a name, but has an extended name!
+                             "CJK UNIFIED IDEOGRAPH-23456";
+           String separator= "|";
+           String source = Utility.valueOf(c);
+           String result = UCharacter.getName(source, separator);
+           if(!result.equals(expected)){
+               errln("UCharacter.getName did not return the expected result.\n\t Expected: "+ expected+"\n\t Got: "+ result);
+           }
+            
         }catch(IllegalArgumentException e){
             if(e.getMessage().indexOf("unames.icu") >= 0){
                 warnln("Could not find unames.icu");
@@ -979,8 +1009,10 @@ public final class UCharacterTest extends TestFmwk
                 throw e;
             }
         }
-    }
 
+    }
+    
+    
     /**
     * Testing name iteration
     */
