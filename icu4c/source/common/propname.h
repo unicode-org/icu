@@ -62,7 +62,7 @@ U_NAMESPACE_BEGIN
  * zero offset indicates an absent entry; this corresponds to aliases
  * marked "n/a" in the original Unicode data files.
  */
-typedef int16_t Offset; // must be signed
+typedef int16_t Offset; /*  must be signed */
 
 #define MAX_OFFSET 0x7FFF
 
@@ -77,8 +77,8 @@ typedef int16_t Offset; // must be signed
  */
 typedef int32_t EnumValue;
 
-//----------------------------------------------------------------------
-// ValueMap
+/* ---------------------------------------------------------------------- */
+/*  ValueMap */
 
 /**
  * For any top-level property that has named values (binary and
@@ -96,18 +96,18 @@ typedef int32_t EnumValue;
  */
 struct ValueMap {
 
-    // -- begin pnames data --
-    // Enum=>name EnumToOffset / NonContiguousEnumToOffset objects.
-    // Exactly one of these will be nonzero.
+    /*  -- begin pnames data -- */
+    /*  Enum=>name EnumToOffset / NonContiguousEnumToOffset objects. */
+    /*  Exactly one of these will be nonzero. */
     Offset enumToName_offset;
     Offset ncEnumToName_offset;
 
-    Offset nameToEnum_offset; // Name=>enum data
-    // -- end pnames data --
+    Offset nameToEnum_offset; /*  Name=>enum data */
+    /*  -- end pnames data -- */
 };
 
-//----------------------------------------------------------------------
-// PropertyAliases class
+/* ---------------------------------------------------------------------- */
+/*  PropertyAliases class */
 
 /**
  * A class encapsulating access to the memory-mapped data representing
@@ -120,29 +120,29 @@ struct ValueMap {
  */
 class PropertyAliases {
 
-    // -- begin pnames data --
-    // Enum=>name EnumToOffset object for binary and enumerated
-    // properties
+    /*  -- begin pnames data -- */
+    /*  Enum=>name EnumToOffset object for binary and enumerated */
+    /*  properties */
     Offset enumToName_offset;
 
-    // Name=>enum data for binary & enumerated properties
+    /*  Name=>enum data for binary & enumerated properties */
     Offset nameToEnum_offset;
 
-    // Enum=>offset EnumToOffset object mapping enumerated properties
-    // to ValueMap objects
+    /*  Enum=>offset EnumToOffset object mapping enumerated properties */
+    /*  to ValueMap objects */
     Offset enumToValue_offset;
 
-    // The following are needed by external readers of this data.
-    // We don't use them ourselves.
-    int16_t total_size; // size in bytes excluding the udata header
-    Offset valueMap_offset; // offset to start of array
-    int16_t valueMap_count; // number of entries
-    Offset nameGroupPool_offset; // offset to start of array
-    int16_t nameGroupPool_count; // number of entries (not groups)
-    Offset stringPool_offset; // offset to start of pool
-    int16_t stringPool_count; // number of strings (not size in bytes)
+    /*  The following are needed by external readers of this data. */
+    /*  We don't use them ourselves. */
+    int16_t total_size; /*  size in bytes excluding the udata header */
+    Offset valueMap_offset; /*  offset to start of array */
+    int16_t valueMap_count; /*  number of entries */
+    Offset nameGroupPool_offset; /*  offset to start of array */
+    int16_t nameGroupPool_count; /*  number of entries (not groups) */
+    Offset stringPool_offset; /*  offset to start of pool */
+    int16_t stringPool_count; /*  number of strings (not size in bytes) */
 
-    // -- end pnames data --
+    /*  -- end pnames data -- */
 
     friend class ::Builder;
 
@@ -178,8 +178,8 @@ class PropertyAliases {
          UErrorCode *pErrorCode);
 };
 
-//----------------------------------------------------------------------
-// EnumToOffset
+/* ---------------------------------------------------------------------- */
+/*  EnumToOffset */
 
 /**
  * A generic map from enum values to Offsets.  The enum values must be
@@ -188,11 +188,11 @@ class PropertyAliases {
  */
 class EnumToOffset {
 
-    // -- begin pnames data --
+    /*  -- begin pnames data -- */
     EnumValue enumStart;
     EnumValue enumLimit;
-    Offset _offsetArray; // [array of enumLimit-enumStart]
-    // -- end pnames data --
+    Offset _offsetArray; /*  [array of enumLimit-enumStart] */
+    /*  -- end pnames data -- */
 
     friend class ::Builder;
 
@@ -217,7 +217,7 @@ class EnumToOffset {
     Offset getOffset(EnumValue enumProbe) const {
         if (enumProbe < enumStart ||
             enumProbe >= enumLimit) {
-            return 0; // not found
+            return 0; /*  not found */
         }
         const Offset* p = getOffsetArray();
         return p[enumProbe - enumStart];
@@ -230,8 +230,8 @@ class EnumToOffset {
          UErrorCode *pErrorCode);
 };
 
-//----------------------------------------------------------------------
-// NonContiguousEnumToOffset
+/* ---------------------------------------------------------------------- */
+/*  NonContiguousEnumToOffset */
 
 /**
  * A generic map from enum values to Offsets.  The enum values may be
@@ -240,11 +240,11 @@ class EnumToOffset {
  */
 class NonContiguousEnumToOffset {
 
-    // -- begin pnames data --
+    /*  -- begin pnames data -- */
     int32_t count;
-    EnumValue _enumArray; // [array of count]
-    // Offset _offsetArray; // [array of count] after enumValue[count-1]
-    // -- end pnames data --
+    EnumValue _enumArray; /*  [array of count] */
+    /*  Offset _offsetArray; // [array of count] after enumValue[count-1] */
+    /*  -- end pnames data -- */
 
     friend class ::Builder;
 
@@ -277,14 +277,14 @@ class NonContiguousEnumToOffset {
     Offset getOffset(EnumValue enumProbe) const {
         const EnumValue* e = getEnumArray();
         const Offset* p = getOffsetArray();
-        // linear search; binary later if warranted
-        // (binary is not faster for short lists)
+        /*  linear search; binary later if warranted */
+        /*  (binary is not faster for short lists) */
         for (int32_t i=0; i<count; ++i) {
             if (e[i] < enumProbe) continue;
             if (e[i] > enumProbe) break;
             return p[i];
         }
-        return 0; // not found
+        return 0; /*  not found */
     }
 
     static int32_t
@@ -294,19 +294,19 @@ class NonContiguousEnumToOffset {
          UErrorCode *pErrorCode);
 };
 
-//----------------------------------------------------------------------
-// NameToEnum
+/* ---------------------------------------------------------------------- */
+/*  NameToEnum */
 
 /**
  * A map from names to enum values.
  */
 class NameToEnum {
 
-    // -- begin pnames data --
-    int32_t count;       // number of entries
-    EnumValue _enumArray; // [array of count] EnumValues
-    // Offset _nameArray; // [array of count] offsets to names
-    // -- end pnames data --
+    /*  -- begin pnames data -- */
+    int32_t count;       /*  number of entries */
+    EnumValue _enumArray; /*  [array of count] EnumValues */
+    /*  Offset _nameArray; // [array of count] offsets to names */
+    /*  -- end pnames data -- */
 
     friend class ::Builder;
 
@@ -341,8 +341,8 @@ class NameToEnum {
         const Offset* n = getNameArray();
         const EnumValue* e = getEnumArray();
 
-        // linear search; binary later if warranted
-        // (binary is not faster for short lists)
+        /*  linear search; binary later if warranted */
+        /*  (binary is not faster for short lists) */
         for (int32_t i=0; i<count; ++i) {
             const char* name = (const char*) data.getPointer(n[i]);
             int32_t c = uprv_comparePropertyNames(alias, name);
