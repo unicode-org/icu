@@ -2800,6 +2800,8 @@ static void TestDisplayKeywordValues(void){
         /* fetch the displayKeywordValue */
         displayKeywordValueLen = uloc_getDisplayKeywordValue(localeID, "calendar", displayLocale, displayKeywordValue, displayKeywordValueLen, &status);
         if(U_FAILURE(status)) {
+          log_err("uloc_getDisplaykeywordValue returned error status %s\n", u_errorName(status));
+        } else if(displayKeywordValueLen != 0) {
           log_err("uloc_getDisplaykeywordValue returned %d should be 0 \n", displayKeywordValueLen);
         }
     }
