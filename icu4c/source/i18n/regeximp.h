@@ -95,8 +95,16 @@ enum {
                                //   matcher data (not stack data) to store it.
      URX_LD_SP         = 33,   // Load the stack pointer.  Operand is location
                                //   to load from.
-     URX_BACKREF       = 34    // Back Reference.  Parameter is the index of the
+     URX_BACKREF       = 34,   // Back Reference.  Parameter is the index of the
                                //   capture group variables in the state stack frame.
+     URX_STO_INP_LOC   = 35,   // Store the input location.  Operand is location
+                               //   within the matcher data (not stack).
+     URX_JMPX          = 36    // Conditional JMP.
+                               //   First Operand:  JMP target location.
+                               //   Second Operand:  Data location containing an 
+                               //     input position.  If current input position ==
+                               //     saved input position, FAIL rather than taking
+                               //     the JMP.
 };
 
 // Keep this list of opcode names in sync with the above enum
@@ -136,7 +144,9 @@ enum {
         "RELOC_OPRND",         \
         "STO_SP",              \
         "LD_SP",               \
-        "BACKREF"
+        "BACKREF",             \
+        "STO_INP_LOC",         \
+        "JMPX"
 
 //
 //  Convenience macros for assembling and disassembling a compiled operation.

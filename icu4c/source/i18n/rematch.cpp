@@ -228,7 +228,9 @@ UBool RegexMatcher::find() {
     // TODO:  needs to go up to the very end, so a pattern that can match a zero lenght
     //        string can match at the end of a string.  Can't do until loop-breaking
     //        is added to the engine, though, otherwise it triggers too many bugs.
-    for (startPos=fMatchEnd; startPos < fInputLength; startPos = fInput->moveIndex32(startPos, 1)) {
+    startPos = fMatchEnd;
+    U_ASSERT(startPos >= 0 && startPos <= fInputLength);
+    for (;;) {
         MatchAt(startPos, status);
         if (U_FAILURE(status)) {
             return FALSE;
@@ -236,6 +238,10 @@ UBool RegexMatcher::find() {
         if (fMatch) {
             return TRUE;
         }
+        if (startPos >= fInputLength) {
+            break;
+        }
+        startPos = fInput->moveIndex32(startPos, 1);
     }
     return FALSE;
 }
@@ -858,17 +864,19 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
                 // The high bit of the op value is a flag for the match polarity.
                 //    0:   success if input char is in set.
                 //    1:   success if input char is not in set.
+                if (fp->fInputIdx >= fInputLength) {
+                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                    break;
+                }
+
                 UBool success = ((opValue & URX_NEG_SET) == URX_NEG_SET);  
                 opValue &= ~URX_NEG_SET;
-                if (fp->fInputIdx < fInputLength) {
-                    // There is input left.  Pick up one char and test it for set membership.
-                    UChar32  c;
-                    U16_NEXT(fInputUC, fp->fInputIdx, fInputLength, c);
-                    U_ASSERT(opValue > 0 && opValue < URX_LAST_SET);
-                    const UnicodeSet *s = fPattern->fStaticSets[opValue];
-                    if (s->contains(c)) {
-                        success = !success;
-                    }
+                U_ASSERT(opValue > 0 && opValue < URX_LAST_SET);
+                UChar32  c;
+                U16_NEXT(fInputUC, fp->fInputIdx, fInputLength, c);
+                const UnicodeSet *s = fPattern->fStaticSets[opValue];
+                if (s->contains(c)) {
+                    success = !success;
                 }
                 if (!success) {
                     fp = (REStackFrame *)fStack->popFrame(frameSize);
@@ -1102,6 +1110,29 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
             }
             break;
 
+        case URX_STO_INP_LOC:
+            {
+                U_ASSERT(opValue >= 0 && opValue < frameSize);
+                fp->fExtra[opValue] = fp->fInputIdx;
+            }
+            break;
+
+        case URX_JMPX:
+            {
+                int32_t instrOperandLoc = fp->fPatIdx;
+                fp->fPatIdx += 1;
+                int32_t dataLoc  = URX_VAL(pat[instrOperandLoc]);
+                U_ASSERT(dataLoc >= 0 && dataLoc < frameSize);
+                int32_t savedInputIdx = fp->fExtra[dataLoc];
+                U_ASSERT(savedInputIdx <= fp->fInputIdx);
+                if (savedInputIdx < fp->fInputIdx) {
+                    fp->fPatIdx = opValue;                               // JMP
+                } else {
+                     fp = (REStackFrame *)fStack->popFrame(frameSize);   // FAIL, no progress in loop.
+                }
+            }
+            break;
+                   
 
         default:
             // Trouble.  The compiled pattern contains an entry with an

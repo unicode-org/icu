@@ -61,7 +61,7 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
             if (exec) Errors(); 
             break;
         case 6: name = "PerlTests";
-            // if (exec) PerlTests();
+            if (exec) PerlTests();
             break;
 
 
@@ -124,7 +124,7 @@ UBool RegexTest::doRegexLMTest(const char *pat, const char *text, UBool looking,
         errln("RegexTest failure in RegexPattern::compile() at line %d.  Status = %d\n", line, status);
         return FALSE;
     }
-    // REPattern->dump();
+    if (line==376) { REPattern->dump();}
 
     UnicodeString inputString(inputText);
     UnicodeString unEscapedInput = inputString.unescape();
@@ -373,7 +373,7 @@ void RegexTest::Basic() {
 //
 #if 0
     {
-    REGEX_TESTLM("\\ba\\b", "-a", FALSE, TRUE);
+    REGEX_TESTLM("\\W", "a", FALSE, FALSE);
     // REGEX_FIND("(?>(abc{2,4}?))(c*)", "<0>ab<1>cc</1><2>ccc</2></0>ddd");
     // REGEX_FIND("(X([abc=X]+)+X)|(y[abc=]+)", "=XX====================");
     }
@@ -1284,7 +1284,7 @@ void RegexTest::Errors() {
 
     // Extra close paren
     REGEX_ERR("Grouping only parens (?: blah)) blah", 1, 31, U_REGEX_MISMATCHED_PAREN);
-    REGEX_ERR(")))))))", 1, 1, U_REGEX_RULE_SYNTAX);
+    REGEX_ERR(")))))))", 1, 1, U_REGEX_MISMATCHED_PAREN);
     REGEX_ERR("(((((((", 1, 7, U_REGEX_MISMATCHED_PAREN);
 
     // Flag settings not yet implemented
