@@ -248,6 +248,7 @@ static void TestString(void) {
 static void TestLocalizedString(void) {
     UChar testStr[256];
     UChar uBuffer[256];
+    char cBuffer[256];
     int32_t numResult = -1;
     UFILE *strFile = u_fstropen(testStr, sizeof(testStr)/sizeof(testStr[0]), "en_US");
 
@@ -260,11 +261,12 @@ static void TestLocalizedString(void) {
     u_fscanf(strFile, "%d", &numResult);
     u_fclose(strFile);
     u_uastrcpy(uBuffer,"1,234");
+    u_austrcpy(cBuffer,testStr);
     if (u_strcmp(testStr, uBuffer) != 0) {
-        log_err("u_fprintf failed to work on a string\n");
+        log_err("u_fprintf failed to work on a string Got: %s\n", cBuffer);
     }
     if (numResult != 1234) {
-        log_err("u_fscanf failed to work on a string\n");
+        log_err("u_fscanf failed to work on a string Got: %d\n", numResult);
     }
 }
 

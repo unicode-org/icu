@@ -20,7 +20,7 @@ CLEANFILES = *~ $(DEPS)
 TARGET = iotest$(EXEEXT)
 
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n \
--I$(top_srcdir)/tools/ctestfw -I$(top_srcdir)/extra/ustdio
+-I$(top_srcdir)/tools/ctestfw -I$(top_srcdir)/io
 LIBS = $(LIBCTESTFW) $(LIBICUI18N) $(LIBICUUC) $(LIBICUIO) $(DEFAULT_LIBS) $(LIB_M)
 
 OBJECTS = iotest.o strtst.o filetst.o
