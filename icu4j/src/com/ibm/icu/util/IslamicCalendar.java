@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/IslamicCalendar.java,v $ 
- * $Date: 2000/10/17 18:26:45 $ 
- * $Revision: 1.6 $
+ * $Date: 2000/10/27 22:25:52 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -360,7 +360,7 @@ public class IslamicCalendar extends Calendar {
      * @see #getLeastMaximum
      */
     public int getActualMaximum(int field) {
-        if (!isSet[YEAR] || !isSet[MONTH]) {
+        if (!isSet(YEAR) || !isSet(MONTH)) {
             complete();
         }
         switch (field) {
@@ -393,7 +393,7 @@ public class IslamicCalendar extends Calendar {
         if (!isLenient() && !validateFields())
             throw new IllegalArgumentException();
 
-        if (isSet[ERA] && internalGet(ERA) != 0)
+        if (isSet(ERA) && internalGet(ERA) != 0)
             throw new IllegalArgumentException();
 
         // We need the time zone offset for some of the calculations below.
@@ -414,11 +414,11 @@ public class IslamicCalendar extends Calendar {
         
         // The following code is somewhat convoluted. The various nested
         //  if's handle the different cases of what fields are present.
-        if (isSet[MONTH] &&
-            (isSet[DATE] ||
-             (isSet[DAY_OF_WEEK] &&
-              (isSet[WEEK_OF_MONTH] ||
-               isSet[DAY_OF_WEEK_IN_MONTH])
+        if (isSet(MONTH) &&
+            (isSet(DATE) ||
+             (isSet(DAY_OF_WEEK) &&
+              (isSet(WEEK_OF_MONTH) ||
+               isSet(DAY_OF_WEEK_IN_MONTH))
                  )
                 ))
         {
@@ -426,7 +426,7 @@ public class IslamicCalendar extends Calendar {
             int month = internalGet(MONTH);
             dayNumber = monthStart(year, month);
 
-            if (isSet[DATE])
+            if (isSet(DATE))
             {
                 date = internalGet(DATE);
             }
@@ -450,7 +450,7 @@ public class IslamicCalendar extends Calendar {
                 // first week.
                 date = 1 - fdm + internalGet(DAY_OF_WEEK) - getFirstDayOfWeek();
 
-                if (isSet[WEEK_OF_MONTH])
+                if (isSet(WEEK_OF_MONTH))
                 {
                     // Adjust for minimal days in first week.
                     if ((7 - fdm) < getMinimalDaysInFirstWeek()) date += 7;
@@ -482,10 +482,10 @@ public class IslamicCalendar extends Calendar {
                 }
             }
         }
-        else if (isSet[DAY_OF_YEAR]) {
+        else if (isSet(DAY_OF_YEAR)) {
             dayNumber = yearStart(year) + internalGet(DAY_OF_YEAR);
         }
-        else if (isSet[DAY_OF_WEEK] && isSet[WEEK_OF_YEAR])
+        else if (isSet(DAY_OF_WEEK) && isSet(WEEK_OF_YEAR))
         {
             dayNumber = yearStart(year);
 
@@ -527,12 +527,12 @@ public class IslamicCalendar extends Calendar {
         int millisInDay = 0;
 
         // Hours
-        if (isSet[HOUR_OF_DAY]) {
+        if (isSet(HOUR_OF_DAY)) {
             // Don't normalize here; let overflow bump into the next period.
             // This is consistent with how we handle other fields.
             millisInDay += internalGet(HOUR_OF_DAY);
 
-         } else if (isSet[HOUR])
+         } else if (isSet(HOUR))
         {
             // Don't normalize here; let overflow bump into the next period.
             // This is consistent with how we handle other fields.
@@ -588,13 +588,13 @@ public class IslamicCalendar extends Calendar {
         for (int field = 0; field < FIELD_COUNT; field++)
         {
             // Ignore DATE and DAY_OF_YEAR which are handled below
-            if (isSet[field] &&
+            if (isSet(field) &&
                 !boundsCheck(internalGet(field), field))
 
                 return false;
         }
 
-        if (isSet[YEAR])
+        if (isSet(YEAR))
         {
             int year = internalGet(YEAR);
             if (year < 1)
@@ -603,7 +603,7 @@ public class IslamicCalendar extends Calendar {
 
         // Handle DAY_OF_WEEK_IN_MONTH, which must not have the value zero.
         // We've checked against minimum and maximum above already.
-        if (isSet[DAY_OF_WEEK_IN_MONTH] &&
+        if (isSet(DAY_OF_WEEK_IN_MONTH) &&
             0 == internalGet(DAY_OF_WEEK_IN_MONTH)) return false;
 
         return true;
@@ -725,9 +725,9 @@ public class IslamicCalendar extends Calendar {
 
         areFieldsSet = true;
 
-        // Careful here: We are manually setting the isSet[] flags to true, so we
+        // Careful here: We are manually setting the isSet flags to true, so we
         // must be sure that the above code actually does set all these fields.
-        for (int i=0; i<FIELD_COUNT; ++i) isSet[i] = true;
+        _TEMPORARY_markAllFieldsSet();
     }
 
     //-------------------------------------------------------------------------
