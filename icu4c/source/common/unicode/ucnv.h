@@ -40,6 +40,7 @@ U_CDECL_BEGIN
 
 /* maximum length of the converter names */
 #define UCNV_MAX_CONVERTER_NAME_LENGTH 60
+/* maximum length of the converter name including path */
 #define UCNV_MAX_FULL_FILE_NAME_LENGTH (600+UCNV_MAX_CONVERTER_NAME_LENGTH)
 
 #define  UCNV_SI 0x0F           /*Shift in for EBDCDIC_STATEFUL and iso2022 states */
@@ -979,7 +980,6 @@ ucnv_getAvailableName (int32_t n);
 
 /**
  * Gives the number of aliases for a given converter or alias name.
- * Note that additional aliases are recognized by ucnv_open().
  * This method only enumerates the listed entries in the alias file.
  * @param alias alias name
  * @param pErrorCode error status
@@ -991,7 +991,6 @@ ucnv_countAliases(const char *alias, UErrorCode *pErrorCode);
 
 /**
  * Gives the name of the alias at given index of alias list.
- * Note that additional aliases are recognized by ucnv_open().
  * This method only enumerates the listed entries in the alias file.
  * @param alias alias name
  * @param n index in alias list
@@ -1005,7 +1004,6 @@ ucnv_getAlias(const char *alias, uint16_t n, UErrorCode *pErrorCode);
 
 /**
  * Fill-up the list of alias names for the given alias.
- * Note that additional aliases are recognized by ucnv_open().
  * This method only enumerates the listed entries in the alias file.
  * @param alias alias name
  * @param aliases fill-in list, aliases is a pointer to an array of
