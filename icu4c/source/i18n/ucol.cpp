@@ -1520,7 +1520,7 @@ ucol_calcSortKey(const    UCollator    *coll,
     if((normMode != UCOL_OFF) 
       && (u_quickCheck(source, len, UNORM_NFD, status) != UQUICK_CHECK_YES) 
       && (u_quickCheck(source, len, UNORM_NFC, status) != UQUICK_CHECK_YES)) {
-      fprintf(stderr, ".");
+      /*fprintf(stderr, ".");*/
         normSourceLen = u_normalize(source, sourceLength, UNORM_NFD, 0, normSource, normSourceLen, status);
         if(U_FAILURE(*status)) {
             *status=U_ZERO_ERROR;
