@@ -23,9 +23,9 @@
 
 
 
-static void TestUCMP16API();
-static void TestUCMP8API();
-static void TestUCMP32API();
+static void TestUCMP16API(void);
+static void TestUCMP8API(void);
+static void TestUCMP32API(void);
 
 
 

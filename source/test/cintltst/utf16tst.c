@@ -22,15 +22,15 @@
 #include <stdio.h>
 
 
-void printUChars(const UChar *uchars);
+static void printUChars(const UChar *uchars);
 
-void TestCodeUnitValues();
-void TestCharLength();
-void TestGetChar();
-void TestNextPrevChar();
-void TestFwdBack();
-void TestSetChar();
-void TestAppendChar();
+static void TestCodeUnitValues(void);
+static void TestCharLength(void);
+static void TestGetChar(void);
+static void TestNextPrevChar(void);
+static void TestFwdBack(void);
+static void TestSetChar(void);
+static void TestAppendChar(void);
 
 
 
@@ -46,7 +46,7 @@ addUTF16Test(TestNode** root)
   addTest(root, &TestAppendChar,        "utf16tst/TestAppendChar"    );
 }
 
-void TestCodeUnitValues()
+static void TestCodeUnitValues()
 {
     static uint16_t codeunit[]={0x0000,0xe065,0x20ac,0xd7ff,0xd800,0xd841,0xd905,0xdbff,0xdc00,0xdc02,0xddee,0xdfff,0};
     
@@ -71,7 +71,8 @@ void TestCodeUnitValues()
         }
     }
 }
-void TestCharLength()
+
+static void TestCharLength()
 {
     static uint32_t codepoint[]={
         1, 0x0061,
@@ -101,7 +102,8 @@ void TestCharLength()
         }
     }
 }
-void TestGetChar()
+
+static void TestGetChar()
 {
     static UChar input[]={
     /*  code unit,*/
@@ -159,7 +161,8 @@ void TestGetChar()
     }
 
 }
-void TestNextPrevChar(){
+
+static void TestNextPrevChar(){
 
     static UChar input[]={0x0061, 0xd800, 0xdc00, 0xdbff, 0xdfff, 0x0062, 0xd841, 0xd7ff, 0xd841, 0xdc41, 0xdc00, 0x0000};
     static uint32_t result[]={
@@ -266,7 +269,8 @@ void TestNextPrevChar(){
     }
 
 }
-void TestFwdBack(){ 
+
+static void TestFwdBack(){ 
     static UChar input[]={0x0061, 0xd800, 0xdc00, 0xdbff, 0xdfff, 0x0062, 0xd841, 0xd7ff, 0xd841, 0xdc41, 0xdc00, 0x0000};
     static uint16_t fwd_unsafe[] ={1, 3, 5, 6,  8, 10, 11, 12};
     static uint16_t fwd_safe[]   ={1, 3, 5, 6, 7, 8, 10, 11, 12};
@@ -345,7 +349,8 @@ void TestFwdBack(){
         }
     }
 }
-void TestSetChar(){
+
+static void TestSetChar(){
     static UChar input[]={0x0061, 0xd800, 0xdc00, 0xdbff, 0xdfff, 0x0062, 0xd841, 0xd7ff, 0xd841, 0xdc41, 0xdc00, 0x0000};
     static uint16_t start_unsafe[]={0, 1, 1, 3, 3, 5, 6, 7, 8, 8, 9, 11};
     static uint16_t start_safe[]  ={0, 1, 1, 3, 3, 5, 6, 7, 8, 8, 10, 11};
@@ -378,7 +383,8 @@ void TestSetChar(){
          i++;
     }
 }
-void TestAppendChar(){
+
+static void TestAppendChar(){
     static UChar s[5]={0x0061, 0x0062, 0x0063, 0x0064, 0x0000};
     static uint32_t test[]={
      /*append-position(unsafe),  CHAR to be appended  */
@@ -476,7 +482,8 @@ void TestAppendChar(){
     free(str);
 
 }
-void printUChars(const UChar *uchars){
+
+static void printUChars(const UChar *uchars){
     int16_t i=0;
     for(i=0; i<u_strlen(uchars); i++){
         printf("%x ", *(uchars+i));
