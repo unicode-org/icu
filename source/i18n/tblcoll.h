@@ -37,7 +37,10 @@
 * 04/23/99     stephen     Removed EDecompositionMode, merged with
 *                          Normalizer::EMode
 * 06/14/99     stephen     Removed kResourceBundleSuffix
-*
+* 11/02/99     helena      Collator performance enhancements.  Eliminates the 
+*                          UnicodeString construction and special case for NO_OP.
+* 11/23/99     srl         More performance enhancements. Updates to NormalizerIterator
+*                          internal state management.
 *******************************************************************************
 */
 
@@ -420,6 +423,39 @@ public:
                           const   UnicodeString&  target,
                           int32_t length) const;
 
+  /**
+   * The comparison function compares the character data stored in two
+   * different string arrays.  Returns information about whether a string
+   * array is less than, greater than or equal to another string array.
+   * <p>Example of use:
+   * <pre>
+   * .       UErrorCode status = U_ZERO_ERROR;
+   * .       Collator *myCollation = Collator::createInstance(Locale::US, status);
+   * .       if (U_FAILURE(status)) return;
+   * .       myCollation->setStrength(Collator::PRIMARY);
+   * .       // result would be Collator::EQUAL ("abc" == "ABC")
+   * .       // (no primary difference between "abc" and "ABC")
+   * .       Collator::EComparisonResult result = myCollation->compare(L"abc", 3, L"ABC", 3);
+   * .       myCollation->setStrength(Collator::TERTIARY);
+   * .       // result would be Collator::LESS (abc" &lt;&lt;&lt; "ABC")
+   * .       // (with tertiary difference between "abc" and "ABC")
+   * .       Collator::EComparisonResult result = myCollation->compare(L"abc", 3, L"ABC", 3);
+   * </pre>
+   * @param source the source string array to be compared with.
+   * @param sourceLength the length of the source string array.  If this value
+   *        is equal to -1, the string array is null-terminated.
+   * @param target the string that is to be compared with the source string.
+   * @param targetLength the length of the target string array.  If this value
+   *        is equal to -1, the string array is null-terminated.
+   * @return Returns a byte value. GREATER if source is greater
+   * than target; EQUAL if source is equal to target; LESS if source is less
+   * than target
+   **/
+  virtual EComparisonResult   compare(    const   UChar* source, 
+                      int32_t sourceLength,
+                      const   UChar*  target,
+                      int32_t targetLength) const ;
+
   /** Transforms a specified region of the string into a series of characters
      * that can be compared with CollationKey.compare. Use a CollationKey when
      * you need to do repeated comparisions on the same string. For a single comparison
@@ -433,6 +469,13 @@ public:
   virtual     CollationKey&       getCollationKey(    const   UnicodeString&  source,
                               CollationKey&   key,
                               UErrorCode&  status) const;
+
+  virtual CollationKey&       getCollationKey(const UChar *source,
+					      int32_t sourceLength,
+					      CollationKey&       key,
+					      UErrorCode&      status) const;
+
+
   /**
    * Generates the hash code for the rule-based collation object.
    * @return the hash code.
@@ -705,11 +748,41 @@ private:
                           const UnicodeString&    name,
                           const UnicodeString&    suffix);
 
-  /**
-   * Chops off the last portion of the locale name.  For example, from "en_US_CA"
-   * to "en_US" and "en_US" to "en".
-   * @param localeName the locale name.
+  /* Internal class for quick iteration over the text.
+     100% pure inline code
    */
+  class NormalizerIterator { 
+  public:
+      Normalizer *cursor;
+      VectorOfInt *bufferAlias;
+      int32_t     swapOrder;
+      UChar*      text;
+      int32_t     expIndex;
+      int32_t     textLen;
+      UTextOffset  currentOffset;
+
+      NormalizerIterator(void);
+      NormalizerIterator(const UChar* source, int32_t length, Normalizer::EMode mode);
+      ~NormalizerIterator(void);
+      void setText(const UChar* source, int32_t length, UErrorCode& status);
+      void setModeAndText(Normalizer::EMode mode, const UChar* source, int32_t length, UErrorCode& status);
+
+      UChar current(void) const;
+      UChar next(void);
+      void reset(void);
+  };
+
+  int32_t getStrengthOrder(NormalizerIterator* cursor, 
+                                    UErrorCode status) const;
+  int32_t strengthOrder(int32_t value) const ;
+  int32_t nextContractChar(NormalizerIterator *cursor, 
+                           UChar ch,
+                           UErrorCode& status) const;
+  /**
+     * Chops off the last portion of the locale name.  For example, from "en_US_CA"
+     * to "en_US" and "en_US" to "en".
+     * @param localeName the locale name.
+     */
   static  void                chopLocale(UnicodeString&   localeName);
 
   //--------------------------------------------------------------------------
@@ -751,12 +824,151 @@ private:
   UnicodeString       sbuffer;
   UnicodeString       tbuffer;
   UnicodeString       key;
-  CollationElementIterator *sourceCursor;
-  CollationElementIterator *targetCursor;
+  NormalizerIterator  *cursor1;
+  NormalizerIterator  *cursor2;
   bool_t              dataIsOwned;
   TableCollationData* data;
 };
 
+inline
+RuleBasedCollator::NormalizerIterator::NormalizerIterator() :
+    cursor(0),
+    bufferAlias(0),
+    swapOrder(0),
+    text(0),
+    textLen(0),
+    currentOffset(0),
+    expIndex(0)
+{
+}
+
+inline
+RuleBasedCollator::NormalizerIterator::NormalizerIterator(const UChar* source, int32_t length, Normalizer::EMode mode) :
+    cursor(0),
+    bufferAlias(0),
+    swapOrder(0),
+    text(0),
+    textLen(0),
+    currentOffset(0),
+    expIndex(0)
+{
+    if (mode == Normalizer::NO_OP) {
+        text = (UChar*)source;
+        textLen = length;
+        currentOffset = 0;
+    } else {
+        cursor = new Normalizer(source, length, mode);
+
+    }
+}
+
+inline
+RuleBasedCollator::NormalizerIterator::~NormalizerIterator() 
+{
+    if (cursor != 0) {
+        delete cursor;
+        cursor = 0;
+    }
+}
+
+inline
+void
+RuleBasedCollator::NormalizerIterator::setText(const UChar* source, int32_t length, UErrorCode& status)
+{
+    if (cursor == 0) {
+        text = (UChar*)source;
+        textLen = length;
+        currentOffset = 0;
+
+    } else {
+        text = 0;
+        cursor->setText(source, length, status);
+    }
+    bufferAlias = 0;
+    swapOrder = 0;
+    expIndex = 0;
+    currentOffset = 0;
+}
+
+/* You can only set mode after the comparision of two strings is completed.
+   Setting the mode in the middle of a comparison is not allowed.
+   */
+inline
+void
+
+
+RuleBasedCollator::NormalizerIterator::setModeAndText(Normalizer::EMode mode, const UChar* source, int32_t length, UErrorCode& status)
+{
+    if (cursor != NULL) {
+        if (mode != Normalizer::NO_OP) {
+            cursor->setMode(mode);
+	    cursor->setText(source, length, status);
+        } else {
+            delete cursor; 
+            cursor = 0;
+
+	    text = (UChar*)source;
+	    textLen = length;
+	    currentOffset = 0;
+        }
+    } else {
+      if(mode == Normalizer::NO_OP)
+	{
+	  text = (UChar*)source;
+	  textLen = length;
+	  currentOffset = 0;
+
+	}
+      else
+	{
+	  cursor = new Normalizer(source, length, mode);
+	}
+    }
+   
+    bufferAlias = 0;
+    swapOrder = 0;
+    expIndex = 0;
+}
+
+inline
+UChar
+RuleBasedCollator::NormalizerIterator::current(void) const
+{
+    if (text != 0) {
+      if(currentOffset >= textLen)
+	{
+	  return Normalizer::DONE;
+	}
+      else
+	{
+	  return text[currentOffset];
+	}
+    }
+
+    return cursor->current();
+}
+
+
+inline
+UChar
+RuleBasedCollator::NormalizerIterator::next(void)
+{
+    if (text != 0) {
+      return ((currentOffset < textLen) ? text[++currentOffset] : Normalizer::DONE);
+    }
+    return cursor->next();
+}
+
+inline
+void
+RuleBasedCollator::NormalizerIterator::reset(void)
+{
+  currentOffset = 0;
+  if(cursor)
+    {
+      cursor->reset();
+    }
+}
 
 inline bool_t
 RuleBasedCollator::operator!=(const Collator& other) const
@@ -771,5 +983,8 @@ RuleBasedCollator::addContractOrder(const UnicodeString &groupChars,
 {
   addContractOrder(groupChars, anOrder, TRUE, status);
 }
+
+
+
 
 #endif

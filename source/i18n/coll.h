@@ -34,6 +34,10 @@
 // 02/10/98     damiba      Added compare() with length as parameter.
 // 04/23/99     stephen     Removed EDecompositionMode, merged with
 //                          Normalizer::EMode.
+// 11/02/99     helena      Collator performance enhancements.  Eliminates the 
+//                          UnicodeString construction and special case for NO_OP.
+// 11/23/99     srl         More performance enhancements. Inlining of
+//                          critical accessors.
 //=============================================================================
 
 #ifndef COLL_H
@@ -299,6 +303,38 @@ public:
                       int32_t length) const = 0;
     
     
+  /**
+   * The comparison function compares the character data stored in two
+   * different string arrays.  Returns information about whether a string
+   * array is less than, greater than or equal to another string array.
+   * <p>Example of use:
+   * <pre>
+   * .       UErrorCode status = U_ZERO_ERROR;
+   * .       Collator *myCollation = Collator::createInstance(Locale::US, status);
+   * .       if (U_FAILURE(status)) return;
+   * .       myCollation->setStrength(Collator::PRIMARY);
+   * .       // result would be Collator::EQUAL ("abc" == "ABC")
+   * .       // (no primary difference between "abc" and "ABC")
+   * .       Collator::EComparisonResult result = myCollation->compare(L"abc", 3, L"ABC", 3);
+   * .       myCollation->setStrength(Collator::TERTIARY);
+   * .       // result would be Collator::LESS (abc" &lt;&lt;&lt; "ABC")
+   * .       // (with tertiary difference between "abc" and "ABC")
+   * .       Collator::EComparisonResult result = myCollation->compare(L"abc", 3, L"ABC", 3);
+   * </pre>
+   * @param source the source string array to be compared with.
+   * @param sourceLength the length of the source string array.  If this value
+   *        is equal to -1, the string array is null-terminated.
+   * @param target the string that is to be compared with the source string.
+   * @param targetLength the length of the target string array.  If this value
+   *        is equal to -1, the string array is null-terminated.
+   * @return Returns a byte value. GREATER if source is greater
+   * than target; EQUAL if source is equal to target; LESS if source is less
+   * than target
+   **/
+  virtual EComparisonResult   compare(    const   UChar* source, 
+                      int32_t sourceLength,
+                      const   UChar*  target,
+                      int32_t targetLength) const = 0;
 
   /** Transforms the string into a series of characters that can be compared
    * with CollationKey::compareTo. It is not possible to restore the original
@@ -339,6 +375,24 @@ public:
   virtual CollationKey&       getCollationKey(const   UnicodeString&  source,
                           CollationKey&       key,
                           UErrorCode&      status) const = 0;
+
+  /** Transforms the string into a series of characters that can be compared
+   * with CollationKey::compareTo. It is not possible to restore the original
+   * string from the chars in the sort key.  The generated sort key handles 
+   * only a limited number of ignorable characters.
+   * <p>Use CollationKey::equals or CollationKey::compare to compare the
+   * generated sort keys.
+   * <p>If the source string is null, a null collation key will be returned.
+   * @param source the source string to be transformed into a sort key.
+   * @param sourceLength length of the collation key
+   * @param key the collation key to be filled in
+   * @return the collation key of the string based on the collation rules.
+   * @see CollationKey#compare
+   */
+  virtual CollationKey&       getCollationKey(const UChar *source,
+					      int32_t sourceLength,
+					      CollationKey&       key,
+					      UErrorCode&      status) const = 0;
   /**
    * Generates the hash code for the collation object
    */
@@ -502,5 +556,18 @@ Collator::operator!=(const Collator& other) const
   result = !(*this == other);
   return result;
 }
+
+inline Collator::ECollationStrength 
+Collator::getStrength() const
+{
+  return strength;
+}
+
+inline Normalizer::EMode
+Collator::getDecomposition() const
+{
+  return decmp;
+}
+
 
 #endif
