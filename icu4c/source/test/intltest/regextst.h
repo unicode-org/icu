@@ -39,6 +39,8 @@ public:
     virtual void regex_err(const char *pat, int32_t errline, int32_t errcol,
                             UErrorCode expectedStatus, int line);
     virtual UChar *ReadAndConvertFile(const char *fileName, int &len, UErrorCode &status);
+    virtual const char *getPath(char buffer[2048], const char *filename);
+
 };
 
 #endif   // !UCONFIG_NO_REGULAR_EXPRESSIONS
