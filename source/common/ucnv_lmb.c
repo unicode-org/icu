@@ -780,6 +780,11 @@ _LMBCSFromUnicode(UConverterFromUnicodeArgs*     args,
 
    while (args->source < args->sourceLimit && !U_FAILURE(*err))
    {
+      if (args->target >= args->targetLimit)
+      {
+         *err = U_INDEX_OUTOFBOUNDS_ERROR;
+         break;
+      }
       uniChar = *(args->source);
       bytes_written = 0;
       pLMBCS = LMBCS;
