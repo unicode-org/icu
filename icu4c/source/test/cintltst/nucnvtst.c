@@ -794,7 +794,7 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
         expectedIBM943, sizeof(expectedIBM943), "ibm-943", toIBM943Offs,FALSE );
     /*DBCS*/
     testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
-        expectedIBM9027, sizeof(expectedIBM9027), "ibm-9027", toIBM9027Offs,FALSE );
+        expectedIBM9027, sizeof(expectedIBM9027), "@ibm9027", toIBM9027Offs,FALSE );
     /*SBCS*/
     testConvertFromU(sampleText, sizeof(sampleText)/sizeof(sampleText[0]),
         expectedIBM920, sizeof(expectedIBM920), "ibm-920", toIBM920Offs,FALSE );
@@ -2406,12 +2406,12 @@ TestDBCS() {
     const char *source=(const char *)in, *limit=(const char *)in+sizeof(in);
     UErrorCode errorCode=U_ZERO_ERROR;
 
-    UConverter *cnv=ucnv_open("ibm-9027", &errorCode);
+    UConverter *cnv=my_ucnv_open("@ibm9027", &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_data_err("Unable to open a DBCS(ibm-9027) converter: %s\n", u_errorName(errorCode));
+        log_data_err("Unable to open a DBCS(@ibm9027) converter: %s\n", u_errorName(errorCode));
         return;
     }
-    TestNextUChar(cnv, source, limit, results, "DBCS(ibm-9027)");
+    TestNextUChar(cnv, source, limit, results, "DBCS(@ibm9027)");
     /* Test the condition when source >= sourceLimit */
     TestNextUCharError(cnv, source, source, U_INDEX_OUTOFBOUNDS_ERROR, "sourceLimit <= source");
     /*Test for the condition where we have a truncated char*/
