@@ -66,7 +66,7 @@ public:
      *
      * CALLER OWNS RESULT.
      */
-    UnicodeRange* largestUnusedSubrange(const UnicodeString& str) const;
+    UnicodeRange* largestUnusedSubrange(const UnicodeString& str, UErrorCode &status) const;
 
 private:
 

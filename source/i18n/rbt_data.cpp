@@ -12,8 +12,10 @@
 #include "unicode/unistr.h"
 #include "unicode/uniset.h"
 
-TransliterationRuleData::TransliterationRuleData(UErrorCode& status) :
-    variableNames(0), variables(0) {
+TransliterationRuleData::TransliterationRuleData(UErrorCode& status)
+ : ruleSet(status),
+    variableNames(0), variables(0)
+{
     if (U_FAILURE(status)) {
         return;
     }
@@ -29,7 +31,8 @@ TransliterationRuleData::TransliterationRuleData(const TransliterationRuleData& 
     ruleSet(other.ruleSet),
     variablesBase(other.variablesBase),
     variablesLength(other.variablesLength),
-    segmentBase(other.segmentBase) {
+    segmentBase(other.segmentBase)
+{
 
     UErrorCode status = U_ZERO_ERROR;
     variableNames = new Hashtable(status);

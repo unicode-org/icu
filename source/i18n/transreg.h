@@ -41,7 +41,7 @@ class TransliteratorRegistry {
 
  public:
 
-    TransliteratorRegistry();
+    TransliteratorRegistry(UErrorCode& status);
 
     /**
      * Nonvirtual destructor -- this class is not subclassable.
