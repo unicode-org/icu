@@ -18,8 +18,6 @@
 #include "cmemory.h"
 #include "cstring.h"
 
-#define USCRIPT_CODE_ARRAY_SIZE 440
-
 #define ARRAY_SIZE(array) (sizeof array  / sizeof array[0])
 
 struct ParenStackEntry
@@ -243,16 +241,16 @@ static const UScriptCode scriptAbbrCodes[] = {
         USCRIPT_COMMON
 };
 
-static UChar32 pairedChars[] = {
-    0x0028, 0x0029, // ascii paired punctuation
+static const UChar32 pairedChars[] = {
+    0x0028, 0x0029, /* ascii paired punctuation */
     0x003c, 0x003e,
     0x005b, 0x005d,
     0x007b, 0x007d,
-    0x00ab, 0x00bb, // guillemets
-    0x2018, 0x2019, // general punctuation
+    0x00ab, 0x00bb, /* guillemets */
+    0x2018, 0x2019, /* general punctuation */
     0x201c, 0x201d,
     0x2039, 0x203a,
-    0x3008, 0x3009, // chinese paired punctuation
+    0x3008, 0x3009, /* chinese paired punctuation */
     0x300a, 0x300b,
     0x300c, 0x300d,
     0x300e, 0x300f,
@@ -309,6 +307,7 @@ findCodeIndex(const UScriptCode sorted[], const UScriptCode target, int size){
     return -1;
 }
 */
+
 /* linearly search the array and return the index */
 U_INLINE static int
 findCodeIndex(const UScriptCode unsorted[], const UScriptCode target, int size){
