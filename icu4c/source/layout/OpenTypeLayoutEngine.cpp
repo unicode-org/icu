@@ -204,7 +204,7 @@ void OpenTypeLayoutEngine::adjustGlyphPositions(const LEUnicode chars[], le_int3
     }
 
     if (glyphCount > 0 && fGPOSTable != NULL) {
-        GlyphPositionAdjustment *adjustments = LE_NEW_ARRAY(GlyphPositionAdjustment, glyphCount);
+        GlyphPositionAdjustment *adjustments = new GlyphPositionAdjustment[glyphCount];
         le_int32 i;
 
         if (adjustments == NULL) {
@@ -255,7 +255,7 @@ void OpenTypeLayoutEngine::adjustGlyphPositions(const LEUnicode chars[], le_int3
         positions[glyphCount*2]   += xAdjust;
         positions[glyphCount*2+1] -= yAdjust;
 
-        LE_DELETE_ARRAY(adjustments);
+        delete[] adjustments;
     }
 
     LE_DELETE_ARRAY(fFeatureTags);
