@@ -251,10 +251,11 @@ unicodeDataLineFn(void *context,
     char *end;
     uint32_t value;
     int i;
-    bool_t hasNumericValue=FALSE;
 
     /* reset the properties */
     uprv_memset(&p, 0, sizeof(Props));
+    p.decimalDigitValue=p.digitValue=-1;
+    p.numericValue=0xffffffff;
 
     /* get the character code, field 0 */
     p.code=uprv_strtoul(fields[0][0], &end, 16);
@@ -299,30 +300,21 @@ unicodeDataLineFn(void *context,
     /* decimal digit value, field 6 */
     if(fields[6][0]<fields[6][1]) {
         value=uprv_strtoul(fields[6][0], &end, 10);
-        if(end!=fields[6][1]) {
+        if(end!=fields[6][1] || value>0x7fff) {
             fprintf(stderr, "genprops: syntax error in field 6 at code 0x%lx\n", p.code);
             exit(U_PARSE_ERROR);
         }
-        p.numericValue=value;
-        hasNumericValue=TRUE;
+        p.decimalDigitValue=(int16_t)value;
     }
 
     /* digit value, field 7 */
     if(fields[7][0]<fields[7][1]) {
         value=uprv_strtoul(fields[7][0], &end, 10);
-        if(end!=fields[7][1]) {
+        if(end!=fields[7][1] || value>0x7fff) {
             fprintf(stderr, "genprops: syntax error in field 7 at code 0x%lx\n", p.code);
             exit(U_PARSE_ERROR);
         }
-        if(hasNumericValue) {
-            if(p.numericValue!=value) {
-                fprintf(stderr, "genprops: more than one numeric value at code 0x%lx\n", p.code);
-                exit(U_PARSE_ERROR);
-            }
-        } else {
-            p.numericValue=value;
-            hasNumericValue=TRUE;
-        }
+        p.digitValue=(int16_t)value;
     }
 
     /* numeric value, field 8 */
@@ -331,20 +323,17 @@ unicodeDataLineFn(void *context,
         if(value>0 && *end=='/') {
             /* field 8 may contain a fractional value, get the denominator */
             p.denominator=uprv_strtoul(end+1, &end, 10);
+            if(p.denominator==0) {
+                fprintf(stderr, "genprops: denominator is 0 in field 8 at code 0x%lx\n", p.code);
+                exit(U_PARSE_ERROR);
+            }
         }
-        if(end!=fields[8][1]) {
+        if(end!=fields[8][1] || value>0x7fffffff) {
             fprintf(stderr, "genprops: syntax error in field 8 at code 0x%lx\n", p.code);
             exit(U_PARSE_ERROR);
         }
-        if(hasNumericValue) {
-            if(p.numericValue!=value) {
-                fprintf(stderr, "genprops: more than one numeric value at code 0x%lx\n", p.code);
-                exit(U_PARSE_ERROR);
-            }
-        } else {
-            p.numericValue=value;
-            hasNumericValue=TRUE;
-        }
+        p.numericValue=(int32_t)value;
+        p.hasNumericValue=TRUE;
     }
 
     /* get Mirrored flag, field 9 */

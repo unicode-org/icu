@@ -26,9 +26,10 @@
 /* character properties */
 typedef struct {
     uint32_t code, lowerCase, upperCase, titleCase, mirrorMapping;
-    /* ### uint32_t decomp[16]; */
-    uint32_t numericValue, denominator;
-    uint8_t generalCategory, canonicalCombining, bidi, isMirrored;
+    int16_t decimalDigitValue, digitValue; /* -1: no value */
+    int32_t numericValue; /* see hasNumericValue */
+    uint32_t denominator; /* 0: no value */
+    uint8_t generalCategory, canonicalCombining, bidi, isMirrored, hasNumericValue;
 } Props;
 
 /* global flags */
