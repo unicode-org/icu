@@ -44,12 +44,24 @@ const int32_t NumberFormat::fgNumberPatternsCount = 3;
 
 // If no number pattern can be located for a locale, this is the last
 // resort.
-const UnicodeString NumberFormat::fgLastResortNumberPatterns[] =
+static const UChar gLastResortDecimalPat[] = {
+    0x23, 0x30, 0x2E, 0x23, 0x23, 0x23, 0x3B, 0x2D, 0x23, 0x30, 0x2E, 0x23, 0x23, 0x23, 0 /* "#0.###;-#0.###" */
+};
+static const UChar gLastResortCurrencyPat[] = {
+    0x24, 0x23, 0x30, 0x2E, 0x30, 0x30, 0x3B, 0x28, 0x24, 0x23, 0x30, 0x2E, 0x30, 0x30, 0x29, 0 /* "$#0.00;($#0.00)" */
+};
+static const UChar gLastResortPercentPat[] = {
+    0x23, 0x30, 0x25, 0 /* "#0%" */
+};
+static const UChar gLastResortScientificPat[] = {
+    0x23, 0x45, 0x30, 0 /* "#E0" */
+};
+const UChar *NumberFormat::fgLastResortNumberPatterns[] =
 {
-    UNICODE_STRING("#0.###;-#0.###", 14),   // decimal pattern
-    UNICODE_STRING("$#0.00;($#0.00)", 15),  // currency pattern
-    UNICODE_STRING("#0%", 3),               // percent pattern
-	UNICODE_STRING("#E0", 3)                // scientific pattern
+    gLastResortDecimalPat,
+    gLastResortCurrencyPat,
+    gLastResortPercentPat,
+	gLastResortScientificPat
 };
 
 // -------------------------------------

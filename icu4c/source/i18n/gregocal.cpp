@@ -67,11 +67,11 @@ const int32_t GregorianCalendar::kLeapMonthLength[]
     = {31,29,31,30,31,30,31,31,30,31,30,31}; // 0-based
 
 // Useful millisecond constants
-const int32_t GregorianCalendar::kOneSecond = 1000;
-const int32_t GregorianCalendar::kOneMinute = 60   * kOneSecond;     //      60,000
-const int32_t GregorianCalendar::kOneHour   = 60   * kOneMinute;    //   3,600,000
-const double  GregorianCalendar::kOneDay    = 24.0 * kOneHour;        //  86,400,000
-const double  GregorianCalendar::kOneWeek   = 7.0  * kOneDay;        // 604,800,000
+const int32_t GregorianCalendar::kOneSecond = U_MILLIS_PER_SECOND;
+const int32_t GregorianCalendar::kOneMinute = U_MILLIS_PER_MINUTE;    //      60,000
+const int32_t GregorianCalendar::kOneHour   = U_MILLIS_PER_HOUR;      //   3,600,000
+const double  GregorianCalendar::kOneDay    = U_MILLIS_PER_DAY;       //  86,400,000
+const double  GregorianCalendar::kOneWeek   = 7.0 * U_MILLIS_PER_DAY; // 604,800,000
 
 // These numbers are 2^52 - 1, the largest allowable mantissa in a 64-bit double
 // with a 0 exponent.  These are the absolute largest numbers for millis that
@@ -127,7 +127,7 @@ char GregorianCalendar::fgClassID = 0; // Value is irrelevant
 // the next few centuries, some as late as 1928. [LIU]
 // in Java, -12219292800000L
 //const UDate GregorianCalendar::kPapalCutover = -12219292800000L;
-const UDate GregorianCalendar::kPapalCutover = (2299161.0 - kEpochStartAsJulianDay) * kOneDay;
+const UDate GregorianCalendar::kPapalCutover = (2299161.0 - kEpochStartAsJulianDay) * U_MILLIS_PER_DAY;
 
 // -------------------------------------
 
