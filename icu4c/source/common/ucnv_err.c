@@ -24,11 +24,20 @@
 #define VALUE_STRING_LENGTH 32
 /*Magic # 32 = 4(number of char in value string) * 8(max number of bytes per char for any converter) */
 #define UNICODE_PERCENT_SIGN_CODEPOINT 0x0025
-#define UNICODE_U_CODEPOINT 0x0055
-#define UNICODE_X_CODEPOINT 0x0058
+#define UNICODE_U_CODEPOINT     0x0055
+#define UNICODE_X_CODEPOINT     0x0058
+#define UNICODE_RS_CODEPOINT    0x005C
+#define UNICODE_U_LOW_CODEPOINT 0x0075
+#define UNICODE_X_LOW_CODEPOINT 0x0078
+#define UNICODE_AMP_CODEPOINT   0x0026
+#define UNICODE_HASH_CODEPOINT  0x0023
 
+#define UCNV_PRV_ESCAPE_ICU      NULL
+#define UCNV_PRV_ESCAPE_C       'C'
+#define UCNV_PRV_ESCAPE_XML_DEC 'D'
+#define UCNV_PRV_ESCAPE_XML_HEX 'X'
+#define UCNV_PRV_ESCAPE_JAVA    'J'
 
-#define ToOffset(a) a<=9?(0x0030+a):(0x0030+a+7)
 
 UBool 
   CONVERSION_U_SUCCESS (UErrorCode err)
@@ -40,7 +49,8 @@ UBool
 /*Takes a int32_t and fills in  a UChar* string with that number "radix"-based
  * and padded with "pad" zeroes
  */
-static void   itou (UChar * buffer, uint32_t i, uint32_t radix, int32_t pad)
+#define MAX_DIGITS 10
+static  int32_t itou (UChar * buffer, uint32_t i, uint32_t radix, int32_t pad)
 {
   int32_t length = 0;
   int32_t num = 0;
@@ -48,28 +58,30 @@ static void   itou (UChar * buffer, uint32_t i, uint32_t radix, int32_t pad)
   int32_t j;
   UChar temp;
 
-  while (i >= radix)
-    {
-      num = i / radix;
-      digit = (int8_t) (i - num * radix);
-      buffer[length++] = (UChar) (ToOffset (digit));
-      i = num;
-    }
+  do{
+      digit = (int)(i % radix);
+      buffer[length++]=(UChar)(digit<=9?(0x0030+digit):(0x0030+digit+7));
+  }while(i=i/radix);
 
-  buffer[length] = (UChar) (ToOffset (i));
+  while (length < pad)   
+      buffer[length++] = (UChar) 0x0030;/*zero padding */
 
-  while (length < pad)   buffer[++length] = (UChar) 0x0030;	/*zero padding */
-  buffer[length--] = (UChar) 0x0000;
+  if(length<MAX_DIGITS){
+       buffer[length--] = (UChar) 0x0000;
+  }
+  num= (pad>=length) ? pad :length;
   
   /*Reverses the string */
-  for (j = 0; j < (pad / 2); j++)
+  for (j = 0; j < (num / 2); j++)
     {
       temp = buffer[length - j];
       buffer[length - j] = buffer[j];
       buffer[j] = temp;
     }
 
-  return;
+  /* truncates the padding */
+  
+  return length+1;
 }
 
 /*Function Pointer STOPS at the ILLEGAL_SEQUENCE */
@@ -109,10 +121,30 @@ void   UCNV_FROM_U_CALLBACK_SKIP (
                   UConverterCallbackReason reason,
                   UErrorCode * err)
 {
-  if (reason <= UCNV_IRREGULAR)
-  {
-    *err = U_ZERO_ERROR;
-  }
+    if(context==NULL)
+    {
+        if (reason <= UCNV_IRREGULAR)
+        {
+            *err = U_ZERO_ERROR;
+            return;
+        }
+
+    }
+    else if(*(char*)context=='i')
+    {
+        if(reason != UCNV_UNASSIGNED)
+        {
+            /* the caller must have set 
+             * the error code accordingly
+             */
+            return;
+        }
+        else
+        {
+            *err = U_ZERO_ERROR;
+            return;
+        }
+    }
 }
 
 void   UCNV_FROM_U_CALLBACK_SUBSTITUTE (
@@ -124,14 +156,33 @@ void   UCNV_FROM_U_CALLBACK_SUBSTITUTE (
                   UConverterCallbackReason reason,
                   UErrorCode * err)
 {
-  if (reason > UCNV_IRREGULAR)
-  {
-    return;
-  }
-  
-  *err = U_ZERO_ERROR;
-  
-  ucnv_cbFromUWriteSub(fromArgs, 0, err);
+    if(context == NULL)
+    {
+        if (reason > UCNV_IRREGULAR)
+        {
+            return;
+        }
+    
+        *err = U_ZERO_ERROR;
+        ucnv_cbFromUWriteSub(fromArgs, 0, err);
+        return;
+    }
+    else if(*((char*)context)=='i')
+    {
+        if(reason != UCNV_UNASSIGNED)
+        {
+            /* the caller must have set 
+             * the error code accordingly
+             */
+            return;
+        }
+        else
+        {
+            *err = U_ZERO_ERROR;
+            ucnv_cbFromUWriteSub(fromArgs, 0, err);
+            return;
+        }
+    }
 }
 
 /*uses itou to get a unicode escape sequence of the offensive sequence,
@@ -160,38 +211,102 @@ void   UCNV_FROM_U_CALLBACK_ESCAPE (
 
   UConverterFromUCallback ignoredCallback = NULL;
   void *ignoredContext;
-
+  
   if (reason > UCNV_IRREGULAR)
   {
     return;
   }
 
   ucnv_setFromUCallBack (fromArgs->converter,
-             (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_SUBSTITUTE,
-             NULL,  /* To Do for HSYS: context is null? */
-             &original,
-             &originalContext,
-             &err2);
+                     (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_SUBSTITUTE,
+                     NULL,  /* To Do for HSYS: context is null? */
+                     &original,
+                     &originalContext,
+                     &err2);
+  
   if (U_FAILURE (err2))
   {
     *err = err2;
     return;
+  } 
+  if(context==NULL)
+  { 
+      while (i < length)
+      {
+        valueString[valueStringLength++] = (UChar) UNICODE_PERCENT_SIGN_CODEPOINT;	/* adding % */
+        valueString[valueStringLength++] = (UChar) UNICODE_U_CODEPOINT;	/* adding U */
+        itou (valueString + valueStringLength, codeUnits[i++], 16, 4);
+        valueStringLength += 4;
+      }
   }
-  
-  /*
-   * ### TODO:
-   * This should actually really work with the codePoint, not with the codeUnits;
-   * how do we represent a code point > 0xffff? It should be one single escape, not
-   * two for a surrogate pair!
-   */
-  while (i < length)
+  else
   {
-    valueString[valueStringLength++] = (UChar) UNICODE_PERCENT_SIGN_CODEPOINT;	/* adding % */
-    valueString[valueStringLength++] = (UChar) UNICODE_U_CODEPOINT;	/* adding U */
-    itou (valueString + valueStringLength, codeUnits[i++], 16, 4);
-    valueStringLength += 4;
-  }
+      switch(*((char*)context))
+      {
+        case UCNV_PRV_ESCAPE_JAVA:
+          while (i < length)
+          {
+            valueString[valueStringLength++] = (UChar) UNICODE_RS_CODEPOINT;    /* adding \ */
+            valueString[valueStringLength++] = (UChar) UNICODE_U_LOW_CODEPOINT;	/* adding u */
+            itou (valueString + valueStringLength, codeUnits[i++], 16, 4);
+            valueStringLength += 4;
+          }
+          break;
 
+        case UCNV_PRV_ESCAPE_C:
+            valueString[valueStringLength++] = (UChar) UNICODE_RS_CODEPOINT;	/* adding \ */
+
+            if(length==2){
+                UChar32 temp = UTF16_GET_PAIR_VALUE(codeUnits[0],codeUnits[1]);
+                valueString[valueStringLength++] = (UChar) UNICODE_U_LOW_CODEPOINT;	/* adding u */
+                valueStringLength += itou (valueString + valueStringLength, temp, 16, 8);
+                
+            }
+            else{
+                valueString[valueStringLength++] = (UChar) UNICODE_U_CODEPOINT;	/* adding U */
+                valueStringLength += itou (valueString + valueStringLength, codeUnits[0], 16, 4);
+            }
+          break;
+
+        case UCNV_PRV_ESCAPE_XML_DEC:
+    
+            valueString[valueStringLength++] = (UChar) UNICODE_AMP_CODEPOINT;	/* adding & */
+            valueString[valueStringLength++] = (UChar) UNICODE_HASH_CODEPOINT;	/* adding # */
+            if(length==2){
+                UChar32 temp = UTF16_GET_PAIR_VALUE(codeUnits[0],codeUnits[1]);
+                valueStringLength += itou (valueString + valueStringLength, temp, 10, 0);
+                
+            }
+            else{
+                valueStringLength += itou (valueString + valueStringLength, codeUnits[0], 10, 4);
+            }
+          break;
+
+        case UCNV_PRV_ESCAPE_XML_HEX:
+
+            valueString[valueStringLength++] = (UChar) UNICODE_AMP_CODEPOINT;	/* adding & */
+            valueString[valueStringLength++] = (UChar) UNICODE_HASH_CODEPOINT;	/* adding # */
+            valueString[valueStringLength++] = (UChar) UNICODE_X_LOW_CODEPOINT; /* adding x */
+            if(length==2){
+                UChar32 temp = UTF16_GET_PAIR_VALUE(codeUnits[0],codeUnits[1]);
+                valueStringLength += itou (valueString + valueStringLength, temp, 16, 0);
+                
+            }
+            else{
+                valueStringLength += itou (valueString + valueStringLength, codeUnits[0], 16, 4);
+            }
+          break;
+       default:
+          while (i < length)
+          {
+            valueString[valueStringLength++] = (UChar) UNICODE_PERCENT_SIGN_CODEPOINT;	/* adding % */
+            valueString[valueStringLength++] = (UChar) UNICODE_U_CODEPOINT;	            /* adding U */
+            itou (valueString + valueStringLength, codeUnits[i++], 16, 4);
+            valueStringLength += 4;
+          }
+      }
+
+  }  
   myValueSource = valueString;
 
   /* reset the error */
@@ -224,9 +339,29 @@ void UCNV_TO_U_CALLBACK_SKIP (
                  UConverterCallbackReason reason,
                  UErrorCode * err)
 {
-    if (reason <= UCNV_IRREGULAR)
+    if(context==NULL)
     {
-        *err = U_ZERO_ERROR;
+        if (reason <= UCNV_IRREGULAR)
+        {
+            *err = U_ZERO_ERROR;
+            return;
+        }
+
+    }
+    else if(*((char*)context)=='i')
+    {
+        if(reason != UCNV_UNASSIGNED)
+        {
+            /* the caller must have set 
+             * the error code accordingly
+             */
+            return;
+        }
+        else
+        {
+            *err = U_ZERO_ERROR;
+            return;
+        }
     }
 }
 
@@ -238,15 +373,34 @@ void   UCNV_TO_U_CALLBACK_SUBSTITUTE (
                  UConverterCallbackReason reason,
                  UErrorCode * err)
 {
-    if (reason > UCNV_IRREGULAR)
+    if(context == NULL)
     {
+        if (reason > UCNV_IRREGULAR)
+        {
+            return;
+        }
+    
+        *err = U_ZERO_ERROR;
+        ucnv_cbToUWriteSub(toArgs,0,err);
         return;
     }
-    
-    *err = U_ZERO_ERROR;
-    ucnv_cbToUWriteSub(toArgs,0,err);
+    else if(*((char*)context)=='i')
+    {
+        if(reason != UCNV_UNASSIGNED)
+        {
+            /* the caller must have set 
+             * the error code accordingly
+             */
+            return;
+        }
+        else
+        {
+            *err = U_ZERO_ERROR;
+            ucnv_cbToUWriteSub(toArgs,0,err);
+            return;
+        }
+    }
 
-    return;
 }
 
 /*uses itou to get a unicode escape sequence of the offensive sequence,
