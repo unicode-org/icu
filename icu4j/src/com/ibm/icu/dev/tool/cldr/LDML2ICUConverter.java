@@ -700,7 +700,7 @@ public class LDML2ICUConverter {
                 ICUResourceWriter.ResourceString str = new ICUResourceWriter.ResourceString();
                 str.val = LDMLUtilities.getAttributeValue(node, LDMLConstants.NUMBER);
                 str.name = (String)keyNameMap.get(LDMLConstants.VERSION);
-                if(LDMLUtilities.isNodeDraft(root)) { // x for experimental
+                if(LDMLUtilities.isDraft(root,new StringBuffer("//ldml"))) { // x for experimental
                     str.val = "x" + str.val;
                 }
                 res = str;
