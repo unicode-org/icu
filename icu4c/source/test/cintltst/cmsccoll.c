@@ -4002,6 +4002,116 @@ static void NullRule(void) {
   }
 }
 
+/**
+ * Test for CollationElementIterator previous and next for the whole set of
+ * unicode characters with normalization on.
+ */
+static void TestNumericCollation(void)
+{
+    UCollationElements *iter;
+    UErrorCode status = U_ZERO_ERROR;
+
+	int i = 0, j = 0, size = 0;
+	/*UCollationResult collResult;*/
+	UChar t1[100], t2[100];
+
+	const static char *basicTestStrings[]={
+	"hello1",
+	"hello2",
+	"hello123456"
+	};
+	
+	const static char *preZeroTestStrings[]={
+	"avery1",
+	"avery01",
+	"avery001",
+	"avery0001"
+	};
+	
+	const static char *thirtyTwoBitNumericStrings[]={
+	"avery42949672960",
+	"avery42949672961",
+	"avery42949672962",
+	"avery429496729610"
+	};
+
+    const static char *supplementaryDigits[] = {
+      "\\uD835\\uDFCE", /* 0 */
+      "\\uD835\\uDFCF", /* 1 */
+      "\\uD835\\uDFD0", /* 2 */
+      "\\uD835\\uDFD1", /* 3 */
+      "\\uD835\\uDFCF\\uD835\\uDFCE", /* 10 */
+      "\\uD835\\uDFCF\\uD835\\uDFCF", /* 11 */
+      "\\uD835\\uDFCF\\uD835\\uDFD0", /* 12 */
+      "\\uD835\\uDFD0\\uD835\\uDFCE", /* 20 */
+      "\\uD835\\uDFD0\\uD835\\uDFCF", /* 21 */
+      "\\uD835\\uDFD0\\uD835\\uDFD0" /* 22 */
+    };
+
+    const static char *foreignDigits[] = {
+      "\\u0661",
+        "\\u0662",
+        "\\u0663",
+      "\\u0661\\u0660",
+      "\\u0661\\u0662",
+      "\\u0661\\u0663",
+      "\\u0662\\u0660",
+      "\\u0662\\u0662",
+      "\\u0662\\u0663",
+      "\\u0663\\u0660",
+      "\\u0663\\u0662",
+      "\\u0663\\u0663"
+    };
+
+    UColAttribute att = UCOL_NUMERIC_COLLATION;
+    UColAttributeValue val = UCOL_ON;
+
+	/* Open our collator. */
+    UCollator* coll = ucol_open("root", &status);
+    if (U_FAILURE(status)){
+        log_err("ERROR: in using ucol_open()\n %s\n",
+              myErrorName(status));
+        return;
+    }
+    genericLocaleStarterWithOptions("root", basicTestStrings, sizeof(basicTestStrings)/sizeof(basicTestStrings[0]), &att, &val, 1);
+    genericLocaleStarterWithOptions("root", thirtyTwoBitNumericStrings, sizeof(thirtyTwoBitNumericStrings)/sizeof(thirtyTwoBitNumericStrings[0]), &att, &val, 1);
+    genericLocaleStarterWithOptions("root", foreignDigits, sizeof(foreignDigits)/sizeof(foreignDigits[0]), &att, &val, 1);
+    genericLocaleStarterWithOptions("root", supplementaryDigits, sizeof(supplementaryDigits)/sizeof(supplementaryDigits[0]), &att, &val, 1);	
+
+	/* Setting up our collator to do digits. */
+	ucol_setAttribute(coll, UCOL_NUMERIC_COLLATION, UCOL_ON, &status);
+    if (U_FAILURE(status)){
+        log_err("ERROR: in setting UCOL_NUMERIC_COLLATION as an attribute\n %s\n",
+              myErrorName(status));
+        return;
+    }
+
+    /* 
+       Testing that prepended zeroes still yield the correct collation behavior. 
+       We expect that every element in our strings array will be equal.
+    */
+    size = sizeof(preZeroTestStrings)/sizeof(preZeroTestStrings[0]);
+    for(i = 0; i < size-1; i++) {
+      for(j = i+1; j < size; j++) {
+        u_uastrcpy(t1, preZeroTestStrings[i]);
+        u_uastrcpy(t2, preZeroTestStrings[j]);
+        doTest(coll, t1, t2, UCOL_EQUAL);
+    	}
+  	}
+
+	/* 
+      Testing collation element iterator. Running backAndForth on 
+      a string with numbers in it should be sufficient.
+     */
+	u_uastrcpy(t1, basicTestStrings[2]);	
+	iter=ucol_openElements(coll, t1, u_strlen(t1), &status);
+	backAndForth(iter);
+    ucol_closeElements(iter);
+   
+    ucol_close(coll);
+}
+
+
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
 
 void addMiscCollTest(TestNode** root)
@@ -4056,6 +4166,7 @@ void addMiscCollTest(TestNode** root)
     TEST(TestEquals);
     TEST(TestJ2726);
     TEST(NullRule);
+    TEST(TestNumericCollation);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
