@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/VersionInfo.java,v $ 
- * $Date: 2003/09/09 21:30:45 $ 
- * $Revision: 1.16 $
+ * $Date: 2003/11/18 17:53:53 $ 
+ * $Revision: 1.17 $
  *
  * jitterbug 1741
  *****************************************************************************************
@@ -104,7 +104,7 @@ public final class VersionInfo
     
     /**
      * ICU4J current release version
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public static final VersionInfo ICU_VERSION;
     

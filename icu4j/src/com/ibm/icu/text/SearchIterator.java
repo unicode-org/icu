@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SearchIterator.java,v $ 
- * $Date: 2002/12/05 22:27:43 $ 
- * $Revision: 1.15 $
+ * $Date: 2003/11/18 17:53:53 $ 
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  */
@@ -156,7 +156,7 @@ public abstract class SearchIterator
      * @exception IndexOutOfBoundsException thrown if argument position is out
      *            of the target text range.
      * @see #getIndex
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public void setIndex(int position) {
         if (position < targetText.getBeginIndex() 
@@ -180,7 +180,7 @@ public abstract class SearchIterator
      * </p>
 	 * @param allowOverlap flag indicator if overlapping matches are allowed
      * @see #isOverlapping
-	 * @draft ICU 2.2
+	 * @stable ICU 2.8
 	 */
 	public void setOverlapping(boolean allowOverlap)
 	{
@@ -257,7 +257,7 @@ public abstract class SearchIterator
      * @see #previous
      * @see #last
      * @see #DONE
-	 * @draft ICU 2.2
+	 * @stable ICU 2.8
 	 */
 	public int getMatchStart()
 	{
@@ -271,7 +271,7 @@ public abstract class SearchIterator
      * the beginning for a backwards search, {@link #DONE} is returned.
      * @return index in the target text at which the iterator is currently 
      *         positioned.
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      * @see #first
      * @see #next
      * @see #previous
@@ -503,7 +503,7 @@ public abstract class SearchIterator
      * See setOverlapping(boolean) for more information.
      * @see #setOverlapping
      * @return true if the overlapping property has been set, false otherwise
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public boolean isOverlapping() 
     {
@@ -520,7 +520,7 @@ public abstract class SearchIterator
      * start of the target text. Otherwise, if a backwards iteration is initiated,
      * the next search will begin at the end of the target text.
      * </p>
-	 * @draft ICU 2.2
+	 * @stable ICU 2.8
 	 */
 	public void reset()
 	{

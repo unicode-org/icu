@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $
-* $Date: 2003/11/13 20:21:13 $
-* $Revision: 1.50 $
+* $Date: 2003/11/18 17:53:53 $
+* $Revision: 1.51 $
 *
 *******************************************************************************
 */
@@ -183,7 +183,7 @@ import com.ibm.icu.impl.StringUCharacterIterator;
  * This class is not subclassable
  * </p>
  * @author Syn Wee Quek
- * @draft ICU 2.2
+ * @stable ICU 2.8
  */
 public final class RuleBasedCollator extends Collator
 {   
@@ -204,7 +204,7 @@ public final class RuleBasedCollator extends Collator
      * @exception ParseException and IOException thrown. ParseException thrown
      *            when argument rules have an invalid syntax. IOException
      *            thrown when an error occured while reading internal data.
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public RuleBasedCollator(String rules) throws Exception
     {
@@ -220,7 +220,7 @@ public final class RuleBasedCollator extends Collator
     /**
      * Clones the RuleBasedCollator
      * @return a new instance of this RuleBasedCollator object
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public Object clone() throws CloneNotSupportedException
     {
@@ -235,7 +235,7 @@ public final class RuleBasedCollator extends Collator
     /**
      * Return a CollationElementIterator for the given String.
      * @see CollationElementIterator
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public CollationElementIterator getCollationElementIterator(String source)
     {
@@ -247,7 +247,7 @@ public final class RuleBasedCollator extends Collator
      * The source iterator's integrity will be preserved since a new copy
      * will be created for use.
      * @see CollationElementIterator
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public CollationElementIterator getCollationElementIterator(
                                                 CharacterIterator source)
@@ -281,7 +281,7 @@ public final class RuleBasedCollator extends Collator
      *        otherwise
      * @see #setHiraganaQuaternaryDefault
      * @see #isHiraganaQuaternary
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public void setHiraganaQuaternary(boolean flag)
     {
@@ -294,7 +294,7 @@ public final class RuleBasedCollator extends Collator
      * See setHiraganaQuaternary(boolean) for more details.
      * @see #setHiraganaQuaternary(boolean)
      * @see #isHiraganaQuaternary
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public void setHiraganaQuaternaryDefault()
     {
@@ -314,7 +314,7 @@ public final class RuleBasedCollator extends Collator
      * @see #isUpperCaseFirst
      * @see #setLowerCaseFirst
      * @see #setCaseFirstDefault
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public void setUpperCaseFirst(boolean upperfirst)
     {
@@ -348,7 +348,7 @@ public final class RuleBasedCollator extends Collator
      * @see #isUpperCaseFirst
      * @see #setUpperCaseFirst
      * @see #setCaseFirstDefault
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public void setLowerCaseFirst(boolean lowerfirst)
     {
@@ -376,7 +376,7 @@ public final class RuleBasedCollator extends Collator
      * @see #isUpperCaseFirst
      * @see #setLowerCaseFirst(boolean)
      * @see #setUpperCaseFirst(boolean)
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public final void setCaseFirstDefault()
     {
@@ -393,7 +393,7 @@ public final class RuleBasedCollator extends Collator
      * See setAlternateHandling(boolean) for more details.
      * @see #setAlternateHandlingShifted(boolean)
      * @see #isAlternateHandlingShifted()
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public void setAlternateHandlingDefault()
     {
@@ -407,7 +407,7 @@ public final class RuleBasedCollator extends Collator
      * See setCaseLevel(boolean) for more details.
      * @see #setCaseLevel(boolean)
      * @see #isCaseLevel
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public void setCaseLevelDefault()
     {
@@ -421,7 +421,7 @@ public final class RuleBasedCollator extends Collator
      * See setDecomposition(int) for more details.
      * @see #getDecomposition
      * @see #setDecomposition(int)
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public void setDecompositionDefault()
     {
@@ -434,7 +434,7 @@ public final class RuleBasedCollator extends Collator
      * See setFrenchCollation(boolean) for more details.
      * @see #isFrenchCollation
      * @see #setFrenchCollation(boolean)
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public void setFrenchCollationDefault()
     {
@@ -451,7 +451,7 @@ public final class RuleBasedCollator extends Collator
      * See setStrength(int) for more details.
      * @see #setStrength(int)
      * @see #getStrength
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public void setStrengthDefault()
     {
@@ -482,7 +482,7 @@ public final class RuleBasedCollator extends Collator
      * <a href=http://oss.software.ibm.com/icu/userguide/Collate_ServiceArchitecture.html>
      * French collation</a> for more information.
      * @param flag true to set the French collation on, false to set it off
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      * @see #isFrenchCollation
      * @see #setFrenchCollationDefault
      */
@@ -514,7 +514,7 @@ public final class RuleBasedCollator extends Collator
      *        desired, false for the NON_IGNORABLE behaviour.
      * @see #isAlternateHandlingShifted
      * @see #setAlternateHandlingDefault
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public void setAlternateHandlingShifted(boolean shifted)
     {
@@ -540,7 +540,7 @@ public final class RuleBasedCollator extends Collator
      * case level</a> for more information.
      * </p>
      * @param flag true if case level sorting is required, false otherwise
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      * @see #setCaseLevelDefault
      * @see #isCaseLevel
      */
@@ -567,7 +567,7 @@ public final class RuleBasedCollator extends Collator
      * @see #IDENTICAL
      * @exception IllegalArgumentException If the new strength value is not one
      *              of PRIMARY, SECONDARY, TERTIARY, QUATERNARY or IDENTICAL.
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public void setStrength(int newStrength)
     {
@@ -674,7 +674,7 @@ public final class RuleBasedCollator extends Collator
      * Equivalent to String getRules(RuleOption.FULL_RULES).
      * @return returns the collation rules
      * @see #getRules(boolean)
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public String getRules()
     {
@@ -743,7 +743,7 @@ public final class RuleBasedCollator extends Collator
      * @see CollationKey
      * @see #compare(String, String)
      * @see #getRawCollationKey
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public CollationKey getCollationKey(String source) {
         if (source == null) {
@@ -843,7 +843,7 @@ public final class RuleBasedCollator extends Collator
      * @see #setCaseFirstDefault
      * @return true if upper cased characters are sorted before lower cased
      *         characters, false otherwise
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
      public boolean isUpperCaseFirst()
      {
@@ -859,7 +859,7 @@ public final class RuleBasedCollator extends Collator
      * @see #setCaseFirstDefault
      * @return true lower cased characters are sorted before upper cased
      *         characters, false otherwise
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public boolean isLowerCaseFirst()
     {
@@ -876,7 +876,7 @@ public final class RuleBasedCollator extends Collator
      * @return true or false
      * @see #setAlternateHandlingShifted(boolean)
      * @see #setAlternateHandlingDefault
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public boolean isAlternateHandlingShifted()
     {
@@ -890,7 +890,7 @@ public final class RuleBasedCollator extends Collator
      * @see #setCaseLevelDefault
      * @see #isCaseLevel
      * @see #setCaseLevel(boolean)
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public boolean isCaseLevel()
     {
@@ -903,7 +903,7 @@ public final class RuleBasedCollator extends Collator
      * @return true if French Collation is set to true, false otherwise
      * @see #setFrenchCollation(boolean)
      * @see #setFrenchCollationDefault
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
      public boolean isFrenchCollation()
      {
@@ -916,7 +916,7 @@ public final class RuleBasedCollator extends Collator
      * @return flag true if Hiragana Quaternary mode is on, false otherwise
      * @see #setHiraganaQuaternaryDefault
      * @see #setHiraganaQuaternary(boolean)
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public boolean isHiraganaQuaternary()
     {
@@ -959,7 +959,7 @@ public final class RuleBasedCollator extends Collator
      * @param obj the RuleBasedCollator to be compared to.
      * @return true if this RuleBasedCollator has exactly the same
      *         collation behaviour as obj, false otherwise.
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public boolean equals(Object obj)
     {
@@ -1053,7 +1053,7 @@ public final class RuleBasedCollator extends Collator
     /**
      * Generates a unique hash code for this RuleBasedCollator.
      * @return the unique hash code for this Collator
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public int hashCode()
     {
@@ -1095,7 +1095,7 @@ public final class RuleBasedCollator extends Collator
      *         value is greater than zero if source is greater than target.
      * @see CollationKey
      * @see #getCollationKey
-     * @draft ICU 2.2
+     * @stable ICU 2.8
      */
     public int compare(String source, String target)
     {
@@ -1286,7 +1286,7 @@ public final class RuleBasedCollator extends Collator
          * to the next trail surrogate data.
          * @param ce collation element of the lead surrogate
          * @return data offset or 0 for the next trail surrogate
-         * @draft 2.2
+         * @stable ICU 2.8
          */
         public final int getFoldingOffset(int ce)
         {
