@@ -8,6 +8,8 @@
 #include "layout/LETypes.h"
 #include "Utilities.h"
 
+U_NAMESPACE_BEGIN
+
 //
 // Finds the high bit by binary searching
 // through the bits in n.
@@ -94,3 +96,4 @@ void Utilities::reverse(float array[], le_int32 length)
     }
 }
 
+U_NAMESPACE_END

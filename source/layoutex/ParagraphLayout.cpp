@@ -20,6 +20,8 @@
 
 #include "layout/ParagraphLayout.h"
 
+U_NAMESPACE_BEGIN
+
 #define ARRAY_SIZE(array) (sizeof array  / sizeof array[0])
 
 struct ParagraphLayout::StyleRunInfo
@@ -1004,3 +1006,5 @@ void ParagraphLayout::Line::computeMetrics()
 }
 
 const char ParagraphLayout::VisualRun::fgClassID = 0;
+
+U_NAMESPACE_END

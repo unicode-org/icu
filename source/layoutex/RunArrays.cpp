@@ -12,6 +12,8 @@
 
 #include "layout/RunArrays.h"
 
+U_NAMESPACE_BEGIN
+
 const char RunArray::fgClassID = 0;
 
 le_int32 RunArray::ensureCapacity()
@@ -161,3 +163,4 @@ le_int32 ValueRuns::getValue(le_int32 run) const
     return fValues[run];
 }
 
+U_NAMESPACE_END
