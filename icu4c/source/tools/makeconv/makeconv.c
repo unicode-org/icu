@@ -173,7 +173,7 @@ static UDataInfo dataInfo={
     0,
 
     0x63, 0x6e, 0x76, 0x74,     /* dataFormat="cnvt" */
-    6, 0, 0, 0,                 /* formatVersion */
+    6, 1, 0, 0,                 /* formatVersion */
     0, 0, 0, 0                  /* dataVersion (calculated at runtime) */
 };
 
@@ -648,7 +648,7 @@ void loadTableFromFile(FileStream* convFile, UConverterSharedData* sharedData, U
     int32_t mbcsLength;
     char codepointBytes[20];
     UBool isOK = TRUE;
-    uint8_t precisionMask = 0;
+    uint8_t precisionMask = 0, unicodeMask = 0;
     char endOfLine;
 
     if(cnvData->startMappings!=NULL)
@@ -684,6 +684,13 @@ void loadTableFromFile(FileStream* convFile, UConverterSharedData* sharedData, U
                 /* End of line could be \0 or | (if fallback) */
                 endOfLine= line[nextTokenOffset(line, CODEPOINT_SEPARATORS)];
             } while((endOfLine != '\0') && (endOfLine != FALLBACK_SEPARATOR));
+
+            if(unicodeValue>=0x10000) {
+                unicodeMask|=UCNV_HAS_SUPPLEMENTARY;    /* there are supplementary code points */
+            } else if(UTF_IS_SURROGATE(unicodeValue)) {
+                unicodeMask|=UCNV_HAS_SURROGATES;       /* there are single surrogates */
+            }
+
             if((uint32_t)unicodeValue > 0x10ffff)
             {
                 fprintf(stderr, "error: Unicode code point > U+10ffff in '%s'\n", storageLine);
@@ -729,6 +736,12 @@ void loadTableFromFile(FileStream* convFile, UConverterSharedData* sharedData, U
             }
         }
     }
+
+    if(unicodeMask == 3)
+    {
+        fprintf(stderr, "warning: contains mappings to both supplementary code points and single surrogates\n");
+    }
+    staticData->unicodeMask = unicodeMask;
 
     if(cnvData->finishMappings!=NULL)
     {

@@ -85,7 +85,8 @@ const UConverterStaticData _HZStaticData={
         "HZ",
         2023, UCNV_IBM, UCNV_HZ, 1, 4,
     { 0x1a, 0, 0, 0 },1, FALSE, FALSE,
-    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0} /* reserved */
+    0,
+    { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0 } /* reserved */
 };
             
             
