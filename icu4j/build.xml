@@ -6,10 +6,10 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2000/03/10 04:17:55 $ 
-* $Revision: 1.2 $
+* $Date: 2000/03/13 19:18:54 $ 
+* $Revision: 1.3 $
 *
-*****************************************************************************************
+*******************************************************************************
 */
 -->
 
@@ -50,6 +50,8 @@
     	   destdir="${build.dir}" 
     	   classpath="${classpath}"
            debug="on" deprecation="off" target="1.2"/>
+    <copyfile src="${src.dir}/com/ibm/demo/rbbi/english_dict"
+    	   dest="${build.dir}/com/ibm/text/resources/english_dict"/>
   </target>
   
   <target name="tools" depends="core">
