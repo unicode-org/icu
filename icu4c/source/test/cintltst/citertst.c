@@ -1793,9 +1793,10 @@ static UBool checkSortKeyValidity(UCollator *coll,
                                   int length) 
 {
     UErrorCode status  = U_ZERO_ERROR;
-    UCollationStrength strength[4] = {UCOL_PRIMARY, UCOL_SECONDARY,
-                                      UCOL_TERTIARY, UCOL_IDENTICAL};
-    int        strengthlen = 4;
+    UCollationStrength strength[5] = {UCOL_PRIMARY, UCOL_SECONDARY,
+                                      UCOL_TERTIARY, UCOL_QUATERNARY, 
+                                      UCOL_IDENTICAL};
+    int        strengthlen = 5;
     int        index       = 0;
     int        caselevel   = 0;
     
@@ -1816,7 +1817,7 @@ static UBool checkSortKeyValidity(UCollator *coll,
             ucol_setStrength(coll, strength[index]);
             sklen = ucol_getSortKey(coll, codepoints, length, sortkey, 128);
             while (sortkey[count] != 0) {
-                if (sortkey[count] == 2 || (sortkey[count] == 3 && count01 > 0 && index != 3)) {
+                if (sortkey[count] == 2 || (sortkey[count] == 3 && count01 > 0 && index != 4)) {
                     printSortKeyError(codepoints, length, sortkey, sklen);
                     return FALSE;
                 }
