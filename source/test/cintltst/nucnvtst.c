@@ -732,7 +732,7 @@ void TestConverterTypesAndStarters()
 
   log_verbose("Testing KSC, ibm-930, ibm-878  for starters and their conversion types.");
 
-    myConverter[0] = ucnv_open("ksc", &err);
+    myConverter[0] = ucnv_open("ibm-949", &err);
     if (U_FAILURE(err))
       log_err("Failed to create an ibm-949 converter\n");
     else
