@@ -29,6 +29,7 @@
 #include <limits.h>
 #include <string.h>
 #include <stdio.h>
+#include "unicode/putil.h"
 
 // *****************************************************************************
 // class DigitList

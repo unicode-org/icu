@@ -63,6 +63,7 @@
 
 /* include ICU headers */
 #include "unicode/utypes.h"
+#include "unicode/putil.h"
 #include "umutex.h"
 #include "cmemory.h"
 #include "cstring.h"

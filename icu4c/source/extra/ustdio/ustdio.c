@@ -18,6 +18,7 @@
 */
 
 #include "unicode/ustdio.h"
+#include "unicode/putil.h"
 #include "ufile.h"
 #include "ufmt_cmn.h"
 #include "unicode/ucnv.h"

@@ -22,6 +22,7 @@
 */
 
 #include "unicode/utypes.h"
+#include "unicode/putil.h"
 #include "unicode/ucnv.h"           /* This file implements ucnv_xXXX() APIs */
 #include "umutex.h"
 #include "cstring.h"

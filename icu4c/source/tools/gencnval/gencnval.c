@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include "unicode/utypes.h"
+#include "unicode/putil.h"
 #include "unicode/ucnv.h" /* ucnv_compareNames() */
 #include "cmemory.h"
 #include "cstring.h"

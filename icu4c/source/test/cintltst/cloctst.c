@@ -16,7 +16,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "unicode/utypes.h"
-#include "unicode/utypes.h"
+#include "unicode/putil.h"
 #include "cloctst.h"
 #include "unicode/uloc.h"
 #include "unicode/ustring.h"
