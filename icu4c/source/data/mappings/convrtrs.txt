@@ -404,7 +404,6 @@ ibm-949_P11A-2000 { UTR22* }
                         KS_C_5601-1989 { IANA }
                         csKSC56011987 { IANA }
                         KSC_5601 { MIME* IANA }
-                        johab
                         ks_x_1001:1992
                         949
                         korean { IANA }
