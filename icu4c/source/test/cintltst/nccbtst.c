@@ -273,14 +273,6 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
         };
         static const int32_t from_iso_2022_jpOffs [] ={0,2};
 
-        static const UChar iso_2022_jp_inputText1[]={0x3000, 0x00E9, 0x3001, };
-        static const uint8_t to_iso_2022_jp1[]={ 
-            0x1b,   0x24,   0x42,   0x21, 0x21,       
-            0x21,   0x22,
-
-        };
-        static const int32_t from_iso_2022_jpOffs1 [] ={0,0,0,0,0,2,2,};
-
         /*ISO-2022-JP*/
         UChar const iso_2022_jp_inputText2[]={0x0041, 0x00E9/*unassigned*/,0x43,0xd800/*illegal*/,0x0042, };
         static const uint8_t to_iso_2022_jp2[]={ 
@@ -427,10 +419,6 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
                 UCNV_FROM_U_CALLBACK_SKIP, from_iso_2022_jpOffs, NULL, 0 ))
             log_err("u-> iso-2022-jp with skip did not match.\n"); 
         
-        if(!testConvertFromUnicode(iso_2022_jp_inputText1, sizeof(iso_2022_jp_inputText1)/sizeof(iso_2022_jp_inputText1[0]),
-                to_iso_2022_jp1, sizeof(to_iso_2022_jp1), "iso-2022-jp",
-                UCNV_FROM_U_CALLBACK_SKIP, from_iso_2022_jpOffs1, NULL, 0 ))
-            log_err("u-> iso-2022-jp with skip did not match.\n"); 
         /* with context */
         if(!testConvertFromUnicodeWithContext(iso_2022_jp_inputText2, sizeof(iso_2022_jp_inputText2)/sizeof(iso_2022_jp_inputText2[0]),
                 to_iso_2022_jp2, sizeof(to_iso_2022_jp2), "iso-2022-jp",
@@ -1379,24 +1367,6 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
             0x61, 0xe6, 0xca, 0x8a,
         };
 
-        /*ISO-2022-JP*/
-        static const UChar iso_2022_jp_inputText[]={ 0x0041, 0x00E9, 0x0042,0x00E9,0x3000 };
-        static const uint8_t to_iso_2022_jp[]={  
-               0x41,   
-               0x1a, 
-               0x42,
-               0x1a,
-               0x1b,  0x24,   0x42,   0x21,   0x21, 
-        };
-
-        static const int32_t from_iso_2022_jpOffs [] ={ 
-            0,
-            1,
-            2,
-            3,
-            4,4,4,4,4
-        };
-
         static const int32_t from_euc_twOffs [] ={ 0, 1, 1, 2, 2, 2, 2, 3, 3, 5, 5, 6, 7, 7, 8,};
 
         if(!testConvertFromUnicode(inputTest, sizeof(inputTest)/sizeof(inputTest[0]),
@@ -1413,13 +1383,6 @@ static void TestSub(int32_t inputsize, int32_t outputsize)
                 to_euc_tw, sizeof(to_euc_tw), "euc-tw",
                 UCNV_FROM_U_CALLBACK_SUBSTITUTE, from_euc_twOffs, NULL, 0 ))
             log_err("u-> euc-tw with substitute did not match.\n");
-
-        if(!testConvertFromUnicodeWithContext(iso_2022_jp_inputText, sizeof(iso_2022_jp_inputText)/sizeof(iso_2022_jp_inputText[0]),
-                to_iso_2022_jp, sizeof(to_iso_2022_jp), "iso-2022-jp",
-                UCNV_FROM_U_CALLBACK_SUBSTITUTE, from_iso_2022_jpOffs, NULL, 0,"i",U_ILLEGAL_CHAR_FOUND ))
-            log_err("u-> iso-2022-jp with substitute did not match.\n");
-        
-
     }
 
     log_verbose("Testing fromUnicode for SCSU with UCNV_FROM_U_CALLBACK_SUBSTITUTE \n");
@@ -1843,22 +1806,6 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
              6, 7, 7, 8,
         };
         /*ISO-2022-JP*/
-        static const UChar iso_2022_jp_inputText[]={ 0x0041, 0x00E9, 0x0042,0x00E9,0x3000 };
-        static const uint8_t to_iso_2022_jp[]={  
-               0x41,   
-               0x25,  0x55,   0x30,   0x30,   0x45,   0x39,   
-               0x42,
-               0x25,  0x55,   0x30,   0x30,   0x45,   0x39,
-               0x1b,  0x24,   0x42,   0x21,   0x21, 
-        };
-
-        static const int32_t from_iso_2022_jpOffs [] ={ 
-            0,
-            1,1,1,1,1,1,
-            2,
-            3,3,3,3,3,3,
-            4,4,4,4,4
-        };
         static const UChar iso_2022_jp_inputText1[]={ 0x3000, 0x00E9, 0x3001,0x00E9, 0x0042} ;
         static const uint8_t to_iso_2022_jp1[]={  
             0x1b,   0x24,   0x42,   0x21, 0x21,   
@@ -1907,39 +1854,6 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
             0,
             1,1,1,1,1,1,
             2,
-        };
-        static const UChar iso_2022_cn_inputText1[]={ 0x4e00, 0x3712, 0x4e01, };
-        static const uint8_t to_iso_2022_cn1[]={  
-                        0x1b,   0x24,   0x29,   0x41,   0x0e,   0x52,   0x3b,   
-                        0x0f,   0x25,   0x55,   0x33,   0x37,   0x31,   0x32, 
-                        0x0e,   0x36,   0x21,
-        };
-        static const int32_t from_iso_2022_cnOffs1 [] ={ 
-                0, 0, 0, 0, 0, 0, 0, 
-                1, 1, 1, 1, 1, 1, 1, 
-                2, 2, 2,
-        };
-        static const UChar iso_2022_cn_inputText3[]={ 0x3000, 0x3712, 0x3001, };
-        static const uint8_t to_iso_2022_cn3[]={  
-               0x1b,   0x24,   0x29,   0x41,   0x0e,   0x21,   0x21,   
-              0x0f,   0x25,   0x55,   0x33,   0x37,   0x31,   0x32,   
-             0x0e,   0x21,   0x22, 
-        };
-        static const int32_t from_iso_2022_cnOffs3 [] ={ 
-            0,0,0,0,0,0,0,
-            1,1,1,1,1,1,1,
-            2,2,2
-        };
-        static const UChar iso_2022_cn_inputText2[]={ 0x0041, 0x3712, 0x4e00, };
-        static const uint8_t to_iso_2022_cn2[]={  
-            0x41,   
-            0x25,   0x55,   0x33,   0x37,   0x31,   0x32,   
-            0x1b,   0x24,   0x29,   0x41,   0x0e,   0x52,   0x3b,
-        };
-        static const int32_t from_iso_2022_cnOffs2 [] ={ 
-            0,
-            1,1,1,1,1,1,
-            2,2,2,2,2,2,2
         };
         
         static const UChar iso_2022_cn_inputText4[]={ 0x3000, 0xD84D, 0xDC56, 0x3001,0xD84D,0xDC56, 0x0042};
@@ -2095,11 +2009,6 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
                 UCNV_FROM_U_CALLBACK_ESCAPE, from_euc_twOffs, NULL, 0 ))
             log_err("u-> euc-tw with subst with value did not match.\n");  
         
-        if(!testConvertFromUnicode(iso_2022_jp_inputText, sizeof(iso_2022_jp_inputText)/sizeof(iso_2022_jp_inputText[0]),
-                to_iso_2022_jp, sizeof(to_iso_2022_jp), "iso-2022-jp",
-                UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_jpOffs, NULL, 0 ))
-            log_err("u-> iso_2022_jp with subst with value did not match.\n"); 
-     
         if(!testConvertFromUnicode(iso_2022_jp_inputText1, sizeof(iso_2022_jp_inputText1)/sizeof(iso_2022_jp_inputText1[0]),
                 to_iso_2022_jp1, sizeof(to_iso_2022_jp1), "iso-2022-jp",
                 UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_jpOffs1, NULL, 0 ))
@@ -2252,18 +2161,6 @@ static void TestSubWithValue(int32_t inputsize, int32_t outputsize)
                 UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs, NULL, 0 ))
             log_err("u-> iso_2022_cn with subst with value did not match.\n");
 
-        if(!testConvertFromUnicode(iso_2022_cn_inputText1, sizeof(iso_2022_cn_inputText1)/sizeof(iso_2022_cn_inputText1[0]),
-                to_iso_2022_cn1, sizeof(to_iso_2022_cn1), "iso-2022-cn",
-                UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs1, NULL, 0 ))
-            log_err("u-> iso_2022_cn with subst with value did not match.\n"); 
-        if(!testConvertFromUnicode(iso_2022_cn_inputText2, sizeof(iso_2022_cn_inputText2)/sizeof(iso_2022_cn_inputText2[0]),
-                to_iso_2022_cn2, sizeof(to_iso_2022_cn2), "iso-2022-cn",
-                UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs2, NULL, 0 ))
-            log_err("u-> iso_2022_cn with subst with value did not match.\n");
-        if(!testConvertFromUnicode(iso_2022_cn_inputText3, sizeof(iso_2022_cn_inputText3)/sizeof(iso_2022_cn_inputText3[0]),
-                to_iso_2022_cn3, sizeof(to_iso_2022_cn3), "iso-2022-cn",
-                UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs3, NULL, 0 ))
-            log_err("u-> iso_2022_cn with subst with value did not match.\n");
         if(!testConvertFromUnicode(iso_2022_cn_inputText4, sizeof(iso_2022_cn_inputText4)/sizeof(iso_2022_cn_inputText4[0]),
                 to_iso_2022_cn4, sizeof(to_iso_2022_cn4), "iso-2022-cn",
                 UCNV_FROM_U_CALLBACK_ESCAPE, from_iso_2022_cnOffs4, NULL, 0 ))

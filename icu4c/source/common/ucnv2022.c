@@ -74,6 +74,8 @@
  */
 #endif
 
+static const char SHIFT_IN_STR[]  = "\x0F";
+static const char SHIFT_OUT_STR[] = "\x0E";
 static const char UCNV_SS2[] = "\x1B\x4E";
 static const char UCNV_SS3[] = "\x1B\x4F";
 #define UCNV_SS2_LEN 2
@@ -1556,6 +1558,64 @@ getTrail:
 
     }/* end while(mySourceIndex<mySourceLength) */
 
+    /*
+     * the end of the input stream and detection of truncated input
+     * are handled by the framework, but for ISO-2022-JP conversion
+     * we need to be in ASCII mode at the very end
+     *
+     * conditions:
+     *   successful
+     *   in SO mode or not in ASCII mode
+     *   end of input and no truncated input
+     */
+    if( U_SUCCESS(*err) &&
+        (pFromU2022State->g!=0 || pFromU2022State->cs[0]!=ASCII) &&
+        args->flush && source>=sourceLimit && args->converter->fromUChar32==0
+    ) {
+        int32_t sourceIndex;
+
+        outLen = 0;
+
+        if(pFromU2022State->g != 0) {
+            buffer[outLen++] = UCNV_SI;
+            pFromU2022State->g = 0;
+        }
+
+        if(pFromU2022State->cs[0] != ASCII) {
+            int32_t escLen = escSeqCharsLen[ASCII];
+            uprv_memcpy(buffer + outLen, escSeqChars[ASCII], escLen);
+            outLen += escLen;
+            pFromU2022State->cs[0] = (int8_t)ASCII;
+        }
+
+        /* get the source index of the last input character */
+        /*
+         * TODO this would be simpler and more reliable if we used a pair
+         * of sourceIndex/prevSourceIndex like in ucnvmbcs.c
+         * so that we could simply use the prevSourceIndex here;
+         * this code gives an incorrect result for the rare case of an unmatched
+         * trail surrogate that is alone in the last buffer of the text stream
+         */
+        sourceIndex=(int32_t)(source-args->source);
+        if(sourceIndex>0) {
+            --sourceIndex;
+            if( U16_IS_TRAIL(args->source[sourceIndex]) &&
+                (sourceIndex==0 || U16_IS_LEAD(args->source[sourceIndex-1]))
+            ) {
+                --sourceIndex;
+            }
+        } else {
+            sourceIndex=-1;
+        }
+
+        ucnv_fromUWriteBytes(
+            args->converter,
+            buffer, outLen,
+            (char **)&target, (const char *)targetLimit,
+            &offsets, sourceIndex,
+            err);
+    }
+
     /*save the state and return */
     args->source = source;
     args->target = (char*)target;
@@ -1938,6 +1998,53 @@ getTrail:
 
     }/* end while(mySourceIndex<mySourceLength) */
 
+    /*
+     * the end of the input stream and detection of truncated input
+     * are handled by the framework, but for ISO-2022-KR conversion
+     * we need to be in ASCII mode at the very end
+     *
+     * conditions:
+     *   successful
+     *   not in ASCII mode
+     *   end of input and no truncated input
+     */
+    if( U_SUCCESS(*err) &&
+        isTargetByteDBCS &&
+        args->flush && source>=sourceLimit && args->converter->fromUChar32==0
+    ) {
+        int32_t sourceIndex;
+
+        /* we are switching to ASCII */
+        isTargetByteDBCS=FALSE;
+
+        /* get the source index of the last input character */
+        /*
+         * TODO this would be simpler and more reliable if we used a pair
+         * of sourceIndex/prevSourceIndex like in ucnvmbcs.c
+         * so that we could simply use the prevSourceIndex here;
+         * this code gives an incorrect result for the rare case of an unmatched
+         * trail surrogate that is alone in the last buffer of the text stream
+         */
+        sourceIndex=(int32_t)(source-args->source);
+        if(sourceIndex>0) {
+            --sourceIndex;
+            if( U16_IS_TRAIL(args->source[sourceIndex]) &&
+                (sourceIndex==0 || U16_IS_LEAD(args->source[sourceIndex-1]))
+            ) {
+                --sourceIndex;
+            }
+        } else {
+            sourceIndex=-1;
+        }
+
+        ucnv_fromUWriteBytes(
+            args->converter,
+            SHIFT_IN_STR, 1,
+            (char **)&target, (const char *)targetLimit,
+            &offsets, sourceIndex,
+            err);
+    }
+
     /*save the state and return */
     args->source = source;
     args->target = (char*)target;
@@ -2230,8 +2337,6 @@ getTrailByte:
 */
 
 /* The following are defined this way to make the strings truely readonly */
-static const char SHIFT_IN_STR[]  = "\x0F";
-static const char SHIFT_OUT_STR[] = "\x0E";
 static const char GB_2312_80_STR[] = "\x1B\x24\x29\x41";
 static const char ISO_IR_165_STR[] = "\x1B\x24\x29\x45";
 static const char CNS_11643_1992_Plane_1_STR[] = "\x1B\x24\x29\x47";
@@ -2508,6 +2613,53 @@ getTrail:
         }
 
     }/* end while(mySourceIndex<mySourceLength) */
+
+    /*
+     * the end of the input stream and detection of truncated input
+     * are handled by the framework, but for ISO-2022-CN conversion
+     * we need to be in ASCII mode at the very end
+     *
+     * conditions:
+     *   successful
+     *   not in ASCII mode
+     *   end of input and no truncated input
+     */
+    if( U_SUCCESS(*err) &&
+        pFromU2022State->g!=0 &&
+        args->flush && source>=sourceLimit && args->converter->fromUChar32==0
+    ) {
+        int32_t sourceIndex;
+
+        /* we are switching to ASCII */
+        pFromU2022State->g=0;
+
+        /* get the source index of the last input character */
+        /*
+         * TODO this would be simpler and more reliable if we used a pair
+         * of sourceIndex/prevSourceIndex like in ucnvmbcs.c
+         * so that we could simply use the prevSourceIndex here;
+         * this code gives an incorrect result for the rare case of an unmatched
+         * trail surrogate that is alone in the last buffer of the text stream
+         */
+        sourceIndex=(int32_t)(source-args->source);
+        if(sourceIndex>0) {
+            --sourceIndex;
+            if( U16_IS_TRAIL(args->source[sourceIndex]) &&
+                (sourceIndex==0 || U16_IS_LEAD(args->source[sourceIndex-1]))
+            ) {
+                --sourceIndex;
+            }
+        } else {
+            sourceIndex=-1;
+        }
+
+        ucnv_fromUWriteBytes(
+            args->converter,
+            SHIFT_IN_STR, 1,
+            (char **)&target, (const char *)targetLimit,
+            &offsets, sourceIndex,
+            err);
+    }
 
     /*save the state and return */
     args->source = source;
