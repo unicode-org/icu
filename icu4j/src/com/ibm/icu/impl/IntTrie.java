@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/IntTrie.java,v $
-* $Date: 2002/02/28 23:30:28 $
-* $Revision: 1.3 $
+* $Date: 2002/04/02 21:00:09 $
+* $Revision: 1.4 $
 *
 ******************************************************************************
 */
@@ -50,27 +50,6 @@ public class IntTrie extends Trie
     }
 
     // public methods --------------------------------------------------
-
-    // to be removed
-    public String toString()
-    {
-        StringBuffer result = new StringBuffer(super.toString());
-        result.append("\ndata length ");
-        int length = m_data_.length;
-        result.append(length);
-        result.append("\ndata-------------------\n");
-
-        for (int i = 0; i < length;) {
-            result.append("0x");
-            result.append(Integer.toHexString(m_data_[i]));
-            result.append(", ");
-            i ++;
-            if ((i % 15) == 0) {
-                result.append("\n");
-            }
-        }
-        return result.toString();
-    }
 
     /**
     * Gets the value associated with the codepoint.
@@ -157,9 +136,12 @@ public class IntTrie extends Trie
             throw new NullPointerException(
                              "The field DataManipulate in this Trie is null");
         }
-        return m_data_[getRawOffset(
-                               m_dataManipulate_.getFoldingOffset(leadvalue),
-                               (char)(trail & SURROGATE_MASK_))];
+        int offset = m_dataManipulate_.getFoldingOffset(leadvalue);
+        if (offset > 0) {
+	        return m_data_[getRawOffset(offset,
+ 	                                    (char)(trail & SURROGATE_MASK_))];
+        }
+        return m_initialValue_;
     }
 
     // protected methods -----------------------------------------------

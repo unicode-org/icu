@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Trie.java,v $
-* $Date: 2002/02/28 23:30:28 $
-* $Revision: 1.3 $
+* $Date: 2002/04/02 21:00:09 $
+* $Revision: 1.4 $
 *
 ******************************************************************************
 */
@@ -195,8 +195,6 @@ public abstract class Trie
     * will do. Otherwise if it is a supplementary character formed by
     * surrogates lead and trail. Then we would have to call getRawOffset()
     * with getFoldingIndexOffset(). See getSurrogateOffset().
-    * This is different from the C macro, because macros does not need to
-    * handle types.
     * @param offset index offset which ch is to start from
     * @param ch index to be used after offset
     * @return offset to the data

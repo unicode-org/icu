@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/CharTrie.java,v $
-* $Date: 2002/02/28 23:30:28 $
-* $Revision: 1.3 $
+* $Date: 2002/04/02 21:00:09 $
+* $Revision: 1.4 $
 *
 ******************************************************************************
 */
@@ -108,12 +108,17 @@ public class CharTrie extends Trie
     */
     public final char getSurrogateValue(char lead, char trail)
     {
-        return m_data_[getSurrogateOffset(lead, trail)];
+    	int offset = getSurrogateOffset(lead, trail);
+    	if (offset > 0) {
+            return m_data_[offset];
+        }
+        return m_initialValue_;
     }
 
     /**
-    * Get a value from a folding offset (from the value of a lead surrogate)
-    * and a trail surrogate.
+    * <p>Get a value from a folding offset (from the value of a lead surrogate)
+    * and a trail surrogate.</p>
+    * <p>If the 
     * @param leadvalue value associated with the lead surrogate which contains
     *        the folding offset
     * @param trail surrogate
@@ -126,9 +131,12 @@ public class CharTrie extends Trie
             throw new NullPointerException(
                              "The field DataManipulate in this Trie is null");
         }
-        return m_data_[getRawOffset(
-                          m_dataManipulate_.getFoldingOffset(leadvalue),
-                          (char)(trail & SURROGATE_MASK_))];
+        int offset = m_dataManipulate_.getFoldingOffset(leadvalue);
+        if (offset > 0) {
+	        return m_data_[getRawOffset(offset,
+ 		                                (char)(trail & SURROGATE_MASK_))];
+        }
+        return m_initialValue_;
     }
 
     // protected methods -----------------------------------------------
