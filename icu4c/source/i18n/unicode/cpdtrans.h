@@ -37,8 +37,8 @@ class TransliteratorRegistry;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.20 $ $Date: 2001/10/08 23:25:22 $
- * @draft
+ * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.21 $ $Date: 2001/11/14 00:15:20 $
+ * @stable
  */
 class U_I18N_API CompoundTransliterator : public Transliterator {
 
@@ -69,7 +69,7 @@ public:
      * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
-     * @draft
+     * @stable
      */
     CompoundTransliterator(Transliterator* const transliterators[],
                            int32_t transliteratorCount,
@@ -78,10 +78,10 @@ public:
     /**
      * Constructs a new compound transliterator.
      * @param filter the filter.  Any character for which
-     * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
      * altered by this transliterator.  If <tt>filter</tt> is
      * <tt>null</tt> then no filtering is applied.
-     * @draft
+     * @stable
      */
     CompoundTransliterator(const UnicodeString& id,
                            UTransDirection dir,
@@ -92,7 +92,7 @@ public:
     /**
      * Constructs a new compound transliterator in the FORWARD
      * direction with a NULL filter.
-     * @draft
+     * @stable
      */
     CompoundTransliterator(const UnicodeString& id,
                            UParseError& parseError,
@@ -100,32 +100,32 @@ public:
 
     /**
      * Destructor.
-     * @draft
+     * @stable
      */
     virtual ~CompoundTransliterator();
 
     /**
      * Copy constructor.
-     * @draft
+     * @stable
      */
     CompoundTransliterator(const CompoundTransliterator&);
 
     /**
      * Assignment operator.
-     * @draft
+     * @stable
      */
     CompoundTransliterator& operator=(const CompoundTransliterator&);
 
     /**
      * Transliterator API.
-     * @draft
+     * @stable
      */
     Transliterator* clone(void) const;
 
     /**
      * Returns the number of transliterators in this chain.
      * @return number of transliterators in this chain.
-     * @draft
+     * @stable
      */
     virtual int32_t getCount(void) const;
 
@@ -133,18 +133,18 @@ public:
      * Returns the transliterator at the given index in this chain.
      * @param index index into chain, from 0 to <code>getCount() - 1</code>
      * @return transliterator at the given index
-     * @draft
+     * @stable
      */
     virtual const Transliterator& getTransliterator(int32_t index) const;
 
     /**
-     * @draft
+     * @stable
      */
     void setTransliterators(Transliterator* const transliterators[],
                             int32_t count);
 
     /**
-     * @draft
+     * @stable
      */
     void adoptTransliterators(Transliterator* adoptedTransliterators[],
                               int32_t count);
@@ -165,7 +165,7 @@ public:
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
-     * @draft
+     * @stable
      */
     virtual void handleTransliterate(Replaceable& text, UTransPosition& index,
                                      UBool incremental) const;
