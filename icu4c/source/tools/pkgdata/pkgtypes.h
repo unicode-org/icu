@@ -136,6 +136,11 @@ typedef struct UPKGOptions_
 # define OBJ_SUFFIX ".obj"
 # define UDATA_LIB_SUFFIX ".LIB"
 
+#elif defined(U_CYGWIN)
+# define LIB_PREFIX "cyg"
+# define OBJ_SUFFIX ".o"
+# define UDATA_LIB_SUFFIX ".a"
+
 #else  /* POSIX? */
 # define LIB_PREFIX "lib"
 # define OBJ_SUFFIX ".o"
