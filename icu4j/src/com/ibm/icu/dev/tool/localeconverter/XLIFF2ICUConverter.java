@@ -6,7 +6,7 @@
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter.java,v $ 
 * $Date: 2003/05/19 
-* $Revision: 1.7 $
+* $Revision: 1.8 $
 *
 ******************************************************************************
 */
@@ -29,9 +29,6 @@ import java.io.*;
 import java.util.*;
 
 public final class XLIFF2ICUConverter {
-    
-
-
     
     /**
      * These must be kept in sync with getOptions().
@@ -65,6 +62,7 @@ public final class XLIFF2ICUConverter {
     private static final String TS              = "ts";
     private static final String ORIGINAL        = "original";
     private static final String SOURCELANGUAGE  = "source-language";
+    private static final String TARGETLANGUAGE  = "target-language";
     private static final String TARGET          = "target";
     private static final String SOURCE          = "source";
     private static final String NOTE            = "note";
@@ -93,12 +91,11 @@ public final class XLIFF2ICUConverter {
     private static final String QUOTE           = "\"";
     private static final String COMMENTSTART    = "/**";
     private static final String COMMENTEND      = " */";
-    private static final String TAG             = " * @ ";
+    private static final String TAG             = " * @";
     private static final String COMMENTMIDDLE   = " * ";
     private static final String SPACE           = " ";
     private static final String INDENT          = "    ";
     private static final String EMPTY           = "";
-    private static final String SOURCE_LANGUAGE = "source-language";
     private static final String ID              = "id";
     
     public static void main(String[] args) {
@@ -198,12 +195,7 @@ public final class XLIFF2ICUConverter {
             }
         }
         return str;
-    }
-    
-    private static String crc = "";
-    private static int transID = -1;
-    private static boolean isIntvector = false;
-    
+    }   
 
     /**
      * Utility method to translate a String filename to URL.  
@@ -270,7 +262,45 @@ public final class XLIFF2ICUConverter {
             return "file:///" + tmp;
 
     }
+    private boolean isXmlLang (String lang){
 
+        int suffix;
+        char c;
+        
+        if (lang.length () < 2){
+            return false;
+        }
+
+        c = lang.charAt(1);
+        if (c == '-') {        
+            c = lang.charAt(0);
+            if (!(c == 'i' || c == 'I' || c == 'x' || c == 'X')){
+                return false;
+            }
+            suffix = 1;
+        } else if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+            c = lang.charAt(0);
+            if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))){
+                return false;
+            }
+            suffix = 2;
+        } else{
+            return false;
+        }
+        while (suffix < lang.length ()) {
+            c = lang.charAt(suffix);
+            if (c != '-'){
+                break;
+            }
+            while (++suffix < lang.length ()) {
+                c = lang.charAt(suffix);
+                if (!((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))){
+                    break;
+                }
+            }
+        }
+        return  ((lang.length() == suffix) && (c != '-'));
+    }
     
     private void createRB(String xmlfileName) {
        
@@ -304,25 +334,47 @@ public final class XLIFF2ICUConverter {
             if(nlist.getLength()>1){
                 throw new RuntimeException("Multiple <file> elements in the XLIFF file not supported.");
             }
+            // get the value of source-language attribute
+            String sourceLang = getLanguageName(doc, SOURCELANGUAGE);
+            // get the value of target-language attribute
+            String targetLang = getLanguageName(doc, TARGETLANGUAGE);
+            
+            // get the list of <source> elements
             NodeList sourceList = doc.getElementsByTagName(SOURCE);
+            // get the list of target elements
             NodeList targetList = doc.getElementsByTagName(TARGET);
+            
+            // check if the xliff file has source elements in multiple languages
+            // the source-language value should be the same as xml:lang values
+            // of all the source elements.
+            checkLangAttribute(sourceList, sourceLang);
+            
+            // check if the xliff file has target elements in multiple languages
+            // the target-language value should be the same as xml:lang values
+            // of all the target elements.
+            checkLangAttribute(targetList, targetLang);
+            
             Resource[] set = new Resource[2];
             set[0] = new ResourceTable();
             set[1] = new ResourceTable();
-            set[0].name = getSourceBundleName(doc);
+            set[0].name = sourceLang.replace('-','_');
+            set[1].name = targetLang.replace('-','_');
             
-            // check if the xliff file is translated into multiple languages
-            checkLangAttribute(sourceList);
-            set[1].name = checkLangAttribute(targetList);
             
             // check if any <alt-trans> elements are present
             NodeList altTrans = doc.getElementsByTagName(ALTTRANS);
             if(altTrans.getLength()>0){
                 throw new RuntimeException("<alt-trans> elements in XLIFF format are not supported.");
             }
-
+            
+            // get all the group elements
             NodeList list = doc.getElementsByTagName(GROUPS);
+            
+            // process the first group element. The first group element is 
+            // the base table that must be parsed recursively
             parseTable(list.item(0), set);
+            
+            // write out the bundle
             writeResource(set, xmlfileName);
          }
         catch (Throwable se) {
@@ -369,26 +421,33 @@ public final class XLIFF2ICUConverter {
             return;
         }
     }
-    private String getSourceBundleName(Document doc){
+    
+    private String getLanguageName(Document doc, String lang){
         if(doc!=null){
             NodeList list = doc.getElementsByTagName(FILE);
             Node node = list.item(0);
             NamedNodeMap attr = node.getAttributes();
-            Node orig = attr.getNamedItem(SOURCE_LANGUAGE);
+            Node orig = attr.getNamedItem(lang);
             String name = orig.getNodeValue();
             
             NodeList groupList = doc.getElementsByTagName(GROUPS);
             Node group = groupList.item(0);
             NamedNodeMap groupAtt = group.getAttributes();
             Node id = groupAtt.getNamedItem(ID);
-            String idVal = id.getNodeValue();
-            
-            if(!name.equals(idVal)){
-                System.out.println("WARNING: The id value != language name. " +
-                                   "Please compare the output with the orignal " +
-                                   "ICU ResourceBundle before proceeding.");
+            if(id!=null){
+                String idVal = id.getNodeValue();
+                
+                if(!name.equals(idVal)){
+                    System.out.println("WARNING: The id value != language name. " +
+                                       "Please compare the output with the orignal " +
+                                       "ICU ResourceBundle before proceeding.");
+                }
             }
-            
+            if(!isXmlLang(name)){
+                System.err.println("The attribute "+ lang + "=\""+ name +
+                                   "\" of <file> element does not satisfy RFC 1766 conditions.");
+                System.exit(-1);
+            }
             return name;
         }
         return null;
@@ -399,20 +458,25 @@ public final class XLIFF2ICUConverter {
     // as the child of <trans-unit> but the attributes of the 
     // <target> element may different across <trans-unit> elements
     // check for it. Similar is the case with <source> elements
-    private String checkLangAttribute(NodeList list){
-        String oldLangName=null;
+    private String checkLangAttribute(NodeList list, String origName){
+        String oldLangName=origName;
         for(int i = 0 ;i<list.getLength(); i++){
             Node node = list.item(i);
             NamedNodeMap attr = node.getAttributes();
             Node lang = attr.getNamedItem(XMLLANG);
-            // the source file sometimes may not contain xml:lang attribute
-            if(lang==null && node.getNodeName().equals(SOURCE)){
-                continue;
+            String langName = null;
+            // the target element should always contain xml:lang attribute
+            if(lang==null ){
+                if(origName==null){
+                    System.err.println("Encountered <target> element without xml:lang attribute. Please fix the below element in the XLIFF file.\n"+ node.toString());
+                    System.exit(-1);
+                }else{
+                    langName = origName;
+                }
+            }else{
+                langName = lang.getNodeValue();
             }
-            String langName = lang.getNodeValue();
-            if(i==0){
-                oldLangName = langName;
-            }
+
             if(oldLangName!=null && langName!=null && !langName.equals(oldLangName)){
                 throw new RuntimeException("The <trans-unit> elements must be bilingual, multilingual tranlations not supported. xml:lang = " + oldLangName + 
                                            " and xml:lang = " + langName);
@@ -1038,6 +1102,7 @@ public final class XLIFF2ICUConverter {
         writeLine(writer, buffer.toString());
 
     }
+    
     private  void writeBOM(OutputStream buffer) {
         try {
             byte[] bytes = BOM.getBytes(CHARSET);
