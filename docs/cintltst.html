@@ -1,0 +1,225 @@
+</<!DOCTYPE>
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 9">
+<meta name=Originator content="Microsoft Word 9">
+<link rel=File-List href="./cintltst_files/filelist.xml">
+<link rel=Edit-Time-Data href="./cintltst_files/editdata.mso">
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+w\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+</style>
+<![endif]-->
+<title>CintlTst Test Suite Doumentation</title>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>Helena Shih</o:Author>
+  <o:Template>Normal</o:Template>
+  <o:LastAuthor>Helena Shih</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>1</o:TotalTime>
+  <o:Created>2000-01-15T02:18:00Z</o:Created>
+  <o:LastSaved>2000-01-15T02:19:00Z</o:LastSaved>
+  <o:Pages>3</o:Pages>
+  <o:Words>832</o:Words>
+  <o:Characters>4747</o:Characters>
+  <o:Company>IBM</o:Company>
+  <o:Lines>39</o:Lines>
+  <o:Paragraphs>9</o:Paragraphs>
+  <o:CharactersWithSpaces>5829</o:CharactersWithSpaces>
+  <o:Version>9.2720</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]-->
+<style>
+<!--
+ /* Style Definitions */
+p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0in;
+	margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+p
+	{font-size:12.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";}
+pre
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:10.0pt;
+	font-family:"Courier New";
+	mso-fareast-font-family:"Courier New";}
+@page Section1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.25in 1.0in 1.25in;
+	mso-header-margin:.5in;
+	mso-footer-margin:.5in;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;}
+-->
+</style>
+<!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="1027"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]-->
+</head>
+
+<body bgcolor=white lang=EN-US link=blue vlink=blue style='tab-interval:.5in'>
+
+<div class=Section1>
+
+<h1>Cintltst Test Suite Documentation</h1>
+
+
+<div class=MsoNormal align=center style='text-align:center'>
+
+<hr size=2 width="100%" align=center>
+
+</div>
+
+
+<p><span style="mso-spacerun: yes">&nbsp;</span>Copyright (C) 1998-2000, International
+Business Machines Corporation and others.<span style="mso-spacerun: yes">&nbsp;
+</span>All Rights Reserved.</p>
+
+
+<div class=MsoNormal align=center style='text-align:center'>
+
+<hr size=2 width="100%" align=center>
+
+</div>
+
+
+<p>The cintltst Test Suite contains all the tests for International
+Components for Unicode C API. These tests may be automatically run by typing
+&quot;cintltst&quot; or &quot;cintltst -all&quot; at the command line. It
+depends on the C Test Framework. <br>
+&quot;cintltst&quot;<br>
+or<br>
+&quot;cintltst -all&quot;</p>
+
+<h3>C Test FrameWork</h3>
+
+<h4>Purpose:</h4>
+
+<p>To enable the writing of tests entirely in C. The Framework has been
+designed to make creating tests or converting old ones as simple as possible,
+with a minimum of framework overhead. A sample test file, <a href="#demo.c">&quot;demo.c&quot;</a>
+is included at the end of this document. For more information regarding C test
+framework, please see the directory \intlwork\source\tools\ctestfw.</p>
+
+<h4>Writing Test Functions</h4>
+
+<p>The format of the test functions is like the following,</p>
+
+<pre>void some_test()</pre><pre>{</pre><pre>}</pre>
+
+<p>Output from the test is accomplished with three printf-like functions:</p>
+
+<pre>void log_err ( const char *fmt, ... );</pre><pre>void log_info ( const char *fmt, ... );</pre><pre>void log_verbose ( const char *fmt, ... );</pre>
+
+<p><strong>log_info() </strong>simply writes to the console, for informational
+messages.<br>
+<strong>log_verbose()</strong> writes to the console ONLY if the VEBOSE flag is
+turned on (or the -v option to the command line). It's useful for debugging. By
+default, VERBOSE flag is turned OFF.<br>
+<strong>log_error()</strong> is what should be called when a test failure is
+detected. The error will be then logged and error count will be incremented by
+one.</p>
+
+<h4>Building a tree of tests</h4>
+
+<p>To use the tests you must link them into a hierarchical structure. The root
+of the structure will be allocated for you.</p>
+
+<pre>TestNode *root = NULL; /* empty */</pre><pre>addTest( &amp;root, &amp;some_test, &quot;/test&quot;);</pre>
+
+<p>The function pointer and an absolute 'path' to the test are supplied. Paths
+may be up to 127 chars in length and may be used to group tests.<br>
+<br>
+The calls to addTest should be placed in a function or a hierarchy of functions
+(perhaps mirroring the paths), please see the following demo.c example for more
+details.</p>
+
+<h4>Running the tests</h4>
+
+<p>A subtree may be extracted from another tree of tests for programmatic
+running of subtests</p>
+
+<pre>TestNode* sub;</pre><pre>sub = getTest(root, &quot;/mytests&quot;);</pre>
+
+<p>And a tree of tests may be run simply by:</p>
+
+<pre>runTests( root ); /* or 'sub' */</pre>
+
+<p>Similarly, showTests() will list out the tests.<br>
+<br>
+However, it is easier to simply run at the command prompt with the Usage
+specified below.</p>
+
+<h4>Globals</h4>
+
+<p>The command line parser will manage resetting the error count, and printing
+a summary of the failed tests. But if you call runTest directly, for instance,
+you will need to manage these yourself.<br>
+<strong>ERROR_COUNT</strong> contains the number of times log_err was called.
+runTests resets it to zero before running the tests.<br>
+<strong>VERBOSITY</strong> should be 1 to allow log_verbose() data to be
+displayed otherwise 0 (default).</p>
+
+<h3>Building</h3>
+
+<p>To compile this test suite using MSVC, follow the instructions in <a
+href="../readme.html#HowToInstall">icu/source/readme.html#HowToInstall</a> for
+building the &quot;allC&quot; workspace. This builds the libraries as well as
+the cintltst executable.</p>
+
+<h3>Executing</h3>
+
+<p>To run the test suite from the command line, change directories to
+&quot;icu/source/test/cintltst/Debug&quot; for the debug build, (or
+&quot;icu/source/test/cintltst/Release&quot; for the releawse build) then type:<br>
+&quot;cintltst&quot;.</p>
+
+<h3>Usage</h3>
+
+<pre>Type &quot;cintltest -h&quot; to see the usage:</pre><pre><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></pre><pre>### Syntax:</pre><pre>### Usage: [ -l ] [ -v ] [ -verbose] [-a] [ -all] [-n] \n [ -no_err_msg] [ -h ] [ /path/to/test ]</pre><pre>### -l To get a list of test names</pre><pre>### -all To run all the test</pre><pre>### -a To run all the test(same a -all)</pre><pre>### -verbose To turn ON verbosity</pre><pre>### -v To turn ON verbosity(same as -verbose)</pre><pre>### -h To print this message</pre><pre>### -n To turn OFF printing error messages</pre><pre>### -no_err_msg (same as -n)</pre><pre>### -[/subtest] To run a subtest</pre><pre>### For example to run just the utility tests type: cintltest /tsutil)</pre><pre>### To run just the locale test type: cintltst /tsutil/loctst</pre><pre>###<span style="mso-spacerun: yes">&nbsp; </span></pre>
+
+<p><a name=demo.c></a><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></p>
+
+<h5><span style='font-size:12.0pt'>/******************** sample ctestfw test
+********************<br>
+********* Simply link this with libctestfw or ctestfw.dll ****<br>
+************************* demo.c *****************************/</span></h5>
+
+<pre><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></pre><pre>#include &quot;stdlib.h&quot;</pre><pre>#include &quot;ctest.h&quot;</pre><pre>#include &quot;stdio.h&quot;</pre><pre>#include &quot;string.h&quot;</pre><pre><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></pre><pre>/**</pre><pre>* Some sample dummy tests.</pre><pre>* the statics simply show how often the test is called.</pre><pre>*/</pre><pre>void mytest()</pre><pre>{</pre><pre><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>static i = 0;</pre><pre><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>log_info(&quot;I am a test[%d]\n&quot;, i++);</pre><pre>}</pre><pre><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></pre><pre>void mytest_err()</pre><pre>{</pre><pre><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>static i = 0;</pre><pre><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>log_err(&quot;I am a test containing an error[%d]\n&quot;, i++);</pre><pre><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>log_err(&quot;I am a test containing an error[%d]\n&quot;, i++);</pre><pre>}</pre><pre><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></pre><pre>void mytest_verbose()</pre><pre>{</pre><pre><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>/* will only show if verbose is on (-v) */</pre><pre><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>log_verbose(&quot;I am a verbose test, blabbing about nothing at all.\n&quot;);</pre><pre>}</pre><pre><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></pre><pre>/**</pre><pre>* Add your tests from this function</pre><pre>*/</pre><pre><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></pre><pre>void add_tests( TestNode** root )</pre><pre>{</pre><pre><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>addTest(root, &amp;mytest, &quot;/apple/bravo&quot; );</pre><pre><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>addTest(root, &amp;mytest, &quot;/a/b/c/d/mytest&quot;);</pre><pre><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>addTest(root, &amp;mytest_err, &quot;/d/e/f/h/junk&quot;);</pre><pre><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>addTest(root, &amp;mytest, &quot;/a/b/c/d/another&quot;);</pre><pre><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>addTest(root, &amp;mytest, &quot;/a/b/c/etest&quot;);</pre><pre><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>addTest(root, &amp;mytest_err, &quot;/a/b/c&quot;);</pre><pre><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>addTest(root, &amp;mytest, &quot;/bertrand/andre/damiba&quot;);</pre><pre><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>addTest(root, &amp;mytest_err, &quot;/bertrand/andre/OJSimpson&quot;);</pre><pre><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>addTest(root, &amp;mytest, &quot;/bertrand/andre/juice/oj&quot;);</pre><pre><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>addTest(root, &amp;mytest, &quot;/bertrand/andre/juice/prune&quot;);</pre><pre><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>addTest(root, &amp;mytest_verbose, &quot;/verbose&quot;);</pre><pre><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></pre><pre>}</pre><pre><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></pre><pre>int main(int argc, const char *argv[])</pre><pre>{</pre><pre><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>TestNode *root = NULL;</pre><pre><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></pre><pre><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>add_tests(&amp;root); /* address of root ptr- will be filled in */</pre><pre><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></pre><pre><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>/* Run the tests. An int is returned suitable for the OS status code.</pre><pre><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>(0 for success, neg for parameter errors, positive for the # of</pre><pre><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>failed tests) */</pre><pre><span style="mso-spacerun: yes">&nbsp;&nbsp;&nbsp; </span>return processArgs( root, argc, argv );</pre><pre>}</pre><pre><![if !supportEmptyParas]>&nbsp;<![endif]><o:p></o:p></pre>
+
+<p><a href="../readme.html">ReadMe for </a><a href="../readme.html#API">
+International Components for Unicode C API</a></p>
+
+
+<div class=MsoNormal align=center style='text-align:center'>
+
+<hr size=2 width="100%" align=center>
+
+</div>
+
+</div>
+
+</body>
+
+</html>
