@@ -487,7 +487,8 @@ DecimalFormat::format(int32_t number,
     // check for this before multiplying, and if it happens we use doubles
     // instead, trading off accuracy for range.
     if (fRoundingIncrement != NULL
-        || (fMultiplier != 0 && (number > (INT32_MAX / fMultiplier))))
+        || (fMultiplier != 0 && (number > (INT32_MAX / fMultiplier)
+                              || number < (INT32_MIN / fMultiplier))))
     {
         digits.set(((double)number) * fMultiplier,
                    fUseExponentialNotation ?
