@@ -100,6 +100,7 @@ typedef struct UPKGOptions_
   CharList   *outFiles;      /* output files [full paths] */
 
   const char *shortName;   /* name of what we're building */
+  const char *cShortName;   /* name of what we're building as a C identifier */
   const char *entryName;   /* special entrypoint name */
   const char *targetDir;
   const char *tmpDir;

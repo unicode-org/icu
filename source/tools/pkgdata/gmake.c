@@ -33,6 +33,7 @@ pkg_mak_writeHeader(FileStream *f, const UPKGOptions *o)
   T_FileStream_writeLine(f, linebuf);
 
   sprintf(linebuf, "NAME=%s\n"
+          "CNAME=%s\n"
           "TARGETDIR=%s\n"
           "TEMP_DIR=%s\n"
           "MODE=%s\n"
@@ -41,6 +42,7 @@ pkg_mak_writeHeader(FileStream *f, const UPKGOptions *o)
           "include %s\n"
           "\n\n\n",
           o->shortName,
+          o->cShortName,
           o->targetDir,
           o->tmpDir,
           o->mode,
