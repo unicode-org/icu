@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2001/10/23 20:56:32 $ 
-* $Revision: 1.38 $
+* $Date: 2001/10/31 01:48:58 $ 
+* $Revision: 1.39 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -105,12 +105,14 @@
   
   <target name="jar" depends="core">
     <jar jarfile="${jar.file}"
+         compress="false"
          includes="com/ibm/util/**/*,com/ibm/text/**/*,com/ibm/math/**/*,com/ibm/richtext/**/*"
          basedir="${build.dir}"/>
   </target>
 
   <target name="richeditJar" depends="core">
     <jar jarfile="${richedit.jar.file}"
+         compress="false"
          includes="com/ibm/richtext/**/*,com/ibm/textlayout/**/*"
          basedir="${build.dir}"
          manifest="${richedit.manifest}"/>
