@@ -1713,6 +1713,10 @@ _MBCSToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
         } else /* unassigned sequences indicated with byteIndex>0 */ {
             /* try an extension mapping */
             pArgs->source=(const char *)source;
+
+            /* save the state for proper extension mapping with SI/SO-stateful converters */
+            cnv->mode=state;
+
             byteIndex=_extToU(cnv, cnv->sharedData,
                               byteIndex, (const char **)&source, (const char *)sourceLimit,
                               &target, targetLimit,
@@ -3347,7 +3351,7 @@ unassigned:
  * conversion implementations.
  * It does not use the converter state nor call callbacks.
  * It does not handle the EBCDIC swaplfnl option (set in UConverter).
- * It does not handle conversion extensions (_extToU()).
+ * It does not handle conversion extensions (_extFromU()).
  *
  * It converts one single Unicode code point into codepage bytes, encoded
  * as one 32-bit value. The function returns the number of bytes in *pValue:
@@ -3489,7 +3493,7 @@ _MBCSFromUChar32(UConverterSharedData *sharedData,
 /**
  * This version of _MBCSFromUChar32() is optimized for single-byte codepages.
  * It does not handle the EBCDIC swaplfnl option (set in UConverter).
- * It does not handle conversion extensions (_extToU()).
+ * It does not handle conversion extensions (_extFromU()).
  *
  * It returns the codepage byte for the code point, or -1 if it is unassigned.
  */
