@@ -78,9 +78,12 @@ public:
 
     /**
      * The character that represents segment 1.  Characters segmentBase
-     * through segmentBase + 8 represent segments 1 through 9.
+     * through segmentBase - segmentCount + 1 represent segments 1
+     * through segmentCount.  Segments work down while variables work up.
      */
     UChar segmentBase;
+
+    int32_t segmentCount;
 
 public:
 
@@ -99,16 +102,16 @@ public:
     /**
      * Return the zero-based index of the segment represented by the given
      * character, or -1 if none.  Repeat: This is a zero-based return value,
-     * 0..8, even though these are notated "$1".."$9".
+     * 0..n-1, even though these are notated "$1".."$n", where n is segmentCount.
      */
     int32_t lookupSegmentReference(UChar32 c) const;
 
     /**
      * Return the character used to stand for the given segment reference.
-     * The reference must be in the range 1..9.
+     * The reference must be in the range 1..segmentCount.
      */
     UChar getSegmentStandin(int32_t ref) const {
-        return (UChar)(segmentBase + ref - 1);
+        return (UChar)(segmentBase - ref + 1);
     }
 };
 
