@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2002/06/26 18:10:04 $
- * $Revision: 1.108 $
+ * $Date: 2002/07/11 23:45:26 $
+ * $Revision: 1.109 $
  *
  *****************************************************************************************
  */
@@ -823,8 +823,8 @@ public class TransliteratorTest extends TestFmwk {
             Transliterator.getInstance("Name-Any");
 
         expect(uni2name, "\u00A0abc\u4E01\u00B5\u0A81\uFFFD\u0004\u0009\u0081\uFFFF",
-               "{NO-BREAK SPACE}abc{CJK UNIFIED IDEOGRAPH-4E01}{MICRO SIGN}{GUJARATI SIGN CANDRABINDU}{REPLACEMENT CHARACTER}{END OF TRANSMISSION}{HORIZONTAL TABULATION}{<control-0081>}{<noncharacter-FFFF>}");
-        expect(name2uni, "{ NO-BREAK SPACE}abc{  CJK UNIFIED  IDEOGRAPH-4E01  }{x{MICRO SIGN}{GUJARATI SIGN CANDRABINDU}{REPLACEMENT CHARACTER}{END OF TRANSMISSION}{HORIZONTAL TABULATION}{<control-0081>}{<noncharacter-FFFF>}{<control-0004>}{",
+               "{NO-BREAK SPACE}abc{CJK UNIFIED IDEOGRAPH-4E01}{MICRO SIGN}{GUJARATI SIGN CANDRABINDU}{REPLACEMENT CHARACTER}{END OF TRANSMISSION}{CHARACTER TABULATION}{<control-0081>}{<noncharacter-FFFF>}");
+        expect(name2uni, "{ NO-BREAK SPACE}abc{  CJK UNIFIED  IDEOGRAPH-4E01  }{x{MICRO SIGN}{GUJARATI SIGN CANDRABINDU}{REPLACEMENT CHARACTER}{END OF TRANSMISSION}{CHARACTER TABULATION}{<control-0081>}{<noncharacter-FFFF>}{<control-0004>}{",
                "\u00A0abc\u4E01{x\u00B5\u0A81\uFFFD\u0004\u0009\u0081\uFFFF\u0004{");
     }
 
@@ -2268,7 +2268,7 @@ public class TransliteratorTest extends TestFmwk {
 
         // ff, i, dotless-i, I, dotted-I, LJLjlj deseret deeDEE
         {"Title", "ab'cD ffi\u0131I\u0130 \u01C7\u01C8\u01C9 " + DESERET_dee + DESERET_DEE,
-                  "Ab'cd Ffi\u0131ii \u01C8\u01C9\u01C9 " + DESERET_DEE + DESERET_dee},
+                  "Ab'cd Ffi\u0131ii\u0307 \u01C8\u01C9\u01C9 " + DESERET_DEE + DESERET_dee},
         //TODO: enable this test once Titlecase works right
         //{"Title", "\uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 " + DESERET_dee + DESERET_DEE,
         //          "Ffi\u0131ii \u01C8\u01C9\u01C9 " + DESERET_DEE + DESERET_dee},
@@ -2276,7 +2276,7 @@ public class TransliteratorTest extends TestFmwk {
         {"Upper", "ab'cD \uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 " + DESERET_dee + DESERET_DEE,
                   "AB'CD FFIII\u0130 \u01C7\u01C7\u01C7 " + DESERET_DEE + DESERET_DEE},
         {"Lower", "ab'cD \uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 " + DESERET_dee + DESERET_DEE,
-                  "ab'cd \uFB00i\u0131ii \u01C9\u01C9\u01C9 " + DESERET_dee + DESERET_dee},
+                  "ab'cd \uFB00i\u0131ii\u0307 \u01C9\u01C9\u01C9 " + DESERET_dee + DESERET_dee},
                   
         {"Upper", "ab'cD \uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 " + DESERET_dee + DESERET_DEE},
         {"Lower", "ab'cD \uFB00i\u0131I\u0130 \u01C7\u01C8\u01C9 " + DESERET_dee + DESERET_DEE},
