@@ -36,10 +36,6 @@
 #define INPUT_FILE "tz.txt"
 #define OUTPUT_FILE "tz.dat"
 
-#define DATA_COPYRIGHT \
-    "Copyright (C) 1999, International Business Machines " \
-    "Corporation and others.  All Rights Reserved."
-
 /* UDataInfo cf. udata.h */
 static const UDataInfo dataInfo = {
     sizeof(UDataInfo),
@@ -228,7 +224,7 @@ int32_t gentz::writeTzDatFile() {
     *(uint16_t*)&(dataInfo.dataVersion[2]) = header.versionSuffix;
 
     pdata = udata_create(TZ_DATA_TYPE, TZ_DATA_NAME, &dataInfo,
-                         useCopyright ? DATA_COPYRIGHT : 0, &status);
+                         useCopyright ? U_COPYRIGHT_STRING : 0, &status);
     if (U_FAILURE(status)) {
         die("Unable to create data memory");
     }
