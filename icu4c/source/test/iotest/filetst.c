@@ -886,6 +886,7 @@ static void TestFprintfFormat(void) {
     TestFPrintFormat("%8C", (UChar)0x65, "%8c", (char)0x65);
     TestFPrintFormat("%-8C", (UChar)0x65, "%-8c", (char)0x65);
 
+    TestFPrintFormat("%f", 1.23456789, "%f", 1.23456789);
     TestFPrintFormat("%10f", 1.23456789, "%10f", 1.23456789);
     TestFPrintFormat("%-10f", 1.23456789, "%-10f", 1.23456789);
     TestFPrintFormat("%10f", 123.456789, "%10f", 123.456789);
