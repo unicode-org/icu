@@ -2408,8 +2408,12 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
             //source->writableBuffer[1] = *(source->pos - 1);
             source->writableBuffer[2] = 0;
 
-            source->fcdPosition       = source->pos+1;   // Indicate where to continue in main input string
-                                                         //   after exhausting the writableBuffer
+            if(source->pos) {
+              source->fcdPosition       = source->pos+1;   // Indicate where to continue in main input string
+                                                           //   after exhausting the writableBuffer
+            } else if(source->iterator) {
+              source->iterator->next(source->iterator);
+            }
         source->pos   = source->writableBuffer;
             source->origFlags         = source->flags;
             source->flags            |= UCOL_ITER_INNORMBUF;
@@ -5282,10 +5286,17 @@ ucol_nextSortKeyPart(UCollator *coll,
                   }
                 }
               }
-              if(s.CEpos - s.toReturn) {
+              if(s.CEpos - s.toReturn || (s.pos && *s.pos != 0)) { 
+                // s.pos != NULL means there is a normalization buffer in effect
+                // in iterative case, this means that we are doing Thai (maybe discontiguos)
                 consumedExpansionCEs++;
               } else {
                 consumedExpansionCEs = 0;
+              }
+              if(s.pos && *s.pos == 0) { 
+                // maybe it is the end of Thai - we have to have
+                // an extra skip
+                iterSkips++;
               }
           }
           /* fall through to next level */
@@ -5329,10 +5340,13 @@ ucol_nextSortKeyPart(UCollator *coll,
                     dest[i++]=(uint8_t)CE;
                   }
                 }
-                if(s.CEpos - s.toReturn) {
+                if(s.CEpos - s.toReturn || (s.pos && *s.pos != 0)) {
                   consumedExpansionCEs++;
                 } else {
                   consumedExpansionCEs = 0;
+                }
+                if(s.pos && *s.pos == 0) { 
+                  iterSkips++;
                 }
               }
             } else { // French secondary processing
@@ -5395,10 +5409,13 @@ ucol_nextSortKeyPart(UCollator *coll,
                     }
                   }
                 }
-                if(s.CEpos - s.toReturn) {
+                if(s.CEpos - s.toReturn || (s.pos && *s.pos != 0)) {
                   consumedExpansionCEs++;
                 } else {
                   consumedExpansionCEs = 0;
+                }
+                if(s.pos && *s.pos == 0) {
+                  iterSkips++;
                 }
               }
             }
@@ -5495,10 +5512,13 @@ ucol_nextSortKeyPart(UCollator *coll,
                 }
               }
               // Not sure this is correct for the case level - revisit
-              if(s.CEpos - s.toReturn) {
+              if(s.CEpos - s.toReturn || (s.pos && *s.pos != 0)) {
                 consumedExpansionCEs++;
               } else {
                 consumedExpansionCEs = 0;
+              }
+              if(s.pos && *s.pos == 0) {
+                iterSkips++;
               }
             }
           } else {
@@ -5553,10 +5573,13 @@ ucol_nextSortKeyPart(UCollator *coll,
                   dest[i++]=(uint8_t)CE;
                 }
               }
-              if(s.CEpos - s.toReturn) {
+              if(s.CEpos - s.toReturn || (s.pos && *s.pos != 0)) {
                 consumedExpansionCEs++;
               } else {
                 consumedExpansionCEs = 0;
+              }
+              if(s.pos && *s.pos == 0) {
+                iterSkips++;
               }
             }
           } else {
@@ -5625,10 +5648,13 @@ ucol_nextSortKeyPart(UCollator *coll,
                   }
                 }
               }
-              if(s.CEpos - s.toReturn) {
+              if(s.CEpos - s.toReturn || (s.pos && *s.pos != 0)) {
                 consumedExpansionCEs++;
               } else {
                 consumedExpansionCEs = 0;
+              }
+              if(s.pos && *s.pos == 0) {
+                iterSkips++;
               }
             }
           } else {
@@ -6718,7 +6744,7 @@ UCollationResult    ucol_checkIdent(collIterate *sColl, collIterate *tColl, UBoo
       sBuf = sColl->string;
       tLen        = (tColl->flags & UCOL_ITER_HASLEN) ? tColl->endp - tColl->string : -1;
       tBuf = tColl->string;
-//    }
+
       if (normalize) {
           *status = U_ZERO_ERROR;
           if (unorm_quickCheck(sBuf, sLen, UNORM_NFD, status) != UNORM_YES) {
@@ -6798,14 +6824,7 @@ UCollationResult    ucol_checkIdent(collIterate *sColl, collIterate *tColl, UBoo
           }
       }
     }
-#if 0
-    if(freeSBuf) {
-      uprv_free(sBuf);
-    }
-    if(freeTBuf) {
-      uprv_free(tBuf);
-    }
-#endif
+
     if (comparison < 0) {
         return UCOL_LESS;
     } else if (comparison == 0) {
@@ -7784,11 +7803,15 @@ ucol_strcollIter( const UCollator    *coll,
                  UCharIterator *sIter,
                  UCharIterator *tIter,
                  UErrorCode         *status) {
-  if(!status || U_FAILURE(*status)) {
+  if(!status || U_FAILURE(*status) || sIter == tIter) {
     return UCOL_EQUAL;
   }
-   // Preparing the context objects for iterating over strings
+
+  UCollationResult result = UCOL_EQUAL;
+
+  // Preparing the context objects for iterating over strings
   collIterate sColl, tColl;
+  UNormIterator *sNormIter = NULL, *tNormIter = NULL;
 
   IInit_collIterate(coll, NULL, -1, &sColl);
   sColl.iterator = sIter;
@@ -7798,30 +7821,59 @@ ucol_strcollIter( const UCollator    *coll,
   tColl.iterator = tIter;
 
   if(ucol_getAttribute(coll, UCOL_NORMALIZATION_MODE, status) == UCOL_ON) {
-    UNormIterator *sNormIter = unorm_openIter(status);
+    sNormIter = unorm_openIter(status);
     sColl.iterator = unorm_setIter(sNormIter, sIter, UNORM_FCD, status);
     sColl.flags &= ~UCOL_ITER_NORM;
 
-    UNormIterator *tNormIter = unorm_openIter(status);
+    tNormIter = unorm_openIter(status);
     tColl.iterator = unorm_setIter(tNormIter, tIter, UNORM_FCD, status);
     tColl.flags &= ~UCOL_ITER_NORM;
-
-    UCollationResult normResult;
-
-    if(U_SUCCESS(*status)) {
-      normResult = ucol_strcollRegular(&sColl, &tColl, status);
-    }
-
-    unorm_closeIter(sNormIter);
-    unorm_closeIter(tNormIter);
-
-    return normResult;
-  } else {
-    return ucol_strcollRegular(&sColl, &tColl, status);
   }
 
-  //*status = U_UNSUPPORTED_ERROR;
-  //return UCOL_EQUAL;
+  UChar32 sChar = U_SENTINEL, tChar = U_SENTINEL;
+  
+  while((sChar = sColl.iterator->next(sColl.iterator)) ==  
+    (tChar = tColl.iterator->next(tColl.iterator))) {
+    if(sChar == U_SENTINEL) {
+      return UCOL_EQUAL;
+    }
+  }
+
+  if(sChar == U_SENTINEL) {
+    tChar = tColl.iterator->previous(tColl.iterator);
+  }
+
+  if(tChar == U_SENTINEL) {
+    sChar = sColl.iterator->previous(sColl.iterator);
+  }
+
+  sChar = sColl.iterator->previous(sColl.iterator);
+  tChar = tColl.iterator->previous(tColl.iterator);
+
+  if (ucol_unsafeCP((UChar)sChar, coll) || ucol_unsafeCP((UChar)tChar, coll))
+  {
+      // We are stopped in the middle of a contraction.
+      // Scan backwards through the == part of the string looking for the start of the contraction.
+      //   It doesn't matter which string we scan, since they are the same in this region.
+      do
+      {
+        sChar = sColl.iterator->previous(sColl.iterator);
+        tChar = tColl.iterator->previous(tColl.iterator);
+      }
+      while (sChar != U_SENTINEL && ucol_unsafeCP((UChar)sChar, coll));
+  }
+
+
+  if(U_SUCCESS(*status)) {
+    result = ucol_strcollRegular(&sColl, &tColl, status);
+  }
+
+  if(sNormIter || tNormIter) {
+    unorm_closeIter(sNormIter);
+    unorm_closeIter(tNormIter);
+  }
+
+  return result;
 }
 
 
