@@ -34,6 +34,7 @@ static UConverterToUCallback otherCharAction(UConverterToUCallback MIA);
 static void TestCCSID(void);
 static void TestJ932(void);
 static void TestJ1968(void);
+static void TestConvertSafeCloneCallback(void);
 
 void addTestConvert(TestNode** root);
 
@@ -42,6 +43,7 @@ void addTestConvert(TestNode** root)
     addTest(root, &TestConvert, "tsconv/ccapitst/TestConvert");
     addTest(root, &TestAlias,   "tsconv/ccapitst/TestAlias"); 
     addTest(root, &TestConvertSafeClone,   "tsconv/ccapitst/TestConvertSafeClone"); 
+    addTest(root, &TestConvertSafeCloneCallback,   "tsconv/ccapitst/TestConvertSafeCloneCallback"); 
     addTest(root, &TestCCSID,   "tsconv/ccapitst/TestCCSID"); 
     addTest(root, &TestJ932,   "tsconv/ccapitst/TestJ932");
     addTest(root, &TestJ1968,   "tsconv/ccapitst/TestJ1968");
@@ -1107,6 +1109,314 @@ static void TestAlias() {
             log_err("FAIL: \"%s\" -> \"%s\", expect %s\n",
                     CONVERTERS_NAMES[i].alias, mapBack, CONVERTERS_NAMES[i].name);
         }
+    }
+}
+
+/* Test safe clone callback */
+
+static uint32_t    TSCC_nextSerial()
+{
+    static uint32_t n = 1;
+    
+    return (n++);
+}
+
+typedef struct
+{
+    uint32_t       magic;      /* 0xC0FFEE to identify that the object is OK */
+    uint32_t       serial;     /* minted from nextSerial, above */
+    UBool          wasClosed;  /* close happened on the object */
+} TSCCContext;
+
+static TSCCContext *TSCC_clone(TSCCContext *ctx)
+{
+    TSCCContext *newCtx;
+    newCtx = malloc(sizeof(TSCCContext));
+    
+    newCtx->serial = TSCC_nextSerial();
+    newCtx->wasClosed = 0;
+    newCtx->magic = 0xC0FFEE;
+    
+    log_verbose("TSCC_clone: %p:%d -> new context %p:%d\n", ctx, ctx->serial, newCtx, newCtx->serial);
+    
+    return newCtx;
+}
+
+static void TSCC_fromU(const void *context,
+                        UConverterFromUnicodeArgs *fromUArgs,
+                        const UChar* codeUnits,
+                        int32_t length,
+                        UChar32 codePoint,
+                        UConverterCallbackReason reason,
+                        UErrorCode * err)
+{
+    TSCCContext *ctx = (TSCCContext*)context;
+    UConverterFromUCallback junkFrom;
+    
+    log_verbose("TSCC_fromU: Context %p:%d called, reason %d on cnv %p\n", ctx, ctx->serial, reason, fromUArgs->converter);
+
+    if(ctx->magic != 0xC0FFEE) {
+        log_err("TSCC_fromU: Context %p:%d magic is 0x%x should be 0xC0FFEE.\n", ctx,ctx->serial, ctx->magic);
+        return;
+    }
+
+    if(reason == UCNV_CLONE) {
+        UErrorCode subErr = U_ZERO_ERROR;
+        TSCCContext *newCtx;
+        TSCCContext *junkCtx;
+
+        /* "recreate" it */
+        log_verbose("TSCC_fromU: cloning..\n");
+        newCtx = TSCC_clone(ctx);
+
+        if(newCtx == NULL) {
+            log_err("TSCC_fromU: internal clone failed on %p\n", ctx);
+        }
+
+        /* now, SET it */
+        ucnv_getFromUCallBack(fromUArgs->converter, &junkFrom, (void**)&junkCtx);
+        ucnv_setFromUCallBack(fromUArgs->converter, junkFrom, newCtx, NULL, NULL, &subErr);
+        
+        if(U_FAILURE(subErr)) {
+            *err = subErr;
+        }    
+    }
+
+    if(reason == UCNV_CLOSE) {
+        log_verbose("TSCC_fromU: Context %p:%d closing\n", ctx, ctx->serial);
+        ctx->wasClosed = TRUE;
+    }
+}
+
+
+static void TSCC_toU(const void *context,
+                        UConverterToUnicodeArgs *toUArgs,
+                        const char* codeUnits,
+                        int32_t length,
+                        UConverterCallbackReason reason,
+                        UErrorCode * err)
+{
+    TSCCContext *ctx = (TSCCContext*)context;
+    UConverterToUCallback junkFrom;
+    
+    log_verbose("TSCC_toU: Context %p:%d called, reason %d on cnv %p\n", ctx, ctx->serial, reason, toUArgs->converter);
+
+    if(ctx->magic != 0xC0FFEE) {
+        log_err("TSCC_toU: Context %p:%d magic is 0x%x should be 0xC0FFEE.\n", ctx,ctx->serial, ctx->magic);
+        return;
+    }
+
+    if(reason == UCNV_CLONE) {
+        UErrorCode subErr = U_ZERO_ERROR;
+        TSCCContext *newCtx;
+        TSCCContext *junkCtx;
+
+        /* "recreate" it */
+        log_verbose("TSCC_toU: cloning..\n");
+        newCtx = TSCC_clone(ctx);
+
+        if(newCtx == NULL) {
+            log_err("TSCC_toU: internal clone failed on %p\n", ctx);
+        }
+
+        /* now, SET it */
+        ucnv_getToUCallBack(toUArgs->converter, &junkFrom, (void**)&junkCtx);
+        ucnv_setToUCallBack(toUArgs->converter, junkFrom, newCtx, NULL, NULL, &subErr);
+        
+        if(U_FAILURE(subErr)) {
+            *err = subErr;
+        }    
+    }
+
+    if(reason == UCNV_CLOSE) {
+        log_verbose("TSCC_toU: Context %p:%d closing\n", ctx, ctx->serial);
+        ctx->wasClosed = TRUE;
+    }
+}
+
+static void TSCC_init(TSCCContext *q)
+{
+    q->magic = 0xC0FFEE;
+    q->serial = TSCC_nextSerial();
+    q->wasClosed = 0;
+}
+
+static void TSCC_print_log(TSCCContext *q, const char *name)
+{
+    if(q==NULL) {
+        log_verbose("TSCContext: %s is NULL!!\n", name);
+    } else {
+        if(q->magic != 0xC0FFEE) {
+            log_err("TSCCContext: %p:%d's magic is %x, supposed to be 0xC0FFEE\n",
+                    q,q->serial, q->magic);
+        }
+        log_verbose("TSCCContext %p:%d=%s - magic %x, %s\n",
+                    q, q->serial, name, q->magic, q->wasClosed?"CLOSED":"open");
+    }
+}
+
+static void TestConvertSafeCloneCallback()
+{
+    UErrorCode err = U_ZERO_ERROR;
+    TSCCContext from1, to1;
+    TSCCContext *from2, *from3, *to2, *to3;
+    char hunk[8192];
+    uint32_t hunkSize = 8192;
+    UConverterFromUCallback junkFrom;
+    UConverterToUCallback junkTo;
+    UConverter *conv1, *conv2 = NULL;
+
+    conv1 = ucnv_open("iso-8859-3", &err);
+    
+    if(U_FAILURE(err)) {
+        log_err("Err opening iso-8859-3, %s", u_errorName(err));
+        return;
+    }
+
+    log_verbose("Opened conv1=%p\n", conv1);
+
+    TSCC_init(&from1);
+    TSCC_init(&to1);
+
+    TSCC_print_log(&from1, "from1");
+    TSCC_print_log(&to1, "to1");
+
+    ucnv_setFromUCallBack(conv1, TSCC_fromU, &from1, NULL, NULL, &err);
+    log_verbose("Set from1 on conv1\n");
+    TSCC_print_log(&from1, "from1");
+
+    ucnv_setToUCallBack(conv1, TSCC_toU, &to1, NULL, NULL, &err);
+    log_verbose("Set to1 on conv1\n");
+    TSCC_print_log(&to1, "to1");
+
+    conv2 = ucnv_safeClone(conv1, hunk, &hunkSize, &err);
+    if(U_FAILURE(err)) {
+        log_err("safeClone failed: %s\n", u_errorName(err));
+        return;
+    }
+    log_verbose("Cloned to conv2=%p.\n", conv2);
+
+/**********   from *********************/
+    ucnv_getFromUCallBack(conv2, &junkFrom, (void**)&from2);
+    ucnv_getFromUCallBack(conv1, &junkFrom, (void**)&from3);
+
+    TSCC_print_log(from2, "from2");
+    TSCC_print_log(from3, "from3(==from1)");
+
+    if(from2 == NULL) {
+        log_err("FAIL! from2 is null \n");
+        return;
+    }
+
+    if(from3 == NULL) {
+        log_err("FAIL! from3 is null \n");
+        return;
+    }
+
+    if(from3 != (&from1) ) {
+        log_err("FAIL! conv1's FROM context changed!\n");
+    }
+
+    if(from2 == (&from1) ) {
+        log_err("FAIL! conv1's FROM context is the same as conv2's!\n");
+    }
+
+    if(from1.wasClosed) {
+        log_err("FAIL! from1 is closed \n");
+    }
+
+    if(from2->wasClosed) {
+        log_err("FAIL! from2 was closed\n");
+    }
+
+/**********   to *********************/
+    ucnv_getToUCallBack(conv2, &junkTo, (void**)&to2);
+    ucnv_getToUCallBack(conv1, &junkTo, (void**)&to3);
+
+    TSCC_print_log(to2, "to2");
+    TSCC_print_log(to3, "to3(==to1)");
+
+    if(to2 == NULL) {
+        log_err("FAIL! to2 is null \n");
+        return;
+    }
+
+    if(to3 == NULL) {
+        log_err("FAIL! to3 is null \n");
+        return;
+    }
+
+    if(to3 != (&to1) ) {
+        log_err("FAIL! conv1's TO context changed!\n");
+    }
+
+    if(to2 == (&to1) ) {
+        log_err("FAIL! conv1's TO context is the same as conv2's!\n");
+    }
+
+    if(to1.wasClosed) {
+        log_err("FAIL! to1 is closed \n");
+    }
+
+    if(to2->wasClosed) {
+        log_err("FAIL! to2 was closed\n");
+    }
+
+/*************************************/
+
+    ucnv_close(conv1);
+    log_verbose("ucnv_closed (conv1)\n");
+    TSCC_print_log(&from1, "from1");
+    TSCC_print_log(from2, "from2");
+    TSCC_print_log(&to1, "to1");
+    TSCC_print_log(to2, "to2");
+
+    if(from1.wasClosed == FALSE) {
+        log_err("FAIL! from1 is NOT closed \n");
+    }
+
+    if(from2->wasClosed) {
+        log_err("FAIL! from2 was closed\n");
+    }
+
+    if(to1.wasClosed == FALSE) {
+        log_err("FAIL! to1 is NOT closed \n");
+    }
+
+    if(to2->wasClosed) {
+        log_err("FAIL! to2 was closed\n");
+    }
+
+    ucnv_close(conv2);
+    log_verbose("ucnv_closed (conv2)\n");
+
+    TSCC_print_log(&from1, "from1");
+    TSCC_print_log(from2, "from2");
+
+    if(from1.wasClosed == FALSE) {
+        log_err("FAIL! from1 is NOT closed \n");
+    }
+
+    if(from2->wasClosed == FALSE) {
+        log_err("FAIL! from2 was NOT closed\n");
+    }   
+
+    TSCC_print_log(&to1, "to1");
+    TSCC_print_log(to2, "to2");
+
+    if(to1.wasClosed == FALSE) {
+        log_err("FAIL! to1 is NOT closed \n");
+    }
+
+    if(to2->wasClosed == FALSE) {
+        log_err("FAIL! to2 was NOT closed\n");
+    }   
+
+    if(to2 != (&to1)) {
+        free(to2); /* to1 is stack based */
+    }
+    if(from2 != (&from1)) {
+        free(from2); /* from1 is stack based */
     }
 }
 
