@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/UnicodeFilterLogic.java,v $ 
- * $Date: 2002/11/22 18:31:01 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/12/03 21:07:57 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -23,7 +23,7 @@ package com.ibm.icu.text;
  * intersection (<tt>and</tt>), or union (<tt>or</tt>) of the given
  * filter objects.
  *
- * @deprecated This will be removed after 2003-Aug-28. Use UnicodeSet methods instead.
+ * @deprecated ICU 2.4 This will be removed after 2003-Aug-28. Use UnicodeSet methods instead.
  */
 public final class UnicodeFilterLogic {
 
@@ -44,7 +44,7 @@ public final class UnicodeFilterLogic {
     /**
      * Returns a <tt>UnicodeFilter</tt> that implements the inverse of
      * the given filter.
-     * @deprecated This will be removed after 2003-Aug-28. Use UnicodeSet methods instead.
+     * @deprecated ICU 2.4 This will be removed after 2003-Aug-28. Use UnicodeSet methods instead.
      */
     public static UnicodeFilter not(final UnicodeFilter f) {
         return new _UF() {
@@ -61,7 +61,7 @@ public final class UnicodeFilterLogic {
      * is not called, and <tt>contains()</tt> returns <tt>false</tt>.
      *
      * <p>Either <tt>f</tt> or <tt>g</tt> must be non-null.
-     * @deprecated This will be removed after 2003-Aug-28. Use UnicodeSet methods instead.
+     * @deprecated ICU 2.4 This will be removed after 2003-Aug-28. Use UnicodeSet methods instead.
      */
     public static UnicodeFilter and(final UnicodeFilter f,
                                     final UnicodeFilter g) {
@@ -84,7 +84,7 @@ public final class UnicodeFilterLogic {
      * <tt>f[i].contains()</tt> is <tt>false</tt>, then
      * <tt>f[j].contains()</tt> is not called, where <tt>j > i</tt>, and
      * <tt>contains()</tt> returns <tt>false</tt>.
-     * @deprecated This will be removed after 2003-Aug-28. Use UnicodeSet methods instead.
+     * @deprecated ICU 2.4 This will be removed after 2003-Aug-28. Use UnicodeSet methods instead.
      */
     public static UnicodeFilter and(final UnicodeFilter[] f) {
         return new _UF() {
@@ -106,7 +106,7 @@ public final class UnicodeFilterLogic {
      * not called, and <tt>contains()</tt> returns <tt>true</tt>.
      *
      * <p>Either <tt>f</tt> or <tt>g</tt> must be non-null.
-     * @deprecated This will be removed after 2003-Aug-28. Use UnicodeSet methods instead.
+     * @deprecated ICU 2.4 This will be removed after 2003-Aug-28. Use UnicodeSet methods instead.
      */
     public static UnicodeFilter or(final UnicodeFilter f,
                                    final UnicodeFilter g) {
@@ -129,7 +129,7 @@ public final class UnicodeFilterLogic {
      * <tt>f[i].contains()</tt> is <tt>false</tt>, then
      * <tt>f[j].contains()</tt> is not called, where <tt>j > i</tt>, and
      * <tt>contains()</tt> returns <tt>true</tt>.
-     * @deprecated This will be removed after 2003-Aug-28. Use UnicodeSet methods instead.
+     * @deprecated ICU 2.4 This will be removed after 2003-Aug-28. Use UnicodeSet methods instead.
      */
     public static UnicodeFilter or(final UnicodeFilter[] f) {
         return new _UF() {
@@ -143,4 +143,7 @@ public final class UnicodeFilterLogic {
             }
         };
     }
+
+    // Disable instantiation and make CheckTags happy
+    private UnicodeFilterLogic() {}
 }
