@@ -992,7 +992,6 @@ public:
 
 private:
     static const char fgClassID;
-    static UParseError fParseError;
     /**
      * Do real work of constructing a new DecimalFormat.
      */
