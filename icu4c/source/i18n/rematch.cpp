@@ -705,8 +705,39 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
 
 
         case URX_BACKSLASH_X:          // Match combining character sequence
-            if (FALSE) {
-                backTrack(inputIdx, patIdx);
+            {
+                // Fail if at end of input
+                if (inputIdx >= fInputLength) {
+                    backTrack(inputIdx, patIdx);
+                    break;
+                }
+
+                // Always consume one char
+                UChar32 c = fInput->char32At(inputIdx);   
+                inputIdx = fInput->moveIndex32(inputIdx, 1);
+
+                // Consume CR/LF as a pair
+                if (c == 0x0d)  { 
+                    UChar32 c = fInput->char32At(inputIdx);   
+                    if (c == 0x0a) {
+                         inputIdx = fInput->moveIndex32(inputIdx, 1);
+                         break;
+                    }
+                }
+
+                // Consume any combining marks following a non-control char
+                int8_t ctype = u_charType(c);
+                if (ctype != U_CONTROL_CHAR) {
+                    for(;;) {   
+                        c = fInput->char32At(inputIdx);   
+                        ctype = u_charType(c);
+                        // TODO:  make a set and add the "othe grapheme extend" chars
+                        //        to the list of stuff to be skipped over.
+                        if (!(ctype == U_NON_SPACING_MARK || ctype == U_ENCLOSING_MARK)) {
+                            break;
+                        }
+                    }
+                }
             }
             break;
 
