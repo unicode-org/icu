@@ -1982,7 +1982,7 @@ DecimalFormat::setMultiplier(int32_t newValue)
  * @see #getRoundingMode
  * @see #setRoundingMode
  */
-double DecimalFormat::getRoundingIncrement() {
+double DecimalFormat::getRoundingIncrement() const {
     return fRoundingDouble;
 }
 
@@ -2041,7 +2041,7 @@ void DecimalFormat::setRoundingMode(ERoundingMode roundingMode) {
  * @see #getPadPosition
  * @see #setPadPosition
  */
-int32_t DecimalFormat::getFormatWidth() {
+int32_t DecimalFormat::getFormatWidth() const {
     return fFormatWidth;
 }
 
@@ -2061,7 +2061,7 @@ void DecimalFormat::setFormatWidth(int32_t width) {
     fFormatWidth = (width > 0) ? width : 0;
 }
 
-UnicodeString DecimalFormat::getPadCharacterString() {
+UnicodeString DecimalFormat::getPadCharacterString() const {
     return fPad;
 }
 
@@ -2091,7 +2091,7 @@ void DecimalFormat::setPadCharacter(const UnicodeString &padChar) {
  * @see #kPadBeforeSuffix
  * @see #kPadAfterSuffix
  */
-DecimalFormat::EPadPosition DecimalFormat::getPadPosition() {
+DecimalFormat::EPadPosition DecimalFormat::getPadPosition() const {
     return fPadPosition;
 }
 
@@ -2154,7 +2154,7 @@ void DecimalFormat::setScientificNotation(UBool useScientific) {
  * @see #isExponentSignAlwaysShown
  * @see #setExponentSignAlwaysShown
  */
-int8_t DecimalFormat::getMinimumExponentDigits() {
+int8_t DecimalFormat::getMinimumExponentDigits() const {
     return fMinExponentDigits;
 }
 
