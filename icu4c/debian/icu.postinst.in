@@ -31,10 +31,10 @@ case "$1" in
 	# use the right directory. But we're not taking chances with the
 	# future :)
 
-	ICU_DATA=@datadir@/@PACKAGE@/@VERSION@
+	ICU_DATA=@libdir@/@PACKAGE@/@VERSION@
 	export ICU_DATA
 
-	if test ! -f $ICU_DATADIR/cnvalias.dat -o @sysconfdir@/icu/convrtrs.txt -nt $ICU_DATADIR/cnvalias.dat
+	if test ! -f $ICU_DATA/cnvalias.dat -o @sysconfdir@/icu/convrtrs.txt -nt $ICU_DATA/cnvalias.dat
 	then
 	    echo Compiling converters and aliases list from @sysconfdir@/icu/convrtrs.txt
 	    /usr/sbin/gencnval @sysconfdir@/icu/convrtrs.txt
