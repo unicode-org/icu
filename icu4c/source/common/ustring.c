@@ -459,6 +459,47 @@ u_strlen(const UChar *s)
 #endif
 }
 
+U_CAPI int32_t U_EXPORT2
+u_countChar32(const UChar *s, int32_t length) {
+    int32_t count;
+
+    if(s==NULL || length<-1) {
+        return 0;
+    }
+
+    count=0;
+    if(length>=0) {
+        while(length>0) {
+            ++count;
+            if(UTF_IS_LEAD(*s) && length>=2 && UTF_IS_TRAIL(*(s+1))) {
+                s+=2;
+                length-=2;
+            } else {
+                ++s;
+                --length;
+            }
+        }
+    } else /* length==-1 */ {
+        UChar c;
+
+        for(;;) {
+            if((c=*s++)==0) {
+                break;
+            }
+            ++count;
+
+            /*
+             * sufficient to look ahead one because of UTF-16;
+             * safe to look ahead one because at worst that would be the terminating NUL
+             */
+            if(UTF_IS_LEAD(c) && UTF_IS_TRAIL(*s)) {
+                ++s;
+            }
+        }
+    }
+    return count;
+}
+
 UChar *
 u_memcpy(UChar *dest, const UChar *src, int32_t count) {
     return (UChar *)uprv_memcpy(dest, src, count*U_SIZEOF_UCHAR);

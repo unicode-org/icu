@@ -18,6 +18,43 @@
 #include "unicode/utypes.h"
 
 /**
+ * \file
+ * \brief C API: Unicode string handling functions
+ *
+ * These C API functions provide Unicode string handling.
+ *
+ * Some functions are equivalent in name, signature, and behavior to the ANSI C <string.h>
+ * functions. (For example, they do not check for bad arguments like NULL string pointers.)
+ * In some cases, only the thread-safe variant of such a function is implemented here
+ * (see u_strtok_r()).
+ *
+ * Other functions provide more Unicode-specific functionality like locale-specific
+ * upper/lower-casing and string comparison in code point order.
+ *
+ * ICU uses 16-bit Unicode (UTF-16) in the form of arrays of UChar code units.
+ * UTF-16 encodes each Unicode code point with either one or two UChar code units.
+ * Some APIs accept a 32-bit UChar32 value for a single code point.
+ * (This is the default form of Unicode, and a forward-compatible extension of the original,
+ * fixed-width form that was known as UCS-2. UTF-16 superseded UCS-2 with Unicode 2.0
+ * in 1996.)
+ *
+ * Although UTF-16 is a variable-width encoding form (like some legacy multi-byte encodings),
+ * it is much more efficient even for random access because the code unit values
+ * for single-unit characters vs. lead units vs. trail units are completely disjoint.
+ * This means that it is easy to determine character (code point) boundaries from
+ * random offsets in the string.
+ * (It also means, e.g., that u_strstr() does not need to verify that a match was
+ * found on actual character boundaries; with some legacy encodings, strstr() may need to
+ * scan back to the start of the text to verify this.)
+ *
+ * Unicode (UTF-16) string processing is optimized for the single-unit case.
+ * Although it is important to support supplementary characters
+ * (which use pairs of lead/trail code units called "surrogates"),
+ * their occurrence is rare. Almost all characters in modern use require only
+ * a single UChar code unit (i.e., their code point values are <=0xffff).
+ */
+
+/**
  * Determine the length of an array of UChar.
  *
  * @param s The array of UChars, NULL (U+0000) terminated.
@@ -26,6 +63,22 @@
  */
 U_CAPI int32_t U_EXPORT2
 u_strlen(const UChar *s);
+
+/**
+ * Count Unicode code points in the length UChar code units of the string.
+ * A code point may occupy either one or two UChar code units.
+ * Counting code points involves reading all code units.
+ *
+ * This functions is basically the inverse of the UTF_FWD_N() macro (see utf.h).
+ *
+ * @param s The input string.
+ * @param length The number of UChar code units to be checked, or -1 to count all
+ *               code points before the first NUL (U+0000).
+ * @return The number of code points in the specified code units.
+ * @draft ICU 2.0
+ */
+U_CAPI int32_t U_EXPORT2
+u_countChar32(const UChar *s, int32_t length);
 
 /**
  * Concatenate two ustrings.  Appends a copy of <TT>src</TT>,
