@@ -45,6 +45,7 @@ ucbuf_autodetect(FileStream* in,const char** cp){
       }
       if(!autodetect){
           T_FileStream_rewind(in);
+          *cp="";
       }
   }
   return autodetect;
@@ -82,7 +83,7 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
         /* since state is saved in the converter we add offset to source*/
         target = pTarget+offset;
         source = cbuf;
-        ucnv_toUnicode(buf->conv,&target,target+numRead,&source,source+numRead,NULL,(UBool)(buf->remaining==0),err);
+        ucnv_toUnicode(buf->conv,&target,target+(MAX_U_BUF-offset),&source,source+numRead,NULL,(UBool)(buf->remaining==0),err);
         numRead= target-pTarget;
         if(U_FAILURE(*err)){
             return NULL;
