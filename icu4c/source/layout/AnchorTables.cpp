@@ -42,6 +42,9 @@ void AnchorTable::getAnchor(LEGlyphID glyphID, const LEFontInstance *fontInstanc
     }
 
     default:
+		// Unknown format, set the anchor point to (0, 0)
+		anchor.fX = 0;
+		anchor.fY = 0;
         break;
     }
 }

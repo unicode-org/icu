@@ -67,6 +67,12 @@ le_int32 MarkToBasePositioningSubtable::process(GlyphIterator *glyphIterator, co
     const AnchorTable *anchorTable = (const AnchorTable *) ((char *) baseArray + anchorTableOffset);
     LEPoint baseAnchor, markAdvance, pixels;
 
+	if (anchorTableOffset == 0) {
+		// this means the table is mal-formed...
+		glyphIterator->setCurrGlyphBaseOffset(baseIterator.getCurrStreamPosition());
+		return 0;
+	}
+
     anchorTable->getAnchor(baseGlyph, fontInstance, baseAnchor);
 
     fontInstance->getGlyphAdvance(markGlyph, pixels);
