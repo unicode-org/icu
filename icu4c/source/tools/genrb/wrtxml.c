@@ -96,7 +96,7 @@ static uint32_t computeCRC(char *ptr, uint32_t len, uint32_t lastcrc){
     int j = 0;
     uint32_t crc2 = 0;
 
-    int32_t CRC32_POLYNOMIAL = 0xEDB88320;
+#define CRC32_POLYNOMIAL 0xEDB88320
 
     /*build crc table*/
     for (i = 0; i <= 255; i++) {
