@@ -19,6 +19,9 @@
 #define USPRINTF_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/ustdio.h"
 #include "ufmt_cmn.h"
 #include "locbund.h"
@@ -70,6 +73,6 @@ typedef int32_t (*u_sprintf_handler) (u_localized_string *output,
                         const u_sprintf_spec_info  *info,
                         const ufmt_args            *args);
 
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif
-

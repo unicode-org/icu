@@ -184,6 +184,8 @@ u_fflush(UFILE *file);
 U_CAPI FILE* U_EXPORT2
 u_fgetfile(UFILE *f);
 
+#if !UCONFIG_NO_FORMATTING
+
 /**
  * Get the locale whose conventions are used to format and parse output.
  * This is the same locale passed in the preceding call to<TT>u_fsetlocale</TT>
@@ -206,6 +208,8 @@ u_fgetlocale(UFILE *file);
 U_CAPI int32_t U_EXPORT2
 u_fsetlocale(const char        *locale,
          UFILE        *file);
+
+#endif
 
 /**
  * Get the codepage in which data is written to and read from the UFILE.
@@ -483,6 +487,8 @@ u_file_read(UChar        *chars,
         int32_t        count, 
         UFILE         *f);
 
+#if !UCONFIG_NO_TRANSLITERATION
+
 /**
  * Set a transliterator on the UFILE. The transliterator will be owned by the
  * UFILE. 
@@ -504,13 +510,7 @@ U_CAPI UTransliterator* U_EXPORT2
 u_fsettransliterator(UFILE *file, UFileDirection direction,
                      UTransliterator *adopt, UErrorCode *status);
 
-
-
-
-
-
-
-
+#endif
 
 
 /* Output string functions */

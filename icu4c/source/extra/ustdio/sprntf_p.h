@@ -18,6 +18,10 @@
 #ifndef USPRINTF_P_H
 #define USPRINTF_P_H
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "sprintf.h"
 
 /**
@@ -42,5 +46,6 @@ int32_t
 u_sprintf_parse_spec (const UChar     *fmt,
              u_sprintf_spec    *spec);
 
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

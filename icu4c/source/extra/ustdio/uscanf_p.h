@@ -19,6 +19,10 @@
 #ifndef _USCANF_P
 #define _USCANF_P
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "uscanf.h"
 
 /**
@@ -42,5 +46,6 @@ int32_t
 u_scanf_parse_spec (const UChar     *fmt,
             u_scanf_spec    *spec);
 
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

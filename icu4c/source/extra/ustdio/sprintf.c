@@ -18,6 +18,9 @@
 */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "sprintf.h"
 #include "sprntf_p.h"
 #include "unicode/ustdio.h"
@@ -1426,3 +1429,4 @@ u_vsnprintf_u(UChar    *buffer,
     return written;
 }
 
+#endif /* #if !UCONFIG_NO_FORMATTING */
