@@ -17,12 +17,13 @@
 *   for mappings from Unicode to GB 18030 and back and turns it into
 *   a single-direction file with only either mapping direction.
 *   The input format is as follows:
-*       unicode [':' | '>'] codepage ['*']
+*       unicode [':' | '>' | '<'] codepage ['*']
 *   With
 *       unicode = hexadecimal number 0..10ffff
 *       codepage = hexadecimal number 0..ffffffff for big-endian bytes
 *       ':' for roundtrip mappings
 *       '>' for fallbacks from Unicode to codepage
+*       '<' for fallbacks from codepage to Unicode
 *       '*' ignored
 *
 *   The output format is as follows:
@@ -44,7 +45,7 @@ main(int argc, const char *argv[]) {
     char line[200];
     char *end;
     unsigned long c, b;
-    unsigned char fallback;
+    signed char dir;
     char uniToGB;
 
     if(argc<=1) {
@@ -73,14 +74,19 @@ main(int argc, const char *argv[]) {
 
         /* read Unicode code point */
         c=strtoul(line, &end, 16);
-        if(end==line || *end!=':' && *end!='>') {
-            fprintf(stderr, "error parsing code point from \"%s\"\n", line);
+        if(end==line) {
+            fprintf(stderr, "error: missing code point in \"%s\"\n", line);
             return 1;
         }
         if(*end==':') {
-            fallback=0;
+            dir=0;
+        } else if(*end=='>') {
+            dir=1;
+        } else if(*end=='<') {
+            dir=-1;
         } else {
-            fallback=1;
+            fprintf(stderr, "error: delimiter not one of :>< in \"%s\"\n", line);
+            return 1;
         }
 
         /* read byte sequence as one long value */
@@ -91,11 +97,15 @@ main(int argc, const char *argv[]) {
         }
 
         if(uniToGB) {
-            /* output Unicode:GB 18030 including fallbacks */
-            printf("%04lx:%02lx\n", c, b);
-        } else if(!fallback) {
-            /* output GB 18030:Unicode excluding fallbacks */
-            printf("%02lx:%04lx\n", b, c);
+            /* output Unicode:GB 18030 including fallbacks from Unicode to codepage */
+            if(dir>=0) {
+                printf("%04lx:%02lx\n", c, b);
+            }
+        } else {
+            /* output Unicode:GB 18030 including fallbacks from codepage to Unicode */
+            if(dir<=0) {
+                printf("%02lx:%04lx\n", b, c);
+            }
         }
     }
 
