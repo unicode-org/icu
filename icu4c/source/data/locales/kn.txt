@@ -80,11 +80,13 @@ kn {
 //    }
     LocaleScript:array { "Knda" }
     ExemplarCharacters { "[:Knda:]" }
-    CollationElements {	    
+    collations {
+      standard { 
         Version { "1.0" }
         Sequence { 
             "[normalization on]"
         }
+      }
     }
 
     // Currency display names

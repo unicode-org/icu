@@ -71,7 +71,7 @@ kw{
     }
     ExemplarCharacters { "[a-z]" }
     // /**************** Info Below is needed ****************/
-    // CollationElements{}
+    // collations{}
     // Countries{}
     // Eras{}
     // Languages{}

@@ -76,7 +76,7 @@ kl{
     }
 
             // /**************** Info Below is needed ****************/
-            // CollationElements{}
+            // collation{}
             // Countries{}
             // Eras{}
             // Languages{}

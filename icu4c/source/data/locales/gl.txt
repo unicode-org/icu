@@ -74,7 +74,7 @@ gl {
     ExemplarCharacters { "[a-z \u00e1 \u00e9 \u00ed \u00f3 \u00fa \u00fc \u00f1]" }
     
     // /**************** Info Below is needed ****************/
-    // CollationElements{}
+    // collations{}
     // Countries{}
     // Eras{}
     // Languages{}
