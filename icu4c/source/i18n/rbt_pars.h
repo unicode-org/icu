@@ -18,7 +18,7 @@ class ParseData;
 class RuleHalf;
 class ParsePosition;
 
-class TransliterationRuleParser {
+class TransliteratorParser {
 
     /**
      * This is a reference to external data we don't own.  This works because
@@ -87,6 +87,28 @@ public:
               UTransDirection direction,
               UParseError* parseError = 0);
 
+    /**
+     * Parse a given set of rules.  Return up to three pieces of
+     * parsed data.  These are the header ::id block, the rule block,
+     * and the footer ::id block.  Any or all of these may be empty.
+     * If the ::id blocks are empty, their corresponding parameters
+     * are returned as the empty string.  If there are no rules, the
+     * TransliterationRuleData result is 0.
+     * @param ruleDataResult caller owns the pointer stored here.
+     * May be NULL.
+     * @param headerRule string including semicolons for the header
+     * ::id block.  May be empty.
+     * @param footerRule string including semicolons for the footer
+     * ::id block.  May be empty.
+     */
+    static void parse(const UnicodeString& rules,
+                      UTransDirection direction,
+                      TransliterationRuleData*& ruleDataResult,
+                      UnicodeString& idBlockResult,
+                      int32_t& idSplitPointResult,
+                      UParseError* parseError,
+                      UErrorCode& ec);
+
 private:
 
     /**
@@ -94,14 +116,14 @@ private:
      * @exception IllegalArgumentException if there is a syntax error in the
      * rules
      */
-    TransliterationRuleParser(const UnicodeString& rules,
+    TransliteratorParser(const UnicodeString& rules,
                               UTransDirection direction,
                               UParseError* parseError = 0);
 
     /**
      * Destructor.
      */
-    ~TransliterationRuleParser();
+    ~TransliteratorParser();
 
     /**
      * Parse the given string as a sequence of rules, separated by newline
@@ -111,7 +133,8 @@ private:
      * @exception IllegalArgumentException if there is a syntax error in the
      * rules
      */
-    void parseRules(void);
+    void parseRules(UnicodeString& idBlockResult, int32_t& idSplitPointResult,
+                    int32_t& ruleCount);
 
     /**
      * MAIN PARSER.  Parse the next rule in the given rule string, starting
@@ -138,13 +161,6 @@ private:
      * @param start position of first character of current rule
      */
     int32_t syntaxError(int32_t parseErrorCode, const UnicodeString&, int32_t start);
-
-    /**
-     * Allocate a private-use substitution character for the given set,
-     * register it in the setVariables hash, and return the substitution
-     * character.
-     */
-    //UChar registerSet(UnicodeSet* adoptedSet);
 
     /**
      * Parse a UnicodeSet out, store it, and return the stand-in character
@@ -189,8 +205,8 @@ private:
     friend class RuleHalf;
 
     // Disallowed methods; no impl.
-    TransliterationRuleParser(const TransliterationRuleParser&);
-    TransliterationRuleParser& operator=(const TransliterationRuleParser&);
+    TransliteratorParser(const TransliteratorParser&);
+    TransliteratorParser& operator=(const TransliteratorParser&);
 };
 
 #endif
