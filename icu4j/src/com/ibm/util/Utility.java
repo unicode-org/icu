@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/util/Attic/Utility.java,v $ 
- * $Date: 2001/09/24 19:57:51 $ 
- * $Revision: 1.7 $
+ * $Date: 2001/10/17 20:09:44 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -764,6 +764,31 @@ public final class Utility {
                 }
                 UTF16.append(buf, e);
                 i = pos[0];
+            } else {
+                buf.append(c);
+            }
+        }
+        return buf.toString();
+    }
+
+    /**
+     * Convert all escapes in a given string using unescapeAt().
+     * Leave invalid escape sequences unchanged.
+     */
+    public static String unescapeLeniently(String s) {
+        StringBuffer buf = new StringBuffer();
+        int[] pos = new int[1];
+        for (int i=0; i<s.length(); ) {
+            char c = s.charAt(i++);
+            if (c == '\\') {
+                pos[0] = i;
+                int e = unescapeAt(s, pos);
+                if (e < 0) {
+                    buf.append(c);
+                } else {
+                    UTF16.append(buf, e);
+                    i = pos[0];
+                }
             } else {
                 buf.append(c);
             }
