@@ -1363,6 +1363,12 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\ucase.c">
+			</File>
+			<File
+				RelativePath=".\ucase.h">
+			</File>
+			<File
 				RelativePath=".\uchar.c">
 			</File>
 			<File
