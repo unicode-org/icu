@@ -65,7 +65,7 @@ RBBINode::RBBINode(NodeType t) : UMemory() {
     else if (t==opStart)  {fPrecedence = precStart;}
     else if (t==opLParen) {fPrecedence = precLParen;}
 
-};
+}
 
 
 RBBINode::RBBINode(const RBBINode &other) : UMemory(other) {
@@ -85,7 +85,7 @@ RBBINode::RBBINode(const RBBINode &other) : UMemory(other) {
     fFirstPosSet = new UVector(status);   // TODO - get a real status from somewhere
     fLastPosSet  = new UVector(status);
     fFollowPos   = new UVector(status);
-};
+}
 
 
 //-------------------------------------------------------------------------
@@ -154,7 +154,7 @@ RBBINode *RBBINode::cloneTree() {
         }
     }
     return n;
-};
+}
 
 
 

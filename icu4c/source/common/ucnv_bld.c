@@ -231,7 +231,7 @@ ucnv_copyPlatformString(char *platformString, UConverterPlatform pltfrm)
         return 4;
     case UCNV_UNKNOWN:
         break;
-    };
+    }
 
     /* default to empty string */
     *platformString = 0;

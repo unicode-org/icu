@@ -32,7 +32,7 @@
 #include "ustr_imp.h"
 
 
-U_INLINE static UBool 
+static U_INLINE UBool 
 u_growAnyBufferFromStatic(void *context,
                        void **pBuffer, int32_t *pCapacity, int32_t reqCapacity,
                        int32_t length, int32_t size) {
@@ -292,7 +292,7 @@ u_strFromUTF8(UChar *dest,
     return dest;
 }
 
-U_INLINE static uint8_t *
+static U_INLINE uint8_t *
 _appendUTF8(uint8_t *pDest, UChar32 c) {
     /* c<=0x7f is handled by the caller, here it is 0x80<=c<=0x10ffff */
     if((c)<=0x7ff) {

@@ -31,7 +31,7 @@ U_CDECL_BEGIN
 static void  U_EXPORT2 U_CALLCONV RBBISymbolTableEntry_deleter(void *p) {
     RBBISymbolTableEntry *px = (RBBISymbolTableEntry *)p;
     delete px;
-};
+}
 U_CDECL_END
 
 
@@ -49,14 +49,14 @@ RBBISymbolTable::RBBISymbolTable(RBBIRuleScanner *rs, const UnicodeString &rules
 
     fHashTable = uhash_open(uhash_hashUnicodeString, uhash_compareUnicodeString, &status);
     uhash_setValueDeleter(fHashTable, RBBISymbolTableEntry_deleter);
-};
+}
 
 
 
 RBBISymbolTable::~RBBISymbolTable()
 {
     uhash_close(fHashTable);
-};
+}
 
 
 //
@@ -98,7 +98,7 @@ const UnicodeString  *RBBISymbolTable::lookup(const UnicodeString& s) const
         This->fCachedSetLookup = NULL;
     }
     return retString;
-};
+}
 
 
 
@@ -122,7 +122,7 @@ const UnicodeFunctor *RBBISymbolTable::lookupMatcher(UChar32 ch) const
         This->fCachedSetLookup = 0;
     }
     return retVal;
-};
+}
 
 //
 // RBBISymbolTable::parseReference   This function from the abstract symbol table interface
@@ -172,7 +172,7 @@ RBBINode       *RBBISymbolTable::lookupNode(const UnicodeString &key) const{
         retNode = el->val;
     }
     return retNode;
-};
+}
 
 
 //
@@ -197,11 +197,11 @@ void            RBBISymbolTable::addEntry  (const UnicodeString &key, RBBINode *
     if (e == NULL) {
         err = U_MEMORY_ALLOCATION_ERROR;
         return;
-    };
+    }
     e->key = key;
     e->val = val;
     uhash_put( fHashTable, &e->key, e, &err);
-};
+}
 
 
 RBBISymbolTableEntry::RBBISymbolTableEntry() : UMemory(), key(), val(NULL) {}
@@ -217,7 +217,7 @@ RBBISymbolTableEntry::~RBBISymbolTableEntry() {
     delete  val;
 
     // Note: the key UnicodeString is destructed by virtue of being in the object by value.
-};
+}
 
 
 //

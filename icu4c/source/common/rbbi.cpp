@@ -49,7 +49,7 @@ RuleBasedBreakIterator::fgClassID = 0;
 RuleBasedBreakIterator::RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode &status)
 {
     init();
-    if (U_FAILURE(status)) {return;};
+    if (U_FAILURE(status)) {return;}
     fData = new RBBIDataWrapper(data, status);
     if(fData == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
@@ -66,7 +66,7 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode 
 RuleBasedBreakIterator::RuleBasedBreakIterator(UDataMemory* udm, UErrorCode &status)
 {
     init();
-    if (U_FAILURE(status)) {return;};
+    if (U_FAILURE(status)) {return;}
     fData = new RBBIDataWrapper(udm, status);
     if(fData == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
@@ -86,7 +86,7 @@ RuleBasedBreakIterator::RuleBasedBreakIterator( const UnicodeString  &rules,
                                                 UErrorCode           &status)
 {
     init();
-    if (U_FAILURE(status)) {return;};
+    if (U_FAILURE(status)) {return;}
     RuleBasedBreakIterator *bi = (RuleBasedBreakIterator *)
         RBBIRuleBuilder::createRuleBasedBreakIterator(rules, parseError, status);
     // Note:  This is a bit awkward.  The RBBI ruleBuilder has a factory method that
@@ -284,7 +284,7 @@ RuleBasedBreakIterator::getText() const {
     if (nonConstThis->fText == NULL) {
         // TODO:  do this in a way that does not do a default conversion!
         nonConstThis->fText = new StringCharacterIterator("");
-    };
+    }
     return *nonConstThis->fText;
 }
 

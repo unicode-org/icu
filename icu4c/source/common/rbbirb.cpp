@@ -105,7 +105,8 @@ RBBIRuleBuilder::~RBBIRuleBuilder() {
 //                    which is also the format needed by the RBBI runtime engine.
 //
 //----------------------------------------------------------------------------------------
-static int32_t align8(int32_t i) {return (i+7) & 0xfffffff8;};
+static int32_t align8(int32_t i) {return (i+7) & 0xfffffff8;}
+
 RBBIDataHeader *RBBIRuleBuilder::flattenData() {
     if (U_FAILURE(*fStatus)) {
         return NULL;
