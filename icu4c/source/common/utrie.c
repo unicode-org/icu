@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2003, International Business Machines
+*   Copyright (C) 2001-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -735,6 +735,48 @@ enum {
     UTRIE_OPTIONS_LATIN1_IS_LINEAR=0x200
 };
 
+/*
+ * Default function for the folding value:
+ * Just store the offset (16 bits) if there is any non-initial-value entry.
+ *
+ * The offset parameter is never 0.
+ * Returning the offset itself is safe for UTRIE_SHIFT>=5 because
+ * for UTRIE_SHIFT==5 the maximum index length is UTRIE_MAX_INDEX_LENGTH==0x8800
+ * which fits into 16-bit trie values;
+ * for higher UTRIE_SHIFT, UTRIE_MAX_INDEX_LENGTH decreases.
+ *
+ * Theoretically, it would be safer for all possible UTRIE_SHIFT including
+ * those of 4 and lower to return offset>>UTRIE_SURROGATE_BLOCK_BITS
+ * which would always result in a value of 0x40..0x43f
+ * (start/end 1k blocks of supplementary Unicode code points).
+ * However, this would be uglier, and would not work for some existing
+ * binary data file formats.
+ *
+ * Also, we do not plan to change UTRIE_SHIFT because it would change binary
+ * data file formats, and we would probably not make it smaller because of
+ * the then even larger BMP index length even for empty tries.
+ */
+static uint32_t U_CALLCONV
+defaultGetFoldedValue(UNewTrie *trie, UChar32 start, int32_t offset) {
+    uint32_t value, initialValue;
+    UChar32 limit;
+    UBool inBlockZero;
+
+    initialValue=trie->data[0];
+    limit=start+0x400;
+    while(start<limit) {
+        value=utrie_get32(trie, start, &inBlockZero);
+        if(inBlockZero) {
+            start+=UTRIE_DATA_BLOCK_LENGTH;
+        } else if(value!=initialValue) {
+            return (uint32_t)offset;
+        } else {
+            ++start;
+        }
+    }
+    return 0;
+}
+
 U_CAPI int32_t U_EXPORT2
 utrie_serialize(UNewTrie *trie, void *dt, int32_t capacity,
                 UNewTrieGetFoldedValue *getFoldedValue,
@@ -751,10 +793,14 @@ utrie_serialize(UNewTrie *trie, void *dt, int32_t capacity,
         return 0;
     }
 
-    if(trie==NULL || capacity<0 || (capacity>0 && dt==NULL) || getFoldedValue==NULL) {
+    if(trie==NULL || capacity<0 || (capacity>0 && dt==NULL)) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
+    if(getFoldedValue==NULL) {
+        getFoldedValue=defaultGetFoldedValue;
+    }
+
     data = (uint8_t*)dt;
     /* fold and compact if necessary, also checks that indexLength is within limits */
     if(!trie->isCompacted) {
@@ -835,6 +881,12 @@ utrie_serialize(UNewTrie *trie, void *dt, int32_t capacity,
     return length;
 }
 
+/* inverse to defaultGetFoldedValue() */
+static int32_t U_CALLCONV
+defaultGetFoldingOffset(uint32_t data) {
+    return (int32_t)data;
+}
+
 U_CAPI int32_t U_EXPORT2
 utrie_unserialize(UTrie *trie, const void *data, int32_t length, UErrorCode *pErrorCode) {
     UTrieHeader *header;
@@ -872,7 +924,7 @@ utrie_unserialize(UTrie *trie, const void *data, int32_t length, UErrorCode *pEr
     trie->indexLength=header->indexLength;
     trie->dataLength=header->dataLength;
 
-    length-=sizeof(UTrieHeader);
+    length-=(int32_t)sizeof(UTrieHeader);
 
     /* enough data for the index? */
     if(length<2*trie->indexLength) {
@@ -892,7 +944,7 @@ utrie_unserialize(UTrie *trie, const void *data, int32_t length, UErrorCode *pEr
         }
         trie->data32=(const uint32_t *)p16;
         trie->initialValue=trie->data32[0];
-        return sizeof(UTrieHeader)+2*trie->indexLength+4*trie->dataLength;
+        length=(int32_t)sizeof(UTrieHeader)+2*trie->indexLength+4*trie->dataLength;
     } else {
         if(length<2*trie->dataLength) {
             *pErrorCode=U_INVALID_FORMAT_ERROR;
@@ -902,8 +954,12 @@ utrie_unserialize(UTrie *trie, const void *data, int32_t length, UErrorCode *pEr
         /* the "data16" data is used via the index pointer */
         trie->data32=NULL;
         trie->initialValue=trie->index[trie->indexLength];
-        return sizeof(UTrieHeader)+2*trie->indexLength+2*trie->dataLength;
+        length=(int32_t)sizeof(UTrieHeader)+2*trie->indexLength+2*trie->dataLength;
     }
+
+    trie->getFoldingOffset=defaultGetFoldingOffset;
+
+    return length;
 }
 
 /* swapping ----------------------------------------------------------------- */
@@ -992,7 +1048,7 @@ enumSameValue(const void *context, uint32_t value) {
  * The values are transformed from the raw trie entries by the enumValue function.
  */
 U_CAPI void U_EXPORT2
-utrie_enum(UTrie *trie,
+utrie_enum(const UTrie *trie,
            UTrieEnumValue *enumValue, UTrieEnumRange *enumRange, const void *context) {
     const uint32_t *data32;
     const uint16_t *index;
