@@ -1573,14 +1573,6 @@ containsAnyOtherByte(uint8_t *p, int32_t length, uint8_t b) {
     return FALSE;
 }
 
-static UBool
-usedStackBuffer(const void *p, const void *q) {
-    return
-        (UBool)
-            (p==q ||
-                ((const char *)p-(const char *)q)<16);
-}
-
 static void TestConvertSafeClone()
 {
     /* one 'regular' & all the 'private stateful' converters */
@@ -1739,16 +1731,20 @@ static void TestConvertSafeClone()
             ucnv_close(cnv);
 
             /* check if the clone function overwrote any bytes that it is not supposed to touch */
-            if(
-                usedStackBuffer(cnv2, buffer[1]) ?
-                    bufferSize > bufferSizes[j] ||
-                    containsAnyOtherByte(buffer[0], (int32_t)sizeof(buffer[0]), 0xaa) ||
+            if(bufferSize <= bufferSizes[j]) {
+                /* used the stack buffer */
+                if( containsAnyOtherByte(buffer[0], (int32_t)sizeof(buffer[0]), 0xaa) ||
                     containsAnyOtherByte(buffer[1]+bufferSize, (int32_t)(sizeof(buffer)-(sizeof(buffer[0])+bufferSize)), 0xaa)
-                :
-                    containsAnyOtherByte(buffer[0], (int32_t)sizeof(buffer), 0xaa)
-            ) {
-                log_err("cloning %s overwrote bytes outside the bufferSize %d (requested %d)\n",
-                    names[index], bufferSize, bufferSizes[j]);
+                ) {
+                    log_err("cloning %s in a stack buffer overwrote bytes outside the bufferSize %d (requested %d)\n",
+                        names[index], bufferSize, bufferSizes[j]);
+                }
+            } else {
+                /* heap-allocated the clone */
+                if(containsAnyOtherByte(buffer[0], (int32_t)sizeof(buffer), 0xaa)) {
+                    log_err("cloning %s used the heap (bufferSize %d, requested %d) but overwrote stack buffer bytes\n",
+                        names[index], bufferSize, bufferSizes[j]);
+                }
             }
 
             pCharBuffer = charBuffer;
