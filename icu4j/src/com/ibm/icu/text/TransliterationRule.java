@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRule.java,v $
- * $Date: 2001/12/11 17:43:57 $
- * $Revision: 1.40 $
+ * $Date: 2001/12/11 22:11:04 $
+ * $Revision: 1.41 $
  *
  *****************************************************************************************
  */
@@ -46,24 +46,32 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.40 $ $Date: 2001/12/11 17:43:57 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.41 $ $Date: 2001/12/11 22:11:04 $
  */
 class TransliterationRule {
 
+    // TODO Eliminate the pattern and keyLength data members.  They
+    // are used only by masks() and getIndexValue() which are called
+    // only during build time, not during run-time.  Perhaps these
+    // methods and pattern/keyLength can be isolated into a separate
+    // object.
+
     /**
      * The match that must occur before the key, or null if there is no
-     * antecedent constraint.
+     * preceding context.
      */
     private StringMatcher anteContext;
 
     /**
-     * The 
+     * The matcher object for the key.  If null, then the key is empty.
      */
     private StringMatcher key;
 
+    /**
+     * The match that must occur after the key, or null if there is no
+     * following context.
+     */
     private StringMatcher postContext;
-
-
 
     /**
      * The string that must be matched, consisting of the anteContext, key,
@@ -850,6 +858,9 @@ class TransliterationRule {
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.41  2001/12/11 22:11:04  alan
+ * jitterbug 1591: edit comments
+ *
  * Revision 1.40  2001/12/11 17:43:57  alan
  * jitterbug 1591: clean up TransliterationRule
  *
