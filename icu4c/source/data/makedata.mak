@@ -247,7 +247,7 @@ BRK_FILES = "$(ICUBLD)\$(ICUDT)sent.brk" "$(ICUBLD)\$(ICUDT)char.brk" "$(ICUBLD)
 "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" : "$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata.exe" $(CNV_FILES) $(BRK_FILES) "$(ICUBLD)\$(ICUDT)uprops.icu" "$(ICUBLD)\$(ICUDT)unames.icu" "$(ICUBLD)\$(ICUDT)unorm.icu" "$(ICUBLD)\$(ICUDT)cnvalias.icu" "$(ICUBLD)\$(ICUDT)tz.icu" "$(ICUBLD)\$(ICUDT)ucadata.icu" "$(ICUBLD)\$(ICUDT)invuca.icu" $(ALL_RES) "$(ICUBLD)\$(ICUDT)icudata.res" "$(ICUP)\source\stubdata\stubdatabuilt.txt"
 	@echo Building icu data
 	@cd "$(ICUBLD)"
- 	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -e $(U_ICUDATA_NAME) -v -m dll -c -p $(ICUPKG) -O "$(PKGOPT)" -d "$(ICUBLD)" -s . <<pkgdatain.txt
+ 	@"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -f -e $(U_ICUDATA_NAME) -v -m dll -c -p $(ICUPKG) -O "$(PKGOPT)" -d "$(ICUBLD)" -s . <<pkgdatain.txt
 $(ICUDT)uprops.icu
 $(ICUDT)unames.icu
 $(ICUDT)unorm.icu

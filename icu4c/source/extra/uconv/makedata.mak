@@ -93,7 +93,7 @@ ALL : GODATA  $(OUTPUT) GOBACK #$(RESNAME).dat
 # invoke pkgdata - static
 "$(DLL_OUTPUT)\$(RESNAME).lib" :  $(RB_FILES) $(RESFILES)
 	@echo Building $(RESNAME).lib
-	@"$(ICUTOOLS)\pkgdata" -v -m static -c -p $(RESNAME) -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -s "$(RESDIR)" <<pkgdatain.txt
+	@"$(ICUTOOLS)\pkgdata" -f -v -m static -c -p $(RESNAME) -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -s "$(RESDIR)" <<pkgdatain.txt
 $(RB_FILES:.res =.res
 )
 <<KEEP
@@ -115,7 +115,7 @@ CLEAN :
 	-@erase "base*.*"
 	@cd "$(ICUTOOLS)"
     -@erase "$(RB_FILES)"
-    -@"$(ICUTOOLS)\pkgdata" --clean -v -m static -c -p $(RESNAME) -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -s "$(RESDIR)" pkgdatain.txt
+    -@"$(ICUTOOLS)\pkgdata" -f --clean -v -m static -c -p $(RESNAME) -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -s "$(RESDIR)" pkgdatain.txt
 
 # Inference rule for creating resource bundles
 .txt.res:
