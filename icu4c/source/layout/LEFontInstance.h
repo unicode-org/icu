@@ -425,7 +425,7 @@ inline le_bool LEFontInstance::isComposite() const
     return false;
 }
 
-inline const LEFontInstance *LEFontInstance::getSubFont(const LEUnicode chars[], le_int32 *offset, le_int32 count, le_int32 script) const
+inline const LEFontInstance *LEFontInstance::getSubFont(const LEUnicode /*chars*/[], le_int32 *offset, le_int32 count, le_int32 /*script*/) const
 {
     *offset += count;
     return this;
@@ -436,7 +436,7 @@ inline le_bool LEFontInstance::canDisplay(LEUnicode32 ch) const
     return mapCharToGlyph(ch) != 0;
 }
 
-inline le_int32 LEFontInstance::getName(le_uint16 platformID, le_uint16 scriptID, le_uint16 languageID, le_uint16 nameID, LEUnicode *name) const
+inline le_int32 LEFontInstance::getName(le_uint16 /*platformID*/, le_uint16 /*scriptID*/, le_uint16 /*languageID*/, le_uint16 /*nameID*/, LEUnicode *name) const
 {
     if (name != NULL) {
         *name = 0;

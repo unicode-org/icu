@@ -35,7 +35,7 @@ TrimmedArrayProcessor::~TrimmedArrayProcessor()
 {
 }
 
-void TrimmedArrayProcessor::process(LEGlyphID *glyphs, le_int32 *charIndices, le_int32 glyphCount)
+void TrimmedArrayProcessor::process(LEGlyphID *glyphs, le_int32 * /*charIndices*/, le_int32 glyphCount)
 {
     le_int32 glyph;
 

@@ -51,7 +51,7 @@ ThaiLayoutEngine::~ThaiLayoutEngine()
 // Output: glyphs, char indices
 // Returns: the glyph count
 // NOTE: this assumes that ThaiShaping::compose will allocate the outChars array...
-le_int32 ThaiLayoutEngine::computeGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool rightToLeft, LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success)
+le_int32 ThaiLayoutEngine::computeGlyphs(const LEUnicode chars[], le_int32 offset, le_int32 count, le_int32 max, le_bool /*rightToLeft*/, LEGlyphID *&glyphs, le_int32 *&charIndices, LEErrorCode &success)
 {
     if (LE_FAILURE(success)) {
         return 0;
