@@ -45,10 +45,12 @@ setUnicodeVersionNC(UVersionInfo version);
 extern void
 init(void);
 
+#if !UCONFIG_NO_IDNA
 extern void
 storeMapping(uint32_t codepoint, uint32_t* mapping,int32_t length, UStringPrepType type, UErrorCode* status);
 extern void
 storeRange(uint32_t start, uint32_t end, UStringPrepType type,UErrorCode* status);
+#endif
 
 extern void
 generateData(const char *dataDir, const char* packageName, const char* bundleName);
