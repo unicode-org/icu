@@ -127,6 +127,19 @@ typedef unsigned short uint16_t;
 #define U_IMPORT __declspec(dllimport)
 
 /*===========================================================================*/
+/* Code alignment and C function inlining                                    */
+/*===========================================================================*/
+
+#define U_INLINE __inline
+
+#ifdef _MSC_VER
+#define U_ALIGN_CODE(val)    __asm      align val
+#else
+#define U_ALIGN_CODE(val)
+#endif
+      
+
+/*===========================================================================*/
 /* Programs used by ICU code                                                 */
 /*===========================================================================*/
 
