@@ -154,6 +154,8 @@ public: // package
 
     void TestWhiteSpaceParsing(void);
 
+    void TestInvalidPattern(void);
+
  private:
     void expectParse(const char** data, int32_t data_length,
                      const Locale& locale);
