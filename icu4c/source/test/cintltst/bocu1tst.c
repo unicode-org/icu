@@ -718,7 +718,7 @@ writeString(const UChar *s, int32_t length, uint8_t *p) {
         UTF_NEXT_CHAR(s, i, length, c);
         p+=writePacked(encodeBocu1(&prev, c), p);
     }
-    return p-p0;
+    return (int32_t)(p-p0);
 }
 
 /**
