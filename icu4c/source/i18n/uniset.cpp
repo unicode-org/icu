@@ -812,30 +812,15 @@ void UnicodeSet::applyPattern(const UnicodeString& pattern,
              * interpret '\\uxxxx' Unicode escapes here (as literals).
              */
             if (c == BACKSLASH) {
-                ++i;
-                if (i < pattern.length()) {
-                    c = pattern.charAt(i);
-                    isLiteral = TRUE;
-                    if (c == 0x0075 /*u*/) {
-                        if ((i+4) >= pattern.length()) {
-                            status = U_ILLEGAL_ARGUMENT_ERROR;
-                            return;
-                        }
-                        c = (UChar)0x0000;
-                        for (int32_t j=(++i)+4; i<j; ++i) { // [sic]
-                            int32_t digit = Unicode::digit(pattern.charAt(i), 16);
-                            if (digit<0) {
-                                status = U_ILLEGAL_ARGUMENT_ERROR;
-                                return;
-                            }
-                            c = (UChar) ((c << 4) | digit);
-                        }
-                        --i; // Move i back to last parsed character
-                    }
-                } else {
+                ++i; // Advance past '\\'
+                UChar32 escaped = pattern.unescapeAt(i);
+                if (escaped == (UChar32) -1) {
                     status = U_ILLEGAL_ARGUMENT_ERROR;
                     return;
                 }
+                isLiteral = TRUE;
+                --i; // Move i back to last parsed character
+                c = (UChar) escaped;
             }
 
             /* Parse variable references.  These are treated as literals.  If a

@@ -43,33 +43,8 @@ void BasicNormalizerTest::runIndexedTest(int32_t index, UBool exec,
  */
 static UnicodeString str(const char *input)
 {
-  static const UnicodeString digitString1("0123456789ABCDEF");
-  static const UnicodeString digitString2("0123456789abcdef");
-  
-  UnicodeString result(input);
-  int index = 0;
-  
-  while ((index = result.indexOf("\\u")) != -1)
-    {
-      if (index + 6 <= result.length())
-    {
-      UChar c = 0;
-      for (int i = index + 2; i < index + 6; i++) {
-        UTextOffset value = digitString1.indexOf(result[i]);
-        
-        if (value == -1) {
-          value = digitString2.indexOf(result[i]);
-        }
-        c = (UChar)(c * 16 + value);
-      }
-      UnicodeString replace;
-      replace += c;
-      result.replace(index, 6, replace);
-    }
-      index += 1;
-    }
-
-  return result;
+    UnicodeString str(input, ""); // Invariant conversion
+    return str.unescape();
 }
 
 
