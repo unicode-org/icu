@@ -39,7 +39,7 @@ $(ICU_PATH)/source/tools/toolutil/uoptions.h:
 	@false
 
 CPPFLAGS += -I$(ICU_PATH)/source/tools/toolutil
-LDFLAGS += -L$(ICU_PATH)/source/tools/toolutil $(shell icu-config --ldflags-toolutil --ldflags-ustdio)
+LDFLAGS += -L$(ICU_PATH)/source/tools/toolutil $(shell icu-config --ldflags-toolutil --ldflags-icuio)
 
 .PHONY: all clean distclean check report
 
