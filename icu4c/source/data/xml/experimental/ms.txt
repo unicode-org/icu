@@ -26,7 +26,7 @@ ms{
         "Ahad",
         "Isnin",
         "Selasa",
-        "Rahu",
+        "Rabu",
         "Khamis",
         "Jumaat",
         "Sabtu",
