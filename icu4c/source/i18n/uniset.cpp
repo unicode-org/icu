@@ -976,9 +976,9 @@ void UnicodeSet::doUnion(UnicodeString& c1, const UnicodeString& c2) {
     // one of the operands.  We can append all of the remaining characters
     // in the other operand without doing any extra work.
     if (i < c1.length())
-        result.append(c1, i, T_INT32_MAX);
+        result.append(c1, i, INT32_MAX);
     if (j < c2.length())
-        result.append(c2, j, T_INT32_MAX);
+        result.append(c2, j, INT32_MAX);
 
     c1 = result;
 }

@@ -1248,11 +1248,11 @@ CalendarRegressionTest::test4031502()
 
         calendar->adoptTimeZone(TimeZone::createTimeZone("GMT"));
 
-        calendar->setTime(makeDate(T_INT32_MIN),status);
+        calendar->setTime(makeDate(INT32_MIN),status);
         int32_t year1 = calendar->get(Calendar::YEAR,status);
         int32_t era1 = calendar->get(Calendar::ERA,status);
         
-        calendar->setTime(makeDate(T_INT32_MAX),status);
+        calendar->setTime(makeDate(INT32_MAX),status);
         int32_t year2 = calendar->get(Calendar::YEAR,status);
         int32_t era2 = calendar->get(Calendar::ERA,status);
         
