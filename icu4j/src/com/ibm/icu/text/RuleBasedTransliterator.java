@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedTransliterator.java,v $
- * $Date: 2001/10/10 20:26:27 $
- * $Revision: 1.49 $
+ * $Date: 2001/11/27 22:07:33 $
+ * $Revision: 1.50 $
  *
  *****************************************************************************************
  */
@@ -279,7 +279,7 @@ import com.ibm.text.resources.ResourceReader;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.49 $ $Date: 2001/10/10 20:26:27 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.50 $ $Date: 2001/11/27 22:07:33 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -423,7 +423,7 @@ public class RuleBasedTransliterator extends Transliterator {
         int segmentCount;
 
         /**
-         * Return the UnicodeSet represented by the given character, or
+         * Return the UnicodeMatcher represented by the given character, or
          * null if none.
          */
         public UnicodeMatcher lookup(int standIn) {
@@ -469,6 +469,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.50  2001/11/27 22:07:33  alan
+ * jitterbug 1389: incorporate Mark's review comments - comments only
+ *
  * Revision 1.49  2001/10/10 20:26:27  alan
  * jitterbug 81: initial implementation of compound filters in IDs and ::ID blocks
  *
