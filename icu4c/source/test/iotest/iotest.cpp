@@ -27,7 +27,7 @@
 
 #if U_IOSTREAM_SOURCE >= 199711
 #include <iostream>
-#include <strstream>
+#include <sstream>
 using namespace std;
 #elif U_IOSTREAM_SOURCE >= 198506
 #include <iostream.h>
@@ -679,10 +679,6 @@ U_CDECL_BEGIN
 static void U_CALLCONV TestStream(void)
 {
 #if U_IOSTREAM_SOURCE >= 198506
-    char testStreamBuf[512];
-    static const char testStr[] = "\x42\x65\x67\x69\x6E\x6E\x69\x6E\x67\x20\x6F\x66\x20\x74\x65\x73\x74\x20\x73\x74\x72\x31\x20\x20\x20\x3C\x3C\x32\x31\x20" UTF8_NEW_LINE "\x20\x55\x54\x46\x2D\x38\x20\xCE\xBC\xF0\x90\x80\x81\xF0\x90\x80\x82";
-    ostrstream outTestStream(testStreamBuf, sizeof(testStreamBuf));
-    istrstream inTestStream("\x20\x74\x48\x69\x73\xCE\xBC\xE2\x80\x82\x20\x6D\x75\x20\x77\x6F\x72\x6C\x64", 0);
     const UChar thisMu[] = { 0x74, 0x48, 0x69, 0x73, 0x3BC, 0};
     const UChar mu[] = { 0x6D, 0x75, 0};
     UnicodeString str1 = UNICODE_STRING_SIMPLE("str1");
@@ -695,10 +691,7 @@ static void U_CALLCONV TestStream(void)
     char inStrC[128];
     UErrorCode status = U_ZERO_ERROR;
     UConverter *defConv;
-
-    /* initialize testStreamBuf */
-    memset(testStreamBuf, '*', sizeof(testStreamBuf));
-    testStreamBuf[sizeof(testStreamBuf)-1] = 0;
+    static const char testStr[] = "\x42\x65\x67\x69\x6E\x6E\x69\x6E\x67\x20\x6F\x66\x20\x74\x65\x73\x74\x20\x73\x74\x72\x31\x20\x20\x20\x3C\x3C\x32\x31\x20" UTF8_NEW_LINE "\x20\x55\x54\x46\x2D\x38\x20\xCE\xBC\xF0\x90\x80\x81\xF0\x90\x80\x82";
 
     str4.append((UChar32)0x03BC);   /* mu */
     str4.append((UChar32)0x10001);
@@ -714,8 +707,24 @@ static void U_CALLCONV TestStream(void)
     strncpy(defConvName, ucnv_getDefaultName(), sizeof(defConvName)/sizeof(defConvName[0]));
     ucnv_setDefaultName("UTF-8");
 
+#if U_IOSTREAM_SOURCE >= 199711
+    ostringstream outTestStream;
+    istringstream inTestStream("\x20\x74\x48\x69\x73\xCE\xBC\xE2\x80\x82\x20\x6D\x75\x20\x77\x6F\x72\x6C\x64");
+#else
+    char testStreamBuf[512];
+    ostrstream outTestStream(testStreamBuf, sizeof(testStreamBuf));
+    istrstream inTestStream("\x20\x74\x48\x69\x73\xCE\xBC\xE2\x80\x82\x20\x6D\x75\x20\x77\x6F\x72\x6C\x64", 0);
+
+    /* initialize testStreamBuf */
+    memset(testStreamBuf, '*', sizeof(testStreamBuf));
+    testStreamBuf[sizeof(testStreamBuf)-1] = 0;
+#endif
+
     outTestStream << "\x42\x65\x67\x69\x6E\x6E\x69\x6E\x67\x20\x6F\x66\x20\x74\x65\x73\x74\x20";
     outTestStream << str1 << "\x20\x20" << str2 << str3 << "\x31\x20" << UTF8_NEW_LINE << str4 << ends;
+#if U_IOSTREAM_SOURCE >= 199711
+    const char *testStreamBuf = outTestStream.str().c_str();
+#endif
     if (strcmp(testStreamBuf, testStr) != 0) {
         log_err("Got: \"%s\", Expected: \"%s\"\n", testStreamBuf, testStr);
     }
