@@ -2210,7 +2210,7 @@ public final class CollationElementIterator
             // illegal code value, use completely ignoreable!
             return IGNORABLE;
         }
-        int result = getImplicitPrimary(codepoint);
+        int result = RuleBasedCollator.impCEGen_.getImplicitFromCodePoint(codepoint);
         m_CEBuffer_[0] = (result & RuleBasedCollator.CE_PRIMARY_MASK_)
                          | 0x00000505;
         m_CEBuffer_[1] = ((result & 0x0000FFFF) << 16) | 0x000000C0;
@@ -2906,7 +2906,7 @@ public final class CollationElementIterator
         if (!UCharacter.isLegal(codepoint)) {
             return IGNORABLE; // illegal code value, completely ignoreable!
         }
-        int result = getImplicitPrimary(codepoint);
+        int result = RuleBasedCollator.impCEGen_.getImplicitFromCodePoint(codepoint);
         m_CEBufferSize_ = 2;
         m_CEBufferOffset_ = 1;
         m_CEBuffer_[0] = (result & RuleBasedCollator.CE_PRIMARY_MASK_)
@@ -3008,82 +3008,82 @@ public final class CollationElementIterator
      * @param cp codepoint
      * @param value is left justified primary key
      */
-    private static final int getImplicitPrimary(int cp)
-    {
-        cp = swapCJK(cp);
+//    private static final int getImplicitPrimary(int cp)
+//    {
+//        cp = swapCJK(cp);
+//
+//        //if (DEBUG) System.out.println("CJK swapped: " + Utility.hex(cp));
+//        // we now have a range of numbers from 0 to 21FFFF.
+//        // we must skip all 00, 01, 02 bytes, so most bytes have 253 values
+//        // we must leave a gap of 01 between all values of the last byte, so
+//        // the last byte has 126 values (3 byte case)
+//        // we shift so that HAN all has the same first primary, for
+//        // compression.
+//        // for the 4 byte case, we make the gap as large as we can fit.
+//        // Three byte forms are EC xx xx, ED xx xx, EE xx xx (with a gap of 1)
+//        // Four byte forms (most supplementaries) are EF xx xx xx (with a gap
+//        // of LAST2_MULTIPLIER == 14)
+//
+//        int last0 = cp - RuleBasedCollator.IMPLICIT_4BYTE_BOUNDARY_;
+//        if (last0 < 0) {
+//            int last1 = cp / RuleBasedCollator.LAST_COUNT_;
+//            last0 = cp % RuleBasedCollator.LAST_COUNT_;
+//
+//            int last2 = last1 / RuleBasedCollator.OTHER_COUNT_;
+//            last1 %= RuleBasedCollator.OTHER_COUNT_;
+//            return RuleBasedCollator.IMPLICIT_BASE_3BYTE_ + (last2 << 24)
+//                   + (last1 << 16)
+//                   + ((last0 * RuleBasedCollator.LAST_MULTIPLIER_) << 8);
+//        }
+//        else {
+//            int last1 = last0 / RuleBasedCollator.LAST_COUNT2_;
+//            last0 %= RuleBasedCollator.LAST_COUNT2_;
+//
+//            int last2 = last1 / RuleBasedCollator.OTHER_COUNT_;
+//            last1 %= RuleBasedCollator.OTHER_COUNT_;
+//
+//            int last3 = last2 / RuleBasedCollator.OTHER_COUNT_;
+//            last2 %= RuleBasedCollator.OTHER_COUNT_;
+//            return RuleBasedCollator.IMPLICIT_BASE_4BYTE_ + (last3 << 24)
+//                   + (last2 << 16) + (last1 << 8)
+//                   + (last0 * RuleBasedCollator.LAST2_MULTIPLIER_);
+//        }
+//    }
 
-        //if (DEBUG) System.out.println("CJK swapped: " + Utility.hex(cp));
-        // we now have a range of numbers from 0 to 21FFFF.
-        // we must skip all 00, 01, 02 bytes, so most bytes have 253 values
-        // we must leave a gap of 01 between all values of the last byte, so
-        // the last byte has 126 values (3 byte case)
-        // we shift so that HAN all has the same first primary, for
-        // compression.
-        // for the 4 byte case, we make the gap as large as we can fit.
-        // Three byte forms are EC xx xx, ED xx xx, EE xx xx (with a gap of 1)
-        // Four byte forms (most supplementaries) are EF xx xx xx (with a gap
-        // of LAST2_MULTIPLIER == 14)
-
-        int last0 = cp - RuleBasedCollator.IMPLICIT_4BYTE_BOUNDARY_;
-        if (last0 < 0) {
-            int last1 = cp / RuleBasedCollator.LAST_COUNT_;
-            last0 = cp % RuleBasedCollator.LAST_COUNT_;
-
-            int last2 = last1 / RuleBasedCollator.OTHER_COUNT_;
-            last1 %= RuleBasedCollator.OTHER_COUNT_;
-            return RuleBasedCollator.IMPLICIT_BASE_3BYTE_ + (last2 << 24)
-                   + (last1 << 16)
-                   + ((last0 * RuleBasedCollator.LAST_MULTIPLIER_) << 8);
-        }
-        else {
-            int last1 = last0 / RuleBasedCollator.LAST_COUNT2_;
-            last0 %= RuleBasedCollator.LAST_COUNT2_;
-
-            int last2 = last1 / RuleBasedCollator.OTHER_COUNT_;
-            last1 %= RuleBasedCollator.OTHER_COUNT_;
-
-            int last3 = last2 / RuleBasedCollator.OTHER_COUNT_;
-            last2 %= RuleBasedCollator.OTHER_COUNT_;
-            return RuleBasedCollator.IMPLICIT_BASE_4BYTE_ + (last3 << 24)
-                   + (last2 << 16) + (last1 << 8)
-                   + (last0 * RuleBasedCollator.LAST2_MULTIPLIER_);
-        }
-    }
-
-    /**
-     * Swapping CJK characters for implicit ces
-     * @param cp codepoint CJK
-     * @return swapped result
-     */
-    private static final int swapCJK(int cp)
-    {
-        if (cp >= CJK_BASE_) {
-            if (cp < CJK_LIMIT_) {
-                return cp - CJK_BASE_;
-            }
-            if (cp < CJK_COMPAT_USED_BASE_) {
-                return cp + NON_CJK_OFFSET_;
-            }
-            if (cp < CJK_COMPAT_USED_LIMIT_) {
-                return cp - CJK_COMPAT_USED_BASE_ + (CJK_LIMIT_ - CJK_BASE_);
-            }
-            if (cp < CJK_B_BASE_) {
-                return cp + NON_CJK_OFFSET_;
-            }
-            if (cp < CJK_B_LIMIT_) {
-                return cp; // non-BMP-CJK
-            }
-            return cp + NON_CJK_OFFSET_; // non-CJK
-        }
-        if (cp < CJK_A_BASE_) {
-            return cp + NON_CJK_OFFSET_;
-        }
-        if (cp < CJK_A_LIMIT_) {
-            return cp - CJK_A_BASE_ + (CJK_LIMIT_ - CJK_BASE_)
-                   + (CJK_COMPAT_USED_LIMIT_ - CJK_COMPAT_USED_BASE_);
-        }
-        return cp + NON_CJK_OFFSET_; // non-CJK
-    }
+//    /**
+//     * Swapping CJK characters for implicit ces
+//     * @param cp codepoint CJK
+//     * @return swapped result
+//     */
+//    private static final int swapCJK(int cp)
+//    {
+//        if (cp >= CJK_BASE_) {
+//            if (cp < CJK_LIMIT_) {
+//                return cp - CJK_BASE_;
+//            }
+//            if (cp < CJK_COMPAT_USED_BASE_) {
+//                return cp + NON_CJK_OFFSET_;
+//            }
+//            if (cp < CJK_COMPAT_USED_LIMIT_) {
+//                return cp - CJK_COMPAT_USED_BASE_ + (CJK_LIMIT_ - CJK_BASE_);
+//            }
+//            if (cp < CJK_B_BASE_) {
+//                return cp + NON_CJK_OFFSET_;
+//            }
+//            if (cp < CJK_B_LIMIT_) {
+//                return cp; // non-BMP-CJK
+//            }
+//            return cp + NON_CJK_OFFSET_; // non-CJK
+//        }
+//        if (cp < CJK_A_BASE_) {
+//            return cp + NON_CJK_OFFSET_;
+//        }
+//        if (cp < CJK_A_LIMIT_) {
+//            return cp - CJK_A_BASE_ + (CJK_LIMIT_ - CJK_BASE_)
+//                   + (CJK_COMPAT_USED_LIMIT_ - CJK_COMPAT_USED_BASE_);
+//        }
+//        return cp + NON_CJK_OFFSET_; // non-CJK
+//    }
     
     /** 
      * Gets a character from the source string at a given offset.

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $
-* $Date: 2004/01/14 21:49:20 $
-* $Revision: 1.55 $
+* $Date: 2004/01/22 06:40:38 $
+* $Revision: 1.56 $
 *
 *******************************************************************************
 */
@@ -1529,24 +1529,28 @@ public final class RuleBasedCollator extends Collator
      */
     static final char UCA_CONTRACTIONS_[];
     /**
-     * Implicit constants
+     * Implicit generator
      */
-    static final int IMPLICIT_BASE_BYTE_;
-    static final int IMPLICIT_LIMIT_BYTE_;
-    static final int IMPLICIT_4BYTE_BOUNDARY_;
-    static final int LAST_MULTIPLIER_;
-    static final int LAST2_MULTIPLIER_;
-    static final int IMPLICIT_BASE_3BYTE_;
-    static final int IMPLICIT_BASE_4BYTE_;
-    static final int BYTES_TO_AVOID_ = 3;
-    static final int OTHER_COUNT_ = 256 - BYTES_TO_AVOID_;
-    static final int LAST_COUNT_ = OTHER_COUNT_ / 2;
-    /**
-     * Room for intervening, without expanding to 5 bytes
-     */
-    static final int LAST_COUNT2_ = OTHER_COUNT_ / 21;
-    static final int IMPLICIT_3BYTE_COUNT_ = 1;
-    
+    static final ImplicitCEGenerator impCEGen_;
+//    /**
+//     * Implicit constants
+//     */
+//    static final int IMPLICIT_BASE_BYTE_;
+//    static final int IMPLICIT_LIMIT_BYTE_;
+//    static final int IMPLICIT_4BYTE_BOUNDARY_;
+//    static final int LAST_MULTIPLIER_;
+//    static final int LAST2_MULTIPLIER_;
+//    static final int IMPLICIT_BASE_3BYTE_;
+//    static final int IMPLICIT_BASE_4BYTE_;
+//    static final int BYTES_TO_AVOID_ = 3;
+//    static final int OTHER_COUNT_ = 256 - BYTES_TO_AVOID_;
+//    static final int LAST_COUNT_ = OTHER_COUNT_ / 2;
+//    /**
+//     * Room for intervening, without expanding to 5 bytes
+//     */
+//    static final int LAST_COUNT2_ = OTHER_COUNT_ / 21;
+//    static final int IMPLICIT_3BYTE_COUNT_ = 1;
+//    
     static final byte SORT_LEVEL_TERMINATOR_ = 1;
 
 
@@ -1566,16 +1570,17 @@ public final class RuleBasedCollator extends Collator
             b.close();
             i.close();
             // called before doing canonical closure for the UCA.
-            IMPLICIT_BASE_BYTE_ = UCA_CONSTANTS_.PRIMARY_IMPLICIT_MIN_;
-            // leave room for 1 3-byte and 2 4-byte forms
-            IMPLICIT_LIMIT_BYTE_ = IMPLICIT_BASE_BYTE_ + 4;
-            IMPLICIT_4BYTE_BOUNDARY_ = IMPLICIT_3BYTE_COUNT_ * OTHER_COUNT_
-                                       * LAST_COUNT_;
-            LAST_MULTIPLIER_ = OTHER_COUNT_ / LAST_COUNT_;
-            LAST2_MULTIPLIER_ = OTHER_COUNT_ / LAST_COUNT2_;
-            IMPLICIT_BASE_3BYTE_ = (IMPLICIT_BASE_BYTE_ << 24) + 0x030300;
-            IMPLICIT_BASE_4BYTE_ = ((IMPLICIT_BASE_BYTE_
-                                     + IMPLICIT_3BYTE_COUNT_) << 24) + 0x030303;
+            impCEGen_ = new ImplicitCEGenerator(UCA_CONSTANTS_.PRIMARY_IMPLICIT_MIN_, UCA_CONSTANTS_.PRIMARY_IMPLICIT_MAX_);
+//            IMPLICIT_BASE_BYTE_ = UCA_CONSTANTS_.PRIMARY_IMPLICIT_MIN_;
+//            // leave room for 1 3-byte and 2 4-byte forms
+//            IMPLICIT_LIMIT_BYTE_ = IMPLICIT_BASE_BYTE_ + 4;
+//            IMPLICIT_4BYTE_BOUNDARY_ = IMPLICIT_3BYTE_COUNT_ * OTHER_COUNT_
+//                                       * LAST_COUNT_;
+//            LAST_MULTIPLIER_ = OTHER_COUNT_ / LAST_COUNT_;
+//            LAST2_MULTIPLIER_ = OTHER_COUNT_ / LAST_COUNT2_;
+//            IMPLICIT_BASE_3BYTE_ = (IMPLICIT_BASE_BYTE_ << 24) + 0x030300;
+//            IMPLICIT_BASE_4BYTE_ = ((IMPLICIT_BASE_BYTE_
+//                                     + IMPLICIT_3BYTE_COUNT_) << 24) + 0x030303;
             UCA_.init();
             ResourceBundle rb = ICULocaleData.getLocaleElements(Locale.ENGLISH);
             UCA_.m_rules_ = (String)rb.getObject("%%UCARULES");
