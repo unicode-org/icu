@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberFormatTest.java,v $ 
- * $Date: 2003/04/19 05:51:50 $ 
- * $Revision: 1.12 $
+ * $Date: 2003/04/19 06:32:17 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -797,8 +797,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         NumberFormat fmt = NumberFormat.getCurrencyInstance(loc);
 
         expect2(fmt, 1.0, "Re1.00");
-        // TODO: Make this work!
-        // expect(fmt, 1.001, "Re1.00");
+        expect(fmt, 1.001, "Re1.00"); // tricky
         expect2(fmt, 12345678.0, "Rs1,23,45,678.00");
         expect2(fmt, 0.5, "Rs0.50");
         expect2(fmt, -1.0, "-Re1.00");
