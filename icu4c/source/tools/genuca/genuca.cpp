@@ -39,6 +39,8 @@
  */
 UBool VERBOSE = FALSE;
 
+static UVersionInfo UCAVersion;
+
 #if UCONFIG_NO_COLLATION
 
 /* dummy UDataInfo cf. udata.h */
@@ -55,8 +57,6 @@ static UDataInfo dummyDataInfo = {
     { 0, 0, 0, 0 },                 /* dummy formatVersion */
     { 0, 0, 0, 0 }                  /* dummy dataVersion */
 };
-
-static UVersionInfo UCAVersion;
 
 #else
 
