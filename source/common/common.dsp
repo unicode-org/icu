@@ -342,6 +342,10 @@ SOURCE=.\uscript.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\uset.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\ushape.c
 # End Source File
 # Begin Source File
@@ -1419,6 +1423,10 @@ InputPath=.\unicode\uscript.h
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\uset.h
 # End Source File
 # Begin Source File
 
