@@ -39,62 +39,62 @@
  *  </tr>
  *
  *  <tr>
- *    <td>JAVA_TIME</td>
+ *    <td>UDTS_JAVA_TIME</td>
  *    <td>int64_t</td>
  *    <td>milliseconds</td>
  *    <td>Jan 1, 1970</td>
  *  </tr>
  *  <tr>
  *
- *    <td>UNIX_TIME</td>
+ *    <td>UDTS_UNIX_TIME</td>
  *    <td>int32_t or int64_t</td>
  *    <td>seconds</td>
  *    <td>Jan 1, 1970</td>
  *  </tr>
  *  <tr>
- *    <td>ICU4C_TIME</td>
+ *    <td>UDTS_ICU4C_TIME</td>
  *
  *    <td>double</td>
  *    <td>milliseconds</td>
  *    <td>Jan 1, 1970</td>
  *  </tr>
  *  <tr>
- *    <td>WINDOWS_FILE_TIME</td>
+ *    <td>UDTS_WINDOWS_FILE_TIME</td>
  *    <td>int64_t</td>
  *
  *    <td>ticks (100 nanoseconds)</td>
  *    <td>Jan 1, 1601</td>
  *  </tr>
  *  <tr>
- *    <td>WINDOWS_DATE_TIME</td>
+ *    <td>UDTS_WINDOWS_DATE_TIME</td>
  *    <td>int64_t</td>
  *    <td>ticks (100 nanoseconds)</td>
  *
  *    <td>Jan 1, 0001</td>
  *  </tr>
  *  <tr>
- *    <td>MAC_OLD_TIME</td>
+ *    <td>UDTS_MAC_OLD_TIME</td>
  *    <td>int32_t</td>
  *    <td>seconds</td>
  *    <td>Jan 1, 1904</td>
  *
  *  </tr>
  *  <tr>
- *    <td>MAC_TIME</td>
+ *    <td>UDTS_MAC_TIME</td>
  *    <td>double</td>
  *    <td>seconds</td>
  *    <td>Jan 1, 2001</td>
  *  </tr>
  *
  *  <tr>
- *    <td>EXCEL_TIME</td>
+ *    <td>UDTS_EXCEL_TIME</td>
  *    <td>?</td>
  *    <td>days</td>
  *    <td>Dec 31, 1899</td>
  *  </tr>
  *  <tr>
  *
- *    <td>DB2_TIME</td>
+ *    <td>UDTS_DB2_TIME</td>
  *    <td>?</td>
  *    <td>days</td>
  *    <td>Dec 31, 1899</td>
@@ -166,7 +166,7 @@
  * with <code>doubles</code>. They provide for much more graceful degradation in arithmetic operations.
  * But they only have 53 bits of accuracy, which means that they will lose precision when
  * converting back and forth to ticks. What would really be nice would be a
- * long double (80 bits -- 64 bit mantissa), but that is not supported on most systems.
+ * <code>long double</code> (80 bits -- 64 bit mantissa), but that is not supported on most systems.
  *
  *<p>
  * The Unix extended time uses a structure with two components: time in seconds and a
@@ -273,12 +273,20 @@ typedef enum UDateTimeScale {
     UDTS_MAX_SCALE
 } UDateTimeScale;
 
+/**
+ * <code>UTimeScaleValue</code> values are used to specify the time scale values
+ * to <code>utmscale_getTimeScaleValue</code>.
+ *
+ * @see utmscale_getTimeScaleValue
+ *
+ * @draft ICU 3.2
+ */
 typedef enum UTimeScaleValue {
     /**
      * The constant used to select the units vale
      * for a time scale.
      * 
-     * @see utms_getTimeScaleValue
+     * @see utmscale_getTimeScaleValue
      *
      * @draft ICU 3.2
      */
@@ -288,7 +296,7 @@ typedef enum UTimeScaleValue {
      * The constant used to select the epoch offset value
      * for a time scale.
      * 
-     * @see utms_getTimeScaleValue
+     * @see utmscale_getTimeScaleValue
      *
      * @draft ICU 3.2
      */
@@ -298,7 +306,7 @@ typedef enum UTimeScaleValue {
      * The constant used to select the minimum from value
      * for a time scale.
      * 
-     * @see utms_getTimeScaleValue
+     * @see utmscale_getTimeScaleValue
      *
      * @draft ICU 3.2
      */
@@ -308,7 +316,7 @@ typedef enum UTimeScaleValue {
      * The constant used to select the maximum from value
      * for a time scale.
      * 
-     * @see utms_getTimeScaleValue
+     * @see utmscale_getTimeScaleValue
      *
      * @draft ICU 3.2
      */
@@ -318,7 +326,7 @@ typedef enum UTimeScaleValue {
      * The constant used to select the minimum to value
      * for a time scale.
      * 
-     * @see utms_getTimeScaleValue
+     * @see utmscale_getTimeScaleValue
      *
      * @draft ICU 3.2
      */
@@ -328,7 +336,7 @@ typedef enum UTimeScaleValue {
      * The constant used to select the maximum to value
      * for a time scale.
      * 
-     * @see utms_getTimeScaleValue
+     * @see utmscale_getTimeScaleValue
      *
      * @draft ICU 3.2
      */
@@ -341,7 +349,7 @@ typedef enum UTimeScaleValue {
      * NOTE: This is an internal value. DO NOT USE IT. May not
      * actually be equal to the epoch offset value plus one.
      * 
-     * @see utms_getTimeScaleValue
+     * @see utmscale_getTimeScaleValue
      *
      * @draft ICU 3.2
      */
@@ -354,7 +362,7 @@ typedef enum UTimeScaleValue {
      * NOTE: This is an internal value. DO NOT USE IT. May not
      * actually be equal to the epoch offset value plus one.
      * 
-     * @see utms_getTimeScaleValue
+     * @see utmscale_getTimeScaleValue
      *
      * @draft ICU 3.2
      */
@@ -366,7 +374,7 @@ typedef enum UTimeScaleValue {
      * 
      * NOTE: This is an internal value. DO NOT USE IT.
      * 
-     * @see utms_getTimeScaleValue
+     * @see utmscale_getTimeScaleValue
      *
      * @internal
      */
@@ -378,7 +386,7 @@ typedef enum UTimeScaleValue {
      * 
      * NOTE: This is an internal value. DO NOT USE IT.
      * 
-     * @see utms_getTimeScaleValue
+     * @see utmscale_getTimeScaleValue
      *
      * @internal
      */
@@ -390,7 +398,7 @@ typedef enum UTimeScaleValue {
      * 
      * NOTE: This is an internal value. DO NOT USE IT.
      * 
-     * @see utms_getTimeScaleValue
+     * @see utmscale_getTimeScaleValue
      *
      * @internal
      */
@@ -401,7 +409,7 @@ typedef enum UTimeScaleValue {
      * 
      * NOTE: This is an internal value. DO NOT USE IT.
      * 
-     * @see utms_getTimeScaleValue
+     * @see utmscale_getTimeScaleValue
      *
      * @internal
      */
