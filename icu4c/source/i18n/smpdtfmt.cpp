@@ -322,8 +322,9 @@ void SimpleDateFormat::construct(EStyle timeStyle,
     // pattern string from the resources
     //else if (timeStyle != kNone) fPattern = UnicodeString(dateTimePatterns[timeStyle]);
     //else if (dateStyle != kNone) fPattern = UnicodeString(dateTimePatterns[dateStyle]);
-    else if (timeStyle != kNone) fPattern = dateTimePatterns.getStringEx(timeStyle, status);
-    else if (dateStyle != kNone) fPattern = dateTimePatterns.getStringEx(dateStyle, status);
+    // fastCopyFrom() - see DateFormatSymbols::assignArray comments
+    else if (timeStyle != kNone) fPattern.fastCopyFrom(dateTimePatterns.getStringEx(timeStyle, status));
+    else if (dateStyle != kNone) fPattern.fastCopyFrom(dateTimePatterns.getStringEx(dateStyle, status));
     
     // and if it includes _neither_, that's an error
     else status = U_INVALID_FORMAT_ERROR;
@@ -1295,34 +1296,30 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             // At this point, check for named time zones by looking through
             // the locale data from the DateFormatZoneData strings.
             // Want to be able to parse both short and long forms.
+            const UnicodeString *zs;
+            int32_t j;
+
             for (i = 0; i < fSymbols->fZoneStringsRowCount; i++)
             {
                 // Checking long and short zones [1 & 2],
                 // and long and short daylight [3 & 4].
-                int32_t j = 1;
-                
-                // {sfb} kludge for case-insensitive compare
-                UnicodeString s1(text);
-                s1.toLower();
-                UnicodeString s2;
-
-                for (; j <= 4; ++j)
+                for (j = 1; j <= 4; ++j)
                 {
-                    s2 = fSymbols->fZoneStrings[i][j];
-                    s2.toLower();
-                
-                    if ((s1.compare(start, s2.length(), s2, 0, s2.length())) == 0)
-                        break;
-                }
-                if (j <= 4)
-                {
-                    TimeZone *tz = TimeZone::createTimeZone(fSymbols->fZoneStrings[i][0]);
-                    cal.set(Calendar::ZONE_OFFSET, tz->getRawOffset());
-                    // Must call set() with something -- TODO -- Fix this to
-                    // use the correct DST SAVINGS for the zone.
-                    delete tz;
-                    cal.set(Calendar::DST_OFFSET, j >= 3 ? U_MILLIS_PER_HOUR : 0);
-                    return (start + fSymbols->fZoneStrings[i][j].length());
+                    zs = &fSymbols->fZoneStrings[i][j];
+                    // ### TODO markus 20021014: This use of caseCompare() will fail
+                    // if the text contains a character that case-folds into multiple
+                    // characters. In that case, zs->length() may be too long, and it does not match.
+                    // We need a case-insensitive version of startsWith().
+                    // There are similar cases of such caseCompare() uses elsewhere in ICU.
+                    if (0 == (text.caseCompare(start, zs->length(), *zs, 0))) {
+                        TimeZone *tz = TimeZone::createTimeZone(fSymbols->fZoneStrings[i][0]);
+                        cal.set(Calendar::ZONE_OFFSET, tz->getRawOffset());
+                        // Must call set() with something -- TODO -- Fix this to
+                        // use the correct DST SAVINGS for the zone.
+                        delete tz;
+                        cal.set(Calendar::DST_OFFSET, j >= 3 ? U_MILLIS_PER_HOUR : 0);
+                        return (start + fSymbols->fZoneStrings[i][j].length());
+                    }
                 }
             }
 

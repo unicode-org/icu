@@ -292,7 +292,7 @@ public:
 
 private:
     /**
-     * Resource bundle file suffix and tag names used by this class.
+     * Tag names used by this class.
      */
     static const char fgErasTag[];   // resource bundle tag for era names
     static const char fgMonthNamesTag[]; // resource bundle tag for month names
@@ -305,6 +305,7 @@ private:
     static const char fgLocalPatternCharsTag[];  // resource bundle tag for localized pattern characters
 
     friend class SimpleDateFormat;
+    friend class DateFormatSymbolsSingleSetter; // see udat.cpp
 
     /**
      * Era strings. For example: "AD" and "BC".
@@ -423,8 +424,7 @@ private:
     /**
      * Create a copy, in fZoneStrings, of the given zone strings array. The
      * member variables fZoneStringsRowCount and fZoneStringsColCount should be
-     * set already by the caller. The fIsOwned flags are not checked or set by
-     * this method; that is the caller's responsibility.
+     * set already by the caller.
      */
     void createZoneStrings(const UnicodeString *const * otherStrings);
 
@@ -444,8 +444,7 @@ private:
     int32_t _getZoneIndex(const UnicodeString& id) const;
 
     /**
-     * Delete all the storage owned by this object and reset the fIsOwned flag
-     * to indicate that arrays have been deleted.
+     * Delete all the storage owned by this object.
      */
     void dispose(void);
 
@@ -456,8 +455,7 @@ private:
     void copyData(const DateFormatSymbols& other);
 
     /**
-     * Delete just the zone strings, if they are owned by this object. This
-     * method does NOT modify fIsOwned; the caller must handle that.
+     * Delete just the zone strings.
      */
     void disposeZoneStrings(void);
 };
