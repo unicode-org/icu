@@ -104,8 +104,10 @@ COMPILE_LINK_ENVVAR = @COMPILE_LINK_ENVVAR@
 
 # Various flags for the tools
 
-# DEFS is for common macro definitions
-DEFS = @DEFS@
+# DEFS is for common macro definitions.
+# configure prevents user defined DEFS, and configure's DEFS is not needed
+# So we ignore the DEFS that comes from configure
+DEFS =
 # CFLAGS is for C only flags
 CFLAGS = @CFLAGS@
 # CXXFLAGS is for C++ only flags
