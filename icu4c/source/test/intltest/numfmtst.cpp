@@ -613,6 +613,7 @@ void NumberFormatTest::TestExponent(void) {
     expect(fmt1, "1.234E3", n);
     expect(fmt1, "1.234E+3", n); // Either format should parse "E+3"
     expect(fmt2, "1.234E+3", n);
+    expect(fmt2, "1.234e+3", n);
 }
 
 /**
