@@ -271,8 +271,8 @@ struct incrementalContext {
   else {                                                                     \
     /* weiv tentatively */\
     /*if ((data).pos == (data).string || (data).pos == (data).writableBuffer) {*/\
-    if (((data).pos <= (data).string && (data).isUsingWritable == FALSE) || \
-        ((data).pos <= (data).writableBuffer && (data).isUsingWritable = TRUE)) {\
+    if (((data).pos <= (data).string && !(data).isUsingWritable) ||          \
+        ((data).pos <= (data).writableBuffer && (data).isUsingWritable)) {   \
       (order) = UCOL_NO_MORE_CES;                                            \
     }                                                                        \
     else {                                                                   \
