@@ -4931,9 +4931,6 @@ ucol_setAttribute(UCollator *coll, UColAttribute attr, UColAttributeValue value,
         } else if (value == UCOL_OFF) {
             coll->normalizationMode = UCOL_OFF;
             coll->normalizationModeisDefault = FALSE;
-        } else if (value == UCOL_ON_WITHOUT_HANGUL) {
-            coll->normalizationMode = UCOL_ON_WITHOUT_HANGUL ;
-            coll->normalizationModeisDefault = FALSE;
         } else if (value == UCOL_DEFAULT) {
             coll->normalizationModeisDefault = TRUE;
             coll->normalizationMode = coll->options->normalizationMode;
