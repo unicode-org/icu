@@ -17,52 +17,58 @@
 *****************************************************************************************
 */
 
-#include "uhash.h"
+#include "hash.h"
 #include "unicode/unistr.h"
+struct UHashtable;
 
 /**
- * A class which represents an ordinary Hashtable which deletes its contents when it
- * is destroyed.  This class stores UnicodeStringKeys as its keys, and
- * ResourceBundleData objects as its values.
+ * A class that maps UnicodeString keys to UHashtable objects.  It
+ * owns the UHashtable objects passed to put() and will eventually
+ * close and delete them.
  */
-class U_COMMON_API ResourceBundleCache  // Not really external; just making the compiler happy
-{
- public:
-  ResourceBundleCache();
-  ~ResourceBundleCache();
-  UHashtable* hashTable;
- private:
-  static void U_CALLCONV deleteValue(void* value);
+class U_COMMON_API ResourceBundleCache { // Not really external; just making the compiler happy
+private:
+    Hashtable* hash;
+    static void U_CALLCONV deleteUHashtable(void* value);
+public:
+    ResourceBundleCache();
+    ~ResourceBundleCache();
+    inline void put(const UnicodeString& key, UHashtable* adoptedValue);
+    inline const UHashtable* get(const UnicodeString& key) const;
 };
+
+inline void ResourceBundleCache::put(const UnicodeString& key, UHashtable* adoptedValue) {
+    UErrorCode status = U_ZERO_ERROR;
+    hash->put(key, adoptedValue, status);
+}
+
+inline const UHashtable* ResourceBundleCache::get(const UnicodeString& key) const {
+    return (const UHashtable*) hash->get(key);
+}
 
 /**
- * A hashtable which owns its keys and values and deletes them when it is destroyed.
- * This class stored UnicodeStringKeys as its keys, and the value 1 as its objects.
- * in other words, the objects are just (void*)1.  The only real information is
- * whether or not a key is present.  Semantically, if a key is present, it means
- * that the corresponding filename has been visited already.
+ * A class that records whether a filename has been seen before or
+ * not.  Call markAsVisited() to mark a filename as seen.  Call
+ * wasVisited() to see if markAsVisited() has been called with that
+ * filename or not.
  */
-class U_COMMON_API VisitedFileCache // Not really external; just making the compiler happy
-{
- public:
-  
-  VisitedFileCache();
-  ~VisitedFileCache();
-  UHashtable* hashTable;
-  inline bool_t wasVisited(const UnicodeString& filename) const;
-  inline void markAsVisited(const UnicodeString& filename);
+class U_COMMON_API VisitedFileCache { // Not really external; just making the compiler happy
+private:
+    Hashtable* hash;
+public:
+    VisitedFileCache();
+    ~VisitedFileCache();
+    inline bool_t wasVisited(const UnicodeString& filename) const;
+    inline void markAsVisited(const UnicodeString& filename);
 };
 
-inline bool_t VisitedFileCache::wasVisited(const UnicodeString& filename) const
-{
-  return (uhash_OLD_get(hashTable, uhash_OLD_hashUString(filename.getUChars())) != 0);
+inline bool_t VisitedFileCache::wasVisited(const UnicodeString& filename) const {
+    return (hash->get(filename) != 0);
 }
 
-inline void VisitedFileCache::markAsVisited(const UnicodeString& filename)
-{
-  UErrorCode err = U_ZERO_ERROR;
-  uhash_OLD_putKey(hashTable, uhash_OLD_hashUString(filename.getUChars()), (void*)TRUE, &err);
+inline void VisitedFileCache::markAsVisited(const UnicodeString& filename) {
+    UErrorCode status = U_ZERO_ERROR;
+    hash->put(filename, (void*)1, status);
 }
-
 
 //eof
