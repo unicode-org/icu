@@ -11,7 +11,7 @@
 //  -  Arundhati Bhowmick [IBM Cupertino]
 
 hi {
-    Version { "1.1" }
+    Version { "2.0" }
     // This ordering comes from Hyangmi Cho of LOTUS
     CollationElements {
         Version { "2.0" }
