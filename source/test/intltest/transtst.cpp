@@ -1058,7 +1058,11 @@ void TransliteratorTest::TestLiberalizedID(void) {
 /* test for Jitterbug 912 */
 void TransliteratorTest::TestCreateInstance(){
     UParseError *err = 0;
-    Transliterator*  myTrans = Transliterator::createInstance(UnicodeString("Latin-Hangul"),UTRANS_REVERSE,err);
+    Transliterator* myTrans = Transliterator::createInstance(UnicodeString("Latin-Hangul"),UTRANS_REVERSE,err);
+	if (myTrans == 0) {
+		errln("FAIL: createInstance failed");
+		return;
+	}
     UnicodeString newID =myTrans->getID();
     if(newID!=UnicodeString("Hangul-Latin")){
         errln(UnicodeString("Test for Jitterbug 912 Transliterator::createInstance(id,UTRANS_REVERSE) failed"));
@@ -1228,6 +1232,38 @@ void TransliteratorTest::TestCompoundRBT(void) {
     }
 
     delete t;
+
+    // Test Foo(Bar) IDs.  Careful with spacing in id; make it conform
+    // to what the regenerated ID will look like.
+    UnicodeString id("Upper(Lower);(NFKC)", "");
+    t = Transliterator::createInstance(id);
+    if (t == 0) {
+        errln("FAIL: createInstance #2 failed");
+        return;
+    }
+    if (t->getID() == id) {
+        logln((UnicodeString)"OK: created " + id);
+    } else {
+        errln((UnicodeString)"FAIL: createInstance(" + id +
+              ").getID() => " + t->getID());
+    }
+
+    Transliterator *u = t->createInverse();
+    if (u == 0) {
+        errln("FAIL: createInverse failed");
+        delete t;
+        return;
+    }
+    exp = "NFKC();Lower(Upper)";
+    if (u->getID() == exp) {
+        logln((UnicodeString)"OK: createInverse(" + id + ") => " +
+              u->getID());
+    } else {
+        errln((UnicodeString)"FAIL: createInverse(" + id + ") => " +
+              u->getID());
+    }
+    delete t;
+    delete u;
 }
 
 //======================================================================

@@ -39,6 +39,9 @@
 const UChar Transliterator::ID_SEP   = 0x002D; /*-*/
 const UChar Transliterator::ID_DELIM = 0x003B; /*;*/
 
+static const UChar OPEN_PAREN  = 40;
+static const UChar CLOSE_PAREN = 41;
+
 static Hashtable _cache(TRUE); // TRUE = keys are case insensitive
 static Hashtable _internalCache(TRUE); // TRUE = keys are case insensitive
 
@@ -590,23 +593,28 @@ Transliterator* Transliterator::createInstance(const UnicodeString& ID,
 
     UVector list;
     int32_t ignored;
-    parseCompoundID(ID, dir, idSplitPoint, adoptedSplitTrans,
+    UnicodeString regenID;
+    parseCompoundID(ID, regenID, dir, idSplitPoint, adoptedSplitTrans,
                     list, ignored, parseError, status);
 
     if (U_FAILURE(status)) {
         return 0;
     }
-    
+
+    Transliterator *t;
     switch (list.size()) {
     case 0:
-        return new NullTransliterator();
-
+        t = new NullTransliterator();
+        break;
     case 1:
-        return (Transliterator*) list.elementAt(0);
-
+        t = (Transliterator*) list.elementAt(0);
+        break;
     default:
-        return new CompoundTransliterator(ID, dir, list, status);
+        t = new CompoundTransliterator(dir, list, status);
+        break;
     }
+    t->setID(regenID);
+    return t;
 }
 
 /**
@@ -690,11 +698,14 @@ UnicodeString& Transliterator::toRules(UnicodeString& rulesSource,
  * specified).  These will be in order of id, so if dir is REVERSE,
  * then the caller will have to reverse the order.
  * 
+ * @param regenID regenerated ID, reversed if appropriate, which
+ * should be applied to the final created transliterator
  * @param splitTransIndex output parameter to receive the index in
  * 'result' at which the adoptedSplitTrans is stored, or -1 if
  * adoptedSplitTrans == 0
  */
 void Transliterator::parseCompoundID(const UnicodeString& id,
+                                     UnicodeString& regenID,
                                      UTransDirection dir,
                                      int32_t idSplitPoint,
                                      Transliterator *adoptedSplitTrans,
@@ -706,6 +717,7 @@ void Transliterator::parseCompoundID(const UnicodeString& id,
         return;
     }
     
+    regenID.truncate(0);
     splitTransIndex = -1;
     int32_t pos = 0;
     int32_t i;
@@ -720,13 +732,13 @@ void Transliterator::parseCompoundID(const UnicodeString& id,
         int32_t p = pos;
         UBool sawDelimiter; // We ignore this
         Transliterator *t =
-            parseID(id, p, sawDelimiter, dir, parseError, TRUE);
-        if (p == pos) {
+            parseID(id, regenID, p, sawDelimiter, dir, parseError, TRUE);
+        if (p == pos || (p < id.length() && !sawDelimiter)) {
             delete t;
             status = U_ILLEGAL_ARGUMENT_ERROR;
             break;
         }
-		pos = p;
+        pos = p;
         // The return value may be NULL when, for instance, creating a
         // REVERSE transliterator of ID "Latin-Greek()".
         if (t != 0) {
@@ -762,12 +774,12 @@ void Transliterator::parseCompoundID(const UnicodeString& id,
  * advanced, it will either point to a non-whitespace character past
  * the trailing ';', if any, or be equal to length().
  *
- * On return one of the following will be true:
- *  pos unchanged: sawDelimiter meaningless
- *  pos == ID.length(): sawDelimiter TRUE or FALSE
- *  pos < ID.length(): sawDelimiter always TRUE
- *
  * @param ID the ID string
+ * @param regenID regenerated ID, reversed if appropriate, which
+ * should be applied to the final created transliterator.  This method
+ * will append to this parameter for FORWARD direction and insert
+ * addition text at offset 0 for REVERSE direction.  If create is
+ * FALSE then this parameter is not used.
  * @param pos INPUT-OUTPUT parameter.  On input, the position of the
  * first character to parse.  On output, the position after the last
  * character parsed.  This will be a semicolon or ID.length().  In the
@@ -782,55 +794,60 @@ void Transliterator::parseCompoundID(const UnicodeString& id,
  * moved.
  */
 Transliterator* Transliterator::parseID(const UnicodeString& ID,
+                                        UnicodeString& regenID,
                                         int32_t& pos,
                                         UBool& sawDelimiter,
                                         UTransDirection dir,
                                         UParseError* parseError,
                                         UBool create) {
-    Transliterator* t = 0;
-    UnicodeString str; // scratch
+    int32_t limit, preDelimLimit,
+        revStart, revLimit,
+        idStart, idLimit,
+        setStart, setLimit;
 
-    // Look for embedded filter pattern by looking for ';' and
-    // '[' and seeing which comes first.
-    UnicodeSet *filter = 0;
-    int32_t limit = ID.indexOf(ID_DELIM, pos);
-    sawDelimiter = limit >= 0;
-    if (!sawDelimiter) {
-        limit = ID.length();
+    UnicodeSet* filter = 0;
+
+    if (!parseIDBounds(ID, pos, FALSE, limit,
+                       setStart, setLimit, revStart, filter)) {
+        delete filter;
+        return 0;
     }
-    int32_t setStart = ID.indexOf((UChar)0x005B /*[*/, pos);
-    int32_t setLimit;
-    if (setStart >= 0 && setStart < limit) {
-        UErrorCode status = U_ZERO_ERROR;
-        ParsePosition ppos(setStart);
-        filter = new UnicodeSet();
-        filter->applyPattern(ID, ppos, 0, status);
-        if (U_FAILURE(status)) {
-            // There was a parse failure in the filter pattern
+    idStart = pos;
+    idLimit = limit;
+
+    if (revStart >= 0 && revStart < limit) {
+        int32_t revSetStart, revSetLimit, dummy;
+        UnicodeSet* revFilter = 0;
+        if (!parseIDBounds(ID, revStart+1, TRUE, revLimit,
+                           revSetStart, revSetLimit, dummy, revFilter)) {
             delete filter;
+            delete revFilter;
             return 0;
         }
-        setLimit = ppos.getIndex();
-        if (limit < setLimit) {
-            limit = ID.indexOf(ID_DELIM, setLimit);
-            sawDelimiter = limit >= 0;
-            if (!sawDelimiter) {
-                limit = ID.length();
-            }
+        // revStart points to '('
+        if (dir == UTRANS_REVERSE) {
+            idStart = revStart+1;
+            idLimit = revLimit;
+            setStart = revSetStart;
+            setLimit = revSetLimit;
+            delete filter;
+            filter = revFilter;
+        } else {
+            idLimit = revStart;
+            delete revFilter;
         }
-    } else {
-        setStart = setLimit = pos;
+        // assert(revLimit < ID.length() && ID.charAt(revLimit) == ')');
+        limit = revLimit+1;
     }
-    
-    // Advance limit past /;?\s*/
-    int32_t idLimit = limit; // limit before separator
+
+    // Advance limit past /\s*;?\s*/
+    preDelimLimit = limit;
+    skipSpaces(ID, limit);
+    sawDelimiter = (limit < ID.length() && ID.charAt(limit) == ID_DELIM);
     if (sawDelimiter) {
-        // assert(limit < ID.length() && ID.charAt(limit) == ID_DELIM);
         ++limit;
     }
-    while (limit < ID.length() && u_isspace(ID.charAt(limit))) {
-        ++limit;
-    }
+    skipSpaces(ID, limit);
 
     if (!create) {
         // TODO Improve performance by scanning the UnicodeSet pattern
@@ -842,31 +859,35 @@ Transliterator* Transliterator::parseID(const UnicodeString& ID,
     }
 
     // 'id' is the ID with the filter pattern removed and with
-    // whitespace deleted.
-    UnicodeString id;
-    ID.extractBetween(pos, setStart, id);
+    // whitespace deleted.  In a Foo(Bar) ID, id is Foo for FORWARD
+    // and Bar for REVERSE.
+    UnicodeString id, str;
+    ID.extractBetween(idStart, setStart, id);
     ID.extractBetween(setLimit, idLimit, str);
     id.append(str);
 
     // Delete whitespace
     int32_t i;
     for (i=0; i<id.length(); ++i) {
-        if (Unicode::isWhitespace(id.charAt(i))) {
+        if (u_isspace(id.charAt(i))) {
             id.remove(i, 1);
             --i;
         }
     }
 
-    // Fix the id, if necessary, by reversing it (A-B => B-A).
-    // Record the position of the separator.  Detect the special
-    // case of Null, whose inverse is itself.  Given an ID with no
-    // separator "Foo", an abbreviation for "Any-Foo", consider
-    // the inverse to be "Foo-Any".
+    // Fix the id, if necessary, by reversing it (A-B => B-A).  This
+    // is only done if the id is NOT of the form Foo(Bar).  Record the
+    // position of the separator.
+    // 
+    // For both A-B and Foo(Bar) ids, detect the special case of Null,
+    // whose inverse is itself.  Given an ID with no separator "Foo",
+    // an abbreviation for "Any-Foo", consider the inverse to be
+    // "Foo-Any".
     int32_t sep = id.indexOf(ID_SEP);
     if (sep < 0 && id.caseCompare(NullTransliterator::ID,
                                   U_FOLD_CASE_DEFAULT) == 0) {
         sep = id.length();
-    } else if (dir == UTRANS_REVERSE) {
+    } else if (dir == UTRANS_REVERSE && revStart < 0) {
         if (sep >= 0) {
             id.extractBetween(0, sep, str);
             id.removeBetween(0, sep+1);
@@ -875,37 +896,185 @@ Transliterator* Transliterator::parseID(const UnicodeString& ID,
         }
         sep = id.length();
         id.append(ID_SEP).append(str);
-    } else if (sep < 0) {
+    } else if (sep < 0 && id.length() > 0) {
+        // Don't do anything for empty IDs -- we handle these specially below
         str = UnicodeString("Any-", "");
-        sep = str.length();
+        sep = str.length() - 1;
         id.insert(0, str);
     }
 
-    // The 'alias' parameter is non-empty if _createInstance()
-    // finds that the given ID refers to an alias.  The reason
-    // _createInstance() doesn't call createInstance() (this
-    // method) directly is to avoid deadlock.  There are other
-    // ways to do this but this is one of the more efficient ways.
-    str.truncate(0);
-    t = _createInstance(id, str /*alias*/, parseError);
+    Transliterator *t = 0;
 
-    if (str.length() > 0) {
-        // assert(t==0);
-        t = createInstance(str, UTRANS_FORWARD, parseError);
+    // If we have a reverse part of the ID, e.g., Foo(Bar), then we
+    // need to check for an empty part, which represents a Null
+    // transliterator.  We return 0 (not a NullTransliterator).  If we
+    // are not of the form Foo(Bar) then an empty string is illegal.
+    if (revStart >= 0 && id.length() == 0) {
+        // Ignore any filters; filters on Null are meaningless (and we
+        // can't attach them to 0 anyway)
+        delete filter;
     }
+
+    else {
+        // Create the actual transliterator by calling _createInstance.
+        // Upon return the 'alias' parameter ('str' here) is non-empty if
+        // _createInstance() the given ID refers to an alias.  The reason
+        // _createInstance() doesn't call createInstance() directly is to
+        // avoid deadlock (_createInstance is holding the cache mutex, so
+        // it has to return before anyone else can do anything).  There
+        // are other ways to do this but this is one of the more efficient
+        // ways.
+        str.truncate(0);
+        t = _createInstance(id, str /*alias*/, parseError);
+        if (str.length() > 0) {
+            // The given id refers to an alias (now in 'str').  As long as
+            // the alias is not to itself we can safely call
+            // createInstance() here.  If there is a circular alias, we'll
+            // enter and infinite loop here.
+            // assert(t==0);
+            t = createInstance(str, UTRANS_FORWARD, parseError);
+        }
+        
+        if (t == 0) {
+            // Creation failed; the ID is invalid
+            delete filter;
+            return 0;
+        }
+
+        // Set the filter, if any
+        t->adoptFilter(filter);
+    }
+    
+    // Set the ID.  This is normally just a substring of the input
+    // ID, but for reverse transliterators we need to munge A-B to
+    // B-A or Foo(Bar) to Bar(Foo).
+    if (dir == UTRANS_FORWARD) {
+        ID.extractBetween(pos, preDelimLimit, id);
+    } else if (revStart < 0) {
+        id.insert(sep, ID, setStart, setLimit-setStart);
+    } else {
+        // Change Foo(Bar) to Bar(Foo)
+        ID.extractBetween(pos, revStart, str);
+        str.trim();
+        ID.extractBetween(revStart+1, revLimit, id);
+        id.trim().append(OPEN_PAREN).append(str).append(CLOSE_PAREN);
+    }
+    id.trim();
 
     if (t != 0) {
-        if (filter != 0) {
-            t->adoptFilter(filter);
-            id.insert(sep, ID, setStart, setLimit-setStart);
-        }
         t->setID(id);
-        pos = limit;
     }
+
+    // Regenerate ID of a compound entity
+    if (dir == UTRANS_FORWARD) {
+        if (regenID.length() != 0) {
+            regenID.append(ID_DELIM);
+        }
+        regenID.append(id);
+    } else {
+        if (regenID.length() != 0) {
+            regenID.insert(0, ID_DELIM);
+        }
+        regenID.insert(0, id);
+    }
+
+    // Indicate success by bumping pos past the final /;?\s*/.
+    pos = limit;
 
     return t;
 }
-                                        
+
+/**
+ * Internal method used by parseID.  Given a piece of a single ID,
+ * find the boundaries of various parts.  For IDs of the form
+ * Foo(Bar), this method parses the Foo, then the Bar.  In each piece
+ * it locates any inline UnicodeSet pattern [setStart, setLimit)
+ * and finds the limit (this will point to either ';' or ')' or
+ * ID.length()).
+ *
+ * @param ID the ID to be parsed
+ * @param pos the index of ID at which to start
+ * @param withinParens if TRUE, parse the Bar of Foo(Bar), stop at a
+ * close paren, and do not look for an open paren.  If TRUE then a
+ * close paren MUST be seen or FALSE is returned; if FALSE then the
+ * ';' delimiter is optional.
+ * @param limit set to the position of ';' or ')' (depending on
+ * withinParens), or ID.length() if no delimiter was found
+ * @param setStart set to the start of an inline filter pattern,
+ * or pos if none
+ * @param setLimit set to the limit of an inline filter pattern,
+ * or pos if none
+ * @param revStart if not withinParens then set to the position of the
+ * first '(', which may be > limit; otherwise set to -1
+ * @param filter set to a newly created UnicodeSet object for the
+ * inline filter pattern, if any; OWNED BY THE CALLER
+ *
+ * @return TRUE if the pattern is valid, FALSE is there is an invalid
+ * UnicodeSet pattern or if withinParens is TRUE and no close paren is
+ * seen.
+ */
+UBool Transliterator::parseIDBounds(const UnicodeString& ID,
+                                    int32_t pos,
+                                    UBool withinParens,
+                                    int32_t& limit,
+                                    int32_t& setStart,
+                                    int32_t& setLimit,
+                                    int32_t& revStart,
+                                    UnicodeSet*& filter) {
+    UChar endDelimiter = withinParens ? CLOSE_PAREN : ID_DELIM;
+    limit = ID.indexOf(endDelimiter, pos);
+    if (limit < 0) {
+        if (withinParens) {
+            return FALSE;
+        }
+        limit = ID.length();
+    }
+    setStart = ID.indexOf((UChar)0x005B /*[*/, pos);
+    revStart = withinParens ? -1 : ID.indexOf(OPEN_PAREN, pos);
+
+    if (setStart >= 0 && setStart < limit &&
+        (revStart < 0 || setStart < revStart)) {
+        UErrorCode status = U_ZERO_ERROR;
+        ParsePosition ppos(setStart);
+        // TODO Improve performance by scanning the UnicodeSet pattern
+        // without actually constructing it, if create is FALSE.  That
+        // is, create a method like this one for UnicodeSet.
+        filter = new UnicodeSet();
+        filter->applyPattern(ID, ppos, 0, status);
+        if (U_FAILURE(status)) {
+            delete filter;
+            return FALSE;
+        }
+        setLimit = ppos.getIndex();
+        if (limit < setLimit) {
+            limit = ID.indexOf(endDelimiter, setLimit);
+            if (limit < 0) {
+                if (withinParens) {
+                    return FALSE;
+                }
+                limit = ID.length();
+            }
+        }
+        if (revStart >= 0 && revStart < setLimit) {
+            revStart = ID.indexOf(CLOSE_PAREN, setLimit);
+        }
+    } else {
+        setStart = setLimit = pos;
+    }
+    return TRUE;
+}
+
+/**
+ * If pos is the index of a space in str, then advance it over that
+ * space and any immediately subsequent ones.
+ */
+void Transliterator::skipSpaces(const UnicodeString& str,
+                                int32_t& pos) {
+    while (pos < str.length() &&
+           u_isspace(str.charAt(pos))) {
+        ++pos;
+    }
+}
 
 /**
  * Returns a transliterator object given its ID.  Unlike getInstance(),
@@ -1079,7 +1248,7 @@ void Transliterator::_registerFactory(const UnicodeString& id,
  * @see #unregister
  */
 void Transliterator::registerInstance(Transliterator* adoptedPrototype,
-                                      UErrorCode &status) {    
+                                      UErrorCode &status) {
     if (!cacheInitialized) {
         initializeCache();
     }
@@ -1204,7 +1373,7 @@ void Transliterator::initializeCache(void) {
     if (cacheInitialized) {
         return;
     }
-        
+
     UErrorCode status = U_ZERO_ERROR;
 
     // Before looking for the resource, construct our cache.
