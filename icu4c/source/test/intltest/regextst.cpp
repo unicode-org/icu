@@ -1233,8 +1233,7 @@ void RegexTest::Errors() {
     REGEX_ERR("(((((((", 1, 7, U_REGEX_MISMATCHED_PAREN);
 
     // Look-ahead, Look-behind
-    REGEX_ERR("abc(?<=xyz).*", 1, 7, U_REGEX_UNIMPLEMENTED);   // look-behind
-    REGEX_ERR("abc(?<!xyz).*", 1, 7, U_REGEX_UNIMPLEMENTED);   // negated look-behind
+    //  TODO:  add tests for unbounded length look-behinds.
     REGEX_ERR("abc(?<@xyz).*", 1, 7, U_REGEX_RULE_SYNTAX);       // illegal construct
 
     // Attempt to use non-default flags 

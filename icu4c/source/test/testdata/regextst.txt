@@ -242,4 +242,24 @@
 "a b c [x y z]"               x "<0>abcx</0>yz"
 "a b c [x y z]"               x "<0>abcy</0>yz"
 
-#"abc|de"                      d "x"
+#
+#  Look Behind
+#
+"(?<=a)b"	                   "a<0>b</0>"
+"(.*)(?<=[bc])"                "<0><1>abc</1></0>d"
+"(?<=(abc))def"                "<1>abc</1><0>def</0>"   # lookbehind precedes main match.
+"(?<=ab|abc)xyz"               "abwxyz"                 # ab matches, but not far enough.
+"(?<=abc)cde"                  "abcde"
+"(?<=abc|ab)cde"               "ab<0>cde</0>"
+"(?<=abc|ab)cde"               "abc<0>cde</0>"
+
+"(?<=bc?c?c?)cd"               "ab<0>cd</0>"
+"(?<=bc?c?c?)cd"               "abc<0>cd</0>"
+"(?<=bc?c?c?)cd"               "abcc<0>cd</0>"
+"(?<=bc?c?c?)cd"               "abccc<0>cd</0>"
+"(?<=bc?c?c?)cd"               "abcccccd"
+"(?<=bc?c?c?)c+d"              "ab<0>cccccd</0>"
+
+".*(?<=: ?)(\w*)"                "<0>1:one  2: two 3:<1>three</1></0>   "
+
+#"(?<=abc*)xyz"           dt    "abcccc<0>xyz</0>"
