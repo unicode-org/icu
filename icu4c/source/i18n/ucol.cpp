@@ -604,6 +604,128 @@ void ucol_initUCA(UErrorCode *status) {
 }
 
 
+
+
+/*    collIterNormalize     Incremental Normalization happens here.                       */
+/*                          pick up the range of chars identifed by FCD,                  */
+/*                          normalize it into the collIterate's writable buffer,          */
+/*                          switch the collIterate's state to use the writable buffer.    */
+/*                                                                                        */
+void collIterNormalize(collIterate *collationSource)
+{
+    UErrorCode  status = U_ZERO_ERROR;
+    UChar      *srcP = collationSource->pos - 1;      /*  Start of chars to normalize    */
+    UChar      *endP = collationSource->fcdPosition;  /* End of region to normalize+1    */
+    uint32_t    normLen;
+
+    normLen = unorm_normalize(srcP, endP-srcP, UNORM_NFD, 0, collationSource->writableBuffer,
+                              collationSource->writableBufSize, &status);
+    if (U_FAILURE(status)) { /* This would be buffer overflow */
+        if (status == U_BUFFER_OVERFLOW_ERROR) {
+            if (collationSource->writableBuffer != collationSource->stackWritableBuffer) {
+                uprv_free( collationSource->writableBuffer);
+            }
+            collationSource->writableBuffer = (UChar *)uprv_malloc((normLen+1)*sizeof(UChar));
+            /* to enable null termination */
+            collationSource->writableBufSize = normLen + 1;
+            status = U_ZERO_ERROR;
+            unorm_normalize(srcP, endP-srcP, UNORM_NFD, 0, collationSource->writableBuffer,
+                            collationSource->writableBufSize, &status);
+        }
+        else {
+            return;
+        }
+    }
+    collationSource->pos        = collationSource->writableBuffer;
+    collationSource->origFlags  = collationSource->flags;
+    collationSource->flags     |= UCOL_ITER_INNORMBUF;
+    collationSource->flags     &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
+}
+
+
+
+
+
+/* Incremental FCD check and normalize                                                    */
+/*   Called from getNextCE when normalization state is suspect.                           */
+/*   When entering, the state is known to be this:                                        */
+/*      o   We are working in the main buffer of the collIterate, not the side            */
+/*          writable buffer.  When in the side buffer, normalization mode is always off,  */
+/*          so we won't get here.                                                         */
+/*      o   The leading combining class from the current character is 0 or                */
+/*          the trailing combining class of the previous char was zero.                   */
+/*          True because the previous call to this function will have always exited       */
+/*          that way, and we get called for every char where cc might be non-zero.        */
+inline void collIterFCD(collIterate *collationSource) {
+    UChar32     codepoint;
+    UChar       *srcP;
+    int         length;
+    int         count = 0;
+    uint8_t     leadingCC;
+    uint8_t     prevTrailingCC = 0;
+    uint16_t    fcd;
+    UBool       needNormalize = FALSE;
+
+    srcP = collationSource->pos-1;
+
+    // If the source string is null terminated, use a fake too-long string length
+    //    (needed for UTF_NEXT_CHAR).  null will stop everything OK.)
+    length = (collationSource->flags & UCOL_ITER_HASLEN) ? collationSource->endp - srcP : INT_MAX;
+
+    // Get the trailing combining class of the current character.  If it's zero,
+    //   we are OK.
+    UTF_NEXT_CHAR(srcP, count, length, codepoint);
+    /* trie access */
+    fcd = FCD_STAGE_3_[
+        FCD_STAGE_2_[FCD_STAGE_1_[codepoint >> STAGE_1_SHIFT_] +
+        ((codepoint >> STAGE_2_SHIFT_) & STAGE_2_MASK_AFTER_SHIFT_)] +
+        (codepoint & STAGE_3_MASK_)];
+    prevTrailingCC = (uint8_t)(fcd & LAST_BYTE_MASK_);
+
+    if (prevTrailingCC != 0) {
+        // The current char has a non-zero trailing CC.  Scan forward until we find
+        //   a char with a leading cc of zero.
+        for (;;)
+        {
+            if (count >= length) {
+                break;
+            }
+            UTF_NEXT_CHAR(srcP, count, length, codepoint);
+
+            /* trie access */
+            fcd = FCD_STAGE_3_[
+                FCD_STAGE_2_[FCD_STAGE_1_[codepoint >> STAGE_1_SHIFT_] +
+                ((codepoint >> STAGE_2_SHIFT_) & STAGE_2_MASK_AFTER_SHIFT_)] +
+                (codepoint & STAGE_3_MASK_)];
+            leadingCC = (uint8_t)(fcd >> SECOND_LAST_BYTE_SHIFT_);
+            if (leadingCC == 0) {
+                break;
+            }
+
+            if (leadingCC < prevTrailingCC) {
+                needNormalize = TRUE;
+            }
+
+            prevTrailingCC = (uint8_t)(fcd & LAST_BYTE_MASK_);
+        }
+    }
+
+    collationSource->fcdPosition = srcP + count;
+    if (codepoint == 0 && (collationSource->flags & UCOL_ITER_HASLEN)==0) {
+        // We checked the string's trailing null, which would advance fcdPosition past the null.
+        //   back it up to point to the null.
+        collationSource->fcdPosition--;
+    }
+
+    if (needNormalize) {
+        collIterNormalize(collationSource);
+    }
+}
+
+
+
+
+
 /****************************************************************************/
 /* Following are the CE retrieval functions                                 */
 /*                                                                          */
@@ -633,6 +755,7 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
         {
             // The source string is null terminated and we're not working from the side buffer,
             //   and we're not normalizing.  This is the fast path.
+            //   (We can be in the side buffer for Thai pre-vowel reordering even when not normalizing.)
             ch = *collationSource->pos++;
             if (ch != 0) {
                 break;
@@ -653,20 +776,27 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
         }
         else
         {
-            // Null terminated string, and we are in the side buffer.
+            // Null terminated string.
             ch = *collationSource->pos++;
-            if (ch != 0) {
-                break;   // Side buffer is always normalized; we can skip further tests.
+            if (ch == 0) {
+                // Ran off end of buffer.
+                if ((collationSource->flags & UCOL_ITER_INNORMBUF) == 0) {
+                    // Ran off end of main string. 
+                    return UCOL_NO_MORE_CES;
+                }
+                else
+                {
+                    // Ran off the end of the normalize side buffer.  Revert to the main string and
+                    //   loop back to top to try again to get a character.
+                    collationSource->pos   = collationSource->fcdPosition;
+                    collationSource->flags = collationSource->origFlags;
+                    continue;
+                }
             }
-
-            // Ran off the end of the normalize side buffer.  Revert to the main string and
-            //   loop back to top to try again to get a character.
-            collationSource->pos   = collationSource->fcdPosition;
-            collationSource->flags = collationSource->origFlags;
-            continue;
         }
 
         // We've got a character.  See if there's any fcd and/or normalization stuff to do.
+        //    Note that UCOL_ITER_NORM flag is always zero when we are in the side buffer.
         if ((collationSource->flags & UCOL_ITER_NORM) == 0) {
             break;
         }
@@ -1002,123 +1132,6 @@ U_CAPI uint32_t ucol_getPrevCE(const UCollator *coll, collIterate *data,
                         UErrorCode *status) {
     return ucol_IGetPrevCE(coll, data, status);
 }
-
-
-
-/*    collIterNormalize     Incremental Normalization happens here.                       */
-/*                          pick up the range of chars identifed by FCD,                  */
-/*                          normalize it into the collIterate's writable buffer,          */
-/*                          switch the collIterate's state to use the writable buffer.    */
-/*                                                                                        */
-void collIterNormalize(collIterate *collationSource)
-{
-    UErrorCode  status = U_ZERO_ERROR;
-    UChar      *srcP = collationSource->pos - 1;      /*  Start of chars to normalize    */
-    UChar      *endP = collationSource->fcdPosition;  /* End of region to normalize+1    */
-    uint32_t    normLen;
-
-    normLen = unorm_normalize(srcP, endP-srcP, UNORM_NFD, 0, collationSource->writableBuffer,
-                              collationSource->writableBufSize, &status);
-    if (U_FAILURE(status)) { /* This would be buffer overflow */
-        if (status == U_BUFFER_OVERFLOW_ERROR) {
-            if (collationSource->writableBuffer != collationSource->stackWritableBuffer) {
-                uprv_free( collationSource->writableBuffer);
-            }
-            collationSource->writableBuffer = (UChar *)uprv_malloc((normLen+1)*sizeof(UChar));
-            /* to enable null termination */
-            collationSource->writableBufSize = normLen + 1;
-            status = U_ZERO_ERROR;
-            unorm_normalize(srcP, endP-srcP, UNORM_NFD, 0, collationSource->writableBuffer,
-                            collationSource->writableBufSize, &status);
-        }
-        else {
-            return;
-        }
-    }
-    collationSource->pos        = collationSource->writableBuffer;
-    collationSource->origFlags  = collationSource->flags;
-    collationSource->flags     |= UCOL_ITER_INNORMBUF;
-    collationSource->flags     &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
-}
-
-
-/* Incremental FCD check and normalize                                                    */
-/*   Called from getNextCE when normalization state is suspect.                           */
-/*   When entering, the state is known to be this:                                        */
-/*      o   We are working in the main buffer of the collIterate, not the side            */
-/*          writable buffer.  When in the side buffer, normalization mode is always off,  */
-/*          so we won't get here.                                                         */
-/*      o   The leading combining class from the current character is 0 or                */
-/*          the trailing combining class of the previous char was zero.                   */
-/*          True because the previous call to this function will have always exited       */
-/*          that way, and we get called for every char where cc might be non-zero.        */
-inline void collIterFCD(collIterate *collationSource) {
-    UChar32     codepoint;
-    UChar       *srcP;
-    int         length;
-    int         count = 0;
-    uint8_t     leadingCC;
-    uint8_t     prevTrailingCC = 0;
-    uint16_t    fcd;
-    UBool       needNormalize = FALSE;
-
-    srcP = collationSource->pos-1;
-
-    // If the source string is null terminated, use a fake too-long string length
-    //    (needed for UTF_NEXT_CHAR).  null will stop everything OK.)
-    length = (collationSource->flags & UCOL_ITER_HASLEN) ? collationSource->endp - srcP : INT_MAX;
-
-    // Get the trailing combining class of the current character.  If it's zero,
-    //   we are OK.
-    UTF_NEXT_CHAR(srcP, count, length, codepoint);
-    /* trie access */
-    fcd = FCD_STAGE_3_[
-        FCD_STAGE_2_[FCD_STAGE_1_[codepoint >> STAGE_1_SHIFT_] +
-        ((codepoint >> STAGE_2_SHIFT_) & STAGE_2_MASK_AFTER_SHIFT_)] +
-        (codepoint & STAGE_3_MASK_)];
-    prevTrailingCC = (uint8_t)(fcd & LAST_BYTE_MASK_);
-
-    if (prevTrailingCC != 0) {
-        // The current char has a non-zero trailing CC.  Scan forward until we find
-        //   a char with a leading cc of zero.
-        for (;;)
-        {
-            if (count >= length) {
-                break;
-            }
-            UTF_NEXT_CHAR(srcP, count, length, codepoint);
-
-            /* trie access */
-            fcd = FCD_STAGE_3_[
-                FCD_STAGE_2_[FCD_STAGE_1_[codepoint >> STAGE_1_SHIFT_] +
-                ((codepoint >> STAGE_2_SHIFT_) & STAGE_2_MASK_AFTER_SHIFT_)] +
-                (codepoint & STAGE_3_MASK_)];
-            leadingCC = (uint8_t)(fcd >> SECOND_LAST_BYTE_SHIFT_);
-            if (leadingCC == 0) {
-                break;
-            }
-
-            if (leadingCC < prevTrailingCC) {
-                needNormalize = TRUE;
-            }
-
-            prevTrailingCC = (uint8_t)(fcd & LAST_BYTE_MASK_);
-        }
-    }
-
-    collationSource->fcdPosition = srcP + count;
-    if (codepoint == 0 && (collationSource->flags & UCOL_ITER_HASLEN)==0) {
-        // We checked the string's trailing null, which would advance fcdPosition past the null.
-        //   back it up to point to the null.
-        collationSource->fcdPosition--;
-    }
-
-    if (needNormalize) {
-        collIterNormalize(collationSource);
-    }
-}
-
-
 
 
 /* this should be connected to special Jamo handling */

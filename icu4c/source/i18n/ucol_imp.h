@@ -618,6 +618,5 @@ U_CAPI int32_t U_EXPORT2 ucol_inv_getPrevCE(uint32_t CE, uint32_t contCE,
                                             uint32_t *prevCE, uint32_t *prevContCE,
                                             uint32_t strength);
 
-void collIterFCD(collIterate *ci);
 #endif
 
