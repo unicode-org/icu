@@ -343,6 +343,10 @@ _enumPropertyStartsRange(const void *context, UChar32 start, UChar32 limit, uint
 
 U_CAPI void U_EXPORT2
 ucase_addPropertyStarts(const UCaseProps *csp, USetAdder *sa, UErrorCode *pErrorCode) {
+    if(U_FAILURE(*pErrorCode)) {
+        return;
+    }
+
     /* add the start code point of each same-value range of the trie */
     utrie_enum(&csp->trie, NULL, _enumPropertyStartsRange, sa);
 
