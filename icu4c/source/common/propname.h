@@ -13,33 +13,47 @@
 
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
+#include "udataswp.h"
 #include "uprops.h"
 
-class Builder;
+/*
+ * This header defines the in-memory layout of the property names data
+ * structure representing the UCD data files PropertyAliases.txt and
+ * PropertyValueAliases.txt.  It is used by:
+ *   propname.cpp - reads data
+ *   genpname     - creates data
+ */
 
-U_NAMESPACE_BEGIN
-
-// This header defines the in-memory layout of the property names data
-// structure representing the UCD data files PropertyAliases.txt and
-// PropertyValueAliases.txt.  It is used by:
-//   propname.cpp - reads data
-//   genpname     - creates data
-
-//----------------------------------------------------------------------
-// UDataMemory structure and signatures
+/* UDataMemory structure and signatures ------------------------------------- */
 
 #define PNAME_DATA_NAME "pnames"
 #define PNAME_DATA_TYPE "icu"
 
-// Fields in UDataInfo:
+/* Fields in UDataInfo: */
 
-// PNAME_SIG[] is encoded as numeric literals for compatibility with the HP compiler
+/* PNAME_SIG[] is encoded as numeric literals for compatibility with the HP compiler */
 #define PNAME_SIG_0 ((uint8_t)0x70) /* p */
 #define PNAME_SIG_1 ((uint8_t)0x6E) /* n */
 #define PNAME_SIG_2 ((uint8_t)0x61) /* a */
 #define PNAME_SIG_3 ((uint8_t)0x6D) /* m */
 
 #define PNAME_FORMAT_VERSION ((int8_t)1) /* formatVersion[0] */
+
+/**
+ * Swap pnames.icu. See udataswp.h.
+ * @internal
+ */
+U_CAPI int32_t U_EXPORT2
+upname_swap(const UDataSwapper *ds,
+            const void *inData, int32_t length, void *outData,
+            UErrorCode *pErrorCode);
+
+
+#ifdef XP_CPLUSPLUS
+
+class Builder;
+
+U_NAMESPACE_BEGIN
 
 /**
  * An offset from the start of the pnames data to a contained entity.
@@ -347,15 +361,6 @@ class NameToEnum {
          UErrorCode *pErrorCode);
 };
 
-/**
- * Swap pnames.icu. See udataswp.h.
- * @internal
- */
-U_CAPI int32_t U_EXPORT2
-upname_swap(const UDataSwapper *ds,
-            const void *inData, int32_t length, void *outData,
-            UErrorCode *pErrorCode);
-
 /*----------------------------------------------------------------------
  * 
  * In-memory layout.  THIS IS NOT A STANDALONE DOCUMENT.  It goes
@@ -467,6 +472,6 @@ upname_swap(const UDataSwapper *ds,
  */
 U_NAMESPACE_END
 
-#endif
+#endif /* C++ */
 
-//eof
+#endif
