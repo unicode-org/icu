@@ -30,19 +30,21 @@ ucbuf_autodetect(FileStream* in,const char** cp){
   UBool autodetect = FALSE;
   char start[3];
   int cap =T_FileStream_size(in);
-  T_FileStream_read(in, start, 3);
-  if(start[0] == '\xFE' && start[1] == '\xFF') {
-      *cp = "UTF16_BigEndian";
-      autodetect = TRUE;
-  } else if(start[0] == '\xFF' && start[1] == '\xFE') {
-      *cp = "UTF16_LittleEndian";
-      autodetect = TRUE;
-  } else if(start[0] == '\xEF' && start[1] == '\xBB' && start[2] == '\xBF') {
-      *cp = "UTF8";
-      autodetect = TRUE;
-  }
-  if(!autodetect){
-      T_FileStream_rewind(in);
+  if(cap>0){
+	  T_FileStream_read(in, start, 3);
+	  if(start[0] == '\xFE' && start[1] == '\xFF') {
+		  *cp = "UTF16_BigEndian";
+		  autodetect = TRUE;
+	  } else if(start[0] == '\xFF' && start[1] == '\xFE') {
+		  *cp = "UTF16_LittleEndian";
+		  autodetect = TRUE;
+	  } else if(start[0] == '\xEF' && start[1] == '\xBB' && start[2] == '\xBF') {
+		  *cp = "UTF8";
+		  autodetect = TRUE;
+	  }
+	  if(!autodetect){
+		  T_FileStream_rewind(in);
+	  }
   }
   return autodetect;
 }
@@ -84,7 +86,7 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
         /* since state is saved in the converter we add offset to source*/
         target = pTarget+offset;
         source = cbuf;
-        ucnv_toUnicode(buf->conv,&target,target+numRead,&source,source+numRead,NULL,FALSE,err);
+        ucnv_toUnicode(buf->conv,&target,target+numRead,&source,source+numRead,NULL,(UBool)(buf->remaining==0),err);
         numRead= target-pTarget;
         if(U_FAILURE(*err)){
             return NULL;
@@ -96,11 +98,11 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
     buf->buffer= pTarget;
     buf->currentPos = pTarget;
     buf->bufLimit=pTarget+numRead;
+	uprv_free(cbuf);
     return buf;
 }
 
 /* get a UChar from the stream*/
-
 U_CAPI UChar32 U_EXPORT2
 ucbuf_getc(UCHARBUF* buf,UErrorCode* err){
     UChar32 c =0;
@@ -210,12 +212,15 @@ ucbuf_open(FileStream* in, const char* cp,UErrorCode* err){
 }
 
 /* TODO: this method will fail if at the 
-   begining of buffer and the uchar to unget
-   is from the previous buffer. Need to implement
-   system to take care of that situation.
-*/
+ * begining of buffer and the uchar to unget
+ * is from the previous buffer. Need to implement
+ * system to take care of that situation.
+ */
 U_CAPI void U_EXPORT2
 ucbuf_ungetc(UChar32 c,UCHARBUF* buf){
+	/* decrement currentPos pointer
+	 * if not at the begining of buffer
+	 */
     if(buf->currentPos!=buf->buffer){
         buf->currentPos--;
     }
