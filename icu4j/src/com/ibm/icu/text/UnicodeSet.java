@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2000/08/30 20:40:30 $
- * $Revision: 1.29 $
+ * $Date: 2000/08/31 17:11:42 $
+ * $Revision: 1.30 $
  *
  *****************************************************************************************
  */
@@ -254,7 +254,7 @@ import java.text.*;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.29 $ $Date: 2000/08/30 20:40:30 $ */
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.30 $ $Date: 2000/08/31 17:11:42 $ */
 public class UnicodeSet implements UnicodeFilter {
 
     /* Implementation Notes.
@@ -1341,11 +1341,11 @@ public class UnicodeSet implements UnicodeFilter {
     //----------------------------------------------------------------
 
     /**
-     * Returns the character after the given position, or '\uFFFF' if
+     * Returns the character after the given position, or '\uFFFE' if
      * there is none.
      */
     private static final char charAfter(String str, int i) {
-        return ((++i) < str.length()) ? str.charAt(i) : '\uFFFF';
+        return ((++i) < str.length()) ? str.charAt(i) : '\uFFFE';
     }
 
     private void ensureCapacity(int newLen) {
