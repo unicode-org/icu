@@ -18,7 +18,7 @@
 #include "usc_impl.h" /* this is currently private! */
 #include "cstring.h"  /* this too! */
 
-#include "ParagraphLayout.h"
+#include "layout/ParagraphLayout.h"
 
 #define ARRAY_SIZE(array) (sizeof array  / sizeof array[0])
 
