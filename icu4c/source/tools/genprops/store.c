@@ -333,6 +333,9 @@ makeProps(Props *p) {
 
             exp-=UPROPS_LARGE_EXP_OFFSET;
             value=(value<<UPROPS_LARGE_MANT_SHIFT)|exp;
+        } else if(value<0) {
+            /* unable to encode negative values, other than fractions -1/x */
+            break;
 
         /* } else normal value=0..0xff { */
         }
