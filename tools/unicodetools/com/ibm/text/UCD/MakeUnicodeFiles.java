@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.text.ParseException;
+import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -18,12 +20,17 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.ibm.icu.dev.test.util.BagFormatter;
 import com.ibm.icu.dev.test.util.Tabber;
 import com.ibm.icu.dev.test.util.UnicodeLabel;
 import com.ibm.icu.dev.test.util.UnicodeProperty;
 import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.text.SymbolTable;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeMatcher;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.text.utility.UnicodeDataFile;
 import com.ibm.text.utility.Utility;
@@ -52,8 +59,9 @@ public class MakeUnicodeFiles {
 
     static boolean DEBUG = false;
     
-    public static void main() throws IOException {
-        generateFile();
+    public static void main(String[] args) throws IOException {
+        //generateFile();
+        testInvariants(ToolUnicodePropertySource.make(Default.ucdVersion()));
     }
 
     static class Format {
@@ -1096,8 +1104,215 @@ public class MakeUnicodeFiles {
             return nameStr;
         }       
     }
-}
+    
+    static Matcher invariantLine = Pattern.compile("([^=><!?])\\s*([=><!?])\\s*([^=><!?])").matcher("");
+    
+    static final UnicodeSet INVARIANT_RELATIONS = new UnicodeSet("[=><!?]");
+    
+    static void testInvariants(UnicodeProperty.Factory factory) throws IOException {
+        PrintWriter out = BagFormatter.openUTF8Writer(UCD_Types.GEN_DIR, "UnicodeInvariantResults.txt");
+        BufferedReader in = BagFormatter.openUTF8Reader("", "UnicodeInvariants.txt");
+        BagFormatter bf = new BagFormatter();
+        SymbolTable st = factory.getSymbolTable();
+        ParsePosition pp = new ParsePosition(0);
+        int parseErrorCount = 0;
+        int testFailureCount = 0;
+        while (true) {
+            String rightSide = null;
+            String leftSide = null;
+            String line = in.readLine();
+            if (line == null) break;
+            line = line.trim();
+            int pos = line.indexOf('#');
+            if (pos >= 0) line = line.substring(0,pos).trim();
+            if (line.length() == 0) continue;
 
+            char relation = 0;
+            UnicodeSet leftSet = null;
+            UnicodeSet rightSet = null;
+            try {
+                pp.setIndex(0);
+                leftSet = new UnicodeSet(line, pp, st);
+                leftSide = line.substring(0,pp.getIndex());
+                eatWhitespace(line, pp);
+                relation = line.charAt(pp.getIndex());
+                if (!INVARIANT_RELATIONS.contains(relation)) {
+                    throw new ParseException("Invalid relation", pp.getIndex());
+                }
+                pp.setIndex(pp.getIndex()+1); // skip char
+                eatWhitespace(line, pp);
+                int start = pp.getIndex();
+                rightSet = new UnicodeSet(line, pp, st);
+                rightSide = line.substring(start,pp.getIndex());
+                eatWhitespace(line, pp);
+                if (line.length() != pp.getIndex()) {
+                    throw new ParseException("Extra characters at end", pp.getIndex());
+                }
+            } catch (ParseException e) {
+                out.println("PARSE ERROR:\t" + line.substring(0,e.getErrorOffset())
+                    + "<@>" + line.substring(e.getErrorOffset()));
+                out.println();
+                out.println("**** START Error Info ****");
+                out.println(e.getMessage());
+                out.println("**** END Error Info ****");
+                out.println();
+                parseErrorCount++;
+                continue;
+            } catch (IllegalArgumentException e) {
+                out.println("PARSE ERROR:\t" + line);
+                out.println();
+                out.println("**** START Error Info ****");
+                out.println(e.getMessage());
+                out.println("**** END Error Info ****");
+                out.println();
+                parseErrorCount++;
+                continue;
+            }
+            
+            boolean ok = true;
+            switch(relation) {
+                case '=': ok = leftSet.equals(rightSet); break;
+                case '>': ok = leftSet.containsAll(rightSet); break;
+                case '<': ok = rightSet.containsAll(leftSet); break;
+                case '!': ok = leftSet.containsNone(rightSet); break;
+                case '?': ok = !leftSet.equals(rightSet) 
+                        && !leftSet.containsAll(rightSet) 
+                        && !rightSet.containsAll(leftSet)
+                        && !leftSet.containsNone(rightSet); 
+                    break;
+                default: throw new IllegalArgumentException("Internal Error");
+            }
+            out.println(String.valueOf(ok).toUpperCase(Locale.ENGLISH) + ":\t" + line);
+            if (ok) continue;
+            out.println();
+            out.println("**** START Error Info ****");
+            bf.showSetDifferences(out, rightSide, rightSet, leftSide, leftSet);
+            out.println("**** END Error Info ****");
+            out.println();
+            testFailureCount++;      
+        }
+        out.println();
+        out.println("**** SUMMARY ****");
+        out.println();
+        out.println("ParseErrorCount=" + parseErrorCount);
+        out.println("TestFailureCount=" + testFailureCount);
+        out.close();
+        System.out.println("ParseErrorCount=" + parseErrorCount);
+        System.out.println("TestFailureCount=" + testFailureCount);
+    }
+    
+    /**
+     * @param line
+     * @param pp
+     */
+    private static void eatWhitespace(String line, ParsePosition pp) {
+        int cp = 0;
+        int i;
+        for (i = pp.getIndex(); i < line.length(); i += UTF16.getCharCount(cp)) {
+            cp = UTF16.charAt(line, i);
+            if (!com.ibm.icu.lang.UCharacter.isUWhiteSpace(cp)) {
+                break;
+            }
+        }
+        pp.setIndex(i);
+    }
+
+    /*
+    static class PropertySymbolTable implements SymbolTable {
+        static boolean DEBUG = false;
+        UnicodeProperty.Factory factory;
+        //static Matcher identifier = Pattern.compile("([:letter:] [\\_\\-[:letter:][:number:]]*)").matcher("");
+        
+        PropertySymbolTable (UnicodeProperty.Factory factory) {
+            this.factory = factory;
+        }
+        
+        public char[] lookup(String s) {
+            if (DEBUG) System.out.println("\tLooking up " + s);
+            int pos = s.indexOf('=');
+            if (pos < 0) return null; // should never happen
+            UnicodeProperty prop = factory.getProperty(s.substring(0,pos));
+            if (prop == null) {
+                throw new IllegalArgumentException("Invalid Property: " + s + "\r\nUse "
+                 + showSet(factory.getAvailableNames())); 
+            }
+            String value = s.substring(pos+1);
+            UnicodeSet set = prop.getSet(value);
+            if (set.size() == 0) {
+                throw new IllegalArgumentException("Empty Property-Value: " + s + "\r\nUse "
+                    + showSet(prop.getAvailableValues()));
+            }
+            if (DEBUG) System.out.println("\tReturning " + set.toPattern(true));
+            return set.toPattern(true).toCharArray(); // really ugly
+        }
+
+        private String showSet(List list) {
+            StringBuffer result = new StringBuffer("[");
+            boolean first = true;
+            for (Iterator it = list.iterator(); it.hasNext();) {
+                if (!first) result.append(", ");
+                else first = false;
+                result.append(it.next().toString());
+            }
+            result.append("]");
+            return result.toString();
+        }
+
+        public UnicodeMatcher lookupMatcher(int ch) {
+            return null;
+        }
+
+        public String parseReference(String text, ParsePosition pos, int limit) {
+            if (DEBUG) System.out.println("\tParsing <" + text.substring(pos.getIndex(),limit) + ">");
+            int start = pos.getIndex();
+            int i = getIdentifier(text, start, limit);
+            if (i == start) return null;
+            String prop = text.substring(start, i);
+            String value = "true";
+            if (i < limit) {
+                int cp = text.charAt(i);
+                if (cp == ':' || cp == '=') {
+                    int j = getIdentifier(text, i+1, limit);
+                    value = text.substring(i+1, j);
+                    i = j;
+                }
+            }
+            pos.setIndex(i);
+            if (DEBUG) System.out.println("\tParsed <" + prop + ">=<" + value + ">");
+            return prop + '=' + value;
+        }
+
+        private int getIdentifier(String text, int start, int limit) {
+            if (DEBUG) System.out.println("\tGetID <" + text.substring(start,limit) + ">");
+            int cp = 0;
+            int i;
+            for (i = start; i < limit; i += UTF16.getCharCount(cp)) {
+                cp = UTF16.charAt(text, i);
+                if (!com.ibm.icu.lang.UCharacter.isUnicodeIdentifierPart(cp)) {
+                    break;
+                }
+            }
+            if (DEBUG) System.out.println("\tGotID <" + text.substring(start,i) + ">");
+            return i;
+        }
+       
+    };
+    
+    /* getCombo(UnicodeProperty.Factory factory, String line) {
+        UnicodeSet result = new UnicodeSet();
+        String[] pieces = Utility.split(line, '+');
+        for (int i = 0; i < pieces.length; ++i) {
+            String[] parts = Utility.split(pieces[i],':');
+            String prop = parts[0].trim();
+            String value = "true";
+            if (parts.length > 1) value = parts[1].trim();
+            UnicodeProperty p = factory.getProperty(prop);
+            result.addAll(p.getSet(value));
+        }
+        return result;
+    }
+    */
+}
     
 /*
 static class OrderedMap {

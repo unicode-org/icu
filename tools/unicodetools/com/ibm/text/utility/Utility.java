@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2004/03/11 19:03:16 $
-* $Revision: 1.41 $
+* $Date: 2004/04/10 16:49:19 $
+* $Revision: 1.42 $
 *
 *******************************************************************************
 */
@@ -463,21 +463,25 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
      * and returns the number of pieces.
      */
 	public static int split(String s, char divider, String[] output) {
-	    int last = 0;
-	    int current = 0;
-	    int i;
-	    for (i = 0; i < s.length(); ++i) {
-	        if (s.charAt(i) == divider) {
-	            output[current++] = s.substring(last,i);
-	            last = i+1;
-	        }
-	    }
-	    output[current++] = s.substring(last,i);
-	    int result = current;
-	    while (current < output.length) {
-	        output[current++] = "";
-	    }
-	    return result;
+	    try {
+            int last = 0;
+            int current = 0;
+            int i;
+            for (i = 0; i < s.length(); ++i) {
+                if (s.charAt(i) == divider) {
+                    output[current++] = s.substring(last,i);
+                    last = i+1;
+                }
+            }
+            output[current++] = s.substring(last,i);
+            int result = current;
+            while (current < output.length) {
+                output[current++] = "";
+            }
+            return result;
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Failure at line: " + s, e);
+        }
 	}
 
 	public static String[] split(String s, char divider) {
