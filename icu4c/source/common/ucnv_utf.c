@@ -1308,7 +1308,7 @@ lowsurogate:
             }
             else if (!args->flush)
             {
-                // ran out of source
+                /* ran out of source */
                 args->converter->fromUnicodeStatus = ch;
                 break;
             }
@@ -1362,10 +1362,10 @@ static const UConverterImpl _UTF32BEImpl = {
 
     T_UConverter_toUnicode_UTF32_BE,
     NULL,
-//    T_UConverter_toUnicode_UTF32_BE_OFFSETS_LOGIC,
+/*    T_UConverter_toUnicode_UTF32_BE_OFFSETS_LOGIC, */
     T_UConverter_fromUnicode_UTF32_BE,
     NULL,
-//    T_UConverter_fromUnicode_UTF32_BE_OFFSETS_LOGIC,
+/*    T_UConverter_fromUnicode_UTF32_BE_OFFSETS_LOGIC, */
     T_UConverter_getNextUChar_UTF32_BE,
 
     NULL
@@ -1379,7 +1379,6 @@ const UConverterStaticData _UTF32BEStaticData = {
     { 0, 0, 0xff, 0xfd }, 4, FALSE, FALSE,
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
 };
-
 
 const UConverterSharedData _UTF32BEData = {
     sizeof(UConverterSharedData), ~((uint32_t) 0),
@@ -1404,9 +1403,8 @@ void T_UConverter_toUnicode_UTF32_LE(UConverterToUnicodeArgs * args,
     {
         i = args->converter->toULength;       /* restore # of bytes consumed */
 
-        ch = args->converter->toUnicodeStatus;/*Stores the previously calculated ch from a previous call*/
-        if (ch == -1)
-            ch = 0;
+        /* Stores the previously calculated ch from a previous call*/
+        ch = args->converter->toUnicodeStatus - 1;
         args->converter->toUnicodeStatus = 0;
         goto morebytes;
     }
@@ -1434,15 +1432,9 @@ morebytes:
                     }
                 }
                 else
-                {    /* stores a partially calculated target*/
-                    if (ch == 0)
-                    {
-                        args->converter->toUnicodeStatus = -1;
-                    }
-                    else 
-                    {
-                        args->converter->toUnicodeStatus = ch;
-                    }
+                {   /* stores a partially calculated target*/
+                    /* + 1 to make 0 a valid character */
+                    args->converter->toUnicodeStatus = ch + 1;
                     args->converter->toULength = (int8_t) i;
                 }
                 goto donefornow;
@@ -1542,7 +1534,7 @@ lowsurogate:
             }
             else if (!args->flush)
             {
-                // ran out of source
+                /* ran out of source */
                 args->converter->fromUnicodeStatus = ch;
                 break;
             }
@@ -1596,10 +1588,10 @@ static const UConverterImpl _UTF32LEImpl = {
 
     T_UConverter_toUnicode_UTF32_LE,
     NULL,
-//    T_UConverter_toUnicode_UTF32_LE_OFFSETS_LOGIC,
+/*    T_UConverter_toUnicode_UTF32_LE_OFFSETS_LOGIC, */
     T_UConverter_fromUnicode_UTF32_LE,
     NULL,
-//    T_UConverter_fromUnicode_UTF32_LE_OFFSETS_LOGIC,
+/*    T_UConverter_fromUnicode_UTF32_LE_OFFSETS_LOGIC, */
     T_UConverter_getNextUChar_UTF32_LE,
 
     NULL
