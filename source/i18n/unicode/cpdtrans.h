@@ -32,7 +32,7 @@
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.4 $ $Date: 2000/01/18 20:00:41 $
+ * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.5 $ $Date: 2000/01/19 19:02:10 $
  */
 class U_I18N_API CompoundTransliterator : public Transliterator {
 
@@ -102,21 +102,10 @@ public:
                               int32_t count);
 
     /**
-     * Transliterates a segment of a string.  <code>Transliterator</code> API.
-     * @param text the string to be transliterated
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= text.length()</code>.
-     * @return the new limit index
-     */
-    virtual int32_t transliterate(Replaceable& text, int32_t start, int32_t limit) const;
-
-    /**
      * Implements {@link Transliterator#handleTransliterate}.
      */
-    virtual void handleTransliterate(Replaceable& text,
-                                     int32_t index[3]) const;
+    virtual void handleTransliterate(Replaceable& text, Position& index,
+                                     bool_t incremental) const;
 
 private:
 
