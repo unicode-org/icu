@@ -96,6 +96,8 @@ install-local:
 	  echo $(INSTALL_DATA) $(top_builddir)/../data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
 	  $(INSTALL_DATA) $(top_builddir)/../data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
 	done
+	$(INSTALL_DATA) $(top_builddir)/config/Makefile $(pkgdatadir)/Makefile.inc
+	$(INSTALL_SCRIPT) mkinstalldirs $(sbindir)/mkinstalldirs
 
 ## Generate HTML documentation
 doc:
