@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/upropset.cpp,v $
-* $Date: 2001/10/23 02:00:50 $
-* $Revision: 1.2 $
+* $Date: 2001/10/24 05:42:13 $
+* $Revision: 1.3 $
 **********************************************************************
 */
 #include "upropset.h"
@@ -321,7 +321,7 @@ static UBool _scriptFilter(UChar32 c, void* context) {
  */
 const UnicodeSet& UnicodePropertySet::getScriptSet(UScriptCode script) {
     if (SCRIPT_CACHE[script].isEmpty()) {
-        initSetFromFilter(CATEGORY_CACHE[script], _scriptFilter, &script);
+        initSetFromFilter(SCRIPT_CACHE[script], _scriptFilter, &script);
     }
     return SCRIPT_CACHE[script];
 }
