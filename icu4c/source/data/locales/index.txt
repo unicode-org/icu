@@ -141,6 +141,7 @@ index {
         kl_GL,
         ko,
         ko_KR,
+	ko__LOTUS,
         kok,
         kok_IN,
         kw,
@@ -208,9 +209,11 @@ index {
         vi,
         vi_VN,
         zh,
+		zh__PINYIN,
         zh_CN,
         zh_HK,
         zh_SG,
         zh_TW,
+		zh_TW_STROKE,
     }
 }
