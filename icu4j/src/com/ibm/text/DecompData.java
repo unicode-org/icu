@@ -7,7 +7,7 @@
 * >       DO NOT EDIT BY HAND       <
 * >      RUN TOOL TO REGENERATE     <
 * Tool: com.ibm.text.Normalizer
-* Creation date: Wed Jul 12 09:38:25 PDT 2000
+* Creation date: Thu Jul 13 14:20:40 PDT 2000
 */
 
 package com.ibm.text;
