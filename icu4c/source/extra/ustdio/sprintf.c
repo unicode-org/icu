@@ -25,7 +25,6 @@
 #include "unicode/ustring.h"
 #include "unicode/unum.h"
 #include "unicode/udat.h"
-#include "unicode/uloc.h"
 
 #include "sprintf.h"
 #include "uprntf_p.h"
@@ -1165,11 +1164,6 @@ u_vsnprintf_u(UChar    *buffer,
     outStr.str = buffer;
     outStr.len = count;
     outStr.available = count;
-
-    /* if locale is 0, use the default */
-    if(locale == 0) {
-        locale = uloc_getDefault();
-    }
 
     if(u_locbund_init(&outStr.fBundle, locale) == 0) {
         return 0;
