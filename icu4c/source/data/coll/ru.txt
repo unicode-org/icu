@@ -1,20 +1,17 @@
-// ***************************************************************************
+﻿// ***************************************************************************
 // *
-// *   Copyright (C) 1997-2004, International Business Machines
-// *   Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2004 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Date & Time: 2004/8/9 14:58
+// * Source File: \work\locale\common\collation\\ru.xml
 // *
 // ***************************************************************************
-
-ru {
-    Version{ "2.0" }
-    // Using the new options in rules in order to 
-    // improve the performance for Cyrillic chars.
-    collations {
-      standard { 
-        Version { "1.1" }
-        Sequence { 
-            "[suppressContractions [\u0400-\u045f]]"
+ru{
+    collations{
+        standard{
+            Sequence{"[suppressContractions[Ѐ-џ]]"}
+            Version{"1.1.1"}
         }
-      }
     }
 }
