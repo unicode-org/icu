@@ -31,7 +31,6 @@ AC_CANONICAL_HOST
 ICU_CHECK_MH_FRAG
 
 hpuxcma=false
-ac_cv_lib_dld_shl_load=false
 
 dnl Checks for libraries
 dnl On HP/UX, don't link to -lm from a shared lib because it isn't
@@ -352,7 +351,7 @@ fi
 dnl END special 
 
 
-if test $ac_cv_lib_dld_shl_load = yes; then
+if test "$ac_cv_lib_dld_shl_load" = "yes"; then
 	CPPFLAGS="${CPPFLAGS} -DICU_USE_SHL_LOAD"
 fi
 	
