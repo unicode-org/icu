@@ -16,6 +16,7 @@ import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.icu.util.RangeValueIterator;
+import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.lang.UCharacter;
 
@@ -46,7 +47,7 @@ public final class NormalizerImpl {
 	 * unorm.icu, which is generated with the gennorm tool.
 	 * The format of that file is described at the end of this file.
 	 */
-	private static final String DATA_FILE_NAME = "data/unorm.icu";
+	private static final String DATA_FILE_NAME = UResourceBundle.ICU_BUNDLE+"unorm.icu";
 	
 	// norm32 value constants 
 	

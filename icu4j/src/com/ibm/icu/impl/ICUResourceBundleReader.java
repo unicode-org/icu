@@ -134,7 +134,7 @@ public class ICUResourceBundleReader implements ICUBinary.Authenticate{
     
     public ICUResourceBundleReader(String baseName, String localeName, ClassLoader root){
         String resolvedName = getFullName(baseName, localeName);
-        InputStream stream = root.getResourceAsStream(resolvedName);
+        InputStream stream = ICUData.getStream(root,resolvedName);
         if(stream==null){
             throw new MissingResourceException(baseName, localeName,root.toString());
         }

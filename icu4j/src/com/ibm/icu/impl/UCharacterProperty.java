@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.Locale;
 
 import com.ibm.icu.util.RangeValueIterator;
+import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
@@ -1311,7 +1312,7 @@ public final class UCharacterProperty implements Trie.DataManipulate
     /**
     * Default name of the datafile
     */
-    private static final String DATA_FILE_NAME_ = "data/uprops.icu";
+    private static final String DATA_FILE_NAME_ = UResourceBundle.ICU_BUNDLE+"uprops.icu";
       
     /**
     * Default buffer size of datafile

@@ -25,7 +25,33 @@ public final class ICUResourceBundleTest extends TestFmwk {
         test.run(args);
 
     }
-    
+    public void TestResourceBundleWrapper(){
+        UResourceBundle bundle = UResourceBundle.getBundleInstance("com.ibm.icu.impl.data.CalendarData", "ar_AE");
+        Object o = bundle.getObject("Weekend");
+        if(o instanceof String[] ){
+            logln("wrapper mechanism works for Weekend data");
+        }else{
+            errln("Did not get the expected output for Weekend data");
+        }
+       
+        bundle = UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME, "bogus", this.getClass().getClassLoader());   
+        if(bundle instanceof ICUResourceBundle && bundle.getULocale().equals("root")){
+            logln("wrapper mechanism works for bogus locale");
+        }else{
+            logln("wrapper mechanism failed for bogus locale");   
+        }
+         
+        try{
+            bundle = UResourceBundle.getBundleInstance("bogus", "bogus", this.getClass().getClassLoader());
+            if(bundle!=null){
+              errln("Did not get the expected exception");   
+            }
+        }catch(MissingResourceException ex){
+            logln("got the expected exception");   
+        }
+        
+        
+    }
     public void TestOpen(){
         ICUResourceBundle bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME, "en_US_POSIX", ICUData.class.getClassLoader());
        
@@ -33,7 +59,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
             errln("could not create the resource bundle");   
         }
         
-        ICUResourceBundle obj = (ICUResourceBundle) bundle.getObject("NumberPatterns");
+        ICUResourceBundle obj =  bundle.get("NumberPatterns");
         
         int size = obj.getSize();
         int type = obj.getType();
@@ -50,8 +76,13 @@ public final class ICUResourceBundleTest extends TestFmwk {
             }
             
         }
+        String[] strings = bundle.getStringArray("NumberPatterns");
+        if(size!=strings.length){
+            errln("Failed to get the items from NumberPatterns array in bundle: "+
+                    bundle.getULocale().getBaseName()); 
+        }
         {
-            obj = (ICUResourceBundle) bundle.getObject("NumberElements");
+            obj =  bundle.get("NumberElements");
             
             size = obj.getSize();
             type = obj.getType();
@@ -336,115 +367,13 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }
         return number;
     }
-    /*
-    public void TestReferences() {
-        ResourceBundle rb = UResourceBundle.getBundleInstance("th");
-        logln("got rb:" + rb);
     
-        byte[] binaryData = null;//(byte[])rb.getObject("%%CollationBin");
-        Object colElem = rb.getObject("collations");
-        if(colElem instanceof Object[][]){
-            Object[][] colElemArr = (Object[][])colElem;
-            if(((String)colElemArr[0][0]).equals("%%CollationBin")){   
-               binaryData = (byte[]) colElemArr[0][1];
-            }
-        }else{
-            errln("Did not get the expected object");
-        }
-        logln("got binaryData: " + binaryData + " length: " + (binaryData == null ? 0 : binaryData.length));
-        Object[] stringArrayData = (Object[])rb.getObject("collations");
-        //String[] collationData = new String[] {
-         //   (String)stringArrayData[0],
-         //   (String)stringArrayData[0]
-        //};
-        logln("got stringData: " + stringArrayData + " length: " + stringArrayData.length);
-        logln("got stringDataElement: " + stringArrayData[0] + " length: " + stringArrayData.length);
-        //System.out.println("got sdee: " + collationData[0]);
-        //  System.out.println("char data length: " + stringArrayData.length());
-    }
-   */
-   String simpleAlias   = "Open";
-
-   Object[][] zoneTests =  new Object[][]{
-                               {
-                                    "zoneAlias",
-                                    new String[] { 
-                                                    "PST",
-                                                    "Pacific Standard Time",
-                                                    "PST",
-                                                    "Pacific Daylight Time",
-                                                    "PDT",
-                                                    "Los Angeles",
-                                                },
-                               },
-                               {
-                                   "zoneAlias1",
-                                   new String[] { 
-                                                   "America/Denver",
-                                                   "Mountain Standard Time",
-                                                   "MST",
-                                                   "Mountain Daylight Time",
-                                                   "MDT",
-                                                   "Denver",
-                        
-                                               },
-                               },
-                               {
-                                   "zoneAlias2",
-                                   "America/Denver",
-                               },
-                           };
-    Object[] zoneStrings = new Object[] {
-                                new String[] { 
-                                    
-                                    "PST",
-                                    "Pacific Standard Time",
-                                    "PST",
-                                    "Pacific Daylight Time",
-                                    "PDT",
-                                    "Los Angeles",
-                                
-                                },
-                                new String[] { 
-                                    "America/Los_Angeles",
-                                    "Pacific Standard Time",
-                                    "PST",
-                                    "Pacific Daylight Time",
-                                    "PDT",
-                                    "Los Angeles",
-                                
-                                },
-                            };
-    Object[] testGetStringByIndexAliasing =  new String[] { 
-                                                    "PST",
-                                                    "Pacific Standard Time",
-                                                    "PDT",
-                                                    "Los Angeles",
-                                                };
-    Object[][] testGetStringByKeyAliasing = new Object[][]{
-                                                {
-                                                    "KeyAlias0PST",
-                                                    "PST",
-                                                },
-                                                {
-                                                    "KeyAlias1PacificStandardTime",
-                                                    "Pacific Standard Time",
-                                                },
-                                                {
-                                                    "KeyAlias2PDT",
-                                                    "PDT",
-                                                },
-                                                {
-                                                    "KeyAlias3LosAngeles",
-                                                    "Los Angeles",
-                                                },
-                                            };     
-    // 
     public void TestAliases(){
-      
+       String simpleAlias   = "Open";
+                 
         ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testaliases");
         ICUResourceBundle sub = rb.get("simplealias");
-        String s1 = sub.getString();
+        String s1 = sub.getString("simplealias");
         if(s1.equals(simpleAlias)){
             logln("Alias mechanism works for simplealias");
         }else{
@@ -498,20 +427,20 @@ public final class ICUResourceBundleTest extends TestFmwk {
                 errln("Did not get the expected output for KeyAlias0PST");
             }
             
-            s1 = sub.get("KeyAlias1PacificStandardTime").getString();
+            s1 = sub.getString("KeyAlias1PacificStandardTime");
             if(s1.equals("Pacific Standard Time")){
                 logln("Alias mechanism works for KeyAlias1PacificStandardTime");
             }else{
                 errln("Did not get the expected output for KeyAlias1PacificStandardTime");
             }
-            s1 = sub.get("KeyAlias2PDT").getString();
+            s1 = sub.getString("KeyAlias2PDT");
             if(s1.equals("PDT")){
                 logln("Alias mechanism works for KeyAlias2PDT");
             }else{
                 errln("Did not get the expected output for KeyAlias2PDT");
             }            
             
-            s1 = sub.get("KeyAlias3LosAngeles").getString();
+            s1 = sub.getString("KeyAlias3LosAngeles");
             if(s1.equals("Los Angeles")){
                 logln("Alias mechanism works for KeyAlias3LosAngeles. Got: "+s1);
             }else{
@@ -546,18 +475,23 @@ public final class ICUResourceBundleTest extends TestFmwk {
                 errln("Did not get the expected output for testGetStringByIndexAliasing/3. Got: "+s1);
             }
         }
-        
+        {
+            sub = rb.get("BreakDictionaryData" );
+            ByteBuffer buf = sub.getBinary();
+            if(buf==null){
+                errln("Did not get the expected output for BreakDictionaryData");   
+            }
+        }
         // should not get an exception
         rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,"fr_BE");
-        ICUResourceBundle b = (ICUResourceBundle) rb.getObject("SpelloutRules");
-        String str = b.getString();
+        String str = rb.getString("SpelloutRules");
         if(str !=null || str.length()>0){
             logln("Alias mechanism works");
         }else{
             errln("Alias mechanism failed for fr_BE SpelloutRules");
         }
         rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(UResourceBundle.ICU_COLLATION_BASE_NAME,"zh_TW");
-        b = (ICUResourceBundle) rb.getObject("collations");
+        ICUResourceBundle b = (ICUResourceBundle) rb.getObject("collations");
         if(b != null){
             if(b.get(0).getKey().equals( "default")){
                 logln("Alias mechanism works");
@@ -572,7 +506,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
     public void TestAlias(){
         logln("Testing %%ALIAS");
         ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,"iw_IL");
-        ICUResourceBundle b = (ICUResourceBundle) rb.getObject("NumberPatterns");
+        ICUResourceBundle b = rb.get("NumberPatterns");
         if(b != null){
             if(b.getSize()>0){
                 logln("%%ALIAS mechanism works");
@@ -595,5 +529,39 @@ public final class ICUResourceBundleTest extends TestFmwk {
             logln("got expected exception for circular references");   
         }
     }    
+    
+    public void TestGetObjectWithFallback(){
+        ICUResourceBundle bundle =(ICUResourceBundle) UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,"te_IN");
+        String key = (String) bundle.getObjectWithFallback("Keys/collation");
+        if(!key.equals("COLLATION")){
+            errln("Did not get the expected result from getObjectWithFallback method.");
+        }
+        String type = (String) bundle.getObjectWithFallback("Types/collation/direct");
+        if(!type.equals("DIRECT")){
+            errln("Did not get the expected result form getObjectWithFallback method.");
+        }
+
+        try{
+            bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(UResourceBundle.ICU_COLLATION_BASE_NAME,ULocale.canonicalize("de__PHONEBOOK"));
+            if(!bundle.getULocale().equals("de")){
+                errln("did not get the expected bundle");   
+            }
+            key = (String) bundle.getObjectWithFallback("collations/collation/default");
+            if(!key.equals("phonebook")){
+                errln("Did not get the expected result from getObjectWithFallback method.");
+            }
+
+        }catch(MissingResourceException ex){
+            logln("got the expected exception");
+        }
+
+       
+        bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(UResourceBundle.ICU_COLLATION_BASE_NAME,"fr_FR");
+        key = (String) bundle.getObjectWithFallback("collations/default");
+        if(!key.equals("standard")){
+            errln("Did not get the expected result from getObjectWithFallback method.");
+        }  
+    }
+
 }
 

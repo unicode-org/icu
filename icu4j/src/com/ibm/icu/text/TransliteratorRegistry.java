@@ -10,11 +10,13 @@
 
 package com.ibm.icu.text;
 
-import com.ibm.icu.impl.ICULocaleData;
+//import com.ibm.icu.impl.ICULocaleData;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.data.ResourceReader;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.util.CaseInsensitiveString;
+import com.ibm.icu.util.UResourceBundle;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
@@ -91,7 +93,7 @@ class TransliteratorRegistry {
         private String scriptName; // script name equivalent of top, if != top
         private boolean isSpecLocale; // TRUE if spec is a locale
         private boolean isNextLocale; // TRUE if nextSpec is a locale
-        private ResourceBundle res;
+        private ICUResourceBundle res;
 
         public Spec(String theSpec) {
             top = theSpec;
@@ -99,9 +101,9 @@ class TransliteratorRegistry {
             scriptName = null;
             try{
                 Locale toploc = LocaleUtility.getLocaleFromName(top);
-                res = ICULocaleData.getLocaleElements(toploc);
+                res  = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,toploc);
                 // Make sure we got the bundle we wanted; otherwise, don't use it
-                if (res!=null && LocaleUtility.isFallbackOf(res.getLocale().toString(), top)) {
+                if (res!=null && LocaleUtility.isFallbackOf(res.getULocale().toString(), top)) {
                     isSpecLocale = true;
                 } else {
                     isSpecLocale = false;
@@ -187,7 +189,7 @@ class TransliteratorRegistry {
          */
         public ResourceBundle getBundle() {
             if (res != null &&
-                res.getLocale().toString().equals(spec)) {
+                res.getULocale().toString().equals(spec)) {
                 return res;
             }
             return null;
@@ -640,9 +642,9 @@ class TransliteratorRegistry {
             // but must be consistent and documented.
             if (pass == 0) {
                 tag.append(direction == Transliterator.FORWARD ?
-                           "TransliterateTo_" : "TransliterateFrom_");
+                           "TransliterateTo" : "TransliterateFrom");
             } else {
-                tag.append("Transliterate_");
+                tag.append("Transliterate");
             }
             tag.append(specToFind.get().toUpperCase());
 

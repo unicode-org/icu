@@ -7,15 +7,18 @@
 package com.ibm.icu.text;
 
 import java.util.Locale;
-import java.util.ResourceBundle;
+//import java.util.ResourceBundle;
 import java.util.Arrays;
+import java.nio.ByteBuffer;
 import java.text.CharacterIterator;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VersionInfo;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.IntTrie;
 import com.ibm.icu.impl.Trie;
-import com.ibm.icu.impl.ICULocaleData;
+//import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.BOCU;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.ICUDebug;
@@ -1576,7 +1579,7 @@ public final class RuleBasedCollator extends Collator
 //            IMPLICIT_BASE_4BYTE_ = ((IMPLICIT_BASE_BYTE_
 //                                     + IMPLICIT_3BYTE_COUNT_) << 24) + 0x030303;
             UCA_.init();
-            ResourceBundle rb = ICULocaleData.getLocaleElements(Locale.ENGLISH);
+            ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_COLLATION_BASE_NAME, ULocale.ENGLISH);
             UCA_.m_rules_ = (String)rb.getObject("%%UCARULES");
         }
         catch (Exception e)
@@ -1610,31 +1613,30 @@ public final class RuleBasedCollator extends Collator
      */
     RuleBasedCollator(Locale locale)
     {
-        ResourceBundle rb = ICULocaleData.getLocaleElements(locale);
+        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_COLLATION_BASE_NAME, locale);
         initUtility();
         if (rb != null) {
             try {
                 // TODO: this is to be updated after the key word search
                 //       is implemented.
                 Object collkey 
-                    = ((ICUListResourceBundle)rb).getObjectWithFallback(
-                                                          "collations/default");
+                    = rb.getObjectWithFallback("collations/default");
                 // collations/default will always give a string back
                 // keyword for the real collation data
                 // if "collations/collkey" will return null if collkey == null 
-                Object elements 
-                            = ((ICUListResourceBundle)rb).getObjectWithFallback(
-                                                       "collations/" + collkey);
+                ICUResourceBundle elements 
+                            = (ICUResourceBundle)rb.getObjectWithFallback("collations/" + collkey);
                 if (elements != null) {
                     // TODO: Determine actual & valid locale correctly
-                    ULocale uloc = new ULocale(rb.getLocale());
+                    ULocale uloc = rb.getULocale();
                     setLocale(uloc, uloc);
 
-                    Object[][] rules = (Object[][])elements;
+                    m_rules_ = elements.getString("Sequence");
+                    ByteBuffer buf = elements.get("%%CollationBin").getBinary();
                     // %%CollationBin
-                    if(rules[0][1] instanceof byte[]){
-                        m_rules_ = (String)rules[1][1];
-                        byte map[] = (byte [])rules[0][1];
+                    if(buf!=null){
+                    //     m_rules_ = (String)rules[1][1];
+                        byte map[] = buf.array();
                         CollatorReader.initRBC(this, map);
 						/*
                         BufferedInputStream input =
@@ -1657,7 +1659,7 @@ public final class RuleBasedCollator extends Collator
                         // the right UCA and other versions
                         if(!m_UCA_version_.equals(UCA_.m_UCA_version_) ||
                         !m_UCD_version_.equals(UCA_.m_UCD_version_)) {
-                            init((String)rules[1][1]);
+                            init(m_rules_);
                             return;
                         }
                         init();
@@ -1667,7 +1669,7 @@ public final class RuleBasedCollator extends Collator
                         // due to resource redirection ICUListResourceBundle does not
                         // raise missing resource error
                         //throw new MissingResourceException("Could not get resource for constructing RuleBasedCollator","com.ibm.icu.impl.data.LocaleElements_"+locale.toString(), "%%CollationBin");
-                        m_rules_ = (String)rules[0][1];
+                        
                         init(m_rules_);
                         return;
                     }
@@ -2209,7 +2211,7 @@ public final class RuleBasedCollator extends Collator
                         if (leadPrimary != 0) {
                             m_utilBytes1_ = append(m_utilBytes1_,
                                                    m_utilBytesCount1_,
-                                    (byte)((p1 > leadPrimary)
+                                    ((p1 > leadPrimary)
                                             ? BYTE_UNSHIFTED_MAX_
                                             : BYTE_UNSHIFTED_MIN_));
                             m_utilBytesCount1_ ++;

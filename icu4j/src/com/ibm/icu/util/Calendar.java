@@ -6,7 +6,7 @@
 
 package com.ibm.icu.util;
 
-import com.ibm.icu.impl.ICULocaleData;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.impl.ICULocaleService;
 import com.ibm.icu.impl.ICULocaleService.LocaleKeyFactory;
@@ -1627,7 +1627,7 @@ public abstract class Calendar implements Serializable, Cloneable {
     public static Locale[] getAvailableLocales()
     {
         return service == null
-            ? ICULocaleData.getAvailableLocales()
+            ? ICUResourceBundle.getAvailableLocales(UResourceBundle.ICU_BASE_NAME)
             : service.getAvailableLocales();
     }
     ///CLOVER:OFF
@@ -3665,11 +3665,11 @@ public abstract class Calendar implements Serializable, Cloneable {
         public int weekendOnsetMillis;
         public int weekendCease;
         public int weekendCeaseMillis;
-        public Locale actualLocale;
+        public ULocale actualLocale;
         public WeekData(int fdow, int mdifw,
                         int weekendOnset, int weekendOnsetMillis,
                         int weekendCease, int weekendCeaseMillis,
-                        Locale actualLoc) {
+                        ULocale actualLoc) {
             this.firstDayOfWeek = fdow;
             this.minimalDaysInFirstWeek = mdifw;
             this.actualLocale = actualLoc;
@@ -3691,19 +3691,15 @@ public abstract class Calendar implements Serializable, Cloneable {
         WeekData data = (WeekData) cachedLocaleData.get(locale);
         
         if (data == null) {  /* cache miss */
-            ResourceBundle dateRes = ICULocaleData.getLocaleElements(locale);
-            String[] dateTimeElements =
-                dateRes.getStringArray("DateTimeElements");
-            String[] weekend =
-                ICULocaleData.getResourceBundle("CalendarData", locale).
-                getStringArray("Weekend");
-            data = new WeekData(Integer.parseInt(dateTimeElements[0]),
-                                Integer.parseInt(dateTimeElements[1]),
+            ICUResourceBundle dateRes = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,locale);
+            int[] dateTimeElements = dateRes.get("DateTimeElements").getIntVector();
+            String[] weekend = UResourceBundle.getBundleInstance("CalendarData", locale).getStringArray("Weekend");
+            data = new WeekData(dateTimeElements[0],dateTimeElements[1],
                                 Integer.parseInt(weekend[0]),
                                 Integer.parseInt(weekend[1]),
                                 Integer.parseInt(weekend[2]),
                                 Integer.parseInt(weekend[3]),
-                                dateRes.getLocale());
+                                dateRes.getULocale());
             /* cache update */
             cachedLocaleData.put(locale, data);
         }
@@ -3715,7 +3711,7 @@ public abstract class Calendar implements Serializable, Cloneable {
         weekendCeaseMillis = data.weekendCeaseMillis;
 
         // TODO: determine the actual/valid locale
-        ULocale uloc = new ULocale(data.actualLocale);
+        ULocale uloc = data.actualLocale;
         setLocale(uloc, uloc);
     }
 

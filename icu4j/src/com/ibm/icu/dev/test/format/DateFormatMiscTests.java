@@ -149,11 +149,11 @@ public class DateFormatMiscTests extends com.ibm.icu.dev.test.TestFmwk {
             errln("*** Should have been " + jstShort);
         }
         logln("Long zone name = " + zones[0][3]);
-        if (zones[0][3] != jstLong) {
-            errln("*** Should have been " + jstLong);
+        if (!zones[0][3].equals(jstLong)) {
+            errln("*** Should have been " + jstLong +" instead of "+zones[0][3]);
         }
         logln("SHORT zone name = " + zones[0][4]);
-        if (zones[0][4] != jstShort) {
+        if (!zones[0][4].equals(jstShort)) {
             errln("*** Should have been " + jstShort);
         }
     }

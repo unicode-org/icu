@@ -7,8 +7,6 @@
 
 package com.ibm.icu.util;
 
-import com.ibm.icu.impl.ICULocaleData;
-
 import java.util.Date;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -36,7 +34,7 @@ public abstract class Holiday implements DateRule
         Holiday[] result = noHolidays;
 
         try {
-            ResourceBundle bundle = ICULocaleData.getResourceBundle("HolidayBundle", locale);
+            ResourceBundle bundle = UResourceBundle.getBundleInstance("HolidayBundle", locale);
 
             result = (Holiday[]) bundle.getObject("holidays");
         }
@@ -144,7 +142,7 @@ public abstract class Holiday implements DateRule
         String name = this.name;
 
         try {
-            ResourceBundle bundle = ICULocaleData.getResourceBundle("HolidayBundle", locale);
+            ResourceBundle bundle = UResourceBundle.getBundleInstance("HolidayBundle", locale);
             name = bundle.getString(name);
         }
         catch (MissingResourceException e) {

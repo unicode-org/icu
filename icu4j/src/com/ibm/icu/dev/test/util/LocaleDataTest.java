@@ -9,11 +9,13 @@ package com.ibm.icu.dev.test.util;
 import java.util.Locale;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.ICULocaleData;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
 import com.ibm.icu.util.LocaleData;
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 
 /**
  * @author ram
@@ -27,14 +29,14 @@ public class LocaleDataTest extends TestFmwk{
         new LocaleDataTest().run(args);
     }
     
-    private Locale[] availableLocales = null;
+    private ULocale[] availableLocales = null;
     
     public LocaleDataTest(){
-        availableLocales = ICULocaleData.getAvailableLocales();
+        availableLocales = ICUResourceBundle.getAvailableULocales(UResourceBundle.ICU_BASE_NAME);
     }
     public void TestPaperSize(){
         for(int i = 0; i < availableLocales.length; i++){
-            Locale locale = availableLocales[i];
+            ULocale locale = availableLocales[i];
             LocaleData.PaperSize paperSize = LocaleData.getPaperSize(locale);
             // skip testing of "in" .. deprecated code for Indonesian
             String lang = locale.getLanguage();
@@ -64,7 +66,7 @@ public class LocaleDataTest extends TestFmwk{
     }
     public void TestMeasurementSystem(){
         for(int i=0; i<availableLocales.length; i++){
-            Locale locale = availableLocales[i];
+            ULocale locale = availableLocales[i];
             LocaleData.MeasurementSystem ms = LocaleData.getMeasurementSystem(locale);
             // skip testing of "in" .. deprecated code for Indonesian
             String lang = locale.getLanguage();
@@ -88,7 +90,7 @@ public class LocaleDataTest extends TestFmwk{
     }
     public void TestExemplarSet(){
         for(int i=0; i<availableLocales.length; i++){
-            Locale locale = availableLocales[i];
+            ULocale locale = availableLocales[i];
             UnicodeSet exemplarSet = LocaleData.getExemplarSet(locale);
             int[] code = UScript.getCode(locale);
             if(code != null){

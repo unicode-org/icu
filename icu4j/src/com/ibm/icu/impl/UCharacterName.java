@@ -12,6 +12,7 @@ import java.io.IOException;
 
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 
@@ -1047,8 +1048,7 @@ public final class UCharacterName
     /**
     * Default name of the name datafile
     */
-    private static final String NAME_FILE_NAME_ =
-                                           "/com/ibm/icu/impl/data/unames.icu";
+    private static final String NAME_FILE_NAME_ = UResourceBundle.ICU_BUNDLE+"unames.icu";
     /**
     * Shift count to retrieve group information
     */

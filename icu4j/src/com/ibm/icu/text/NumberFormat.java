@@ -19,11 +19,13 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-import com.ibm.icu.impl.ICULocaleData;
+//import com.ibm.icu.impl.ICULocaleData;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.text.UFormat;
 
 /**
@@ -707,7 +709,7 @@ public abstract class NumberFormat extends UFormat {
      */
     public static Locale[] getAvailableLocales() {
         if (shim == null) {
-            return ICULocaleData.getAvailableLocales();
+            return ICUResourceBundle.getAvailableLocales(UResourceBundle.ICU_BASE_NAME);
         }
         return getShim().getAvailableLocales();
     }
@@ -1069,7 +1071,7 @@ public abstract class NumberFormat extends UFormat {
         //}
 
 		// {dlf}
-		ResourceBundle rb = ICULocaleData.getLocaleElements(forLocale);
+		ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,forLocale);
 		String[] numberPatterns = rb.getStringArray("NumberPatterns");
 
 		/* {dlf}

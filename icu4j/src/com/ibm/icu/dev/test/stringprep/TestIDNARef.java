@@ -54,6 +54,9 @@ public class TestIDNARef extends TestFmwk {
         for(int i=0; i<TestData.domainNames1Uni.length; i++){
             doTestIDNToASCII(TestData.domainNames1Uni[i],TestData.domainNamesToASCIIOut[i],IDNAReference.DEFAULT, null);
             doTestIDNToASCII(TestData.domainNames1Uni[i],TestData.domainNamesToASCIIOut[i],IDNAReference.ALLOW_UNASSIGNED, null);
+            doTestIDNToASCII(TestData.domainNames1Uni[i],TestData.domainNamesToASCIIOut[i],IDNAReference.USE_STD3_RULES, null);
+            doTestIDNToASCII(TestData.domainNames1Uni[i],TestData.domainNamesToASCIIOut[i],IDNAReference.ALLOW_UNASSIGNED|IDNAReference.USE_STD3_RULES, null);
+
         }
     }
     public void TestIDNToUnicode() throws Exception{
@@ -227,21 +230,21 @@ public class TestIDNARef extends TestFmwk {
             
             StringBuffer out = IDNAReference.convertIDNToASCII(src,options);
             if(expected!=null && out != null && !out.toString().equals(expected.toLowerCase())){
-                errln("convertToIDNAReferenceSCII did not return expected result with options : "+ options + 
+                errln("convertToIDNAReferenceASCII did not return expected result with options : "+ options + 
                       " Expected: " + expected+" Got: "+out);
             }
             if(expectedException!=null && !unassignedException.equals(expectedException)){
-                errln("convertToIDNAReferenceSCII did not get the expected exception. The operation succeeded!");
+                errln("convertToIDNAReferenceASCII did not get the expected exception. The operation succeeded!");
             }
         }catch(StringPrepParseException ex){
             if(expectedException == null || !ex.equals(expectedException)){
-                errln("convertToIDNAReferenceSCII did not get the expected exception for source: " +src +" Got:  "+ ex.toString());
+                errln("convertToIDNAReferenceASCII did not get the expected exception for source: " +src +" Got:  "+ ex.toString());
             }
         }
         try{
             StringBuffer out = IDNAReference.convertIDNtoASCII(inBuf,options);
             if(expected!=null && out != null && !out.toString().equals(expected.toLowerCase())){
-               errln("convertToIDNAReferenceSCII did not return expected result with options : "+ options + 
+               errln("convertToIDNAReferenceASCII did not return expected result with options : "+ options + 
                      " Expected: " + expected+" Got: "+out);
             }           
             if(expectedException!=null && !unassignedException.equals(expectedException)){

@@ -101,7 +101,7 @@ public final class VersionInfo
      */
     public static final VersionInfo ICU_VERSION;
     
-    public static final String ICU_DATA_VERSION = "28b";
+    public static final String ICU_DATA_VERSION = "30b";
     
     /**
      * ICU4J collator runtime version

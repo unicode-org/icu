@@ -15,10 +15,11 @@ import java.util.ResourceBundle;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.ICULocaleService;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.VersionInfo;
+import com.ibm.icu.util.UResourceBundle;
 
 /**
  * @author Ram
@@ -44,7 +45,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
     
     public Locale[] getAvailableLocales() {
         if (service == null) {
-            return ICULocaleData.getAvailableLocales();
+            return ICUResourceBundle.getAvailableLocales(UResourceBundle.ICU_BASE_NAME);
         } else {
             return service.getAvailableLocales();
         }
@@ -124,10 +125,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         		// Class for new RBBI engine.
         		// Open a stream to the .brk file.  Path to the brk files has this form:
         		//      data/icudt30b/line.brk      (30 is version number)
-        		String rulesFileName = 
-        			"data/icudt" + VersionInfo.ICU_VERSION.getMajor() +  
-					VersionInfo.ICU_VERSION.getMinor() + "b/" + 
-					KIND_NAMES_2[kind] + ".brk";
+        		String rulesFileName = UResourceBundle.ICU_BUNDLE + KIND_NAMES_2[kind] + ".brk";
         		InputStream is = ICUData.getStream(rulesFileName);
         		if (is == null) {
         			// Temporary!!! Try again with break files named data/icudt28b_char.brk
@@ -135,9 +133,7 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         			//              used during development, this code can be removed once
         			//              the data is in the data directory, above.  TODO:  remove 
         			//              the following code, make this catch turn around and throw.
-        			rulesFileName = 
-        				"data/icudt" + VersionInfo.ICU_VERSION.getMajor() +  
-						VersionInfo.ICU_VERSION.getMinor() + "b_" + 
+        			rulesFileName = UResourceBundle.ICU_BUNDLE + 
 						KIND_NAMES_2[kind] + ".brk";
         			is = ICUData.getRequiredStream(rulesFileName);
         		}

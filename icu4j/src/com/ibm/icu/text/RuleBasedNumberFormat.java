@@ -7,15 +7,17 @@
 
 package com.ibm.icu.text;
 
-import com.ibm.icu.impl.ICULocaleData;
+//import com.ibm.icu.impl.ICULocaleData;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 
 import java.math.BigInteger;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.Locale;
-import java.util.ResourceBundle;
+//import java.util.ResourceBundle;
 
 
 /**
@@ -602,12 +604,12 @@ public class RuleBasedNumberFormat extends NumberFormat {
         // load up the resource bundle containing the description
         // from the specified locale
 	//        ResourceBundle bundle = ICULocaleData.getResourceBundle("NumberFormatRules", locale);
-        ResourceBundle bundle = ICULocaleData.getResourceBundle("LocaleElements", locale);
+        ICUResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME, locale);
 
         // TODO: determine correct actual/valid locale.  Note ambiguity
         // here -- do actual/valid refer to pattern, DecimalFormatSymbols,
         // or Collator?
-        ULocale uloc = new ULocale(bundle.getLocale());
+        ULocale uloc = bundle.getULocale();
         setLocale(uloc, uloc);
         
         String description = "";

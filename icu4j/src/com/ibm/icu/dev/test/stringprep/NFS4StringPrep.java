@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
 import com.ibm.icu.dev.test.TestUtil;
+import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.text.StringPrepParseException;
 import com.ibm.icu.text.StringPrep;
 import com.ibm.icu.text.UCharacterIterator;
@@ -35,23 +36,23 @@ public final class NFS4StringPrep {
 
     private  NFS4StringPrep (){
       try{
-          InputStream  nfscsiFile = TestUtil.getDataStream("nfscsi.spp");
+          InputStream  nfscsiFile = ICUData.getStream(this.getClass().getClassLoader(), "com/ibm/icu/dev/data/testdata/nfscsi.spp");
           nfscsi = new StringPrep(nfscsiFile);
           nfscsiFile.close();
           
-          InputStream  nfscssFile = TestUtil.getDataStream("nfscss.spp");
+          InputStream  nfscssFile = ICUData.getStream(this.getClass().getClassLoader(),"com/ibm/icu/dev/data/testdata/nfscss.spp");
           nfscss = new StringPrep(nfscssFile);
           nfscssFile.close();
           
-          InputStream  nfscisFile = TestUtil.getDataStream("nfscis.spp");
+          InputStream  nfscisFile = ICUData.getStream(this.getClass().getClassLoader(),"com/ibm/icu/dev/data/testdata/nfscis.spp");
           nfscis = new StringPrep(nfscisFile);
           nfscisFile.close();
           
-          InputStream  nfsmxpFile = TestUtil.getDataStream("nfsmxp.spp");
+          InputStream  nfsmxpFile = ICUData.getStream(this.getClass().getClassLoader(),"com/ibm/icu/dev/data/testdata/nfsmxp.spp");
           nfsmxp = new StringPrep(nfsmxpFile);
           nfsmxpFile.close();
           
-          InputStream  nfsmxsFile = TestUtil.getDataStream("nfsmxs.spp");
+          InputStream  nfsmxsFile = ICUData.getStream(this.getClass().getClassLoader(),"com/ibm/icu/dev/data/testdata/nfsmxs.spp");
           nfsmxs = new StringPrep(nfsmxsFile);
           nfsmxsFile.close();
       }catch(IOException e){

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import com.ibm.icu.impl.ICUData;
+import com.ibm.icu.util.UResourceBundle;
 
 /**
  *
@@ -83,7 +84,7 @@ public final class IDNA {
     /* private constructor to prevent construction of the object */
     private IDNA(){
         try{
-           InputStream stream = ICUData.getRequiredStream("data/uidna.spp");
+           InputStream stream = ICUData.getRequiredStream(UResourceBundle.ICU_BUNDLE+"uidna.spp");
            namePrep = new StringPrep(stream);
            stream.close();
         }catch (IOException e){

@@ -13,6 +13,7 @@ package com.ibm.icu.impl;
 import java.io.*;
 
 import com.ibm.icu.lang.*;
+import com.ibm.icu.util.UResourceBundle;
 
 /**
  * Wrapper for the pnames.icu binary data file.  This data file is
@@ -101,7 +102,7 @@ public final class UPropertyAliases implements ICUBinary.Authenticate {
     /**
      * Name of the datafile
      */
-    private static final String DATA_FILE_NAME = "data/pnames.icu";
+    private static final String DATA_FILE_NAME = UResourceBundle.ICU_BUNDLE+"pnames.icu";
 
     /**
      * Buffer size of datafile.  The whole file is < 16k.

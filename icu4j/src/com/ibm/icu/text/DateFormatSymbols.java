@@ -8,9 +8,11 @@
 package com.ibm.icu.text;
 
 import com.ibm.icu.impl.ICULocaleData;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
+import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.impl.ZoneMeta;
 import com.ibm.icu.util.ULocale;
 
@@ -408,7 +410,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     private void initializeData(Locale desiredLocale)
     {
-        ResourceBundle rb = ICULocaleData.getLocaleElements(desiredLocale);
+        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,desiredLocale);
 
         // FIXME: cache only ResourceBundle. Hence every time, will do
         // getObject(). This won't be necessary if the Resource itself
@@ -431,16 +433,20 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
         // hack around class cast problem
         // zoneStrings = (String[][])rb.getObject("zoneStrings");
-        Object[] zoneObject = (Object[])rb.getObject("zoneStrings");
-        zoneStrings = new String[zoneObject.length][];
-        for (int i = 0; i < zoneStrings.length; ++i) {
-            zoneStrings[i] = (String[])zoneObject[i];
+        ICUResourceBundle zoneObject = rb.get("zoneStrings");
+        zoneStrings = new String[zoneObject.getSize()][];
+        for(int i =0; i< zoneObject.getSize(); i++){
+            ICUResourceBundle zoneArr = zoneObject.get(i);
+            String[] strings = new String[zoneArr.getSize()];
+            for(int j=0; j<zoneArr.getSize(); j++){
+                strings[j]=zoneArr.get(j).getString();
+            }
+            zoneStrings[i] = strings;
         }
-
         localPatternChars = rb.getString("localPatternChars");
 
         // TODO: obtain correct actual/valid locale later
-        ULocale uloc = new ULocale(rb.getLocale());
+        ULocale uloc = rb.getULocale();
         setLocale(uloc, uloc);
     }
 

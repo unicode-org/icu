@@ -6,15 +6,16 @@
 */
 package com.ibm.icu.dev.test.stringprep;
 
-import java.util.ResourceBundle;
 
-import com.ibm.icu.impl.ICULocaleData;
+//import com.ibm.icu.impl.ICULocaleData;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterDirection;
 import com.ibm.icu.text.StringPrepParseException;
 import com.ibm.icu.text.UCharacterIterator;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.Transliterator;
+import com.ibm.icu.util.UResourceBundle;
 
 /**
  * @author ram
@@ -35,9 +36,9 @@ public class NamePrepTransform {
     
     private NamePrepTransform(){
         // load the resource bundle
-        ResourceBundle bundle = ICULocaleData.getResourceBundle("com.ibm.icu.dev.test.stringprep","IDNA","rules");
-        String  mapRules      = bundle.getString("Map");
-        mapRules             += bundle.getString("CaseMap");
+        ICUResourceBundle bundle = (ICUResourceBundle)ICUResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","idna_rules", true);
+        String  mapRules      = bundle.getString("MapNoNormalization");
+        mapRules             += bundle.getString("MapNFKC");
         mapTransform          = Transliterator.createFromRules("CaseMap",mapRules,Transliterator.FORWARD);
         labelSeparatorSet     = new UnicodeSet(bundle.getString("LabelSeparatorSet"));
         prohibitedSet         = new UnicodeSet(bundle.getString("ProhibitedSet"));
@@ -97,7 +98,7 @@ public class NamePrepTransform {
     private String map ( String src, int options)
                                 throws StringPrepParseException{
         // map 
-        boolean allowUnassigned = (boolean) ((options & ALLOW_UNASSIGNED)>0);
+        boolean allowUnassigned =  ((options & ALLOW_UNASSIGNED)>0);
         String caseMapOut = transform.mapTransform.transliterate(src);    
         UCharacterIterator iter = UCharacterIterator.getInstance(caseMapOut);
         int ch;
@@ -124,7 +125,7 @@ public class NamePrepTransform {
         while((ch=iter.nextCodePoint())!= UCharacterIterator.DONE){
 
 
-            if(transform.prohibitedSet.contains(ch)==true){
+            if(transform.prohibitedSet.contains(ch)==true && ch!=0x0020){
                 throw new StringPrepParseException("A prohibited code point was found in the input",
                                          StringPrepParseException.PROHIBITED_ERROR,
                                          iter.getText(),iter.getIndex());

@@ -87,54 +87,73 @@
         <property name="ime.indic.jar.file" value="icuindicime.jar"/>
         <property name="zip.file" value="../icu4j${DSTAMP}.zip"/>
         <property name="zipSrc.file" value="../icu4jSrc${DSTAMP}.zip"/>
-
-    <path id="build.classpath">
-        <pathelement path="${build.dir}"/>
-    </path>
+    	<!-- fix the data folder every time there is a version update-->
+		<property name="icu4j.data.path" value="com/ibm/icu/impl/data/icudt30b/" />
+    	<property name="icu4j.testdata.path" value="com/ibm/icu/dev/data/testdata/" />
+    	
+	    <path id="build.classpath">
+	        <pathelement path="${build.dir}"/>
+	    </path>
 
         <property name="richedit.dir" value="richedit"/>
         <property name="richedit.doc.dir" value="${richedit.dir}/doc"/>
         <property name="richedit.jar.file" value="${richedit.dir}/richedit.jar"/>
         <property name="richedit.zip.file" value="${richedit.dir}/richedit.zip"/>
         <property name="richedit.manifest" value="${src.dir}/com/ibm/richtext/manifest.stub"/>
-
         <mkdir dir="${build.dir}"/>
-    	<uptodate property="icu4j.resources" targetfile="${src.dir}/com/ibm/icu/impl/data/ICULocaleData.jar">
-        	<!-- note must not have '/' before 'com' in srcfiles includes arg! -->
-        	<srcfiles dir="${build.dir}" includes="com/ibm/icu/impl/data/LocaleElements_index.class"/>
-    	</uptodate>
-        <echo message="java home: ${java.home}"/>
+    	<echo message="java home: ${java.home}"/>
         <echo message="java version: ${java.version}"/>
         <echo message="ant java version: ${ant.java.version}"/>
         <echo message="${ant.version}"/>
         <echo message="clover initstring = '${clover.initstring}'"/>
+    	
+    	<uptodate property="icu4j.resources" targetfile="${src.dir}/com/ibm/icu/impl/data">
+        	<!-- note must not have '/' before 'com' in srcfiles includes arg! -->
+        	<srcfiles dir="${build.dir}" includes="${icu4j.data.path}/res_index.res"/>
+    	</uptodate>
+    	
+    	<uptodate property="icu4j.testdata.resources" targetfile="${src.dir}/com/ibm/icu/dev/data">
+        	<!-- note must not have '/' before 'com' in srcfiles includes arg! -->
+        	<srcfiles dir="${build.dir}" includes="${icu4j.testdatadata.path}/root.res"/>
+    	</uptodate>
+    	
     </target>
 
     <!-- build everything but dist-related stuff -->
     <target name="all" depends="core,tests,tools,richedit,demos,jar,docs"/>
-
+<!--
     <target name="resources" depends="init">
-        <!-- use this target to force resources to be rebuilt -->
-        <unjar src="${src.dir}/com/ibm/icu/impl/data/ICULocaleData.jar" dest="${build.dir}"/>
-        <touch file="${build.dir}/com/ibm/icu/impl/data/LocaleElements_index.class"/>
-    </target>
-    <target name="icudata" depends="init">
+         use this target to force resources to be rebuilt
+        	<unjar src="${src.dir}/com/ibm/icu/impl/data/ICULocaleData.jar" dest="${build.dir}"/>
+        	<touch file="${build.dir}/com/ibm/icu/impl/data/LocaleElements_index.class"/>
+        	
+-->  
+	<target name="resources" depends="init">
+		<unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}"/>
+		<touch file="${build.dir}/${icu4j.data.path}/res_index.res"/>
+		<unjar src="${src.dir}/com/ibm/icu/dev/data/testdata.jar" dest="${build.dir}"/>
+		<touch file="${build.dir}/${icu4j.testdata.path}/root.res"/>
+	</target>	
+    <target name="icudata" depends="init" if="icu4j.resources">
         <!-- use this target to force resources to be rebuilt -->
         <unjar src="${src.dir}/com/ibm/icu/impl/data/icudata.jar" dest="${build.dir}"/>
+    	<touch file="${build.dir}/${icu4j.data.path}/res_index.res"/>
     </target>
-	<target name="testdata" depends="init">
+		
+    <target name="testdata" depends="init" if="icu4j.testdata.resources">
         <!-- use this target to force resources to be rebuilt -->
         <unjar src="${src.dir}/com/ibm/icu/dev/data/testdata.jar" dest="${build.dir}"/>
-    </target>	
-	
-    <target name="_resources" depends="init" if="icu4j.resources">
-        <!-- use this target to conditionally build resources only if icu4j.resources is set -->
+    	<touch file="${build.dir}/${icu4j.testdata.path}/root.res"/>
+    </target>
+<!--	
+    <target name="icu" depends="init" if="icu4j.resources">
+         use this target to conditionally build resources only if icu4j.resources is set
         <unjar src="${src.dir}/com/ibm/icu/impl/data/ICULocaleData.jar" dest="${build.dir}"/>
         <touch file="${build.dir}/com/ibm/icu/impl/data/LocaleElements_index.class"/>
     </target>
-
+ -->
     <!-- core does not build richedit or tests -->
-    <target name="core" depends="init,coreData,_resources,icudata">
+    <target name="core" depends="init,coreData,icudata,icudata">
         <javac includes="com/ibm/icu/util/**/*.java,com/ibm/icu/text/**/*.java,com/ibm/icu/math/**/*.java,com/ibm/icu/impl/**/*.java,com/ibm/icu/lang/*.java"
             excludes="**/CVS/**/*"
             srcdir="${src.dir}"
@@ -496,7 +515,7 @@
     <!--
             Targets to build only Collation API and Collation tests
      -->
-    <target name="collator" depends="init,_resources,copyAllICUData">
+    <target name="collator" depends="init,icudata,copyAllICUData">
 
          <javac includes="com/ibm/icu/text/*Collator*.java,com/ibm/icu/text/*Collation*.java,com/ibm/icu/text/*BreakIterator*.java,com/ibm/icu/text/Normalizer.java,com/ibm/icu/text/UTF16.java,com/ibm/icu/text/Replaceable.java,com/ibm/icu/text/ReplaceableString.java,com/ibm/icu/text/UnicodeFilter.java,com/ibm/icu/text/UnicodeSetIterator.java, com/ibm/icu/impl/data/*Break*.java"
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/UnicodeCharacterIterator.java"
@@ -526,7 +545,7 @@
             classpathref="build.classpath"
             debug="on" deprecation="off"/>
     </target>
-    <target name="propertiesFull" depends="init,_resources, copyICUPropsData">
+    <target name="propertiesFull" depends="init,icudata, copyICUPropsData">
 
          <javac includes="com/ibm/icu/lang/**/*, com/ibm/icu/text/*BreakIterator*.java,com/ibm/icu/text/*BreakDictionary*.java,com/ibm/icu/impl/data/*Break*.java,com/ibm/icu/text/UnicodeSetIterator.java,com/ibm/icu/impl/ICUListResourceBundle.java"
             excludes="**/CVS/**/*,com/ibm/icu/impl/UtilityExtensions.java"
@@ -575,7 +594,7 @@
     <!--
             Targets to build only Calendar API and Calendar tests
      -->
-    <target name="calendar" depends="init,_resources,copyICUData">
+    <target name="calendar" depends="init,icudata,copyICUData">
 
          <javac includes="com/ibm/icu/util/*Calendar*.java,com/ibm/icu/lang/UCharacter.java,com/ibm/icu/impl/ICUListResourceBundle.java,com/ibm/icu/text/UnicodeSetIterator.java,com/ibm/icu/impl/data/*Calendar*.java,com/ibm/icu/impl/data/*Holiday*.java"
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java"
@@ -600,7 +619,7 @@
     <!--
             Targets to build only Transliterator API and  tests
      -->
-    <target name="transliterator" depends="init,_resources,propertiesBasic">
+    <target name="transliterator" depends="init,icudata,propertiesBasic">
          <javac includes="com/ibm/icu/text/*Transliterator*.java,com/ibm/icu/text/UnicodeSetIterator.java,com/ibm/icu/text/RuleBasedBreakIterator.java,com/ibm/icu/text/DictionaryBasedBreakIterator.java,com/ibm/icu/impl/LocaleUtility.java,com/ibm/icu/impl/data/BreakIterator*.java,com/ibm/icu/impl/*Property*.java,com/ibm/icu/impl/*Iterator*.java,com/ibm/icu/impl/ICUListResourceBundle.java,com/ibm/icu/impl/data/ResourceReader.java,com/ibm/icu/impl/UtilityExtensions.java"
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java,com/ibm/icu/text/UnicodeFilterLogic*.java"
             srcdir="${src.dir}"
@@ -630,7 +649,7 @@
     <!--
             Targets to build only Format API
      -->
-    <target name="format" depends="init,_resources,copyAllICUData">
+    <target name="format" depends="init,icudata,copyAllICUData">
 
          <javac includes="com/ibm/icu/text/*Format*.java,com/ibm/icu/lang/UCharacter.java,com/ibm/icu/text/*Collator*.java,com/ibm/icu/text/UnicodeSetIterator.java,com/ibm/icu/impl/ICUListResourceBundle.java,com/ibm/icu/impl/data/CalendarData*.java"
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java"
@@ -651,7 +670,7 @@
     <!--
             Targets to build only BreakIterator API
      -->
-    <target name="breakIterator" depends="init,_resources,copyICUPropsData">
+    <target name="breakIterator" depends="init,icudata,copyICUPropsData">
 
          <javac includes="com/ibm/icu/text/*BreakIterator*.java,com/ibm/icu/impl/data/*Break*.java,com/ibm/icu/lang/**/*,com/ibm/icu/impl/UCharacterName.java,com/ibm/icu/impl/ICUListResourceBundle.java,com/ibm/icu/text/UnicodeSetIterator.java"
             excludes="**/CVS/**/*, com/ibm/icu/lang/UScriptRun.java,com/ibm/icu/impl/UtilityExtensions.java,com/ibm/icu/impl/BOCU.java,com/ibm/icu/impl/TrieBuilder.java,com/ibm/icu/impl/IntTrieBuilder.java"

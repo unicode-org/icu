@@ -7,12 +7,14 @@
 
 package com.ibm.icu.text;
 
-import com.ibm.icu.impl.ICULocaleData;
+//import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -321,10 +323,10 @@ public class SimpleDateFormat extends DateFormat {
         /* try the cache first */
         String[] dateTimePatterns = (String[]) cachedLocaleData.get(loc);
         if (dateTimePatterns == null) { /* cache miss */
-            ResourceBundle r = ICULocaleData.getLocaleElements(loc);
+            ICUResourceBundle r = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME, loc);
             
             // TODO: get correct actual/valid locale here
-            ULocale uloc = new ULocale(r.getLocale());
+            ULocale uloc = r.getULocale();
             setLocale(uloc, uloc);
             
             dateTimePatterns = r.getStringArray("DateTimePatterns");

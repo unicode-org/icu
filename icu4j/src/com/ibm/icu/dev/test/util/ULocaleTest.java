@@ -560,7 +560,7 @@ public class ULocaleTest extends TestFmwk {
                     
                 case VAR:
                     buf  = ULocale.getVariant(loc);
-                    buf1 = uloc.getVariant();
+                    buf1 = buf;
                     break;
                     
                 case NAME+1:

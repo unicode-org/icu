@@ -15,11 +15,13 @@ package com.ibm.icu.dev.test.collator;
 
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.*;
+import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Utility;
-import com.ibm.icu.impl.ICULocaleData;
-import com.ibm.icu.impl.ICUListResourceBundle;
+//import com.ibm.icu.impl.ICULocaleData;
+//import com.ibm.icu.impl.ICUListResourceBundle;
 import java.util.Locale;
-import java.util.ResourceBundle;
+//import java.util.ResourceBundle;
 
 public class CollationMiscTest extends TestFmwk{
 
@@ -38,15 +40,13 @@ public class CollationMiscTest extends TestFmwk{
     
     private static final boolean hasCollationElements(Locale locale)
     {
-        ResourceBundle rb = ICULocaleData.getLocaleElements(locale);
+        ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,locale);
         if (rb != null) {
             try {
                  String collkey 
-                 = (String)((ICUListResourceBundle)rb).getObjectWithFallback(
-                                                       "collations/default"); 
+                 = (String)rb.getObjectWithFallback("collations/default"); 
                  Object elements
-                 = ((ICUListResourceBundle)rb).getObjectWithFallback(
-                                                    "collations/" + collkey);
+                 = rb.getObjectWithFallback("collations/" + collkey);
                  if (elements != null) {
                      return true;
                  }
@@ -1590,17 +1590,16 @@ public class CollationMiscTest extends TestFmwk{
         for (int i = 0; i < locale.length; i ++) {
             Locale l = locale[i];
             try {
-                ResourceBundle rb = ICULocaleData.getLocaleElements(l);
+                ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(UResourceBundle.ICU_BASE_NAME,l);
                 String collkey 
-                    = (String)((ICUListResourceBundle)rb).getObjectWithFallback(
-                                                          "collations/default"); 
-                Object elements 
-                            = ((ICUListResourceBundle)rb).getObjectWithFallback(
-                                                       "collations/" + collkey);
+                    = (String)rb.getObjectWithFallback("collations/default"); 
+                ICUResourceBundle elements 
+                            = (ICUResourceBundle)rb.getObjectWithFallback("collations/" + collkey);
                 if (elements == null) {
                     continue;
                 }
                 String rule = null;
+                /*
                 Object[][] colldata = (Object[][])elements;
                 // %%CollationBin
                 if (colldata[0][1] instanceof byte[]){
@@ -1609,7 +1608,9 @@ public class CollationMiscTest extends TestFmwk{
                 else {
                     rule = (String)colldata[0][1];
                 }
-                    
+                */
+                rule = elements.getString("Sequence");   
+
                 RuleBasedCollator col1 = 
                                   (RuleBasedCollator)Collator.getInstance(l);
                 if (!rule.equals(col1.getRules())) {

@@ -8,6 +8,7 @@
 package com.ibm.icu.dev.test.lang;
 
 import com.ibm.icu.lang.UScript;
+import com.ibm.icu.util.ULocale;
 import com.ibm.icu.dev.test.TestFmwk;
 
 import java.util.Locale;
@@ -25,15 +26,16 @@ public class TestUScript extends TestFmwk {
         new TestUScript().run(args);
     }
     public void TestLocaleGetCode(){
-        final Locale[] testNames={
+        final ULocale[] testNames={
         /* test locale */
-        new Locale("en",""), new Locale("en","US"),
-        new Locale("sr",""), new Locale("ta","") ,
-        new Locale("te","IN"),
-        new Locale("hi",""),
-        new Locale("he",""), new Locale("ar",""),
-        new Locale("abcde",""),
-        new Locale("abcde","cdef")
+        new ULocale("en"), new ULocale("en_US"),
+        new ULocale("sr"), new ULocale("ta") ,
+        new ULocale("te_IN"),
+        new ULocale("hi"),
+        new ULocale("he"), new ULocale("ar"),
+        new ULocale("abcde"),
+        new ULocale("abcde_cdef"),
+        //new ULocale(ULocale.canonicalize("iw"))
         };
         final int[] expected ={
                 /* locales should return */
@@ -41,7 +43,8 @@ public class TestUScript extends TestFmwk {
                 UScript.CYRILLIC, UScript.TAMIL,
                 UScript.TELUGU,UScript.DEVANAGARI,
                 UScript.HEBREW, UScript.ARABIC,
-                UScript.INVALID_CODE,UScript.INVALID_CODE
+                UScript.INVALID_CODE,UScript.INVALID_CODE,
+                //UScript.HEBREW
         };
         int i =0;
         int numErrors =0;
