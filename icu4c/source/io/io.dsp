@@ -55,7 +55,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:I386
-# ADD LINK32 icuuc.lib icuin.lib /nologo /dll /machine:I386 /out:"..\..\bin\icuio32.dll" /implib:"..\..\lib/icuio.lib" /libpath:"..\..\lib\\"
+# ADD LINK32 icuuc.lib icuin.lib /nologo /dll /machine:I386 /out:"..\..\bin\icuio33.dll" /implib:"..\..\lib/icuio.lib" /libpath:"..\..\lib\\"
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "io - Win32 Debug"
@@ -82,7 +82,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 icuucd.lib icuind.lib /nologo /dll /debug /machine:I386 /out:"..\..\bin\icuio32d.dll" /implib:"..\..\lib\icuiod.lib" /pdbtype:sept /libpath:"debug" /libpath:"..\..\lib\\"
+# ADD LINK32 icuucd.lib icuind.lib /nologo /dll /debug /machine:I386 /out:"..\..\bin\icuio33d.dll" /implib:"..\..\lib\icuiod.lib" /pdbtype:sept /libpath:"debug" /libpath:"..\..\lib\\"
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "io - Win64 Release"
@@ -109,7 +109,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /machine:IX86 /machine:IA64
-# ADD LINK32 icuuc.lib icuin.lib /nologo /dll /machine:IX86 /out:"..\..\bin\icuio32.dll" /implib:"..\..\lib/icuio.lib" /libpath:"..\..\lib\\" /machine:IA64
+# ADD LINK32 icuuc.lib icuin.lib /nologo /dll /machine:IX86 /out:"..\..\bin\icuio33.dll" /implib:"..\..\lib/icuio.lib" /libpath:"..\..\lib\\" /machine:IA64
 
 !ELSEIF  "$(CFG)" == "io - Win64 Debug"
 
@@ -135,7 +135,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /debug /machine:IX86 /pdbtype:sept /machine:IA64
-# ADD LINK32 icuucd.lib icuind.lib /nologo /dll /incremental:no /debug /machine:IX86 /out:"..\..\bin\icuio32d.dll" /implib:"..\..\lib\icuiod.lib" /pdbtype:sept /libpath:"debug" /libpath:"..\..\lib\\" /machine:IA64
+# ADD LINK32 icuucd.lib icuind.lib /nologo /dll /incremental:no /debug /machine:IX86 /out:"..\..\bin\icuio33d.dll" /implib:"..\..\lib\icuiod.lib" /pdbtype:sept /libpath:"debug" /libpath:"..\..\lib\\" /machine:IA64
 
 !ENDIF 
 
