@@ -260,8 +260,8 @@ vi {
         "HH:mm:ss z",
         "HH:mm:ss",
         "HH:mm",
-        "EEEE dd MMMM yyyy",    // Should this be "EEEE dd MMMM n\u0103m yyyy"?
-        "dd MMMM yyyy",         // Should this be "dd MMMM n\u0103m yyyy"?
+        "EEEE, 'ng\u00E0y' d 'th\u00E1ng' M 'n\u0103m' yyyy",    // Should this be "EEEE dd MMMM n\u0103m yyyy"?
+        "'ng\u00E0y' d 'th\u00E1ng' M 'n\u0103m' yyyy",         // Should this be "dd MMMM n\u0103m yyyy"?
         "dd-MM-yyyy",
         "dd/MM/yyyy",
         "{0} {1}",
