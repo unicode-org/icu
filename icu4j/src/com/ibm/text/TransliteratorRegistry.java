@@ -703,7 +703,7 @@ class TransliteratorRegistry {
             } else {
                 tag.append("Transliterate_");
             }
-            tag.append(specToFind.get());
+            tag.append(specToFind.get().toUpperCase());
             
             try {
                 // The Transliterate*_xxx resource is an array of

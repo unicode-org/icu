@@ -3,8 +3,8 @@
  * others. All Rights Reserved.
  **************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/LocaleElements_el.java,v $ 
- * $Date: 2001/11/02 19:59:11 $ 
- * $Revision: 1.1 $
+ * $Date: 2001/11/03 02:00:04 $ 
+ * $Revision: 1.2 $
  **************************************************************************
  */
 
@@ -18,7 +18,7 @@ public class LocaleElements_el extends ListResourceBundle {
      */
     public Object[][] getContents() {
         return new Object[][] {
-            { "Transliterate_Latin",
+            { "Transliterate_LATIN",
               new String[] { "UNGEGN",
 
 "# Rules are predicated on running NFD first, and NFC afterwards\n"+
