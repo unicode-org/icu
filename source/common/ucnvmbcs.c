@@ -3033,6 +3033,19 @@ _MBCSWriteSub(UConverterFromUnicodeArgs *pArgs,
     }
 }
 
+U_CFUNC UConverterType
+_MBCSGetType(const UConverter* converter) {
+    /* SBCS, DBCS, and EBCDIC_STATEFUL are replaced by MBCS, but here we cheat a little */
+    if(converter->sharedData->table->mbcs.countStates==1) {
+        return (UConverterType)UCNV_SBCS;
+    } else if((converter->sharedData->table->mbcs.outputType&0xff)==MBCS_OUTPUT_2_SISO) {
+        return (UConverterType)UCNV_EBCDIC_STATEFUL;
+    } else if(converter->sharedData->staticData->minBytesPerChar==2 && converter->sharedData->staticData->maxBytesPerChar==2) {
+        return (UConverterType)UCNV_DBCS;
+    }
+    return (UConverterType)UCNV_MBCS;
+}
+
 static const UConverterImpl _MBCSImpl={
     UCNV_MBCS,
 
@@ -3050,7 +3063,8 @@ static const UConverterImpl _MBCSImpl={
     _MBCSGetNextUChar,
 
     _MBCSGetStarters,
-    NULL
+    NULL,
+    _MBCSWriteSub
 };
 
 
