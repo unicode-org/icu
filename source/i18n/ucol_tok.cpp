@@ -47,15 +47,6 @@ uhash_hashTokens(const void *k) {
           hash = (hash * 37) + *p;
           p += inc;
       }
-
-      if((len = ((key->expansion & 0xFF000000)>>24)) != 0) {
-        p = (key->expansion & 0x00FFFFFF) + rulesToParse;
-        limit = p + len;    
-        while (p<limit) {
-            hash = (hash * 37) + *p;
-            p += inc;
-        }
-      }
   }
   return hash;
 }
@@ -74,33 +65,19 @@ UBool uhash_compareTokens(const void *key1, const void *key2) {
     if (p1 == NULL || p2 == NULL) {
         return FALSE;
     }
-    if(p1->source == p2->source && p1->expansion == p2->expansion) {
-      return TRUE;
-    }
     if(s1L != s2L) {
       return FALSE;
     }
-    while(s1 < s1+s1L-1 && *s1 == *s2) {
+    if(p1->source == p2->source) {
+      return TRUE;
+    }
+    const UChar *end = s1+s1L-1;
+    while((s1 < end) && *s1 == *s2) {
       ++s1;
       ++s2;
     }
     if(*s1 == *s2) {
-      s1 = (p1->expansion & 0x00FFFFFF) + rulesToParse;
-      s2 = (p2->expansion & 0x00FFFFFF) + rulesToParse;
-      s1L = ((p1->expansion & 0xFF000000) >> 24);
-      s2L = ((p2->expansion & 0xFF000000) >> 24);
-      if(s1L != s2L) {
-        return FALSE;
-      }
-      if(s1L != 0) {
-        while(s1 < s1+s1L-1 && *s1 == *s2) {
-          ++s1;
-          ++s2;
-        }
-        return (UBool)(*s1 == *s2);
-      } else {
-        return TRUE;
-      }
+      return TRUE;
     } else {
       return FALSE;
     }
@@ -389,10 +366,6 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
         }
       }
     } else {
-      // This here would be the proper way to do it, but we then need to require quoting all isWhitespace in 
-//      while(u_isWhitespace(ch)) {
-//        ch = *(++src->current);
-//      }
       /* Sets the strength for this entry */
       switch (ch) {
         case 0x003D/*'='*/ : 
@@ -514,7 +487,6 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
         case 0x000D/*'\r'*/:
         case 0x000A/*'\n'*/:
         case 0x0020/*' '*/:  
-        case 0x2028/* Unicode line break (UniPad likes to add it)*/:
           break; /* skip whitespace TODO use Unicode */
         case 0x002F/*'/'*/:
           wasInQuote = FALSE; /* if we were copying source characters, we want to stop now */
@@ -793,6 +765,7 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
           src->varTop = sourceToken;
         }
 
+        sourceToken->expansion = newExtensionsLen << 24 | extensionOffset;
         /*
           If "xy" doesn't occur earlier in the list or in the UCA, convert &xy * c * 
           d * ... into &x * c/y * d * ... 
@@ -802,15 +775,15 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
             expandNext = 0;
           } else if(sourceToken->expansion == 0) { /* if there is no expansion, implicit is just added to the token */
             sourceToken->expansion = expandNext;
-            sourceToken->debugExpansion = *(src->source + (expandNext & 0xFFFFFF));
           } else { /* there is both explicit and implicit expansion. We need to make a combination */
             memcpy(src->extraCurrent, src->source + (expandNext & 0xFFFFFF), (expandNext >> 24)*sizeof(UChar));
             memcpy(src->extraCurrent+(expandNext >> 24), src->source + extensionOffset, newExtensionsLen*sizeof(UChar));
             sourceToken->expansion = ((expandNext >> 24) + newExtensionsLen)<<24 | (src->extraCurrent - src->source);
             src->extraCurrent += (expandNext >> 24) + newExtensionsLen;
-            sourceToken->debugExpansion = *(src->source + (sourceToken->expansion & 0xFFFFFF));
           }
         }
+
+        sourceToken->debugExpansion = *(src->source + (sourceToken->expansion & 0xFFFFFF));
 
         /*
         1.	Find the strongest strength in each list, and set strongestP and strongestN 
@@ -887,6 +860,18 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
           }
         }
       } else {
+        if(sourceToken == NULL) { /* this is a reset, but it might still be somewhere in the tailoring, in shorter form */
+          uint32_t searchCharsLen = newCharsLen;
+          while(searchCharsLen > 1 && sourceToken == NULL) {
+            searchCharsLen--;
+            key.source = searchCharsLen << 24 | charsOffset;
+            sourceToken = (UColToken *)uhash_get(uchars2tokens, &key);
+          }
+          if(sourceToken != NULL) {
+            expandNext = (newCharsLen - searchCharsLen) << 24 | (charsOffset + searchCharsLen);
+          }
+        }
+
         uint32_t CE = UCOL_NOT_FOUND, SecondCE = UCOL_NOT_FOUND;
         collIterate s;
 
@@ -926,12 +911,6 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
           }
         }
 
-        if(newCharsLen > 1) {
-          expandNext = ((newCharsLen-1)<<24) | (charsOffset + 1);
-        } else {
-          expandNext = 0;
-        }
-
       /*  5 If the relation is a reset: 
           If sourceToken is null 
             Create new list, create new sourceToken, make the baseCE from source, put 
@@ -962,14 +941,13 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
                 earlier in the list. 
           */
           if(top == FALSE) {
-            if(newCharsLen > 1) {
-              sourceToken->source = 0x01000000 | charsOffset;
-            } 
+            uint32_t resetCharsOffset;
 
- 
-            init_collIterate(src->UCA, src->source+charsOffset, 1, &s); /* or newCharsLen instead of 1??? */
+            init_collIterate(src->UCA, src->source+charsOffset, newCharsLen, &s);
 
             CE = ucol_getNextCE(src->UCA, &s, status);
+            resetCharsOffset = s.pos - src->source;
+
             SecondCE = ucol_getNextCE(src->UCA, &s, status);
     
             ListList[src->resultLen].baseCE = CE & 0xFFFFFF3F;
@@ -977,6 +955,12 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
               ListList[src->resultLen].baseContCE = SecondCE;
             } else {
               ListList[src->resultLen].baseContCE = 0;
+            }
+            if(newCharsLen > 1) {
+              sourceToken->source = ((resetCharsOffset - charsOffset ) << 24) | charsOffset;
+              expandNext = ((newCharsLen + charsOffset - resetCharsOffset)<<24) | (resetCharsOffset);
+            } else {
+              expandNext = 0;
             }
           } else { /* top == TRUE */
             top = FALSE;
