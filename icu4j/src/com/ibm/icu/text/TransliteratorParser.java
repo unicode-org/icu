@@ -4,8 +4,8 @@
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliteratorParser.java,v $
-* $Date: 2002/07/26 21:12:36 $
-* $Revision: 1.23 $
+* $Date: 2003/04/23 00:20:15 $
+* $Revision: 1.24 $
 **********************************************************************
 */
 package com.ibm.icu.text;
@@ -133,8 +133,8 @@ class TransliteratorParser {
     private static final char REVERSE_RULE_OP   = '<';
     private static final char FWDREV_RULE_OP    = '~'; // internal rep of <> op
 
-    private static final String OPERATORS = "=><";
-    private static final String HALF_ENDERS = "=><;";
+    private static final String OPERATORS = "=><\u2190\u2192\u2194";
+    private static final String HALF_ENDERS = "=><\u2190\u2192\u2194;";
 
     // Other special characters
     private static final char QUOTE               = '\'';
@@ -167,6 +167,14 @@ class TransliteratorParser {
     // A function is denoted &Source-Target/Variant(text)
     private static final char FUNCTION            = '&';
 
+    // Aliases for some of the syntax characters. These are provided so
+    // transliteration rules can be expressed in XML without clashing with
+    // XML syntax characters '<', '>', and '&'.
+    private static final char ALT_REVERSE_RULE_OP = '\u2190'; // Left Arrow
+    private static final char ALT_FORWARD_RULE_OP = '\u2192'; // Right Arrow
+    private static final char ALT_FWDREV_RULE_OP  = '\u2194'; // Left Right Arrow
+    private static final char ALT_FUNCTION        = '\u2206'; // Increment (~Greek Capital Delta)
+    
     // Special characters disallowed at the top level
     private static UnicodeSet ILLEGAL_TOP = new UnicodeSet("[\\)]");
 
@@ -569,6 +577,7 @@ class TransliteratorParser {
                     }
                     break;
                 case FUNCTION:
+                case ALT_FUNCTION:
                     {
                         iref[0] = pos;
                         TransliteratorIDParser.SingleID single = TransliteratorIDParser.parseFilterID(rule, iref);
@@ -1110,6 +1119,19 @@ class TransliteratorParser {
             (pos < limit && rule.charAt(pos) == FORWARD_RULE_OP)) {
             ++pos;
             operator = FWDREV_RULE_OP;
+        }
+
+        // Translate alternate op characters.
+        switch (operator) {
+        case ALT_FORWARD_RULE_OP:
+            operator = FORWARD_RULE_OP;
+            break;
+        case ALT_REVERSE_RULE_OP:
+            operator = REVERSE_RULE_OP;
+            break;
+        case ALT_FWDREV_RULE_OP:
+            operator = FWDREV_RULE_OP;
+            break;
         }
 
         pos = right.parse(rule, pos, limit, this);

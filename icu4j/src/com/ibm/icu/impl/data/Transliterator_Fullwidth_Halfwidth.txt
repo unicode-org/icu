@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Fullwidth_Halfwidth.txt,v $
-# $Date: 2002/03/02 00:27:27 $
-# $Revision: 1.3 $
+# $Date: 2003/04/23 00:20:15 $
+# $Revision: 1.4 $
 #--------------------------------------------------------------------
 
 # Fullwidth-Halfwidth
@@ -264,9 +264,9 @@
 ￥<>'¥'; # from FULLWIDTH YEN SIGN
 ￦<>₩; # from FULLWIDTH WON SIGN
 │<>￨; # to HALFWIDTH FORMS LIGHT VERTICAL
-←<>￩; # to HALFWIDTH LEFTWARDS ARROW
+'←'<>'￩'; # to HALFWIDTH LEFTWARDS ARROW
 ↑<>￪; # to HALFWIDTH UPWARDS ARROW
-→<>￫; # to HALFWIDTH RIGHTWARDS ARROW
+'→'<>'￫'; # to HALFWIDTH RIGHTWARDS ARROW
 ↓<>￬; # to HALFWIDTH DOWNWARDS ARROW
 ■<>￭; # to HALFWIDTH BLACK SQUARE
 ○<>￮; # to HALFWIDTH WHITE CIRCLE
