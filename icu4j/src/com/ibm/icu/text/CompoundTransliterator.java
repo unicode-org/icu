@@ -1,5 +1,5 @@
 package com.ibm.text;
-import com.ibm.Utility;
+import com.ibm.util.Utility;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -23,7 +23,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.6 $ $Date: 2000/01/27 20:12:14 $
+ * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.7 $ $Date: 2000/02/10 07:36:25 $
  */
 public class CompoundTransliterator extends Transliterator {
 

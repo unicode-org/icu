@@ -1,6 +1,6 @@
 package com.ibm.text;
 
-import com.ibm.Utility;
+import com.ibm.util.Utility;
 
 /**
  * A transliteration rule used by
@@ -21,9 +21,12 @@ import com.ibm.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.12 $ $Date: 2000/02/03 18:11:19 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.13 $ $Date: 2000/02/10 07:36:25 $
  *
  * $Log: TransliterationRule.java,v $
+ * Revision 1.13  2000/02/10 07:36:25  johnf
+ * fixed imports for com.ibm.util.Utility
+ *
  * Revision 1.12  2000/02/03 18:11:19  Alan
  * Use array rather than hashtable for char-to-set map
  *
