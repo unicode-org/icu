@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SimpleDateFormat.java,v $ 
- * $Date: 2001/10/19 12:24:23 $ 
- * $Revision: 1.8 $
+ * $Date: 2001/10/31 03:33:17 $ 
+ * $Revision: 1.9 $
  *
  *****************************************************************************************
  */
@@ -111,7 +111,7 @@ import java.lang.StringIndexOutOfBoundsException;
  * "h:mm a"                          ->>  12:08 PM
  * "hh 'o''clock' a, zzzz"           ->>  12 o'clock PM, Pacific Daylight Time
  * "K:mm a, z"                       ->>  0:00 PM, PST
- * "yyyyy.MMMMM.dd GGG hh:mm aaa"    ->>  1996.July.10 AD 12:08 PM
+ * "yyyyy.MMMMM.dd GGG hh:mm aaa"    ->>  01996.July.10 AD 12:08 PM
  * </pre>
  * </blockquote>
  * <strong>Code Sample:</strong>
@@ -139,7 +139,7 @@ import java.lang.StringIndexOutOfBoundsException;
  * happen when formatting the time in PM.
  *
  * <p>
- * When parsing a date string using the abbreviated year pattern ("y" or "yy"),
+ * When parsing a date string using the abbreviated year pattern ("yy"),
  * SimpleDateFormat must interpret the abbreviated year
  * relative to some century.  It does this by adjusting dates to be
  * within 80 years before and 20 years after the time the SimpleDateFormat
@@ -155,7 +155,7 @@ import java.lang.StringIndexOutOfBoundsException;
  * same pattern, as Jan 2, 3 AD.  Likewise, "01/02/-3" is parsed as Jan 2, 4 BC.
  *
  * <p>
- * If the year pattern has more than two 'y' characters, the year is
+ * If the year pattern does not have exactly two 'y' characters, the year is
  * interpreted literally, regardless of the number of digits.  So using the
  * pattern "MM/dd/yyyy", "01/11/12" parses to Jan 11, 12 A.D.
  *
@@ -505,10 +505,16 @@ public class SimpleDateFormat extends DateFormat {
             current = formatData.eras[value];
             break;
         case 1: // 'y' - YEAR
-            if (count >= 4)
-                current = zeroPaddingNumber(value, 4, maxIntCount);
-            else // count < 4
+            /* According to the specification, if the number of pattern letters ('y') is 2, 
+             * the year is truncated to 2 digits; otherwise it is interpreted as a number. 
+             * But the original code process 'y', 'yy', 'yyy' in the same way. and process 
+             * patterns with 4 or more than 4 'y' characters in the same way. 
+             * So I change the codes to meet the specification. [Richard/GCl]
+             */
+            if (count == 2)
                 current = zeroPaddingNumber(value, 2, 2); // clip 1996 to 96
+            else //count = 1 or count > 2
+                current = zeroPaddingNumber(value, count, maxIntCount);
             break;
         case 2: // 'M' - MONTH
             if (count >= 4)
@@ -1059,7 +1065,8 @@ public class SimpleDateFormat extends DateFormat {
             // we made adjustments to place the 2-digit year in the proper
             // century, for parsed strings from "00" to "99".  Any other string
             // is treated literally:  "2250", "-1", "1", "002".
-            if (count <= 2 && (pos.getIndex() - start) == 2
+            /* 'yy' is the only special case, 'y' is interpreted as number. [Richard/GCL]*/
+            if (count == 2 && (pos.getIndex() - start) == 2
                 && Character.isDigit(text.charAt(start))
                 && Character.isDigit(text.charAt(start+1)))
             {
