@@ -39,7 +39,7 @@ import com.ibm.text.utility.Utility;
 import com.ibm.icu.text.Collator;
 
 public class MakeUnicodeFiles {
-    public static int dVersion = 8; // change to fix the generated file D version. If less than zero, no "d"
+    public static int dVersion = 6; // change to fix the generated file D version. If less than zero, no "d"
     
     /*static String[] hackNameList = {
        "noBreak", "Arabic_Presentation_Forms-A", "Arabic_Presentation_Forms-B", 
@@ -476,6 +476,9 @@ public class MakeUnicodeFiles {
     }
     
     public static void generateFile() throws IOException {
+    	String[] lines = new String[2];
+    	Utility.filesAreIdentical("C:\\DATA\\UCD\\4.0.1-Update\\CaseFolding-4.0.1.txt", 
+    			"C:\\DATA\\GEN\\DerivedData\\CaseFolding-4.1.0d13.txt", lines);
         for (int i = 0; i < Format.theFormat.filesToDo.length; ++i) {
             String fileName =
                 Format.theFormat.filesToDo[i].trim().toLowerCase(

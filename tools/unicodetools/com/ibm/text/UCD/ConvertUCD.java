@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/ConvertUCD.java,v $
-* $Date: 2004/03/11 19:03:18 $
-* $Revision: 1.15 $
+* $Date: 2004/11/12 23:17:15 $
+* $Revision: 1.16 $
 *
 *******************************************************************************
 */
@@ -864,7 +864,9 @@ public final class ConvertUCD implements UCD_Types {
             } else if (fieldName.equals("jt")) {
                 uData.joiningType = Utility.lookup(fieldValue, UCD_Names.JOINING_TYPE, true);
             } else if (fieldName.equals("jg")) {
-                uData.joiningGroup = Utility.lookup(fieldValue, UCD_Names.OLD_JOINING_GROUP, true);
+                byte temp = (byte)Utility.find(fieldValue, UCD_Names.OLD_JOINING_GROUP, true);
+                if (temp != -1) uData.joiningGroup = temp;
+                else uData.joiningGroup = Utility.lookup(fieldValue, UCD_Names.JOINING_GROUP, true);
 
             } else if (fieldName.equals("nv")) {
                 if (major < 2) {
