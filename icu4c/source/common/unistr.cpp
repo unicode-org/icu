@@ -1196,7 +1196,8 @@ UnicodeString::doHashCode() const
 int32_t
 UnicodeString::extract(UTextOffset start,
                        int32_t length,
-                       char *dst,
+                       char *target,
+                       uint32_t dstSize,
                        const char *codepage) const
 {
   // if we're bogus or there's nothing to convert, do nothing
@@ -1208,20 +1209,19 @@ UnicodeString::extract(UTextOffset start,
   pinIndices(start, length);
 
   // set up the conversion parameters
-  const UChar *mySource    = getArrayStart() + start;
-  const UChar *mySourceEnd = mySource + length;
-  char *myTarget           = dst;
-  char *myTargetLimit;
-  UErrorCode status        = U_ZERO_ERROR;
-  int32_t arraySize        = 0x0FFFFFFF;
+  const UChar *mySource      = getArrayStart() + start;
+  const UChar *mySourceLimit = mySource + length;
+  char *myTarget             = target;
+  const char *myTargetLimit  = target + dstSize;
+  UErrorCode status          = U_ZERO_ERROR;
 
   // create the converter
   UConverter *converter;
 
   // if the codepage is the default, use our cache
-  if(codepage == 0) {
+  if (codepage == 0) {
     converter = getDefaultConverter(status);
-  } else if(*codepage == 0) {
+  } else if (*codepage == 0) {
     converter = 0;
   } else {
     converter = ucnv_open(codepage, &status);
@@ -1229,9 +1229,9 @@ UnicodeString::extract(UTextOffset start,
 
   // if we failed, set the appropriate flags and return
   // if it is an empty string, then use the "invariant character" conversion
-  if(U_FAILURE(status)) {
+  if (U_FAILURE(status)) {
     // close the converter
-    if(codepage == 0) {
+    if (codepage == 0) {
       releaseDefaultConverter(converter);
     } else {
       ucnv_close(converter);
@@ -1240,34 +1240,49 @@ UnicodeString::extract(UTextOffset start,
   }
 
   // perform the conversion
-  if(converter == 0) {
+  if (converter == 0) {
     // use the "invariant characters" conversion
-    if(length > fLength - start) {
+    if (length > fLength - start) {
       length = fLength - start;
     }
     u_UCharsToChars(mySource, myTarget, length);
     return length;
   }
 
-  // there is no loop here since we assume the buffer is large enough
-  myTargetLimit = myTarget + arraySize;
 
   /* Pin the limit to U_MAX_PTR.  NULL check is for AS/400. */
-  if((myTargetLimit < myTarget) || (myTargetLimit == NULL)) {
+  /* [grhoten] What sort of silly assumption is this? */
+/*  if((myTargetLimit < myTarget) || (myTargetLimit == NULL)) {
     myTargetLimit = (char*)U_MAX_PTR;
+  }*/
+
+  if (myTarget != NULL) {
+    ucnv_fromUnicode(converter, &myTarget, myTargetLimit,
+             &mySource, mySourceLimit, 0, TRUE, &status);
+  } else {
+    /* Find out the size of the target needed for the current codepage */
+    char target = 0;
+    int32_t size = 0;
+
+    myTargetLimit = myTarget + sizeof(char);
+    while (mySource < mySourceLimit && U_SUCCESS(status)) {
+        myTarget = &target;
+        ucnv_fromUnicode(converter, &myTarget, myTargetLimit,
+                 &mySource, mySourceLimit, 0, TRUE, &status);
+        size += sizeof(char);
+    }
+    /* Use the close at the end of the function */
+    myTarget = target + (char *)size;
   }
 
-  ucnv_fromUnicode(converter, &myTarget,  myTargetLimit,
-           &mySource, mySourceEnd, 0, TRUE, &status);
-
   // close the converter
-  if(codepage == 0) {
+  if (codepage == 0) {
     releaseDefaultConverter(converter);
   } else {
     ucnv_close(converter);
   }
 
-  return (myTarget - dst);
+  return (myTarget - target);
 }
 
 void
