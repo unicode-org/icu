@@ -1841,13 +1841,13 @@ public:
    *
    * This function is similar to u_unescape() but not identical to it.
    * The latter takes a source char*, so it does escape recognition
-   * and also conversion.  It also recognizes a narrower set of
-   * hexadecimal and octal digit characters.
+   * and also invariant conversion.
    *
    * @return a string with backslash escapes interpreted, or an
    * empty string on error.
-   * @see unescapeAt()
+   * @see UnicodeString#unescapeAt()
    * @see u_unescape()
+   * @see u_unescapeAt()
    */
   UnicodeString unescape() const;
 
@@ -1856,7 +1856,8 @@ public:
    * character.  See unescape() for a listing of the recognized escape
    * sequences.  The character at offset-1 is assumed (without
    * checking) to be a backslash.  If the escape sequence is
-   * ill-formed, (UChar32)0xFFFFFFFF is returned.
+   * ill-formed, or the offset is out of range, (UChar32)0xFFFFFFFF is
+   * returned.
    *
    * @param offset an input output parameter.  On input, it is the
    * offset into this string where the escape sequence is located,
@@ -1864,8 +1865,9 @@ public:
    * last character parsed.  On error, it is not advanced at all.
    * @return the character represented by the escape sequence at
    * offset, or (UChar32)0xFFFFFFFF on error.
-   * @see unescape()
+   * @see UnicodeString#unescape()
    * @see u_unescape()
+   * @see u_unescapeAt()
    */
   UChar32 unescapeAt(int32_t &offset) const;
 
