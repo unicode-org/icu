@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2002/05/09 16:59:20 $ 
- * $Revision: 1.17 $
+ * $Date: 2002/08/21 00:04:18 $ 
+ * $Revision: 1.18 $
  *
  *****************************************************************************************
  */
@@ -2020,83 +2020,102 @@ public class DecimalFormat extends NumberFormat {
         buffer.setLength(0);
         for (int i=0; i<pattern.length(); ) {
             char c = pattern.charAt(i++);
-            //if (c == QUOTE) {
-            //    c = pattern.charAt(i++);
-                switch (c) {
-                case CURRENCY_SIGN:
-                    // As of ICU 2.2 we use the currency object, and
-                    // ignore the currency symbols in the DFS, unless
-                    // we have a null currency object.  This occurs if
-                    // resurrecting a pre-2.2 object or if the user
-                    // sets a custom DFS.
-                    boolean intl = i<pattern.length() &&
-                        pattern.charAt(i) == CURRENCY_SIGN;
-                    if (intl) {
-                        ++i;
-                    }
-                    String s;
-                    if (currency != null) {
-                        s = intl ? currency.getCurrencyCode()
-                            : currency.getSymbol(symbols.getLocale());
+            if (c == QUOTE) {
+                for (;;) {
+                    int j = pattern.indexOf(QUOTE, i);
+                    if (j == i) {
+                        buffer.append(QUOTE);
+                        i = j+1;
+                        break;
+                    } else if (j > i) {
+                        buffer.append(pattern.substring(i, j));
+                        i = j+1;
+                        if (i<pattern.length() &&
+                            pattern.charAt(i)==QUOTE) {
+                            buffer.append(QUOTE);
+                            ++i;
+                            // loop again
+                        } else {
+                            break;
+                        }
                     } else {
-                        s = intl ? symbols.getInternationalCurrencySymbol()
-                            : symbols.getCurrencySymbol();
+                        throw new IllegalArgumentException(
+                            "Unterminated quote: " + pattern);
                     }
-                    buffer.append(s);
-                    continue;
-                case PATTERN_PERCENT:
-                    c = symbols.getPercent();
-                    break;
-                case PATTERN_PER_MILLE:
-                    c = symbols.getPerMill();
-                    break;
-                case PATTERN_MINUS:
-                    c = symbols.getMinusSign();
-                    break;
                 }
-            //}
+                continue;
+            }
+
+            switch (c) {
+            case CURRENCY_SIGN:
+                // As of ICU 2.2 we use the currency object, and
+                // ignore the currency symbols in the DFS, unless
+                // we have a null currency object.  This occurs if
+                // resurrecting a pre-2.2 object or if the user
+                // sets a custom DFS.
+                boolean intl = i<pattern.length() &&
+                    pattern.charAt(i) == CURRENCY_SIGN;
+                if (intl) {
+                    ++i;
+                }
+                String s;
+                if (currency != null) {
+                    s = intl ? currency.getCurrencyCode()
+                        : currency.getSymbol(symbols.getLocale());
+                } else {
+                    s = intl ? symbols.getInternationalCurrencySymbol()
+                        : symbols.getCurrencySymbol();
+                }
+                buffer.append(s);
+                continue;
+            case PATTERN_PERCENT:
+                c = symbols.getPercent();
+                break;
+            case PATTERN_PER_MILLE:
+                c = symbols.getPerMill();
+                break;
+            case PATTERN_MINUS:
+                c = symbols.getMinusSign();
+                break;
+            }
             buffer.append(c);
         }
         return buffer.toString();
     }
-    
+
     /**
-     * Append an affix to the given StringBuffer, using quotes if
-     * there are special characters.  Single quotes themselves must be
-     * escaped in either case.
+     * Append an affix pattern to the given StringBuffer.  Localize unquoted
+     * specials.
      */
-    private void appendAffix(StringBuffer buffer, String affix, boolean localized) {
-        boolean needQuote;
-        if (localized) {
-            needQuote = affix.indexOf(symbols.getZeroDigit()) >= 0
-                || affix.indexOf(symbols.getGroupingSeparator()) >= 0
-                || affix.indexOf(symbols.getDecimalSeparator()) >= 0
-                || affix.indexOf(symbols.getPercent()) >= 0
-                || affix.indexOf(symbols.getPerMill()) >= 0
-                || affix.indexOf(symbols.getDigit()) >= 0
-                || affix.indexOf(symbols.getPatternSeparator()) >= 0
-                || affix.indexOf(symbols.getExponentSeparator()) >= 0;
-        }
-        else {
-            needQuote = affix.indexOf(PATTERN_ZERO_DIGIT) >= 0
-                || affix.indexOf(PATTERN_GROUPING_SEPARATOR) >= 0
-                || affix.indexOf(PATTERN_DECIMAL_SEPARATOR) >= 0
-                || affix.indexOf(PATTERN_PERCENT) >= 0
-                || affix.indexOf(PATTERN_PER_MILLE) >= 0
-                || affix.indexOf(PATTERN_DIGIT) >= 0
-                || affix.indexOf(PATTERN_SEPARATOR) >= 0
-                || affix.indexOf(PATTERN_EXPONENT) >= 0;
-        }
-        if (needQuote) buffer.append('\'');
-        if (affix.indexOf('\'') < 0) buffer.append(affix);
-        else {
-            for (int j=0; j<affix.length(); ++j) {
-                char c = affix.charAt(j);
-                buffer.append(c);
-                if (c == '\'') buffer.append(c);
+    private void appendAffixPattern(StringBuffer buffer, String affixPat, boolean localized) {
+        if (!localized) {
+            buffer.append(affixPat);
+        } else {
+            int i, j;
+            for (i=0; i<affixPat.length(); ++i) {
+                char ch = affixPat.charAt(i);
+                switch (ch) {
+                case QUOTE:
+                    j = affixPat.indexOf(QUOTE, i+1);
+                    if (j < 0) {
+                        throw new IllegalArgumentException("Malformed affix pattern: " + affixPat);
+                    }
+                    buffer.append(affixPat.substring(i, j+1));
+                    i = j;
+                    continue;
+                case PATTERN_PER_MILLE:
+                    ch = symbols.getPerMill();
+                    break;
+                case PATTERN_PERCENT:
+                    ch = symbols.getPercent();
+                    break;
+                case PATTERN_MINUS:
+                    ch = symbols.getMinusSign();
+                    break;
+                }
+                buffer.append(ch);
             }
         }
-        if (needQuote) buffer.append('\'');
     }
 
     /**
@@ -2131,9 +2150,9 @@ public class DecimalFormat extends NumberFormat {
             /* Use original symbols read from resources in pattern
              * eg. use "\u00A4" instead of "$" in Locale.US [Richard/GCL]
              */
-            appendAffix(result,
-                        (part==0 ? posPrefixPattern : negPrefixPattern),
-                        localized);
+            appendAffixPattern(result,
+                               (part==0 ? posPrefixPattern : negPrefixPattern),
+                               localized);
             if (padPos == PAD_AFTER_PREFIX) {
                 result.append(padSpec);
             }
@@ -2210,7 +2229,7 @@ public class DecimalFormat extends NumberFormat {
                 /* Use original symbols read from resources in pattern
                  * eg. use "\u00A4" instead of "$" in Locale.US [Richard/GCL]
                  */
-                appendAffix(result, posSuffixPattern, localized);
+                appendAffixPattern(result, posSuffixPattern, localized);
                 if (padPos == PAD_AFTER_SUFFIX) {
                     result.append(padSpec);
                 }
@@ -2222,7 +2241,7 @@ public class DecimalFormat extends NumberFormat {
                                   PATTERN_SEPARATOR);
                 }
             } else {
-                appendAffix(result, negSuffixPattern, localized);
+                appendAffixPattern(result, negSuffixPattern, localized);
                 if (padPos == PAD_AFTER_SUFFIX) {
                     result.append(padSpec);
                 }
@@ -2396,29 +2415,25 @@ public class DecimalFormat extends NumberFormat {
                           (Locale="CH", groupingSeparator == QUOTE)                          
                           [Richard/GCL]
                         */
-                        if ((pos + 1) < pattern.length()
-                            && !((pattern.charAt(pos +1) == digit)
-                            || ((pattern.charAt(pos +1) >= zeroDigit)
-                                && (pattern.charAt(pos + 1) <= nineDigit))
-                            )) {
-                            if (ch == QUOTE) {
+                        if (ch == QUOTE && (pos+1) < pattern.length()) {
+                            char after = pattern.charAt(pos+1);
+                            if (!(after == digit || (after >= zeroDigit && after <= nineDigit))) {
                                 // A quote outside quotes indicates either the opening
                                 // quote or two quotes, which is a quote literal.  That is,
                                 // we have the first quote in 'do' or o''clock.
-                                if ((pos+1) < pattern.length() &&
-                                    pattern.charAt(pos+1) == QUOTE) {
+                                if (after == QUOTE) {
                                     ++pos;
                                     // Fall through to append(ch)
                                 } else {
                                     if (groupingCount < 0) {
-                                        subpart += 3; // open quote
+                                        subpart = 3; // quoted prefix subpart
                                     } else {
-                                        // Transition to suffix subpart
-                                        subpart = 2; // suffix subpart
-                                        affix = suffix;
-                                        sub0Limit = pos--;
+                                      // Transition to suffix subpart
+                                      subpart = 2; // suffix subpart
+                                      affix = suffix;
+                                      sub0Limit = pos--;
                                     }
-                                    continue;
+                                  continue;
                                 }
                             }
                         }
@@ -2525,10 +2540,12 @@ public class DecimalFormat extends NumberFormat {
                          To meet the need of expandAffix(String, StirngBuffer)
                          [Richard/GCL]
                         */
-                        affix.append(doubled ? "\u00A4\u00A4" : "\u00A4"); 
-                        if (doubled) ++pos; // Skip over the doubled character
+                        if (doubled) {
+                            ++pos; // Skip over the doubled character
+                            affix.append(ch); // append two: one here, one below
+                        }
                         isCurrency = true;
-                        continue;
+                        // Fall through to append(ch)
                     } else if (ch == QUOTE) {
                         // A quote outside quotes indicates either the opening
                         // quote or two quotes, which is a quote literal.  That is,
@@ -2536,11 +2553,11 @@ public class DecimalFormat extends NumberFormat {
                         if ((pos+1) < pattern.length() &&
                             pattern.charAt(pos+1) == QUOTE) {
                             ++pos;
-                            // Fall through to append(ch)
+                            affix.append(ch); // append two: one here, one below
                         } else {
                             subpart += 2; // open quote
-                            continue;
                         }
+                        // Fall through to append(ch)
                     } else if (ch == separator) {
                         // Don't allow separators in the prefix, and don't allow
                         // separators in the second pattern (part == 1).
@@ -2559,13 +2576,13 @@ public class DecimalFormat extends NumberFormat {
                                     "Too many percent/permille characters "
                                     + "in pattern \"" + pattern + '"');
                         }
-                        if (ch == percent) {
-                            multiplier = 100;
-                            ch = symbols.getPercent();
-                        } else {
-                            multiplier = 1000;
-                            ch = symbols.getPerMill();
-                        }
+                        multiplier = (ch == percent) ? 100 : 1000;
+                        // Convert to non-localized pattern
+                        ch = (ch == percent) ? PATTERN_PERCENT : PATTERN_PER_MILLE;
+                        // Fall through to append(ch)
+                    } else if (ch == minus) {
+                        // Convert to non-localized pattern
+                        ch = PATTERN_MINUS;
                         // Fall through to append(ch)
                     } else if (ch == padEscape) {
                         if (padPos >= 0) {
@@ -2580,9 +2597,6 @@ public class DecimalFormat extends NumberFormat {
                         padChar = pattern.charAt(pos);
                         continue;
                     }
-                    // Unquoted, non-special characters fall through to here, as
-                    // well as other code which needs to append something to the
-                    // affix.
                     affix.append(ch);
                     break;
                 case 3: // Prefix subpart, in quote
@@ -2594,35 +2608,23 @@ public class DecimalFormat extends NumberFormat {
                         if ((pos+1) < pattern.length() &&
                             pattern.charAt(pos+1) == QUOTE) {
                             ++pos; 
-                            // Fall through to append(ch)
+                            affix.append(ch);
                         } else {
                             subpart -= 2; // close quote
-                            continue;
                         }
+                        // Fall through to append(ch)
                     }
-                    /*Bug 4212072
-                      To process the localized pattern "#,##0'%'" of which percent 
-                      symbol is quoted
-                      [Richard/GCL]
-                    */
-                    if (ch == percent || ch == perMill) {
-                        // Next handle characters which are appended directly.
-                        if (multiplier != 1) {
-                            throw new IllegalArgumentException(
-                                "Too many percent/permille characters "
-                                + "in pattern \"" + pattern + '"');
-                        }
-                        if (ch == percent) {
-                            multiplier = 100;
-                            ch = symbols.getPercent();
-                        } else {
-                            multiplier = 1000;
-                            ch = symbols.getPerMill();
-                        }
-                    }
+                    // NOTE: In ICU 2.2 there was code here to parse quoted
+                    // percent and permille characters _within quotes_ and give
+                    // them special meaning.  This is incorrect, since quoted
+                    // characters are literals without special meaning.
                     affix.append(ch);
                     break;                    
                 }
+            }
+            
+            if (subpart == 3 || subpart == 4) {
+                throw new IllegalArgumentException("Unterminated quote in " + pattern);
             }
 
             if (sub0Limit == 0) {
@@ -2688,9 +2690,9 @@ public class DecimalFormat extends NumberFormat {
                   To meet the need of expandAffix(String, StirngBuffer)
                   [Richard/GCL]
                 */
-                this.posPrefixPattern = this.negPrefixPattern = prefix.toString();
-                this.posSuffixPattern = this.negSuffixPattern = suffix.toString();
-                
+                posPrefixPattern = negPrefixPattern = prefix.toString();
+                posSuffixPattern = negSuffixPattern = suffix.toString();
+
                 useExponentialNotation = (expDigits >= 0);
                 if (useExponentialNotation) {
                     minExponentDigits = expDigits;
@@ -2722,8 +2724,7 @@ public class DecimalFormat extends NumberFormat {
                         || decimalPos == digitTotalCount);
                 if (padPos >= 0) {
                     padPosition = padPos;
-                    formatWidth = prefix.length() + suffix.length() +
-                        sub0Limit - sub0Start;
+                    formatWidth = sub0Limit - sub0Start; // to be fixed up below
                     pad = padChar;
                 } else {
                     formatWidth = 0;
@@ -2748,8 +2749,8 @@ public class DecimalFormat extends NumberFormat {
                   To meet the need of expandAffix(String, StirngBuffer)
                   [Richard/GCL]
                 */
-                this.negPrefixPattern = prefix.toString();
-                this.negSuffixPattern = suffix.toString();
+                negPrefixPattern = prefix.toString();
+                negSuffixPattern = suffix.toString();
                 gotNegative = true;
             }
         }
@@ -2785,6 +2786,11 @@ public class DecimalFormat extends NumberFormat {
           [Richard/GCL]
         */
         expandAffixes();
+
+        // Now that we have the actual prefix and suffix, fix up formatWidth
+        if (formatWidth > 0) {
+            formatWidth += positivePrefix.length() + positiveSuffix.length();
+        }
     }
 
     /*Rewrite the following 4 "set" methods
@@ -3253,19 +3259,23 @@ public class DecimalFormat extends NumberFormat {
     private static final char       PATTERN_ZERO_DIGIT         = '0';
     private static final char       PATTERN_GROUPING_SEPARATOR = ',';
     private static final char       PATTERN_DECIMAL_SEPARATOR  = '.';
+    private static final char       PATTERN_DIGIT              = '#';
+            static final String     PATTERN_EXPONENT           = "E"; // [NEW]
+            static final char       PATTERN_PLUS_SIGN          = '+'; // [NEW]
+
+    // Affix
     private static final char       PATTERN_PER_MILLE          = '\u2030';
     private static final char       PATTERN_PERCENT            = '%';
-    private static final char       PATTERN_DIGIT              = '#';
-    private static final char       PATTERN_SEPARATOR          = ';';
-            static final String     PATTERN_EXPONENT           = "E"; // [NEW]
             static final char       PATTERN_PAD_ESCAPE         = '*'; // [NEW]
-            static final char       PATTERN_PLUS_SIGN          = '+'; // [NEW]
     /*Bug 4212072
       To meet the need of expandAffix(String, StirngBuffer)
       [Richard/GCL]
     */
     private static final char       PATTERN_MINUS              = '-'; //[Richard/GCL]
-    
+
+    // Other    
+    private static final char       PATTERN_SEPARATOR          = ';';
+
     // Pad escape is package private to allow access by DecimalFormatSymbols.
     // Also plus sign.  Also exponent.
 
