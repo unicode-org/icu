@@ -816,7 +816,7 @@ void TestRegexCAPI(void) {
         TEST_ASSERT_STRING("tag-b",   fields[3], TRUE);
         TEST_ASSERT_STRING("  third", fields[4], TRUE);
         TEST_ASSERT(fields[5] == NULL);
-        spaceNeeded = strlen("first .tag-a. second.tag-b.  third.");  // "." at NUL positions
+        spaceNeeded = strlen("first .tag-a. second.tag-b.  third.");  /* "." at NUL positions */
         TEST_ASSERT(spaceNeeded == requiredCapacity);
 
     
@@ -831,7 +831,7 @@ void TestRegexCAPI(void) {
         TEST_ASSERT_STRING(" second<tag-b>  third", fields[1], TRUE);
         TEST_ASSERT(fields[2] == (UChar *)-1);
 
-        spaceNeeded = strlen("first . second<tag-b>  third.");  // "." at NUL positions
+        spaceNeeded = strlen("first . second<tag-b>  third.");  /* "." at NUL positions */
         TEST_ASSERT(spaceNeeded == requiredCapacity);
 
         /*  Split with too few output strings available (3) */
@@ -846,7 +846,7 @@ void TestRegexCAPI(void) {
         TEST_ASSERT_STRING(" second<tag-b>  third", fields[2], TRUE);
         TEST_ASSERT(fields[3] == (UChar *)-1);
 
-        spaceNeeded = strlen("first .tag-a. second<tag-b>  third.");  // "." at NUL positions
+        spaceNeeded = strlen("first .tag-a. second<tag-b>  third.");  /* "." at NUL positions */
         TEST_ASSERT(spaceNeeded == requiredCapacity);
 
         /*  Split with just enough output strings available (5) */
@@ -863,7 +863,7 @@ void TestRegexCAPI(void) {
         TEST_ASSERT_STRING("  third", fields[4], TRUE);
         TEST_ASSERT(fields[5] == (UChar *)-1);
 
-        spaceNeeded = strlen("first .tag-a. second.tag-b.  third.");  // "." at NUL positions
+        spaceNeeded = strlen("first .tag-a. second.tag-b.  third.");  /* "." at NUL positions */
         TEST_ASSERT(spaceNeeded == requiredCapacity);
 
 
@@ -884,7 +884,7 @@ void TestRegexCAPI(void) {
         TEST_ASSERT(fields[4] == NULL);
         TEST_ASSERT(fields[8] == NULL);
         TEST_ASSERT(fields[9] == (UChar *)-1);
-        spaceNeeded = strlen("first .tag-a. second.tag-b.");  // "." at NUL positions
+        spaceNeeded = strlen("first .tag-a. second.tag-b.");  /* "." at NUL positions */
         TEST_ASSERT(spaceNeeded == requiredCapacity);
 
         uregex_close(re);
