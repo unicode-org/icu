@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2003, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.194 2003/06/23 23:16:10 grhoten-oss Exp $
+dnl $Id: configure.in,v 1.195 2003/07/25 00:08:14 rviswanadha Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -867,7 +867,7 @@ case "${host}" in
 			  tools/gencnval/gencnval tools/gennorm/gennorm \
 			  tools/gennames/gennames tools/gentest/gentest \
 			  tools/pkgdata/pkgdata tools/genprops/genprops \
-			  tools/genidna/genidna
+			  tools/genprep/gensprep
 			do
 			  if test -f $file.c; then
 			    mv $file.c $file.cpp
@@ -942,7 +942,7 @@ AC_OUTPUT([README icudefs.mk \
 		tools/genprops/Makefile \
 		tools/genpname/Makefile \
 		tools/genbrk/Makefile \
-		tools/genidna/Makefile \
+		tools/gensprep/Makefile \
 		tools/dumpce/Makefile \
 		test/Makefile test/testdata/Makefile \
 		test/intltest/Makefile \
