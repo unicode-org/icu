@@ -262,28 +262,28 @@ enum
     C_DOTTED_CIRCLE = 0x25CC
 };
 
-const LETag emptyTag       = 0x00000000; // ''
+static const LETag emptyTag       = 0x00000000; // ''
 
-const LETag nuktFeatureTag = LE_NUKT_FEATURE_TAG;
-const LETag akhnFeatureTag = LE_AKHN_FEATURE_TAG;
-const LETag rphfFeatureTag = LE_RPHF_FEATURE_TAG;
-const LETag blwfFeatureTag = LE_BLWF_FEATURE_TAG;
-const LETag halfFeatureTag = LE_HALF_FEATURE_TAG;
-const LETag pstfFeatureTag = LE_PSTF_FEATURE_TAG;
-const LETag vatuFeatureTag = LE_VATU_FEATURE_TAG;
-const LETag presFeatureTag = LE_PRES_FEATURE_TAG;
-const LETag blwsFeatureTag = LE_BLWS_FEATURE_TAG;
-const LETag abvsFeatureTag = LE_ABVS_FEATURE_TAG;
-const LETag pstsFeatureTag = LE_PSTS_FEATURE_TAG;
-const LETag halnFeatureTag = LE_HALN_FEATURE_TAG;
+static const LETag nuktFeatureTag = LE_NUKT_FEATURE_TAG;
+static const LETag akhnFeatureTag = LE_AKHN_FEATURE_TAG;
+static const LETag rphfFeatureTag = LE_RPHF_FEATURE_TAG;
+static const LETag blwfFeatureTag = LE_BLWF_FEATURE_TAG;
+static const LETag halfFeatureTag = LE_HALF_FEATURE_TAG;
+static const LETag pstfFeatureTag = LE_PSTF_FEATURE_TAG;
+static const LETag vatuFeatureTag = LE_VATU_FEATURE_TAG;
+static const LETag presFeatureTag = LE_PRES_FEATURE_TAG;
+static const LETag blwsFeatureTag = LE_BLWS_FEATURE_TAG;
+static const LETag abvsFeatureTag = LE_ABVS_FEATURE_TAG;
+static const LETag pstsFeatureTag = LE_PSTS_FEATURE_TAG;
+static const LETag halnFeatureTag = LE_HALN_FEATURE_TAG;
 
-const LETag blwmFeatureTag = LE_BLWM_FEATURE_TAG;
-const LETag abvmFeatureTag = LE_ABVM_FEATURE_TAG;
-const LETag distFeatureTag = LE_DIST_FEATURE_TAG;
+static const LETag blwmFeatureTag = LE_BLWM_FEATURE_TAG;
+static const LETag abvmFeatureTag = LE_ABVM_FEATURE_TAG;
+static const LETag distFeatureTag = LE_DIST_FEATURE_TAG;
 
 // These are in the order in which the features need to be applied
 // for correct processing
-const LETag featureOrder[] =
+static const LETag featureOrder[] =
 {
     nuktFeatureTag, akhnFeatureTag, rphfFeatureTag, blwfFeatureTag, halfFeatureTag, pstfFeatureTag,
     vatuFeatureTag, presFeatureTag, blwsFeatureTag, abvsFeatureTag, pstsFeatureTag, halnFeatureTag,
@@ -295,14 +295,14 @@ const LETag featureOrder[] =
 // FIXME: do we want a seperate tag array for each kind of character??
 // FIXME: are there cases where this ordering causes glyphs to get tags
 // that they shouldn't?
-const LETag tagArray[] =
+static const LETag tagArray[] =
 {
     rphfFeatureTag, blwfFeatureTag, halfFeatureTag, pstfFeatureTag, nuktFeatureTag, akhnFeatureTag,
     vatuFeatureTag, presFeatureTag, blwsFeatureTag, abvsFeatureTag, pstsFeatureTag, halnFeatureTag,
     blwmFeatureTag, abvmFeatureTag, distFeatureTag, emptyTag
 };
 
-const le_int8 stateTable[][IndicClassTable::CC_COUNT] =
+static const le_int8 stateTable[][IndicClassTable::CC_COUNT] =
 {
 //   xx  vm  sm  iv  ct  cn  nu  dv  vr  zw
     { 1,  1,  1,  5,  3,  2,  1,  1,  1,  1}, // 0

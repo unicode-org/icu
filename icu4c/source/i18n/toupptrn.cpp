@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2001-2003, International Business Machines
+*   Copyright (C) 2001-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -22,7 +22,7 @@ U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UppercaseTransliterator)
 
-const char CURR_ID[] = "Any-Upper";
+static const char CURR_ID[] = "Any-Upper";
 
 /**
  * Constructs a transliterator.
