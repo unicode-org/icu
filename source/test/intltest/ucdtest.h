@@ -12,6 +12,11 @@ U_CAPI void U_CALLCONV unicodeDataLineFn(void *context,
                               char *fields[][2], int32_t fieldCount,
                               UErrorCode *pErrorCode);
 
+U_CAPI void U_CALLCONV
+derivedCorePropsLineFn(void *context,
+                       char *fields[][2], int32_t fieldCount,
+                       UErrorCode *pErrorCode);
+
 /** 
  * Test API and functionality of class Unicode
  **/
@@ -82,7 +87,7 @@ private:
                               char *fields[][2], int32_t fieldCount,
                               UErrorCode *pErrorCode);
 
-    static void U_CALLCONV
+    friend void U_CALLCONV
     derivedCorePropsLineFn(void *context,
                            char *fields[][2], int32_t fieldCount,
                            UErrorCode *pErrorCode);
