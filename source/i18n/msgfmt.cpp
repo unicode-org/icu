@@ -1069,8 +1069,7 @@ MessageFormat::releaseNumberFormat(NumberFormat *adopt)
  * a call to wtoi().
  */
 int32_t
-MessageFormat::stoi(const UnicodeString& string,
-                    UErrorCode& status)
+MessageFormat::stoi(const UnicodeString& string)
 {
     /*
     NumberFormat *myFormat = getNumberFormat(status);
@@ -1156,7 +1155,7 @@ MessageFormat::makeFormat(/*int32_t position, */
     // get the number
     int32_t argumentNumber;
     int32_t oldMaxOffset = fMaxOffset;
-    argumentNumber = stoi(segments[1], success); // always unlocalized!
+    argumentNumber = stoi(segments[1]); // always unlocalized!
     if (argumentNumber < 0 || argumentNumber > 9) {
         success = U_INVALID_FORMAT_ERROR;
         return;
