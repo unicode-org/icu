@@ -26,7 +26,7 @@
 #include <string.h>
 #include "cformtst.h"
 
-static char* txt_testCasePatterns[] = {
+static const char* txt_testCasePatterns[] = {
    "Quotes '', '{', a {0,number,integer} '{'0}",
    "Quotes '', '{', a {0,number,integer} '{'0}",
    "You deposited {0,number,integer} times an amount of {1,number,currency} on {2,date,short}",
@@ -34,7 +34,7 @@ static char* txt_testCasePatterns[] = {
    "'{'1,number,percent} for {0,number,integer} is {1,number,percent}",
 };
 
-static char* txt_testResultStrings[] = {
+static const char* txt_testResultStrings[] = {
     "Quotes ', {, a 1 {0}",
     "Quotes ', {, a 1 {0}",
     "You deposited 1 times an amount of $3,456.00 on 1/12/70",

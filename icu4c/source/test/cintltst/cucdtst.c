@@ -42,35 +42,35 @@ const char tagStrings[] = "MnMcMeNdNlNoZsZlZpCcCfCsCoCnLuLlLtLmLoPcPdPsPePoSmScS
 const int32_t tagValues[] =
     {
     /* Mn */ U_NON_SPACING_MARK,
-	/* Mc */ U_COMBINING_SPACING_MARK,
-	/* Me */ U_ENCLOSING_MARK,
-	/* Nd */ U_DECIMAL_DIGIT_NUMBER,
-	/* Nl */ U_LETTER_NUMBER,
-	/* No */ U_OTHER_NUMBER,
-	/* Zs */ U_SPACE_SEPARATOR,
-	/* Zl */ U_LINE_SEPARATOR,
-	/* Zp */ U_PARAGRAPH_SEPARATOR,
-	/* Cc */ U_CONTROL_CHAR,
-	/* Cf */ U_FORMAT_CHAR,
-	/* Cs */ U_SURROGATE,
-	/* Co */ U_PRIVATE_USE_CHAR,
-	/* Cn */ U_UNASSIGNED,
-	/* Lu */ U_UPPERCASE_LETTER,
-	/* Ll */ U_LOWERCASE_LETTER,
-	/* Lt */ U_TITLECASE_LETTER,
-	/* Lm */ U_MODIFIER_LETTER,
-	/* Lo */ U_OTHER_LETTER,
-	/* Pc */ U_CONNECTOR_PUNCTUATION,
-	/* Pd */ U_DASH_PUNCTUATION,
-	/* Ps */ U_START_PUNCTUATION,
-	/* Pe */ U_END_PUNCTUATION,
-	/* Po */ U_OTHER_PUNCTUATION,
-	/* Sm */ U_MATH_SYMBOL,
-	/* Sc */ U_CURRENCY_SYMBOL,
-	/* Sk */ U_MODIFIER_SYMBOL,
-	/* So */ U_OTHER_SYMBOL,
-	/* Pi */ U_INITIAL_PUNCTUATION,
-	/* Pf */ U_FINAL_PUNCTUATION
+    /* Mc */ U_COMBINING_SPACING_MARK,
+    /* Me */ U_ENCLOSING_MARK,
+    /* Nd */ U_DECIMAL_DIGIT_NUMBER,
+    /* Nl */ U_LETTER_NUMBER,
+    /* No */ U_OTHER_NUMBER,
+    /* Zs */ U_SPACE_SEPARATOR,
+    /* Zl */ U_LINE_SEPARATOR,
+    /* Zp */ U_PARAGRAPH_SEPARATOR,
+    /* Cc */ U_CONTROL_CHAR,
+    /* Cf */ U_FORMAT_CHAR,
+    /* Cs */ U_SURROGATE,
+    /* Co */ U_PRIVATE_USE_CHAR,
+    /* Cn */ U_UNASSIGNED,
+    /* Lu */ U_UPPERCASE_LETTER,
+    /* Ll */ U_LOWERCASE_LETTER,
+    /* Lt */ U_TITLECASE_LETTER,
+    /* Lm */ U_MODIFIER_LETTER,
+    /* Lo */ U_OTHER_LETTER,
+    /* Pc */ U_CONNECTOR_PUNCTUATION,
+    /* Pd */ U_DASH_PUNCTUATION,
+    /* Ps */ U_START_PUNCTUATION,
+    /* Pe */ U_END_PUNCTUATION,
+    /* Po */ U_OTHER_PUNCTUATION,
+    /* Sm */ U_MATH_SYMBOL,
+    /* Sc */ U_CURRENCY_SYMBOL,
+    /* Sk */ U_MODIFIER_SYMBOL,
+    /* So */ U_OTHER_SYMBOL,
+    /* Pi */ U_INITIAL_PUNCTUATION,
+    /* Pf */ U_FINAL_PUNCTUATION
     };
 const char dirStrings[][5] = {
     "L",
@@ -85,13 +85,13 @@ const char dirStrings[][5] = {
     "WS",
     "ON",
     "LRE",
-	"LRO",
-	"AL",
-	"RLE",
-	"RLO",
-	"PDF",
-	"NSM",
-	"BN"
+    "LRO",
+    "AL",
+    "RLE",
+    "RLO",
+    "PDF",
+    "NSM",
+    "BN"
 };
 
 
@@ -439,7 +439,7 @@ void TestUnicodeData()
 
     if(memcmp(versionArray, expectVersionArray, U_MAX_VERSION_LENGTH) != 0)
       {
-	log_err("Testing u_getUnicodeVersion() - expected %s got %d.%d.%d.%d\n", expectString, 
+        log_err("Testing u_getUnicodeVersion() - expected %s got %d.%d.%d.%d\n", expectString, 
         versionArray[0], versionArray[1], versionArray[2], versionArray[3]);
       }
 
@@ -450,7 +450,7 @@ void TestUnicodeData()
          log_err("Testing configure.in's UNICODE_VERSION - expected %s got %s\n",  expectVersion, ICU_UNICODE_VERSION);
       }
 #endif
-    
+
     input = fopen(newPath, "r");
 
     if (input == 0) {
@@ -458,7 +458,7 @@ void TestUnicodeData()
       return;
     }
 
-        
+
         for(;;) {
             bufferPtr = fgets(buffer, 999, input);
             if (bufferPtr == NULL) break;
@@ -575,7 +575,7 @@ int32_t MakeDir(char* str)
 /*----------------*/
 
 
-static  char* raw[3][4] = {
+static const char* raw[3][4] = {
    
     /* First String */
     {   "English_",  "French_",   "Croatian_", "English_"},

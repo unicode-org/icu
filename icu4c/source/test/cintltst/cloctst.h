@@ -8,7 +8,7 @@
 * File CLOCTST.H
 *
 * Modification History:
-*        Name                     Description            
+*        Name                     Description
 *     Madhu Katragadda            Converted to C
 *********************************************************************************
 */
@@ -18,10 +18,8 @@
 #include "cintltst.h"
 /*C API TEST FOR LOCALE */
 
-static void addLocaleTests(TestNode**);
-
 /**
-Test functions to set and get data fields
+ * Test functions to set and get data fields
  **/
 static void TestBasicGetters(void);
 /**
@@ -32,10 +30,6 @@ static void TestSimpleResourceInfo(void);
  * Use Locale to access Resource file display names and compare against expected values
  **/
 static  void TestDisplayNames(void);
-/**
- * Test functions for basic object behaviour
- **/
-static  void TestSimpleObjectStuff(void);
 /**
  * Test getAvailableLocales
  **/
