@@ -404,17 +404,17 @@ static void TestCurrencySign(void)
 static void TestCurrency(void)
 {
   UNumberFormat *currencyFmt;
-  UChar *str=NULL, *res=NULL;
+  UChar *str;
   int32_t lneed, i;
   UFieldPosition pos;
-  char cStr[100]; 
+  UChar res[100];
   UErrorCode status = U_ZERO_ERROR;
   const char* locale[]={"fr_CA", "de_DE_PREEURO", "fr_FR_PREEURO"};
   const char* result[]={"1,50 $", "1,50 DM", "1,50 F"};
   log_verbose("\nTesting the number format with different currency patterns\n");
   for(i=0; i < 3; i++)
     {
-      cStr[0]=0;
+      str=NULL;
       currencyFmt = unum_open(UNUM_CURRENCY, NULL,0,locale[i],NULL, &status);
       if(U_FAILURE(status)){
           log_err("Error in the construction of number format with style currency:\n%s\n",
@@ -431,15 +431,12 @@ static void TestCurrency(void)
       if(U_FAILURE(status)) {
         log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status) );
       }
-      res=(UChar*)malloc(sizeof(UChar) * (strlen(result[i])+1) );
-      u_uastrcpy(res, result[i]);
-      u_UCharsToChars(str,cStr,u_strlen(res));
+      u_charsToUChars(result[i], res, strlen(result[i])+1);
       if (u_strcmp(str, res) != 0){
-          log_err("FAIL: Expected %s Got: %s for locale: %s\n", result[i],cStr,locale[i]);
+          log_err("FAIL: Expected %s Got: %s for locale: %s\n", result[i], aescstrdup(str, -1), locale[i]);
       }
       unum_close(currencyFmt);
       free(str);
-      free(res);
     }
 }
 /**
@@ -489,9 +486,8 @@ static void TestCurrencyPreEuro(void)
       }
       res=(UChar*)malloc(sizeof(UChar) * (strlen(result[i])+1) );
       u_unescape(result[i],res,(int32_t)(strlen(result[i])+1));
-      u_UCharsToChars(str,cStr,u_strlen(str));
       if (u_strcmp(str, res) != 0){
-          log_err("FAIL: Expected %s Got: %s for locale: %s\n", result[i],cStr,locale[i]);
+          log_err("FAIL: Expected %s Got: %s for locale: %s\n", result[i],aescstrdup(str, -1),locale[i]);
       }
       
       unum_close(currencyFmt);
@@ -570,9 +566,8 @@ static void TestCurrencyObject(void)
       }
       res=(UChar*)malloc(sizeof(UChar) * (strlen(result[i])+1) );
       u_unescape(result[i],res, (int32_t)(strlen(result[i])+1));
-      u_UCharsToChars(str,cStr,u_strlen(str));
       if (u_strcmp(str, res) != 0){
-          log_err("FAIL: Expected %s Got: %s for locale: %s\n", result[i],cStr,locale[i]);
+          log_err("FAIL: Expected %s Got: %s for locale: %s\n", result[i],aescstrdup(str, -1),locale[i]);
       }
       
       unum_close(currencyFmt);

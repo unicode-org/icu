@@ -227,7 +227,6 @@ void TestCzechMonths459()
     UCalendar *cal;
     UDate june, july, d;
     UErrorCode status = U_ZERO_ERROR;
-    char buffer[512];
     UChar *date;
     
     fmt = udat_open(UDAT_FULL, UDAT_FULL, "cs", NULL, 0, NULL, 0, &status);
@@ -263,19 +262,17 @@ void TestCzechMonths459()
     }
     d = udat_parse(fmt, juneStr, u_strlen(juneStr), &pos, &status);
     date = myDateFormat(fmt, d);
-    u_UCharsToChars(date, buffer, (int32_t)(u_strlen(date)+1));
     if(u_strcmp(myDateFormat(fmt, june), myDateFormat(fmt, d) ) !=0)
         log_err("Error in handling the czech month june\n");
     else
-        log_verbose("Pass: Date = %s\n",  buffer );
+        log_verbose("Pass: Date = %s\n", aescstrdup(fmt, -1));
     pos=0;
     d = udat_parse(fmt, julyStr, u_strlen(julyStr), &pos, &status);
     date = myDateFormat(fmt, d);
-    u_UCharsToChars(date, buffer, (int32_t)(u_strlen(date)+1));
     if(u_strcmp(myDateFormat(fmt, july), myDateFormat(fmt, d) ) !=0)
         log_err("Error in handling the czech month july\n");
     else
-        log_verbose("Pass: Date = %s\n",  buffer );
+        log_verbose("Pass: Date = %s\n", aescstrdup(date, -1));
     
     udat_close(fmt);
     ucal_close(cal);
