@@ -452,11 +452,9 @@ ucurr_getName(const UChar* currency,
     for (;;) {
         ec2 = U_ZERO_ERROR;
         UResourceBundle* rb = ures_open(NULL, loc, &ec2);
-        UResourceBundle* curr = ures_getByKey(rb, CURRENCIES, NULL, &ec2);
-        UResourceBundle* names = ures_getByKey(curr, buf, NULL, &ec2);
-        s = ures_getStringByIndex(names, choice, len, &ec2);
-        ures_close(names);
-        ures_close(curr);
+        rb = ures_getByKey(rb, CURRENCIES, rb, &ec2);
+        rb = ures_getByKey(rb, buf, rb, &ec2);
+        s = ures_getStringByIndex(rb, choice, len, &ec2);
         ures_close(rb);
 
         // If we've succeeded we're done.  Otherwise, try to fallback.
