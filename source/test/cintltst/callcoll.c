@@ -613,7 +613,8 @@ static void TestSurrogates(void)
     /* tests that \uD801\uDC01 still has the same value, not changed */
     enlen = ucol_getSortKey(enCollation, source[2], 2, enresult, 20);
     mylen = ucol_getSortKey(myCollation, source[2], 2, myresult, 20);
-    if (uprv_strcmp(enresult, myresult) != 0) {
+    if (enlen != mylen ||
+        uprv_memcmp(enresult, myresult, enlen) != 0) {
         log_verbose("Failed : non-tailored supplementary characters should have the same value\n");
     }
 
