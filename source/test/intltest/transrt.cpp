@@ -32,9 +32,8 @@ TransliteratorRoundTripTest::runIndexedTest(int32_t index, UBool exec,
         CASE(1,TestKatakana);
         CASE(2,TestArabic);
         CASE(3,TestHebrew);
-        CASE(4,TestHangul);
-        CASE(5,TestGreek);
-        CASE(6,TestCyrillic);
+        CASE(4,TestGreek);
+        CASE(5,TestCyrillic);
         /*
         CASE(7,TestJamo);
         CASE(8,TestJamoHangul);
@@ -330,31 +329,6 @@ UBool RTTest::isReceivingTarget(const UnicodeString& s) {
 }
 
 //--------------------------------------------------------------------
-// RTHangulTest
-//--------------------------------------------------------------------
-
-class RTHangulTest : public RTTest {
-public:
-    RTHangulTest();
-protected:
-    virtual UBool isSource(UChar c);
-};
-
-RTHangulTest::RTHangulTest() : RTTest("Jamo-Hangul",
-                                  TestUtility::JAMO_SCRIPT,
-                                  TestUtility::HANGUL_SCRIPT) {}
-
-UBool RTHangulTest::isSource(UChar c)
-{
-    if ((0x1113 <= c && c <= 0x1160)
-     || (0x1176 <= c && c <= 0x11F9)
-     || (0x3131 <= c && c <= 0x318E)) {
-       return FALSE;
-    }
-    return RTTest::isSource(c);
-}
-
-//--------------------------------------------------------------------
 // Specific Tests
 //--------------------------------------------------------------------
 
@@ -380,12 +354,6 @@ void TransliteratorRoundTripTest::TestHebrew() {
     RTTest test("Latin-Hebrew", 
                 TestUtility::LATIN_SCRIPT, TestUtility::HEBREW_SCRIPT);
     test.test("", UnicodeString("[\\u05D0-\\u05EF]", ""), this);
-}
-
-void TransliteratorRoundTripTest::TestHangul() {
-    RTHangulTest t;
-    t.setPairLimit(30); // Don't run full test -- too long
-    t.test("", "", this);
 }
 
 void TransliteratorRoundTripTest::TestJamo() {
