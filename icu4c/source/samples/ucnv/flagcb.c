@@ -11,10 +11,16 @@ U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_FLAG (
                   UConverterCallbackReason reason,
 				  UErrorCode * err)
 {
+  /* First step - based on the reason code, take action */
+
   if(reason == UCNV_UNASSIGNED) { /* whatever set should be trapped here */
     ((FromUFLAGContext*)context)->flag = TRUE;
   }
-  
+
+  if(reason == UCNV_CLONE) {
+    
+  }
+
   /* Always call the subCallback if present */
   
   if(((FromUFLAGContext*)context)->subCallback != NULL)
@@ -28,4 +34,12 @@ U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_FLAG (
                                                     err);
 
     }
+
+  /* cleanup */
+  if(reason == UCNV_CLOSE) {
+    free(context);
+  }
+
+
+
 }
