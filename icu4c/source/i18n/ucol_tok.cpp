@@ -97,6 +97,9 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
     return;
   }
   
+  // set everything to zero, so that we can clean up gracefully
+  uprv_memset(src, 0, sizeof(UColTokenParser));
+  
   src->source = (UChar *)uprv_malloc(estimatedSize*sizeof(UChar));
   nSize = unorm_normalize(rules, rulesLength, UNORM_NFD, 0, src->source, estimatedSize, status);
   if(nSize > estimatedSize || *status == U_BUFFER_OVERFLOW_ERROR) {
@@ -109,11 +112,12 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
   src->sourceCurrent = src->source;
   src->extraCurrent = src->end;
   src->extraEnd = src->source+estimatedSize; //src->end+UCOL_TOK_EXTRA_RULE_SPACE_SIZE;
+  src->varTop = NULL;
   src->UCA = UCA;
   src->invUCA = ucol_initInverseUCA(status);
-  src->resultLen = 0;
-  src->lh = 0;
-  src->varTop = NULL;
+  if(U_FAILURE(*status)) {
+    return;
+  }
   src->tailored = uhash_open(uhash_hashTokens, uhash_compareTokens, status);
   if(U_FAILURE(*status)) {
     return;
@@ -125,6 +129,7 @@ void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint
   uprv_memcpy(src->opts, UCA->options, sizeof(UColOptionSet));
 
   // rulesToParse = src->source;
+  src->lh = 0;
   src->lh = (UColTokListHeader *)uprv_malloc(512*sizeof(UColTokListHeader));
   src->resultLen = 0;
 }
