@@ -35,7 +35,6 @@ private :
     UnicodeSet prohibited;
     UnicodeSet labelSeparatorSet;
     UResourceBundle *bundle;
-    static NamePrepTransform* transform;
     NamePrepTransform(UParseError& parseError, UErrorCode& status);
 
 

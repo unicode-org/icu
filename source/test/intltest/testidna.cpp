@@ -1339,6 +1339,9 @@ void TestIDNA::testCompareReferenceImpl(const UChar* src, int32_t srcLen){
 }
 void TestIDNA::TestIDNAMonkeyTest(){
     UnicodeString source;
+    UErrorCode status = U_ZERO_ERROR;
+
+    getInstance(status);    // Init prep
     
     for(int i=0; i<loopCount; i++){
         source.truncate(0);
@@ -1356,6 +1359,8 @@ void TestIDNA::TestIDNAMonkeyTest(){
     source.releaseBuffer();
     */
 
+    delete TestIDNA::prep;
+    TestIDNA::prep = NULL;
 }
 
 void TestIDNA::TestCompareReferenceImpl(){
