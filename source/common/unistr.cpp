@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1999-2003, International Business Machines Corporation and   *
+* Copyright (C) 1999-2004, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 *
@@ -1621,8 +1621,11 @@ UnicodeString::extract(char *dest, int32_t destCapacity,
 void 
 UnicodeString::extractBetween(int32_t start,
                   int32_t limit,
-                  UnicodeString& target) const
-{ doExtract(start, limit - start, target); }
+                  UnicodeString& target) const {
+  pinIndex(start);
+  pinIndex(limit);
+  doExtract(start, limit - start, target);
+}
 
 int32_t
 UnicodeString::doExtract(int32_t start, int32_t length,

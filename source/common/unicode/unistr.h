@@ -3748,8 +3748,11 @@ inline void
 UnicodeString::extractBetween(int32_t start, 
                   int32_t limit, 
                   UChar *dst, 
-                  int32_t dstStart) const
-{ doExtract(start, limit - start, dst, dstStart); }
+                  int32_t dstStart) const {
+  pinIndex(start);
+  pinIndex(limit);
+  doExtract(start, limit - start, dst, dstStart);
+}
 
 inline UChar
 UnicodeString::doCharAt(int32_t offset) const
