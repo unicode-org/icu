@@ -103,12 +103,13 @@ updates come out.  */
 #    define U_CALLCONV 
 #endif
 
-/* Define U_NULL pointer value, and NULL if it isn't already defined */
-
-#define U_NULL	0
-
+/* Define NULL (the wrong way, cast to void *) if it does not exist. */
 #ifndef NULL
-#define NULL    U_NULL
+#ifdef XP_CPLUSPLUS
+#define NULL    0
+#else
+#define NULL    ((void *)0)
+#endif
 #endif
 
 /* Maximum value of a (void*) - use to indicate the limit of
