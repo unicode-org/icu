@@ -198,17 +198,24 @@ U_CAPI const UChar *u_wmsg_errorName(UErrorCode err)
     }
     else
     {
-        msg = (UChar*)ures_getStringByKey(gBundle, u_errorName(err), &msgLen, &subErr);
-        
-        if(U_FAILURE(subErr))
-        {
-            msg = NULL;
+        const char *errname = u_errorName(err);
+        if (errname) {
+            msg = (UChar*)ures_getStringByKey(gBundle, errname, &msgLen, &subErr);
+            if(U_FAILURE(subErr))
+            {
+                msg = NULL;
+            }
         }
     }
 
     if(msg == NULL)  /* Couldn't find it anywhere.. */
     {
+        char error[128];
         textMsg = u_errorName(err);
+        if (!textMsg) {
+            sprintf(error, "UNDOCUMENTED ICU ERROR %d", err);
+            textMsg = error;
+        }
         msg = (UChar*)malloc((strlen(textMsg)+1)*sizeof(msg[0]));
         u_charsToUChars(textMsg, msg, strlen(textMsg)+1);
     }
