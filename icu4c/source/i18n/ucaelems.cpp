@@ -344,7 +344,7 @@ uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode
             /* This loop has to change the CE at the end of contraction REDO!*/
             uprv_cnttab_changeLastCE(contractions, CE, element->mapCE, TRUE, status);
         } else {
-          //fprintf(stderr, "Warning - trying to overwrite already existing data for codepoint %04X\n", element->cPoints[0]);
+          fprintf(stderr, "Warning - trying to overwrite already existing data for codepoint %04X\n", element->cPoints[0]);
           //*status = U_ILLEGAL_ARGUMENT_ERROR;
         }
     } else {
