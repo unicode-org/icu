@@ -756,6 +756,7 @@ en {
         btk { "Batak" }
         bua { "Buriat" }
         bug { "Buginese" }
+        byn { "Blin" }
         ca  { "Catalan" }
         cad { "Caddo" }
         cai { "Central American Indian (Other)" }
