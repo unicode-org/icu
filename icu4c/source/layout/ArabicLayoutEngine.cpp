@@ -84,7 +84,7 @@ le_int32 ArabicOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[]
 
     CanonShaping::reorderMarks(&chars[offset], count, rightToLeft, outChars, glyphStorage);
 
-    // Note: This process the *original* character array so we can get context
+    // Note: This processes the *original* character array so we can get context
     // for the first and last characters. This is OK because only the marks
     // will have been reordered, and they don't contribute to shaping.
     ArabicShaping::shape(chars, offset, count, max, rightToLeft, glyphStorage);

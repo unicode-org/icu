@@ -179,6 +179,23 @@ le_int32 LayoutEngine::characterProcessing(const LEUnicode chars[], le_int32 off
 
     if (canonGSUBTable->coversScript(scriptTag)) {
         CharSubstitutionFilter *substitutionFilter = new CharSubstitutionFilter(fFontInstance);
+		const LEUnicode *inChars = &chars[offset];
+		LEUnicode *reordered = NULL;
+
+		// This is the cheapest way to get mark reordering only for Hebrew.
+		// We could just do the mark reordering for all scripts, but most
+		// of them probably don't need it...
+		if (fScriptCode == hebrScriptCode) {
+			reordered = LE_NEW_ARRAY(LEUnicode, count);
+
+			if (reordered == NULL) {
+				success = LE_MEMORY_ALLOCATION_ERROR;
+				return 0;
+			}
+
+			CanonShaping::reorderMarks(&chars[offset], count, rightToLeft, reordered, glyphStorage);
+			inChars = reordered;
+		}
 
         glyphStorage.allocateGlyphArray(count, rightToLeft, success);
         glyphStorage.allocateAuxData(success);
@@ -193,9 +210,13 @@ le_int32 LayoutEngine::characterProcessing(const LEUnicode chars[], le_int32 off
         }
 
         for (i = 0; i < count; i += 1, out += dir) {
-            glyphStorage[out] = (LEGlyphID) chars[offset + i];
+            glyphStorage[out] = (LEGlyphID) inChars[i];
             glyphStorage.setAuxData(out, (void *) canonFeatures, success);
         }
+
+		if (reordered != NULL) {
+			LE_DELETE_ARRAY(reordered);
+		}
 
         outCharCount = canonGSUBTable->process(glyphStorage, rightToLeft, scriptTag, langSysTag, NULL, substitutionFilter, NULL);
 
