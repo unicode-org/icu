@@ -57,6 +57,7 @@ static const char* scriptNames[]={
         "THAI",       /* U_THAI       */
         "TIBETAN",    /* U_TIBETAN    */
         "UCAS",       /* U_UCAS       */
+    
 };
 
 static const char* scriptAbbr[]= {
@@ -210,23 +211,68 @@ static const UScriptCode scriptAbbrCodes[] = {
         U_YI         ,
         U_COMMON     , 
 };
+static const char* scriptCodeName[]={
+    "U_INVALID_CODE",
+    "U_COMMON",    
+    "U_INHERITED", 
+    "U_ARABIC",    
+    "U_ARMENIAN",  
+    "U_BENGALI",   
+    "U_BOPOMOFO",  
+    "U_CHEROKEE",  
+    "U_COPTIC",    
+    "U_CYRILLIC",  
+    "U_DESERET",   
+    "U_DEVANAGARI",
+    "U_ETHIOPIC",  
+    "U_GEORGIAN",  
+    "U_GOTHIC",    
+    "U_GREEK",     
+    "U_GUJARATI",  
+    "U_GURMUKHI",  
+    "U_HAN",       
+    "U_HANGUL",   
+    "U_HEBREW",    
+    "U_HIRAGANA",  
+    "U_KANNADA",   
+    "U_KATAKANA",  
+    "U_KHMER",     
+    "U_LAO",       
+    "U_LATIN",     
+    "U_MALAYALAM", 
+    "U_MONGOLIAN", 
+    "U_MYANMAR",   
+    "U_OGHAM",     
+    "U_OLD_ITALIC",
+    "U_ORIYA",     
+    "U_RUNIC",     
+    "U_SINHALA",   
+    "U_SYRIAC",    
+    "U_TAMIL",     
+    "U_TELUGU",    
+    "U_THAANA",    
+    "U_THAI",      
+    "U_TIBETAN",   
+    "U_UCAS",      
+    "U_YI",  
+    "U_SCRIPT_CODE_LIMIT",
+};
 
 /* binary search the string array */
 static int 
 findStringIndex(const char* sortedArr[],const char* target, int size){
-    int left, middle, right;
+    int left, middle, right,rc;
     left =0;
     right= size-1;
+    
     while(left <= right){
         middle = (left+right)/2;
-        switch(uprv_stricmp(sortedArr[middle],target)){
-        case -1:
+        rc=uprv_stricmp(sortedArr[middle],target);
+        if(rc<0){
             left = middle+1;
-            break;
-        case 1:
+        }else if(rc >0){
             right = middle -1;
-            break;
-        case 0:
+        }else{
             return middle;
         }
     }
