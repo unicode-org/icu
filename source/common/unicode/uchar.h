@@ -1116,17 +1116,17 @@ u_charName(UChar32 code, UCharNameChoice nameChoice,
 /**
  * Find a Unicode character by its name and return its code point value.
  * The name is matched exactly and completely.
+ * If the name does not correspond to a code point, <i>pErrorCode</i>
+ * is set to <code>U_INVALID_CHAR_FOUND</code>.
  * A Unicode 1.0 name is matched only if it differs from the modern name.
- * Unicode names are all uppercase. Extended names are all lowercase and
- * within angle brackets.
+ * Unicode names are all uppercase. Extended names are lowercase followed
+ * by an uppercase hexadecimal number, and within angle brackets.
  *
  * @param nameChoice Selector for which name to match.
  * @param name The name to match.
  * @param pErrorCode Pointer to a UErrorCode variable
- * @return The Unicode code point value of the character with the given name,
- *         or 0xffff if there is no such character or if the extended name
- *         corresponds to U+FFFF. In the latter case, the variable pointed
- *         to by pErrorCode is not set to an error code.
+ * @return The Unicode value of the code point with the given name,
+ *         or an undefined value if there is no such code point.
  *
  * @see UCharNameChoice
  * @see u_charName
