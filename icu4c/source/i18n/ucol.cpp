@@ -324,8 +324,6 @@ inline void freeHeapWritableBuffer(collIterate *data)
 }
 
 
-
-
 /****************************************************************************/
 /* Following are the open/close functions                                   */
 /*                                                                          */
@@ -400,6 +398,9 @@ clean:
     ures_close(binary);
     return NULL;
   }
+
+  result->validLocale = NULL;
+
   if(loc == NULL) {
     loc = ures_getLocale(result->rb, status);
   }
@@ -407,12 +408,15 @@ clean:
   /* test for NULL */
   if (result->requestedLocale == NULL) {
 	*status = U_MEMORY_ALLOCATION_ERROR;
+        ures_close(collElem);
 	return NULL;
   }
   uprv_strcpy(result->requestedLocale, loc);
+
   ures_close(collElem);
   return result;
 }
+
 
 #ifdef U_USE_DEPRECATED_UCOL_API
 U_CAPI UCollator * U_EXPORT2
@@ -435,6 +439,21 @@ ucol_openVersion(const char *loc,
 }
 #endif
 
+// used by service code to create a new collator
+U_CAPI void U_EXPORT2
+ucol_setReqValidLocales(UCollator *coll, char *requestedLocaleToAdopt, char *validLocaleToAdopt)
+{
+  if (coll) {
+    if (coll->validLocale) {
+      uprv_free(coll->validLocale);
+      coll->validLocale = validLocaleToAdopt;
+    }
+    if (coll->requestedLocale) { // should always have
+      uprv_free(coll->requestedLocale);
+      coll->requestedLocale = requestedLocaleToAdopt;
+    }
+  }
+}
 
 U_CAPI void U_EXPORT2
 ucol_close(UCollator *coll)
@@ -466,6 +485,9 @@ ucol_close(UCollator *coll)
     }
     if(coll->binary != NULL) {
       ures_close(coll->binary);
+    }
+    if(coll->validLocale != NULL) {
+      uprv_free(coll->validLocale);
     }
     if(coll->requestedLocale != NULL) {
       uprv_free(coll->requestedLocale);
@@ -607,6 +629,7 @@ ucol_openRules( const UChar        *rules,
     }
     result->rb = NULL;
     result->binary = NULL;
+    result->validLocale = NULL;
     result->requestedLocale = NULL;
     ucol_setAttribute(result, UCOL_STRENGTH, strength, status);
     ucol_setAttribute(result, UCOL_NORMALIZATION_MODE, norm, status);
@@ -1059,6 +1082,7 @@ void ucol_initUCA(UErrorCode *status) {
             if(U_SUCCESS(*status)){
                 newUCA->rb = NULL;
 		newUCA->binary = NULL;
+		newUCA->validLocale = NULL;
 		newUCA->requestedLocale = NULL;
 		newUCA->hasRealData = FALSE; // real data lives in .dat file...
                 umtx_lock(NULL);
@@ -8229,12 +8253,19 @@ ucol_getLocale(const UCollator *coll, ULocDataLocaleType type, UErrorCode *statu
   }
   switch(type) {
   case ULOC_ACTUAL_LOCALE:
-    if(coll->binary != NULL) {
+    // validLocale is set only if service registration has explicitly set the
+    // requested and valid locales.  if this is the case, the actual locale
+    // is considered to be the valid locale.
+    if (coll->validLocale != NULL) {
+      result = coll->validLocale;
+    } else if(coll->binary != NULL) {
       result = ures_getLocale(coll->binary, status);
     }
     break;
   case ULOC_VALID_LOCALE:
-    if(coll->rb != NULL) {
+    if (coll->validLocale != NULL) {
+      result = coll->validLocale;
+    } else if(coll->rb != NULL) {
       result = ures_getLocale(coll->rb, status);
     } 
     break;

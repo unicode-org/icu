@@ -360,6 +360,9 @@ ucol_getSortKeySize(const UCollator *coll, collIterate *s,
 U_CAPI uint8_t* U_EXPORT2 
 ucol_cloneRuleData(const UCollator *coll, int32_t *length, UErrorCode *status);
 
+U_CAPI void U_EXPORT2
+ucol_setReqValidLocales(UCollator *coll, char *requestedLocaleToAdopt, char *validLocaleToAdopt);
+
 #define UCOL_SPECIAL_FLAG 0xF0000000
 #define UCOL_TAG_SHIFT 24
 #define UCOL_TAG_MASK 0x0F000000
@@ -718,6 +721,7 @@ struct UCollator {
     UColOptionSet  *options;
     SortKeyGenerator *sortKeyGen;
     uint32_t *latinOneCEs;
+    char* validLocale;
     char* requestedLocale;
     UResourceBundle *rb;
     UResourceBundle *binary;

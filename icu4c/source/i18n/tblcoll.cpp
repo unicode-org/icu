@@ -66,6 +66,7 @@
 #include "uresimp.h"
 #include "uhash.h"
 #include "cmemory.h"
+#include "cstring.h"
 
 /* public RuleBasedCollator constructor ---------------------------------- */
 
@@ -557,6 +558,23 @@ const Locale RuleBasedCollator::getLocale(ULocDataLocaleType type, UErrorCode &s
   } else {
     return Locale(result);
   }
+}
+
+void
+RuleBasedCollator::setLocales(const Locale& requestedLocale, const Locale& validLocale) {
+    size_t rlen = uprv_strlen(requestedLocale.getName());
+    char* rloc  = (char *)uprv_malloc((rlen+1)*sizeof(char));
+    if (rloc) {
+        uprv_strcpy(rloc, requestedLocale.getName());
+        size_t vlen = uprv_strlen(validLocale.getName());
+        char* vloc = (char*)uprv_malloc((vlen+1)*sizeof(char));
+        if (vloc) {
+            uprv_strcpy(vloc, validLocale.getName());
+            ucol_setReqValidLocales(ucollator, rloc, vloc);
+            return;
+        }
+        uprv_free(rloc);
+    }
 }
 
 // RuleBaseCollatorNew private constructor ----------------------------------
