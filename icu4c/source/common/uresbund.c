@@ -497,7 +497,9 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID, UEr
  */
 static void entryClose(UResourceDataEntry *resB);
 /* INTERNAL: */
-static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r, const char *key, UResourceDataEntry *realData, UResourceBundle *resB, UErrorCode *status) {
+static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r, 
+                                         const char *key, UResourceDataEntry *realData, 
+                                         UResourceBundle *resB, UErrorCode *status) {
     if(status == NULL || U_FAILURE(*status)) {
         return resB;
     }
@@ -521,6 +523,9 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r, 
           locale++;
           path = chAlias;
         }
+        if(path != NULL && uprv_strlen(path) == 0) {
+          path = realData->fPath;
+        }
 
         keyPath = uprv_strchr(locale, '/');
         if(keyPath == NULL) {
@@ -533,17 +538,18 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r, 
         {
           char *kp = NULL;
           /* got almost everything, let's try to open */
-          UResourceBundle *res = ures_open(path, locale, status);
+          UResourceBundle *main = ures_open(path, locale, status); 
+          UResourceBundle *res = main;
           UResourceBundle *res2 = resB;
-          while(kp=uprv_strchr(keyPath, '/')) {
+          while((kp=uprv_strchr(keyPath, '/')) && U_SUCCESS(*status)) {
             *kp = 0;
             res2 = ures_getByKey(res, keyPath, res2, status);
-            ures_close(res);
+            /*ures_close(res);*/
             res = res2;
             keyPath = kp+1;
           }
           res2 = ures_getByKey(res, keyPath, res2, status);
-          ures_close(res);
+          ures_close(main);
           /*res = res2;*/
 
           /* here we have the wanted resource */
