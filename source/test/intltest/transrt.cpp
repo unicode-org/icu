@@ -990,11 +990,11 @@ void TransliteratorRoundTripTest::TestKatakana() {
 
 void TransliteratorRoundTripTest::TestJamo() {
     RTTest t("Latin-Jamo");
-    Legal *legal = new Legal();
+    Legal *legal = new LegalJamo();
     t.test(UnicodeString("[a-zA-Z]", ""), 
            UnicodeString("[\\u1100-\\u1112 \\u1161-\\u1175 \\u11A8-\\u11C2]", 
                          ""), 
-           NULL, this, quick, new LegalJamo());
+           NULL, this, quick, legal);
     delete legal;
 }
 
