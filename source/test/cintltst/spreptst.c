@@ -290,7 +290,6 @@ unescapeData(const char* src, int32_t srcLen,
 static void Test_nfs4_cis_prep(void){
     int32_t i=0;
 
-    int32_t expLen = 0;
     for(i=0;i< (int32_t)(sizeof(conformanceTestCases)/sizeof(conformanceTestCases[0]));i++){
         const char* src = conformanceTestCases[i].in;
         UErrorCode status = U_ZERO_ERROR;
