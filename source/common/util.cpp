@@ -11,6 +11,7 @@
 #include "util.h"
 #include "unicode/uchar.h"
 #include "unicode/unimatch.h"
+#include "uprops.h"
 
 // Define UChar constants using hex for EBCDIC compatibility
 
@@ -132,7 +133,7 @@ int32_t ICU_Utility::skipWhitespace(const UnicodeString& str, int32_t& pos,
     int32_t p = pos;
     while (p < str.length()) {
         UChar32 c = str.char32At(p);
-        if (!u_isWhitespace(c)) {
+        if (!uprv_isRuleWhiteSpace(c)) {
             break;
         }
         p += UTF_CHAR_LENGTH(c);
@@ -200,7 +201,7 @@ int32_t ICU_Utility::parsePattern(const UnicodeString& rule, int32_t pos, int32_
                 return -1;
             }
             c = rule.charAt(pos++);
-            if (!u_isWhitespace(c)) {
+            if (!uprv_isRuleWhiteSpace(c)) {
                 return -1;
             }
             // FALL THROUGH to skipWhitespace
@@ -287,14 +288,14 @@ int32_t ICU_Utility::parseInteger(const UnicodeString& rule, int32_t& pos, int32
  * first character to examine.  It must be less than str.length(),
  * and it must not point to a whitespace character.  That is, must
  * have pos < str.length() and
- * !UCharacter::isWhitespace(str.char32At(pos)).  On
+ * !uprv_isRuleWhiteSpace(str.char32At(pos)).  On
  * OUTPUT, the position after the last parsed character.
  * @return the Unicode identifier, or an empty string if there is
  * no valid identifier at pos.
  */
 UnicodeString ICU_Utility::parseUnicodeIdentifier(const UnicodeString& str, int32_t& pos) {
     // assert(pos < str.length());
-    // assert(!UCharacter::isWhitespace(str.char32At(pos)));
+    // assert(!uprv_isRuleWhiteSpace(str.char32At(pos)));
     UnicodeString buf;
     int p = pos;
     while (p < str.length()) {
@@ -456,7 +457,7 @@ void ICU_Utility::appendToRule(UnicodeString& rule,
               !((c >= 0x0030/*'0'*/ && c <= 0x0039/*'9'*/) ||
                 (c >= 0x0041/*'A'*/ && c <= 0x005A/*'Z'*/) ||
                 (c >= 0x0061/*'a'*/ && c <= 0x007A/*'z'*/))) ||
-             u_isWhitespace(c)) {
+             uprv_isRuleWhiteSpace(c)) {
         quoteBuf.append(c);
         // Double ' within a quote
         if (c == APOSTROPHE) {

@@ -18,6 +18,7 @@
 #include "upropset.h"
 #include "util.h"
 #include "uvector.h"
+#include "uprops.h"
 
 // HIGH_VALUE > all valid values. 110000 for codepoints
 #define UNICODESET_HIGH 0x0110000
@@ -390,7 +391,7 @@ UnicodeSet& UnicodeSet::set(UChar32 start, UChar32 end) {
  * @param pattern a string specifying what characters are in the set
  * @param ignoreSpaces if <code>true</code>, all spaces in the
  * pattern are ignored.  Spaces are those characters for which
- * <code>Character.isSpaceChar()</code> is <code>true</code>.
+ * <code>uprv_isRuleWhiteSpace()</code> is <code>true</code>.
  * Characters preceded by '\\' are escaped, losing any special
  * meaning they otherwise have.  Spaces may be included by
  * escaping them.
@@ -410,7 +411,7 @@ UnicodeSet& UnicodeSet::applyPattern(const UnicodeString& pattern,
     // Skip over trailing whitespace
     int32_t i = pos.getIndex();
     int32_t n = pattern.length();
-    while (i<n && u_isWhitespace(pattern.charAt(i))) {
+    while (i<n && uprv_isRuleWhiteSpace(pattern.charAt(i))) {
         ++i;
     }
 
@@ -469,7 +470,7 @@ void UnicodeSet::_appendToPat(UnicodeString& buf, UChar32 c, UBool useHexEscape)
         break;
     default:
         // Escape whitespace
-        if (u_isspace(c)) {
+        if (uprv_isRuleWhiteSpace(c)) {
             buf.append(BACKSLASH);
         }
         break;
@@ -1638,9 +1639,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
             i += UTF_CHAR_LENGTH(c);
         }
 
-        // Ignore whitespace.  This is not Unicode whitespace, but Java
-        // whitespace, a subset of Unicode whitespace.
-        if (u_isspace(c)) {
+        if (uprv_isRuleWhiteSpace(c)) {
             continue;
         }
 
