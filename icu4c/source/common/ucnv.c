@@ -56,7 +56,7 @@ void UCNV_DEBUG_LOG(char *what, char *who, void *p, int l)
 
 typedef struct UAmbiguousConverter {
     const char *name;
-    UChar variant5c;
+    const UChar variant5c;
 } UAmbiguousConverter;
 
 static const UAmbiguousConverter ambiguousConverters[]={
