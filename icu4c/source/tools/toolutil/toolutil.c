@@ -31,6 +31,8 @@
 #   define NOIME
 #   define NOMCX
 #   include <windows.h>
+#   include <direct.h>
+#   include <errno.h>
 #endif
 
 U_CAPI const char * U_EXPORT2
@@ -73,6 +75,19 @@ findBasename(const char *filename) {
         return basename+1;
     } else {
         return filename;
+    }
+}
+
+U_CAPI void U_EXPORT2
+uprv_mkdir(const char *pathname, UErrorCode *status) {
+    int retVal = 0;
+#if defined(U_WINDOWS)
+    retVal = _mkdir(pathname);
+#else
+    retVal = mkdir(pathname, S_IRWXU | (S_IROTH | S_IXOTH) | (S_IROTH | S_IXOTH));
+#endif
+    if (retVal && errno != EEXIST) {
+        *status = U_FILE_ACCESS_ERROR;
     }
 }
 
