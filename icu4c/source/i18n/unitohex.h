@@ -52,8 +52,6 @@ private:
         BACKSLASH = 0x005C  // '\\'
     };
 
-    static const UChar HEX_DIGITS[32];
-
     /**
      * ID for this transliterator.
      */
@@ -85,12 +83,6 @@ private:
      * lowercase.  Set by setUppercase() and returned by isUppercase().
      */
     UBool uppercase;
-
-    /**
-     * The address of this static class variable serves as this class's ID
-     * for ICU "poor man's RTTI".
-     */
-    static const char fgClassID;
 
 public:
 
@@ -212,25 +204,15 @@ public:
      *
      * @draft ICU 2.2
      */
-    virtual inline UClassID getDynamicClassID() const;
+    virtual UClassID getDynamicClassID() const;
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @draft ICU 2.2
      */
-    static inline UClassID getStaticClassID();
+    static UClassID getStaticClassID();
 };
-
-inline UnicodeToHexTransliterator::~UnicodeToHexTransliterator() {}
-
-inline UClassID
-UnicodeToHexTransliterator::getStaticClassID()
-{ return (UClassID)&fgClassID; }
-
-inline UClassID
-UnicodeToHexTransliterator::getDynamicClassID() const
-{ return UnicodeToHexTransliterator::getStaticClassID(); }
 
 U_NAMESPACE_END
 #endif /* #if !UCONFIG_NO_TRANSLITERATION */
