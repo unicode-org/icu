@@ -21,8 +21,6 @@ static const UChar FORWARD_OP[] = {32,62,32,0}; // " > "
 
 U_NAMESPACE_BEGIN
 
-const UChar TransliterationRule::ETHER = 0xFFFF;
-
 /**
  * Construct a new rule with the given input, output text, and other
  * attributes.  A cursor position may be specified for the output text.

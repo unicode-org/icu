@@ -23,7 +23,7 @@ class TransliterationRuleData;
  * that perform match and/or replace operations on Unicode strings.
  * @author Alan Liu
  */
-class U_I18N_API UnicodeFunctor {
+class U_COMMON_API UnicodeFunctor {
 
  public:
 

@@ -20,8 +20,8 @@
 #include "unicode/utypes.h"
 #include "unicode/uiter.h"
 #include "unicode/unorm.h"
+#include "unicode/uset.h"
 #include "utrie.h"
-#include "uset.h"
 #include "ustr_imp.h"
 
 /*

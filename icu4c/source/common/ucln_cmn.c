@@ -48,6 +48,7 @@ u_cleanup(void)
         }
 
     }
+    upropset_cleanup();
     unorm_cleanup();
     unames_cleanup();
     uchar_cleanup();

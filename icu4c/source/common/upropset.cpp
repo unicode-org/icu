@@ -13,7 +13,7 @@
 #include "unicode/uchar.h"
 #include "hash.h"
 #include "mutex.h"
-#include "ucln_in.h"
+#include "ucln.h"
 #include "charstr.h"
 
 
@@ -115,10 +115,9 @@ static const UChar INCLUSIONS_PATTERN[] =
 // "[^\\u3401-\\u4DB5 \\u4E01-\\u9FA5 \\uAC01-\\uD7A3 \\uD801-\\uDB7F \\uDB81-\\uDBFF \\uDC01-\\uDFFF \\uE001-\\uF8FF \\U0001044F-\\U0001CFFF \\U0001D801-\\U0001FFFF \\U00020001-\\U0002A6D6 \\U0002A6D8-\\U0002F7FF \\U0002FA1F-\\U000E0000 \\U000E0081-\\U000EFFFF \\U000F0001-\\U000FFFFD \\U00100001-\\U0010FFFD]"
 
 /**
- * Cleanup function for transliterator component; delegates to
- * Transliterator::cleanupRegistry().
+ * Cleanup function for UnicodePropertySet
  */
-U_CFUNC UBool unicodePropertySet_cleanup(void) {
+U_CFUNC UBool upropset_cleanup(void) {
     if (NAME_MAP != NULL) {
         delete NAME_MAP; NAME_MAP = NULL;
         delete CATEGORY_MAP; CATEGORY_MAP = NULL;
@@ -523,8 +522,6 @@ void UnicodePropertySet::init() {
     NAME_MAP = new Hashtable(TRUE);
     CATEGORY_MAP = new Hashtable(TRUE);
     SCRIPT_CACHE = new UnicodeSet[(size_t)USCRIPT_CODE_LIMIT];
-
-    ucln_i18n_registerCleanup(); // Call this when allocating statics
 
     // NOTE:  We munge all search keys to have no whitespace
     // and upper case.  As such, all stored keys should have

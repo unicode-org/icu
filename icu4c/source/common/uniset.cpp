@@ -14,7 +14,6 @@
 #include "unicode/uscript.h"
 #include "symtable.h"
 #include "cmemory.h"
-#include "rbt_rule.h"
 #include "uhash.h"
 #include "upropset.h"
 #include "util.h"
@@ -780,7 +779,7 @@ UMatchDegree UnicodeSet::matches(const Replaceable& text,
         // Strings, if any, have length != 0, so we don't worry
         // about them here.  If we ever allow zero-length strings
         // we much check for them here.
-        if (contains(TransliterationRule::ETHER)) {
+        if (contains(U_ETHER)) {
             return incremental ? U_PARTIAL_MATCH : U_MATCH;
         } else {
             return U_MISMATCH;
@@ -1382,6 +1381,87 @@ UnicodeSet& UnicodeSet::compact() {
     return *this;
 }
 
+int32_t UnicodeSet::serialize(uint16_t *dest, int32_t destCapacity, UErrorCode& ec) const {
+    int32_t bmpLength, length, destLength;
+
+    if (U_FAILURE(ec)) {
+        return 0;
+    }
+
+    if (destCapacity<0 || (destCapacity>0 && dest==NULL)) {
+        ec=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    /* count necessary 16-bit units */
+    length=this->len-1; // Subtract 1 to ignore final UNICODESET_HIGH
+    // assert(length>=0);
+    if (length==0) {
+        /* empty set */
+        if (destCapacity>0) {
+            *dest=0;
+        } else {
+            ec=U_BUFFER_OVERFLOW_ERROR;
+        }
+        return 1;
+    }
+    /* now length>0 */
+
+    if (this->list[length-1]<=0xffff) {
+        /* all BMP */
+        bmpLength=length;
+    } else if (this->list[0]>=0x10000) {
+        /* all supplementary */
+        bmpLength=0;
+        length*=2;
+    } else {
+        /* some BMP, some supplementary */
+        for (bmpLength=0; bmpLength<length && this->list[bmpLength]<=0xffff; ++bmpLength) {}
+        length=bmpLength+2*(length-bmpLength);
+    }
+
+    /* length: number of 16-bit array units */
+    if (length>0x7fff) {
+        /* there are only 15 bits for the length in the first serialized word */
+        ec=U_INDEX_OUTOFBOUNDS_ERROR;
+        return 0;
+    }
+
+    /*
+     * total serialized length:
+     * number of 16-bit array units (length) +
+     * 1 length unit (always) +
+     * 1 bmpLength unit (if there are supplementary values)
+     */
+    destLength=length+((length>bmpLength)?2:1);
+    if (destLength<=destCapacity) {
+        const UChar32 *p;
+        int32_t i;
+
+        *dest=(uint16_t)length;
+        if (length>bmpLength) {
+            *dest|=0x8000;
+            *++dest=(uint16_t)bmpLength;
+        }
+        ++dest;
+
+        /* write the BMP part of the array */
+        p=this->list;
+        for (i=0; i<bmpLength; ++i) {
+            *dest++=(uint16_t)*p++;
+        }
+
+        /* write the supplementary part of the array */
+        for (; i<length; i+=2) {
+            *dest++=(uint16_t)(*p>>16);
+            *dest++=(uint16_t)*p++;
+        }
+    } else {
+        ec=U_BUFFER_OVERFLOW_ERROR;
+    }
+    return destLength;
+}
+
 //----------------------------------------------------------------
 // Implementation: Pattern parsing
 //----------------------------------------------------------------
@@ -1789,7 +1869,7 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
             if (anchor == 2) {
                 rebuildPattern = TRUE;
                 newPat.append((UChar)SymbolTable::SYMBOL_REF);
-                add(TransliterationRule::ETHER);
+                add(U_ETHER);
             }
             mode = 4;
             break;
@@ -1833,13 +1913,13 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
         return;
     }
 
-    // Treat a trailing '$' as indicating ETHER.  This code is only
+    // Treat a trailing '$' as indicating U_ETHER.  This code is only
     // executed if symbols == NULL; otherwise other code parses the
     // anchor.
     if (lastChar == (UChar)SymbolTable::SYMBOL_REF && !isLastLiteral) {
         rebuildPattern = TRUE;
         newPat.append(lastChar);
-        add(TransliterationRule::ETHER);
+        add(U_ETHER);
     }
 
     else if (lastChar != NONE) {

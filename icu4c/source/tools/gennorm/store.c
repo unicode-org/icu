@@ -25,7 +25,7 @@
 #include "filestrm.h"
 #include "unicode/udata.h"
 #include "utrie.h"
-#include "uset.h"
+#include "unicode/uset.h"
 #include "unewdata.h"
 #include "unormimp.h"
 #include "gennorm.h"
@@ -806,7 +806,7 @@ setHangulJamoSpecials() {
         norm->combiningFlags=1;
 
         /* for each Jamo L create a set with its associated Hangul block */
-        norm->canonStart=uset_open(hangul, hangul+21*28);
+        norm->canonStart=uset_open(hangul, hangul+21*28-1);
         hangul+=21*28;
     }
 
@@ -1000,13 +1000,14 @@ postParseFn(void *context, uint32_t code, Norm *norm) {
         c=norm->nfd[0];
         otherNorm=createNorm(c);
         if(otherNorm->canonStart==NULL) {
-            otherNorm->canonStart=uset_open(code, code+1);
+            otherNorm->canonStart=uset_open(code, code);
             if(otherNorm->canonStart==NULL) {
                 fprintf(stderr, "gennorm error: out of memory in uset_open()\n");
                 exit(U_MEMORY_ALLOCATION_ERROR);
             }
         } else {
-            if(!uset_add(otherNorm->canonStart, code)) {
+            uset_add(otherNorm->canonStart, code);
+            if(!uset_contains(otherNorm->canonStart, code)) {
                 fprintf(stderr, "gennorm error: uset_add(setOf(U+%4lx), U+%4x)\n", c, code);
                 exit(U_INTERNAL_PROGRAM_ERROR);
             }
@@ -1201,15 +1202,29 @@ makeFCD() {
     }
 }
 
+/**
+ * If the given set contains exactly one character, then return it.
+ * Otherwise return -1.
+ */
+static int32_t
+usetContainsOne(const USet* set) {
+    if (uset_size(set) == 1) {
+        UChar32 start, end;
+        uset_getRange(set, 0, &start, &end);
+        return start;
+    }
+    return -1;
+}
+
 static void
 makeCanonSetFn(void *context, uint32_t code, Norm *norm) {
-    if(!uset_isEmpty(norm->canonStart)) {
+    if(norm->canonStart!=NULL && !uset_isEmpty(norm->canonStart)) {
         uint16_t *table;
         int32_t c, tableLength;
         UErrorCode errorCode=U_ZERO_ERROR;
 
         /* does the set contain exactly one code point? */
-        c=uset_containsOne(norm->canonStart);
+        c=usetContainsOne(norm->canonStart);
 
         /* add an entry to the BMP or supplementary search table */
         if(code<=0xffff) {

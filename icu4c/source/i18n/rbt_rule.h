@@ -49,16 +49,6 @@ class UnicodeFunctor;
  */
 class TransliterationRule {
 
-public:
-
-    /**
-     * The character at index i, where i < contextStart || i >= contextLimit,
-     * is ETHER.  This allows explicit matching by rules and UnicodeSets
-     * of text outside the context.  In traditional terms, this allows anchoring
-     * at the start and/or end.
-     */
-    static const UChar ETHER;
-
 private:
 
     // TODO Eliminate the pattern and keyLength data members.  They

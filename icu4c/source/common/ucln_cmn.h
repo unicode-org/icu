@@ -46,4 +46,6 @@ U_CFUNC UBool udata_cleanup(void);
 
 U_CFUNC UBool putil_cleanup(void);
 
+U_CFUNC UBool upropset_cleanup(void);
+
 #endif

@@ -14,6 +14,15 @@
 U_NAMESPACE_BEGIN
 
 /**
+ * U_ETHER is used to represent character values for positions outside
+ * a range.  For example, transliterator uses this to represent
+ * characters outside the range contextStart..contextLimit-1.  This
+ * allows explicit matching by rules and UnicodeSets of text outside a
+ * defined range.
+ */
+#define U_ETHER ((UChar)0xFFFF)
+
+/**
  * <code>UnicodeFilter</code> defines a protocol for selecting a
  * subset of the full range (U+0000 to U+10FFFF) of Unicode characters.
  * Currently, filters are used in conjunction with classes like {@link
@@ -38,7 +47,7 @@ U_NAMESPACE_BEGIN
  * @see UnicodeFilterLogic
  * @stable
  */
-class U_I18N_API UnicodeFilter : public UnicodeFunctor, public UnicodeMatcher {
+class U_COMMON_API UnicodeFilter : public UnicodeFunctor, public UnicodeMatcher {
 
 public:
     /**

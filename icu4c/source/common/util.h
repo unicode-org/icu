@@ -22,7 +22,7 @@ U_NAMESPACE_BEGIN
 
 class UnicodeMatcher;
 
-class ICU_Utility {
+class U_COMMON_API ICU_Utility {
  public:
 
     /**
