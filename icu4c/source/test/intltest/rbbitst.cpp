@@ -554,7 +554,6 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
 {
     if (exec) logln("TestSuite RuleBasedBreakIterator: ");
     switch (index) {
-
         case 0: name = "TestJapaneseLineBreak";
             if(exec) TestJapaneseLineBreak();                 break;
         case 1: name = "TestStatusReturn";
@@ -575,11 +574,14 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
             if(exec) TestEndBehaviour();                       break;
         case 7: name = "TestBug4153072";
             if(exec) TestBug4153072();                         break;
-        case 8: name = "TestWordBoundary";
+        case 8: name = "TestWordBreaks";
+             if(exec) TestWordBreaks();                   break;
+        case 9: name = "TestWordBoundary";
              if(exec) TestWordBoundary();                 break;
         default: name = ""; break; //needed to end loop
     }
-    /*** TODO synwee
+
+    /***
     switch (index) {
         case 0: name = "TestExtended";
              if(exec) TestExtended();                          break;
@@ -630,8 +632,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
         case 17: name = "TestSentBreaks";
              if(exec) TestSentBreaks();                 break;
         default: name = ""; break; //needed to end loop
-    }
-    ***/
+    } ***/
 }
 
 
@@ -3029,7 +3030,10 @@ void RBBITest::TestWordBreaks(void)
     BreakIterator *bi = BreakIterator::createWordInstance(locale, status);
     UChar         str[25]; 
     char          *strlist[] = 
-    {"\\U000e0042\\u002e\\u0fb8\\u09ef\\u0ed1\\u2044",
+    {
+    "\\u0602\\u2019\\ua191\\U000e0063\\u0a4c\\u003a\\ub4b5\\u003a\\u827f\\u002e",
+    "\\u7f1f\\uc634\\u65f8\\u0944\\u04f2\\uacdf\\u1f9c\\u05f4\\u002e",
+    "\\U000e0042\\u002e\\u0fb8\\u09ef\\u0ed1\\u2044",
     "\\u003b\\u024a\\u102e\\U000e0071\\u0600",
     "\\u2027\\U000e0067\\u0a47\\u00b7",
     "\\u1fcd\\u002c\\u07aa\\u0027\\u11b0",
@@ -3057,11 +3061,12 @@ void RBBITest::TestWordBreaks(void)
     "\\U000e005d\\u2044\\u0731\\u0650\\u0061",
     "\\u003a\\u0664\\u00b7\\u1fba",
     "\\u003b\\u0027\\u00b7\\u47a3",
+    "\\u2027\\U000e0067\\u0a42\\u00b7\\ubddf\\uc26c\\u003a\\u4186\\u041b",
+    "\\u0027\\u003a\\U0001d70f\\U0001d7df\\ubf4a\\U0001d7f5\\U0001d177\\u003a\\u0e51\\u1058\\U000e0058\\u00b7\\u0673",
     "\\uc30d\\u002e\\U000e002c\\u0c48\\u003a\\ub5a1\\u0661\\u002c",
     };
     int loop;
     for (loop = 0; loop < (sizeof(strlist) / sizeof(char *)); loop ++) {
-        printf("looping %d\n", loop);
         u_unescape(strlist[loop], str, 25);
         UnicodeString ustr(str);
         // RBBICharMonkey monkey;
@@ -3147,7 +3152,6 @@ void RBBITest::TestWordBoundary(void)
     };
     int loop;
     for (loop = 0; loop < (sizeof(strlist) / sizeof(char *)); loop ++) {
-        printf("looping %d\n", loop);
         u_unescape(strlist[loop], str, 20);
         UnicodeString ustr(str);
         int forward[20];
@@ -3501,10 +3505,14 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, char *name, uint
                 // Start of the range is the last point where expected and actual results
                 //   both agreed that there was a break position.
                 int startContext = i;
+                int32_t count = 0;
                 for (;;) {
                     if (startContext==0) { break; }
                     startContext --;
-                    if (expectedBreaks[startContext] != 0) {break;}
+                    if (expectedBreaks[startContext] != 0) {
+                        if (count == 2) break;
+                        count ++;
+                    }
                 }
 
                 // End of range is two expected breaks past the start position.
@@ -3513,19 +3521,21 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, char *name, uint
                 for (ci=0; ci<2; ci++) {  // Number of items to include in error text.
                     for (;;) {
                         if (endContext >= testText.length()) {break;}
-                        if (expectedBreaks[endContext-1] != 0) { break;}
+                        if (expectedBreaks[endContext-1] != 0) { 
+                            if (count == 0) break;
+                            count --;
+                        }
                         endContext ++;
                     }
                 }
 
                 // Format looks like   "<data><>\uabcd\uabcd<>\U0001abcd...</data>"
                 UnicodeString errorText = "<data>";
-                /***
-                if (strcmp(errorType, "previous()") == 0) {
+                /*** if (strcmp(errorType, "next()") == 0) {
                     startContext = 0;
                     int j = i;
                     while (true) {
-                        if (reverseBreaks[j ++] != 0) {
+                        if (forwardBreaks[j ++] != 0) {
                             printf("%d\n", j);
                             break;
                         }
@@ -3533,9 +3543,8 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, char *name, uint
                             printf("continue %d\n", j);
                         }
                     }
-                    endContext = j - 1;
-                }
-                ***/
+                    endContext = j + 1;
+                }***/
                 for (ci=startContext; ci<endContext;) {
                     UnicodeString hexChars("0123456789abcdef");
                     UChar32  c;
