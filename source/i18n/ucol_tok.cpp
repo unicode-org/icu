@@ -389,6 +389,10 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
         }
       }
     } else {
+      // This here would be the proper way to do it, but we then need to require quoting all isWhitespace in 
+//      while(u_isWhitespace(ch)) {
+//        ch = *(++src->current);
+//      }
       /* Sets the strength for this entry */
       switch (ch) {
         case 0x003D/*'='*/ : 
@@ -504,45 +508,52 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
             }
           }
           break;
-
         /* Ignore the white spaces */
         case 0x0009/*'\t'*/:
         case 0x000C/*'\f'*/:
         case 0x000D/*'\r'*/:
         case 0x000A/*'\n'*/:
         case 0x0020/*' '*/:  
+        case 0x2028/* Unicode line break (UniPad likes to add it)*/:
           break; /* skip whitespace TODO use Unicode */
-
         case 0x002F/*'/'*/:
-                /* This entry has an extension. */
-          inChars = FALSE;
+          wasInQuote = FALSE; /* if we were copying source characters, we want to stop now */
+          inChars = FALSE; /* we're now processing expansion */
           break;
 
         /* found a quote, we're gonna start copying */
         case 0x0027/*'\''*/:
-          inQuote = TRUE;
-          wasInQuote = TRUE;
+          if (newStrength == UCOL_TOK_UNSET) { /* quote is illegal until we have a strength */
+            *status = U_INVALID_FORMAT_ERROR;
+            return NULL;
+          }
 
-          if (newCharsLen == 0) {
-            charsOffset = src->extraCurrent - src->source;
-            newCharsLen++;
-          } else if (inChars) { /* we're reading some chars */
-            charsOffset = src->extraCurrent - src->source;
-            if(newCharsLen != 0) {
-              uprv_memcpy(src->extraCurrent, src->current - newCharsLen, newCharsLen*sizeof(UChar));
-              src->extraCurrent += newCharsLen;
+          inQuote = TRUE;
+
+          if(inChars) { /* we're doing characters */
+            if(wasInQuote == FALSE) {
+              charsOffset = src->extraCurrent - src->source;
+            }
+            if (newCharsLen != 0) {
+                uprv_memcpy(src->extraCurrent, src->current - newCharsLen, newCharsLen*sizeof(UChar));
+                src->extraCurrent += newCharsLen;
             }
             newCharsLen++;
-          } else {
-            if(newExtensionLen != 0) {
+          } else { /* we're doing an expansion */
+            if(wasInQuote == FALSE) {
+              extensionOffset = src->extraCurrent - src->source;
+            }
+            if (newExtensionLen != 0) {
               uprv_memcpy(src->extraCurrent, src->current - newExtensionLen, newExtensionLen*sizeof(UChar));
               src->extraCurrent += newExtensionLen;
             }
             newExtensionLen++;
           }
 
-          ch = *(++(src->current)); /*pattern[++index]; */
-          if(ch == 0x0027) {
+          wasInQuote = TRUE;
+
+          ch = *(++(src->current)); 
+          if(ch == 0x0027) { /* copy the double quote */
             *src->extraCurrent++ = ch;
             inQuote = FALSE;
           }
@@ -593,6 +604,18 @@ const UChar *ucol_tok_parseNextToken(UColTokenParser *src,
       }
       if(src->extraCurrent == src->extraEnd) {
         /* reallocate */
+        UChar *newSrc = (UChar *)uprv_realloc(src->source, (src->extraEnd-src->source)*2*sizeof(UChar));
+        if(newSrc != NULL) {
+          src->current = newSrc + (src->current - src->source);
+          src->extraCurrent = newSrc + (src->extraCurrent - src->source);
+          src->end = newSrc + (src->end - src->source);
+          src->extraEnd = newSrc + (src->extraEnd-src->source)*2;
+          src->sourceCurrent = newSrc + (src->sourceCurrent-src->source);
+          src->source = newSrc;
+        } else {
+          *status = U_MEMORY_ALLOCATION_ERROR;
+          return NULL;
+        }
       }
     }
 
