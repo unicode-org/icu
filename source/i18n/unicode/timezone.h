@@ -343,14 +343,14 @@ public:
      * that is returned (in other words, what is the adjusted GMT offset in this time zone
      * at this particular date and time?).  For the time zones produced by createTimeZone(),
      * the reference data is specified according to the Gregorian calendar, and the date
-     * and time fields are in GMT, NOT local time.
+     * and time fields are local standard time.
      *
      * @param era        The reference date's era
      * @param year       The reference date's year
      * @param month      The reference date's month (0-based; 0 is January)
      * @param day        The reference date's day-in-month (1-based)
      * @param dayOfWeek  The reference date's day-of-week (1-based; 1 is Sunday)
-     * @param millis     The reference date's milliseconds in day, UTT (NOT local time).
+     * @param millis     The reference date's milliseconds in day, local standard time
      * @param status     Output param to filled in with a success or an error.
      * @return           The offset in milliseconds to add to GMT to get local time.
      * @stable ICU 2.0
@@ -376,6 +376,32 @@ public:
     virtual int32_t getOffset(uint8_t era, int32_t year, int32_t month, int32_t day,
                            uint8_t dayOfWeek, int32_t milliseconds,
                            int32_t monthLength, UErrorCode& status) const = 0;
+
+    /**
+     * Returns the time zone raw and GMT offset for the given moment
+     * in time.  Upon return, local-millis = GMT-millis + rawOffset +
+     * dstOffset.  All computations are performed in the proleptic
+     * Gregorian calendar.  The default implementation in the TimeZone
+     * class delegates to the 8-argument getOffset().
+     *
+     * @param date moment in time for which to return offsets, in
+     * units of milliseconds from January 1, 1970 0:00 GMT, either GMT
+     * time or local wall time, depending on `local'.
+     * @param local if true, `date' is local wall time; otherwise it
+     * is in GMT time.
+     * @param rawOffset output parameter to receive the raw offset, that
+     * is, the offset not including DST adjustments
+     * @param dstOffset output parameter to receive the DST offset,
+     * that is, the offset to be added to `rawOffset' to obtain the
+     * total offset between local and GMT time. If DST is not in
+     * effect, this value is zero; otherwise it is a positive value,
+     * typically one hour.
+     * @param ec input-output error code
+     *
+     * @draft ICU 2.8
+     */
+    virtual void getOffset(UDate date, UBool local, int32_t& rawOffset,
+                           int32_t& dstOffset, UErrorCode& ec) const;
 
     /**
      * Sets the TimeZone's raw GMT offset (i.e., the number of milliseconds to add
