@@ -184,6 +184,24 @@ UCM_SOURCE=$(UCM_SOURCE) $(UCM_SOURCE_LOCAL)
 
 CNV_FILES=$(UCM_SOURCE:.ucm=.cnv)
 
+!IF EXISTS("$(ICUSRCDATA)\$(ICUBRK)\brkfiles.mk")
+!INCLUDE "$(ICUSRCDATA)\$(ICUBRK)\brkfiles.mk"
+!IF EXISTS("$(ICUSRCDATA)\$(ICUBRK)\brklocal.mk")
+!INCLUDE "$(ICUSRCDATA)\$(ICUBRK)\brklocal.mk"
+BRK_SOURCE=$(BRK_SOURCE) $(BRK_SOURCE_LOCAL)
+!ELSE
+!MESSAGE Information: cannot find "brklocal.mk". Not building user-additional break iterator files.
+!ENDIF
+!ELSE
+!MESSAGE Warning: cannot find "brkfiles.mk"
+!ENDIF
+BRK_SOURCE=char.txt title.txt word.txt $(BRK_SOURCE)
+
+#
+#  Break iterator data files.
+#
+BRK_FILES=$(BRK_SOURCE:.txt=.brk)
+
 # Read list of locale resource bundle files
 !IF EXISTS("$(ICUSRCDATA)\$(ICULOC)\resfiles.mk")
 !INCLUDE "$(ICUSRCDATA)\$(ICULOC)\resfiles.mk"
@@ -272,12 +290,6 @@ INDEX_RES_FILES = res_index.res
 INDEX_COL_FILES = $(ICUCOL)\res_index.res
 INDEX_RBNF_FILES = $(ICURBNF)\res_index.res
 #INDEX_TRANSLIT_FILES = $(ICUTRNS)\res_index.res
-
-#
-#  Break iterator data files.
-#
-BRK_SOURCE_FILES = sent.txt char.txt line.txt word.txt title.txt line_th.txt word_th.txt
-BRK_FILES=$(BRK_SOURCE_FILES:.txt=.brk)
 
 # don't include COL_FILES
 ALL_RES = $(INDEX_RES_FILES) $(RB_FILES) $(MISC_FILES)
@@ -518,4 +530,4 @@ $(UCM_SOURCE) : {"$(ICUTOOLS)\makeconv\$(CFG)"}makeconv.exe
 
 $(MISC_SOURCE) $(RB_FILES) $(COL_COL_FILES) $(RBNF_RES_FILES) $(TRANSLIT_RES_FILES): {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe "$(ICUBLD)\ucadata.icu" "$(ICUBLD)\uprops.icu" "$(ICUBLD)\ucase.icu" "$(ICUBLD)\unorm.icu"
 
-$(BRK_SOURCE_FILES) : "$(ICUBLD)\uprops.icu" "$(ICUBLD)\ucase.icu" "$(ICUBLD)\unames.icu" "$(ICUBLD)\pnames.icu" "$(ICUBLD)\unorm.icu"
+$(BRK_SOURCE) : "$(ICUBLD)\uprops.icu" "$(ICUBLD)\ucase.icu" "$(ICUBLD)\unames.icu" "$(ICUBLD)\pnames.icu" "$(ICUBLD)\unorm.icu"

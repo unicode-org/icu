@@ -49,6 +49,9 @@
 			Name="Make Files"
 			Filter="mak;mk">
 			<File
+				RelativePath=".\brkitr\brkfiles.mk">
+			</File>
+			<File
 				RelativePath=".\coll\colfiles.mk">
 			</File>
 			<File
