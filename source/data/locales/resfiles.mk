@@ -28,7 +28,8 @@
 # These are usually aliased locales or the root locale.
 GENRB_ALIAS_SOURCE = \
 iw.txt iw_IL.txt\
-no.txt no_NO.txt no_NO_NY.txt
+no.txt no_NO.txt no_NO_NY.txt \
+ja_JP_TRADITIONAL.txt th_TH_TRADITIONAL.txt
 
 
 # Please try to keep this list in alphabetical order
@@ -76,7 +77,7 @@ hy.txt hy_AM.txt hy_AM_REVISED.txt\
 id.txt id_ID.txt\
 is.txt is_IS.txt\
 it.txt it_CH.txt it_IT.txt it_IT_PREEURO.txt\
-ja.txt ja_JP.txt ja_JP_TRADITIONAL.txt\
+ja.txt ja_JP.txt\
 kk.txt kk_KZ.txt\
 kl.txt kl_GL.txt\
 ko.txt ko_KR.txt\
@@ -109,7 +110,7 @@ sv.txt sv_FI.txt sv_SE.txt\
 sw.txt sw_KE.txt sw_TZ.txt\
 ta.txt ta_IN.txt\
 te.txt te_IN.txt\
-th.txt th_TH.txt th_TH_TRADITIONAL.txt\
+th.txt th_TH.txt\
 ti.txt ti_ET.txt ti_ER.txt\
 tr.txt tr_TR.txt\
 uk.txt uk_UA.txt\
