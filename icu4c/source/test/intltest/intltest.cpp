@@ -970,8 +970,10 @@ main(int argc, char* argv[])
     UErrorCode errorCode = U_ZERO_ERROR;
     UConverter *cnv = NULL;
     const char *warnOrErr = "Failure";
+#if !UCONFIG_NO_FORMATTING
     const char* zone = "America/Los_Angeles";
     int argzone = -1;
+#endif
 
 #ifdef XP_MAC_CONSOLE
     argc = ccommand( &argv );
@@ -1194,9 +1196,11 @@ main(int argc, char* argv[])
         }
     }else{
         for (int i = 1; i < argc; ++i) {
+#if !UCONFIG_NO_FORMATTING
             if (i == argzone) {
                 continue;
             }
+#endif
             if (argv[i][0] != '-') {
                 char* name = argv[i];
                 fprintf(stdout, "\n=== Handling test: %s: ===\n", name);
