@@ -706,7 +706,7 @@ parseCollationElements(char *tag, uint32_t startline, UErrorCode *status)
                 {
                     warning(line, "%%Collation could not be constructed from CollationElements - check context!");
                     if(isStrict()){
-                        *status = U_INVALID_FORMAT_ERROR;
+                        *status = intStatus;
                         return NULL;
                     }
                 }
