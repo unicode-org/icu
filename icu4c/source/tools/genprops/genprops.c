@@ -176,7 +176,6 @@ main(int argc, char* argv[]) {
 
     /* process parsed data */
     if(U_SUCCESS(errorCode)) {
-        repeatProps();
         compactProps();
         compactStage3();
         compactStage2();
@@ -272,20 +271,20 @@ mirrorLineFn(void *context,
     mirrorMappings[mirrorCount][0]=uprv_strtoul(fields[0][0], &end, 16);
     if(end<=fields[0][0] || end!=fields[0][1]) {
         fprintf(stderr, "genprops: syntax error in Mirror.txt field 0 at %s\n", fields[0][0]);
-        *pErrorCode = U_PARSE_ERROR;
+        *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
 
     mirrorMappings[mirrorCount][1]=uprv_strtoul(fields[1][0], &end, 16);
     if(end<=fields[1][0] || end!=fields[1][1]) {
         fprintf(stderr, "genprops: syntax error in Mirror.txt field 1 at %s\n", fields[1][0]);
-        *pErrorCode = U_PARSE_ERROR;
+        *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
 
     if(++mirrorCount==MAX_MIRROR_COUNT) {
         fprintf(stderr, "genprops: too many mirror mappings\n");
-        *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
+        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
         exit(U_INDEX_OUTOFBOUNDS_ERROR);
     }
 }
@@ -319,7 +318,7 @@ specialCasingLineFn(void *context,
     end=(char *)skipWhitespace(end);
     if(end<=fields[0][0] || end!=fields[0][1]) {
         fprintf(stderr, "genprops: syntax error in SpecialCasing.txt field 0 at %s\n", fields[0][0]);
-        *pErrorCode = U_PARSE_ERROR;
+        *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
 
@@ -346,7 +345,7 @@ specialCasingLineFn(void *context,
 
     if(++specialCasingCount==MAX_SPECIAL_CASING_COUNT) {
         fprintf(stderr, "genprops: too many special casing mappings\n");
-        *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
+        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
         exit(U_INDEX_OUTOFBOUNDS_ERROR);
     }
 }
@@ -413,7 +412,7 @@ caseFoldingLineFn(void *context,
     end=(char *)skipWhitespace(end);
     if(end<=fields[0][0] || end!=fields[0][1]) {
         fprintf(stderr, "genprops: syntax error in CaseFolding.txt field 0 at %s\n", fields[0][0]);
-        *pErrorCode = U_PARSE_ERROR;
+        *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
 
@@ -421,7 +420,7 @@ caseFoldingLineFn(void *context,
     caseFoldings[caseFoldingCount].status=status=*skipWhitespace(fields[1][0]);
     if(status!='L' && status!='E' && status!='C' && status!='S' && status!='F' && status!='I') {
         fprintf(stderr, "genprops: unrecognized status field in CaseFolding.txt at %s\n", fields[0][0]);
-        *pErrorCode = U_PARSE_ERROR;
+        *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
 
@@ -471,7 +470,7 @@ caseFoldingLineFn(void *context,
 
     if(++caseFoldingCount==MAX_CASE_FOLDING_COUNT) {
         fprintf(stderr, "genprops: too many case folding mappings\n");
-        *pErrorCode = U_INDEX_OUTOFBOUNDS_ERROR;
+        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
         exit(U_INDEX_OUTOFBOUNDS_ERROR);
     }
 }
@@ -526,6 +525,13 @@ static const struct {
     /* NL */    0x85, U_PARAGRAPH_SEPARATOR
 };
 
+static struct {
+    uint32_t first, last, props;
+    char name[80];
+} unicodeAreas[32];
+
+static int32_t unicodeAreaIndex=0;
+
 static void
 unicodeDataLineFn(void *context,
                   char *fields[][2], int32_t fieldCount,
@@ -539,13 +545,13 @@ unicodeDataLineFn(void *context,
     /* reset the properties */
     uprv_memset(&p, 0, sizeof(Props));
     p.decimalDigitValue=p.digitValue=-1;
-    p.numericValue=0xffffffff;
+    p.numericValue=0x80000000;
 
     /* get the character code, field 0 */
     p.code=uprv_strtoul(fields[0][0], &end, 16);
     if(end<=fields[0][0] || end!=fields[0][1]) {
         fprintf(stderr, "genprops: syntax error in field 0 at %s\n", fields[0][0]);
-        *pErrorCode = U_PARSE_ERROR;
+        *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
 
@@ -558,7 +564,7 @@ unicodeDataLineFn(void *context,
         }
         if(++i==U_CHAR_CATEGORY_COUNT) {
             fprintf(stderr, "genprops: unknown general category \"%s\" at code 0x%lx\n", fields[2][0], p.code);
-            *pErrorCode = U_PARSE_ERROR;
+            *pErrorCode=U_PARSE_ERROR;
             exit(U_PARSE_ERROR);
         }
     }
@@ -567,7 +573,7 @@ unicodeDataLineFn(void *context,
     p.canonicalCombining=(uint8_t)uprv_strtoul(fields[3][0], &end, 10);
     if(end<=fields[3][0] || end!=fields[3][1]) {
         fprintf(stderr, "genprops: syntax error in field 3 at code 0x%lx\n", p.code);
-        *pErrorCode = U_PARSE_ERROR;
+        *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
 
@@ -580,7 +586,7 @@ unicodeDataLineFn(void *context,
         }
         if(++i==U_CHAR_DIRECTION_COUNT) {
             fprintf(stderr, "genprops: unknown BiDi category \"%s\" at code 0x%lx\n", fields[4][0], p.code);
-            *pErrorCode = U_PARSE_ERROR;
+            *pErrorCode=U_PARSE_ERROR;
             exit(U_PARSE_ERROR);
         }
     }
@@ -590,7 +596,7 @@ unicodeDataLineFn(void *context,
         value=uprv_strtoul(fields[6][0], &end, 10);
         if(end!=fields[6][1] || value>0x7fff) {
             fprintf(stderr, "genprops: syntax error in field 6 at code 0x%lx\n", p.code);
-            *pErrorCode = U_PARSE_ERROR;
+            *pErrorCode=U_PARSE_ERROR;
             exit(U_PARSE_ERROR);
         }
         p.decimalDigitValue=(int16_t)value;
@@ -601,7 +607,7 @@ unicodeDataLineFn(void *context,
         value=uprv_strtoul(fields[7][0], &end, 10);
         if(end!=fields[7][1] || value>0x7fff) {
             fprintf(stderr, "genprops: syntax error in field 7 at code 0x%lx\n", p.code);
-            *pErrorCode = U_PARSE_ERROR;
+            *pErrorCode=U_PARSE_ERROR;
             exit(U_PARSE_ERROR);
         }
         p.digitValue=(int16_t)value;
@@ -609,22 +615,38 @@ unicodeDataLineFn(void *context,
 
     /* numeric value, field 8 */
     if(fields[8][0]<fields[8][1]) {
-        value=uprv_strtoul(fields[8][0], &end, 10);
+        char *s=fields[8][0];
+        UBool isNegative;
+
+        /* get a possible minus sign */
+        if(*s=='-') {
+            isNegative=TRUE;
+            ++s;
+        } else {
+            isNegative=FALSE;
+        }
+
+        value=uprv_strtoul(s, &end, 10);
         if(value>0 && *end=='/') {
             /* field 8 may contain a fractional value, get the denominator */
             p.denominator=uprv_strtoul(end+1, &end, 10);
             if(p.denominator==0) {
                 fprintf(stderr, "genprops: denominator is 0 in field 8 at code 0x%lx\n", p.code);
-                *pErrorCode = U_PARSE_ERROR;
+                *pErrorCode=U_PARSE_ERROR;
                 exit(U_PARSE_ERROR);
             }
         }
         if(end!=fields[8][1] || value>0x7fffffff) {
             fprintf(stderr, "genprops: syntax error in field 8 at code 0x%lx\n", p.code);
-            *pErrorCode = U_PARSE_ERROR;
+            *pErrorCode=U_PARSE_ERROR;
             exit(U_PARSE_ERROR);
         }
-        p.numericValue=(int32_t)value;
+
+        if(isNegative) {
+            p.numericValue=-(int32_t)value;
+        } else {
+            p.numericValue=(int32_t)value;
+        }
         p.hasNumericValue=TRUE;
     }
 
@@ -633,7 +655,7 @@ unicodeDataLineFn(void *context,
         p.isMirrored=1;
     } else if(fields[9][1]-fields[9][0]!=1 || *fields[9][0]!='N') {
         fprintf(stderr, "genprops: syntax error in field 9 at code 0x%lx\n", p.code);
-        *pErrorCode = U_PARSE_ERROR;
+        *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
 
@@ -641,7 +663,7 @@ unicodeDataLineFn(void *context,
     value=uprv_strtoul(fields[12][0], &end, 16);
     if(end!=fields[12][1]) {
         fprintf(stderr, "genprops: syntax error in field 12 at code 0x%lx\n", p.code);
-        *pErrorCode = U_PARSE_ERROR;
+        *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
     p.upperCase=value;
@@ -650,7 +672,7 @@ unicodeDataLineFn(void *context,
     value=uprv_strtoul(fields[13][0], &end, 16);
     if(end!=fields[13][1]) {
         fprintf(stderr, "genprops: syntax error in field 13 at code 0x%lx\n", p.code);
-        *pErrorCode = U_PARSE_ERROR;
+        *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
     p.lowerCase=value;
@@ -659,7 +681,7 @@ unicodeDataLineFn(void *context,
     value=uprv_strtoul(fields[14][0], &end, 16);
     if(end!=fields[14][1]) {
         fprintf(stderr, "genprops: syntax error in field 14 at code 0x%lx\n", p.code);
-        *pErrorCode = U_PARSE_ERROR;
+        *pErrorCode=U_PARSE_ERROR;
         exit(U_PARSE_ERROR);
     }
     p.titleCase=value;
@@ -695,7 +717,99 @@ unicodeDataLineFn(void *context,
         p.caseFolding=NULL;
     }
 
-    addProps(&p);
+    value=makeProps(&p);
+
+    if(*fields[1][0]=='<') {
+        /* first or last entry of a Unicode area */
+        size_t length=fields[1][1]-fields[1][0];
+
+        if(length<9) {
+            /* name too short for an area name */
+        } else if(0==uprv_memcmp(", First>", fields[1][1]-8, 8)) {
+            /* set the current area */
+            if(unicodeAreas[unicodeAreaIndex].first==0xffffffff) {
+                length-=9;
+                unicodeAreas[unicodeAreaIndex].first=p.code;
+                unicodeAreas[unicodeAreaIndex].props=value;
+                uprv_memcpy(unicodeAreas[unicodeAreaIndex].name, fields[1][0]+1, length);
+                unicodeAreas[unicodeAreaIndex].name[length]=0;
+            } else {
+                /* error: a previous area is incomplete */
+                fprintf(stderr, "genprops: error - area \"%s\" is incomplete\n", unicodeAreas[unicodeAreaIndex].name);
+                *pErrorCode=U_PARSE_ERROR;
+                exit(U_PARSE_ERROR);
+            }
+            return;
+        } else if(0==uprv_memcmp(", Last>", fields[1][1]-7, 7)) {
+            /* check that the current area matches, and complete it with the last code point */
+            length-=8;
+            if( unicodeAreas[unicodeAreaIndex].props==value &&
+                0==uprv_memcmp(unicodeAreas[unicodeAreaIndex].name, fields[1][0]+1, length) &&
+                unicodeAreas[unicodeAreaIndex].name[length]==0 &&
+                unicodeAreas[unicodeAreaIndex].first<p.code
+            ) {
+                unicodeAreas[unicodeAreaIndex].last=p.code;
+                if(beVerbose) {
+                    printf("Unicode area U+%04lx..U+%04lx \"%s\"\n",
+                        unicodeAreas[unicodeAreaIndex].first,
+                        unicodeAreas[unicodeAreaIndex].last,
+                        unicodeAreas[unicodeAreaIndex].name);
+                }
+                unicodeAreas[++unicodeAreaIndex].first=0xffffffff;
+            } else {
+                /* error: different properties between first & last, different area name, first>=last */
+                fprintf(stderr, "genprops: error - Last of area \"%s\" is incorrect\n", unicodeAreas[unicodeAreaIndex].name);
+                *pErrorCode=U_PARSE_ERROR;
+                exit(U_PARSE_ERROR);
+            }
+            return;
+        } else {
+            /* not an area name */
+        }
+    }
+
+    /* properties for a single code point */
+    /* ### TODO: check that the code points (p.code) are in ascending order */
+    addProps(p.code, value);
+}
+
+/* set repeated properties for the areas */
+static void
+repeatAreaProps() {
+    uint32_t puaProps;
+    int32_t i;
+    UBool hasPlane15PUA, hasPlane16PUA;
+
+    /*
+     * UnicodeData.txt before 3.0.1 did not contain the PUAs on
+     * planes 15 and 16.
+     * If that is the case, then we add them here, using the properties
+     * from the BMP PUA.
+     */
+    puaProps=0;
+    hasPlane15PUA=hasPlane16PUA=FALSE;
+
+    for(i=0; i<unicodeAreaIndex; ++i) {
+        repeatProps(unicodeAreas[i].first,
+                    unicodeAreas[i].last,
+                    unicodeAreas[i].props);
+        if(unicodeAreas[i].first==0xe000) {
+            puaProps=unicodeAreas[i].props;
+        } else if(unicodeAreas[i].first==0xf0000) {
+            hasPlane15PUA=TRUE;
+        } else if(unicodeAreas[i].first==0x100000) {
+            hasPlane16PUA=TRUE;
+        }
+    }
+
+    if(puaProps!=0) {
+        if(!hasPlane15PUA) {
+            repeatProps(0xf0000, 0xffffd, puaProps);
+        }
+        if(!hasPlane16PUA) {
+            repeatProps(0x100000, 0x10fffd, puaProps);
+        }
+    }
 }
 
 static void
@@ -706,7 +820,20 @@ parseDB(const char *filename, UErrorCode *pErrorCode) {
         return;
     }
 
+    /* while unicodeAreas[unicodeAreaIndex] is unused, set its first to a bogus value */
+    unicodeAreas[0].first=0xffffffff;
+
     u_parseDelimitedFile(filename, ';', fields, 15, unicodeDataLineFn, NULL, pErrorCode);
+
+    if(unicodeAreas[unicodeAreaIndex].first!=0xffffffff) {
+        fprintf(stderr, "genprops: error - the last area \"%s\" from U+%04lx is incomplete\n",
+            unicodeAreas[unicodeAreaIndex].name,
+            unicodeAreas[unicodeAreaIndex].first);
+        *pErrorCode=U_PARSE_ERROR;
+        exit(U_PARSE_ERROR);
+    }
+
+    repeatAreaProps();
 }
 
 /*

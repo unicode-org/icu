@@ -344,11 +344,11 @@ static uint16_t exceptionsCount=0;
 
 /* prototypes --------------------------------------------------------------- */
 
-static uint16_t
-repeatFromStage2(uint16_t i2, uint16_t i2Limit, uint16_t i3Repeat, uint32_t x);
+static void
+repeatFromStage2(uint16_t i2, uint32_t start, uint32_t limit, uint16_t i3Repeat, uint32_t x);
 
 static void
-repeatFromStage3(uint16_t i2, uint16_t j3, uint32_t x);
+repeatFromStage3(uint16_t i3, uint32_t start, uint32_t limit, uint32_t x);
 
 static uint16_t
 compactStage(uint16_t *stage, uint16_t stageTop, uint16_t blockSize,
@@ -398,8 +398,8 @@ initStore() {
 
 /* store a character's properties ------------------------------------------- */
 
-extern void
-addProps(Props *p) {
+extern uint32_t
+makeProps(Props *p) {
     uint32_t x;
     int32_t value;
     uint16_t count;
@@ -662,8 +662,6 @@ addProps(Props *p) {
         (uint32_t)p->isMirrored<<MIRROR_SHIFT |
         (uint32_t)value<<VALUE_SHIFT;
 
-    setProps(p->code, x, &count, &count, &count);
-
     if(beVerbose && p->code<=0x9f) {
         if(p->code==0) {
             printf("static uint32_t staticProps32Table[0xa0]={\n");
@@ -678,6 +676,8 @@ addProps(Props *p) {
             printf("};\n");
         }
     }
+
+    return x;
 
     /*
      * "Higher-hanging fruit" (not implemented):
@@ -696,23 +696,17 @@ addProps(Props *p) {
      */
 }
 
+extern void
+addProps(uint32_t c, uint32_t x) {
+    uint16_t notUsed;
+
+    setProps(c, x, &notUsed, &notUsed, &notUsed);
+}
+
 /* areas of same properties ------------------------------------------------- */
 
 extern void
-repeatProps(void) {
-    /* first and last code points in repetitive areas */
-    static const uint32_t areas[][2]={
-        { 0x3400, 0x4db5 },     /* CJK ext. A */
-        { 0x4e00, 0x9fa5 },     /* CJK */
-        { 0xac00, 0xd7a3 },     /* Hangul */
-        { 0xd800, 0xdb7f },     /* High Surrogates */
-        { 0xdb80, 0xdbff },     /* Private Use High Surrogates */
-        { 0xdc00, 0xdfff },     /* Low Surrogates */
-        { 0xe000, 0xf8ff },     /* Private Use */
-        { 0xf0000, 0xffffd },   /* Private Use */
-        { 0x100000, 0x10fffd }  /* Private Use */
-    };
-
+repeatProps(uint32_t first, uint32_t last, uint32_t x) {
     /*
      * Set the repetitive properties for the big, known areas of all the same
      * character properties. Most of those will share the same stage 2 and 3
@@ -720,190 +714,167 @@ repeatProps(void) {
      *
      * Assumptions:
      * - each area starts at a code point that is a multiple of 16
-     * - for each area, except the plane 15/16 private use one,
-     *   the first and last code points are defined in UnicodeData.txt
-     *   and thus already set
      * - there may be some properties already stored for some code points,
      *   especially in the Private Use areas
      */
 
-    uint16_t i1, i2, i3, j3, i1Limit, i2Repeat, i3Repeat, area;
-    uint32_t x, start, limit;
-
-    /* set the properties for the plane 15/16 Private Use area if necessary */
-    if(getProps(0xf0000, &i1, &i2, &i3)==0) {
-        setProps(0xf0000, getProps(0xe000, &i1, &i2, &i3), &i1, &i2, &i3);
-    }
-    if(getProps(0x100000, &i1, &i2, &i3)==0) {
-        setProps(0x100000, getProps(0xe000, &i1, &i2, &i3), &i1, &i2, &i3);
-    }
+    uint16_t i1, i2, j3, i1Limit, i2Repeat, i3Repeat;
+    uint32_t start, next, limit;
 
     /* fill in the repetitive properties */
-    for(area=0; area<sizeof(areas)/sizeof(areas[0]); ++area) {
-        start=areas[area][0];
-        limit=areas[area][1]+1;
+    start=first;
+    limit=last+1;
 
-        /* get the properties from the preset first code point */
-        x=getProps(start, &i1, &i2, &i3);
+    /* allocate a stage 3 block and set all of its properties to x */
+    i3Repeat=allocProps();
+    for(j3=0; j3<STAGE_3_BLOCK; ++j3) {
+        props[i3Repeat+j3]=x;
+    }
 
-        /* i1, i2, and i3 are set for the start code point */
-        i1Limit=(uint16_t)(limit>>STAGE_1_SHIFT);
+    /* we will need to allocate a stage 2 block if we use an entire one at all */
+    i2Repeat=0;
 
-        /* assume that i3 is the beginning of a stage 3 block (see assumptions above) */
+    i1=(uint16_t)(start>>STAGE_1_SHIFT);
+    i1Limit=(uint16_t)(limit>>STAGE_1_SHIFT);
 
-        /* is this stage 3 block suitable for setting it everywhere? (set i3Repeat) */
-        for(j3=1;;) {
-            if(!(props[i3+j3]==0 || props[i3+j3]==x)) {
-                /* this block contains different properties, we need a new one */
-                i3Repeat=allocProps();
-                break;
-            }
-            if(++j3==STAGE_3_BLOCK) {
-                /* this block is good */
-                i3Repeat=i3;
-                break;
-            }
+    /*
+     * now there are up to three sub-areas:
+     * - a range of code points before the first full block for
+     *   one stage 1 index
+     * - a (big) range of code points within full blocks for
+     *   stage 1 indexes
+     * - a range of code points after the last full block for
+     *   one stage 1 index
+     */
+
+    if((start&(STAGE_2_3_AREA-1))!=0) {
+        /* incomplete stage 2 block at the beginning */
+        /* allocate the stage 2 block if necessary */
+        i2=stage1[i1];
+        if(i2==0) {
+            stage1[i1]=i2=allocStage2();
         }
 
-        /* fill the repetitive block */
-        for(j3=0; j3<STAGE_3_BLOCK; ++j3) {
-            props[i3Repeat+j3]=x;
-        }
-
-        /*
-         * now there are up to three sub-areas:
-         * - a range of code points before the first full block for
-         *   one stage 1 index
-         * - a (big) range of code points within full blocks for
-         *   stage 1 indexes
-         * - a range of code points after the last full block for
-         *   one stage 1 index
-         */
-
-        if((start&(STAGE_2_3_AREA-1))!=0) {
-            /*
-             * fill the area before the first full block;
-             * assume that the start value is set and therefore
-             * at least stage 2 is allocated
-             */
-
-            /* fill stages 2 & 3 */
-            if(i1<i1Limit) {
-                i2=repeatFromStage2(i2, (uint16_t)((i2+STAGE_2_BLOCK)&~(STAGE_2_BLOCK-1)), i3Repeat, x);
-            } else {
-                /* there is no full block at all - fill stages 2 & 3 only inside this block */
-                i2=repeatFromStage2(i2, (uint16_t)(stage1[i1]+((limit>>STAGE_2_SHIFT)&(STAGE_2_BLOCK-1))), i3Repeat, x);
-
-                /* does this area end in an incomplete stage 3 block? */
-                repeatFromStage3(i2, (uint16_t)(limit&(STAGE_3_BLOCK-1)), x);
-                return;
-            }
-
-            /* this stage 2 block will not be suitable for repetition */
-            i2Repeat=0;
+        /* fill stages 2 & 3 of this sub-area */
+        if(i1<i1Limit) {
+            /* the stage 2 block goes to the end */
+            next=(i1+1)<<STAGE_1_SHIFT;
+            repeatFromStage2(i2, start, next, i3Repeat, x);
+            start=next;
 
             /* advance i1 to the first full block */
             ++i1;
         } else {
-            uint16_t j2;
-
-            /* is this stage 2 block suitable for setting it everywhere? (set i2Repeat) */
-            for(j2=0;;) {
-                if(!(stage2[i2+j2]==0 || stage2[i2+j2]==i3Repeat)) {
-                    /* this block contains different indexes, we will need a new one */
-                    i2Repeat=0;
-                    break;
-                }
-                if(++j2==STAGE_2_BLOCK) {
-                    /* this block is good, set and fill it */
-                    i2Repeat=i2;
-                    for(j2=0; j2<STAGE_2_BLOCK; ++j2) {
-                        stage2[i2Repeat+j2]=i3Repeat;
-                    }
-                    break;
-                }
-            }
-        }
-
-        if(i1<i1Limit) {
-            /* fill whole blocks for stage 1 indexes */
-
-            /* fill all the stages 1 to 3 */
-            do {
-                i2=stage1[i1];
-                if(i2==0) {
-                    /* set the index for common repeat block for stage 2 */
-                    if(i2Repeat==0) {
-                        /* allocate and fill a stage 2 block for this */
-                        uint16_t j2;
-
-                        i2Repeat=allocStage2();
-                        for(j2=0; j2<STAGE_2_BLOCK; ++j2) {
-                            stage2[i2Repeat+j2]=i3Repeat;
-                        }
-                    }
-                    stage1[i1]=i2Repeat;
-                } else {
-                    /* some properties are set in this stage 2 block */
-                    repeatFromStage2(i2, (uint16_t)(i2+STAGE_2_BLOCK), i3Repeat, x);
-                }
-            } while(++i1<i1Limit);
-        }
-
-        if((limit&(STAGE_2_3_AREA-1))!=0) {
-            /* fill the area after the last full block */
-            i2=stage1[i1];
-            if(i2==0) {
-                i2=allocStage2();
-            }
-            i2=repeatFromStage2(i2, (uint16_t)(i2+((limit>>STAGE_2_SHIFT)&(STAGE_2_BLOCK-1))), i3Repeat, x);
-
-            /* does this area end in an incomplete stage 3 block? */
-            repeatFromStage3(i2, (uint16_t)(limit&(STAGE_3_BLOCK-1)), x);
+            /* there is only one stage 2 block at all */
+            repeatFromStage2(i2, start, limit, i3Repeat, x);
+            return;
         }
     }
-}
 
-static uint16_t
-repeatFromStage2(uint16_t i2, uint16_t i2Limit, uint16_t i3Repeat, uint32_t x) {
-    /* set a section of a stage 2 table and its properties to x */
-    uint16_t i3, j3;
+    while(i1<i1Limit) {
+        /* fill complete stage 2 blocks */
+        next=start+STAGE_2_3_AREA;
+        i2=stage1[i1];
+        if(i2==0) {
+            /* set the index for common repeat block for stage 2 */
+            if(i2Repeat==0) {
+                /* allocate and fill a stage 2 block for this */
+                uint16_t j2;
 
-    while(i2<i2Limit) {
-        i3=stage2[i2];
-        if(i3==0) {
-            stage2[i2]=i3Repeat;
+                i2Repeat=allocStage2();
+                for(j2=0; j2<STAGE_2_BLOCK; ++j2) {
+                    stage2[i2Repeat+j2]=i3Repeat;
+                }
+            }
+            stage1[i1]=i2Repeat;
         } else {
-            /* some properties are set in this stage 3 block */
-            j3=STAGE_3_BLOCK;
-            do {
-                if(props[i3]==0) {
-                    props[i3]=x;
-                }
-                ++i3;
-            } while(--j3>0);
+            repeatFromStage2(i2, start, next, i3Repeat, x);
         }
-        ++i2;
+        start=next;
+        ++i1;
     }
-    return i2;
+
+    if(start<limit) {
+        /* fill the area after the last full block */
+        i2=stage1[i1];
+        if(i2==0) {
+            stage1[i1]=i2=allocStage2();
+        }
+
+        repeatFromStage2(i2, start, limit, i3Repeat, x);
+    }
 }
 
+/* set a section of a stage 2 table and its properties to x */
 static void
-repeatFromStage3(uint16_t i2, uint16_t j3, uint32_t x) {
-    if(j3!=0) {
-        /* fill in properties in a last, incomplete stage 3 block */
-        uint16_t i3=stage2[i2];
+repeatFromStage2(uint16_t i2, uint32_t start, uint32_t limit, uint16_t i3Repeat, uint32_t x) {
+    uint32_t next;
+    uint16_t i2Limit, i3;
+
+    /* remove irrelevant bits from start and limit */
+    start&=STAGE_2_3_AREA-1;
+    limit=((limit-1)&(STAGE_2_3_AREA-1))+1;
+
+    i2Limit=i2+(uint16_t)(limit>>STAGE_3_BITS);
+    i2+=(uint16_t)(start>>STAGE_3_BITS);
+
+    /* similar to repeatProps(), there may be 3 sub-areas */
+    if((start&(STAGE_3_BLOCK-1))!=0) {
+        /* incomplete stage 3 block at the beginning */
+        i3=stage2[i2];
         if(i3==0) {
             stage2[i2]=i3=allocProps();
         }
 
+        if(i2<i2Limit) {
+            /* the stage 3 block goes to the end */
+            next=(i2+1)<<STAGE_3_BITS;
+            repeatFromStage3(i3, start, next, x);
+            start=next;
+            ++i2;
+        } else {
+            /* there is only one stage 3 block at all */
+            repeatFromStage3(i3, start, limit, x);
+            return;
+        }
+    }
+
+    while(i2<i2Limit) {
+        /* fill complete stage 3 blocks */
+        next=start+STAGE_3_BLOCK;
+        i3=stage2[i2];
+        if(i3==0) {
+            stage2[i2]=i3Repeat;
+        } else {
+            repeatFromStage3(i3, start, next, x);
+        }
+        start=next;
+        ++i2;
+    }
+
+    if(start<limit) {
+        i3=stage2[i2];
+        if(i3==0) {
+            stage2[i2]=i3=allocProps();
+        }
+
+        repeatFromStage3(i3, start, limit, x);
+    }
+}
+
+static void
+repeatFromStage3(uint16_t i3, uint32_t start, uint32_t limit, uint32_t x) {
+    uint16_t i3End;
+
+    i3End=(uint16_t)(i3+((limit-1)&(STAGE_3_BLOCK-1)));
+    i3+=(uint16_t)(start&(STAGE_3_BLOCK-1));
+
+    while(i3<=i3End) {
         /* some properties may be set in this stage 3 block */
-        do {
-            if(props[i3]==0) {
-                props[i3]=x;
-            }
-            ++i3;
-        } while(--j3>0);
+        if(props[i3]==0) {
+            props[i3]=x;
+        }
+        ++i3;
     }
 }
 
