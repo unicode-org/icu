@@ -3,12 +3,6 @@
  * Copyright (C) 1997-2000, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/impl/DemoTextBox.java,v $ 
- * $Date: 2002/02/19 04:10:23 $ 
- * $Revision: 1.4 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.dev.demo.impl;
 

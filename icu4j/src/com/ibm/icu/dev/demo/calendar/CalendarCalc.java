@@ -3,12 +3,6 @@
  * Copyright (C) 1997-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/calendar/CalendarCalc.java,v $ 
- * $Date: 2003/10/02 20:50:56 $ 
- * $Revision: 1.16 $
- *
- *****************************************************************************************
  */
 
 package com.ibm.icu.dev.demo.calendar;

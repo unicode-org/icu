@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2000, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/impl/AppletFrame.java,v $ 
- * $Date: 2002/02/16 03:04:56 $ 
- * $Revision: 1.4 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.dev.demo.impl;
 import java.applet.*;
@@ -37,7 +31,7 @@ import java.io.IOException;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: AppletFrame.java,v $ $Revision: 1.4 $ $Date: 2002/02/16 03:04:56 $
+ * @version $RCSfile: AppletFrame.java,v $ $Revision: 1.5 $ $Date: 2004/03/26 20:01:27 $
  */
 public class AppletFrame extends Frame implements AppletStub, AppletContext {
 
