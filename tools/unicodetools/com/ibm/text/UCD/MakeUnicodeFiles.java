@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -20,42 +21,18 @@ import java.util.TreeSet;
 
 import com.ibm.icu.dev.test.util.BagFormatter;
 import com.ibm.icu.dev.test.util.Tabber;
+import com.ibm.icu.dev.test.util.UnicodeLabel;
 import com.ibm.icu.dev.test.util.UnicodeProperty;
+import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.text.utility.UnicodeDataFile;
 import com.ibm.text.utility.Utility;
 import com.ibm.icu.text.Collator;
 
 public class MakeUnicodeFiles {
+    public static int dVersion = 8; // change to fix the generated file D version. If less than zero, no "d"
     
-    static boolean DEBUG = true;
-    
-    public static void main() throws IOException {
-        generateFile("*");
-    }
-
-      static String[] FILE_OPTIONS = {
-         "Script            nameStyle=none makeUppercase skipUnassigned=Common hackValues",
-         "Age               nameStyle=none noLabel skipValue=unassigned",
-         "Numeric_Type      nameStyle=none makeFirstLetterLowercase skipValue=None",
-         "General_Category  nameStyle=none valueStyle=short noLabel",
-         "Line_Break        nameStyle=none valueStyle=short skipUnassigned=Unknown",
-         "Joining_Type      nameStyle=none valueStyle=short skipValue=Non_Joining",
-         "Joining_Group     nameStyle=none skipValue=No_Joining_Group makeUppercase",
-         "East_Asian_Width      nameStyle=none valueStyle=short skipUnassigned=Neutral",
-         "Decomposition_Type    nameStyle=none skipValue=None makeFirstLetterLowercase hackValues",
-         "Bidi_Class        nameStyle=none valueStyle=short skipUnassigned=Left_To_Right",
-         "Block             nameStyle=none noLabel valueList",
-         "Canonical_Combining_Class     nameStyle=none valueStyle=short skipUnassigned=Not_Reordered longValueHeading=ccc",
-         "Hangul_Syllable_Type  nameStyle=none valueStyle=short skipValue=Not_Applicable",
-         "NFD_Quick_Check   nameStyle=short valueStyle=short skipValue=Yes",
-         "NFC_Quick_Check   nameStyle=short valueStyle=short skipValue=Yes",
-         "NFKC_Quick_Check  nameStyle=short valueStyle=short skipValue=Yes",
-         "NFKD_Quick_Check  nameStyle=short valueStyle=short skipValue=Yes",        
-         "FC_NFKC_Closure   nameStyle=short"
-     };
-     
-    static String[] hackNameList = {
+    /*static String[] hackNameList = {
        "noBreak", "Arabic_Presentation_Forms-A", "Arabic_Presentation_Forms-B", 
        "CJK_Symbols_and_Punctuation", "Combining_Diacritical_Marks_for_Symbols",
        "Enclosed_CJK_Letters_and_Months", "Greek_and_Coptic",
@@ -66,218 +43,450 @@ public class MakeUnicodeFiles {
        "Supplementary_Private_Use_Area-A", "Supplementary_Private_Use_Area-B",
        "Canadian-Aboriginal", "Old-Italic"
     };
+    static {
+        for (int i = 0; i < hackNameList.length; ++i) {
+            System.out.println("HackName:\t" + hackNameList[i]);
+        }
+    }
+    */
 
-    static class PrintStyle {
-         static PrintStyle DEFAULT_PRINT_STYLE = new PrintStyle();
-         static Map PRINT_STYLE_MAP = new TreeMap(UnicodeProperty.PROPERTY_COMPARATOR);
-         boolean noLabel = false;
-         boolean makeUppercase = false;
-         boolean makeFirstLetterLowercase = false;
-         boolean orderByRangeStart = false;
-         boolean interleaveValues = false;
+    static boolean DEBUG = false;
+    
+    public static void main() throws IOException {
+        generateFile();
+    }
+
+    static class Format {
+        public static Format theFormat = new Format(); // singleton
+
+        
+        Map printStyleMap = new TreeMap(UnicodeProperty.PROPERTY_COMPARATOR);
+        static PrintStyle DEFAULT_PRINT_STYLE = new PrintStyle();        
+        Map fileToPropertySet = new TreeMap();
+        Map fileToComments = new TreeMap();
+        Map fileToDirectory = new TreeMap();
+        TreeMap propertyToValueToComments = new TreeMap();        
+        Map hackMap = new HashMap();
+        UnicodeProperty.MapFilter hackMapFilter;
+        String[] filesToDo;
+      
+        private Format(){
+            build();            
+        }
+        /*
+        static String[] FILE_OPTIONS = {
+           "Script            nameStyle=none makeUppercase skipUnassigned=Common hackValues",
+           "Age               nameStyle=none noLabel skipValue=unassigned",
+           "Numeric_Type      nameStyle=none makeFirstLetterLowercase skipValue=None",
+           "General_Category  nameStyle=none valueStyle=short noLabel",
+           "Line_Break        nameStyle=none valueStyle=short skipUnassigned=Unknown",
+           "Joining_Type      nameStyle=none valueStyle=short skipValue=Non_Joining",
+           "Joining_Group     nameStyle=none skipValue=No_Joining_Group makeUppercase",
+           "East_Asian_Width      nameStyle=none valueStyle=short skipUnassigned=Neutral",
+           "Decomposition_Type    nameStyle=none skipValue=None makeFirstLetterLowercase hackValues",
+           "Bidi_Class        nameStyle=none valueStyle=short skipUnassigned=Left_To_Right",
+           "Block             nameStyle=none noLabel valueList",
+           "Canonical_Combining_Class     nameStyle=none valueStyle=short skipUnassigned=Not_Reordered longValueHeading=ccc",
+           "Hangul_Syllable_Type  nameStyle=none valueStyle=short skipValue=Not_Applicable",
+           "NFD_Quick_Check   nameStyle=short valueStyle=short skipValue=Yes",
+           "NFC_Quick_Check   nameStyle=short valueStyle=short skipValue=Yes",
+           "NFKC_Quick_Check  nameStyle=short valueStyle=short skipValue=Yes",
+           "NFKD_Quick_Check  nameStyle=short valueStyle=short skipValue=Yes",        
+           "FC_NFKC_Closure   nameStyle=short"
+       };
+     */
+
+    void printFileComments(PrintWriter pw, String filename) {
+        String fileComments = (String) fileToComments.get(filename);
+        if (fileComments != null)
+            pw.println(fileComments);
+    }
+
+      private void addPrintStyle(String options) {
+          PrintStyle result = new PrintStyle();
+          printStyleMap.put(result.parse(options), result);
+      }
+      
+      public PrintStyle getPrintStyle(String propname) {
+          PrintStyle result = (PrintStyle) printStyleMap.get(propname);
+          if (result != null)
+              return result;
+          if (DEBUG)
+              System.out.println("Using default style!");
+          return DEFAULT_PRINT_STYLE;
+      }
+
+    public static class PrintStyle {
+        boolean noLabel = false;
+        boolean makeUppercase = false;
+        boolean makeFirstLetterLowercase = false;
+        boolean orderByRangeStart = false;
+        boolean interleaveValues = false;
         boolean hackValues = false;
         String nameStyle = "none";
         String valueStyle = "long";
         String skipValue = null;
         String skipUnassigned = null;
         String longValueHeading = null;
-        
-        static void add(String options) {
-            PrintStyle result = new PrintStyle();
-            PRINT_STYLE_MAP.put(result.parse(options), result);
-        }
-        static PrintStyle get(String propname) {
-            PrintStyle result = (PrintStyle) PRINT_STYLE_MAP.get(propname);
-            if (result != null) return result;
-            if (DEBUG) System.out.println("Using default style!");
-            return DEFAULT_PRINT_STYLE;
-        }
+        boolean sortNumeric = false;
+
         String parse(String options) {
             options = options.replace('\t', ' ');
             String[] pieces = Utility.split(options, ' ');
             for (int i = 1; i < pieces.length; ++i) {
                 String piece = pieces[i];
                 // binary
-                if (piece.equals("noLabel")) noLabel = true;
-                else if (piece.equals("makeUppercase")) makeUppercase = true;
-                else if (piece.equals("makeFirstLetterLowercase")) makeFirstLetterLowercase = true;
-                else if (piece.equals("orderByRangeStart")) orderByRangeStart = true;
-                else if (piece.equals("valueList")) interleaveValues = true;
-                else if (piece.equals("hackValues")) hackValues = true;
+                if (piece.equals("noLabel"))
+                    noLabel = true;
+                else if (piece.equals("makeUppercase"))
+                    makeUppercase = true;
+                else if (piece.equals("makeFirstLetterLowercase"))
+                    makeFirstLetterLowercase = true;
+                else if (piece.equals("orderByRangeStart"))
+                    orderByRangeStart = true;
+                else if (piece.equals("valueList"))
+                    interleaveValues = true;
+                else if (piece.equals("hackValues"))
+                    hackValues = true;
+                else if (piece.equals("sortNumeric"))
+                    sortNumeric = true;
                 // with parameter
-                else if (piece.startsWith("valueStyle=")) valueStyle = afterEquals(piece);
-                else if (piece.startsWith("nameStyle=")) nameStyle = afterEquals(piece);
-                else if (piece.startsWith("longValueHeading=")) longValueHeading = afterEquals(piece);
-                else if (piece.startsWith("skipValue=")) skipValue = afterEquals(piece);
-                else if (piece.startsWith("skipUnassigned=")) skipUnassigned = afterEquals(piece);
-                else if (piece.length() != 0) {
-                    throw new IllegalArgumentException("Illegal PrintStyle Parameter: " + piece + " in " + pieces[0]);
+                else if (piece.startsWith("valueStyle="))
+                    valueStyle = afterEquals(piece);
+                else if (piece.startsWith("nameStyle="))
+                    nameStyle = afterEquals(piece);
+                else if (piece.startsWith("longValueHeading="))
+                    longValueHeading = afterEquals(piece);
+                else if (piece.startsWith("skipValue=")) {
+                    if (skipUnassigned != null)
+                        throw new IllegalArgumentException("Can't have both skipUnassigned and skipValue");
+                    skipValue = afterEquals(piece);
+                } else if (piece.startsWith("skipUnassigned=")) {
+                    if (skipValue != null)
+                        throw new IllegalArgumentException("Can't have both skipUnassigned and skipValue");
+                    skipUnassigned = afterEquals(piece);
+                } else if (piece.length() != 0) {
+                    throw new IllegalArgumentException(
+                        "Illegal PrintStyle Parameter: "
+                            + piece
+                            + " in "
+                            + pieces[0]);
                 }
-            }
-            if (DEBUG && options.indexOf('=') >= 0) {
-                System.out.println(pieces[0]);
-                if (longValueHeading != null)System.out.println(" name " + longValueHeading);
-                if (nameStyle != null) System.out.println(" nameStyle " + nameStyle);
-                if (longValueHeading != null) System.out.println(" longValueHeading " + longValueHeading);
-                if (skipValue != null) System.out.println(" skipValue " + skipValue);
-                if (skipUnassigned != null) System.out.println(" skipUnassigned " + skipUnassigned);
             }
             return pieces[0];
         }
-        String afterEquals(String source) {
-            return source.substring(source.indexOf('=')+1);
+        public String toString() {
+            Class myClass = getClass();
+            String result = myClass.getName() + "\n";
+            Field[] myFields = myClass.getDeclaredFields();
+            for (int i = 0; i < myFields.length; ++i) {
+                String value = "<private>";
+                try {
+                    Object obj = myFields[i].get(this);
+                    if (obj == null) value = "<null>";
+                    else value = obj.toString();
+                } catch (Exception e) {}
+                result += "\t" + myFields[i].getName() + "=<" + value + ">\n";
+            }
+            return result;
         }
-     }
-     static {
-         for (int i = 0; i < FILE_OPTIONS.length; ++i) {
-             PrintStyle.add(FILE_OPTIONS[i]);
-         }
-     }
-
-    static Map hackMap = new HashMap();
-    static {
-         for (int i = 0; i < hackNameList.length; ++i) {
-             String item = hackNameList[i];
-             String regularItem = UnicodeProperty.regularize(item,true);
-             hackMap.put(regularItem, item);
-         }
     }
-    static UnicodeProperty.MapFilter hackMapFilter = new UnicodeProperty.MapFilter(hackMap);
+           /*
+           static {
+               for (int i = 0; i < FILE_OPTIONS.length; ++i) {
+                   PrintStyle.add(FILE_OPTIONS[i]);
+               }
+           }
+           */
 
-    static class ValueComments {
-        TreeMap propertyToValueToComments = new TreeMap();
-        ValueComments add(String property, String value, String comments) {
-             TreeMap valueToComments = (TreeMap) propertyToValueToComments.get(property);
-             if (valueToComments == null) {
-                 valueToComments = new TreeMap();
-                 propertyToValueToComments.put(property, valueToComments);
-             }
-             valueToComments.put(value, comments);
-             return this;
-         }
-         String get(String property, String value) {
-             TreeMap valueToComments = (TreeMap) propertyToValueToComments.get(property);
-             if (valueToComments != null) return (String) valueToComments.get(value);
-             return null;
-         }
-     }
-     static ValueComments valueComments = new ValueComments();
-     static {
-         for (int i = 0; i < UCD_Names.UNIFIED_PROPERTIES.length; ++i) {
-             String name = Utility.getUnskeleton(UCD_Names.UNIFIED_PROPERTIES[i], false);
-             valueComments.add(name, "*", "# " + UCD_Names.UNIFIED_PROPERTY_HEADERS[i]);
-         }
-         // HACK
-         valueComments.add("Bidi_Mirroring", "*", "# " + UCD_Names.UNIFIED_PROPERTY_HEADERS[9]);
-        try {
-            BufferedReader br = Utility.openReadFile("MakeUnicodeFiles.txt", Utility.UTF8);
-            String key = null;
-            String value = "";
-            while (true) {
-                String line = br.readLine();
-                if (line == null) break;
-                if (!line.startsWith("#")) {
-                    if (key != null) {// store
-                        String[] pieces = Utility.split(key, '=');
-                        if (pieces.length == 1) {
-                            valueComments.add(pieces[0].trim(), "*", value); 
-                        } else {
-                            valueComments.add(pieces[0].trim(), pieces[1].trim(), value); 
-                        }
-                        value = "";
-                    }
-                    key = line;
-                } else {
-                    value += line + "\n";
+        void addValueComments(String property, String value, String comments) {
+            if (DEBUG)
+                showPVC(property, value, comments);
+            TreeMap valueToComments =
+                (TreeMap) propertyToValueToComments.get(property);
+            if (valueToComments == null) {
+                valueToComments = new TreeMap();
+                propertyToValueToComments.put(property, valueToComments);
+            }
+            valueToComments.put(value, comments);
+            if (DEBUG && property.equals("BidiClass")) {
+                getValueComments(property, value);
+            }
+        }
+
+        private void showPVC(String property, String value, String comments) {
+            System.out.println(
+                "Putting Property: <"
+                    + property
+                    + ">, Value: <"
+                    + value
+                    + ">, Comments: <"
+                    + comments + ">");
+        }
+        
+        String getValueComments(String property, String value) {
+            TreeMap valueToComments =
+                (TreeMap) propertyToValueToComments.get(property);
+            String result = null;
+            if (valueToComments != null)
+                result = (String) valueToComments.get(value);
+            if (DEBUG) System.out.println("Getting Property: <" + property + ">, Value: <"
+                + value + ">, Comment: <" + result + ">");
+            return result;
+        }
+        
+        Map getValue2CommentsMap(String property) {
+            return (Map) propertyToValueToComments.get(property);
+        }
+
+        static String afterEquals(String source) {
+            return source.substring(source.indexOf('=') + 1);
+        }
+
+        static String afterWhitespace(String source) {
+            // Note: don't need to be international
+            for (int i = 0; i < source.length(); ++i) {
+                char ch = source.charAt(i);
+                if (Character.isWhitespace(source.charAt(i))) {
+                    return source.substring(i).trim();
                 }
             }
-            br.close();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            throw new IllegalArgumentException("File missing");
+            return "";
+        }
+         
+        /*private void add(String name, String[] properties) {
+             fileToPropertySet.put(name, properties);
+        }*/      
+         
+        private void build() {
+            /*
+            for (int i = 0; i < hackNameList.length; ++i) {
+                   String item = hackNameList[i];
+                   String regularItem = UnicodeProperty.regularize(item,true);
+                   hackMap.put(regularItem, item);
+               }
+               */
+
+            /*
+            for (int i = 0; i < UCD_Names.UNIFIED_PROPERTIES.length; ++i) {
+                String name = Utility.getUnskeleton(UCD_Names.UNIFIED_PROPERTIES[i], false);
+                valueComments.add(name, "*", "# " + UCD_Names.UNIFIED_PROPERTY_HEADERS[i]);
+                System.out.println();
+                System.out.println(name);
+                System.out.println("# " + UCD_Names.UNIFIED_PROPERTY_HEADERS[i]);
+            }
+            // HACK
+            valueComments.add("Bidi_Mirroring", "*", "# " + UCD_Names.UNIFIED_PROPERTY_HEADERS[9]);
+            */
+            try {
+                BufferedReader br =
+                    Utility.openReadFile("MakeUnicodeFiles.txt", Utility.UTF8);
+                String key = null;
+                String file = null, property = null, value = "", comments = "";
+                while (true) {
+                    String line = br.readLine();
+                    if (line == null)
+                        break;
+                    line = line.trim();
+                    if (line.length() == 0)
+                        continue;
+                    if (DEBUG)
+                        System.out.println("\t" + line);
+                    String lineValue = afterWhitespace(line);
+                    if (line.startsWith("Format:")) {
+                        addPrintStyle(property + " " + lineValue); // fix later
+                    } else if (line.startsWith("#")) {
+                        if (comments.length() != 0) comments += "\n";
+                        comments += line;
+                    } else {
+                        // end of comments, roll up
+                        if (property != null)
+                            addValueComments(property, value, comments);
+                        comments = "";
+                        if (line.startsWith("Generate:")) {
+                            filesToDo = Utility.split(lineValue, ' ');
+                            if (filesToDo.length == 0) {
+                                filesToDo = new String[] {""};
+                            }
+                        } else if (line.startsWith("DeltaVersion:")) {
+                            dVersion = Integer.parseInt(lineValue);
+                        } else if (line.startsWith("File:")) {
+                            int p2 = lineValue.lastIndexOf('/');
+                            file = lineValue.substring(p2+1);
+                            if (p2 >= 0) {
+                                fileToDirectory.put(file, lineValue.substring(0,p2+1));
+                            }
+                            property = null;
+                        } else if (line.startsWith("Property:")) {
+                            property = lineValue;
+                            addPropertyToFile(file, property);
+                            value = "";
+                        } else if (line.startsWith("Value:")) {
+                            value = lineValue;
+                        } else if (line.startsWith("HackName:")) {
+                            String regularItem =
+                                UnicodeProperty.regularize(lineValue, true);
+                            hackMap.put(regularItem, lineValue);
+                        } else if (line.startsWith("FinalComments")) {
+                            break;
+                        } else {
+                            throw new IllegalArgumentException("Unknown command: " + line);
+                        }
+                    }
+                }
+                br.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                throw new IllegalArgumentException("File missing");
+            }
+            hackMapFilter = new UnicodeProperty.MapFilter(hackMap);
+            /*
+               add("PropertyValueAliases", null);
+               add("PropertyAliases", null);
+               add("SpecialCasing", null);
+               add("NormalizationTest", null);
+               add("StandardizedVariants", null);
+               add("CaseFolding", null);
+               add("DerivedAge", new String[] {"Age"});
+               add("Scripts", new String[] {"Script"});
+               add("HangulSyllableType", new String[] {"HangulSyllableType"});
+               add("DerivedBidiClass", new String[] {"BidiClass"});
+               add("DerivedBinaryProperties", new String[] {"BidiMirrored"});
+               add("DerivedCombiningClass", new String[] {"CanonicalCombiningClass"});
+               add("DerivedDecompositionType", new String[] {"DecompositionType"});
+               add("DerivedEastAsianWidth", new String[] {"EastAsianWidth"});
+               add("DerivedGeneralCategory", new String[] {"GeneralCategory"});
+               add("DerivedJoiningGroup", new String[] {"JoiningGroup"});
+               add("DerivedJoiningType", new String[] {"JoiningType"});
+               add("DerivedLineBreak", new String[] {"LineBreak"});
+               add("DerivedNumericType", new String[] {"NumericType"});
+               add("DerivedNumericValues", new String[] {"NumericValue"});
+               add("PropList", new String[] {
+                   "White_Space", "Bidi_Control", "Join_Control",
+                   "Dash", "Hyphen", "Quotation_Mark",
+                   "Terminal_Punctuation", "Other_Math", 
+                   "Hex_Digit", "ASCII_Hex_Digit",
+                   "Other_Alphabetic",
+                   "Ideographic",
+                   "Diacritic", "Extender", 
+                   "Other_Lowercase", "Other_Uppercase",
+                   "Noncharacter_Code_Point",
+                   "Other_Grapheme_Extend",
+                   "Grapheme_Link",
+                   "IDS_Binary_Operator", "IDS_Trinary_Operator",
+                   "Radical", "Unified_Ideograph", 
+                   "Other_Default_Ignorable_Code_Point",
+                   "Deprecated", "Soft_Dotted",
+                   "Logical_Order_Exception",
+                   "Other_ID_Start"
+               });
+               add("DerivedCoreProperties", new String[] {
+                   "Math", "Alphabetic", "Lowercase", "Uppercase",
+                   "ID_Start", "ID_Continue", 
+                   "XID_Start", "XID_Continue", 
+                   "Default_Ignorable_Code_Point",
+                   "Grapheme_Extend", "Grapheme_Base"
+               });
+               add("DerivedNormalizationProps", new String[] {
+                   "FC_NFKC_Closure", 
+                   "Full_Composition_Exclusion", 
+                   "NFD_QuickCheck", "NFC_QuickCheck", "NFKD_QuickCheck", "NFKC_QuickCheck", 
+                   "Expands_On_NFD", "Expands_On_NFC", "Expands_On_NFKD", "Expands_On_NFKC"
+                  });
+            */
+            write();
+        }
+        
+        private void write() {
+            TreeMap fileoptions = new TreeMap();
+            /*for (int i = 0; i < FILE_OPTIONS.length; ++i) {
+                String s = FILE_OPTIONS[i];
+                int pos = s.indexOf(' ');
+                String name = s.substring(0,pos);
+                String options = s.substring(pos).trim();
+                fileoptions.put(name, options);
+            }
+            */
+            for (Iterator it = fileToPropertySet.keySet().iterator(); it.hasNext();) {
+                String key = (String) it.next();
+                if (DEBUG) {
+                    System.out.println();
+                    System.out.println("File:\t" + key);
+                }
+                List propList2 = (List) fileToPropertySet.get(key);
+                if (propList2 == null) {
+                    System.out.println("SPECIAL");
+                    continue;
+                } 
+                for (Iterator pIt = propList2.iterator(); pIt.hasNext();) {
+                    String prop = (String) pIt.next();
+                    String options = (String)fileoptions.get(prop);
+                    if (DEBUG) {
+                        System.out.println();
+                        System.out.println("Property:\t" + prop);
+                        if (options != null) {
+                            System.out.println("Format:\t" + options);
+                        }
+                    }
+                    Map vc = getValue2CommentsMap(prop);
+                    if (vc == null) continue;
+                    for (Iterator it2 = vc.keySet().iterator(); it2.hasNext();) {
+                        String value = (String) it2.next();
+                        String comment = (String) vc.get(value);
+                        if (DEBUG) {
+                            if (!value.equals("")) {
+                                System.out.println("Value:\t" + value);
+                            }
+                            System.out.println(comment);
+                        }
+                    }
+                }
+            }
+        }
+        
+        private void addCommentToFile(String filename, String comment) {
+            fileToComments.put(filename, comment);
+        }
+        
+        private void addPropertyToFile(String filename, String property) {
+            List properties = (List) fileToPropertySet.get(filename);
+            if (properties == null) {
+                properties = new ArrayList(1);
+                fileToPropertySet.put(filename, properties);
+            }
+            properties.add(property);
+        }
+        public List getPropertiesFromFile(String filename) {
+            return (List) fileToPropertySet.get(filename);
+        }
+        public Set getFiles() {
+            return fileToPropertySet.keySet();
         }
     }
-
-         
-
-     //CompositionExclusions
-     //SpecialCasing
-     //NormalizationTest
-     //add("CaseFolding", new String[] {"CaseFolding"});
-     static Map contents = new TreeMap();
-     static void add(String name, String[] properties) {
-         contents.put(name, properties);
-     }
-     static {
-         add("PropertyValueAliases", null);
-         add("PropertyAliases", null);
-         add("SpecialCasing", null);
-         add("NormalizationTest", null);
-         add("StandardizedVariants", null);
-         add("CaseFolding", null);
-         add("DerivedAge", new String[] {"Age"});
-         add("Scripts", new String[] {"Script"});
-         add("HangulSyllableType", new String[] {"HangulSyllableType"});
-         add("DerivedBidiClass", new String[] {"BidiClass"});
-         add("DerivedBinaryProperties", new String[] {"BidiMirrored"});
-         add("DerivedCombiningClass", new String[] {"CanonicalCombiningClass"});
-         add("DerivedDecompositionType", new String[] {"DecompositionType"});
-         add("DerivedEastAsianWidth", new String[] {"EastAsianWidth"});
-         add("DerivedGeneralCategory", new String[] {"GeneralCategory"});
-         add("DerivedJoiningGroup", new String[] {"JoiningGroup"});
-         add("DerivedJoiningType", new String[] {"JoiningType"});
-         add("DerivedLineBreak", new String[] {"LineBreak"});
-         add("DerivedNumericType", new String[] {"NumericType"});
-         add("DerivedNumericValues", new String[] {"NumericValue"});
-         add("PropList", new String[] {
-             "White_Space", "Bidi_Control", "Join_Control",
-             "Dash", "Hyphen", "Quotation_Mark",
-             "Terminal_Punctuation", "Other_Math", 
-             "Hex_Digit", "ASCII_Hex_Digit",
-             "Other_Alphabetic",
-             "Ideographic",
-             "Diacritic", "Extender", 
-             "Other_Lowercase", "Other_Uppercase",
-             "Noncharacter_Code_Point",
-             "Other_Grapheme_Extend",
-             "Grapheme_Link",
-             "IDS_Binary_Operator", "IDS_Trinary_Operator",
-             "Radical", "Unified_Ideograph", 
-             "Other_Default_Ignorable_Code_Point",
-             "Deprecated", "Soft_Dotted",
-             "Logical_Order_Exception",
-             "Other_ID_Start"
-         });
-         add("DerivedCoreProperties", new String[] {
-             "Math", "Alphabetic", "Lowercase", "Uppercase",
-             "ID_Start", "ID_Continue", 
-             "XID_Start", "XID_Continue", 
-             "Default_Ignorable_Code_Point",
-             "Grapheme_Extend", "Grapheme_Base"
-         });
-         add("DerivedNormalizationProps", new String[] {
-             "FC_NFKC_Closure", 
-             "Full_Composition_Exclusion", 
-             "NFD_QuickCheck", "NFC_QuickCheck", "NFKD_QuickCheck", "NFKC_QuickCheck", 
-             "Expands_On_NFD", "Expands_On_NFC", "Expands_On_NFKD", "Expands_On_NFKC"
-            });
-     }
     
-    public static void generateFile(String atOrAfter, String atOrBefore) throws IOException {
-         Iterator it = contents.keySet().iterator();
-         while (it.hasNext()) {
-             String propname = (String) it.next();
-             if (propname.compareToIgnoreCase(atOrAfter) < 0) continue;
-             if (propname.compareToIgnoreCase(atOrBefore) > 0) continue;
-             generateFile(propname);
-         }
-     }
+    public static void generateFile() throws IOException {
+        for (int i = 0; i < Format.theFormat.filesToDo.length; ++i) {
+            String fileName =
+                Format.theFormat.filesToDo[i].trim().toLowerCase(
+                    Locale.ENGLISH);
+            Iterator it = Format.theFormat.getFiles().iterator();
+            boolean gotOne = false;
+            while (it.hasNext()) {
+                String propname = (String) it.next();
+                if (!propname.toLowerCase(Locale.ENGLISH).startsWith(fileName)) continue;
+                generateFile(propname);
+                gotOne = true;
+            }
+            if (!gotOne) {
+                throw new IllegalArgumentException(
+                    "Non-matching file name: " + fileName);
+            }
+        }
+    }
      
     public static void generateFile(String filename) throws IOException {
-        if (filename.equals("*")) {
-            generateFile("", "\uFFFD");
-        } else if (filename.endsWith("Aliases")) {
+        if (filename.endsWith("Aliases")) {
             if (filename.endsWith("ValueAliases")) generateValueAliasFile(filename);
             else generateAliasFile(filename);
         } else if (filename.equals("NormalizationTest")) {
@@ -296,7 +505,7 @@ public class MakeUnicodeFiles {
     static final String SEPARATOR = "# ================================================";
     
     public static void generateAliasFile(String filename) throws IOException {
-        UnicodeDataFile udf = UnicodeDataFile.openAndWriteHeader("DerivedDataTest/", filename);
+        UnicodeDataFile udf = UnicodeDataFile.openAndWriteHeader("DerivedData/", filename);
         PrintWriter pw = udf.out;
         UnicodeProperty.Factory ups 
                   = ToolUnicodePropertySource.make(Default.ucdVersion());
@@ -354,7 +563,7 @@ public class MakeUnicodeFiles {
         }
         pw.println();
         pw.println(SEPARATOR);
-        pw.println("#Total:    " + count);
+        pw.println("# Total:    " + count);
         pw.println();
         udf.close();       
     }
@@ -386,8 +595,9 @@ public class MakeUnicodeFiles {
         "gc\t;\tZ\t;\tSeparator\t# Zl | Zp | Zs"};
         
     public static void generateValueAliasFile(String filename) throws IOException {
-        UnicodeDataFile udf = UnicodeDataFile.openAndWriteHeader("DerivedDataTest/", filename);
+        UnicodeDataFile udf = UnicodeDataFile.openAndWriteHeader("DerivedData/", filename);
         PrintWriter pw = udf.out;
+        Format.theFormat.printFileComments(pw, filename);
         UnicodeProperty.Factory toolFactory 
           = ToolUnicodePropertySource.make(Default.ucdVersion());
         BagFormatter bf = new BagFormatter(toolFactory);
@@ -428,7 +638,7 @@ public class MakeUnicodeFiles {
             for (Iterator it2 = up.getAvailableValues().iterator(); it2.hasNext();) {
                 String value = (String) it2.next();
                 List l = up.getValueAliases(value);
-                System.out.println(value + "\t" + bf.join(l));
+                if (DEBUG) System.out.println(value + "\t" + bf.join(l));
                 
                 // HACK
                 Tabber mt = mt2;
@@ -442,7 +652,7 @@ public class MakeUnicodeFiles {
                     } else {
                         l.add(0, l.get(0)); // double up
                     } 
-                } else if (l.size() > 2) {
+                } else if (propName.equals("Canonical_Combining_Class")) {
                     mt = mt3;
                 }
                 if (UnicodeProperty.equalNames(value,"Cyrillic_Supplement")) {
@@ -464,6 +674,8 @@ public class MakeUnicodeFiles {
                 }
             }
             pw.println();
+            pw.println("# " + propName + " (" + shortProp + ")");
+            pw.println();
             for (Iterator it4 = sortedSet.iterator(); it4.hasNext();) {
                 String line = (String) it4.next();
                 pw.println(line);
@@ -473,28 +685,52 @@ public class MakeUnicodeFiles {
     }
     
     public static void generatePropertyFile(String filename) throws IOException {
-         String[] propList = (String[]) contents.get(filename);
-         UnicodeDataFile udf = UnicodeDataFile.openAndWriteHeader("DerivedDataTest/", filename);
-         PrintWriter pw = udf.out; // bf2.openUTF8Writer(UCD_Types.GEN_DIR, "Test" + filename + ".txt");
-         UnicodeProperty.Factory toolFactory 
-           = ToolUnicodePropertySource.make(Default.ucdVersion());
-         UnicodeSet unassigned = toolFactory.getSet("gc=cn")
-             .addAll(toolFactory.getSet("gc=cs"));
-         //System.out.println(unassigned.toPattern(true));
-         // .removeAll(toolFactory.getSet("noncharactercodepoint=true"));
- 
-         for (int i = 0; i < propList.length; ++i) {
+        String dir = (String) Format.theFormat.fileToDirectory.get(filename);
+        if (dir == null) dir = "";
+        UnicodeDataFile udf =
+            UnicodeDataFile.openAndWriteHeader("DerivedData/" + dir, filename);
+        PrintWriter pw = udf.out;
+        // bf2.openUTF8Writer(UCD_Types.GEN_DIR, "Test" + filename + ".txt");
+        Format.theFormat.printFileComments(pw, filename);
+        UnicodeProperty.Factory toolFactory =
+            ToolUnicodePropertySource.make(Default.ucdVersion());
+        UnicodeSet unassigned =
+            toolFactory.getSet("gc=cn").addAll(toolFactory.getSet("gc=cs"));
+        //System.out.println(unassigned.toPattern(true));
+        // .removeAll(toolFactory.getSet("noncharactercodepoint=true"));
+
+        List propList = Format.theFormat.getPropertiesFromFile(filename);
+        for (Iterator propIt = propList.iterator(); propIt.hasNext();) {
              BagFormatter bf = new BagFormatter(toolFactory);
-             UnicodeProperty prop = toolFactory.getProperty(propList[i]);
+             UnicodeProperty prop = toolFactory.getProperty((String) propIt.next());
              String name = prop.getName();
              System.out.println("Property: " + name + "; " + prop.getTypeName(prop.getType()));
-             pw.println("\n" + SEPARATOR + "\n");
-             String propComment = valueComments.get(name, "*");
-             if (propComment != null) {
-                 pw.print(propComment);
+            pw.println();
+            pw.println(SEPARATOR);
+             String propComment = Format.theFormat.getValueComments(name, "");
+             if (propComment != null && propComment.length() != 0) {
+                 pw.println();
+                 pw.println(propComment);
+             } else if (!prop.isType(UnicodeProperty.BINARY_MASK)) {
+                 pw.println();
+                 pw.println("# Property:\t" + name);
              }
-             pw.println();
-             PrintStyle ps = PrintStyle.get(name);
+             
+            Format.PrintStyle ps = Format.theFormat.getPrintStyle(name);
+            if (DEBUG) System.out.println(ps.toString());
+
+            if (!prop.isType(UnicodeProperty.BINARY_MASK) &&
+                (ps.skipUnassigned != null || ps.skipValue != null)) {
+                 String v = ps.skipValue;
+                if (v == null) {
+                    v = ps.skipUnassigned;
+                }
+                String v2 = prop.getFirstValueAlias(v);
+                if (UnicodeProperty.compareNames(v,v2) != 0) v = v + " (" + v2 + ")";
+                pw.println();
+                pw.println("#  All code points not explicitly listed for " + prop.getName());
+                pw.println("#  have the value " + v + ".");
+            }
              
              if (!ps.interleaveValues && prop.isType(UnicodeProperty.BINARY_MASK)) {
                  if (DEBUG) System.out.println("Resetting Binary Values");
@@ -517,60 +753,73 @@ public class MakeUnicodeFiles {
              } else {
                  writeEnumeratedValues(pw, bf, unassigned, prop, ps);
              }
-             pw.println();
          }
          udf.close();
      }
+     
     private static void writeEnumeratedValues(
             PrintWriter pw,
             BagFormatter bf,
             UnicodeSet unassigned,
             UnicodeProperty prop,
-            PrintStyle ps) {
+            Format.PrintStyle ps) {
         if (DEBUG) System.out.println("Writing Enumerated Values: " + prop.getName());
         
-         bf.setValueSource(new UnicodeProperty.FilteredProperty(prop, hackMapFilter));
+         bf.setValueSource(new UnicodeProperty.FilteredProperty(prop, Format.theFormat.hackMapFilter));
          Collection aliases = prop.getAvailableValues();
          if (ps.orderByRangeStart) {
-             System.out.println("Reordering");
+             if (DEBUG) System.out.println("Reordering");
              TreeSet temp2 = new TreeSet(new RangeStartComparator(prop));
              temp2.addAll(aliases);
              aliases = temp2;
-         } 
+         }
+         if (ps.sortNumeric) {
+             if (DEBUG) System.out.println("Reordering");
+             TreeSet temp2 = new TreeSet(NUMERIC_STRING_COMPARATOR);
+             temp2.addAll(aliases);
+             aliases = temp2;
+         }
          for (Iterator it = aliases.iterator(); it.hasNext();) {
              String value = (String)it.next();
-             UnicodeSet s = prop.getSet(value);
              if (DEBUG) System.out.println("Getting value " + value);
-             String valueComment = valueComments.get(prop.getName(), value);
+             UnicodeSet s = prop.getSet(value);
+             String valueComment = Format.theFormat.getValueComments(prop.getName(), value);
         
             if (DEBUG) {
-                System.out.println(value + "\t" + prop.getFirstValueAlias(value) + "\tskip:" + ps.skipValue); 
+                System.out.println("Value:\t" + value + "\t" + prop.getFirstValueAlias(value) + "\tskip:" + ps.skipValue); 
+                System.out.println("Value Comment\t" + valueComment); 
                 System.out.println(s.toPattern(true));
             }
             
             int totalSize = s.size();
-            if (s.size() == 0) continue;
+            if (s.size() == 0) {
+                System.out.println("\tSkipping Empty: " + prop.getName() + "=" + value);
+                continue;
+            } 
             
             if (UnicodeProperty.compareNames(value, ps.skipValue) == 0) {
-                System.out.println("Skipping: " + value);
+                if (DEBUG) System.out.println("Skipping: " + value);
                 continue;
             } 
              
             if (UnicodeProperty.compareNames(value, ps.skipUnassigned) == 0) {
-                System.out.println("Removing Unassigneds: " + value);
+                bf.setFullTotal(s.size());
+                if (DEBUG) System.out.println("Removing Unassigneds: " + value);
                 s.removeAll(unassigned);
             }
              
             //if (s.size() == 0) continue;
              //if (unassigned.containsAll(s)) continue; // skip if all unassigned
              //if (s.contains(0xD0000)) continue; // skip unassigned
-             pw.print("\n" + SEPARATOR + "\n\n");
              
+             boolean nonLongValue = false;
              String displayValue = value;
              if (ps.valueStyle.equals("none")) {
                  displayValue = null;
+                 nonLongValue = true;
              } else if (ps.valueStyle.equals("short")) {
                  displayValue = prop.getFirstValueAlias(displayValue);
+                 nonLongValue = true;
                  if (DEBUG) System.out.println("Changing value " + displayValue);
              } 
              if (ps.makeUppercase && displayValue != null) {
@@ -585,29 +834,48 @@ public class MakeUnicodeFiles {
              }
              if (DEBUG) System.out.println("Setting value " + displayValue);
              bf.setValueSource(displayValue);
-             if (valueComment != null) {
-                 pw.println(valueComment);
+             
+             if (!prop.isType(UnicodeProperty.BINARY_MASK)) {
                  pw.println();
+                 pw.println(SEPARATOR);
+                 if (nonLongValue) {
+                     pw.println();
+                     pw.println("# " + prop.getName() + "=" + value);
+                 }
              }
-             if (ps.longValueHeading != null) {
+
+             if (valueComment != null) {
+                 pw.println();
+                 pw.println(valueComment);
+             }
+             if (false && ps.longValueHeading != null) {
                  String headingValue = value;
                  if (ps.longValueHeading == "ccc") {
                      headingValue = Utility.replace(value, "_", "");
                      char c = headingValue.charAt(0);
                      if ('0' <= c && c <= '9') headingValue = "Other Combining Class";
                  }
+                 pw.println();
                  pw.println("# " + headingValue);
-                 pw.println();
-             }
-             if (s.size() != 0) bf.showSetNames(pw, s);
-             if (s.size() != totalSize) {
-                 pw.println();
-                 pw.print("# Not Listed: " + totalSize);
              }
              pw.println();
+             //if (s.size() != 0) 
+             bf.showSetNames(pw, s);
         }
         
     }
+    //static NumberFormat nf = NumberFormat.getInstance();
+    static Comparator NUMERIC_STRING_COMPARATOR = new Comparator() {
+        public int compare(Object o1, Object o2) {
+            if (o1 == o2) return 0;
+            if (o1 == null) return -1;
+            if (o2 == null) return 1;
+            return Double.compare(
+                Double.parseDouble((String) o1),
+                Double.parseDouble((String) o2));
+        }
+        
+    };
     /*
     private static void writeBinaryValues(
         PrintWriter pw,
@@ -625,8 +893,11 @@ public class MakeUnicodeFiles {
         BagFormatter bf,
         UnicodeProperty prop) {
         if (DEBUG) System.out.println("Writing Interleaved Values: " + prop.getName());
+        pw.println();   
          bf.setValueSource(new UnicodeProperty.FilteredProperty(prop, new RestoreSpacesFilter()))
          .setNameSource(null)
+         .setLabelSource(null)
+         .setRangeBreakSource(null)
          .setShowCount(false)
          .showSetNames(pw,new UnicodeSet(0,0x10FFFF));                 
     }
@@ -636,8 +907,11 @@ public class MakeUnicodeFiles {
             BagFormatter bf,
             UnicodeProperty prop) {
         if (DEBUG) System.out.println("Writing String Values: " + prop.getName());
-        bf.setValueSource(prop).setHexValue(true).setMergeRanges(false);
-        bf.showSetNames(pw,new UnicodeSet(0,0x10FFFF));                 
+        pw.println();   
+        bf.setValueSource(prop)
+        .setHexValue(true)
+        .setMergeRanges(false)
+        .showSetNames(pw,new UnicodeSet(0,0x10FFFF));                 
     }
      
     static class RangeStartComparator implements Comparator {
@@ -660,7 +934,7 @@ public class MakeUnicodeFiles {
     static class RestoreSpacesFilter extends UnicodeProperty.StringFilter {
         public String remap(String original) {
             // ok, because doesn't change length
-            String mod = (String) hackMap.get(original);
+            String mod = (String) Format.theFormat.hackMap.get(original);
             if (mod != null) original = mod;
             return original.replace('_',' ');
         }
@@ -673,6 +947,155 @@ public class MakeUnicodeFiles {
             return s.compareToIgnoreCase(t);
         }
     };
+    
+    public static void showDiff() throws IOException {
+        PrintWriter out = BagFormatter.openUTF8Writer(UCD_Types.GEN_DIR, "propertyDifference.txt");
+        try {
+            showDifferences(out, "4.0.1", "LB", "GC");
+            showDifferences(out, "4.0.1", "East Asian Width", "LB");
+            showDifferences(out, "4.0.1", "East Asian Width", "GC");
+        } finally {
+            out.close();
+        }
+    }
+    
+    public static void showMatches() throws IOException {
+        PrintWriter out = BagFormatter.openUTF8Writer(UCD_Types.GEN_DIR, "propertyDifference.txt");
+        try {
+            showDifferences(out, "4.0.1", "LB", "GC");
+            showDifferences(out, "4.0.1", "East Asian Width", "LB");
+            showDifferences(out, "4.0.1", "East Asian Width", "GC");
+        } finally {
+            out.close();
+        }
+    }
+
+    static NumberFormat nf = NumberFormat.getIntegerInstance(Locale.ENGLISH);
+    
+    static void showDifferences(PrintWriter out, String version, String prop1, String prop2) throws IOException {
+        UnicodeProperty p1 = ToolUnicodePropertySource.make(version).getProperty(prop1);
+        UnicodeProperty p2 = ToolUnicodePropertySource.make(version).getProperty(prop2);
+        BagFormatter bf = new BagFormatter();
+        out.println("Comparing " + p1.getName() + " and " + p2.getName());
+        System.out.println("Comparing " + p1.getName() + " and " + p2.getName());
+        UnicodeSet intersection = new UnicodeSet();
+        UnicodeSet disjoint = new UnicodeSet();
+            main:
+            for (Iterator it1 = p1.getAvailableValues().iterator(); it1.hasNext();) {
+                String v1 = (String)it1.next();
+                UnicodeSet s1 = p1.getSet(v1);
+                v1 += " (" + p1.getFirstValueAlias(v1) + ")";
+                System.out.println(v1);
+                out.println();
+                out.println(v1 + " [" + nf.format(s1.size()) + "]");
+
+                // create some containers so that the output is organized reasonably
+                String contains = "";
+                String overlaps = "";
+                UnicodeSet containsSet = new UnicodeSet();
+                Set overlapsSet = new TreeSet();
+                for (Iterator it2 = p2.getAvailableValues().iterator(); it2.hasNext();) {
+                    String v2 = (String)it2.next();
+                    UnicodeSet s2 = p2.getSet(v2);
+                    // v2 += "(" + p2.getFirstValueAlias(v2) + ")";
+                    v2 = p2.getFirstValueAlias(v2);
+                    if (s1.containsNone(s2)) continue;
+                    if (s1.equals(s2)) {
+                        out.println("\t= " + v2);
+                        continue main; // since they are partitions, we can stop here
+                    } else if (s2.containsAll(s1)) {
+                        out.println("\t\u2282 " + v2 + " [" + nf.format(s2.size()) + "]");
+                        continue main; // partition, stop
+                    } else if (s1.containsAll(s2)) {
+                        if (contains.length() != 0) contains += " \u222a ";
+                        contains += v2 + " [" + nf.format(s2.size()) + "]";
+                        containsSet.addAll(s2);
+                        if (containsSet.size() == s1.size()) break;
+                    } else { // doesn't contain, isn't contained
+                        if (overlaps.length() != 0) overlaps += "\r\n\t";
+                        intersection.clear().addAll(s2).retainAll(s1);
+                        disjoint.clear().addAll(s1).removeAll(s2);
+                        overlaps += "\u2283 " + v2 + " [" + nf.format(intersection.size()) + "]"
+                            + " \u2285 " + v2 + " [" + nf.format(disjoint.size()) + "]";
+                        overlapsSet.add(v2);
+                    } 
+                }
+                if (contains.length() != 0) {
+                    out.println((containsSet.size() == s1.size() ? "\t= " : "\t\u2283 ") + contains);
+                } 
+                if (overlaps.length() != 0) out.println("\t" + overlaps);
+                if (false && overlapsSet.size() != 0) {
+                    out.println("\t\u2260\u2284\u2285");
+                    for (Iterator it3 = overlapsSet.iterator(); it3.hasNext();) {
+                        String v3 = (String) it3.next();
+                        UnicodeSet s3 = p2.getSet(v3);
+                        out.println("\t" + v3);
+                        bf.showSetDifferences(out,v1,s1,v3,s3);
+                    }
+                }
+            }
+    }
+    
+    static class UnicodeDataHack extends UnicodeLabel {
+        private UnicodeProperty.Factory factory;
+        private UnicodeProperty name;
+        private UnicodeProperty bidiMirrored;
+        private UnicodeProperty numericValue;
+        private UnicodeProperty numericType;
+        private UnicodeProperty decompositionValue;
+        private UnicodeProperty decompositionType;
+        private UnicodeProperty bidiClass;
+        private UnicodeProperty combiningClass;
+        private UnicodeProperty category;
+        UnicodeDataHack(UnicodeProperty.Factory factory) {
+            this.factory = factory;
+            name = factory.getProperty("Name");
+            category = factory.getProperty("General_Category");
+            combiningClass = factory.getProperty("Canonical_Combining_Class");
+            bidiClass = factory.getProperty("Bidi_Class");
+            decompositionType = factory.getProperty("Decomposition_Type");
+            decompositionValue = factory.getProperty("Decomposition_Value");
+            numericType = factory.getProperty("Numeric_Type");
+            numericValue = factory.getProperty("Numeric_Value");
+            bidiMirrored = factory.getProperty("Bidi_Mirrored");
+            //name10
+            //isoComment
+        }
+        public String getValue(int codepoint, boolean isShort) {
+            String nameStr = name.getName();
+            if (nameStr.startsWith("<reserved")) return null;
+            String code = Utility.hex(codepoint);
+            int pos = nameStr.indexOf(code);
+            if (pos > 0) {
+                nameStr = nameStr.substring(0,pos) + "%" + nameStr.substring(pos + code.length());
+            }
+            nameStr += ";"
+            + category.getValue(codepoint, true) + ";"
+            + combiningClass.getValue(codepoint, true) + ";"
+            + bidiClass.getValue(codepoint, true) + ";"
+            ;
+            String temp = decompositionType.getValue(codepoint, true);
+            if (!temp.equals("None")) {
+                nameStr += "<" + temp + "> " + Utility.hex(decompositionValue.getValue(codepoint));
+            }
+            nameStr += ";";
+            temp = numericType.getValue(codepoint, true);
+            if (temp.equals("Decimal")) {
+                nameStr += temp + ";" + temp + ";" + temp + ";";
+            } else if (temp.equals("Digit")) {
+                nameStr += ";" + temp + ";" + temp + ";";
+            } else if (temp.equals("Numeric")) {
+                nameStr += ";;" + temp + ";";
+            } else if (temp.equals("Digit")) {
+                nameStr += ";;;";
+            }
+            if (bidiMirrored.getValue(codepoint, true).equals("True")) {
+                nameStr += "Y" + ";";
+            }
+            nameStr += ";";
+            return nameStr;
+        }       
+    }
 }
 
     

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/BuildNames.java,v $
-* $Date: 2004/02/07 01:01:17 $
-* $Revision: 1.8 $
+* $Date: 2004/03/11 19:03:18 $
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -26,7 +26,7 @@ import com.ibm.text.utility.*;
 
 public class BuildNames implements UCD_Types {
 
-    static final boolean DEBUG = true;
+    static final boolean DEBUG = false;
 
     public static void main(String[] args) throws IOException {
         collectWords();

@@ -1,5 +1,6 @@
 package com.ibm.text.UCD;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -53,7 +54,7 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
         
         add(new UnicodeProperty.SimpleProperty() {
             public String _getValue(int codepoint) {
-                if (codepoint == 0x1D100) {
+                if (DEBUG && codepoint == 0x1D100) {
                     System.out.println("here");
                 }
                 //if ((ODD_BALLS & ucd.getCategoryMask(codepoint)) != 0) return null;
@@ -82,10 +83,17 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
         .setValues("<string>"));
         
         add(new UnicodeProperty.SimpleProperty() {
+            NumberFormat nf = NumberFormat.getInstance();
+            {
+                nf.setGroupingUsed(false);
+                nf.setMaximumFractionDigits(8);
+                nf.setMinimumFractionDigits(1);
+            }
             public String _getValue(int codepoint) {
+                
                 double num = ucd.getNumericValue(codepoint);
                 if (Double.isNaN(num)) return null;
-                return Double.toString(num);
+                return nf.format(num);
             }
         }.setMain("Numeric_Value", "nv", UnicodeProperty.NUMERIC, version));
         
@@ -100,8 +108,9 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
             public int getMaxWidth(boolean isShort) {
                 return 14;
             }
-        }.setMain("FC_NFKC_Closure", "FNC", UnicodeProperty.STRING, version)
-        .addName("FC_NFKC"));
+        }.setMain("FC_NFKC_Closure", "FC_NFKC", UnicodeProperty.STRING, version)
+        //.addName("FNC")
+        );
 
         add(new UnicodeProperty.SimpleProperty() {
             public String _getValue(int codepoint) {
@@ -319,7 +328,7 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
                         case UCD_Types.COMBINING_CLASS>>8: temp = (ucd.getCombiningClassID_fromIndex((short)i, style)); break;
                         case UCD_Types.BIDI_CLASS>>8: temp = (ucd.getBidiClassID_fromIndex((byte)i, style)); break;
                         case UCD_Types.DECOMPOSITION_TYPE>>8: temp = (ucd.getDecompositionTypeID_fromIndex((byte)i, style)); 
-                            check = temp != null;
+                            //check = temp != null;
                             break;
                         case UCD_Types.NUMERIC_TYPE>>8: temp = (ucd.getNumericTypeID_fromIndex((byte)i, style));
                             titlecase = true;
@@ -389,7 +398,10 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
                         case UCD_Types.EAST_ASIAN_WIDTH>>8:
                             return lookup(valueAlias, UCD_Names.LONG_EAST_ASIAN_WIDTH, UCD_Names.EAST_ASIAN_WIDTH, result);
                         case UCD_Types.LINE_BREAK>>8:
-                            return lookup(valueAlias, UCD_Names.LONG_LINE_BREAK, UCD_Names.LINE_BREAK, result);
+                            lookup(valueAlias, UCD_Names.LONG_LINE_BREAK, UCD_Names.LINE_BREAK, result);
+                            if (valueAlias.equals("Inseparable")) addUnique("Inseperable", result);
+                            // Inseparable; Inseperable
+                            return result;
                         case UCD_Types.JOINING_TYPE>>8:
                             return lookup(valueAlias, UCD_Names.LONG_JOINING_TYPE, UCD_Names.JOINING_TYPE, result);
                         case UCD_Types.JOINING_GROUP>>8:
@@ -445,10 +457,13 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
             if (isType(BINARY_MASK)) {
                 return up.hasValue(codepoint) ? "True" : "False";
             }
-            return "<unknown>";
+            throw new IllegalArgumentException("Failed to find value for " + Utility.hex(codepoint));
         }
     
         public String getAge(int codePoint) {
+            if (codePoint == 0xF0000) {
+                System.out.println("debug point");
+            }
             if (needAgeCache) {
                 for (int i = UCD_Types.AGE11; i < UCD_Types.LIMIT_AGE; ++i) {
                     ucdCache[i] = UCD.make(UCD_Names.AGE_VERSIONS[i]);

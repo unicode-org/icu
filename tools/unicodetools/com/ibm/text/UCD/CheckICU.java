@@ -59,7 +59,7 @@ public class CheckICU {
         toolFactory = ToolUnicodePropertySource.make("4.0.0");
 
         String[] quickList = {
-            "Canonical_Combining_Class",
+            // "Canonical_Combining_Class",
             // "Script", "Bidi_Mirroring_Glyph", "Case_Folding",
             //"Numeric_Value"
         };

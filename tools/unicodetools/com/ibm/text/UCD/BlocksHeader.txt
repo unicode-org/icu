@@ -1,7 +1,4 @@
-# Correlated with Unicode 4.0
-# Note: The casing of block names is not normative.
-#       For example, "Basic Latin" and "BASIC LATIN" are equivalent.
-#
-# Code points not explicitly listed in this file are given the value No_Block.
-#
+# Note:   The casing of block names is not normative.
+#         For example, "Basic Latin" and "BASIC LATIN" are equivalent.
+# Format:
 # Start Code..End Code; Block Name

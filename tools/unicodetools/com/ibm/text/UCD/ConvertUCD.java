@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/ConvertUCD.java,v $
-* $Date: 2004/02/12 08:23:17 $
-* $Revision: 1.14 $
+* $Date: 2004/03/11 19:03:18 $
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -305,6 +305,7 @@ public final class ConvertUCD implements UCD_Types {
             value.compact();
         }
         
+        /*
         UData ud;
         ud = getEntry(0x5e);
         System.out.println("SPOT-CHECK: 5e: " + ud);
@@ -320,6 +321,7 @@ public final class ConvertUCD implements UCD_Types {
         
         ud = getEntry(0xFFFF);
         System.out.println("SPOT-CHECK: FFFF: " + ud);
+        */
 
         writeJavaData();
     }
@@ -410,7 +412,7 @@ public final class ConvertUCD implements UCD_Types {
 
                 int count = Utility.split(line,';',parts);
 
-                if (parts[0].equals("2801")) {
+                if (false && parts[0].equals("2801")) {
                     System.out.println("debug?");
                 }
 
@@ -468,7 +470,7 @@ public final class ConvertUCD implements UCD_Types {
                         if (end == 0) end = cpStart;
 
                         for (int j = cpStart; j <= end; ++j) {
-                            if (j != UCD.mapToRepresentative(j, false)) continue;
+                            if (j != UCD.mapToRepresentative(j, Integer.MAX_VALUE)) continue;
                             if (skipLetters && getEntry(cpStart).isLetter()) continue;
                             appendCharProperties(j, prop);
                         }
@@ -490,7 +492,7 @@ public final class ConvertUCD implements UCD_Types {
                         if (val.equals("")) continue; // skip empty values, they mean default
 
                         for (int cps = cpStart; cps <= cpTop; ++cps) {
-                            if (UCD.mapToRepresentative(cps, false) != cps) continue;    // skip condensed ranges
+                            if (UCD.mapToRepresentative(cps, Integer.MAX_VALUE) != cps) continue;    // skip condensed ranges
 
                             if (key.equals("binary")) {
                                 appendCharProperties(cps, val);
@@ -508,7 +510,7 @@ public final class ConvertUCD implements UCD_Types {
                                 if (type.equals("I")) {
                                     data.simpleCaseFolding = val;
                                     setBinaryProperty(cps, CaseFoldTurkishI);
-                                    System.out.println("SPOT-CHECK: <" + parts[i-1] + "> Setting " 
+                                    if (DEBUG) System.out.println("SPOT-CHECK: <" + parts[i-1] + "> Setting " 
                                     	+ Utility.hex(cps) + ": " + Utility.hex(val));
                                 }
                             } else if (labels[0].equals("SpecialCasing")   // special handling for special casing
@@ -658,7 +660,7 @@ public final class ConvertUCD implements UCD_Types {
                     System.out.println("Warning: NULL name\r\n" + uData);
                     System.out.println();
                 }
-                if (uData.codePoint == 0x2801) {
+                if (false && uData.codePoint == 0x2801) {
                     System.out.println("SPOT-CHECK: " + uData);
                 }
                 uData.writeBytes(dataOut);
