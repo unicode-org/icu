@@ -338,10 +338,17 @@ parseConverterOptions(const char *inName,
 
                 /* copy the locale option value */
                 inName+=7;
+                len=0;
                 for(;;) {
                     c=*inName;
                     if(c!=0) {
-                        ++inName;
+                        len++;
+                        inName++;
+                        if (++len>=ULOC_FULLNAME_CAPACITY) {
+                            *err = U_BUFFER_OVERFLOW_ERROR;
+                            *dest=0;
+                            return;
+                        }
                         if(c!=UCNV_OPTION_SEP_CHAR) {
                             *dest++=c;
                         } else {
