@@ -26,8 +26,8 @@
 
 U_CAPI void U_EXPORT2
 u_parseDelimitedFile(const char *filename, char delimiter,
-                     UParseFieldFn *fields[], int32_t fieldCount,
-                     void *context,
+                     char *fields[][2], int32_t fieldCount,
+                     UParseLineFn *lineFn, void *context,
                      UErrorCode *pErrorCode) {
     FileStream *file;
     char line[300];
@@ -38,7 +38,17 @@ u_parseDelimitedFile(const char *filename, char delimiter,
         return;
     }
 
-    file=T_FileStream_open(filename, "r");
+    if(fields==NULL || lineFn==NULL || fieldCount<=0) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    if(filename==NULL || *filename==0 || *filename=='-' && filename[1]==0) {
+        filename=NULL;
+        file=T_FileStream_stdin();
+    } else {
+        file=T_FileStream_open(filename, "r");
+    }
     if(file==NULL) {
         fprintf(stderr, "*** unable to open input file %s ***\n", filename);
         *pErrorCode=U_FILE_ACCESS_ERROR;
@@ -58,14 +68,6 @@ u_parseDelimitedFile(const char *filename, char delimiter,
             continue;
         }
 
-        /* call the preparation function */
-        if(fields[0]!=NULL) {
-            fields[0](context, line, line+length, -1, pErrorCode);
-            if(U_FAILURE(*pErrorCode)) {
-                break;
-            }
-        }
-
         /* for each field, call the corresponding field function */
         start=line;
         for(i=0; i<fieldCount; ++i) {
@@ -75,15 +77,9 @@ u_parseDelimitedFile(const char *filename, char delimiter,
                 ++limit;
             }
 
-            /* call the field function */
-            if(fields[i+1]!=NULL) {
-                fields[i+1](context, start, limit, i, pErrorCode);
-                if(U_FAILURE(*pErrorCode)) {
-                    limit=line+length;
-                    i=fieldCount;
-                    break;
-                }
-            }
+            /* set the field start and limit in the fields array */
+            fields[i][0]=start;
+            fields[i][1]=limit;
 
             /* set start to the beginning of the next field, if any */
             start=limit;
@@ -103,14 +99,14 @@ u_parseDelimitedFile(const char *filename, char delimiter,
             break;
         }
 
-        /* call the finalizing function */
-        if(fields[fieldCount+1]!=NULL) {
-            fields[fieldCount+1](context, line, line+length, fieldCount, pErrorCode);
-            if(U_FAILURE(*pErrorCode)) {
-                break;
-            }
+        /* call the field function */
+        lineFn(context, fields, fieldCount, pErrorCode);
+        if(U_FAILURE(*pErrorCode)) {
+            break;
         }
     }
 
-    T_FileStream_close(file);
+    if(filename!=NULL) {
+        T_FileStream_close(file);
+    }
 }

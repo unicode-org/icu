@@ -23,11 +23,11 @@
 
 #include "unicode/utypes.h"
 
-/* Function type for u_parseDelimitedFile()'s fields parameter. */
+/* Function type for u_parseDelimitedFile(). */
 typedef void
-UParseFieldFn(void *context,
-              char *start, char *limit,
-              int32_t fieldNr,
+UParseLineFn(void *context,
+              char *fields[][2],
+              int32_t fieldCount,
               UErrorCode *pErrorCode);
 
 /*
@@ -38,27 +38,26 @@ UParseFieldFn(void *context,
  * (semicolon for Unicode Properties files) between two fields. The last field in
  * a line does not need to be terminated with a delimiter.
  *
- * For each field, and at the beginning and end of the processing of a line,
- * a field function is called. There must be fieldCount+2 function pointers in
- * the fields array. Any of them may be NULL to indicate that there is no function.
- * For each function call, the context parameter of the field function is
- * the same as the one for the parse function. The start pointer indicates the
- * beginning of the field. The limit pointer points to the delimiter or NUL
- * character.
- * For the functions for the beginning and end of a line, start and limit
- * are set to the entire line.
- * Before a line's fields are processed, fields[0] is called with
- * fieldNr=-1.
- * For each field i (i=0..fieldCount-1), fieldFn[i+1] is called with fieldNr=i.
- * After a line's fields are processed, fields[fieldCount+1] is called
- * with fieldNr=fieldCount.
+ * For each line, after segmenting it, a line function is called.
+ * It gets passed the array of field start and limit pointers that is
+ * passed into this parser and filled by it for each line.
+ * For each field i of the line, the start pointer in fields[i][0]
+ * points to the beginning of the field, while the limit pointer in fields[i][1]
+ * points behind the field, i.e., to the delimiter or the line end.
+ *
+ * The context parameter of the line function is
+ * the same as the one for the parse function.
+ *
+ * The line function may modify the contents of the fields including the
+ * limit characters.
+ *
  * If the file cannot be opened, or there is a parsing error or a field function
  * sets *pErrorCode, then the parser returns with *pErrorCode set to an error code.
  */
 U_CAPI void U_EXPORT2
 u_parseDelimitedFile(const char *filename, char delimiter,
-                     UParseFieldFn *fields[], int32_t fieldCount,
-                     void *context,
+                     char *fields[][2], int32_t fieldCount,
+                     UParseLineFn *lineFn, void *context,
                      UErrorCode *pErrorCode);
 
 #endif

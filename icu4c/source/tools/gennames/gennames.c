@@ -27,10 +27,10 @@
 #include "unicode/utypes.h"
 #include "cmemory.h"
 #include "cstring.h"
-#include "filestrm.h"
 #include "unicode/udata.h"
 #include "unewdata.h"
 #include "uoptions.h"
+#include "uparse.h"
 
 #define STRING_STORE_SIZE 1000000
 #define GROUP_STORE_SIZE 5000
@@ -102,7 +102,7 @@ static void
 init();
 
 static void
-parseDB(FileStream *in, bool_t store10Names);
+parseDB(const char *filename, bool_t store10Names);
 
 static void
 parseName(char *name, int16_t length);
@@ -182,7 +182,7 @@ __versionFromString(UVersionInfo versionArray, const char *versionString) {
     if(versionString!=NULL) {
         for(;;) {
             versionArray[part]=(uint8_t)uprv_strtoul(versionString, &end, 10);
-            if(*end!=U_VERSION_DELIMITER || ++part==U_MAX_VERSION_LENGTH) {
+            if(end==versionString || ++part==U_MAX_VERSION_LENGTH || *end!=U_VERSION_DELIMITER) {
                 break;
             }
             versionString=end+1;
@@ -209,7 +209,6 @@ static UOption options[]={
 extern int
 main(int argc, const char *argv[]) {
     UVersionInfo version;
-    FileStream *in;
     bool_t store10Names=FALSE;
 
     /* preset then read command line options */
@@ -256,24 +255,10 @@ main(int argc, const char *argv[]) {
     __versionFromString(version, options[7].value);
     uprv_memcpy(dataInfo.dataVersion, version, 4);
 
-    if(argc<2) {
-        in=T_FileStream_stdin();
-    } else {
-        in=T_FileStream_open(argv[1], "r");
-        if(in==NULL) {
-            fprintf(stderr, "gennames: unable to open input file %s\n", argv[1]);
-            exit(U_FILE_ACCESS_ERROR);
-        }
-    }
-
     init();
-    parseDB(in, store10Names);
+    parseDB(argc>=2 ? argv[1] : "-", store10Names);
     compress();
     generateData(options[5].value);
-
-    if(in!=T_FileStream_stdin()) {
-        T_FileStream_close(in);
-    }
 
     return 0;
 }
@@ -290,66 +275,54 @@ init() {
 /* parsing ------------------------------------------------------------------ */
 
 static void
-parseDB(FileStream *in, bool_t store10Names) {
-    char line[300];
+lineFn(void *context,
+       char *fields[][2], int32_t fieldCount,
+       UErrorCode *pErrorCode) {
     uint32_t code=0;
-    int16_t limit, length, name1Start, name1Length, name2Start, name2Length=0;
-    int i;
+    char *name1Start, *name2Start;
+    int16_t name1Length, name2Length;
 
-    while(T_FileStream_readLine(in, line, sizeof(line))!=NULL) {
-        length=uprv_strlen(line);
+    /* get the character code */
+    code=uprv_strtoul(fields[0][0], NULL, 16);
 
-        /* get the character code */
-        limit=getField(line, 0, length);
-        if(limit<1 || limit==length) {
-            fprintf(stderr, "gennames: too few fields at code 0x%lx\n", code);
-            exit(U_PARSE_ERROR);
-        }
-        code=uprv_strtoul(line, NULL, 16);
-
-        /* get the character name */
-        name1Start=limit+1;
-        if(name1Start>=length) {
-            fprintf(stderr, "gennames: too few fields at code 0x%lx\n", code);
-            exit(U_PARSE_ERROR);
-        }
-        limit=getField(line, name1Start, length);
-
+    /* get the character name */
+    name1Start=fields[1][0];
+    if(fields[1][0][0]!='<') {
+        name1Length=fields[1][1]-name1Start;
+    } else {
         /* do not store pseudo-names in <> brackets */
-        if(line[name1Start]!='<') {
-            name1Length=limit-name1Start;
-        } else {
-            name1Length=0;
-        }
+        name1Length=0;
+    }
 
-        if(store10Names) {
-            /* skip 8 fields and get the following one */
-            for(i=0; i<9; ++i) {
-                name2Start=limit+1;
-                if(name2Start>=length) {
-                    fprintf(stderr, "gennames: too few fields at code 0x%lx\n", code);
-                    exit(U_PARSE_ERROR);
-                }
-                limit=getField(line, name2Start, length);
-            }
+    /* store 1.0 names */
+    /* get the second character name, the one from Unicode 1.0 */
+    /* do not store pseudo-names in <> brackets */
+    name2Start=fields[10][0];
+    if(*(bool_t *)context && fields[10][0][0]!='<') {
+        name2Length=fields[10][1]-name2Start;
+    } else {
+        name2Length=0;
+    }
 
-            /* get the second character name, the one from Unicode 1.0 */
-            /* do not store pseudo-names in <> brackets */
-            if(line[name2Start]!='<') {
-                name2Length=limit-name2Start;
-            } else {
-                name2Length=0;
-            }
-        }
+    if(name1Length+name2Length>0) {
+        /* printf("%lx:%.*s(%.*s)\n", code, name1Length, line+name1Start, name2Length, line+name2Start); */
 
-        if(name1Length>0 || name2Length>0) {
-            /* printf("%lx:%.*s(%.*s)\n", code, name1Length, line+name1Start, name2Length, line+name2Start); */
+        parseName(name1Start, name1Length);
+        parseName(name2Start, name2Length);
 
-            parseName(line+name1Start, name1Length);
-            parseName(line+name2Start, name2Length);
+        addLine(code, name1Start, name1Length, name2Start, name2Length);
+    }
+}
 
-            addLine(code, line+name1Start, name1Length, line+name2Start, name2Length);
-        }
+static void
+parseDB(const char *filename, bool_t store10Names) {
+    char *fields[11][2];
+    UErrorCode errorCode=U_ZERO_ERROR;
+
+    /* parsing the 11 fields 0..10 is enough for gennames */
+    u_parseDelimitedFile(filename, ';', fields, 11, lineFn, &store10Names, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        exit(errorCode);
     }
 
     if(!beQuiet) {
