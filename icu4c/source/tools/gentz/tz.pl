@@ -863,7 +863,7 @@ sub emitJava {
     my $java = <<"END";
 // Instructions: Build against icu4j. Run and save output.
 // Paste output into icu4j/src/com/ibm/util/TimeZoneData.java
-import com.ibm.util.Utility;
+import com.ibm.icu.impl.Utility;
 import java.util.Date;
 public class tz {
     public static void main(String[] args) {
