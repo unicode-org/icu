@@ -26,6 +26,7 @@
 #define CSTRING_H 1
 
 #include <string.h>
+#include <stdlib.h>
 #include <ctype.h>
 #include "unicode/utypes.h"
 
