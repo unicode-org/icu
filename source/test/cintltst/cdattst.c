@@ -609,8 +609,8 @@ static void TestDateFormatCalendar() {
         goto FAIL;
     }
     u_austrcpy(cbuf, buf);
-    // Thursday, April 5, 2001 5:45:00 PM PDT 986517900000
-    if (when == 986517900000) {
+    /* Thursday, April 5, 2001 5:45:00 PM PDT 986517900000 */
+    if (when == 986517900000.0) {
         log_verbose("Ok: Parsed result: %s\n", cbuf);
     } else {
         log_err("FAIL: Parsed result: %s, exp 4/5/2001 5:45 PM", cbuf);
