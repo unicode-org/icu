@@ -959,6 +959,11 @@
 #define uprv_uca_canonicalClosure uprv_uca_canonicalClosure_2_8
 #define uprv_uca_cloneTempTable uprv_uca_cloneTempTable_2_8
 #define uprv_uca_closeTempTable uprv_uca_closeTempTable_2_8
+#define uprv_uca_getCodePointFromRaw uprv_uca_getCodePointFromRaw_2_8
+#define uprv_uca_getImplicitFromRaw uprv_uca_getImplicitFromRaw_2_8
+#define uprv_uca_getImplicitPrimary uprv_uca_getImplicitPrimary_2_8
+#define uprv_uca_getRawFromCodePoint uprv_uca_getRawFromCodePoint_2_8
+#define uprv_uca_getRawFromImplicit uprv_uca_getRawFromImplicit_2_8
 #define uprv_uca_initImplicitConstants uprv_uca_initImplicitConstants_2_8
 #define uprv_uca_initTempTable uprv_uca_initTempTable_2_8
 #define uprv_uint16Comparator uprv_uint16Comparator_2_8
@@ -1245,6 +1250,7 @@
 #define LigatureSubstitutionProcessor LigatureSubstitutionProcessor_2_8
 #define LigatureSubstitutionSubtable LigatureSubstitutionSubtable_2_8
 #define Locale Locale_2_8
+#define LocaleBased LocaleBased_2_8
 #define LocaleKey LocaleKey_2_8
 #define LocaleKeyFactory LocaleKeyFactory_2_8
 #define LocaleRuns LocaleRuns_2_8
