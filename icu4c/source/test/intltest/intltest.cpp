@@ -760,8 +760,8 @@ void IntlTest::LL_message( UnicodeString message, UBool newline )
 {
     // string that starts with a LineFeed character and continues
     // with spaces according to the current indentation
-    static UChar indentUChars[] = {
-        10,
+    static const UChar indentUChars[] = {
+        '\n',
         32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32,
         32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32,
         32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32,
@@ -779,22 +779,20 @@ void IntlTest::LL_message( UnicodeString message, UBool newline )
     int32_t length;
 
     // stream out the indentation string first if necessary
-    if(LL_linestart) {
-        length = indent.extract(0, indent.length(), buffer);
-        fwrite(buffer, sizeof(*buffer), length, testoutfp);
-    }
+    length = indent.extract(1, indent.length(), buffer);
+    fwrite(buffer, sizeof(*buffer), length, testoutfp);
 
     // replace each LineFeed by the indentation string
-    message.findAndReplace(UnicodeString((UChar)10), indent);
+    message.findAndReplace(UnicodeString((UChar)'\n'), indent);
 
     // stream out the message
     length = message.extract(0, message.length(), buffer);
     fwrite(buffer, sizeof(*buffer), length, testoutfp);
-    fflush(testoutfp);
 
-    // keep the terminating newline as a state for the next call,
-    // for use with the then active indentation
-    LL_linestart = newline;
+    if (newline) {
+        char newLine = '\n';
+        fwrite(&newLine, sizeof(newLine), 1, testoutfp);
+    }
 }
 
 /**
