@@ -123,9 +123,12 @@ GDIFontInstance::GDIFontInstance(HDC hdc, const char *faceName, le_int16 pointSi
     dpiX = (FLOAT) GetDeviceCaps(hdc, LOGPIXELSX);
     dpiY = (FLOAT) GetDeviceCaps(hdc, LOGPIXELSY);
 
+    fDeviceScaleX = dpiX / 72;
+    fDeviceScaleY = dpiY / 72;
+
 #if 1
-    pt.x = (int) (pointSize * dpiX / 72);
-    pt.y = (int) (pointSize * dpiY / 72);
+    pt.x = (int) (pointSize * fDeviceScaleX);
+    pt.y = (int) (pointSize * fDeviceScaleY);
 
     DPtoLP(hdc, &pt, 1);
 #else
