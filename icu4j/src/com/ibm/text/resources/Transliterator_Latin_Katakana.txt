@@ -3,11 +3,11 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/Transliterator_Latin_Katakana.txt,v $
-# $Date: 2001/11/13 00:29:17 $
-# $Revision: 1.8 $
+# $Date: 2001/11/13 02:49:41 $
+# $Revision: 1.9 $
 #--------------------------------------------------------------------
 
-:: [\u0020-\u00FF [:Latin:][:Mark:]] ;   # note: a global filter is more efficient, but MUST include all source chars
+#:: [\u0020-\u00FF [:Latin:][:Mark:]] ;   # note: a global filter is more efficient, but MUST include all source chars
 :: NFKD (NFC);  # use NFKD to get the fullwidth latin characters
 :: Lower ();    # whenever transliterating from cased to uncased script, include this
 # :: NFD () ;   # this would catch the odd cases where a lowercase is not in NFD, but none are important for Japanese
@@ -449,8 +449,11 @@ x > | ks ;
 
 '~' > ; # delete stray tildes between letters
 [:Katakana:] { '' } [:Latin:] > ; # delete stray quotes between letters
+[\u3099-\u309C[:Nonspacing Mark:]] > ; # delete any non-spacing marks that we didn't use
 
 :: NFC (NFKD) ;  # use NFKD to get the halfwidth katakana characters
-:: ([[\u0020-\u007F \u30A1-\u30FC \uFF61-\uFF9F 。、][:Katakana:][:Mark:]]); # note: a global filter is more efficient, but MUST include all source chars
+
+# note: a global filter is more efficient, but MUST include all source chars!!
+# :: ([\u0000-\u007E \u3001\u3002 \u3099-\u309C \u30A1-\u30FC \uFF61-\uFF9F [:Katakana:]]);
 
 # eof

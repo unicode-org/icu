@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/WriteCharts.java,v $
- * $Date: 2001/11/13 00:30:14 $
- * $Revision: 1.5 $
+ * $Date: 2001/11/13 02:50:11 $
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -21,7 +21,7 @@ import java.io.*;
 
 public class WriteCharts {
     public static void main(String[] args) throws IOException {
-        testSet();
+        if (false) testSet();
         String testSet = "";
         if (args.length == 0) args = all;
         for (int i = 0; i < args.length; ++i) {
@@ -36,7 +36,7 @@ public class WriteCharts {
     }
     
     public static void testSet() {
-        UnicodeSet s = new UnicodeSet("[[\u0020-\u007E \u30A1-\u30FC \uFF61-\uFF9F\u3001\u3002][:Katakana:][:Mark:]]");
+        UnicodeSet s = new UnicodeSet("[[\u0000-\u007E \u30A1-\u30FC \uFF61-\uFF9F\u3001\u3002][:Katakana:][:Mark:]]");
         int count = s.getRangeCount();
         for (int i = 0; i < count; ++i) {
             int start = s.getRangeStart(i);
