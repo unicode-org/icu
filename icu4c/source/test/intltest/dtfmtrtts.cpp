@@ -68,7 +68,7 @@ void DateFormatRoundTripTest::TestDateFormatRoundTrip()
 
     int32_t locCount = 0;
     const Locale *avail = DateFormat::getAvailableLocales(locCount);
-    logln("DateFormat available locales: " + locCount);
+    logln("DateFormat available locales: %d", locCount);
     if(quick) {
         if(locCount > 5)
             locCount = 5;

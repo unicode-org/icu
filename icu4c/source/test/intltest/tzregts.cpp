@@ -478,7 +478,7 @@ void TimeZoneRegressionTest:: Test4151406() {
             errln(hname + ' ' + "Fail: " + e);
         }*/
     }
-    logln("Maximum zones per offset = " + max);
+    logln("Maximum zones per offset = %d", max);
 }
 
 /**

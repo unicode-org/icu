@@ -67,7 +67,7 @@ void DateFormatTest::TestWallyWedel()
     /*
      * How many ids do we have?
      */
-    logln("Time Zone IDs size: " + ids_length);
+    logln("Time Zone IDs size: %d", ids_length);
     /*
      * Column headings (sort of)
      */
