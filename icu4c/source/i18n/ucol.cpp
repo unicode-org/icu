@@ -3178,6 +3178,7 @@ uint8_t *reallocateBuffer(uint8_t **secondaries, uint8_t *secStart, uint8_t *sec
   fprintf(stderr, ".");
 #endif
   uint8_t *newStart = NULL;
+  uint32_t offset = *secondaries-secStart;
 
   if(secStart==second) {
     newStart=(uint8_t*)uprv_malloc(newSize);
@@ -3193,7 +3194,7 @@ uint8_t *reallocateBuffer(uint8_t **secondaries, uint8_t *secStart, uint8_t *sec
       return NULL;
     }
   }
-  *secondaries=newStart+(*secondaries-secStart);
+  *secondaries=newStart+offset;
   *secSize=newSize;
   return newStart;
 }
