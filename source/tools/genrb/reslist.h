@@ -75,7 +75,7 @@ struct SResString {
     UChar *fChars;
 };
 
-struct SResource *string_open(struct SRBRoot *bundle, char *tag, UChar *value, UErrorCode *status);
+struct SResource *string_open(struct SRBRoot *bundle, char *tag, UChar *value, int32_t len, UErrorCode *status);
 void string_close(struct SResource *string, UErrorCode *status);
 
 struct SResIntVector {
