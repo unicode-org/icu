@@ -154,7 +154,7 @@ struct UDataSwapper;
 typedef struct UDataSwapper UDataSwapper;
 
 /**
- * Swap an ICU converter alias table. See ucnv_io.h.
+ * Swap an ICU converter alias table. See ucnv_io.c.
  * @internal
  */
 U_CAPI int32_t U_EXPORT2
