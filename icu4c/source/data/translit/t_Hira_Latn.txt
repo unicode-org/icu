@@ -1,0 +1,32 @@
+﻿ // -*- Coding: utf-8; -*-
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others.  All Rights Reserved.
+//--------------------------------------------------------------------
+// THIS IS A MACHINE-GENERATED FILE
+// Tool: dumpICUrules.bat
+// Source: ../../text/resources/Transliterator_Hiragana_Latin.txt
+// Date: Thu Oct 25 22:17:21 2001
+//--------------------------------------------------------------------
+
+// Hiragana_Latin
+
+translit_Hiragana_Latin {
+  Rule {
+//--------------------------------------------------------------------
+// Copyright (c) 1999-2001, International Business Machines
+// Corporation and others. All Rights Reserved.
+//--------------------------------------------------------------------
+// $Source: /xsrl/Nsvn/icu/icu/source/data/translit/Attic/t_Hira_Latn.txt,v $
+// $Date: 2001/10/26 05:41:16 $
+// $Revision: 1.1 $
+//--------------------------------------------------------------------
+
+":: [:^Katakana:] ;" // don't touch any katakana that was in the text!
+
+":: Hiragana-Katakana;"
+":: Katakana-Latin;"
+
+":: ([:^Katakana:]) ;" // don't touch any katakana that was in the text!
+  }
+}

@@ -103,28 +103,34 @@ uk.txt uk_UA.txt\
 vi.txt vi_VN.txt\
 zh.txt zh__PINYIN.txt zh_CN.txt zh_HK.txt zh_SG.txt zh_TW.txt zh_TW_STROKE.txt
 
-TRANSLIT_SOURCE=fullhalf.txt translit_index.txt kana.txt kbdescl1.txt\
-larabic.txt lcyril.txt\
-lgreek.txt lhebrew.txt ljamo.txt\
-lkana.txt quotes.txt\
-Bengali_InterIndic.txt\
-Devanagari_InterIndic.txt\
-Gujarati_InterIndic.txt\
-Gurmukhi_InterIndic.txt\
-Kannada_InterIndic.txt\
-Malayalam_InterIndic.txt\
-Oriya_InterIndic.txt\
-Tamil_InterIndic.txt\
-Telugu_InterIndic.txt\
-InterIndic_Bengali.txt\
-InterIndic_Devanagari.txt\
-InterIndic_Gujarati.txt\
-InterIndic_Gurmukhi.txt\
-InterIndic_Kannada.txt\
-InterIndic_Malayalam.txt\
-InterIndic_Oriya.txt\
-InterIndic_Tamil.txt\
-InterIndic_Telugu.txt\
-Latin_InterIndic.txt\
-InterIndic_Latin.txt
+TRANSLIT_SOURCE=translit_Any_Accents.txt\
+translit_Any_Publishing.txt\
+translit_Bengali_InterIndic.txt\
+translit_Cyrillic_Latin.txt\
+translit_Devanagari_InterIndic.txt\
+translit_Fullwidth_Halfwidth.txt\
+translit_Greek_Latin.txt\
+translit_Gujarati_InterIndic.txt\
+translit_Gurmukhi_InterIndic.txt\
+translit_Hiragana_Katakana.txt\
+translit_Hiragana_Latin.txt\
+translit_InterIndic_Bengali.txt\
+translit_InterIndic_Devanagari.txt\
+translit_InterIndic_Gujarati.txt\
+translit_InterIndic_Gurmukhi.txt\
+translit_InterIndic_Kannada.txt\
+translit_InterIndic_Latin.txt\
+translit_InterIndic_Malayalam.txt\
+translit_InterIndic_Oriya.txt\
+translit_InterIndic_Tamil.txt\
+translit_InterIndic_Telugu.txt\
+translit_Kannada_InterIndic.txt\
+translit_Latin_InterIndic.txt\
+translit_Latin_Jamo.txt\
+translit_Latin_Katakana.txt\
+translit_Malayalam_InterIndic.txt\
+translit_Oriya_InterIndic.txt\
+translit_Tamil_InterIndic.txt\
+translit_Telugu_InterIndic.txt\
+translit_index.txt
 
