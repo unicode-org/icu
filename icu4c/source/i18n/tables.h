@@ -143,6 +143,17 @@ class VectorOfInt {
         int32_t                 size(void) const;
 
         /**
+         * Sets the size of this vector. If the new size is greater than the 
+         * current size, new <code>0</code> items are added to the end of 
+         * the vector. If the new size is less than the current size, all 
+         * components at index <code>newSize</code> and greater are discarded.
+         * If <code>newSize</code> is negative it is treated as if it were zero.
+         *
+         * @param   newSize   the new size of this vector.
+         */
+        void                    setSize(int32_t newSize);
+
+        /**
          * Checks if this vector object is valid.
          * @return TRUE if the vector object is valid, FALSE otherwise.
          */
