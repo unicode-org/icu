@@ -985,6 +985,19 @@ public class ULocaleTest extends TestFmwk {
         }   
     }
     
+    public void TestBamBm() {
+        // "bam" shouldn't be there since the official code is 'bm'
+        String[] isoLanguages = ULocale.getISOLanguages();
+        for (int i = 0; i < isoLanguages.length; ++i) {
+            if ("bam".equals(isoLanguages[i])) {
+                errln("found bam");
+            }
+            if (i > 0 && isoLanguages[i].compareTo(isoLanguages[i-1]) <= 0) {
+                errln("language list out of order: '" + isoLanguages[i] + " <= " + isoLanguages[i-1]);
+            }
+        }
+    }
+        
     public void TestDisplayKeyword() {
         //prepare testing data
         initHashtable();
