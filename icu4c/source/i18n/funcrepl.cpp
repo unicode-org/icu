@@ -38,7 +38,10 @@ FunctionReplacer::FunctionReplacer(Transliterator* adoptedTranslit,
 /**
  * Copy constructor.
  */
-FunctionReplacer::FunctionReplacer(const FunctionReplacer& other) {
+FunctionReplacer::FunctionReplacer(const FunctionReplacer& other) :
+    UnicodeFunctor(other),
+    UnicodeReplacer(other)
+{
     translit = other.translit->clone();
     replacer = other.replacer->clone();
 }
