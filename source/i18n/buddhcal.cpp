@@ -92,7 +92,6 @@ int32_t
 BuddhistCalendar::monthLength(int32_t month) const
 {
     UErrorCode status = U_ZERO_ERROR;
-    int32_t year = internalGet(UCAL_YEAR);
     // ignore era
     return GregorianCalendar::monthLength(month, getGregorianYear(status));
 }
@@ -188,7 +187,6 @@ void BuddhistCalendar::add(UCalendarDateFields field, int32_t amount, UErrorCode
     
     if(field == UCAL_YEAR /* || field == UCAL_YEAR_WOY */) {
         int32_t year = internalGet(field);
-        int32_t era = internalGetEra();
 
         year += amount;
         
