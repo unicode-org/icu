@@ -84,7 +84,7 @@ u_scanf_parse_spec (const UChar     *fmt,
 
 
   /* skip over the initial '%' */
-  *s++;
+  s++;
 
   /* Check for positional argument */
   if(ISDIGIT(*s)) {
@@ -109,7 +109,7 @@ u_scanf_parse_spec (const UChar     *fmt,
     }
     /* munge the '$' */
     else
-      *s++;
+      s++;
   }
   
   /* Get any format flags */
@@ -131,7 +131,7 @@ u_scanf_parse_spec (const UChar     *fmt,
       info->fPadChar = (UChar)((info->fPadChar * 16) + ufmt_digitvalue(*s++));
       
       /* final character is ignored */
-      *s++;
+      s++;
       
       break;
     }
@@ -161,7 +161,7 @@ u_scanf_parse_spec (const UChar     *fmt,
       if(*s == MOD_LOWERL) {
         info->fIsLongLong = TRUE;
         /* skip over the next 'l' */
-        *s++;
+        s++;
       }
       else
         info->fIsLong = TRUE;
