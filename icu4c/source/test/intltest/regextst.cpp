@@ -1071,7 +1071,7 @@ void RegexTest::API_Pattern() {
     REGEX_ASSERT(*pat1a == *pat1);
 
     REGEX_ASSERT(pat1a->flags() == 0);
-#if 0
+
     // Compile with different flags should be not equal
     RegexPattern        *pat1b = RegexPattern::compile(re1, UREGEX_CASE_INSENSITIVE, pe, status);
     REGEX_CHECK_STATUS;
@@ -1080,7 +1080,6 @@ void RegexTest::API_Pattern() {
     REGEX_ASSERT(pat1b->flags() == UREGEX_CASE_INSENSITIVE);
     REGEX_ASSERT(pat1a->flags() == 0);
     delete pat1b;
-#endif    // add test back in when we actually support flag settings.
 
     // clone
     RegexPattern *pat1c = pat1->clone();
@@ -1097,7 +1096,6 @@ void RegexTest::API_Pattern() {
     //   Verify that a matcher created from a cloned pattern works.
     //     (Jitterbug 3423)
     //
-#if 0
     {
         UErrorCode     status     = U_ZERO_ERROR;
         RegexPattern  *pSource    = RegexPattern::compile("\\p{L}+", 0, status);
@@ -1115,7 +1113,6 @@ void RegexTest::API_Pattern() {
         delete mFromClone;
         delete pClone;
     }
-#endif
 
     //
     //   matches convenience API
