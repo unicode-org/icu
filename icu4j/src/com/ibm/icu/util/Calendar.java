@@ -307,6 +307,10 @@ import com.ibm.text.SimpleDateFormat;
  *
  * <p><b>SUBCLASSING</b>
  *
+ * <p><b>NOTE: This section needs to be rewritten to reflect the new
+ * subclassing API.  Information contained here is out-of-date and
+ * incorrect.</b>
+ * 
  * <p>While ICU4J supports a number of calendar systems, it does not
  * support all of them.  In order to support a new calendar system,
  * <code>Calendar</code> must be subclassed.
@@ -364,7 +368,7 @@ import com.ibm.text.SimpleDateFormat;
  * @see          GregorianCalendar
  * @see          TimeZone
  * @see          DateFormat
- * @version      $Revision: 1.10 $ $Date: 2000/10/27 22:25:52 $
+ * @version      $Revision: 1.11 $ $Date: 2000/11/18 01:07:18 $
  * @author Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu, Laura Werner
  * @since JDK1.1
  */
@@ -583,11 +587,68 @@ public abstract class Calendar implements Serializable, Cloneable {
      * daylight savings offset in milliseconds.
      */
     public final static int DST_OFFSET = 16;
+
     /**
-     * The number of distict fields recognized by <code>get</code> and <code>set</code>.
-     * Field numbers range from <code>0..FIELD_COUNT-1</code>.
+     * Field number for <code>get()</code> and <code>set()</code>
+     * indicating the extended year corresponding to the
+     * <code>WEEK_OF_YEAR</code> field.  This may be one greater or less
+     * than the value of <code>EXTENDED_YEAR</code>.
      */
-    public final static int FIELD_COUNT = 17;
+    public static final int YEAR_WOY = 17;
+
+    /**
+     * Field number for <code>get()</code> and <code>set()</code>
+     * indicating the localized day of week.  This will be a value from 1
+     * to 7 inclusive, with 1 being the localized first day of the week.
+     */
+    public static final int DOW_LOCAL = 18;
+
+    /**
+     * Field number for <code>get()</code> and <code>set()</code>
+     * indicating the extended year.  This is a single number designating
+     * the year of this calendar system, encompassing all supra-year
+     * fields.  For example, for the Julian calendar system, year numbers
+     * are positive, with an era of BCE or CE.  An extended year value for
+     * the Julian calendar system assigns positive values to CE years and
+     * negative values to BCE years, with 1 BCE being year 0.
+     */
+    public static final int EXTENDED_YEAR = 19;
+
+    /**
+     * Field number for <code>get()</code> and <code>set()</code>
+     * indicating the modified Julian day number.  This is different from
+     * the conventional Julian day number in two regards.  First, it
+     * demarcates days at local zone midnight, rather than noon GMT.
+     * Second, it is a local number; that is, it depends on the local time
+     * zone.  It can be thought of as a single number that encompasses all
+     * the date-related fields.
+     */
+    public static final int JULIAN_DAY = 20;
+
+    /**
+     * Field number for <code>get()</code> and <code>set()</code>
+     * indicating the milliseconds in the day.  This ranges from 0 to
+     * 23:59:59.999 (regardless of DST).  This field behaves
+     * <em>exactly</em> like a composite of all time-related fields, not
+     * including the zone fields.  As such, it also reflects
+     * discontinuities of those fields on DST transition days.  On a day of
+     * DST onset, it will jump forward.  On a day of DST cessation, it will
+     * jump backward.  This reflects the fact that is must be combined with
+     * the DST_OFFSET field to obtain a unique local time value.
+     */
+    public static final int MILLISECONDS_IN_DAY = 21;
+    
+    /**
+     * The number of fields defined by this class.  Subclasses may define
+     * addition fields starting with this number.
+     */
+    protected static final int BASE_FIELD_COUNT = 22;
+
+    /**
+     * The maximum number of fields possible.  Subclasses must not define
+     * more total fields than this number.
+     */
+    protected static final int MAX_FIELD_COUNT = 32;
 
     /**
      * Value of the <code>DAY_OF_WEEK</code> field indicating
@@ -745,6 +806,28 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     public static final int WEEKEND_CEASE = 3;
 
+    // Useful millisecond constants.  Although ONE_DAY and ONE_WEEK can fit
+    // into ints, they must be longs in order to prevent arithmetic overflow
+    // when performing (bug 4173516).
+    protected static final int  ONE_SECOND = 1000;
+    protected static final int  ONE_MINUTE = 60*ONE_SECOND;
+    protected static final int  ONE_HOUR   = 60*ONE_MINUTE;
+    protected static final long ONE_DAY    = 24*ONE_HOUR;
+    protected static final long ONE_WEEK   = 7*ONE_DAY;
+
+    protected static final int JAN_1_1_JULIAN_DAY = 1721426; // January 1, 1 (Gregorian)
+    protected static final int EPOCH_JULIAN_DAY   = 2440588; // Jaunary 1, 1970 (Gregorian)
+
+    public static final int MIN_JULIAN = -0x7F000000;
+    // Get around bug in jikes 1.12 for now:
+    public static final long MIN_MILLIS = -184303902528000000L;
+    //public static final long MIN_MILLIS = (MIN_JULIAN - EPOCH_JULIAN_DAY) * ONE_DAY;
+    public static final Date MIN_DATE = new Date(MIN_MILLIS);
+
+    public static final int MAX_JULIAN = +0x7F000000;
+    public static final long MAX_MILLIS = (MAX_JULIAN - EPOCH_JULIAN_DAY) * ONE_DAY;
+    public static final Date MAX_DATE = new Date(MAX_MILLIS);
+
     // Internal notes:
     // Calendar contains two kinds of time representations: current "time" in
     // milliseconds, and a set of time "fields" representing the current time.
@@ -758,18 +841,18 @@ public abstract class Calendar implements Serializable, Cloneable {
 
     /**
      * The field values for the currently set time for this calendar.
-     * This is an array of <code>FIELD_COUNT</code> integers, with index values
-     * <code>ERA</code> through <code>DST_OFFSET</code>.
+     * This is an array of at least <code>BASE_FIELD_COUNT</code> integers.
+     * @see #handleCreateFields
      * @serial
      */
-    protected int           fields[]; // NOTE: Make transient when possible
+    private transient int           fields[];
 
     /**
      * Pseudo-time-stamps which specify when each field was set. There
      * are two special values, UNSET and INTERNALLY_SET. Values from
      * MINIMUM_USER_SET to Integer.MAX_VALUE are legal user set values.
      */
-    transient int           stamp[];
+    private transient int           stamp[];
 
     /**
      * The currently set time for this calendar, expressed in milliseconds after
@@ -777,7 +860,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      * @see #isTimeSet
      * @serial
      */
-    protected long          time;
+    private long          time;
 
     /**
      * True if then the value of <code>time</code> is valid.
@@ -785,7 +868,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      * @see #time
      * @serial
      */
-    protected boolean       isTimeSet; // NOTE: Make transient when possible
+    private transient boolean       isTimeSet;
 
     /**
      * True if <code>fields[]</code> are in sync with the currently set time.
@@ -794,13 +877,17 @@ public abstract class Calendar implements Serializable, Cloneable {
      * <code>time</code>.
      * @serial
      */
-    protected boolean       areFieldsSet; // NOTE: Make transient when possible
+    private transient boolean       areFieldsSet;
 
     /**
-     * True if all fields have been set.
+     * True if all fields have been set.  This is only false in a few
+     * situations: In a newly created, partially constructed object.  After
+     * a call to clear().  In an object just read from a stream using
+     * readObject().  Once computeFields() has been called this is set to
+     * true and stays true until one of the above situations recurs.
      * @serial
      */
-    transient boolean       areAllFieldsSet;
+    private transient boolean       areAllFieldsSet;
 
     /**
      * True if this calendar allows out-of-range field values during computation
@@ -873,9 +960,9 @@ public abstract class Calendar implements Serializable, Cloneable {
     private static Hashtable cachedLocaleData = new Hashtable(3);
 
     // Special values of stamp[]
-    static final int        UNSET = 0;
-    static final int        INTERNALLY_SET = 1;
-    static final int        MINIMUM_USER_STAMP = 2;
+    protected static final int UNSET = 0;
+    protected static final int INTERNALLY_SET = 1;
+    protected static final int MINIMUM_USER_STAMP = 2;
 
     /**
      * The next available value for <code>stamp[]</code>, an internal array.
@@ -884,7 +971,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      * a value of <code>MINIMUM_USER_STAMP</code> should be used.
      * @serial
      */
-    private int             nextStamp = MINIMUM_USER_STAMP;
+    private transient int             nextStamp = MINIMUM_USER_STAMP;
 
     // the internal serial version which says which version was written
     // - 0 (default) for version up to JDK 1.1.5
@@ -894,7 +981,7 @@ public abstract class Calendar implements Serializable, Cloneable {
     // - 2 (not implemented yet) a future version, in which fields[],
     //     areFieldsSet, and isTimeSet become transient, and isSet[] is
     //     removed. In JDK 1.1.6 we write a format compatible with version 2.
-    static final int        currentSerialVersion = 1;
+    // static final int        currentSerialVersion = 1;
     
     /**
      * The version of the serialized data on the stream.  Possible values:
@@ -916,10 +1003,42 @@ public abstract class Calendar implements Serializable, Cloneable {
      * @serial
      * @since JDK1.1.6
      */
-    private int             serialVersionOnStream = currentSerialVersion;
+    // private int             serialVersionOnStream = currentSerialVersion;
 
     // Proclaim serialization compatibility with JDK 1.1
-    static final long       serialVersionUID = -1807547505821590642L;
+    // static final long       serialVersionUID = -1807547505821590642L;
+
+    /**
+     * Bitmask for internalSet() defining which fields may legally be set
+     * by subclasses.  Any attempt to set a field not in this bitmask
+     * results in an exception, because such fields must be set by the base
+     * class.
+     */
+    private transient int internalSetMask;
+
+    /**
+     * The Gregorian year, as computed by computeGregorianFields() and
+     * returned by getGregorianYear().
+     */
+    private transient int gregorianYear;
+
+    /**
+     * The Gregorian month, as computed by computeGregorianFields() and
+     * returned by getGregorianMonth().
+     */
+    private transient int gregorianMonth;
+
+    /**
+     * The Gregorian day of the year, as computed by
+     * computeGregorianFields() and returned by getGregorianDayOfYear().
+     */
+    private transient int gregorianDayOfYear;
+
+    /**
+     * The Gregorian day of the month, as computed by
+     * computeGregorianFields() and returned by getGregorianDayOfMonth().
+     */
+    private transient int gregorianDayOfMonth;
 
     /**
      * Constructs a Calendar with the default time zone
@@ -938,12 +1057,28 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     protected Calendar(TimeZone zone, Locale aLocale)
     {
-        fields = new int[FIELD_COUNT];
-        stamp = new int[FIELD_COUNT];
-
         this.zone = zone;
         setWeekCountData(aLocale);
         setWeekendData(aLocale);
+
+        // Allocate fields through the framework method.  Subclasses
+        // may override this to define additional fields.
+        fields = handleCreateFields();
+        if (fields == null || fields.length < BASE_FIELD_COUNT ||
+            fields.length > MAX_FIELD_COUNT) {
+            throw new IllegalArgumentException("Invalid fields[]");
+        }
+        stamp = new int[fields.length];
+        int mask = (1 << ERA) |
+            (1 << YEAR) |
+            (1 << MONTH) |
+            (1 << DAY_OF_MONTH) |
+            (1 << DAY_OF_YEAR) |
+            (1 << EXTENDED_YEAR);
+        for (int i=BASE_FIELD_COUNT; i<fields.length; ++i) {
+            mask |= (1 << i);
+        }
+        internalSetMask = mask;
     }
 
     /**
@@ -997,26 +1132,6 @@ public abstract class Calendar implements Serializable, Cloneable {
     }
 
     /**
-     * Converts the current field values in <code>fields[]</code>
-     * to the millisecond time value
-     * <code>time</code>.
-     */
-    protected abstract void computeTime();
-
-    /**
-     * Converts 
-     * the current millisecond time value
-     * <code>time</code>
-     * to field values in <code>fields[]</code>.
-     * This allows you to sync up the time field values with
-     * a new time that is set for the calendar.  The time is <em>not</em>
-     * recomputed first; to recompute the time, then the fields, call the
-     * <code>complete</code> method.
-     * @see #complete
-     */
-    protected abstract void computeFields();
-
-    /**
      * Gets this Calendar's current time.
      * @return the current time.
      */
@@ -1039,7 +1154,7 @@ public abstract class Calendar implements Serializable, Cloneable {
      * Gets this Calendar's current time as a long.
      * @return the current time as UTC milliseconds from the epoch.
      */
-    protected long getTimeInMillis() {
+    public long getTimeInMillis() {
         if (!isTimeSet) updateTime();
         return time;
     }
@@ -1048,15 +1163,12 @@ public abstract class Calendar implements Serializable, Cloneable {
      * Sets this Calendar's current time from the given long value.
      * @param date the new time in UTC milliseconds from the epoch.
      */
-    protected void setTimeInMillis( long millis ) {
-        isTimeSet = true;
+    public void setTimeInMillis( long millis ) {
         time = millis;
-        areFieldsSet = false;
-        if (!areFieldsSet) {
-            computeFields();
-            areFieldsSet = true;
-            areAllFieldsSet = true;
-        }
+        isTimeSet = true;
+        computeFields();
+        areFieldsSet = true;
+        areAllFieldsSet = true;
     }
 
     /**
@@ -1071,8 +1183,8 @@ public abstract class Calendar implements Serializable, Cloneable {
     }
 
     /**
-     * Gets the value for a given time field. This is an internal
-     * fast time field value getter for the subclasses.
+     * Gets the value for a given time field.  This is an internal method
+     * for subclasses that does <em>not</em> trigger any calculations.
      * @param field the given time field.
      * @return the value for the given time field.
      */
@@ -1080,15 +1192,18 @@ public abstract class Calendar implements Serializable, Cloneable {
     {
         return fields[field];
     }
-
+ 
     /**
-     * Sets the value for the given time field.  This is an internal
-     * fast setter for subclasses.  It does not affect the areFieldsSet, isTimeSet,
-     * or areAllFieldsSet flags.
+     * Get the value for a given time field, or return the given default
+     * value if the field is not set.  This is an internal method for
+     * subclasses that does <em>not</em> trigger any calculations.
+     * @param field the given time field.
+     * @param defaultValue value to return if field is not set
+     * @return the value for the given time field of defaultValue if the
+     * field is unset
      */
-    final void internalSet(int field, int value)
-    {
-        fields[field] = value;
+    protected final int internalGet(int field, int defaultValue) {
+        return (stamp[field] > UNSET) ? fields[field] : defaultValue;
     }
 
     /**
@@ -1168,8 +1283,9 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     public final void clear()
     {
-        fields = new int[FIELD_COUNT];
-        stamp = new int[FIELD_COUNT];
+        for (int i=0; i<fields.length; ++i) {
+            fields[i] = stamp[i] = 0; // UNSET == 0
+        }
         areFieldsSet = false;
         areAllFieldsSet = false;
         isTimeSet = false;
@@ -1266,7 +1382,7 @@ public abstract class Calendar implements Serializable, Cloneable {
         } else if (that instanceof Date) {
             thatMs = ((Date)that).getTime();
         } else {
-            throw new IllegalArgumentException("argument must be a non-null Calendar or Date");
+            throw new IllegalArgumentException(that + "is not a Calendar or Date");
         }
         return getTimeInMillis() - thatMs;
     }
@@ -1293,38 +1409,25 @@ public abstract class Calendar implements Serializable, Cloneable {
         return compare(when) > 0;
     }
 
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     /**
-     * Return the maximum value that this field could have, given the current date.
-     * For example, with the Gregorian date "Feb 3, 1997" and the
-     * {@link #DAY_OF_MONTH DAY_OF_MONTH} field, the actual
-     * maximum is 28; for "Feb 3, 1996" it is 29.
-     * <p>
-     * <b>Note:</b>This method has been added to {@link java.util.Calendar} in JDK 1.2; it
-     * is provided here so that 1.1 clients can take advantage of it as well.
-     * <p>
-     * <b>Subclassing:</b><br>
-     * For the {@link #WEEK_OF_YEAR WEEK_OF_YEAR}, {@link #WEEK_OF_MONTH WEEK_OF_MONTH},
-     * and {@link #DAY_OF_WEEK_IN_MONTH DAY_OF_WEEK_IN_MONTH} fields, this method
-     * calls <code>getActualMaximum(DAY_OF_YEAR)</code> or
-     * <code>getActualMaximum(DAY_OF_MONTH)</code> and then uses that value in a call to
-     * {@link #weekNumber weekNumber} to determine the result.  However, for all other
-     * fields it iterates between the values returned by
-     * {@link #getLeastMaximum getLeastMaximum} and {@link #getMaximum getMaximum}
-     * to determine the actual maximum value for the field.
-     * <p>
-     * There is almost always a more efficient way to accomplish this,
-     * and thus you should almost always override this method in your subclass.
-     * For most fields, you can simply return the same thing as
-     * {@link #getMaximum getMaximum}.  If your class has an internal method that
-     * calculates the number of days in a month or year, your getActualMaximum override
-     * can use those functions in its implementation.  For fields that you cannot
-     * handle efficiently, you can simply call <code>super.getActualMaximum(field)</code>.
-     * <p>
+     * Return the maximum value that this field could have, given the
+     * current date.  For example, with the Gregorian date February 3, 1997
+     * and the {@link #DAY_OF_MONTH DAY_OF_MONTH} field, the actual maximum
+     * is 28; for February 3, 1996 it is 29.
+     *
+     * <p>The actual maximum computation ignores smaller fields and the
+     * current value of like-sized fields.  For example, the actual maximum
+     * of the DAY_OF_YEAR or MONTH depends only on the year and supra-year
+     * fields.  The actual maximum of the DAY_OF_MONTH depends, in
+     * addition, on the MONTH field and any other fields at that
+     * granularity (such as ChineseCalendar.IS_LEAP_MONTH).  The
+     * DAY_OF_WEEK_IN_MONTH field does not depend on the current
+     * DAY_OF_WEEK; it returns the maximum for any day of week in the
+     * current month.  Likewise for the WEEK_OF_MONTH and WEEK_OF_YEAR
+     * fields.
+     * 
      * @param field the field whose maximum is desired
-     *
      * @return the maximum of the given field for the current date of this calendar
-     *
      * @see #getMaximum
      * @see #getLeastMaximum
      */
@@ -1332,35 +1435,42 @@ public abstract class Calendar implements Serializable, Cloneable {
         int result;
         
         switch (field) {
-            // This is broken -- it's causing regression tests to
-            // fail.  One problem is that it's calling get(), causing
-            // a field resolution -- it shouldn't, since the calendar
-            // may be in an intermediate state.  [Liu 2000-10-13]
-//~            //
-//~            // For the week-related fields, there's a shortcut.  Since we know the
-//~            // current DAY_OF_WEEK and DAY_OF_MONTH or DAY_OF_YEAR, we can compute
-//~            // the the maximum for this field in terms of the maximum DAY_OF_*,
-//~            // on the theory that's easier to determine.
-//~            //
-//~            case WEEK_OF_YEAR:
-//~                result = weekNumber(getActualMaximum(DAY_OF_YEAR),
-//~                                    get(DAY_OF_YEAR), get(DAY_OF_WEEK));
-//~                break;
-//~                
-//~            case WEEK_OF_MONTH:
-//~                result = weekNumber(getActualMaximum(DAY_OF_MONTH),
-//~                                    get(DAY_OF_MONTH), get(DAY_OF_WEEK));
-//~                break;
-//~          
-//~            case DAY_OF_WEEK_IN_MONTH:
-//~                int weekLength = getMaximum(DAY_OF_WEEK) - getMinimum(DAY_OF_WEEK) + 1;
-//~                result = (getActualMaximum(DAY_OF_MONTH) - 1) / weekLength + 1;
-//~                break;
-            
+        case DAY_OF_MONTH:
+            {
+                Calendar cal = (Calendar) clone();
+                cal.prepareGetActual(field, false);
+                result = handleGetMonthLength(cal.get(EXTENDED_YEAR), cal.get(MONTH));
+            }
+            break;
+
+        case DAY_OF_YEAR:
+            {
+                Calendar cal = (Calendar) clone();
+                cal.prepareGetActual(field, false);
+                result = handleGetYearLength(cal.get(EXTENDED_YEAR));
+            }
+            break;
+
+        case DAY_OF_WEEK:
+        case AM_PM:
+        case HOUR:
+        case HOUR_OF_DAY:
+        case MINUTE:
+        case SECOND:
+        case MILLISECOND:
+        case ZONE_OFFSET:
+        case DST_OFFSET:
+        case DOW_LOCAL:
+        case JULIAN_DAY:
+        case MILLISECONDS_IN_DAY:
+            // These fields all have fixed minima/maxima
+            result = getMaximum(field);
+            break;
+
+        default:
             // For all other fields, do it the hard way....
-            default:
-                result = getActualHelper(field, getLeastMaximum(field), getMaximum(field));
-                break;
+            result = getActualHelper(field, getLeastMaximum(field), getMaximum(field));
+            break;
         }
         return result;
     }
@@ -1380,25 +1490,6 @@ public abstract class Calendar implements Serializable, Cloneable {
      * <em>not</em> four days in that week, so it is week number 0, and 
      * <code>getActualMinimum(WEEK_OF_MONTH)</code> will return 0.
      * <p>
-     * <b>Note:</b>This method has been added to java.util.Calendar in JDK 1.2; it
-     * is provided here so that 1.1 clients can take advantage of it as well.
-     * <p>
-     * <b>Subclassing:</b><br>
-     * For the {@link #WEEK_OF_YEAR WEEK_OF_YEAR}, {@link #WEEK_OF_MONTH WEEK_OF_MONTH},
-     * and {@link #DAY_OF_WEEK_IN_MONTH DAY_OF_WEEK_IN_MONTH} fields, this method
-     * calls <code>getActualMinimum(DAY_OF_YEAR)</code> or
-     * <code>getActualMinimum(DAY_OF_MONTH)</code> and then uses that value in a call to
-     * {@link #weekNumber weekNumber} to determine the result.  However, for all other
-     * fields it iterates between the values returned by
-     * {@link #getMinimum getMinimum} and {@link #getGreatestMinimum getGreatestMinimum}
-     * to determine the actual maximum value for the field.
-     * <p>
-     * There is almost always a more efficient way to accomplish this,
-     * and thus you should almost always override this method in your subclass.
-     * For most fields, you can simply return the same thing as
-     * {@link #getMinimum getMinimum}.  For fields that you cannot
-     * handle efficiently, you can simply call <code>super.getActualMaximum(field)</code>.
-     * <p>
      * @param field the field whose actual minimum value is desired.
      * @return the minimum of the given field for the current date of this calendar
      *
@@ -1409,37 +1500,92 @@ public abstract class Calendar implements Serializable, Cloneable {
         int result;
         
         switch (field) {
-            // This is broken -- it's causing regression tests to
-            // fail.  One problem is that it's calling get(), causing
-            // a field resolution -- it shouldn't, since the calendar
-            // may be in an intermediate state.  [Liu 2000-10-13]
-//~            //
-//~            // For the week-related fields, there's a shortcut.  Since we know the
-//~            // current DAY_OF_WEEK and DAY_OF_MONTH or DAY_OF_YEAR, we can compute
-//~            // the the maximum for this field in terms of the maximum DAY_OF_*,
-//~            // on the theory that's easier to determine.
-//~            //
-//~            case WEEK_OF_YEAR:
-//~                result = weekNumber(getActualMinimum(DAY_OF_YEAR),
-//~                                    get(DAY_OF_YEAR), get(DAY_OF_WEEK));
-//~                break;
-//~                
-//~            case WEEK_OF_MONTH:
-//~                result = weekNumber(getActualMinimum(DAY_OF_MONTH),
-//~                                    get(DAY_OF_MONTH), get(DAY_OF_WEEK));
-//~                break;
-//~          
-//~            case DAY_OF_WEEK_IN_MONTH:
-//~                int weekLength = getMaximum(DAY_OF_WEEK) - getMinimum(DAY_OF_WEEK) + 1;
-//~                result = (getActualMinimum(DAY_OF_MONTH) - 1) / weekLength + 1;
-//~                break;
+        case DAY_OF_WEEK:
+        case AM_PM:
+        case HOUR:
+        case HOUR_OF_DAY:
+        case MINUTE:
+        case SECOND:
+        case MILLISECOND:
+        case ZONE_OFFSET:
+        case DST_OFFSET:
+        case DOW_LOCAL:
+        case JULIAN_DAY:
+        case MILLISECONDS_IN_DAY:
+            // These fields all have fixed minima/maxima
+            result = getMinimum(field);
+            break;
             
+        default:
             // For all other fields, do it the hard way....
-            default:
-                result = getActualHelper(field, getGreatestMinimum(field), getMinimum(field));
-                break;
+            result = getActualHelper(field, getGreatestMinimum(field), getMinimum(field));
+            break;
         }
         return result;
+    }
+
+    /**
+     * Prepare this calendar for computing the actual minimum or maximum.
+     * This method modifies this calendar's fields; it is called on a
+     * temporary calendar.
+     *
+     * <p>Rationale: The semantics of getActualXxx() is to return the
+     * maximum or minimum value that the given field can take, taking into
+     * account other relevant fields.  In general these other fields are
+     * larger fields.  For example, when computing the actual maximum
+     * DAY_OF_MONTH, the current value of DAY_OF_MONTH itself is ignored,
+     * as is the value of any field smaller.
+     *
+     * <p>The time fields all have fixed minima and maxima, so we don't
+     * need to worry about them.  This also lets us set the
+     * MILLISECONDS_IN_DAY to zero to erase any effects the time fields
+     * might have when computing date fields.
+     *
+     * <p>DAY_OF_WEEK is adjusted specially for the WEEK_OF_MONTH and
+     * WEEK_OF_YEAR fields to ensure that they are computed correctly.
+     */
+    protected void prepareGetActual(int field, boolean isMinimum) {
+        set(MILLISECONDS_IN_DAY, 0);
+
+        switch (field) {
+        case YEAR:
+        case YEAR_WOY:
+        case EXTENDED_YEAR:
+            set(DAY_OF_YEAR, getGreatestMinimum(DAY_OF_YEAR));
+            break;
+                
+        case MONTH:
+            set(DAY_OF_MONTH, getGreatestMinimum(DAY_OF_MONTH));
+            break;
+
+        case DAY_OF_WEEK_IN_MONTH:
+            // For dowim, the maximum occurs for the DOW of the first of the
+            // month.
+            set(DAY_OF_MONTH, 1);
+            set(DAY_OF_WEEK, get(DAY_OF_WEEK)); // Make this user set
+            break;
+                
+        case WEEK_OF_MONTH:
+        case WEEK_OF_YEAR:
+            // If we're counting weeks, set the day of the week to either the
+            // first or last localized DOW.  We know the last week of a month
+            // or year will contain the first day of the week, and that the
+            // first week will contain the last DOW.
+            {
+                int dow = firstDayOfWeek;
+                if (isMinimum) {
+                    dow = (dow + 6) % 7; // set to last DOW
+                    if (dow < SUNDAY) {
+                        dow += 7;
+                    }
+                }
+                set(DAY_OF_WEEK, dow);
+            }
+            break;
+        }
+
+        // Do this last to give it the newest time stamp
+        set(field, getGreatestMinimum(field));
     }
 
     private int getActualHelper(int field, int startValue, int endValue) {
@@ -1449,24 +1595,18 @@ public abstract class Calendar implements Serializable, Cloneable {
             return startValue;
         } 
 
+        final int delta = (endValue > startValue) ? 1 : -1;
+
         // clone the calendar so we don't mess with the real one, and set it to
         // accept anything for the field values
-        Calendar work = (Calendar) this.clone();
+        Calendar work = (Calendar) clone();
         work.setLenient(true);
-        
-        // If we're counting weeks, set the day of the week to Sunday.  We know the
-        // last week of a month or year will contain the first day of the week.
-        if (field == WEEK_OF_YEAR || field == WEEK_OF_MONTH) {
-            work.set(DAY_OF_WEEK, firstDayOfWeek);
-        }
+        work.prepareGetActual(field, delta < 0);
         
         // now try each value from the start to the end one by one until
         // we get a value that normalizes to another value.  The last value that
         // normalizes to itself is the actual maximum for the current date
-        final int delta = (endValue > startValue) ? 1 : -1;
-        
         int result = startValue;
-
         do {
             work.set(field, startValue);
             if (work.get(field) != startValue) {
@@ -1585,9 +1725,11 @@ public abstract class Calendar implements Serializable, Cloneable {
      * @see #roll(int, boolean)
      * @see #add
      */
-    public void roll(int field, int amount)
-    {
-        if (amount == 0) return; // Nothing to do
+    public void roll(int field, int amount) {
+
+        if (amount == 0) {
+            return; // Nothing to do
+        }
 
         complete();
 
@@ -1597,6 +1739,7 @@ public abstract class Calendar implements Serializable, Cloneable {
         case MINUTE:
         case SECOND:
         case MILLISECOND:
+        case MILLISECONDS_IN_DAY:
             // These are the standard roll instructions.  These work for all
             // simple cases, that is, cases in which the limits are fixed, such
             // as the hour, the day of the month, and the era.
@@ -1607,7 +1750,9 @@ public abstract class Calendar implements Serializable, Cloneable {
 
                 int value = internalGet(field) + amount;
                 value = (value - min) % gap;
-                if (value < 0) value += gap;
+                if (value < 0) {
+                    value += gap;
+                }
                 value += min;
 
                 set(field, value);
@@ -1625,14 +1770,14 @@ public abstract class Calendar implements Serializable, Cloneable {
             // the time in millis directly.
             {
                 // Assume min == 0 in calculations below
-                Date start = getTime();
+                long start = getTimeInMillis();
                 int oldHour = internalGet(field);
-                int max = getActualMaximum(field);
+                int max = getMaximum(field);
                 int newHour = (oldHour + amount) % (max + 1);
                 if (newHour < 0) {
                     newHour += max + 1;
                 }
-                setTime(new Date(start.getTime() + HOUR_MS * (newHour - oldHour)));
+                setTimeInMillis(start + ONE_HOUR * (newHour - oldHour));
                 return;
             }
 
@@ -1645,7 +1790,9 @@ public abstract class Calendar implements Serializable, Cloneable {
                 int max = getActualMaximum(MONTH);
                 int mon = (internalGet(MONTH) + amount) % (max+1);
                 
-                if (mon < 0) mon += (max + 1);
+                if (mon < 0) {
+                    mon += (max + 1);
+                }
                 set(MONTH, mon);
                 
                 // Keep the day of month in range.  We don't want to spill over
@@ -1656,8 +1803,10 @@ public abstract class Calendar implements Serializable, Cloneable {
             }
 
         case YEAR:
+        case YEAR_WOY:
+        case EXTENDED_YEAR:
             // Rolling the year can involve pinning the DAY_OF_MONTH.
-            set(YEAR, internalGet(YEAR) + amount);
+            set(field, internalGet(field) + amount);
             pinField(MONTH);
             pinField(DAY_OF_MONTH);
             return;
@@ -1804,27 +1953,29 @@ public abstract class Calendar implements Serializable, Cloneable {
             {
                 // Roll the day of year using millis.  Compute the millis for
                 // the start of the year, and get the length of the year.
-                long delta = amount * DAY_MS; // Scale up from days to millis
-                long min2 = time - (internalGet(DAY_OF_YEAR) - 1) * DAY_MS;
+                long delta = amount * ONE_DAY; // Scale up from days to millis
+                long min2 = time - (internalGet(DAY_OF_YEAR) - 1) * ONE_DAY;
                 int yearLength = getActualMaximum(DAY_OF_YEAR);
-                time = (time + delta - min2) % (yearLength*DAY_MS);
-                if (time < 0) time += yearLength*DAY_MS;
+                time = (time + delta - min2) % (yearLength*ONE_DAY);
+                if (time < 0) time += yearLength*ONE_DAY;
                 setTimeInMillis(time + min2);
                 return;
             }
         case DAY_OF_WEEK:
+        case DOW_LOCAL:
             {
                 // Roll the day of week using millis.  Compute the millis for
                 // the start of the week, using the first day of week setting.
                 // Restrict the millis to [start, start+7days).
-                long delta = amount * DAY_MS; // Scale up from days to millis
+                long delta = amount * ONE_DAY; // Scale up from days to millis
                 // Compute the number of days before the current day in this
                 // week.  This will be a value 0..6.
-                int leadDays = internalGet(DAY_OF_WEEK) - getFirstDayOfWeek();
+                int leadDays = internalGet(field);
+                leadDays -= (field == DAY_OF_WEEK) ? getFirstDayOfWeek() : 1;
                 if (leadDays < 0) leadDays += 7;
-                long min2 = time - leadDays * DAY_MS;
-                time = (time + delta - min2) % WEEK_MS;
-                if (time < 0) time += WEEK_MS;
+                long min2 = time - leadDays * ONE_DAY;
+                time = (time + delta - min2) % ONE_WEEK;
+                if (time < 0) time += ONE_WEEK;
                 setTimeInMillis(time + min2);
                 return;
             }
@@ -1833,7 +1984,7 @@ public abstract class Calendar implements Serializable, Cloneable {
                 // Roll the day of week in the month using millis.  Determine
                 // the first day of the week in the month, and then the last,
                 // and then roll within that range.
-                long delta = amount * WEEK_MS; // Scale up from weeks to millis
+                long delta = amount * ONE_WEEK; // Scale up from weeks to millis
                 // Find the number of same days of the week before this one
                 // in this month.
                 int preWeeks = (internalGet(DAY_OF_MONTH) - 1) / 7;
@@ -1842,17 +1993,21 @@ public abstract class Calendar implements Serializable, Cloneable {
                 int postWeeks = (getActualMaximum(DAY_OF_MONTH) -
                                  internalGet(DAY_OF_MONTH)) / 7;
                 // From these compute the min and gap millis for rolling.
-                long min2 = time - preWeeks * WEEK_MS;
-                long gap2 = WEEK_MS * (preWeeks + postWeeks + 1); // Must add 1!
+                long min2 = time - preWeeks * ONE_WEEK;
+                long gap2 = ONE_WEEK * (preWeeks + postWeeks + 1); // Must add 1!
                 // Roll within this range
                 time = (time + delta - min2) % gap2;
                 if (time < 0) time += gap2;
                 setTimeInMillis(time + min2);
                 return;
             }
+        case JULIAN_DAY:
+            set(field, internalGet(field) + amount);
+            return;
         default:
             // Other fields cannot be rolled by this method
-            throw new IllegalArgumentException("Calendar.roll: field not supported");
+            throw new IllegalArgumentException("Calendar.roll(" + fieldName(field) +
+                                               ") not supported");
         }
     }
     
@@ -1904,84 +2059,106 @@ public abstract class Calendar implements Serializable, Cloneable {
      *              to a field that cannot be handled by this method.
      * @see #roll(int, int)
      */
-    public void add(int field, int amount)
-    {
-        if (amount == 0) return;   // Do nothing!
+    public void add(int field, int amount) {
 
-        long delta = amount;
+        if (amount == 0) {
+            return;   // Do nothing!
+        }
+
+        // We handle most fields in the same way.  The algorithm is to add
+        // a computed amount of millis to the current millis.  The only
+        // wrinkle is with DST -- for some fields, like the DAY_OF_MONTH,
+        // we don't want the HOUR to shift due to changes in DST.  If the
+        // result of the add operation is to move from DST to Standard, or
+        // vice versa, we need to adjust by an hour forward or back,
+        // respectively.  For such fields we set keepHourInvariant to true.
+        
+        // We only adjust the DST for fields larger than an hour.  For
+        // fields smaller than an hour, we cannot adjust for DST without
+        // causing problems.  for instance, if you add one hour to April 5,
+        // 1998, 1:00 AM, in PST, the time becomes "2:00 AM PDT" (an
+        // illegal value), but then the adjustment sees the change and
+        // compensates by subtracting an hour.  As a result the time
+        // doesn't advance at all.
+
+        // For some fields larger than a day, such as a MONTH, we pin the
+        // DAY_OF_MONTH.  This allows <March 31>.add(MONTH, 1) to be
+        // <April 30>, rather than <April 31> => <May 1>.
+
+        long delta = amount; // delta in ms
+        boolean keepHourInvariant = true;
 
         switch (field) {
         case YEAR:
-            {
-                int year = get(YEAR) + amount;
-                set(YEAR, year);
-                pinField(DAY_OF_MONTH);
-                return;
-            }
-        
+        case EXTENDED_YEAR:
+        case YEAR_WOY:
         case MONTH:
-            // About the best we can do for a default implementation is
-            // assume a constant number of months per year.  Subclasses
-            // with a variable number of months will have to do this
-            // one themselves
-            {
-                int month = this.get(MONTH) + amount;
-                int year = get(YEAR);
-                int length = getMaximum(MONTH) + 1;
-                
-                if (month >= 0) {
-                    set(YEAR, year + month/length);
-                    set(MONTH, month % length);
-                } else {
-                    set(YEAR, year + (month + 1)/length - 1);
-                    month %= length;
-                    if (month < 0) {
-                        month += length;
-                    }
-                    set(MONTH, month);
-                }
-                pinField(DAY_OF_MONTH);
-                return;
-            }
+            set(field, get(field) + amount);
+            pinField(DAY_OF_MONTH);
+            return;
             
         case WEEK_OF_YEAR:
         case WEEK_OF_MONTH:
         case DAY_OF_WEEK_IN_MONTH:
-            delta *= WEEK_MS;
+            delta *= ONE_WEEK;
             break;
 
         case AM_PM:
-            delta *= 12 * HOUR_MS;
+            delta *= 12 * ONE_HOUR;
             break;
 
         case DAY_OF_MONTH:
         case DAY_OF_YEAR:
         case DAY_OF_WEEK:
-            delta *= DAY_MS;
+        case DOW_LOCAL:
+        case JULIAN_DAY:
+            delta *= ONE_DAY;
             break;
 
         case HOUR_OF_DAY:
         case HOUR:
-            delta *= HOUR_MS;
+            delta *= ONE_HOUR;
+            keepHourInvariant = false;
             break;
 
         case MINUTE:
-            delta *= MINUTE_MS;
+            delta *= ONE_MINUTE;
+            keepHourInvariant = false;
             break;
 
         case SECOND:
-            delta *= SECOND_MS;
+            delta *= ONE_SECOND;
+            keepHourInvariant = false;
             break;
 
         case MILLISECOND:
+        case MILLISECONDS_IN_DAY:
+            keepHourInvariant = false;
             break;
 
         default:
-            throw new IllegalArgumentException("Calendar.add: field not supported");
+            throw new IllegalArgumentException("Calendar.add(" + fieldName(field) +
+                                               ") not supported");
         }
-        setTimeInMillis(getTimeInMillis() + delta);
-    }
 
+        // In order to keep the hour invariant (for fields where this is
+        // appropriate), record the DST_OFFSET before and after the add()
+        // operation.  If it has changed, then adjust the millis to
+        // compensate.
+        int dst = 0;
+        if (keepHourInvariant) {
+            dst = get(DST_OFFSET);
+        }
+
+        setTimeInMillis(getTimeInMillis() + delta);
+
+        if (keepHourInvariant) {
+            dst -= get(DST_OFFSET);
+            if (dst != 0) {
+                setTimeInMillis(time + dst);
+            }
+        }
+    }
     
     /**
      * Return the name of this calendar in the language of the given locale.
@@ -2145,23 +2322,21 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     protected int weekNumber(int desiredDay, int dayOfPeriod, int dayOfWeek)
     {
-        int length = getMaximum(DAY_OF_WEEK) - getMinimum(DAY_OF_WEEK) + 1;
-
         // Determine the day of the week of the first day of the period
         // in question (either a year or a month).  Zero represents the
         // first day of the week on this calendar.
-        int periodStartDayOfWeek = (dayOfWeek - getFirstDayOfWeek() - dayOfPeriod + 1) % length;
-        if (periodStartDayOfWeek < 0) periodStartDayOfWeek += length;
+        int periodStartDayOfWeek = (dayOfWeek - getFirstDayOfWeek() - dayOfPeriod + 1) % 7;
+        if (periodStartDayOfWeek < 0) periodStartDayOfWeek += 7;
 
         // Compute the week number.  Initially, ignore the first week, which
         // may be fractional (or may not be).  We add periodStartDayOfWeek in
         // order to fill out the first week, if it is fractional.
-        int weekNo = (desiredDay + periodStartDayOfWeek - 1)/length;
+        int weekNo = (desiredDay + periodStartDayOfWeek - 1)/7;
 
         // If the first week is long enough, then count it.  If
         // the minimal days in the first week is one, or if the period start
         // is zero, we always increment weekNo.
-        if ((length - periodStartDayOfWeek) >= getMinimalDaysInFirstWeek()) ++weekNo;
+        if ((7 - periodStartDayOfWeek) >= getMinimalDaysInFirstWeek()) ++weekNo;
 
         return weekNo;
     }
@@ -2204,69 +2379,6 @@ public abstract class Calendar implements Serializable, Cloneable {
     // Constants
     //-------------------------------------------------------------------------
     
-    private static final int  SECOND_MS = 1000;
-    private static final int  MINUTE_MS = 60*SECOND_MS;
-    private static final int  HOUR_MS   = 60*MINUTE_MS;
-    private static final long DAY_MS    = 24*HOUR_MS;
-    private static final long WEEK_MS   = 7*DAY_MS;
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-//|    /**
-//|     * Date Arithmetic function.
-//|     * Adds the specified (signed) amount of time to the given time field,
-//|     * based on the calendar's rules. For example, to subtract 5 days from
-//|     * the current time of the calendar, you can achieve it by calling:
-//|     * <p>add(Calendar.DATE, -5).
-//|     * @param field the time field.
-//|     * @param amount the amount of date or time to be added to the field.
-//|     */
-//|    abstract public void add(int field, int amount);
-//|
-//|    /**
-//|     * Time Field Rolling function.
-//|     * Rolls (up/down) a single unit of time on the given time field. For
-//|     * example, to roll the current date up by one day, you can achieve it
-//|     * by calling:
-//|     * <p>roll(Calendar.DATE, true).
-//|     * When rolling on the year or Calendar.YEAR field, it will roll the year
-//|     * value in the range between 1 and the value returned by calling
-//|     * getMaximum(Calendar.YEAR).
-//|     * When rolling on the month or Calendar.MONTH field, other fields like
-//|     * date might conflict and, need to be changed. For instance,
-//|     * rolling the month on the date 01/31/96 will result in 02/29/96.
-//|     * When rolling on the hour-in-day or Calendar.HOUR_OF_DAY field, it will
-//|     * roll the hour value in the range between 0 and 23, which is zero-based.
-//|     * @param field the time field.
-//|     * @param up indicates if the value of the specified time field is to be
-//|     * rolled up or rolled down. Use true if rolling up, false otherwise.
-//|     */
-//|    abstract public void roll(int field, boolean up);
-//|
-//|    /**
-//|     * Time Field Rolling function.
-//|     * Rolls up or down the specified number of units on the given time field.
-//|     * (A negative roll amount means to roll down.)
-//|     * [NOTE:  This default implementation on Calendar just repeatedly calls the
-//|     * version of roll() that takes a boolean and rolls by one unit.  This may not
-//|     * always do the right thing.  For example, if the DAY_OF_MONTH field is 31,
-//|     * rolling through February will leave it set to 28.  The GregorianCalendar
-//|     * version of this function takes care of this problem.  Other subclasses
-//|     * should also provide overrides of this function that do the right thing.
-//|     * 
-//|     * @since 1.2
-//|     */
-//|    public void roll(int field, int amount)
-//|    {
-//|        while (amount > 0) {
-//|            roll(field, true);
-//|            amount--;
-//|        }
-//|        while (amount < 0) {
-//|            roll(field, false);
-//|            amount++;
-//|        }
-//|    }
-
     /**
      * [NEW]
      * Return the difference between the given time and the time this
@@ -2445,13 +2557,87 @@ public abstract class Calendar implements Serializable, Cloneable {
         return minimalDaysInFirstWeek;
     }
 
+    private static final int LIMITS[][] = {
+        //    Minimum  Greatest min      Least max   Greatest max
+        {/*                                                      */}, // ERA
+        {/*                                                      */}, // YEAR
+        {/*                                                      */}, // MONTH
+        {/*                                                      */}, // WEEK_OF_YEAR
+        {/*                                                      */}, // WEEK_OF_MONTH
+        {/*                                                      */}, // DAY_OF_MONTH
+        {/*                                                      */}, // DAY_OF_YEAR
+        {           1,            1,             7,             7  }, // DAY_OF_WEEK
+        {/*                                                      */}, // DAY_OF_WEEK_IN_MONTH
+        {           0,            0,             1,             1  }, // AM_PM
+        {           0,            0,            11,            11  }, // HOUR
+        {           0,            0,            23,            23  }, // HOUR_OF_DAY
+        {           0,            0,            59,            59  }, // MINUTE
+        {           0,            0,            59,            59  }, // SECOND
+        {           0,            0,           999,           999  }, // MILLISECOND
+        {-12*ONE_HOUR, -12*ONE_HOUR,   12*ONE_HOUR,   12*ONE_HOUR  }, // ZONE_OFFSET
+        {           0,            0,    1*ONE_HOUR,    1*ONE_HOUR  }, // DST_OFFSET
+        {/*                                                      */}, // YEAR_WOY
+        {           1,            1,             7,             7  }, // DOW_LOCAL
+        {/*                                                      */}, // EXTENDED_YEAR
+        { -0x7F000000,  -0x7F000000,    0x7F000000,    0x7F000000  }, // JULIAN_DAY
+        {           0,            0, 24*ONE_HOUR-1, 24*ONE_HOUR-1  }, // MILLISECONDS_IN_DAY
+    };
+
+    /**
+     * Subclasses must implement this method to return limits for the
+     * following fields:
+     *
+     * <pre>ERA
+     * YEAR
+     * MONTH
+     * WEEK_OF_YEAR
+     * WEEK_OF_MONTH
+     * DAY_OF_MONTH
+     * DAY_OF_YEAR
+     * DAY_OF_WEEK_IN_MONTH
+     * YEAR_WOY
+     * EXTENDED_YEAR</pre>
+     *
+     * @param field one of the above field numbers
+     * @param limitType one of <code>MINIMUM</code>, <code>GREATEST_MINIMUM</code>,
+     * <code>LEAST_MAXIMUM</code>, or <code>MAXIMUM</code>
+     */
+    abstract protected int handleGetLimit(int field, int limitType);
+
+    protected int getLimit(int field, int limitType) {
+        switch (field) {
+        case DAY_OF_WEEK:
+        case AM_PM:
+        case HOUR:
+        case HOUR_OF_DAY:
+        case MINUTE:
+        case SECOND:
+        case MILLISECOND:
+        case ZONE_OFFSET:
+        case DST_OFFSET:
+        case DOW_LOCAL:
+        case JULIAN_DAY:
+        case MILLISECONDS_IN_DAY:
+            return LIMITS[field][limitType];
+        }
+        return handleGetLimit(field, limitType);
+    }
+
+    // Possible values of limitType for getLimit() and handleGetLimit()
+    protected static final int MINIMUM = 0;
+    protected static final int GREATEST_MINIMUM = 1;
+    protected static final int LEAST_MAXIMUM = 2;
+    protected static final int MAXIMUM = 3;
+
     /**
      * Gets the minimum value for the given time field.
      * e.g., for Gregorian DAY_OF_MONTH, 1.
      * @param field the given time field.
      * @return the minimum value for the given time field.
      */
-    abstract public int getMinimum(int field);
+    public final int getMinimum(int field) {
+        return getLimit(field, MINIMUM);
+    }
 
     /**
      * Gets the maximum value for the given time field.
@@ -2459,7 +2645,9 @@ public abstract class Calendar implements Serializable, Cloneable {
      * @param field the given time field.
      * @return the maximum value for the given time field.
      */
-    abstract public int getMaximum(int field);
+    public final int getMaximum(int field) {
+        return getLimit(field, MAXIMUM);
+    }
 
     /**
      * Gets the highest minimum value for the given field if varies.
@@ -2467,7 +2655,9 @@ public abstract class Calendar implements Serializable, Cloneable {
      * @param field the given time field.
      * @return the highest minimum value for the given time field.
      */
-    abstract public int getGreatestMinimum(int field);
+    public final int getGreatestMinimum(int field) {
+        return getLimit(field, GREATEST_MINIMUM);
+    }
 
     /**
      * Gets the lowest maximum value for the given field if varies.
@@ -2475,104 +2665,9 @@ public abstract class Calendar implements Serializable, Cloneable {
      * @param field the given time field.
      * @return the lowest maximum value for the given time field.
      */
-    abstract public int getLeastMaximum(int field);
-
-//|    /**
-//|     * Return the minimum value that this field could have, given the current date.
-//|     * For the Gregorian calendar, this is the same as getMinimum() and getGreatestMinimum().
-//|     *
-//|     * The version of this function on Calendar uses an iterative algorithm to determine the
-//|     * actual minimum value for the field.  There is almost always a more efficient way to
-//|     * accomplish this (in most cases, you can simply return getMinimum()).  GregorianCalendar
-//|     * overrides this function with a more efficient implementation.
-//|     *
-//|     * @param field the field to determine the minimum of
-//|     * @return the minimum of the given field for the current date of this Calendar
-//|     * @since 1.2
-//|     */
-//|    public int getActualMinimum(int field) {
-//|        int fieldValue = getGreatestMinimum(field);
-//|        int endValue = getMinimum(field);
-//|
-//|        // if we know that the minimum value is always the same, just return it
-//|        if (fieldValue == endValue) {
-//|            return fieldValue;
-//|        }
-//|
-//|        // clone the calendar so we don't mess with the real one, and set it to
-//|        // accept anything for the field values
-//|        Calendar work = (Calendar)this.clone();
-//|        work.setLenient(true);
-//|
-//|        // now try each value from getLeastMaximum() to getMaximum() one by one until
-//|        // we get a value that normalizes to another value.  The last value that
-//|        // normalizes to itself is the actual minimum for the current date
-//|        int result = fieldValue;
-//|
-//|        do {
-//|            work.set(field, fieldValue);
-//|            if (work.get(field) != fieldValue) {
-//|                break;
-//|            } else {
-//|                result = fieldValue;
-//|                fieldValue--;
-//|            }
-//|        } while (fieldValue >= endValue);
-//|
-//|        return result;
-//|    }
-//|
-//|    /**
-//|     * Return the maximum value that this field could have, given the current date.
-//|     * For example, with the date "Feb 3, 1997" and the DAY_OF_MONTH field, the actual
-//|     * maximum would be 28; for "Feb 3, 1996" it s 29.  Similarly for a Hebrew calendar,
-//|     * for some years the actual maximum for MONTH is 12, and for others 13.
-//|     *
-//|     * The version of this function on Calendar uses an iterative algorithm to determine the
-//|     * actual maximum value for the field.  There is almost always a more efficient way to
-//|     * accomplish this (in most cases, you can simply return getMaximum()).  GregorianCalendar
-//|     * overrides this function with a more efficient implementation.
-//|     *
-//|     * @param field the field to determine the maximum of
-//|     * @return the maximum of the given field for the current date of this Calendar
-//|     * @since 1.2
-//|     */
-//|    public int getActualMaximum(int field) {
-//|        int fieldValue = getLeastMaximum(field);
-//|        int endValue = getMaximum(field);
-//|
-//|        // if we know that the maximum value is always the same, just return it
-//|        if (fieldValue == endValue) {
-//|            return fieldValue;
-//|        }
-//|
-//|        // clone the calendar so we don't mess with the real one, and set it to
-//|        // accept anything for the field values
-//|        Calendar work = (Calendar)this.clone();
-//|        work.setLenient(true);
-//|
-//|        // if we're counting weeks, set the day of the week to Sunday.  We know the
-//|        // last week of a month or year will contain the first day of the week.
-//|        if (field == WEEK_OF_YEAR || field == WEEK_OF_MONTH)
-//|            work.set(DAY_OF_WEEK, firstDayOfWeek);
-//|
-//|        // now try each value from getLeastMaximum() to getMaximum() one by one until
-//|        // we get a value that normalizes to another value.  The last value that
-//|        // normalizes to itself is the actual maximum for the current date
-//|        int result = fieldValue;
-//|
-//|        do {
-//|            work.set(field, fieldValue);
-//|            if (work.get(field) != fieldValue) {
-//|                break;
-//|            } else {
-//|                result = fieldValue;
-//|                fieldValue++;
-//|            }
-//|        } while (fieldValue <= endValue);
-//|
-//|        return result;
-//|    }
+    public final int getLeastMaximum(int field) {
+        return getLimit(field, LEAST_MAXIMUM);
+    }
 
     //-------------------------------------------------------------------------
     // Weekend support -- determining which days of the week are the weekend
@@ -2731,10 +2826,10 @@ public abstract class Calendar implements Serializable, Cloneable {
         try {
             Calendar other = (Calendar) super.clone();
 
-            other.fields = new int[FIELD_COUNT];
-            other.stamp = new int[FIELD_COUNT];
-            System.arraycopy(this.fields, 0, other.fields, 0, FIELD_COUNT);
-            System.arraycopy(this.stamp, 0, other.stamp, 0, FIELD_COUNT);
+            other.fields = new int[fields.length];
+            other.stamp = new int[fields.length];
+            System.arraycopy(this.fields, 0, other.fields, 0, fields.length);
+            System.arraycopy(this.stamp, 0, other.stamp, 0, fields.length);
 
             other.zone = (TimeZone) zone.clone();
             return other;
@@ -2744,13 +2839,6 @@ public abstract class Calendar implements Serializable, Cloneable {
             throw new InternalError();
         }
     }
-
-    private static final String[] FIELD_NAME = {
-        ",ERA=", ",YEAR=", ",MONTH=", ",WEEK_OF_YEAR=", ",WEEK_OF_MONTH=", ",DAY_OF_MONTH=",
-        ",DAY_OF_YEAR=", ",DAY_OF_WEEK=", ",DAY_OF_WEEK_IN_MONTH=", ",AM_PM=", ",HOUR=",
-        ",HOUR_OF_DAY=", ",MINUTE=", ",SECOND=", ",MILLISECOND=", ",ZONE_OFFSET=",
-        ",DST_OFFSET="
-    };
 
     /**
      * Return a string representation of this calendar. This method 
@@ -2777,8 +2865,8 @@ public abstract class Calendar implements Serializable, Cloneable {
         buffer.append(firstDayOfWeek);
         buffer.append(",minimalDaysInFirstWeek=");
         buffer.append(minimalDaysInFirstWeek);
-        for (int i=0; i<FIELD_COUNT; ++i) {
-            buffer.append(FIELD_NAME[i]);
+        for (int i=0; i<fields.length; ++i) {
+            buffer.append(',').append(FIELD_NAME[i]).append('=');
             buffer.append(isSet(i) ? String.valueOf(fields[i]) : "?");
         }
         buffer.append(']');
@@ -2859,41 +2947,1028 @@ public abstract class Calendar implements Serializable, Cloneable {
     /**
      * Reconstitute this object from a stream (i.e., deserialize it).
      */
-    /*
     private void readObject(ObjectInputStream stream)
-         throws IOException, ClassNotFoundException
-    {
+        throws IOException, ClassNotFoundException {
+        
         stream.defaultReadObject();
-
-        stamp = new int[FIELD_COUNT];
-
-        // Starting with version 2 (not implemented yet), we expect that
-        // fields[], isSet[], isTimeSet, and areFieldsSet may not be
-        // streamed out anymore.  We expect 'time' to be correct.
-        if (serialVersionOnStream >= 2)
-        {
-            isTimeSet = true;
-            if (fields == null) fields = new int[FIELD_COUNT];
-            if (isSet == null) isSet = new boolean[FIELD_COUNT];
-        }
-        else if (serialVersionOnStream == 0)
-        {
-            for (int i=0; i<FIELD_COUNT; ++i)
-                stamp[i] = isSet[i] ? INTERNALLY_SET : UNSET;
-        }
-
-        serialVersionOnStream = currentSerialVersion;
+        fields = handleCreateFields();
+        stamp = new int[fields.length];
+        isTimeSet = true;
+        areFieldsSet = areAllFieldsSet = false;
+        nextStamp = MINIMUM_USER_STAMP;
     }
-    */
+
+
+    //----------------------------------------------------------------------
+    // Time -> Fields
+    //----------------------------------------------------------------------
+
+    /**
+     * Converts the current millisecond time value <code>time</code> to
+     * field values in <code>fields[]</code>.  This synchronizes the time
+     * field values with a new time that is set for the calendar.  The time
+     * is <em>not</em> recomputed first; to recompute the time, then the
+     * fields, call the <code>complete</code> method.
+     * @see #complete
+     */
+    protected void computeFields() {
+        int rawOffset = getTimeZone().getRawOffset();
+        long localMillis = time + rawOffset;
+
+        // Mark fields as set.  Do this before calling handleComputeFields().
+        int mask = internalSetMask;
+        for (int i=0; i<fields.length; ++i) {
+            if ((mask & 1) == 0) {
+                stamp[i] = INTERNALLY_SET;
+            } else {
+                stamp[i] = UNSET;
+            }
+            mask >>= 1;
+        }
+
+        // We used to check for and correct extreme millis values (near
+        // Long.MIN_VALUE or Long.MAX_VALUE) here.  Such values would cause
+        // overflows from positive to negative (or vice versa) and had to
+        // be manually tweaked.  We no longer need to do this because we
+        // have limited the range of supported dates to those that have a
+        // Julian day that fits into an int.  This allows us to implement a
+        // JULIAN_DAY field and also removes some inelegant code. - Liu
+        // 11/6/00
+
+        fields[JULIAN_DAY] = (int) floorDivide(localMillis, ONE_DAY) +
+            EPOCH_JULIAN_DAY;
+
+        // In some cases we will have to call this method again below to
+        // adjust for DST pushing us into the next Julian day.
+        computeGregorianAndDOWFields(fields[JULIAN_DAY]);
+
+        long days = (long) (localMillis / ONE_DAY);
+        int millisInDay = (int) (localMillis - (days * ONE_DAY));
+        if (millisInDay < 0) millisInDay += ONE_DAY;
+
+        // Call getOffset() to get the TimeZone offset.  The millisInDay value
+        // must be _standard_ local zone millis.
+        int dstOffset = getTimeZone().getOffset(
+                gregorianYear, gregorianMonth,
+                gregorianDayOfMonth,
+                fields[DAY_OF_WEEK],
+                millisInDay,
+                gregorianMonthLength(gregorianYear, gregorianMonth),
+                gregorianPreviousMonthLength(gregorianYear, gregorianMonth))
+            - rawOffset;
+
+        // Adjust our millisInDay for DST.  dstOffset will be zero if DST
+        // is not in effect at this time of year, or if our zone does not
+        // use DST.
+        millisInDay += dstOffset;
+
+        // If DST has pushed us into the next day, we must call
+        // computeGregorianAndDOWFields() again.  This happens in DST between
+        // 12:00 am and 1:00 am every day.  The first call to
+        // computeGregorianAndDOWFields() will give the wrong day, since the
+        // Standard time is in the previous day.
+        if (millisInDay >= ONE_DAY) {
+            millisInDay -= ONE_DAY; // ASSUME dstOffset < 24:00
+
+            // We don't worry about overflow of JULIAN_DAY because the
+            // allowable range of JULIAN_DAY has slop at the ends (that is,
+            // the max is less that 0x7FFFFFFF and the min is greater than
+            // -0x80000000).
+            computeGregorianAndDOWFields(++fields[JULIAN_DAY]);
+        }
+
+        // Call framework method to have subclass compute its fields.
+        // These must include, at a minimum, MONTH, DAY_OF_MONTH,
+        // EXTENDED_YEAR, YEAR, DAY_OF_YEAR.  This method will call internalSet(),
+        // which will update stamp[].
+        handleComputeFields(fields[JULIAN_DAY]);
+
+        // Compute week-related fields, based on the subclass-computed
+        // fields computed by handleComputeFields().
+        computeWeekFields();
+
+        // Compute time-related fields.  These are indepent of the date and
+        // of the subclass algorithm.  They depend only on the local zone
+        // wall milliseconds in day.
+        fields[MILLISECONDS_IN_DAY] = millisInDay;
+        fields[MILLISECOND] = millisInDay % 1000;
+        millisInDay /= 1000;
+        fields[SECOND] = millisInDay % 60;
+        millisInDay /= 60;
+        fields[MINUTE] = millisInDay % 60;
+        millisInDay /= 60;
+        fields[HOUR_OF_DAY] = millisInDay;
+        fields[AM_PM] = millisInDay / 12; // Assume AM == 0
+        fields[HOUR] = millisInDay % 12;
+        fields[ZONE_OFFSET] = rawOffset;
+        fields[DST_OFFSET] = dstOffset;
+    }
+
+    /**
+     * Compute the Gregorian calendar year, month, and day of month from
+     * the given Julian day.  These values are not stored in fields, but in
+     * member variables gregorianXxx.  Also compute the DAY_OF_WEEK and
+     * DOW_LOCAL fields.
+     */
+    private final void computeGregorianAndDOWFields(int julianDay) {
+        computeGregorianFields(julianDay);
+
+        // Compute day of week: JD 0 = Monday
+        int dow = fields[DAY_OF_WEEK] = julianDayToDayOfWeek(julianDay);
+
+        // Calculate 1-based localized day of week
+        int dowLocal = dow - getFirstDayOfWeek() + 1;
+        if (dowLocal < 1) {
+            dowLocal += 7;
+        }
+        fields[DOW_LOCAL] = dowLocal;
+    }
+    
+    /**
+     * Compute the Gregorian calendar year, month, and day of month from the
+     * Julian day.  These values are not stored in fields, but in member
+     * variables gregorianXxx.  They are used for time zone computations and by
+     * subclasses that are Gregorian derivatives.  Subclasses may call this
+     * method to perform a Gregorian calendar millis->fields computation.
+     * To perform a Gregorian calendar fields->millis computation, call
+     * computeGregorianMonthStart().
+     * @see computeGregorianMonthStart
+     */
+    protected final void computeGregorianFields(int julianDay) {
+        int year, month, dayOfMonth, dayOfYear;
+
+        // The Gregorian epoch day is zero for Monday January 1, year 1.
+        long gregorianEpochDay = julianDay - JAN_1_1_JULIAN_DAY;
+
+        // Here we convert from the day number to the multiple radix
+        // representation.  We use 400-year, 100-year, and 4-year cycles.
+        // For example, the 4-year cycle has 4 years + 1 leap day; giving
+        // 1461 == 365*4 + 1 days.
+        int[] rem = new int[1];
+        int n400 = floorDivide(gregorianEpochDay, 146097, rem); // 400-year cycle length
+        int n100 = floorDivide(rem[0], 36524, rem); // 100-year cycle length
+        int n4 = floorDivide(rem[0], 1461, rem); // 4-year cycle length
+        int n1 = floorDivide(rem[0], 365, rem);
+        year = 400*n400 + 100*n100 + 4*n4 + n1;
+        dayOfYear = rem[0]; // zero-based day of year
+        if (n100 == 4 || n1 == 4) {
+            dayOfYear = 365; // Dec 31 at end of 4- or 400-yr cycle
+        } else {
+            ++year;
+        }
+
+        boolean isLeap = ((year&0x3) == 0) && // equiv. to (year%4 == 0)
+            (year%100 != 0 || year%400 == 0);
+
+        int correction = 0;
+        int march1 = isLeap ? 60 : 59; // zero-based DOY for March 1
+        if (dayOfYear >= march1) correction = isLeap ? 1 : 2;
+        month = (12 * (dayOfYear + correction) + 6) / 367; // zero-based month
+        dayOfMonth = dayOfYear -
+            GREGORIAN_MONTH_COUNT[month][isLeap?3:2] + 1; // one-based DOM
+
+        gregorianYear = year;
+        gregorianMonth = month; // 0-based already
+        gregorianDayOfMonth = dayOfMonth; // 1-based already
+        gregorianDayOfYear = dayOfYear + 1; // Convert from 0-based to 1-based
+    }
+
+    /**
+     * Compute the fields WEEK_OF_YEAR, YEAR_WOY, WEEK_OF_MONTH,
+     * DAY_OF_WEEK_IN_MONTH, and DOW_LOCAL from EXTENDED_YEAR, YEAR,
+     * DAY_OF_WEEK, and DAY_OF_YEAR.  The latter fields are computed by the
+     * subclass based on the calendar system.
+     *
+     * <p>The YEAR_WOY field is computed simplistically.  It is equal to YEAR
+     * most of the time, but at the year boundary it may be adjusted to YEAR-1
+     * or YEAR+1 to reflect the overlap of a week into an adjacent year.  In
+     * this case, a simple increment or decrement is performed on YEAR, even
+     * though this may yield an invalid YEAR value.  For instance, if the YEAR
+     * is part of a calendar system with an N-year cycle field CYCLE, then
+     * incrementing the YEAR may involve incrementing CYCLE and setting YEAR
+     * back to 0 or 1.  This is not handled by this code, and in fact cannot be
+     * simply handled without having subclasses define an entire parallel set of
+     * fields for fields larger than or equal to a year.  This additional
+     * complexity is not warranted, since the intention of the YEAR_WOY field is
+     * to support ISO 8601 notation, so it will typically be used with a
+     * proleptic Gregorian calendar, which has no field larger than a year.
+     */
+    private final void computeWeekFields() {
+        int eyear = fields[EXTENDED_YEAR];
+        int year = fields[YEAR];
+        int dayOfWeek = fields[DAY_OF_WEEK];
+        int dayOfYear = fields[DAY_OF_YEAR];
+
+        // WEEK_OF_YEAR start
+        // Compute the week of the year.  For the Gregorian calendar, valid week
+        // numbers run from 1 to 52 or 53, depending on the year, the first day
+        // of the week, and the minimal days in the first week.  For other
+        // calendars, the valid range may be different -- it depends on the year
+        // length.  Days at the start of the year may fall into the last week of
+        // the previous year; days at the end of the year may fall into the
+        // first week of the next year.  ASSUME that the year length is less than
+        // 7000 days.
+        int yearOfWeekOfYear = year;
+        int relDow = (dayOfWeek + 7 - getFirstDayOfWeek()) % 7; // 0..6
+        int relDowJan1 = (dayOfWeek - dayOfYear + 7001 - getFirstDayOfWeek()) % 7; // 0..6
+        int woy = (dayOfYear - 1 + relDowJan1) / 7; // 0..53
+        if ((7 - relDowJan1) >= getMinimalDaysInFirstWeek()) {
+            ++woy;
+        }
+
+        // Adjust for weeks at the year end that overlap into the previous or
+        // next calendar year.
+        if (woy == 0) {
+            // We are the last week of the previous year.
+            // Check to see if we are in the last week; if so, we need
+            // to handle the case in which we are the first week of the
+            // next year.
+
+            int prevDoy = dayOfYear + handleGetYearLength(eyear - 1);
+            woy = weekNumber(prevDoy, dayOfWeek);
+            yearOfWeekOfYear--;
+        } else {
+            int lastDoy = handleGetYearLength(eyear);
+            // Fast check: For it to be week 1 of the next year, the DOY
+            // must be on or after L-5, where L is yearLength(), then it
+            // cannot possibly be week 1 of the next year:
+            //          L-5                  L
+            // doy: 359 360 361 362 363 364 365 001
+            // dow:      1   2   3   4   5   6   7
+            if (dayOfYear >= (lastDoy - 5)) {
+                int lastRelDow = (relDow + lastDoy - dayOfYear) % 7;
+                if (lastRelDow < 0) {
+                    lastRelDow += 7;
+                }
+                if (((6 - lastRelDow) >= getMinimalDaysInFirstWeek()) &&
+                    ((dayOfYear + 7 - relDow) > lastDoy)) {
+                    woy = 1;
+                    yearOfWeekOfYear++;
+                }
+            }
+        }
+        fields[WEEK_OF_YEAR] = woy;
+        fields[YEAR_WOY] = yearOfWeekOfYear;
+        // WEEK_OF_YEAR end
+
+        int dayOfMonth = fields[DAY_OF_MONTH];
+        fields[WEEK_OF_MONTH] = weekNumber(dayOfMonth, dayOfWeek);
+        fields[DAY_OF_WEEK_IN_MONTH] = (dayOfMonth-1) / 7 + 1;
+    }
+
+    //----------------------------------------------------------------------
+    // Fields -> Time
+    //----------------------------------------------------------------------
+
+    // Default table for day in year
+    static final int[][][] DATE_PRECEDENCE = {
+        {
+            { Calendar.DAY_OF_MONTH },
+            { Calendar.WEEK_OF_YEAR, Calendar.DAY_OF_WEEK },
+            { Calendar.WEEK_OF_MONTH, Calendar.DAY_OF_WEEK },
+            { Calendar.DAY_OF_WEEK_IN_MONTH, Calendar.DAY_OF_WEEK },
+            { Calendar.WEEK_OF_YEAR, Calendar.DOW_LOCAL },
+            { Calendar.WEEK_OF_MONTH, Calendar.DOW_LOCAL },
+            { Calendar.DAY_OF_WEEK_IN_MONTH, Calendar.DOW_LOCAL },
+            { Calendar.DAY_OF_YEAR },
+        },
+        {
+            { Calendar.WEEK_OF_YEAR },
+            { Calendar.WEEK_OF_MONTH },
+            { Calendar.DAY_OF_WEEK_IN_MONTH },
+            { Calendar.DAY_OF_WEEK },
+            { Calendar.DOW_LOCAL },
+        },
+    };
+
+    static final int[][][] DOW_PRECEDENCE = {
+        {
+            { DAY_OF_WEEK },
+            { DOW_LOCAL },
+        },
+    };
+
+    /**
+     * Given a precedence table, return the newest field combination in
+     * the table, or -1 if none is found.
+     *
+     * TODO: Document table format
+     */
+    static final boolean DEBUG_RESOLVE = false;
+    protected int resolveFields(int[][][] precedenceTable) {
+        int bestField = -1;
+        for (int g=0; g<precedenceTable.length && bestField < 0; ++g) {
+            int[][] group = precedenceTable[g];
+            int bestStamp = UNSET;
+            if (DEBUG_RESOLVE) System.out.println("Resolve group " + g);
+        linesInGroup:
+            for (int l=0; l<group.length; ++l) {
+                int[] line= group[l];
+                int lineStamp = UNSET;
+                for (int i=0; i<line.length; ++i) {
+                    int s = stamp[line[i]];
+                    // If any field is unset then don't use this line
+                    if (s == UNSET) {
+                        if (DEBUG_RESOLVE) System.out.println("Resolve line " + fieldName(line[0]) + " UNSET");
+                        continue linesInGroup;
+                    } else {
+                        lineStamp = Math.max(lineStamp, s);
+                    }
+                }
+                // Record new maximum stamp & field no.
+                if (DEBUG_RESOLVE) System.out.println("Resolve line " + fieldName(line[0]) + " " + lineStamp);                
+                if (lineStamp > bestStamp) {
+                    bestStamp = lineStamp;
+                    bestField = line[0]; // First field refers to entire line
+                }
+            }
+        }
+        return bestField;
+    }
+
+    /**
+     * Return the newest stamp of a given range of fields.
+     */
+    protected int newestStamp(int first, int last, int bestStampSoFar) {
+        int bestStamp = bestStampSoFar;
+        for (int i=first; i<=last; ++i) {
+            if (stamp[i] > bestStamp) {
+                bestStamp = stamp[i];
+            }
+        }
+        return bestStamp;
+    }
+
+    /**
+     * Return the timestamp of a field.
+     */
+    protected final int getStamp(int field) {
+        return stamp[field];
+    }
+    
+    /**
+     * Return the field that is newer, either defaultField, or
+     * alternateField.  If neither is newer or neither is set, return defaultField.
+     */
+    protected int newerField(int defaultField, int alternateField) {
+        if (stamp[alternateField] > stamp[defaultField]) {
+            return alternateField;
+        }
+        return defaultField;
+    }
+
+    protected void validateFields() {
+        for (int field = 0; field < fields.length; field++) {
+            if (isSet(field)) {
+                validateField(field);
+            }
+        }
+    }
+
+    /**
+     * Subclasses should override this method to validate any calendar-specific
+     * fields.  Generic fields can be handled by super.validateField().
+     */
+    protected void validateField(int field) {
+        int y;
+        switch (field) {
+        case DAY_OF_MONTH:
+            y = handleGetExtendedYear();
+            validateField(field, 1, handleGetMonthLength(y, internalGet(MONTH)));
+            break;
+        case DAY_OF_YEAR:
+            y = handleGetExtendedYear();
+            validateField(field, 1, handleGetYearLength(y));
+            break;
+        case DAY_OF_WEEK_IN_MONTH:
+            if (internalGet(field) == 0) {
+                throw new IllegalArgumentException("DAY_OF_WEEK_IN_MONTH cannot be zero");
+            }
+            validateField(field, getMinimum(field), getMaximum(field));
+            break;
+        default:
+            validateField(field, getMinimum(field), getMaximum(field));
+            break;
+        }
+    }
+
+    protected final void validateField(int field, int min, int max) {
+        int value = fields[field];
+        if (value < min || value > max) {
+            throw new IllegalArgumentException(fieldName(field) +
+                                               '=' + value + ", valid range=" +
+                                               min + ".." + max);
+        }
+    }
+
+    /**
+     * Converts the current field values in <code>fields[]</code> to the
+     * millisecond time value <code>time</code>.
+     */
+   protected void computeTime() {
+        if (!isLenient()) {
+            validateFields();
+        }
+
+        // Compute the Julian day 
+        int julianDay = computeJulianDay();
+
+        long millis = julianDayToMillis(julianDay);
+
+        int millisInDay;
+
+        // We only use MILLISECONDS_IN_DAY if it has been set by the user.
+        // This makes it possible for the caller to set the calendar to a
+        // time and call clear(MONTH) to reset the MONTH to January.  This
+        // is legacy behavior.  Without this, clear(MONTH) has no effect,
+        // since the internally set JULIAN_DAY is used.
+        if (stamp[MILLISECONDS_IN_DAY] >= MINIMUM_USER_STAMP &&
+            newestStamp(AM_PM, MILLISECOND, UNSET) <= stamp[MILLISECONDS_IN_DAY]) {
+            millisInDay = internalGet(MILLISECONDS_IN_DAY);
+        } else {
+            millisInDay = computeMillisInDay();
+        }
+
+        // Compute the time zone offset and DST offset.  There are two potential
+        // ambiguities here.  We'll assume a 2:00 am (wall time) switchover time
+        // for discussion purposes here.
+        // 1. The transition into DST.  Here, a designated time of 2:00 am - 2:59 am
+        //    can be in standard or in DST depending.  However, 2:00 am is an invalid
+        //    representation (the representation jumps from 1:59:59 am Std to 3:00:00 am DST).
+        //    We assume standard time.
+        // 2. The transition out of DST.  Here, a designated time of 1:00 am - 1:59 am
+        //    can be in standard or DST.  Both are valid representations (the rep
+        //    jumps from 1:59:59 DST to 1:00:00 Std).
+        //    Again, we assume standard time.
+        // We use the TimeZone object, unless the user has explicitly set the ZONE_OFFSET
+        // or DST_OFFSET fields; then we use those fields.
+        if (stamp[ZONE_OFFSET] >= MINIMUM_USER_STAMP ||
+            stamp[DST_OFFSET] >= MINIMUM_USER_STAMP) {
+            millisInDay -= internalGet(ZONE_OFFSET) + internalGet(DST_OFFSET);
+        } else {
+            millisInDay -= computeZoneOffset(millis, millisInDay);
+        }
+
+        time = millis + millisInDay;
+    }
+
+    /**
+     * Compute the milliseconds in the day from the fields.  This is a
+     * value from 0 to 23:59:59.999 inclusive, unless fields are out of
+     * range, in which case it can be an arbitrary value.  This value
+     * reflects local zone wall time.
+     */
+    protected int computeMillisInDay() {
+        // Do the time portion of the conversion.
+
+        int millisInDay = 0;
+
+        // Find the best set of fields specifying the time of day.  There
+        // are only two possibilities here; the HOUR_OF_DAY or the
+        // AM_PM and the HOUR.
+        int hourOfDayStamp = stamp[HOUR_OF_DAY];
+        int hourStamp = Math.max(stamp[HOUR], stamp[AM_PM]);
+        int bestStamp = (hourStamp > hourOfDayStamp) ? hourStamp : hourOfDayStamp;
+
+        // Hours
+        if (bestStamp != UNSET) {
+            if (bestStamp == hourOfDayStamp) {
+                // Don't normalize here; let overflow bump into the next period.
+                // This is consistent with how we handle other fields.
+                millisInDay += internalGet(HOUR_OF_DAY);
+            } else {
+                // Don't normalize here; let overflow bump into the next period.
+                // This is consistent with how we handle other fields.
+                millisInDay += internalGet(HOUR);
+                millisInDay += 12 * internalGet(AM_PM); // Default works for unset AM_PM
+            }
+        }
+
+        // We use the fact that unset == 0; we start with millisInDay
+        // == HOUR_OF_DAY.
+        millisInDay *= 60;
+        millisInDay += internalGet(MINUTE); // now have minutes
+        millisInDay *= 60;
+        millisInDay += internalGet(SECOND); // now have seconds
+        millisInDay *= 1000;
+        millisInDay += internalGet(MILLISECOND); // now have millis
+
+        return millisInDay;
+    }
+
+    /**
+     * This method can assume EXTENDED_YEAR has been set.
+     * @param millis milliseconds of the date fields
+     * @param millisInDay milliseconds of the time fields; may be out
+     * or range.
+     */
+    protected int computeZoneOffset(long millis, int millisInDay) {
+
+        /* Normalize the millisInDay to 0..ONE_DAY-1.  If the millis is out
+         * of range, then we must call computeGregorianAndDOWFields() to
+         * recompute our fields. */
+        int[] normalizedMillisInDay = new int[1];
+        int days = floorDivide(millis + millisInDay, (int) ONE_DAY,
+                               normalizedMillisInDay);
+
+        int julianDay = millisToJulianDay(days * ONE_DAY);
+
+        computeGregorianAndDOWFields(julianDay);
+
+        return zone.getOffset(
+                      gregorianYear, gregorianMonth, gregorianDayOfMonth,
+                      fields[DAY_OF_WEEK], normalizedMillisInDay[0],
+                      gregorianMonthLength(gregorianYear, gregorianMonth),
+                      gregorianPreviousMonthLength(gregorianYear,
+                                                   gregorianMonth));
+
+        // Note: Because we pass in wall millisInDay, rather than
+        // standard millisInDay, we interpret "1:00 am" on the day
+        // of cessation of DST as "1:00 am Std" (assuming the time
+        // of cessation is 2:00 am).
+    }
+
+    /**
+     * Compute the Julian day number as specified by this calendar's fields.
+     */
+    protected int computeJulianDay() {
+
+        // We want to see if any of the date fields is newer than the
+        // JULIAN_DAY.  If not, then we use JULIAN_DAY.  If so, then we do
+        // the normal resolution.  We only use JULIAN_DAY if it has been
+        // set by the user.  This makes it possible for the caller to set
+        // the calendar to a time and call clear(MONTH) to reset the MONTH
+        // to January.  This is legacy behavior.  Without this,
+        // clear(MONTH) has no effect, since the internally set JULIAN_DAY
+        // is used.
+        if (stamp[JULIAN_DAY] >= MINIMUM_USER_STAMP) {
+            int bestStamp = newestStamp(ERA, DAY_OF_WEEK_IN_MONTH, UNSET);
+            bestStamp = newestStamp(YEAR_WOY, EXTENDED_YEAR, bestStamp);
+            if (bestStamp <= stamp[JULIAN_DAY]) {
+                return internalGet(JULIAN_DAY);
+            }
+        }
+
+        int bestField = resolveFields(DATE_PRECEDENCE);
+
+        if (bestField == DAY_OF_WEEK || bestField == DOW_LOCAL) {
+            bestField = DAY_OF_WEEK_IN_MONTH;
+        } else if (bestField < 0) {
+            bestField = DAY_OF_MONTH;
+        }
+
+        return handleComputeJulianDay(bestField);
+    }
+
+    /**
+     * Return the Julian day number of day before the first day of the
+     * given month in the given extended year.  Subclasses should override
+     * this method to implement their calendar system.
+     * @param eyear the extended year
+     * @param month the zero-based month
+     * @param return the Julian day number of the day before the first
+     * day of the given month and year
+     */
+    abstract protected int handleComputeMonthStart(int eyear, int month);
+
+    /**
+     * Return the extended year defined by the current fields.  This will
+     * use the EXTENDED_YEAR field or the YEAR and supra-year fields (such
+     * as ERA) specific to the calendar system, depending on which set of
+     * fields is newer.
+     * @return the extended year
+     */
+    abstract protected int handleGetExtendedYear();
+
+    /**
+     * Return the number of days in the given month of the given extended
+     * year of this calendar system.  Subclasses should override this
+     * method if they can provide a more correct or more efficient
+     * implementation than the default implementation in Calendar.
+     */
+    protected int handleGetMonthLength(int extendedYear, int month) {
+        return handleComputeMonthStart(extendedYear, month+1) -
+               handleComputeMonthStart(extendedYear, month);
+    }
+
+    /**
+     * Return the number of days in the given extended year of this
+     * calendar system.  Subclasses should override this method if they can
+     * provide a more correct or more efficient implementation than the
+     * default implementation in Calendar.
+     */
+    protected int handleGetYearLength(int eyear) {
+        return handleComputeMonthStart(eyear+1, 0) -
+               handleComputeMonthStart(eyear, 0);
+    }
+
+    /**
+     * Subclasses that use additional fields beyond those defined in
+     * <code>Calendar</code> should override this method to return an
+     * <code>int[]</code> array of the appropriate length.  The length
+     * must be at least <code>BASE_FIELD_COUNT</code> and no more than
+     * <code>MAX_FIELD_COUNT</code>.
+     */
+    protected int[] handleCreateFields() {
+        return new int[BASE_FIELD_COUNT];
+    }
+
+    /**
+     * Subclasses may override this.  This method calls
+     * handleGetMonthLength() to obtain the calendar-specific month
+     * length.
+     */
+    protected int handleComputeJulianDay(int bestField) {
+
+        boolean useMonth = (bestField == DAY_OF_MONTH ||
+                            bestField == WEEK_OF_MONTH ||
+                            bestField == DAY_OF_WEEK_IN_MONTH);
+
+        int year = handleGetExtendedYear();
+        internalSet(EXTENDED_YEAR, year);
+
+        // Get the Julian day of the day BEFORE the start of this year.
+        // If useMonth is true, get the day before the start of the month.
+        int julianDay = handleComputeMonthStart(year, useMonth ? internalGet(MONTH) : 0);
+
+        if (bestField == DAY_OF_MONTH) {
+            return julianDay + internalGet(DAY_OF_MONTH, 1);
+        }
+
+        if (bestField == DAY_OF_YEAR) {
+            return julianDay + internalGet(DAY_OF_YEAR);
+        }
+
+        int firstDayOfWeek = getFirstDayOfWeek(); // Localized fdw
+
+        // At this point julianDay is the 0-based day BEFORE the first day of
+        // January 1, year 1 of the given calendar.  If julianDay == 0, it
+        // specifies (Jan. 1, 1) - 1, in whatever calendar we are using (Julian
+        // or Gregorian).
+
+        // At this point we need to process the WEEK_OF_MONTH or
+        // WEEK_OF_YEAR, which are similar, or the DAY_OF_WEEK_IN_MONTH.
+        // First, perform initial shared computations.  These locate the
+        // first week of the period.
+
+        // Get the 0-based localized DOW of day one of the month or year.
+        // Valid range 0..6.
+        int first = julianDayToDayOfWeek(julianDay + 1) - firstDayOfWeek;
+        if (first < 0) {
+            first += 7;
+        }
+        
+        // Get zero-based localized DOW, valid range 0..6.  This is the DOW
+        // we are looking for.
+        int dowLocal = 0;
+        switch (resolveFields(DOW_PRECEDENCE)) {
+        case DAY_OF_WEEK:
+            dowLocal = internalGet(DAY_OF_WEEK) - firstDayOfWeek;
+            break;
+        case DOW_LOCAL:
+            dowLocal = internalGet(DOW_LOCAL) - 1;
+            break;
+        }
+        dowLocal = dowLocal % 7;
+        if (dowLocal < 0) {
+            dowLocal += 7;
+        }
+
+        // Find the first target DOW (dowLocal) in the month or year.
+        // Actually, it may be just before the first of the month or year.
+        // It will be an integer from -5..7.
+        int date = 1 - first + dowLocal;
+
+        if (bestField == DAY_OF_WEEK_IN_MONTH) {
+
+            // Adjust the target DOW to be in the month or year.
+            if (date < 1) {
+                date += 7;
+            }
+
+            // The only trickiness occurs if the day-of-week-in-month is
+            // negative.
+            int dim = internalGet(DAY_OF_WEEK_IN_MONTH, 1);
+            if (dim >= 0) {
+                date += 7*(dim - 1);
+                
+            } else {
+                // Move date to the last of this day-of-week in this month,
+                // then back up as needed.  If dim==-1, we don't back up at
+                // all.  If dim==-2, we back up once, etc.  Don't back up
+                // past the first of the given day-of-week in this month.
+                // Note that we handle -2, -3, etc. correctly, even though
+                // values < -1 are technically disallowed.
+                int m = internalGet(MONTH, JANUARY);
+                int monthLength = handleGetMonthLength(year, m);
+                date += ((monthLength - date) / 7 + dim + 1) * 7;
+            }
+        } else {
+            // assert(bestField == WEEK_OF_MONTH || bestField == WEEK_OF_YEAR)
+
+            // Adjust for minimal days in first week
+            if ((7 - first) < getMinimalDaysInFirstWeek()) {
+                date += 7;
+            }
+
+            // Now adjust for the week number.
+            date += 7 * (internalGet(bestField) - 1);
+        }
+
+        return julianDay + date;
+    }
+
+    /**
+     * Compute the Julian day of a month of the Gregorian calendar.
+     * Subclasses may call this method to perform a Gregorian calendar
+     * fields->millis computation.  To perform a Gregorian calendar
+     * millis->fields computation, call computeGregorianFields().
+     * @param year extended Gregorian year
+     * @param month zero-based Gregorian month
+     * @see computeGregorianFields
+     * @return the Julian day number of the day before the first
+     * day of the given month in the given extended year
+     */
+    protected int computeGregorianMonthStart(int year, int month) {
+
+        // If the month is out of range, adjust it into range, and
+        // modify the extended year value accordingly.
+        if (month < 0 || month > 11) {
+            int[] rem = new int[1];
+            year += floorDivide(month, 12, rem);
+            month = rem[0];
+        }
+
+        boolean isLeap = (year%4 == 0) && ((year%100 != 0) || (year%400 == 0));
+        int y = year - 1;
+        // This computation is actually ... + (JAN_1_1_JULIAN_DAY - 3) + 2.
+        // Add 2 because Gregorian calendar starts 2 days after Julian
+        // calendar.
+        int julianDay = 365*y + floorDivide(y, 4) - floorDivide(y, 100) +
+            floorDivide(y, 400) + JAN_1_1_JULIAN_DAY - 1;
+
+        // At this point julianDay indicates the day BEFORE the first day
+        // of January 1, <eyear> of the Gregorian calendar.
+        if (month != 0) {
+            julianDay += GREGORIAN_MONTH_COUNT[month][isLeap?3:2];
+        }
+
+        return julianDay;
+    }
 
     //----------------------------------------------------------------------
     // Subclass API
-    //  For use by subclasses of Calendar
+    // For subclasses to override
     //----------------------------------------------------------------------
 
-    protected void _TEMPORARY_markAllFieldsSet() {
-        for (int i=0; i<stamp.length; ++i) {
-            stamp[i] = INTERNALLY_SET;
+    /**
+     * Subclasses may override this method to compute several fields
+     * specific to each calendar system.  These are:
+     *
+     * <ul><li>ERA
+     * <li>YEAR
+     * <li>MONTH
+     * <li>DAY_OF_MONTH
+     * <li>DAY_OF_YEAR
+     * <li>EXTENDED_YEAR</ul>
+     * 
+     * Subclasses can refer to the DAY_OF_WEEK and DOW_LOCAL fields, which
+     * will be set when this method is called.  Subclasses can also call
+     * the getGregorianXxx() methods to obtain Gregorian calendar
+     * equivalents for the given Julian day.
+     *
+     * <p>In addition, subclasses should compute any subclass-specific
+     * fields, that is, fields from BASE_FIELD_COUNT to
+     * getFieldCount() - 1.
+     *
+     * <p>The default implementation in <code>Calendar</code> implements
+     * a pure proleptic Gregorian calendar.
+     */
+    protected void handleComputeFields(int julianDay) {
+        internalSet(MONTH, getGregorianMonth());
+        internalSet(DAY_OF_MONTH, getGregorianDayOfMonth());
+        internalSet(DAY_OF_YEAR, getGregorianDayOfYear());
+        int eyear = getGregorianYear();
+        internalSet(EXTENDED_YEAR, eyear);
+        int era = GregorianCalendar.AD;
+        if (eyear < 1) {
+            era = GregorianCalendar.BC;
+            eyear = 1 - eyear;
         }
+        internalSet(ERA, era);
+        internalSet(YEAR, eyear);
+    }
+
+    //----------------------------------------------------------------------
+    // Subclass API
+    // For subclasses to call
+    //----------------------------------------------------------------------
+
+    protected final int getGregorianYear() {
+        return gregorianYear;
+    }
+
+    protected final int getGregorianMonth() {
+        return gregorianMonth;
+    }
+
+    protected final int getGregorianDayOfYear() {
+        return gregorianDayOfYear;
+    }
+
+    protected final int getGregorianDayOfMonth() {
+        return gregorianDayOfMonth;
+    }
+
+    public final int getFieldCount() {
+        return fields.length;
+    }
+
+    protected final void internalSet(int field, int value) {
+        if (((1 << field) & internalSetMask) == 0) {
+            throw new IllegalArgumentException("Subclass cannot set " +
+                                               fieldName(field));
+        }
+        fields[field] = value;
+        stamp[field] = INTERNALLY_SET;
+    }
+
+    private static final int[][] GREGORIAN_MONTH_COUNT = {
+        //len len2   st  st2
+        {  31,  31,   0,   0 }, // Jan
+        {  28,  29,  31,  31 }, // Feb
+        {  31,  31,  59,  60 }, // Mar
+        {  30,  30,  90,  91 }, // Apr
+        {  31,  31, 120, 121 }, // May
+        {  30,  30, 151, 152 }, // Jun
+        {  31,  31, 181, 182 }, // Jul
+        {  31,  31, 212, 213 }, // Aug
+        {  30,  30, 243, 244 }, // Sep
+        {  31,  31, 273, 274 }, // Oct
+        {  30,  30, 304, 305 }, // Nov
+        {  31,  31, 334, 335 }  // Dec
+        // len  length of month
+        // len2 length of month in a leap year
+        // st   days in year before start of month
+        // st2  days in year before month in leap year
+    };
+
+    /**
+     * Determines if the given year is a leap year. Returns true if the
+     * given year is a leap year.
+     * @param year the given year.
+     * @return true if the given year is a leap year; false otherwise.
+     */
+    protected static final boolean isGregorianLeapYear(int year) {
+        return (year%4 == 0) && ((year%100 != 0) || (year%400 == 0));
+    }
+
+    protected static final int gregorianMonthLength(int y, int m) {
+        return GREGORIAN_MONTH_COUNT[m][isGregorianLeapYear(y)?1:0];
+    }
+
+    protected static final int gregorianPreviousMonthLength(int y, int m) {
+        return (m > 0) ? gregorianMonthLength(y, m-1) : 31;
+    }
+
+    /**
+     * Divide two long integers, returning the floor of the quotient.
+     * <p>
+     * Unlike the built-in division, this is mathematically well-behaved.
+     * E.g., <code>-1/4</code> => 0
+     * but <code>floorDivide(-1,4)</code> => -1.
+     * @param numerator the numerator
+     * @param denominator a divisor which must be > 0
+     * @return the floor of the quotient.
+     */
+    protected static final long floorDivide(long numerator, long denominator) {
+        // We do this computation in order to handle
+        // a numerator of Long.MIN_VALUE correctly
+        return (numerator >= 0) ?
+            numerator / denominator :
+            ((numerator + 1) / denominator) - 1;
+    }
+
+    /**
+     * Divide two integers, returning the floor of the quotient.
+     * <p>
+     * Unlike the built-in division, this is mathematically well-behaved.
+     * E.g., <code>-1/4</code> => 0
+     * but <code>floorDivide(-1,4)</code> => -1.
+     * @param numerator the numerator
+     * @param denominator a divisor which must be > 0
+     * @return the floor of the quotient.
+     */
+    protected static final int floorDivide(int numerator, int denominator) {
+        // We do this computation in order to handle
+        // a numerator of Integer.MIN_VALUE correctly
+        return (numerator >= 0) ?
+            numerator / denominator :
+            ((numerator + 1) / denominator) - 1;
+    }
+
+    /**
+     * Divide two integers, returning the floor of the quotient, and
+     * the modulus remainder.
+     * <p>
+     * Unlike the built-in division, this is mathematically well-behaved.
+     * E.g., <code>-1/4</code> => 0 and <code>-1%4</code> => -1,
+     * but <code>floorDivide(-1,4)</code> => -1 with <code>remainder[0]</code> => 3.
+     * @param numerator the numerator
+     * @param denominator a divisor which must be > 0
+     * @param remainder an array of at least one element in which the value
+     * <code>numerator mod denominator</code> is returned. Unlike <code>numerator
+     * % denominator</code>, this will always be non-negative.
+     * @return the floor of the quotient.
+     */
+    protected static final int floorDivide(int numerator, int denominator, int[] remainder) {
+        if (numerator >= 0) {
+            remainder[0] = numerator % denominator;
+            return numerator / denominator;
+        }
+        remainder[0] = denominator + (numerator % denominator);
+        return ((numerator + 1) / denominator) - 1;
+    }
+
+    /**
+     * Divide two integers, returning the floor of the quotient, and
+     * the modulus remainder.
+     * <p>
+     * Unlike the built-in division, this is mathematically well-behaved.
+     * E.g., <code>-1/4</code> => 0 and <code>-1%4</code> => -1,
+     * but <code>floorDivide(-1,4)</code> => -1 with <code>remainder[0]</code> => 3.
+     * @param numerator the numerator
+     * @param denominator a divisor which must be > 0
+     * @param remainder an array of at least one element in which the value
+     * <code>numerator mod denominator</code> is returned. Unlike <code>numerator
+     * % denominator</code>, this will always be non-negative.
+     * @return the floor of the quotient.
+     */
+    protected static final int floorDivide(long numerator, int denominator, int[] remainder) {
+        if (numerator >= 0) {
+            remainder[0] = (int)(numerator % denominator);
+            return (int)(numerator / denominator);
+        }
+        int quotient = (int)(((numerator + 1) / denominator) - 1);
+        remainder[0] = (int)(numerator - (quotient * denominator));
+        return quotient;
+    }
+
+    private static final String[] FIELD_NAME = {
+        "ERA", "YEAR", "MONTH", "WEEK_OF_YEAR", "WEEK_OF_MONTH",
+        "DAY_OF_MONTH", "DAY_OF_YEAR", "DAY_OF_WEEK",
+        "DAY_OF_WEEK_IN_MONTH", "AM_PM", "HOUR", "HOUR_OF_DAY",
+        "MINUTE", "SECOND", "MILLISECOND", "ZONE_OFFSET",
+        "DST_OFFSET", "YEAR_WOY", "DOW_LOCAL", "EXTENDED_YEAR",
+        "JULIAN_DAY", "MILLISECONDS_IN_DAY",
+    };
+
+    /**
+     * Return a string name for a field, for debugging and exceptions.
+     */
+    protected String fieldName(int field) {
+        try {
+            return FIELD_NAME[field];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return "Field " + field;
+        }
+    }
+
+    /**
+     * Converts time as milliseconds to Julian day.
+     * @param millis the given milliseconds.
+     * @return the Julian day number.
+     */
+    protected static final int millisToJulianDay(long millis) {
+        return (int) (EPOCH_JULIAN_DAY + floorDivide(millis, ONE_DAY));
+    }
+
+    /**
+     * Converts Julian day to time as milliseconds.
+     * @param julian the given Julian day number.
+     * @return time as milliseconds.
+     */
+    protected static final long julianDayToMillis(int julian) {
+        return (julian - EPOCH_JULIAN_DAY) * ONE_DAY;
+    }
+
+    /**
+     * Return the day of week, from SUNDAY to SATURDAY, given a Julian day.
+     */
+    protected static final int julianDayToDayOfWeek(int julian) {
+        // If julian is negative, then julian%7 will be negative, so we adjust
+        // accordingly.  Julian day 0 is Monday.
+        int dayOfWeek = (julian + MONDAY) % 7;
+        if (dayOfWeek < SUNDAY) {
+            dayOfWeek += 7;
+        }
+        return dayOfWeek;
+    }
+
+    /**
+     * Subclasses may call this method to obtain the current milliseconds.
+     */
+    protected final long internalGetTimeInMillis() {
+        return time;
     }
 }
