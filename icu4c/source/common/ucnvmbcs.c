@@ -28,6 +28,12 @@
 *   - byte sequences must not have leading zero bytes
 *   - except for SBCS codepages: no fallback mapping from Unicode to a zero byte
 *   - limitation to up to 4 bytes per character
+*
+*   Change history: 
+*
+*    5/6/2001       Ram       Moved  MBCS_SINGLE_RESULT_FROM_U,MBCS_STAGE_2_FROM_U,
+*                             MBCS_VALUE_2_FROM_STAGE_2, MBCS_VALUE_4_FROM_STAGE_2
+*                             macros to ucnvmbcs.h file
 */
 
 #include "unicode/utypes.h"
@@ -268,17 +274,6 @@
  * the converter checks for known output types, which allows
  * adding new ones without crashing an unaware converter
  */
-
-/* single-byte fromUnicode: get the 16-bit result word */
-#define MBCS_SINGLE_RESULT_FROM_U(table, results, c) (results)[ (table)[ (table)[(c)>>10] +(((c)>>4)&0x3f) ] +((c)&0xf) ]
-
-/* multi-byte fromUnicode: get the 32-bit stage 2 entry */
-#define MBCS_STAGE_2_FROM_U(table, c) ((uint32_t *)(table))[ (table)[(c)>>10] +(((c)>>4)&0x3f) ]
-
-#define MBCS_VALUE_2_FROM_STAGE_2(bytes, stage2Entry, c) ((uint16_t *)(bytes))[16*(uint32_t)(uint16_t)(stage2Entry)+((c)&0xf)]
-#define MBCS_VALUE_4_FROM_STAGE_2(bytes, stage2Entry, c) ((uint32_t *)(bytes))[16*(uint32_t)(uint16_t)(stage2Entry)+((c)&0xf)]
-
-#define MBCS_POINTER_3_FROM_STAGE_2(bytes, stage2Entry, c) ((bytes)+(16*(uint32_t)(uint16_t)(stage2Entry)+((c)&0xf))*3)
 
 /* prototypes --------------------------------------------------------------- */
 
