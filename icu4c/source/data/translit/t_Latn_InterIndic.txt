@@ -4,14 +4,14 @@
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpicurules.bat
+// Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Latin_InterIndic.txt
-// Date: Mon Dec  3 11:44:30 2001
+// Date: Mon Jan 21 10:41:16 2002
 //--------------------------------------------------------------------
 
 // Latin_InterIndic
 
-translit_Latin_InterIndic {
+Latin_InterIndic {
   Rule {
 //--------------------------------------------------------------------
 // Copyright (c) 2001-2004, International Business Machines
