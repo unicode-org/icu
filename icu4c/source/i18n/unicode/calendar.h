@@ -1387,7 +1387,7 @@ protected:
      * default implementation in Calendar.
      * @stable ICU 2.0
      */
-    virtual int32_t handleGetYearLength(int eyear) const;
+    virtual int32_t handleGetYearLength(int32_t eyear) const;
 
 
     /**

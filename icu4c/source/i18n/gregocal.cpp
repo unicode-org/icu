@@ -76,21 +76,21 @@ static const int32_t kGregorianCalendarLimits[UCAL_FIELD_COUNT][4] = {
     {        0,        0,       4,       6 }, // WEEK_OF_MONTH
     {        1,        1,      28,      31 }, // DAY_OF_MONTH
     {        1,        1,     365,     366 }, // DAY_OF_YEAR
-    {/*                                  */}, // DAY_OF_WEEK
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// DAY_OF_WEEK
     {       -1,       -1,       4,       6 }, // DAY_OF_WEEK_IN_MONTH
-    {/*                                  */}, // AM_PM
-    {/*                                  */}, // HOUR
-    {/*                                  */}, // HOUR_OF_DAY
-    {/*                                  */}, // MINUTE
-    {/*                                  */}, // SECOND
-    {/*                                  */}, // MILLISECOND
-    {/*                                  */}, // ZONE_OFFSET
-    {/*                                  */}, // DST_OFFSET
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// AM_PM
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// HOUR
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// HOUR_OF_DAY
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// MINUTE
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// SECOND
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// MILLISECOND
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// ZONE_OFFSET
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// DST_OFFSET
     { -140742, -140742, 140742, 144683 }, // YEAR_WOY
-    {/*                                  */}, // DOW_LOCAL
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// DOW_LOCAL
     { -140742, -140742, 140742, 144683 }, // EXTENDED_YEAR
-    {/*                                  */}, // JULIAN_DAY
-    {/*                                  */}, // MILLISECONDS_IN_DAY
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1},// JULIAN_DAY
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1} // MILLISECONDS_IN_DAY
 };
 
 // These numbers are 2^52 - 1, the largest allowable mantissa in a 64-bit double
@@ -500,7 +500,7 @@ int32_t GregorianCalendar::handleComputeJulianDay(UCalendarDateFields bestField)
 
 int32_t GregorianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month,
 
-                                                   UBool useMonth) const
+                                                   UBool /* useMonth */) const
 {
     GregorianCalendar *nonConstThis = (GregorianCalendar*)this; // cast away const
 
@@ -978,7 +978,7 @@ int32_t GregorianCalendar::getActualMaximum(UCalendarDateFields field, UErrorCod
             int32_t lowGood = kGregorianCalendarLimits[UCAL_YEAR][1];
             int32_t highBad = kGregorianCalendarLimits[UCAL_YEAR][2]+1;
             while ((lowGood + 1) < highBad) {
-                int y = (lowGood + highBad) / 2;
+                int32_t y = (lowGood + highBad) / 2;
                 cal->set(UCAL_YEAR, y);
                 if (cal->get(UCAL_YEAR, status) == y && cal->get(UCAL_ERA, status) == era) {
                     lowGood = y;
@@ -1008,7 +1008,7 @@ int32_t GregorianCalendar::handleGetExtendedYear() {
   case UCAL_YEAR:
     {
       // The year defaults to the epoch start, the era to AD
-      int era = internalGet(UCAL_ERA, AD);
+      int32_t era = internalGet(UCAL_ERA, AD);
       if (era == BC) {
         year = 1 - internalGet(UCAL_YEAR, 1); // Convert to extended year
       } else {

@@ -343,15 +343,15 @@ getService(void)
 
 static const int32_t kCalendarLimits[UCAL_FIELD_COUNT][4] = {
     //    Minimum  Greatest min      Least max   Greatest max
-    {/*                                                      */}, // ERA
-    {/*                                                      */}, // YEAR
-    {/*                                                      */}, // MONTH
-    {/*                                                      */}, // WEEK_OF_YEAR
-    {/*                                                      */}, // WEEK_OF_MONTH
-    {/*                                                      */}, // DAY_OF_MONTH
-    {/*                                                      */}, // DAY_OF_YEAR
+    {/*N/A*/-1,       /*N/A*/-1,     /*N/A*/-1,       /*N/A*/-1}, // ERA
+    {/*N/A*/-1,       /*N/A*/-1,     /*N/A*/-1,       /*N/A*/-1}, // YEAR
+    {/*N/A*/-1,       /*N/A*/-1,     /*N/A*/-1,       /*N/A*/-1}, // MONTH
+    {/*N/A*/-1,       /*N/A*/-1,     /*N/A*/-1,       /*N/A*/-1}, // WEEK_OF_YEAR
+    {/*N/A*/-1,       /*N/A*/-1,     /*N/A*/-1,       /*N/A*/-1}, // WEEK_OF_MONTH
+    {/*N/A*/-1,       /*N/A*/-1,     /*N/A*/-1,       /*N/A*/-1}, // DAY_OF_MONTH
+    {/*N/A*/-1,       /*N/A*/-1,     /*N/A*/-1,       /*N/A*/-1}, // DAY_OF_YEAR
     {           1,            1,             7,             7  }, // DAY_OF_WEEK
-    {/*                                                      */}, // DAY_OF_WEEK_IN_MONTH
+    {/*N/A*/-1,       /*N/A*/-1,     /*N/A*/-1,       /*N/A*/-1}, // DAY_OF_WEEK_IN_MONTH
     {           0,            0,             1,             1  }, // AM_PM
     {           0,            0,            11,            11  }, // HOUR
     {           0,            0,            23,            23  }, // HOUR_OF_DAY
@@ -360,11 +360,11 @@ static const int32_t kCalendarLimits[UCAL_FIELD_COUNT][4] = {
     {           0,            0,           999,           999  }, // MILLISECOND
     {-12*kOneHour, -12*kOneHour,   12*kOneHour,   12*kOneHour  }, // ZONE_OFFSET
     {           0,            0,    1*kOneHour,    1*kOneHour  }, // DST_OFFSET
-    {/*                                                      */}, // YEAR_WOY
+    {/*N/A*/-1,       /*N/A*/-1,     /*N/A*/-1,       /*N/A*/-1}, // YEAR_WOY
     {           1,            1,             7,             7  }, // DOW_LOCAL
-    {/*                                                      */}, // EXTENDED_YEAR
+    {/*N/A*/-1,       /*N/A*/-1,     /*N/A*/-1,       /*N/A*/-1}, // EXTENDED_YEAR
     { -0x7F000000,  -0x7F000000,    0x7F000000,    0x7F000000  }, // JULIAN_DAY
-    {           0,            0, 24*kOneHour-1, 24*kOneHour-1  }, // MILLISECONDS_IN_DAY
+    {           0,            0, 24*kOneHour-1, 24*kOneHour-1  } // MILLISECONDS_IN_DAY
 };
 
 // Resource bundle tags read by this class
@@ -1036,11 +1036,11 @@ void Calendar::computeGregorianAndDOWFields(int32_t julianDay, UErrorCode &ec)
   computeGregorianFields(julianDay, ec);
   
   // Compute day of week: JD 0 = Monday
-  int dow = julianDayToDayOfWeek(julianDay);
+  int32_t dow = julianDayToDayOfWeek(julianDay);
   internalSet(UCAL_DAY_OF_WEEK,dow);
 
   // Calculate 1-based localized day of week
-  int dowLocal = dow - getFirstDayOfWeek() + 1;
+  int32_t dowLocal = dow - getFirstDayOfWeek() + 1;
   if (dowLocal < 1) {
     dowLocal += 7;
   }
@@ -1084,6 +1084,9 @@ void Calendar::computeGregorianFields(int32_t julianDay, UErrorCode & /* ec */) 
  * proleptic Gregorian calendar, which has no field larger than a year.
  */
 void Calendar::computeWeekFields(UErrorCode &ec) {
+  if(U_FAILURE(ec)) { 
+    return;
+  }
   int32_t eyear = fFields[UCAL_EXTENDED_YEAR];
   int32_t year = fFields[UCAL_YEAR];
   int32_t dayOfWeek = fFields[UCAL_DAY_OF_WEEK];
@@ -1114,11 +1117,11 @@ void Calendar::computeWeekFields(UErrorCode &ec) {
     // to handle the case in which we are the first week of the
     // next year.
     
-    int prevDoy = dayOfYear + handleGetYearLength(eyear - 1);
+    int32_t prevDoy = dayOfYear + handleGetYearLength(eyear - 1);
     woy = weekNumber(prevDoy, dayOfWeek);
     yearOfWeekOfYear--;
   } else {
-    int lastDoy = handleGetYearLength(eyear);
+    int32_t lastDoy = handleGetYearLength(eyear);
     // Fast check: For it to be week 1 of the next year, the DOY
     // must be on or after L-5, where L is yearLength(), then it
     // cannot possibly be week 1 of the next year:
@@ -1126,7 +1129,7 @@ void Calendar::computeWeekFields(UErrorCode &ec) {
     // doy: 359 360 361 362 363 364 365 001
     // dow:      1   2   3   4   5   6   7
     if (dayOfYear >= (lastDoy - 5)) {
-      int lastRelDow = (relDow + lastDoy - dayOfYear) % 7;
+      int32_t lastRelDow = (relDow + lastDoy - dayOfYear) % 7;
       if (lastRelDow < 0) {
         lastRelDow += 7;
       }
@@ -1141,7 +1144,7 @@ void Calendar::computeWeekFields(UErrorCode &ec) {
   fFields[UCAL_YEAR_WOY] = yearOfWeekOfYear;
   // WEEK_OF_YEAR end
   
-  int dayOfMonth = fFields[UCAL_DAY_OF_MONTH];
+  int32_t dayOfMonth = fFields[UCAL_DAY_OF_MONTH];
   fFields[UCAL_WEEK_OF_MONTH] = weekNumber(dayOfMonth, dayOfWeek);
   fFields[UCAL_DAY_OF_WEEK_IN_MONTH] = (dayOfMonth-1) / 7 + 1;
 #if defined (U_DEBUG_CAL)
@@ -1172,14 +1175,14 @@ int32_t Calendar::weekNumber(int32_t desiredDay, int32_t dayOfPeriod, int32_t da
   return weekNo;
 }
 
-void Calendar::handleComputeFields(int32_t julianDay, UErrorCode &status)
+void Calendar::handleComputeFields(int32_t /* julianDay */, UErrorCode &/* status */)
 {
   internalSet(UCAL_MONTH, getGregorianMonth());
   internalSet(UCAL_DAY_OF_MONTH, getGregorianDayOfMonth());
   internalSet(UCAL_DAY_OF_YEAR, getGregorianDayOfYear());
   int32_t eyear = getGregorianYear();
   internalSet(UCAL_EXTENDED_YEAR, eyear);
-  int era = GregorianCalendar::AD;
+  int32_t era = GregorianCalendar::AD;
   if (eyear < 1) {
     era = GregorianCalendar::BC;
     eyear = 1 - eyear;
@@ -2298,9 +2301,9 @@ int32_t Calendar::handleComputeJulianDay(UCalendarDateFields bestField)  {
   int8_t month;
 
   if(isSet(UCAL_MONTH)) {
-    month = internalGet(UCAL_MONTH);
+    month = (int8_t)internalGet(UCAL_MONTH);
   } else {
-    month = getDefaultMonthInYear();
+    month = (int8_t)getDefaultMonthInYear();
   }
 
   int32_t julianDay = handleComputeMonthStart(year, useMonth ? month : 0, useMonth);
