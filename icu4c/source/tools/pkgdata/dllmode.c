@@ -179,7 +179,8 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   T_FileStream_writeLine(makefile,"$(TEMP_DIR)/%.o: $(TEMP_DIR)/%.c\n\t  $(COMPILE.c) -o $@ $<\n\n");
 
   T_FileStream_writeLine(makefile,"build-objs: $(SOURCES) $(OBJECTS)\n\n$(OBJECTS): $(SOURCES)\n\n");
-  
+ 
+#ifdef HPUX 
   T_FileStream_writeLine(makefile, "$(TARGETDIR)/$(TARGET): $(OBJECTS) $(HPUX_JUNK_OBJ) $(LISTFILES)\n"
                                    "\t$(SHLIB.cc) -o $@ $(OBJECTS) $(HPUX_JUNK_OBJ)\n"
                                    "\t-ls -l $@\n\n");
@@ -190,6 +191,11 @@ void pkg_mode_dll(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
                                    "$(TEMP_DIR)/hpux_junk_obj.o: $(TEMP_DIR)/hpux_junk_obj.cpp\n"
                                    "	$(COMPILE.cc) -o $@ $<\n"
                                    "\n");
+#else
+  T_FileStream_writeLine(makefile, "$(TARGETDIR)/$(TARGET): $(OBJECTS) $(LISTFILES)\n"
+                                   "\t$(SHLIB.c) -o $@ $(OBJECTS)\n"
+                                   "\t-ls -l $@\n\n");
+#endif
 
   T_FileStream_writeLine(makefile, "CLEANFILES= $(OBJECTS) $(HPUX_JUNK_OBJ) $(TARGETDIR)/$(TARGET)\n\nclean:\n\t-$(RMV) $(CLEANFILES) $(MAKEFILE)");
   T_FileStream_writeLine(makefile, "\n\n");
