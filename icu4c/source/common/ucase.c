@@ -530,20 +530,62 @@ U_CAPI UBool U_EXPORT2
 u_isULowercase(UChar32 c) {
     UErrorCode errorCode=U_ZERO_ERROR;
     UCaseProps *csp=ucase_getSingleton(&errorCode);
-    if(U_FAILURE(errorCode)) {
-        return FALSE;
-    }
-    return (UBool)(UCASE_LOWER==ucase_getType(csp, c));
+    return (UBool)(csp!=NULL && UCASE_LOWER==ucase_getType(csp, c));
 }
 
 U_CAPI UBool U_EXPORT2
 u_isUUppercase(UChar32 c) {
     UErrorCode errorCode=U_ZERO_ERROR;
     UCaseProps *csp=ucase_getSingleton(&errorCode);
-    if(U_FAILURE(errorCode)) {
-        return FALSE;
+    return (UBool)(csp!=NULL && UCASE_UPPER==ucase_getType(csp, c));
+}
+
+/* Transforms the Unicode character to its lower case equivalent.*/
+U_CAPI UChar32 U_EXPORT2
+u_tolower(UChar32 c) {
+    UErrorCode errorCode=U_ZERO_ERROR;
+    UCaseProps *csp=ucase_getSingleton(&errorCode);
+    if(csp!=NULL) {
+        return ucase_tolower(csp, c);
+    } else {
+        return c;
     }
-    return (UBool)(UCASE_UPPER==ucase_getType(csp, c));
+}
+    
+/* Transforms the Unicode character to its upper case equivalent.*/
+U_CAPI UChar32 U_EXPORT2
+u_toupper(UChar32 c) {
+    UErrorCode errorCode=U_ZERO_ERROR;
+    UCaseProps *csp=ucase_getSingleton(&errorCode);
+    if(csp!=NULL) {
+        return ucase_toupper(csp, c);
+    } else {
+        return c;
+    }
+}
+
+/* Transforms the Unicode character to its title case equivalent.*/
+U_CAPI UChar32 U_EXPORT2
+u_totitle(UChar32 c) {
+    UErrorCode errorCode=U_ZERO_ERROR;
+    UCaseProps *csp=ucase_getSingleton(&errorCode);
+    if(csp!=NULL) {
+        return ucase_totitle(csp, c);
+    } else {
+        return c;
+    }
+}
+
+/* return the simple case folding mapping for c */
+U_CAPI UChar32 U_EXPORT2
+u_foldCase(UChar32 c, uint32_t options) {
+    UErrorCode errorCode=U_ZERO_ERROR;
+    UCaseProps *csp=ucase_getSingleton(&errorCode);
+    if(csp!=NULL) {
+        return ucase_fold(csp, c, options);
+    } else {
+        return c;
+    }
 }
 
 /* string casing ------------------------------------------------------------ */

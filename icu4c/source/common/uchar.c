@@ -53,8 +53,6 @@ static const uint32_t *pData32=NULL, *props32Table=NULL, *exceptionsTable=NULL, 
 static const UChar *ucharsTable=NULL;
 static int32_t countPropsVectors=0, propsVectorsColumns=0;
 
-static UCaseProps *gCsp=NULL;
-
 static int8_t havePropsData=0;     /*  == 0   ->  Data has not been loaded.
                                     *   < 0   ->  Error occured attempting to load data.
                                     *   > 0   ->  Data has been successfully loaded.
@@ -104,7 +102,6 @@ uchar_cleanup()
         udata_close(propsData);
         propsData=NULL;
     }
-    gCsp=NULL;
     pData32=NULL;
     props32Table=NULL;
     exceptionsTable=NULL;
@@ -178,7 +175,6 @@ uprv_loadPropsData(UErrorCode *pErrorCode) {
 
         /* open the data outside the mutex block */
         _openProps(&ucp, pErrorCode);
-        csp=ucase_getSingleton(pErrorCode);
 
         if(U_SUCCESS(*pErrorCode)) {
             /* in the mutex block, set the data for this process */
@@ -190,7 +186,6 @@ uprv_loadPropsData(UErrorCode *pErrorCode) {
                 ucp.pData32=NULL;
                 uprv_memcpy(&propsTrie, &ucp.propsTrie, sizeof(propsTrie));
                 uprv_memcpy(&propsVectorsTrie, &ucp.propsVectorsTrie, sizeof(propsVectorsTrie));
-                gCsp=csp;
                 csp=NULL;
             }
 
@@ -422,18 +417,6 @@ uprv_haveProperties(UErrorCode *pErrorCode) {
         return FALSE;
     }
     return TRUE;
-}
-
-U_CFUNC UCaseProps *
-uchar_getCaseProps(UErrorCode *pErrorCode) {
-    if(U_FAILURE(*pErrorCode)) {
-        return NULL;
-    } else if(HAVE_DATA) {
-        return gCsp;
-    } else {
-        *pErrorCode=dataErrorCode;
-        return NULL;
-    }
 }
 
 /* API functions ------------------------------------------------------------ */
@@ -708,46 +691,6 @@ u_isJavaIDPart(UChar32 c) {
              U_GC_MC_MASK|U_GC_MN_MASK)
            )!=0 ||
            u_isIDIgnorable(c));
-}
-
-/* Transforms the Unicode character to its lower case equivalent.*/
-U_CAPI UChar32 U_EXPORT2
-u_tolower(UChar32 c) {
-    if(HAVE_DATA) {
-        return ucase_tolower(gCsp, c);
-    } else {
-        return c;
-    }
-}
-    
-/* Transforms the Unicode character to its upper case equivalent.*/
-U_CAPI UChar32 U_EXPORT2
-u_toupper(UChar32 c) {
-    if(HAVE_DATA) {
-        return ucase_toupper(gCsp, c);
-    } else {
-        return c;
-    }
-}
-
-/* Transforms the Unicode character to its title case equivalent.*/
-U_CAPI UChar32 U_EXPORT2
-u_totitle(UChar32 c) {
-    if(HAVE_DATA) {
-        return ucase_totitle(gCsp, c);
-    } else {
-        return c;
-    }
-}
-
-/* return the simple case folding mapping for c */
-U_CAPI UChar32 U_EXPORT2
-u_foldCase(UChar32 c, uint32_t options) {
-    if(HAVE_DATA) {
-        return ucase_fold(gCsp, c, options);
-    } else {
-        return c;
-    }
 }
 
 U_CAPI int32_t U_EXPORT2
