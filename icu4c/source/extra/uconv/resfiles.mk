@@ -2,4 +2,4 @@
 # A small makefile containing the list of resource bundles 
 # to include in uconv.
 
-RESSRC=root.txt 
+RESSRC = root.txt fr.txt
