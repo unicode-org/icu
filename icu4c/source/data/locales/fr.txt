@@ -269,7 +269,7 @@ fr {
         BYB { "BYB", "nouveau rouble bi\u00E9lorusse (1994-1999)" }
         BYL { "BYL", "rouble bi\u00E9lorusse (1992-1994)" }
         BYR { "Rbl", "rouble bi\u00E9lorusse" }
-        BZD { "BZD", "dollar de Belize" }
+        BZD { "BZD", "dollar de B\u00E9lize" }
         BZH { "BZH", "dollar du Honduras britannique" }
         CAD { "CAD", "dollar canadien" }
         CDF { "CDF", "franc congolais" }
@@ -329,7 +329,7 @@ fr {
         GBP { "\u00A3", "livre sterling" }
         GEK { "GEK", "Georgian Kupon Larit" }
         GEL { "lari","lari" }
-        GHC { "GHC", "cedi" }
+        GHC { "GHC", "c\u00E9di" }
         GHO { "GHO", "ancien cedi" }
         GHP { "GHP", "livre ghan\u00E9enne" }
         GHR { "GHR", "cedi revaloris\u00E9" }
@@ -341,7 +341,7 @@ fr {
         GNI { "GNI", "franc guin\u00E9en (1960-1972)" }
         GNS { "GNS", "syli" }
         GPF { "GPF", "franc guadeloup\u00E9en" }
-        GQE { "GQE", "ekwele" }
+        GQE { "GQE", "ekw\u00E9l\u00E9" }
         GQF { "GQF", "franco de Guin\u00E9e Equatoriale" }
         GQP { "GQP", "peseta de Guin\u00E9e Equatoriale" }
         GRD { "GRD", "drachme" }
@@ -388,7 +388,7 @@ fr {
         KPW { "KPW", "won nord-cor\u00E9en" }
         KRH { "KRH", "hwan" }
         KRO { "KRO", "vieux won" }
-        KRW { "KRW", "won" }
+        KRW { "KRW", "won sud-cor\u00E9en" }
         KWD { "KWD", "dinar koweitien" }
         KYD { "KYD", "dollar des \u00EEles Ca\u00EFmans" }
         KZR { "KZR", "rouble du Kazakhstan" }
@@ -438,7 +438,7 @@ fr {
         MXV { "MXV", "unit\u00E9 de conversion mexicaine (UDI)" }
         MYR { "MYR", "ringgit" }
         MZE { "MZE", "escudo du Mozambique" }
-        MZM { "MZM", "metical" }
+        MZM { "MZM", "m\u00E9tical" }
         NAD { "N$",  "dollar de Namibie" }
         NCF { "NCF", "franc Germinal de Nouvelle Cal\u00E9donie" }
         NGN { "NGN", "naira" }
@@ -488,11 +488,11 @@ fr {
         SIB { "SIB", "bons de tolar slov\u00E8ne" }
         SIT { "SIT", "tolar slov\u00E8ne" }
         SKK { "SKK", "couronne slovaque" }
-        SLL { "SLL", "leone" }
+        SLL { "SLL", "l\u00E9one" }
         SML { "SML", "lire de Saint-Marin" }
         SOS { "SOS", "shilling de Somalie" }
         SQS { "SQS", "shilling de Somalie" }
-        SRG { "SRG", "florin de Surinam" }
+        SRG { "SRG", "florin du Surinam" }
         SSP { "SSP", "livre \u00E9cossaise" }
         STD { "STD", "dobra" }
         STE { "STE", "escudo de Sao Tom\u00E9 et Principe" }
@@ -516,7 +516,7 @@ fr {
         TTD { "TTD", "dollar de la Trinit\u00E9" }
         TTO { "TTO", "vieux dollar de la Trinit\u00E9" }
         TVD { "TVD", "dollar du Tuvalu" }
-        TWD { "TWD", "dollar ta\u00EFwanien" }
+        TWD { "TWD", "dollar ta\u00EFwanais" }
         TZS { "TZS", "shilling de Tanzanie" }
         UAH { "UAH", "hryvnia" }
         UAK { "UAK", "karbovanetz" }
@@ -661,7 +661,7 @@ fr {
         ht { "ha\u00EFtien" }
         hu { "hongrois" }
         hy { "arm\u00E9nien" }
-        hz { "herero" }
+        hz { "h\u00E9r\u00E9ro" }
         ia { "interlingua" }
         id { "indon\u00E9sien" }
         ie { "interlingue" }
