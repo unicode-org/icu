@@ -62,18 +62,12 @@ distclean : distclean-local
 dist: dist-local
 check: all check-local
 
-all-local: $(TARGET) build-data
+all-local: $(TARGET) 
 
-install-local: all-local build-data
+install-local: all-local
 	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
 
-build-data: $(TEST_FILES)
-
-# we set the ICU_DATA directory here so that test.dat ends up in 
-# icu/data rather than PREFIX/share/icu/VERSION/
-$(ICUDATADIR)/test.dat: $(TARGET)
-	ICU_DATA=$(ICUDATADIR) $(INVOKE) ./$(TARGET) 
 
 dist-local:
 

@@ -76,12 +76,6 @@ install-local: all-local build-data install-man
 	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
 
-build-data: $(ICUDATADIR)/cnvalias.dat
-
-# we set the ICU_DATA directory here so that unames.dat ends up in 
-# icu/data rather than PREFIX/share/icu/VERSION/
-$(ICUDATADIR)/cnvalias.dat: $(CONVRTRSFILE) $(TARGET)
-	ICU_DATA=$(ICUDATADIR) $(INVOKE) ./$(TARGET) $(CONVRTRSFILE)
 
 dist-local:
 

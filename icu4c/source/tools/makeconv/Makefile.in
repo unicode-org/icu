@@ -22,9 +22,6 @@ GENERATED_MAN_FILES = $(TARGET).$(SECTION)
 
 ALL_MAN_FILES = $(MANX_FILES)
 
-## List of converter tables to build
-include $(srcdir)/ucmfiles.mk
--include $(srcdir)/ucmlocal.mk
 
 ## Build directory information
 subdir = tools/makeconv
@@ -59,13 +56,6 @@ OBJECTS = makeconv.o ucnvstat.o genmbcs.o newconv.o
 
 DEPS = $(OBJECTS:.o=.d)
 
-ALL_UCM = $(UCM_SOURCE) $(UCM_SOURCE_LOCAL)
-UCM_FILES = $(ALL_UCM:%=$(top_srcdir)/../data/%)
-CNV_FILES = $(ALL_UCM:%.ucm=$(top_builddir)/data/%.cnv)
-
-TEST_UCM_SOURCE= test1.ucm test3.ucm test4.ucm
-TEST_UCM_FILES=$(TEST_UCM_SOURCE:%=$(top_srcdir)/test/testdata/%)
-TEST_CNV_FILES=$(TEST_UCM_SOURCE:%.ucm=$(top_builddir)/data/%.cnv)
 
 ## List of phony targets
 .PHONY : all all-local install install-local install-man clean clean-local \
@@ -83,7 +73,7 @@ distclean : distclean-local
 dist: dist-local
 check: all check-local
 
-all-local: $(TARGET) $(CNV_FILES) $(TEST_CNV_FILES) $(ALL_MAN_FILES)
+all-local: $(TARGET) $(ALL_MAN_FILES)
 
 install-local: all-local install-man
 	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
@@ -97,7 +87,7 @@ install-local: all-local install-man
 dist-local:
 
 rebuild: $(TARGET)
-	-$(RMV) $(CNV_FILES) $(TEST_CNV_FILES)
+	-$(RMV) 
 	$(MAKE) all-local
 
 clean-local:
@@ -109,8 +99,6 @@ distclean-local: clean-local
 
 check-local: all-local
 
-invokation:
-	$(INVOKE) $(COMMAND)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
@@ -128,14 +116,6 @@ install-manx: $(MANX_FILES)
 	cd $(top_builddir) \
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
-# Rule to build a compiled cnv file
-$(top_builddir)/data/test%.cnv : $(top_srcdir)/test/testdata/test%.ucm $(TARGET)
-	@echo $(ECHO_N) "$< -> $(ECHO_C)"
-	@$(INVOKE) ./$(TARGET) -d $(top_builddir)/data $<
-
-$(top_builddir)/data/%.cnv : $(top_srcdir)/../data/%.ucm $(TARGET)
-	@echo $(ECHO_N) "$< -> $(ECHO_C)"
-	@$(INVOKE) ./$(TARGET) -d $(top_builddir)/data $<
 
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)

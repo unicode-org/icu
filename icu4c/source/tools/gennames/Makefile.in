@@ -60,16 +60,12 @@ distclean : distclean-local
 dist: dist-local
 check: all check-local
 
-all-local: $(TARGET) build-data
+all-local: $(TARGET)
 
 install-local: all-local build-data
 	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
 
-build-data: $(ICUDATADIR)/unames.dat
-
-$(ICUDATADIR)/unames.dat: $(UNICODEFILE) $(TARGET)
-	$(INVOKE) ./$(TARGET) -d $(ICUDATADIR) $(UNICODEFILE) -u $(UNICODE_VERSION)
 
 dist-local:
 

@@ -62,14 +62,9 @@ check: all check-local
 
 all-local: $(TARGET) build-data
 
-install-local: all-local build-data
+install-local: all-local
 	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
-
-build-data: $(ICUDATADIR)/uprops.dat
-
-$(ICUDATADIR)/uprops.dat: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/Mirror.txt $(TARGET)
-	$(INVOKE) ./$(TARGET) -s $(UNICODEDATADIR) -d $(ICUDATADIR) -u $(UNICODE_VERSION)
 
 dist-local:
 
