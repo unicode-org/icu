@@ -6558,7 +6558,7 @@ zh {
         zh { "\u4E2D\u6587" }
         zu { "\u7956\u9C81\u6587" }
     }
-    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAeugXZ" }
     MonthAbbreviations { 
         "\u4E00\u6708",
         "\u4E8C\u6708",

@@ -486,7 +486,7 @@ tr {
         ",",
         "+",
     }
-    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAeugXZ" }
 
     LocaleScript{ 
         "Latn",  // ISO 15924 Name 

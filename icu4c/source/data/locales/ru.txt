@@ -476,7 +476,7 @@ ru {
         "\u041D\u043E\u044F\u0431\u0440\u044C",
         "\u0414\u0435\u043A\u0430\u0431\u0440\u044C",
     }
-    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAeugXZ" }
 
     LocaleScript:array {
         "Cyrl"      // ISO 15924 Name 

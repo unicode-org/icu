@@ -333,7 +333,7 @@ bg {
     LocaleScript{
         "Cyrl",     // Abbreviation 
     }
-    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAeugXZ" }
     MonthAbbreviations { 
         "\u044f\u043d.",
         "\u0444\u0435\u0432.",

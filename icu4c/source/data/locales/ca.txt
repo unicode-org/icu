@@ -427,7 +427,7 @@ ca {
         ",",
         "+",
     }
-    localPatternChars { "GuMtkHmsSEDFwWahKzUe" }
+    localPatternChars { "GuMtkHmsSEDFwWahKzUeugAZ" }
 
     LocaleScript{ 
                 "Latn",  // ISO 15924 Name 

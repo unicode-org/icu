@@ -866,7 +866,7 @@ ga{
         zh  { "Sínis" }
         zu  { "Súlúis" } //??
     }
-    localPatternChars { "RbMLkUnsSElFtTauKcBe" }
+    localPatternChars { "RbMLkUnsSElFtTauKcBeurAC" }
     SpelloutRules {
 
         // Maoluimhreacha

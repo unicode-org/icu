@@ -350,7 +350,7 @@ he {
         "\u05E0\u05D5\u05D1\u05DE\u05D1\u05E8",
         "\u05D3\u05E6\u05DE\u05D1\u05E8",
     }
-    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAeugXZ" }
 
     LocaleScript:array { 
         "Hebr"    // ISO 15924 Name 

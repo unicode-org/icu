@@ -481,7 +481,7 @@ uk {
     LocaleScript:array {
         "Cyrl"      // ISO 15924 Name 
     }
-    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    localPatternChars { "GanjkHmsSEDFwWxhKzAeugXZ" }
     MonthAbbreviations { 
         "\u0441\u0456\u0447",
         "\u043B\u044E\u0442",
