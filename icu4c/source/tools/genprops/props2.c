@@ -29,6 +29,8 @@
 #include "uparse.h"
 #include "genprops.h"
 
+#define FLAG(n) ((uint32_t)1<<(n))
+
 /* data --------------------------------------------------------------------- */
 
 static UNewTrie *trie;
@@ -51,7 +53,9 @@ ageLineFn(void *context,
           UErrorCode *pErrorCode);
 
 static void
-parseScripts(const char *filename, UErrorCode *pErrorCode);
+scriptsLineFn(void *context,
+              char *fields[][2], int32_t fieldCount,
+              UErrorCode *pErrorCode);
 
 static void
 blocksLineFn(void *context,
@@ -62,6 +66,11 @@ static void
 propListLineFn(void *context,
                char *fields[][2], int32_t fieldCount,
                UErrorCode *pErrorCode);
+
+static void
+derivedPropListLineFn(void *context,
+                      char *fields[][2], int32_t fieldCount,
+                      UErrorCode *pErrorCode);
 
 static void
 eaWidthLineFn(void *context,
@@ -98,12 +107,29 @@ generateAdditionalProperties(char *filename, const char *suffix, UErrorCode *pEr
     /* process various UCD .txt files */
     parseTwoFieldFile(filename, basename, "DerivedAge", suffix, ageLineFn, pErrorCode);
 
-    writeUCDFilename(basename, "Scripts", suffix);
-    parseScripts(filename, pErrorCode);
+    /*
+     * UTR 24 says:
+     * Section 2:
+     *   "Common - For characters that may be used
+     *             within multiple scripts,
+     *             or any unassigned code points."
+     *
+     * Section 4:
+     *   "The value COMMON is the default value,
+     *    given to all code points that are not
+     *    explicitly mentioned in the data file."
+     */
+    if(!upvec_setValue(pv, 0, 0x110000, 0, (uint32_t)USCRIPT_COMMON, UPROPS_SCRIPT_MASK, pErrorCode)) {
+        fprintf(stderr, "genprops error: unable to set script code: %s\n", u_errorName(*pErrorCode));
+        exit(*pErrorCode);
+    }
+    parseTwoFieldFile(filename, basename, "Scripts", suffix, scriptsLineFn, pErrorCode);
 
     parseTwoFieldFile(filename, basename, "Blocks", suffix, blocksLineFn, pErrorCode);
 
     parseTwoFieldFile(filename, basename, "PropList", suffix, propListLineFn, pErrorCode);
+
+    parseTwoFieldFile(filename, basename, "DerivedCoreProperties", suffix, derivedPropListLineFn, pErrorCode);
 
     /*
      * Preset East Asian Width defaults:
@@ -247,34 +273,6 @@ scriptsLineFn(void *context,
     }
 }
 
-static void
-parseScripts(const char *filename, UErrorCode *pErrorCode) {
-    char *fields[2][2];
-
-    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
-        return;
-    }
-
-    /*
-     * UTR 24 says:
-     * Section 2:
-     *   "Common - For characters that may be used
-     *             within multiple scripts,
-     *             or any unassigned code points."
-     *
-     * Section 4:
-     *   "The value COMMON is the default value,
-     *    given to all code points that are not
-     *    explicitly mentioned in the data file."
-     */
-    if(!upvec_setValue(pv, 0, 0x110000, 0, (uint32_t)USCRIPT_COMMON, UPROPS_SCRIPT_MASK, pErrorCode)) {
-        fprintf(stderr, "genprops error: unable to set script code: %s\n", u_errorName(*pErrorCode));
-        exit(*pErrorCode);
-    }
-
-    u_parseDelimitedFile(filename, ';', fields, 2, scriptsLineFn, NULL, pErrorCode);
-}
-
 /* Blocks.txt --------------------------------------------------------------- */
 
 /* Blocks.txt block names in the order of the parallel UBlockCode constants */
@@ -412,6 +410,10 @@ blocksLineFn(void *context,
 /*
  * Keep this list of property names in sync with
  * enums in icu/source/common/uprops.h, see UPROPS_BINARY_1_TOP!
+ *
+ * Careful: Since UPROPS_ also contain derivedPropListNames[] entries,
+ * they would need to be skipped here with NULL entries if new properties
+ * are added to PropList.txt.
  */
 static const char *const
 propListNames[]={
@@ -462,9 +464,42 @@ propListLineFn(void *context,
     i=getTokenIndex(propListNames, sizeof(propListNames)/sizeof(*propListNames), fields[1][0]);
     if(i<0) {
         fprintf(stderr, "genprops warning: unknown binary property name \"%s\" in PropList.txt\n", fields[1][0]);
-    } else if(!upvec_setValue(pv, start, limit, 1, (uint32_t)(1<<i), (uint32_t)(1<<i), pErrorCode)) {
+    } else if(!upvec_setValue(pv, start, limit, 1, FLAG(i), FLAG(i), pErrorCode)) {
         fprintf(stderr, "genprops error: unable to set binary property: %s\n", u_errorName(*pErrorCode));
         exit(*pErrorCode);
+    }
+}
+
+/* DerivedCoreProperties ---------------------------------------------------- */
+
+static const char *const
+derivedPropListNames[]={
+    "XID_Start",
+    "XID_Continue"
+};
+
+static void
+derivedPropListLineFn(void *context,
+                      char *fields[][2], int32_t fieldCount,
+                      UErrorCode *pErrorCode) {
+    uint32_t start, limit;
+    int32_t i;
+
+    u_parseCodePointRange(fields[0][0], &start, &limit, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) {
+        fprintf(stderr, "genprops: syntax error in DerivedCoreProperties.txt field 0 at %s\n", fields[0][0]);
+        exit(*pErrorCode);
+    }
+    ++limit;
+
+    /* parse derived binary property name, ignore unknown names */
+    i=getTokenIndex(derivedPropListNames, sizeof(derivedPropListNames)/sizeof(*derivedPropListNames), fields[1][0]);
+    if(i>=0) {
+        uint32_t flag=FLAG(UPROPS_XID_START+i);
+        if(!upvec_setValue(pv, start, limit, 1, flag, flag, pErrorCode)) {
+            fprintf(stderr, "genprops error: unable to set derived binary property: %s\n", u_errorName(*pErrorCode));
+            exit(*pErrorCode);
+        }
     }
 }
 

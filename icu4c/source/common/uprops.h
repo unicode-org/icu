@@ -41,7 +41,7 @@ enum {
     UPROPS_EXCEPTION_SHIFT=5,                           /*  5 (1 bit)  */
     UPROPS_BIDI_SHIFT,                                  /*  6 (5 bits) */
     UPROPS_MIRROR_SHIFT=UPROPS_BIDI_SHIFT+5,            /* 11 (1 bit)  */
-    UPROPS_NUMERIC_TYPE_SHIFT,                          /* 12 (3 bits) ### TODO 2 or 3 bits? Han number type=4? */
+    UPROPS_NUMERIC_TYPE_SHIFT,                          /* 12 (3 bits) */
     UPROPS_RESERVED_SHIFT=UPROPS_NUMERIC_TYPE_SHIFT+3,  /* 15 (5 bits) */
     UPROPS_VALUE_SHIFT=20,                              /* 20 */
 
@@ -115,6 +115,11 @@ enum {
     UPROPS_DEPRECATED,
     UPROPS_SOFT_DOTTED,
     UPROPS_LOGICAL_ORDER_EXCEPTION,
+
+    /* derivedPropListNames[] in genprops/props2.c, not easily derivable */
+    UPROPS_XID_START,
+    UPROPS_XID_CONTINUE,
+
     UPROPS_BINARY_1_TOP
 };
 
@@ -126,7 +131,7 @@ enum {
 U_CFUNC uint32_t
 u_getUnicodeProperties(UChar32 c, int32_t column);
 
-/* ### TODO move to uchar.h, @draft ICU 2.x */
+/* ### TODO check with PropertyValueAliases.txt and move to uchar.h, @draft ICU 2.x */
 /**
  * East Asian Widths constants.
  * Keep in sync with names list in genprops/props2.c.

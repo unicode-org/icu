@@ -64,6 +64,152 @@ U_CDECL_BEGIN
 #define UCHAR_MAX_VALUE 0x10ffff
 
 /**
+ * Selection constants for Unicode properties.
+ * These constants are used in functions like u_hasBinaryProperty to select
+ * one of the Unicode properties.
+ *
+ * The properties APIs are intended to reflect Unicode properties as defined
+ * in the Unicode Character Database (UCD) and Unicode Technical Reports (UTR).
+ * For details about the properties see http://www.unicode.org/ .
+ * For names of Unicode properties see the UCD file PropertyAliases.txt.
+ *
+ * Important: If ICU is built with UCD files from Unicode versions below 3.2,
+ * then properties marked with "new in Unicode 3.2" are not or not fully available.
+ * Check u_getUnicodeVersion to be sure.
+ *
+ * @see u_getUnicodeVersion
+ * @draft ICU 2.1
+ */
+enum UProperty {
+    /** Binary property Alphabetic. Same as u_isUAlphabetic, different from u_isalpha.
+        Lu+Ll+Lt+Lm+Lo+Other_Alphabetic @draft ICU 2.1 */
+    UCHAR_ALPHABETIC,
+    /** First constant for binary Unicode properties. @draft ICU 2.1 */
+    UCHAR_BINARY_START=UCHAR_ALPHABETIC,
+    /** Binary property ASCII_Hex_Digit. 0-9 A-F a-f @draft ICU 2.1 */
+    UCHAR_ASCII_HEX_DIGIT,
+    /** Binary property Bidi_Control.
+        Format controls which have specific functions
+        in the Bidi Algorithm. @draft ICU 2.1 */
+    UCHAR_BIDI_CONTROL,
+    /** Binary property Bidi_Mirrored.
+        Characters that may change display in RTL text.
+        Same as u_isMirrored.
+        See Bidi Algorithm, UTR 9. @draft ICU 2.1 */
+    UCHAR_BIDI_MIRRORED,
+    /** Binary property Dash. Variations of dashes. @draft ICU 2.1 */
+    UCHAR_DASH,
+    /** Binary property Default_Ignorable_Code_Point (new in Unicode 3.2).
+        Ignorable in most processing.
+        Cf+Cc+Cs+Other_Default_Ignorable_Code_Point-White_Space @draft ICU 2.1 */
+    UCHAR_DEFAULT_IGNORABLE_CODE_POINT,
+    /** Binary property Deprecated (new in Unicode 3.2).
+        The usage of deprecated characters is strongly discouraged. @draft ICU 2.1 */
+    UCHAR_DEPRECATED,
+    /** Binary property Diacritic. Characters that linguistically modify
+        the meaning of another character to which they apply. @draft ICU 2.1 */
+    UCHAR_DIACRITIC,
+    /** Binary property Extender.
+        Extend the value or shape of a preceding alphabetic character,
+        e.g., length and iteration marks. @draft ICU 2.1 */
+    UCHAR_EXTENDER,
+    /** Binary property Full_Composition_Exclusion.
+        CompositionExclusions.txt+Singleton Decompositions+
+        Non-Starter Decompositions. @draft ICU 2.1 */
+    UCHAR_FULL_COMPOSITION_EXCLUSION,
+    /** Binary property Grapheme_Base (new in Unicode 3.2).
+        For programmatic determination of grapheme cluster boundaries.
+        [0..10FFFF]-Cc-Cf-Cs-Co-Cn-Zl-Zp-Grapheme_Link-Grapheme_Extend @draft ICU 2.1 */
+    UCHAR_GRAPHEME_BASE,
+    /** Binary property Grapheme_Extend (new in Unicode 3.2).
+        For programmatic determination of grapheme cluster boundaries.
+        Me+Mn+Mc+Other_Grapheme_Extend-Grapheme_Link @draft ICU 2.1 */
+    UCHAR_GRAPHEME_EXTEND,
+    /** Binary property Grapheme_Link (new in Unicode 3.2).
+        For programmatic determination of grapheme cluster boundaries. @draft ICU 2.1 */
+    UCHAR_GRAPHEME_LINK,
+    /** Binary property Hex_Digit.
+        Characters commonly used for hexadecimal numbers. @draft ICU 2.1 */
+    UCHAR_HEX_DIGIT,
+    /** Binary property Hyphen. Dashes used to mark connections
+        between pieces of words, plus the Katakana middle dot. @draft ICU 2.1 */
+    UCHAR_HYPHEN,
+    /** Binary property ID_Continue.
+        Characters that can continue an identifier.
+        ID_Start+Mn+Mc+Nd+Pc @draft ICU 2.1 */
+    UCHAR_ID_CONTINUE,
+    /** Binary property ID_Start.
+        Characters that can start an identifier.
+        Lu+Ll+Lt+Lm+Lo+Nl @draft ICU 2.1 */
+    UCHAR_ID_START,
+    /** Binary property Ideographic (new in Unicode 3.2).
+        CJKV ideographs. @draft ICU 2.1 */
+    UCHAR_IDEOGRAPHIC,
+    /** Binary property IDS_Binary_Operator (new in Unicode 3.2).
+        For programmatic determination of
+        Ideographic Description Sequences. @draft ICU 2.1 */
+    UCHAR_IDS_BINARY_OPERATOR,
+    /** Binary property IDS_Trinary_Operator (new in Unicode 3.2).
+        For programmatic determination of
+        Ideographic Description Sequences. @draft ICU 2.1 */
+    UCHAR_IDS_TRIARY_OPERATOR,
+    /** Binary property Join_Control.
+        Format controls for cursive joining and ligation. @draft ICU 2.1 */
+    UCHAR_JOIN_CONTROL,
+    /** Binary property Logical_Order_Exception (new in Unicode 3.2).
+        Characters that do not use logical order and
+        require special handling in most processing. @draft ICU 2.1 */
+    UCHAR_LOGICAL_ORDER_EXCEPTION,
+    /** Binary property Lowercase. Same as u_isULowercase, different from u_islower.
+        Ll+Other_Lowercase @draft ICU 2.1 */
+    UCHAR_LOWERCASE,
+    /** Binary property Math. Sm+Other_Math @draft ICU 2.1 */
+    UCHAR_MATH,
+    /** Binary property Noncharacter_Code_Point.
+        Code points that are explicitly defined as illegal
+        for the encoding of characters. @draft ICU 2.1 */
+    UCHAR_NONCHARACTER_CODE_POINT,
+    /** Binary property Quotation_Mark. @draft ICU 2.1 */
+    UCHAR_QUOTATION_MARK,
+    /** Binary property Radical (new in Unicode 3.2).
+        For programmatic determination of
+        Ideographic Description Sequences. @draft ICU 2.1 */
+    UCHAR_RADICAL,
+    /** Binary property Soft_Dotted (new in Unicode 3.2).
+        Characters with a "soft dot", like i or j.
+        An accent placed on these characters causes
+        the dot to disappear. @draft ICU 2.1 */
+    UCHAR_SOFT_DOTTED,
+    /** Binary property Terminal_Punctuation.
+        Punctuation characters that generally mark
+        the end of textual units. @draft ICU 2.1 */
+    UCHAR_TERMINAL_PUNCTUATION,
+    /** Binary property Unified_Ideograph (new in Unicode 3.2).
+        For programmatic determination of
+        Ideographic Description Sequences. @draft ICU 2.1 */
+    UCHAR_UNIFIED_IDEOGRAPH,
+    /** Binary property Uppercase. Same as u_isUUppercase, different from u_isupper.
+        Lu+Other_Uppercase @draft ICU 2.1 */
+    UCHAR_UPPERCASE,
+    /** Binary property White_Space.
+        Same as u_isUWhiteSpace, different from u_isspace and u_isWhitespace.
+        Space characters+TAB+CR+LF-ZWSP-ZWNBSP @draft ICU 2.1 */
+    UCHAR_WHITE_SPACE,
+    /** Binary property XID_Continue.
+        ID_Continue modified to allow closure under
+        normalization forms NFKC and NFKD. @draft ICU 2.1 */
+    UCHAR_XID_CONTINUE,
+    /** Binary property XID_Start. ID_Start modified to allow
+        closure under normalization forms NFKC and NFKD. @draft ICU 2.1 */
+    UCHAR_XID_START,
+    /** One more than the last constant for binary Unicode properties. @draft ICU 2.1 */
+    UCHAR_BINARY_LIMIT
+};
+
+/** @draft ICU 2.1 */
+typedef enum UProperty UProperty;
+
+/**
  * Data for enumerated Unicode general category types.
  * See http://www.unicode.org/Public/UNIDATA/UnicodeData.html .
  * @stable
@@ -706,6 +852,91 @@ enum UCharNameChoice {
 
 /** @stable */
 typedef enum UCharNameChoice UCharNameChoice;
+
+/**
+ * Check a binary Unicode property for a code point.
+ *
+ * Unicode, especially in version 3.2, defines many more properties than the
+ * original set in UnicodeData.txt.
+ * This API is intended to reflect Unicode properties as defined
+ * in the Unicode Character Database (UCD) and Unicode Technical Reports (UTR).
+ * For details about the properties see http://www.unicode.org/ .
+ * For names of Unicode properties see the UCD file PropertyAliases.txt.
+ *
+ * The properties APIs are intended to reflect Unicode properties as defined
+ * in the Unicode Character Database (UCD) and Unicode Technical Reports (UTR).
+ * For details about the properties see http://www.unicode.org/ .
+ * For names of Unicode properties see the UCD file PropertyAliases.txt.
+ *
+ * Important: If ICU is built with UCD files from Unicode versions below 3.2,
+ * then properties marked with "new in Unicode 3.2" are not or not fully available.
+ *
+ * @param c Code point to test.
+ * @param which UProperty selector constant, identifies which binary property to check.
+ *        Must be UCHAR_BINARY_START<=which<UCHAR_BINARY_LIMIT.
+ * @return TRUE or FALSE according to the binary Unicode property value for c.
+ *         Also FALSE if which is out of bounds or if the Unicode version
+ *         does not have data for the property at all, or not for this code point.
+ *
+ * @see UProperty
+ * @see u_getUnicodeVersion
+ * @draft ICU 2.1
+ */
+UBool u_hasBinaryProperty(UChar32 c, UProperty which);
+
+/**
+ * Check if a code point has the Alphabetic Unicode property.
+ * Same as u_hasBinaryProperty(c, UCHAR_ALPHABETIC).
+ * This is different from u_isalpha!
+ *
+ * @see UCHAR_ALPHABETIC
+ * @see u_isalpha
+ * @see u_hasBinaryProperty
+ * @draft ICU 2.1
+ */
+UBool u_isUAlphabetic(UChar32 c);
+
+/**
+ * Check if a code point has the Lowercase Unicode property.
+ * Same as u_hasBinaryProperty(c, UCHAR_LOWERCASE).
+ * This is different from u_islower!
+ *
+ * @see UCHAR_LOWERCASE
+ * @see u_islower
+ * @see u_hasBinaryProperty
+ * @draft ICU 2.1
+ */
+UBool u_isULowercase(UChar32 c);
+
+/**
+ * Check if a code point has the Uppercase Unicode property.
+ * Same as u_hasBinaryProperty(c, UCHAR_UPPERCASE).
+ * This is different from u_isupper!
+ *
+ * @see UCHAR_UPPERCASE
+ * @see u_isupper
+ * @see u_hasBinaryProperty
+ * @draft ICU 2.1
+ */
+UBool u_isUUppercase(UChar32 c);
+
+/**
+ * Check if a code point has the White_Space Unicode property.
+ * Same as u_hasBinaryProperty(c, UCHAR_WHITE_SPACE).
+ * This is different from both u_isspace and u_isWhitespace!
+ *
+ * @see UCHAR_WHITE_SPACE
+ * @see u_isWhitespace
+ * @see u_isspace
+ * @see u_hasBinaryProperty
+ * @draft ICU 2.1
+ */
+UBool u_isUWhiteSpace(UChar32 c);
+
+/*
+ * ### TODO Document all properties more precisely, how they are based (or not) on UCD files.
+ * Especially u_isdigit, u_isspace, u_isWhitespace.
+ */
 
 /**
  * Determines whether the specified UChar is a lowercase character
