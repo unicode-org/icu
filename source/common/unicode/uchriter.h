@@ -272,7 +272,7 @@ public:
    * at or after the current position in the iteration range.
    * @stable ICU 2.0
    */
-  virtual UBool        hasNext() const;
+  virtual UBool        hasNext();
 
   /**
    * Advances to the previous code unit in the iteration range (toward
@@ -301,7 +301,7 @@ public:
    * before the current position in the iteration range.
    * @stable ICU 2.0
    */
-  virtual UBool        hasPrevious() const;
+  virtual UBool        hasPrevious();
 
   /**
    * Moves the current position relative to the start or end of the
@@ -342,7 +342,7 @@ public:
    * @param result Receives a copy of the text under iteration.  
    * @stable ICU 2.0
    */
-  virtual void            getText(UnicodeString& result) const;
+  virtual void            getText(UnicodeString& result);
 
   /**
    * Return a class ID for this class (not really public) 
