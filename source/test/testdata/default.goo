@@ -1,0 +1,10 @@
+
+// This is a test default locale file
+
+default
+{
+    Version { 44 }
+    string_in_Default_te_te_IN { GOOGOO }
+}
+
+//eof

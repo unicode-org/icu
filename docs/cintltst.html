@@ -1,0 +1,220 @@
+</<!DOCTYPE>
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+<title>CintlTst Test Suite Doumentation</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h1>Cintltst Test Suite Documentation</h1>
+
+<hr>
+
+<p>COPYRIGHT:<br>
+(C) Copyright Taligent, Inc., 1997<br>
+(C) Copyright International Business Machines Corporation, 1999<br>
+Licensed Material - Program-Property of IBM - All Rights Reserved.<br>
+US Government Users Restricted Rights - Use, duplication, or disclosure<br>
+restricted by GSA ADP Schedule Contract with IBM Corp.</p>
+
+<hr>
+
+<p>The cintltst Test Suite contains all the tests for IBM's International Classes for
+Unicode C API. These tests may be automatically run by typing &quot;cintltst&quot; or
+&quot;cintltst -all&quot; at the command line. It depends on the C Test Framework. <br>
+&quot;cintltst&quot;<br>
+or<br>
+&quot;cintltst -all&quot;</p>
+
+<h3>C Test FrameWork</h3>
+
+<h4>Purpose:</h4>
+
+<p>To enable the writing of tests entirely in C. The Framework has been designed to make
+creating tests or converting old ones as simple as possible, with a minimum of framework
+overhead. A sample test file, <a href="#demo.c">&quot;demo.c&quot;</a> is included at the
+end of this document. For more information regarding C test framework, please see the
+directory \intlwork\source\tools\ctestfw.</p>
+
+<h4>Writing Test Functions</h4>
+
+<p>The format of the test functions is like the following,</p>
+
+<pre>void some_test()
+{
+}</pre>
+
+<p>Output from the test is accomplished with three printf-like functions:</p>
+
+<pre>void log_err ( const char *fmt, ... );
+void log_info ( const char *fmt, ... );
+void log_verbose ( const char *fmt, ... );</pre>
+
+<p><strong>log_info() </strong>simply writes to the console, for informational messages.<br>
+<strong>log_verbose()</strong> writes to the console ONLY if the VEBOSE flag is turned on
+(or the -v option to the command line). It's useful for debugging. By default, VERBOSE
+flag is turned OFF.<br>
+<strong>log_error()</strong> is what should be called when a test failure is detected. The
+error will be then logged and error count will be incremented by one.<br>
+</p>
+
+<h4>Building a tree of tests</h4>
+
+<p>To use the tests you must link them into a hierarchical structure. The root of the
+structure will be allocated for you.</p>
+
+<pre>TestNode *root = NULL; /* empty */
+addTest( &amp;root, &amp;some_test, &quot;/test&quot;);</pre>
+
+<p>The function pointer and an absolute 'path' to the test are supplied. Paths may be up
+to 127 chars in length and may be used to group tests.<br>
+<br>
+The calls to addTest should be placed in a function or a hierarchy of functions (perhaps
+mirroring the paths), please see the following demo.c example for more details.<br>
+</p>
+
+<h4>Running the tests</h4>
+
+<p>A subtree may be extracted from another tree of tests for programmatic running of
+subtests</p>
+
+<pre>TestNode* sub;
+sub = getTest(root, &quot;/mytests&quot;);</pre>
+
+<p>And a tree of tests may be run simply by:</p>
+
+<pre>runTests( root ); /* or 'sub' */</pre>
+
+<p>Similarly, showTests() will list out the tests.<br>
+<br>
+However, it is easier to simply run at the command prompt with the Usage specified below.<br>
+</p>
+
+<h4>Globals</h4>
+
+<p>The command line parser will manage resetting the error count, and printing a summary
+of the failed tests. But if you call runTest directly, for instance, you will need to
+manage these yourself.<br>
+<strong>ERROR_COUNT</strong> contains the number of times log_err was called. runTests
+resets it to zero before running the tests.<br>
+<strong>VERBOSITY</strong> should be 1 to allow log_verbose() data to be displayed
+otherwise 0 (default).<br>
+</p>
+
+<h3>Building</h3>
+
+<p>To compile this test suite using MSVC, follow the instructions in <a
+href="../readme.html#HowToInstall">icu/source/readme.html#HowToInstall</a> for building
+the &quot;allC&quot; workspace. This builds the libraries as well as the cintltst
+executable.</p>
+
+<h3>Executing</h3>
+
+<p>To run the test suite from the command line, change directories to
+&quot;icu/source/test/cintltst/Debug&quot; for the debug build, (or
+&quot;icu/source/test/cintltst/Release&quot; for the releawse build) then type:<br>
+&quot;cintltst&quot;.</p>
+
+<h3>Usage</h3>
+
+<pre>Type &quot;cintltest -h&quot; to see the usage:
+
+### Syntax:
+### Usage: [ -l ] [ -v ] [ -verbose] [-a] [ -all] [-n] \n [ -no_err_msg] [ -h ] [ /path/to/test ]
+### -l To get a list of test names
+### -all To run all the test
+### -a To run all the test(same a -all)
+### -verbose To turn ON verbosity
+### -v To turn ON verbosity(same as -verbose)
+### -h To print this message
+### -n To turn OFF printing error messages
+### -no_err_msg (same as -n)
+### -[/subtest] To run a subtest
+### For example to run just the utility tests type: cintltest /tsutil)
+### To run just the locale test type: cintltst /tsutil/loctst
+###  </pre>
+
+<p><br>
+<a name="demo.c"></a></p>
+
+<h5><big>/******************** sample ctestfw test ********************<br>
+********* Simply link this with libctestfw or ctestfw.dll ****<br>
+************************* demo.c *****************************/<br>
+</big></h5>
+
+<pre>
+</pre>
+
+<pre>#include &quot;stdlib.h&quot;
+#include &quot;ctest.h&quot;
+#include &quot;stdio.h&quot;
+#include &quot;string.h&quot;
+
+</pre>
+
+<pre>/**
+* Some sample dummy tests.
+* the statics simply show how often the test is called.
+*/
+void mytest()
+{
+    static i = 0;
+    log_info(&quot;I am a test[%d]\n&quot;, i++);
+}
+
+void mytest_err()
+{
+    static i = 0;
+    log_err(&quot;I am a test containing an error[%d]\n&quot;, i++);
+    log_err(&quot;I am a test containing an error[%d]\n&quot;, i++);
+}
+
+void mytest_verbose()
+{
+    /* will only show if verbose is on (-v) */
+    log_verbose(&quot;I am a verbose test, blabbing about nothing at all.\n&quot;);
+}
+
+/**
+* Add your tests from this function
+*/
+
+void add_tests( TestNode** root )
+{
+    addTest(root, &amp;mytest, &quot;/apple/bravo&quot; );
+    addTest(root, &amp;mytest, &quot;/a/b/c/d/mytest&quot;);
+    addTest(root, &amp;mytest_err, &quot;/d/e/f/h/junk&quot;);
+    addTest(root, &amp;mytest, &quot;/a/b/c/d/another&quot;);
+    addTest(root, &amp;mytest, &quot;/a/b/c/etest&quot;);
+    addTest(root, &amp;mytest_err, &quot;/a/b/c&quot;);
+    addTest(root, &amp;mytest, &quot;/bertrand/andre/damiba&quot;);
+    addTest(root, &amp;mytest_err, &quot;/bertrand/andre/OJSimpson&quot;);
+    addTest(root, &amp;mytest, &quot;/bertrand/andre/juice/oj&quot;);
+    addTest(root, &amp;mytest, &quot;/bertrand/andre/juice/prune&quot;);
+    addTest(root, &amp;mytest_verbose, &quot;/verbose&quot;);
+
+}
+
+int main(int argc, const char *argv[])
+{
+    TestNode *root = NULL;
+
+    add_tests(&amp;root); /* address of root ptr- will be filled in */
+
+    /* Run the tests. An int is returned suitable for the OS status code.
+    (0 for success, neg for parameter errors, positive for the # of
+    failed tests) */
+    return processArgs( root, argc, argv );
+}
+
+</pre>
+
+<p><a href="../readme.html">ReadMe for </a><a href="../readme.html#API">IBM's
+International Classes for Unicode C API</a></p>
+
+<hr>
+</body>
+</html>

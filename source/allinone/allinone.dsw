@@ -1,0 +1,176 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "cintltst"=..\test\cintltst\cintltst.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ctestfw
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name i18n
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name makeconv
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name gencol
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name genrb
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "common"=..\common\common.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "ctestfw"=..\tools\ctestfw\ctestfw.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name i18n
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name makeconv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "gencol"=..\tools\gencol\gencol.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name i18n
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "genrb"=..\tools\genrb\genrb.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name makeconv
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "i18n"=..\i18n\i18n.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "intltest"=..\test\intltest\intltest.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name i18n
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name makeconv
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name gencol
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name genrb
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "makeconv"=..\tools\makeconv\makeconv.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name i18n
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+

@@ -1,0 +1,113 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright Taligent, Inc.,  1997                                      *
+// * (C) Copyright International Business Machines Corporation,  1997-99      *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+
+it {
+    Countries { 
+        IT { "Italia" }
+        CH { "Svizzera" }
+    }
+    DateTimeElements { 
+            "2",
+            "4",
+    }
+    DateTimePatterns { 
+            "H.mm.ss z",
+            "H.mm.ss z",
+            "H.mm.ss",
+            "H.mm",
+            "EEEE d MMMM yyyy",
+            "d MMMM yyyy",
+            "d-MMM-yy",
+            "dd/MM/yy",
+            "{1} {0}",
+    }
+    DayAbbreviations { 
+            "dom",
+            "lun",
+            "mar",
+            "mer",
+            "gio",
+            "ven",
+            "sab",
+    }
+    DayNames { 
+            "domenica",
+            "luned\u00EC",
+            "marted\u00EC",
+            "mercoled\u00EC",
+            "gioved\u00EC",
+            "venerd\u00EC",
+            "sabato",
+    }
+    Eras { 
+            "BC",
+            "dopo Cristo",
+    }
+    Languages { 
+        it { "italiano" }
+    }
+    LocaleID { "0410" }
+    LocaleString { "it" }
+    MonthAbbreviations { 
+            "gen",
+            "feb",
+            "mar",
+            "apr",
+            "mag",
+            "giu",
+            "lug",
+            "ago",
+            "set",
+            "ott",
+            "nov",
+            "dic",
+            "",
+    }
+    MonthNames { 
+            "gennaio",
+            "febbraio",
+            "marzo",
+            "aprile",
+            "maggio",
+            "giugno",
+            "luglio",
+            "agosto",
+            "settembre",
+            "ottobre",
+            "novembre",
+            "dicembre",
+            "",
+    }
+    NumberElements { 
+            ",",
+            ".",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    ShortLanguage { "ita" }
+    localPatternChars { "GyMdkHmsSEDFwWahKz" }
+    zoneStrings { 
+        {
+                "Africa/Casablanca",
+                "GMT",
+                "GMT",
+                "GMT",
+                "GMT",
+        }
+    }
+}

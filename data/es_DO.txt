@@ -1,0 +1,45 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright Taligent, Inc.,  1997                                      *
+// * (C) Copyright International Business Machines Corporation,  1997-99      *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+
+es_DO {
+    CurrencyElements { 
+            "RD$",
+            "DOP",
+            ".",
+    }
+    DateTimePatterns { 
+            "hh:mm:ss a z",
+            "hh:mm:ss a z",
+            "hh:mm:ss a",
+            "hh:mm a",
+            "EEEE d' de 'MMMM' de 'yyyy",
+            "d' de 'MMMM' de 'yyyy",
+            "MM/dd/yyyy",
+            "MM/dd/yy",
+            "{1} {0}",
+    }
+    LocaleID { "1c0a" }
+    LocaleString { "es_DO" }
+    NumberElements { 
+            ".",
+            ",",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    ShortCountry { "DOM" }
+}

@@ -1,0 +1,88 @@
+vi {
+    CollationElements { "&\u009F,' ','_',\u00AF,\u00AD,'-',',',';',':','!',\u00A1"
+        ",'?',\u00BF,'/','.','^','~',\u00B7,''','\u0022',\u00AB,\u00BB,'(',')','[',']','"
+        "{','}',\u00A7,\u00B6,\u00A9,\u00AE,'@',\u00A4,\u00A2,'$',\u00A3,\u00A5,'*','\u005C"
+        "','&','#','%','+',\u00B1,\u00F7,\u00D7,'<','=','>',\u00AC,'|',\u00A6,\u00B0,\u00B5"
+        ";\u0300;\u0309;\u0303;\u0301;\u0323;\u0306;\u0302;\u031B<\u00A0&0,\u00BC,\u00BD"
+        ",\u00BE&1,\u00B9&2,\u00B2&3,\u00B3&D<\u0111,\u0110" }
+    DateTimePatterns {
+            "HH:mm:ss z",
+            "HH:mm:ss z",
+            "HH:mm:ss",
+            "HH:mm",
+            "EEEE dd MMMM yyyy",
+            "EEE dd MMM yyyy",
+            "dd MMM yyyy",
+            "dd/MM/yy",
+            "{0} {1}",
+    }
+    DayAbbreviations {
+            "Th 2",
+            "Th 3",
+            "Th 4",
+            "Th 5",
+            "Th 6",
+            "Th 7",
+            "CN",
+    }
+    DayNames {
+            "Th\u01B0\u0301 hai",
+            "Th\u01B0\u0301 ba",
+            "Th\u01B0\u0301 t\u01B0",
+            "Th\u01B0\u0301 n\u0103m",
+            "Th\u01B0\u0301 s\u00E1u",
+            "Th\u01B0\u0301 ba\u0309y",
+            "Chu\u0309 nh\u00E2\u0323t",
+    }
+    LocaleID { "002A" }
+    LocaleString { "vi" }
+    MonthAbbreviations {
+            "Thg 1",
+            "Thg 2",
+            "Thg 3",
+            "Thg 4",
+            "Thg 5",
+            "Thg 6",
+            "Thg 7",
+            "Thg 8",
+            "Thg 9",
+            "Thg 10",
+            "Thg 11",
+            "Thg 12",
+            "",
+    }
+    MonthNames {
+            "Th\u00E1ng m\u00F4\u0323t",
+            "Th\u00E1ng hai",
+            "Th\u00E1ng ba",
+            "Th\u00E1ng t\u01B0",
+            "Th\u00E1ng n\u0103m",
+            "Th\u00E1ng s\u00E1u",
+            "Th\u00E1ng ba\u0309y",
+            "Th\u00E1ng t\u00E1m",
+            "Th\u00E1ng ch\u00EDn",
+            "Th\u00E1ng m\u01B0\u01A1\u0300i",
+            "Th\u00E1ng m\u01B0\u01A1\u0300i m\u00F4\u0323t",
+            "Th\u00E1ng m\u01B0\u01A1\u0300i hai",
+            "",
+    }
+    NumberElements {
+            ",",
+            ".",
+            ";",
+            "%",
+            "0",
+            "#",
+            "-",
+            "E",
+            "\u2030",
+            "\u221E",
+            "\uFFFD",
+    }
+    NumberPatterns {
+            "#,##0.###;-#,##0.###",
+            "#,##0.00 \u00A4;-#,##0.00 \u00A4",
+            "#,##0%",
+    }
+    ShortLanguage { "vie" }
+}
