@@ -215,7 +215,7 @@ ucnv_getNextUCharFromToUImpl(UConverterToUnicodeArgs *pArgs,
         /* convert this byte and check the result */
         toU(pArgs, pErrorCode);
         if(U_SUCCESS(*pErrorCode)) {
-            int32_t length=pArgs->target-buffer;
+            int32_t length=(int32_t)(pArgs->target-buffer);
 
             /* this test is UTF-16 specific */
             if(/* some output and

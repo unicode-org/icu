@@ -244,8 +244,9 @@ UConverter_toUnicode_HZ_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
 
             }
             if(targetUniChar < 0xfffe){
-                if(args->offsets)
-                    args->offsets[myTarget - args->target]=mySource - args->source - 1-(myData->isStateDBCS);
+                if(args->offsets) {
+                    args->offsets[myTarget - args->target]=(int32_t)(mySource - args->source - 1-(myData->isStateDBCS));
+                }
 
                 *(myTarget++)=(UChar)targetUniChar;
             }
@@ -258,7 +259,7 @@ SAVE_STATE:
                     
                     UConverterCallbackReason reason;
                     int32_t currentOffset ;
-                    int32_t saveIndex = myTarget - args->target;
+                    int32_t saveIndex = (int32_t)(myTarget - args->target);
 
                     args->converter->invalidCharLength=0;
                    
@@ -274,12 +275,12 @@ SAVE_STATE:
 
                         args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)(tempBuf[0]-0x80);
                         args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)(tempBuf[1]-0x80);
-                        currentOffset= mySource - args->source -2;
+                        currentOffset= (int32_t)(mySource - args->source -2);
                     
                     }
                     else{
                         args->converter->invalidCharBuffer[args->converter->invalidCharLength++] = (char)mySourceChar;
-                        currentOffset= mySource - args->source -1;
+                        currentOffset= (int32_t)(mySource - args->source -1);
                     }
                     args->offsets = args->offsets?args->offsets+(myTarget - args->target):0;
                     args->target = myTarget;
@@ -340,8 +341,8 @@ UConverter_fromUnicode_HZ_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
     int32_t* offsets = args->offsets;
     int32_t mySourceIndex = 0;
     int32_t myTargetIndex = 0;
-    int32_t targetLength = args->targetLimit - args->target;
-    int32_t mySourceLength = args->sourceLimit - args->source;
+    int32_t targetLength = (int32_t)(args->targetLimit - args->target);
+    int32_t mySourceLength = (int32_t)(args->sourceLimit - args->source);
     int32_t length=0;
     uint32_t targetUniChar = 0x0000;
     UChar32 mySourceChar = 0x0000,c=0x0000;
@@ -519,8 +520,8 @@ getTrail:
                     /*Update the local Indexes so that the conversion 
                     *can restart at the right points 
                     */ 
-                    myTargetIndex = args->target - (char*)myTarget; 
-                    mySourceIndex = args->source - mySource; 
+                    myTargetIndex = (int32_t)(args->target - (char*)myTarget);
+                    mySourceIndex = (int32_t)(args->source - mySource);
                     args->offsets = saveOffsets; 
                     saveIndex = myTargetIndex - saveIndex;
                     if(args->offsets){
