@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2001/11/17 06:44:50 $
- * $Revision: 1.73 $
+ * $Date: 2001/11/20 17:55:54 $
+ * $Revision: 1.74 $
  *
  *****************************************************************************************
  */
@@ -2113,6 +2113,24 @@ public class TransliteratorTest extends TestFmwk {
         
         checkRules("Failed toRules FORWARD", t2, testRulesForward);
         checkRules("Failed toRules BACKWARD", t3, testRulesBackward);
+    }
+
+    /**
+     * Test Escape and Unescape transliterators.
+     */
+    public void TestEscape() {
+        expect(Transliterator.getInstance("Hex-Any"),
+               "\\x{40}\\U00000031&#x32;&#81;",
+               "@12Q");
+        expect(Transliterator.getInstance("Any-Hex/C"),
+               CharsToUnicodeString("A\\U0010BEEF\\uFEED"),
+               "\\u0041\\U0010BEEF\\uFEED");
+        expect(Transliterator.getInstance("Any-Hex/Java"),
+               CharsToUnicodeString("A\\U0010BEEF\\uFEED"),
+               "\\u0041\\uDBEF\\uDEEF\\uFEED");
+        expect(Transliterator.getInstance("Any-Hex/Perl"),
+               CharsToUnicodeString("A\\U0010BEEF\\uFEED"),
+               "\\x{41}\\x{10BEEF}\\x{FEED}");
     }
 
     //======================================================================
