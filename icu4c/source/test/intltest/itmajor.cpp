@@ -20,7 +20,6 @@
 #include "itutil.h"
 #include "tscoll.h"
 #include "itformat.h"
-//%#include "itconv.h"
 #include "ittrans.h"
 #include "itrbbi.h"
 #include "itrbnf.h"
@@ -31,6 +30,8 @@
 #include "canittst.h"
 #include "icusvtst.h"
 #include "testidna.h"
+#include "convtest.h"
+
 #define CASE_SUITE(id, suite) case id:                  \
                           name = #suite;                \
                           if(exec) {                    \
@@ -147,6 +148,14 @@ void MajorTestLevel::runIndexedTest( int32_t index, UBool exec, const char* &nam
             }
 #endif
             break;
+        case 11: name = "conversion";
+                if (exec) {
+                    logln("TestSuite Conversion---"); logln();
+                    ConversionTest test;
+                    callTest( test, par );
+                }
+                break;
+
         default: name = ""; break;
     }
 }
