@@ -175,15 +175,17 @@ static enum ETokenType getStringToken(UCHARBUF* buf,
                         return TOK_ERROR;
                     }
                 }               
+
+                U_APPEND_CHAR32(c, pTarget,len);
+                pTarget = target;
+                ustr_uscat(token, pTarget,len, status);
+                isFollowingCharEscaped = FALSE;
+                len=0;
+                
                 if(c==ESCAPE && !isFollowingCharEscaped){
                     isFollowingCharEscaped = TRUE;
-                }else{
-                    U_APPEND_CHAR32(c, pTarget,len);
-                    pTarget = target;
-                    ustr_uscat(token, pTarget,len, status);
-                    isFollowingCharEscaped = FALSE;
-                    len=0;
                 }
+                
                 if (U_FAILURE(*status)) {
                     return TOK_ERROR;
                 }
