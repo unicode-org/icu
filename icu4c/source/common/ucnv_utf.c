@@ -2261,7 +2261,7 @@ const UConverterSharedData _UTF32LEData = {
 
 /* UTF-7 -------------------------------------------------------------------- */
 
-/* ### TODO: document version option (=1 for escaping set O characters) */
+/* ### TODO: in the and user guide, document version option (=1 for escaping set O characters) */
 /*
  * UTF-7 is a stateful encoding of Unicode, somewhat like UTF7.
  * It is defined in RFC 2152  http://www.imc.org/rfc2152 .
@@ -2269,6 +2269,15 @@ const UConverterSharedData _UTF32LEData = {
  * encoding only a subset of 7-bit US-ASCII.
  * UTF-7 is deprecated in favor of UTF-8/16/32 and UTF7, but still
  * occasionally used.
+ *
+ * For converting Unicode to UTF-7, the RFC allows to encode some US-ASCII
+ * characters directly or in base64. Especially, the characters in set O
+ * as defined in the RFC (see below) may be encoded directly but are not
+ * allowed in, e.g., email headers.
+ * By default, the ICU UTF-7 converter encodes set O directly.
+ * By choosing the option "version=1", set O will be escaped instead.
+ * For example:
+ *     utf7Converter=ucnv_open("UTF-7,version=1");
  */
 
 /*
@@ -2284,10 +2293,18 @@ const UConverterSharedData _UTF32LEData = {
  * Set O (optional direct characters) consists of the following
  * characters (note that "\" and "~" are omitted):
  *     !"#$%&*;<=>@[]^_`{|}
+ *
+ * According to the rules in RFC 2152, the byte values for the following
+ * US-ASCII characters are not used in UTF-7 and are therefore illegal:
+ * - all C0 control codes except for CR LF TAB
+ * - BACKSLASH
+ * - TILDE
+ * - DEL
+ * - all codes beyond US-ASCII, i.e. all >127
  */
 #define inSetD(c) \
     ((uint8_t)((c)-97)<26 || (uint8_t)((c)-65)<26 || /* letters */ \
-     (uint8_t)((c)-48)<10 ||  /* digits */ \
+     (uint8_t)((c)-48)<10 ||    /* digits */ \
      (uint8_t)((c)-39)<3 ||     /* '() */ \
      (uint8_t)((c)-44)<4 ||     /* ,-./ */ \
      (c)==58 || (c)==63         /* :? */ \
@@ -2309,6 +2326,41 @@ const UConverterSharedData _UTF32LEData = {
 #define BACKSLASH 92
 #define TILDE 126
 
+/* legal byte values: all US-ASCII graphic characters from space to before tilde, and CR LF TAB */
+#define isLegalUTF7(c) (((uint8_t)((c)-32)<94 && (c)!=BACKSLASH) || isCRLFTAB(c))
+
+/* encode directly sets D and O and CR LF SP TAB */
+static const UBool encodeDirectlyMaximum[128]={
+ /* 0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f */
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1,
+
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0
+};
+
+/* encode directly set D and CR LF SP TAB but not set O */
+static const UBool encodeDirectlyRestricted[128]={
+ /* 0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f */
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+
+    1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1,
+
+    0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0,
+
+    0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0
+};
+
 static const uint8_t
 toBase64[64]={
     /* A-Z */
@@ -2325,9 +2377,9 @@ toBase64[64]={
 
 static const int8_t
 fromBase64[128]={
-    /* C0 controls */
-    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-    -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+    /* C0 controls, -1 for legal ones (CR LF TAB), -3 for illegal ones */
+    -3, -3, -3, -3, -3, -3, -3, -3, -3, -1, -1, -3, -3, -1, -3, -3,
+    -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3, -3,
 
     /* general punctuation with + and / and a special value (-2) for - */
     -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 62, -1, -2, -1, 63,
@@ -2336,11 +2388,11 @@ fromBase64[128]={
 
     /* A-Z */
     -1,  0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,
-    15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1, -1, -1,
+    15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -3, -1, -1, -1,
 
     /* a-z */
     -1, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-    41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, -1, -1, -1, -1, -1,
+    41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, -1, -1, -1, -3, -3
 };
 
 /*
@@ -2364,7 +2416,7 @@ _UTF7Reset(UConverter *cnv, UConverterResetChoice choice) {
     if(choice<=UCNV_RESET_TO_UNICODE) {
         /* reset toUnicode */
         cnv->toUnicodeStatus=0x1000000; /* inDirectMode=TRUE */
-        cnv->invalidCharLength=0;
+        cnv->toULength=0;
     }
     if(choice!=UCNV_RESET_TO_UNICODE) {
         /* reset fromUnicode */
@@ -2386,7 +2438,6 @@ _UTF7Open(UConverter *cnv,
     }
 }
 
-/* ### TODO: check/test callback behavior */
 U_CFUNC void
 _UTF7ToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
                           UErrorCode *pErrorCode) {
@@ -2454,7 +2505,7 @@ directMode:
         }
         while(length>0) {
             b=*source++;
-            if((uint8_t)(b-32)>=96 && !isCRLFTAB(b) || b==BACKSLASH || b==TILDE) {
+            if(!isLegalUTF7(b)) {
                 /* illegal */
                 bytes[0]=b;
                 byteIndex=1;
@@ -2466,7 +2517,7 @@ directMode:
                 if(offsets!=NULL) {
                     *offsets++=sourceIndex++;
                 }
-            } else {
+            } else /* PLUS */ {
                 /* switch to Unicode mode */
                 nextSourceIndex=++sourceIndex;
                 inDirectMode=FALSE;
@@ -2497,8 +2548,8 @@ unicodeMode:
             if(target<targetLimit) {
                 bytes[byteIndex++]=b=*source++;
                 ++nextSourceIndex;
-                if((uint8_t)(b-32)>=96 && !isCRLFTAB(b) || b==BACKSLASH || b==TILDE) {
-                    /* illegal */
+                if(b>=126) {
+                    /* illegal - test other illegal US-ASCII values by base64Value==-3 */
                     inDirectMode=TRUE;
                     goto callback;
                 } else if((base64Value=fromBase64[b])>=0) {
@@ -2570,10 +2621,18 @@ unicodeMode:
                     }
                     sourceIndex=nextSourceIndex;
                     goto directMode;
-                } else /* base64Value==-1 for any other character */ {
+                } else if(base64Value==-1) /* for any legal character except base64 and minus sign */ {
                     /* leave the Unicode Mode */
                     inDirectMode=TRUE;
-                    if(bits==0) {
+                    if(base64Counter==-1) {
+                        /* illegal: + immediately followed by something other than base64 or minus sign */
+                        /* include the plus sign in the reported sequence */
+                        --sourceIndex;
+                        bytes[0]=PLUS;
+                        bytes[1]=b;
+                        byteIndex=2;
+                        goto callback;
+                    } else if(bits==0) {
                         /* un-read the character in case it is a plus sign */
                         --source;
                         sourceIndex=nextSourceIndex-1;
@@ -2582,6 +2641,10 @@ unicodeMode:
                         /* bits are illegally left over, a UChar is incomplete */
                         goto callback;
                     }
+                } else /* base64Value==-3 for illegal characters */ {
+                    /* illegal */
+                    inDirectMode=TRUE;
+                    goto callback;
                 }
             } else {
                 /* target is full */
@@ -2599,10 +2662,11 @@ endloop:
             *pErrorCode=U_TRUNCATED_CHAR_FOUND;
         }
         cnv->toUnicodeStatus=0x1000000; /* inDirectMode=TRUE */
-        cnv->invalidCharLength=0;
+        cnv->toULength=0;
     } else {
         /* set the converter state back into UConverter */
         cnv->toUnicodeStatus=((uint32_t)inDirectMode<<24)|((uint32_t)((uint8_t)base64Counter)<<16)|(uint32_t)bits;
+        cnv->toULength=byteIndex;
     }
 
 finish:
@@ -2663,11 +2727,17 @@ callback:
     } else if(U_FAILURE(*pErrorCode)) {
         /* break on error */
         cnv->toUnicodeStatus=0x1000000; /* inDirectMode=TRUE */
-        cnv->invalidCharLength=0;
+        cnv->toULength=0;
         goto finish;
     } else {
         goto loop;
     }
+}
+
+U_CFUNC UChar32
+_UTF7GetNextUChar(UConverterToUnicodeArgs *pArgs,
+                  UErrorCode *pErrorCode) {
+    return ucnv_getNextUCharFromToUImpl(pArgs, _UTF7ToUnicodeWithOffsets, TRUE, pErrorCode);
 }
 
 U_CFUNC void
@@ -2682,9 +2752,10 @@ _UTF7FromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     UChar c;
 
     /* UTF-7 state */
+    const UBool *encodeDirectly;
     uint8_t bits;
     int8_t base64Counter;
-    UBool inDirectMode, setODirect;
+    UBool inDirectMode;
 
     /* set up the local pointers */
     cnv=pArgs->converter;
@@ -2699,7 +2770,7 @@ _UTF7FromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     /* get the state machine state */
     {
         uint32_t status=cnv->fromUnicodeStatus;
-        setODirect= status<0x10000000;
+        encodeDirectly= status<0x10000000 ? encodeDirectlyMaximum : encodeDirectlyRestricted;
         inDirectMode=(UBool)((status>>24)&1);
         base64Counter=(int8_t)(status>>16);
         bits=(uint8_t)status;
@@ -2718,7 +2789,7 @@ directMode:
         while(length>0) {
             c=*source++;
             /* currently always encode CR LF SP TAB directly */
-            if(c<=127 && (inSetD(c) || isCRLFSPTAB(c) || setODirect && inSetO(c))) {
+            if(c<=127 && encodeDirectly[c]) {
                 /* encode directly */
                 *target++=(uint8_t)c;
                 if(offsets!=NULL) {
@@ -2766,7 +2837,7 @@ unicodeMode:
         while(source<sourceLimit) {
             if(target<targetLimit) {
                 c=*source++;
-                if(c<=127 && (inSetD(c) || isCRLFSPTAB(c) || setODirect && inSetO(c))) {
+                if(c<=127 && encodeDirectly[c]) {
                     /* encode directly */
                     inDirectMode=TRUE;
 
@@ -2957,7 +3028,7 @@ static const UConverterImpl _UTF7Impl={
     _UTF7ToUnicodeWithOffsets,
     _UTF7FromUnicodeWithOffsets,
     _UTF7FromUnicodeWithOffsets,
-    NULL,
+    _UTF7GetNextUChar,
 
     NULL,
     _UTF7GetName,
