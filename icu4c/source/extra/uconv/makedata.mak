@@ -120,7 +120,7 @@ CLEAN :
 # Inference rule for creating resource bundles
 .txt.res:
 	@echo Making Resource Bundle files
-	"$(ICUTOOLS)\genrb" -s $(@D) -d $(@D) $(?F)
+        "$(ICUTOOLS)\genrb" -t -p $(RESNAME) -s $(@D) -d $(@D) $(?F)
 
 
 $(RESSRC) : {"$(ICUTOOLS)"}genrb.exe
