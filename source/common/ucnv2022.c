@@ -1595,14 +1595,11 @@ UConverter_toUnicode_ISO_2022_JP_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                     continue;
                 }
                 else{
-                    const char *pBuf;
-
                     tempBuf[0] = (char) args->converter->toUnicodeStatus;
                     tempBuf[1] = (char) mySourceChar;
                     mySourceChar+= (args->converter->toUnicodeStatus)<<8;
                     *toUnicodeStatus= 0;
-                    pBuf = tempBuf;
-                    targetUniChar = _MBCSSimpleGetNextUChar(myData->currentConverter->sharedData, &pBuf, tempBuf+2, args->converter->useFallback);
+                    targetUniChar = _MBCSSimpleGetNextUChar(myData->currentConverter->sharedData, tempBuf, 2, args->converter->useFallback);
                 }
                 break;
 
@@ -1917,8 +1914,7 @@ UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC_IBM(UConverterToUnicodeArgs *args
 static void 
 UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                                                             UErrorCode* err){
-    char tempBuf[3];
-    const char* pBuf;
+    char tempBuf[2];
     const char *mySource = ( char *) args->source;
     UChar *myTarget = args->target;
     const char *mySourceLimit = args->sourceLimit;
@@ -1995,19 +1991,17 @@ UConverter_toUnicode_ISO_2022_KR_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                     tempBuf[1] = (char) (mySourceChar+0x80);
                     mySourceChar = (UChar)(mySourceChar + (args->converter->toUnicodeStatus<<8));
                     args->converter->toUnicodeStatus =0x00;
-                    pBuf = tempBuf;
-                    targetUniChar = _MBCSSimpleGetNextUChar(sharedData,
-                        &pBuf,(pBuf+2),useFallback);
+                    targetUniChar = _MBCSSimpleGetNextUChar(sharedData, tempBuf, 2, useFallback);
                 }
             }
             else{
                 if(args->converter->fromUnicodeStatus == 0x00){
-                    targetUniChar = _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(sharedData, mySourceChar);
+                    targetUniChar = _MBCSSimpleGetNextUChar(sharedData, mySource - 1, 1, useFallback);
 
                 }
 
             }
-            if(targetUniChar != missingCharMarker){
+            if(targetUniChar < 0xfffe){
                 if(args->offsets)
                     args->offsets[myTarget - args->target]= mySource - args->source - 1-(myData->currentType==DBCS);
                 *(myTarget++)=(UChar)targetUniChar;
@@ -2432,10 +2426,8 @@ UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                                                UErrorCode* err){
     char tempBuf[3];
     int plane=0;
-    const char* pBuf;
     const char *mySource = ( char *) args->source;
     UChar *myTarget = args->target;
-    char *tempLimit = &tempBuf[3];
     const char *mySourceLimit = args->sourceLimit;
     uint32_t targetUniChar = 0x0000;
     uint32_t mySourceChar = 0x0000;
@@ -2494,22 +2486,22 @@ UConverter_toUnicode_ISO_2022_CN_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                             continue;
                         }
                         else{
+                            int32_t tempBufLen;
                             if(plane >0){
                                 tempBuf[0] = (char) (0x80+plane);
                                 tempBuf[1] = (char) (args->converter->toUnicodeStatus);
                                 tempBuf[2] = (char) (mySourceChar);
-                                tempLimit  = &tempBuf[2]+1;
+                                tempBufLen = 3;
 
                             }else{
                                 tempBuf[0] = (char) args->converter->toUnicodeStatus;
                                 tempBuf[1] = (char) mySourceChar;
-                                tempLimit  = &tempBuf[2];
+                                tempBufLen = 2;
                             }
                             mySourceChar+= (uint32_t) args->converter->toUnicodeStatus<<8;
                             args->converter->toUnicodeStatus = 0;
-                            pBuf = tempBuf;
                             if(myData->currentConverter!=NULL){
-                                targetUniChar = _MBCSSimpleGetNextUChar(myData->currentConverter->sharedData, &pBuf, tempLimit, FALSE);
+                                targetUniChar = _MBCSSimpleGetNextUChar(myData->currentConverter->sharedData, tempBuf, tempBufLen, FALSE);
                             }else{
                                 *err=U_INVALID_CHAR_FOUND;
                                 break;

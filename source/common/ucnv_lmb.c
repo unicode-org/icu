@@ -1037,12 +1037,12 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
                 if (*args->source == group) {
                     /* single byte */
                     ++args->source;
-                    uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, &args->source, args->source + 1, FALSE);
+                    uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, args->source, 1, FALSE);
+                    ++args->source;
                 } else {
                     /* double byte */
-                    const char *newLimit = args->source + 2;
-                    uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, &args->source, newLimit, FALSE);
-                    args->source = newLimit; /* set the correct limit even in case of an error */
+                    uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, args->source, 2, FALSE);
+                    args->source += 2;
                 }
             }
             else {                                  /* single byte conversion */
@@ -1058,7 +1058,6 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
                     /* The non-optimizable oddballs where there is an explicit byte 
                     * AND the second byte is not in the upper ascii range
                     */
-                    const char *s;
                     char bytes[2];
 
                     extraInfo = (UConverterDataLMBCS *) args->converter->extraInfo;
@@ -1067,8 +1066,7 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
                     /* Lookup value must include opt group */
                     bytes[0] = group;
                     bytes[1] = CurByte;
-                    s = bytes;
-                    uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, &s, bytes + 2, FALSE);
+                    uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, bytes, 2, FALSE);
                 }
             }
         }
@@ -1084,16 +1082,14 @@ _LMBCSGetNextUCharWorker(UConverterToUnicodeArgs*   args,
                     CHECK_SOURCE_LIMIT(0);
 
                     /* let the MBCS conversion consume CurByte again */
-                    --args->source;
-                    uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, &args->source, args->source + 1, FALSE);
+                    uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, args->source - 1, 1, FALSE);
                 }
                 else
                 {
                     CHECK_SOURCE_LIMIT(1);
                     /* let the MBCS conversion consume CurByte again */
-                    --args->source;
-                    /* since we know that we start at a lead byte, args->source _will_ be incremented by 2 */
-                    uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, &args->source, args->source + 2, FALSE);
+                    uniChar = _MBCSSimpleGetNextUChar(cnv->sharedData, args->source - 1, 2, FALSE);
+                    ++args->source;
                 }
             }
             else                                   /* single byte conversion */
