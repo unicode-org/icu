@@ -1103,6 +1103,11 @@ uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status)
 	    expansion |= ((uprv_uca_addExpansion(expansions, element->CEs[0], status)+(headersize>>2))<<4);
       }
 	  element->mapCE = expansion;
+	  
+	  // Need to go back to the beginning of the digit string if in the middle!
+      if(uniChar <= 0xFFFF) { // supplementaries are always unsafe. API takes UChars
+	    unsafeCPSet(t->unsafeCP, (UChar)uniChar);
+      }
   }
 
   // here we want to add the prefix structure.
