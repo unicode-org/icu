@@ -27,7 +27,7 @@ public:
     virtual void Basic();
     virtual void Extended();
 
-    virtual UBool doRegexLMTest(char *pat, char *text, UBool looking, UBool match, int line);
-    virtual void regex_find(char *pat, char *input, UErrorCode expectedStatus, int line);
+    virtual UBool doRegexLMTest(const char *pat, const char *text, UBool looking, UBool match, int line);
+    virtual void regex_find(const char *pat, const char *input, UErrorCode expectedStatus, int line);
 };
 #endif

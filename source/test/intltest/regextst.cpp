@@ -97,7 +97,7 @@ if (status!=errcode) {errln("RegexTest failure at line %d.\n", __LINE__);};}
 
 #define REGEX_TESTLM(pat, text, looking, match) doRegexLMTest(pat, text, looking, match, __LINE__);
 
-UBool RegexTest::doRegexLMTest(char *pat, char *text, UBool looking, UBool match, int line) {
+UBool RegexTest::doRegexLMTest(const char *pat, const char *text, UBool looking, UBool match, int line) {
     const UnicodeString pattern(pat);
     const UnicodeString inputText(text);
     UErrorCode          status  = U_ZERO_ERROR;
@@ -195,7 +195,7 @@ void set(UVector &vec, int val, UnicodeString index) {
     vec.setElementAt(val, idx);
 }
         
-void RegexTest::regex_find(char *pat, char *input, UErrorCode expectedStatus, int line) {
+void RegexTest::regex_find(const char *pat, const char *input, UErrorCode expectedStatus, int line) {
     UnicodeString       pattern(pat);
     UnicodeString       inputString(input);
     UnicodeString       unEscapedInput;
