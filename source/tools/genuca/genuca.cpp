@@ -114,7 +114,7 @@ uint32_t getSingleCEValue(char *primary, char *secondary, char *tertiary, UBool 
     value &= 0xFFFFFF7F; 
 
     // Here's case handling!
-    if(caseBit == TRUE) {
+    if(caseBit == TRUE && tervalue != 0) {
         value |= 0x40; // 0100 0000 set case bit
     } else {
         value &= 0xFFFFFFBF; // ... 1011 1111 (reset case bit)
@@ -207,7 +207,7 @@ uint32_t addToInverse(UCAElements *element, UErrorCode *status) {
     uint32_t position = inversePos;
     while(inverseTable[--position][0] > element->CEs[0])
     addToExistingInverse(element, position, status);
-  } else if(inverseTable[inversePos][0] == element->CEs[0]) {
+  } else if(inverseTable[inversePos][0] == element->CEs[0] && inversePos != 0) {
     if(element->noOfCEs > 1 && isContinuation(element->CEs[1]) 
       && inverseTable[inversePos][1] != element->CEs[1]) {
       /* also, we should do long primaries here */
@@ -385,7 +385,7 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
     startCodePoint = endCodePoint+1;
     endCodePoint = strchr(startCodePoint, ';');
 
-    while(*startCodePoint != 'L' && *startCodePoint != 'S') {
+    while(*startCodePoint != '0' && *startCodePoint != '1') {
         startCodePoint++;
         if(startCodePoint == endCodePoint) {
             *status = U_INVALID_FORMAT_ERROR;
@@ -393,7 +393,7 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
         }
     }
 
-    if(*startCodePoint == 'S') {
+    if(*startCodePoint == '0') {
         element->caseBit = FALSE;
     } else {
         element->caseBit = TRUE;
@@ -437,7 +437,7 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
 
           uint32_t CEi = 1;
           while(2*CEi<element->sizePrim[i] || CEi<element->sizeSec[i] || CEi<element->sizeTer[i]) {
-              uint32_t value = 0x80; /* Continuation marker */
+            uint32_t value = element->caseBit?0xC0:0x80; /* Continuation marker */
               if(2*CEi<element->sizePrim[i]) {
                   value |= ((hex2num(*(primary+4*CEi))&0xF)<<28);
                   value |= ((hex2num(*(primary+4*CEi+1))&0xF)<<24);
@@ -571,7 +571,7 @@ write_uca_table(const char *filename,
     myD->strength = UCOL_TERTIARY;
     myD->frenchCollation = UCOL_OFF;
     myD->alternateHandling = UCOL_SHIFTED; /* attribute for handling variable elements*/
-    myD->caseFirst = UCOL_LOWER_FIRST;         /* who goes first, lower case or uppercase */
+    myD->caseFirst = UCOL_OFF;         /* who goes first, lower case or uppercase */
     myD->caseLevel = UCOL_OFF;         /* do we have an extra case level */
     myD->normalizationMode = UCOL_ON; /* attribute for normalization */
     /* populate the version info struct with version info*/
