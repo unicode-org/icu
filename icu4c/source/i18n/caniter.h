@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/caniter.h,v $ 
- * $Date: 2002/03/19 07:16:01 $ 
- * $Revision: 1.3 $
+ * $Date: 2002/03/20 05:08:57 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -124,7 +124,8 @@ private:
     UnicodeString *getEquivalents(const UnicodeString &segment, int32_t &result_len, UErrorCode &status); //private String[] getEquivalents(String segment)
     
     //Set getEquivalents2(String segment);
-    Hashtable *getEquivalents2(const UnicodeString &segment, UErrorCode &status);
+    Hashtable *getEquivalents2(const UChar *segment, int32_t segLen, UErrorCode &status);
+    //Hashtable *getEquivalents2(const UnicodeString &segment, int32_t segLen, UErrorCode &status);
     
     /**
      * See if the decomposition of cp2 is at segment starting at segmentPos 
@@ -132,7 +133,8 @@ private:
      * If so, take the remainder, and return the equivalents 
      */
     //Set extract(int comp, String segment, int segmentPos, StringBuffer buffer);
-    Hashtable *extract(UChar32 comp, const UnicodeString &segment, int32_t segmentPos, UnicodeString &buffer, UErrorCode &status);
+    Hashtable *extract(UChar32 comp, const UChar *segment, int32_t segLen, int32_t segmentPos, UErrorCode &status);
+    //Hashtable *extract(UChar32 comp, const UnicodeString &segment, int32_t segLen, int32_t segmentPos, UErrorCode &status);
 
     void cleanPieces();
 };
