@@ -125,17 +125,17 @@ public class TransliterationRule$Latin$Cyrillic extends ListResourceBundle {
                 // Special titlecase forms, not duplicated
                 // #############################################
                 
-                + "Ch>{CH};" + "Ch<{CH}[{lower};"
-                + "Kh>{KH};" + "Kh<{KH}[{lower};"
-                + "Shch>{SHCH};" + "Shch<{SHCH}[{lower};"
-                + "Sh>{SH};" + "Sh<{SH}[{lower};"
-                + "Ts>{TS};"  + "Ts<{TS}[{lower};"
-                + "Zh>{ZH};" + "Zh<{ZH}[{lower};"
-                + "Yi>{YI};"  //+ "Yi<{YI}[{lower};"
-                + "Ye>{YE};"  //+ "Ye<{YE}[{lower};"
-                + "Yo>{YO};" //+ "Yo<{YO}[{lower};"
-                + "Yu>{YU};" //+ "Yu<{YU}[{lower};"
-                + "Ya>{YA};" //+ "Ya<{YA}[{lower};"
+                + "Ch>{CH};" + "Ch<{CH}({lower};"
+                + "Kh>{KH};" + "Kh<{KH}({lower};"
+                + "Shch>{SHCH};" + "Shch<{SHCH}({lower};"
+                + "Sh>{SH};" + "Sh<{SH}({lower};"
+                + "Ts>{TS};"  + "Ts<{TS}({lower};"
+                + "Zh>{ZH};" + "Zh<{ZH}({lower};"
+                + "Yi>{YI};"  //+ "Yi<{YI}({lower};"
+                + "Ye>{YE};"  //+ "Ye<{YE}({lower};"
+                + "Yo>{YO};" //+ "Yo<{YO}({lower};"
+                + "Yu>{YU};" //+ "Yu<{YU}({lower};"
+                + "Ya>{YA};" //+ "Ya<{YA}({lower};"
                 
                 // #############################################
                 // Rules to Duplicate
@@ -154,15 +154,15 @@ public class TransliterationRule$Latin$Cyrillic extends ListResourceBundle {
                 
                 // Separate letters that would otherwise join
                 
-                + "SH''<{SH}[{BECOMES_C};"
-                + "T''<{T}[{BECOMES_S};"
+                + "SH''<{SH}({BECOMES_C};"
+                + "T''<{T}({BECOMES_S};"
                 
-                + "K''<{K}[{BECOMES_H};"
-                + "S''<{S}[{BECOMES_H};"
-                + "T''<{T}[{BECOMES_H};"
-                + "Z''<{Z}[{BECOMES_H};"
+                + "K''<{K}({BECOMES_H};"
+                + "S''<{S}({BECOMES_H};"
+                + "T''<{T}({BECOMES_H};"
+                + "Z''<{Z}({BECOMES_H};"
                 
-                + "Y''<{Y}[{BECOMES_VOWEL};"
+                + "Y''<{Y}({BECOMES_VOWEL};"
                 
                 // Main letters
 
@@ -213,7 +213,7 @@ public class TransliterationRule$Latin$Cyrillic extends ListResourceBundle {
 
                 // variant spellings in English
                 
-                + "C[{csoft}>{S};"
+                + "C({csoft}>{S};"
                 + "C>{K};"
 
                 // #############################################
@@ -233,15 +233,15 @@ public class TransliterationRule$Latin$Cyrillic extends ListResourceBundle {
                 
                 // separate letters that would otherwise join
                 
-                + "sh''<{sh}[{becomes_c};"
-                + "t''<{t}[{becomes_s};"
+                + "sh''<{sh}({becomes_c};"
+                + "t''<{t}({becomes_s};"
                 
-                + "k''<{k}[{becomes_h};"
-                + "s''<{s}[{becomes_h};"
-                + "t''<{t}[{becomes_h};"
-                + "z''<{z}[{becomes_h};"
+                + "k''<{k}({becomes_h};"
+                + "s''<{s}({becomes_h};"
+                + "t''<{t}({becomes_h};"
+                + "z''<{z}({becomes_h};"
                 
-                + "y''<{y}[{becomes_vowel};"
+                + "y''<{y}({becomes_vowel};"
                 
                 // main letters
 
@@ -292,7 +292,7 @@ public class TransliterationRule$Latin$Cyrillic extends ListResourceBundle {
 
                 // variant spellings in english
                 
-                + "c[{csoft}>{s};"
+                + "c({csoft}>{s};"
                 + "c>{k};"
 
 

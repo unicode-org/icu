@@ -72,7 +72,7 @@ public class TransliterationRule$Fullwidth$Halfwidth extends ListResourceBundle 
     + "\uFF18<>'8';"    //  from FULLWIDTH DIGIT EIGHT
     + "\uFF19<>'9';"    //  from FULLWIDTH DIGIT NINE
     + "\uFF1A<>':';"    //  from FULLWIDTH COLON
-    + "\uFF1B<>\\;;"    //  from FULLWIDTH SEMICOLON {';' doesn't work yet - aliu}
+    + "\uFF1B<>';';"    //  from FULLWIDTH SEMICOLON
     + "\uFF1C<>'<';"    //  from FULLWIDTH LESS-THAN SIGN
     + "\uFF1D<>'=';"    //  from FULLWIDTH EQUALS SIGN
     + "\uFF1E<>'>';"    //  from FULLWIDTH GREATER-THAN SIGN
