@@ -11,8 +11,6 @@ import com.ibm.icu.lang.UScript;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.dev.test.TestFmwk;
 
-import java.util.Locale;
-
 public class TestUScript extends TestFmwk {
 
     /**

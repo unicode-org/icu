@@ -7,7 +7,6 @@
 
 package com.ibm.icu.text;
 
-//import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -24,7 +23,6 @@ import java.text.ParsePosition;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
 /**
  * <code>SimpleDateFormat</code> is a concrete class for formatting and

@@ -15,7 +15,6 @@ import com.ibm.icu.text.StringPrepParseException;
 import com.ibm.icu.text.UCharacterIterator;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.Transliterator;
-import com.ibm.icu.util.UResourceBundle;
 
 /**
  * @author ram

@@ -6,7 +6,6 @@
  */
 package com.ibm.icu.text;
 
-//import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.data.ResourceReader;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Utility;
@@ -19,7 +18,6 @@ import java.text.MessageFormat;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Locale;
-import java.util.ResourceBundle;
 import java.util.MissingResourceException;
 import java.util.Vector;
 
