@@ -1368,3 +1368,18 @@ UnicodeString::cloneArrayIfNeeded(int32_t newCapacity,
   return TRUE;
 }
 U_NAMESPACE_END
+
+#ifdef U_STATIC_IMPLEMENTATION
+/*
+This should never be called. It is defined here to make sure that the
+virtual vector deleting destructor is defined within unistr.cpp.
+The vector deleting destructor is already a part of UObject,
+but defining it here makes sure that it is included with this object file.
+This makes sure that static library dependencies are kept to a minimum.
+*/
+static void uprv_UnicodeStringDummy(void) {
+    U_NAMESPACE_USE
+    delete [] (new UnicodeString[2]);
+}
+#endif
+
