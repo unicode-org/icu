@@ -765,10 +765,13 @@ U_CFUNC void ucol_createElements(UColTokenParser *src, tempUCATable *t, UColTokL
     el.prefix = el.prefixChars;
     el.cPoints = el.uchars;
     if(tok->prefix != 0) { // adjust the source if there is a prefix
-      el.prefixSize = (tok->prefix>>24);
-      for(i = 0; i < tok->prefix>>24; i++) { // prefixes are going to be looked up backwards
+      // need to normalize to NFKC first
+      UChar buffNFKC[256];
+      el.prefixSize = unorm_normalize(src->source+(tok->prefix&0x00FFFFFF), tok->prefix>>24, UNORM_NFKC, 0, buffNFKC, 256, status);
+      for(i = 0; i < el.prefixSize; i++) { // prefixes are going to be looked up backwards
         // therefore, we will promptly reverse the prefix buffer...
-        el.prefix[i] = *(src->source+(tok->prefix& 0x00FFFFFF)+(tok->prefix>>24)-i-1);
+        //el.prefix[i] = *(src->source+(tok->prefix& 0x00FFFFFF)+(tok->prefix>>24)-i-1);
+        el.prefix[i] = *(buffNFKC+el.prefixSize-i-1);
       }
       //uprv_memcpy(el.prefix, (tok->prefix & 0x00FFFFFF) + src->source, el.prefixSize*sizeof(UChar));
 
