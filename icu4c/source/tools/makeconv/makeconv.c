@@ -32,6 +32,11 @@
 
 
 /*
+ * from ucnvstat.c - static prototypes of data-based converters
+ */
+extern const UConverterStaticData * ucnv_converterStaticData[UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES];
+
+/*
  * Global - verbosity
  */
 bool_t VERBOSE = FALSE;
@@ -90,6 +95,8 @@ static const char NLTC_SEPARATORS[9] = { '\r', '\n', '\t', ' ', '<', '>' ,'"' , 
 static const char PLAIN_SEPARATORS[9] = { '\r', '\n', '\t', ' ', '<', '>' ,'"' ,  '\0' };
 static const char CODEPOINT_SEPARATORS[8] = {  '\r', '>', '\\', 'x', '\n', ' ', '\t', '\0' };
 static const char UNICODE_CODEPOINT_SEPARATORS[6] = {  '<', '>', 'U', ' ', '\t', '\0' };
+
+
 
 /* Remove all characters followed by '#'
  */
@@ -159,7 +166,7 @@ char *
   return line + i;
 }
 
-extern bool_t haveCopyright=TRUE;
+bool_t haveCopyright=TRUE;
 
 static const UDataInfo dataInfo={
     sizeof(UDataInfo),
@@ -472,6 +479,46 @@ void readHeaderFromFile(UConverterStaticData* myConverter,
                   return;
                 }
 
+              /* Now that we know the type, copy any 'default' values
+                 from the table. */
+              {
+                const UConverterStaticData *prototype = ucnv_converterStaticData[myConverter->conversionType];
+                if ( prototype != NULL )
+                {
+                  if ( myConverter->name[0] == 0 )
+                  {
+                    uprv_strcpy((char*)myConverter->name, prototype->name);
+                  }
+
+                  if ( myConverter->codepage == 0 )
+                  {
+                    myConverter->codepage = prototype->codepage;
+                  }
+
+                  if ( myConverter->platform == 0 )
+                  {
+                    myConverter->platform = prototype->platform;
+                  }
+
+                  if ( myConverter->minBytesPerChar == 0 )
+                  {
+                    myConverter->minBytesPerChar = prototype->minBytesPerChar;
+                  }
+
+                  if ( myConverter->maxBytesPerChar == 0 )
+                  {
+                    myConverter->maxBytesPerChar = prototype->maxBytesPerChar;
+                  }
+
+                  if ( myConverter->subCharLen == 0 )
+                  {
+                    myConverter->subCharLen = prototype->subCharLen;
+                    uprv_memcpy(myConverter->subChar, prototype->subChar,
+                                prototype->subCharLen);
+                  }
+                }
+              }
+
             }
           
           /*get mb_cur_max amount*/
@@ -527,11 +574,15 @@ UConverterTable *loadSBCSTableFromFile(FileStream* convFile, UConverterStaticDat
   if (U_FAILURE(*err)) return;
   replacementChar = myConverter->subChar[0];
   myUConverterTable = (UConverterTable*)uprv_malloc(sizeof(UConverterSBCSTable));
+
   if (myUConverterTable == NULL) 
     {
       *err = U_MEMORY_ALLOCATION_ERROR;
-      return;
+      return NULL;
     }
+
+  
+  uprv_memset(myUConverterTable, 0, sizeof(UConverterSBCSTable));
 
   /*create a compact array with replacement chars as default chars*/
   ucmp8_init(&myUConverterTable->sbcs.fromUnicode, 0);
@@ -540,7 +591,7 @@ UConverterTable *loadSBCSTableFromFile(FileStream* convFile, UConverterStaticDat
     {
       uprv_free(myUConverterTable);
       *err = U_MEMORY_ALLOCATION_ERROR;
-      return;
+      return NULL;
     } 
   
   myUConverterTable->sbcs.toUnicode = (UChar*)malloc(sizeof(UChar)*256);
@@ -596,14 +647,16 @@ UConverterTable *loadMBCSTableFromFile(FileStream* convFile, UConverterStaticDat
   if (myUConverterTable == NULL) 
     {
       *err = U_MEMORY_ALLOCATION_ERROR;
-      return;
+      return NULL;
     }
+
+  uprv_memset(myUConverterTable, 0, sizeof(UConverterMBCSTable));
   
   myUConverterTable->mbcs.starters = (bool_t*)(uprv_malloc(sizeof(bool_t)*256));
   if (myUConverterTable->mbcs.starters == NULL) 
     {
       *err = U_MEMORY_ALLOCATION_ERROR;
-      return;
+      return NULL;
     }
   
 
@@ -676,9 +729,10 @@ UConverterTable *loadEBCDIC_STATEFULTableFromFile(FileStream* convFile, UConvert
   if (myUConverterTable == NULL) 
     {
       *err = U_MEMORY_ALLOCATION_ERROR;
-      return;
+      return NULL;
     }
   
+  uprv_memset(myUConverterTable, 0, sizeof(UConverterMBCSTable));
   
   myFromUnicode = &myUConverterTable->dbcs.fromUnicode;
   ucmp16_init(myFromUnicode, (uint16_t)replacementChar);
@@ -738,6 +792,8 @@ UConverterTable * loadDBCSTableFromFile(FileStream* convFile, UConverterStaticDa
       *err = U_MEMORY_ALLOCATION_ERROR;
       return NULL;
     }
+
+  uprv_memset(myUConverterTable, 0, sizeof(UConverterDBCSTable));
 
   myFromUnicode = &(myUConverterTable->dbcs.fromUnicode);
   ucmp16_init(myFromUnicode, (int16_t)replacementChar);
@@ -834,6 +890,8 @@ UConverterSharedData* createConverterFromTableFile(const char* converterName, UE
       T_FileStream_close(convFile);
       return;
     }
+
+  uprv_memset(mySharedData, 0, sizeof(UConverterSharedData));
   
   mySharedData->structSize = sizeof(UConverterSharedData);
 
