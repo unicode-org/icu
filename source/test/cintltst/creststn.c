@@ -514,7 +514,7 @@ static void TestNewTypes() {
 					log_verbose("Expected: 0x%04X Got: 0x%04X \n",expected[i], got[i]);
 				}
 			}
-
+            uprv_free(expected);
 	}
     /* test for jitterbug#1435 */
     {
