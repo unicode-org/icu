@@ -439,6 +439,7 @@ enum UErrorCode {
     U_MISPLACED_COMPOUND_FILTER,
     U_MULTIPLE_COMPOUND_FILTERS,
     U_INVALID_RBT_SYNTAX,
+    U_INVALID_PROPERTY_PATTERN,
     U_PARSE_ERROR_LIMIT,                /**< end of Transliterator specific parse Errors */
 
     /* 
