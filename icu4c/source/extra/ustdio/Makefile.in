@@ -57,6 +57,8 @@ LIBS = $(LIBICU-UC) $(LIBICU-I18N) @LIBS@
 OBJECTS = locbund.o loccache.o ufile.o ufmt_cmn.o uprintf.o uprntf_p.o	\
 uscanf.o uscanf_p.o uscanset.o ustdio.o
 
+HEADERS = ustdio.h
+
 DEPS = $(OBJECTS:.o=.d)
 
 ## List of phony targets
@@ -76,7 +78,19 @@ check: check-local
 
 all-local: $(TARGET)
 
-install-local: all-local
+install-local: all-local install-headers install-library
+
+install-library: all-local
+	$(mkinstalldirs) $(libdir)
+	$(INSTALL) $(TARGET) $(libdir)/$(TARGET)
+
+install-headers:
+	$(mkinstalldirs) $(includedir)
+	@list='$(HEADERS)'; for file in $$list; do \
+	 echo " $(INSTALL_DATA) $$file $(includedir)/$$file"; \
+	 $(INSTALL_DATA) $$file $(includedir)/$$file; \
+	done
+
 
 dist-local:
 
