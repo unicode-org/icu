@@ -133,18 +133,18 @@ public:
         const VisualRun *getVisualRun(le_int32 runIndex) const;
 
         /**
-         * ICU "poor man's RTTI", returns a UClassID for the actual class.
-         *
-         * @stable ICU 3.2
-         */
-        virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-        /**
          * ICU "poor man's RTTI", returns a UClassID for this class.
          *
          * @stable ICU 3.2
          */
         static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
+        /**
+         * ICU "poor man's RTTI", returns a UClassID for the actual class.
+         *
+         * @stable ICU 3.2
+         */
+        virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
 
     private:
 
@@ -296,18 +296,18 @@ public:
         le_int32 getLeading() const;
 
         /**
-         * ICU "poor man's RTTI", returns a UClassID for the actual class.
-         *
-         * @stable ICU 3.2
-         */
-        virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-        /**
          * ICU "poor man's RTTI", returns a UClassID for this class.
          *
          * @stable ICU 3.2
          */
         static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
+        /**
+         * ICU "poor man's RTTI", returns a UClassID for the actual class.
+         *
+         * @stable ICU 3.2
+         */
+        virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
 
     private:
 
@@ -514,18 +514,18 @@ public:
     Line *nextLine(float width);
 
     /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @stable ICU 3.2
-     */
-    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
-
-    /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @stable ICU 3.2
      */
     static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @stable ICU 3.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
 
 private:
 
