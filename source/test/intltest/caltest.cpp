@@ -241,7 +241,7 @@ CalendarTest::TestGenericAPI()
     UErrorCode status = U_ZERO_ERROR;
     UDate d;
     UnicodeString str;
-    UBool eq,b4,af;
+    UBool eq = FALSE,b4 = FALSE,af = FALSE;
 
     UDate when = date(90, UCAL_APRIL, 15);
 
@@ -1827,7 +1827,6 @@ void CalendarTest::TestYWOY()
    cal.setFirstDayOfWeek(UCAL_MONDAY);
    cal.setMinimalDaysInFirstWeek(4);
    UDate t = 946713600000.;
-   UDate t2 = 978163200000.;
    cal.setTime(t, status);
    cal.set(UCAL_DAY_OF_WEEK, 4);
    cal.set(UCAL_DOW_LOCAL, 6);
