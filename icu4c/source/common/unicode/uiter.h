@@ -396,12 +396,33 @@ U_CAPI void U_EXPORT2
 uiter_setString(UCharIterator *iter, const UChar *s, int32_t length);
 
 /**
+ * Set up a UCharIterator to iterate over a UTF-16BE string
+ * (byte vector with a big-endian pair of bytes per UChar).
+ *
+ * Everything works just like with a normal UChar iterator (uiter_setString),
+ * except that UChars are assembled from byte pairs,
+ * and that the length argument here indicates an even number of bytes.
+ *
+ * @param iter UCharIterator structure to be set for iteration
+ * @param s UTF-16BE string to iterate over
+ * @param length Length of s as an even number of bytes, or -1 if NUL-terminated
+ *               (NUL means pair of 0 bytes at even index from s)
+ *
+ * @see UCharIterator
+ * @see uiter_setString
+ * @draft ICU 2.6
+ */
+U_CAPI void U_EXPORT2
+uiter_setUTF16BE(UCharIterator *iter, const char *s, int32_t length);
+
+/**
  * Set up a UCharIterator to iterate over a UTF-8 string.
  *
  * Sets the UCharIterator function pointers for iteration over the UTF-8 string s
  * with UTF-8 iteration boundaries 0 and length.
  * The implementation counts the UTF-16 index on the fly and
  * lazily evaluates the UTF-16 length of the text.
+ *
  * The start field is used as the UTF-8 offset, the limit field as the UTF-8 length.
  * When the reservedField is not 0, then it contains a supplementary code point
  * and the UTF-16 index is between the two corresponding surrogates.
