@@ -11,6 +11,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import com.ibm.icu.dev.test.util.BagFormatter;
+import com.ibm.icu.dev.test.util.UnicodeLabel;
 import com.ibm.icu.dev.test.util.UnicodeProperty;
 import com.ibm.icu.dev.test.util.ICUPropertyFactory;
 import com.ibm.icu.lang.UProperty;
@@ -19,6 +20,7 @@ import com.ibm.text.utility.Utility;
 
 public class CheckICU {
     static final BagFormatter bf = new BagFormatter();
+    static final BagFormatter bf2 = new BagFormatter();
     
     public static void main(String[] args) throws IOException {
         System.out.println("Start");
@@ -29,6 +31,20 @@ public class CheckICU {
     static UnicodeSet itemFailures;
     static ICUPropertyFactory icuFactory;
     static ToolUnicodePropertySource toolFactory;
+    
+    static class ReplaceLabel extends UnicodeLabel {
+        UnicodeProperty p;
+        ReplaceLabel(UnicodeProperty p) {
+            this.p = p;
+        }
+        public String getValue(int codepoint, boolean isShort) {
+            // TODO Auto-generated method stub
+            return p.getValue(codepoint, isShort).replace('_',' ');
+        }
+        public int getMaxWidth(boolean v) {
+            return p.getMaxWidth(v);           
+        }
+    }
 
     public static void test() throws IOException {
         checkUCD();
@@ -37,18 +53,23 @@ public class CheckICU {
         toolFactory = ToolUnicodePropertySource.make("4.0.0");
 
         String[] quickList = {
-            "Name",
+            "Block",
             // "Script", "Bidi_Mirroring_Glyph", "Case_Folding",
             //"Numeric_Value"
         };
         for (int i = 0; i < quickList.length; ++i) {
-            testProperty(quickList[i], -1);
+            //testProperty(quickList[i], -1);
+            bf2.setValueSource(new ReplaceLabel(toolFactory.getProperty(quickList[i])))
+            .setLabelSource(null)
+            .setNameSource(null)
+            .setShowCount(false);
+            bf2.showSetNames(bf2.CONSOLE, quickList[i], new UnicodeSet(0,0x10FFFF));
         }
         if (quickList.length > 0) return;
 
-        Collection availableTool = toolFactory.getAvailablePropertyAliases(new TreeSet());
+        Collection availableTool = toolFactory.getAvailableAliases(new TreeSet());
        
-        Collection availableICU = icuFactory.getAvailablePropertyAliases(new TreeSet());
+        Collection availableICU = icuFactory.getAvailableAliases(new TreeSet());
         System.out.println(showDifferences("Property Aliases", "ICU", availableICU, "Tool", availableTool));
         Collection common = new TreeSet(availableICU);
         common.retainAll(availableTool);
@@ -98,7 +119,7 @@ public class CheckICU {
 
     private static void testProperty(String prop, int typeFilter) {
         UnicodeProperty icuProp = icuFactory.getProperty(prop);
-        int icuType = icuProp.getPropertyType();
+        int icuType = icuProp.getType();
         
         if (typeFilter >= 0 && icuType != typeFilter) return;
         
@@ -106,18 +127,18 @@ public class CheckICU {
         System.out.println("Testing: " + prop);
         UnicodeProperty toolProp = toolFactory.getProperty(prop);
         
-        int toolType = toolProp.getPropertyType();
+        int toolType = toolProp.getType();
         if (icuType != toolType) {
             System.out.println("FAILURE Type: ICU: " + UnicodeProperty.getTypeName(icuType)
                 + "\tTool: " + UnicodeProperty.getTypeName(toolType));
         }
         
-        Collection icuAliases = icuProp.getPropertyAliases(new ArrayList());
-        Collection toolAliases = toolProp.getPropertyAliases(new ArrayList());
+        Collection icuAliases = icuProp.getAliases(new ArrayList());
+        Collection toolAliases = toolProp.getAliases(new ArrayList());
         System.out.println(showDifferences("Aliases", "ICU", icuAliases, "Tool", toolAliases));
         
-        icuAliases = icuProp.getAvailablePropertyValueAliases(new ArrayList());
-        toolAliases = toolProp.getAvailablePropertyValueAliases(new ArrayList());
+        icuAliases = icuProp.getAvailableValueAliases(new ArrayList());
+        toolAliases = toolProp.getAvailableValueAliases(new ArrayList());
         System.out.println(showDifferences("Value Aliases", "ICU", icuAliases, "Tool", toolAliases));
         
         // TODO do property value aliases
@@ -128,8 +149,8 @@ public class CheckICU {
                 System.out.println();
             }
             */
-            String icuValue = icuProp.getPropertyValue(i);
-            String toolValue = toolProp.getPropertyValue(i);
+            String icuValue = icuProp.getValue(i);
+            String toolValue = toolProp.getValue(i);
             if (!equals(icuValue, toolValue)) {
                 itemFailures.add(i);
                 if (firstDiffCP == null) {

@@ -9,29 +9,25 @@ import java.util.TimeZone;
 public final class Default implements UCD_Types {
     
     private static String ucdVersion = UCD.latestVersion;
-    public static UCD ucd;
-    public static Normalizer nfc;
-    public static Normalizer nfd;
-    public static Normalizer nfkc;
-    public static Normalizer nfkd;
-    public static Normalizer[] nf = new Normalizer[4];
-    
-    public static void ensureUCD() {
-    	if (ucd == null) setUCD();
-    }
+    private static UCD ucd;
+    private static Normalizer nfc;
+    private static Normalizer nfd;
+    private static Normalizer nfkc;
+    private static Normalizer nfkd;
+    private static Normalizer[] nf = new Normalizer[4];
     
     public static void setUCD(String version) {
-    	setUcdVersion(version);
+        ucdVersion = version;
     	setUCD();
     }
     
-    public static void setUCD() {
-        ucd = UCD.make(getUcdVersion());
-        nfd = nf[NFD] = new Normalizer(Normalizer.NFD, getUcdVersion());
-        nfc = nf[NFC] = new Normalizer(Normalizer.NFC, getUcdVersion());
-        nfkd = nf[NFKD] = new Normalizer(Normalizer.NFKD, getUcdVersion());
-        nfkc = nf[NFKC] = new Normalizer(Normalizer.NFKC, getUcdVersion());
-        System.out.println("Loaded UCD" + ucd.getVersion() + " " + (new Date(ucd.getDate())));
+    private static void setUCD() {
+        ucd = UCD.make(ucdVersion());
+        nfd = nf[NFD] = new Normalizer(Normalizer.NFD, ucdVersion());
+        nfc = nf[NFC] = new Normalizer(Normalizer.NFC, ucdVersion());
+        nfkd = nf[NFKD] = new Normalizer(Normalizer.NFKD, ucdVersion());
+        nfkc = nf[NFKC] = new Normalizer(Normalizer.NFKC, ucdVersion());
+        System.out.println("Loaded UCD" + ucd().getVersion() + " " + (new Date(ucd().getDate())));
     }
     
     static DateFormat myDateFormat = new SimpleDateFormat("yyyy-MM-dd', 'HH:mm:ss' GMT'");
@@ -43,12 +39,34 @@ public final class Default implements UCD_Types {
         return myDateFormat.format(new Date());
     }
 
-    public static void setUcdVersion(String ucdVersion) {
-        Default.ucdVersion = ucdVersion;
+    public static String ucdVersion() {
+        if (ucd() == null) setUCD();
+        return ucdVersion;
     }
 
-    public static String getUcdVersion() {
-        return ucdVersion;
+    public static UCD ucd() {
+        if (ucd() == null) setUCD();
+        return ucd;
+    }
+    public static Normalizer nfc() {
+        if (ucd() == null) setUCD();
+        return nfc;
+    }
+    public static Normalizer nfd() {
+        if (ucd() == null) setUCD();
+        return nfd;
+    }
+    public static Normalizer nfkc() {
+        if (ucd() == null) setUCD();
+        return nfkc;
+    }
+    public static Normalizer nfkd() {
+        if (ucd() == null) setUCD();
+        return nfkd;
+    }
+    public static Normalizer nf(int index) {
+        if (ucd() == null) setUCD();
+        return nf[index];
     }
 
 }

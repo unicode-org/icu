@@ -18,7 +18,7 @@ public final class TernaryStore {
     static DepthPrinter dp;
     
     static void test() throws java.io.IOException {
-        Default.setUCD();
+        
         
         PrintWriter pw = Utility.openPrintWriter("TestTernary.txt", Utility.LATIN1_WINDOWS);
         try {
@@ -35,7 +35,7 @@ public final class TernaryStore {
             int counter = 0;
             int i;
             for (i = 0; counter < tests.length && i <= 0x10FFFF; ++i) {
-                if (Default.ucd.hasComputableName(i)) continue;
+                if (Default.ucd().hasComputableName(i)) continue;
                 
                 String temp = UCharacter.getName(i);
                 if (temp != null) tests[counter++] = temp.trim();

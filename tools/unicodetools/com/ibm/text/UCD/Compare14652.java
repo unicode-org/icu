@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Compare14652.java,v $
-* $Date: 2003/04/25 01:39:15 $
-* $Revision: 1.2 $
+* $Date: 2004/02/07 01:01:16 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -150,7 +150,7 @@ tolower
             pw.println("**************************************************");
             pw.println(name);
             pw.println("**************************************************");
-            Utility.showSetDifferences(pw, name, contents, guess, guessContents, false, true, null, Default.ucd);
+            Utility.showSetDifferences(pw, name, contents, guess, guessContents, false, true, null, Default.ucd());
             //pw.println(props[i].contents);
         }
     }
@@ -160,7 +160,7 @@ tolower
     
     public static void main(String[] args) throws IOException {
         
-        String version = Default.ucd.getVersion();
+        String version = Default.ucd().getVersion();
         PrintWriter log = Utility.openPrintWriter("Diff14652_" + version + ".txt", Utility.UTF8_WINDOWS);
         try {
             log.write('\uFEFF');
@@ -171,8 +171,8 @@ tolower
                 UnicodeSet XID = getSet(DERIVED, Mod_ID_Start).addAll(getSet(DERIVED, Mod_ID_Continue_NO_Cf));
                 UnicodeSet alphanumSet = new UnicodeSet(alphaSet).addAll(digitSet).addAll(getSet(CATEGORY, Pc));
                 
-                Utility.showSetDifferences("ID", ID, "XID", XID, false, Default.ucd);
-                Utility.showSetDifferences("ID", ID, "Alphabetic+Digit+Pc", alphanumSet, false, Default.ucd);
+                Utility.showSetDifferences("ID", ID, "XID", XID, false, Default.ucd());
+                Utility.showSetDifferences("ID", ID, "Alphabetic+Digit+Pc", alphanumSet, false, Default.ucd());
             }
             
             BufferedReader br = Utility.openReadFile("C:\\DATA\\ISO14652_CTYPE.txt", Utility.LATIN1);
@@ -259,7 +259,7 @@ xdigit includes digit
                 .removeAll(alpha.contents)
                 .removeAll(cntrl.contents)
                 .removeAll(space.contents);
-            Utility.showSetNames(log, "TR Remainder: ", trRemainder, false, false, Default.ucd);
+            Utility.showSetNames(log, "TR Remainder: ", trRemainder, false, false, Default.ucd());
                 
             UnicodeSet propRemainder = new UnicodeSet(cnSet)
                 .complement()
@@ -271,7 +271,7 @@ xdigit includes digit
                 .removeAll(alpha.guessContents)
                 .removeAll(cntrl.guessContents)
                 .removeAll(space.guessContents);
-            Utility.showSetNames(log, "Prop Remainder: ", propRemainder, false, false, Default.ucd);
+            Utility.showSetNames(log, "Prop Remainder: ", propRemainder, false, false, Default.ucd());
                 
             /*
             checkDisjoint(new Prop[] {alpha, digit, punct, cntrl});
@@ -318,7 +318,7 @@ xdigit includes digit
             log.println();
             log.println("Fails test: " + name + " disjoint-with " + name2);
             UnicodeSet diff = new UnicodeSet(set).retainAll(set2);
-            Utility.showSetNames(log, "", diff, false, false, Default.ucd);
+            Utility.showSetNames(log, "", diff, false, false, Default.ucd());
         }
     }
     
@@ -332,7 +332,7 @@ xdigit includes digit
             log.println();
             log.println("Fails test:" + name + " includes " + name2);
             UnicodeSet diff = new UnicodeSet(set2).removeAll(set);
-            Utility.showSetNames(log, "", diff, false, false, Default.ucd);
+            Utility.showSetNames(log, "", diff, false, false, Default.ucd());
         }
     }
 

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedProperty.java,v $
-* $Date: 2004/02/06 18:30:22 $
-* $Revision: 1.23 $
+* $Date: 2004/02/07 01:01:16 $
+* $Revision: 1.24 $
 *
 *******************************************************************************
 */
@@ -32,7 +32,7 @@ public final class DerivedProperty implements UCD_Types {
     // ADD CONSTANT to UCD_TYPES
     
     static public UCDProperty make(int derivedPropertyID) {
-        return make(derivedPropertyID, Default.ucd);
+        return make(derivedPropertyID, Default.ucd());
     }
     
     static public UCDProperty make(int derivedPropertyID, UCD ucd) {
@@ -961,7 +961,6 @@ of characters, the first of which has a non-zero combining class.
     }
     
     public static void test() {
-        Default.setUCD();
         /*
         DerivedProperty dprop = new DerivedProperty(Default.ucd);
         for (int j = 0; j < LIMIT; ++j) {
@@ -973,9 +972,9 @@ of characters, the first of which has a non-zero combining class.
         
         for (int cp = 0xA0; cp < 0xFF; ++cp) {
             System.out.println();
-            System.out.println(Default.ucd.getCodeAndName(cp));
+            System.out.println(Default.ucd().getCodeAndName(cp));
             for (int j = 0; j < DERIVED_PROPERTY_LIMIT; ++j) {
-                String prop = make(j, Default.ucd).getValue(cp);
+                String prop = make(j, Default.ucd()).getValue(cp);
                 if (prop.length() != 0) System.out.println("\t" + prop);
             }
         }

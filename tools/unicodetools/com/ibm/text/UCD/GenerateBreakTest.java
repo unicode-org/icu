@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateBreakTest.java,v $
-* $Date: 2004/02/06 18:30:22 $
-* $Revision: 1.8 $
+* $Date: 2004/02/07 01:01:16 $
+* $Revision: 1.9 $
 *
 *******************************************************************************
 */
@@ -36,10 +36,10 @@ abstract public class GenerateBreakTest implements UCD_Types {
     public static void main(String[] args) throws IOException {
         System.out.println("Remember to add length marks (half & full) and other punctuation for sentence, with FF61");
         //Default.setUCD();
-        new GenerateGraphemeBreakTest(Default.ucd).run();
-        new GenerateWordBreakTest(Default.ucd).run();
-        new GenerateLineBreakTest(Default.ucd).run();
-        new GenerateSentenceBreakTest(Default.ucd).run();
+        new GenerateGraphemeBreakTest(Default.ucd()).run();
+        new GenerateWordBreakTest(Default.ucd()).run();
+        new GenerateLineBreakTest(Default.ucd()).run();
+        new GenerateSentenceBreakTest(Default.ucd()).run();
     }
     
     GenerateBreakTest(UCD ucd) {

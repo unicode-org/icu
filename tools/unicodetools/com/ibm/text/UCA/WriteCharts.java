@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCharts.java,v $
-* $Date: 2004/02/06 18:32:03 $
-* $Revision: 1.18 $
+* $Date: 2004/02/07 01:01:12 $
+* $Revision: 1.19 $
 *
 *******************************************************************************
 */
@@ -32,11 +32,11 @@ public class WriteCharts implements UCD_Types {
     static boolean HACK_KANA = false;
 
     static public void special() {
-    	Default.setUCD();
+    	
     	for (int i = 0xE000; i < 0x10000; ++i) {
-    		if (!Default.ucd.isRepresented(i)) continue;
-    		if (!Default.nfkc.isNormalized(i)) continue;
-    		System.out.println(Default.ucd.getCodeAndName(i));
+    		if (!Default.ucd().isRepresented(i)) continue;
+    		if (!Default.nfkc().isNormalized(i)) continue;
+    		System.out.println(Default.ucd().getCodeAndName(i));
     	}
     }
 
@@ -109,7 +109,7 @@ public class WriteCharts implements UCD_Types {
 
             int cp = UTF16.charAt(s,0);
 
-            byte script = Default.ucd.getScript(cp);
+            byte script = Default.ucd().getScript(cp);
 
             // get first non-zero primary
             int currentPrimary = getFirstPrimary(sortKey);
@@ -140,7 +140,7 @@ public class WriteCharts implements UCD_Types {
                 ++scriptCount[script+3];
                 if (scriptCount[script+3] > 1) {
                     System.out.println("\t\tFAIL: " + scriptCount[script+3] + ", " +
-                        getChunkName(script, LONG) + ", " + Default.ucd.getCodeAndName(s));
+                        getChunkName(script, LONG) + ", " + Default.ucd().getCodeAndName(s));
                 }
                 output = openFile(scriptCount[script+3], folder, script);
             }
@@ -190,19 +190,19 @@ public class WriteCharts implements UCD_Types {
         String s,
         byte script,
         String classname) {
-        String name = Default.ucd.getName(s);
+        String name = Default.ucd().getName(s);
         
         
         if (s.equals("\u1eaf")) {
         	System.out.println("debug");
         }
         
-        String comp = Default.nfc.normalize(s);
-        int cat = Default.ucd.getCategory(UTF16.charAt(comp,0));
+        String comp = Default.nfc().normalize(s);
+        int cat = Default.ucd().getCategory(UTF16.charAt(comp,0));
         if (cat == Mn || cat == Mc || cat == Me) {
             comp = '\u25CC' + comp;
             if (s.equals("\u0300")) {
-                System.out.println(Default.ucd.getCodeAndName(comp));
+                System.out.println(Default.ucd().getCodeAndName(comp));
             } 
         } 
         // TODO: merge with showCell
@@ -226,27 +226,26 @@ public class WriteCharts implements UCD_Types {
     }
 
     static public void normalizationChart() throws IOException {
-        Default.setUCD();
     	HACK_KANA = false;
 
         Set set = new TreeSet();
 
         for (int i = 0; i <= 0x10FFFF; ++i) {
-        	if (!Default.ucd.isRepresented(i)) {
+        	if (!Default.ucd().isRepresented(i)) {
         		if (i < 0xAC00) continue;
         		if (i > 0xD7A3) continue;
         		if (i > 0xACFF && i < 0xD700) continue;
         	}
-        	byte cat = Default.ucd.getCategory(i);
+        	byte cat = Default.ucd().getCategory(i);
         	if (cat == Cs || cat == Co) continue;
 
-        	if (Default.nfkd.isNormalized(i)) continue;
-        	String decomp = Default.nfkd.normalize(i);
+        	if (Default.nfkd().isNormalized(i)) continue;
+        	String decomp = Default.nfkd().normalize(i);
 
         	byte script = getBestScript(decomp);
 
             set.add(new Pair(new Integer(script == COMMON_SCRIPT ? cat + CAT_OFFSET : script),
-            		new Pair(Default.ucd.getCase(decomp, FULL, FOLD),
+            		new Pair(Default.ucd().getCase(decomp, FULL, FOLD),
             				 new Integer(i))));
         }
 
@@ -302,10 +301,10 @@ public class WriteCharts implements UCD_Types {
 
             String prefix;
             String code = UTF16.valueOf(cp);
-            String c = Default.nfc.normalize(cp);
-            String d = Default.nfd.normalize(cp);
-            String kc = Default.nfkc.normalize(cp);
-            String kd = Default.nfkd.normalize(cp);
+            String c = Default.nfc().normalize(cp);
+            String d = Default.nfd().normalize(cp);
+            String kc = Default.nfkc().normalize(cp);
+            String kd = Default.nfkd().normalize(cp);
 
             showCell(output, code, "<td class='z' ", "", false);
 
@@ -330,23 +329,22 @@ public class WriteCharts implements UCD_Types {
     }
 
     static public void caseChart() throws IOException {
-        Default.setUCD();
     	HACK_KANA = false;
 
         Set set = new TreeSet();
 
         for (int i = 0; i <= 0x10FFFF; ++i) {
-        	if (!Default.ucd.isRepresented(i)) continue;
-        	byte cat = Default.ucd.getCategory(i);
+        	if (!Default.ucd().isRepresented(i)) continue;
+        	byte cat = Default.ucd().getCategory(i);
         	if (cat == Cs || cat == Co) continue;
 
             String code = UTF16.valueOf(i);
-            String lower = Default.ucd.getCase(i, FULL, LOWER);
-            String title = Default.ucd.getCase(i, FULL, TITLE);
-            String upper = Default.ucd.getCase(i, FULL, UPPER);
-            String fold = Default.ucd.getCase(i, FULL, FOLD);
+            String lower = Default.ucd().getCase(i, FULL, LOWER);
+            String title = Default.ucd().getCase(i, FULL, TITLE);
+            String upper = Default.ucd().getCase(i, FULL, UPPER);
+            String fold = Default.ucd().getCase(i, FULL, FOLD);
 
-        	String decomp = Default.nfkd.normalize(i);
+        	String decomp = Default.nfkd().normalize(i);
         	int script = 0;
             if (lower.equals(code) && upper.equals(code) && fold.equals(code) && title.equals(code)) {
             	if (!containsCase(decomp)) continue;
@@ -356,7 +354,7 @@ public class WriteCharts implements UCD_Types {
         	if (script == 0) script = getBestScript(decomp);
 
             set.add(new Pair(new Integer(script == COMMON_SCRIPT ? cat + CAT_OFFSET : script),
-            		new Pair(Default.ucd.getCase(decomp, FULL, FOLD),
+            		new Pair(Default.ucd().getCase(decomp, FULL, FOLD),
             				 new Integer(i))));
         }
 
@@ -425,10 +423,10 @@ public class WriteCharts implements UCD_Types {
 
             String prefix;
             String code = UTF16.valueOf(cp);
-            String lower = Default.ucd.getCase(cp, FULL, LOWER);
-            String title = Default.ucd.getCase(cp, FULL, TITLE);
-            String upper = Default.ucd.getCase(cp, FULL, UPPER);
-            String fold = Default.ucd.getCase(cp, FULL, FOLD);
+            String lower = Default.ucd().getCase(cp, FULL, LOWER);
+            String title = Default.ucd().getCase(cp, FULL, TITLE);
+            String upper = Default.ucd().getCase(cp, FULL, UPPER);
+            String fold = Default.ucd().getCase(cp, FULL, FOLD);
 
             showCell(output, code, "<td class='z' ", "", false);
 
@@ -453,19 +451,18 @@ public class WriteCharts implements UCD_Types {
     }
     
 	static public void scriptChart() throws IOException {
-			Default.setUCD();
 			HACK_KANA = false;
 
 			Set set = new TreeSet();
 
 			for (int i = 0; i <= 0x10FFFF; ++i) {
-				if (!Default.ucd.isRepresented(i)) continue;
-				byte cat = Default.ucd.getCategory(i);
+				if (!Default.ucd().isRepresented(i)) continue;
+				byte cat = Default.ucd().getCategory(i);
 				if (cat == Cs || cat == Co || cat == Cn) continue;
 
 				String code = UTF16.valueOf(i);
 
-				String decomp = Default.nfkd.normalize(i);
+				String decomp = Default.nfkd().normalize(i);
 				int script = getBestScript(decomp);
 
 				set.add(new Pair(new Integer(script == COMMON_SCRIPT ? cat + CAT_OFFSET : script),
@@ -548,7 +545,6 @@ public class WriteCharts implements UCD_Types {
     }
 
     static public void indexChart() throws IOException {
-        Default.setUCD();
     	HACK_KANA = false;
 
         Map map = new TreeMap();
@@ -559,21 +555,21 @@ public class WriteCharts implements UCD_Types {
         System.out.println("Stop-list: " + stoplist);
 
         for (int i = 0; i < LIMIT_SCRIPT; ++i) {
-        	stoplist.add(Default.ucd.getScriptID_fromIndex((byte)i));
+        	stoplist.add(Default.ucd().getScriptID_fromIndex((byte)i));
         }
         System.out.println("Stop-list: " + stoplist);
 
         for (int i = 0; i <= 0x10FFFF; ++i) {
-			if (!Default.ucd.isRepresented(i)) continue;
-			if (!Default.ucd.isAssigned(i)) continue;
+			if (!Default.ucd().isRepresented(i)) continue;
+			if (!Default.ucd().isAssigned(i)) continue;
         	if (0xAC00 <= i && i <= 0xD7A3) continue;
-        	if (Default.ucd.hasComputableName(i)) continue;
+        	if (Default.ucd().hasComputableName(i)) continue;
 
-        	String s = Default.ucd.getName(i);
+        	String s = Default.ucd().getName(i);
         	if (s == null) continue;
 
         	if (s.startsWith("<")) {
-        		System.out.println("Weird character at " + Default.ucd.getCodeAndName(i));
+        		System.out.println("Weird character at " + Default.ucd().getCodeAndName(i));
         	}
         	String ch = UTF16.valueOf(i);
         	int last = -1;
@@ -664,13 +660,13 @@ public class WriteCharts implements UCD_Types {
         if (s.equals("\u0300")) {
             System.out.println();
         }
-        String name = Default.ucd.getName(s);
-        String comp = Default.nfc.normalize(s);
-        int cat = Default.ucd.getCategory(UTF16.charAt(comp,0));
+        String name = Default.ucd().getName(s);
+        String comp = Default.nfc().normalize(s);
+        int cat = Default.ucd().getCategory(UTF16.charAt(comp,0));
         if (cat == Mn || cat == Mc || cat == Me) {
             comp = '\u25CC' + comp;
             if (s.equals("\u0300")) {
-                System.out.println(Default.ucd.getCodeAndName(comp));
+                System.out.println(Default.ucd().getCodeAndName(comp));
             } 
         } 
 
@@ -691,7 +687,7 @@ public class WriteCharts implements UCD_Types {
     	byte result = COMMON_SCRIPT;
     	for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
     		cp = UTF16.charAt(s, i);
-    		result = Default.ucd.getScript(cp);
+    		result = Default.ucd().getScript(cp);
     		if (result != COMMON_SCRIPT && result != INHERITED_SCRIPT) return result;
     	}
     	return COMMON_SCRIPT;
@@ -780,9 +776,9 @@ public class WriteCharts implements UCD_Types {
         	case CJK_AB: return "CJK-Extensions";
         	case UNSUPPORTED: return "Unsupported";
         	default:
-    		if (script >= CAT_OFFSET) return Default.ucd.getCategoryID_fromIndex((byte)(script - CAT_OFFSET), length);
+    		if (script >= CAT_OFFSET) return Default.ucd().getCategoryID_fromIndex((byte)(script - CAT_OFFSET), length);
         	else if (script == HIRAGANA_SCRIPT && HACK_KANA) return length == SHORT ? "Kata-Hira" : "Katakana-Hiragana";
-        	else return Default.ucd.getCase(Default.ucd.getScriptID_fromIndex((byte)script, length), FULL, TITLE);
+        	else return Default.ucd().getCase(Default.ucd().getScriptID_fromIndex((byte)script, length), FULL, TITLE);
     	}
     }
 
@@ -816,8 +812,8 @@ public class WriteCharts implements UCD_Types {
         	gotOne = true;
         }
         indexFile.println("</p><hr width='50%'><p style='font-size: 70%'>");
-        indexFile.println("UCD: " + Default.ucd.getVersion() + extra);
-        indexFile.println("<br>" + df.format(new Date()) + " <a href='http://www.macchiato.com/' target='_top'>MED</a>");
+        indexFile.println("UCD: " + Default.ucd().getVersion() + extra);
+        indexFile.println("<br>" + Default.getDate() + " <a href='http://www.macchiato.com/' target='_top'>MED</a>");
         indexFile.println("</p></body></html>");
         indexFile.close();
     }
@@ -827,10 +823,10 @@ public class WriteCharts implements UCD_Types {
     	for (int i = 0; i < s.length(); i += UTF16.getCharCount(cp)) {
     		cp = UTF16.charAt(s, i);
 			// contains Lu, Lo, Lt, or Lowercase or Uppercase
-			byte cat = Default.ucd.getCategory(cp);
+			byte cat = Default.ucd().getCategory(cp);
 			if (cat == Lu || cat == Ll || cat == Lt) return true;
-			if (Default.ucd.getBinaryProperty(cp, Other_Lowercase)) return true;
-			if (Default.ucd.getBinaryProperty(cp, Other_Uppercase)) return true;
+			if (Default.ucd().getBinaryProperty(cp, Other_Lowercase)) return true;
+			if (Default.ucd().getBinaryProperty(cp, Other_Uppercase)) return true;
 		}
 		return false;
 	}
@@ -839,7 +835,6 @@ public class WriteCharts implements UCD_Types {
         "any-addCircle", "([[:Mn:][:Me:]]) > \u25CC $1", Transliterator.FORWARD);
 
     public static void writeCompositionChart() throws IOException {
-        Default.setUCD();
         UCA uca = new UCA(null,"");
 
         Set letters = new TreeSet();
@@ -873,7 +868,7 @@ public class WriteCharts implements UCD_Types {
                 
                 String scriptName = "";
                 try {
-                    scriptName = Default.ucd.getScriptID_fromIndex(script);
+                    scriptName = Default.ucd().getScriptID_fromIndex(script);
                     Utility.fixDot();
                     System.out.println(scriptName);
                 } catch (IllegalArgumentException e) {
@@ -889,15 +884,15 @@ public class WriteCharts implements UCD_Types {
                 printed.clear();
 
                 for (int cp = 0; cp < 0x10FFFF; ++cp) {
-                    byte type = Default.ucd.getCategory(cp);
-                    if (type == Default.ucd.UNASSIGNED || type == Default.ucd.PRIVATE_USE) continue; // skip chaff
+                    byte type = Default.ucd().getCategory(cp);
+                    if (type == Default.ucd().UNASSIGNED || type == Default.ucd().PRIVATE_USE) continue; // skip chaff
                     Utility.dot(cp);
                     
-                    byte newScript = Default.ucd.getScript(cp);
+                    byte newScript = Default.ucd().getScript(cp);
                     if (newScript != script) continue;
 
                     String source = UTF16.valueOf(cp);
-                    String decomp = Default.nfd.normalize(source);
+                    String decomp = Default.nfd().normalize(source);
                     if (decomp.equals(source)) continue;
 
                     // pick up all decompositions
@@ -931,7 +926,7 @@ public class WriteCharts implements UCD_Types {
                     Iterator it2 = letters.iterator();
                     while (it2.hasNext()) {
                         String let = (String)it2.next();
-                        out.println("<tr>" + showCell(Default.nfc.normalize(let), "class='h'"));
+                        out.println("<tr>" + showCell(Default.nfc().normalize(let), "class='h'"));
                         Iterator it3 = marks.iterator();
                         while (it3.hasNext()) {
                             String mark = (String)it3.next();
@@ -942,7 +937,7 @@ public class WriteCharts implements UCD_Types {
                             }
                             String comp;
                             try {
-                                comp = Default.nfc.normalize(merge);
+                                comp = Default.nfc().normalize(merge);
                             } catch (Exception e) {
                                 System.out.println("Failed when trying to compose <" + Utility.hex(e) + ">");
                                 continue;
@@ -1027,14 +1022,13 @@ public class WriteCharts implements UCD_Types {
         }
         return "<td "
             + classType + (classType.length() != 0 ? " " : "")
-            + "title='" + Utility.hex(comp) + " " + Default.ucd.getName(comp) + "'>" + addCircle.transliterate(comp)
+            + "title='" + Utility.hex(comp) + " " + Default.ucd().getName(comp) + "'>" + addCircle.transliterate(comp)
             + "<br><tt>" + Utility.hex(comp) + "</tt></td>";
     }
 
     
 
     public static void writeAllocation() throws IOException {
-    	Default.setUCD();
         String[] names = new String[300]; // HACK, 300 is plenty for now. Fix if it ever gets larger
         int[] starts = new int[names.length];
         int[] ends = new int[names.length];
@@ -1043,7 +1037,7 @@ public class WriteCharts implements UCD_Types {
         
         int counter = 0;
         int blockId = 0;
-        while (Default.ucd.getBlockData(blockId++, blockData)) {
+        while (Default.ucd().getBlockData(blockId++, blockData)) {
             names[counter] = blockData.name;
             starts[counter] = blockData.start;
             ends[counter] = blockData.end;
@@ -1094,7 +1088,7 @@ public class WriteCharts implements UCD_Types {
                     int total = ends[i] - starts[i] + 1;
                     int alloc = 0;
                     for (int j = starts[i]; j <= ends[i]; ++j) {
-                        if (Default.ucd.isAllocated(j)) ++alloc;
+                        if (Default.ucd().isAllocated(j)) ++alloc;
                     }
                     //System.out.println(names[i] + "\t" + alloc + "\t" + total);
                     String color = names[i].indexOf("Surrogates") >= 0 ? "#FF0000"

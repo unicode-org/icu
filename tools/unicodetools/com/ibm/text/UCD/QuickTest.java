@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/QuickTest.java,v $
-* $Date: 2003/02/25 23:38:22 $
-* $Revision: 1.2 $
+* $Date: 2004/02/07 01:01:14 $
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -22,7 +22,7 @@ import com.ibm.text.utility.*;
 
 public class QuickTest implements UCD_Types {
     static final void test() {
-        Default.setUCD();
+        
         UnicodeSet format = new UnicodeSet("[:Cf:]");
 /*
  [4]     NameStartChar := ":" | [A-Z] | "_" | [a-z] |
@@ -64,10 +64,10 @@ public class QuickTest implements UCD_Types {
         UnicodeSet noncharacter = new UnicodeSet();
         
         for (int i = 0; i <= 0x10FFFF; ++i) {
-            if (!Default.ucd.isAllocated(i)) continue;
-            if (!Default.nfkc.isNormalized(i)) notNFKC.add(i);
-            if (Default.ucd.isNoncharacter(i)) noncharacter.add(i);
-            if (Default.ucd.getCategory(i) == PRIVATE_USE) privateUse.add(i);
+            if (!Default.ucd().isAllocated(i)) continue;
+            if (!Default.nfkc().isNormalized(i)) notNFKC.add(i);
+            if (Default.ucd().isNoncharacter(i)) noncharacter.add(i);
+            if (Default.ucd().getCategory(i) == PRIVATE_USE) privateUse.add(i);
         }
         
 		showSet("notNFKC in NameChar", new UnicodeSet(notNFKC).retainAll(nameChar));
@@ -110,6 +110,6 @@ public class QuickTest implements UCD_Types {
         System.out.println("\tCount:" + set1.size());
         System.out.println("\tSet:" + set1.toPattern(true));
         System.out.println("\tDetails:");
-        Utility.showSetNames("", set1, false, Default.ucd);
+        Utility.showSetNames("", set1, false, Default.ucd());
     }
 }

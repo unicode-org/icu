@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/TestBagFormatter.java,v $
- * $Date: 2004/01/27 23:13:13 $
- * $Revision: 1.6 $
+ * $Date: 2004/02/07 00:59:25 $
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -14,6 +14,8 @@ package com.ibm.icu.dev.test.util;
 
 // TODO integrate this into the test framework
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.TreeSet;
 import java.util.Iterator;
 import java.io.IOException;
@@ -28,26 +30,30 @@ import com.ibm.icu.text.Transliterator;
 import com.ibm.icu.text.UnicodeSet;
 
 public class TestBagFormatter {
+    
     static final void generatePropertyAliases(boolean showValues) {
-        UnicodePropertySource ups = new UnicodePropertySource.ICU().setNameChoice(UProperty.NameChoice.SHORT);
         Collator order = Collator.getInstance(Locale.ENGLISH);
+        UnicodeProperty.Factory ups = ICUPropertyFactory.make();
         TreeSet props = new TreeSet(order);
         TreeSet values = new TreeSet(order);
-        ups.getAvailablePropertyAliases(props);
+        Collection aliases = new ArrayList();
+        BagFormatter bf = new BagFormatter();
+        ups.getAvailableAliases(props);
         Iterator it = props.iterator();
         while (it.hasNext()) {
             String propAlias = (String)it.next();
-            ups.setPropertyAlias(propAlias);
+            UnicodeProperty up = ups.getProperty(propAlias);
             System.out.println();
-            System.out.println(propAlias + ";\t" + ups.getPropertyAlias(UProperty.NameChoice.LONG));
+            aliases.clear();
+            System.out.println(bf.join(up.getAliases(aliases)));
             if (!showValues) continue;
             values.clear();
-            ups.getAvailablePropertyValueAliases(values);
+            up.getAvailableValueAliases(values);
             Iterator it2 = values.iterator();
             while (it2.hasNext()) {
                 String valueAlias = (String)it2.next();
-                System.out.println("\t" + valueAlias
-                    + ";\t" + ups.getPropertyValueAlias(valueAlias, UProperty.NameChoice.LONG));
+                aliases.clear();
+                System.out.println("\t" + bf.join(up.getValueAliases(valueAlias, aliases)));
             }
         }
     }
@@ -65,6 +71,10 @@ public class TestBagFormatter {
             bf.showSetNames(BagFormatter.CONSOLE,"[:numeric_value=2:]", us);
             us = new UnicodeSet("[:numeric_type=numeric:]");   
             bf.showSetNames(BagFormatter.CONSOLE,"[:numeric_type=numeric:]", us);
+            
+            UnicodeProperty.Factory ups = ICUPropertyFactory.make();
+            us = ups.getSet("gc=mn", null, null); 
+            bf.showSetNames(bf.CONSOLE,"gc=mn", us);
             
             if (true) return;
             //showNames("Name", ".*MARK.*");

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateHanTransliterator.java,v $
-* $Date: 2004/02/06 18:30:21 $
-* $Revision: 1.13 $
+* $Date: 2004/02/07 01:01:15 $
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -49,7 +49,7 @@ public final class GenerateHanTransliterator implements UCD_Types {
         log.println("<title>Unihan check</title>");
         log.println("</head>");
 
-        BufferedReader in = Utility.openUnicodeFile("Unihan", Default.getUcdVersion(), true, Utility.UTF8); 
+        BufferedReader in = Utility.openUnicodeFile("Unihan", Default.ucdVersion(), true, Utility.UTF8); 
         
         Map properties = new TreeMap();
         
@@ -252,7 +252,7 @@ public final class GenerateHanTransliterator implements UCD_Types {
     
     public static void main(int typeIn) {
     	type = typeIn;
-    	Default.setUCD();
+    	
         try {
             System.out.println("Starting");
             System.out.println("Quoting: " + quoteNonLetters.toRules(true));
@@ -277,7 +277,7 @@ public final class GenerateHanTransliterator implements UCD_Types {
                     break;
                 default: throw new IllegalArgumentException("Unexpected option: must be 0..2");
             }
-            filename += Default.ucd.getVersion() + ".txt";
+            filename += Default.ucd().getVersion() + ".txt";
                 
             err = Utility.openPrintWriter("Transliterate_err.txt", Utility.UTF8_WINDOWS);
             log = Utility.openPrintWriter("Transliterate_log.txt", Utility.UTF8_WINDOWS);
@@ -325,7 +325,7 @@ public final class GenerateHanTransliterator implements UCD_Types {
                     String def = (String) unihanMap.get(keyChar);
                     if (!isValidPinyin(def)) {
                         String fixedDef = fixPinyin(def);
-                        err.println(Default.ucd.getCode(keyChar) + "\t" + keyChar + "\t" + fixedDef + "\t#" + def
+                        err.println(Default.ucd().getCode(keyChar) + "\t" + keyChar + "\t" + fixedDef + "\t#" + def
                             + (fixedDef.equals(def) ? " FAIL" : ""));
                         Utility.addToSet(badPinyin, def, keyChar);
                     }
@@ -334,7 +334,7 @@ public final class GenerateHanTransliterator implements UCD_Types {
                     String accentDef = digitPinyin_accentPinyin.transliterate(digitDef);
                     if (!accentDef.equals(def)) {
                         err.println("Failed Digit Pinyin: " 
-                            + Default.ucd.getCode(keyChar) + "\t" + keyChar + "\t" 
+                            + Default.ucd().getCode(keyChar) + "\t" + keyChar + "\t" 
                             + def + " => " + digitDef + " => " + accentDef);
                     }
                     
@@ -1157,11 +1157,11 @@ U+7878	·	nüè	#nuè
                     
                     for (int i = tabPos+1; i < tabPos2; ++i) {
                         int cp = line.charAt(i);
-                        int script = Default.ucd.getScript(cp);
+                        int script = Default.ucd().getScript(cp);
                         if (script != HAN_SCRIPT) {
                             if (script != HIRAGANA_SCRIPT && script != KATAKANA_SCRIPT 
                                 && cp != 0x30FB && cp != 0x30FC) {
-                                System.out.println("Huh: " + Default.ucd.getCodeAndName(cp));
+                                System.out.println("Huh: " + Default.ucd().getCodeAndName(cp));
                             }
                             continue;
                         }
@@ -1237,15 +1237,15 @@ U+7878	·	nüè	#nuè
         UnicodeSet sPinyin = new UnicodeSet();
         
         for (int i = 0; i < 0x10FFFF; ++i) {
-            if (!Default.ucd.isAllocated(i)) continue;
-            if (Default.ucd.getScript(i) != HAN_SCRIPT) continue;
+            if (!Default.ucd().isAllocated(i)) continue;
+            if (Default.ucd().getScript(i) != HAN_SCRIPT) continue;
             Utility.dot(i);
             
             String ch = UTF16.valueOf(i);
             
             String pinyin = (String) unihanMap.get(ch);
             if (pinyin == null) {
-                String ch2 = Default.nfkd.normalize(ch);
+                String ch2 = Default.nfkd().normalize(ch);
                 pinyin = (String) unihanMap.get(ch2);
                 if (pinyin != null) {
                     addCheck(ch, pinyin, "n/a");
@@ -1688,8 +1688,8 @@ Bad pinyin data: \u4E7F	?	LE
     }
     
     static void addCheck2(String word, String definition, String line) {
-        definition = Default.nfc.normalize(definition);
-        word = Default.nfc.normalize(word);
+        definition = Default.nfc().normalize(definition);
+        word = Default.nfc().normalize(word);
         if (DO_SIMPLE && UTF16.countCodePoint(word) > 1) return;
         
         if (pua.containsSome(word) ) {
@@ -1799,7 +1799,7 @@ Bad pinyin data: \u4E7F	?	LE
   
     static void readUnihanData(String key) throws java.io.IOException {
 
-        BufferedReader in = Utility.openUnicodeFile("Unihan", Default.getUcdVersion(), true, Utility.UTF8); 
+        BufferedReader in = Utility.openUnicodeFile("Unihan", Default.ucdVersion(), true, Utility.UTF8); 
 
         int count = 0;
         int lineCounter = 0;
@@ -1892,11 +1892,11 @@ Bad pinyin data: \u4E7F	?	LE
             definition = fixDefinition(definition, line);
         }
         definition = definition.trim();
-        definition = Default.ucd.getCase(definition, FULL, LOWER);
+        definition = Default.ucd().getCase(definition, FULL, LOWER);
 
         if (definition.length() == 0) {
             Utility.fixDot();
-            err.println("Zero value for " + Default.ucd.getCode(cp) + " on: " + hex.transliterate(line));
+            err.println("Zero value for " + Default.ucd().getCode(cp) + " on: " + hex.transliterate(line));
         } else {
             addCheck(UTF16.valueOf(cp), definition, line);
         }
@@ -1914,7 +1914,7 @@ Bad pinyin data: \u4E7F	?	LE
         definition = definition.trim();
         definition = Utility.replace(definition, "  ", " ");
         definition = Utility.replace(definition, " ", "-");
-        definition = Default.ucd.getCase(definition, FULL, LOWER);
+        definition = Default.ucd().getCase(definition, FULL, LOWER);
         return definition;
     }
     

@@ -35,36 +35,37 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
             add(new ToolUnicodeProperty(name));
         }
         add(new UnicodeProperty.SimpleProperty() {
-            {set("Name", "na", "<string>", UnicodeProperty.STRING);}
-            public String getPropertyValue(int codepoint) {
+            {set("Name", "na", UnicodeProperty.STRING, "<string>");}
+            public String getValue(int codepoint) {
                 if ((ODD_BALLS & ucd.getCategoryMask(codepoint)) != 0) return null;
                 return ucd.getName(codepoint);
             }
         });
         add(new UnicodeProperty.SimpleProperty() {
-            {set("Block", "blk", "<string>", UnicodeProperty.STRING);}
-            public String getPropertyValue(int codepoint) {
+            {set("Block", "blk", UnicodeProperty.ENUMERATED,
+                ucd.getBlockNames(null));}
+            public String getValue(int codepoint) {
                 //if ((ODD_BALLS & ucd.getCategoryMask(codepoint)) != 0) return null;
                 return ucd.getBlock(codepoint);
             }
         });
         add(new UnicodeProperty.SimpleProperty() {
-            {set("Bidi_Mirroring_Glyph", "bmg", "<string>", UnicodeProperty.STRING);}
-            public String getPropertyValue(int codepoint) {
+            {set("Bidi_Mirroring_Glyph", "bmg", UnicodeProperty.STRING, "<string>");}
+            public String getValue(int codepoint) {
                 //if ((ODD_BALLS & ucd.getCategoryMask(codepoint)) != 0) return null;
                 return ucd.getBidiMirror(codepoint);
             }
         });
         add(new UnicodeProperty.SimpleProperty() {
-            {set("Case_Folding", "cf", "<string>", UnicodeProperty.STRING);}
-            public String getPropertyValue(int codepoint) {
+            {set("Case_Folding", "cf", UnicodeProperty.STRING, "<string>");}
+            public String getValue(int codepoint) {
                 //if ((ODD_BALLS & ucd.getCategoryMask(codepoint)) != 0) return null;
                 return ucd.getCase(codepoint,UCD_Types.FULL,UCD_Types.FOLD);
             }
         });
         add(new UnicodeProperty.SimpleProperty() {
-            {set("Numeric_Value", "nv", "<number>", UnicodeProperty.NUMERIC);}
-            public String getPropertyValue(int codepoint) {
+            {set("Numeric_Value", "nv", UnicodeProperty.NUMERIC, "<number>");}
+            public String getValue(int codepoint) {
                 double num = ucd.getNumericValue(codepoint);
                 if (Double.isNaN(num)) return null;
                 return Double.toString(num);
@@ -108,8 +109,8 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
             setName(propertyAlias);
         }
 
-        public Collection getAvailablePropertyValueAliases(Collection result) {
-            int type = getPropertyType() & ~EXTENDED_BIT;
+        public Collection getAvailableValueAliases(Collection result) {
+            int type = getType() & ~EXTENDED_BIT;
             if (type == STRING) result.add("<string>");
             else if (type == NUMERIC) result.add("<string>");
             else if (type == BINARY) {
@@ -155,7 +156,7 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
             return result;
         }
 
-        public Collection getPropertyAliases(Collection result) {
+        public Collection getAliases(Collection result) {
              String longName = up.getName(UCD_Types.LONG);
              addUnique(Utility.getUnskeleton(longName, true), result);
              String shortName = up.getName(UCD_Types.SHORT);
@@ -163,12 +164,12 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
              return result;
         }
         
-        public Collection getPropertyValueAliases(String valueAlias, Collection result) {
+        public Collection getValueAliases(String valueAlias, Collection result) {
             // TODO Auto-generated method stub
             return result;
         }
 
-        public String getPropertyValue(int codepoint) {
+        public String getValue(int codepoint) {
             byte style = UCD_Types.LONG;
             String temp = null;
             boolean titlecase = false;
@@ -200,7 +201,7 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
                temp =  (ucd.getHangulSyllableTypeID_fromIndex(ucd.getHangulSyllableType(codepoint),style)); break;
             }
             if (temp != null) return Utility.getUnskeleton(temp,titlecase);
-            if (getPropertyType() == BINARY) {
+            if (getType() == BINARY) {
                 return up.hasValue(codepoint) ? "True" : "False";
             }
             return "<unknown>";

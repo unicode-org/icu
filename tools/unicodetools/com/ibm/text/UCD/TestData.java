@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/TestData.java,v $
-* $Date: 2004/02/06 18:30:20 $
-* $Revision: 1.13 $
+* $Date: 2004/02/07 01:01:14 $
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -35,10 +35,10 @@ public class TestData implements UCD_Types {
     static UnicodeProperty.Factory upf;
     
 	public static void main (String[] args) throws IOException {
-        Default.setUCD();
-        System.out.println(new Date());
+        
+        System.out.println("main: " + Default.getDate());
         upf = ICUPropertyFactory.make();
-        System.out.println(new Date());
+        System.out.println("after factory: " + Default.getDate());
  
         showPropDiff(
             "gc=mn", null,
@@ -56,39 +56,39 @@ public class TestData implements UCD_Types {
         showPropDiff(
             "General_Category=L", null,
             "Script!=Inherited|Common", 
-                UnifiedBinaryProperty.getSet("script=inherited", Default.ucd)
-                .addAll(UnifiedBinaryProperty.getSet("script=common", Default.ucd))
+                upf.getSet("script=inherited")
+                .addAll(UnifiedBinaryProperty.getSet("script=common", Default.ucd()))
                 .complement()
         );
        
         
-        UnicodeSet sterm = UnifiedProperty.getSet("STerm", Default.ucd);
-        UnicodeSet term = UnifiedProperty.getSet("Terminal_Punctuation", Default.ucd);
+        UnicodeSet sterm = UnifiedProperty.getSet("STerm", Default.ucd());
+        UnicodeSet term = UnifiedProperty.getSet("Terminal_Punctuation", Default.ucd());
         UnicodeSet po = new UnicodeSet("[:po:]");
         UnicodeSet empty = new UnicodeSet();
         
         Utility.showSetDifferences(
             "Sentence_Terminal", sterm, 
             "Empty", empty, 
-            true, Default.ucd);
+            true, Default.ucd());
 
         Utility.showSetDifferences(
             "Sentence_Terminal", sterm, 
             "Terminal_Punctuation", term, 
-            true, Default.ucd);
+            true, Default.ucd());
 
         Utility.showSetDifferences(
             "Terminal_Punctuation", term, 
             "Punctuation_Other", po, 
-            true, Default.ucd);
+            true, Default.ucd());
         
         if (true) return;
         
         UnicodeSet us = getSetForName("LATIN LETTER.*P");
-        Utility.showSetNames("",us,false,Default.ucd);
+        Utility.showSetNames("",us,false,Default.ucd());
         
         us = getSetForName(".*VARIA(TION|NT).*");
-        Utility.showSetNames("",us,false,Default.ucd);
+        Utility.showSetNames("",us,false,Default.ucd());
        
         if (true) return;
         
@@ -128,9 +128,9 @@ public class TestData implements UCD_Types {
 			UnicodeSetIterator it = new UnicodeSetIterator(base);
 			while (it.next()) {
 				String s = UTF16.valueOf(it.codepoint);
-				String norm = Default.nfd.normalize(s);
-				if (s.equals(norm) && Default.nfkd.isNormalized(norm)) {
-					log.println("# " + s + " <> XXX # " + Default.ucd.getName(it.codepoint));
+				String norm = Default.nfd().normalize(s);
+				if (s.equals(norm) && Default.nfkd().isNormalized(norm)) {
+					log.println("# " + s + " <> XXX # " + Default.ucd().getName(it.codepoint));
 				}
 			}
 		} finally {
@@ -158,10 +158,10 @@ public class TestData implements UCD_Types {
         Matcher m = p.matcher("");
         for (int i = 0; i < 0x10FFFF; ++i) {
             Utility.dot(i);
-            if (!Default.ucd.isAssigned(i)) continue;
-            byte cat = Default.ucd.getCategory(i);
+            if (!Default.ucd().isAssigned(i)) continue;
+            byte cat = Default.ucd().getCategory(i);
             if (cat == PRIVATE_USE) continue;
-            m.reset(Default.ucd.getName(i));
+            m.reset(Default.ucd().getName(i));
             if (m.matches()) {
                 result.add(i);
             }
@@ -174,7 +174,7 @@ public class TestData implements UCD_Types {
         System.out.println(x);
         UnicodeSet ss = new UnicodeSet(x);
         pw.println(x);
-        Utility.showSetNames(pw,"",ss,separateLines,false,Default.ucd);
+        Utility.showSetNames(pw,"",ss,separateLines,false,Default.ucd());
         pw.println("****************************");
     }
 	

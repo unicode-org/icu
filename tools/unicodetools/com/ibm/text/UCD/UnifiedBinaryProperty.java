@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UnifiedBinaryProperty.java,v $
-* $Date: 2004/02/06 18:30:19 $
-* $Revision: 1.15 $
+* $Date: 2004/02/07 01:01:13 $
+* $Revision: 1.16 $
 *
 *******************************************************************************
 */
@@ -24,7 +24,7 @@ public final class UnifiedBinaryProperty extends UCDProperty {
     // DerivedProperty dp;
     
     public static UCDProperty make(int propMask) {
-        return make(propMask, Default.ucd);
+        return make(propMask, Default.ucd());
     }
     
     public static UCDProperty make(int propMask, UCD ucd) {
@@ -323,7 +323,7 @@ public final class UnifiedBinaryProperty extends UCDProperty {
         if (shortOne.length() == 0) shortOne = "xx";
         String longOne = getValue(LONG);
         if (majorProp == (SCRIPT>>8)) {
-        	longOne = Default.ucd.getCase(longOne, FULL, TITLE);
+        	longOne = Default.ucd().getCase(longOne, FULL, TITLE);
        	} 
         if (longOne.length() == 0) longOne = "none";
 

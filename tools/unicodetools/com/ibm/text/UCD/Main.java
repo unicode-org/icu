@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2004/02/06 18:30:21 $
-* $Revision: 1.33 $
+* $Date: 2004/02/07 01:01:14 $
+* $Revision: 1.34 $
 *
 *******************************************************************************
 */
@@ -56,7 +56,7 @@ public final class Main implements UCD_Types {
     };
 
     public static void main (String[] args) throws Exception {
-        System.out.println("*** Start *** " + new Date());
+        System.out.println("*** Start *** " + Default.getDate());
 
         try {
             for (int i = 0; i < args.length; ++i) {
@@ -68,7 +68,7 @@ public final class Main implements UCD_Types {
     
                 Utility.fixDot();
                 System.out.println();
-                System.out.println("** Argument: " + args[i] + " ** " + new Date());
+                System.out.println("** Argument: " + args[i] + " ** " + Default.getDate());
                 
                 // Expand string arguments
                 
@@ -96,7 +96,6 @@ public final class Main implements UCD_Types {
                     Default.setUCD(args[++i]);
                     continue;
                 }
-                Default.ensureUCD();
                 
                 // Now handle other options
     
@@ -106,7 +105,7 @@ public final class Main implements UCD_Types {
                     VerifyUCD.CheckCaseFold();
                     VerifyUCD.checkAgainstUInfo();
     
-                } else if (arg.equalsIgnoreCase("build")) ConvertUCD.main(new String[]{Default.getUcdVersion()});
+                } else if (arg.equalsIgnoreCase("build")) ConvertUCD.main(new String[]{Default.ucdVersion()});
                 else if (arg.equalsIgnoreCase("statistics")) VerifyUCD.statistics();
                 else if (arg.equalsIgnoreCase("NFSkippable")) NFSkippable.main(null);
                 else if (arg.equalsIgnoreCase("diffIgnorable")) VerifyUCD.diffIgnorable();
@@ -342,7 +341,7 @@ public final class Main implements UCD_Types {
                 //
             }
         } finally {
-            System.out.println("*** Done *** " + new Date());
+            System.out.println("*** Done *** " + Default.getDate());
         }
     }
 

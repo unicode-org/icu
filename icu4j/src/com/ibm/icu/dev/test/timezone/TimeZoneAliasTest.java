@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/timezone/TimeZoneAliasTest.java,v $ 
- * $Date: 2004/01/27 23:13:13 $ 
- * $Revision: 1.2 $
+ * $Date: 2004/02/07 00:59:26 $ 
+ * $Revision: 1.3 $
  *
  *******************************************************************************
 */
@@ -27,7 +27,9 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 
 import com.ibm.icu.dev.test.*;
+import com.ibm.icu.dev.test.util.BagFormatter;
 import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.VersionInfo;
 
 
 /**
@@ -36,7 +38,7 @@ import com.ibm.icu.util.TimeZone;
  * 
  */
 public class TimeZoneAliasTest extends TestFmwk {
-
+    
     public static void main(String[] args) throws Exception {
         new TimeZoneAliasTest().run(args);
     }
@@ -47,6 +49,7 @@ public class TimeZoneAliasTest extends TestFmwk {
      * 2. all aliases must have the same offsets
       */
     public void TestAliases() {
+        if (skipIfBeforeICU(3,0)) return;
         Zone.Seconds seconds = new Zone.Seconds();
         for (Iterator it = Zone.getZoneSet().iterator(); it.hasNext(); ) {
             Zone zone = (Zone)it.next();
@@ -71,9 +74,9 @@ public class TimeZoneAliasTest extends TestFmwk {
                 if (!aliasesSet.equals(otherAliases)) {
                     errln(
                         "Aliases Unsymmetric: "
-                        + id + " => " + join(aliasesSet, ", ")
+                        + id + " => " + Zone.bf.join(aliasesSet)
                         + "; " 
-                        + otherId + " => " + join(otherAliases, ", "));
+                        + otherId + " => " + Zone.bf.join(otherAliases));
                 }
                 if (zone.findOffsetOrdering(otherZone, seconds) != 0) {
                     errln("Aliases differ: " + id + ", " + otherId
@@ -87,12 +90,13 @@ public class TimeZoneAliasTest extends TestFmwk {
      * We check to see that every timezone that is not an alias is actually different!
      */
     public void TestDifferences() {
+        if (skipIfBeforeICU(3,0)) return;
         Zone last = null;
         Zone.Seconds diffDate = new Zone.Seconds();        
         for (Iterator it = Zone.getZoneSet().iterator(); it.hasNext();) {
             Zone testZone = (Zone)it.next();
             if (last != null) {
-                String common = testZone + " vs " + last + ":\t";
+                String common = testZone + "\tvs " + last + ":\t";
                 int diff = testZone.findOffsetOrdering(last, diffDate);
                 if (diff != 0) {
                     logln("\t" + common + "difference at: " + diffDate 
@@ -110,17 +114,17 @@ public class TimeZoneAliasTest extends TestFmwk {
     /**
      * Utility for printing out zones to be translated.
      */
-    public static void printZones() {
+    public static void TestGenerateZones() {
         int count = 1;
         for (Iterator it = Zone.getUniqueZoneSet().iterator(); it.hasNext();) {
             Zone zone = (Zone)it.next();
             System.out.println(zone.toString(count++));
         }
     }
-
+    
     /** Utility; ought to be someplace common
      */
-    
+    /*
     static String join(Collection c, String separator) {
         StringBuffer result = new StringBuffer();
         boolean isFirst = true;
@@ -131,6 +135,7 @@ public class TimeZoneAliasTest extends TestFmwk {
         }
         return result.toString();
     }
+    */
         
     /**
      * The guts is in this subclass. It sucks in all the data from the zones,
@@ -144,6 +149,7 @@ public class TimeZoneAliasTest extends TestFmwk {
      */
     static class Zone implements Comparable {
         // class fields
+        static private final BagFormatter bf = new BagFormatter().setSeparator(", ");
         static private final DateFormat df = DateFormat.getDateInstance(DateFormat.LONG, Locale.US);
         static private final NumberFormat nf = NumberFormat.getInstance(Locale.US);
         static private final long HOUR = 1000*60*60;
@@ -365,13 +371,13 @@ public class TimeZoneAliasTest extends TestFmwk {
         public String getPurportedAliasesAsString() {
             Set s = getPurportedAliases();
             if (s.size() == 0) return "";
-            return " {" + join(s,", ") + "}";
+            return " " + bf.join(s);
         }
         
         public String getRealAliasesAsString() {
             Set s = (Set)idToRealAliases.get(id);
             if (s == null) return "";
-            return " {" + join(s,", ") + "}";
+            return " *" + bf.join(s);
         }
         
         public String getCity() {
@@ -384,6 +390,9 @@ public class TimeZoneAliasTest extends TestFmwk {
             return toString(-1);
         }
         
+        /**
+         * Where count > 0, returns string that is set up for translation
+         */
         public String toString(int count) {
             String city = getCity();
             String hours = formatHours(minRecentOffset)
@@ -393,9 +402,9 @@ public class TimeZoneAliasTest extends TestFmwk {
             if (count < 0) {
                 return id + getPurportedAliasesAsString() + " (" + hours + ")";
             } 
-            
+            // for getting template for translation
             return "\t{\t\"" + id + "\"\t// [" + count + "] " + hours 
-                + getPurportedAliasesAsString() + getRealAliasesAsString() + "\r\n"
+                + getRealAliasesAsString() + "\r\n"
                 + "\t\t// translate the following!!\r\n"
                 + (minRecentOffset != maxRecentOffset
                     ? "\t\t\"" + city + " Standard Time\"\r\n"

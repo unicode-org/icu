@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/Tokenizer.java,v $
- * $Date: 2003/12/20 03:06:53 $
- * $Revision: 1.3 $
+ * $Date: 2004/02/07 00:59:25 $
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -115,7 +115,7 @@ public class Tokenizer {
             case UNICODESET:
                 return s+"n=" + getUnicodeSet() + s;           
             default:
-                return s+"c=" + usf.getName(type) + s;
+                return s+"c=" + usf.getName(type,true) + s;
         }
     }
     

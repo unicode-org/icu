@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UnifiedProperty.java,v $
-* $Date: 2004/02/06 18:30:18 $
-* $Revision: 1.5 $
+* $Date: 2004/02/07 01:01:12 $
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -23,7 +23,7 @@ public final class UnifiedProperty extends UCDProperty {
     // DerivedProperty dp;
     
     public static UCDProperty make(int propMask) {
-        return make(propMask, Default.ucd);
+        return make(propMask, Default.ucd());
     }
     
     public static UCDProperty make(int propMask, UCD ucd) {

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/TestNameUniqueness.java,v $
-* $Date: 2003/02/26 00:35:09 $
-* $Revision: 1.1 $
+* $Date: 2004/02/07 01:01:13 $
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -24,7 +24,7 @@ import com.ibm.icu.text.UnicodeSet;
 public class TestNameUniqueness implements UCD_Types {
     
     public static void test() throws IOException {
-        Default.setUCD();
+        
         new TestNameUniqueness().checkNames();
     }
     
@@ -39,18 +39,18 @@ public class TestNameUniqueness implements UCD_Types {
             out.println();
             for (int cp = 0; cp < 0x10FFFF; ++cp) {
                 Utility.dot(cp);
-                if (!Default.ucd.isAllocated(cp)) continue;
-                if (Default.ucd.hasComputableName(cp)) continue;
-                int cat = Default.ucd.getCategory(cp);
+                if (!Default.ucd().isAllocated(cp)) continue;
+                if (Default.ucd().hasComputableName(cp)) continue;
+                int cat = Default.ucd().getCategory(cp);
                 if (cat == Cc) continue;
                 
-                String name = Default.ucd.getName(cp);
+                String name = Default.ucd().getName(cp);
                 String processedName = processName(cp, name);
                 Integer existing = (Integer) names.get(processedName);
                 if (existing != null) {
                     out.println("Collision between: "
-                        + Default.ucd.getCodeAndName(existing.intValue())
-                        + ", " + Default.ucd.getCodeAndName(cp));
+                        + Default.ucd().getCodeAndName(existing.intValue())
+                        + ", " + Default.ucd().getCodeAndName(cp));
                 } else {
                     names.put(processedName, new Integer(cp));
                 }
@@ -61,19 +61,19 @@ public class TestNameUniqueness implements UCD_Types {
             for (int i = 0; i < charCount.length; ++i) {
                 int count = charCount[i];
                 if (count == 0) continue;
-                String sampleName = Default.ucd.getCodeAndName(samples[i]);
+                String sampleName = Default.ucd().getCodeAndName(samples[i]);
                 out.println(count + "\t'" + ((char)i)
-                    + "'\t" + Default.ucd.getCodeAndName(samples[i])
-                    + "\t=>\t" + processName(samples[i], Default.ucd.getName(samples[i])));
+                    + "'\t" + Default.ucd().getCodeAndName(samples[i])
+                    + "\t=>\t" + processName(samples[i], Default.ucd().getName(samples[i])));
             }
             out.println();
             out.println("Name Samples");
             out.println();
             for (int i = 0; i < 256; ++i) {
-                int cat = Default.ucd.getCategory(i);
+                int cat = Default.ucd().getCategory(i);
                 if (cat == Cc) continue;
-                out.println(Default.ucd.getCodeAndName(i)
-                    + "\t=>\t" + processName(i, Default.ucd.getName(i)));
+                out.println(Default.ucd().getCodeAndName(i)
+                    + "\t=>\t" + processName(i, Default.ucd().getName(i)));
             }
         } finally {
             out.close();

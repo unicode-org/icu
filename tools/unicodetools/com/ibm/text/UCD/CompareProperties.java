@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/CompareProperties.java,v $
-* $Date: 2004/02/06 18:30:23 $
-* $Revision: 1.3 $
+* $Date: 2004/02/07 01:01:16 $
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -142,9 +142,9 @@ public class CompareProperties implements UCD_Types {
 	    int total = 0;
 	    for (int cp = 0; cp <= 0x10FFFF; ++cp) {
 	        Utility.dot(cp);
-	        int cat = Default.ucd.getCategory(cp);
+	        int cat = Default.ucd().getCategory(cp);
 	        // if (cat == UNASSIGNED || cat == PRIVATE_USE || cat == SURROGATE) continue;
-	        if (!Default.ucd.isAllocated(cp)) continue;
+	        if (!Default.ucd().isAllocated(cp)) continue;
 	    
 	        for (int i = 0; i < count; ++i) {
 	            UCDProperty up = props[i];
@@ -170,14 +170,13 @@ public class CompareProperties implements UCD_Types {
 	}
 
 	private void getProperties() {
-	    Default.setUCD();
 	    for (int i = 0; i < LIMIT_ENUM; ++i) { //   || iType == SCRIPT
 	        int iType = i & 0xFF00;
 	        if (iType == AGE || iType == JOINING_GROUP || iType == COMBINING_CLASS) continue;
 	        if (i == 0x0900) {
 	        	System.out.println("debug");
 	        }
-	        UCDProperty up = UnifiedBinaryProperty.make(i, Default.ucd);
+	        UCDProperty up = UnifiedBinaryProperty.make(i, Default.ucd());
 	        if (up == null) continue;
 			if (up.getValueType() < BINARY_PROP) {
 				System.out.println("\tSkipping " + up.getName() + "; value varies");
@@ -384,10 +383,9 @@ public class CompareProperties implements UCD_Types {
 
     public static void listDifferences() throws IOException {
     
-        Default.setUCD();
         PrintWriter output = Utility.openPrintWriter("PropertyDifferences" + GenerateData.getFileSuffix(true), Utility.LATIN1_UNIX);
         output.println("# Listing of relationships among properties, suitable for analysis by spreadsheet");
-        output.println("# Generated for " + Default.ucd.getVersion());
+        output.println("# Generated for " + Default.ucd().getVersion());
         output.println(GenerateData.generateDateLine());
         output.println("# P1	P2	R(P1,P2)	C(P1&P2)	C(P1-P2)	C(P2-P1)");
         
@@ -395,7 +393,7 @@ public class CompareProperties implements UCD_Types {
         for (int i = 1; i < UCD_Types.LIMIT_ENUM; ++i) {
             int iType = i & 0xFF00;
             if (iType == UCD_Types.JOINING_GROUP || iType == UCD_Types.AGE || iType == UCD_Types.COMBINING_CLASS || iType == UCD_Types.SCRIPT) continue;
-            UCDProperty upi = UnifiedBinaryProperty.make(i, Default.ucd);
+            UCDProperty upi = UnifiedBinaryProperty.make(i, Default.ucd());
             if (upi == null) continue;
             if (!upi.isStandard()) {
                 System.out.println("Skipping " + upi.getName() + "; not standard");
@@ -419,7 +417,7 @@ public class CompareProperties implements UCD_Types {
                 int jType = j & 0xFF00;
                 if (jType == UCD_Types.JOINING_GROUP || jType == UCD_Types.AGE || jType == UCD_Types.COMBINING_CLASS || jType == UCD_Types.SCRIPT
                     || (jType == iType && jType != UCD_Types.BINARY_PROPERTIES)) continue;
-                UCDProperty upj = UnifiedBinaryProperty.make(j, Default.ucd);
+                UCDProperty upj = UnifiedBinaryProperty.make(j, Default.ucd());
                 if (upj == null) continue;
                 if (!upj.isStandard()) continue;
                 if (upj.getValueType() < UCD_Types.BINARY_PROP) continue;
@@ -439,9 +437,9 @@ public class CompareProperties implements UCD_Types {
                 int bothCount = 0, i_jPropCount = 0, j_iPropCount = 0, iCount = 0, jCount = 0;
     
                 for (int cp = 0; cp <= 0x10FFFF; ++cp) {
-                    int cat = Default.ucd.getCategory(cp);
+                    int cat = Default.ucd().getCategory(cp);
                     if (cat == UCD_Types.UNASSIGNED || cat == UCD_Types.PRIVATE_USE || cat == UCD_Types.SURROGATE) continue;
-                    if (!Default.ucd.isAllocated(cp)) continue;
+                    if (!Default.ucd().isAllocated(cp)) continue;
     
                     boolean iProp = upi.hasValue(cp);
                     boolean jProp = upj.hasValue(cp);
