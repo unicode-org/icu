@@ -420,7 +420,7 @@ UnicodeString::operator[] (UTextOffset pos)
 UnicodeString UnicodeString::unescape() const {
     UnicodeString result;
     for (int32_t i=0; i<length(); ) {
-        UChar32 c = char32At(i++);
+        UChar32 c = charAt(i++);
         if (c == 0x005C /*'\\'*/) {
             c = unescapeAt(i); // advances i
             if (c == (UChar32)0xFFFFFFFF) {
