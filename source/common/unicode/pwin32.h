@@ -252,4 +252,7 @@ typedef unsigned int uint32_t;
 /* Programs used by ICU code                                                 */
 /*===========================================================================*/
 
+#ifndef U_MAKE
 #define U_MAKE  "nmake"
+#define U_MAKE_IS_NMAKE 1
+#endif

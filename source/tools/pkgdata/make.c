@@ -26,7 +26,7 @@
 #include "cstring.h"
 #include <stdio.h>
 
-#ifdef WIN32
+#ifdef U_MAKE_IS_NMAKE
 
 char linebuf[2048];
 

@@ -59,17 +59,17 @@ static struct
 } modes[] =
 {
     { "files", 0, pkg_mode_files, "Uses raw data files (no effect). Installation copies all files to the target location." },
-#ifdef WIN32
+#ifdef U_MAKE_IS_NMAKE
     { "dll",    "library", pkg_mode_windows,    "Generates one common data file and one shared library, <package>.dll"},
     { "common", "archive", pkg_mode_windows,    "Generates just the common file, <package>.dat"},
     { "static", "static",  pkg_mode_windows,    "Generates one statically linked library, " LIB_PREFIX "<package>" UDATA_LIB_SUFFIX }
-#else /*#ifdef WIN32*/
+#else /*#ifdef U_MAKE_IS_NMAKE*/
 #ifdef UDATA_SO_SUFFIX
     { "dll",    "library", pkg_mode_dll,    "Generates one shared library, <package>" UDATA_SO_SUFFIX },
 #endif
     { "common", "archive", pkg_mode_common, "Generates one common data file, <package>.dat" },
     { "static", "static",  pkg_mode_static, "Generates one statically linked library, " LIB_PREFIX "<package>" UDATA_LIB_SUFFIX }
-#endif /*#ifdef WIN32*/
+#endif /*#ifdef U_MAKE_IS_NMAKE*/
 };
 
 static UOption options[]={
@@ -100,7 +100,7 @@ static UOption options[]={
 
 const char options_help[][320]={
     "Set the data name",
-#ifdef WIN32
+#ifdef U_MAKE_IS_NMAKE
     "The directory where the ICU is located (e.g. <ICUROOT> which contains the bin directory)",
 #else
     "Specify options for the builder. (Autdetected if icu-config is available)",
@@ -171,7 +171,7 @@ main(int argc, char* argv[]) {
             /* Try to fill in from icu-config or equivalent */
             fillInMakefileFromICUConfig(&options[1]);
         }
-#ifdef WIN32
+#ifdef U_MAKE_IS_NMAKE
         else {
             fprintf(stderr, "Warning: You are using the deprecated -O option\n"
                             "\tYou can fix this warning by installing pkgdata, gencmn and genccode\n"
@@ -287,7 +287,7 @@ main(int argc, char* argv[]) {
     }
 
     o.verbose   = options[5].doesOccur;
-#ifdef WIN32 /* format is R:pathtoICU or D:pathtoICU */
+#ifdef U_MAKE_IS_NMAKE /* format is R:pathtoICU or D:pathtoICU */
     {
         char *pathstuff = (char *)options[1].value;
         if(options[1].value[uprv_strlen(options[1].value)-1] == '\\') {
