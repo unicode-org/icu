@@ -860,7 +860,7 @@ root {
         //in  { "Indonesian" }  // Use id instead
         inc { "Indic (Other)" }
         ine { "Indo-European" }
-        ira { "Iranian " }
+        ira { "Iranian" }
         iro { "Iroguoian  Languages" }
         is  { "Icelandic" }
         it  { "Italian" }
