@@ -29,21 +29,18 @@
 #include "pkgtypes.h"
 #include "makefile.h"
 
-#define WINBUILDMODE "debug"
+#define WINBUILDMODE (*(o->options)=='R'?"Release":"Debug")
 
 void writeCmnRules(UPKGOptions *o,  FileStream *makefile, CharList **objects)
 {
-  char *p, *baseName;
   char tmp[1024];
-  char stanza[1024];
-  char cfile[1024];
   CharList *oTail = NULL;
   CharList *infiles;
   CharList *parents = NULL, *commands = NULL;
 
   infiles = o->filePaths;
 
-  sprintf(tmp, "$(CMNTARGET) : $(DATAFILEPATHS)\n\t@$(GENCMN) -C \"%s\" -d %s -n %s 10000 <<\n", 
+  sprintf(tmp, "$(TARGETDIR)\\$(CMNTARGET) : $(DATAFILEPATHS)\n\t@$(GENCMN) -C \"%s\" -d %s -n %s 1000000 <<\n", 
 	  o->comment, o->targetDir, o->shortName);
     T_FileStream_writeLine(makefile, tmp);
 
@@ -62,18 +59,19 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
   char tmp2[1024];
   CharList *tail = NULL;
   CharList *objects = NULL;
-  CharList *iter;
-  const char *dataDir =   u_getDataDirectory(); /* we need data directory to know where to look for tools */
-  const char *separator = dataDir[uprv_strlen(dataDir)-1]=='\\'?"":"\\";
+  const char *separator = o->icuroot[uprv_strlen(o->icuroot)-1]=='\\'?"":"\\";
   UBool isDll = (uprv_strcmp(o->mode, "dll") == 0);
 
   if(U_FAILURE(*status)) { 
     return;
   }
 
+  sprintf(tmp2, "ICUROOT=%s\n\n", o->icuroot);
+  T_FileStream_writeLine(makefile, tmp2);
+
   sprintf(tmp2,
-	  "GENCMN = %s%s..\\source\\tools\\gencmn\\%s\\gencmn.exe\n",
-	  dataDir, separator, WINBUILDMODE);
+	  "GENCMN = $(ICUROOT)%ssource\\tools\\gencmn\\%s\\gencmn.exe\n",
+	  separator, WINBUILDMODE);
   T_FileStream_writeLine(makefile, tmp2);
 
   if(isDll) {
@@ -101,8 +99,8 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
       T_FileStream_writeLine(makefile, tmp2);
 
 	  sprintf(tmp2,
-		  "GENCCODE = %s%s..\\source\\tools\\genccode\\%s\\genccode.exe\n",
-		  dataDir, separator, WINBUILDMODE);
+		  "GENCCODE = $(ICUROOT)%ssource\\tools\\genccode\\%s\\genccode.exe\n",
+		  separator, WINBUILDMODE);
       T_FileStream_writeLine(makefile, tmp2);
 
 
@@ -133,20 +131,37 @@ void pkg_mode_windows(UPKGOptions *o, FileStream *makefile, UErrorCode *status) 
     sprintf(tmp2, "# common file to make:\nCMNTARGET=%s\n\n", tmp);
     T_FileStream_writeLine(makefile, tmp2);
 
+
   if(isDll) {
-      sprintf(tmp, "all: $(DLLTARGET)\n\n");
+      sprintf(tmp, "all: $(TARGETDIR)\\$(DLLTARGET)\n\n");
       T_FileStream_writeLine(makefile, tmp);
 
-      sprintf(tmp, "$(DLLTARGET): $(CMNOBJTARGET)\n"
-				    "\t@$(LINK32) $(LINK32_FLAGS) $?\n\n");
+      sprintf(tmp, "$(TARGETDIR)\\$(DLLTARGET): $(TARGETDIR)\\$(CMNOBJTARGET)\n"
+				    "\t@$(LINK32) $(LINK32_FLAGS) $(TARGETDIR)\\$(CMNOBJTARGET)\n\n");
       T_FileStream_writeLine(makefile, tmp);
-      sprintf(tmp, "$(CMNOBJTARGET): $(CMNTARGET)\n"
-				    "\t@$(GENCCODE) $(GENCOPTIONS) -o $(TARGETDIR) $(TARGETDIR)\\$(CMNTARGET)\n\n");
+      sprintf(tmp, "$(TARGETDIR)\\$(CMNOBJTARGET): $(TARGETDIR)\\$(CMNTARGET)\n"
+				    "\t@$(GENCCODE) $(GENCOPTIONS) -o -d $(TARGETDIR) $(TARGETDIR)\\$(CMNTARGET)\n\n");
       T_FileStream_writeLine(makefile, tmp);
+
+      sprintf(tmp2, 
+          "clean:\n"
+          "\t-@erase $(TARGETDIR)\\$(DLLTARGET)\n"
+          "\t-@erase $(TARGETDIR)\\$(CMNOBJTARGET)\n"
+          "\t-@erase $(TARGETDIR)\\$(CMNTARGET)\n\n");
+      T_FileStream_writeLine(makefile, tmp2);
   } else {
-      sprintf(tmp, "all: $(CMNTARGET)\n\n");
+
+      sprintf(tmp, "all: $(TARGETDIR)\\$(CMNTARGET)\n\n");
       T_FileStream_writeLine(makefile, tmp);
+
+      sprintf(tmp2, 
+          "clean:\n"
+          "\t-@erase $(TARGETDIR)\\$(CMNTARGET)\n\n");
+      T_FileStream_writeLine(makefile, tmp2);
   }
+
+  sprintf(tmp2, "rebuild: clean all\n\n");
+  T_FileStream_writeLine(makefile, tmp2);
 
 	/* Write compile rules */
   writeCmnRules(o, makefile, &objects);
