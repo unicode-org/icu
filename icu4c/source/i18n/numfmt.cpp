@@ -737,6 +737,13 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
     return f;
 }
 
+Locale 
+NumberFormat::getLocale(ULocDataLocaleType type, UErrorCode& status) const 
+{
+  return Locale("");
+}
+
+
 U_NAMESPACE_END
 
 // defined in ucln_cmn.h

@@ -595,6 +595,14 @@ public:
      */
     static UClassID getStaticClassID(void);
     
+    /** Get the locale for this date format object. You can choose between valid and actual locale.
+     *  @param type type of the locale we're looking for (valid or actual) 
+     *  @param status error code for the operation
+     *  @return the locale
+     *  @draft ICU 2.8
+     */
+    virtual Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
+
 private:
 
     Locale              fLocale;

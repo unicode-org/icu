@@ -1388,6 +1388,12 @@ const DateFormat* MessageFormat::getDefaultDateFormat(UErrorCode& ec) const {
     return defaultDateFormat;
 }
 
+Locale 
+MessageFormat::getLocale(ULocDataLocaleType type, UErrorCode& status) const 
+{
+  return Locale("");
+}
+
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
