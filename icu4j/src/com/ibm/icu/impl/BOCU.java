@@ -5,14 +5,15 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/BOCU.java,v $ 
-* $Date: 2002/10/12 00:10:57 $ 
-* $Revision: 1.2 $
+* $Date: 2002/10/31 22:35:20 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
 package com.ibm.icu.impl;
 
-import com.ibm.icu.impl.UCharacterIterator;
+import com.ibm.icu.text.*;
+import com.ibm.icu.text.UCharacterIterator;
 
 /**
  * <p>Binary Ordered Compression for Unicode</p>

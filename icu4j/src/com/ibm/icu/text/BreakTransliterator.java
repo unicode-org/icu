@@ -5,20 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakTransliterator.java,v $ 
- * $Date: 2002/07/13 03:27:09 $ 
- * $Revision: 1.1 $
+ * $Date: 2002/10/31 22:36:49 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
 //import com.ibm.icu.dev.demo.impl.*;
 //import com.ibm.icu.lang.*;
-import com.ibm.icu.text.Transliterator;
-import com.ibm.icu.text.BreakIterator;
-import com.ibm.icu.text.UnicodeFilter;
-import com.ibm.icu.text.Replaceable;
 import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.impl.UCharacterIterator;
 import java.util.Locale;
 import java.text.StringCharacterIterator;
 import java.text.CharacterIterator;

@@ -5,15 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/iterator/TestUCharacterIterator.java,v $
- * $Date: 2002/08/13 21:57:05 $
- * $Revision: 1.6 $
+ * $Date: 2002/10/31 22:37:31 $
+ * $Revision: 1.7 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.iterator;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.UCharacterIterator;
+import com.ibm.icu.text.UCharacterIterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.StringCharacterIterator;
 import com.ibm.icu.text.ReplaceableString;

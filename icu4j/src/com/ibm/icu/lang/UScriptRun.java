@@ -9,8 +9,8 @@
 
 package com.ibm.icu.lang;
 
-import com.ibm.icu.impl.UCharacterIterator;
-import com.ibm.icu.impl.UForwardCharacterIterator;
+import com.ibm.icu.text.UCharacterIterator;
+import com.ibm.icu.text.UForwardCharacterIterator;
 
 /**
  * <code>UScriptRun</code> is used to find runs of characters in

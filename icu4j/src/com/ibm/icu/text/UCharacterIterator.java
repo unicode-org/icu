@@ -4,30 +4,23 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Attic/UCharacterIterator.java,v $ 
+ * $Source: /usr/cvs/icu4j/icu4j/src/com/ibm/icu/impl/UCharacterIterator.java,v $ 
  * $Date: 2002/07/31 03:04:28 $ 
  * $Revision: 1.11 $
  *
  *******************************************************************************
  */
-package com.ibm.icu.impl;
+package com.ibm.icu.text;
 
-import com.ibm.icu.text.Replaceable;
-import com.ibm.icu.text.UTF16;
 
 import java.text.CharacterIterator;
-import com.ibm.icu.impl.UCharArrayIterator;
 
-/**
- * DLF- Docs mostly need 1) much more description of iteration behavior,
- * especially at endpoints and with empty or single character strings,
- * and 2) need to describe the other major difference with Java
- * CharacterIterator, which is that this also returns code points as
- * well as code units.  
- *
- * Don't understand why setIndex and moveIndex have different exception behavior.
- * I expect they shouldn't.
- */
+import com.ibm.icu.impl.CharacterIteratorWrapper;
+import com.ibm.icu.impl.ReplaceableUCharacterIterator;
+import com.ibm.icu.impl.UCharArrayIterator;
+import com.ibm.icu.impl.UCharacterIteratorWrapper;
+import com.ibm.icu.impl.UCharacterProperty;
+
 
 /**
  * Abstract class that defines an API for iteration on text objects.This is an 
@@ -37,6 +30,9 @@ import com.ibm.icu.impl.UCharArrayIterator;
  * <code>java.text.CharacterIterator</code> interface methods provided forward 
  * iteration with "pre-increment" and backward iteration with pre-decrement 
  * semantics. This API is more efficient for forward iteration over code points.
+ * The other major difference is that this API can do both code unit and code point 
+ * iteration, <code>java.text.CharacterIterator</code> can only iterate over 
+ * code units and is limited to BMP (0 - 0xFFFF)
  * @author Ram
  * @version release 2.2, May 2002
  */

@@ -4,13 +4,13 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Attic/UForwardCharacterIterator.java,v $ 
+ * $Source: /usr/cvs/icu4j/icu4j/src/com/ibm/icu/impl/UForwardCharacterIterator.java,v $ 
  * $Date: 2002/06/20 01:18:09 $ 
  * $Revision: 1.1 $
  *
  *****************************************************************************************
  */
-package com.ibm.icu.impl;
+package com.ibm.icu.text;
 
 /**
  * Interface that defines an API for forward-only iteration
