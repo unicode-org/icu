@@ -58,21 +58,25 @@ another pointer variable for this:
 
 Formally, the file contains the following structures:
 
-    A const uint16_t exceptionsIndex; -- 32-bit index
-    B const uint16_t ucharsIndex; -- 32-bit index
-    C const uint16_t reservedIndex;
-    D const uint16_t reservedIndex;
+    A0 const uint16_t exceptionsIndex; -- 32-bit index
+    A1 const uint16_t ucharsIndex; -- 32-bit index
+    A2 const uint16_t reservedIndex;
+    A3 const uint16_t reservedIndex;
+    A4 const uint16_t reservedIndex;
+    A5 const uint16_t reservedIndex;
+    A6 const uint16_t reservedIndex;
+    A7 const uint16_t reservedIndex;
 
-    E const uint16_t stage1[0x440]; -- 0x440=0x110000>>10
-    F const uint16_t stage2[variable];
-    G const uint16_t stage3[variable];
-      (possible 1*uint16_t for padding to 4-alignment)
+    S1 const uint16_t stage1[0x440]; -- 0x440=0x110000>>10
+    S2 const uint16_t stage2[variable];
+    S3 const uint16_t stage3[variable];
+       (possible 1*uint16_t for padding to 4-alignment)
 
-    H const uint32_t props32[variable];
-    I const uint16_t exceptions[variable];
-      (possible 1*uint16_t for padding to 4-alignment)
+    P  const uint32_t props32[variable];
+    E  const uint16_t exceptions[variable];
+       (possible 1*uint16_t for padding to 4-alignment)
 
-    J const UChar uchars[variable];
+    U  const UChar uchars[variable];
 
 3-stage lookup and properties:
 
@@ -114,7 +118,7 @@ array of Unicode strings, especially for non-1:1 case mappings.
 The first stage consumes the 11 most significant bits of the 21-bit code point
 and results in an index into the second stage:
 
-    uint16_t i2=p16[4+c>>10];
+    uint16_t i2=p16[8+c>>10];
 
 The second stage consumes bits 9 to 4 of c and results in an index into the
 third stage:
@@ -139,15 +143,15 @@ For some characters, this contains an index into the exceptions array:
 
 The exception values are a variable number of uint16_t starting at
 
-    const uint16_t *pe=p16+2*p16[0]+e;
+    const uint16_t *pe=p16+2*exceptionsIndex+e;
 
 The first uint16_t there contains flags about what values actually follow it.
 Some of those may be indexes for case mappings or similar and point to strings
 (zero-terminated) in the uchars[] array:
 
     ...
-    uint16_t u=pe[depends on pe[0]];
-    const UChar *pu=(const UChar *)(p32+p16[1])+u;
+    uint16_t u=pe[index depends on pe[0]];
+    const UChar *pu=(const UChar *)(p32+ucharsIndex)+u;
 
 32-bit properties sets:
 
@@ -237,6 +241,13 @@ static uint16_t exceptionsCount=0;
 static uint16_t
 repeatFromStage2(uint16_t i2, uint16_t i2Limit, uint16_t i3Repeat, uint32_t x);
 
+static void
+repeatFromStage3(uint16_t i2, uint16_t j3, uint32_t x);
+
+static uint16_t
+compactStage(uint16_t *stage, uint16_t stageTop, uint16_t blockSize,
+             uint16_t *parent, uint16_t parentTop);
+
 static int
 compareProps(const void *l, const void *r);
 
@@ -266,6 +277,7 @@ initStore() {
     icu_memset(stage2, 0, sizeof(stage2));
     icu_memset(stage3, 0, sizeof(stage3));
     icu_memset(map, 0, sizeof(map));
+    icu_memset(props, 0, sizeof(props));
     icu_memset(props32, 0, sizeof(props32));
 }
 
@@ -490,6 +502,8 @@ repeatProps() {
         x=getProps(start, &i1, &i2, &i3);
 
         /* i1, i2, and i3 are set for the start code point */
+        i1Limit=(uint16_t)(limit>>STAGE_1_SHIFT);
+
         /* assume that i3 is the beginning of a stage 3 block (see assumptions above) */
 
         /* is this stage 3 block suitable for setting it everywhere? (set i3Repeat) */
@@ -532,7 +546,16 @@ repeatProps() {
              */
 
             /* fill stages 2 & 3 */
-            i2=repeatFromStage2(i2, (uint16_t)((i2+STAGE_2_BLOCK)&~(STAGE_2_BLOCK-1)), i3Repeat, x);
+            if(i1<i1Limit) {
+                i2=repeatFromStage2(i2, (uint16_t)((i2+STAGE_2_BLOCK)&~(STAGE_2_BLOCK-1)), i3Repeat, x);
+            } else {
+                /* there is no full block at all - fill stages 2 & 3 only inside this block */
+                i2=repeatFromStage2(i2, (uint16_t)(stage1[i1]+((limit>>STAGE_2_SHIFT)&(STAGE_2_BLOCK-1))), i3Repeat, x);
+
+                /* does this area end in an incomplete stage 3 block? */
+                repeatFromStage3(i2, (uint16_t)(limit&(STAGE_3_BLOCK-1)), x);
+                return;
+            }
 
             /* this stage 2 block will not be suitable for repetition */
             i2Repeat=0;
@@ -560,7 +583,6 @@ repeatProps() {
             }
         }
 
-        i1Limit=(uint16_t)(limit>>STAGE_1_SHIFT);
         if(i1<i1Limit) {
             /* fill whole blocks for stage 1 indexes */
 
@@ -595,22 +617,7 @@ repeatProps() {
             i2=repeatFromStage2(i2, (uint16_t)(i2+((limit>>STAGE_2_SHIFT)&(STAGE_2_BLOCK-1))), i3Repeat, x);
 
             /* does this area end in an incomplete stage 3 block? */
-            j3=(uint16_t)(limit&(STAGE_3_BLOCK-1));
-            if(j3!=0) {
-                /* fill in properties in a last, incomplete stage 3 block */
-                i3=stage2[i2];
-                if(i3==0) {
-                    stage2[i2]=i3=allocProps();
-                }
-
-                /* some properties are set in this stage 3 block */
-                do {
-                    if(props[i3]==0) {
-                        props[i3]=x;
-                    }
-                    ++i3;
-                } while(--j3>0);
-            }
+            repeatFromStage3(i2, (uint16_t)(limit&(STAGE_3_BLOCK-1)), x);
         }
     }
 }
@@ -639,65 +646,37 @@ repeatFromStage2(uint16_t i2, uint16_t i2Limit, uint16_t i3Repeat, uint32_t x) {
     return i2;
 }
 
+static void
+repeatFromStage3(uint16_t i2, uint16_t j3, uint32_t x) {
+    if(j3!=0) {
+        /* fill in properties in a last, incomplete stage 3 block */
+        uint16_t i3=stage2[i2];
+        if(i3==0) {
+            stage2[i2]=i3=allocProps();
+        }
+
+        /* some properties may be set in this stage 3 block */
+        do {
+            if(props[i3]==0) {
+                props[i3]=x;
+            }
+            ++i3;
+        } while(--j3>0);
+    }
+}
+
 /* compacting --------------------------------------------------------------- */
 
 extern void
 compactStage2() {
-    /*
-     * At this point, there are stage2Top indexes in stage2[].
-     * stage2Top is a multiple of 64, and there are always 64 stage2[] entries
-     * per stage 1 entry which do not overlap.
-     * The first 64 stage2[] are always the empty ones.
-     * We make them overlap appropriately here and fill every 64th entry in
-     * map[] with the mapping from old to new properties indexes
-     * in order to adjust the stage 1 tables.
-     * This simple algorithm does not find arbitrary overlaps, but only those
-     * where the last i indexes of the previous group and the first i of the
-     * current one all have the same value.
-     * This seems reasonable and yields linear performance.
-     */
-    uint16_t i, start, prevEnd, newStart, x;
-
-    map[0]=0;
-    newStart=STAGE_2_BLOCK;
-    for(start=newStart; start<stage2Top;) {
-        prevEnd=newStart-1;
-        x=stage2[start];
-        if(x==stage2[prevEnd]) {
-            /* overlap by at least one */
-            for(i=1; i<STAGE_2_BLOCK && x==stage2[start+i] && x==stage2[prevEnd-i]; ++i) {}
-
-            /* overlap by i */
-            map[start]=newStart-i;
-
-            /* move the non-overlapping properties to their new positions */
-            start+=i;
-            for(i=STAGE_2_BLOCK-i; i>0; --i) {
-                stage2[newStart++]=stage2[start++];
-            }
-        } else if(newStart<start) {
-            /* move the properties to their new positions */
-            map[start]=newStart;
-            for(i=STAGE_2_BLOCK; i>0; --i) {
-                stage2[newStart++]=stage2[start++];
-            }
-        } else /* no overlap && newStart==start */ {
-            map[start]=start;
-            newStart+=STAGE_2_BLOCK;
-            start=newStart;
-        }
-    }
+    uint16_t newTop=compactStage(stage2, stage2Top, STAGE_2_BLOCK, stage1, STAGE_1_BLOCK);
 
     /* we saved some space */
     if(beVerbose) {
-        printf("compactStage2() reduced stage2Top from %u to %u\n", stage2Top, stage2Top-(start-newStart));
+        printf("compactStage2() reduced stage2Top from %u to %u\n", stage2Top, newTop);
     }
-    stage2Top-=(start-newStart);
+    stage2Top=newTop;
 
-    /* now adjust the stage 1 table */
-    for(start=0; start<STAGE_1_BLOCK; ++start) {
-        stage1[start]=map[stage1[start]];
-    }
     if(DO_DEBUG_OUT) {
         /* ### debug output */
         uint16_t i1, i2, i3, i4;
@@ -710,61 +689,14 @@ compactStage2() {
 
 extern void
 compactStage3() {
-    /*
-     * At this point, there are stage3Top properties indexes in stage3[].
-     * stage3Top is a multiple of 16, and there are always 16 stage3[] entries
-     * per stage 2 entry which do not overlap.
-     * The first 16 stage3[] are always the empty ones.
-     * We make them overlap appropriately here and fill every 16th entry in
-     * map[] with the mapping from old to new properties indexes
-     * in order to adjust the stage 2 tables.
-     * This simple algorithm does not find arbitrary overlaps, but only those
-     * where the last i properties of the previous group and the first i of the
-     * current one all have the same value.
-     * This seems reasonable and yields linear performance.
-     */
-    uint16_t i, start, prevEnd, newStart, x;
-
-    map[0]=0;
-    newStart=STAGE_3_BLOCK;
-    for(start=newStart; start<stage3Top;) {
-        prevEnd=newStart-1;
-        x=stage3[start];
-        if(x==stage3[prevEnd]) {
-            /* overlap by at least one */
-            for(i=1; i<STAGE_3_BLOCK && x==stage3[start+i] && x==stage3[prevEnd-i]; ++i) {}
-
-            /* overlap by i */
-            map[start]=newStart-i;
-
-            /* move the non-overlapping properties to their new positions */
-            start+=i;
-            for(i=STAGE_3_BLOCK-i; i>0; --i) {
-                stage3[newStart++]=stage3[start++];
-            }
-        } else if(newStart<start) {
-            /* move the properties to their new positions */
-            map[start]=newStart;
-            for(i=STAGE_3_BLOCK; i>0; --i) {
-                stage3[newStart++]=stage3[start++];
-            }
-        } else /* no overlap && newStart==start */ {
-            map[start]=start;
-            newStart+=STAGE_3_BLOCK;
-            start=newStart;
-        }
-    }
+    uint16_t newTop=compactStage(stage3, stage3Top, STAGE_3_BLOCK, stage2, stage2Top);
 
     /* we saved some space */
     if(beVerbose) {
-        printf("compactStage3() reduced stage3Top from %u to %u\n", stage3Top, stage3Top-(start-newStart));
+        printf("compactStage3() reduced stage3Top from %u to %u\n", stage3Top, newTop);
     }
-    stage3Top-=(start-newStart);
+    stage3Top=newTop;
 
-    /* now adjust the stage 2 tables */
-    for(start=0; start<stage2Top; ++start) {
-        stage2[start]=map[stage2[start]];
-    }
     if(DO_DEBUG_OUT) {
         /* ### debug output */
         uint16_t i1, i2, i3, i4;
@@ -773,6 +705,65 @@ compactStage3() {
             printf("properties(0x%06x)=0x%06x\n", c, getProps2(c, &i1, &i2, &i3, &i4));
         }
     }
+}
+
+static uint16_t
+compactStage(uint16_t *stage, uint16_t stageTop, uint16_t blockSize,
+             uint16_t *parent, uint16_t parentTop) {
+    /*
+     * This function is the common implementation for compacting
+     * a stage table.
+     * There are stageTop entries (indexes) in stage[].
+     * stageTop is a multiple of blockSize, and there are always blockSize stage[] entries
+     * per parent stage entry which do not overlap - yet.
+     * The first blockSize stage[] entries are always the empty ones.
+     * We make the blocks overlap appropriately here and fill every blockSize-th entry in
+     * map[] with the mapping from old to new properties indexes
+     * in order to adjust the parent stage tables.
+     * This simple algorithm does not find arbitrary overlaps, but only those
+     * where the last i entries of the previous block and the first i of the
+     * current one all have the same value.
+     * This seems reasonable and yields linear performance.
+     */
+    uint16_t i, start, prevEnd, newStart, x;
+
+    map[0]=0;
+    newStart=blockSize;
+    for(start=newStart; start<stageTop;) {
+        prevEnd=newStart-1;
+        x=stage[start];
+        if(x==stage[prevEnd]) {
+            /* overlap by at least one */
+            for(i=1; i<blockSize && x==stage[start+i] && x==stage[prevEnd-i]; ++i) {}
+
+            /* overlap by i */
+            map[start]=newStart-i;
+
+            /* move the non-overlapping indexes to their new positions */
+            start+=i;
+            for(i=blockSize-i; i>0; --i) {
+                stage[newStart++]=stage[start++];
+            }
+        } else if(newStart<start) {
+            /* move the indexes to their new positions */
+            map[start]=newStart;
+            for(i=blockSize; i>0; --i) {
+                stage[newStart++]=stage[start++];
+            }
+        } else /* no overlap && newStart==start */ {
+            map[start]=start;
+            newStart+=blockSize;
+            start=newStart;
+        }
+    }
+
+    /* now adjust the parent stage table */
+    for(i=0; i<parentTop; ++i) {
+        parent[i]=map[parent[i]];
+    }
+
+    /* we saved some space */
+    return stageTop-(start-newStart);
 }
 
 extern void
@@ -863,12 +854,45 @@ compareProps(const void *l, const void *r) {
 
 extern void
 generateData() {
-#if 0
+    static uint16_t indexes[8]={ 0, 0, 0, 0, 0, 0, 0, 0 };
     UNewDataMemory *pData;
     UErrorCode errorCode=U_ZERO_ERROR;
     uint32_t size;
     long dataLength;
+    uint16_t i, offset;
 
+    /* fix up the indexes in the stage tables to include the table offsets in the data */
+    offset=8+STAGE_1_BLOCK;         /* uint16_t offset to stage2[] */
+    for(i=0; i<STAGE_1_BLOCK; ++i) {
+        stage1[i]+=offset;
+    }
+
+    offset+=stage2Top;              /* uint16_t offset to stage3[] */
+    for(i=0; i<stage2Top; ++i) {
+        stage2[i]+=offset;
+    }
+
+    offset=(offset+stage3Top+1)/2;  /* uint32_t offset to props[], include padding */
+    for(i=0; i<stage3Top; ++i) {
+        stage3[i]+=offset;
+    }
+
+    indexes[0]=offset+=propsTop;            /* uint32_t offset to exceptions[] */
+    indexes[1]=offset+=(exceptionsTop+1)/2; /* uint32_t offset to uchars[], include padding */
+
+    size=4*offset+ucharsTop*U_SIZEOF_UCHAR; /* total size of data */
+
+    if(beVerbose) {
+        printf("number of stage 2 entries:              %5u\n", stage2Top);
+        printf("number of stage 3 entries:              %5u\n", stage3Top);
+        printf("number of unique properties values:     %5u\n", propsTop);
+        printf("number of code points with exceptions:  %5u\n", exceptionsCount);
+        printf("size in bytes of exceptions:            %5u\n", 2*exceptionsTop);
+        printf("size in bytes of Uchars:                %5u\n", ucharsTop*U_SIZEOF_UCHAR);
+        printf("data size:                             %6lu\n", size);
+    }
+
+    /* write the data */
     pData=udata_create(DATA_TYPE, DATA_NAME, &dataInfo,
                        haveCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
     if(U_FAILURE(errorCode)) {
@@ -876,8 +900,15 @@ generateData() {
         exit(errorCode);
     }
 
-    /* ### write the data */
-    size=0;
+    udata_writeBlock(pData, indexes, sizeof(indexes));
+    udata_writeBlock(pData, stage1, sizeof(stage1));
+    udata_writeBlock(pData, stage2, 2*stage2Top);
+    udata_writeBlock(pData, stage3, 2*stage3Top);
+    udata_writePadding(pData, (stage2Top+stage3Top)&1);
+    udata_writeBlock(pData, props32, 4*propsTop);
+    udata_writeBlock(pData, exceptions, 2*exceptionsTop);
+    udata_writePadding(pData, exceptionsTop&1);
+    udata_writeBlock(pData, uchars, ucharsTop*U_SIZEOF_UCHAR);
 
     /* finish up */
     dataLength=udata_finish(pData, &errorCode);
@@ -889,13 +920,6 @@ generateData() {
     if(dataLength!=(long)size) {
         fprintf(stderr, "genprops: data length %ld != calculated size %lu\n", dataLength, size);
         exit(U_INTERNAL_PROGRAM_ERROR);
-    }
-#endif
-
-    if(beVerbose) {
-        printf("number of code points with exceptions: %u\n", exceptionsCount);
-        printf("data size: %lu\n",
-            8+sizeof(stage1)+2*stage2Top+2*stage3Top+2*((stage2Top+stage3Top)&1)+4*propsTop);
     }
 }
 
