@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TestParagraphStyles.java,v $ $Revision: 1.2 $ $Date: 2000/04/21 22:11:24 $
+ * @(#)$RCSfile: TestParagraphStyles.java,v $ $Revision: 1.3 $ $Date: 2000/04/21 22:48:49 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -195,7 +195,7 @@ public final class TestParagraphStyles extends TestFmwk {
         }
         finally {
             if (i < NUM_TESTS) {
-                System.out.println("i=" + i);
+                logln("iteration=" + i);
             }
         }
     }
@@ -236,7 +236,7 @@ public final class TestParagraphStyles extends TestFmwk {
                         Integer.MIN_VALUE : start + (srcLimit-srcStart);
 
         if (target.damagedRangeLimit() != damageLimit) {
-            System.out.println("limit: " + damageLimit + ";  target.limit: " +
+            logln("limit: " + damageLimit + ";  target.limit: " +
                                 target.damagedRangeLimit());
             errln("Damaged range limit is incorrect");
         }
@@ -244,7 +244,7 @@ public final class TestParagraphStyles extends TestFmwk {
         final int damageStart = (damageLimit==Integer.MIN_VALUE)? Integer.MAX_VALUE :
                 (stylePropogated? target.paragraphStart(Math.max(0, start-1)) : start);
         if (target.damagedRangeStart() > damageStart) {
-            System.out.println("start: " + damageStart + ";  target.start: " +
+            logln("start: " + damageStart + ";  target.start: " +
                                 target.damagedRangeStart());
             errln("Damaged range start is incorrect");
         }
@@ -314,7 +314,7 @@ public final class TestParagraphStyles extends TestFmwk {
         }
 
         if (sepCount + 1 != pCount) {
-            System.out.println("sepCount=" + sepCount + ";  pCount=" + pCount);
+            logln("sepCount=" + sepCount + ";  pCount=" + pCount);
             errln("Paragraph count is not consistent with characters");
         }
     }
