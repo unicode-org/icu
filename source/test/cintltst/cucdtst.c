@@ -229,7 +229,7 @@ void TestMisc()
                                          FULL_WIDTH, 
                                          NEUTRAL};
     int i;
-    char icuVersion[U_MAX_VERSION_STRING_LENGTH], temp[U_MAX_VERSION_LENGTH];
+    char icuVersion[U_MAX_VERSION_STRING_LENGTH];
     UVersionInfo realVersion;
 
     memset(icuVersion, 0, U_MAX_VERSION_STRING_LENGTH);
@@ -274,18 +274,7 @@ void TestMisc()
     }
     /* Tests the ICU version #*/
     u_getVersion(realVersion);
-    for (i = 0; i < U_MAX_VERSION_LENGTH; i++ )
-    {
-        int len = 0;
-        T_CString_integerToString(temp, realVersion[i], 10);
-        strcat(icuVersion, temp);
-        len = strlen(icuVersion);
-        if (i != U_MAX_VERSION_LENGTH-1) 
-        {
-            icuVersion[len] = U_VERSION_DELIMITER;
-            icuVersion[len + 1] = 0;
-        }
-    }
+    u_versionToString(realVersion, icuVersion);
     if (strncmp(icuVersion, U_ICU_VERSION, MIN(strlen(icuVersion), strlen(U_ICU_VERSION))) != 0)
     {
         log_err("ICU version test failed. Header says=%s, got=%s \n", U_ICU_VERSION, icuVersion);
@@ -387,7 +376,7 @@ void TestUnicodeData()
     const char *expectVersion = U_UNICODE_VERSION;  /* NOTE: this purposely breaks to force the tests to stay in sync with the unicodedata */
     /* expectVersionArray must be filled from u_versionFromString(expectVersionArray, U_UNICODE_VERSION)
        once this function is public. */
-    UVersionInfo expectVersionArray = {0x03, 0x00, 0x00, 0x00};
+    UVersionInfo expectVersionArray;
     UVersionInfo versionArray;
     char expectString[256];
 
@@ -396,6 +385,7 @@ void TestUnicodeData()
     strcat(newPath, expectVersion);
     strcat(newPath, ".txt");
 
+    u_versionFromString(expectVersionArray, expectVersion);
     strcpy(expectString, "Unicode Version ");
     strcat(expectString, expectVersion);
     u_getUnicodeVersion(versionArray);
