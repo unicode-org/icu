@@ -193,10 +193,10 @@ Collator::Collator()
 * The task for handling the argument collation strength and normalization 
 * mode is left to the child class.
 * @param collationStrength collation strength
-* @param decompositionMode 
+* @param decompositionMode
+* @deprecated 2.4 use the default constructor instead
 */
-Collator::Collator(UCollationStrength /* collationStrength */,
-                         UNormalizationMode /* decompositionMode */)
+Collator::Collator(UCollationStrength, UNormalizationMode )
     : UObject()
 {
 }

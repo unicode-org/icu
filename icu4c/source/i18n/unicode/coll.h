@@ -751,10 +751,12 @@ protected:
   * mode is left to the child class.
   * @param collationStrength collation strength
   * @param decompositionMode 
-  * @stable
+  * @deprecated 2.4, constructor is not used anywhere. Child classes should 
+  *             implement their own constructor to handle the strength and
+  *             normalization mode
   */
   Collator(UCollationStrength collationStrength, 
-              UNormalizationMode decompositionMode);
+           UNormalizationMode decompositionMode);
   
   /**
   * Copy constructor.
