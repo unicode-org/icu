@@ -57,7 +57,6 @@ public:
     void TestSimpleDisplayNames(void);
     void TestUninstalledISO3Names(void);
     void TestAtypicalLocales(void);
-    void TestNullDefault(void);
 #if !UCONFIG_NO_FORMATTING
     void TestThaiCurrencyFormat(void);
     void TestEuroSupport(void);
