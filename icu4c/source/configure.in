@@ -10,10 +10,18 @@ AC_INIT(common/unicode/utypes.h)
 AC_CONFIG_HEADER(common/icucfg.h)
 PACKAGE="icu"
 AC_SUBST(PACKAGE)
-VERSION=1.6.0.1
-VERSION_MAJOR=`echo $VERSION | sed 's/\..*//'`
+
+AC_MSG_CHECKING(for ICU version numbers)
+
+dnl Get the ICU version from utypes.h
+changequote(<<, >>)dnl
+VERSION=`sed -n 's/^[ 	]*#[ 	]*define[ 	]*U_ICU_VERSION[ 	]*"\([^"]*\)".*/\1/p' $srcdir/common/unicode/utypes.h`
 AC_SUBST(VERSION)
+VERSION_MAJOR=`echo $VERSION | sed 's/\..*//'`
+changequote([, ])dnl
 AC_SUBST(VERSION_MAJOR)
+AC_MSG_RESULT([release $VERSION])
+
 UNICODE_VERSION="3.0.0"
 AC_SUBST(UNICODE_VERSION)
 
