@@ -203,7 +203,7 @@ findAlias(const char *alias) {
     }
 
     /* did we really find it? */
-    if(icu_strcmp(name, (const char *)aliasTable+p[start])==0) {
+    if(strHalfCaseCmp(name, (const char *)aliasTable+p[start])==0) {
         limit=*(p-1);       /* aliasCount */
         p+=limit;           /* advance to the second column of the alias table */
         i=p[start];         /* converter index */
