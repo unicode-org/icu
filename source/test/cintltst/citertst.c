@@ -177,7 +177,7 @@ static void TestPrevious()
     test2=(UChar*)malloc(sizeof(UChar) * 50);
     u_uastrcpy(test1, "What subset of all possible test cases?");
     u_uastrcpy(test2, "has the highest probability of detecting");
-    coll = ucol_open("coll", &status);
+    coll = ucol_open("en_US", &status);
 
     iter=ucol_openElements(coll, test1, u_strlen(test1), &status);
     if(U_FAILURE(status)){
@@ -470,6 +470,9 @@ static void backAndForth(UCollationElements *iter)
           }
         }
       }
+
+      if (index == 0x96)
+          log_verbose("test");
     }
 
     while (index != 0 && orders[index - 1] == 0) {
@@ -572,14 +575,18 @@ static int32_t* getOrders(UCollationElements *iter, int32_t *orderLength)
 
     if (maxSize > size)
     {
-        if (size == 0) size = 1;
-        temp = (int32_t*)malloc(sizeof(int32_t) * size);
+        if (size == 0) {
+            size = 1;
+            temp = (int32_t*)malloc(sizeof(int32_t) * size);
+            temp[0] = 0;
+        }
+        else {
+            temp = (int32_t*)malloc(sizeof(int32_t) * size);
+            memcpy(temp, orders, size * sizeof(int32_t));
+        }
 
-        memcpy(temp, orders, size * sizeof(int32_t));
         free(orders);
         orders = temp;
-
-
     }
 
     *orderLength = size;
