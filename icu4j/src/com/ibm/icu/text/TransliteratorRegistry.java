@@ -94,10 +94,10 @@ class TransliteratorRegistry {
      */
     static class Spec {
 
-        private String top;
-        private String spec;
-        private String nextSpec;
-        private String scriptName;
+        private String top;        // top spec
+        private String spec;       // current spec
+        private String nextSpec;   // next spec
+        private String scriptName; // script name equivalent of top, if != top
         private boolean isSpecLocale; // TRUE if spec is a locale
         private boolean isNextLocale; // TRUE if nextSpec is a locale
         private ResourceBundle res;
@@ -110,7 +110,7 @@ class TransliteratorRegistry {
             Locale toploc = getLocale(top);
             res = ResourceBundle.getBundle(RB_LOCALE_ELEMENTS, toploc);
             // Make sure we got the bundle we wanted; otherwise, don't use it
-            if (res.getLocale().equals(toploc)) {
+            if (isFallbackOf(res.getLocale().toString(), top)) {
                 isSpecLocale = true;
             } else {
                 isSpecLocale = false;
@@ -121,6 +121,10 @@ class TransliteratorRegistry {
             int[] s = UScript.getCode(top);
             if (s[0] != UScript.INVALID_CODE) {
                 scriptName = UScript.getName(s[0]);
+                // If the script name is the same as top then it's redundant
+                if (scriptName.equalsIgnoreCase(top)) {
+                    scriptName = null;
+                }
             }
 
             // assert(spec != top);
@@ -153,8 +157,8 @@ class TransliteratorRegistry {
                     nextSpec = scriptName; // scriptName may be null
                 }
             } else {
-                // spec is a script, so we are at the end
-                nextSpec = null;
+                // Fallback to the script, which may be null
+                nextSpec = scriptName;
             }
         }
 
@@ -196,7 +200,8 @@ class TransliteratorRegistry {
             return top;
         }
 
-        // Internal helper function
+        // Internal helper function to convert  string of the form
+        // aa_bb_CC to a locale object.  Why isn't this in Locale?
         private static Locale getLocale(String name) {
             String language = "";
             String country = "";
@@ -217,6 +222,18 @@ class TransliteratorRegistry {
                 }
             }
             return new Locale(language, country, variant);
+        }
+
+        // Compare two locale strings of the form aa_bb_CC, and
+        // return true if parent is a fallback of child, that is,
+        // if child =~ /^parent(_.+)*/ (roughly).
+        private static boolean isFallbackOf(String parent, String child) {
+            if (!child.startsWith(parent)) {
+                return false;
+            }
+            int i = parent.length();
+            return (i == child.length() ||
+                    child.charAt(i) == '_');
         }
     }
 
