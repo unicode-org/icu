@@ -96,9 +96,9 @@ IntlTestNumberFormat::testFormat(/* char* par */)
 {
     if (U_FAILURE(fStatus))
     { 
-        errln((UnicodeString)"********** FAIL: createXxxInstance failed.");
+        errln((UnicodeString)"**** FAIL: createXxxInstance failed.");
         if (fFormat != 0)
-            errln("********** FAIL: Non-null format returned by createXxxInstance upon failure.");
+            errln("**** FAIL: Non-null format returned by createXxxInstance upon failure.");
         delete fFormat;
         fFormat = 0;
         return;
@@ -106,7 +106,7 @@ IntlTestNumberFormat::testFormat(/* char* par */)
                     
     if (fFormat == 0)
     {
-        errln((UnicodeString)"********** FAIL: Null format returned by createXxxInstance.");
+        errln((UnicodeString)"**** FAIL: Null format returned by createXxxInstance.");
         return;
     }
 
@@ -185,6 +185,7 @@ IntlTestNumberFormat::testFormat(/* char* par */)
     tryIt((int32_t)-1);
     tryIt((int32_t)-10);
     tryIt((int32_t)-100);
+    tryIt((int32_t)-1913860352);
 #endif
 
 #if 1
@@ -236,7 +237,7 @@ IntlTestNumberFormat::tryIt(double aNumber)
             fFormat->parse(string[i-1], number[i], status);
         if (U_FAILURE(status))
         {
-            errln("********** FAIL: Parse of " + string[i-1] + " failed.");
+            errln("**** FAIL: Parse of " + string[i-1] + " failed.");
             dump = TRUE;
             break;
         }
@@ -245,7 +246,10 @@ IntlTestNumberFormat::tryIt(double aNumber)
             number[i].setDouble(number[i].getLong());
         else if (number[i].getType() != Formattable::kDouble)
         {
-            errln("********** FAIL: Parse of " + string[i-1] + " returned non-numeric Formattable.");
+            errln("**** FAIL: Parse of " + string[i-1]
+                + " returned non-numeric Formattable, type " + UnicodeString(formattableTypeName(number[i].getType()))
+                + ", Locale=" + UnicodeString(fLocale.getName())
+                + ", longValue=" + number[i].getLong());
             dump = TRUE;
             break;
         }
@@ -256,7 +260,7 @@ IntlTestNumberFormat::tryIt(double aNumber)
                 numberMatch = i;
             else if (numberMatch > 0 && number[i] != number[i-1])
             {
-                errln("********** FAIL: Numeric mismatch after match.");
+                errln("**** FAIL: Numeric mismatch after match.");
                 dump = TRUE;
                 break;
             }
@@ -264,19 +268,20 @@ IntlTestNumberFormat::tryIt(double aNumber)
                 stringMatch = i;
             else if (stringMatch > 0 && string[i] != string[i-1])
             {
-                errln("********** FAIL: String mismatch after match.");
+                errln("**** FAIL: String mismatch after match.");
                 dump = TRUE;
                 break;
             }
         }
-        if (numberMatch > 0 && stringMatch > 0) break;
+        if (numberMatch > 0 && stringMatch > 0)
+            break;
     }
     if (i == DEPTH)
         --i;
 
     if (stringMatch > 2 || numberMatch > 2)
     {
-        errln("********** FAIL: No string and/or number match within 2 iterations.");
+        errln("**** FAIL: No string and/or number match within 2 iterations.");
         dump = TRUE;
     }
 
@@ -293,67 +298,35 @@ IntlTestNumberFormat::tryIt(double aNumber)
 void 
 IntlTestNumberFormat::tryIt(int32_t aNumber)
 {
-    const int32_t DEPTH = 10;
-    Formattable number[DEPTH];
-    UnicodeString string[DEPTH];
+    Formattable number(aNumber);
+    UnicodeString stringNum;
+    UErrorCode status = U_ZERO_ERROR;
 
-    int32_t numberMatch = 0;
-    int32_t stringMatch = 0;
-    UBool dump = FALSE;
-    int32_t i;
-    for (i=0; i<DEPTH; ++i)
+    fFormat->format(number, stringNum, status);
+    if (U_FAILURE(status))
     {
-        UErrorCode status = U_ZERO_ERROR;
-        if (i == 0) number[i].setLong(aNumber);
-        else fFormat->parse(string[i-1], number[i], status);
-        if (U_FAILURE(status))
-        {
-            errln("********** FAIL: Parse of " + string[i-1] + " failed.");
-            dump = TRUE;
-            break;
-        }
-              
-        if (number[i].getType() != Formattable::kLong)
-        {
-            errln("********** FAIL: Parse of " + string[i-1] + " returned non-long Formattable, type " + UnicodeString(formattableTypeName(number[i].getType())) + ", Locale=" + UnicodeString(fLocale.getName()));
-            dump = TRUE;
-            break;
-        }
-        fFormat->format(number[i].getLong(), string[i]);
-        if (i > 0)
-        {
-            if (numberMatch == 0 && number[i] == number[i-1]) numberMatch = i;
-            else if (numberMatch > 0 && number[i] != number[i-1])
-            {
-                errln("********** FAIL: Numeric mismatch after match.");
-                dump = TRUE;
-                break;
-            }
-            if (stringMatch == 0 && string[i] == string[i-1]) stringMatch = i;
-            else if (stringMatch > 0 && string[i] != string[i-1])
-            {
-                errln("********** FAIL: String mismatch after match.");
-                dump = TRUE;
-                break;
-            }
-        }
-        if (numberMatch > 0 && stringMatch > 0) break;
+        errln("**** FAIL: Formatting " + aNumber);
+        return;
     }
-    if (i == DEPTH) --i;
-
-    if (stringMatch > 2 || numberMatch > 2)
+    fFormat->parse(stringNum, number, status);
+    if (U_FAILURE(status))
     {
-        errln("********** FAIL: No string and/or number match within 2 iterations.");
-        dump = TRUE;
+        errln("**** FAIL: Parse of " + stringNum + " failed.");
+        return;
     }
-
-    if (dump)
+    if (number.getType() != Formattable::kLong)
     {
-        for (int32_t k=0; k<=i; ++k)
-        {
-            logln((UnicodeString)"" + k + ": " + number[k].getLong() + " F> " +
-                  string[k] + " P> ");
-        }
+        errln("**** FAIL: Parse of " + stringNum
+            + " returned non-long Formattable, type " + UnicodeString(formattableTypeName(number.getType()))
+            + ", Locale=" + UnicodeString(fLocale.getName())
+            + ", doubleValue=" + number.getDouble()
+            + ", longValue=" + number.getLong()
+            + ", origValue=" + aNumber
+            );
+    }
+    if (number.getLong() != aNumber) {
+        errln("**** FAIL: Parse of " + stringNum + " failed. Got:" + number.getLong()
+            + " Expected:" + aNumber);
     }
 }
 
@@ -368,12 +341,14 @@ void IntlTestNumberFormat::testAvailableLocales(/* char* par */)
         UnicodeString all;
         for (int32_t i=0; i<count; ++i)
         {
-            if (i!=0) all += ", ";
+            if (i!=0)
+                all += ", ";
             all += locales[i].getName();
         }
         logln(all);
     }
-    else errln((UnicodeString)"********** FAIL: Zero available locales or null array pointer");
+    else
+        errln((UnicodeString)"**** FAIL: Zero available locales or null array pointer");
 }
 
 void IntlTestNumberFormat::monsterTest(/* char* par */)
@@ -383,9 +358,9 @@ void IntlTestNumberFormat::monsterTest(/* char* par */)
     const Locale* locales = NumberFormat::getAvailableLocales(count);
     if (locales && count)
     {
-        if (quick && count > 2) {
-            logln("quick test: testing just 2 locales!");
-            count = 2;
+        if (quick && count > 3) {
+            logln("quick test: testing just 3 locales!");
+            count = 3;
         }
         for (int32_t i=0; i<count; ++i)
         {
