@@ -106,11 +106,7 @@
 #define _UTF32LEData _UTF32LEData_2_0
 #define _UTF7Data _UTF7Data_2_0
 #define _UTF8Data _UTF8Data_2_0
-#define _fini _fini_2_0
-#define _init _init_2_0
-#define findNameDummy findNameDummy_2_0
 #define init_collIterate init_collIterate_2_0
-#define isCaseIgnorable isCaseIgnorable_2_0
 #define isTailored isTailored_2_0
 #define locale_cleanup locale_cleanup_2_0
 #define locale_get_default locale_get_default_2_0
@@ -780,7 +776,6 @@
 #define AnchorTable AnchorTable_2_0
 #define ArabicOpenTypeLayoutEngine ArabicOpenTypeLayoutEngine_2_0
 #define ArabicShaping ArabicShaping_2_0
-#define AttachmentPositioningSubtable AttachmentPositioningSubtable_2_0
 #define BinarySearchLookupTable BinarySearchLookupTable_2_0
 #define BreakDictionary BreakDictionary_2_0
 #define BreakIterator BreakIterator_2_0
@@ -821,7 +816,6 @@
 #define DigitList DigitList_2_0
 #define Entry Entry_2_0
 #define FeatureListTable FeatureListTable_2_0
-#define FieldPosition FieldPosition_2_0
 #define Format Format_2_0
 #define Format1AnchorTable Format1AnchorTable_2_0
 #define Format2AnchorTable Format2AnchorTable_2_0
@@ -833,14 +827,12 @@
 #define GXLayoutEngine GXLayoutEngine_2_0
 #define GlyphDefinitionTableHeader GlyphDefinitionTableHeader_2_0
 #define GlyphIterator GlyphIterator_2_0
-#define GlyphPositionAdjustment GlyphPositionAdjustment_2_0
 #define GlyphPositioningLookupProcessor GlyphPositioningLookupProcessor_2_0
 #define GlyphPositioningTableHeader GlyphPositioningTableHeader_2_0
 #define GlyphShaper GlyphShaper_2_0
 #define GlyphSubstitutionLookupProcessor GlyphSubstitutionLookupProcessor_2_0
 #define GlyphSubstitutionTableHeader GlyphSubstitutionTableHeader_2_0
 #define GregorianCalendar GregorianCalendar_2_0
-#define Hashtable Hashtable_2_0
 #define HebrewShaping HebrewShaping_2_0
 #define HexToUnicodeTransliterator HexToUnicodeTransliterator_2_0
 #define IndicClassTable IndicClassTable_2_0
@@ -850,7 +842,6 @@
 #define IntegralPartSubstitution IntegralPartSubstitution_2_0
 #define LECharMapper LECharMapper_2_0
 #define LEGlyphFilter LEGlyphFilter_2_0
-#define LESwaps LESwaps_2_0
 #define LayoutEngine LayoutEngine_2_0
 #define LigatureSubstitutionProcessor LigatureSubstitutionProcessor_2_0
 #define LigatureSubstitutionSubtable LigatureSubstitutionSubtable_2_0
@@ -870,9 +861,7 @@
 #define MorphTableHeader MorphTableHeader_2_0
 #define MultipleSubstitutionSubtable MultipleSubstitutionSubtable_2_0
 #define MultiplierSubstitution MultiplierSubstitution_2_0
-#define Mutex Mutex_2_0
 #define NFRule NFRule_2_0
-#define NFRuleList NFRuleList_2_0
 #define NFRuleSet NFRuleSet_2_0
 #define NFSubstitution NFSubstitution_2_0
 #define NameUnicodeTransliterator NameUnicodeTransliterator_2_0
@@ -890,10 +879,8 @@
 #define PairPositioningFormat2Subtable PairPositioningFormat2Subtable_2_0
 #define PairPositioningSubtable PairPositioningSubtable_2_0
 #define ParseData ParseData_2_0
-#define ParsePosition ParsePosition_2_0
 #define Quantifier Quantifier_2_0
 #define RemoveTransliterator RemoveTransliterator_2_0
-#define ReorderingOutput ReorderingOutput_2_0
 #define Replaceable Replaceable_2_0
 #define ReplaceableGlue ReplaceableGlue_2_0
 #define ResourceBundle ResourceBundle_2_0
@@ -944,11 +931,8 @@
 #define TransliteratorRegistry TransliteratorRegistry_2_0
 #define TrimmedArrayProcessor TrimmedArrayProcessor_2_0
 #define UCharCharacterIterator UCharCharacterIterator_2_0
-#define UCharReference UCharReference_2_0
 #define UStack UStack_2_0
 #define UVector UVector_2_0
-#define U_FAILURE U_FAILURE_2_0
-#define U_SUCCESS U_SUCCESS_2_0
 #define Unicode Unicode_2_0
 #define UnicodeAndFilter UnicodeAndFilter_2_0
 #define UnicodeArabicOpenTypeLayoutEngine UnicodeArabicOpenTypeLayoutEngine_2_0
@@ -971,10 +955,9 @@
 #define _cnttab_getCE _cnttab_getCE_2_0
 #define _cnttab_getContractionTable _cnttab_getContractionTable_2_0
 #define addATableElement addATableElement_2_0
+#define indicClassTables indicClassTables_2_0
 #define llong llong_2_0
 #define locale_set_default_internal locale_set_default_internal_2_0
-#define unorm_getFCD16 unorm_getFCD16_2_0
-#define unorm_getFCD16FromSurrogatePair unorm_getFCD16FromSurrogatePair_2_0
 #define uprv_cnttab_addContraction uprv_cnttab_addContraction_2_0
 #define uprv_cnttab_changeContraction uprv_cnttab_changeContraction_2_0
 #define uprv_cnttab_changeLastCE uprv_cnttab_changeLastCE_2_0
@@ -995,8 +978,6 @@
 #define uprv_uca_getMaxExpansionJamo uprv_uca_getMaxExpansionJamo_2_0
 #define uprv_uca_setMaxExpansion uprv_uca_setMaxExpansion_2_0
 #define uprv_uca_setMaxJamoExpansion uprv_uca_setMaxJamoExpansion_2_0
-#define ures_getUnicodeStringByIndex ures_getUnicodeStringByIndex_2_0
-#define ures_getUnicodeStringByKey ures_getUnicodeStringByKey_2_0
 #define util_equalRules util_equalRules_2_0
 #endif
 #endif
