@@ -50,11 +50,13 @@ public:
 
     /**
      * The character preceding a symbol reference name.
+     * @draft ICU 2.8
      */
     enum { SYMBOL_REF = 0x0024 /*$*/ };
 
     /**
      * Destructor.
+     * @draft ICU 2.8
      */
     virtual ~SymbolTable();
 
@@ -65,6 +67,7 @@ public:
      * @param s the symbolic name to lookup
      * @return a string containing the name's value, or <tt>NULL</tt> if
      * there is no mapping for s.
+     * @draft ICU 2.8
      */
     virtual const UnicodeString* lookup(const UnicodeString& s) const = 0;
 
@@ -74,6 +77,7 @@ public:
      * @param ch a 32-bit code point from 0 to 0x10FFFF inclusive.
      * @return the UnicodeMatcher object represented by the given
      * character, or NULL if there is no mapping for ch.
+     * @draft ICU 2.8
      */
     virtual const UnicodeFunctor* lookupMatcher(UChar32 ch) const = 0;
 
@@ -92,6 +96,7 @@ public:
      * @param limit the index after the last character to be parsed.
      * @return the parsed name, or an empty string if there is no
      * valid symbolic name at the given position.
+     * @draft ICU 2.8
      */
     virtual UnicodeString parseReference(const UnicodeString& text,
                                          ParsePosition& pos, int32_t limit) const = 0;
