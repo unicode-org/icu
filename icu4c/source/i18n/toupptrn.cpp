@@ -25,8 +25,8 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UppercaseTransliterator)
 /**
  * Constructs a transliterator.
  */
-UppercaseTransliterator::UppercaseTransliterator(const Locale& theLoc) :
-    CaseMapTransliterator(theLoc, UNICODE_STRING("Any-Upper", 9), ucase_toFullUpper)
+UppercaseTransliterator::UppercaseTransliterator() :
+    CaseMapTransliterator(UNICODE_STRING("Any-Upper", 9), ucase_toFullUpper)
 {
 }
 
