@@ -6,7 +6,7 @@
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter.java,v $ 
 * $Date: 2003/05/19 
-* $Revision: 1.8 $
+* $Revision: 1.9 $
 *
 ******************************************************************************
 */
@@ -197,7 +197,7 @@ public final class XLIFF2ICUConverter {
         return str;
     }   
 
-    /**
+    /*
      * Utility method to translate a String filename to URL.  
      *
      * Note: This method is not necessarily proven to get the 
@@ -212,16 +212,12 @@ public final class XLIFF2ICUConverter {
      * found in the examples of RFC2396), then simply return the 
      * name as-is (the assumption is that it's already a URL)
      * Otherwise we attempt (cheaply) to convert to a file:/// URL.
-     * 
-     * @param String local path\filename of a file
-     * @return a file:/// URL, the same string if it appears to 
-     * already be a URL, or null if error
      */
-    private static String filenameToURL(String filename)
-    {
+    private static String filenameToURL(String filename){
         // null begets null - something like the commutative property
-        if (null == filename)
+        if (null == filename){
             return null;
+        }
 
         // Don't translate a string that already looks like a URL
         if (filename.startsWith("file:")
@@ -231,18 +227,17 @@ public final class XLIFF2ICUConverter {
             || filename.startsWith("mailto:")
             || filename.startsWith("news:")
             || filename.startsWith("telnet:")
-           )
-        return filename;
+           ){
+               return filename;
+           }
+        
 
         File f = new File(filename);
         String tmp = null;
-        try
-        {
+        try{
             // This normally gives a better path
             tmp = f.getCanonicalPath();
-        }
-        catch (IOException ioe)
-        {
+        }catch (IOException ioe){
             // But this can be used as a backup, for cases 
             //  where the file does not exist, etc.
             tmp = f.getAbsolutePath();
@@ -256,11 +251,12 @@ public final class XLIFF2ICUConverter {
         // Ensure we have the correct number of slashes at the 
         //  start: we always want 3 /// if it's absolute
         //  (which we should have forced above)
-        if (tmp.startsWith("/"))
+        if (tmp.startsWith("/")){
             return "file://" + tmp;
-        else
+        }
+        else{
             return "file:///" + tmp;
-
+        }
     }
     private boolean isXmlLang (String lang){
 
@@ -347,19 +343,42 @@ public final class XLIFF2ICUConverter {
             // check if the xliff file has source elements in multiple languages
             // the source-language value should be the same as xml:lang values
             // of all the source elements.
-            checkLangAttribute(sourceList, sourceLang);
+            String xmlSrcLang = checkLangAttribute(sourceList, sourceLang);
             
             // check if the xliff file has target elements in multiple languages
             // the target-language value should be the same as xml:lang values
             // of all the target elements.
-            checkLangAttribute(targetList, targetLang);
+            String xmlTargetLang = checkLangAttribute(targetList, targetLang);
             
+            // Create the Resource linked list which will hold the
+            // source and target bundles after parsing
             Resource[] set = new Resource[2];
             set[0] = new ResourceTable();
             set[1] = new ResourceTable();
-            set[0].name = sourceLang.replace('-','_');
-            set[1].name = targetLang.replace('-','_');
             
+            // lenient extraction of source language 
+            if(sourceLang!=null){
+                set[0].name = sourceLang.replace('-','_');
+            }else{
+                if(xmlSrcLang != null){
+                    set[0].name = xmlSrcLang.replace('-','_');
+                }else{
+                    System.err.println("ERROR: Could not figure out the source language of the file. Please check the XLIFF file.");
+                    System.exit(-1);
+                }
+            }
+            
+            // lenient extraction of the target language
+            if(targetLang!=null){
+                set[1].name = targetLang.replace('-','_');
+            }else{
+                if(xmlTargetLang!=null){
+                    set[1].name = xmlTargetLang.replace('-','_');
+                }else{
+                    System.err.println("WARNING: Could not figure out the target language of the file. Producing source bundle only.");
+                }
+            }
+   
             
             // check if any <alt-trans> elements are present
             NodeList altTrans = doc.getElementsByTagName(ALTTRANS);
@@ -405,7 +424,7 @@ public final class XLIFF2ICUConverter {
             }
             FileOutputStream file = new FileOutputStream(outputFileName);
             BufferedOutputStream writer = new BufferedOutputStream(file);
-            writeBOM(writer);
+
             writeHeader(writer,sourceFileName);
             
             //Now start writing the resource;
@@ -428,27 +447,29 @@ public final class XLIFF2ICUConverter {
             Node node = list.item(0);
             NamedNodeMap attr = node.getAttributes();
             Node orig = attr.getNamedItem(lang);
-            String name = orig.getNodeValue();
             
-            NodeList groupList = doc.getElementsByTagName(GROUPS);
-            Node group = groupList.item(0);
-            NamedNodeMap groupAtt = group.getAttributes();
-            Node id = groupAtt.getNamedItem(ID);
-            if(id!=null){
-                String idVal = id.getNodeValue();
-                
-                if(!name.equals(idVal)){
-                    System.out.println("WARNING: The id value != language name. " +
-                                       "Please compare the output with the orignal " +
-                                       "ICU ResourceBundle before proceeding.");
+            if(orig != null){
+                String name = orig.getNodeValue();
+                NodeList groupList = doc.getElementsByTagName(GROUPS);
+                Node group = groupList.item(0);
+                NamedNodeMap groupAtt = group.getAttributes();
+                Node id = groupAtt.getNamedItem(ID);
+                if(id!=null){
+                    String idVal = id.getNodeValue();
+                    
+                    if(!name.equals(idVal)){
+                        System.out.println("WARNING: The id value != language name. " +
+                                           "Please compare the output with the orignal " +
+                                           "ICU ResourceBundle before proceeding.");
+                    }
                 }
+                if(!isXmlLang(name)){
+                    System.err.println("The attribute "+ lang + "=\""+ name +
+                                       "\" of <file> element does not satisfy RFC 1766 conditions.");
+                    System.exit(-1);
+                }
+                return name;
             }
-            if(!isXmlLang(name)){
-                System.err.println("The attribute "+ lang + "=\""+ name +
-                                   "\" of <file> element does not satisfy RFC 1766 conditions.");
-                System.exit(-1);
-            }
-            return name;
         }
         return null;
     }
