@@ -455,5 +455,26 @@ public class TestUCharacterIterator extends TestFmwk{
     private static final String ITERATION_STRING_ =
                                         "Testing 1 2 3 \ud800\udc00 456";
     private static final int ITERATION_SUPPLEMENTARY_INDEX = 14;
+    
+    public void TestJitterbug1952(){
+        //test previous code point
+        char[] src = new char[]{ '\uDC00','\uD800','\uDC01','\uD802','\uDC02','\uDC03'};
+        UCharacterIterator iter = UCharacterIterator.getInstance(src);
+        iter.setIndex(1);
+        int ch;
+        // this should never go into a infinite loop
+        // if it does then we have a problem
+        while((ch=iter.previousCodePoint())!=iter.DONE){
+	        if(ch!=0xDc00){
+	            errln("iter.previousCodePoint() failed");
+	        }
+        }
+        iter.setIndex(5);
+        while((ch=iter.nextCodePoint()) !=iter.DONE){
+	        if(ch!= 0xDC03){
+	            errln("iter.nextCodePoint() failed");
+	        } 
+        }      
+    }
         
 }
