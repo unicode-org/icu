@@ -9,17 +9,6 @@
 
 ti_ET {
     Version{ "2.0" }
-    DateTimePatterns { 
-        "h:mm:ss a",
-        "h:mm:ss a",
-        "h:mm:ss a",
-        "h:mm a",
-        "EEEE\u1363 dd MMMM \u1218\u12D3\u120D\u1272 yyyy G",
-        "dd MMMM yyyy",
-        "dd-MMM-yy",
-        "dd/MM/yy",
-        "{1} {0}",
-    }
     // Measurement { "Metric" }
 //    NumberElements {
 //        ".",
@@ -49,5 +38,20 @@ ti_ET {
     // Currency display names
     Currencies {
         ETB { "$", "ETB" }
+    }
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "h:mm:ss a",
+                "h:mm:ss a",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE\u1363 dd MMMM \u1218\u12D3\u120D\u1272 yyyy G",
+                "dd MMMM yyyy",
+                "dd-MMM-yy",
+                "dd/MM/yy",
+                "{1} {0}",
+            }
+        }
     }
 }

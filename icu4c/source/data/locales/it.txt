@@ -7,10 +7,6 @@
 
 it {
     Version{ "2.0" }
-    AmPmMarkers { 
-        "m.",
-        "p.",
-    }
     Countries { 
         Fallback{ "en"}
         //AD { "Andorra" }
@@ -638,43 +634,7 @@ it {
         ZRZ { "ZRZ", "Zaire dello Zaire" }
         ZWD { "Z$",  "Dollaro dello Zimbabwe" }
     }
-    DateTimeElements:intvector { 
-        2,
-        4,
-    }
-    DateTimePatterns { 
-        "HH:mm:ss z",
-        "HH:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
-        "EEEE d MMMM yyyy",
-        "dd MMMM yyyy",
-        "dd/MMM/yy",
-        "dd/MM/yy",
-        "{1} {0}",
-    }
-    DayAbbreviations { 
-        "dom",
-        "lun",
-        "mar",
-        "mer",
-        "gio",
-        "ven",
-        "sab",
-    }
-    DayNames { 
-        "domenica",
-        "luned\u00EC",
-        "marted\u00EC",
-        "mercoled\u00EC",
-        "gioved\u00EC",
-        "venerd\u00EC",
-        "sabato",
-    }
-    Eras { 
-        "aC",
-        "dC",
-    }
+
     Languages {
 
         af  { "afrikaans" }
@@ -793,34 +753,6 @@ it {
     ExemplarCharacters { "[a-z\u00e9\u00f3\u00e0\u00e8\u00ec\u00f2\u00ed\u00fa\u00f9\u00ef]" }
     LocaleScript{ 
         "Latn",  // ISO 15924 Name 
-    }
-    MonthAbbreviations { 
-        "gen",
-        "feb",
-        "mar",
-        "apr",
-        "mag",
-        "giu",
-        "lug",
-        "ago",
-        "set",
-        "ott",
-        "nov",
-        "dic",
-    }
-    MonthNames { 
-        "gennaio",
-        "febbraio",
-        "marzo",
-        "aprile",
-        "maggio",
-        "giugno",
-        "luglio",
-        "agosto",
-        "settembre",
-        "ottobre",
-        "novembre",
-        "dicembre",
     }
     NumberElements { 
         ",",
@@ -989,4 +921,108 @@ it {
         REVISED { "Modificato" }
     }
 
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "m.",
+                "p.",
+            }
+            DateTimeElements:intvector {
+                2,
+                4,
+            }
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE d MMMM yyyy",
+                "dd MMMM yyyy",
+                "dd/MMM/yy",
+                "dd/MM/yy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "dom",
+                        "lun",
+                        "mar",
+                        "mer",
+                        "gio",
+                        "ven",
+                        "sab",
+                    }
+                    narrow{
+		                "D",
+		                "L",
+		                "M",
+		                "M",
+		                "G",
+		                "V",
+		                "S",
+                    }
+                    wide{
+                        "domenica",
+                        "luned\u00EC",
+                        "marted\u00EC",
+                        "mercoled\u00EC",
+                        "gioved\u00EC",
+                        "venerd\u00EC",
+                        "sabato",
+                    }
+                }
+            }
+            eras{
+                "aC",
+                "dC",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "gen",
+                        "feb",
+                        "mar",
+                        "apr",
+                        "mag",
+                        "giu",
+                        "lug",
+                        "ago",
+                        "set",
+                        "ott",
+                        "nov",
+                        "dic",
+                    }
+                    narrow{
+		                "G",
+		                "F",
+		                "M",
+		                "A",
+		                "M",
+		                "G",
+		                "L",
+		                "A",
+		                "S",
+		                "O",
+		                "N",
+		                "D",
+                    }  
+                    wide{
+                        "gennaio",
+                        "febbraio",
+                        "marzo",
+                        "aprile",
+                        "maggio",
+                        "giugno",
+                        "luglio",
+                        "agosto",
+                        "settembre",
+                        "ottobre",
+                        "novembre",
+                        "dicembre",
+                    }
+                }
+            }
+        }
+    }
 }

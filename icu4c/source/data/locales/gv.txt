@@ -7,30 +7,8 @@
 
 gv {
     Version { "2.0" }
-    AmPmMarkers {
-        "a.m.",
-        "p.m."
-    }
     Countries {
         GB { "Rywvaneth Unys" }
-    }
-    DayAbbreviations {
-        "Jed",
-        "Jel",
-        "Jem",
-        "Jerc",
-        "Jerd",
-        "Jeh",
-        "Jes",
-    }
-    DayNames {
-        "Jedoonee",
-        "Jelhein",
-        "Jemayrt",
-        "Jercean",
-        "Jerdein",
-        "Jeheiney",
-        "Jesarn",
     }
     Languages {
         gv { "Gaelg" }
@@ -40,38 +18,6 @@ gv {
     }
     ExemplarCharacters{
         "[a-z\u00E7]"
-    }
-    Eras {
-        "RC", // BC
-        "AD"  // AD
-    }
-    MonthAbbreviations {
-        "J-guer",
-        "T-arree",
-        "Mayrnt",
-        "Avrril",
-        "Boaldyn",
-        "M-souree",
-        "J-souree",
-        "Luanistyn",
-        "M-fouyir",
-        "J-fouyir",
-        "M.Houney",
-        "M.Nollick",
-    }
-    MonthNames {
-        "Jerrey-geuree",
-        "Toshiaght-arree",
-        "Mayrnt",
-        "Averil",
-        "Boaldyn",
-        "Mean-souree",
-        "Jerrey-souree",
-        "Luanistyn",
-        "Mean-fouyir",
-        "Jerrey-fouyir",
-        "Mee Houney",
-        "Mee ny Nollick",
     }
 //    NumberElements {
 //        ".",
@@ -89,4 +35,70 @@ gv {
     // /**************** Info Below is needed ****************/
     // localPatternChars{}
     //
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "a.m.",
+                "p.m."
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Jed",
+                        "Jel",
+                        "Jem",
+                        "Jerc",
+                        "Jerd",
+                        "Jeh",
+                        "Jes",
+                    }
+                    wide{
+                        "Jedoonee",
+                        "Jelhein",
+                        "Jemayrt",
+                        "Jercean",
+                        "Jerdein",
+                        "Jeheiney",
+                        "Jesarn",
+                    }
+                }
+            }
+            eras{
+                "RC", // BC
+                "AD"  // AD
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "J-guer",
+                        "T-arree",
+                        "Mayrnt",
+                        "Avrril",
+                        "Boaldyn",
+                        "M-souree",
+                        "J-souree",
+                        "Luanistyn",
+                        "M-fouyir",
+                        "J-fouyir",
+                        "M.Houney",
+                        "M.Nollick",
+                    }
+                    wide{
+                        "Jerrey-geuree",
+                        "Toshiaght-arree",
+                        "Mayrnt",
+                        "Averil",
+                        "Boaldyn",
+                        "Mean-souree",
+                        "Jerrey-souree",
+                        "Luanistyn",
+                        "Mean-fouyir",
+                        "Jerrey-fouyir",
+                        "Mee Houney",
+                        "Mee ny Nollick",
+                    }
+                }
+            }
+        }
+    }
 }

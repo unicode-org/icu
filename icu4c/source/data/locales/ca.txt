@@ -347,63 +347,6 @@ ca {
         zh { "xin\u00E9s" }
         zu { "zulu" }
     }
-    DateTimePatterns { 
-        "HH:mm:ss z",
-        "HH:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
-        "EEEE dd MMMM yyyy",
-        "d MMMM yyyy",
-        "dd/MM/yyyy",
-        "dd/MM/yy",
-        "{1} {0}",
-    }
-    DayAbbreviations { 
-        "dg.",
-        "dl.",
-        "dt.",
-        "dc.",
-        "dj.",
-        "dv.",
-        "ds.",
-    }
-    DayNames { 
-        "diumenge",
-        "dilluns",
-        "dimarts",
-        "dimecres",
-        "dijous",
-        "divendres",
-        "dissabte",
-    }
-    MonthAbbreviations { 
-        "gen.",
-        "feb.",
-        "mar\u00E7",
-        "abr.",
-        "maig",
-        "juny",
-        "jul.",
-        "ag.",
-        "set.",
-        "oct.",
-        "nov.",
-        "des.",
-    }
-    MonthNames { 
-        "gener",
-        "febrer",
-        "mar\u00E7",
-        "abril",
-        "maig",
-        "juny",
-        "juliol",
-        "agost",
-        "setembre",
-        "octubre",
-        "novembre",
-        "desembre",
-    }
     NumberElements { 
         ",",
         ".",
@@ -430,5 +373,74 @@ ca {
     // Currency display names
     Currencies {
         ESP { "\u20A7", "ESP" } // Spanish Peseta
+    }
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE dd MMMM yyyy",
+                "d MMMM yyyy",
+                "dd/MM/yyyy",
+                "dd/MM/yy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "dg.",
+                        "dl.",
+                        "dt.",
+                        "dc.",
+                        "dj.",
+                        "dv.",
+                        "ds.",
+                    }
+                    wide{
+                        "diumenge",
+                        "dilluns",
+                        "dimarts",
+                        "dimecres",
+                        "dijous",
+                        "divendres",
+                        "dissabte",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "gen.",
+                        "feb.",
+                        "mar\u00E7",
+                        "abr.",
+                        "maig",
+                        "juny",
+                        "jul.",
+                        "ag.",
+                        "set.",
+                        "oct.",
+                        "nov.",
+                        "des.",
+                    }
+                    wide{
+                        "gener",
+                        "febrer",
+                        "mar\u00E7",
+                        "abril",
+                        "maig",
+                        "juny",
+                        "juliol",
+                        "agost",
+                        "setembre",
+                        "octubre",
+                        "novembre",
+                        "desembre",
+                    }
+                }
+            }
+        }
     }
 }

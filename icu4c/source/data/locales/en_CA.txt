@@ -7,17 +7,6 @@
 
 en_CA {
     Version { "2.0" }
-    DateTimePatterns { 
-        "h:mm:ss a z",
-        "h:mm:ss a z",
-        "h:mm:ss a",
-        "h:mm a",
-        "EEEE, MMMM d, yyyy",
-        "MMMM d, yyyy",
-        "d-MMM-yy",
-        "dd/MM/yy",
-        "{1} {0}",
-    }
     NumberPatterns {
         "#,##0.###;-#,##0.###",
         "\u00A4#,##0.00;(\u00A4#,##0.00)",
@@ -29,5 +18,20 @@ en_CA {
     Currencies {
         CAD { "$", "Canadian Dollar" }
         USD { "US$", "US Dollar" }
+    }
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "h:mm:ss a z",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, MMMM d, yyyy",
+                "MMMM d, yyyy",
+                "d-MMM-yy",
+                "dd/MM/yy",
+                "{1} {0}",
+            }
+        }
     }
 }

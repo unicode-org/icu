@@ -23,20 +23,24 @@ ko_KR {
         //FR { "\uD504\uB791\uC2A4" }
         //CA { "\uCE90\uB098\uB2E4" }
 //    }
-    DateTimePatterns {
-        "a hh'\uC2DC' mm'\uBD84' ss'\uCD08' z",
-        "a hh'\uC2DC' mm'\uBD84' ss'\uCD08'",
-        "a h:mm:ss",
-        "a h:mm",
-        "yyyy'\uB144' M'\uC6D4' d'\uC77C' EEEE",
-        "yyyy'\uB144' M'\uC6D4' d'\uC77C'",
-        "yyyy. MM. dd",
-        "yy. MM. dd",
-        "{1} {0}",
-    }
 
 //    Languages {
 //         ko { "\uD55C\uAD6D\uC5B4" }
 //    }
 
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "a hh'\uC2DC' mm'\uBD84' ss'\uCD08' z",
+                "a hh'\uC2DC' mm'\uBD84' ss'\uCD08'",
+                "a h:mm:ss",
+                "a h:mm",
+                "yyyy'\uB144' M'\uC6D4' d'\uC77C' EEEE",
+                "yyyy'\uB144' M'\uC6D4' d'\uC77C'",
+                "yyyy. MM. dd",
+                "yy. MM. dd",
+                "{1} {0}",
+            }
+        }
+    }
 }

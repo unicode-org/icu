@@ -7,9 +7,13 @@
 
 fr_LU {
     Version{"2.0"}
-    DateTimeElements:intvector {
-        2,
-        1,
+    calendar{
+        gregorian{
+            DateTimeElements:intvector {
+                2,
+                1,
+            }
+        }
     }
     NumberElements {
         ",",

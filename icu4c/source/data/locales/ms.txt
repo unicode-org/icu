@@ -91,24 +91,6 @@ ms{
     Currencies {
         MYR { "RM", "Ringgit Malaysia" }
     }
-    DayAbbreviations { 
-        "Ahd",
-        "Isn",
-        "Sel",
-        "Rab",
-        "Kha",
-        "Jum",
-        "Sab",
-    }
-    DayNames { 
-        "Ahad",
-        "Isnin",
-        "Selasa",
-        "Rabu",
-        "Khamis",
-        "Jumaat",
-        "Sabtu",
-    }
     ExemplarCharacters{ "[a-z]" }
     LocaleScript{ 
         "Latn",  // ISO 15924 Name 
@@ -116,32 +98,62 @@ ms{
     Languages {
         ms { "Bahasa Melayu" }
     }
-    MonthAbbreviations { 
-        "Jan",
-        "Feb",
-        "Mac",
-        "Apr",
-        "Mei",
-        "Jun",
-        "Jul",
-        "Ogos",
-        "Sep",
-        "Okt",
-        "Nov",
-        "Dis"
-    }
-    MonthNames { 
-        "Januari",
-        "Februari",
-        "Mac",
-        "April",
-        "Mei",
-        "Jun",
-        "Julai",
-        "Ogos",
-        "September",
-        "Oktober",
-        "November",
-        "Disember"
+    calendar{
+        gregorian{
+            dayNames{
+                format{
+                    abbreviated{
+                        "Ahd",
+                        "Isn",
+                        "Sel",
+                        "Rab",
+                        "Kha",
+                        "Jum",
+                        "Sab",
+                    }
+                    wide{
+                        "Ahad",
+                        "Isnin",
+                        "Selasa",
+                        "Rabu",
+                        "Khamis",
+                        "Jumaat",
+                        "Sabtu",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Jan",
+                        "Feb",
+                        "Mac",
+                        "Apr",
+                        "Mei",
+                        "Jun",
+                        "Jul",
+                        "Ogos",
+                        "Sep",
+                        "Okt",
+                        "Nov",
+                        "Dis"
+                    }
+                    wide{
+                        "Januari",
+                        "Februari",
+                        "Mac",
+                        "April",
+                        "Mei",
+                        "Jun",
+                        "Julai",
+                        "Ogos",
+                        "September",
+                        "Oktober",
+                        "November",
+                        "Disember"
+                    }
+                }
+            }
+        }
     }
 }

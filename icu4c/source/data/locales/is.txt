@@ -188,65 +188,8 @@ is {
     Currencies {
         ISK { "kr.", "ISK" }
     }
-    DateTimePatterns { 
-        "HH:mm:ss z",
-        "HH:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
-        "EEEE, d. MMMM yyyy",
-        "d. MMMM yyyy",
-        "d.M.yyyy",
-        "d.M.yyyy",
-        "{1} {0}",
-    }
-    DayAbbreviations { 
-        "sun",
-        "m\u00E1n",
-        "\u00FEri",
-        "mi\u00F0",
-        "fim",
-        "f\u00F6s",
-        "lau",
-    }
-    DayNames { 
-        "sunnudagur",
-        "m\u00E1nudagur",
-        "\u00FEri\u00F0judagur",
-        "mi\u00F0vikudagur",
-        "fimmtudagur",
-        "f\u00F6studagur",
-        "laugardagur",
-    }
     Languages { 
         is { "\u00EDslenska" }
-    }
-    MonthAbbreviations { 
-        "jan",
-        "feb",
-        "mar",
-        "apr",
-        "ma\u00ED",
-        "j\u00FAn",
-        "j\u00FAl",
-        "\u00E1g\u00FA",
-        "sep",
-        "okt",
-        "n\u00F3v",
-        "des",
-    }
-    MonthNames { 
-        "jan\u00FAar",
-        "febr\u00FAar",
-        "mars",
-        "apr\u00EDl",
-        "ma\u00ED",
-        "j\u00FAn\u00ED",
-        "j\u00FAl\u00ED",
-        "\u00E1g\u00FAst",
-        "september",
-        "okt\u00F3ber",
-        "n\u00F3vember",
-        "desember",
     }
     NumberElements { 
         ",",
@@ -268,4 +211,73 @@ is {
         "Latn",  // ISO 15924 Name 
     }
     ExemplarCharacters { "[a-z\u00e1\u00e9\u00ed\u00f3\u00fa\u00fd\u00f6\u00e6\u00f0\u00fe]" }
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d. MMMM yyyy",
+                "d. MMMM yyyy",
+                "d.M.yyyy",
+                "d.M.yyyy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "sun",
+                        "m\u00E1n",
+                        "\u00FEri",
+                        "mi\u00F0",
+                        "fim",
+                        "f\u00F6s",
+                        "lau",
+                    }
+                    wide{
+                        "sunnudagur",
+                        "m\u00E1nudagur",
+                        "\u00FEri\u00F0judagur",
+                        "mi\u00F0vikudagur",
+                        "fimmtudagur",
+                        "f\u00F6studagur",
+                        "laugardagur",
+                    }
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "jan",
+                        "feb",
+                        "mar",
+                        "apr",
+                        "ma\u00ED",
+                        "j\u00FAn",
+                        "j\u00FAl",
+                        "\u00E1g\u00FA",
+                        "sep",
+                        "okt",
+                        "n\u00F3v",
+                        "des",
+                    }
+                    wide{
+                        "jan\u00FAar",
+                        "febr\u00FAar",
+                        "mars",
+                        "apr\u00EDl",
+                        "ma\u00ED",
+                        "j\u00FAn\u00ED",
+                        "j\u00FAl\u00ED",
+                        "\u00E1g\u00FAst",
+                        "september",
+                        "okt\u00F3ber",
+                        "n\u00F3vember",
+                        "desember",
+                    }
+                }
+            }
+        }
+    }
 }

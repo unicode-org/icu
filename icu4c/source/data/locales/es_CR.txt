@@ -7,17 +7,6 @@
 
 es_CR {
     Version { "2.0" }
-    DateTimePatterns { 
-        "hh:mm:ss a z",
-        "hh:mm:ss a z",
-        "hh:mm:ss a",
-        "hh:mm a",
-        "EEEE d' de 'MMMM' de 'yyyy",
-        "d' de 'MMMM' de 'yyyy",
-        "dd/MM/yyyy",
-        "dd/MM/yy",
-        "{1} {0}",
-    }
     NumberElements { 
         ",",
         ".",
@@ -32,5 +21,20 @@ es_CR {
         "\uFFFD",
         ",",
         "+",
+    }
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "hh:mm:ss a z",
+                "hh:mm:ss a z",
+                "hh:mm:ss a",
+                "hh:mm a",
+                "EEEE d' de 'MMMM' de 'yyyy",
+                "d' de 'MMMM' de 'yyyy",
+                "dd/MM/yyyy",
+                "dd/MM/yy",
+                "{1} {0}",
+            }
+        }
     }
 }

@@ -250,43 +250,7 @@ ro {
         //ZM { "Zambia" }
         //ZW { "Zimbabwe" }
     }
-    DateTimePatterns { 
-        "HH:mm:ss z",
-        "HH:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
-        "d MMMM yyyy",
-        "d MMMM yyyy",
-        "dd.MM.yyyy",
-        "dd.MM.yyyy",
-        "{1} {0}",
-    }
-    DateTimeElements:intvector {
-        2,
-        1, // "Minimal Days in First Week" is unknown. Root value used instead
-    }
-    DayAbbreviations { 
-        "D",
-        "L",
-        "Ma",
-        "Mi",
-        "J",
-        "V",
-        "S",
-    }
-    DayNames { 
-        "duminic\u0103",
-        "luni",
-        "mar\u0163i",
-        "miercuri",
-        "joi",
-        "vineri",
-        "s\u00EEmb\u0103t\u0103",
-    }
-    Eras { 
-        "d.C.",
-        "\u00EE.d.C.",
-    }
+
     Languages { 
         ar { "Arab\u0103" }
         bg { "Bulgar\u0103" }
@@ -321,34 +285,6 @@ ro {
         //zh_cn { "Chinez\u0103 (Simplificat\u0103)" }
         //zh_tw { "Chinez\u0103 (Tradi\u0163ional\u0103)" }
     }
-    MonthAbbreviations { 
-        "Ian",
-        "Feb",
-        "Mar",
-        "Apr",
-        "Mai",
-        "Iun",
-        "Iul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-    }
-    MonthNames { 
-        "ianuarie",
-        "februarie",
-        "martie",
-        "aprilie",
-        "mai",
-        "iunie",
-        "iulie",
-        "august",
-        "septembrie",
-        "octombrie",
-        "noiembrie",
-        "decembrie",
-    }
     NumberElements { 
         ",",
         ".",
@@ -373,5 +309,82 @@ ro {
     // Currency display names
     Currencies {
         ROL { "lei", "ROL" }
+    }
+    calendar{
+        gregorian{
+            DateTimeElements:intvector {
+                2,
+                1, // "Minimal Days in First Week" is unknown. Root value used instead
+            }
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "d MMMM yyyy",
+                "d MMMM yyyy",
+                "dd.MM.yyyy",
+                "dd.MM.yyyy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "D",
+                        "L",
+                        "Ma",
+                        "Mi",
+                        "J",
+                        "V",
+                        "S",
+                    }
+                    wide{
+                        "duminic\u0103",
+                        "luni",
+                        "mar\u0163i",
+                        "miercuri",
+                        "joi",
+                        "vineri",
+                        "s\u00EEmb\u0103t\u0103",
+                    }
+                }
+            }
+            eras{
+                "d.C.",
+                "\u00EE.d.C.",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Ian",
+                        "Feb",
+                        "Mar",
+                        "Apr",
+                        "Mai",
+                        "Iun",
+                        "Iul",
+                        "Aug",
+                        "Sep",
+                        "Oct",
+                        "Nov",
+                        "Dec",
+                    }
+                    wide{
+                        "ianuarie",
+                        "februarie",
+                        "martie",
+                        "aprilie",
+                        "mai",
+                        "iunie",
+                        "iulie",
+                        "august",
+                        "septembrie",
+                        "octombrie",
+                        "noiembrie",
+                        "decembrie",
+                    }
+                }
+            }
+        }
     }
 }

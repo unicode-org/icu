@@ -10,21 +10,25 @@ ga_IE {
     Currencies {
         IEP { "\u00A3","Punt \u00C9ireannach"      } // 1922-2001
     }
-    DateTimePatterns { 
-        "HH:mm:ss z",
-        "HH:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
-        "EEEE d MMMM yyyy",
-        "d MMMM yyyy",
-        "d MMM yyyy",
-        "dd/MM/yyyy",
-        "{1} {0}",
-    }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",
         "\u00a4#,##0.00;-\u00a4#,##0.00",
         "#,##0%",
         "#E0",
+    }
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE d MMMM yyyy",
+                "d MMMM yyyy",
+                "d MMM yyyy",
+                "dd/MM/yyyy",
+                "{1} {0}",
+            }
+        }
     }
 }

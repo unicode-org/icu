@@ -10,5 +10,7 @@ ja_JP_TRADITIONAL {
      Version { "1.0" } 
     // International Calendars Data.
     // NOTE (ICU 2.6) - the format of this data WILL CHANGE in future releases.  
-     DefaultCalendar { "japanese" }
+     calendar{ 
+        default{"japanese" }
+     }
 }

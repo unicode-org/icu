@@ -22,21 +22,25 @@ es_ES {
         ",",
         "+",
     }
-    DateTimePatterns { 
-        "HH'H'mm''ss\" z",
-        "HH:mm:ss z",
-        "H:mm:ss",
-        "H:mm",
-        "EEEE d' de 'MMMM' de 'yyyy",
-        "d' de 'MMMM' de 'yyyy",
-        "dd/MM/yyyy",
-        "dd/MM/yy",
-        "{1} {0}",
-    }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",
         "#,##0.00 \u00A4;-#,##0.00 \u00A4",
         "#,##0%",
         "#E0",
+    }
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "HH'H'mm''ss\" z",
+                "HH:mm:ss z",
+                "H:mm:ss",
+                "H:mm",
+                "EEEE d' de 'MMMM' de 'yyyy",
+                "d' de 'MMMM' de 'yyyy",
+                "dd/MM/yyyy",
+                "dd/MM/yy",
+                "{1} {0}",
+            }
+        }
     }
 }

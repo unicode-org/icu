@@ -7,34 +7,8 @@
 
 kw {
     Version { "2.0" }
-    AmPmMarkers {
-        "a.m.",
-        "p.m.",
-    }
     Countries {
         GB { "Rywvaneth Unys" }
-    }
-    DayAbbreviations { 
-        "Sul",
-        "Lun",
-        "Mth",
-        "Mhr",
-        "Yow",
-        "Gwe",
-        "Sad",
-    }
-    DayNames { 
-        "De Sul",
-        "De Lun",
-        "De Merth",
-        "De Merher",
-        "De Yow",
-        "De Gwener",
-        "De Sadorn",
-    }
-    Eras {
-        "RC", // BC
-        "AD"   // AD
     }
     ExemplarCharacters { "[a-z]" }
     LocaleScript:array{ 
@@ -42,34 +16,6 @@ kw {
     }
     Languages {
         kw { "kernewek" }
-    }
-    MonthAbbreviations { 
-        "Gen",
-        "Whe",
-        "Mer",
-        "Ebr",
-        "Me",
-        "Efn",
-        "Gor",
-        "Est",
-        "Gwn",
-        "Hed",
-        "Du",
-        "Kev",
-    }
-    MonthNames { 
-        "Mys Genver",
-        "Mys Whevrel",
-        "Mys Merth",
-        "Mys Ebrel",
-        "Mys Me",
-        "Mys Efan",
-        "Mys Gortheren",
-        "Mye Est",
-        "Mys Gwyngala",
-        "Mys Hedra",
-        "Mys Du",
-        "Mys Kevardhu",
     }
 //    NumberElements { 
 //        ".",
@@ -90,4 +36,70 @@ kw {
     // Languages{}
     // localPatternChars{}
     //
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "a.m.",
+                "p.m.",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Sul",
+                        "Lun",
+                        "Mth",
+                        "Mhr",
+                        "Yow",
+                        "Gwe",
+                        "Sad",
+                    }
+                    wide{
+                        "De Sul",
+                        "De Lun",
+                        "De Merth",
+                        "De Merher",
+                        "De Yow",
+                        "De Gwener",
+                        "De Sadorn",
+                    }
+                }
+            }
+            eras{
+                "RC", // BC
+                "AD"   // AD
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Gen",
+                        "Whe",
+                        "Mer",
+                        "Ebr",
+                        "Me",
+                        "Efn",
+                        "Gor",
+                        "Est",
+                        "Gwn",
+                        "Hed",
+                        "Du",
+                        "Kev",
+                    }
+                    wide{
+                        "Mys Genver",
+                        "Mys Whevrel",
+                        "Mys Merth",
+                        "Mys Ebrel",
+                        "Mys Me",
+                        "Mys Efan",
+                        "Mys Gortheren",
+                        "Mye Est",
+                        "Mys Gwyngala",
+                        "Mys Hedra",
+                        "Mys Du",
+                        "Mys Kevardhu",
+                    }
+                }
+            }
+        }
+    }
 }

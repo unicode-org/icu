@@ -17,21 +17,6 @@
 
 om_ET {
     Version{ "2.0" }
-    AmPmMarkers {
-        "WD",  // WD = Waaree Dura
-        "WB",  // WD = Waaree Booda
-    }
-    DateTimePatterns { 
-        "h:mm:ss a",
-        "h:mm:ss a",
-        "h:mm:ss a",
-        "h:mm a",
-        "EEEE, MMMM d, yyyy",
-        "dd MMMM yyyy",
-        "dd-MMM-yy",
-        "dd/MM/yy",
-        "{1} {0}",
-    }
     // Measurement { "Metric" }
 //    NumberElements {
 //        ".",
@@ -61,5 +46,24 @@ om_ET {
     // Currency display names
     Currencies {
         ETB { "$", "ETB" }
+    }
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "WD",  // WD = Waaree Dura
+                "WB",  // WD = Waaree Booda
+            }
+            DateTimePatterns{
+                "h:mm:ss a",
+                "h:mm:ss a",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, MMMM d, yyyy",
+                "dd MMMM yyyy",
+                "dd-MMM-yy",
+                "dd/MM/yy",
+                "{1} {0}",
+            }
+        }
     }
 }

@@ -250,44 +250,7 @@ sk {
         //ZM { "Zambia" }
         //ZW { "Zimbabwe" }
     }
-    DateTimePatterns { 
-        "H:mm:ss z",
-        "H:mm:ss z",
-        "H:mm:ss",
-        "H:mm",
-        "EEEE, d. MMMM yyyy",
-        "d. MMMM yyyy",
-        "d.M.yyyy",
-        "d.M.yyyy",
-        "{1} {0}",
-    }
-    DayAbbreviations { 
-        "Ne",
-        "Po",
-        "Ut",
-        "St",
-        "\u0160t",
-        "Pi",
-        "So",
-    }
-    DayNames { 
-        "Nede\u013Ea", // Is this Nede\u013Ea or Nede\u013Ee?
-        "Pondelok",
-        "Utorok",
-        "Streda",
-        "\u0160tvrtok",
-        "Piatok",
-        "Sobota",
-    }
-    Eras { 
-        "pred n.l.",
-        "n.l.",
-    }
-    DateTimeElements:intvector {
-        2,
-        4
-    }
-    Languages { 
+    Languages {
         ar { "arabsk\u00FD" }
         bg { "bulharsk\u00FD" }
         cs { "\u010Desk\u00FD" }
@@ -322,34 +285,6 @@ sk {
         //zh_cn { "\u010D\u00EDnsky (zjednodu\u0161en\u00FD)" }
         //zh_tw { "\u010D\u00EDnsky (tradi\u010Dn\u00FD)" }
     }
-    MonthAbbreviations { 
-        "jan",
-        "feb",
-        "mar",
-        "apr",
-        "m\u00E1j",
-        "j\u00FAn",
-        "j\u00FAl",
-        "aug",
-        "sep",
-        "okt",
-        "nov",
-        "dec",
-    }
-    MonthNames { 
-        "janu\u00E1r",
-        "febru\u00E1r",
-        "marec",
-        "apr\u00EDl",
-        "m\u00E1j",
-        "j\u00FAn",
-        "j\u00FAl",
-        "august",
-        "september",
-        "okt\u00F3ber",
-        "november",
-        "december",
-    }
     NumberElements { 
         ",",
         "\u00A0",
@@ -375,5 +310,82 @@ sk {
     // Currency display names
     Currencies {
         SKK { "Sk", "SKK" }
+    }
+    calendar{
+        gregorian{
+            DateTimeElements:intvector {
+                2,
+                4
+            }
+            DateTimePatterns{
+                "H:mm:ss z",
+                "H:mm:ss z",
+                "H:mm:ss",
+                "H:mm",
+                "EEEE, d. MMMM yyyy",
+                "d. MMMM yyyy",
+                "d.M.yyyy",
+                "d.M.yyyy",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Ne",
+                        "Po",
+                        "Ut",
+                        "St",
+                        "\u0160t",
+                        "Pi",
+                        "So",
+                    }
+                    wide{
+                        "Nede\u013Ea", // Is this Nede\u013Ea or Nede\u013Ee?
+                        "Pondelok",
+                        "Utorok",
+                        "Streda",
+                        "\u0160tvrtok",
+                        "Piatok",
+                        "Sobota",
+                    }
+                }
+            }
+            eras{
+                "pred n.l.",
+                "n.l.",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "jan",
+                        "feb",
+                        "mar",
+                        "apr",
+                        "m\u00E1j",
+                        "j\u00FAn",
+                        "j\u00FAl",
+                        "aug",
+                        "sep",
+                        "okt",
+                        "nov",
+                        "dec",
+                    }
+                    wide{
+                        "janu\u00E1r",
+                        "febru\u00E1r",
+                        "marec",
+                        "apr\u00EDl",
+                        "m\u00E1j",
+                        "j\u00FAn",
+                        "j\u00FAl",
+                        "august",
+                        "september",
+                        "okt\u00F3ber",
+                        "november",
+                        "december",
+                    }
+                }
+            }
+        }
     }
 }

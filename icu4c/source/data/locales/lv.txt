@@ -249,43 +249,7 @@ lv {
         ZM { "Zambija" }
         ZW { "Zimbabve" }
     }
-    DateTimePatterns { 
-        "HH:mm:ss z",
-        "HH:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
-        "EEEE, yyyy'. gada 'd. MMMM",
-        "yyyy'. gada 'd. MMMM",
-        "yyyy.d.M",
-        "yy.d.M",
-        "{1} {0}",
-    }
-    DateTimeElements:intvector {
-        2,
-        1, // "Minimal Days in First Week" is unknown. Root value used instead
-    }
-    DayAbbreviations { 
-        "Sv",
-        "P",
-        "O",
-        "T",
-        "C",
-        "Pk",
-        "S",
-    }
-    DayNames { 
-        "sv\u0113tdiena",
-        "pirmdiena",
-        "otrdiena",
-        "tre\u0161diena",
-        "ceturtdiena",
-        "piektdiena",
-        "sestdiena",
-    }
-    Eras { 
-        "pm\u0113",
-        "m\u0113",
-    }
+
     Languages { 
         ar { "ar\u0101bu" }
         bg { "bulg\u0101ru" }
@@ -320,34 +284,6 @@ lv {
         //zh_cn { "\u0137\u012Bnie\u0161u (vienk\u0101r\u0161ot\u0101)" }
         //zh_tw { "\u0137\u012Bnie\u0161u (tradicion\u0101l\u0101)" }
     }
-    MonthAbbreviations { 
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "Mai",
-        "J\u016Bn",
-        "J\u016Bl",
-        "Aug",
-        "Sep",
-        "Okt",
-        "Nov",
-        "Dec",
-    }
-    MonthNames { 
-        "janv\u0101ris",
-        "febru\u0101ris",
-        "marts",
-        "apr\u012Blis",
-        "maijs",
-        "j\u016Bnijs",
-        "j\u016Blijs",
-        "augusts",
-        "septembris",
-        "oktobris",
-        "novembris",
-        "decembris",
-    }
     NumberElements { 
         ",",
         "\u00A0",
@@ -372,5 +308,82 @@ lv {
     // Currency display names
     Currencies {
         LVL { "Ls", "LVL" }
+    }
+    calendar{
+        gregorian{
+            DateTimeElements:intvector {
+                2,
+                1, // "Minimal Days in First Week" is unknown. Root value used instead
+            }
+            DateTimePatterns{
+                "HH:mm:ss z",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, yyyy'. gada 'd. MMMM",
+                "yyyy'. gada 'd. MMMM",
+                "yyyy.d.M",
+                "yy.d.M",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Sv",
+                        "P",
+                        "O",
+                        "T",
+                        "C",
+                        "Pk",
+                        "S",
+                    }
+                    wide{
+                        "sv\u0113tdiena",
+                        "pirmdiena",
+                        "otrdiena",
+                        "tre\u0161diena",
+                        "ceturtdiena",
+                        "piektdiena",
+                        "sestdiena",
+                    }
+                }
+            }
+            eras{
+                "pm\u0113",
+                "m\u0113",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Jan",
+                        "Feb",
+                        "Mar",
+                        "Apr",
+                        "Mai",
+                        "J\u016Bn",
+                        "J\u016Bl",
+                        "Aug",
+                        "Sep",
+                        "Okt",
+                        "Nov",
+                        "Dec",
+                    }
+                    wide{
+                        "janv\u0101ris",
+                        "febru\u0101ris",
+                        "marts",
+                        "apr\u012Blis",
+                        "maijs",
+                        "j\u016Bnijs",
+                        "j\u016Blijs",
+                        "augusts",
+                        "septembris",
+                        "oktobris",
+                        "novembris",
+                        "decembris",
+                    }
+                }
+            }
+        }
     }
 }

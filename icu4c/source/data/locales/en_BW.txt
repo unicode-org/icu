@@ -7,17 +7,6 @@
 
 en_BW {
     Version { "2.0" }
-    DateTimePatterns {
-        "h:mm:ss a",
-        "h:mm:ss a",
-        "h:mm:ss a",
-        "h:mm a",
-        "EEEE dd MMMM yyyy",
-        "dd MMMM yyyy",
-        "MMM dd,yy",
-        "dd/MM/yy",
-        "{1} {0}",
-    }
 //    NumberElements {
 //        ".",
 //        ",",
@@ -36,5 +25,20 @@ en_BW {
         "\u00a4#,##0.00;-\u00a4#,##0.00",
         "#,##0%",
         "#E0",
+    }
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "h:mm:ss a",
+                "h:mm:ss a",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE dd MMMM yyyy",
+                "dd MMMM yyyy",
+                "MMM dd,yy",
+                "dd/MM/yy",
+                "{1} {0}",
+            }
+        }
     }
 }

@@ -9,17 +9,6 @@
 
 te_IN {
     Version{ "2.0" }
-    DateTimePatterns {
-        "h:mm:ss a z",
-        "h:mm:ss a z",
-        "h:mm:ss a",
-        "h:mm a",
-        "EEEE d MMMM yyyy",
-        "d MMMM yyyy",
-        "dd-MM-yyyy",
-        "dd-MM-yy",
-        "{1} {0}",
-    }
 
     // LanguageLibraryUse { "Te" }
     // Measurement { "Metric" }
@@ -34,5 +23,19 @@ te_IN {
     //    Width { "210" }
     //    Units { "mm" }
     //}
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "h:mm:ss a z",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE d MMMM yyyy",
+                "d MMMM yyyy",
+                "dd-MM-yyyy",
+                "dd-MM-yy",
+                "{1} {0}",
+            }
+        }
+    }
 }
-

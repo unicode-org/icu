@@ -659,39 +659,6 @@ en {
         ZRZ { "ZRZ", "Zairean Zaire"        } // 10/27/1971-11/01/1993
         ZWD { "Z$",  "Zimbabwe Dollar"      } // 04/18/1980-
     }
-    DateTimePatterns { 
-        "h:mm:ss a z",
-        "h:mm:ss a z",
-        "h:mm:ss a",
-        "h:mm a",
-        "EEEE, MMMM d, yyyy",
-        "MMMM d, yyyy",
-        "MMM d, yyyy",
-        "M/d/yy", // Changing this will break binary compatibility.
-        "{1} {0}",
-    }
-    DayAbbreviations {
-        "Sun",
-        "Mon",
-        "Tue",
-        "Wed",
-        "Thu",
-        "Fri",
-        "Sat",
-    }
-    DayNames { 
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-    }
-    Eras { 
-        "BC",
-        "AD",
-    }
     Languages {
         root{ "Root"}    // The only exception to ISO-639
 
@@ -1172,34 +1139,6 @@ en {
     }
     ExemplarCharacters{ "[a-z]" }
     LocaleScript:array{ "Latn" }
-    MonthAbbreviations { 
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-    }
-    MonthNames { 
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
-    }
     NumberPatterns { 
         "#,##0.###;-#,##0.###",
         "\u00A4#,##0.00;-\u00A4#,##0.00",
@@ -1494,7 +1433,7 @@ en {
             japanese      { "Japanese Calendar" }
             buddhist      { "Buddhist Calendar" }
             islamic       { "Islamic Calendar" }
-            islamic-civil { "Islamic-Civil Calendar" }
+            islamic-civil  { "Islamic-Civil Calendar" }
             hebrew        { "Hebrew Calendar" }
             chinese       { "Chinese Calendar" }
             gregorian     { "Gregorian Calendar" }
@@ -1754,6 +1693,79 @@ en {
             "China Standard Time",
             "CDT",
             "Shanghai",
+        }
+    }
+    calendar{
+        gregorian{
+            DateTimePatterns{
+                "h:mm:ss a z",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, MMMM d, yyyy",
+                "MMMM d, yyyy",
+                "MMM d, yyyy",
+                "M/d/yy", // Changing this will break binary compatibility.
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Sun",
+                        "Mon",
+                        "Tue",
+                        "Wed",
+                        "Thu",
+                        "Fri",
+                        "Sat",
+                    }
+                    wide{
+                        "Sunday",
+                        "Monday",
+                        "Tuesday",
+                        "Wednesday",
+                        "Thursday",
+                        "Friday",
+                        "Saturday",
+                    }
+                }
+            }
+            eras{
+                "BC",
+                "AD",
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Jan",
+                        "Feb",
+                        "Mar",
+                        "Apr",
+                        "May",
+                        "Jun",
+                        "Jul",
+                        "Aug",
+                        "Sep",
+                        "Oct",
+                        "Nov",
+                        "Dec",
+                    }
+                    wide{
+                        "January",
+                        "February",
+                        "March",
+                        "April",
+                        "May",
+                        "June",
+                        "July",
+                        "August",
+                        "September",
+                        "October",
+                        "November",
+                        "December",
+                    }
+                }
+            }
         }
     }
 }

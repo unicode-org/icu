@@ -9,11 +9,15 @@
 
 fa_IR {
     Version { "3.0" }
-    DateTimeElements:intvector {
-        7,      // Saturday
-        1,
+    calendar{
+        gregorian{
+            DateTimeElements:intvector {
+                7,      // Saturday
+                1,
+            }
+        }
     }
-    NumberPatterns { 
+    NumberPatterns {
         "#,##0.###;\u2212#,##0.###",
         "#,##0 \u00a4;\u2212#,##0 \u00a4",
         "%#,##0",
@@ -35,4 +39,3 @@ fa_IR {
         "+",
     }
 }
-
