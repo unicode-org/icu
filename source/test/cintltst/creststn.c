@@ -2435,7 +2435,7 @@ static void TestGetFunctionalEquivalent(void) {
         "t",    "zh_TW@collation=stroke",      "zh@collation=stroke",
         "f",    "de_CN@collation=pinyin",      "de",
         "t",    "zh@collation=pinyin",      "zh",
-        "f",    "zh_CN@collation=pinyin",      "zh", /* should be 'T' when validSubLocales works */
+        "t",    "zh_CN@collation=pinyin",      "zh", /* should be 'T' when validSubLocales works */
         "t",    "zh_HK@collation=pinyin",      "zh",
         "t",    "zh_HK@collation=stroke",      "zh@collation=stroke",
         "t",    "zh_HK",  "zh@collation=stroke",
@@ -2446,11 +2446,11 @@ static void TestGetFunctionalEquivalent(void) {
         "t",    "de@calendar=japanese",        "de",
         "t",    "zh_TW@collation=big5han",    "zh@collation=big5han",
         "t",    "zh_TW@collation=gb2312han", "zh@collation=gb2312han",
-        "f",    "zh_CN@collation=big5han",    "zh@collation=big5han",
-        "f",    "zh_CN@collation=gb2312han", "zh@collation=gb2312han",
+        "t",    "zh_CN@collation=big5han",    "zh@collation=big5han",
+        "t",    "zh_CN@collation=gb2312han", "zh@collation=gb2312han",
         "t",    "zh@collation=big5han",       "zh@collation=big5han",
         "t",    "zh@collation=gb2312han",    "zh@collation=gb2312han",
-        "f",    "hi_IN@collation=direct",      "hi@collation=direct",
+        "t",    "hi_IN@collation=direct",      "hi@collation=direct",
         "t",    "hi@collation=standard",      "hi",
         "t",    "hi@collation=direct",      "hi@collation=direct",
         "f",    "hi_AU@collation=direct;currency=CHF;calendar=buddhist",   "hi@collation=direct",
