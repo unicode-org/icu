@@ -853,22 +853,6 @@ static uint32_t uprv_uca_finalizeAddition(tempUCATable *t, UCAElements *element,
     UTF_NEXT_CHAR(element->cPoints, i, element->cSize, cp);
     /*CE = ucmpe32_get(t->mapping, cp);*/
     CE = utrie_get32(t->mapping, cp, NULL);
-#if 0
-    UCAElements *composed = (UCAElements *)uprv_malloc(sizeof(UCAElements));
-    uprv_memcpy(composed, element, sizeof(UCAElements));
-    composed->cPoints = composed->uchars;
-    *composed->cPoints = *element->cPoints;
-    composed->cSize = unorm_normalize(element->cPoints+1, element->cSize-1, UNORM_NFC, 0, composed->cPoints+1, 128, status);
-    composed->cSize++;
-    if(composed->cSize != element->cSize || uprv_memcmp(composed->cPoints+1, element->cPoints+1, element->cSize-1)) {
-      // do it!
-      CE = uprv_uca_addContraction(t, CE, composed, status);
-#ifdef UCOL_DEBUG
-      fprintf(stderr, "Adding composed for %04X\n", *element->cPoints);
-#endif
-    }
-    uprv_free(composed);
-#endif
 
     CE = uprv_uca_addContraction(t, CE, element, status);
   } else { /* easy case, */
@@ -921,30 +905,57 @@ uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status)
       element->mapCE = expansion;
     }
   } else {     
-    expansion = (uint32_t)(UCOL_SPECIAL_FLAG | (EXPANSION_TAG<<UCOL_TAG_SHIFT) 
-      | ((uprv_uca_addExpansion(expansions, element->CEs[0], status)+(headersize>>2))<<4)
-      & 0xFFFFF0);
-
-    for(i = 1; i<element->noOfCEs; i++) {
-      uprv_uca_addExpansion(expansions, element->CEs[i], status);
-    }
-    if(element->noOfCEs <= 0xF) {
-      expansion |= element->noOfCEs;
+    /* ICU 2.1 long primaries */
+    /* unfortunately, it looks like we have to look for a long primary here */
+    /* since in canonical closure we are going to hit some long primaries from */
+    /* the first phase, and they will come back as continuations/expansions */
+    /* destroying the effect of the previous opitimization */
+    /* A long primary is a three byte primary with starting secondaries and tertiaries */
+    /* It can appear in long runs of only primary differences (like east Asian tailorings) */
+    /* also, it should not be an expansion, as expansions would break with this */
+    // This part came in from ucol_bld.cpp
+    //if(tok->expansion == 0
+      //&& noOfBytes[0] == 3 && noOfBytes[1] == 1 && noOfBytes[2] == 1
+      //&& CEparts[1] == (UCOL_BYTE_COMMON << 24) && CEparts[2] == (UCOL_BYTE_COMMON << 24)) {
+      /* we will construct a special CE that will go unchanged to the table */
+    if(element->noOfCEs == 2 // a two CE expansion 
+      && isContinuation(element->CEs[1]) // which  is a continuation
+      && (element->CEs[1] & (~(0xFF << 24 | UCOL_CONTINUATION_MARKER))) == 0 // that has only primaries in continuation,
+      && (((element->CEs[0]>>8) & 0xFF) == UCOL_BYTE_COMMON) // a common secondary
+      && ((element->CEs[0] & 0xFF) == UCOL_BYTE_COMMON) // and a common tertiary
+      ) {
+#ifdef UCOL_DEBUG
+      fprintf(stdout, "Long primary %04X\n", element->cPoints[0]);
+#endif
+      element->mapCE = UCOL_SPECIAL_FLAG | (LONG_PRIMARY_TAG<<24) // a long primary special
+        | ((element->CEs[0]>>8) & 0xFFFF00) // first and second byte of primary
+        | ((element->CEs[1]>>24) & 0xFF);   // third byte of primary
     } else {
-      uprv_uca_addExpansion(expansions, 0, status);
-    }
-    element->mapCE = expansion;
-    uprv_uca_setMaxExpansion(element->CEs[element->noOfCEs - 1],
-                             (uint8_t)element->noOfCEs,
-                             t->maxExpansions,
-                             status);
-    if(UCOL_ISJAMO(element->cPoints[0])) {
-      t->image->jamoSpecial = TRUE;
-      uprv_uca_setMaxJamoExpansion(element->cPoints[0],
-                               element->CEs[element->noOfCEs - 1],
+      expansion = (uint32_t)(UCOL_SPECIAL_FLAG | (EXPANSION_TAG<<UCOL_TAG_SHIFT) 
+        | ((uprv_uca_addExpansion(expansions, element->CEs[0], status)+(headersize>>2))<<4)
+        & 0xFFFFF0);
+
+      for(i = 1; i<element->noOfCEs; i++) {
+        uprv_uca_addExpansion(expansions, element->CEs[i], status);
+      }
+      if(element->noOfCEs <= 0xF) {
+        expansion |= element->noOfCEs;
+      } else {
+        uprv_uca_addExpansion(expansions, 0, status);
+      }
+      element->mapCE = expansion;
+      uprv_uca_setMaxExpansion(element->CEs[element->noOfCEs - 1],
                                (uint8_t)element->noOfCEs,
-                               t->maxJamoExpansions,
+                               t->maxExpansions,
                                status);
+      if(UCOL_ISJAMO(element->cPoints[0])) {
+        t->image->jamoSpecial = TRUE;
+        uprv_uca_setMaxJamoExpansion(element->cPoints[0],
+                                 element->CEs[element->noOfCEs - 1],
+                                 (uint8_t)element->noOfCEs,
+                                 t->maxJamoExpansions,
+                                 status);
+      }
     }
   }
 
@@ -987,7 +998,7 @@ uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status)
 
   CE = uprv_uca_finalizeAddition(t, element, status);
 
-  if(element->cSize > 1) { // this is a contraction, we should check whether a composed form should also be included
+  if(element->cSize > 1 && !(element->cSize==2 && UTF16_IS_LEAD(element->cPoints[0]) && UTF16_IS_TRAIL(element->cPoints[1]))) { // this is a contraction, we should check whether a composed form should also be included
     UChar composed[256];
     uint32_t compLen = unorm_normalize(element->cPoints, element->cSize, UNORM_NFC, 0, composed, 256, status);;
 
@@ -1072,6 +1083,7 @@ static inline uint32_t getFoldedValue(UNewTrie *trie, UChar32 start, int32_t off
   uint32_t tag;
   UChar32 limit;
   UBool inBlockZero;
+  static int32_t count = 1;
 
   limit=start+0x400;
   while(start<limit) {
@@ -1079,7 +1091,10 @@ static inline uint32_t getFoldedValue(UNewTrie *trie, UChar32 start, int32_t off
       tag = getCETag(value);
       if(inBlockZero == TRUE) {
           start+=UTRIE_DATA_BLOCK_LENGTH;
-      } else if(value!=0 && tag != IMPLICIT_TAG) {
+      } else if(value!=0 && tag != IMPLICIT_TAG && tag != NOT_FOUND_TAG) {
+#ifdef UCOL_DEBUG
+        fprintf(stdout, "%i, Folded %08X, value %08X\n", count++, start, value);
+#endif
           return (uint32_t)(UCOL_SPECIAL_FLAG | (SURROGATE_TAG<<24) | offset);
       } else {
           ++start;
@@ -1087,6 +1102,28 @@ static inline uint32_t getFoldedValue(UNewTrie *trie, UChar32 start, int32_t off
   }
   return 0;
 }
+
+
+#ifdef UCOL_DEBUG
+// This is a debug function to print the contents of a trie.
+// It is used in conjuction with the code around utrie_unserialize call
+void enumRange(const void *context, UChar32 start, UChar32 limit, uint32_t value) {
+  if(start<0x10000) {
+    fprintf(stdout, "%08X, %08X, %08X\n", start, limit, value);
+  } else {
+    fprintf(stdout, "%08X=%04X %04X, %08X=%04X %04X, %08X\n", start, UTF16_LEAD(start), UTF16_TRAIL(start), limit, UTF16_LEAD(limit), UTF16_TRAIL(limit), value);
+  }
+}
+
+int32_t 
+myGetFoldingOffset(uint32_t data) {
+  if(data > UCOL_NOT_FOUND && getCETag(data) == SURROGATE_TAG) {
+    return (data&0xFFFFFF);
+  } else {
+    return 0;
+  }
+}
+#endif
 
 U_CAPI UCATableHeader* U_EXPORT2
 uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
@@ -1194,7 +1231,19 @@ uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
 
     myData->mappingPosition = tableOffset;
     utrie_serialize(mapping, dataStart+tableOffset, toAllocate-tableOffset, getFoldedValue, FALSE, status);
+#ifdef UCOL_DEBUG
+    // This is debug code to dump the contents of the trie. It needs two functions defined above
+    {
+      UTrie UCAt = { 0 };
+      utrie_unserialize(&UCAt, dataStart+tableOffset, 9999999, status);
+      UCAt.getFoldingOffset = myGetFoldingOffset;
+      if(U_SUCCESS(*status)) {
+        utrie_enum(&UCAt, NULL, enumRange, NULL);
+      }
+    }
+#endif
     tableOffset += paddedsize(mappingSize);
+
 
     int32_t i = 0;
 #if 0
