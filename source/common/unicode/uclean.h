@@ -53,6 +53,7 @@
  * </p>
  *
  * @stable ICU 2.0
+ * @system
  */
 U_CAPI void U_EXPORT2 
 u_cleanup(void);
