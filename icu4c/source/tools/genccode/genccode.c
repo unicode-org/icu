@@ -31,8 +31,11 @@
 #include <time.h>
 
 /* _M_IA64 should be defined in windows.h */
-#ifdef _M_IA64
+#if defined(_M_IA64)
 #   define ICU_OBJECT_MACHINE_TYPE IMAGE_FILE_MACHINE_IA64
+#   define ICU_ENTRY_OFFSET 0
+#elif defined(_M_AMD64)
+#   define ICU_OBJECT_MACHINE_TYPE IMAGE_FILE_MACHINE_AMD64
 #   define ICU_ENTRY_OFFSET 0
 #else
 #   define ICU_OBJECT_MACHINE_TYPE IMAGE_FILE_MACHINE_I386
@@ -511,5 +514,4 @@ write8str(FileStream *out, uint8_t byte) {
     T_FileStream_writeLine(out, s);
 }
 #endif
-
 
