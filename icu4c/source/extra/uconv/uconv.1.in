@@ -30,6 +30,12 @@
 [
 .BI "\-x" " trasnsliterator
 ]
+[
+.B "\-c"
+]
+[
+.B "\-i"
+]
 .BI "\-f\fP, \fB\-\-from\-code" " encoding"
 .BI "\-t\fP, \fB\-\-to\-code" " encoding"
 [
@@ -83,6 +89,12 @@ Run the transcoded Unicode data through the given
 .IR transliterator 
 and use the transliterated data as input for the transcoding to
 the the destination encoding.
+.TP
+.B "\-c"
+Omit invalid characters from the output.
+.TP
+.B "\-i"
+Ignore invalid sequences from the input.
 .TP
 .BI "\-f\fP, \fB\-\-from\-code" " encoding"
 Set the original encoding of the data to 
