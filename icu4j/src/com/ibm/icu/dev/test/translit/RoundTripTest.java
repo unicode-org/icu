@@ -216,7 +216,7 @@ public class RoundTripTest extends TestFmwk {
     public void TestHebrew() throws IOException, ParseException {
         long start = System.currentTimeMillis();
         new Test("Latin-Hebrew")
-          .test("[a-zA-Z\u02BC\u02BB]", "[[:hebrew:]-[\uFB00-\uFBFF]]", "[\u05F0\u05F1\u05F2]", this, new LegalHebrew());
+          .test("[a-zA-Z\u02BC\u02BB]", "[[:hebrew:]-[\u05BD\uFB00-\uFBFF]]", "[\u05F0\u05F1\u05F2]", this, new LegalHebrew());
         showElapsed(start, "TestHebrew");
     }
 

@@ -3,8 +3,8 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Hebrew_Latin.txt,v $
-# $Date: 2002/07/26 19:56:55 $
-# $Revision: 1.4 $
+# $Date: 2004/05/06 23:03:43 $
+# $Revision: 1.5 $
 #--------------------------------------------------------------------
 
 # Transliteration table for Hebrew
@@ -27,7 +27,7 @@
 # For more information, see"
 #   http://oss.software.ibm.com/icu/userguide/Transliteration.html
 
-:: [[:Hebrew:] [\u05B0-\u05B9\u05BB-\u05BC\u05C1-\u05C2\u2135-\u2138̄\u05BF]] ;
+:: [[:Hebrew:] [\u05B0-\u05B9\u05BB-\u05BC\u05C1-\u05C2\u2135-\u2138̄\u05BF] - [\u05BD]] ;
 :: nfkd (nfc) ;
 $letterAfter = [:M:]* [:L:] ;
 
