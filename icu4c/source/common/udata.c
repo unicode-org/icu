@@ -194,7 +194,8 @@
 
 #   define MAP_IMPLEMENTATION MAP_WIN32
 
-#elif defined(LINUX) || defined(POSIX) || defined(SOLARIS) || defined(AIX) || defined(HPUX) /* Todo: auto detect mmap(). Until then, just add your platform here. */
+/* ### Todo: auto detect mmap(). Until then, just add your platform here. */
+#elif defined(LINUX) || defined(POSIX) || defined(SOLARIS) || defined(AIX) || defined(HPUX) || defined(OS390)
     typedef size_t MemoryMap;
 
 #   define NO_MAP 0
@@ -662,8 +663,15 @@ openCommonData(UDataMemory *pData,
         uprv_strcpy(suffix, LIB_SUFFIX);
 
         /* try path/basename first */
-        lib=LOAD_LIBRARY(pathBuffer, basename);
-        if(!IS_LIBRARY(lib)) {
+#       ifdef OS390BATCH
+            /* ### hack: we still need to get u_getDataDirectory() fixed
+               for OS/390 (batch mode - always return "//"??)
+               and this here straightened out with LIB_PREFIX and LIB_SUFFIX (both empty?!) */
+            lib=LOAD_LIBRARY("//icudata", "//icudata");
+#       else
+            lib=LOAD_LIBRARY(pathBuffer, basename);
+#       endif
+        if(!IS_LIBRARY(lib) && basename!=pathBuffer) {
             /* try basename only next */
             lib=LOAD_LIBRARY(basename, basename);
         }
@@ -739,7 +747,9 @@ openCommonData(UDataMemory *pData,
     uprv_strcpy(suffix, "." DATA_TYPE);
 
     /* try path/basename first, then basename only */
-    if(uprv_mapFile(pData, pathBuffer, basename) || uprv_mapFile(pData, basename, basename)) {
+    if( uprv_mapFile(pData, pathBuffer, basename) ||
+        basename!=pathBuffer && uprv_mapFile(pData, basename, basename)
+    ) {
         const DataHeader *pHeader;
         *basename=0;
 
@@ -948,7 +958,9 @@ doOpenChoice(const char *path, const char *type, const char *name,
         *suffix++='_';
         uprv_strcpy(suffix, tocEntryName);
 
-        if(uprv_mapFile(&dataMemory, pathBuffer, basename) || uprv_mapFile(&dataMemory, basename, basename)) {
+        if( uprv_mapFile(&dataMemory, pathBuffer, basename) ||
+            basename!=pathBuffer && uprv_mapFile(&dataMemory, basename, basename)
+        ) {
             pHeader=dataMemory.pHeader;
             if(pHeader->dataHeader.magic1==0xda && pHeader->dataHeader.magic2==0x27 &&
                pHeader->info.isBigEndian==U_IS_BIG_ENDIAN &&
@@ -974,7 +986,9 @@ doOpenChoice(const char *path, const char *type, const char *name,
 
     /* try path+entryName next */
     uprv_strcpy(basename, tocEntryName);
-    if(uprv_mapFile(&dataMemory, pathBuffer, basename) || uprv_mapFile(&dataMemory, basename, basename)) {
+    if( uprv_mapFile(&dataMemory, pathBuffer, basename) ||
+        basename!=pathBuffer && uprv_mapFile(&dataMemory, basename, basename)
+    ) {
         pHeader=dataMemory.pHeader;
         if(pHeader->dataHeader.magic1==0xda && pHeader->dataHeader.magic2==0x27 &&
            pHeader->info.isBigEndian==U_IS_BIG_ENDIAN &&
