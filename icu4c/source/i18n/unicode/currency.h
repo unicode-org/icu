@@ -4,7 +4,7 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/unicode/Attic/currency.h,v $ 
-* $Revision: 1.2 $
+* $Revision: 1.3 $
 **********************************************************************
 */
 #ifndef UCURRENCY_H
@@ -34,39 +34,42 @@ class Locale;
  */
 class U_I18N_API UCurrency {
 
-    // TODO:? Make the string a char* instead of a UnicodeString ?
-
  public:
 
     /**
-     * Returns a currency object for the default currency in the given
+     * Returns a currency code for the default currency in the given
      * locale.
+     * @param locale the locale for which to retrieve a currency code
+     * @param result pointer to a buffer of at least 4 chars
+     * to receive a null-terminated 3-letter ISO 4217 code
+     * @param ec error code
      */
-    static UnicodeString forLocale(const Locale& locale,
-                                   UErrorCode& ec);
+    static void forLocale(const Locale& locale,
+                          char* result,
+                          UErrorCode& ec);
 
     /**
-     * Returns the display string for this currency object in the
+     * Returns the display string for the given currency in the
      * given locale.  For example, the display string for the USD
      * currency object in the en_US locale is "$".
      */
-    static UnicodeString getSymbol(const UnicodeString& currency,
+    static UnicodeString getSymbol(const char* currency,
                                    const Locale& locale);
 
     /**
      * Returns the number of the number of fraction digits that should
-     * be displayed for this currency.
+     * be displayed for the given currency.
      * @return a non-negative number of fraction digits to be
      * displayed
      */
-    static int32_t getDefaultFractionDigits(const UnicodeString& currency);
+    static int32_t getDefaultFractionDigits(const char* currency);
 
     /**
-     * Returns the rounding increment for this currency, or 0.0 if no
-     * rounding is done by this currency.
+     * Returns the rounding increment for the given currency, or 0.0 if no
+     * rounding is done by the currency.
      * @return the non-negative rounding increment, or 0.0 if none
      */
-    static double getRoundingIncrement(const UnicodeString& currency);
+    static double getRoundingIncrement(const char* currency);
 };
 
 U_NAMESPACE_END
