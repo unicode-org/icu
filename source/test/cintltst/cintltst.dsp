@@ -276,6 +276,10 @@ SOURCE=.\susctest.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\ucmptst.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\udatatst.c
 # End Source File
 # Begin Source File
@@ -285,13 +289,6 @@ SOURCE=.\utf16tst.c
 # Begin Source File
 
 SOURCE=.\utf8tst.c
-
-!IF  "$(CFG)" == "cintltst - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "cintltst - Win32 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
