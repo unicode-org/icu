@@ -203,23 +203,18 @@ void TransliterationRuleSet::freeze(const TransliterationRuleData& data,
  * <code>limit</code>.
  * @param data a dictionary mapping variables to the sets they
  * represent (maps <code>Character</code> to <code>UnicodeSet</code>)
- * @param filter the filter.  Any character for which
- * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
- * altered by this transliterator.  If <tt>filter</tt> is
- * <tt>null</tt> then no filtering is applied.
  * @return the matching rule, or null if none found.
  */
 TransliterationRule*
 TransliterationRuleSet::findMatch(const Replaceable& text,
                                   const UTransPosition& pos,
-                                  const TransliterationRuleData& data,
-                                  const UnicodeFilter* filter) const {
+                                  const TransliterationRuleData& data) const {
     /* We only need to check our indexed bin of the rule table,
      * based on the low byte of the first key character.
      */
     int16_t x = (int16_t) (text.charAt(pos.start) & 0xFF);
     for (int32_t i=index[x]; i<index[x+1]; ++i) {
-        if (rules[i]->matches(text, pos, data, filter)) {
+        if (rules[i]->matches(text, pos, data)) {
             return rules[i];
         }
     }
@@ -246,10 +241,6 @@ TransliterationRuleSet::findMatch(const Replaceable& text,
  * represent (maps <code>Character</code> to <code>UnicodeSet</code>)
  * @param partial output parameter.  <code>partial[0]</code> is set to
  * true if a partial match is returned.
- * @param filter the filter.  Any character for which
- * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
- * altered by this transliterator.  If <tt>filter</tt> is
- * <tt>null</tt> then no filtering is applied.
  * @return the matching rule, or null if none found, or if the text buffer
  * does not have enough text yet to unambiguously match a rule.
  */
@@ -257,8 +248,7 @@ TransliterationRule*
 TransliterationRuleSet::findIncrementalMatch(const Replaceable& text,
                                              const UTransPosition& pos,
                                              const TransliterationRuleData& data,
-                                             UBool& isPartial,
-                                             const UnicodeFilter* filter) const {
+                                             UBool& isPartial) const {
 
     /* We only need to check our indexed bin of the rule table,
      * based on the low byte of the first key character.
@@ -266,7 +256,7 @@ TransliterationRuleSet::findIncrementalMatch(const Replaceable& text,
     isPartial = FALSE;
     int16_t x = (int16_t) (text.charAt(pos.start) & 0xFF);
     for (int32_t i=index[x]; i<index[x+1]; ++i) {
-        int32_t match = rules[i]->getMatchDegree(text, pos, data, filter);
+        int32_t match = rules[i]->getMatchDegree(text, pos, data);
         switch (match) {
         case TransliterationRule::FULL_MATCH:
             return rules[i];

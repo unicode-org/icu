@@ -662,6 +662,8 @@ protected:
                                        UTransPosition& index,
                                        UBool incremental) const;
 
+    friend class CompoundTransliterator; // for filteredTransliterate
+
 public:
 
     /**
@@ -1013,13 +1015,6 @@ protected:
 
 private:
     static void initializeCache(void);
-
-    /* IDs take the form <source> ID_SEP <target>, where
-     * <source> and <target> are (usually) script names.
-     * Compound IDs take the form <ID> ( ID_DELIM <ID> )+.
-     */
-    static const UChar ID_SEP;   // ((UChar)0x002D) /*-*/
-    static const UChar ID_DELIM; // ((UChar)0x003B) /*;*/
 };
 
 inline int32_t Transliterator::getMaximumContextLength(void) const {
