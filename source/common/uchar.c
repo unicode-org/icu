@@ -391,7 +391,6 @@ static const uint8_t flagsOffset[256]={
 
 U_CFUNC UBool
 uprv_haveProperties(UErrorCode *pErrorCode) {
-    U_ASSERT(havePropsData>0);
     if (havePropsData == 0) {
         uprv_loadPropsData(pErrorCode);
     }
