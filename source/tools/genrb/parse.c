@@ -208,8 +208,12 @@ parse(FileStream *f,
       ustr_cpy(&tag, &token, status);
       if(FAILURE(*status)) goto finish;
       if(uhash_get(data, uhash_hashUString(tag.fChars)) != 0) {
+	 char *s;
 	*status = U_INVALID_FORMAT_ERROR;
-	setErrorText("Duplicate tag name detected");
+       s = icu_malloc(1024);
+       strcpy(s, "Duplicate tag name detected: ");
+       u_austrcpy(s+strlen(s), tag.fChars);
+       setErrorText(s);
 	goto finish;
       }
       break;
