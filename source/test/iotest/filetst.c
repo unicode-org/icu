@@ -295,7 +295,10 @@ static void TestFileFromICU(UFILE *myFile) {
         log_err("u_fgets got \"%s\"\n", myString);
     }
     if (!u_feof(myFile)) {
-        log_err("Got feof while reading the end of the file.\n");
+        log_err("Did not get feof while reading the end of the file.\n");
+    }
+    if (u_fscanf(myFile, "%S\n", myUString) != 0) {
+        log_err("u_fscanf read data while reading the end of the file.\n");
     }
 
     u_fclose(myFile);

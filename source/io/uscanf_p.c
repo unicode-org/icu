@@ -1253,35 +1253,38 @@ u_scanf_parse(UFILE     *f,
         handlerNum = (uint16_t)(spec.fInfo.fSpec - USCANF_BASE_FMT_HANDLERS);
         if (handlerNum < USCANF_NUM_FMT_HANDLERS) {
             /* skip the argument, if necessary */
-            if(spec.fInfo.fSkipArg) {
+            /* query the info function for argument information */
+            info = g_u_scanf_infos[ handlerNum ].info;
+            if (info != ufmt_count && u_feof(f)) {
+                break;
+            }
+            else if(spec.fInfo.fSkipArg) {
                 args.ptrValue = NULL;
             }
             else {
-                /* query the info function for argument information */
-                info = g_u_scanf_infos[ handlerNum ].info;
-                if(info > ufmt_simple_percent) {
-                    switch(info) {
+                switch(info) {
+                case ufmt_count:
+                    /* set the spec's width to the # of items converted */
+                    spec.fInfo.fWidth = cpConsumed;
+                    /* fall through to next case */
+                case ufmt_char:
+                case ufmt_uchar:
+                case ufmt_int:
+                case ufmt_string:
+                case ufmt_ustring:
+                case ufmt_pointer:
+                case ufmt_float:
+                case ufmt_double:
+                    args.ptrValue = va_arg(ap, void*);
+                    break;
 
-                    case ufmt_count:
-                        /* set the spec's width to the # of items converted */
-                        spec.fInfo.fWidth = cpConsumed;
-                        /* fall through to next case */
-                    case ufmt_char:
-                    case ufmt_uchar:
-                    case ufmt_int:
-                    case ufmt_string:
-                    case ufmt_ustring:
-                    case ufmt_pointer:
-                    case ufmt_float:
-                    case ufmt_double:
-                        args.ptrValue = va_arg(ap, void*);
-                        break;
-
-                    default:
-                        break;  /* Should never get here */
-                    }
+                default:
+                    /* else args is ignored */
+                    args.ptrValue = NULL;
+                    break;
                 }
             }
+
             /* call the handler function */
             handler = g_u_scanf_infos[ handlerNum ].handler;
             if(handler != 0) {
@@ -1292,8 +1295,10 @@ u_scanf_parse(UFILE     *f,
                 cpConsumed += (*handler)(f, &spec.fInfo, &args, alias, &count, &argConsumed);
 
                 /* if the handler encountered an error condition, break */
-                if(argConsumed < 0)
+                if(argConsumed < 0) {
+                    converted = -converted;
                     break;
+                }
 
                 /* add to the # of items converted */
                 converted += argConsumed;
