@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $
- * $Date: 2001/10/17 19:19:00 $
- * $Revision: 1.53 $
+ * $Date: 2001/10/17 19:23:28 $
+ * $Revision: 1.54 $
  *
  *****************************************************************************************
  */
@@ -1537,7 +1537,7 @@ public class TransliteratorTest extends TestFmwk {
      * Test new property set syntax
      */
     public void TestPropertySet() {
-        expect("a>A; \\p{Lu}>x; \\p{ALL}>y;", "abcDEF", "Ayyxxx");
+        expect("a>A; \\p{Lu}>x; \\p{Any}>y;", "abcDEF", "Ayyxxx");
         expect("(.+)>'[' $1 ']';", " a stitch \n in time \r saves 9",
                "[ a stitch ]\n[ in time ]\r[ saves 9]");
     }
