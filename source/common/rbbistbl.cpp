@@ -38,10 +38,6 @@ U_CDECL_END
 
 U_NAMESPACE_BEGIN
 
-const char RBBISymbolTable::fgClassID=0;
-
-
-
 RBBISymbolTable::RBBISymbolTable(RBBIRuleScanner *rs, const UnicodeString &rules, UErrorCode &status)
     :fRules(rules), fRuleScanner(rs), ffffString(UChar(0xffff))
 {
