@@ -270,7 +270,8 @@ morebytes:
                 if (T_UConverter_toUnicode_InvalidChar_Callback(args, UCNV_ILLEGAL, err))
                 {
                     /* Stop if the error wasn't handled */
-                    break;
+                    /* args and err should already be set properly */
+                    return;
                 }
 
                 mySource = (unsigned char *) args->source;
@@ -424,7 +425,8 @@ morebytes:
                     offsetNum, UCNV_ILLEGAL, err))
                 {
                     /* Stop if the error wasn't handled */
-                    break;
+                    /* args and err should already be set properly */
+                    return;
                 }
 
                 offsetNum += i + ((unsigned char *) args->source - mySource);
