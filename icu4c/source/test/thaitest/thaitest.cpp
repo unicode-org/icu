@@ -335,6 +335,8 @@ const UChar *ThaiWordbreakTest::readFile(char *fileName, int32_t &charCount)
     fclose(f);
     
     UnicodeString myText(bufferChars, fileSize, "UTF-8");
+
+    delete[] bufferChars;
     
     charCount = myText.length();
     buffer = new UChar[charCount];
