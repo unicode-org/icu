@@ -90,14 +90,7 @@ const char dirStrings[][5] = {
     "BN"
 };
 
-static void
-TestCaseFolding(void);
-
-static void
-TestCaseCompare(void);
-
-static void
-TestUScriptCodeAPI(void);
+void addUnicodeTest(TestNode** root);
 
 void addUnicodeTest(TestNode** root)
 {
@@ -1852,19 +1845,19 @@ void TestUScriptCodeAPI(){
             U_GOTHIC, U_GREEK, U_GUJARATI,
         };
 
-        const char* expected[]={
+        const char* expectedNames[]={
               
             /* test names */
             "CYRILLIC","DESERET","DEVANAGARI","ETHIOPIC","GEORGIAN", 
             "GOTHIC",  "GREEK",  "GUJARATI", 
              '\0'
         };
-        int i=0;
+        i=0;
         while(i<sizeof(testAbbr)/sizeof(UScriptCode)){
             const char* name = uchar_getScriptName(testAbbr[i]);
-            int numErrors=0;
-            if(strcmp(expected[i],name)!=0){
-                log_verbose("Error getting abbreviations Got: %s Expected: %s \n",name,expected[i]);
+            numErrors=0;
+            if(strcmp(expectedNames[i],name)!=0){
+                log_verbose("Error getting abbreviations Got: %s Expected: %s\n",name,expectedNames[i]);
                 numErrors++;
             }
             if(numErrors > 0){
@@ -1885,7 +1878,7 @@ void TestUScriptCodeAPI(){
             U_MALAYALAM, U_MONGOLIAN,
         };
 
-        const char* expected[]={
+        const char* expectedAbbr[]={
               /* test abbr */
             "Hani", "Hang","Hebr","Hira",
             "Knda","Kana","Khmr","Lao",
@@ -1893,12 +1886,12 @@ void TestUScriptCodeAPI(){
             "Mlym", "Mong",
              '\0'
         };
-        int i=0;
+        i=0;
         while(i<sizeof(testAbbr)/sizeof(UScriptCode)){
             const char* name = uchar_getScriptAbbr(testAbbr[i]);
-            int numErrors=0;
-            if(strcmp(expected[i],name)!=0){
-                log_verbose("Error getting abbreviations Got: %s Expected: %s \n",name,expected[i]);
+            numErrors=0;
+            if(strcmp(expectedAbbr[i],name)!=0){
+                log_verbose("Error getting abbreviations Got: %s Expected: %s\n",name,expectedAbbr[i]);
                 numErrors++;
             }
             if(numErrors > 0){
