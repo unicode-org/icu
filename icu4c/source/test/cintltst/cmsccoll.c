@@ -544,26 +544,28 @@ static void BillFairmanTest( ) {
 ** lp points to the original locale ("fr_FR_....")
 */
 
-  UResourceBundle *lr,*cr;
-  UErrorCode              lec = U_ZERO_ERROR;
-  const char *lp = "fr_FR_you_ll_never_find_this_locale";
+    UResourceBundle *lr,*cr;
+    UErrorCode              lec = U_ZERO_ERROR;
+    const char *lp = "fr_FR_you_ll_never_find_this_locale";
 
-  log_verbose("BillFairmanTest\n");
+    log_verbose("BillFairmanTest\n");
 
-  if ((lr = ures_open(NULL,lp,&lec))) {
-    if ((cr = ures_getByKey(lr,"CollationElements",0,&lec))) {
-      if ((lp = ures_getLocale(cr,&lec))) {
-        if (U_SUCCESS(lec)) {
-          if(strcmp(lp, "fr") != 0) {
-            log_err("Wrong locale for French Collation Data, expected \"fr\" got %s", lp);
-          }
+    lr = ures_open(NULL,lp,&lec);
+    if (lr) {
+        cr = ures_getByKey(lr,"CollationElements",0,&lec);
+        if (cr) {
+            lp = ures_getLocale(cr,&lec);
+            if (lp) {
+                if (U_SUCCESS(lec)) {
+                    if(strcmp(lp, "fr") != 0) {
+                        log_err("Wrong locale for French Collation Data, expected \"fr\" got %s", lp);
+                    }
+                }
+            }
+            ures_close(cr);
         }
-      }
-      ures_close(cr);
+        ures_close(lr);
     }
-    ures_close(lr);
-  }
-
 }
 
 static void testPrimary(UCollator* col, const UChar* p,const UChar* q){
@@ -754,8 +756,8 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
   uint32_t exOffset = 0; uint32_t exLen = 0;
   uint32_t oldOffset = 0;
 
-  /*  uint32_t rExpsLen = 0; */
-  uint32_t firstLen = 0;
+  /* uint32_t rExpsLen = 0; */
+  /* uint32_t firstLen = 0; */
   UBool varT = FALSE; UBool top_ = TRUE;
   UBool startOfRules = TRUE;
   UColTokenParser src;
