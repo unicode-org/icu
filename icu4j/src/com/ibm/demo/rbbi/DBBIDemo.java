@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/demo/rbbi/Attic/DBBIDemo.java,v $ 
- * $Date: 2000/05/12 01:29:30 $ 
- * $Revision: 1.5 $
+ * $Date: 2001/02/20 22:48:19 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -337,7 +337,7 @@ text.setWrapStyleWord(true);
             enum = BreakIterator.getCharacterInstance();
         }
         else if (s.equals("Word")) {
-            errorText("tWordBreak");
+            errorText("getWordInstance");
             enum = BreakIterator.getWordInstance();
         }
         else if (s.equals("Line Break")) {
