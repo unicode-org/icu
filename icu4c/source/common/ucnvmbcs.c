@@ -218,8 +218,8 @@
  * If the value is to be retrieved, then it is looked up in the bytes table
  * depending on the number of bytes that are stored per character:
  *     p=bytes array;
- *     ++i; // advance beyond assignment flags in stage 2 to the bytes index
- *     p+=(16*(uint32_t)table[i]+(c&0xf))*bytes-stored-per-character;
+ *     // [i+1]: advance beyond assignment flags in stage 2 to the bytes index
+ *     p+=(16*(uint32_t)table[i+1]+(c&0xf))*bytes-stored-per-character;
  *
  * That is, the bytes array index is 16 times the index from stage 2,
  * plus the last 4 bits from the code point, and indexing as many bytes
@@ -1818,7 +1818,7 @@ _MBCSFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     int32_t *offsets;
 
     const uint16_t *table;
-    const uint8_t *bytes;
+    const uint8_t *p, *bytes;
     uint8_t outputType;
 
     UChar32 c;
@@ -1984,156 +1984,149 @@ getTrail:
              * for other code points, and also does not allow output of leading zeros.
              */
             i=MBCS_STAGE_2_MULTIPLIER*(uint32_t)table[c>>10]+((c>>3)&0x7e);
+            p=bytes;
+
+            /* get the bytes and the length for the output */
+            switch(outputType) {
+            case MBCS_OUTPUT_1:
+                p+=(16*(uint32_t)table[i+1]+(c&0xf));
+                value=*p;
+                length=1;
+                break;
+            case MBCS_OUTPUT_2:
+                p+=(16*(uint32_t)table[i+1]+(c&0xf))*2;
+#               if U_IS_BIG_ENDIAN
+                    value=*(uint16_t *)p;
+#               else
+                    value=((uint32_t)*p<<8)|p[1];
+#               endif
+                if(value<=0xff) {
+                    length=1;
+                } else {
+                    length=2;
+                }
+                break;
+            case MBCS_OUTPUT_2_SISO:
+                /* 1/2-byte stateful with Shift-In/Shift-Out */
+                p+=(16*(uint32_t)table[i+1]+(c&0xf))*2;
+#               if U_IS_BIG_ENDIAN
+                    value=*(uint16_t *)p;
+#               else
+                    value=((uint32_t)*p<<8)|p[1];
+#               endif
+                if(value==0 && c!=0) {
+                    /* unassigned (do not allow 0 result for assigned here), do not change state */
+                    length=0;
+                } else if(value<=0xff) {
+                    if(prevLength==1) {
+                        length=1;
+                    } else {
+                        /* change from double-byte mode to single-byte */
+                        value|=(uint32_t)UCNV_SI<<8;
+                        length=2;
+                        prevLength=1;
+                    }
+                } else {
+                    if(prevLength==2) {
+                        length=2;
+                    } else {
+                        /* change from single-byte mode to double-byte */
+                        value|=(uint32_t)UCNV_SO<<16;
+                        length=3;
+                        prevLength=2;
+                    }
+                }
+                break;
+            case MBCS_OUTPUT_3:
+                p+=(16*(uint32_t)table[i+1]+(c&0xf))*3;
+                value=((uint32_t)*p<<16)|((uint32_t)p[1]<<8)|p[2];
+                if(value<=0xff) {
+                    length=1;
+                } else if(value<=0xffff) {
+                    length=2;
+                } else {
+                    length=3;
+                }
+                break;
+            case MBCS_OUTPUT_4:
+                p+=(16*(uint32_t)table[i+1]+(c&0xf))*4;
+#               if U_IS_BIG_ENDIAN
+                    value=*(uint32_t *)p;
+#               else
+                    value=((uint32_t)*p<<24)|((uint32_t)p[1]<<16)|((uint32_t)p[2]<<8)|p[3];
+#               endif
+                if(value<=0xff) {
+                    length=1;
+                } else if(value<=0xffff) {
+                    length=2;
+                } else if(value<=0xffffff) {
+                    length=3;
+                } else {
+                    length=4;
+                }
+                break;
+            case MBCS_OUTPUT_3_EUC:
+                p+=(16*(uint32_t)table[i+1]+(c&0xf))*2;
+#               if U_IS_BIG_ENDIAN
+                    value=*(uint16_t *)p;
+#               else
+                    value=((uint32_t)*p<<8)|p[1];
+#               endif
+                /* EUC 16-bit fixed-length representation */
+                if(value<=0xff) {
+                    length=1;
+                } else if((value&0x8000)==0) {
+                    value|=0x8e8000;
+                    length=3;
+                } else if((value&0x80)==0) {
+                    value|=0x8f0080;
+                    length=3;
+                } else {
+                    length=2;
+                }
+                break;
+            case MBCS_OUTPUT_4_EUC:
+                p+=(16*(uint32_t)table[i+1]+(c&0xf))*3;
+                value=((uint32_t)*p<<16)|((uint32_t)p[1]<<8)|p[2];
+                /* EUC 16-bit fixed-length representation applied to the first two bytes */
+                if(value<=0xff) {
+                    length=1;
+                } else if(value<=0xffff) {
+                    length=2;
+                } else if((value&0x800000)==0) {
+                    value|=0x8e800000;
+                    length=4;
+                } else if((value&0x8000)==0) {
+                    value|=0x8f008000;
+                    length=4;
+                } else {
+                    length=3;
+                }
+                break;
+            default:
+                /* must not occur */
+                /*
+                 * To avoid compiler warnings that value & length may be
+                 * used without having been initialized, we set them here.
+                 * In reality, this is unreachable code.
+                 * Not having a default branch also causes warnings with
+                 * some compilers.
+                 */
+                value=0;
+                length=0;
+                break;
+            }
 
             /* is this code point assigned, or do we use fallbacks? */
-            if((table[i++]&(1<<(c&0xf)))!=0 || UCNV_FROM_U_USE_FALLBACK(cnv, c)) {
-                const uint8_t *p=bytes;
-
-                /* get the bytes and the length for the output */
-                switch(outputType) {
-                case MBCS_OUTPUT_1:
-                    p+=(16*(uint32_t)table[i]+(c&0xf));
-                    value=*p;
-                    length=1;
-                    break;
-                case MBCS_OUTPUT_2:
-                    p+=(16*(uint32_t)table[i]+(c&0xf))*2;
-#                   if U_IS_BIG_ENDIAN
-                        value=*(uint16_t *)p;
-#                   else
-                        value=((uint32_t)*p<<8)|p[1];
-#                   endif
-                    if(value<=0xff) {
-                        length=1;
-                    } else {
-                        length=2;
-                    }
-                    break;
-                case MBCS_OUTPUT_2_SISO:
-                    /* 1/2-byte stateful with Shift-In/Shift-Out */
-                    p+=(16*(uint32_t)table[i]+(c&0xf))*2;
-#                   if U_IS_BIG_ENDIAN
-                        value=*(uint16_t *)p;
-#                   else
-                        value=((uint32_t)*p<<8)|p[1];
-#                   endif
-                    if(value==0 && c!=0) {
-                        /* unassigned (do not allow 0 result for assigned here), do not change state */
-                        length=0;
-                    } else if(value<=0xff) {
-                        if(prevLength==1) {
-                            length=1;
-                        } else {
-                            /* change from double-byte mode to single-byte */
-                            value|=(uint32_t)UCNV_SI<<8;
-                            length=2;
-                            prevLength=1;
-                        }
-                    } else {
-                        if(prevLength==2) {
-                            length=2;
-                        } else {
-                            /* change from single-byte mode to double-byte */
-                            value|=(uint32_t)UCNV_SO<<16;
-                            length=3;
-                            prevLength=2;
-                        }
-                    }
-                    break;
-                case MBCS_OUTPUT_3:
-                    p+=(16*(uint32_t)table[i]+(c&0xf))*3;
-                    value=((uint32_t)*p<<16)|((uint32_t)p[1]<<8)|p[2];
-                    if(value<=0xff) {
-                        length=1;
-                    } else if(value<=0xffff) {
-                        length=2;
-                    } else {
-                        length=3;
-                    }
-                    break;
-                case MBCS_OUTPUT_4:
-                    p+=(16*(uint32_t)table[i]+(c&0xf))*4;
-#                   if U_IS_BIG_ENDIAN
-                        value=*(uint32_t *)p;
-#                   else
-                        value=((uint32_t)*p<<24)|((uint32_t)p[1]<<16)|((uint32_t)p[2]<<8)|p[3];
-#                   endif
-                    if(value<=0xff) {
-                        length=1;
-                    } else if(value<=0xffff) {
-                        length=2;
-                    } else if(value<=0xffffff) {
-                        length=3;
-                    } else {
-                        length=4;
-                    }
-                    break;
-                case MBCS_OUTPUT_3_EUC:
-                    p+=(16*(uint32_t)table[i]+(c&0xf))*2;
-#                   if U_IS_BIG_ENDIAN
-                        value=*(uint16_t *)p;
-#                   else
-                        value=((uint32_t)*p<<8)|p[1];
-#                   endif
-                    /* EUC 16-bit fixed-length representation */
-                    if(value<=0xff) {
-                        length=1;
-                    } else if((value&0x8000)==0) {
-                        value|=0x8e8000;
-                        length=3;
-                    } else if((value&0x80)==0) {
-                        value|=0x8f0080;
-                        length=3;
-                    } else {
-                        length=2;
-                    }
-                    break;
-                case MBCS_OUTPUT_4_EUC:
-                    p+=(16*(uint32_t)table[i]+(c&0xf))*3;
-                    value=((uint32_t)*p<<16)|((uint32_t)p[1]<<8)|p[2];
-                    /* EUC 16-bit fixed-length representation applied to the first two bytes */
-                    if(value<=0xff) {
-                        length=1;
-                    } else if(value<=0xffff) {
-                        length=2;
-                    } else if((value&0x800000)==0) {
-                        value|=0x8e800000;
-                        length=4;
-                    } else if((value&0x8000)==0) {
-                        value|=0x8f008000;
-                        length=4;
-                    } else {
-                        length=3;
-                    }
-                    break;
-                default:
-                    /* must not occur */
-                    /*
-                     * To avoid compiler warnings that value & length may be
-                     * used without having been initialized, we set them here.
-                     * In reality, this is unreachable code.
-                     * Not having a default branch also causes warnings with
-                     * some compilers.
-                     */
-                    value=0;
-                    length=0;
-                    break;
-                }
-
-                /* is the codepage value really an "unassigned" indicator? */
-                if(value==0 && c!=0 && (table[i-1]&(1<<(c&0xf)))==0) {
-                    /*
-                     * We allow a 0 byte output if the Unicode code point is
-                     * U+0000 and also if the "assigned" bit is set for this entry.
-                     * There is no way with this data structure for fallback output
-                     * for other than U+0000 to be a zero byte.
-                     */
-                    /* callback(unassigned) */
-                    reason=UCNV_UNASSIGNED;
-                    *pErrorCode=U_INVALID_CHAR_FOUND;
-                    goto callback;
-                }
-            } else {
+            if(!((table[i]&(1<<(c&0xf)))!=0 ||
+                 UCNV_FROM_U_USE_FALLBACK(cnv, c) && (value!=0 || c==0))
+            ) {
+                /*
+                 * We allow a 0 byte output if the Unicode code point is
+                 * U+0000 and also if the "assigned" bit is set for this entry.
+                 * There is no way with this data structure for fallback output
+                 * for other than U+0000 to be a zero byte.
+                 */
                 /* callback(unassigned) */
                 reason=UCNV_UNASSIGNED;
                 *pErrorCode=U_INVALID_CHAR_FOUND;
@@ -2336,7 +2329,7 @@ _MBCSSingleFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     int32_t *offsets;
 
     const uint16_t *table;
-    const uint8_t *bytes;
+    const uint8_t *p, *bytes;
 
     UChar32 c;
 
@@ -2430,42 +2423,36 @@ getTrail:
 
             /* convert the Unicode code point in c into codepage bytes */
             i=MBCS_STAGE_2_MULTIPLIER*(uint32_t)table[c>>10]+((c>>3)&0x7e);
+            p=bytes;
+
+            /* MBCS_OUTPUT_1 */
+            p+=(16*(uint32_t)table[i+1]+(c&0xf));
+            value=*p;
 
             /* is this code point assigned, or do we use fallbacks? */
-            if((table[i++]&(1<<(c&0xf)))!=0 || UCNV_FROM_U_USE_FALLBACK(cnv, c)) {
-                const uint8_t *p=bytes;
-
-                /* MBCS_OUTPUT_1 */
-                p+=(16*(uint32_t)table[i]+(c&0xf));
-                value=*p;
-
-                /* is the codepage value really an "unassigned" indicator? */
-                if(!(value==0 && c!=0 && (table[i-1]&(1<<(c&0xf)))==0)) {
-                    /* assigned, write the output character bytes from value and length */
-                    /* length==1 */
-                    /* this is easy because we know that there is enough space */
-                    *target++=value;
-                    if(offsets!=NULL) {
-                        *offsets++=sourceIndex;
-                    }
-                    --targetCapacity;
-
-                    /* normal end of conversion: prepare for a new character */
-                    c=0;
-                    sourceIndex=nextSourceIndex;
-                    continue;
-                } else { /* unassigned */
-                    /*
-                     * We allow a 0 byte output if the Unicode code point is
-                     * U+0000 and also if the "assigned" bit is set for this entry.
-                     * There is no way with this data structure for fallback output
-                     * for other than U+0000 to be a zero byte.
-                     */
-                    /* callback(unassigned) */
-                    reason=UCNV_UNASSIGNED;
-                    *pErrorCode=U_INVALID_CHAR_FOUND;
+            if( (table[i]&(1<<(c&0xf)))!=0 ||
+                UCNV_FROM_U_USE_FALLBACK(cnv, c) && (value!=0 || c==0)
+            ) {
+                /* assigned, write the output character bytes from value and length */
+                /* length==1 */
+                /* this is easy because we know that there is enough space */
+                *target++=value;
+                if(offsets!=NULL) {
+                    *offsets++=sourceIndex;
                 }
-            } else {
+                --targetCapacity;
+
+                /* normal end of conversion: prepare for a new character */
+                c=0;
+                sourceIndex=nextSourceIndex;
+                continue;
+            } else { /* unassigned */
+                /*
+                 * We allow a 0 byte output if the Unicode code point is
+                 * U+0000 and also if the "assigned" bit is set for this entry.
+                 * There is no way with this data structure for fallback output
+                 * for other than U+0000 to be a zero byte.
+                 */
                 /* callback(unassigned) */
                 reason=UCNV_UNASSIGNED;
                 *pErrorCode=U_INVALID_CHAR_FOUND;
@@ -2563,7 +2550,7 @@ _MBCSSingleFromBMPWithOffsets(UConverterFromUnicodeArgs *pArgs,
     int32_t *offsets;
 
     const uint16_t *table;
-    const uint8_t *bytes;
+    const uint8_t *p, *bytes;
 
     UChar32 c;
 
@@ -2615,38 +2602,32 @@ _MBCSSingleFromBMPWithOffsets(UConverterFromUnicodeArgs *pArgs,
         if(!UTF_IS_SURROGATE(c)) {
             /* convert the Unicode code point in c into codepage bytes */
             i=MBCS_STAGE_2_MULTIPLIER*(uint32_t)table[c>>10]+((c>>3)&0x7e);
+            p=bytes;
+
+            /* MBCS_OUTPUT_1 */
+            p+=(16*(uint32_t)table[i+1]+(c&0xf));
+            value=*p;
 
             /* is this code point assigned, or do we use fallbacks? */
-            if((table[i++]&(1<<(c&0xf)))!=0 || UCNV_FROM_U_USE_FALLBACK(cnv, c)) {
-                const uint8_t *p=bytes;
+            if( (table[i]&(1<<(c&0xf)))!=0 ||
+                UCNV_FROM_U_USE_FALLBACK(cnv, c) && (value!=0 || c==0)
+            ) {
+                /* assigned, write the output character bytes from value and length */
+                /* length==1 */
+                /* this is easy because we know that there is enough space */
+                *target++=value;
+                --targetCapacity;
 
-                /* MBCS_OUTPUT_1 */
-                p+=(16*(uint32_t)table[i]+(c&0xf));
-                value=*p;
-
-                /* is the codepage value really an "unassigned" indicator? */
-                if(!(value==0 && c!=0 && (table[i-1]&(1<<(c&0xf)))==0)) {
-                    /* assigned, write the output character bytes from value and length */
-                    /* length==1 */
-                    /* this is easy because we know that there is enough space */
-                    *target++=value;
-                    --targetCapacity;
-
-                    /* normal end of conversion: prepare for a new character */
-                    c=0;
-                    continue;
-                } else { /* unassigned */
-                    /*
-                     * We allow a 0 byte output if the Unicode code point is
-                     * U+0000 and also if the "assigned" bit is set for this entry.
-                     * There is no way with this data structure for fallback output
-                     * for other than U+0000 to be a zero byte.
-                     */
-                    /* callback(unassigned) */
-                    reason=UCNV_UNASSIGNED;
-                    *pErrorCode=U_INVALID_CHAR_FOUND;
-                }
-            } else {
+                /* normal end of conversion: prepare for a new character */
+                c=0;
+                continue;
+            } else { /* unassigned */
+                /*
+                 * We allow a 0 byte output if the Unicode code point is
+                 * U+0000 and also if the "assigned" bit is set for this entry.
+                 * There is no way with this data structure for fallback output
+                 * for other than U+0000 to be a zero byte.
+                 */
                 /* callback(unassigned) */
                 reason=UCNV_UNASSIGNED;
                 *pErrorCode=U_INVALID_CHAR_FOUND;
@@ -2799,6 +2780,7 @@ _MBCSFromUChar32(UConverterSharedData *sharedData,
                  UChar32 c, uint32_t *pValue,
                  UBool useFallback) {
     const uint16_t *table=sharedData->table->mbcs.fromUnicodeTable;
+    const uint8_t *p;
     uint32_t i;
     uint32_t value;
     int32_t length;
@@ -2810,116 +2792,115 @@ _MBCSFromUChar32(UConverterSharedData *sharedData,
 
     /* convert the Unicode code point in c into codepage bytes (same as in _MBCSFromUnicodeWithOffsets) */
     i=MBCS_STAGE_2_MULTIPLIER*(uint32_t)table[c>>10]+((c>>3)&0x7e);
+    p=sharedData->table->mbcs.fromUnicodeBytes;
+
+    /* get the bytes and the length for the output */
+    switch(sharedData->table->mbcs.outputType) {
+    case MBCS_OUTPUT_1:
+        p+=(16*(uint32_t)table[i+1]+(c&0xf));
+        value=*p;
+        length=1;
+        break;
+    case MBCS_OUTPUT_2:
+        p+=(16*(uint32_t)table[i+1]+(c&0xf))*2;
+#       if U_IS_BIG_ENDIAN
+            value=*(uint16_t *)p;
+#       else
+            value=((uint32_t)*p<<8)|p[1];
+#       endif
+        if(value<=0xff) {
+            length=1;
+        } else {
+            length=2;
+        }
+        break;
+    case MBCS_OUTPUT_3:
+        p+=(16*(uint32_t)table[i+1]+(c&0xf))*3;
+        value=((uint32_t)*p<<16)|((uint32_t)p[1]<<8)|p[2];
+        if(value<=0xff) {
+            length=1;
+        } else if(value<=0xffff) {
+            length=2;
+        } else {
+            length=3;
+        }
+        break;
+    case MBCS_OUTPUT_4:
+        p+=(16*(uint32_t)table[i+1]+(c&0xf))*4;
+#       if U_IS_BIG_ENDIAN
+            value=*(uint32_t *)p;
+#       else
+            value=((uint32_t)*p<<24)|((uint32_t)p[1]<<16)|((uint32_t)p[2]<<8)|p[3];
+#       endif
+        if(value<=0xff) {
+            length=1;
+        } else if(value<=0xffff) {
+            length=2;
+        } else if(value<=0xffffff) {
+            length=3;
+        } else {
+            length=4;
+        }
+        break;
+    case MBCS_OUTPUT_3_EUC:
+        p+=(16*(uint32_t)table[i+1]+(c&0xf))*2;
+#       if U_IS_BIG_ENDIAN
+            value=*(uint16_t *)p;
+#       else
+            value=((uint32_t)*p<<8)|p[1];
+#       endif
+        /* EUC 16-bit fixed-length representation */
+        if(value<=0xff) {
+            length=1;
+        } else if((value&0x8000)==0) {
+            value|=0x8e8000;
+            length=3;
+        } else if((value&0x80)==0) {
+            value|=0x8f0080;
+            length=3;
+        } else {
+            length=2;
+        }
+        break;
+    case MBCS_OUTPUT_4_EUC:
+        p+=(16*(uint32_t)table[i+1]+(c&0xf))*3;
+        value=((uint32_t)*p<<16)|((uint32_t)p[1]<<8)|p[2];
+        /* EUC 16-bit fixed-length representation applied to the first two bytes */
+        if(value<=0xff) {
+            length=1;
+        } else if(value<=0xffff) {
+            length=2;
+        } else if((value&0x800000)==0) {
+            value|=0x8e800000;
+            length=4;
+        } else if((value&0x8000)==0) {
+            value|=0x8f008000;
+            length=4;
+        } else {
+            length=3;
+        }
+        break;
+    default:
+        /* must not occur */
+        return -1;
+    }
 
     /* is this code point assigned, or do we use fallbacks? */
-    if((table[i++]&(1<<(c&0xf)))!=0 || FROM_U_USE_FALLBACK(useFallback, c)) {
-        const uint8_t *p=sharedData->table->mbcs.fromUnicodeBytes;
-
-        /* get the bytes and the length for the output */
-        switch(sharedData->table->mbcs.outputType) {
-        case MBCS_OUTPUT_1:
-            p+=(16*(uint32_t)table[i]+(c&0xf));
-            value=*p;
-            length=1;
-            break;
-        case MBCS_OUTPUT_2:
-            p+=(16*(uint32_t)table[i]+(c&0xf))*2;
-#           if U_IS_BIG_ENDIAN
-                value=*(uint16_t *)p;
-#           else
-                value=((uint32_t)*p<<8)|p[1];
-#           endif
-            if(value<=0xff) {
-                length=1;
-            } else {
-                length=2;
-            }
-            break;
-        case MBCS_OUTPUT_3:
-            p+=(16*(uint32_t)table[i]+(c&0xf))*3;
-            value=((uint32_t)*p<<16)|((uint32_t)p[1]<<8)|p[2];
-            if(value<=0xff) {
-                length=1;
-            } else if(value<=0xffff) {
-                length=2;
-            } else {
-                length=3;
-            }
-            break;
-        case MBCS_OUTPUT_4:
-            p+=(16*(uint32_t)table[i]+(c&0xf))*4;
-#           if U_IS_BIG_ENDIAN
-                value=*(uint32_t *)p;
-#           else
-                value=((uint32_t)*p<<24)|((uint32_t)p[1]<<16)|((uint32_t)p[2]<<8)|p[3];
-#           endif
-            if(value<=0xff) {
-                length=1;
-            } else if(value<=0xffff) {
-                length=2;
-            } else if(value<=0xffffff) {
-                length=3;
-            } else {
-                length=4;
-            }
-            break;
-        case MBCS_OUTPUT_3_EUC:
-            p+=(16*(uint32_t)table[i]+(c&0xf))*2;
-#           if U_IS_BIG_ENDIAN
-                value=*(uint16_t *)p;
-#           else
-                value=((uint32_t)*p<<8)|p[1];
-#           endif
-            /* EUC 16-bit fixed-length representation */
-            if(value<=0xff) {
-                length=1;
-            } else if((value&0x8000)==0) {
-                value|=0x8e8000;
-                length=3;
-            } else if((value&0x80)==0) {
-                value|=0x8f0080;
-                length=3;
-            } else {
-                length=2;
-            }
-            break;
-        case MBCS_OUTPUT_4_EUC:
-            p+=(16*(uint32_t)table[i]+(c&0xf))*3;
-            value=((uint32_t)*p<<16)|((uint32_t)p[1]<<8)|p[2];
-            /* EUC 16-bit fixed-length representation applied to the first two bytes */
-            if(value<=0xff) {
-                length=1;
-            } else if(value<=0xffff) {
-                length=2;
-            } else if((value&0x800000)==0) {
-                value|=0x8e800000;
-                length=4;
-            } else if((value&0x8000)==0) {
-                value|=0x8f008000;
-                length=4;
-            } else {
-                length=3;
-            }
-            break;
-        default:
-            /* must not occur */
-            return -1;
-        }
-
-        /* is the codepage value really an "unassigned" indicator? */
+    if( (table[i]&(1<<(c&0xf)))!=0 ||
+        FROM_U_USE_FALLBACK(useFallback, c) && (value!=0 || c==0)
+    ) {
         /*
          * We allow a 0 byte output if the Unicode code point is
          * U+0000 and also if the "assigned" bit is set for this entry.
          * There is no way with this data structure for fallback output
          * for other than U+0000 to be a zero byte.
          */
-        if(!(value==0 && c!=0 && (table[i-1]&(1<<(c&0xf)))==0)) {
-            /* assigned */
-            *pValue=value;
-            return length;
-        }
+        /* assigned */
+        *pValue=value;
+        return length;
+    } else {
+        return 0;
     }
-    return 0;
 }
 
 U_CFUNC int32_t
@@ -2927,6 +2908,7 @@ _MBCSSingleFromUChar32(UConverterSharedData *sharedData,
                        UChar32 c,
                        UBool useFallback) {
     const uint16_t *table=sharedData->table->mbcs.fromUnicodeTable;
+    const uint8_t *p;
     uint32_t i;
     int32_t value;
 
@@ -2937,29 +2919,28 @@ _MBCSSingleFromUChar32(UConverterSharedData *sharedData,
 
     /* convert the Unicode code point in c into codepage bytes (same as in _MBCSFromUnicodeWithOffsets) */
     i=MBCS_STAGE_2_MULTIPLIER*(uint32_t)table[c>>10]+((c>>3)&0x7e);
+    p=sharedData->table->mbcs.fromUnicodeBytes;
+
+    /* get the byte for the output */
+    /* MBCS_OUTPUT_1 */
+    p+=(16*(uint32_t)table[i+1]+(c&0xf));
+    value=*p;
 
     /* is this code point assigned, or do we use fallbacks? */
-    if((table[i++]&(1<<(c&0xf)))!=0 || FROM_U_USE_FALLBACK(useFallback, c)) {
-        const uint8_t *p=sharedData->table->mbcs.fromUnicodeBytes;
-
-        /* get the byte for the output */
-        /* MBCS_OUTPUT_1 */
-        p+=(16*(uint32_t)table[i]+(c&0xf));
-        value=*p;
-
-        /* is the codepage value really an "unassigned" indicator? */
+    if( (table[i]&(1<<(c&0xf)))!=0 ||
+        FROM_U_USE_FALLBACK(useFallback, c) && (value!=0 || c==0)
+    ) {
         /*
          * We allow a 0 byte output if the Unicode code point is
          * U+0000 and also if the "assigned" bit is set for this entry.
          * There is no way with this data structure for fallback output
          * for other than U+0000 to be a zero byte.
          */
-        if(!(value==0 && c!=0 && (table[i-1]&(1<<(c&0xf)))==0)) {
-            /* assigned */
-            return value;
-        }
+        /* assigned */
+        return value;
+    } else {
+        return -1;
     }
-    return -1;
 }
 
 /* miscellaneous ------------------------------------------------------------ */
