@@ -739,13 +739,13 @@ _processContractions(const void *context, UChar32 start, UChar32 limit, uint32_t
         return TRUE;
     }
 }
-U_CDECL_END
 
 static int32_t U_CALLCONV
 _getTrieFoldingOffset(uint32_t data) 
 {
     return (int32_t)(data&0xFFFFFF);
 }
+U_CDECL_END
 
 U_CAPI int32_t U_EXPORT2
 ucol_getUnsafeSet( const UCollator *coll,
