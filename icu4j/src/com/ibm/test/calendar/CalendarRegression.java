@@ -18,6 +18,15 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
         new CalendarRegression().run(args);
     }
 
+    static final String[] FIELD_NAME = {
+        "ERA", "YEAR", "MONTH", "WEEK_OF_YEAR", "WEEK_OF_MONTH",
+        "DAY_OF_MONTH", "DAY_OF_YEAR", "DAY_OF_WEEK",
+        "DAY_OF_WEEK_IN_MONTH", "AM_PM", "HOUR", "HOUR_OF_DAY",
+        "MINUTE", "SECOND", "MILLISECOND", "ZONE_OFFSET",
+        "DST_OFFSET", "YEAR_WOY", "DOW_LOCAL", "EXTENDED_YEAR",
+        "JULIAN_DAY", "MILLISECONDS_IN_DAY",
+    };
+
     /*
       Synopsis: java.sql.Timestamp constructor works wrong on Windows 95
 
@@ -48,12 +57,18 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
             cal.clear();
             cal.set(1900, 15, 5, 5, 8, 13);
             if (cal.get(Calendar.HOUR) != 5) {
-                logln(zone.getID() + " " +
-                                   //zone.useDaylightTime() + " " +
-                                   cal.get(Calendar.DST_OFFSET) / (60*60*1000) + " " +
-                                   zone.getRawOffset() / (60*60*1000) +
-                                   ": HOUR = " + cal.get(Calendar.HOUR));
+                logln("Fail: " + zone.getID() + " " +
+                      zone.useDaylightTime() + " " +
+                      cal.get(Calendar.DST_OFFSET) / (60*60*1000) + " " +
+                      zone.getRawOffset() / (60*60*1000) +
+                      ": HOUR = " + cal.get(Calendar.HOUR));
                 bad = true;
+            } else if (false) { // Change to true to debug
+                logln("OK: " + zone.getID() + " " +
+                      zone.useDaylightTime() + " " +
+                      cal.get(Calendar.DST_OFFSET) / (60*60*1000) + " " +
+                      zone.getRawOffset() / (60*60*1000) +
+                      ": HOUR = " + cal.get(Calendar.HOUR));
             }
         }
         if (bad) errln("TimeZone problems with GC");
@@ -650,6 +665,7 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
         Date d01 = new Date(97, Calendar.MARCH, 15, 12, 00, 56);
         Date d10 = new Date(97, Calendar.MARCH, 15, 12, 34, 00);
         Date d11 = new Date(97, Calendar.MARCH, 15, 12, 34, 56);
+        Date dM  = new Date(97, Calendar.JANUARY, 15, 12, 34, 56);
         Date epoch = new Date(70, Calendar.JANUARY, 1);
 
         Calendar cal = Calendar.getInstance(); 
@@ -657,8 +673,10 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
 
         cal.clear( Calendar.MINUTE ); 
         logln(cal.getTime().toString()); 
-        if (!cal.getTime().equals(d01))
-            errln("Fail: clear(MINUTE) broken");
+        if (!cal.getTime().equals(d01)) {
+            errln("Fail: " + d11 + " clear(MINUTE) => expect " +
+                  d01 + ", got " + cal.getTime());
+        }
 
         cal.set( Calendar.SECOND, 0 ); 
         logln(cal.getTime().toString()); 
@@ -679,7 +697,15 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
         cal.clear();
         logln(cal.getTime().toString());
         if (!cal.getTime().equals(epoch))
-            errln("Fail: clear() broken Want " + epoch);
+            errln("Fail: after clear() expect " + epoch + ", got " + cal.getTime());
+
+        cal.setTime(d11);
+        cal.clear( Calendar.MONTH ); 
+        logln(cal.getTime().toString()); 
+        if (!cal.getTime().equals(dM)) {
+            errln("Fail: " + d11 + " clear(MONTH) => expect " +
+                  dM + ", got " + cal.getTime());
+        }
     }
 
     public void Test4114578() {
@@ -891,17 +917,20 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
      * other of these will wrap.  We've modified the test given in the bug
      * report to therefore only check the behavior of a calendar with a zero raw
      * offset zone.
+     *
+     * NEWCAL We no longer support dates before Calendar.MIN_DATE or after
+     * Calendar.MAX_DATE.  Modify this test.
      */
     public void Test4145158() {
         GregorianCalendar calendar = new GregorianCalendar();
 
         calendar.setTimeZone(TimeZone.getTimeZone("GMT"));
 
-        calendar.setTime(new Date(Long.MIN_VALUE));
+        calendar.setTime(Calendar.MIN_DATE);
         int year1 = calendar.get(Calendar.YEAR);
         int era1 = calendar.get(Calendar.ERA);
         
-        calendar.setTime(new Date(Long.MAX_VALUE));
+        calendar.setTime(Calendar.MAX_DATE);
         int year2 = calendar.get(Calendar.YEAR);
         int era2 = calendar.get(Calendar.ERA);
         
@@ -916,7 +945,7 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
     public void Test4145983() {
         GregorianCalendar calendar = new GregorianCalendar();
         calendar.setTimeZone(TimeZone.getTimeZone("GMT"));
-        Date[] DATES = { new Date(Long.MAX_VALUE), new Date(Long.MIN_VALUE) };
+        Date[] DATES = { Calendar.MAX_DATE, Calendar.MIN_DATE };
         for (int i=0; i<DATES.length; ++i) {
             calendar.setTime(DATES[i]);
             int year = calendar.get(Calendar.YEAR);
@@ -935,29 +964,10 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
      * field. - liu 6/29/98
      */
     public void Test4147269() {
-        final String[] fieldName = {
-            "ERA", 
-            "YEAR", 
-            "MONTH", 
-            "WEEK_OF_YEAR", 
-            "WEEK_OF_MONTH", 
-            "DAY_OF_MONTH", 
-            "DAY_OF_YEAR", 
-            "DAY_OF_WEEK", 
-            "DAY_OF_WEEK_IN_MONTH", 
-            "AM_PM", 
-            "HOUR", 
-            "HOUR_OF_DAY", 
-            "MINUTE", 
-            "SECOND", 
-            "MILLISECOND", 
-            "ZONE_OFFSET", 
-            "DST_OFFSET"
-        };
         GregorianCalendar calendar = new GregorianCalendar();
         calendar.setLenient(false);
         Date date = new Date(1996-1900, Calendar.JANUARY, 3); // Arbitrary date
-        for (int field = 0; field < Calendar.FIELD_COUNT; field++) {
+        for (int field = 0; field < calendar.getFieldCount(); field++) {
             calendar.setTime(date);
             // Note: In the bug report, getActualMaximum() was called instead
             // of getMaximum() -- this was an error.  The validation code doesn't
@@ -969,7 +979,7 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
                 calendar.getTime(); // Force time computation
                 // We expect an exception to be thrown. If we fall through
                 // to the next line, then we have a bug.
-                errln("Test failed with field " + fieldName[field] +
+                errln("Test failed with field " + FIELD_NAME[field] +
                       ", date before: " + date +
                       ", date after: " + calendar.getTime() +
                       ", value: " + value + " (max = " + max +")");
@@ -990,22 +1000,22 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
             GregorianCalendar calendar = new GregorianCalendar(zones[i]);
 
             // Make sure extreme values don't wrap around
-            calendar.setTime(new Date(Long.MIN_VALUE));
+            calendar.setTime(Calendar.MIN_DATE);
             if (calendar.get(Calendar.ERA) != GregorianCalendar.BC) {
-                errln("Fail: Date(Long.MIN_VALUE) has an AD year");
+                errln("Fail: Calendar.MIN_DATE has an AD year");
             }
-            calendar.setTime(new Date(Long.MAX_VALUE));
+            calendar.setTime(Calendar.MAX_DATE);
             if (calendar.get(Calendar.ERA) != GregorianCalendar.AD) {
-                errln("Fail: Date(Long.MAX_VALUE) has a BC year");
+                errln("Fail: Calendar.MAX_DATE has a BC year");
             }
 
-            calendar.setGregorianChange(new Date(Long.MAX_VALUE));
+            calendar.setGregorianChange(Calendar.MAX_DATE);
             // to obtain a pure Julian calendar
             
             boolean is100Leap = calendar.isLeapYear(100);
             if (!is100Leap) {
                 errln("test failed with zone " + zones[i].getID());
-                errln(" cutover date is Date(Long.MAX_VALUE)");
+                errln(" cutover date is Calendar.MAX_DATE");
                 errln(" isLeapYear(100) returns: " + is100Leap);
             }
         }
@@ -1134,9 +1144,9 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
             for (int j=0; j<calendars.length; ++j) {
                 GregorianCalendar calendar = calendars[j];
                 if (k == 1) {
-                    calendar.setGregorianChange(new Date(Long.MIN_VALUE));
+                    calendar.setGregorianChange(Calendar.MIN_DATE);
                 } else if (k == 2) {
-                    calendar.setGregorianChange(new Date(Long.MAX_VALUE));
+                    calendar.setGregorianChange(Calendar.MAX_DATE);
                 }
 
                 format.setCalendar((Calendar)calendar.clone());
@@ -1161,7 +1171,10 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
                     if (valid && newYear != years[i]) {
                         errln("  FAIL: " + newYear + " should be valid; date, month and time shouldn't change");
                     } else if (!valid && newYear == years[i]) {
-                        errln("  FAIL: " + newYear + " should be invalid");
+                        // We no longer require strict year maxima.  That is, the calendar
+                        // algorithm may work for values > the stated maximum.
+                        //errln("  FAIL: " + newYear + " should be invalid");
+                        logln("  Note: " + newYear + " > maximum, but still valid");
                     }
                 }
             }
@@ -1177,12 +1190,6 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
             { 1997, Calendar.FEBRUARY,  1, 10, 45, 15, 900 },
             { 1999, Calendar.DECEMBER, 22, 23, 59, 59, 999 }
         };
-        String[] fieldNames = {
-            "ERA", "YEAR", "MONTH", "WEEK_OF_YEAR", "WEEK_OF_MONTH", "DATE",
-            "DAY_OF_MONTH", "DAY_OF_YEAR", "DAY_OF_WEEK", "DAY_OF_WEEK_IN_MONTH",
-            "AM_PM", "HOUR", "HOUR_OF_DAY", "MINUTE", "SECOND", "MILLISECOND",
-            "ZONE_OFFSET", "DST_OFFSET"
-        };
         int limit = 40;
         GregorianCalendar cal = new GregorianCalendar();
 
@@ -1192,11 +1199,11 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
         if (cal.getTime().getTime() != 0) {
             errln("Hour rolling broken");
         }
-        
+
         for (int op=0; op<2; ++op) {
             logln("Testing GregorianCalendar " +
                   (op==0 ? "add" : "roll"));
-            for (int field=0; field < Calendar.FIELD_COUNT; ++field) {
+            for (int field=0; field < cal.getFieldCount(); ++field) {
                 if (field != Calendar.ZONE_OFFSET &&
                     field != Calendar.DST_OFFSET) {
                     for (int j=0; j<fieldsList.length; ++j) {
@@ -1220,7 +1227,7 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
                             cal.get(Calendar.SECOND) != fields[5] ||
                             cal.get(Calendar.MILLISECOND) != fields[6]) {
                             errln("Field " + field +
-                                  " (" + fieldNames[field] +
+                                  " (" + FIELD_NAME[field] +
                                   ") FAIL, expected " +
                                   fields[0] +
                                   "/" + (fields[1] + 1) +
@@ -1240,7 +1247,7 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
                             cal.set(fields[0], fields[1], fields[2],
                                     fields[3], fields[4], fields[5]);
                             cal.set(Calendar.MILLISECOND, fields[6]);
-                            errln(cal.get(Calendar.YEAR) +
+                            logln("Start date: " + cal.get(Calendar.YEAR) +
                                   "/" + (cal.get(Calendar.MONTH) + 1) +
                                   "/" + cal.get(Calendar.DATE) +
                                   " " + cal.get(Calendar.HOUR_OF_DAY) +
@@ -1257,8 +1264,8 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
                                 long t = cal.getTime().getTime();
                                 long delta = t - prev;
                                 prev = t;
-                                errln((op == 0 ? "add" : "roll") +
-                                      (i < limit ? " +> " : " -> ") +
+                                logln((op == 0 ? "add(" : "roll(") + FIELD_NAME[field] +
+                                      (i < limit ? ", +1) => " : ", -1) => ") +
                                       cal.get(Calendar.YEAR) +
                                       "/" + (cal.get(Calendar.MONTH) + 1) +
                                       "/" + cal.get(Calendar.DATE) +
@@ -1266,7 +1273,7 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
                                       ":" + cal.get(Calendar.MINUTE) +
                                       ":" + cal.get(Calendar.SECOND) +
                                       "." + cal.get(Calendar.MILLISECOND) +
-                                      " d=" + delta);
+                                      " delta=" + delta + " ms");
                             }
                         }
                     }
@@ -1274,7 +1281,7 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
             }
         }
     }
-    
+
     public void Test4174361() {
         GregorianCalendar calendar = new GregorianCalendar(1996, 1, 29);
 
@@ -1575,6 +1582,77 @@ public class CalendarRegression extends com.ibm.test.TestFmwk {
                       dy + "y " + dm + "m " + dd + "d = " +
                       date22);
             }
+        }
+    }
+
+    /**
+     * Set behavior of DST_OFFSET field.  ICU4J Jitterbug 9.
+     */
+    public void TestJ9() {
+        int HOURS = 60*60*1000;
+        Calendar cal = new GregorianCalendar(TimeZone.getTimeZone("PST"),
+                                             Locale.US);
+
+        final int END_FIELDS = 0x1234;
+
+        int[] DATA = {
+            // With no explicit ZONE/DST expect 12:00 am
+            Calendar.MONTH, Calendar.JUNE,
+            END_FIELDS,
+            0, 0, // expected hour, min
+
+            // Normal ZONE/DST for June 1 Pacific is 8:00/1:00
+            Calendar.MONTH, Calendar.JUNE,
+            Calendar.ZONE_OFFSET, -8*HOURS,
+            Calendar.DST_OFFSET, HOURS,
+            END_FIELDS,
+            0, 0, // expected hour, min
+
+            // With ZONE/DST of 8:00/0:30 expect time of 12:30 am
+            Calendar.MONTH, Calendar.JUNE,
+            Calendar.ZONE_OFFSET, -8*HOURS,
+            Calendar.DST_OFFSET, HOURS/2,
+            END_FIELDS,
+            0, 30, // expected hour, min
+
+            // With ZONE/DST of 8:00/UNSET expect time of 1:00 am
+            Calendar.MONTH, Calendar.JUNE,
+            Calendar.ZONE_OFFSET, -8*HOURS,
+            END_FIELDS,
+            1, 0, // expected hour, min
+
+            // With ZONE/DST of UNSET/0:30 expect 4:30 pm (day before)
+            Calendar.MONTH, Calendar.JUNE,
+            Calendar.DST_OFFSET, HOURS/2,
+            END_FIELDS,
+            16, 30, // expected hour, min
+        };
+
+        for (int i=0; i<DATA.length; ) {
+            int start = i;
+            cal.clear();
+
+            // Set fields
+            while (DATA[i] != END_FIELDS) {
+                cal.set(DATA[i++], DATA[i++]);
+            }
+            ++i; // skip over END_FIELDS
+
+            // Get hour/minute
+            int h = cal.get(Calendar.HOUR_OF_DAY);
+            int m = cal.get(Calendar.MINUTE);
+
+            // Check
+            if (h != DATA[i] || m != DATA[i+1]) {
+                errln("Fail: expected " + DATA[i] + ":" + DATA[i+1] +
+                      ", got " + h + ":" + m + " after:");
+                while (DATA[start] != END_FIELDS) {
+                    logln("set(" + FIELD_NAME[DATA[start++]] +
+                          ", " + DATA[start++] + ");");
+                }
+            }
+
+            i += 2; // skip over expected hour, min
         }
     }
 }

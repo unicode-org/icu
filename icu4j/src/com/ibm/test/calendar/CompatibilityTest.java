@@ -17,6 +17,15 @@ public class CompatibilityTest extends com.ibm.test.TestFmwk {
         new CompatibilityTest().run(argv);
     }
 
+    static final String[] FIELD_NAME = {
+        "ERA", "YEAR", "MONTH", "WEEK_OF_YEAR", "WEEK_OF_MONTH",
+        "DAY_OF_MONTH", "DAY_OF_YEAR", "DAY_OF_WEEK",
+        "DAY_OF_WEEK_IN_MONTH", "AM_PM", "HOUR", "HOUR_OF_DAY",
+        "MINUTE", "SECOND", "MILLISECOND", "ZONE_OFFSET",
+        "DST_OFFSET", "YEAR_WOY", "DOW_LOCAL", "EXTENDED_YEAR",
+        "JULIAN_DAY", "MILLISECONDS_IN_DAY",
+    };
+
     /**
      * Test the behavior of the GregorianCalendar around the changeover.
      */
@@ -64,11 +73,62 @@ public class CompatibilityTest extends com.ibm.test.TestFmwk {
      * (first day of week, minimal days in first week).
      */
     public void TestMapping() {
+        if (false) {
+            Date PURE_GREGORIAN = new Date(Long.MIN_VALUE);
+            Date PURE_JULIAN = GregorianCalendar.PURE_JULIAN; // new Date(Long.MAX_VALUE);
+            GregorianCalendar cal =
+                new GregorianCalendar(TimeZone.getTimeZone("UTC"));
+            final int EPOCH_JULIAN = 2440588;
+            final long ONE_DAY = 24*60*60*1000L;
+            com.ibm.text.SimpleDateFormat fmt =
+                new com.ibm.text.SimpleDateFormat("EEE MMM dd yyyy G");
+                /*HH:mm:ss.SSS z*/
+
+            for (int type=0; type<2; ++type) {
+                System.out.println(type==0 ? "Gregorian" : "Julian");
+                cal.setGregorianChange(type==0 ? PURE_GREGORIAN : PURE_JULIAN);
+                fmt.setCalendar(cal);
+                int[] J = {
+                    0x7FFFFFFF,
+                    0x7FFFFFF0,
+                    0x7F000000,
+                    0x78000000,
+                    0x70000000,
+                    0x60000000,
+                    0x50000000,
+                    0x40000000,
+                    0x30000000,
+                    0x20000000,
+                    0x10000000,
+                };
+                for (int i=0; i<J.length; ++i) {
+                    String[] lim = new String[2];
+                    long[] ms = new long[2];
+                    int jd = J[i];
+                    for (int sign=0; sign<2; ++sign) {
+                        int julian = jd;
+                        if (sign==0) julian = -julian;
+                        long millis = ((long)julian - EPOCH_JULIAN) * ONE_DAY;
+                        ms[sign] = millis;
+                        cal.setTime(new Date(millis));
+                        lim[sign] = fmt.format(cal.getTime());
+                    }
+                    System.out.println("JD +/-" +
+                                       Long.toString(jd, 16) +
+                                       ": " + ms[0] + ".." + ms[1] +
+                                       ": " + lim[0] + ".." + lim[1]);
+                }
+            }
+        }
+
         TimeZone saveZone = TimeZone.getDefault();
         try {
             TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-            Date PURE_GREGORIAN = new Date(Long.MIN_VALUE);
-            Date PURE_JULIAN = new Date(Long.MAX_VALUE);
+            //NEWCAL
+            //Date PURE_GREGORIAN = new Date(Long.MIN_VALUE);
+            //Date PURE_JULIAN = new Date(Long.MAX_VALUE);
+            Date PURE_GREGORIAN = Calendar.MIN_DATE;
+            Date PURE_JULIAN = Calendar.MAX_DATE;
             GregorianCalendar cal = new GregorianCalendar();
             final int EPOCH_JULIAN = 2440588;
             final long ONE_DAY = 24*60*60*1000L;
@@ -227,7 +287,7 @@ public class CompatibilityTest extends com.ibm.test.TestFmwk {
             if (cal.getMinimalDaysInFirstWeek() != i) errln("FAIL: set/getFirstDayOfWeek failed");
         }
 
-        for (i=0; i<Calendar.FIELD_COUNT; ++i) {
+        for (i=0; i<cal.getFieldCount(); ++i) {
             if (cal.getMinimum(i) != cal.getGreatestMinimum(i))
                 errln("FAIL: getMinimum doesn't match getGreatestMinimum for field " + i);
             if (cal.getLeastMaximum(i) > cal.getMaximum(i))
@@ -259,14 +319,17 @@ public class CompatibilityTest extends com.ibm.test.TestFmwk {
         }
 
         cal.getTime();
-        for (i=0; i<Calendar.FIELD_COUNT; ++i) {
+        // This test is strange -- why do we expect certain fields to be set, and
+        // others not to be?  Revisit the appropriateness of this.  - Alan NEWCAL
+        for (i=0; i<cal.getFieldCount(); ++i) {
             switch(i) {
             case Calendar.YEAR: case Calendar.MONTH: case Calendar.DATE:
             case Calendar.HOUR_OF_DAY: case Calendar.MINUTE: case Calendar.SECOND:
-                if (!cal.isSet(i)) errln("FAIL: Calendar.isSet failed");
+            case Calendar.EXTENDED_YEAR:
+                if (!cal.isSet(i)) errln("FAIL: " + FIELD_NAME[i] + " is not set");
                 break;
             default:
-                if (cal.isSet(i)) errln("FAIL: Calendar.isSet failed");
+                if (cal.isSet(i)) errln("FAIL: " + FIELD_NAME[i] + " is set");
             }
             cal.clear(i);
             if (cal.isSet(i)) errln("FAIL: Calendar.clear/isSet failed");
@@ -433,7 +496,7 @@ public class CompatibilityTest extends com.ibm.test.TestFmwk {
         catch (IllegalArgumentException ex) {
             e = ex;
         }
-        verify765("1997 zero-th Tuesday in June = ", e);
+        verify765("1997 zero-th Tuesday in June = ", e, c);
 
         c.clear();
         c.set(Calendar.YEAR, 1997);
@@ -485,20 +548,25 @@ public class CompatibilityTest extends com.ibm.test.TestFmwk {
         catch (IllegalArgumentException ex) {}
     }
     void verify765(String msg, Calendar c, int year, int month, int day) {
-        if (c.get(Calendar.YEAR) == year &&
-            c.get(Calendar.MONTH) == month &&
-            c.get(Calendar.DATE) == day) {
+        int cy = c.get(Calendar.YEAR); // NEWCAL
+        int cm = c.get(Calendar.MONTH);
+        int cd = c.get(Calendar.DATE);
+        if (cy == year &&
+            cm == month &&
+            cd == day) {
             logln("PASS: " + msg + c.getTime());
         }
         else {
-            errln("FAIL: " + msg + c.getTime() +
+            errln("FAIL: " + msg + cy + "/" + (cm+1) + "/" + cd +
+                  "=" + c.getTime() +
                   "; expected " +
                   year + "/" + (month+1) + "/" + day);
         }
     }
     // Called when e expected to be non-null
-    void verify765(String msg, IllegalArgumentException e) {
-        if (e == null) errln("FAIL: No IllegalArgumentException for " + msg);
+    void verify765(String msg, IllegalArgumentException e, Calendar c) {
+        if (e == null) errln("FAIL: No IllegalArgumentException for " + msg +
+                             c.getTime());
         else logln("PASS: " + msg + "IllegalArgument as expected");
     }
 
@@ -883,6 +951,7 @@ public class CompatibilityTest extends com.ibm.test.TestFmwk {
                   cal.getActualMaximum(Calendar.WEEK_OF_YEAR));
 
         cal.set(Calendar.YEAR, 1976);
+        cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek()); // Added - Liu 11/6/00
         // Using week settings of SUNDAY/3 (see above)
         if (cal.getActualMaximum(Calendar.WEEK_OF_YEAR) != 53)
             errln("Number of weeks in 1976 should have been 53; got " +
@@ -893,7 +962,6 @@ public class CompatibilityTest extends com.ibm.test.TestFmwk {
         Calendar cal = new GregorianCalendar(1997, Calendar.JANUARY, 31);
 
         int[] dayValues = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31, 31 };
-
         for (int i = 0; i < dayValues.length; i++) {
             Calendar cal2 = (Calendar)cal.clone();
             cal2.roll(Calendar.MONTH, i);
@@ -905,19 +973,24 @@ public class CompatibilityTest extends com.ibm.test.TestFmwk {
 
         cal.set(1996, Calendar.FEBRUARY, 29);
 
-        int[] monthValues = { 1, 2, 2, 2, 1, 2, 2, 2, 1, 2 };
-        int[] dayValues2 = { 29, 1, 1, 1, 29, 1, 1, 1, 29, 1 };
+        //int[] monthValues = { 1, 2, 2, 2, 1, 2, 2, 2, 1, 2 };
+        //int[] dayValues2 = { 29, 1, 1, 1, 29, 1, 1, 1, 29, 1 };
+
+        // I've revised the expected values to make more sense -- rolling
+        // the year should pin the DAY_OF_MONTH. - Liu 11/6/00
+        int[] monthValues = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+        int[] dayValues2 = { 29, 28, 28, 28, 29, 28, 28, 28, 29, 28 };
 
         for (int i = 0; i < dayValues2.length; i++) {
             Calendar cal2 = (Calendar)cal.clone();
             cal2.roll(Calendar.YEAR, i);
             if (cal2.get(Calendar.DAY_OF_MONTH) != dayValues2[i] || cal2.get(Calendar.MONTH)
                 != monthValues[i])
-                errln("Rolling the year in 2/29/1996 up by " + i + " should have yielded "
+                errln("Roll 2/29/1996 by " + i + " year: expected "
                       + (monthValues[i] + 1) + "/" + dayValues2[i] + "/"
-                      + (1996 + i) + ", but actually yielded "
+                      + (1996 + i) + ", got "
                       + (cal2.get(Calendar.MONTH) + 1) + "/" +
-                      cal2.get(Calendar.DAY_OF_MONTH) + "/" + (1996 + i) + ".");
+                      cal2.get(Calendar.DAY_OF_MONTH) + "/" + cal2.get(Calendar.YEAR));
         }
 
         // Test rolling hour of day

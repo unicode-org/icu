@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/calendar/Attic/IslamicTest.java,v $ 
- * $Date: 2000/03/10 03:47:45 $ 
- * $Revision: 1.2 $
+ * $Date: 2000/11/18 00:17:58 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -117,6 +117,22 @@ public class IslamicTest extends CalendarTest {
         IslamicCalendar civilCalendar = newCivil();
         civilCalendar.setLenient(true);
         doTestCases(tests, civilCalendar);
+    }
+
+    public void TestBasic() {
+        IslamicCalendar cal = newCivil();
+        cal.clear();
+        cal.set(1000, 0, 30);
+        logln("1000/0/30 -> " +
+              cal.get(YEAR) + "/" +
+              cal.get(MONTH) + "/" + 
+              cal.get(DATE));
+        cal.clear();
+        cal.set(1, 0, 30);
+        logln("1/0/30 -> " +
+              cal.get(YEAR) + "/" +
+              cal.get(MONTH) + "/" + 
+              cal.get(DATE));
     }
 
     private static IslamicCalendar newCivil() {
