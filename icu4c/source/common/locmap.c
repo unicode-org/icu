@@ -485,15 +485,23 @@ static const ILcidPosixElement uz[] = {
 
 ILCID_POSIX_ELEMENT_ARRAY(0x042a, vi, vi_VN)
 
+/* TODO: Make the locales with the script the primary locale once the names are implemented in the resources. */
 static const ILcidPosixElement zh[] = {
     {0x04,   "zh"},
     {0x0804, "zh_CN"},
+    {0x0804, "zh_Hans_CN"},
     {0x0c04, "zh_HK"},
+    {0x0c04, "zh_Hant_HK"},
     {0x1404, "zh_MO"},
+    {0x1404, "zh_Hant_MO"},
     {0x1004, "zh_SG"},
+    {0x1004, "zh_Hans_SG"},
     {0x0404, "zh_TW"},
+    {0x0404, "zh_Hant_TW"},
     {0x30404,"zh_TW"},
-    {0x20404,"zh_TW_STROKE"}
+    {0x30404,"zh_Hant_TW"},
+    {0x20404,"zh_TW_STROKE"},
+    {0x20404,"zh_Hant_TW_STROKE"}
 };
 
 /* This must be static and grouped by LCID. */

@@ -37,59 +37,59 @@ void PrintDataTable();
 /*---------------------------------------------------
   table of valid data
  --------------------------------------------------- */
-#define LOCALE_SIZE 5
+#define LOCALE_SIZE 6
 #define LOCALE_INFO_SIZE 28
 
 static const char* rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
     /* language code */
-    {   "en",   "fr",   "ca",   "el",   "no"    },
+    {   "en",   "fr",   "ca",   "el",   "no",   "zh"    },
     /* script code */
-    {   "",     "",     "",     "",     ""      },
+    {   "",     "",     "",     "",     "",     "Hans"  },
     /* country code */
-    {   "US",   "FR",   "ES",   "GR",   "NO"    },
+    {   "US",   "FR",   "ES",   "GR",   "NO",   "CN"    },
     /* variant code */
-    {   "",     "",     "",     "",     "NY"    },
+    {   "",     "",     "",     "",     "NY",   ""    },
     /* full name */
-    {   "en_US",    "fr_FR",    "ca_ES",    "el_GR",    "no_NO_NY"  },
+    {   "en_US",    "fr_FR",    "ca_ES",    "el_GR",    "no_NO_NY", "zh_Hans_CN"  },
     /* ISO-3 language */
-    {   "eng",  "fra",  "cat",  "ell",  "nor"   },
+    {   "eng",  "fra",  "cat",  "ell",  "nor",  "zho"   },
     /* ISO-3 country */
-    {   "USA",  "FRA",  "ESP",  "GRC",  "NOR"   },
+    {   "USA",  "FRA",  "ESP",  "GRC",  "NOR",  "CHN"   },
     /* LCID */
-    {   "409", "40c", "403", "408", "814"  },
+    {   "409", "40c", "403", "408", "814",  "804"  },
 
     /* display language (English) */
-    {   "English",  "French",   "Catalan", "Greek",    "Norwegian" },
+    {   "English",  "French",   "Catalan", "Greek",    "Norwegian", "Chinese" },
     /* display script code (English) */
-    {   "",     "",     "",     "",     ""      },
+    {   "",     "",     "",     "",     "",     "Simplified Han"    },
     /* display country (English) */
-    {   "United States",    "France",   "Spain",  "Greece",   "Norway"    },
+    {   "United States",    "France",   "Spain",  "Greece",   "Norway", "China"    },
     /* display variant (English) */
-    {   "",     "",     "",     "",     "Nynorsk"    },
+    {   "",     "",     "",     "",     "Nynorsk",  ""    },
     /* display name (English) */
-    {   "English (United States)", "French (France)", "Catalan (Spain)", "Greek (Greece)", "Norwegian (Norway, Nynorsk)" },
+    {   "English (United States)", "French (France)", "Catalan (Spain)", "Greek (Greece)", "Norwegian (Norway, Nynorsk)", "Chinese (Simplified Han, China)" },
 
     /* display language (French) */
-    {   "anglais",  "fran\\u00E7ais",   "catalan", "grec",    "norv\\u00E9gien" },
+    {   "anglais",  "fran\\u00E7ais",   "catalan", "grec",    "norv\\u00E9gien",    "chinois"  },
     /* display script code (French) */
-    {   "",     "",     "",     "",     ""      },
+    {   "",     "",     "",     "",     "",     "Hans"      },
     /* display country (French) */
-    {   "\\u00C9tats-Unis",    "France",   "Espagne",  "Gr\\u00E8ce",   "Norv\\u00E8ge"    },
+    {   "\\u00C9tats-Unis",    "France",   "Espagne",  "Gr\\u00E8ce",   "Norv\\u00E8ge",    "Chine"    },
     /* display variant (French) */
-    {   "",     "",     "",     "",     "NY"    },
+    {   "",     "",     "",     "",     "NY",   ""    },
     /* display name (French) */
-    {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "catalan (Espagne)", "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, NY)" },
+    {   "anglais (\\u00C9tats-Unis)", "fran\\u00E7ais (France)", "catalan (Espagne)", "grec (Gr\\u00E8ce)", "norv\\u00E9gien (Norv\\u00E8ge, NY)",  "chinois (Hans, Chine)" },
 
     /* display language (Catalan) */
-    {   "angl\\u00E8s", "franc\\u00E8s", "catal\\u00E0", "grec",  "noruec" },
+    {   "angl\\u00E8s", "franc\\u00E8s", "catal\\u00E0", "grec",  "noruec", "xin\\u00E9s" },
     /* display script code (Catalan) */
-    {   "",     "",     "",     "",     ""      },
+    {   "",     "",     "",     "",     "",     "Hans"      },
     /* display country (Catalan) */
-    {   "Estats Units", "Fran\\u00E7a", "Espanya",  "Gr\\u00E8cia", "Noruega" },
+    {   "Estats Units", "Fran\\u00E7a", "Espanya",  "Gr\\u00E8cia", "Noruega",  "Xina" },
     /* display variant (Catalan) */
-    {   "", "", "",                    "", "NY" },
+    {   "", "", "",                    "", "NY",    "" },
     /* display name (Catalan) */
-    {   "angl\\u00E8s (Estats Units)", "franc\\u00E8s (Fran\\u00E7a)", "catal\\u00E0 (Espanya)", "grec (Gr\\u00E8cia)", "noruec (Noruega, NY)" },
+    {   "angl\\u00E8s (Estats Units)", "franc\\u00E8s (Fran\\u00E7a)", "catal\\u00E0 (Espanya)", "grec (Gr\\u00E8cia)", "noruec (Noruega, NY)", "xin\\u00E9s (Hans, Xina)" },
 
     /* display language (Greek) */
     {
@@ -97,27 +97,30 @@ static const char* rawData2[LOCALE_INFO_SIZE][LOCALE_SIZE] = {
         "\\u0393\\u03b1\\u03bb\\u03bb\\u03b9\\u03ba\\u03ac",
         "\\u039a\\u03b1\\u03c4\\u03b1\\u03bb\\u03b1\\u03bd\\u03b9\\u03ba\\u03ac",
         "\\u0395\\u03bb\\u03bb\\u03b7\\u03bd\\u03b9\\u03ba\\u03ac",
-        "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03b9\\u03ba\\u03ac"
+        "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03b9\\u03ba\\u03ac",
+        "\\u039A\\u03B9\\u03BD\\u03B5\\u03B6\\u03B9\\u03BA\\u03AC"
     },
     /* display script code (Greek) */
-    {   "",     "",     "",     "",     ""      },
+    {   "",     "",     "",     "",     "",     "Hans"      },
     /* display country (Greek) */
     {
         "\\u0397\\u03bd\\u03c9\\u03bc\\u03ad\\u03bd\\u03b5\\u03c2 \\u03a0\\u03bf\\u03bb\\u03b9\\u03c4\\u03b5\\u03af\\u03b5\\u03c2",
         "\\u0393\\u03b1\\u03bb\\u03bb\\u03af\\u03b1",
         "\\u0399\\u03c3\\u03c0\\u03b1\\u03bd\\u03af\\u03b1",
         "\\u0395\\u03bb\\u03bb\\u03ac\\u03b4\\u03b1",
-        "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03af\\u03b1"
+        "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03af\\u03b1",
+        "\\u039A\\u03AF\\u03BD\\u03B1"
     },
     /* display variant (Greek) */
-    {   "", "", "", "", "NY" }, /* TODO: currently there is no translation for NY in Greek fix this test when we have it */
+    {   "", "", "", "", "NY", "" }, /* TODO: currently there is no translation for NY in Greek fix this test when we have it */
     /* display name (Greek) */
     {
         "\\u0391\\u03b3\\u03b3\\u03bb\\u03b9\\u03ba\\u03ac (\\u0397\\u03bd\\u03c9\\u03bc\\u03ad\\u03bd\\u03b5\\u03c2 \\u03a0\\u03bf\\u03bb\\u03b9\\u03c4\\u03b5\\u03af\\u03b5\\u03c2)",
         "\\u0393\\u03b1\\u03bb\\u03bb\\u03b9\\u03ba\\u03ac (\\u0393\\u03b1\\u03bb\\u03bb\\u03af\\u03b1)",
         "\\u039a\\u03b1\\u03c4\\u03b1\\u03bb\\u03b1\\u03bd\\u03b9\\u03ba\\u03ac (\\u0399\\u03c3\\u03c0\\u03b1\\u03bd\\u03af\\u03b1)",
         "\\u0395\\u03bb\\u03bb\\u03b7\\u03bd\\u03b9\\u03ba\\u03ac (\\u0395\\u03bb\\u03bb\\u03ac\\u03b4\\u03b1)",
-        "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03b9\\u03ba\\u03ac (\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03af\\u03b1, NY)"
+        "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03b9\\u03ba\\u03ac (\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03af\\u03b1, NY)",
+        "\\u039A\\u03B9\\u03BD\\u03B5\\u03B6\\u03B9\\u03BA\\u03AC (Hans, \\u039A\\u03AF\\u03BD\\u03B1)"
     }
 };
 
