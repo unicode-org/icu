@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Transliterator.java,v $ 
- * $Date: 2001/06/29 22:50:25 $ 
- * $Revision: 1.35 $
+ * $Date: 2001/07/02 20:55:29 $ 
+ * $Revision: 1.36 $
  *
  *****************************************************************************************
  */
@@ -240,7 +240,7 @@ import com.ibm.text.resources.ResourceReader;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.35 $ $Date: 2001/06/29 22:50:25 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.36 $ $Date: 2001/07/02 20:55:29 $
  */
 public abstract class Transliterator {
     /**
@@ -1100,6 +1100,8 @@ public abstract class Transliterator {
         LowercaseTransliterator.register();
         UppercaseTransliterator.register();
         TitlecaseTransliterator.register();
+        UnicodeNameTransliterator.register();
+        NameUnicodeTransliterator.register();
         NormalizationTransliterator.register();
     }
 

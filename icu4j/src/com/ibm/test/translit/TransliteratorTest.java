@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $ 
- * $Date: 2001/07/02 19:44:10 $ 
- * $Revision: 1.38 $
+ * $Date: 2001/07/02 20:54:51 $ 
+ * $Revision: 1.39 $
  *
  *****************************************************************************************
  */
@@ -793,6 +793,26 @@ public class TransliteratorTest extends TestFmwk {
                "the quick brown foX jumped over the lazY dogs.");
         expect(toTitle, "the quick brown foX caN'T jump over the laZy dogs.",
                "The Quick Brown FoX Can't Jump Over The LaZy Dogs.");
+    }
+
+    /**
+     * Test the name mapping transliterators.
+     */
+    public void TestNameMap() {
+        Transliterator uni2name =
+            Transliterator.getInstance("Any-Name[^abc]");
+        Transliterator name2uni =
+            Transliterator.getInstance("Name-Any");
+        
+        /// NOTE NOTE NOTE NOTE NOTE NOTE NOTE
+        // The results in icu4j and icu4c are different:
+        // icu4c: CJK UNIFIED IDEOGRAPH-4E01
+        // icu4j: CJK UNIFIED IDEOGRAPH-4e01
+
+        expect(uni2name, "\u00A0abc\u4E01\u00B5\u0A81\uFFFD\uFFFF",
+               "{NO-BREAK SPACE}abc{CJK UNIFIED IDEOGRAPH-4e01}{MICRO SIGN}{GUJARATI SIGN CANDRABINDU}{REPLACEMENT CHARACTER}\uFFFF");
+        expect(name2uni, "{ NO-BREAK SPACE}abc{  CJK UNIFIED  IDEOGRAPH-4E01  }{x{MICRO SIGN}{GUJARATI SIGN CANDRABINDU}{REPLACEMENT CHARACTER}{",
+               "\u00A0abc\u4E01{x\u00B5\u0A81\uFFFD{");
     }
 
     /**
