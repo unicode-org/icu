@@ -1246,9 +1246,10 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
                 digits.fDecimalAt = digitCount; // Not digits.fCount!
                 sawDecimal = TRUE;
             }
-            else if (!text.compare(position,
+            else if (!text.caseCompare(position,
                 fSymbols->getSymbol(DecimalFormatSymbols::kExponentialSymbol).length(),
-                fSymbols->getSymbol(DecimalFormatSymbols::kExponentialSymbol)))    // error code is set below if !sawDigit
+                fSymbols->getSymbol(DecimalFormatSymbols::kExponentialSymbol),
+                U_FOLD_CASE_DEFAULT))    // error code is set below if !sawDigit
             {
                 // Parse sign, if present
                 int32_t pos = position + 1; // position + exponentSep.length();

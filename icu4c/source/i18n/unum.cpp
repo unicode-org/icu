@@ -128,6 +128,14 @@ unum_open(  UNumberFormatStyle    style,
                                     *status);
         break;
 
+      case UNUM_SCIENTIFIC:
+        if(locale == 0)
+          retVal = (UNumberFormat*)NumberFormat::createScientificInstance(*status);
+        else
+          retVal = (UNumberFormat*)NumberFormat::createScientificInstance(Locale(locale),
+                                    *status);
+        break;
+
       case UNUM_SPELLOUT:
 		return (UNumberFormat*)new RuleBasedNumberFormat(URBNF_SPELLOUT, Locale(locale), *status);
 

@@ -26,10 +26,16 @@
 
 #include <string.h>
 
-static const UChar DELIMITERS [] = { 0x000A, 0x0000 };
-
 #define DELIM_CR 0x000D
 #define DELIM_LF 0x000A
+
+#ifdef WIN32
+static const UChar DELIMITERS [] = { DELIM_CR, DELIM_LF, 0x0000 };
+static const uint32_t DELIMITERS_LEN = 2;
+#else
+static const UChar DELIMITERS [] = { DELIM_LF, 0x0000 };
+static const uint32_t DELIMITERS_LEN = 1;
+#endif
 
 #define IS_STRING_DELIMITER(s)    (UBool)(    (s) == DELIM_CR || \
                         (s) == DELIM_LF    )
@@ -42,7 +48,7 @@ u_fputs(const UChar    *s,
     UFILE        *f)
 {
   int32_t count = u_file_write(s, u_strlen(s), f);
-  count += u_file_write(DELIMITERS, u_strlen(DELIMITERS), f);
+  count += u_file_write(DELIMITERS, DELIMITERS_LEN, f);
   return count;
 }
 
