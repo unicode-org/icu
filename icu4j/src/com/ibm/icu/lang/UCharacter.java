@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/10/31 01:06:49 $ 
-* $Revision: 1.49 $
+* $Date: 2002/11/06 19:50:21 $ 
+* $Revision: 1.50 $
 *
 *******************************************************************************
 */
@@ -24,6 +24,7 @@ import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.UCharacterUtility;
 import com.ibm.icu.impl.UCharacterName;
 import com.ibm.icu.impl.UCharacterNameChoice;
+import com.ibm.icu.impl.UPropertyAliases;
 
 /**
 * <p>
@@ -2864,6 +2865,134 @@ public final class UCharacter
         return NAME_.getCharFromName(
                             UCharacterNameChoice.EXTENDED_CHAR_NAME, name);
     }
+
+    /**
+     * Return the Unicode name for a given property, as given in the
+     * Unicode database file PropertyAliases.txt.  Most properties
+     * have more than one name.  The nameChoice determines which one
+     * is returned.
+     *
+     * @param property UProperty selector.
+     *
+     * @param nameChoice UProperty.NameChoice selector for which name
+     * to get.  All properties have a long name.  Most have a short
+     * name, but some do not.  Unicode allows for additional names; if
+     * present these will be returned by UProperty.NameChoice.LONG + i,
+     * where i=1, 2,...
+     *
+     * @return a name, or null if Unicode explicitly defines no name
+     * ("n/a") for a given property/nameChoice.  If a given nameChoice
+     * throws an exception, then all larger values of nameChoice will
+     * throw an exception.  If null is returned for a given
+     * nameChoice, then other nameChoice values may return non-null
+     * results.
+     *
+     * @exception IllegalArgumentException thrown if property or
+     * nameChoice are invalid.
+     *
+     * @see UProperty
+     * @see UProperty.NameChoice
+     * @since ICU 2.4
+     */
+    public static String getPropertyName(int property,
+                                         int nameChoice) {
+        return PNAMES_.getPropertyName(property, nameChoice);
+    }
+
+    /**
+     * Return the UProperty selector for a given property name, as
+     * specified in the Unicode database file PropertyAliases.txt.
+     * Short, long, and any other variants are recognized.
+     *
+     * @param propertyAlias the property name to be matched.  The name
+     * is compared using "loose matching" as described in
+     * PropertyAliases.txt.
+     *
+     * @return a UProperty enum.
+     *
+     * @exception IllegalArgumentException thrown if propertyAlias
+     * is not recognized.
+     *
+     * @see UProperty
+     * @since ICU 2.4
+     */
+    public static int getPropertyEnum(String propertyAlias) {
+        return PNAMES_.getPropertyEnum(propertyAlias);
+    }
+
+    /**
+     * Return the Unicode name for a given property value, as given in
+     * the Unicode database file PropertyValueAliases.txt.  Most
+     * values have more than one name.  The nameChoice determines
+     * which one is returned.
+     *
+     * @param property UProperty selector in the range
+     * UProperty.INT_START <= x < UProperty.INT_LIMIT or
+     * UProperty.BINARY_START <= x < UProperty.BINARY_LIMIT.
+     *
+     * @param value selector for a value for the given property.  In
+     * general, valid values range from 0 up to some maximum.  There
+     * are a few exceptions: (1.) UProperty.BLOCK values begin at the
+     * non-zero value BASIC_LATIN.getID().  (2.)
+     * UProperty.CANONICAL_COMBINING_CLASS values are not contiguous
+     * and range from 0..240.  (3.)  UProperty.GENERAL_CATEGORY values
+     * are mask values produced by left-shifting 1 by
+     * UCharacter.getType().  This allows grouped categories such as
+     * [:L:] to be represented.  Mask values are non-contiguous.
+     *
+     * @param nameChoice UProperty.NameChoice selector for which name
+     * to get.  All values have a long name.  Most have a short name,
+     * but some do not.  Unicode allows for additional names; if
+     * present these will be returned by UProperty.NameChoice.LONG + i,
+     * where i=1, 2,...
+     *
+     * @return a name, or null if Unicode explicitly defines no name
+     * ("n/a") for a given property/value/nameChoice.  If a given
+     * nameChoice throws an exception, then all larger values of
+     * nameChoice will throw an exception.  If null is returned for a
+     * given nameChoice, then other nameChoice values may return
+     * non-null results.
+     *
+     * @exception IllegalArgumentException thrown if property, value,
+     * or nameChoice are invalid.
+     *
+     * @see UProperty
+     * @see UProperty.NameChoice
+     * @since ICU 2.4
+     */
+    public static String getPropertyValueName(int property,
+                                              int value,
+                                              int nameChoice) {
+        return PNAMES_.getPropertyValueName(property, value, nameChoice);
+    }
+
+    /**
+     * Return the property value integer for a given value name, as
+     * specified in the Unicode database file PropertyValueAliases.txt.
+     * Short, long, and any other variants are recognized.
+     *
+     * @param prop the UProperty selector for the property to which
+     * the given value alias belongs.  It should be in the range
+     * UProperty.INT_START <= x < UProperty.INT_LIMIT or
+     * UProperty.BINARY_START <= x < UProperty.BINARY_LIMIT; only
+     * these properties define value names and enums.
+     *
+     * @param valueAlias the value name to be matched.  The name is
+     * compared using "loose matching" as described in
+     * PropertyValueAliases.txt.
+     *
+     * @return a value integer.  Note: UProperty.GENERAL_CATEGORY
+     * values are mask values produced by left-shifting 1 by
+     * UCharacter.getType().  This allows grouped categories such as
+     * [:L:] to be represented.
+     *
+     * @see UProperty
+     * @since ICU 2.4
+     */
+    public static int getPropertyValueEnum(int property,
+                                           String valueAlias) {
+        return PNAMES_.getPropertyValueEnum(property, valueAlias);
+    }
       
     /**
     * Returns a code point corresponding to the two UTF16 characters.
@@ -3714,6 +3843,11 @@ public final class UCharacter
     * Database storing the sets of character name
     */
     protected static final UCharacterName NAME_;
+
+    /**
+     * Singleton object encapsulating the imported pnames.icu property aliases
+     */
+    protected static final UPropertyAliases PNAMES_;
       
     // block to initialise name database and unicode 1.0 data 
     static
@@ -3721,6 +3855,7 @@ public final class UCharacter
         try
         {
             NAME_ = UCharacterName.getInstance();
+            PNAMES_ = new UPropertyAliases();
         }
         catch (Exception e)
         {
