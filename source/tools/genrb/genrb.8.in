@@ -2,9 +2,9 @@
 .\"
 .\" genrb.8: manual page for the genrb utility
 .\"
-.\" Copyright (C) 2000 IBM, Inc. and others.
+.\" Copyright (C) 2000-2002 IBM, Inc. and others.
 .\"
-.TH GENRB 8 "12 October 2000" "ICU MANPAGE" "ICU @VERSION@ Manual"
+.TH GENRB 8 "19 March 2002" "ICU MANPAGE" "ICU @VERSION@ Manual"
 .SH NAME
 .B genrb
 \- compile a resource bundle
@@ -23,6 +23,9 @@
 .BI "\-e\fP, \fB\-\-encoding" " encoding"
 ]
 [
+.BI "\-j\fP, \fB\-\-write\-java" " \fR[ \fPencoding\fR ]\fP"
+]
+[
 .BI "\-s\fP, \fB\-\-sourcedir" " source"
 ]
 [
@@ -36,22 +39,26 @@
 .B genrb
 converts the resource
 .I bundle
-source files passed on the command line to their binary form.
-The resulting files have a
+source files passed on the command line to their binary form or to
+a Java source file for use with ICU4J.
+The resulting binary files have a
 .B .res
 extension while resource bundle source files typically have a 
 .B .txt
-extension.
+extension. Java source files have a
+.B java
+extension and follow the ICU4J naming conventions.
 .PP
-For locale data to be useable by ICU, the
+It is customary to name the resource bundles by their locale name,
+e.g. to use a local identifier for the
 .I bundle
-file name should be a locale identifier, e.g.
+filename, e.g.
 .B ja_JP.txt
 for Japanese (Japan) data, or
 .B root.txt
 for the root bundle.
 .PP
-These binary files can then be read directly by ICU, or used by
+The binary files can be read directly by ICU, or used by
 .BR pkgdata (8)
 for incorporation into a larger archive or library.
 .SH OPTIONS
@@ -75,6 +82,11 @@ codepage for the system (see section
 .BR "INVARIANT CHARACTERS" ).
 The encodings UTF-8, UTF-16BE, and UTF-16LE are automatically detected
 if a byte order mark (BOM) is present.
+.TP
+.BI "\-j\fP, \fB\-\-write\-java" " \fR[ \fPencoding\fR ]\fP"
+Generate a Java source code for use with ICU4J. An optional
+.I encoding
+for the Java file can be given.
 .TP
 .BI "\-s\fP, \fB\-\-sourcedir" " source"
 Set the source directory to
@@ -121,6 +133,6 @@ is set.
 .SH VERSION
 @VERSION@
 .SH COPYRIGHT
-Copyright (C) 2000-2001 IBM, Inc. and others.
+Copyright (C) 2000-2002 IBM, Inc. and others.
 .SH SEE ALSO
 .BR pkgdata (8)
