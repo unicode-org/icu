@@ -437,6 +437,91 @@ udat_countSymbols(    const    UDateFormat                *fmt,
   return count;
 }
 
+U_NAMESPACE_BEGIN
+
+/*
+ * This DateFormatSymbolsSingleSetter class is a friend of DateFormatSymbols
+ * solely for the purpose of avoiding to clone the array of strings
+ * just to modify one of them and then setting all of them back.
+ * For example, the old code looked like this:
+ *  case UDAT_MONTHS:
+ *    res = syms->getMonths(count);
+ *    array = new UnicodeString[count];
+ *    if(array == 0) {
+ *      *status = U_MEMORY_ALLOCATION_ERROR;
+ *      return;
+ *    }
+ *    uprv_arrayCopy(res, array, count);
+ *    if(index < count)
+ *      array[index] = val;
+ *    syms->setMonths(array, count);
+ *    break;
+ *
+ * Even worse, the old code actually cloned the entire DateFormatSymbols object,
+ * cloned one value array, changed one value, and then made the SimpleDateFormat
+ * replace its DateFormatSymbols object with the new one.
+ *
+ * markus 2002-oct-14
+ */
+class DateFormatSymbolsSingleSetter /* not : public UObject because all methods are static */ {
+public:
+  static void
+  setSymbol(UnicodeString *array, int32_t count, int32_t index,
+            const UChar *value, int32_t valueLength, UErrorCode &errorCode) {
+    if(array!=NULL) {
+      if(index>=count) {
+        errorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+      } else if(value==NULL) {
+        errorCode=U_ILLEGAL_ARGUMENT_ERROR;
+      } else {
+        array[index].setTo(value, valueLength);
+      }
+    }
+  }
+
+  static void
+  setEra(DateFormatSymbols *syms, int32_t index,
+         const UChar *value, int32_t valueLength, UErrorCode &errorCode) {
+    setSymbol(syms->fEras, syms->fErasCount, index, value, valueLength, errorCode);
+  }
+
+  static void
+  setMonth(DateFormatSymbols *syms, int32_t index,
+           const UChar *value, int32_t valueLength, UErrorCode &errorCode) {
+    setSymbol(syms->fMonths, syms->fMonthsCount, index, value, valueLength, errorCode);
+  }
+
+  static void
+  setShortMonth(DateFormatSymbols *syms, int32_t index,
+                const UChar *value, int32_t valueLength, UErrorCode &errorCode) {
+    setSymbol(syms->fShortMonths, syms->fShortMonthsCount, index, value, valueLength, errorCode);
+  }
+
+  static void
+  setWeekday(DateFormatSymbols *syms, int32_t index,
+             const UChar *value, int32_t valueLength, UErrorCode &errorCode) {
+    setSymbol(syms->fWeekdays, syms->fWeekdaysCount, index, value, valueLength, errorCode);
+  }
+
+  static void
+  setShortWeekday(DateFormatSymbols *syms, int32_t index,
+                  const UChar *value, int32_t valueLength, UErrorCode &errorCode) {
+    setSymbol(syms->fShortWeekdays, syms->fShortWeekdaysCount, index, value, valueLength, errorCode);
+  }
+
+  static void
+  setAmPm(DateFormatSymbols *syms, int32_t index,
+          const UChar *value, int32_t valueLength, UErrorCode &errorCode) {
+    setSymbol(syms->fAmPms, syms->fAmPmsCount, index, value, valueLength, errorCode);
+  }
+
+  static void
+  setLocalPatternChars(DateFormatSymbols *syms,
+                       const UChar *value, int32_t valueLength, UErrorCode &errorCode) {
+    setSymbol(&syms->fLocalPatternChars, 1, 0, value, valueLength, errorCode);
+  }
+};
+
 U_CAPI void U_EXPORT2
 udat_setSymbols(    UDateFormat             *format,
             UDateFormatSymbolType   type,
@@ -448,105 +533,39 @@ udat_setSymbols(    UDateFormat             *format,
 
   if(U_FAILURE(*status)) return;
 
-  int32_t count;
-  int32_t len = (valueLength == -1 ? u_strlen(value) : valueLength);
-  const UnicodeString val((UChar*)value, len, len);
-  const UnicodeString *res;
-  DateFormatSymbols *syms = new DateFormatSymbols( 
-    * ((SimpleDateFormat*)format)->getDateFormatSymbols() );
-  UnicodeString *array = 0;
-
-  if(syms == 0) {
-    *status = U_MEMORY_ALLOCATION_ERROR;
-    return;
-  }
+  DateFormatSymbols *syms = (DateFormatSymbols *)((SimpleDateFormat *)format)->getDateFormatSymbols();
 
   switch(type) {
   case UDAT_ERAS:
-    res = syms->getEras(count);
-    array = new UnicodeString[count];
-    if(array == 0) {
-      *status = U_MEMORY_ALLOCATION_ERROR;
-      return;
-    }
-    uprv_arrayCopy(res, array, count);
-    if(index < count)
-      array[index] = val;
-    syms->setEras(array, count);
+    DateFormatSymbolsSingleSetter::setEra(syms, index, value, valueLength, *status);
     break;
 
   case UDAT_MONTHS:
-    res = syms->getMonths(count);
-    array = new UnicodeString[count];
-    if(array == 0) {
-      *status = U_MEMORY_ALLOCATION_ERROR;
-      return;
-    }
-    uprv_arrayCopy(res, array, count);
-    if(index < count)
-      array[index] = val;
-    syms->setMonths(array, count);
+    DateFormatSymbolsSingleSetter::setMonth(syms, index, value, valueLength, *status);
     break;
 
   case UDAT_SHORT_MONTHS:
-    res = syms->getShortMonths(count);
-    array = new UnicodeString[count];
-    if(array == 0) {
-      *status = U_MEMORY_ALLOCATION_ERROR;
-      return;
-    }
-    uprv_arrayCopy(res, array, count);
-    if(index < count)
-      array[index] = val;
-    syms->setShortMonths(array, count);
+    DateFormatSymbolsSingleSetter::setShortMonth(syms, index, value, valueLength, *status);
     break;
 
   case UDAT_WEEKDAYS:
-    res = syms->getWeekdays(count);
-    array = new UnicodeString[count];
-    if(array == 0) {
-      *status = U_MEMORY_ALLOCATION_ERROR;
-      return;
-    }
-    uprv_arrayCopy(res, array, count);
-    if(index < count)
-      array[index] = val;
-    syms->setWeekdays(array, count);
+    DateFormatSymbolsSingleSetter::setWeekday(syms, index, value, valueLength, *status);
     break;
 
   case UDAT_SHORT_WEEKDAYS:
-    res = syms->getShortWeekdays(count);
-    array = new UnicodeString[count];
-    if(array == 0) {
-      *status = U_MEMORY_ALLOCATION_ERROR;
-      return;
-    }
-    uprv_arrayCopy(res, array, count);
-    if(index < count)
-      array[index] = val;
-    syms->setShortWeekdays(array, count);
+    DateFormatSymbolsSingleSetter::setShortWeekday(syms, index, value, valueLength, *status);
     break;
 
   case UDAT_AM_PMS:
-    res = syms->getAmPmStrings(count);
-    array = new UnicodeString[count];
-    if(array == 0) {
-      *status = U_MEMORY_ALLOCATION_ERROR;
-      return;
-    }
-    uprv_arrayCopy(res, array, count);
-    if(index < count)
-      array[index] = val;
-    syms->setAmPmStrings(array, count);
+    DateFormatSymbolsSingleSetter::setAmPm(syms, index, value, valueLength, *status);
     break;
 
   case UDAT_LOCALIZED_CHARS:
-    syms->setLocalPatternChars(val);
+    DateFormatSymbolsSingleSetter::setLocalPatternChars(syms, value, valueLength, *status);
     break;
   }
-  
-  ((SimpleDateFormat*)format)->adoptDateFormatSymbols(syms);
-  delete [] array;
 }
+
+U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

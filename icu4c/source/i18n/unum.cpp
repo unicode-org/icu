@@ -726,8 +726,11 @@ unum_getSymbol(UNumberFormat *fmt,
     return 0;
   }
 
-  UnicodeString s=((DecimalFormat *)fmt)->getDecimalFormatSymbols()->getSymbol((DecimalFormatSymbols::ENumberFormatSymbol)symbol);
-  return s.extract(buffer, size, *status);
+  return
+    ((const DecimalFormat *)fmt)->
+      getDecimalFormatSymbols()->
+        getConstSymbol((DecimalFormatSymbols::ENumberFormatSymbol)symbol).
+          extract(buffer, size, *status);
 }
 
 U_CAPI void U_EXPORT2

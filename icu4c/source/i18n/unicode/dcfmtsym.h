@@ -244,10 +244,13 @@ private:
 
     void setCurrencyForSymbols();
 
+public:
     /**
-     * More efficient version of getSymbol, returning a const reference to one of the symbol strings.
+     * _Internal_ function - more efficient version of getSymbol,
+     * returning a const reference to one of the symbol strings.
      * The returned reference becomes invalid when the symbol is changed
      * or when the DecimalFormatSymbols are destroyed.
+     * ### TODO markus 2002oct11: Consider proposing getConstSymbol() to be really public.
      *
      * @param symbol Constant to indicate a number format symbol.
      * @return the format symbol by the param 'symbol'
@@ -255,12 +258,7 @@ private:
      */
     inline const UnicodeString &getConstSymbol(ENumberFormatSymbol symbol) const;
 
-    /**
-     * Just for getConstSymbol().
-     * ### TODO markus 2002oct11: Consider proposing getConstSymbol() to be public instead.
-     */
-    friend class DecimalFormat;
-
+private:
     /**
      * Private symbol strings.
      * They are either loaded from a resource bundle or otherwise owned.
