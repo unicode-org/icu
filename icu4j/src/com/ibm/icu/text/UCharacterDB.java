@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Attic/UCharacterDB.java,v $ 
-* $Date: 2000/12/26 20:00:56 $ 
-* $Revision: 1.1 $
+* $Date: 2001/02/27 21:30:12 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
@@ -20,13 +20,13 @@ package com.ibm.icu.text;
 * Due to the form most commonly used for retrieval, array of char is used
 * to store the binary data
 * Responsibility for molding the binary data into more meaning form lies on 
-* <a href=UCharacterPpty.html>UCharacterPpty</a> and 
-* <a href=UCharacterName.html>UCharacterName</a>.
+* <a href=UCharacterPropertyDB.html>UCharacterPropertyDB</a> and 
+* <a href=UCharacterNameDB.html>UCharacterNameDB</a>.
 * Data populated by <a href=UGenReader.html>UGenReader</a>
 * @author Syn Wee Quek
 * @since oct3100 HALLOWEEN!!
-* @see com.ibm.icu.text.UCharacterPpty
-* @see com.ibm.icu.text.UCharacterName
+* @see com.ibm.icu.text.UCharacterPropertyDB
+* @see com.ibm.icu.text.UCharacterNameDB
 */
 
 class UCharacterDB
