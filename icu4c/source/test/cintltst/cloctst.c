@@ -790,60 +790,74 @@ static void TestISOFunctions()
     const char* const* str1=uloc_getISOCountries();
     const char* test;
     int32_t count  = 0;
-    UBool done = FALSE;
     int32_t expect;
+    UResourceBundle *res;
+    UErrorCode status = U_ZERO_ERROR;
 
     /*  test getISOLanguages*/
     /*str=uloc_getISOLanguages(); */
     log_verbose("Testing ISO Languages: \n");
 
-    while(!done)
-    {
-        if(*(str+count++) == 0)
-        {
-            done = TRUE;
-        }
-        else
-        {
-            test = *(str+count-1);
-            if(!strcmp(test,"in"))
-                log_err("FAIL getISOLanguages() has obsolete language code %s\n", test);
-            if(!strcmp(test,"iw"))
-                log_err("FAIL getISOLanguages() has obsolete language code %s\n", test);
-            if(!strcmp(test,"ji"))
-                log_err("FAIL getISOLanguages() has obsolete language code %s\n", test);
-            if(!strcmp(test,"jw"))
-                log_err("FAIL getISOLanguages() has obsolete language code %s\n", test);
-            if(!strcmp(test,"sh"))
-                log_err("FAIL getISOLanguages() has obsolete language code %s\n", test);
-        }
+    res = ures_open(NULL, "root", &status);
+    ures_getByKey(res, "Languages", res, &status);
+    if (U_FAILURE(status)) {
+        log_err("There is an error in ures_getByKey(\"Languages\"), status=%s\n", u_errorName(status));
+        status = U_ZERO_ERROR;
     }
-    count--;
-    expect = 450;
+
+    for(count = 0; *(str+count) != 0; count++)
+    {
+        test = *(str+count);
+
+#if 0
+        {
+            /* This code only works on ASCII machines where the keys are stored in ASCII order */
+            const char *key;
+            ures_getNextString(res, NULL, &key, &status);
+            if(!strcmp(key,"root"))
+                ures_getNextString(res, NULL, &key, &status);
+            if(!strcmp(key,"Fallback"))
+                ures_getNextString(res, NULL, &key, &status);
+            if(!strcmp(key,"sh")) /* Remove this once sh is removed. */
+                ures_getNextString(res, NULL, &key, &status);
+            if(!key || strcmp(test,key)) {
+                /* The first difference usually implies the place where things get out of sync */
+                log_err("FAIL diff at offset %d, \"%s\" != \"%s\"\n", count, test, key);
+            }
+            status = U_ZERO_ERROR;
+        }
+#endif
+
+        if(!strcmp(test,"in"))
+            log_err("FAIL getISOLanguages() has obsolete language code %s\n", test);
+        if(!strcmp(test,"iw"))
+            log_err("FAIL getISOLanguages() has obsolete language code %s\n", test);
+        if(!strcmp(test,"ji"))
+            log_err("FAIL getISOLanguages() has obsolete language code %s\n", test);
+        if(!strcmp(test,"jw"))
+            log_err("FAIL getISOLanguages() has obsolete language code %s\n", test);
+        if(!strcmp(test,"sh"))
+            log_err("FAIL getISOLanguages() has obsolete language code %s\n", test);
+    }
+
+    /* We check root, just in case the en locale is removed. The en locale should have the same number of resources. */
+    expect = ures_getSize(res) - 2; /* Ignore Fallback and root */
+    expect -= 1; /* TODO: Remove this line once sh goes away. */
+    ures_close(res);
 
     if(count!=expect) {
         log_err("There is an error in getISOLanguages, got %d, expected %d\n", count, expect);
     }
 
     log_verbose("Testing ISO Countries");
-    count=0;
-    done=FALSE;
-    while(!done)
+    for(count = 0; *(str1+count) != 0; count++)
     {
-        if(*(str1 + count++)==0)
-        {
-            done=TRUE;
-        }
-        else
-        {
-            test = *(str1+count-1);
-            if(!strcmp(test,"FX"))
-                log_err("FAIL getISOCountries() has obsolete country code %s\n", test);
-            if(!strcmp(test,"ZR"))
-                log_err("FAIL getISOCountries() has obsolete country code %s\n", test);
-        }
+        test = *(str1+count);
+        if(!strcmp(test,"FX"))
+            log_err("FAIL getISOCountries() has obsolete country code %s\n", test);
+        if(!strcmp(test,"ZR"))
+            log_err("FAIL getISOCountries() has obsolete country code %s\n", test);
     }
-    count--;
     expect=239;
     if(count!=expect)
     {
