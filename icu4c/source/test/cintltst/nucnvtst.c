@@ -1054,9 +1054,9 @@ static void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
 
 static void TestCoverageMBCS(){
     UErrorCode status = U_ZERO_ERROR;
-    const char *directory = loadTestData(&status);
 
 #if 0
+    const char *directory = loadTestData(&status);
     char* tdpath = NULL;
     char* saveDirectory = (char*)malloc(sizeof(char) *(strlen(u_getDataDirectory())+1));
     int len = strlen(directory);

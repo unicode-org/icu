@@ -1337,7 +1337,7 @@ void TestBounds() {
   ucol_close(coll);
 }
 
-void doOverrunTest(UCollator *coll, const UChar *uString, int32_t strLen) {
+static void doOverrunTest(UCollator *coll, const UChar *uString, int32_t strLen) {
   int32_t skLen = 0, skLen2 = 0;
   uint8_t sortKey[256];
   int32_t i, j;
