@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UTF16Test.java,v $ 
-* $Date: 2001/12/04 20:09:07 $ 
-* $Revision: 1.9 $
+* $Date: 2002/02/08 01:13:42 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -786,17 +786,298 @@ public final class UTF16Test extends TestFmwk
     }
   }
   
-  public static void main(String[] arg)
-  {
-    try
+    public void TestIndexOf()
     {
-      UTF16Test test = new UTF16Test();
-      test.run(arg);
+                          //012345678901234567890123456789012345
+        String test1     = "test test ttest tetest testesteststt";
+        String test2     = "test";
+        int    testChar1 = 0x74;
+        int    testChar2 = 0x20402;
+        String test3     = "\ud841\udc02\u0071\udc02\ud841\u0071\ud841\udc02\u0071\u0072\ud841\udc02\u0071\ud841\udc02\u0071\udc02\ud841\u0073";
+        String test4     = UCharacter.toString(testChar2);
+
+        if (UTF16.indexOf(test1, test2) != 0) {
+            errln("indexOf failed: expected to find '" + test2 + 
+                  "' at position 0 in text '" + test1 + "'");
+        }
+        if (UTF16.indexOf(test1, testChar1) != 0) {
+            errln("indexOf failed: expected to find 0x" + 
+                  Integer.toHexString(testChar1) + 
+                  " at position 0 in text '" + test1 + "'");
+        }
+        if (UTF16.indexOf(test3, testChar2) != 0) {
+            errln("indexOf failed: expected to find 0x" + 
+                  Integer.toHexString(testChar2) + 
+                  " at position 0 in text '" + Utility.hex(test3) + "'");
+        }
+        String test5 = "\ud841\ud841\udc02";
+        if (UTF16.indexOf(test5, testChar2) != 1) {
+            errln("indexOf failed: expected to find 0x" + 
+                  Integer.toHexString(testChar2) + 
+                  " at position 0 in text '" + Utility.hex(test3) + "'");
+        }
+        if (UTF16.lastIndexOf(test1, test2) != 29) {
+            errln("lastIndexOf failed: expected to find '" + test2 + 
+                  "' at position 29 in text '" + test1 + "'");
+        }
+        if (UTF16.lastIndexOf(test1, testChar1) != 35) {
+            errln("lastIndexOf failed: expected to find 0x" + 
+                  Integer.toHexString(testChar1) + 
+                  " at position 35 in text '" + test1 + "'");
+        }
+        if (UTF16.lastIndexOf(test3, testChar2) != 13) {
+            errln("indexOf failed: expected to find 0x" + 
+                  Integer.toHexString(testChar2) + 
+                  " at position 13 in text '" + Utility.hex(test3) + "'");
+        }
+        int occurrences = 0;
+        for (int startPos = 0; startPos != -1 && startPos < test1.length();)
+        {
+            startPos = UTF16.indexOf(test1, test2, startPos);
+            if (startPos >= 0) {
+                ++ occurrences;
+                startPos += 4;
+            }
+        }
+        if (occurrences != 6) {
+            errln("indexOf failed: expected to find 6 occurrences, found " 
+                  + occurrences);
+        }
+    
+        occurrences = 0;
+        for (int startPos = 10; startPos != -1 && startPos < test1.length();)
+        {
+            startPos = UTF16.indexOf(test1, test2, startPos);
+            if (startPos >= 0) {
+                ++ occurrences;
+                startPos += 4;
+            }
+        }
+        if (occurrences != 4) {
+            errln("indexOf with starting offset failed: expected to find 4 occurrences, found " 
+                  + occurrences);
+        }
+        
+        occurrences = 0;
+        for (int startPos = 0;
+            startPos != -1 && startPos < test3.length();) {
+            startPos = UTF16.indexOf(test3, test4, startPos);
+            if (startPos != -1) {
+                ++ occurrences;
+                startPos += 2;
+            }
+        }
+        if (occurrences != 4) {
+            errln("indexOf failed: expected to find 4 occurrences, found " 
+            + occurrences);
+        }
+
+        occurrences = 0;
+        for (int startPos = 10;
+             startPos != -1 && startPos < test3.length();) {
+            startPos = UTF16.indexOf(test3, test4, startPos);
+            if (startPos != -1) {
+                ++ occurrences; 
+                startPos += 2;
+            }
+        }
+        if (occurrences != 2) {
+            errln("indexOf failed: expected to find 2 occurrences, found " 
+                  + occurrences);
+        }
+        
+        occurrences = 0;
+        for (int startPos = 0;
+            startPos != -1 && startPos < test1.length();) {
+            startPos = UTF16.indexOf(test1, testChar1, startPos);
+            if (startPos != -1) { 
+                ++ occurrences; 
+                startPos += 1;
+            }
+        }
+        if (occurrences != 16) {
+            errln("indexOf with character failed: expected to find 16 occurrences, found " 
+                  + occurrences);
+        }
+
+        occurrences = 0;
+        for (int startPos = 10;
+            startPos != -1 && startPos < test1.length();) {
+            startPos = UTF16.indexOf(test1, testChar1, startPos);
+            if (startPos != -1) { 
+                ++ occurrences; 
+                startPos += 1;
+            }
+        }
+        if (occurrences != 12) {
+            errln("indexOf with character & start offset failed: expected to find 12 occurrences, found " 
+            + occurrences);
+        }
+
+        occurrences = 0;
+        for (int startPos = 0;
+            startPos != -1 && startPos < test3.length();) {
+            startPos = UTF16.indexOf(test3, testChar2, startPos);
+            if (startPos != -1) {
+                ++ occurrences; 
+                startPos += 1;
+            }
+        }
+        if (occurrences != 4) {
+            errln("indexOf failed: expected to find 4 occurrences, found " 
+                  + occurrences);
+        }
+     
+        occurrences = 0;
+        for (int startPos = 5; startPos != -1 && startPos < test3.length();) {
+            startPos = UTF16.indexOf(test3, testChar2, startPos);
+            if (startPos != -1) {
+                ++ occurrences; 
+                startPos += 1;
+            }
+        }
+        if (occurrences != 3) {
+            errln("indexOf with character & start & end offsets failed: expected to find 2 occurrences, found " 
+            + occurrences);
+        }
+        occurrences = 0;
+        for (int startPos = 32; startPos != -1;) {
+            startPos = UTF16.lastIndexOf(test1, test2, startPos);
+            if (startPos != -1) {
+                ++ occurrences;
+                startPos -= 5;
+            }
+        }
+        if (occurrences != 6) {
+            errln("lastIndexOf with starting and ending offsets failed: expected to find 4 occurrences, found " 
+                  + occurrences);
+        }
+        occurrences = 0;
+        for (int startPos = 32; startPos != -1;) {
+            startPos = UTF16.lastIndexOf(test1, testChar1, startPos);
+            if (startPos != -1) { 
+                ++ occurrences;
+                startPos -= 5;
+            }
+        }
+        if (occurrences != 7) {
+            errln("lastIndexOf with character & start & end offsets failed: expected to find 11 occurrences, found " 
+            + occurrences);
+        }
+
+        //testing UChar32
+        occurrences = 0;
+        for (int startPos = test3.length(); startPos != -1;) {
+            startPos = UTF16.lastIndexOf(test3, testChar2, startPos - 5);
+            if (startPos != -1) { 
+                ++ occurrences;
+            }
+        }
+        if (occurrences != 3) {
+            errln("lastIndexOf with character & start & end offsets failed: expected to find 3 occurrences, found " 
+            + occurrences);
+        }
     }
-    catch (Exception e)
+    
+    public void TestReplace()
     {
-      e.printStackTrace();
+        String test1 = "One potato, two potato, three potato, four\n";
+        String test2 = "potato";
+        String test3 = "MISSISSIPPI";
+
+        String result = UTF16.replace(test1, test2, test3);
+        String expectedValue = 
+            "One MISSISSIPPI, two MISSISSIPPI, three MISSISSIPPI, four\n";
+        if (!result.equals(expectedValue)) {
+            errln("findAndReplace failed: expected \"" + expectedValue + 
+                  "\", got \"" + test1 + "\".");
+        }
+        result = UTF16.replace(test1, test3, test2);
+        expectedValue = test1;
+        if (!result.equals(expectedValue)) {
+            errln("findAndReplace failed: expected \"" + expectedValue + 
+                  "\", got \"" + test1 + "\".");
+        }
+        
+        result = UTF16.replace(test1, ',', 'e');
+        expectedValue = "One potatoe two potatoe three potatoe four\n";
+        if (!result.equals(expectedValue)) {
+            errln("findAndReplace failed: expected \"" + expectedValue + 
+                  "\", got \"" + test1 + "\".");
+        }
+        
+        result = UTF16.replace(test1, ',', 0x10000);
+        expectedValue = "One potato\ud800\udc00 two potato\ud800\udc00 three potato\ud800\udc00 four\n";
+        if (!result.equals(expectedValue)) {
+            errln("findAndReplace failed: expected \"" + expectedValue + 
+                  "\", got \"" + test1 + "\".");
+        }
+        
+        result = UTF16.replace(test1, "potato", "\ud800\udc00\ud801\udc01");
+        expectedValue = "One \ud800\udc00\ud801\udc01, two \ud800\udc00\ud801\udc01, three \ud800\udc00\ud801\udc01, four\n";
+        if (!result.equals(expectedValue)) {
+            errln("findAndReplace failed: expected \"" + expectedValue + 
+                  "\", got \"" + test1 + "\".");
+        }
+        
+        String test4 = "\ud800\ud800\udc00\ud800\udc00\udc00\ud800\ud800\udc00\ud800\udc00\udc00";
+        result = UTF16.replace(test4, 0xd800, 'A');
+        expectedValue = "A\ud800\udc00\ud800\udc00\udc00A\ud800\udc00\ud800\udc00\udc00";
+        if (!result.equals(expectedValue)) {
+            errln("findAndReplace failed: expected \"" + expectedValue + 
+                  "\", got \"" + test1 + "\".");
+        }
+        
+        result = UTF16.replace(test4, 0xdC00, 'A');
+        expectedValue = "\ud800\ud800\udc00\ud800\udc00A\ud800\ud800\udc00\ud800\udc00A";
+        if (!result.equals(expectedValue)) {
+            errln("findAndReplace failed: expected \"" + expectedValue + 
+                  "\", got \"" + test1 + "\".");
+        }
+        
+        result = UTF16.replace(test4, 0x10000, 'A');
+        expectedValue = "\ud800AA\udc00\ud800AA\udc00";
+        if (!result.equals(expectedValue)) {
+            errln("findAndReplace failed: expected \"" + expectedValue + 
+                  "\", got \"" + test1 + "\".");
+        }
     }
-  }
+    
+    public void TestReverse()
+    {
+        StringBuffer test = new StringBuffer(
+                                          "backwards words say to used I");
+
+        StringBuffer result = UTF16.reverse(test);
+        if (!result.toString().equals("I desu ot yas sdrow sdrawkcab")) {
+            errln("reverse() failed:  Expected \"I desu ot yas sdrow sdrawkcab\",\n got \""
+            + result + "\"");
+        }
+        StringBuffer testbuffer = new StringBuffer();
+        UTF16.append(testbuffer, 0x2f999);
+        UTF16.append(testbuffer, 0x1d15f);
+        UTF16.append(testbuffer, 0x00c4);
+        UTF16.append(testbuffer, 0x1ed0);
+        result = UTF16.reverse(testbuffer);
+        if (result.charAt(0) != 0x1ed0 || 
+            result.charAt(1) != 0xc4 || 
+            UTF16.charAt(result, 2) != 0x1d15f || 
+            UTF16.charAt(result, 4)!=0x2f999) {
+            errln("reverse() failed with supplementary characters");
+        }
+    }
+  
+    public static void main(String[] arg)
+    {
+        try
+        {
+            UTF16Test test = new UTF16Test();
+            test.run(arg);
+        }
+        catch (Exception e)
+        {
+        e.printStackTrace();
+        }
+    }
 }
 
