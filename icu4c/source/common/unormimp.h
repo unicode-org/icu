@@ -92,11 +92,19 @@ enum {
 
 /* canonStartSets[0..31] contains indexes for what is in the array */
 enum {
-    _NORM_SET_INDEX_CANON_SETS_LENGTH,  /* number of uint16_t in canonical starter sets */
+    _NORM_SET_INDEX_CANON_SETS_LENGTH,      /* number of uint16_t in canonical starter sets */
     _NORM_SET_INDEX_CANON_BMP_TABLE_LENGTH, /* number of uint16_t in the BMP search table (contains pairs) */
     _NORM_SET_INDEX_CANON_SUPP_TABLE_LENGTH,/* number of uint16_t in the supplementary search table (contains triplets) */
 
-    _NORM_SET_INDEX_TOP=32              /* changing this requires a new formatVersion */
+    /* from formatVersion 2.3: */
+    _NORM_SET_INDEX_NX_CJK_COMPAT_OFFSET,   /* uint16_t offset from canonStartSets[0] to the
+                                               exclusion set for CJK compatibility characters */
+    _NORM_SET_INDEX_NX_UNICODE32_OFFSET,    /* uint16_t offset from canonStartSets[0] to the
+                                               exclusion set for Unicode 3.2 characters */
+    _NORM_SET_INDEX_NX_RESERVED_OFFSET,     /* uint16_t offset from canonStartSets[0] to the
+                                               end of the previous exclusion set */
+
+    _NORM_SET_INDEX_TOP=32                  /* changing this requires a new formatVersion */
 };
 
 /* more constants for canonical starter sets */
@@ -401,12 +409,14 @@ U_CAPI UNormalizationCheckResult U_EXPORT2
 unorm_getQuickCheck(UChar32 c, UNormalizationMode mode);
 
 /**
- * Description of the format of unorm.dat version 2.2.
+ * Description of the format of unorm.icu version 2.3.
  *
  * Main change from version 1 to version 2:
  * Use of new, common UTrie instead of normalization-specific tries.
  * Change to version 2.1: add third/auxiliary trie with associated data.
  * Change to version 2.2: add skippable (f) flag data (_NORM_AUX_NFC_SKIP_F_MASK).
+ * Change to version 2.3: add serialized sets for normalization exclusions
+ *                        stored inside canonStartSets[]
  *
  * For more details of how to use the data structures see the code
  * in unorm.cpp (runtime normalization code) and
@@ -690,6 +700,31 @@ unorm_getQuickCheck(UChar32 c, UNormalizationMode mode);
  *     if the high word has bit 15 set, then build a set with a single code point
  *     which is (((high16(cp)&0x1f00)<<8)|result;
  *     else there is a USerializedSet at canonStartSets+result
+ *
+ * FormatVersion 2.3 adds 2 serialized sets for normalization exclusions.
+ * They are stored in the data file so that the runtime normalization code need
+ * not depend on other properties and their data and implementation files.
+ * The _NORM_SET_INDEX_NX_..._OFFSET offsets in the canonStartSets index table
+ * give the location for each set.
+ * There is no set stored for UNORM_NX_HANGUL because it's trivial to create
+ * without using properties.
+ *
+ * Set contents:
+ *
+ * _NORM_SET_INDEX_NX_CJK_COMPAT_OFFSET (for UNORM_NX_CJK_COMPAT)
+ *     [[:Ideographic:]&[:NFD_QC=No:]]
+ *     =[CJK Ideographs]&[has canonical decomposition]
+ *
+ * _NORM_SET_INDEX_NX_UNICODE32_OFFSET (for UNORM_UNICODE_3_2)
+ *     [:^Age=3.2:]
+ *     =set with all code points that were not designated by the specified Unicode version
+ *
+ * _NORM_SET_INDEX_NX_RESERVED_OFFSET
+ *     This is an offset that points to where the next, future set would start.
+ *     Currently it indicates where the previous set ends, and thus its length.
+ *     The name for this enum constant may in the future be applied to different
+ *     index slots. In order to get the limit of a set, use its index slot and
+ *     the immediately following one regardless of that one's enum name.
  */
 
 #endif /* #if !UCONFIG_NO_NORMALIZATION */
