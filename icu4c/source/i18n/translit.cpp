@@ -1854,6 +1854,7 @@ U_NAMESPACE_END
  */
 U_CFUNC UBool transliterator_cleanup(void) {
     TitlecaseTransliterator::cleanup();
+    NormalizationTransliterator::cleanup();
     if (registry) {
         delete registry;
         registry = NULL;

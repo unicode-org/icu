@@ -11,6 +11,7 @@
 #include "unicode/cpdtrans.h"
 #include "unicode/dtfmtsym.h"
 #include "unicode/hextouni.h"
+#include "unicode/normlzr.h"
 #include "unicode/nultrans.h"
 #include "unicode/rbt.h"
 #include "unicode/translit.h"
@@ -2978,14 +2979,18 @@ void TransliteratorTest::TestSpecialCases(void) {
         "Any-Dev2", "XY > Z",
         "Greek-Latin/FAKE", 
             CharsToUnicodeString
-            ("[^[:L:][:M:]] { \\u03bc\\u03c0 > b ; \\u03bc\\u03c0 } [^[:L:][:M:]] > b ; [^[:L:][:M:]] { [\\u039c\\u03bc][\\u03a0\\u03c0] > B ; [\\u039c\\u03bc][\\u03a0\\u03c0] } [^[:L:][:M:]] > B ;") 
+            ("[^[:L:][:M:]] { \\u03bc\\u03c0 > b ; \\u03bc\\u03c0 } [^[:L:][:M:]] > b ; [^[:L:][:M:]] { [\\u039c\\u03bc][\\u03a0\\u03c0] > B ; [\\u039c\\u03bc][\\u03a0\\u03c0] } [^[:L:][:M:]] > B ;"),
+        "" // END MARKER
     };
 
-    const UnicodeString testCases[] = {
-        // NORMALIZATION, not in C
-        "NFC", CharsToUnicodeString("a\\u0300"), CharsToUnicodeString("\\u00E0"),
-        "NFD", CharsToUnicodeString("\\u00E0"), CharsToUnicodeString("a\\u0300"),
-    
+    static const UnicodeString testCases[] = {
+        // NORMALIZATION
+        // should add more test cases
+        "NFD" , CharsToUnicodeString("a\\u0300 \\u00E0 \\u1100\\u1161 \\uFF76\\uFF9E\\u03D3"), "",
+        "NFC" , CharsToUnicodeString("a\\u0300 \\u00E0 \\u1100\\u1161 \\uFF76\\uFF9E\\u03D3"), "",
+        "NFKD", CharsToUnicodeString("a\\u0300 \\u00E0 \\u1100\\u1161 \\uFF76\\uFF9E\\u03D3"), "",
+        "NFKC", CharsToUnicodeString("a\\u0300 \\u00E0 \\u1100\\u1161 \\uFF76\\uFF9E\\u03D3"), "",
+
         // mp -> b BUG
         "Greek-Latin/UNGEGN", CharsToUnicodeString("(\\u03BC\\u03C0)"), "(b)",
         "Greek-Latin/FAKE", CharsToUnicodeString("(\\u03BC\\u03C0)"), "(b)",
@@ -3007,6 +3012,9 @@ void TransliteratorTest::TestSpecialCases(void) {
         "Lower", CharsToUnicodeString("ab'cD \\uFB00i\\u0131I\\u0130 \\u01C7\\u01C8\\u01C9 ") + DESERET_dee + DESERET_DEE, 
                  CharsToUnicodeString("ab'cd \\uFB00i\\u0131ii \\u01C9\\u01C9\\u01C9 ") + DESERET_dee + DESERET_dee,
     
+        "Upper", CharsToUnicodeString("ab'cD \\uFB00i\\u0131I\\u0130 \\u01C7\\u01C8\\u01C9 ") + DESERET_dee + DESERET_DEE, "",
+        "Lower", CharsToUnicodeString("ab'cD \\uFB00i\\u0131I\\u0130 \\u01C7\\u01C8\\u01C9 ") + DESERET_dee + DESERET_DEE, "",
+
          // FORMS OF S
         "Greek-Latin/UNGEGN",  CharsToUnicodeString("\\u03C3 \\u03C3\\u03C2 \\u03C2\\u03C3"), 
                                CharsToUnicodeString("s ss s\\u0331s\\u0331") ,
@@ -3015,12 +3023,13 @@ void TransliteratorTest::TestSpecialCases(void) {
         "Greek-Latin",  CharsToUnicodeString("\\u03C3 \\u03C3\\u03C2 \\u03C2\\u03C3"), 
                         CharsToUnicodeString("s ss s\\u0331s\\u0331") ,
         "Latin-Greek",  CharsToUnicodeString("s ss s\\u0331s\\u0331"), 
-                        CharsToUnicodeString("\\u03C3 \\u03C3\\u03C2 \\u03C2\\u03C3")
+                        CharsToUnicodeString("\\u03C3 \\u03C3\\u03C2 \\u03C2\\u03C3"),
+        "" // END MARKER
     };
 
     UParseError pos;
     int32_t i;
-    for (i = 0; i < 6 /*registerRules.length*/; i+=2) {
+    for (i = 0; registerRules[i].length()!=0; i+=2) {
         UErrorCode status = U_ZERO_ERROR;
 
         Transliterator *t = Transliterator::createFromRules(registerRules[0+i], 
@@ -3031,11 +3040,49 @@ void TransliteratorTest::TestSpecialCases(void) {
             Transliterator::registerInstance(t);
         }
     }
-    for (i = 0; i < 36 /*testCases.length*/; i+=3) {
-        UErrorCode status = U_ZERO_ERROR;
-        Transliterator *t = Transliterator::createInstance(testCases[i+0], UTRANS_FORWARD, pos, status);
-        expect(*t, testCases[i+1], testCases[i+2], 0);
+    for (i = 0; testCases[i].length()!=0; i+=3) {
+        UErrorCode ec = U_ZERO_ERROR;
+        UParseError pe;
+        const UnicodeString& name = testCases[i];
+        Transliterator *t = Transliterator::createInstance(name, UTRANS_FORWARD, pe, ec);
+        if (U_FAILURE(ec)) {
+            errln((UnicodeString)"FAIL: Couldn't create " + name);
+            delete t;
+            continue;
+        }
+        const UnicodeString& id = t->getID();
+        const UnicodeString& source = testCases[i+1];
+        UnicodeString target;
+
+        // Automatic generation of targets, to make it simpler to add test cases (and more fail-safe)
+        
+        if (testCases[i+2].length() > 0) {
+            target = testCases[i+2];
+        } else if (0==id.caseCompare("NFD", U_FOLD_CASE_DEFAULT)) {
+            Normalizer::normalize(source, UNORM_NFD, 0, target, ec);
+        } else if (0==id.caseCompare("NFC", U_FOLD_CASE_DEFAULT)) {
+            Normalizer::normalize(source, UNORM_NFC, 0, target, ec);
+        } else if (0==id.caseCompare("NFKD", U_FOLD_CASE_DEFAULT)) {
+            Normalizer::normalize(source, UNORM_NFKD, 0, target, ec);
+        } else if (0==id.caseCompare("NFKC", U_FOLD_CASE_DEFAULT)) {
+            Normalizer::normalize(source, UNORM_NFKC, 0, target, ec);
+        } else if (0==id.caseCompare("Lower", U_FOLD_CASE_DEFAULT)) {
+            target = source;
+            target.toLower(Locale::US);
+        } else if (0==id.caseCompare("Upper", U_FOLD_CASE_DEFAULT)) {
+            target = source;
+            target.toUpper(Locale::US);
+        }
+        if (U_FAILURE(ec)) {
+            errln((UnicodeString)"FAIL: Internal error normalizing " + source);
+            continue;
+        }
+
+        expect(*t, source, target);
         delete t;
+    }
+    for (i = 0; registerRules[i].length()!=0; i+=2) {
+        Transliterator::unregister(registerRules[i]);
     }
 }
 
@@ -3080,16 +3127,66 @@ void TransliteratorTest::TestSurrogateCasing (void) {
     }
 }
 
+static void _trans(Transliterator& t, const UnicodeString& src,
+                   UnicodeString& result) {
+    result = src;
+    t.transliterate(result);
+}
+
+static void _trans(const UnicodeString& id, const UnicodeString& src,
+                   UnicodeString& result, UErrorCode ec) {
+    UParseError pe;
+    Transliterator *t = Transliterator::createInstance(id, UTRANS_FORWARD, pe, ec);
+    if (U_SUCCESS(ec)) {
+        _trans(*t, src, result);
+    }
+    delete t;
+}
+
+static const UnicodeString& _findMatch(const UnicodeString& source,
+                                       const UnicodeString* pairs) {
+    static const UnicodeString empty;
+    for (int32_t i=0; pairs[i].length() > 0; i+=2) {
+        if (0==source.caseCompare(pairs[i], U_FOLD_CASE_DEFAULT)) {
+            return pairs[i+1];
+        }
+    }
+    return empty;
+}
+
 // Check to see that incremental gets at least part way through a reasonable string.
 
 void TransliteratorTest::TestIncrementalProgress(void) {
+    UErrorCode ec = U_ZERO_ERROR;
+    UnicodeString latinTest = "The Quick Brown Fox.";
+    UnicodeString devaTest;
+    _trans("Latin-Devanagari", latinTest, devaTest, ec);
+    UnicodeString kataTest;
+    _trans("Latin-Katakana", latinTest, kataTest, ec);
+    if (U_FAILURE(ec)) {
+        errln("FAIL: Internal error");
+        return;
+    }
+    static const UnicodeString tests[] = {
+        "Any", latinTest,
+        "Latin", latinTest,
+        "Halfwidth", latinTest,
+        "Devanagari", devaTest,
+        "Katakana", kataTest,
+        "" // END MARKER
+    };
+
     UnicodeString test("The Quick Brown Fox Jumped Over The Lazy Dog.");
     int32_t i = 0, j=0, k=0;
     int32_t sources = Transliterator::countAvailableSources();
     for (i = 0; i < sources; i++) {
         UnicodeString source;
         Transliterator::getAvailableSource(i, source);
-        if (source != UnicodeString("Latin")) continue;
+        UnicodeString test = _findMatch(source, tests);
+        if (test.length() == 0) {
+            logln((UnicodeString)"Skipping " + source + "-X");
+            continue;
+        }
         int32_t targets = Transliterator::countAvailableTargets(source);
         for (j = 0; j < targets; j++) {
             UnicodeString target;
@@ -3105,12 +3202,23 @@ void TransliteratorTest::TestIncrementalProgress(void) {
     
                 Transliterator *t = Transliterator::createInstance(id, UTRANS_FORWARD, err, status);
                 if (U_FAILURE(status)) {
-                    errln("FAIL: Not able to create transliterator from the composed ID.");
+                    errln((UnicodeString)"FAIL: Could not create " + id);
+                    delete t;
+                    continue;
                 }
                 status = U_ZERO_ERROR;
-                UnicodeString result = CheckIncrementalAux(t, test);
+                CheckIncrementalAux(t, test);
+
+                UnicodeString rev;
+                _trans(*t, test, rev);
                 Transliterator *inv = t->createInverse(status);
-                CheckIncrementalAux(inv, result);
+                if (U_FAILURE(status)) {
+                    errln((UnicodeString)"FAIL: Could not create inverse of " + id);
+                    delete t;
+                    delete inv;
+                    continue;
+                }
+                CheckIncrementalAux(inv, rev);
                 delete t;
                 delete inv;
             }
@@ -3118,7 +3226,7 @@ void TransliteratorTest::TestIncrementalProgress(void) {
     }
 }
 
-UnicodeString TransliteratorTest::CheckIncrementalAux(const Transliterator* t, 
+void TransliteratorTest::CheckIncrementalAux(const Transliterator* t, 
                                                       const UnicodeString& input) {
     UErrorCode ec = U_ZERO_ERROR;
     UTransPosition pos;
@@ -3132,10 +3240,13 @@ UnicodeString TransliteratorTest::CheckIncrementalAux(const Transliterator* t,
     t->transliterate(test, pos, ec);
     if (U_FAILURE(ec)) {
         errln((UnicodeString)"FAIL: transliterate() error " + u_errorName(ec));
-        return test;
+        return;
     }
     UBool gotError = FALSE;
-    if (pos.start == 0) {
+
+    // we have a few special cases. Any-Remove (pos.start = 0, but also = limit) and U+XXXXX?X?
+
+    if (pos.start == 0 && pos.limit != 0 && t->getID() != "Hex-Any/Unicode") {
         errln((UnicodeString)"No Progress, " +
               t->getID() + ": " + formatInput(test, input, pos));
         gotError = TRUE;
@@ -3149,7 +3260,6 @@ UnicodeString TransliteratorTest::CheckIncrementalAux(const Transliterator* t,
               t->getID() + ": " + formatInput(test, input, pos));
         gotError = TRUE;
     }
-    return test;
 }
 //======================================================================
 // Support methods

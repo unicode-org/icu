@@ -540,6 +540,16 @@ public:
      */
     virtual UBool containsAll(const UnicodeSet& c) const;
 
+ private:
+    friend class NormalizationTransliterator;
+    // TODO: Make this public
+    /**
+     * Return TRUE if every character in s is in this set.
+     */
+    UBool containsAll(const UnicodeString& s) const;
+
+ public:
+
     /**
      * Adds all of the elements in the specified set to this set if
      * they're not already present.  This operation effectively

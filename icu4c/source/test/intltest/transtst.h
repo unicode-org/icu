@@ -347,7 +347,7 @@ class TransliteratorTest : public IntlTest {
 
     void checkRules(const UnicodeString& label, Transliterator& t2,
                     const UnicodeString& testRulesForward);
-    UnicodeString CheckIncrementalAux(const Transliterator* t, 
+    void CheckIncrementalAux(const Transliterator* t, 
                              const UnicodeString& input);
 
 };
