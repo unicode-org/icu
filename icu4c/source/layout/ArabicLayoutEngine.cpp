@@ -48,7 +48,7 @@ CharSubstitutionFilter::CharSubstitutionFilter(const LEFontInstance *fontInstanc
 
 CharSubstitutionFilter::~CharSubstitutionFilter()
 {
-	// nothing to do
+    // nothing to do
 }
 
 
