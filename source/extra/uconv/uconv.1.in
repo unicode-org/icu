@@ -2,11 +2,11 @@
 .\"
 .\" uconv.1: manual page for the uconv utility.
 .\"
-.\" Copyright (C) 2000-2001 IBM, Inc. and others.
+.\" Copyright (C) 2000-2003 IBM, Inc. and others.
 .\"
 .\" Manual page by Yves Arrouye <yves@realnames.com>.
 .\"
-.TH UCONV 1 "16 February 2002" "ICU MANPAGE" "ICU @VERSION@ Manual"
+.TH UCONV 1 "2003-dec-22" "ICU MANPAGE" "ICU @VERSION@ Manual"
 .SH NAME
 .B uconv
 \- convert data from one encoding to another
@@ -67,6 +67,12 @@
 .BI "\-t\fP, \fB\-\-to\-code" " encoding"
 ]
 [
+.BI "\-\-add\-signature"
+]
+[
+.BI "\-\-remove\-signature"
+]
+[
 .BI "\-o\fP, \fB\-\-output" " file"
 ]
 [
@@ -114,14 +120,14 @@ after the data have been transcoded to Unicode.
 The
 .I transliteration
 can be either a list of semicolon-separated transliterator names,
-or an arbitrary complex set of rules in the ICU transliteration
+or an arbitrarily complex set of rules in the ICU transliteration
 rules format.
 .PP
 For transcoding purposes,
 .B uconv
 options are compatible with those of
 .BR iconv (1),
-making it easy to replace it in scripts. It is not necessary the case,
+making it easy to replace it in scripts. It is not necessarily the case,
 however, that the encoding names used by
 .B uconv
 and ICU are the same as the ones used by
@@ -239,6 +245,13 @@ Set the original encoding of the data to
 .BI "\-t\fP, \fB\-\-to\-code" " encoding"
 Transcode the data to
 .IR encoding .
+.TP
+.BI "\-\-add\-signature"
+Add a U+FEFF Unicode signature character (BOM) if the output charset
+supports it and does not add one anyway.
+.TP
+.BI "\-\-remove\-signature"
+Remove a U+FEFF Unicode signature character (BOM).
 .TP
 .BI "\-o\fP, \fB\-\-output" " file"
 Write the transcoded data to
@@ -431,7 +444,7 @@ Yves Arrouye
 .SH VERSION
 @VERSION@
 .SH COPYRIGHT
-Copyright (C) 2001 IBM, Inc. and others.
+Copyright (C) 2000-2003 IBM, Inc. and others.
 .SH SEE ALSO
 .BR convrtrs.txt (5)
 .br
