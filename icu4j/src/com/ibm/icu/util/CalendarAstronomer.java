@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/Attic/CalendarAstronomer.java,v $ 
- * $Date: 2000/11/18 00:33:16 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/11/22 19:37:22 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -43,9 +43,10 @@ import java.text.*;
  * <strong>WARNING:</strong> This class is very early in its development, and
  * it is highly likely that its API will change to some degree in the future.
  * At the moment, it basically does just enough to support {@link IslamicCalendar}
- * and a Chinese calendar class that is still in development.
+ * and {@link ChineseCalendar}.
  *
  * @author Laura Werner
+ * @author Alan Liu
  */
 public class CalendarAstronomer {
     
