@@ -31,20 +31,61 @@ import com.ibm.icu.text.UnicodeSet;
 
 public class BagFormatter {
     static final boolean DEBUG = false;
+    public static final boolean SHOW_FILES = System.getProperty("SHOW_FILES") != null;
 
-    private static final String HTML_RULES =
-    "'<' > '&lt;' ;" +
-    "'<' < '&'[lL][Tt]';' ;" +
-    "'&' > '&amp;' ;" +
-    "'&' < '&'[aA][mM][pP]';' ;" +
-    "'>' > '&gt;' ;" +
-    "'>' < '&'[gG][tT]';' ;" +
-    "'\"' > '&quot;' ; " +
-    "'\"' < '&'[qQ][uU][oO][tT]';' ; ";
+    private static final String BASE_RULES =
+	  	"'<' > '&lt;' ;" +
+	    "'<' < '&'[lL][Tt]';' ;" +
+	    "'&' > '&amp;' ;" +
+	    "'&' < '&'[aA][mM][pP]';' ;" +
+	    "'>' < '&'[gG][tT]';' ;" +
+	    "'\"' < '&'[qQ][uU][oO][tT]';' ; " +
+	    "'' < '&'[aA][pP][oO][sS]';' ; ";
+
+    private static final String CONTENT_RULES =
+        "'>' > '&gt;' ;";
+
+    private static final String HTML_RULES = BASE_RULES + CONTENT_RULES + 
+	    "'\"' > '&quot;' ; ";
 
     private static final String XML_RULES = HTML_RULES +
-    "'' > '&apos;' ; " +
-    "'' < '&'[aA][pP][oO][sS]';' ; ";
+	    "'' > '&apos;' ; ";
+    
+    /*
+The ampersand character (&) and the left angle bracket (<) MUST NOT appear 
+
+in their literal form, except when used as markup delimiters, or within a 
+
+comment, a processing instruction, or a CDATA section. If they are needed 
+
+elsewhere, they MUST be escaped using either numeric character references or 
+
+the strings "&amp;" and "&lt;" respectively. The right angle bracket (>) MAY 
+
+be represented using the string "&gt;", and MUST, for compatibility, be 
+
+escaped using either "&gt;" or a character reference when it appears in the string 
+
+"]]>" in content, when that string is not marking the end of a CDATA section.
+
+In the content of elements, character data is any string of characters which does 
+
+not contain the start-delimiter of any markup and does not include the 
+
+CDATA-section-close delimiter, "]]>". In a CDATA section, character data is 
+
+any string of characters not including the CDATA-section-close delimiter, 
+
+"]]>".
+
+To allow attribute values to contain both single and double quotes, the 
+
+apostrophe or single-quote character (') MAY be represented as "&apos;", and 
+
+the double-quote character (") as "&quot;".
+
+
+     */
 
     public static final Transliterator toXML = Transliterator.createFromRules(
             "any-xml", XML_RULES, Transliterator.FORWARD);
@@ -774,7 +815,7 @@ public class BagFormatter {
 
     public static BufferedReader openReader(String dir, String filename, String encoding) throws IOException {
         File file = new File(dir + filename);
-        if (log != null) {
+        if (SHOW_FILES && log != null) {
             log.println("Opening File: "
                 + file.getCanonicalPath());
         }
@@ -791,7 +832,7 @@ public class BagFormatter {
 
     public static PrintWriter openWriter(String dir, String filename, String encoding) throws IOException {
         File file = new File(dir + filename);
-        if (log != null) {
+        if (SHOW_FILES && log != null) {
             log.println("Creating File: "
                 + file.getCanonicalPath());
         }
