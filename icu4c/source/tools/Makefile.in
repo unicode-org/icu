@@ -53,8 +53,6 @@ STRIP = @STRIP@
 PACKAGE = @PACKAGE@
 VERSION = @VERSION@
 
-## Files to remove for 'make clean'
-CLEANFILES = *~
 
 SUBDIRS = ctestfw toolutil makeconv genrb gencol rbdump \
 genccode gennames gencmn gencnval gentz
@@ -97,8 +95,20 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 all-local: build-local
 
 DAT_FILES=unames.dat cnvalias.dat tz.dat
+BRK_FILES=char.brk line.brk line_th.brk sent.brk word.brk word_th.brk
 
 DATAFILESD=$(DAT_FILES:%=$(SRCDATADIR)/%)
+DATAFILESB=$(BRK_FILES:%=$(SRCDATADIR)/%)
+
+# copy the right endianness
+
+ifeq (@U_IS_BIG_ENDIAN@,1)
+%.brk: %BE.brk
+	cp $< $@
+else
+%.brk: %LE.brk
+	cp $< $@
+endif
 
 include makeconv/ucmfiles.mk
 -include makeconv/ucmlocal.mk
@@ -110,11 +120,13 @@ CNV_FILES = $(UCM_FILES:.ucm=.cnv)
 DATAFILESC=$(CNV_FILES)
 
 
-DATAFILES=$(DATAFILESD) $(DATAFILESC)
+DATAFILES=$(DATAFILESD) $(DATAFILESC) $(DATAFILESB)
 
 SRCDATAFILESD=$(DATAFILESD:.dat=_dat.c)
 SRCDATAFILESC=$(DATAFILESC:%.cnv=%_cnv.c)
-SRCDATAFILES=$(SRCDATAFILESD) $(SRCDATAFILESC)
+SRCDATAFILESB=$(DATAFILESB:%.brk=%_brk.c)
+
+SRCDATAFILES=$(SRCDATAFILESD) $(SRCDATAFILESC) $(SRCDATAFILESB)
 
 
 OBJDATAFILES=$(SRCDATAFILES:%.c=%.o)
@@ -163,6 +175,9 @@ build-dll: $(COMMONDLL)
 %_cnv.c: %.cnv
 	(cd genccode ; ./genccode ../$< )
 
+%_brk.c: %.brk
+	(cd genccode ; ./genccode ../$< )
+
 
 # strip is optional 
 #	-$(STRIP) $@
@@ -173,6 +188,9 @@ $(COMMONDLL): $(OBJDATAFILES)
 
 srcs: $(SRCDATAFILES)
 
+
+## Files to remove for 'make clean'
+CLEANFILES = *~ $(BRK_FILES)
 
 
 ### use the "--enable-mapped=" option to configure, to get mapped file behavior.
