@@ -97,6 +97,7 @@ ucol_reset(UCollationElements *elems)
     ci->writableBuffer = ci->stackWritableBuffer;
     ci->writableBufSize = UCOL_WRITABLE_BUFFER_SIZE;
   }
+  ci->fcdPosition = NULL;
 }
 
 U_CAPI int32_t
@@ -138,6 +139,7 @@ ucol_previous(UCollationElements *elems,
             elems->iteratordata_.flags |= UCOL_ITER_HASLEN;
         }
         elems->iteratordata_.pos = elems->iteratordata_.endp;
+        elems->iteratordata_.fcdPosition = elems->iteratordata_.endp;
     }
 
     elems->reset_ = FALSE;
