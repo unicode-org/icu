@@ -18,6 +18,7 @@
 #include "cmemory.h"
 #include "unicode/putil.h"
 #include "unicode/ustring.h"
+#include "cstring.h"
 
 static void TestPUtilAPI(void);
 static void testIEEEremainder(void);
@@ -26,12 +27,14 @@ static void doAssert(double expect, double got, const char *message);
 static UBool compareWithNAN(double x, double y);
 
 void addPUtilTest(TestNode** root);
+static void TestErrorName();
 
 void
 addPUtilTest(TestNode** root)
 {
     addTest(root, &TestPUtilAPI,       "putiltst/TestPUtilAPI");
     addTest(root, &testIEEEremainder,  "putiltst/testIEEEremainder");
+    addTest(root, &TestErrorName, "putiltst/TestErrorName()");
 
 
 }
@@ -371,4 +374,43 @@ static void doAssert(double got, double expect, const char *message)
   if(! compareWithNAN(expect, got) ) {
     log_err("ERROR :  %s. Expected : %lf, Got: %lf\n", message, expect, got);
   }
+}
+
+
+#define _CODE_ARR_LEN 8
+static const UErrorCode errorCode[_CODE_ARR_LEN] = {
+    U_USING_FALLBACK_WARNING,
+    U_STRING_NOT_TERMINATED_WARNING,
+    U_ILLEGAL_ARGUMENT_ERROR,
+    U_STATE_TOO_OLD_ERROR,
+    U_BAD_VARIABLE_DEFINITION,
+    U_RULE_MASK_ERROR,
+    U_UNEXPECTED_TOKEN,
+    U_UNSUPPORTED_ATTRIBUTE
+};
+
+static const char* str[] = {
+    "U_USING_FALLBACK_WARNING",
+    "U_STRING_NOT_TERMINATED_WARNING",
+    "U_ILLEGAL_ARGUMENT_ERROR",
+    "U_STATE_TOO_OLD_ERROR",
+    "U_BAD_VARIABLE_DEFINITION",
+    "U_RULE_MASK_ERROR",
+    "U_UNEXPECTED_TOKEN",
+    "U_UNSUPPORTED_ATTRIBUTE"
+};
+
+static void TestErrorName(){
+    int32_t code=0;
+    const char* errorName ;
+    for(;code<U_ERROR_LIMIT;code++){
+        errorName = u_errorName((UErrorCode)code);
+    }
+
+    for(code=0;code<_CODE_ARR_LEN; code++){
+        errorName = u_errorName(errorCode[code]);
+        if(uprv_strcmp(str[code],errorName )!=0){
+            log_err("Error : u_errorName failed. Expected: %s Got: %s \n",str[code],errorName);
+        }
+    }
 }
