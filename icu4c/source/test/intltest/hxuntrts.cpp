@@ -187,7 +187,9 @@ void HexToUniTransliteratorTest::TestCloneEqual(){
 		trans2clone->toPattern() != trans2equal->toPattern()  ){
 			errln("Error: equal() or clone() failed");
 	}
-
+    delete transdefaultequal;
+    delete trans1equal;
+    delete trans2equal;
 	delete transdefault;
 	delete trans1;
 	delete trans2;
