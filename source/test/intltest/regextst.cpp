@@ -368,7 +368,7 @@ void RegexTest::Basic() {
 //
 #if 0
     {
-    REGEX_FIND("(?:ABC)+", "<0>ABCABCABC</0>D");
+    REGEX_FIND("[{ab}]", "a");
     }
     exit(1);
 #endif
@@ -435,6 +435,9 @@ void RegexTest::Basic() {
     REGEX_TESTLM("[\\p{Nd}]*", "123456", TRUE, TRUE);
     REGEX_TESTLM("[\\p{Nd}]*", "a123456", TRUE, FALSE);   // note that * matches 0 occurences.
     REGEX_TESTLM("[a][b][[:Zs:]]*", "ab   ", TRUE, TRUE);
+
+    // Set contains only a string, no individual chars.
+    REGEX_TESTLM("[{ab}]", "a", FALSE, FALSE);
 
     //
     //   OR operator in patterns
@@ -975,6 +978,52 @@ void RegexTest::API_Pattern() {
 
     delete pat1;
 
+    //  split, with a pattern with (capture)
+    pat1 = RegexPattern::compile("<(\\w*)>",  pe, status);
+    REGEX_CHECK_STATUS;
+
+    n = pat1->split("<a>Now is <b>the time<c>", fields, 10, status);
+    REGEX_CHECK_STATUS;
+    REGEX_ASSERT(n==6);
+    REGEX_ASSERT(fields[0]=="");
+    REGEX_ASSERT(fields[1]=="a");
+    REGEX_ASSERT(fields[2]=="Now is ");
+    REGEX_ASSERT(fields[3]=="b");
+    REGEX_ASSERT(fields[4]=="the time");
+    REGEX_ASSERT(fields[5]=="c");
+    REGEX_ASSERT(fields[6]=="");
+
+    n = pat1->split("  <a>Now is <b>the time<c>", fields, 10, status);
+    REGEX_CHECK_STATUS;
+    REGEX_ASSERT(n==6);
+    REGEX_ASSERT(fields[0]=="  ");
+    REGEX_ASSERT(fields[1]=="a");
+    REGEX_ASSERT(fields[2]=="Now is ");
+    REGEX_ASSERT(fields[3]=="b");
+    REGEX_ASSERT(fields[4]=="the time");
+    REGEX_ASSERT(fields[5]=="c");
+    REGEX_ASSERT(fields[6]=="");
+
+    n = pat1->split("  <a>Now is <b>the time<c>", fields, 4, status);
+    REGEX_CHECK_STATUS;
+    REGEX_ASSERT(n==4);
+    REGEX_ASSERT(fields[0]=="  ");
+    REGEX_ASSERT(fields[1]=="a");
+    REGEX_ASSERT(fields[2]=="Now is ");
+    REGEX_ASSERT(fields[3]=="the time<c>");
+    delete pat1;
+
+    pat1 = RegexPattern::compile("([-,])",  pe, status);
+    REGEX_CHECK_STATUS;
+    n = pat1->split("1-10,20", fields, 10, status);
+    REGEX_CHECK_STATUS;
+    REGEX_ASSERT(n==5);
+    REGEX_ASSERT(fields[0]=="1");
+    REGEX_ASSERT(fields[1]=="-");
+    REGEX_ASSERT(fields[2]=="10");
+    REGEX_ASSERT(fields[3]==",");
+    REGEX_ASSERT(fields[4]=="20");
+    delete pat1;
 }
 
 

@@ -14,12 +14,44 @@
 
 
 //
+//  debugging support.  Enable one or more of the #defines immediately following
+//
+//#define REGEX_SCAN_DEBUG
+#define REGEX_DUMP_DEBUG
+//#define REGEX_RUN_DEBUG
+//  End of #defines inteded to be directly set.
+
+#ifdef REGEX_SCAN_DEBUG
+#define REGEX_SCAN_DEBUG_PRINTF printf
+#else
+#define REGEX_SCAN_DEBUG_PRINTF
+#endif
+
+#ifdef REGEX_DUMP_DEBUG
+#define REGEX_DUMP_DEBUG_PRINTF printf
+#else
+#define REGEX_DUMP_DEBUG_PRINTF
+#endif
+
+#ifdef REGEX_RUN_DEBUG
+#define REGEX_RUN_DEBUG_PRINTF printf
+#define REGEX_DUMP_DEBUG_PRINTF printf
+#else
+#define REGEX_RUN_DEBUG_PRINTF
+#endif
+
+#if defined(REGEX_SCAN_DEBUG) || defined(REGEX_RUN_DEBUG) || defined(REGEX_DUMP_DEBUG)
+#include <stdio.h>
+#endif
+
+
+//
 //  Opcode types     In the compiled form of the regexp, these are the type, or opcodes,
 //                   of the entries.
 //
 enum {
      URX_RESERVED_OP   = 0,
-     URX_UNUSED1       = 1,
+     URX_BACKTRACK     = 1,
      URX_END           = 2,
      URX_ONECHAR       = 3,    // Value field is the 21 bit unicode char to match
      URX_STRING        = 4,    // Value field is index of string start
@@ -52,7 +84,7 @@ enum {
 //   Used for debug printing only.
 #define URX_OPCODE_NAMES       \
         "URX_RESERVED_OP",     \
-        "URX_UNUSED1",         \
+        "URX_BACKTRACK",       \
         "END",                 \
         "ONECHAR",             \
         "STRING",              \

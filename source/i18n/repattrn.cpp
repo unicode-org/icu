@@ -18,8 +18,6 @@
 #include "regexcmp.h"
 #include "regeximp.h"
 
-#include "stdio.h"    // TODO:  get rid of this...
-
 U_NAMESPACE_BEGIN
 
 //--------------------------------------------------------------------------
@@ -197,7 +195,7 @@ UBool   RegexPattern::operator ==(const RegexPattern &other) const {
 //---------------------------------------------------------------------
 RegexPattern  *RegexPattern::compile(
                              const UnicodeString &regex,
-                             int32_t              flags,
+                             uint32_t             flags,
                              UParseError          &pe,
                              UErrorCode           &status)  {
 
@@ -243,7 +241,7 @@ RegexPattern *RegexPattern::compile( const UnicodeString &regex,
 //   flags
 //
 //---------------------------------------------------------------------
-int32_t RegexPattern::flags() const {
+uint32_t RegexPattern::flags() const {
     return fFlags;
 }
 
@@ -320,8 +318,6 @@ UnicodeString RegexPattern::pattern() const {
 //---------------------------------------------------------------------
 //
 //   split
-//            TODO:  perl returns captured strings intermixed with the
-//                   fields.  Should we do this too?
 //
 //---------------------------------------------------------------------
 int32_t  RegexPattern::split(const UnicodeString &input,
@@ -383,9 +379,27 @@ int32_t  RegexPattern::split(const UnicodeString &input,
             int32_t fieldLen = fMatcher->fMatchStart - nextOutputStringStart;
             dest[i].setTo(input, nextOutputStringStart, fieldLen);
             nextOutputStringStart = fMatcher->fMatchEnd;
+
+            // If the delimiter pattern has capturing parentheses, the captured
+            //  text goes out into the next n destination strings.
+            int32_t groupNum;
+            for (groupNum=1; groupNum<=this->fNumCaptureGroups; groupNum++) {
+                if (i==destCapacity-1) {
+                    break;
+                }
+                i++;
+                dest[i] = fMatcher->group(groupNum, status);
+            }
+
             if (nextOutputStringStart == inputLen) {
                 // The delimiter was at the end of the string.  We're done.
                 break;
+            }
+
+            if (i==destCapacity-1) {
+                // We've filled up the last output string with capture group data.
+                //  Give back the last string, to be used for the remainder of the input.
+                i--;
             }
         }
         else
@@ -410,88 +424,102 @@ int32_t  RegexPattern::split(const UnicodeString &input,
 //---------------------------------------------------------------------
 static const char *opNames[] = {URX_OPCODE_NAMES};
 
-void   RegexPattern::dump() {
+void   RegexPattern::dumpOp(int32_t index) const {
+    int32_t op          = fCompiledPat->elementAti(index);
+    int32_t val         = URX_VAL(op);
+    int32_t type        = URX_TYPE(op);
+    int32_t pinnedType  = type;
+    if (pinnedType >= sizeof(opNames)/sizeof(char *)) {
+        pinnedType = 0;
+    }
+    
+    REGEX_DUMP_DEBUG_PRINTF("%4d   %08x    %-15s  ", index, op, opNames[pinnedType]);
+    switch (type) {
+    case URX_NOP:
+    case URX_DOTANY:
+    case URX_FAIL:
+    case URX_BACKSLASH_A:
+    case URX_BACKSLASH_G:
+    case URX_BACKSLASH_X:
+    case URX_END:
+        // Types with no operand field of interest.
+        break;
+        
+    case URX_START_CAPTURE:
+    case URX_END_CAPTURE:
+    case URX_STATIC_SETREF:
+    case URX_STATE_SAVE:
+    case URX_JMP:
+    case URX_BACKSLASH_B:
+    case URX_BACKSLASH_D:
+    case URX_BACKSLASH_W:
+    case URX_BACKSLASH_Z:
+    case URX_CARET:
+    case URX_DOLLAR:
+    case URX_STRING_LEN:
+        // types with an integer operand field.
+        REGEX_DUMP_DEBUG_PRINTF("%d", val);
+        break;
+        
+    case URX_ONECHAR:
+        REGEX_DUMP_DEBUG_PRINTF("%c", val<256?val:'?');
+        break;
+        
+    case URX_STRING:
+        {
+            int32_t lengthOp       = fCompiledPat->elementAti(index+1);
+            U_ASSERT(URX_TYPE(lengthOp) == URX_STRING_LEN);
+            int32_t length = URX_VAL(lengthOp);
+            int32_t i;
+            for (i=val; i<val+length; i++) {
+                UChar c = fLiteralText[i];
+                if (c < 32 || c >= 256) {c = '.';}
+                REGEX_DUMP_DEBUG_PRINTF("%c", c);
+            }
+        }
+        break;
+
+    case URX_SETREF:
+        {
+            REGEX_DUMP_DEBUG_PRINTF("%d ", val);
+            UnicodeString s;
+            UnicodeSet *set = (UnicodeSet *)fSets->elementAt(val);
+            set->toPattern(s, TRUE);
+            for (int32_t i=0; i<s.length(); i++) {
+                REGEX_DUMP_DEBUG_PRINTF("%c", s.charAt(i));
+            }
+        }
+
+
+        
+    default:
+        REGEX_DUMP_DEBUG_PRINTF("??????");
+        break;
+    }
+    REGEX_DUMP_DEBUG_PRINTF("\n");
+}
+
+
+
+
+
+
+void   RegexPattern::dump() const {
     int      index;
     int      i;
-    UChar    c;
-    int32_t  op;
-    int32_t  pinnedType;
-    int32_t  type;
-    int32_t  val;
-    int32_t  stringStart;
 
-
-    printf("Original Pattern:  ");
+    REGEX_DUMP_DEBUG_PRINTF("Original Pattern:  ");
     for (i=0; i<fPattern.length(); i++) {
-        printf("%c", fPattern.charAt(i));
+        REGEX_DUMP_DEBUG_PRINTF("%c", fPattern.charAt(i));
     }
-    printf("\n");
-    printf("Pattern Valid?:     %s\n", fBadState? "no" : "yes");
-    printf("\nIndex   Binary     Type             Operand\n"
+    REGEX_DUMP_DEBUG_PRINTF("\n");
+    REGEX_DUMP_DEBUG_PRINTF("Pattern Valid?:     %s\n", fBadState? "no" : "yes");
+    REGEX_DUMP_DEBUG_PRINTF("\nIndex   Binary     Type             Operand\n"
            "-------------------------------------------\n");
-    for (index = 0; ; index++) {
-        op         = fCompiledPat->elementAti(index);
-        val        = URX_VAL(op);
-        type       = URX_TYPE(op);
-        pinnedType = type;
-        if (pinnedType >= sizeof(opNames)/sizeof(char *)) {
-            pinnedType = 0;
-        }
-
-        printf("%4d   %08x    %-15s  ", index, op, opNames[pinnedType]);
-        switch (type) {
-        case URX_NOP:
-        case URX_DOTANY:
-        case URX_FAIL:
-        case URX_BACKSLASH_A:
-        case URX_BACKSLASH_G:
-        case URX_BACKSLASH_X:
-            // Types with no operand field of interest.
-            break;
-
-        case URX_START_CAPTURE:
-        case URX_END_CAPTURE:
-        case URX_SETREF:
-        case URX_STATIC_SETREF:
-        case URX_STATE_SAVE:
-        case URX_JMP:
-        case URX_BACKSLASH_B:
-        case URX_BACKSLASH_D:
-        case URX_BACKSLASH_W:
-        case URX_BACKSLASH_Z:
-        case URX_CARET:
-        case URX_DOLLAR:
-            // types with an integer operand field.
-            printf("%d", val);
-            break;
-
-        case URX_ONECHAR:
-            printf("%c", val<256?val:'?');
-            break;
-
-        case URX_STRING:
-            stringStart = val;
-            break;
-
-        case URX_STRING_LEN:
-            for (i=stringStart; i<stringStart+val; i++) {
-                c = fLiteralText[i];
-                if (c >= 256) {c = '?';};
-                printf("%c", c);
-            }
-            break;
-            
-        case URX_END:
-            goto breakFromLoop;
-            
-        default:
-            printf("??????");
-            break;
-        }
-        printf("\n");
+    for (index = 0; index<fCompiledPat->size(); index++) {
+        dumpOp(index);
     }
-breakFromLoop:
-    printf("\n\n");
+    REGEX_DUMP_DEBUG_PRINTF("\n\n");
 };
 
 const char RegexPattern::fgClassID = 0;
