@@ -6,16 +6,19 @@
 //*******************************************************************************
 
 casing {
-    TestPurpose { "This is test data file for string casing" }
+    Info {
+        Description { "This is test data file for string casing" }
 
-    TestDataParsing { "each item is an array with"
+        LongDescription { "each item is an array with"
                       "input string, result string, locale ID, break iterator"
                       "the break iterator is specified as an int, same as in UBreakIteratorType:"
                       "0=UBRK_CHARACTER  1=UBRK_WORD  2=UBRK_LINE  3=UBRK_SENTENCE  4=UBRK_TITLE  -1=default"
                      }
+    }
     TestData {
       titlecasing {
-        TestCases {
+        Headers { "Input", "Output", "Locale", "Type" }
+        Cases {
             { " tHe QUIcK bRoWn", " The Quick Brown", "", "4" },
             { "ǄǅǆǇǈǉǊǋǌ", "ǅǅǅǈǈǈǋǋǋ", "", "0" }, // UBRK_CHARACTER
             { "ǉubav ljubav", "ǈubav Ljubav", "", "-1" }, // Lj vs. L+j
