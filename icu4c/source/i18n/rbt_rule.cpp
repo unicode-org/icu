@@ -732,6 +732,11 @@ UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
     UBool emitBraces =
         (anteContextLength != 0) || (keyLength != pattern.length());
 
+    // Emit start anchor
+    if ((flags & ANCHOR_START) != 0) {
+        rule.append((UChar)94/*^*/);
+    }
+
     // Emit the input pattern
     for (i=0; i<pattern.length(); ++i) {
         if (emitBraces && i == anteContextLength) {
@@ -767,6 +772,11 @@ UnicodeString& TransliterationRule::toRule(UnicodeString& rule,
 
     if (emitBraces && i == (anteContextLength + keyLength)) {
         appendToRule(rule, (UChar)0x007D /*}*/, TRUE, escapeUnprintable, quoteBuf);
+    }
+
+    // Emit end anchor
+    if ((flags & ANCHOR_END) != 0) {
+        rule.append((UChar)36/*$*/);
     }
 
     appendToRule(rule, UnicodeString(" > ", ""), TRUE, escapeUnprintable, quoteBuf);
