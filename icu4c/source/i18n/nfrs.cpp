@@ -25,6 +25,8 @@
 #include "cmemory.h"
 #endif
 
+#include "uprops.h"
+
 U_NAMESPACE_BEGIN
 
 #if 0
@@ -142,7 +144,7 @@ NFRuleSet::NFRuleSet(UnicodeString* descriptions, int32_t index, UErrorCode& sta
             status = U_PARSE_ERROR;
         } else {
             name.setTo(description, 0, pos);
-            while (pos < description.length() && u_isWhitespace(description.charAt(++pos))) {
+            while (pos < description.length() && uprv_isRuleWhiteSpace(description.charAt(++pos))) {
             }
             description.remove(0, pos);
         }
