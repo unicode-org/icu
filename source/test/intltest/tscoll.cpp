@@ -48,6 +48,7 @@
 #include "lcukocol.h"
 #include "ucaconf.h"
 #include "svccoll.h"
+#include "cmemory.h"
 
 void IntlTestCollator::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
