@@ -99,6 +99,11 @@ no {
     }
     ShortLanguage { "nor" }
     localPatternChars { "GyMdkHmsSEDFwWahKz" }
+    Eras { 
+            "f.Kr.",
+            "e.Kr.",
+    }
+
     zoneStrings { 
         {
                 "Africa/Casablanca",
