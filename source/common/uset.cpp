@@ -26,6 +26,7 @@
 #include "unicode/uset.h"
 #include "unicode/uniset.h"
 #include "cmemory.h"
+#include "unicode/ustring.h"
 
 U_CAPI USet* U_EXPORT2
 uset_open(UChar32 start, UChar32 end) {
@@ -72,7 +73,14 @@ uset_add(USet* set, UChar32 c) {
 
 U_CAPI void U_EXPORT2
 uset_addString(USet* set, const UChar* str, int32_t strLen) {
-    UnicodeString s(strLen==-1, str, strLen);
+  // WRONG! Do not alias, it will stay aliased, even after 
+  // copying. TODO: do we need a copy ctor that unaliases
+    //UnicodeString s(strLen==-1, str, strLen);
+  // We promised -1 for zero terminated
+    if(strLen == -1) {
+      strLen = u_strlen(str);
+    }
+    UnicodeString s(str, strLen);
     ((UnicodeSet*) set)->add(s);
 }
 
