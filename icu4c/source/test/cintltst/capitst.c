@@ -15,7 +15,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "unicode/utypes.h"
-#include "unicode/ucol.h"
+#include "ucolimp.h"
 #include "unicode/uloc.h"
 #include "cintltst.h"
 #include "capitst.h"
