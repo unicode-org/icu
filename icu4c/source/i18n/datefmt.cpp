@@ -26,9 +26,6 @@
 // class DateFormat
 // *****************************************************************************
 
-int32_t         DateFormat::fgLocalesCount;
-const Locale*   DateFormat::fgLocales = 0;
-
 DateFormat::DateFormat()
 :   fCalendar(0),
     fNumberFormat(0)
@@ -231,53 +228,10 @@ DateFormat::create(EStyle timeStyle, EStyle dateStyle, const Locale& locale)
 const Locale*
 DateFormat::getAvailableLocales(int32_t& count)
 {
-    //  return LocaleData.getAvailableLocales("DateTimePatterns");
-
-
-    // We only do this computation once.  Thereafter, we keep it in the static
-    // fgLocalesArray.  What we do is iterate over all the locales, and try to
-    // load a specific resource from them which indicates that they have
-    // date format data.
-
-    if (!fgLocales)
-    {
-        // This is going to load all the locale resource bundles into the
-        // cache!
-        int32_t localesCount;
-        const Locale* locales = Locale::getAvailableLocales(localesCount);
-        Locale* temp = new Locale[localesCount];
-        int32_t newLocalesCount = 0;
-        int32_t i;
-        for (i=0; i<localesCount; ++i)
-        {
-            UErrorCode status = U_ZERO_ERROR;
-            ResourceBundle resource((char *)0, locales[i], status);
-
-            resource.get(SimpleDateFormat::fgDateTimePatternsTag, status);
-            if (U_SUCCESS(status))
-            {
-                temp[newLocalesCount++] = locales[i];
-            }
-        }
-        Locale *newLocales = new Locale[newLocalesCount];
-        for (i=0; i<newLocalesCount; ++i) ((Locale*)newLocales)[i] = temp[i]; // Cast away const
-        delete[] temp;
-
-
-        Mutex lock;
-        if(!fgLocales)
-        {
-            fgLocalesCount = newLocalesCount;
-            fgLocales = newLocales;
-        }
-        else
-        {
-            delete [] newLocales; // *shrug*
-        }
-    }
-
-    count = fgLocalesCount;
-    return fgLocales;
+    // Get the list of installed locales.
+    // Even if root has the correct date format for this locale,
+    // it's still a valid locale (we don't worry about data fallbacks).
+    return Locale::getAvailableLocales(count);
 }
 
 //----------------------------------------------------------------------
