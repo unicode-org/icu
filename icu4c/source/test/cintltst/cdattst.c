@@ -102,7 +102,7 @@ static void TestDateFormat()
     numlocales=udat_countAvailable();
     /* use something sensible w/o hardcoding the count */
     if(numlocales < 0)
-        log_err("FAIL: error in countAvailable\n");
+        log_data_err("FAIL: error in countAvailable\n");
     log_verbose("The number of locales for which date/time formatting patterns are available is %d\n", numlocales);
     /*for(i=0;i<numlocales;i++)
         log_verbose("%s\n", uloc_getName(udat_getAvailable(i))); */
@@ -154,14 +154,14 @@ static void TestDateFormat()
     if(u_strcmp(result, temp)==0)
         log_verbose("PASS: Date Format for french locale successful uisng udat_format()\n");
     else
-        log_err("FAIL: Date Format for french locale failed using udat_format()\n");
+        log_data_err("FAIL: Date Format for french locale failed using udat_format()\n");
     /*foramt using it */
     u_uastrcpy(temp, "10/lug/96 16:05:28");
     
     if(u_strcmp(myDateFormat(it,d), temp)==0)
         log_verbose("PASS: Date Format for italian locale successful uisng udat_format()\n");
     else
-        log_err("FAIL: Date Format for italian locale failed using udat_format()\n");
+        log_data_err("FAIL: Date Format for italian locale failed using udat_format()\n");
 
     
     /*Testing parsing using udat_parse()*/
@@ -389,7 +389,7 @@ static void TestSymbols()
     if(u_strcmp(result, pattern)==0)
         log_verbose("PASS: getSymbols retrieved the right value\n");
     else
-        log_err("FAIL: getSymbols retrieved the wrong value\n");
+        log_data_err("FAIL: getSymbols retrieved the wrong value\n");
 
     /*run series of tests to test getsymbols regressively*/
     log_verbose("\nTesting getSymbols() regressively\n");
@@ -493,7 +493,7 @@ free(pattern);
         log_err("FAIL: error in retrieving the value using getSymbols i.e roundtrip\n");
     
     if(u_strcmp(result, value)!=0)
-        log_err("FAIL: Error in settting and getting symbols\n");
+        log_data_err("FAIL: Error in settting and getting symbols\n");
     else
         log_verbose("PASS: setSymbols successful\n");
     
@@ -652,7 +652,7 @@ static void VerifygetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, in
     if(u_strcmp(result, pattern)==0)
         log_verbose("PASS: getSymbols retrieved the right value\n");
     else{
-        log_err("FAlL: getSymbols retrieved the wrong value\n Expected %s Got %s\n", austrdup(pattern), 
+        log_data_err("FAIL: getSymbols retrieved the wrong value\n Expected %s Got %s\n", austrdup(pattern), 
             austrdup(result) );
     }
     free(result);
@@ -744,7 +744,7 @@ static void VerifygetsetSymbols(UDateFormat* from, UDateFormat* to, UDateFormatS
     }
     
     if(u_strcmp(result, value)!=0){
-        log_err("FAIL:Error in setting and then getting symbols\n Expected %s Got %s\n", austrdup(result),
+        log_data_err("FAIL:Error in setting and then getting symbols\n Expected %s Got %s\n", austrdup(result),
             austrdup(value) );
     }
     else

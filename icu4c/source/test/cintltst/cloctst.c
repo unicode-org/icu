@@ -368,7 +368,7 @@ setUpDataTable();
         }
         sprintf(temp2, "%x", uloc_getLCID(testLocale));
         if (strcmp(temp2, rawData2[LCID][i]) != 0) {
-            log_err("LCID mismatch: %s versus %s\n", temp2 , rawData2[LCID][i]);
+            log_data_err("LCID mismatch: %s versus %s\n", temp2 , rawData2[LCID][i]);
         }
 
     }
@@ -460,11 +460,11 @@ static void TestGetAvailableLocales()
     log_verbose("Testing the no of avialable locales\n");
     locCount=uloc_countAvailable();
     if (locCount == 0)
-        log_err("countAvailable() returned an empty list!\n");
+        log_data_err("countAvailable() returned an empty list!\n");
 
     /* use something sensible w/o hardcoding the count */
     else if(locCount < 0){
-        log_err("countAvailable() returned a wrong value!= %d\n", locCount);
+        log_data_err("countAvailable() returned a wrong value!= %d\n", locCount);
     }
     else{
         log_info("Number of locales returned = %d\n", locCount);
@@ -730,19 +730,19 @@ setUpDataTable();
 
 
         if (0 !=u_strcmp(testLang,expectedLang))  {
-            log_err(" Display Language mismatch: %s  versus  %s inLocale=%s\n", austrdup(testLang), austrdup(expectedLang), inLocale);
+            log_data_err(" Display Language mismatch: %s  versus  %s inLocale=%s\n", austrdup(testLang), austrdup(expectedLang), inLocale);
         }
 
         if (0 != u_strcmp(testCtry,expectedCtry))   {
-            log_err(" Display Country mismatch: %s  versus  %s inLocale=%s\n", austrdup(testCtry), austrdup(expectedCtry), inLocale);
+            log_data_err(" Display Country mismatch: %s  versus  %s inLocale=%s\n", austrdup(testCtry), austrdup(expectedCtry), inLocale);
         }
 
         if (0 != u_strcmp(testVar,expectedVar))    {
-            log_err(" Display Variant mismatch: %s  versus  %s inLocale=%s\n", austrdup(testVar), austrdup(expectedVar), inLocale);
+            log_data_err(" Display Variant mismatch: %s  versus  %s inLocale=%s\n", austrdup(testVar), austrdup(expectedVar), inLocale);
         }
 
         if(0 != u_strcmp(testName, expectedName))    {
-            log_err(" Display Name mismatch: %s  versus  %s inLocale=%s\n", austrdup(testName), austrdup(expectedName), inLocale);
+            log_data_err(" Display Name mismatch: %s  versus  %s inLocale=%s\n", austrdup(testName), austrdup(expectedName), inLocale);
         }
 
         if(testName!=&_NUL) {
@@ -910,7 +910,7 @@ static void TestSimpleDisplayNames()
         expectedLang=(UChar*)malloc(sizeof(UChar) * (strlen(languageNames[i])+1));
         u_uastrcpy(expectedLang, languageNames[i]);
         if (u_strcmp(testLang, expectedLang) != 0)
-            log_err("Got wrong display name for %s : Expected \"%s\", got \"%s\".\n",
+            log_data_err("Got wrong display name for %s : Expected \"%s\", got \"%s\".\n",
                     languageCodes[i], languageNames[i], austrdup(testLang));
         free(testLang);
         free(expectedLang);
@@ -1250,7 +1250,7 @@ TestKeyInRootRecursive(UResourceBundle *root, UResourceBundle *currentBundle, co
         errorCode = U_ZERO_ERROR;
         subBundle = ures_getNextResource(currentBundle, NULL, &errorCode);
         if (U_FAILURE(errorCode)) {
-            log_err("Can't open a resource for locale %s\n", locale);
+            log_data_err("Can't open a resource for locale %s\n", locale);
             continue;
         }
         subBundleKey = ures_getKey(subBundle);
@@ -1270,7 +1270,7 @@ TestKeyInRootRecursive(UResourceBundle *root, UResourceBundle *currentBundle, co
                         || (strcmp(subBundleKey, "TransliterateLATIN") != 0 /* Ignore these special cases */
                         && strcmp(subBundleKey, "BreakDictionaryData") != 0))
                     {
-                        log_err("Can't open a resource with key \"%s\" in \"%s\" from root for locale \"%s\"\n",
+                        log_data_err("Can't open a resource with key \"%s\" in \"%s\" from root for locale \"%s\"\n",
                                 subBundleKey,
                                 ures_getKey(currentBundle),
                                 locale);
@@ -1653,12 +1653,12 @@ TestLocaleStructure(void) {
         }
 */
     if (locCount <= 1) {
-        log_err("At least root needs to be installed\n");
+        log_data_err("At least root needs to be installed\n");
     }
 
     root = ures_openDirect(NULL, "root", &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err("Can't open root\n");
+        log_data_err("Can't open root\n");
         return;
     }
     for (locIndex = 0; locIndex < locCount; locIndex++) {
@@ -1669,7 +1669,7 @@ TestLocaleStructure(void) {
                 if (strcmp(uloc_getAvailable(locIndex),"sv_FI_AL") != 0) {
                     /* It's installed, but there is no data.
                        It's installed for the g18n white paper [grhoten] */
-                    log_err("ERROR: Locale %-5s not installed, and it should be!\n",
+                    log_data_err("ERROR: Locale %-5s not installed, and it should be!\n",
                         uloc_getAvailable(locIndex));
                 }
             } else {

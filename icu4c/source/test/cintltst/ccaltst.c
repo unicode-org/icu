@@ -116,7 +116,7 @@ static void TestCalendar()
         log_verbose("The no: of locales for which calendars are avilable are %d\n", count);
     }
     else
-        log_err("FAIL: Error in countAvialable()\n");
+        log_data_err("FAIL: Error in countAvailable()\n");
 
     for(i=0;i<count;i++) 
        log_verbose("%s\n", ucal_getAvailable(i)); 
