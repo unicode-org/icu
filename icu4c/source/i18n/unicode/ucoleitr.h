@@ -157,8 +157,9 @@ ucol_previous(UCollationElements *elems, UErrorCode *status);
  * This is useful for .... ?
  * @param elems The UCollationElements containing the text.
  * @param order A collation order returned by previous or next.
- * @return The maximum length of any expansion sequences ending with the 
- *         specified order.
+ * @return maximum size of the expansion sequences ending with the collation 
+ *         element or 1 if collation element does not occur at the end of any 
+ *         expansion sequence
  */
 U_CAPI int32_t
 ucol_getMaxExpansion(const UCollationElements *elems, int32_t order);

@@ -499,7 +499,8 @@ CollationKey& RuleBasedCollator::getCollationKey(const UChar* source,
  * specified comparison order.
  * @param order a collation order returned by previous or next.
  * @return the maximum length of any expansion seuences ending with the 
- *         specified order.
+ *         specified order or 1 if collation order does not occur at the end of any 
+ *         expansion sequence.
  * @see CollationElementIterator#getMaxExpansion
  */
 int32_t RuleBasedCollator::getMaxExpansion(int32_t order) const
