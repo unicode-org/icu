@@ -46,6 +46,7 @@
 *******************************************************************************
 */
 
+#include "unicode/utypes.h"
 #include "unicode/resbund.h"
 #include "mutex.h"
 
@@ -57,10 +58,6 @@
 #include "uresimp.h"
 
 #include <string.h>
-
-#if U_HAVE_WCHAR_H
-# include <wchar.h>
-#endif
 
 #include "cmemory.h"
 
