@@ -1938,11 +1938,13 @@ ures_loc_nextLocale(UEnumeration* en,
     UResourceBundle *res = &(ctx->installed);
     UResourceBundle *k = NULL;
     const char *result = NULL;
+    int32_t len = 0;
     if(ures_hasNext(res) && (k = ures_getNextResource(res, &ctx->curr, status))) {
         result = ures_getKey(k);
-        *resultLength = uprv_strlen(result);
-    } else {
-        *resultLength = 0;
+        len = uprv_strlen(result);
+    }
+    if (resultLength) {
+        *resuleLength = len;
     }
     return result;
 }
