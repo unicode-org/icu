@@ -93,7 +93,7 @@ build-data: $(ICUDATADIR)/unames.dat
 # we set the ICU_DATA directory here so that unames.dat ends up in 
 # icu/data rather than PREFIX/share/icu/VERSION/
 $(ICUDATADIR)/unames.dat: $(UNICODEFILE) $(TARGET)
-	ICU_DATA=$(ICUDATADIR) ./$(TARGET) -v- -c- $(UNICODEFILE)
+	ICU_DATA=$(ICUDATADIR) ./$(TARGET) $(UNICODEFILE)
 
 dist-local:
 
