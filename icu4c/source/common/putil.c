@@ -98,6 +98,9 @@
 #   include <dl.h>
 #endif 
 
+/* Define the extension for data files, again... */
+#define DATA_TYPE "dat"
+
 /* floating point implementations ------------------------------------------- */
 
 /* We return QNAN rather than SNAN*/
