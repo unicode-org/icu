@@ -62,7 +62,7 @@ distclean-local: clean-local
 	$(RMV) Makefile
 
 check-local:
-	-$(INVOKE) $(TARGET)
+	-$(INVOKE) ./$(TARGET)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \

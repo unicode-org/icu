@@ -33,6 +33,7 @@
                                /*   set conversions.                         */
 #include "unicode/ustring.h"
 
+#ifndef UFORTUNE_NOSETAPPDATA
 /*
  *  Resource Data Reference.  The data is packaged as a dll (or .so or
  *           whatever, depending on the platform) that exports a data
@@ -41,6 +42,8 @@
  *           be able to fetch resources from the data.
  */
 extern  const void U_IMPORT *fortune_resources_dat;
+#endif
+
 void u_write(const UChar *what, int len);
 
 
@@ -106,6 +109,7 @@ int main(int argc, char **argv)
         u_fprintf(u_stdout, "%s:  checking output via ustdio.\n", programName);
     }
 
+#ifndef UFORTUNE_NOSETAPPDATA
     /* Tell ICU where our resource data is located in memory.
      *   The data lives in the Fortune_Resources dll, and we just
      *   pass the address of an exported symbol from that library
@@ -116,6 +120,7 @@ int main(int argc, char **argv)
         fprintf(stderr, "%s: ures_open failed with error \"%s\"\n", programName, u_errorName(err));
         exit(-1);
     }
+#endif
 
     /* Open our resources.
     */
