@@ -1131,3 +1131,44 @@ UBool ucnv_usesFallback(const UConverter *cnv)
 {
     return cnv->useFallback;
 }
+
+
+
+void 
+ucnv_getInvalidChars (const UConverter * converter,
+			  char *errBytes,
+			  int8_t * len,
+			  UErrorCode * err)
+{
+   if (!err) return;
+   if (!len || !errBytes || !converter)
+   {
+      *err = U_ILLEGAL_ARGUMENT_ERROR;
+   }
+   if (*len < converter->charErrorBufferLength)
+   {
+      *err = U_INDEX_OUTOFBOUNDS_ERROR;
+   }
+   *len = converter->charErrorBufferLength;
+   uprv_memcpy (errBytes, converter->charErrorBuffer, *len);
+}
+
+
+void 
+ucnv_getInvalidUChars (const UConverter * converter,
+			   UChar *errChars,
+			   int8_t * len,
+			   UErrorCode * err)
+{
+   if (!err) return;
+   if (!len || !errChars || !converter)
+   {
+      *err = U_ILLEGAL_ARGUMENT_ERROR;
+   }
+   if (*len < converter->UCharErrorBufferLength)
+   {
+      *err = U_INDEX_OUTOFBOUNDS_ERROR;
+   }
+   *len = converter->UCharErrorBufferLength;
+   uprv_memcpy (errChars, converter->UCharErrorBuffer, sizeof(UChar) * (*len));
+}
