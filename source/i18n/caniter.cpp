@@ -53,7 +53,7 @@ static UBool PROGRESS = FALSE;
 
 UErrorCode status = U_ZERO_ERROR;
 
-// Just for testing - remove, not thread safe. 
+// Just for testing - remove, not thread safe.
 static const char* UToS(const UnicodeString &source) {
   static char buffer[256];
   buffer[source.extract(0, source.length(), buffer)] = 0;
@@ -102,11 +102,11 @@ void CanonicalIterator::cleanPieces() {
     delete[] pieces;
     pieces = NULL;
     if(pieces_lengths != NULL) {
-      delete[] pieces_lengths;
+      uprv_free(pieces_lengths);
     }
     pieces_lengths = NULL;
     if(current != NULL) {
-      delete[] current;
+      uprv_free(current);
     }
     current = NULL;
   }
@@ -134,19 +134,20 @@ void CanonicalIterator::reset() {
  * the iteration is done.
  */
 UnicodeString CanonicalIterator::next() {
-  int32_t i = 0;
-    if (done) return "";
-    
+    int32_t i = 0;
+    if (done)
+        return "";
+
     // construct return value
-    
+
     buffer.truncate(0); //buffer.setLength(0); // delete old contents
     for (i = 0; i < pieces_length; ++i) {
         buffer.append(pieces[i][current[i]]);
     }
     //String result = buffer.toString(); // not needed
-    
+
     // find next value for next time
-    
+
     for (i = current_length - 1; ; --i) {
         if (i < 0) {
             done = TRUE;
@@ -169,23 +170,23 @@ void CanonicalIterator::setSource(const UnicodeString &newSource, UErrorCode &st
     }
     Normalizer::normalize(newSource, UNORM_NFD, 0, source, status);
     done = FALSE;
-    
+
     cleanPieces();
 
     // catch degenerate case
     if (newSource.length() == 0) {
-    	pieces = new UnicodeString*[1];
         pieces_length = 1;
-    	current = new int32_t[1];
+        pieces = new UnicodeString*[1];
         current_length = 1;
+        current = uprv_malloc(1 * sizeof(int32_t));
         current[0] = 0;
-    	pieces[0] = new UnicodeString[1];
+        pieces[0] = new UnicodeString[1];
         pieces[0][0] = UnicodeString("");
-        pieces_lengths = new int32_t[1];
+        pieces_lengths = uprv_malloc(1 * sizeof(int32_t));
         pieces_lengths[0] = 1;
-    	return;
+        return;
     }
-        
+
 
     UnicodeString *list = new UnicodeString[source.length()];
     int32_t list_length = 0;
@@ -209,13 +210,13 @@ void CanonicalIterator::setSource(const UnicodeString &newSource, UErrorCode &st
     }
     source.extract(start, i-start, list[list_length++]); // add last one
 
-    
+
     // allocate the arrays, and find the strings that are CE to each segment
     pieces = new UnicodeString*[list_length];
     pieces_length = list_length;
-    pieces_lengths = new int32_t[list_length];
+    pieces_lengths = uprv_malloc(list_length * sizeof(int32_t));
 
-    current = new int32_t[list_length];
+    current = uprv_malloc(list_length * sizeof(int32_t));
     current_length = list_length;
     for (i = 0; i < current_length; i++) {
       current[i] = 0;
@@ -231,7 +232,7 @@ void CanonicalIterator::setSource(const UnicodeString &newSource, UErrorCode &st
 }
 
 /**
- * Dumb recursive implementation of permutation. 
+ * Dumb recursive implementation of permutation.
  * TODO: optimize
  * @param source the string to find permutations for
  * @return the results in a set.
@@ -248,10 +249,10 @@ void CanonicalIterator::permute(UnicodeString &source, UBool skipZeros, Hashtabl
     // we check for length < 2 to keep from counting code points all the time
     if (source.length() <= 2 && source.countChar32() <= 1) {
       UnicodeString *toPut = new UnicodeString(source);
-      result->put(source, toPut, status); 
+      result->put(source, toPut, status);
       return;
     }
-    
+
     // otherwise iterate through the string, and recursively permute all the other characters
     UChar32 cp;
     Hashtable *subpermute = new Hashtable(FALSE, status);
@@ -269,18 +270,18 @@ void CanonicalIterator::permute(UnicodeString &source, UBool skipZeros, Hashtabl
         // if the character is canonical combining class zero,
         // don't permute it
         if (skipZeros && i != 0 && u_getCombiningClass(cp) == 0) {
-        	//System.out.println("Skipping " + Utility.hex(UTF16.valueOf(source, i)));
-	        continue;
-        }            
+            //System.out.println("Skipping " + Utility.hex(UTF16.valueOf(source, i)));
+            continue;
+        }
 
         subpermute->removeAll();
-        
+
         // see what the permutations of the characters before and after this one are
         //Hashtable *subpermute = permute(source.substring(0,i) + source.substring(i + UTF16.getCharCount(cp)));
         permute(subPermuteString.replace(i, UTF16_CHAR_LENGTH(cp), NULL, 0), skipZeros, subpermute, status);
         // The upper replace is destructive. The question is do we have to make a copy, or we don't care about the contents 
         // of source at this point.
-        
+
         // prefix this character to all of them
         ne = subpermute->nextElement(el);
         while (ne != NULL) {
@@ -297,9 +298,11 @@ void CanonicalIterator::permute(UnicodeString &source, UBool skipZeros, Hashtabl
 }
 
 // privates
-    
+
 // we have a segment, in NFD. Find all the strings that are canonically equivalent to it.
-UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, int32_t &result_len, UErrorCode &status) { //private String[] getEquivalents(String segment) 
+UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, int32_t &result_len, UErrorCode &status) {
+    //private String[] getEquivalents(String segment)
+
     Hashtable *result = new Hashtable(FALSE, status);
     if (U_SUCCESS(status)) {
         result->setValueDeleter(uhash_deleteUnicodeString);
@@ -308,7 +311,7 @@ UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, i
     int32_t segLen = segment.extract(USeg, 256, status);
     Hashtable *basic = getEquivalents2(USeg, segLen, status);
     //Hashtable *basic = getEquivalents2(segment, segLen, status);
-    
+
     // now get all the permutations
     // add only the ones that are canonically equivalent
     // TODO: optimize by not permuting any class zero.
@@ -322,7 +325,7 @@ UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, i
     int32_t el = -1;
     //Iterator it = basic.iterator();
     ne = basic->nextElement(el);
-    //while (it.hasNext()) 
+    //while (it.hasNext())
     while (ne != NULL) {
         //String item = (String) it.next();
         UnicodeString item = *((UnicodeString *)(ne->value.pointer));
@@ -333,7 +336,7 @@ UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, i
         int32_t el2 = -1;
         //Iterator it2 = permutations.iterator();
         ne2 = permutations->nextElement(el2);
-        //while (it2.hasNext()) 
+        //while (it2.hasNext())
         while (ne2 != NULL) {
             //String possible = (String) it2.next();
             //UnicodeString *possible = new UnicodeString(*((UnicodeString *)(ne2->value.pointer)));
@@ -354,7 +357,7 @@ UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, i
         }
         ne = basic->nextElement(el);
     }
-    
+
     // convert into a String[] to clean up storage
     //String[] finalResult = new String[result.size()];
     UnicodeString *finalResult = new UnicodeString[result->count()];
@@ -390,7 +393,7 @@ Hashtable *CanonicalIterator::getEquivalents2(const UChar *segment, int32_t segL
     result->put(toPut, new UnicodeString(toPut), status);
 
     USerializedSet starts;
-    
+
     // cycle through all the characters
     UChar32 cp, limit = 0;
     int32_t i = 0, j;
@@ -405,7 +408,7 @@ Hashtable *CanonicalIterator::getEquivalents2(const UChar *segment, int32_t segL
             //Hashtable *remainder = extract(cp, segment, segLen, i, status);
             Hashtable *remainder = extract(cp, segment, segLen, i, status);
             if (remainder == NULL) continue;
-            
+
             // there were some matches, so add all the possibilities to the set.
             UnicodeString prefix(segment, i);
             prefix += cp;
@@ -440,7 +443,7 @@ Hashtable *CanonicalIterator::extract(UChar32 comp, const UChar *segment, int32_
     //if (PROGRESS) printf(" extract: %s, ", UToS(Tr(UnicodeString(comp))));
     //if (PROGRESS) printf("%s, %i\n", UToS(Tr(segment)), segmentPos);
 
-    const int32_t bufSize = 256; 
+    const int32_t bufSize = 256;
     int32_t bufLen = 0;
     UChar temp[bufSize];
 
@@ -462,7 +465,7 @@ Hashtable *CanonicalIterator::extract(UChar32 comp, const UChar *segment, int32_
     int32_t decompPos = 0;
     UChar32 decompCp;
     UTF_NEXT_CHAR(decomp, decompPos, decompLen, decompCp);
-    
+
     int32_t i = 0;
     i = segmentPos;
     while(i < segLen) {
@@ -476,7 +479,7 @@ Hashtable *CanonicalIterator::extract(UChar32 comp, const UChar *segment, int32_
                 //u_strcat(buff+bufLen, segment+i);
                 memcpy(buff+bufLen, segment+i, (segLen-i)*sizeof(UChar));
                 bufLen+=segLen-i;
-                  
+
                 ok = TRUE;
                 break;
             }
@@ -495,7 +498,7 @@ Hashtable *CanonicalIterator::extract(UChar32 comp, const UChar *segment, int32_
             // there are only a few cases that work: zero, less, same, greater
             // if both classes are the same, we fail
             // if the decomp class < the segment class, we fail
-    
+
             segClass = getClass(cp);
             if (decompClass <= segClass) return null;
             */
@@ -523,7 +526,7 @@ Hashtable *CanonicalIterator::extract(UChar32 comp, const UChar *segment, int32_
     if(uprv_memcmp(segment+segmentPos, trial, (segLen - segmentPos)*sizeof(UChar)) != 0) {
       return NULL;
     }
-    
+
     return getEquivalents2(buff, bufLen, status);
 }
 
