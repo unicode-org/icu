@@ -1048,8 +1048,11 @@ ucol_initUCA(UErrorCode *status) {
     if(U_FAILURE(*status)) {
         return NULL;
     }
+    umtx_lock(NULL);
+    UBool f = (UCA == NULL);
+    umtx_unlock(NULL);
     
-    if(UCA == NULL) {
+    if(f) {
         UCollator *newUCA = NULL;
         UDataMemory *result = udata_openChoice(NULL, UCA_DATA_TYPE, UCA_DATA_NAME, isAcceptableUCA, NULL, status);
         
