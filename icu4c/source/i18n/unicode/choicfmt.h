@@ -350,7 +350,7 @@ public:
      * @param status     Output param set to success/failure code on
      *                   exit. If the pattern is invalid, this will be
      *                   set to a failure result.
-     * @draft
+     * @draft ICU 2.0
      */
     virtual void applyPattern(const UnicodeString& pattern,
                              UParseError& parseError,

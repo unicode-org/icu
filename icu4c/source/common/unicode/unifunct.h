@@ -105,7 +105,7 @@ class U_COMMON_API UnicodeFunctor : public UObject {
      * method is required when assigning a functor to a different data
      * object.  This function MAY GO AWAY later if the architecture is
      * changed to pass data object pointers through the API.
-     * @draft
+     * @draft ICU 2.1
      */
     virtual void setData(const TransliterationRuleData*) = 0;
 
