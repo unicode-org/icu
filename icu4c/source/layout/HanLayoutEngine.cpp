@@ -3,7 +3,7 @@
  *
  * (C) Copyright IBM Corp. 1998-2003 - All Rights Reserved.
  *
- * $Source: /xsrl/Nsvn/icu/icu/source/layout/HanLayoutEngine.cpp,v $ $Date: 2003/06/03 20:58:21 $ $Revision: 1.4 $
+ * $Source: /xsrl/Nsvn/icu/icu/source/layout/HanLayoutEngine.cpp,v $ $Date: 2003/10/07 02:23:19 $ $Revision: 1.5 $
  */
 
 #include "LETypes.h"
@@ -14,6 +14,8 @@
 #include "OpenTypeLayoutEngine.h"
 #include "HanLayoutEngine.h"
 #include "ScriptAndLanguageTags.h"
+
+U_NAMESPACE_BEGIN
 
 const char HanOpenTypeLayoutEngine::fgClassID=0;
 
@@ -66,3 +68,5 @@ le_int32 HanOpenTypeLayoutEngine::characterProcessing(const LEUnicode chars[], l
 
     return count;
 }
+
+U_NAMESPACE_END
