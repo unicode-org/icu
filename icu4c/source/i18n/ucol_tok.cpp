@@ -1125,9 +1125,9 @@ inline UColToken *getVirginBefore(UColTokenParser *src, UColToken *sourceToken, 
   uint32_t CE, SecondCE;
   uint32_t invPos;
   if(sourceToken != NULL) {
-    init_collIterate(src->UCA, src->source+((sourceToken->source)&0xFFFFFF), 1, &s); 
+    uprv_init_collIterate(src->UCA, src->source+((sourceToken->source)&0xFFFFFF), 1, &s); 
   } else {
-    init_collIterate(src->UCA, src->source+src->parsedToken.charsOffset /**charsOffset*/, 1, &s); 
+    uprv_init_collIterate(src->UCA, src->source+src->parsedToken.charsOffset /**charsOffset*/, 1, &s); 
   }
 
   baseCE = ucol_getNextCE(src->UCA, &s, status) & 0xFFFFFF3F;
@@ -1490,7 +1490,7 @@ uint32_t ucol_tok_assembleTokenList(UColTokenParser *src, UParseError *parseErro
             collIterate s;
             uint32_t CE = UCOL_NOT_FOUND, SecondCE = UCOL_NOT_FOUND;
 
-            init_collIterate(src->UCA, src->source+src->parsedToken.charsOffset, src->parsedToken.charsLen, &s);
+            uprv_init_collIterate(src->UCA, src->source+src->parsedToken.charsOffset, src->parsedToken.charsLen, &s);
 
             CE = ucol_getNextCE(src->UCA, &s, status);
             UChar *expand = s.pos;

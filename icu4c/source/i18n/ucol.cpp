@@ -121,7 +121,7 @@ inline void  IInit_collIterate(const UCollator *collator, const UChar *sourceStr
 }
 
 U_CAPI void  U_EXPORT2
-init_collIterate(const UCollator *collator, const UChar *sourceString,
+uprv_init_collIterate(const UCollator *collator, const UChar *sourceString,
                              int32_t sourceLen, collIterate *s){
     /* Out-of-line version for use from other files. */
     IInit_collIterate(collator, sourceString, sourceLen, s);
@@ -5175,7 +5175,7 @@ ucol_getVersion(const UCollator* coll,
 
 /* This internal API checks whether a character is tailored or not */
 U_CAPI UBool  U_EXPORT2
-isTailored(const UCollator *coll, const UChar u, UErrorCode *status) {
+ucol_isTailored(const UCollator *coll, const UChar u, UErrorCode *status) {
   uint32_t CE = UCOL_NOT_FOUND;
   const UChar *ContractionStart = NULL;
   if(U_SUCCESS(*status) && coll != NULL) {

@@ -72,7 +72,7 @@ uprv_cnttab_open(UNewTrie *mapping, UErrorCode *status) {
     return tbl;
 }
 
-ContractionTable *addATableElement(CntTable *table, uint32_t *key, UErrorCode *status) {
+static ContractionTable *addATableElement(CntTable *table, uint32_t *key, UErrorCode *status) {
     ContractionTable *el = (ContractionTable *)uprv_malloc(sizeof(ContractionTable));
     if(el == NULL) {
       *status = U_MEMORY_ALLOCATION_ERROR;
@@ -444,7 +444,7 @@ uprv_cnttab_setContraction(CntTable *table, uint32_t element, uint32_t offset, U
     return(constructContractCE(table->currentTag, element));
 }
 
-ContractionTable *_cnttab_getContractionTable(CntTable *table, uint32_t element) {
+static ContractionTable *_cnttab_getContractionTable(CntTable *table, uint32_t element) {
     element &= 0xFFFFFF;
     ContractionTable *tbl = NULL;
 
@@ -455,7 +455,7 @@ ContractionTable *_cnttab_getContractionTable(CntTable *table, uint32_t element)
     }
 }
 
-int32_t _cnttab_findCP(ContractionTable *tbl, UChar codePoint) {
+static int32_t _cnttab_findCP(ContractionTable *tbl, UChar codePoint) {
     uint32_t position = 0;
     if(tbl == NULL) {
       return -1;
@@ -474,7 +474,7 @@ int32_t _cnttab_findCP(ContractionTable *tbl, UChar codePoint) {
     }
 }
 
-uint32_t _cnttab_getCE(ContractionTable *tbl, int32_t position) {
+static uint32_t _cnttab_getCE(ContractionTable *tbl, int32_t position) {
   if(tbl == NULL) {
     return UCOL_NOT_FOUND;
   }

@@ -161,7 +161,7 @@ struct collIterateState {
 };
 
 U_CAPI void U_EXPORT2 
-init_collIterate(const UCollator *collator, const UChar *sourceString, int32_t sourceLen, collIterate *s);
+uprv_init_collIterate(const UCollator *collator, const UChar *sourceString, int32_t sourceLen, collIterate *s);
 
 
 struct UCollationElements
@@ -778,7 +778,7 @@ void ucol_updateInternalState(UCollator *coll);
 
 U_CAPI uint32_t U_EXPORT2 ucol_getFirstCE(const UCollator *coll, UChar u, UErrorCode *status);
 U_CAPI char* U_EXPORT2 ucol_sortKeyToString(const UCollator *coll, const uint8_t *sortkey, char *buffer, uint32_t *len);
-U_CAPI UBool U_EXPORT2 isTailored(const UCollator *coll, const UChar u, UErrorCode *status);
+U_CAPI UBool U_EXPORT2 ucol_isTailored(const UCollator *coll, const UChar u, UErrorCode *status);
 
 U_CAPI const InverseTableHeader* U_EXPORT2 ucol_initInverseUCA(UErrorCode *status);
 U_CAPI int32_t U_EXPORT2 ucol_inv_getNextCE(uint32_t CE, uint32_t contCE,
