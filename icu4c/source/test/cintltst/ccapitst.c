@@ -324,7 +324,7 @@ void TestConvert()
     someConverters[0] = ucnv_open(NULL,&err);
     someConverters[1] = ucnv_open(NULL,&err);
     someConverters[2] = ucnv_open("utf8", &err);
-    someConverters[3] = ucnv_openCCSID(949,UCNV_IBM,&err);
+    someConverters[3] = ucnv_openCCSID(1051,UCNV_IBM,&err); /* was 949 before testing j350 */
     if (U_FAILURE(err)){ log_err("FAILURE! %s\n", myErrorName(err));}
     
     /* Testing ucnv_getName()*/

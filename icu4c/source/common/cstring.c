@@ -53,10 +53,9 @@ void T_CString_integerToString(char* buffer, int32_t i, int32_t radix)
   int32_t length=0;
   int32_t num = 0;
   int8_t digit;
-  int32_t j;
   char temp;
   
-  while (i>radix)
+  while (i>=radix)
     {
       num = i/radix;
       digit = (int8_t)(i - num*radix);
@@ -69,12 +68,11 @@ void T_CString_integerToString(char* buffer, int32_t i, int32_t radix)
   
   
   /*Reverses the string*/
-  for (j=0 ; j<(length/2) + 1 ; j++)
-    {
-      temp = buffer[length - j];
-      buffer[length - j] = buffer[j];
-      buffer[j] = temp;
-    }
+  for (i = 0; i < length; ++i, --length) {
+    temp = buffer[length];
+    buffer[length] = buffer[i];
+    buffer[i] = temp;
+  }
   
   return;
 }
