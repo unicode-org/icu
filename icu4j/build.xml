@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2003/11/21 19:45:03 $
-* $Revision: 1.81 $
+* $Date: 2003/11/21 21:25:27 $
+* $Revision: 1.82 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -198,7 +198,6 @@
                  includes="Transliterator_*.txt,*.icu,*.spp"
                  excludes="**/CVS/**/*,Transliterator_Han_Latin_*.txt"/>
         </copy>
-	<copy file="${src.dir}/com/ibm/icu/impl/foo.txt" todir="${build.dir}/com/ibm/icu/impl"/>
     </target>
 
     <target name ="testData" depends="init">
