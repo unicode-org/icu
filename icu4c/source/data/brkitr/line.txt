@@ -78,19 +78,46 @@ $QUcm = $QU $CM*;
 $SPcm = $SP $CM*;
 $SYcm = $SY $CM*;
 
+#
+#  Each class of character can stand by itself as an unbroken token, with trailing combining stuff
+#
+$ALPlus $CM+;
+$BA $CM+;
+$BB $CM+;
+$B2 $CM+;
+$CL $CM+;
+$EX $CM+;
+$GL $CM+;
+$HY $CM+;
+$ID $CM+;
+$IN $CM+;
+$IS $CM+;
+$NS $CM+;
+$NU $CM+;
+$OP $CM+;
+$PO $CM+;
+$PR $CM+;
+$QU $CM+;
+$SP $CM+;
+$SY $CM+;
+
 
 #  
 #  Rule LB 3
 $LB3NonBreaks = [^$BK $CR $LF $NL];               
-$LB3NonBreaks? ($BK | $CR | $LF | $NL){100};   
+$LB5NonBreaks = [[$LB3NonBreaks] - [$ZW]];
+
+$LB3NonBreaks?     ($BK | $CR | $LF | $NL){100};   
+$LB5NonBreaks $CM* ($BK | $CR | $LF | $NL){100};
 $CR $LF {100};
 
 # LB 4         x SP
 #              x ZW
-$LB3NonBreaks [$SP $ZW];
+$LB3NonBreaks      [$SP $ZW];
+$LB5NonBreaks $CM* [$SP $ZW];
 
 # LB 5         Break after zero width space
-$LB5NonBreaks = [[$LB3NonBreaks] - [$ZW]];
+
 
 # LB 7     Combining marks.  TODO:  get it right!
 #                                   $SP $CM needs to behave like $ID.
@@ -99,10 +126,10 @@ $LB5NonBreaks = [[$LB3NonBreaks] - [$ZW]];
 [$LB5NonBreaks] $CM+;    #  Stick together any combining sequences that don't match other rules.
 
 # LB 8     
-[$LB5NonBreaks] $CL;
-[$LB5NonBreaks] $EX;
-[$LB5NonBreaks] $IS;
-[$LB5NonBreaks] $SY;
+[$LB5NonBreaks] $CM* $CL;
+[$LB5NonBreaks] $CM* $EX;
+[$LB5NonBreaks] $CM* $IS;
+[$LB5NonBreaks] $CM* $SY;
 
 # LB 9
 $OPcm $SP* .?;         
@@ -118,8 +145,8 @@ $CLcm $SP* $NScm;
 ($B2cm)+;
 
 # LB 11b
-$LB5NonBreaks $GLcm .?;
-$LB5NonBreaks $GLcm [$LB5NonBreaks] $CM*;
+$LB5NonBreaks $CM* $GLcm .?;
+$LB5NonBreaks $CM* $GLcm [$LB5NonBreaks] $CM*;
 $GLcm $LB3NonBreaks?;
 $GLcm [$LB5NonBreaks] $CM*;
 
@@ -127,26 +154,40 @@ $GLcm [$LB5NonBreaks] $CM*;
 $LB12NonBreaks = [[$LB5NonBreaks] - [$SP]];
 
 # LB 14
-$LB12NonBreaks $QUcm+ .?;
-$LB12NonBreaks $QUcm+ [$LB5NonBreaks] $CM*;
+$LB12NonBreaks $CM* $QUcm+ .?;
+$LB12NonBreaks $CM* $QUcm+ [$LB5NonBreaks] $CM*;
+$SP $CM+            $QUcm+ .?;                      # LB7a  SP CM+ behaves as ID
+$SP $CM+            $QUcm+ [$LB5NonBreaks] $CM*;
+
 $QUcm $LB3NonBreaks?;
 $QUcm [$LB5NonBreaks] $CM*;    # Don't let a combining mark go onto $CR, $BK, etc.
-
+ 
 # LB 14a
 $LB14NonBreaks = [[$LB12NonBreaks] - [$CB]];
+$LB14CanBreakAfter = $LB14NonBreaks $CM* | $SP $CM+;
 
 
 # LB 15
-$LB14NonBreaks ($BAcm | $HYcm | $NScm);   
+$LB14CanBreakAfter ($BAcm | $HYcm | $NScm);   
 $BBcm [^$CB];
+$BBcm [^$CB $CR $LF $BK $NL $ZW] CM*;  
 
 # LB 16
-($ALcm | $IDcm | $SP $CM+ | $INcm | $NUcm) $INcm;
+#($ALcm | $IDcm | $SP $CM+ | $INcm | $NUcm) $INcm;
+$ALcm    $INcm;
+$CM+     $INcm;     #  by rule 7c, any otherwise unattached CM behaves as AL
+$IDcm    $INcm;
+$SP $CM+ $INcm;     # by rule 7a, $SP $CM behaves like ID
+$INcm    $INcm;
+$NUcm    $INcm;
+
 
 # $LB 17
-($IDcm | SP CM+) $POcm;
+($IDcm | $SP $CM+) $POcm;
 $ALcm+ $NUcm;       # includes $LB19
+$CM+   $NUcm;       # Rule 7c
 $NUcm $ALcm+;
+
 
 
 # LB 18
@@ -154,8 +195,7 @@ $PRcm? ($OPcm | $HYcm)? $NUcm ($NUcm | $IScm)* $CLcm? $POcm?;
 #$PRcm? ($OPcm | $HYcm)? $NUcm ($NUcm | $IScm)* $CLcm?;
 
 # LB 19
-#$CM* $ALcm+;
-$ALcm+;
+$CM* $ALcm+;    # The $CM* is from rule 7C, and unattached CM is treated as AL
 
 #
 #  Reverse Rules.

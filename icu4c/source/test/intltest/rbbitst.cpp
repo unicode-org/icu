@@ -2407,6 +2407,8 @@ private:
     int32_t              *fOrigPositions;
 
     RegexMatcher         *fNumberMatcher;
+    RegexMatcher         *fLB10Matcher;
+    RegexMatcher         *fLB11Matcher;
 };
 
 
@@ -2493,6 +2495,18 @@ RBBILineMonkey::RBBILineMonkey()
         "((\\p{Line_Break=NU}|\\p{Line_Break=IS})\\p{Line_Break=CM}*)*"
         "(\\p{Line_Break=CL}\\p{Line_Break=CM}*)?"
         "(\\p{Line_Break=PO}\\p{Line_Break=CM}*)?", 
+        0, status);
+
+    fLB10Matcher = new RegexMatcher(
+        "\\p{Line_Break=QU}\\p{Line_Break=CM}*"
+        "\\p{Line_Break=SP}*"
+        "(\\p{Line_Break=OP})\\p{Line_Break=CM}*", 
+        0, status);
+
+    fLB11Matcher = new RegexMatcher(
+        "\\p{Line_Break=CL}\\p{Line_Break=CM}*"
+        "\\p{Line_Break=SP}*"
+        "(\\p{Line_Break=NS})\\p{Line_Break=CM}*", 
         0, status);
 
     fCharBI = BreakIterator::createCharacterInstance(Locale::getEnglish(), status);
@@ -2637,6 +2651,30 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
                 continue;
         }
 
+        // LB 10    QU SP* x OP
+        UnicodeString  subStr10(*fText, prevPos);
+        fLB10Matcher->reset(subStr10);
+        status = U_ZERO_ERROR;
+        if (fLB10Matcher->lookingAt(status)) {  //   /QU CM* SP* (OP) CM*/;
+            // TODO:  Check status codes
+            pos      = prevPos + fLB10Matcher->start(1, status);
+            nextPos  = prevPos + fLB10Matcher->end(0, status);
+            thisChar = fText->char32At(pos);
+            continue;
+        }
+
+        // LB 11   CL SP* x NS
+        UnicodeString  subStr11(*fText, prevPos);
+        fLB11Matcher->reset(subStr11);
+        status = U_ZERO_ERROR;
+        if (fLB11Matcher->lookingAt(status)) {  //   /QU CM* SP* (OP) CM*/;
+            // TODO:  Check status codes
+            pos      = prevPos + fLB11Matcher->start(1, status);
+            nextPos  = prevPos + fLB11Matcher->end(0, status);
+            thisChar = fText->char32At(pos);
+            continue;
+        }
+
         // LB 4  Don't break before spaces or zero-width space.
         if (fSP->contains(thisChar)) {
             continue;
@@ -2652,6 +2690,9 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
 
         // LB 6, LB 7
         rule67Adjust(prevPos, &prevChar, &pos,     &thisChar);
+
+        nextCPPos = fText->moveIndex32(pos, 1);
+        nextPos   = nextCPPos;
         UChar32 c = fText->char32At(nextPos);
         rule67Adjust(pos,     &thisChar, &nextPos, &c);
 
@@ -2661,6 +2702,20 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         if (prevPos == -1) {
             continue;
         }
+
+        // Re-apply rules 3c, 4 because these could be affected by having
+        //                      a new thisChar from doing rule 6 or 7.
+        if (thisChar == 0x0d || thisChar == 0x0a || thisChar == 0x85 ||   // 3c
+            fBK->contains(thisChar)) {
+                continue;
+        }
+        if (fSP->contains(thisChar)) {    // LB 4
+            continue;
+        }
+        if (fZW->contains(thisChar)) {    // LB 4
+            continue;
+        }
+
 
         // LB 8  Don't break before closings.
         //       NU x CL  and NU x IS are not matched here so that they will
@@ -2689,42 +2744,7 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         continue;
 
 fall_through_9:
-        
-        // LB 10    QU SP* x OP
-        if (fOP->contains(thisChar)) {
-            tPos = prevPos;
-            for (tPos=prevPos; ; tPos=fCharBI->preceding(tPos)) {
-                if (fOP->contains(fText->char32At(tPos))) {
-                    break;
-                }
-                if (fSP->contains(fText->char32At(tPos)) == FALSE || tPos == 0) {
-                    goto fall_through_10;
-                }
-            }
-            // We match QU SP* x OP
-            //   No break at this postion.
-            //   Continue the outer loop.
-            continue;
-        }
-fall_through_10:
 
-        // LB 11   CL SP* x NS
-        if (fNS->contains(thisChar)) {
-            tPos = prevPos;
-            for (tPos=prevPos; ; tPos=fCharBI->preceding(tPos)) {
-                if (fCL->contains(fText->char32At(tPos))) {
-                    break;
-                }
-                if (fSP->contains(fText->char32At(tPos)) == FALSE || tPos == 0) {
-                    goto fall_through_11;
-                }
-            }
-            // We match CL SP* x NS
-            //   No break at this postion.
-            //   Continue the outer loop.
-            continue;
-        }
-fall_through_11:
 
         // LB 11a        B2 x B2
         if (fB2->contains(thisChar) && fB2->contains(prevChar)) {
@@ -2783,8 +2803,8 @@ fall_through_11:
         }
 
         // LB 18    Numbers
-        UnicodeString  subStr(*fText, prevPos);
-        fNumberMatcher->reset(subStr);
+        UnicodeString  subStr18(*fText, prevPos);
+        fNumberMatcher->reset(subStr18);
         if (fNumberMatcher->lookingAt(status)) {
             // TODO:  Check status codes
             // Matched a number.  But could have been just a single digit, which would
@@ -2864,6 +2884,8 @@ RBBILineMonkey::~RBBILineMonkey() {
 
     delete fCharBI;
     delete fNumberMatcher;
+    delete fLB10Matcher;
+    delete fLB11Matcher;
 }
 
 
