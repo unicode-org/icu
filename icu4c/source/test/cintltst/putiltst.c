@@ -280,11 +280,6 @@ static void TestPUtilAPI(){
         log_err("ERROR: uprv_nextDouble failed. Expected : %lf, Got: %f\n", y1, expn1);
     }
 #endif
-    
-    log_verbose("Testing the API uprv_longBitsFromDouble().....\n");
-    uprv_longBitsFromDouble(value1, &hi, &lo);
-
-   
 
 }
 
