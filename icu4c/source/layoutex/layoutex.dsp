@@ -170,6 +170,14 @@ SOURCE=.\layout\ParagraphLayout.h
 
 !IF  "$(CFG)" == "layoutex - Win32 Release"
 
+# Begin Custom Build
+InputPath=.\layout\ParagraphLayout.h
+
+"..\..\include\layout\ParagraphLayout.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy  $(InputPath)  ..\..\include\layout
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "layoutex - Win32 Debug"
 
 # Begin Custom Build
@@ -182,7 +190,23 @@ InputPath=.\layout\ParagraphLayout.h
 
 !ELSEIF  "$(CFG)" == "layoutex - Win64 Release"
 
+# Begin Custom Build
+InputPath=.\layout\ParagraphLayout.h
+
+"..\..\include\layout\ParagraphLayout.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy  $(InputPath)  ..\..\include\layout
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "layoutex - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\layout\ParagraphLayout.h
+
+"..\..\include\layout\ParagraphLayout.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy  $(InputPath)  ..\..\include\layout
+
+# End Custom Build
 
 !ENDIF 
 
@@ -192,6 +216,14 @@ InputPath=.\layout\ParagraphLayout.h
 SOURCE=.\layout\RunArrays.h
 
 !IF  "$(CFG)" == "layoutex - Win32 Release"
+
+# Begin Custom Build
+InputPath=.\layout\RunArrays.h
+
+"..\..\include\layout\RunArrays.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy  $(InputPath)  ..\..\include\layout
+
+# End Custom Build
 
 !ELSEIF  "$(CFG)" == "layoutex - Win32 Debug"
 
@@ -205,7 +237,23 @@ InputPath=.\layout\RunArrays.h
 
 !ELSEIF  "$(CFG)" == "layoutex - Win64 Release"
 
+# Begin Custom Build
+InputPath=.\layout\RunArrays.h
+
+"..\..\include\layout\RunArrays.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy  $(InputPath)  ..\..\include\layout
+
+# End Custom Build
+
 !ELSEIF  "$(CFG)" == "layoutex - Win64 Debug"
+
+# Begin Custom Build
+InputPath=.\layout\RunArrays.h
+
+"..\..\include\layout\RunArrays.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy  $(InputPath)  ..\..\include\layout
+
+# End Custom Build
 
 !ENDIF 
 
