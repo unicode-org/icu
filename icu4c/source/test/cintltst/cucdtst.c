@@ -76,6 +76,7 @@ const int32_t tagValues[] =
     /* Pi */ U_INITIAL_PUNCTUATION,
     /* Pf */ U_FINAL_PUNCTUATION
     };
+
 const char dirStrings[][5] = {
     "L",
     "R",
@@ -357,8 +358,9 @@ static void TestControlPrint()
         }
     }
 }
+
 /* u_isJavaIDStart, u_isJavaIDPart, u_isIDStart(), u_isIDPart(), u_isIDIgnorable()*/
-void TestIdentifier()
+static void TestIdentifier()
 {
     const UChar sampleJavaIDStart[] = {0x0071, 0x00e4, 0x005f};
     const UChar sampleNonJavaIDStart[] = {0x0020, 0x2030, 0x0082};
@@ -568,7 +570,7 @@ static int32_t MakeProp(char* str)
     return result;
 }
 
-int32_t MakeDir(char* str) 
+static int32_t MakeDir(char* str) 
 {
     int32_t pos = 0;
     for (pos = 0; pos < 19; pos++) {
@@ -592,7 +594,7 @@ static const char* raw[3][4] = {
     {   "English_United States", "French_France", "Croatian_Croatia", "English_United States"}
 };
    
-void setUpDataTable()
+U_CFUNC void setUpDataTable()
 {
     int32_t i,j;
     if(dataTable == NULL) {
@@ -625,7 +627,7 @@ U_CFUNC void cleanUpDataTable()
 }
 
 /*Tests  for u_strcat(),u_strcmp(), u_strlen(), u_strcpy(),u_strncat(),u_strncmp(),u_strncpy, u_uastrcpy(),u_austrcpy(), u_uastrncpy(); */
-void TestStringFunctions()
+static void TestStringFunctions()
 {
    
     int32_t i,j,k;

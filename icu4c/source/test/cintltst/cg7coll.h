@@ -47,23 +47,23 @@
 
         
     /* main test routine, tests comparisons for a set of strings against sets of expected results */
-   static  void doTest(UCollator *myCollation, const UChar* source, const UChar* target, UCollationResult result);
+    static void doTest(UCollator *myCollation, const UChar* source, const UChar* target, UCollationResult result);
     
     /* perform test for G7 locales */
-    void TestG7Locales(void);
+    static void TestG7Locales(void);
 
     /* perform test with added rules " & Z < p, P" */
-    void TestDemo1(void);
+    static void TestDemo1(void);
 
     /* perorm test with added rules "& C < ch , cH, Ch, CH" */
-    void TestDemo2(void);
+    static void TestDemo2(void);
 
     /* perform test with added rules  */
     /* "& Question'-'mark ; '?' & Hash'-'mark ; '#' & Ampersand ; '&'" */
-    void TestDemo3(void);
+    static void TestDemo3(void);
 
     /* perform test with added rules  */
     /* " & aa ; a'-' & ee ; e'-' & ii ; i'-' & oo ; o'-' & uu ; u'-' " */
-    void TestDemo4(void);
+    static void TestDemo4(void);
 
 #endif
