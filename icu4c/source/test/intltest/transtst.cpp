@@ -141,6 +141,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(59,TestIDForms);
         TESTCASE(60,TestToRulesMark);
         TESTCASE(61,TestEscape);
+        TESTCASE(62,TestAnchorMasking);
         default: name = ""; break;
     }
 }
@@ -2892,12 +2893,23 @@ void TransliteratorTest::TestEscape() {
     delete t;
 }
 
-//======================================================================
-// icu4c ONLY
-// These tests are not mirrored (yet) in icu4j at
-// src/com/ibm/test/translit/TransliteratorTest.java
-//======================================================================
 
+void TransliteratorTest::TestAnchorMasking(){
+    UnicodeString rule ("^a > Q; a > q;");
+    UErrorCode status= U_ZERO_ERROR;
+    UParseError parseError;
+
+    Transliterator* t = Transliterator::createFromRules("ID", rule, UTRANS_FORWARD,parseError,status);
+    if(U_FAILURE(status)){
+        errln(UnicodeString("FAIL: ") + "ID" +
+              ".toRules() => bad rules" +
+              /*", parse error " + parseError.code +*/
+              ", line " + parseError.line +
+              ", offset " + parseError.offset +
+              ", context " + prettify(parseError.preContext, TRUE) +
+              ", rules: " + prettify(rule, TRUE));
+    }
+}
 //======================================================================
 // Support methods
 //======================================================================
