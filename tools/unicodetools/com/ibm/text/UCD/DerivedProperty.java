@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/DerivedProperty.java,v $
-* $Date: 2001/10/26 23:33:08 $
-* $Revision: 1.6 $
+* $Date: 2001/12/03 19:29:35 $
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -22,24 +22,28 @@ public class DerivedProperty implements UCD_Types {
     
     // ADD CONSTANT to UCD_TYPES
     
+    static public UnicodeProperty getProperty(int derivedPropertyID, UCD ucd) {
+        return new DerivedProperty(ucd).dprops[derivedPropertyID];
+    }
+    
     public DerivedProperty(UCD ucd) {
       ucdData = ucd;
     }
     
     public String getHeader(int propNumber) {
-        DProp dp = dprops[propNumber];
+        UnicodeProperty dp = dprops[propNumber];
         if (dp != null) return dp.getHeader();
         else return "Unimplemented!!";
     }
 
     public String getName(int propNumber, byte style) {
-        DProp dp = dprops[propNumber];
+        UnicodeProperty dp = dprops[propNumber];
         if (dp != null) return dp.getName(style);
         else return "Unimplemented!!";
     }
 
     public String getProperty(int cp, int propNumber) {
-        DProp dp = dprops[propNumber];
+        UnicodeProperty dp = dprops[propNumber];
         if (dp != null) return dp.getProperty(cp);
         else return "Unimplemented!!";
     }
@@ -67,16 +71,17 @@ public class DerivedProperty implements UCD_Types {
         return dprops[propNumber].getProperty(int cp);
     }
     */
-    private DProp[] dprops = new DProp[50];
+    private UnicodeProperty[] dprops = new UnicodeProperty[50];
     private Normalizer[] nf = new Normalizer[4];
     private Normalizer nfd, nfc, nfkd, nfkc;
-    static final String[] NAME = {"NFD", "NFC", "NFKD", "NFKC"};
+
     static final String[] CaseNames = {
                 "Uppercase", 
                 "Lowercase", 
                 "Mixedcase"};
-                    
-    private abstract class DProp {
+    
+    /*         
+    private abstract static class UnicodeProperty {
         boolean testStatus = false;
         byte defaultStyle = LONG;
         String name, shortName, header;
@@ -90,13 +95,14 @@ public class DerivedProperty implements UCD_Types {
         public boolean propertyVaries() { return false; }
         public String getProperty(int cp) { return hasProperty(cp) ? name : ""; }
     }
+    */
     
-    class ExDProp extends DProp {
+    class ExDProp extends UnicodeProperty {
         Normalizer nfx;
         ExDProp(int i) {
-            nfx = nf[i-ExpandsOnNFD];
-            name = "Expands_On_" + NAME[i-ExpandsOnNFD];
-            shortName = "XO_" + NAME[i-ExpandsOnNFD];
+            nfx = nf[i];
+            name = "Expands_On_" + nfx.getName();
+            shortName = "XO_" + nfx.getName();
             header = "# Derived Property: " + name
                 + "\r\n#   Generated according to UAX #15."
                 + "\r\n#   Characters whose normalized length is not one."
@@ -111,16 +117,15 @@ public class DerivedProperty implements UCD_Types {
         }
     };
     
-    class NF_UnsafeStartProp extends DProp {
+    class NF_UnsafeStartProp extends UnicodeProperty {
         Normalizer nfx;
-        int prop;
+        //int prop;
         
         NF_UnsafeStartProp(int i) {
-            testStatus = true;
-            prop = i-NFD_UnsafeStart;
-            nfx = nf[prop];
-            name = NAME[prop] + "_UnsafeStart";
-            shortName = NAME[prop] + "_SS";
+            isStandard = false;
+            nfx = nf[i];
+            name = nfx.getName() + "_UnsafeStart";
+            shortName = nfx.getName() + "_SS";
             header = "# Derived Property: " + name
                 + "\r\n#   Generated according to UAX #15."
                 + "\r\n#   Characters that are cc==0, BUT which may interact with previous characters."
@@ -131,20 +136,20 @@ public class DerivedProperty implements UCD_Types {
             String norm = nfx.normalize(cp);
             int first = UTF16.charAt(norm, 0);
             if (ucdData.getCombiningClass(first) != 0) return true;
-            if ((prop == 1 || prop == 3) 
+            if (nfx.isComposition()
                 && dprops[NFC_TrailingZero].hasProperty(first)) return true; // 1,3 == composing
             return false;
         }
     };
     
     
-    class NFC_Prop extends DProp {
+    class NFC_Prop extends UnicodeProperty {
         BitSet bitset;
         boolean filter = false;
         boolean keepNonZero = true;
         
         NFC_Prop(int i) {
-            testStatus = true;
+            isStandard = false;
             BitSet[] bitsets = new BitSet[3];
             switch(i) {
                 case NFC_Leading: bitsets[0] = bitset = new BitSet(); break;
@@ -181,27 +186,27 @@ public class DerivedProperty implements UCD_Types {
         };
     };
     
-    class GenDProp extends DProp {
+    class GenDProp extends UnicodeProperty {
         Normalizer nfx;
         Normalizer nfComp = null;
         
         GenDProp (int i) {
-            testStatus = true;
-            nfx = nf[i-GenNFD];
-            name = NAME[i-GenNFD];
+                isStandard = false;
+            nfx = nf[i];
+            name = nfx.getName();
             String compName = "the character itself";
             
-            if (i == GenNFKC || i == GenNFD) {
+            if (i == NFKC || i == NFD) {
                 name += "-NFC";
                 nfComp = nfc;
                 compName = "NFC for the character";
-            } else if (i == GenNFKD) {
+            } else if (i == NFKD) {
                 name += "-NFD";
                 nfComp = nfd;
                 compName = "NFD for the character";
             }
             header = "# Derived Property: " + name              
-                + "\r\n#   Lists characters in normalized form " + NAME[i-GenNFD] + "."
+                + "\r\n#   Lists characters in normalized form " + nfx.getName() + "."
                 + "\r\n#   Only those characters whith normalized forms are DIFFERENT from " + compName + " are listed!"
                 + "\r\n#   WARNING: Normalization of STRINGS must use the algorithm in UAX #15 because characters may interact."
                 + "\r\n#            It is NOT sufficient to replace characters one-by-one with these results!";
@@ -237,10 +242,10 @@ public class DerivedProperty implements UCD_Types {
         boolean hasProperty(int cp) { return getProperty(cp).length() != 0; }
     };
     
-    class CaseDProp extends DProp {
+    class CaseDProp extends UnicodeProperty {
         byte val;
         CaseDProp (int i) {
-            testStatus = true;
+                isStandard = false;
             val = (i == Missing_Uppercase ? Lu : i == Missing_Lowercase ? Ll : Lt);
             name = "Possible_Missing_" + CaseNames[i-Missing_Uppercase];
             header = "# Derived Property: " + name
@@ -256,16 +261,16 @@ public class DerivedProperty implements UCD_Types {
         }
     };
     
-    class QuickDProp extends DProp {
+    class QuickDProp extends UnicodeProperty {
         String NO;
         String MAYBE;
         Normalizer nfx;
         QuickDProp (int i) {
-            nfx = nf[i - QuickNFD];
-            NO = NAME[i-QuickNFD] + "_NO";
-            MAYBE = NAME[i-QuickNFD] + "_MAYBE";
-            name = NAME[i-QuickNFD] + "_QuickCheck";
-            shortName = NAME[i-QuickNFD] + "_QC";
+            nfx = nf[i];
+            NO = nfx.getName() + "_NO";
+            MAYBE = nfx.getName() + "_MAYBE";
+            name = nfx.getName() + "_QuickCheck";
+            shortName = nfx.getName() + "_QC";
             header = "# Derived Property: " + name
             + "\r\n#  Generated from computing decomposibles"
             + ((i == QuickNFC || i == QuickNFKC)
@@ -288,11 +293,11 @@ public class DerivedProperty implements UCD_Types {
         nfkc = nf[3] = new Normalizer(Normalizer.NFKC);
 
         for (int i = ExpandsOnNFD; i <= ExpandsOnNFKC; ++i) {
-            dprops[i] = new ExDProp(i);
+            dprops[i] = new ExDProp(i-ExpandsOnNFD);
         }
         
         for (int i = GenNFD; i <= GenNFKC; ++i) {
-            dprops[i] = new GenDProp(i);
+            dprops[i] = new GenDProp(i-GenNFD);
         }
         
         for (int i = NFC_Leading; i <= NFC_Resulting; ++i) {
@@ -300,10 +305,10 @@ public class DerivedProperty implements UCD_Types {
         }
         
         for (int i = NFD_UnsafeStart; i <= NFKC_UnsafeStart; ++i) {
-            dprops[i] = new NF_UnsafeStartProp(i);
+            dprops[i] = new NF_UnsafeStartProp(i-NFD_UnsafeStart);
         }
         
-        dprops[ID_Start] = new DProp() {
+        dprops[ID_Start] = new UnicodeProperty() {
             {
                 name = "ID_Start";
                 shortName = "IDS";
@@ -316,7 +321,7 @@ public class DerivedProperty implements UCD_Types {
             }
         };
         
-        dprops[ID_Continue_NO_Cf] = new DProp() {
+        dprops[ID_Continue_NO_Cf] = new UnicodeProperty() {
             {
                 name = "ID_Continue";
                 shortName = "IDC";
@@ -330,7 +335,7 @@ public class DerivedProperty implements UCD_Types {
             }
         };
         
-        dprops[Mod_ID_Start] = new DProp() {
+        dprops[Mod_ID_Start] = new UnicodeProperty() {
             {
                 name = "XID_Start";
                 shortName = "XIDS";
@@ -345,7 +350,7 @@ public class DerivedProperty implements UCD_Types {
             }
         };
         
-        dprops[Mod_ID_Continue_NO_Cf] = new DProp() {
+        dprops[Mod_ID_Continue_NO_Cf] = new UnicodeProperty() {
             {
                 name = "XID_Continue";
                 shortName = "XIDC";
@@ -361,7 +366,7 @@ public class DerivedProperty implements UCD_Types {
             }
         };
         
-        dprops[PropMath] = new DProp() {
+        dprops[PropMath] = new UnicodeProperty() {
             {
                 name = "Math";
                 shortName = name;
@@ -376,7 +381,7 @@ public class DerivedProperty implements UCD_Types {
             }
         };
         
-        dprops[PropAlphabetic] = new DProp() {
+        dprops[PropAlphabetic] = new UnicodeProperty() {
             {
                 name = "Alphabetic";
                 shortName = "Alpha";
@@ -391,7 +396,7 @@ public class DerivedProperty implements UCD_Types {
             }
         };
         
-        dprops[PropLowercase] = new DProp() {
+        dprops[PropLowercase] = new UnicodeProperty() {
             {
                 name = "Lowercase";
                 shortName = "Lower";
@@ -406,7 +411,7 @@ public class DerivedProperty implements UCD_Types {
             }
         };
         
-        dprops[PropUppercase] = new DProp() {
+        dprops[PropUppercase] = new UnicodeProperty() {
             {
                 name = "Uppercase";
                 shortName = "Upper";
@@ -432,7 +437,7 @@ including all characters whose canonical decomposition consists of a single char
 file by including all characters whose canonical decomposition consists of a sequence
 of characters, the first of which has a non-zero combining class.
 */
-        dprops[FullCompExclusion] = new DProp() {
+        dprops[FullCompExclusion] = new UnicodeProperty() {
             {
                 name = "Full_Composition_Exclusion";
                 shortName = "Comp_Ex";
@@ -451,9 +456,9 @@ of characters, the first of which has a non-zero combining class.
             }
         };
         
-        dprops[FullCompInclusion] = new DProp() {
+        dprops[FullCompInclusion] = new UnicodeProperty() {
             {
-                testStatus = true;
+                isStandard = false;
                 name = "Full_Composition_Inclusion";
                 shortName = "Comp_In";
                 defaultStyle = SHORT;
@@ -471,7 +476,7 @@ of characters, the first of which has a non-zero combining class.
             }
         };
         
-        dprops[FC_NFKC_Closure] = new DProp() {
+        dprops[FC_NFKC_Closure] = new UnicodeProperty() {
             {
                 name = "FC_NFKC_Closure";
                 shortName = "FC_NFKC";
@@ -491,7 +496,7 @@ of characters, the first of which has a non-zero combining class.
             boolean hasProperty(int cp) { return getProperty(cp).length() != 0; }
         };
         
-        dprops[FC_NFC_Closure] = new DProp() {
+        dprops[FC_NFC_Closure] = new UnicodeProperty() {
             {
                 name = "FC_NFC_Closure";
                 shortName = "FC_NFC";
@@ -512,10 +517,10 @@ of characters, the first of which has a non-zero combining class.
         };
         
         for (int i = QuickNFD; i <= QuickNFKC; ++i) {
-            dprops[i] = new QuickDProp(i);
+            dprops[i] = new QuickDProp(i - QuickNFD);
         }        
         
-        dprops[DefaultIgnorable] = new DProp() {
+        dprops[DefaultIgnorable] = new UnicodeProperty() {
             {
                 name = "Default_Ignorable_Code_Point";
                 shortName = "DI";
@@ -538,7 +543,7 @@ of characters, the first of which has a non-zero combining class.
 # GraphemeBase := 
 
 */
-        dprops[GraphemeExtend] = new DProp() {
+        dprops[GraphemeExtend] = new UnicodeProperty() {
             {
                 name = "Grapheme_Extend";
                 shortName = "GrExt";
@@ -556,7 +561,7 @@ of characters, the first of which has a non-zero combining class.
             }
         };
 
-        dprops[Other_Case_Ignorable] = new DProp() {
+        dprops[Other_Case_Ignorable] = new UnicodeProperty() {
             {
                 name = "Other_Case_Ignorable";
                 shortName = "OCI";
@@ -577,7 +582,7 @@ of characters, the first of which has a non-zero combining class.
             }
         };
         
-        dprops[Type_i] = new DProp() {
+        dprops[Type_i] = new UnicodeProperty() {
             {
                 name = "Special_Dotted";
                 shortName = "SDot";
@@ -606,7 +611,7 @@ of characters, the first of which has a non-zero combining class.
             }
         };
         
-        dprops[Case_Ignorable] = new DProp() {
+        dprops[Case_Ignorable] = new UnicodeProperty() {
             {
                 name = "Case_Ignorable";
                 shortName = "CI";
@@ -621,7 +626,7 @@ of characters, the first of which has a non-zero combining class.
             }
         };
         
-        dprops[GraphemeBase] = new DProp() {
+        dprops[GraphemeBase] = new UnicodeProperty() {
             {
                 name = "Grapheme_Base";
                 shortName = "GrBase";
@@ -648,6 +653,9 @@ of characters, the first of which has a non-zero combining class.
         if (cat == Ll
             || ucdData.getBinaryProperty(cp, Other_Lowercase)) return Ll;
         if (cat == Lt || cat == Lo || cat == Lm || cat == Nl) return cat;
+        
+        if (true) throw new IllegalArgumentException("FIX nf[2]");
+        
         if (!nf[2].normalizationDiffers(cp)) return Lo;
 
         String norm = nf[2].normalize(cp);

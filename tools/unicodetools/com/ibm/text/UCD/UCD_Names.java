@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2001/11/13 02:31:55 $
-* $Revision: 1.7 $
+* $Date: 2001/12/03 19:29:35 $
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -766,6 +766,8 @@ final class UCD_Names implements UCD_Types {
         "P",    // U+11C1; P; HANGUL JONGSEONG PHIEUPH
         "H",    // U+11C2; H; HANGUL JONGSEONG HIEUH
     };
+    
+    static final String[] NF_NAME = {"NFD", "NFC", "NFKD", "NFKC"};
 
 /*
     static {

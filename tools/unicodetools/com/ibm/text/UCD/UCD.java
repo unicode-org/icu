@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2001/10/26 23:33:07 $
-* $Revision: 1.5 $
+* $Date: 2001/12/03 19:29:35 $
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -976,6 +976,16 @@ to guarantee identifier closure.
             return char1 + (char2 - TBase);
         }
         return 0xFFFF; // no composition
+    }
+    
+    static boolean isHangulSyllable(int char1) {
+        return SBase <= char1 && char1 < SLimit;
+    }
+
+    static boolean isLeadingJamoComposition(int char1) {
+        return (LBase <= char1 && char1 < LLimit
+            ||  SBase <= char1 && char1 < SLimit
+                && ((char1 - SBase) % TCount) == 0);
     }
 
     static boolean isTrailingJamo(int cp) {
