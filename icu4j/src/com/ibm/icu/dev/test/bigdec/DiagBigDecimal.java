@@ -2,7 +2,6 @@
 /* Options: Binary Comments Crossref Format Java Logo Trace1 Verbose3 */
 package com.ibm.icu.dev.test.bigdec;
 import java.math.BigInteger;
-import com.ibm.icu.math.*;
 import com.ibm.icu.dev.test.TestFmwk;
 
 /* ------------------------------------------------------------------ */

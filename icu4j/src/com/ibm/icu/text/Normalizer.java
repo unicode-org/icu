@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Normalizer.java,v $ 
- * $Date: 2003/04/09 21:38:57 $ 
- * $Revision: 1.30 $
+ * $Date: 2003/05/14 19:03:30 $ 
+ * $Revision: 1.31 $
  *
  *******************************************************************************
  */
@@ -2659,7 +2659,7 @@ public final class Normalizer implements Cloneable{
                                   
 	    char[] fcd1  = new char[300];
         char[] fcd2  = new char[300];
-        int f1Index, f2Index, d1Index, d2Index;
+        
         Normalizer.Mode mode;
         int result;
 	
@@ -2671,7 +2671,6 @@ public final class Normalizer implements Cloneable{
 	    }
 
 	    UnicodeSet nx=NormalizerImpl.getNX((int)(options>>Normalizer.COMPARE_NORM_OPTIONS_SHIFT));
-	    d1Index=d2Index=0;
     	options|= NormalizerImpl.COMPARE_EQUIV;
     	result=0;
 
@@ -2705,7 +2704,6 @@ public final class Normalizer implements Cloneable{
 	    if((options& Normalizer.INPUT_IS_FCD)==0) {
 	        char[] dest;
 	        int fcdLen1, fcdLen2;
-            int foldLen1, foldLen2;
 	        boolean isFCD1, isFCD2;
 	
 	        // check if s1 and/or s2 fulfill the FCD conditions

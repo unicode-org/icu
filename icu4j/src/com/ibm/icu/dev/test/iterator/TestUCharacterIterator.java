@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/iterator/TestUCharacterIterator.java,v $
- * $Date: 2002/11/22 00:21:03 $
- * $Revision: 1.8 $
+ * $Date: 2003/05/14 19:03:19 $
+ * $Revision: 1.9 $
  *
  *******************************************************************************
  */
@@ -14,6 +14,7 @@ package com.ibm.icu.dev.test.iterator;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.UCharacterIterator;
+import com.ibm.icu.text.UForwardCharacterIterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.ReplaceableString;
 import com.ibm.icu.impl.UnicodeCharacterIterator;
@@ -478,13 +479,13 @@ public class TestUCharacterIterator extends TestFmwk{
 	        int ch;
 	        // this should never go into a infinite loop
 	        // if it does then we have a problem
-	        while((ch=iter1.previousCodePoint())!=iter.DONE_CODEPOINT){
+	        while((ch=iter1.previousCodePoint())!=UnicodeCharacterIterator.DONE_CODEPOINT){
 	            if(ch!=0xDc00){
 	                errln("iter.previousCodePoint() failed");
 	            }
 	        }
 	        iter1.setIndex(5);
-	        while((ch=iter1.nextCodePoint()) !=iter.DONE_CODEPOINT){
+	        while((ch=iter1.nextCodePoint()) !=UnicodeCharacterIterator.DONE_CODEPOINT){
 	            if(ch!= 0xDC03){
 	                errln("iter.nextCodePoint() failed");
 	            } 
@@ -570,13 +571,13 @@ public class TestUCharacterIterator extends TestFmwk{
         int ch;
         // this should never go into a infinite loop
         // if it does then we have a problem
-        while((ch=iter.previousCodePoint())!=iter.DONE){
+        while((ch=iter.previousCodePoint())!=UCharacterIterator.DONE){
 	        if(ch!=0xDc00){
 	            errln("iter.previousCodePoint() failed");
 	        }
         }
         iter.setIndex(5);
-        while((ch=iter.nextCodePoint()) !=iter.DONE){
+        while((ch=iter.nextCodePoint()) !=UForwardCharacterIterator.DONE){
 	        if(ch!= 0xDC03){
 	            errln("iter.nextCodePoint() failed");
 	        } 

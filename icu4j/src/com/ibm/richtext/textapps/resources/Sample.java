@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/richtext/textapps/resources/Sample.java,v $
- * $Date: 2002/12/12 23:26:56 $
- * $Revision: 1.3 $
+ * $Date: 2003/05/14 19:04:02 $
+ * $Revision: 1.4 $
  *
  *******************************************************************************
  */
@@ -18,7 +18,7 @@ public final class Sample extends ListResourceBundle {
     
     public Object[][] getContents() {
 
-        Object sample = this.getClass().getResource("hagan");
+        /*Object sample =*/ this.getClass().getResource("hagan");
 
         return new Object[][] {
             { "default.sample", this.getClass().getResource("unicode.hebrew.red") },

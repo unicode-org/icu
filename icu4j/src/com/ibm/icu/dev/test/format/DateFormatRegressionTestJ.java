@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatRegressionTestJ.java,v $ 
- * $Date: 2002/02/16 03:05:08 $ 
- * $Revision: 1.4 $
+ * $Date: 2003/05/14 19:03:15 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -16,14 +16,12 @@
 
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.util.*;
 import java.util.Date;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Locale;
-import java.text.FieldPosition;
 
 public class DateFormatRegressionTestJ extends com.ibm.icu.dev.test.TestFmwk {
     
@@ -73,7 +71,7 @@ public class DateFormatRegressionTestJ extends com.ibm.icu.dev.test.TestFmwk {
     //DateFormat getDateTimeInstance(int, int), invalid styles no exception
     public void Test4213086() {
         Date someDate = new Date();
-        String d;
+        String d=null;
         try {
             DateFormat df2 = DateFormat.getDateTimeInstance(2, -2);
             d = df2.format(someDate);
@@ -111,6 +109,10 @@ public class DateFormatRegressionTestJ extends com.ibm.icu.dev.test.TestFmwk {
             logln("dateStyle = 2" + "\t timeStyle = 123");
             logln("Exception caught!");
             logln("********************************************");
+        }
+        //read the value in d to get rid of the warning
+        if(d!=null){
+            logln("The value of d: " + d);
         }
     }
     

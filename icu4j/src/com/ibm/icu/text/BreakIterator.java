@@ -5,15 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakIterator.java,v $
- * $Date: 2003/05/05 23:42:17 $
- * $Revision: 1.17 $
+ * $Date: 2003/05/14 19:03:31 $
+ * $Revision: 1.18 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
 
 import java.lang.ref.SoftReference;
-import java.lang.reflect.Method;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
 import java.util.Locale;

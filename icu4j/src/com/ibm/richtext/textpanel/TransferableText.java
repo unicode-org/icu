@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TransferableText.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:51:23 $
+ * @(#)$RCSfile: TransferableText.java,v $ $Revision: 1.2 $ $Date: 2003/05/14 19:04:00 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -18,7 +18,6 @@ import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
-import java.io.ByteArrayInputStream;
 
 import com.ibm.richtext.styledtext.MConstText;
 

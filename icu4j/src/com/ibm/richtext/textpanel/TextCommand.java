@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TextCommand.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:51:23 $
+ * @(#)$RCSfile: TextCommand.java,v $ $Revision: 1.2 $ $Date: 2003/05/14 19:04:00 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -14,7 +14,6 @@
  */
 package com.ibm.richtext.textpanel;
 
-import com.ibm.richtext.styledtext.MConstText;
 import com.ibm.richtext.styledtext.MText;
 import com.ibm.richtext.textformat.TextOffset;
 

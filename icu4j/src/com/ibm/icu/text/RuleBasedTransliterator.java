@@ -5,18 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedTransliterator.java,v $
- * $Date: 2002/12/03 18:57:36 $
- * $Revision: 1.58 $
+ * $Date: 2003/05/14 19:03:30 $
+ * $Revision: 1.59 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
 
 import java.util.Hashtable;
-import java.util.Vector;
-import java.text.ParsePosition;
-import com.ibm.icu.impl.Utility;
-import com.ibm.icu.impl.data.ResourceReader;
+
 
 /**
  * <code>RuleBasedTransliterator</code> is a transliterator
@@ -474,6 +471,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.59  2003/05/14 19:03:30  rviswanadha
+ * jitterbug 2836: fix compiler warnings
+ *
  * Revision 1.58  2002/12/03 18:57:36  alan
  * jitterbug 2087: fix @ tags
  *

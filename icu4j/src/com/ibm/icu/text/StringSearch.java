@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/StringSearch.java,v $ 
- * $Date: 2003/04/09 20:03:43 $ 
- * $Revision: 1.20 $
+ * $Date: 2003/05/14 19:03:31 $ 
+ * $Revision: 1.21 $
  *
  *****************************************************************************************
  */
@@ -2417,7 +2417,7 @@ public final class StringSearch extends SearchIterator
 	 */
 	private int doPreviousCanonicalPrefixMatch(int textoffset)
 	{
-	    int safelength = 0;
+	   // int safelength = 0;
 	    StringBuffer safetext;
 	    int safeoffset = textoffset;
 	
@@ -2425,7 +2425,7 @@ public final class StringSearch extends SearchIterator
 	    	&& m_collator_.isUnsafe(m_canonicalPrefixAccents_.charAt(
 	    							m_canonicalPrefixAccents_.length() - 1))) {
 	        safeoffset = getNextSafeOffset(textoffset, m_textLimitOffset_);
-	        safelength = safeoffset - textoffset;
+	        //safelength = safeoffset - textoffset;
 	        safetext = merge(m_canonicalPrefixAccents_, targetText, textoffset, 
 	        				 safeoffset, null);
 	    }

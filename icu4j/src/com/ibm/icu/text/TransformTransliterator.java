@@ -3,11 +3,11 @@
  * others. All Rights Reserved.
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransformTransliterator.java,v $ 
- * $Date: 2002/02/16 03:06:16 $ 
- * $Revision: 1.5 $
+ * $Date: 2003/05/14 19:03:30 $ 
+ * $Revision: 1.6 $
  */
 package com.ibm.icu.text;
-import java.util.*;
+//import java.util.*;
 
 abstract class TransformTransliterator {
     // Currently unused

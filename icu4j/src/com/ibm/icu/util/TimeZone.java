@@ -10,16 +10,12 @@
 package com.ibm.icu.util;
 import java.io.Serializable;
 import java.lang.ref.SoftReference;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.text.NumberFormat;
 import java.text.ParsePosition;
-import sun.security.action.GetPropertyAction;
 import java.util.Date;
 import java.util.Hashtable;
 import java.util.Locale;
-import java.util.Vector;
 
 /**
  * <code>TimeZone</code> represents a time zone offset, and also figures out daylight

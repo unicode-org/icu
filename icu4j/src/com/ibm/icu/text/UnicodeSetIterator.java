@@ -5,16 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSetIterator.java,v $ 
- * $Date: 2002/12/09 16:40:00 $ 
- * $Revision: 1.12 $
+ * $Date: 2003/05/14 19:03:31 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
 
-import com.ibm.icu.impl.Utility;
 import java.util.*;
-import java.io.*;
 
 /**
  * UnicodeSetIterator iterates over the contents of a UnicodeSet.  It

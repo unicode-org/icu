@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TypingPerfTest.java,v $ $Revision: 1.4 $ $Date: 2002/02/16 03:06:39 $
+ * @(#)$RCSfile: TypingPerfTest.java,v $ $Revision: 1.5 $ $Date: 2003/05/14 19:04:02 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -17,7 +17,6 @@ package com.ibm.richtext.test;
 import java.awt.Button;
 import java.awt.GridLayout;
 import java.awt.Frame;
-import java.awt.Toolkit;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,8 +25,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.IOException;
 

@@ -286,10 +286,10 @@ public final class CollationElementIterator
                 // couldn't find a good CE in the tailoring
                 // if we got here, the codepoint MUST be over 0xFF - so we look
                 // directly in the UCA
-                result = m_collator_.UCA_.m_trie_.getLeadValue(ch);
+                result = RuleBasedCollator.UCA_.m_trie_.getLeadValue(ch);
                 if (RuleBasedCollator.isSpecial(result)) {
                     // UCA also gives us a special CE
-                    result = nextSpecial(m_collator_.UCA_, result, ch);
+                    result = nextSpecial(RuleBasedCollator.UCA_, result, ch);
                 }
             }
         }

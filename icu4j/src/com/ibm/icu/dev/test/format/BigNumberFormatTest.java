@@ -5,19 +5,17 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/BigNumberFormatTest.java,v $ 
- * $Date: 2002/02/25 22:43:59 $ 
- * $Revision: 1.14 $
+ * $Date: 2003/05/14 19:03:16 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.dev.test.format;
 
 import com.ibm.icu.dev.test.*;
-import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import java.text.ParseException;
 import java.util.*;
-import java.math.BigInteger;
 import com.ibm.icu.impl.Utility;
 
 /**

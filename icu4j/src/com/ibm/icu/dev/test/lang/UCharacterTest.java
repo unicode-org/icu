@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $
-* $Date: 2003/04/04 19:37:00 $
-* $Revision: 1.54 $
+* $Date: 2003/05/14 19:03:16 $
+* $Revision: 1.55 $
 *
 *******************************************************************************
 */
@@ -29,8 +29,6 @@ import com.ibm.icu.impl.UCharacterName;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.USerializedSet;
 import com.ibm.icu.impl.NormalizerImpl;
-import com.ibm.icu.text.Normalizer;
-
 import java.io.BufferedReader;
 import java.util.Arrays;
 
@@ -1926,7 +1924,7 @@ public final class UCharacterTest extends TestFmwk
     }
 	/* add characters from a serialized set to a normal one */ 
 	private static void _setAddSerialized(UnicodeSet set, USerializedSet sset) { 
-	   int start, end; 
+	 //  int start, end; 
 	   int i, count; 
 	
 	   count=sset.countSerializedRanges(); 

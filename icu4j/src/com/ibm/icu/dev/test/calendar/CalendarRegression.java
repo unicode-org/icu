@@ -5,18 +5,16 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/CalendarRegression.java,v $
- * $Date: 2002/11/20 19:48:10 $
- * $Revision: 1.14 $
+ * $Date: 2003/05/14 19:02:52 $
+ * $Revision: 1.15 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
 import com.ibm.icu.util.*;
+
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Locale;
-import java.util.Set;
-import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 
 /**
@@ -443,14 +441,14 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
         Calendar cal1 = new GregorianCalendar(PST);
         cal1.setTime(new Date(880698639000L));
         int p;
-        logln("PST 1 is: " + (p=cal1.get(cal1.HOUR_OF_DAY)));
+        logln("PST 1 is: " + (p=cal1.get(Calendar.HOUR_OF_DAY)));
         cal1.setTimeZone(GMT);
         // Issue 1: Changing the timezone doesn't change the
         //          represented time.
         int h1,h2;
-        logln("GMT 1 is: " + (h1=cal1.get(cal1.HOUR_OF_DAY)));
+        logln("GMT 1 is: " + (h1=cal1.get(Calendar.HOUR_OF_DAY)));
         cal1.setTime(new Date(880698639000L));
-        logln("GMT 2 is: " + (h2=cal1.get(cal1.HOUR_OF_DAY)));
+        logln("GMT 2 is: " + (h2=cal1.get(Calendar.HOUR_OF_DAY)));
         // Note: This test had a bug in it.  It wanted h1!=h2, when
         // what was meant was h1!=p.  Fixed this concurrent with fix
         // to 4177484.
@@ -462,12 +460,12 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
         cal2.set(Calendar.MILLISECOND, 0);
         cal3.set(Calendar.MILLISECOND, 0);
 
-        cal2.set(cal1.get(cal1.YEAR),
-                 cal1.get(cal1.MONTH),
-                 cal1.get(cal1.DAY_OF_MONTH),
-                 cal1.get(cal1.HOUR_OF_DAY),
-                 cal1.get(cal1.MINUTE),
-                 cal1.get(cal1.SECOND));
+        cal2.set(cal1.get(Calendar.YEAR),
+                 cal1.get(Calendar.MONTH),
+                 cal1.get(Calendar.DAY_OF_MONTH),
+                 cal1.get(Calendar.HOUR_OF_DAY),
+                 cal1.get(Calendar.MINUTE),
+                 cal1.get(Calendar.SECOND));
 
         long t1,t2,t3,t4;
         logln("RGMT 1 is: " + (t1=cal2.getTime().getTime()));
@@ -475,12 +473,12 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
         logln("RPST 1 is: " + (t2=cal3.getTime().getTime()));
         cal3.setTimeZone(GMT);
         logln("RGMT 2 is: " + (t3=cal3.getTime().getTime()));
-        cal3.set(cal1.get(cal1.YEAR),
-                 cal1.get(cal1.MONTH),
-                 cal1.get(cal1.DAY_OF_MONTH),
-                 cal1.get(cal1.HOUR_OF_DAY),
-                 cal1.get(cal1.MINUTE),
-                 cal1.get(cal1.SECOND));
+        cal3.set(cal1.get(Calendar.YEAR),
+                 cal1.get(Calendar.MONTH),
+                 cal1.get(Calendar.DAY_OF_MONTH),
+                 cal1.get(Calendar.HOUR_OF_DAY),
+                 cal1.get(Calendar.MINUTE),
+                 cal1.get(Calendar.SECOND));
         // Issue 2: Calendar continues to use the timezone in its
         //          constructor for set() conversions, regardless
         //          of calls to setTimeZone()

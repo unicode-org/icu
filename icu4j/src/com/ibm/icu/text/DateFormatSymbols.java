@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DateFormatSymbols.java,v $
- * $Date: 2003/03/07 01:05:48 $
- * $Revision: 1.16 $
+ * $Date: 2003/05/14 19:03:30 $
+ * $Revision: 1.17 $
  *
  *****************************************************************************************
  */
@@ -20,13 +20,9 @@ import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.TimeZone;
 
 import java.io.Serializable;
-import java.lang.ref.SoftReference;
-import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import java.util.Vector;
 
 /**
  * <code>DateFormatSymbols</code> is a public class for encapsulating

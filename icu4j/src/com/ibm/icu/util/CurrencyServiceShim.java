@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/CurrencyServiceShim.java,v $
- * $Date: 2003/05/05 23:42:18 $
- * $Revision: 1.2 $
+ * $Date: 2003/05/14 19:03:48 $
+ * $Revision: 1.3 $
  *
  *******************************************************************************
  */
@@ -17,10 +17,8 @@ import java.util.Locale;
 import com.ibm.icu.impl.ICULocaleData;
 
 import com.ibm.icu.impl.ICUService;
-import com.ibm.icu.impl.ICUService.Key;
 import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.impl.ICULocaleService;
-import com.ibm.icu.impl.ICULocaleService.ICUResourceBundleFactory;
 
 /**
  * This is a package-access implementation of registration for

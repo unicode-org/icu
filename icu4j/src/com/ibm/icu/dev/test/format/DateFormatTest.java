@@ -4,8 +4,8 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/DateFormatTest.java,v $ 
- * $Date: 2003/04/24 22:59:13 $ 
- * $Revision: 1.15 $
+ * $Date: 2003/05/14 19:03:16 $ 
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  */
@@ -17,7 +17,6 @@
 
 package com.ibm.icu.dev.test.format;
 
-import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.util.*;
 import com.ibm.icu.impl.*;
@@ -208,16 +207,16 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         dateFormats[2] = new SimpleDateFormat("G, y, M, d, k, H, m, s, S, E, D, F, w, W, a, h, K, z, y, E", Locale.US);
         dateFormats[3] = new SimpleDateFormat("GGGG, yyyy, MMMM, dddd, kkkk, HHHH, mmmm, ssss, SSSS, EEEE, DDDD, FFFF, wwww, WWWW, aaaa, hhhh, KKKK, zzzz, yyyy, EEEE", Locale.US);
         //fix the jdk resources differences between jdk 1.2 and jdk 1.3
-        String javaVersion = System.getProperty("java.version");
+        // String javaVersion = System.getProperty("java.version");
         
         for (j = 0, exp = 0; j < dateFormats_length; ++j) {
-            String str;
+          //  String str;
             DateFormat df = dateFormats[j];
             TimeZone tz = TimeZone.getTimeZone("PST");
             ((SimpleTimeZone)tz).setDSTSavings(3600000);
             df.setTimeZone(tz);
             logln(" Pattern = " + ((SimpleDateFormat) df).toPattern());
-            str = "";
+            // str = "";
             try {
                 logln("  Result = " + df.format(someDate));
             } catch (Exception e) {
@@ -900,11 +899,14 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         logln("time: " + f.format(now));
 
         int hash = f.hashCode(); // sigh, everyone overrides this
-
+        
         f = DateFormat.getInstance(cal);
+        if(hash == f.hashCode()){
+            errln("FAIL: hashCode equal for inequal objects");
+        }
         logln("time again: " + f.format(now));
 
-        f = DateFormat.getTimeInstance(cal, f.FULL);
+        f = DateFormat.getTimeInstance(cal, DateFormat.FULL);
         logln("time yet again: " + f.format(now));
 
         ResourceBundle rb = ICULocaleData.getLocaleElements("de_DE");

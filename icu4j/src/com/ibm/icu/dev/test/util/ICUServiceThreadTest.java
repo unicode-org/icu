@@ -5,26 +5,20 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/ICUServiceThreadTest.java,v $
- * $Date: 2003/02/05 05:45:16 $
- * $Revision: 1.7 $
+ * $Date: 2003/05/14 19:03:17 $
+ * $Revision: 1.8 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.util;
 
-import com.ibm.icu.dev.test.AbstractTestLog;
-import com.ibm.icu.dev.test.AbstractTestLog.DelegatingLog;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestLog;
 import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.ICUService.Factory;
 import com.ibm.icu.impl.ICUService.SimpleFactory;
-import com.ibm.icu.impl.ICUService.Key;
 import com.ibm.icu.impl.LocaleUtility;
-import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.ICULocaleService;
-import com.ibm.icu.impl.ICULocaleService.LocaleKey;
-import com.ibm.icu.impl.ICULocaleService.ICUResourceBundleFactory;
 import com.ibm.icu.text.Collator;
 
 import java.util.Arrays;
@@ -38,9 +32,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
-import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.SortedMap;
 
 public class ICUServiceThreadTest extends TestFmwk

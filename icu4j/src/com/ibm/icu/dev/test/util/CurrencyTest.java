@@ -28,7 +28,7 @@ public class CurrencyTest extends TestFmwk {
      */
     public void TestAPI() {
         Currency usd = Currency.getInstance("USD");
-        int hash = usd.hashCode();
+        /*int hash = */usd.hashCode();
         Currency jpy = Currency.getInstance("JPY");
         if (usd.equals(jpy)) {
             errln("FAIL: USD == JPY");
@@ -44,5 +44,8 @@ public class CurrencyTest extends TestFmwk {
         }
 
         Locale[] avail = Currency.getAvailableLocales();
+        if(avail==null){
+            errln("FAIL: getAvailableLocales returned null");
+        }
     }
 }

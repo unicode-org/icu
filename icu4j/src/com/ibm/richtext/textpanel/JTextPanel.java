@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: JTextPanel.java,v $ $Revision: 1.4 $ $Date: 2002/02/16 03:06:47 $
+ * @(#)$RCSfile: JTextPanel.java,v $ $Revision: 1.5 $ $Date: 2003/05/14 19:04:00 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -30,7 +30,6 @@ import com.ibm.richtext.textlayout.attributes.AttributeMap;
 
 import com.ibm.richtext.styledtext.StyleModifier;
 import com.ibm.richtext.styledtext.MConstText;
-import com.ibm.richtext.styledtext.StyledText;
 
 /**
  * JTextPanel is an implementation of MTextPanel in a Swing JPanel.

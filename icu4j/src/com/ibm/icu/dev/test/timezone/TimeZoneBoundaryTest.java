@@ -5,13 +5,12 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/timezone/TimeZoneBoundaryTest.java,v $
- * $Date: 2002/08/13 22:04:39 $
- * $Revision: 1.6 $
+ * $Date: 2003/05/14 19:03:18 $
+ * $Revision: 1.7 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.timezone;
-import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.util.*;
 import com.ibm.icu.dev.test.*;
@@ -263,12 +262,12 @@ public class TimeZoneBoundaryTest extends TestFmwk
 
         GregorianCalendar gc = new GregorianCalendar(time_zone);
         gc.setTime(d);
-        int offset = time_zone.getOffset(gc.get(gc.ERA), gc.get(gc.YEAR), gc.get(gc.MONTH),
-                                         gc.get(gc.DAY_OF_MONTH), gc.get(gc.DAY_OF_WEEK),
-                                         ((gc.get(gc.HOUR_OF_DAY) * 60 +
-                                           gc.get(gc.MINUTE)) * 60 +
-                                          gc.get(gc.SECOND)) * 1000 +
-                                         gc.get(gc.MILLISECOND));
+        int offset = time_zone.getOffset(gc.get(Calendar.ERA), gc.get(Calendar.YEAR), gc.get(Calendar.MONTH),
+                                         gc.get(Calendar.DAY_OF_MONTH), gc.get(Calendar.DAY_OF_WEEK),
+                                         ((gc.get(Calendar.HOUR_OF_DAY) * 60 +
+                                           gc.get(Calendar.MINUTE)) * 60 +
+                                          gc.get(Calendar.SECOND)) * 1000 +
+                                         gc.get(Calendar.MILLISECOND));
         if (offset == expDSTOffset)
             logln("PASS: getOffset() = " + offset/(double)ONE_HOUR);
         else

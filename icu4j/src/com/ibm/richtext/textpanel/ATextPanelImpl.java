@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: ATextPanelImpl.java,v $ $Revision: 1.3 $ $Date: 2002/02/16 03:06:46 $
+ * @(#)$RCSfile: ATextPanelImpl.java,v $ $Revision: 1.4 $ $Date: 2003/05/14 19:04:00 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -16,11 +16,9 @@ package com.ibm.richtext.textpanel;
 
 import java.awt.Adjustable;
 import java.awt.Component;
-import java.awt.Graphics;
 import java.awt.datatransfer.Clipboard;
 
 import com.ibm.richtext.textlayout.attributes.AttributeMap;
-import com.ibm.richtext.textlayout.attributes.AttributeSet;
 
 import com.ibm.richtext.styledtext.StyleModifier;
 import com.ibm.richtext.styledtext.MConstText;

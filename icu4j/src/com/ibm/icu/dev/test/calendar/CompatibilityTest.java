@@ -5,16 +5,16 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/CompatibilityTest.java,v $
- * $Date: 2003/03/17 17:14:48 $
- * $Revision: 1.9 $
+ * $Date: 2003/05/14 19:02:52 $
+ * $Revision: 1.10 $
  *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.calendar;
 import com.ibm.icu.util.*;
+
 import java.util.Date;
 import java.util.Locale;
-import java.text.*;
 import java.io.*;
 
 public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
@@ -690,23 +690,23 @@ public class CompatibilityTest extends com.ibm.icu.dev.test.TestFmwk {
         GregorianCalendar temp = new GregorianCalendar( y, m, d );
         check520(temp, y, m, d);
 
-        temp.add( temp.YEAR, 1 );
+        temp.add( Calendar.YEAR, 1 );
         y++;
         check520(temp, y, m, d);
 
-        temp.add( temp.MONTH, 1 );
+        temp.add( Calendar.MONTH, 1 );
         m++;
         check520(temp, y, m, d);
 
-        temp.add( temp.DATE, 1 );
+        temp.add( Calendar.DATE, 1 );
         d++;
         check520(temp, y, m, d);
 
-        temp.add( temp.DATE, 2 );
+        temp.add( Calendar.DATE, 2 );
         d += 2;
         check520(temp, y, m, d);
 
-        temp.add( temp.DATE, 28 );
+        temp.add( Calendar.DATE, 28 );
         d = 1; ++m;
         check520(temp, y, m, d);
     }

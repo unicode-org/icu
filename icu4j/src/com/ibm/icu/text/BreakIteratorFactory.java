@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakIteratorFactory.java,v $ 
- * $Date: 2003/05/05 23:42:17 $ 
- * $Revision: 1.3 $
+ * $Date: 2003/05/14 19:03:30 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -21,13 +21,8 @@ import java.util.ResourceBundle;
 
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.ICULocaleService;
-import com.ibm.icu.impl.ICULocaleService.LocaleKey;
-import com.ibm.icu.impl.ICULocaleService.ICUResourceBundleFactory;
 import com.ibm.icu.impl.ICUService;
 import com.ibm.icu.impl.ICUService.Factory;
-import com.ibm.icu.impl.ICUService.Key;
-import com.ibm.icu.impl.LocaleUtility;
-
 /**
  * @author Ram
  *

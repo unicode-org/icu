@@ -5,15 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CompoundTransliterator.java,v $
- * $Date: 2003/01/28 18:55:41 $
- * $Revision: 1.32 $
+ * $Date: 2003/05/14 19:03:30 $
+ * $Revision: 1.33 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.UtilityExtensions;
-import java.util.Enumeration;
 import java.util.Vector;
 
 /**

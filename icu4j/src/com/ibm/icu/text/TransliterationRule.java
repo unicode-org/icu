@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/TransliterationRule.java,v $
- * $Date: 2003/01/28 18:55:42 $
- * $Revision: 1.48 $
+ * $Date: 2003/05/14 19:03:30 $
+ * $Revision: 1.49 $
  *
  *****************************************************************************************
  */
@@ -46,7 +46,7 @@ import com.ibm.icu.impl.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.48 $ $Date: 2003/01/28 18:55:42 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.49 $ $Date: 2003/05/14 19:03:30 $
  */
 class TransliterationRule {
 
@@ -495,7 +495,7 @@ class TransliterationRule {
      * given string.
      */
     public String toRule(boolean escapeUnprintable) {
-        int i;
+       // int i;
 
         StringBuffer rule = new StringBuffer();
 
@@ -583,6 +583,9 @@ class TransliterationRule {
 
 /**
  * $Log: TransliterationRule.java,v $
+ * Revision 1.49  2003/05/14 19:03:30  rviswanadha
+ * jitterbug 2836: fix compiler warnings
+ *
  * Revision 1.48  2003/01/28 18:55:42  rviswanadha
  * jitterbug 2309: Modularize ICU4J big bang commit
  *

@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: SwingDocumentWindow.java,v $ $Revision: 1.2 $ $Date: 2002/02/16 03:06:37 $
+ * @(#)$RCSfile: SwingDocumentWindow.java,v $ $Revision: 1.3 $ $Date: 2003/05/14 19:04:02 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -18,12 +18,6 @@ import com.ibm.richtext.textpanel.JTextPanel;
 import com.ibm.richtext.textpanel.TextPanelListener;
 import com.ibm.richtext.textpanel.TextPanelSettings;
 
-import com.ibm.richtext.styledtext.MConstText;
-import com.ibm.richtext.styledtext.StyledText;
-import com.ibm.richtext.styledtext.StyleModifier;
-
-import com.ibm.richtext.textlayout.attributes.AttributeMap;
-
 import com.ibm.richtext.swingui.JTabRuler;
 import com.ibm.richtext.swingui.SwingMenuBuilder;
 
@@ -38,7 +32,6 @@ import com.ibm.richtext.demo.TextDocument;
 
 import java.awt.BorderLayout;
 import java.awt.FileDialog;
-import java.awt.Frame;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;

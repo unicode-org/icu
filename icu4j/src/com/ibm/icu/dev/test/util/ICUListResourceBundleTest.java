@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/ICUListResourceBundleTest.java,v $
- * $Date: 2002/08/13 22:10:20 $
- * $Revision: 1.4 $
+ * $Date: 2003/05/14 19:03:17 $
+ * $Revision: 1.5 $
  *
  *******************************************************************************
  */
@@ -51,15 +51,15 @@ public final class ICUListResourceBundleTest extends TestFmwk
     }
     public void TestAliases(){
         ResourceBundle rb = ICULocaleData.getResourceBundle("com.ibm.icu.dev.data","TestDataElements","testaliases");
-        Object o = rb.getObject("CollationElements");
-        Object o1 = rb.getObject("zoneTests");
-        
+       /* Object o =*/ rb.getObject("CollationElements");
+       /* Object o1 = */rb.getObject("zoneTests");
+        // should not get an exception
     }
     
     public void TestCircularAliases(){
         try{
 	        ResourceBundle rb = ICULocaleData.getResourceBundle("com.ibm.icu.dev.data","TestDataElements","testcircularalias");
-	        Object o = rb.getObject("aaa");
+	       /* Object o =*/ rb.getObject("aaa");
         }catch(java.util.MissingResourceException e){
             if(e.toString().indexOf("ircular")==-1){
                 errln("Did not get the expected Exception for circular aliases");

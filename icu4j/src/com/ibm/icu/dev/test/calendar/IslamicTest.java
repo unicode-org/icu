@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/IslamicTest.java,v $ 
- * $Date: 2002/08/07 03:10:18 $ 
- * $Revision: 1.5 $
+ * $Date: 2003/05/14 19:02:52 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -143,27 +143,42 @@ public class IslamicTest extends CalendarTest {
 	{
 	    // new IslamicCalendar(TimeZone)
 	    IslamicCalendar cal = new IslamicCalendar(TimeZone.getDefault());
-	}
+        if(cal == null){
+            errln("could not create IslamicCalendar with TimeZone");
+        }
+    }
 	
 	{
 	    // new IslamicCalendar(Locale)
 	    IslamicCalendar cal = new IslamicCalendar(Locale.getDefault());
-	}
+        if(cal == null){
+            errln("could not create IslamicCalendar with Locale");
+        }
+    }
 
 	{
 	    // new IslamicCalendar(Date)
 	    IslamicCalendar cal = new IslamicCalendar(new Date());
+        if(cal == null){
+            errln("could not create IslamicCalendar with Date");
+        }
 	}
 
 	{
 	    // new IslamicCalendar(int year, int month, int date)
 	    IslamicCalendar cal = new IslamicCalendar(800, IslamicCalendar.RAMADAN, 1);
-	}
+        if(cal == null){
+            errln("could not create IslamicCalendar with year,month,date");
+        }
+    }
 
 	{
 	    // new IslamicCalendar(int year, int month, int date, int hour, int minute, int second)
 	    IslamicCalendar cal = new IslamicCalendar(800, IslamicCalendar.RAMADAN, 1, 1, 1, 1);
-	}
+        if(cal == null){
+            errln("could not create IslamicCalendar with year,month,date,hour,minute,second");
+        }
+    }
 
 	{
 	    // setCivil/isCivil
@@ -184,9 +199,9 @@ public class IslamicTest extends CalendarTest {
 
 	    logln(then.toString());
 
-	    cal.add(cal.MONTH, 1);
-	    cal.add(cal.DAY_OF_MONTH, 1);
-	    cal.add(cal.YEAR, 1);
+	    cal.add(Calendar.MONTH, 1);
+	    cal.add(Calendar.DAY_OF_MONTH, 1);
+	    cal.add(Calendar.YEAR, 1);
 
 	    logln(cal.getTime().toString());
 	}

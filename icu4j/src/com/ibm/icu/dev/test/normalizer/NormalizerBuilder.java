@@ -156,7 +156,7 @@ class NormalizerBuilder {
                 //System.out.println("debug: " + line);
             }
             end = line.indexOf(';',start=end+1); // name
-            String name = line.substring(start,end);
+            /*String name =*/ line.substring(start,end);
             end = line.indexOf(';',start=end+1); // general category
             end = line.indexOf(';',start=end+1); // canonical class
 

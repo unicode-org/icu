@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: BidiDemo.java,v $ $Revision: 1.3 $ $Date: 2002/12/12 23:26:57 $
+ * @(#)$RCSfile: BidiDemo.java,v $ $Revision: 1.4 $ $Date: 2003/05/14 19:04:01 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -19,14 +19,11 @@ import com.ibm.richtext.styledtext.StyledText;
 import com.ibm.richtext.textlayout.attributes.AttributeMap;
 import com.ibm.richtext.awtui.TextFrame;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.awt.Toolkit;
 
 import java.io.*;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.Date;
 
 public class BidiDemo {
 

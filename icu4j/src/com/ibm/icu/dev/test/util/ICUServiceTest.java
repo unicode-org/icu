@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/ICUServiceTest.java,v $
- * $Date: 2003/02/05 05:45:16 $
- * $Revision: 1.12 $
+ * $Date: 2003/05/14 19:03:17 $
+ * $Revision: 1.13 $
  *
  *******************************************************************************
  */
@@ -39,10 +39,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.SortedMap;
-import java.util.TreeSet;
 
 public class ICUServiceTest extends TestFmwk
 {    
@@ -458,7 +456,7 @@ public class ICUServiceTest extends TestFmwk
             logln("californio language factory");
 	    StringBuffer buf = new StringBuffer("{");
             String[] idNames = {
-                califactory.californio, califactory.valley, califactory.surfer, califactory.geek
+                CalifornioLanguageFactory.californio, CalifornioLanguageFactory.valley, CalifornioLanguageFactory.surfer, CalifornioLanguageFactory.geek
             };
             for (int i = 0; i < idNames.length; ++i) {
                 String idName = idNames[i];

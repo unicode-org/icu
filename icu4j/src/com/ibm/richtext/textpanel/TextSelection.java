@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TextSelection.java,v $ $Revision: 1.2 $ $Date: 2001/10/30 02:42:48 $
+ * @(#)$RCSfile: TextSelection.java,v $ $Revision: 1.3 $ $Date: 2003/05/14 19:04:00 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -24,10 +24,8 @@ package com.ibm.richtext.textpanel;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Rectangle;
-import java.awt.Point;
 
 import java.text.BreakIterator;
-import java.text.CharacterIterator;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyEvent;
@@ -189,7 +187,7 @@ class TextSelection extends Behavior implements Runnable {
         // leave it unchanged.  Otherwise move to next boundary.
         int nextPos = fBoundaries.following(position);
         if (fBoundaries.previous() == position && 
-                offset.fPlacement==offset.BEFORE_OFFSET) {
+                offset.fPlacement==TextOffset.BEFORE_OFFSET) {
             return;
         }
         
@@ -226,7 +224,7 @@ class TextSelection extends Behavior implements Runnable {
         int prevPos = fBoundaries.previous();
         
         if (prevPos == position) {
-            if (!alwaysMove && offset.fPlacement==offset.AFTER_OFFSET) {
+            if (!alwaysMove && offset.fPlacement==TextOffset.AFTER_OFFSET) {
                 return;
             }
 
@@ -508,7 +506,7 @@ class TextSelection extends Behavior implements Runnable {
      */
     public static boolean keyAffectsSelection(KeyEvent e) {
 
-        if (e.getID() != e.KEY_PRESSED) {
+        if (e.getID() != KeyEvent.KEY_PRESSED) {
             return false;
         }
 

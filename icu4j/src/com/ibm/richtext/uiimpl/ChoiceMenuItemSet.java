@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: ChoiceMenuItemSet.java,v $ $Revision: 1.2 $ $Date: 2002/02/16 03:06:49 $
+ * @(#)$RCSfile: ChoiceMenuItemSet.java,v $ $Revision: 1.3 $ $Date: 2003/05/14 19:04:00 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -18,11 +18,7 @@ import java.util.EventObject;
 
 import java.util.Hashtable;
 
-import com.ibm.richtext.textlayout.attributes.AttributeSet;
-import com.ibm.richtext.styledtext.StyleModifier;
-
 import com.ibm.richtext.textpanel.MTextPanel;
-import com.ibm.richtext.textpanel.TextPanelEvent;
 import com.ibm.richtext.uiimpl.resources.MenuData;
 
 public abstract class ChoiceMenuItemSet extends MenuItemSet {

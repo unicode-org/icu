@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedNumberFormat.java,v $ 
- * $Date: 2003/04/15 14:58:17 $ 
- * $Revision: 1.12 $
+ * $Date: 2003/05/14 19:03:31 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -21,7 +21,7 @@ import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.Vector;
+
 
 /**
  * <p>A class that formats numbers according to a set of rules. This number formatter is
@@ -472,7 +472,7 @@ import java.util.Vector;
  * using these features.</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.12 $ $Date: 2003/04/15 14:58:17 $
+ * $RCSfile: RuleBasedNumberFormat.java,v $ $Revision: 1.13 $ $Date: 2003/05/14 19:03:31 $
  * @see NumberFormat
  * @see DecimalFormat
  * @stable ICU 2.0
@@ -1058,7 +1058,7 @@ public final class RuleBasedNumberFormat extends NumberFormat {
                 // then pull out that collator's rules, append any additional
                 // rules specified in the description, and create a _new_
                 // collator based on the combinaiton of those rules
-                RuleBasedCollator temp = (RuleBasedCollator)collator.getInstance(locale);
+                RuleBasedCollator temp = (RuleBasedCollator)Collator.getInstance(locale);
                 String rules = temp.getRules() + lenientParseRules;
 
                 collator = new RuleBasedCollator(rules);

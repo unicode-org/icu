@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: JTextFrame.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:46:22 $
+ * @(#)$RCSfile: JTextFrame.java,v $ $Revision: 1.2 $ $Date: 2003/05/14 19:04:00 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -17,9 +17,6 @@ package com.ibm.richtext.swingui;
 import com.ibm.richtext.textpanel.MTextPanel;
 import com.ibm.richtext.textpanel.JTextPanel;
 import com.ibm.richtext.styledtext.MConstText;
-
-import com.ibm.richtext.uiimpl.resources.FrameResources;
-import com.ibm.richtext.uiimpl.ResourceUtils;
 
 import java.awt.BorderLayout;
 import java.awt.Toolkit;

@@ -145,7 +145,7 @@ public class UnicodeNormalizer {
             decompPos += UTF16Util.codePointLength(ch);
             int chClass = data.getCanonicalClass(ch);
             int composite = data.getPairwiseComposition(starterCh, ch);
-            if (composite != data.NOT_COMPOSITE
+            if (composite != NormalizerData.NOT_COMPOSITE
             && (lastClass < chClass || lastClass == 0)) {
                 UTF16Util.setCodePointAt(target, starterPos, composite);
                 starterCh = composite;

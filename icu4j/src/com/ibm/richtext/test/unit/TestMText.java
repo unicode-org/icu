@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TestMText.java,v $ $Revision: 1.5 $ $Date: 2003/02/05 06:48:52 $
+ * @(#)$RCSfile: TestMText.java,v $ $Revision: 1.6 $ $Date: 2003/05/14 19:03:59 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -160,7 +160,7 @@ public class TestMText extends TestFmwk {
 
             ts = buf.getTimeStamp();
             CharacterIterator cIter = buf.createCharacterIterator();
-            for (char ch = cIter.first(); ch != cIter.DONE; ch = cIter.next()) {
+            for (char ch = cIter.first(); ch != CharacterIterator.DONE; ch = cIter.next()) {
                 if (ch != allBold.at(0)) {
                     errln("Character is wrong.");
                 }

@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: TextComponent.java,v $ $Revision: 1.5 $ $Date: 2002/02/16 03:06:47 $
+ * @(#)$RCSfile: TextComponent.java,v $ $Revision: 1.6 $ $Date: 2003/05/14 19:04:00 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -16,7 +16,6 @@ package com.ibm.richtext.textpanel;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Point;
@@ -32,7 +31,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowEvent;
 
 import com.ibm.richtext.styledtext.MConstText;
 import com.ibm.richtext.styledtext.MText;
@@ -835,7 +833,7 @@ class TextComponent extends FakeComponent
 
             if (selStart != null && selEnd != null) {
                 haveSelection = true;
-                redrawRect.add(fFormatter.getBoundingRect(selStart, selEnd, fOrigin, fFormatter.LOOSE));
+                redrawRect.add(fFormatter.getBoundingRect(selStart, selEnd, fOrigin, MFormatter.LOOSE));
                 //System.out.println("[3] redrawRect: " + redrawRect);
             }
             else {
@@ -963,7 +961,7 @@ class TextComponent extends FakeComponent
 
         Rectangle getBoundingRect(TextOffset offset1, TextOffset offset2) {
 
-            Rectangle r = fFormatter.getBoundingRect(offset1, offset2, fOrigin, fFormatter.TIGHT);
+            Rectangle r = fFormatter.getBoundingRect(offset1, offset2, fOrigin, MFormatter.TIGHT);
             //r.width += CARET_SLOP;
             //System.out.println("offset1="+offset1+"; offset2="+offset2);
             //System.out.println("bounds width="+r.width+"; host width="+(fHost.getBounds().width));
