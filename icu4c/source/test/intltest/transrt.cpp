@@ -407,7 +407,8 @@ private:
    
     void logNotCanonical(const UnicodeString& label, 
                          const UnicodeString& from, 
-                         const UnicodeString& to, 
+                         const UnicodeString& to,
+                         const UnicodeString& fromCan,
                          const UnicodeString& toCan);
 
     void logFails(const UnicodeString& label);
@@ -418,7 +419,9 @@ private:
                          const UnicodeString& toCan);
 
     void logRoundTripFailure(const UnicodeString& from,
+                             const UnicodeString& toID,
                              const UnicodeString& to,
+                             const UnicodeString& backID,
                              const UnicodeString& back);
 };
 
@@ -714,7 +717,7 @@ void RTTest::test2(UBool quick) {
         UnicodeString targ2 = cs2;
         sourceToTarget->transliterate(targ2);
         if (targ != targ2) {
-            logNotCanonical("Source-Target", cs, targ, targ2);
+            logNotCanonical("Source-Target", cs, targ,cs2, targ2);
         }
     }
 
@@ -764,7 +767,7 @@ void RTTest::test2(UBool quick) {
             UnicodeString targ2 = cs2;
             sourceToTarget->transliterate(targ2);
             if (targ != targ2) {
-                logNotCanonical("Source-Target", cs, targ, targ2);
+                logNotCanonical("Source-Target", cs, targ, cs2,targ2);
             }
         }
     }
@@ -805,7 +808,7 @@ void RTTest::test2(UBool quick) {
         }
         if (isSame(cs, reverse) == FALSE && 
             roundtripExclusionsSet.contains(c) == FALSE) {
-            logRoundTripFailure(cs, targ, reverse);
+            logRoundTripFailure(cs,targetToSource->getID(), targ,sourceToTarget->getID(), reverse);
             failRound.add((UChar32)c);
             continue;
         } 
@@ -819,7 +822,7 @@ void RTTest::test2(UBool quick) {
         UnicodeString reverse2 = targ2;
         sourceToTarget->transliterate(reverse2);
         if (reverse != reverse2) {
-            logNotCanonical("Target-Source", cs, targ, targ2);
+            logNotCanonical("Target-Source", targ, reverse, targ2, reverse2);
         }
     }
 
@@ -878,7 +881,7 @@ void RTTest::test2(UBool quick) {
             if (isSame(cs, reverse) == FALSE && 
                 roundtripExclusionsSet.contains(c) == FALSE&&
                 roundtripExclusionsSet.contains(d) == FALSE) {
-                logRoundTripFailure(cs, targ, reverse);
+                logRoundTripFailure(cs,targetToSource->getID(), targ, sourceToTarget->getID(),reverse);
                 continue;
             } 
         
@@ -891,7 +894,7 @@ void RTTest::test2(UBool quick) {
             UnicodeString reverse2 = targ2;
             sourceToTarget->transliterate(reverse2);
             if (reverse != reverse2) {
-                logNotCanonical("Target-Source", cs, targ, targ2);
+                logNotCanonical("Target-Source", targ,reverse, targ2, reverse2);
             }
         }
     }
@@ -913,11 +916,13 @@ void RTTest::logWrongScript(const UnicodeString& label,
 void RTTest::logNotCanonical(const UnicodeString& label,
                              const UnicodeString& from,
                              const UnicodeString& to,
+                             const UnicodeString& fromCan,
                              const UnicodeString& toCan) {
     log->errln((UnicodeString)"Fail (can.equiv)" +
                label + ": " +
                from + "(" + TestUtility::hex(from) + ") => " +
                to + "(" + TestUtility::hex(to) + ")" +
+               fromCan + "(" + TestUtility::hex(fromCan) + ") => " +
                toCan + " (" +
                TestUtility::hex(toCan) + ")"
                );
@@ -925,34 +930,37 @@ void RTTest::logNotCanonical(const UnicodeString& label,
 }
 
 void RTTest::logFails(const UnicodeString& label) {
-    log->errln((UnicodeString)"<br>Fail (can.equiv) " + label);
+    log->errln((UnicodeString)"<br>Fail " + label);
     ++errorCount;
 }
 
 void RTTest::logToRulesFails(const UnicodeString& label, 
                              const UnicodeString& from, 
                              const UnicodeString& to, 
-                             const UnicodeString& toCan) {
-    log->errln((UnicodeString)"Fail (can.equiv)" +
+                             const UnicodeString& otherTo) {
+    log->errln((UnicodeString)"Fail" +
                label + ": " +
                from + "(" + TestUtility::hex(from) + ") => " +
                to + "(" + TestUtility::hex(to) + ")" +
-               toCan + " (" +
-               TestUtility::hex(toCan) + ")"
+               "!=" +
+               otherTo + " (" +
+               TestUtility::hex(otherTo) + ")"
                );
     ++errorCount;
 }
 
 
 void RTTest::logRoundTripFailure(const UnicodeString& from,
+                                 const UnicodeString& toID,
                                  const UnicodeString& to,
+                                 const UnicodeString& backID,
                                  const UnicodeString& back) {
     if (legalSource->is(from) == FALSE) return; // skip illegals
 
     log->errln((UnicodeString)"Fail Roundtrip: " +
                from + "(" + TestUtility::hex(from) + ") => " +
-               to + "(" + TestUtility::hex(to) + ") => " +
-               back + "(" + TestUtility::hex(back) + ") => ");
+               to + "(" + TestUtility::hex(to) + ")  "+toID+" => " +
+               back + "(" + TestUtility::hex(back) + ") "+backID+" => ");
     ++errorCount;
 }
 
@@ -1058,6 +1066,7 @@ class LegalIndic :public Legal{
     UnicodeSet nukta;
     UnicodeSet virama;
     UnicodeSet sanskritStressSigns;
+    UnicodeSet chandrabindu;
     
 public:        
     LegalIndic(){
@@ -1076,6 +1085,7 @@ public:
         nukta.addAll(UnicodeSet("[\\u093c\\u09bc\\u0a3c\\u0abc\\u0b3c]",status));
         virama.addAll(UnicodeSet("[\\u094d\\u09cd\\u0a4d\\u0acd\\u0b4d\\u0bcd\\u0c4d\\u0ccd\\u0d4d]",status));
         sanskritStressSigns.addAll(UnicodeSet("[\\u0951\\u0952\\u0953\\u0954]",status));
+        chandrabindu.addAll(UnicodeSet("[\\u0901\\u0981\\u0A81\\u0b01]",status));
 
     }
     virtual UBool is(const UnicodeString& sourceString) const;
@@ -1095,9 +1105,32 @@ UBool LegalIndic::is(const UnicodeString& sourceString) const{
         return FALSE;
     }else if(sanskritStressSigns.contains(cp)){
         return FALSE;
+    }else if(chandrabindu.contains(cp) && 
+                ((sourceString.length()>1) && 
+                    vowelSignSet.contains(sourceString.charAt(1)))){
+        return FALSE;
     }
     return TRUE;
 }
+
+static const char* latinForIndic = "[['.0-9A-Za-z~\\u00C0-\\u00C5\\u00C7-\\u00CF\\u00D1-\\u00D6\\u00D9-\\u00DD"
+                                   "\\u00E0-\\u00E5\\u00E7-\\u00EF\\u00F1-\\u00F6\\u00F9-\\u00FD\\u00FF-\\u010F"
+                                   "\\u0112-\\u0125\\u0128-\\u0130\\u0134-\\u0137\\u0139-\\u013E\\u0143-\\u0148"
+                                   "\\u014C-\\u0151\\u0154-\\u0165\\u0168-\\u017E\\u01A0-\\u01A1\\u01AF-\\u01B0"
+                                   "\\u01CD-\\u01DC\\u01DE-\\u01E3\\u01E6-\\u01ED\\u01F0\\u01F4-\\u01F5\\u01F8-\\u01FB"
+                                   "\\u0200-\\u021B\\u021E-\\u021F\\u0226-\\u0233\\u0303-\\u0304\\u0306\\u0314-\\u0315"
+                                   "\\u0325\\u040E\\u0419\\u0439\\u045E\\u04C1-\\u04C2\\u04D0-\\u04D1\\u04D6-\\u04D7"
+                                   "\\u04E2-\\u04E3\\u04EE-\\u04EF\\u1E00-\\u1E99\\u1EA0-\\u1EF9\\u1F01\\u1F03\\u1F05"
+                                   "\\u1F07\\u1F09\\u1F0B\\u1F0D\\u1F0F\\u1F11\\u1F13\\u1F15\\u1F19\\u1F1B\\u1F1D\\u1F21"
+                                   "\\u1F23\\u1F25\\u1F27\\u1F29\\u1F2B\\u1F2D\\u1F2F\\u1F31\\u1F33\\u1F35\\u1F37\\u1F39"
+                                   "\\u1F3B\\u1F3D\\u1F3F\\u1F41\\u1F43\\u1F45\\u1F49\\u1F4B\\u1F4D\\u1F51\\u1F53\\u1F55"
+                                   "\\u1F57\\u1F59\\u1F5B\\u1F5D\\u1F5F\\u1F61\\u1F63\\u1F65\\u1F67\\u1F69\\u1F6B\\u1F6D"
+                                   "\\u1F6F\\u1F81\\u1F83\\u1F85\\u1F87\\u1F89\\u1F8B\\u1F8D\\u1F8F\\u1F91\\u1F93\\u1F95"
+                                   "\\u1F97\\u1F99\\u1F9B\\u1F9D\\u1F9F\\u1FA1\\u1FA3\\u1FA5\\u1FA7\\u1FA9\\u1FAB\\u1FAD"
+                                   "\\u1FAF-\\u1FB1\\u1FB8-\\u1FB9\\u1FD0-\\u1FD1\\u1FD8-\\u1FD9\\u1FE0-\\u1FE1\\u1FE5"
+                                   "\\u1FE8-\\u1FE9\\u1FEC\\u212A-\\u212B\\uE04D\\uE064]"
+                                   "-[\\uE000-\\uE080 \\u01E2\\u01E3]& [[:latin:][:mark:]]]";
+
 void TransliteratorRoundTripTest::TestDevanagariLatin() {
     {
         UErrorCode status = U_ZERO_ERROR;
@@ -1111,7 +1144,7 @@ void TransliteratorRoundTripTest::TestDevanagariLatin() {
     }
     RTTest test("Latin-Devanagari");
     Legal *legal = new LegalIndic();
-    test.test(UnicodeString("[a-zA-Z]", ""), 
+    test.test(UnicodeString(latinForIndic, ""), 
               UnicodeString("[:Devanagari:]", ""), NULL, this, quick, 
               legal);
     delete legal;
@@ -1334,28 +1367,28 @@ static const char * array[][4] = {
     {"KANNADA-MALAYALAM", "[:KANNADA:]", "[:MALAYALAM:]",
     "[\\u0d4c\\u0d57\\u0d46\\u0D34]"}, /*roundtrip exclusions*/
     
-    {"Latin-Bengali","[a-zA-Z]", "[:Bengali:]", 
-    "[\\u09f0\\u09f1]" /*roundtrip exclusions*/ },
+    {"Latin-Bengali",latinForIndic, "[[:Bengali:][\\u0964\\u0965]]", 
+    "[\\u0965\\u09f0\\u09f1]" /*roundtrip exclusions*/ },
     
-    {"Latin-Gurmukhi", "[a-zA-Z]", "[:Gurmukhi:]", 
-    "[\\u0a72\\u0a73\\u0a74]" /*roundtrip exclusions*/},
+    {"Latin-Gurmukhi", latinForIndic, "[[:Gurmukhi:][\\u0964\\u0965]]", 
+    "[\\u0965\\u0a72\\u0a73\\u0a74]" /*roundtrip exclusions*/},
     
-    {"Latin-Gujarati","[a-zA-Z]", "[:Gujarati:]", 
+    {"Latin-Gujarati",latinForIndic, "[[:Gujarati:][\\u0964\\u0965]]", 
+    "[\\u0965]" /*roundtrip exclusions*/},
+    
+    {"Latin-Oriya",latinForIndic, "[[:Oriya:][\\u0964\\u0965]]", 
+    "[\\u0965]" /*roundtrip exclusions*/},
+    
+    {"Latin-Tamil",latinForIndic, "[:Tamil:]", 
     NULL /*roundtrip exclusions*/},
     
-    {"Latin-Oriya","[a-zA-Z]", "[:Oriya:]", 
+    {"Latin-Telugu",latinForIndic, "[:Telugu:]", 
     NULL /*roundtrip exclusions*/},
     
-    {"Latin-Tamil","[a-zA-Z]", "[:Tamil:]", 
+    {"Latin-Kannada",latinForIndic, "[:Kannada:]", 
     NULL /*roundtrip exclusions*/},
     
-    {"Latin-Telugu","[a-zA-Z]", "[:Telugu:]", 
-    NULL /*roundtrip exclusions*/},
-    
-    {"Latin-Kannada","[a-zA-Z]", "[:Kannada:]", 
-    NULL /*roundtrip exclusions*/},
-    
-    {"Latin-Malayalam","[a-zA-Z]", "[:Malayalam:]", 
+    {"Latin-Malayalam",latinForIndic, "[:Malayalam:]", 
     NULL /*roundtrip exclusions*/}  
 
 };
