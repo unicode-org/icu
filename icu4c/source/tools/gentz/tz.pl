@@ -93,14 +93,15 @@
 #   | end
 # - The fifth list is an index by GMT offset.  Each line lists the
 #   zones with the same offset.  The first number on the line
-#   is the GMT offset in seconds.  The second number is the count
+#   is the GMT offset in seconds.  The second number is the default
+#   zone number in the following list, taken from tz.default.  The
+#   third number is the count
 #   of zone numbers to follow.  Each zone number is an integer from
 #   0..n-1, where n is the total number of zones.  The zone numbers
 #   refer to the zone list in alphabetical order.
 #   | 39 # index by offset entries to follow
-#   | -43200,1,280
-#   | -39600,6,279,365,373,393,395,398
-#   | -36000,8,57,278,349,379,386,387,403,405
+#   | -43200,280,1,280 # -12:00 d=Etc/GMT+12 Etc/GMT+12
+#   | -39600,374,6,279,366,374,394,396,399 # -11:00 d=Pacific/Apia Etc/GMT+11 MIT Pacific/Apia Pacific/Midway Pacific/Niue Pacific/Pago_Pago
 #   ...
 #   | end
 ######################################################################
@@ -121,7 +122,8 @@ require 5; # Minimum version of perl needed
 use strict;
 use Getopt::Long;
 use vars qw(@FILES $YEAR $DATA_DIR $OUT $SEP @MONTH
-            $VERSION_YEAR $VERSION_SUFFIX $RAW_VERSION $TZ_ALIAS);
+            $VERSION_YEAR $VERSION_SUFFIX $RAW_VERSION
+            $TZ_ALIAS $TZ_DEFAULT);
 require 'dumpvar.pl';
 use tzparse;
 use tzutil;
@@ -129,6 +131,7 @@ use tzutil;
 # File names
 $OUT = 'tz.txt';
 $TZ_ALIAS = 'tz.alias';
+$TZ_DEFAULT = 'tz.default';
 
 # Separator between fields in the output file
 $SEP = ','; # Don't use ':'!
@@ -221,6 +224,17 @@ sub main {
     print
         "Read ", scalar keys %ZONES, " current zones and ",
         scalar keys %RULES, " rules for $YEAR\n";
+
+    # Make sure we have a zone named GMT from either the
+    # UNIX data or the alias table.  If not, add one.
+    if (!exists $ZONES{GMT}) {
+        print "Adding GMT zone\n";
+        my %GMT = ('format' => 'GMT',
+                   'gmtoff' => '0:00',
+                   'rule' => $TZ::STANDARD,
+                   'until' => '');
+        $ZONES{GMT} = \%GMT;
+    }
 
     # Write out the zone data in a compact readable format.
 
@@ -345,9 +359,14 @@ sub main {
     # EMIT INDEX BY GMT OFFSET
     ############################################################
     # Create a hash mapping zone name -> integer, from 0..n-1.
+    # Create an array mapping zone number -> name.
     my %zoneNumber;
+    my @zoneName;
     my $i = 0;
-    foreach (sort keys %ZONES) { $zoneNumber{$_} = $i++; }
+    foreach (sort keys %ZONES) {
+        $zoneName[$i] = $_;
+        $zoneNumber{$_} = $i++;
+    }
 
     # Create a hash by index.  The hash has offset integers as keys
     # and arrays of index numbers as values.
@@ -357,12 +376,86 @@ sub main {
         push @{$offsetMap{$offset}}, $zoneNumber{$_};
     }
 
+    # Select defaults.  We do this by reading the file $TZ_DEFAULT.
+    # If there are multiple errors, we want to report them all,
+    # so we set a flag and die at the end if there are problems.
+    my %defaults; # key=offset integer, value=zone #
+    my $ok = 1;
+    open(IN, $TZ_DEFAULT) or die "Can't open $TZ_DEFAULT: $!";
+    while (<IN>) {
+        my $raw = $_;
+        s/\#.*//; # Trim comments
+        next unless (/\S/); # Skip blank lines
+        if (/^\s*(\S+)\s*$/) {
+            my $z = $1;
+            if (! exists $ZONES{$z}) {
+                print "Error: Nonexistent zone $z listed in $TZ_DEFAULT line: $raw";
+                $ok = 0;
+                next;
+            }
+            my $offset = parseOffset($ZONES{$z}->{gmtoff});
+            if (exists $defaults{$offset}) {
+                print
+                    "Error: Offset ", formatOffset($offset), " has both ",
+                    $zoneName[$defaults{$offset}], " and ", $z,
+                    " specified as defaults\n";
+                $ok = 0;
+                next;
+            }
+            $defaults{$offset} = $zoneNumber{$z};
+        } else {
+            print "Error: Can't parse line in $TZ_DEFAULT: $raw";
+            $ok = 0;
+        }
+    }
+    close(IN);
+    die "Error: Aborting due to errors in $TZ_DEFAULT\n" unless ($ok);
+    print "Incorporated ", scalar keys %defaults, " defaults from $TZ_DEFAULT\n";
+
     # Emit it
+    my $missing = 0;
     print OUT scalar keys %offsetMap, " # index by offset entries to follow\n";
     foreach (sort {$a <=> $b} keys %offsetMap) {
         my $aref = $offsetMap{$_};
-        print OUT $_, ",", scalar @{$aref}, ",", join(",", @{$aref}), "\n";
+        my $def = -1;
+        if (exists $defaults{$_}) {
+            $def = $defaults{$_};
+        } else {
+            # If there is an offset for which we have no listed default
+            # in $TZ_DEFAULT, we try to figure out a reasonable default
+            # ourselves.  We ignore any zone named Etc/ because that's not
+            # a "real" zone; it's just one listed as a POSIX convience.
+            # We take the first (alphabetically) zone of what's left,
+            # and if there are more than one of those, we emit a warning.
+
+            my $ambiguous = 0;
+            # Ignore zones named Etc/ and take the first one we otherwise see;
+            # if there is more than one of those, emit a warning.
+            foreach (sort map($zoneName[$_], @{$aref})) {
+                next if (m|^Etc/|);
+                if ($def < 0) {
+                    $def = $zoneNumber{$_}
+                } else {
+                    $ambiguous = 1;
+                }
+            }
+            $def = $aref->[0] if ($def < 0);
+            if ($ambiguous) {
+                $missing = 1;
+                print
+                    "Warning: No default for GMT", formatOffset($_),
+                    ", using ", $zoneName[$def], "\n";
+            }
+        }
+        # Emit the actual line, including a descriptive comment
+        print OUT
+            $_, ",", $def, ",",
+            scalar @{$aref}, ",", join(",", @{$aref}),
+            " # ", formatOffset($_), " d=", $zoneName[$def], " ",
+            join(" ", map($zoneName[$_], @{$aref})), "\n";
     }
+    print "Defaults may be specified in $TZ_DEFAULT\n" if ($missing);
+
     print OUT "end\n";
 
     ############################################################
@@ -427,12 +520,6 @@ sub incorporateAliases {
             if (!exists $zones->{$original}) {
                 die "Bad alias in $aliasFile: $alias maps to the nonexistent " .
                     "zone $original. Please fix this entry in the alias table.\n";
-            }
-            # We hardcode the GMT zone in the TimeZone class; don't include
-            # it in the tz.txt file.
-            if ($alias eq "GMT") {
-                die "Bad alias in $aliasFile: GMT is a hardcoded system zone. " .
-                    "Please remove it from the alias table.\n";
             }
             # Create the alias!
             $zones->{$alias} = $zones->{$original};
@@ -532,6 +619,21 @@ sub parseOffset {
     } else {
         die "Cannot parse offset \"$_\"";
     }
+}
+
+# Format an offset in seconds and return a string of the form
+# /[+-]\d{1,2}:\d\d(:\d\d)?/.
+# Param: Offset in seconds
+# Return: String
+sub formatOffset {
+    local $_ = shift;
+    my $result = $_<0 ? "-":"+";
+    $_ = -$_ if ($_ < 0);
+    my $sec = $_ % 60;  $_ = ($_ - $sec) / 60;
+    my $min = $_ % 60;  $_ = ($_ - $min) / 60;
+    $min = "0$min" if ($min < 10);
+    $sec = $sec ? ($sec < 10 ? ":0$sec" : ":$sec") : "";
+    $result . $_ . ":" . $min . $sec;
 }
 
 # Parse a time of the format dd:dds, where s is a suffix character.
