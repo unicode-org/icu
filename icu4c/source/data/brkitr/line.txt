@@ -212,10 +212,13 @@ $CM+   $NUcm;       # Rule 7c
 $NUcm $ALcm+;
 
 # LB 18
-$PRcm? ($OPcm | $HYcm)? $NUcm ($NUcm | $IScm)* $CLcm? $POcm?;
+$PRcm? ($OPcm | $HYcm)? $NUcm ($NUcm | $IScm | $SYcm)* $CLcm? $POcm?;
+$PRcm $ALcm;
+$PRcm $IDcm;
 
 # LB 19
 $CM* $ALcm+;    # The $CM* is from rule 7C, and unattached CM is treated as AL
+$IScm $ALcm;
 
 #
 #  Reverse Rules.
@@ -326,11 +329,14 @@ $CM* $NU $CM+ / $LB5Breaks;        # Rule 7c
 $CM* $ALPlus $CM* $NU;
 
 # LB 18
-($CM* $PO)? ($CM* $CL)? ($CM* ($NU | $IS))* $CM* $NU ($CM* ($OP | $HY))? ($CM* $PR)?;
+($CM* $PO)? ($CM* $CL)? ($CM* ($NU | $IS | $SY))* $CM* $NU ($CM* ($OP | $HY))? ($CM* $PR)?;
+$CM* $ALPlus $CM* $PR;
+$CM* ($ID | $BackHangulSyllable) $CM* $PR;
 
 # LB 19
 $CM* $ALPlus $CM* $ALPlus;
 # The $CM* is from rule 7C, and unattached CM is treated as AL
+$CM* $ALPlus $CM* $IS;
 $CM* $ALPlus $CM+ / $LB5Breaks;
 
 ## problem state table can't handle lookahead when it is at the
@@ -358,8 +364,8 @@ $SP+ $CM* $QU;
 $SP+ $CM* $CL;
 
 # LB 18
-($CM* $IS)+ $CM* $NU;
-$CL $CM* ($NU | $IS);
+($CM* ($IS | $SY))+ $CM* $NU;
+$CL $CM* ($NU | $IS | $SY);
 
 ## -------------------------------------------------
 
@@ -384,3 +390,4 @@ $CL $CM* $SP+;
 # LB 18
 $HY $CM* $NU;
 $IS $CM* $CL;
+$SY $CM* $CL;
