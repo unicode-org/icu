@@ -207,9 +207,6 @@
 				RelativePath=".\sprintf.h">
 			</File>
 			<File
-				RelativePath=".\sscanf.h">
-			</File>
-			<File
 				RelativePath=".\ufile.h">
 			</File>
 			<File

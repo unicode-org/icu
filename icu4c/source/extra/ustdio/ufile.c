@@ -47,8 +47,9 @@ u_finit(FILE        *f,
 #else
     result->fFile = f;
 #endif
-    result->fUCPos     = result->fUCBuffer;
-    result->fUCLimit     = result->fUCBuffer;
+    result->str.fBuffer = result->fUCBuffer;
+    result->str.fPos    = result->fUCBuffer;
+    result->str.fLimit  = result->fUCBuffer;
 
 #if !UCONFIG_NO_FORMATTING
         /* if locale is 0, use the default */
@@ -56,7 +57,7 @@ u_finit(FILE        *f,
             locale = uloc_getDefault();
         }
 
-        if(u_locbund_init(&result->fBundle, locale) == 0) {
+        if(u_locbund_init(&result->str.fBundle, locale) == 0) {
             /* DO NOT FCLOSE HERE! */
             uprv_free(result);
             return 0;
@@ -77,7 +78,7 @@ u_finit(FILE        *f,
 
     if(U_FAILURE(status)) {
 #if !UCONFIG_NO_FORMATTING
-        u_locbund_close(&result->fBundle);
+        u_locbund_close(&result->str.fBundle);
 #endif
         /* DO NOT fclose here!!!!!! */
         uprv_free(result);
@@ -127,8 +128,8 @@ u_frewind(UFILE *file)
     u_fflush(file);
     rewind(file->fFile);
     ucnv_reset(file->fConverter);
-    file->fUCPos   = file->fUCBuffer;
-    file->fUCLimit = file->fUCBuffer;
+    file->str.fPos   = file->fUCBuffer;
+    file->str.fLimit = file->fUCBuffer;
 }
 
 U_CAPI void U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
@@ -141,7 +142,7 @@ u_fclose(UFILE *file)
         fclose(file->fFile);
 
 #if !UCONFIG_NO_FORMATTING
-    u_locbund_close(&file->fBundle);
+    u_locbund_close(&file->str.fBundle);
 #endif
 
     ucnv_close(file->fConverter);
@@ -159,16 +160,16 @@ u_fgetfile(    UFILE         *f)
 U_CAPI const char*  U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_fgetlocale(    UFILE        *file)
 {
-    return file->fBundle.fLocale;
+    return file->str.fBundle.fLocale;
 }
 
 U_CAPI int32_t U_EXPORT2 /* U_CAPI ... U_EXPORT2 added by Peter Kirk 17 Nov 2001 */
 u_fsetlocale(const char        *locale,
              UFILE        *file)
 {
-    u_locbund_close(&file->fBundle);
+    u_locbund_close(&file->str.fBundle);
 
-    return u_locbund_init(&file->fBundle, locale) == 0 ? -1 : 0;
+    return u_locbund_init(&file->str.fBundle, locale) == 0 ? -1 : 0;
 }
 
 #endif
@@ -204,7 +205,7 @@ u_fsetcodepage(    const char    *codepage,
     }
 #endif
 
-    if ((file->fUCPos == file->fUCBuffer) && (file->fUCLimit == file->fUCBuffer)) {
+    if ((file->str.fPos == file->str.fBuffer) && (file->str.fLimit == file->str.fBuffer)) {
         ucnv_close(file->fConverter);
         file->fConverter = ucnv_open(codepage, &status);
         if(U_SUCCESS(status)) {

@@ -38,7 +38,7 @@ u_sprintf_write(void        *context,
                 const UChar *str,
                 int32_t     count)
 {
-    u_localized_string *output = (u_localized_string *)context;
+    u_localized_print_string *output = (u_localized_print_string *)context;
     int32_t size = ufmt_min(count, output->available);
 
     u_strncpy(output->str + (output->len - output->available), str, size);
@@ -52,7 +52,7 @@ u_sprintf_pad_and_justify(void                        *context,
                           const UChar                 *result,
                           int32_t                     resultLen)
 {
-    u_localized_string *output = (u_localized_string *)context;
+    u_localized_print_string *output = (u_localized_print_string *)context;
     int32_t written = 0;
 
     resultLen = ufmt_min(resultLen, output->available);
@@ -228,7 +228,7 @@ u_vsnprintf_u(UChar    *buffer,
     int32_t          patCount;
     int32_t          written = 0;   /* haven't written anything yet */
 
-    u_localized_string outStr;
+    u_localized_print_string outStr;
 
     if (count < 0) {
         count = INT32_MAX;
