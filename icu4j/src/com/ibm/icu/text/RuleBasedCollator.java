@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $ 
-* $Date: 2002/11/20 19:14:08 $ 
-* $Revision: 1.23 $
+* $Date: 2002/11/21 22:19:52 $ 
+* $Revision: 1.24 $
 *
 *******************************************************************************
 */
@@ -3714,8 +3714,13 @@ public final class RuleBasedCollator extends Collator
                       }
                     }
                     contractionOffset++;
-                  } else {
+                  } else if(!isSpecial(CE)) {
                     addLatinOneEntry(contractionOffset++, CE, s);
+                  } else {                    
+                      latinOneCEs_[contractionOffset] = BAIL_OUT_CE_;
+                      latinOneCEs_[latinOneTableLen_+contractionOffset] = BAIL_OUT_CE_;
+                      latinOneCEs_[2*latinOneTableLen_+contractionOffset] = BAIL_OUT_CE_;
+                      contractionOffset++;
                   }
                   UCharOffset++;
                   s.primShift = 24; s.secShift = 24; s.terShift = 24;
