@@ -210,17 +210,33 @@ res_getString(const ResourceData *pResData, const Resource res, int32_t *pLength
 
 U_CFUNC const uint8_t *
 res_getBinary(const ResourceData *pResData, const Resource res, int32_t *pLength) {
-    int32_t *p=(int32_t *)RES_GET_POINTER(pResData->pRoot, res);
-    *pLength=*p++;
-    return (uint8_t *)p;
+    if(res!=RES_BOGUS) {
+        int32_t *p=(int32_t *)RES_GET_POINTER(pResData->pRoot, res);
+        *pLength=*p++;
+        if (*pLength == 0) {
+            p = NULL;
+        }
+        return (uint8_t *)p;
+    } else {
+        *pLength=0;
+        return NULL;
+    }
 }
 
 
 U_CFUNC const int32_t *
 res_getIntVector(const ResourceData *pResData, const Resource res, int32_t *pLength) {
-    int32_t *p=(int32_t *)RES_GET_POINTER(pResData->pRoot, res);
-    *pLength=*p++;
-    return (const int32_t *)p;
+    if(res!=RES_BOGUS && RES_GET_TYPE(res)==RES_INT_VECTOR) {
+        int32_t *p=(int32_t *)RES_GET_POINTER(pResData->pRoot, res);
+        *pLength=*p++;
+        if (*pLength == 0) {
+            p = NULL;
+        }
+        return (const int32_t *)p;
+    } else {
+        *pLength=0;
+        return NULL;
+    }
 }
 
 U_CFUNC int32_t
