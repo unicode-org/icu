@@ -1121,7 +1121,7 @@ static char * getCEs(char *str, uint32_t *ces, UErrorCode *status) {
 /** 
 * Getting the FractionalUCA.txt file stream
 */
-static FileStream * getFractionalUCA()
+static FileStream * getFractionalUCA(void)
 {
     char  dir[250];
     char *pDir = dir;
@@ -1659,7 +1659,7 @@ static UBool checkSortKeyValidity(UCollator *coll,
     return TRUE; 
 }
 
-static void TestSortKeyValidity()
+static void TestSortKeyValidity(void)
 {
     /* testing UCA collation elements */
     UErrorCode  status      = U_ZERO_ERROR;
