@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2003/04/09 20:03:45 $ 
-* $Revision: 1.71 $
+* $Date: 2003/04/09 21:39:15 $ 
+* $Revision: 1.72 $
 *
 *******************************************************************************
 */
@@ -21,7 +21,6 @@ import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.UTF16;
-import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.impl.NormalizerImpl;
 import com.ibm.icu.impl.UCharacterUtility;
 import com.ibm.icu.impl.UCharacterName;
