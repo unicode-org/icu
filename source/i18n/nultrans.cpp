@@ -9,7 +9,7 @@
 */
 #include "unicode/nultrans.h"
 
-const char* NullTransliterator::_ID = "Null";
+const UnicodeString NullTransliterator::ID = UnicodeString("Null", "");
 
 Transliterator* NullTransliterator::clone(void) const {
     return new NullTransliterator();
