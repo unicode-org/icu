@@ -393,7 +393,11 @@ public class LDML2ICUConverter {
         int savedLength = xpath.length();
         getXPath(root, xpath);
         int oldLength = xpath.length();
-        if(xpath.indexOf(LDMLConstants.ALT)>-1){
+        if(isDraft(root, xpath)&& !writeDraft){
+            return null;
+        }
+        //the alt atrribute is set .. so ignore the resource
+        if(isAlternate(root)){
             return null;
         }
         table.name = (String) keyNameMap.get(root.getNodeName());
@@ -405,6 +409,13 @@ public class LDML2ICUConverter {
             String name = node.getNodeName();
             ICUResourceWriter.Resource res = null;
             getXPath(node, xpath);
+            if(isDraft(node, xpath)&& !writeDraft){
+                continue;
+            }
+            //the alt atrribute is set .. so ignore the resource
+            if(isAlternate(node)){
+                continue;
+            }
             if(name.equals(LDMLConstants.ALIAS)){
                 res = parseAliasResource(node, xpath);
                 res.name = name;
@@ -450,7 +461,11 @@ public class LDML2ICUConverter {
         int savedLength = xpath.length();
         getXPath(root, xpath);
         int oldLength = xpath.length();
-        if(xpath.indexOf(LDMLConstants.ALT)>-1){
+        if(isDraft(root, xpath)&& !writeDraft){
+            return null;
+        }
+        //the alt atrribute is set .. so ignore the resource
+        if(isAlternate(root)){
             return null;
         }
         table.name = (String) keyNameMap.get(root.getNodeName());
@@ -472,6 +487,13 @@ public class LDML2ICUConverter {
                 str.val = LDMLUtilities.getAttributeValue(node,LDMLConstants.TYPE);
                 res = str;
             }else if(name.equals(LDMLConstants.REGION)){
+                if(isDraft(node, xpath)&& !writeDraft){
+                    continue;
+                }
+                //the alt atrribute is set .. so ignore the resource
+                if(isAlternate(node)){
+                    continue;
+                }
                 ICUResourceWriter.ResourceIntVector vector = new ICUResourceWriter.ResourceIntVector();
                 vector.name = LDMLUtilities.getAttributeValue(node, LDMLConstants.ISO_3166);
                 ICUResourceWriter.ResourceInt zero = new ICUResourceWriter.ResourceInt();
@@ -507,7 +529,11 @@ public class LDML2ICUConverter {
         int savedLength = xpath.length();
         getXPath(root, xpath);
         int oldLength = xpath.length();
-        if(xpath.indexOf(LDMLConstants.ALT)>-1){
+        if(isDraft(root, xpath)&& !writeDraft){
+            return null;
+        }
+        //the alt atrribute is set .. so ignore the resource
+        if(isAlternate(root)){
             return null;
         }
         for(Node node=root.getFirstChild(); node!=null; node=node.getNextSibling()){
@@ -571,7 +597,6 @@ public class LDML2ICUConverter {
             }
     		String name = node.getNodeName();
             ICUResourceWriter.Resource res = null;
-            
             
             if(name.equals(LDMLConstants.ALIAS)){
                 ICUResourceWriter.ResourceString str = new ICUResourceWriter.ResourceString();
@@ -772,6 +797,10 @@ public class LDML2ICUConverter {
         int savedLength = xpath.length();
         getXPath(root,xpath);
         int oldLength = xpath.length();
+        // the locale display names are maked draft
+        if(isDraft(root, xpath)&& !writeDraft){
+            return null;
+        }
         for(Node node=root.getFirstChild(); node!=null; node=node.getNextSibling()){
             if(node.getNodeType()!=Node.ELEMENT_NODE){
                 continue;
@@ -813,6 +842,13 @@ public class LDML2ICUConverter {
         ICUResourceWriter.ResourceTable table = new ICUResourceWriter.ResourceTable();
         table.name = (String)keyNameMap.get(LDMLConstants.TYPES);
         ICUResourceWriter.ResourceTable current = null;
+        
+        if(isDraft(root, xpath)&& !writeDraft){
+            return null;
+        }
+        if(isAlternate(root)){
+            return null;
+        }
         for(int i=0; i<registeredKeys.length; i++){
             myXpath.append(registeredKeys[i]);
             myXpath.append("']");
@@ -829,16 +865,15 @@ public class LDML2ICUConverter {
                 ICUResourceWriter.ResourceString currentString = null;
                 for(int j=0; j<list.getLength(); j++){
                     Node item = list.item(j);
-                    String type = LDMLUtilities.getAttributeValue(item, LDMLConstants.TYPE);
-                    String value = LDMLUtilities.getNodeValue(item);
-                    
-                    String altVal = LDMLUtilities.getAttributeValue(item, LDMLConstants.ALT);
-                    // the alt atrribute is set .. so ignore the resource
-                    if(altVal!=null){
+                    if(isDraft(item, xpath)&& !writeDraft){
                         continue;
                     }
-                    //TODO now check if this string is draft
-                    
+                    if(isAlternate(item)){
+                        continue;
+                    }
+                    String type = LDMLUtilities.getAttributeValue(item, LDMLConstants.TYPE);
+                    String value = LDMLUtilities.getNodeValue(item);
+               
                     ICUResourceWriter.ResourceString string = new ICUResourceWriter.ResourceString();
                     string.name = type;
                     string.val  = value;
@@ -864,7 +899,14 @@ public class LDML2ICUConverter {
         int savedLength = xpath.length();
         getXPath(root, xpath);
         int oldLength = xpath.length();
-        
+        // if the whole list is marked draft
+        // then donot output it.
+        if(isDraft(root, xpath)&& !writeDraft){
+            return null;
+        }
+        if(isAlternate(root)){
+            return null;
+        }
         Node alias = LDMLUtilities.getNode(root,"alias", null, null);
         if(alias!=null){
             ICUResourceWriter.Resource res =  parseAliasResource(alias,xpath);
@@ -877,9 +919,14 @@ public class LDML2ICUConverter {
         		continue;
             }
             getXPath(node, xpath);
-            String altVal = LDMLUtilities.getAttributeValue(node, LDMLConstants.ALT);
-            // the alt atrribute is set .. so ignore the resource
-            if(altVal!=null){
+            // a ceratain element of the list
+            // is marked draft .. just dont
+            // output that item
+            if(isDraft(node, xpath)&& !writeDraft){
+                continue;
+            }
+            //the alt atrribute is set .. so ignore the resource
+            if(isAlternate(node)){
                 continue;
             }
             if(current==null){
@@ -906,14 +953,25 @@ public class LDML2ICUConverter {
         int savedLength = xpath.length();
         getXPath(root, xpath);
         int oldLength = xpath.length();
+        
+        if(isDraft(root, xpath)&& !writeDraft){
+            return null;
+        }
+        //the alt atrribute is set .. so ignore the resource
+        if(isAlternate(root)){
+             return null;
+        }
         for(Node node = root.getFirstChild(); node!=null; node=node.getNextSibling()){
             if(node.getNodeType()!=Node.ELEMENT_NODE){
                 continue;
             }
             getXPath(node, xpath);
-            String altVal = LDMLUtilities.getAttributeValue(node, LDMLConstants.ALT);
-            // the alt atrribute is set .. so ignore the resource
-            if(altVal!=null){
+            
+            if(isDraft(node, xpath)&& !writeDraft){
+                continue;
+            }
+            //the alt atrribute is set .. so ignore the resource
+            if(isAlternate(node)){
                 continue;
             }
             if(current==null){
@@ -941,7 +999,15 @@ public class LDML2ICUConverter {
         ICUResourceWriter.Resource current = null, first=null;
         int savedLength = xpath.length();
         getXPath(root,xpath);
-        int oldLength = xpath.length();
+        int oldLength = xpath.length(); 
+        
+        if(isDraft(root, xpath)&& !writeDraft){
+            return null;
+        }
+        if(isAlternate(root)){
+            return null;
+        }
+        
         for(Node node = root.getFirstChild(); node!=null; node=node.getNextSibling()){
             if(node.getNodeType()!=Node.ELEMENT_NODE){
                 continue;
@@ -990,6 +1056,14 @@ public class LDML2ICUConverter {
         ICUResourceWriter.ResourceTable table = new ICUResourceWriter.ResourceTable();
         table.name = root.getNodeName();
         getXPath(root,xpath);
+        // if the whole list is marked draft
+        // then donot output it.
+        if(isDraft(root, xpath)&& !writeDraft){
+            return null;
+        }
+        if(isAlternate(root)){
+            return null;
+        }
         ICUResourceWriter.Resource res = parseDelimiter(root, xpath);
         if(res!=null){
             table.first = res;
@@ -1002,7 +1076,14 @@ public class LDML2ICUConverter {
         int savedLength = xpath.length();
         getXPath(root, xpath);
         int oldLength = xpath.length();
-        
+        // if the whole list is marked draft
+        // then donot output it.
+        if(isDraft(root, xpath)&& !writeDraft){
+            return null;
+        }
+        if(isAlternate(root)){
+            return null;
+        }
         for(Node node = root.getFirstChild(); node!=null; node=node.getNextSibling()){
             if(node.getNodeType()!=Node.ELEMENT_NODE){
                 continue;
@@ -1012,7 +1093,9 @@ public class LDML2ICUConverter {
             ICUResourceWriter.Resource res = null;
             if(name.equals(LDMLConstants.QS) || name.equals(LDMLConstants.QE)||
                name.equals(LDMLConstants.AQS)|| name.equals(LDMLConstants.AQE)){
-                res = parseStringResource(node);
+                if(!(isDraft(node, xpath) && !writeDraft)|| !isAlternate(node)){
+                    res = parseStringResource(node);
+                }
             }else if(name.equals(LDMLConstants.ALIAS)){
                 res = parseAliasResource(node, xpath);
             }else if(name.equals(LDMLConstants.MAPPING)){
@@ -1044,19 +1127,36 @@ public class LDML2ICUConverter {
         int savedLength = xpath.length();
         getXPath(root, xpath);
         int oldLength = xpath.length();
+        // if the whole list is marked draft
+        // then donot output it.
+        if(isDraft(root, xpath)&& !writeDraft){
+            return null;
+        }
+        if(isAlternate(root)){
+            return null;
+        }
+        int numElements = 0;
         for(Node node = root.getFirstChild(); node!=null; node=node.getNextSibling()){
             if(node.getNodeType()!=Node.ELEMENT_NODE){
                 continue;
             }
             String name = node.getNodeName();
             ICUResourceWriter.Resource res = null;
-            
+            // if the whole list is marked draft
+            // then donot output it.
+            if(isDraft(node, xpath)&& !writeDraft){
+                continue;
+            }
+            if(isAlternate(node)){
+                continue;
+            }
             // here we assume that the DTD enforces the correct order
             // of elements
             if(name.equals(LDMLConstants.HEIGHT)||name.equals(LDMLConstants.WIDTH)){
                 ICUResourceWriter.ResourceInt resint = new ICUResourceWriter.ResourceInt();
                 resint.val = LDMLUtilities.getNodeValue(node);
                 res = resint;
+                numElements++;
             }else if(name.equals(LDMLConstants.ALIAS)){
                 res = parseAliasResource(node, xpath);
                 //We know that paperSize element can only contain either alias or (height and width)
@@ -1076,6 +1176,13 @@ public class LDML2ICUConverter {
             xpath.delete(oldLength, xpath.length());
         }
         xpath.delete(savedLength, xpath.length());
+        //TODO : actually there can 1 element in the LDML file
+        // since every element node is either inherited or overidden
+        // so fix the code to find the missing element form fully  
+        // locale
+        if(numElements!=2){ 
+            return null;
+        }
         return vector;
     }
     private ICUResourceWriter.Resource parseMeasurement (Node root, StringBuffer xpath){
@@ -1083,6 +1190,14 @@ public class LDML2ICUConverter {
         int savedLength = xpath.length();
         getXPath(root, xpath);
         int oldLength = xpath.length();
+        // if the whole list is marked draft
+        // then donot output it.
+        if(isDraft(root, xpath)&& !writeDraft){
+            return null;
+        }
+        if(isAlternate(root)){
+            return null;
+        }
         for(Node node = root.getFirstChild(); node!=null; node=node.getNextSibling()){
             if(node.getNodeType()!=Node.ELEMENT_NODE){
                 continue;
@@ -1091,10 +1206,11 @@ public class LDML2ICUConverter {
             String name = node.getNodeName();
             ICUResourceWriter.Resource res = null;
             if(name.equals(LDMLConstants.MS)){
-                String altVal = LDMLUtilities.getAttributeValue(node, LDMLConstants.ALT);
-                // the alt atrribute is set .. so ignore the resource
-                if(altVal!=null){
-                    continue;
+                if(isDraft(node, xpath)&& !writeDraft){
+                    return null;
+                }
+                if(isAlternate(node)){
+                    return null;
                 }
                 ICUResourceWriter.ResourceInt resint = new ICUResourceWriter.ResourceInt();
                 String sys = LDMLUtilities.getAttributeValue(node,LDMLConstants.TYPE);
@@ -1135,7 +1251,11 @@ public class LDML2ICUConverter {
         int savedLength = xpath.length();
         getXPath(root, xpath);
         int oldLength = xpath.length();
-        
+        //if the whole calendar node is marked draft then
+        //dont write anything
+        if(isDraft(root, xpath)&& !writeDraft){
+            return null;
+        }
         for(Node node=root.getFirstChild(); node!=null; node=node.getNextSibling()){
             if(node.getNodeType()!=Node.ELEMENT_NODE){
                 continue;
@@ -1147,18 +1267,29 @@ public class LDML2ICUConverter {
                 //dont compute xpath
                 res = parseAliasResource(node,xpath);
             }else if(name.equals(LDMLConstants.DEFAULT) ){
+                if(isAlternate(node)){
+                    continue;
+                }
+                if(isDraft(node, xpath)&& !writeDraft){
+                    continue;
+                }
                 ICUResourceWriter.ResourceString str = new ICUResourceWriter.ResourceString();
                 str.name = name;
                 str.val = LDMLUtilities.getAttributeValue(node, LDMLConstants.TYPE);
                 res = str;
             }else if(name.equals(LDMLConstants.LPC)){
-                getXPath(node, xpath);
-                if(xpath.indexOf(LDMLConstants.ALT)<0){
-                    ICUResourceWriter.ResourceString str = new ICUResourceWriter.ResourceString();
-                    str.name = (String) keyNameMap.get(name);
-                    str.val = LDMLUtilities.getNodeValue(node);
-                    res = str;
+                getXPath(node, xpath); 
+                if(isAlternate(node)){
+                    continue;
                 }
+                if(isDraft(node, xpath)&& !writeDraft){
+                    continue;
+                }
+                ICUResourceWriter.ResourceString str = new ICUResourceWriter.ResourceString();
+                str.name = (String) keyNameMap.get(name);
+                str.val = LDMLUtilities.getNodeValue(node);
+                res = str;
+                
             }else if(name.equals(LDMLConstants.CALENDARS)){
                 res = parseCalendars(node, xpath);
             }else if(name.equals(LDMLConstants.TZN)){
@@ -1189,7 +1320,11 @@ public class LDML2ICUConverter {
         int savedLength = xpath.length();
         getXPath(root, xpath);
         int oldLength = xpath.length();
-        
+        //if the whole calendar node is marked draft then
+        //dont write anything
+        if(isDraft(root, xpath)&& !writeDraft){
+            return null;
+        }
         for(Node node=root.getFirstChild(); node!=null; node=node.getNextSibling()){
             if(node.getNodeType()!=Node.ELEMENT_NODE){
                 continue;
@@ -1238,6 +1373,12 @@ public class LDML2ICUConverter {
         getXPath(root, xpath);
         int oldLength = xpath.length();
         
+        if(isDraft(root, xpath)&& !writeDraft){
+            return null;
+        }
+        if(isAlternate(root)){
+            return null;
+        }
         for(Node node=root.getFirstChild(); node!=null; node=node.getNextSibling()){
             if(node.getNodeType()!=Node.ELEMENT_NODE){
                 continue;
@@ -1302,7 +1443,7 @@ public class LDML2ICUConverter {
             }
             String name = node.getNodeName();
             ICUResourceWriter.Resource res = null;
-            
+            getXPath(node, xpath);
             if(name.equals(LDMLConstants.ALIAS)){
                 res = parseAliasResource(node, xpath);
                 return res;
@@ -1313,8 +1454,8 @@ public class LDML2ICUConverter {
                 res = str;
             }else if(name.equals(LDMLConstants.SHORT)){
                 /* get information about long */
-                Node ssn = LDMLUtilities.getNode(node, LDMLConstants.STANDARD, fullyResolvedDoc, xpath.toString());
-                Node sdn = LDMLUtilities.getNode(node, LDMLConstants.DAYLIGHT, fullyResolvedDoc, xpath.toString());
+                Node ssn = getVettedNode(node, LDMLConstants.STANDARD, xpath);
+                Node sdn = getVettedNode(node, LDMLConstants.DAYLIGHT, xpath);
                 if(ssn==null||sdn==null){
                     System.err.println("Could not get timeZone string for " + xpath.toString());
                     System.exit(-1);
@@ -1331,8 +1472,8 @@ public class LDML2ICUConverter {
                 }
             }else if(name.equals(LDMLConstants.LONG)){
                 /* get information about long */
-                Node lsn = LDMLUtilities.getNode(node, LDMLConstants.STANDARD, fullyResolvedDoc, xpath.toString());
-                Node ldn = LDMLUtilities.getNode(node, LDMLConstants.DAYLIGHT, fullyResolvedDoc, xpath.toString());
+                Node lsn = getVettedNode(node, LDMLConstants.STANDARD, xpath);
+                Node ldn = getVettedNode(node, LDMLConstants.DAYLIGHT, xpath);
                 if(lsn==null||ldn==null){
                     System.err.println("Could not get timeZone string for " + xpath.toString());
                     System.exit(-1);
@@ -1348,6 +1489,12 @@ public class LDML2ICUConverter {
                     ld.val = "";
                 }
             }else if(name.equals(LDMLConstants.EXEMPLAR_CITY)){
+                if(isDraft(node, xpath)&& !writeDraft){
+                    return null;
+                }
+                if(isAlternate(node)){
+                    return null;
+                }
                 exemplarCity.val = LDMLUtilities.getNodeValue(node);
                 if(exemplarCity.val==null){
                     exemplarCity.val = "";
@@ -1392,11 +1539,15 @@ public class LDML2ICUConverter {
     private ICUResourceWriter.Resource parseShortLong(Node root, StringBuffer xpath){
         int savedLength = xpath.length();
         getXPath(root, xpath);
-        if(xpath.indexOf(LDMLConstants.ALT)>-1){
+        if(isDraft(root, xpath)&& !writeDraft){
+            return null ;
+        }
+        //the alt atrribute is set .. so ignore the resource
+        if(isAlternate(root)){
             return null;
         }
-        Node sn = LDMLUtilities.getNode(root, LDMLConstants.STANDARD, fullyResolvedDoc, xpath.toString());
-        Node dn = LDMLUtilities.getNode(root, LDMLConstants.DAYLIGHT, fullyResolvedDoc, xpath.toString());
+        Node sn = getVettedNode(root, LDMLConstants.STANDARD, xpath);
+        Node dn = getVettedNode(root, LDMLConstants.DAYLIGHT, xpath);
         if(sn==null||dn==null){
             System.err.println("Could not get timeZone string for " + xpath.toString());
             System.exit(-1);
@@ -1416,7 +1567,12 @@ public class LDML2ICUConverter {
         int savedLength = xpath.length();
         getXPath(root, xpath);
         int oldLength = xpath.length();
-        if(xpath.indexOf(LDMLConstants.ALT)>-1){
+        //if the whole calendar node is marked draft then
+        //dont write anything
+        if(isDraft(root, xpath)&& !writeDraft){
+            return null;
+        }
+        if(isAlternate(root)){
             return null;
         }
         boolean writtenAmPm = false;
@@ -1490,7 +1646,10 @@ public class LDML2ICUConverter {
         int savedLength = xpath.length();
         getXPath(root, xpath);
         int oldLength = xpath.length();
-        if(xpath.indexOf(LDMLConstants.ALT)>-1){
+        if(isDraft(root, xpath)&& !writeDraft){
+            return null;
+        }
+        if(isAlternate(root)){
             return null;
         }
         for(Node node=root.getFirstChild(); node!=null; node=node.getNextSibling()){
@@ -1539,9 +1698,14 @@ public class LDML2ICUConverter {
         int savedLength = xpath.length();
         getXPath(root, xpath);
         int oldLength = xpath.length();
-        if(xpath.indexOf(LDMLConstants.ALT)>-1){
+        
+        if(isDraft(root, xpath)&& !writeDraft){
             return null;
         }
+        if(isAlternate(root)){
+            return null;
+        }
+        
         String resName = root.getNodeName();
         resName = resName.substring(0, resName.lastIndexOf("Context"));
         for(Node node=root.getFirstChild(); node!=null; node=node.getNextSibling()){
@@ -1613,9 +1777,14 @@ public class LDML2ICUConverter {
         int savedLength = xpath.length();
         getXPath(root, xpath);
         //int oldLength = xpath.length();
-        if(xpath.indexOf(LDMLConstants.ALT)>-1){
+
+        if(isDraft(root, xpath)&& !writeDraft){
             return null;
         }
+        if(isAlternate(root)){
+            return null;
+        }
+        
         Node alias = LDMLUtilities.getNode(root,"alias", null, null);
         if(alias!=null){
             ICUResourceWriter.Resource res =  parseAliasResource(alias,xpath);
@@ -1623,11 +1792,11 @@ public class LDML2ICUConverter {
             return res;
         }
         
-        HashMap map = getElementsMap(root);
+        HashMap map = getElementsMap(root, xpath);
         if((resName.equals(LDMLConstants.DAY) && map.size()<7) ||
             (resName.equals(LDMLConstants.MONTH)&& map.size()<12)){
             root = LDMLUtilities.getNode(fullyResolvedDoc,xpath.toString() );
-            map = getElementsMap(root);
+            map = getElementsMap(root, xpath);
         }
         if(map.size()>0){
             for(int i=0; i<map.size(); i++){
@@ -1663,19 +1832,29 @@ public class LDML2ICUConverter {
         xpath.delete(savedLength, xpath.length());
         return null;
     }
-    private HashMap getElementsMap(Node root){
+    private HashMap getElementsMap(Node root, StringBuffer xpath){
         HashMap map = new HashMap();
         // first create the hash map;
+        int saveLength = xpath.length();
+        getXPath(root,xpath);
+        int oldLength = xpath.length();
+        
         for(Node node=root.getFirstChild(); node!=null; node=node.getNextSibling()){
             if(node.getNodeType()!=Node.ELEMENT_NODE){
                 continue;
             }
+           
+            getXPath(node, xpath);
+            
             String name = node.getNodeName();
             String val = LDMLUtilities.getNodeValue(node);
             String type = LDMLUtilities.getAttributeValue(node,LDMLConstants.TYPE);
-            String alt = LDMLUtilities.getAttributeValue(node,LDMLConstants.ALT);
-            if(alt!=null){
-                // ignore elements with alt attribute set
+            
+            if(isDraft(node, xpath)&& !writeDraft){
+               continue;
+            }
+            //the alt atrribute is set .. so ignore the resource
+            if(isAlternate(node)){
                 continue;
             }
             if(name.equals(LDMLConstants.DAY)){
@@ -1688,7 +1867,9 @@ public class LDML2ICUConverter {
                 System.err.println("Encountered unknown element: "+name);
                 System.exit(-1);
             }
+            xpath.setLength(oldLength);
         }
+        xpath.setLength(saveLength);
         return map;
     }
 
@@ -1709,8 +1890,8 @@ public class LDML2ICUConverter {
        return  (hours * 60  + minutes ) * 60 * 1000;
     }
     private ICUResourceWriter.Resource parseWeekend(Node root, StringBuffer xpath){
-        Node wkendStart = LDMLUtilities.getNode(root, LDMLConstants.WENDSTART, fullyResolvedDoc, xpath.toString());
-        Node wkendEnd = LDMLUtilities.getNode(root, LDMLConstants.WENDEND, fullyResolvedDoc, xpath.toString());
+        Node wkendStart = getVettedNode(root, LDMLConstants.WENDSTART, xpath);
+        Node wkendEnd = getVettedNode(root, LDMLConstants.WENDEND, xpath);
         ICUResourceWriter.ResourceIntVector wkend = null;
         
         if(wkendStart!=null && wkendEnd!=null){
@@ -1737,9 +1918,10 @@ public class LDML2ICUConverter {
         return wkend; 
     }
     private ICUResourceWriter.Resource parseDTE(Node root, StringBuffer xpath){
-        Node minDays = LDMLUtilities.getNode(root, LDMLConstants.MINDAYS, fullyResolvedDoc, xpath.toString());
-        Node firstDay = LDMLUtilities.getNode(root, LDMLConstants.FIRSTDAY, fullyResolvedDoc, xpath.toString());
+        Node minDays = getVettedNode(root, LDMLConstants.MINDAYS,  xpath);
+        Node firstDay = getVettedNode(root, LDMLConstants.FIRSTDAY, xpath);
         ICUResourceWriter.ResourceIntVector dte = null;
+        
         if(minDays!=null && firstDay!=null){
             dte =  new ICUResourceWriter.ResourceIntVector();
             ICUResourceWriter.ResourceInt int1 = new ICUResourceWriter.ResourceInt();
@@ -1764,7 +1946,11 @@ public class LDML2ICUConverter {
         int savedLength = xpath.length();
         getXPath(root, xpath);
         int oldLength = xpath.length();
-        if(xpath.indexOf(LDMLConstants.ALT)>-1){
+        if(isDraft(root, xpath)&& !writeDraft){
+            return null;
+        }
+        //the alt atrribute is set .. so ignore the resource
+        if(isAlternate(root)){
             return null;
         }
         table.name = LDMLConstants.ERAS;
@@ -1818,11 +2004,14 @@ public class LDML2ICUConverter {
         int savedLength = xpath.length();
         getXPath(root, xpath);
        // int oldLength = xpath.length();
-        if(xpath.indexOf(LDMLConstants.ALT)>-1){
+        if(isDraft(root, xpath)&& !writeDraft){
             return null;
         }
-        
-        HashMap map = getElementsMap(root);
+        //the alt atrribute is set .. so ignore the resource
+        if(isAlternate(root)){
+            return null;
+        }
+        HashMap map = getElementsMap(root, xpath);
 
         if(map.size()>0){
             for(int i=0; i<map.size(); i++){
@@ -1850,6 +2039,11 @@ public class LDML2ICUConverter {
    
     }
     private boolean isDraft(Node node, StringBuffer xpath){
+        //if the xpath contains : then it is a special node
+        // turn off checking of draftness for this node
+        if(xpath.indexOf(":")!=0){
+            return false;
+        }
         if(LDMLUtilities.isNodeDraft(node)){
             return true;
         }
@@ -1858,15 +2052,7 @@ public class LDML2ICUConverter {
         }
         return false;
     }
-    /*
-    private boolean isAlternate(Node node){
-        String alt = LDMLUtilities.getAttributeValue(node, LDMLConstants.ALT);
-        if(alt!=null){
-            return true;
-        }
-        return false;
-    }
-    */
+        
     private Node getVettedNode(NodeList list, StringBuffer xpath){
         // A vetted node is one which is not draft and does not have alternate
         // attribute set
@@ -1879,20 +2065,22 @@ public class LDML2ICUConverter {
         }
         return null;
     }
-    private ICUResourceWriter.Resource parseAmPm(Node root, StringBuffer xpath){
-        Node parent =root.getParentNode();
-        Node amNode = null;
-        NodeList list = LDMLUtilities.getNodeList(parent, LDMLConstants.AM, fullyResolvedDoc, xpath.toString());
+    private Node getVettedNode(Node parent, String childName, StringBuffer xpath){
+        NodeList list = LDMLUtilities.getNodeList(parent, childName, fullyResolvedDoc, xpath.toString());
         int oldLength=xpath.length();
+        Node ret = null;
         if(list!=null){
-            amNode = getVettedNode(list,xpath.append("/"+LDMLConstants.AM));
+           ret = getVettedNode(list,xpath.append("/"+childName));
         }
         xpath.setLength(oldLength);
-        Node pmNode = null;
-        list = LDMLUtilities.getNodeList(parent, LDMLConstants.PM, fullyResolvedDoc, xpath.toString());
-        if(list!=null){
-            pmNode = getVettedNode(list, xpath.append("/"+LDMLConstants.PM));
-        }
+        return ret;
+    }
+    
+    private ICUResourceWriter.Resource parseAmPm(Node root, StringBuffer xpath){
+        Node parent =root.getParentNode();
+        Node amNode = getVettedNode(parent, LDMLConstants.AM, xpath);
+        Node pmNode = getVettedNode(parent, LDMLConstants.PM, xpath);
+
         ICUResourceWriter.ResourceArray arr = null;
         if(amNode!=null && pmNode!= null){
             arr = new ICUResourceWriter.ResourceArray();
@@ -1943,16 +2131,16 @@ public class LDML2ICUConverter {
         //TODO figure out what to do for alias
         Node parent = root.getParentNode();
         ArrayList list = new ArrayList();
-        list.add(LDMLUtilities.getNode(parent, "timeFormats/timeFormatLength[@type='full']/timeFormat[@type='standard']/pattern", fullyResolvedDoc, xpath.toString()));
-        list.add(LDMLUtilities.getNode(parent, "timeFormats/timeFormatLength[@type='long']/timeFormat[@type='standard']/pattern", fullyResolvedDoc, xpath.toString()));
-        list.add(LDMLUtilities.getNode(parent, "timeFormats/timeFormatLength[@type='medium']/timeFormat[@type='standard']/pattern", fullyResolvedDoc, xpath.toString()));
-        list.add(LDMLUtilities.getNode(parent, "timeFormats/timeFormatLength[@type='short']/timeFormat[@type='standard']/pattern", fullyResolvedDoc, xpath.toString()));
-        list.add(LDMLUtilities.getNode(parent, "dateFormats/dateFormatLength[@type='full']/dateFormat[@type='standard']/pattern", fullyResolvedDoc, xpath.toString()));
-        list.add(LDMLUtilities.getNode(parent, "dateFormats/dateFormatLength[@type='long']/dateFormat[@type='standard']/pattern", fullyResolvedDoc, xpath.toString()));
-        list.add(LDMLUtilities.getNode(parent, "dateFormats/dateFormatLength[@type='medium']/dateFormat[@type='standard']/pattern", fullyResolvedDoc, xpath.toString()));
-        list.add(LDMLUtilities.getNode(parent, "dateFormats/dateFormatLength[@type='short']/dateFormat[@type='standard']/pattern", fullyResolvedDoc, xpath.toString()));
+        list.add(getVettedNode(parent, "timeFormats/timeFormatLength[@type='full']/timeFormat[@type='standard']/pattern",  xpath));
+        list.add(getVettedNode(parent, "timeFormats/timeFormatLength[@type='long']/timeFormat[@type='standard']/pattern",  xpath));
+        list.add(getVettedNode(parent, "timeFormats/timeFormatLength[@type='medium']/timeFormat[@type='standard']/pattern", xpath));
+        list.add(getVettedNode(parent, "timeFormats/timeFormatLength[@type='short']/timeFormat[@type='standard']/pattern", xpath));
+        list.add(getVettedNode(parent, "dateFormats/dateFormatLength[@type='full']/dateFormat[@type='standard']/pattern", xpath));
+        list.add(getVettedNode(parent, "dateFormats/dateFormatLength[@type='long']/dateFormat[@type='standard']/pattern", xpath));
+        list.add(getVettedNode(parent, "dateFormats/dateFormatLength[@type='medium']/dateFormat[@type='standard']/pattern", xpath));
+        list.add(getVettedNode(parent, "dateFormats/dateFormatLength[@type='short']/dateFormat[@type='standard']/pattern",  xpath));
         //TODO guard this against possible failure 
-        list.add(LDMLUtilities.getNode(parent, "dateTimeFormats/dateTimeFormatLength/dateTimeFormat/pattern", fullyResolvedDoc, xpath.toString()));
+        list.add(getVettedNode(parent, "dateTimeFormats/dateTimeFormatLength/dateTimeFormat/pattern", xpath));
         
         if(list.size()<9){
             throw new RuntimeException("Did not get expected output for Date and Time patterns!!");
@@ -1990,7 +2178,11 @@ public class LDML2ICUConverter {
         int savedLength = xpath.length();
         getXPath(root, xpath);
         int oldLength = xpath.length();
-        if(xpath.indexOf(LDMLConstants.ALT)>-1){
+        if(isDraft(root, xpath)&& !writeDraft){
+            return null;
+        }
+        //the alt atrribute is set .. so ignore the resource
+        if(isAlternate(root)){
             return null;
         }
         boolean writtenFormats = false;
@@ -2046,23 +2238,27 @@ public class LDML2ICUConverter {
         int savedLength = xpath.length();
         getXPath(root, xpath);
         //int oldLength = xpath.length();
-        if(xpath.indexOf(LDMLConstants.ALT)>-1){
+        if(isDraft(root, xpath)&& !writeDraft){
+            return null;
+        }
+        //the alt atrribute is set .. so ignore the resource
+        if(isAlternate(root)){
             return null;
         }
         //TODO figure out what to do for alias
         ArrayList list = new ArrayList();
-        list.add(LDMLUtilities.getNode(root, "decimal", fullyResolvedDoc, xpath.toString()));
-        list.add(LDMLUtilities.getNode(root, "group", fullyResolvedDoc, xpath.toString()));
-        list.add(LDMLUtilities.getNode(root, "list", fullyResolvedDoc, xpath.toString()));
-        list.add(LDMLUtilities.getNode(root, "percentSign", fullyResolvedDoc, xpath.toString()));
-        list.add(LDMLUtilities.getNode(root, "nativeZeroDigit", fullyResolvedDoc, xpath.toString()));
-        list.add(LDMLUtilities.getNode(root, "patternDigit", fullyResolvedDoc, xpath.toString()));
-        list.add(LDMLUtilities.getNode(root, "minusSign", fullyResolvedDoc, xpath.toString()));
-        list.add(LDMLUtilities.getNode(root, "exponential", fullyResolvedDoc, xpath.toString()));
-        list.add(LDMLUtilities.getNode(root, "perMille", fullyResolvedDoc, xpath.toString()));
-        list.add(LDMLUtilities.getNode(root, "infinity", fullyResolvedDoc, xpath.toString()));
-        list.add(LDMLUtilities.getNode(root, "nan", fullyResolvedDoc, xpath.toString()));
-        list.add(LDMLUtilities.getNode(root, "plusSign", fullyResolvedDoc, xpath.toString()));
+        list.add(getVettedNode(root, "decimal", xpath));
+        list.add(getVettedNode(root, "group", xpath));
+        list.add(getVettedNode(root, "list", xpath));
+        list.add(getVettedNode(root, "percentSign", xpath));
+        list.add(getVettedNode(root, "nativeZeroDigit", xpath));
+        list.add(getVettedNode(root, "patternDigit", xpath));
+        list.add(getVettedNode(root, "minusSign", xpath));
+        list.add(getVettedNode(root, "exponential", xpath));
+        list.add(getVettedNode(root, "perMille", xpath));
+        list.add(getVettedNode(root, "infinity", xpath));
+        list.add(getVettedNode(root, "nan", xpath));
+        list.add(getVettedNode(root, "plusSign", xpath));
         
         ICUResourceWriter.ResourceArray arr = new ICUResourceWriter.ResourceArray();
         arr.name = NUMBER_ELEMENTS;
@@ -2099,13 +2295,13 @@ public class LDML2ICUConverter {
         //      here we dont add stuff to XPATH since we are querying the parent 
         //      with the hardcoded XPATHS!
         
-        //TODO figure out what to do for alias
+        //TODO figure out what to do for alias, draft and alt elements
         Node parent = root.getParentNode();
         ArrayList list = new ArrayList();
-        list.add(LDMLUtilities.getNode(parent, "decimalFormats/decimalFormatLength/decimalFormat/pattern", fullyResolvedDoc, xpath.toString()));
-        list.add(LDMLUtilities.getNode(parent, "currencyFormats/currencyFormatLength/currencyFormat/pattern", fullyResolvedDoc, xpath.toString()));
-        list.add(LDMLUtilities.getNode(parent, "percentFormats/percentFormatLength/percentFormat/pattern", fullyResolvedDoc, xpath.toString()));
-        list.add(LDMLUtilities.getNode(parent, "scientificFormats/scientificFormatLength/scientificFormat/pattern", fullyResolvedDoc, xpath.toString()));
+        list.add(getVettedNode(parent, "decimalFormats/decimalFormatLength/decimalFormat/pattern",  xpath));
+        list.add(getVettedNode(parent, "currencyFormats/currencyFormatLength/currencyFormat/pattern",  xpath));
+        list.add(getVettedNode(parent, "percentFormats/percentFormatLength/percentFormat/pattern",  xpath));
+        list.add(getVettedNode(parent, "scientificFormats/scientificFormatLength/scientificFormat/pattern",  xpath));
         
         if(list.size()<4){
             throw new RuntimeException("Did not get expected output for number patterns!!");
@@ -2145,7 +2341,14 @@ public class LDML2ICUConverter {
         int savedLength = xpath.length();
         getXPath(root, xpath);
         int oldLength = xpath.length();
-        if(xpath.indexOf(LDMLConstants.ALT)>-1){
+
+        //if the whole currencis node is marked draft then
+        //dont write anything
+        if(isDraft(root, xpath)&& !writeDraft){
+            return null;
+        }
+        //the alt atrribute is set .. so ignore the resource
+        if(isAlternate(root)){
             return null;
         }
         table.name = (String) keyNameMap.get(root.getNodeName());
@@ -2194,9 +2397,16 @@ public class LDML2ICUConverter {
         int savedLength = xpath.length();
         getXPath(root, xpath);
         //int oldLength = xpath.length();
-        if(xpath.indexOf(LDMLConstants.ALT)>-1){
+
+        //if the  currency node is marked draft then
+        //dont write anything
+        if(isDraft(root, xpath)&& !writeDraft){
             return null;
         }
+        if(isAlternate(root)){
+            return null;
+        }
+        
         Node alias = LDMLUtilities.getNode(root, LDMLConstants.ALIAS, fullyResolvedDoc, xpath.toString());
         if(alias!=null){
             ICUResourceWriter.Resource res = parseAliasResource(alias, xpath);
@@ -2256,10 +2466,19 @@ public class LDML2ICUConverter {
         int savedLength = xpath.length();
         getXPath(root,xpath);
         int oldLength = xpath.length();
+        
+        if(isDraft(root, xpath)&& !writeDraft){
+            return null;
+        }
+        if(isAlternate(root)){
+            return null;
+        }
+        
         for(Node node=root.getFirstChild(); node!=null; node=node.getNextSibling()){
             if(node.getNodeType()!=Node.ELEMENT_NODE){
                 continue;
             }
+
             String name = node.getNodeName();
             ICUResourceWriter.Resource res = null;
             if(name.equals(LDMLConstants.MESSAGES)){
@@ -2291,6 +2510,15 @@ public class LDML2ICUConverter {
         int savedLength = xpath.length();
         getXPath(root,xpath);
         int oldLength = xpath.length();
+        table.name = root.getNodeName();
+        
+        if(isDraft(root, xpath)&& !writeDraft){
+            return null;
+        }
+        if(isAlternate(root)){
+            return null;
+        }
+        
         for(Node node=root.getFirstChild(); node!=null; node=node.getNextSibling()){
             if(node.getNodeType()!=Node.ELEMENT_NODE){
                 continue;
@@ -2298,6 +2526,12 @@ public class LDML2ICUConverter {
             String name = node.getNodeName();
             ICUResourceWriter.Resource res = null;
             if(name.equals(LDMLConstants.YESSTR)||name.equals(LDMLConstants.YESEXPR)||name.equals(LDMLConstants.NOSTR)||name.equals(LDMLConstants.NOEXPR)){
+                if(isDraft(node, xpath)&& !writeDraft){
+                    continue;
+                }
+                if(isAlternate(node)){
+                    continue;
+                }
                 ICUResourceWriter.ResourceString str = new ICUResourceWriter.ResourceString();
                 str.name = name;
                 str.val = LDMLUtilities.getNodeValue(node);
@@ -2320,7 +2554,7 @@ public class LDML2ICUConverter {
             xpath.delete(oldLength, xpath.length());
         }    
         xpath.delete(savedLength, xpath.length());
-        return table.first;
+        return table;
     }
     
     private ICUResourceWriter.Resource parseCollations(Node root, StringBuffer xpath){
@@ -2330,7 +2564,12 @@ public class LDML2ICUConverter {
         int savedLength = xpath.length();
         getXPath(root, xpath);
         int oldLength = xpath.length();
-     
+        //if the whole collations node is marked draft then
+        //dont write anything
+        if(isDraft(root, xpath)&& !writeDraft){
+            return null;
+        }
+        
         for(Node node=root.getFirstChild(); node!=null; node=node.getNextSibling()){
             if(node.getNodeType()!=Node.ELEMENT_NODE){
                 continue;
@@ -2378,6 +2617,15 @@ public class LDML2ICUConverter {
         int savedLength = xpath.length();
         getXPath(root, xpath);
         int oldLength = xpath.length();
+        //if the whole collatoin node is marked draft then
+        //dont write anything
+        if(isDraft(root, xpath)&& !writeDraft){
+            return null;
+        }
+        if(isAlternate(root)){
+            return null;
+        }
+        
         StringBuffer rules = new StringBuffer();
         for(Node node=root.getFirstChild(); node!=null; node=node.getNextSibling()){
             if(node.getNodeType()!=Node.ELEMENT_NODE){
@@ -2810,6 +3058,17 @@ public class LDML2ICUConverter {
     private ICUResourceWriter.Resource parseSpecialElements(Node root, StringBuffer xpath){
         ICUResourceWriter.Resource current = null, first = null;
         int savedLength = xpath.length();
+        getXPath(root,xpath);
+        
+        // if the whole list is marked draft
+        // then donot output it.
+
+        if(isDraft(root, xpath)&& !writeDraft){
+            return null;
+        }
+        if(isAlternate(root)){
+            return null;
+        }
         for(Node node=root.getFirstChild(); node!=null; node=node.getNextSibling()){
             if(node.getNodeType()!=Node.ELEMENT_NODE){
                 continue;
@@ -2918,6 +3177,7 @@ public class LDML2ICUConverter {
     }
     
     private boolean isAlternate(Node node){
+
         NamedNodeMap attributes = node.getAttributes();
         Node attr = attributes.getNamedItem(LDMLConstants.ALT);
         if(attr!=null){
