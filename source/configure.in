@@ -328,7 +328,7 @@ case "${host}" in
 		  tools/makeconv/makeconv tools/genrb/genrb \
 		  tools/rbdump/read tools/genccode/genccode \
 		  tools/gencmn/gencmn tools/gencnval/gencnval \
-		  tools/gennames/gennames
+		  tools/gennames/gennames tools/gentest/gentest
 		do
 		  if test -f $file.c; then
 		    mv $file.c $file.cpp
@@ -375,7 +375,7 @@ AC_OUTPUT([Makefile \
 		tools/Makefile tools/ctestfw/Makefile tools/makeconv/Makefile \
 		tools/genrb/Makefile tools/gencol/Makefile \
 		tools/rbdump/Makefile tools/genccode/Makefile tools/gencmn/Makefile tools/gencnval/Makefile tools/gentz/Makefile \
-	        tools/gennames/Makefile tools/toolutil/Makefile \
+	        tools/gennames/Makefile tools/toolutil/Makefile tools/gentest/Makefile \
 		test/Makefile test/intltest/Makefile test/cintltst/Makefile \
 		test/ieeetest/Makefile \
 		samples/Makefile samples/date/Makefile samples/cal/Makefile \
