@@ -576,10 +576,14 @@ SOURCE=.\ucol.cpp
 
 !ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
 
-# ADD CPP /Ze /W3 /D "UCOL_DEBUG"
+# ADD CPP /Ze /W3
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucol_bld.cpp
 # End Source File
 # Begin Source File
 
@@ -1645,6 +1649,10 @@ InputPath=.\unicode\ucol.h
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\ucol_bld.h
 # End Source File
 # Begin Source File
 
