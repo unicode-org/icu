@@ -42,6 +42,21 @@
 #define U_IOSTREAM_SOURCE 199711
 #endif
 
+#ifndef U_DEBUG
+#ifdef _DEBUG
+#define U_DEBUG 1
+#else
+#define U_DEBUG 0
+#endif
+
+#ifndef U_RELEASE
+#ifdef NDEBUG
+#define U_RELEASE 1
+#else
+#define U_RELEASE 0
+#endif
+#endif
+
 /* Determines whether specific types are available */
 #define U_HAVE_INT8_T 0
 #define U_HAVE_UINT8_T 0
