@@ -1783,7 +1783,7 @@ CheckScriptRuns(UScriptRun *scriptRun, int32_t *runStarts, const RunTestData *te
 static void
 TestUScriptRunAPI()
 {
-    static const RunTestData testData[] = {
+    static const RunTestData testData1[] = {
         {"\\u0020\\u0946\\u0939\\u093F\\u0928\\u094D\\u0926\\u0940\\u0020", USCRIPT_DEVANAGARI},
         {"\\u0627\\u0644\\u0639\\u0631\\u0628\\u064A\\u0629\\u0020", USCRIPT_ARABIC},
         {"\\u0420\\u0443\\u0441\\u0441\\u043A\\u0438\\u0439\\u0020", USCRIPT_CYRILLIC},
@@ -1795,135 +1795,155 @@ TestUScriptRunAPI()
         {"\\u30AB\\u30BF\\u30AB\\u30CA", USCRIPT_KATAKANA},
         {"\\U00010400\\U00010401\\U00010402\\U00010403", USCRIPT_DESERET}
     };
-
-    int32_t nTestRuns = sizeof testData / sizeof testData[0];
-
-    UChar testString[1024];
-    int32_t runStarts[256];
-
-    int32_t run, stringLimit;
-    UScriptRun *scriptRun = NULL;
-    UErrorCode err;
-
-    /*
-     * Fill in the test string and the runStarts array.
-     */
-    stringLimit = 0;
-    for (run = 0; run < nTestRuns; run += 1) {
-        runStarts[run] = stringLimit;
-        stringLimit += u_unescape(testData[run].runText, &testString[stringLimit], 1024 - stringLimit);
-        /*stringLimit -= 1;*/
-    }
-
-    /* The limit of the last run */ 
-    runStarts[nTestRuns] = stringLimit;
-
-    /*
-     * Make sure that calling uscript_OpenRun with a NULL text pointer
-     * and a non-zero text length returns the correct error.
-     */
-    err = U_ZERO_ERROR;
-    scriptRun = uscript_openRun(NULL, stringLimit, &err);
-
-    if (err != U_ILLEGAL_ARGUMENT_ERROR) {
-        log_err("uscript_openRun(NULL, stringLimit, &err) returned %s instead of U_ILLEGAL_ARGUMENT_ERROR.\n", u_errorName(err));
-    }
-
-    if (scriptRun != NULL) {
-        log_err("uscript_openRun(NULL, stringLimit, &err) returned a non-NULL result.\n");
+    
+    static const RunTestData testData2[] = {
+       {"((((((((((abc))))))))))", USCRIPT_LATIN}
+    };
+    
+    /*static const*/ int32_t nTest1Runs = sizeof testData1 / sizeof testData1[0];
+    /*static const*/ int32_t nTest2Runs = sizeof testData2 / sizeof testData2[0];
+    
+    /*static const*/ struct {
+      const RunTestData *testData;
+      int32_t nRuns;
+    } testDataEntries[] = {
+        {testData1, nTest1Runs},
+        {testData2, nTest2Runs}
+    };
+    
+    static const int32_t nTestEntries = sizeof testDataEntries / sizeof testDataEntries[0];
+    int32_t testEntry;
+    
+    for (testEntry = 0; testEntry < nTestEntries; testEntry += 1) {
+        UChar testString[1024];
+        int32_t runStarts[256];
+        int32_t nTestRuns = testDataEntries[testEntry].nRuns;
+        const RunTestData *testData = testDataEntries[testEntry].testData;
+    
+        int32_t run, stringLimit;
+        UScriptRun *scriptRun = NULL;
+        UErrorCode err;
+    
+        /*
+         * Fill in the test string and the runStarts array.
+         */
+        stringLimit = 0;
+        for (run = 0; run < nTestRuns; run += 1) {
+            runStarts[run] = stringLimit;
+            stringLimit += u_unescape(testData[run].runText, &testString[stringLimit], 1024 - stringLimit);
+            /*stringLimit -= 1;*/
+        }
+    
+        /* The limit of the last run */ 
+        runStarts[nTestRuns] = stringLimit;
+    
+        /*
+         * Make sure that calling uscript_OpenRun with a NULL text pointer
+         * and a non-zero text length returns the correct error.
+         */
+        err = U_ZERO_ERROR;
+        scriptRun = uscript_openRun(NULL, stringLimit, &err);
+    
+        if (err != U_ILLEGAL_ARGUMENT_ERROR) {
+            log_err("uscript_openRun(NULL, stringLimit, &err) returned %s instead of U_ILLEGAL_ARGUMENT_ERROR.\n", u_errorName(err));
+        }
+    
+        if (scriptRun != NULL) {
+            log_err("uscript_openRun(NULL, stringLimit, &err) returned a non-NULL result.\n");
+            uscript_closeRun(scriptRun);
+        }
+    
+        /*
+         * Make sure that calling uscript_OpenRun with a non-NULL text pointer
+         * and a zero text length returns the correct error.
+         */
+        err = U_ZERO_ERROR;
+        scriptRun = uscript_openRun(testString, 0, &err);
+    
+        if (err != U_ILLEGAL_ARGUMENT_ERROR) {
+            log_err("uscript_openRun(testString, 0, &err) returned %s instead of U_ILLEGAL_ARGUMENT_ERROR.\n", u_errorName(err));
+        }
+    
+        if (scriptRun != NULL) {
+            log_err("uscript_openRun(testString, 0, &err) returned a non-NULL result.\n");
+            uscript_closeRun(scriptRun);
+        }
+    
+        /*
+         * Make sure that calling uscript_openRun with a NULL text pointer
+         * and a zero text length doesn't return an error.
+         */
+        err = U_ZERO_ERROR;
+        scriptRun = uscript_openRun(NULL, 0, &err);
+    
+        if (U_FAILURE(err)) {
+            log_err("Got error %s from uscript_openRun(NULL, 0, &err)\n", u_errorName(err));
+        }
+    
+        /* Make sure that the empty iterator doesn't find any runs */
+        if (uscript_nextRun(scriptRun, NULL, NULL, NULL)) {
+            log_err("uscript_nextRun(...) returned TRUE for an empty iterator.\n");
+        }
+    
+        /*
+         * Make sure that calling uscript_setRunText with a NULL text pointer
+         * and a non-zero text length returns the correct error.
+         */
+        err = U_ZERO_ERROR;
+        uscript_setRunText(scriptRun, NULL, stringLimit, &err);
+    
+        if (err != U_ILLEGAL_ARGUMENT_ERROR) {
+            log_err("uscript_setRunText(scriptRun, NULL, stringLimit, &err) returned %s instead of U_ILLEGAL_ARGUMENT_ERROR.\n", u_errorName(err));
+        }
+    
+        /*
+         * Make sure that calling uscript_OpenRun with a non-NULL text pointer
+         * and a zero text length returns the correct error.
+         */
+        err = U_ZERO_ERROR;
+        uscript_setRunText(scriptRun, testString, 0, &err);
+    
+        if (err != U_ILLEGAL_ARGUMENT_ERROR) {
+            log_err("uscript_setRunText(scriptRun, testString, 0, &err) returned %s instead of U_ILLEGAL_ARGUMENT_ERROR.\n", u_errorName(err));
+        }
+    
+        /*
+         * Now call uscript_setRunText on the empty iterator
+         * and make sure that it works.
+         */
+        err = U_ZERO_ERROR;
+        uscript_setRunText(scriptRun, testString, stringLimit, &err);
+    
+        if (U_FAILURE(err)) {
+            log_err("Got error %s from uscript_setRunText(...)\n", u_errorName(err));
+        } else {
+            CheckScriptRuns(scriptRun, runStarts, testData, nTestRuns, "uscript_setRunText");
+        }
+    
+        uscript_closeRun(scriptRun);
+    
+        /* 
+         * Now open an interator over the testString
+         * using uscript_openRun and make sure that it works
+         */
+        scriptRun = uscript_openRun(testString, stringLimit, &err);
+    
+        if (U_FAILURE(err)) {
+            log_err("Got error %s from uscript_openRun(...)\n", u_errorName(err));
+        } else {
+            CheckScriptRuns(scriptRun, runStarts, testData, nTestRuns, "uscript_openRun");
+        }
+    
+        /* Now reset the iterator, and make sure
+         * that it still works.
+         */
+        uscript_resetRun(scriptRun);
+    
+        CheckScriptRuns(scriptRun, runStarts, testData, nTestRuns, "uscript_resetRun");
+    
+        /* Close the iterator */
         uscript_closeRun(scriptRun);
     }
-
-    /*
-     * Make sure that calling uscript_OpenRun with a non-NULL text pointer
-     * and a zero text length returns the correct error.
-     */
-    err = U_ZERO_ERROR;
-    scriptRun = uscript_openRun(testString, 0, &err);
-
-    if (err != U_ILLEGAL_ARGUMENT_ERROR) {
-        log_err("uscript_openRun(testString, 0, &err) returned %s instead of U_ILLEGAL_ARGUMENT_ERROR.\n", u_errorName(err));
-    }
-
-    if (scriptRun != NULL) {
-        log_err("uscript_openRun(testString, 0, &err) returned a non-NULL result.\n");
-        uscript_closeRun(scriptRun);
-    }
-
-    /*
-     * Make sure that calling uscript_openRun with a NULL text pointer
-     * and a zero text length doesn't return an error.
-     */
-    err = U_ZERO_ERROR;
-    scriptRun = uscript_openRun(NULL, 0, &err);
-
-    if (U_FAILURE(err)) {
-        log_err("Got error %s from uscript_openRun(NULL, 0, &err)\n", u_errorName(err));
-    }
-
-    /* Make sure that the empty iterator doesn't find any runs */
-    if (uscript_nextRun(scriptRun, NULL, NULL, NULL)) {
-        log_err("uscript_nextRun(...) returned TRUE for an empty iterator.\n");
-    }
-
-    /*
-     * Make sure that calling uscript_setRunText with a NULL text pointer
-     * and a non-zero text length returns the correct error.
-     */
-    err = U_ZERO_ERROR;
-    uscript_setRunText(scriptRun, NULL, stringLimit, &err);
-
-    if (err != U_ILLEGAL_ARGUMENT_ERROR) {
-        log_err("uscript_setRunText(scriptRun, NULL, stringLimit, &err) returned %s instead of U_ILLEGAL_ARGUMENT_ERROR.\n", u_errorName(err));
-    }
-
-    /*
-     * Make sure that calling uscript_OpenRun with a non-NULL text pointer
-     * and a zero text length returns the correct error.
-     */
-    err = U_ZERO_ERROR;
-    uscript_setRunText(scriptRun, testString, 0, &err);
-
-    if (err != U_ILLEGAL_ARGUMENT_ERROR) {
-        log_err("uscript_setRunText(scriptRun, testString, 0, &err) returned %s instead of U_ILLEGAL_ARGUMENT_ERROR.\n", u_errorName(err));
-    }
-
-    /*
-     * Now call uscript_setRunText on the empty iterator
-     * and make sure that it works.
-     */
-    err = U_ZERO_ERROR;
-    uscript_setRunText(scriptRun, testString, stringLimit, &err);
-
-    if (U_FAILURE(err)) {
-        log_err("Got error %s from uscript_setRunText(...)\n", u_errorName(err));
-    } else {
-        CheckScriptRuns(scriptRun, runStarts, testData, nTestRuns, "uscript_setRunText");
-    }
-
-    uscript_closeRun(scriptRun);
-
-    /* 
-     * Now open an interator over the testString
-     * using uscript_openRun and make sure that it works
-     */
-    scriptRun = uscript_openRun(testString, stringLimit, &err);
-
-    if (U_FAILURE(err)) {
-        log_err("Got error %s from uscript_openRun(...)\n", u_errorName(err));
-    } else {
-        CheckScriptRuns(scriptRun, runStarts, testData, nTestRuns, "uscript_openRun");
-    }
-
-    /* Now reset the iterator, and make sure
-     * that it still works.
-     */
-    uscript_resetRun(scriptRun);
-
-    CheckScriptRuns(scriptRun, runStarts, testData, nTestRuns, "uscript_resetRun");
-
-    /* Close the iterator */
-    uscript_closeRun(scriptRun);
 }
 
 /* test additional, non-core properties */

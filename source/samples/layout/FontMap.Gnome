@@ -1,8 +1,20 @@
-# Copyright (C) 2001-2003, International Business Machines
-# Corporation and others.  All Rights Reserved.
-# This is a sample FontMap file for Linux.
-# Fonts are specified by file names.
+# a test comment
+# and a test blank line...
 
- DEVANAGARI: raghu.ttf
-       THAI: THONBURI.TTF
-	DEFAULT: CODE2000.TTF
+     LATIN: DEVAMT102.ttf
+#    TAMIL: deshtaml.ttf
+     TAMIL: latha.ttf
+DEVANAGARI: DEVAMT102.ttf
+#DEVANAGARI: raghu.ttf
+#   ARABIC: trado.ttf
+#   ARABIC: MSFARSI.TTF
+    ARABIC: Noori-Thorn-v5x2.20030917.ttf
+      THAI: THONBURI.TTF
+#   TELUGU: deshtelu.ttf
+# GUJARATI: deshgujr.ttf
+#     surr: ThorndaleS.ttf
+    TELUGU: Gautami.ttf
+  GURMUKHI: Raavi.ttf
+  GUJARATI: Shruti.ttf
+   KANNADA: Tunga.ttf
+   DEFAULT: CODE2000.TTF
