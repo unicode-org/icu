@@ -16,6 +16,7 @@
 */
 
 #include "makefile.h"
+#include "cstring.h"
 #include <stdio.h>
 
 char linebuf[2048];
@@ -80,15 +81,26 @@ void
 pkg_mak_writeStanza(FileStream *f, const UPKGOptions *o, 
                     const char *target,
                     CharList* parents,
-                    CharList* commands)
+                    CharList* commands )
 {
-	/* intentionally left blank */
+  T_FileStream_write(f, target, uprv_strlen(target));
+  T_FileStream_write(f, " : ", 3);
+  pkg_writeCharList(f, parents, " ",1);
+  T_FileStream_write(f, "\n", 1);
+
+  if(commands)
+  {
+    T_FileStream_write(f, "\t", 1);
+    pkg_writeCharList(f, commands, "\n\t",0);
+  }
+  T_FileStream_write(f, "\n\n", 2);
 }
 
 /* write any cleanup/post stuff */
 void
 pkg_mak_writeFooter(FileStream *f, const UPKGOptions *o)
 {
-	/* intentionally left blank */
+    char buf[256];
+    sprintf(buf, "\n\n# End of makefile for %s [%s mode]\n\n", o->shortName, o->mode);
+    T_FileStream_write(f, buf, uprv_strlen(buf));
 }
-
