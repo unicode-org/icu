@@ -228,7 +228,7 @@ umsg_open(  const UChar     *pattern,
     
     UnicodeString patString((patternLength == -1 ? TRUE:FALSE), pattern,len);
 
-    retVal = (UMessageFormat*) new MessageFormat(pattern,Locale(locale),*parseError,*status);
+    retVal = (UMessageFormat*) new MessageFormat(patString,Locale(locale),*parseError,*status);
     
     if(retVal == 0) {
         *status = U_MEMORY_ALLOCATION_ERROR;
