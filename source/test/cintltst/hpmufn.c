@@ -357,7 +357,7 @@ static void TestMutexFunctions() {
 
     if(gMutexFailures) {
       log_info("Note: these failures may be caused by ICU failing to initialize/uninitialize properly.\n");
-      log_verbose("Check for prior tests which may not have closed all open resources.\n");
+      log_verbose("Check for prior tests which may not have closed all open resources. See the internal function ures_flushCache()\n");
     }
 }
 
