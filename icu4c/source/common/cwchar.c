@@ -17,7 +17,8 @@
 #include "unicode/utypes.h"
 #include "cwchar.h"
 
-#if !U_HAVE_WCHAR_H
+#if !U_HAVE_WCSCPY
+
 U_CAPI wchar_t *uprv_wcscat(wchar_t *dst, const wchar_t *src) {
     wchar_t *start=dst;
     while(*dst!=0) {
@@ -46,4 +47,6 @@ U_CAPI size_t uprv_wcslen(const wchar_t *src) {
     }
     return src-start;
 }
+
 #endif
+
