@@ -270,21 +270,26 @@ UnicodeStringTest::TestCompare()
     /* test compareCodePointOrder() */
     {
         /* these strings are in ascending order */
-        static const UChar strings[5][3]={
-            { 0x61, 0 },            /* U+0061 */
-            { 0x20ac, 0 },          /* U+20ac */
-            { 0xff61, 0 },          /* U+ff61 */
-            { 0xd800, 0xdc02, 0 },  /* U+10002 */
-            { 0xd84d, 0xdc56, 0 }   /* U+23456 */
+        static const UChar strings[][4]={
+            { 0x61, 0 },                    /* U+0061 */
+            { 0x20ac, 0xd801, 0 },          /* U+20ac U+d801 */
+            { 0x20ac, 0xd800, 0xdc00, 0 },  /* U+20ac U+10000 */
+            { 0xd800, 0 },                  /* U+d800 */
+            { 0xd800, 0xff61, 0 },          /* U+d800 U+ff61 */
+            { 0xdfff, 0 },                  /* U+dfff */
+            { 0xff61, 0xdfff, 0 },          /* U+ff61 U+dfff */
+            { 0xff61, 0xd800, 0xdc02, 0 },  /* U+ff61 U+10002 */
+            { 0xd800, 0xdc02, 0 },          /* U+10002 */
+            { 0xd84d, 0xdc56, 0 }           /* U+23456 */
         };
-        UnicodeString u[5];
+        UnicodeString u[20]; // must be at least as long as strings[]
         int i;
 
-        for(i=0; i<5; ++i) {
+        for(i=0; i<sizeof(strings)/sizeof(strings[0]); ++i) {
             u[i]=UnicodeString(TRUE, strings[i], -1);
         }
 
-        for(i=0; i<4; ++i) {
+        for(i=0; i<(sizeof(strings)/sizeof(strings[0])-1); ++i) {
             if(u[i].compareCodePointOrder(u[i+1])>=0) {
                 errln("error: UnicodeString::compareCodePointOrder() fails for string %d and the following one\n", i);
             }
