@@ -9,8 +9,8 @@ af {
     Version { "4.0" }
 
     AmPmMarkers { 
-        "VM",
-        "NM",
+        "vm",
+        "nm"
     }
     Countries {
         //Fallback{ "en" }
