@@ -3,26 +3,26 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-aix-va,v 1.12 2001/10/03 23:32:11 grhoten-oss Exp $
+## $Id: mh-aix-va,v 1.13 2001/10/26 20:25:31 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX) -E -M $(DEFS) $(CPPFLAGS)
 
 ## Commands to compile
-COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -brtl -c
-COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -brtl -c
+COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -qroconst -c
+COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -qroconst -c
 
 ## Commands to link
 ## We need to use the C++ linker, even when linking C programs, since
 ##  our libraries contain C++ code (C++ static init not called)
 #LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
-LINK.c=		$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
-LINK.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+LINK.c=		$(CXX) -brtl $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+LINK.cc=	$(CXX) -brtl $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 
 ## Commands to make a shared library
-SHLIB.c=	xlC_r -qmkshrobj
-SHLIB.cc=	xlC_r -qmkshrobj
+SHLIB.c=	xlC_r -qmkshrobj -brtl
+SHLIB.cc=	xlC_r -qmkshrobj -brtl
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	-I
@@ -32,8 +32,7 @@ LD_RPATH_PRE=
 LDLIBRARYPATH_ENVVAR = LIBPATH
 
 ## Shared object suffix
-## AIX doesnot support versioning so we tag the version to name
-SO=		so.$(SO_TARGET_VERSION_MAJOR)
+SO=		so
 ## Non-shared intermediate object suffix
 STATIC_O = o
 
@@ -70,10 +69,16 @@ STATIC_O = o
 
 %.u : $(srcdir)/%.c
 	@echo "Generating dependency information for $<"
-	@$(SHELL) -ec '$(GEN_DEPS.c) $< > /dev/null 2>&1'
+	@$(SHELL) -ec '$(GEN_DEPS.c) $< > /dev/null'
 
 %.u : $(srcdir)/%.cpp
 	@echo "Generating dependency information for $<"
-	@$(SHELL) -ec '$(GEN_DEPS.cc) $< > /dev/null 2>&1'
+	@$(SHELL) -ec '$(GEN_DEPS.cc) $< > /dev/null'
+
+## Versioned libraries rules
+%.$(SO).$(SO_TARGET_VERSION_MAJOR): %.$(SO).$(SO_TARGET_VERSION)
+	$(RM) $@ && ln -s $< $@
+%.$(SO): %.$(SO).$(SO_TARGET_VERSION_MAJOR)
+	$(RM) $@ && ln -s $*.$(SO).$(SO_TARGET_VERSION) $@
 
 ## End Aix-specific setup
