@@ -369,7 +369,6 @@ es {
         BYR { "BYR", "Rublo de Belorusia" }
         BZD { "BZD", "D\u00F3lar de Belize" }
         CAD { "CAD", "D\u00F3lar Canadiense" }
-        CDP { "CDP", "Santo Domingo" }
         CHF { "CHF", "Franco Suizo" }
         CLP { "CLP", "Peso Chileno" }
         COP { "COP", "Peso de Colombia" }
