@@ -441,7 +441,7 @@ NFSubstitution::doParse(const UnicodeString& text,
     // if possible, or a Double
     if (parsePosition.getIndex() != 0) {
         UErrorCode status = U_ZERO_ERROR;
-        double tempResult = result.getDouble(&status);
+        double tempResult = result.getDouble(status);
 
         // composeRuleValue() produces a full parse result from
         // the partial parse result passed to this function from
@@ -861,7 +861,7 @@ FractionalPartSubstitution::doParse(const UnicodeString& text,
             Formattable temp;
             getRuleSet()->parse(workText, workPos, 10, temp);
             UErrorCode status = U_ZERO_ERROR;
-            digit = temp.getLong(&status);
+            digit = temp.getLong(status);
 //            digit = temp.getType() == Formattable::kLong ?
 //               temp.getLong() :
 //            (int32_t)temp.getDouble();

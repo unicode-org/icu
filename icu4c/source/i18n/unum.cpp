@@ -288,7 +288,7 @@ unum_parse(    const   UNumberFormat*  fmt,
 {
     Formattable res;
     parseRes(res, fmt, text, textLength, parsePos, status);
-    return res.getLong(status);
+    return res.getLong(*status);
 }
 
 U_CAPI int64_t U_EXPORT2
@@ -300,7 +300,7 @@ unum_parseInt64(    const   UNumberFormat*  fmt,
 {
     Formattable res;
     parseRes(res, fmt, text, textLength, parsePos, status);
-    return res.getInt64(status);
+    return res.getInt64(*status);
 }
 
 U_CAPI double U_EXPORT2
@@ -312,7 +312,7 @@ unum_parseDouble(    const   UNumberFormat*  fmt,
 {
     Formattable res;
     parseRes(res, fmt, text, textLength, parsePos, status);
-    return res.getDouble(status);
+    return res.getDouble(*status);
 }
 
 U_CAPI const char* U_EXPORT2
