@@ -355,7 +355,7 @@ NFRuleSet::findNormalRule(llong number) const
     // to find the rule (we should only go into this clause if the
     // value is 0)
     if (fIsFractionRuleSet) {
-        return findFractionRuleSetRule(llong_asDouble(number));
+        return findFractionRuleSetRule(number.asDouble());
     }
     
     // if the number is negative, return the negative-number rule
@@ -401,7 +401,7 @@ NFRuleSet::findNormalRule(llong number) const
     // an explanation of the rollback rule).  If we do, roll back
     // one rule and return that one instead of the one we'd normally
     // return
-    if (result->shouldRollBack(llong_asDouble(number))) {
+    if (result->shouldRollBack(number.asDouble())) {
         result = rules[hi - 2];
     }
     
@@ -441,7 +441,7 @@ NFRuleSet::findFractionRuleSetRule(double number) const
         for (uint32_t i = 1; i < rules.size(); ++i) {
             leastCommonMultiple = util_lcm(leastCommonMultiple, rules[i]->getBaseValue());
         }
-        numerator = number * llong_asDouble(leastCommonMultiple) + 0.5;
+        numerator = number * leastCommonMultiple.asDouble() + 0.5;
     }
     // for each rule, do the following...
     llong tempDifference;
@@ -485,7 +485,7 @@ NFRuleSet::findFractionRuleSetRule(double number) const
     // a whole bunch of extra rule sets)
     if ((unsigned)(winner + 1) < rules.size() &&
         rules[winner + 1]->getBaseValue() == rules[winner]->getBaseValue()) {
-        double n = llong_asDouble(rules[winner]->getBaseValue()) * number;
+        double n = rules[winner]->getBaseValue().asDouble() * number;
         if (n < 0.5 || n >= 2) {
             ++winner;
         }

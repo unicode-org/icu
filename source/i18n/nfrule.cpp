@@ -123,7 +123,7 @@ NFRule::makeRules(UnicodeString& description,
         // base value is an even multiple of its divisor (or it's one
         // of the special rules)
         if ((rule1->baseValue > 0
-            && (rule1->baseValue % llong_pow((int32_t)rule1->radix, (int32_t)rule1->exponent)) == 0)
+            && (rule1->baseValue % ((llong)rule1->radix).pow((int32_t)rule1->exponent)) == 0)
             || rule1->getType() == kImproperFractionRule
             || rule1->getType() == kMasterRule) {
             
@@ -306,7 +306,7 @@ NFRule::parseRuleDescriptor(UnicodeString& description, UErrorCode& status)
 
                 // tempValue now contain's the rule's radix.  Set it
                 // accordingly, and recalculate the rule's exponent
-                radix = (int16_t)llong_asInt(val);
+                radix = (int16_t)val.asInt();
                 if (radix == 0) {
                     // throw new IllegalArgumentException("Rule can't have radix of 0");
                     status = U_PARSE_ERROR;
@@ -492,8 +492,8 @@ NFRule::expectedExponent() const
     // we get rounding error in some cases-- for example, log 1000 / log 10
     // gives us 1.9999999996 instead of 2.  The extra logic here is to take
     // that into account
-    int16_t tempResult = (int16_t)(uprv_log(llong_asDouble(baseValue)) / uprv_log((double)radix));
-    llong temp = llong_pow(radix, tempResult + 1);
+    int16_t tempResult = (int16_t)(uprv_log(baseValue.asDouble()) / uprv_log((double)radix));
+    llong temp = ((llong)radix).pow(tempResult + 1);
     if (temp <= baseValue) {
         tempResult += 1;
     }
@@ -574,7 +574,7 @@ util_append_llong(UnicodeString& result, const llong& value)
 static void util_append64(UnicodeString& result, const llong& n)
 {
     UChar buffer[256];
-    int32_t len = u_lltoa(n, buffer, sizeof(buffer));
+    int32_t len = n.u_lltoa(buffer, sizeof(buffer));
     UnicodeString temp(buffer, len);
     result.append(temp);
 }
@@ -647,7 +647,7 @@ NFRule::appendRuleText(UnicodeString& result) const
 * should be inserted
 */
 void 
-NFRule::doFormat(llong number, UnicodeString& toInsertInto, int32_t pos) const
+NFRule::doFormat(const llong &number, UnicodeString& toInsertInto, int32_t pos) const
 {
     // first, insert the rule's rule text into toInsertInto at the
     // specified position, then insert the results of the substitutions
@@ -710,8 +710,8 @@ NFRule::shouldRollBack(double number) const
     // of 100, and the value we're trying to format _is_ an even
     // multiple of 100.  This is called the "rollback rule."
     if ((sub1->isModulusSubstitution()) || (sub2->isModulusSubstitution())) {
-        llong re = llong_pow(radix, exponent);
-        return uprv_fmod(number, llong_asDouble(re)) == 0 && (baseValue % re) != 0;
+        llong re = ((llong)radix).pow(exponent);
+        return uprv_fmod(number, re.asDouble()) == 0 && (baseValue % re) != 0;
     }
     return FALSE;
 }
@@ -828,7 +828,7 @@ NFRule::doParse(const UnicodeString& text,
     int highWaterMark = 0;
     double result = 0;
     int start = 0;
-    double tempBaseValue = (baseValue <= 0) ? 0 : llong_asDouble(baseValue);
+    double tempBaseValue = (baseValue <= 0) ? 0 : baseValue.asDouble();
     
     UnicodeString temp;
     do {

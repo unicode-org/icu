@@ -72,7 +72,7 @@ NFSubstitution::makeSubstitution(int32_t pos,
         // if the rule set containing the rule is a fraction
         // rule set, return a NumeratorSubstitution
         else if (ruleSet->isFractionRuleSet()) {
-            return new NumeratorSubstitution(pos, llong_asDouble(rule->getBaseValue()),
+            return new NumeratorSubstitution(pos, rule->getBaseValue().asDouble(),
                 formatter->getDefaultRuleSet(), formatter, description, status);
         }
 
@@ -276,21 +276,19 @@ NFSubstitution::toString(UnicodeString& text) const
  * position to determine exactly where to insert the new text)
  */
 void
-NFSubstitution::doSubstitution(llong number, UnicodeString& toInsertInto, int32_t _pos) const
+NFSubstitution::doSubstitution(const llong &number, UnicodeString& toInsertInto, int32_t _pos) const
 {
     if (ruleSet != NULL) {
         // perform a transformation on the number that is dependent
         // on the type of substitution this is, then just call its
         // rule set's format() method to format the result
-        llong numberToFormat = transformNumber(number);
-
-        ruleSet->format(numberToFormat, toInsertInto, _pos + this->pos);
+        ruleSet->format(transformNumber(number), toInsertInto, _pos + this->pos);
     } else {
         // or perform the transformation on the number (preserving
         // the result's fractional part if the formatter it set
         // to show it), then use that formatter's format() method
         // to format the result
-        double numberToFormat = transformNumber(llong_asDouble(number));
+        double numberToFormat = transformNumber(number.asDouble());
         if (numberFormat->getMaximumFractionDigits() == 0) {
             numberToFormat = uprv_floor(numberToFormat);
         }
@@ -579,7 +577,7 @@ UBool ModulusSubstitution::operator==(const NFSubstitution& rhs) const
  * @param pos The position of the rule text in toInsertInto
  */
 void
-ModulusSubstitution::doSubstitution(llong number, UnicodeString& toInsertInto, int32_t _pos) const
+ModulusSubstitution::doSubstitution(const llong &   number, UnicodeString& toInsertInto, int32_t _pos) const
 {
     // if this isn't a >>> substitution, just use the inherited version
     // of this function (which uses either a rule set or a DecimalFormat
