@@ -30,9 +30,9 @@ void addStandardNamesTest(TestNode** root);
 void
 addStandardNamesTest(TestNode** root)
 {
-  addTest(root, &TestStandardName,  "stdnmtst/TestStandardName");
-  addTest(root, &TestStandardNames, "stdnmtst/TestStandardNames");
-  addTest(root, &TestCanonicalName, "stdnmtst/TestCanonicalName");
+  addTest(root, &TestStandardName,  "tsconv/stdnmtst/TestStandardName");
+  addTest(root, &TestStandardNames, "tsconv/stdnmtst/TestStandardNames");
+  addTest(root, &TestCanonicalName, "tsconv/stdnmtst/TestCanonicalName");
 }
 
 static int dotestname(const char *name, const char *standard, const char *expected) {
@@ -99,8 +99,8 @@ static void TestStandardName()
     if (dotestname("ibm-1208", "MIME", "UTF-8") &&
         /*dotestname("cp1252", "MIME", "windows-1252") &&*/
         dotestname("ascii", "MIME", "US-ASCII") &&
-        dotestname("ISO_2022", "MIME", "ISO-2022") &&
-        dotestname("ISO-2022", "MIME", "ISO-2022") &&
+        dotestname("csiso2022jp2", "MIME", "ISO-2022-JP-2") &&
+        dotestname("Iso20-22__cN", "MIME", "ISO-2022-CN") &&
         dotestname("ascii", "IANA", "ANSI_X3.4-1968") &&
         dotestname("cp850", "IANA", "IBM850") &&
         dotestname("crazy", "MIME", NULL) &&
@@ -147,7 +147,7 @@ static void TestCanonicalName()
         dotestconv("ibm-5305", "IANA", NULL) &&     /* mapping does not exist */
         dotestconv("cp1208", "", "UTF-8") &&        /* default name due to ordering */
         dotestconv("UTF16_BigEndian", "", "UTF-16BE") &&        /* non-default name due to ordering */
-        dotestconv("ISO-2022", "MIME", "ISO_2022") &&/* default name */
+        dotestconv("ISO-2022-CN", "MIME", "ISO_2022,locale=zh,version=0") &&/* default name */
         dotestconv("Shift_JIS", "MIME", "ibm-943_P14A-1999") &&/* ambiguous alias */
         dotestconv("Shift_JIS", "", "ibm-943_P130-1999") &&/* ambiguous alias */
         dotestconv("ibm-943", "", "ibm-943_P14A-1999") &&/* ambiguous alias */
@@ -262,7 +262,7 @@ static void TestStandardNames()
     };
 
     static const char *iso2022MIME[] = {
-        "ISO-2022",
+        "ISO-2022-KR",
     };
 
     doTestNames("ASCII", "IANA", asciiIANA, ARRAY_SIZE(asciiIANA));
@@ -275,8 +275,8 @@ static void TestStandardNames()
 
     doTestNames("LMBCS-1", "MIME", asciiMIME, 0);
 
-    doTestNames("ISO_2022", "MIME", iso2022MIME, ARRAY_SIZE(iso2022MIME));
-    doTestNames("ISO-2022", "MIME", iso2022MIME, ARRAY_SIZE(iso2022MIME));
+    doTestNames("ISO_2022,locale=ko,version=0", "MIME", iso2022MIME, ARRAY_SIZE(iso2022MIME));
+    doTestNames("csiso2022kr", "MIME", iso2022MIME, ARRAY_SIZE(iso2022MIME));
 
     log_verbose(" Testing unext()\n");
     doTestUCharNames("ASCII", "IANA", asciiIANA, ARRAY_SIZE(asciiIANA));
