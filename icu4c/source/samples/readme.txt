@@ -43,3 +43,18 @@ ustring  - demonstrates ICU string manipulation functions
     included with ICU.  You can check it out from the CVS command line
     by using for example,  "cvs co icuapps" instead of "cvs co icu",
    or through WebCVS at http://oss.software.ibm.com/cvs/icu/icuapps/
+
+==
+* How do I build the samples?
+
+ - See the Readme in each subdirectory
+
+ To build all samples at once:
+
+    Unix:   - build and install (make install) ICU
+            - be sure 'icu-config' is accessible from the PATH
+            - type 'make all-samples' from this directory 
+               (other targets:  clean-samples, check-samples)
+
+            - legacy and layout are not included in these lists,
+                   please see their individual readmes.

@@ -1,43 +1,22 @@
 # Copyright (c) 2000 IBM, Inc. and others
-# conversion sample code $Revision: 1.5 $
-
-
+# conversion sample code $Revision: 1.6 $
 # Usage:
-#  - configure and build ICU [see the docs] .. use "--prefix=" something
-#     (I  used --prefix=/home/srl/III )
-# 
-#  - do 'make install' of icu 
-#
-#  - change ICU_DEFAULT_PREFIX line to point to the $(prefix) that 
-#    was used (will look for $(prefix)/lib/icu/Makefile.inc )
-#      OR 
-#   set the variable ICU_PREFIX to point at $(prefix)
-#  
-#  - change ICU_DEFAULT_PATH line to point to the 'icu' directory
-#    containing source, data, config, etc.. 
-#      OR 
-#   set the variable ICU_PATH to point at that path
-#
+#  - configure, build, install ICU
+#  - ensure that 'icu-config' is in the PATH (PREFIX/bin/icu-config) 
+#  - if ICU is not built relative to this directory,
+#      set the variable ICU_PATH to the 'icu' directory
+#       (i.e.  /foo/icu  )
 #  - do 'make' in this directory
 
-ICU_DEFAULT_PREFIX=ICU_PREFIX
-ICU_DEFAULT_PATH=../../..
+include ../defs.mk
 
-ifeq ($(strip $(ICU_PREFIX)),)
-  ICU_INC=$(ICU_DEFAULT_PREFIX)/lib/icu/Makefile.inc
-  GENRB = $(ICU_DEFAULT_PREFIX)/sbin/genrb
-else
-  ICU_INC=$(ICU_PREFIX)/lib/icu/Makefile.inc
-  GENRB = $(ICU_PREFIX)/sbin/genrb
-endif
+ICU_DEFAULT_PATH=../../..
 
 ifeq ($(strip $(ICU_PATH)),)
   ICU_PATH=$(ICU_DEFAULT_PATH)
 endif
 
 GENRBOPT = -s. -d.
-
-include $(ICU_INC)
 
 # Name of your target
 TARGET=uresb
@@ -48,9 +27,7 @@ OBJECTS=uresb.o
 
 CLEANFILES=*~ $(TARGET).out
 
-DEPS=$(OBJECTS:.o=.d)
-
-all: $(GENRB) $(RESOURCES) $(TARGET) 
+all: $(RESOURCES) $(TARGET) 
 
 uresb.o:  $(ICU_PATH)/source/tools/toolutil/uoptions.h
 
@@ -60,39 +37,29 @@ $(ICU_PATH)/source/tools/toolutil/uoptions.h:
 	@false
 
 CPPFLAGS += -I$(ICU_PATH)/source/tools/toolutil
-LDFLAGS += -L$(ICU_PATH)/source/tools/toolutil -licutoolutil -lustdio
-
-$(GENRB):
-	@echo "Please read the directions at the top of this file (Makefile)"
-	@echo "Can't open $@ - check ICU_PATH"
-	@false
+LDFLAGS += -L$(ICU_PATH)/source/tools/toolutil $(shell icu-config --ldflags-toolutil --ldflags-ustdio)
 
 .PHONY: all clean distclean check report
 
 distclean clean:
 	-test -z "$(CLEANFILES)" || rm -f $(CLEANFILES)
 	-$(RMV) $(OBJECTS) $(TARGET)
-	-$(RMV) $(DEPS)
+
 
 ## resources
-root.res : root.txt
+%.res: %.txt
 	@echo "generating $@"
-	$(GENRB) $(GENRBOPT) $?
+	$(GENRB) $(GENRBOPT) $^
 
-en.res : en.txt
-	@echo "generating $@"
-	$(GENRB) $(GENRBOPT) $?
-
+## Special for a special codepage
 sr.res : sr.txt
 	@echo "generating $@"
 	$(GENRB) $(GENRBOPT) -e cp1251 $?
 
-
-
 # Can change this to LINK.c if it is a C only program
 # Can add more libraries here. 
 $(TARGET): $(OBJECTS)
-	$(LINK.cc) -o $@ $^ $(ICULIBS)
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 # Make check: simply runs the sample, logged to a file
 check: $(TARGET) $(RESOURCES)
@@ -104,14 +71,6 @@ report: $(TARGET).report
 $(TARGET).report: check $(TARGET).cpp
 	more $(TARGET).cpp $(TARGET).out > $@
 
-$(ICU_INC):
-	@echo "Please read the directions at the top of this file (Makefile)"
-	@echo "Can't open $(ICU_INC)"
-	@false
-
-ifneq ($(MAKECMDGOALS),distclean)
--include $(DEPS)
-endif
 
 
 

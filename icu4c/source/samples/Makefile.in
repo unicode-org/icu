@@ -20,6 +20,7 @@ include @platform_make_fragment@
 CLEANFILES = *~
 
 SUBDIRS = date cal
+ALLSUBDIRS = datefmt msgfmt numfmt props translit ucnv udata ufortune uresb ustring
 
 ## List of phony targets
 .PHONY : all all-local all-recursive install install-local		\
@@ -36,6 +37,10 @@ install: install-recursive install-local
 clean: clean-recursive clean-local
 distclean : distclean-recursive distclean-local
 dist: dist-recursive dist-local
+
+all-samples: all-samples-recursive
+clean-samples: clean-samples-recursive
+check-samples: check-samples-recursive
 
 # Note (srl 4/15/2002) do  NOT recursively check samples for 2.1, look into testing them in the future.
 #check: all check-recursive check-local
@@ -59,6 +64,25 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 	if test "$$dot_seen" = "no"; then \
 	  $(MAKE) "$$target-local" || exit; \
 	fi
+
+all-samples-recursive check-samples-recursive clean-samples-recursive:
+	@dot_seen=no; \
+	target=`echo $@ | sed s/-recursive//`; \
+	subtarget=`echo $@ | sed s/-samples-recursive//`; \
+	list='$(SUBDIRS) $(ALLSUBDIRS)'; for subdir in $$list; do \
+	  echo "$(MAKE)[$(MAKELEVEL)]: Making \`$$subtarget' in \`$$subdir'"; \
+	  if test "$$subdir" = "."; then \
+	    dot_seen=yes; \
+	    local_target="$$subtarget-local"; \
+	  else \
+	    local_target="$$subtarget"; \
+	  fi; \
+	  (cd $$subdir && $(MAKE) $$local_target) || exit; \
+	done; \
+	if test "$$dot_seen" = "no"; then \
+	  $(MAKE) "$$subtarget-local" || exit; \
+	fi
+
 
 all-local:
 
