@@ -1168,8 +1168,9 @@ CalendarTest::TestDOW_LOCALandYEAR_WOY()
 
 void CalendarTest::loop_addroll(Calendar *cal, SimpleDateFormat *sdf, int times, Calendar::EDateFields field, Calendar::EDateFields field2, UErrorCode& errorCode) {
     Calendar *calclone;
-    
-    for(int i = 0; i<times; i++) {
+    int i;
+
+    for(i = 0; i<times; i++) {
         calclone = cal->clone();
         cal->add(field,1,errorCode);
         if (U_FAILURE(errorCode)) { errln("Error in add"); delete calclone; return; }
@@ -1209,7 +1210,7 @@ CalendarTest::doYEAR_WOYLoop(Calendar *cal, SimpleDateFormat *sdf,
     UDate tst, original;
     Calendar *tstres = new GregorianCalendar(Locale::GERMANY, errorCode);
     for(int i=0; i<times; ++i) {
-        sdf->format(cal->getTime(errorCode), us, errorCode);
+        sdf->format(Formattable(cal->getTime(errorCode),Formattable::kIsDate), us, errorCode);
         //logln("expected: "+us);
         if (U_FAILURE(errorCode)) { errln("Format error"); return; }
         tst=sdf->parse(us,errorCode);
@@ -1220,17 +1221,17 @@ CalendarTest::doYEAR_WOYLoop(Calendar *cal, SimpleDateFormat *sdf,
         if (U_FAILURE(errorCode)) { errln("Set time error"); return; }
         original = cal->getTime(errorCode);
         us.remove();
-        sdf->format(tst, us, errorCode);
+        sdf->format(Formattable(tst,Formattable::kIsDate), us, errorCode);
         //logln("got: "+us);
         if (U_FAILURE(errorCode)) { errln("Get time error"); return; }
         s[us.extract(0, us.length(), s)]=0;
         if(original!=tst) {
             us.remove();
-            sdf->format(original, us, errorCode);
+            sdf->format(Formattable(original, Formattable::kIsDate), us, errorCode);
             errln("Parsed time doesn't match with regular");
             logln("expected "+us);
             us.remove();
-            sdf->format(tst, us, errorCode);
+            sdf->format(Formattable(tst, Formattable::kIsDate), us, errorCode);
             logln("got "+us);
         }
         tstres->clear();
