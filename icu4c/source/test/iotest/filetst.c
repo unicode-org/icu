@@ -90,8 +90,8 @@ static void TestFileFromICU(UFILE *myFile) {
     u_fprintf(myFile, "Pointer to integer Value: %d\n", *n);
     u_fprintf(myFile, "This is a long test123456789012345678901234567890123456789012345678901234567890\n");
     *n = 1;
-    fprintf(u_fgetfile(myFile), "\tNormal fprintf count: n=%d %n n=%d\n", *n ,n, *n);
-    fprintf(u_fgetfile(myFile), "\tNormal fprintf count value: n=%d\n", *n);
+    fprintf(u_fgetfile(myFile), "\tNormal fprintf count: n=%d %n n=%d\n", (int)*n, (int*)n, (int)*n);
+    fprintf(u_fgetfile(myFile), "\tNormal fprintf count value: n=%d\n", (int)*n);
 
     u_fclose(myFile);
     myFile = u_fopen(STANDARD_TEST_FILE, "r", NULL, NULL);
@@ -781,32 +781,32 @@ static void TestFilePrintCompatibility(void) {
 
     for (num = -STANDARD_TEST_NUM_RANGE; num < STANDARD_TEST_NUM_RANGE; num++) {
         fscanf(myCFile, "%s", readBuf);
-        sprintf(testBuf, "%x", num);
+        sprintf(testBuf, "%x", (int)num);
         if (strcmp(readBuf, testBuf) != 0) {
             log_err("%%x Got: \"%s\", Expected: \"%s\"\n", readBuf, testBuf);
         }
 
         fscanf(myCFile, "%s", readBuf);
-        sprintf(testBuf, "%X", num);
+        sprintf(testBuf, "%X", (int)num);
         if (strcmp(readBuf, testBuf) != 0) {
             log_err("%%X Got: \"%s\", Expected: \"%s\"\n", readBuf, testBuf);
         }
 
         fscanf(myCFile, "%s", readBuf);
-        sprintf(testBuf, "%o", num);
+        sprintf(testBuf, "%o", (int)num);
         if (strcmp(readBuf, testBuf) != 0) {
             log_err("%%o Got: \"%s\", Expected: \"%s\"\n", readBuf, testBuf);
         }
 
         /* fprintf is not compatible on all platforms e.g. the iSeries */
         fscanf(myCFile, "%s", readBuf);
-        sprintf(testBuf, "%d", num);
+        sprintf(testBuf, "%d", (int)num);
         if (strcmp(readBuf, testBuf) != 0) {
             log_err("%%d Got: \"%s\", Expected: \"%s\"\n", readBuf, testBuf);
         }
 
         fscanf(myCFile, "%s", readBuf);
-        sprintf(testBuf, "%i", num);
+        sprintf(testBuf, "%i", (int)num);
         if (strcmp(readBuf, testBuf) != 0) {
             log_err("%%i Got: \"%s\", Expected: \"%s\"\n", readBuf, testBuf);
         }

@@ -291,6 +291,10 @@ static void DataDrivenPrintf(void) {
                     uBufferLenReturned = u_sprintf_u(uBuffer, format, argument);
                     uFileBufferLenReturned = u_fprintf_u(testFile, format, argument);
                     break;
+                default:
+                    uBufferLenReturned = 0;
+                    uFileBufferLenReturned = 0;
+                    log_err("Unknown type %c for test %d\n", testCase->getString("argumentType", errorCode)[0], i);
                 }
                 if (u_strcmp(uBuffer, expectedResult) != 0) {
                     u_austrncpy(cBuffer, uBuffer, sizeof(cBuffer));
@@ -316,7 +320,7 @@ static void DataDrivenPrintf(void) {
                     log_err("Can't open test file - %s\n",
                             STANDARD_TEST_FILE);
                 }
-                uBuffer[0];
+                uBuffer[0]=0;
                 u_fgets(uBuffer, sizeof(uBuffer)/sizeof(uBuffer[0]), testFile);
                 if (u_strcmp(uBuffer, expectedResult) != 0) {
                     u_austrncpy(cBuffer, uBuffer, sizeof(cBuffer));
@@ -471,6 +475,10 @@ static void DataDrivenScanf(void) {
                         log_err("error in scanf UChar * string %s Got: \"%s\". Test case = %d\n", cExpected, cBuffer, i);
                     }
                     break;
+                default:
+                    uBufferLenReturned = 0;
+                    //uFileBufferLenReturned = 0;
+                    log_err("Unknown type %c for test %d\n", testCase->getString("argumentType", errorCode)[0], i);
                 }
                 if (uBufferLenReturned != 1) {
                     log_err("error scanf converted %d arguments. Test case = %d\n", uBufferLenReturned, i);
@@ -614,6 +622,9 @@ static void DataDrivenPrintfPrecision(void) {
                 case 0x53:  // 'S' UChar *
                     uBufferLenReturned = u_sprintf_u(uBuffer, format, precision, argument);
                     break;
+                default:
+                    uBufferLenReturned = 0;
+                    log_err("Unknown type %c for test %d\n", testCase->getString("argumentType", errorCode)[0], i);
                 }
                 if (u_strcmp(uBuffer, expectedResult) != 0) {
                     u_austrncpy(cBuffer, uBuffer, sizeof(cBuffer));
