@@ -19,6 +19,8 @@ CFG=toolutil - Win32 Debug
 !MESSAGE 
 !MESSAGE "toolutil - Win32 Release" (based on "Win32 (x86) Static Library")
 !MESSAGE "toolutil - Win32 Debug" (based on "Win32 (x86) Static Library")
+!MESSAGE "toolutil - Win64 Release" (based on "Win32 (x86) Static Library")
+!MESSAGE "toolutil - Win64 Debug" (based on "Win32 (x86) Static Library")
 !MESSAGE 
 
 # Begin Project
@@ -40,8 +42,8 @@ RSC=rc.exe
 # PROP Output_Dir "..\..\..\lib"
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MD /Za /W3 /GX /O2 /I "..\..\common" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
+# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
+# ADD CPP /nologo /MD /Za /W3 /GX /O2 /I "..\..\common" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -63,8 +65,54 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\..\lib"
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MDd /Za /W3 /Gm /GX /ZI /Od /I "..\..\common" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FR /YX /FD /GZ /c
+# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB"  /FD /GZ /c
+# ADD CPP /nologo /MDd /Za /W3 /Gm /GX /ZI /Od /I "..\..\common" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /FR  /FD /GZ /c
+# ADD BASE RSC /l 0x409 /d "_DEBUG"
+# ADD RSC /l 0x409 /d "_DEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo
+# ADD LIB32 /nologo /out:"..\..\..\lib\icutud.lib"
+
+!ELSEIF  "$(CFG)" == "toolutil - Win64 Release"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "Release"
+# PROP BASE Intermediate_Dir "Release"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "..\..\..\lib"
+# PROP Intermediate_Dir "Release"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN64" /D "NDEBUG" /D "_MBCS" /D "_LIB"  /FD /c
+# ADD CPP /nologo /MD /Za /W3   /I "..\..\common" /D"WIN64" /D"NDEBUG" /D"_MBCS" /D"_LIB"  /FD /c /O2 /GX /Op /QIA64_fmaopt /D"_IA64_" /Zi /D"WIN64" /D"WIN32" /D"_AFX_NO_DAO_SUPPORT" /Wp64 /Zm600
+# ADD BASE RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LIB32=link.exe -lib
+# ADD BASE LIB32 /nologo
+# ADD LIB32 /nologo /out:"..\..\..\lib\icutu.lib"
+
+!ELSEIF  "$(CFG)" == "toolutil - Win64 Debug"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "Debug"
+# PROP BASE Intermediate_Dir "Debug"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "..\..\..\lib"
+# PROP Intermediate_Dir "Debug"
+# PROP Target_Dir ""
+# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN64" /D "_DEBUG" /D "_MBCS" /D "_LIB"  /FD /GZ /c
+# ADD CPP /nologo /MDd /Za /W3 /Gm    /I "..\..\common" /D"WIN64" /D"_DEBUG" /D"_MBCS" /D"_LIB" /FR  /FD /GZ /c /Od /GX /Op /QIA64_fmaopt /D"_IA64_" /Zi /D"WIN64" /D"WIN32" /D"_AFX_NO_DAO_SUPPORT" /Wp64 /Zm600
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -80,6 +128,8 @@ LIB32=link.exe -lib
 
 # Name "toolutil - Win32 Release"
 # Name "toolutil - Win32 Debug"
+# Name "toolutil - Win64 Release"
+# Name "toolutil - Win64 Debug"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
