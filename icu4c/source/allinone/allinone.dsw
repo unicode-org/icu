@@ -98,6 +98,9 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name genidna
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name layoutex
+    End Project Dependency
 }}}
 
 ###############################################################################
@@ -496,6 +499,27 @@ Package=<4>
 {{{
     Begin Project Dependency
     Project_Dep_Name common
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "layoutex"=..\layoutex\layoutex.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name common
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name i18n
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name layout
     End Project Dependency
 }}}
 
