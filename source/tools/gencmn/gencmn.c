@@ -319,6 +319,12 @@ main(int argc, char* argv[]) {
             }
         }
 
+        /* pad to 16-align the last file (cleaner, avoids growing .dat files in icuswap) */
+        length&=0xf;
+        if(length!=0) {
+            udata_writePadding(out, 16-length);
+        }
+
         /* finish */
         udata_finish(out, &errorCode);
         if(U_FAILURE(errorCode)) {
