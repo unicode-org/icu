@@ -59,7 +59,7 @@ class Hashtable;
  * @author Alan Liu
  * @internal
  */
-class UnicodePropertySet : public UObject {
+class UnicodePropertySet /* not : public UObject because all methods are static */ {
 
  public:
 
@@ -226,6 +226,9 @@ class UnicodePropertySet : public UObject {
     static void init();
 
  private:
+    // do not instantiate
+    UnicodePropertySet();
+
     //----------------------------------------------------------------
     // SetFactory <=> void*
     // I don't know why the compiler won't cast between these types.

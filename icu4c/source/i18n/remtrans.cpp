@@ -13,6 +13,8 @@ static const UChar ID[] = {65, 110, 121, 45, 0x52, 0x65, 0x6D, 0x6F, 0x76, 0x65,
 
 U_NAMESPACE_BEGIN
 
+const char RemoveTransliterator::fgClassID=0;
+
 /**
  * System registration hook.
  */

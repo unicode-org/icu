@@ -15,6 +15,8 @@ U_NAMESPACE_BEGIN
 
 #define DEFUALT_CAPACITY 8
 
+const char UVector::fgClassID=0;
+
 UVector::UVector(UErrorCode &status) :
     count(0),
     capacity(0),
@@ -432,6 +434,8 @@ void UVector::sortedInsert(UHashTok tok, USortComparator compare, UErrorCode& ec
         ++count;
     }
 }
+
+const char UStack::fgClassID=0;
 
 UStack::UStack(UErrorCode &status) :
     UVector(status)

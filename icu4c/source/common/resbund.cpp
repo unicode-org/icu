@@ -167,6 +167,8 @@ U_NAMESPACE_BEGIN
  */
 //-----------------------------------------------------------------------------
 
+const char ResourceBundle::fgClassID=0;
+
 ResourceBundle::ResourceBundle( const UnicodeString&    path,
                                 const Locale&           locale,
                                 UErrorCode&              error)

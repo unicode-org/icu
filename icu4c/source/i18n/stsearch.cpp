@@ -13,6 +13,8 @@
 
 U_NAMESPACE_BEGIN
 
+const char StringSearch::fgClassID=0;
+
 // public constructors and destructors -----------------------------------
 
 StringSearch::StringSearch(const UnicodeString &pattern, 

@@ -78,6 +78,12 @@ class U_I18N_API EscapeTransliterator : public Transliterator {
      */
     EscapeTransliterator* supplementalHandler;
 
+    /**
+     * The address of this static class variable serves as this class's ID
+     * for ICU "poor man's RTTI".
+     */
+    static const char fgClassID;
+
  public:
 
     /**
@@ -110,6 +116,20 @@ class U_I18N_API EscapeTransliterator : public Transliterator {
      * Transliterator API.
      */
     virtual Transliterator* clone() const;
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for this class.
+     *
+     * @draft ICU 2.2
+     */
+    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
 
  protected:
 

@@ -15,6 +15,8 @@
 
 U_NAMESPACE_BEGIN
 
+const char ThaiLayoutEngine::fgClassID=0;
+
 ThaiLayoutEngine::ThaiLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode)
     : LayoutEngine(fontInstance, scriptCode, languageCode)
 {

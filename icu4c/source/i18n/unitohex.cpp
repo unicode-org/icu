@@ -13,6 +13,8 @@
 
 U_NAMESPACE_BEGIN
 
+const char UnicodeToHexTransliterator::fgClassID=0;
+
 /**
  * ID for this transliterator.
  */

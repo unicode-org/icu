@@ -16,6 +16,12 @@
 #include "unicode/unistr.h"
 #include "unicode/uchar.h"
 
+U_NAMESPACE_BEGIN
+
+const char Hashtable::fgClassID=0;
+
+U_NAMESPACE_END
+
 /********************************************************************
  * PUBLIC UnicodeString support functions for UHashtable
  ********************************************************************/

@@ -41,7 +41,7 @@
 
 U_NAMESPACE_BEGIN
 
-
+const char RBBISetBuilder::fgClassID=0;
 
 //------------------------------------------------------------------------
 //

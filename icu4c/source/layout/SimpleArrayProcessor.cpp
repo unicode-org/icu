@@ -15,6 +15,8 @@
 
 U_NAMESPACE_BEGIN
 
+const char SimpleArrayProcessor::fgClassID=0;
+
 SimpleArrayProcessor::SimpleArrayProcessor()
 {
 }

@@ -39,6 +39,20 @@ public:
     void    adjustXAdvance(float xAdjustment);
     void    adjustYAdvance(float yAdjustment);
 
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for this class.
+     *
+     * @draft ICU 2.2
+     */
+    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
 private:
     float xPlacement;
     float yPlacement;
@@ -46,6 +60,12 @@ private:
     float yAdvance;
 
     le_int32 baseOffset;
+
+    /**
+     * The address of this static class variable serves as this class's ID
+     * for ICU "poor man's RTTI".
+     */
+    static const char fgClassID;
 };
 
 inline GlyphPositionAdjustment::GlyphPositionAdjustment()

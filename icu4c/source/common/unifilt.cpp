@@ -11,6 +11,8 @@
 
 U_NAMESPACE_BEGIN
 
+const char UnicodeFilter::fgClassID=0;
+
 /**
  * UnicodeFunctor API.  Cast 'this' to a UnicodeMatcher* pointer
  * and return the pointer.

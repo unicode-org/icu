@@ -17,6 +17,8 @@ U_NAMESPACE_BEGIN
 
 const UChar EMPTY[] = { 0 }; // empty string: ""
 
+const char StringReplacer::fgClassID=0;
+
 /**
  * Construct a StringReplacer that sets the emits the given output
  * text and sets the cursor to the given position.

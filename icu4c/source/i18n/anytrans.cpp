@@ -4,7 +4,7 @@
 * and others.  All Rights Reserved.
 *****************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/anytrans.cpp,v $ 
-* $Revision: 1.6 $
+* $Revision: 1.7 $
 *****************************************************************
 * Date        Name        Description
 * 06/06/2002  aliu        Creation.
@@ -102,7 +102,31 @@ public:
      * given delta.  A positive delta means the limit has increased.
      */
     void adjustLimit(int32_t delta);
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for this class.
+     *
+     * @draft ICU 2.2
+     */
+    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+
+private:
+
+    /**
+     * The address of this static class variable serves as this class's ID
+     * for ICU "poor man's RTTI".
+     */
+    static const char fgClassID;
 };
+
+const char ScriptRunIterator::fgClassID=0;
 
 ScriptRunIterator::ScriptRunIterator(const Replaceable& theText,
                                      int32_t start, int32_t limit) :
@@ -164,6 +188,8 @@ void ScriptRunIterator::adjustLimit(int32_t delta) {
 
 //------------------------------------------------------------
 // AnyTransliterator
+
+const char AnyTransliterator::fgClassID=0;
 
 AnyTransliterator::AnyTransliterator(const UnicodeString& id,
                                      const UnicodeString& theTarget,

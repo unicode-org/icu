@@ -118,7 +118,7 @@ U_NAMESPACE_BEGIN
  * USet support API.  Declaring a class a friend is more portable than
  * trying to declare extern "C" functions as friends.
  */
-class USetAccess : public UObject {
+class USetAccess /* not : public UObject because all methods are static */ {
 public:
     // Try to have the compiler inline these
     inline static int32_t getStringCount(const UnicodeSet& set) {
@@ -128,6 +128,9 @@ public:
                                                  int32_t i) {
         return set.getString(i);
     }
+private:
+    // do not instantiate
+    USetAccess();
 };
 U_NAMESPACE_END
 

@@ -44,6 +44,12 @@ private:
         }
     }
 
+    /**
+     * The address of this static class variable serves as this class's ID
+     * for ICU "poor man's RTTI".
+     */
+    static const char fgClassID;
+
 public:
     ReorderingOutput(LEUnicode *outChars, le_int32 *charIndices, const LETag **charTags)
         : fOutIndex(0), fOutChars(outChars), fCharIndices(charIndices), fCharTags(charTags),
@@ -131,7 +137,23 @@ public:
     {
         return fOutIndex;
     }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for the actual class.
+     *
+     * @draft ICU 2.2
+     */
+    virtual inline UClassID getDynamicClassID() const { return getStaticClassID(); }
+
+    /**
+     * ICU "poor man's RTTI", returns a UClassID for this class.
+     *
+     * @draft ICU 2.2
+     */
+    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
 };
+
+const char ReorderingOutput::fgClassID=0;
 
 enum
 {

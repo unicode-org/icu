@@ -19,6 +19,4 @@
 
 U_NAMESPACE_BEGIN
 
-const char UObject::fgClassID=0;
-
 U_NAMESPACE_END

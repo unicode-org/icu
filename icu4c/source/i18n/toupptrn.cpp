@@ -16,6 +16,8 @@
 
 U_NAMESPACE_BEGIN
 
+const char UppercaseTransliterator::fgClassID=0;
+
 const char UppercaseTransliterator::_ID[] = "Any-Upper";
 
 /**

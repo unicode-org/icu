@@ -14,6 +14,8 @@
 
 U_NAMESPACE_BEGIN
 
+const char GXLayoutEngine::fgClassID=0;
+
 GXLayoutEngine::GXLayoutEngine(const LEFontInstance *fontInstance, le_int32 scriptCode, le_int32 languageCode, const MorphTableHeader *morphTable) 
     : LayoutEngine(fontInstance, scriptCode, languageCode), fMorphTable(morphTable)
 {

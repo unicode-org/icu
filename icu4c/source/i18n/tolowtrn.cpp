@@ -16,6 +16,8 @@
 
 U_NAMESPACE_BEGIN
 
+const char LowercaseTransliterator::fgClassID=0;
+
 const char LowercaseTransliterator::_ID[] = "Any-Lower";
 
 /**

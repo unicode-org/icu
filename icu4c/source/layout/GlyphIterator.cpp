@@ -15,6 +15,8 @@
 
 U_NAMESPACE_BEGIN
 
+const char GlyphIterator::fgClassID=0;
+
 GlyphIterator::GlyphIterator(LEGlyphID *theGlyphs, GlyphPositionAdjustment *theGlyphPositionAdjustments, le_int32 theGlyphCount,
     le_bool rightToLeft, le_uint16 theLookupFlags, LETag theFeatureTag, const LETag *theGlyphTags[],
     const GlyphDefinitionTableHeader *theGlyphDefinitionTableHeader)

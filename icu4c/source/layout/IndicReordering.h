@@ -125,7 +125,7 @@ struct IndicClassTable
     static const IndicClassTable *getScriptClassTable(le_int32 scriptCode);
 };
 
-class IndicReordering : public UObject {
+class IndicReordering /* not : public UObject because all methods are static */ {
 public:
     static le_int32 getWorstCaseExpansion(le_int32 scriptCode);
 
@@ -138,6 +138,9 @@ public:
     static const LETag *getFeatureOrder();
 
 private:
+    // do not instantiate
+    IndicReordering();
+
     static le_int32 findSyllable(const IndicClassTable *classTable, const LEUnicode *chars, le_int32 prev, le_int32 charCount);
 
 };

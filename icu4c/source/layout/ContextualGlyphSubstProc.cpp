@@ -16,6 +16,8 @@
 
 U_NAMESPACE_BEGIN
 
+const char ContextualGlyphSubstitutionProcessor::fgClassID=0;
+
 ContextualGlyphSubstitutionProcessor::ContextualGlyphSubstitutionProcessor(const MorphSubtableHeader *morphSubtableHeader)
   : StateTableProcessor(morphSubtableHeader)
 {

@@ -17,6 +17,8 @@ static const UChar CLOSE[]   = {32,41,0}; // " )"
 
 U_NAMESPACE_BEGIN
 
+const char FunctionReplacer::fgClassID=0;
+
 /**
  * Construct a replacer that takes the output of the given
  * replacer, passes it through the given transliterator, and emits
