@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-aix-va,v 1.13 2001/10/26 20:25:31 grhoten-oss Exp $
+## $Id: mh-aix-va,v 1.14 2001/11/01 22:45:17 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)
@@ -16,13 +16,15 @@ COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -qroconst -c
 ## Commands to link
 ## We need to use the C++ linker, even when linking C programs, since
 ##  our libraries contain C++ code (C++ static init not called)
-#LINK.c=		$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
 LINK.c=		$(CXX) -brtl $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 LINK.cc=	$(CXX) -brtl $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 
 ## Commands to make a shared library
-SHLIB.c=	xlC_r -qmkshrobj -brtl
-SHLIB.cc=	xlC_r -qmkshrobj -brtl
+## -G means -berok -brtl -bnortllib -bnosymbolic -bnoautoexp
+## -bh:8 means halt on errors or worse.  We don't display warnings about
+##      duplicate inline symbols.
+SHLIB.c=	xlC_r -qmkshrobj -G -bh:8
+SHLIB.cc=	xlC_r -qmkshrobj -G -bh:8
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	-I
