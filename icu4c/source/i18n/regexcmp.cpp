@@ -89,8 +89,8 @@ RegexCompile::~RegexCompile() {
 //
 //----------------------------------------------------------------------------------------
 void RegexCompile::cleanup() {
-    delete RegexPattern::gStaticSets;
-    RegexPattern::gStaticSets = NULL;
+    delete RegexStaticSets::gStaticSets;
+    RegexStaticSets::gStaticSets = NULL;
 }
 
 
@@ -122,8 +122,8 @@ void    RegexCompile::compile(
     // Prepare the RegexPattern object to receive the compiled pattern.
     //   TODO:  remove per-instance field, and just use globals directly.  (But check perf)
     fRXPat->fPattern        = pat;
-    fRXPat->fStaticSets     = RegexPattern::gStaticSets->fPropSets;
-    fRXPat->fStaticSets8    = RegexPattern::gStaticSets->fPropSets8;
+    fRXPat->fStaticSets     = RegexStaticSets::gStaticSets->fPropSets;
+    fRXPat->fStaticSets8    = RegexStaticSets::gStaticSets->fPropSets8;
 
 
     // Initialize the pattern scanning state machine
@@ -186,7 +186,7 @@ void    RegexCompile::compile(
             if (tableEl->fCharClass >= 128 && tableEl->fCharClass < 240 &&   // Table specs a char class &&
                 fC.fQuoted == FALSE &&                                       //   char is not escaped &&
                 fC.fChar != (UChar32)-1) {                                   //   char is not EOF
-                UnicodeSet *uniset = RegexPattern::gStaticSets->fRuleSets[tableEl->fCharClass-128];
+                UnicodeSet *uniset = RegexStaticSets::gStaticSets->fRuleSets[tableEl->fCharClass-128];
                 if (uniset->contains(fC.fChar)) {
                     // Table row specified a character class, or set of characters,
                     //   and the current char matches it.
@@ -1186,7 +1186,7 @@ UBool RegexCompile::doParseActions(EParseAction action)
                     break;
                 }
                 c = peekCharLL();
-                if (RegexPattern::gStaticSets->fRuleDigits->contains(c) == FALSE) {
+                if (RegexStaticSets::gStaticSets->fRuleDigits->contains(c) == FALSE) {
                     break;
                 }
                 nextCharLL();
@@ -3377,7 +3377,7 @@ void RegexCompile::nextChar(RegexPatternChar &c) {
                 int32_t startX = fNextIndex;  // start and end positions of the
                 int32_t endX   = fNextIndex;  //   sequence following the '\'
         if (c.fChar == chBackSlash) {
-            if (RegexPattern::gStaticSets->fUnescapeCharSet->contains(peekCharLL())) {
+            if (RegexStaticSets::gStaticSets->fUnescapeCharSet->contains(peekCharLL())) {
                 //
                 // A '\' sequence that is handled by ICU's standard unescapeAt function.
                 //   Includes \uxxxx, \n, \r, many others.
