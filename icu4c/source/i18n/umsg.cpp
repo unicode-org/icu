@@ -329,7 +329,12 @@ umsg_toPattern(UMessageFormat *fmt,
     }
 
 
-    UnicodeString res(result, 0, resultLength);
+    UnicodeString res;
+    if(!(result==NULL && resultLength==0)) {
+        // NULL destination for pure preflighting: empty dummy string
+        // otherwise, alias the destination buffer
+        res.setTo(result, 0, resultLength);
+    }
     ((MessageFormat*)fmt)->toPattern(res);
     return res.extract(result, resultLength, *status);
 }
