@@ -14,6 +14,8 @@
 
 U_NAMESPACE_BEGIN
 
+class UnicodeString;
+
 /**
  * Base class for 'pure' C++ implementations.  Adds method that
  * returns the next UnicodeString since in C++ this might be a
