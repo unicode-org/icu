@@ -290,7 +290,7 @@ UnicodeString::allocate(int32_t capacity) {
       fCapacity = (words - 1) * (sizeof(int32_t) / U_SIZEOF_UCHAR);
       fFlags = kLongString;
     } else {
-      fArray = 0;
+      fLength = 0;
       fCapacity = 0;
       fFlags = kIsBogus;
       return FALSE;
@@ -1264,7 +1264,7 @@ UnicodeString::extract(UTextOffset start,
     char target = 0;
     int32_t size = 0;
 
-    myTargetLimit = myTarget + sizeof(char);
+    myTargetLimit = &target + sizeof(char);
     while (mySource < mySourceLimit && U_SUCCESS(status)) {
         myTarget = &target;
         ucnv_fromUnicode(converter, &myTarget, myTargetLimit,
