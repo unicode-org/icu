@@ -4973,9 +4973,14 @@ UBool ucol_setUpLatinOne(UCollator *coll, UErrorCode *status) {
                   }
                 }
                 contractionOffset++;
-              } else {
+              } else if(CE < UCOL_NOT_FOUND) {
                 ucol_addLatinOneEntry(coll, (UChar)contractionOffset++, CE, &primShift, &secShift, &terShift);
-              }
+              } else {
+                coll->latinOneCEs[(UChar)contractionOffset] = UCOL_BAIL_OUT_CE;
+                coll->latinOneCEs[coll->latinOneTableLen+(UChar)contractionOffset] = UCOL_BAIL_OUT_CE;
+                coll->latinOneCEs[2*coll->latinOneTableLen+(UChar)contractionOffset] = UCOL_BAIL_OUT_CE;
+                contractionOffset++;
+              }                
               UCharOffset++;
               primShift = 24; secShift = 24; terShift = 24;
               if(contractionOffset == coll->latinOneTableLen) { // we need to reallocate
