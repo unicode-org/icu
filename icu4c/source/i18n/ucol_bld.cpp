@@ -309,6 +309,10 @@ U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t* lows, uint32_
     }
   } 
 
+  if(low == 0) {
+    low = 0x01000000;
+  }
+
   if(strength == UCOL_SECONDARY) { /* similar as simple */
     if(low >= UCOL_COMMON_BOT2<<24 && low < UCOL_COMMON_TOP2<<24) {
       low = UCOL_COMMON_TOP2<<24;
