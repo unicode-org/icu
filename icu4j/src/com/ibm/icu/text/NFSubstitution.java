@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NFSubstitution.java,v $ 
- * $Date: 2004/03/22 21:53:12 $ 
- * $Revision: 1.9 $
+ * $Date: 2004/03/23 21:33:58 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -23,7 +23,7 @@ import java.text.*;
  * is a section of a rule that inserts text into the rule's rule text
  * based on some part of the number being formatted.
  * @author Richard Gillam
- * @version $RCSfile: NFSubstitution.java,v $ $Revision: 1.9 $ $Date: 2004/03/22 21:53:12 $
+ * @version $RCSfile: NFSubstitution.java,v $ $Revision: 1.10 $ $Date: 2004/03/23 21:33:58 $
  */
 abstract class NFSubstitution {
     //-----------------------------------------------------------------------
@@ -1345,9 +1345,30 @@ class FractionalPartSubstitution extends NFSubstitution {
             String workText = new String(text);
             ParsePosition workPos = new ParsePosition(1);
             double result = 0;
-            int digit;
-            double p10 = 0.1;
+	    int digit;
+//              double p10 = 0.1;
 
+//              while (workText.length() > 0 && workPos.getIndex() != 0) {
+//                  workPos.setIndex(0);
+//                  digit = ruleSet.parse(workText, workPos, 10).intValue();
+//                  if (lenientParse && workPos.getIndex() == 0) {
+//                      digit = NumberFormat.getInstance().parse(workText, workPos).intValue();
+//                  }
+
+//                  if (workPos.getIndex() != 0) {
+//                      result += digit * p10;
+//                      p10 /= 10;
+//                      parsePosition.setIndex(parsePosition.getIndex() + workPos.getIndex());
+//                      workText = workText.substring(workPos.getIndex());
+//                      while (workText.length() > 0 && workText.charAt(0) == ' ') {
+//                          workText = workText.substring(1);
+//                          parsePosition.setIndex(parsePosition.getIndex() + 1);
+//                      }
+//                  }
+//              }
+
+
+	    DigitList dl = new DigitList();
             while (workText.length() > 0 && workPos.getIndex() != 0) {
                 workPos.setIndex(0);
                 digit = ruleSet.parse(workText, workPos, 10).intValue();
@@ -1356,8 +1377,8 @@ class FractionalPartSubstitution extends NFSubstitution {
                 }
 
                 if (workPos.getIndex() != 0) {
-                    result += digit * p10;
-                    p10 /= 10;
+		    dl.append('0'+digit);
+
                     parsePosition.setIndex(parsePosition.getIndex() + workPos.getIndex());
                     workText = workText.substring(workPos.getIndex());
                     while (workText.length() > 0 && workText.charAt(0) == ' ') {
@@ -1366,6 +1387,8 @@ class FractionalPartSubstitution extends NFSubstitution {
                     }
                 }
             }
+	    result = dl.count == 0 ? 0 : dl.getDouble();
+
             result = composeRuleValue(result, baseValue);
             return new Double(result);
         }

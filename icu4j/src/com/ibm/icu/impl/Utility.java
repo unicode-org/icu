@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Utility.java,v $
- * $Date: 2004/01/22 06:39:04 $
- * $Revision: 1.50 $
+ * $Date: 2004/03/23 21:33:58 $
+ * $Revision: 1.51 $
  *
  *****************************************************************************************
  */
@@ -617,15 +617,23 @@ public final class Utility {
             while (i<s.length() && count<80) {
             char c = s.charAt(i++);
             if (c < '\u0020' || c == '"' || c == '\\') {
-                // Represent control characters, backslash and double quote
-                // using octal notation; otherwise the string we form
-                // won't compile, since Unicode escape sequences are
-                // processed before tokenization.
-                buffer.append('\\');
-                buffer.append(HEX_DIGIT[(c & 0700) >> 6]); // HEX_DIGIT works for octal
-                buffer.append(HEX_DIGIT[(c & 0070) >> 3]);
-                buffer.append(HEX_DIGIT[(c & 0007)]);
-                count += 4;
+		if (c == '\n') {
+		    buffer.append("\\n");
+		} else if (c == '\t') {
+		    buffer.append("\\t");
+		} else if (c == '\r') {
+		    buffer.append("\\r");
+		} else {
+		    // Represent control characters, backslash and double quote
+		    // using octal notation; otherwise the string we form
+		    // won't compile, since Unicode escape sequences are
+		    // processed before tokenization.
+		    buffer.append('\\');
+		    buffer.append(HEX_DIGIT[(c & 0700) >> 6]); // HEX_DIGIT works for octal
+		    buffer.append(HEX_DIGIT[(c & 0070) >> 3]);
+		    buffer.append(HEX_DIGIT[(c & 0007)]);
+		    count += 4;
+		}
             }
             else if (c <= '\u007E') {
                 buffer.append(c);
@@ -658,14 +666,22 @@ public final class Utility {
         for (int i=0; i<s.length();) {
             char c = s.charAt(i++);
             if (c < '\u0020' || c == '"' || c == '\\') {
-                // Represent control characters, backslash and double quote
-                // using octal notation; otherwise the string we form
-                // won't compile, since Unicode escape sequences are
-                // processed before tokenization.
-                buffer.append('\\');
-                buffer.append(HEX_DIGIT[(c & 0700) >> 6]); // HEX_DIGIT works for octal
-                buffer.append(HEX_DIGIT[(c & 0070) >> 3]);
-                buffer.append(HEX_DIGIT[(c & 0007)]);
+		if (c == '\n') {
+		    buffer.append("\\n");
+		} else if (c == '\t') {
+		    buffer.append("\\t");
+		} else if (c == '\r') {
+		    buffer.append("\\r");
+		} else {
+		    // Represent control characters, backslash and double quote
+		    // using octal notation; otherwise the string we form
+		    // won't compile, since Unicode escape sequences are
+		    // processed before tokenization.
+		    buffer.append('\\');
+		    buffer.append(HEX_DIGIT[(c & 0700) >> 6]); // HEX_DIGIT works for octal
+		    buffer.append(HEX_DIGIT[(c & 0070) >> 3]);
+		    buffer.append(HEX_DIGIT[(c & 0007)]);
+		}
             }
             else if (c <= '\u007E') {
                 buffer.append(c);
