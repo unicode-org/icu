@@ -54,6 +54,7 @@ class DateFormat;
  * .   ------   -------                 ------------       -------
  * .   G        era designator          (Text)             AD
  * .   y        year                    (Number)           1996
+ * .   Y        year/week of year       (Number)           1996
  * .   M        month in year           (Text & Number)    July & 07
  * .   d        day in month            (Number)           10
  * .   h        hour in am/pm (1~12)    (Number)           12
@@ -61,8 +62,9 @@ class DateFormat;
  * .   m        minute in hour          (Number)           30
  * .   s        second in minute        (Number)           55
  * .   S        millisecond             (Number)           978
- * .   E        day in week             (Text)             Tuesday
- * .   D        day in year             (Number)           189
+ * .   E        day of week             (Text)             Tuesday
+ * .   e        day of week/local (1~7) (Number)           2
+ * .   D        day of year             (Number)           189
  * .   F        day of week in month    (Number)           2 (2nd Wed in July)
  * .   w        week in year            (Number)           27
  * .   W        week in month           (Number)           2
