@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_InterIndic_Latin.txt
-// Date: Thu Oct 25 22:17:21 2001
+// Date: Sat Nov 10 17:25:41 2001
 //--------------------------------------------------------------------
 
 // InterIndic_Latin
@@ -102,7 +102,7 @@ translit_InterIndic_Latin {
     "$virama=\ue04d;"
 // \u094e Reserved
 // \u094f Reserved
-//\u0950>\ue050; # OM
+    "$om=\ue050;" // OM
 // \u0951>;        # UNMAPPED STRESS SIGN UDATTA
 // \u0952>;        # UNMAPPED STRESS SIGN ANUDATTA
 // \u0953>;        # UNMAPPED GRAVE ACCENT
@@ -253,6 +253,9 @@ translit_InterIndic_Latin {
     "$ra$virama}$ha>r'';"
     "$ra}$x>r;"
     "$ra>ra;"
+    "$rra$virama}$ha>r\u0331'';"
+    "$rra}$x>r\u0331;"
+    "$rra>r\u0331a;"
     "$la$virama}$ha>l'';"
     "$la}$x>l;"
     "$la>la;"
@@ -282,8 +285,8 @@ translit_InterIndic_Latin {
     "$ena     > n\u0331a ;"
     "$uka}$x  > q        ;"
     "$uka     > qa       ;"
-    "$ukha}$x > k\u0323  ;"
-    "$ukha    > k\u0323a ;"
+    "$ukha}$x > k\u0331h\u0331 ;"
+    "$ukha    > k\u0331h\u0331a ;"
     "$ugha}$x > g\u0307  ;"
     "$ugha    > g\u0307a ;"
     "$ujha}$x > z        ;"
@@ -292,8 +295,8 @@ translit_InterIndic_Latin {
     "$udha    > r\u0323ha;"
     "$uddha}$x> r\u0323  ;"
     "$uddha   > r\u0323a ;"
-    "$ufa}$x  > f\u0323  ;"
-    "$ufa     > f\u0323a ;"
+    "$ufa}$x  > f  ;"
+    "$ufa     > fa ;"
     // dependent vowels (should never occur except following consonants)
     "$aa  > a\u0304       ;"
     "$ai  > ai            ;"
@@ -315,33 +318,33 @@ translit_InterIndic_Latin {
     "$se  > e             ;"
     "$so  > o             ;"   
     // independent vowels (when following consonants)
-    "a}$waa     > ''a\u0304       ;"
-    "$z}$waa    > ''a\u0304        ;"
-    "a}$wai     > ''ai        ;"
-    "$z}$wai    > ''ai        ;"
-    "a}$wau     > ''au       ;"
-    "$z}$wau    > ''au        ;"
-    "a}$wii     > ''i\u0304       ;"
-    "$z}$wii    > ''i\u0304        ;"
-    "a}$wi      > ''i         ;"
-    "$z}$wi     > ''i         ;"
-    "a}$wuu     > ''u\u0304         ;"
-    "$z}$wuu    > ''u\u0304         ;"
-    "a}$wu      > ''u        ;"
-    "$z}$wu     > ''u         ;"
-    "$z}$wrr    > ''r\u0325\u0304         ;"
-    "$z}$wr     > ''r\u0325         ;"
-    "$z}$wll    > ''l\u0325\u0304         ;"
-    "$z}$wl     > ''l\u0325         ;"
-    "$z}$we     > ''e\u0304         ;"
-    "$z}$wo     > ''o\u0304         ;"
-    "a}$wa      > ''a         ;"
-    "$z}$wa     > ''a         ;"
+    "a{$waa     > ''a\u0304       ;"
+    "$z{$waa    > ''a\u0304        ;"
+    "a{$wai     > ''ai        ;"
+    "$z{$wai    > ''ai        ;"
+    "a{$wau     > ''au       ;"
+    "$z{$wau    > ''au        ;"
+    "a{$wii     > ''i\u0304       ;"
+    "$z{$wii    > ''i\u0304        ;"
+    "a{$wi      > ''i         ;"
+    "$z{$wi     > ''i         ;"
+    "a{$wuu     > ''u\u0304         ;"
+    "$z{$wuu    > ''u\u0304         ;"
+    "a{$wu      > ''u        ;"
+    "$z{$wu     > ''u         ;"
+    "$z{$wrr    > ''r\u0325\u0304         ;"
+    "$z{$wr     > ''r\u0325         ;"
+    "$z{$wll    > ''l\u0325\u0304         ;"
+    "$z{$wl     > ''l\u0325         ;"
+    "$z{$we     > ''e\u0304         ;"
+    "$z{$wo     > ''o\u0304         ;"
+    "a{$wa      > ''a         ;"
+    "$z{$wa     > ''a         ;"
     //extra vowels
-    "$z}$wce    > ''e\u0306         ;"
-    "$z}$wco    > ''o\u0306         ;"
-    "$z}$wse    > ''e         ;"
-    "$z}$wso    > ''o         ;"
+    "$z{$wce    > ''e\u0306         ;"
+    "$z{$wco    > ''o\u0306         ;"
+    "$z{$wse    > ''e         ;"
+    "$z{$wso    > ''o         ;"
     // independent vowels (otherwise)
     "$waa > a\u0304        ;"
     "$wai > ai         ;"
@@ -362,6 +365,7 @@ translit_InterIndic_Latin {
     "$wco > o\u0306       ;"
     "$wse > e         ;"
     "$wso > o     ;"
+    "$om > ''om ;"
     //stress marks
     "$avagraha > \u0315;"
     "$chandrabindu$anusvara>'-'\u0303;"

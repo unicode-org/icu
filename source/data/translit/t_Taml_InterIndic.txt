@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Tamil_InterIndic.txt
-// Date: Thu Oct 25 22:17:22 2001
+// Date: Sat Nov 10 17:25:42 2001
 //--------------------------------------------------------------------
 
 // Tamil_InterIndic
@@ -31,6 +31,7 @@ translit_Tamil_InterIndic {
 //--------------------------------------------------------------------
 // Tamil-InterIndic
 //:: NFD (NFC) ;
+"\u0bc6\u0bd7>\ue04c;"
 "\u0b82>\ue002;" // SIGN ANUSVARA
 "\u0b83>\ue003;" // SIGN VISARGA
 "\u0b85>\ue005;" // LETTER A

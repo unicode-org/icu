@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Kannada_InterIndic.txt
-// Date: Thu Oct 25 22:17:21 2001
+// Date: Sat Nov 10 17:25:41 2001
 //--------------------------------------------------------------------
 
 // Kannada_InterIndic

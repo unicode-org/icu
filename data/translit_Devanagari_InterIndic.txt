@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Devanagari_InterIndic.txt
-// Date: Thu Oct 25 22:17:21 2001
+// Date: Sat Nov 10 17:25:41 2001
 //--------------------------------------------------------------------
 
 // Devanagari_InterIndic
@@ -50,11 +50,11 @@ translit_Devanagari_InterIndic {
  "\u090b>\ue00b;"  // LETTER VOCALIC R
  "\u090c>\ue00c;"  // LETTER VOCALIC L
  "\u090d>\ue00d;"  // LETTER CANDRA E (For representing English sounds)
-//\u090e>\ue00e; # UNMAPPED LETTER SHORT E(For Southern Scripts)
+ "\u090e>\ue00e;" // UNMAPPED LETTER SHORT E(For Southern Scripts)
  "\u090f>\ue00f;"  // LETTER E
  "\u0910>\ue010;"  // LETTER AI
  "\u0911>\ue011;"  // LETTER CANDRA O (For representing English sounds)
-//\u0912>\ue012; # UNMAPPED LETTER SHORT O (For Southern Scripts)
+ "\u0912>\ue012;" // UNMAPPED LETTER SHORT O (For Southern Scripts)
  "\u0913>\ue013;"  // LETTER O
  "\u0914>\ue014;"  // LETTER AU
  "\u0915>\ue015;"  // LETTER KA
@@ -85,10 +85,10 @@ translit_Devanagari_InterIndic {
  "\u092e>\ue02e;"  // LETTER MA
  "\u092f>\ue02f;"  // LETTER YA
  "\u0930>\ue030;"  // LETTER RA
- //\u0931>\ue031;  # UNMAPPED LETTER RRA (Eyelash RA for Southern scripts)
+ "\u0931>\ue031;"  // UNMAPPED LETTER RRA (Eyelash RA for Southern scripts)
  "\u0932>\ue032;"  // LETTER LA
  "\u0933>\ue033;"  // LETTER LLA
- //\u0934>\ue034;  # UNMAPPED LETTER LLLA (LLLA for Southern scripts)
+ "\u0934>\ue034;"  // UNMAPPED LETTER LLLA (LLLA for Southern scripts)
  "\u0935>\ue035;"  // LETTER VA
  "\u0936>\ue036;"  // LETTER SHA
  "\u0937>\ue037;"  // LETTER SSA
@@ -104,11 +104,11 @@ translit_Devanagari_InterIndic {
  "\u0943>\ue043;"  // VOWEL SIGN VOCALIC R
  "\u0944>\ue044;"  // VOWEL SIGN VOCALIC RR
  "\u0945>\ue045;"  // VOWEL SIGN CANDRA E
-//\u0946>\ue046; # UNMAPPED VOWEL SIGN SHORT E
+ "\u0946>\ue046;" // UNMAPPED VOWEL SIGN SHORT E
  "\u0947>\ue047;"  // VOWEL SIGN E
  "\u0948>\ue048;"  // VOWEL SIGN AI
  "\u0949>\ue049;"  // VOWEL SIGN CANDRA O
-//\u094a>\ue04a; # UNMAPPED VOWEL SIGN SHORT O
+ "\u094a>\ue04a;" // UNMAPPED VOWEL SIGN SHORT O
  "\u094b>\ue04b;"  // VOWEL SIGN O
  "\u094c>\ue04c;"  // VOWEL SIGN AU
  "\u094d>\ue04d;"  // SIGN VIRAMA

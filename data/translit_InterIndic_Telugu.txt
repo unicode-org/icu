@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_InterIndic_Telugu.txt
-// Date: Thu Oct 25 22:17:21 2001
+// Date: Sat Nov 10 17:25:41 2001
 //--------------------------------------------------------------------
 
 // InterIndic_Telugu
@@ -42,8 +42,12 @@ translit_InterIndic_Telugu {
 "\ue00a>\u0c0a;" // LETTER UU
 "\ue00b>\u0c0b;" // LETTER VOCALIC R
 "\ue00c>\u0c0c;" // LETTER VOCALIC L
+"\ue00d>\u0c0E;" // FALLBACK MAPPING
+"\ue00e>\u0c0E;" // LETTER E
 "\ue00f>\u0c0f;" // LETTER EE
 "\ue010>\u0c10;" // LETTER AI
+"\ue011>\u0c12;" // FALBACK MAPPING
+"\ue012>\u0c12;" // LETTER O
 "\ue013>\u0c13;" // LETTER OO
 "\ue014>\u0c14;" // LETTER AU
 "\ue015>\u0c15;" // LETTER KA
@@ -82,8 +86,10 @@ translit_InterIndic_Telugu {
 "\ue037>\u0c37;" // LETTER SSA
 "\ue038>\u0c38;" // LETTER SA
 "\ue039>\u0c39;" // LETTER HA
-// \ue03c>; # UNMAPPED InterIndic-Telugu: SIGN NUKTA
-// \ue03d>; # UNMAPPED InterIndic-Telugu: SIGN AVAGRAHA
+
+"\ue03c>;" // FALLBACK BLOW AWAY NUKTA
+"\ue03d>;" // FALLBACK BLOW AWAY AVAGRAHA
+
 "\ue03e>\u0c3e;" // VOWEL SIGN AA
 "\ue03f>\u0c3f;" // VOWEL SIGN I
 "\ue040>\u0c40;" // VOWEL SIGN II
@@ -102,9 +108,11 @@ translit_InterIndic_Telugu {
 "\ue055>\u0c55;" // LENGTH MARK
 "\ue056>\u0c56;" // AI LENGTH MARK
 "\ue057>\u0c4c;" // REMAP (indicExceptions.txt): \u0c57>\u0c4c = AU LENGTH MARK>VOWEL SIGN AU
+"\ue058>\u0c15;" // REMAP
 "\ue059>\u0c16;" // REMAP (indicExceptions.txt): \u0c59>\u0c16 = LETTER KHHA>LETTER KHA
 "\ue05a>\u0c17;" // REMAP (indicExceptions.txt): \u0c5a>\u0c17 = LETTER GHHA>LETTER GA
 "\ue05b>\u0c1c;" // REMAP (indicExceptions.txt): \u0c5b>\u0c1c = LETTER ZA>LETTER JA
+"\ue05c>\u0c22;" // REMAP
 "\ue05d>\u0c22;" // REMAP (indicExceptions.txt): \u0c5d>\u0c22 = LETTER RHA>LETTER DDHA
 "\ue05e>\u0c2b;" // REMAP (indicExceptions.txt): \u0c5e>\u0c2b = LETTER FA>LETTER PHA
 "\ue05f>\u0c2f;" // REMAP (indicExceptions.txt): \u0c5f>\u0c2f = LETTER YYA>LETTER YA
@@ -123,8 +131,7 @@ translit_InterIndic_Telugu {
 "\ue06e>\u0c6e;" // DIGIT EIGHT
 "\ue06f>\u0c6f;" // DIGIT NINE
 // \ue080>; # UNMAPPED InterIndic-Telugu: ISSHAR
-"\ue00e>\u0c0e;" // LETTER E
-"\ue012>\u0c12;" // LETTER O
+
 "\ue031>\u0c31;" // LETTER RRA
 "\ue046>\u0c46;" // VOWEL SIGN E
 "\ue04a>\u0c4a;" // VOWEL SIGN O

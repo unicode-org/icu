@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_InterIndic_Bengali.txt
-// Date: Thu Oct 25 22:17:21 2001
+// Date: Sat Nov 10 17:25:41 2001
 //--------------------------------------------------------------------
 
 // InterIndic_Bengali
@@ -42,9 +42,13 @@ translit_InterIndic_Bengali {
 "\ue00a>\u098a;" // LETTER UU
 "\ue00b>\u098b;" // LETTER VOCALIC R
 "\ue00c>\u098c;" // LETTER VOCALIC L
-// \ue00f>; # UNMAPPED InterIndic-Bengali: LETTER EE (\u098f = LETTER E)
+"\ue00d>\u098f;" // FALLBACK
+"\ue00e>\u098f;" // FALLBACK
+"\ue00f>\u098f;" // LETTER E
 "\ue010>\u0990;" // LETTER AI
-// \ue013>; # UNMAPPED InterIndic-Bengali: LETTER OO (\u0993 = LETTER O)
+"\ue011>\u0993;" // FALLBACK
+"\ue012>\u0993;" // FALLBACK
+"\ue013>\u0993;" // LETTER O
 "\ue014>\u0994;" // LETTER AU
 "\ue015>\u0995;" // LETTER KA
 "\ue016>\u0996;" // LETTER KHA
@@ -74,6 +78,7 @@ translit_InterIndic_Bengali {
 "\ue02e>\u09ae;" // LETTER MA
 "\ue02f>\u09af;" // LETTER YA
 "\ue030>\u09b0;" // LETTER RA
+"\ue031>\u09b0\u09bc;" // FALLBACK to RA
 "\ue032>\u09b2;" // LETTER LA
 "\ue033>\u09b2;" // REMAP (indicExceptions.txt): \u09b3>\u09b2 = LETTER LLA>LETTER LA
 "\ue034>\u09b2;" // REMAP (indicExceptions.txt): \u09b4>\u09b2 = LETTER LLLA>LETTER LA
@@ -83,7 +88,7 @@ translit_InterIndic_Bengali {
 "\ue038>\u09b8;" // LETTER SA
 "\ue039>\u09b9;" // LETTER HA
 "\ue03c>\u09bc;" // SIGN NUKTA
-// \ue03d>; # UNMAPPED InterIndic-Bengali: SIGN AVAGRAHA
+"\ue03d>;" // FALLBACK BLOW AWAY AVAGRAHA
 "\ue03e>\u09be;" // VOWEL SIGN AA
 "\ue03f>\u09bf;" // VOWEL SIGN I
 "\ue040>\u09c0;" // VOWEL SIGN II
@@ -92,19 +97,23 @@ translit_InterIndic_Bengali {
 "\ue043>\u09c3;" // VOWEL SIGN VOCALIC R
 "\ue044>\u09c4;" // VOWEL SIGN VOCALIC RR
 "\ue045>\u09c7;" // REMAP (indicExceptions.txt): \u09c5>\u09c7 = VOWEL SIGN CANDRA E>VOWEL SIGN E
-// \ue047>; # UNMAPPED InterIndic-Bengali: VOWEL SIGN EE (\u09c7 = VOWEL SIGN E)
+"\ue046>\u09c7;" // FALLBACK
+"\ue047>\u09c7;" // VOWEL SIGN E
 "\ue048>\u09c8;" // VOWEL SIGN AI
 "\ue049>\u09cb;" // REMAP (indicExceptions.txt): \u09c9>\u09cb = VOWEL SIGN CANDRA O>VOWEL SIGN O
-// \ue04b>; # UNMAPPED InterIndic-Bengali: VOWEL SIGN OO (\u09cb = VOWEL SIGN O)
+"\ue04a>\u09cb;" // FALLBACK
+"\ue04b>\u09cb;" // VOWEL SIGN O
 "\ue04c>\u09cc;" // VOWEL SIGN AU
 "\ue04d>\u09cd;" // SIGN VIRAMA
-// \ue050>; # UNMAPPED InterIndic-Bengali: OM
+"\ue050>\u0993\u0982;" //  InterIndic-Bengali: OM
 // \ue055>; # UNMAPPED InterIndic-Bengali: LENGTH MARK
 "\ue056>\u09c8;" // REMAP (indicExceptions.txt): \u09d6>\u09c8 = AI LENGTH MARK>VOWEL SIGN AI
 "\ue057>\u09d7;" // AU LENGTH MARK
+"\ue058>\u0995;" // FALLBACK
 "\ue059>\u0996;" // REMAP (indicExceptions.txt): \u09d9>\u0996 = LETTER KHHA>LETTER KHA
 "\ue05a>\u0997;" // REMAP (indicExceptions.txt): \u09da>\u0997 = LETTER GHHA>LETTER GA
 "\ue05b>\u099c;" // REMAP (indicExceptions.txt): \u09db>\u099c = LETTER ZA>LETTER JA
+"\ue05c>\u09Dc;" // FALLBACK
 "\ue05d>\u09dd;" // LETTER RHA
 "\ue05e>\u09ab;" // REMAP (indicExceptions.txt): \u09de>\u09ab = LETTER FA>LETTER PHA
 "\ue05f>\u09df;" // LETTER YYA
@@ -123,11 +132,9 @@ translit_InterIndic_Bengali {
 "\ue06e>\u09ee;" // DIGIT EIGHT
 "\ue06f>\u09ef;" // DIGIT NINE
 "\ue0fa>\u09fa;" // ISSHAR
-"\ue00f>\u098f;" // LETTER E
-"\ue013>\u0993;" // LETTER O
-"\ue031>\u09dc;" // LETTER RRA
-"\ue047>\u09c7;" // VOWEL SIGN E
-"\ue04b>\u09cb;" // VOWEL SIGN O
+
+
+
 //    :: NFC (NFD) ;
 // eof
   }
