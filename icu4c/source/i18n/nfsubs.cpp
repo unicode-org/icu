@@ -276,7 +276,7 @@ NFSubstitution::toString(UnicodeString& text) const
   UnicodeString temp;
   if (ruleSet != NULL) {
     ruleSet->getName(temp);
-  } else {
+  } else if (numberFormat != NULL) {
     numberFormat->toPattern(temp);
   }
   text.append(temp);
@@ -305,7 +305,7 @@ NFSubstitution::doSubstitution(int64_t number, UnicodeString& toInsertInto, int3
         // on the type of substitution this is, then just call its
         // rule set's format() method to format the result
         ruleSet->format(transformNumber(number), toInsertInto, _pos + this->pos);
-    } else {
+    } else if (numberFormat != NULL) {
         // or perform the transformation on the number (preserving
         // the result's fractional part if the formatter it set
         // to show it), then use that formatter's format() method
@@ -348,7 +348,7 @@ NFSubstitution::doSubstitution(double number, UnicodeString& toInsertInto, int32
     } else {
         if (ruleSet != NULL) {
             ruleSet->format(numberToFormat, toInsertInto, _pos + this->pos);
-        } else {
+        } else if (numberFormat != NULL) {
             UnicodeString temp;
             numberFormat->format(numberToFormat, temp);
             toInsertInto.insert(_pos + this->pos, temp);
@@ -431,7 +431,7 @@ NFSubstitution::doParse(const UnicodeString& text,
         }
 
         // ...or use our DecimalFormat to parse the text
-    } else {
+    } else if (numberFormat != NULL) {
         numberFormat->parse(text, result, parsePosition);
     }
 
