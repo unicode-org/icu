@@ -245,6 +245,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_openU(const UChar* path,
                   const char* locale, 
                   UErrorCode* status);
 
+#ifdef ICU_URES_USE_DEPRECATES
 /**
  * returns a resource string, given a resource bundle and a key.
  *
@@ -307,7 +308,7 @@ U_CAPI const UChar* U_EXPORT2 ures_getArrayItem(const UResourceBundle*     resou
  * @see ures_get
  * @see ures_getArrayItem
  * @see ures_getTaggedItem
- * @deprecated Remove after 2000-dec-31. Use ures_getBinary instead.
+ * @deprecated Remove after 2000-dec-31. Use ures_getByKey and ures_getByIndex instead.
  */
 U_CAPI const UChar* U_EXPORT2 ures_get2dArrayItem(const UResourceBundle*   resourceBundle,
                       const char*             resourceTag,
@@ -331,13 +332,13 @@ U_CAPI const UChar* U_EXPORT2 ures_get2dArrayItem(const UResourceBundle*   resou
  * @see ures_get
  * @see ures_getArrayItem
  * @see ures_get2dItem
- * @deprecated Remove after 2000-dec-31. Use ures_getByKey and ures_getByIndex instead.
+ * @deprecated Remove after 2000-dec-31. Use ures_getByKey and ures_getStringByKey instead.
  */
 U_CAPI const UChar* U_EXPORT2 ures_getTaggedArrayItem(const UResourceBundle*   resourceBundle,
                       const char*             resourceTag,
                       const char*             itemTag,
                       UErrorCode*              status);
-
+#endif
 
 /**
  * Returns the number of strings/arrays in resource bundles.
@@ -541,7 +542,7 @@ U_CAPI const UChar* U_EXPORT2 ures_getNextString(UResourceBundle *resourceBundle
  *                          Alternatively, you can supply a struct to be filled by this function.
  * @param status            fills in the outgoing error code
  * @return                  a pointer to a UResourceBundle struct. If fill in param was NULL, caller must delete it
- * @draft
+ * @stable
  */
 U_CAPI UResourceBundle* U_EXPORT2 ures_getByIndex(const UResourceBundle *resourceBundle, int32_t indexR, UResourceBundle *fillIn, UErrorCode *status);
 
@@ -553,7 +554,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByIndex(const UResourceBundle *resourc
  * @param len               fill in length of the string
  * @param status            fills in the outgoing error code
  * @return                  a pointer to a zero-terminated UChar array which lives in a memory mapped/DLL file.
- * @draft
+ * @stable
  */
 U_CAPI const UChar* U_EXPORT2 ures_getStringByIndex(const UResourceBundle *resB, int32_t indexS, int32_t* len, UErrorCode *status);
 
@@ -567,7 +568,7 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByIndex(const UResourceBundle *resB,
  *                          Alternatively, you can supply a struct to be filled by this function.
  * @param status            fills in the outgoing error code.
  * @return                  a pointer to a UResourceBundle struct. If fill in param was NULL, caller must delete it
- * @draft
+ * @stable
  */
 U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resourceBundle, const char* key, UResourceBundle *fillIn, UErrorCode *status);
 
@@ -580,7 +581,7 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_getByKey(const UResourceBundle *resourceB
  * @param len               fill in length of the string
  * @param status            fills in the outgoing error code
  * @return                  a pointer to a zero-terminated UChar array which lives in a memory mapped/DLL file.
- * @draft
+ * @stable
  */
 U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, const char* key, int32_t* len, UErrorCode *status);
 
