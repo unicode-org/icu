@@ -357,7 +357,7 @@ en {
         CMF { "CMF", "Cameroon CFA Franc"   } // 01/01/1960-1992
         CNP { "CNP", "Chinese Jen Min Piao Yuan" } // 1948-04/30/1953
         CNX { "CNX", "Chinese US Dollar Foreign Exchange Certificates" } // 1979-1998
-        CNY { "CN\u00A5", "Chinese Yuan Renminbi" } // 03/01/1953-
+        CNY { "Y", "Chinese Yuan Renminbi" } // 03/01/1953-
         COB { "COB", "Colombian Paper Peso" }
         COF { "COF", "Congo CFA Franc"      } // 04/01/1973-1992
         COP { "Col$","Colombian Peso"       } // 6/9/1871-
