@@ -62,6 +62,14 @@ class U_I18N_API TitlecaseTransliterator : public Transliterator {
      */
     void handleTransliterate(Replaceable& text, UTransPosition& offset,
                              UBool isIncremental) const;
+
+ public:
+
+    /**
+     * Static memory cleanup function.  FOR INTERNAL USE ONLY; DO NOT
+     * CALL.
+     */
+    static void cleanup();
 };
 
 U_NAMESPACE_END
