@@ -8,6 +8,9 @@
 
 bn {
     Version{ "1.1" }
+    Languages {
+        bn { "\u09ac\u09be\u0982\u09b2\u09be" }
+    }
     AmPmMarkers { 
         "\u09AA\u09C2\u09B0\u09CD\u09AC\u09BE\u09B9\u09CD\u09A3",
         "\u0985\u09AA\u09B0\u09BE\u09B9\u09CD\u09A3",
