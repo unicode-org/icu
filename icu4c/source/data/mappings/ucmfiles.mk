@@ -64,4 +64,14 @@ ibm-1388.ucm ibm-1162.ucm ibm-939.ucm ibm-941.ucm ibm-5050.ucm\
 jisx-201.ucm jisx-208.ucm jisx-212.ucm gb18030.ucm gb_2312_80-1.ucm\
 ksc_5601_1.ucm\
 iso-ir-165.ucm cns-11643-1992.ucm ibm-1252.ucm ibm-37-s390.ucm ibm-861.ucm\
-lmb-excp.ucm ibm-33722.ucm ibm-964.ucm ibm-5348.ucm
+lmb-excp.ucm ibm-33722.ucm ibm-964.ucm ibm-5348.ucm icu-internal-25546.ucm\
+ibm-1006_P100-2000.ucm ibm-1006_X100-2000.ucm ibm-1025_P100-2000.ucm\
+ibm-1026_P100-2000.ucm ibm-1097_P100-2000.ucm ibm-1097_X100-2000.ucm\
+ibm-1098_P100-2000.ucm ibm-1098_X100-2000.ucm ibm-1112_P100-2000.ucm\
+ibm-1122_P100-2000.ucm ibm-1124_P100-2000.ucm ibm-1125_P100-2000.ucm\
+ibm-1129_P100-2000.ucm ibm-1130_P100-2000.ucm ibm-1131_P100-2000.ucm\
+ibm-1132_P100-2000.ucm ibm-1133_P100-2000.ucm ibm-1137_P100-2000.ucm\
+ibm-1381_P110-2000.ucm ibm-1381_X110-2000.ucm ibm-806_P100-2000.ucm\
+ibm-870_P100-2000.ucm ibm-875_P100-2000.ucm ibm-9030_P100-2000.ucm\
+ibm-9066_P100-2000.ucm ibm-918_P100-2000.ucm ibm-918_X100-2000.ucm
+
