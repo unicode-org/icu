@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/UnicodeSet.java,v $
- * $Date: 2000/08/31 17:11:42 $
- * $Revision: 1.30 $
+ * $Date: 2001/04/04 22:45:23 $
+ * $Revision: 1.31 $
  *
  *****************************************************************************************
  */
@@ -254,7 +254,7 @@ import java.text.*;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.30 $ $Date: 2000/08/31 17:11:42 $ */
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.31 $ $Date: 2001/04/04 22:45:23 $ */
 public class UnicodeSet implements UnicodeFilter {
 
     /* Implementation Notes.
@@ -555,6 +555,50 @@ public class UnicodeSet implements UnicodeFilter {
             if (start < list[++i]) break;
         }
         return ((i & 1) != 0 && end < list[i]);
+    }
+
+    /**
+     * Returns the index of the given character within this set, where
+     * the set is ordered by ascending code point.  If the character
+     * is not in this set, return -1.  The inverse of this method is
+     * <code>charAt()</code>.
+     * @return an index from 0..size()-1, or -1
+     */
+    public int indexOf(char c) {
+        int i = 0;
+        int n = 0;
+        for (;;) {
+            int start = list[i++];
+            if (c < start) {
+                return -1;
+            }
+            int limit = list[i++];
+            if (c < limit) {
+                return n + c - start;
+            }
+            n += limit - start;
+        }
+    }
+
+    /**
+     * Returns the character at the given index within this set, where
+     * the set is ordered by ascending code point.  If the index is
+     * out of range, return U+FFFE.  The inverse of this method is
+     * <code>indexOf()</code>.
+     * @param index an index from 0..size()-1
+     */
+    public char charAt(int index) {
+        if (index >= 0) {
+            for (int i=0; i < len;) {
+                int start = list[i++];
+                int count = list[i++] - start;
+                if (index < count) {
+                    return (char)(start + index);
+                }
+                index -= count;
+            }
+        }
+        return '\uFFFE';
     }
 
     /**
