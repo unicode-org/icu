@@ -464,7 +464,13 @@ public:
   /**
    * Return the next character in the normalized text.
    * (Post-increment semantics.)
-   * If the end of the text has already been reached, {@link #DONE} is returned.
+   * If the end of the text has already been reached, DONE is returned.
+   * The DONE value could be confused with a U+FFFF non-character code point
+   * in the text. If this is possible, you can test getIndex()<endIndex()
+   * before calling next(), or (getIndex()<endIndex() || last()!=DONE)
+   * after calling next(). (Calling last() will change the iterator state!)
+   *
+   * The C API unorm_next() is more efficient and does not have this ambiguity.
    *
    * @return the next normalized code point
    * @stable ICU 2.0
@@ -472,9 +478,15 @@ public:
   UChar32              next(void);
 
   /**
-   * Return the previous character in the normalized text. and decrement
+   * Return the previous character in the normalized text and decrement.
    * (Pre-decrement semantics.)
-   * If the beginning of the text has already been reached, {@link #DONE} is returned.
+   * If the beginning of the text has already been reached, DONE is returned.
+   * The DONE value could be confused with a U+FFFF non-character code point
+   * in the text. If this is possible, you can test
+   * (getIndex()>startIndex() || first()!=DONE). (Calling first() will change
+   * the iterator state!)
+   *
+   * The C API unorm_previous() is more efficient and does not have this ambiguity.
    *
    * @return the previous normalized code point
    * @stable ICU 2.0
