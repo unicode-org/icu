@@ -204,7 +204,7 @@ bool_t TransliterationRule::masks(const TransliterationRule& r2) const {
  * If greater than or equal to result.length(), represents offset start +
  * cursor - result.length() into text.
  * @param filter the filter.  Any character for which
- * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+ * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
  * altered by this transliterator.  If <tt>filter</tt> is
  * <tt>null</tt> then no filtering is applied.
  */
@@ -231,7 +231,7 @@ bool_t TransliterationRule::matches(const UnicodeString& text,
  * into text.  This value must be between <code>start</code> and
  * <code>limit</code>.
  * @param filter the filter.  Any character for which
- * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+ * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
  * altered by this transliterator.  If <tt>filter</tt> is
  * <tt>null</tt> then no filtering is applied.
  */
@@ -262,7 +262,7 @@ bool_t TransliterationRule::matches(const Replaceable& text,
  * into text.  This value must be between <code>start</code> and
  * <code>limit</code>.
  * @param filter the filter.  Any character for which
- * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+ * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
  * altered by this transliterator.  If <tt>filter</tt> is
  * <tt>null</tt> then no filtering is applied.
  * @return one of <code>MISMATCH</code>, <code>PARTIAL_MATCH</code>, or
@@ -301,7 +301,7 @@ int32_t TransliterationRule::getMatchDegree(const Replaceable& text,
  * @param data a dictionary of variables mapping <code>Character</code>
  * to <code>UnicodeSet</code>
  * @param filter the filter.  Any character for which
- * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+ * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
  * altered by this transliterator.  If <tt>filter</tt> is
  * <tt>null</tt> then no filtering is applied.
  * @return true if there is a match
@@ -344,7 +344,7 @@ bool_t TransliterationRule::regionMatches(const UnicodeString& text,
  * @param data a dictionary of variables mapping <code>Character</code>
  * to <code>UnicodeSet</code>
  * @param filter the filter.  Any character for which
- * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+ * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
  * altered by this transliterator.  If <tt>filter</tt> is
  * <tt>null</tt> then no filtering is applied.
  * @return true if there is a match
@@ -384,7 +384,7 @@ bool_t TransliterationRule::regionMatches(const Replaceable& text,
  * @param data a dictionary of variables mapping <code>Character</code>
  * to <code>UnicodeSet</code>
  * @param filter the filter.  Any character for which
- * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+ * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
  * altered by this transliterator.  If <tt>filter</tt> is
  * <tt>null</tt> then no filtering is applied.
  * @return -1 if there is a mismatch, 0 if the text is not long enough to
@@ -420,7 +420,7 @@ int32_t TransliterationRule::getRegionMatchLength(const Replaceable& text,
  * @param data a dictionary of variables mapping <code>Character</code>
  * to <code>UnicodeSet</code>
  * @param filter the filter.  Any character for which
- * <tt>filter.isIn()</tt> returns <tt>false</tt> will not be
+ * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
  * altered by this transliterator.  If <tt>filter</tt> is
  * <tt>null</tt> then no filtering is applied.
  */
@@ -428,7 +428,7 @@ bool_t TransliterationRule::charMatches(UChar keyChar, UChar textChar,
                                         const TransliterationRuleData& data,
                                         const UnicodeFilter* filter) const {
     UnicodeSet* set = 0;
-    return (filter == 0 || filter->isIn(textChar)) &&
+    return (filter == 0 || filter->contains(textChar)) &&
         (((set = data.lookupSet(keyChar)) == 0) ?
          keyChar == textChar : set->contains(textChar));
 }
