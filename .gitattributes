@@ -241,6 +241,7 @@ icu4j/src/com/ibm/icu/dev/data/nfsmxs.spp -text
 icu4j/src/com/ibm/icu/dev/data/rbbi/english.dict -text svneol=native#application/octet-stream
 icu4j/src/com/ibm/icu/dev/data/thai6.ucs -text
 icu4j/src/com/ibm/icu/dev/demo/calendar/package.html svneol=native#text/html
+icu4j/src/com/ibm/icu/dev/demo/chart/UnicodeChart.css svneol=native#text/css
 icu4j/src/com/ibm/icu/dev/demo/holiday/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/demo/impl/package.html svneol=native#text/html
 icu4j/src/com/ibm/icu/dev/demo/rbbi/package.html svneol=native#text/html
