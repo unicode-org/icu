@@ -1323,7 +1323,6 @@ _ISCII_SafeClone(const UConverter *cnv,
 
     localClone = (struct cloneStruct *)stackBuffer;
     uprv_memcpy(&localClone->cnv, cnv, sizeof(UConverter));
-    localClone->cnv.isCopyLocal = TRUE;
 
     uprv_memcpy(&localClone->mydata, cnv->extraInfo, sizeof(UConverterDataISCII));
     localClone->cnv.extraInfo = &localClone->mydata;
