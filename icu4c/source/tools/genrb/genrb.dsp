@@ -195,6 +195,10 @@ SOURCE=.\parse.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\prscmnts.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\read.c
 # End Source File
 # Begin Source File
@@ -236,6 +240,10 @@ SOURCE=.\genrb.h
 # Begin Source File
 
 SOURCE=.\parse.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\prscmnts.h
 # End Source File
 # Begin Source File
 
