@@ -279,13 +279,13 @@ mt {
 
 // Time zone
 //CET: 
-    zoneStrings { 
+    zoneStrings {
         {
         "CET", 
-        "Ħin ta' L-Ewropa Centrali", 
-        "ĦEC", 
-        "Ħin ta' L-Ewropa Centrali ta' sajf",
-        "ĦEC-sajf"
+        "Ħin ta' L-Ewropa Ċentrali", 
+        "ĦEĊ", 
+        "Ħin tas-Sajf fl-Ewropa Ċentrali",
+        "ĦSEĊ"
         }
     }
 
