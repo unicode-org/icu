@@ -945,13 +945,15 @@ static int32_t
 ref_norm_compare(const UnicodeString &s1, const UnicodeString &s2, uint32_t options, UErrorCode &errorCode) {
     UnicodeString r1, r2, t1, t2;
 
-    // get writable objects
-    r1=s1;
-    r2=s2;
-
     if(options&U_COMPARE_IGNORE_CASE) {
+        Normalizer::decompose(s1, FALSE, 0, r1, errorCode);
+        Normalizer::decompose(s2, FALSE, 0, r2, errorCode);
+
         r1.foldCase(options);
         r2.foldCase(options);
+    } else {
+        r1=s1;
+        r2=s2;
     }
 
     Normalizer::decompose(r1, FALSE, 0, t1, errorCode);
@@ -1106,10 +1108,14 @@ BasicNormalizerTest::TestCompare() {
         "\\u0360\\u1ffc\\u0334",
         "\\u0360\\u03c9\\u03b9\\u0334",
 
-        "\\u00cc",
-        "\\u0069\\u0300",
         "a\\u0360\\u0345\\u0360\\u0345b",
         "a\\u0345\\u0360\\u0345\\u0360b",
+
+        // interesting cases for canonical caseless match with turkic i handling
+        // 42..43
+        "\\u00cc",
+        "\\u0069\\u0300",
+
         // empty string
         // 44
         ""
