@@ -51,7 +51,7 @@ typedef union {
  * Get the amount of bytes that a pointer is off by from
  * the previous aligned pointer
  */
-#define U_ALIGNMENT_OFFSET(ptr) (((long)ptr) & (sizeof(UAlignedMemory) - 1))
+#define U_ALIGNMENT_OFFSET(ptr) (((size_t)ptr) & (sizeof(UAlignedMemory) - 1))
 
 /**
  * Get the amount of bytes to add to a pointer
