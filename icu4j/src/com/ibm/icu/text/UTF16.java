@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UTF16.java,v $ 
-* $Date: 2002/10/29 18:59:04 $ 
-* $Revision: 1.25 $
+* $Date: 2002/12/03 02:14:21 $ 
+* $Revision: 1.26 $
 *
 *******************************************************************************
 */
@@ -16,142 +16,152 @@ package com.ibm.icu.text;
 import com.ibm.icu.impl.UCharacterProperty;
 import com.ibm.icu.impl.NormalizerImpl;
 /**
-* <p>Standalone utility class providing UTF16 character conversions and indexing 
-* conversions.</p>
-* <p>Code that uses strings alone rarely need modification. 
-* By design, UTF-16 does not allow overlap, so searching for strings is a safe 
-* operation. Similarly, concatenation is always safe. Substringing is safe if 
-* the start and end are both on UTF-32 boundaries. In normal code, the values 
-* for start and end are on those boundaries, since they arose from operations 
-* like searching. If not, the nearest UTF-32 boundaries can be determined 
-* using <code>bounds()</code>.</p>
-* <strong>Examples:</strong>
-* <p>The following examples illustrate use of some of these methods. 
-* <pre>
-* // iteration forwards: Original
-* for (int i = 0; i < s.length(); ++i) {
-*   char ch = s.charAt(i);
-*   doSomethingWith(ch);
-* }
-*
-* // iteration forwards: Changes for UTF-32
-* int ch;
-* for (int i = 0; i < s.length(); i+=UTF16.getCharCount(ch)) {
-*   ch = UTF16.charAt(s,i);
-*   doSomethingWith(ch);
-* }
-*
-* // iteration backwards: Original
-* for (int i = s.length() -1; i >= 0; --i) {
-*   char ch = s.charAt(i);
-*   doSomethingWith(ch);
-* }
-*  
-* // iteration backwards: Changes for UTF-32
-* int ch;
-* for (int i = s.length() -1; i > 0; i-=UTF16.getCharCount(ch)) {
-*   ch = UTF16.charAt(s,i);
-*   doSomethingWith(ch);
-* }
-* </pre>
-* <strong>Notes:</strong>
-* <ul>
-*   <li>
-*   <strong>Naming:</strong> For clarity, High and Low surrogates are called 
-*   <code>Lead</code> and <code>Trail</code> in the API, which gives a better 
-*   sense of their ordering in a string. <code>offset16</code> and 
-*   <code>offset32</code> are used to distinguish offsets to UTF-16 
-*   boundaries vs offsets to UTF-32 boundaries. <code>int char32</code> is 
-*   used to contain UTF-32 characters, as opposed to <code>char16</code>, 
-*   which is a UTF-16 code unit.
-*   </li>
-*   <li>
-*   <strong>Roundtripping Offsets:</strong> You can always roundtrip from a 
-*   UTF-32 offset to a UTF-16 offset and back. Because of the difference in 
-*   structure, you can roundtrip from a UTF-16 offset to a UTF-32 offset and 
-*   back if and only if <code>bounds(string, offset16) != TRAIL</code>.
-*   </li>
-*   <li>
-*   <strong>Exceptions:</strong> The error checking will throw an exception 
-*   if indices are out of bounds. Other than than that, all methods will 
-*   behave reasonably, even if unmatched surrogates or out-of-bounds UTF-32 
-*   values are present. <code>UCharacter.isLegal()</code> can be used to check 
-*   for validity if desired.
-*   </li>
-*   <li>
-*   <strong>Unmatched Surrogates:</strong> If the string contains unmatched 
-*   surrogates, then these are counted as one UTF-32 value. This matches 
-*   their iteration behavior, which is vital. It also matches common display 
-*   practice as missing glyphs (see the Unicode Standard Section 5.4, 5.5).
-*   </li>
-*   <li>
-*     <strong>Optimization:</strong> The method implementations may need 
-*     optimization if the compiler doesn't fold static final methods. Since 
-*     surrogate pairs will form an exceeding small percentage of all the text 
-*     in the world, the singleton case should always be optimized for.
-*   </li>
-* </ul>
-* @author Mark Davis, with help from Markus Scherer
-* @since Nov2400
-*/
+ * <p>Standalone utility class providing UTF16 character conversions and 
+ * indexing conversions.</p>
+ * <p>Code that uses strings alone rarely need modification. 
+ * By design, UTF-16 does not allow overlap, so searching for strings is a safe 
+ * operation. Similarly, concatenation is always safe. Substringing is safe if 
+ * the start and end are both on UTF-32 boundaries. In normal code, the values 
+ * for start and end are on those boundaries, since they arose from operations 
+ * like searching. If not, the nearest UTF-32 boundaries can be determined 
+ * using <code>bounds()</code>.</p>
+ * <strong>Examples:</strong>
+ * <p>The following examples illustrate use of some of these methods. 
+ * <pre>
+ * // iteration forwards: Original
+ * for (int i = 0; i &lt; s.length(); ++i) {
+ *   char ch = s.charAt(i);
+ *   doSomethingWith(ch);
+ * }
+ *
+ * // iteration forwards: Changes for UTF-32
+ * int ch;
+ * for (int i = 0; i &lt; s.length(); i+=UTF16.getCharCount(ch)) {
+ *   ch = UTF16.charAt(s,i);
+ *   doSomethingWith(ch);
+ * }
+ *
+ * // iteration backwards: Original
+ * for (int i = s.length() -1; i >= 0; --i) {
+ *   char ch = s.charAt(i);
+ *    doSomethingWith(ch);
+ * }
+ *  
+ * // iteration backwards: Changes for UTF-32
+ * int ch;
+ * for (int i = s.length() -1; i > 0; i-=UTF16.getCharCount(ch)) {
+ *   ch = UTF16.charAt(s,i);
+ *   doSomethingWith(ch);
+ * }
+ * </pre>
+ * <strong>Notes:</strong>
+ * <ul>
+ *   <li>
+ *   <strong>Naming:</strong> For clarity, High and Low surrogates are called 
+ *   <code>Lead</code> and <code>Trail</code> in the API, which gives a better 
+ *   sense of their ordering in a string. <code>offset16</code> and 
+ *   <code>offset32</code> are used to distinguish offsets to UTF-16 
+ *   boundaries vs offsets to UTF-32 boundaries. <code>int char32</code> is 
+ *   used to contain UTF-32 characters, as opposed to <code>char16</code>, 
+ *   which is a UTF-16 code unit.
+ *   </li>
+ *   <li>
+ *   <strong>Roundtripping Offsets:</strong> You can always roundtrip from a 
+ *   UTF-32 offset to a UTF-16 offset and back. Because of the difference in 
+ *   structure, you can roundtrip from a UTF-16 offset to a UTF-32 offset and 
+ *   back if and only if <code>bounds(string, offset16) != TRAIL</code>.
+ *   </li>
+ *   <li>
+ *    <strong>Exceptions:</strong> The error checking will throw an exception 
+ *   if indices are out of bounds. Other than than that, all methods will 
+ *   behave reasonably, even if unmatched surrogates or out-of-bounds UTF-32 
+ *   values are present. <code>UCharacter.isLegal()</code> can be used to check 
+ *   for validity if desired.
+ *   </li>
+ *   <li>
+ *   <strong>Unmatched Surrogates:</strong> If the string contains unmatched 
+ *   surrogates, then these are counted as one UTF-32 value. This matches 
+ *   their iteration behavior, which is vital. It also matches common display 
+ *   practice as missing glyphs (see the Unicode Standard Section 5.4, 5.5).
+ *   </li>
+ *   <li>
+ *     <strong>Optimization:</strong> The method implementations may need 
+ *     optimization if the compiler doesn't fold static final methods. Since 
+ *     surrogate pairs will form an exceeding small percentage of all the text 
+ *     in the world, the singleton case should always be optimized for.
+ *   </li>
+ * </ul>
+ * @author Mark Davis, with help from Markus Scherer
+ * @stable ICU 2.1
+ */
 
 public final class UTF16
 {
     // public variables ---------------------------------------------------
       
     /**
-    * Value returned in <code><a href="#bounds(java.lang.String, int)">
-    * bounds()</a></code>.
-    * These values are chosen specifically so that it actually represents  
-    * the position of the character 
-    * [offset16 - (value >> 2), offset16 + (value & 3)]
-    */
+     * Value returned in <code><a href="#bounds(java.lang.String, int)">
+     * bounds()</a></code>.
+     * These values are chosen specifically so that it actually represents  
+     * the position of the character 
+     * [offset16 - (value >> 2), offset16 + (value & 3)]
+     * @stable ICU 2.1
+     */
     public static final int SINGLE_CHAR_BOUNDARY = 1, 
                             LEAD_SURROGATE_BOUNDARY = 2, 
                             TRAIL_SURROGATE_BOUNDARY = 5;
     /** 
-    * The lowest Unicode code point value.
-    */
+     * The lowest Unicode code point value.
+     * @stable ICU 2.1
+     */
     public static final int CODEPOINT_MIN_VALUE = 0;
     /**
-    * The highest Unicode code point value (scalar value) according to the 
-    * Unicode Standard.
-    */
+     * The highest Unicode code point value (scalar value) according to the 
+     * Unicode Standard.
+     * @stable ICU 2.1
+     */
     public static final int CODEPOINT_MAX_VALUE = 0x10ffff; 
     /**
-    * The minimum value for Supplementary code points
-    */
+     * The minimum value for Supplementary code points
+     * @stable ICU 2.1
+     */
     public static final int SUPPLEMENTARY_MIN_VALUE  = 0x10000;  
     /**
      * Lead surrogate minimum value
+     * @stable ICU 2.1
      */
     public static final int LEAD_SURROGATE_MIN_VALUE = 0xD800;
 	/**
      * Trail surrogate minimum value
+     * @stable ICU 2.1
      */
     public static final int TRAIL_SURROGATE_MIN_VALUE = 0xDC00; 
     /**
      * Lead surrogate maximum value
+     * @stable ICU 2.1
      */
     public static final int LEAD_SURROGATE_MAX_VALUE = 0xDBFF;
 	/**
      * Trail surrogate maximum value
+     * @stable ICU 2.1
      */
     public static final int TRAIL_SURROGATE_MAX_VALUE = 0xDFFF;
     /**
      * Surrogate minimum value
+     * @stable ICU 2.1
      */
     public static final int SURROGATE_MIN_VALUE = LEAD_SURROGATE_MIN_VALUE;
     /**
      * Maximum surrogate value
+     * @stable ICU 2.1
      */
     public static final int SURROGATE_MAX_VALUE = TRAIL_SURROGATE_MAX_VALUE; 
                               
     // constructor --------------------------------------------------------
       
     /**
-    * Prevent instance from being created.
-    */
+     * Prevent instance from being created.
+     */
     private UTF16() 
     {
     }
@@ -159,23 +169,24 @@ public final class UTF16
     // public method ------------------------------------------------------
       
     /**
-    * Extract a single UTF-32 value from a string.
-    * Used when iterating forwards or backwards (with 
-    * <code>UTF16.getCharCount()</code>, as well as random access. If a 
-    * validity check is required, use 
-    * <code><a href="../UCharacter.html#isLegal(char)">
-    * UCharacter.isLegal()</a></code> on the return value.
-    * If the char retrieved is part of a surrogate pair, its supplementary 
-    * character will be returned. If a complete supplementary character is 
-    * not found the incomplete character will be returned
-    * @param source array of UTF-16 chars
-    * @param offset16 UTF-16 offset to the start of the character.
-    * @return UTF-32 value for the UTF-32 value that contains the char at 
-    *         offset16. The boundaries of that codepoint are the same as in 
-    *         <code>bounds32()</code>. 
-    * @exception IndexOutOfBoundsException thrown if offset16 is out of 
-    *            bounds.
-    */
+     * Extract a single UTF-32 value from a string.
+     * Used when iterating forwards or backwards (with 
+     * <code>UTF16.getCharCount()</code>, as well as random access. If a 
+     * validity check is required, use 
+     * <code><a href="../UCharacter.html#isLegal(char)">
+     * UCharacter.isLegal()</a></code> on the return value.
+     * If the char retrieved is part of a surrogate pair, its supplementary 
+     * character will be returned. If a complete supplementary character is 
+     * not found the incomplete character will be returned
+     * @param source array of UTF-16 chars
+     * @param offset16 UTF-16 offset to the start of the character.
+     * @return UTF-32 value for the UTF-32 value that contains the char at 
+     *         offset16. The boundaries of that codepoint are the same as in 
+     *         <code>bounds32()</code>. 
+     * @exception IndexOutOfBoundsException thrown if offset16 is out of 
+     *            bounds.
+     * @stable ICU 2.1
+     */
     public static int charAt(String source, int offset16) 
     {             
         if (offset16 < 0 || offset16 >= source.length()) {
@@ -220,23 +231,24 @@ public final class UTF16
     }
       
     /**
-    * Extract a single UTF-32 value from a string.
-    * Used when iterating forwards or backwards (with
-    * <code>UTF16.getCharCount()</code>, as well as random access. If a 
-    * validity check is required, use 
-    * <code><a href="../UCharacter.html#isLegal(char)">UCharacter.isLegal()
-    * </a></code> on the return value.
-    * If the char retrieved is part of a surrogate pair, its supplementary
-    * character will be returned. If a complete supplementary character is 
-    * not found the incomplete character will be returned
-    * @param source UTF-16 chars string buffer
-    * @param offset16 UTF-16 offset to the start of the character.
-    * @return UTF-32 value for the UTF-32 value that contains the char at
-    *         offset16. The boundaries of that codepoint are the same as in
-    *         <code>bounds32()</code>.
-    * @exception IndexOutOfBoundsException thrown if offset16 is out of 
-    *            bounds.
-    */
+     * Extract a single UTF-32 value from a string.
+     * Used when iterating forwards or backwards (with
+     * <code>UTF16.getCharCount()</code>, as well as random access. If a 
+     * validity check is required, use 
+     * <code><a href="../UCharacter.html#isLegal(char)">UCharacter.isLegal()
+     * </a></code> on the return value.
+     * If the char retrieved is part of a surrogate pair, its supplementary
+     * character will be returned. If a complete supplementary character is 
+     * not found the incomplete character will be returned
+     * @param source UTF-16 chars string buffer
+     * @param offset16 UTF-16 offset to the start of the character.
+     * @return UTF-32 value for the UTF-32 value that contains the char at
+     *         offset16. The boundaries of that codepoint are the same as in
+     *         <code>bounds32()</code>.
+     * @exception IndexOutOfBoundsException thrown if offset16 is out of 
+     *            bounds.
+     * @stable ICU 2.1
+     */
     public static int charAt(StringBuffer source, int offset16)
     {
         if (offset16 < 0 || offset16 >= source.length()) {
@@ -278,25 +290,26 @@ public final class UTF16
     }
       
     /**
-    * Extract a single UTF-32 value from a substring.
-    * Used when iterating forwards or backwards (with
-    * <code>UTF16.getCharCount()</code>, as well as random access. If a
-    * validity check is required, use 
-    * <code><a href="../UCharacter.html#isLegal(char)">UCharacter.isLegal()
-    * </a></code> on the return value.
-    * If the char retrieved is part of a surrogate pair, its supplementary
-    * character will be returned. If a complete supplementary character is 
-    * not found the incomplete character will be returned
-    * @param source array of UTF-16 chars
-    * @param start offset to substring in the source array for analyzing
-    * @param limit offset to substring in the source array for analyzing
-    * @param offset16 UTF-16 offset relative to start
-    * @return UTF-32 value for the UTF-32 value that contains the char at
-    *         offset16. The boundaries of that codepoint are the same as in
-    *         <code>bounds32()</code>.
-    * @exception IndexOutOfBoundsException thrown if offset16 is not within 
-    *            the range of start and limit.
-    */
+     * Extract a single UTF-32 value from a substring.
+     * Used when iterating forwards or backwards (with
+     * <code>UTF16.getCharCount()</code>, as well as random access. If a
+     * validity check is required, use 
+     * <code><a href="../UCharacter.html#isLegal(char)">UCharacter.isLegal()
+     * </a></code> on the return value.
+     * If the char retrieved is part of a surrogate pair, its supplementary
+     * character will be returned. If a complete supplementary character is 
+     * not found the incomplete character will be returned
+     * @param source array of UTF-16 chars
+     * @param start offset to substring in the source array for analyzing
+     * @param limit offset to substring in the source array for analyzing
+     * @param offset16 UTF-16 offset relative to start
+     * @return UTF-32 value for the UTF-32 value that contains the char at
+     *         offset16. The boundaries of that codepoint are the same as in
+     *         <code>bounds32()</code>.
+     * @exception IndexOutOfBoundsException thrown if offset16 is not within 
+     *            the range of start and limit.
+     * @stable ICU 2.1
+     */
     public static int charAt(char source[], int start, int limit, 
                              int offset16)
     {
@@ -336,23 +349,24 @@ public final class UTF16
     }
       
     /**
-    * Extract a single UTF-32 value from a string.
-    * Used when iterating forwards or backwards (with
-    * <code>UTF16.getCharCount()</code>, as well as random access. If a 
-    * validity check is required, use 
-    * <code><a href="../UCharacter.html#isLegal(char)">UCharacter.isLegal()
-    * </a></code> on the return value.
-    * If the char retrieved is part of a surrogate pair, its supplementary
-    * character will be returned. If a complete supplementary character is 
-    * not found the incomplete character will be returned
-    * @param source UTF-16 chars string buffer
-    * @param offset16 UTF-16 offset to the start of the character.
-    * @return UTF-32 value for the UTF-32 value that contains the char at
-    *         offset16. The boundaries of that codepoint are the same as in
-    *         <code>bounds32()</code>.
-    * @exception IndexOutOfBoundsException thrown if offset16 is out of 
-    *            bounds.
-    */
+     * Extract a single UTF-32 value from a string.
+     * Used when iterating forwards or backwards (with
+     * <code>UTF16.getCharCount()</code>, as well as random access. If a 
+     * validity check is required, use 
+     * <code><a href="../UCharacter.html#isLegal(char)">UCharacter.isLegal()
+     * </a></code> on the return value.
+     * If the char retrieved is part of a surrogate pair, its supplementary
+     * character will be returned. If a complete supplementary character is 
+     * not found the incomplete character will be returned
+     * @param source UTF-16 chars string buffer
+     * @param offset16 UTF-16 offset to the start of the character.
+     * @return UTF-32 value for the UTF-32 value that contains the char at
+     *         offset16. The boundaries of that codepoint are the same as in
+     *         <code>bounds32()</code>.
+     * @exception IndexOutOfBoundsException thrown if offset16 is out of 
+     *            bounds.
+     * @stable ICU 2.1
+     */
     public static int charAt(Replaceable source, int offset16)
     {
         if (offset16 < 0 || offset16 >= source.length()) {
@@ -394,13 +408,14 @@ public final class UTF16
     }
       
     /**
-    * Determines how many chars this char32 requires.
-    * If a validity check is required, use <code>
-    * <a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> on 
-    * char32 before calling.
-    * @param ch the input codepoint.
-    * @return 2 if is in supplementary space, otherwise 1. 
-    */
+     * Determines how many chars this char32 requires.
+     * If a validity check is required, use <code>
+     * <a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> on 
+     * char32 before calling.
+     * @param ch the input codepoint.
+     * @return 2 if is in supplementary space, otherwise 1. 
+     * @stable ICU 2.1
+     */
     public static int getCharCount(int char32) 
     {
         if (char32 < SUPPLEMENTARY_MIN_VALUE) {
@@ -410,26 +425,27 @@ public final class UTF16
     }
       
     /**
-    * Returns the type of the boundaries around the char at offset16.
-    * Used for random access.
-    * @param source text to analyse
-    * @param offset16 UTF-16 offset
-    * @return <ul>
-    *           <li> SINGLE_CHAR_BOUNDARY : a single char; the bounds are 
-    *                                       [offset16, offset16+1]
-    *           <li> LEAD_SURROGATE_BOUNDARY : a surrogate pair starting at 
-    *                                          offset16; 
-    *                                          the bounds are 
-    *                                          [offset16, offset16 + 2]
-    *           <li> TRAIL_SURROGATE_BOUNDARY : a surrogate pair starting at 
-    *                                           offset16 - 1; the bounds are 
-    *                                           [offset16 - 1, offset16 + 1]
-    *         </ul>
-    *         For bit-twiddlers, the return values for these are chosen so 
-    *         that the boundaries can be gotten by:
-    *         [offset16 - (value >> 2), offset16 + (value & 3)].
-    * @exception IndexOutOfBoundsException if offset16 is out of bounds.
-    */
+     * Returns the type of the boundaries around the char at offset16.
+     * Used for random access.
+     * @param source text to analyse
+     * @param offset16 UTF-16 offset
+     * @return <ul>
+     *           <li> SINGLE_CHAR_BOUNDARY : a single char; the bounds are 
+     *                                       [offset16, offset16+1]
+     *           <li> LEAD_SURROGATE_BOUNDARY : a surrogate pair starting at 
+     *                                          offset16; 
+     *                                          the bounds are 
+     *                                          [offset16, offset16 + 2]
+     *           <li> TRAIL_SURROGATE_BOUNDARY : a surrogate pair starting at 
+     *                                           offset16 - 1; the bounds are 
+     *                                           [offset16 - 1, offset16 + 1]
+     *         </ul>
+     *         For bit-twiddlers, the return values for these are chosen so 
+     *         that the boundaries can be gotten by:
+     *         [offset16 - (value >> 2), offset16 + (value & 3)].
+     * @exception IndexOutOfBoundsException if offset16 is out of bounds.
+     * @stable ICU 2.1
+     */
     public static int bounds(String source, int offset16) 
     {
         char ch = source.charAt(offset16);
@@ -453,26 +469,27 @@ public final class UTF16
     }
       
     /**
-    * Returns the type of the boundaries around the char at offset16. Used 
-    * for random access.
-    * @param source string buffer to analyse
-    * @param offset16 UTF16 offset
-    * @return
-    *     <ul>
-    *     <li> SINGLE_CHAR_BOUNDARY : a single char; the bounds are
-    *                                               [offset16, offset16 + 1]
-    *     <li> LEAD_SURROGATE_BOUNDARY : a surrogate pair starting at 
-    *                                    offset16; the bounds are 
-    *                                    [offset16, offset16 + 2]
-    *     <li> TRAIL_SURROGATE_BOUNDARY : a surrogate pair starting at 
-    *                                     offset16 - 1; the bounds are 
-    *                                     [offset16 - 1, offset16 + 1]
-    *     </ul>
-    * For bit-twiddlers, the return values for these are chosen so that the 
-    * boundaries can be gotten by: 
-    *                    [offset16 - (value >> 2), offset16 + (value & 3)].
-    * @exception IndexOutOfBoundsException if offset16 is out of bounds.
-    */
+     * Returns the type of the boundaries around the char at offset16. Used 
+     * for random access.
+     * @param source string buffer to analyse
+     * @param offset16 UTF16 offset
+     * @return
+     *     <ul>
+     *     <li> SINGLE_CHAR_BOUNDARY : a single char; the bounds are
+     *                                               [offset16, offset16 + 1]
+     *     <li> LEAD_SURROGATE_BOUNDARY : a surrogate pair starting at 
+     *                                    offset16; the bounds are 
+     *                                    [offset16, offset16 + 2]
+     *     <li> TRAIL_SURROGATE_BOUNDARY : a surrogate pair starting at 
+     *                                     offset16 - 1; the bounds are 
+     *                                     [offset16 - 1, offset16 + 1]
+     *     </ul>
+     * For bit-twiddlers, the return values for these are chosen so that the 
+     * boundaries can be gotten by: 
+     *                    [offset16 - (value >> 2), offset16 + (value & 3)].
+     * @exception IndexOutOfBoundsException if offset16 is out of bounds.
+     * @stable ICU 2.1
+     */
     public static int bounds(StringBuffer source, int offset16)
     {
         char ch = source.charAt(offset16);
@@ -497,28 +514,29 @@ public final class UTF16
     }
 
     /**
-    * Returns the type of the boundaries around the char at offset16. Used 
-    * for random access. Note that the boundaries are determined with respect 
-    * to the subarray, hence the char array {0xD800, 0xDC00} has the result 
-    * SINGLE_CHAR_BOUNDARY for start = offset16 = 0 and limit = 1.
-    * @param source char array to analyse
-    * @param start offset to substring in the source array for analyzing
-    * @param limit offset to substring in the source array for analyzing
-    * @param offset16 UTF16 offset relative to start
-    * @return
-    *     <ul>
-    *         <li> SINGLE_CHAR_BOUNDARY : a single char; the bounds are
-    *         <li> LEAD_SURROGATE_BOUNDARY : a surrogate pair starting at
-    *                       offset16; the bounds are [offset16, offset16 + 2]
-    *         <li> TRAIL_SURROGATE_BOUNDARY : a surrogate pair starting at
-    *               offset16 - 1; the bounds are [offset16 - 1, offset16 + 1]
-    *     </ul>
-    * For bit-twiddlers, the boundary values for these are chosen so that the 
-    * boundaries can be gotten by: [offset16 - (boundvalue >> 2), offset16 
-    *                                                    + (boundvalue & 3)].
-    * @exception IndexOutOfBoundsException if offset16 is not within the 
-    *                                      range of start and limit.
-    */
+     * Returns the type of the boundaries around the char at offset16. Used 
+     * for random access. Note that the boundaries are determined with respect 
+     * to the subarray, hence the char array {0xD800, 0xDC00} has the result 
+     * SINGLE_CHAR_BOUNDARY for start = offset16 = 0 and limit = 1.
+     * @param source char array to analyse
+     * @param start offset to substring in the source array for analyzing
+     * @param limit offset to substring in the source array for analyzing
+     * @param offset16 UTF16 offset relative to start
+     * @return
+     *     <ul>
+     *         <li> SINGLE_CHAR_BOUNDARY : a single char; the bounds are
+     *         <li> LEAD_SURROGATE_BOUNDARY : a surrogate pair starting at
+     *                       offset16; the bounds are [offset16, offset16 + 2]
+     *         <li> TRAIL_SURROGATE_BOUNDARY : a surrogate pair starting at
+     *               offset16 - 1; the bounds are [offset16 - 1, offset16 + 1]
+     *     </ul>
+     * For bit-twiddlers, the boundary values for these are chosen so that the 
+     * boundaries can be gotten by: [offset16 - (boundvalue >> 2), offset16 
+     *                                                    + (boundvalue & 3)].
+     * @exception IndexOutOfBoundsException if offset16 is not within the 
+     *                                      range of start and limit.
+     * @stable ICU 2.1
+     */
     public static int bounds(char source[], int start, int limit, 
                              int offset16)
     {
@@ -545,10 +563,11 @@ public final class UTF16
     }
 
     /**
-    * Determines whether the code value is a surrogate.
-    * @param ch the input character.
-    * @return true iff the input character is a surrogate.
-    */
+     * Determines whether the code value is a surrogate.
+     * @param ch the input character.
+     * @return true iff the input character is a surrogate.
+     * @stable ICU 2.1
+     */
     public static boolean isSurrogate(char char16) 
     {
         return LEAD_SURROGATE_MIN_VALUE <= char16 && 
@@ -556,10 +575,11 @@ public final class UTF16
     }
         
     /**
-    * Determines whether the character is a trail surrogate.
-    * @param char16 the input character.
-    * @return true iff the input character is a trail surrogate.
-    */
+     * Determines whether the character is a trail surrogate.
+     * @param char16 the input character.
+     * @return true iff the input character is a trail surrogate.
+     * @stable ICU 2.1
+     */
     public static boolean isTrailSurrogate(char char16) 
     {
         return (TRAIL_SURROGATE_MIN_VALUE <= char16 && 
@@ -567,10 +587,11 @@ public final class UTF16
     }
         
     /**
-    * Determines whether the character is a lead surrogate.
-    * @param char16 the input character.
-    * @return true iff the input character is a lead surrogate
-    */
+     * Determines whether the character is a lead surrogate.
+     * @param char16 the input character.
+     * @return true iff the input character is a lead surrogate
+     * @stable ICU 2.1
+     */
     public static boolean isLeadSurrogate(char char16) 
     {
         return LEAD_SURROGATE_MIN_VALUE <= char16 && 
@@ -578,14 +599,15 @@ public final class UTF16
     }
             
     /**
-    * Returns the lead surrogate.
-    * If a validity check is required, use 
-    * <code><a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> 
-    * on char32 before calling.
-    * @param char32 the input character.
-    * @return lead surrogate if the getCharCount(ch) is 2; <br>
-    *         and 0 otherwise (note: 0 is not a valid lead surrogate).
-    */
+     * Returns the lead surrogate.
+     * If a validity check is required, use 
+     * <code><a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> 
+     * on char32 before calling.
+     * @param char32 the input character.
+     * @return lead surrogate if the getCharCount(ch) is 2; <br>
+     *         and 0 otherwise (note: 0 is not a valid lead surrogate).
+     * @stable ICU 2.1
+     */
     public static char getLeadSurrogate(int char32) 
     {
         if (char32 >= SUPPLEMENTARY_MIN_VALUE) {
@@ -597,14 +619,15 @@ public final class UTF16
     }
         
     /**
-    * Returns the trail surrogate.
-    * If a validity check is required, use 
-    * <code><a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> 
-    * on char32 before calling.
-    * @param char32 the input character.
-    * @return the trail surrogate if the getCharCount(ch) is 2; <br>otherwise 
-    *         the character itself
-    */
+     * Returns the trail surrogate.
+     * If a validity check is required, use 
+     * <code><a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> 
+     * on char32 before calling.
+     * @param char32 the input character.
+     * @return the trail surrogate if the getCharCount(ch) is 2; <br>otherwise 
+     *         the character itself
+     * @stable ICU 2.1
+     */
     public static char getTrailSurrogate(int char32) 
     {
         if (char32 >= SUPPLEMENTARY_MIN_VALUE) {
@@ -616,16 +639,17 @@ public final class UTF16
     }
         
     /**
-    * Convenience method corresponding to String.valueOf(char). Returns a one 
-    * or two char string containing the UTF-32 value in UTF16 format. If a 
-    * validity check is required, use 
-    * <a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> on 
-    * char32 before calling.
-    * @param char32 the input character.
-    * @return string value of char32 in UTF16 format
-    * @exception IllegalArgumentException thrown if char32 is a invalid 
-    *            codepoint.
-    */
+     * Convenience method corresponding to String.valueOf(char). Returns a one 
+     * or two char string containing the UTF-32 value in UTF16 format. If a 
+     * validity check is required, use 
+     * <a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> on 
+     * char32 before calling.
+     * @param char32 the input character.
+     * @return string value of char32 in UTF16 format
+     * @exception IllegalArgumentException thrown if char32 is a invalid 
+     *            codepoint.
+     * @stable ICU 2.1
+     */
     public static String valueOf(int char32)
     {
         if (char32 < CODEPOINT_MIN_VALUE || char32 > CODEPOINT_MAX_VALUE) {
@@ -635,20 +659,21 @@ public final class UTF16
     }
       
     /**
-    * Convenience method corresponding to String.valueOf(codepoint at 
-    * offset16). 
-    * Returns a one or two char string containing the UTF-32 value in UTF16 
-    * format. If offset16 indexes a surrogate character, the whole 
-    * supplementary codepoint will be returned.
-    * If a validity check is required, use 
-    * <a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> on the 
-    * codepoint at offset16 before calling.
-    * The result returned will be a newly created String obtained by calling 
-    * source.substring(..) with the appropriate indexes.
-    * @param source the input string.
-    * @param offset16 the UTF16 index to the codepoint in source
-    * @return string value of char32 in UTF16 format
-    */
+     * Convenience method corresponding to String.valueOf(codepoint at 
+     * offset16). 
+     * Returns a one or two char string containing the UTF-32 value in UTF16 
+     * format. If offset16 indexes a surrogate character, the whole 
+     * supplementary codepoint will be returned.
+     * If a validity check is required, use 
+     * <a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> on the 
+     * codepoint at offset16 before calling.
+     * The result returned will be a newly created String obtained by calling 
+     * source.substring(..) with the appropriate indexes.
+     * @param source the input string.
+     * @param offset16 the UTF16 index to the codepoint in source
+     * @return string value of char32 in UTF16 format
+     * @stable ICU 2.1
+     */
     public static String valueOf(String source, int offset16)
     {
         switch (bounds(source, offset16)) {
@@ -661,20 +686,21 @@ public final class UTF16
     }
       
     /**
-    * Convenience method corresponding to 
-    * StringBuffer.valueOf(codepoint at offset16). 
-    * Returns a one or two char string containing the UTF-32 value in UTF16 
-    * format. If offset16 indexes a surrogate character, the whole 
-    * supplementary codepoint will be returned.
-    * If a validity check is required, use 
-    * <a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> on the 
-    * codepoint at offset16 before calling.
-    * The result returned will be a newly created String obtained by calling 
-    * source.substring(..) with the appropriate indexes.
-    * @param source the input string buffer.
-    * @param offset16 the UTF16 index to the codepoint in source
-    * @return string value of char32 in UTF16 format
-    */
+     * Convenience method corresponding to 
+     * StringBuffer.valueOf(codepoint at offset16). 
+     * Returns a one or two char string containing the UTF-32 value in UTF16 
+     * format. If offset16 indexes a surrogate character, the whole 
+     * supplementary codepoint will be returned.
+     * If a validity check is required, use 
+     * <a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> on the 
+     * codepoint at offset16 before calling.
+     * The result returned will be a newly created String obtained by calling 
+     * source.substring(..) with the appropriate indexes.
+     * @param source the input string buffer.
+     * @param offset16 the UTF16 index to the codepoint in source
+     * @return string value of char32 in UTF16 format
+     * @stable ICU 2.1
+     */
     public static String valueOf(StringBuffer source, int offset16)
     {
         switch (bounds(source, offset16)) {
@@ -687,25 +713,26 @@ public final class UTF16
     }
       
     /**
-    * Convenience method. 
-    * Returns a one or two char string containing the UTF-32 value in UTF16 
-    * format. If offset16 indexes a surrogate character, the whole 
-    * supplementary codepoint will be returned, except when either the 
-    * leading or trailing surrogate character lies out of the specified 
-    * subarray. In the latter case, only the surrogate character within 
-    * bounds will be returned.
-    * If a validity check is required, use 
-    * <a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> on the 
-    * codepoint at offset16 before calling.
-    * The result returned will be a newly created String containing the 
-    * relevant characters.
-    * @param source the input char array.
-    * @param start start index of the subarray
-    * @param limit end index of the subarray
-    * @param offset16 the UTF16 index to the codepoint in source relative to 
-    *        start
-    * @return string value of char32 in UTF16 format
-    */
+     * Convenience method. 
+     * Returns a one or two char string containing the UTF-32 value in UTF16 
+     * format. If offset16 indexes a surrogate character, the whole 
+     * supplementary codepoint will be returned, except when either the 
+     * leading or trailing surrogate character lies out of the specified 
+     * subarray. In the latter case, only the surrogate character within 
+     * bounds will be returned.
+     * If a validity check is required, use 
+     * <a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> on the 
+     * codepoint at offset16 before calling.
+     * The result returned will be a newly created String containing the 
+     * relevant characters.
+     * @param source the input char array.
+     * @param start start index of the subarray
+     * @param limit end index of the subarray
+     * @param offset16 the UTF16 index to the codepoint in source relative to 
+     *        start
+     * @return string value of char32 in UTF16 format
+     * @stable ICU 2.1
+     */
     public static String valueOf(char source[], int start, int limit,
                                  int offset16)
     {
@@ -719,14 +746,15 @@ public final class UTF16
     }
       
     /**
-    * Returns the UTF-16 offset that corresponds to a UTF-32 offset. 
-    * Used for random access. See the <a name="_top_">class description</a> 
-    * for notes on roundtripping.
-    * @param source the UTF-16 string
-    * @param offset32 UTF-32 offset
-    * @return UTF-16 offset 
-    * @exception IndexOutOfBoundsException if offset32 is out of bounds.
-    */
+     * Returns the UTF-16 offset that corresponds to a UTF-32 offset. 
+     * Used for random access. See the <a name="_top_">class description</a> 
+     * for notes on roundtripping.
+     * @param source the UTF-16 string
+     * @param offset32 UTF-32 offset
+     * @return UTF-16 offset 
+     * @exception IndexOutOfBoundsException if offset32 is out of bounds.
+     * @stable ICU 2.1
+     */
     public static int findOffsetFromCodePoint(String source, int offset32) 
     {
         char ch;
@@ -754,14 +782,15 @@ public final class UTF16
     }
       
     /**
-    * Returns the UTF-16 offset that corresponds to a UTF-32 offset.
-    * Used for random access. See the <a name="_top_">class description</a>
-    * for notes on roundtripping.
-    * @param source the UTF-16 string buffer
-    * @param offset32 UTF-32 offset
-    * @return UTF-16 offset
-    * @exception IndexOutOfBoundsException if offset32 is out of bounds.
-    */
+     * Returns the UTF-16 offset that corresponds to a UTF-32 offset.
+     * Used for random access. See the <a name="_top_">class description</a>
+     * for notes on roundtripping.
+     * @param source the UTF-16 string buffer
+     * @param offset32 UTF-32 offset
+     * @return UTF-16 offset
+     * @exception IndexOutOfBoundsException if offset32 is out of bounds.
+     * @stable ICU 2.1
+     */
     public static int findOffsetFromCodePoint(StringBuffer source, 
                                               int offset32)
     {
@@ -790,16 +819,17 @@ public final class UTF16
     }
 
     /**
-    * Returns the UTF-16 offset that corresponds to a UTF-32 offset.
-    * Used for random access. See the <a name="_top_">class description</a>
-    * for notes on roundtripping.
-    * @param source the UTF-16 char array whose substring is to be analysed
-    * @param start offset of the substring to be analysed
-    * @param limit offset of the substring to be analysed
-    * @param offset32 UTF-32 offset relative to start
-    * @return UTF-16 offset relative to start
-    * @exception IndexOutOfBoundsException if offset32 is out of bounds.
-    */
+     * Returns the UTF-16 offset that corresponds to a UTF-32 offset.
+     * Used for random access. See the <a name="_top_">class description</a>
+     * for notes on roundtripping.
+     * @param source the UTF-16 char array whose substring is to be analysed
+     * @param start offset of the substring to be analysed
+     * @param limit offset of the substring to be analysed
+     * @param offset32 UTF-32 offset relative to start
+     * @return UTF-16 offset relative to start
+     * @exception IndexOutOfBoundsException if offset32 is out of bounds.
+     * @stable ICU 2.1
+     */
     public static int findOffsetFromCodePoint(char source[], int start, 
                                               int limit, int offset32)
     {
@@ -827,25 +857,26 @@ public final class UTF16
     }
       
     /**
-    * Returns the UTF-32 offset corresponding to the first UTF-32 boundary at 
-    * or after the given UTF-16 offset. Used for random access. See the 
-    * <a name="_top_">class description</a> for notes on roundtripping.<br>
-    * <i>Note: If the UTF-16 offset is into the middle of a surrogate pair, 
-    * then the UTF-32 offset of the <strong>lead</strong> of the pair is 
-    * returned.
-    * </i>
-    * <p>
-    * To find the UTF-32 length of a string, use:
-    *   <pre>
-    *     len32 = countCodePoint(source, source.length());
-    *   </pre>
-    * </p>
-    * <p>
-    * @param source text to analyse
-    * @param offset16 UTF-16 offset < source text length.
-    * @return UTF-32 offset
-    * @exception IndexOutOfBoundsException if offset16 is out of bounds.
-    */
+     * Returns the UTF-32 offset corresponding to the first UTF-32 boundary at 
+     * or after the given UTF-16 offset. Used for random access. See the 
+     * <a name="_top_">class description</a> for notes on roundtripping.<br>
+     * <i>Note: If the UTF-16 offset is into the middle of a surrogate pair, 
+     * then the UTF-32 offset of the <strong>lead</strong> of the pair is 
+     * returned.
+     * </i>
+     * <p>
+     * To find the UTF-32 length of a string, use:
+     *   <pre>
+     *     len32 = countCodePoint(source, source.length());
+     *   </pre>
+     * </p>
+     * <p>
+     * @param source text to analyse
+     * @param offset16 UTF-16 offset < source text length.
+     * @return UTF-32 offset
+     * @exception IndexOutOfBoundsException if offset16 is out of bounds.
+     * @stable ICU 2.1
+     */
     public static int findCodePointOffset(String source, int offset16) 
     {
         if (offset16 < 0 || offset16 > source.length()) {
@@ -883,25 +914,26 @@ public final class UTF16
     }
       
     /**
-    * Returns the UTF-32 offset corresponding to the first UTF-32 boundary at
-    * the given UTF-16 offset. Used for random access. See the
-    * <a name="_top_">class description</a> for notes on roundtripping.<br>
-    * <i>Note: If the UTF-16 offset is into the middle of a surrogate pair, 
-    * then the UTF-32 offset of the <strong>lead</strong> of the pair is 
-    * returned.
-    * </i>
-    * <p>
-    * To find the UTF-32 length of a string, use:
-    *   <pre>
-    *     len32 = countCodePoint(source);
-    *   </pre>
-    * </p>
-    * <p>
-    * @param source text to analyse
-    * @param offset16 UTF-16 offset < source text length.
-    * @return UTF-32 offset
-    * @exception IndexOutOfBoundsException if offset16 is out of bounds.
-    */
+     * Returns the UTF-32 offset corresponding to the first UTF-32 boundary at
+     * the given UTF-16 offset. Used for random access. See the
+     * <a name="_top_">class description</a> for notes on roundtripping.<br>
+     * <i>Note: If the UTF-16 offset is into the middle of a surrogate pair, 
+     * then the UTF-32 offset of the <strong>lead</strong> of the pair is 
+     * returned.
+     * </i>
+     * <p>
+     * To find the UTF-32 length of a string, use:
+     *   <pre>
+     *     len32 = countCodePoint(source);
+     *   </pre>
+     * </p>
+     * <p>
+     * @param source text to analyse
+     * @param offset16 UTF-16 offset < source text length.
+     * @return UTF-32 offset
+     * @exception IndexOutOfBoundsException if offset16 is out of bounds.
+     * @stable ICU 2.1
+     */
     public static int findCodePointOffset(StringBuffer source, int offset16)
     {
         if (offset16 < 0 || offset16 > source.length()) {
@@ -940,28 +972,29 @@ public final class UTF16
     }
 
     /**
-    * Returns the UTF-32 offset corresponding to the first UTF-32 boundary at
-    * the given UTF-16 offset. Used for random access. See the
-    * <a name="_top_">class description</a> for notes on roundtripping.<br>
-    * <i>Note: If the UTF-16 offset is into the middle of a surrogate pair, 
-    * then the UTF-32 offset of the <strong>lead</strong> of the pair is 
-    * returned.
-    * </i>
-    * <p>
-    * To find the UTF-32 length of a substring, use:
-    *   <pre>
-    *     len32 = countCodePoint(source, start, limit);
-    *   </pre>
-    * </p>
-    * <p>
-    * @param source text to analyse
-    * @param start offset of the substring
-    * @param limit offset of the substring
-    * @param offset16 UTF-16 relative to start
-    * @return UTF-32 offset relative to start
-    * @exception IndexOutOfBoundsException if offset16 is not within the 
-    *            range of start and limit.
-    */
+     * Returns the UTF-32 offset corresponding to the first UTF-32 boundary at
+     * the given UTF-16 offset. Used for random access. See the
+     * <a name="_top_">class description</a> for notes on roundtripping.<br>
+     * <i>Note: If the UTF-16 offset is into the middle of a surrogate pair, 
+     * then the UTF-32 offset of the <strong>lead</strong> of the pair is 
+     * returned.
+     * </i>
+     * <p>
+     * To find the UTF-32 length of a substring, use:
+     *   <pre>
+     *     len32 = countCodePoint(source, start, limit);
+     *   </pre>
+     * </p>
+     * <p>
+     * @param source text to analyse
+     * @param start offset of the substring
+     * @param limit offset of the substring
+      * @param offset16 UTF-16 relative to start
+     * @return UTF-32 offset relative to start
+     * @exception IndexOutOfBoundsException if offset16 is not within the 
+     *            range of start and limit.
+     * @stable ICU 2.1
+     */
     public static int findCodePointOffset(char source[], int start, int limit,
                                           int offset16)
     {
@@ -1001,15 +1034,16 @@ public final class UTF16
     }
 
     /**
-    * Append a single UTF-32 value to the end of a StringBuffer.
-    * If a validity check is required, use 
-    * <a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> on 
-    * char32 before calling.
-    * @param char32 value to append.
-    * @return the updated StringBuffer
-    * @exception IllegalArgumentException thrown when char32 does not lie within
-    *            the range of the Unicode codepoints
-    */
+     * Append a single UTF-32 value to the end of a StringBuffer.
+     * If a validity check is required, use 
+     * <a href="../UCharacter.html#isLegal(char)">isLegal()</a></code> on 
+     * char32 before calling.
+     * @param char32 value to append.
+     * @return the updated StringBuffer
+     * @exception IllegalArgumentException thrown when char32 does not lie 
+     *            within the range of the Unicode codepoints
+     * @stable ICU 2.1
+     */
     public static StringBuffer append(StringBuffer target, int char32)
     {
         // Check for irregular values
@@ -1030,15 +1064,16 @@ public final class UTF16
     }
       
     /**
-    * Adds a codepoint to offset16 position of the argument char array.
-    * @param target char array to be append with the new code point
-    * @param limit UTF16 offset which the codepoint will be appended.
-    * @param char32 code point to be appended
-    * @return offset after char32 in the array.
-    * @exception IllegalArgumentException thrown if there is not enough 
-    *            space for the append, or when char32 does not lie within
-    *            the range of the Unicode codepoints.
-    */
+     * Adds a codepoint to offset16 position of the argument char array.
+     * @param target char array to be append with the new code point
+     * @param limit UTF16 offset which the codepoint will be appended.
+     * @param char32 code point to be appended
+     * @return offset after char32 in the array.
+     * @exception IllegalArgumentException thrown if there is not enough 
+     *            space for the append, or when char32 does not lie within
+     *            the range of the Unicode codepoints.
+     * @stable ICU 2.1
+     */
     public static int append(char[] target, int limit, int char32)
     {
         // Check for irregular values
@@ -1058,10 +1093,11 @@ public final class UTF16
     }
         
     /**
-    * Number of codepoints in a UTF16 String
-    * @param source UTF16 string
-    * @return number of codepoint in string
-    */
+     * Number of codepoints in a UTF16 String
+     * @param source UTF16 string
+     * @return number of codepoint in string
+     * @stable ICU 2.1
+     */
     public static int countCodePoint(String source)
     {
         if (source == null || source.length() == 0) {
@@ -1071,10 +1107,11 @@ public final class UTF16
     }
       
     /**
-    * Number of codepoints in a UTF16 String buffer
-    * @param source UTF16 string buffer
-    * @return number of codepoint in string
-    */
+     * Number of codepoints in a UTF16 String buffer
+     * @param source UTF16 string buffer
+     * @return number of codepoint in string
+     * @stable ICU 2.1
+     */
     public static int countCodePoint(StringBuffer source)
     {
         if (source == null || source.length() == 0) {
@@ -1084,13 +1121,14 @@ public final class UTF16
     }
 
     /**
-    * Number of codepoints in a UTF16 char array substring
-    * @param source UTF16 char array
-    * @param start offset of the substring
-    * @param limit offset of the substring
-    * @return number of codepoint in the substring
-    * @exception IndexOutOfBoundsException if start and limit are not valid.
-    */
+     * Number of codepoints in a UTF16 char array substring
+     * @param source UTF16 char array
+     * @param start offset of the substring
+     * @param limit offset of the substring
+     * @return number of codepoint in the substring
+     * @exception IndexOutOfBoundsException if start and limit are not valid.
+     * @stable ICU 2.1
+     */
     public static int countCodePoint(char source[], int start, int limit)
     {
         if (source == null || source.length == 0) {
@@ -1100,13 +1138,14 @@ public final class UTF16
     }
       
     /**
-    * Set a code point into a UTF16 position. 
-    * Adjusts target according if we are replacing a non-supplementary 
-    * codepoint with a supplementary and vice versa.
-    * @param target stringbuffer
-    * @param offset16 UTF16 position to insert into
-    * @param char32 code point
-    */
+     * Set a code point into a UTF16 position. 
+     * Adjusts target according if we are replacing a non-supplementary 
+     * codepoint with a supplementary and vice versa.
+     * @param target stringbuffer
+     * @param offset16 UTF16 position to insert into
+     * @param char32 code point
+     * @stable ICU 2.1
+     */
     public static void setCharAt(StringBuffer target, int offset16, 
                                  int char32)
     {
@@ -1135,18 +1174,19 @@ public final class UTF16
     }
     	
     /**
-    * Set a code point into a UTF16 position in a char array.
-    * Adjusts target according if we are replacing a non-supplementary 
-    * codepoint with a supplementary and vice versa.
-    * @param target char array
-    * @param limit numbers of valid chars in target, different from 
-    *        target.length. limit counts the number of chars in target 
-    *        that represents a string, not the size of array target.
-    * @param offset16 UTF16 position to insert into
-    * @param char32 code point
-    * @return new number of chars in target that represents a string
-    * @exception IndexOutOfBoundsException if offset16 is out of range
-    */
+     * Set a code point into a UTF16 position in a char array.
+     * Adjusts target according if we are replacing a non-supplementary 
+     * codepoint with a supplementary and vice versa.
+     * @param target char array
+     * @param limit numbers of valid chars in target, different from 
+     *        target.length. limit counts the number of chars in target 
+     *        that represents a string, not the size of array target.
+     * @param offset16 UTF16 position to insert into
+     * @param char32 code point
+     * @return new number of chars in target that represents a string
+     * @exception IndexOutOfBoundsException if offset16 is out of range
+     * @stable ICU 2.1
+     */
     public static int setCharAt(char target[], int limit, 
                                 int offset16, int char32)
     {
@@ -1209,14 +1249,15 @@ public final class UTF16
     }
       
     /**
-    * Shifts offset16 by the argument number of codepoints
-    * @param source string
-    * @param offset16 UTF16 position to shift
-    * @param shift32 number of codepoints to shift
-    * @return new shifted offset16 
-    * @exception IndexOutOfBoundsException if the new offset16 is out of 
-    *                                      bounds.
-    */
+     * Shifts offset16 by the argument number of codepoints
+     * @param source string
+     * @param offset16 UTF16 position to shift
+     * @param shift32 number of codepoints to shift
+     * @return new shifted offset16 
+     * @exception IndexOutOfBoundsException if the new offset16 is out of 
+     *                                      bounds.
+     * @stable ICU 2.1
+     */
     public static int moveCodePointOffset(String source, int offset16, 
                                                         int shift32)
     {
@@ -1245,14 +1286,15 @@ public final class UTF16
     }
 
     /**
-    * Shifts offset16 by the argument number of codepoints
-    * @param target string buffer
-    * @param offset16 UTF16 position to shift
-    * @param shift32 number of codepoints to shift
-    * @return new shifted offset16 
-    * @exception IndexOutOfBoundsException if the new offset16 is out of 
-    *                                      bounds.
-    */
+     * Shifts offset16 by the argument number of codepoints
+     * @param target string buffer
+     * @param offset16 UTF16 position to shift
+     * @param shift32 number of codepoints to shift
+     * @return new shifted offset16 
+     * @exception IndexOutOfBoundsException if the new offset16 is out of 
+     *                                      bounds.
+     * @stable ICU 2.1
+     */
     public static int moveCodePointOffset(StringBuffer source, int offset16, 
                                                                 int shift32)
     {
@@ -1281,16 +1323,17 @@ public final class UTF16
     }
 
     /**
-    * Shifts offset16 by the argument number of codepoints within a subarray.
-    * @param target char array
-    * @param start position of the subarray to be performed on
-    * @param limit position of the subarray to be performed on
-    * @param offset16 UTF16 position to shift relative to start
-    * @param shift32 number of codepoints to shift
-    * @return new shifted offset16 relative to start
-    * @exception IndexOutOfBoundsException if the new offset16 is out of 
-    *            bounds with respect to the subarray.
-    */
+     * Shifts offset16 by the argument number of codepoints within a subarray.
+     * @param target char array
+     * @param start position of the subarray to be performed on
+     * @param limit position of the subarray to be performed on
+     * @param offset16 UTF16 position to shift relative to start
+     * @param shift32 number of codepoints to shift
+     * @return new shifted offset16 relative to start
+     * @exception IndexOutOfBoundsException if the new offset16 is out of 
+     *            bounds with respect to the subarray.
+     * @stable ICU 2.1
+     */
     public static int moveCodePointOffset(char source[], int start, int limit, 
                                           int offset16, int shift32)
     {
@@ -1319,25 +1362,26 @@ public final class UTF16
     }
       
     /**
-    * Inserts char32 codepoint into target at the argument offset16. 
-    * If the offset16 is in the middle of a supplementary codepoint, char32 
-    * will be inserted after the supplementary codepoint.
-    * The length of target increases by one if codepoint is non-supplementary, 
-    * 2 otherwise. 
-    * <p>
-    * The overall effect is exactly as if the argument were converted to a 
-    * string by the method valueOf(char) and the characters in that string 
-    * were then inserted into target at the position indicated by offset16. 
-    * </p>
-    * <p>
-    * The offset argument must be greater than or equal to 0, and less than 
-    * or equal to the length of source.
-    * @param target string buffer to insert to
-    * @param offset16 offset which char32 will be inserted in
-    * @param char32 codepoint to be inserted
-    * @return a reference to target
-    * @exception IndexOutOfBoundsException thrown if offset16 is invalid.
-    */
+     * Inserts char32 codepoint into target at the argument offset16. 
+     * If the offset16 is in the middle of a supplementary codepoint, char32 
+     * will be inserted after the supplementary codepoint.
+     * The length of target increases by one if codepoint is non-supplementary, 
+     * 2 otherwise. 
+     * <p>
+     * The overall effect is exactly as if the argument were converted to a 
+     * string by the method valueOf(char) and the characters in that string 
+     * were then inserted into target at the position indicated by offset16. 
+     * </p>
+     * <p>
+     * The offset argument must be greater than or equal to 0, and less than 
+     * or equal to the length of source.
+     * @param target string buffer to insert to
+     * @param offset16 offset which char32 will be inserted in
+     * @param char32 codepoint to be inserted
+     * @return a reference to target
+     * @exception IndexOutOfBoundsException thrown if offset16 is invalid.
+     * @stable ICU 2.1
+     */
     public static StringBuffer insert(StringBuffer target, int offset16, 
                                         int char32)
     {
@@ -1351,25 +1395,26 @@ public final class UTF16
     }
 
     /**
-    * Inserts char32 codepoint into target at the argument offset16. 
-    * If the offset16 is in the middle of a supplementary codepoint, char32 
-    * will be inserted after the supplementary codepoint.
-    * Limit increases by one if codepoint is non-supplementary, 2 otherwise. 
-    * <p>
-    * The overall effect is exactly as if the argument were converted to a 
-    * string by the method valueOf(char) and the characters in that string 
-    * were then inserted into target at the position indicated by offset16. 
-    * </p>
-    * <p>
-    * The offset argument must be greater than or equal to 0, and less than 
-    * or equal to the limit.
-    * @param target char array to insert to
-    * @param limit end index of the char array, limit <= target.length
-    * @param offset16 offset which char32 will be inserted in
-    * @param char32 codepoint to be inserted
-    * @return new limit size
-    * @exception IndexOutOfBoundsException thrown if offset16 is invalid.
-    */
+     * Inserts char32 codepoint into target at the argument offset16. 
+     * If the offset16 is in the middle of a supplementary codepoint, char32 
+     * will be inserted after the supplementary codepoint.
+     * Limit increases by one if codepoint is non-supplementary, 2 otherwise. 
+     * <p>
+     * The overall effect is exactly as if the argument were converted to a 
+     * string by the method valueOf(char) and the characters in that string 
+     * were then inserted into target at the position indicated by offset16. 
+     * </p>
+     * <p>
+     * The offset argument must be greater than or equal to 0, and less than 
+     * or equal to the limit.
+     * @param target char array to insert to
+     * @param limit end index of the char array, limit <= target.length
+     * @param offset16 offset which char32 will be inserted in
+     * @param char32 codepoint to be inserted
+     * @return new limit size
+     * @exception IndexOutOfBoundsException thrown if offset16 is invalid.
+     * @stable ICU 2.1
+     */
     public static int insert(char target[], int limit, int offset16, 
                              int char32)
     {
@@ -1392,14 +1437,15 @@ public final class UTF16
     }
 
     /**
-    * Removes the codepoint at the specified position in this target 
-    * (shortening target by 1 character if the codepoint is a 
-    * non-supplementary, 2 otherwise).
-    * @param target string buffer to remove codepoint from
-    * @param offset16 offset which the codepoint will be removed
-    * @return a reference to target
-    * @exception IndexOutOfBoundsException thrown if offset16 is invalid.
-    */
+     * Removes the codepoint at the specified position in this target 
+     * (shortening target by 1 character if the codepoint is a 
+     * non-supplementary, 2 otherwise).
+     * @param target string buffer to remove codepoint from
+     * @param offset16 offset which the codepoint will be removed
+     * @return a reference to target
+     * @exception IndexOutOfBoundsException thrown if offset16 is invalid.
+     * @stable ICU 2.1
+     */
     public static StringBuffer delete(StringBuffer target, int offset16)
     {
         int count = 1;
@@ -1417,15 +1463,16 @@ public final class UTF16
     }
 
     /**
-    * Removes the codepoint at the specified position in this target 
-    * (shortening target by 1 character if the codepoint is a 
-    * non-supplementary, 2 otherwise).
-    * @param target string buffer to remove codepoint from
-    * @param limit end index of the char array, limit <= target.length
-    * @param offset16 offset which the codepoint will be removed
-    * @return a new limit size
-    * @exception IndexOutOfBoundsException thrown if offset16 is invalid.
-    */
+     * Removes the codepoint at the specified position in this target 
+     * (shortening target by 1 character if the codepoint is a 
+     * non-supplementary, 2 otherwise).
+     * @param target string buffer to remove codepoint from
+     * @param limit end index of the char array, limit <= target.length
+     * @param offset16 offset which the codepoint will be removed
+     * @return a new limit size
+     * @exception IndexOutOfBoundsException thrown if offset16 is invalid.
+     * @stable ICU 2.1
+     */
     public static int delete(char target[], int limit, int offset16)
     {
         int count = 1;
@@ -1445,24 +1492,25 @@ public final class UTF16
     }
       
     /**
-    * Returns the index within the argument UTF16 format Unicode string of 
-    * the first occurrence of the argument codepoint. I.e., the smallest 
-    * index <code>i</code> such that <code>UTF16.charAt(source, i) == char32</code> is true. 
-    * <p>If no such character occurs in this string, then -1 is returned.</p> 
-    * <p>
-    * Examples:<br>
-    * UTF16.indexOf("abc", 'a') returns 0<br>
-    * UTF16.indexOf("abc\ud800\udc00", 0x10000) returns 3<br>
-    * UTF16.indexOf("abc\ud800\udc00", 0xd800) returns -1<br>
-    * </p>
-    * Note this method is provided as support to jdk 1.3, which does not 
-    * support supplementary characters to its fullest.
-    * @param source UTF16 format Unicode string that will be searched
-    * @param char32 codepoint to search for 
-    * @return the index of the first occurrence of the codepoint in the 
-    *         argument Unicode string, or -1 if the codepoint does not occur.
-    * @draft since release 2.1
-    */
+     * Returns the index within the argument UTF16 format Unicode string of 
+     * the first occurrence of the argument codepoint. I.e., the smallest 
+     * index <code>i</code> such that <code>UTF16.charAt(source, i) == 
+     * char32</code> is true. 
+     * <p>If no such character occurs in this string, then -1 is returned.</p> 
+     * <p> 
+     * Examples:<br>
+     * UTF16.indexOf("abc", 'a') returns 0<br>
+     * UTF16.indexOf("abc\ud800\udc00", 0x10000) returns 3<br>
+     * UTF16.indexOf("abc\ud800\udc00", 0xd800) returns -1<br>
+     * </p>
+     * Note this method is provided as support to jdk 1.3, which does not 
+     * support supplementary characters to its fullest.
+     * @param source UTF16 format Unicode string that will be searched
+     * @param char32 codepoint to search for 
+     * @return the index of the first occurrence of the codepoint in the 
+     *         argument Unicode string, or -1 if the codepoint does not occur.
+     * @draft ICU 2.1
+     */
     public static int indexOf(String source, int char32)  
     {
         if (char32 < CODEPOINT_MIN_VALUE || 
@@ -1499,30 +1547,30 @@ public final class UTF16
     }
      
     /**
-    * Returns the index within the argument UTF16 format Unicode string of 
-    * the first occurrence of the argument string str. This method is 
-    * implemented based on codepoints, hence a "lead surrogate character +
-    * trail surrogate character" is treated as one entity.e
-    * Hence if the str starts with trail surrogate character at index 0, a 
-    * source with a leading a surrogate character before str found at in 
-    * source will not have a valid match. Vice versa for lead surrogates 
-    * that ends str.
-    * See example below.
-    * <p>If no such string str occurs in this source, then -1 is returned.
-    * </p> <p>
-    * Examples:<br>
-    * UTF16.indexOf("abc", "ab") returns 0<br>
-    * UTF16.indexOf("abc\ud800\udc00", "\ud800\udc00") returns 3<br>
-    * UTF16.indexOf("abc\ud800\udc00", "\ud800") returns -1<br>
-    * </p>
-    * Note this method is provided as support to jdk 1.3, which does not 
-    * support supplementary characters to its fullest.
-    * @param source UTF16 format Unicode string that will be searched
-    * @param str UTF16 format Unicode string to search for
-    * @return the index of the first occurrence of the codepoint in the 
-    *         argument Unicode string, or -1 if the codepoint does not occur.
-    * @draft since release 2.1
-    */
+     * Returns the index within the argument UTF16 format Unicode string of 
+     * the first occurrence of the argument string str. This method is 
+     * implemented based on codepoints, hence a "lead surrogate character +
+     * trail surrogate character" is treated as one entity.e
+     * Hence if the str starts with trail surrogate character at index 0, a 
+     * source with a leading a surrogate character before str found at in 
+     * source will not have a valid match. Vice versa for lead surrogates 
+     * that ends str.
+     * See example below.
+     * <p>If no such string str occurs in this source, then -1 is returned.
+     * </p> <p>
+     * Examples:<br>
+     * UTF16.indexOf("abc", "ab") returns 0<br>
+     * UTF16.indexOf("abc\ud800\udc00", "\ud800\udc00") returns 3<br>
+     * UTF16.indexOf("abc\ud800\udc00", "\ud800") returns -1<br>
+     * </p>
+     * Note this method is provided as support to jdk 1.3, which does not 
+     * support supplementary characters to its fullest.
+     * @param source UTF16 format Unicode string that will be searched
+     * @param str UTF16 format Unicode string to search for
+     * @return the index of the first occurrence of the codepoint in the 
+     *         argument Unicode string, or -1 if the codepoint does not occur.
+     * @draft ICU 2.1
+     */
     public static int indexOf(String source, String str)  
     {
         int strLength = str.length();
@@ -1551,27 +1599,27 @@ public final class UTF16
     }
     
     /**
-    * Returns the index within the argument UTF16 format Unicode string of 
-    * the first occurrence of the argument codepoint. I.e., the smallest 
-    * index i such that: <br>
-    * (UTF16.charAt(source, i) == char32 && i >= fromIndex) is true. 
-    * <p>If no such character occurs in this string, then -1 is returned.</p> 
-    * <p>
-    * Examples:<br>
-    * UTF16.indexOf("abc", 'a', 1) returns -1<br>
-    * UTF16.indexOf("abc\ud800\udc00", 0x10000, 1) returns 3<br>
-    * UTF16.indexOf("abc\ud800\udc00", 0xd800, 1) returns -1<br>
-    * </p>
-    * Note this method is provided as support to jdk 1.3, which does not 
-    * support supplementary characters to its fullest.
-    * @param source UTF16 format Unicode string that will be searched
-    * @param char32 codepoint to search for 
-    * @param fromIndex the index to start the search from. 
-    * @return the index of the first occurrence of the codepoint in the 
-    *         argument Unicode string at or after fromIndex, or -1 if the 
-    *         codepoint does not occur.
-    * @draft since release 2.1
-    */
+     * Returns the index within the argument UTF16 format Unicode string of 
+     * the first occurrence of the argument codepoint. I.e., the smallest 
+     * index i such that: <br>
+     * (UTF16.charAt(source, i) == char32 && i >= fromIndex) is true. 
+     * <p>If no such character occurs in this string, then -1 is returned.</p> 
+     * <p>
+     * Examples:<br>
+     * UTF16.indexOf("abc", 'a', 1) returns -1<br>
+     * UTF16.indexOf("abc\ud800\udc00", 0x10000, 1) returns 3<br>
+     * UTF16.indexOf("abc\ud800\udc00", 0xd800, 1) returns -1<br>
+     * </p>
+     * Note this method is provided as support to jdk 1.3, which does not 
+     * support supplementary characters to its fullest.
+     * @param source UTF16 format Unicode string that will be searched
+     * @param char32 codepoint to search for 
+     * @param fromIndex the index to start the search from. 
+     * @return the index of the first occurrence of the codepoint in the 
+     *         argument Unicode string at or after fromIndex, or -1 if the 
+     *         codepoint does not occur.
+     * @draft ICU 2.1
+     */
     public static int indexOf(String source, int char32, int fromIndex) 
     {
         if (char32 < CODEPOINT_MIN_VALUE || char32 > CODEPOINT_MAX_VALUE) {
@@ -1607,32 +1655,32 @@ public final class UTF16
     }
 
     /**
-    * Returns the index within the argument UTF16 format Unicode string of 
-    * the first occurrence of the argument string str. This method is 
-    * implemented based on codepoints, hence a "lead surrogate character +
-    * trail surrogate character" is treated as one entity.e
-    * Hence if the str starts with trail surrogate character at index 0, a 
-    * source with a leading a surrogate character before str found at in 
-    * source will not have a valid match. Vice versa for lead surrogates 
-    * that ends str.
-    * See example below.
-    * <p>If no such string str occurs in this source, then -1 is returned.
-    * </p> <p>
-    * Examples:<br>
-    * UTF16.indexOf("abc", "ab", 0) returns 0<br>
-    * UTF16.indexOf("abc\ud800\udc00", "\ud800\udc00", 0) returns 3<br>
-    * UTF16.indexOf("abc\ud800\udc00", "\ud800\udc00", 2) returns 3<br>
-    * UTF16.indexOf("abc\ud800\udc00", "\ud800", 0) returns -1<br>
-    * </p>
-    * Note this method is provided as support to jdk 1.3, which does not 
-    * support supplementary characters to its fullest.
-    * @param source UTF16 format Unicode string that will be searched
-    * @param str UTF16 format Unicode string to search for
-    * @param fromIndex the index to start the search from. 
-    * @return the index of the first occurrence of the codepoint in the 
-    *         argument Unicode string, or -1 if the codepoint does not occur.
-    * @draft since release 2.1
-    */
+     * Returns the index within the argument UTF16 format Unicode string of 
+     * the first occurrence of the argument string str. This method is 
+     * implemented based on codepoints, hence a "lead surrogate character +
+     * trail surrogate character" is treated as one entity.e
+     * Hence if the str starts with trail surrogate character at index 0, a 
+     * source with a leading a surrogate character before str found at in   
+     * source will not have a valid match. Vice versa for lead surrogates   
+     * that ends str.
+     * See example below.
+     * <p>If no such string str occurs in this source, then -1 is returned.
+     * </p> <p>
+     * Examples:<br>
+     * UTF16.indexOf("abc", "ab", 0) returns 0<br>
+     * UTF16.indexOf("abc\ud800\udc00", "\ud800\udc00", 0) returns 3<br>
+     * UTF16.indexOf("abc\ud800\udc00", "\ud800\udc00", 2) returns 3<br> 
+     * UTF16.indexOf("abc\ud800\udc00", "\ud800", 0) returns -1<br>
+     * </p>
+     * Note this method is provided as support to jdk 1.3, which does not 
+     * support supplementary characters to its fullest.
+     * @param source UTF16 format Unicode string that will be searched
+     * @param str UTF16 format Unicode string to search for
+     * @param fromIndex the index to start the search from. 
+     * @return the index of the first occurrence of the codepoint in the 
+     *         argument Unicode string, or -1 if the codepoint does not occur.
+     * @draft ICU 2.1
+     */
     public static int indexOf(String source, String str, int fromIndex)  
     {
         int strLength = str.length();
@@ -1661,25 +1709,25 @@ public final class UTF16
     }
     
     /**
-    * Returns the index within the argument UTF16 format Unicode string of 
-    * the last occurrence of the argument codepoint. I.e., the index returned 
-    * is the largest value i such that: UTF16.charAt(source, i) == char32
-    * is true. 
-    * <p>
-    * Examples:<br>
-    * UTF16.lastIndexOf("abc", 'a') returns 0<br>
-    * UTF16.lastIndexOf("abc\ud800\udc00", 0x10000) returns 3<br>
-    * UTF16.lastIndexOf("abc\ud800\udc00", 0xd800) returns -1<br>
-    * </p>
-    * <p>source is searched backwards starting at the last character.</p> 
-    * Note this method is provided as support to jdk 1.3, which does not 
-    * support supplementary characters to its fullest.
-    * @param source UTF16 format Unicode string that will be searched
-    * @param char32 codepoint to search for 
-    * @return the index of the last occurrence of the codepoint in source, 
-    *         or -1 if the codepoint does not occur.
-    * @draft since release 2.1
-    */
+     * Returns the index within the argument UTF16 format Unicode string of 
+     * the last occurrence of the argument codepoint. I.e., the index returned 
+     * is the largest value i such that: UTF16.charAt(source, i) == char32
+     * is true. 
+     * <p>
+     * Examples:<br>
+     * UTF16.lastIndexOf("abc", 'a') returns 0<br>
+     * UTF16.lastIndexOf("abc\ud800\udc00", 0x10000) returns 3<br>
+     * UTF16.lastIndexOf("abc\ud800\udc00", 0xd800) returns -1<br>
+     * </p>
+     * <p>source is searched backwards starting at the last character.</p> 
+     * Note this method is provided as support to jdk 1.3, which does not 
+     * support supplementary characters to its fullest.
+     * @param source UTF16 format Unicode string that will be searched
+     * @param char32 codepoint to search for 
+     * @return the index of the last occurrence of the codepoint in source, 
+     *         or -1 if the codepoint does not occur.
+     * @draft ICU 2.1
+     */
     public static int lastIndexOf(String source, int char32)  
     {
         if (char32 < CODEPOINT_MIN_VALUE || char32 > CODEPOINT_MAX_VALUE) {
@@ -1715,30 +1763,30 @@ public final class UTF16
     }
     
     /**
-    * Returns the index within the argument UTF16 format Unicode string of 
-    * the last occurrence of the argument string str. This method is 
-    * implemented based on codepoints, hence a "lead surrogate character +
-    * trail surrogate character" is treated as one entity.e
-    * Hence if the str starts with trail surrogate character at index 0, a 
-    * source with a leading a surrogate character before str found at in 
-    * source will not have a valid match. Vice versa for lead surrogates 
-    * that ends str.
-    * See example below.
-    * <p>
-    * Examples:<br>
-    * UTF16.lastIndexOf("abc", "a") returns 0<br>
-    * UTF16.lastIndexOf("abc\ud800\udc00", "\ud800\udc00") returns 3<br>
-    * UTF16.lastIndexOf("abc\ud800\udc00", "\ud800") returns -1<br>
-    * </p>
-    * <p>source is searched backwards starting at the last character.</p> 
-    * Note this method is provided as support to jdk 1.3, which does not 
-    * support supplementary characters to its fullest.
-    * @param source UTF16 format Unicode string that will be searched
-    * @param str UTF16 format Unicode string to search for 
-    * @return the index of the last occurrence of the codepoint in source, 
-    *         or -1 if the codepoint does not occur.
-    * @draft since release 2.1
-    */
+     * Returns the index within the argument UTF16 format Unicode string of 
+     * the last occurrence of the argument string str. This method is 
+     * implemented based on codepoints, hence a "lead surrogate character +
+     * trail surrogate character" is treated as one entity.e
+     * Hence if the str starts with trail surrogate character at index 0, a 
+     * source with a leading a surrogate character before str found at in 
+     * source will not have a valid match. Vice versa for lead surrogates 
+     * that ends str.
+     * See example below.
+     * <p>
+     * Examples:<br>
+     * UTF16.lastIndexOf("abc", "a") returns 0<br>
+     * UTF16.lastIndexOf("abc\ud800\udc00", "\ud800\udc00") returns 3<br>
+     * UTF16.lastIndexOf("abc\ud800\udc00", "\ud800") returns -1<br>
+     * </p>
+     * <p>source is searched backwards starting at the last character.</p> 
+     * Note this method is provided as support to jdk 1.3, which does not 
+     * support supplementary characters to its fullest.
+     * @param source UTF16 format Unicode string that will be searched
+     * @param str UTF16 format Unicode string to search for 
+     * @return the index of the last occurrence of the codepoint in source, 
+     *         or -1 if the codepoint does not occur.
+     * @draft ICU 2.1
+     */
     public static int lastIndexOf(String source, String str)  
     {
         int strLength = str.length();
@@ -1766,36 +1814,36 @@ public final class UTF16
     }
     
     /**
-    * <p>Returns the index within the argument UTF16 format Unicode string of 
-    * the last occurrence of the argument codepoint, where the result is less
-    * than or equals to fromIndex.</p> 
-    * <p>This method is implemented based on codepoints, hence a single 
-    * surrogate character will not match a supplementary character.</p>
-    * <p>source is searched backwards starting at the last character starting 
-    * at the specified index.</p>
-    * <p>
-    * Examples:<br>
-    * UTF16.lastIndexOf("abc", 'c', 2) returns 2<br>
-    * UTF16.lastIndexOf("abc", 'c', 1) returns -1<br>
-    * UTF16.lastIndexOf("abc\ud800\udc00", 0x10000, 5) returns 3<br>
-    * UTF16.lastIndexOf("abc\ud800\udc00", 0x10000, 3) returns 3<br>
-    * UTF16.lastIndexOf("abc\ud800\udc00", 0xd800) returns -1<br>
-    * </p>
-    * Note this method is provided as support to jdk 1.3, which does not 
-    * support supplementary characters to its fullest.
-    * @param source UTF16 format Unicode string that will be searched
-    * @param char32 codepoint to search for 
-    * @param fromIndex the index to start the search from. There is no 
-    *                  restriction on the value of fromIndex. If it is 
-    *                  greater than or equal to the length of this string, 
-    *                  it has the same effect as if it were equal to one 
-    *                  less than the length of this string: this entire 
-    *                  string may be searched. If it is negative, it has 
-    *                  the same effect as if it were -1: -1 is returned. 
-    * @return the index of the last occurrence of the codepoint in source, 
-    *         or -1 if the codepoint does not occur.
-    * @draft since release 2.1
-    */
+     * <p>Returns the index within the argument UTF16 format Unicode string of 
+     * the last occurrence of the argument codepoint, where the result is less
+     * than or equals to fromIndex.</p> 
+     * <p>This method is implemented based on codepoints, hence a single 
+     * surrogate character will not match a supplementary character.</p>
+     * <p>source is searched backwards starting at the last character starting 
+     * at the specified index.</p>
+     * <p>
+     * Examples:<br>
+     * UTF16.lastIndexOf("abc", 'c', 2) returns 2<br>
+     * UTF16.lastIndexOf("abc", 'c', 1) returns -1<br>
+     * UTF16.lastIndexOf("abc\ud800\udc00", 0x10000, 5) returns 3<br>
+     * UTF16.lastIndexOf("abc\ud800\udc00", 0x10000, 3) returns 3<br>
+     * UTF16.lastIndexOf("abc\ud800\udc00", 0xd800) returns -1<br>
+     * </p>
+     * Note this method is provided as support to jdk 1.3, which does not 
+     * support supplementary characters to its fullest.
+     * @param source UTF16 format Unicode string that will be searched
+     * @param char32 codepoint to search for 
+     * @param fromIndex the index to start the search from. There is no 
+     *                  restriction on the value of fromIndex. If it is 
+     *                  greater than or equal to the length of this string, 
+     *                  it has the same effect as if it were equal to one 
+     *                  less than the length of this string: this entire 
+     *                  string may be searched. If it is negative, it has 
+     *                  the same effect as if it were -1: -1 is returned. 
+     * @return the index of the last occurrence of the codepoint in source, 
+     *         or -1 if the codepoint does not occur.
+     * @draft ICU 2.1
+     */
     public static int lastIndexOf(String source, int char32, int fromIndex)
     {
         if (char32 < CODEPOINT_MIN_VALUE || char32 > CODEPOINT_MAX_VALUE) {
@@ -1831,42 +1879,42 @@ public final class UTF16
     }
     
     /**
-    * <p>Returns the index within the argument UTF16 format Unicode string of 
-    * the last occurrence of the argument string str, where the result is less
-    * than or equals to fromIndex.</p> 
-    * <p>This method is implemented based on codepoints, hence a 
-    * "lead surrogate character + trail surrogate character" is treated as one 
-    * entity.
-    * Hence if the str starts with trail surrogate character at index 0, a 
-    * source with a leading a surrogate character before str found at in 
-    * source will not have a valid match. Vice versa for lead surrogates 
-    * that ends str.
-    * </p>
-    * See example below.
-    * <p>
-    * Examples:<br>
-    * UTF16.lastIndexOf("abc", "c", 2) returns 2<br>
-    * UTF16.lastIndexOf("abc", "c", 1) returns -1<br>
-    * UTF16.lastIndexOf("abc\ud800\udc00", "\ud800\udc00", 5) returns 3<br>
-    * UTF16.lastIndexOf("abc\ud800\udc00", "\ud800\udc00", 3) returns 3<br>
-    * UTF16.lastIndexOf("abc\ud800\udc00", "\ud800", 4) returns -1<br>
-    * </p>
-    * <p>source is searched backwards starting at the last character.</p> 
-    * Note this method is provided as support to jdk 1.3, which does not 
-    * support supplementary characters to its fullest.
-    * @param source UTF16 format Unicode string that will be searched
-    * @param str UTF16 format Unicode string to search for 
-    * @param fromIndex the index to start the search from. There is no 
-    *                  restriction on the value of fromIndex. If it is 
-    *                  greater than or equal to the length of this string, 
-    *                  it has the same effect as if it were equal to one 
-    *                  less than the length of this string: this entire 
-    *                  string may be searched. If it is negative, it has 
-    *                  the same effect as if it were -1: -1 is returned. 
-    * @return the index of the last occurrence of the codepoint in source, 
-    *         or -1 if the codepoint does not occur.
-    * @draft since release 2.1
-    */
+     * <p>Returns the index within the argument UTF16 format Unicode string of 
+     * the last occurrence of the argument string str, where the result is less
+     * than or equals to fromIndex.</p> 
+     * <p>This method is implemented based on codepoints, hence a 
+     * "lead surrogate character + trail surrogate character" is treated as one 
+     * entity.
+     * Hence if the str starts with trail surrogate character at index 0, a 
+     * source with a leading a surrogate character before str found at in 
+     * source will not have a valid match. Vice versa for lead surrogates 
+     * that ends str.
+     * </p>
+     * See example below.
+     * <p>
+     * Examples:<br>
+     * UTF16.lastIndexOf("abc", "c", 2) returns 2<br>
+     * UTF16.lastIndexOf("abc", "c", 1) returns -1<br>
+     * UTF16.lastIndexOf("abc\ud800\udc00", "\ud800\udc00", 5) returns 3<br>
+     * UTF16.lastIndexOf("abc\ud800\udc00", "\ud800\udc00", 3) returns 3<br>
+     * UTF16.lastIndexOf("abc\ud800\udc00", "\ud800", 4) returns -1<br>
+     * </p>
+     * <p>source is searched backwards starting at the last character.</p> 
+     * Note this method is provided as support to jdk 1.3, which does not 
+     * support supplementary characters to its fullest.
+     * @param source UTF16 format Unicode string that will be searched
+     * @param str UTF16 format Unicode string to search for 
+     * @param fromIndex the index to start the search from. There is no 
+     *                  restriction on the value of fromIndex. If it is 
+     *                  greater than or equal to the length of this string, 
+     *                  it has the same effect as if it were equal to one 
+     *                  less than the length of this string: this entire 
+     *                  string may be searched. If it is negative, it has 
+     *                  the same effect as if it were -1: -1 is returned. 
+     * @return the index of the last occurrence of the codepoint in source, 
+     *         or -1 if the codepoint does not occur.
+     * @draft ICU 2.1
+     */
     public static int lastIndexOf(String source, String str, int fromIndex)  
     {
         int strLength = str.length();
@@ -1894,35 +1942,35 @@ public final class UTF16
     }
 
     /**
-    * Returns a new UTF16 format Unicode string resulting from replacing all 
-    * occurrences of oldChar32 in source with newChar32. 
-    * If the character oldChar32 does not occur in the UTF16 format Unicode
-    * string source, then source will be returned. Otherwise, a new String 
-    * object is created that represents a codepoint sequence identical to the 
-    * codepoint sequence represented by source, except that every occurrence 
-    * of oldChar32 is replaced by an occurrence of newChar32. 
-    * <p>
-    * Examples: <br>
-    * UTF16.replace("mesquite in your cellar", 'e', 'o');<br>
-    *        returns "mosquito in your collar"<br>
-    * UTF16.replace("JonL", 'q', 'x');<br>
-    *        returns "JonL" (no change)<br>
-    * UTF16.replace("Supplementary character \ud800\udc00", 0x10000, '!');
-    * <br>   returns "Supplementary character !"<br>
-    * UTF16.replace("Supplementary character \ud800\udc00", 0xd800, '!');
-    * <br>   returns "Supplementary character \ud800\udc00"<br>
-    * </p>
-    * Note this method is provided as support to jdk 1.3, which does not 
-    * support supplementary characters to its fullest.
-    * @param source UTF16 format Unicode string which the codepoint 
-    *               replacements will be based on.
-    * @param oldChar32 non-zero old codepoint to be replaced.
-    * @param newChar32 the new codepoint to replace oldChar32
-    * @return new String derived from source by replacing every occurrence 
-    *         of oldChar32 with newChar32, unless when no oldChar32 is found
-    *         in source then source will be returned.
-    * @draft since release 2.1
-    */
+     * Returns a new UTF16 format Unicode string resulting from replacing all 
+     * occurrences of oldChar32 in source with newChar32. 
+     * If the character oldChar32 does not occur in the UTF16 format Unicode
+     * string source, then source will be returned. Otherwise, a new String 
+     * object is created that represents a codepoint sequence identical to the 
+     * codepoint sequence represented by source, except that every occurrence 
+     * of oldChar32 is replaced by an occurrence of newChar32. 
+     * <p>
+     * Examples: <br>
+     * UTF16.replace("mesquite in your cellar", 'e', 'o');<br>
+     *        returns "mosquito in your collar"<br>
+     * UTF16.replace("JonL", 'q', 'x');<br>
+     *        returns "JonL" (no change)<br>
+     * UTF16.replace("Supplementary character \ud800\udc00", 0x10000, '!');
+     * <br>   returns "Supplementary character !"<br>
+     * UTF16.replace("Supplementary character \ud800\udc00", 0xd800, '!');
+     * <br>   returns "Supplementary character \ud800\udc00"<br>
+     * </p>
+     * Note this method is provided as support to jdk 1.3, which does not 
+     * support supplementary characters to its fullest.
+     * @param source UTF16 format Unicode string which the codepoint 
+     *               replacements will be based on.
+     * @param oldChar32 non-zero old codepoint to be replaced.
+     * @param newChar32 the new codepoint to replace oldChar32
+     * @return new String derived from source by replacing every occurrence 
+     *         of oldChar32 with newChar32, unless when no oldChar32 is found
+     *         in source then source will be returned.
+     * @draft ICU 2.1
+     */
     public static String replace(String source, int oldChar32, 
                                  int newChar32)  
     {
@@ -1960,38 +2008,38 @@ public final class UTF16
     }
     
     /**
-    * Returns a new UTF16 format Unicode string resulting from replacing all 
-    * occurrences of oldStr in source with newStr. 
-    * If the character oldStr does not occur in the UTF16 format Unicode
-    * string source, then source will be returned. Otherwise, a new String 
-    * object is created that represents a codepoint sequence identical to the 
-    * codepoint sequence represented by source, except that every occurrence 
-    * of oldStr is replaced by an occurrence of newStr. 
-    * <p>
-    * Examples: <br>
-    * UTF16.replace("mesquite in your cellar", "e", "o");<br>
-    *        returns "mosquito in your collar"<br>
-    * UTF16.replace("mesquite in your cellar", "mesquite", "cat");<br>
-    *        returns "cat in your collar"<br>
-    * UTF16.replace("JonL", "q", "x");<br>
-    *        returns "JonL" (no change)<br>
-    * UTF16.replace("Supplementary character \ud800\udc00", "\ud800\udc00",
-    *               '!');
-    * <br>   returns "Supplementary character !"<br>
-    * UTF16.replace("Supplementary character \ud800\udc00", "\ud800", '!');
-    * <br>   returns "Supplementary character \ud800\udc00"<br>
-    * </p>
-    * Note this method is provided as support to jdk 1.3, which does not 
-    * support supplementary characters to its fullest.
-    * @param source UTF16 format Unicode string which the codepoint 
-    *               replacements will be based on.
-    * @param oldChar32 non-zero old codepoint to be replaced.
-    * @param newChar32 the new codepoint to replace oldChar32
-    * @return new String derived from source by replacing every occurrence 
-    *         of oldChar32 with newChar32, unless when no oldChar32 is found
-    *         in source then source will be returned.
-    * @draft since release 2.1
-    */
+     * Returns a new UTF16 format Unicode string resulting from replacing all 
+     * occurrences of oldStr in source with newStr. 
+     * If the character oldStr does not occur in the UTF16 format Unicode
+     * string source, then source will be returned. Otherwise, a new String 
+     * object is created that represents a codepoint sequence identical to the 
+     * codepoint sequence represented by source, except that every occurrence 
+     * of oldStr is replaced by an occurrence of newStr. 
+     * <p>
+     * Examples: <br>
+     * UTF16.replace("mesquite in your cellar", "e", "o");<br>
+     *        returns "mosquito in your collar"<br>
+     * UTF16.replace("mesquite in your cellar", "mesquite", "cat");<br>
+     *        returns "cat in your collar"<br>
+     * UTF16.replace("JonL", "q", "x");<br>
+     *        returns "JonL" (no change)<br>
+     * UTF16.replace("Supplementary character \ud800\udc00", "\ud800\udc00",
+     *               '!');
+     * <br>   returns "Supplementary character !"<br>
+     * UTF16.replace("Supplementary character \ud800\udc00", "\ud800", '!');
+     * <br>   returns "Supplementary character \ud800\udc00"<br>
+     * </p>
+     * Note this method is provided as support to jdk 1.3, which does not 
+     * support supplementary characters to its fullest.
+     * @param source UTF16 format Unicode string which the codepoint 
+     *               replacements will be based on.
+     * @param oldChar32 non-zero old codepoint to be replaced.
+     * @param newChar32 the new codepoint to replace oldChar32
+     * @return new String derived from source by replacing every occurrence 
+     *         of oldChar32 with newChar32, unless when no oldChar32 is found
+     *         in source then source will be returned.
+     * @draft ICU 2.1
+     */
     public static String replace(String source, String oldStr, 
                                  String newStr)  
     {
@@ -2015,20 +2063,20 @@ public final class UTF16
     }
     
     /** 
-    * Reverses a UTF16 format Unicode string and replaces source's content 
-    * with it.
-    * This method will reverse surrogate characters correctly, instead of 
-    * blindly reversing every character.
-    * <p>
-    * Examples:<br>
-    * UTF16.reverse(new StringBuffer(
-    *             "Supplementary characters \ud800\udc00\ud801\udc01"))<br>
-    * returns "\ud801\udc01\ud800\udc00 sretcarahc yratnemelppuS".
-    * @param source the source StringBuffer that contains UTF16 format 
-    *        Unicode string to be reversed
-    * @return a modified source with reversed UTF16 format Unicode string.
-    * @draft since release 2.1
-    */
+     * Reverses a UTF16 format Unicode string and replaces source's content 
+     * with it.
+     * This method will reverse surrogate characters correctly, instead of 
+     * blindly reversing every character.
+     * <p>
+     * Examples:<br>
+     * UTF16.reverse(new StringBuffer(
+     *             "Supplementary characters \ud800\udc00\ud801\udc01"))<br>
+     * returns "\ud801\udc01\ud800\udc00 sretcarahc yratnemelppuS".
+     * @param source the source StringBuffer that contains UTF16 format 
+     *        Unicode string to be reversed
+     * @return a modified source with reversed UTF16 format Unicode string.
+     * @draft ICU 2.1
+     */
     public static StringBuffer reverse(StringBuffer source)      
     {
         StringBuffer result = source.reverse();
@@ -2063,7 +2111,7 @@ public final class UTF16
      *               against the 'number' parameter.
      * @return boolean value for whether the string contains more Unicode code 
      *         points than 'number'. 
-     * @draft 2.4
+     * @draft ICU 2.4
      */
     public static boolean hasMoreCodePointsThan(String source, int number)
     {
@@ -2131,7 +2179,7 @@ public final class UTF16
      * @return boolean value for whether the string contains more Unicode code 
      *         points than 'number'.
      * @exception IndexOutOfBoundsException thrown when limit &lt; start
-     * @draft 2.4
+     * @draft ICU 2.4
      */
     public static boolean hasMoreCodePointsThan(char source[], int start, 
                                                 int limit, int number)
@@ -2199,7 +2247,7 @@ public final class UTF16
      *               against the 'number' parameter.
      * @return boolean value for whether the string buffer contains more 
      *         Unicode code points than 'number'.
-     * @draft 2.4
+     * @draft ICU 2.4
      */
     public static boolean hasMoreCodePointsThan(StringBuffer source, int number)
     {
@@ -2265,7 +2313,7 @@ public final class UTF16
     * &#92;ud800..&#92;udfff.</p>
     * @see #FOLD_CASE_DEFAULT
     * @see #FOLD_CASE_EXCLUDE_SPECIAL_I
-    * @stable 
+    * @stable ICU 2.1
     */
     public static final class StringComparator implements java.util.Comparator 
     {
@@ -2274,6 +2322,7 @@ public final class UTF16
         /**
          * Default constructor that does code unit comparison and case 
          * sensitive comparison.
+         * @stable ICU 2.1
          */
         public StringComparator()
         {
@@ -2293,6 +2342,7 @@ public final class UTF16
          * @see #FOLD_CASE_DEFAULT
          * @see #FOLD_CASE_EXCLUDE_SPECIAL_I
          * @throws IllegalArgumentException if foldcaseoption is out of range
+         * @draft ICU 2.4
          */
         public StringComparator(boolean codepointcompare, 
                                 boolean ignorecase,
@@ -2315,7 +2365,7 @@ public final class UTF16
          * mappings defined in Unicode data file CaseFolding.txt, before 
          * comparison. 
          * </p>
-         * @draft 2.4
+         * @draft ICU 2.4
          */
         public static final int FOLD_CASE_DEFAULT = 0;
         /**
@@ -2333,7 +2383,7 @@ public final class UTF16
          * <p>Unicode 3.2 CaseFolding.txt instead contains mappings marked with 
          * 'T' that are to be excluded for default mappings and included for 
          * the Turkic-specific mappings.</p>
-         * @draft 2.4
+         * @draft ICU 2.4
          */
         public static final int FOLD_CASE_EXCLUDE_SPECIAL_I = 1;
         
@@ -2345,6 +2395,7 @@ public final class UTF16
          * Sets the comparison mode to code point compare if flag is true.
          * Otherwise comparison mode is set to code unit compare
          * @param flag true for code point compare, false for code unit compare
+         * @draft ICU 2.4
          */
         public void setCodePointCompare(boolean flag)
         {
@@ -2367,6 +2418,7 @@ public final class UTF16
          *        is ignored.
          * @see #FOLD_CASE_DEFAULT
          * @see #FOLD_CASE_EXCLUDE_SPECIAL_I
+         * @draft ICU 2.4
          */
         public void setIgnoreCase(boolean ignorecase, int foldcaseoption) 
         {
@@ -2383,6 +2435,7 @@ public final class UTF16
         /**
          * Checks if the comparison mode is code point compare.
          * @return true for code point compare, false for code unit compare
+         * @draft ICU 2.4
          */
         public boolean getCodePointCompare()
         {
@@ -2393,6 +2446,7 @@ public final class UTF16
          * Checks if Comparator is in the case insensitive mode.
          * @return true if Comparator performs case insensitive comparison, 
          *         false otherwise
+         * @draft ICU 2.4
          */
         public boolean getIgnoreCase() 
         {
@@ -2405,6 +2459,7 @@ public final class UTF16
          * @return either FOLD_CASE_DEFAULT or FOLD_CASE_EXCLUDE_SPECIAL_I
          * @see #FOLD_CASE_DEFAULT
          * @see #FOLD_CASE_EXCLUDE_SPECIAL_I
+         * @draft ICU 2.4
          */
         public int getIgnoreCaseOption() 
         {
@@ -2422,7 +2477,7 @@ public final class UTF16
          *         Otherwise if a > b, a positive value is returned.
          * @exception ClassCastException thrown when either a or b is not a 
          *            String object
-         * @draft 2.4
+         * @draft ICU 2.4
          */
         public int compare(Object a, Object b) 
         {
@@ -2587,7 +2642,7 @@ public final class UTF16
     * points, 2 otherwise.</p>
     * @param ch code point
     * @return string representation of the code point
-    * @deprecated since 2.4, use UCharater.toString(int) instead
+    * @deprecated ICU 2.4. Use UCharater.toString(int) instead
     */
     public static String toString(int ch)
     {   
