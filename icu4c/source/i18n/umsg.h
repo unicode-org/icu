@@ -17,6 +17,8 @@
 #include "utypes.h"
 #include <stdarg.h>
 /**
+ * @name Message Format C API
+ *
  * Provides means to produce concatenated messages in language-neutral way.
  * Use this for all concatenations that show up to end users.
  * <P>

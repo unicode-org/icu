@@ -50,7 +50,7 @@
  */
 class EntryPair
 {
-public :
+public:
     /**
      * Constructor
      */

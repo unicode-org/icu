@@ -19,6 +19,7 @@
 #include "unum.h"
 /**
  * @name Date Format C API
+ *
  * Date Format C API  consists of functions that convert dates and
  * times from their internal representations to textual form and back again in a
  * language-independent manner. Converting from the internal representation (milliseconds
@@ -41,9 +42,9 @@
  * .    UDateFormat* dfmt = udat_open(UCAL_DEFAULT, UCAL_DEFAULT, NULL, "PST", &status);
  * .    myStrlen = udat_format(dfmt, myDate, NULL, myStrlen, &pos, &status);
  * .    if(status==U_BUFFER_OVERFLOW_ERROR){
- * .    status=U_ZERO_ERROR;
- * .    myString=(UChar*)malloc(sizeof(UChar) * (myStrlen+1) );
- * .    udat_format(dfmt, myDate, myString, myStrlen+1, &pos, &status);
+ * .		status=U_ZERO_ERROR;
+ * .		myString=(UChar*)malloc(sizeof(UChar) * (myStrlen+1) );
+ * .		udat_format(dfmt, myDate, myString, myStrlen+1, &pos, &status);
  * .    }
  * </pre>
  * If you are formatting multiple numbers, it is more efficient to get the
@@ -55,14 +56,14 @@
  * .    UDate myDateArr[] = { 0.0, 100000000.0, 2000000000.0 }; // test values
  * .    UDateFormat* df = udat_open(UCAL_DEFAULT, UCAL_DEFAULT, NULL, "GMT", &status);
  * .    for (i = 0; i < 3; ++i) {
- * .    myStrlen = udat_format(df, myDate, NULL, myStrlen, &pos, &status);
- * .    if(status==U_BUFFER_OVERFLOW_ERROR){
- * .    status=U_ZERO_ERROR;
- * .    myString=(UChar*)malloc(sizeof(UChar) * (myStrlen+1) );
- * .    udat_format(df, myDate, myString, myStrlen+1, &pos, &status);
- * .    }
- * .    printf("%s \n", austrdup(myString) ); //austrdup( a function used to convert UChar* to char*)
- * .    free(myString);
+ * .		myStrlen = udat_format(df, myDate, NULL, myStrlen, &pos, &status);
+ * .		if(status==U_BUFFER_OVERFLOW_ERROR){
+ * .			status=U_ZERO_ERROR;
+ * .			myString=(UChar*)malloc(sizeof(UChar) * (myStrlen+1) );
+ * .			udat_format(df, myDate, myString, myStrlen+1, &pos, &status);
+ * .		}
+ * .		printf("%s \n", austrdup(myString) ); //austrdup( a function used to convert UChar* to char*)
+ * .		free(myString);
  * .    }
  * </pre>
  * To format a date for a different Locale, specify it in the call to

@@ -87,31 +87,31 @@
  * @author       Helena Shih
  */
 class U_I18N_API CollationKey {
-public :
+public:
     /**
      * This creates an empty collation key based on the null string.  An empty 
      * collation key contains no sorting information.  When comparing two empty
      * collation keys, the result is Collator::EQUAL.  Comparing empty collation key
      * with non-empty collation key is always Collator::LESS.
      */
-                                    CollationKey();
+     CollationKey();
     /**
      * Creates a collation key based on the collation key values.  
      * @param values the collation key values
      * @param count number of collation key values, including trailing nulls.
      * @see #createBits
      */
-                                    CollationKey(const  uint8_t*    values,
-                                                        int32_t     count);
+     CollationKey(const  uint8_t*    values,
+					int32_t     count);
 
     /**
      * Copy constructor.
      */
-                                    CollationKey(const CollationKey& other);
+     CollationKey(const CollationKey& other);
     /** 
      * Sort key destructor.
      */
-                                    ~CollationKey();
+     ~CollationKey();
 
     /**
      * Assignment operator
@@ -123,14 +123,14 @@ public :
      * @param source the collation key to compare to.
      * @return Returns true if two collation keys are equal, false otherwise.
      */
-            bool_t                  operator==(const CollationKey& source) const;
+     bool_t                  operator==(const CollationKey& source) const;
 
     /**
      * Compare if two collation keys are not the same.
      * @param source the collation key to compare to.
      * @return Returns TRUE if two collation keys are different, FALSE otherwise.
      */
-            bool_t                  operator!=(const CollationKey& source) const;
+     bool_t                  operator!=(const CollationKey& source) const;
 
 
     /**
@@ -138,7 +138,7 @@ public :
      * invalid state if it couldn't allocate memory for some operation.
      * @return Returns TRUE if the key is in an invalid, FALSE otherwise.
      */
-            bool_t                  isBogus(void) const;
+     bool_t                  isBogus(void) const;
 
     /** 
      * Returns a pointer to the collation key values. The storage is owned
@@ -147,7 +147,7 @@ public :
      * @param count the output parameter of number of collation key values,
      * including any trailing nulls.
      */
-   const    uint8_t*                getByteArray(int32_t& count) const;
+	 const    uint8_t*                getByteArray(int32_t& count) const;
 
     /** 
      * Extracts the collation key values into a new array. The caller owns
@@ -155,7 +155,7 @@ public :
      * @param count the output parameter of number of collation key values,
      * including any trailing nulls.
      */
-            uint8_t*                toByteArray(int32_t& count) const;
+     uint8_t*                toByteArray(int32_t& count) const;
 
     /**
      * Convenience method which does a string(bit-wise) comparison of the
@@ -166,7 +166,7 @@ public :
      * Collator::GREATER if sourceKey > targetKey and Collator::EQUAL
      * otherwise.
      */
-    Collator::EComparisonResult    compareTo(const CollationKey& target) const;
+     Collator::EComparisonResult    compareTo(const CollationKey& target) const;
 
     /**
      * Creates an integer that is unique to the collation key.  NOTE: this
@@ -187,7 +187,7 @@ public :
      * @return the hash value based on the string's collation order.
      * @see UnicodeString#hashCode
      */
-            int32_t                 hashCode(void) const;
+     int32_t                 hashCode(void) const;
 
 private:
     /**

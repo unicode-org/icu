@@ -18,6 +18,12 @@
  *   04/04/99    helena      Fixed internal header inclusion.
  */
 
+/**
+ * @name Character Conversion C API
+ *
+ * Character Conversion C API documentation is still under construction. 
+ * Please check for updates soon.
+ */
 
 #ifndef UCNV_H
 #define UCNV_H
