@@ -222,7 +222,7 @@ void TransliteratorTest::TestRuleBasedInverse(void) {
         "caccb", "xyzzy",
     };
 
-    int32_t DATA_length = sizeof(DATA) / sizeof(DATA[0]);
+    int32_t DATA_length = (int32_t)(sizeof(DATA) / sizeof(DATA[0]));
 
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedTransliterator fwd("<ID>", RULES, status);
@@ -264,7 +264,7 @@ void TransliteratorTest::TestKeyboard(void) {
         0, "AycAY", // null means finishKeyboardTransliteration
     };
 
-    keyboardAux(t, DATA, sizeof(DATA)/sizeof(DATA[0]));
+    keyboardAux(t, DATA, (int32_t)(sizeof(DATA)/sizeof(DATA[0])));
 }
 
 /**
@@ -296,7 +296,7 @@ void TransliteratorTest::TestKeyboard2(void) {
         0, "AycAY", // null means finishKeyboardTransliteration
     };
 
-    keyboardAux(t, DATA, sizeof(DATA)/sizeof(DATA[0]));
+    keyboardAux(t, DATA, (int32_t)(sizeof(DATA)/sizeof(DATA[0])));
 }
 
 /**
@@ -328,7 +328,7 @@ void TransliteratorTest::TestKeyboard3(void) {
         errln("FAIL: RBT constructor failed");
         return;
     }
-    keyboardAux(t, DATA, sizeof(DATA)/sizeof(DATA[0]));
+    keyboardAux(t, DATA, (int32_t)(sizeof(DATA)/sizeof(DATA[0])));
 }
 
 void TransliteratorTest::keyboardAux(const Transliterator& t,
@@ -634,7 +634,7 @@ void TransliteratorTest::TestJ329(void) {
         { FALSE, "a > b; c > d" },
         { TRUE,  "a > b; no operator; c > d" },
     };
-    int32_t DATA_length = sizeof(DATA) / sizeof(DATA[0]);
+    int32_t DATA_length = (int32_t)(sizeof(DATA) / sizeof(DATA[0]));
 
     for (int32_t i=0; i<DATA_length; ++i) {
         UErrorCode status = U_ZERO_ERROR;
@@ -673,7 +673,7 @@ void TransliteratorTest::TestSegments(void) {
         "abc.123.xyz.456",
         "ab1-c23.xy4-z56",
     };
-    int32_t DATA_length = sizeof(DATA)/sizeof(*DATA);
+    int32_t DATA_length = (int32_t)(sizeof(DATA)/sizeof(*DATA));
 
     for (int32_t i=0; i<DATA_length; i+=3) {
         logln("Pattern: " + prettify(DATA[i]));
@@ -703,7 +703,7 @@ void TransliteratorTest::TestCursorOffset(void) {
 
         "prbetaxyz preBETApost",
     };
-    int32_t DATA_length = sizeof(DATA)/sizeof(*DATA);
+    int32_t DATA_length = (int32_t)(sizeof(DATA)/sizeof(*DATA));
 
     for (int32_t i=0; i<DATA_length; i+=3) {
         logln("Pattern: " + prettify(DATA[i]));
@@ -742,7 +742,7 @@ void TransliteratorTest::TestArbitraryVariableValues(void) {
         "ab xYzxyz stY78",
         "ABE ENDEND 1129",
     };
-    int32_t DATA_length = sizeof(DATA)/sizeof(*DATA);
+    int32_t DATA_length = (int32_t)(sizeof(DATA)/sizeof(*DATA));
 
     for (int32_t i=0; i<DATA_length; i+=3) {
         logln("Pattern: " + prettify(DATA[i]));
@@ -785,7 +785,7 @@ void TransliteratorTest::TestPositionHandling(void) {
         3, 8, 3, 8,
     };
 
-    int32_t n = sizeof(DATA) / sizeof(DATA[0]) / 3;
+    int32_t n = (int32_t)(sizeof(DATA) / sizeof(DATA[0])) / 3;
     for (int32_t i=0; i<n; i++) {
         UErrorCode status = U_ZERO_ERROR;
         Transliterator *t = new RuleBasedTransliterator("<ID>",
@@ -840,7 +840,7 @@ void TransliteratorTest::TestHiraganaKatakana(void) {
         "\\u307C\\u3051\\u3060\\u3042\\u3093\\u30FC",
         "\\u30DC\\u30F6\\u30C0\\u30FC\\u30F3\\u30FC",
     };
-    int32_t DATA_length = sizeof(DATA) / sizeof(DATA[0]);
+    int32_t DATA_length = (int32_t)(sizeof(DATA) / sizeof(DATA[0]));
 
     for (int32_t i=0; i<DATA_length; i+=3) {
         UnicodeString h = CharsToUnicodeString(DATA[i+1]);
