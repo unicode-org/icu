@@ -160,7 +160,7 @@ en {
         ML { "Mali" }
         MM { "Myanmar" }
         MN { "Mongolia" }
-        MO { "Macao S.A.R. China" }
+        MO { "Macao S.A.R., China" }
         MP { "Northern Mariana Islands" }
         MQ { "Martinique" }
         MR { "Mauritania" }
