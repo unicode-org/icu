@@ -979,7 +979,8 @@ UBool checkNextExactContractionMatch(UStringSearch *strsrch,
     // This part checks if either ends of the match contains potential 
     // contraction. If so we'll have to iterate through them
     if ((*end < textlength && ucol_unsafeCP(text[*end], collator)) || 
-        (*start < textlength && ucol_unsafeCP(text[*start + 1], collator))) {
+        (*start + 1 < textlength 
+         && ucol_unsafeCP(text[*start + 1], collator))) {
         int32_t expansion  = getExpansionPrefix(coleiter);
         UBool   expandflag = expansion > 0;
         ucol_setOffset(coleiter, *start, status);
