@@ -118,7 +118,7 @@ ru {
         }
     }
     LocaleScript{ 
-                "Cyrs"      // ISO 15924 Name 
+                "Cyrl"      // ISO 15924 Name 
 
     }
 
