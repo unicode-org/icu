@@ -93,6 +93,7 @@ icu4c/source/data/build/sent.brk
 icu4c/source/data/build/word.brk
 icu4c/source/data/build/word_th.brk
 icu4c/source/extra/Makefile
+icu4c/source/extra/scrptrun/Makefile
 icu4c/source/extra/uconv/*.d
 icu4c/source/extra/uconv/Debug
 icu4c/source/extra/uconv/Makefile
@@ -136,6 +137,7 @@ icu4c/source/samples/date/Debug
 icu4c/source/samples/date/Makefile
 icu4c/source/samples/date/Release
 icu4c/source/samples/date/date
+icu4c/source/samples/layout/Makefile
 icu4c/source/stubdata/*.ao
 icu4c/source/stubdata/*.d
 icu4c/source/stubdata/*.plg
@@ -162,6 +164,7 @@ icu4c/source/test/intltest/Debug
 icu4c/source/test/intltest/Makefile
 icu4c/source/test/intltest/Release
 icu4c/source/test/intltest/intltest
+icu4c/source/test/letest/Makefile
 icu4c/source/test/testdata/*.c
 icu4c/source/test/testdata/*.dat
 icu4c/source/test/testdata/*.lst
@@ -187,6 +190,7 @@ icu4c/source/tools/ctestfw/Makefile
 icu4c/source/tools/ctestfw/Release
 icu4c/source/tools/ctestfw/pkgdata
 icu4c/source/tools/ctestfw/tmp
+icu4c/source/tools/dumpce/Makefile
 icu4c/source/tools/genccode/*.d
 icu4c/source/tools/genccode/*.pdb
 icu4c/source/tools/genccode/*.plg
@@ -215,14 +219,7 @@ icu4c/source/tools/gencnval/convrtrs.txt.[0-9]
 icu4c/source/tools/gencnval/gencnval
 icu4c/source/tools/gencnval/gencnval.[0-9]
 icu4c/source/tools/gencnval/tmp
-icu4c/source/tools/genfchk/*.d
-icu4c/source/tools/genfchk/*.pdb
-icu4c/source/tools/genfchk/*.plg
-icu4c/source/tools/genfchk/Debug
 icu4c/source/tools/genfchk/Makefile
-icu4c/source/tools/genfchk/Release
-icu4c/source/tools/genfchk/genfchk
-icu4c/source/tools/genfchk/tmp*
 icu4c/source/tools/gennames/*.d
 icu4c/source/tools/gennames/*.pdb
 icu4c/source/tools/gennames/Debug
@@ -245,14 +242,7 @@ icu4c/source/tools/genprops/Makefile
 icu4c/source/tools/genprops/Release
 icu4c/source/tools/genprops/genprops
 icu4c/source/tools/genprops/tmp
-icu4c/source/tools/genqchk/*.d
-icu4c/source/tools/genqchk/*.pdb
-icu4c/source/tools/genqchk/*.plg
-icu4c/source/tools/genqchk/Debug
 icu4c/source/tools/genqchk/Makefile
-icu4c/source/tools/genqchk/Release
-icu4c/source/tools/genqchk/genqchk
-icu4c/source/tools/genqchk/tmp*
 icu4c/source/tools/genrb/*.d
 icu4c/source/tools/genrb/*.pdb
 icu4c/source/tools/genrb/Debug
