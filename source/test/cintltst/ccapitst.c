@@ -76,7 +76,7 @@ static void TestConvert()
     char                ucs_file_name[UCS_FILE_NAME_SIZE];
     UConverterFromUCallback          MIA1, MIA1_2;
     UConverterToUCallback              MIA2, MIA2_2;
-    void                *MIA1Context, *MIA1Context2, *MIA2Context, *MIA2Context2;
+    const void         *MIA1Context, *MIA1Context2, *MIA2Context, *MIA2Context2;
     UConverter*            someConverters[5];
     UConverter*         myConverter = 0;
     UChar*                displayname = 0;
@@ -150,8 +150,8 @@ static void TestConvert()
 
     UConverterFromUCallback oldFromUAction = NULL;
     UConverterToUCallback oldToUAction = NULL;
-    void* oldFromUContext = NULL;
-    void* oldToUContext = NULL;
+    const void* oldFromUContext = NULL;
+    const void* oldToUContext = NULL;
 
     /* Allocate memory */
     mytarget = (char*) malloc(MAX_FILE_LEN * sizeof(mytarget[0]));

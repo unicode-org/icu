@@ -288,7 +288,7 @@ const char*  getName( UErrorCode&  err) const;
   * @stable
   */
  void getMissingCharAction(UConverterToUCallback *action,
-                           void **context) const;
+                           const void **context) const;
 
 /**
  * Return the current setting action taken when a unicode character is missing
@@ -298,7 +298,7 @@ const char*  getName( UErrorCode&  err) const;
  * @stable
  */
  void getMissingUnicodeAction(UConverterFromUCallback *action,
-                              void **context) const;
+                              const void **context) const;
 
  /**
   * Sets the current setting action taken when a character from a codepage is
@@ -311,9 +311,9 @@ const char*  getName( UErrorCode&  err) const;
   * @stable
   */
  void  setMissingCharAction(UConverterToUCallback     newAction,
-                void* newContext,
+                const void* newContext,
                 UConverterToUCallback *oldAction, 
-                void** oldContext,
+                const void** oldContext,
                 UErrorCode&            err);
 
 /**
@@ -328,9 +328,9 @@ const char*  getName( UErrorCode&  err) const;
  * @stable
  */
  void  setMissingUnicodeAction(UConverterFromUCallback  newAction,
-                   void* newContext,
+                   const void* newContext,
                    UConverterFromUCallback *oldAction,
-                   void** oldContext,
+                   const void** oldContext,
                    UErrorCode&            err);
 /**
  * Returns the localized name of the UnicodeConverter, if for any reason it is

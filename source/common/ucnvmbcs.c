@@ -339,13 +339,13 @@ _MBCSWriteSub(UConverterFromUnicodeArgs *pArgs,
 
 static void
 fromUCallback(UConverter *cnv,
-              void *context, UConverterFromUnicodeArgs *pArgs,
+              const void *context, UConverterFromUnicodeArgs *pArgs,
               UChar32 codePoint,
               UConverterCallbackReason reason, UErrorCode *pErrorCode);
 
 static void
 toUCallback(UConverter *cnv,
-            void *context, UConverterToUnicodeArgs *pArgs,
+            const void *context, UConverterToUnicodeArgs *pArgs,
             const char *codeUnits, int32_t length,
             UConverterCallbackReason reason, UErrorCode *pErrorCode);
 
@@ -3250,7 +3250,7 @@ const UConverterSharedData _MBCSData={
 /* the callback functions handle GB 18030 specially */
 static void
 fromUCallback(UConverter *cnv,
-              void *context, UConverterFromUnicodeArgs *pArgs,
+              const void *context, UConverterFromUnicodeArgs *pArgs,
               UChar32 codePoint,
               UConverterCallbackReason reason, UErrorCode *pErrorCode) {
     int32_t i;
@@ -3297,7 +3297,7 @@ fromUCallback(UConverter *cnv,
 
 static void
 toUCallback(UConverter *cnv,
-            void *context, UConverterToUnicodeArgs *pArgs,
+            const void *context, UConverterToUnicodeArgs *pArgs,
             const char *codeUnits, int32_t length,
             UConverterCallbackReason reason, UErrorCode *pErrorCode) {
     int32_t i;

@@ -1394,7 +1394,7 @@ static TestUTF8() {
     };
 
     UConverterToUCallback cb;
-    void *p;
+    const void *p;
 
     const char *source=(const char *)in,*limit=(const char *)in+sizeof(in);
     UErrorCode errorCode=U_ZERO_ERROR;
@@ -1553,7 +1553,7 @@ TestUTF32BE() {
     };
 
     UConverterToUCallback cb;
-    void *p;
+    const void *p;
 
     const char *source=(const char *)in, *limit=(const char *)in+sizeof(in);
     UErrorCode errorCode=U_ZERO_ERROR;
@@ -1622,7 +1622,7 @@ TestUTF32LE() {
     };
 
     UConverterToUCallback cb;
-    void *p;
+    const void *p;
 
     const char *source=(const char *)in, *limit=(const char *)in+sizeof(in);
     UErrorCode errorCode=U_ZERO_ERROR;

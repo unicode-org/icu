@@ -64,7 +64,7 @@ void ConvertTest::TestConvert()
     char       ucs_file_name[UCS_FILE_NAME_SIZE];
     UConverterFromUCallback MIA1, MIA1_2;
     UConverterToUCallback   MIA2, MIA2_2;
-    void              *MIA1Context, *MIA1Context2, *MIA2Context, *MIA2Context2;
+    const void         *MIA1Context, *MIA1Context2, *MIA2Context, *MIA2Context2;
     UnicodeConverter* someConverters[5];
     /******************************************************************
                                 Checking Unicode -> ksc
@@ -131,9 +131,9 @@ void ConvertTest::TestConvert()
     };
 
     UConverterFromUCallback fromUAction = NULL;
-    void* fromUContext = NULL;
+    const void* fromUContext = NULL;
     UConverterToUCallback toUAction = NULL;
-    void* toUContext = NULL;
+    const void* toUContext = NULL;
 
     /*Calling all the UnicodeConverter API and checking functionality*/
 
