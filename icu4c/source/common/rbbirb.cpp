@@ -188,10 +188,10 @@ RBBIRuleBuilder::createRuleBasedBreakIterator( const UnicodeString    &rules,
     // and list of all Unicode Sets referenced by the rules.
     //
     RBBIRuleBuilder  builder(rules, parseError, status);
+    builder.fScanner->parse();
     if (U_FAILURE(status)) {
         return NULL;
     }
-    builder.fScanner->parse();
 
     //
     // UnicodeSet processing.
