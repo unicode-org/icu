@@ -2118,6 +2118,24 @@ void CollationAPITest::TestSubclass()
     }
 }
 
+void CollationAPITest::TestNULLCharTailoring()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    UChar buf[256] = {0};
+    int32_t len = u_unescape("&a < '\\u0000'", buf, 256);
+    UnicodeString first(0x0061);
+    UnicodeString second(0);
+    RuleBasedCollator *coll = new RuleBasedCollator(UnicodeString(buf, len), status);
+    if(U_FAILURE(status)) {
+        errln("Failed to open collator");
+    }
+    UCollationResult res = coll->compare(first, second, status);
+    if(res != UCOL_LESS) {
+        errln("a should be less then NULL after tailoring");
+    }
+    delete coll;
+}
+
 void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par */)
 {
     if (exec) logln("TestSuite CollationAPITest: ");
@@ -2144,6 +2162,7 @@ void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &n
         case 19: name = "TestGetTailoredSet"; if (exec) TestGetTailoredSet(); break;
         case 20: name = "TestUClassID"; if (exec) TestUClassID(); break;
         case 21: name = "TestSubclass"; if (exec) TestSubclass(); break;
+        case 22: name = "TestNULLCharTailoring"; if (exec) TestNULLCharTailoring(); break;
         default: name = ""; break;
     }
 }
