@@ -1,3 +1,15 @@
+#/**
+# *******************************************************************************
+# * Copyright (C) 2002-2002, International Business Machines Corporation and    *
+# * others. All Rights Reserved.                                                *
+# *******************************************************************************
+# *
+# * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/perf/collationperf.pl,v $
+# * $Date: 2002/12/18 03:56:40 $
+# * $Revision: 1.2 $
+# *
+# *******************************************************************************
+# */
 #
 #  ICU and Windows Collation performance test script
 #      Used in conjunction with the collperf test program.

@@ -1,3 +1,15 @@
+#/**
+# *******************************************************************************
+# * Copyright (C) 2002-2002, International Business Machines Corporation and    *
+# * others. All Rights Reserved.                                                *
+# *******************************************************************************
+# *
+# * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/translit/genIndexFilters.bat,v $
+# * $Date: 2002/12/18 03:56:41 $
+# * $Revision: 1.3 $
+# *
+# *******************************************************************************
+# */
 @rem = '--*-Perl-*--
 @echo off
 if "%OS%" == "Windows_NT" goto WinNT

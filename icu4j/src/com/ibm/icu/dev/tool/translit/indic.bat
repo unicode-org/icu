@@ -1,7 +1,17 @@
-@echo off
-REM Copyright (C) 2000, International Business Machines
-REM Corporation and others.  All Rights Reserved.
+REM /**
+REM *******************************************************************************
+REM * Copyright (C) 2002-2002, International Business Machines Corporation and    *
+REM * others. All Rights Reserved.                                                *
+REM *******************************************************************************
+REM *
+REM * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/translit/indic.bat,v $
+REM * $Date: 2002/12/18 03:56:41 $
+REM * $Revision: 1.2 $
+REM *
+REM *******************************************************************************
+REM */
 
+@echo off
 REM This script is a Windows launcher for the indic.pl script.  For this
 REM to work, the perl executable must be on the path.  We recommend
 REM the ActiveState build; see http://www.activestate.com.  See the
