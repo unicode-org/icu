@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/normalizer/TestCanonicalIterator.java,v $ 
- * $Date: 2002/11/22 00:23:20 $ 
- * $Revision: 1.9 $
+ * $Date: 2002/11/22 00:44:06 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -31,7 +31,7 @@ public class TestCanonicalIterator extends TestFmwk {
     }
 	
     static final String testArray[][] = {
-        {"Åd\u0307\u0327", "A\u030Ad\u0307\u0327, A\u030Ad\u0327\u0307, A\u030A\u1E0B\u0327, "
+        {"\u00C5d\u0307\u0327", "A\u030Ad\u0307\u0327, A\u030Ad\u0327\u0307, A\u030A\u1E0B\u0327, "
         	+ "A\u030A\u1E11\u0307, \u00C5d\u0307\u0327, \u00C5d\u0327\u0307, "
         	+ "\u00C5\u1E0B\u0327, \u00C5\u1E11\u0307, \u212Bd\u0307\u0327, "
         	+ "\u212Bd\u0327\u0307, \u212B\u1E0B\u0327, \u212B\u1E11\u0307"},
@@ -85,12 +85,13 @@ public class TestCanonicalIterator extends TestFmwk {
     					logln("");
     					lastMixedCounter = mixedCounter;
     				}
-    				logln("\t" + mixedCounter + "\t" + name.transliterate(item)
-    				+ (item.equals(s) ? "\t(*original*)" : "")
-    				+ (item.equals(decomp) ? "\t(*decomp*)" : "")
-    				+ (item.equals(comp) ? "\t(*comp*)" : "")
-    				);
+                    logln("\t" + mixedCounter + "\t" + name.transliterate(item)
+                    + (item.equals(s) ? "\t(*original*)" : "")
+                    + (item.equals(decomp) ? "\t(*decomp*)" : "")
+                    + (item.equals(comp) ? "\t(*comp*)" : "")
+                    );
     			}
+
     		}
     		
     		// check that zeros optimization doesn't mess up.
@@ -118,7 +119,12 @@ public class TestCanonicalIterator extends TestFmwk {
     		
     		mixedCounter++;
     		if (!gotSource || !gotDecomp || !gotComp) {
-    			errln("FAIL CanonicalIterator: " + s);
+    			errln("FAIL CanonicalIterator: " + s + " decomp: " +decomp+" comp: "+comp);
+                it.reset();
+                for(String item=it.next();item!=null;item=it.next()){
+                    err(item + "    ");
+                }
+                errln("");   
     		}
     	}
     }
