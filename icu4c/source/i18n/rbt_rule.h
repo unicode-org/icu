@@ -110,31 +110,6 @@ private:
 public:
 
     /**
-     * Construct a new rule with the given key, output text, and other
-     * attributes.  Zero, one, or two context strings may be specified.  A
-     * cursor position may be specified for the output text.
-     * @param key the string to match
-     * @param output the string to produce when the <code>key</code> is seen
-     * @param anteContext if not null and not empty, then it must be matched
-     * before the <code>key</code>
-     * @param postContext if not null and not empty, then it must be matched
-     * after the <code>key</code>
-     * @param cursorPos a position for the cursor after the <code>output</code>
-     * is emitted.  If less than zero, then the cursor is placed after the
-     * <code>output</code>; that is, -1 is equivalent to
-     * <code>output.length()</code>.  If greater than
-     * <code>output.length()</code> then an exception is thrown.
-     * @exception IllegalArgumentException if the cursor position is out of
-     * range.
-     */
-    TransliterationRule(const UnicodeString& theKey,
-                        const UnicodeString& theOutput,
-                        const UnicodeString& theAnteContext,
-                        const UnicodeString& thePostContext,
-                        int32_t theCursorPos,
-                        UErrorCode &status);
-
-    /**
      * Construct a new rule with the given input, output text, and other
      * attributes.  A cursor position may be specified for the output text.
      * @param input input string, including key and optional ante and
@@ -187,9 +162,6 @@ public:
      */
     virtual int32_t getAnteContextLength(void) const;
 
-private:
-    friend class TransliterationRuleSet;
-
     /**
      * Internal method.  Returns 8-bit index value for this rule.
      * This is the low byte of the first character of the key,
@@ -211,7 +183,6 @@ private:
     bool_t matchesIndexValue(uint8_t v,
                              const TransliterationRuleData& data);
 
-public:
     /**
      * Return true if this rule masks another rule.  If r1 masks r2 then
      * r1 matches any input string that r2 matches.  If r1 masks r2 and r2 masks
