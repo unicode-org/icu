@@ -48,6 +48,13 @@
 #define icu_toupper(c) toupper(c)
 #define icu_tolower(c) tolower(c)
 #define icu_strtoul(str, end, base) strtoul(str, end, base)
+#ifdef WIN32
+#   define icu_stricmp(str1, str2) _stricmp(str1, str2)
+#elif defined(POSIX)
+#   define icu_stricmp(str1, str2) strcasecmp(str1, str2)
+#else
+#   define icu_stricmp(str1, str2) T_CString_stricmp(str1, str2)
+#endif
 
 /*===========================================================================*/
 /* Wide-character functions                                                  */
@@ -69,5 +76,8 @@ T_CString_integerToString(char *buffer, int32_t n, int32_t radix);
 
 U_CAPI int32_t U_EXPORT2
 T_CString_stringToInteger(const char *integerString, int32_t radix);
+
+U_CAPI int U_EXPORT2
+T_CString_stricmp(const char *str1, const char *str2);
 
 #endif /* ! CSTRING_H */
