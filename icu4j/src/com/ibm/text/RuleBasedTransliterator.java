@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/RuleBasedTransliterator.java,v $ 
- * $Date: 2000/04/22 00:08:43 $ 
- * $Revision: 1.25 $
+ * $Date: 2000/04/22 01:25:10 $ 
+ * $Revision: 1.26 $
  *
  *****************************************************************************************
  */
@@ -18,13 +18,14 @@ import java.text.ParsePosition;
 import com.ibm.util.Utility;
 
 /**
- * A transliterator that reads a set of rules in order to
- * determine how to perform translations. Rules are stored in
- * resource bundles indexed by name. Rules are separated by
- * semicolons (';'). To include a literal semicolon, prefix it with
- * a backslash ('\'). Whitespace, as defined by <code>Character.isWhitespace()</code>,
- * is ignored. If the first non-blank character on a line is '#',
- * the entire line is ignored as a comment. </p>
+ * <strong>RuleBasedTransliterator</strong> is a transliterator
+ * that reads a set of rules in order to determine how to perform
+ * translations. Rules are stored in resource bundles indexed by
+ * name. Rules are separated by semicolons (';'). To include a
+ * literal semicolon, prefix it with a backslash ('\'). Whitespace,
+ * as defined by <code>Character.isWhitespace()</code>, is ignored.
+ * If the first non-blank character on a line is '#', the entire
+ * line is ignored as a comment. </p>
  * 
  * <p>Each set of rules consists of two groups, one forward, and one
  * reverse. This is a convention that is not enforced; rules for one
@@ -38,22 +39,21 @@ import com.ibm.util.Utility;
  * <p>Rule statements take one of the following forms: </p>
  * 
  * <dl>
- *     <dt><code>alefmadda=\u0622</code></dt>
+ *     <dt><code>$alefmadda=\u0622</code></dt>
  *     <dd><strong>Variable definition.</strong> The name on the
  *         left is assigned the character or expression on the
- *         right. Names may not contain any special characters (see
- *         list below). Duplicate names (including duplicates of
- *         simple variables or category names) cause an exception to
- *         be thrown. If the right hand side consists of one
- *         character, then the variable stands for that character.
- *         In this example, after this statement, instances of the
- *         left hand name surrounded by braces, &quot;<code>{alefmadda}</code>&quot;,
- *         will be replaced by the Unicode character U+0622. If the
- *         right hand side is longer than one character, then it is
- *         interpreted as a character category expression; see below
- *         for details.</dd>
+ *         right. Names must begin with a letter and consist only of
+ *         letters, digits, and underscores. Case is significant.
+ *         Duplicate names (including duplicates of simple variables
+ *         or category names) cause an exception to be thrown. If
+ *         the right hand side consists of one character, then the
+ *         variable stands for that character. In this example,
+ *         after this statement, instances of the left hand name,
+ *         &quot;<code>$alefmadda</code>&quot;, will be replaced by
+ *         the Unicode character U+0622. The right hand side must be
+ *         exactly one character long (current limitation).</dd>
  *     <dt>&nbsp;</dt>
- *     <dt><code>softvowel=[eiyEIY]</code></dt>
+ *     <dt><code>$softvowel=[eiyEIY]</code></dt>
  *     <dd><strong>Category definition.</strong> The name on the
  *         left is assigned to stand for a set of characters. The
  *         same rules for names of simple variables apply. After
@@ -91,16 +91,17 @@ import com.ibm.util.Utility;
  *                 letters.</td>
  *             </tr>
  *         </table>
- *         <p>See {@link UnicodeSet} for more documentation and
- *         examples. </p>
+ *         <p>Patterns may contain variable references, such as
+ *         &quot;<code>$a=[a-z];$not_a=[^$a]</code>&quot;. See
+ *         {@link UnicodeSet} for more documentation and examples. </p>
  *     </dd>
- *     <dt><code>ai&gt;{alefmadda}</code></dt>
+ *     <dt><code>ai&gt;$alefmadda</code></dt>
  *     <dd><strong>Forward translation rule.</strong> This rule
  *         states that the string on the left will be changed to the
  *         string on the right when performing forward
  *         transliteration.</dd>
  *     <dt>&nbsp;</dt>
- *     <dt><code>ai&lt;{alefmadda}</code></dt>
+ *     <dt><code>ai&lt;$alefmadda</code></dt>
  *     <dd><strong>Reverse translation rule.</strong> This rule
  *         states that the string on the right will be changed to
  *         the string on the left when performing reverse
@@ -108,7 +109,7 @@ import com.ibm.util.Utility;
  * </dl>
  * 
  * <dl>
- *     <dt><code>ai&lt;&gt;{alefmadda}</code></dt>
+ *     <dt><code>ai&lt;&gt;$alefmadda</code></dt>
  *     <dd><strong>Bidirectional translation rule.</strong> This
  *         rule states that the string on the right will be changed
  *         to the string on the left when performing forward
@@ -122,14 +123,14 @@ import com.ibm.util.Utility;
  * context. Context characters, like literal pattern characters,
  * must be matched in the text being transliterated. However, unlike
  * literal pattern characters, they are not replaced by the output
- * text. For example, the pattern &quot;<code>(abc)def</code>&quot;
+ * text. For example, the pattern &quot;<code>abc{def}</code>&quot;
  * indicates the characters &quot;<code>def</code>&quot; must be
  * preceded by &quot;<code>abc</code>&quot; for a successful match.
  * If there is a successful match, &quot;<code>def</code>&quot; will
- * be replaced, but not &quot;<code>abc</code>&quot;. The initial '<code>(</code>'
- * is optional, so &quot;<code>abc)def</code>&quot; is equivalent to
- * &quot;<code>(abc)def</code>&quot;. Another example is &quot;<code>123(456)</code>&quot;
- * (or &quot;<code>123(456</code>&quot;) in which the literal
+ * be replaced, but not &quot;<code>abc</code>&quot;. The final '<code>}</code>'
+ * is optional, so &quot;<code>abc{def</code>&quot; is equivalent to
+ * &quot;<code>abc{def}</code>&quot;. Another example is &quot;<code>{123}456</code>&quot;
+ * (or &quot;<code>123}456</code>&quot;) in which the literal
  * pattern &quot;<code>123</code>&quot; must be followed by &quot;<code>456</code>&quot;.
  * </p>
  * 
@@ -138,15 +139,25 @@ import com.ibm.util.Utility;
  * output string contains the character '<code>|</code>', this is
  * taken to indicate the location of the <em>cursor</em> after
  * replacement. The cursor is the point in the text at which the
- * next replacement, if any, will be applied. </p>
+ * next replacement, if any, will be applied. The cursor is usually
+ * placed within the replacement text; however, it can actually be
+ * placed into the precending or following context by using the
+ * special character '<code>@</code>'. Examples:</p>
+ * 
+ * <blockquote>
+ *     <p><code>a {foo} z &gt; | @ bar; # foo -&gt; bar, move cursor
+ *     before a<br>
+ *     {foo} xyz &gt; bar @@|; #&nbsp;foo -&gt; bar, cursor between
+ *     y and z</code></p>
+ * </blockquote>
  * 
  * <p>In addition to being defined in variables, <code>UnicodeSet</code>
  * patterns may be embedded directly into rule strings. Thus, the
  * following two rules are equivalent:</p>
  * 
  * <blockquote>
- *     <p><code>vowel=[aeiou]; {vowel}&gt;*; # One way to do this<br>
- *     [aeiou]&gt;*;
+ *     <p><code>$vowel=[aeiou]; $vowel&gt;'*'; # One way to do this<br>
+ *     [aeiou]&gt;'*';
  *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#
  *     Another way</code></p>
  * </blockquote>
@@ -158,16 +169,14 @@ import com.ibm.util.Utility;
  * general, and makes reordering possible. For example:</p>
  * 
  * <blockquote>
- *     <p><code>$([a-z]$) &gt; $1 $1;
- *     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#
+ *     <p><code>([a-z]) &gt; $1 $1; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#
  *     double lowercase letters<br>
- *     $([:Lu:]$) $([:Ll:]$) &gt; $2 $1; # reverse order of Lu-Ll
- *     pairs</code></p>
+ *     ([:Lu:]) ([:Ll:]) &gt; $2 $1; # reverse order of Lu-Ll pairs</code></p>
  * </blockquote>
  * 
  * <p>The segment of the input string to be copied is delimited by
- * &quot;<code>$(</code>&quot; and &quot;<code>)$</code>&quot;. Up
- * to nine segments may be defined. Segments may not overlap. In the
+ * &quot;<code>(</code>&quot; and &quot;<code>)</code>&quot;. Up to
+ * nine segments may be defined. Segments may not overlap. In the
  * output string, &quot;<code>$1</code>&quot; through &quot;<code>$9</code>&quot;
  * represent the input string segments, in left-to-right order of
  * definition.</p>
@@ -180,7 +189,7 @@ import com.ibm.util.Utility;
  * <table border="0" cellpadding="4">
  *     <tr>
  *         <td valign="top">Rule 1.</td>
- *         <td valign="top" nowrap><code>(abc)def&gt;x|y</code></td>
+ *         <td valign="top" nowrap><code>abc{def}&gt;x|y</code></td>
  *     </tr>
  *     <tr>
  *         <td valign="top">Rule 2.</td>
@@ -255,11 +264,12 @@ import com.ibm.util.Utility;
  * Otherwise, an empty left or right hand side of any statement is a
  * syntax error. </p>
  * 
- * <p>Single quotes are used to quote the special characters <code>=&gt;&lt;{}[]()|</code>.
- * To specify a single quote itself, inside or outside of quotes,
- * use two single quotes in a row. For example, the rule &quot;<code>'&gt;'&gt;o''clock</code>&quot;
- * changes the string &quot;<code>&gt;</code>&quot; to the string
- * &quot;<code>o'clock</code>&quot;. </p>
+ * <p>Single quotes are used to quote any character other than a
+ * digit or letter. To specify a single quote itself, inside or
+ * outside of quotes, use two single quotes in a row. For example,
+ * the rule &quot;<code>'&gt;'&gt;o''clock</code>&quot; changes the
+ * string &quot;<code>&gt;</code>&quot; to the string &quot;<code>o'clock</code>&quot;.
+ * </p>
  * 
  * <p><b>Notes</b> </p>
  * 
@@ -272,9 +282,9 @@ import com.ibm.util.Utility;
  * rule <em>masks</em> the second rule. </p>
  * 
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
- *
+ * 
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.25 $ $Date: 2000/04/22 00:08:43 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.26 $ $Date: 2000/04/22 01:25:10 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -615,6 +625,7 @@ public class RuleBasedTransliterator extends Transliterator {
         private static final char SET_OPEN            = '[';
         private static final char SET_CLOSE           = ']';
         private static final char CURSOR_POS          = '|';
+        private static final char CURSOR_OFFSET       = '@';
 
         // Segments of the input string are delimited by "$(" and "$)".  In the
         // output string these segments are referenced as "$1" through "$9".
@@ -731,14 +742,24 @@ public class RuleBasedTransliterator extends Transliterator {
             public String text;
 
             public int cursor = -1; // position of cursor in text
-            public int ante = -1;   // position of ante context marker ')' in text
-            public int post = -1;   // position of post context marker '(' in text
+            public int ante = -1;   // position of ante context marker '{' in text
+            public int post = -1;   // position of post context marker '}' in text
 
             // Record the position of the segment substrings and references.  A
             // given side should have segments or segment references, but not
             // both.
             public Vector segments = null; // ref substring start,limits
             public int maxRef = -1; // index of largest ref (1..9)
+
+            // Record the offset to the cursor either to the left or to the
+            // right of the key.  This is indicated by characters on the output
+            // side that allow the cursor to be positioned arbitrarily within
+            // the matching text.  For example, abc{def} > | @@@ xyz; changes
+            // def to xyz and moves the cursor to before abc.  Offset characters
+            // must be at the start or end, and they cannot move the cursor past
+            // the ante- or postcontext text.  Placeholders are only valid in
+            // output text.
+            public int cursorOffset = 0; // only nonzero on output side
 
             /**
              * Parse one side of a rule, stopping at either the limit,
@@ -750,6 +771,7 @@ public class RuleBasedTransliterator extends Transliterator {
                 int start = pos;
                 StringBuffer buf = new StringBuffer();
                 ParsePosition pp = null;
+                int cursorOffsetPos = 0; // Position of first CURSOR_OFFSET on _right_
 
             main:
                 while (pos < limit) {
@@ -882,6 +904,28 @@ public class RuleBasedTransliterator extends Transliterator {
                         }
                         cursor = buf.length();
                         break;
+                    case CURSOR_OFFSET:
+                        if (cursorOffset < 0) {
+                            if (buf.length() > 0) {
+                                syntaxError("Misplaced " + c, rule, start);
+                            }
+                            --cursorOffset;
+                        } else if (cursorOffset > 0) {
+                            if (buf.length() != cursorOffsetPos || cursor >= 0) {
+                                syntaxError("Misplaced " + c, rule, start);
+                            }
+                            ++cursorOffset;
+                        } else {
+                            if (cursor == 0 && buf.length() == 0) {
+                                cursorOffset = -1;
+                            } else if (cursor < 0) {
+                                cursorOffsetPos = buf.length();
+                                cursorOffset = 1;
+                            } else {
+                                syntaxError("Misplaced " + c, rule, start);
+                            }
+                        }
+                        break;
                     default:
                         // Disallow unquoted characters other than [0-9A-Za-z]
                         // in the printable ASCII range.  These characters are
@@ -897,6 +941,9 @@ public class RuleBasedTransliterator extends Transliterator {
                     }
                 }
 
+                if (cursorOffset > 0 && cursor != cursorOffsetPos) {
+                    syntaxError("Misplaced " + CURSOR_POS, rule, start);
+                }
                 text = buf.toString();
                 return pos;
             }
@@ -1026,13 +1073,27 @@ public class RuleBasedTransliterator extends Transliterator {
                 right.removeContext();
                 right.segments = null;
                 left.cursor = left.maxRef = -1;
+                left.cursorOffset = 0;
+            }
+
+            // Normalize context
+            if (left.ante < 0) {
+                left.ante = 0;
+            }
+            if (left.post < 0) {
+                left.post = left.text.length();
             }
 
             // Context is only allowed on the input side.  Cursors are only
             // allowed on the output side.  Segment delimiters can only appear
-            // on the left, and references on the right.
+            // on the left, and references on the right.  Cursor offset
+            // cannot appear without an explicit cursor.  Cursor offset
+            // cannot place the cursor outside the limits of the context.
             if (right.ante >= 0 || right.post >= 0 || left.cursor >= 0 ||
-                right.segments != null || left.maxRef >= 0) {
+                right.segments != null || left.maxRef >= 0 ||
+                (right.cursorOffset != 0 && right.cursor < 0) ||
+                (right.cursorOffset > (left.text.length() - left.post)) ||
+                (-right.cursorOffset > left.ante)) {
                 syntaxError("Malformed rule", rule, start);
             }
 
@@ -1053,7 +1114,7 @@ public class RuleBasedTransliterator extends Transliterator {
 
             data.ruleSet.addRule(new TransliterationRule(
                                          left.text, left.ante, left.post,
-                                         right.text, right.cursor,
+                                         right.text, right.cursor, right.cursorOffset,
                                          left.getSegments()));
             
             return pos;
@@ -1285,6 +1346,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.26  2000/04/22 01:25:10  alan
+ * Add support for cursor positioner '@'; update javadoc
+ *
  * Revision 1.25  2000/04/22 00:08:43  alan
  * Narrow range to 21 - 7E for mandatory quoting.
  *
