@@ -46,6 +46,7 @@ void TestISO_2022_CN(void);
 void TestHZ(void);
 void TestISO_2022_JP_Next(void);
 void TestEBCDIC_STATEFUL(void);
+void TestGB18030(void);
 void TestLMBCS(void);
 void TestJitterbug255(void);
 void TestEBCDICUS4XML(void);
@@ -174,6 +175,7 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestHZ, "tsconv/nucnvtst/TestHZ");
    addTest(root, &TestISO_2022_JP_Next, "tsconv/nucnvtst/TestISO_2022_JP_Next");
    addTest(root, &TestEBCDIC_STATEFUL, "tsconv/nucnvtst/TestEBCDIC_STATEFUL");
+   addTest(root, &TestGB18030, "tsconv/nucnvtst/TestGB18030");
    addTest(root, &TestLMBCS, "tsconv/nucnvtst/TestLMBCS");
    addTest(root, &TestJitterbug255, "tsconv/nucnvtst/TestJitterbug255");
    addTest(root, &TestEBCDICUS4XML, "tsconv/nucnvtst/TestEBCDICUS4XML");
@@ -1808,6 +1810,56 @@ TestEBCDIC_STATEFUL() {
     ucnv_close(cnv);
 
 }
+
+void
+TestGB18030() {
+    /* test input */
+        static const UChar u2[]={
+            0x24, 0x7f, 0x80,                   0x1f9,      0x20ac, 0x4e00,     0x9fa6,                 0xffff,                 0xd800, 0xdc00,         0xfffd,                 0xdbff, 0xdfff };
+        static const uint8_t gb2[]={
+            0x24, 0x7f, 0x84, 0x32, 0xeb, 0x38, 0xa8, 0xbf, 0x80,   0xd2, 0xbb, 0x82, 0x35, 0x8f, 0x34, 0x84, 0x32, 0xeb, 0x37, 0x90, 0x30, 0x81, 0x30, 0xe3, 0x32, 0x9a, 0x36, 0xe3, 0x32, 0x9a, 0x35 };
+        static const offsets2[]={
+            0, 1, 2, 6, 8, 9, 11, 15, 19, 19, 23, 27, 27 };
+    static const uint8_t in[]={
+        0x24,
+        0x7f,
+        0x84, 0x32, 0xeb, 0x38,
+        0xa8, 0xbf,
+        0x80,
+        0xd2, 0xbb,
+        0x82, 0x35, 0x8f, 0x34,
+        0x84, 0x32, 0xeb, 0x37,
+        0x90, 0x30, 0x81, 0x30,
+        0xe3, 0x32, 0x9a, 0x35,
+        0x83, 0x36, 0xc8, 0x30, 0x83, 0x37, 0xb0, 0x34 /* separately encoded surrogates */
+    };
+
+    /* expected test results */
+    static const uint32_t results[]={
+        /* number of bytes read, code point */
+        1, 0x24,
+        1, 0x7f,
+        4, 0x80,
+        2, 0x1f9,
+        1, 0x20ac,
+        2, 0x4e00,
+        4, 0x9fa6,
+        4, 0xffff,
+        4, 0x10000,
+        4, 0x10ffff,
+        8, 0x10000
+    };
+
+    const char *source=(const char *)in,*limit=(const char *)in+sizeof(in);
+    UErrorCode errorCode=U_ZERO_ERROR;
+    UConverter *cnv=ucnv_open("gb18030", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("Unable to open a gb18030 converter: %s\n", u_errorName(errorCode));
+    }
+    TestNextUChar(cnv, (const char *)in, (const char *)in+sizeof(in), results, "gb18030");
+    ucnv_close(cnv);
+}
+
 void
 TestLMBCS() {
     /* LMBCS-1 string */
