@@ -1,5 +1,5 @@
 #
-# @(#)$RCSfile: makefile.gmk,v $ $Revision: 1.4 $ $Date: 2000/02/18 18:50:33 $
+# @(#)$RCSfile: GNUmakefile,v $ $Revision: 1.1 $ $Date: 2000/02/23 00:35:27 $
 # 
 
 TOPDIR=..
