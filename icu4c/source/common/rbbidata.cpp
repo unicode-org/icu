@@ -51,7 +51,9 @@ RBBIDataWrapper::RBBIDataWrapper(const RBBIDataHeader *data, UErrorCode &status)
 
 RBBIDataWrapper::RBBIDataWrapper(UDataMemory* udm, UErrorCode &status) {
     const RBBIDataHeader *d = (const RBBIDataHeader *)
-        ((char *)&(udm->pHeader->info) + udm->pHeader->info.size);
+        // ((char *)&(udm->pHeader->info) + udm->pHeader->info.size);
+        // taking into consideration the padding added in by udata_write
+        ((char *)(udm->pHeader) + udm->pHeader->dataHeader.headerSize);
     init(d, status);
     fUDataMem = udm;
 }
