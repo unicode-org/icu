@@ -224,17 +224,18 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* error){
             int32_t start=0;
             int32_t stop =0;
             int32_t pos =0;
-
+            /* use erro1 to preserve the error code */
+            UErrorCode error1 =U_ZERO_ERROR;
+            
             if( buf->showWarning==TRUE){
                 fprintf(stderr,"\n###WARNING: Encountered abnormal bytes while"
                                " converting input stream to target encoding: %s\n",
                                u_errorName(*error));
             }
 
-            *error = U_ZERO_ERROR;
 
             /* now get the context chars */
-            ucnv_getInvalidChars(buf->conv,context,&len,error);
+            ucnv_getInvalidChars(buf->conv,context,&len,&error1);
             context[len]= 0 ; /* null terminate the buffer */
 
             pos = (int32_t)(source - cbuf - len);
@@ -273,7 +274,7 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* error){
                toUNewContext,
                &toUOldAction,
                (const void**)&toUOldContext,
-               error);
+               &error1);
 
             /* reset source and target start positions */
             target = pTarget+offset;
@@ -282,7 +283,7 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* error){
             /* re convert */
             ucnv_toUnicode(buf->conv,&target,target+(buf->bufCapacity-offset),
                             &source,sourceLimit,NULL,
-                            (UBool)(buf->remaining==0),error);
+                            (UBool)(buf->remaining==0),&error1);
 
         }
         outputWritten = (int32_t)(target - pTarget);
@@ -432,6 +433,7 @@ ucbuf_open(const char* fileName,const char** cp,UBool showWarning, UBool buffere
 
     FileStream* in = NULL; 
     int32_t fileSize=0;
+    const char* knownCp;
     if(error==NULL || U_FAILURE(*error)){
         return NULL;
     }
@@ -454,9 +456,12 @@ ucbuf_open(const char* fileName,const char** cp,UBool showWarning, UBool buffere
             buf->showWarning = showWarning;
             buf->isBuffered = buffered;
             buf->signatureLength=0;
-            if(*cp==NULL || **cp=='\0' || ucbuf_isCPKnown(*cp)/* to discard BOMs */){
+            if(*cp==NULL || **cp=='\0'){
                 /* don't have code page name... try to autodetect */
                 ucbuf_autodetect_fs(in,cp,&buf->conv,&buf->signatureLength,error);
+            }else if(ucbuf_isCPKnown(*cp)){
+                /* discard BOM */
+                ucbuf_autodetect_fs(in,&knownCp,&buf->conv,&buf->signatureLength,error);
             }
             if(U_SUCCESS(*error) && buf->conv==NULL) {
                 buf->conv=ucnv_open(*cp,error);
