@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-1999, International Business Machines Corporation and
+ * Copyright (c) 2001, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -9,10 +9,8 @@
 *
 *********************************************************************************/
 /**
- * CollationGermanTest is a third level test class.  This tests the locale
- * specific primary, secondary and tertiary rules.  For example, the ignorable
- * character '-' in string "black-bird".  The en_US locale uses the default
- * collation rules as its sorting sequence.
+ * These are the tests specific to ICU 1.8 and above, that I didn't know where to 
+ * fit.
  */
 
 #include <stdlib.h>
@@ -55,6 +53,32 @@ const static UColAttributeValue caseTestAttributes[][2] =
         { UCOL_LOWER_FIRST, UCOL_ON},        
         { UCOL_UPPER_FIRST, UCOL_ON}
 
+};
+
+const static char cnt1[][10] = {
+  "AA",
+  "AC",
+  "AZ",
+  "AQ",
+  "AB",
+  "ABZ",
+  "ABQ",
+  "Z",
+  "ABC",
+  "Q",
+  "B"
+};
+
+const static char cnt2[][10] = {
+  "DA",
+  "DAD",
+  "DAZ",
+  "MAR",
+  "Z",
+  "DAVIS",
+  "MARK",
+  "DAV",
+  "DAVI"
 };
 
 static void TestCase( )
@@ -102,14 +126,55 @@ static void TestCase( )
 
 }
 
+static void IncompleteCntTest( )
+{
+  UErrorCode status = U_ZERO_ERROR;
+  UChar *temp=(UChar*)malloc(sizeof(UChar) * 90);
+  UChar *t1 =(UChar*)malloc(sizeof(UChar) * 90);
+  UChar *t2 =(UChar*)malloc(sizeof(UChar) * 90);
 
+  UCollator *coll =  NULL;
+  uint32_t i = 0, j = 0;
+  uint32_t size = 0;
+  u_uastrcpy(temp, " & Z < ABC < Q < B");
+
+  coll = ucol_openRules(temp, u_strlen(temp), UCOL_NO_NORMALIZATION, 
+                                                UCOL_DEFAULT_STRENGTH, &status);
+  if(U_SUCCESS(status)) {
+    size = sizeof(cnt1)/sizeof(cnt1[0]);
+    for(i = 0; i < size-1; i++) {
+      for(j = i+1; j < size; j++) {
+        u_uastrcpy(t1, cnt1[i]);
+        u_uastrcpy(t2, cnt1[j]);
+        doTest(coll, t1, t2, UCOL_LESS);
+      }
+    }
+  } 
+
+  ucol_close(coll);
+
+
+  u_uastrcpy(temp, " & Z < DAVIS < MARK <DAV");
+  coll = ucol_openRules(temp, u_strlen(temp), UCOL_NO_NORMALIZATION, 
+                                                UCOL_DEFAULT_STRENGTH, &status);
+  if(U_SUCCESS(status)) {
+    size = sizeof(cnt2)/sizeof(cnt2[0]);
+    for(i = 0; i < size-1; i++) {
+      for(j = i+1; j < size; j++) {
+        u_uastrcpy(t1, cnt2[i]);
+        u_uastrcpy(t2, cnt2[j]);
+        doTest(coll, t1, t2, UCOL_LESS);
+      }
+    }
+  } 
+
+  ucol_close(coll);
+
+
+}
 
 void addMiscCollTest(TestNode** root)
-{
-    
-
+{ 
     addTest(root, &TestCase, "tscoll/cmsccoll/TestCase");
-     
-
-
+    addTest(root, &IncompleteCntTest, "tscoll/cmsccoll/IncompleteCntTest");
 }
