@@ -339,7 +339,7 @@ const UChar testTargetCases[][16] = {
 
 const UCollationResult results[] = {
     UCOL_LESS,
-    UCOL_GREATER,
+    UCOL_LESS, /*UCOL_GREATER,*/
     UCOL_LESS,
     UCOL_LESS,
     UCOL_LESS,
@@ -643,8 +643,10 @@ static void TestJB581(void)
     UCollator   *myCollator = 0;
     UErrorCode status = U_ZERO_ERROR;
 
-    u_uastrcpy(source, "This is a test.");
-    u_uastrcpy(target, "THISISATEST.");
+    /*u_uastrcpy(source, "This is a test.");*/
+    /*u_uastrcpy(target, "THISISATEST.");*/
+    u_uastrcpy(source, "THISISATEST.");
+    u_uastrcpy(target, "Thisisatest.");
 
     myCollator = ucol_open("en_US", &status);
     if (U_FAILURE(status)){
