@@ -113,12 +113,12 @@ LIBICU=$(LIBSICU)
 endif
 
 # Current full path directory.
-CURR_FULL_DIR=$(shell cygpath -ma .)
+CURR_FULL_DIR=$(shell cygpath -dma .)
 # Convert the specified directory to the native directory format.
 # e.g. /cygdrive/c/temp -> C:/temp
-native_dir=$(shell cygpath -ma $(1))
+native_dir=$(shell cygpath -dma $(1))
 # Current full path directory for use in source code in a -D compiler option.
-CURR_SRCCODE_FULL_DIR=$(subst \,\\\\,$(shell cygpath -wa .))
+CURR_SRCCODE_FULL_DIR=$(subst \,\\\\,$(shell cygpath -da .))
 
 ## Compilation rules
 %.$(STATIC_O): $(srcdir)/%.c
