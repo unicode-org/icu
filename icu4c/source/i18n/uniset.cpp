@@ -1346,7 +1346,7 @@ void UnicodeSet::swapBuffers(void) {
 // Implementation: Fundamental operators
 //----------------------------------------------------------------
 
-inline UChar32 max(UChar32 a, UChar32 b) {
+static inline UChar32 max(UChar32 a, UChar32 b) {
     return (a > b) ? a : b;
 }
 
