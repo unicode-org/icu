@@ -33,10 +33,14 @@ alpha*-*-linux-gnu)
 	fi ;;
 *-*-*bsd*) 	icu_cv_host_frag=mh-bsd-gcc ;;
 *-*-aix*)
+       if test "$ac_cv_prog_gcc" = yes; then
+               icu_cv_host_frag=mh-aix-gcc
+       else
 	if test -n "`$CXX --help 2>&1 | grep 'IBM C and C++ Compilers$'`"; then
 		icu_cv_host_frag=mh-aix
 	else
 		icu_cv_host_frag=mh-aix-va
+       fi
 	fi ;;
 *-*-hpux*)
 	if test "$ac_cv_prog_gcc" = yes; then
@@ -140,20 +144,22 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
             fi
             ;;
         *-*-aix*)
-            OLD_CFLAGS="${CFLAGS}"
-            OLD_CXXFLAGS="${CXXFLAGS}"
-            OLD_LDFLAGS="${LDFLAGS}"
-            CFLAGS="${CFLAGS} -q64"
-            CXXFLAGS="${CXXFLAGS} -q64"
-            LDFLAGS="${LDFLAGS} -q64"
-            AC_TRY_RUN(int main(void) {return 0;},
+            if test "$ac_cv_prog_gcc" = no; then
+             OLD_CFLAGS="${CFLAGS}"
+             OLD_CXXFLAGS="${CXXFLAGS}"
+             OLD_LDFLAGS="${LDFLAGS}"
+             CFLAGS="${CFLAGS} -q64"
+             CXXFLAGS="${CXXFLAGS} -q64"
+             LDFLAGS="${LDFLAGS} -q64"
+             AC_TRY_RUN(int main(void) {return 0;},
                 ENABLE_64BIT_LIBS=yes, ENABLE_64BIT_LIBS=no, ENABLE_64BIT_LIBS=no)
-            if test "$ENABLE_64BIT_LIBS" = no; then
+             if test "$ENABLE_64BIT_LIBS" = no; then
                 CFLAGS="${OLD_CFLAGS}"
                 CXXFLAGS="${OLD_CXXFLAGS}"
                 LDFLAGS="${OLD_LDFLAGS}"
-            else
+             else
                 ARFLAGS="${ARFLAGS} -X64"
+             fi
             fi
             ;;
         *-*-hpux*)
