@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os390,v 1.36 2002/05/21 22:41:42 grhoten-oss Exp $
+## $Id: mh-os390,v 1.37 2002/05/23 23:09:19 grhoten-oss Exp $
 
 ###################################################################
 #                    IMPORTANT NOTE                               #
@@ -37,7 +37,9 @@ else
 DEFS390=        -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED -D_SHR_TZNAME -D_SHR_TIMEZONE
 endif
 ARFLAGS=        -cr
-OS390DATA=      1
+
+# Uncomment this line or do "gmake OS390_STUBDATA=1" to enable dual common library support
+#OS390_STUBDATA=1
 
 
 ## Commands to generate dependency files
@@ -73,7 +75,7 @@ STATIC_O = o
 
 ifeq ($(OS390_STUBDATA),1)
 ## Suffix of the subset data library for batch mode
-STUB_SUFFIX=_390
+STUB_SUFFIX=_390_
 endif
 
 ifeq ($(OS390BATCH),1)
@@ -83,7 +85,7 @@ BATCH_LIBICUDT=		"//'${LOADEXP}(IXMI${SO_TARGET_VERSION_MAJOR}D1)'"
 endif
 
 ## Link commands to link to ICU libs
-LIBICUDT=	$(top_builddir)/stubdata/lib$(ICUPREFIX)data$(ICULIBSUFFIX)$(STUB_SUFFIX).x
+LIBICUDT=	$(top_builddir)/stubdata/lib$(ICUPREFIX)data$(ICULIBSUFFIX)$(STUB_SUFFIX)$(SO_TARGET_VERSION).x
 LIBICUUC=	$(top_builddir)/common/lib$(ICUPREFIX)uc$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
 LIBICUI18N=	$(top_builddir)/i18n/lib$(ICUPREFIX)i18n$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
 LIBICULE=	$(top_builddir)/layout/lib$(ICUPREFIX)le$(ICULIBSUFFIX)$(SO_TARGET_VERSION).x
