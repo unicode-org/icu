@@ -416,7 +416,7 @@ typedef enum UCharNameChoice UCharNameChoice;
  * @see u_islower()
  */
 U_CAPI bool_t U_EXPORT2
-u_islower(UChar c);
+u_islower(UChar32 c);
 
 /**
  * Determines whether the specified character is an uppercase character
@@ -429,7 +429,7 @@ u_islower(UChar c);
  * @see u_tolower()
  */
 U_CAPI bool_t U_EXPORT2
-u_isupper(UChar c);
+u_isupper(UChar32 c);
 
 /**
  * Determines whether the specified character is a titlecase character
@@ -442,7 +442,7 @@ u_isupper(UChar c);
  * @see u_totitle()
  */
 U_CAPI bool_t U_EXPORT2
-u_istitle(UChar c);
+u_istitle(UChar32 c);
 
 /**
  * Determines whether the specified character is a digit according to Unicode
@@ -452,7 +452,7 @@ u_istitle(UChar c);
  * @return  true if the character is a digit; false otherwise.
  */
 U_CAPI bool_t U_EXPORT2
-u_isdigit(UChar c);
+u_isdigit(UChar32 c);
 
 /**
  * Determines whether the specified character is an alphanumeric character
@@ -462,7 +462,7 @@ u_isdigit(UChar c);
  * @return  true if the character is a letter or a digit; false otherwise.
  */
 U_CAPI bool_t U_EXPORT2
-u_isalnum(UChar c);
+u_isalnum(UChar32 c);
 
 /**
  * Determines whether the specified numeric value is actually a defined character
@@ -479,7 +479,7 @@ u_isalnum(UChar c);
  * @see u_istitle()
  */
 U_CAPI bool_t U_EXPORT2
-u_isdefined(UChar c);
+u_isdefined(UChar32 c);
 
 /**
  * Determines whether the specified character is a letter
@@ -492,7 +492,7 @@ u_isdefined(UChar c);
  * @see u_isalnum()
  */
 U_CAPI bool_t U_EXPORT2
-u_isalpha(UChar c);
+u_isalpha(UChar32 c);
 
 /**
  * Determines if the specified character is a space character or not.
@@ -501,7 +501,7 @@ u_isalpha(UChar c);
  * @return  true if the character is a space character; false otherwise.
  */
 U_CAPI bool_t U_EXPORT2
-u_isspace(UChar c);
+u_isspace(UChar32 c);
 
 /**
  * Determines whether the specified character is a control character or not.
@@ -512,7 +512,7 @@ u_isspace(UChar c);
  * @see u_isprint()
  */
 U_CAPI bool_t U_EXPORT2
-u_iscntrl(UChar c);
+u_iscntrl(UChar32 c);
 
 
 /**
@@ -525,7 +525,7 @@ u_iscntrl(UChar c);
  * @see u_iscntrl()
  */
 U_CAPI bool_t U_EXPORT2
-u_isprint(UChar c);
+u_isprint(UChar32 c);
 
 /**
  * Determines whether the specified character is of the base form according 
@@ -538,7 +538,7 @@ u_isprint(UChar c);
  * @see u_isdigit()
  */
 U_CAPI bool_t U_EXPORT2
-u_isbase(UChar c);
+u_isbase(UChar32 c);
 /**
   * Returns the linguistic direction property of a character.
   * <P>
@@ -548,7 +548,7 @@ u_isbase(UChar c);
   * @see UCharDirection
   */
 U_CAPI UCharDirection U_EXPORT2
-u_charDirection(UChar c);
+u_charDirection(UChar32 c);
 
 /**
  * Returns a value indicating the display-cell width of the character
@@ -601,7 +601,7 @@ u_charDirection(UChar c);
  * conventions.
  */
 U_CAPI uint16_t U_EXPORT2
-u_charCellWidth(UChar c);
+u_charCellWidth(UChar32 c);
 
 /**
  * Returns a value indicating a character category according to Unicode
@@ -611,7 +611,7 @@ u_charCellWidth(UChar c);
  * @see UCharCategory
  */
 U_CAPI int8_t U_EXPORT2
-u_charType(UChar c);
+u_charType(UChar32 c);
 
 /**
  * Retrives the decimal numeric value of a digit character.
@@ -621,7 +621,7 @@ u_charType(UChar c);
  * -1 if ch is not a valid digit character.
  */
 U_CAPI int32_t U_EXPORT2
-u_charDigitValue(UChar c);
+u_charDigitValue(UChar32 c);
 
 /**
  * Returns the script associated with a character.
@@ -629,7 +629,7 @@ u_charDigitValue(UChar c);
  * @see #UCharScript
  */
 U_CAPI UCharScript     U_EXPORT2
-u_charScript(UChar    ch);
+u_charScript(UChar32    ch);
 
 /**
  * Retrieve the name of a Unicode character.
@@ -671,7 +671,7 @@ u_charName(uint32_t code, UCharNameChoice nameChoice,
   * @see     u_isIDPart
   */
 U_CAPI bool_t U_EXPORT2
-u_isIDStart(UChar c);
+u_isIDStart(UChar32 c);
 /**
   * A convenience method for determining if a Unicode character
   * may be part of a Unicode identifier other than the starting
@@ -696,7 +696,7 @@ u_isIDStart(UChar c);
   * @see     u_isIDStart
      */
 U_CAPI bool_t U_EXPORT2
-u_isIDPart(UChar c);
+u_isIDPart(UChar32 c);
 /**
   * A convenience method for determining if a Unicode character 
   * should be regarded as an ignorable character 
@@ -721,7 +721,7 @@ u_isIDPart(UChar c);
   * @see     u_isIDPart
   */
 U_CAPI bool_t U_EXPORT2
-u_isIDIgnorable(UChar c);
+u_isIDIgnorable(UChar32 c);
     /**
      * A convenience method for determining if a Unicode character
      * is allowed as the first character in a Java identifier.
@@ -742,7 +742,7 @@ u_isIDIgnorable(UChar c);
      * @see     u_isIDStart
      */
 U_CAPI bool_t U_EXPORT2
-u_isJavaIDStart(UChar c);
+u_isJavaIDStart(UChar32 c);
     /**
      * A convenience method for determining if a Unicode character 
      * may be part of a Java identifier other than the starting
@@ -772,7 +772,7 @@ u_isJavaIDStart(UChar c);
      */
 
 U_CAPI bool_t U_EXPORT2
-u_isJavaIDPart(UChar c);
+u_isJavaIDPart(UChar32 c);
 
 /**
  * Functions to change character case.
@@ -795,8 +795,8 @@ u_isJavaIDPart(UChar c);
  * @return  the lowercase equivalent of the character, if any;
  *      otherwise the character itself.
  */
-U_CAPI UChar U_EXPORT2
-u_tolower(UChar c);
+U_CAPI UChar32 U_EXPORT2
+u_tolower(UChar32 c);
 
 /**
  * The given character is mapped to its uppercase equivalent according to Unicode
@@ -812,8 +812,8 @@ u_tolower(UChar c);
  * @return  the uppercase equivalent of the character, if any;
  *      otherwise the character itself.
  */
-U_CAPI UChar U_EXPORT2
-u_toupper(UChar c);
+U_CAPI UChar32 U_EXPORT2
+u_toupper(UChar32 c);
 /**
  * The given character is mapped to its titlecase equivalent according to Unicode
  * 2.1.2.  There are only four Unicode characters that are truly titlecase forms
@@ -827,8 +827,8 @@ u_toupper(UChar c);
  * @return  the titlecase equivalent of the character, if any;
  *      otherwise the character itself.
  */
-U_CAPI UChar U_EXPORT2
-u_totitle(UChar c);
+U_CAPI UChar32 U_EXPORT2
+u_totitle(UChar32 c);
 
 /**
  * Gets the Unicode version information.  The version array stores the version information
