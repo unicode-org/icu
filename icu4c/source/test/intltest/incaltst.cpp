@@ -412,6 +412,8 @@ void IntlCalendarTest::TestJapaneseFormat() {
     CHECK(status, UnicodeString("Creating ja_JP_TRADITIONAL calendar"));
     
     Calendar *cal2 = cal->clone();
+    delete cal;
+    cal = NULL;
     
     // Test simple parse/format with adopt
     
