@@ -85,8 +85,8 @@ check: check-local
 all-local: $(TARGET) build-data
 
 install-local: all-local build-data
-	$(mkinstalldirs) $(sbindir)
-	$(INSTALL) $(TARGET) $(sbindir)/$(TARGET)
+	$(mkinstalldirs) $(DESTDIR)$(sbindir)
+	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
 
 build-data: $(ICUDATADIR)/tz.dat
 

@@ -91,10 +91,10 @@ clean-sentinel:
 	rm -f .sentinel
 
 install-local: all-local
-#	$(mkinstalldirs) $(sbindir)
-#	$(INSTALL) $(TARGET) $(sbindir)/$(TARGET)
-	$(mkinstalldirs) $(pkgdatadir)/$(VERSION)
-	cp @DATABUILDDIR@/*.col $(pkgdatadir)/$(VERSION)
+#	$(mkinstalldirs) $(DESTDIR)$(sbindir)
+#	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
+	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/$(VERSION)
+	cp @DATABUILDDIR@/*.col $(DESTDIR)$(pkgdatadir)/$(VERSION)
 
 dist-local:
 

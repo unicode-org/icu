@@ -115,17 +115,17 @@ check: check-local
 all-local: $(TARGET) $(RES_FILES) $(TRANSLIT_RES) $(TEST_FILES)
 
 install-local: all-local
-	$(mkinstalldirs) $(sbindir)
-	$(INSTALL) $(TARGET) $(sbindir)/$(TARGET)
-	$(mkinstalldirs) $(pkgdatadir)/$(VERSION)
+	$(mkinstalldirs) $(DESTDIR)$(sbindir)
+	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
+	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/$(VERSION)
 	@list='$(notdir $(RES_FILES))'; for file in $$list; do \
-		echo $(INSTALL_DATA) $(top_builddir)/data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
-		$(INSTALL_DATA) $(top_builddir)/data/$$file $(pkgdatadir)/$(VERSION)/$$file; \
+		echo $(INSTALL_DATA) $(top_builddir)/data/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file; \
+		$(INSTALL_DATA) $(top_builddir)/data/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/$$file; \
 	done
-	$(mkinstalldirs) $(pkgdatadir)/$(VERSION)/translit
+	$(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/$(VERSION)/translit
 	@list='$(notdir $(TRANSLIT_RES))'; for file in $$list; do \
-		echo $(INSTALL_DATA) $(top_builddir)/data/translit/$$file $(pkgdatadir)/$(VERSION)/translit/$$file; \
-		$(INSTALL_DATA) $(top_builddir)/data/translit/$$file $(pkgdatadir)/$(VERSION)/translit/$$file; \
+		echo $(INSTALL_DATA) $(top_builddir)/data/translit/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/translit/$$file; \
+		$(INSTALL_DATA) $(top_builddir)/data/translit/$$file $(DESTDIR)$(pkgdatadir)/$(VERSION)/translit/$$file; \
 	done
 
 dist-local:
