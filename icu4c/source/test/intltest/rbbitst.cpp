@@ -3132,6 +3132,8 @@ static void testBreakBoundPreceding(RBBITest *test, UnicodeString ustr,
 
 void RBBITest::TestWordBreaks(void)
 {
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
+
     // <data><>\u1d4a\u206e<?>\u0603\U0001d7ff<>\u2019<></data>
     Locale        locale("en");
     UErrorCode    status = U_ZERO_ERROR;
@@ -3200,6 +3202,7 @@ void RBBITest::TestWordBreaks(void)
         testBreakBoundPreceding(this, ustr, bi, expected, expectedcount);
     }
     delete bi;
+#endif
 }
 
 void RBBITest::TestWordBoundary(void)
@@ -3280,6 +3283,7 @@ void RBBITest::TestWordBoundary(void)
 
 void RBBITest::TestLineBreaks(void)
 {
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
     Locale        locale("en");
     UErrorCode    status = U_ZERO_ERROR;
     BreakIterator *bi = BreakIterator::createLineInstance(locale, status);
@@ -3343,6 +3347,7 @@ void RBBITest::TestLineBreaks(void)
         testBreakBoundPreceding(this, ustr, bi, expected, expectedcount);
     }
     delete bi;
+#endif
 }
 
 void RBBITest::TestSentBreaks(void)

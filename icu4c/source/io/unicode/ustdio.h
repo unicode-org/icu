@@ -354,6 +354,8 @@ u_fsetcodepage(const char   *codepage,
  */
 U_CAPI UConverter* U_EXPORT2 u_fgetConverter(UFILE *f);
 
+#if !UCONFIG_NO_FORMATTING
+
 /* Output functions */
 
 /**
@@ -415,7 +417,7 @@ U_CAPI int32_t U_EXPORT2
 u_vfprintf_u(UFILE      *f,
             const UChar *patternSpecification,
             va_list     ap);
-
+#endif
 /**
  * Write a Unicode to a UFILE.  The null (U+0000) terminated UChar*
  * <TT>s</TT> will be written to <TT>f</TT>, excluding the NULL terminator.
@@ -459,6 +461,7 @@ u_file_write(const UChar    *ustring,
 
 
 /* Input functions */
+#if !UCONFIG_NO_FORMATTING
 
 /**
  * Read formatted data from a UFILE.
@@ -523,6 +526,7 @@ U_CAPI int32_t U_EXPORT2
 u_vfscanf_u(UFILE       *f,
             const UChar *patternSpecification,
             va_list      ap);
+#endif
 
 /**
  * Read one line of text into a UChar* string from a UFILE. The newline
@@ -623,6 +627,7 @@ u_fsettransliterator(UFILE *file, UFileDirection direction,
 
 
 /* Output string functions */
+#if !UCONFIG_NO_FORMATTING
 
 
 /**
@@ -853,7 +858,7 @@ u_vsscanf_u(const UChar *buffer,
         const UChar     *patternSpecification,
         va_list         ap);
 
-
+#endif
 #endif
 
 

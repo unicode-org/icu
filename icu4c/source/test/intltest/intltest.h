@@ -140,8 +140,12 @@ protected:
                        const UnicodeString& actual);
     UBool assertEquals(const char* message, const char* expected,
                        const char* actual);
+#if !UCONFIG_NO_FORMATTING
     UBool assertEquals(const char* message, const Formattable& expected,
                        const Formattable& actual);
+    UBool assertEquals(const UnicodeString& message, const Formattable& expected,
+                       const Formattable& actual);
+#endif
     UBool assertTrue(const UnicodeString& message, UBool condition, UBool quiet=FALSE);
     UBool assertFalse(const UnicodeString& message, UBool condition, UBool quiet=FALSE);
     UBool assertSuccess(const UnicodeString& message, UErrorCode ec);
@@ -149,8 +153,6 @@ protected:
                        const UnicodeString& actual);
     UBool assertEquals(const UnicodeString& message, const char* expected,
                        const char* actual);
-    UBool assertEquals(const UnicodeString& message, const Formattable& expected,
-                       const Formattable& actual);
 
     virtual void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ); // overide !
 

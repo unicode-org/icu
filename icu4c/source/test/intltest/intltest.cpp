@@ -1439,6 +1439,7 @@ UBool IntlTest::assertEquals(const char* message,
     return TRUE;
 }
 
+#if !UCONFIG_NO_FORMATTING
 UBool IntlTest::assertEquals(const char* message,
                              const Formattable& expected,
                              const Formattable& actual) {
@@ -1455,6 +1456,7 @@ UBool IntlTest::assertEquals(const char* message,
 #endif
     return TRUE;
 }
+#endif
 
 static char ASSERT_BUF[256];
 
@@ -1490,11 +1492,13 @@ UBool IntlTest::assertEquals(const UnicodeString& message,
     return assertEquals(extractToAssertBuf(message), expected, actual);
 }
 
+#if !UCONFIG_NO_FORMATTING
 UBool IntlTest::assertEquals(const UnicodeString& message,
                              const Formattable& expected,
                              const Formattable& actual) {
     return assertEquals(extractToAssertBuf(message), expected, actual);
 }
+#endif
 
 /*
  * Hey, Emacs, please set the following:
