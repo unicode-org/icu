@@ -408,7 +408,7 @@ public class LDML2ICUConverter {
                 //TODO: these are specials .. ignore for now ... figure out
                 // what to do later
             }else{
-                printError(file,"Encountered unknown element: "+name);
+                printError(file,"Encountered unknown <"+root.getNodeName()+"> subelement: "+name);
                 System.exit(-1);
             }
             if(res!=null){
@@ -476,7 +476,7 @@ public class LDML2ICUConverter {
                 vector.first = zero;
                 zero.next = one;
             }else{
-                System.err.println("Encountered unknown element: "+name);
+                System.err.println("Encountered unknown <"+root.getNodeName()+"> subelement: "+name);
                 System.exit(-1);
             }
             if(res!=null){
@@ -546,7 +546,7 @@ public class LDML2ICUConverter {
                 vector.first = zero;
                 zero.next = one;
             }else{
-                System.err.println("Encountered unknown element: "+name);
+                System.err.println("Encountered unknown <"+root.getNodeName()+"> subelement: "+name);
                 System.exit(-1);
             }
             if(res!=null){
@@ -593,7 +593,7 @@ public class LDML2ICUConverter {
             }else if(name.equals(LDMLConstants.FRACTIONS)){
                 res = parseCurrencyFraction(node, xpath);
             }else{
-                System.err.println("Encountered unknown element: "+name);
+                System.err.println("Encountered unknown <"+root.getNodeName()+"> subelement: "+name);
                 System.exit(-1);
             }
             if(res!=null){
@@ -690,7 +690,7 @@ public class LDML2ICUConverter {
                 //TODO: these are specials .. ignore for now ... figure out
                 // what to do later
             }else{
-                System.err.println("Encountered unknown element: "+name);
+                System.err.println("Encountered unknown <"+root.getNodeName()+"> subelement: "+name);
                 System.exit(-1);
             }
             if(res!=null){
@@ -1361,7 +1361,7 @@ public class LDML2ICUConverter {
             }else if(name.equals(LDMLConstants.TZN)){
                 res = parseTimeZoneNames(node, xpath);
             }else{
-                System.err.println("Encountered unknown element: "+name);
+                System.err.println("Encountered unknown <"+root.getNodeName()+"> subelement: "+name);
                 System.exit(-1);
             }
             if(res!=null){
@@ -1411,7 +1411,7 @@ public class LDML2ICUConverter {
             }else if(name.equals(LDMLConstants.CALENDAR)){
                 res = parseCalendar(node, xpath);
             }else{
-                System.err.println("Encountered unknown element: "+name);
+                System.err.println("Encountered unknown <"+root.getNodeName()+"> subelement: "+name);
                 System.exit(-1);
             }
             if(res!=null){
@@ -1465,7 +1465,7 @@ public class LDML2ICUConverter {
             }else if(name.equals(LDMLConstants.ZONE)){
                 res = parseZone(node, xpath);
             }else{
-                System.err.println("Encountered unknown element: "+name);
+                System.err.println("Encountered unknown <"+root.getNodeName()+"> subelement: "+name);
                 System.exit(-1);
             }
             if(res!=null){
@@ -1573,7 +1573,7 @@ public class LDML2ICUConverter {
                     exemplarCity.val = "";
                 }
             }else{
-                System.err.println("Encountered unknown element: "+name);
+                System.err.println("Encountered unknown <"+root.getNodeName()+"> subelement: "+name);
                 System.exit(-1);
             }
             xpath.delete(oldLength, xpath.length());
@@ -1693,7 +1693,7 @@ public class LDML2ICUConverter {
                     writtenDTF = true;
                 }
             }else{
-                System.err.println("Encountered unknown element: "+name);
+                System.err.println("Encountered unknown <"+root.getNodeName()+"> subelement: "+name);
                 System.exit(-1);
             }
             if(res!=null){
@@ -1749,7 +1749,7 @@ public class LDML2ICUConverter {
             }else if(name.equals(LDMLConstants.MONTH_CONTEXT)|| name.equals(LDMLConstants.DAY_CONTEXT)){
                 res = parseContext(node, xpath);
             }else{
-                System.err.println("Encountered unknown element: "+name);
+                System.err.println("Encountered unknown <"+root.getNodeName()+"> subelement: "+name);
                 System.exit(-1);
             }
             if(res!=null){
@@ -1805,7 +1805,7 @@ public class LDML2ICUConverter {
             }else if(name.equals(resName+"Width")){
                 res = parseWidth(node, resName, xpath);
             }else{
-                System.err.println("Encountered unknown element: "+name);
+                System.err.println("Encountered unknown <"+root.getNodeName()+"> subelement: "+name);
                 System.exit(-1);
             }
             if(res!=null){
@@ -1942,7 +1942,7 @@ public class LDML2ICUConverter {
             }else if( name.equals(LDMLConstants.ERA)){
                 map.put(type, val);
             }else{
-                System.err.println("Encountered unknown element: "+name);
+                System.err.println("Encountered unknown <"+root.getNodeName()+"> subelement: "+name);
                 System.exit(-1);
             }
             xpath.setLength(oldLength);
@@ -2094,7 +2094,7 @@ public class LDML2ICUConverter {
             }else if( name.equals(LDMLConstants.ERANAMES)){
                 res = parseEra(node, xpath, LDMLConstants.WIDE);
             }else{
-                System.err.println("Encountered unknown element: "+name);
+                System.err.println("Encountered unknown <"+root.getNodeName()+"> subelement: "+name);
                 System.exit(-1);
             }
             if(res!=null){
@@ -2357,7 +2357,7 @@ public class LDML2ICUConverter {
             }else if(name.equals(LDMLConstants.CURRENCIES)){
                 res = parseCurrencies(node, xpath);
             }else{
-                System.err.println("Encountered unknown element: "+name);
+                System.err.println("Encountered unknown <"+root.getNodeName()+"> subelement: "+name);
                 System.exit(-1);
             }
             if(res!=null){
@@ -2520,7 +2520,7 @@ public class LDML2ICUConverter {
             }else if(name.equals(LDMLConstants.CURRENCY)){
                 res = parseCurrency(node, xpath);
             }else{
-                System.err.println("Encountered unknown element: "+name);
+                System.err.println("Encountered unknown <"+root.getNodeName()+"> subelement: "+name);
                 System.exit(-1);
             }
             if(res!=null){
@@ -2737,7 +2737,7 @@ public class LDML2ICUConverter {
             }else if(name.equals(LDMLConstants.COLLATION)){
                 res = parseCollation(node, xpath);
             }else{
-                System.err.println("Encountered unknown element: "+name);
+                System.err.println("Encountered unknown <"+root.getNodeName()+"> subelement: "+name);
                 System.exit(-1);
             }
             if(res!=null){
@@ -2835,7 +2835,7 @@ public class LDML2ICUConverter {
             }else if (name.equals(LDMLConstants.BASE)){
                 //TODO Dont know what to do here
             }else{
-                System.err.println("Encountered unknown element: "+name);
+                System.err.println("Encountered unknown <"+root.getNodeName()+"> subelement: "+name);
                 System.exit(-1);
             }
             if(res!=null){
@@ -2987,7 +2987,7 @@ public class LDML2ICUConverter {
             }else if(name.equals(LDMLConstants.RESET)){
                 rules.append(parseReset(node));
             }else{
-                System.err.println("Encountered unknown element: "+name);
+                System.err.println("Encountered unknown <"+root.getNodeName()+"> subelement: "+name);
                 System.exit(-1);
             }
         }
@@ -3188,7 +3188,7 @@ public class LDML2ICUConverter {
              }else if(name.equals(LDMLConstants.EXTEND)){
                  extendNode = node;   
              }else{
-                 System.err.println("Encountered unknown element: "+name);
+                 System.err.println("Encountered unknown <"+root.getNodeName()+"> subelement: "+name);
                  System.exit(-1);
              }
          }
@@ -3263,7 +3263,7 @@ public class LDML2ICUConverter {
                    res = str;
                }
            }else{
-               System.err.println("Encountered unknown element: "+name);
+               System.err.println("Encountered unknown <"+root.getNodeName()+"> subelement: "+name);
                System.exit(-1);
            }
             if(res!=null){
@@ -3322,7 +3322,7 @@ public class LDML2ICUConverter {
                     System.err.println("WARNING: icu:breakDictionaryData element does not have either import or importFile attributes!");
                 }
             }else{
-                System.err.println("Encountered unknown element: "+name);
+                System.err.println("Encountered unknown <"+root.getNodeName()+"> subelement: "+name);
                 System.exit(-1);
             }
             if(res!=null){
@@ -3389,7 +3389,7 @@ public class LDML2ICUConverter {
                 //TODO: these are specials .. ignore for now ... figure out
                 // what to do later
             }else{
-                System.err.println("Encountered unknown element: "+name);
+                System.err.println("Encountered unknown <"+root.getNodeName()+"> subelement: "+name);
                 System.exit(-1);
             }
             if(res!=null){
