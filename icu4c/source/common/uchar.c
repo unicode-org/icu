@@ -219,7 +219,7 @@ uprops_swap(const UDataSwapper *ds,
     const UDataInfo *pInfo;
     int32_t headerSize, i;
 
-    int32_t indexes[UPROPS_INDEX_COUNT];
+    int32_t dataIndexes[UPROPS_INDEX_COUNT];
     const int32_t *inData32;
 
     /* udata_swapDataHeader checks the arguments */
@@ -248,7 +248,7 @@ uprops_swap(const UDataSwapper *ds,
     }
 
     /* the properties file must contain at least the indexes array */
-    if(length>=0 && (length-headerSize)<sizeof(indexes)) {
+    if(length>=0 && (length-headerSize)<sizeof(dataIndexes)) {
         udata_printError(ds, "uprops_swap(): too few bytes (%d after header) for a Unicode properties file\n",
                          length-headerSize);
         *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
@@ -258,7 +258,7 @@ uprops_swap(const UDataSwapper *ds,
     /* read the indexes */
     inData32=(const int32_t *)((const char *)inData+headerSize);
     for(i=0; i<UPROPS_INDEX_COUNT; ++i) {
-        indexes[i]=udata_readInt32(ds, inData32[i]);
+        dataIndexes[i]=udata_readInt32(ds, inData32[i]);
     }
 
     /*
@@ -268,7 +268,7 @@ uprops_swap(const UDataSwapper *ds,
     if(length>=0) {
         int32_t *outData32;
 
-        if((length-headerSize)<(4*indexes[UPROPS_RESERVED_INDEX])) {
+        if((length-headerSize)<(4*dataIndexes[UPROPS_RESERVED_INDEX])) {
             udata_printError(ds, "uprops_swap(): too few bytes (%d after header) for a Unicode properties file\n",
                              length-headerSize);
             *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
@@ -279,7 +279,7 @@ uprops_swap(const UDataSwapper *ds,
 
         /* copy everything for inaccessible data (padding) */
         if(inData32!=outData32) {
-            uprv_memcpy(outData32, inData32, 4*indexes[UPROPS_RESERVED_INDEX]);
+            uprv_memcpy(outData32, inData32, 4*dataIndexes[UPROPS_RESERVED_INDEX]);
         }
 
         /* swap the indexes[16] */
@@ -291,7 +291,7 @@ uprops_swap(const UDataSwapper *ds,
          */
         utrie_swap(ds,
             inData32+UPROPS_INDEX_COUNT,
-            4*(indexes[UPROPS_PROPS32_INDEX]-UPROPS_INDEX_COUNT),
+            4*(dataIndexes[UPROPS_PROPS32_INDEX]-UPROPS_INDEX_COUNT),
             outData32+UPROPS_INDEX_COUNT,
             pErrorCode);
 
@@ -301,9 +301,9 @@ uprops_swap(const UDataSwapper *ds,
          * E  const uint32_t exceptions[i2-i1];
          */
         ds->swapArray32(ds,
-            inData32+indexes[UPROPS_PROPS32_INDEX],
-            4*(indexes[UPROPS_EXCEPTIONS_TOP_INDEX]-indexes[UPROPS_PROPS32_INDEX]),
-            outData32+indexes[UPROPS_PROPS32_INDEX],
+            inData32+dataIndexes[UPROPS_PROPS32_INDEX],
+            4*(dataIndexes[UPROPS_EXCEPTIONS_TOP_INDEX]-dataIndexes[UPROPS_PROPS32_INDEX]),
+            outData32+dataIndexes[UPROPS_PROPS32_INDEX],
             pErrorCode);
 
         /*
@@ -311,9 +311,9 @@ uprops_swap(const UDataSwapper *ds,
          * U  const UChar uchars[2*(i3-i2)];
          */
         ds->swapArray16(ds,
-            inData32+indexes[UPROPS_EXCEPTIONS_TOP_INDEX],
-            4*(indexes[UPROPS_ADDITIONAL_TRIE_INDEX]-indexes[UPROPS_EXCEPTIONS_TOP_INDEX]),
-            outData32+indexes[UPROPS_EXCEPTIONS_TOP_INDEX],
+            inData32+dataIndexes[UPROPS_EXCEPTIONS_TOP_INDEX],
+            4*(dataIndexes[UPROPS_ADDITIONAL_TRIE_INDEX]-dataIndexes[UPROPS_EXCEPTIONS_TOP_INDEX]),
+            outData32+dataIndexes[UPROPS_EXCEPTIONS_TOP_INDEX],
             pErrorCode);
 
         /*
@@ -321,9 +321,9 @@ uprops_swap(const UDataSwapper *ds,
          * i3 additionalTrieIndex; -- 32-bit unit index to the additional trie for more properties
          */
         utrie_swap(ds,
-            inData32+indexes[UPROPS_ADDITIONAL_TRIE_INDEX],
-            4*(indexes[UPROPS_ADDITIONAL_VECTORS_INDEX]-indexes[UPROPS_ADDITIONAL_TRIE_INDEX]),
-            outData32+indexes[UPROPS_ADDITIONAL_TRIE_INDEX],
+            inData32+dataIndexes[UPROPS_ADDITIONAL_TRIE_INDEX],
+            4*(dataIndexes[UPROPS_ADDITIONAL_VECTORS_INDEX]-dataIndexes[UPROPS_ADDITIONAL_TRIE_INDEX]),
+            outData32+dataIndexes[UPROPS_ADDITIONAL_TRIE_INDEX],
             pErrorCode);
 
         /*
@@ -331,14 +331,14 @@ uprops_swap(const UDataSwapper *ds,
          * PV const uint32_t propsVectors[(i6-i4)/i5][i5]==uint32_t propsVectors[i6-i4];
          */
         ds->swapArray32(ds,
-            inData32+indexes[UPROPS_ADDITIONAL_VECTORS_INDEX],
-            4*(indexes[UPROPS_RESERVED_INDEX]-indexes[UPROPS_ADDITIONAL_VECTORS_INDEX]),
-            outData32+indexes[UPROPS_ADDITIONAL_VECTORS_INDEX],
+            inData32+dataIndexes[UPROPS_ADDITIONAL_VECTORS_INDEX],
+            4*(dataIndexes[UPROPS_RESERVED_INDEX]-dataIndexes[UPROPS_ADDITIONAL_VECTORS_INDEX]),
+            outData32+dataIndexes[UPROPS_ADDITIONAL_VECTORS_INDEX],
             pErrorCode);
     }
 
     /* i6 reservedItemIndex; -- 32-bit unit index to the top of the properties vectors table */
-    return headerSize+4*indexes[UPROPS_RESERVED_INDEX];
+    return headerSize+4*dataIndexes[UPROPS_RESERVED_INDEX];
 }
 
 /* constants and macros for access to the data ------------------------------ */

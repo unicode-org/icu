@@ -155,7 +155,7 @@ MBCSStartMappings(MBCSData *mbcsData) {
     /* allocate the code unit array and prefill it with "unassigned" values */
     sum=mbcsData->ucm->states.countToUCodeUnits;
     if(VERBOSE) {
-        printf("the total number of offsets is 0x%lx=%ld\n", sum, sum);
+        printf("the total number of offsets is 0x%lx=%ld\n", (long)sum, (long)sum);
     }
 
     if(sum>0) {
@@ -180,7 +180,7 @@ MBCSStartMappings(MBCSData *mbcsData) {
     }
     mbcsData->fromUBytes=(uint8_t *)uprv_malloc(sum);
     if(mbcsData->fromUBytes==NULL) {
-        fprintf(stderr, "error: out of memory allocating %ld B for target mappings\n", sum);
+        fprintf(stderr, "error: out of memory allocating %ld B for target mappings\n", (long)sum);
         return FALSE;
     }
     /* initialize the all-unassigned first stage 3 block */
@@ -1075,7 +1075,7 @@ MBCSWrite(NewConverter *cnvData, const UConverterStaticData *staticData,
 
     if(tableType&TABLE_EXT) {
         if(top>0xffffff) {
-            fprintf(stderr, "error: offset 0x%lx to extension table exceeds 0xffffff\n", top);
+            fprintf(stderr, "error: offset 0x%lx to extension table exceeds 0xffffff\n", (long)top);
             return 0;
         }
 

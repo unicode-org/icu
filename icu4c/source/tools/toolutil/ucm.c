@@ -42,7 +42,7 @@ printMapping(UCMapping *m, UChar32 *codePoints, uint8_t *bytes, FILE *f) {
     int32_t j;
 
     for(j=0; j<m->uLen; ++j) {
-        fprintf(f, "<U%04lX>", codePoints[j]);
+        fprintf(f, "<U%04lX>", (long)codePoints[j]);
     }
 
     fputc(' ', f);
@@ -52,7 +52,7 @@ printMapping(UCMapping *m, UChar32 *codePoints, uint8_t *bytes, FILE *f) {
     }
 
     if(m->f>=0) {
-        fprintf(f, " |%lu\n", m->f);
+        fprintf(f, " |%u\n", m->f);
     } else {
         fputs("\n", f);
     }

@@ -272,7 +272,7 @@ CnvExtWrite(NewConverter *cnvData, const UConverterStaticData *staticData,
 #endif
 
     if(VERBOSE) {
-        printf("size of extension data: %ld\n", top);
+        printf("size of extension data: %ld\n", (long)top);
     }
 
     /* return the number of bytes that should have been written */
