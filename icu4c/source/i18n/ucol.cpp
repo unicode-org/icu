@@ -3125,7 +3125,13 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
 
 
           if(shifted && ((notIsContinuation && order <= variableTopValue && primary1 > 0)
-            || (!notIsContinuation && wasShifted))) {
+            || (!notIsContinuation && wasShifted)) 
+            || (wasShifted && primary1 == 0)) { /* amendment to the UCA says that primary ignorables */
+            /* and other ignorables should be removed if following a shifted code point */
+            if(primary1 == 0) { /* if we were shifted and we got an ignorable code point */
+                                /* we should just completely ignore it */
+              continue;
+            }
             if(compareQuad == 0) {
               if(c4 > 0) {
                 currentSize += (c2/UCOL_BOT_COUNT4)+1;
@@ -3553,7 +3559,13 @@ ucol_calcSortKey(const    UCollator    *coll,
             }
 
             if(shifted && ((notIsContinuation && order <= variableTopValue && primary1 > 0)
-              || (!notIsContinuation && wasShifted))) {
+              || (!notIsContinuation && wasShifted))
+              || (wasShifted && primary1 == 0)) { /* amendment to the UCA says that primary ignorables */
+              /* and other ignorables should be removed if following a shifted code point */
+              if(primary1 == 0) { /* if we were shifted and we got an ignorable code point */
+                                  /* we should just completely ignore it */
+                continue;
+              }
               if(count4 > 0) {
                 while (count4 > UCOL_BOT_COUNT4) {
                   *quads++ = (uint8_t)(UCOL_COMMON_BOT4 + UCOL_BOT_COUNT4);
@@ -5257,7 +5269,9 @@ ucol_strcoll( const UCollator    *coll,
           if(sOrder == UCOL_NO_MORE_CES) {
             UCOL_CEBUF_PUT(&sCEs, sOrder, &sColl);
             break;
-          } else if(sOrder == 0) {
+          } else if(sOrder == 0 
+            || (sInShifted && (sOrder & UCOL_PRIMARYMASK) == 0)) { 
+            /* UCA amendment - ignore ignorables that follow shifted code points */
             continue;
           } else if(isContinuation(sOrder)) {
             if((sOrder & UCOL_PRIMARYMASK) > 0) { /* There is primary value */
@@ -5303,7 +5317,9 @@ ucol_strcoll( const UCollator    *coll,
           if(tOrder == UCOL_NO_MORE_CES) {
             UCOL_CEBUF_PUT(&tCEs, tOrder, &tColl);
             break;
-          } else if(tOrder == 0) {
+          } else if(tOrder == 0
+            || (tInShifted && (tOrder & UCOL_PRIMARYMASK) == 0)) { 
+            /* UCA amendment - ignore ignorables that follow shifted code points */
             continue;
           } else if(isContinuation(tOrder)) {
             if((tOrder & UCOL_PRIMARYMASK) > 0) { /* There is primary value */
