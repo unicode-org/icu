@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NumberFormat.java,v $ 
- * $Date: 2003/09/18 21:03:14 $ 
- * $Revision: 1.30 $
+ * $Date: 2003/11/14 23:45:01 $ 
+ * $Revision: 1.31 $
  *
  *****************************************************************************************
  */
@@ -18,7 +18,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 import java.text.FieldPosition;
-import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Collections;
@@ -29,6 +28,8 @@ import java.util.Set;
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.text.UFormat;
 
 /**
  * <code>NumberFormat</code> is the abstract base class for all number
@@ -155,7 +156,7 @@ import com.ibm.icu.util.Currency;
  * @author       Alan Liu
  * @stable ICU 2.0
  */
-public abstract class NumberFormat extends Format {
+public abstract class NumberFormat extends UFormat {
 
     // Constants used by factory methods to specify a style of format.
     private static final int NUMBERSTYLE = 0;
@@ -916,6 +917,15 @@ public abstract class NumberFormat extends Format {
         return currency;
     }
     
+	/** Get the locale for this date format object. You can choose between valid and actual locale.
+	 *  @param type type of the locale we're looking for (valid or actual) 
+	 *  @return the locale
+	 *  @draft ICU 2.8
+	 */
+	public ULocale getLocale(ULocale.ULocaleDataType type) {
+		return new ULocale("");		
+	}
+	
     // =======================privates===============================
 
     // Hook for service

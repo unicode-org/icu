@@ -3597,6 +3597,15 @@ public abstract class Calendar implements Serializable, Cloneable {
     // End of weekend support
     //-------------------------------------------------------------------------
 
+	/** Get the locale for this calendar object. You can choose between valid and actual locale.
+	 *  @param type type of the locale we're looking for (valid or actual) 
+	 *  @return the locale
+	 *  @draft ICU 2.8
+	 */
+	public ULocale getLocale(ULocale.ULocaleDataType type) {
+		return new ULocale("");		
+	}
+	
     /**
      * Overrides Cloneable
      * @stable ICU 2.0

@@ -8,9 +8,10 @@ package com.ibm.icu.text;
 import com.ibm.icu.impl.ICULocaleData;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.ULocale;
+import com.ibm.icu.text.UFormat;
 
 import java.text.FieldPosition;
-import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
@@ -104,7 +105,7 @@ import java.util.MissingResourceException;
  * @author       Mark Davis, Chen-Lieh Huang, Alan Liu
  * @stable ICU 2.0
  */
-public abstract class DateFormat extends Format {
+public abstract class DateFormat extends UFormat {
 
     /**
      * The calendar that <code>DateFormat</code> uses to produce the time field
@@ -728,6 +729,15 @@ public abstract class DateFormat extends Format {
     {
         return calendar.isLenient();
     }
+
+    /** Get the locale for this date format object. You can choose between valid and actual locale.
+	 *  @param type type of the locale we're looking for (valid or actual) 
+	 *  @return the locale
+	 *  @draft ICU 2.8
+	 */
+	public ULocale getLocale(ULocale.ULocaleDataType type) {
+		return new ULocale("");		
+	}
 
     /**
      * Overrides hashCode
