@@ -126,4 +126,7 @@ hu {
     Currencies {
         HUF { "Ft", "HUF" }
     }
+
+    // (ICU 2.6) International Calendar Data.  Note, THE FORMAT OF THIS DATA WILL CHANGE IN FUTURE RELEASES.
+    Eras_buddhist:array { "BK" }
 }
