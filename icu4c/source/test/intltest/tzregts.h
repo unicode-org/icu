@@ -19,6 +19,8 @@
 
 #include "gregocal.h"
 
+class SimpleTimeZone;
+
 /** 
  * Performs regression test for Calendar
  **/
@@ -42,13 +44,15 @@ public:
     void Test4154650(void);
     void Test4154525(void);
     void Test4162593(void);
-
+    void TestJ186(void);
     void TestJDK12API(void);
 
     bool_t checkCalendar314(GregorianCalendar *testCal, TimeZone *testTZ);
 
 
 protected:
+    UDate findTransitionBinary(const SimpleTimeZone& tz, UDate min, UDate max);
+    UDate findTransitionStepwise(const SimpleTimeZone& tz, UDate min, UDate max);
     bool_t failure(UErrorCode status, const char* msg);
 };
 

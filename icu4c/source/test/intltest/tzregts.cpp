@@ -44,7 +44,8 @@ TimeZoneRegressionTest::runIndexedTest( int32_t index, bool_t exec, char* &name,
         CASE(11, Test4154650)
         CASE(12, Test4154525)
         CASE(13, Test4162593)
-        CASE(14, TestJDK12API)
+        CASE(14, TestJ186)
+        CASE(15, TestJDK12API)
 
         default: name = ""; break;
     }
@@ -84,6 +85,41 @@ void TimeZoneRegressionTest:: Test4073209() {
     delete z2;
 }
 
+UDate TimeZoneRegressionTest::findTransitionBinary(const SimpleTimeZone& tz, UDate min, UDate max) {
+    UErrorCode status = U_ZERO_ERROR;
+    bool_t startsInDST = tz.inDaylightTime(min, status);
+    if (failure(status, "SimpleTimeZone::inDaylightTime")) return 0;
+    if (tz.inDaylightTime(max, status) == startsInDST) {
+        logln((UnicodeString)"Error: inDaylightTime() != " + ((!startsInDST)?"TRUE":"FALSE"));
+        return 0;
+    }
+    if (failure(status, "SimpleTimeZone::inDaylightTime")) return 0;
+    while ((max - min) > 100) { // Min accuracy in ms
+        UDate mid = (min + max) / 2;
+        if (tz.inDaylightTime(mid, status) == startsInDST) {
+            min = mid;
+        } else {
+            max = mid;
+        }
+        if (failure(status, "SimpleTimeZone::inDaylightTime")) return 0;
+    }
+    return (min + max) / 2;
+}
+
+UDate TimeZoneRegressionTest::findTransitionStepwise(const SimpleTimeZone& tz, UDate min, UDate max) {
+    UErrorCode status = U_ZERO_ERROR;
+    bool_t startsInDST = tz.inDaylightTime(min, status);
+    if (failure(status, "SimpleTimeZone::inDaylightTime")) return 0;
+    while (min < max) {
+        if (tz.inDaylightTime(min, status) != startsInDST) {
+            return min;
+        }
+        if (failure(status, "SimpleTimeZone::inDaylightTime")) return 0;
+        min += (UDate)24*60*60*1000; // one day
+    }
+    return 0;
+}
+
 /**
  * @bug 4073215
  */
@@ -91,6 +127,7 @@ void TimeZoneRegressionTest:: Test4073209() {
 void TimeZoneRegressionTest:: Test4073215() 
 {
     UErrorCode status = U_ZERO_ERROR;
+    UnicodeString str, str2;
     SimpleTimeZone *z = (SimpleTimeZone*) TimeZone::createTimeZone("GMT");
     if (z->useDaylightTime())
         errln("Fail: Fix test to start with non-DST zone");
@@ -100,24 +137,55 @@ void TimeZoneRegressionTest:: Test4073215()
     failure(status, "z->setStartRule()");
     if (!z->useDaylightTime())
         errln("Fail: DST not active");
-    GregorianCalendar *cal = new GregorianCalendar(97, Calendar::JANUARY, 31, status);
+
+    GregorianCalendar cal(1997, Calendar::JANUARY, 31, status);
     failure(status, "new GregorianCalendar");
-    if (z->inDaylightTime(cal->getTime(status), status) || U_FAILURE(status) ) {
-        errln("Fail: DST not working as expected");
+    cal.adoptTimeZone(z);
+
+    SimpleDateFormat sdf("E d MMM yyyy G HH:mm", status); 
+    sdf.setCalendar(cal); 
+    failure(status, "new SimpleDateFormat");
+
+    UDate jan31, mar1, mar31;
+
+    bool_t indt = z->inDaylightTime(jan31=cal.getTime(status), status);
+    failure(status, "inDaylightTime or getTime call on Jan 31");
+    if (indt) {
+        errln("Fail: Jan 31 inDaylightTime=TRUE, exp FALSE");
     }
-    cal->set(97, Calendar::MARCH, 1);
-    failure(status, "GregorianCalendar->set()");
-    if (! z->inDaylightTime(cal->getTime(status), status) || U_FAILURE(status) ) {
-        errln("Fail: DST not working as expected");
+    cal.set(1997, Calendar::MARCH, 1);
+    indt = z->inDaylightTime(mar1=cal.getTime(status), status);
+    failure(status, "inDaylightTime or getTime call on Mar 1");
+    if (!indt) {
+        UnicodeString str;
+        sdf.format(cal.getTime(status), str);
+        failure(status, "getTime");
+        errln((UnicodeString)"Fail: " + str + " inDaylightTime=FALSE, exp TRUE");
     }
-    cal->set(97, Calendar::MARCH, 31);
-    failure(status, "GregorianCalendar->set()");
-    if (z->inDaylightTime(cal->getTime(status), status) || U_FAILURE(status)) {
-        errln("Fail: DST not working as expected");
+    cal.set(1997, Calendar::MARCH, 31);
+    indt = z->inDaylightTime(mar31=cal.getTime(status), status);
+    failure(status, "inDaylightTime or getTime call on Mar 31");
+    if (indt) {
+        errln("Fail: Mar 31 inDaylightTime=TRUE, exp FALSE");
     }
 
-    delete z;
-    delete cal;
+    /*
+    cal.set(1997, Calendar::DECEMBER, 31);
+    UDate dec31 = cal.getTime(status);
+    failure(status, "getTime");
+    UDate trans = findTransitionStepwise(*z, jan31, dec31);
+    logln((UnicodeString)"Stepwise from " +
+          sdf.format(jan31, str.remove()) + "; transition at " +
+          (trans?sdf.format(trans, str2.remove()):(UnicodeString)"NONE"));
+    trans = findTransitionStepwise(*z, mar1, dec31);
+    logln((UnicodeString)"Stepwise from " +
+          sdf.format(mar1, str.remove()) + "; transition at " +
+          (trans?sdf.format(trans, str2.remove()):(UnicodeString)"NONE"));
+    trans = findTransitionStepwise(*z, mar31, dec31);
+    logln((UnicodeString)"Stepwise from " +
+          sdf.format(mar31, str.remove()) + "; transition at " +
+          (trans?sdf.format(trans, str2.remove()):(UnicodeString)"NONE"));
+    */
 }
 
 /**
@@ -785,6 +853,32 @@ TimeZoneRegressionTest::Test4162593()
     delete fmt;
     delete asuncion;
     delete DATA_TZ[0];
+}
+
+/**
+ * Make sure setStartRule and setEndRule set the DST savings to nonzero
+ * if it was zero.
+ */
+void TimeZoneRegressionTest::TestJ186() {
+    UErrorCode status = U_ZERO_ERROR;
+    SimpleTimeZone z(0, "ID");
+    z.setDSTSavings(0); // Must do this!
+    z.setStartRule(Calendar::FEBRUARY, 1, Calendar::SUNDAY, 0, status);
+    failure(status, "setStartRule()");
+    if (z.useDaylightTime()) {
+        errln("Fail: useDaylightTime true with start rule only");
+    }
+    if (z.getDSTSavings() != 0) {
+        errln("Fail: dst savings != 0 with start rule only");
+    }
+    z.setEndRule(Calendar::MARCH, -1, Calendar::SUNDAY, 0, status);
+    failure(status, "setStartRule()");
+    if (!z.useDaylightTime()) {
+        errln("Fail: useDaylightTime false with rules set");
+    }
+    if (z.getDSTSavings() == 0) {
+        errln("Fail: dst savings == 0 with rules set");
+    }
 }
 
 // test new API for JDK 1.2 8/31 putback
