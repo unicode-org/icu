@@ -43,7 +43,9 @@ void pkg_sttc_writeReadme(struct UPKGOptions_ *o, const char *libName, UErrorCod
 
   /* Makefile pathname */
   uprv_strcpy(tmp, o->targetDir);
-  uprv_strcat(tmp, U_FILE_SEP_STRING "README_$(NAME).txt");
+  uprv_strcat(tmp, U_FILE_SEP_STRING "README_");
+  uprv_strcat(tmp, o->shortName);
+  uprv_strcat(tmp, ".txt");
 
   out = T_FileStream_open(tmp, "w");
   if (!out) {
@@ -166,7 +168,9 @@ void pkg_mode_static(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
         return;
     }
 
-    uprv_strcpy(tmp, LIB_PREFIX "$(NAME)" UDATA_LIB_SUFFIX);
+    uprv_strcpy(tmp, LIB_PREFIX);
+    uprv_strcat(tmp, o->cShortName);
+    uprv_strcat(tmp, UDATA_LIB_SUFFIX);
 
     o->outFiles = pkg_appendToList(o->outFiles, &tail, uprv_strdup(tmp));
 
