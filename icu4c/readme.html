@@ -7,11 +7,17 @@
 
 <body lang="en-US">
 
+<H4>Late breaking news:</H4>
+<UL>
+  <LI> <A HREF="#hpux_data_note">HP/UX shared library loading</A>
+</UL>
+
+<HR>
 <div class=Section1>
 
 <h2>ReadMe: International Components for Unicode</h2>
 
-<p>Version: February 1, 2000</p>
+<p>Version: May 30, 2000</p>
 
 
 <div class=MsoNormal align=center style='text-align:center'>
@@ -873,6 +879,20 @@ want to run the test suite. <br>
 Regarding the test suite, please read the directions in <a
 href="docs/intltest.html">docs/intltest.html</a> and <a
 href="docs/cintltst.html">docs/cintltst.html</a> </p>
+
+<P>
+<A NAME="hpux_data_note">
+<H4>Note about HP/UX data libraries:</H4>
+<UL> 
+   <LI>HP/UX has a documented characteristic where the shl_unload() function
+     always unloads a library, regardless of how many times the library has 
+     been loaded.  Most operating systems reference-count libraries as they 
+     are opened.  In the future (Jitterbug 414) this may be corrected in the
+     ICU, but at present we work around this problem by simply NOT ever 
+     unloading shared libraries.  This means that once a data library
+     is loaded (ex: libicudata.sl) by a process, it cannot be
+     unloaded and replaced without stopping and restarting the process.
+</UL>
 
 <h1><a name=datahandling>How ICU handles data</a></h1>
 
