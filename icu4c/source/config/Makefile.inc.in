@@ -2,7 +2,7 @@
 #******************************************************************************
 #   Copyright (C) 1999, International Business Machines
 #   Corporation and others.  All Rights Reserved.
-# $Revision: 1.16 $
+# $Revision: 1.17 $
 #******************************************************************************
 # This Makefile is designed to be included into projects which make use
 # of the ICU.
@@ -94,3 +94,13 @@ GENCMN = $(sbindir)/gencmn
 
 INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(libdir):$$$(LDLIBRARYPATH_ENVVAR)
 
+# Should be the same as U_ICUDATA_NAME
+ICUDATA_NAME = icudt@LIB_VERSION_MAJOR@@ICUDATA_CHAR@
+ifeq ($(strip $(PKGDATA_MODE)),)
+PKGDATA_MODE=@DATA_PACKAGING_MODE@
+endif
+ifeq ($(PKGDATA_MODE),common)
+ICUDATA_DIR=$(pkgdatadir)
+else
+ICUDATA_DIR=$(pkglibdir)
+endif
