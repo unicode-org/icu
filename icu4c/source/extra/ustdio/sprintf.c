@@ -262,7 +262,7 @@ u_vsnprintf_u(UChar    *buffer,
         }
 
         /* parse and print the specifier */
-        patCount = u_printf_print_spec(&g_sprintf_stream_handler, alias, &outStr, &outStr.fBundle, (int32_t)(alias - lastAlias), &written, &ap);
+        patCount = u_printf_print_spec(&g_sprintf_stream_handler, alias, &outStr, &outStr.fBundle, (int32_t)(alias - lastAlias), &written, (va_list*)&ap);
 
         /* update the pointer in pattern and continue */
         alias += patCount;
