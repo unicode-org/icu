@@ -53,8 +53,8 @@ static const char CURRENCIES[] = "Currencies";
  * to use it as a resource key.
  */
 static inline char*
-_16to8(char* resultOfLen4, const UChar* currency) {
-    u_austrncpy(resultOfLen4, currency, 3);
+myUCharsToChars(char* resultOfLen4, const UChar* currency) {
+    u_UCharsToChars(currency, resultOfLen4, 3);
     resultOfLen4[3] = 0;
     return resultOfLen4;
 }
@@ -82,7 +82,7 @@ _findData(const UChar* currency) {
 
     // Look up our currency, or if that's not available, then DEFAULT
     char buf[4];
-    ResourceBundle rb = currencyMeta.get(_16to8(buf, currency), ec);
+    ResourceBundle rb = currencyMeta.get(myUCharsToChars(buf, currency), ec);
     if (U_FAILURE(ec)) {
         rb = currencyMeta.get(DEFAULT_META, ec);
         if (U_FAILURE(ec)) {
@@ -156,7 +156,7 @@ ucurr_getSymbol(const UChar* currency,
     char buf[4];
     UResourceBundle* rb = ures_open(NULL, locale, ec);
     UResourceBundle* rb_c = ures_getByKey(rb, CURRENCIES, NULL, ec);
-    s = ures_getStringByKey(rb_c, _16to8(buf, currency), len, ec);
+    s = ures_getStringByKey(rb_c, myUCharsToChars(buf, currency), len, ec);
     ures_close(rb_c);
     UBool found = U_SUCCESS(*ec);
 
