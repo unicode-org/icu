@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2002/12/03 21:42:18 $ 
- * $Revision: 1.38 $
+ * $Date: 2002/12/04 00:25:52 $ 
+ * $Revision: 1.39 $
  *
  *****************************************************************************************
  */
@@ -15,6 +15,7 @@ import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.impl.SortedSetRelation;
 import java.util.*;
 
 /**
@@ -573,178 +574,175 @@ public class UnicodeSetTest extends TestFmwk {
                         new String[] {"\u4E01\u4E02", "\n\r"});
     }
 
-//24// Temporarily commented out in ICU 2.4
-//24// The API being tested is ont public
-//24//
-//24//  static final Integer 
-//24//     I_ANY = new Integer(UnicodeSet.ANY),
-//24//     I_CONTAINS = new Integer(UnicodeSet.CONTAINS),
-//24//     I_DISJOINT = new Integer(UnicodeSet.DISJOINT),
-//24//     I_NO_B = new Integer(UnicodeSet.NO_B),
-//24//     I_ISCONTAINED = new Integer(UnicodeSet.ISCONTAINED),
-//24//     I_EQUALS = new Integer(UnicodeSet.EQUALS),
-//24//     I_NO_A = new Integer(UnicodeSet.NO_A),
-//24//     I_NONE = new Integer(UnicodeSet.NONE);
-//24//  
-//24//  public void TestSetRelation() {
-//24//
-//24//      String[] choices = {"a", "b", "cd", "ef"};
-//24//      int limit = 1 << choices.length;
-//24//      
-//24//      SortedSet iset = new TreeSet();
-//24//      SortedSet jset = new TreeSet();
-//24//      
-//24//      for (int i = 0; i < limit; ++i) {
-//24//          pick(i, choices, iset);
-//24//          for (int j = 0; j < limit; ++j) {
-//24//              pick(j, choices, jset);
-//24//              checkSetRelation(iset, jset, "(" + i + ")");
-//24//          }
-//24//      }
-//24//  }
-//24//    
-//24//    public void TestSetSpeed() {
-//24//        // skip unless verbose
-//24//        if (!isVerbose()) return;
-//24//        
-//24//        SetSpeed2(100);
-//24//        SetSpeed2(1000);
-//24//    }
-//24//    
-//24//    public void SetSpeed2(int size) {
-//24//        
-//24//        SortedSet iset = new TreeSet();
-//24//        SortedSet jset = new TreeSet();
-//24//        
-//24//        for (int i = 0; i < size*2; i += 2) { // only even values
-//24//            iset.add(new Integer(i));
-//24//            jset.add(new Integer(i));
-//24//        }
-//24//        
-//24//        int iterations = 1000000 / size;
-//24//        
-//24//        logln("Timing comparison of Java vs Utility");
-//24//        logln("For about " + size + " objects that are almost all the same.");
-//24//        
-//24//        CheckSpeed(iset, jset, "when a = b", iterations);
-//24//        
-//24//        iset.add(new Integer(size + 1));    // add odd value in middle
-//24//        
-//24//        CheckSpeed(iset, jset, "when a contains b", iterations);        
-//24//        CheckSpeed(jset, iset, "when b contains a", iterations);
-//24//        
-//24//        jset.add(new Integer(size - 1));    // add different odd value in middle
-//24//        
-//24//        CheckSpeed(jset, iset, "when a, b are disjoint", iterations);        
-//24//    }
-//24//    
-//24//    void CheckSpeed(SortedSet iset, SortedSet jset, String message, int iterations) {
-//24//        CheckSpeed2(iset, jset, message, iterations);
-//24//        CheckSpeed3(iset, jset, message, iterations);
-//24//    }
-//24//    
-//24//    void CheckSpeed2(SortedSet iset, SortedSet jset, String message, int iterations) {
-//24//        boolean x;
-//24//        boolean y;
-//24//        
-//24//        // make sure code is loaded:
-//24//        x = iset.containsAll(jset);
-//24//        y = UnicodeSet.hasRelation(iset, UnicodeSet.CONTAINS, jset);
-//24//        if (x != y) errln("FAIL contains comparison");
-//24//        
-//24//        double start = System.currentTimeMillis();
-//24//        for (int i = 0; i < iterations; ++i) {
-//24//            x |= iset.containsAll(jset);
-//24//        }
-//24//        double middle = System.currentTimeMillis();
-//24//        for (int i = 0; i < iterations; ++i) {
-//24//            y |= UnicodeSet.hasRelation(iset, UnicodeSet.CONTAINS, jset);
-//24//        }
-//24//        double end = System.currentTimeMillis();
-//24//        
-//24//        double jtime = (middle - start)/iterations;
-//24//        double utime = (end - middle)/iterations;
-//24//        
-//24//        java.text.NumberFormat nf = java.text.NumberFormat.getPercentInstance();
-//24//        logln("Test contains: " + message + ": Java: " + jtime
-//24//            + ", Utility: " + utime + ", u:j: " + nf.format(utime/jtime));
-//24//    }
-//24//    
-//24//    void CheckSpeed3(SortedSet iset, SortedSet jset, String message, int iterations) {
-//24//        boolean x;
-//24//        boolean y;
-//24//        
-//24//        // make sure code is loaded:
-//24//        x = iset.equals(jset);
-//24//        y = UnicodeSet.hasRelation(iset, UnicodeSet.EQUALS, jset);
-//24//        if (x != y) errln("FAIL equality comparison");
-//24//
-//24//        
-//24//        double start = System.currentTimeMillis();
-//24//        for (int i = 0; i < iterations; ++i) {
-//24//            x |= iset.equals(jset);
-//24//        }
-//24//        double middle = System.currentTimeMillis();
-//24//        for (int i = 0; i < iterations; ++i) {
-//24//            y |= UnicodeSet.hasRelation(iset, UnicodeSet.EQUALS, jset);
-//24//        }
-//24//        double end = System.currentTimeMillis();
-//24//        
-//24//        double jtime = (middle - start)/iterations;
-//24//        double utime = (end - middle)/iterations;
-//24//        
-//24//        java.text.NumberFormat nf = java.text.NumberFormat.getPercentInstance();
-//24//        logln("Test equals:   " + message + ": Java: " + jtime
-//24//            + ", Utility: " + utime + ", u:j: " + nf.format(utime/jtime));
-//24//    }
-//24//    
-//24//    void pick(int bits, Object[] examples, SortedSet output) {
-//24//        output.clear();
-//24//        for (int k = 0; k < 32; ++k) {
-//24//            if (((1<<k) & bits) != 0) output.add(examples[k]);
-//24//        }
-//24//    }
-//24//    
-//24//    public static final String[] RELATION_NAME = {
-//24//        "both-are-null",
-//24//        "a-is-null", 
-//24//        "equals", 
-//24//        "is-contained-in",
-//24//        "b-is-null",
-//24//        "is-disjoint_with",
-//24//        "contains", 
-//24//        "any", };
-//24//        
-//24//    boolean dumbHasRelation(Collection A, int filter, Collection B) {
-//24//        Collection ab = new TreeSet(A);
-//24//        ab.retainAll(B);
-//24//        if (ab.size() > 0 && (filter & UnicodeSet.A_AND_B) == 0) return false; 
-//24//        
-//24//        // A - B size == A.size - A&B.size
-//24//        if (A.size() > ab.size() && (filter & UnicodeSet.A_NOT_B) == 0) return false; 
-//24//        
-//24//        // B - A size == B.size - A&B.size
-//24//        if (B.size() > ab.size() && (filter & UnicodeSet.B_NOT_A) == 0) return false; 
-//24//
-//24//        
-//24//        return true;
-//24//    }    
-//24//    
-//24//    void checkSetRelation(SortedSet a, SortedSet b, String message) {
-//24//        for (int i = 0; i < 8; ++i) {
-//24//            
-//24//            boolean hasRelation = UnicodeSet.hasRelation(a, i, b);
-//24//            boolean dumbHasRelation = dumbHasRelation(a, i, b);
-//24//            
-//24//            logln(message + " " + hasRelation + ":\t" + a + "\t" + RELATION_NAME[i] + "\t" + b);
-//24//            
-//24//            if (hasRelation != dumbHasRelation) {
-//24//                errln("FAIL: " + 
-//24//                    message + " " + dumbHasRelation + ":\t" + a + "\t" + RELATION_NAME[i] + "\t" + b);
-//24//            }
-//24//        }
-//24//        logln("");
-//24//    }
+    static final Integer 
+        I_ANY = new Integer(SortedSetRelation.ANY),
+        I_CONTAINS = new Integer(SortedSetRelation.CONTAINS),
+        I_DISJOINT = new Integer(SortedSetRelation.DISJOINT),
+        I_NO_B = new Integer(SortedSetRelation.NO_B),
+        I_ISCONTAINED = new Integer(SortedSetRelation.ISCONTAINED),
+        I_EQUALS = new Integer(SortedSetRelation.EQUALS),
+        I_NO_A = new Integer(SortedSetRelation.NO_A),
+        I_NONE = new Integer(SortedSetRelation.NONE);
+    
+    public void TestSetRelation() {
+        
+        String[] choices = {"a", "b", "cd", "ef"};
+        int limit = 1 << choices.length;
+        
+        SortedSet iset = new TreeSet();
+        SortedSet jset = new TreeSet();
+        
+        for (int i = 0; i < limit; ++i) {
+            pick(i, choices, iset);
+            for (int j = 0; j < limit; ++j) {
+                pick(j, choices, jset);
+                checkSetRelation(iset, jset, "(" + i + ")");
+            }
+        }
+    }
+    
+    public void TestSetSpeed() {
+        // skip unless verbose
+        if (!isVerbose()) return;
+        
+        SetSpeed2(100);
+        SetSpeed2(1000);
+    }
+    
+    public void SetSpeed2(int size) {
+        
+        SortedSet iset = new TreeSet();
+        SortedSet jset = new TreeSet();
+        
+        for (int i = 0; i < size*2; i += 2) { // only even values
+            iset.add(new Integer(i));
+            jset.add(new Integer(i));
+        }
+        
+        int iterations = 1000000 / size;
+        
+        logln("Timing comparison of Java vs Utility");
+        logln("For about " + size + " objects that are almost all the same.");
+        
+        CheckSpeed(iset, jset, "when a = b", iterations);
+        
+        iset.add(new Integer(size + 1));    // add odd value in middle
+        
+        CheckSpeed(iset, jset, "when a contains b", iterations);        
+        CheckSpeed(jset, iset, "when b contains a", iterations);
+        
+        jset.add(new Integer(size - 1));    // add different odd value in middle
+        
+        CheckSpeed(jset, iset, "when a, b are disjoint", iterations);        
+    }
+    
+    void CheckSpeed(SortedSet iset, SortedSet jset, String message, int iterations) {
+        CheckSpeed2(iset, jset, message, iterations);
+        CheckSpeed3(iset, jset, message, iterations);
+    }
+    
+    void CheckSpeed2(SortedSet iset, SortedSet jset, String message, int iterations) {
+        boolean x;
+        boolean y;
+        
+        // make sure code is loaded:
+        x = iset.containsAll(jset);
+        y = SortedSetRelation.hasRelation(iset, SortedSetRelation.CONTAINS, jset);
+        if (x != y) errln("FAIL contains comparison");
+        
+        double start = System.currentTimeMillis();
+        for (int i = 0; i < iterations; ++i) {
+            x |= iset.containsAll(jset);
+        }
+        double middle = System.currentTimeMillis();
+        for (int i = 0; i < iterations; ++i) {
+            y |= SortedSetRelation.hasRelation(iset, SortedSetRelation.CONTAINS, jset);
+        }
+        double end = System.currentTimeMillis();
+        
+        double jtime = (middle - start)/iterations;
+        double utime = (end - middle)/iterations;
+        
+        java.text.NumberFormat nf = java.text.NumberFormat.getPercentInstance();
+        logln("Test contains: " + message + ": Java: " + jtime
+            + ", Utility: " + utime + ", u:j: " + nf.format(utime/jtime));
+    }
+    
+    void CheckSpeed3(SortedSet iset, SortedSet jset, String message, int iterations) {
+        boolean x;
+        boolean y;
+        
+        // make sure code is loaded:
+        x = iset.equals(jset);
+        y = SortedSetRelation.hasRelation(iset, SortedSetRelation.EQUALS, jset);
+        if (x != y) errln("FAIL equality comparison");
+
+        
+        double start = System.currentTimeMillis();
+        for (int i = 0; i < iterations; ++i) {
+            x |= iset.equals(jset);
+        }
+        double middle = System.currentTimeMillis();
+        for (int i = 0; i < iterations; ++i) {
+            y |= SortedSetRelation.hasRelation(iset, SortedSetRelation.EQUALS, jset);
+        }
+        double end = System.currentTimeMillis();
+        
+        double jtime = (middle - start)/iterations;
+        double utime = (end - middle)/iterations;
+        
+        java.text.NumberFormat nf = java.text.NumberFormat.getPercentInstance();
+        logln("Test equals:   " + message + ": Java: " + jtime
+            + ", Utility: " + utime + ", u:j: " + nf.format(utime/jtime));
+    }
+    
+    void pick(int bits, Object[] examples, SortedSet output) {
+        output.clear();
+        for (int k = 0; k < 32; ++k) {
+            if (((1<<k) & bits) != 0) output.add(examples[k]);
+        }
+    }
+    
+    public static final String[] RELATION_NAME = {
+        "both-are-null",
+        "a-is-null", 
+        "equals", 
+        "is-contained-in",
+        "b-is-null",
+        "is-disjoint_with",
+        "contains", 
+        "any", };
+        
+    boolean dumbHasRelation(Collection A, int filter, Collection B) {
+        Collection ab = new TreeSet(A);
+        ab.retainAll(B);
+        if (ab.size() > 0 && (filter & SortedSetRelation.A_AND_B) == 0) return false; 
+        
+        // A - B size == A.size - A&B.size
+        if (A.size() > ab.size() && (filter & SortedSetRelation.A_NOT_B) == 0) return false; 
+        
+        // B - A size == B.size - A&B.size
+        if (B.size() > ab.size() && (filter & SortedSetRelation.B_NOT_A) == 0) return false; 
+
+        
+        return true;
+    }    
+    
+    void checkSetRelation(SortedSet a, SortedSet b, String message) {
+        for (int i = 0; i < 8; ++i) {
+            
+            boolean hasRelation = SortedSetRelation.hasRelation(a, i, b);
+            boolean dumbHasRelation = dumbHasRelation(a, i, b);
+            
+            logln(message + " " + hasRelation + ":\t" + a + "\t" + RELATION_NAME[i] + "\t" + b);
+            
+            if (hasRelation != dumbHasRelation) {
+                errln("FAIL: " + 
+                    message + " " + dumbHasRelation + ":\t" + a + "\t" + RELATION_NAME[i] + "\t" + b);
+            }
+        }
+        logln("");
+    }
     
    /**
     * Test the [:Latin:] syntax.
@@ -1069,68 +1067,68 @@ public class UnicodeSetTest extends TestFmwk {
         return pairs.toString();
     }
     
-//24//    /**
-//24//     * Test function. Make sure that the sets have the right relation
-//24//     */
-//24//     
-//24//    void expectRelation(Object relationObj, Object set1Obj, Object set2Obj, String message) {
-//24//        int relation = ((Integer) relationObj).intValue();
-//24//        UnicodeSet set1 = (UnicodeSet) set1Obj;
-//24//        UnicodeSet set2 = (UnicodeSet) set2Obj;
-//24//        
-//24//        // by-the-by, check the iterator
-//24//        checkRoundTrip(set1);
-//24//        checkRoundTrip(set2);
-//24//        
-//24//        boolean contains = set1.containsAll(set2);
-//24//        boolean isContained = set2.containsAll(set1);
-//24//        boolean disjoint = set1.containsNone(set2);
-//24//        boolean equals = set1.equals(set2);
-//24//        
-//24//        UnicodeSet intersection = new UnicodeSet(set1).retainAll(set2);
-//24//        UnicodeSet minus12 = new UnicodeSet(set1).removeAll(set2);
-//24//        UnicodeSet minus21 = new UnicodeSet(set2).removeAll(set1);
-//24//        
-//24//        // test basic properties
-//24//        
-//24//        if (contains != (intersection.size() == set2.size())) {
-//24//            errln("FAIL contains1" + set1.toPattern(true) + ", " + set2.toPattern(true));
-//24//        }
-//24//          
-//24//        if (contains != (intersection.equals(set2))) {
-//24//            errln("FAIL contains2" + set1.toPattern(true) + ", " + set2.toPattern(true));
-//24//        }
-//24//          
-//24//        if (isContained != (intersection.size() == set1.size())) {
-//24//            errln("FAIL isContained1" + set1.toPattern(true) + ", " + set2.toPattern(true));
-//24//        }
-//24//          
-//24//        if (isContained != (intersection.equals(set1))) {
-//24//            errln("FAIL isContained2" + set1.toPattern(true) + ", " + set2.toPattern(true));
-//24//        }
-//24//          
-//24//        if ((contains && isContained) != equals) {
-//24//            errln("FAIL equals" + set1.toPattern(true) + ", " + set2.toPattern(true));
-//24//        }
-//24//          
-//24//        if (disjoint != (intersection.size() == 0)) {
-//24//            errln("FAIL disjoint" + set1.toPattern(true) + ", " + set2.toPattern(true));
-//24//        }
-//24//        
-//24//        // Now see if the expected relation is true
-//24//        int status = (minus12.size() != 0 ? 4 : 0)
-//24//          | (intersection.size() != 0 ? 2 : 0)
-//24//          | (minus21.size() != 0 ? 1 : 0);
-//24//        
-//24//        if (status != relation) {
-//24//            errln("FAIL relation incorrect" + message
-//24//              + "; desired = " + RELATION_NAME[relation]
-//24//              + "; found = " + RELATION_NAME[status]
-//24//              + "; set1 = " + set1.toPattern(true)
-//24//              + "; set2 = " + set2.toPattern(true)
-//24//              );
-//24//        }
-//24//    }
+    /**
+     * Test function. Make sure that the sets have the right relation
+     */
+     
+    void expectRelation(Object relationObj, Object set1Obj, Object set2Obj, String message) {
+        int relation = ((Integer) relationObj).intValue();
+        UnicodeSet set1 = (UnicodeSet) set1Obj;
+        UnicodeSet set2 = (UnicodeSet) set2Obj;
+        
+        // by-the-by, check the iterator
+        checkRoundTrip(set1);
+        checkRoundTrip(set2);
+        
+        boolean contains = set1.containsAll(set2);
+        boolean isContained = set2.containsAll(set1);
+        boolean disjoint = set1.containsNone(set2);
+        boolean equals = set1.equals(set2);
+        
+        UnicodeSet intersection = new UnicodeSet(set1).retainAll(set2);
+        UnicodeSet minus12 = new UnicodeSet(set1).removeAll(set2);
+        UnicodeSet minus21 = new UnicodeSet(set2).removeAll(set1);
+        
+        // test basic properties
+        
+        if (contains != (intersection.size() == set2.size())) {
+            errln("FAIL contains1" + set1.toPattern(true) + ", " + set2.toPattern(true));
+        }
+          
+        if (contains != (intersection.equals(set2))) {
+            errln("FAIL contains2" + set1.toPattern(true) + ", " + set2.toPattern(true));
+        }
+          
+        if (isContained != (intersection.size() == set1.size())) {
+            errln("FAIL isContained1" + set1.toPattern(true) + ", " + set2.toPattern(true));
+        }
+          
+        if (isContained != (intersection.equals(set1))) {
+            errln("FAIL isContained2" + set1.toPattern(true) + ", " + set2.toPattern(true));
+        }
+          
+        if ((contains && isContained) != equals) {
+            errln("FAIL equals" + set1.toPattern(true) + ", " + set2.toPattern(true));
+        }
+          
+        if (disjoint != (intersection.size() == 0)) {
+            errln("FAIL disjoint" + set1.toPattern(true) + ", " + set2.toPattern(true));
+        }
+        
+        // Now see if the expected relation is true
+        int status = (minus12.size() != 0 ? 4 : 0)
+          | (intersection.size() != 0 ? 2 : 0)
+          | (minus21.size() != 0 ? 1 : 0);
+        
+        if (status != relation) {
+            errln("FAIL relation incorrect" + message
+              + "; desired = " + RELATION_NAME[relation]
+              + "; found = " + RELATION_NAME[status]
+              + "; set1 = " + set1.toPattern(true)
+              + "; set2 = " + set2.toPattern(true)
+              );
+        }
+    }
     
     /**
      * Basic consistency check for a few items.
