@@ -77,7 +77,7 @@ fi
 %preun -n libicu16
 # Adjust the current ICU link in /usr/lib/icu
 
-icucurrent=`2>/dev/null ls -dp /usr/lib/icu/* | sed -n 's,.*/\([^/]*\)/$,\1,p'| sort -rn | head -1`
+icucurrent=`2>/dev/null ls -dp /usr/lib/icu/* | sed -n -e '/\/1.6.0.1\//d -e 's,.*/\([^/]*\)/$,\1,p'| sort -rn | head -1`
 cd /usr/lib/icu
 rm -f current
 if test x"$icucurrent" != x
