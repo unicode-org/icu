@@ -158,7 +158,7 @@ uset_close(USet* set);
  * Modifies the set to represent the set specified by the given
  * pattern. See the UnicodeSet class description for the syntax of 
  * the pattern language. See also the User Guide chapter about UnicodeSet.
- * <em> Empties the set passed before applying the pattern.<em>
+ * <em>Empties the set passed before applying the pattern.</em>
  * @param set               The set to which the pattern is to be applied. 
  * @param pattern           A pointer to UChar string specifying what characters are in the set.
  *                          The character at pattern[0] must be a '['.
