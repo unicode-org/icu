@@ -349,6 +349,13 @@ SAVE_STATE:
             args->converter->toUnicodeStatus = 0x00;
         }
     }
+    /* Reset the state of converter if we consumed 
+     * the source and flush is true
+     */
+    if( (mySource == mySourceLimit) && args->flush){
+        _HZReset(args->converter);
+    }
+
     args->target = myTarget;
     args->source = mySource;
 }
@@ -550,6 +557,13 @@ SAVE_STATE:
             args->converter->toUnicodeStatus = 0x00;
         }
     }
+    /* Reset the state of converter if we consumed 
+     * the source and flush is true
+     */
+    if( (mySource == mySourceLimit) && args->flush){
+         _HZReset(args->converter);
+    }
+
     args->target = myTarget;
     args->source = mySource;
 }
@@ -790,6 +804,13 @@ CALLBACK:
             args->converter->toUnicodeStatus = 0x00;
         }
     }
+    /* Reset the state of converter if we consumed 
+     * the source and flush is true
+     */
+    if( (mySourceIndex == sourceLength) && args->flush){
+        _HZReset(args->converter);
+    }
+
     args->target += myTargetIndex;
     args->source += mySourceIndex;
     myConverterData->isTargetUCharDBCS = isTargetUCharDBCS;
@@ -963,6 +984,13 @@ CALLBACK:
             args->converter->toUnicodeStatus = 0x00;
         }
     }
+    /* Reset the state of converter if we consumed 
+     * the source and flush is true
+     */
+    if( (mySourceIndex == sourceLength) && args->flush){
+        _HZReset(args->converter);
+    }
+
     args->target += myTargetIndex;
     args->source += mySourceIndex;
     myConverterData->isTargetUCharDBCS = isTargetUCharDBCS;
