@@ -208,12 +208,27 @@ strrch(const char* source,uint32_t sourceLen,char find){
     return (uint32_t)(tSourceEnd-source);
 }
 
+static int32_t getColumnCount(int32_t len){
+    int32_t columnCount = 80;
+    int32_t maxLines = 3000;
+    int32_t adjustedLen = len*5; /* assume that every codepoint is represented in \uXXXX format*/
+    /*
+     * calculate the number of lines that
+     * may be required if column count is 80
+     */
+    if (maxLines  < (adjustedLen / columnCount) ){
+        columnCount = adjustedLen / maxLines;
+    }
+    return columnCount;
+}
 static void
 str_write_java( uint16_t* src, int32_t srcLen, UBool printEndLine, UErrorCode *status){
 
     uint32_t length = srcLen*8;
     uint32_t bufLen = 0;
     char* buf = (char*) malloc(sizeof(char)*length);
+    
+    uint32_t columnCount = getColumnCount(srcLen);
 
     /* test for NULL */
     if(buf == NULL) {
@@ -231,12 +246,12 @@ str_write_java( uint16_t* src, int32_t srcLen, UBool printEndLine, UErrorCode *s
         return;
     }
     
-    if(bufLen+(tabCount*4) > 70  ){
+    if(bufLen+(tabCount*4) > columnCount  ){
         uint32_t len = 0;
         char* current = buf;
         uint32_t add;
         while(len < bufLen){
-            add = 70-(tabCount*4)-5/* for ", +\n */;
+            add = columnCount-(tabCount*4)-5/* for ", +\n */;
             current = buf +len;
             if (add < (bufLen-len)) {
                 uint32_t index = strrch(current,add,'\\');
@@ -292,10 +307,11 @@ string_write_java(struct SResource *res,UErrorCode *status) {
         const char* type = "new ICUListResourceBundle.ResourceString(";
         char* dest  = (char*) uprv_malloc( 8 * res->u.fString.fLength);
         int32_t len = 0;
-
-        uprv_strcat(fileName,outDir);
-        if(outDir[uprv_strlen(outDir)-1]!=U_FILE_SEP_CHAR){
-            uprv_strcat(fileName,U_FILE_SEP_STRING);
+        if(outDir){
+            uprv_strcat(fileName,outDir);
+            if(outDir[uprv_strlen(outDir)-1]!=U_FILE_SEP_CHAR){
+                uprv_strcat(fileName,U_FILE_SEP_STRING);
+            }
         }
         uprv_strcat(fileName,file);/* UCARULES.utf8 UTF-8 file */
         
@@ -320,67 +336,6 @@ string_write_java(struct SResource *res,UErrorCode *status) {
         T_FileStream_write(datFile,dest,len);
         T_FileStream_close(datFile);
         uprv_free(dest);
-
-    }else if( res->u.fString.fLength > 2000){
-
-            int32_t srcLen = res->u.fBinaryValue.fLength/2;
-            int32_t tgtLen = srcLen *2;
-            uint16_t* target = (uint16_t*)malloc(sizeof(uint16_t) * tgtLen );
-            uint16_t* saveTarget;
-            const char* type = "new ICUListResourceBundle.CompressedString(\n";
-            if(target){
-                saveTarget  = target;
-                tgtLen = usArrayToRLEString((uint16_t*)res->u.fBinaryValue.fData,
-                                             srcLen,target, tgtLen, status);
-                if(U_FAILURE(*status)){
-                     printf("Could not encode got error : %s \n", u_errorName(*status));
-                     return;
-                }
-#if DEBUG
-                {
-                    /***************** Test Roundtripping *********************/
-                    int32_t myTargetLen = rleStringToUCharArray(target,tgtLen,NULL,0,status);
-                    uint16_t* myTarget = (uint16_t*) malloc(sizeof(uint16_t) * myTargetLen);
-
-                    /* test for NULL */
-                    if(myTarget == NULL) {
-                        *status = U_MEMORY_ALLOCATION_ERROR;
-                        return;    
-                    }
-                    
-                    int i=0;
-                    int32_t retVal=0;
-                    uint16_t* saveSrc = (uint16_t*)res->u.fBinaryValue.fData;
-                    *status = U_ZERO_ERROR;
-                    retVal=rleStringToUCharArray(target,tgtLen,myTarget,myTargetLen,status);
-                    if(U_SUCCESS(*status)){
-
-                        for(i=0; i< srcLen;i++){
-                            if(saveSrc[i]!= myTarget[i]){
-                                printf("the encoded string cannot be decoded Expected : 0x%04X Got : %: 0x%04X at %i\n",res->u.fBinaryValue.fData[i],myTarget[i], i);
-                            }
-                        }
-                    }else{
-                        printf("Could not decode got error : %s \n", u_errorName(*status));
-                    }
-                    free(myTarget);
-                 }
-#endif
-
-            }else{
-                *status= U_MEMORY_ALLOCATION_ERROR;
-                return;
-            }
-            write_tabs(out);
-            T_FileStream_write(out, type, (int32_t)uprv_strlen(type));
-            T_FileStream_write(out, "\n", 1);
-            tabCount++;
-            write_tabs(out);
-            str_write_java(target, tgtLen,FALSE, status);
-            tabCount--;
-            T_FileStream_write(out, "),\n", 3);
-
-            free(target);
            
     }else{
         str_write_java(res->u.fString.fChars,res->u.fString.fLength,TRUE,status);
@@ -569,10 +524,11 @@ bin_write_java( struct SResource *res, UErrorCode *status) {
             }
             
             uprv_strcat(fileName,ext);
-
-            uprv_strcat(fn,outDir);
-            if(outDir[uprv_strlen(outDir)-1]!=U_FILE_SEP_CHAR){
-                uprv_strcat(fn,U_FILE_SEP_STRING);
+            if(outDir ){
+                uprv_strcat(fn,outDir);
+                if(outDir[uprv_strlen(outDir)-1]!=U_FILE_SEP_CHAR){
+                    uprv_strcat(fn,U_FILE_SEP_STRING);
+                }
             }
             uprv_strcat(fn,fileName);
             type = "new ICUListResourceBundle.ResourceBinary(";
@@ -588,56 +544,54 @@ bin_write_java( struct SResource *res, UErrorCode *status) {
 
         }else{
 
-                srcLen = res->u.fBinaryValue.fLength;
-                tgtLen = srcLen * 2;
-                target = (uint16_t*)malloc(sizeof(uint16_t) * tgtLen);
-                saveTarget  = target;
-                if(target){
-                    tgtLen = byteArrayToRLEString(res->u.fBinaryValue.fData,
-                                                  srcLen,target, tgtLen,status);
-                    if(U_FAILURE(*status)){
-                         printf("Could not encode got error : %s \n", u_errorName(*status));
-                         return;
-                    }
+            srcLen = res->u.fBinaryValue.fLength;
+            tgtLen = srcLen * 2;
+            target = (uint16_t*)malloc(sizeof(uint16_t) * tgtLen);
+            saveTarget  = target;
+            if(target){
+                tgtLen = byteArrayToRLEString(res->u.fBinaryValue.fData,
+                                              srcLen,target, tgtLen,status);
+                if(U_FAILURE(*status)){
+                     printf("Could not encode got error : %s \n", u_errorName(*status));
+                     return;
+                }
 #if DEBUG
-                    /***************** Test Roundtripping *********************/
-                    {
-                        int32_t myTargetLen = rleStringToByteArray(target,tgtLen,NULL,0,status);
-                        uint8_t* myTarget = (uint8_t*) malloc(sizeof(uint8_t) * myTargetLen);
+                /***************** Test Roundtripping *********************/
+                {
+                    int32_t myTargetLen = rleStringToByteArray(target,tgtLen,NULL,0,status);
+                    uint8_t* myTarget = (uint8_t*) malloc(sizeof(uint8_t) * myTargetLen);
 
-                        /* test for NULL */
-                        if(myTarget == NULL) {
-                            *status = U_MEMORY_ALLOCATION_ERROR;
-                            return; 
-                        }
-
-                        int i=0;
-                        int32_t retVal=0;
-
-                        *status = U_ZERO_ERROR;
-                        retVal=rleStringToByteArray(target,tgtLen,myTarget,myTargetLen,status);
-                        if(U_SUCCESS(*status)){
-
-                            for(i=0; i< srcLen;i++){
-                                if(res->u.fBinaryValue.fData[i]!= myTarget[i]){
-                                    printf("the encoded string cannot be decoded Expected : 0x%02X Got : %: 0x%02X at %i\n",res->u.fBinaryValue.fData[i],myTarget[i], i);
-                                }
-                            }
-                        }else{
-                            printf("Could not decode got error : %s \n", u_errorName(*status));
-                        }
-                        free(myTarget);
-
+                    /* test for NULL */
+                    if(myTarget == NULL) {
+                        *status = U_MEMORY_ALLOCATION_ERROR;
+                        return; 
                     }
+
+                    int i=0;
+                    int32_t retVal=0;
+
+                    *status = U_ZERO_ERROR;
+                    retVal=rleStringToByteArray(target,tgtLen,myTarget,myTargetLen,status);
+                    if(U_SUCCESS(*status)){
+
+                        for(i=0; i< srcLen;i++){
+                            if(res->u.fBinaryValue.fData[i]!= myTarget[i]){
+                                printf("the encoded string cannot be decoded Expected : 0x%02X Got : %: 0x%02X at %i\n",res->u.fBinaryValue.fData[i],myTarget[i], i);
+                            }
+                        }
+                    }else{
+                        printf("Could not decode got error : %s \n", u_errorName(*status));
+                    }
+                    free(myTarget);
+
+                }
 #endif
 
-                }else{
-                    *status = U_MEMORY_ALLOCATION_ERROR;
-                    return;
-                }
-
+            }else{
+                *status = U_MEMORY_ALLOCATION_ERROR;
+                return;
             }
-        
+
             write_tabs(out);
             T_FileStream_write(out, type, (int32_t)uprv_strlen(type));
             T_FileStream_write(out, "\n", 1);
@@ -648,6 +602,9 @@ bin_write_java( struct SResource *res, UErrorCode *status) {
             T_FileStream_write(out, "),\n", 3);
 
             free(target);
+
+        }
+    
    }else{
         write_tabs(out);
         T_FileStream_write(out,type,uprv_strlen(type));
