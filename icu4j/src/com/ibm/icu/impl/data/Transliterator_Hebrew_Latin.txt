@@ -23,7 +23,7 @@
 # For more information, see"
 #   http://oss.software.ibm.com/icu/userguide/Transliteration.html
 
-:: [[:Hebrew:] [\u05B0-\u05B9\u05BB-\u05BC\u05C1-\u05C2\u2135-\u2138̄\u05BF] - [\u05BD]] ;
+:: [[:Hebrew:] [:^ccc=0:] [\u05B0-\u05B9\u05BB-\u05BC\u05C1-\u05C2\u2135-\u2138̄\u05BF] - [\u05BD]] ;
 :: nfkd (nfc) ;
 $letterAfter = [:M:]* [:L:] ;
 
@@ -68,15 +68,28 @@ $letterAfter = [:M:]* [:L:] ;
 ׂ <> ̂ ; # sin dot -> s
 
 # points
-ֲ <> à ;
-ָ <> á ;
-ֱ <> è ;
-ֵ <> é ;
-ְ <> ê ;
-ִ <> i ;
-ֹ <> ò ;
-ֻ <> u ;
+$above = [^[:ccc=0:][:ccc=230:]]*;
 
+‎ֲ‎ > à ;
+‎ֲ‎ $1< a ($above)  ̀;
+
+‎ָ‎ > á ;
+‎ָ‎  $1 < a ($above)  ́;
+
+‎ֱ‎ > è ;
+‎ֱ‎  $1 < e ($above)  ̀;
+
+‎ֵ‎ > é ;
+‎ֵ‎  $1 < e ($above)   ́;
+
+‎ְ‎ > e ̆ ;
+‎ְ‎  $1 < e ($above)   ̆;
+
+‎ֹ‎ > ò ;
+‎ֹ‎  $1 < o ($above)   ̀;
+
+ִ <> i ;
+ֻ <> u ;
 ַ <> a ;
 ֶ <> e ;
 ֳ <> o ;
@@ -93,4 +106,4 @@ $letterAfter = [:M:]* [:L:] ;
 
 :: (lower);
 :: nfc (nfd) ;
-:: ([[:Latin:] [\u02BB-\u02BC\u0300-\u0302\u0307\u030C\u0327\u0331\u0340-\u0341    ̄ ]]);
+:: ([[:Latin:] [:^ccc=0:] [\u02BB-\u02BC\u0300-\u0302\u0307\u030C\u0327\u0331\u0340-\u0341    ̄ ]]);
