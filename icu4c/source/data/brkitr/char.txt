@@ -15,9 +15,9 @@
 #
 $CR = \r;
 $LF = \n;
-$Control    = [[:Zl:] [:Zp:] [:Cc:] [:Cf:]];
+$Control    = [[:Zl:] [:Zp:] [:Cc:] [:Cf:] - [:Grapheme_Extend = TRUE:]];
 
-$Extend     = [[:Grapheme_Extend = TRUE:] - [$Control]];
+$Extend     = [[:Grapheme_Extend = TRUE:]];
 
 #
 # Korean Syllable Definitions
