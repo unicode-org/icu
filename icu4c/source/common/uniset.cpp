@@ -59,10 +59,10 @@ static const UChar PERL_CLOSE[]  = { 125,0 };    // "}"
 static const UChar NAME_OPEN[]   = { 92,78,0 };  // "\\N"
 
 // Special property set IDs
-static const char* ANY   = "ANY";   // [\u0000-\U0010FFFF]
-static const char* ASCII = "ASCII"; // [\u0000-\u007F]
+static const char ANY[]   = "ANY";   // [\u0000-\U0010FFFF]
+static const char ASCII[] = "ASCII"; // [\u0000-\u007F]
 
-static const char* NAME_PROP = "na"; // Unicode name property alias
+static const char NAME_PROP[] = "na"; // Unicode name property alias
 
 // TEMPORARY: Remove when deprecated category code constructor is removed.
 static const UChar CATEGORY_NAMES[] = {
@@ -2570,7 +2570,7 @@ void UnicodeSet::applyFilter(UnicodeSet::Filter filter,
     }
 }
 
-UBool mungeCharName(char* dst, const char* src, int32_t dstCapacity) {
+static UBool mungeCharName(char* dst, const char* src, int32_t dstCapacity) {
     /* Note: we use ' ' in compiler code page */
     int32_t j = 0;
     char ch;
