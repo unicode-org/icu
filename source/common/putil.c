@@ -12,12 +12,12 @@
 *   04/14/97    aliu        Creation.
 *   04/24/97    aliu        Added getDefaultDataDirectory() and
 *                            getDefaultLocaleID().
-*   04/28/97    aliu        Rewritten to assume Unix and apply general methods 
+*   04/28/97    aliu        Rewritten to assume Unix and apply general methods
 *                            for assumed case.  Non-UNIX platforms must be
 *                            special-cased.  Rewrote numeric methods dealing
 *                            with NaN and Infinity to be platform independent
 *                             over all IEEE 754 platforms.
-*   05/13/97    aliu        Restored sign of timezone 
+*   05/13/97    aliu        Restored sign of timezone
 *                            (semantics are hours West of GMT)
 *   06/16/98    erm         Added IEEE_754 stuff, cleaned up isInfinite, isNan,
 *                             nextDouble..
@@ -25,7 +25,7 @@
 *   08/13/98    stephen     Added isNegativeInfinity, isPositiveInfinity
 *   08/24/98    stephen     Added longBitsFromDouble
 *   09/08/98    stephen     Minor changes for Mac Port
-*   03/02/99    stephen     Removed openFile().  Added AS400 support.  
+*   03/02/99    stephen     Removed openFile().  Added AS400 support.
 *                            Fixed EBCDIC tables
 *   04/15/99    stephen     Converted to C.
 *   06/28/99    stephen     Removed mutex locking in u_isBigEndian().
@@ -106,7 +106,7 @@
 #   include <link.h>
 #elif defined(HPUX)
 #   include <dl.h>
-#endif 
+#endif
 
 /* Define the extension for data files, again... */
 #define DATA_TYPE "dat"
@@ -201,7 +201,7 @@ uprv_getUTCtime()
   for getNaN and getInfinity, and false for isNaN and isInfinite.
   ---------------------------------------------------------------------------*/
 
-UBool 
+UBool
 uprv_isNaN(double number)
 {
 #if IEEE_754
@@ -220,12 +220,12 @@ uprv_isNaN(double number)
     /* here.  Note that the y value must be non-zero; if it is zero, then we*/
     /* have infinity.*/
 
-    uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number, 
+    uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number,
                               sizeof(uint32_t));
-    uint32_t lowBits  = *(uint32_t*)u_bottomNBytesOfDouble(&number, 
+    uint32_t lowBits  = *(uint32_t*)u_bottomNBytesOfDouble(&number,
                              sizeof(uint32_t));
 
-    return (UBool)(((highBits & 0x7FF00000L) == 0x7FF00000L) && 
+    return (UBool)(((highBits & 0x7FF00000L) == 0x7FF00000L) &&
       (((highBits & 0x000FFFFFL) != 0) || (lowBits != 0)));
 
 #elif defined(OS390)
@@ -260,10 +260,10 @@ uprv_isInfinite(double number)
 
     /*   7FF0 0000 0000 0000*/
     /*   FFF0 0000 0000 0000*/
-  
-    uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number, 
+
+    uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number,
                         sizeof(uint32_t));
-    uint32_t lowBits  = *(uint32_t*)u_bottomNBytesOfDouble(&number, 
+    uint32_t lowBits  = *(uint32_t*)u_bottomNBytesOfDouble(&number,
                         sizeof(uint32_t));
 
     return (UBool)(((highBits  & ~SIGN) == 0x7FF00000L) &&
@@ -285,7 +285,7 @@ uprv_isInfinite(double number)
 #endif
 }
 
-UBool   
+UBool
 uprv_isPositiveInfinity(double number)
 {
 #if IEEE_754 || defined(OS390)
@@ -295,7 +295,7 @@ uprv_isPositiveInfinity(double number)
 #endif
 }
 
-UBool   
+UBool
 uprv_isNegativeInfinity(double number)
 {
 #if IEEE_754 || defined(OS390)
@@ -309,7 +309,7 @@ uprv_isNegativeInfinity(double number)
 #endif
 }
 
-double 
+double
 uprv_getNaN()
 {
 #if IEEE_754 || defined(OS390)
@@ -318,7 +318,7 @@ uprv_getNaN()
         if( ! fgNaNInitialized) {
             int i;
             int8_t* p = (int8_t*)&fgNan;
-            for(i = 0; i < sizeof(double); ++i) 
+            for(i = 0; i < sizeof(double); ++i)
                 *p++ = 0;
             *(int16_t*)u_topNBytesOfDouble(&fgNan, sizeof(NAN_TOP)) = NAN_TOP;
             fgNaNInitialized = TRUE;
@@ -334,7 +334,7 @@ uprv_getNaN()
 #endif
 }
 
-double 
+double
 uprv_getInfinity()
 {
 #if IEEE_754 || defined(OS390)
@@ -342,7 +342,7 @@ uprv_getInfinity()
     {
         int i;
         int8_t* p = (int8_t*)&fgInf;
-        for(i = 0; i < sizeof(double); ++i) 
+        for(i = 0; i < sizeof(double); ++i)
             *p++ = 0;
         *(int16_t*)u_topNBytesOfDouble(&fgInf, sizeof(INF_TOP)) = INF_TOP;
         fgInfInitialized = TRUE;
@@ -356,31 +356,31 @@ uprv_getInfinity()
 #endif
 }
 
-double 
+double
 uprv_floor(double x)
 {
     return floor(x);
 }
 
-double 
+double
 uprv_ceil(double x)
 {
     return ceil(x);
 }
 
-double 
+double
 uprv_fabs(double x)
 {
     return fabs(x);
 }
 
-double 
+double
 uprv_modf(double x, double* y)
 {
     return modf(x, y);
 }
 
-double 
+double
 uprv_fmod(double x, double y)
 {
     return fmod(x, y);
@@ -418,7 +418,7 @@ uprv_pow10(int32_t x)
  * and is preferred; the latter may work on platforms where the former
  * fails, but will introduce inaccuracies.
  */
-double 
+double
 uprv_IEEEremainder(double x, double p)
 {
 #if IEEE_754
@@ -438,7 +438,7 @@ uprv_IEEEremainder(double x, double p)
     hx &= 0x7fffffff;
 
     /* purge off exception values */
-    if((hp|lp) == 0) 
+    if((hp|lp) == 0)
     {
         return (x*p) / (x*p);     /* p = 0 */
     }
@@ -449,11 +449,11 @@ uprv_IEEEremainder(double x, double p)
         return uprv_getNaN();
     }
 
-    if(hp <= 0x7fdfffff) 
+    if(hp <= 0x7fdfffff)
     {
         x = uprv_fmod(x, p + p);    /* now x < 2p */
     }
-    if(((hx-hp)|(lx-lp)) == 0) 
+    if(((hx-hp)|(lx-lp)) == 0)
     {
         return 0.0 * x;
     }
@@ -462,7 +462,7 @@ uprv_IEEEremainder(double x, double p)
     if (hp < 0x00200000) {
         if(x + x > p) {
             x -= p;
-            if(x + x >= p) 
+            if(x + x >= p)
                 x -= p;
         }
     }
@@ -470,7 +470,7 @@ uprv_IEEEremainder(double x, double p)
         p_half = 0.5 * p;
         if(x > p_half) {
             x -= p;
-            if(x >= p_half) 
+            if(x >= p_half)
                 x -= p;
         }
     }
@@ -505,7 +505,7 @@ uprv_IEEEremainder(double x, double p)
 #endif
 }
 
-double 
+double
 uprv_fmax(double x, double y)
 {
 #if IEEE_754
@@ -518,7 +518,7 @@ uprv_fmax(double x, double y)
     /* check for -0 and 0*/
     lowBits = *(uint32_t*) u_bottomNBytesOfDouble(&x, sizeof(uint32_t));
     if(x == 0.0 && y == 0.0 && (lowBits & SIGN))
-        return y; 
+        return y;
 
     return (x > y ? x : y);
 #else
@@ -528,13 +528,13 @@ uprv_fmax(double x, double y)
 #endif
 }
 
-int32_t 
+int32_t
 uprv_max(int32_t x, int32_t y)
 {
     return (x > y ? x : y);
 }
 
-double 
+double
 uprv_fmin(double x, double y)
 {
 #if IEEE_754
@@ -547,7 +547,7 @@ uprv_fmin(double x, double y)
     /* check for -0 and 0*/
     lowBits = *(uint32_t*) u_bottomNBytesOfDouble(&y, sizeof(uint32_t));
     if(x == 0.0 && y == 0.0 && (lowBits & SIGN))
-        return y; 
+        return y;
 
     return (x > y ? y : x);
 #else
@@ -557,7 +557,7 @@ uprv_fmin(double x, double y)
 #endif
 }
 
-int32_t 
+int32_t
 uprv_min(int32_t x, int32_t y)
 {
     return (x > y ? y : x);
@@ -570,7 +570,7 @@ uprv_min(int32_t x, int32_t y)
  * floor(3.3) = 3, floor(-3.3) = -4
  * ceil(3.3) = 4, ceil(-3.3) = -3
  */
-double 
+double
 uprv_trunc(double d)
 {
 #if IEEE_754
@@ -594,7 +594,7 @@ uprv_trunc(double d)
 #endif
 }
 
-void 
+void
 uprv_longBitsFromDouble(double d, int32_t *hi, uint32_t *lo)
 {
     *hi = *(int32_t*)u_topNBytesOfDouble(&d, sizeof(int32_t));
@@ -609,7 +609,7 @@ uprv_longBitsFromDouble(double d, int32_t *hi, uint32_t *lo)
  * must be positive and finite.
  * (Thanks to Alan Liu for supplying this function.)
  */
-int16_t 
+int16_t
 uprv_log10(double d)
 {
 #ifdef OS400
@@ -636,7 +636,7 @@ uprv_log10(double d)
 #endif
 }
 
-int32_t 
+int32_t
 uprv_digitsAfterDecimal(double x)
 {
     char buffer[20];
@@ -679,7 +679,7 @@ uprv_digitsAfterDecimal(double x)
     return numDigits;
 }
 
-double 
+double
 uprv_nextDouble(double d, UBool next)
 {
 #if IEEE_754
@@ -695,37 +695,37 @@ uprv_nextDouble(double d, UBool next)
   if (uprv_isNaN(d)) {
     return d;
   }
-  
+
   /* zero's are also a special case */
   if (d == 0.0) {
     double smallestPositiveDouble = 0.0;
-    uint32_t *plowBits = 
-      (uint32_t *)u_bottomNBytesOfDouble(&smallestPositiveDouble, 
+    uint32_t *plowBits =
+      (uint32_t *)u_bottomNBytesOfDouble(&smallestPositiveDouble,
                      sizeof(uint32_t));
-    
+
     *plowBits = 1;
 #ifdef OS400
     /* Don't get an underflow exception */
     *(plowBits-1) = 0x00100000;
 #endif
-    
+
     if (next) {
       return smallestPositiveDouble;
     } else {
       return -smallestPositiveDouble;
     }
   }
-  
+
   /* if we get here, d is a nonzero value */
-  
+
   /* hold all bits for later use */
   highBits = *(int32_t*)u_topNBytesOfDouble(&d, sizeof(uint32_t));
   lowBits = *(uint32_t*)u_bottomNBytesOfDouble(&d, sizeof(uint32_t));
-  
+
   /* strip off the sign bit */
   highMagnitude = highBits & ~SIGN;
   lowMagnitude = lowBits;
-  
+
   /* if next double away from zero, increase magnitude */
   if ((highBits >= 0) == next) {
     if (highMagnitude != 0x7FF00000L || lowMagnitude != 0x00000000L) {
@@ -751,12 +751,12 @@ uprv_nextDouble(double d, UBool next)
     }
 #endif
   }
-  
+
   /* construct result and return */
   signBit = highBits & SIGN;
   highResult = (uint32_t *)u_topNBytesOfDouble(&result, sizeof(uint32_t));
   lowResult  = (uint32_t *)u_bottomNBytesOfDouble(&result, sizeof(uint32_t));
-  
+
   *highResult = signBit | highMagnitude;
   *lowResult  = lowMagnitude;
   return result;
@@ -764,7 +764,7 @@ uprv_nextDouble(double d, UBool next)
 
   /* This is the portable implementation...*/
   /* a small coefficient within the precision of the mantissa*/
-  static const double smallValue = 1e-10;  
+  static const double smallValue = 1e-10;
   double epsilon = ((d<0)?-d:d) * smallValue; /* first approximation*/
   double last_eps, sum;
 
@@ -812,7 +812,7 @@ static char* u_bottomNBytesOfDouble(double* d, int n)
   ---------------------------------------------------------------------------*/
 
 /* Time zone utilities */
-void 
+void
 uprv_tzset()
 {
 #ifdef U_TZSET
@@ -822,7 +822,7 @@ uprv_tzset()
 #endif
 }
 
-int32_t 
+int32_t
 uprv_timezone()
 {
 #ifdef U_TIMEZONE
@@ -840,7 +840,7 @@ uprv_timezone()
     memcpy( &tmrec, gmtime(&t), sizeof(tmrec) );
     t2 = mktime(&tmrec);                 /* GMT (or UTC) in seconds*/
     tdiff = t2 - t1;
-    /* imitate NT behaviour, which returns same timezone offset to GMT for 
+    /* imitate NT behaviour, which returns same timezone offset to GMT for
        winter and summer*/
     if (dst_checked)
         tdiff += 3600;
@@ -848,7 +848,7 @@ uprv_timezone()
 #endif
 }
 
-char* 
+char*
 uprv_tzname(int n)
 {
 #ifdef U_TZNAME
@@ -863,475 +863,33 @@ uprv_tzname(int n)
 static UBool
 gHaveDataDirectory=FALSE;
 
-static char
-gDataDirectory[1024];
+static const char *gDataDirectory = "";
 
 /*
- * Here, we use a mutex to make sure that setting the data directory
- * is thread-safe; however, reading it after calling u_getDataDirectory()
- * may still occur while it is (re)set and is therefore not thread-safe.
- * The best is to not call it after the initialization.
+ * Set the data directory.
+ *    Make a copy of the passed string, and set the global data dir to point to it.
+ *    Deliberately leak any previously set string, on the chance that some code
+ *      may have called getDataDirectory() and still be using the old string.
  */
 U_CAPI void U_EXPORT2
 u_setDataDirectory(const char *directory) {
-    if(directory!=NULL) {
+    char *newDataDir;
+
+    if(directory!=NULL && *directory != 0) {
         int length=uprv_strlen(directory);
-
-        if(length<sizeof(gDataDirectory)-1) {
-            umtx_lock(NULL);
-            if(length==0) {
-                *gDataDirectory=0;
-            } else {
-                uprv_memcpy(gDataDirectory, directory, length);
-
-                /* terminate the directory with a separator (/ or \) */
-                if(gDataDirectory[length-1]!=U_FILE_SEP_CHAR) {
-                    gDataDirectory[length++]=U_FILE_SEP_CHAR;
-                }
-
-                /* zero-terminate it */
-                gDataDirectory[length]=0;
-            }
-            gHaveDataDirectory=TRUE;
-            umtx_unlock(NULL);
+        newDataDir = (char *)uprv_malloc(length + 2);
+        uprv_strcpy(newDataDir, directory);
+        if(newDataDir[length-1]!=U_FILE_SEP_CHAR) {
+            newDataDir[length++]=U_FILE_SEP_CHAR;
+            newDataDir[length] = 0;
         }
+
+        gDataDirectory = newDataDir;
+        gHaveDataDirectory=TRUE;
     }
 }
 
 
-#ifndef ICU_DATA_DIR
-
-# if defined(XP_MAC)
-
-/* Kouichi added the following internal functions for MAC porting */
-
-pascal  OSErr   FSMakeFSSpecCompat(short vRefNum,
-                                   long dirID,
-                                   ConstStr255Param fileName,
-                                   FSSpec *spec)
-{
-    OSErr   result;
-    
-    /* Let the file system create the FSSpec if it can since it does the job */
-    /* much more efficiently than I can. */
-    result = FSMakeFSSpec(vRefNum, dirID, fileName, spec);
-    
-    /* Fix a bug in Macintosh PC Exchange's MakeFSSpec code where 0 is */
-    /* returned in the parID field when making an FSSpec to the volume's */
-    /* root directory by passing a full pathname in MakeFSSpec's */
-    /* fileName parameter. Fixed in Mac OS 8.1 */
-    if ( (result == noErr) && (spec->parID == 0) )
-        spec->parID = fsRtParID;
-    
-    return ( result );
-}
-
-
-/* FSpGetFullPath */
-pascal  OSErr   FSpGetFullPath(const FSSpec *spec,
-                               short *fullPathLength,
-                               Handle *fullPath)
-{
-    OSErr       result;
-    OSErr       realResult;
-    FSSpec      tempSpec;
-    CInfoPBRec  pb;
-
-    *fullPathLength = 0;
-    *fullPath = NULL;
-
-    /* Default to noErr */
-    realResult = result = noErr;
-
-    /* work around Nav Services "bug" (it returns invalid FSSpecs with empty names) */
-    if ( spec->name[0] == 0 )
-    {
-        result = FSMakeFSSpecCompat(spec->vRefNum, spec->parID, spec->name, &tempSpec);
-    }
-    else
-    {
-        /* Make a copy of the input FSSpec that can be modified */
-        BlockMoveData(spec, &tempSpec, sizeof(FSSpec));
-    }
-
-    if ( result == noErr )
-    {
-        if ( tempSpec.parID == fsRtParID )
-        {
-            /* The object is a volume */
-            
-            /* Add a colon to make it a full pathname */
-            ++tempSpec.name[0];
-            tempSpec.name[tempSpec.name[0]] = ':';
-            
-            /* We're done */
-            result = PtrToHand(&tempSpec.name[1], fullPath, tempSpec.name[0]);
-        }
-        else
-        {
-            /* The object isn't a volume */
-            
-            /* Is the object a file or a directory? */
-            pb.dirInfo.ioNamePtr = tempSpec.name;
-            pb.dirInfo.ioVRefNum = tempSpec.vRefNum;
-            pb.dirInfo.ioDrDirID = tempSpec.parID;
-            pb.dirInfo.ioFDirIndex = 0;
-            result = PBGetCatInfoSync(&pb);
-            /* Allow file/directory name at end of path to not exist. */
-            realResult = result;
-            if ( (result == noErr) || (result == fnfErr) )
-            {
-                /* if the object is a directory, append a colon so full pathname ends with colon */
-                if ( (result == noErr) && (pb.hFileInfo.ioFlAttrib & kioFlAttribDirMask) != 0 )
-                {
-                    ++tempSpec.name[0];
-                    tempSpec.name[tempSpec.name[0]] = ':';
-                }
-                
-                /* Put the object name in first */
-                result = PtrToHand(&tempSpec.name[1], fullPath, tempSpec.name[0]);
-                if ( result == noErr )
-                {
-                    /* Get the ancestor directory names */
-                    pb.dirInfo.ioNamePtr = tempSpec.name;
-                    pb.dirInfo.ioVRefNum = tempSpec.vRefNum;
-                    pb.dirInfo.ioDrParID = tempSpec.parID;
-                    do  /* loop until we have an error or find the root directory */
-                    {
-                        pb.dirInfo.ioFDirIndex = -1;
-                        pb.dirInfo.ioDrDirID = pb.dirInfo.ioDrParID;
-                        result = PBGetCatInfoSync(&pb);
-                        if ( result == noErr )
-                        {
-                            /* Append colon to directory name */
-                            ++tempSpec.name[0];
-                            tempSpec.name[tempSpec.name[0]] = ':';
-                            
-                            /* Add directory name to beginning of fullPath */
-                            (void) Munger(*fullPath, 0, NULL, 0, &tempSpec.name[1], tempSpec.name[0]);
-                            result = MemError();
-                        }
-                    } while ( (result == noErr) && (pb.dirInfo.ioDrDirID != fsRtDirID) );
-                }
-            }
-        }
-    }
-
-    if ( result == noErr )
-    {
-        /* Return the length */
-        *fullPathLength = GetHandleSize(*fullPath);
-        result = realResult;    /* return realResult in case it was fnfErr */
-    }
-    else
-    {
-        /* Dispose of the handle and return NULL and zero length */
-        if ( *fullPath != NULL )
-        {
-            DisposeHandle(*fullPath);
-        }
-    }
-
-    return result;
-}
-# endif /* XP_MAC */
-
-/*
- * get the system drive or volume path
- * (Windows: e.g. "C:" or "D:")
- * do not terminate with a U_FILE_SEP_CHAR separator
- * return the length of the path, or 0 if none
- */
-static int
-getSystemPath(char *path, int size) {
-#if defined(XP_MAC)
-    int32_t dirID;
-    OSErr err;
-    int16_t volNum;
-
-    path[0]=0;
-    err=HGetVol((unsigned char*)path, &volNum, &dirID);
-    if(err==noErr) {
-        int length=(uint8_t)path[0];
-        if(length>0) {
-            /* convert the Pascal string to a C string */
-            uprv_memmove(path, path+1, length);
-            path[length]=0;
-        }
-        return length;
-    }
-
-#elif defined(WIN32)
-    if(GetSystemDirectory(path, size)>=2 && path[1]==':') {
-        /* remove the rest of the path - "\\winnt\\system32" or similar */
-        path[2]=0;
-        return 2;
-    }
-
-#elif defined(OS2)
-    APIRET rc;
-    ULONG bootDrive=0;  /* 1=A, 2=B, 3=C, ... */
-
-    rc=DosQuerySysInfo(QSV_BOOT_DRIVE, QSV_BOOT_DRIVE, (PVOID)&bootDrive, sizeof(ULONG));
-    if(rc==NO_ERROR) {
-        /* convert the numeric boot drive to a string */
-        path[0]='A'+bootDrive-1;
-        path[1]=':';
-        path[2]=0;
-        return 2;
-    }
-#endif
-
-    return 0;
-}
-
-#endif /* ICU_DATA_DIR not defined */
-
-/*
- * get the path to the ICU dynamic library
- * do not terminate with a U_FILE_SEP_CHAR separator
- * return the length of the path, or 0 if none
- */
-static int
-getLibraryPath(char *path, int size) {
-#ifdef WIN32
-    HINSTANCE mod=GetModuleHandle("icuuc.dll");
-    if(mod!=NULL) {
-        if(GetModuleFileName(mod, path, size)>0) {
-            /* remove the basename and the last file separator */
-            char *lastSep=uprv_strrchr(path, U_FILE_SEP_CHAR);
-            if(lastSep!=NULL) {
-                *lastSep=0;
-                return lastSep-path;
-            }
-        }
-    }
-
-#elif defined(OS2)
-    HMODULE mod=NULLHANDLE;
-    APIRET rc=DosQueryModuleHandle("icuuc.dll", &mod);
-    if(rc==NO_ERROR) {
-        rc=DosQueryModuleName(mod, (LONG)size, path);
-        if(rc==NO_ERROR) {
-            /* remove the basename and the last file separator */
-            char *lastSep=uprv_strrchr(path, U_FILE_SEP_CHAR);
-            if(lastSep!=NULL) {
-                *lastSep=0;
-                return lastSep-path;
-            }
-        }
-    }
-
-#elif defined(U_SOLARIS)
-    void *handle=dlopen(U_COMMON_LIBNAME, RTLD_LAZY); /* "libicu-uc.so" */
-    if(handle!=NULL) {
-        Link_map *p=NULL;
-        char *s;
-        int rc, length=0;
-
-        /* get the Link_map list */
-        rc=dlinfo(handle, RTLD_DI_LINKMAP, (void *)&p);
-        if(rc>=0) {
-            /* search for the list item for the library itself */
-            while(p!=NULL) {
-                s=uprv_strstr(p->l_name, U_COMMON_LIBNAME); /* "libicu-uc.so" */
-                if(s!=NULL) {
-                    if(s>p->l_name) {
-                        /* copy the path, without the basename and the last separator */
-                        length=(s-p->l_name)-1;
-                        if(0<length && length<size) {
-                            uprv_memcpy(path, p->l_name, length);
-                            path[length]=0;
-                        } else {
-                            length=0;
-                        }
-                    }
-                    break;
-                }
-                p=p->l_next;
-            }
-        }
-        dlclose(handle);
-        return length;
-    }
-
-#elif defined(AIX)
-    void *handle=(void*)load(U_COMMON_LIBNAME, L_LIBPATH_EXEC, "."); /* "libicu-uc.a" */
-    if(handle!=NULL) {
-        uint8_t buffer[4096];
-        struct ld_info *p=NULL;
-        char *s;
-        int rc, length=0;
-
-        /* copy the linked list of loaded libraries into the buffer */
-        rc=loadquery(L_GETINFO, buffer, sizeof(buffer));
-        if(rc>=0) {
-            /* search for the list item for the library itself */
-            p=(struct ld_info *)buffer;
-            for(;;) {
-                /* advance (ignore the first list item) */
-                if(p->ldinfo_next==0) {
-                    break;
-                }
-                p=(struct ld_info *)((uint8_t *)p+p->ldinfo_next);
-
-                s=uprv_strstr(p->ldinfo_filename, U_COMMON_LIBNAME); /*  "libicuuc.a"    */
-                if(s!=NULL) {
-                    if(s>p->ldinfo_filename) {
-                        /* copy the path, without the basename and the last separator */
-                        length=(s-p->ldinfo_filename)-1;
-                        if(0<length && length<size) {
-                            uprv_memcpy(path, p->ldinfo_filename, length);
-                            path[length]=0;
-                        } else {
-                            length=0;
-                        }
-                    }
-                    break;
-                }
-                /* p=p->l_next; */
-            }
-        }
-        unload(handle);
-        return length;
-    }
-
-#elif defined(HPUX)
-    {
-        struct shl_descriptor *p=NULL;
-        char *s;
-        int i=1, rc, length=0;
-
-        /* walk the list of shared libraries */
-        /* search for the list item for the library itself */
-        for(;;) {
-            rc=shl_get(i, &p);
-            if(rc<0) {
-                break;
-            }
-
-            s=uprv_strstr(p->filename, U_COMMON_LIBNAME);
-            if(s!=NULL) {
-                if(s>p->filename) {
-                    /* copy the path, without the basename and the last separator */
-                    length=(s-p->filename)-1;
-                    if(0<length && length<size) {
-                        uprv_memcpy(path, p->filename, length);
-                        path[length]=0;
-                    } else {
-                        length=0;
-                    }
-                }
-                break;
-            }
-            ++i;
-        }
-        return length;
-    }
-
-#elif defined(OS390)
-#elif defined(OS400)
-#elif defined(XP_MAC)
-#elif defined(U_LINUX)
-#elif defined(TANDEM)
-#elif defined(U_POSIX)
-#endif
-
-    return 0;
-}
-
-#ifdef WIN32
-#   define LIB_PATH_VAR "PATH"
-#   define LIB_FILENAME "icuuc.dll"
-#elif defined(U_LINUX)
-#   define LIB_PATH_VAR "LD_LIBRARY_PATH"
-#   define LIB_FILENAME U_COMMON_LIBNAME
-#elif defined(OS2)
-#   define LIB_PATH_VAR "LIBPATH"
-#   define LIB_FILENAME "icuuc.dll"
-#elif defined(OS390)
-#   define LIB_PATH_VAR "LIBPATH"
-#   define LIB_FILENAME "libicuuc.a"
-#elif defined(TANDEM)
-#   define LIB_PATH_VAR "LIBPATH"
-#   define LIB_FILENAME "libicuuc.a"
-#elif defined(OS400)
-#elif defined(XP_MAC)
-#elif defined(U_SOLARIS)
-#elif defined(AIX)
-#elif defined(HPUX)
-#elif defined(U_POSIX)
-#   define LIB_PATH_VAR "LIBPATH"
-#   define LIB_FILENAME U_COMMON_LIBNAME
-#endif
-
-/*
- * search for the ICU dynamic library and set the path
- * do not terminate with a U_FILE_SEP_CHAR separator
- * return the length of the path, or 0 if none
- */
-static int
-findLibraryPath(char *path, int size) {
-    /* common implementation for searching the library path */
-#ifdef LIB_FILENAME
-    const char *libPath=getenv(LIB_PATH_VAR);
-
-    if(libPath!=NULL) {
-        /* loop over all paths */
-        FileStream *f;
-        const char *end;
-        int length;
-
-        for(;;) {
-            /* find the end of the path */
-            end=libPath;
-            while(*end!=0 && *end!=U_PATH_SEP_CHAR) {
-                ++end;
-            }
-
-            if(end!=libPath) {
-                /* try this non-empty path */
-                length=end-libPath;
-
-                /* do not terminate the path */
-                if(*(end-1)==U_FILE_SEP_CHAR) {
-                    --length;
-                }
-
-                /* copy the path and add the library filename */
-                uprv_memcpy(path, libPath, length);
-                uprv_strcpy(path+length, U_FILE_SEP_STRING LIB_FILENAME);
-
-                /* does this file exist in this path? */
-                f=T_FileStream_open(path, "rb");
-                if(f!=NULL) {
-                    /* yes, clean up and return */
-                    T_FileStream_close(f);
-                    path[length]=0;
-                    return length;
-                }
-            }
-
-            if(*end==0) {
-                break;  /* no more path */
-            }
-
-            /* *end==U_PATH_SEP_CHAR, go to the next path */
-            libPath=end+1;
-        }
-    }
-#endif
-    return 0;
-}
-
-/* define a path for fallbacks */
-#ifdef WIN32
-#   define FALLBACK_PATH U_FILE_SEP_STRING ".." U_FILE_SEP_STRING "data"
-#elif defined(XP_MAC)
-#   define FALLBACK_PATH U_FILE_SEP_STRING "ICU" U_FILE_SEP_STRING U_ICU_VERSION U_FILE_SEP_STRING
-#else
-#   define FALLBACK_PATH U_FILE_SEP_STRING "lib" U_FILE_SEP_STRING "icu" U_FILE_SEP_STRING U_ICU_VERSION U_FILE_SEP_STRING
-#endif
 
 /* #include <stdio.h> */
 /* #include <unistd.h> */
@@ -1344,170 +902,108 @@ findLibraryPath(char *path, int size) {
 
 U_CAPI const char * U_EXPORT2
 u_getDataDirectory(void) {
+    const char *path = NULL;
+    char pathBuffer[1024];
+
     /* if we have the directory, then return it immediately */
-    if(!gHaveDataDirectory) {
-        /* we need to look for it */
-        char pathBuffer[1024];
-        const char *path = NULL;
-        int length;
-
-#       if !defined(XP_MAC)
-            /* first try to get the environment variable */
-            path=getenv("ICU_DATA");
-#       else    /* XP_MAC */
-        {
-            OSErr myErr;
-            short vRef;
-            long  dir,newDir;
-            int16_t volNum;
-            Str255 xpath;
-            FSSpec spec;
-            short  len;
-            Handle full;
-
-            xpath[0]=0;
-
-            myErr = HGetVol(xpath, &volNum, &dir);
-
-            if(myErr == noErr) {
-                myErr = FindFolder(volNum, kApplicationSupportFolderType, TRUE, &vRef, &dir);
-                newDir=-1;
-                if (myErr == noErr) {
-                    myErr = DirCreate(volNum,
-                                 dir,
-                                 "\pICU",
-                                 &newDir);
-                    if( (myErr == noErr) || (myErr == dupFNErr) ) {
-                        spec.vRefNum = volNum;
-                        spec.parID = dir;
-                        uprv_memcpy(spec.name, "\pICU", 4);
-
-                        myErr = FSpGetFullPath(&spec, &len, &full);
-                        if(full != NULL)
-                        {
-                            HLock(full);
-                            uprv_memcpy(pathBuffer,  ((char*)(*full)), len);
-                            pathBuffer[len] = 0;
-                            path = pathBuffer;
-                            DisposeHandle(full);
-                        }
-                    }
-                }
-            }
-        }
-#       endif
-#       ifdef WIN32
-            /* next, try to read the path from the registry */
-            if(path==NULL || *path==0) {
-                HKEY key;
-
-                if(ERROR_SUCCESS==RegOpenKeyEx(HKEY_LOCAL_MACHINE, "SOFTWARE\\ICU\\Unicode\\Data", 0, KEY_QUERY_VALUE, &key)) {
-                    DWORD type=REG_EXPAND_SZ, size=sizeof(pathBuffer);
-
-                    if(ERROR_SUCCESS==RegQueryValueEx(key, "Path", NULL, &type, (unsigned char *)pathBuffer, &size) && size>1) {
-                        if(type==REG_EXPAND_SZ) {
-                            /* replace environment variable references by their values */
-                            char temporaryPath[1024];
-
-                            /* copy the path with variables to the temporary one */
-                            uprv_memcpy(temporaryPath, pathBuffer, size);
-
-                            /* do the replacement and store it in the pathBuffer */
-                            size=ExpandEnvironmentStrings(temporaryPath, pathBuffer, sizeof(pathBuffer));
-                            if(size>0 && size<sizeof(pathBuffer)) {
-                                path=pathBuffer;
-                            }
-                        } else if(type==REG_SZ) {
-                            path=pathBuffer;
-                        }
-                    }
-                    RegCloseKey(key);
-                }
-            }
-#       endif
-
-        /* before being fancy, check if we can find the right kind of
-           data in the hardcoded path */
-        if(path==NULL || *path==0) {
-            char fileBuffer[1024];      /* XXX sloppy, should be FILE_MAX. */
-            FileStream *f;
-
-            /* ICU_DATA_DIR may be set as a compile option */
-#           ifdef ICU_DATA_DIR
-                path=ICU_DATA_DIR;
-#           else
-                length=getSystemPath(pathBuffer, sizeof(pathBuffer));
-                if(length>0) {
-                    uprv_strcpy(pathBuffer+length, FALLBACK_PATH);
-                    path=pathBuffer;
-                } else {
-                    path=FALLBACK_PATH;
-                }
-#           endif
-
-            length = uprv_strlen(path);
-            uprv_memcpy(fileBuffer, path, length);
-
-            /* produce the path of a file that should be here given the way
-               that ICU was compiled; if it's here in the hardcoded location,
-               we should just use the hardcoded path without further
-               guessing */
-#           if defined(UDATA_DLL)
-                uprv_strcpy(fileBuffer + length, U_FILE_SEP_STRING LIB_PREFIX U_ICUDATA_NAME UDATA_SO_SUFFIX);
-#           elif defined(UDATA_MAP)
-                uprv_strcpy(fileBuffer + length, U_FILE_SEP_STRING U_ICUDATA_NAME "." DATA_TYPE); /* XXX Sloppy, won't be good enough on OS390 probably. */
-#           elif defined(UDATA_FILES)
-                uprv_strcpy(fileBuffer + length, U_FILE_SEP_STRING "uprops.dat");
-#           endif
-
-            f = T_FileStream_open(fileBuffer, "rb");    /* XXX Sloppy, use stat(). */
-            if (f) {
-                T_FileStream_close(f); /* found it, keep path */
-            } else {
-                path = NULL;    /* not found, reset path */
-            }
-        }
-
-        /* next, try to get the path to the ICU dynamic library */
-        if(path==NULL || *path==0) {
-            length=getLibraryPath(pathBuffer, sizeof(pathBuffer));
-            if(length>0) {
-                uprv_strcpy(pathBuffer+length, U_FILE_SEP_STRING ".." FALLBACK_PATH);
-                path=pathBuffer;
-            }
-        }
-
-        /* next, search for the ICU dynamic library */
-        if(path==NULL || *path==0) {
-            length=findLibraryPath(pathBuffer, sizeof(pathBuffer));
-            if(length>0) {
-                uprv_strcpy(pathBuffer+length, U_FILE_SEP_STRING ".." FALLBACK_PATH);
-                path=pathBuffer;
-            }
-        }
-
-        /* last resort: use hardcoded path */
-        if(path==NULL || *path==0) {
-            /* ICU_DATA_DIR may be set as a compile option */
-#           ifdef ICU_DATA_DIR
-                path=ICU_DATA_DIR;
-#           else
-                length=getSystemPath(pathBuffer, sizeof(pathBuffer));
-                if(length>0) {
-                    uprv_strcpy(pathBuffer+length, FALLBACK_PATH);
-                    path=pathBuffer;
-                } else {
-                    path=FALLBACK_PATH;
-                }
-#           endif
-        }
-
-        u_setDataDirectory(path);
+    if(gHaveDataDirectory) {
+        return gDataDirectory;
     }
 
-    /* we did set the directory if necessary */
+    /* we need to look for it */
+    pathBuffer[0] = 0;                     /* Shuts up compiler warnings about unreferenced */
+                                           /*   variables when the code using it is ifdefed out */
+#   if !defined(XP_MAC)
+    /* first try to get the environment variable */
+    path=getenv("ICU_DATA");
+#   else    /* XP_MAC */
+    {
+        OSErr myErr;
+        short vRef;
+        long  dir,newDir;
+        int16_t volNum;
+        Str255 xpath;
+        FSSpec spec;
+        short  len;
+        Handle full;
+
+        xpath[0]=0;
+
+        myErr = HGetVol(xpath, &volNum, &dir);
+
+        if(myErr == noErr) {
+            myErr = FindFolder(volNum, kApplicationSupportFolderType, TRUE, &vRef, &dir);
+            newDir=-1;
+            if (myErr == noErr) {
+                myErr = DirCreate(volNum,
+                    dir,
+                    "\pICU",
+                    &newDir);
+                if( (myErr == noErr) || (myErr == dupFNErr) ) {
+                    spec.vRefNum = volNum;
+                    spec.parID = dir;
+                    uprv_memcpy(spec.name, "\pICU", 4);
+
+                    myErr = FSpGetFullPath(&spec, &len, &full);
+                    if(full != NULL)
+                    {
+                        HLock(full);
+                        uprv_memcpy(pathBuffer,  ((char*)(*full)), len);
+                        pathBuffer[len] = 0;
+                        path = pathBuffer;
+                        DisposeHandle(full);
+                    }
+                }
+            }
+        }
+    }
+#       endif
+
+
+#       if defined WIN32 && defined ICU_ENABLE_DEPRECATED_WIN_REGISTRY
+    /* next, try to read the path from the registry */
+    if(path==NULL || *path==0) {
+        HKEY key;
+
+        if(ERROR_SUCCESS==RegOpenKeyEx(HKEY_LOCAL_MACHINE, "SOFTWARE\\ICU\\Unicode\\Data", 0, KEY_QUERY_VALUE, &key)) {
+            DWORD type=REG_EXPAND_SZ, size=sizeof(pathBuffer);
+
+            if(ERROR_SUCCESS==RegQueryValueEx(key, "Path", NULL, &type, (unsigned char *)pathBuffer, &size) && size>1) {
+                if(type==REG_EXPAND_SZ) {
+                    /* replace environment variable references by their values */
+                    char temporaryPath[1024];
+
+                    /* copy the path with variables to the temporary one */
+                    uprv_memcpy(temporaryPath, pathBuffer, size);
+
+                    /* do the replacement and store it in the pathBuffer */
+                    size=ExpandEnvironmentStrings(temporaryPath, pathBuffer, sizeof(pathBuffer));
+                    if(size>0 && size<sizeof(pathBuffer)) {
+                        path=pathBuffer;
+                    }
+                } else if(type==REG_SZ) {
+                    path=pathBuffer;
+                }
+            }
+            RegCloseKey(key);
+        }
+    }
+#       endif
+
+    /* ICU_DATA_DIR may be set as a compile option */
+#   ifdef ICU_DATA_DIR
+    if(path==NULL || *path==0) {
+        path=ICU_DATA_DIR;
+    }
+#   endif
+
+    u_setDataDirectory(path);
     return gDataDirectory;
 }
+
+
+
+
 
 /* Macintosh-specific locale information ------------------------------------ */
 #ifdef XP_MAC
@@ -1619,7 +1115,7 @@ struct
 {
   const char *loc;
   const char *charmap;
-} 
+}
 _localeToDefaultCharmapTable [] =
 {
 /*
@@ -1638,7 +1134,7 @@ _localeToDefaultCharmapTable [] =
  { "cs", "iso-8859-2" },  /* Czech */
  { "da", "iso-8859-1" },  /* Danish */
  { "de", "iso-8859-1" },  /* German */
- { "el", "iso-8859-7" },  /* Greek */ 
+ { "el", "iso-8859-7" },  /* Greek */
  { "en", "iso-8859-1" },  /* English */
  { "eo", "iso-8859-3" },  /* Esperanto */
  { "es", "iso-8859-1" },  /* Spanish */
@@ -1691,7 +1187,7 @@ _localeToDefaultCharmapTable [] =
  { "ar", "ibm-1256" }, /* arabic */
  { "ko", "ibm-949" }, /* korean  */
  { "ru", "ibm-878" }, /* Russian- koi8-r */
- { "sk", "ibm-912" }, 
+ { "sk", "ibm-912" },
 #endif
 
 U_CAPI const char *
@@ -1703,7 +1199,7 @@ uprv_defaultCodePageForLocale(const char *locale)
     int32_t i;
     int32_t locale_len;
 
-    if (locale == NULL) 
+    if (locale == NULL)
     {
         return NULL;
     }
@@ -1718,8 +1214,8 @@ uprv_defaultCodePageForLocale(const char *locale)
 
     for(i=0; _localeToDefaultCharmapTable[i].loc; i++)
     {
-        if(uprv_strncmp(locale, _localeToDefaultCharmapTable[i].loc, 
-                        uprv_min(locale_len, 
+        if(uprv_strncmp(locale, _localeToDefaultCharmapTable[i].loc,
+                        uprv_min(locale_len,
                                  uprv_strlen(_localeToDefaultCharmapTable[i].loc)))
             == 0)
         {
@@ -1738,7 +1234,7 @@ static const char *uprv_getPOSIXID()
         posixID = getenv("LANG");
     if (posixID == 0)
         posixID = setlocale(LC_ALL, NULL);
-    
+
     if (posixID==0)
     {
         posixID = "en_US";
@@ -1752,17 +1248,17 @@ static const char *uprv_getPOSIXID()
 }
 #endif
 
-const char* 
+const char*
 uprv_getDefaultLocaleID()
 {
 #if U_POSIX_LOCALE
     char *correctedPOSIXLocale = 0;
     const char* posixID = uprv_getPOSIXID();
     const char *p;
-    
+
     /* Format: (no spaces)
     ll [ _CC ] [ . MM ] [ @ VV]
-    
+
       l = lang, C = ctry, M = charmap, V = variant
     */
 
@@ -1772,7 +1268,7 @@ uprv_getDefaultLocaleID()
         correctedPOSIXLocale = uprv_malloc(uprv_strlen(posixID));
         uprv_strncpy(correctedPOSIXLocale, posixID, p-posixID);
         correctedPOSIXLocale[p-posixID] = 0;
-        
+
         posixID = correctedPOSIXLocale;
     }
 
@@ -1789,7 +1285,7 @@ uprv_getDefaultLocaleID()
         if(!uprv_strcmp(p, "nynorsk"))
         {
             p = "NY";
-            
+
             /*      Should we assume no_NO_NY instead of possible no__NY?
             * if(!uprv_strcmp(correctedPOSIXLocale, "no")) {
             *         uprv_strcpy(correctedPOSIXLocale, "no_NO");
@@ -1823,11 +1319,11 @@ uprv_getDefaultLocaleID()
     return locID;
 
 #elif defined(XP_MAC)
-    int32_t script = MAC_LC_INIT_NUMBER; 
+    int32_t script = MAC_LC_INIT_NUMBER;
     /* = IntlScript(); or GetScriptManagerVariable(smSysScript);*/
-    int32_t region = MAC_LC_INIT_NUMBER; 
+    int32_t region = MAC_LC_INIT_NUMBER;
     /* = GetScriptManagerVariable(smRegionCode);*/
-    int32_t lang = MAC_LC_INIT_NUMBER;   
+    int32_t lang = MAC_LC_INIT_NUMBER;
     /* = GetScriptManagerVariable(smScriptLang);*/
     int32_t date_region = MAC_LC_INIT_NUMBER;
     char* posixID = 0;
@@ -1840,13 +1336,13 @@ uprv_getDefaultLocaleID()
         date_region = ((uint16_t)(*ih)->intl1Vers) >> 8;
 
     for (i = 0; i < count; i++) {
-        if (   ((mac_lc_recs[i].script == MAC_LC_MAGIC_NUMBER)      
+        if (   ((mac_lc_recs[i].script == MAC_LC_MAGIC_NUMBER)
              || (mac_lc_recs[i].script == script))
             && ((mac_lc_recs[i].region == MAC_LC_MAGIC_NUMBER)
              || (mac_lc_recs[i].region == region))
             && ((mac_lc_recs[i].lang == MAC_LC_MAGIC_NUMBER)
              || (mac_lc_recs[i].lang == lang))
-            && ((mac_lc_recs[i].date_region == MAC_LC_MAGIC_NUMBER) 
+            && ((mac_lc_recs[i].date_region == MAC_LC_MAGIC_NUMBER)
              || (mac_lc_recs[i].date_region == date_region))
             )
         {
@@ -1955,9 +1451,9 @@ uprv_getDefaultLocaleID()
         {
             uprv_strcpy(correctedLocale, "zh_CN");
         }
-        
+
     }
-    
+
     return correctedLocale;
 #endif
 
@@ -2005,13 +1501,13 @@ const char* uprv_getDefaultCodepage()
     char *euro = NULL;
     const char *localeName = NULL;
     const char *defaultTable = NULL;
- 
+
     uprv_memset(codesetName, 0, 100);
     localeName = uprv_getPOSIXID();
-    if (localeName != NULL) 
+    if (localeName != NULL)
     {
         uprv_strcpy(codesetName, localeName);
-        if  ((name = (uprv_strchr(codesetName, (int) '.'))) != NULL) 
+        if  ((name = (uprv_strchr(codesetName, (int) '.'))) != NULL)
         {
             /* strip the locale name and look at the suffix only */
             name++;
@@ -2020,21 +1516,21 @@ const char* uprv_getDefaultCodepage()
                *euro  = 0;
             }
             /* if we can find the codset name from setlocale, return that. */
-            if (uprv_strlen(name) != 0) 
+            if (uprv_strlen(name) != 0)
             {
                 return name;
             }
-        } 
+        }
     }
 
     /* otherwise, try CTYPE */
 
     uprv_memset(codesetName, 0, 100);
     localeName = setlocale(LC_CTYPE, "");
-    if (localeName != NULL) 
+    if (localeName != NULL)
     {
         uprv_strcpy(codesetName, localeName);
-        if  ((name = (uprv_strchr(codesetName, (int) '.'))) != NULL) 
+        if  ((name = (uprv_strchr(codesetName, (int) '.'))) != NULL)
         {
             /* strip the locale name and look at the suffix only */
             name++;
@@ -2043,13 +1539,13 @@ const char* uprv_getDefaultCodepage()
                *euro  = 0;
             }
             /* if we can find the codset name from setlocale, return that. */
-            if (uprv_strlen(name) != 0) 
+            if (uprv_strlen(name) != 0)
             {
                 return name;
             }
-        } 
+        }
     }
-    if (strlen(codesetName) != 0) 
+    if (strlen(codesetName) != 0)
     {
         uprv_memset(codesetName, 0, 100);
     }
@@ -2061,14 +1557,14 @@ const char* uprv_getDefaultCodepage()
         }
     }
 #endif
-    if (uprv_strlen(codesetName) == 0) 
+    if (uprv_strlen(codesetName) == 0)
     {
         /* look up in srl's table */
         defaultTable = uprv_defaultCodePageForLocale(localeName);
         if (defaultTable != NULL)
         {
             uprv_strcpy(codesetName, defaultTable);
-        } 
+        }
         else
         {
             /* if the table lookup failed, return latin1. */
@@ -2325,7 +1821,7 @@ _uErrorInfoName[U_ERROR_INFO_LIMIT-U_ERROR_INFO_START]={
 };
 
 static const char *
-_uTransErrorName[U_PARSE_ERROR_LIMIT - U_PARSE_ERROR_START]={ 
+_uTransErrorName[U_PARSE_ERROR_LIMIT - U_PARSE_ERROR_START]={
     "U_BAD_VARIABLE_DEFINITION",
     "U_MALFORMED_RULE",
     "U_MALFORMED_SET",
@@ -2370,10 +1866,10 @@ _uErrorName[U_STANDARD_ERROR_LIMIT]={
     "U_BUFFER_OVERFLOW_ERROR",
     "U_UNSUPPORTED_ERROR",
     "U_RESOURCE_TYPE_MISMATCH",
-    "U_ILLEGAL_ESCAPE_SEQUENCE", 
+    "U_ILLEGAL_ESCAPE_SEQUENCE",
     "U_UNSUPPORTED_ESCAPE_SEQUENCE",
     "U_NO_SPACE_AVAILABLE",
-    "U_CE_NOT_FOUND_ERROR",  
+    "U_CE_NOT_FOUND_ERROR",
     "U_PRIMARY_TOO_LONG_ERROR",
     "U_STATE_TOO_OLD_ERROR"
 };
