@@ -425,61 +425,62 @@ typedef enum UErrorCode {
     /* 
      * the error code range 0x10000 0x10100 are reserved for Transliterator
      */
-    U_BAD_VARIABLE_DEFINITION=0x10000,
-    U_PARSE_ERROR_START = 0x10000,      /**< start of Transliterator specific parse Errors */
-    U_MALFORMED_RULE,
-    U_MALFORMED_SET,
-    U_MALFORMED_SYMBOL_REFERENCE,
-    U_MALFORMED_UNICODE_ESCAPE,
-    U_MALFORMED_VARIABLE_DEFINITION,
-    U_MALFORMED_VARIABLE_REFERENCE,
-    U_MISMATCHED_SEGMENT_DELIMITERS,
-    U_MISPLACED_ANCHOR_START,
-    U_MISPLACED_CURSOR_OFFSET,
-    U_MISPLACED_QUANTIFIER,
-    U_MISSING_OPERATOR,
-    U_MISSING_SEGMENT_CLOSE,
-    U_MULTIPLE_ANTE_CONTEXTS,
-    U_MULTIPLE_CURSORS,
-    U_MULTIPLE_POST_CONTEXTS,
-    U_TRAILING_BACKSLASH,
-    U_UNDEFINED_SEGMENT_REFERENCE,
-    U_UNDEFINED_VARIABLE,
-    U_UNQUOTED_SPECIAL,
-    U_UNTERMINATED_QUOTE,
-    U_RULE_MASK_ERROR,
-    U_MISPLACED_COMPOUND_FILTER,
-    U_MULTIPLE_COMPOUND_FILTERS,
-    U_INVALID_RBT_SYNTAX,
-    U_INVALID_PROPERTY_PATTERN,
-    U_MALFORMED_PRAGMA,
-    U_UNCLOSED_SEGMENT,
-    U_ILLEGAL_CHAR_IN_SEGMENT,
-    U_VARIABLE_RANGE_EXHAUSTED,         /**< Too many stand-ins generated for the given variable range */
-    U_VARIABLE_RANGE_OVERLAP,           /**< The variable range overlaps characters used in rules */
-    U_ILLEGAL_CHARACTER,
-    U_INTERNAL_TRANSLITERATOR_ERROR,
-    U_INVALID_ID,
-    U_INVALID_FUNCTION,
-    U_PARSE_ERROR_LIMIT,                /**< end of Transliterator specific parse Errors */
+    U_BAD_VARIABLE_DEFINITION=0x10000,/**< Missing '$' or duplicate variable name */
+    U_PARSE_ERROR_START = 0x10000,    /**< Start of Transliterator errors */
+    U_MALFORMED_RULE,                 /**< Elements of a rule are misplaced */
+    U_MALFORMED_SET,                  /**< A UnicodeSet pattern is invalid*/
+    U_MALFORMED_SYMBOL_REFERENCE,     /**< UNUSED as of ICU 2.4 */
+    U_MALFORMED_UNICODE_ESCAPE,       /**< A Unicode escape pattern is invalid*/
+    U_MALFORMED_VARIABLE_DEFINITION,  /**< A variable definition is invalid */
+    U_MALFORMED_VARIABLE_REFERENCE,   /**< A variable reference is invalid */
+    U_MISMATCHED_SEGMENT_DELIMITERS,  /**< UNUSED as of ICU 2.4 */
+    U_MISPLACED_ANCHOR_START,         /**< A start anchor appears at an illegal position */
+    U_MISPLACED_CURSOR_OFFSET,        /**< A cursor offset occurs at an illegal position */
+    U_MISPLACED_QUANTIFIER,           /**< A quantifier appears after a segment close delimiter */
+    U_MISSING_OPERATOR,               /**< A rule contains no operator */
+    U_MISSING_SEGMENT_CLOSE,          /**< UNUSED as of ICU 2.4 */
+    U_MULTIPLE_ANTE_CONTEXTS,         /**< More than one ante context */
+    U_MULTIPLE_CURSORS,               /**< More than one cursor */
+    U_MULTIPLE_POST_CONTEXTS,         /**< More than one post context */
+    U_TRAILING_BACKSLASH,             /**< A dangling backslash */
+    U_UNDEFINED_SEGMENT_REFERENCE,    /**< A segment reference does not correspond to a defined segment */
+    U_UNDEFINED_VARIABLE,             /**< A variable reference does not correspond to a defined variable */
+    U_UNQUOTED_SPECIAL,               /**< A special character was not quoted or escaped */
+    U_UNTERMINATED_QUOTE,             /**< A closing single quote is missing */
+    U_RULE_MASK_ERROR,                /**< A rule is hidden by an earlier more general rule */
+    U_MISPLACED_COMPOUND_FILTER,      /**< A compound filter is in an invalid location */
+    U_MULTIPLE_COMPOUND_FILTERS,      /**< More than one compound filter */
+    U_INVALID_RBT_SYNTAX,             /**< A "::id" rule was passed to the RuleBasedTransliterator parser */
+    U_INVALID_PROPERTY_PATTERN,       /**< UNUSED as of ICU 2.4 */
+    U_MALFORMED_PRAGMA,               /**< A 'use' pragma is invlalid */
+    U_UNCLOSED_SEGMENT,               /**< A closing ')' is missing */
+    U_ILLEGAL_CHAR_IN_SEGMENT,        /**< UNUSED as of ICU 2.4 */
+    U_VARIABLE_RANGE_EXHAUSTED,       /**< Too many stand-ins generated for the given variable range */
+    U_VARIABLE_RANGE_OVERLAP,         /**< The variable range overlaps characters used in rules */
+    U_ILLEGAL_CHARACTER,              /**< A special character is outside its allowed context */
+    U_INTERNAL_TRANSLITERATOR_ERROR,  /**< Internal transliterator system error */
+    U_INVALID_ID,                     /**< A "::id" rule specifies an unknown transliterator */
+    U_INVALID_FUNCTION,               /**< A "&fn()" rule specifies an unknown transliterator */
+    U_PARSE_ERROR_LIMIT,              /**< The limit for Transliterator errors */
 
     /* 
      * the error code range 0x10100 0x10200 are reserved for formatting API parsing error
      */
-    U_UNEXPECTED_TOKEN=0x10100,
-    U_FMT_PARSE_ERROR_START=0x10100,
-    U_MULTIPLE_DECIMAL_SEPERATORS,
-    U_MULTIPLE_EXPONENTIAL_SYMBOLS,
-    U_MALFORMED_EXPONENTIAL_PATTERN,
-    U_MULTIPLE_PERCENT_SYMBOLS,
-    U_MULTIPLE_PERMILL_SYMBOLS,
-    U_MULTIPLE_PAD_SPECIFIERS,
-    U_PATTERN_SYNTAX_ERROR,
-    U_ILLEGAL_PAD_POSITION,
-    U_UNMATCHED_BRACES,
-    U_UNSUPPORTED_PROPERTY,
-    U_UNSUPPORTED_ATTRIBUTE,
-    U_FMT_PARSE_ERROR_LIMIT,
+    U_UNEXPECTED_TOKEN=0x10100,       /**< Syntax error in format pattern */
+    U_FMT_PARSE_ERROR_START=0x10100,  /**< Start of format library errors */
+    U_MULTIPLE_DECIMAL_SEPARATORS,    /**< More than one decimal separator in number pattern */
+    U_MULTIPLE_DECIMAL_SEPERATORS = U_MULTIPLE_DECIMAL_SEPARATORS, /* Typo: kept for backward compatibility */
+    U_MULTIPLE_EXPONENTIAL_SYMBOLS,   /**< More than one exponent symbol in number pattern */
+    U_MALFORMED_EXPONENTIAL_PATTERN,  /**< Grouping symbol in exponent pattern */
+    U_MULTIPLE_PERCENT_SYMBOLS,       /**< More than one percent symbol in number pattern */
+    U_MULTIPLE_PERMILL_SYMBOLS,       /**< More than one permill symbol in number pattern */
+    U_MULTIPLE_PAD_SPECIFIERS,        /**< More than one pad symbol in number pattern */
+    U_PATTERN_SYNTAX_ERROR,           /**< Syntax error in format pattern */
+    U_ILLEGAL_PAD_POSITION,           /**< Pad symbol misplaced in number pattern */
+    U_UNMATCHED_BRACES,               /**< Braces do not match in message pattern */
+    U_UNSUPPORTED_PROPERTY,           /**< UNUSED as of ICU 2.4 */
+    U_UNSUPPORTED_ATTRIBUTE,          /**< UNUSED as of ICU 2.4 */
+    U_FMT_PARSE_ERROR_LIMIT,          /**< The limit for format library errors */
    
     /* 
      * the error code range 0x10200 0x102ff are reserved for Break Iterator related error
@@ -496,7 +497,7 @@ typedef enum UErrorCode {
     U_BRK_NEW_LINE_IN_QUOTED_STRING,       /**< Missing closing quote in an RBBI rule.            */
     U_BRK_UNDEFINED_VARIABLE,              /**< Use of an undefined $Variable in an RBBI rule.    */
     U_BRK_INIT_ERROR,                      /**< Initialization failure.  Probable missing ICU Data. */
-    U_BRK_ERROR_LIMIT,                     /**< This must always be the last value to indicate the limit for UErrorCode (last error code +1) */
+    U_BRK_ERROR_LIMIT,                     /**< This must always be the last value to indicate the limit for Break Iterator failures */
 
     /*
      * The error codes in the range 0x10300-0x103ff are reserved for regular expression related errrs
