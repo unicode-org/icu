@@ -652,7 +652,6 @@ void TransliteratorIDParser::registerSpecialInverse(const UnicodeString& target,
     umtx_init(&LOCK);
     Mutex lock(&LOCK);
 
-    UErrorCode ec = U_ZERO_ERROR;
     SPECIAL_INVERSES->put(target, new UnicodeString(inverseTarget), status);
     if (bidirectional) {
         SPECIAL_INVERSES->put(inverseTarget, new UnicodeString(target), status);

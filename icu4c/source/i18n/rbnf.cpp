@@ -900,7 +900,7 @@ RuleBasedNumberFormat::getRuleSetDisplayNameLocale(int32_t index, UErrorCode& st
         if (cap > 64) {
             bp = new char[cap];
         }
-        int32_t len = name.extract(0, name.length(), bp, cap, UnicodeString::kInvariant);
+        name.extract(0, name.length(), bp, cap, UnicodeString::kInvariant);
         Locale retLocale(bp);
         if (bp != buffer) {
             delete[] bp;
