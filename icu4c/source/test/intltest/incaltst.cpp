@@ -58,21 +58,25 @@ static UnicodeString fieldName(UCalendarDateFields f);
 
 static UnicodeString calToStr(const Calendar & cal)
 {
-
-  UnicodeString out;
-  UErrorCode status = U_ZERO_ERROR;
-  int i;
-  for(i = 0;i<UCAL_FIELD_COUNT;i++) {
-    out += (UnicodeString("+") + fieldName((UCalendarDateFields)i) + "=" +  cal.get((UCalendarDateFields)i, status) + UnicodeString(", "));
-  }
-  out += UnicodeString(cal.getType());
-
-  out += cal.inDaylightTime(status)?UnicodeString("- DAYLIGHT"):UnicodeString("- NORMAL");
-
-  UnicodeString str2;
-  out += cal.getTimeZone().getDisplayName(str2);
-
-  return out;
+    UnicodeString out;
+    UErrorCode status = U_ZERO_ERROR;
+    int i;
+    for(i = 0;i<UCAL_FIELD_COUNT;i++) {
+        out += (UnicodeString("+") + fieldName((UCalendarDateFields)i) + "=" +  cal.get((UCalendarDateFields)i, status) + UnicodeString(", "));
+    }
+    out += UnicodeString(cal.getType());
+    
+    if(cal.inDaylightTime(status)) {
+        out += UnicodeString("- DAYLIGHT");
+    }
+    else {
+        out += UnicodeString("- NORMAL");
+    }
+    
+    UnicodeString str2;
+    out += cal.getTimeZone().getDisplayName(str2);
+    
+    return out;
 }
 
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break
