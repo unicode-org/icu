@@ -88,12 +88,14 @@ T_FileStream_file_exists(const char* filename)
 /*static const int32_t kEOF;
 const int32_t FileStream::kEOF = EOF;*/
 
+/*
 U_CAPI FileStream*
 T_FileStream_tmpfile()
 {
     FILE* file = tmpfile();
     return (FileStream*)file;
 }
+*/
 
 U_CAPI int32_t
 T_FileStream_read(FileStream* fileStream, void* addr, int32_t len)
