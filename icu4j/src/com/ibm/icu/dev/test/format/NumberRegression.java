@@ -1,7 +1,7 @@
 /*****************************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/NumberRegression.java,v $ 
- * $Date: 2002/08/15 18:29:06 $ 
- * $Revision: 1.10 $
+ * $Date: 2002/08/21 00:05:59 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  **/
@@ -1559,7 +1559,7 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
                 DecimalFormatSymbols symb = new DecimalFormatSymbols(avail[i]);
                 DecimalFormat f2 = new DecimalFormat(pat, symb);
                 if (!df.equals(f2)) {
-                    errln("FAIL: " + avail[i] + " -> \"" + pat +
+                    errln("FAIL: " + avail[i] + " #" + j + " -> \"" + pat +
                           "\" -> \"" + f2.toPattern() + '"');
                 }
 
@@ -1567,8 +1567,8 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
                 pat = df.toLocalizedPattern();
                 f2.applyLocalizedPattern(pat);
                 if (!df.equals(f2)) {
-                    errln("FAIL: " + avail[i] + " -> localized \"" + pat +
-                          "\" -> \"" + f2.toPattern() + '"');
+                    errln("FAIL: " + avail[i] + " #" + j + " -> localized \"" + pat +
+                          "\" -> \"" + f2.toLocalizedPattern() + '"');
                 }
 
                 // Test writeObject/readObject round trip
@@ -1587,6 +1587,33 @@ public class NumberRegression extends com.ibm.icu.dev.test.TestFmwk {
                           (f2 != null ? ("\""+f2.toPattern()+'"') : "null"));
                 }
 
+            }
+        }
+
+        // @since ICU 2.4
+        // Make sure that all special characters, when quoted in a suffix or
+        // prefix, lose their special meaning.
+        char[] SPECIALS = { '0', ',', '.', '\u2030', '%', '#',
+                            ';', 'E', '*', '+', '-' };
+        sym = new DecimalFormatSymbols(Locale.US);
+        for (int j=0; j<SPECIALS.length; ++j) {
+            char special = SPECIALS[j];
+            String pat = "'" + special + "'#0'" + special + "'";
+            try {
+                fmt = new DecimalFormat(pat, sym);
+                String pat2 = fmt.toPattern();
+                if (!pat.equals(pat2)) {
+                    errln("FAIL: Pattern \"" + pat + "\" => toPattern() => \"" +
+                          pat2 + "\"");
+                }
+                String s = fmt.format(123);
+                String exp = "" + special + "123" + special;
+                if (!s.equals(exp)) {
+                    errln("FAIL: 123 x \"" + pat + "\" => \"" + s + "\", exp \"" +
+                          exp + "\"");
+                }
+            } catch (IllegalArgumentException e) {
+                errln("FAIL: Pattern \"" + pat + "\" => " + e.getMessage());
             }
         }
     }
