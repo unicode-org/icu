@@ -42,11 +42,11 @@ enum E_Where
 
 //***************************************************************************************
 
-#define CONFIRM_EQ(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail(action + " returned " + (actual) + " instead of " + (expected)); }
-#define CONFIRM_GE(actual,expected) if ((actual)>=(expected)) { record_pass(); } else { record_fail(action + " returned " + (actual) + " instead of x >= " + (expected)); }
-#define CONFIRM_NE(actual,expected) if ((expected)!=(actual)) { record_pass(); } else { record_fail(action + " returned " + (actual) + " instead of x != " + (expected)); }
+#define CONFIRM_EQ(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail(); OUT << action << " returned " << (actual) << " instead of " << (expected) << endl; }
+#define CONFIRM_GE(actual,expected) if ((actual)>=(expected)) { record_pass(); } else { record_fail(); OUT << action << " returned " << (actual) << " instead of x >= " << (expected) << endl; }
+#define CONFIRM_NE(actual,expected) if ((expected)!=(actual)) { record_pass(); } else { record_fail(); OUT << action << " returned " << (actual) << " instead of x != " << (expected) << endl; }
 
-#define CONFIRM_UErrorCode(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail(action + " returned " + u_errorName(actual) + " instead of " + u_errorName(expected)); }
+#define CONFIRM_UErrorCode(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail(); OUT << action << " returned " << u_errorName(actual) << " instead of " << u_errorName(expected) << endl; }
 
 //***************************************************************************************
 
@@ -339,7 +339,7 @@ ResourceBundleTest::testTag(const char* frag,
                             UBool in_te,
                             UBool in_te_IN)
 {
-    int32_t passOrig = pass;
+    UBool passOrig = pass;
 
     // Make array from input params
 
@@ -621,7 +621,7 @@ ResourceBundleTest::testTag(const char* frag,
                 if (tags[index].startsWith("tag") && items[index].startsWith(base))
                     record_pass();
                 else
-                    record_fail("tag = " + tags[index] + ", value = " + items[index]);
+                    record_fail();
             }
         }
         else
@@ -675,9 +675,9 @@ ResourceBundleTest::record_pass()
   ++pass;
 }
 void
-ResourceBundleTest::record_fail(const UnicodeString &message)
+ResourceBundleTest::record_fail()
 {
-  err(message);
+  err();
   ++fail;
 }
 //eof
