@@ -31,12 +31,6 @@ typedef struct _UHashtable UHashtable;
  */
 extern UHashtable *SHARED_DATA_HASHTABLE;
 
-/*Hashtable generated (lazy eval) by algorithmicConverterNames for fast lookup
- *Behaviour is completely different for the Algorithmic conversions.
- *we use this table to as a litmus test.
- */
-extern UHashtable *ALGORITHMIC_CONVERTERS_HASHTABLE;
-
 
 /* figures out if we need to go to file to read in the data tables.
  */
