@@ -1,62 +1,23 @@
+# *******************************************************************************
+# *
+# *   Copyright (C) 1997-2000, International Business Machines
+# *   Corporation and others.  All Rights Reserved.
+# *
+# *******************************************************************************
 #
-#       Name:		  JIS X	0208 (1990) to Unicode
-#       Unicode version:  1.1
-#       Table version:	  0.9
-#       Table format:	  Format A
-#       Date:		  8 March 1994
-#       Authors:	  Glenn	Adams <glenn@metis.com>
-#		      John H. Jenkins <John_Jenkins@taligent.com>
+#       Name:		  JIS X	0208 (1990)	to Unicode
+#       Unicode version:	  1.1
+#       Table version:		  0.9
 #
-#       Copyright (c) 1991-1994 Unicode, Inc.  All Rights reserved.
-#
-#       This file is provided as-is by Unicode, Inc. (The Unicode Consortium).
-#       No claims are made as to fitness for any particular purpose.  No
-#       warranties of any kind are expressed or implied.  The recipient
-#       agrees to determine applicability of information provided.  If this
-#       file has been provided on magnetic media by Unicode, Inc., the sole
-#       remedy for any claim will be exchange of defective media within 90
-#       days of receipt.
-#
-#       Recipient is granted the right to make copies in any form for
-#       internal distribution and to freely use the information supplied
-#       in the creation of products supporting Unicode.	 Unicode, Inc.
-#       specifically excludes the right to re-distribute this file directly
-#       to third parties or other organizations whether for profit or not.
-#
-#       General notes:
-#
-#       This table contains the data the Unicode Consortium has on how
-#       JIS X 0208 (1983) characters map into Unicode.
-#
-#       Format:	 Four tab-separated columns
-#		 Column	#1 is the shift-JIS code (in hex)
-#		 Column	#2 is the JIS X 0208 code (in hex as 0xXXXX)
-#		 Column	#3 is the Unicode (in hex as 0xXXXX)
-#		 Column	#4 the Unicode name (follows a comment sign, '#')
-#					The official names for Unicode characters U+4E00
-#					to U+9FA5, inclusive, is "CJK UNIFIED IDEOGRAPH-XXXX",
-#					where XXXX is the code point.  Including all these
-#					names in this file increases its size substantially
-#					and needlessly.	 The token "<CJK>" is used for the
-#					name of	these characters.  If necessary, it can be
-#					expanded algorithmically by a parser or	editor.
-#
-#       The entries are in JIS X 0208 order
-#
-#       The following algorithms can be used to change the hex form
-#		of JIS 0208 to other standard forms:
-#
-#		To change hex to EUC form, add 0x8080
-#		To change hex to kuten form, first subtract 0x2020.  Then
-#			the high and low bytes correspond to the ku and	ten of
-#			the kuten form.	 For example, 0x2121 -> 0x0101 -> 0101;
-#			0x7426 -> 0x5406 -> 8406
-#
-#   The kanji mappings are a normative part of ISO/IEC 10646.  The
-#       non-kanji mappings are provisional, pending definition of
-#       official mappings by Japanese standards bodies
-#
-#       Any comments or problems, contact <John_Jenkins@taligent.com>
+#       Authors:		 Raghuram Viswanadha
+#       Date:		 8/20/2000
+#       General Notes:
+#			 This file is created from JISX 208
+#			 mapping table from Unicode Consortium
+#			 (www.unicode.org).
+#			 Original authors:
+#			 Glenn     Adams <glenn@metis.com>
+#			 John H. Jenkins <John_Jenkins@taligent.com>
 #
 #
 <code_set_name>		      "JISX-208"
@@ -69,27 +30,27 @@
 CHARMAP
 #
 #
-#ISO 10646      JISX208
-#_________      _________
+#ISO 10646	    JISX208
+#_________	    _________
 
 <U3000>	        \x21\x21		# IDEOGRAPHIC SPACE
 <U3001>	        \x21\x22		# IDEOGRAPHIC COMMA
 <U3002>	        \x21\x23		# IDEOGRAPHIC FULL STOP
-<UFF0C>	        \x21\x24		# FULLWIDTH COMMA
-<UFF0E>	        \x21\x25		# FULLWIDTH FULL STOP
+<UFF0C>	        \x21\x24		# FULLWIDTH	COMMA
+<UFF0E>	        \x21\x25		# FULLWIDTH	FULL STOP
 <U30FB>	        \x21\x26		# KATAKANA MIDDLE DOT
-<UFF1A>	        \x21\x27		# FULLWIDTH COLON
-<UFF1B>	        \x21\x28		# FULLWIDTH SEMICOLON
-<UFF1F>	        \x21\x29		# FULLWIDTH QUESTION MARK
-<UFF01>	        \x21\x2A		# FULLWIDTH EXCLAMATION	MARK
+<UFF1A>	        \x21\x27		# FULLWIDTH	COLON
+<UFF1B>	        \x21\x28		# FULLWIDTH	SEMICOLON
+<UFF1F>	        \x21\x29		# FULLWIDTH	QUESTION MARK
+<UFF01>	        \x21\x2A		# FULLWIDTH	EXCLAMATION MARK
 <U309B>	        \x21\x2B		# KATAKANA-HIRAGANA VOICED SOUND MARK
 <U309C>	        \x21\x2C		# KATAKANA-HIRAGANA SEMI-VOICED	SOUND MARK
 <U00B4>	        \x21\x2D		# ACUTE	ACCENT
-<UFF40>	        \x21\x2E		# FULLWIDTH GRAVE ACCENT
+<UFF40>	        \x21\x2E		# FULLWIDTH	GRAVE ACCENT
 <U00A8>	        \x21\x2F		# DIAERESIS
-<UFF3E>	        \x21\x30		# FULLWIDTH CIRCUMFLEX ACCENT
-<UFFE3>	        \x21\x31		# FULLWIDTH MACRON
-<UFF3F>	        \x21\x32		# FULLWIDTH LOW	LINE
+<UFF3E>	        \x21\x30		# FULLWIDTH	CIRCUMFLEX ACCENT
+<UFFE3>	        \x21\x31		# FULLWIDTH	MACRON
+<UFF3F>	        \x21\x32		# FULLWIDTH	LOW         LINE
 <U30FD>	        \x21\x33		# KATAKANA ITERATION MARK
 <U30FE>	        \x21\x34		# KATAKANA VOICED ITERATION MARK
 <U309D>	        \x21\x35		# HIRAGANA ITERATION MARK
@@ -99,28 +60,28 @@ CHARMAP
 <U3005>	        \x21\x39		# IDEOGRAPHIC ITERATION	MARK
 <U3006>	        \x21\x3A		# IDEOGRAPHIC CLOSING MARK
 <U3007>	        \x21\x3B		# IDEOGRAPHIC NUMBER ZERO
-<U30FC>	        \x21\x3C		# KATAKANA-HIRAGANA PROLONGED SOUND MARK
+<U30FC>	        \x21\x3C		# KATAKANA-HIRAGANA PROLONGED SOUND	MARK
 <U2015>	        \x21\x3D		# HORIZONTAL BAR
 <U2010>	        \x21\x3E		# HYPHEN
-<UFF0F>	        \x21\x3F		# FULLWIDTH SOLIDUS
+<UFF0F>	        \x21\x3F		# FULLWIDTH	SOLIDUS
 <U005C>	        \x21\x40		# REVERSE SOLIDUS
 <U301C>	        \x21\x41		# WAVE DASH
 <U2016>	        \x21\x42		# DOUBLE VERTICAL LINE
-<UFF5C>	        \x21\x43		# FULLWIDTH VERTICAL LINE
+<UFF5C>	        \x21\x43		# FULLWIDTH	VERTICAL LINE
 <U2026>	        \x21\x44		# HORIZONTAL ELLIPSIS
 <U2025>	        \x21\x45		# TWO DOT LEADER
 <U2018>	        \x21\x46		# LEFT SINGLE QUOTATION	MARK
 <U2019>	        \x21\x47		# RIGHT	SINGLE QUOTATION MARK
 <U201C>	        \x21\x48		# LEFT DOUBLE QUOTATION	MARK
 <U201D>	        \x21\x49		# RIGHT	DOUBLE QUOTATION MARK
-<UFF08>	        \x21\x4A		# FULLWIDTH LEFT PARENTHESIS
-<UFF09>	        \x21\x4B		# FULLWIDTH RIGHT PARENTHESIS
+<UFF08>	        \x21\x4A		# FULLWIDTH	LEFT PARENTHESIS
+<UFF09>	        \x21\x4B		# FULLWIDTH	RIGHT PARENTHESIS
 <U3014>	        \x21\x4C		# LEFT TORTOISE	SHELL BRACKET
 <U3015>	        \x21\x4D		# RIGHT	TORTOISE SHELL BRACKET
-<UFF3B>	        \x21\x4E		# FULLWIDTH LEFT SQUARE	BRACKET
-<UFF3D>	        \x21\x4F		# FULLWIDTH RIGHT SQUARE BRACKET
-<UFF5B>	        \x21\x50		# FULLWIDTH LEFT CURLY BRACKET
-<UFF5D>	        \x21\x51		# FULLWIDTH RIGHT CURLY	BRACKET
+<UFF3B>	        \x21\x4E		# FULLWIDTH	LEFT SQUARE BRACKET
+<UFF3D>	        \x21\x4F		# FULLWIDTH	RIGHT SQUARE BRACKET
+<UFF5B>	        \x21\x50		# FULLWIDTH	LEFT CURLY BRACKET
+<UFF5D>	        \x21\x51		# FULLWIDTH	RIGHT CURLY BRACKET
 <U3008>	        \x21\x52		# LEFT ANGLE BRACKET
 <U3009>	        \x21\x53		# RIGHT	ANGLE BRACKET
 <U300A>	        \x21\x54		# LEFT DOUBLE ANGLE BRACKET
@@ -131,16 +92,16 @@ CHARMAP
 <U300F>	        \x21\x59		# RIGHT	WHITE CORNER BRACKET
 <U3010>	        \x21\x5A		# LEFT BLACK LENTICULAR	BRACKET
 <U3011>	        \x21\x5B		# RIGHT	BLACK LENTICULAR BRACKET
-<UFF0B>	        \x21\x5C		# FULLWIDTH PLUS SIGN
+<UFF0B>	        \x21\x5C		# FULLWIDTH	PLUS SIGN
 <U2212>	        \x21\x5D		# MINUS	SIGN
 <U00B1>	        \x21\x5E		# PLUS-MINUS SIGN
 <U00D7>	        \x21\x5F		# MULTIPLICATION SIGN
 <U00F7>	        \x21\x60		# DIVISION SIGN
-<UFF1D>	        \x21\x61		# FULLWIDTH EQUALS SIGN
-<U2260>	        \x21\x62		# NOT EQUAL TO
-<UFF1C>	        \x21\x63		# FULLWIDTH LESS-THAN SIGN
-<UFF1E>	        \x21\x64		# FULLWIDTH GREATER-THAN SIGN
-<U2266>	        \x21\x65		# LESS-THAN OVER EQUAL TO
+<UFF1D>	        \x21\x61		# FULLWIDTH	EQUALS SIGN
+<U2260>	        \x21\x62		# NOT EQUAL	TO
+<UFF1C>	        \x21\x63		# FULLWIDTH	LESS-THAN SIGN
+<UFF1E>	        \x21\x64		# FULLWIDTH	GREATER-THAN SIGN
+<U2266>	        \x21\x65		# LESS-THAN	OVER EQUAL TO
 <U2267>	        \x21\x66		# GREATER-THAN OVER EQUAL TO
 <U221E>	        \x21\x67		# INFINITY
 <U2234>	        \x21\x68		# THEREFORE
@@ -150,15 +111,15 @@ CHARMAP
 <U2032>	        \x21\x6C		# PRIME
 <U2033>	        \x21\x6D		# DOUBLE PRIME
 <U2103>	        \x21\x6E		# DEGREE CELSIUS
-<UFFE5>	        \x21\x6F		# FULLWIDTH YEN	SIGN
-<UFF04>	        \x21\x70		# FULLWIDTH DOLLAR SIGN
+<UFFE5>	        \x21\x6F		# FULLWIDTH	YEN         SIGN
+<UFF04>	        \x21\x70		# FULLWIDTH	DOLLAR SIGN
 <U00A2>	        \x21\x71		# CENT SIGN
 <U00A3>	        \x21\x72		# POUND	SIGN
-<UFF05>	        \x21\x73		# FULLWIDTH PERCENT SIGN
-<UFF03>	        \x21\x74		# FULLWIDTH NUMBER SIGN
-<UFF06>	        \x21\x75		# FULLWIDTH AMPERSAND
-<UFF0A>	        \x21\x76		# FULLWIDTH ASTERISK
-<UFF20>	        \x21\x77		# FULLWIDTH COMMERCIAL AT
+<UFF05>	        \x21\x73		# FULLWIDTH	PERCENT SIGN
+<UFF03>	        \x21\x74		# FULLWIDTH	NUMBER SIGN
+<UFF06>	        \x21\x75		# FULLWIDTH	AMPERSAND
+<UFF0A>	        \x21\x76		# FULLWIDTH	ASTERISK
+<UFF20>	        \x21\x77		# FULLWIDTH	COMMERCIAL AT
 <U00A7>	        \x21\x78		# SECTION SIGN
 <U2606>	        \x21\x79		# WHITE	STAR
 <U2605>	        \x21\x7A		# BLACK	STAR
@@ -169,20 +130,20 @@ CHARMAP
 <U25C6>	        \x22\x21		# BLACK	DIAMOND
 <U25A1>	        \x22\x22		# WHITE	SQUARE
 <U25A0>	        \x22\x23		# BLACK	SQUARE
-<U25B3>	        \x22\x24		# WHITE	UP-POINTING TRIANGLE
-<U25B2>	        \x22\x25		# BLACK	UP-POINTING TRIANGLE
+<U25B3>	        \x22\x24		# WHITE	UP-POINTING	TRIANGLE
+<U25B2>	        \x22\x25		# BLACK	UP-POINTING	TRIANGLE
 <U25BD>	        \x22\x26		# WHITE	DOWN-POINTING TRIANGLE
 <U25BC>	        \x22\x27		# BLACK	DOWN-POINTING TRIANGLE
-<U203B>	        \x22\x28		# REFERENCE MARK
+<U203B>	        \x22\x28		# REFERENCE	MARK
 <U3012>	        \x22\x29		# POSTAL MARK
 <U2192>	        \x22\x2A		# RIGHTWARDS ARROW
-<U2190>	        \x22\x2B		# LEFTWARDS ARROW
+<U2190>	        \x22\x2B		# LEFTWARDS	ARROW
 <U2191>	        \x22\x2C		# UPWARDS ARROW
-<U2193>	        \x22\x2D		# DOWNWARDS ARROW
+<U2193>	        \x22\x2D		# DOWNWARDS	ARROW
 <U3013>	        \x22\x2E		# GETA MARK
 <U2208>	        \x22\x3A		# ELEMENT OF
 <U220B>	        \x22\x3B		# CONTAINS AS MEMBER
-<U2286>	        \x22\x3C		# SUBSET OF OR EQUAL TO
+<U2286>	        \x22\x3C		# SUBSET OF	OR EQUAL TO
 <U2287>	        \x22\x3D		# SUPERSET OF OR EQUAL TO
 <U2282>	        \x22\x3E		# SUBSET OF
 <U2283>	        \x22\x3F		# SUPERSET OF
@@ -200,8 +161,8 @@ CHARMAP
 <U2312>	        \x22\x5E		# ARC
 <U2202>	        \x22\x5F		# PARTIAL DIFFERENTIAL
 <U2207>	        \x22\x60		# NABLA
-<U2261>	        \x22\x61		# IDENTICAL TO
-<U2252>	        \x22\x62		# APPROXIMATELY	EQUAL TO OR THE IMAGE OF
+<U2261>	        \x22\x61		# IDENTICAL	TO
+<U2252>	        \x22\x62		# APPROXIMATELY	EQUAL TO OR	THE IMAGE OF
 <U226A>	        \x22\x63		# MUCH LESS-THAN
 <U226B>	        \x22\x64		# MUCH GREATER-THAN
 <U221A>	        \x22\x65		# SQUARE ROOT
@@ -211,7 +172,7 @@ CHARMAP
 <U222B>	        \x22\x69		# INTEGRAL
 <U222C>	        \x22\x6A		# DOUBLE INTEGRAL
 <U212B>	        \x22\x72		# ANGSTROM SIGN
-<U2030>	        \x22\x73		# PER MILLE SIGN
+<U2030>	        \x22\x73		# PER MILLE	SIGN
 <U266F>	        \x22\x74		# MUSIC	SHARP SIGN
 <U266D>	        \x22\x75		# MUSIC	FLAT SIGN
 <U266A>	        \x22\x76		# EIGHTH NOTE
@@ -219,68 +180,68 @@ CHARMAP
 <U2021>	        \x22\x78		# DOUBLE DAGGER
 <U00B6>	        \x22\x79		# PILCROW SIGN
 <U25EF>	        \x22\x7E		# LARGE	CIRCLE
-<UFF10>	        \x23\x30		# FULLWIDTH DIGIT ZERO
-<UFF11>	        \x23\x31		# FULLWIDTH DIGIT ONE
-<UFF12>	        \x23\x32		# FULLWIDTH DIGIT TWO
-<UFF13>	        \x23\x33		# FULLWIDTH DIGIT THREE
-<UFF14>	        \x23\x34		# FULLWIDTH DIGIT FOUR
-<UFF15>	        \x23\x35		# FULLWIDTH DIGIT FIVE
-<UFF16>	        \x23\x36		# FULLWIDTH DIGIT SIX
-<UFF17>	        \x23\x37		# FULLWIDTH DIGIT SEVEN
-<UFF18>	        \x23\x38		# FULLWIDTH DIGIT EIGHT
-<UFF19>	        \x23\x39		# FULLWIDTH DIGIT NINE
-<UFF21>	        \x23\x41		# FULLWIDTH LATIN CAPITAL LETTER A
-<UFF22>	        \x23\x42		# FULLWIDTH LATIN CAPITAL LETTER B
-<UFF23>	        \x23\x43		# FULLWIDTH LATIN CAPITAL LETTER C
-<UFF24>	        \x23\x44		# FULLWIDTH LATIN CAPITAL LETTER D
-<UFF25>	        \x23\x45		# FULLWIDTH LATIN CAPITAL LETTER E
-<UFF26>	        \x23\x46		# FULLWIDTH LATIN CAPITAL LETTER F
-<UFF27>	        \x23\x47		# FULLWIDTH LATIN CAPITAL LETTER G
-<UFF28>	        \x23\x48		# FULLWIDTH LATIN CAPITAL LETTER H
-<UFF29>	        \x23\x49		# FULLWIDTH LATIN CAPITAL LETTER I
-<UFF2A>	        \x23\x4A		# FULLWIDTH LATIN CAPITAL LETTER J
-<UFF2B>	        \x23\x4B		# FULLWIDTH LATIN CAPITAL LETTER K
-<UFF2C>	        \x23\x4C		# FULLWIDTH LATIN CAPITAL LETTER L
-<UFF2D>	        \x23\x4D		# FULLWIDTH LATIN CAPITAL LETTER M
-<UFF2E>	        \x23\x4E		# FULLWIDTH LATIN CAPITAL LETTER N
-<UFF2F>	        \x23\x4F		# FULLWIDTH LATIN CAPITAL LETTER O
-<UFF30>	        \x23\x50		# FULLWIDTH LATIN CAPITAL LETTER P
-<UFF31>	        \x23\x51		# FULLWIDTH LATIN CAPITAL LETTER Q
-<UFF32>	        \x23\x52		# FULLWIDTH LATIN CAPITAL LETTER R
-<UFF33>	        \x23\x53		# FULLWIDTH LATIN CAPITAL LETTER S
-<UFF34>	        \x23\x54		# FULLWIDTH LATIN CAPITAL LETTER T
-<UFF35>	        \x23\x55		# FULLWIDTH LATIN CAPITAL LETTER U
-<UFF36>	        \x23\x56		# FULLWIDTH LATIN CAPITAL LETTER V
-<UFF37>	        \x23\x57		# FULLWIDTH LATIN CAPITAL LETTER W
-<UFF38>	        \x23\x58		# FULLWIDTH LATIN CAPITAL LETTER X
-<UFF39>	        \x23\x59		# FULLWIDTH LATIN CAPITAL LETTER Y
-<UFF3A>	        \x23\x5A		# FULLWIDTH LATIN CAPITAL LETTER Z
-<UFF41>	        \x23\x61		# FULLWIDTH LATIN SMALL	LETTER A
-<UFF42>	        \x23\x62		# FULLWIDTH LATIN SMALL	LETTER B
-<UFF43>	        \x23\x63		# FULLWIDTH LATIN SMALL	LETTER C
-<UFF44>	        \x23\x64		# FULLWIDTH LATIN SMALL	LETTER D
-<UFF45>	        \x23\x65		# FULLWIDTH LATIN SMALL	LETTER E
-<UFF46>	        \x23\x66		# FULLWIDTH LATIN SMALL	LETTER F
-<UFF47>	        \x23\x67		# FULLWIDTH LATIN SMALL	LETTER G
-<UFF48>	        \x23\x68		# FULLWIDTH LATIN SMALL	LETTER H
-<UFF49>	        \x23\x69		# FULLWIDTH LATIN SMALL	LETTER I
-<UFF4A>	        \x23\x6A		# FULLWIDTH LATIN SMALL	LETTER J
-<UFF4B>	        \x23\x6B		# FULLWIDTH LATIN SMALL	LETTER K
-<UFF4C>	        \x23\x6C		# FULLWIDTH LATIN SMALL	LETTER L
-<UFF4D>	        \x23\x6D		# FULLWIDTH LATIN SMALL	LETTER M
-<UFF4E>	        \x23\x6E		# FULLWIDTH LATIN SMALL	LETTER N
-<UFF4F>	        \x23\x6F		# FULLWIDTH LATIN SMALL	LETTER O
-<UFF50>	        \x23\x70		# FULLWIDTH LATIN SMALL	LETTER P
-<UFF51>	        \x23\x71		# FULLWIDTH LATIN SMALL	LETTER Q
-<UFF52>	        \x23\x72		# FULLWIDTH LATIN SMALL	LETTER R
-<UFF53>	        \x23\x73		# FULLWIDTH LATIN SMALL	LETTER S
-<UFF54>	        \x23\x74		# FULLWIDTH LATIN SMALL	LETTER T
-<UFF55>	        \x23\x75		# FULLWIDTH LATIN SMALL	LETTER U
-<UFF56>	        \x23\x76		# FULLWIDTH LATIN SMALL	LETTER V
-<UFF57>	        \x23\x77		# FULLWIDTH LATIN SMALL	LETTER W
-<UFF58>	        \x23\x78		# FULLWIDTH LATIN SMALL	LETTER X
-<UFF59>	        \x23\x79		# FULLWIDTH LATIN SMALL	LETTER Y
-<UFF5A>	        \x23\x7A		# FULLWIDTH LATIN SMALL	LETTER Z
+<UFF10>	        \x23\x30		# FULLWIDTH	DIGIT ZERO
+<UFF11>	        \x23\x31		# FULLWIDTH	DIGIT ONE
+<UFF12>	        \x23\x32		# FULLWIDTH	DIGIT TWO
+<UFF13>	        \x23\x33		# FULLWIDTH	DIGIT THREE
+<UFF14>	        \x23\x34		# FULLWIDTH	DIGIT FOUR
+<UFF15>	        \x23\x35		# FULLWIDTH	DIGIT FIVE
+<UFF16>	        \x23\x36		# FULLWIDTH	DIGIT SIX
+<UFF17>	        \x23\x37		# FULLWIDTH	DIGIT SEVEN
+<UFF18>	        \x23\x38		# FULLWIDTH	DIGIT EIGHT
+<UFF19>	        \x23\x39		# FULLWIDTH	DIGIT NINE
+<UFF21>	        \x23\x41		# FULLWIDTH	LATIN CAPITAL LETTER A
+<UFF22>	        \x23\x42		# FULLWIDTH	LATIN CAPITAL LETTER B
+<UFF23>	        \x23\x43		# FULLWIDTH	LATIN CAPITAL LETTER C
+<UFF24>	        \x23\x44		# FULLWIDTH	LATIN CAPITAL LETTER D
+<UFF25>	        \x23\x45		# FULLWIDTH	LATIN CAPITAL LETTER E
+<UFF26>	        \x23\x46		# FULLWIDTH	LATIN CAPITAL LETTER F
+<UFF27>	        \x23\x47		# FULLWIDTH	LATIN CAPITAL LETTER G
+<UFF28>	        \x23\x48		# FULLWIDTH	LATIN CAPITAL LETTER H
+<UFF29>	        \x23\x49		# FULLWIDTH	LATIN CAPITAL LETTER I
+<UFF2A>	        \x23\x4A		# FULLWIDTH	LATIN CAPITAL LETTER J
+<UFF2B>	        \x23\x4B		# FULLWIDTH	LATIN CAPITAL LETTER K
+<UFF2C>	        \x23\x4C		# FULLWIDTH	LATIN CAPITAL LETTER L
+<UFF2D>	        \x23\x4D		# FULLWIDTH	LATIN CAPITAL LETTER M
+<UFF2E>	        \x23\x4E		# FULLWIDTH	LATIN CAPITAL LETTER N
+<UFF2F>	        \x23\x4F		# FULLWIDTH	LATIN CAPITAL LETTER O
+<UFF30>	        \x23\x50		# FULLWIDTH	LATIN CAPITAL LETTER P
+<UFF31>	        \x23\x51		# FULLWIDTH	LATIN CAPITAL LETTER Q
+<UFF32>	        \x23\x52		# FULLWIDTH	LATIN CAPITAL LETTER R
+<UFF33>	        \x23\x53		# FULLWIDTH	LATIN CAPITAL LETTER S
+<UFF34>	        \x23\x54		# FULLWIDTH	LATIN CAPITAL LETTER T
+<UFF35>	        \x23\x55		# FULLWIDTH	LATIN CAPITAL LETTER U
+<UFF36>	        \x23\x56		# FULLWIDTH	LATIN CAPITAL LETTER V
+<UFF37>	        \x23\x57		# FULLWIDTH	LATIN CAPITAL LETTER W
+<UFF38>	        \x23\x58		# FULLWIDTH	LATIN CAPITAL LETTER X
+<UFF39>	        \x23\x59		# FULLWIDTH	LATIN CAPITAL LETTER Y
+<UFF3A>	        \x23\x5A		# FULLWIDTH	LATIN CAPITAL LETTER Z
+<UFF41>	        \x23\x61		# FULLWIDTH	LATIN SMALL LETTER A
+<UFF42>	        \x23\x62		# FULLWIDTH	LATIN SMALL LETTER B
+<UFF43>	        \x23\x63		# FULLWIDTH	LATIN SMALL LETTER C
+<UFF44>	        \x23\x64		# FULLWIDTH	LATIN SMALL LETTER D
+<UFF45>	        \x23\x65		# FULLWIDTH	LATIN SMALL LETTER E
+<UFF46>	        \x23\x66		# FULLWIDTH	LATIN SMALL LETTER F
+<UFF47>	        \x23\x67		# FULLWIDTH	LATIN SMALL LETTER G
+<UFF48>	        \x23\x68		# FULLWIDTH	LATIN SMALL LETTER H
+<UFF49>	        \x23\x69		# FULLWIDTH	LATIN SMALL LETTER I
+<UFF4A>	        \x23\x6A		# FULLWIDTH	LATIN SMALL LETTER J
+<UFF4B>	        \x23\x6B		# FULLWIDTH	LATIN SMALL LETTER K
+<UFF4C>	        \x23\x6C		# FULLWIDTH	LATIN SMALL LETTER L
+<UFF4D>	        \x23\x6D		# FULLWIDTH	LATIN SMALL LETTER M
+<UFF4E>	        \x23\x6E		# FULLWIDTH	LATIN SMALL LETTER N
+<UFF4F>	        \x23\x6F		# FULLWIDTH	LATIN SMALL LETTER O
+<UFF50>	        \x23\x70		# FULLWIDTH	LATIN SMALL LETTER P
+<UFF51>	        \x23\x71		# FULLWIDTH	LATIN SMALL LETTER Q
+<UFF52>	        \x23\x72		# FULLWIDTH	LATIN SMALL LETTER R
+<UFF53>	        \x23\x73		# FULLWIDTH	LATIN SMALL LETTER S
+<UFF54>	        \x23\x74		# FULLWIDTH	LATIN SMALL LETTER T
+<UFF55>	        \x23\x75		# FULLWIDTH	LATIN SMALL LETTER U
+<UFF56>	        \x23\x76		# FULLWIDTH	LATIN SMALL LETTER V
+<UFF57>	        \x23\x77		# FULLWIDTH	LATIN SMALL LETTER W
+<UFF58>	        \x23\x78		# FULLWIDTH	LATIN SMALL LETTER X
+<UFF59>	        \x23\x79		# FULLWIDTH	LATIN SMALL LETTER Y
+<UFF5A>	        \x23\x7A		# FULLWIDTH	LATIN SMALL LETTER Z
 <U3041>	        \x24\x21		# HIRAGANA LETTER SMALL A
 <U3042>	        \x24\x22		# HIRAGANA LETTER A
 <U3043>	        \x24\x23		# HIRAGANA LETTER SMALL I
