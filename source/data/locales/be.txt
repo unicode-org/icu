@@ -109,4 +109,10 @@ be {
                 "GMT",
         }
     }
+    LocaleScript{
+        "Cyrillic", // Script name
+        "Cyrl",     // Abbreviation 
+        "Cyrs"      // Alias 
+    }
+
 }
