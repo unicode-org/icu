@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/TestFmwk.java,v $ 
- * $Date: 2002/09/19 22:45:45 $ 
- * $Revision: 1.32 $
+ * $Date: 2002/11/06 19:07:02 $ 
+ * $Revision: 1.33 $
  *
  *****************************************************************************************
  */
@@ -261,7 +261,7 @@ public class TestFmwk implements TestLog {
     }
 
     public void logln( String message ) {
-        log(message + System.getProperty("line.separator"), true, false);
+        logln(message, true, false);
     }
 
     /**
@@ -279,7 +279,7 @@ public class TestFmwk implements TestLog {
         }
 
         if (!pass || params.verbose) {
-            indent(params.indentLevel + 1);
+            if (!params.suppressIndent) indent(params.indentLevel + 1);
             params.log.print( message );
             params.log.flush();
         }
@@ -287,10 +287,13 @@ public class TestFmwk implements TestLog {
         if (!pass && !params.nothrow) {
             throw new RuntimeException(message);
         }
+
+        params.suppressIndent = true; // don't indent on successive calls to log()
     }
 
     public void logln( String message, boolean pass, boolean incrementCount ) {
         log(message + System.getProperty("line.separator"), pass, incrementCount);
+        params.suppressIndent = false; // time to indent again
     }
 
     /**
@@ -485,6 +488,7 @@ public class TestFmwk implements TestLog {
         public PrintWriter log = new ASCIIWriter(System.out, true);
         public int         indentLevel = 0;
         public boolean     needLineFeed = false;
+        public boolean     suppressIndent = false;
         public int         errorCount = 0;
         public int         invalidCount = 0;
     }
