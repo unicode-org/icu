@@ -1,6 +1,7 @@
 package com.ibm.text;
 
 import java.text.*;
+import java.util.Dictionary;
 
 /**
  * A mutable set of Unicode characters.  Objects of this class
@@ -225,7 +226,7 @@ import java.text.*;
  * *Unsupported by Java (and hence unsupported by UnicodeSet).
  *
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.2 $ $Date: 2000/01/04 21:43:58 $ */
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.3 $ $Date: 2000/01/11 02:25:03 $ */
 public class UnicodeSet {
     /**
      * The internal representation is a StringBuffer of even length.
@@ -250,6 +251,9 @@ public class UnicodeSet {
         "CnLuLlLtLmLoMnMeMcNdNlNoZsZlZpCcCf--CoCsPdPsPePcPoSmScSkSo";
 
     private static final int UNSUPPORTED_CATEGORY = 17;
+
+    private static final char VARIABLE_REF_OPEN = '{';
+    private static final char VARIABLE_REF_CLOSE = '}';
 
     private static final int CATEGORY_COUNT = 29;
 
@@ -293,24 +297,20 @@ public class UnicodeSet {
      * a syntax error.
      */
     public UnicodeSet(String pattern) {
-        applyPattern(pattern, false);
+        applyPattern(pattern);
     }
 
-    /**
-     * Constructs a set from the given pattern, optionally ignoring
-     * white space.  See the class description for the syntax of the
-     * pattern language.
-     * @param pattern a string specifying what characters are in the set
-     * @param ignoreSpaces if <code>true</code>, all spaces in the
-     * pattern are ignored, except those preceded by '\u005C'.  Spaces are
-     * those characters for which <code>Character.isSpaceChar()</code>
-     * is <code>true</code>.
-     * @exception <code>IllegalArgumentException</code> if the pattern
-     * contains a syntax error.
-     */
-    public UnicodeSet(String pattern, boolean ignoreSpaces) {
-        applyPattern(pattern, ignoreSpaces);
+
+
+
+
+    public UnicodeSet(String pattern, ParsePosition pos,
+                      Dictionary varNameToChar, Dictionary varCharToSet) {
+        applyPattern(pattern, pos, varNameToChar, varCharToSet);
     }
+
+
+
 
     /**
      * Constructs a set from the given Unicode character category.
@@ -328,63 +328,34 @@ public class UnicodeSet {
     }
 
     /**
-     * Modifies this set to represent the set specified by the given
-     * pattern.  See the class description for the syntax of the
-     * pattern language.
+     * Modifies this set to represent the set specified by the given pattern.
+     * See the class description for the syntax of the pattern language.
      * @param pattern a string specifying what characters are in the set
      * @exception <code>IllegalArgumentException</code> if the pattern
      * contains a syntax error.
      */
-    public final void applyPattern(String pattern) {
-        applyPattern(pattern, false);
-    }
-
-    /**
-     * Modifies this set to represent the set specified by the given
-     * pattern, optionally ignoring white space.  See the class
-     * description for the syntax of the pattern language.
-     * @param pattern a string specifying what characters are in the set
-     * @param ignoreSpaces if <code>true</code>, all spaces in the
-     * pattern are ignored.  Spaces are those characters for which
-     * <code>Character.isSpaceChar()</code> is <code>true</code>.
-     * Characters preceded by '\\' are escaped, losing any special
-     * meaning they otherwise have.  Spaces may be included by
-     * escaping them.
-     * @exception <code>IllegalArgumentException</code> if the pattern
-     * contains a syntax error.
-     */
-    public void applyPattern(String pattern, boolean ignoreSpaces) {
+    public void applyPattern(String pattern) {
         ParsePosition pos = new ParsePosition(0);
-
-        // To ignore spaces, create a new pattern without spaces.  We
-        // have to process all '\' escapes.  If '\' is encountered,
-        // insert it and the following character (if any -- let parse
-        // deal with any syntax errors) in the pattern.  This allows
-        // escaped spaces.
-        if (ignoreSpaces) {
-            StringBuffer pat = new StringBuffer();
-            for (int i=0; i<pattern.length(); ++i) {
-                char c = pattern.charAt(i);
-                if (Character.isSpaceChar(c)) {
-                    continue;
-                }
-                if (c == '\\' && (i+1) < pattern.length()) {
-                    pat.append(c);
-                    c = pattern.charAt(++i);
-                    // Fall through and append the following char
-                }
-                pat.append(c);
-            }
-            pattern = pat.toString();
-        }
-
-        pairs = parse(pattern, pos);
+        pairs = parse(pattern, pos, null, null);
         if (pos.getIndex() != pattern.length()) {
             throw new IllegalArgumentException("Parse of \"" + pattern +
                                                "\" failed at " +
                                                pos.getIndex());
         }
     }
+
+
+
+
+
+    private void applyPattern(String pattern, ParsePosition pos,
+                              Dictionary varNameToChar, Dictionary varCharToSet) {
+        pairs = parse(pattern, pos, varNameToChar, varCharToSet);
+    }
+
+
+
+
 
     /**
      * Returns a string representation of this set.  If the result of
@@ -643,77 +614,137 @@ public class UnicodeSet {
         return pairs.hashCode();
     }
 
+    /**
+     * Return a programmer-readable string representation of this object.
+     */
+    public String toString() {
+        return getClass().getName() + '{' + toPattern() + '}';
+    }
+
     //----------------------------------------------------------------
     // Implementation: Pattern parsing
     //----------------------------------------------------------------
 
     /**
-     * Parses the given pattern, starting at the given position.  The
-     * character at pattern.charAt(pos.getIndex()) must be '[', or the
-     * parse fails.  Parsing continues until the corresponding closing
-     * ']'.  If a syntax error is encountered between the opening and
-     * closing brace, the parse fails.  Upon return from a successful
-     * parse, the ParsePosition is updated to point to the character
-     * following the closing ']', and a StringBuffer containing a
-     * pairs list for the parsed pattern is returned.  This method calls
-     * itself recursively to parse embedded subpatterns.
+     * Parses the given pattern, starting at the given position.  The character
+     * at pattern.charAt(pos.getIndex()) must be '[', or the parse fails.
+     * Parsing continues until the corresponding closing ']'.  If a syntax error
+     * is encountered between the opening and closing brace, the parse fails.
+     * Upon return from a successful parse, the ParsePosition is updated to
+     * point to the character following the closing ']', and a StringBuffer
+     * containing a pairs list for the parsed pattern is returned.  This method
+     * calls itself recursively to parse embedded subpatterns.
      *
-     * @param pattern the string containing the pattern to be parsed.
-     * The portion of the string from pos.getIndex(), which must be a
-     * '[', to the corresponding closing ']', is parsed.
-     * @param pos upon entry, the position at which to being parsing.
-     * The character at pattern.charAt(pos.getIndex()) must be a '['.
-     * Upon return from a successful parse, pos.getIndex() is either
-     * the character after the closing ']' of the parsed pattern, or
-     * pattern.length() if the closing ']' is the last character of
-     * the pattern string.
-     * @return a StringBuffer containing a pairs list for the parsed
-     * substring of <code>pattern</code>
+     * @param pattern the string containing the pattern to be parsed.  The
+     * portion of the string from pos.getIndex(), which must be a '[', to the
+     * corresponding closing ']', is parsed.
+     * @param pos upon entry, the position at which to being parsing.  The
+     * character at pattern.charAt(pos.getIndex()) must be a '['.  Upon return
+     * from a successful parse, pos.getIndex() is either the character after the
+     * closing ']' of the parsed pattern, or pattern.length() if the closing ']'
+     * is the last character of the pattern string.
+     * @return a StringBuffer containing a pairs list for the parsed substring
+     * of <code>pattern</code>
      * @exception IllegalArgumentException if the parse fails.
      */
-    private static StringBuffer parse(String pattern, ParsePosition pos) {
+    private static StringBuffer parse(String pattern, ParsePosition pos,
+                                      Dictionary varNameToChar, Dictionary varCharToSet) {
 
-        boolean invert = false;
         StringBuffer pairsBuf = new StringBuffer();
+        boolean invert = false;
 
-        /**
-         * Nodes:  0 - idle, waiting for '['
-         *        10 - like 11, but immediately after "[" or "[^"
-         *        11 - awaiting x, "]", "[...]", or "[:...:]"
-         *        21 - after x
-         *        23 - after x-
-         * 
-         * The parsing state machine moves from node 0 through zero or more
-         * other nodes back to node 0, in a successful parse.
+        int lastChar = -1; // This is either a char (0..FFFF) or -1
+        char lastOp = 0;
+
+        /* This loop iterates over the characters in the pattern.  We start at
+         * the position specified by pos.  We exit the loop when either a
+         * matching closing ']' is seen, or we read all characters of the
+         * pattern.  In the latter case an error will be thrown.
          */
-        int node = 0;
-        char first = 0;
-        int i;
 
-        /**
-         * This loop iterates over the characters in the pattern.  We
-         * start at the position specified by pos.  We exit the loop
-         * when either a matching closing ']' is seen, or we read all
-         * characters of the pattern.
+        /* Pattern syntax:
+         *  pat := '[' '^'? elem* ']'
+         *  elem := a | a '-' a | set | set op set
+         *  set := pat | (a set variable)
+         *  op := '&' | '-'
+         *  a := (a character, possibly defined by a var)
          */
-        for (i=pos.getIndex(); i<pattern.length(); ++i) {
-            char c = pattern.charAt(i);
 
-            /**
-             * Handle escapes here.  If a character is escaped, then
-             * it assumes its literal value.  This is true for all
-             * characters, both special characters and characters with
-             * no special meaning.  We also interpret '\\uxxxx' Unicode
-             * escapes here.
+        // mode 0: No chars parsed yet; next must be '['
+        // mode 1: '[' seen; if next is '^' or ':' then special
+        // mode 2: '[' '^'? seen; parse pattern and close with ']'
+        // mode 3: '[:' seen; parse category and close with ':]'
+        int mode = 0;
+        int openPos = 0; // offset to opening '['
+        int i = pos.getIndex();
+        int limit = pattern.length();
+        for (; i<limit; ++i) {
+            /* If the next element is a single character, c will be set to it,
+             * and nestedPairs will be null.  In this case isLiteral indicates
+             * whether the character should assume special meaning if it has
+             * one.  If the next element is a nested set, either via a variable
+             * reference, or via an embedded "[..]"  or "[:..:]" pattern, then
+             * nestedPairs will be set to the pairs list for the nested set, and
+             * c's value should be ignored.
              */
+            char c = pattern.charAt(i);
+            String nestedPairs = null;
             boolean isLiteral = false;
+
+            // Ignore whitespace.  This is not Unicode whitespace, but Java
+            // whitespace, a subset of Unicode whitespace.
+            if (Character.isWhitespace(c)) {
+                continue;
+            }
+
+            // Parse the opening '[' and optional following '^'
+            switch (mode) {
+            case 0:
+                if (c == '[') {
+                    mode = 1; // Next look for '^'
+                    openPos = i;
+                    continue;
+                } else {
+                    throw new IllegalArgumentException("Missing opening '['");
+                }
+            case 1:
+                mode = 2;
+                switch (c) {
+                case '^':
+                    invert = true;
+                    continue; // Back to top to fetch next character
+                case ':':
+                    if (i == openPos+1) {
+                        // '[:' cannot have whitespace in it
+                        --i;
+                        c = '[';
+                        mode = 3;
+                        // Fall through and parse category normally
+                    }
+                    break; // Fall through
+                case '-':
+                    isLiteral = true; // Treat leading '-' as a literal
+                    break; // Fall through
+                }
+                // else fall through and parse this character normally
+            }
+
+            // After opening matter is parsed ("[", "[^", or "[:"), the mode
+            // will be 2 if we want a closing ']', or 3 if we should parse a
+            // category and close with ":]".
+
+            /* Handle escapes.  If a character is escaped, then it assumes its
+             * literal value.  This is true for all characters, both special
+             * characters and characters with no special meaning.  We also
+             * interpret '\\uxxxx' Unicode escapes here (as literals).
+             */
             if (c == '\\') {
                 ++i;
-                if (i < pattern.length()) {
+                if (i < limit) {
                     c = pattern.charAt(i);
                     isLiteral = true;
                     if (c == 'u') {
-                        if ((i+4) >= pattern.length()) {
+                        if ((i+4) >= limit) {
                             throw new IllegalArgumentException("Invalid \\u escape");
                         }
                         c = '\u0000';
@@ -731,200 +762,142 @@ public class UnicodeSet {
                 }
             }
 
-            /**
-             * Within this loop, we handle each of the four
-             * conditions: '[', ']', '-', other.  The first three
-             * characters must not be escaped.
+            /* Parse variable references.  These are treated as literals.  If a
+             * variable refers to a UnicodeSet, nestedPairs is assigned here.
+             * Variable names are only parsed if varNameToChar is not null.
+             * Set variables are only looked up if varCharToSet is not null.
              */
+            else if (varNameToChar != null && !isLiteral && c == VARIABLE_REF_OPEN) {
+                ++i;
+                int j = pattern.indexOf(VARIABLE_REF_CLOSE, i);
+                if (i == j || j < 0) { // empty or unterminated
+                    throw new IllegalArgumentException("Illegal variable reference");
+                }
+                String name = pattern.substring(i, j);
+                ++j;
+                Character ch = (Character) varNameToChar.get(name);
+                if (ch == null) {
+                    throw new IllegalArgumentException("Undefined variable: "
+                                                       + name);
+                }
+                c = ch.charValue();
+                isLiteral = true;
 
-            /**
-             * An opening bracket indicates either the first bracket
-             * of the entire subpattern we are parsing, in which case
-             * we are in node 0 and move into node 10.  We also check
-             * for an immediately following '^', indicating the
-             * complement of the following pattern.  ('^' is any other
-             * position has no special meaning.)  If we are not in
-             * node 0, '[' represents a nested subpattern that must be
-             * recursively parsed and checked for following operators
-             * ('&' or '|').  If two nested subpatterns follow one
-             * another with no operator, their union is formed, just
-             * as with any other elements that follow one another
-             * without intervening operator.  The other thing we
-             * handle here is the syntax "[:Xx:]" or "[:X:]" that
-             * indicates a Unicode category or supercategory.
+                if (varCharToSet != null) {
+                    UnicodeSet set = (UnicodeSet) varCharToSet.get(ch);
+                    if (set != null) {
+                        nestedPairs = set.pairs.toString();
+                    }
+                }
+            }
+
+            /* An opening bracket indicates the first bracket of a nested
+             * subpattern, either a normal pattern or a category pattern.  We
+             * recognize these here and set nestedPairs accordingly.
              */
-            if (!isLiteral && c == '[') {
-                boolean parseOp = false;
+            else if (!isLiteral && c == '[') {
+                // Handle "[:...:]", representing a character category
                 char d = charAfter(pattern, i);
-                // "[:...:]" represents a character category
                 if (d == ':') {
-                    if (node == 23) {
-                        throw new IllegalArgumentException("Unexpected \"[:\"");
-                    }
-                    if (node == 21) {
-                        addPair(pairsBuf, first, first);
-                        node = 11;
-                    }
                     i += 2;
                     int j = pattern.indexOf(":]", i);
                     if (j < 0) {
                         throw new IllegalArgumentException("Missing \":]\"");
                     }
-                    doUnion(pairsBuf,
-                            getCategoryPairs(pattern.substring(i, j)));
-                    i = j+1;
-                    if (node == 10) {
-                        node = 11;
-                        parseOp = true;
-                    } else if (node == 0) {
+                    nestedPairs = getCategoryPairs(pattern.substring(i, j));
+                    i = j+1; // Make i point to ']'
+                    if (mode == 3) {
+                        // Entire pattern is a category; leave parse loop
+                        pairsBuf.append(nestedPairs);
                         break;
                     }
                 } else {
-                    if (node == 0) {
-                        node = 10;
-                        if (d == '^') {
-                            invert = true;
-                            ++i;
-                        }
-                    } else {
-                        // Nested '['
-                        pos.setIndex(i);
-                        doUnion(pairsBuf, parse(pattern, pos)
-                                .toString());
-                        i = pos.getIndex() - 1; // Subtract 1 to point at ']'
-                        parseOp = true;
-                    }
+                    // Recurse to get the pairs for this nested set.
+                    pos.setIndex(i); // Add 2 to point AFTER op
+                    nestedPairs = parse(pattern, pos, varNameToChar, varCharToSet).toString();
+                    i = pos.getIndex() - 1; // - 1 to point at ']'
                 }
-                /**
-                 * parseOp is true after "[:...:]" or a nested
-                 * "[...]".  It is false only after the final closing
-                 * ']'.  If parseOp is true, we look past the closing
-                 * ']' to see if we have an operator character.  If
-                 * so, we parse the subsequent "[...]" recursively,
-                 * then perform the operation.  We do this in a loop
-                 * until there are no more operators.  Note that this
-                 * means the operators have equal precedence and are
-                 * bound left-to-right.
-                 */
-                if (parseOp) {
-                    for (;;) {
-                        // Is the next character an operator?
-                        char op = charAfter(pattern, i);
-                        if (op == '-' || op == '&') {
-                            pos.setIndex(i+2); // Add 2 to point AFTER op
-                            String rhs = parse(pattern, pos).toString();
-                            if (op == '-') {
-                                doDifference(pairsBuf, rhs);
-                            } else if (op == '&') {
-                                doIntersection(pairsBuf, rhs);
-                            }
-                            i = pos.getIndex() - 1; // - 1 to point at ']'
-                        } else {
-                            break;
-                        }
-                    }
-                }          
             }
 
-            /**
-             * A closing bracket can only be a closing bracket for
-             * "[...]", since the closing bracket for "[:...:]" is
-             * taken care of when the initial "[:" is seen.  When we
-             * see a closing bracket, we then know, if we were in node
-             * 21 (after x) or 23 (after x-) that nothing more is
-             * coming, and we add the last character(s) we saw to the
-             * set.  Note that a trailing '-' assumes its literal
-             * meaning, just as a leading '-' after "[" or "[^".
+            /* At this point we have either a character c, or a nested set.  If
+             * we have encountered a nested set, either embedded in the pattern,
+             * or as a variable, we have a non-null nestedPairs, and c should be
+             * ignored.  Otherwise c is the current character, and isLiteral
+             * indicates whether it is an escaped literal (or variable) or a
+             * normal unescaped character.  Unescaped characters '-', '&', and
+             * ']' have special meanings.
              */
-            else if (!isLiteral && c == ']') {
-                if (node == 0) {
-                    throw new IllegalArgumentException("Unexpected ']'");
-                }
-                if (node == 21 || node == 23) {
-                    addPair(pairsBuf, first, first);
-                    if (node == 23) {
-                        addPair(pairsBuf, '-', '-');
+            if (nestedPairs != null) {
+                if (lastChar >= 0) {
+                    if (lastOp != 0) {
+                        throw new IllegalArgumentException("Illegal rhs for " + lastChar + lastOp);
                     }
+                    addPair(pairsBuf, (char)lastChar, (char)lastChar);
+                    lastChar = -1;
                 }
-                node = 0;
+                switch (lastOp) {
+                case '-':
+                    doDifference(pairsBuf, nestedPairs);
+                    break;
+                case '&':
+                    doIntersection(pairsBuf, nestedPairs);
+                    break;
+                case 0:
+                    doUnion(pairsBuf, nestedPairs);
+                    break;
+                }
+                lastOp = 0;
+            } else if (!isLiteral && c == ']') {
+                // Final closing delimiter.  This is the only way we leave this
+                // loop if the pattern is well-formed.
                 break;
-            }
-
-            /**
-             * '-' has the following interpretations: 1. Within
-             * "[...]", between two letters, it indicates a range.
-             * 2. Between two nested bracket patterns, "[[...]-[...]",
-             * it indicates asymmetric difference.  3. At the start of
-             * a bracket pattern, "[-...]", "[^-...]", it indicates
-             * the literal character '-'.  4. At the end of a bracket
-             * pattern, "[...-]", it indicates the literal character
-             * '-'.
-             *
-             * We handle cases 1 and 3 here.  Cases 2 and 4 are
-             * handled in the ']' parsing code.
-             */
-            else if (!isLiteral && c == '-') {
-                if (node == 10) {
-                    addPair(pairsBuf, c, c); // Handle "[-...]", "[^-...]"
-                } else if (node == 21) {
-                    node = 23;
-                } else {
-                    throw new IllegalArgumentException("Unexpected '-'");
+            } else if (lastOp == 0 && !isLiteral && (c == '-' || c == '&')) {
+                lastOp = c;
+            } else if (lastOp == '-') {
+                addPair(pairsBuf, (char)lastChar, c);
+                lastOp = 0;
+                lastChar = -1;
+            } else if (lastOp != 0) {
+                // We have <set>&<char> or <char>&<char>
+                throw new IllegalArgumentException("Unquoted " + lastOp);
+            } else {
+                if (lastChar >= 0) {
+                    // We have <char><char>
+                    addPair(pairsBuf, (char)lastChar, (char)lastChar);
                 }
-            } 
-
-            /**
-             * If we fall through to this point, we have a literal
-             * character, either one that has been escaped with a
-             * backslash, escaped with a backslash u, or that isn't
-             * a special '[', ']', or '-'.
-             *
-             * Literals can either start a range "x-...", end a range,
-             * "...-x", or indicate a single character "x".
-             */
-            else {
-                if (node == 10 || node == 11) {
-                    first = c;
-                    node = 21;
-                } else if (node == 21) {
-                    addPair(pairsBuf, first, first);
-                    first = c;
-                    node = 21;
-                } else if (node == 23) {
-                    if (c < first) {
-                        throw new IllegalArgumentException("Bad range");
-                    }
-                    addPair(pairsBuf, first, c);
-                    node = 11;
-                } else {
-                    throw new IllegalArgumentException("Expected '[', got '" + c + '\'');
-                }
+                lastChar = c;
             }
         }
 
-        if (node != 0) {
-            throw new IllegalArgumentException("Missing ']'");
+        // Handle unprocessed stuff preceding the closing ']'
+        if (lastOp == '-') {
+            // Trailing '-' is treated as literal
+            addPair(pairsBuf, lastOp, lastOp);
+        } else if (lastOp == '&') {
+            throw new IllegalArgumentException("Unquoted trailing " + lastOp);
+        }
+        if (lastChar >= 0) {
+            addPair(pairsBuf, (char)lastChar, (char)lastChar);                    
         }
 
         /**
-         * i indexes the last character we parsed or is
-         * pattern.length().  In the latter case, the node will not be
-         * zero, since we have run off the end without finding a
-         * closing ']'.  Therefore, the above statement will have
-         * thrown an exception, and we'll never get here.  If we get
-         * here, we know i < pattern.length(), and we set the
-         * ParsePosition to the next character to be parsed.
-         */
-        pos.setIndex(i+1);
-
-        /**
-         * If we saw a '^' after the initial '[' of this pattern, then
-         * perform the complement.  (Inversion after '[:' is handled
-         * elsewhere.)
+         * If we saw a '^' after the initial '[' of this pattern, then perform
+         * the complement.  (Inversion after '[:' is handled elsewhere.)
          */
         if (invert) {
             doComplement(pairsBuf);
         }
+
+        /**
+         * i indexes the last character we parsed or is pattern.length().  In
+         * the latter case, we have run off the end without finding a closing
+         * ']'.  Otherwise, we know i < pattern.length(), and we set the
+         * ParsePosition to the next character to be parsed.
+         */
+        if (i == limit) {
+            throw new IllegalArgumentException("Missing ']'");
+        }
+        pos.setIndex(i+1);
 
         return pairsBuf;
     }
@@ -1352,7 +1325,6 @@ public class UnicodeSet {
     /**
      * Returns the character after the given position, or '\uFFFF' if
      * there is none.
-
      */
     private static final char charAfter(String str, int i) {
         return ((++i) < str.length()) ? str.charAt(i) : '\uFFFF';

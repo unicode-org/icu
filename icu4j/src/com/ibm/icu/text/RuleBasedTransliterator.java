@@ -2,6 +2,7 @@ package com.ibm.text;
 
 import java.util.Hashtable;
 import java.util.Vector;
+import java.text.ParsePosition;
 
 /**
  * A transliterator that reads a set of rules in order to determine how to
@@ -181,9 +182,12 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.7 $ $Date: 2000/01/06 01:36:36 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.8 $ $Date: 2000/01/11 02:25:03 $
  *
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.8  2000/01/11 02:25:03  Alan
+ * Rewrite UnicodeSet and RBT parsers for better performance and new syntax
+ *
  * Revision 1.7  2000/01/06 01:36:36  Alan
  * Allow string arrays in rule resource bundles
  *
@@ -195,7 +199,6 @@ import java.util.Vector;
  *
  * Revision 1.4  1999/12/22 01:05:54  Alan
  * Improve masking checking; turn it off by default, for better performance
- *
  */
 public class RuleBasedTransliterator extends Transliterator {
     /**
@@ -213,8 +216,6 @@ public class RuleBasedTransliterator extends Transliterator {
     private Data data;
 
     static final boolean DEBUG = false;
-
-    static final boolean CHECK_MASKING = true;
 
     private static final String COPYRIGHT =
         "\u00A9 IBM Corporation 1999. All rights reserved.";
@@ -561,33 +562,34 @@ public class RuleBasedTransliterator extends Transliterator {
         private static final char VARIABLE_DEF_OP   = '=';
         private static final char FORWARD_RULE_OP   = '>';
         private static final char REVERSE_RULE_OP   = '<';
-        private static final char FWDREV_RULE_OP    = '~'; // internal rep of FWDREF_OP_STRING
+        private static final char FWDREV_RULE_OP    = '~'; // internal rep of <> op
 
         private static final String OPERATORS = "=><";
 
-        // Forward-Reverse operator
-        // a<>b is equivalent to a<b;a>b
-        private static final String FWDREV_OP_STRING  = "<>"; // must have length 2
-
         // Other special characters
         private static final char QUOTE               = '\'';
+        private static final char ESCAPE              = '\\';
+        private static final char END_OF_RULE         = ';';
+        private static final char RULE_COMMENT_CHAR   = '#';
+
         private static final char VARIABLE_REF_OPEN   = '{';
         private static final char VARIABLE_REF_CLOSE  = '}';
-        private static final char CONTEXT_OPEN        = '[';
-        private static final char CONTEXT_CLOSE       = ']';
+        private static final char CONTEXT_OPEN        = '(';
+        private static final char CONTEXT_CLOSE       = ')';
+        private static final char SET_OPEN            = '[';
+        private static final char SET_CLOSE           = ']';
         private static final char CURSOR_POS          = '|';
-        private static final char RULE_COMMENT_CHAR   = '#';
 
         /**
          * Specials must be quoted in rules to be used as literals.
          * Specials may not occur in variable names.
          */
-        private static final String SPECIALS = "'{}[]|#" + OPERATORS;
+//!        private static final String SPECIALS = "{}[]|" + OPERATORS;
 
         /**
          * Specials that must be quoted in variable definitions.
          */
-        private static final String DEF_SPECIALS = "'{}";
+//!        private static final String DEF_SPECIALS = "{}";
 
         /**
          * @param rules list of rules, separated by semicolon characters
@@ -616,37 +618,12 @@ public class RuleBasedTransliterator extends Transliterator {
             determineVariableRange(ruleArray);
 
             StringBuffer errors = null;
-            for (int irule=0; irule<ruleArray.length; ++irule) {
-                rules = ruleArray[irule];
-                int n = rules.length();
-                int i = 0;
-                while (i<n) {
-                    int limit = rules.indexOf(';', i);
-
-                    // Recognize "\\;" as an escaped ";"
-                    while (limit>0 && rules.charAt(limit-1) == '\\') {
-                        limit = rules.indexOf(';', limit+1);
-                    }
-
-                    if (limit == -1) {
-                        limit = n;
-                    }
-                    // Skip over empty lines and line starting with #
-                    if (limit > i && rules.charAt(i) != RULE_COMMENT_CHAR) {
-                        try {
-                            applyRule(i, limit);
-                        } catch (IllegalArgumentException e) {
-                            if (errors == null) {
-                                errors = new StringBuffer(e.getMessage());
-                            } else {
-                                errors.append("\n").append(e.getMessage());
-                            }
-                        }
-                    }
-                    i = limit + 1;
-                }
+            try {
+                parseRuleArray(ruleArray);
+            } catch (IllegalArgumentException e) {
+                errors = new StringBuffer(e.getMessage());
             }
-
+            
             // Index the rules
             try {
                 data.ruleSet.freeze(data.setVariables);
@@ -663,411 +640,684 @@ public class RuleBasedTransliterator extends Transliterator {
             }
         }
 
-        /**
-         * Parse the given substring as a rule, and append it to the rules currently
-         * represented in this object.
-         * @param start the beginning index, inclusive; <code>0 <= start
-         * <= limit</code>.
-         * @param limit the ending index, exclusive; <code>start <= limit
-         * <= rules.length()</code>.
-         * @exception IllegalArgumentException if there is a syntax error in the
-         * rules
-         */
-        private void applyRule(int start, int limit) {
-            /* General description of parsing: Initially, rules contain two types of
-             * quoted characters.  First, there are variable references, such as
-             * "{alpha}".  Second, there are quotes, such as "'<'" or "''".  One of
-             * the first steps in parsing a rule is to resolve such quoted matter.
-             * Quotes are removed early, leaving unquoted literal matter.  Variable
-             * references are resolved and replaced by single characters.  In some
-             * instances these characters represent themselves; in others, they
-             * stand for categories of characters.  Character categories are either
-             * predefined (e.g., "{Lu}"), or are defined by the user using a
-             * statement (e.g., "vowels:aeiouAEIOU").
-             *
-             * Another early step in parsing is to split each rule into component
-             * pieces.  These pieces are, for every rule, a left-hand side, a right-
-             * hand side, and an operator.  The left- and right-hand sides may not
-             * be empty, except for the output patterns of forward and reverse
-             * rules.  In addition to this partitioning, the match patterns of
-             * forward and reverse rules must be partitioned into antecontext,
-             * postcontext, and literal pattern, where the context portions may or
-             * may not be present.  Finally, output patterns must have the cursor
-             * indicator '|' detected and removed, with its position recorded.
-             *
-             * Quote removal, variable resolution, and sub-pattern splitting must
-             * all happen at once.  This is due chiefly to the quoting mechanism,
-             * which allows special characters to appear at arbitrary positions in
-             * the final unquoted text.  (For this reason, alteration of the rule
-             * language is somewhat clumsy; it entails reassessment and revision of
-             * the parsing methods as a whole.)
-             *
-             * After this processing of rules is complete, the final end products
-             * are unquoted pieces of text of various types, and an integer cursor
-             * position, if one is specified.  These processed raw materials are now
-             * easy to deal with; other classes such as UnicodeSet and
-             * TransliterationRule need know nothing of quoting or variables.
-             */
-            StringBuffer left = new StringBuffer();
-            StringBuffer right = new StringBuffer();
-            StringBuffer anteContext = new StringBuffer();
-            StringBuffer postContext = new StringBuffer();
-            int cursorPos[] = new int[1];
 
-            char operator = parseRule(start, limit, left, right,
-                                      anteContext, postContext, cursorPos);
+
+
+
+
+
+
+        private void parseRuleArray(String[] ruleArray) {
+            String[] leftRight = new String[2];
+            char[] op = new char[1];
+            for (int i=0; i<ruleArray.length; ++i) {
+                String rule = ruleArray[i];
+                int pos = 0;
+                int limit = rule.length();
+                while (pos < limit) {
+                    char c = rule.charAt(pos++);
+                    if (Character.isWhitespace(c)) {
+                        // Ignore leading whitespace.  Note that this is not
+                        // Unicode spaces, but Java spaces -- a subset,
+                        // representing whitespace likely to be seen in code.
+                        continue;
+                    }
+                    // Skip lines starting with the comment character
+                    if (c == RULE_COMMENT_CHAR) {
+                        pos = rule.indexOf("\n", pos) + 1;
+                        if (pos == 0) {
+                            break; // No "\n" found; rest of rule is a commnet
+                        }
+                        continue; // Either fall out or restart with next line
+                    }
+                    // We've found the start of a rule.  c is its first
+                    // character, and pos points past c.  Lexically parse the
+                    // rule into component pieces.
+                    pos = parseRule(rule, --pos, limit);                    
+                }
+            }
+        }
+
+        /**
+         * Do a lexical parse of the next rule in the given rule string,
+         * starting at pos.  Return the index after the last character parsed.
+         * Do not parse characters at or after limit.
+         *
+         * The character at pos must be a non-whitespace character
+         * that is not the comment character.
+         *
+         * This method handles quoting, escaping, and whitespace removal.  It
+         * parses the end-of-rule character.
+         */
+        int parseRule(String rule, int pos, int limit) {
+            // Locate the left side, operator, and right side
+            int start = pos;
+            char operator = 0;
+
+            StringBuffer buf = new StringBuffer();
+            int cursor = -1; // position of cursor in buf
+            int ante = -1;   // position of ante context marker ')' in buf
+            int post = -1;   // position of post context marker '(' in buf
+            int postClose = -1; // position of post context close ')' in buf
+
+            // Assigned to buf and its adjuncts after the LHS has been
+            // parsed.  Thereafter, buf etc. refer to the RHS.
+            String left = null;
+            int leftCursor = -1, leftAnte = -1, leftPost = -1, leftPostClose = -1;
+
+        main:
+            while (pos < limit) {
+                char c = rule.charAt(pos++);
+                if (Character.isWhitespace(c)) {
+                    // Ignore whitespace.  Note that this is not Unicode
+                    // spaces, but Java spaces -- a subset, representing
+                    // whitespace likely to be seen in code.
+                    continue;
+                }
+                // Handle escapes
+                if (c == ESCAPE) {
+                    if (pos == limit) {
+                        syntaxError("Trailing backslash", rule, start);
+                    }
+                    buf.append(rule.charAt(pos++));
+                    continue;
+                }
+                // Handle quoted matter
+                if (c == QUOTE) {
+                    int iq = rule.indexOf(QUOTE, pos);
+                    if (iq == pos) {
+                        buf.append(c); // Parse [''] outside quotes as [']
+                        ++pos;
+                    } else {
+                        /* This loop picks up a segment of quoted text of the
+                         * form 'aaaa' each time through.  If this segment
+                         * hasn't really ended ('aaaa''bbbb') then it keeps
+                         * looping, each time adding on a new segment.  When it
+                         * reaches the final quote it breaks.
+                         */
+                        for (;;) {
+                            if (iq < 0) {
+                                syntaxError("Unterminated quote", rule, start);
+                            }
+                            buf.append(rule.substring(pos, iq));
+                            pos = iq+1;
+                            if (pos < limit && rule.charAt(pos) == QUOTE) {
+                                // Parse [''] inside quotes as [']
+                                iq = rule.indexOf(QUOTE, pos+1);
+                                // Continue looping
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+                    continue;
+                }
+                if (OPERATORS.indexOf(c) >= 0) {
+                    if (operator != 0) {
+                        syntaxError("Unquoted " + c, rule, start);
+                    }
+                    // Found an operator char.  Check for forward-reverse operator.
+                    if (c == REVERSE_RULE_OP &&
+                        (pos < limit && rule.charAt(pos) == FORWARD_RULE_OP)) {
+                        ++pos;
+                        operator = FWDREV_RULE_OP;
+                    } else {
+                        operator = c;
+                    }
+                    left = buf.toString(); // lhs
+                    leftCursor = cursor;
+                    leftAnte = ante;
+                    leftPost = post;
+                    leftPostClose = postClose;
+
+                    buf.setLength(0);
+                    cursor = ante = post = postClose = -1;
+                    continue;
+                }
+                switch (c) {
+                case END_OF_RULE:
+                    break main;
+                case VARIABLE_REF_OPEN:
+                    {
+                        int j = rule.indexOf(VARIABLE_REF_CLOSE, pos);
+                        if (pos == j || j < 0) { // empty or unterminated
+                            syntaxError("Malformed variable reference", rule, start);
+                        }
+                        String name = rule.substring(pos, j);
+                        pos = j+1;
+                        buf.append(getVariableDef(name).charValue());
+                    }
+                    break;
+                case CONTEXT_OPEN:
+                    if (post >= 0) {
+                        syntaxError("Multiple post contexts", rule, start);
+                    }
+                    // Ignore CONTEXT_OPEN if buffer length is zero -- that means
+                    // this is the optional opening delimiter for the ante context.
+                    if (buf.length() > 0) {
+                        post = buf.length();
+                    }
+                    break;
+                case CONTEXT_CLOSE:
+                    if (postClose >= 0) {
+                        syntaxError("Unexpected " + c, rule, start);
+                    }
+                    if (post >= 0) {
+                        // This is probably the optional closing delimiter
+                        // for the post context; save the pos and check later.
+                        postClose = buf.length();
+                    } else if (ante >= 0) {
+                        syntaxError("Multiple ante contexts", rule, start);
+                    } else {
+                        ante = buf.length();
+                    }
+                    break;
+                case SET_OPEN:
+                    ParsePosition pp = new ParsePosition(pos-1); // Backup to opening '['
+                    buf.append(registerSet(new UnicodeSet(rule, pp,
+                                   data.variableNames, data.setVariables)).charValue());
+                    pos = pp.getIndex();
+                    break;
+                case VARIABLE_REF_CLOSE:
+                case SET_CLOSE:
+                    syntaxError("Unquoted " + c, rule, start);
+                case CURSOR_POS:
+                    if (cursor >= 0) {
+                        syntaxError("Multiple cursors", rule, start);
+                    }
+                    cursor = buf.length();
+                    break;
+                default:
+                    buf.append(c);
+                    break;
+                }
+            }
+            if (operator == 0) {
+                syntaxError("No operator", rule, start);
+            }
+
+            // Check context close parameters
+            if ((leftPostClose >= 0 && leftPostClose != left.length()) ||
+                (postClose >= 0 && postClose != buf.length())) {
+                syntaxError("Extra text after ]", rule, start);
+            }
+
+            // Context is only allowed on the input side; that is, the left side
+            // for forward rules.  Cursors are only allowed on the output side;
+            // that is, the right side for forward rules.  Bidirectional rules
+            // ignore elements that do not apply.
 
             switch (operator) {
             case VARIABLE_DEF_OP:
-                applyVariableDef(left.toString(), right.toString());
+                // LHS is the name.  RHS is a single character, either a literal
+                // or a set (already parsed).  If RHS is longer than one
+                // character, it is either a multi-character string, or multiple
+                // sets, or a mixture of chars and sets -- syntax error.
+                if (buf.length() != 1) {
+                    syntaxError("Malformed RHS", rule, start);
+                }
+                if (data.variableNames.get(left) != null) {
+                    syntaxError("Duplicate definition of {" +
+                                left + "}", rule, start);
+                }
+                data.variableNames.put(left, new Character(buf.charAt(0)));
                 break;
+
             case FORWARD_RULE_OP:
                 if (direction == FORWARD) {
+                    if (ante >= 0 || post >= 0 || leftCursor >= 0) {
+                        syntaxError("Malformed rule", rule, start);
+                    }
                     data.ruleSet.addRule(new TransliterationRule(
-                                             left.toString(), right.toString(),
-                                             anteContext.toString(), postContext.toString(),
-                                             cursorPos[0]));
+                                             left, leftAnte, leftPost,
+                                             buf.toString(), cursor));
                 } // otherwise ignore the rule; it's not the direction we want
                 break;
+
             case REVERSE_RULE_OP:
                 if (direction == REVERSE) {
+                    if (leftAnte >= 0 || leftPost >= 0 || cursor >= 0) {
+                        syntaxError("Malformed rule", rule, start);
+                    }
                     data.ruleSet.addRule(new TransliterationRule(
-                                             right.toString(), left.toString(),
-                                             anteContext.toString(), postContext.toString(),
-                                             cursorPos[0]));
+                                             buf.toString(), ante, post,
+                                             left, leftCursor));
                 } // otherwise ignore the rule; it's not the direction we want
                 break;
+
             case FWDREV_RULE_OP:
-                data.ruleSet.addRule(new TransliterationRule(
-                                         direction == FORWARD ? left.toString() : right.toString(),
-                                         direction == FORWARD ? right.toString() : left.toString(),
-                                         // Context & cursor disallowed
-                                         "", "", -1));
+                if (direction == FORWARD) {
+                    // The output side is the right; trim off any context
+                    String output = buf.toString().substring(ante < 0 ? 0 : ante,
+                                                             post < 0 ? buf.length() : post);
+                    data.ruleSet.addRule(new TransliterationRule(
+                                             left, leftAnte, leftPost,
+                                             output, cursor));
+                } else {
+                    // The output side is the left; trim off any context
+                    String output = left.substring(leftAnte < 0 ? 0 : leftAnte,
+                                                   leftPost < 0 ? left.length() : leftPost);
+                    data.ruleSet.addRule(new TransliterationRule(
+                                             buf.toString(), ante, post,
+                                             output, leftCursor));
+                }
                 break;
             }
+
+            return pos;
         }
 
-        /**
-         * Add a variable definition.
-         * @param name the name of the variable.  It must not already be defined.
-         * @param pattern the value of the variable.  It may be a single character
-         * or a pattern describing a character set.
-         * @exception IllegalArgumentException if there is a syntax error
-         */
-        private final void applyVariableDef(String name, String pattern) {
-            validateVariableName(name);
-            if (data.variableNames.get(name) != null) {
-                throw new IllegalArgumentException("Duplicate variable definition: "
-                                                   + name + '=' + pattern);
+
+
+        private static final void syntaxError(String msg, String rule, int start) {
+            int end = quotedIndexOf(rule, start, rule.length(), ";");
+            if (end < 0) {
+                end = rule.length();
             }
-//!         if (UnicodeSet.getCategoryID(name) >= 0) {
-//!             throw new IllegalArgumentException("Reserved variable name: "
-//!                                                + name);
-//!         }
-            if (pattern.length() < 1) {
-                throw new IllegalArgumentException("Variable definition missing: "
-                                                   + name);
-            }
-            if (pattern.length() == 1) {
-                // Got a single character variable definition
-                data.variableNames.put(name, new Character(pattern.charAt(0)));
-            } else {
-                // Got more than one character; parse it as a category
-                if (variableNext >= variableLimit) {
-                    throw new RuntimeException("Private use variables exhausted");
-                }
-                Character c = new Character(variableNext++);
-                data.variableNames.put(name, c);
-                data.setVariables.put(c, new UnicodeSet(pattern));
-            }
+            throw new IllegalArgumentException(msg + " in " +
+                                               rule.substring(start, end));
         }
 
-        /**
-         * Given a rule, parses it into three pieces: The left side, the right side,
-         * and the operator.  Returns the operator.  Quotes and variable references
-         * are resolved; the otuput text in all <code>StringBuffer</code> parameters
-         * is literal text.  This method delegates to other parsing methods to
-         * handle the match pattern, output pattern, and other sub-patterns in the
-         * rule.
-         * @param start the beginning index, inclusive; <code>0 <= start
-         * <= limit</code>.
-         * @param limit the ending index, exclusive; <code>start <= limit
-         * <= rules.length()</code>.
-         * @param left left side of rule is appended to this buffer
-         * with the quotes removed and variables resolved
-         * @param right right side of rule is appended to this buffer
-         * with the quotes removed and variables resolved
-         * @param anteContext the preceding context of the match pattern,
-         * if there is one, is appended to this buffer
-         * @param postContext the following context of the match pattern,
-         * if there is one, is appended to this buffer
-         * @param cursorPos if there is a cursor in the output pattern, its
-         * offset is stored in <code>cursorPos[0]</code>
-         * @return The operator character, one of the characters in OPERATORS.
-         */
-        private char parseRule(int start, int limit,
-                               StringBuffer left, StringBuffer right,
-                               StringBuffer anteContext,
-                               StringBuffer postContext,
-                               int[] cursorPos) {
-            if (false) {
-                System.err.println("Parsing " + rules.substring(start, limit));
-            }
-            /* Parse the rule into three pieces -- left, operator, and right,
-             * parsing out quotes.  The result is that left and right will have
-             * unquoted text.  E.g., "gt<'>'" will have right = ">".  Unquoted
-             * operators throw an exception.  Two quotes inside or outside
-             * quotes indicates a quote literal.  E.g., "o''clock" -> "o'clock".
-             */
-            int i = quotedIndexOf(rules, start, limit, OPERATORS);
-            if (i < 0) {
-                throw new IllegalArgumentException(
-                              "Syntax error: "
-                              + rules.substring(start, limit));
-            }
-            char c = rules.charAt(i);
-            
-            // Look for "<>" double rules.
-            if ((i+1) < limit && rules.substring(i, i+2).equals(FWDREV_OP_STRING)) {
-                if (i == start) {
-                    throw new IllegalArgumentException(
-                                  "Empty left side: "
-                                  + rules.substring(start, limit));
-                }
-                if (i+2 == limit) {
-                    throw new IllegalArgumentException(
-                                  "Empty right side: "
-                                  + rules.substring(start, limit));
-                }
-                parseSubPattern(start, i, left, null, SPECIALS);
-                parseSubPattern(i+2, limit, right, null, SPECIALS);
-                return FWDREV_RULE_OP;
-            }
 
-            switch (c) {
-            case FORWARD_RULE_OP:
-                if (i == start) {
-                    throw new IllegalArgumentException(
-                                  "Empty left side: "
-                                  + rules.substring(start, limit));
-                }
-                parseMatchPattern(start, i, left, anteContext, postContext);
-                if (i != (limit-1)) {
-                    parseOutputPattern(i+1, limit, right, cursorPos);
-                }
-                break;
-            case REVERSE_RULE_OP:
-                if (i == (limit-1)) {
-                    throw new IllegalArgumentException(
-                                  "Empty right side: "
-                                  + rules.substring(start, limit));
-                }
-                if (i != start) {
-                    parseOutputPattern(start, i, left, cursorPos);
-                }
-                parseMatchPattern(i+1, limit, right, anteContext, postContext);
-                break;
-            case VARIABLE_DEF_OP:
-                if (i == start || i == (limit-1)) {
-                    throw new IllegalArgumentException(
-                                  "Empty left or right side: "
-                                  + rules.substring(start, limit));
-                }
-                parseSubPattern(start, i, left);
-                parseDefPattern(i+1, limit, right);
-                break;
-            default:
-                throw new RuntimeException();
+
+//|        /**
+//|         * Parse the given substring as a rule, and append it to the rules currently
+//|         * represented in this object.
+//|         * @param start the beginning index, inclusive; <code>0 <= start
+//|         * <= limit</code>.
+//|         * @param limit the ending index, exclusive; <code>start <= limit
+//|         * <= rules.length()</code>.
+//|         * @exception IllegalArgumentException if there is a syntax error in the
+//|         * rules
+//|         */
+//|        private void applyRule(int start, int limit) {
+//|            /* General description of parsing: Initially, rules contain two types of
+//|             * quoted characters.  First, there are variable references, such as
+//|             * "{alpha}".  Second, there are quotes, such as "'<'" or "''".  One of
+//|             * the first steps in parsing a rule is to resolve such quoted matter.
+//|             * Quotes are removed early, leaving unquoted literal matter.  Variable
+//|             * references are resolved and replaced by single characters.  In some
+//|             * instances these characters represent themselves; in others, they
+//|             * stand for categories of characters.  Character categories are either
+//|             * predefined (e.g., "{Lu}"), or are defined by the user using a
+//|             * statement (e.g., "vowels:aeiouAEIOU").
+//|             *
+//|             * Another early step in parsing is to split each rule into component
+//|             * pieces.  These pieces are, for every rule, a left-hand side, a right-
+//|             * hand side, and an operator.  The left- and right-hand sides may not
+//|             * be empty, except for the output patterns of forward and reverse
+//|             * rules.  In addition to this partitioning, the match patterns of
+//|             * forward and reverse rules must be partitioned into antecontext,
+//|             * postcontext, and literal pattern, where the context portions may or
+//|             * may not be present.  Finally, output patterns must have the cursor
+//|             * indicator '|' detected and removed, with its position recorded.
+//|             *
+//|             * Quote removal, variable resolution, and sub-pattern splitting must
+//|             * all happen at once.  This is due chiefly to the quoting mechanism,
+//|             * which allows special characters to appear at arbitrary positions in
+//|             * the final unquoted text.  (For this reason, alteration of the rule
+//|             * language is somewhat clumsy; it entails reassessment and revision of
+//|             * the parsing methods as a whole.)
+//|             *
+//|             * After this processing of rules is complete, the final end products
+//|             * are unquoted pieces of text of various types, and an integer cursor
+//|             * position, if one is specified.  These processed raw materials are now
+//|             * easy to deal with; other classes such as UnicodeSet and
+//|             * TransliterationRule need know nothing of quoting or variables.
+//|             */
+//|            StringBuffer left = new StringBuffer();
+//|            StringBuffer right = new StringBuffer();
+//|            StringBuffer anteContext = new StringBuffer();
+//|            StringBuffer postContext = new StringBuffer();
+//|            int cursorPos[] = new int[1];
+//|
+//|            char operator = parseRule(start, limit, left, right,
+//|                                      anteContext, postContext, cursorPos);
+//|
+//|            switch (operator) {
+//|            case VARIABLE_DEF_OP:
+//|                applyVariableDef(left.toString(), right.toString());
+//|                break;
+//|            case FORWARD_RULE_OP:
+//|                if (direction == FORWARD) {
+//|                    data.ruleSet.addRule(new TransliterationRule(
+//|                                             left.toString(), right.toString(),
+//|                                             anteContext.toString(), postContext.toString(),
+//|                                             cursorPos[0]));
+//|                } // otherwise ignore the rule; it's not the direction we want
+//|                break;
+//|            case REVERSE_RULE_OP:
+//|                if (direction == REVERSE) {
+//|                    data.ruleSet.addRule(new TransliterationRule(
+//|                                             right.toString(), left.toString(),
+//|                                             anteContext.toString(), postContext.toString(),
+//|                                             cursorPos[0]));
+//|                } // otherwise ignore the rule; it's not the direction we want
+//|                break;
+//|            case FWDREV_RULE_OP:
+//|                data.ruleSet.addRule(new TransliterationRule(
+//|                                         direction == FORWARD ? left.toString() : right.toString(),
+//|                                         direction == FORWARD ? right.toString() : left.toString(),
+//|                                         // Context & cursor disallowed
+//|                                         "", "", -1));
+//|                break;
+//|            }
+//|        }
+
+//|        /**
+//|         * Add a variable definition.
+//|         * @param name the name of the variable.  It must not already be defined.
+//|         * @param pattern the value of the variable.  It may be a single character
+//|         * or a pattern describing a character set.
+//|         * @exception IllegalArgumentException if there is a syntax error
+//|         */
+//|        private final void applyVariableDef(String name, String pattern) {
+//|            validateVariableName(name);
+//|            if (data.variableNames.get(name) != null) {
+//|                throw new IllegalArgumentException("Duplicate variable definition: "
+//|                                                   + name + '=' + pattern);
+//|            }
+//|            if (pattern.length() < 1) {
+//|                throw new IllegalArgumentException("Variable definition missing: "
+//|                                                   + name);
+//|            }
+//|            if (pattern.length() == 1) {
+//|                // Got a single character variable definition
+//|                data.variableNames.put(name, new Character(pattern.charAt(0)));
+//|            } else {
+//|                // Got more than one character; parse it as a category
+//|                UnicodeSet set = new UnicodeSet(pattern);
+//|                data.variableNames.put(name, registerSet(set));
+//|            }
+//|        }
+
+
+
+
+        private final Character registerSet(UnicodeSet set) {
+            if (variableNext >= variableLimit) {
+                throw new RuntimeException("Private use variables exhausted");
             }
+            Character c = new Character(variableNext++);
+            data.setVariables.put(c, set);
             return c;
         }
 
-        /**
-         * Parses the match pattern of a forward or reverse rule.  Given the raw
-         * match pattern, return the match text and the context on both sides, if
-         * any.  Resolves all quotes and variables.
-         * @param start the beginning index, inclusive; <code>0 <= start
-         * <= limit</code>.
-         * @param limit the ending index, exclusive; <code>start <= limit
-         * <= rules.length()</code>.
-         * @param text the key to be matched will be appended to this buffer
-         * @param anteContext the preceding context, if any, will be appended
-         * to this buffer.
-         * @param postContext the following context, if any, will be appended
-         * to this buffer.
-         */
-        private void parseMatchPattern(int start, int limit,
-                                       StringBuffer text,
-                                       StringBuffer anteContext,
-                                       StringBuffer postContext) {
-            if (start >= limit) {
-                throw new IllegalArgumentException(
-                              "Empty expression in rule: "
-                              + rules.substring(start, limit));
-            }
-            if (anteContext != null) {
-                // Ignore optional opening and closing context characters
-                if (rules.charAt(start) == CONTEXT_OPEN) {
-                    ++start;
-                }
-                if (rules.charAt(limit-1) == CONTEXT_CLOSE) {
-                    --limit;
-                }
-                // The four possibilities are:
-                //             key
-                // anteContext]key
-                // anteContext]key[postContext
-                //             key[postContext
-                int ante = quotedIndexOf(rules, start, limit, String.valueOf(CONTEXT_CLOSE));
-                int post = quotedIndexOf(rules, start, limit, String.valueOf(CONTEXT_OPEN));
-                if (ante >= 0 && post >= 0 && ante > post) {
-                    throw new IllegalArgumentException(
-                                  "Syntax error in context specifier: "
-                                  + rules.substring(start, limit));
-                }
-                if (ante >= 0) {
-                    parseSubPattern(start, ante, anteContext);
-                    start = ante+1;
-                }
-                if (post >= 0) {
-                    parseSubPattern(post+1, limit, postContext);
-                    limit = post;
-                }
-            }
-            parseSubPattern(start, limit, text);
-        }
 
-        private final void parseSubPattern(int start, int limit,
-                                           StringBuffer text) {
-            parseSubPattern(start, limit, text, null, SPECIALS);
-        }
 
-        /**
-         * Parse a variable definition sub pattern.  This kind of sub
-         * pattern differs in the set of characters that are considered
-         * special.  In particular, the '[' and ']' characters are not
-         * special, since these are used in UnicodeSet patterns.
-         */
-        private final void parseDefPattern(int start, int limit,
-                                           StringBuffer text) {
-            parseSubPattern(start, limit, text, null, DEF_SPECIALS);
-        }
 
-        /**
-         * Parses the output pattern of a forward or reverse rule.  Given the
-         * output pattern, return the output text and the position of the cursor,
-         * if any.  Resolves all quotes and variables.
-         * @param rules the string to be parsed
-         * @param start the beginning index, inclusive; <code>0 <= start
-         * <= limit</code>.
-         * @param limit the ending index, exclusive; <code>start <= limit
-         * <= rules.length()</code>.
-         * @param text the output text will be appended to this buffer
-         * @param cursorPos if this parameter is not null, then cursorPos[0]
-         * will be set to the cursor position, or -1 if there is none.  If this
-         * parameter is null, then cursors will be disallowed.
-         */
-        private final void parseOutputPattern(int start, int limit,
-                                              StringBuffer text,
-                                              int[] cursorPos) {
-            parseSubPattern(start, limit, text, cursorPos, SPECIALS);
-        }
-
-        /**
-         * Parses a sub-pattern of a rule.  Return the text and the position of the cursor,
-         * if any.  Resolves all quotes and variables.
-         * @param rules the string to be parsed
-         * @param start the beginning index, inclusive; <code>0 <= start
-         * <= limit</code>.
-         * @param limit the ending index, exclusive; <code>start <= limit
-         * <= rules.length()</code>.
-         * @param text the output text will be appended to this buffer
-         * @param cursorPos if this parameter is not null, then cursorPos[0]
-         * will be set to the cursor position, or -1 if there is none.  If this
-         * parameter is null, then cursors will be disallowed.
-         * @param specials characters that must be quoted; typically either
-         * SPECIALS or DEF_SPECIALS.
-         */
-        private void parseSubPattern(int start, int limit,
-                                     StringBuffer text,
-                                     int[] cursorPos,
-                                     String specials) {
-            boolean inQuote = false;
-
-            if (start >= limit) {
-                throw new IllegalArgumentException("Empty expression in rule");
-            }
-            if (cursorPos != null) {
-                cursorPos[0] = -1;
-            }
-            for (int i=start; i<limit; ++i) {
-                char c = rules.charAt(i);
-                if (c == QUOTE) {
-                    // Check for double quote
-                    if ((i+1) < limit
-                        && rules.charAt(i+1) == QUOTE) {
-                        text.append(QUOTE);
-                        ++i; // Skip over both quotes
-                    } else {
-                        inQuote = !inQuote;
-                    }
-                } else if (inQuote) {
-                    text.append(c);
-                } else if (c == VARIABLE_REF_OPEN) {
-                    ++i;
-                    int j = rules.indexOf(VARIABLE_REF_CLOSE, i);
-                    if (i == j || j < 0) { // empty or unterminated
-                        throw new IllegalArgumentException("Illegal variable reference: "
-                                                           + rules.substring(start, limit));
-                    }
-                    String name = rules.substring(i, j);
-                    validateVariableName(name);
-                    text.append(getVariableDef(name).charValue());
-                    i = j;
-                } else if (c == CURSOR_POS && cursorPos != null) {
-                    if (cursorPos[0] >= 0) {
-                        throw new IllegalArgumentException("Multiple cursors: "
-                                                           + rules.substring(start, limit));
-                    }
-                    cursorPos[0] = text.length();
-                } else if (specials.indexOf(c) >= 0) {
-                    throw new IllegalArgumentException("Unquoted special character: "
-                                                       + rules.substring(start, limit));
-                } else {
-                    text.append(c);
-                }
-            }
-        }
-
-        private static void validateVariableName(String name) {
-            if (indexOf(name, SPECIALS) >= 0) {
-                throw new IllegalArgumentException(
-                              "Special character in variable name: "
-                              + name);
-            }
-        }
+//|        /**
+//|         * Given a rule, parses it into three pieces: The left side, the right side,
+//|         * and the operator.  Returns the operator.  Quotes and variable references
+//|         * are resolved; the otuput text in all <code>StringBuffer</code> parameters
+//|         * is literal text.  This method delegates to other parsing methods to
+//|         * handle the match pattern, output pattern, and other sub-patterns in the
+//|         * rule.
+//|         * @param start the beginning index, inclusive; <code>0 <= start
+//|         * <= limit</code>.
+//|         * @param limit the ending index, exclusive; <code>start <= limit
+//|         * <= rules.length()</code>.
+//|         * @param left left side of rule is appended to this buffer
+//|         * with the quotes removed and variables resolved
+//|         * @param right right side of rule is appended to this buffer
+//|         * with the quotes removed and variables resolved
+//|         * @param anteContext the preceding context of the match pattern,
+//|         * if there is one, is appended to this buffer
+//|         * @param postContext the following context of the match pattern,
+//|         * if there is one, is appended to this buffer
+//|         * @param cursorPos if there is a cursor in the output pattern, its
+//|         * offset is stored in <code>cursorPos[0]</code>
+//|         * @return The operator character, one of the characters in OPERATORS.
+//|         */
+//|        private char parseRule(int start, int limit,
+//|                               StringBuffer left, StringBuffer right,
+//|                               StringBuffer anteContext,
+//|                               StringBuffer postContext,
+//|                               int[] cursorPos) {
+//|            if (false) {
+//|                System.err.println("Parsing " + rules.substring(start, limit));
+//|            }
+//|            /* Parse the rule into three pieces -- left, operator, and right,
+//|             * parsing out quotes.  The result is that left and right will have
+//|             * unquoted text.  E.g., "gt<'>'" will have right = ">".  Unquoted
+//|             * operators throw an exception.  Two quotes inside or outside
+//|             * quotes indicates a quote literal.  E.g., "o''clock" -> "o'clock".
+//|             */
+//|            int i = quotedIndexOf(rules, start, limit, OPERATORS);
+//|            if (i < 0) {
+//|                throw new IllegalArgumentException(
+//|                              "Syntax error: "
+//|                              + rules.substring(start, limit));
+//|            }
+//|            char c = rules.charAt(i);
+//|            
+//|            // Look for "<>" double rules.
+//|            if ((i+1) < limit && rules.substring(i, i+2).equals(FWDREV_OP_STRING)) {
+//|                if (i == start) {
+//|                    throw new IllegalArgumentException(
+//|                                  "Empty left side: "
+//|                                  + rules.substring(start, limit));
+//|                }
+//|                if (i+2 == limit) {
+//|                    throw new IllegalArgumentException(
+//|                                  "Empty right side: "
+//|                                  + rules.substring(start, limit));
+//|                }
+//|                parseSubPattern(start, i, left, null, SPECIALS);
+//|                parseSubPattern(i+2, limit, right, null, SPECIALS);
+//|                return FWDREV_RULE_OP;
+//|            }
+//|
+//|            switch (c) {
+//|            case FORWARD_RULE_OP:
+//|                if (i == start) {
+//|                    throw new IllegalArgumentException(
+//|                                  "Empty left side: "
+//|                                  + rules.substring(start, limit));
+//|                }
+//|                parseMatchPattern(start, i, left, anteContext, postContext);
+//|                if (i != (limit-1)) {
+//|                    parseOutputPattern(i+1, limit, right, cursorPos);
+//|                }
+//|                break;
+//|            case REVERSE_RULE_OP:
+//|                if (i == (limit-1)) {
+//|                    throw new IllegalArgumentException(
+//|                                  "Empty right side: "
+//|                                  + rules.substring(start, limit));
+//|                }
+//|                if (i != start) {
+//|                    parseOutputPattern(start, i, left, cursorPos);
+//|                }
+//|                parseMatchPattern(i+1, limit, right, anteContext, postContext);
+//|                break;
+//|            case VARIABLE_DEF_OP:
+//|                if (i == start || i == (limit-1)) {
+//|                    throw new IllegalArgumentException(
+//|                                  "Empty left or right side: "
+//|                                  + rules.substring(start, limit));
+//|                }
+//|                parseSubPattern(start, i, left);
+//|                parseDefPattern(i+1, limit, right);
+//|                break;
+//|            default:
+//|                throw new RuntimeException();
+//|            }
+//|            return c;
+//|        }
+//|
+//|        /**
+//|         * Parses the match pattern of a forward or reverse rule.  Given the raw
+//|         * match pattern, return the match text and the context on both sides, if
+//|         * any.  Resolves all quotes and variables.
+//|         * @param start the beginning index, inclusive; <code>0 <= start
+//|         * <= limit</code>.
+//|         * @param limit the ending index, exclusive; <code>start <= limit
+//|         * <= rules.length()</code>.
+//|         * @param text the key to be matched will be appended to this buffer
+//|         * @param anteContext the preceding context, if any, will be appended
+//|         * to this buffer.
+//|         * @param postContext the following context, if any, will be appended
+//|         * to this buffer.
+//|         */
+//|        private void parseMatchPattern(int start, int limit,
+//|                                       StringBuffer text,
+//|                                       StringBuffer anteContext,
+//|                                       StringBuffer postContext) {
+//|            if (start >= limit) {
+//|                throw new IllegalArgumentException(
+//|                              "Empty expression in rule: "
+//|                              + rules.substring(start, limit));
+//|            }
+//|            if (anteContext != null) {
+//|                // Ignore optional opening and closing context characters
+//|                if (rules.charAt(start) == CONTEXT_OPEN) {
+//|                    ++start;
+//|                }
+//|                if (rules.charAt(limit-1) == CONTEXT_CLOSE) {
+//|                    --limit;
+//|                }
+//|                // The four possibilities are:
+//|                //             key
+//|                // anteContext]key
+//|                // anteContext]key[postContext
+//|                //             key[postContext
+//|                int ante = quotedIndexOf(rules, start, limit, String.valueOf(CONTEXT_CLOSE));
+//|                int post = quotedIndexOf(rules, start, limit, String.valueOf(CONTEXT_OPEN));
+//|                if (ante >= 0 && post >= 0 && ante > post) {
+//|                    throw new IllegalArgumentException(
+//|                                  "Syntax error in context specifier: "
+//|                                  + rules.substring(start, limit));
+//|                }
+//|                if (ante >= 0) {
+//|                    parseSubPattern(start, ante, anteContext);
+//|                    start = ante+1;
+//|                }
+//|                if (post >= 0) {
+//|                    parseSubPattern(post+1, limit, postContext);
+//|                    limit = post;
+//|                }
+//|            }
+//|            parseSubPattern(start, limit, text);
+//|        }
+//|
+//|        private final void parseSubPattern(int start, int limit,
+//|                                           StringBuffer text) {
+//|            parseSubPattern(start, limit, text, null, SPECIALS);
+//|        }
+//|
+//|        /**
+//|         * Parse a variable definition sub pattern.  This kind of sub
+//|         * pattern differs in the set of characters that are considered
+//|         * special.  In particular, the '[' and ']' characters are not
+//|         * special, since these are used in UnicodeSet patterns.
+//|         */
+//|        private final void parseDefPattern(int start, int limit,
+//|                                           StringBuffer text) {
+//|            parseSubPattern(start, limit, text, null, DEF_SPECIALS);
+//|        }
+//|
+//|        /**
+//|         * Parses the output pattern of a forward or reverse rule.  Given the
+//|         * output pattern, return the output text and the position of the cursor,
+//|         * if any.  Resolves all quotes and variables.
+//|         * @param rules the string to be parsed
+//|         * @param start the beginning index, inclusive; <code>0 <= start
+//|         * <= limit</code>.
+//|         * @param limit the ending index, exclusive; <code>start <= limit
+//|         * <= rules.length()</code>.
+//|         * @param text the output text will be appended to this buffer
+//|         * @param cursorPos if this parameter is not null, then cursorPos[0]
+//|         * will be set to the cursor position, or -1 if there is none.  If this
+//|         * parameter is null, then cursors will be disallowed.
+//|         */
+//|        private final void parseOutputPattern(int start, int limit,
+//|                                              StringBuffer text,
+//|                                              int[] cursorPos) {
+//|            parseSubPattern(start, limit, text, cursorPos, SPECIALS);
+//|        }
+//|
+//|        /**
+//|         * Parses a sub-pattern of a rule.  Return the text and the position of the cursor,
+//|         * if any.  Resolves all quotes and variables.
+//|         * @param rules the string to be parsed
+//|         * @param start the beginning index, inclusive; <code>0 <= start
+//|         * <= limit</code>.
+//|         * @param limit the ending index, exclusive; <code>start <= limit
+//|         * <= rules.length()</code>.
+//|         * @param text the output text will be appended to this buffer
+//|         * @param cursorPos if this parameter is not null, then cursorPos[0]
+//|         * will be set to the cursor position, or -1 if there is none.  If this
+//|         * parameter is null, then cursors will be disallowed.
+//|         * @param specials characters that must be quoted; typically either
+//|         * SPECIALS or DEF_SPECIALS.
+//|         */
+//|        private void parseSubPattern(int start, int limit,
+//|                                     StringBuffer text,
+//|                                     int[] cursorPos,
+//|                                     String specials) {
+//|            boolean inQuote = false;
+//|
+//|            if (start >= limit) {
+//|                throw new IllegalArgumentException("Empty expression in rule");
+//|            }
+//|            if (cursorPos != null) {
+//|                cursorPos[0] = -1;
+//|            }
+//|            for (int i=start; i<limit; ++i) {
+//|                char c = rules.charAt(i);
+//|                if (c == QUOTE) {
+//|                    // Check for double quote
+//|                    if ((i+1) < limit
+//|                        && rules.charAt(i+1) == QUOTE) {
+//|                        text.append(QUOTE);
+//|                        ++i; // Skip over both quotes
+//|                    } else {
+//|                        inQuote = !inQuote;
+//|                    }
+//|                } else if (inQuote) {
+//|                    text.append(c);
+//|                } else if (c == VARIABLE_REF_OPEN) {
+//|                    ++i;
+//|                    int j = rules.indexOf(VARIABLE_REF_CLOSE, i);
+//|                    if (i == j || j < 0) { // empty or unterminated
+//|                        throw new IllegalArgumentException("Illegal variable reference: "
+//|                                                           + rules.substring(start, limit));
+//|                    }
+//|                    String name = rules.substring(i, j);
+//|                    validateVariableName(name);
+//|                    text.append(getVariableDef(name).charValue());
+//|                    i = j;
+//|                } else if (c == CURSOR_POS && cursorPos != null) {
+//|                    if (cursorPos[0] >= 0) {
+//|                        throw new IllegalArgumentException("Multiple cursors: "
+//|                                                           + rules.substring(start, limit));
+//|                    }
+//|                    cursorPos[0] = text.length();
+//|                } else if (specials.indexOf(c) >= 0) {
+//|                    throw new IllegalArgumentException("Unquoted special character: "
+//|                                                       + rules.substring(start, limit));
+//|                } else {
+//|                    text.append(c);
+//|                }
+//|            }
+//|        }
+//|
+//|        private static void validateVariableName(String name) {
+//|            if (indexOf(name, SPECIALS) >= 0) {
+//|                throw new IllegalArgumentException(
+//|                              "Special character in variable name: "
+//|                              + name);
+//|            }
+//|        }
 
         /**
          * Returns the single character value of the given variable name.  Defined
          * names are recognized.
-         *
-         * NO LONGER SUPPORTED:
-         * If a Unicode category name is given, a standard character variable
-         * in the range firstCategoryVariable to lastCategoryVariable is returned,
-         * with value firstCategoryVariable + n, where n is the category
-         * number.
          * @exception IllegalArgumentException if the name is unknown.
          */
         private Character getVariableDef(String name) {
             Character ch = (Character) data.variableNames.get(name);
-//!         if (ch == null) {
-//!             int id = UnicodeSet.getCategoryID(name);
-//!             if (id >= 0) {
-//!                 ch = new Character((char) (firstCategoryVariable + id));
-//!                 data.variableNames.put(name, ch);
-//!                 data.setVariables.put(ch, new UnicodeSet(id));
-//!             }
-//!         }
             if (ch == null) {
                 throw new IllegalArgumentException("Undefined variable: "
                                                    + name);
@@ -1084,6 +1334,10 @@ public class RuleBasedTransliterator extends Transliterator {
          * this method may employ some other algorithm for improved speed.
          */
         private final void determineVariableRange(String[] ruleArray) {
+            // As an initial implementation, we just run through all the
+            // characters, ignoring any quoting.  This works since the quote
+            // mechanisms are outside the private use area.
+
             Range r = new Range('\uE000', 0x1900); // Private use area
             r = r.largestUnusedSubrange(ruleArray);
             
@@ -1121,7 +1375,9 @@ public class RuleBasedTransliterator extends Transliterator {
                                          String setOfChars) {
             for (int i=start; i<limit; ++i) {
                 char c = text.charAt(i);
-                if (c == QUOTE) {
+                if (c == ESCAPE) {
+                    ++i;
+                } else if (c == QUOTE) {
                     while (++i < limit
                            && text.charAt(i) != QUOTE) {}
                 } else if (setOfChars.indexOf(c) >= 0) {

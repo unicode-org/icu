@@ -21,9 +21,12 @@ import java.util.Dictionary;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.5 $ $Date: 2000/01/04 21:43:57 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.6 $ $Date: 2000/01/11 02:25:03 $
  *
  * $Log: TransliterationRule.java,v $
+ * Revision 1.6  2000/01/11 02:25:03  Alan
+ * Rewrite UnicodeSet and RBT parsers for better performance and new syntax
+ *
  * Revision 1.5  2000/01/04 21:43:57  Alan
  * Add rule indexing, and move masking check to TransliterationRuleSet.
  *
@@ -134,6 +137,46 @@ class TransliterationRule {
         }
     }
 
+
+
+
+
+
+
+    /**
+     * @param input input string, including key and optional ante and
+     * post context
+     * @param anteContextPos offset into input to end of ante context, or
+     * -1 if none
+     * @param postContextPos offset into input to start of post context,
+     * or -1 if none
+     * @param output output string
+     * @param cursorPos offset into output at which cursor is located,
+     * or -1 if none.
+     */
+    public TransliterationRule(String input,
+                               int anteContextPos, int postContextPos,
+                               String output,
+                               int cursorPos) {
+        anteContextLength = (anteContextPos < 0) ? 0 : anteContextPos;
+        keyLength = (postContextPos < 0) ? input.length() - anteContextLength :
+            postContextPos - anteContextLength;
+        pattern = input;
+        this.output = output;
+        this.cursorPos = cursorPos < 0 ? output.length() : cursorPos;
+        if (anteContextPos > input.length() || postContextPos > input.length() ||
+            cursorPos > output.length()) {
+            throw new IllegalArgumentException();
+        }
+    }
+
+
+
+
+
+
+
+
     /**
      * Return the length of the key.  Equivalent to <code>getKey().length()</code>.
      * @return the length of the match key.
@@ -171,9 +214,14 @@ class TransliterationRule {
      * Internal method.  Returns 8-bit index value for this rule.
      * This is the low byte of the first character of the key,
      * unless the first character of the key is a set.  If it's a
-     * set, the index value is -1.
+     * set, or otherwise can match multiple keys, the index value is -1.
      */
     final int getIndexValue(Dictionary variables) {
+        if (anteContextLength == pattern.length()) {
+            // A pattern with just ante context {such as foo)>bar} can
+            // match any key.
+            return -1;
+        }
         char c = pattern.charAt(anteContextLength);
         return variables.get(new Character(c)) == null ? (c & 0xFF) : -1;
     }
@@ -185,9 +233,15 @@ class TransliterationRule {
      * It matches this rule if it matches the first character of the
      * key, or if the first character of the key is a set, and the set
      * contains any character with a low byte equal to the index
-     * value.
+     * value.  If the rule contains only ante context, as in foo)>bar,
+     * then it will match any key.
      */
     final boolean matchesIndexValue(int v, Dictionary variables) {
+        if (anteContextLength == pattern.length()) {
+            // A pattern with just ante context {such as foo)>bar} can
+            // match any key.
+            return true;
+        }
         char c = pattern.charAt(anteContextLength);
         UnicodeSet set = (UnicodeSet) variables.get(new Character(c));
         return set == null ? (c & 0xFF) == v : set.containsIndexValue(v);
@@ -238,15 +292,15 @@ class TransliterationRule {
      */
     public String toString() {
         return getClass().getName() + '{'
-            + escape(anteContextLength > 0 ? ("[" + pattern.substring(0, anteContextLength) +
-                                              ']') : "")
-            + pattern.substring(anteContextLength, anteContextLength + keyLength)
-            + (anteContextLength + keyLength < pattern.length() ?
-               ("[" + pattern.substring(anteContextLength + keyLength) + ']') : "")
-            + " -> "
-            + (cursorPos < output.length()
-               ? (output.substring(0, cursorPos) + '|' + output.substring(cursorPos))
-               : output)
+            + escape((anteContextLength > 0 ? ("(" + pattern.substring(0, anteContextLength) +
+                                              ") ") : "")
+                     + pattern.substring(anteContextLength, anteContextLength + keyLength)
+                     + (anteContextLength + keyLength < pattern.length() ?
+                        (" (" + pattern.substring(anteContextLength + keyLength) + ")") : "")
+                     + " > "
+                     + (cursorPos < output.length()
+                        ? (output.substring(0, cursorPos) + '|' + output.substring(cursorPos))
+                        : output))
             + '}';
     }
 
