@@ -129,12 +129,21 @@ static char* u_bottomNBytesOfDouble(double* d, int n);
 
 /* Assume POSIX, and modify as necessary below*/
 #if defined(_WIN32) || defined(XP_MAC) || defined(OS400) || defined(OS2) || defined(U_DARWIN)
-#   undef POSIX
+#   undef U_POSIX
 #else
-#   define POSIX
+#   define U_POSIX
 #endif
 
-#ifdef POSIX
+/* Separate POSIX into a few different features, allow for some but not all */
+#if defined(U_POSIX)
+#define U_POSIX_LOCALE 1
+#define U_POSIX_TIMEZONE 1
+#define U_HAVE_NL_LANGINFO 1
+#elif defined(U_DARWIN)
+#define U_POSIX_LOCALE 1
+#endif
+
+#ifdef U_HAVE_NL_LANGINFO
 #include <langinfo.h>
 #endif
 
@@ -660,7 +669,7 @@ uprv_digitsAfterDecimal(double x)
 void 
 uprv_tzset()
 {
-#ifdef POSIX
+#ifdef U_POSIX
   tzset();
 #endif
 
@@ -676,7 +685,7 @@ uprv_tzset()
 int32_t 
 uprv_timezone()
 {
-#if defined(POSIX)
+#if defined(U_POSIX)
 #if defined(OS390)
   return _timezone;
 #else
@@ -711,7 +720,7 @@ uprv_timezone()
 char* 
 uprv_tzname(int n)
 {
-#if defined(POSIX)
+#if defined(U_POSIX)
   return tzname[n];
 #endif
 
@@ -954,7 +963,7 @@ getLibraryPath(char *path, int size) {
         return length;
      }
 #   elif defined(TANDEM)
-#   elif defined(POSIX)
+#   elif defined(U_POSIX)
 #   endif
     return 0;
 }
@@ -986,7 +995,7 @@ findLibraryPath(char *path, int size) {
 #   elif defined(TANDEM)
 #       define LIB_PATH_VAR "LIBPATH"
 #       define LIB_FILENAME "libicuuc.a"
-#   elif defined(POSIX)
+#   elif defined(U_POSIX)
 #       define LIB_PATH_VAR "LIBPATH"
 #       define LIB_FILENAME "libicuuc.so"
 #   endif
@@ -1250,7 +1259,7 @@ mac_lc_rec mac_lc_recs[] = {
 
 #endif
 
-#ifdef POSIX
+#if U_POSIX_LOCALE
 /* Return just the POSIX id, whatever happens to be in it */
 static const char *uprv_getPOSIXID()
 {
@@ -1270,7 +1279,7 @@ static const char *uprv_getPOSIXID()
 const char* 
 uprv_getDefaultLocaleID()
 {
-#ifdef POSIX
+#if U_POSIX_LOCALE
   char *correctedPOSIXLocale = 0;
   const char* posixID = uprv_getPOSIXID();
   char *p;
@@ -1512,7 +1521,7 @@ const char* uprv_getDefaultCodepage()
   static char codepage[12]={ "cp" };
   uprv_strcpy(codepage+2, _itoa(GetACP(), tempString, 10));
   return codepage;
-#elif defined(POSIX)
+#elif U_POSIX_LOCALE
     static char codesetName[100];
     char *name = NULL;
     char *euro = NULL;
@@ -1566,6 +1575,7 @@ const char* uprv_getDefaultCodepage()
     {
         uprv_memset(codesetName, 0, 100);
     }
+#if U_HAVE_NL_LANGINFO
 #ifdef U_LINUX
     if (nl_langinfo(_NL_CTYPE_CODESET_NAME) != NULL)
         uprv_strcpy(codesetName, nl_langinfo(_NL_CTYPE_CODESET_NAME));     
@@ -1573,6 +1583,7 @@ const char* uprv_getDefaultCodepage()
     if (nl_langinfo(CODESET) != NULL)
         uprv_strcpy(codesetName, nl_langinfo(CODESET));    
 #endif  
+#endif
     if (uprv_strlen(codesetName) == 0) 
     {
         /* look up in srl's table */
