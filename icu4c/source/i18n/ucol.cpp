@@ -336,17 +336,28 @@ tryOpeningFromRules(UResourceBundle *collElem, UErrorCode *status) {
 
 }
 
-U_CAPI UCollator* U_EXPORT2
-ucol_open(    const    char         *loc,
-        UErrorCode      *status)
+U_NAMESPACE_BEGIN
+
+U_CAPI UCollator*
+ucol_open(const char *loc,
+		  UErrorCode *status)
 {
+	U_NAMESPACE_USE;
+
+  UCollator *result = NULL;
+  if (status && U_SUCCESS(*status)) {
+	  result = Collator::createUCollator(loc, status);
+	if (result) {
+	  return result;
+	}	
+  }
 
   ucol_initUCA(status);
 
   /* New version */
   if(U_FAILURE(*status)) return 0;
 
-  UCollator *result = NULL;
+
   UResourceBundle *b = ures_open(NULL, loc, status);
   UResourceBundle *collElem = ures_getByKey(b, "CollationElements", NULL, status);
   UResourceBundle *binary = NULL;
@@ -431,6 +442,7 @@ clean:
   ures_close(binary);
   return result;
 }
+U_NAMESPACE_END
 
 U_CAPI void U_EXPORT2
 ucol_setReqValidLocales(UCollator *coll, char *requestedLocaleToAdopt, char *validLocaleToAdopt)
