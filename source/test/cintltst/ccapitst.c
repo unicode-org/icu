@@ -23,6 +23,8 @@
 #include "cintltst.h"
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
+#include "cstring.h"
+#include "cmemory.h"
 
 #define NUM_CODEPAGE 1
 #define MAX_FILE_LEN 1024*20
@@ -77,6 +79,7 @@ void TestConvert()
     int32_t             j                   =   0;
     int32_t             k                   =   0;
     uint16_t            codepage_index      =   0;
+    uint16_t            count;
     int32_t             cp                  =   0;
     UErrorCode          err                 =   U_ZERO_ERROR;
     const char*            available_conv;  
@@ -208,8 +211,58 @@ void TestConvert()
     
     available_conv = ucnv_getAvailableName(testLong1);
     
-    
-     
+    /* Test ucnv_countAliases() etc. */
+    count = ucnv_countAliases("utf-8", &err);
+    if(U_FAILURE(err)) {
+        log_err("FAILURE! ucnv_countAliases(\"utf-8\") -> %s\n", myErrorName(err));
+    } else if(count <= 0) {
+        log_err("FAILURE! ucnv_countAliases(\"utf-8\") -> %d aliases\n", count);
+    } else {
+        /* try to get the aliases individually */
+        const char *alias;
+        alias = ucnv_getAlias("utf-8", 0, &err);
+        if(U_FAILURE(err)) {
+            log_err("FAILURE! ucnv_getAlias(\"utf-8\", 0) -> %s\n", myErrorName(err));
+        } else if(uprv_strcmp("UTF8", alias) != 0) {
+            log_err("FAILURE! ucnv_getAlias(\"utf-8\", 0) -> %s instead of UTF8\n", alias);
+        } else {
+            uint16_t i;
+            for(i = 0; i < count; ++i) {
+                alias = ucnv_getAlias("utf-8", i, &err);
+                if(U_FAILURE(err)) {
+                    log_err("FAILURE! ucnv_getAlias(\"utf-8\", %d) -> %s\n", i, myErrorName(err));
+                } else if(uprv_strlen(alias) > 20) {
+                    /* sanity check */
+                    log_err("FAILURE! ucnv_getAlias(\"utf-8\", %d) -> alias %s insanely long, corrupt?!\n", i, alias);
+                } else {
+                    log_verbose("alias %d for utf-8: %s\n", i, alias);
+                }
+            }
+            if(U_SUCCESS(err)) {
+                /* try to fill an array with all aliases */
+                const char **aliases;
+                aliases=(const char **)uprv_malloc(count * sizeof(const char *));
+                if(aliases != 0) {
+                    ucnv_getAliases("utf-8", aliases, &err);
+                    if(U_FAILURE(err)) {
+                        log_err("FAILURE! ucnv_getAliases(\"utf-8\") -> %s\n", myErrorName(err));
+                    } else {
+                        for(i = 0; i < count; ++i) {
+                            /* compare the pointers with the ones returned individually */
+                            alias = ucnv_getAlias("utf-8", i, &err);
+                            if(U_FAILURE(err)) {
+                                log_err("FAILURE! ucnv_getAlias(\"utf-8\", %d) -> %s\n", i, myErrorName(err));
+                            } else if(aliases[i] != alias) {
+                                log_err("FAILURE! ucnv_getAliases(\"utf-8\")[%d] != ucnv_getAlias(\"utf-8\", %d)\n", i, i);
+                            }
+                        }
+                    }
+                    uprv_free((char **)aliases);
+                }
+            }
+        }
+    }
+
     /*Testing ucnv_open()*/
 
     someConverters[0] = ucnv_open("ibm-949", &err);
