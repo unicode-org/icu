@@ -131,26 +131,34 @@ main(int argc, char* argv[]) {
         argc=-1;
     }
     if(argc<0 || options[0].doesOccur || options[1].doesOccur) {
+        /*
+         * Broken into chucks because the C89 standard says the minimum
+         * required supported string length is 509 bytes.
+         */
         fprintf(stderr,
             "usage: %s [-options] maxsize [list-filename]\n"
-            "  read the list file (default: stdin) and \n"
-            "  create a common data file from specified files; omit any larger than maxsize\n"
-            " \n"
-            "      option              parameter   description\n"
-            "      ---------------------------------------------------------------------------\n"
-            "      -h or -? or --help              this usage text\n"
-            "      -v or --verbose                 verbose output\n"
-            "      -c or --copyright               include the ICU copyright notice\n"
-            "      -C or --comment     \"text\"      include a comment string\n"
-            "      -d or --destdir     dir         destination directory\n"
-            "      -n or --name        file-name   output file name, without .type extension\n"
-            "                                         defaults to " COMMON_DATA_NAME "\n"
-            "      -t or --type        file-type   type of the destination file\n"
-            "                                         defaults to \"" DATA_TYPE "\"\n"
-            "      -S or --source      toc-file    write a .c source file with the table of contents\n"
-            "      -e or --entrypoint  name        override the c entrypoint name\n"
-            "                                         defaults to \"<name>_<type>\" ",
+            "\n"
+            "Read the list file (default: stdin) and \n"
+            "create a common data file from specified files; omit any larger than maxsize\n"
+            "\n",
             argv[0]);
+        fprintf(stderr,
+            "    option              parameter   description\n"
+            "    ---------------------------------------------------------------------------\n"
+            "    -h or -? or --help              this usage text\n"
+            "    -v or --verbose                 verbose output\n"
+            "    -c or --copyright               include the ICU copyright notice\n"
+            "    -C or --comment     \"text\"      include a comment string\n"
+            "    -d or --destdir     dir         destination directory\n");
+        fprintf(stderr,
+            "    -n or --name        file-name   output file name, without .type extension\n"
+            "                                       defaults to " COMMON_DATA_NAME "\n"
+            "    -t or --type        file-type   type of the destination file\n"
+            "                                       defaults to \"" DATA_TYPE "\"\n"
+            "    -S or --source      toc-file    write a .c source file with the table of contents\n"
+            "    -e or --entrypoint  name        override the c entrypoint name\n"
+            "                                       defaults to \"<name>_<type>\" ");
+
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
