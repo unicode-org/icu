@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/translit/Attic/TransliteratorTest.java,v $
- * $Date: 2001/11/15 22:20:29 $
- * $Revision: 1.69 $
+ * $Date: 2001/11/15 23:38:31 $
+ * $Revision: 1.70 $
  *
  *****************************************************************************************
  */
@@ -2013,7 +2013,7 @@ public class TransliteratorTest extends TestFmwk {
     public void TestIDForms() {
         String DATA[] = {
             "NFC", "NFD",
-            "NFD", "NFC",
+            "nfd", "NFC", // make sure case is ignored
             "Any-NFKD", "Any-NFKC",
             "Null", "Null",
             "Latin-Greek/UNGEGN", "Greek-Latin/UNGEGN",
