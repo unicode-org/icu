@@ -173,6 +173,7 @@ IntlTestRBNF::TestEnglishSpellout()
         };
         doLenientParseTest(formatter, lpTestData);
     }
+    delete formatter;
 }
 
 void 
@@ -208,6 +209,7 @@ IntlTestRBNF::TestOrdinalAbbreviations()
         
         doTest(formatter, testData, FALSE);
     }
+    delete formatter;
 }
 
 void 
@@ -244,6 +246,7 @@ IntlTestRBNF::TestDurations()
         };
         doLenientParseTest(formatter, lpTestData);
     }
+    delete formatter;
 }
 
 void 
@@ -283,6 +286,7 @@ IntlTestRBNF::TestSpanishSpellout()
         
         doTest(formatter, testData, TRUE);
     }
+    delete formatter;
 }
 
 void 
@@ -335,7 +339,9 @@ IntlTestRBNF::TestFrenchSpellout()
         };
         doLenientParseTest(formatter, lpTestData);
     }
+    delete formatter;
 }
+
 void 
 IntlTestRBNF::TestSwissFrenchSpellout() 
 {
@@ -378,6 +384,7 @@ IntlTestRBNF::TestSwissFrenchSpellout()
         
         doTest(formatter, testData, TRUE);
     }
+    delete formatter;
 }
 
 void 
@@ -416,6 +423,7 @@ IntlTestRBNF::TestItalianSpellout()
         
         doTest(formatter, testData, TRUE);
     }
+    delete formatter;
 }
 
 void 
@@ -458,6 +466,7 @@ IntlTestRBNF::TestGermanSpellout()
         };
         doLenientParseTest(formatter, lpTestData);
     }
+    delete formatter;
 }
 
 void 
@@ -483,6 +492,7 @@ IntlTestRBNF::TestThaiSpellout()
         
         doTest(formatter, testData, TRUE);
     }
+    delete formatter;
 }
 
 void 
