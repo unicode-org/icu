@@ -53,14 +53,14 @@ typedef struct UConverter UConverter;
 
 U_CDECL_BEGIN
 
-/** Maximum length of a converter name including the terminating NULL */
+/** Maximum length of a converter name including the terminating NULL @stable ICU 2.0 */
 #define UCNV_MAX_CONVERTER_NAME_LENGTH 60
-/** Maximum length of a converter name including path and terminating NULL */
+/** Maximum length of a converter name including path and terminating NULL @stable ICU 2.0 */
 #define UCNV_MAX_FULL_FILE_NAME_LENGTH (600+UCNV_MAX_CONVERTER_NAME_LENGTH)
 
-/** Shift in for EBDCDIC_STATEFUL and iso2022 states */
+/** Shift in for EBDCDIC_STATEFUL and iso2022 states @stable ICU 2.0 */
 #define  UCNV_SI 0x0F
-/** Shift out for EBDCDIC_STATEFUL and iso2022 states */
+/** Shift out for EBDCDIC_STATEFUL and iso2022 states @stable ICU 2.0 */
 #define  UCNV_SO 0x0E
 
 /**
@@ -1070,6 +1070,7 @@ ucnv_getAvailableName (int32_t n);
  * @see ucnv_getAvailableName
  * @see uenum_close
  * @see uenum_next
+ * @draft ICU 2.4
  */
 U_CAPI UEnumeration * U_EXPORT2
 ucnv_openAllNames(UErrorCode *pErrorCode);
@@ -1189,6 +1190,7 @@ ucnv_getStandardName(const char *name, const char *standard, UErrorCode *pErrorC
  *         then <code>NULL</code> is returned. The returned string is
  *         owned by the library.
  * @see ucnv_getStandardName
+ * @draft ICU 2.4
  */
 U_CAPI const char * U_EXPORT2
 ucnv_getCanonicalName(const char *alias, const char *standard, UErrorCode *pErrorCode);
@@ -1322,6 +1324,7 @@ ucnv_usesFallback(const UConverter *cnv);
  *                          Must be a valid pointer to an error code value, which must not indicate a failure
  *                          before the function call.
  * @return The name of the encoding detected. NULL if encoding is not detected. 
+ * @stable ICU 2.4
  */
 U_CAPI const char* U_EXPORT2
 ucnv_detectUnicodeSignature( const char* source,

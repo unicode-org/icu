@@ -53,6 +53,18 @@
 /*===========================================================================*/
 
 /**
+ * U_CHARSET_FAMILY is equal to this value when the platform is an ASCII based platform.
+ * @stable ICU 2.0
+ */
+#define U_ASCII_FAMILY 0
+
+/**
+ * U_CHARSET_FAMILY is equal to this value when the platform is an EBCDIC based platform.
+ * @stable ICU 2.0
+ */
+#define U_EBCDIC_FAMILY 1
+
+/**
  * \def U_CHARSET_FAMILY
  *
  * <p>These definitions allow to specify the encoding of text
@@ -90,10 +102,8 @@
  *    '@' <commercial at>
  *    '`' <grave accent>
  * \endcode
+ * @stable ICU 2.0
  */
-
-#define U_ASCII_FAMILY 0
-#define U_EBCDIC_FAMILY 1
 
 #ifndef U_CHARSET_FAMILY
 #   define U_CHARSET_FAMILY 0
@@ -111,6 +121,13 @@
  * - l for little-endian, ASCII-family platforms
  * - e for big-endian, EBCDIC-family platforms
  * This letter is part of the common data file name.
+ * @stable ICU 2.0
+ */
+
+/**
+ * \def U_ICUDATA_TYPE_LITLETTER
+ * The non-string form of U_ICUDATA_TYPE_LETTER
+ * @stable ICU 2.0
  */
 #if U_CHARSET_FAMILY
 #   if U_IS_BIG_ENDIAN
@@ -134,13 +151,16 @@
 #   endif
 #endif
 
-/** A single string literal containing the icudata stub name, i.e. 'icudt18e' for 
-   ICU 1.8.x on EBCDIC, etc.. */
+/**
+ * A single string literal containing the icudata stub name. i.e. 'icudt18e' for 
+ * ICU 1.8.x on EBCDIC, etc..
+ * @stable ICU 2.0
+ */
 #define U_ICUDATA_NAME    "icudt" U_ICU_VERSION_SHORT U_ICUDATA_TYPE_LETTER
 
 
-/*
- *  Define U_ICU_ENTRY_POINT to be the name of the DLL entry point.
+/**
+ *  U_ICU_ENTRY_POINT is the name of the DLL entry point to the ICU data library.
  *    Defined as a literal, not a string.
  *    Tricky Preprocessor use - ## operator replaces macro paramters with the literal string
  *                              from the corresponding macro invocation, _before_ other macro substitutions.
@@ -148,6 +168,7 @@
  *                              the literal text U_ICU_VERSION_MAJOR_NUM into the name.
  *                              The net result will be something of the form
  *                                  #define U_ICU_ENTRY_POINT icudt19_dat
+ * @stable ICU 2.4
  */
 #define U_ICUDATA_ENTRY_POINT  U_DEF2_ICUDATA_ENTRY_POINT(U_ICU_VERSION_MAJOR_NUM, U_ICU_VERSION_MINOR_NUM) 
 #define U_DEF2_ICUDATA_ENTRY_POINT(major, minor) U_DEF_ICUDATA_ENTRY_POINT(major, minor)
@@ -162,6 +183,7 @@
  * This is only used for non-ICU-API functions.
  * When a function is a public ICU API,
  * you must use the U_CAPI and U_EXPORT2 qualifiers.
+ * @stable ICU 2.0
  */
 #if defined(OS390) && (__COMPILER_VER__ < 0x41020000) && defined(XP_CPLUSPLUS)
 #    define U_CALLCONV __cdecl
@@ -172,6 +194,7 @@
 /**
  * \def NULL
  * Define NULL if necessary, to 0 for C++ and to ((void *)0) for C.
+ * @stable ICU 2.0
  */
 #ifndef NULL
 #ifdef XP_CPLUSPLUS
@@ -190,13 +213,17 @@
  * This is a primitive data type that holds the date and time
  * as the number of milliseconds since 1970-jan-01, 00:00 UTC.
  * UTC leap seconds are ignored.
+ * @stable ICU 2.0
  */
 typedef double UDate;
 
-/* Common time manipulation constants */
+/** The number of milliseconds per second @stable ICU 2.0 */
 #define U_MILLIS_PER_SECOND        (1000)
+/** The number of milliseconds per minute @stable ICU 2.0 */
 #define U_MILLIS_PER_MINUTE       (60000)
+/** The number of milliseconds per hour @stable ICU 2.0 */
 #define U_MILLIS_PER_HOUR       (3600000)
+/** The number of milliseconds per day @stable ICU 2.0 */
 #define U_MILLIS_PER_DAY       (86400000)
 
 
@@ -244,8 +271,8 @@ typedef double UDate;
  *        { return (UClassID)&Derived::fgClassID; }
  *      char Derived::fgClassID = 0; // Value is irrelevant
  * \endcode
+ * @stable ICU 2.0
  */
-
 typedef void* UClassID;
 
 /*===========================================================================*/
@@ -263,30 +290,35 @@ typedef void* UClassID;
  * when all of ICU is in a single library.
  * This can be set as a compiler option while building ICU, and it
  * needs to be the first one tested to override U_COMMON_API, U_I18N_API, etc.
+ * @stable ICU 2.0
  */
 
 /**
  * \def U_COMMON_API
  * Set to export library symbols from inside the common library,
  * and to import them from outside.
+ * @stable ICU 2.0
  */
 
 /**
  * \def U_I18N_API
  * Set to export library symbols from inside the i18n library,
  * and to import them from outside.
+ * @stable ICU 2.0
  */
 
 /**
  * \def U_LAYOUT_API
  * Set to export library symbols from inside the layout engine library,
  * and to import them from outside.
+ * @stable ICU 2.0
  */
 
 /**
  * \def U_USTDIO_API
  * Set to export library symbols from inside the ustdio library,
  * and to import them from outside.
+ * @stable ICU 2.0
  */
 
 #if defined(U_COMBINED_IMPLEMENTATION)
@@ -329,6 +361,7 @@ typedef void* UClassID;
 /**
  * \def U_STANDARD_CPP_NAMESPACE
  * Control of C++ Namespace
+ * @stable ICU 2.0
  */
 #ifdef __cplusplus
 #define U_STANDARD_CPP_NAMESPACE        ::
@@ -352,6 +385,7 @@ typedef void* UClassID;
  *
  * \par
  * Error codes should be tested using U_FAILURE() and U_SUCCESS().
+ * @stable ICU 2.0
  */
 typedef enum UErrorCode {
     /* The ordering of U_ERROR_INFO_START Vs U_USING_FALLBACK_WARNING looks weird
@@ -548,6 +582,7 @@ typedef enum UErrorCode {
  * Return a string for a UErrorCode value.
  * The string will be the same as the name of the error code constant
  * in the UErrorCode enum above.
+ * @stable ICU 2.0
  */
 U_CAPI const char * U_EXPORT2
 u_errorName(UErrorCode code);
