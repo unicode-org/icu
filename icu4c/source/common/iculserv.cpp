@@ -321,7 +321,7 @@ LocaleKeyFactory::create(const ICUServiceKey& key, const ICUService* service, UE
         const LocaleKey& lkey = (const LocaleKey&)key;
         int32_t kind = lkey.kind();
         Locale loc;
-        lkey.canonicalLocale(loc);
+        lkey.currentLocale(loc);
 
         return handleCreate(loc, kind, service, status);
     }
