@@ -15,12 +15,12 @@
 typedef struct
 {
   UConverterFromUCallback  subCallback;
-  void                    *subContext;
+  const void               *subContext;
   UBool                    flag;
 } FromUFLAGContext;
 
 U_CAPI void U_EXPORT2 UCNV_FROM_U_CALLBACK_FLAG (
-                  void *context,
+                  const void *context,
                   UConverterFromUnicodeArgs *fromUArgs,
                   const UChar* codeUnits,
                   int32_t length,

@@ -51,7 +51,7 @@ void prettyPrintUChar(UChar c)
 {
   if(  (c <= 0x007F) &&
        (isgraph(c))  ) {
-    printf("  '%c'  ", (char)(0x00FF&c));
+    printf(" '%c'   ", (char)(0x00FF&c));
   } else if ( c > 0x007F ) {
     char buf[1000];
     UErrorCode status = U_ZERO_ERROR;
@@ -68,22 +68,22 @@ void prettyPrintUChar(UChar c)
         printf("~%6s", buf);
       }
       else {
-        printf("??????? ");
+        printf(" ??????");
       }
     }
   } else {
     switch((char)(c & 0x007F)) {
     case ' ':
-      printf("  ' '  ");
+      printf(" ' '   ");
       break;
     case '\t':
-      printf("  \\t   ");
+      printf(" \\t    ");
       break;
     case '\n':
-      printf("  \\n   ");
+      printf(" \\n    ");
       break;
     default:
-      printf("   _   ");
+      printf("  _    ");
       break;
     }
   }
@@ -100,7 +100,7 @@ void printUChars(const char  *name = "?",
     len = u_strlen(uch);
   }
 
-  printf("%5s:", name);
+  printf("%5s: ", name);
   for( i = 0; i <len; i++) {
     printf("%-6d ", i);
   }
@@ -112,7 +112,7 @@ void printUChars(const char  *name = "?",
   }
   printf("\n");
 
-  printf("%5s: ", "ch");
+  printf("%5s:", "ch");
   for( i = 0; i <len; i++) {
     prettyPrintUChar(uch[i]);
   }
@@ -140,9 +140,9 @@ void printBytes(const char  *name = "?",
     len = strlen(uch);
   }
 
-  printf("%5s:", name);
+  printf("%5s: ", name);
   for( i = 0; i <len; i++) {
-    printf(" %- 4d", i);
+    printf("%-4d ", i);
   }
   printf("\n");
 
@@ -152,7 +152,7 @@ void printBytes(const char  *name = "?",
   }
   printf("\n");
 
-  printf("%5s: ", "ch");
+  printf("%5s:", "ch");
   for( i = 0; i <len; i++) {
     if(isgraph(uch[i])) {
       printf(" '%c' ", (char)uch[i]);
@@ -169,7 +169,7 @@ void printUChar(UChar32 ch32)
       printf("ch: U+%06X\n", ch32);
     }
     else {
-      UChar ch = ch32;
+      UChar ch = (UChar)ch32;
       printUChars("C", &ch, 1);
     }
 }
@@ -352,10 +352,10 @@ UErrorCode convsample_05()
   UErrorCode status = U_ZERO_ERROR;
   uint32_t letters=0, total=0;
 
-  f = fopen("data01.ut8", "r");
+  f = fopen("data01.txt", "r");
   if(!f)
   {
-    fprintf(stderr, "Couldn't open file 'data01.ut8' (UTF-8 data file).\n");
+    fprintf(stderr, "Couldn't open file 'data01.txt' (UTF-8 data file).\n");
     return U_FILE_ACCESS_ERROR;
   }
 
@@ -455,10 +455,10 @@ UErrorCode convsample_06()
   uint32_t gh = 0;
   UChar32 l = 0;
 
-  f = fopen("data06.ut8", "r");
+  f = fopen("data06.txt", "r");
   if(!f)
   {
-    fprintf(stderr, "Couldn't open file 'data06.ut8' (UTF-8 data file).\n");
+    fprintf(stderr, "Couldn't open file 'data06.txt' (UTF-8 data file).\n");
     return U_FILE_ACCESS_ERROR;
   }
 
