@@ -17,6 +17,7 @@
 #include "dbbi_tbl.h"
 #include "uvector.h"
 #include "cmemory.h"
+#include "uassert.h"
 
 U_NAMESPACE_BEGIN
 
@@ -142,7 +143,14 @@ DictionaryBasedBreakIterator::previous()
         reset();
         int32_t result = RuleBasedBreakIterator::previous();
         if (cachedBreakPositions != NULL) {
-            positionInCache = numCachedBreakPositions - 2;
+            for (positionInCache=0; 
+                cachedBreakPositions[positionInCache] != result;
+                positionInCache++);
+            U_ASSERT(positionInCache < numCachedBreakPositions);
+            if (positionInCache >= numCachedBreakPositions) {
+                // Something has gone wrong.  Dump the cache.
+                reset();
+            }
         }
         return result;
     }
@@ -257,8 +265,13 @@ DictionaryBasedBreakIterator::handleNext()
         // for the new range
         if (fDictionaryCharCount > 1 && result - startPos > 1) {
             divideUpDictionaryRange(startPos, result, status);
+            U_ASSERT(U_SUCCESS(status));
             if (U_FAILURE(status)) {
-                return -9999;   // SHOULD NEVER GET HERE!
+                // Something went badly wrong, an internal error.
+                // We have no way from here to report it to caller.
+                // Treat as if this is if the dictionary did not apply to range.
+                reset();
+                return result;
             }
         }
 

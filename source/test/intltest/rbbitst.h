@@ -74,6 +74,7 @@ public:
     void TestWordBoundary();
     void TestLineBreaks();
     void TestSentBreaks();
+    void TestBug3818();
     
     
 /***********************/
