@@ -10,7 +10,7 @@ be {
 
     // We use UCA collation table optimized for Cyrillic
     // as defined in the Russian locale
-    CollationElements:alias { "ru" }
+    collations:alias { "ru" }
 
     Countries { 
         BY { "\u0411\u0435\u043B\u0430\u0440\u0443\u0441\u044C" }

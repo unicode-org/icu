@@ -45,10 +45,6 @@ es {
           }
 	}
     }
-    //CollationElements {
-        //Version { "1.0" }
-        //Sequence { "& N < n\u0303<<< N\u0303" }
-    //}
     /* Duplicates from root commented out. */
     Countries { 
         Fallback{ "en"}

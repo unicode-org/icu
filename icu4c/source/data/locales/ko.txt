@@ -29,7 +29,8 @@ ko {
     // Collation rules supplied by Hyangmi Cho of LOTUS
     // UCA deals properly with Hangul and Jamo. These rules interleave proper CJK (Hanja)
     // between corresponding Hanguls.
-    CollationElements {
+    collations {
+      standard { 
         Version { "2.1" }
         Sequence{
             "[optimize [\uAC00-\uAC01\uAC04\uAC07-\uAC0A\uAC10-\uAC17\uAC19-\uAC1D\uAC20"
@@ -2054,6 +2055,7 @@ ko {
 
             "&\ud790<<\u8a70<<\u72b5<<\u7e88<<\u896d<<\u9821<<\u9ee0"
         }
+      }
     }
     Countries {
         AD { "\uC548\uB3C4\uB77C" }

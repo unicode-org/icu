@@ -7,9 +7,11 @@
 
 fr {
     Version{"2.0"}
-    CollationElements { 
+    collations {
+      standard { 
         Version { "1.0" }
         Sequence { "[backwards 2]&A<<\u00e6/e<<<\u00c6/E" }
+      }
     }
     Variants {
         REVISED { "R\u00e9vis\u00e9" }

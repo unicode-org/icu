@@ -9,7 +9,7 @@ sr {
     Version{ "2.0"}
     // We use UCA collation table optimized for Cyrillic
     // as defined in the Russian locale
-    CollationElements:alias { "ru" }
+    collations:alias { "ru" }
     Countries { 
         AF { "\u0410\u0432\u0433\u0430\u043D\u0438\u0441\u0442\u0430\u043D" }
         AL { "\u0410\u043B\u0431\u0430\u043D\u0438\u0458\u0430" }

@@ -87,7 +87,7 @@ hy{
     }
 
     // /**************** Info Below is needed ****************/
-    // CollationElements{}    // To be supplied from Unicode
+    // collations{}    // To be supplied from Unicode
     //
 
     DateTimePatterns {

@@ -7,11 +7,7 @@
 
 de__PHONEBOOK {
     Version { "1.0" }
-    CollationElements:alias { "de/collations/phonebook" }
-    //CollationElements { 
-        //Version { "1.0" }
-        //Sequence { "&ae <<< \u00E4 &AE <<< \u00C4" 
-        //"&oe <<< \u00F6 &OE <<< \u00D6" 
-        //"&ue <<< \u00FC &UE <<< \u00DC" }
-    //}
+    collations {
+      default { "phonebook" }
+    }
 }

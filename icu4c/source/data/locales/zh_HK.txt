@@ -8,7 +8,9 @@
 zh_HK {
     Version{ "2.0" }
 
-    CollationElements:alias { "zh_TW" }
+    collations { 
+      default { "traditional" }
+    }
     Countries:alias { "zh_TW" }
 
     DateTimePatterns { 

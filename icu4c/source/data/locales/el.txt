@@ -11,9 +11,11 @@ el {
         "\u03C0\u03BC",
         "\u03BC\u03BC",
     }
-    CollationElements { 
+    collations {
+      standard { 
         Version { "2.0" }
         Sequence { "[normalization on]" }
+      }
     }
     Countries { 
         AD { "\u0391\u03BD\u03B4\u03CC\u03C1\u03B1" }

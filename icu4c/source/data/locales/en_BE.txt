@@ -7,9 +7,11 @@
 
 en_BE {
     Version { "2.0" }
-    CollationElements { 
+    collations {
+      standard { 
         Version { "1.0.1" }
         Sequence { "[backwards 2]" }
+      }
     }
     DateTimePatterns {
         "HH' h 'mm' min 'ss' s 'z",

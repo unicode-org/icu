@@ -9,7 +9,8 @@
 
 fa {
     Version { "3.0" }
-    CollationElements {
+    collations {
+      standard { 
         Version { "2.0" }
         Sequence { "[normalization on]"
            "&\u064e<<\u0650<<\u064f<<\u064b<<\u064d<<\u064c"
@@ -19,6 +20,7 @@ fa {
            "&\u06cf <\u0647<<\u06d5<<\u06c1<<\u0629<<\u06c3<<\u06c0<<\u06be"
            "&\u06cc<<\u0649<<\u06d2<<\u064a<<\u06d0<<\u06d1<<\u06cd<<\u06ce"
          }
+      }
     }
     AmPmMarkers { 
         "\u0642.\u0638.",

@@ -769,8 +769,8 @@ mt {
 // Note that IE is **NOT** sorted as ittra waħda. 
 // So says the Akkademja tal-Malta
 
-   CollationElements
-   {
+    collations {
+      standard { 
         Version { "1.0" }
         Sequence { "& B < ċ <<< Ċ" // ċ  Ċ
                    "    < c<<<C"      
@@ -780,6 +780,7 @@ mt {
                    "& H < ħ  <<< Ħ "           
                    "& Y < ż<<< Ż"               // ż Ż
                    "    < z<<<Z" }
+      }
    }
 
 // Time zone

@@ -11,9 +11,11 @@ sq {
         "PD",
         "MD",
     }
-    CollationElements { 
+    collations {
+      standard { 
         Version { "1.0" }
-        Sequence { "@" }
+        Sequence { "[backwards 2]" }
+      }
     }
     Countries { 
         AL { "Shqip\u00EBria" }
