@@ -87,7 +87,8 @@ const char Calendar::kDateTimeElements[] = "DateTimeElements";
 // -------------------------------------
 
 Calendar::Calendar(UErrorCode& success)
-:   fIsTimeSet(FALSE),
+:   UObject(),
+    fIsTimeSet(FALSE),
     fAreFieldsSet(FALSE),
     fAreAllFieldsSet(FALSE),
     fNextStamp(kMinimumUserStamp),
@@ -103,7 +104,8 @@ Calendar::Calendar(UErrorCode& success)
 // -------------------------------------
 
 Calendar::Calendar(TimeZone* zone, const Locale& aLocale, UErrorCode& success)
-:   fIsTimeSet(FALSE),
+:   UObject(),
+    fIsTimeSet(FALSE),
     fAreFieldsSet(FALSE),
     fAreAllFieldsSet(FALSE),
     fNextStamp(kMinimumUserStamp),
@@ -125,7 +127,8 @@ Calendar::Calendar(TimeZone* zone, const Locale& aLocale, UErrorCode& success)
 // -------------------------------------
 
 Calendar::Calendar(const TimeZone& zone, const Locale& aLocale, UErrorCode& success)
-:   fIsTimeSet(FALSE),
+:   UObject(),
+    fIsTimeSet(FALSE),
     fAreFieldsSet(FALSE),
     fAreAllFieldsSet(FALSE),
     fNextStamp(kMinimumUserStamp),
@@ -148,6 +151,7 @@ Calendar::~Calendar()
 // -------------------------------------
 
 Calendar::Calendar(const Calendar &source)
+:   UObject(source)
 {
     fZone = 0;
     *this = source;

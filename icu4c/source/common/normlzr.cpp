@@ -25,7 +25,7 @@ const char Normalizer::fgClassID=0;
 //-------------------------------------------------------------------------
 
 Normalizer::Normalizer(const UnicodeString& str, UNormalizationMode mode) :
-    fUMode(mode), fOptions(0),
+    UObject(), fUMode(mode), fOptions(0),
     currentIndex(0), nextIndex(0),
     buffer(), bufferPos(0)
 {
@@ -33,7 +33,7 @@ Normalizer::Normalizer(const UnicodeString& str, UNormalizationMode mode) :
 }
 
 Normalizer::Normalizer(const UChar *str, int32_t length, UNormalizationMode mode) :
-    fUMode(mode), fOptions(0),
+    UObject(), fUMode(mode), fOptions(0),
     currentIndex(0), nextIndex(0),
     buffer(), bufferPos(0)
 {
@@ -41,7 +41,7 @@ Normalizer::Normalizer(const UChar *str, int32_t length, UNormalizationMode mode
 }
 
 Normalizer::Normalizer(const CharacterIterator& iter, UNormalizationMode mode) :
-    fUMode(mode), fOptions(0),
+    UObject(), fUMode(mode), fOptions(0),
     currentIndex(0), nextIndex(0),
     buffer(), bufferPos(0)
 {
@@ -52,7 +52,7 @@ Normalizer::Normalizer(const CharacterIterator& iter, UNormalizationMode mode) :
 
 Normalizer::Normalizer(const UnicodeString& str, 
                        EMode mode) :
-    fUMode(getUMode(mode)), fOptions(0),
+    UObject(), fUMode(getUMode(mode)), fOptions(0),
     currentIndex(0), nextIndex(0),
     buffer(), bufferPos(0)
 {
@@ -62,7 +62,7 @@ Normalizer::Normalizer(const UnicodeString& str,
 Normalizer::Normalizer(const UnicodeString& str, 
                        EMode mode, 
                        int32_t options) :
-    fUMode(getUMode(mode)), fOptions(options),
+    UObject(), fUMode(getUMode(mode)), fOptions(options),
     currentIndex(0), nextIndex(0),
     buffer(), bufferPos(0)
 {
@@ -70,7 +70,7 @@ Normalizer::Normalizer(const UnicodeString& str,
 }
 
 Normalizer::Normalizer(const UChar *str, int32_t length, EMode mode) :
-    fUMode(getUMode(mode)), fOptions(0),
+    UObject(), fUMode(getUMode(mode)), fOptions(0),
     currentIndex(0), nextIndex(0),
     buffer(), bufferPos(0)
 {
@@ -79,7 +79,7 @@ Normalizer::Normalizer(const UChar *str, int32_t length, EMode mode) :
 
 Normalizer::Normalizer(const CharacterIterator& iter, 
                        EMode mode) :
-    fUMode(getUMode(mode)), fOptions(0),
+    UObject(), fUMode(getUMode(mode)), fOptions(0),
     currentIndex(0), nextIndex(0),
     buffer(), bufferPos(0)
 {
@@ -89,7 +89,7 @@ Normalizer::Normalizer(const CharacterIterator& iter,
 Normalizer::Normalizer(const CharacterIterator& iter, 
                        EMode mode, 
                        int32_t options) :
-    fUMode(getUMode(mode)), fOptions(options),
+    UObject(), fUMode(getUMode(mode)), fOptions(options),
     currentIndex(0), nextIndex(0),
     buffer(), bufferPos(0)
 {
@@ -97,7 +97,7 @@ Normalizer::Normalizer(const CharacterIterator& iter,
 }
 
 Normalizer::Normalizer(const Normalizer &copy) :
-    fUMode(copy.fUMode), fOptions(copy.fOptions),
+    UObject(copy), fUMode(copy.fUMode), fOptions(copy.fOptions),
     currentIndex(copy.currentIndex), nextIndex(copy.nextIndex),
     buffer(copy.buffer), bufferPos(copy.bufferPos)
 {

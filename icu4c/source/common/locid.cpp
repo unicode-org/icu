@@ -217,7 +217,7 @@ Locale::~Locale()
 }
 
 Locale::Locale()
-    : fullName(fullNameBuffer)
+    : UObject(), fullName(fullNameBuffer)
 {
     init(NULL);
 }
@@ -225,7 +225,7 @@ Locale::Locale()
 Locale::Locale( const   char * newLanguage, 
                 const   char * newCountry, 
                 const   char * newVariant) 
-    : fullName(fullNameBuffer)
+    : UObject(), fullName(fullNameBuffer)
 {
     if( (newLanguage==NULL) && (newCountry == NULL) && (newVariant == NULL) )
     {
@@ -345,7 +345,7 @@ Locale::Locale( const   char * newLanguage,
 }
 
 Locale::Locale(const Locale &other)
-    : fullName(fullNameBuffer)
+    : UObject(other), fullName(fullNameBuffer)
 {
     *this = other;
 }

@@ -17,7 +17,7 @@ U_NAMESPACE_BEGIN
 const char TransliterationRuleData::fgClassID=0;
 
 TransliterationRuleData::TransliterationRuleData(UErrorCode& status)
- : ruleSet(status),
+ : UObject(), ruleSet(status),
     variableNames(0), variables(0)
 {
     if (U_FAILURE(status)) {
@@ -37,7 +37,7 @@ TransliterationRuleData::TransliterationRuleData(UErrorCode& status)
 }
 
 TransliterationRuleData::TransliterationRuleData(const TransliterationRuleData& other) :
-    ruleSet(other.ruleSet),
+    UObject(other), ruleSet(other.ruleSet),
     variablesBase(other.variablesBase),
     variablesLength(other.variablesLength)
 {

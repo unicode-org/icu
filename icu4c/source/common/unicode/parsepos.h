@@ -44,6 +44,7 @@ public:
      * @stable
      */
     ParsePosition()
+        : UObject()
       { this->index = 0; this->errorIndex = -1; }
 
     /**
@@ -52,6 +53,7 @@ public:
      * @stable
      */
     ParsePosition(int32_t newIndex)
+        : UObject()
       {    this->index = newIndex; this->errorIndex = -1; }
 
     /**
@@ -60,6 +62,7 @@ public:
      * @stable
      */
     ParsePosition(const ParsePosition& copy)
+        : UObject(copy)
       {    this->index = copy.index; this->errorIndex = copy.errorIndex; }
 
     /**

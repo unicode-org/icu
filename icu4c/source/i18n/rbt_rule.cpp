@@ -57,6 +57,7 @@ TransliterationRule::TransliterationRule(const UnicodeString& input,
                                          UBool anchorStart, UBool anchorEnd,
                                          const TransliterationRuleData* theData,
                                          UErrorCode& status) :
+    UObject(),
     segments(0),
     data(theData) {
 
@@ -154,6 +155,7 @@ TransliterationRule::TransliterationRule(const UnicodeString& input,
  * Copy constructor.
  */
 TransliterationRule::TransliterationRule(TransliterationRule& other) :
+    UObject(other),
     anteContext(NULL),
     key(NULL),
     postContext(NULL),

@@ -4046,11 +4046,12 @@ private:
 inline
 UCharReference::UCharReference(UnicodeString *string, 
                    int32_t pos)
-  : fString(string), fPos(pos)
+  : UObject(), fString(string), fPos(pos)
 {}
 
 inline
 UCharReference::UCharReference(const UCharReference& that)
+: UObject(that)
 { this->operator=(that); }
 
 inline

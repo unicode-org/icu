@@ -60,6 +60,7 @@ const char DigitList::fgClassID=0;
 // default constructor
 
 DigitList::DigitList()
+    : UObject()
 {
     clear();
 }
@@ -74,6 +75,7 @@ DigitList::~DigitList()
 // copy constructor
 
 DigitList::DigitList(const DigitList &other)
+    : UObject(other)
 {
     fDigits = fDecimalDigits + 1;   // skip the decimal
     *this = other;

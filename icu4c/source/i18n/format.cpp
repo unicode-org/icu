@@ -33,6 +33,7 @@ const char FieldPosition::fgClassID=0;
 // default constructor
 
 Format::Format()
+    : UObject()
 {
 }
 
@@ -45,7 +46,8 @@ Format::~Format()
 // -------------------------------------
 // copy constructor
 
-Format::Format(const Format& /*that*/)
+Format::Format(const Format &that)
+    : UObject(that)
 {
 }
 

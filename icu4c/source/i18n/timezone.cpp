@@ -211,13 +211,14 @@ TimeZone::getGMT(void)
 // *****************************************************************************
 
 TimeZone::TimeZone()
+    :   UObject(), fID()
 {
 }
 
 // -------------------------------------
 
 TimeZone::TimeZone(const UnicodeString &id)
-    :   fID(id)
+    :   UObject(), fID(id)
 {
 }
 
@@ -230,7 +231,7 @@ TimeZone::~TimeZone()
 // -------------------------------------
 
 TimeZone::TimeZone(const TimeZone &source)
-    :   fID(source.fID)
+    :   UObject(source), fID(source.fID)
 {
 }
 

@@ -138,16 +138,19 @@ const char DateFormatSymbols::fgLocalPatternCharsTag[]="localPatternChars";
 
 DateFormatSymbols::DateFormatSymbols(const Locale& locale,
                                      UErrorCode& status)
+    : UObject()
 {
     initializeData(locale, status);
 }
 
 DateFormatSymbols::DateFormatSymbols(UErrorCode& status)
+    : UObject()
 {
     initializeData(Locale::getDefault(), status, TRUE);
 }
 
 DateFormatSymbols::DateFormatSymbols(const DateFormatSymbols& other)
+    : UObject(other)
 {
     copyData(other);
 }

@@ -172,20 +172,20 @@ const char ResourceBundle::fgClassID=0;
 ResourceBundle::ResourceBundle( const UnicodeString&    path,
                                 const Locale&           locale,
                                 UErrorCode&              error)
-                                :locName(NULL)
+                                :UObject(), locName(NULL)
 {
     constructForLocale(path, locale, error);
 }
 
 ResourceBundle::ResourceBundle(UErrorCode &err)
-                                :locName(NULL)
+                                :UObject(), locName(NULL)
 {
     resource = ures_open(0, Locale::getDefault().getName(), &err);
 }
 
 ResourceBundle::ResourceBundle( const UnicodeString&    path,
                                 UErrorCode&              error)
-                                :locName(NULL)
+                                :UObject(), locName(NULL)
 {
     constructForLocale(path, Locale::getDefault(), error);
 }
@@ -193,13 +193,13 @@ ResourceBundle::ResourceBundle( const UnicodeString&    path,
 ResourceBundle::ResourceBundle(const wchar_t* path,
                                const Locale& locale, 
                                UErrorCode& err)
-                               :locName(NULL)
+                               :UObject(), locName(NULL)
 {
     constructForLocale(path, locale, err);
 }
 
 ResourceBundle::ResourceBundle(const ResourceBundle &other)
-                              :locName(NULL)
+                              :UObject(other), locName(NULL)
 {
     UErrorCode status = U_ZERO_ERROR;
 
@@ -212,7 +212,7 @@ ResourceBundle::ResourceBundle(const ResourceBundle &other)
 }
 
 ResourceBundle::ResourceBundle(UResourceBundle *res, UErrorCode& err)
-                               :locName(NULL)
+                               :UObject(), locName(NULL)
 {
     if (res) {
         resource = ures_copyResb(0, res, &err);
@@ -222,8 +222,8 @@ ResourceBundle::ResourceBundle(UResourceBundle *res, UErrorCode& err)
     }
 }
 
-ResourceBundle::ResourceBundle( const char* path, const Locale& locale, UErrorCode& err) 
-                                :locName(NULL)
+ResourceBundle::ResourceBundle(const char* path, const Locale& locale, UErrorCode& err) 
+                               :UObject(), locName(NULL)
 {
     resource = ures_open(path, locale.getName(), &err);
 }

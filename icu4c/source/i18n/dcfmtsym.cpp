@@ -36,6 +36,7 @@ const char DecimalFormatSymbols::fgCurrencyElements[] = "CurrencyElements";
 // Initializes this with the decimal format symbols in the default locale.
  
 DecimalFormatSymbols::DecimalFormatSymbols(UErrorCode& status)
+    : UObject()
 {
     initialize(Locale::getDefault(), status, TRUE);
 }
@@ -44,6 +45,7 @@ DecimalFormatSymbols::DecimalFormatSymbols(UErrorCode& status)
 // Initializes this with the decimal format symbols in the desired locale.
  
 DecimalFormatSymbols::DecimalFormatSymbols(const Locale& loc, UErrorCode& status)
+    : UObject()
 {
     initialize(loc, status);
 }
@@ -57,7 +59,9 @@ DecimalFormatSymbols::~DecimalFormatSymbols()
 // -------------------------------------
 // copy constructor
 
-DecimalFormatSymbols::DecimalFormatSymbols(const DecimalFormatSymbols &source) {
+DecimalFormatSymbols::DecimalFormatSymbols(const DecimalFormatSymbols &source)
+    : UObject(source)
+{
     int i;
     for(i = 0; i < (int)kFormatSymbolCount; ++i) {
         fSymbols[(ENumberFormatSymbol)i] = source.fSymbols[(ENumberFormatSymbol)i];

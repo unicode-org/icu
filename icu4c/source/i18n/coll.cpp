@@ -178,6 +178,7 @@ UnicodeString& Collator::getDisplayName(const Locale& objectLocale,
 * is left to the child class.
 */
 Collator::Collator()
+    : UObject()
 {
 }
 
@@ -192,6 +193,7 @@ Collator::Collator()
 */
 Collator::Collator(UCollationStrength /* collationStrength */,
                          UNormalizationMode /* decompositionMode */)
+    : UObject()
 {
 }
 
@@ -199,7 +201,8 @@ Collator::~Collator()
 {
 }
 
-Collator::Collator(const Collator& /* other */)
+Collator::Collator(const Collator &other)
+    : UObject(other)
 {
 }
 

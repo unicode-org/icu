@@ -47,16 +47,19 @@ U_NAMESPACE_BEGIN
 const char UnicodeConverter::fgClassID=0;
 
 UnicodeConverter::UnicodeConverter()
+    : UObject()
 {
     UErrorCode err = U_ZERO_ERROR;
     myUnicodeConverter = ucnv_open(NULL, &err);
 }
 UnicodeConverter::UnicodeConverter(const char* name, UErrorCode& err)
+    : UObject()
 {
     myUnicodeConverter = ucnv_open(name, &err);
 }
 
 UnicodeConverter::UnicodeConverter(const UnicodeString& name, UErrorCode& err)
+    : UObject()
 {
     char myName[UCNV_MAX_CONVERTER_NAME_LENGTH];
     name.extract(myName, sizeof(myName), 0, err);
@@ -67,6 +70,7 @@ UnicodeConverter::UnicodeConverter(const UnicodeString& name, UErrorCode& err)
 UnicodeConverter::UnicodeConverter(int32_t codepageNumber,
                                          UConverterPlatform platform,
                                          UErrorCode& err)
+    : UObject()
 {
     myUnicodeConverter = ucnv_openCCSID(codepageNumber,
                                    platform,
@@ -116,6 +120,7 @@ UBool UnicodeConverter::operator!=(const UnicodeConverter& that) const
 }
 
 UnicodeConverter::UnicodeConverter(const UnicodeConverter&  that)
+    : UObject(that)
 {
     /*increments the referenceCounter to let the static table know
      *it has one more client
