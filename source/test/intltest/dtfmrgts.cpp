@@ -1039,7 +1039,7 @@ void DateFormatRegressionTest::Test4182066(void) {
         "09/12/+1",
         "09/12/001",
     };
-    int32_t STRINGS_COUNT = sizeof(STRINGS) / sizeof(STRINGS[0]);
+    int32_t STRINGS_COUNT = (int32_t)(sizeof(STRINGS) / sizeof(STRINGS[0]));
     UDate FAIL_DATE = (UDate) 0;
     UDate DATES[] = {
         date(2000-1900, Calendar::FEBRUARY, 29),

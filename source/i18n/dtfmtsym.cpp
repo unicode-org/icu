@@ -456,13 +456,13 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
             status = U_USING_FALLBACK_ERROR;
 
             fEras = (UnicodeString*)fgLastResortEras;
-            fErasCount = sizeof(fgLastResortEras[0]) / sizeof(fgLastResortEras[0]);
+            fErasCount = (int32_t)(sizeof(fgLastResortEras[0]) / sizeof(fgLastResortEras[0]));
             fMonths = fShortMonths = (UnicodeString*)fgLastResortMonthNames;
-            fMonthsCount = fShortMonthsCount = sizeof(fgLastResortMonthNames) / sizeof(fgLastResortMonthNames[0]);
+            fMonthsCount = fShortMonthsCount = (int32_t)(sizeof(fgLastResortMonthNames) / sizeof(fgLastResortMonthNames[0]));
             fWeekdays = fShortWeekdays = (UnicodeString*)fgLastResortDayNames;
-            fWeekdaysCount = fShortWeekdaysCount = sizeof(fgLastResortDayNames) / sizeof(fgLastResortDayNames[0]);
+            fWeekdaysCount = fShortWeekdaysCount = (int32_t)(sizeof(fgLastResortDayNames) / sizeof(fgLastResortDayNames[0]));
             fAmPms = (UnicodeString*)fgLastResortAmPmMarkers;
-            fAmPmsCount = sizeof(fgLastResortAmPmMarkers) / sizeof(fgLastResortAmPmMarkers[0]);
+            fAmPmsCount = (int32_t)(sizeof(fgLastResortAmPmMarkers) / sizeof(fgLastResortAmPmMarkers[0]));
             if (fgLastResortZoneStringsH == 0)
             {
                 // Initialize this -- the compiler doesn't like to do so at static init time
@@ -473,7 +473,7 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
             }
             fZoneStrings = fgLastResortZoneStringsH;
             fZoneStringsRowCount = 1;
-            fZoneStringsColCount = sizeof(fgLastResortZoneStrings);
+            fZoneStringsColCount = (int32_t)(sizeof(fgLastResortZoneStrings));
             fLocalPatternChars = fgPatternChars;
         }
         return;
