@@ -1272,6 +1272,88 @@ public abstract class Calendar implements Serializable, Cloneable {
     }
 
     /**
+     * [NEW]
+     * Return the difference between the given time and the time this
+     * calendar object is set to.  If this calendar is set
+     * <em>before</em> the given time, the returned value will be
+     * positive.  If this calendar is set <em>after</em> the given
+     * time, the returned value will be negative.  The
+     * <code>field</code> parameter specifies the units of the return
+     * value.  For example, if <code>fieldDifference(when,
+     * Calendar.MONTH)</code> returns 3, then this calendar is set to
+     * 3 months before <code>when</code>, and possibly some addition
+     * time less than one month.
+     *
+     * <p>As a side effect of this call, this calendar is advanced
+     * toward <code>when</code> by the given amount.  That is, calling
+     * this method has the side effect of calling <code>add(field,
+     * n)</code>, where <code>n</code> is the return value.
+     *
+     * <p>Usage: To use this method, call it first with the largest
+     * field of interest, then with progressively smaller fields.  For
+     * example:
+     *
+     * <pre>
+     * int y = cal.fieldDifference(when, Calendar.YEAR);
+     * int m = cal.fieldDifference(when, Calendar.MONTH);
+     * int d = cal.fieldDifference(when, Calendar.DATE);</pre>
+     *
+     * computes the difference between <code>cal</code> and
+     * <code>when</code> in years, months, and days.
+     *
+     * <p>Note: <code>fieldDifference()</code> is
+     * <em>asymmetrical</em>.  That is, in the following code:
+     *
+     * <pre>
+     * cal.setTime(date1);
+     * int m1 = cal.fieldDifference(date2, Calendar.MONTH);
+     * int d1 = cal.fieldDifference(date2, Calendar.DATE);
+     * cal.setTime(date2);
+     * int m2 = cal.fieldDifference(date1, Calendar.MONTH);
+     * int d2 = cal.fieldDifference(date1, Calendar.DATE);</pre>
+     *
+     * one might expect that <code>m1 == -m2 && d1 == -d2</code>.
+     * However, this is not generally the case, because of
+     * irregularities in the underlying calendar system (e.g., the
+     * Gregorian calendar has a varying number of days per month).
+     *
+     * @param when the date to compare this calendar's time to
+     * @param field the field in which to compute the result
+     * @return the difference, either positive or negative, between
+     * this calendar's time and <code>when</code>, in terms of
+     * <code>field</code>.
+     */
+    public int fieldDifference(Date when, int field) {
+        int result = 0;
+        long targetMs = when.getTime();
+        long ms = getTimeInMillis();
+        if (ms < targetMs) {
+            for (;;) {
+                add(field, 1);
+                long newMs = getTimeInMillis();
+                if (newMs > targetMs) {
+                    setTimeInMillis(ms);
+                    break;
+                }
+                ms = newMs;
+                ++result;
+            }
+        } else if (ms > targetMs) {
+            for (;;) {
+                add(field, -1);
+                long newMs = getTimeInMillis();
+                if (newMs < targetMs) {
+                    setTimeInMillis(ms);
+                    break;
+                }
+                ms = newMs;
+                --result;
+            }
+        }
+        return result;
+    }
+
+    /**
      * Sets the time zone with the given time zone value.
      * @param value the given time zone.
      */
