@@ -17,6 +17,7 @@
 #include "rbt_rule.h"
 #include "umutex.h"
 #include "ucln_in.h"
+#include "upropset.h"
 
 // HIGH_VALUE > all valid values. 110000 for codepoints
 #define UNICODESET_HIGH 0x0110000
@@ -42,49 +43,40 @@
 #define UPPER_U         ((UChar)0x0055) /*U*/
 #define LOWER_U         ((UChar)0x0075) /*u*/
 
-// N.B.: This mapping is different in ICU and Java
-//const UnicodeString UnicodeSet::CATEGORY_NAMES(
-//    "CnLuLlLtLmLoMnMeMcNdNlNoZsZlZpCcCfCoCsPdPsPePcPoSmScSkSoPiPf", "");
-static const UChar CATEGORY_NAMES[] = {
-    0x43, 0x6E, /* "Cn" */
-    0x4C, 0x75, /* "Lu" */
-    0x4C, 0x6C, /* "Ll" */
-    0x4C, 0x74, /* "Lt" */
-    0x4C, 0x6D, /* "Lm" */
-    0x4C, 0x6F, /* "Lo" */
-    0x4D, 0x6E, /* "Mn" */
-    0x4D, 0x65, /* "Me" */
-    0x4D, 0x63, /* "Mc" */
-    0x4E, 0x64, /* "Nd" */
-    0x4E, 0x6C, /* "Nl" */
-    0x4E, 0x6F, /* "No" */
-    0x5A, 0x73, /* "Zs" */
-    0x5A, 0x6C, /* "Zl" */
-    0x5A, 0x70, /* "Zp" */
-    0x43, 0x63, /* "Cc" */
-    0x43, 0x66, /* "Cf" */
-    0x43, 0x6F, /* "Co" */
-    0x43, 0x73, /* "Cs" */
-    0x50, 0x64, /* "Pd" */
-    0x50, 0x73, /* "Ps" */
-    0x50, 0x65, /* "Pe" */
-    0x50, 0x63, /* "Pc" */
-    0x50, 0x6F, /* "Po" */
-    0x53, 0x6D, /* "Sm" */
-    0x53, 0x63, /* "Sc" */
-    0x53, 0x6B, /* "Sk" */
-    0x53, 0x6F, /* "So" */
-    0x50, 0x69, /* "Pi" */
-    0x50, 0x66, /* "Pf" */
-    0x00
-};
-
-/**
- * A cache mapping character category integers, as returned by
- * Unicode::getType(), to pairs strings.  Entries are initially
- * zero length and are filled in on demand.
- */
-static UnicodeSet* CATEGORY_CACHE = NULL;
+//// TEMPORARY: Remove when deprecated category code constructor is removed.
+//static const UChar CATEGORY_NAMES[] = {
+//    0x43, 0x6E, /* "Cn" */
+//    0x4C, 0x75, /* "Lu" */
+//    0x4C, 0x6C, /* "Ll" */
+//    0x4C, 0x74, /* "Lt" */
+//    0x4C, 0x6D, /* "Lm" */
+//    0x4C, 0x6F, /* "Lo" */
+//    0x4D, 0x6E, /* "Mn" */
+//    0x4D, 0x65, /* "Me" */
+//    0x4D, 0x63, /* "Mc" */
+//    0x4E, 0x64, /* "Nd" */
+//    0x4E, 0x6C, /* "Nl" */
+//    0x4E, 0x6F, /* "No" */
+//    0x5A, 0x73, /* "Zs" */
+//    0x5A, 0x6C, /* "Zl" */
+//    0x5A, 0x70, /* "Zp" */
+//    0x43, 0x63, /* "Cc" */
+//    0x43, 0x66, /* "Cf" */
+//    0x43, 0x6F, /* "Co" */
+//    0x43, 0x73, /* "Cs" */
+//    0x50, 0x64, /* "Pd" */
+//    0x50, 0x73, /* "Ps" */
+//    0x50, 0x65, /* "Pe" */
+//    0x50, 0x63, /* "Pc" */
+//    0x50, 0x6F, /* "Po" */
+//    0x53, 0x6D, /* "Sm" */
+//    0x53, 0x63, /* "Sc" */
+//    0x53, 0x6B, /* "Sk" */
+//    0x53, 0x6F, /* "So" */
+//    0x50, 0x69, /* "Pi" */
+//    0x50, 0x66, /* "Pf" */
+//    0x00
+//};
 
 /**
  * Delimiter string used in patterns to close a category reference:
@@ -92,16 +84,12 @@ static UnicodeSet* CATEGORY_CACHE = NULL;
  */
 static const UChar CATEGORY_CLOSE[] = {COLON, SET_CLOSE, 0x0000}; /* ":]" */
 
-
 /**
  * Cleanup function for transliterator component; delegates to
  * Transliterator::cleanupRegistry().
  */
 U_CFUNC UBool unicodeset_cleanup(void) {
-    if (CATEGORY_CACHE) {
-        delete []CATEGORY_CACHE;
-        CATEGORY_CACHE = NULL;
-    }
+    UnicodePropertySet::cleanup();
     return TRUE;
 }
 
@@ -174,24 +162,24 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
     applyPattern(pattern, pos, &symbols, status);
 }
 
-/**
- * Constructs a set from the given Unicode character category.
- * @param category an integer indicating the character category as
- * returned by <code>Unicode::getType()</code>.
- */
-UnicodeSet::UnicodeSet(int8_t category, UErrorCode& status) :
-    len(0), capacity(START_EXTRA), bufferCapacity(0), list(0),
-    buffer(0)
-{
-    if (U_SUCCESS(status)) {
-        if (category < 0 || category >= Unicode::GENERAL_TYPES_COUNT) {
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-        } else {
-            list = new UChar32[capacity];
-            *this = getCategorySet(category);
-        }
-    }
-}
+///**
+// * Constructs a set from the given Unicode character category.
+// * @param category an integer indicating the character category as
+// * returned by <code>Unicode::getType()</code>.
+// */
+//UnicodeSet::UnicodeSet(int8_t category, UErrorCode& status) :
+//    len(0), capacity(START_EXTRA), bufferCapacity(0), list(0),
+//    buffer(0)
+//{
+//    if (U_SUCCESS(status)) {
+//        if (category < 0 || category >= Unicode::GENERAL_TYPES_COUNT) {
+//            status = U_ILLEGAL_ARGUMENT_ERROR;
+//        } else {
+//            list = new UChar32[capacity];
+//            *this = getCategorySet(category);
+//        }
+//    }
+//}
 
 /**
  * Constructs a set that is identical to the given UnicodeSet.
@@ -320,6 +308,16 @@ void UnicodeSet::applyPattern(const UnicodeString& pattern,
 }
 
 /**
+ * Return true if the given position, in the given pattern, appears
+ * to be the start of a UnicodeSet pattern.
+ */
+UBool UnicodeSet::resemblesPattern(const UnicodeString& pattern, int32_t pos) {
+    return ((pos+1) < pattern.length() &&
+            pattern.charAt(pos) == (UChar)91/*[*/) ||
+        UnicodePropertySet::resemblesPattern(pattern, pos);
+}
+
+/**
  * Append the <code>toPattern()</code> representation of a
  * character to the given <code>StringBuffer</code>.
  */
@@ -339,6 +337,8 @@ void UnicodeSet::_appendToPat(UnicodeString& buf, UChar32 c, UBool useHexEscape)
     case COMPLEMENT:
     case INTERSECTION:
     case BACKSLASH:
+    case 123/*{*/:
+    case 125/*}*/:
         buf.append(BACKSLASH);
         break;
     default:
@@ -451,15 +451,15 @@ UnicodeString& UnicodeSet::_generatePattern(UnicodeString& result,
                                             UBool escapeUnprintable) const {
     result.append(SET_OPEN);
 
-    // Check against the predefined categories.  We implicitly build
-    // up ALL category sets the first time toPattern() is called.
-    for (int8_t cat=0; cat<Unicode::GENERAL_TYPES_COUNT; ++cat) {
-        if (*this == getCategorySet(cat)) {
-            result.append(COLON);
-            result.append(CATEGORY_NAMES, cat*2, 2);
-            return result.append(CATEGORY_CLOSE);
-        }
-    }
+//  // Check against the predefined categories.  We implicitly build
+//  // up ALL category sets the first time toPattern() is called.
+//  for (int8_t cat=0; cat<Unicode::GENERAL_TYPES_COUNT; ++cat) {
+//      if (*this == getCategorySet(cat)) {
+//          result.append(COLON);
+//          result.append(CATEGORY_NAMES, cat*2, 2);
+//          return result.append(CATEGORY_CLOSE);
+//      }
+//  }
 
     int32_t count = getRangeCount();
 
@@ -940,9 +940,9 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
     // mode 1: '[' seen; if next is '^' or ':' then special
     // mode 2: '[' '^'? seen; parse pattern and close with ']'
     // mode 3: '[:' seen; parse category and close with ':]'
-    // mode 4: Pattern closed cleanly
+    // mode 4: ']' seen; parse complete
+    // mode 5: Top-level property pattern seen
     int8_t mode = 0;
-    int32_t colonPos = 0; // Expected pos of ':' in '[:'
     int32_t i = pos.getIndex();
     int32_t limit = pattern.length();
     UnicodeSet nestedAux;
@@ -997,9 +997,11 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
         // Parse the opening '[' and optional following '^'
         switch (mode) {
         case 0:
-            if (c == SET_OPEN) {
+            if (UnicodePropertySet::resemblesPattern(pattern, i-1)) {
+                mode = 3;
+                break; // Fall through
+            } else if (c == SET_OPEN) {
                 mode = 1; // Next look for '^' or ':'
-                colonPos = i; // Expect ':' at next offset
                 continue;
             } else {
                 // throw new IllegalArgumentException("Missing opening '['");
@@ -1013,18 +1015,6 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
                 invert = TRUE;
                 newPat.append(c);
                 continue; // Back to top to fetch next character
-            case COLON:
-                // '[:' cannot have whitespace in it.  'i' has already
-                // been advanced.
-                if (i-1 == colonPos) {
-                    --i; // Backup to the '['
-                    c = SET_OPEN;
-                    mode = 3;
-                    // Fall through and parse category using the same
-                    // code used to parse a nested category.  The mode
-                    // will indicate that this is actually top level.
-                }
-                break; // Fall through
             case HYPHEN:
                 isLiteral = TRUE; // Treat leading '-' as a literal
                 break; // Fall through
@@ -1041,12 +1031,59 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
         // buffer.  Characters in the variable buffer have already
         // benn through escape and variable reference processing.
         if (varValueBuffer == NULL) {
+            /**
+             * Handle property set patterns.
+             */
+            if (UnicodePropertySet::resemblesPattern(pattern, i-1)) {
+                ParsePosition pp(i-1);
+                nestedSet = UnicodePropertySet::createFromPattern(pattern, pp);
+                if (nestedSet == NULL) {
+                    // assert(pp.getIndex() == i-1);
+                    //throw new IllegalArgumentException("Invalid property pattern " +
+                    //                                   pattern.substring(i-1));
+                    status = U_INVALID_PROPERTY_PATTERN;
+                    return;
+                }
+                // TODO This is very inefficient.  We create a new UnicodeSet,
+                // then do an assignment, then delete it.  Clean this up in
+                // the future so that either (1) we just use the new set
+                // directly, and delete it when we're done, or (2) even better,
+                // UnicodePropertySet takes an existing set.
+                nestedAux = *nestedSet;
+                delete nestedSet;
+                nestedSet = &nestedAux;
+                nestedPatStart = newPat.length();
+                nestedPatDone = TRUE; // we're going to do it just below
+                
+                // If we have a top-level property pattern, then trim
+                // off the opening '[' and use the property pattern
+                // as the entire pattern.
+                if (mode == 3) {
+                    newPat.truncate(0);
+                }
+                UnicodeString str;
+                pattern.extractBetween(i-1, pp.getIndex(), str);
+                newPat.append(str);
+                rebuildPattern = TRUE;
+                
+                i = pp.getIndex(); // advance past property pattern
+                
+                if (mode == 3) {
+                    // Entire pattern is a category; leave parse
+                    // loop.  This is one of 2 ways we leave this
+                    // loop if the pattern is well-formed.
+                    *this = nestedAux;
+                    mode = 5;
+                    break;
+                }
+            }
+            
             /* Handle escapes.  If a character is escaped, then it assumes its
              * literal value.  This is true for all characters, both special
              * characters and characters with no special meaning.  We also
              * interpret '\\uxxxx' Unicode escapes here (as literals).
              */
-            if (c == BACKSLASH) {
+            else if (c == BACKSLASH) {
                 UChar32 escaped = pattern.unescapeAt(i);
                 if (escaped == (UChar32) -1) {
                     status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -1084,73 +1121,28 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
             }
 
             /* An opening bracket indicates the first bracket of a nested
-             * subpattern, either a normal pattern or a category pattern.  We
-             * recognize these here and set nestedSet accordingly.
-             *
-             * The other way we wind up here is with a top level category.
-             * If that is the case, the mode will be set accordingly.
+             * subpattern.
              */
             else if (!isLiteral && c == SET_OPEN) {
                 // Record position before nested pattern
                 nestedPatStart = newPat.length();
 
-                // Handle "[:...:]", representing a character category
-                if (i < pattern.length() && pattern.charAt(i) == COLON) {
-                    ++i;
-                    int32_t j = pattern.indexOf(CATEGORY_CLOSE, i);
-                    if (j < 0) {
-                        // throw new IllegalArgumentException("Missing \":]\"");
-                        status = U_ILLEGAL_ARGUMENT_ERROR;
-                        return;
-                    }
-                    scratch.truncate(0);
-                    pattern.extractBetween(i, j, scratch);
-                    nestedAux.applyCategory(scratch, status);
-                    nestedSet = &nestedAux;
-                    nestedPatDone = TRUE; // We're going to do it just below
-                    if (U_FAILURE(status)) {
-                        return;
-                    }
-                    i = j+2; // Advance i past ":]"
-
-                    // Use a rebuilt pattern.  If we are top level,
-                    // then there is already a SET_OPEN in newPat, and
-                    // SET_CLOSE will be appended elsewhere.
-                    if (mode != 3) {
-                        newPat.append(SET_OPEN);
-                    }
-                    newPat.append(COLON).append(scratch).append(COLON);
-                    if (mode != 3) {
-                        newPat.append(SET_CLOSE);
-                    }
-                    rebuildPattern = TRUE;
-
-                    if (mode == 3) {
-                        // Entire pattern is a category; leave parse
-                        // loop.  This is one of 2 ways we leave this
-                        // loop if the pattern is well-formed.
-                        *this = *nestedSet;
-                        mode = 4;
-                        break;
-                    }
-                } else {
-                    // Recurse to get the pairs for this nested set.
-                    // Backup i to '['.
-                    pos.setIndex(--i);
-                    switch (lastOp) {
-                    case HYPHEN:
-                    case INTERSECTION:
-                        newPat.append(lastOp);
-                        break;
-                    }
-                    nestedAux._applyPattern(pattern, pos, symbols, newPat, status);
-                    nestedSet = &nestedAux;
-                    nestedPatDone =  TRUE;
-                    if (U_FAILURE(status)) {
-                        return;
-                    }
-                    i = pos.getIndex();
+                // Recurse to get the pairs for this nested set.
+                // Backup i to '['.
+                pos.setIndex(--i);
+                switch (lastOp) {
+                case HYPHEN:
+                case INTERSECTION:
+                    newPat.append(lastOp);
+                    break;
                 }
+                nestedAux._applyPattern(pattern, pos, symbols, newPat, status);
+                nestedSet = &nestedAux;
+                nestedPatDone =  TRUE;
+                if (U_FAILURE(status)) {
+                    return;
+                }
+                i = pos.getIndex();
             }
         }
 
@@ -1255,7 +1247,22 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
         }
     }
 
-    if (lastChar != NONE) {
+    if (mode < 4) {
+        // throw new IllegalArgumentException("Missing ']'");
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    // Treat a trailing '$' as indicating ETHER.  This code is only
+    // executed if symbols == NULL; otherwise other code parses the
+    // anchor.
+    if (lastChar == (UChar)SymbolTable::SYMBOL_REF) {
+        rebuildPattern = TRUE;
+        newPat.append(lastChar);
+        add(TransliterationRule::ETHER);
+    }
+
+    else if (lastChar != NONE) {
         add(lastChar, lastChar);
         _appendToPat(newPat, lastChar, FALSE);
     }
@@ -1271,7 +1278,9 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
         return;
     }
 
-    newPat.append(SET_CLOSE);
+    if (mode == 4) {
+        newPat.append(SET_CLOSE);
+    }
 
     /**
      * If we saw a '^' after the initial '[' of this pattern, then perform
@@ -1279,12 +1288,6 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
      */
     if (invert) {
         complement();
-    }
-
-    if (mode != 4) {
-        // throw new IllegalArgumentException("Missing ']'");
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
     }
 
     pos.setIndex(i);
@@ -1296,157 +1299,6 @@ void UnicodeSet::_applyPattern(const UnicodeString& pattern,
     } else {
         _generatePattern(rebuiltPat, FALSE);
     }
-}
-
-//----------------------------------------------------------------
-// Implementation: Generation of pairs for Unicode categories
-//----------------------------------------------------------------
-
-/**
- * Sets this object to the given category, given its name.
- * The category name must be either a two-letter name, such as
- * "Lu", or a one letter name, such as "L".  One-letter names
- * indicate the logical union of all two-letter names that start
- * with that letter.  Case is significant.  If the name starts
- * with the character '^' then the complement of the given
- * character set is returned.
- *
- * Although individual categories such as "Lu" are cached, we do
- * not currently cache single-letter categories such as "L" or
- * complements such as "^Lu" or "^L".  It would be easy to cache
- * these as well in a hashtable should the need arise.
- */
-void UnicodeSet::applyCategory(const UnicodeString& catName,
-                               UErrorCode& status) {
-    if (U_FAILURE(status)) {
-        return;
-    }
-
-    UnicodeString cat(catName);
-    UBool invert = (catName.length() > 1 &&
-                     catName.charAt(0) == COMPLEMENT);
-    if (invert) {
-        cat.remove(0, 1);
-    }
-
-    UBool match = FALSE;
-
-    // if we have two characters, search the category map for that
-    // code and either construct and return a UnicodeSet from the
-    // data in the category map or throw an exception
-    if (cat.length() == 2) {
-        int32_t i = 0;
-        int32_t numCategories = Unicode::GENERAL_TYPES_COUNT * 2;
-
-        while (i < numCategories)
-        {
-            if (CATEGORY_NAMES[i] == cat.charAt(0)
-                && CATEGORY_NAMES[i+1] == cat.charAt(1))
-            {
-                *this = getCategorySet((int8_t)(i/2));
-                match = TRUE;
-                break;
-            }
-            i += 2;
-        }
-    } else if (cat.length() == 1) {
-        // if we have one character, search the category map for
-        // codes beginning with that letter, and union together
-        // all of the matching sets that we find (or throw an
-        // exception if there are no matches)
-        clear();
-        for (int32_t i=0; i<Unicode::GENERAL_TYPES_COUNT; ++i) {
-            if (CATEGORY_NAMES[2*i] == cat.charAt(0)) {
-                addAll(getCategorySet((int8_t)i));
-                match = TRUE;
-            }
-        }
-    }
-
-    if (!match) {
-        // TODO: Add caching of these, if desired
-        char buf[128];
-        catName.extract(buf, sizeof(buf), NULL, status);
-        UScriptCode script = uscript_getCode(buf, &status);
-        if (script != USCRIPT_INVALID_CODE) {
-            match = TRUE;
-            clear();
-            int32_t start = -1;
-            int32_t end = -2;
-            for (UChar32 i=MIN_VALUE; i<=MAX_VALUE; ++i) {
-                if (uscript_getScript(i, &status) == script) {
-                    if ((end+1) == (int32_t) i) {
-                        end = i;
-                    } else {
-                        if (start >= 0) {
-                            add((UChar32) start, (UChar32) end);
-                        }
-                        start = end = i;
-                    }
-                }
-            }
-            if (start >= 0) {
-                add((UChar32) start, (UChar32) end);
-            }
-        }
-    }
-
-    if (!match) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    }
-
-    if (invert) {
-        complement();
-    }
-}
-
-/**
- * Returns a pairs string for the given category.  This string is
- * cached and returned again if this method is called again with
- * the same parameter.
- */
-const UnicodeSet& UnicodeSet::getCategorySet(int8_t cat) {
-    // In order to tell what cache entries are empty, we assume
-    // every category specifies at least one character.  Thus
-    // sets in the cache that are empty are uninitialized.
-    if (CATEGORY_CACHE == NULL) {
-        umtx_lock(NULL);
-        if (CATEGORY_CACHE == NULL) {
-            CATEGORY_CACHE = new UnicodeSet[Unicode::GENERAL_TYPES_COUNT];
-            ucln_i18n_registerCleanup();
-        }
-        umtx_unlock(NULL);
-    }
-    if (CATEGORY_CACHE[cat].isEmpty()) {
-        // Walk through all Unicode characters, noting the start
-        // and end of each range for which Character.getType(c)
-        // returns the given category integer.  Since we are
-        // iterating in order, we can simply append the resulting
-        // ranges to the pairs string.
-        UnicodeSet& set = CATEGORY_CACHE[cat];
-        int32_t start = -1;
-        int32_t end = -2;
-        // N.B.: There seems to be a bug that deadlocks if you
-		// call getType() with a supplemental character right now.
-		// TODO: Change 0xFFFF to MAX_VALUE later.
-        for (int32_t i=MIN_VALUE; i<=0xFFFF/*TEMPORARY*/; ++i) {
-            if (Unicode::getType((UChar)i) == cat) {
-                if ((end+1) == i) {
-                    end = i;
-                } else {
-                    if (start >= 0) {
-                        set.add((UChar32)start, (UChar32)end);
-                    }
-                    start = end = i;
-                }
-            }
-        }
-        if (start >= 0) {
-            set.add((UChar32)start, (UChar32)end);
-        }
-    }
-    return CATEGORY_CACHE[cat];
 }
 
 //----------------------------------------------------------------

@@ -370,6 +370,10 @@ SOURCE=.\unum.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\upropset.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\usearch.cpp
 # End Source File
 # Begin Source File
