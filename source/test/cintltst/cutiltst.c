@@ -22,11 +22,13 @@ void addSCSUTest(TestNode** root);
 void addHashtableTest(TestNode** root);
 void addCStringTest(TestNode** root);
 void addMemoryStreamTest(TestNode** root);
+void addTrieTest(TestNode** root);
 
 void addUtility(TestNode** root);
 
 void addUtility(TestNode** root)
 {
+    addTrieTest(root);
     addLocaleTest(root);
     addUnicodeTest(root);
     addResourceBundleTest(root);
@@ -36,4 +38,3 @@ void addUtility(TestNode** root)
     addCStringTest(root);
     addMemoryStreamTest(root);
 }
-

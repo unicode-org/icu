@@ -332,6 +332,10 @@ SOURCE=.\utf_impl.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\utrie.c
+# End Source File
+# Begin Source File
+
 SOURCE=.\uvector.cpp
 # End Source File
 # End Group
@@ -1404,6 +1408,10 @@ InputPath=.\unicode\utf8.h
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\utrie.h
 # End Source File
 # Begin Source File
 

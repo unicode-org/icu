@@ -25,8 +25,9 @@
 #include "unicode/uloc.h"
 #include "umutex.h"
 #include "cmemory.h"
-#include "ustr_imp.h"
 #include "ucln_cmn.h"
+#include "utrie.h"
+#include "ustr_imp.h"
 
 /*
  * Since genprops overrides the general category for some control codes,
@@ -213,36 +214,31 @@ static UDataMemory *propsData=NULL;
 static uint8_t formatVersion[4]={ 0, 0, 0, 0 };
 static UVersionInfo dataVersion={ 3, 0, 0, 0 };
 
-static const uint16_t *propsTable=NULL;
-#define props32Table ((uint32_t *)propsTable)
-
+static UTrie propsTrie={ 0 };
+static const uint32_t *pData32=NULL, *props32Table=NULL, *exceptionsTable=NULL;
 static const UChar *ucharsTable=NULL;
 
 static int8_t havePropsData=0;
 
 /* index values loaded from uprops.dat */
-static uint16_t indexes[8];
+static int32_t indexes[16];
 
 enum {
-    INDEX_STAGE_2_BITS,
-    INDEX_STAGE_3_BITS,
-    INDEX_EXCEPTIONS,
-    INDEX_STAGE_3_INDEX,
     INDEX_PROPS,
-    INDEX_UCHARS
+    INDEX_EXCEPTIONS,
+    INDEX_UCHARS,
+    INDEX_RESERVED      /* contains the uint32_t offset to the top of the known data */
 };
 
-#ifdef UCHAR_VARIABLE_TRIE_BITS
-    /* access values calculated from indexes */
-    static uint16_t stage23Bits, stage2Mask, stage3Mask;
-#   define stage3Bits   indexes[INDEX_STAGE_3_BITS]
-#else
-    /* We are now hardcoding the bit distribution for the trie table access. */
-#   define stage23Bits  10
-#   define stage2Mask   0x3f
-#   define stage3Mask   0xf
-#   define stage3Bits   4
-#endif
+/* if bit 15 is set, then the folding offset is in bits 14..0 of the 16-bit trie result */
+static int32_t U_CALLCONV
+getFoldingPropsOffset(uint32_t data) {
+    if(data&0x8000) {
+        return (int32_t)(data&0x7fff);
+    } else {
+        return 0;
+    }
+}
 
 static UBool
 isAcceptable(void *context,
@@ -256,7 +252,9 @@ isAcceptable(void *context,
         pInfo->dataFormat[1]==0x50 &&
         pInfo->dataFormat[2]==0x72 &&
         pInfo->dataFormat[3]==0x6f &&
-        pInfo->formatVersion[0]==1
+        pInfo->formatVersion[0]==2 &&
+        pInfo->formatVersion[2]==UTRIE_SHIFT &&
+        pInfo->formatVersion[3]==UTRIE_INDEX_SHIFT
     ) {
         uprv_memcpy(formatVersion, pInfo->formatVersion, 4);
         uprv_memcpy(dataVersion, pInfo->dataVersion, 4);
@@ -271,11 +269,13 @@ uchar_cleanup()
 {
     if (propsData) {
         udata_close(propsData);
-        propsData = NULL;
+        propsData=NULL;
     }
-    propsTable = NULL;
-    ucharsTable = NULL;
-    havePropsData = FALSE;
+    pData32=NULL;
+    props32Table=NULL;
+    exceptionsTable=NULL;
+    ucharsTable=NULL;
+    havePropsData=FALSE;
     return TRUE;
 }
 
@@ -283,9 +283,11 @@ static int8_t
 loadPropsData() {
     /* load Unicode character properties data from file if necessary */
     if(havePropsData==0) {
+        UTrie trie={ 0 };
         UErrorCode errorCode=U_ZERO_ERROR;
         UDataMemory *data;
-        const uint16_t *p=NULL;
+        const uint32_t *p=NULL;
+        int32_t length;
 
         /* open the data outside the mutex block */
         data=udata_openChoice(NULL, DATA_TYPE, DATA_NAME, isAcceptable, NULL, &errorCode);
@@ -293,38 +295,33 @@ loadPropsData() {
             return havePropsData=-1;
         }
 
-        p=(const uint16_t *)udata_getMemory(data);
+        p=(const uint32_t *)udata_getMemory(data);
 
-#ifndef UCHAR_VARIABLE_TRIE_BITS
-        /*
-         * We are now hardcoding the bit distribution for the trie table access.
-         * Check that the file is stored accordingly.
-         */
-        if(p[INDEX_STAGE_2_BITS]!=6 || p[INDEX_STAGE_3_BITS]!=4) {
+        /* unserialize the trie; it is directly after the int32_t indexes[16] */
+        length=(*(int32_t *)p)*4;
+        length=utrie_unserialize(&trie, (const uint8_t *)(p+16), length-64, &errorCode);
+        if(U_FAILURE(errorCode)) {
             udata_close(data);
-            errorCode=U_INVALID_FORMAT_ERROR;
             return havePropsData=-1;
         }
-#endif
+        trie.getFoldingOffset=getFoldingPropsOffset;
 
         /* in the mutex block, set the data for this process */
         umtx_lock(NULL);
         if(propsData==NULL) {
             propsData=data;
             data=NULL;
-            propsTable=p;
+            pData32=p;
             p=NULL;
+            uprv_memcpy(&propsTrie, &trie, sizeof(trie));
         }
         umtx_unlock(NULL);
 
         /* initialize some variables */
-        uprv_memcpy(indexes, propsTable, 16);
-#ifdef UCHAR_VARIABLE_TRIE_BITS
-        stage23Bits=(uint16_t)(indexes[INDEX_STAGE_2_BITS]+indexes[INDEX_STAGE_3_BITS]);
-        stage2Mask=(uint16_t)((1<<indexes[INDEX_STAGE_2_BITS])-1);
-        stage3Mask=(uint16_t)((1<<indexes[INDEX_STAGE_3_BITS])-1);
-#endif
-        ucharsTable=(const UChar *)(props32Table+indexes[INDEX_UCHARS]);
+        uprv_memcpy(indexes, pData32, sizeof(indexes));
+        props32Table=pData32+indexes[INDEX_PROPS];
+        exceptionsTable=pData32+indexes[INDEX_EXCEPTIONS];
+        ucharsTable=(const UChar *)(pData32+indexes[INDEX_UCHARS]);
         havePropsData=1;
 
         /* if a different thread set it first, then close the extra data */
@@ -361,28 +358,22 @@ enum {
 /* getting a uint32_t properties word from the data */
 #define HAVE_DATA (havePropsData>0 || (havePropsData==0 && loadPropsData()>0))
 #define VALIDATE(c) (((uint32_t)(c))<=0x10ffff && HAVE_DATA)
-#define GET_PROPS_UNSAFE(c) \
-    props32Table[ \
-        propsTable[ \
-            propsTable[ \
-                propsTable[8+((c)>>stage23Bits)]+ \
-                (((c)>>stage3Bits)&stage2Mask)]+ \
-            ((c)&stage3Mask) \
-        ] \
-    ]
-#define GET_PROPS(c) \
-    (((uint32_t)(c))<=0x10ffff ? \
-        HAVE_DATA ? \
-            GET_PROPS_UNSAFE(c) \
-        : (c)<=0x9f ? \
-            staticProps32Table[c] \
-        : 0 \
-    : 0)
+#define GET_PROPS_UNSAFE(c, result) \
+    UTRIE_GET16(&propsTrie, c, result); \
+    (result)=props32Table[(result)]
+#define GET_PROPS(c, result) \
+    if(HAVE_DATA) { \
+        GET_PROPS_UNSAFE(c, result); \
+    } else if((c)<=0x9f) { \
+        (result)=staticProps32Table[c]; \
+    } else { \
+        (result)=0; \
+    }
 #define PROPS_VALUE_IS_EXCEPTION(props) ((props)&(1UL<<EXCEPTION_SHIFT))
 #define GET_CATEGORY(props) ((props)&0x1f)
 #define GET_UNSIGNED_VALUE(props) ((props)>>VALUE_SHIFT)
 #define GET_SIGNED_VALUE(props) ((int32_t)(props)>>VALUE_SHIFT)
-#define GET_EXCEPTIONS(props) (props32Table+indexes[INDEX_EXCEPTIONS]+GET_UNSIGNED_VALUE(props))
+#define GET_EXCEPTIONS(props) (exceptionsTable+GET_UNSIGNED_VALUE(props))
 
 /* finding an exception value */
 #define HAVE_EXCEPTION_VALUE(flags, index) ((flags)&(1UL<<(index)))
@@ -427,31 +418,41 @@ uprv_haveProperties() {
 /* Gets the Unicode character's general category.*/
 U_CAPI int8_t U_EXPORT2
 u_charType(UChar32 c) {
-    return (int8_t)GET_CATEGORY(GET_PROPS(c));
+    uint32_t props;
+    GET_PROPS(c, props);
+    return (int8_t)GET_CATEGORY(props);
 }
 
 /* Checks if ch is a lower case letter.*/
 U_CAPI UBool U_EXPORT2
 u_islower(UChar32 c) {
-    return (UBool)(GET_CATEGORY(GET_PROPS(c))==U_LOWERCASE_LETTER);
+    uint32_t props;
+    GET_PROPS(c, props);
+    return (UBool)(GET_CATEGORY(props)==U_LOWERCASE_LETTER);
 }
 
 /* Checks if ch is an upper case letter.*/
 U_CAPI UBool U_EXPORT2
 u_isupper(UChar32 c) {
-    return (UBool)(GET_CATEGORY(GET_PROPS(c))==U_UPPERCASE_LETTER);
+    uint32_t props;
+    GET_PROPS(c, props);
+    return (UBool)(GET_CATEGORY(props)==U_UPPERCASE_LETTER);
 }
 
 /* Checks if ch is a title case letter; usually upper case letters.*/
 U_CAPI UBool U_EXPORT2
 u_istitle(UChar32 c) {
-    return (UBool)(GET_CATEGORY(GET_PROPS(c))==U_TITLECASE_LETTER);
+    uint32_t props;
+    GET_PROPS(c, props);
+    return (UBool)(GET_CATEGORY(props)==U_TITLECASE_LETTER);
 }
 
 /* Checks if ch is a decimal digit. */
 U_CAPI UBool U_EXPORT2
 u_isdigit(UChar32 c) {
-    return (UBool)(((1UL<<GET_CATEGORY(GET_PROPS(c)))&
+    uint32_t props;
+    GET_PROPS(c, props);
+    return (UBool)(((1UL<<GET_CATEGORY(props))&
             (1UL<<U_DECIMAL_DIGIT_NUMBER|1UL<<U_OTHER_NUMBER|1UL<<U_LETTER_NUMBER)
            )!=0);
 }
@@ -459,7 +460,9 @@ u_isdigit(UChar32 c) {
 /* Checks if the Unicode character is a letter.*/
 U_CAPI UBool U_EXPORT2
 u_isalpha(UChar32 c) {
-    return (UBool)(((1UL<<GET_CATEGORY(GET_PROPS(c)))&
+    uint32_t props;
+    GET_PROPS(c, props);
+    return (UBool)(((1UL<<GET_CATEGORY(props))&
             (1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER)
            )!=0);
 }
@@ -467,7 +470,9 @@ u_isalpha(UChar32 c) {
 /* Checks if ch is a letter or a decimal digit */
 U_CAPI UBool U_EXPORT2
 u_isalnum(UChar32 c) {
-    return (UBool)(((1UL<<GET_CATEGORY(GET_PROPS(c)))&
+    uint32_t props;
+    GET_PROPS(c, props);
+    return (UBool)(((1UL<<GET_CATEGORY(props))&
             (1UL<<U_DECIMAL_DIGIT_NUMBER|1UL<<U_OTHER_NUMBER|1UL<<U_LETTER_NUMBER|
              1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER)
            )!=0);
@@ -476,13 +481,17 @@ u_isalnum(UChar32 c) {
 /* Checks if ch is a unicode character with assigned character type.*/
 U_CAPI UBool U_EXPORT2
 u_isdefined(UChar32 c) {
-    return (UBool)(GET_PROPS(c)!=0);
+    uint32_t props;
+    GET_PROPS(c, props);
+    return (UBool)(GET_CATEGORY(props)!=0);
 }
 
 /* Checks if the Unicode character is a base form character that can take a diacritic.*/
 U_CAPI UBool U_EXPORT2
 u_isbase(UChar32 c) {
-    return (UBool)(((1UL<<GET_CATEGORY(GET_PROPS(c)))&
+    uint32_t props;
+    GET_PROPS(c, props);
+    return (UBool)(((1UL<<GET_CATEGORY(props))&
             (1UL<<U_DECIMAL_DIGIT_NUMBER|1UL<<U_OTHER_NUMBER|1UL<<U_LETTER_NUMBER|
              1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER|
              1UL<<U_NON_SPACING_MARK|1UL<<U_ENCLOSING_MARK|1UL<<U_COMBINING_SPACING_MARK)
@@ -492,17 +501,24 @@ u_isbase(UChar32 c) {
 /* Checks if the Unicode character is a control character.*/
 U_CAPI UBool U_EXPORT2
 u_iscntrl(UChar32 c) {
-    return (UBool)(
-           IS_ISO_8_CONTROL(c) ||
-           ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
-            (1UL<<U_CONTROL_CHAR|1UL<<U_FORMAT_CHAR|1UL<<U_LINE_SEPARATOR|1UL<<U_PARAGRAPH_SEPARATOR)
-           )!=0);
+    if(IS_ISO_8_CONTROL(c)) {
+        return TRUE;
+    } else {
+        uint32_t props;
+        GET_PROPS(c, props);
+        return (UBool)(
+               ((1UL<<GET_CATEGORY(props))&
+                (1UL<<U_CONTROL_CHAR|1UL<<U_FORMAT_CHAR|1UL<<U_LINE_SEPARATOR|1UL<<U_PARAGRAPH_SEPARATOR)
+               )!=0);
+    }
 }
 
 /* Checks if the Unicode character is a space character.*/
 U_CAPI UBool U_EXPORT2
 u_isspace(UChar32 c) {
-    return (UBool)(((1UL<<GET_CATEGORY(GET_PROPS(c)))&
+    uint32_t props;
+    GET_PROPS(c, props);
+    return (UBool)(((1UL<<GET_CATEGORY(props))&
             (1UL<<U_SPACE_SEPARATOR|1UL<<U_LINE_SEPARATOR|1UL<<U_PARAGRAPH_SEPARATOR)
            )!=0);
 }
@@ -510,7 +526,9 @@ u_isspace(UChar32 c) {
 /* Checks if the Unicode character is a whitespace character.*/
 U_CAPI UBool U_EXPORT2
 u_isWhitespace(UChar32 c) {
-    return (UBool)(((1UL<<GET_CATEGORY(GET_PROPS(c)))&
+    uint32_t props;
+    GET_PROPS(c, props);
+    return (UBool)(((1UL<<GET_CATEGORY(props))&
             (1UL<<U_SPACE_SEPARATOR|1UL<<U_LINE_SEPARATOR|1UL<<U_PARAGRAPH_SEPARATOR)
            )!=0 &&
            c!=0xa0 && c!=0x202f && c!=0xfeff); /* exclude no-break spaces */
@@ -519,20 +537,27 @@ u_isWhitespace(UChar32 c) {
 /* Checks if the Unicode character is printable.*/
 U_CAPI UBool U_EXPORT2
 u_isprint(UChar32 c) {
-    return (UBool)(
-            !IS_ISO_8_CONTROL(c) &&
-            ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
-            ~(1UL<<U_UNASSIGNED|
-              1UL<<U_CONTROL_CHAR|1UL<<U_FORMAT_CHAR|1UL<<U_PRIVATE_USE_CHAR|1UL<<U_SURROGATE|
-              1UL<<U_GENERAL_OTHER_TYPES|1UL<<31)
-           )!=0);
+    if(IS_ISO_8_CONTROL(c)) {
+        return FALSE;
+    } else {
+        uint32_t props;
+        GET_PROPS(c, props);
+        return (UBool)(
+                ((1UL<<GET_CATEGORY(props))&
+                ~(1UL<<U_UNASSIGNED|
+                  1UL<<U_CONTROL_CHAR|1UL<<U_FORMAT_CHAR|1UL<<U_PRIVATE_USE_CHAR|1UL<<U_SURROGATE|
+                  1UL<<U_GENERAL_OTHER_TYPES|1UL<<31)
+               )!=0);
+    }
 }
 
 /* Checks if the Unicode character can start a Unicode identifier.*/
 U_CAPI UBool U_EXPORT2
 u_isIDStart(UChar32 c) {
     /* same as u_isalpha() */
-    return (UBool)(((1UL<<GET_CATEGORY(GET_PROPS(c)))&
+    uint32_t props;
+    GET_PROPS(c, props);
+    return (UBool)(((1UL<<GET_CATEGORY(props))&
             (1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER)
            )!=0);
 }
@@ -541,8 +566,10 @@ u_isIDStart(UChar32 c) {
  identifier.*/
 U_CAPI UBool U_EXPORT2
 u_isIDPart(UChar32 c) {
+    uint32_t props;
+    GET_PROPS(c, props);
     return (UBool)(
-           ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
+           ((1UL<<GET_CATEGORY(props))&
             (1UL<<U_DECIMAL_DIGIT_NUMBER|1UL<<U_LETTER_NUMBER|
              1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER|
              1UL<<U_CONNECTOR_PUNCTUATION|1UL<<U_COMBINING_SPACING_MARK|1UL<<U_NON_SPACING_MARK)
@@ -564,8 +591,10 @@ u_isIDIgnorable(UChar32 c) {
 /*Checks if the Unicode character can start a Java identifier.*/
 U_CAPI UBool U_EXPORT2
 u_isJavaIDStart(UChar32 c) {
+    uint32_t props;
+    GET_PROPS(c, props);
     return (UBool)(
-           ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
+           ((1UL<<GET_CATEGORY(props))&
             (1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER|
              1UL<<U_CURRENCY_SYMBOL|1UL<<U_CONNECTOR_PUNCTUATION)
            )!=0);
@@ -576,8 +605,10 @@ u_isJavaIDStart(UChar32 c) {
  */
 U_CAPI UBool U_EXPORT2
 u_isJavaIDPart(UChar32 c) {
+    uint32_t props;
+    GET_PROPS(c, props);
     return (UBool)(
-           ((1UL<<GET_CATEGORY(GET_PROPS(c)))&
+           ((1UL<<GET_CATEGORY(props))&
             (1UL<<U_DECIMAL_DIGIT_NUMBER|1UL<<U_LETTER_NUMBER|
              1UL<<U_UPPERCASE_LETTER|1UL<<U_LOWERCASE_LETTER|1UL<<U_TITLECASE_LETTER|1UL<<U_MODIFIER_LETTER|1UL<<U_OTHER_LETTER|
              1UL<<U_CURRENCY_SYMBOL|1UL<<U_CONNECTOR_PUNCTUATION|
@@ -589,13 +620,14 @@ u_isJavaIDPart(UChar32 c) {
 /* Transforms the Unicode character to its lower case equivalent.*/
 U_CAPI UChar32 U_EXPORT2
 u_tolower(UChar32 c) {
-    uint32_t props=GET_PROPS(c);
+    uint32_t props;
+    GET_PROPS(c, props);
     if(!PROPS_VALUE_IS_EXCEPTION(props)) {
         if((1UL<<GET_CATEGORY(props))&(1UL<<U_UPPERCASE_LETTER|1UL<<U_TITLECASE_LETTER)) {
             return c+GET_SIGNED_VALUE(props);
         }
     } else {
-        uint32_t *pe=GET_EXCEPTIONS(props);
+        const uint32_t *pe=GET_EXCEPTIONS(props);
         uint32_t firstExceptionValue=*pe;
         if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_LOWERCASE)) {
             int i=EXC_LOWERCASE;
@@ -610,13 +642,14 @@ u_tolower(UChar32 c) {
 /* Transforms the Unicode character to its upper case equivalent.*/
 U_CAPI UChar32 U_EXPORT2
 u_toupper(UChar32 c) {
-    uint32_t props=GET_PROPS(c);
+    uint32_t props;
+    GET_PROPS(c, props);
     if(!PROPS_VALUE_IS_EXCEPTION(props)) {
         if(GET_CATEGORY(props)==U_LOWERCASE_LETTER) {
             return c-GET_SIGNED_VALUE(props);
         }
     } else {
-        uint32_t *pe=GET_EXCEPTIONS(props);
+        const uint32_t *pe=GET_EXCEPTIONS(props);
         uint32_t firstExceptionValue=*pe;
         if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_UPPERCASE)) {
             int i=EXC_UPPERCASE;
@@ -631,14 +664,15 @@ u_toupper(UChar32 c) {
 /* Transforms the Unicode character to its title case equivalent.*/
 U_CAPI UChar32 U_EXPORT2
 u_totitle(UChar32 c) {
-    uint32_t props=GET_PROPS(c);
+    uint32_t props;
+    GET_PROPS(c, props);
     if(!PROPS_VALUE_IS_EXCEPTION(props)) {
         if(GET_CATEGORY(props)==U_LOWERCASE_LETTER) {
             /* here, titlecase is same as uppercase */
             return c-GET_SIGNED_VALUE(props);
         }
     } else {
-        uint32_t *pe=GET_EXCEPTIONS(props);
+        const uint32_t *pe=GET_EXCEPTIONS(props);
         uint32_t firstExceptionValue=*pe;
         if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_TITLECASE)) {
             int i=EXC_TITLECASE;
@@ -658,13 +692,14 @@ u_totitle(UChar32 c) {
 
 U_CAPI int32_t U_EXPORT2
 u_charDigitValue(UChar32 c) {
-    uint32_t props=GET_PROPS(c);
+    uint32_t props;
+    GET_PROPS(c, props);
     if(!PROPS_VALUE_IS_EXCEPTION(props)) {
         if(GET_CATEGORY(props)==U_DECIMAL_DIGIT_NUMBER) {
             return GET_SIGNED_VALUE(props);
         }
     } else {
-        uint32_t *pe=GET_EXCEPTIONS(props);
+        const uint32_t *pe=GET_EXCEPTIONS(props);
         uint32_t firstExceptionValue=*pe;
         if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_DIGIT_VALUE)) {
             int32_t value;
@@ -697,7 +732,8 @@ u_charDigitValue(UChar32 c) {
 /* Gets the character's linguistic directionality.*/
 U_CAPI UCharDirection U_EXPORT2
 u_charDirection(UChar32 c) {   
-    uint32_t props=GET_PROPS(c);
+    uint32_t props;
+    GET_PROPS(c, props);
     if(props!=0) {
         return (UCharDirection)((props>>BIDI_SHIFT)&0x1f);
     } else {
@@ -707,19 +743,22 @@ u_charDirection(UChar32 c) {
 
 U_CAPI UBool U_EXPORT2
 u_isMirrored(UChar32 c) {
-    return (UBool)(GET_PROPS(c)&(1UL<<MIRROR_SHIFT) ? TRUE : FALSE);
+    uint32_t props;
+    GET_PROPS(c, props);
+    return (UBool)(props&(1UL<<MIRROR_SHIFT) ? TRUE : FALSE);
 }
 
 U_CAPI UChar32 U_EXPORT2
 u_charMirror(UChar32 c) {
-    uint32_t props=GET_PROPS(c);
+    uint32_t props;
+    GET_PROPS(c, props);
     if((props&(1UL<<MIRROR_SHIFT))==0) {
         /* not mirrored - the value is not a mirror offset */
         return c;
     } else if(!PROPS_VALUE_IS_EXCEPTION(props)) {
         return c+GET_SIGNED_VALUE(props);
     } else {
-        uint32_t *pe=GET_EXCEPTIONS(props);
+        const uint32_t *pe=GET_EXCEPTIONS(props);
         uint32_t firstExceptionValue=*pe;
         if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_MIRROR_MAPPING)) {
             int i=EXC_MIRROR_MAPPING;
@@ -734,7 +773,8 @@ u_charMirror(UChar32 c) {
 
 U_CFUNC uint8_t
 u_internalGetCombiningClass(UChar32 c) {
-    uint32_t props=GET_PROPS_UNSAFE(c);
+    uint32_t props;
+    GET_PROPS(c, props);
     if(!PROPS_VALUE_IS_EXCEPTION(props)) {
         if(GET_CATEGORY(props)==U_NON_SPACING_MARK) {
             return (uint8_t)GET_UNSIGNED_VALUE(props);
@@ -749,7 +789,8 @@ u_internalGetCombiningClass(UChar32 c) {
 
 U_CAPI uint8_t U_EXPORT2
 u_getCombiningClass(UChar32 c) {
-    uint32_t props=GET_PROPS(c);
+    uint32_t props;
+    GET_PROPS(c, props);
     if(!PROPS_VALUE_IS_EXCEPTION(props)) {
         if(GET_CATEGORY(props)==U_NON_SPACING_MARK) {
             return (uint8_t)GET_UNSIGNED_VALUE(props);
@@ -1091,7 +1132,7 @@ isFollowedByCasedLetter(const UChar *src, UTextOffset srcIndex, int32_t srcLengt
 
     while(srcIndex<srcLength) {
         UTF_NEXT_CHAR(src, srcIndex, srcLength, c);
-        props=GET_PROPS_UNSAFE(c);
+        GET_PROPS_UNSAFE(c, props);
         category=GET_CATEGORY(props);
         if((1UL<<category)&(1UL<<U_LOWERCASE_LETTER|1UL<<U_UPPERCASE_LETTER|1UL<<U_TITLECASE_LETTER)) {
             return TRUE; /* followed by cased letter */
@@ -1112,7 +1153,7 @@ isPrecededByCasedLetter(const UChar *src, UTextOffset srcIndex) {
 
     while(0<srcIndex) {
         UTF_PREV_CHAR(src, 0, srcIndex, c);
-        props=GET_PROPS_UNSAFE(c);
+        GET_PROPS_UNSAFE(c, props);
         category=GET_CATEGORY(props);
         if((1UL<<category)&(1UL<<U_LOWERCASE_LETTER|1UL<<U_UPPERCASE_LETTER|1UL<<U_TITLECASE_LETTER)) {
             return TRUE; /* preceded by cased letter */
@@ -1216,7 +1257,7 @@ u_internalStrToLower(UChar *dest, int32_t destCapacity,
                      UGrowBuffer *growBuffer, void *context,
                      UErrorCode *pErrorCode) {
     UChar buffer[8];
-    uint32_t *pe;
+    const uint32_t *pe;
     const UChar *u;
     uint32_t props, firstExceptionValue, specialCasing;
     int32_t srcIndex, destIndex, i, loc;
@@ -1262,7 +1303,7 @@ u_internalStrToLower(UChar *dest, int32_t destCapacity,
     srcIndex=destIndex=0;
     while(srcIndex<srcLength) {
         UTF_NEXT_CHAR(src, srcIndex, srcLength, c);
-        props=GET_PROPS_UNSAFE(c);
+        GET_PROPS_UNSAFE(c, props);
         if(!PROPS_VALUE_IS_EXCEPTION(props)) {
             if((1UL<<GET_CATEGORY(props))&(1UL<<U_UPPERCASE_LETTER|1UL<<U_TITLECASE_LETTER)) {
                 c+=GET_SIGNED_VALUE(props);
@@ -1432,7 +1473,7 @@ u_internalStrToUpper(UChar *dest, int32_t destCapacity,
                      UGrowBuffer *growBuffer, void *context,
                      UErrorCode *pErrorCode) {
     UChar buffer[8];
-    uint32_t *pe;
+    const uint32_t *pe;
     const UChar *u;
     uint32_t props, firstExceptionValue, specialCasing;
     int32_t srcIndex, destIndex, i, loc;
@@ -1478,7 +1519,7 @@ u_internalStrToUpper(UChar *dest, int32_t destCapacity,
     srcIndex=destIndex=0;
     while(srcIndex<srcLength) {
         UTF_NEXT_CHAR(src, srcIndex, srcLength, c);
-        props=GET_PROPS_UNSAFE(c);
+        GET_PROPS_UNSAFE(c, props);
         if(!PROPS_VALUE_IS_EXCEPTION(props)) {
             if(GET_CATEGORY(props)==U_LOWERCASE_LETTER) {
                 c-=GET_SIGNED_VALUE(props);
@@ -1594,11 +1635,12 @@ notSpecial:
 /* internal */
 U_CAPI int32_t U_EXPORT2
 u_internalTitleCase(UChar32 c, UChar *dest, int32_t destCapacity, const char *locale) {
-    uint32_t props=GET_PROPS(c);
+    uint32_t props;
     UChar32 title;
     int32_t i, length;
 
     title=c;
+    GET_PROPS(c, props);
     if(!PROPS_VALUE_IS_EXCEPTION(props)) {
         if(GET_CATEGORY(props)==U_LOWERCASE_LETTER) {
             /* here, titlecase is same as uppercase */
@@ -1606,7 +1648,7 @@ u_internalTitleCase(UChar32 c, UChar *dest, int32_t destCapacity, const char *lo
         }
     } else if(HAVE_DATA) {
         const UChar *u;
-        uint32_t *pe=GET_EXCEPTIONS(props);
+        const uint32_t *pe=GET_EXCEPTIONS(props);
         uint32_t firstExceptionValue=*pe, specialCasing;
         if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_SPECIAL_CASING)) {
             i=EXC_SPECIAL_CASING;
@@ -1704,16 +1746,17 @@ single:
 /* return the simple case folding mapping for c */
 U_CAPI UChar32 U_EXPORT2
 u_foldCase(UChar32 c, uint32_t options) {
-    uint32_t props=GET_PROPS(c);
+    uint32_t props;
+    GET_PROPS(c, props);
     if(!PROPS_VALUE_IS_EXCEPTION(props)) {
         if((1UL<<GET_CATEGORY(props))&(1UL<<U_UPPERCASE_LETTER|1UL<<U_TITLECASE_LETTER)) {
             return c+GET_SIGNED_VALUE(props);
         }
     } else {
-        uint32_t *pe=GET_EXCEPTIONS(props);
+        const uint32_t *pe=GET_EXCEPTIONS(props);
         uint32_t firstExceptionValue=*pe;
         if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_CASE_FOLDING)) {
-            uint32_t *oldPE=pe;
+            const uint32_t *oldPE=pe;
             int i=EXC_CASE_FOLDING;
             ++pe;
             ADD_EXCEPTION_OFFSET(firstExceptionValue, i, pe);
@@ -1753,15 +1796,16 @@ u_foldCase(UChar32 c, uint32_t options) {
 /* internal, return the full case folding mapping for c, must be used only if uprv_haveProperties() is true */
 U_CFUNC int32_t
 u_internalFoldCase(UChar32 c, UChar dest[32], uint32_t options) {
-    uint32_t props=GET_PROPS_UNSAFE(c);
+    uint32_t props;
     int32_t i;
 
+    GET_PROPS_UNSAFE(c, props);
     if(!PROPS_VALUE_IS_EXCEPTION(props)) {
         if((1UL<<GET_CATEGORY(props))&(1UL<<U_UPPERCASE_LETTER|1UL<<U_TITLECASE_LETTER)) {
             c+=GET_SIGNED_VALUE(props);
         }
     } else {
-        uint32_t *pe=GET_EXCEPTIONS(props);
+        const uint32_t *pe=GET_EXCEPTIONS(props);
         uint32_t firstExceptionValue=*pe;
         if(HAVE_EXCEPTION_VALUE(firstExceptionValue, EXC_CASE_FOLDING)) {
             i=EXC_CASE_FOLDING;
@@ -1810,7 +1854,7 @@ u_internalStrFoldCase(UChar *dest, int32_t destCapacity,
                       UGrowBuffer *growBuffer, void *context,
                       UErrorCode *pErrorCode) {
     UChar buffer[UTF_MAX_CHAR_LENGTH];
-    uint32_t *pe;
+    const uint32_t *pe;
     const UChar *uchars, *u;
     uint32_t props, firstExceptionValue;
     int32_t srcIndex, destIndex, i;
@@ -1857,7 +1901,7 @@ u_internalStrFoldCase(UChar *dest, int32_t destCapacity,
     srcIndex=destIndex=0;
     while(srcIndex<srcLength) {
         UTF_NEXT_CHAR(src, srcIndex, srcLength, c);
-        props=GET_PROPS_UNSAFE(c);
+        GET_PROPS_UNSAFE(c, props);
         if(!PROPS_VALUE_IS_EXCEPTION(props)) {
             if((1UL<<GET_CATEGORY(props))&(1UL<<U_UPPERCASE_LETTER|1UL<<U_TITLECASE_LETTER)) {
                 c+=GET_SIGNED_VALUE(props);
