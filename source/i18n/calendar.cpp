@@ -475,6 +475,7 @@ Calendar::Calendar(UErrorCode& success)
     fIsTimeSet(FALSE),
     fAreFieldsSet(FALSE),
     fAreAllFieldsSet(FALSE),
+    fAreFieldsVirtuallySet(FALSE),
     fNextStamp((int32_t)kMinimumUserStamp),
     fTime(0),
     fLenient(TRUE),
@@ -492,6 +493,7 @@ Calendar::Calendar(TimeZone* zone, const Locale& aLocale, UErrorCode& success)
     fIsTimeSet(FALSE),
     fAreFieldsSet(FALSE),
     fAreAllFieldsSet(FALSE),
+    fAreFieldsVirtuallySet(FALSE),
     fNextStamp((int32_t)kMinimumUserStamp),
     fTime(0),
     fLenient(TRUE),
@@ -519,6 +521,7 @@ Calendar::Calendar(const TimeZone& zone, const Locale& aLocale, UErrorCode& succ
     fIsTimeSet(FALSE),
     fAreFieldsSet(FALSE),
     fAreAllFieldsSet(FALSE),
+    fAreFieldsVirtuallySet(FALSE),
     fNextStamp((int32_t)kMinimumUserStamp),
     fTime(0),
     fLenient(TRUE),
@@ -554,16 +557,17 @@ Calendar::operator=(const Calendar &right)
         uprv_arrayCopy(right.fFields, fFields, UCAL_FIELD_COUNT);
         uprv_arrayCopy(right.fIsSet, fIsSet, UCAL_FIELD_COUNT);
         uprv_arrayCopy(right.fStamp, fStamp, UCAL_FIELD_COUNT);
-        fTime                     = right.fTime;
-        fIsTimeSet                 = right.fIsTimeSet;
+        fTime                    = right.fTime;
+        fIsTimeSet               = right.fIsTimeSet;
         fAreAllFieldsSet         = right.fAreAllFieldsSet;
-        fAreFieldsSet             = right.fAreFieldsSet;
+        fAreFieldsSet            = right.fAreFieldsSet;
+        fAreFieldsVirtuallySet   = right.fAreFieldsVirtuallySet;
         fLenient                 = right.fLenient;
         delete fZone;
         fZone                    = right.fZone->clone();
-        fFirstDayOfWeek         = right.fFirstDayOfWeek;
-        fMinimalDaysInFirstWeek = right.fMinimalDaysInFirstWeek;
-        fNextStamp                 = right.fNextStamp;
+        fFirstDayOfWeek          = right.fFirstDayOfWeek;
+        fMinimalDaysInFirstWeek  = right.fMinimalDaysInFirstWeek;
+        fNextStamp               = right.fNextStamp;
     }
     
     return *this;
@@ -788,19 +792,9 @@ Calendar::setTimeInMillis( double millis, UErrorCode& status ) {
     if(U_FAILURE(status)) 
         return;
 
-    fIsTimeSet = TRUE;
     fTime = millis;
-
-    fAreFieldsSet = FALSE;
-
-    computeFields(status);
-
-    /* Test for buffer overflows */
-    if(U_FAILURE(status)) {
-        return;
-    }
-    fAreFieldsSet = TRUE;
-    fAreAllFieldsSet = TRUE;
+    fAreFieldsSet = fAreAllFieldsSet = FALSE;
+    fIsTimeSet = fAreFieldsVirtuallySet = TRUE;
 }
 
 // -------------------------------------
@@ -820,11 +814,14 @@ Calendar::get(UCalendarDateFields field, UErrorCode& status) const
 void
 Calendar::set(UCalendarDateFields field, int32_t value)
 {
-    fIsTimeSet         = FALSE;
+    if (fAreFieldsVirtuallySet) {
+        UErrorCode ec = U_ZERO_ERROR;
+        computeFields(ec);
+    }
     fFields[field]     = value;
     fStamp[field]     = fNextStamp++;
-    fAreFieldsSet     = FALSE;
     fIsSet[field]     = TRUE; // Remove later
+    fIsTimeSet = fAreFieldsSet = fAreFieldsVirtuallySet = FALSE;
 }
 
 // -------------------------------------
@@ -869,13 +866,10 @@ Calendar::clear()
 {
     for (int32_t i=0; i<UCAL_FIELD_COUNT; ++i) {
         fFields[i]     = 0; // Must do this; other code depends on it
-        fIsSet[i]     = FALSE;
         fStamp[i]     = kUnset;
+        fIsSet[i]     = FALSE; // Remove later
     }
-    
-    fAreFieldsSet         = FALSE;
-    fAreAllFieldsSet    = FALSE;
-    fIsTimeSet             = FALSE;
+    fIsTimeSet = fAreFieldsSet = fAreAllFieldsSet = fAreFieldsVirtuallySet = FALSE;
 }
 
 // -------------------------------------
@@ -883,12 +877,14 @@ Calendar::clear()
 void
 Calendar::clear(UCalendarDateFields field)
 {
+    if (fAreFieldsVirtuallySet) {
+        UErrorCode ec = U_ZERO_ERROR;
+        computeFields(ec);
+    }
     fFields[field]         = 0;
     fStamp[field]         = kUnset;
-    fAreFieldsSet         = FALSE;
-    fAreAllFieldsSet     = FALSE;
     fIsSet[field]         = FALSE; // Remove later
-    fIsTimeSet             = FALSE;
+    fIsTimeSet = fAreFieldsSet = fAreAllFieldsSet = fAreFieldsVirtuallySet = FALSE;
 }
 
 // -------------------------------------
@@ -896,7 +892,7 @@ Calendar::clear(UCalendarDateFields field)
 UBool
 Calendar::isSet(UCalendarDateFields field) const
 {
-    return fStamp[field] != kUnset;
+    return fAreFieldsVirtuallySet || (fStamp[field] != kUnset);
 }
 
 
@@ -1005,7 +1001,7 @@ void Calendar::computeFields(UErrorCode &ec)
       fIsSet[i] = TRUE; // Remove later
     } else {
       fStamp[i] = kUnset;
-      fIsSet[i] = FALSE;
+      fIsSet[i] = FALSE; // Remove later
     }
     mask >>= 1;
   }
@@ -2955,6 +2951,7 @@ Calendar::updateTime(UErrorCode& status)
         fAreFieldsSet = FALSE;
     
     fIsTimeSet = TRUE;
+    fAreFieldsVirtuallySet = FALSE;
 }
 
 Locale 
