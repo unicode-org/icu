@@ -57,7 +57,7 @@ InputName=pkgdata
 SOURCE="$(InputPath)"
 
 "..\..\..\bin\$(InputName).exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\..\..\bin
+	copy $(TargetPath) ..\..\..\bin
 
 # End Custom Build
 
@@ -90,7 +90,7 @@ InputName=pkgdata
 SOURCE="$(InputPath)"
 
 "..\..\..\bin\$(InputName).exe" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	copy $(InputPath) ..\..\..\bin
+	copy $(TargetPath) ..\..\..\bin
 
 # End Custom Build
 
