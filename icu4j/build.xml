@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $
-* $Date: 2003/02/05 05:45:15 $
-* $Revision: 1.65 $
+* $Date: 2003/02/28 17:19:50 $
+* $Revision: 1.66 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -285,7 +285,7 @@
     </target>
 
     <target name="check" depends="tests">
-    <java classname="com.ibm.icu.dev.test.TestAll">
+    <java classname="com.ibm.icu.dev.test.TestAll" fork="yes">
         <classpath>
                 <pathelement path="${java.class.path}/"/>
                 <pathelement path="${build.dir}"/>
