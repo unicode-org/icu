@@ -35,6 +35,7 @@
 #include "unicode/ucnv.h"     /* C   Converter API    */
 #include "unicode/convert.h"  /* C++ Converter API    */
 #include "unicode/ustring.h"  /* some more string fcns*/
+#include "unicode/uchar.h"    /* char names           */
 #include "unicode/uloc.h"
 
 
