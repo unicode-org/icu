@@ -330,8 +330,20 @@ public:
      * returned break position.  The values appear in the rule source
      * within brackets, {123}, for example.  For rules that do not specify a
      * status, a default value of 0 is returned.
+     * <p>
+     * Of the standard types of ICU break iterators, only the word break
+     * iterator provides status values.  The values are defined in
+     * <code>enum UWordBreak</code>, and allow distinguishing between words
+     * that contain alphabetic letters, "words" that appear to be numbers,
+     * punctuation and spaces, words containing ideographic characters, and
+     * more.  Call <code>getRuleStatus</code> after obtaining a boundary
+     * position from <code>next()<code>, <code>previous()</code>, or 
+     * any other break iterator functions that returns a boundary position.
+     * <p>
      * @return the status from the break rule that determined the most recently
      * returned break position.
+     *
+     * @see UWordBreak
      * @draft ICU 2.2
      */
     virtual int32_t getRuleStatus() const;
