@@ -7,14 +7,14 @@
 ******************************************************************************/
 
 
-/*----------------------------------------------------------------------------------
+/*----------------------------------------------------------------------------
  *                           
  *       Memory mapped file wrappers for use by the ICU Data Implementation
  *       All of the platform-specific implementation for mapping data files
  *         is here.  The rest of the ICU Data implementation uses only the
  *         wrapper functions.
  *
- *----------------------------------------------------------------------------------*/
+ *----------------------------------------------------------------------------*/
 #include "unicode/utypes.h"
 
 
@@ -67,7 +67,6 @@
 #       include "cmemory.h"
 #       include "unicode/udata.h"
 #       define LIB_PREFIX "lib"
-#       define LIB_PREFIX_LENGTH 3
 #       define LIB_SUFFIX ".dll"
 #       define MAP_IMPLEMENTATION MAP_390DLL
 
@@ -92,12 +91,12 @@
 
 
 
-/*----------------------------------------------------------------------------------*
- *                                                                                  *
- *   Memory Mapped File support.  Platform dependent implementation of functions    *
- *                                used by the rest of the implementation.           *
- *                                                                                  *
- *----------------------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------*
+ *                                                                            *
+ *   Memory Mapped File support.  Platform dependent implementation of        *
+ *                           functions used by the rest of the implementation.*
+ *                                                                            *
+ *----------------------------------------------------------------------------*/
 #if MAP_IMPLEMENTATION==MAP_WIN32
     UBool
     uprv_mapFile(
@@ -272,12 +271,11 @@
 
     UBool uprv_mapFile(UDataMemory *pData, const char *path) {
         const char *inBasename;
-        char *basename, *suffix, *tempbasename;
+        char *basename;
         char pathBuffer[1024];
         const DataHeader *pHeader;
         dllhandle *handle;
-        char filename[1024];
-        void *val=0; 
+        void *val=0;
 
         inBasename=uprv_strrchr(path, U_FILE_SEP_CHAR);
         if(inBasename==NULL) {
@@ -331,14 +329,7 @@
             uprv_strcpy(pathBuffer, "//IXMI" U_ICU_VERSION_SHORT "DA");
 #       else
             /* set up the library name */
-            uprv_memcpy(basename, LIB_PREFIX, LIB_PREFIX_LENGTH);
-            inBasename = U_ICUDATA_NAME;
-            suffix = basename+LIB_PREFIX_LENGTH;
-            while((*suffix=*inBasename)!=0) {
-                ++suffix;
-                ++inBasename;
-            }
-            uprv_strcpy(suffix, LIB_SUFFIX);
+            uprv_strcpy(basename, LIB_PREFIX U_LIBICUDATA_NAME U_ICU_VERSION_SHORT LIB_SUFFIX);
 #       endif
 
 #       ifdef UDATA_DEBUG
@@ -373,7 +364,7 @@
 
 
 
-    void    uprv_unmapFile(UDataMemory *pData) {
+    void uprv_unmapFile(UDataMemory *pData) {
         if(pData!=NULL && pData->map!=NULL) {
             uprv_free(pData->map);
             pData->map     = NULL;
