@@ -43,7 +43,7 @@ static UBool isMutexInited = FALSE;
 static UMTX resbMutex = NULL;
 
 /* INTERNAL: hashes an entry  */
-static int32_t hashEntry(const UHashTok parm) {
+static int32_t U_EXPORT2 U_CALLCONV hashEntry(const UHashTok parm) {
     UResourceDataEntry *b = (UResourceDataEntry *)parm.pointer;
     UHashTok namekey, pathkey;
     namekey.pointer = b->fName;
@@ -52,7 +52,7 @@ static int32_t hashEntry(const UHashTok parm) {
 }
 
 /* INTERNAL: compares two entries */
-static UBool compareEntries(const UHashTok p1, const UHashTok p2) {
+static UBool U_EXPORT2 U_CALLCONV compareEntries(const UHashTok p1, const UHashTok p2) {
     UResourceDataEntry *b1 = (UResourceDataEntry *)p1.pointer;
     UResourceDataEntry *b2 = (UResourceDataEntry *)p2.pointer;
     UHashTok name1, name2, path1, path2;
@@ -983,7 +983,8 @@ U_CAPI const UChar* U_EXPORT2 ures_getStringByKey(const UResourceBundle *resB, c
  *  INTERNAL: Get the name of the first real locale (not placeholder) 
  *  that has resource bundle data.
  */
-U_CAPI const char* ures_getLocale(const UResourceBundle* resourceBundle, UErrorCode* status)
+U_CAPI const char*  U_EXPORT2
+ures_getLocale(const UResourceBundle* resourceBundle, UErrorCode* status)
 {
     if (status==NULL || U_FAILURE(*status)) {
         return NULL;
@@ -1059,7 +1060,8 @@ U_CFUNC const char* ures_getPath(const UResourceBundle* resB) {
  *  proper fallback chaining is executed while initialization. 
  *  The result is stored in cache for later fallback search.
  */
-U_CAPI void ures_openFillIn(UResourceBundle *r, const char* path,
+U_CAPI void  U_EXPORT2
+ures_openFillIn(UResourceBundle *r, const char* path,
                     const char* localeID, UErrorCode* status) {
     if(r == NULL) {
         *status = U_INTERNAL_PROGRAM_ERROR;
@@ -1083,7 +1085,8 @@ U_CAPI void ures_openFillIn(UResourceBundle *r, const char* path,
         r->fSize = res_countArrayItems(&(r->fResData), r->fRes);
     }
 }
-U_CAPI UResourceBundle* ures_open(const char* path,
+U_CAPI UResourceBundle*  U_EXPORT2
+ures_open(const char* path,
                     const char* localeID,
                     UErrorCode* status)
 {
@@ -1143,7 +1146,8 @@ U_CAPI UResourceBundle* ures_open(const char* path,
     return r;
 }
 
-U_CAPI UResourceBundle* ures_openW(const wchar_t* myPath,
+U_CAPI UResourceBundle*  U_EXPORT2
+ures_openW(const wchar_t* myPath,
                     const char* localeID,
                     UErrorCode* status)
 {
@@ -1190,7 +1194,8 @@ U_CAPI UResourceBundle* U_EXPORT2 ures_openU(const UChar* myPath,
  *  Opens a resource bundle without "canonicalizing" the locale name. No fallback will be performed 
  *  or sought. However, alias substitution will happen!
  */
-U_CFUNC UResourceBundle* ures_openDirect(const char* path, const char* localeID, UErrorCode* status) {
+U_CAPI UResourceBundle*  U_EXPORT2
+ures_openDirect(const char* path, const char* localeID, UErrorCode* status) {
     UResourceBundle *r;
 
     if(status == NULL || U_FAILURE(*status)) {
@@ -1249,7 +1254,8 @@ U_CFUNC UBool ures_isStackObject(UResourceBundle* resB) {
  *  API: Counts members. For arrays and tables, returns number of resources.
  *  For strings, returns 1.
  */
-U_CAPI int32_t ures_countArrayItems(const UResourceBundle* resourceBundle,
+U_CAPI int32_t  U_EXPORT2
+ures_countArrayItems(const UResourceBundle* resourceBundle,
                   const char* resourceKey,
                   UErrorCode* status)
 {
@@ -1275,7 +1281,8 @@ U_CAPI int32_t ures_countArrayItems(const UResourceBundle* resourceBundle,
     }
 }
 
-U_CAPI void ures_close(UResourceBundle*    resB)
+U_CAPI void  U_EXPORT2
+ures_close(UResourceBundle*    resB)
 {
     if(resB != NULL) {
         if(resB->fData != NULL) {
@@ -1296,7 +1303,8 @@ U_CAPI void ures_close(UResourceBundle*    resB)
     }
 }
 
-U_CAPI const char* ures_getVersionNumber(const UResourceBundle*   resourceBundle)
+U_CAPI const char*  U_EXPORT2
+ures_getVersionNumber(const UResourceBundle*   resourceBundle)
 {
     if (!resourceBundle) return NULL;
 

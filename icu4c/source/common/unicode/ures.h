@@ -242,7 +242,8 @@ U_CAPI UResourceBundle*  U_EXPORT2 ures_open(const char*    path,   /* NULL if n
  * @see ures_close
  * @draft ICU 2.0
  */
-U_CAPI UResourceBundle* ures_openDirect(const char* path, const char* locale, UErrorCode* status);
+U_CAPI UResourceBundle* U_EXPORT2 
+ures_openDirect(const char* path, const char* locale, UErrorCode* status);
 
 /**
 *Opens a UResourceBundle, from which users can extract strings by using
@@ -339,7 +340,8 @@ U_CAPI void U_EXPORT2 ures_getVersion(const UResourceBundle* resB, UVersionInfo 
  * @return  A Locale name
  * @stable
  */
-U_CAPI const char* ures_getLocale(const UResourceBundle* resourceBundle, UErrorCode* status);
+U_CAPI const char* U_EXPORT2 
+ures_getLocale(const UResourceBundle* resourceBundle, UErrorCode* status);
 
 /**
  * Same as ures_open() but uses the fill-in parameter instead of allocating
@@ -348,7 +350,8 @@ U_CAPI const char* ures_getLocale(const UResourceBundle* resourceBundle, UErrorC
  *      and usage model for fillIn parameters without knowing sizeof(UResourceBundle)
  * @internal
  */
-U_CAPI void ures_openFillIn(UResourceBundle *r, const char* path,
+U_CAPI void U_EXPORT2 
+ures_openFillIn(UResourceBundle *r, const char* path,
                     const char* localeID, UErrorCode* status);
 
 /**

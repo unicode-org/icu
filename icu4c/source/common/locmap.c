@@ -101,7 +101,7 @@ const _localeToDefaultCharmapTable [] =
  { NULL, NULL         }
 };
 
-U_CAPI const char *
+U_CAPI const char* U_EXPORT2
 uprv_defaultCodePageForLocale(const char *locale)
 {
     int32_t i;

@@ -493,7 +493,7 @@ uloc_getISOCountries(void);
  * @return The length of the parent locale ID.
  * @stable
  */
-int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 uloc_getParent(const char*    localeID,
                  char* parent,
                  int32_t parentCapacity,
