@@ -255,7 +255,7 @@ uprv_getUTCtime()
 /*
     struct timeval posixTime;
     gettimeofday(&posixTime, NULL);
-    return ((UDate)posixTime.tv_sec * U_MILLIS_PER_SECOND) + ((UDate)posixTime.tv_usec/1000);
+    return (UDate)(((int64_t)posixTime.tv_sec * U_MILLIS_PER_SECOND) + (posixTime.tv_usec/1000));
 */
     time_t epochtime;
     time(&epochtime);
