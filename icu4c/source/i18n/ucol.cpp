@@ -313,7 +313,7 @@ ucol_open(    const    char         *loc,
     ures_close(binary);
     // if the real data came from the fallback, we want to drag around 
     // the real resource bundle
-    if(uprv_strcmp(ures_getLocale(b, status), realCollationDataLocale) != NULL) {
+    if(uprv_strcmp(ures_getLocale(b, status), realCollationDataLocale) != 0) {
       result->rb = ures_open(NULL, realCollationDataLocale, status);
       if(U_FAILURE(*status)) {
         goto clean;
