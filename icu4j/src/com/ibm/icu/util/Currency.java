@@ -112,9 +112,7 @@ public class Currency implements Serializable {
      * displayed
      */
     public int getDefaultFractionDigits() {
-        // TODO Temporary implementation; Redo this
-        int i = findData();
-        return (i >= 0) ? Integer.parseInt(DATA[i+1]) : 2;
+        return (findData())[0].intValue();
     }
 
     /**
@@ -123,9 +121,26 @@ public class Currency implements Serializable {
      * @return the non-negative rounding increment, or 0.0 if none
      */
     public double getRoundingIncrement() {
-        // TODO Temporary implementation; Redo this
-        int i = findData();
-        return (i >= 0) ? Double.parseDouble(DATA[i+2]) : 0.0;
+        Integer[] data = findData();
+
+        int data1 = data[1].intValue(); // rounding increment
+
+        // If there is no rounding return 0.0 to indicate no rounding.
+        // This is the high-runner case, by far.
+        if (data1 == 0) {
+            return 0.0;
+        }
+
+        int data0 = data[0].intValue(); // fraction digits
+
+        // If the meta data is invalid, return 0.0 to indicate no rounding.
+        if (data0 < 0 || data0 >= POW10.length) {
+            return 0.0;
+        }
+
+        // Return data[1] / 10^(data[0]).  The only actual rounding data,
+        // as of this writing, is CHF { 2, 25 }.
+        return (double) data1 / POW10[data0];
     }
 
     /**
@@ -144,44 +159,67 @@ public class Currency implements Serializable {
     }
 
     /**
-     * TEMPORARY Internal function to look up currency data.
+     * Internal function to look up currency data.  Result is an array of
+     * two Integers.  The first is the fraction digits.  The second is the
+     * rounding increment, or 0 if none.  The rounding increment is in
+     * units of 10^(-fraction_digits).
      */
-    private int findData() {
-        // TODO Temporary implementation; Redo this
-        for (int i=0; i<DATA.length; i+=3) {
-            int c = DATA[i].compareTo(isoCode);
-            if (c == 0) {
+    private Integer[] findData() {
+
+        try {
+            // Get CurrencyMeta resource out of root locale file.  [This may
+            // move out of the root locale file later; if it does, update this
+            // code.]
+            ResourceBundle root = ICULocaleData.getLocaleElements("");
+
+            Object[][] currencyMeta = (Object[][]) root.getObject("CurrencyMeta");
+
+            Integer[] i = null;
+            int defaultPos = -1;
+
+            // Do a linear search for isoCode.  At the same time,
+            // record the position of the DEFAULT meta data.  If the
+            // meta data becomes large, make this faster.
+            for (int j=0; j<currencyMeta.length; ++j) {
+                Object[] row = currencyMeta[j];
+                String s = (String) row[0];
+                int c = isoCode.compareToIgnoreCase(s);
+                if (c == 0) {
+                    i = (Integer[]) row[1];
+                    break;
+                }
+                if ("DEFAULT".equalsIgnoreCase(s)) {
+                    defaultPos = j;
+                }
+                if (c < 0 && defaultPos >= 0) {
+                    break;
+                }
+            }
+
+            if (i == null && defaultPos >= 0) {
+                i = (Integer[]) currencyMeta[defaultPos][1];
+            }
+
+            if (i != null && i.length >= 2) {
                 return i;
-            } else if (c > 0) {
-                break;
             }
         }
-        return -1;
+        catch (MissingResourceException e) {}
+
+        // Config/build error; return hard-coded defaults
+        return LAST_RESORT_DATA;
     }
 
-    /**
-     * TEMPORARY Static data block giving currency fraction digits and
-     * rounding increments.  Currencies that are not listed have the
-     * default fraction digits (2) and no rounding.
-     */
-    private static String[] DATA = {
-        // TODO Temporary implementation; Redo this
-        // Code, Fraction digits, Rounding increment
-        "BYB", "0", "0",
-        "CHF", "2", "0.25",
-        "ESP", "0", "0",
-        "IQD", "3", "0",
-        "ITL", "0", "0",
-        "JOD", "3", "0",
-        "JPY", "0", "0",
-        "KWD", "3", "0",
-        "LUF", "0", "0",
-        "LYD", "3", "0",
-        "PTE", "0", "0",
-        "PYG", "0", "0",
-        "TND", "3", "0",
-        "TRL", "0", "0",
-    };
+    // Default currency meta data of last resort.  We try to use the
+    // defaults encoded in the meta data resource bundle.  If there is a
+    // configuration/build error and these are not available, we use these
+    // hard-coded defaults (which should be identical).
+    private static final Integer[] LAST_RESORT_DATA =
+        new Integer[] { new Integer(2), new Integer(0) };
+
+    // POW10[i] = 10^i
+    private static final int[] POW10 = { 1, 10, 100, 1000, 10000, 100000,
+                                1000000, 10000000, 100000000, 1000000000 };
 }
 
 //eof
