@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/SimpleDateFormat.java,v $ 
- * $Date: 2003/12/13 00:30:55 $ 
- * $Revision: 1.26 $
+ * $Date: 2003/12/17 00:50:33 $ 
+ * $Revision: 1.27 $
  *
  *****************************************************************************************
  */
@@ -28,7 +28,6 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.lang.reflect.Method;
 
 /**
  * <code>SimpleDateFormat</code> is a concrete class for formatting and
@@ -1002,22 +1001,7 @@ public class SimpleDateFormat extends DateFormat {
         cal.set(Calendar.ZONE_OFFSET, tz.getRawOffset());
         int savings = 0;
         if (j >= 3) {
-            // TODO: When JDK 1.3 support is dropped, change the following
-            // try/catch block to "savings = tz.getDSTSavings();".
-
-            // As of ICU 2.8 we support both 1.4 and 1.3.  When 1.3
-            // support is dropped, we can call
-            // TimeZone.getDSTSavings() directly.  Until then, we use
-            // reflection to call getDSTSavings() on either TimeZone
-            // or SimpleTimeZone. - Alan
-            try {
-                // The following works if getDSTSavings is declared in
-                // TimeZone (JDK 1.4) or SimpleTimeZone (JDK 1.3).
-                Method m = tz.getClass().getMethod("getDSTSavings", new Class[0]);
-                savings = ((Integer) m.invoke(tz, new Object[0])).intValue();
-            } catch (Exception e1) {
-            	// todo: fix bug 3458, this code shold be on JDKTimeZone
-            }
+        	savings = tz.getDSTSavings();
         }
         cal.set(Calendar.DST_OFFSET, savings);
         return (start + formatData.zoneStrings[i][j].length());

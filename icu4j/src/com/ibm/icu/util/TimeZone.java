@@ -116,6 +116,27 @@ abstract public class TimeZone implements Serializable, Cloneable {
     abstract public int getOffset(int era, int year, int month, int day,
                                   int dayOfWeek, int milliseconds);
 
+
+    /**
+     * Returns the offset of this time zone from UTC at the specified
+     * date. If Daylight Saving Time is in effect at the specified
+     * date, the offset value is adjusted with the amount of daylight
+     * saving.
+     *
+     * @param date the date represented in milliseconds since January 1, 1970 00:00:00 GMT
+     * @return the amount of time in milliseconds to add to UTC to get local time.
+     *
+     * @see Calendar#ZONE_OFFSET
+     * @see Calendar#DST_OFFSET
+     * @see #getOffset(long, boolean, int[])
+     * @draft ICU 2.8
+     */
+    public int getOffset(long date) {
+	int[] result = new int[2];
+	getOffset(date, false, result);
+	return result[0]+result[1];
+    }
+
     /**
      * Returns the time zone raw and GMT offset for the given moment
      * in time.  Upon return, local-millis = GMT-millis + rawOffset +
@@ -424,10 +445,7 @@ abstract public class TimeZone implements Serializable, Cloneable {
         // they're small and cheap to create.
         SimpleTimeZone tz;
         if (daylight && useDaylightTime()) {
-            int savings = 3600000; // one hour
-            try {
-                savings = ((SimpleTimeZone) this).getDSTSavings();
-            } catch (ClassCastException e) {}
+            int savings = getDSTSavings();
             tz = new SimpleTimeZone(getRawOffset(), getID(),
                                     Calendar.JANUARY, 1, 0, 0,
                                     Calendar.FEBRUARY, 1, 0, 0,
@@ -440,6 +458,28 @@ abstract public class TimeZone implements Serializable, Cloneable {
         // Format a date in January.  We use the value 10*ONE_DAY == Jan 11 1970
         // 0:00 GMT.
         return format.format(new Date(864000000L));
+    }
+
+    /**
+     * Returns the amount of time to be added to local standard time
+     * to get local wall clock time.
+     * <p>
+     * The default implementation always returns 3600000 milliseconds
+     * (i.e., one hour) if this time zone observes Daylight Saving
+     * Time. Otherwise, 0 (zero) is returned.
+     * <p>
+     * If an underlying TimeZone implementation subclass supports
+     * historical Daylight Saving Time changes, this method returns
+     * the known latest daylight saving value.
+     *
+     * @return the amount of saving time in milliseconds
+     * @draft ICU 2.8
+     */
+    public int getDSTSavings() {
+	if (useDaylightTime()) {
+	    return 3600000;
+	}
+	return 0;
     }
 
     /**
