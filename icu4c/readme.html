@@ -32,7 +32,7 @@
      <abbr title="International Components for Unicode">ICU</abbr> 2.6
     ReadMe</h1>
 
-    <p>Version: 2003-Jan-29<br>
+    <p>Version: 2003-Feb-11<br>
      Copyright &copy; 1997-2003 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -615,10 +615,10 @@
       </tr>
 
       <tr>
-        <td>Mac OS X (10.1)</td>
+        <td>Mac OS X (10.2)</td>
 
-        <td>gcc-932.1, based on gcc version 2.95.2<br>
-         (Developer Tools December 2001)</td>
+        <td>gcc 3.1<br>
+         (Developer Tools, July 2002)</td>
 
         <td>Regularly tested</td>
       </tr>
@@ -686,6 +686,14 @@
 
         <td>iCC</td>
 
+        <td>Rarely tested</td>
+      </tr>
+
+      <tr>
+        <td>CygWin</td>
+
+        <td>gcc 2.95.3</td>
+        
         <td>Rarely tested</td>
       </tr>
 
@@ -1276,10 +1284,11 @@ del common/libicuuc.o
     products. Usually only the libraries need to be considered for
     packaging.</p>
 
-    <p>On Unix, you should have used "gmake install" to make it easier to
+    <p>On Unix, you should have used "<tt>gmake install</tt>" to make it easier to
     develop and package ICU. The bin, lib and include directories are needed to
-    develop applications that use ICU. When ICU is built on Windows, a similar
-    directory structure is built.</p>
+    develop applications that use ICU.  These directories will be created relative to the 
+    "<tt>--prefix=</tt><i>dir</i>" configure option (See <a href="#HowToBuildUnix">above</a>).
+     When ICU is built on Windows, a similar directory structure is built.</p>
 
     <p>When changes have been made to the standard ICU distribution, it is
     recommended that at least one of the following guidelines be followed for
@@ -1574,6 +1583,10 @@ del common/libicuuc.o
 
           <li>U_EXPORT and U_IMPORT for specifying dynamic library import and
           export</li>
+
+          <li>int64_t and uint64_t. If the platform does not support 64 bit values, the macro
+          <tt>U_INT64_T_UNAVAILABLE</tt> must be defined.  For example, this will disable
+          Rule-based number formatting.</li>
         </ul>
         <br>
       </li>
