@@ -2284,15 +2284,15 @@ void DecimalFormat::expandAffix(const UnicodeString& pattern,
                 if (intl) {
                     ++i;
                 }
-                const UChar* currency = getCurrency();
-                if (currency[0] != 0) {
+                const UChar* currencyUChars = getCurrency();
+                if (currencyUChars[0] != 0) {
                     UErrorCode ec = U_ZERO_ERROR;
                     if(intl) {
-                        affix += currency;
+                        affix += currencyUChars;
                     } else {
                         int32_t len;
                         UBool isChoiceFormat;
-                        const UChar* s = ucurr_getName(currency, fSymbols->getLocale().getName(),
+                        const UChar* s = ucurr_getName(currencyUChars, fSymbols->getLocale().getName(),
                                                        UCURR_SYMBOL_NAME, &isChoiceFormat, &len, &ec);
                         if (isChoiceFormat) {
                             // Two modes here: If doFormat is false, we set up
@@ -2336,7 +2336,7 @@ void DecimalFormat::expandAffix(const UnicodeString& pattern,
                                 } else {
                                     // We only arrive here if the currency choice
                                     // format in the locale data is INVALID.
-                                    affix += currency;
+                                    affix += currencyUChars;
                                 }
                             }
                             continue;
