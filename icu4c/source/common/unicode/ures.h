@@ -83,6 +83,14 @@ typedef enum {
     URES_ALIAS=3,
 
     /**
+     * Internal use only.
+     * Alternative resource type constant for tables of key-value pairs.
+     * Never returned by ures_getType().
+     * @internal
+     */
+    URES_TABLE32=4,
+
+    /**
      * Resource type constant for a single 28-bit integer, interpreted as
      * signed or unsigned by the ures_getInt() or ures_getUInt() function.
      * @see ures_getInt

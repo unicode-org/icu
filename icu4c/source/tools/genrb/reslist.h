@@ -37,6 +37,7 @@ struct SRBRoot {
   char *fLocale;
   int32_t fKeyPoint;
   char *fKeys;
+  int32_t fKeysCapacity;
   int32_t fCount;
   struct SResource *fRoot;
   int32_t fMaxTableLength;
@@ -65,7 +66,7 @@ int32_t bundle_addtag(struct SRBRoot *bundle, const char *tag, UErrorCode *statu
 /* Various resource types */
 
 struct SResTable {
-    uint16_t fCount;
+    uint32_t fCount;
     uint32_t fChildrenSize;
     struct SResource *fFirst;
     struct SRBRoot *fRoot;
