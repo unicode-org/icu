@@ -453,18 +453,20 @@ static void DataDrivenScanf(void) {
                     }
                     break;
                 case 0x73:  // 's' char *
-                    u_austrncpy(cExpected, uBuffer, sizeof(cBuffer));
+                    u_austrcpy(cExpected, expectedResult);
                     uBufferLenReturned = u_sscanf_u(argument, format, cBuffer);
                     //uFileBufferLenReturned = u_fscanf_u(testFile, format, cBuffer);
                     if (strcmp(cBuffer, cExpected) != 0) {
-                        log_err("error in scanf char * string. Test case = %d\n", i);
+                        log_err("error in scanf char * string. Got \"%s\" Expected \"%s\". Test case = %d\n", cBuffer, cExpected, i);
                     }
                     break;
                 case 0x53:  // 'S' UChar *
                     uBufferLenReturned = u_sscanf_u(argument, format, uBuffer);
                     //uFileBufferLenReturned = u_fscanf_u(testFile, format, argument);
                     if (u_strcmp(uBuffer, expectedResult) != 0) {
-                        log_err("error in scanf UChar * string. Test case = %d\n", i);
+                        u_austrcpy(cExpected, format);
+                        u_austrcpy(cBuffer, uBuffer);
+                        log_err("error in scanf UChar * string %s Got: \"%s\". Test case = %d\n", cExpected, cBuffer, i);
                     }
                     break;
                 }
