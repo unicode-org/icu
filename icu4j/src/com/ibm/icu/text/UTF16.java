@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UTF16.java,v $ 
-* $Date: 2002/04/03 22:48:10 $ 
-* $Revision: 1.19 $
+* $Date: 2002/05/14 23:45:46 $ 
+* $Revision: 1.20 $
 *
 *******************************************************************************
 */
@@ -2129,60 +2129,89 @@ public final class UTF16
         public int compare(Object a, Object b) 
         {
 	        if (a == b) {
-	        return 0;
+	        	return 0;
 	        }
-        if (a == null) {
-            return -1;
-        }
-        if (b == null) {
-            return 1;
-        }
-              
-        String sa = (String) a;
-        String sb = (String) b;
-        int lena = sa.length();
-        int lenb = sb.length();
-        int len = lena;
-        if (len > lenb) {
-            len = lenb;
-        }
-            
-        for (int i = 0; i < len; ++i) 
-        {
-            char ca = sa.charAt(i);
-            char cb = sb.charAt(i);
-            if (ca == cb) {
-            continue; // skip remap if equal
-            }
-                    
-            // start of only different section
-            // what this part does is to rearrange the characters 0xE000 to 0xFFFF
-            // to the region starting from 0xD800
-            // and shift the surrogate characters to above this region
-            if (ca >= LEAD_SURROGATE_MIN_VALUE) {
-            ca += (ca <= TRAIL_SURROGATE_MAX_VALUE) ? 0x2000 : -0x800;
-            }
-            if (cb >= LEAD_SURROGATE_MIN_VALUE) {
-            cb += (cb <= TRAIL_SURROGATE_MAX_VALUE) ? 0x2000 : -0x800;
-            }
-            // end of only different section
-                    
-            if (ca < cb) {
-            return -1;
-            }
-              
-            return 1; // wasn't equal, so return 1
-        }
-          
-        if (lena < lenb) {
-            return -1;
-        }
-            
-        if (lena > lenb) {
-            return 1;
-        }
-                
-        return 0;
+	        if (a == null) {
+	            return -1;
+	        }
+	        if (b == null) {
+	            return 1;
+	        }
+	              
+	        String sa = (String) a;
+	        String sb = (String) b;
+	        int lena = sa.length();
+	        int lenb = sb.length();
+	        int len = lena;
+	        if (len > lenb) {
+	            len = lenb;
+	        }
+	            
+	        for (int i = 0; i < len; ++i) 
+	        {
+	            char ca = sa.charAt(i);
+	            char cb = sb.charAt(i);
+	            if (ca == cb) {
+	            	continue; // skip remap if equal
+	            }
+	                    
+	            // start of only different section
+            	// if either code unit is below 0xd800, i.e., below the 
+            	// surrogate range, then nothing needs to be done
+
+            	// if both are >=0xd800 then special code adjusts code unit 
+            	// values so that all BMP code points (including single 
+            	// surrogate code points) sort below supplementary ones
+
+            	// this is necessary because surrogates are not at the end of 
+            	// the code unit range
+            	if (ca >= LEAD_SURROGATE_MIN_VALUE 
+            		&& cb >= LEAD_SURROGATE_MIN_VALUE) {
+                	// subtract 0x2800 from BMP code points to make them 
+                	// smaller than supplementary ones
+                	if ((ca <= LEAD_SURROGATE_MAX_VALUE && (i + 1) < lena 
+                		&& isTrailSurrogate(sa.charAt(i + 1))) 
+                		|| (isTrailSurrogate(ca) && i > 0 
+                			&& isLeadSurrogate(sa.charAt(i - 1)))) {
+                    	// part of a surrogate pair, leave >=d800
+                	} 
+                	else {
+                    	// BMP code point - may be surrogate code point - make 
+                    	// <d800
+                    	ca -= 0x2800;
+                	}
+
+                	if ((cb <= LEAD_SURROGATE_MAX_VALUE && (i + 1) < lenb 
+                		&& isTrailSurrogate(sb.charAt(i + 1))) 
+                		|| (isTrailSurrogate(cb) && i > 0 
+                			&& isLeadSurrogate(sb.charAt(i - 1)))) {
+                    	// part of a surrogate pair, leave >=d800
+                	} 
+                	else {
+                    	// BMP code point - may be surrogate code point - make 
+                    	// < d800
+                    	cb -= 0x2800;
+                	}
+            	}
+
+	            // end of only different section
+	                    
+	            if (ca < cb) {
+	            	return -1;
+	            }
+	              
+	            return 1; // wasn't equal, so return 1
+	        }
+	          
+	        if (lena < lenb) {
+	            return -1;
+	        }
+	            
+	        if (lena > lenb) {
+	            return 1;
+	        }
+	                
+	        return 0;
         }
     }
     
