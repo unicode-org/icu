@@ -99,7 +99,6 @@ he {
         }
     }
     LocaleScript{ 
-                "Hebrew", // Script Name  
                 "Hebr"    // ISO 15924 Name 
     }
 

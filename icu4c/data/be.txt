@@ -110,9 +110,7 @@ be {
         }
     }
     LocaleScript{
-        "Cyrillic", // Script name
         "Cyrl",     // Abbreviation 
-        "Cyrs"      // Alias 
     }
 
 }

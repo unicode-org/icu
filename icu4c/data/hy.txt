@@ -4,24 +4,24 @@
 // *   Corporation and others.  All Rights Reserved.
 // *
 // *   Data by :
-// *		Bedo Agopian	  www.agosoft.com
-// *		Aram Airapetian
-// *		Arminco Global Telecommunications
-// *		Jora Manoucherians
-// *		Richard Youatt
+// *         Bedo Agopian   www.agosoft.com
+// *         Aram Airapetian
+// *         Arminco Global Telecommunications
+// *         Jora Manoucherians
+// *         Richard Youatt
 // *******************************************************************************
 
 hy{
     Version { "x0.1" }
-            
-    AmPmMarkers { 
-            "\u0531\u057c.",
-            "\u053f\u0565.",
+
+    AmPmMarkers {
+            "\u0531\u057c\u2024",
+            "\u0535\u0580\u2024",
             "\u0531\u057c\u0561\u0582\u0585\u057f\u0565\u0561\u0576",
             "\u0535\u0580\u0565\u056f\u0578\u0575\u0565\u0561\u0576"
-            
+
     }
-    DayAbbreviations { 
+    DayAbbreviations {
             "\u053f\u056b\u0580",
             "\u0535\u0580\u056f",
             "\u0535\u0580\u0584",
@@ -30,7 +30,7 @@ hy{
             "\u0548\u0582\u0580",
             "\u0547\u0561\u0562",
     }
-    DayNames { 
+    DayNames {
             "\u053f\u056b\u0580\u0561\u056f\u056b",
             "\u0535\u0580\u056f\u0578\u0582\u0577\u0561\u0562\u0569\u056b",
             "\u0535\u0580\u0565\u0584\u0577\u0561\u0562\u0569\u056b",
@@ -39,7 +39,7 @@ hy{
             "\u0548\u0582\u0580\u0562\u0561\u0569",
             "\u0547\u0561\u0562\u0561\u0569",
     }
-    MonthAbbreviations { 
+    MonthAbbreviations {
             "\u0545\u0576\u0580",
             "\u0553\u057f\u0580",
             "\u0544\u0580\u057f",
@@ -54,7 +54,7 @@ hy{
             "\u0534\u0565\u056f",
             "",
     }
-    MonthNames { 
+    MonthNames {
             "\u0545\u0578\u0582\u0576\u0578\u0582\u0561\u0580",
             "\u0553\u0565\u057f\u0580\u0578\u0582\u0561\u0580",
             "\u0544\u0561\u0580\u057f",
@@ -69,24 +69,64 @@ hy{
             "\u0534\u0565\u056f\u057f\u0565\u0574\u0562\u0565\u0580",
             "",
     }
+
     Eras {
-    	"\u0554.\u0531.",
-    	"\u0554.\u0535."
+      "\u0545\u2024\u054F\u2024",            // 3.D.
+      "\u0546\u2024\u0554\u2024"             // N.K.
     }
-    LocaleScript{ 
+    LocaleScript{
                 "Armn", // Script Name
     }
     Countries{
-     	AM { "\u0540\u0561\u0575\u0561\u057D\u057F\u0561\u0576\u056B\u0020\u0540\u0561\u0576\u0580\u0561\u057A\u0565\u057F\u0578\u0582\u0569\u056B\u0582\u0576"}
+        AM {
+     "\u0540\u0561\u0575\u0561\u057D\u057F\u0561\u0576\u056B\u0020"
+"\u0540\u0561\u0576\u0580\u0561\u057A\u0565\u057F\u0578\u0582\u0569"
+     "\u056B\u0582\u0576"}
     }
     Languages{
-    	hy { "\u0540\u0561\u0575\u0565\u0580\u0567\u0576" }
+      hy { "\u0540\u0561\u0575\u0565\u0580\u0567\u0576" }
     }
     LocaleString{ "hy" }
     LocaleID{ "2b" }
-            
+
             // /**************** Info Below is needed ****************/
-            // CollationElements{}
+            // CollationElements{}    // To be supplied from Unicode
             // ShortLanguage { }
             //
-} 
+
+     DateTimePatterns {
+      "HH:mm:ss z",
+      "H:mm:ss z",
+      "H:mm:ss",
+      "H:mm",
+      "EEEE,MMMM d, yyyy",
+      "MMMM dd, yyyy",
+      "MMM d, yyyy",
+      "MM/dd/yy",
+      "{1} {0}",
+     }
+
+     localPatternChars{ "GyMdkHmsSEDFwWahKz" }
+
+      NumberPatterns{
+             "#0,###;-#0,###",
+             "#0,00 \u00A4;-#0,00 \u00A4",
+             "#0%"
+
+      }
+      NumberElements {
+              ".",
+              ",",
+              ";",
+              "%",
+              "0",
+              "#",
+              "-",
+              "E",
+              "\u2030",
+              "\u221e",
+              "\ufffd",
+      }
+
+
+}

@@ -326,7 +326,6 @@ hi {
          "<\u0947 <\u0948 <\u0949 <\u094a <\u094b <\u094c" }
       }
       LocaleScript{ 
-                "Devanagari", // Script Name  
                 "Deva"        // ISO 15924 Name 
      }
 }

@@ -4,52 +4,25 @@
 // *   Corporation and others.  All Rights Reserved.
 // *
 // *   Data by :
-// *		Bedo Agopian	   www.agosoft.com
-// *		Aram Airapetian
-// *		Arminco Global Telecommunications
-// *		Jora Manoucherians
-// *		Richard Youatt
+// *         Bedo Agopian    www.agosoft.com
+// *         Aram Airapetian
+// *         Arminco Global Telecommunications
+// *         Jora Manoucherians
+// *         Richard Youatt
 // *******************************************************************************
 
 hy_AM{
-     Version { "x0.1" }
-    
-     LocaleString { "hy_AM" }
-     DateTimePatterns { 	
-    	"H:mm:ss z",
-    	"H:mm:ss z",
-    	"h:mm:ss",
-    	"h:mm",
-    	"EEEE,d MMMM, yyyy",
-    	"d MMMM yyyy",
-    	"d MMM yyyy",
-    	"d-M-yy",
-    	"{1} {0}",
-     }
-     localPatternChars{ "GyMdkHmsSEDFwWahKz" }
-     
-      NumberElements {
-              ".",
-              ",",
-              ";",
-              "%",
-              "0",
-              "#",
-              "-",
-              "E",
-              "\u2030",
-              "\u221e",
-              "\ufffd",
-      }
-  
-      NumberPatterns{
-      	"#0,###;-#0,###",
-      	"#0,00 \u00A4;-#0,00 \u00A4",
-      	"#0%"
-      
-      }
-      LocaleID{ "042b" }
+    Version { "x0.1" }
+
+    LocaleString { "hy_AM" }
+    Eras {
+      "\u0554\u2024\u0531\u2024",      // K.A.
+      "\u0554\u2024\u0535\u2024"       // K.E.
+    }
+    LocaleID{ "042b" }
 }
+
+
 
     
     

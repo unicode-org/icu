@@ -75,10 +75,7 @@ id {
     }
     LocaleID{ "21"}
     LocaleScript{ 
-                "Latin", // Script Name  
                 "Latn",  // ISO 15924 Name 
-                "Latf",  // ISO 15924 Name 
-                "Latg",  // ISO 15924 Name 
     }
             // /**************** Info Below is needed ****************/
             // CollationElements{}

@@ -60,7 +60,6 @@ am {
             "",
     }
     LocaleScript {
-    	"Ethiopic",
     	"Ethi",
     }
 }
