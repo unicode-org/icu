@@ -295,6 +295,7 @@ RuleBasedBreakIterator(const void* image);
     /**
      * Returns a newly-created CharacterIterator that the caller is to take
      * ownership of.
+     * @deprecated This will be removed after 2000-Dec-31.
      * THIS FUNCTION SHOULD NOT BE HERE.  IT'S HERE BECAUSE BreakIterator DEFINES
      * IT AS PURE VIRTUAL, FORCING RBBI TO IMPLEMENT IT.  IT SHOULD BE REMOVED
      * FROM *BOTH* CLASSES.

@@ -210,7 +210,7 @@ public:
 
     /**
      * Get the text for which this object is finding the boundaries.
-     * @draft
+     * @deprecated This will be removed after 2000-Dec-31.
      */
     virtual CharacterIterator* createText(void) const = 0;
 
