@@ -32,6 +32,7 @@
 #include "unicode/uloc.h"
 
 #include "ustr_imp.h"
+#include "ulocimp.h"
 #include "uresimp.h"
 #include "umutex.h"
 #include "cstring.h"

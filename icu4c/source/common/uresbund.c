@@ -30,6 +30,7 @@
 #include "uhash.h"
 #include "unicode/uenum.h"
 #include "uenumimp.h"
+#include "ulocimp.h"
 #include "umutex.h"
 
 
@@ -2114,8 +2115,6 @@ UBool *isAvailable, UErrorCode *status)
     } else if(subStatus == U_ZERO_ERROR) {
       ures_getByKey(res,resName,&bund1, &subStatus);
       if(subStatus == U_ZERO_ERROR) {
-        const UChar *defUstr;
-        int32_t defLen;
         ures_getByKey(&bund1, kwVal, &bund2, &subStatus);
         if(subStatus == U_ZERO_ERROR) {
 #if defined(URES_TREE_DEBUG)
@@ -2167,8 +2166,6 @@ UBool *isAvailable, UErrorCode *status)
       } else if(subStatus == U_ZERO_ERROR) {
         ures_getByKey(res,resName,&bund1, &subStatus);
         if(subStatus == U_ZERO_ERROR) {
-          const UChar *defUstr;
-          int32_t defLen;
           ures_getByKey(&bund1, kwVal, &bund2, &subStatus);
           if(subStatus == U_ZERO_ERROR) {
 #if defined(URES_TREE_DEBUG)
