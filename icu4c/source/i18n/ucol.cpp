@@ -146,9 +146,6 @@ ucol_openNew(    const    char         *loc,
 
   ucol_initUCA(status);
 
-  /* Open to discussion -                                               */
-  /* Do we want to cache these objects?                                 */
-  /* Do we need a name or other stuff?                                  */
   UCollatorNew *result = NULL;
   UResourceBundle *b = ures_open(NULL, loc, status);
   UResourceBundle *binary = ures_getByKey(b, "%%CollationNew", NULL, status);
@@ -189,6 +186,7 @@ uint32_t ucol_getNextCENew(const UCollatorNew *coll, collIterate *collationSourc
       order = UCOL_NULLORDER;                                         /* if so, we won't play any more        */
     } else if (collationSource->CEpos > collationSource->toReturn) {  /* Are there any CEs from previous expansions? */
       order = *(collationSource->toReturn++);                         /* if so, return them */
+      collationSource->pos--;
     } else {                                                          /* This is the real business now */
       UChar ch = *collationSource->pos;
       collationSource->CEpos = collationSource->toReturn = collationSource->CEs; 
@@ -201,7 +199,7 @@ uint32_t ucol_getNextCENew(const UCollatorNew *coll, collIterate *collationSourc
         *(collationSource->CEpos) = order;                            /* prepare the buffer */
         order = getSpecialCENew(coll, collationSource, status);       /* and try to get the special CE */
         if(order == UCOL_NOT_FOUND) {   /* We couldn't find a good CE in the tailoring */
-          ucol_getNextUCA(ch, collationSource, status);
+          order = ucol_getNextUCA(ch, collationSource, status);
         }
       } 
     } 
@@ -222,6 +220,9 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
     } 
     if(order == UCOL_NOT_FOUND) { /* This is where we have to resort to algorithmical generation */
       /* Make up an artifical CE from code point as per UCA */
+      order = 0xD08004F1;
+      order |= (ch & 0xF000)<<12;
+      order |= (ch & 0x0FFF)<<11;
     }
     return order; /* return the CE */
 }
@@ -291,15 +292,15 @@ uint32_t getSpecialCENew(const UCollatorNew *coll, collIterate *source, UErrorCo
           break;
         }
         schar = *(++source->pos);
-        while(schar > (tchar = *(UCharOffset++))) ; /* since the contraction codepoints should be ordered, we skip all that are smaller */
+        while(schar > (tchar = *UCharOffset)) { /* since the contraction codepoints should be ordered, we skip all that are smaller */
+          UCharOffset++;
+        }
         if(schar != tchar) { /* we didn't find the correct codepoint. We can use either the first or the last CE */
-          if(tchar == 0xFFFF) {
-            UCharOffset--; /* We moved one after the 0xFFFF, so we better back up. We're gonna use the last CE*/
-          } else {
+          if(tchar != 0xFFFF) {
             UCharOffset = ContractionStart; /* We're not at the end, bailed out in the middle. Better use starting CE */
           }
           source->pos--; /* Spit out the last char of the string, wasn't tasty enough */
-        }
+        } 
         CE = *(coll->contractionCEs + (UCharOffset - coll->contractionIndex));
         if(!isContraction(CE)) {
           /* Maybe not */
@@ -312,7 +313,7 @@ uint32_t getSpecialCENew(const UCollatorNew *coll, collIterate *source, UErrorCo
       /* This should handle expansion. */
       /* NOTE: we can encounter both continuations and expansions in an expansion! */
       /* I have to decide where continuations are going to be dealt with */
-      CEOffset = coll->expansion+getExpansionOffset(CE); /* find the offset to expansion table */
+      CEOffset = (uint32_t *)coll->image+getExpansionOffset(CE); /* find the offset to expansion table */
       size = getExpansionCount(CE);
       CE = *CEOffset++;
       if(size != 0) { /* if there are less than 16 elements in expansion, we don't terminate */
@@ -324,7 +325,8 @@ uint32_t getSpecialCENew(const UCollatorNew *coll, collIterate *source, UErrorCo
           *(source->CEpos++) = *CEOffset++;
         }
       }
-      source->toReturn++;
+      /*source->toReturn++;*/
+      return CE;
       break;
     case CHARSET_TAG:
       /* probably after 1.8 */
@@ -332,6 +334,7 @@ uint32_t getSpecialCENew(const UCollatorNew *coll, collIterate *source, UErrorCo
       break;
     default:
       *status = U_INTERNAL_PROGRAM_ERROR;
+      CE=0;
       break;
     }
     if (CE <= UCOL_NOT_FOUND) break;
@@ -588,6 +591,7 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
     uint32_t order = 0;
     uint32_t ce = 0;
 
+    uint8_t carry = 0;
     uint8_t primary1 = 0;
     uint8_t primary2 = 0;
     uint8_t primary3 = 0;
@@ -602,8 +606,8 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
     for(;;) {
         for(i=prevBuffSize; i<minBufferSize; ++i) {
 
-            /*order = ucol_getNextCENew(coll, &s, status);*/
-            UCOL_GETNEXTCENEW(order, coll, s, status);
+            order = ucol_getNextCENew(coll, &s, status);
+            /*UCOL_GETNEXTCENEW(order, coll, s, status);*/
 
             if(order == UCOL_NULLORDER) {
                 finished = TRUE;
@@ -615,10 +619,25 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
 
             tertiary = (order & UCOL_TERTIARYORDERMASK);
             secondary = (order >>= 8) & 0xFF;
-            primary3 = 0; /* the third primary */
-            primary2 = (order >>= 8) & 0xFF;;
-            primary1 = order >>= 8;
-
+            if(!isContinuation(ce)) {
+              primary3 = 0; /* the third primary */
+              primary2 = (order >>= 8) & 0xFF;
+              primary1 = order >>= 8;
+              if(upperFirst) {
+                /* Upper cases have this bit turned on, so that they always come after the lower cases */
+                /* if we want to reverse this situation, we'll flip this bit */
+                tertiary ^= 0x80;
+              }
+            } else {
+              primary3 = 0;
+              if(carry != 0) {
+                carry = (order >>= 8) & 0xF;
+                primary1 = (order >>= 4) & 0xFF;
+              } else {
+                primary2 = (order >>= 8) & 0xFF;
+                primary1 = ((order >>= 8) & 0xF) | carry<<4;
+              }
+            }
             if((tertiary & 0xF0) == 0xF0) { /* This indicates a long primary (11110000) */
               /* Note: long primary can appear both as a normal CE or as a continuation CE (not that it matters much) */
               primary3 = secondary;
@@ -626,11 +645,6 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
               tertiary = UNMARKED;
             }
 
-            if(upperFirst && !(isContinuation(ce))) { 
-              /* Upper cases have this bit turned on, so that they always come after the lower cases */
-              /* if we want to reverse this situation, we'll flip this bit */
-              tertiary ^= 0x80;
-            }
 
             /* In the code below, every increase in any of buffers is followed by the increase to  */
             /* sortKeySize - this might look tedious, but it is needed so that we can find out if  */
@@ -657,7 +671,7 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
                   *primaries++ = primary2; /* second part */
                   sortKeySize++;
                   if(primary3 != UCOL_NEW_IGNORABLE) {
-                    *primaries++ = primary2; /* third part */
+                    *primaries++ = primary3; /* third part */
                     sortKeySize++;
                   }
                 }
