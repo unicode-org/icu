@@ -81,7 +81,9 @@ static void printAllConverters(const char *pname)
 {
     UErrorCode err = U_ZERO_ERROR;
     int32_t num;
+#if 0
     size_t numprint = 0;
+#endif
     static const size_t maxline = 70;
 
     // getAvailable returns a string-table with all available codepages
@@ -97,12 +99,16 @@ static void printAllConverters(const char *pname)
     {
         // ucnv_getAvailableName gets the codepage name at a specific
         // index
+#if 0
         numprint += printf("%-20s", convtable[i]);
         if (numprint>maxline)
         {
             putchar('\n');
             numprint = 0;
         }
+#else
+	printf("%s ", convtable[i]);
+#endif
     }
     puts(convtable[num-1]);
 }
