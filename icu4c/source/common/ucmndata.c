@@ -7,7 +7,7 @@
 ******************************************************************************/
 
 
-/*----------------------------------------------------------------------------------
+/*------------------------------------------------------------------------------
  *
  *   UCommonData   An abstract interface for dealing with ICU Common Data Files.
  *                 ICU Common Data Files are a grouping of a number of individual
@@ -58,14 +58,14 @@ udata_getInfoSize(const UDataInfo *info) {
     }
 }
 
-/*----------------------------------------------------------------------------------*
- *                                                                                  *
- *  Pointer TOCs.   TODO: This form of table-of-contents should be removed because  *
- *                  DLLs must be relocated on loading to correct the pointer values *
- *                  and this operation makes shared memory mapping of the data      *
- *                  much less likely to work.                                       *
- *                                                                                  *
- *----------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------*
+ *                                                                             *
+ *  Pointer TOCs.   TODO: This form of table-of-contents should be removed     *
+ *                  because DLLs must be relocated on loading to correct the   *
+ *                  pointer values and this operation makes shared memory      *
+ *                  mapping of the data much less likely to work.              *
+ *                                                                             *
+ *-----------------------------------------------------------------------------*/
 typedef struct {
     const char       *entryName;
     const DataHeader *pHeader;
@@ -81,11 +81,11 @@ typedef struct  {
 
 /* definition of OffsetTOC struct types moved to ucmndata.h */
 
-/*----------------------------------------------------------------------------------*
- *                                                                                  *
- *    entry point lookup implementations                                            *
- *                                                                                  *
- *----------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------*
+ *                                                                             *
+ *    entry point lookup implementations                                       *
+ *                                                                             *
+ *-----------------------------------------------------------------------------*/
 static uint32_t offsetTOCEntryCount(const UDataMemory *pData) {
     int32_t          retVal=0;
     const UDataOffsetTOC *toc = (UDataOffsetTOC *)pData->toc;
@@ -177,39 +177,50 @@ static const DataHeader *pointerTOCLookupFn(const UDataMemory *pData,
                    UErrorCode *pErrorCode) {
     if(pData->toc!=NULL) {
         const PointerTOC *toc = (PointerTOC *)pData->toc;
-        uint32_t start, limit, number;
+        uint32_t start, limit, number, lastNumber;
+        int32_t strResult;
 
 #if defined (UDATA_DEBUG_DUMP)
         /* list the contents of the TOC each time .. not recommended */
         for(start=0;start<toc->count;start++) {
-          fprintf(stderr, "\tx%d: %s\n", start, toc->entry[start].entryName);
+            fprintf(stderr, "\tx%d: %s\n", start, toc->entry[start].entryName);
         }
 #endif
 
         /* perform a binary search for the data in the common data's table of contents */
         start=0;
         limit=toc->count;   
+        lastNumber=limit;
 
         if (limit == 0) {       /* Stub common data library used during build is empty. */
             return NULL;
         }
 
-        while(start<limit-1) {
-            number=(start+limit)/2;
-            if(uprv_strcmp(name, toc->entry[number].entryName)<0) {
+        for (;;) {
+            number = (start+limit)/2;
+            if (lastNumber == number) {	/* Have we moved? */
+                break;	/* We haven't moved, and it wasn't found. */
+            }
+            lastNumber = number;
+            strResult = uprv_strcmp(name, toc->entry[number].entryName);
+            if(strResult<0) {
                 limit=number;
-            } else {
+            } else if (strResult>0) {
                 start=number;
             }
+            else {
+                /* found it */
+#ifdef UDATA_DEBUG
+                fprintf(STDErr, "%s: Found.\n", toc->entry[number].entryName);
+#endif
+                *pLength=-1;
+                return UDataMemory_normalizeDataPointer(toc->entry[number].pHeader);
+            }
         }
-
-        if(uprv_strcmp(name, toc->entry[start].entryName)==0) {
-            /* found it */
-            *pLength=-1;
-            return UDataMemory_normalizeDataPointer(toc->entry[start].pHeader);
-        } else {
-            return NULL;
-        }
+#ifdef UDATA_DEBUG
+        fprintf(stderr, "%s: Not found.\n", name);
+#endif
+        return NULL;
     } else {
         return pData->pHeader;
     }
@@ -223,7 +234,7 @@ static const commonDataFuncs ToCPFuncs = {pointerTOCLookupFn, pointerTOCEntryCou
 /*----------------------------------------------------------------------*
  *                                                                      *
  *  checkCommonData   Validate the format of a common data file.        *
- *                    Fill in the virtual function ptr based on TOC type  *
+ *                    Fill in the virtual function ptr based on TOC type *
  *                    If the data is invalid, close the UDataMemory     *
  *                    and set the appropriate error code.               *
  *                                                                      *
