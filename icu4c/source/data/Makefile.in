@@ -1,5 +1,5 @@
 ## Makefile.in for ICU data
-## Copyright (c) 1999-2003, International Business Machines Corporation and
+## Copyright (c) 1999-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -30,7 +30,7 @@ endif
 
 top_builddir_from_tmp = $(patsubst ..%,../..%,$(top_builddir))
 CURDIR=$(shell pwd)
-PKGDATA = $(top_builddir)/tools/pkgdata/pkgdata $(PKGDATA_OPTS) -c -d $(CURDIR)/out
+PKGDATA = $(BINDIR)/pkgdata $(PKGDATA_OPTS) -c -d $(CURDIR)/out
 PKGDATA_VERSIONING = -r $(SO_TARGET_VERSION)
 
 # OBJDATADIR must be a short path (with ..'s) to the data.
@@ -231,32 +231,32 @@ build-dir:
 # DAT FILES
 
 # uprops.icu
-$(BUILDDIR)/$(ICUDT)uprops.icu: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/BidiMirroring.txt $(TOOLDIR)/genprops/genprops$(EXEEXT) $(BUILDDIR)/$(ICUDT)pnames.icu
-	$(INVOKE) $(TOOLDIR)/genprops/genprops -s $(UNICODEDATADIR) -i $(BUILDDIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
+$(BUILDDIR)/$(ICUDT)uprops.icu: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/BidiMirroring.txt $(BINDIR)/genprops$(EXEEXT) $(BUILDDIR)/$(ICUDT)pnames.icu
+	$(INVOKE) $(BINDIR)/genprops -s $(UNICODEDATADIR) -i $(BUILDDIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
 
 # pnames.icu
-$(BUILDDIR)/$(ICUDT)pnames.icu: $(UNICODEDATADIR)/PropertyAliases.txt $(UNICODEDATADIR)/PropertyValueAliases.txt $(UNICODEDATADIR)/Blocks.txt $(COMINCDIR)/uscript.h $(COMINCDIR)/uchar.h $(TOOLDIR)/genpname/genpname$(EXEEXT)
-	$(INVOKE) $(TOOLDIR)/genpname/genpname -d $(BUILDDIR)
+$(BUILDDIR)/$(ICUDT)pnames.icu: $(UNICODEDATADIR)/PropertyAliases.txt $(UNICODEDATADIR)/PropertyValueAliases.txt $(UNICODEDATADIR)/Blocks.txt $(COMINCDIR)/uscript.h $(COMINCDIR)/uchar.h $(BINDIR)/genpname$(EXEEXT)
+	$(INVOKE) $(BINDIR)/genpname -d $(BUILDDIR)
 
 # unorm.icu
-$(BUILDDIR)/$(ICUDT)unorm.icu: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/DerivedNormalizationProps.txt $(UNICODEDATADIR)/BidiMirroring.txt $(TOOLDIR)/gennorm/gennorm$(EXEEXT) $(BUILDDIR)/$(ICUDT)uprops.icu
-	$(INVOKE) $(TOOLDIR)/gennorm/gennorm -s $(UNICODEDATADIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
+$(BUILDDIR)/$(ICUDT)unorm.icu: $(UNICODEDATADIR)/UnicodeData.txt $(UNICODEDATADIR)/DerivedNormalizationProps.txt $(UNICODEDATADIR)/BidiMirroring.txt $(BINDIR)/gennorm$(EXEEXT) $(BUILDDIR)/$(ICUDT)uprops.icu
+	$(INVOKE) $(BINDIR)/gennorm -s $(UNICODEDATADIR) -d $(BUILDDIR) -u $(UNICODE_VERSION)
 
 # ucadata.icu
-$(BUILDDIR)/$(ICUDT)ucadata.icu $(BUILDDIR)/$(ICUDT)invuca.icu: $(UNICODEDATADIR)/FractionalUCA.txt $(TOOLDIR)/genuca/genuca$(EXEEXT) $(BUILDDIR)/$(ICUDT)unorm.icu
-	$(INVOKE) $(TOOLDIR)/genuca/genuca -s $(UNICODEDATADIR) -d $(BUILDDIR) -i $(BUILDDIR) 
+$(BUILDDIR)/$(ICUDT)ucadata.icu $(BUILDDIR)/$(ICUDT)invuca.icu: $(UNICODEDATADIR)/FractionalUCA.txt $(BINDIR)/genuca$(EXEEXT) $(BUILDDIR)/$(ICUDT)unorm.icu
+	$(INVOKE) $(BINDIR)/genuca -s $(UNICODEDATADIR) -d $(BUILDDIR) -i $(BUILDDIR) 
 
 # unames.icu
-$(BUILDDIR)/$(ICUDT)unames.icu: $(UNICODEDATADIR)/UnicodeData.txt $(TOOLDIR)/gennames/gennames$(EXEEXT)
-	$(INVOKE) $(TOOLDIR)/gennames/gennames -1 -d $(BUILDDIR) $(UNICODEDATADIR)/UnicodeData.txt -u $(UNICODE_VERSION)
+$(BUILDDIR)/$(ICUDT)unames.icu: $(UNICODEDATADIR)/UnicodeData.txt $(BINDIR)/gennames$(EXEEXT)
+	$(INVOKE) $(BINDIR)/gennames -1 -d $(BUILDDIR) $(UNICODEDATADIR)/UnicodeData.txt -u $(UNICODE_VERSION)
 
 # cnvalias.icu
-$(BUILDDIR)/$(ICUDT)cnvalias.icu: $(UCMSRCDIR)/convrtrs.txt $(TOOLDIR)/gencnval/gencnval$(EXEEXT)
-	$(INVOKE) $(TOOLDIR)/gencnval/gencnval -d $(BUILDDIR) $(UCMSRCDIR)/convrtrs.txt
+$(BUILDDIR)/$(ICUDT)cnvalias.icu: $(UCMSRCDIR)/convrtrs.txt $(BINDIR)/gencnval$(EXEEXT)
+	$(INVOKE) $(BINDIR)/gencnval -d $(BUILDDIR) $(UCMSRCDIR)/convrtrs.txt
 
 # uidna.spp
-$(BUILDDIR)/$(ICUDT)uidna.spp: $(MISCSRCDIR)/NamePrepProfile.txt $(TOOLDIR)/gensprep/gensprep$(EXEEXT) $(BUILDDIR)/$(ICUDT)uprops.icu $(BUILDDIR)/$(ICUDT)unames.icu $(BUILDDIR)/$(ICUDT)pnames.icu
-	$(INVOKE) $(TOOLDIR)/gensprep/gensprep -d $(BUILDDIR) -i $(BUILDDIR) -s $(MISCSRCDIR) -b uidna -n $(UNICODEDATADIR) -u 3.2.0 -k NamePrepProfile.txt
+$(BUILDDIR)/$(ICUDT)uidna.spp: $(MISCSRCDIR)/NamePrepProfile.txt $(BINDIR)/gensprep$(EXEEXT) $(BUILDDIR)/$(ICUDT)uprops.icu $(BUILDDIR)/$(ICUDT)unames.icu $(BUILDDIR)/$(ICUDT)pnames.icu
+	$(INVOKE) $(BINDIR)/gensprep -d $(BUILDDIR) -i $(BUILDDIR) -s $(MISCSRCDIR) -b uidna -n $(UNICODEDATADIR) -u 3.2.0 -k NamePrepProfile.txt
 
 ####################################################    BRK
 # BRK FILES
@@ -264,27 +264,27 @@ $(BUILDDIR)/$(ICUDT)uidna.spp: $(MISCSRCDIR)/NamePrepProfile.txt $(TOOLDIR)/gens
 thaidict.brk: $(SRCDATADIR)/thaidict.brk
 	$(RMV) $@ && ln -s $(BUILDDIR) $@
 
-$(BUILDDIR)/$(ICUDT)%.brk: $(BRKSRCDIR)/%.txt $(TOOLDIR)/genbrk/genbrk$(EXEEXT) $(DAT_FILES)
-	$(INVOKE) $(TOOLDIR)/genbrk/genbrk -c -i $(BUILDDIR) -r $< -o $@
+$(BUILDDIR)/$(ICUDT)%.brk: $(BRKSRCDIR)/%.txt $(BINDIR)/genbrk$(EXEEXT) $(DAT_FILES)
+	$(INVOKE) $(BINDIR)/genbrk -c -i $(BUILDDIR) -r $< -o $@
 
 ####################################################    CNV
 # CNV FILES
-$(BUILDDIR)/$(ICUDT)%.cnv: $(UCMSRCDIR)/%.ucm $(TOOLDIR)/makeconv/makeconv$(EXEEXT)
-	$(INVOKE) $(TOOLDIR)/makeconv/makeconv -p $(ICUDATA_PLATFORM_NAME) -c -d $(BUILDDIR) $(UCMSRCDIR)/$(<F)
+$(BUILDDIR)/$(ICUDT)%.cnv: $(UCMSRCDIR)/%.ucm $(BINDIR)/makeconv$(EXEEXT)
+	$(INVOKE) $(BINDIR)/makeconv -p $(ICUDATA_PLATFORM_NAME) -c -d $(BUILDDIR) $(UCMSRCDIR)/$(<F)
 
 ####################################################    RES
 # RES FILES
 
 all-RES:  $(RES_FILES)
 
-$(BUILDDIR)/$(ICUDT)%.res: $(LOCSRCDIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT) $(DAT_FILES)
-	$(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(ICUDATA_PLATFORM_NAME) -i $(BUILDDIR) -s $(LOCSRCDIR) -d $(BUILDDIR) $(<F)
+$(BUILDDIR)/$(ICUDT)%.res: $(LOCSRCDIR)/%.txt $(BINDIR)/genrb$(EXEEXT) $(DAT_FILES)
+	$(INVOKE) $(BINDIR)/genrb $(GENRBOPTS) -p $(ICUDATA_PLATFORM_NAME) -i $(BUILDDIR) -s $(LOCSRCDIR) -d $(BUILDDIR) $(<F)
 
-$(BUILDDIR)/$(ICUDT)%.res: $(TRNSSRCDIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT) $(DAT_FILES)
-	$(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(ICUDATA_PLATFORM_NAME) -i $(BUILDDIR) -s $(TRNSSRCDIR) -d $(BUILDDIR) $(<F)
+$(BUILDDIR)/$(ICUDT)%.res: $(TRNSSRCDIR)/%.txt $(BINDIR)/genrb$(EXEEXT) $(DAT_FILES)
+	$(INVOKE) $(BINDIR)/genrb $(GENRBOPTS) -p $(ICUDATA_PLATFORM_NAME) -i $(BUILDDIR) -s $(TRNSSRCDIR) -d $(BUILDDIR) $(<F)
 
-$(BUILDDIR)/$(ICUDT)%.res: $(MISCSRCDIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT)
-	$(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(ICUDATA_PLATFORM_NAME) -i $(BUILDDIR) -s $(MISCSRCDIR) -d $(BUILDDIR) $(<F)
+$(BUILDDIR)/$(ICUDT)%.res: $(MISCSRCDIR)/%.txt $(BINDIR)/genrb$(EXEEXT)
+	$(INVOKE) $(BINDIR)/genrb $(GENRBOPTS) -p $(ICUDATA_PLATFORM_NAME) -i $(BUILDDIR) -s $(MISCSRCDIR) -d $(BUILDDIR) $(<F)
 
 $(BUILDDIR)/res_index.txt: $(SRCLISTDEPS)
 	@echo "generating $@ (list of installed locales)"; \
@@ -301,8 +301,8 @@ $(BUILDDIR)/res_index.txt: $(SRCLISTDEPS)
 clean-resindex:
 	-$(RMV) $(BUILDDIR)/res_index.txt $(BUILDDIR)/icudata.lst
 
-$(BUILDDIR)/$(ICUDT)%.res: $(INDEX_FILES) $(TOOLDIR)/genrb/genrb$(EXEEXT)
-	$(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(ICUDATA_PLATFORM_NAME) -i $(BUILDDIR) -d $(BUILDDIR) $(INDEX_FILES)
+$(BUILDDIR)/$(ICUDT)%.res: $(INDEX_FILES) $(BINDIR)/genrb$(EXEEXT)
+	$(INVOKE) $(BINDIR)/genrb $(GENRBOPTS) -p $(ICUDATA_PLATFORM_NAME) -i $(BUILDDIR) -d $(BUILDDIR) $(INDEX_FILES)
 
 ###################################################################
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
@@ -373,43 +373,43 @@ $(TESTBUILDDIR)/$(TESTDT)test.icu: $(TOOLDIR)/gentest/gentest$(EXEEXT)
 $(TESTBUILDDIR)/testtable32.txt:  $(TOOLDIR)/gentest/gentest$(EXEEXT)
 	$(INVOKE) $(TOOLDIR)/gentest/gentest -r -d $(TESTBUILDDIR) 
 
-$(TESTBUILDDIR)/$(TESTDT)testtable32.res: $(TESTBUILDDIR)/testtable32.txt $(TOOLDIR)/genrb/genrb$(EXEEXT)
-	$(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(TESTDATA) -q -s $(TESTBUILDDIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) $(<F)
+$(TESTBUILDDIR)/$(TESTDT)testtable32.res: $(TESTBUILDDIR)/testtable32.txt $(BINDIR)/genrb$(EXEEXT)
+	$(INVOKE) $(BINDIR)/genrb $(GENRBOPTS) -p $(TESTDATA) -q -s $(TESTBUILDDIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) $(<F)
 
 # Targets for nfscsi.spp
-$(TESTBUILDDIR)/$(TESTDT)nfscsi.spp: $(TOOLDIR)/gensprep/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_cs_prep_ci.txt
+$(TESTBUILDDIR)/$(TESTDT)nfscsi.spp: $(BINDIR)/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_cs_prep_ci.txt
 	@echo Building nfscsi.icu
-	$(INVOKE) $(TOOLDIR)/gensprep/gensprep -s $(TESTSRCDATADIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) -b nfscsi -p $(TESTDATA) -u 3.2.0 nfs4_cs_prep_ci.txt
+	$(INVOKE) $(BINDIR)/gensprep -s $(TESTSRCDATADIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) -b nfscsi -p $(TESTDATA) -u 3.2.0 nfs4_cs_prep_ci.txt
 
 # Targets for nfscss.spp
-$(TESTBUILDDIR)/$(TESTDT)nfscss.spp: $(TOOLDIR)/gensprep/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_cs_prep_cs.txt
+$(TESTBUILDDIR)/$(TESTDT)nfscss.spp: $(BINDIR)/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_cs_prep_cs.txt
 	@echo Building nfscss.icu
-	$(INVOKE) $(TOOLDIR)/gensprep/gensprep -s $(TESTSRCDATADIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) -b nfscss -p $(TESTDATA) -u 3.2.0 nfs4_cs_prep_cs.txt
+	$(INVOKE) $(BINDIR)/gensprep -s $(TESTSRCDATADIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) -b nfscss -p $(TESTDATA) -u 3.2.0 nfs4_cs_prep_cs.txt
 
 # Targets for nfscis.spp
-$(TESTBUILDDIR)/$(TESTDT)nfscis.spp: $(TOOLDIR)/gensprep/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_cis_prep.txt
+$(TESTBUILDDIR)/$(TESTDT)nfscis.spp: $(BINDIR)/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_cis_prep.txt
 	@echo Building nfscis.spp
-	$(INVOKE) $(TOOLDIR)/gensprep/gensprep -s $(TESTSRCDATADIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) -b nfscis -p $(TESTDATA) -k -n $(UNICODEDATADIR) -u 3.2.0 nfs4_cis_prep.txt
+	$(INVOKE) $(BINDIR)/gensprep -s $(TESTSRCDATADIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) -b nfscis -p $(TESTDATA) -k -n $(UNICODEDATADIR) -u 3.2.0 nfs4_cis_prep.txt
 
 # Targets for nfsmxs.spp
-$(TESTBUILDDIR)/$(TESTDT)nfsmxs.spp: $(TOOLDIR)/gensprep/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_mixed_prep_s.txt
+$(TESTBUILDDIR)/$(TESTDT)nfsmxs.spp: $(BINDIR)/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_mixed_prep_s.txt
 	@echo Building nfsmxs.spp
-	$(INVOKE) $(TOOLDIR)/gensprep/gensprep -s $(TESTSRCDATADIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) -b nfsmxs -p $(TESTDATA) -k -n $(UNICODEDATADIR) -u 3.2.0 nfs4_mixed_prep_s.txt
+	$(INVOKE) $(BINDIR)/gensprep -s $(TESTSRCDATADIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) -b nfsmxs -p $(TESTDATA) -k -n $(UNICODEDATADIR) -u 3.2.0 nfs4_mixed_prep_s.txt
 
 # Targets for nfsmxp.spp
-$(TESTBUILDDIR)/$(TESTDT)nfsmxp.spp: $(TOOLDIR)/gensprep/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_mixed_prep_p.txt
+$(TESTBUILDDIR)/$(TESTDT)nfsmxp.spp: $(BINDIR)/gensprep$(EXEEXT) $(TESTSRCDATADIR)/nfs4_mixed_prep_p.txt
 	@echo Building nfsmxp.spp
-	$(INVOKE) $(TOOLDIR)/gensprep/gensprep -s $(TESTSRCDATADIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) -b nfsmxp -p $(TESTDATA) -k -n $(UNICODEDATADIR) -u 3.2.0 nfs4_mixed_prep_p.txt
+	$(INVOKE) $(BINDIR)/gensprep -s $(TESTSRCDATADIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) -b nfsmxp -p $(TESTDATA) -k -n $(UNICODEDATADIR) -u 3.2.0 nfs4_mixed_prep_p.txt
 
-$(TESTBUILDDIR)/$(TESTDT)%.cnv: $(TESTSRCDATADIR)/%.ucm $(TOOLDIR)/makeconv/makeconv$(EXEEXT)
-	$(INVOKE) $(TOOLDIR)/makeconv/makeconv -p $(TESTDATA) -c -d $(TESTBUILDDIR) $(TESTSRCDATADIR)/$(<F)
+$(TESTBUILDDIR)/$(TESTDT)%.cnv: $(TESTSRCDATADIR)/%.ucm $(BINDIR)/makeconv$(EXEEXT)
+	$(INVOKE) $(BINDIR)/makeconv -p $(TESTDATA) -c -d $(TESTBUILDDIR) $(TESTSRCDATADIR)/$(<F)
 
-$(TESTBUILDDIR)/$(TESTDT)%.res: $(TESTSRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb$(EXEEXT) $(DAT_FILES)
-	$(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -p $(TESTDATA) -q -s $(TESTSRCDATADIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) $(<F)
+$(TESTBUILDDIR)/$(TESTDT)%.res: $(TESTSRCDATADIR)/%.txt $(BINDIR)/genrb$(EXEEXT) $(DAT_FILES)
+	$(INVOKE) $(BINDIR)/genrb $(GENRBOPTS) -p $(TESTDATA) -q -s $(TESTSRCDATADIR) -i $(BUILDDIR) -d $(TESTBUILDDIR) $(<F)
 
-$(TESTBUILDDIR)/$(TESTDT)iscii.res:  $(TESTSRCDATADIR)/iscii.bin $(TOOLDIR)/genrb/genrb$(EXEEXT)
+$(TESTBUILDDIR)/$(TESTDT)iscii.res:  $(TESTSRCDATADIR)/iscii.bin $(BINDIR)/genrb$(EXEEXT)
 	@echo Testing genrb -e option
-	@ICU_DATA=$(BUILDDIR) $(INVOKE) $(TOOLDIR)/genrb/genrb $(GENRBOPTS) -s $(TESTSRCDATADIR) -p $(TESTDATA) -eISCII,version=0 -d $(TESTBUILDDIR) $(<F) >/dev/null  || ( echo "WARNING: could not open ISCII - it may have been disabled." | tee $@ )
+	@ICU_DATA=$(BUILDDIR) $(INVOKE) $(BINDIR)/genrb $(GENRBOPTS) -s $(TESTSRCDATADIR) -p $(TESTDATA) -eISCII,version=0 -d $(TESTBUILDDIR) $(<F) >/dev/null  || ( echo "WARNING: could not open ISCII - it may have been disabled." | tee $@ )
 	@echo Finished testing genrb -e option
 
 ################################################################### TYP

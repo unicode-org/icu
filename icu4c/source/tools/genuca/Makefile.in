@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - tools/genuca
-## Copyright (c) 1999-2003, International Business Machines Corporation and
+## Copyright (c) 1999-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -12,9 +12,11 @@ include $(top_builddir)/icudefs.mk
 
 ##
 
+TARGET_STUB_NAME = genuca
+
 SECTION = 8
 
-MAN_FILES = $(TARGET:$(EXEEXT)=).$(SECTION)
+MANX_FILES = $(TARGET_STUB_NAME).$(SECTION)
 
 ## Build directory information
 subdir = tools/genuca
@@ -23,7 +25,7 @@ subdir = tools/genuca
 CLEANFILES = *~ $(MAN_FILES) $(DEPS)
 
 ## Target information
-TARGET = genuca$(EXEEXT)
+TARGET = $(BINDIR)/$(TARGET_STUB_NAME)$(EXEEXT)
 
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n -I$(srcdir)/../toolutil
 LIBS = $(LIBICUI18N) $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)

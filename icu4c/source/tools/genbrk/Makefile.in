@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - tools/genbrk
-## Copyright (c) 2002-2003 International Business Machines Corporation and
+## Copyright (c) 2002-2004 International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -12,9 +12,11 @@ include $(top_builddir)/icudefs.mk
 
 ##
 
+TARGET_STUB_NAME = genbrk
+
 SECTION = 1
 
-MAN_FILES = $(TARGET:$(EXEEXT)=).$(SECTION)
+MAN_FILES = $(TARGET_STUB_NAME).$(SECTION)
 
 ## Build directory information
 subdir = tools/genbrk
@@ -23,7 +25,7 @@ subdir = tools/genbrk
 CLEANFILES = *~ $(MAN_FILES) $(DEPS) 
 
 ## Target information
-TARGET = genbrk$(EXEEXT)
+TARGET = $(BINDIR)/$(TARGET_STUB_NAME)$(EXEEXT)
 
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
 LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)

@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - tools/genpname
-## Copyright (c) 1999-2003, International Business Machines Corporation and
+## Copyright (c) 1999-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ## Steven R. Loomis
 
@@ -16,11 +16,13 @@ include $(top_builddir)/icudefs.mk
 ## Build directory information
 subdir = tools/genpname
 
+TARGET_STUB_NAME = genpname
+
 ## Extra files to remove for 'make clean'
 CLEANFILES = *~ $(DEPS)
 
 ## Target information
-TARGET = genpname$(EXEEXT)
+TARGET = $(BINDIR)/$(TARGET_STUB_NAME)$(EXEEXT)
 
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
 LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)

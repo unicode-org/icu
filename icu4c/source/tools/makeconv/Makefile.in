@@ -1,5 +1,5 @@
 ## Makefile.in for ICU - tools/makeconv
-## Copyright (c) 1999-2003, International Business Machines Corporation and
+## Copyright (c) 1999-2004, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ## Stephen F. Booth
 
@@ -13,11 +13,11 @@ include $(top_builddir)/icudefs.mk
 
 ##
 
+TARGET_STUB_NAME = makeconv
+
 SECTION = 1
 
-MANX_FILES = $(TARGET:$(EXEEXT)=).$(SECTION)
-
-GENERATED_MAN_FILES = $(TARGET:$(EXEEXT)=).$(SECTION)
+MANX_FILES = $(TARGET_STUB_NAME).$(SECTION)
 
 ALL_MAN_FILES = $(MANX_FILES)
 
@@ -26,10 +26,10 @@ ALL_MAN_FILES = $(MANX_FILES)
 subdir = tools/makeconv
 
 ## Extra files to remove for 'make clean'
-CLEANFILES = *~ $(GENERATED_MAN_FILES) $(DEPS) $(CNV_FILES) $(TEST_CNV_FILES)
+CLEANFILES = *~ $(ALL_MAN_FILES) $(DEPS)
 
 ## Target information
-TARGET = makeconv$(EXEEXT)
+TARGET = $(BINDIR)/$(TARGET_STUB_NAME)$(EXEEXT)
 
 CPPFLAGS += -I$(top_builddir)/common -I$(top_srcdir)/common -I$(srcdir)/../toolutil
 LIBS = $(LIBICUTOOLUTIL) $(LIBICUUC) $(DEFAULT_LIBS) $(LIB_M)
@@ -60,11 +60,6 @@ all-local: $(TARGET) $(ALL_MAN_FILES)
 install-local: all-local install-man
 	$(MKINSTALLDIRS) $(DESTDIR)$(bindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(bindir)/$(TARGET)
-#	$(MKINSTALLDIRS) $(DESTDIR)$(pkglibdir)
-#	@list='$(notdir $(CNV_FILES)) convrtrs.txt'; for file in $$list; do \
-#		echo $(INSTALL_DATA) $(top_builddir)/data/$$file $(DESTDIR)$(pkglibdir)/$$file; \
-#		$(INSTALL_DATA) $(top_builddir)/data/$$file $(DESTDIR)$(pkglibdir)/$$file; \
-#	done
 
 dist-local:
 
