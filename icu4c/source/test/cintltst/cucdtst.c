@@ -1829,7 +1829,7 @@ void TestUScriptCodeAPI(){
         /* bounds */
         U_UCAS, U_ARABIC,
         /* bogus names should return invalid code */
-        U_INVALID_CODE, U_INVALID_CODE, U_INVALID_CODE,
+        U_INVALID_SCRIPT_CODE, U_INVALID_SCRIPT_CODE, U_INVALID_SCRIPT_CODE,
     };
     int i =0;
     int numErrors =0;
