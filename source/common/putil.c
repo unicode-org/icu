@@ -698,7 +698,7 @@ uprv_tzname(int n)
 #endif
 
 #if defined(WIN32) || defined(OS2)
-  return _tzname[index];
+  return _tzname[n];
 #endif
 }
 
