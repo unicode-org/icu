@@ -4,7 +4,7 @@
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
 */
-// $Revision: 1.11 $
+// $Revision: 1.12 $
 //
 // Provides functionality for mapping between
 // LCID and Posix IDs.
@@ -160,7 +160,7 @@ static const ILcidPosixElement en[] = {
     {0x0409, "en_US"},
     {0x2409, "en_VI"},    //Todo: Data does not exist
     {0x1c09, "en_ZA"},
-    {0x3009, "en_ZW"}     //Todo: Data does not exist
+    {0x3009, "en_ZW"}
 };
 
 static const ILcidPosixElement es[] = {
@@ -188,10 +188,10 @@ static const ILcidPosixElement es[] = {
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0425, et, et_EE)
-ILCID_POSIX_ELEMENT_ARRAY(0x042d, eu, eu_ES)    //Todo: Data does not exist
-ILCID_POSIX_ELEMENT_ARRAY(0x0429, fa, fa_IR)    //Todo: Data does not exist
+ILCID_POSIX_ELEMENT_ARRAY(0x042d, eu, eu_ES)
+ILCID_POSIX_ELEMENT_ARRAY(0x0429, fa, fa_IR)
 ILCID_POSIX_ELEMENT_ARRAY(0x040b, fi, fi_FI)
-ILCID_POSIX_ELEMENT_ARRAY(0x0438, fo, fo_FO)    //Todo: Data does not exist
+ILCID_POSIX_ELEMENT_ARRAY(0x0438, fo, fo_FO)
 
 static const ILcidPosixElement fr[] = {
     {0x0c,   "fr"},
@@ -209,7 +209,7 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0439, hi, hi_IN)
 ILCID_POSIX_ELEMENT_ARRAY(0x041a, hr, hr_HR)
 ILCID_POSIX_ELEMENT_ARRAY(0x040e, hu, hu_HU)
 ILCID_POSIX_ELEMENT_ARRAY(0x042b, hy, hy_AM)    //Todo: Data does not exist
-ILCID_POSIX_ELEMENT_ARRAY(0x0421, id, id_ID)    //Todo: Data does not exist
+ILCID_POSIX_ELEMENT_ARRAY(0x0421, id, id_ID)
 //ILCID_POSIX_ELEMENT_ARRAY(0x0421, in, in_ID)    //Should really be id_ID
 ILCID_POSIX_ELEMENT_ARRAY(0x040f, is, is_IS)
 
