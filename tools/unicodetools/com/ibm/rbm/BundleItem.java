@@ -5,8 +5,8 @@
  *****************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/rbm/BundleItem.java,v $ 
- * $Date: 2004/06/29 18:45:42 $ 
- * $Revision: 1.2 $
+ * $Date: 2004/07/11 02:00:30 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************
  */
@@ -240,7 +240,8 @@ public class BundleItem {
      */
     
     public void setModifiedDate(String dateStr) {
-        if (dateStr != null) modified = parseDateFromString(dateStr);
+        if (dateStr != null)
+        	modified = parseDateFromString(dateStr);
     }
     
     /**
@@ -379,8 +380,10 @@ public class BundleItem {
 	
     private Date parseDateFromString(String dateStr) {
         SimpleDateFormat format = null;
-        if (dateStr.length() == 10) format = new SimpleDateFormat("yyyy-MM-dd"); // Simple format
-        else format = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");              // TMX ISO format
+        if (dateStr.length() == 10)
+        	format = new SimpleDateFormat("yyyy-MM-dd"); // Simple format
+        else
+        	format = new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'");              // TMX ISO format
         try {
             return format.parse(dateStr);
         } catch (ParseException pe) {

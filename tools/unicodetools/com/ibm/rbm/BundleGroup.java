@@ -5,8 +5,8 @@
  *****************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/rbm/BundleGroup.java,v $ 
- * $Date: 2004/06/29 18:45:42 $ 
- * $Revision: 1.2 $
+ * $Date: 2004/07/11 02:00:30 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************
  */
@@ -75,16 +75,11 @@ public class BundleGroup {
      */
 	
     public void addBundleItem(BundleItem item) {
-        Iterator iter = items.iterator();
-        boolean found = false;
-        while (iter.hasNext()) {
-            BundleItem oldItem = (BundleItem)iter.next();
-            if (oldItem == item) found = true;
-        }
-        if (!found) {
-            item.setParentGroup(this);
-            items.add(item);
-        }
+    	if (items.contains(item)) {
+    		items.remove(item);
+    	}
+        item.setParentGroup(this);
+        items.add(item);
     }
 	
     /**
