@@ -6,8 +6,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/build.xml,v $ 
-* $Date: 2001/07/17 20:22:28 $ 
-* $Revision: 1.34 $
+* $Date: 2001/07/18 01:35:59 $ 
+* $Revision: 1.35 $
 *
 *******************************************************************************
 * This is the ant build file for ICU4J.  See readme.html for more information.
@@ -152,10 +152,10 @@
     the root ICU4J directory. The exclude pattern ${src.dir}/data/unicode/UnicodeData-*.txt
     and ${src.dir}/data/unicode/SpecialCasing-*.txt
     eliminates old archive copies like SpecialCasing-2.txt and
-    UnicodeData-2.1.8.txt -->
+    UnicodeData-2.1.8.txt etc -->
     <zip zipfile="${zipbin.file}"
          basedir="."
-         excludes="${richedit.dist.dir},test_*,${src.dir}/data/unicode/UnicodeData-*.txt,${src.dir}/data/unicode/SpecialCasing-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*"/>
+         excludes="${richedit.dist.dir},test_*,${src.dir}/data/unicode/UnicodeData-*.txt,${src.dir}/data/unicode/SpecialCasing-*.txt,${src.dir}/data/unicode/CompositionExclusions-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*"/>
   </target>
 
   <target name="zip" depends="init">
@@ -167,7 +167,7 @@
     UnicodeData-2.1.8.txt -->
     <zip zipfile="${zip.file}"
          basedir="."
-         excludes="${richedit.dist.dir},test_*,${src.dir}/data/unicode/UnicodeData-*.txt,${src.dir}/data/unicode/SpecialCasing-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*,${doc.dir}/**,${jar.file}"/>
+         excludes="${richedit.dist.dir},test_*,${src.dir}/data/unicode/UnicodeData-*.txt,${src.dir}/data/unicode/SpecialCasing-*.txt,${src.dir}/data/unicode/CompositionExclusions-*.txt,${obsolete.dir}/**,**/*~,${src.dir}/**/*.class,${build.dir}/**,**/CVS/**/*,${doc.dir}/**,${jar.file}"/>
   </target>
 
   <target name="clean" depends="init">
