@@ -1868,7 +1868,7 @@ static void TestContractionCanonical()
     if (U_FAILURE(status)) {
         log_err("Error opening string search %s\n", u_errorName(status));
     }   
-    
+        
     while (CONTRACTIONCANONICAL[count].text != NULL) {
         u_unescape(CONTRACTIONCANONICAL[count].text, text, 128);
         u_unescape(CONTRACTIONCANONICAL[count].pattern, pattern, 128);
