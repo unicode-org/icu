@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001, International Business Machines
+*   Copyright (C) 2001-2002, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -71,6 +71,20 @@ enum {
 #define _NORM_MIN_JAMO_V        0xfff20000
 #define _NORM_JAMO_V_TOP        0xfff30000
 
+/* value constants for auxTrie */
+enum {
+    _NORM_AUX_CANON_FLAG_SHIFT=11,
+    _NORM_AUX_FNC_SHIFT=20,
+    _NORM_AUX_COMP_EX_SHIFT=30,
+    _NORM_AUX_IS_LEAD_SHIFT=31
+};
+
+#define _NORM_AUX_MAX_FNC       ((int32_t)1<<(_NORM_AUX_COMP_EX_SHIFT-_NORM_AUX_FNC_SHIFT))
+
+#define _NORM_AUX_CANON_SET_MASK    (((uint32_t)1<<_NORM_AUX_CANON_FLAG_SHIFT)-1)
+#define _NORM_AUX_FNC_MASK          ((uint32_t)(_NORM_AUX_MAX_FNC-1)<<_NORM_AUX_FNC_SHIFT)
+#define _NORM_AUX_COMP_EX_MASK      ((uint32_t)1<<_NORM_AUX_COMP_EX_SHIFT)
+#define _NORM_AUX_IS_LEAD_MASK      ((uint32_t)1<<_NORM_AUX_IS_LEAD_SHIFT)
 
 /* indexes[] value names */
 enum {
@@ -88,6 +102,9 @@ enum {
     _NORM_INDEX_MIN_NFKD_NO_MAYBE,      /* first code point with quick check NFKD NO/MAYBE */
 
     _NORM_INDEX_FCD_TRIE_SIZE,          /* number of bytes in FCD trie */
+
+    _NORM_INDEX_AUX_TRIE_SIZE,          /* number of bytes in the auxiliary trie */
+    _NORM_INDEX_UNICODE_SET_COUNT,      /* number of int32_t in the UnicodeSet array */
 
     _NORM_INDEX_TOP=32                  /* changing this requires a new formatVersion */
 };
@@ -223,10 +240,18 @@ U_NAMESPACE_END
 #endif
 
 /**
- * Description of the format of unorm.dat version 2.0.
+ * internal API, used by uprops.cpp
+ * @internal
+ */
+U_CAPI UBool U_EXPORT2
+unorm_internalIsFullCompositionExclusion(UChar32 c);
+
+/**
+ * Description of the format of unorm.dat version 2.1.
  *
  * Main change from version 1 to version 2:
  * Use of new, common UTrie instead of normalization-specific tries.
+ * Change to version 2.1: add third/auxiliary trie with associated data.
  *
  * For more details of how to use the data structures see the code
  * in unorm.cpp (runtime normalization code) and
@@ -244,12 +269,18 @@ U_NAMESPACE_END
  * UTrie normTrie;                              -- size in bytes=indexes[_NORM_INDEX_TRIE_SIZE]
  * 
  * uint16_t extraData[extraDataTop];            -- extraDataTop=indexes[_NORM_INDEX_UCHAR_COUNT]
+ *                                                 extraData[0] contains the number of units for
+ *                                                 FC_NFKC_Closure (formatVersion>=2.1)
  *
  * uint16_t combiningTable[combiningTableTop];  -- combiningTableTop=indexes[_NORM_INDEX_COMBINE_DATA_COUNT]
  *                                                 combiningTableTop may include one 16-bit padding unit
  *                                                 to make sure that fcdTrie is 32-bit-aligned
  *
  * UTrie fcdTrie;                               -- size in bytes=indexes[_NORM_INDEX_FCD_TRIE_SIZE]
+ *
+ * UTrie auxTrie;                               -- size in bytes=indexes[_NORM_INDEX_AUX_TRIE_SIZE]
+ *
+ * int32_t unicodeSets[unicodeSetsTop]          -- unicodeSetsTop=indexes[_NORM_INDEX_UNICODE_SET_COUNT]
  *
  *
  * The indexes array contains lengths and sizes of the following arrays and structures
@@ -417,6 +448,34 @@ U_NAMESPACE_END
  * This is done only if the 16-bit data word is not zero.
  * If the code unit is a leading surrogate and the data word is not zero,
  * then instead of cc's it contains the offset for the second trie lookup.
+ *
+ *
+ * - Auxiliary trie and data
+ *
+ * The auxiliary 32-bit trie contains data for additional properties.
+ * Bits
+ *     31   set if lead surrogate offset
+ *     30   composition exclusion
+ * 29..20   index into extraData[] to FC_NFKC_Closure string (bit 31==0),
+ *          or lead surrogate offset (bit 31==1)
+ * 19..16   skippable flags
+ * 15..13   reserved
+ *     11   flag: not a safe starter for canonical closure
+ * 10.. 0   index to UnicodeSet for canonical closure
+ *
+ * - FC_NFKC_Closure strings in extraData[]
+ *
+ * Strings are either stored as a single code unit or as the length
+ * followed by that many units.
+ *   const UChar *s=extraData+(index from auxTrie data bits 29..20);
+ *   int32_t length;
+ *   if(*s<0xff00) {
+ *     // s points to the single-unit string
+ *     length=1;
+ *   } else {
+ *     length=*s&0xff;
+ *     ++s;
+ *   }
  */
 
 #endif
