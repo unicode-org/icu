@@ -189,7 +189,8 @@ void IndicLatinTest::TestDevanagariLatinRT(){
         expect(*latinToDev,CharsToUnicodeString(source[i]),CharsToUnicodeString(expected[i]));
         expect(*devToLatin,CharsToUnicodeString(expected[i]),CharsToUnicodeString(source[i]));
     }
-        
+    delete latinToDev;
+    delete devToLatin;
 }
 void IndicLatinTest::TestTeluguLatinRT(){
     const int MAX_LEN=10;
@@ -235,6 +236,8 @@ void IndicLatinTest::TestTeluguLatinRT(){
         expect(*latinToDev,CharsToUnicodeString(source[i]),CharsToUnicodeString(expected[i]));
         expect(*devToLatin,CharsToUnicodeString(expected[i]),CharsToUnicodeString(source[i]));
     }
+    delete latinToDev;
+    delete devToLatin;
 }
 
 void IndicLatinTest::TestSanskritLatinRT(){
@@ -291,6 +294,8 @@ void IndicLatinTest::TestSanskritLatinRT(){
         expect(*latinToDev,CharsToUnicodeString(source[i]),CharsToUnicodeString(expected[i]));
         expect(*devToLatin,CharsToUnicodeString(expected[i]),CharsToUnicodeString(source[i]));
     }
+    delete latinToDev;
+    delete devToLatin;
 }
 
 
