@@ -240,6 +240,15 @@ public class UOption {
     }
 
     /**
+     * Allows the default to be set in an option list.
+     * @param s
+     * @return this
+     */public UOption setDefault(String s) {
+    	value = s;
+        return this;
+    }
+     
+    /**
      * Convenient method.
      */
     public static int parseArgs(String argv[], UOption options[]) {
