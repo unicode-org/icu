@@ -588,7 +588,7 @@ void TestConvert()
       /*Calls the Conversion Routine */
       testLong1 = MAX_FILE_LEN;
       log_verbose("\n---Testing ucnv_fromUChars()\n");
-           targetcapacity = ucnv_fromUChars(myConverter, output_cp_buffer, testLong1,  uchar1, &err);
+           targetcapacity = ucnv_fromUChars(myConverter, output_cp_buffer, testLong1,  uchar1, -1, &err);
       if (U_FAILURE(err))  
       {
             log_err("\nFAILURE...%s\n", myErrorName(err));
