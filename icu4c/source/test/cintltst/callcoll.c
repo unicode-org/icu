@@ -68,6 +68,8 @@ static void TestVariableTop(void);
 /* Test surrogates */
 static void TestSurrogates(void);
 
+static void TestInvalidRules(void);
+
 #endif
 
 const UChar testSourceCases[][16] = {
@@ -228,7 +230,9 @@ void addAllCollTest(TestNode** root)
     addTest(root, &TestExtra, "tscoll/callcoll/TestExtra");
     addTest(root, &TestJB581, "tscoll/callcoll/TestJB581");      
     addTest(root, &TestVariableTop, "tscoll/callcoll/TestVariableTop");      
-    addTest(root, &TestSurrogates, "tscoll/callcoll/TestSurrogates");      
+    addTest(root, &TestSurrogates, "tscoll/callcoll/TestSurrogates");
+    addTest(root, &TestInvalidRules, "tscoll/callcoll/TestInvalidRules");
+    
 }
 
 static void doTestVariant(UCollator* myCollation, const UChar source[], const UChar target[], UCollationResult result)
@@ -642,6 +646,52 @@ static void TestSurrogates(void)
     ucol_close(myCollation);
     enCollation = NULL;
     myCollation = NULL;
+}
+
+/*
+ *### TODO: Add more invalid rules to test all different scenarios.
+ *
+ */
+static void 
+TestInvalidRules(){
+#define MAX_ERROR_STATES 2
+
+    static const char* rulesArr[MAX_ERROR_STATES] = {
+        "& C < ch, cH, Ch[this should fail]<d",
+        "& C < ch, cH, & Ch[variable top]"
+    };
+    static const char* preContextArr[MAX_ERROR_STATES] = {
+        "his should fail",
+        "& C < ch, cH, ",
+
+    };
+    static const char* postContextArr[MAX_ERROR_STATES] = {
+        "<d",
+        " Ch[variable t"
+    };
+    int i = 0;
+    for(i;i<MAX_ERROR_STATES;i++){
+        UChar rules[1000]       = { '\0' };
+        UChar preContextExp[1000]  = { '\0' };
+        UChar postContextExp[1000] = { '\0' };
+        UParseError parseError;
+        UErrorCode status = U_ZERO_ERROR;
+        UCollator* coll=0;
+        u_charsToUChars(rulesArr[i],rules,1000);
+        u_charsToUChars(preContextArr[i],preContextExp,1000);
+        u_charsToUChars(postContextArr[i],postContextExp,1000);
+        /* clean up stuff in parseError */
+        u_memset(parseError.preContext,0x0000,U_PARSE_CONTEXT_LEN);      
+        u_memset(parseError.postContext,0x0000,U_PARSE_CONTEXT_LEN);
+        /* open the rules and test */
+        coll = ucol_openRules(rules,u_strlen(rules),UCOL_NO_NORMALIZATION,UCOL_DEFAULT_STRENGTH,&parseError,&status);
+        if(u_strcmp(parseError.preContext,preContextExp)!=0){
+            log_err("preContext in UParseError for ucol_openRules does not match\n");
+        }
+        if(u_strcmp(parseError.postContext,postContextExp)!=0){
+            log_err("postContext in UParseError for ucol_openRules does not match\n");
+        }
+    }  
 }
 
 #endif
