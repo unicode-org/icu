@@ -1473,7 +1473,8 @@ void TransliteratorTest::TestContext() {
            "xadabdabzy");
 }
 
-void TransliteratorTest::TestSupplemental() {
+void TransliteratorTest::TestSupplemental() { 
+
     expect(CharsToUnicodeString("$a=\\U00010300; $s=[\\U00010300-\\U00010323];"
                                 "a > $a; $s > i;"),
            CharsToUnicodeString("ab\\U0001030Fx"),
@@ -1484,6 +1485,20 @@ void TransliteratorTest::TestSupplemental() {
                                 "($a)($b) > $2 $1;"),
            CharsToUnicodeString("aB\\U00010300\\U00010400c\\U00010401\\U00010301D"),
            CharsToUnicodeString("Ba\\U00010400\\U00010300\\U00010401cD\\U00010301"));
+
+    // k|ax\\U00010300xm
+
+    // k|a\\U00010400\\U00010300xm
+    // ky|\\U00010400\\U00010300xm
+    // ky\\U00010400|\\U00010300xm
+
+    // ky\\U00010400|\\U00010300\\U00010400m
+    // ky\\U00010400y|\\U00010400m
+    expect(CharsToUnicodeString("$a=[a\\U00010300-\\U00010323];"
+                                "$a {x} > | @ \\U00010400;"
+                                "{$a} [^\\u0000-\\uFFFF] > y;"),
+           CharsToUnicodeString("kax\\U00010300xm"),
+           CharsToUnicodeString("ky\\U00010400y\\U00010400m"));
 }
 
 //======================================================================
