@@ -126,8 +126,15 @@ TESTDATABLD=$(ICUP)\source\test\testdata\out\build
 #
 ICUTOOLS=$(ICUP)\source\tools
 
+# The current ICU tools need to be in the path first.
+PATH = $(ICUP)\bin;$(PATH)
 
-PATH = $(PATH);$(ICUP)\bin
+# This variable can be overridden to "-m static" by the project settings,
+# if you want a static data library.
+!IF "$(ICU_PACKAGE_MODE)"==""
+ICU_PACKAGE_MODE=-m dll
+!ENDIF
+
 
 # Suffixes for data files
 .SUFFIXES : .ucm .cnv .dll .dat .res .txt .c
@@ -253,7 +260,7 @@ BRK_FILES = $(ICUDT)sent.brk $(ICUDT)char.brk $(ICUDT)line.brk $(ICUDT)word.brk 
 "$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" : "$(ICUP)\bin\pkgdata.exe" $(CNV_FILES) $(BRK_FILES) "$(ICUBLD)\$(ICUDT)uprops.icu" "$(ICUBLD)\$(ICUDT)unames.icu" "$(ICUBLD)\$(ICUDT)pnames.icu" "$(ICUBLD)\$(ICUDT)unorm.icu" "$(ICUBLD)\$(ICUDT)cnvalias.icu" "$(ICUBLD)\$(ICUDT)ucadata.icu" "$(ICUBLD)\$(ICUDT)invuca.icu" "$(ICUBLD)\$(ICUDT)uidna.spp" $(ALL_RES) "$(ICUBLD)\$(ICUDT)icudata.res" "$(ICUP)\source\stubdata\stubdatabuilt.txt"
 	@echo Building icu data
 	@cd "$(ICUBLD)"
- 	@"$(ICUP)\bin\pkgdata" -f -e $(U_ICUDATA_NAME) -v -m dll -c -p $(ICUPKG) -d "$(ICUBLD)" -s . <<pkgdatain.txt
+ 	@"$(ICUP)\bin\pkgdata" -f -e $(U_ICUDATA_NAME) -v $(ICU_PACKAGE_MODE) -c -p $(ICUPKG) -d "$(ICUBLD)" -s . <<pkgdatain.txt
 $(ICUDT)unorm.icu
 $(ICUDT)uprops.icu
 $(ICUDT)pnames.icu
