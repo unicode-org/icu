@@ -79,8 +79,8 @@ void ucnv_cbFromUWriteBytes (UConverterFromUnicodeArgs *args,
 }
 
 void ucnv_cbFromUWriteUChars(UConverterFromUnicodeArgs *args,
-                             const UChar* source,
-                             int32_t length,
+                             const UChar** source,
+                             const UChar*  sourceLimit,
                              int32_t offsetIndex,
                              UErrorCode * err)
 {
@@ -97,8 +97,6 @@ void ucnv_cbFromUWriteUChars(UConverterFromUnicodeArgs *args,
   */
 
   char *oldTarget;
-  const UChar* mySource = source;
-  const UChar* sourceLimit = source + length;
 
   if(U_FAILURE(*err))
   {
@@ -110,7 +108,7 @@ void ucnv_cbFromUWriteUChars(UConverterFromUnicodeArgs *args,
   ucnv_fromUnicode(args->converter,
                    &args->target,
                    args->targetLimit,
-                   &mySource,
+                   source,
                    sourceLimit,
                    NULL, /* no offsets */
                    FALSE, /* no flush */
@@ -129,7 +127,7 @@ void ucnv_cbFromUWriteUChars(UConverterFromUnicodeArgs *args,
      In fact, here's where we want to return the partially consumed in-source! 
   */
   if(*err == U_INDEX_OUTOFBOUNDS_ERROR)
-         /* && (mySource < source+length && args->target >= args->targetLimit) 
+         /* && (*source < sourceLimit && args->target >= args->targetLimit) 
                     -- S. Hrcek */
   {
     /* Overflowed the target.  Now, we'll write into the charErrorBuffer.
@@ -164,7 +162,7 @@ void ucnv_cbFromUWriteUChars(UConverterFromUnicodeArgs *args,
     ucnv_fromUnicode(args->converter,
                      &newTarget, 
                      newTargetLimit,
-                     &mySource,
+                     source,
                      sourceLimit,
                      NULL,
                      FALSE,
