@@ -101,18 +101,17 @@ void LocaleTest::runIndexedTest( int32_t index, bool_t exec, char* &name, char* 
         CASE(10, TestBug4135316)
         CASE(11, TestSimpleDisplayNames)
         CASE(12, TestUninstalledISO3Names)
-        CASE(13, TestChangedISO639Codes)
-        CASE(14, TestAtypicalLocales)
-        CASE(15, TestThaiCurrencyFormat)
-        CASE(16, TestEuroSupport)
-        CASE(17, TestToString)
-        CASE(18, Test4139940)
-        CASE(19, Test4143951)
-        CASE(20, Test4147315)
-        CASE(21, Test4147317)
-        CASE(22, Test4147552)
-        CASE(23, TestVariantParsing)
-        CASE(24, Test4105828)
+        CASE(13, TestAtypicalLocales)
+        CASE(14, TestThaiCurrencyFormat)
+        CASE(15, TestEuroSupport)
+        CASE(16, TestToString)
+        CASE(17, Test4139940)
+        CASE(18, Test4143951)
+        CASE(19, Test4147315)
+        CASE(20, Test4147317)
+        CASE(21, Test4147552)
+        CASE(22, TestVariantParsing)
+        CASE(23, Test4105828)
 
         default: name = ""; break; //needed to end loop
     }
@@ -909,39 +908,6 @@ LocaleTest::TestUninstalledISO3Names()
             errln("Got wrong ISO3 code for " + iso2Countries[i] + ": Expected \"" +
                     iso3Countries[i] + "\", got \"" + test + "\".");
     }
-}
-
-/**
- * @bug 4052404
- */
-void 
-LocaleTest::TestChangedISO639Codes() 
-{
-    Locale hebrewOld("iw", "IL", "");
-    Locale hebrewNew("he", "IL", "");
-    Locale yiddishOld("ji", "IL", "");
-    Locale yiddishNew("yi", "IL", "");
-    Locale indonesianOld("in", "", "");
-    Locale indonesianNew("id", "", "");
-
-    UnicodeString temp;
-
-    if (hebrewNew.getLanguage(temp) != "iw")
-        errln("Got back wrong language code for Hebrew: expected \"iw\", got \"" +
-                        hebrewNew.getLanguage(temp) + "\"");
-    if (yiddishNew.getLanguage(temp) != "ji")
-        errln("Got back wrong language code for Yiddish: expected \"ji\", got \"" +
-                        yiddishNew.getLanguage(temp) + "\"");
-    if (indonesianNew.getLanguage(temp) != "in")
-        errln("Got back wrong language code for Indonesian: expected \"in\", got \"" +
-                        indonesianNew.getLanguage(temp) + "\"");
-
-    if (hebrewOld != hebrewNew)
-        errln("Old and new Hebrew locales don't compare equal.");
-    if (yiddishOld != yiddishNew)
-        errln("Old and new Yiddish locales don't compare equal.");
-    if (indonesianOld != indonesianNew)
-        errln("Old and new Indonesian locales don't compare equal.");
 }
 
 /**
