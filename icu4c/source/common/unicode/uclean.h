@@ -34,12 +34,15 @@
  *  without contention, in a single thread only.
  *  <p>
  *  Extra, repeated, or otherwise unneeded calls to u_init() do no harm,
- *  other taking a small amount of time.
+ *  other than taking a small amount of time.
  *
  * @param pErrorCode An ICU UErrorCode parameter. It must not be <code>NULL</code>.
- *    An Error will be retuned if some required part of ICU data can not
+ *    An Error will be returned if some required part of ICU data can not
  *    be loaded or initialized.
+ *    The function returns immediately if the input error code indicates a
+ *    failure, as usual.
  *
+ * @draft ICU 2.6
  */  
 U_CAPI void U_EXPORT2 
 u_init(UErrorCode *status);
