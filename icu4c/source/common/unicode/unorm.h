@@ -173,18 +173,6 @@ typedef enum {
    * @obsolete ICU 2.4. Use UNORM_NFKC instead since this API will be removed in that release.
    */
   UCOL_DECOMP_COMPAT_COMP_CAN =5,
-
-  /**
-   * Do not normalize Hangul.
-   * @obsolete ICU 2.2. Obsolete option, to be removed (or moved to private for documentation) in that release.
-   */
-  UCOL_IGNORE_HANGUL    = 16,
-
-  /**
-   * Do not normalize Hangul.
-   * @obsolete ICU 2.2. Obsolete option, to be removed (or moved to private for documentation) in that release.
-   */
-  UNORM_IGNORE_HANGUL    = 16
 #endif /* ICU_UNORM_USE_DEPRECATES */
 } UNormalizationMode;
 
