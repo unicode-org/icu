@@ -390,6 +390,10 @@ SOURCE=.\udatamem.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\uenum.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\uhash.c
 # End Source File
 # Begin Source File
@@ -1816,6 +1820,14 @@ InputPath=.\unicode\udata.h
 # Begin Source File
 
 SOURCE=.\udatamem.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\uenum.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\uenumimp.h
 # End Source File
 # Begin Source File
 
