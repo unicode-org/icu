@@ -83,6 +83,7 @@ U_CAPI int64_t U_EXPORT2
 utmscale_fromDouble(double otherTime, UDateTimeScale timeScale, UErrorCode *status)
 {
     const InternalTimeScaleData *data;
+    double fromMin, fromMax;
 
     if (status == NULL || U_FAILURE(*status)) {
         return 0;
@@ -94,8 +95,10 @@ utmscale_fromDouble(double otherTime, UDateTimeScale timeScale, UErrorCode *stat
     }
 
     data = &timeScaleTable[timeScale];
+    fromMin = (double) data->fromMin;
+    fromMax = (double) data->fromMax;
 
-    if (otherTime < data->fromMin || otherTime > data->fromMax) {
+    if (!(otherTime >= fromMin && otherTime <= fromMax)) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }

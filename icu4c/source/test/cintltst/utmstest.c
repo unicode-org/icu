@@ -141,6 +141,16 @@ static void epochOffsetTest(int64_t epochOffset, int64_t units, int32_t scale)
         log_err("utmscale_fromInt64(0, scale): scale = %d, result = %lld.\n", scale, universal);
     }
 }
+
+static double valueLessThan(double value)
+{
+    return value - 100000.0;
+}
+
+static double valueGreaterThan(double value)
+{
+    return value + 100000.0;
+}
     
 static void TestEpochOffsets(void)
 {
@@ -219,13 +229,10 @@ static void TestFromDouble(void)
             log_err("utmscale_fromDouble(fromMin, %d, &status) generated U_ILLEGAL_ARGUMENT_ERROR.\n", scale);
         }
 
-        /* only do this test if we can exactly represent fromMin - 1 */
-        if (fromMin - 1 < fromMin) {
-            status = U_ZERO_ERROR;
-            result = utmscale_fromDouble((double) data.fromMin - 1, scale, &status);
-            if (status != U_ILLEGAL_ARGUMENT_ERROR) {
-                log_err("utmscale_fromDouble(fromMin - 1, %d, &status) did not generate U_ILLEGAL_ARGUMENT_ERROR.\n", scale);
-            }
+        status = U_ZERO_ERROR;
+        result = utmscale_fromDouble(valueLessThan(fromMin), scale, &status);
+        if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+            log_err("utmscale_fromDouble(fromMin - 1, %d, &status) did not generate U_ILLEGAL_ARGUMENT_ERROR.\n", scale);
         }
             
         status = U_ZERO_ERROR;
@@ -234,13 +241,10 @@ static void TestFromDouble(void)
             log_err("utmscale_fromDouble(fromMax, %d, &status) generated U_ILLEGAL_ARGUMENT_ERROR.\n", scale);
         }
 
-        /* Only do this test if we can exactly represent fromMax + 1 */
-        if (fromMax < fromMax + 1) {
-            status = U_ZERO_ERROR;
-            result = utmscale_fromDouble((double) data.fromMax + 1, scale, &status);
-            if (status != U_ILLEGAL_ARGUMENT_ERROR) {
-                log_err("utmscale_fromDouble(fromMax + 1, %d, &status) didn't generate U_ILLEGAL_ARGUMENT_ERROR.\n", scale);
-            }
+        status = U_ZERO_ERROR;
+        result = utmscale_fromDouble(valueGreaterThan(fromMax), scale, &status);
+        if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+            log_err("utmscale_fromDouble(fromMax + 1, %d, &status) didn't generate U_ILLEGAL_ARGUMENT_ERROR.\n", scale);
         }
     }
     
