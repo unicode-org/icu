@@ -1086,6 +1086,32 @@ static UChar32 swapCJK(UChar32 i) {
     return i + NON_CJK_OFFSET; // non-CJK
 }
 
+U_CAPI UChar32 U_EXPORT2
+uprv_uca_getRawFromCodePoint(UChar32 i) {
+    return swapCJK(i)+1;
+}
+
+U_CAPI UChar32 U_EXPORT2
+uprv_uca_getCodePointFromRaw(UChar32 i) {
+    i--;
+    UChar32 result = 0;
+    if(i >= NON_CJK_OFFSET) {
+        result = i - NON_CJK_OFFSET;
+    } else if(i >= CJK_B_BASE) {
+        result = i;
+    } else if(i < CJK_A_LIMIT + (CJK_LIMIT - CJK_BASE) + (CJK_COMPAT_USED_LIMIT - CJK_COMPAT_USED_BASE)) { // rest of CJKs, compacted
+        if(i < CJK_LIMIT - CJK_BASE) {
+            result = i + CJK_BASE;
+        } else if(i < (CJK_LIMIT - CJK_BASE) + (CJK_COMPAT_USED_LIMIT - CJK_COMPAT_USED_BASE)) {
+            result = i + CJK_COMPAT_USED_BASE - (CJK_LIMIT - CJK_BASE);
+        } else {
+            result = i + CJK_A_BASE - (CJK_LIMIT - CJK_BASE) - (CJK_COMPAT_USED_LIMIT - CJK_COMPAT_USED_BASE);
+        }
+    } else {
+        result = -1;
+    }
+    return result;
+}
 
 // GET IMPLICIT PRIMARY WEIGHTS
 // Return value is left justified primary key

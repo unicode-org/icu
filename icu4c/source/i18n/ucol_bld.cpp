@@ -275,16 +275,12 @@ U_CFUNC void ucol_inv_getGapPositions(UColTokenParser *src, UColTokListHeader *l
     lh->gapsLo[0] = (t1 & UCOL_PRIMARYMASK) | (t2 & UCOL_PRIMARYMASK) >> 16;
     lh->gapsLo[1] = (t1 & UCOL_SECONDARYMASK) << 16 | (t2 & UCOL_SECONDARYMASK) << 8;
     lh->gapsLo[2] = (UCOL_TERTIARYORDER(t1)) << 24 | (UCOL_TERTIARYORDER(t2)) << 16;
-    if(lh->baseCE < 0xEF000000) {
-    /* first implicits have three byte primaries, with a gap of one */
-    /* so we esentially need to add 2 to the top byte in lh->baseContCE */
-      t2 += 0x02000000;
-    } else {
-    /* second implicits have four byte primaries, with a gap of IMPLICIT_LAST2_MULTIPLIER_ */
-    /* Now, this guy is not really accessible here, so until we find a better way to pass it */
-    /* around, we'll assume that the gap is 1 */
-      t2 += 0x00020000;
-    }
+    uint32_t primaryCE = t1 & UCOL_PRIMARYMASK | (t2 & UCOL_PRIMARYMASK) >> 16;
+    primaryCE = uprv_uca_getImplicitFromRaw(uprv_uca_getRawFromImplicit(primaryCE)+1);
+
+    t1 = primaryCE & UCOL_PRIMARYMASK | 0x0505;
+    t2 = (primaryCE << 16) & UCOL_PRIMARYMASK | UCOL_CONTINUATION_MARKER;
+
     lh->gapsHi[0] = (t1 & UCOL_PRIMARYMASK) | (t2 & UCOL_PRIMARYMASK) >> 16;
     lh->gapsHi[1] = (t1 & UCOL_SECONDARYMASK) << 16 | (t2 & UCOL_SECONDARYMASK) << 8;
     lh->gapsHi[2] = (UCOL_TERTIARYORDER(t1)) << 24 | (UCOL_TERTIARYORDER(t2)) << 16;
