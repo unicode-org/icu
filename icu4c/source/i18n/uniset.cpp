@@ -30,18 +30,6 @@ UnicodeString* UnicodeSet::CATEGORY_PAIRS_CACHE =
  */
 const UnicodeString UnicodeSet::CATEGORY_CLOSE = UNICODE_STRING(":]", 2);
 
-/**
- * Delimiter char beginning a variable reference:
- * "{".  Example: "{var}".
- */
-const UChar UnicodeSet::VARIABLE_REF_OPEN = 0x007B /*{*/;
-
-/**
- * Delimiter char ending a variable reference:
- * "}".  Example: "{var}".
- */
-const UChar UnicodeSet::VARIABLE_REF_CLOSE = 0x007D /*}*/;
-
 // Define UChar constants using hex for EBCDIC compatibility
 const UChar UnicodeSet::SET_OPEN     = 0x005B; /*[*/
 const UChar UnicodeSet::SET_CLOSE    = 0x005D; /*]*/
@@ -497,9 +485,15 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
     int32_t i = pos.getIndex();
     int32_t limit = pattern.length();
     UnicodeString nestedAux;
-    UnicodeString* nestedPairs;
+    const UnicodeString* nestedPairs;
     UnicodeString scratch;
-    for (; i<limit; ++i) {
+    /* In the case of an embedded SymbolTable variable, we look it up and
+     * then take characters from the resultant char[] array.  These chars
+     * are subjected to an extra level of lookup in the SymbolTable in case
+     * they are stand-ins for a nested UnicodeSet.  */
+    const UnicodeString* varValueBuffer = NULL;
+    int32_t ivarValueBuffer = 0;
+    for (; i<limit; i+=((varValueBuffer==NULL)?1:0)) {
         /* If the next element is a single character, c will be set to it,
          * and nestedPairs will be null.  In this case isLiteral indicates
          * whether the character should assume special meaning if it has
@@ -508,9 +502,24 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
          * nestedPairs will be set to the pairs list for the nested set, and
          * c's value should be ignored.
          */
-        UChar c = pattern.charAt(i);
         nestedPairs = NULL;
         UBool isLiteral = FALSE;
+        UChar c;
+        if (varValueBuffer != NULL) {
+            if (ivarValueBuffer < varValueBuffer->length()) {
+                c = varValueBuffer->charAt(ivarValueBuffer++);
+                const UnicodeSet* s = symbols->lookupSet(c);
+                if (s != NULL) {
+                    //nestedSet = s;
+                    nestedPairs = &s->pairs;
+                }
+            } else {
+                varValueBuffer = NULL;
+                c = pattern.charAt(i);
+            }
+        } else {
+            c = pattern.charAt(i);
+        }
 
         // Ignore whitespace.  This is not Unicode whitespace, but Java
         // whitespace, a subset of Unicode whitespace.
@@ -556,103 +565,104 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
         // will be 2 if we want a closing ']', or 3 if we should parse a
         // category and close with ":]".
 
-        /* Handle escapes.  If a character is escaped, then it assumes its
-         * literal value.  This is true for all characters, both special
-         * characters and characters with no special meaning.  We also
-         * interpret '\\uxxxx' Unicode escapes here (as literals).
-         */
-        if (c == BACKSLASH) {
-            ++i;
-            if (i < pattern.length()) {
-                c = pattern.charAt(i);
-                isLiteral = TRUE;
-                if (c == 0x0075 /*u*/) {
-                    if ((i+4) >= pattern.length()) {
-						status = U_ILLEGAL_ARGUMENT_ERROR;
-						return pairsBuf;
-                    }
-                    c = (UChar)0x0000;
-                    for (int32_t j=(++i)+4; i<j; ++i) { // [sic]
-                        int32_t digit = Unicode::digit(pattern.charAt(i), 16);
-                        if (digit<0) {
+        // Only process escapes, variable references, and nested sets
+        // if we are _not_ retrieving characters from the variable
+        // buffer.  Characters in the variable buffer have already
+        // benn through escape and variable reference processing.
+        if (varValueBuffer == NULL) {
+            /* Handle escapes.  If a character is escaped, then it assumes its
+             * literal value.  This is true for all characters, both special
+             * characters and characters with no special meaning.  We also
+             * interpret '\\uxxxx' Unicode escapes here (as literals).
+             */
+            if (c == BACKSLASH) {
+                ++i;
+                if (i < pattern.length()) {
+                    c = pattern.charAt(i);
+                    isLiteral = TRUE;
+                    if (c == 0x0075 /*u*/) {
+                        if ((i+4) >= pattern.length()) {
                             status = U_ILLEGAL_ARGUMENT_ERROR;
                             return pairsBuf;
                         }
-                        c = (UChar) ((c << 4) | digit);
+                        c = (UChar)0x0000;
+                        for (int32_t j=(++i)+4; i<j; ++i) { // [sic]
+                            int32_t digit = Unicode::digit(pattern.charAt(i), 16);
+                            if (digit<0) {
+                                status = U_ILLEGAL_ARGUMENT_ERROR;
+                                return pairsBuf;
+                            }
+                            c = (UChar) ((c << 4) | digit);
+                        }
+                        --i; // Move i back to last parsed character
                     }
-                    --i; // Move i back to last parsed character
-                }
-            } else {
-                status = U_ILLEGAL_ARGUMENT_ERROR;
-                return pairsBuf;
-            }
-        }
-
-        /* Parse variable references.  These are treated as literals.  If a
-         * variable refers to a UnicodeSet, nestedPairs is assigned here.
-         * Variable names are only parsed if varNameToChar is not null.
-         * Set variables are only looked up if varCharToSet is not null.
-         */
-        else if (symbols != NULL && !isLiteral && c == VARIABLE_REF_OPEN) {
-            ++i;
-            int32_t j = pattern.indexOf(VARIABLE_REF_CLOSE, i);
-            UnicodeSet* set = NULL;
-            if (i == j || j < 0) { // empty or unterminated
-                // throw new IllegalArgumentException("Illegal variable reference");
-                status = U_ILLEGAL_ARGUMENT_ERROR;
-            } else {
-                scratch.truncate(0);
-                pattern.extractBetween(i, j, scratch);
-                symbols->lookup(scratch, c, set, status);
-            }
-            if (U_FAILURE(status)) {
-                // Either the reference was ill-formed (empty name, or no
-                // closing '}', or the specified name is not defined.
-                return pairsBuf;
-            }
-            isLiteral = TRUE;
-
-            if (set != NULL) {
-                nestedPairs = &set->pairs;
-            }
-            i = j; // Make i point to '}'
-        }
-
-        /* An opening bracket indicates the first bracket of a nested
-         * subpattern, either a normal pattern or a category pattern.  We
-         * recognize these here and set nestedPairs accordingly.
-         */
-        else if (!isLiteral && c == SET_OPEN) {
-            // Handle "[:...:]", representing a character category
-            UChar d = charAfter(pattern, i);
-            if (d == COLON) {
-                i += 2;
-                int32_t j = pattern.indexOf(CATEGORY_CLOSE, i);
-                if (j < 0) {
-                    // throw new IllegalArgumentException("Missing \":]\"");
+                } else {
                     status = U_ILLEGAL_ARGUMENT_ERROR;
                     return pairsBuf;
                 }
-                scratch.truncate(0);
-                pattern.extractBetween(i, j, scratch);
-                nestedPairs = &getCategoryPairs(nestedAux, scratch, status);
-                if (U_FAILURE(status)) {
+            }
+
+            /* Parse variable references.  These are treated as literals.  If a
+             * variable refers to a UnicodeSet, its stand in character is
+             * returned in the UChar[] buffer.
+             * Variable names are only parsed if varNameToChar is not null.
+             * Set variables are only looked up if varCharToSet is not null.
+             */
+            else if (symbols != NULL && !isLiteral && c == SymbolTable::SYMBOL_REF) {
+                pos.setIndex(++i);
+                UnicodeString name = symbols->parseReference(pattern, pos, limit);
+                if (name.length() == 0) {
+                    status = U_ILLEGAL_ARGUMENT_ERROR;
                     return pairsBuf;
                 }
-                i = j+1; // Make i point to ']' in ":]"
-                if (mode == 3) {
-                    // Entire pattern is a category; leave parse loop
-                    pairsBuf.append(*nestedPairs);
-                    break;
-                }
-            } else {
-                // Recurse to get the pairs for this nested set.
-                pos.setIndex(i);
-                nestedPairs = &parse(nestedAux, pattern, pos, symbols, status);
-                if (U_FAILURE(status)) {
+                varValueBuffer = symbols->lookup(name);
+                if (varValueBuffer == NULL) {
+                    //throw new IllegalArgumentException("Undefined variable: "
+                    //                                   + name);
+                    status = U_ILLEGAL_ARGUMENT_ERROR;
                     return pairsBuf;
                 }
-                i = pos.getIndex() - 1; // - 1 to point at ']'
+                ivarValueBuffer = 0;
+                i = pos.getIndex(); // Make i point PAST last char of var name
+                continue; // Back to the top to get varValueBuffer[0]
+            }
+
+            /* An opening bracket indicates the first bracket of a nested
+             * subpattern, either a normal pattern or a category pattern.  We
+             * recognize these here and set nestedPairs accordingly.
+             */
+            else if (!isLiteral && c == SET_OPEN) {
+                // Handle "[:...:]", representing a character category
+                UChar d = charAfter(pattern, i);
+                if (d == COLON) {
+                    i += 2;
+                    int32_t j = pattern.indexOf(CATEGORY_CLOSE, i);
+                    if (j < 0) {
+                        // throw new IllegalArgumentException("Missing \":]\"");
+                        status = U_ILLEGAL_ARGUMENT_ERROR;
+                        return pairsBuf;
+                    }
+                    scratch.truncate(0);
+                    pattern.extractBetween(i, j, scratch);
+                    nestedPairs = &getCategoryPairs(nestedAux, scratch, status);
+                    if (U_FAILURE(status)) {
+                        return pairsBuf;
+                    }
+                    i = j+1; // Make i point to ']' in ":]"
+                    if (mode == 3) {
+                        // Entire pattern is a category; leave parse loop
+                        pairsBuf.append(*nestedPairs);
+                        break;
+                    }
+                } else {
+                    // Recurse to get the pairs for this nested set.
+                    pos.setIndex(i);
+                    nestedPairs = &parse(nestedAux, pattern, pos, symbols, status);
+                    if (U_FAILURE(status)) {
+                        return pairsBuf;
+                    }
+                    i = pos.getIndex() - 1; // - 1 to point at ']'
+                }
             }
         }
 

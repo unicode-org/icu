@@ -117,9 +117,10 @@ void TransliteratorAPITest::TestgetInverse() {
          Transliterator* invt1 = Transliterator::createInstance("Latin-Kana");
          Transliterator* t2    = Transliterator::createInstance("Latin-Devanagari");
          Transliterator* invt2 = Transliterator::createInstance("Devanagari-Latin");
-         if(t1 == 0 || invt1 == 0 || t2 == 0 || invt2 == 0)
+         if(t1 == 0 || invt1 == 0 || t2 == 0 || invt2 == 0) {
              errln("FAIL: in instantiation");
-			 
+			 return;
+         }
 
          Transliterator* inverse1=t1->createInverse();
          Transliterator* inverse2=t2->createInverse();
@@ -235,7 +236,7 @@ void TransliteratorAPITest::TestTransliterate1(){
              "Unicode-Hex",         "hello",                               "\\u0068\\u0065\\u006C\\u006C\\u006F" ,
              "Hex-Unicode",         "\\u0068\\u0065\\u006C\\u006C\\u006F", "hello"  ,
              "Latin-Devanagari",    "bhaarata",                            CharsToUnicodeString("\\u092D\\u093E\\u0930\\u0924") ,
-             "Devanagari-Latin",    CharsToUnicodeString("\\u092D\\u093E\\u0930\\u0924"),        "bhaaarata" ,
+             "Devanagari-Latin",    CharsToUnicodeString("\\u092D\\u093E\\u0930\\u0924"),        "bhaarata" ,
          //  "Contracted-Expanded", CharsToUnicodeString("\\u00C0\\u00C1\\u0042"),               CharsToUnicodeString("\\u0041\\u0300\\u0041\\u0301\\u0042") ,
          //  "Expanded-Contracted", CharsToUnicodeString("\\u0041\\u0300\\u0041\\u0301\\u0042"), CharsToUnicodeString("\\u00C0\\u00C1\\u0042") ,
              "Latin-Arabic",        "aap",                                 CharsToUnicodeString("\\u0627\\u06A4")     ,
@@ -472,13 +473,17 @@ void TransliteratorAPITest::TestKeyboardTransliterator2(){
         t=Transliterator::createInstance("Unicode-Hex");
 		if(t == 0)
 			errln("FAIL : construction");
-		keyboardAux(t, Data, rs, 0, 20);
+        else {
+		    keyboardAux(t, Data, rs, 0, 20);
+            delete t;
+        }
 
         rs="Hindi --";
 		t=Transliterator::createInstance("Latin-Devanagari");
 		if(t == 0)
 			errln("FAIL : construction");
-        keyboardAux(t, Data, rs, 20, 40);
+        else
+            keyboardAux(t, Data, rs, 20, 40);
 
 		
       //  rs="Add here:";

@@ -55,6 +55,9 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         CASE(12,TestJ277);
         CASE(13,TestJ243);
         CASE(14,TestJ329);
+        CASE(15,TestSegments);
+        CASE(16,TestCursorOffset);
+        CASE(17,TestArbitraryVariableValues);
         default: name = ""; break;
     }
 }
@@ -140,17 +143,15 @@ void TransliteratorTest::TestSimpleRules(void) {
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedTransliterator t(
         "<ID>",
-        UnicodeString("dummy=").append((UChar)0xE100) +
-        UnicodeString(
-        ";"
-        "          vowel = [aeiouAEIOU];"
-        "             lu = [:Lu:];"
-
-        " {vowel} ({lu}) > ! ;"
-        " {vowel}        > & ;"
-        "        !) {lu} > ^ ;"
-        "           {lu} > * ;"
-        "              a > ERROR", ""),
+        UnicodeString("$dummy=").append((UChar)0xE100) +
+        UnicodeString(";"
+                      "$vowel=[aeiouAEIOU];"
+                      "$lu=[:Lu:];"
+                      "$vowel } $lu > '!';"
+                      "$vowel > '&';"
+                      "'!' { $lu > '^';"
+                      "$lu > '*';"
+                      "a > ERROR", ""),
         status);
     if (U_FAILURE(status)) {
         errln("FAIL: RBT constructor failed");
@@ -163,16 +164,16 @@ void TransliteratorTest::TestSimpleRules(void) {
  * Test inline set syntax and set variable syntax.
  */
 void TransliteratorTest::TestInlineSet(void) {
-    expect("[:Ll:] (x) > y; [:Ll:] > z;", "aAbxq", "zAyzz");
+    expect("{ [:Ll:] } x > y; [:Ll:] > z;", "aAbxq", "zAyzz");
     expect("a[0-9]b > qrs", "1a7b9", "1qrs9");
     
     expect(UnicodeString(
-           "digit = [0-9];"
-           "alpha = [a-zA-Z];"
-           "alphanumeric = [{digit}{alpha}];" // ***
-           "special = [^{alphanumeric}];"     // ***
-           "{alphanumeric} > -;"
-           "{special} > *;", ""),
+           "$digit = [0-9];"
+           "$alpha = [a-zA-Z];"
+           "$alphanumeric = [$digit $alpha];" // ***
+           "$special = [^$alphanumeric];"     // ***
+           "$alphanumeric > '-';"
+           "$special > '*';", ""),
            
            "thx-1138", "---*----");
 }
@@ -498,6 +499,10 @@ void TransliteratorTest::TestPatternQuoting(void) {
 void TransliteratorTest::TestJ277(void) {
     UErrorCode status = U_ZERO_ERROR;
     Transliterator *gl = Transliterator::createInstance("Greek-Latin");
+    if (gl == NULL) {
+        errln("FAIL: createInstance(Greek-Latin) returned NULL");
+        return;
+    }
 
     UChar sigma = 0x3C3;
     UChar upsilon = 0x3C5;
@@ -520,17 +525,17 @@ void TransliteratorTest::TestJ277(void) {
 
     // Again, using a smaller rule set
     UnicodeString rules(
-                "alpha   = \\u03B1;"
-                "nu      = \\u03BD;"
-                "sigma   = \\u03C3;"
-                "ypsilon = \\u03C5;"
-                "vowel   = [aeiouAEIOU{alpha}{ypsilon}];"
-                "s <>           {sigma};"
-                "a <>           {alpha};"
-                "u <> ({vowel}) {ypsilon};"
-                "y <>           {ypsilon};"
-                "n <>           {nu};"
-                );
+                "$alpha   = \\u03B1;"
+                "$nu      = \\u03BD;"
+                "$sigma   = \\u03C3;"
+                "$ypsilon = \\u03C5;"
+                "$vowel   = [aeiouAEIOU$alpha$ypsilon];"
+                "s <>           $sigma;"
+                "a <>           $alpha;"
+                "u <>  $vowel { $ypsilon;"
+                "y <>           $ypsilon;"
+                "n <>           $nu;",
+                "");
     RuleBasedTransliterator mini("mini", rules, Transliterator::REVERSE, status);
     if (U_FAILURE(status)) { errln("FAIL: Transliterator constructor failed"); return; }
     expect(mini, syn, "syn");
@@ -622,6 +627,100 @@ void TransliteratorTest::TestJ329(void) {
             logln(UnicodeString("Ok:   ") + desc);
         } else {
             errln(UnicodeString("FAIL: ") + desc);
+        }
+    }
+}
+
+/**
+ * Test segments and segment references.
+ */
+void TransliteratorTest::TestSegments(void) {
+    // Array of 3n items
+    // Each item is <rules>, <input>, <expected output>
+    UnicodeString DATA[] = {
+        "([a-z]) '.' ([0-9]) > $2 '-' $1",
+        "abc.123.xyz.456",
+        "ab1-c23.xy4-z56",
+    };
+    int32_t DATA_length = sizeof(DATA)/sizeof(*DATA);
+
+    for (int32_t i=0; i<DATA_length; i+=3) {
+        logln("Pattern: " + prettify(DATA[i]));
+        UErrorCode status = U_ZERO_ERROR;
+        RuleBasedTransliterator t("<ID>", DATA[i], status);
+        if (U_FAILURE(status)) {
+            errln("FAIL: RBT constructor");
+        } else {
+            expect(t, DATA[i+1], DATA[i+2]);
+        }
+    }
+}
+
+/**
+ * Test cursor positioning outside of the key
+ */
+void TransliteratorTest::TestCursorOffset(void) {
+    // Array of 3n items
+    // Each item is <rules>, <input>, <expected output>
+    UnicodeString DATA[] = {
+        "pre {alpha} post > | @ ALPHA ;" 
+        "eALPHA > beta ;" 
+        "pre {beta} post > BETA @@ | ;" 
+        "post > xyz",
+
+        "prealphapost prebetapost",
+
+        "prbetaxyz preBETApost",
+    };
+    int32_t DATA_length = sizeof(DATA)/sizeof(*DATA);
+
+    for (int32_t i=0; i<DATA_length; i+=3) {
+        logln("Pattern: " + prettify(DATA[i]));
+        UErrorCode status = U_ZERO_ERROR;
+        RuleBasedTransliterator t("<ID>", DATA[i], status);
+        if (U_FAILURE(status)) {
+            errln("FAIL: RBT constructor");
+        } else {
+            expect(t, DATA[i+1], DATA[i+2]);
+        }
+    }
+}
+
+/**
+ * Test zero length and > 1 char length variable values.  Test
+ * use of variable refs in UnicodeSets.
+ */
+void TransliteratorTest::TestArbitraryVariableValues(void) {
+    // Array of 3n items
+    // Each item is <rules>, <input>, <expected output>
+    UnicodeString DATA[] = {
+        "$abe = ab;" 
+        "$pat = x[yY]z;" 
+        "$ll  = 'a-z';" 
+        "$llZ = [$ll];" 
+        "$llY = [$ll$pat];" 
+        "$emp = ;" 
+
+        "$abe > ABE;" 
+        "$pat > END;" 
+        "$llZ > 1;" 
+        "$llY > 2;" 
+        "7$emp 8 > 9;" 
+        "",
+
+        "ab xYzxyz stY78",
+        "ABE ENDEND 1129",
+    };
+    int32_t DATA_length = sizeof(DATA)/sizeof(*DATA);
+
+    for (int32_t i=0; i<DATA_length; i+=3) {
+        logln("Pattern: " + prettify(DATA[i]));
+        UErrorCode status = U_ZERO_ERROR;
+        RuleBasedTransliterator t("<ID>", DATA[i], status);
+        if (U_FAILURE(status)) {
+            errln("FAIL: RBT constructor");
+        } else {
+            expect(t, DATA[i+1], DATA[i+2]);
         }
     }
 }

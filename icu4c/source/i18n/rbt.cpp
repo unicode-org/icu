@@ -135,9 +135,8 @@ RuleBasedTransliterator::handleTransliterate(Replaceable& text, Position& index,
                 ++cursor;
             }
         } else {
-            text.handleReplaceBetween(cursor, cursor + r->getKeyLength(),
-                                      r->getOutput());
-            limit += r->getOutput().length() - r->getKeyLength();
+            // Delegate replacement to TransliterationRule object
+            limit += r->replace(text, cursor, *data);
             cursor += r->getCursorPos();
             ++loopCount;
         }

@@ -35,42 +35,39 @@ class TransliterationRuleData {
 
 public:
 
+    // PUBLIC DATA MEMBERS
+
     /**
      * Rule table.  May be empty.
-     *
-     * PUBLIC DATA MEMBER for internal use by RBT
      */
     TransliterationRuleSet ruleSet;
 
     /**
-     * Map variable name (UnicodeString) to variable (Character).
-     * A variable name may correspond to a single literal
-     * character, in which case the character is stored in this
-     * hash.  It may also correspond to a UnicodeSet, in which
-     * case a character is again stored in this hash, but the
-     * character is a stand-in: it is a key for a secondary lookup
-     * in data.setVariables.  The stand-in also represents the
-     * UnicodeSet in the stored rules.
-     *
-     * PUBLIC DATA MEMBER for internal use by RBT
+     * Map variable name (String) to variable (UnicodeString).  A variable name
+     * corresponds to zero or more characters, stored in a UnicodeString in
+     * this hash.  One or more of these chars may also correspond to a
+     * UnicodeSet, in which case the character in the UnicodeString in this hash is
+     * a stand-in: it is an index for a secondary lookup in
+     * data.setVariables.  The stand-in also represents the UnicodeSet in
+     * the stored rules.
      */
     Hashtable* variableNames;
     
     /**
-     * Map category variable (Character) to set (UnicodeSet).
+     * Map category variable (UChar) to set (UnicodeSet).
      * Variables that correspond to a set of characters are mapped
      * from variable name to a stand-in character in data.variableNames.
      * The stand-in then serves as a key in this hash to lookup the
      * actual UnicodeSet object.  In addition, the stand-in is
      * stored in the rule text to represent the set of characters.
      * setVariables[i] represents character (setVariablesBase + i).
-     *
-     * PUBLIC DATA MEMBER for internal use by RBT
      */
     UnicodeSet** setVariables;
     
     /**
-     * The character represented by setVariables[0].
+     * The character that represents setVariables[0].  Characters
+     * setVariablesBase through setVariablesBase +
+     * setVariables.length - 1 represent UnicodeSet objects.
      */
     UChar setVariablesBase;
 
@@ -79,20 +76,34 @@ public:
      */
     int32_t setVariablesLength;
 
+    /**
+     * The character that represents segment 1.  Characters segmentBase
+     * through segmentBase + 8 represent segments 1 through 9.
+     */
+    UChar segmentBase;
+
+public:
+
     TransliterationRuleData(UErrorCode& status);
 
     ~TransliterationRuleData();
     
-    void defineVariable(const UnicodeString& name,
-                        UChar value,
-                        UErrorCode& status);
-        
-    UChar lookupVariable(const UnicodeString& name,
-                         UErrorCode& status) const;
-    
 	const UnicodeSet* lookupSet(UChar standIn) const;
 
-    UBool isVariableDefined(const UnicodeString& name) const;
+    /**
+     * Return the zero-based index of the segment represented by the given
+     * character, or -1 if none.  Repeat: This is a zero-based return value,
+     * 0..8, even though these are notated "$1".."$9".
+     */
+    int32_t lookupSegmentReference(UChar c) const;
+
+    /**
+     * Return the character used to stand for the given segment reference.
+     * The reference must be in the range 1..9.
+     */
+    UChar getSegmentStandin(int32_t ref) const {
+        return segmentBase + ref - 1;
+    }
 };
 
 #endif

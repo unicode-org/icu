@@ -276,18 +276,6 @@ class U_I18N_API UnicodeSet : public UnicodeFilter {
      * ":]".  Example: "[:Lu:]".
      */
     static const UnicodeString CATEGORY_CLOSE;
-
-    /**
-     * Delimiter char beginning a variable reference:
-     * "{".  Example: "{var}".
-     */
-    static const UChar VARIABLE_REF_OPEN;
-    
-    /**
-     * Delimiter char ending a variable reference:
-     * "}".  Example: "{var}".
-     */
-    static const UChar VARIABLE_REF_CLOSE;
     
     // More special characters...
     static const UChar SET_OPEN;
