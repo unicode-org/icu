@@ -2337,9 +2337,14 @@ private:
     UnicodeSet  *fBA;
     UnicodeSet  *fBB;
     UnicodeSet  *fHY;
+	UnicodeSet  *fH2;
+	UnicodeSet  *fH3;
     UnicodeSet  *fCL;
     UnicodeSet  *fEX;
     UnicodeSet  *fIN;
+	UnicodeSet  *fJL;
+	UnicodeSet  *fJV;
+	UnicodeSet  *fJT;
     UnicodeSet  *fNS;
     UnicodeSet  *fOP;
     UnicodeSet  *fQU;
@@ -2385,9 +2390,14 @@ RBBILineMonkey::RBBILineMonkey()
     fBA    = new UnicodeSet("[\\p{Line_break=BA}]", status);
     fBB    = new UnicodeSet("[\\p{Line_break=BB}]", status);
     fHY    = new UnicodeSet("[\\p{Line_break=HY}]", status);
+    fH2    = new UnicodeSet("[\\p{Line_break=H2}]", status);
+    fH3    = new UnicodeSet("[\\p{Line_break=H3}]", status);
     fCL    = new UnicodeSet("[\\p{Line_break=CL}]", status);
     fEX    = new UnicodeSet("[\\p{Line_break=EX}]", status);
     fIN    = new UnicodeSet("[\\p{Line_break=IN}]", status);
+	fJL    = new UnicodeSet("[\\p{Line_break=JL}]", status);
+    fJV    = new UnicodeSet("[\\p{Line_break=JV}]", status);
+    fJT    = new UnicodeSet("[\\p{Line_break=JT}]", status);
     fNS    = new UnicodeSet("[\\p{Line_break=NS}]", status);
     fOP    = new UnicodeSet("[\\p{Line_break=OP}]", status);
     fQU    = new UnicodeSet("[\\p{Line_break=QU}]", status);
@@ -2422,9 +2432,14 @@ RBBILineMonkey::RBBILineMonkey()
     fSets->addElement(fBA, status);
     fSets->addElement(fBB, status);
     fSets->addElement(fHY, status);
+    fSets->addElement(fH2, status);
+    fSets->addElement(fH3, status);
     fSets->addElement(fCL, status);
     fSets->addElement(fEX, status);
     fSets->addElement(fIN, status);
+    fSets->addElement(fJL, status);
+    fSets->addElement(fJT, status);
+    fSets->addElement(fJV, status);
     fSets->addElement(fNS, status);
     fSets->addElement(fOP, status);
     fSets->addElement(fQU, status);
@@ -2480,7 +2495,7 @@ void RBBILineMonkey::setText(const UnicodeString &s) {
 //
 //  rule67Adjust
 //     Line Break TR rules 6 and 7 implementation.
-//     This deals with combining marks, Hangul Syllables, and other sequences that
+//     This deals with combining marks and other sequences that
 //     that must be treated as if they were something other than what they actually are.
 //
 //     This is factored out into a separate function because it must be applied twice for
@@ -2496,32 +2511,10 @@ void RBBILineMonkey::rule67Adjust(int32_t pos, UChar32 *posChar, int32_t *nextPo
 
     int32_t  nPos = *nextPos;
     
-    // LB 6  Treat Korean Syllables as a single unit
-    int32_t  hangultype = u_getIntPropertyValue(*posChar, UCHAR_HANGUL_SYLLABLE_TYPE);
-    if (hangultype != U_HST_NOT_APPLICABLE) {
-        nPos = fCharBI->following(pos);   // Advance by grapheme cluster, which
-                                          //  contains the logic to locate Hangul syllables.
-        // Grapheme Cluster Ugliness: some Grapheme_Extend chars, which are absorbed
-        //   into a grapheme cluster, are NOT Line Break CM. (Some are GL, for example.)
-        //   We don't want consume any of these.  The Approach is
-        //      1.  Back nPos up, undoing the consumption of any
-        //          Grapheme_Extend chars by the char break iterator.
-        //      2.  Let the LB 7b logic below reconsume any Line Break CM chars.
-        for (;;) {
-            nPos = fText->moveIndex32(nPos, -1);
-            UChar32 possiblyExtendChar = fText->char32At(nPos);
-            if (fID->contains(possiblyExtendChar)) {
-                // We hit into the Hangul Syllable itself, class is ID.
-                nPos = fText->moveIndex32(nPos, +1);
-                break;
-            }
-        }
-    }
     
     // LB 7b  Keep combining sequences together.
-    //  advance over any CM class chars.  (Line Break CM class is different from
-    //    grapheme cluster CM, so we need to do this even for HangulSyllables.
-    //    Line Break may eat additional stuff as combining, beyond what graphem cluster did.
+    //  advance over any CM class chars.  Note that Line Break CM is different
+	//  from normal Mc general category.
     if (!(fBK->contains(*posChar) || fZW->contains(*posChar) || *posChar==0x0a 
         || *posChar==0x0d || *posChar==0x85)) {
         for (;;) {
@@ -2548,8 +2541,8 @@ void RBBILineMonkey::rule67Adjust(int32_t pos, UChar32 *posChar, int32_t *nextPo
     }
 
     // Push the updated nextPos and nextChar back to our caller.
-    // This only makes a difference if posChar got bigger, by slurping up a
-    // combining sequence or Hangul syllable.
+    // This only makes a difference if posChar got bigger by consuming a
+    // combining sequence.
     *nextPos  = nPos;
     *nextChar = fText->char32At(nPos);
 }
@@ -2666,8 +2659,7 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
             break;
         }
 
-        // LB 6, LB 7
-        /*int32_t oldpos = pos;*/
+        // LB LB 7
         rule67Adjust(prevPos, &prevChar, &pos,     &thisChar);
         
         nextCPPos = fText->moveIndex32(pos, 1);
@@ -2739,11 +2731,8 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         }
 
         // LB 11b   
-        //    x  GL
-        //    GL  x
-        if (fGL->contains(thisChar) || fGL->contains(prevChar)) {
-            continue;
-        }
+        //    x  WJ
+        //    WJ  x
         if (fWJ->contains(thisChar) || fWJ->contains(prevChar)) {
             continue;
         }
@@ -2751,6 +2740,13 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         // LB 12    break after space
         if (fSP->contains(prevChar)) {
             break;
+        }
+
+        // LB 13   
+        //    x  GL
+        //    GL  x
+        if (fGL->contains(thisChar) || fGL->contains(prevChar)) {
+            continue;
         }
 
         // LB 14
@@ -2827,10 +2823,44 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         }
 
         // LB 18b
-        if (fHY->contains(prevChar) || fBB->contains(thisChar)) {
-            break;
+		if (fJL->contains(prevChar) && (fJL->contains(thisChar) ||
+			                            fJV->contains(thisChar) ||
+										fH2->contains(thisChar) ||
+										fH3->contains(thisChar))) {
+											continue;
+										}
+
+        if ((fJV->contains(prevChar) || fH2->contains(prevChar))  &&
+			(fJV->contains(thisChar) || fJT->contains(thisChar))) {
+				continue;
         }
 
+        if ((fJT->contains(prevChar) || fH3->contains(prevChar)) &&
+            fJT->contains(thisChar)) {
+                continue;
+        }
+			
+        // LB 18c  more Korean
+        if ((fJL->contains(prevChar) || fJV->contains(prevChar) ||
+            fJT->contains(prevChar) || fH2->contains(prevChar) || fH3->contains(prevChar)) &&
+            fIN->contains(thisChar)) {
+                continue;
+            }
+        if ((fJL->contains(prevChar) || fJV->contains(prevChar) ||
+            fJT->contains(prevChar) || fH2->contains(prevChar) || fH3->contains(prevChar)) &&
+            fPO->contains(thisChar)) {
+                continue;
+            }
+        if (fPR->contains(prevChar) && (fJL->contains(thisChar) || fJV->contains(thisChar) ||
+            fJT->contains(thisChar) || fH2->contains(thisChar) || fH3->contains(thisChar))) {
+                continue;
+            }
+
+
+
+
+
+ 
         // LB 19
         if (fAL->contains(prevChar) && fAL->contains(thisChar)) {
             continue;
@@ -2872,9 +2902,14 @@ RBBILineMonkey::~RBBILineMonkey() {
     delete fBA;
     delete fBB;
     delete fHY;
+    delete fH2;
+    delete fH3;
     delete fCL;
     delete fEX;
     delete fIN;
+    delete fJL;
+    delete fJV;
+    delete fJT;
     delete fNS;
     delete fOP;
     delete fQU;
@@ -3165,7 +3200,6 @@ void RBBITest::TestWordBoundary(void)
 void RBBITest::TestLineBreaks(void)
 {
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
-    TEST_ASSERT(FALSE); return;   // TODO:  debug the failure, which is going into an infinite loop in the monkey setup code.
     Locale        locale("en");
     UErrorCode    status = U_ZERO_ERROR;
     BreakIterator *bi = BreakIterator::createLineInstance(locale, status);
