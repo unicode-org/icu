@@ -105,7 +105,6 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="icuucd.lib icuind.lib"
 				OutputFile=".\Debug/ugrep.exe"
-				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="../../../lib"
 				GenerateDebugInformation="TRUE"
