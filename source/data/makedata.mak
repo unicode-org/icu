@@ -117,9 +117,6 @@ TESTDATA=$(ICUP)\source\test\testdata
 #
 #   TESTDATAOUT
 #      The destination directory for the built test data .dat file
-#         When running the tests, ICU_DATA environment variable is set to here
-#         so that test data files can be loaded.  (Tests are NOT run from this makefile,
-#         only the data is put in place.)
 TESTDATAOUT=$(ICUP)\source\test\testdata\out\
 
 #
@@ -432,7 +429,7 @@ res_index {
 	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -k -d"$(ICUBLD)\$(ICUCOL)" .\$(ICUCOL)\res_index.txt
 
 {$(ICUSRCDATA_RELATIVE_PATH)\$(ICURBNF)}.txt{$(ICURBNF)}.res::
-	@echo Making RBNF files $(RBNF_SOURCE) $(RBNF_RES_FILES)
+	@echo Making RBNF files
 	@"$(ICUTOOLS)\genrb\$(CFG)\genrb" -k -i "$(ICUBLD)" -d"$(ICUBLD)\$(ICURBNF)" $<
 
 $(INDEX_RBNF_FILES):
@@ -469,39 +466,33 @@ res_index {
 # Targets for unames.icu
 "$(ICUBLD)\unames.icu": "$(ICUUNIDATA)\*.txt" "$(ICUTOOLS)\gennames\$(CFG)\gennames.exe"
 	@echo Creating data file for Unicode Names
-	@set ICU_DATA=$(ICUBLD)
 	@"$(ICUTOOLS)\gennames\$(CFG)\gennames" -1 -u $(UNICODE_VERSION) "$(ICUUNIDATA)\UnicodeData.txt"
 
 # Targets for pnames.icu
 # >> Depends on the Unicode data as well as uchar.h and uscript.h <<
 "$(ICUBLD)\pnames.icu": "$(ICUUNIDATA)\*.txt" "$(ICUTOOLS)\genpname\$(CFG)\genpname.exe" "$(ICUP)\source\common\unicode\uchar.h" "$(ICUP)\source\common\unicode\uscript.h"
 	@echo Creating data file for Unicode Property Names
-	@set ICU_DATA=$(ICUBLD)
 	@"$(ICUTOOLS)\genpname\$(CFG)\genpname" -d "$(ICUBLD)"
 
 # Targets for uprops.icu
 "$(ICUBLD)\uprops.icu": "$(ICUUNIDATA)\*.txt" "$(ICUTOOLS)\genprops\$(CFG)\genprops.exe" "$(ICUBLD)\pnames.icu"
 	@echo Creating data file for Unicode Character Properties
-	@set ICU_DATA=$(ICUBLD)
-	@"$(ICUTOOLS)\genprops\$(CFG)\genprops" -u $(UNICODE_VERSION) -s "$(ICUUNIDATA)"
+	@"$(ICUTOOLS)\genprops\$(CFG)\genprops" -u $(UNICODE_VERSION) -i "$(ICUBLD)" -s "$(ICUUNIDATA)"
 
 # Targets for unorm.icu
 "$(ICUBLD)\unorm.icu": "$(ICUUNIDATA)\*.txt" "$(ICUTOOLS)\gennorm\$(CFG)\gennorm.exe"
 	@echo Creating data file for Unicode Normalization
-	@set ICU_DATA=$(ICUBLD)
 	@"$(ICUTOOLS)\gennorm\$(CFG)\gennorm" -u $(UNICODE_VERSION) -s "$(ICUUNIDATA)"
 
 # Targets for converters
 "$(ICUBLD)\cnvalias.icu" : {"$(ICUSRCDATA)\$(ICUUCM)"}\convrtrs.txt "$(ICUTOOLS)\gencnval\$(CFG)\gencnval.exe"
 	@echo Creating data file for Converter Aliases
-	@set ICU_DATA=$(ICUBLD)
 	@"$(ICUTOOLS)\gencnval\$(CFG)\gencnval" "$(ICUSRCDATA)\$(ICUUCM)\convrtrs.txt"
 
 # Targets for ucadata.icu & invuca.icu
 "$(ICUBLD)\invuca.icu" "$(ICUBLD)\ucadata.icu": "$(ICUUNIDATA)\FractionalUCA.txt" "$(ICUTOOLS)\genuca\$(CFG)\genuca.exe" "$(ICUBLD)\uprops.icu" "$(ICUBLD)\unorm.icu"
 	@echo Creating UCA data files
-	@set ICU_DATA=$(ICUBLD)
-	@"$(ICUTOOLS)\genuca\$(CFG)\genuca" -s "$(ICUUNIDATA)"
+	@"$(ICUTOOLS)\genuca\$(CFG)\genuca" -d "$(ICUBLD)" -i "$(ICUBLD)" -s "$(ICUUNIDATA)"
 
 # Targets for uidna.spp
 "$(ICUBLD)\uidna.spp" : "$(ICUUNIDATA)\*.txt" "$(ICUMISC)\NamePrepProfile.txt"
