@@ -87,7 +87,7 @@ ibm-1386                gb_2312-80 iso-ir-58 csISO58GB231280 gb2312-80 gbk chine
 #ibm-954                euc-jp eucJP ibm-eucJP eucjis extended_unix_code_packed_format_for_japanese cseuckdfmtjapanese x-euc-jp x-eucjp  # Japan EUC Why is this one commented!!!
 ibm-970                 euc-kr euckr ibm-eucKR csEUCKR                       # Korean EUC
 #ibm-964                euc-tw euctw ibm-eucTW cns11643              # Taiwan EUC
-ibm-1361                cp949 ksc korean                              # Korean KSC
+#ibm-1361                cp949 ksc korean                              # Korean KSC
 ibm-1383                euc-cn euccn ibm-eucCN                       # China EUC
 #ibm-1162               tis-620 cp874 windows-874 ms874       # Thai (w/ euro support) #what is the connection between this and the one below!!!
 ibm-874                 ibm-1161 #same as 1162 (w/o euro update) ***This is commented out in Helena's
