@@ -59,26 +59,30 @@ static struct
 };
 
 static UOption options[]={
-    UOPTION_DEF( "name",    'p', UOPT_REQUIRES_ARG),       
-    UOPTION_DEF( "bldopt",  'O', UOPT_REQUIRES_ARG),
-    UOPTION_DEF( "mode",    'm', UOPT_REQUIRES_ARG),
-    UOPTION_HELP_H,                                   /* -h */
-    UOPTION_HELP_QUESTION_MARK,                       /* -? */
-    UOPTION_VERBOSE,                                  /* -v */
-    UOPTION_COPYRIGHT,                                /* -c */
-    UOPTION_DEF( "comment", 'C', UOPT_REQUIRES_ARG),  
-    UOPTION_DESTDIR,                                  /* -d */
-    UOPTION_DEF( "clean",   'k', UOPT_NO_ARG),    
-    UOPTION_DEF( "nooutput",'n', UOPT_NO_ARG),
-    UOPTION_DEF( "rebuild", 'F', UOPT_NO_ARG),
-    UOPTION_DEF( "tempdir", 'T', UOPT_REQUIRES_ARG),
-    UOPTION_DEF( "install", 'I', UOPT_REQUIRES_ARG),
-    UOPTION_DEF( "srcdir",  's', UOPT_REQUIRES_ARG)
+/*00*/    UOPTION_DEF( "name",    'p', UOPT_REQUIRES_ARG),       
+/*01*/    UOPTION_DEF( "bldopt",  'O', UOPT_REQUIRES_ARG), /* on Win32 it is release or debug */
+/*02*/    UOPTION_DEF( "mode",    'm', UOPT_REQUIRES_ARG),
+/*03*/    UOPTION_HELP_H,                                   /* -h */
+/*04*/    UOPTION_HELP_QUESTION_MARK,                       /* -? */
+/*05*/    UOPTION_VERBOSE,                                  /* -v */
+/*06*/    UOPTION_COPYRIGHT,                                /* -c */
+/*07*/    UOPTION_DEF( "comment", 'C', UOPT_REQUIRES_ARG),  
+/*08*/    UOPTION_DESTDIR,                                  /* -d */
+/*09*/    UOPTION_DEF( "clean",   'k', UOPT_NO_ARG),    
+/*10*/    UOPTION_DEF( "nooutput",'n', UOPT_NO_ARG),
+/*11*/    UOPTION_DEF( "rebuild", 'F', UOPT_NO_ARG),
+/*12*/    UOPTION_DEF( "tempdir", 'T', UOPT_REQUIRES_ARG),
+/*13*/    UOPTION_DEF( "install", 'I', UOPT_REQUIRES_ARG),
+/*14*/    UOPTION_SOURCEDIR 
 };
 
-const char options_help[][80]={
+const char options_help[][160]={
   "Set the data name",
-  "Specify options for the builder",
+#ifdef WIN32
+      "R:icupath for release version or D:icupath for debug version, where icupath is the directory where ICU is located"
+#else
+      "Specify options for the builder",
+#endif
   "Specify the mode of building (see below)",
   "This usage text",
   "This usage text",
@@ -127,11 +131,7 @@ main(int argc, const char *argv[]) {
       fprintf(stderr, "Run '%s --help' for help.\n", progname);
       return 1;
     }
-#ifdef WIN32     
-    if(! (options[0].doesOccur && 
-#else
     if(! (options[0].doesOccur && options[1].doesOccur &&
-#endif
           options[2].doesOccur) ) {
       fprintf(stderr, " required parameters are missing: -p AND -O AND -m \n");
       fprintf(stderr, "Run '%s --help' for help.\n", progname);
@@ -189,7 +189,31 @@ main(int argc, const char *argv[]) {
   }
 
   o.shortName = options[0].value;
+#ifdef WIN32 /* format is R:pathtoICU or D:pathtoICU */
+  {
+      char *pathstuff = (char *)options[1].value;
+      if(options[1].value[uprv_strlen(options[1].value)-1] == '\\') {
+        pathstuff[uprv_strlen(options[1].value)-1] = '\0';
+      }
+      if(*pathstuff == 'R' || *pathstuff == 'D') {
+          o.options = pathstuff;
+          pathstuff++;
+          if(*pathstuff == ':') {
+              *pathstuff = '\0';
+              pathstuff++;
+          } else {
+            fprintf(stderr, "Error: invalid windows build mode, should be R (release) or D (debug).\n", o.mode, progname);
+            return 1;
+          }
+      } else {
+        fprintf(stderr, "Error: invalid windows build mode, should be R (release) or D (debug).\n", o.mode, progname);
+        return 1;
+      }
+      o.icuroot = pathstuff;
+  }
+#else /* on UNIX, we'll just include the file... */
   o.options   = options[1].value;
+#endif
   o.verbose   = options[5].doesOccur;
   if(options[6].doesOccur) {
     o.comment = U_COPYRIGHT_STRING;
@@ -218,7 +242,7 @@ main(int argc, const char *argv[]) {
   }
 
   if( options[14].doesOccur ) {
-    o.srcDir   = options[12].value;
+    o.srcDir   = options[14].value;
   } else {
     o.srcDir   = ".";
   }
@@ -317,6 +341,8 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
   CharList   *l, *tail = NULL, *tail2 = NULL;
   FileStream *in; 
   char        line[2048];
+  char        tmp[1024];
+  const char* baseName;
   char       *s;
   
   for(l = o->fileListFiles; l; l = l->next) {
@@ -350,8 +376,18 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
       /* add the file */
       s = (char*)getLongPathname(line);
 
-      o->files = pkg_appendToList(o->files, &tail, uprv_strdup(findBasename(s)));
-      o->filePaths = pkg_appendToList(o->filePaths, &tail2, uprv_strdup(s));
+      baseName = findBasename(s);
+
+      o->files = pkg_appendToList(o->files, &tail, uprv_strdup(baseName));
+
+      if(s != baseName) { /* s was something long, so we leave it as it is */
+        o->filePaths = pkg_appendToList(o->filePaths, &tail2, uprv_strdup(s));
+      } else { /* s was just a basename, we want to prepend source dir*/
+          uprv_strcpy(tmp, o->srcDir);
+          uprv_strcat(tmp, o->srcDir[uprv_strlen(o->srcDir)-1]==U_FILE_SEP_CHAR?"":U_FILE_SEP_STRING);
+          uprv_strcat(tmp, s);
+          o->filePaths = pkg_appendToList(o->filePaths, &tail2, uprv_strdup(tmp)); 
+      }
     }
     
     T_FileStream_close(in);
