@@ -580,9 +580,12 @@ public:
                                        UnicodeString& name);
 
   /**
-  * Get the set of Locales for which Collations are installed
+  * Get the set of Locales for which Collations are installed.
+  *
+  * <p>Note this does not include locales supported by registered collators.</p>
+  *
   * @param count the output parameter of number of elements in the locale list
-  * @return the list of available locales which collations are installed
+  * @return the list of available locales for which collations are installed
   * @stable ICU 2.0
   */
   static const Locale* getAvailableLocales(int32_t& count);
@@ -901,9 +904,11 @@ public:
 
     /**
      * Return the name of the collator for the objectLocale, localized for the displayLocale.
-     * If objectLocale is not visible or not defined by the factory, return null.
+     * If objectLocale is not visible or not defined by the factory, set the result string
+     * to bogus.
      * @param objectLocale the locale identifying the collator
      * @param displayLocale the locale for which the display name of the collator should be localized
+     * @param result an output parameter for the display name, set to bogus if none supported.
      * @return the display name
      * @draft ICU 2.6
      */
@@ -915,7 +920,7 @@ public:
      * Return the locale names directly supported by this factory.  The number of names
      * is returned in count;
      */
-    virtual const UnicodeString * const getSupportedIDs(int32_t &count, UErrorCode& status) const = 0;
+    virtual const UnicodeString * const getSupportedIDs(int32_t &count, UErrorCode& status) = 0;
 };
 
 // Collator inline methods -----------------------------------------------
