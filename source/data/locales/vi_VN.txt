@@ -1,0 +1,18 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+vi_VN {
+    Version{ "1.1" }
+    CurrencyElements {
+        "\u20AB",
+        "VND",
+        ",",
+    }
+    LocaleID:int { 0x042A }
+//    LocaleString { "vi_VN" }
+//    ShortCountry { "VNM" }
+}

@@ -1,0 +1,119 @@
+// ***************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// ***************************************************************************
+
+da {
+    Version {"1.1"}
+    CollationElements { 
+        Version { "2.0" }
+        Sequence { "& A < \u00E6\u0301 , \u00C6\u0301& Z < \u00E6 , \u00C6;"
+        " a\u0308 , A\u0308 < \u00F8 , \u00D8 ; o\u0308 , O\u0308 ; o\u030B, O\u030B< a\u030A"
+        " , A\u030A, aa , aA , Aa , AA & V, w, W & Y ; u\u0308 , U\u0308 &D < \u00F0, \u00D0 &T < \u00FE, \u00DE" }
+    }
+    Countries { 
+        DK { "Danmark" }
+    }
+    DateTimeElements:intvector { 
+        2,
+        4,
+    }
+    DateTimePatterns { 
+        "HH:mm:ss z",
+        "HH:mm:ss z",
+        "HH:mm:ss",
+        "HH:mm",
+        "d. MMMM yyyy",
+        "d. MMMM yyyy",
+        "dd-MM-yyyy",
+        "dd-MM-yy",
+        "{1} {0}",
+    }
+    DayAbbreviations { 
+        "s\u00F8",
+        "ma",
+        "ti",
+        "on",
+        "to",
+        "fr",
+        "l\u00F8",
+    }
+    DayNames { 
+        "s\u00F8ndag",
+        "mandag",
+        "tirsdag",
+        "onsdag",
+        "torsdag",
+        "fredag",
+        "l\u00F8rdag",
+    }
+    Languages { 
+        da { "dansk" }
+    }
+    LocaleID:int { 0x06 }
+//    LocaleString { "da" }
+    MonthAbbreviations { 
+        "jan",
+        "feb",
+        "mar",
+        "apr",
+        "maj",
+        "jun",
+        "jul",
+        "aug",
+        "sep",
+        "okt",
+        "nov",
+        "dec",
+    }
+    MonthNames { 
+        "januar",
+        "februar",
+        "marts",
+        "april",
+        "maj",
+        "juni",
+        "juli",
+        "august",
+        "september",
+        "oktober",
+        "november",
+        "december",
+    }
+    NumberElements { 
+        ",",
+        ".",
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+    }
+//    ShortLanguage { "dan" }
+    localPatternChars { "GuMtkHmsSEDFwWahKzUe" }
+    Eras { 
+        "f.Kr.",
+        "e.Kr.",
+    }
+
+    zoneStrings { 
+        {
+            "Europe/Copenhagen",
+            "Central European Time",
+            "MET",
+            "Central European Time (DST)",
+            "MET",
+            "Copenhagen",
+        }
+    }
+//    LocaleScript{  
+//        "Latn",  // ISO 15924 Name 
+//    }
+    ExemplarCharacters { "[a-z \u00e6 \u00e5 \u00f8 \u00e1 \u00e9 \u00ed \u00f3 \u00fa \u00fd]" }
+}

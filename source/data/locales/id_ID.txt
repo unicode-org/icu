@@ -1,0 +1,27 @@
+// *******************************************************************************
+// *
+// *   Copyright (C) 1997-2002, International Business Machines
+// *   Corporation and others.  All Rights Reserved.
+// *
+// *******************************************************************************
+
+id_ID {
+   Version { "1.0" }
+   CurrencyElements {
+        "Rp",
+        "IDR",
+        ",",
+    }
+    DateTimePatterns {
+        "h:mm:ss a",
+        "h:mm:ss a",
+        "h:mm:ss a",
+        "h:mm a",
+        "EEEE dd MMMM yyyy",
+        "dd MMMM yyyy",
+        "MMM dd,yy",
+        "dd/MM/yy",
+        "{1} {0}",
+    }
+    LocaleID:int { 0x0421 }
+}

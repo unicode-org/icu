@@ -1,0 +1,126 @@
+#
+#   Copyright (C) 2002, International Business Machines Corporation and others.
+#       All Rights Reserved.
+#
+#   file:  word.txt   
+#
+#   ICU Word Break Rules
+#      See Unicode Technical Report #29.
+#      These rules are based on the proposed draft dated 2002-08-06
+#
+
+
+
+####################################################################################
+#
+#  Definitions imported from Line Break Rules.
+#
+####################################################################################
+$Numeric = [ \u0030-\u0039 \u0660-\u0669 \u06F0-\u06F9 \u0966-\u096F \u09E6-\u09EF
+        \u0A66-\u0A6F \u0AE6-\u0AEF \u0B66-\u0B6F \u0BE7-\u0BEF \u0C66-\u0C6F
+        \u0CE6-\u0CEF \u0D66-\u0D6F \u0E50-\u0E59 \u0ED0-\u0ED9 \u0F20-\u0F29
+        \u1040-\u1049 \u1369-\u1371 \u17E0-\u17E9 \u1810-\u1819 \U0001D7CE-\U0001D7FF];
+
+
+
+####################################################################################
+#
+#  Definitions imported from Character Break Rules.
+#
+####################################################################################
+#
+#  Character Class Definitions.
+#    The names are those from TR29.
+#
+$Control    = [[:Zl:] [:Zp:] [:Cc:] [:Cf:]];
+
+# Note on $Extend:  Earlier versions of TR29 included Mc characters.
+#                   To avoid test breakage, Mc is still included for the time being.
+# $Extend     = [[:Mn:] [:Me:] \uff9e-\uff9f];   #  FF9E..FF9F    ; Other_Grapheme_Extend
+$Extend     = [[:Mn:] [:Me:] [:Mc:] \uff9e-\uff9f];   #  FF9E..FF9F    ; Other_Grapheme_Extend
+
+
+
+
+####################################################################################
+#
+#  Word Break Rules.    Definitions and Rules specific to word break begin Here. 
+#
+####################################################################################
+
+$Katakana  = [[:Kana:]  \u30fc \uff70 \uff9e-\uff9f];
+$Hiragana  = [[:Hira:]];
+$Letter    = [[[:Alphabetic:]  \u02b9-\u02ba \u02c2-\u02cf \u02d2-\u02df \u02e5-\u02ed \u05f3] -
+             [[:IDEOGRAPHIC:] [:THAI:] [:LAO:] $Hiragana $Katakana ]];
+$Format    = [[:Cf:]];
+
+$MidLetter = [\u0027 \u00ad \u05f4 \u2019];
+
+$MidNumLet = [\u002e \u003a];
+
+
+# From Line Break, IS - Numeric Separator (Infix)
+#  $IS = [\u002c \u002e \u003a \u003b \u0589];
+$MidNum    = [\u002c \u003b \u0589];
+
+#
+#  "Extended"  definitions.  Classes of characters including trailing combining chars and,
+#                            for types of chars that can appear in the interior of a word only,
+#                            trailing format characters.
+#
+$LetterEx     = $Letter    $Extend*; 
+$NumericEx    = $Numeric   $Extend*;
+$MidNumExF    = $MidNum    $Extend* $Format*;
+$MidNumLetExF = $MidNumLet $Extend* $Format*;
+$MidLetterExF = $MidLetter $Extend* $Format*;
+
+
+#
+#  Numbers.  Rules 6, 9, 10 form the TR.
+#
+$NumberSequence = $NumericEx ($Format* ($MidNumExF | $MidNumLetExF)? $NumericEx)*;
+$NumberSequence {100};
+
+#
+#  Words.  Alpha-numerics.  Rule 3 - 10
+#     - must include at least one letter. 
+#     - may include both letters and numbers.
+#     - may include  MideLetter, MidNumber punctuation.
+#
+$LetterSequence = $LetterEx ($Format* ($MidLetterExF | $MidNumLetExF)? $LetterEx)*;
+$NumberSequence? $LetterSequence ($NumberSequence | $LetterSequence)* {200};
+
+#
+#  Hiragana and Katakana
+#
+$Hiragana $Extend* {300};
+$Katakana $Extend* ($Format* $Katakana $Extend*)* {300};
+
+#
+#  Ideographic Characters.  Stand by themselves as words.
+#
+[:IDEOGRAPHIC:] $Extend* {400};
+
+#
+#  Everything Else, with no tag.
+#                   Non-Control chars combine with $Extend (combining) chars.
+#                   Controls are returned by themselves.
+#
+[^$Control] $Extend*;
+\r\n;
+.;
+
+#
+#  Reverse Rules.   Back up over any of the chars that can group together.
+#                   (Reverse rules do not need to be exact; they can back up  too far,
+#                   but must back up at least enough, and must stop on a boundary.)
+#
+
+# NonStarters are the set of all characters that can appear at the 2nd - nth position of
+#    a word.   (They may also be the first.)   The reverse rule skips over these, until it
+#    reaches something that can only be the start (and probably only) char in a "word".
+#    A space or punctuation meets the test.
+#
+$NonStarters = [$Numeric $Letter $Katakana $MidLetter $MidNum $MidNumLet $Extend $Format \u000a];
+
+! $NonStarters* .;
