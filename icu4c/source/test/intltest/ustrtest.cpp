@@ -79,6 +79,23 @@ UnicodeStringTest::TestBasicManipulation()
         errln("length() failed: expected 70, got " + test1.length());
     if (test2.length() != 30)
         errln("length() failed: expected 30, got " + test2.length());
+
+	UnicodeString test3;
+	test3.append((UChar32)0x20402);
+	if(test3 != CharsToUnicodeString("\\uD841\\uDC02")){
+		errln((UnicodeString)"append failed for UChar32, expected \"\\\\ud841\\\\udc02\", got " + prettify(test3));
+	}
+	if(test3.length() != 2){
+		errln("append or length failed for UChar32, expected 2, got " + test3.length());
+	}
+	test3.append((UChar32)0x0074);
+	if(test3 != CharsToUnicodeString("\\uD841\\uDC02t")){
+		errln((UnicodeString)"append failed for UChar32, expected \"\\\\uD841\\\\uDC02t\", got " + prettify(test3));
+	}
+	if(test3.length() != 3){
+        errln((UnicodeString)"append or length failed for UChar32, expected 2, got " + test3.length());
+	}
+
 }
 
 void
@@ -268,7 +285,7 @@ UnicodeStringTest::TestCaseConversion()
     if (test4 != expectedResult)
         errln("1. toLower failed: expected \"" + expectedResult + "\", got \"" + test4 + "\".");
 
-    test4 = test3;
+	test4 = test3;
     test4.toLower(Locale("tr", "TR"));
     expectedResult = lowercaseTurkish;
     if (test4 != expectedResult)
@@ -317,7 +334,14 @@ UnicodeStringTest::TestSearching()
 {
     UnicodeString test1("test test ttest tetest testesteststt");
     UnicodeString test2("test");
-    UChar testChar = 0x74;
+	UChar testChar = 0x74;
+    
+	UChar32 testChar32 = 0x20402;
+	UChar testData[]={0xd841, 0xdc02, 0x71, 0xdc02, 0xd841, 0x71, 0xd841, 0xdc02, 0x71, 0x72, 0xd841, 0xdc02, 0x71, 0xd841, 0xdc02, 0x71, 0xdc02, 0xd841, 0x73, 0x0000};
+    UnicodeString test3(testData);
+	UnicodeString test4(testChar32);
+
+
 
     uint16_t occurrences = 0;
     UTextOffset startPos = 0;
@@ -327,7 +351,7 @@ UnicodeStringTest::TestSearching()
         ;
     if (occurrences != 6)
         errln("indexOf failed: expected to find 6 occurrences, found " + occurrences);
-
+    
     for ( occurrences = 0, startPos = 10;
           startPos != -1 && startPos < test1.length();
           (startPos = test1.indexOf(test2, startPos)) != -1 ? (++occurrences, startPos += 4) : 0)
@@ -335,13 +359,29 @@ UnicodeStringTest::TestSearching()
     if (occurrences != 4)
         errln("indexOf with starting offset failed: expected to find 4 occurrences, found " + occurrences);
 
-    UTextOffset endPos = 28;
+	UTextOffset endPos = 28;
     for ( occurrences = 0, startPos = 5;
           startPos != -1 && startPos < test1.length();
           (startPos = test1.indexOf(test2, startPos, endPos - startPos)) != -1 ? (++occurrences, startPos += 4) : 0)
         ;
     if (occurrences != 4)
         errln("indexOf with starting and ending offsets failed: expected to find 4 occurrences, found " + occurrences);
+
+	//using UChar32 string
+	for ( startPos=0, occurrences=0;
+          startPos != -1 && startPos < test3.length();
+          (startPos = test3.indexOf(test4, startPos)) != -1 ? (++occurrences, startPos += 2) : 0)
+        ;
+    if (occurrences != 4)
+        errln((UnicodeString)"indexOf failed: expected to find 4 occurrences, found " + occurrences);
+	
+	for ( startPos=10, occurrences=0;
+          startPos != -1 && startPos < test3.length();
+          (startPos = test3.indexOf(test4, startPos)) != -1 ? (++occurrences, startPos += 2) : 0)
+        ;
+    if (occurrences != 2)
+        errln("indexOf failed: expected to find 2 occurrences, found " + occurrences);
+	//---
 
     for ( occurrences = 0, startPos = 0;
           startPos != -1 && startPos < test1.length();
@@ -364,6 +404,34 @@ UnicodeStringTest::TestSearching()
     if (occurrences != 10)
         errln("indexOf with character & start & end offsets failed: expected to find 10 occurrences, found " + occurrences);
 
+    //testing for UChar32
+    UnicodeString subString;
+	for( occurrences =0, startPos=0; startPos < test3.length(); startPos +=1){
+		 subString.append(test3, startPos, test3.length());
+		 if(subString.indexOf(testChar32) != -1 ){
+			  ++occurrences;
+		 }
+		 subString.remove();
+	}
+    if (occurrences != 14)
+        errln((UnicodeString)"indexOf failed: expected to find 14 occurrences, found " + occurrences);
+
+	for ( occurrences = 0, startPos = 0;
+          startPos != -1 && startPos < test3.length();
+          (startPos = test3.indexOf(testChar32, startPos)) != -1 ? (++occurrences, startPos += 1) : 0)
+        ;
+    if (occurrences != 4)
+        errln((UnicodeString)"indexOf failed: expected to find 4 occurrences, found " + occurrences);
+     
+	endPos=test3.length();
+	for ( occurrences = 0, startPos = 5;
+          startPos != -1 && startPos < test3.length();
+          (startPos = test3.indexOf(testChar32, startPos, endPos - startPos)) != -1 ? (++occurrences, startPos += 1) : 0)
+        ;
+    if (occurrences != 3)
+        errln((UnicodeString)"indexOf with character & start & end offsets failed: expected to find 2 occurrences, found " + occurrences);
+    //---
+
     for ( occurrences = 0, startPos = 32;
           startPos != -1;
           (startPos = test1.lastIndexOf(test2, 5, startPos - 5)) != -1 ? ++occurrences : 0)
@@ -377,6 +445,27 @@ UnicodeStringTest::TestSearching()
         ;
     if (occurrences != 11)
         errln("lastIndexOf with character & start & end offsets failed: expected to find 11 occurrences, found " + occurrences);
+    
+	//testing UChar32
+	startPos=test3.length();
+	for ( occurrences = 0;
+          startPos != -1;
+          (startPos = test3.lastIndexOf(testChar32, 5, startPos - 5)) != -1 ? ++occurrences : 0)
+        ;
+    if (occurrences != 3)
+        errln((UnicodeString)"lastIndexOf with character & start & end offsets failed: expected to find 3 occurrences, found " + occurrences);
+  
+   
+	for ( occurrences = 0, endPos = test3.length();  endPos > 0; endPos -= 1){
+		subString.remove();
+		subString.append(test3, 0, endPos);
+		if(subString.lastIndexOf(testChar32) != -1 ){
+			++occurrences;
+		}
+	}
+    if (occurrences != 18)
+        errln((UnicodeString)"indexOf failed: expected to find 18 occurrences, found " + occurrences);
+	//---
 }
 
 void
