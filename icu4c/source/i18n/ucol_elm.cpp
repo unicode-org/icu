@@ -1346,7 +1346,17 @@ uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
     }
 
     UCATableHeader *myData = (UCATableHeader *)dataStart;
-    uprv_memcpy(myData, t->image, sizeof(UCATableHeader));
+    // Please, do reset all the fields!
+    uprv_memset(dataStart, 0, toAllocate);
+    // Make sure we know this is reset
+    myData->magic = UCOL_HEADER_MAGIC;
+    myData->isBigEndian = U_IS_BIG_ENDIAN;
+    myData->charSetFamily = U_CHARSET_FAMILY;
+    uprv_memcpy(myData->formatVersion, ucaDataInfo.formatVersion, sizeof(UVersionInfo));
+    myData->jamoSpecial = t->image->jamoSpecial;
+
+    // Don't copy stuff from UCA header!
+    //uprv_memcpy(myData, t->image, sizeof(UCATableHeader));
 
     myData->contractionSize = contractionsSize;
 
@@ -1377,7 +1387,7 @@ uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
       tableOffset += (uint32_t)(paddedsize(contractionsSize*sizeof(uint32_t)));
     } else {
       myData->contractionIndex = 0;
-      myData->contractionIndex = 0;
+      myData->contractionCEs = 0;
     }
 
     /* copy mapping table */
