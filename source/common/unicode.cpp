@@ -202,40 +202,6 @@ Unicode::toTitleCase(UChar ch)
     return(u_totitle(ch) );
 }
 
-/**
- * Determines if the specified character is ISO-LATIN-1 white space. 
- * This method returns <code>true</code> for the following five 
- * characters only: 
- * <table>
- * <tr><td>'\t'</td>            <td>&#92;u0009</td>
- *     <td><code>HORIZONTAL TABULATION</code></td></tr>
- * <tr><td>'\n'</td>            <td>&#92;u000A</td>
- *     <td><code>NEW LINE</code></td></tr>
- * <tr><td>'\f'</td>            <td>&#92;u000C</td>
- *     <td><code>FORM FEED</code></td></tr>
- * <tr><td>'\r'</td>            <td>&#92;u000D</td>
- *     <td><code>CARRIAGE RETURN</code></td></tr>
- * <tr><td>'&nbsp;&nbsp;'</td>  <td>&#92;u0020</td>
- *     <td><code>SPACE</code></td></tr>
- * </table>
- *
- * @param      ch   the character to be tested.
- * @return     <code>true</code> if the character is ISO-LATIN-1 white
- *             space; <code>false</code> otherwise.
- * @see        #isSpaceChar
- * @see        #isWhitespace
- * @deprecated Replaced by isWhitespace(char).
- */
-bool_t
-Unicode::isSpace(UChar ch) {
-    return (ch <= 0x0020) &&
-        (((((int32_t(1) << 0x0009) |
-            (int32_t(1) << 0x000A) |
-            (int32_t(1) << 0x000C) |
-            (int32_t(1) << 0x000D) |
-            (int32_t(1) << 0x0020)) >> ch) & int32_t(1)) != 0);
-}
-
 // Checks if the Unicode character is a space character.
 bool_t
 Unicode::isSpaceChar(UChar ch) 
@@ -243,33 +209,34 @@ Unicode::isSpaceChar(UChar ch)
     return(u_isspace(ch) );
 }
 
-/**
- * Determines if the specified character is white space according to ICU.
- * A character is considered to be an ICU whitespace character if and only
- * if it satisfies one of the following criteria:
- * <ul>
- * <li> It is a Unicode space separator (category "Zs"), but is not
- *      a no-break space (&#92;u00A0 or &#92;uFEFF).
- * <li> It is a Unicode line separator (category "Zl").
- * <li> It is a Unicode paragraph separator (category "Zp").
- * <li> It is &#92;u0009, HORIZONTAL TABULATION.
- * <li> It is &#92;u000A, LINE FEED.
- * <li> It is &#92;u000B, VERTICAL TABULATION.
- * <li> It is &#92;u000C, FORM FEED.
- * <li> It is &#92;u000D, CARRIAGE RETURN.
- * <li> It is &#92;u001C, FILE SEPARATOR.
- * <li> It is &#92;u001D, GROUP SEPARATOR.
- * <li> It is &#92;u001E, RECORD SEPARATOR.
- * <li> It is &#92;u001F, UNIT SEPARATOR.
- * </ul>
- *
- * @param   ch	the character to be tested.
- * @return  true if the character is a Java whitespace character;
- *          false otherwise.
- * @see     #isSpaceChar
- */
+// Determines if the specified character is white space according to ICU.
 bool_t
 Unicode::isWhitespace(UChar ch) {
+    // TODO Move this implementation to C, and make this call the C
+    //      implementation.
+    // TODO Optional -- reimplement in terms of modified category
+    //      code -- see Mark Davis's note (below).  If this is done,
+    //      the implementation still must conform to the specified
+    //      semantics.  That is, U+00A0 and U+FEFF must return false,
+    //      and the ranges U+0009 - U+000D and U+001C - U+001F must
+    //      return true.  Characters other than these in Zs, Zl, or Zp
+    //      must return true.
+
+    int8_t cat = Unicode::getType(ch);
+    return
+        (cat == SPACE_SEPARATOR && ch != 0x00A0 && ch != 0xFEFF) ||
+        (((((int32_t(1) << LINE_SEPARATOR) |
+            (int32_t(1) << PARAGRAPH_SEPARATOR)) >> cat) & int32_t(1)) != 0) ||
+        (ch <= 0x1F && ((((int32_t(1) << 0x0009) |
+                          (int32_t(1) << 0x000A) |
+                          (int32_t(1) << 0x000B) |
+                          (int32_t(1) << 0x000C) |
+                          (int32_t(1) << 0x000D) |
+                          (int32_t(1) << 0x001C) |
+                          (int32_t(1) << 0x001D) |
+                          (int32_t(1) << 0x001E) |
+                          (int32_t(1) << 0x001F)) >> ch) & int32_t(1)) != 0);
+
     // From Mark Davis:
     //| What we should do is to make sure that the special Cc characters like CR
     //| have either Zs, Zl, or Zp in the property database. We can then just call
@@ -282,23 +249,9 @@ Unicode::isWhitespace(UChar ch) {
     //| 
     //| This is much faster code, since it just looksup the property value and does
     //| a couple of arithmetics to get the right answer.
-
-    // TEMPORARY IMPLEMENTATION until the tables are updated to
-    // modify Cc character categories:
-    int8_t cat = Unicode::getType(ch);
-    return
-        (cat == SPACE_SEPARATOR && ch != 0x00A0 && ch != 0xFEFF) ||
-        (cat == LINE_SEPARATOR) ||
-        (cat == PARAGRAPH_SEPARATOR) ||
-        (ch <= 0x1F && ((((int32_t(1) << 0x0009) |
-                          (int32_t(1) << 0x000A) |
-                          (int32_t(1) << 0x000B) |
-                          (int32_t(1) << 0x000C) |
-                          (int32_t(1) << 0x000D) |
-                          (int32_t(1) << 0x001C) |
-                          (int32_t(1) << 0x001D) |
-                          (int32_t(1) << 0x001E) |
-                          (int32_t(1) << 0x001F)) >> ch) & int32_t(1)) != 0);
+    //
+    // (We still have to make sure U+00A0 and U+FEFF are excluded, so the code
+    //  might not be as simple as this. - aliu)
 }
 
 // Gets if the Unicode character's character property.

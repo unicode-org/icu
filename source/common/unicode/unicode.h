@@ -529,32 +529,6 @@ public:
     static  UChar             toTitleCase(UChar     ch);
 
     /**
-     * Determines if the specified character is ISO-LATIN-1 white space. 
-     * This method returns <code>true</code> for the following five 
-     * characters only: 
-     * <table>
-     * <tr><td>'\t'</td>            <td>&#92;u0009</td>
-     *     <td><code>HORIZONTAL TABULATION</code></td></tr>
-     * <tr><td>'\n'</td>            <td>&#92;u000A</td>
-     *     <td><code>NEW LINE</code></td></tr>
-     * <tr><td>'\f'</td>            <td>&#92;u000C</td>
-     *     <td><code>FORM FEED</code></td></tr>
-     * <tr><td>'\r'</td>            <td>&#92;u000D</td>
-     *     <td><code>CARRIAGE RETURN</code></td></tr>
-     * <tr><td>'&nbsp;&nbsp;'</td>  <td>&#92;u0020</td>
-     *     <td><code>SPACE</code></td></tr>
-     * </table>
-     *
-     * @param      ch   the character to be tested.
-     * @return     <code>true</code> if the character is ISO-LATIN-1 white
-     *             space; <code>false</code> otherwise.
-     * @see        #isSpaceChar
-     * @see        #isWhitespace
-     * @deprecated Replaced by isWhitespace(char).
-     */
-    static bool_t isSpace(UChar ch);
-
-    /**
      * Determines if the specified character is a Unicode space character
      * according to Unicode 2.1.2.
      *
@@ -582,11 +556,14 @@ public:
      * <li> It is &#92;u001E, RECORD SEPARATOR.
      * <li> It is &#92;u001F, UNIT SEPARATOR.
      * </ul>
+     * Note: This method corresponds to the Java method
+     * <tt>java.lang.Character.isWhitespace()</tt>.
      *
      * @param   ch	the character to be tested.
-     * @return  true if the character is a Java whitespace character;
+     * @return  true if the character is an ICU whitespace character;
      *          false otherwise.
      * @see     #isSpaceChar
+     * @draft
      */
     static bool_t isWhitespace(UChar ch);
 
