@@ -899,8 +899,6 @@ CollationAPITest::TestOperators(/* char* par */)
     doAssert((*col7 != *col9), "The two different table collations compared equal");
     doAssert((*col8 != *col9), "The two different table collations compared equal");
 
-
-
     logln("operator tests ended.");
     delete col1;
     delete col2;
@@ -1787,7 +1785,12 @@ public:
     virtual int32_t getSortKey(const UChar*source, int32_t sourceLength,
                              uint8_t*result, int32_t resultLength) const;
     virtual UnicodeSet *getTailoredSet(UErrorCode &status) const;
+	virtual UBool operator!=(const TestCollator& other) const;
 };
+
+inline UBool TestCollator::operator!=(const TestCollator& other) const {
+	return Collator::operator!=(other);
+}
 
 #define returnEComparisonResult(data) \
 	                    if (data < 0) return EComparisonResult::LESS;\
@@ -1937,10 +1940,8 @@ void CollationAPITest::TestSubclass()
 {
 	TestCollator col1;
     TestCollator col2;
-    if (&col1 == &col2) {
-        errln("2 different instance of TestCollator should fail");
-    }
-    if (col1.hashCode() != col2.hashCode()) {
+    doAssert(col1 != col2, "2 instance of TestCollator should be different");
+	if (col1.hashCode() != col2.hashCode()) {
         errln("Every TestCollator has the same hashcode");
     }
     UnicodeString abc("abc", 3);
