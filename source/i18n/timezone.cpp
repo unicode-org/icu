@@ -42,11 +42,12 @@
 #include "unicode/udata.h"
 #include "tzdat.h"
 #include "cstring.h"
+#include "ucln_in.h"
 
 // static initialization
 char                       TimeZone::fgClassID = 0; // Value is irrelevant
 
-TimeZone*                  TimeZone::fgDefaultZone = NULL;
+TimeZone*                  DEFAULT_ZONE = NULL;
 
 static const UChar         GMT_ID[] = {0x47, 0x4D, 0x54, 0x00}; /* "GMT" */
 static const int32_t       GMT_ID_LENGTH = 3;
@@ -60,14 +61,16 @@ const TimeZone*            TimeZone::GMT = getGMT();
 #endif
 
 // See header file for documentation of the following
-static const TZHeader *    DATA = 0;
+static const TZHeader *    DATA = NULL;
 static const uint32_t*     INDEX_BY_ID = 0;
 static const OffsetIndex*  INDEX_BY_OFFSET = 0;
 static const CountryIndex* INDEX_BY_COUNTRY = 0;
 static UnicodeString*      ZONE_IDS = 0;
-static UBool               DATA_LOADED = FALSE;
 static UDataMemory*        UDATA_POINTER = 0;
 static UMTX                LOCK;
+static UBool               DATA_LOADED = FALSE;
+
+const TimeZone*            GMT = NULL;
 
 static void                 loadZoneData(void);
 static const TZEquivalencyGroup* lookupEquivalencyGroup(const UnicodeString& id);
@@ -77,8 +80,10 @@ static const TZEquivalencyGroup* lookupEquivalencyGroup(const UnicodeString& id)
 const TimeZone*
 TimeZone::getGMT(void)
 {
-    static const SimpleTimeZone SIMPLE_GMT(0, UnicodeString(GMT_ID, GMT_ID_LENGTH));
-    return &SIMPLE_GMT;
+    if (!DATA_LOADED) {
+        loadZoneData();
+    }
+    return GMT;
 }
 
 /**
@@ -101,6 +106,36 @@ isTimeZoneDataAcceptable(void * /*context*/,
 }
 U_CDECL_END
 
+UBool timeZone_cleanup()
+{
+    DATA = NULL;
+    INDEX_BY_ID = NULL;
+    INDEX_BY_OFFSET = NULL;
+    INDEX_BY_COUNTRY = NULL;
+    if (ZONE_IDS) {
+        delete []ZONE_IDS;
+        ZONE_IDS = NULL;
+    }
+    if (UDATA_POINTER) {
+        udata_close(UDATA_POINTER);
+        UDATA_POINTER = NULL;
+    }
+    if (LOCK) {
+        umtx_destroy(&LOCK);
+        LOCK = NULL;
+    }
+    if (::GMT) {
+        delete ::GMT;
+        ::GMT = NULL;
+    }
+    if (DEFAULT_ZONE) {
+        delete DEFAULT_ZONE;
+        DEFAULT_ZONE = NULL;
+    }
+    DATA_LOADED = FALSE;
+    return TRUE;
+}
+
 /**
  * Attempt to load the system zone data from icudata.dll (or its
  * equivalent).  After this call returns DATA_LOADED will be true.
@@ -116,7 +151,9 @@ U_CDECL_END
  */
 static void loadZoneData() {
     if (!DATA_LOADED) {
+        umtx_lock(NULL);
         Mutex lock(&LOCK);
+        umtx_unlock(NULL);
         if (!DATA_LOADED) {
             UErrorCode status = U_ZERO_ERROR;
             UDATA_POINTER = udata_openChoice(0, TZ_DATA_TYPE, TZ_DATA_NAME, // THIS IS NOT A LEAK!
@@ -156,6 +193,8 @@ static void loadZoneData() {
 
             // Whether we succeed or fail, stop future attempts
             DATA_LOADED = TRUE;
+            ::GMT = new SimpleTimeZone(0, UnicodeString(GMT_ID, GMT_ID_LENGTH));
+            ucln_i18n_registerCleanup();
         }
     }
 }
@@ -292,9 +331,9 @@ TimeZone::initDefault()
     // fgDefaultZone from the system default time zone.  If
     // fgDefaultZone is already filled in, we obviously don't have to
     // do anything.
-    if (fgDefaultZone == 0) {
+    if (DEFAULT_ZONE == 0) {
         Mutex lock(&LOCK);
-        if (fgDefaultZone == 0) {
+        if (DEFAULT_ZONE == 0) {
             // We access system timezone data through TPlatformUtilities,
             // including tzset(), timezone, and tzname[].
             int32_t rawOffset = 0;
@@ -322,7 +361,7 @@ TimeZone::initDefault()
             // but that means we'd have to do so for every locale.  A
             // better way is to use the offset and find a
             // corresponding zone, which is what we do below.
-            fgDefaultZone = createSystemTimeZone(hostID);
+            DEFAULT_ZONE = createSystemTimeZone(hostID);
 
             // If we couldn't get the time zone ID from the host, use
             // the default host timezone offset.  Further refinements
@@ -330,7 +369,7 @@ TimeZone::initDefault()
             // is in use or not and possibly using the host locale to
             // select from multiple zones at a the same offset.  We
             // don't do any of this now, but we could easily add this.
-            if (fgDefaultZone == 0 && DATA != 0) {
+            if (DEFAULT_ZONE == 0 && DATA != 0) {
                 // Use the designated default in the time zone list that has the
                 // appropriate GMT offset, if there is one.
 
@@ -343,7 +382,7 @@ TimeZone::initDefault()
                     }
                     if (index->gmtOffset == rawOffset) {
                         // Found our desired offset
-                        fgDefaultZone = createTimeZone(ZONE_IDS[index->defaultZone]);
+                        DEFAULT_ZONE = createTimeZone(ZONE_IDS[index->defaultZone]);
                         break;
                     }
                     // Compute the position of the next entry.  If the delta value
@@ -359,9 +398,10 @@ TimeZone::initDefault()
             // If we _still_ don't have a time zone, use GMT.  This
             // can only happen if the raw offset returned by
             // uprv_timezone() does not correspond to any system zone.
-            if (fgDefaultZone == 0) {
-                fgDefaultZone = getGMT()->clone();
+            if (DEFAULT_ZONE == 0) {
+                DEFAULT_ZONE = getGMT()->clone();
             }
+            ucln_i18n_registerCleanup();
         }
     }
 }
@@ -373,7 +413,7 @@ TimeZone::createDefault()
 {
     initDefault(); // After this call fgDefaultZone is not NULL
     Mutex lock(&LOCK); // In case adoptDefault is called
-    return fgDefaultZone->clone();
+    return DEFAULT_ZONE->clone();
 }
 
 // -------------------------------------
@@ -385,11 +425,11 @@ TimeZone::adoptDefault(TimeZone* zone)
     {
         Mutex mutex(&LOCK);
 
-        if (fgDefaultZone != NULL) {
-            delete fgDefaultZone;
+        if (DEFAULT_ZONE != NULL) {
+            delete DEFAULT_ZONE;
         }
 
-        fgDefaultZone = zone;
+        DEFAULT_ZONE = zone;
     }
 }
 // -------------------------------------

@@ -656,7 +656,9 @@ static void OpenMessageFormatTest(void)
     }
     /* umsg_format umsg_parse */
 
-
+    umsg_close(f1);
+    umsg_close(f2);
+    umsg_close(f3);
 }
 
 void addMsgForTest(TestNode** root);

@@ -533,19 +533,17 @@ protected:
 private:
     static char fgClassID;
 
-    static TimeZone*        fgDefaultZone; // default time zone (lazy evaluated)
-
     static TimeZone*        createCustomTimeZone(const UnicodeString&); // Creates a time zone based on the string.
 
     /**
-     * Responsible for setting up fgDefaultZone.  Uses routines in TPlatformUtilities
+     * Responsible for setting up DEFAULT_ZONE.  Uses routines in TPlatformUtilities
      * (i.e., platform-specific calls) to get the current system time zone.  Failing
      * that, uses the platform-specific default time zone.  Failing that, uses GMT.
      */
     static void             initDefault(void);
 
     // See source file for documentation
-    static TimeZone* createSystemTimeZone(const UnicodeString& name);
+    static TimeZone*        createSystemTimeZone(const UnicodeString& name);
 
     UnicodeString           fID;    // this time zone's ID
 };
