@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Kannada_InterIndic.txt
-// Date: Tue Nov 13 00:51:08 2001
+// Date: Tue Nov 20 21:43:01 2001
 //--------------------------------------------------------------------
 
 // Kannada_InterIndic
@@ -31,6 +31,7 @@ translit_Kannada_InterIndic {
 //--------------------------------------------------------------------
 // Kannada-InterIndic
 "\u0CC6\u0CD5>\uE047;"        // VOWEL SIGN EE
+"\u0CC6\u0CCD\u0CD6>\uE048\ue04d;"        // VOWEL SIGN AI
 "\u0CC6\u0CD6>\uE048;"        // VOWEL SIGN AI
 "\u0CC6\u0CC2\u0CD5>\uE04B;"  // VOWEL SIGN OO
 "\u0CC6\u0CC2>\uE04A;"        // VOWEL SIGN O

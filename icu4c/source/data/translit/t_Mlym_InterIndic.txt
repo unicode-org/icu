@@ -6,7 +6,7 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Malayalam_InterIndic.txt
-// Date: Tue Nov 13 00:51:08 2001
+// Date: Tue Nov 20 21:43:02 2001
 //--------------------------------------------------------------------
 
 // Malayalam_InterIndic
@@ -31,9 +31,6 @@ translit_Malayalam_InterIndic {
 //--------------------------------------------------------------------
 // Malayalam-InterIndic
 //:: NFD (NFC) ;
-"\u0D46\u0D3E>\uE04A;"// VOWEL SIGN O
-"\u0D47\u0D3E>\uE04B;"// VOWEL SIGN OO
-"\u0D46\u0D57>\uE04C;"// VOWEL SIGN AU
 
 "\u0D02>\uE002;"      // SIGN ANUSVARA
 "\u0D03>\uE003;"      // SIGN VISARGA
