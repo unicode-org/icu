@@ -38,6 +38,8 @@ MIDDLE_SO_TARGET =
 LIBICU = libicu-
 ## Shared object suffix
 SO=		a
+## Non-shared intermediate object suffix
+STATIC_O = o
 
 RMV = rm -rf
 ## Platform commands to remove or move executable and library targets
@@ -63,14 +65,18 @@ LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio
 	@$(SHELL) -ec "echo '#! $*.a($*.so)' | cat - $< > $@"
 
 ## Compilation rules
-%.o : $(srcdir)/%.c
-	$(COMPILE.c) -o $@ $<
+%.$(STATIC_O): $(srcdir)/%.c
+	$(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS) -o $@ $<
+%.o: $(srcdir)/%.c
+	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
 
-%.o : $(srcdir)/%.cpp
-	$(COMPILE.cc) -o $@ $<
+%.$(STATIC_O): $(srcdir)/%.cpp
+	$(COMPILE.cc) $(STATICCPPFLAGS) $(STATICCXXFLAGS) -o $@ $<
+%.o: $(srcdir)/%.cpp
+	$(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS) -o $@ $<
 
-../data/%.o : ../data/%.c
-	$(COMPILE.c) -o $@ $<
+../data/%.o: ../data/%.c
+	$(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS) -o $@ $<
 
 ## Dependency rules
 %.d : %.u

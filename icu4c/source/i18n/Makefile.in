@@ -62,6 +62,10 @@ endif
 
 ALL_TARGETS = $(TARGET) $(ALL_SO_TARGETS)
 
+DYNAMICCPPFLAGS = $(SHAREDLIBCPPFLAGS)
+DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
+DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
+
 DEFS = @DEFS@
 CPPFLAGS = @CPPFLAGS@ $(LIBCPPFLAGS) -I$(srcdir) -I$(top_builddir)/common -I$(top_srcdir)/common
 CFLAGS = @CFLAGS@
@@ -83,6 +87,8 @@ txtbdat.o txtbdry.o ubrk.o ucal.o ucol.o udat.o umsg.o unicdcm.o \
 unifltlg.o unirange.o uniset.o unitohex.o unum.o wdbkdat.o wdbktbl.o \
 dbbi.o dbbi_tbl.o rbbi.o rbbi_tbl.o brkdict.o nultrans.o jamohang.o hangjamo.o \
 	utrans.o
+
+STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 
 DEPS = $(OBJECTS:.o=.d)
 
@@ -133,7 +139,7 @@ dist-local:
 
 clean-local:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
-	$(RMV) $(OBJECTS) $(ALL_TARGETS)
+	$(RMV) $(OBJECTS) $(STATIC_OBJECTS) $(ALL_TARGETS)
 
 distclean-local: clean-local
 	$(RMV) Makefile
@@ -145,7 +151,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 ifneq ($(ENABLE_STATIC),)
-$(TARGET): $(TARGET)($(OBJECTS))
+$(TARGET): $(TARGET)($(STATIC_OBJECTS))
 	$(RANLIB) $@
 endif
 

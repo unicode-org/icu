@@ -68,6 +68,10 @@ endif
 
 ALL_TARGETS = $(TARGET) $(ALL_SO_TARGETS)
 
+DYNAMICCPPFLAGS = $(SHAREDLIBCPPFLAGS)
+DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
+DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
+
 DEFS = @DEFS@
 CPPFLAGS = @CPPFLAGS@ $(LIBCPPFLAGS) -I$(top_builddir)/common -I$(top_srcdir)/common -I$(top_srcdir)/i18n
 CFLAGS = @CFLAGS@
@@ -81,6 +85,8 @@ LIBS = $(LIBICU-UC) $(LIBICU-I18N) @LIBS@
 
 OBJECTS = locbund.o loccache.o ufile.o ufmt_cmn.o uprintf.o uprntf_p.o	\
 uscanf.o uscanf_p.o uscanset.o ustdio.o
+
+STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 
 HEADERS = $(srcdir)/unicode/*.h
 
@@ -130,7 +136,7 @@ dist-local:
 
 clean-local:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
-	$(RMV) $(OBJECTS) $(ALL_TARGETS)
+	$(RMV) $(OBJECTS) $(STATIC_OBJECTS) $(ALL_TARGETS)
 
 distclean-local: clean-local
 	$(RMV) Makefile
@@ -142,7 +148,7 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	 && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 ifneq ($(ENABLE_STATIC),)
-$(TARGET): $(TARGET)($(OBJECTS))
+$(TARGET): $(TARGET)($(STATIC_OBJECTS))
 	$(RANLIB) $@
 endif
 

@@ -1,3 +1,4 @@
+icu4c/*-stamp
 icu4c/data/*.cnv
 icu4c/data/*.dat
 icu4c/data/*.lst
@@ -11,6 +12,7 @@ icu4c/data/line_th.brk
 icu4c/data/sent.brk
 icu4c/data/word.brk
 icu4c/data/word_th.brk
+icu4c/debian
 icu4c/source/Makefile
 icu4c/source/common/*.d
 icu4c/source/common/Debug
