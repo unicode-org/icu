@@ -59,7 +59,7 @@ all-local: $(TARGET) $(ALL_MAN_FILES)
 
 install-local: all-local install-man
 	$(MKINSTALLDIRS) $(DESTDIR)$(bindir)
-	$(INSTALL) $(TARGET) $(DESTDIR)$(bindir)/$(TARGET)
+	$(INSTALL) $(TARGET) $(DESTDIR)$(bindir)
 
 dist-local:
 

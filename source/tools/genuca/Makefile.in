@@ -16,7 +16,7 @@ TARGET_STUB_NAME = genuca
 
 SECTION = 8
 
-MANX_FILES = $(TARGET_STUB_NAME).$(SECTION)
+MAN_FILES = $(TARGET_STUB_NAME).$(SECTION)
 
 ## Build directory information
 subdir = tools/genuca
@@ -55,9 +55,9 @@ all-local: $(TARGET) $(MAN_FILES)
 
 install-local: all-local install-man
 	$(MKINSTALLDIRS) $(DESTDIR)$(sbindir)
-	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)/$(TARGET)
+	$(INSTALL) $(TARGET) $(DESTDIR)$(sbindir)
 
-<dist-local:
+dist-local:
 
 clean-local: 
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
