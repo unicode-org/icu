@@ -5,3 +5,5 @@ Makefile
 *.d
 *.pdb
 gencnval
+gencnval.[0-9]
+

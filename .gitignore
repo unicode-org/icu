@@ -109,6 +109,7 @@ icu4c/source/tools/gencnval/Debug
 icu4c/source/tools/gencnval/Makefile
 icu4c/source/tools/gencnval/Release
 icu4c/source/tools/gencnval/gencnval
+icu4c/source/tools/gencnval/gencnval.[0-9]
 icu4c/source/tools/gencnval/tmp
 icu4c/source/tools/gennames/*.d
 icu4c/source/tools/gennames/*.pdb
@@ -130,6 +131,7 @@ icu4c/source/tools/genrb/Debug
 icu4c/source/tools/genrb/Makefile
 icu4c/source/tools/genrb/Release
 icu4c/source/tools/genrb/genrb
+icu4c/source/tools/genrb/genrb.[0-9]
 icu4c/source/tools/genrb/tmp
 icu4c/source/tools/gentest/*.d
 icu4c/source/tools/gentest/*.pdb

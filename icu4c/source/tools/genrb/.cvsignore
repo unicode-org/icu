@@ -5,3 +5,5 @@ Makefile
 *.d
 *.pdb
 genrb
+genrb.[0-9]
+
