@@ -93,7 +93,7 @@ fi {
         KR { "Etel\u00E4-Korea" }    // alternate name { "Korean tasavalta" }
         KY { "Caymansaaret" }
         KZ { "Kazakstan" }
-        //LA { "Laos" }
+        LA { "Laos" }
         LB { "Libanon" }
         LT { "Liettua" }
         LU { "Luxemburg" }
