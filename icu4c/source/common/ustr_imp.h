@@ -164,4 +164,6 @@ u_terminateUChar32s(UChar32 *dest, int32_t destCapacity, int32_t length, UErrorC
 U_CAPI int32_t U_EXPORT2
 u_terminateWChars(wchar_t *dest, int32_t destCapacity, int32_t length, UErrorCode *pErrorCode);
 
+#define u_getMaxCaseExpansion() 10
+
 #endif
