@@ -1078,14 +1078,25 @@ static void TestAlias() {
             }
 
             if (0 != uprv_strcmp(alias0, mapBack)) {
-                if (status != U_AMBIGUOUS_ALIAS_WARNING) {
+                int32_t idx;
+                UBool foundAlias = FALSE;
+                if (status == U_AMBIGUOUS_ALIAS_WARNING) {
+                    /* Make sure that we only get this mismapping when there is
+                       an ambiguous alias, and the other converter has this alias too. */
+                    for (idx = 0; idx < ucnv_countAliases(mapBack, &status); idx++) {
+                        if (uprv_strcmp(ucnv_getAlias(mapBack, (uint16_t)idx, &status), alias) == 0) {
+                            foundAlias = TRUE;
+                            break;
+                        }
+                    }
+                }
+                /* else not ambiguous, and this is a real problem. foundAlias = FALSE */
+
+                if (!foundAlias) {
                     log_err("FAIL: Converter \"%s\" -> "
                             "alias[%d]=\"%s\" -> "
                             "alias[0]=\"%s\", exp. \"%s\"\n",
                             name, j, alias, mapBack, alias0);
-                }
-                else {
-                    ucnv_getAlias(mapBack, 0, &status);
                 }
             }
         }
