@@ -1,56 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="3.2">Various notes and changes in version 3.2</version>
-		<generation date="2003-04-08" />
+		<version number="4.0">Various notes and changes in version 4.0</version>
+		<generation date="2003-06-25" />
 		<language type="root"></language>
 	</identity>
 	<localeDisplayNames>
-		<scripts>
-			<script type="ARAB">Arabic</script>
-			<script type="ARMN">Armenian</script>
-			<script type="BENG">Bengali</script>
-			<script type="BOPO">Bopomofo</script>
-			<script type="CANS">Unified Canadian Aboriginal Symbols</script>
-			<script type="CHER">Cherokee</script>
-			<script type="CYRL">Cyrillic</script>
-			<script type="DEVA">Devanagari</script>
-			<script type="DSRT">Deseret</script>
-			<script type="ETHI">Ethiopic</script>
-			<script type="GEOR">Georgian</script>
-			<script type="GOTH">Gothic</script>
-			<script type="GREK">Greek</script>
-			<script type="GUJR">Gujarati</script>
-			<script type="GURU">Gurmukhi</script>
-			<script type="HANG">Hangul</script>
-			<script type="HANI">Han</script>
-			<script type="HEBR">Hebrew</script>
-			<script type="HIRA">Hiragana</script>
-			<script type="ITAL">Old_italic</script>
-			<script type="KANA">Katakana</script>
-			<script type="KHMR">Khmer</script>
-			<script type="KNDA">Kannada</script>
-			<script type="LAO">Lao</script>
-			<script type="LATN">Latin</script>
-			<script type="MLYM">Malayalam</script>
-			<script type="MONG">Mongolian</script>
-			<script type="MYMR">Myanmar</script>
-			<script type="OGAM">Ogham</script>
-			<script type="ORYA">Oriya</script>
-			<script type="QAAC">Coptic</script>
-			<script type="QAAI">Inherited</script>
-			<script type="RUNR">Runic</script>
-			<script type="SINH">Sinhala</script>
-			<script type="SYRC">Syriac</script>
-			<script type="TAML">Tamil</script>
-			<script type="TELU">Telugu</script>
-			<script type="THAA">Thana</script>
-			<script type="THAI">Thai</script>
-			<script type="TIBT">Tibetan</script>
-			<script type="YIII">Yi</script>
-			<script type="ZYYY">Common</script>
-		</scripts>
 		<languages>
 			<language type="aa">Afar</language>
 			<language type="ab">Abkhazian</language>
@@ -512,6 +473,50 @@
 			<language type="zu">Zulu</language>
 			<language type="zun">Zuni</language>
 		</languages>
+		<scripts>
+			<script type="ARAB">Arabic</script>
+			<script type="ARMN">Armenian</script>
+			<script type="BENG">Bengali</script>
+			<script type="BOPO">Bopomofo</script>
+			<script type="CANS">Unified Canadian Aboriginal Symbols</script>
+			<script type="CHER">Cherokee</script>
+			<script type="CYRL">Cyrillic</script>
+			<script type="DEVA">Devanagari</script>
+			<script type="DSRT">Deseret</script>
+			<script type="ETHI">Ethiopic</script>
+			<script type="GEOR">Georgian</script>
+			<script type="GOTH">Gothic</script>
+			<script type="GREK">Greek</script>
+			<script type="GUJR">Gujarati</script>
+			<script type="GURU">Gurmukhi</script>
+			<script type="HANG">Hangul</script>
+			<script type="HANI">Han</script>
+			<script type="HEBR">Hebrew</script>
+			<script type="HIRA">Hiragana</script>
+			<script type="ITAL">Old_italic</script>
+			<script type="KANA">Katakana</script>
+			<script type="KHMR">Khmer</script>
+			<script type="KNDA">Kannada</script>
+			<script type="LAO">Lao</script>
+			<script type="LATN">Latin</script>
+			<script type="MLYM">Malayalam</script>
+			<script type="MONG">Mongolian</script>
+			<script type="MYMR">Myanmar</script>
+			<script type="OGAM">Ogham</script>
+			<script type="ORYA">Oriya</script>
+			<script type="QAAC">Coptic</script>
+			<script type="QAAI">Inherited</script>
+			<script type="RUNR">Runic</script>
+			<script type="SINH">Sinhala</script>
+			<script type="SYRC">Syriac</script>
+			<script type="TAML">Tamil</script>
+			<script type="TELU">Telugu</script>
+			<script type="THAA">Thana</script>
+			<script type="THAI">Thai</script>
+			<script type="TIBT">Tibetan</script>
+			<script type="YIII">Yi</script>
+			<script type="ZYYY">Common</script>
+		</scripts>
 		<territories>
 			<territory type="AD">Andorra</territory>
 			<territory type="AE">United Arab Emirates</territory>
@@ -752,7 +757,6 @@
 			<territory type="YU">Yugoslavia</territory>
 			<territory type="ZA">South Africa</territory>
 			<territory type="ZM">Zambia</territory>
-			<territory type="ZR">Zaire</territory>
 			<territory type="ZW">Zimbabwe</territory>
 		</territories>
 		<variants>
@@ -776,9 +780,14 @@
 	<layout>
 		<orientation lines="top-to-bottom" characters="left-to-right" />
 	</layout>
-	<encodings>
+	<characters>
 		<exemplarCharacters>[a-z]</exemplarCharacters>
-	</encodings>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Latn</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
 	<dates>
 		<localizedPatternChars>GyMdkHmsSEDFwWahKzYe</localizedPatternChars>
 		<calendars>
@@ -832,57 +841,69 @@
 				</dayAbbr>
 				<week>
 					<minDays count="1"/>
-					<firstDay day="mon"/>
+					<firstDay day="sun"/>
 				</week>
+				<am>AM</am>
+				<pm>PM</pm>
 				<eras>
 					<eraAbbr>
 						<era type="1">BC</era>
 						<era type="2">AD</era>
 					</eraAbbr>
 				</eras>
-				<am>AM</am>
-				<pm>PM</pm>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormatStyle type="full">
+					<dateFormatLength type="full">
 						<dateFormat >
 							<pattern>EEEE, MMMM d, yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="long">
+					</dateFormatLength >
+					<dateFormatLength type="long">
 						<dateFormat >
 							<pattern>MMMM d, yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="medium">
+					</dateFormatLength >
+					<dateFormatLength type="medium">
 						<dateFormat >
 							<pattern>MMM d, yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="short">
+					</dateFormatLength >
+					<dateFormatLength type="short">
 						<dateFormat >
 							<pattern>M/d/yy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
+					</dateFormatLength >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
-					<timeFormat type="full">
-						<pattern>h:mm:ss a z</pattern>
-					</timeFormat>
-					<timeFormat type="long">
-						<pattern>h:mm:ss a z</pattern>
-					</timeFormat>
-					<timeFormat type="medium">
-						<pattern>h:mm:ss a</pattern>
-					</timeFormat>
-					<timeFormat type="short">
-						<pattern>h:mm a</pattern>
-					</timeFormat>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>h:mm:ss a z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>h:mm:ss a z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>h:mm:ss a</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>h:mm a</pattern>
+						</timeFormat>
+					</timeFormatLength >
 				</timeFormats>
-				<dateTimeFormat>
-					<pattern>{1} {0}</pattern>
-				</dateTimeFormat>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 		<timeZoneNames>
@@ -1020,50 +1041,71 @@
 			<infinity>∞</infinity>
 			<nan>�</nan>
 		</symbols>
-		<numberFormats>
-			<default type="decimal"/>
-			<numberFormatStyle type="decimal" >
-				<numberFormat >
-					<pattern>#,##0.###</pattern>
-					<pattern>-#,##0.###</pattern>
-				</numberFormat>
-			</numberFormatStyle  >
-			<numberFormatStyle type="currency" >
-				<numberFormat >
-					<pattern>¤ #,##0.00</pattern>
-					<pattern>-¤ #,##0.00</pattern>
-				</numberFormat>
-			</numberFormatStyle  >
-			<numberFormatStyle type="percent" >
-				<numberFormat >
-					<pattern>#,##0%</pattern>
-				</numberFormat>
-			</numberFormatStyle  >
-			<numberFormatStyle type="scientific" >
-				<numberFormat >
+		<decimalFormats>
+			<decimalFormatLength >
+				<decimalFormat >
+					<pattern>#,##0.###;-#,##0.###</pattern>
+				</decimalFormat>
+			</decimalFormatLength >
+		</decimalFormats>
+		<scientificFormats>
+			<scientificFormatLength >
+				<scientificFormat >
 					<pattern>#E0</pattern>
-				</numberFormat>
-			</numberFormatStyle  >
-		</numberFormats>
+				</scientificFormat>
+			</scientificFormatLength >
+		</scientificFormats>
+		<percentFormats>
+			<percentFormatLength >
+				<percentFormat >
+					<pattern>#,##0%</pattern>
+				</percentFormat>
+			</percentFormatLength >
+		</percentFormats>
+		<currencyFormats>
+			<currencyFormatLength >
+				<currencyFormat >
+					<pattern>¤ #,##0.00;-¤ #,##0.00</pattern>
+				</currencyFormat>
+			</currencyFormatLength >
+		</currencyFormats>
 		<currencies>
-			<default type="XXX"/>
-			<currency type="XXX">
-				<symbol>¤</symbol>
-				<displayName>XXX</displayName>
-				<decimal></decimal>
+			<currency type="EUR">
+				<displayName>EUR</displayName>
+				<symbol>€</symbol>
+			</currency>
+			<currency type="GBP">
+				<displayName>GBP</displayName>
+				<symbol>£</symbol>
+			</currency>
+			<currency type="INR">
+				<displayName>INR</displayName>
+				<symbol>=0#Rs.|1#Re.|1&lt;Rs.</symbol>
+			</currency>
+			<currency type="ITL">
+				<displayName>ITL</displayName>
+				<symbol>₤</symbol>
+			</currency>
+			<currency type="JPY">
+				<displayName>JPY</displayName>
+				<symbol>¥</symbol>
+			</currency>
+			<currency type="USD">
+				<displayName>USD</displayName>
+				<symbol>$</symbol>
 			</currency>
 		</currencies>
 	</numbers>
-<special owner="http://oss.software.ibm.com/icu/"  >
-	<ruleBasedNumberFormats>
-		<ruleBasedNumberFormat type="spellout">=#,##0.######=;<cp hex="000A" /></ruleBasedNumberFormat>
-		<ruleBasedNumberFormat type="ordinal">=#,##0=;<cp hex="000A" /></ruleBasedNumberFormat>
-		<ruleBasedNumberFormat type="duration">=#,##0=;<cp hex="000A" /></ruleBasedNumberFormat>
-	</ruleBasedNumberFormats>
-</special>
-<collations>
+<collations version="3.1.1">
 	<collation  >
-		<special owner="http://oss.software.ibm.com/icu/" version="x0.0" />
+		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="x0.0" />
 	</collation  >
-</collations>
-</localeData>
+</collations >
+<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+	<icu:ruleBasedNumberFormats>
+		<icu:ruleBasedNumberFormat type="spellout">=#,##0.######=;<cp hex="000A" /></icu:ruleBasedNumberFormat>
+		<icu:ruleBasedNumberFormat type="ordinal">=#,##0=;<cp hex="000A" /></icu:ruleBasedNumberFormat>
+		<icu:ruleBasedNumberFormat type="duration">=#,##0=;<cp hex="000A" /></icu:ruleBasedNumberFormat>
+	</icu:ruleBasedNumberFormats>
+</special>
+</ldml>

@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="x0.2">Various notes and changes in version x0.2</version>
-		<generation date="2003-04-08" />
+		<version number="x0.3">Various notes and changes in version x0.3</version>
+		<generation date="2003-06-25" />
 		<language type="ms"></language>
 		<territory type="BRN">BN</territory>
 	</identity>
@@ -13,76 +18,90 @@
 			<key type="calendar">calendar</key>
 		</keys>
 	</localeDisplayNames>
-		<dates>
-			<calendars>
-				<default type="gregorian"/>
-				<calendar type="gregorian">
-					<dateFormats>
-						<default type="medium"/>
-						<dateFormatStyle type="full">
-							<dateFormat >
-								<pattern>dd MMMM yyyy</pattern>
-							</dateFormat>
-						</dateFormatStyle >
-						<dateFormatStyle type="long">
-							<dateFormat >
-								<pattern>dd MMMM yyyy</pattern>
-							</dateFormat>
-						</dateFormatStyle >
-						<dateFormatStyle type="medium">
-							<dateFormat >
-								<pattern>dd/MM/yyyy</pattern>
-							</dateFormat>
-						</dateFormatStyle >
-						<dateFormatStyle type="short">
-							<dateFormat >
-								<pattern>dd/MM/yyyy</pattern>
-							</dateFormat>
-						</dateFormatStyle >
-					</dateFormats>
-					<timeFormats>
-						<default type="medium"/>
-						<timeFormat type="full">
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat >
+							<pattern>dd MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="long">
+						<dateFormat >
+							<pattern>dd MMMM yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="medium">
+						<dateFormat >
+							<pattern>dd/MM/yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="short">
+						<dateFormat >
+							<pattern>dd/MM/yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormatLength type="full">
+						<timeFormat >
 							<pattern>h:mm:ss aa</pattern>
 						</timeFormat>
-						<timeFormat type="long">
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
 							<pattern>H:mm:ss</pattern>
 						</timeFormat>
-						<timeFormat type="medium">
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
 							<pattern>H:mm:ss</pattern>
 						</timeFormat>
-						<timeFormat type="short">
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
 							<pattern>H:mm:ss</pattern>
 						</timeFormat>
-					</timeFormats>
-					<dateTimeFormat>
-						<pattern>{1} {0}</pattern>
-					</dateTimeFormat>
-				</calendar>
-			</calendars>
-		</dates>
-		<numbers>
-			<symbols>
-				<decimal>,</decimal>
-				<group>.</group>
-				<list>;</list>
-				<percentSign>%</percentSign>
-				<nativeZeroDigit>0</nativeZeroDigit>
-				<patternDigit>#</patternDigit>
-				<plusSign>+</plusSign>
-				<minusSign>-</minusSign>
-				<exponential>E</exponential>
-				<perMille>‰</perMille>
-				<infinity>∞</infinity>
-				<nan>�</nan>
-			</symbols>
-			<currencies>
-				<default type="BND"/>
-				<currency type="BND">
-					<symbol>$</symbol>
-					<displayName>BND</displayName>
-					<decimal>,</decimal>
-				</currency>
-			</currencies>
-		</numbers>
-</localeData>
+					</timeFormatLength >
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group>.</group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+		<currencies>
+			<currency type="BND">
+				<displayName>BND</displayName>
+				<symbol>$</symbol>
+			</currency>
+			<currency type="USD">
+				<displayName>USD</displayName>
+				<symbol>US$</symbol>
+			</currency>
+		</currencies>
+	</numbers>
+</ldml>

@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-04-08" />
+		<version number="2.0">Various notes and changes in version 2.0</version>
+		<generation date="2003-06-25" />
 		<language type="pt"></language>
 	</identity>
 	<localeDisplayNames>
@@ -144,9 +149,9 @@
 	<layout>
 		<orientation lines="top-to-bottom" characters="left-to-right" />
 	</layout>
-	<encodings>
+	<characters>
 		<exemplarCharacters>[a-z ã õ ç á é í ó ú à â ê ô ü ò]</exemplarCharacters>
-	</encodings>
+	</characters>
 	<dates>
 		<calendars>
 			<default type="gregorian"/>
@@ -198,50 +203,62 @@
 					<day type="sat">Sáb</day>
 				</dayAbbr>
 				<week>
-					<minDays count="2"/>
+					<minDays count="1"/>
 					<firstDay day="mon"/>
 				</week>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormatStyle type="full">
+					<dateFormatLength type="full">
 						<dateFormat >
 							<pattern>EEEE, d' de 'MMMM' de 'yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="long">
+					</dateFormatLength >
+					<dateFormatLength type="long">
 						<dateFormat >
 							<pattern>d' de 'MMMM' de 'yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="medium">
+					</dateFormatLength >
+					<dateFormatLength type="medium">
 						<dateFormat >
 							<pattern>d/MMM/yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="short">
+					</dateFormatLength >
+					<dateFormatLength type="short">
 						<dateFormat >
 							<pattern>dd-MM-yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
+					</dateFormatLength >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
-					<timeFormat type="full">
-						<pattern>HH'H'mm'm' z</pattern>
-					</timeFormat>
-					<timeFormat type="long">
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-					<timeFormat type="medium">
-						<pattern>HH:mm:ss</pattern>
-					</timeFormat>
-					<timeFormat type="short">
-						<pattern>HH:mm</pattern>
-					</timeFormat>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>HH'H'mm'm' z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
 				</timeFormats>
-				<dateTimeFormat>
-					<pattern>{1} {0}</pattern>
-				</dateTimeFormat>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 		<timeZoneNames>
@@ -262,5 +279,699 @@
 			<infinity>∞</infinity>
 			<nan>�</nan>
 		</symbols>
+		<currencies>
+			<currency type="ADP">
+				<displayName>Peseta de Andorra</displayName>
+				<symbol>ADP</symbol>
+			</currency>
+			<currency type="AED">
+				<displayName>Dirham dos Emirados Árabes Unidos</displayName>
+				<symbol>AED</symbol>
+			</currency>
+			<currency type="AFA">
+				<displayName>Afgani</displayName>
+				<symbol>AFA</symbol>
+			</currency>
+			<currency type="ALL">
+				<displayName>Lek Albanês</displayName>
+				<symbol>ALL</symbol>
+			</currency>
+			<currency type="AMD">
+				<displayName>Dram Arménio</displayName>
+				<symbol>AMD</symbol>
+			</currency>
+			<currency type="ANG">
+				<displayName>Guilda da Índia Ocidental</displayName>
+				<symbol>ANG</symbol>
+			</currency>
+			<currency type="AOK">
+				<displayName>Kwanza Angolano</displayName>
+				<symbol>AOK</symbol>
+			</currency>
+			<currency type="ARA">
+				<displayName>Austral Argentino</displayName>
+				<symbol>ARA</symbol>
+			</currency>
+			<currency type="ARS">
+				<displayName>Peso Argentino</displayName>
+				<symbol>ARS</symbol>
+			</currency>
+			<currency type="ATS">
+				<displayName>Schilling Austriaco</displayName>
+				<symbol>ATS</symbol>
+			</currency>
+			<currency type="AUD">
+				<displayName>Dólar Australiano</displayName>
+				<symbol>AUD</symbol>
+			</currency>
+			<currency type="AWG">
+				<displayName>Guilda Aruban</displayName>
+				<symbol>AWG</symbol>
+			</currency>
+			<currency type="AZM">
+				<displayName>Manat do Azerbeijão</displayName>
+				<symbol>AZM</symbol>
+			</currency>
+			<currency type="BAD">
+				<displayName>Dinar da Bósnia-Herzgovina</displayName>
+				<symbol>BAD</symbol>
+			</currency>
+			<currency type="BBD">
+				<displayName>Dólar dos Barbados</displayName>
+				<symbol>BBD</symbol>
+			</currency>
+			<currency type="BDT">
+				<displayName>Taka do Bangladesh</displayName>
+				<symbol>BDT</symbol>
+			</currency>
+			<currency type="BEF">
+				<displayName>Franco Bélga</displayName>
+				<symbol>BEF</symbol>
+			</currency>
+			<currency type="BGL">
+				<displayName>Lev Búlgaro</displayName>
+				<symbol>BGL</symbol>
+			</currency>
+			<currency type="BHD">
+				<displayName>Dinar Bahrain</displayName>
+				<symbol>BHD</symbol>
+			</currency>
+			<currency type="BIF">
+				<displayName>Franco do Burundi</displayName>
+				<symbol>BIF</symbol>
+			</currency>
+			<currency type="BMD">
+				<displayName>Dólar das Bermudas</displayName>
+				<symbol>BMD</symbol>
+			</currency>
+			<currency type="BND">
+				<displayName>Dólar do Brunei</displayName>
+				<symbol>BND</symbol>
+			</currency>
+			<currency type="BOB">
+				<displayName>Boliviano Boliviano</displayName>
+				<symbol>BOB</symbol>
+			</currency>
+			<currency type="BRL">
+				<displayName>Real Brasileiro</displayName>
+				<symbol>R$</symbol>
+			</currency>
+			<currency type="BRR">
+				<displayName>Brasil Brasileiro</displayName>
+				<symbol>BRR</symbol>
+			</currency>
+			<currency type="BSD">
+				<displayName>Dólar das Bahamas</displayName>
+				<symbol>BSD</symbol>
+			</currency>
+			<currency type="BWP">
+				<displayName>Pula do Bostwana</displayName>
+				<symbol>BWP</symbol>
+			</currency>
+			<currency type="BYR">
+				<displayName>Rublo Bielorusso</displayName>
+				<symbol>BYR</symbol>
+			</currency>
+			<currency type="BZD">
+				<displayName>Dólar do Belize</displayName>
+				<symbol>BZD</symbol>
+			</currency>
+			<currency type="CAD">
+				<displayName>Dólar Canadiano</displayName>
+				<symbol>CAD</symbol>
+			</currency>
+			<currency type="CHF">
+				<displayName>Franco Suiço</displayName>
+				<symbol>CHF</symbol>
+			</currency>
+			<currency type="CLP">
+				<displayName>Peso Chileno</displayName>
+				<symbol>CLP</symbol>
+			</currency>
+			<currency type="COP">
+				<displayName>Peso Colombiano</displayName>
+				<symbol>COP</symbol>
+			</currency>
+			<currency type="CRC">
+				<displayName>Colon da Costa Rica</displayName>
+				<symbol>CRC</symbol>
+			</currency>
+			<currency type="CUP">
+				<displayName>Peso Cubano</displayName>
+				<symbol>CUP</symbol>
+			</currency>
+			<currency type="CVE">
+				<displayName>Escudo Cabo Verdiano</displayName>
+				<symbol>CVE</symbol>
+			</currency>
+			<currency type="CYP">
+				<displayName>Libra de Chipre</displayName>
+				<symbol>CYP</symbol>
+			</currency>
+			<currency type="CZK">
+				<displayName>Côroa Checa</displayName>
+				<symbol>CZK</symbol>
+			</currency>
+			<currency type="DEM">
+				<displayName>Marco Alemão</displayName>
+				<symbol>DEM</symbol>
+			</currency>
+			<currency type="DJF">
+				<displayName>Franco do Djibouti</displayName>
+				<symbol>DJF</symbol>
+			</currency>
+			<currency type="DKK">
+				<displayName>Côroa Dinamarquesa</displayName>
+				<symbol>DKK</symbol>
+			</currency>
+			<currency type="DOP">
+				<displayName>Peso Dominicano</displayName>
+				<symbol>DOP</symbol>
+			</currency>
+			<currency type="DZD">
+				<displayName>Dinar Argelino</displayName>
+				<symbol>DZD</symbol>
+			</currency>
+			<currency type="ECS">
+				<displayName>Sucre Equatorial</displayName>
+				<symbol>ECS</symbol>
+			</currency>
+			<currency type="EEK">
+				<displayName>Côroa Estónia</displayName>
+				<symbol>EEK</symbol>
+			</currency>
+			<currency type="EGP">
+				<displayName>Libra Egípcia</displayName>
+				<symbol>EGP</symbol>
+			</currency>
+			<currency type="ESP">
+				<displayName>Peseta Espanhola</displayName>
+				<symbol>ESP</symbol>
+			</currency>
+			<currency type="ETB">
+				<displayName>Birr Etíope</displayName>
+				<symbol>ETB</symbol>
+			</currency>
+			<currency type="EUR">
+				<displayName>Moeda dos Estados Membros da UEM</displayName>
+				<symbol>€</symbol>
+			</currency>
+			<currency type="FIM">
+				<displayName>Marco Finlandês</displayName>
+				<symbol>FIM</symbol>
+			</currency>
+			<currency type="FJD">
+				<displayName>Dólar das Fiji</displayName>
+				<symbol>FJD</symbol>
+			</currency>
+			<currency type="FKP">
+				<displayName>Libra das Maldivas</displayName>
+				<symbol>FKP</symbol>
+			</currency>
+			<currency type="FRF">
+				<displayName>Franco Francês</displayName>
+				<symbol>FRF</symbol>
+			</currency>
+			<currency type="GBP">
+				<displayName>Libra Britânica</displayName>
+				<symbol>£</symbol>
+			</currency>
+			<currency type="GEK">
+				<displayName>Kupon da Geórgia</displayName>
+				<symbol>GEK</symbol>
+			</currency>
+			<currency type="GHC">
+				<displayName>Cedi do Ghana</displayName>
+				<symbol>GHC</symbol>
+			</currency>
+			<currency type="GIP">
+				<displayName>Libra de Gibraltar</displayName>
+				<symbol>GIP</symbol>
+			</currency>
+			<currency type="GMD">
+				<displayName>Dalasi do Gabão</displayName>
+				<symbol>GMD</symbol>
+			</currency>
+			<currency type="GNF">
+				<displayName>Franco da Guiana</displayName>
+				<symbol>GNF</symbol>
+			</currency>
+			<currency type="GRD">
+				<displayName>Dracma Grego</displayName>
+				<symbol>GRD</symbol>
+			</currency>
+			<currency type="GTQ">
+				<displayName>Quedzal da Guatemala</displayName>
+				<symbol>GTQ</symbol>
+			</currency>
+			<currency type="GWP">
+				<displayName>Peso da Guiana</displayName>
+				<symbol>GWP</symbol>
+			</currency>
+			<currency type="GYD">
+				<displayName>Dólar de Guyanese</displayName>
+				<symbol>GYD</symbol>
+			</currency>
+			<currency type="HKD">
+				<displayName>Dólar de Hong Kong</displayName>
+				<symbol>HKD</symbol>
+			</currency>
+			<currency type="HNL">
+				<displayName>Lempira das Honduras</displayName>
+				<symbol>HNL</symbol>
+			</currency>
+			<currency type="HRD">
+				<displayName>Dinar Croata</displayName>
+				<symbol>HRD</symbol>
+			</currency>
+			<currency type="HTG">
+				<displayName>Gourde do Haiti</displayName>
+				<symbol>HTG</symbol>
+			</currency>
+			<currency type="HUF">
+				<displayName>Forint Hungaro</displayName>
+				<symbol>HUF</symbol>
+			</currency>
+			<currency type="IDR">
+				<displayName>Rupia Indonésia</displayName>
+				<symbol>IDR</symbol>
+			</currency>
+			<currency type="IEP">
+				<displayName>Libra Irlandesa</displayName>
+				<symbol>IEP</symbol>
+			</currency>
+			<currency type="ILS">
+				<displayName>Scheckel Israelita</displayName>
+				<symbol>ILS</symbol>
+			</currency>
+			<currency type="INR">
+				<displayName>Rupia Indiana</displayName>
+				<symbol>=0#Rs.|1#Re.|1&lt;Rs.</symbol>
+			</currency>
+			<currency type="IQD">
+				<displayName>Dinar Iraquiano</displayName>
+				<symbol>IQD</symbol>
+			</currency>
+			<currency type="IRR">
+				<displayName>Rial Iraniano</displayName>
+				<symbol>IRR</symbol>
+			</currency>
+			<currency type="ISK">
+				<displayName>Coroa Islandesa</displayName>
+				<symbol>ISK</symbol>
+			</currency>
+			<currency type="ITL">
+				<displayName>Lira Italiana</displayName>
+				<symbol>₤</symbol>
+			</currency>
+			<currency type="JMD">
+				<displayName>Dólar Jamaicano</displayName>
+				<symbol>JMD</symbol>
+			</currency>
+			<currency type="JOD">
+				<displayName>Dinar Jordano</displayName>
+				<symbol>JOD</symbol>
+			</currency>
+			<currency type="JPY">
+				<displayName>Yen Japonês</displayName>
+				<symbol>¥</symbol>
+			</currency>
+			<currency type="KES">
+				<displayName>Shilling Queniano</displayName>
+				<symbol>KES</symbol>
+			</currency>
+			<currency type="KHR">
+				<displayName>Riel Cambodjano</displayName>
+				<symbol>KHR</symbol>
+			</currency>
+			<currency type="KMF">
+				<displayName>Franco dos Comoros</displayName>
+				<symbol>KMF</symbol>
+			</currency>
+			<currency type="KPW">
+				<displayName>Won Norte-Coreano</displayName>
+				<symbol>KPW</symbol>
+			</currency>
+			<currency type="KRW">
+				<displayName>Won Sul-Coreano</displayName>
+				<symbol>KRW</symbol>
+			</currency>
+			<currency type="KWD">
+				<displayName>Dinar do Kuwait</displayName>
+				<symbol>KWD</symbol>
+			</currency>
+			<currency type="KYD">
+				<displayName>Dólar das Caimão</displayName>
+				<symbol>KYD</symbol>
+			</currency>
+			<currency type="KZT">
+				<displayName>Tenge do Kasaquistão</displayName>
+				<symbol>KZT</symbol>
+			</currency>
+			<currency type="LAK">
+				<displayName>Kip do Lao</displayName>
+				<symbol>LAK</symbol>
+			</currency>
+			<currency type="LBP">
+				<displayName>Libra Libanesa</displayName>
+				<symbol>LBP</symbol>
+			</currency>
+			<currency type="LKR">
+				<displayName>Rupia do Sri Lanka</displayName>
+				<symbol>LKR</symbol>
+			</currency>
+			<currency type="LRD">
+				<displayName>Dólar Liberiano</displayName>
+				<symbol>LRD</symbol>
+			</currency>
+			<currency type="LSL">
+				<displayName>Loti do Lesoto</displayName>
+				<symbol>LSL</symbol>
+			</currency>
+			<currency type="LTL">
+				<displayName>Lita Lituano</displayName>
+				<symbol>LTL</symbol>
+			</currency>
+			<currency type="LUF">
+				<displayName>Franco Luxemburguês</displayName>
+				<symbol>LUF</symbol>
+			</currency>
+			<currency type="LVL">
+				<displayName>Lat Lituano</displayName>
+				<symbol>LVL</symbol>
+			</currency>
+			<currency type="LYD">
+				<displayName>Dinar Líbio</displayName>
+				<symbol>LYD</symbol>
+			</currency>
+			<currency type="MAD">
+				<displayName>Dirham Marroquino</displayName>
+				<symbol>MAD</symbol>
+			</currency>
+			<currency type="MDL">
+				<displayName>Lei Moldavo</displayName>
+				<symbol>MDL</symbol>
+			</currency>
+			<currency type="MGF">
+				<displayName>Franco de Madagascar</displayName>
+				<symbol>MGF</symbol>
+			</currency>
+			<currency type="MNT">
+				<displayName>Tugrik Mongól</displayName>
+				<symbol>MNT</symbol>
+			</currency>
+			<currency type="MOP">
+				<displayName>Pataca Macaense</displayName>
+				<symbol>MOP</symbol>
+			</currency>
+			<currency type="MRO">
+				<displayName>Ouguiya da Mauritânia</displayName>
+				<symbol>MRO</symbol>
+			</currency>
+			<currency type="MTL">
+				<displayName>Lira Maltesa</displayName>
+				<symbol>MTL</symbol>
+			</currency>
+			<currency type="MUR">
+				<displayName>Rupia de Mauritius</displayName>
+				<symbol>MUR</symbol>
+			</currency>
+			<currency type="MVR">
+				<displayName>Rufiyaa das Maldivas</displayName>
+				<symbol>MVR</symbol>
+			</currency>
+			<currency type="MWK">
+				<displayName>Kwacha do Malaui</displayName>
+				<symbol>MWK</symbol>
+			</currency>
+			<currency type="MXN">
+				<displayName>Peso Mexicano (novo)</displayName>
+				<symbol>MXN</symbol>
+			</currency>
+			<currency type="MXP">
+				<displayName>Peso Mexicano (antigo)</displayName>
+				<symbol>MXP</symbol>
+			</currency>
+			<currency type="MYR">
+				<displayName>Ringgit da Malásia</displayName>
+				<symbol>MYR</symbol>
+			</currency>
+			<currency type="MZM">
+				<displayName>Metical Moçambicano</displayName>
+				<symbol>MZM</symbol>
+			</currency>
+			<currency type="NGN">
+				<displayName>Naira Nigeriana</displayName>
+				<symbol>NGN</symbol>
+			</currency>
+			<currency type="NIO">
+				<displayName>Cordoba de Nicarágua</displayName>
+				<symbol>NIO</symbol>
+			</currency>
+			<currency type="NLG">
+				<displayName>Guilda Holandesa</displayName>
+				<symbol>NLG</symbol>
+			</currency>
+			<currency type="NOK">
+				<displayName>Coroa Norueguesa</displayName>
+				<symbol>NOK</symbol>
+			</currency>
+			<currency type="NPR">
+				<displayName>Rupia Nepalesa</displayName>
+				<symbol>NPR</symbol>
+			</currency>
+			<currency type="NZD">
+				<displayName>Dólar da Nova-Zelândia</displayName>
+				<symbol>NZD</symbol>
+			</currency>
+			<currency type="OMR">
+				<displayName>Rial de Omão</displayName>
+				<symbol>OMR</symbol>
+			</currency>
+			<currency type="PAB">
+				<displayName>Balboa Panamiano</displayName>
+				<symbol>PAB</symbol>
+			</currency>
+			<currency type="PEI">
+				<displayName>Inti Peruano</displayName>
+				<symbol>PEI</symbol>
+			</currency>
+			<currency type="PEN">
+				<displayName>Sol Peruano - Novo</displayName>
+				<symbol>PEN</symbol>
+			</currency>
+			<currency type="PES">
+				<displayName>Sol Peruano</displayName>
+				<symbol>PES</symbol>
+			</currency>
+			<currency type="PGK">
+				<displayName>Kina da Papua Nova Guiné</displayName>
+				<symbol>PGK</symbol>
+			</currency>
+			<currency type="PHP">
+				<displayName>Peso Filipino</displayName>
+				<symbol>PHP</symbol>
+			</currency>
+			<currency type="PKR">
+				<displayName>Rupia Paquistanesa</displayName>
+				<symbol>PKR</symbol>
+			</currency>
+			<currency type="PLN">
+				<displayName>Zloty Polaco</displayName>
+				<symbol>PLN</symbol>
+			</currency>
+			<currency type="PTE">
+				<displayName>Escudo Portugues</displayName>
+				<symbol>Esc.</symbol>
+			</currency>
+			<currency type="PYG">
+				<displayName>Guarani Paraguaio</displayName>
+				<symbol>PYG</symbol>
+			</currency>
+			<currency type="QAR">
+				<displayName>Riyal do Quatar</displayName>
+				<symbol>QAR</symbol>
+			</currency>
+			<currency type="ROL">
+				<displayName>Lei Romeno</displayName>
+				<symbol>ROL</symbol>
+			</currency>
+			<currency type="RUR">
+				<displayName>Rublo Russo</displayName>
+				<symbol>RUR</symbol>
+			</currency>
+			<currency type="RWF">
+				<displayName>Franco Ruandês</displayName>
+				<symbol>RWF</symbol>
+			</currency>
+			<currency type="SAR">
+				<displayName>Riyal Saudita</displayName>
+				<symbol>SAR</symbol>
+			</currency>
+			<currency type="SBD">
+				<displayName>Dólar das Ilhas Salomão</displayName>
+				<symbol>SBD</symbol>
+			</currency>
+			<currency type="SCR">
+				<displayName>Rupia das Seychelles</displayName>
+				<symbol>SCR</symbol>
+			</currency>
+			<currency type="SDP">
+				<displayName>Libra do Sudão</displayName>
+				<symbol>SDP</symbol>
+			</currency>
+			<currency type="SEK">
+				<displayName>Coroa Sueca</displayName>
+				<symbol>SEK</symbol>
+			</currency>
+			<currency type="SGD">
+				<displayName>Dólar de Singapura</displayName>
+				<symbol>SGD</symbol>
+			</currency>
+			<currency type="SHP">
+				<displayName>Libra de St.Helena</displayName>
+				<symbol>SHP</symbol>
+			</currency>
+			<currency type="SIT">
+				<displayName>Tolar Esloveno</displayName>
+				<symbol>SIT</symbol>
+			</currency>
+			<currency type="SKK">
+				<displayName>Coroa Eslovaca</displayName>
+				<symbol>SKK</symbol>
+			</currency>
+			<currency type="SLL">
+				<displayName>Leão</displayName>
+				<symbol>SLL</symbol>
+			</currency>
+			<currency type="SOS">
+				<displayName>Shilling Somalí</displayName>
+				<symbol>SOS</symbol>
+			</currency>
+			<currency type="SRG">
+				<displayName>Guilda do Suriname</displayName>
+				<symbol>SRG</symbol>
+			</currency>
+			<currency type="STD">
+				<displayName>Dobra de São Tomé e Príncepe</displayName>
+				<symbol>STD</symbol>
+			</currency>
+			<currency type="SUR">
+				<displayName>Rublo Russo (antigo)</displayName>
+				<symbol>SUR</symbol>
+			</currency>
+			<currency type="SVC">
+				<displayName>Colon El Salvadoranho</displayName>
+				<symbol>SVC</symbol>
+			</currency>
+			<currency type="SYP">
+				<displayName>Libra Síria</displayName>
+				<symbol>SYP</symbol>
+			</currency>
+			<currency type="SZL">
+				<displayName>Lilangeni da Swazilândia</displayName>
+				<symbol>SZL</symbol>
+			</currency>
+			<currency type="THB">
+				<displayName>Baht Tailandês</displayName>
+				<symbol>THB</symbol>
+			</currency>
+			<currency type="TJR">
+				<displayName>Rublo do Tadjaquistão</displayName>
+				<symbol>TJR</symbol>
+			</currency>
+			<currency type="TMM">
+				<displayName>Manat do Turquistão</displayName>
+				<symbol>TMM</symbol>
+			</currency>
+			<currency type="TND">
+				<displayName>Dinar Tunisino</displayName>
+				<symbol>TND</symbol>
+			</currency>
+			<currency type="TOP">
+				<displayName>Pa'anga do Tongo</displayName>
+				<symbol>TOP</symbol>
+			</currency>
+			<currency type="TPE">
+				<displayName>Escudo Timorênse</displayName>
+				<symbol>TPE</symbol>
+			</currency>
+			<currency type="TRL">
+				<displayName>Lira Turca</displayName>
+				<symbol>TRL</symbol>
+			</currency>
+			<currency type="TTD">
+				<displayName>Dólar de Trinidade e Tobago</displayName>
+				<symbol>TTD</symbol>
+			</currency>
+			<currency type="TWD">
+				<displayName>Novo Dólar de Taiwan</displayName>
+				<symbol>TWD</symbol>
+			</currency>
+			<currency type="TZS">
+				<displayName>Shilling da Tanzânia</displayName>
+				<symbol>TZS</symbol>
+			</currency>
+			<currency type="UAK">
+				<displayName>Karbowanez Ucraniano</displayName>
+				<symbol>UAK</symbol>
+			</currency>
+			<currency type="UGS">
+				<displayName>Shilling do Uganda</displayName>
+				<symbol>UGS</symbol>
+			</currency>
+			<currency type="USD">
+				<displayName>Dólar Americano</displayName>
+				<symbol>$</symbol>
+			</currency>
+			<currency type="UYP">
+				<displayName>Novo Peso Uruguaio</displayName>
+				<symbol>UYP</symbol>
+			</currency>
+			<currency type="VEB">
+				<displayName>Bolivar Venezuelano</displayName>
+				<symbol>VEB</symbol>
+			</currency>
+			<currency type="VND">
+				<displayName>Dong Vietnamita</displayName>
+				<symbol>₫</symbol>
+			</currency>
+			<currency type="VUV">
+				<displayName>Vatu do Vanuatu</displayName>
+				<symbol>VUV</symbol>
+			</currency>
+			<currency type="WST">
+				<displayName>Tala de Samoa</displayName>
+				<symbol>WST</symbol>
+			</currency>
+			<currency type="XAF">
+				<displayName>Franco do Gabão C.f.A</displayName>
+				<symbol>XAF</symbol>
+			</currency>
+			<currency type="XCD">
+				<displayName>Dólar do Caraíbe Oriental</displayName>
+				<symbol>XCD</symbol>
+			</currency>
+			<currency type="XOF">
+				<displayName>Franco do Benin C.f.A.</displayName>
+				<symbol>XOF</symbol>
+			</currency>
+			<currency type="YER">
+				<displayName>Ryal do Yemeni</displayName>
+				<symbol>YER</symbol>
+			</currency>
+			<currency type="ZAR">
+				<displayName>Rand Sul-Africano</displayName>
+				<symbol>ZAR</symbol>
+			</currency>
+			<currency type="ZMK">
+				<displayName>Kwacha da Zâmbia</displayName>
+				<symbol>ZMK</symbol>
+			</currency>
+			<currency type="ZWD">
+				<displayName>Dólar do Zimbabue</displayName>
+				<symbol>ZWD</symbol>
+			</currency>
+		</currencies>
 	</numbers>
-</localeData>
+</ldml>

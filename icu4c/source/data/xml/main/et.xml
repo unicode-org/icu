@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-04-08" />
+		<version number="2.0">Various notes and changes in version 2.0</version>
+		<generation date="2003-06-25" />
 		<language type="et"></language>
 	</identity>
 	<localeDisplayNames>
@@ -21,9 +26,9 @@
 	<layout>
 		<orientation lines="top-to-bottom" characters="left-to-right" />
 	</layout>
-	<encodings>
+	<characters>
 		<exemplarCharacters>[a-z õ ä ö ü š ž]</exemplarCharacters>
-	</encodings>
+	</characters>
 	<dates>
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
 		<calendars>
@@ -44,18 +49,18 @@
 					<month type="12">detsember</month>
 				</monthNames>
 				<monthAbbr>
-					<month type="1">jaan</month>
-					<month type="2">veebr</month>
+					<month type="1">jaan.</month>
+					<month type="2">veebr.</month>
 					<month type="3">märts</month>
-					<month type="4">apr</month>
+					<month type="4">apr.</month>
 					<month type="5">mai</month>
 					<month type="6">juuni</month>
 					<month type="7">juuli</month>
-					<month type="8">aug</month>
-					<month type="9">sept</month>
-					<month type="10">okt</month>
-					<month type="11">nov</month>
-					<month type="12">dets</month>
+					<month type="8">aug.</month>
+					<month type="9">sept.</month>
+					<month type="10">okt.</month>
+					<month type="11">nov.</month>
+					<month type="12">dets.</month>
 				</monthAbbr>
 				<dayNames>
 					<day type="sun">pühapäev</day>
@@ -76,7 +81,7 @@
 					<day type="sat">L</day>
 				</dayAbbr>
 				<week>
-					<minDays count="2"/>
+					<minDays count="1"/>
 					<firstDay day="mon"/>
 				</week>
 				<eras>
@@ -87,45 +92,57 @@
 				</eras>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormatStyle type="full">
+					<dateFormatLength type="full">
 						<dateFormat >
 							<pattern>EEEE, d, MMMM yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="long">
+					</dateFormatLength >
+					<dateFormatLength type="long">
 						<dateFormat >
-							<pattern>EEEE, d, MMMM yyyy</pattern>
+							<pattern>d MMMM yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="medium">
+					</dateFormatLength >
+					<dateFormatLength type="medium">
 						<dateFormat >
 							<pattern>dd.MM.yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="short">
+					</dateFormatLength >
+					<dateFormatLength type="short">
 						<dateFormat >
 							<pattern>dd.MM.yy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
+					</dateFormatLength >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
-					<timeFormat type="full">
-						<pattern>H:mm:ss z</pattern>
-					</timeFormat>
-					<timeFormat type="long">
-						<pattern>H:mm:ss z</pattern>
-					</timeFormat>
-					<timeFormat type="medium">
-						<pattern>H:mm:ss</pattern>
-					</timeFormat>
-					<timeFormat type="short">
-						<pattern>H:mm</pattern>
-					</timeFormat>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>H:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>H:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>H:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>H:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
 				</timeFormats>
-				<dateTimeFormat>
-					<pattern>{1} {0}</pattern>
-				</dateTimeFormat>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 		<timeZoneNames>
@@ -146,35 +163,41 @@
 			<infinity>∞</infinity>
 			<nan>�</nan>
 		</symbols>
+		<currencies>
+			<currency type="EEK">
+				<displayName>EEK</displayName>
+				<symbol>kr</symbol>
+			</currency>
+		</currencies>
 	</numbers>
-		<collations>
-			<collation  >
-				<settings backwards="2"/>
-				<rules>
-					<reset>S</reset>
-					<p>š</p>
-					<t>Š</t>
-					<p>z</p>
-					<t>Z</t>
-					<p>ž</p>
-					<t>Ž</t>
-					<reset>V</reset>
-					<s>w</s>
-					<t>W</t>
-					<p>õ</p>
-					<t>Õ</t>
-					<p>ä</p>
-					<t>Ä</t>
-					<p>ö</p>
-					<t>Ö</t>
-					<s>ŵ</s>
-					<t>Ŵ</t>
-					<p>ü</p>
-					<t>Ü</t>
-					<reset>Y</reset>
-					<p>ƶ</p>
-				</rules>
-				<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
-			</collation  >
-		</collations>
-</localeData>
+<collations version="3.1.1">
+	<collation  >
+		<settings backwards="on"  />
+		<rules>
+			<reset>S</reset>
+			<p>š</p>
+			<t>Š</t>
+			<p>z</p>
+			<t>Z</t>
+			<p>ž</p>
+			<t>Ž</t>
+			<reset>V</reset>
+			<s>w</s>
+			<t>W</t>
+			<p>õ</p>
+			<t>Õ</t>
+			<p>ä</p>
+			<t>Ä</t>
+			<p>ö</p>
+			<t>Ö</t>
+			<s>ŵ</s>
+			<t>Ŵ</t>
+			<p>ü</p>
+			<t>Ü</t>
+			<reset>Y</reset>
+			<p>ƶ</p>
+		</rules>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
+	</collation  >
+</collations >
+</ldml>

@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="1.2">Various notes and changes in version 1.2</version>
-		<generation date="2003-04-08" />
+		<version number="2.0">Various notes and changes in version 2.0</version>
+		<generation date="2003-06-25" />
 		<language type="tr"></language>
 	</identity>
 	<localeDisplayNames>
@@ -21,9 +26,9 @@
 	<layout>
 		<orientation lines="top-to-bottom" characters="left-to-right" />
 	</layout>
-	<encodings>
+	<characters>
 		<exemplarCharacters>[a-z â î û ö ü ı ç ş ğ]</exemplarCharacters>
-	</encodings>
+	</characters>
 	<dates>
 		<localizedPatternChars>GanjkHmsSEDFwWxhKzAe</localizedPatternChars>
 		<calendars>
@@ -76,50 +81,62 @@
 					<day type="sat">Cmt</day>
 				</dayAbbr>
 				<week>
-					<minDays count="2"/>
+					<minDays count="1"/>
 					<firstDay day="mon"/>
 				</week>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormatStyle type="full">
+					<dateFormatLength type="full">
 						<dateFormat >
 							<pattern>dd MMMM yyyy EEEE</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="long">
+					</dateFormatLength >
+					<dateFormatLength type="long">
 						<dateFormat >
 							<pattern>dd MMMM yyyy EEEE</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="medium">
+					</dateFormatLength >
+					<dateFormatLength type="medium">
 						<dateFormat >
 							<pattern>dd.MMM.yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="short">
+					</dateFormatLength >
+					<dateFormatLength type="short">
 						<dateFormat >
 							<pattern>dd.MM.yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
+					</dateFormatLength >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
-					<timeFormat type="full">
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-					<timeFormat type="long">
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-					<timeFormat type="medium">
-						<pattern>HH:mm:ss</pattern>
-					</timeFormat>
-					<timeFormat type="short">
-						<pattern>HH:mm</pattern>
-					</timeFormat>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
 				</timeFormats>
-				<dateTimeFormat>
-					<pattern>{1} {0}</pattern>
-				</dateTimeFormat>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 		<timeZoneNames>
@@ -140,31 +157,41 @@
 			<infinity>∞</infinity>
 			<nan>�</nan>
 		</symbols>
+		<currencies>
+			<currency type="ITL">
+				<displayName>ITL</displayName>
+				<symbol>ITL</symbol>
+			</currency>
+			<currency type="TRL">
+				<displayName>TRL</displayName>
+				<symbol>₤</symbol>
+			</currency>
+		</currencies>
 	</numbers>
-		<collations>
-			<collation  >
-				<rules>
-					<reset>C</reset>
-					<p>ç</p>
-					<t>Ç</t>
-					<reset>G</reset>
-					<p>ğ</p>
-					<t>Ğ</t>
-					<reset>H</reset>
-					<p>ı</p>
-					<t>I</t>
-					<p>i</p>
-					<t>İ</t>
-					<reset>O</reset>
-					<p>ö</p>
-					<t>Ö</t>
-					<reset>S</reset>
-					<p>ş</p>
-					<t>Ş</t>
-					<reset>U</reset>
-					<p>ü</p>
-				</rules>
-				<special owner="http://oss.software.ibm.com/icu/" version="2" />
-			</collation  >
-		</collations>
-</localeData>
+<collations version="3.1.1">
+	<collation  >
+		<rules>
+			<reset>C</reset>
+			<p>ç</p>
+			<t>Ç</t>
+			<reset>G</reset>
+			<p>ğ</p>
+			<t>Ğ</t>
+			<reset>H</reset>
+			<p>ı</p>
+			<t>I</t>
+			<p>i</p>
+			<t>İ</t>
+			<reset>O</reset>
+			<p>ö</p>
+			<t>Ö</t>
+			<reset>S</reset>
+			<p>ş</p>
+			<t>Ş</t>
+			<reset>U</reset>
+			<p>ü</p>
+		</rules>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="2" />
+	</collation  >
+</collations >
+</ldml>

@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="2.1">Various notes and changes in version 2.1</version>
-		<generation date="2003-04-08" />
+		<version number="3.0">Various notes and changes in version 3.0</version>
+		<generation date="2003-06-25" />
 		<language type="eo"></language>
 	</identity>
 	<localeDisplayNames>
@@ -50,9 +55,9 @@
 	<layout>
 		<orientation lines="top-to-bottom" characters="left-to-right" />
 	</layout>
-	<encodings>
+	<characters>
 		<exemplarCharacters>[a-z ŭ ĉ ĝ ĥ ĵ ŝ]</exemplarCharacters>
-	</encodings>
+	</characters>
 	<dates>
 		<localizedPatternChars>GjMtkHmslTDUSnahKzJd</localizedPatternChars>
 		<calendars>
@@ -105,58 +110,70 @@
 					<day type="sat">sa</day>
 				</dayAbbr>
 				<week>
-					<minDays count="2"/>
-					<firstDay day="thu"/>
+					<minDays count="4"/>
+					<firstDay day="mon"/>
 				</week>
+				<am>atm</am>
+				<pm>ptm</pm>
 				<eras>
 					<eraAbbr>
 						<era type="1">aK</era>
 						<era type="2">pK</era>
 					</eraAbbr>
 				</eras>
-				<am>atm</am>
-				<pm>ptm</pm>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormatStyle type="full">
+					<dateFormatLength type="full">
 						<dateFormat >
 							<pattern>EEEE, d'-a de 'MMMM yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="long">
+					</dateFormatLength >
+					<dateFormatLength type="long">
 						<dateFormat >
 							<pattern>yyyy-MMMM-dd</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="medium">
+					</dateFormatLength >
+					<dateFormatLength type="medium">
 						<dateFormat >
 							<pattern>yyyy-MMM-dd</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="short">
+					</dateFormatLength >
+					<dateFormatLength type="short">
 						<dateFormat >
 							<pattern>yy-MM-dd</pattern>
 						</dateFormat>
-					</dateFormatStyle >
+					</dateFormatLength >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
-					<timeFormat type="full">
-						<pattern>H'-a horo kaj 'm z</pattern>
-					</timeFormat>
-					<timeFormat type="long">
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-					<timeFormat type="medium">
-						<pattern>HH:mm:ss</pattern>
-					</timeFormat>
-					<timeFormat type="short">
-						<pattern>HH:mm</pattern>
-					</timeFormat>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>H'-a horo kaj 'm z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
 				</timeFormats>
-				<dateTimeFormat>
-					<pattern>{1} {0}</pattern>
-				</dateTimeFormat>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 	</dates>
@@ -176,12 +193,7 @@
 			<nan>�</nan>
 		</symbols>
 	</numbers>
-	<special owner="http://oss.software.ibm.com/icu/"  >
-		<ruleBasedNumberFormats>
-			<ruleBasedNumberFormat type="spellout">-x: minus &gt;&gt;;<cp hex="000A" />x.x: &lt;&lt; komo &gt;&gt;;<cp hex="000A" />nulo; unu; du; tri; kvar; kvin; ses; sep; ok; naŭ;<cp hex="000A" />10: dek[ &gt;&gt;];<cp hex="000A" />20: &lt;&lt;dek[ &gt;&gt;];<cp hex="000A" />100: cent[ &gt;&gt;];<cp hex="000A" />200: &lt;&lt;cent[ &gt;&gt;];<cp hex="000A" />1000: mil[ &gt;&gt;];<cp hex="000A" />2000: &lt;&lt;mil[ &gt;&gt;];<cp hex="000A" />10000: dekmil[ &gt;&gt;];<cp hex="000A" />11000&gt;: &lt;&lt; mil[ &gt;&gt;];<cp hex="000A" />1,000,000: miliono[ &gt;&gt;];<cp hex="000A" />2,000,000: &lt;&lt; milionoj[ &gt;&gt;];<cp hex="000A" />1,000,000,000: miliardo[ &gt;&gt;];<cp hex="000A" />2,000,000,000: &lt;&lt; miliardoj[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000: biliono[ &gt;&gt;];<cp hex="000A" />2,000,000,000,000: &lt;&lt; bilionoj[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000,000: =#,##0=;<cp hex="000A" /></ruleBasedNumberFormat>
-		</ruleBasedNumberFormats>
-	</special>
-	<collations>
+	<collations version="3.1.1">
 		<collation  >
 			<rules>
 				<reset>C</reset>
@@ -202,7 +214,12 @@
 				<reset>U</reset>
 				<p>ŭ</p>
 			</rules>
-			<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
+			<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
 		</collation  >
-	</collations>
-</localeData>
+	</collations >
+	<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+		<icu:ruleBasedNumberFormats>
+			<icu:ruleBasedNumberFormat type="spellout">-x: minus &gt;&gt;;<cp hex="000A" />x.x: &lt;&lt; komo &gt;&gt;;<cp hex="000A" />nulo; unu; du; tri; kvar; kvin; ses; sep; ok; naŭ;<cp hex="000A" />10: dek[ &gt;&gt;];<cp hex="000A" />20: &lt;&lt;dek[ &gt;&gt;];<cp hex="000A" />100: cent[ &gt;&gt;];<cp hex="000A" />200: &lt;&lt;cent[ &gt;&gt;];<cp hex="000A" />1000: mil[ &gt;&gt;];<cp hex="000A" />2000: &lt;&lt;mil[ &gt;&gt;];<cp hex="000A" />10000: dekmil[ &gt;&gt;];<cp hex="000A" />11000&gt;: &lt;&lt; mil[ &gt;&gt;];<cp hex="000A" />1,000,000: miliono[ &gt;&gt;];<cp hex="000A" />2,000,000: &lt;&lt; milionoj[ &gt;&gt;];<cp hex="000A" />1,000,000,000: miliardo[ &gt;&gt;];<cp hex="000A" />2,000,000,000: &lt;&lt; miliardoj[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000: biliono[ &gt;&gt;];<cp hex="000A" />2,000,000,000,000: &lt;&lt; bilionoj[ &gt;&gt;];<cp hex="000A" />1,000,000,000,000,000: =#,##0=;<cp hex="000A" /></icu:ruleBasedNumberFormat>
+		</icu:ruleBasedNumberFormats>
+	</special>
+</ldml>

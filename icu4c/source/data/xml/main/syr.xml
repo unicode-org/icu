@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
 		<version number="x0.2">Various notes and changes in version x0.2</version>
-		<generation date="2003-04-08" />
+		<generation date="2003-06-25" />
 		<language type="syr"></language>
 	</identity>
 	<localeDisplayNames>
@@ -18,9 +23,14 @@
 	<layout>
 		<orientation lines="top-to-bottom" characters="left-to-right" />
 	</layout>
-	<encodings>
-		<exemplarCharacters>[:Syrc:]</exemplarCharacters>
-	</encodings>
+	<characters>
+		<exemplarCharacters>[[:Syrc:]‌‍‏‎]</exemplarCharacters>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">Syrc</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
 	<dates>
 		<calendars>
 			<default type="gregorian"/>
@@ -76,10 +86,17 @@
 			</calendar>
 		</calendars>
 	</dates>
-		<collations>
-			<collation  >
-				<settings normalization="on"/>
-				<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
-			</collation  >
-		</collations>
-</localeData>
+	<numbers>
+		<currencies>
+			<currency type="SYP">
+				<displayName>SYP</displayName>
+				<symbol>ل.س.‏</symbol>
+			</currency>
+		</currencies>
+	</numbers>
+<collations version="3.1.1">
+	<collation  >
+		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
+	</collation  >
+</collations >
+</ldml>

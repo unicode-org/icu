@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-04-08" />
+		<version number="2.0">Various notes and changes in version 2.0</version>
+		<generation date="2003-06-25" />
 		<language type="es"></language>
 		<territory type="ARG">AR</territory>
 	</identity>
@@ -13,92 +18,107 @@
 			<key type="calendar">calendar</key>
 		</keys>
 	</localeDisplayNames>
-		<dates>
-			<calendars>
-				<default type="gregorian"/>
-				<calendar type="gregorian">
-					<dateFormats>
-						<default type="medium"/>
-						<dateFormatStyle type="full">
-							<dateFormat >
-								<pattern>EEEE d' de 'MMMM' de 'yyyy</pattern>
-							</dateFormat>
-						</dateFormatStyle >
-						<dateFormatStyle type="long">
-							<dateFormat >
-								<pattern>d' de 'MMMM' de 'yyyy</pattern>
-							</dateFormat>
-						</dateFormatStyle >
-						<dateFormatStyle type="medium">
-							<dateFormat >
-								<pattern>dd/MM/yyyy</pattern>
-							</dateFormat>
-						</dateFormatStyle >
-						<dateFormatStyle type="short">
-							<dateFormat >
-								<pattern>dd/MM/yy</pattern>
-							</dateFormat>
-						</dateFormatStyle >
-					</dateFormats>
-					<timeFormats>
-						<default type="medium"/>
-						<timeFormat type="full">
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+				<dateFormats>
+					<default type="medium"/>
+					<dateFormatLength type="full">
+						<dateFormat >
+							<pattern>EEEE d' de 'MMMM' de 'yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="long">
+						<dateFormat >
+							<pattern>d' de 'MMMM' de 'yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="medium">
+						<dateFormat >
+							<pattern>dd/MM/yyyy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+					<dateFormatLength type="short">
+						<dateFormat >
+							<pattern>dd/MM/yy</pattern>
+						</dateFormat>
+					</dateFormatLength >
+				</dateFormats>
+				<timeFormats>
+					<default type="medium"/>
+					<timeFormatLength type="full">
+						<timeFormat >
 							<pattern>HH'h'''mm z</pattern>
 						</timeFormat>
-						<timeFormat type="long">
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
 							<pattern>H:mm:ss z</pattern>
 						</timeFormat>
-						<timeFormat type="medium">
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
 							<pattern>HH:mm:ss</pattern>
 						</timeFormat>
-						<timeFormat type="short">
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
 							<pattern>HH:mm</pattern>
 						</timeFormat>
-					</timeFormats>
-					<dateTimeFormat>
-						<pattern>{1} {0}</pattern>
-					</dateTimeFormat>
-				</calendar>
-			</calendars>
-		</dates>
-		<numbers>
-			<symbols>
-				<decimal>,</decimal>
-				<group>.</group>
-				<list>;</list>
-				<percentSign>%</percentSign>
-				<nativeZeroDigit>0</nativeZeroDigit>
-				<patternDigit>#</patternDigit>
-				<plusSign>+</plusSign>
-				<minusSign>-</minusSign>
-				<exponential>E</exponential>
-				<perMille>‰</perMille>
-				<infinity>∞</infinity>
-				<nan>�</nan>
-			</symbols>
-			<currencies>
-				<default type="ARS"/>
-				<currency type="ARS">
-					<symbol>$</symbol>
-					<displayName>ARS</displayName>
-					<decimal>,</decimal>
-				</currency>
-			</currencies>
-		</numbers>
-		<collations>
-			<collation key="TRADITIONAL" >
-				<rules>
-					<reset>N</reset>
-					<p>ñ</p>
-					<t>Ñ</t>
-					<reset>C</reset>
-					<p>ch</p>
-					<tc>ChCH</tc>
-					<reset>l</reset>
-					<p>ll</p>
-					<t>Ll</t>
-				</rules>
-				<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
-			</collation  >
-		</collations>
-</localeData>
+					</timeFormatLength >
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<symbols>
+			<decimal>,</decimal>
+			<group>.</group>
+			<list>;</list>
+			<percentSign>%</percentSign>
+			<nativeZeroDigit>0</nativeZeroDigit>
+			<patternDigit>#</patternDigit>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>�</nan>
+		</symbols>
+		<currencies>
+			<currency type="ARS">
+				<displayName>Peso Argentino</displayName>
+				<symbol>$</symbol>
+			</currency>
+			<currency type="USD">
+				<displayName>Dólar Americano</displayName>
+				<symbol>US$</symbol>
+			</currency>
+		</currencies>
+	</numbers>
+<collations version="3.1.1">
+	<collation type="TRADITIONAL" >
+		<rules>
+			<reset>N</reset>
+			<p>ñ</p>
+			<t>Ñ</t>
+			<reset>C</reset>
+			<p>ch</p>
+			<t>Ch</t>
+			<t>CH</t>
+			<reset>l</reset>
+			<p>ll</p>
+			<t>Ll</t>
+		</rules>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
+	</collation  >
+</collations >
+</ldml>

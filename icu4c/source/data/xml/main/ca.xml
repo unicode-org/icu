@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="1.0">Various notes and changes in version 1.0</version>
-		<generation date="2003-04-08" />
+		<version number="2.0">Various notes and changes in version 2.0</version>
+		<generation date="2003-06-25" />
 		<language type="ca"></language>
 	</identity>
 	<localeDisplayNames>
@@ -21,9 +26,9 @@
 	<layout>
 		<orientation lines="top-to-bottom" characters="left-to-right" />
 	</layout>
-	<encodings>
+	<characters>
 		<exemplarCharacters>[a-z é í ó ú à è ò ï ü ŀ ç ñ]</exemplarCharacters>
-	</encodings>
+	</characters>
 	<dates>
 		<localizedPatternChars>GuMtkHmsSEDFwWahKzUe</localizedPatternChars>
 		<calendars>
@@ -77,45 +82,57 @@
 				</dayAbbr>
 				<dateFormats>
 					<default type="medium"/>
-					<dateFormatStyle type="full">
+					<dateFormatLength type="full">
 						<dateFormat >
 							<pattern>EEEE dd MMMM yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="long">
+					</dateFormatLength >
+					<dateFormatLength type="long">
 						<dateFormat >
 							<pattern>d MMMM yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="medium">
+					</dateFormatLength >
+					<dateFormatLength type="medium">
 						<dateFormat >
 							<pattern>dd/MM/yyyy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
-					<dateFormatStyle type="short">
+					</dateFormatLength >
+					<dateFormatLength type="short">
 						<dateFormat >
 							<pattern>dd/MM/yy</pattern>
 						</dateFormat>
-					</dateFormatStyle >
+					</dateFormatLength >
 				</dateFormats>
 				<timeFormats>
 					<default type="medium"/>
-					<timeFormat type="full">
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-					<timeFormat type="long">
-						<pattern>HH:mm:ss z</pattern>
-					</timeFormat>
-					<timeFormat type="medium">
-						<pattern>HH:mm:ss</pattern>
-					</timeFormat>
-					<timeFormat type="short">
-						<pattern>HH:mm</pattern>
-					</timeFormat>
+					<timeFormatLength type="full">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="long">
+						<timeFormat >
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="medium">
+						<timeFormat >
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength >
+					<timeFormatLength type="short">
+						<timeFormat >
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength >
 				</timeFormats>
-				<dateTimeFormat>
-					<pattern>{1} {0}</pattern>
-				</dateTimeFormat>
+				<dateTimeFormats>
+					<dateTimeFormatLength >
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength >
+				</dateTimeFormats>
 			</calendar>
 		</calendars>
 		<timeZoneNames>
@@ -136,19 +153,29 @@
 			<infinity>∞</infinity>
 			<nan>�</nan>
 		</symbols>
+		<currencies>
+			<currency type="ESP">
+				<displayName>ESP</displayName>
+				<symbol>₧</symbol>
+			</currency>
+		</currencies>
 	</numbers>
-		<collations>
-			<collation  >
-				<settings backwards="2"/>
-				<rules>
-					<reset>C</reset>
-					<p>ch</p>
-					<tc>ChCH</tc>
-					<reset>L</reset>
-					<p>ll</p>
-					<tc>l·lLlL·lLL</tc>
-				</rules>
-				<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
-			</collation  >
-		</collations>
-</localeData>
+<collations version="3.1.1">
+	<collation  >
+		<settings backwards="on"  />
+		<rules>
+			<reset>C</reset>
+			<p>ch</p>
+			<t>Ch</t>
+			<t>CH</t>
+			<reset>L</reset>
+			<p>ll</p>
+			<t>l·l</t>
+			<t>Ll</t>
+			<t>L·l</t>
+			<t>LL</t>
+		</rules>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
+	</collation  >
+</collations >
+</ldml>

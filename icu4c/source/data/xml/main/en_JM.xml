@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="x0.1">Various notes and changes in version x0.1</version>
-		<generation date="2003-04-08" />
+		<version number="x0.2">Various notes and changes in version x0.2</version>
+		<generation date="2003-06-25" />
 		<language type="en"></language>
 		<territory type="JAM">JM</territory>
 	</identity>
@@ -13,21 +18,11 @@
 			<key type="calendar">calendar</key>
 		</keys>
 	</localeDisplayNames>
-		<dates>
-			<calendars>
-				<default type="gregorian"/>
-				<calendar type="gregorian">
-				</calendar>
-			</calendars>
-		</dates>
-		<numbers>
-			<currencies>
-				<default type="JMD"/>
-				<currency type="JMD">
-					<symbol>J$</symbol>
-					<displayName>JMD</displayName>
-					<decimal>.</decimal>
-				</currency>
-			</currencies>
-		</numbers>
-</localeData>
+	<dates>
+		<calendars>
+			<default type="gregorian"/>
+			<calendar type="gregorian">
+			</calendar>
+		</calendars>
+	</dates>
+</ldml>

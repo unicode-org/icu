@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="x0.2">Various notes and changes in version x0.2</version>
-		<generation date="2003-04-08" />
+		<version number="x0.3">Various notes and changes in version x0.3</version>
+		<generation date="2003-06-25" />
 		<language type="az"></language>
 	</identity>
 	<localeDisplayNames>
@@ -18,9 +23,14 @@
 	<layout>
 		<orientation lines="top-to-bottom" characters="left-to-right" />
 	</layout>
-	<encodings>
+	<characters>
 		<exemplarCharacters>[а-и к-х ч ш ы ј ғ ҝ ү ҹ һ ә ө]</exemplarCharacters>
-	</encodings>
+		<special xmlns:icu="http://oss.software.ibm.com/icu/"  >
+			<icu:scripts>
+				<icu:script type="1">CYRL</icu:script>
+			</icu:scripts>
+		</special>
+	</characters>
 	<dates>
 		<calendars>
 			<default type="gregorian"/>
@@ -89,11 +99,16 @@
 			<infinity>∞</infinity>
 			<nan>�</nan>
 		</symbols>
+		<currencies>
+			<currency type="AZM">
+				<displayName>AZM</displayName>
+				<symbol>ман.</symbol>
+			</currency>
+		</currencies>
 	</numbers>
-		<collations>
-			<collation  >
-				<settings normalization="on"/>
-				<special owner="http://oss.software.ibm.com/icu/" version="1.0" />
-			</collation  >
-		</collations>
-</localeData>
+<collations version="3.1.1">
+	<collation  >
+		<special xmlns:icu="http://oss.software.ibm.com/icu/" icu:version="1.0" />
+	</collation  >
+</collations >
+</ldml>

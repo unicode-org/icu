@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE localeData SYSTEM "http://oss.software.ibm.com/cvs/icu/~checkout~/locale/LocaleElements.dtd" >
-<localeData>
+<!DOCTYPE ldml SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldml.dtd" 
+[
+      <!ENTITY % icu SYSTEM " 	http://www.openi18n.org/spec/ldml/1.0/ldmlICU.dtd"> 
+%icu;
+]
+>
+<ldml>
 	<identity>
-		<version number="2.0">Various notes and changes in version 2.0</version>
-		<generation date="2003-04-08" />
+		<version number="3.0">Various notes and changes in version 3.0</version>
+		<generation date="2003-06-25" />
 		<language type="af"></language>
 	</identity>
 	<localeDisplayNames>
@@ -15,9 +20,9 @@
 	<layout>
 		<orientation lines="top-to-bottom" characters="left-to-right" />
 	</layout>
-	<encodings>
+	<characters>
 		<exemplarCharacters>[a-z á é è â ê î ô û ë ï ö]</exemplarCharacters>
-	</encodings>
+	</characters>
 	<dates>
 		<calendars>
 			<default type="gregorian"/>
@@ -73,4 +78,12 @@
 			</calendar>
 		</calendars>
 	</dates>
-</localeData>
+	<numbers>
+		<currencies>
+			<currency type="ZAR">
+				<displayName>ZAR</displayName>
+				<symbol>R</symbol>
+			</currency>
+		</currencies>
+	</numbers>
+</ldml>
