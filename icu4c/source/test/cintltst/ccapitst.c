@@ -1322,7 +1322,7 @@ static void TestConvertSafeCloneCallback()
     conv1 = ucnv_open("iso-8859-3", &err);
     
     if(U_FAILURE(err)) {
-        log_err("Err opening iso-8859-3, %s", u_errorName(err));
+        log_data_err("Err opening iso-8859-3, %s", u_errorName(err));
         return;
     }
 
