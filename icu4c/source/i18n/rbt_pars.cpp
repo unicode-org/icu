@@ -743,7 +743,7 @@ TransliterationRuleData* TransliteratorParser::orphanData() {
 void TransliteratorParser::parseRules(const UnicodeString& rules,
                                       UTransDirection theDirection) {
     // Clear error struct
-    parseError.line = parseError.offset = 0;
+    parseError.line = parseError.offset = -1;
     parseError.preContext[0] = parseError.postContext[0] = (UChar)0;
     status = U_ZERO_ERROR;
 
