@@ -623,9 +623,9 @@ int32_t
 uprv_digitsAfterDecimal(double x)
 {
   char buffer[20];
-  int16_t numDigits;
+  int32_t numDigits;
   char *p;
-  int16_t ptPos, exponent;
+  int32_t ptPos, exponent;
 
   /* negative numbers throw off the calculations*/
   x = fabs(x);
@@ -1443,8 +1443,14 @@ uprv_getDefaultLocaleID()
 #endif
 
 #ifdef WIN32
-  LCID id = GetThreadLocale();
-  return T_convertToPosix(id);
+    UErrorCode status = U_ZERO_ERROR;
+    LCID id = GetThreadLocale();
+    const char* locID = T_convertToPosix(id, &status);
+
+    if (U_FAILURE(status)) {
+        locID = "en_US";
+    }
+    return locID;
 #endif
 
 #ifdef OS2
