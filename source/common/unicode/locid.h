@@ -29,14 +29,18 @@
 #define LOCID_H
 
 
-#include "unicode/unistr.h"
-
-typedef struct ULocale ULocale;
-typedef struct UHashtable UHashtable;
+#include "unicode/putil.h"
 
 #define ULOC_LANG_CAPACITY 3
 #define ULOC_COUNTRY_CAPACITY 3
 #define ULOC_FULLNAME_CAPACITY 50
+
+#ifdef XP_CPLUSPLUS
+
+#include "unicode/unistr.h"
+
+typedef struct ULocale ULocale;
+typedef struct UHashtable UHashtable;
 
 /**    
  *
@@ -194,8 +198,8 @@ public:
     static const Locale ITALY;
     static const Locale JAPAN;
     static const Locale KOREA;
-    static const Locale CHINA;      // Alias for PRC
-    static const Locale PRC;        // Peoples Republic of China
+    static const Locale CHINA;      /* Alias for PRC */
+    static const Locale PRC;        /* Peoples Republic of China */
     static const Locale TAIWAN;
     static const Locale UK;
     static const Locale US;
@@ -254,7 +258,7 @@ public:
                 Locale( const   UnicodeString&  language);
 
 
-#endif // ICU_LOCID_NO_DEPRECATES
+#endif /* ICU_LOCID_NO_DEPRECATES */
     /**
      * Initializes a Locale object from another Locale object.
      *
@@ -369,7 +373,7 @@ public:
                 const char * getISO3Country() const;
 
 #ifndef ICU_LOCID_NO_DEPRECATES
-// begin deprecated versions
+/* begin deprecated versions */
 
     /**
      * Fills in "lang" with the locale's two-letter ISO-639 language code.
@@ -424,8 +428,8 @@ public:
      */
                 UnicodeString&  getISO3Country( UnicodeString&  name, UErrorCode& status) const;
 
-// END deprecated [ ICU_LOCID_NO_DEPRECATES ]
-#endif // ICU_LOCID_NO_DEPRECATES
+/* END deprecated [ ICU_LOCID_NO_DEPRECATES ] */
+#endif /* ICU_LOCID_NO_DEPRECATES */
     /**
      * Returns the Windows LCID value corresponding to this locale.
      * This value is stored in the resource data for the locale as a one-to-four-digit
@@ -592,10 +596,10 @@ public:
      * @deprecated Remove in the first release of 2001.
      */
     static const UnicodeString* getISOLanguages(int32_t& count);
-#endif // ICU_LOCID_NO_DEPRECATES
+#endif /* ICU_LOCID_NO_DEPRECATES */
     
-protected: // only protected for testing purposes. DO NOT USE.
-    void setFromPOSIXID(const char *posixID); // set it from a single string.
+protected: /* only protected for testing purposes. DO NOT USE. */
+    void setFromPOSIXID(const char *posixID); /* set it from a single string. */
 
     /**
      * Given an ISO country code, returns an array of Strings containing the ISO
@@ -635,12 +639,12 @@ private:
     static Locale *localeList;
     static int32_t localeListCount;
 
-// Begin deprecated fields
+/* Begin deprecated fields */
     static UnicodeString *isoLanguages;
     static int32_t isoLanguagesCount;
     static UnicodeString *isoCountries;
     static int32_t isoCountriesCount;
-// End deprecated fields
+/* End deprecated fields */
 
     static UHashtable *ctry2LangMapping;
     static const UnicodeString compressedCtry2LangMapping;
@@ -657,6 +661,7 @@ Locale::operator!=(const    Locale&     other) const
     return !operator==(other);
 }
 
+#endif  /* XP_CPLUSPLUS */
 #endif
 
 

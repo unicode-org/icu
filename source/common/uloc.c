@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-1999, International Business Machines
+*   Copyright (C) 1997-2000, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -20,6 +20,7 @@
 
 
 #include "unicode/uloc.h"
+#include "unicode/locid.h"
 
 #include "unicode/utypes.h"
 #include "uresimp.h"
@@ -41,7 +42,7 @@ U_CFUNC int32_t T_UnicodeString_length(const UnicodeString *s);
 U_CAPI int32_t
 T_UnicodeString_extract(const UnicodeString *s, char *dst);
 
-/* Locale stuff */
+/* Locale stuff from locid.cpp */
 U_CAPI void locale_set_default(const char *id);
 
 /* These strings describe the resources we attempt to load from
@@ -62,7 +63,8 @@ static const UChar comma[] = { (UChar)0x002C /* space */, (UChar)0x0020 /* , */,
 static const UChar closeParen[] = { (UChar)0x0029 /* ( */, (UChar)0x0000};
 
 
-static char* _defaultLocale = NULL;
+static char _defaultLocale[ULOC_FULLNAME_CAPACITY] = "en_US";
+static UBool _emptyDefaultLocale = TRUE;
 
 static char** _installedLocales = NULL;
 static int32_t _installedLocalesCount = 0;
@@ -204,24 +206,23 @@ static int16_t _findIndex(const char* list, int32_t listLength, const char* key)
 
 const char* uloc_getDefault()
 {
-  const char* result = _defaultLocale;
   UErrorCode err = U_ZERO_ERROR;
   
   /*lazy evaluates _defaultLocale*/
-  if (result == NULL) 
+  if (_emptyDefaultLocale) 
     {
       uloc_setDefault(NULL, &err);
-      result = _defaultLocale;
     }
   
-  return result;
+  return _defaultLocale;
 }
 
 void uloc_setDefault(const char*   newDefaultLocale,
              UErrorCode* err) 
 {
 
-  if (U_FAILURE(*err))    return;
+  if (U_FAILURE(*err))
+      return;
   /* the error code isn't currently used for anything by this function*/
   
   if (newDefaultLocale == NULL) 
@@ -230,12 +231,9 @@ void uloc_setDefault(const char*   newDefaultLocale,
     }
   
   umtx_lock(NULL);
-  if(_defaultLocale == NULL)
-    _defaultLocale = (char*)uprv_malloc(sizeof(char) * (uprv_strlen(newDefaultLocale) + 1));
-  else
-    _defaultLocale = (char*)uprv_realloc(_defaultLocale, 
-                         sizeof(char) * (uprv_strlen(newDefaultLocale) + 1));
-  uprv_strcpy(_defaultLocale, newDefaultLocale);
+  uprv_strncpy(_defaultLocale, newDefaultLocale, ULOC_FULLNAME_CAPACITY - 1);
+  _defaultLocale[ULOC_FULLNAME_CAPACITY - 1] = 0;
+  _emptyDefaultLocale = FALSE;
   umtx_unlock(NULL);
 
   /* propagate change to C++ */
