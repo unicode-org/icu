@@ -27,6 +27,7 @@
 #include "cmemory.h"
 #include "utrie.h"
 #include "ucase.h"
+#include "ucln_cmn.h"
 
 struct UCaseProps {
     UDataMemory *mem;
@@ -182,6 +183,14 @@ static UCaseProps *gCsp=NULL;
 static UErrorCode gErrorCode=U_ZERO_ERROR;
 static int8_t gHaveData=0;
 
+static UBool U_CALLCONV ucase_cleanup(void) {
+    ucase_close(gCsp);
+    gCsp=NULL;
+    gErrorCode=U_ZERO_ERROR;
+    gHaveData=0;
+    return TRUE;
+}
+
 U_CAPI UCaseProps * U_EXPORT2
 ucase_getSingleton(UErrorCode *pErrorCode) {
     int8_t haveData;
@@ -214,20 +223,13 @@ ucase_getSingleton(UErrorCode *pErrorCode) {
             gCsp=csp;
             csp=NULL;
             gHaveData=1;
+            ucln_common_registerCleanup(UCLN_COMMON_UCASE, ucase_cleanup);
         }
         umtx_unlock(NULL);
 
         ucase_close(csp);
         return gCsp;
     }
-}
-
-U_CFUNC void
-ucase_cleanup() {
-    ucase_close(gCsp);
-    gCsp=NULL;
-    gErrorCode=U_ZERO_ERROR;
-    gHaveData=0;
 }
 
 /* Unicode case mapping data swapping --------------------------------------- */

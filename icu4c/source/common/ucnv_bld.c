@@ -161,7 +161,7 @@ static const char DATA_TYPE[] = "cnv";
 /*                by open converters.                                                  */
 /*                Not thread safe.                                                     */
 /*                Not supported  API.  Marked U_CAPI only for use by test programs.    */
-U_CFUNC UBool U_EXPORT2 ucnv_cleanup(void) {
+static UBool U_CALLCONV ucnv_cleanup(void) {
     if (SHARED_DATA_HASHTABLE != NULL) {
         ucnv_flushCache();
         if (SHARED_DATA_HASHTABLE != NULL && uhash_count(SHARED_DATA_HASHTABLE) == 0) {
@@ -381,6 +381,8 @@ ucnv_shareConverterData(UConverterSharedData * data)
         SHARED_DATA_HASHTABLE = uhash_openSize(uhash_hashChars, uhash_compareChars,
                             ucnv_io_countAvailableAliases(&err),
                             &err);
+        ucln_common_registerCleanup(UCLN_COMMON_UCNV, ucnv_cleanup);
+
         if (U_FAILURE(err)) 
             return;
     }

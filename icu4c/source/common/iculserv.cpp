@@ -17,9 +17,8 @@
 #include "ustrfmt.h"
 #include "uhash.h"
 #include "charstr.h"
+#include "ucln_cmn.h"
 #include "uassert.h"
-
-U_NAMESPACE_BEGIN
 
 // see LocaleUtility::getAvailableLocaleNames
 static Hashtable * LocaleUtility_cache = NULL;
@@ -31,6 +30,21 @@ static Hashtable * LocaleUtility_cache = NULL;
 /*
  ******************************************************************
  */
+
+/**
+ * Release all static memory held by Locale Utility.  
+ */
+U_CDECL_BEGIN
+static UBool U_CALLCONV service_cleanup(void) {
+    if (LocaleUtility_cache) {
+        delete LocaleUtility_cache;
+        LocaleUtility_cache = NULL;
+    }
+    return TRUE;
+}
+U_CDECL_END
+
+U_NAMESPACE_BEGIN
 
 UnicodeString&
 LocaleUtility::canonicalLocaleString(const UnicodeString* id, UnicodeString& result)
@@ -194,6 +208,7 @@ LocaleUtility::getAvailableLocaleNames(const UnicodeString& bundleID)
         if (h == NULL) {
             LocaleUtility_cache = h = cache;
             cache = NULL;
+            ucln_common_registerCleanup(UCLN_COMMON_SERVICE, service_cleanup);
         }
         umtx_unlock(NULL);
         delete cache;
@@ -241,15 +256,6 @@ LocaleUtility::isFallbackOf(const UnicodeString& root, const UnicodeString& chil
     return child.indexOf(root) == 0 &&
       (child.length() == root.length() ||
        child.charAt(root.length()) == UNDERSCORE_CHAR);
-}
-
-UBool
-LocaleUtility::cleanup(void) {
-    if (LocaleUtility_cache) {
-        delete LocaleUtility_cache;
-        LocaleUtility_cache = NULL;
-    }
-    return TRUE;
 }
 
 /*
@@ -949,15 +955,6 @@ ICULocaleService::createKey(const UnicodeString* id, int32_t kind, UErrorCode& s
 }
 
 U_NAMESPACE_END
-
-// defined in ucln_cmn.h
-
-/**
- * Release all static memory held by Locale Utility.  
- */
-U_CFUNC UBool service_cleanup(void) {
-  return LocaleUtility::cleanup();
-}
 
 /* !UCONFIG_NO_SERVICE */
 #endif

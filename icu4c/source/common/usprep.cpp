@@ -31,6 +31,7 @@
 #include "uhash.h"
 #include "cstring.h"
 #include "udataswp.h"
+#include "ucln_cmn.h"
 #include "unormimp.h"
 
 U_CDECL_BEGIN
@@ -104,9 +105,85 @@ compareEntries(const UHashTok p1, const UHashTok p2) {
         uhash_compareChars(path1, path2)));
 }
 
+static void 
+usprep_unload(UStringPrepProfile* data){
+    udata_close(data->sprepData);
+}
+
+static int32_t 
+usprep_internal_flushCache(UBool noRefCount){
+    UStringPrepProfile *profile = NULL;
+    UStringPrepKey  *key  = NULL;
+    int32_t pos = -1;
+    int32_t deletedNum = 0;
+    const UHashElement *e;
+
+    /*
+     * if shared data hasn't even been lazy evaluated yet
+     * return 0
+     */
+    umtx_lock(&usprepMutex);
+    if (SHARED_DATA_HASHTABLE == NULL) {
+        umtx_unlock(&usprepMutex);
+        return 0;
+    }
+
+    /*creates an enumeration to iterate through every element in the table */
+    while ((e = uhash_nextElement(SHARED_DATA_HASHTABLE, &pos)) != NULL)
+    {
+        profile = (UStringPrepProfile *) e->value.pointer;
+        key  = (UStringPrepKey *) e->key.pointer;
+
+        if ((noRefCount== FALSE && profile->refCount == 0) || 
+             noRefCount== TRUE) {
+            deletedNum++;
+            uhash_removeElement(SHARED_DATA_HASHTABLE, e);
+
+            /* unload the data */
+            usprep_unload(profile);
+
+            if(key->name != NULL) {
+                uprv_free(key->name);
+                key->name=NULL;
+            }
+            if(key->path != NULL) {
+                uprv_free(key->path);
+                key->path=NULL;
+            }
+            uprv_free(profile);
+            uprv_free(key);
+        }
+       
+    }
+    umtx_unlock(&usprepMutex);
+
+    return deletedNum;
+}
+
+/* Works just like ucnv_flushCache() 
+static int32_t 
+usprep_flushCache(){
+    return usprep_internal_flushCache(FALSE);
+}
+*/
+
+static UBool U_CALLCONV usprep_cleanup(void){
+    if (SHARED_DATA_HASHTABLE != NULL) {
+        usprep_internal_flushCache(TRUE);
+        if (SHARED_DATA_HASHTABLE != NULL && uhash_count(SHARED_DATA_HASHTABLE) == 0) {
+            uhash_close(SHARED_DATA_HASHTABLE);
+            SHARED_DATA_HASHTABLE = NULL;
+        }
+    }
+
+    umtx_destroy(&usprepMutex);             /* Don't worry about destroying the mutex even  */
+                                            /*  if the hash table still exists.  The mutex  */
+                                            /*  will lazily re-init  itself if needed.      */
+    return (SHARED_DATA_HASHTABLE == NULL);
+}
 U_CDECL_END
 
-U_CFUNC void 
+static void 
 usprep_init() {
     umtx_init(&usprepMutex);
 }
@@ -114,25 +191,26 @@ usprep_init() {
 /** Initializes the cache for resources */
 static void 
 initCache(UErrorCode *status) {
-  UBool makeCache = FALSE;
-  umtx_lock(&usprepMutex);
-  makeCache = (SHARED_DATA_HASHTABLE ==  NULL);
-  umtx_unlock(&usprepMutex);
-  if(makeCache) {
-      UHashtable *newCache = uhash_open(hashEntry, compareEntries, status);
-      if (U_FAILURE(*status)) {
-          return;
-      }
-      umtx_lock(&usprepMutex);
-      if(SHARED_DATA_HASHTABLE == NULL) {
-          SHARED_DATA_HASHTABLE = newCache;
-          newCache = NULL;
-      }
-      umtx_unlock(&usprepMutex);
-      if(newCache != NULL) {
-          uhash_close(newCache);
-      }
-  }
+    UBool makeCache = FALSE;
+    umtx_lock(&usprepMutex);
+    makeCache = (SHARED_DATA_HASHTABLE ==  NULL);
+    umtx_unlock(&usprepMutex);
+    if(makeCache) {
+        UHashtable *newCache = uhash_open(hashEntry, compareEntries, status);
+        if (U_FAILURE(*status)) {
+            return;
+        }
+        umtx_lock(&usprepMutex);
+        if(SHARED_DATA_HASHTABLE == NULL) {
+            SHARED_DATA_HASHTABLE = newCache;
+            ucln_common_registerCleanup(UCLN_COMMON_USPREP, usprep_cleanup);
+            newCache = NULL;
+        }
+        umtx_unlock(&usprepMutex);
+        if(newCache != NULL) {
+            uhash_close(newCache);
+        }
+    }
 }
 
 static UBool U_CALLCONV
@@ -335,85 +413,6 @@ usprep_close(UStringPrepProfile* profile){
     }
     umtx_unlock(&usprepMutex);
     
-}
-
-static void 
-usprep_unload(UStringPrepProfile* data){
-    udata_close(data->sprepData);
-}
-
-
-static int32_t 
-usprep_internal_flushCache(UBool noRefCount){
-    UStringPrepProfile *profile = NULL;
-    UStringPrepKey  *key  = NULL;
-    int32_t pos = -1;
-    int32_t deletedNum = 0;
-    const UHashElement *e;
-
-    /*
-     * if shared data hasn't even been lazy evaluated yet
-     * return 0
-     */
-    umtx_lock(&usprepMutex);
-    if (SHARED_DATA_HASHTABLE == NULL) {
-        umtx_unlock(&usprepMutex);
-        return 0;
-    }
-
-    /*creates an enumeration to iterate through every element in the table */
-    while ((e = uhash_nextElement(SHARED_DATA_HASHTABLE, &pos)) != NULL)
-    {
-        profile = (UStringPrepProfile *) e->value.pointer;
-        key  = (UStringPrepKey *) e->key.pointer;
-
-        if ((noRefCount== FALSE && profile->refCount == 0) || 
-             noRefCount== TRUE) {
-            deletedNum++;
-            uhash_removeElement(SHARED_DATA_HASHTABLE, e);
-
-            /* unload the data */
-            usprep_unload(profile);
-
-            if(key->name != NULL) {
-                uprv_free(key->name);
-                key->name=NULL;
-            }
-            if(key->path != NULL) {
-                uprv_free(key->path);
-                key->path=NULL;
-            }
-            uprv_free(profile);
-            uprv_free(key);
-        }
-       
-    }
-    umtx_unlock(&usprepMutex);
-
-    return deletedNum;
-}
-
-/* Works just like ucnv_flushCache() 
-static int32_t 
-usprep_flushCache(){
-    return usprep_internal_flushCache(FALSE);
-}
-*/
-
-U_CFUNC UBool 
-usprep_cleanup(void){
-    if (SHARED_DATA_HASHTABLE != NULL) {
-        usprep_internal_flushCache(TRUE);
-        if (SHARED_DATA_HASHTABLE != NULL && uhash_count(SHARED_DATA_HASHTABLE) == 0) {
-            uhash_close(SHARED_DATA_HASHTABLE);
-            SHARED_DATA_HASHTABLE = NULL;
-        }
-    }
-
-    umtx_destroy(&usprepMutex);             /* Don't worry about destroying the mutex even  */
-                                            /*  if the hash table still exists.  The mutex  */
-                                            /*  will lazily re-init  itself if needed.      */
-    return (SHARED_DATA_HASHTABLE == NULL);
 }
 
 U_CFUNC void 

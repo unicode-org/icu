@@ -963,6 +963,9 @@
 				RelativePath=".\udataswp.h">
 			</File>
 			<File
+				RelativePath=".\uinit.c">
+			</File>
+			<File
 				RelativePath=".\umapfile.c">
 				<FileConfiguration
 					Name="Release|Win32">

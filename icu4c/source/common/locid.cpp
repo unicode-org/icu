@@ -88,11 +88,8 @@ static void U_CALLCONV
 deleteLocale(void *obj) {
     delete (Locale *) obj;
 }
-U_CDECL_END
 
-
-UBool
-locale_cleanup(void)
+static UBool U_CALLCONV locale_cleanup(void)
 {
     U_NAMESPACE_USE
 
@@ -115,6 +112,7 @@ locale_cleanup(void)
 
     return TRUE;
 }
+U_CDECL_END
 
 U_NAMESPACE_BEGIN
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(Locale)
@@ -170,6 +168,7 @@ void locale_set_default_internal(const char *id)
         umtx_lock(NULL);
         if (gDefaultLocalesHashT == NULL) {
             gDefaultLocalesHashT = tHashTable;
+            ucln_common_registerCleanup(UCLN_COMMON_LOCALE, locale_cleanup);
             umtx_unlock(NULL);
         } else {
             umtx_unlock(NULL);
@@ -972,6 +971,7 @@ Locale::getAvailableLocales(int32_t& count)
             availableLocaleListCount = count;
             availableLocaleList = newLocaleList;
             newLocaleList = NULL;
+            ucln_common_registerCleanup(UCLN_COMMON_LOCALE, locale_cleanup);
         }
         umtx_unlock(NULL);
         delete []newLocaleList;
@@ -1175,6 +1175,7 @@ Locale::getLocaleCache(void)
         if (gLocaleCache == NULL) {
             gLocaleCache = tLocaleCache;
             tLocaleCache = NULL;
+            ucln_common_registerCleanup(UCLN_COMMON_LOCALE, locale_cleanup);
         }
         umtx_unlock(NULL);
         if (tLocaleCache) {
