@@ -109,16 +109,13 @@ public abstract class ICUNotifier {
      * The notification thread.
      */
     private class NotifyThread extends Thread {
-	List queue;
+	List queue = new LinkedList();
 
 	/**
 	 * Queue the notification on the thread.
 	 */
 	public void queue(Object[] list) {
 	    synchronized (this) {
-		if (queue == null) {
-		    queue = new LinkedList();
-		}
 		queue.add(list);
 		notify();
 	    }
