@@ -7,6 +7,12 @@
 
 ms{
     Version{ "x1.1" }
+    Countries {
+        Fallback{ "en" }
+    }
+    Currencies {
+        MYR { "R", "MYR" }
+    }
     DayAbbreviations { 
         "Aha",
         "Isn",
@@ -24,6 +30,13 @@ ms{
         "Khamis",
         "Jumaat",
         "Sabtu",
+    }
+    ExemplarCharacters{ "[a-z]" }
+    LocaleScript{ 
+        "Latn",  // ISO 15924 Name 
+    }
+    Languages {
+        ms { "Bahasa Malaysia" }
     }
     MonthAbbreviations { 
         "Jan",
@@ -53,10 +66,4 @@ ms{
         "November",
         "Disember",
     }
-    Currencies {
-        MYR { "R", "MYR" }
-    }
-//    LocaleScript{ 
-//        "Latn",  // ISO 15924 Name 
-//    }
 }
