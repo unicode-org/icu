@@ -467,8 +467,8 @@ void _LMBCSFromUnicode(UConverter*     _this,
          { };
                    
    }
-   while (*source<= sourceLimit && 
-      *target <= targetLimit && 
+   while (*source< sourceLimit && 
+      *target < targetLimit && 
       !U_FAILURE(*err));
       
       /* JSGTODO Check the various exit conditions */
