@@ -20,7 +20,7 @@
 #    |  UCM_SOURCE = ibm-913.ucm ibm-949.ucm ibm-37.ucm
 #
 # If you are planning to exclude EBCDIC mappings in you data then please delete
-# ucmebcdic.mk from the <icu>/data directory
+# ucmebcdic.mk from the <icu>/source/data directory
 #
 
 UCM_SOURCE_FILES = ibm-1253.ucm ibm-862.ucm\
@@ -38,15 +38,15 @@ ibm-1277.ucm ibm-874.ucm\
 ibm-1280.ucm ibm-5210.ucm ibm-878.ucm\
 ibm-1281.ucm ibm-901.ucm\
 ibm-1282.ucm ibm-902.ucm\
-ibm-1283.ucm ibm-9027.ucm\
+ibm-1283.ucm\
 ibm-9044.ucm\
 ibm-9049.ucm\
 ibm-1363_P110-2000.ucm\
 ibm-9061.ucm\
 ibm-808.ucm\
 ibm-813.ucm\
-ibm-834.ucm ibm-921.ucm\
-ibm-16684.ucm ibm-835.ucm ibm-922.ucm\
+ibm-921.ucm\
+ibm-922.ucm\
 ibm-848.ucm\
 ibm-9238.ucm\
 ibm-17248.ucm ibm-849.ucm\
