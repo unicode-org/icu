@@ -187,8 +187,17 @@ $(top_builddir)/config/icu-config: $(top_builddir)/Makefile $(top_srcdir)/config
 	cat $(top_srcdir)/config/icu-config-bottom >> $@
 	echo "# Rebuilt on "`date` >> $@
 
-config.status: $(srcdir)/configure
-	$(SHELL) ./config.status --recheck
+config.status: $(srcdir)/configure $(srcdir)/common/unicode/uversion.h
+	@echo
+	@echo
+	@echo "*** config.status has become stale ***"
+	@echo "   'configure' and/or 'uversion.h' have changed, please"
+	@echo "  do 'runConfigureICU' (or 'configure') again, as per"
+	@echo "  the readme.html."
+	@echo
+	@echo
+	exit 1
+
 
 install-manx: $(MANX_FILES)
 	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
