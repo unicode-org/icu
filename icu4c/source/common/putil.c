@@ -124,6 +124,9 @@
 /*
 #   include <dl.h>
 */
+#elif defined(U_DARWIN)
+#include <sys/file.h>
+#include <sys/param.h>
 #endif
 
 /* Define the extension for data files, again... */
@@ -1185,14 +1188,22 @@ uprv_timezone()
 #endif
 }
 
-/* Note that U_TZNAME does *not* have to be tzname, but if it does,
+/* Note that U_TZNAME does *not* have to be tzname, but if it is,
    some platforms need to have it declared here. */ 
 
-#if defined(IRIX) || defined(U_DARWIN) /* For SGI/MacOSX.  */
+#if defined(IRIX) || defined(U_DARWIN) /* For SGI or Mac OS X.  */
 extern char *tzname[]; /* RS6000 and others reject char **tzname.  */
 #elif defined(U_CYGWIN)
 extern U_IMPORT char *_tzname[2]; 
 #endif
+
+#if defined(U_DARWIN)	/* For Mac OS X */
+#define TZZONELINK	"/etc/localtime"
+#define TZZONEINFO	"/usr/share/zoneinfo/"
+static char *gTimeZoneBuffer = NULL; /* Heap allocated */
+#endif
+
+#include <stdio.h>
 
 U_CAPI char* U_EXPORT2
 uprv_tzname(int n)
@@ -1201,6 +1212,41 @@ uprv_tzname(int n)
     char* id = (char*) detectWindowsTimeZone();
     if (id != NULL) {
         return id;
+    }
+#endif
+
+#if defined(U_DARWIN)
+    int ret;
+
+    char *tzenv;
+
+    tzenv = getenv("TZFILE");
+    if (tzenv != NULL) {
+    	return tzenv;
+    }
+
+#if 0
+    /* TZ is often set to "PST8PDT" or similar, so we cannot use it. Alan */
+    tzenv = getenv("TZ");
+    if (tzenv != NULL) {
+    	return tzenv;
+    }
+#endif
+    
+    /* Caller must handle threading issues */
+    if (gTimeZoneBuffer == NULL) {
+    	gTimeZoneBuffer = (char *) uprv_malloc(MAXPATHLEN + 2);
+
+        ret = readlink(TZZONELINK, gTimeZoneBuffer, MAXPATHLEN + 2);
+        if (0 < ret) {
+            gTimeZoneBuffer[ret] = '\0';
+            if (strncmp(gTimeZoneBuffer, TZZONEINFO, sizeof(TZZONEINFO) - 1) == 0) {
+                return (gTimeZoneBuffer += sizeof(TZZONEINFO) - 1);
+            }
+        }
+
+        uprv_free(gTimeZoneBuffer);
+        gTimeZoneBuffer = NULL;
     }
 #endif
 
