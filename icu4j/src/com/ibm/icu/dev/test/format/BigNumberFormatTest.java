@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/BigNumberFormatTest.java,v $ 
- * $Date: 2001/05/21 23:31:54 $ 
- * $Revision: 1.10 $
+ * $Date: 2001/10/19 12:47:42 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -162,10 +162,11 @@ public class BigNumberFormatTest extends TestFmwk {
      */
     public void TestAlphaBigDecimal() {
         DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
+        /*For ICU compatibility [Richard/GCL]*/
         expect(NumberFormat.getScientificInstance(Locale.US),
                new Number[] { new com.ibm.math.BigDecimal("12345.678901"),
                            },
-               "1.234568E4");
+               "1.2345678901E4");
         expect(new DecimalFormat("##0.####E0", US),
                new Number[] { new com.ibm.math.BigDecimal("12345.4999"),
                               new com.ibm.math.BigDecimal("12344.5001"),
@@ -182,11 +183,12 @@ public class BigNumberFormatTest extends TestFmwk {
      */
     public void TestScientific() {
         DecimalFormatSymbols US = new DecimalFormatSymbols(Locale.US);
+        /*For ICU compatibility [Richard/GCL]*/
         expect(NumberFormat.getScientificInstance(Locale.US),
                new Number[] { new Double(12345.678901),
                               new java.math.BigDecimal("12345.678901"),
                             },
-               "1.234568E4");
+               "1.2345678901E4");
         expect(new DecimalFormat("##0.###E0", US),
                new Double(12345),
                "12.34E3");
@@ -205,9 +207,10 @@ public class BigNumberFormatTest extends TestFmwk {
                               new java.math.BigDecimal("12346.5000"),
                             },
                "12.346E3");
+        /*For ICU compatibility [Richard/GCL]*/
         expect(NumberFormat.getScientificInstance(Locale.FRANCE),
                new Double(12345.678901),
-               "1,234568E4");
+               "1,2345678901E4");
         expect(new DecimalFormat("##0.####E0", US),
                new Double(789.12345e-9),
                "789.12E-9");
