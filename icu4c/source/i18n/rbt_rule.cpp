@@ -111,6 +111,7 @@ TransliterationRule::TransliterationRule(TransliterationRule& other) :
     keyLength(other.keyLength),
     cursorPos(other.cursorPos),
     flags(other.flags),
+    firstKeySeg(other.firstKeySeg),
     data(other.data) {
 
     segments = 0;
