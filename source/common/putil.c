@@ -78,7 +78,7 @@
 /* floating point implementations ------------------------------------------- */
 
 /* We return QNAN rather than SNAN*/
-#ifdef IEEE_754
+#if IEEE_754
 #define NAN_TOP ((int16_t)0x7FF8)
 #define INF_TOP ((int16_t)0x7FF0)
 #else
@@ -163,7 +163,7 @@ uprv_getUTCtime()
 bool_t 
 uprv_isNaN(double number)
 {
-#ifdef IEEE_754
+#if IEEE_754
   /* This should work in theory, but it doesn't, so we resort to the more*/
   /* complicated method below.*/
   /*  return number != number;*/
@@ -206,7 +206,7 @@ uprv_isNaN(double number)
 bool_t
 uprv_isInfinite(double number)
 {
-#ifdef IEEE_754
+#if IEEE_754
   /* We know the top bit is the sign bit, so we mask that off in a copy of */
   /* the number and compare against infinity. [LIU]*/
   /* The following approach doesn't work for some reason, so we go ahead and */
@@ -244,7 +244,7 @@ return ((highBits  & ~SIGN) == 0x70FF0000L) && (lowBits == 0x00000000L);
 bool_t   
 uprv_isPositiveInfinity(double number)
 {
-#if defined(IEEE_754) || defined(OS390)
+#if IEEE_754 || defined(OS390)
   return (number > 0 && uprv_isInfinite(number));
 #else
   return uprv_isInfinite(number);
@@ -254,7 +254,7 @@ uprv_isPositiveInfinity(double number)
 bool_t   
 uprv_isNegativeInfinity(double number)
 {
-#if defined(IEEE_754) || defined(OS390)
+#if IEEE_754 || defined(OS390)
   return (number < 0 && uprv_isInfinite(number));
 #else
   uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number,
@@ -267,7 +267,7 @@ uprv_isNegativeInfinity(double number)
 double 
 uprv_getNaN()
 {
-#if defined(IEEE_754) || defined(OS390)
+#if IEEE_754 || defined(OS390)
   if( ! fgNaNInitialized) {
     umtx_lock(NULL);
     if( ! fgNaNInitialized) {
@@ -292,7 +292,7 @@ uprv_getNaN()
 double 
 uprv_getInfinity()
 {
-#if defined(IEEE_754  ) || defined(OS390)
+#if IEEE_754 || defined(OS390)
   if (!fgInfInitialized)
     {
       int i;
@@ -379,7 +379,7 @@ uprv_pow10(int32_t x)
 double 
 uprv_IEEEremainder(double x, double p)
 {
-#ifdef IEEE_754
+#if IEEE_754
   int32_t hx, hp;
   uint32_t sx, lx, lp;
   double p_half;
@@ -458,7 +458,7 @@ uprv_IEEEremainder(double x, double p)
 double 
 uprv_fmax(double x, double y)
 {
-#ifdef IEEE_754
+#if IEEE_754
   int32_t lowBits;
   
   /* first handle NaN*/
@@ -491,7 +491,7 @@ uprv_max(int32_t x, int32_t y)
 double 
 uprv_fmin(double x, double y)
 {
-#ifdef IEEE_754
+#if IEEE_754
   int32_t lowBits;
 
   /* first handle NaN*/
@@ -532,7 +532,7 @@ uprv_min(int32_t x, int32_t y)
 double 
 uprv_trunc(double d)
 {
-#ifdef IEEE_754
+#if IEEE_754
 
   int32_t lowBits;
   
@@ -1298,7 +1298,7 @@ uprv_getDefaultLocaleID()
 double 
 uprv_nextDouble(double d, bool_t next)
 {
-#ifdef IEEE_754
+#if IEEE_754
   int32_t highBits;
   uint32_t lowBits;
   int32_t highMagnitude;
