@@ -64,7 +64,6 @@ DigitList::~DigitList()
 
 DigitList::DigitList(const DigitList &other)
 {
-    *fDecimalDigits = '.';
     fDigits = fDecimalDigits + 1;   // skip the decimal
     *this = other;
 }
@@ -101,15 +100,12 @@ DigitList::operator==(const DigitList& that) const
 void
 DigitList::clear()
 {
-    *fDecimalDigits = '.';
     fDigits = fDecimalDigits + 1;   // skip the decimal
     fDecimalAt = 0;
     fCount = 0;
     fIsPositive = TRUE;
 
-// This isn't needed because fCount = 0;
-//    for (int32_t i=0; i<MAX_DIGITS; ++i)
-//        fDigits[i] = kZero;
+    // Don't bother initializing fDigits because fCount is 0.
 }
 
 
@@ -161,7 +157,7 @@ DigitList::formatBase10(int32_t number, char *outputStr, int32_t outputLen)
  * can be linked to this function.
  */
 double
-DigitList::getDouble() const
+DigitList::getDouble()
 {
     double value;
 
@@ -169,10 +165,11 @@ DigitList::getDouble() const
         value = 0.0;
     }
     else {
+        *fDecimalDigits = '.';
         *(fDigits+fCount) = 'e';    // add an e after the digits.
         formatBase10(fDecimalAt,
                      fDigits + fCount + 1,  // skip the 'e'
-                     MAX_DEC_DIGITS - fCount - 2);  // skip the 'e' and '.'
+                     MAX_DEC_DIGITS - fCount - 3);  // skip the 'e' and '.'
         value = atof(fDecimalDigits);
     }
 
@@ -195,7 +192,6 @@ int32_t DigitList::getLong()
         // be able to return a 64-bit number [grhoten]
         *fDecimalDigits = fIsPositive ? '+' : '-';
         value = (int32_t)atol(fDecimalDigits);
-        *fDecimalDigits = '.';
         return value;
     }
     else {
@@ -278,7 +274,6 @@ DigitList::set(int32_t source, int32_t maximumDigits)
     fCount = fDecimalAt = formatBase10(source, fDecimalDigits, MAX_DIGITS);
 
     fIsPositive = (*fDecimalDigits == '+');
-    *fDecimalDigits = '.';
     
     // Don't copy trailing zeros
     while (fCount > 1 && fDigits[fCount - 1] == '0') 
@@ -304,76 +299,69 @@ DigitList::set(double source, int32_t maximumDigits, UBool fixedPoint)
 {
     // for now, simple implementation; later, do proper IEEE stuff
     char rep[MAX_DIGITS + 7]; // Extra space for '.', e+NNN, and '\0' (actually +7 is enough)
+    char *digitPtr      = fDigits;
+    char *repPtr        = rep + 2;  // +2 to skip the sign and decimal
     int32_t exponent    = 0;
-    int idx;
-    char ch;
 
-//    if (source == 0)
-//        source = 0;    /* -0? */
+    fIsPositive = !uprv_isNegative(source);    // Allow +0 and -0
 
     // Generate a representation of the form /[+-][0-9]+e[+-][0-9]+/
     sprintf(rep, "%+1.*e", MAX_DIGITS - 1, source);
-    fDecimalAt  = 1;
-    fCount      = 0;
-    fIsPositive = !uprv_isNegative(source);    // Allow +0 and -0
+    fDecimalAt  = 0;
     rep[2]      = rep[1];    // remove decimal
 
-    for (idx=2; idx < MAX_DIGITS + 2; ++idx) {
-        ch = rep[idx];
-        if (fCount == 0 && ch == '0') {
-            --fDecimalAt;   // account for leading zeros
-        }
-        else {
-            fDigits[fCount++] = (char)ch;
-        }
+    while (*repPtr == '0') {
+        repPtr++;
+        fDecimalAt--;   // account for leading zeros
     }
 
+    while (*repPtr != 'e') {
+        *(digitPtr++) = *(repPtr++);
+    }
+    fCount = MAX_DIGITS + fDecimalAt;
+
     // Parse an exponent of the form /[eE][+-][0-9]+/
-    idx++;  // skip the e
-    UBool negExp = (rep[idx++] == '-');
-    while ((ch = rep[idx++]) != 0) {
-        exponent = 10*exponent + ch - '0';
+    UBool negExp = (*(++repPtr) == '-');
+    while (*(++repPtr) != 0) {
+        exponent = 10*exponent + *repPtr - '0';
     }
     if (negExp) {
         exponent = -exponent;
     }
-    fDecimalAt += exponent;
+    fDecimalAt += exponent + 1; // +1 for decimal removal
 
-    if (fixedPoint)
+    // The negative of the exponent represents the number of leading
+    // zeros between the decimal and the first non-zero digit, for
+    // a value < 0.1 (e.g., for 0.00123, -decimalAt == 2).  If this
+    // is more than the maximum fraction digits, then we have an underflow
+    // for the printed representation.
+    if (fixedPoint && -fDecimalAt >= maximumDigits)
     {
-        // The negative of the exponent represents the number of leading
-        // zeros between the decimal and the first non-zero digit, for
-        // a value < 0.1 (e.g., for 0.00123, -decimalAt == 2).  If this
-        // is more than the maximum fraction digits, then we have an underflow
-        // for the printed representation.
-        if (-fDecimalAt > maximumDigits) {
+        // If we round 0.0009 to 3 fractional digits, then we have to
+        // create a new one digit in the least significant location.
+        if (-fDecimalAt == maximumDigits && shouldRoundUp(0)) {
+            fCount = 1;
+            ++fDecimalAt;
+            fDigits[0] = (char)'1';
+        } else {
             // Handle an underflow to zero when we round something like
             // 0.0009 to 2 fractional digits.
             fCount = 0;
-            return;
-        } else if (-fDecimalAt == maximumDigits) {
-            // If we round 0.0009 to 3 fractional digits, then we have to
-            // create a new one digit in the least significant location.
-            if (shouldRoundUp(0)) {
-                fCount = 1;
-                ++fDecimalAt;
-                fDigits[0] = (char)'1';
-            } else {
-                fCount = 0;
-            }
-            return;
         }
+        return;
     }
 
-    // Eliminate trailing zeros.
-    while (fCount > 1 && fDigits[fCount - 1] == '0')
-        --fCount;
 
     // Eliminate digits beyond maximum digits to be displayed.
     // Round up if appropriate.  Do NOT round in the special
     // case where maximumDigits == 0 and fixedPoint is FALSE.
-    if (fixedPoint || maximumDigits > 0) {
+    if (fixedPoint || (0 < maximumDigits && maximumDigits < fCount)) {
         round(fixedPoint ? (maximumDigits + fDecimalAt) : maximumDigits);
+    }
+    else {
+        // Eliminate trailing zeros.
+        while (fCount > 1 && fDigits[fCount - 1] == '0')
+            --fCount;
     }
 }
 
@@ -447,11 +435,11 @@ DigitList::round(int32_t maximumDigits)
             }
         }
         fCount = maximumDigits;
+    }
 
-        // Eliminate trailing zeros.
-        while (fCount > 1 && fDigits[fCount-1] == '0') {
-            --fCount;
-        }
+    // Eliminate trailing zeros.
+    while (fCount > 1 && fDigits[fCount-1] == '0') {
+        --fCount;
     }
 }
 

@@ -87,7 +87,7 @@ public:
      * Utility routine to get the value of the digit list
      * Returns 0.0 if zero length.
      */
-    double getDouble(void) const;
+    double getDouble(void);
 
     /**
      * Utility routine to get the value of the digit list
@@ -137,10 +137,11 @@ public:
 private:
     enum {
         MAX_DIGITS = DBL_DIG,
-        MAX_EXPONENT = 30,
+        MAX_EXPONENT = DBL_DIG,
+        DIGIT_PADDING = 3,
 
-         // "." + fDigits + "e" + fDecimalAt
-        MAX_DEC_DIGITS = DBL_DIG + 2 + MAX_EXPONENT
+         // "+." + fDigits + "e" + fDecimalAt
+        MAX_DEC_DIGITS = DBL_DIG + DIGIT_PADDING + MAX_EXPONENT
     };
 
 public:
@@ -172,7 +173,8 @@ public:
 
 private:
 
-    char        fDecimalDigits[MAX_DEC_DIGITS + 1]; // +1 for NULL
+    /* One character before fDigits for the decimal*/
+    char        fDecimalDigits[MAX_DEC_DIGITS + 1];
 
 //    static char LONG_MIN_REP[LONG_DIGITS];
 //    static const char LONG_MIN_REP[];
