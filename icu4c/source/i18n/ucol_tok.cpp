@@ -28,13 +28,14 @@ const UChar *rulesToParse;
 
 void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint32_t rulesLength, UCollator *UCA, UErrorCode *status) {
   uint32_t nSize = 0;
+  uint32_t estimatedSize = (2*rulesLength+UCOL_TOK_EXTRA_RULE_SPACE_SIZE);
   if(U_FAILURE(*status)) {
     return;
   }
   
-  src->source = (UChar *)uprv_malloc((2*rulesLength+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
-  nSize = unorm_normalize(rules, rulesLength, UNORM_NFD, 0, src->source, 2*rulesLength+UCOL_TOK_EXTRA_RULE_SPACE_SIZE, status);
-  if(nSize > (uint32_t)(2*rulesLength+UCOL_TOK_EXTRA_RULE_SPACE_SIZE) || *status == U_BUFFER_OVERFLOW_ERROR) {
+  src->source = (UChar *)uprv_malloc(estimatedSize*sizeof(UChar));
+  nSize = unorm_normalize(rules, rulesLength, UNORM_NFD, 0, src->source, estimatedSize, status);
+  if(nSize > estimatedSize || *status == U_BUFFER_OVERFLOW_ERROR) {
     *status = U_ZERO_ERROR;
     src->source = (UChar *)realloc(src->source, (nSize+UCOL_TOK_EXTRA_RULE_SPACE_SIZE)*sizeof(UChar));
     nSize = unorm_normalize(rules, rulesLength, UNORM_NFD, 0, src->source, nSize+UCOL_TOK_EXTRA_RULE_SPACE_SIZE, status);
@@ -663,7 +664,7 @@ inline void getVirginBefore(UColTokenParser *src, UColToken *sourceToken, uint32
   uint32_t ch = CETable[3*invPos+2];
 
   if((ch &  UCOL_INV_SIZEMASK) != 0) {
-    uint32_t *conts = (uint32_t *)((uint8_t *)src->invUCA+src->invUCA->conts);
+    uint16_t *conts = (uint16_t *)((uint8_t *)src->invUCA+src->invUCA->conts);
     uint32_t offset = (ch & UCOL_INV_OFFSETMASK);
     ch = conts[offset];
   }      
