@@ -21,7 +21,7 @@ U_NAMESPACE_BEGIN
 /**
  * A transliterator that leaves text unchanged.
  * @author Alan Liu
- * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+ * @internal Use transliterator factory methods instead since this class will be removed in that release.
  */
 class U_I18N_API NullTransliterator : public Transliterator {
 
@@ -29,37 +29,37 @@ public:
 
     /**
      * ID for this transliterator.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     static const UChar ID[]; // public for Transliterator
 
     /**
      * ID for this transliterator.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     static const UChar SHORT_ID[]; // public for Transliterator
 
     /**
      * Constructs a transliterator.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     NullTransliterator();
 
     /**
      * Destructor.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     virtual ~NullTransliterator();
 
     /**
      * Transliterator API.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     Transliterator* clone(void) const;
 
     /**
      * Implements {@link Transliterator#handleTransliterate}.
-     * @obsolete ICU 2.4. Use transliterator factory methods instead since this class will be removed in that release.
+     * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */
     virtual void handleTransliterate(Replaceable& text, UTransPosition& offset,
                                      UBool isIncremental) const;

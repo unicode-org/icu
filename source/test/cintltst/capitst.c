@@ -269,14 +269,6 @@ void TestProperty()
     doAssert( (ucol_getStrength(col) != UCOL_PRIMARY), "collation object's strength is primary difference");
     doAssert( (ucol_getStrength(col) == UCOL_SECONDARY), "collation object has the wrong strength");
 
-#ifdef ICU_NORMALIZER_USE_DEPRECATES
-    log_verbose("testing ucol_setDecomposition() method ...\n");
-    ucol_setNormalization(col, UNORM_NONE);
-    doAssert( (ucol_getNormalization(col) != UNORM_NFC), "collation object's normalization mode is Canonical decomposition followed by canonical composition");
-    doAssert( (ucol_getNormalization(col) != UNORM_NFD), "collation object's normalization mode is canonical decomposition");
-    doAssert( (ucol_getNormalization(col) == UNORM_NONE), "collation object has the wrong normalization mode");
-#endif
-
     
     log_verbose("Get display name for the default collation in German : \n");
 
@@ -552,28 +544,9 @@ void TestDecomposition() {
         log_err("ERROR: en_US collation had cannonical decomposition for normalization!\n");
     }
 
-#ifdef ICU_NORMALIZER_USE_DEPRECATES
-    /* there is no reason to have canonical decomposition in en_US OR default locale */
-    if(ucol_getNormalization(vi_VN) != UNORM_NFD)
-      {
-        log_err("ERROR: vi_VN collation did not have cannonical decomposition for normalization!\n");
-      }
-
-    if(ucol_getNormalization(el_GR) != UNORM_NFD)
-      {
-        log_err("ERROR: el_GR collation did not have cannonical decomposition for normalization!\n");
-      }
-
-    if(ucol_getNormalization(en_US) != UNORM_NONE)
-      {
-        log_err("ERROR: en_US collation had cannonical decomposition for normalization!\n");
-      }
-#endif
-
     ucol_close(en_US);
     ucol_close(el_GR);
     ucol_close(vi_VN);
-
 }
 
 #define CLONETEST_COLLATOR_COUNT 3

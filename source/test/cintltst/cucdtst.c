@@ -448,7 +448,7 @@ static void TestLetterNumber()
     }
 }
 
-/* Tests for isDefined(u_isdefined)(, isBaseForm(u_isbase()), isSpaceChar(u_isspace()), isWhiteSpace(), u_CharDigitValue(),u_CharCellWidth() */
+/* Tests for isDefined(u_isdefined)(, isBaseForm(u_isbase()), isSpaceChar(u_isspace()), isWhiteSpace(), u_CharDigitValue() */
 static void TestMisc()
 {
     const UChar sampleSpaces[] = {0x0020, 0x00a0, 0x2000, 0x2001, 0x2005};
@@ -469,20 +469,6 @@ static void TestMisc()
 
     uint32_t mask;
 
-    enum ECellWidths         /* pasted in here from unicode.h */
-    {
-        ZERO_WIDTH              = 0,
-        HALF_WIDTH              = 1,
-        FULL_WIDTH              = 2,
-        NEUTRAL                 = 3
-    };
-
-    const uint16_t sampleCellWidth[] = { ZERO_WIDTH, 
-                                         HALF_WIDTH, 
-                                         FULL_WIDTH, 
-                                         NEUTRAL,
-                                         U_HALF_WIDTH,
-                                         U_ZERO_WIDTH};
     int i;
     char icuVersion[U_MAX_VERSION_STRING_LENGTH];
     UVersionInfo realVersion;
@@ -527,14 +513,6 @@ static void TestMisc()
                 !(u_isbase(sampleBase[i])))
         {
             log_err("Non-baseform char test error : U+%04x or U+%04x",(int32_t)sampleNonBase[i], (int32_t)sampleBase[i]);
-        }
-    }
-
-    log_verbose("Testing for charcellwidth\n");
-    for (i = 0; i < 5; i++) {
-        if (u_charCellWidth(sampleChars[i]) != sampleCellWidth[i])
-        {
-            log_err("Cell width char test error : U+%04x  \n", (int32_t)sampleChars[i]);
         }
     }
 
