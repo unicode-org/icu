@@ -198,12 +198,18 @@ isAcceptable(void *context,
 
 static UBool
 haveAliasData(UErrorCode *pErrorCode) {
+    int haveData;
+
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return FALSE;
     }
 
+    umtx_lock(NULL);
+    haveData = (int)(gAliasData==NULL);
+    umtx_unlock(NULL);
+
     /* load converter alias data from file if necessary */
-    if(gAliasData==NULL) {
+    if (haveData) {
         UDataMemory *data = NULL;
         const uint16_t *table = NULL;
         uint32_t tableStart;
@@ -568,13 +574,19 @@ findTaggedConverterNum(const char *alias, const char *standard, UErrorCode *pErr
 
 
 U_CFUNC const char *
-ucnv_io_getConverterName(const char *alias, UErrorCode *pErrorCode) {
+ucnv_io_getConverterName(const char *alias, int32_t *convNumPtr, UErrorCode *pErrorCode) {
     if(haveAliasData(pErrorCode) && isAlias(alias, pErrorCode)) {
         uint32_t convNum = findConverter(alias, pErrorCode);
         if (convNum < gConverterListSize) {
+            if (convNumPtr) {
+                *convNumPtr = (int32_t)convNum;
+            }
             return GET_STRING(gConverterList[convNum]);
         }
         /* else converter not found */
+    }
+    if (convNumPtr) {
+        *convNumPtr = -1;
     }
     return NULL;
 }
@@ -1012,7 +1024,7 @@ ucnv_io_setDefaultConverterName(const char *converterName) {
         gDefaultConverterName=NULL;
     } else {
         UErrorCode errorCode=U_ZERO_ERROR;
-        const char *name=ucnv_io_getConverterName(converterName, &errorCode);
+        const char *name=ucnv_io_getConverterName(converterName, NULL, &errorCode);
         if(U_SUCCESS(errorCode) && name!=NULL) {
             gDefaultConverterName=name;
         } else {

@@ -36,6 +36,7 @@
 #include "ustr_imp.h"
 
 
+
 #if 0
 #include <stdio.h>
 extern void UCNV_DEBUG_LOG(char *what, char *who, void *p, int l);
@@ -147,6 +148,27 @@ static struct {
 static UConverterSharedData *createConverterFromFile(const char *pkg, const char *converterName, UErrorCode * err);
 
 static const UConverterSharedData *getAlgorithmicTypeFromName(const char *realName);
+
+/* Stores the shared data in the SHARED_DATA_HASHTABLE
+ * @param data The shared data
+ */
+static void ucnv_shareConverterData(UConverterSharedData * data);
+
+/* gets the shared data from the SHARED_DATA_HASHTABLE (might return NULL if it isn't there)
+ * @param name The name of the shared data
+ * @return the shared data from the SHARED_DATA_HASHTABLE
+ */
+static UConverterSharedData *ucnv_getSharedConverterData(const char *name);
+
+/* Deletes (frees) the Shared data it's passed. first it checks the referenceCounter to
+ * see if anyone is using it, if not it frees all the memory stemming from sharedConverterData and
+ * returns TRUE,
+ * otherwise returns FALSE
+ * @param sharedConverterData The shared data
+ * @return if not it frees all the memory stemming from sharedConverterData and
+ * returns TRUE, otherwise returns FALSE
+ */
+static UBool ucnv_deleteSharedConverterData(UConverterSharedData * sharedConverterData);
 
 /**
  * Un flatten shared data from a UDATA..
@@ -281,7 +303,7 @@ getAlgorithmicTypeFromName(const char *realName)
 /* Puts the shared data in the static hashtable SHARED_DATA_HASHTABLE */
 /*   Will always be called with the cnvCacheMutex alrady being held   */
 /*     by the calling function.                                       */
-void
+static void
 ucnv_shareConverterData(UConverterSharedData * data)
 {
     UErrorCode err = U_ZERO_ERROR;
@@ -322,7 +344,7 @@ ucnv_shareConverterData(UConverterSharedData * data)
 
 /*  Look up a converter name in the shared data cache.                    */
 /*    cnvCacheMutex must be held by the caller to protect the hash table. */
-UConverterSharedData *
+static UConverterSharedData *
 ucnv_getSharedConverterData(const char *name)
 {
     /*special case when no Table has yet been created we return NULL */
@@ -343,7 +365,7 @@ ucnv_getSharedConverterData(const char *name)
 /*frees the string of memory blocks associates with a sharedConverter
  *if and only if the referenceCounter == 0
  */
-UBool
+static UBool
 ucnv_deleteSharedConverterData(UConverterSharedData * deadSharedData)
 {
     if (deadSharedData->referenceCounter > 0)
@@ -381,6 +403,40 @@ ucnv_deleteSharedConverterData(UConverterSharedData * deadSharedData)
     uprv_free(deadSharedData);
     
     return TRUE;
+}
+
+void
+ucnv_unloadSharedDataIfReady(UConverterSharedData *sharedData)
+{
+    umtx_lock(&cnvCacheMutex);
+    /*
+    Double checking doesn't work on some platforms.
+    Don't check referenceCounter outside of a mutex block.
+    */
+    if (sharedData->referenceCounter != ~0) {
+        if (sharedData->referenceCounter > 0) {
+            sharedData->referenceCounter--;
+        }
+        
+        if((sharedData->referenceCounter <= 0)&&(sharedData->sharedDataCached == FALSE)) {
+            ucnv_deleteSharedConverterData(sharedData);
+        }
+    }
+    umtx_unlock(&cnvCacheMutex);
+}
+
+void
+ucnv_incrementRefCount(UConverterSharedData *sharedData)
+{
+    umtx_lock(&cnvCacheMutex);
+    /*
+    Double checking doesn't work on some platforms.
+    Don't check referenceCounter outside of a mutex block.
+    */
+    if (sharedData->referenceCounter != ~0) {
+        sharedData->referenceCounter++;
+    }
+    umtx_unlock(&cnvCacheMutex);
 }
 
 static void
@@ -472,7 +528,8 @@ ucnv_createConverter(UConverter *myUConverter, const char *converterName, UError
     const char *realName;
     UConverterSharedData *mySharedConverterData = NULL;
     UErrorCode internalErrorCode = U_ZERO_ERROR;
-    uint32_t options=0;
+    uint32_t options = 0;
+    int32_t cnvNumber = -1;
     if (U_FAILURE (*err))
         return NULL;
 
@@ -495,7 +552,7 @@ ucnv_createConverter(UConverter *myUConverter, const char *converterName, UError
         }
 
         /* get the canonical converter name */
-        realName = ucnv_io_getConverterName(cnvName, &internalErrorCode);
+        realName = ucnv_io_getConverterName(cnvName, &cnvNumber, &internalErrorCode);
         if (U_FAILURE(internalErrorCode) || realName == NULL) {
             /*
             * set the input name in case the converter was added
@@ -541,9 +598,7 @@ ucnv_createConverter(UConverter *myUConverter, const char *converterName, UError
         {
             /* The data for this converter was already in the cache.            */
             /* Update the reference counter on the shared data: one more client */
-            umtx_lock(NULL);
             mySharedConverterData->referenceCounter++;
-            umtx_unlock(NULL);
         }
         umtx_unlock(&cnvCacheMutex);
     }
@@ -553,9 +608,9 @@ ucnv_createConverter(UConverter *myUConverter, const char *converterName, UError
     if (U_FAILURE(*err))
     {
         if (mySharedConverterData->referenceCounter != ~0) {
-            umtx_lock (NULL);
+            umtx_lock(&cnvCacheMutex);
             --mySharedConverterData->referenceCounter;
-            umtx_unlock (NULL);
+            umtx_unlock(&cnvCacheMutex);
         }
         return NULL;
     }
@@ -763,7 +818,7 @@ ucnv_flushCache ()
     *                   because the sequence of looking up in the cache + incrementing
     *                   is protected by cnvCacheMutex.
     */
-    umtx_lock (&cnvCacheMutex);
+    umtx_lock(&cnvCacheMutex);
     while ((e = uhash_nextElement (SHARED_DATA_HASHTABLE, &pos)) != NULL)
     {
         mySharedData = (UConverterSharedData *) e->value.pointer;
@@ -779,7 +834,7 @@ ucnv_flushCache ()
             ucnv_deleteSharedConverterData (mySharedData);
         }
     }
-    umtx_unlock (&cnvCacheMutex);
+    umtx_unlock(&cnvCacheMutex);
 
     ucnv_io_flushAvailableConverterCache();
 

@@ -27,8 +27,6 @@
 #include "unicode/uset.h"
 #include "cmemory.h"
 #include "cstring.h"
-#include "umutex.h"
-#include "uhash.h"
 #include "ustr_imp.h"
 #include "ucnv_imp.h"
 #include "ucnv_io.h"
@@ -40,18 +38,27 @@
 # include <stdio.h>
 void UCNV_DEBUG_LOG(char *what, char *who, void *p, int l)
 {
-   static FILE *f = NULL;
-   if(f==NULL)
-   {
-     /* stderr, or open another file */
-     f = stderr;
-     /*  f = fopen("c:\\UCNV_DEBUG_LOG.txt", "w"); */
-   }
+    static FILE *f = NULL;
+    if(f==NULL)
+    {
+        /* stderr, or open another file */
+        f = stderr;
+        /*  f = fopen("c:\\UCNV_DEBUG_LOG.txt", "w"); */
+    }
+    if (!what) {
+        what = "(null)";
+    }
+    if (!who) {
+        who = "(null)";
+    }
+    if (!p) {
+        p = "(null)";
+    }
 
-   fprintf(f, "%p\t:%d\t%-20s\t%-10s\n",
-           p, l, who, what);
+    fprintf(f, "%p\t:%d\t%-20s\t%-10s\n",
+        p, l, who, what);
 
-   fflush(f);
+    fflush(f);
 }
 
 
@@ -61,11 +68,15 @@ static void UCNV_DEBUG_CNV(UConverter *c, int line)
     UErrorCode err = U_ZERO_ERROR;
     fprintf(stderr, "%p\t:%d\t", c, line);
     if(c!=NULL) {
-        fprintf(stderr, "%s\t", ucnv_getName(c, &err));
-        
+        const char *name = ucnv_getName(c, &err);
+        if (!name) {
+            name = "(null)";
+        }
+        fprintf(stderr, "%s\t", name);
+
         fprintf(stderr, "shr=%p, ref=%x\n", 
-                c->sharedData,
-                c->sharedData->referenceCounter);
+            c->sharedData,
+            c->sharedData->referenceCounter);
     } else { 
         fprintf(stderr, "DEMISED\n");
     }
@@ -278,13 +289,7 @@ ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pBufferSize, U
     }
 
     /* increment refcount of shared data if needed */
-    if (cnv->sharedData->referenceCounter != ~0) {
-        umtx_lock (NULL);
-        if (cnv->sharedData->referenceCounter != ~0) {
-            cnv->sharedData->referenceCounter++;
-        }
-        umtx_unlock (NULL);
-    }
+    ucnv_incrementRefCount(cnv->sharedData);
 
     if(localConverter==NULL || U_FAILURE(*status)) {
         return NULL;
@@ -372,29 +377,20 @@ ucnv_close (UConverter * converter)
         converter->sharedData->impl->close(converter);
     }
 
-    if (converter->sharedData->referenceCounter != ~0) {
-        umtx_lock (NULL);
-        if (converter->sharedData->referenceCounter != 0) {
-            converter->sharedData->referenceCounter--;
-        }
-        umtx_unlock (NULL);
-        
 #ifdef UCNV_DEBUG
-        {
-            char c[4];
-            c[1]=0;
-            c[0]='0'+converter->sharedData->referenceCounter;
-            UCNV_DEBUG_LOG("close--", c, converter);
-        }
-#endif
-
+    {
+        char c[4];
+        c[0]='0'+converter->sharedData->referenceCounter;
+        c[1]=0;
+        UCNV_DEBUG_LOG("close--", c, converter);
         if((converter->sharedData->referenceCounter == 0)&&(converter->sharedData->sharedDataCached == FALSE)) {
             UCNV_DEBUG_CNV(converter);
             UCNV_DEBUG_LOG("close:delDead", "??", converter);
-            ucnv_deleteSharedConverterData(converter->sharedData);
         }
     }
+#endif
 
+    ucnv_unloadSharedDataIfReady(converter->sharedData);
 
     if(!converter->isCopyLocal){
         UCNV_DEBUG_LOG("close:free", "", converter);
