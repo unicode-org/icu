@@ -322,7 +322,7 @@ U_CDECL_END
  * @see UnicodeString#unescape()
  * @see UnicodeString#unescapeAt()
  */
-U_CAPI int32_t U_EXPORT2
+U_CAPI UChar32 U_EXPORT2
 u_unescapeAt(UNESCAPE_CHAR_AT charAt,
              int32_t *offset,
              int32_t length,
