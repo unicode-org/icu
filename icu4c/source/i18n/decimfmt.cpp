@@ -1056,29 +1056,33 @@ DecimalFormat::parse(const UnicodeString& text,
                      Formattable& result,
                      ParsePosition& parsePosition) const
 {
-    int32_t backup = parsePosition.getIndex();
-    int32_t i;
-    int32_t padLen = fPad.length();
+    int32_t backup;
+    int32_t i = backup = parsePosition.getIndex();
 
-    // Skip padding characters, if any
-    if (fFormatWidth > 0) {
-        i = parsePosition.getIndex();
-        while (i < text.length() && !text.compare(i, padLen, fPad, 0, padLen)) {
-            i += padLen;
-        }
-        parsePosition.setIndex(i);
+    // Handle NaN as a special case:
+    
+    // Skip padding characters, if around prefix
+    if (fFormatWidth > 0 && (fPadPosition == kPadBeforePrefix ||
+                             fPadPosition == kPadAfterPrefix)) {
+        i = skipPadding(text, i);
     }
-
-    // special case NaN
     // If the text is composed of the representation of NaN, returns NaN.length
     const UnicodeString *nan = &getConstSymbol(DecimalFormatSymbols::kNaNSymbol);
-    int32_t nanLen = (text.compare(parsePosition.getIndex(), nan->length(), *nan)
-        ? 0 : nan->length());
+    int32_t nanLen = (text.compare(i, nan->length(), *nan)
+                      ? 0 : nan->length());
     if (nanLen) {
-        parsePosition.setIndex(parsePosition.getIndex() + nanLen);
+        i += nanLen;
+        if (fFormatWidth > 0 && (fPadPosition == kPadBeforeSuffix ||
+                                 fPadPosition == kPadAfterSuffix)) {
+            i = skipPadding(text, i);
+        }
+        parsePosition.setIndex(i);
         result.setDouble(uprv_getNaN());
         return;
     }
+    
+    // NaN parse failed; start over
+    i = backup;
 
     // status is used to record whether a number is infinite.
     UBool status[fgStatusLength];
@@ -1087,13 +1091,6 @@ DecimalFormat::parse(const UnicodeString& text,
     if (!subparse(text, parsePosition, digits, status)) {
         parsePosition.setIndex(backup);
         return;
-    }
-    if (fFormatWidth < 0) {
-        i = parsePosition.getIndex();
-        while (i < text.length() && !text.compare(i, padLen, fPad, 0, padLen)) {
-            i += padLen;
-        }
-        parsePosition.setIndex(i);
     }
 
     // Handle infinity
@@ -1161,6 +1158,11 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
     int32_t position = parsePosition.getIndex();
     int32_t oldStart = position;
 
+    // Match padding before prefix
+    if (fFormatWidth > 0 && fPadPosition == kPadBeforePrefix) {
+        position = skipPadding(text, position);
+    }
+
     // Match positive and negative prefixes; prefer longest match.
     int32_t posMatch = compareAffix(fPositivePrefix, text, position);
     int32_t negMatch = compareAffix(fNegativePrefix, text, position);
@@ -1178,6 +1180,11 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
     } else {
         parsePosition.setErrorIndex(position);
         return FALSE;
+    }
+
+    // Match padding before prefix
+    if (fFormatWidth > 0 && fPadPosition == kPadAfterPrefix) {
+        position = skipPadding(text, position);
     }
 
     // process digits or Inf, find decimal position
@@ -1209,7 +1216,6 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
         UBool sawDecimal = FALSE;
         UBool sawDigit = FALSE;
         int32_t backup = -1;
-        UChar32 ch;
         int32_t digit;
         int32_t textLength = text.length(); // One less pointer to follow
         int32_t groupingLen = grouping->length();
@@ -1219,9 +1225,9 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
         // pin when the maximum allowable digits is reached.
         int32_t digitCount = 0;
 
-        for (; position < textLength; position += 1 + UTF_NEED_MULTIPLE_UCHAR(ch))
+        for (; position < textLength; )
         {
-            ch = text.char32At(position);
+            UChar32 ch = text.char32At(position);
 
             /* We recognize all digit ranges, not only the Latin digit range
              * '0'..'9'.  We do so by using the Character.digit() method,
@@ -1249,6 +1255,7 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
                 // output a regular non-zero digit.
                 ++digitCount;
                 digits.append((char)(digit + '0'));
+                position += U16_LENGTH(ch);
             }
             else if (digit == 0)
             {
@@ -1271,6 +1278,7 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
                     --digits.fDecimalAt;
                 }
                 // else ignore leading zeros in integer part of number.
+                position += U16_LENGTH(ch);
             }
             else if (!text.compare(position, groupingLen, *grouping) && isGroupingUsed())
             {
@@ -1278,6 +1286,7 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
                 // that they be followed by a digit.  Otherwise we backup and
                 // reprocess them.
                 backup = position;
+                position += groupingLen;
             }
             else if (!text.compare(position, decimalLen, *decimal) && !isParseIntegerOnly() && !sawDecimal)
             {
@@ -1286,6 +1295,7 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
 
                 digits.fDecimalAt = digitCount; // Not digits.fCount!
                 sawDecimal = TRUE;
+                position += decimalLen;
             }
             else {
                 const UnicodeString *tmp;
@@ -1293,7 +1303,7 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
                 if (!text.caseCompare(position, tmp->length(), *tmp, U_FOLD_CASE_DEFAULT))    // error code is set below if !sawDigit
                 {
                     // Parse sign, if present
-                    int32_t pos = position + 1; // position + exponentSep.length();
+                    int32_t pos = position + tmp->length();
                     DigitList exponentDigits;
 
                     if (pos < textLength)
@@ -1301,13 +1311,13 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
                         tmp = &getConstSymbol(DecimalFormatSymbols::kPlusSignSymbol);
                         if (!text.compare(pos, tmp->length(), *tmp))
                         {
-                            ++pos;
+                            pos += tmp->length();
                         }
                         else {
                             tmp = &getConstSymbol(DecimalFormatSymbols::kMinusSignSymbol);
                             if (!text.compare(pos, tmp->length(), *tmp))
                             {
-                                ++pos;
+                                pos += tmp->length();
                                 exponentDigits.fIsPositive = FALSE;
                             }
                         }
@@ -1364,6 +1374,11 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
         }
     }
 
+    // Match padding before suffix
+    if (fFormatWidth > 0 && fPadPosition == kPadBeforeSuffix) {
+        position = skipPadding(text, position);
+    }
+
     // Match positive and negative suffixes; prefer longest match.
     if (posMatch >= 0) {
         posMatch = compareAffix(fPositiveSuffix, text, position);
@@ -1385,7 +1400,14 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
         return FALSE;
     }
 
-    parsePosition.setIndex(position + (posMatch>=0 ? posMatch : negMatch));
+    position += (posMatch>=0 ? posMatch : negMatch);
+
+    // Match padding before suffix
+    if (fFormatWidth > 0 && fPadPosition == kPadAfterSuffix) {
+        position = skipPadding(text, position);
+    }
+
+    parsePosition.setIndex(position);
 
     digits.fIsPositive = (posMatch >= 0);
 
@@ -1395,6 +1417,20 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
         return FALSE;
     }
     return TRUE;
+}
+
+/**
+ * Starting at position, advance past a run of pad characters, if any.
+ * Return the index of the first character after position that is not a pad
+ * character.  Result is >= position.
+ */
+int32_t DecimalFormat::skipPadding(const UnicodeString& text, int32_t position) const {
+    int32_t padLen = fPad.length();
+    while (position < text.length() &&
+           text.compare(position, padLen, fPad) == 0) {
+        position += padLen;
+    }
+    return position;
 }
 
 /**

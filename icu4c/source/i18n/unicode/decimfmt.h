@@ -1187,6 +1187,8 @@ private:
     UBool subparse(const UnicodeString& text, ParsePosition& parsePosition,
                     DigitList& digits, UBool* status) const;
 
+    int32_t skipPadding(const UnicodeString& text, int32_t position) const;
+
     static int32_t compareAffix(const UnicodeString& affix,
                                 const UnicodeString& input,
                                 int32_t pos);
