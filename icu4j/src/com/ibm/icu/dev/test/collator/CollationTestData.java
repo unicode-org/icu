@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/collator/Attic/CollationTestData.java,v $
- * $Date: 2004/01/05 22:23:38 $
- * $Revision: 1.6 $
+ * $Date: 2004/01/06 23:09:06 $
+ * $Revision: 1.7 $
  *
  *******************************************************************************
  */
@@ -648,7 +648,7 @@ public class CollationTestData extends ICUListResourceBundle {
                             },
                         },
                         {
-                            "da_TestPrimary",
+                            "TestDanishPrimary",
                             new Object[][]{
                                 {
                                     "Cases",
@@ -694,7 +694,7 @@ public class CollationTestData extends ICUListResourceBundle {
                             },
                         },
                         {
-                            "da_TestTertiary",
+                            "TestDanishTertiary",
                             new Object[][]{
                                 {
                                     "Cases",
@@ -776,7 +776,7 @@ public class CollationTestData extends ICUListResourceBundle {
                             },
                         },
                         {
-                            "hi_TestNewRules",
+                            "TestNewHindiRules",
                             new Object[][]{
                                 {
                                     "Cases",
