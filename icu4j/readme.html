@@ -6,17 +6,12 @@
   <meta http-equiv="Content-Style-Type" content="text/css2">
   <title>ReadMe for ICU4J</title>
 <!--
-
 *******************************************************************************
-
-* Copyright (C) 2000-2004, International Business Machines Corporation and    *
-
+* Copyright (C) 2000-2005, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
-
 *******************************************************************************
-
 -->
-  <style>
+  <style type="text/css">
 h3.doc { background: #CCCCFF }
   </style>
 </head>
@@ -253,13 +248,6 @@ IBM version contains the essential text of the license, omitting the
 X-specific trademarks and copyright notices. The full copy of <a
  href="license.html">ICU's license</a> is included in the download
 package.
-</p>
-<p>
-For more details please see the <a
- href="http://oss.software.ibm.com/icu/press.html">press announcement</a>
-and the <a
- href="http://oss.software.ibm.com/icu/project_faq.html#license">Project
-FAQ</a>.
 </p>
 <h3 class="doc"><a name="PlatformDependencies"></a>Platform Dependencies</h3>
 <p> Parts of ICU4J depend on functionality that is only available in
@@ -675,7 +663,7 @@ and in fact they share the same name.</p>
 <p>
 Currently ICU4J can be divided into the following modules:
 </p>
-<p><b>Key:</b><br>
+<p><b>Key:</b></p>
 <table bgcolor="#ccccff" cellpadding="3" frame="void" width="623">
   <tbody>
     <tr>
@@ -698,8 +686,7 @@ Currently ICU4J can be divided into the following modules:
     </tr>
   </tbody>
 </table>
-<b>
-<font size="2">* com.ibm. should be prepended to the package names
+<b><font size="2">* com.ibm. should be prepended to the package names
 listed.
 <br>
 &#8224; A bold class name core service APIs. Only APIs in these classes are
@@ -707,8 +694,8 @@ fully supported.
 <br>
 &#8225; Sizes are of the compressed jar file containing only this module.
 Full size is 3,047&nbsp;KB.
-</font></b></p>
-<p><b>Modules:</b><br>
+</font></b>
+<p><b>Modules:</b></p>
 <table bgcolor="#ccccff" cellpadding="3" frame="void" width="623">
   <tbody>
     <tr>
@@ -915,7 +902,7 @@ BreakIteratorFactory, DictionaryBasedBreakIterator, <b>Normalizer</b>,
             <b>Replaceable</b>, <b>ReplaceableString</b>,
 RuleBasedBreakIterator, <b>UCharacterIterator</b>, <b>UForwardCharacterIterator</b>,
             <b>UnicodeFilter</b>, <b>UnicodeMatcher</b>, <b>UnicodeSet</b>,
-            <b>UnicodeSetIterator</b>, <b>UTF16<b> </b></b></td>
+            <b>UnicodeSetIterator</b>, <b>UTF16</b></td>
           </tr>
           <tr>
             <td valign="baseline">icu.util:</td>
@@ -1053,7 +1040,6 @@ transliteratorTests</td>
 </tr -->
   </tbody>
 </table>
-</p>
 <p>Building any of these modules is as easy as specifying a build
 target to the Ant build system, e.g:
 <br>
@@ -1112,15 +1098,13 @@ demo classes, so unless you build ICU4J there is little to try out.
 To try out the <strong>richedit</strong> package, first build the
 richeditJar target.
 This is a 'runnable' jar file. To run the richedit demo, type:
-<tt>
-<blockquote> java -jar $Root/richedit/richedit.jar</blockquote>
-</tt>This will present an empty edit pane with an awt interface.
+<blockquote><tt>java -jar $Root/richedit/richedit.jar</tt></blockquote>
+This will present an empty edit pane with an awt interface.
 <p>With a fuller command line you can try out other options, for
-example:
-<tt>
-<blockquote> java -classpath $Root/richedit/richedit.jar
-com.ibm.richtext.demo.EditDemo [-swing][file]</blockquote>
-</tt>This will use an awt GUI, or a swing GUI if
+example:</p>
+<blockquote><tt>java -classpath $Root/richedit/richedit.jar
+com.ibm.richtext.demo.EditDemo [-swing][file]</tt></blockquote>
+<p>This will use an awt GUI, or a swing GUI if
 <tt>-swing</tt> is passed on the command line. It will open a text
 file if one is provided, otherwise it will open a blank page. Click
 to type.</p>
