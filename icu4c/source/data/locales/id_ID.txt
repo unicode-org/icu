@@ -1,4 +1,3 @@
-﻿
 // *******************************************************************************
 // *
 // *   Copyright (C) 1997-2001, International Business Machines
@@ -7,15 +6,13 @@
 // *******************************************************************************
 
 id_ID {
-    
    Version { "x0.0" }
-
-    CurrencyElements { 
+   CurrencyElements {
             "Rp",
             "IDR",
             ",",
     }
-    DateTimePatterns { 
+    DateTimePatterns {
             "h:mm:ss a",
             "h:mm:ss a",
             "h:mm:ss a",
@@ -25,7 +22,6 @@ id_ID {
             "MMM dd,yy",
             "dd/MM/yy",
             "{1} {0}",
-
     }
     LocaleID{ "0421"}
 }
