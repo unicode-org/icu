@@ -767,6 +767,9 @@ public:
     }
 
     void reset(UErrorCode& status) {
+		if (status == U_ENUM_OUT_OF_SYNC_ERROR) {
+			status = U_ZERO_ERROR;
+		}
         if (U_SUCCESS(status)) {
             _timestamp = _service->getTimestamp();
             _pos = 0;

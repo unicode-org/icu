@@ -26,10 +26,16 @@
 
 #include "unicode/unistr.h"
 #include "unicode/format.h"
+#include "unicode/unum.h" // UNumberFormatStyle
+#include "hash.h"
+#include "unicode/locid.h"
 
 U_NAMESPACE_BEGIN
 
-class Locale;
+class NumberFormatFactory;
+class StringEnumeration;
+
+typedef const void* URegistryKey;
 
 /**
  * Abstract base class for all number formats.  Provides interface for
@@ -421,6 +427,34 @@ public:
     static const Locale* getAvailableLocales(int32_t& count);
 
     /**
+     * Register a new NumberFormatFactory.  The factory will be adopted.
+     * @param toAdopt the NumberFormatFactory instance to be adopted
+     * @param status the in/out status code, no special meanings are assigned
+     * @return a registry key that can be used to unregister this factory
+     * @draft ICU 2.6
+     */
+    static URegistryKey registerFactory(NumberFormatFactory* toAdopt, UErrorCode& status);
+
+    /**
+     * Unregister a previously-registered NumberFormatFactory using the key returned from the
+     * register call.  Key becomes invalid after a successful call and should not be used again.
+     * The NumberFormatFactory corresponding to the key will be deleted.
+     * @param key the registry key returned by a previous call to registerFactory
+     * @param status the in/out status code, no special meanings are assigned
+     * @return TRUE if the factory for the key was successfully unregistered
+     * @draft ICU 2.6
+     */
+    static UBool unregister(URegistryKey key, UErrorCode& status);
+
+    /**
+     * Return a StringEnumeration over the locales available at the time of the call, 
+     * including registered locales.
+     * @return a StringEnumeration over the locales available at the time of the call
+     * @draft ICU 2.6
+     */
+    static StringEnumeration* getAvailableLocales(void);
+
+    /**
      * Returns true if grouping is used in this format. For example,
      * in the English locale, with grouping on, the number 1234567
      * might be formatted as "1,234,567". The grouping separator as
@@ -545,7 +579,6 @@ public:
     static inline UClassID getStaticClassID(void);
 
     /**
-     * Override Calendar
      * Returns a unique class ID POLYMORPHICALLY.  Pure virtual override.
      * This method is to implement a simple version of RTTI, since not all
      * C++ compilers support genuine RTTI.  Polymorphic operator==() and
@@ -595,6 +628,8 @@ private:
     
     /**
      * Creates the specified decimal format style of the desired locale.
+	 * Hook for service registration, uses makeInstance directly if no services
+	 * registered.
      * @param desiredLocale    the given locale.
      * @param choice           the given style.
      * @param success          Output param filled with success/failure status.
@@ -602,6 +637,14 @@ private:
      */
     static NumberFormat* createInstance(const Locale& desiredLocale, EStyles choice, UErrorCode& success);
 
+    /**
+     * Creates the specified decimal format style of the desired locale.
+     * @param desiredLocale    the given locale.
+     * @param choice           the given style.
+     * @param success          Output param filled with success/failure status.
+     * @return                 A new NumberFormat instance.
+     */
+	static NumberFormat* makeInstance(const Locale& desiredLocale, EStyles choice, UErrorCode& success);
     static const int32_t    fgNumberPatternsCount;
     static const UChar* const fgLastResortNumberPatterns[];
 
@@ -611,7 +654,74 @@ private:
     int32_t     fMaxFractionDigits;
     int32_t     fMinFractionDigits;
     UBool      fParseIntegerOnly;
+
+	friend class ICUNumberFormatFactory; // access to makeInstance, EStyles
+	friend class ICUNumberFormatService;
 };
+
+/**
+ * A NumberFormatFactory is used to register new number formats.  The factory
+ * should be able to create any of the predefined formats for each locale it
+ * supports.  When registered, the locales it supports extend or override the
+ * locale already supported by ICU.
+ *
+ * @prototype
+ */
+class U_I18N_API NumberFormatFactory : public UObject {
+public:
+
+    /**
+     * Return true if this factory will be visible.  Default is true.
+     * If not visible, the locales supported by this factory will not
+     * be listed by getAvailableLocales.
+     */
+    virtual UBool visible(void) const = 0;
+
+    /**
+     * Return an unmodifiable collection of the locale names directly 
+     * supported by this factory.
+     */
+    virtual const Hashtable* getSupportedIDs(UErrorCode& status) const = 0;
+
+    /**
+     * Return a number format of the appropriate type.  If the locale
+     * is not supported, return null.  If the locale is supported, but
+     * the type is not provided by this service, return null.  Otherwise
+     * return an appropriate instance of NumberFormat.
+     */
+    virtual NumberFormat* createFormat(const Locale& loc, UNumberFormatStyle formatType) = 0;
+};
+
+    /**
+     * A NumberFormatFactory that supports a single locale.  It can be visible or invisible.
+     * @prototype 
+     */
+class U_I18N_API SimpleNumberFormatFactory : public NumberFormatFactory {
+protected:
+    const UBool _visible;
+	Hashtable _ids;
+
+public:
+    SimpleNumberFormatFactory(const Locale& locale, UBool visible = TRUE)
+		: _visible(visible)
+	{
+		UErrorCode status = U_ZERO_ERROR;
+		_ids.put(locale.getName(), this, status); // um, ignore error code...
+    }
+
+    virtual UBool visible(void) const {
+        return _visible;
+    }
+
+	virtual const Hashtable* getSupportedIDs(UErrorCode& status) const 
+	{
+		if (U_SUCCESS(status)) {
+			return &_ids;
+		}
+		return NULL;
+	}
+};
+
 
 // -------------------------------------
 
