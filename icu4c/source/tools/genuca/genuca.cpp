@@ -131,6 +131,7 @@ uint32_t getSingleCEValue(char *primary, char *secondary, char *tertiary, UBool 
 }
 
 
+/*
 UCAElements *copyUCAElement(UCAElements *that) {
     UCAElements *r = (UCAElements *)malloc(sizeof(*that));
     memcpy(r, that, sizeof(*that));
@@ -140,16 +141,17 @@ UCAElements *copyUCAElement(UCAElements *that) {
 void releaseUCACopy(UCAElements *r) {
     free(r);
 }
+*/
 
-uint32_t inverseTable[0xFFFF][3];
-uint32_t inversePos = 0;
+static uint32_t inverseTable[0xFFFF][3];
+static uint32_t inversePos = 0;
 /*UChar *stringContinue[0xFFFF];*/
-UChar stringContinue[0xFFFF];
-uint32_t stringContSize[0xFFFF]; 
-uint32_t sContPos = 0;
-uint32_t contSize = 0;
+static UChar stringContinue[0xFFFF];
+static uint32_t stringContSize[0xFFFF]; 
+static uint32_t sContPos = 0;
+static uint32_t contSize = 0;
 
-void addNewInverse(UCAElements *element, UErrorCode *status) {
+static void addNewInverse(UCAElements *element, UErrorCode *status) {
   if(U_FAILURE(*status)) {
     return;
   }
@@ -172,7 +174,7 @@ void addNewInverse(UCAElements *element, UErrorCode *status) {
   }
 }
 
-void insertInverse(UCAElements *element, uint32_t position, UErrorCode *status) {
+static void insertInverse(UCAElements *element, uint32_t position, UErrorCode *status) {
   uint8_t space[4096];
 
   if(U_FAILURE(*status)) {
@@ -203,7 +205,7 @@ void insertInverse(UCAElements *element, uint32_t position, UErrorCode *status) 
   inversePos++;
 }
 
-void addToExistingInverse(UCAElements *element, uint32_t position, UErrorCode *status) {
+static void addToExistingInverse(UCAElements *element, uint32_t position, UErrorCode *status) {
 
   if(U_FAILURE(*status)) {
     return;
@@ -235,7 +237,7 @@ void addToExistingInverse(UCAElements *element, uint32_t position, UErrorCode *s
       }
 }
 
-uint32_t addToInverse(UCAElements *element, UErrorCode *status) {
+static uint32_t addToInverse(UCAElements *element, UErrorCode *status) {
   uint32_t comp = 0;
   uint32_t position = inversePos;
   if(element->noOfCEs == 1) {
@@ -283,7 +285,7 @@ uint32_t addToInverse(UCAElements *element, UErrorCode *status) {
   return inversePos;
 }
 
-InverseTableHeader *assembleInverseTable(UErrorCode *status)
+static InverseTableHeader *assembleInverseTable(UErrorCode *status)
 {
   InverseTableHeader *result = NULL;
   uint32_t headerByteSize = paddedsize(sizeof(InverseTableHeader));
@@ -327,7 +329,7 @@ InverseTableHeader *assembleInverseTable(UErrorCode *status)
 }
 
 
-void writeOutInverseData(InverseTableHeader *data,
+static void writeOutInverseData(InverseTableHeader *data,
                   const char *outputDir,
                   const char *copyright,
                   UErrorCode *status)
@@ -360,7 +362,7 @@ void writeOutInverseData(InverseTableHeader *data,
 
 
 
-int32_t hex2num(char hex) {
+static int32_t hex2num(char hex) {
     if(hex>='0' && hex <='9') {
         return hex-'0';
     } else if(hex>='a' && hex<='f') {
@@ -403,7 +405,7 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
     UCAElements *element = &le; //(UCAElements *)malloc(sizeof(UCAElements));
 
     if(buffer[0] == '[') {
-      char *vt = "[variable top = ";
+      const char *vt = "[variable top = ";
       uint32_t vtLen = uprv_strlen(vt);
       if(uprv_strncmp(buffer, vt, vtLen) == 0) {
         element->variableTop = TRUE;
@@ -411,7 +413,7 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
         {
           fprintf(stderr, " scanf(hex) failed!\n ");
         }
-        element->cPoints[0] = theValue;
+        element->cPoints[0] = (UChar)theValue;
         return element; // just a comment, skip whole line
       } else {
         *status = U_INVALID_FORMAT_ERROR;
@@ -445,7 +447,7 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
     {
       fprintf(stderr, " scanf(hex) failed!\n ");
     }
-    element->cPoints[0] = theValue;
+    element->cPoints[0] = (UChar)theValue;
 
     /*element->codepoint = element->cPoints[0];*/
     if(spacePointer == 0) {
@@ -629,8 +631,9 @@ write_uca_table(const char *filename,
     FILE *data = fopen(filename, "r");
     uint32_t line = 0;
     int32_t sizesPrim[35], sizesSec[35], sizesTer[35];
-    int32_t terValue[0xffff], secValue[0xffff];
     int32_t sizeBreakDown[35][35][35];
+    int32_t *secValue = (int32_t*)uprv_malloc(sizeof(int32_t)*0xffff);
+    int32_t *terValue = (int32_t*)uprv_malloc(sizeof(int32_t)*0xffff);
     UCAElements *element = NULL;
     UChar variableTopValue = 0;
     UCATableHeader *myD = (UCATableHeader *)uprv_malloc(sizeof(UCATableHeader));
@@ -781,9 +784,12 @@ write_uca_table(const char *filename,
     //printOutTable(myData, &status);
     //uhash_close(elements);
 
-    free(myData);
-    free(inverse);
+    uprv_free(myData);
+    uprv_free(inverse);
     fclose(data);
+
+    uprv_free(secValue);
+    uprv_free(terValue);
 
 	return 0;
 }
