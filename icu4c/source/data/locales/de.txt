@@ -26,6 +26,10 @@ de {
         "nachm.",
     }
     collations {
+        standard { 
+            Version { "1.0" }
+            Sequence { "&A<<<\u00c6/E &a<<<\u00e6/e" }
+        }
         phonebook {
             Version { "1.0" }
             Sequence { "&ae <<< \u00E4 &AE <<< \u00C4" 
