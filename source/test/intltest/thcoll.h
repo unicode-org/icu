@@ -53,9 +53,15 @@ private:
      * test that invalid Thai sorts properly
      */
     void TestInvalidThai(void);
+
+    /** 
+     * test that reording is done properly
+     */
+    void TestReordering(void);
+
 private:
 
-    void compareArray(const Collator& c, const char* tests[],
+    void compareArray(Collator& c, const char* tests[],
                       int32_t testsLength);
 
     int8_t sign(int32_t i);

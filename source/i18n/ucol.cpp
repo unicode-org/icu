@@ -2580,6 +2580,7 @@ inline UChar getPrevNormalizedChar(collIterate *data)
 
 uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate *source, UErrorCode *status) {
   collIterateState entryState;
+  UChar    buffer[UCOL_MAX_BUFFER];
   backupState(source, &entryState);
   UChar32 cp = ch;
 
@@ -2624,9 +2625,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
     case THAI_TAG:
       /* Thai/Lao reordering */
         if  (((source->flags) & UCOL_ITER_INNORMBUF)      /* Already Swapped     ||                 */
-            || (source->iterator && !source->iterator->hasNext(source->iterator))
-            || (source->pos && source->endp == source->pos)                /* At end of string.  No swap possible || */
-            /*|| UCOL_ISTHAIBASECONSONANT(*(source->pos)) == 0*/)  /* next char not Thai base cons.*/ // This is from the old specs - we now rearrange unconditionally
+          || collIter_eos(source))                        /* At end of string.  No swap possible    */
         {
             // Treat Thai as a length one expansion */
             CEOffset = (uint32_t *)coll->image+getExpansionOffset(CE); /* find the offset to expansion table */
@@ -2634,36 +2633,37 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
         }
         else
         {
-          if(!collIter_eos(source)) {
-            // Move the prevowel and the following base Consonant into the normalization buffer
-            //   with their order swapped
-
-            UChar thCh = peekCharacter(source, 0); //getNextNormalizedChar(source);
-            UChar32 cp = 0;
-            if(U16_IS_LEAD(thCh)) {
-              if(!collIter_eos(source)) {
-                collIterateState thaiState;
-                backupState(source, &thaiState);
-                getNextNormalizedChar(source);
-                UChar trailCh = peekCharacter(source, 0); //getNextNormalizedChar(source);
-                if(U16_IS_TRAIL(trailCh)) {
-                  cp = U16_GET_SUPPLEMENTARY(thCh, trailCh);                  
-                } else {
-                  loadState(source, &thaiState, TRUE);
-                }
+          // Move the prevowel and the following base Consonant into the normalization buffer
+          //   with their order swapped
+          // Note: this operation might activate the normalization buffer. We have to check for 
+          // that and act accordingly.
+          UChar thCh = getNextNormalizedChar(source); 
+          UChar32 cp = 0;
+          if(U16_IS_LEAD(thCh)) {
+            if(!collIter_eos(source)) {
+              collIterateState thaiState;
+              backupState(source, &thaiState);
+              UChar trailCh = getNextNormalizedChar(source); 
+              if(U16_IS_TRAIL(trailCh)) {
+                cp = U16_GET_SUPPLEMENTARY(thCh, trailCh);                  
               } else {
-                cp = (UChar32)thCh;
+                loadState(source, &thaiState, TRUE);
               }
             } else {
-                cp = (UChar32)thCh;
+              cp = (UChar32)thCh;
             }
-            
-
+          } else {
+              cp = (UChar32)thCh;
+          }
+          // Now we have the character that needs to be decomposed
+          // if the normalizing buffer was not used, we can just use our structure and be happy.
+          if(source->flags & UCOL_ITER_INNORMBUF == 0) {
+            // decompose into writable buffer
             int32_t decompLen = unorm_getDecomposition(cp, FALSE, &(source->writableBuffer[1]), UCOL_WRITABLE_BUFFER_SIZE-1);
             if(decompLen < 0) {
               decompLen = -decompLen;
             }
-
+            // reorder Thai and the character after it
             if(decompLen >= 2 && U16_IS_LEAD(source->writableBuffer[1]) && U16_IS_TRAIL(source->writableBuffer[2])) {
               source->writableBuffer[0] = source->writableBuffer[1];
               source->writableBuffer[1] = source->writableBuffer[2];
@@ -2672,12 +2672,8 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
               source->writableBuffer[0] = source->writableBuffer[1];
               source->writableBuffer[1] = ch;
             }
+            // zero terminate, since normalization buffer is always zero terminated
             source->writableBuffer[decompLen+1] = 0; // we added the prevowel
-/*
-            source->writableBuffer[0] = peekCharacter(source, 0);
-            source->writableBuffer[1] = peekCharacter(source, -1);
-            source->writableBuffer[2] = 0;
-*/
             if(source->pos) {
               source->fcdPosition       = source->pos+1;   // Indicate where to continue in main input string
                                                            //   after exhausting the writableBuffer
@@ -2690,9 +2686,49 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
             source->flags            &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN | UCOL_USE_ITERATOR);
 
             CE = UCOL_IGNORABLE;
-          } else {
-            CEOffset = (uint32_t *)coll->image+getExpansionOffset(CE); /* find the offset to expansion table */
-            CE = *CEOffset++;
+          } else { // stuff is already normalized... what to do here???
+            int32_t decompLen = unorm_getDecomposition(cp, FALSE, &buffer[1], UCOL_MAX_BUFFER-1);
+            if(decompLen < 0) {
+              decompLen = -decompLen;
+            }
+            if(decompLen >= 2 && U16_IS_LEAD(buffer[1]) && U16_IS_TRAIL(buffer[2])) {
+              buffer[0] = buffer[1];
+              buffer[1] = buffer[2];
+              buffer[2] = ch;
+            } else {
+              buffer[0] = buffer[1];
+              buffer[1] = ch;
+            }
+            buffer[decompLen+1] = 0; // we added the prevowel
+            // we will construct a new iterator and suck out CEs.
+            collIterate temp;
+            // Here is the string initialization. We have decomposed character (decompLen) + 1 Thai + trailing zero
+            IInit_collIterate(coll, buffer, decompLen+2, &temp);
+            // We need the trailing zero so that we can tell the iterate function that it is in the normalized and reordered
+            // buffer. This buffer is always zero terminated. 
+            temp.flags |= UCOL_ITER_INNORMBUF;
+            // This is where to return after iteration is done. We point at the end of the string
+            temp.fcdPosition = buffer+decompLen+2;
+            temp.flags &= ~UCOL_ITER_NORM;
+
+            CE = ucol_IGetNextCE(coll, &temp, status);
+            uint32_t *endCEBuffer = source->CEs + UCOL_EXPAND_CE_BUFFER_SIZE;
+            while (CE != UCOL_NO_MORE_CES) {
+                *(source->CEpos ++) = CE;
+                if (source->CEpos == endCEBuffer) {
+                    /* ran out of CE space, bail.
+                    there's no guarantee of the right character position after
+                    this bail*/
+                    *status = U_BUFFER_OVERFLOW_ERROR;
+                    source->CEpos = source->CEs;
+                    freeHeapWritableBuffer(&temp);
+                    return UCOL_NULLORDER;
+                }
+                CE = ucol_IGetNextCE(coll, &temp, status);
+            }
+            freeHeapWritableBuffer(&temp);
+            // return the first of CEs so that we save a call
+            CE = *(source->toReturn++);
           }
       }
       break;
@@ -3338,7 +3374,9 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
         *(UCharOffset --) = 0;
         noChars = 0;
         // have to swap thai characters
-        while (ucol_unsafeCP(schar, coll) || (!collIter_bos(source) && UCOL_ISTHAIPREVOWEL(peekCharacter(source, -1)))) { // this one is problematic
+        while (ucol_unsafeCP(schar, coll) || UCOL_ISTHAIPREVOWEL(peekCharacter(source, -1))) { 
+          // we might have ended here after trying to reorder Thai, but seeing that there are unsafe points 
+          // in the backward processing
             *(UCharOffset) = schar;
             noChars++;
             UCharOffset --;
