@@ -52,10 +52,12 @@ static UBool gMutexInitialized = FALSE;
 
 static void TestMutex(void) {
     if (!gMutexInitialized) {
-        log_err("*** Failure! The global mutex was not initialized.\n"
+        log_verbose("*** Failure! The global mutex was not initialized.\n"
                 "*** Make sure the right linker was used.\n");
     }
 }
+
+void addSetup(TestNode** root);
 
 void addSetup(TestNode** root)
 {
@@ -155,6 +157,19 @@ int main(int argc, const char* const argv[])
 
         u_cleanup(); /* nuke the hashtable.. so that any still-open cnvs are leaked */
 #endif
+    }
+
+    if (!gMutexInitialized) {
+        fprintf(stderr,
+            "#### WARNING!\n"
+            "  The global mutex was not initialized during C++ static initialization.\n"
+            "  You must use an ICU API in a single thread, like ucnv_open() or\n"
+            "  uloc_countAvailable(), before using ICU in multiple threads.\n"
+            "  Most ICU API functions will initialize the global mutex for you.\n"
+            "  If you are using ICU in a single threaded application, please ignore this\n"
+            "  warning.\n"
+            "#### WARNING!\n"
+            );
     }
 
     return nerrors ? 1 : 0;
