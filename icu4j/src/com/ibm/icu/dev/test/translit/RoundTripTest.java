@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/RoundTripTest.java,v $
- * $Date: 2003/01/28 18:55:35 $
- * $Revision: 1.50 $
+ * $Date: 2003/04/25 19:33:42 $
+ * $Revision: 1.51 $
  *
  *******************************************************************************
  */
@@ -15,6 +15,7 @@ package com.ibm.icu.dev.test.translit;
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
+import com.ibm.icu.util.VersionInfo;
 import com.ibm.icu.impl.Utility;
 import java.io.*;
 import java.text.ParseException;
@@ -25,6 +26,13 @@ import java.util.Locale;
  * @summary Round trip test of Transliterator
  */
 public class RoundTripTest extends TestFmwk {
+
+    // Time bomb code to temporarily modify the behavior of this test
+    // to account for changes in the Unicode properties for ICU 2.6.
+    static VersionInfo ICU26 = VersionInfo.getInstance(2,6,0,0);
+    static boolean isICU26() {
+        return ICU26.compareTo(VersionInfo.ICU_VERSION) == 0;
+    }
 
     static final boolean EXTRA_TESTS = true;
     static final boolean PRINT_RULES = true;
@@ -156,10 +164,17 @@ public class RoundTripTest extends TestFmwk {
         t.transliterate("\u0061\u0101\u0069");
     }
 
+    String getGreekSet() {
+        // Time bomb
+        return isICU26() ?
+            "[[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]&[:Age=3.2:]]" :
+            "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]";
+    }
+
     public void TestGreek() throws IOException, ParseException {
         long start = System.currentTimeMillis();
         new Test("Latin-Greek", 50)
-        .test("[a-zA-Z]", "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]",
+        .test("[a-zA-Z]", getGreekSet(),
             "[\u00B5\u037A\u03D0-\u03F5]", /* roundtrip exclusions */
             this, new LegalGreek(true));
         showElapsed(start, "TestGreek");
@@ -168,7 +183,7 @@ public class RoundTripTest extends TestFmwk {
     public void TestGreekUNGEGN() throws IOException, ParseException {
         long start = System.currentTimeMillis();
         new Test("Latin-Greek/UNGEGN")
-          .test("[a-zA-Z]", "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]",
+          .test("[a-zA-Z]", getGreekSet(),
             "[\u00B5\u037A\u03D0-\uFFFF{\u039C\u03C0}]", /* roundtrip exclusions */
             this, new LegalGreek(false));
         showElapsed(start, "TestGreekUNGEGN");
@@ -177,7 +192,7 @@ public class RoundTripTest extends TestFmwk {
     public void Testel() throws IOException, ParseException {
         long start = System.currentTimeMillis();
         new Test("Latin-el")
-          .test("[a-zA-Z]", "[\u003B\u00B7[:Greek:]-[\u03D7-\u03EF]]",
+          .test("[a-zA-Z]", getGreekSet(),
             "[\u00B5\u037A\u03D0-\uFFFF{\u039C\u03C0}]", /* roundtrip exclusions */
             this, new LegalGreek(false));
         showElapsed(start, "Testel");
