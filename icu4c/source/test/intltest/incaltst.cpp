@@ -13,6 +13,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include <stdio.h>
+#include "caltest.h"
 
 #define CHECK(status, msg) \
     if (U_FAILURE(status)) { \
@@ -51,33 +52,9 @@ static UnicodeString escape( const UnicodeString&src)
 // class IntlCalendarTest
 // *****************************************************************************
 
-static UnicodeString fieldName(UCalendarDateFields f);
-
 // Turn this on to dump the calendar fields 
 #define U_DEBUG_DUMPCALS  
 
-static UnicodeString calToStr(const Calendar & cal)
-{
-    UnicodeString out;
-    UErrorCode status = U_ZERO_ERROR;
-    int i;
-    for(i = 0;i<UCAL_FIELD_COUNT;i++) {
-        out += (UnicodeString("+") + fieldName((UCalendarDateFields)i) + "=" +  cal.get((UCalendarDateFields)i, status) + UnicodeString(", "));
-    }
-    out += UnicodeString(cal.getType());
-    
-    if(cal.inDaylightTime(status)) {
-        out += UnicodeString("- DAYLIGHT");
-    }
-    else {
-        out += UnicodeString("- NORMAL");
-    }
-    
-    UnicodeString str2;
-    out += cal.getTimeZone().getDisplayName(str2);
-    
-    return out;
-}
 
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break
 
@@ -100,32 +77,6 @@ void IntlCalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &n
 
 // ---------------------------------------------------------------------------------
 
-static UnicodeString fieldName(UCalendarDateFields f) {
-    switch (f) {
-    case UCAL_ERA:           return "ERA";
-    case UCAL_YEAR:          return "YEAR";
-    case UCAL_MONTH:         return "MONTH";
-    case UCAL_WEEK_OF_YEAR:  return "WEEK_OF_YEAR";
-    case UCAL_WEEK_OF_MONTH: return "WEEK_OF_MONTH";
-    case UCAL_DATE:			 return "DAY_OF_MONTH"; // DATE is synonym for DAY_OF_MONTH
-    case UCAL_DAY_OF_YEAR:   return "DAY_OF_YEAR";
-    case UCAL_DAY_OF_WEEK:   return "DAY_OF_WEEK";
-    case UCAL_DAY_OF_WEEK_IN_MONTH: return "DAY_OF_WEEK_IN_MONTH";
-    case UCAL_AM_PM:         return "AM_PM";
-    case UCAL_HOUR:          return "HOUR";
-    case UCAL_HOUR_OF_DAY:   return "HOUR_OF_DAY";
-    case UCAL_MINUTE:        return "MINUTE";
-    case UCAL_SECOND:        return "SECOND";
-    case UCAL_MILLISECOND:   return "MILLISECOND";
-    case UCAL_ZONE_OFFSET:   return "ZONE_OFFSET";
-    case UCAL_DST_OFFSET:    return "DST_OFFSET";
-    case UCAL_YEAR_WOY:      return "YEAR_WOY";
-    case UCAL_DOW_LOCAL:     return "DOW_LOCAL";
-    case UCAL_FIELD_COUNT:   return "FIELD_COUNT";
-    default:
-        return UnicodeString("") + ((int32_t)f);
-    }
-}
 
 /**
  * Test various API methods for API completeness.
@@ -199,8 +150,8 @@ void IntlCalendarTest::quasiGregorianTest(Calendar& cal, const Locale& gcl, cons
     cal.set(year, month, dayOfMonth);
     UDate d = cal.getTime(status);
 #ifdef U_DEBUG_DUMPCALS
-    logln((UnicodeString)"cal  : " + calToStr(cal));
-    logln((UnicodeString)"grego: " + calToStr(*grego));
+    logln((UnicodeString)"cal  : " + CalendarTest::calToStr(cal));
+    logln((UnicodeString)"grego: " + CalendarTest::calToStr(*grego));
 #endif
     if (d == D) {
       logln(UnicodeString("OK: ") + era + ":" + year + "/" + (month+1) + "/" + dayOfMonth +
@@ -216,8 +167,8 @@ void IntlCalendarTest::quasiGregorianTest(Calendar& cal, const Locale& gcl, cons
     int e = cal.get(UCAL_ERA, status);
     int y = cal.get(UCAL_YEAR, status);
 #ifdef U_DEBUG_DUMPCALS
-    logln((UnicodeString)"cal  : " + calToStr(cal));
-    logln((UnicodeString)"grego: " + calToStr(*grego));
+    logln((UnicodeString)"cal  : " + CalendarTest::calToStr(cal));
+    logln((UnicodeString)"grego: " + CalendarTest::calToStr(*grego));
 #endif
     if (y == year && e == era) {
       logln((UnicodeString)"OK: " + D + " => " + cal.get(UCAL_ERA, status) + ":" +
@@ -280,20 +231,20 @@ void IntlCalendarTest::TestBuddhist() {
     UDate timeA = Calendar::getNow();
 
     int32_t data[] = {
-        0,           // B. era
+        0,           // B. era   [928479600000]
         2542,        // B. year
         1999,        // G. year
         UCAL_JUNE,   // month
         4,           // day
 
-        0,           // B. era
+        0,           // B. era   [-79204842000000]
         3,           // B. year
         -540,        // G. year
         UCAL_FEBRUARY, // month
         12,          // day
 
         0,           // test month calculation:  4795 BE = 4252 AD is a leap year, but 4795 AD is not.
-        4795,        // BE
+        4795,        // BE [72018057600000]
         4252,        // AD
         UCAL_FEBRUARY,
         29,
@@ -457,7 +408,7 @@ void IntlCalendarTest::TestJapaneseFormat() {
             ParsePosition pp;
             fmt->parse(expected, *cal2, pp);
             fmt->format(otherDate, str3);
-            errln("Parse incorrect of " + expected + " - wanted " + aDate + " but got " +  " = " +   otherDate + ", " + str3 + " = " + calToStr(*cal2) );
+            errln("Parse incorrect of " + expected + " - wanted " + aDate + " but got " +  " = " +   otherDate + ", " + str3 + " = " + CalendarTest::calToStr(*cal2) );
             
         } else {
             logln("Parsed OK: " + expected);
@@ -490,7 +441,7 @@ void IntlCalendarTest::TestJapaneseFormat() {
             fmt->parse(expected, *cal2, pp);
             fmt->format(otherDate, str3);
             errln("Parse incorrect of " + expected + " - wanted " + aDate + " but got " +  " = " +
-                otherDate + ", " + str3 + " = " + calToStr(*cal2) );
+                otherDate + ", " + str3 + " = " + CalendarTest::calToStr(*cal2) );
         } else {
             logln("Parsed OK: " + expected);
         }

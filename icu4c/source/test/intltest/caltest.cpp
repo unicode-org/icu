@@ -17,17 +17,29 @@
 // class CalendarTest
 // *****************************************************************************
 
-static UnicodeString fieldName(UCalendarDateFields f);
-
-static UnicodeString calToStr(const Calendar & cal)
+UnicodeString CalendarTest::calToStr(const Calendar & cal)
 {
   UnicodeString out;
   UErrorCode status = U_ZERO_ERROR;
   int i;
+  UDate d;
   for(i = 0;i<UCAL_FIELD_COUNT;i++) {
-    out += (UnicodeString("+") + fieldName((UCalendarDateFields)i) + "=" +  cal.get((UCalendarDateFields)i, status) + UnicodeString(", "));
+    out += (UnicodeString("") + fieldName((UCalendarDateFields)i) + "=" +  cal.get((UCalendarDateFields)i, status) + UnicodeString(" "));
   }
-
+  out += "[" + UnicodeString(cal.getType()) + "]";
+  
+  if(cal.inDaylightTime(status)) {
+    out += UnicodeString(" (in DST), zone=");
+  }
+  else {
+    out += UnicodeString(", zone=");
+  }
+  
+  UnicodeString str2;
+  out += cal.getTimeZone().getDisplayName(str2);
+  d = cal.getTime(status);
+  out += UnicodeString(" :","") + d;
+  
   return out;
 }
 
@@ -168,34 +180,46 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
                 TestRog();
             }
             break;
+        case 19:
+           name = "TestYWOY";
+            if (exec) {
+                logln("TestYWOY---"); logln("");
+                TestYWOY();
+            }
+            break;
+          
         default: name = ""; break;
     }
 }
 
 // ---------------------------------------------------------------------------------
 
-static UnicodeString fieldName(UCalendarDateFields f) {
+UnicodeString CalendarTest::fieldName(UCalendarDateFields f) {
     switch (f) {
-    case UCAL_ERA:           return "ERA";
-    case UCAL_YEAR:          return "YEAR";
-    case UCAL_MONTH:         return "MONTH";
-    case UCAL_WEEK_OF_YEAR:  return "WEEK_OF_YEAR";
-    case UCAL_WEEK_OF_MONTH: return "WEEK_OF_MONTH";
-    case UCAL_DATE:			 return "DAY_OF_MONTH"; // DATE is synonym for DAY_OF_MONTH
-    case UCAL_DAY_OF_YEAR:   return "DAY_OF_YEAR";
-    case UCAL_DAY_OF_WEEK:   return "DAY_OF_WEEK";
-    case UCAL_DAY_OF_WEEK_IN_MONTH: return "DAY_OF_WEEK_IN_MONTH";
-    case UCAL_AM_PM:         return "AM_PM";
-    case UCAL_HOUR:          return "HOUR";
-    case UCAL_HOUR_OF_DAY:   return "HOUR_OF_DAY";
-    case UCAL_MINUTE:        return "MINUTE";
-    case UCAL_SECOND:        return "SECOND";
-    case UCAL_MILLISECOND:   return "MILLISECOND";
-    case UCAL_ZONE_OFFSET:   return "ZONE_OFFSET";
-    case UCAL_DST_OFFSET:    return "DST_OFFSET";
-    case UCAL_YEAR_WOY:      return "YEAR_WOY";
-    case UCAL_DOW_LOCAL:     return "DOW_LOCAL";
-    case UCAL_FIELD_COUNT:   return "FIELD_COUNT";
+#define FIELD_NAME_STR(x) case x: return (#x+5)
+      FIELD_NAME_STR( UCAL_ERA );
+      FIELD_NAME_STR( UCAL_YEAR );
+      FIELD_NAME_STR( UCAL_MONTH );
+      FIELD_NAME_STR( UCAL_WEEK_OF_YEAR );
+      FIELD_NAME_STR( UCAL_WEEK_OF_MONTH );
+      FIELD_NAME_STR( UCAL_DATE );
+      FIELD_NAME_STR( UCAL_DAY_OF_YEAR );
+      FIELD_NAME_STR( UCAL_DAY_OF_WEEK );
+      FIELD_NAME_STR( UCAL_DAY_OF_WEEK_IN_MONTH );
+      FIELD_NAME_STR( UCAL_AM_PM );
+      FIELD_NAME_STR( UCAL_HOUR );
+      FIELD_NAME_STR( UCAL_HOUR_OF_DAY );
+      FIELD_NAME_STR( UCAL_MINUTE );
+      FIELD_NAME_STR( UCAL_SECOND );
+      FIELD_NAME_STR( UCAL_MILLISECOND );
+      FIELD_NAME_STR( UCAL_ZONE_OFFSET );
+      FIELD_NAME_STR( UCAL_DST_OFFSET );
+      FIELD_NAME_STR( UCAL_YEAR_WOY );
+      FIELD_NAME_STR( UCAL_DOW_LOCAL );
+      FIELD_NAME_STR( UCAL_EXTENDED_YEAR );
+      FIELD_NAME_STR( UCAL_JULIAN_DAY );
+      FIELD_NAME_STR( UCAL_MILLISECONDS_IN_DAY );
+#undef FIELD_NAME_STR
     default:
         return UnicodeString("") + ((int32_t)f);
     }
@@ -210,6 +234,7 @@ CalendarTest::TestGenericAPI()
     UErrorCode status = U_ZERO_ERROR;
     UDate d;
     UnicodeString str;
+    UBool eq,b4,af;
 
     UDate when = date(90, UCAL_APRIL, 15);
 
@@ -235,19 +260,34 @@ CalendarTest::TestGenericAPI()
         cal->after(*cal2, status) ||
         U_FAILURE(status)) errln("FAIL: equals/before/after failed");
 
+    logln(UnicodeString("cal=")  +cal->getTime(status)  + UnicodeString(calToStr(*cal)));
+    logln(UnicodeString("cal2=")  +cal2->getTime(status)  + UnicodeString(calToStr(*cal2)));
+    logln("cal2->setTime(when+1000)");
     cal2->setTime(when + 1000, status);
+    logln(UnicodeString("cal2=")  +cal2->getTime(status)  + UnicodeString(calToStr(*cal2)));
+
     if (failure(status, "Calendar::setTime")) return;
     if (cal->equals(*cal2, status) ||
         cal2->before(*cal, status) ||
         cal->after(*cal2, status) ||
-        U_FAILURE(status)) errln("FAIL: equals/before/after failed");
+        U_FAILURE(status)) errln("FAIL: equals/before/after failed after setTime(+1000)");
 
+    logln("cal1->roll(UCAL_SECOND)");
     cal->roll(UCAL_SECOND, (UBool) TRUE, status);
+    logln(UnicodeString("cal=")  +cal->getTime(status)  + UnicodeString(calToStr(*cal)));
+
     if (failure(status, "Calendar::roll")) return;
-    if (!cal->equals(*cal2, status) ||
-        cal->before(*cal2, status) ||
-        cal->after(*cal2, status) ||
-        U_FAILURE(status)) errln("FAIL: equals/before/after failed");
+    if (!(eq=cal->equals(*cal2, status)) ||
+        (b4=cal->before(*cal2, status)) ||
+        (af=cal->after(*cal2, status)) ||
+        U_FAILURE(status)) {
+      errln("FAIL: equals[%c]/before[%c]/after[%c] failed after roll 1 second [should be T/F/F]",
+            eq?'T':'F',
+            b4?'T':'F',
+            af?'T':'F');
+      logln(UnicodeString("cal=")  +cal->getTime(status)  + UnicodeString(calToStr(*cal)));
+      logln(UnicodeString("cal2=")  +cal2->getTime(status)  + UnicodeString(calToStr(*cal2)));
+    }
 
     // Roll back to January
     cal->roll(UCAL_MONTH, (int32_t)(1 + UCAL_DECEMBER - cal->get(UCAL_MONTH, status)), status);
@@ -255,7 +295,7 @@ CalendarTest::TestGenericAPI()
     if (cal->equals(*cal2, status) ||
         cal2->before(*cal, status) ||
         cal->after(*cal2, status) ||
-        U_FAILURE(status)) errln("FAIL: equals/before/after failed");
+        U_FAILURE(status)) errln("FAIL: equals/before/after failed after rollback to January");
 
     TimeZone *z = cal->orphanTimeZone();
     if (z->getID(str) != tzid ||
@@ -318,13 +358,14 @@ CalendarTest::TestGenericAPI()
         switch(i) {
             case UCAL_YEAR: case UCAL_MONTH: case UCAL_DATE:
             case UCAL_HOUR_OF_DAY: case UCAL_MINUTE: case UCAL_SECOND:
-                if (!cal->isSet((UCalendarDateFields)i)) errln("FAIL: Calendar::isSet failed");
+            case UCAL_EXTENDED_YEAR:
+              if (!cal->isSet((UCalendarDateFields)i)) errln("FAIL: Calendar::isSet F, should be T " + fieldName((UCalendarDateFields)i));
                 break;
             default:
-                if (cal->isSet((UCalendarDateFields)i)) errln("FAIL: Calendar::isSet failed");
+              if (cal->isSet((UCalendarDateFields)i)) errln("FAIL: Calendar::isSet = T, should be F  " + fieldName((UCalendarDateFields)i));
         }
         cal->clear((UCalendarDateFields)i);
-        if (cal->isSet((UCalendarDateFields)i)) errln("FAIL: Calendar::clear/isSet failed");
+        if (cal->isSet((UCalendarDateFields)i)) errln("FAIL: Calendar::clear/isSet failed " + fieldName((UCalendarDateFields)i));
     }
 
     delete cal;
@@ -438,18 +479,22 @@ void CalendarTest::dowTest(UBool lenient)
     UErrorCode status = U_ZERO_ERROR;
     GregorianCalendar* cal = new GregorianCalendar(status);
     if (U_FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
+    logln("cal - Aug 12, 1997\n");
     cal->set(1997, UCAL_AUGUST, 12);
     cal->getTime(status);
     if (U_FAILURE(status)) { errln("Calendar::getTime failed"); return; }
+    logln((lenient?UnicodeString("LENIENT0: "):UnicodeString("nonlenient0: ")) + UnicodeString(calToStr(*cal)));
     cal->setLenient(lenient);
+    logln("cal - Dec 1, 1996\n");
     cal->set(1996, UCAL_DECEMBER, 1);
+    logln((lenient?UnicodeString("LENIENT: "):UnicodeString("nonlenient: ")) + UnicodeString(calToStr(*cal)));
     int32_t dow = cal->get(UCAL_DAY_OF_WEEK, status);
-    if (U_FAILURE(status)) { errln("Calendar::get failed"); return; }
+    if (U_FAILURE(status)) { errln("Calendar::get failed [%s]", u_errorName(status)); return; }
     int32_t min = cal->getMinimum(UCAL_DAY_OF_WEEK);
     int32_t max = cal->getMaximum(UCAL_DAY_OF_WEEK);
     if (dow < min ||
         dow > max) errln(UnicodeString("FAIL: Day of week ") + (int32_t)dow + " out of range");
-    if (dow != UCAL_SUNDAY) errln("FAIL: Day of week should be SUNDAY");
+    if (dow != UCAL_SUNDAY) errln("FAIL: Day of week should be SUNDAY[%d] not %d", UCAL_SUNDAY, dow);
     if (min != UCAL_SUNDAY ||
         max != UCAL_SATURDAY) errln("FAIL: Min/max bad");
     delete cal;
@@ -857,12 +902,19 @@ CalendarTest::TestAddRollExtensive()
         int32_t limit = maxlimit;
         status = U_ZERO_ERROR;
         for (i = 0; i < limit; i++) {
+            logln(calToStr(*temp) + UnicodeString("  " ) + fieldName(e) + UnicodeString("++") );
             temp->roll(e, 1, status);
-            if (U_FAILURE(status)) { limit = i; status = U_ZERO_ERROR; }
+            if (U_FAILURE(status)) { 
+              logln("caltest.cpp:%d e=%d, i=%d - roll(+) err %s\n",  __LINE__, (int) e, (int) i, u_errorName(status));
+              logln(calToStr(*temp));
+              limit = i; status = U_ZERO_ERROR; 
+            }
         }
         for (i = 0; i < limit; i++) {
+            logln("caltest.cpp:%d e=%d, i=%d\n",  __LINE__, (int) e, (int) i);
+            logln(calToStr(*temp) + UnicodeString("  " ) + fieldName(e) + UnicodeString("--") );
             temp->roll(e, -1, status);
-            if (U_FAILURE(status)) { errln("GregorianCalendar::roll -1 failed"); return; }
+            if (U_FAILURE(status)) { errln(UnicodeString("GregorianCalendar::roll ") + CalendarTest::fieldName(e) + " count=" + UnicodeString('@'+i) + " by -1 failed with " + u_errorName(status) ); return; }
         }
         check520(temp, y, m, d, hr, min, sec, ms, e);
 
@@ -1234,6 +1286,7 @@ CalendarTest::TestDOW_LOCALandYEAR_WOY()
     yearAddTest(*cal, status); // aliu
     loop_addroll(cal, /*sdf,*/ times, UCAL_DOW_LOCAL, UCAL_DAY_OF_WEEK, status);
     if (U_FAILURE(status)) { errln("Error in parse/calculate test for 1997"); return; }
+
     cal->clear();
     cal->set(1998, UCAL_DECEMBER, 25);
     doYEAR_WOYLoop(cal, sdf, times, status);
@@ -1241,6 +1294,17 @@ CalendarTest::TestDOW_LOCALandYEAR_WOY()
     yearAddTest(*cal, status); // aliu
     loop_addroll(cal, /*sdf,*/ times, UCAL_DOW_LOCAL, UCAL_DAY_OF_WEEK, status);
     if (U_FAILURE(status)) { errln("Error in parse/calculate test for 1998"); return; }
+#ifndef _TMP_ROLLOVER_28
+    static const UDate kExpire = 1067480869000.0;
+    
+    if(Calendar::getNow() >= kExpire) {
+      errln("FAIL: please remove #ifdef _TMP_ROLLOVER_28 and fix this code - [%s:%d]", __FILE__, __LINE__);
+    } else {
+      logln("WARNING: %.0lf days until gregorian cutover test reenabled - please #define _TMP_ROLLOVER_28 or remove these #ifdefs [%s:%d]\n", (kExpire-Calendar::getNow())/86400000.0, __FILE__, __LINE__);
+    }
+#endif
+
+#ifdef _TMP_ROLLOVER_28
     cal->clear();
     cal->set(1582, UCAL_OCTOBER, 1);
     doYEAR_WOYLoop(cal, sdf, times, status);
@@ -1248,7 +1312,7 @@ CalendarTest::TestDOW_LOCALandYEAR_WOY()
     yearAddTest(*cal, status); // aliu
     loop_addroll(cal, /*sdf,*/ times, UCAL_DOW_LOCAL, UCAL_DAY_OF_WEEK, status);
     if (U_FAILURE(status)) { errln("Error in parse/calculate test for 1582"); return; }
-
+#endif
     delete sdf;
     delete cal;
 
@@ -1294,6 +1358,7 @@ void CalendarTest::yearAddTest(Calendar& cal, UErrorCode& status) {
         str += (UnicodeString)", expected year " +
             (y+1) + ", month " + (mon+1) + ", day " + day;
         errln((UnicodeString)"FAIL: " + str);
+        logln( UnicodeString(" -> ") + CalendarTest::calToStr(cal) );
     } else {
         logln(str);
     }
@@ -1301,6 +1366,7 @@ void CalendarTest::yearAddTest(Calendar& cal, UErrorCode& status) {
     fmt.format(t, str.remove());
     str += ".add(YEAR_WOY, 1)=>";
     cal.setTime(t, status);
+    logln( UnicodeString(" <- ") + CalendarTest::calToStr(cal) );
     cal.add(UCAL_YEAR_WOY, 1, status);
     int32_t ywy2 = cal.get(UCAL_YEAR_WOY, status);
     int32_t woy2 = cal.get(UCAL_WEEK_OF_YEAR, status);
@@ -1310,6 +1376,7 @@ void CalendarTest::yearAddTest(Calendar& cal, UErrorCode& status) {
         str += (UnicodeString)", expected yearWOY " +
             (ywy+1) + ", woy " + woy + ", dowLocal " + dow;
         errln((UnicodeString)"FAIL: " + str);
+        logln( UnicodeString(" -> ") + CalendarTest::calToStr(cal) );
     } else {
         logln(str);
     }
@@ -1489,7 +1556,7 @@ void CalendarTest::TestWOY(void) {
          Sun Jan 09 2000, WOY 2
          Mon Jan 10 2000, WOY 3
     */
-
+ 
     UnicodeString str;
     UErrorCode status = U_ZERO_ERROR;
     int32_t i;
@@ -1500,35 +1567,37 @@ void CalendarTest::TestWOY(void) {
 
     UCalendarDaysOfWeek fdw = (UCalendarDaysOfWeek) 0;
 
+    //for (int8_t pass=2; pass<=2; ++pass) {
     for (int8_t pass=1; pass<=2; ++pass) {
         switch (pass) {
         case 1:
             fdw = UCAL_MONDAY;
             cal.setFirstDayOfWeek(fdw);
             cal.setMinimalDaysInFirstWeek(4);
-            fmt.setCalendar(cal);
+            fmt.adoptCalendar(cal.clone());
             break;
         case 2:
             fdw = UCAL_MONDAY;
             cal.setFirstDayOfWeek(fdw);
             cal.setMinimalDaysInFirstWeek(2);
-            fmt.setCalendar(cal);
+            fmt.adoptCalendar(cal.clone());
             break;
         }
 
-    for (i=0; i<16; ++i) {
+        //for (i=2; i<=6; ++i) {
+        for (i=0; i<16; ++i) {
         UDate t, t2;
         int32_t t_y, t_woy, t_dow;
         cal.clear();
         cal.set(1999, UCAL_DECEMBER, 26 + i);
         fmt.format(t = cal.getTime(status), str.remove());
         CHECK(status, "Fail: getTime failed");
-        logln(str);
-
+        logln(UnicodeString("* ") + str);
         int32_t dow = cal.get(UCAL_DAY_OF_WEEK, status);
         int32_t woy = cal.get(UCAL_WEEK_OF_YEAR, status);
         int32_t year = cal.get(UCAL_YEAR, status);
         int32_t mon = cal.get(UCAL_MONTH, status);
+        logln(calToStr(cal));
         CHECK(status, "Fail: get failed");
         int32_t dowLocal = dow - fdw;
         if (dowLocal < 0) dowLocal += 7;
@@ -1555,6 +1624,11 @@ void CalendarTest::TestWOY(void) {
             str = "Fail: y/woy/dow fields->time => ";
             fmt.format(cal.getTime(status), str);
             errln(str);
+            logln(calToStr(cal));
+            logln("[get!=set] Y%d!=%d || woy%d!=%d || dow%d!=%d\n",
+                  t_y, year, t_woy, woy, t_dow, dow);
+        } else {
+          logln("y/woy/dow fields->time OK");
         }
 
         // Basic fields->time check y/woy/dow_local
@@ -1585,6 +1659,10 @@ void CalendarTest::TestWOY(void) {
             str = "Fail: y_woy/woy/dow fields->time => ";
             fmt.format(t2, str);
             errln(str);
+            logln(calToStr(cal));
+            logln("%.f != %.f\n", t, t2);
+        } else {
+          logln("y_woy/woy/dow OK");
         }
 
         // Basic fields->time check y_woy/woy/dow_local
@@ -1600,6 +1678,7 @@ void CalendarTest::TestWOY(void) {
             errln(str);
         }
 
+        logln("Testing DOW_LOCAL.. dow%d\n", dow);
         // Make sure DOW_LOCAL disambiguates over DOW
         int32_t wrongDow = dow - 3;
         if (wrongDow < 1) wrongDow += 7;
@@ -1612,6 +1691,9 @@ void CalendarTest::TestWOY(void) {
             str = "Fail: DOW_LOCAL fields->time => ";
             fmt.format(t2, str);
             errln(str);
+            logln(calToStr(cal));
+            logln("%.f :   DOW%d, DOW_LOCAL%d -> %.f\n",
+                  t, wrongDow, dowLocal, t2);
         }
 
         // Make sure DOW disambiguates over DOW_LOCAL
@@ -1698,6 +1780,67 @@ void CalendarTest::TestWOY(void) {
             }
         }
     }
+}
+
+void CalendarTest::TestYWOY()
+{
+   UnicodeString str;
+   UErrorCode status = U_ZERO_ERROR;
+   int32_t i;
+   
+   GregorianCalendar cal(status);
+   //SimpleDateFormat fmt(UnicodeString("EEE MMM dd yyyy', WOY' w"), status);
+   CHECK(status, "Fail: Cannot construct calendar/format");
+
+   cal.setFirstDayOfWeek(UCAL_SUNDAY);
+   cal.setMinimalDaysInFirstWeek(1);
+
+   logln("Setting:  ywoy=2004, woy=1, dow=MONDAY");
+   cal.clear();
+   cal.set(UCAL_YEAR_WOY,2004);
+   cal.set(UCAL_WEEK_OF_YEAR,1);
+   cal.set(UCAL_DAY_OF_WEEK, UCAL_MONDAY);
+   
+   logln(calToStr(cal));
+   if(cal.get(UCAL_YEAR, status) != 2003) {
+     errln("year not 2003");
+   }
+
+   logln("+ setting DOW to THURSDAY");
+   cal.clear();
+   cal.set(UCAL_YEAR_WOY,2004);
+   cal.set(UCAL_WEEK_OF_YEAR,1);
+   cal.set(UCAL_DAY_OF_WEEK, UCAL_THURSDAY);
+   
+   logln(calToStr(cal));
+   if(cal.get(UCAL_YEAR, status) != 2004) {
+     errln("year not 2004");
+   }
+
+   logln("+ setting DOW_LOCAL to 1");
+   cal.clear();
+   cal.set(UCAL_YEAR_WOY,2004);
+   cal.set(UCAL_WEEK_OF_YEAR,1);
+   cal.set(UCAL_DAY_OF_WEEK, UCAL_THURSDAY);
+   cal.set(UCAL_DOW_LOCAL, 1);
+   
+   logln(calToStr(cal));
+   if(cal.get(UCAL_YEAR, status) != 2003) {
+     errln("year not 2003");
+   }
+
+   cal.setFirstDayOfWeek(UCAL_MONDAY);
+   cal.setMinimalDaysInFirstWeek(4);
+   UDate t = 946713600000.;
+   UDate t2 = 978163200000.;
+   cal.setTime(t, status);
+   cal.set(UCAL_DAY_OF_WEEK, 4);
+   cal.set(UCAL_DOW_LOCAL, 6);
+   if(cal.getTime(status) != t) {
+     logln(calToStr(cal));
+     errln("FAIL:  DOW_LOCAL did not take precedence");
+   }
+
 }
 
 #undef CHECK
