@@ -104,28 +104,6 @@ void ReplaceableGlue::copy(int32_t start, int32_t limit, int32_t dest) {
 }
 
 /********************************************************************
- * PRIVATE Implementation
- ********************************************************************/
-
-/**
- * Extract a UnicodeString to a char* buffer using the invariant
- * converter and return the actual length.
- */
-static int32_t
-_utrans_copyUnicodeStringToChars(const UnicodeString& str,
-                                 char* buf,
-                                 int32_t bufCapacity) {
-    int32_t len = str.length();
-    if (buf != 0) {
-        // copy whatever will fit into buf
-        int32_t len2 = uprv_min(len, bufCapacity - 1);
-        str.extract(0, len2, buf, "");
-        buf[len2] = 0; // zero-terminate
-    }
-    return len; // return actual length    
-}
-
-/********************************************************************
  * General API
  ********************************************************************/
 #if 0
@@ -285,8 +263,7 @@ U_CAPI int32_t
 utrans_getID(const UTransliterator* trans,
              char* buf,
              int32_t bufCapacity) {
-    const UnicodeString& id = ((Transliterator*) trans)->getID();
-    return _utrans_copyUnicodeStringToChars(id, buf, bufCapacity);
+    return ((Transliterator*) trans)->getID().extract(0, 0x7fffffff, buf, bufCapacity, "");
 }
 
 U_CAPI void
@@ -332,8 +309,7 @@ U_CAPI int32_t
 utrans_getAvailableID(int32_t index,
                       char* buf, // may be NULL
                       int32_t bufCapacity) {
-    const UnicodeString& id = Transliterator::getAvailableID(index);
-    return _utrans_copyUnicodeStringToChars(id, buf, bufCapacity);
+    return Transliterator::getAvailableID(index).extract(0, 0x7fffffff, buf, bufCapacity, "");
 }
 
 /********************************************************************
