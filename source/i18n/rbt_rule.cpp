@@ -160,10 +160,6 @@ void TransliterationRule::init(const UnicodeString& input,
         if (anchorStart) {
             pattern.append(ETHER);
             ++anteContextLength;
-/*          // The following was commented out because it modified the parameter
-            // instead of this->cursorPos [grhoten j535]
-            ++cursorPosition;
-*/
             // Adjust segment offsets
             if (segments != 0) {
                 int32_t *p = segments;
@@ -495,9 +491,7 @@ void TransliterationRule::_appendToRule(UnicodeString& rule,
             rule.append((UChar) 0x0027 /*'*/);
             quoteBuf.truncate(0);
         }
-        if (!UnicodeSet::_escapeUnprintable(rule, c)) {
-            // Literals should be printable and should get appended
-            // here.
+        if (!escapeUnprintable || !UnicodeSet::_escapeUnprintable(rule, c)) {
             rule.append(c);
         }
     }
