@@ -598,7 +598,10 @@ _HZ_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorCode *e
 /* structure for SafeClone calculations */
 struct cloneStruct
 {
-    UConverter cnv, subCnv;
+    UConverter cnv;
+    UAlignedMemory deadSpace1;
+    UConverter subCnv;
+    UAlignedMemory deadSpace2;
     UConverterDataHZ mydata;
 };
 
