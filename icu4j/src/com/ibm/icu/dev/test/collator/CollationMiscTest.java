@@ -2085,9 +2085,9 @@ public class CollationMiscTest extends TestFmwk {
 	        "xAx"
 	    };
 	    /* TODO: port builder fixes to before */
-	    /*genericRulesStarter(rules, test);*/
+	    genericRulesStarter(rules, test);
 	    genericLocaleStarter(new Locale("zh"), test);
-	    /*genericRulesStarter(rules, test2);*/
+	    genericRulesStarter(rules, test2);
 	    genericLocaleStarter(new Locale("zh"), test2);
 	}
 

@@ -110,12 +110,25 @@ final class CollationParsedRuleBuilder
 		   && result > 0) { 
 		                // this condition should prevent falling off the edge of the 
 		                // world 
-		// here, we end up in a singularity - zero
-		prevresult[0] = m_table_[3 * (-- result)];
-		prevresult[1] = m_table_[3 * result + 1];
+		        // here, we end up in a singularity - zero
+		        prevresult[0] = m_table_[3 * (-- result)];
+		        prevresult[1] = m_table_[3 * result + 1];
+		   }
+           return result;
+		}
+	    
+	    final int getCEStrengthDifference(int CE, int contCE, 
+	    		int prevCE, int prevContCE) {
+			int strength = Collator.TERTIARY;
+			while(
+			((prevCE & STRENGTH_MASK_[strength]) != (CE & STRENGTH_MASK_[strength]) 
+			|| (prevContCE & STRENGTH_MASK_[strength]) != (contCE & STRENGTH_MASK_[strength]))
+			&& (strength != 0)) {
+				strength--;
+			}
+			return strength;                
 	    }
-	    return result;
-	}
+
         
         /**
          * Finding the inverse CE of the argument CEs
@@ -299,9 +312,12 @@ final class CollationParsedRuleBuilder
 								   Collator.SECONDARY);
 			listheader.m_gapsHi_[3 * st + 2] = (t1 & 0x3f) << 24 
 			    | (t2 & 0x3f) << 16;
-			pos --;
-			t1 = m_table_[3 * pos];
-			t2 = m_table_[3 * pos + 1];
+			//pos --;
+			//t1 = m_table_[3 * pos];
+			//t2 = m_table_[3 * pos + 1];
+            t1 = listheader.m_baseCE_;
+            t2 = listheader.m_baseContCE_;
+            
 			listheader.m_gapsLo_[3 * st] = mergeCE(t1, t2, 
 							       Collator.PRIMARY);
 			listheader.m_gapsLo_[3 * st + 1] = mergeCE(t1, t2, 
@@ -1500,9 +1516,10 @@ final class CollationParsedRuleBuilder
 	    if (Utility.compareUnsigned(low, 
 					RuleBasedCollator.COMMON_BOTTOM_2_ << 24) < 0) {
 		g.m_rangesLength_ = allocateWeights(
-						    RuleBasedCollator.COMMON_BOTTOM_2_ << 24, 
+						    RuleBasedCollator.BYTE_UNSHIFTED_MIN_ << 24, 
 						    high, count, maxbyte, g.m_ranges_);
-		g.m_current_ = RuleBasedCollator.COMMON_BOTTOM_2_ << 24;
+        g.m_current_ = nextWeight(g);
+		//g.m_current_ = RuleBasedCollator.COMMON_BOTTOM_2_ << 24;
 		return g.m_current_;
 	    }
 	} 
