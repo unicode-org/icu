@@ -43,40 +43,41 @@
 #define UPPER_U         ((UChar)0x0055) /*U*/
 #define LOWER_U         ((UChar)0x0075) /*u*/
 
-//// TEMPORARY: Remove when deprecated category code constructor is removed.
-//static const UChar CATEGORY_NAMES[] = {
-//    0x43, 0x6E, /* "Cn" */
-//    0x4C, 0x75, /* "Lu" */
-//    0x4C, 0x6C, /* "Ll" */
-//    0x4C, 0x74, /* "Lt" */
-//    0x4C, 0x6D, /* "Lm" */
-//    0x4C, 0x6F, /* "Lo" */
-//    0x4D, 0x6E, /* "Mn" */
-//    0x4D, 0x65, /* "Me" */
-//    0x4D, 0x63, /* "Mc" */
-//    0x4E, 0x64, /* "Nd" */
-//    0x4E, 0x6C, /* "Nl" */
-//    0x4E, 0x6F, /* "No" */
-//    0x5A, 0x73, /* "Zs" */
-//    0x5A, 0x6C, /* "Zl" */
-//    0x5A, 0x70, /* "Zp" */
-//    0x43, 0x63, /* "Cc" */
-//    0x43, 0x66, /* "Cf" */
-//    0x43, 0x6F, /* "Co" */
-//    0x43, 0x73, /* "Cs" */
-//    0x50, 0x64, /* "Pd" */
-//    0x50, 0x73, /* "Ps" */
-//    0x50, 0x65, /* "Pe" */
-//    0x50, 0x63, /* "Pc" */
-//    0x50, 0x6F, /* "Po" */
-//    0x53, 0x6D, /* "Sm" */
-//    0x53, 0x63, /* "Sc" */
-//    0x53, 0x6B, /* "Sk" */
-//    0x53, 0x6F, /* "So" */
-//    0x50, 0x69, /* "Pi" */
-//    0x50, 0x66, /* "Pf" */
-//    0x00
-//};
+// TEMPORARY: Remove when deprecated category code constructor is removed.
+static const UChar CATEGORY_NAMES[] = {
+    // Must be kept in sync with uchar.h/UCharCategory
+    0x43, 0x6E, /* "Cn" */
+    0x4C, 0x75, /* "Lu" */
+    0x4C, 0x6C, /* "Ll" */
+    0x4C, 0x74, /* "Lt" */
+    0x4C, 0x6D, /* "Lm" */
+    0x4C, 0x6F, /* "Lo" */
+    0x4D, 0x6E, /* "Mn" */
+    0x4D, 0x65, /* "Me" */
+    0x4D, 0x63, /* "Mc" */
+    0x4E, 0x64, /* "Nd" */
+    0x4E, 0x6C, /* "Nl" */
+    0x4E, 0x6F, /* "No" */
+    0x5A, 0x73, /* "Zs" */
+    0x5A, 0x6C, /* "Zl" */
+    0x5A, 0x70, /* "Zp" */
+    0x43, 0x63, /* "Cc" */
+    0x43, 0x66, /* "Cf" */
+    0x43, 0x6F, /* "Co" */
+    0x43, 0x73, /* "Cs" */
+    0x50, 0x64, /* "Pd" */
+    0x50, 0x73, /* "Ps" */
+    0x50, 0x65, /* "Pe" */
+    0x50, 0x63, /* "Pc" */
+    0x50, 0x6F, /* "Po" */
+    0x53, 0x6D, /* "Sm" */
+    0x53, 0x63, /* "Sc" */
+    0x53, 0x6B, /* "Sk" */
+    0x53, 0x6F, /* "So" */
+    0x50, 0x69, /* "Pi" */
+    0x50, 0x66, /* "Pf" */
+    0x00
+};
 
 /**
  * Delimiter string used in patterns to close a category reference:
@@ -162,24 +163,30 @@ UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
     applyPattern(pattern, pos, &symbols, status);
 }
 
-///**
-// * Constructs a set from the given Unicode character category.
-// * @param category an integer indicating the character category as
-// * returned by <code>Unicode::getType()</code>.
-// */
-//UnicodeSet::UnicodeSet(int8_t category, UErrorCode& status) :
-//    len(0), capacity(START_EXTRA), bufferCapacity(0), list(0),
-//    buffer(0)
-//{
-//    if (U_SUCCESS(status)) {
-//        if (category < 0 || category >= Unicode::GENERAL_TYPES_COUNT) {
-//            status = U_ILLEGAL_ARGUMENT_ERROR;
-//        } else {
-//            list = new UChar32[capacity];
-//            *this = getCategorySet(category);
-//        }
-//    }
-//}
+/**
+ * DEPRECATED Constructs a set from the given Unicode character category.
+ * @param category an integer indicating the character category as
+ * defined in uchar.h.
+ * @deprecated To be removed after 2002-DEC-31
+ */
+UnicodeSet::UnicodeSet(int8_t category, UErrorCode& status) :
+    len(0), capacity(START_EXTRA), bufferCapacity(0), list(0),
+    buffer(0)
+{
+    static const UChar OPEN[] = { 91, 58, 0 }; // "[:"
+    static const UChar CLOSE[]= { 58, 93, 0 }; // ":]"
+    if (U_SUCCESS(status)) {
+        if (category < 0 || category >= U_CHAR_CATEGORY_COUNT) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+        } else {
+            UnicodeString pat(FALSE, CATEGORY_NAMES + category*2, 2);
+            pat.insert(0, OPEN);
+            pat.append(CLOSE);
+            list = new UChar32[capacity];
+            applyPattern(pat, status);
+        }
+    }
+}
 
 /**
  * Constructs a set that is identical to the given UnicodeSet.
