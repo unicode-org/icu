@@ -323,7 +323,16 @@ static void TestBreakIteratorSafeClone(void)
 
     /* US & Thai - rule-based & dictionary based */
     someIterators[0] = ubrk_open(UBRK_WORD, "en_US", text, u_strlen(text), &status);
+    if(!someIterators[0] || U_FAILURE(status)) {
+      log_data_err("Couldn't open en_US word break iterator - %s\n", u_errorName(status));
+      return;
+    }
+
     someIterators[1] = ubrk_open(UBRK_WORD, "th_TH", text, u_strlen(text), &status);
+    if(!someIterators[1] || U_FAILURE(status)) {
+      log_data_err("Couldn't open th_TH word break iterator - %s\n", u_errorName(status));
+      return;
+    }
 
     /* test each type of iterator */
     for (i = 0; i < CLONETEST_ITERATOR_COUNT; i++)

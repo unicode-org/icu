@@ -2179,7 +2179,7 @@ static void TestUScriptCodeAPI(){
             }
         }
         if(numErrors >0 ){
-            log_err("Errors uchar_getScriptCode() : %i \n",numErrors);
+            log_data_err("Errors uchar_getScriptCode() : %i \n",numErrors);
         }
     }
     {
@@ -2197,7 +2197,7 @@ static void TestUScriptCodeAPI(){
                 log_err("Errors uscript_getScriptCode() for Japaneese locale \n");
             }
         }else{
-            log_err("Errors in uscript_getScriptCode() expected error : %s got: %s \n", 
+            log_data_err("Errors in uscript_getScriptCode() expected error : %s got: %s \n", 
                 "U_BUFFER_OVERFLOW_ERROR",
                  u_errorName(err));
         }
