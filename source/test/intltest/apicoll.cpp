@@ -1705,137 +1705,137 @@ void CollationAPITest::TestGetTailoredSet()
 
 void CollationAPITest::TestUClassID()
 {
-	char id = *((char *)RuleBasedCollator::getStaticClassID());
-	if (id != 0) {
-		errln("Static class id for RuleBasedCollator should be 0");
-	}
-	UErrorCode status = U_ZERO_ERROR;
-	RuleBasedCollator *coll 
-		= (RuleBasedCollator *)Collator::createInstance(status);
-	id = *((char *)coll->getDynamicClassID());
-	if (id != 0) {
-		errln("Dynamic class id for RuleBasedCollator should be 0");
-	}
-	id = *((char *)CollationKey::getStaticClassID());
-	if (id != 0) {
-		errln("Static class id for CollationKey should be 0");
-	}
-	CollationKey *key = new CollationKey();
-	id = *((char *)key->getDynamicClassID());
-	if (id != 0) {
-		errln("Dynamic class id for CollationKey should be 0");
-	}
-	id = *((char *)CollationElementIterator::getStaticClassID());
-	if (id != 0) {
-		errln("Static class id for CollationElementIterator should be 0");
-	}
-	UnicodeString str("testing");
-	CollationElementIterator *iter = coll->createCollationElementIterator(str);
-	id = *((char *)iter->getDynamicClassID());
-	if (id != 0) {
-		errln("Dynamic class id for CollationElementIterator should be 0");
-	}
-        delete key;
-	delete iter;
-	delete coll;
+    char id = *((char *)RuleBasedCollator::getStaticClassID());
+    if (id != 0) {
+        errln("Static class id for RuleBasedCollator should be 0");
+    }
+    UErrorCode status = U_ZERO_ERROR;
+    RuleBasedCollator *coll 
+        = (RuleBasedCollator *)Collator::createInstance(status);
+    id = *((char *)coll->getDynamicClassID());
+    if (id != 0) {
+        errln("Dynamic class id for RuleBasedCollator should be 0");
+    }
+    id = *((char *)CollationKey::getStaticClassID());
+    if (id != 0) {
+        errln("Static class id for CollationKey should be 0");
+    }
+    CollationKey *key = new CollationKey();
+    id = *((char *)key->getDynamicClassID());
+    if (id != 0) {
+        errln("Dynamic class id for CollationKey should be 0");
+    }
+    id = *((char *)CollationElementIterator::getStaticClassID());
+    if (id != 0) {
+        errln("Static class id for CollationElementIterator should be 0");
+    }
+    UnicodeString str("testing");
+    CollationElementIterator *iter = coll->createCollationElementIterator(str);
+    id = *((char *)iter->getDynamicClassID());
+    if (id != 0) {
+        errln("Dynamic class id for CollationElementIterator should be 0");
+    }
+    delete key;
+    delete iter;
+    delete coll;
 }
 
 class TestCollator  : public Collator
 {
 public:
     virtual Collator* clone(void) const;
-	
-	// dang, markus says we can't use 'using' in ICU.  I hate doing this for
-	// deprecated methods...
 
-	// using Collator::compare;
+    // dang, markus says we can't use 'using' in ICU.  I hate doing this for
+    // deprecated methods...
 
-	virtual EComparisonResult compare(const UnicodeString& source, 
+    // using Collator::compare;
+
+    virtual EComparisonResult compare(const UnicodeString& source, 
                                       const UnicodeString& target) const
-	{
-		return Collator::compare(source, target);
-	}
+    {
+        return Collator::compare(source, target);
+    }
 
-	virtual EComparisonResult compare(const UnicodeString& source,
+    virtual EComparisonResult compare(const UnicodeString& source,
                                       const UnicodeString& target,
                                       int32_t length) const
-	{
-		return Collator::compare(source, target, length);
-	}
+    {
+        return Collator::compare(source, target, length);
+    }
 
-	virtual EComparisonResult compare(const UChar* source, 
-		                              int32_t sourceLength, 
-									  const UChar* target, 
-									  int32_t targetLength) const
-	{
-		return Collator::compare(source, sourceLength, target, targetLength);
-	}
+    virtual EComparisonResult compare(const UChar* source, 
+                                      int32_t sourceLength, 
+                                      const UChar* target, 
+                                      int32_t targetLength) const
+    {
+        return Collator::compare(source, sourceLength, target, targetLength);
+    }
 
 
-	virtual UCollationResult compare(const UnicodeString& source, 
+    virtual UCollationResult compare(const UnicodeString& source, 
                                       const UnicodeString& target,
-									  UErrorCode& status) const;
-	virtual UCollationResult compare(const UnicodeString& source,
+                                      UErrorCode& status) const;
+    virtual UCollationResult compare(const UnicodeString& source,
                                       const UnicodeString& target,
                                       int32_t length,
-									  UErrorCode& status) const;
-	virtual UCollationResult compare(const UChar* source, 
-		                              int32_t sourceLength, 
-									  const UChar* target, 
-									  int32_t targetLength,
-									  UErrorCode& status) const;
-	virtual CollationKey& getCollationKey(const UnicodeString&  source,
+                                      UErrorCode& status) const;
+    virtual UCollationResult compare(const UChar* source, 
+                                      int32_t sourceLength, 
+                                      const UChar* target, 
+                                      int32_t targetLength,
+                                      UErrorCode& status) const;
+    virtual CollationKey& getCollationKey(const UnicodeString&  source,
                                           CollationKey& key,
                                           UErrorCode& status) const;
-	virtual CollationKey& getCollationKey(const UChar*source, 
+    virtual CollationKey& getCollationKey(const UChar*source, 
                                           int32_t sourceLength,
                                           CollationKey& key,
                                           UErrorCode& status) const;
-	virtual int32_t hashCode(void) const;
-	virtual const Locale getLocale(ULocDataLocaleType type, 
-		                           UErrorCode& status) const;
-	virtual ECollationStrength getStrength(void) const;
-	virtual void setStrength(ECollationStrength newStrength);
-	virtual UClassID getDynamicClassID(void) const;
-	virtual void getVersion(UVersionInfo info) const;
-	virtual void setAttribute(UColAttribute attr, UColAttributeValue value, 
+    virtual int32_t hashCode(void) const;
+    virtual const Locale getLocale(ULocDataLocaleType type, 
+                                   UErrorCode& status) const;
+    virtual ECollationStrength getStrength(void) const;
+    virtual void setStrength(ECollationStrength newStrength);
+    virtual UClassID getDynamicClassID(void) const;
+    virtual void getVersion(UVersionInfo info) const;
+    virtual void setAttribute(UColAttribute attr, UColAttributeValue value, 
                               UErrorCode &status);
-	virtual UColAttributeValue getAttribute(UColAttribute attr, 
+    virtual UColAttributeValue getAttribute(UColAttribute attr, 
                                             UErrorCode &status);
-	virtual uint32_t setVariableTop(const UChar *varTop, int32_t len, 
-		                            UErrorCode &status);
-	virtual uint32_t setVariableTop(const UnicodeString varTop, 
-		                            UErrorCode &status);
-	virtual void setVariableTop(const uint32_t varTop, UErrorCode &status);
-	virtual uint32_t getVariableTop(UErrorCode &status) const;
-	virtual Collator* safeClone(void);
-	virtual int32_t getSortKey(const UnicodeString& source,
+    virtual uint32_t setVariableTop(const UChar *varTop, int32_t len, 
+                                    UErrorCode &status);
+    virtual uint32_t setVariableTop(const UnicodeString varTop, 
+                                    UErrorCode &status);
+    virtual void setVariableTop(const uint32_t varTop, UErrorCode &status);
+    virtual uint32_t getVariableTop(UErrorCode &status) const;
+    virtual Collator* safeClone(void);
+    virtual int32_t getSortKey(const UnicodeString& source,
                             uint8_t* result,
                             int32_t resultLength) const;
     virtual int32_t getSortKey(const UChar*source, int32_t sourceLength,
                              uint8_t*result, int32_t resultLength) const;
     virtual UnicodeSet *getTailoredSet(UErrorCode &status) const;
-	virtual UBool operator!=(const TestCollator& other) const;
-	virtual void setLocales(const Locale& requestedLocale, const Locale& validLocale);
+    virtual UBool operator!=(const Collator& other) const;
+    virtual void setLocales(const Locale& requestedLocale, const Locale& validLocale);
 };
 
-inline UBool TestCollator::operator!=(const TestCollator& other) const {
-	return Collator::operator!=(other);
+inline UBool TestCollator::operator!=(const Collator& other) const {
+    return Collator::operator!=(other);
 }
 
 #define returnEComparisonResult(data) \
-	                    if (data < 0) return Collator::LESS;\
-			    if (data > 0) return Collator::GREATER;\
-                        return Collator::EQUAL;
+    if (data < 0) return Collator::LESS;\
+    if (data > 0) return Collator::GREATER;\
+    return Collator::EQUAL;
 
 Collator* TestCollator::clone() const
 {
-	return new TestCollator();
+    return new TestCollator();
 }
 
 UCollationResult TestCollator::compare(const UnicodeString& source, 
                                         const UnicodeString& target,
-										UErrorCode& status) const
+                                        UErrorCode& status) const
 {
   if(U_SUCCESS(status)) {
     return UCollationResult(source.compare(target));
@@ -1847,7 +1847,7 @@ UCollationResult TestCollator::compare(const UnicodeString& source,
 UCollationResult TestCollator::compare(const UnicodeString& source,
                                         const UnicodeString& target,
                                         int32_t length,
-										UErrorCode& status) const
+                                        UErrorCode& status) const
 {
   if(U_SUCCESS(status)) {
     return UCollationResult(source.compare(0, length, target));
@@ -1857,27 +1857,27 @@ UCollationResult TestCollator::compare(const UnicodeString& source,
 }
 
 UCollationResult TestCollator::compare(const UChar* source, 
-		                                int32_t sourceLength, 
-									    const UChar* target, 
-									    int32_t targetLength,
-										UErrorCode& status) const
+                                        int32_t sourceLength, 
+                                        const UChar* target, 
+                                        int32_t targetLength,
+                                        UErrorCode& status) const
 {
-	UnicodeString s(source, sourceLength);
-	UnicodeString t(target, targetLength);
-	return compare(s, t, status);
+    UnicodeString s(source, sourceLength);
+    UnicodeString t(target, targetLength);
+    return compare(s, t, status);
 }
 
 CollationKey& TestCollator::getCollationKey(const UnicodeString& source,
                                             CollationKey& key,
                                             UErrorCode& status) const
 {
-	char temp[100];
-	int length = 100;
-	length = source.extract(temp, length, NULL, status);
-	temp[length] = 0;
-	CollationKey tempkey((uint8_t*)temp, length);
-	key = tempkey;
-	return key;
+    char temp[100];
+    int length = 100;
+    length = source.extract(temp, length, NULL, status);
+    temp[length] = 0;
+    CollationKey tempkey((uint8_t*)temp, length);
+    key = tempkey;
+    return key;
 }
 
 CollationKey& TestCollator::getCollationKey(const UChar*source, 
@@ -1885,35 +1885,35 @@ CollationKey& TestCollator::getCollationKey(const UChar*source,
                                           CollationKey& key,
                                           UErrorCode& status) const
 {
-	//s tack allocation used since collationkey does not keep the unicodestring
-	UnicodeString str(source, sourceLength);
-	return getCollationKey(str, key, status);
+    //s tack allocation used since collationkey does not keep the unicodestring
+    UnicodeString str(source, sourceLength);
+    return getCollationKey(str, key, status);
 }
 
 int32_t TestCollator::getSortKey(const UnicodeString& source, uint8_t* result, 
-				                 int32_t resultLength) const
+                                 int32_t resultLength) const
 {
-	UErrorCode status = U_ZERO_ERROR;
-	int32_t length = source.extract((char *)result, resultLength, NULL, 
-		                            status);
-	result[length] = 0;
-	return length;
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t length = source.extract((char *)result, resultLength, NULL, 
+                                    status);
+    result[length] = 0;
+    return length;
 }
 
 int32_t TestCollator::getSortKey(const UChar*source, int32_t sourceLength, 
-								 uint8_t*result, int32_t resultLength) const
+                                 uint8_t*result, int32_t resultLength) const
 {
-	UnicodeString str(source, sourceLength);
-	return getSortKey(str, result, resultLength);
+    UnicodeString str(source, sourceLength);
+    return getSortKey(str, result, resultLength);
 }
 
 int32_t TestCollator::hashCode() const
 {
-	return 0;
+    return 0;
 }
 
 const Locale TestCollator::getLocale(ULocDataLocaleType type, 
-		                             UErrorCode& status) const
+                                     UErrorCode& status) const
 {
     // api not used, this is to make the compiler happy
     if (U_FAILURE(status)) {
@@ -1924,7 +1924,7 @@ const Locale TestCollator::getLocale(ULocDataLocaleType type,
 
 Collator::ECollationStrength TestCollator::getStrength() const
 {
-	return TERTIARY;
+    return TERTIARY;
 }
 
 void TestCollator::setStrength(Collator::ECollationStrength newStrength)
@@ -1935,7 +1935,7 @@ void TestCollator::setStrength(Collator::ECollationStrength newStrength)
 
 UClassID TestCollator::getDynamicClassID(void) const
 {
-	return 0;
+    return 0;
 }
 
 void TestCollator::getVersion(UVersionInfo info) const
@@ -1961,27 +1961,27 @@ UColAttributeValue TestCollator::getAttribute(UColAttribute attr,
     if (U_FAILURE(status) || attr == UCOL_ATTRIBUTE_COUNT) {
         return UCOL_OFF;
     }
-	return UCOL_DEFAULT;
+    return UCOL_DEFAULT;
 }
 
 uint32_t TestCollator::setVariableTop(const UChar *varTop, int32_t len, 
-		                          UErrorCode &status)
+                                  UErrorCode &status)
 {
     // api not used, this is to make the compiler happy
     if (U_SUCCESS(status) && (varTop == 0 || len < -1)) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
     }
-	return 0;
+    return 0;
 }
 
 uint32_t TestCollator::setVariableTop(const UnicodeString varTop, 
                                   UErrorCode &status)
 {
-	// api not used, this is to make the compiler happy
+    // api not used, this is to make the compiler happy
     if (U_SUCCESS(status) && varTop.length() == 0) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
     }
-	return 0;
+    return 0;
 }
 
 void TestCollator::setVariableTop(const uint32_t varTop, UErrorCode &status)
@@ -1999,31 +1999,31 @@ uint32_t TestCollator::getVariableTop(UErrorCode &status) const
     if (U_SUCCESS(status)) {
         return 0;
     }
-	return (uint32_t)(0xFFFFFFFFu);
+    return (uint32_t)(0xFFFFFFFFu);
 }
 
 Collator* TestCollator::safeClone(void)
 {
-	return new TestCollator();
+    return new TestCollator();
 }
 
 UnicodeSet * TestCollator::getTailoredSet(UErrorCode &status) const
 {
-	return Collator::getTailoredSet(status);
+    return Collator::getTailoredSet(status);
 }
 
 void TestCollator::setLocales(const Locale& requestedLocale, const Locale& validLocale) 
 {
-	Collator::setLocales(requestedLocale, validLocale);
+    Collator::setLocales(requestedLocale, validLocale);
 }
 
 
 void CollationAPITest::TestSubclass()
 {
-	TestCollator col1;
+    TestCollator col1;
     TestCollator col2;
     doAssert(col1 != col2, "2 instance of TestCollator should be different");
-	if (col1.hashCode() != col2.hashCode()) {
+    if (col1.hashCode() != col2.hashCode()) {
         errln("Every TestCollator has the same hashcode");
     }
     UnicodeString abc("abc", 3);
@@ -2033,30 +2033,30 @@ void CollationAPITest::TestSubclass()
               "string comparison");
     }
     CollationKey key;
-	UErrorCode status = U_ZERO_ERROR;
-	col1.getCollationKey(abc, key, status);
-	int32_t length = 0;
-	const char* bytes = (const char *)key.getByteArray(length);
+    UErrorCode status = U_ZERO_ERROR;
+    col1.getCollationKey(abc, key, status);
+    int32_t length = 0;
+    const char* bytes = (const char *)key.getByteArray(length);
     UnicodeString keyarray(bytes, length, NULL, status);
     if (abc != keyarray) {
         errln("TestCollator collationkey API is returning wrong values");
     }
 
-	UnicodeSet expectedset(0, 0x10FFFF);
-	UnicodeSet *defaultset = col1.getTailoredSet(status);
-	if (!defaultset->containsAll(expectedset) 
-	    || !expectedset.containsAll(*defaultset)) {
-		errln("Error: expected default tailoring to be 0 to 0x10ffff");
-	}
-	delete defaultset;
+    UnicodeSet expectedset(0, 0x10FFFF);
+    UnicodeSet *defaultset = col1.getTailoredSet(status);
+    if (!defaultset->containsAll(expectedset) 
+        || !expectedset.containsAll(*defaultset)) {
+        errln("Error: expected default tailoring to be 0 to 0x10ffff");
+    }
+    delete defaultset;
 
-	// use base class implementation
-	Locale loc1 = Locale::getGermany();
-	Locale loc2 = Locale::getFrance();
-	col1.setLocales(loc1, loc2); // default implementation has no effect
+    // use base class implementation
+    Locale loc1 = Locale::getGermany();
+    Locale loc2 = Locale::getFrance();
+    col1.setLocales(loc1, loc2); // default implementation has no effect
 
-	UnicodeString displayName;
-	col1.getDisplayName(loc1, loc2, displayName); // de_DE collator in fr_FR locale
+    UnicodeString displayName;
+    col1.getDisplayName(loc1, loc2, displayName); // de_DE collator in fr_FR locale
 }
 
 void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par */)
@@ -2084,7 +2084,7 @@ void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &n
         case 18: name = "TestBounds"; if (exec) TestBounds(); break;
         case 19: name = "TestGetTailoredSet"; if (exec) TestGetTailoredSet(); break;
         case 20: name = "TestUClassID"; if (exec) TestUClassID(); break;
-		case 21: name = "TestSubclass"; if (exec) TestSubclass(); break;
+        case 21: name = "TestSubclass"; if (exec) TestSubclass(); break;
         default: name = ""; break;
     }
 }
