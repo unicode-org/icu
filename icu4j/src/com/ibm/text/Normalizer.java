@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Normalizer.java,v $ 
- * $Date: 2001/11/01 00:16:01 $ 
- * $Revision: 1.12 $
+ * $Date: 2001/11/21 00:56:22 $ 
+ * $Revision: 1.13 $
  *
  *****************************************************************************************
  */
@@ -845,26 +845,35 @@ public final class Normalizer {
 
     private static void bubbleAppend(StringBuffer target, char ch, int cclass) {
         if (DEBUG) System.out.println(" bubbleAppend(" + Utility.hex(target) + ", " + Utility.hex(ch) + ", " + cclass + ")" );
-        if (DEBUG) System.out.println("  getComposeClass(" + Utility.hex(ch) + ")=" + getComposeClass(ch));
-        int i;
-        for (i = target.length() - 1; i >= 0; --i) {
-            int iClass = getComposeClass(target.charAt(i));
-            if (DEBUG) System.out.println(" bubbleAppend: target[" + i + "]=" + Utility.hex(target.charAt(i)) + " is class " + iClass);
-
-            if (iClass == 1 || iClass <= cclass) {      // 1 means combining class 0
-                // We've hit something we can't bubble this character past, so insert here
-                break;
+        if (DEBUG) System.out.println(" getComposeClass(" + Utility.hex(ch) + ")=" + getComposeClass(ch) );       
+        if (DEBUG) System.out.println(" target before bubbling is : " + Utility.hex(target));
+        
+        int i = target.length()-1;
+        if (cclass != 1) {      // 1 means combining class 0!!!
+            for (; i >= 0; --i ) {
+                int iClass = getComposeClass(target.charAt(i));
+                if (DEBUG) System.out.println("  getComposeClass(" + Utility.hex(target.charAt(i)) + ")=" + getComposeClass(target.charAt(i)) );   
+                if (DEBUG) System.out.println(" bubbleAppend: target[" + i + "]=" + Utility.hex(target.charAt(i)) + " is iClass=" + iClass + " CC="+ UCharacter.getCombiningClass(target.charAt(i)));
+                if (DEBUG) System.out.println(" bubbleAppend: for ch="+ Utility.hex(ch) + " class="+cclass + " CC=" + UCharacter.getCombiningClass(ch));
+                if (iClass <= cclass) {
+                    // We've hit something we can't bubble this character past, so insert here
+                    break;
+                }
             }
         }
         // We need to insert just after character "i"
-        if (DEBUG) System.out.println(" bubbleAppend inserting at index " + (i+1));
+        if (DEBUG) System.out.println(" bubbleAppend inserting "+ Utility.hex(ch)+" at index " + (i+1));
+        
         target.insert(i+1, ch);
+        
+        if (DEBUG) System.out.println(" target is : " + Utility.hex(target));
     }
 
     private static int getComposeClass(char ch) {
         int cclass = 0;
         int charInfo = composeLookup(ch);
         int type = charInfo & ComposeData.TYPE_MASK;
+        if(DEBUG) System.out.println(Utility.hex(ch) + " charInfo: " +charInfo + " type : " +type);
         if (type == ComposeData.COMBINING) {
             cclass = ComposeData.typeBit[charInfo >>> ComposeData.INDEX_SHIFT];
         }
