@@ -353,7 +353,7 @@ static void writeOutInverseData(InverseUCATableHeader *data,
     uprv_memcpy(&invUcaInfo, &invUcaDataInfo, sizeof(UDataInfo));
     u_getUnicodeVersion(invUcaInfo.dataVersion);
 
-    pData=udata_create(outputDir, INVC_DATA_TYPE, U_ICUDATA_NAME "_" INVC_DATA_NAME, &invUcaInfo,
+    pData=udata_create(outputDir, INVC_DATA_TYPE, INVC_DATA_NAME, &invUcaInfo,
                        copyright, status);
 
     if(U_FAILURE(*status)) {
@@ -364,7 +364,7 @@ static void writeOutInverseData(InverseUCATableHeader *data,
     /* write the data to the file */
     if (VERBOSE) {
         fprintf(stdout, "Writing out inverse UCA table: %s%c%s.%s\n", outputDir, U_FILE_SEP_CHAR,
-                                                                U_ICUDATA_NAME "_" INVC_DATA_NAME,
+                                                                INVC_DATA_NAME,
                                                                 INVC_DATA_TYPE);
     }
     udata_writeBlock(pData, data, data->byteSize);
@@ -700,7 +700,7 @@ void writeOutData(UCATableHeader *data,
     uprv_memcpy(&ucaInfo, &ucaDataInfo, sizeof(UDataInfo));
     u_getUnicodeVersion(ucaInfo.dataVersion);
 
-    pData=udata_create(outputDir, UCA_DATA_TYPE, U_ICUDATA_NAME "_" UCA_DATA_NAME, &ucaInfo,
+    pData=udata_create(outputDir, UCA_DATA_TYPE, UCA_DATA_NAME, &ucaInfo,
                        copyright, status);
 
     if(U_FAILURE(*status)) {
@@ -1104,16 +1104,16 @@ int main(int argc, char* argv[]) {
     UNewDataMemory *pData;
     const char *msg;
     
-    msg = "genuca writes dummy " U_ICUDATA_NAME "_" UCA_DATA_NAME "." UCA_DATA_TYPE " because of UCONFIG_NO_COLLATION, see uconfig.h";
+    msg = "genuca writes dummy " UCA_DATA_NAME "." UCA_DATA_TYPE " because of UCONFIG_NO_COLLATION, see uconfig.h";
     fprintf(stderr, "%s\n", msg);
-    pData = udata_create(destdir, UCA_DATA_TYPE, U_ICUDATA_NAME "_" UCA_DATA_NAME, &dummyDataInfo,
+    pData = udata_create(destdir, UCA_DATA_TYPE, UCA_DATA_NAME, &dummyDataInfo,
                          NULL, &status);
     udata_writeBlock(pData, msg, strlen(msg));
     udata_finish(pData, &status);
 
-    msg = "genuca writes dummy " U_ICUDATA_NAME "_" INVC_DATA_NAME "." INVC_DATA_TYPE " because of UCONFIG_NO_COLLATION, see uconfig.h";
+    msg = "genuca writes dummy " INVC_DATA_NAME "." INVC_DATA_TYPE " because of UCONFIG_NO_COLLATION, see uconfig.h";
     fprintf(stderr, "%s\n", msg);
-    pData = udata_create(destdir, INVC_DATA_TYPE, U_ICUDATA_NAME "_" INVC_DATA_NAME, &dummyDataInfo,
+    pData = udata_create(destdir, INVC_DATA_TYPE, INVC_DATA_NAME, &dummyDataInfo,
                          NULL, &status);
     udata_writeBlock(pData, msg, strlen(msg));
     udata_finish(pData, &status);

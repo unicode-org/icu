@@ -198,6 +198,38 @@ CharList *pkg_appendToList(CharList *l, CharList** end, const char *str)
   return l;
 }
 
+CharList *pkg_appendFromStrings(CharList *l, CharList** end, const char *s, int32_t len)
+{
+  CharList *endptr = NULL;
+  const char *p;
+  char *t;
+  const char *targ;
+  if(end == NULL) {
+    end = &endptr;
+  }
+
+  if(len==-1) {
+    len = uprv_strlen(s);
+  }
+  targ = s+len;
+  
+  while(*s && s<targ) {
+    while(s<targ&&isspace(*s)) s++;
+    for(p=s;s<targ&&!isspace(*p);p++);
+    if(p!=s) {
+      t = uprv_malloc(p-s+1);
+      uprv_strncpy(t,s,p-s);
+      t[p-s]=0;
+      l=pkg_appendToList(l,end,t);
+      fprintf(stderr, " P %s\n", t);
+    }
+    s=p;
+  }
+  
+  return l;
+}
+
+
 /*
  * Delete list 
  */

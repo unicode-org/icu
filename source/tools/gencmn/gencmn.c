@@ -98,6 +98,7 @@ typedef struct {
 
 static File files[MAX_FILE_COUNT];
 static uint32_t fileCount=0;
+static UBool embed = FALSE;
 
 /* prototypes --------------------------------------------------------------- */
 
@@ -109,6 +110,9 @@ allocString(uint32_t length);
 
 static int
 compareFiles(const void *file1, const void *file2);
+
+static char * 
+pathToFullPath(const char *path);
 
 /* -------------------------------------------------------------------------- */
 
@@ -122,7 +126,9 @@ static UOption options[]={
 /*6*/ UOPTION_DEF( "name", 'n', UOPT_REQUIRES_ARG),
 /*7*/ UOPTION_DEF( "type", 't', UOPT_REQUIRES_ARG),
 /*8*/ UOPTION_DEF( "source", 'S', UOPT_NO_ARG),
-/*9*/ UOPTION_DEF( "entrypoint", 'e', UOPT_REQUIRES_ARG)
+/*9*/ UOPTION_DEF( "entrypoint", 'e', UOPT_REQUIRES_ARG),
+/*10*/UOPTION_SOURCEDIR,
+/*11*/    UOPTION_DEF( "embed", 'E', UOPT_NO_ARG)
 };
 
 static char *symPrefix = NULL;
@@ -144,6 +150,7 @@ main(int argc, char* argv[]) {
     options[4].value=u_getDataDirectory();
     options[6].value=COMMON_DATA_NAME;
     options[7].value=DATA_TYPE;
+    options[10].value=".";
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
 
     /* error handling, printing usage message */
@@ -154,6 +161,11 @@ main(int argc, char* argv[]) {
     } else if(argc<2) {
         argc=-1;
     }
+
+    if(options[11].doesOccur) {
+      embed = TRUE;
+    }
+
     if(argc<0 || options[0].doesOccur || options[1].doesOccur) {
         FILE *where = argc < 0 ? stderr : stdout;
         
@@ -314,7 +326,7 @@ main(int argc, char* argv[]) {
             length=files[i].fileSize;
 
             if (nread != files[i].fileSize) {
-                fprintf(stderr, "gencmn: unable to read %s properly (got %ld/%ld byte%s)\n", files[i].pathname, (long)nread, (long)files[i].fileSize, files[i].fileSize == 1 ? "" : "s");
+              fprintf(stderr, "gencmn: unable to read %s properly (got %ld/%ld byte%s)\n", files[i].pathname,  (long)nread, (long)files[i].fileSize, files[i].fileSize == 1 ? "" : "s");
                 exit(U_FILE_ACCESS_ERROR);
             }
         }
@@ -368,16 +380,18 @@ main(int argc, char* argv[]) {
 
 
 #if 0
-        symPrefix = (char *) uprv_malloc(uprv_strlen(entrypointName) + 2);
-
-        /* test for NULL */
-	if (symPrefix == NULL) {
+        if(!embed) {
+          symPrefix = (char *) uprv_malloc(uprv_strlen(entrypointName) + 2);
+          
+          /* test for NULL */
+          if (symPrefix == NULL) {
 	    sprintf(buffer, "U_MEMORY_ALLOCATION_ERROR");
 	    exit(U_MEMORY_ALLOCATION_ERROR);
-	}
-
-        uprv_strcpy(symPrefix, entrypointName);
-        uprv_strcat(symPrefix, "_");
+          }
+          
+          uprv_strcpy(symPrefix, entrypointName);
+          uprv_strcat(symPrefix, "_");
+        }
 #endif
 
         /* write the source file */
@@ -453,6 +467,7 @@ static void
 addFile(const char *filename, UBool sourceTOC, UBool verbose) {
     char *s;
     uint32_t length;
+    char *fullPath = NULL;
 
     if(fileCount==MAX_FILE_COUNT) {
         fprintf(stderr, "gencmn: too many files, maximum is %d\n", MAX_FILE_COUNT);
@@ -461,39 +476,54 @@ addFile(const char *filename, UBool sourceTOC, UBool verbose) {
 
     if(!sourceTOC) {
         FileStream *file;
+        char *fullPath;
+
+        fullPath = pathToFullPath(filename);
 
         /* store the pathname */
-        length = (uint32_t)(uprv_strlen(filename) + 1);
-        s=allocString(length);
-        uprv_memcpy(s, filename, length);
-        files[fileCount].pathname=s;
+        if(!embed) {
+          length = (uint32_t)(uprv_strlen(filename) + 1 + uprv_strlen(options[6].value) + 1);
+          s=allocString(length);
+          uprv_strcpy(s, options[6].value);
+          uprv_strcat(s, U_TREE_SEPARATOR_STRING);
+          uprv_strcat(s, filename);
+        } else {
+          /* compatibility mode */
+          const char *base;
+          base = findBasename(filename);
+          length = (uint32_t)(uprv_strlen(base) + 1);
+          s=allocString(length);
+          uprv_memcpy(s, base, length);
+        }
 
         /* get the basename */
-        s=(char *)findBasename(s);
         files[fileCount].basename=s;
-        length = (uint32_t)(uprv_strlen(s) + 1);
         files[fileCount].basenameLength=length;
+
+        files[fileCount].pathname=fullPath;
+
         basenameTotal+=length;
 
         /* try to open the file */
-        file=T_FileStream_open(filename, "rb");
+        file=T_FileStream_open(fullPath, "rb");
         if(file==NULL) {
-            fprintf(stderr, "gencmn: unable to open listed file %s\n", filename);
+            fprintf(stderr, "gencmn: unable to open listed file %s\n", fullPath);
             exit(U_FILE_ACCESS_ERROR);
         }
 
         /* get the file length */
         length=T_FileStream_size(file);
         if(T_FileStream_error(file) || length<=20) {
-            fprintf(stderr, "gencmn: unable to get length of listed file %s\n", filename);
+            fprintf(stderr, "gencmn: unable to get length of listed file %s\n", fullPath);
             exit(U_FILE_ACCESS_ERROR);
         }
+        
         T_FileStream_close(file);
 
         /* do not add files that are longer than maxSize */
         if(maxSize && length>maxSize) {
             if (verbose) {
-                printf("%s ignored (size %ld > %ld)\n", filename, (long)length, (long)maxSize);
+                printf("%s ignored (size %ld > %ld)\n", fullPath, (long)length, (long)maxSize);
             }
             return;
         }
@@ -501,17 +531,29 @@ addFile(const char *filename, UBool sourceTOC, UBool verbose) {
     } else {
         char *t;
 
+        if(embed) {
+          filename = findBasename(filename);
+        }
         /* get and store the basename */
-        filename=findBasename(filename);
-        length = (uint32_t)(uprv_strlen(filename) + 1);
-        s=allocString(length);
-        uprv_memcpy(s, filename, length);
+        if(!embed) {
+          /* need to include the package name */
+          length = (uint32_t)(uprv_strlen(filename) + 1 + uprv_strlen(options[6].value) + 1);
+          s=allocString(length);
+          uprv_strcpy(s, options[6].value);
+          uprv_strcat(s, "/");
+          uprv_strcat(s, filename);
+        } else {
+          length = (uint32_t)(uprv_strlen(filename) + 1);
+          s=allocString(length);
+          uprv_memcpy(s, filename, length);
+        }
         files[fileCount].basename=s;
+
 
         /* turn the basename into an entry point name and store in the pathname field */
         t=files[fileCount].pathname=allocString(length);
         while(--length>0) {
-            if(*s=='.' || *s=='-') {
+            if(*s=='.' || *s=='-' || *s=='/') {
                 *t='_';
             } else {
                 *t=*s;
@@ -521,7 +563,6 @@ addFile(const char *filename, UBool sourceTOC, UBool verbose) {
         }
         *t=0;
     }
-
     ++fileCount;
 }
 
@@ -537,6 +578,38 @@ allocString(uint32_t length) {
     p=stringStore+stringTop;
     stringTop=top;
     return p;
+}
+
+static char * 
+pathToFullPath(const char *path) {
+  int32_t length;
+  int32_t newLength;
+  char *fullPath;
+  int32_t n;
+
+  length = (uint32_t)(uprv_strlen(path) + 1);
+  newLength = (length + 1 + uprv_strlen(options[10].value));
+  fullPath = uprv_malloc(newLength);
+  if(options[10].doesOccur) {
+    uprv_strcpy(fullPath, options[10].value);
+    uprv_strcat(fullPath, U_FILE_SEP_STRING);
+  } else {
+    fullPath[0] = 0;
+  }
+  n = uprv_strlen(fullPath);
+  uprv_strcat(fullPath, path);
+  
+  if(!embed) {
+    if(U_FILE_SEP_CHAR != U_TREE_SEPARATOR) {
+      /* replace tree separator (such as '/') with file sep char (such as ':' or '\\') */
+      for(;fullPath[n];n++) {
+        if(fullPath[n] == U_TREE_SEPARATOR) {
+          fullPath[n] = U_FILE_SEP_CHAR;
+        }
+      }
+    }
+  }
+  return fullPath;
 }
 
 static int
