@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterCompare.java,v $ 
-* $Date: 2002/02/22 03:43:32 $ 
-* $Revision: 1.9 $
+* $Date: 2002/04/04 00:52:31 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -41,6 +41,7 @@ public final class UCharacterCompare
   */
   public static void main(String arg[])
   {
+  	System.out.println("Starting character compare");
     try
     {
       FileWriter f;
@@ -53,6 +54,7 @@ public final class UCharacterCompare
       p.println("method name               ucharacter character");
       for (char i = Character.MIN_VALUE; i < Character.MAX_VALUE; i ++)
       {
+      	System.out.println("character \\u" + Integer.toHexString(i));
         if (UCharacter.isDefined(i) != Character.isDefined(i))
           trackDifference(p, i, "isDefined()", "" + UCharacter.isDefined(i), 
                           "" + Character.isDefined(i));
@@ -275,7 +277,7 @@ public final class UCharacterCompare
 	  StringBuffer s = new StringBuffer(temp);
 	  for (int i = 0; i < 6 - temp.length(); i ++)
 	    s.append(' ');
-	  temp = UCharacter.getName(ch);
+	  temp = UCharacter.getExtendedName(ch);
 	  if (temp == null)
 	    temp = " ";
 	  s.append(temp);

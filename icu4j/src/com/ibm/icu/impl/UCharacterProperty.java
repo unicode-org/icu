@@ -6,8 +6,8 @@
 *
 * $Source: 
 *         /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterPropertyDB.java $ 
-* $Date: 2002/04/03 00:00:00 $ 
-* $Revision: 1.7 $
+* $Date: 2002/04/04 00:52:27 $ 
+* $Revision: 1.8 $
 *
 *******************************************************************************
 */
@@ -101,9 +101,21 @@ public final class UCharacterProperty implements Trie.DataManipulate
      */
     public static final int EXC_COMBINING_CLASS_ = 9;
     /**
-     * Numeric type for general numbers
+     * Non numeric type
      */
-    public static final int GENERAL_NUMERIC_TYPE_ = 1;
+    public static final int NON_NUMERIC_TYPE_ = 0;
+    /**
+     * Numeric type for decimal digits
+     */
+    public static final int DECIMAL_DIGIT_NUMERIC_TYPE_ = 1;
+    /**
+     * Numeric type for digits
+     */
+    public static final int DIGIT_NUMERIC_TYPE_ = 2;
+    /**
+     * Numeric type for non digits numbers
+     */
+    public static final int NON_DIGIT_NUMERIC_TYPE_ = 3;
     /**
      * Maximum number of expansion for a case mapping
      */

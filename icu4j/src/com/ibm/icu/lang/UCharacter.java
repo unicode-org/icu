@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/04/03 04:32:00 $ 
-* $Revision: 1.36 $
+* $Date: 2002/04/04 00:52:40 $ 
+* $Revision: 1.37 $
 *
 *******************************************************************************
 */
@@ -140,7 +140,7 @@ public final class UCharacter
         int numericType = UCharacterProperty.getNumericType(props);
         
         int result = -1;
-        if (numericType == UCharacterProperty.GENERAL_NUMERIC_TYPE_) {
+        if (numericType == UCharacterProperty.DECIMAL_DIGIT_NUMERIC_TYPE_) {
         	// if props == 0, it will just fall through and return -1
         	if (!UCharacterProperty.isExceptionIndicator(props)) {
             	// not contained in exception data
@@ -1797,18 +1797,19 @@ public final class UCharacter
         int numericType = UCharacterProperty.getNumericType(props);
         
         int result = -1;
-        if (numericType == UCharacterProperty.GENERAL_NUMERIC_TYPE_) {
+        if (numericType != UCharacterProperty.NON_NUMERIC_TYPE_) {
         	// if props == 0, it will just fall through and return -1
+        	if (numericType == UCharacterProperty.NON_DIGIT_NUMERIC_TYPE_ 
+            	/* && PROPERTY_.hasExceptionValue(index, 
+                      UCharacterProperty.EXC_DENOMINATOR_VALUE_)*/) {
+			    return -2;
+            }
         	if (!UCharacterProperty.isExceptionIndicator(props)) {
             	// not contained in exception data
             	result = UCharacterProperty.getSignedValue(props);
             }
             else {
             	int index = UCharacterProperty.getExceptionIndex(props);
-            	if (PROPERTY_.hasExceptionValue(index, 
-                               UCharacterProperty.EXC_DENOMINATOR_VALUE_)) {
-                    return -2;
-                }
             	if (PROPERTY_.hasExceptionValue(index, 
                                    UCharacterProperty.EXC_NUMERIC_VALUE_)) {
                 	result = PROPERTY_.getException(index, 
