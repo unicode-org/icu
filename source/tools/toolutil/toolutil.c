@@ -27,8 +27,8 @@
 #include "cstring.h"
 #include "toolutil.h"
 
-U_CFUNC char *
-getLongPathname(char *pathname) {
+U_CFUNC const char *
+getLongPathname(const char *pathname) {
 #ifdef WIN32
     /* anticipate problems with "short" pathnames */
     static WIN32_FIND_DATA info;
