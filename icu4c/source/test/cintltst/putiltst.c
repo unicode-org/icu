@@ -45,7 +45,7 @@ static void TestPUtilAPI(){
     int32_t hi=0;
     uint32_t lo=0;
     UVersionInfo versionArray = {0x01, 0x00, 0x02, 0x02};
-    char versionString[10];
+    char versionString[17]; /* xxx.xxx.xxx.xxx\0 */
     char *str=0;
     UBool isTrue=FALSE;
 
