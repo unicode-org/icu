@@ -753,6 +753,7 @@ void ucol_initUCA(UErrorCode *status) {
 /*                          normalize it into the collIterate's writable buffer,          */
 /*                          switch the collIterate's state to use the writable buffer.    */
 /*                                                                                        */
+static
 void collIterNormalize(collIterate *collationSource)
 {
     UErrorCode  status = U_ZERO_ERROR;
@@ -1022,21 +1023,21 @@ inline uint32_t ucol_IGetNextCE(const UCollator *coll, collIterate *collationSou
           /*    because all of the UCA data is replicated in the latinOneMapping array  */
           order = coll->latinOneMapping[ch];
           if (order > UCOL_NOT_FOUND) {
-              order = getSpecialCE(coll, ch, order, collationSource, status);
+              order = ucol_prv_getSpecialCE(coll, ch, order, collationSource, status);
           }
       }
       else
       {
           order = ucmpe32_get(coll->mapping, ch);                             /* we'll go for slightly slower trie */
           if(order > UCOL_NOT_FOUND) {                                       /* if a CE is special                */
-              order = getSpecialCE(coll, ch, order, collationSource, status);    /* and try to get the special CE     */
+              order = ucol_prv_getSpecialCE(coll, ch, order, collationSource, status);    /* and try to get the special CE     */
           }
           if(order == UCOL_NOT_FOUND) {   /* We couldn't find a good CE in the tailoring */
             /* if we got here, the codepoint MUST be over 0xFF - so we look directly in the trie */
             order = ucmpe32_get(UCA->mapping, ch);
 
             if(order > UCOL_NOT_FOUND) { /* UCA also gives us a special CE */
-              order = getSpecialCE(UCA, ch, order, collationSource, status);
+              order = ucol_prv_getSpecialCE(UCA, ch, order, collationSource, status);
             }
           }
       }
@@ -1055,6 +1056,7 @@ U_CAPI uint32_t ucol_getNextCE(const UCollator *coll, collIterate *collationSour
 * switch the collIterate's state to use the writable buffer.
 * @param data collation iterator data
 */
+static
 void collPrevIterNormalize(collIterate *data)
 {
     UErrorCode status  = U_ZERO_ERROR;
@@ -1319,13 +1321,13 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
         contraction
         */
         if (ucol_contractionEndCP(ch, coll) && !isAtStartPrevIterate(data)) {
-            result = getSpecialPrevCE(coll, ch, UCOL_CONTRACTION, data, status);
+            result = ucol_prv_getSpecialPrevCE(coll, ch, UCOL_CONTRACTION, data, status);
         }
         else {
             if (ch <= 0xFF) {
               result = coll->latinOneMapping[ch];
               if (result > UCOL_NOT_FOUND) {
-                    result = getSpecialPrevCE(coll, ch, result, data, status);
+                    result = ucol_prv_getSpecialPrevCE(coll, ch, result, data, status);
               }
             }
             else {
@@ -1339,7 +1341,7 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
                     result = ucmpe32_get(coll->mapping, ch);
                 }
                 if (result > UCOL_NOT_FOUND) {
-                    result = getSpecialPrevCE(coll, ch, result, data, status);
+                    result = ucol_prv_getSpecialPrevCE(coll, ch, result, data, status);
                 }
                 if (result == UCOL_NOT_FOUND) {
                   if (!isAtStartPrevIterate(data) &&
@@ -1351,7 +1353,7 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
                   }
 
                   if (result > UCOL_NOT_FOUND) {
-                    result = getSpecialPrevCE(UCA, ch, result, data, status);
+                    result = ucol_prv_getSpecialPrevCE(UCA, ch, result, data, status);
                   }
                 }
             }
@@ -1629,7 +1631,7 @@ inline void setDiscontiguosAttribute(collIterate *source, UChar *buffer,
     fcdposition = pos, pos = start of normalization buffer. if pos in
     normalization buffer, we'll insert the copy infront of pos and point pos
     to the start of the normalization buffer. why am i doing these copies?
-    well, so that the whole chunk of codes in the getNextCE, getSpecialCE does
+    well, so that the whole chunk of codes in the getNextCE, ucol_prv_getSpecialCE does
     not require any changes, which be really painful. */
     uint32_t length = u_strlen(buffer);;
     if (source->flags & UCOL_ITER_INNORMBUF) {
@@ -1661,6 +1663,7 @@ inline void setDiscontiguosAttribute(collIterate *source, UChar *buffer,
 * @param constart index to the start character in the contraction table
 * @return discontiguos collation element offset
 */
+static
 uint32_t getDiscontiguous(const UCollator *coll, collIterate *source,
                                 const UChar *constart)
 {
@@ -1792,11 +1795,13 @@ inline uint32_t getImplicit(UChar32 cp, collIterate *collationSource, uint32_t h
   return (r & UCOL_PRIMARYMASK) | 0x00000505; // This was 'order'
 }
 
+static
 inline UChar getPrevNormalizedChar(collIterate *data);
 
 /* This function handles the special CEs like contractions, expansions, surrogates, Thai */
 /* It is called by getNextCE */
-uint32_t getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate *source, UErrorCode *status) {
+
+uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate *source, UErrorCode *status) {
   collIterateState entryState;
   backupState(source, &entryState);
 
@@ -1870,7 +1875,7 @@ uint32_t getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, collIterate 
         // prefix data is stored backwards in the table.
         const UChar *UCharOffset;
         UChar schar, tchar;
-        UChar32 normOutput = 0;
+        //UChar32 normOutput = 0;
         collIterateState prefixState;
         backupState(source, &prefixState);
         loadState(source, &entryState, TRUE);
@@ -2289,6 +2294,7 @@ inline void normalizePrevContraction(collIterate *data)
 * @param data collation element iterator data
 * @return previous character
 */
+static
 inline UChar getPrevNormalizedChar(collIterate *data)
 {
     UChar  prevch;
@@ -2404,7 +2410,7 @@ inline uint32_t getPrevImplicit(UChar32 cp, collIterate *collationSource, uint32
 * surrogates, Thai.
 * It is called by both getPrevCE
 */
-uint32_t getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
+uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                           collIterate *source,
                           UErrorCode *status)
 {
@@ -2485,7 +2491,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
         collIterateState prefixState;
         backupState(source, &prefixState);
         //UChar *sourcePointer = source->pos;
-        UChar32 normOutput = 0;
+        //UChar32 normOutput = 0;
         for(;;) {
         // This loop will run once per source string character, for as long as we
         //  are matching a potential contraction sequence                  
@@ -2770,6 +2776,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
 /* This should really be a macro        */
 /* However, it is used only when stack buffers are not sufficiently big, and then we're messed up performance wise */
 /* anyway */
+static
 uint8_t *reallocateBuffer(uint8_t **secondaries, uint8_t *secStart, uint8_t *second, uint32_t *secSize, uint32_t newSize, UErrorCode *status) {
 #ifdef UCOL_DEBUG
   fprintf(stderr, ".");
@@ -2966,7 +2973,7 @@ int32_t ucol_getSortKeySize(const UCollator *coll, collIterate *s, int32_t curre
     UBool  compareIdent = (strength == UCOL_IDENTICAL);
     UBool  doCase = (coll->caseLevel == UCOL_ON);
     UBool  shifted = (coll->alternateHandling == UCOL_SHIFTED);
-    UBool  qShifted = shifted  && (compareQuad == 0);
+    //UBool  qShifted = shifted  && (compareQuad == 0);
     UBool  doHiragana = (coll->hiraganaQ == UCOL_ON) && (compareQuad == 0);
     UBool  isFrenchSec = (coll->frenchCollation == UCOL_ON) && (compareSec == 0);
     uint8_t fSecsBuff[UCOL_FSEC_BUF_SIZE];
@@ -3313,7 +3320,7 @@ ucol_calcSortKey(const    UCollator    *coll,
     UBool  doCase = (coll->caseLevel == UCOL_ON);
     UBool  isFrenchSec = (coll->frenchCollation == UCOL_ON) && (compareSec == 0);
     UBool  shifted = (coll->alternateHandling == UCOL_SHIFTED);
-    UBool  qShifted = shifted && (compareQuad == 0);
+    //UBool  qShifted = shifted && (compareQuad == 0);
     UBool  doHiragana = (coll->hiraganaQ == UCOL_ON) && (compareQuad == 0);
     const uint8_t *scriptOrder = coll->scriptOrder;
 
@@ -4693,6 +4700,7 @@ U_CAPI UBool isTailored(const UCollator *coll, const UChar u, UErrorCode *status
 /*      TODO:  make an incremental NFD Comparison function, which could      */
 /*             be of general use                                             */
 
+static
 UCollationResult    ucol_checkIdent(collIterate *sColl, collIterate *tColl, UBool normalize)
 {
     int32_t            comparison;
@@ -4799,6 +4807,7 @@ inline void UCOL_INIT_CEBUF(ucol_CEBuf *b) {
     (b)->endp = (b)->buf + UCOL_CEBUF_SIZE;
 };
 
+static
 void ucol_CEBuf_Expand(ucol_CEBuf *b, collIterate *ci) {
     uint32_t  oldSize;
     uint32_t  newSize;

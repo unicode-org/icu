@@ -25,6 +25,8 @@
 #include "uhash.h"
 #include "unicode/parseerr.h"
 
+U_NAMESPACE_BEGIN
+
 #define UCOL_TOK_UNSET 0xFFFFFFFF
 #define UCOL_TOK_RESET 0xDEADBEEF
 
@@ -138,6 +140,8 @@ U_CAPI const UChar U_EXPORT2 *ucol_tok_parseNextToken(UColTokenParser *src,
 U_CFUNC int32_t uhash_hashTokens(const UHashTok k);
 U_CFUNC UBool uhash_compareTokens(const UHashTok key1, const UHashTok key2);
 U_CFUNC void deleteToken(void *token);
+
+U_NAMESPACE_END
 
 #endif
 

@@ -581,6 +581,8 @@ inline UTextOffset getNextSafeOffset(const UCollator   *collator,
 * @return TRUE if there is non-ignorable accents before at the beginning
 *              of the match, FALSE otherwise.
 */
+
+static
 UBool checkExtraMatchAccents(const UStringSearch *strsrch, UTextOffset  start,
                                    UTextOffset    end,     
                                    UErrorCode    *status)
@@ -663,6 +665,7 @@ UBool checkExtraMatchAccents(const UStringSearch *strsrch, UTextOffset  start,
 * @return TRUE if there are accents on either side of the match, 
 *         FALSE otherwise
 */
+static
 UBool hasAccentsBeforeMatch(const UStringSearch *strsrch, UTextOffset start,
                                   UTextOffset    end) 
 {
@@ -734,6 +737,7 @@ UBool hasAccentsBeforeMatch(const UStringSearch *strsrch, UTextOffset start,
 * @return TRUE if there are accents on either side of the match, 
 *         FALSE otherwise
 */
+static
 UBool hasAccentsAfterMatch(const UStringSearch *strsrch, UTextOffset start,               
                                  UTextOffset    end) 
 {
@@ -869,6 +873,8 @@ inline UTextOffset getColElemIterOffset(const UCollationElements *coleiter,
 * @param status error status if any
 * @return TRUE if match passes the contraction test, FALSE otherwise
 */
+
+static
 UBool checkNextExactContractionMatch(UStringSearch *strsrch, 
                                      UTextOffset   *start, 
                                      UTextOffset   *end, UErrorCode  *status) 
@@ -1129,6 +1135,7 @@ inline UBool checkCollationMatch(const UStringSearch      *strsrch,
 * @return USEARCH_DONE if a match is not found, otherwise return the starting
 *         offset of the match. Note this start includes all preceding accents.
 */
+static
 UTextOffset doNextCanonicalPrefixMatch(UStringSearch *strsrch, 
                                        UTextOffset    start,
                                        UTextOffset    end,     
@@ -1253,6 +1260,7 @@ inline void cleanUpSafeText(const UStringSearch *strsrch, UChar *safetext,
 * @return USEARCH_DONE if a match is not found, otherwise return the starting
 *         offset of the match. Note this start includes all preceding accents.
 */
+static
 UTextOffset doNextCanonicalSuffixMatch(UStringSearch *strsrch, 
                                        UTextOffset    textoffset,
                                        UErrorCode    *status)
@@ -1370,6 +1378,7 @@ UTextOffset doNextCanonicalSuffixMatch(UStringSearch *strsrch,
 * @param status error status if any
 * @return TRUE if the match is valid, FALSE otherwise
 */
+static
 UBool doNextCanonicalMatch(UStringSearch *strsrch, 
                            UTextOffset    textoffset, 
                            UErrorCode    *status)
@@ -1467,6 +1476,7 @@ inline UTextOffset getPreviousUStringSearchBaseOffset(UStringSearch *strsrch,
 * @param status error status if any
 * @return TRUE if match passes the contraction test, FALSE otherwise
 */
+static
 UBool checkNextCanonicalContractionMatch(UStringSearch *strsrch, 
                                          UTextOffset   *start, 
                                          UTextOffset   *end, 
@@ -1555,6 +1565,7 @@ UBool checkNextCanonicalContractionMatch(UStringSearch *strsrch,
 * @param status error status if any
 * @return TRUE if the match is valid, FALSE otherwise
 */
+static
 inline UBool checkNextCanonicalMatch(UStringSearch *strsrch, 
                                      UTextOffset   *textoffset, 
                                      UErrorCode    *status)
@@ -1661,6 +1672,7 @@ inline UTextOffset reverseShift(UStringSearch *strsrch,
 * @param status error status if any
 * @return TRUE if match passes the contraction test, FALSE otherwise
 */
+static
 UBool checkPreviousExactContractionMatch(UStringSearch *strsrch, 
                                      UTextOffset   *start, 
                                      UTextOffset   *end, UErrorCode  *status) 
@@ -1737,6 +1749,7 @@ UBool checkPreviousExactContractionMatch(UStringSearch *strsrch,
 * @param status error status if any
 * @return TRUE if the match is valid, FALSE otherwise
 */
+static
 inline UBool checkPreviousExactMatch(UStringSearch *strsrch, 
                                      UTextOffset   *textoffset, 
                                      UErrorCode    *status)
@@ -1785,6 +1798,7 @@ inline UBool checkPreviousExactMatch(UStringSearch *strsrch,
 * @return USEARCH_DONE if a match is not found, otherwise return the ending
 *         offset of the match. Note this start includes all following accents.
 */
+static
 UTextOffset doPreviousCanonicalSuffixMatch(UStringSearch *strsrch, 
                                            UTextOffset    start,
                                            UTextOffset    end,     
@@ -1868,6 +1882,7 @@ UTextOffset doPreviousCanonicalSuffixMatch(UStringSearch *strsrch,
 * @return USEARCH_DONE if a match is not found, otherwise return the ending
 *         offset of the match. Note this start includes all following accents.
 */
+static
 UTextOffset doPreviousCanonicalPrefixMatch(UStringSearch *strsrch, 
                                            UTextOffset    textoffset,
                                            UErrorCode    *status)
@@ -1988,6 +2003,7 @@ UTextOffset doPreviousCanonicalPrefixMatch(UStringSearch *strsrch,
 * @param status error status if any
 * @return TRUE if the match is valid, FALSE otherwise
 */
+static
 UBool doPreviousCanonicalMatch(UStringSearch *strsrch, 
                                UTextOffset    textoffset, 
                                UErrorCode    *status)
@@ -2061,6 +2077,7 @@ UBool doPreviousCanonicalMatch(UStringSearch *strsrch,
 * @param status error status if any
 * @return TRUE if match passes the contraction test, FALSE otherwise
 */
+static
 UBool checkPreviousCanonicalContractionMatch(UStringSearch *strsrch, 
                                      UTextOffset   *start, 
                                      UTextOffset   *end, UErrorCode  *status) 

@@ -26,6 +26,8 @@
 #include "ucol_elm.h"
 #include "unicode/uchar.h"
 
+U_NAMESPACE_BEGIN
+
 static uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *element, uint32_t existingCE, UErrorCode *status);
 
 U_CDECL_BEGIN
@@ -1186,4 +1188,4 @@ UCATableHeader *uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
     return myData;
 }
 
-
+U_NAMESPACE_END

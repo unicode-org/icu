@@ -30,6 +30,8 @@
 #include <stdio.h>
 #endif
 
+U_NAMESPACE_BEGIN
+
 typedef struct {
     uint32_t *CEs;
     int32_t position;
@@ -95,5 +97,7 @@ U_CAPI uint32_t U_EXPORT2 uprv_uca_setRange(tempUCATable *t, UChar32 rangeStart,
 
 #define paddedsize(something) ((something)+((((something)%4)!=0)?(4-(something)%4):0))
 #define headersize (paddedsize(sizeof(UCATableHeader))+paddedsize(sizeof(UColOptionSet)))
+
+U_NAMESPACE_END
 
 #endif

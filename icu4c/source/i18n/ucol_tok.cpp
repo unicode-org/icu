@@ -24,6 +24,8 @@
 #include "cmemory.h"
 #include "ucol_tok.h"
 
+U_NAMESPACE_BEGIN
+
 void ucol_tok_initTokenList(UColTokenParser *src, const UChar *rules, const uint32_t rulesLength, UCollator *UCA, UErrorCode *status) {
   uint32_t nSize = 0;
   uint32_t estimatedSize = (2*rulesLength+UCOL_TOK_EXTRA_RULE_SPACE_SIZE);
@@ -1155,3 +1157,5 @@ void deleteToken(void *token) {
     UColToken *tok = (UColToken *)token;
     uprv_free(tok);
 }
+
+U_NAMESPACE_END
