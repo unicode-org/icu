@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/CompactByteArray.java,v $ 
- * $Date: 2002/02/25 22:43:59 $ 
- * $Revision: 1.7 $
+ * $Date: 2002/08/12 20:26:39 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -31,7 +31,7 @@ import com.ibm.icu.impl.Utility;
  * array contains the indicies of Unicode characters to the value array.
  *
  * @see                CompactCharArray
- * @version            $Revision: 1.7 $
+ * @version            $Revision: 1.8 $
  * @author             Helena Shih
  */
 public final class CompactByteArray implements Cloneable {
@@ -68,24 +68,26 @@ public final class CompactByteArray implements Cloneable {
             hashes[i] = 0;
         }
         isCompact = false;
+
+        this.defaultValue = defaultValue;
     }
 
     /**
      * Constructor for CompactByteArray.
      * @param indexArray the indicies of the compact array.
      * @param newValues the values of the compact array.
-     * @exception IllegalArgumentException If index is out of range.
+     * @exception IllegalArgumentException If the index is out of range.
      */
     public CompactByteArray(char indexArray[],
                             byte newValues[])
     {
         int i;
         if (indexArray.length != INDEXCOUNT)
-            throw new IllegalArgumentException("Index out of bounds!");
+            throw new IllegalArgumentException("Index out of bounds.");
         for (i = 0; i < INDEXCOUNT; ++i) {
             char index = indexArray[i];
             if ((index < 0) || (index >= newValues.length+BLOCKCOUNT))
-                throw new IllegalArgumentException("Index out of bounds!");
+                throw new IllegalArgumentException("Index out of bounds.");
         }
         indices = indexArray;
         values = newValues;
@@ -94,15 +96,18 @@ public final class CompactByteArray implements Cloneable {
 
     /**
      * Constructor for CompactByteArray.
+     *
      * @param indexArray the RLE-encoded indicies of the compact array.
      * @param valueArray the RLE-encoded values of the compact array.
-     * @exception IllegalArgumentException If index is out of range.
+     *
+     * @throws IllegalArgumentException if the index or value array is
+     *          the wrong size.
      */
     public CompactByteArray(String indexArray,
                             String valueArray)
     {
         this( Utility.RLEStringToCharArray(indexArray),
-              Utility.RLEStringToByteArray(valueArray) );
+              Utility.RLEStringToByteArray(valueArray));
     }
 
     /**
@@ -132,7 +137,8 @@ public final class CompactByteArray implements Cloneable {
 
     /**
      * Set new values for a range of Unicode character.
-     * @param start the starting offset o of the range
+     *
+     * @param start the starting offset of the range
      * @param end the ending offset of the range
      * @param value the new mapped value
      */
@@ -198,7 +204,7 @@ public final class CompactByteArray implements Cloneable {
                     }
                 }
             }
-            // we are done compacting, so now make the array charer
+            // we are done compacting, so now make the array shorter
             int newSize = limitCompacted*BLOCKCOUNT;
             byte[] result = new byte[newSize];
             System.arraycopy(values, 0, result, 0, newSize);
@@ -310,7 +316,7 @@ public final class CompactByteArray implements Cloneable {
     }
 
     // --------------------------------------------------------------
-    // package private
+    // private
     // --------------------------------------------------------------
 
     /**
@@ -337,11 +343,6 @@ public final class CompactByteArray implements Cloneable {
         }
     }
 
-    private byte[] getArray()
-    {
-        return values;
-    }
-
     private static  final int BLOCKSHIFT =7;
     private static  final int BLOCKCOUNT =(1<<BLOCKSHIFT);
     private static  final int INDEXSHIFT =(16-BLOCKSHIFT);
@@ -350,6 +351,7 @@ public final class CompactByteArray implements Cloneable {
 
     private byte[] values;
     private char indices[];
-    private boolean isCompact;
     private int[] hashes;
+    private boolean isCompact;
+    byte defaultValue;
 };
