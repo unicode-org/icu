@@ -40,18 +40,18 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				OutputFile="..\..\bin\icudt30.dll"
+				OutputFile="..\..\bin\icudt31.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				ProgramDatabaseFile=".\Release/icudt26l.pdb"
-				ImportLibrary="..\..\lib\icudata.lib"/>
+				ProgramDatabaseFile=".\Release/icudt31.pdb"
+				ImportLibrary="..\..\lib\icudt.lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Release/stubdata.tlb"/>
+				TypeLibraryName=".\Release/icudt.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -105,18 +105,18 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				OutputFile="..\..\bin\icudt30.dll"
+				OutputFile="..\..\bin\icudt31.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				ProgramDatabaseFile=".\Debug/icudt26l.pdb"
-				ImportLibrary="..\..\lib\icudata.lib"/>
+				ProgramDatabaseFile=".\Debug/icudt31.pdb"
+				ImportLibrary="..\..\lib\icudt.lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="_DEBUG"
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\Debug/stubdata.tlb"/>
+				TypeLibraryName=".\Debug/icudt.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool

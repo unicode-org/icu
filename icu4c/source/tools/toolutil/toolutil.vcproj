@@ -39,20 +39,20 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
-				OutputFile="..\..\..\bin\icutu30.dll"
+				OutputFile="..\..\..\bin\icutu31.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\..\lib"
-				ProgramDatabaseFile=".\..\..\..\lib/icutu30.pdb"
+				ProgramDatabaseFile=".\..\..\..\lib\icutu31.pdb"
 				BaseAddress="0x4ac00000"
-				ImportLibrary="..\..\..\lib/icutu.lib"/>
+				ImportLibrary="..\..\..\lib\icutu.lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="NDEBUG"
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\..\..\..\lib/toolutil.tlb"/>
+				TypeLibraryName=".\..\..\..\lib\icutu.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -108,16 +108,16 @@
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\..\lib"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\..\..\..\lib/icutu30d.pdb"
+				ProgramDatabaseFile=".\..\..\..\lib\icutu31d.pdb"
 				BaseAddress="0x4ac00000"
-				ImportLibrary="..\..\..\lib/icutud.lib"/>
+				ImportLibrary="..\..\..\lib\icutud.lib"/>
 			<Tool
 				Name="VCMIDLTool"
 				PreprocessorDefinitions="_DEBUG"
 				MkTypLibCompatible="TRUE"
 				SuppressStartupBanner="TRUE"
 				TargetEnvironment="1"
-				TypeLibraryName=".\..\..\..\lib/toolutil.tlb"/>
+				TypeLibraryName=".\..\..\..\lib\icutud.tlb"/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
