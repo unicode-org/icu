@@ -3571,7 +3571,7 @@ getTrail:
                     }
                     if(targetUniChar==missingCharMarker){
                         iterCount = (iterCount<3)? iterCount+1 : 0;
-                        myConverterData->fromUnicodeCurrentState=(StateEnumCN)(currentState<3)? currentState+1:0;
+                        myConverterData->fromUnicodeCurrentState=(StateEnum)((currentState<3)? currentState+1:0);
                         currentState =(StateEnumCN) myConverterData->fromUnicodeCurrentState;
                         myConverterData->fromUnicodeConverter = (myConverterData->fromUnicodeConverter == NULL) ?
                                                         myConverterData->myConverterArray[0] :
@@ -3873,7 +3873,7 @@ getTrail:
                     }
                     if(targetUniChar==missingCharMarker){
                         iterCount = (iterCount<3)? iterCount+1 : 0;
-                        myConverterData->fromUnicodeCurrentState=(StateEnumCN)(currentState<3)? currentState+1:0;
+                        myConverterData->fromUnicodeCurrentState=(StateEnum)((currentState<3)? currentState+1:0);
                         currentState =(StateEnumCN) myConverterData->fromUnicodeCurrentState;
                         myConverterData->fromUnicodeConverter = (myConverterData->fromUnicodeConverter == NULL) ?
                                                         myConverterData->myConverterArray[0] :
