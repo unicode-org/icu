@@ -76,7 +76,7 @@ static const uint16_t *mappingData       = NULL;
 
 extern int
 testData(TestIDNA& test) {
-    char* filename = (char*) malloc(strlen(IntlTest::pathToDataDirectory())*3);
+    char* filename = (char*) malloc(strlen(IntlTest::pathToDataDirectory())*5555);
     //TODO get the srcDir dynamically 
     const char *srcDir=IntlTest::pathToDataDirectory();
     char *basename=NULL;
