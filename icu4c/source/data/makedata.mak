@@ -13,7 +13,7 @@
 U_ICUDATA_NAME=icudt26
 ##############################################################################
 U_ICUDATA_ENDIAN_SUFFIX=l
-UNICODE_VERSION=3.2
+UNICODE_VERSION=4
 
 #  ICUMAKE
 #     Must be provided by whoever runs this makefile.
