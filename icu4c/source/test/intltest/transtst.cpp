@@ -45,10 +45,10 @@
 
                   ==> THIS IS THE IMPORTANT PART <==
 
-   When you add a test here, add it there.  Give it the same name and
-   put it in the same relative place.  This makes maintenance a lot
-   simpler for any poor soul who ends up trying to synchronize the
-   tests between icu4j and icu4c.
+   When you add a test in this file, add it in TransliteratorTest.java
+   too.  Give it the same name and put it in the same relative place.
+   This makes maintenance a lot simpler for any poor soul who ends up
+   trying to synchronize the tests between icu4j and icu4c.
 
 4. If you MUST enter a test that is NOT paralleled in the sister file,
    then add it in the special non-mirrored section.  These are
@@ -123,6 +123,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(41,TestCompoundInverseID);
         TESTCASE(42,TestUndefinedVariable);
         TESTCASE(43,TestEmptyContext);
+        TESTCASE(44,TestCompoundFilterID);
         default: name = ""; break;
     }
 }
@@ -2004,6 +2005,55 @@ void TransliteratorTest::TestUndefinedVariable() {
  */
 void TransliteratorTest::TestEmptyContext() {
     expect(" { a } > b;", "xay a ", "xby b ");
+}
+
+/**
+* Test compound filter ID syntax
+*/
+void TransliteratorTest::TestCompoundFilterID(void) {
+    char* DATA[] = {
+        // Col. 1 = ID or rule set (latter must start with #)
+
+        // = columns > 1 are null if expect col. 1 to be illegal =
+
+        // Col. 2 = direction, "F..." or "R..."
+        // Col. 3 = source string
+        // Col. 4 = exp result
+
+        "[abc]; [abc]", NULL, NULL, NULL, // multiple filters
+        "Latin-Greek; [abc];", NULL, NULL, NULL, // misplaced filter
+        "[b]; Latin-Greek; Upper; ([xyz])", "F", "abc", "a\\u0392c",
+        "[b]; (Lower); Latin-Greek; Upper(); ([\\u0392])", "R", "\\u0391\\u0392\\u0393", "\\u0391b\\u0393",
+        NULL,
+    };
+
+    for (int32_t i=0; DATA[i]; i+=4) {
+        UnicodeString id = CharsToUnicodeString(DATA[i]);
+        UTransDirection direction = (DATA[i+1] != NULL && DATA[i+1][0] == 'R') ?
+            UTRANS_REVERSE : UTRANS_FORWARD;
+        UnicodeString source;
+        UnicodeString exp;
+        if (DATA[i+2] != NULL) {
+            source = CharsToUnicodeString(DATA[i+2]);
+            exp = CharsToUnicodeString(DATA[i+3]);
+        }
+        UBool expOk = (DATA[i+1] != NULL);
+        Transliterator* t = NULL;
+        UParseError pe;
+        UErrorCode ec = U_ZERO_ERROR;
+        t = Transliterator::createInstance(id, direction, pe, ec);
+        UBool ok = (t != NULL && U_SUCCESS(ec));
+        if (ok == expOk) {
+            logln((UnicodeString)"Ok: " + id + " => " + (t!=0?t->getID():"NULL") + ", " +
+                  u_errorName(ec));
+            if (source.length() != 0) {
+                expect(*t, source, exp);
+            }
+        } else {
+            errln((UnicodeString)"FAIL: " + id + " => " + (t!=0?t->getID():"NULL") + ", " +
+                  u_errorName(ec));
+        }
+    }
 }
 
 //======================================================================
