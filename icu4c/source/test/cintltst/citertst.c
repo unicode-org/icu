@@ -1149,10 +1149,8 @@ static FileStream * getFractionalUCA()
 * Testing the CEs returned by the iterator
 */
 static void TestCEs() {
-    char        dir[150];        
     FileStream *file = NULL;
     char        line[300];
-    char       *pDir = dir;
     char       *str;
     UChar       codepoints[5];
     uint32_t    ces[20];
@@ -1362,7 +1360,7 @@ static UBool checkByteBounds(uint32_t data, char upper, char lower)
 {
     int count = 4;
     while (count > 0) {
-        char b = (char)data & 0xFF;
+        char b = (char)(data & 0xFF);
         if (b > upper || b < lower) {
             return FALSE;
         }
@@ -1376,12 +1374,13 @@ static UBool checkByteBounds(uint32_t data, char upper, char lower)
 * Determines case of the string of codepoints.
 * If it is a multiple codepoints it has to treated as a contraction.
 */
-uint8_t getCase(const UChar *s, uint32_t len) {
-          UBool       lower = FALSE;
-          UBool       upper = FALSE;
-          UBool       title = FALSE;
-          UErrorCode  status = U_ZERO_ERROR;
-          /* UChar       str[256]; */
+#if 0
+static uint8_t getCase(const UChar *s, uint32_t len) {
+    UBool       lower = FALSE;
+    UBool       upper = FALSE;
+    UBool       title = FALSE;
+    UErrorCode  status = U_ZERO_ERROR;
+    UChar       str[256];
     const UChar      *ps = s;
 
     if (len == 0) {
@@ -1424,6 +1423,7 @@ uint8_t getCase(const UChar *s, uint32_t len) {
     }
     return UCOL_LOWER_CASE;
 }
+#endif
 
 /**
 * Checking collation element validity given the boundary arguments.
@@ -1437,8 +1437,10 @@ static UBool checkCEValidity(const UCollator *coll, const UChar *codepoints,
                                                   &status);
     uint32_t            ce;
     UBool               first  = TRUE;
+/*
     UBool               upper  = FALSE;
     UBool               lower  = FALSE;
+*/
 
     if (U_FAILURE(status)) {
         log_err("Error creating iterator for testing validity\n");
@@ -1451,7 +1453,7 @@ static UBool checkCEValidity(const UCollator *coll, const UChar *codepoints,
            uint32_t primary   = UCOL_PRIMARYORDER(ce);
            uint32_t secondary = UCOL_SECONDARYORDER(ce);
            uint32_t tertiary  = UCOL_TERTIARYORDER(ce);
-           uint32_t scasebits = tertiary & 0xC0;
+/*           uint32_t scasebits = tertiary & 0xC0;*/
                 
            if ((tertiary == 0 && secondary != 0) || 
                (tertiary < 0xC0 && secondary == 0 && primary != 0)) {
@@ -1541,12 +1543,10 @@ static void TestCEValidity()
         UChar *rulesCopy = NULL;
         int32_t ruleLen = 0;
 
-        int32_t result = 0;
         uint32_t chOffset = 0; 
         uint32_t chLen = 0;
         uint32_t exOffset = 0; 
         uint32_t exLen = 0;
-        uint32_t oldOffset = 0;
         UBool    startOfRules = TRUE;
         UColOptionSet opts;
   
@@ -1712,12 +1712,10 @@ static void TestSortKeyValidity()
         UChar *rulesCopy = NULL;
         int32_t ruleLen = 0;
 
-        int32_t result = 0;
         uint32_t chOffset = 0; 
         uint32_t chLen = 0;
         uint32_t exOffset = 0; 
         uint32_t exLen = 0;
-        uint32_t oldOffset = 0;
         UBool    startOfRules = TRUE;
         UColOptionSet opts;
   
