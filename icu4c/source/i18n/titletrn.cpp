@@ -25,6 +25,11 @@ U_NAMESPACE_BEGIN
 const char TitlecaseTransliterator::_ID[] = "Any-Title";
 
 /**
+ * Mutex for statics IN THIS FILE
+ */
+static UMTX MUTEX = 0;
+
+/**
  * The set of characters we skip.  These are neither cased nor
  * non-cased, to us; we copy them verbatim.
  */
@@ -88,7 +93,7 @@ void TitlecaseTransliterator::handleTransliterate(
                                   Replaceable& text, UTransPosition& offsets,
                                   UBool isIncremental) const {
     if (SKIP == NULL) {
-        Mutex lock;
+        Mutex lock(&MUTEX);
         if (SKIP == NULL) {
             UErrorCode ec = U_ZERO_ERROR;
             SKIP = new UnicodeSet(UnicodeString("[\\u00AD \\u2019 \\' [:Mn:] [:Me:] [:Cf:] [:Lm:]]", ""), ec);
@@ -180,6 +185,7 @@ void TitlecaseTransliterator::cleanup() {
     if (SKIP != NULL) {
         delete SKIP; SKIP = NULL;
         delete CASED; CASED = NULL;
+        umtx_destroy(&MUTEX);
     }
 }
 
