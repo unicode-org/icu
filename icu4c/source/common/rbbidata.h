@@ -1,37 +1,55 @@
-//  file:  rbbidata.h
-//
-//**********************************************************************
-//   Copyright (C) 1999 IBM Corp. All rights reserved.
-//**********************************************************************
-//
-//   RBBI data formats  Includes
-//
-//                          Structs that describes the format of the Binary RBBI data,
-//                          as it is stored in ICU's data file.
-//
-//      RBBIDataWrapper  -  Instances of this class sit between the
-//                          raw data structs and the RulesBasedBreakIterator objects
-//                          that are created by applications.  The wrapper class
-//                          provides reference counting for the underlying data,
-//                          and direct pointers to data that would not otherwise
-//                          be accessible without ugly pointer arithmetic.  The
-//                          wrapper does not attempt to provide any higher level
-//                          abstractions for the data itself.
-//
-//                          There will be only one instance of RBBIDataWrapper for any
-//                          set of RBBI run time data being shared by instances
-//                          (clones) of RulesBasedBreakIterator.
-//
+/*
+*******************************************************************************
+*
+*   Copyright (C) 1999-2003, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  rbbidata.h
+*   encoding:   US-ASCII
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   RBBI data formats  Includes
+*
+*                          Structs that describes the format of the Binary RBBI data,
+*                          as it is stored in ICU's data file.
+*
+*      RBBIDataWrapper  -  Instances of this class sit between the
+*                          raw data structs and the RulesBasedBreakIterator objects
+*                          that are created by applications.  The wrapper class
+*                          provides reference counting for the underlying data,
+*                          and direct pointers to data that would not otherwise
+*                          be accessible without ugly pointer arithmetic.  The
+*                          wrapper does not attempt to provide any higher level
+*                          abstractions for the data itself.
+*
+*                          There will be only one instance of RBBIDataWrapper for any
+*                          set of RBBI run time data being shared by instances
+*                          (clones) of RulesBasedBreakIterator.
+*/
 
 #ifndef __RBBIDATA_H__
 #define __RBBIDATA_H__
 
 #include "unicode/utypes.h"
+#include "unicode/udata.h"
+#include "udataswp.h"
+
+/**
+ * Swap RBBI data. See udataswp.h.
+ * @internal
+ */
+U_CAPI int32_t U_EXPORT2
+ubrk_swap(const UDataSwapper *ds,
+          const void *inData, int32_t length, void *outData,
+          UErrorCode *pErrorCode);
+
+#ifdef XP_CPLUSPLUS
+
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
-#include "unicode/udata.h"
 #include "utrie.h"
-
 
 U_NAMESPACE_BEGIN
 
@@ -146,17 +164,9 @@ private:
 };
 
 
-/**
- * Swap RBBI data. See udataswp.h.
- * @internal
- */
-U_CAPI int32_t U_EXPORT2
-ubrk_swap(const UDataSwapper *ds,
-           const void *inData, int32_t length, void *outData,
-           UErrorCode *pErrorCode);
-
 
 U_NAMESPACE_END
 
-#endif
+#endif /* C++ */
 
+#endif
