@@ -42,8 +42,12 @@ import com.ibm.icu.dev.test.util.BagFormatter;
 import com.ibm.icu.dev.tool.UOption;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.Collator;
+import com.ibm.icu.text.Normalizer;
 import com.ibm.icu.text.RuleBasedCollator;
+import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
@@ -63,7 +67,8 @@ import com.ibm.icu.util.UResourceBundle;
     static final boolean DEBUG = false;
     static final boolean DEBUG2 = false;
     static final boolean DEBUG_SHOW_ADD = false;
-    static final boolean DEBUG_ELEMENT = true;
+    static final boolean DEBUG_ELEMENT = false;
+    static final boolean DEBUG_SHOW_BAT = false;
     
     static final boolean FIX_ZONE_ALIASES = true;
 
@@ -117,6 +122,7 @@ import com.ibm.icu.util.UResourceBundle;
                 // if (baseName.equals("root")) temp.addMissing();
 
                 temp.writeTo(options[DESTDIR].value, baseName);
+                generateBat(options[SOURCEDIR].value, baseName + ".xml", options[DESTDIR].value, baseName + ".xml");
                 sidewaysView.putData(temp.data, baseName);
                 log.flush();          
             }
@@ -298,9 +304,9 @@ import com.ibm.icu.util.UResourceBundle;
                 EndNode value = (EndNode) data.get(key);
                 GenerateSidewaysView parent = (GenerateSidewaysView) toRemove.get(key);
                 EndNode parentValue = (EndNode) parent.data.get(key);
-                log.println("Removing " + key.toString(true, 0) + "\t" + value);
+                log.println("Removing " + key.toString(true, 0, Integer.MAX_VALUE) + "\t" + value);
                 ElementChain parentKey = (ElementChain) parent.data.getKeyFor(key);
-                log.println("\tIn " + parent.filename + ":\t" + parentKey.toString(true, 0) + "\t"+ parentValue);
+                log.println("\tIn " + parent.filename + ":\t" + parentKey.toString(true, 0, Integer.MAX_VALUE) + "\t"+ parentValue);
                 data.remove(key);
             }
         }
@@ -434,6 +440,68 @@ import com.ibm.icu.util.UResourceBundle;
         return buffer.toString();
     }
     
+    static void generateBat(String sourceDir, String sourceFile, String targetDir, String targetFile) {
+        boolean needBat = true;
+        try {
+			BufferedReader b1 = BagFormatter.openUTF8Reader(sourceDir, sourceFile);
+            BufferedReader b2 = BagFormatter.openUTF8Reader(targetDir, targetFile);
+            while (true) {
+            	String line1 = b1.readLine();
+                String line2 = b2.readLine();
+                if (line1 == null && line2 == null) {
+                    needBat = false;
+                    break;
+                }
+                if (line1 == null || line2 == null) {
+                    if (DEBUG_SHOW_BAT) System.out.println("*File line counts differ: ");
+                    break;
+                }
+                if (!equalsIgnoringWhitespace(line1, line2)) {
+                    if (DEBUG_SHOW_BAT) {
+                        System.out.println("*File lines differ: ");
+                        System.out.println("\t1\t" + line1);
+                        System.out.println("\t2\t" + line2);
+                    }
+                    break;
+                }
+            }
+            b1.close();
+            b2.close();
+            String batDir = targetDir + File.separator + "diff" + File.separator;
+            String batName = targetFile + ".bat";
+            if (needBat) {
+            	PrintWriter bat = BagFormatter.openUTF8Writer(batDir, batName);
+                bat.println("\"C:\\Program Files\\Compare It!\\wincmp3.exe\" " +
+                        new File(sourceDir + sourceFile).getCanonicalPath() + " " +
+                        new File(targetDir + targetFile).getCanonicalPath());
+                bat.close();
+            } else {
+            	File f = new File(batDir + batName);
+                if (f.exists()) {
+                	if (DEBUG_SHOW_BAT) System.out.println("*Deleting old " + f.getCanonicalPath());
+                	f.delete();
+                }
+            }
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+     // 
+   
+    }
+    
+    static boolean equalsIgnoringWhitespace(String a, String b) {
+        int i = 0;
+        int j = 0;
+        char c, d;
+    	while (true) { // don't worry about surrogates
+            do {c = i < a.length() ? a.charAt(i++) : 0xFFFF;} while (UCharacter.isUWhiteSpace(c));
+            do {d = j < b.length() ? b.charAt(j++) : 0xFFFF;} while (UCharacter.isUWhiteSpace(d));
+            if (c != d) return false;
+            if (c == 0xFFFF) return true;
+        }
+    }
 
     static class SimpleAttribute implements Comparable {
         String name;
@@ -493,8 +561,7 @@ import com.ibm.icu.util.UResourceBundle;
                     
                     // hack to removed #IMPLIED
                     if (elementName.equals("ldml")
-                        && name.equals("version") 
-                        && value.equals("1.1")) continue;
+                        && name.equals("version")) continue; // skip version
                     if (name.equals("type") 
                         && value.equals("standard")) continue;
 
@@ -587,6 +654,18 @@ import com.ibm.icu.util.UResourceBundle;
 		 */
 		public void add(SimpleAttributes attributes) {
 			contents.addAll(attributes.contents);
+		}
+
+		/**
+		 * @param ignorelist
+		 */
+		public void removeAttributes(Set ignorelist) {
+            for (Iterator it = contents.iterator(); it.hasNext();) {
+                SimpleAttribute sa = (SimpleAttribute) it.next();
+                if (ignorelist.contains(sa.name)) {
+                    it.remove();
+                }
+            }	
 		}
     }
     
@@ -932,6 +1011,13 @@ import com.ibm.icu.util.UResourceBundle;
             return;
         }
         */
+		/**
+		 * @param ignorelist
+		 * @return
+		 */
+		public void removeAttributes(Set ignorelist) {
+            attributes.removeAttributes(ignorelist);
+		}
     }
     
     private void writeElementComment(StringBuffer out, String comment, int common) {
@@ -1004,12 +1090,14 @@ import com.ibm.icu.util.UResourceBundle;
         
         public String toString() {
             //throw new IllegalArgumentException("Don't use");
-            return toString(true, 0);
+            return toString(true, 0, Integer.MAX_VALUE);
         }
         
-        public String toString(boolean path, int startLevel) {
+        public String toString(boolean path, int startLevel, int limitLevel) {
             StringBuffer buffer = new StringBuffer();
-            for (int i = startLevel; i < contexts.size(); ++i) {
+            if (startLevel < 0) startLevel = 0;
+            if (limitLevel > contexts.size()) limitLevel = contexts.size();
+            for (int i = startLevel; i < limitLevel; ++i) {
                 //if (i != 0) buffer.append(' ');
                 Element e = (Element) contexts.get(i);
                 if (path) buffer.append("/" + e.toString(Element.PATH));
@@ -1093,6 +1181,19 @@ import com.ibm.icu.util.UResourceBundle;
 
 		public Element getLast() {
 			return (Element) contexts.get(contexts.size()-1);
+		}
+
+		/**
+		 * @param ignorelist
+		 * @return
+		 */
+		public ElementChain createRemovingAttributes(Set ignorelist) {
+			ElementChain result = new ElementChain(this);
+            for (int i = 0; i < contexts.size(); ++i) {
+            	Element e = (Element)contexts.get(i);
+                e.removeAttributes(ignorelist);
+            }
+            return result;
 		}
 
 		/**
@@ -1377,9 +1478,11 @@ import com.ibm.icu.util.UResourceBundle;
         Map contextCache = new TreeMap();
         Set fileNames = new TreeSet();
         Set allTypes = new TreeSet();
+        
         void putData(OrderedMap data, String filename) {
             for (Iterator it = data.iterator(); it.hasNext();) {
-                ElementChain copy = (ElementChain) it.next();
+                ElementChain original = (ElementChain) it.next();
+                ElementChain copy = original.createRemovingAttributes(IGNORELIST);
                 EndNode endNode = (EndNode)data.get(copy);
                 Map dataToFile = (Map)contextCache.get(copy);
                 if (dataToFile == null) {
@@ -1397,12 +1500,21 @@ import com.ibm.icu.util.UResourceBundle;
             if (filename.indexOf('_') < 0
                 || filename.equals("zh_Hant")) fileNames.add(filename); // add all language-only locales
         }
-        
-        String getChainName(ElementChain ec) {
-        	Element e = (Element)ec.contexts.get(1);
+ 
+        int getChainDepth(ElementChain ec) {
+            Element e = (Element)ec.contexts.get(1);
             String result = e.elementName;
             if (result.equals("numbers") || result.equals("localeDisplayNames") || result.equals("dates")) {
-            	e = (Element)ec.contexts.get(2);
+                return 3;
+            }
+            return 2;
+        }
+
+        String getChainName(ElementChain ec, int limit) {
+        	Element e = (Element)ec.contexts.get(1);
+            String result = e.elementName;
+            for (int i = 2; i < limit; ++i) {
+            	e = (Element)ec.contexts.get(i);
                 result += "_" + e.elementName;
             }
             return result;
@@ -1426,7 +1538,8 @@ import com.ibm.icu.util.UResourceBundle;
             int lineCounter = 1;
             for (Iterator it = contextCache.keySet().iterator(); it.hasNext();) {
                 ElementChain stack = (ElementChain) it.next();
-                String chainName = getChainName(stack);
+                int limit = getChainDepth(stack);
+                String chainName = getChainName(stack, limit);
                 if (!chainName.equals(lastChainName)) {
                     if (out != null) {
                         out.println("</table>");
@@ -1435,16 +1548,16 @@ import com.ibm.icu.util.UResourceBundle;
                     allTypes.add(chainName); // add to the list
                 	out = openAndDoHeader(chainName);
                     lastChainName = chainName;
-                    lineCounter = 1;
+                    lineCounter = 0;
                 }
-                String key = stack.toString(true, 1);
+                String key = stack.toString(true, limit, Integer.MAX_VALUE);
                 // strip    /ldml@version="1.2"/;
                 
+                lineCounter++;
                 out.println("<tr><td colspan='2' class='head'>" + 
                         "<a href='#" + lineCounter + "' name='" + lineCounter + "'>" 
                         + lineCounter + "</a>&nbsp;" + 
                         BagFormatter.toHTML.transliterate(key) + "</td></tr>");
-                lineCounter++;
                 Map dataToFile = (Map) contextCache.get(stack);
                 // walk through once, and gather all the filenames
                 Set remainingFiles = new TreeSet(fileNames);
@@ -1463,7 +1576,9 @@ import com.ibm.icu.util.UResourceBundle;
                         files.addAll(remainingFiles);
                         dataStyle = " class='nodata'";
                     }
-                    out.print("<tr><th" + dataStyle + ">\"" + data + "\"</th><td>");
+                    out.print("<tr><th" + dataStyle + 
+                            (lineCounter == 1 ? " width='20%'" : "")
+                            + ">\"" + data + "\"</th><td>");
                     boolean first = true;
                     for (Iterator it3 = files.iterator(); it3.hasNext();) {
                         if (first) first = false;
@@ -1503,7 +1618,20 @@ import com.ibm.icu.util.UResourceBundle;
             out.println("<link rel='stylesheet' type='text/css' href='by_type.css'>");
 			out.println("</head>");
             out.println("<body>");
-            out.println("<ul><li><a href=\"index.html\">Index</a></li></ul>");
+            out.println("<h2>By-Type Chart for " + "//ldml/" + type.replace('_', '/') + "/...</h1>");
+            out.println("<p>" +
+                    "<a href=\"index.html\">By-Type Chart Index</a> " +
+                    "| <a href='http://www.jtcsv.com/cgibin/cldrwiki.pl?InterimVettingCharts'>Interim Vetting Charts</a>" +
+                    "| <a href='http://oss.software.ibm.com/cvs/icu/~checkout~/locale/docs/tr35.html'>LDML Specification</a>" +
+                    "| <a href='http://www.unicode.org/cldr/filing_bug_reports.html'>Filing Bug Reports</a>" +
+                    "| <a href='http://oss.software.ibm.com/cvs/icu/~checkout~/locale/comparison_charts.html'>Cross Platform Charts</a>" +                        
+                    "</p>");
+            out.println("<p>This chart shows values across locales for different fields. " +
+                    "Each value is listed under the field designator (in XML XPath format), " +
+                    "followed by all the locales that use it. " +
+                    "Locales are omitted if the value would be the same as the parent's. " +
+                    "The locales are listed in the format: ·aa· for searching. " +
+                    "The value appears in red if it is the same as the root. </p>");             
             out.println("<table>");
 			return out;
 		}
@@ -1526,7 +1654,13 @@ import com.ibm.icu.util.UResourceBundle;
             out.println("<link rel='stylesheet' type='text/css' href='http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/common.css'>");
             out.println("<link rel='stylesheet' type='text/css' href='by_type.css'>");
 			out.println("</head>");
-            out.println("<body><ul>");
+            out.println("<body><h1>By Type Chart Index</h1>");
+            out.println("<p>The following are charts for the individual datatypes, " +
+                    "that show a comparison across locales for different fields. " +
+                    "For example, in the orientation chart, one can see that all locales " +
+                    "are left-to-right except ·ar· ·fa· ·he· ·ps· (and their children).</p>" +
+                    "<p>Note: these charts do not yet include collations</p>");             
+            out.println("<ul>");
             for(Iterator e = allTypes.iterator();e.hasNext();) {
                 String f = (String)e.next();
                 out.println(" <li><a href=\"" + f + ".html" +  "\">" + f + "</a>");
