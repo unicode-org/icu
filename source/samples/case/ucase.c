@@ -36,13 +36,13 @@ int c_main(UFILE *out)
 
   /* uchar.h APIs, single character case mapping */
   ch = u_toupper(char_k); /* ch = 'K' */
-  u_fprintf(out, "toupper(%K) = %K\n", char_k, ch);
+  u_fprintf(out, "toupper(%C) = %C\n", char_k, ch);
   ch = u_tolower(ch); /* ch = 'k' */
-  u_fprintf(out, "tolower() = %K\n", ch);
+  u_fprintf(out, "tolower() = %C\n", ch);
   ch = u_totitle(char_k); /* ch = 'K' */
-  u_fprintf(out, "totitle(%K) = %K\n", char_k, ch);
+  u_fprintf(out, "totitle(%C) = %C\n", char_k, ch);
   ch = u_foldCase(char_K, U_FOLD_CASE_DEFAULT); /* ch = 'k' */
-  u_fprintf(out, "u_foldCase(%K, U_FOLD_CASE_DEFAULT) = %K\n", char_K, (UChar) ch);
+  u_fprintf(out, "u_foldCase(%C, U_FOLD_CASE_DEFAULT) = %C\n", char_K, (UChar) ch);
 
   /* ustring.h APIs, UChar * string case mapping with a Turkish locale */
   /* result buffer = "ab?" latin small letter a, latin small letter b, latin
@@ -54,7 +54,7 @@ int c_main(UFILE *out)
            u_errorName(errorCode));
   }
   
-  u_fprintf(out, "u_strToLower(%U, turkish) -> %U\n", upper, buffer);
+  u_fprintf(out, "u_strToLower(%S, turkish) -> %S\n", upper, buffer);
 
 
   /* ustring.h APIs, UChar * string case mapping with a Engish locale */
@@ -66,7 +66,7 @@ int c_main(UFILE *out)
     u_fprintf(out, "error in u_strToLower(English locale)=%ld error=%s\n", length, 
               u_errorName(errorCode));
   }
-  u_fprintf(out, "u_strToUpper(%U, english) -> %U\n", lower, buffer);
+  u_fprintf(out, "u_strToUpper(%S, english) -> %S\n", lower, buffer);
 
 
   /* ustring.h APIs, UChar * string case folding */
@@ -78,7 +78,7 @@ int c_main(UFILE *out)
     u_fprintf(out, "error in u_strFoldCase()=%ld error=%s\n", length, 
            u_errorName(errorCode));
   }
-  u_fprintf(out, "u_strFoldCase(%U, U_FOLD_CASE_DEFAULT) -> %U\n", unfold, buffer);
+  u_fprintf(out, "u_strFoldCase(%S, U_FOLD_CASE_DEFAULT) -> %S\n", unfold, buffer);
   u_fprintf(out, "\n** end of C sample\n");
 
   return 0;
