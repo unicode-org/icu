@@ -826,7 +826,6 @@ private:
         UErrorCode ec = U_ZERO_ERROR;
         UResourceBundle *top = ures_openDirect(0, kZONEINFO, &ec);
         top = ures_getByKey(top, kNAMES, top, &ec); // dereference Zones section
-        int32_t len;
         unistr = ures_getUnicodeStringByIndex(top, i,&ec);
         if(U_FAILURE(ec)) {
           unistr.truncate(0);
@@ -1046,7 +1045,6 @@ TimeZone::getEquivalentID(const UnicodeString& id, int32_t index) {
     if (zone >= 0) {
         UResourceBundle *ares = ures_getByKey(top, kNAMES, NULL, &ec); // dereference Zones section
         if (U_SUCCESS(ec)) {
-          int32_t len;
           result = ures_getUnicodeStringByIndex(ares, zone, &ec);
           U_DEBUG_TZ_MSG(("gei(%d) -> %d, len%d, %s\n", index, zone, result.length(), u_errorName(ec)));
         }
