@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/LocaleData.java,v $
- * $Date: 2003/11/07 03:06:00 $
- * $Revision: 1.1 $
+ * $Date: 2003/11/14 19:14:46 $
+ * $Revision: 1.2 $
  *
  *******************************************************************************
 */
@@ -24,7 +24,7 @@ import com.ibm.icu.text.UnicodeSet;
  */
 public final class LocaleData {
     
-    private static final String EXEMPLAR_CHARS      = "ExemplarChars";
+    private static final String EXEMPLAR_CHARS      = "ExemplarCharacters";
     private static final String MEASUREMENT_SYSTEM  = "MeasurementSystem";
     private static final String PAPER_SIZE          = "PaperSize";
     
@@ -39,7 +39,7 @@ public final class LocaleData {
      * @return UnicodeSet The set representing the exemplar characters
      * @draft ICU 2.8
      */
-    public static UnicodeSet getExemplarSet(String locale){
+    public static UnicodeSet getExemplarSet(Locale locale){
         ResourceBundle bundle = ICULocaleData.getLocaleElements(locale);
         String pattern = bundle.getString(EXEMPLAR_CHARS);
         return new UnicodeSet(pattern);
