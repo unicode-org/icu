@@ -26,22 +26,17 @@ Options: -h, --help         Print this message and exit
 
 The following names can be supplied as the argument for platform:
 
-    AIX4.1.5xlC             Use xlC on AIX 4.1.5
     AIX4.3xlC               Use xlC on AIX 4.3
     AIX4.3VA                Use the VA compiler on AIX 4.3
-    SOLARISCC               Use Sun's CC compiler on Solaris 
-    SOL2.7CC                Same as above
-    SOLARISGCC              Use the GNU C++ compiler on Solaris
-    SOLARISX86              Use Sun's CC compiler on Solaris x86
-    LinuxRedHat5.2          Use the GNU C++ compiler on Linux
-    LinuxRedHat6.0          Same as above
-    HP/UX10.2CC             Use HP's C++ compiler on HP-UX 10.2
-    HP/UX10.2ACC            Use the Advanced C++ compiler on HP-UX 10.2
+    ALPHA/LINUXGCC          Use GCC on Alpha/Linux systems
+    ALPHA/LINUXCCC          Use Compaq C compiler on Alpha/Linux systems
+    FreeBSD                 Use the GNU C++ compiler on Free BSD
     HP/UX11CC               Use HP's C++ compiler on HP-UX 11
     HP/UX11ACC              Use the Advanced C++ compiler on HP-UX 11
-    PTX                     Use C++ on Dynix/PTX v4.5
-    ALPHA/LINUXGCC	    Use GCC on Alpha/Linux systems
-    ALPHA/LINUXCCC	    Use Compaq C compiler on Alpha/Linux systems
+    LinuxRedHat             Use the GNU C++ compiler on Linux
+    SOLARISCC               Use Sun's CC compiler on Solaris 
+    SOLARISGCC              Use the GNU C++ compiler on Solaris
+    SOLARISX86              Use Sun's CC compiler on Solaris x86
 EOE
     fi
 
@@ -113,16 +108,6 @@ then
 fi
 
 case $platform in
-    AIX4.1.5xlC)
-        THE_OS=AIX
-        THE_COMP=xlC
-        CC=/usr/lpp/xlC/bin/xlc; export CC
-        CXX=/usr/lpp/xlC/bin/xlC_r; export CXX
-        RELEASE_CFLAGS="-qignerrno"
-        RELEASE_CXXFLAGS="-qignerrno"
-        #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
-        #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
-        ;;
     AIX4.3xlC)
         THE_OS=AIX
         THE_COMP=xlC
@@ -142,14 +127,6 @@ case $platform in
         #RELEASE_CXXFLAGS=-O2
         #CPPFLAGS=-I/usr/lpp/xlC/include; export CPPFLAGS
         #LDFLAGS=-L/usr/lpp/xlC/lib; export LDFLAGS
-        ;;
-    SOL2.7CC)
-        THE_OS="SOLARIS 2.7"
-        THE_COMP="Sun's CC"
-        CC=`which cc`; export CC
-        CXX=`which CC`; export CXX
-        RELEASE_CFLAGS=-xO3
-        RELEASE_CXXFLAGS=-O3
         ;;
     SOLARISX86)
         THE_OS="SOLARIS X86"
@@ -176,22 +153,6 @@ case $platform in
         CXXFLAGS=-I/usr/local/include/g++; export CXXFLAGS
         LDFLAGS=-R/usr/local/lib; export LDFLAGS
         ;;
-    HP/UX10.2CC)
-        THE_OS="HP-UX 10.2"
-        THE_COMP="HP's CC"
-        CC=cc; export CC
-        CXX=CC; export CXX
-        RELEASE_CFLAGS='+O2 +Ofltacc'
-        RELEASE_CXXFLAGS='+O2 +Ofltacc'
-        ;;
-    HP/UX10.2ACC)
-        THE_OS="HP-UX 10.2"
-        THE_COMP="aCC"
-        CC=cc; export CC
-        CXX=aCC; export CXX
-        RELEASE_CFLAGS='+O2 +Ofltacc'
-        RELEASE_CXXFLAGS='+O2 +Ofltacc'
-        ;;
     HP/UX11CC)
         THE_OS="HP-UX 11"
         THE_COMP="HP's CC"
@@ -208,22 +169,6 @@ case $platform in
         RELEASE_CFLAGS='+O2 +Ofltacc'
         RELEASE_CXXFLAGS='+O2 +Ofltacc'
         ;;
-    PTX)
-        THE_OS="PTX"
-        THE_COMP="C++"
-        CC=cc; export CC
-        CXX=c++; export CXX
-        if test ${XMLINSTALL}o = "o"; then 
-            XMLINSTALL=/usr/local; export XMLINSTALL
-        fi
-        configure="$configure --prefix=$XMLINSTALL"
-        ;;
-    LinuxRedHat*)
-        THE_OS=Linux
-        THE_COMP="the GNU C++"
-        CXX=g++; export CXX 
-        CC=gcc; export CC
-        ;;
     ALPHA/LINUXCCC)
         THE_OS="Linux"
         THE_COMP="Compaq's CC"
@@ -235,6 +180,18 @@ case $platform in
         THE_COMP="the GNU C++"
         CC=gcc; export CC
         CXX=g++; export CXX
+        ;;
+    LinuxRedHat*)
+        THE_OS="Linux"
+        THE_COMP="the GNU C++"
+        CC=gcc; export CC
+        CXX=g++; export CXX 
+        ;;
+    *BSD)
+        THE_OS="BSD"
+        THE_COMP="the GNU C++"
+        CC=gcc; export CC
+        CXX=g++; export CXX 
         ;;
     *)
         >&2 echo "$me: unrecognized platform \"$platform\" (use --help for help)"
