@@ -296,6 +296,8 @@ Formattable::adoptArray(Formattable* array, int32_t count)
 //----------------------------------------------------
 #ifdef _DEBUG
 
+#include <iostream.h>
+
 #include "unicode/datefmt.h"
 #include "unistrm.h"
 
