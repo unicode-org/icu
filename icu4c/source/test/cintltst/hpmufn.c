@@ -28,9 +28,9 @@ void addHeapMutexTest(TestNode **root);
 void
 addHeapMutexTest(TestNode** root)
 {
-    addTest(root, &TestHeapFunctions,       "tsutil/TestHeapFunctions"  );
-    addTest(root, &TestMutexFunctions,      "tsutil/TestMutexFunctions" );
-    addTest(root, &TestIncDecFunctions,     "tsutil/TestIncDecFunctions");
+    addTest(root, &TestHeapFunctions,       "tsutil/hpmufn/TestHeapFunctions"  );
+    addTest(root, &TestMutexFunctions,      "tsutil/hpmufn/TestMutexFunctions" );
+    addTest(root, &TestIncDecFunctions,     "tsutil/hpmufn/TestIncDecFunctions");
 }
 
 
@@ -347,7 +347,7 @@ static int32_t myDecFunc(const void *context, int32_t *p) {
 
 static void TestIncDecFunctions() {
     UErrorCode   status = U_ZERO_ERROR;
-    int32_t      t;
+    int32_t      t = 1; /* random value to make sure that Inc/dec works */
     char         *dataDir;
 
 
@@ -387,7 +387,9 @@ static void TestIncDecFunctions() {
     gIncCount = 0;
     gDecCount = 0;
     umtx_atomic_inc(&t);
+    TEST_ASSERT(t == 2);
     umtx_atomic_dec(&t);
+    TEST_ASSERT(t == 1);
     TEST_ASSERT(gIncCount > 0);
     TEST_ASSERT(gDecCount > 0);
 
@@ -409,5 +411,7 @@ static void TestIncDecFunctions() {
     TEST_STATUS(status, U_ZERO_ERROR);
     TEST_ASSERT(gIncCount == 0);
     TEST_ASSERT(gDecCount == 0);
+
+    free(dataDir);
 }
 
