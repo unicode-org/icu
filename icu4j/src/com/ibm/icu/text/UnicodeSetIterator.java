@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSetIterator.java,v $ 
- * $Date: 2002/03/14 15:08:21 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/03/14 23:14:23 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -21,6 +21,7 @@ import java.io.*;
  * Class that allows simple iteration over a UnicodeSet.
  * @author M. Davis
  * @draft
+ * @internal -- this API is not for general use, and may change at any time.
  */
 public final class UnicodeSetIterator {
 	
@@ -33,23 +34,28 @@ public final class UnicodeSetIterator {
 	public String string;
 
     /**
-     *@set set to iterate over
+     * Create an iterator
+     * @set set to iterate over
      */
     public UnicodeSetIterator(UnicodeSet set) {
         reset(set);
     }
         
     /**
-     *convenience
+     * Create an iterator. Convenience for when the contents are to be set later.
      */
     public UnicodeSetIterator() {
         reset(new UnicodeSet());
     }
         
     /**
-     *@return true if there was another element in the set.
-     *if so, if codepoint == IS_STRING, the value is a string in the string field
-     *else the value is a single code point in the codepoint field.
+     * Returns the next element in the set.
+     * @return true if there was another element in the set.
+     * if so, if codepoint == IS_STRING, the value is a string in the string field
+     * else the value is a single code point in the codepoint field.
+     * <br>You are guaranteed that the codepoints are in sorted order, and the strings are in sorted order,
+     * and that all code points are returned before any strings are returned.
+     * <br>Note also that the codepointEnd is undefined after calling this method.
      */
     public boolean next() {
         if (nextElement <= endElement) {
@@ -77,9 +83,15 @@ public final class UnicodeSetIterator {
     }
         
     /**
-     *@return true if there was another element in the set.
-     *if so, if codepoint == IS_STRING, the value is a string in the string field
-     *else the value is a range of codepoints in the <codepoint, codepointEnd> fields.
+     * @return true if there was another element in the set.
+     * if so, if codepoint == IS_STRING, the value is a string in the string field
+     * else the value is a range of codepoints in the <codepoint, codepointEnd> fields.
+     * <br>Note that the codepoints are in sorted order, and the strings are in sorted order,
+     * and that all code points are returned before any strings are returned.
+     * <br>You are guaranteed that the ranges are in sorted order, and the strings are in sorted order,
+     * and that all ranges are returned before any strings are returned.
+     * <br>You are also guaranteed that ranges are disjoint and non-contiguous.
+     * <br>Note also that the codepointEnd is undefined after calling this method.
      */
     public boolean nextRange() {
         if (nextElement <= endElement) {
@@ -129,7 +141,7 @@ public final class UnicodeSetIterator {
     
     /**
      * Causes the interation to only to part of long ranges
-     * @internal
+     * @internal -- used only for testing
      */
     public void setAbbreviated(boolean abbr) {
         abbreviated = abbr;
@@ -137,7 +149,7 @@ public final class UnicodeSetIterator {
     
     /**
      * Causes the interation to only to part of long ranges
-     * @internal
+     * @internal -- used only for testing
      */
     public boolean getAbbreviated() {
         return abbreviated;

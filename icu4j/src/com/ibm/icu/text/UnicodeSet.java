@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2002/03/13 19:52:34 $
- * $Revision: 1.61 $
+ * $Date: 2002/03/14 23:14:23 $
+ * $Revision: 1.62 $
  *
  *****************************************************************************************
  */
@@ -207,8 +207,9 @@ import java.util.Iterator;
  * <td>The set of characters <em>not</em> having the given
  * Unicode property
  * </table>
+ * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.61 $ $Date: 2002/03/13 19:52:34 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.62 $ $Date: 2002/03/14 23:14:23 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -863,7 +864,9 @@ public class UnicodeSet extends UnicodeFilter {
      * present.  If this set already contains the multicharacter,
      * the call leaves this set unchanged.
      * Thus "ch" => {"ch"}
-     * @param string to add
+     * @parameter the source string
+     * @return the modified set, for chaining
+     * @internal -- this API is not for general use, and may change at any time.
      */
     public final boolean contains(String s) {
         
@@ -916,7 +919,10 @@ public class UnicodeSet extends UnicodeFilter {
      * present.  If this set already contains the multicharacter,
      * the call leaves this set unchanged.
      * Thus "ch" => {"ch"}
-     * @param string to add
+	 * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
+     * @parameter the source string
+     * @return the modified set, for chaining
+     * @internal -- this API is not for general use, and may change at any time.
      */
     public final UnicodeSet add(String s) {
         
@@ -953,7 +959,9 @@ public class UnicodeSet extends UnicodeFilter {
     /**
      * Adds each of the characters in this string to the set. Thus "ch" => {"c", "h"}
      * If this set already any particular character, it has no effect on that character.
-     * @param string to add
+     * @parameter the source string
+     * @return the modified set, for chaining
+     * @internal -- this API is not for general use, and may change at any time.
      */
     public final UnicodeSet addAll(String s) {
         int cp;
@@ -967,7 +975,9 @@ public class UnicodeSet extends UnicodeFilter {
     /**
      * Retains EACH of the characters in this string. Note: "ch" == {"c", "h"}
      * If this set already any particular character, it has no effect on that character.
-     * @param string to add
+     * @parameter the source string
+     * @return the modified set, for chaining
+     * @internal -- this API is not for general use, and may change at any time.
      */
     public final UnicodeSet retainAll(String s) {
     	return retainAll(fromAll(s));
@@ -976,7 +986,9 @@ public class UnicodeSet extends UnicodeFilter {
     /**
      * Complement EACH of the characters in this string. Note: "ch" == {"c", "h"}
      * If this set already any particular character, it has no effect on that character.
-     * @param string to add
+     * @parameter the source string
+     * @return the modified set, for chaining
+     * @internal -- this API is not for general use, and may change at any time.
      */
     public final UnicodeSet complementAll(String s) {
     	return complementAll(fromAll(s));
@@ -985,7 +997,9 @@ public class UnicodeSet extends UnicodeFilter {
     /**
      * Remove EACH of the characters in this string. Note: "ch" == {"c", "h"}
      * If this set already any particular character, it has no effect on that character.
-     * @param string to add
+     * @parameter the source string
+     * @return the modified set, for chaining
+     * @internal -- this API is not for general use, and may change at any time.
      */
     public final UnicodeSet removeAll(String s) {
     	return removeAll(fromAll(s));
@@ -993,7 +1007,10 @@ public class UnicodeSet extends UnicodeFilter {
 
     /**
      * Makes a set from a multicharacter string. Thus "ch" => {"ch"}
-     * @param string to add
+	 * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
+     * @parameter the source string
+     * @return the modified set, for chaining
+     * @internal -- this API is not for general use, and may change at any time.
      */
     public static UnicodeSet from(String s) {
         return new UnicodeSet().add(s);
@@ -1002,7 +1019,9 @@ public class UnicodeSet extends UnicodeFilter {
     
     /**
      * Makes a set from each of the characters in the string. Thus "ch" => {"c", "h"}
-     * @param string to add
+     * @parameter the source string
+     * @return the modified set, for chaining
+     * @internal -- this API is not for general use, and may change at any time.
      */
     public static UnicodeSet fromAll(String s) {
         return new UnicodeSet().addAll(s);
@@ -1045,6 +1064,9 @@ public class UnicodeSet extends UnicodeFilter {
      * Retain the specified string in this set if it is present.
      * The set will not contain the specified character once the call
      * returns.
+     * @parameter the source string
+     * @return the modified set, for chaining
+     * @internal -- this API is not for general use, and may change at any time.
      */
     public final UnicodeSet retain(String s) {
         int cp = getSingleCP(s);
@@ -1096,6 +1118,9 @@ public class UnicodeSet extends UnicodeFilter {
      * Removes the specified string from this set if it is present.
      * The set will not contain the specified character once the call
      * returns.
+     * @parameter the source string
+     * @return the modified set, for chaining
+     * @internal -- this API is not for general use, and may change at any time.
      */
     public final UnicodeSet remove(String s) {
         int cp = getSingleCP(s);
@@ -1163,6 +1188,10 @@ public class UnicodeSet extends UnicodeFilter {
      * Complement the specified string in this set.
      * The set will not contain the specified character once the call
      * returns.
+	 * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
+     * @parameter the source string
+     * @return the modified set, for chaining
+     * @internal -- this API is not for general use, and may change at any time.
      */
     public final UnicodeSet complement(String s) {
         int cp = getSingleCP(s);
@@ -1199,7 +1228,10 @@ public class UnicodeSet extends UnicodeFilter {
     }
     
     /**
-     * @return TRUE if every character in s is in this set.
+     * Tests if every character in the string is in this set.
+     * @parameter the source string
+     * @return true if contained
+     * @internal -- this API is not for general use, and may change at any time.
      */
     public boolean containsAll(String s) {
         int cp;
@@ -1216,9 +1248,12 @@ public class UnicodeSet extends UnicodeFilter {
      * in the specified range of chars.
      * If <code>end > start</code> then the results of this method
      * are undefined.
-     *
+     * @param start first character, inclusive, of range to be removed
+     * from this set.
+     * @param end last character, inclusive, of range to be removed
      * @return <tt>true</tt> if this set contains the specified range
      * of chars.
+     * @internal -- this API is not for general use, and may change at any time.
      */
     public boolean containsNone(int start, int end) {
         if (start < MIN_VALUE || start > MAX_VALUE) {
@@ -1237,10 +1272,10 @@ public class UnicodeSet extends UnicodeFilter {
 
     /**
      * Returns <tt>true</tt> if the specified set is disjoint with this set.
-     *
      * @param c set to be checked for containment in this set.
      * @return <tt>true</tt> if this set contains all of the elements of the
      * 	       specified set.
+     * @internal -- this API is not for general use, and may change at any time.
      */
     public boolean containsNone(UnicodeSet c) {
         // The specified set is a subset if all of its pairs are contained in
@@ -1257,7 +1292,10 @@ public class UnicodeSet extends UnicodeFilter {
     }
     
     /**
-     * @return TRUE if one or more characters in s is in this set.
+     * Tests whether none of the characters are contained.
+     * @parameter the source string
+     * @return true if the condition is met
+     * @internal -- this API is not for general use, and may change at any time.
      */
     public boolean containsNone(String s) {
         int cp;
@@ -1270,7 +1308,10 @@ public class UnicodeSet extends UnicodeFilter {
         
         
     /**
-     * @return !containsNone(s)
+     * Tests whether some of the characters are contained.
+     * @parameter the source string
+     * @return true if the condition is met
+     * @internal -- this API is not for general use, and may change at any time.
      */
     public final boolean containsSome(String s) {
     	return !containsNone(s);
@@ -1278,7 +1319,10 @@ public class UnicodeSet extends UnicodeFilter {
         
         
     /**
-     * @return !containsNone(s)
+     * Tests whether some of the characters are contained.
+     * @parameter the source string
+     * @return true if the condition is met
+     * @internal -- this API is not for general use, and may change at any time.
      */
     public final boolean containsSome(UnicodeSet s) {
     	return !containsNone(s);
@@ -1286,7 +1330,10 @@ public class UnicodeSet extends UnicodeFilter {
         
         
     /**
-     * @return !containsNone(s)
+     * Tests whether some of the characters are contained.
+     * @parameter the source string
+     * @return true if the condition is met
+     * @internal -- this API is not for general use, and may change at any time.
      */
     public final boolean containsSome(int start, int end) {
     	return !containsNone(start, end);
