@@ -4098,7 +4098,7 @@ case "${host}" in
 			  tools/gencnval/gencnval tools/gennorm/gennorm \
 			  tools/gennames/gennames tools/gentest/gentest \
 			  tools/pkgdata/pkgdata tools/genprops/genprops \
-			  tools/pkgdata/pkgdata tools/genidna/genidna
+			  tools/genidna/genidna
 			do
 			  if test -f $file.c; then
 			    mv $file.c $file.cpp
