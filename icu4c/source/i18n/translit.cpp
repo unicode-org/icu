@@ -799,7 +799,7 @@ UChar Transliterator::filteredCharAt(const Replaceable& text, int32_t i) const {
     UChar c;
     const UnicodeFilter* filter = getFilter();
     return (filter == 0) ? text.charAt(i) :
-        (filter->contains(c = text.charAt(i)) ? c : (UChar)0xFFFF);
+        (filter->contains(c = text.charAt(i)) ? c : (UChar)0xFFFE);
 }
 
 /**

@@ -823,7 +823,8 @@ protected:
 
     /**
      * Method for subclasses to use to obtain a character in the given
-     * string, with filtering.
+     * string, with filtering.  If the character at the given offset
+     * is excluded by this transliterator's filter, then U+FFFE is returned.
      */
     UChar filteredCharAt(const Replaceable& text, int32_t i) const;
 
