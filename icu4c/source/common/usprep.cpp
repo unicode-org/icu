@@ -298,6 +298,11 @@ usprep_open(const char* path,
     if(status == NULL || U_FAILURE(*status)){
         return NULL;
     }
+
+    usprep_init(status);
+    if (U_FAILURE(*status)) {
+        return NULL;
+    }
        
     /* initialize the profile struct members */
     return usprep_getProfile(path,name,status);;

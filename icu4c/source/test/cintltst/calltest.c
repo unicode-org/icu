@@ -16,7 +16,6 @@
 
 #include "cintltst.h"
 
-void addSetup(TestNode** root);
 void addUtility(TestNode** root);
 void addBreakIter(TestNode** root);
 void addStandardNamesTest(TestNode **root);
@@ -39,7 +38,6 @@ void addHeapMutexTest(TestNode **root);
 
 void addAllTests(TestNode** root)
 {
-    addSetup(root);  /* Leave this test first! */
     addUDataTest(root);
     addPUtilTest(root);
     addUTF16Test(root);

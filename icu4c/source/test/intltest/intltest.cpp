@@ -26,7 +26,6 @@
 #include "intltest.h"
 #include "caltztst.h"
 #include "itmajor.h"
-#include "tsmutex.h"
 
 #include "umutex.h"
 
@@ -970,9 +969,6 @@ main(int argc, char* argv[])
     UConverter *cnv = NULL;
     const char *warnOrErr = "Failure"; 
 
-    /* This must be tested before using anything! */
-    MutexTest::gMutexInitialized = umtx_isInitialized(NULL);
-
 #ifdef XP_MAC_CONSOLE
     argc = ccommand( &argv );
 #endif
@@ -1186,16 +1182,6 @@ main(int argc, char* argv[])
 
     fprintf(stdout, "--------------------------------------\n");
 
-    if (!MutexTest::gMutexInitialized) {
-        fprintf(stderr,
-            "#### WARNING!\n"
-            "  The global mutex was not initialized during C++ static initialization.\n"
-            "  You must explicitly initialize ICU by calling u_init() before using ICU\n"
-            "  in multiple threads. If you are using ICU in a single threaded application,\n"
-            "  use of u_init() is recommended, but it is not required.\n"
-            "#### WARNING!\n"
-            );
-    }
     if (execCount <= 0) {
         fprintf(stdout, "***** Not all called tests actually exist! *****\n");
     }
