@@ -27,6 +27,7 @@
 #include "cintltst.h"
 #include "cucdtst.h"
 #include "uparse.h"
+#include "unicode/uscript.h"
 
 /* test data ---------------------------------------------------------------- */
 
@@ -95,6 +96,9 @@ TestCaseFolding(void);
 static void
 TestCaseCompare(void);
 
+static void
+TestUScriptCodeAPI(void);
+
 void addUnicodeTest(TestNode** root)
 {
     addTest(root, &TestUpperLower, "tsutil/cucdtst/TestUpperLower");
@@ -112,6 +116,7 @@ void addUnicodeTest(TestNode** root)
     addTest(root, &TestCaseMapping, "tsutil/cucdtst/TestCaseMapping");
     addTest(root, &TestCaseFolding, "tsutil/cucdtst/TestCaseFolding");
     addTest(root, &TestCaseCompare, "tsutil/cucdtst/TestCaseCompare");
+    addTest(root, &TestUScriptCodeAPI, "tsutil/cucdtst/TestUScriptCodeAPI");
 }
 
 /*==================================================== */
@@ -615,7 +620,7 @@ static void TestUnicodeData()
     }
 #endif
 
-    if (u_charScript((UChar)0x0041 != U_BASIC_LATIN)) {
+    if (u_charScript((UChar)0x0041 != U_BASIC_LATIN_BLOCK)) {
         log_err("Unicode character script property failed !\n");
     }
 
@@ -1760,3 +1765,133 @@ TestCaseCompare() {
         log_err("error: u_memcasecmp(mixed, different, 5, default)=%ld instead of positive\n", result);
     }
 }
+
+void TestUScriptCodeAPI(){
+    const char* testNames[]={
+    /* test locale */
+    "en", "en_US", "sr", "ta" , "te_IN",
+    "hi", "he", "ar",
+    /* test abbr */
+    "Hani", "Hang","Hebr","Hira",
+    "Knda","Kana","Khmr","Lao",
+    "Latn",/*"Latf","Latg",*/ 
+    "Mlym", "Mong",
+    
+    /* test names */
+    "CYRILLIC","DESERET","DEVANAGARI","ETHIOPIC","GEORGIAN", 
+    "GOTHIC",  "GREEK",  "GUJARATI", 
+    /* test lower case names */
+    "malayalam", "mongolian", "myanmar", "ogham", "old_italic",
+    "oriya",     "runic",     "sinhala", "syriac","tamil",     
+    "telugu",    "thaana",    "thai",    "tibetan", 
+    /* test the bounds*/
+    "ucas", "arabic",
+    /* test bogus */
+    "asfdasd", "5464", "12235",
+    '\0'  
+    };
+    UScriptCode expected[] ={
+        /* locales should return */
+        U_LATIN, U_LATIN, U_CYRILLIC, U_TAMIL, U_TELUGU, 
+        U_DEVANAGARI, U_HEBREW, U_ARABIC,
+        /* abbr should return */
+        U_HAN, U_HANGUL, U_HEBREW, U_HIRAGANA,
+        U_KANNADA, U_KATAKANA, U_KHMER, U_LAO,
+        U_LATIN,/* U_LATIN, U_LATIN,*/ 
+        U_MALAYALAM, U_MONGOLIAN,
+        /* names should return */
+        U_CYRILLIC, U_DESERET, U_DEVANAGARI, U_ETHIOPIC, U_GEORGIAN,
+        U_GOTHIC, U_GREEK, U_GUJARATI,
+        /* lower case names should return */    
+        U_MALAYALAM, U_MONGOLIAN, U_MYANMAR, U_OGHAM, U_OLD_ITALIC,
+        U_ORIYA, U_RUNIC, U_SINHALA, U_SYRIAC, U_TAMIL,
+        U_TELUGU, U_THAANA, U_THAI, U_TIBETAN,
+        /* bounds */
+        U_UCAS, U_ARABIC,
+        /* bogus names should return invalid code */
+        U_INVALID_CODE, U_INVALID_CODE, U_INVALID_CODE,
+    };
+    int i =0;
+    int numErrors =0;
+    UErrorCode err = U_ZERO_ERROR;
+    for( ; testNames[i]!='\0'; i++){
+        UScriptCode code = uchar_getScriptCode(testNames[i],&err);
+        if( code != expected[i]){
+               log_verbose("Error getting script code Got: %s  Expected: %s for name %s\n",
+                   uchar_scriptCodeName(code),uchar_scriptCodeName(expected[i]),testNames[i]);
+               numErrors++;
+        }
+    }
+    if(numErrors >0 ){
+        log_err("Errors uchar_getScriptCode() : %i \n",numErrors);
+    }
+    {
+        UScriptCode testAbbr[]={
+            /* names should return */
+            U_CYRILLIC, U_DESERET, U_DEVANAGARI, U_ETHIOPIC, U_GEORGIAN,
+            U_GOTHIC, U_GREEK, U_GUJARATI,
+        };
+
+        const char* expected[]={
+              
+            /* test names */
+            "CYRILLIC","DESERET","DEVANAGARI","ETHIOPIC","GEORGIAN", 
+            "GOTHIC",  "GREEK",  "GUJARATI", 
+             '\0'
+        };
+        int i=0;
+        while(i<sizeof(testAbbr)/sizeof(UScriptCode)){
+            const char* name = uchar_getScriptName(testAbbr[i]);
+            int numErrors=0;
+            if(strcmp(expected[i],name)!=0){
+                log_verbose("Error getting abbreviations Got: %s Expected: %s \n",name,expected[i]);
+                numErrors++;
+            }
+            if(numErrors > 0){
+                if(numErrors >0 ){
+                    log_err("Errors uchar_getScriptAbbr() : %i \n",numErrors);
+                }
+            }
+            i++;
+        }
+
+    }
+    {
+        UScriptCode testAbbr[]={
+            /* abbr should return */
+            U_HAN, U_HANGUL, U_HEBREW, U_HIRAGANA,
+            U_KANNADA, U_KATAKANA, U_KHMER, U_LAO,
+            U_LATIN, 
+            U_MALAYALAM, U_MONGOLIAN,
+        };
+
+        const char* expected[]={
+              /* test abbr */
+            "Hani", "Hang","Hebr","Hira",
+            "Knda","Kana","Khmr","Lao",
+            "Latn",
+            "Mlym", "Mong",
+             '\0'
+        };
+        int i=0;
+        while(i<sizeof(testAbbr)/sizeof(UScriptCode)){
+            const char* name = uchar_getScriptAbbr(testAbbr[i]);
+            int numErrors=0;
+            if(strcmp(expected[i],name)!=0){
+                log_verbose("Error getting abbreviations Got: %s Expected: %s \n",name,expected[i]);
+                numErrors++;
+            }
+            if(numErrors > 0){
+                if(numErrors >0 ){
+                    log_err("Errors uchar_getScriptAbbr() : %i \n",numErrors);
+                }
+            }
+            i++;
+        }
+
+    }
+
+}
+
+
+
