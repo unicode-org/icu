@@ -9,6 +9,7 @@ import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -61,7 +62,7 @@ public class MakeUnicodeFiles {
     
     public static void main(String[] args) throws IOException {
         //generateFile();
-        testInvariants(ToolUnicodePropertySource.make(Default.ucdVersion()));
+        testInvariants();
     }
 
     static class Format {
@@ -1105,15 +1106,60 @@ public class MakeUnicodeFiles {
         }       
     }
     
-    static Matcher invariantLine = Pattern.compile("([^=><!?])\\s*([=><!?])\\s*([^=><!?])").matcher("");
+    /**
+     * Chain together several SymbolTables. 
+     * @author Davis
+     */
+    static class ChainedSymbolTable implements SymbolTable {
+        // TODO: add accessors?
+        private List symbolTables;
+        /**
+         * Each SymbolTable is each accessed in order by the other methods,
+         * so the first in the list is accessed first, etc.
+         * @param symbolTables
+         */
+        ChainedSymbolTable(SymbolTable[] symbolTables) {
+            this.symbolTables = Arrays.asList(symbolTables);
+        }
+        public char[] lookup(String s) {
+            for (Iterator it = symbolTables.iterator(); it.hasNext();) {
+                SymbolTable st = (SymbolTable) it.next();
+                char[] result = st.lookup(s);
+                if (result != null) return result;
+            }
+            return null;
+        }
+
+        public UnicodeMatcher lookupMatcher(int ch) {
+            for (Iterator it = symbolTables.iterator(); it.hasNext();) {
+                SymbolTable st = (SymbolTable) it.next();
+                UnicodeMatcher result = st.lookupMatcher(ch);
+                if (result != null) return result;
+            }
+            return null;
+        }
+        
+        // Warning: this depends on pos being left alone unless a string is returned!!
+        public String parseReference(String text, ParsePosition pos, int limit) {
+            for (Iterator it = symbolTables.iterator(); it.hasNext();) {
+                SymbolTable st = (SymbolTable) it.next();
+                String result = st.parseReference(text, pos, limit);
+                if (result != null) return result;
+            }
+            return null;
+        }
+    }
     
-    static final UnicodeSet INVARIANT_RELATIONS = new UnicodeSet("[=><!?]");
+    static final UnicodeSet INVARIANT_RELATIONS = new UnicodeSet("[\\= \\! \\? \\< \\> \u2264 \u2265 \u2282 \u2286 \u2283 \u2287]");
     
-    static void testInvariants(UnicodeProperty.Factory factory) throws IOException {
+    static void testInvariants() throws IOException {
         PrintWriter out = BagFormatter.openUTF8Writer(UCD_Types.GEN_DIR, "UnicodeInvariantResults.txt");
+        out.write('\uFEFF'); // BOM
         BufferedReader in = BagFormatter.openUTF8Reader("", "UnicodeInvariants.txt");
         BagFormatter bf = new BagFormatter();
-        SymbolTable st = factory.getSymbolTable();
+        ChainedSymbolTable st = new ChainedSymbolTable(new SymbolTable[] {
+            ToolUnicodePropertySource.make("4.0.0").getSymbolTable("\u00D7"),
+            ToolUnicodePropertySource.make(Default.ucdVersion()).getSymbolTable("")});
         ParsePosition pp = new ParsePosition(0);
         int parseErrorCount = 0;
         int testFailureCount = 0;
@@ -1122,6 +1168,7 @@ public class MakeUnicodeFiles {
             String leftSide = null;
             String line = in.readLine();
             if (line == null) break;
+            if (line.startsWith("\uFEFF")) line = line.substring(1);
             line = line.trim();
             int pos = line.indexOf('#');
             if (pos >= 0) line = line.substring(0,pos).trim();
@@ -1137,7 +1184,8 @@ public class MakeUnicodeFiles {
                 eatWhitespace(line, pp);
                 relation = line.charAt(pp.getIndex());
                 if (!INVARIANT_RELATIONS.contains(relation)) {
-                    throw new ParseException("Invalid relation", pp.getIndex());
+                    throw new ParseException("Invalid relation, must be one of " + INVARIANT_RELATIONS.toPattern(false),
+                        pp.getIndex());
                 }
                 pp.setIndex(pp.getIndex()+1); // skip char
                 eatWhitespace(line, pp);
@@ -1172,8 +1220,10 @@ public class MakeUnicodeFiles {
             boolean ok = true;
             switch(relation) {
                 case '=': ok = leftSet.equals(rightSet); break;
-                case '>': ok = leftSet.containsAll(rightSet); break;
-                case '<': ok = rightSet.containsAll(leftSet); break;
+                case '<': case '\u2282': ok = rightSet.containsAll(leftSet) && !leftSet.equals(rightSet); break;
+                case '>': case '\u2283': ok = leftSet.containsAll(rightSet) && !leftSet.equals(rightSet); break;
+                case '\u2264': case '\u2286': ok = rightSet.containsAll(leftSet); break;
+                case '\u2265': case '\u2287': ok = leftSet.containsAll(rightSet); break;
                 case '!': ok = leftSet.containsNone(rightSet); break;
                 case '?': ok = !leftSet.equals(rightSet) 
                         && !leftSet.containsAll(rightSet) 
