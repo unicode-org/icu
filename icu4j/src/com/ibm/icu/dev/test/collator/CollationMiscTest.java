@@ -20,14 +20,104 @@ package com.ibm.icu.dev.test.collator;
 import com.ibm.icu.dev.test.*;
 import com.ibm.icu.text.*;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.impl.ICULocaleData;
 import java.util.Locale;
-
+import java.util.ResourceBundle;
 
 public class CollationMiscTest extends TestFmwk{
 
     public static void main(String[] args) throws Exception {
         new CollationMiscTest().run(args);
         // new CollationMiscTest().TestLocaleRuleBasedCollators(); 
+    }
+    
+    private static final int NORM_BUFFER_TEST_LEN_ = 32;
+    private static final class Tester 
+    {
+        int u;
+        String NFC;
+        String NFD;
+    };
+    
+    private static final boolean hasCollationElements(Locale locale)
+    {
+        ResourceBundle rb = ICULocaleData.getLocaleElements(locale);
+        if (rb != null) {
+            try {
+                 Object elements = rb.getObject("CollationElements");
+                 if (elements != null) {
+                     return true;
+                 }
+            } catch (Exception e) {
+            }
+        }
+        return false;
+    }
+    
+    public void TestComposeDecompose() 
+    {
+        Tester t[] = new Tester[0x30000];
+        t[0] = new Tester();
+        logln("Testing UCA extensively\n");
+        RuleBasedCollator coll;
+        try {
+            coll = (RuleBasedCollator)Collator.getInstance(Locale.ENGLISH);
+        } 
+        catch (Exception e) {
+            errln("Error opening collator\n");
+            return;
+        }
+    
+        int noCases = 0;
+        for (int u = 0; u < 0x30000; u ++) {
+            String comp = UTF16.valueOf(u);
+            int len = comp.length();
+            t[noCases].NFC = Normalizer.normalize(u, Normalizer.NFC);
+            t[noCases].NFD = Normalizer.normalize(u, Normalizer.NFD);
+    
+            if (t[noCases].NFC.length() != t[noCases].NFD.length() 
+                || (t[noCases].NFC.compareTo(t[noCases].NFD) != 0) 
+                || (len != t[noCases].NFD.length())
+                || (comp.compareTo(t[noCases].NFD) != 0)) {
+                t[noCases].u = u;
+                if (len != t[noCases].NFD.length() 
+                    || (comp.compareTo(t[noCases].NFD) != 0)) {
+                    t[noCases].NFC = comp;
+                }
+                noCases ++;
+                t[noCases] = new Tester();
+            } 
+        }
+    
+        for (int u = 0; u < noCases; u ++) {
+            if (!coll.equals(t[u].NFC, t[u].NFD)) {
+                errln("Failure: codePoint \\u" + Integer.toHexString(t[u].u) 
+                      + " fails TestComposeDecompose in the UCA");
+                CollationTest.doTest(this, coll, t[u].NFC, t[u].NFD, 0);
+            }
+        }
+    
+        logln("Testing locales, number of cases = " + noCases);
+        Locale loc[] = Collator.getAvailableLocales();
+        for (int i = 0; i < loc.length; i ++) {
+            if (hasCollationElements(loc[i])) {
+                logln("Testing locale " + loc[i].getDisplayName());
+                coll = (RuleBasedCollator)Collator.getInstance(loc[i]);
+                coll.setStrength(Collator.IDENTICAL);
+    
+                for (int u = 0; u < noCases; u ++) {
+                    if (!coll.equals(t[u].NFC, t[u].NFD)) {
+                        errln("Failure: codePoint \\u" 
+                              + Integer.toHexString(t[u].u)
+                              + " fails TestComposeDecompose for locale "
+                              + loc[i].getDisplayName());
+                        // this tests for the iterators too
+                        CollationTest.doTest(this, coll, t[u].NFC, t[u].NFD, 
+                                             0);
+                    }
+                }
+            }
+        }
     }
     
     public void TestRuleOptions() {
@@ -425,6 +515,9 @@ public class CollationMiscTest extends TestFmwk{
             else if (attrs[i].equals("AlternateHandling")) {
                 coll.setAlternateHandlingShifted(((Boolean)values[i]
                                                             ).booleanValue());
+            }
+            else if (attrs[i].equals("NumericCollation")) {
+                coll.setNumericCollation(((Boolean)values[i]).booleanValue());
             }
         }
         
@@ -1698,4 +1791,73 @@ public class CollationMiscTest extends TestFmwk{
         CollationTest.doTest(this, collator, "a", "a ", 0); // inconsistent results
     }
     
+    /**
+     * Test for CollationElementIterator previous and next for the whole set of
+     * unicode characters with normalization on.
+     */
+    public void TestNumericCollation()
+    {
+        String basicTestStrings[] = {"hello1", "hello2", "hello123456"};
+        String preZeroTestStrings[] = {"avery1",
+                                       "avery01",
+                                       "avery001",
+                                       "avery0001"};
+        String thirtyTwoBitNumericStrings[] = {"avery42949672960",
+                                               "avery42949672961",
+                                               "avery42949672962",
+                                               "avery429496729610"};
+    
+        String supplementaryDigits[] = {"\uD835\uDFCE", // 0 
+                                        "\uD835\uDFCF", // 1 
+                                        "\uD835\uDFD0", // 2 
+                                        "\uD835\uDFD1", // 3 
+                                        "\uD835\uDFCF\uD835\uDFCE", // 10 
+                                        "\uD835\uDFCF\uD835\uDFCF", // 11 
+                                        "\uD835\uDFCF\uD835\uDFD0", // 12 
+                                        "\uD835\uDFD0\uD835\uDFCE", // 20 
+                                        "\uD835\uDFD0\uD835\uDFCF", // 21 
+                                        "\uD835\uDFD0\uD835\uDFD0" // 22 
+                                       };
+    
+        String foreignDigits[] = {"\u0661",
+                                  "\u0662",
+                                  "\u0663",
+                                  "\u0661\u0660",
+                                  "\u0661\u0662",
+                                  "\u0661\u0663",
+                                  "\u0662\u0660",
+                                  "\u0662\u0662",
+                                  "\u0662\u0663",
+                                  "\u0663\u0660",
+                                  "\u0663\u0662",
+                                  "\u0663\u0663"
+                                 };
+    
+        // Open our collator.
+        RuleBasedCollator coll 
+                    = (RuleBasedCollator)Collator.getInstance(Locale.ENGLISH);
+        String att[] = {"NumericCollation"};
+        Boolean val[] = {new Boolean(true)};
+        genericLocaleStarterWithOptions(Locale.ENGLISH, basicTestStrings, att,
+                                        val);
+        genericLocaleStarterWithOptions(Locale.ENGLISH, 
+                                        thirtyTwoBitNumericStrings, att, val);
+        genericLocaleStarterWithOptions(Locale.ENGLISH, foreignDigits, att, 
+                                        val);
+        genericLocaleStarterWithOptions(Locale.ENGLISH, supplementaryDigits, 
+                                        att, val);    
+    
+        // Setting up our collator to do digits.
+        coll.setNumericCollation(true);
+    
+        // Testing that prepended zeroes still yield the correct collation 
+        // behavior. 
+        // We expect that every element in our strings array will be equal.
+        for (int i = 0; i < preZeroTestStrings.length - 1; i ++) {
+            for (int j = i + 1; j < preZeroTestStrings.length; j ++) {
+                CollationTest.doTest(this, coll, preZeroTestStrings[i], 
+                                     preZeroTestStrings[j],0);
+            }
+        }
+    }
 }

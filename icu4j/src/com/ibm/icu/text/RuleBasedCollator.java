@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $
-* $Date: 2003/08/25 23:23:12 $
-* $Revision: 1.44 $
+* $Date: 2003/08/27 22:28:45 $
+* $Revision: 1.45 $
 *
 *******************************************************************************
 */
@@ -446,6 +446,20 @@ public final class RuleBasedCollator extends Collator
     }
     
     /**
+     * Method to set numeric collation to its default value.
+     * When numeric collation is turned on, this Collator generates a collation 
+     * key for the numeric value of substrings of digits. This is a way to get 
+     * '100' to sort AFTER '2'
+     * @see #getNumericCollation
+     * @see #setNumericCollation
+     * @draft ICU 2.8
+     */
+    public void setNumericCollationDefault()
+    {
+        setNumericCollation(m_defaultIsNumericCollation_);
+    }
+
+    /**
      * Sets the mode for the direction of SECONDARY weights to be used in
      * French collation.
      * The default value is false, which treats SECONDARY weights in the order
@@ -625,6 +639,21 @@ public final class RuleBasedCollator extends Collator
         m_variableTopValue_ = (varTop & CE_PRIMARY_MASK_) >> 16;
     }
     
+    /**
+     * When numeric collation is turned on, this Collator generates a collation 
+     * key for the numeric value of substrings of digits. This is a way to get 
+     * '100' to sort AFTER '2'
+     * @param flag true to turn numeric collation on and false to turn it off
+     * @see #getNumericCollation
+     * @see #setNumericCollationDefault
+     * @draft ICU 2.8
+     */
+    public void setNumericCollation(boolean flag)
+    {
+        // sort substrings of digits as numbers
+        m_isNumericCollation_ = flag;
+    }
+
     // public getters --------------------------------------------------------
 
     /**
@@ -861,6 +890,21 @@ public final class RuleBasedCollator extends Collator
     public int getVariableTop()
     {
           return m_variableTopValue_ << 16;
+    }
+    
+    /** 
+     * Method to retrieve the numeric collation value.
+     * When numeric collation is turned on, this Collator generates a collation 
+     * key for the numeric value of substrings of digits. This is a way to get 
+     * '100' to sort AFTER '2'
+     * @see #setNumericCollation
+     * @see #setNumericCollationDefault
+     * @return true if numeric collation is turned on, false otherwise
+     * @draft ICU 2.8
+     */
+    public boolean getNumericCollation()
+    {
+        return m_isNumericCollation_;
     }
     
     // public other methods -------------------------------------------------
@@ -1324,6 +1368,7 @@ public final class RuleBasedCollator extends Collator
     boolean m_isJamoSpecial_;
 
     // Collator options ------------------------------------------------------
+    
     int m_defaultVariableTopValue_;
     boolean m_defaultIsFrenchCollation_;
     boolean m_defaultIsAlternateHandlingShifted_;
@@ -1332,6 +1377,8 @@ public final class RuleBasedCollator extends Collator
     int m_defaultDecomposition_;
     int m_defaultStrength_;
     boolean m_defaultIsHiragana4_;
+    boolean m_defaultIsNumericCollation_;
+    
     /**
      * Value of the variable top
      */
@@ -1344,6 +1391,10 @@ public final class RuleBasedCollator extends Collator
      * Case sorting customization
      */
     int m_caseFirst_;
+    /**
+     * Numeric collation option
+     */
+    boolean m_isNumericCollation_;
 
     // end Collator options --------------------------------------------------
 
@@ -1515,10 +1566,9 @@ public final class RuleBasedCollator extends Collator
                 Object elements = rb.getObject("CollationElements");
                 if (elements != null) {
                     Object[][] rules = (Object[][])elements;
-                    m_rules_ = (String)rules[1][1];
                     // %%CollationBin
                     if(rules[0][1] instanceof byte[]){
-
+                        m_rules_ = (String)rules[1][1];
                         byte map[] = (byte [])rules[0][1];
                         BufferedInputStream input =
                                                  new BufferedInputStream(
@@ -1547,7 +1597,8 @@ public final class RuleBasedCollator extends Collator
                         // due to resource redirection ICUListResourceBundle does not
                         // raise missing resource error
                         //throw new MissingResourceException("Could not get resource for constructing RuleBasedCollator","com.ibm.icu.impl.data.LocaleElements_"+locale.toString(), "%%CollationBin");
-                        init((String)rules[1][1]);
+                        m_rules_ = (String)rules[0][1];
+                        init(m_rules_);
                         return;
                     }
                 }
@@ -1606,6 +1657,7 @@ public final class RuleBasedCollator extends Collator
         m_defaultIsHiragana4_ = UCA_.m_defaultIsHiragana4_;
         m_defaultStrength_ = UCA_.m_defaultStrength_;
         m_defaultVariableTopValue_ = UCA_.m_defaultVariableTopValue_;
+        m_defaultIsNumericCollation_ = UCA_.m_defaultIsNumericCollation_;
         m_expansionOffset_ = UCA_.m_expansionOffset_;
         m_isAlternateHandlingShifted_ = UCA_.m_isAlternateHandlingShifted_;
         m_isCaseLevel_ = UCA_.m_isCaseLevel_;
@@ -1621,6 +1673,7 @@ public final class RuleBasedCollator extends Collator
         m_top3_ = UCA_.m_top3_;
         m_topCount3_ = UCA_.m_topCount3_;
         m_variableTopValue_ = UCA_.m_variableTopValue_;
+        m_isNumericCollation_ = UCA_.m_isNumericCollation_;
         setWithUCATables();
         latinOneFailed_ = false;
     }
@@ -1818,7 +1871,7 @@ public final class RuleBasedCollator extends Collator
      * Minimum size required for the binary collation data in bytes.
      * Size of UCA header + size of options to 4 bytes
      */
-    private static final int MIN_BINARY_DATA_SIZE_ = (42 + 24) << 2;
+    private static final int MIN_BINARY_DATA_SIZE_ = (42 + 25) << 2;
 
     /**
      * If this collator is to generate only simple tertiaries for fast path
@@ -3679,6 +3732,7 @@ public final class RuleBasedCollator extends Collator
         m_isCaseLevel_ = m_defaultIsCaseLevel_;
         m_caseFirst_ = m_defaultCaseFirst_;
         m_isHiragana4_ = m_defaultIsHiragana4_;
+        m_isNumericCollation_ = m_defaultIsNumericCollation_;
         latinOneFailed_ = false;
         updateInternalState();
     }
