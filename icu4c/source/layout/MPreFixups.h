@@ -2,13 +2,18 @@
  * (C) Copyright IBM Corp. 2002, 2003 - All Rights Reserved
  *
  * $Source: /xsrl/Nsvn/icu/icu/source/layout/MPreFixups.h,v $
- * $Date: 2003/01/04 02:52:23 $
- * $Revision: 1.1 $
+ * $Date: 2003/01/13 23:15:11 $
+ * $Revision: 1.2 $
  *
  */
 
 #ifndef __MPREFIXUPS_H
 #define __MPREFIXUPS_H
+
+/**
+ * \file
+ * \internal
+ */
 
 #include "LETypes.h"
 

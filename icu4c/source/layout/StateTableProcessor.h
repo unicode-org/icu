@@ -8,6 +8,11 @@
 #ifndef __STATETABLEPROCESSOR_H
 #define __STATETABLEPROCESSOR_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 #include "MorphTables.h"
 #include "MorphStateTables.h"

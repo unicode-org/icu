@@ -8,6 +8,11 @@
 #ifndef __MULTIPLESUBSTITUTIONSUBTABLES_H
 #define __MULTIPLESUBSTITUTIONSUBTABLES_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 #include "LEGlyphFilter.h"
 #include "OpenTypeTables.h"

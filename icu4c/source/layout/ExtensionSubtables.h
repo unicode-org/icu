@@ -8,6 +8,11 @@
 #ifndef __EXTENSIONSUBTABLES_H
 #define __EXTENSIONSUBTABLES_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 #include "OpenTypeTables.h"
 #include "GlyphSubstitutionTables.h"

@@ -8,6 +8,11 @@
 #ifndef __GLYPHPOSITIONINGTABLES_H
 #define __GLYPHPOSITIONINGTABLES_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 #include "LEFontInstance.h"
 #include "OpenTypeTables.h"

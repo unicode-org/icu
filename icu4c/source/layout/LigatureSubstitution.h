@@ -8,6 +8,11 @@
 #ifndef __LIGATURESUBSTITUTION_H
 #define __LIGATURESUBSTITUTION_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 #include "LayoutTables.h"
 #include "StateTables.h"

@@ -8,6 +8,11 @@
 #ifndef __HINDIFEATURETAGS_H
 #define __HINDIFEATURETAGS_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "jni.h"
 #include "LETypes.h"
 #include "OpenTypeTables.h"

@@ -8,6 +8,11 @@
 #ifndef __PAIRPOSITIONINGSUBTABLES_H
 #define __PAIRPOSITIONINGSUBTABLES_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 #include "LEFontInstance.h"
 #include "OpenTypeTables.h"

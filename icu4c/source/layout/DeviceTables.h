@@ -8,6 +8,11 @@
 #ifndef __DEVICETABLES_H
 #define __DEVICETABLES_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 #include "OpenTypeTables.h"
 #include "GlyphIterator.h"

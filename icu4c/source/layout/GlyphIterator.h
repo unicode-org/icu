@@ -8,6 +8,11 @@
 #ifndef __GLYPHITERATOR_H
 #define __GLYPHITERATOR_H
 
+/**
+ * \file
+ * \internal
+ */
+
 #include "LETypes.h"
 #include "OpenTypeTables.h"
 #include "GlyphDefinitionTables.h"
