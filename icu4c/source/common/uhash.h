@@ -42,7 +42,7 @@ typedef int32_t (*UHashFunction)(const void*);
  * and <TT>uhash_put</TT>
  * @param parm A pointer to the data to be hashed.
  */
-typedef void (*ValueDeleter)(void* valuePtr);
+typedef void (* U_CALLCONV ValueDeleter)(void* valuePtr);
 /** The UHashtable struct */
 struct UHashtable {
 

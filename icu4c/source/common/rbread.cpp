@@ -40,7 +40,7 @@ static String2dList* read_strlist2d(FileStream *rb, UnicodeString& listname,
 				    UErrorCode& status);
 static TaggedList* read_taglist(FileStream *rb, UnicodeString& listname,
 				UErrorCode& status);
-static void RBHashtable_valueDeleter(void *value);
+static void U_CALLCONV RBHashtable_valueDeleter(void *value);
 
 
 /* Read a string from a compiled resource file */

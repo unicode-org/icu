@@ -132,6 +132,13 @@ typedef uint16_t UChar;
 #endif
 #define U_CAPI U_CFUNC U_EXPORT
 
+/* Work around the OS390 compiler issue, to be removed when the compiler 
+updates come out.  */
+#ifdef OS390
+#    define U_CALLCONV __cdecl
+#else
+#    define U_CALLCONV 
+#endif
 
 /* Define NULL pointer value  if it isn't already defined */
 

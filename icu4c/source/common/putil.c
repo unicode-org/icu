@@ -34,6 +34,7 @@
 *   04/15/99    stephen     Converted to C.
 *   06/28/99    stephen     Removed mutex locking in u_isBigEndian().
 *   08/04/99    jeffrey R.  Added OS/2 changes
+*   11/15/99    helena      Integrated S/390 IEEE support.
 *******************************************************************************
 */
 
@@ -68,8 +69,15 @@
 #endif
 
 /* We return QNAN rather than SNAN*/
+#ifdef IEEE_754
 #define NAN_TOP ((int16_t)0x7FF8)
 #define INF_TOP ((int16_t)0x7FF0)
+#else
+#ifdef OS390
+#define NAN_TOP ((int16_t)0x7F08)
+#define INF_TOP ((int16_t)0x3F00)
+#endif
+#endif
 
 #define SIGN 0x80000000L
 
@@ -174,6 +182,15 @@ icu_isNaN(double number)
   /* If your platform doesn't support IEEE 754 but *does* have an NaN value,*/
   /* you'll need to replace this default implementation with what's correct*/
   /* for your platform.*/
+#ifdef OS390
+  uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number,
+                            sizeof(uint32_t));
+  uint32_t lowBits  = *(uint32_t*)u_bottomNBytesOfDouble(&number,
+                           sizeof(uint32_t));
+
+  return ((highBits & 0x7F000000L) == 0x7F000000L) &&
+    (((highBits & 0x000FFFFFL) != 0) || (lowBits != 0));
+#endif
   return number != number;
 #endif
 }
@@ -224,6 +241,11 @@ icu_isNegativeInfinity(double number)
 #ifdef IEEE_754
   return (number < 0 && icu_isInfinite(number));
 #else
+#ifdef OS390
+  uint32_t highBits = *(uint32_t*)u_topNBytesOfDouble(&number,
+                            sizeof(uint32_t));
+  return((highBits & SIGN) && icu_isInfinite(number));
+#endif
   return icu_isInfinite(number);
 #endif
 }
@@ -231,7 +253,7 @@ icu_isNegativeInfinity(double number)
 double 
 icu_getNaN()
 {
-#ifdef IEEE_754  
+#if defined(IEEE_754) || defined(OS390)
   if( ! fgNaNInitialized) {
     umtx_lock(NULL);
     if( ! fgNaNInitialized) {
@@ -392,7 +414,12 @@ icu_fmax(double x, double y)
   return (x > y ? x : y);
 #else
   /* {sfb} fix this*/
+#ifdef OS390
+/* this should work for all flt point w/o NaN and Infpecial cases */
+  return (x > y ? x : y);
+#else
   return x;
+#endif
 #endif
 }
 
@@ -420,7 +447,13 @@ icu_fmin(double x, double y)
   return (x > y ? y : x);
 #else
   /* {sfb} fix this*/
+#ifdef OS390
+/* this should work for all flt point w/o NaN and Inf special cases */
+
+  return (x > y ? y : x);
+#else
   return x;
+#endif
 #endif
 }
 
@@ -565,7 +598,11 @@ int32_t
 icu_timezone()
 {
 #ifdef POSIX
+#ifdef OS390
+  return _timezone;
+#else
   return timezone;
+#endif
 #endif
 
 #if defined(OS400) || defined(XP_MAC)
@@ -612,9 +649,11 @@ icu_getDefaultDataDirectory()
 {
 #ifdef POSIX
   static char *PATH = 0;
+#ifndef OS390
   if(PATH == 0) {
     umtx_lock(NULL);
     if(PATH == 0) {
+#endif
       /* Normally, the locale and converter data will be installed in
          the same tree as the ICU libraries - typically /usr/local/lib
          for the libraries, /usr/local/include for the headers, and
@@ -632,8 +671,11 @@ icu_getDefaultDataDirectory()
         PATH = ICU_DATA_DIR;
       }
     }
+#ifndef OS390
+  }
     umtx_unlock(NULL);
   }
+#endif
   return PATH;
 #endif
 
@@ -930,6 +972,9 @@ icu_nextDouble(double d, bool_t next)
   *lowResult  = lowMagnitude;
   return result;
 #else
+#ifdef OS390
+  double last_eps,sum;
+#endif
   /* This is the portable implementation...*/
   /* a small coefficient within the precision of the mantissa*/
   static const double smallValue = 1e-10;  
@@ -938,7 +983,12 @@ icu_nextDouble(double d, bool_t next)
   if (!next) epsilon = -epsilon;
   double last_eps = epsilon * 2.0;
   /* avoid higher precision possibly used for temporay values*/
+#ifdef OS390
+  last_eps = epsilon * 2.0;
+  sum = d + epsilon;
+#else
   double sum = d + epsilon; 
+#endif
   while ((sum != d) && (epsilon != last_eps)) {
     last_eps = epsilon;
     epsilon /= 2.0;
