@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2000-2001, International Business Machines
+*   Copyright (C) 2000-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnvhz.c
@@ -597,7 +597,7 @@ _HZ_WriteSub(UConverterFromUnicodeArgs *args, int32_t offsetIndex, UErrorCode *e
 /* structure for SafeClone calculations */
 struct cloneStruct
 {
-    UConverter cnv;
+    UConverter cnv, subCnv;
     UConverterDataHZ mydata;
 };
 
@@ -609,7 +609,7 @@ _HZ_SafeClone(const UConverter *cnv,
               UErrorCode *status)
 {
     struct cloneStruct * localClone;
-    int32_t bufferSizeNeeded = sizeof(struct cloneStruct);
+    int32_t size, bufferSizeNeeded = sizeof(struct cloneStruct);
 
     if (U_FAILURE(*status)){
         return 0;
@@ -626,6 +626,11 @@ _HZ_SafeClone(const UConverter *cnv,
 
     uprv_memcpy(&localClone->mydata, cnv->extraInfo, sizeof(UConverterDataHZ));
     localClone->cnv.extraInfo = &localClone->mydata;
+
+    /* deep-clone the sub-converter */
+    size = (int32_t)sizeof(UConverter);
+    ((UConverterDataHZ*)localClone->cnv.extraInfo)->gbConverter =
+        ucnv_safeClone(((UConverterDataHZ*)cnv->extraInfo)->gbConverter, &localClone->subCnv, &size, status);
 
     return &localClone->cnv;
 }
