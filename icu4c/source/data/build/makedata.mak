@@ -124,7 +124,7 @@ ALL : GODATA  test.dat  "$(DLL_OUTPUT)\testdata.dll" "$(DLL_OUTPUT)\$(U_ICUDATA_
 BRK_FILES = "$(ICUDATA)\sent.brk" "$(ICUDATA)\char.brk" "$(ICUDATA)\line.brk" "$(ICUDATA)\word.brk" "$(ICUDATA)\line_th.brk" "$(ICUDATA)\word_th.brk"
 
 #invoke pkgdata
-"$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" :  $(CNV_FILES) $(BRK_FILES) uprops.dat unames.dat cnvalias.dat tz.dat $(ALL_RES) 
+"$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll" :  $(CNV_FILES) $(BRK_FILES) uprops.dat unames.dat cnvalias.dat tz.dat ucadata.dat invuca.dat $(ALL_RES) 
 	@echo Building icu data
 	@cd "$(ICUDBLD)"
  	"$(ICUTOOLS)\pkgdata\$(CFG)\pkgdata" -e icudata -v -T . -m dll -c -p $(U_ICUDATA_NAME) -O "$(PKGOPT)" -d "$(DLL_OUTPUT)" -s . <<pkgdatain.txt
@@ -132,6 +132,8 @@ uprops.dat
 unames.dat
 cnvalias.dat
 tz.dat
+ucadata.dat
+invuca.dat
 $(CNV_FILES:.cnv =.cnv
 )
 $(RB_FILES:.res =.res
@@ -283,12 +285,22 @@ tz.dat : {"$(ICUDATA)"}timezone.txt {"$(ICUTOOLS)\gentz\$(CFG)"}gentz.exe
 	@set ICU_DATA=$(ICUDBLD)
 	@"$(ICUTOOLS)\gentz\$(CFG)\gentz" "$(ICUDATA)\timezone.txt"
 
+# Targets for ucadata.dat & invuca.dat
+ucadata.dat: "$(ICUDATA)\unidata\FractionalUCA.txt" "$(ICUTOOLS)\genuca\$(CFG)\genuca.exe"
+	@echo Creating UCA data files
+	@set ICU_DATA=$(ICUDBLD)
+	@"$(ICUTOOLS)\genuca\$(CFG)\genuca" -s "$(ICUDATA)\unidata"
+
+invuca.dat: ucadata.dat
+
 # Dependencies on the tools
 convrtrs.txt : {"$(ICUTOOLS)\gencnval\$(CFG)"}gencnval.exe
 
 tz.txt : {"$(ICUTOOLS)\gentz\$(CFG)"}gentz.exe
 
-uprops.dat unames.dat cnvalias.dat tz.dat : {"$(ICUTOOLS)\genccode\$(CFG)"}genccode.exe
+uprops.dat unames.dat cnvalias.dat tz.dat ucadata.dat invuca.dat: {"$(ICUTOOLS)\genccode\$(CFG)"}genccode.exe
+
+genrb.exe : ucadata.dat
 
 $(TRANSLIT_SOURCE) $(GENRB_SOURCE) : {"$(ICUTOOLS)\genrb\$(CFG)"}genrb.exe
 

@@ -1,7 +1,29 @@
+/*
+*******************************************************************************
+*
+*   Copyright (C) 2000-2001, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+*
+*******************************************************************************
+*   file name:  genuca.cpp
+*   encoding:   US-ASCII
+*   tab size:   8 (not used)
+*   indentation:4
+*
+*   created at the end of XX century
+*   created by: Vladimir Weinstein
+*
+*   This program reads the Franctional UCA table and generates
+*   internal format for UCA table as well as inverse UCA table.
+*   It then writes binary files containing the data: ucadata.dat 
+*   & invuca.dat
+*/
+
 #include "genuca.h"
 #include "cnttable.h"
 #include "uoptions.h"
 #include "toolutil.h"
+#include "cstring.h"
 
 #include <stdlib.h>
 
@@ -961,13 +983,18 @@ static UOption options[]={
     UOPTION_COPYRIGHT,           /* 2 */
     UOPTION_VERSION,             /* 3 */
     UOPTION_DESTDIR,             /* 4 */
-    UOPTION_VERBOSE              /* 5 */
+    UOPTION_SOURCEDIR,           /* 5 */
+    UOPTION_VERBOSE              /* 6 */
+    /* weiv can't count :))))) */
 };
 
 int main(int argc, char* argv[]) {
     UErrorCode status = U_ZERO_ERROR;
-    const char* destdir;
+    const char* destdir = NULL;
+    const char* srcDir = NULL;
     UBool haveCopyright;
+    char filename[300];
+    char *basename = NULL;
 
 #ifdef XP_MAC_CONSOLE
     argc = ccommand((char***)&argv);
@@ -975,6 +1002,7 @@ int main(int argc, char* argv[]) {
 
     /* preset then read command line options */
     options[4].value=u_getDataDirectory();
+    options[5].value="";
     argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
 
     /* error handling, printing usage message */
@@ -985,7 +1013,7 @@ int main(int argc, char* argv[]) {
     } else if(argc<2) {
         argc=-1;
     }
-    if(argc<=1 || options[0].doesOccur || options[1].doesOccur) {
+    if(options[0].doesOccur || options[1].doesOccur) {
         fprintf(stderr,
             "usage: %s [-options] file\n"
             "\tRead in UCA collation text data and write out the binary collation data\n"
@@ -994,6 +1022,7 @@ int main(int argc, char* argv[]) {
             "\t\t-V or --version     show a version message\n"
             "\t\t-c or --copyright   include a copyright notice\n"
             "\t\t-d or --destdir     destination directory, followed by the path\n"
+            "\t\t-s or --sourcedir   source directory, followed by the path\n"
             "\t\t-v or --verbose     Turn on verbose output\n",
             argv[0]);
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
@@ -1010,10 +1039,26 @@ int main(int argc, char* argv[]) {
     /* get the options values */
     haveCopyright = options[2].doesOccur;
     destdir = options[4].value;
-    VERBOSE = options[5].doesOccur;
+    srcDir = options[5].value;
+    VERBOSE = options[6].doesOccur;
 
-    argv++;
-    return write_uca_table(getLongPathname(*argv), destdir, haveCopyright, &status);
+    if(argc < 0) {
+
+      /* prepare the filename beginning with the source dir */
+      uprv_strcpy(filename, srcDir);
+      basename=filename+uprv_strlen(filename);
+
+      if(basename>filename && *(basename-1)!=U_FILE_SEP_CHAR) {
+          *basename++=U_FILE_SEP_CHAR;
+      }
+    
+      uprv_strcpy(basename, "FractionalUCA.txt");
+    } else {
+      argv++;
+      uprv_strcpy(filename, getLongPathname(*argv));
+    }
+
+    return write_uca_table(filename, destdir, haveCopyright, &status);
 }
 
 /*
