@@ -226,9 +226,9 @@ double IntlTestDateFormat::randDouble()
     {
         double e = uprv_floor(uprv_log10(d));
         if (e < -2.0)
-            d *= uprv_pow10((long)-e-2);
+            d *= uprv_pow10((int32_t)(-e-2));
         else if (e > -1.0)
-            d /= uprv_pow10((long)e+1);
+            d /= uprv_pow10((int32_t)(e+1));
     }
     return d;
 }

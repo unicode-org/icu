@@ -329,7 +329,7 @@ UnicodeTest::unicodeDataLineFn(void *context,
     }
 
     /* get the character code, field 0 */
-    c=uprv_strtoul(fields[0][0], &end, 16);
+    c=(UChar32)uprv_strtoul(fields[0][0], &end, 16);
     if(end<=fields[0][0] || end!=fields[0][1]) {
         me->errln("error: syntax error in field 0 at %s\n" + UnicodeString(fields[0][0], ""));
         *pErrorCode = U_PARSE_ERROR;
@@ -372,7 +372,7 @@ UnicodeTest::unicodeDataLineFn(void *context,
     }
 
     /* get canonical combining class, field 3 */
-    value=uprv_strtoul(fields[3][0], &end, 10);
+    value=(uint32_t)uprv_strtoul(fields[3][0], &end, 10);
     if(end<=fields[3][0] || end!=fields[3][1]) {
         me->errln("error: syntax error in field 3 at code 0x%lx\n", c);
         *pErrorCode = U_PARSE_ERROR;
@@ -399,7 +399,7 @@ UnicodeTest::unicodeDataLineFn(void *context,
 
     /* get uppercase mapping, field 12 */
     if(fields[12][0]!=fields[12][1]) {
-        value=uprv_strtoul(fields[12][0], &end, 16);
+        value=(uint32_t)uprv_strtoul(fields[12][0], &end, 16);
         if(end!=fields[12][1]) {
             me->errln("error: syntax error in field 12 at code 0x%lx\n", c);
             *pErrorCode = U_PARSE_ERROR;
@@ -421,7 +421,7 @@ UnicodeTest::unicodeDataLineFn(void *context,
 
     /* get lowercase mapping, field 13 */
     if(fields[13][0]!=fields[13][1]) {
-        value=uprv_strtoul(fields[13][0], &end, 16);
+        value=(uint32_t)uprv_strtoul(fields[13][0], &end, 16);
         if(end!=fields[13][1]) {
             me->errln("error: syntax error in field 13 at code 0x%lx\n", c);
             *pErrorCode = U_PARSE_ERROR;
@@ -443,7 +443,7 @@ UnicodeTest::unicodeDataLineFn(void *context,
 
     /* get titlecase mapping, field 14 */
     if(fields[14][0]!=fields[14][1]) {
-        value=uprv_strtoul(fields[14][0], &end, 16);
+        value=(uint32_t)uprv_strtoul(fields[14][0], &end, 16);
         if(end!=fields[14][1]) {
             me->errln("error: syntax error in field 14 at code 0x%lx\n", c);
             *pErrorCode = U_PARSE_ERROR;
