@@ -971,6 +971,18 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     /**
+     * Parse a CurrencyAmount using the given NumberFormat, with
+     * the 'delim' character separating the number and the currency.
+     */
+    private static CurrencyAmount parseCurrencyAmount(String str, NumberFormat fmt,
+                                                      char delim) 
+        throws ParseException {
+        int i = str.indexOf(delim);
+        return new CurrencyAmount(fmt.parse(str.substring(0,i)),
+                                  Currency.getInstance(str.substring(i+1)));
+    }
+
+    /**
      * Return an integer representing the next token from this
      * iterator.  The integer will be an index into the given list, or
      * -1 if there are no more tokens, or -2 if the token is not on
@@ -992,8 +1004,9 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         /*3*/ "fp:",  // <pattern or '-'> <number> <exp. string> <exp. number>
         /*4*/ "rt:",  // <pattern or '-'> <(exp.) number> <(exp.) string>
         /*5*/ "p:",   // <pattern or '-'> <string> <exp. number>
-        /*6*/ "perr:",   // <pattern or '-'> <invalid string>
+        /*6*/ "perr:", // <pattern or '-'> <invalid string>
         /*7*/ "pat:", // <pattern or '-'> <exp. toPattern or '-' or 'err'>
+        /*8*/ "fpc:", // <pattern or '-'> <curr.amt> <exp. string> <exp. curr.amt>
     };
 
     public void TestCases() {
@@ -1027,6 +1040,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 case 3: // fp:
                 case 4: // rt:
                 case 5: // p:
+                case 8: // fpc:
                 	tok = tokens.next();
                     if (!tok.equals("-")) {
                     	pat = tok;
@@ -1037,7 +1051,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                             iae.printStackTrace();
                             tokens.next(); // consume remaining tokens
                             tokens.next();
-                            if (cmd == 3) tokens.next();
+                            if (cmd == 3 || cmd == 8) tokens.next();
                             continue;
                         }
                     }
@@ -1059,6 +1073,17 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                                 assertEquals(where + '"' + pat + "\".parse(\"" + str + "\")",
                                              n, fmt.parse(str));
                             } 
+                        }
+                        // fpc: <pattern or '-'> <curr.amt> <exp. string> <exp. curr.amt>
+                        else if (cmd == 8) {
+                            String currAmt = tokens.next();
+                            str = tokens.next();
+                            CurrencyAmount n = parseCurrencyAmount(currAmt, ref, '/');
+                            assertEquals(where + '"' + pat + "\".format(" + currAmt + ")",
+                                         str, fmt.format(n));
+                            n = parseCurrencyAmount(tokens.next(), ref, '/');
+                            assertEquals(where + '"' + pat + "\".parse(\"" + str + "\")",
+                                         n, fmt.parseCurrency(str));
                         }
                         // p: <pattern or '-'> <string to parse> <exp. number>
                         else {

@@ -1,12 +1,14 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2003, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2004, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.util;
 
 import java.io.Serializable;
+import java.text.ChoiceFormat;
+import java.text.ParsePosition;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -306,6 +308,123 @@ public class Currency implements Serializable {
 
         // If we fail to find a match, use the ISO 4217 code
         return isoCode;        
+    }
+
+    /**
+     * Attempt to parse the given string as a currency, either as a
+     * display name in the given locale, or as a 3-letter ISO 4217
+     * code.  If multiple display names match, then the longest one is
+     * selected.  If both a display name and a 3-letter ISO code
+     * match, then the display name is preferred, unless it's length
+     * is less than 3.
+     *
+     * @param locale the locale of the display names to match
+     * @param text the text to parse
+     * @param pos input-output position; on input, the position within
+     * text to match; must have 0 <= pos.getIndex() < text.length();
+     * on output, the position after the last matched character. If
+     * the parse fails, the position in unchanged upon output.
+     * @return the ISO 4217 code, as a string, of the best match, or
+     * null if there is no match
+     *
+     * @internal
+     */
+    public static String parse(Locale locale, String text, ParsePosition pos) {
+
+        // TODO: There is a slight problem with the pseudo-multi-level
+        // fallback implemented here.  More-specific locales don't
+        // properly shield duplicate entries in less-specific locales.
+        // This problem will go away when real multi-level fallback is
+        // implemented.  We could also fix this by recording (in a
+        // hash) which codes are used at each level of fallback, but
+        // this doesn't seem warranted.
+
+        int start = pos.getIndex();
+        String fragment = text.substring(start);
+
+        String iso = null;
+        int max = 0;
+
+        // Look up the Currencies resource for the given locale.  The
+        // Currencies locale data looks like this:
+        //|en {
+        //|  Currencies { 
+        //|    USD { "US$", "US Dollar" }
+        //|    CHF { "Sw F", "Swiss Franc" }
+        //|    INR { "=0#Rs|1#Re|1<Rs", "=0#Rupees|1#Rupee|1<Rupees" }
+        //|    //...
+        //|  }
+        //|}
+
+        // In the future, resource bundles may implement multi-level
+        // fallback.  That is, if a currency is not found in the en_US
+        // Currencies data, then the en Currencies data will be searched.
+        // Currently, if a Currencies datum exists in en_US and en, the
+        // en_US entry hides that in en.
+
+        // We want multi-level fallback for this resource, so we implement
+        // it manually.
+
+        // Multi-level resource inheritance fallback loop
+        while (locale != null) {
+            ResourceBundle rb = ICULocaleData.getLocaleElements(locale);
+            // We can't cast this to String[][]; the cast has to happen later
+            try {
+                Object[][] currencies = (Object[][]) rb.getObject("Currencies");
+                // Do a linear search
+                for (int i=0; i<currencies.length; ++i) {
+                    String name = ((String[]) currencies[i][1])[0];
+                    if (name.length() < 1) {
+                        // Ignore zero-length names -- later, change this
+                        // when zero-length is used to mean something.
+                        continue;
+                    } else if (name.charAt(0) == '=') {
+                        name = name.substring(1);
+                        if (name.length() > 0 && name.charAt(0) != '=') {
+                            ChoiceFormat choice = new ChoiceFormat(name);
+                            /* Number n = */choice.parse(text, pos);
+                            int len = pos.getIndex() - start;
+                            if (len > max) {
+                                iso = (String) currencies[i][0];
+                                max = len;
+                            }
+                            pos.setIndex(start);
+                            continue;
+                        }
+                    }
+                    if (name.length() > max && fragment.startsWith(name)) {
+                        iso = (String) currencies[i][0];
+                        max = name.length();
+                    }
+                }
+            }
+            catch (MissingResourceException e) {}
+
+            locale = LocaleUtility.fallback(locale);
+        }
+        
+        // If display name parse fails or if it matches fewer than 3
+        // characters, try to parse 3-letter ISO.  Do this after the
+        // display name processing so 3-letter display names are
+        // preferred.  Consider /[A-Z]{3}/ to be valid ISO, and parse
+        // it manually--UnicodeSet/regex are too slow and heavy.
+        if (max < 3 && (text.length() - start) >= 3) {
+            boolean valid = true;
+            for (int k=0; k<3; ++k) {
+                char ch = text.charAt(start + k); // 16-bit ok
+                if (ch < 'A' || ch > 'Z') {
+                    valid = false;
+                    break;
+                }
+            }
+            if (valid) {
+                iso = text.substring(start, start+3);
+                max = 3;
+            }
+        }
+        
+    	pos.setIndex(start + max);
+        return iso;
     }
 
     /**
