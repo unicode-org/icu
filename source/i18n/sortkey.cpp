@@ -42,14 +42,14 @@ U_NAMESPACE_BEGIN
 const char CollationKey::fgClassID=0;
 
 CollationKey::CollationKey()
-    : fBogus(FALSE), fCount(0), fCapacity(0),
+    : UObject(), fBogus(FALSE), fCount(0), fCapacity(0),
       fHashCode(kEmptyHashCode), fBytes(NULL)
 {
 }
 
 // Create a collation key from a bit array.
 CollationKey::CollationKey(const uint8_t* newValues, int32_t count)
-    : fBogus(FALSE), fCount(count), fCapacity(count),
+    : UObject(), fBogus(FALSE), fCount(count), fCapacity(count),
       fHashCode(kInvalidHashCode)
 {
     fBytes = (uint8_t *)uprv_malloc(count);
@@ -64,7 +64,7 @@ CollationKey::CollationKey(const uint8_t* newValues, int32_t count)
 }
 
 CollationKey::CollationKey(const CollationKey& other)
-: fBogus(FALSE), fCount(other.fCount), fCapacity(other.fCapacity),
+: UObject(other), fBogus(FALSE), fCount(other.fCount), fCapacity(other.fCapacity),
   fHashCode(other.fHashCode), fBytes(NULL)
 {
     if (other.fBogus)

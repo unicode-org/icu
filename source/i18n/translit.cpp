@@ -117,7 +117,7 @@ inline UBool positionIsValid(UTransPosition& index, int32_t len) {
  */
 Transliterator::Transliterator(const UnicodeString& theID,
                                UnicodeFilter* adoptedFilter) :
-    ID(theID), filter(adoptedFilter),
+    UObject(), ID(theID), filter(adoptedFilter),
     maximumContextLength(0) {}
 
 /**
@@ -131,7 +131,7 @@ Transliterator::~Transliterator() {
  * Copy constructor.
  */
 Transliterator::Transliterator(const Transliterator& other) :
-    ID(other.ID), filter(0),
+    UObject(other), ID(other.ID), filter(0),
     maximumContextLength(other.maximumContextLength) {
     if (other.filter != 0) {
         // We own the filter, so we must have our own copy

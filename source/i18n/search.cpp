@@ -17,6 +17,7 @@
 U_NAMESPACE_BEGIN
 
 SearchIterator::SearchIterator(const SearchIterator &other)
+    : UObject(other)
 {   
     m_breakiterator_            = other.m_breakiterator_;
     m_text_                     = other.m_text_;

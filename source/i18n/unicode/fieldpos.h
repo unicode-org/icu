@@ -105,7 +105,7 @@ public:
      * @stable
      */
     FieldPosition() 
-        : fField(DONT_CARE), fBeginIndex(0), fEndIndex(0) {}
+        : UObject(), fField(DONT_CARE), fBeginIndex(0), fEndIndex(0) {}
 
     /**
      * Creates a FieldPosition object for the given field.  Fields are
@@ -119,7 +119,7 @@ public:
      * @stable
      */
     FieldPosition(int32_t field) 
-        : fField(field), fBeginIndex(0), fEndIndex(0) {}
+        : UObject(), fField(field), fBeginIndex(0), fEndIndex(0) {}
 
     /**
      * Copy constructor
@@ -127,7 +127,7 @@ public:
      * @stable
      */
     FieldPosition(const FieldPosition& copy) 
-        : fField(copy.fField), fBeginIndex(copy.fBeginIndex), fEndIndex(copy.fEndIndex) {}
+        : UObject(copy), fField(copy.fField), fBeginIndex(copy.fBeginIndex), fEndIndex(copy.fEndIndex) {}
 
     /**
      * Destructor

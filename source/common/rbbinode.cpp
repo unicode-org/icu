@@ -42,7 +42,7 @@ int  RBBINode::gLastSerial = 0;
 //    Constructor.   Just set the fields to reasonable default values.
 //
 //-------------------------------------------------------------------------
-RBBINode::RBBINode(NodeType t) {
+RBBINode::RBBINode(NodeType t) : UObject() {
     fSerialNum    = ++gLastSerial;
     fType         = t;
     fParent       = NULL;
@@ -67,7 +67,7 @@ RBBINode::RBBINode(NodeType t) {
 };
 
 
-RBBINode::RBBINode(const RBBINode &other) {
+RBBINode::RBBINode(const RBBINode &other) : UObject(other) {
     fSerialNum   = ++gLastSerial;
     fType        = other.fType;
     fParent      = NULL;
