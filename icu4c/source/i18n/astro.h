@@ -97,7 +97,7 @@ public:
     UnicodeString toString() {
       char tmp[800];
       sprintf(tmp, "[%.5f,%.5f]", longitude*RAD_DEG, latitude*RAD_DEG);
-      return UnicodeString(tmp,"");
+      return UnicodeString(tmp);
     }
         
     /**
@@ -164,7 +164,7 @@ public:
       char tmp[400];
       sprintf(tmp, "%lf,%lf", 
               (ascension*RAD_DEG), (declination*RAD_DEG));
-      return UnicodeString(tmp, "");
+      return UnicodeString(tmp);
     }
         
     /**
@@ -237,7 +237,7 @@ public:
     UnicodeString toString() {
       char tmp[800];
       sprintf(tmp, "[%.5f,%.5f]", altitude*RAD_DEG, azimuth*RAD_DEG);
-      return UnicodeString(tmp,"");
+      return UnicodeString(tmp);
     }
         
     /** 
@@ -445,6 +445,8 @@ public:
    * @deprecated ICU 2.4. This class may be removed or modified.
    */
   CalendarAstronomer(double longitude, double latitude);
+
+  ~CalendarAstronomer();
     
     
   //-------------------------------------------------------------------------
