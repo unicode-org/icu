@@ -193,69 +193,84 @@ utf8_appendCharSafeBody(uint8_t *s, UTextOffset i, UTextOffset length, UChar32 c
 }
 
 U_CAPI UChar32 U_EXPORT2
-utf8_prevCharSafeBody(const uint8_t *s, UTextOffset *pi, UChar32 c, bool_t strict) {
+utf8_prevCharSafeBody(const uint8_t *s, UTextOffset start, UTextOffset *pi, UChar32 c, bool_t strict) {
     UTextOffset i=*pi;
-    if(UTF8_IS_TRAIL(c)) {
-        uint8_t b, count=1, shift=6;
+    uint8_t b, count=1, shift=6;
 
-        c&=0x3f;
-        while(i>0 && count<6) {
-            b=s[--i];
-            if((uint8_t)(b-0x80)<0x7e) { /* 0x80<=b<0xfe */
-                if(b&0x40) {
-                    /* lead byte */
-                    uint8_t shouldCount=UTF8_COUNT_TRAIL_BYTES(b);
+    /* extract value bits from the last trail byte */
+    c&=0x3f;
 
-                    if(count==shouldCount) {
-                        *pi=i;
-                        UTF8_MASK_LEAD_BYTE(b, count);
-                        c|=(UChar32)b<<shift;
-                        if( c>0x10ffff ||
-                            (strict) &&
-                                (UTF_IS_SURROGATE(c) ||
-                                 count>=4 || (c)<utf8_minRegular[count] || ((c)&0xfffe)==0xfffe)
-                        ) {
-                            /* irregular sequence */
-                        } else {
-                            return c;
-                        }
+    for(;;) {
+        if(i<=start) {
+            /* no lead byte at all */
+            c=UTF8_ERROR_VALUE_1;
+            break;
+        }
+
+        /* read another previous byte */
+        b=s[--i];
+        if((uint8_t)(b-0x80)<0x7e) { /* 0x80<=b<0xfe */
+            if(b&0x40) {
+                /* lead byte, this will always end the loop */
+                uint8_t shouldCount=UTF8_COUNT_TRAIL_BYTES(b);
+
+                if(count==shouldCount) {
+                    /* set the new position */
+                    *pi=i;
+                    UTF8_MASK_LEAD_BYTE(b, count);
+                    c|=(UChar32)b<<shift;
+                    if( c>0x10ffff ||
+                        (strict) &&
+                            (UTF_IS_SURROGATE(c) ||
+                             count>=4 || (c)<utf8_minRegular[count] || ((c)&0xfffe)==0xfffe)
+                    ) {
+                        /* irregular sequence */
+                        c=utf8_errorValue[count];
                     } else {
-                        /* the lead byte does not match the number of trail bytes */
-                        /* only set the position to the lead byte if it would
-                           include the trail byte that we started with */
-                        if(count<shouldCount) {
-                            *pi=i;
-                        }
+                        /* exit with correct c */
                     }
-                    break;
                 } else {
-                    /* trail byte */
-                    c|=(UChar32)(b&0x3f)<<shift;
-                    ++count;
-                    shift+=6;
+                    /* the lead byte does not match the number of trail bytes */
+                    /* only set the position to the lead byte if it would
+                       include the trail byte that we started with */
+                    if(count<shouldCount) {
+                        *pi=i;
+                        c=utf8_errorValue[count];
+                    } else {
+                        c=UTF8_ERROR_VALUE_1;
+                    }
                 }
+                break;
+            } else if(count<5) {
+                /* trail byte */
+                c|=(UChar32)(b&0x3f)<<shift;
+                ++count;
+                shift+=6;
             } else {
-                /* single-byte character precedes trailing bytes */
+                /* more than 5 trail bytes is illegal */
+                c=UTF8_ERROR_VALUE_1;
                 break;
             }
+        } else {
+            /* single-byte character precedes trailing bytes */
+            c=UTF8_ERROR_VALUE_1;
+            break;
         }
-        /* i==0 or count==6 - no lead byte in legal distance */
-    /* } else { called with single lead byte */
     }
-    return UTF_ERROR_VALUE;
+    return c;
 }
 
 U_CAPI UTextOffset U_EXPORT2
-utf8_back1SafeBody(const uint8_t *s, UTextOffset i) {
+utf8_back1SafeBody(const uint8_t *s, UTextOffset start, UTextOffset i) {
     /* i had been decremented once before the function call */
     UTextOffset I=i, Z;
     uint8_t b;
 
     /* read at most the 6 bytes s[Z] to s[i], inclusively */
-    if(I>5) {
+    if(I-5>start) {
         Z=I-5;
     } else {
-        Z=0;
+        Z=start;
     }
 
     /* return I if the sequence starting there is long enough to include i */

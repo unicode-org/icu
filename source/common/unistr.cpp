@@ -1085,7 +1085,7 @@ UnicodeString::trim()
     if(i <= 0) {
       break;
     }
-    UTF_PREV_CHAR(fArray, i, c);
+    UTF_PREV_CHAR(fArray, 0, i, c);
     if(!(c == 0x20 || Unicode::isWhitespace(c))) {
       break;
     }
