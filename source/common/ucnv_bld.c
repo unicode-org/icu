@@ -35,7 +35,9 @@ static const UConverterSharedData *
 converterData[UCNV_NUMBER_OF_SUPPORTED_CONVERTER_TYPES]={
     &_SBCSData, &_DBCSData, &_MBCSData, &_Latin1Data,
     &_UTF8Data, &_UTF16BEData, &_UTF16LEData, &_EBCDICStatefulData,
-    &_ISO2022Data
+    &_ISO2022Data, 
+    &_LMBCSData1,&_LMBCSData2, &_LMBCSData3, &_LMBCSData4, &_LMBCSData5, &_LMBCSData6,
+    &_LMBCSData8,&_LMBCSData11,&_LMBCSData16,&_LMBCSData17,&_LMBCSData18,&_LMBCSData19
 };
 
 static struct {
@@ -53,8 +55,21 @@ static struct {
   { "UTF16_PlatformEndian", UCNV_UTF16_LittleEndian },
   { "UTF16_OppositeEndian", UCNV_UTF16_BigEndian},
 #endif
-  { "ISO_2022", UCNV_ISO_2022 }
+  { "ISO_2022", UCNV_ISO_2022 },
+  { "LMBCS-1", UCNV_LMBCS_1 },
+  { "LMBCS-2", UCNV_LMBCS_2 },
+  { "LMBCS-3", UCNV_LMBCS_3 },
+  { "LMBCS-4", UCNV_LMBCS_4 },
+  { "LMBCS-5", UCNV_LMBCS_5 },
+  { "LMBCS-6", UCNV_LMBCS_6 },
+  { "LMBCS-8", UCNV_LMBCS_8 },
+  { "LMBCS-11",UCNV_LMBCS_11 },
+  { "LMBCS-16",UCNV_LMBCS_16 },
+  { "LMBCS-17",UCNV_LMBCS_17 },
+  { "LMBCS-18",UCNV_LMBCS_18 },
+  { "LMBCS-19",UCNV_LMBCS_19 }
 };
+
 
 /*Takes an alias name gets an actual converter file name
  *goes to disk and opens it.

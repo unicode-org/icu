@@ -30,6 +30,7 @@ void TestNewConvertWithBufferSizes(int32_t osize, int32_t isize) ;
 void TestConverterTypesAndStarters(void);
 void TestAmbiguous(void);
 void TestUTF8(void);
+void TestLMBCS(void);
 void TestJitterbug255(void);
 
 #define NEW_MAX_BUFFER 999
@@ -105,6 +106,7 @@ void addTestNewConvert(TestNode** root)
    addTest(root, &TestConverterTypesAndStarters, "tsconv/nucnvtst/TestConverterTypesAndStarters");
    addTest(root, &TestAmbiguous, "tsconv/nucnvtst/TestAmbiguous");
    addTest(root, &TestUTF8, "tsconv/nucnvtst/TestUTF8");
+   addTest(root, &TestLMBCS, "tsconv/nucnvtst/TestLMBCS");
    addTest(root, &TestJitterbug255, "tsconv/nucnvtst/TestJitterbug255");
 }
 
@@ -747,6 +749,68 @@ TestUTF8() {
 
     ucnv_close(cnv);
 }
+
+void
+TestLMBCS() {
+    /* test input */
+    static const uint8_t in[]={
+        0x61,
+        0x01, 0x29,
+        0x81,
+        0xA0,
+        0x0F, 0x27,
+        0x0F, 0x91,
+        0x14, 0x0a, 0x74,
+        0x14, 0xF6, 0x02, 
+        0x10, 0x88, 0xA0
+    };
+
+    /* expected test results */
+    static const uint32_t results[]={
+        /* number of bytes read, code point */
+        1, 0x0061,
+        2, 0x2013,
+        1, 0x00FC,
+        1, 0x00E1,
+        2, 0x0007,
+        2, 0x0091,
+        3, 0x0a74,
+        3, 0x0200,
+        3, 0x5516
+
+    };
+
+    const char *s=(const char *)in, *s0, *limit=(const char *)in+sizeof(in);
+    const uint32_t *r=results;
+
+    UErrorCode errorCode=U_ZERO_ERROR;
+    uint32_t c;
+
+    UConverter *cnv=ucnv_open("LMBCS-1", &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("Unable to open a LMBCS-1 converter: %s\n", u_errorName(errorCode));
+    }
+    else
+    {
+
+      while(s<limit) {
+         s0=s;
+         c=ucnv_getNextUChar(cnv, &s, limit, &errorCode);
+         if(U_FAILURE(errorCode)) {
+               log_err("LMBCS-1 ucnv_getNextUChar() failed: %s\n", u_errorName(errorCode));
+               break;
+         } else if((uint32_t)(s-s0)!=*r || c!=*(r+1)) {
+               log_err("LMBCS-1 ucnv_getNextUChar() result %lx from %d bytes, should have been %lx from %d bytes.\n",
+                   c, (s-s0), *(r+1), *r);
+               break;
+         }
+         r+=2;
+      }
+
+      ucnv_close(cnv);
+    }
+}
+
 
 void TestJitterbug255()
 {
