@@ -402,11 +402,12 @@ UnicodeString&
 LocaleKeyFactory::getDisplayName(const UnicodeString& id, const Locale& locale, UnicodeString& result) const {
     if ((_coverage & 0x1) == 0) {
         UErrorCode status = U_ZERO_ERROR;
-        if (isSupportedID(id, status)) {
+        // assume if this is called on us, we support some fallback of this id
+        // if (isSupportedID(id, status)) {
             Locale loc;
             LocaleUtility::initLocaleFromName(id, loc);
             return loc.getDisplayName(locale, result);
-        }
+        // }
     }
     result.setToBogus();
     return result;
