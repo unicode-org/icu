@@ -103,7 +103,7 @@ protected:
      *
      * @param fontInstance - the font for the text
      * @param scriptCode - the script for the text
-     * @param langaugeCode - the language for the text
+     * @param languageCode - the language for the text
      *
      * @see LEFontInstance
      * @see ScriptAndLanguageTags.h
@@ -136,7 +136,7 @@ protected:
      * @param max - the number of characters in the input context
      * @param rightToLeft - TRUE if the characters are in a right to left directional run
      * @param outChars - the output character array, if different from the input
-     * @param glyphStorege - the object that holds the per-glyph storage. The character index array may be set.
+     * @param glyphStorage - the object that holds the per-glyph storage. The character index array may be set.
      * @param success - set to an error code if the operation fails
      *
      * @return the output character count (input character count if no change)
@@ -209,7 +209,7 @@ protected:
      *
      * @internal
      */
-    virtual void adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool /*reverse*/, LEGlyphStorage &glyphStorage, LEErrorCode &success);
+    virtual void adjustGlyphPositions(const LEUnicode chars[], le_int32 offset, le_int32 count, le_bool reverse, LEGlyphStorage &glyphStorage, LEErrorCode &success);
 
     /**
      * This method gets a table from the font associated with
@@ -257,7 +257,6 @@ protected:
      * glyphs to be zero, which is required for proper selection and highlighting.
      * 
      * @param glyphStorage - the object containing the per-glyph storage. The positions array will be modified.
-     * @param reverse - <code>TRUE</code> if the glyph array has been reordered
      * @param markFilter - used to identify mark glyphs
      * @param success - output parameter set to an error code if the operation fails
      *
@@ -430,7 +429,7 @@ public:
      *
      * @param fontInstance - the font of the text
      * @param scriptCode - the script of the text
-     * @param langaugeCode - the language of the text
+     * @param languageCode - the language of the text
      * @param success - output parameter set to an error code if the operation fails
      *
      * @return a LayoutEngine which can layout text in the given font.
