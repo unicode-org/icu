@@ -2166,6 +2166,7 @@ public:
   /**
    * Replaceable API
    * @return TRUE if it has MetaData
+   * @draft ICU 2.4
    */
   virtual UBool hasMetaData() const;
   
@@ -2890,18 +2891,21 @@ public:
 protected:
   /**
    * Implement Replaceable::getLength() (see jitterbug 1027).
+   * @draft ICU 2.4
    */
   virtual int32_t getLength() const;
 
   /**
    * The change in Replaceable to use virtual getCharAt() allows
    * UnicodeString::charAt() to be inline again (see jitterbug 709).
+   * @draft ICU 2.4
    */
   virtual UChar getCharAt(int32_t offset) const;
 
   /**
    * The change in Replaceable to use virtual getChar32At() allows
    * UnicodeString::char32At() to be inline again (see jitterbug 709).
+   * @draft ICU 2.4
    */
   virtual UChar32 getChar32At(int32_t offset) const;
 
