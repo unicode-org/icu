@@ -364,11 +364,10 @@ int dlclose (void *handle)
         return dllfree((dllhandle*)handle);
 }
 
-
+#endif
 #else
  /* 'de facto standard' dlopen etc */
 # include <dlfcn.h>
-#endif
 #endif
 
 typedef void *Library;
