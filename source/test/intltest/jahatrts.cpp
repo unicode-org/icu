@@ -208,7 +208,7 @@ void JamoToHangTransliteratorTest::TestTransliterate(){
         CharsToUnicodeString("\\u1167\\u1101"), "0", "2", "0",  CharsToUnicodeString("\\uc5ec\\uae4c"), CharsToUnicodeString("\\uc5ec\\u1101"),
 
     };
-    int i;
+    uint32_t i;
     JamoHangulTransliterator *trans1=new JamoHangulTransliterator();
     if(trans1 == 0){
         errln("JamoHangulTransliterator construction failed");
