@@ -401,8 +401,7 @@ Locale::createFromName (const char *name)
   char stack[128];
   char *heap = NULL;
   char *buf = stack;
-  int buflen = 128;
-  int   n;
+  size_t buflen = 128;
   UErrorCode status;
 
   status = U_ZERO_ERROR;
@@ -414,10 +413,13 @@ Locale::createFromName (const char *name)
     buf = heap;
   }
   
-  n = uloc_getName(name, buf, buflen, &status);
+  uloc_getName(name, buf, buflen, &status);
   
   Locale l(buf);
-  free(heap);
+  if(heap != NULL)
+  {
+    free(heap);
+  }
   return l;
 }
 
