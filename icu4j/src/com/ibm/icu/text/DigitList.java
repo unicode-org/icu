@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DigitList.java,v $ 
- * $Date: 2003/06/11 22:29:38 $ 
- * $Revision: 1.13 $
+ * $Date: 2003/12/01 22:00:44 $ 
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -47,7 +47,7 @@ import java.math.BigInteger;
  * @version      1.18 08/12/98
  * @author       Mark Davis, Alan Liu
  * */
-final class DigitList implements Cloneable {
+final class DigitList {
     /**
      * The maximum number of significant digits in an IEEE 754 double, that
      * is, in a Java double.  This must not be increased, or garbage digits
