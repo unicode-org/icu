@@ -919,7 +919,7 @@ typedef int32_t UTextOffset;
 #define UTF_GET_CHAR_SAFE(s, start, i, length, c, strict) UTF16_GET_CHAR_SAFE(s, start, i, length, c, strict)
 
 
-/** @deprecated since ICU 2.4. Renamed to U16_NEXT, see utf_old.h. */
+/** @deprecated since ICU 2.4. Renamed to U16_NEXT_UNSAFE, see utf_old.h. */
 #define UTF_NEXT_CHAR_UNSAFE(s, i, c)                UTF16_NEXT_CHAR_UNSAFE(s, i, c)
 
 /** @deprecated since ICU 2.4. Use U16_NEXT instead, see utf_old.h. */
