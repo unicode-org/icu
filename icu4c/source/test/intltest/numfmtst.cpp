@@ -194,7 +194,7 @@ NumberFormatTest::TestExponential(void)
                 a = af.getLong();
             else if (af.getType() == Formattable::kDouble) {
                 a = af.getDouble();
-#if defined(OS390)
+#if defined(OS390) || defined(OS400)
                 // S/390 will show a failure like this:
                 //| -3.141592652999999e-271 -format-> -3.1416E-271
                 //|                          -parse-> -3.1416e-271
