@@ -154,9 +154,9 @@ void pkg_mode_files(UPKGOptions *o, FileStream *makefile, UErrorCode *status)
   }
 
   sprintf(tmp, "install: \n"
-	  "\techo Installing to $(INSTALLTO) - be patient\n"
           "\t@for file in $(DATAFILEPATHS) ; do \\\n"
-	  "\t\t$(INSTALL_DATA) $$file  $$INSTALLTO; \\\n"
+	  "\t\techo $(INSTALL_DATA) $$file $$INSTALLTO; \\\n"
+	  "\t\t$(INSTALL_DATA) $$file $$INSTALLTO; \\\n"
 	  "\tdone;\n\n");
 
 

@@ -38,20 +38,20 @@ static void loadLists(UPKGOptions *o, UErrorCode *status);
 /* This sets the modes that are available */
 static struct
 {
-  const char *name;
+  const char *name, *alt_name;
   UPKGMODE   *fcn;
   const char *desc;
 } modes[] =
 {
-  { "files", pkg_mode_files, "Uses raw data files (no effect). Installation copies all files to the target location." },
+  { "files", 0, pkg_mode_files, "Uses raw data files (no effect). Installation copies all files to the target location." },
 #ifdef WIN32
-  { "dll",    pkg_mode_windows,    "Generates one common data file and one shared library, <package>.dll"},
-  { "common", pkg_mode_windows,    "Generates just the common file, <package>.dat"}
+  { "dll",    "library", pkg_mode_windows,    "Generates one common data file and one shared library, <package>.dll"},
+  { "common", "archive", pkg_mode_windows,    "Generates just the common file, <package>.dat"}
 #else /*#ifdef WIN32*/
 #ifdef UDATA_SO_SUFFIX
-  { "dll",    pkg_mode_dll,    "Generates one shared library, <package>" UDATA_SO_SUFFIX },
+  { "dll",    "library", pkg_mode_dll,    "Generates one shared library, <package>" UDATA_SO_SUFFIX },
 #endif
-  { "common", pkg_mode_common, "Generates one common data file, <package>.dat" }
+  { "common", "archive", pkg_mode_common, "Generates one common data file, <package>.dat" }
 #endif /*#ifdef WIN32*/
 };
 
@@ -166,7 +166,13 @@ main(int argc, char* argv[]) {
 
     fprintf(stderr, "modes: (-m option)\n");
     for(i=0;i<(sizeof(modes)/sizeof(modes[0]));i++) {
-      fprintf(stderr, "   %-10s %s\n", modes[i].name, modes[i].desc);
+      fprintf(stderr, "   %-10s ", modes[i].name);
+      if (modes[i].alt_name) {
+	fprintf(stderr, "(or %-10s)", modes[i].alt_name);
+      } else {
+        fprintf(stderr, "               ");
+      }
+      fprintf(stderr, "%s\n", modes[i].name, modes[i].desc);
     }
     return 1;
   }
@@ -175,11 +181,16 @@ main(int argc, char* argv[]) {
   uprv_memset(&o, 0, sizeof(o));
 
   o.mode      = options[2].value;
+  o.version   = options[16].doesOccur ? options[16].value : 0;
 
   o.fcn = NULL;
 
   for(i=0;i<sizeof(modes)/sizeof(modes[0]);i++) {
     if(!uprv_strcmp(modes[i].name, o.mode)) {
+      o.fcn = modes[i].fcn;
+      break;
+    } else if (modes[i].alt_name && !uprv_strcmp(modes[i].alt_name, o.mode)) {
+      o.mode = modes[i].name;
       o.fcn = modes[i].fcn;
       break;
     }
