@@ -2,7 +2,7 @@
 #	(except in extensions).
 #	For syntax description, see: http://oss.software.ibm.com/icu/userguide/Collate_Intro.html
 # VERSION: UCA=3.1.1d1, UCD=3.2.0
-& '\u0000'
+& [last tertiary ignorable]
 	#  U+0000 <NULL>
     =	 '\u0001'	#  U+0001 <START OF HEADING>
     =	 '\u0002'	#  U+0002 <START OF TEXT>
@@ -274,7 +274,7 @@
     =	 󠁾	#  U+E007E TAG TILDE
     =	 󠁿	#  U+E007F CANCEL TAG
     =	 ���	#  U+DBFF <surrogate-DBFF>
-& ̲
+& [last primary ignorable]
   <<	 ̲	# [0000.0021.0002] U+0332 COMBINING LOW LINE
   <<	 ̓	# [0000.0022.0002] U+0313 COMBINING COMMA ABOVE
   <<	 ̔	# [0000.002A.0002] U+0314 COMBINING REVERSED COMMA ABOVE
@@ -546,7 +546,7 @@
   <<	 ⃡	# [0000.0150.0002] U+20E1 COMBINING LEFT RIGHT ARROW ABOVE
   <<	 ⃢	# [0000.0151.0002] U+20E2 COMBINING ENCLOSING SCREEN
   <<	 ⃣	# [0000.0152.0002] U+20E3 COMBINING ENCLOSING KEYCAP
-& [top]
+& [last non-ignorable]
  <	 '\u0009'	# [0201.0020.0002] U+0009 <CHARACTER TABULATION>
  <	 '\u000A'	# [0202.0020.0002] U+000A <LINE FEED (LF)>
  <	 '\u000B'	# [0203.0020.0002] U+000B <LINE TABULATION>
@@ -2826,7 +2826,7 @@
  <	 ፼	# [09D0.0020.0002] U+137C ETHIOPIC NUMBER TEN THOUSAND
  <	 𐌢	# [09D1.0020.0002] U+10322 OLD ITALIC NUMERAL TEN
  <	 𐌣	# [09D2.0020.0002] U+10323 OLD ITALIC NUMERAL FIFTY
-& [variable\u0020top]
+ <	 [variable top]
  <	 ː	# [09D3.0020.0002] U+02D0 MODIFIER LETTER TRIANGULAR COLON
  <	 ˑ	# [09D4.0020.0002] U+02D1 MODIFIER LETTER HALF TRIANGULAR COLON
  <	 ๆ	# [09D5.0020.0002] U+0E46 THAI CHARACTER MAIYAMOK

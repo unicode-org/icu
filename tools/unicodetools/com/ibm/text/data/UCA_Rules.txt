@@ -2,7 +2,7 @@
 #	(except in extensions).
 #	For syntax description, see: http://oss.software.ibm.com/icu/userguide/Collate_Intro.html
 # VERSION: UCA=3.1.1d1, UCD=3.2.0
-& '\u0000'
+& [last tertiary ignorable]
 
     =	 '\u0001'
     =	 '\u0002'
@@ -274,7 +274,7 @@
     =	 󠁾
     =	 󠁿
     =	 ���
-& ̲
+& [last primary ignorable]
   <<	 ̲
   <<	 ̓
   <<	 ̔
@@ -546,7 +546,7 @@
   <<	 ⃡
   <<	 ⃢
   <<	 ⃣
-& [top]
+& [last non-ignorable]
  <	 '\u0009'
  <	 '\u000A'
  <	 '\u000B'
@@ -2826,7 +2826,7 @@
  <	 ፼
  <	 𐌢
  <	 𐌣
-& [variable\u0020top]
+ <	 [variable top]
  <	 ː
  <	 ˑ
  <	 ๆ
