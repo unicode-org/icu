@@ -12,6 +12,9 @@
 # parse out the current zones and create a listing of current zones.
 # Author: Alan Liu
 ######################################################################
+# This script reads an alias table, $TZ_ALIAS, and creates clones of
+# standard UNIX zones with alias names.
+######################################################################
 # To update the zone data, download the latest data from the NIH URL
 # listed above into a directory.  Run this script with the directory
 # name as an argument.  THE DIRECTORY NAME MUST END IN tzdataYYYYR.
@@ -27,31 +30,36 @@
 # - Lines may be followed by a comment; the parser must ignore
 #   anything of the form /\s+#.*$/ in each line.
 #   |3065,14400 # Asia/Dubai GMT+4:00
-# - The file contains a header and 3 lists.
+# - The file contains a header and 5 lists.
 # - The header contains the version of the unix data, the total
-#   zone count, and the length of the name table in bytes.
-#   |1999 # (tzdata1999j) ftp://elsie.nci.nih.gov data version YEAR
-#   |10 # (tzdata1999j) ftp://elsie.nci.nih.gov data version SUFFIX
-#   |387 # total zone count
-#   |5906 # length of name table in bytes
+#   zone count, the maximum number of zones sharing the same value
+#   of gmtOffset, the length of the name table in bytes, and
+#   the length of the longest name (not including the terminating
+#   zero byte).
+#   | 1999 # (tzdata1999j) version of Olson zone
+#   | 10 #  data from ftp://elsie.nci.nih.gov
+#   | 387 # total zone count
+#   | 40 # max count of zones with same gmtOffset
+#   | 25 # max name length not incl final zero
+#   | 5906 # length of name table in bytes
 # - Lists start with a count of the records to follow, the records
 #   themselves (one per line), and a single line with the keyword
 #   'end'.
 # - The first list is the list of standard zones:
-#   |208 # count of standard zones to follow
-#   |0,0 # Africa/Abidjan GMT+0:00
-#   |28,10800 # Africa/Addis_Ababa GMT+3:00
+#   | 208 # count of standard zones to follow
+#   | 0,0 # Africa/Abidjan GMT+0:00
+#   | 28,10800 # Africa/Addis_Ababa GMT+3:00
 #   ...
-#   |end
+#   | end
 #   Each standard zone record contains two integers.  The first
 #   is a byte offset into the name table for the name of the zone.
 #   The second integer is the GMT offset in SECONDS for this zone.
 # - The second list is the list of DST zones:
-#   |179 # count of dst zones to follow
-#   |15,0,8,1,0,0,w,11,31,0,0,w,20 # Africa/Accra GMT+0:00 Sep 1...
-#   |184,7200,3,-1,6,0,s,8,-1,5,1380,s,60 # Africa/Cairo GMT+2:0...
+#   | 179 # count of dst zones to follow
+#   | 15,0,8,1,0,0,w,11,31,0,0,w,20 # Africa/Accra GMT+0:00 Sep 1...
+#   | 184,7200,3,-1,6,0,s,8,-1,5,1380,s,60 # Africa/Cairo GMT+2:0...
 #   ...
-#   |end
+#   | end
 #   Each record starts with the same two integers as a standard
 #   zone record.  Following this are data for the onset rule and
 #   the cease rule.  Each rule is described by the following integers:
@@ -63,13 +71,38 @@
 #   The last integer in the record is the DST savings in MINUTES,
 #   typically 60.
 # - The third list is the name table:
-#   |387 # count of names to follow
-#   |Africa/Abidjan
-#   |Africa/Accra
+#   | 387 # count of names to follow
+#   | Africa/Abidjan
+#   | Africa/Accra
 #   ...
-#   |end
+#   | end
 #   Each name is terminated by a newline (like all lines in the file).
 #   The offsets in the first two lists refer to this table.
+# - The fourth list is an index list by name.  The index entries
+#   themselves are of the form /[sd]\d+/, where the first character
+#   indicates standard or DST, and the number that follows indexes
+#   into the correpsonding array.
+#   | 416 # count of name index table entries to follow
+#   | d0 # ACT
+#   | d1 # AET
+#   | d2 # AGT
+#   | d3 # ART
+#   | d4 # AST
+#   | s0 # Africa/Abidjan
+#   ...
+#   | end
+# - The fifth list is an index by GMT offset.  Each line lists the
+#   zones with the same offset.  The first number on the line
+#   is the GMT offset in seconds.  The second number is the count
+#   of zone numbers to follow.  Each zone number is an integer from
+#   0..n-1, where n is the total number of zones.  The zone numbers
+#   refer to the zone list in alphabetical order.
+#   | 39 # index by offset entries to follow
+#   | -43200,1,280
+#   | -39600,6,279,365,373,393,395,398
+#   | -36000,8,57,278,349,379,386,387,403,405
+#   ...
+#   | end
 ######################################################################
 # As of 1999j, here are the various possible values taken by the
 # rule fields.  See code below that generates this data.
@@ -88,10 +121,32 @@ require 5; # Minimum version of perl needed
 use strict;
 use Getopt::Long;
 use vars qw(@FILES $YEAR $DATA_DIR $OUT $SEP @MONTH
-            $VERSION_YEAR $VERSION_SUFFIX $RAW_VERSION);
+            $VERSION_YEAR $VERSION_SUFFIX $RAW_VERSION $TZ_ALIAS);
 require 'dumpvar.pl';
-use TZFileParser;
-use TZUtility;
+use tzparse;
+use tzutil;
+
+# File names
+$OUT = 'tz.txt';
+$TZ_ALIAS = 'tz.alias';
+
+# Separator between fields in the output file
+$SEP = ','; # Don't use ':'!
+
+@FILES = qw(africa      
+            antarctica  
+            asia        
+            australasia 
+            backward    
+            etcetera    
+            europe      
+            factory     
+            northamerica
+            pacificnew  
+            solar87     
+            solar88     
+            solar89     
+            southamerica);
 
 # We get the current year from the system here.  Later
 # we double check this against the zone data version.
@@ -127,26 +182,6 @@ if ($DATA_DIR =~ /(tzdata(\d{4})(\w?))/) {
     usage();
 }
 
-# Output file name
-$OUT = 'tz.txt';
-
-# Separator between fields in the output file
-$SEP = ','; # Don't use ':'!
-
-@FILES = qw(africa      
-            antarctica  
-            asia        
-            australasia 
-            backward    
-            etcetera    
-            europe      
-            factory     
-            northamerica
-            pacificnew  
-            solar87     
-            solar88     
-            solar89     
-            southamerica);
 
 @MONTH = qw(jan feb mar apr may jun
             jul aug sep oct nov dec);
@@ -181,6 +216,8 @@ sub main {
 
     TZ::Postprocess(\%ZONES, \%RULES);
 
+    incorporateAliases($TZ_ALIAS, \%ZONES);
+
     print
         "Read ", scalar keys %ZONES, " current zones and ",
         scalar keys %RULES, " rules for $YEAR\n";
@@ -207,10 +244,16 @@ sub main {
     my %NAME_OFFSET;
     my $STD_COUNT = 0; # Count of standard zones
     my $DST_COUNT = 0; # Count of DST zones
+    my $maxNameLen = 0;
     foreach my $z (sort keys %ZONES) {
+        # Make sure zone IDs only contain invariant chars
+        assertInvariantChars($z);
+
+        my $len = length($z);
         $NAME_OFFSET{$z} = $offset;
-        $offset += length($z) + 1;
+        $offset += $len + 1;
         $NAME_LIST .= "$z\n";
+        $maxNameLen = $len if ($len > $maxNameLen);
         if ($ZONES{$z}->{rule} eq $TZ::STANDARD) {
             $STD_COUNT++;
         } else {
@@ -218,14 +261,35 @@ sub main {
         }
     }
     my $NAME_SIZE = $offset;
+
+    # Find the maximum number of zones with the same value of
+    # gmtOffset.
+    my %perOffset; # Hash of offset -> count
+    foreach my $z (keys %ZONES) {
+        # Use parseOffset to normalize values - probably unnecessary
+        ++$perOffset{parseOffset($ZONES{$z}->{gmtoff})};
+    }
+    my $maxPerOffset = 0;
+    foreach (values %perOffset) {
+        $maxPerOffset = $_ if ($_ > $maxPerOffset);
+    }
     
     open(OUT,">$OUT") or die "Can't open $OUT for writing: $!";
+
+    ############################################################
+    # EMIT HEADER
+    ############################################################
     # Zone data version
-    print OUT $VERSION_YEAR, " # ($RAW_VERSION) ftp://elsie.nci.nih.gov data version YEAR\n";
-    print OUT $VERSION_SUFFIX, " # ($RAW_VERSION) ftp://elsie.nci.nih.gov data version SUFFIX\n";
+    print OUT $VERSION_YEAR, " # ($RAW_VERSION) version of Olson zone\n";
+    print OUT $VERSION_SUFFIX, " #  data from ftp://elsie.nci.nih.gov\n";
     print OUT scalar keys %ZONES, " # total zone count\n";
+    print OUT $maxPerOffset, " # max count of zones with same gmtOffset\n";
+    print OUT $maxNameLen, " # max name length not incl final zero\n";
     print OUT $NAME_SIZE, " # length of name table in bytes\n";
 
+    ############################################################
+    # EMIT ZONE TABLES
+    ############################################################
     # Output first the standard zones, then the dst zones.
     # Precede each list with the count of zones to follow,
     # and follow it with the keyword 'end'.
@@ -241,12 +305,72 @@ sub main {
         print OUT "end\n"; # 'end' keyword for error checking
     }
 
+    ############################################################
+    # EMIT NAME TABLE
+    ############################################################
     # Output the name table, followed by 'end' keyword
     print OUT scalar keys %ZONES, " # count of names to follow\n";
     print OUT $NAME_LIST, "end\n";
 
+    ############################################################
+    # EMIT INDEX BY NAME
+    ############################################################
+    # Output the name index table.  Since we don't know structure
+    # sizes, we output the index number of each zone.  For example,
+    # "s0" is the first standard zone, "s1" is the second, etc.
+    # Likewise, "d0" is the first DST zone, "d1" is the second, etc.
+    
+    # First compute index IDs, as described above.
+    my %indexID;
+    my $s = 0;
+    my $d = 0;
+    foreach my $z (sort keys %ZONES) {
+        if ($ZONES{$z}->{rule} eq $TZ::STANDARD) {
+            $indexID{$z} = "s$s";
+            $s++;
+        } else {
+            $indexID{$z} = "d$d";
+            $d++;
+        }
+    }
+    
+    # Now emit table sorted by name
+    print OUT scalar keys %ZONES, " # count of name index table entries to follow\n";
+    foreach my $z (sort keys %ZONES) {
+        print OUT $indexID{$z}, " # $z\n";
+    }
+    print OUT "end\n";
+
+    ############################################################
+    # EMIT INDEX BY GMT OFFSET
+    ############################################################
+    # Create a hash mapping zone name -> integer, from 0..n-1.
+    my %zoneNumber;
+    my $i = 0;
+    foreach (sort keys %ZONES) { $zoneNumber{$_} = $i++; }
+
+    # Create a hash by index.  The hash has offset integers as keys
+    # and arrays of index numbers as values.
+    my %offsetMap;
+    foreach (sort keys %ZONES) {
+        my $offset = parseOffset($ZONES{$_}->{gmtoff});
+        push @{$offsetMap{$offset}}, $zoneNumber{$_};
+    }
+
+    # Emit it
+    print OUT scalar keys %offsetMap, " # index by offset entries to follow\n";
+    foreach (sort {$a <=> $b} keys %offsetMap) {
+        my $aref = $offsetMap{$_};
+        print OUT $_, ",", scalar @{$aref}, ",", join(",", @{$aref}), "\n";
+    }
+    print OUT "end\n";
+
+    ############################################################
+    # END
+    ############################################################
     close(OUT);
     print "$OUT written.\n";
+
 
     if (0) {
         TZ::FormZoneEquivalencyGroups(\%ZONES, \%RULES, \@EQUIV);
@@ -279,6 +403,46 @@ sub main {
             print "$key: ", join(", ", sort keys %{$RULEVALS{$key}}), "\n";
         }
     }
+}
+
+# Read the alias list and create clones with alias names.  This
+# sub should be called AFTER all standard zones have been read in.
+# Param: File name of alias list
+# Param: Ref to zone hash
+sub incorporateAliases {
+    my $aliasFile = shift;
+    my $zones = shift;
+    my $n = 0;
+    local *IN;
+    open(IN,$aliasFile) or die "Can't open $aliasFile: $!";
+    while (<IN>) {
+        s/\#.*//; # Trim comments
+        next unless (/\S/); # Skip blank lines
+        if (/^\s*(\S+)\s+(\S+)\s*$/) {
+            my ($alias, $original) = ($1, $2);
+            if (exists $zones->{$alias}) {
+                die "Bad alias in $aliasFile: $alias is a standard UNIX zone. " .
+                    "Please remove $alias from the alias table.\n";
+            }
+            if (!exists $zones->{$original}) {
+                die "Bad alias in $aliasFile: $alias maps to the nonexistent " .
+                    "zone $original. Please fix this entry in the alias table.\n";
+            }
+            # We hardcode the GMT zone in the TimeZone class; don't include
+            # it in the tz.txt file.
+            if ($alias eq "GMT") {
+                die "Bad alias in $aliasFile: GMT is a hardcoded system zone. " .
+                    "Please remove it from the alias table.\n";
+            }
+            # Create the alias!
+            $zones->{$alias} = $zones->{$original};
+            $n++;
+        } else {
+            die "Bad line in alias table $aliasFile: $_\n";
+        }
+    }
+    print "Incorporated $n aliases from $aliasFile\n";
+    close(IN);
 }
 
 # Format a time zone as a machine-readable line of text.  Another
@@ -479,6 +643,16 @@ sub parseDaySpecifier {
     }
 
     ( $dowim, $dow );
+}
+
+# Confirm that the given ID contains only invariant characters.
+# See utypes.h for an explanation.
+# Param: string to be checked
+sub assertInvariantChars {
+    local $_ = shift;
+    if (/[^A-Za-z0-9 \"%&\'()*+,-.\/:;<=>?_]/) {
+        die "Error: Zone ID \"$_\" contains non-invariant characters\n";
+    }
 }
 
 __END__
