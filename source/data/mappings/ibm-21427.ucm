@@ -16,7 +16,10 @@
 <char_name_mask>              "AXXXX"
 <mb_cur_max>                  2
 <mb_cur_min>                  2
-<uconv_class>                 "DBCS"
+<uconv_class>                 "MBCS"
+<icu:state>                   0-80:2, 81-fe:1, ff:2
+<icu:state>                   40-7e, 80-fe
+<icu:state>
 <subchar>                     \xC8\xFE
 #
 CHARMAP
