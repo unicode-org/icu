@@ -97,6 +97,21 @@ void DateFormatRoundTripTest::TestDateFormatRoundTrip()
     delete getFieldCal;
 }
 
+static const char *styleName(DateFormat::EStyle s)
+{
+  switch(s)
+    {
+    case DateFormat::SHORT: return "SHORT";
+    case DateFormat::MEDIUM: return "MEDIUM";
+    case DateFormat::LONG: return "LONG";
+    case DateFormat::FULL: return "FULL";
+//  case DateFormat::DEFAULT: return "DEFAULT";
+    case DateFormat::DATE_OFFSET: return "DATE_OFFSET";
+    case DateFormat::NONE: return "NONE";
+    case DateFormat::DATE_TIME: return "DATE_TIME";
+    }
+}
+
 void DateFormatRoundTripTest::test(const Locale& loc) 
 {
     UnicodeString temp;
@@ -126,6 +141,7 @@ void DateFormatRoundTripTest::test(const Locale& loc)
     int32_t style = 0;
     for(style = DateFormat::FULL; style <= DateFormat::SHORT; ++style) {
         if(TEST_TABLE[itable++]) {
+/**/          logln("Testing style " + UnicodeString(styleName((DateFormat::EStyle)style)));
             DateFormat *df = DateFormat::createDateInstance((DateFormat::EStyle)style, loc);
             test(df);
             delete df;
@@ -134,6 +150,7 @@ void DateFormatRoundTripTest::test(const Locale& loc)
     
     for(style = DateFormat::FULL; style <= DateFormat::SHORT; ++style) {
         if (TEST_TABLE[itable++]) {
+          logln("Testing style " + UnicodeString(styleName((DateFormat::EStyle)style)));
             DateFormat *df = DateFormat::createTimeInstance((DateFormat::EStyle)style, loc);
             test(df, TRUE);
             delete df;
@@ -143,6 +160,7 @@ void DateFormatRoundTripTest::test(const Locale& loc)
     for(int32_t dstyle = DateFormat::FULL; dstyle <= DateFormat::SHORT; ++dstyle) {
         for(int32_t tstyle = DateFormat::FULL; tstyle <= DateFormat::SHORT; ++tstyle) {
             if(TEST_TABLE[itable++]) {
+              logln("Testing dstyle" + UnicodeString(styleName((DateFormat::EStyle)dstyle)) + ", tstyle" + UnicodeString(styleName((DateFormat::EStyle)tstyle)) );
                 DateFormat *df = DateFormat::createDateTimeInstance((DateFormat::EStyle)dstyle, (DateFormat::EStyle)tstyle, loc);
                 test(df);
                 delete df;
@@ -264,8 +282,10 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, UBool timeOnly)
             }
             
             if(dmatch > maxDmatch || smatch > maxSmatch) {
-                errln(UnicodeString("Pattern: ") + pat);
+                errln(UnicodeString("Pattern: ") + pat + UnicodeString(" failed to match"));
                 logln(UnicodeString(" Date ") + dmatch + "  String " + smatch);
+
+                printf("dmatch:%d maxD:%d smatch:%d maxS:%d\n", dmatch,maxDmatch, smatch, maxSmatch);
                 
                 for(int j = 0; j <= loop && j < DEPTH; ++j) {
                     UnicodeString temp;
