@@ -184,7 +184,6 @@ static void TestPlainDakutenHandakuten(void)
   log_verbose("Testing plain, Daku-ten, Handaku-ten letters Japanese Characters Collation\n");
   ucol_setNormalization(myCollation, UCOL_DECOMP_COMPAT);
   ucol_setStrength(myCollation, UCOL_SECONDARY);
-  ucol_setAttribute(myCollation, UCOL_CASE_LEVEL, UCOL_ON, &status);
   for (i = 0; i < 3 ; i++)
     doTest(myCollation, testPlainDakutenHandakutenCases[i], 
            testPlainDakutenHandakutenCases[i + 1], UCOL_LESS);
@@ -235,11 +234,12 @@ static void TestKatakanaHiragana(void)
   
   log_verbose("Testing Japanese Katakana, Hiragana Characters Collation\n");
   ucol_setNormalization(myCollation, UCOL_DECOMP_COMPAT);
-  ucol_setStrength(myCollation, UCOL_TERTIARY);
+  ucol_setStrength(myCollation, UCOL_QUATERNARY);
   ucol_setAttribute(myCollation, UCOL_CASE_LEVEL, UCOL_ON, &status);
-  for (i = 0; i < 3 ; i++)
+  for (i = 0; i < 3 ; i++) {
     doTest(myCollation, testKatakanaHiraganaCases[i], 
            testKatakanaHiraganaCases[i + 1], UCOL_LESS);
+  }
 
   ucol_close(myCollation);
 }
@@ -261,10 +261,12 @@ static void TestChooonKigoo(void)
   
   log_verbose("Testing Japanese Choo-on Kigoo Characters Collation\n");
   ucol_setNormalization(myCollation, UCOL_DECOMP_COMPAT);
-  ucol_setStrength(myCollation, UCOL_TERTIARY);
+  ucol_setStrength(myCollation, UCOL_QUATERNARY);
   ucol_setAttribute(myCollation, UCOL_CASE_LEVEL, UCOL_ON, &status);
-  for (i = 0; i < 6 ; i++)
-    doTest(myCollation, testBaseCases[i], testBaseCases[i + 1], UCOL_LESS);
+  for (i = 0; i < 6 ; i++) {
+    doTest(myCollation, testChooonKigooCases[i], testChooonKigooCases[i + 1], 
+           UCOL_LESS);
+  }
 
   ucol_close(myCollation);
 }
