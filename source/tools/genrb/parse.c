@@ -38,6 +38,10 @@
 #define LF               0x000A
 #define SPACE            0x0020
 #define ESCAPE           0x005C
+#define HASH             0x0023
+#define QUOTE            0x0027
+#define STARTCOMMAND     0x005B
+#define ENDCOMMAND       0x005D
 
 U_STRING_DECL(k_type_string,    "string",    6);
 U_STRING_DECL(k_type_binary,    "binary",    6);
@@ -345,6 +349,7 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
     char              cs[128]       = { '\0' };
     uint32_t          line;
     int               len=0;
+    UBool quoted = FALSE;
     expect(TOK_STRING, &tokenValue, &line, status);
 
     /* make the filename including the directory */
@@ -408,8 +413,29 @@ parseUCARules(char *tag, uint32_t startline, UErrorCode *status)
         while (target < targetLimit)
         {
             c = ucbuf_getc(ucbuf, status);
-
-            if (c == ESCAPE)
+            if(c == QUOTE) {
+              quoted = !quoted;
+            }
+            /* weiv (06/26/2002): adding the following:
+             * - preserving spaces in commands [...]
+             * - # comments until the end of line
+             */
+            if (c == STARTCOMMAND) 
+            {
+              /* preserve commands 
+               * closing bracket will be handled by the 
+               * append at the end of the loop
+               */
+              while(c != ENDCOMMAND) {
+                U_APPEND_CHAR32(c, target,len);
+                c = ucbuf_getc(ucbuf, status);
+              }
+            } else if (c == HASH && !quoted) {
+              /* skip comments */
+              while(c != CR && c != LF) {
+                c = ucbuf_getc(ucbuf, status);
+              }
+            } else if (c == ESCAPE)
             {
                 c = unescape(ucbuf, status);
 

@@ -132,8 +132,6 @@ static void addNewInverse(UCAElements *element, UErrorCode *status) {
 }
 
 static void insertInverse(UCAElements *element, uint32_t position, UErrorCode *status) {
-  uint8_t space[4096];
-
   if(U_FAILURE(*status)) {
     return;
   }
@@ -143,8 +141,8 @@ static void insertInverse(UCAElements *element, uint32_t position, UErrorCode *s
   }
   if(position <= inversePos) {
     /*move stuff around */
-    uprv_memcpy(space, inverseTable[position], (inversePos - position+1)*sizeof(inverseTable[0]));
-    uprv_memcpy(inverseTable[position+1], space, (inversePos - position+1)*sizeof(inverseTable[0]));
+    uint32_t amountToMove = (inversePos - position+1)*sizeof(inverseTable[0]);
+    uprv_memmove(inverseTable[position+1], inverseTable[position], amountToMove);
   }
   inverseTable[position][0] = element->CEs[0];
   if(element->noOfCEs > 1 && isContinuation(element->CEs[1])) {
@@ -207,41 +205,44 @@ static uint32_t addToInverse(UCAElements *element, UErrorCode *status) {
     addNewInverse(element, status);
   } else if(inverseTable[inversePos][0] > element->CEs[0]) {
     while(inverseTable[--position][0] > element->CEs[0]) {}
+        if(VERBOSE) { fprintf(stdout, "p:%i ", position); }
     if(inverseTable[position][0] == element->CEs[0]) {
       if(isContinuation(element->CEs[1])) {
         comp = element->CEs[1];
-      } else {
-        comp = 0;
-      }
-      if(inverseTable[position][1] > comp) {
-        while(inverseTable[--position][1] > comp) {}
-      }
-      if(inverseTable[position][1] == comp) {
+        } else {
+          comp = 0;
+        }
+        if(inverseTable[position][1] > comp) {
+          while(inverseTable[--position][1] > comp) {}
+        }
+        if(inverseTable[position][1] == comp) {
         addToExistingInverse(element, position, status);
-      } else {
+        } else {
         insertInverse(element, position+1, status);
-      }
-    } else {
+        }
+      } else {
+      if(VERBOSE) { fprintf(stdout, "ins"); }
       insertInverse(element, position+1, status);
     }
   } else if(inverseTable[inversePos][0] == element->CEs[0]) {
     if(element->noOfCEs > 1 && isContinuation(element->CEs[1])) {
       comp = element->CEs[1];
-      if(inverseTable[position][1] > comp) {
-        while(inverseTable[--position][1] > comp) {}
-      }
-      if(inverseTable[position][1] == comp) {
+        if(inverseTable[position][1] > comp) {
+          while(inverseTable[--position][1] > comp) {}
+        }
+        if(inverseTable[position][1] == comp) {
         addToExistingInverse(element, position, status);
-      } else {
+        } else {
         insertInverse(element, position+1, status);
-      }
+        }
+      } else {
+        addToExistingInverse(element, inversePos, status);
+      } 
     } else {
-      addToExistingInverse(element, inversePos, status);
-    } 
-  } else {
     addNewInverse(element, status);
   }
   element->CEs[0] = saveElement;
+  if(VERBOSE) { fprintf(stdout, "+"); }
   return inversePos;
 }
 
@@ -289,8 +290,8 @@ static InverseTableHeader *assembleInverseTable(UErrorCode *status)
 }
 
 
-static void writeOutInverseData(InverseTableHeader *data,
-                  const char *outputDir,
+static void writeOutInverseData(InverseTableHeader *data, 
+                  const char *outputDir, 
                   const char *copyright,
                   UErrorCode *status)
 {
@@ -366,36 +367,107 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, UE
 
     UCAElements *element = &le; //(UCAElements *)malloc(sizeof(UCAElements));
 
+    enum ActionType {
+      READCE,
+      READHEX,
+    };
+
     // Directives.
     if(buffer[0] == '[') {
       uint32_t cnt = 0;
       struct {
         char name[256];
         uint32_t *what;
-      } vt[3] = { {"[variable top = ", &t->options->variableTopValue},
-                  {"[FIRST_IMPLICIT= ", &consts->UCA_PRIMARY_IMPLICIT_MIN},
-                  {"[LAST_IMPLICIT= ", &consts->UCA_PRIMARY_IMPLICIT_MAX}
+        ActionType what_to_do;
+      } vt[]  = { {"[first tertiary ignorable",  consts->UCA_FIRST_TERTIARY_IGNORABLE,  READCE},
+                  {"[last tertiary ignorable",   consts->UCA_LAST_TERTIARY_IGNORABLE,   READCE},
+                  {"[first secondary ignorable", consts->UCA_FIRST_SECONDARY_IGNORABLE, READCE},
+                  {"[last secondary ignorable",  consts->UCA_LAST_SECONDARY_IGNORABLE,  READCE},
+                  {"[first primary ignorable",   consts->UCA_FIRST_PRIMARY_IGNORABLE,   READCE},
+                  {"[last primary ignorable",    consts->UCA_LAST_PRIMARY_IGNORABLE,    READCE},
+                  {"[first variable",            consts->UCA_FIRST_VARIABLE,            READCE},
+                  {"[last variable",             consts->UCA_LAST_VARIABLE,             READCE},
+                  {"[first non-ignorable",       consts->UCA_FIRST_NON_VARIABLE,        READCE},
+                  {"[last non-ignorable",        consts->UCA_LAST_NON_VARIABLE,         READCE},
+                  {"[first implicit",            consts->UCA_FIRST_IMPLICIT,            READCE},
+                  {"[last implicit",             consts->UCA_LAST_IMPLICIT,             READCE},
+                  {"[first trailing",            consts->UCA_FIRST_TRAILING,            READCE},
+                  {"[last trailing",             consts->UCA_LAST_TRAILING,             READCE},
+
+                  {"[fixed top",                       &consts->UCA_PRIMARY_TOP_MIN,           READHEX},
+                  {"[fixed first implicit byte",       &consts->UCA_PRIMARY_IMPLICIT_MIN,      READHEX},
+                  {"[fixed last implicit byte",        &consts->UCA_PRIMARY_IMPLICIT_MAX,      READHEX},
+                  {"[fixed first trail byte",          &consts->UCA_PRIMARY_TRAILING_MIN,      READHEX},
+                  {"[fixed last trail byte",           &consts->UCA_PRIMARY_TRAILING_MAX,      READHEX},
+                  {"[fixed first special byte",        &consts->UCA_PRIMARY_SPECIAL_MIN,       READHEX},
+                  {"[fixed last special byte",         &consts->UCA_PRIMARY_SPECIAL_MAX,       READHEX},
+                  {"[variable top = ",                &t->options->variableTopValue,          READHEX}, 
       };
       for (cnt = 0; cnt<sizeof(vt)/sizeof(vt[0]); cnt++) {
         uint32_t vtLen = (uint32_t)uprv_strlen(vt[cnt].name);
         if(uprv_strncmp(buffer, vt[cnt].name, vtLen) == 0) {
             element->variableTop = TRUE;
-            if(sscanf(buffer+vtLen, "%4x", &theValue) != 1) /* read first code point */
-            {
-                fprintf(stderr, " scanf(hex) failed!\n ");
-            }
-            *(vt[cnt].what) = (UChar)theValue;
-            if(cnt == 1) { // first implicit
-              // we need to set the value for top next
-              //uint32_t nextTop = ucol_prv_calculateImplicitPrimary(0x4E00); // CJK base
-              consts->UCA_NEXT_TOP_VALUE = theValue<<24 | 0x030303;
+            if(vt[cnt].what_to_do == READHEX) {
+              if(sscanf(buffer+vtLen, "%4x", &theValue) != 1) /* read first code point */
+              {
+                  fprintf(stderr, " scanf(hex) failed on !\n ");
+              }
+              *(vt[cnt].what) = (UChar)theValue;
+              //if(cnt == 1) { // first implicit
+                // we need to set the value for top next
+                //uint32_t nextTop = ucol_prv_calculateImplicitPrimary(0x4E00); // CJK base
+                //consts->UCA_NEXT_TOP_VALUE = theValue<<24 | 0x030303;
+              //}
+            } else { /* vt[cnt].what_to_do == READCE */
+              pointer = strchr(buffer+vtLen, '[');
+              if(pointer) {
+                pointer++;
+                element->sizePrim[0]=readElement(&pointer, primary, ',', status);
+                element->sizeSec[0]=readElement(&pointer, secondary, ',', status);
+                element->sizeTer[0]=readElement(&pointer, tertiary, ']', status);
+
+                vt[cnt].what[0] = getSingleCEValue(primary, secondary, tertiary, status);
+                if(element->sizePrim[0] > 2 || element->sizeSec[0] > 1 || element->sizeTer[0] > 1) {
+                  uint32_t CEi = 1;
+                  uint32_t value = UCOL_CONTINUATION_MARKER; /* Continuation marker */
+                    if(2*CEi<element->sizePrim[i]) {
+                        value |= ((hex2num(*(primary+4*CEi))&0xF)<<28);
+                        value |= ((hex2num(*(primary+4*CEi+1))&0xF)<<24);
+                    }
+
+                    if(2*CEi+1<element->sizePrim[i]) {
+                        value |= ((hex2num(*(primary+4*CEi+2))&0xF)<<20);
+                        value |= ((hex2num(*(primary+4*CEi+3))&0xF)<<16);
+                    }
+
+                    if(CEi<element->sizeSec[i]) {
+                        value |= ((hex2num(*(secondary+2*CEi))&0xF)<<12);
+                        value |= ((hex2num(*(secondary+2*CEi+1))&0xF)<<8);
+                    }
+
+                    if(CEi<element->sizeTer[i]) {
+                        value |= ((hex2num(*(tertiary+2*CEi))&0x3)<<4);
+                        value |= (hex2num(*(tertiary+2*CEi+1))&0xF);
+                    }
+
+                    CEi++;
+
+                    vt[cnt].what[1] = value;
+                    //element->CEs[CEindex++] = value;
+                } else {
+                  vt[cnt].what[1] = 0;
+                }
+              } else {
+                fprintf(stderr, "Failed to read a CE from line %s\n", buffer);
+              }
             }
             //element->cPoints[0] = (UChar)theValue;
             //return element; 
             return NULL;
         }
       }
-      *status = U_INVALID_FORMAT_ERROR;
+      fprintf(stderr, "Warning: unrecognized option: %s\n", buffer);
+      //*status = U_INVALID_FORMAT_ERROR;
       return NULL;
     }
     element->variableTop = FALSE;
@@ -545,9 +617,10 @@ void writeOutData(UCATableHeader *data,
       noOfcontractions++;
 
 
-      data->UCAConsts = size;
-      //data->contractionUCACombos = size;
-      data->size += paddedsize(sizeof(UCAConstants)+(noOfcontractions*3*sizeof(UChar)));
+      data->UCAConsts = data->size;
+      data->size += paddedsize(sizeof(UCAConstants));
+      data->contractionUCACombos = data->size;
+      data->size += paddedsize((noOfcontractions*3*sizeof(UChar)));
     }
 
     UNewDataMemory *pData;
@@ -614,9 +687,10 @@ write_uca_table(const char *filename,
 	}
     UChar contractionCEs[256][3];
     uint32_t noOfContractions = 0;
+    UCAConstants consts;
+#if 0
     UCAConstants consts = {
       UCOL_RESET_TOP_VALUE,
-/*
       UCOL_FIRST_PRIMARY_IGNORABLE,
       UCOL_LAST_PRIMARY_IGNORABLE,
       UCOL_LAST_PRIMARY_IGNORABLE_CONT,
@@ -628,7 +702,6 @@ write_uca_table(const char *filename,
       UCOL_LAST_VARIABLE,
       UCOL_FIRST_NON_VARIABLE,
       UCOL_LAST_NON_VARIABLE,
-*/
 
       UCOL_NEXT_TOP_VALUE,
 /*
@@ -645,6 +718,7 @@ write_uca_table(const char *filename,
       PRIMARY_IMPLICIT_MIN,
       PRIMARY_IMPLICIT_MAX
     };
+#endif
 
 
     if(data == NULL) {
@@ -724,6 +798,9 @@ struct {
 
         element = readAnElement(data, t, &consts, status);
         line++;
+        if(VERBOSE) {
+          fprintf(stdout, "%i ", line);
+        }
         if(element != NULL) {
             // we have read the line, now do something sensible with the read data!
 
@@ -733,7 +810,7 @@ struct {
             //}
 
             // if element is a contraction, we want to add it to contractions
-            if(element->cSize > 1) { // this is a contraction
+            if(element->cSize > 1 && element->cPoints[0] != 0xFDD0) { // this is a contraction
               if(UTF_IS_LEAD(element->cPoints[0]) && UTF_IS_TRAIL(element->cPoints[1]) && element->cSize == 2) {
                 surrogateCount++;
               } else {
@@ -751,7 +828,9 @@ struct {
             /* we're first adding to inverse, because addAnElement will reverse the order */
             /* of code points and stuff... we don't want that to happen */
             addToInverse(element, status);
-            uprv_uca_addAnElement(t, element, status);
+            if(!(element->cSize > 1 && element->cPoints[0] == 0xFDD0)) {
+              uprv_uca_addAnElement(t, element, status);
+            }
         }
     }
 
