@@ -59,7 +59,7 @@
 #       Any comments or problems, contact <John_Jenkins@taligent.com>
 #
 #
-<code_set_name>		      "JISX208"
+<code_set_name>		      "JISX-208"
 <char_name_mask>	      "AXXXX"
 <mb_cur_max>		      1
 <mb_cur_min>		      1
