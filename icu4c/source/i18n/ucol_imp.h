@@ -70,21 +70,40 @@
 #define UCOL_RUNTIME_VERSION 1
 #define UCOL_BUILDER_VERSION 1
 
+/* flags bits for collIterate.flags       */
+/*                                        */
+                              // NORM - set for incremental normalize of source string
+#define UCOL_ITER_NORM  1
+
+#define UCOL_ITER_HASLEN 2
+
+                              // UCOL_ITER_INNORMBUF - set if the "pos" is in
+                              //               the writable side buffer, handling
+                              //               incrementally normalized characters.
+#define UCOL_ITER_INNORMBUF 4
+
+#define NFC_ZERO_CC_BLOCK_LIMIT_  0x300
+
 struct collIterate {
   UChar *string; /* Original string */
   UChar *start;  /* Pointer to the start of the source string. Either points to string
                     or to writableBuffer */
-  UChar *len;   /* Original string length */
-  UChar *pos; /* This is position in the string */
+  UChar *endp;   /* string end ptr.  Is undefined for null terminated strings */
+  UChar *pos; /* This is position in the string.  Can be to original or writable buf */
+
   uint32_t *toReturn; /* This is the CE from CEs buffer that should be returned */
   uint32_t *CEpos; /* This is the position to which we have stored processed CEs */
-  uint32_t CEs[UCOL_EXPAND_CE_BUFFER_SIZE]; /* This is where we store CEs */
-  UBool isThai; /* Have we already encountered a Thai prevowel */
-  UBool isWritable; /* is the source buffer writable? */
-  UChar stackWritableBuffer[UCOL_WRITABLE_BUFFER_SIZE]; /* A writable buffer. */
   UChar *writableBuffer;
+  uint32_t writableBufSize;
+  UChar *fcdPosition; /* Position in the original string to continue FCD check from. */
   const UCollator *coll;
+  uint8_t   flags;
+  uint8_t   origFlags; 
+  uint32_t CEs[UCOL_EXPAND_CE_BUFFER_SIZE]; /* This is where we store CEs */
+  UChar stackWritableBuffer[UCOL_WRITABLE_BUFFER_SIZE]; /* A writable buffer. */
 };
+U_CAPI void init_collIterate(const UCollator *collator, const UChar *sourceString, int32_t sourceLen, collIterate *s);
+
 
 struct UCollationElements
 {
@@ -106,6 +125,10 @@ struct UCollationElements
   * Indicates if this data has been reset.
   */
         UBool              reset_;
+  /**
+  * Indicates if the data should be deleted.
+  */
+        UBool              isWritable;
 };
 
 struct incrementalContext {
@@ -170,16 +193,44 @@ struct incrementalContext {
 
 
 
+#if 0
 /* initializes collIterate structure */
 /* made as macro to speed up things */
-#define init_collIterate(collator, sourceString, sourceLen, s, isSourceWritable) { \
+#define init_collIterate(collator, sourceString, sourceLen, s) { \
     (s)->start = (s)->string = (s)->pos = (UChar *)(sourceString); \
-    (s)->len = (UChar *)(sourceString)+(sourceLen); \
+    (s)->endp  = (sourceLen) == -1 ? NULL :(UChar *)(sourceString)+(sourceLen); \
     (s)->CEpos = (s)->toReturn = (s)->CEs; \
-	(s)->isThai = TRUE; \
-	(s)->isWritable = (isSourceWritable); \
-	(s)->writableBuffer = (s)->stackWritableBuffer; \
+    (s)->isThai = TRUE; \
+    (s)->writableBuffer = (s)->stackWritableBuffer; \
+    (s)->writableBufSize = UCOL_WRITABLE_BUFFER_SIZE; \
     (s)->coll = (collator); \
+    (s)->fcdPosition = 0;   \
+    (s)->flags = 0; \
+    if(((collator)->normalizationMode == UCOL_ON)) (s)->flags |= UCOL_ITER_NORM; \
+}
+#endif
+
+
+/* CEBuf - a growable buffer for holding CEs during strcoll            */
+#define UCOL_CEBUF_SIZE 512
+typedef struct ucol_CEBuf {
+    uint32_t    *buf;
+    uint32_t    *endp;
+    uint32_t    *pos;
+    uint32_t     localArray[UCOL_CEBUF_SIZE];
+} ucol_CEBuf;
+
+
+#define UCOL_INIT_CEBUF(b) {                 \
+    (b)->buf = (b)->pos = (b)->localArray;   \
+    (b)->endp = (b)->buf + UCOL_CEBUF_SIZE;  \
+}
+    
+void ucol_CEBuf_Expand(ucol_CEBuf *b);
+
+#define UCOL_CEBUF_PUT(b, ce) {                       \
+    if ((b)->pos == (b)->endp) ucol_CEBuf_Expand(b);  \
+    *(b)->pos++ = ce;                                 \
 }
 
 /* a macro that gets a simple CE */
@@ -190,7 +241,7 @@ struct incrementalContext {
       if((collationSource).CEpos == (collationSource).toReturn) {                     \
         (collationSource).CEpos = (collationSource).toReturn = (collationSource).CEs; \
       }                                                                               \
-    } else if((collationSource).pos < (collationSource).len) {                        \
+    } else if((collationSource).pos < (collationSource).endp) {                        \
       UChar ch = *(collationSource).pos++;                                              \
       if(ch <= 0xFF) {                                                                \
       (order) = (coll)->latinOneMapping[ch];                                          \
@@ -563,5 +614,6 @@ U_CAPI int32_t U_EXPORT2 ucol_inv_getPrevCE(uint32_t CE, uint32_t contCE,
                                             uint32_t *prevCE, uint32_t *prevContCE, 
                                             uint32_t strength);
 
+void collIterFCD(collIterate *ci);
 #endif
 

@@ -91,7 +91,7 @@ UBool CollationElementIterator::operator==(
                 that.m_data_->iteratordata_.string,
                 this->m_data_->length_) == 0 &&
     this->getOffset() == that.getOffset() &&  
-    this->m_data_->iteratordata_.isThai == that.m_data_->iteratordata_.isThai &&
+    /* this->m_data_->iteratordata_.isThai == that.m_data_->iteratordata_.isThai && */
     this->m_data_->iteratordata_.coll == that.m_data_->iteratordata_.coll);
 }
 
@@ -134,10 +134,11 @@ void CollationElementIterator::setText(const UnicodeString& source,
 	
   m_data_->length_ = length;
 
-  if (m_data_->iteratordata_.isWritable && 
+  if (m_data_->isWritable && 
       m_data_->iteratordata_.string != NULL)
     uprv_free(m_data_->iteratordata_.string);
-  init_collIterate(m_data_->iteratordata_.coll, string, length, &m_data_->iteratordata_, TRUE);
+  m_data_->isWritable = TRUE;
+  init_collIterate(m_data_->iteratordata_.coll, string, length, &m_data_->iteratordata_);
 }
 
 // Sets the source to the new character iterator.
@@ -158,10 +159,11 @@ void CollationElementIterator::setText(CharacterIterator& source,
   string.extract(0, length, buffer);
   m_data_->length_ = length;
 
-  if (m_data_->iteratordata_.isWritable && 
+  if (m_data_->isWritable && 
       m_data_->iteratordata_.string != NULL)
     uprv_free(m_data_->iteratordata_.string);
-  init_collIterate(m_data_->iteratordata_.coll, buffer, length, &m_data_->iteratordata_, TRUE);
+  m_data_->isWritable = TRUE;
+  init_collIterate(m_data_->iteratordata_.coll, buffer, length, &m_data_->iteratordata_);
 }
 
 int32_t CollationElementIterator::strengthOrder(int32_t order) const
@@ -216,7 +218,7 @@ CollationElementIterator::CollationElementIterator(
   sourceText.extract(0, length, string);
 
   m_data_ = ucol_openElements(order->ucollator, string, length, &status);
-  m_data_->iteratordata_.isWritable = TRUE;
+  m_data_->isWritable = TRUE;
 }
 
 /** 
@@ -262,7 +264,7 @@ CollationElementIterator::CollationElementIterator(
   string.extract(0, length, buffer);
   
   m_data_ = ucol_openElements(order->ucollator, buffer, length, &status);
-  m_data_->iteratordata_.isWritable = TRUE;
+  m_data_->isWritable = TRUE;
 }
 
 /* CollationElementIterator private methods -------------------------------- */
@@ -279,7 +281,7 @@ const CollationElementIterator& CollationElementIterator::operator=(
 
     this->m_data_->iteratordata_.string   = other.m_data_->iteratordata_.string;
     this->m_data_->iteratordata_.start    = other.m_data_->iteratordata_.start;
-    this->m_data_->iteratordata_.len      = other.m_data_->iteratordata_.len;
+    this->m_data_->iteratordata_.endp     = other.m_data_->iteratordata_.endp;
     this->m_data_->iteratordata_.pos      = other.m_data_->iteratordata_.pos;
     this->m_data_->iteratordata_.toReturn = other.m_data_->iteratordata_.CEs + 
           (other.m_data_->iteratordata_.toReturn - other.m_data_->iteratordata_.CEs);
@@ -287,8 +289,8 @@ const CollationElementIterator& CollationElementIterator::operator=(
           (other.m_data_->iteratordata_.CEpos - other.m_data_->iteratordata_.CEs);
     uprv_memcpy(this->m_data_->iteratordata_.CEs, other.m_data_->iteratordata_.CEs, 
                 UCOL_EXPAND_CE_BUFFER_SIZE * sizeof(uint32_t));
-    this->m_data_->iteratordata_.isThai   = other.m_data_->iteratordata_.isThai;
-    this->m_data_->iteratordata_.isWritable = other.m_data_->iteratordata_.isWritable;
+    /* this->m_data_->iteratordata_.isThai   = other.m_data_->iteratordata_.isThai; */
+    this->m_data_->isWritable = other.m_data_->isWritable;
 
     uprv_memcpy(this->m_data_->iteratordata_.stackWritableBuffer, 
                 other.m_data_->iteratordata_.stackWritableBuffer, 

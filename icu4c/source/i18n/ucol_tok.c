@@ -803,7 +803,7 @@ uint32_t ucol_uprv_tok_assembleTokenList(UColTokenParser *src, UErrorCode *statu
             } 
 
  
-            init_collIterate(src->UCA, src->source+charsOffset, 1, &s, FALSE); /* or newCharsLen instead of 1??? */
+            init_collIterate(src->UCA, src->source+charsOffset, 1, &s); /* or newCharsLen instead of 1??? */
 
             CE = ucol_getNextCE(src->UCA, &s, status);
             /*UCOL_GETNEXTCE(CE, src->UCA, s, &status);*/

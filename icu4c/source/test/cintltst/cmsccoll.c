@@ -1003,7 +1003,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
                       &varT, &top_, startOfRules, status)) != NULL) {
       startOfRules = FALSE;
 
-      init_collIterate(coll, rulesCopy+chOffset, chLen, &c, FALSE);
+      init_collIterate(coll, rulesCopy+chOffset, chLen, &c);
 
       currCE = ucol_getNextCE(coll, &c, status);
       if(currCE == 0 && UCOL_ISTHAIPREVOWEL(*(rulesCopy+chOffset))) {
