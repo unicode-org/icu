@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-1999, International Business Machines Corporation and    *
+* Copyright (C) 1997-2001, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -21,7 +21,6 @@
 #include "unicode/dtfmtsym.h"
 #include "unicode/resbund.h"
 #include "unicode/smpdtfmt.h"
-#include "mutex.h"
  
 // *****************************************************************************
 // class DateFormatSymbols
@@ -37,44 +36,59 @@ UnicodeString DateFormatSymbols::fgPatternChars = UNICODE_STRING("GyMdkHmsSEDFwW
 // Strings of last resort.  These are only used if we have no resource
 // files.  They aren't designed for actual use, just for backup.
 
-//============================================================
-// To make the VC++ compiler happy these must occur before the
-// sizeof operations on the arrays occur below.
-//============================================================
-
 // These are the month names and abbreviations of last resort.
-const UnicodeString DateFormatSymbols::fgLastResortMonthNames[] =
+const UChar DateFormatSymbols::fgLastResortMonthNames[kMonthNum][kMonthLen] =
 {
-    UNICODE_STRING("01", 2), UNICODE_STRING("02", 2), UNICODE_STRING("03", 2), UNICODE_STRING("04", 2),
-    UNICODE_STRING("05", 2), UNICODE_STRING("06", 2), UNICODE_STRING("07", 2), UNICODE_STRING("08", 2),
-    UNICODE_STRING("09", 2), UNICODE_STRING("10", 2), UNICODE_STRING("11", 2), UNICODE_STRING("12", 2),
-    UNICODE_STRING("13", 2)
+    {0x0030, 0x0031, 0x0000}, /* "01" */
+    {0x0030, 0x0032, 0x0000}, /* "02" */
+    {0x0030, 0x0033, 0x0000}, /* "03" */
+    {0x0030, 0x0034, 0x0000}, /* "04" */
+    {0x0030, 0x0035, 0x0000}, /* "05" */
+    {0x0030, 0x0036, 0x0000}, /* "06" */
+    {0x0030, 0x0037, 0x0000}, /* "07" */
+    {0x0030, 0x0038, 0x0000}, /* "08" */
+    {0x0030, 0x0039, 0x0000}, /* "09" */
+    {0x0031, 0x0030, 0x0000}, /* "10" */
+    {0x0031, 0x0031, 0x0000}, /* "11" */
+    {0x0031, 0x0032, 0x0000}, /* "12" */
+    {0x0031, 0x0033, 0x0000}  /* "13" */
 };
 
 // These are the weekday names and abbreviations of last resort.
-const UnicodeString DateFormatSymbols::fgLastResortDayNames[] =
+const UChar DateFormatSymbols::fgLastResortDayNames[kDayNum][kDayLen] =
 {
-    UnicodeString(), UNICODE_STRING("1", 1), UNICODE_STRING("2", 1), UNICODE_STRING("3", 1),
-    UNICODE_STRING("4", 1), UNICODE_STRING("5", 1), UNICODE_STRING("6", 1), UNICODE_STRING("7", 1)
+    {0x0000, 0x0000}, /* "" */
+    {0x0031, 0x0000}, /* "1" */
+    {0x0032, 0x0000}, /* "2" */
+    {0x0033, 0x0000}, /* "3" */
+    {0x0034, 0x0000}, /* "4" */
+    {0x0035, 0x0000}, /* "5" */
+    {0x0036, 0x0000}, /* "6" */
+    {0x0037, 0x0000}  /* "7" */
 };
 
 // These are the am/pm and BC/AD markers of last resort.
-const UnicodeString DateFormatSymbols::fgLastResortAmPmMarkers[] =
+const UChar DateFormatSymbols::fgLastResortAmPmMarkers[kAmPmNum][kAmPmLen] =
 {
-    UNICODE_STRING("AM", 2), UNICODE_STRING("PM", 2)
+    {0x0041, 0x004D, 0x0000}, /* "AM" */
+    {0x0050, 0x004D, 0x0000}  /* "PM" */
 };
 
-const UnicodeString DateFormatSymbols::fgLastResortEras[] =
+const UChar DateFormatSymbols::fgLastResortEras[kEraNum][kEraLen] =
 {
-    UNICODE_STRING("BC", 2), UNICODE_STRING("AD", 2)
+    {0x0042, 0x0043, 0x0000}, /* "BC" */
+    {0x0041, 0x0044, 0x0000}  /* "AD" */
 };
+
 
 // These are the zone strings of last resort.
-UnicodeString** DateFormatSymbols::fgLastResortZoneStringsH = 0;
-
-const UnicodeString DateFormatSymbols::fgLastResortZoneStrings[] =
+const UChar DateFormatSymbols::fgLastResortZoneStrings[kZoneNum][kZoneLen] =
 {
-    UNICODE_STRING("GMT", 3), UNICODE_STRING("GMT", 3), UNICODE_STRING("GMT", 3), UNICODE_STRING("GMT", 3), UNICODE_STRING("GMT", 3)
+    {0x0047, 0x004D, 0x0054, 0x0000}, /* "GMT" */
+    {0x0047, 0x004D, 0x0054, 0x0000}, /* "GMT" */
+    {0x0047, 0x004D, 0x0054, 0x0000}, /* "GMT" */
+    {0x0047, 0x004D, 0x0054, 0x0000}, /* "GMT" */
+    {0x0047, 0x004D, 0x0054, 0x0000}  /* "GMT" */
 };
 
 //------------------------------------------------------
@@ -92,32 +106,20 @@ DateFormatSymbols::DateFormatSymbols(UErrorCode& status)
 
 DateFormatSymbols::DateFormatSymbols(const DateFormatSymbols& other)
 {
-    fIsOwned = 0; // We own nothing (ignore existing pointers)
-    *this = other;
+    copyData(other);
 }
 
 void
 DateFormatSymbols::assignArray(UnicodeString*& dstArray,
                                int32_t& dstCount,
                                const UnicodeString* srcArray,
-                               int32_t srcCount,
-                               const DateFormatSymbols& other,
-                               int32_t which)
+                               int32_t srcCount)
 {
     // duplicates or aliases the source array, depending on the status of
     // the appropriate isOwned flag
-    UBool owned = other.isOwned(which);
-    setIsOwned(which, owned);
     dstCount = srcCount;
-    if (owned)
-    {
-        dstArray = new UnicodeString[srcCount];
-        uprv_arrayCopy(srcArray, dstArray, srcCount);
-    }
-    else
-    {
-        dstArray = (UnicodeString*)srcArray; // Compiler requires cast
-    }
+    dstArray = new UnicodeString[srcCount];
+    uprv_arrayCopy(srcArray, dstArray, srcCount);
 }
 
 /**
@@ -138,6 +140,25 @@ DateFormatSymbols::createZoneStrings(const UnicodeString *const * otherStrings)
 }
 
 /**
+ * Copy all of the other's data to this.
+ */
+void
+DateFormatSymbols::copyData(const DateFormatSymbols& other) {
+    assignArray(fEras, fErasCount, other.fEras, other.fErasCount);
+    assignArray(fMonths, fMonthsCount, other.fMonths, other.fMonthsCount);
+    assignArray(fShortMonths, fShortMonthsCount, other.fShortMonths, other.fShortMonthsCount);
+    assignArray(fWeekdays, fWeekdaysCount, other.fWeekdays, other.fWeekdaysCount);
+    assignArray(fShortWeekdays, fShortWeekdaysCount, other.fShortWeekdays, other.fShortWeekdaysCount);
+    assignArray(fAmPms, fAmPmsCount, other.fAmPms, other.fAmPmsCount);
+
+    fZoneStringsRowCount = other.fZoneStringsRowCount;
+    fZoneStringsColCount = other.fZoneStringsColCount;
+    createZoneStrings((const UnicodeString**)other.fZoneStrings);
+
+    fLocalPatternChars = other.fLocalPatternChars;
+}
+
+/**
  * Assignment operator.  A bit messy because the other object may or may not
  * own each of its arrays.  We then alias or copy those arrays as appropriate.
  * Arrays that aren't owned are assumed to be permanently "around," which is
@@ -146,21 +167,7 @@ DateFormatSymbols::createZoneStrings(const UnicodeString *const * otherStrings)
 DateFormatSymbols& DateFormatSymbols::operator=(const DateFormatSymbols& other)
 {
     dispose();
-    assignArray(fEras, fErasCount, other.fEras, other.fErasCount, other, kEras);
-    assignArray(fMonths, fMonthsCount, other.fMonths, other.fMonthsCount, other, kMonths);
-    assignArray(fShortMonths, fShortMonthsCount, other.fShortMonths, other.fShortMonthsCount, other, kShortMonths);
-    assignArray(fWeekdays, fWeekdaysCount, other.fWeekdays, other.fWeekdaysCount, other, kWeekdays);
-    assignArray(fShortWeekdays, fShortWeekdaysCount, other.fShortWeekdays, other.fShortWeekdaysCount, other, kShortWeekdays);
-    assignArray(fAmPms, fAmPmsCount, other.fAmPms, other.fAmPmsCount, other, kAmPms);
-
-    UBool owned = other.isOwned(kZoneStrings);
-    setIsOwned(kZoneStrings, owned);
-    fZoneStringsRowCount = other.fZoneStringsRowCount;
-    fZoneStringsColCount = other.fZoneStringsColCount;
-    if (owned) createZoneStrings((const UnicodeString**)other.fZoneStrings);
-        else fZoneStrings = other.fZoneStrings;
-
-    fLocalPatternChars = other.fLocalPatternChars;
+    copyData(other);
 
     return *this;
 }
@@ -172,24 +179,19 @@ DateFormatSymbols::~DateFormatSymbols()
 
 void DateFormatSymbols::dispose()
 {
-    // Delete those items which we have marked as owned
+    if (fEras)          delete[] fEras;
+    if (fMonths)        delete[] fMonths;
+    if (fShortMonths)   delete[] fShortMonths;
+    if (fWeekdays)      delete[] fWeekdays;
+    if (fShortWeekdays) delete[] fShortWeekdays;
+    if (fAmPms)         delete[] fAmPms;
 
-    if (isOwned(kEras))             delete[] fEras;
-    if (isOwned(kMonths))           delete[] fMonths;
-    if (isOwned(kShortMonths))      delete[] fShortMonths;
-    if (isOwned(kWeekdays))         delete[] fWeekdays;
-    if (isOwned(kShortWeekdays))    delete[] fShortWeekdays;
-    if (isOwned(kAmPms))            delete[] fAmPms;
-    
     disposeZoneStrings();
-
-    fIsOwned = 0; // Indicate that we no longer need to delete anything
 }
 
 void DateFormatSymbols::disposeZoneStrings()
 {
-    if (isOwned(kZoneStrings))
-    {
+    if (fZoneStrings) {
         for (int32_t row=0; row<fZoneStringsRowCount; ++row)
             delete[] fZoneStrings[row];
         delete[] fZoneStrings;
@@ -294,11 +296,10 @@ void
 DateFormatSymbols::setEras(const UnicodeString* erasArray, int32_t count)
 {
     // delete the old list if we own it
-    if (isOwned(kEras)) delete[] fEras;
+    if (fEras) delete[] fEras;
 
     // we always own the new list, which we create here (we duplicate rather
     // than adopting the list passed in)
-    setIsOwned(kEras, TRUE);
     fEras = new UnicodeString[count];
     uprv_arrayCopy(erasArray,fEras,  count);
     fErasCount = count;
@@ -308,11 +309,10 @@ void
 DateFormatSymbols::setMonths(const UnicodeString* monthsArray, int32_t count)
 {
     // delete the old list if we own it
-    if (isOwned(kMonths)) delete[] fMonths;
+    if (fMonths) delete[] fMonths;
 
     // we always own the new list, which we create here (we duplicate rather
     // than adopting the list passed in)
-    setIsOwned(kMonths, TRUE);
     fMonths = new UnicodeString[count];
     uprv_arrayCopy( monthsArray,fMonths,count);
     fMonthsCount = count;
@@ -322,11 +322,10 @@ void
 DateFormatSymbols::setShortMonths(const UnicodeString* shortMonthsArray, int32_t count)
 {
     // delete the old list if we own it
-    if (isOwned(kShortMonths)) delete[] fShortMonths;
+    if (fShortMonths) delete[] fShortMonths;
 
     // we always own the new list, which we create here (we duplicate rather
     // than adopting the list passed in)
-    setIsOwned(kShortMonths, TRUE);
     fShortMonths = new UnicodeString[count];
     uprv_arrayCopy(shortMonthsArray,fShortMonths,  count);
     fShortMonthsCount = count;
@@ -335,11 +334,10 @@ DateFormatSymbols::setShortMonths(const UnicodeString* shortMonthsArray, int32_t
 void DateFormatSymbols::setWeekdays(const UnicodeString* weekdaysArray, int32_t count)
 {
     // delete the old list if we own it
-    if (isOwned(kWeekdays)) delete[] fWeekdays;
+    if (fWeekdays) delete[] fWeekdays;
 
     // we always own the new list, which we create here (we duplicate rather
     // than adopting the list passed in)
-    setIsOwned(kWeekdays, TRUE);
     fWeekdays = new UnicodeString[count];
     uprv_arrayCopy(weekdaysArray,fWeekdays,count);
     fWeekdaysCount = count;
@@ -349,11 +347,10 @@ void
 DateFormatSymbols::setShortWeekdays(const UnicodeString* shortWeekdaysArray, int32_t count)
 {
     // delete the old list if we own it
-    if (isOwned(kShortWeekdays)) delete[] fShortWeekdays;
+    if (fShortWeekdays) delete[] fShortWeekdays;
 
     // we always own the new list, which we create here (we duplicate rather
     // than adopting the list passed in)
-    setIsOwned(kShortWeekdays, TRUE);
     fShortWeekdays = new UnicodeString[count];
     uprv_arrayCopy( shortWeekdaysArray,fShortWeekdays,count);
     fShortWeekdaysCount = count;
@@ -363,11 +360,10 @@ void
 DateFormatSymbols::setAmPmStrings(const UnicodeString* amPmsArray, int32_t count)
 {
     // delete the old list if we own it
-    if (isOwned(kAmPms)) delete[] fAmPms;
+    if (fAmPms) delete[] fAmPms;
 
     // we always own the new list, which we create here (we duplicate rather
     // than adopting the list passed in)
-    setIsOwned(kAmPms, TRUE);
     fAmPms = new UnicodeString[count];
     uprv_arrayCopy(amPmsArray,fAmPms,count);
     fAmPmsCount = count;
@@ -392,7 +388,6 @@ DateFormatSymbols::setZoneStrings(const UnicodeString* const *strings, int32_t r
 
     // we always own the new list, which we create here (we duplicate rather
     // than adopting the list passed in)
-    setIsOwned(kZoneStrings, TRUE);
     fZoneStringsRowCount = rowCount;
     fZoneStringsColCount = columnCount;
     createZoneStrings((const UnicodeString**)strings);
@@ -418,24 +413,44 @@ DateFormatSymbols::setLocalPatternChars(const UnicodeString& newLocalPatternChar
 //------------------------------------------------------
 
 void
-DateFormatSymbols::initField(UnicodeString **field, int32_t& length, const ResourceBundle data, uint8_t ownfield, UErrorCode &status) {
-    //ResourceBundle data = source->getByKey(tag, status);
-    length = data.getSize();
-    *field = new UnicodeString[length];
-    for(int32_t i = 0; i<length; i++) {
-        *(*(field)+i) = data.getStringEx(i, status);
+DateFormatSymbols::initField(UnicodeString **field, int32_t& length, const ResourceBundle data, UErrorCode &status) {
+    if (U_SUCCESS(status)) {
+        length = data.getSize();
+        *field = new UnicodeString[length];
+        if (*field) {
+            for(int32_t i = 0; i<length; i++) {
+                *(*(field)+i) = data.getStringEx(i, status);
+            }
+        }
+        else {
+            length = 0;
+            status = U_MEMORY_ALLOCATION_ERROR;
+        }
     }
-    setIsOwned(ownfield, TRUE);
+}
+
+void
+DateFormatSymbols::initField(UnicodeString **field, int32_t& length, const UChar *data, LastResortSize numStr, LastResortSize strLen, UErrorCode &status) {
+    if (U_SUCCESS(status)) {
+        length = numStr;
+        *field = new UnicodeString[numStr];
+        if (*field) {
+            for(int32_t i = 0; i<length; i++) {
+                *(*(field)+i) = data+(i*((int32_t)strLen));
+            }
+        }
+        else {
+            length = 0;
+            status = U_MEMORY_ALLOCATION_ERROR;
+        }
+    }
 }
 
 void
 DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBool useLastResortData)
 {
-    if (U_FAILURE(status)) return;
-
-    fIsOwned = 0; // Nothing is owned
-
     int32_t i;
+    if (U_FAILURE(status)) return;
 
     /**
      * Retrieve the string arrays we need from the resource bundle file.
@@ -455,26 +470,26 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
 
             status = U_USING_FALLBACK_ERROR;
 
-            fEras = (UnicodeString*)fgLastResortEras;
-            fErasCount = (int32_t)(sizeof(fgLastResortEras[0]) / sizeof(fgLastResortEras[0]));
-            fMonths = fShortMonths = (UnicodeString*)fgLastResortMonthNames;
-            fMonthsCount = fShortMonthsCount = (int32_t)(sizeof(fgLastResortMonthNames) / sizeof(fgLastResortMonthNames[0]));
-            fWeekdays = fShortWeekdays = (UnicodeString*)fgLastResortDayNames;
-            fWeekdaysCount = fShortWeekdaysCount = (int32_t)(sizeof(fgLastResortDayNames) / sizeof(fgLastResortDayNames[0]));
-            fAmPms = (UnicodeString*)fgLastResortAmPmMarkers;
-            fAmPmsCount = (int32_t)(sizeof(fgLastResortAmPmMarkers) / sizeof(fgLastResortAmPmMarkers[0]));
-            if (fgLastResortZoneStringsH == 0)
-            {
-                // Initialize this -- the compiler doesn't like to do so at static init time
-                fgLastResortZoneStringsH = new UnicodeString*[1];
+            initField(&fEras, fErasCount, (const UChar *)fgLastResortEras, kEraNum, kEraLen, status);
+            initField(&fMonths, fMonthsCount, (const UChar *)fgLastResortMonthNames, kMonthNum, kMonthLen,  status);
+            initField(&fShortMonths, fShortMonthsCount, (const UChar *)fgLastResortMonthNames, kMonthNum, kMonthLen, status);
+            initField(&fWeekdays, fWeekdaysCount, (const UChar *)fgLastResortDayNames, kDayNum, kDayLen, status);
+            initField(&fShortWeekdays, fShortWeekdaysCount, (const UChar *)fgLastResortDayNames, kDayNum, kDayLen, status);
+            initField(&fAmPms, fAmPmsCount, (const UChar *)fgLastResortAmPmMarkers, kAmPmNum, kAmPmLen, status);
 
-                Mutex lock; // This could be optimized but it's not worth it -- exceptional case
-                *fgLastResortZoneStringsH = (UnicodeString*)fgLastResortZoneStrings;
-            }
-            fZoneStrings = fgLastResortZoneStringsH;
+            fZoneStrings = new UnicodeString*[1];
             fZoneStringsRowCount = 1;
-            fZoneStringsColCount = (int32_t)(sizeof(fgLastResortZoneStrings));
+            initField(fZoneStrings, fZoneStringsColCount, (const UChar *)fgLastResortZoneStrings, kZoneNum, kZoneLen, status);
             fLocalPatternChars = fgPatternChars;
+        }
+        else {
+            fEras = NULL;
+            fMonths = NULL;
+            fShortMonths = NULL;
+            fWeekdays = NULL;
+            fShortWeekdays = NULL;
+            fAmPms = NULL;
+            fZoneStrings = NULL;
         }
         return;
     }
@@ -482,18 +497,11 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
     // if we make it to here, the resource data is cool, and we can get everything out
     // of it that we need except for the time-zone and localized-pattern data, which
     // are stoerd in a separate file
-    initField(&fEras, fErasCount, resource.get(SimpleDateFormat::fgErasTag, status), kEras, status);
-    initField(&fMonths, fMonthsCount, resource.get(SimpleDateFormat::fgMonthNamesTag, status), kMonths, status);
-    initField(&fShortMonths, fShortMonthsCount, resource.get(SimpleDateFormat::fgMonthAbbreviationsTag, status), kShortMonths, status);
-    initField(&fAmPms, fAmPmsCount, resource.get(SimpleDateFormat::fgAmPmMarkersTag, status), kAmPms, status);
+    initField(&fEras, fErasCount, resource.get(SimpleDateFormat::fgErasTag, status), status);
+    initField(&fMonths, fMonthsCount, resource.get(SimpleDateFormat::fgMonthNamesTag, status), status);
+    initField(&fShortMonths, fShortMonthsCount, resource.get(SimpleDateFormat::fgMonthAbbreviationsTag, status), status);
+    initField(&fAmPms, fAmPmsCount, resource.get(SimpleDateFormat::fgAmPmMarkersTag, status), status);
     fLocalPatternChars = resource.getStringEx(SimpleDateFormat::fgLocalPatternCharsTag, status);
-
-
-    //fEras           = (UnicodeString*)resource.getStringArray(SimpleDateFormat::fgErasTag, fErasCount, status);
-    //fMonths         = (UnicodeString*)resource.getStringArray(SimpleDateFormat::fgMonthNamesTag, fMonthsCount, status);
-    //fShortMonths    = (UnicodeString*)resource.getStringArray(SimpleDateFormat::fgMonthAbbreviationsTag, fShortMonthsCount, status);
-    //fAmPms          = (UnicodeString*)resource.getStringArray(SimpleDateFormat::fgAmPmMarkersTag, fAmPmsCount, status);
-    //fLocalPatternChars = *resource.getString(SimpleDateFormat::fgLocalPatternCharsTag, status);
 
     ResourceBundle zoneArray = resource.get(SimpleDateFormat::fgZoneStringsTag, status);
     fZoneStringsRowCount = zoneArray.getSize();
@@ -507,24 +515,7 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
             fZoneStrings[i][j] = zoneRow.getStringEx(j, status);
         }
     }
-    setIsOwned(kZoneStrings, TRUE);
 
-/*
-    ResourceBundle data = resource.getByKey(SimpleDateFormat::fgErasTag, status);
-    fErasCount = data.getSize();
-    fEras = new UnicodeString[fErasCount];
-    for(i = 0; i<fErasCount; i++) {
-        fEras[i] = data.getStringByIndex(i, status);
-    }
-    setIsOwned(kEras, TRUE);
-    data = resource.getByKey(SimpleDateFormat::fgMonthNamesTag, status);
-    fMonthsCount = data.getSize();
-    fMonths = new UnicodeString[fMonthsCount];
-    for(int32_t i = 0; i<fMonthsCount; i++) {
-        fMonths[i] = data.getStringByIndex(i, status);
-    }
-    setIsOwned(kMonths, TRUE);
-*/
     // {sfb} fixed to handle 1-based weekdays
     ResourceBundle weekdaysData = resource.get(SimpleDateFormat::fgDayNamesTag, status);
     fWeekdaysCount = weekdaysData.getSize();
@@ -533,7 +524,6 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
     for(i = 0; i<fWeekdaysCount; i++) {
         fWeekdays[i+1] = weekdaysData.getStringEx(i, status);
     }
-    setIsOwned(kWeekdays, TRUE);
 
     ResourceBundle lsweekdaysData = resource.get(SimpleDateFormat::fgDayAbbreviationsTag, status);
     fShortWeekdaysCount = lsweekdaysData.getSize();
@@ -542,7 +532,6 @@ DateFormatSymbols::initializeData(const Locale& locale, UErrorCode& status, UBoo
     for(i = 0; i<fShortWeekdaysCount; i++) {
         fShortWeekdays[i+1] = lsweekdaysData.getStringEx(i, status);
     }
-    setIsOwned(kShortWeekdays, TRUE);
 
     fWeekdaysCount = fShortWeekdaysCount = 8;
     
