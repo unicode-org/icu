@@ -300,7 +300,7 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale, UErrorCode *
         }
 
         myConverterData->myConverterArray[0] =NULL;
-        if(locale && uprv_stricmp(locale,"jp")==0){
+        if(locale && (uprv_stricmp(locale,"jp")==0 || uprv_stricmp(locale,"ja")==0)){
             myConverterData->myConverterArray[0]=   ucnv_open("ASCII", errorCode );
             myConverterData->myConverterArray[1]=   ucnv_open("ISO8859_1", errorCode);
             myConverterData->myConverterArray[2]=   ucnv_open("ISO8859_7", errorCode);
@@ -323,7 +323,7 @@ _ISO2022Open(UConverter *cnv, const char *name, const char *locale, UErrorCode *
             }
             myConverterData->isFirstBuffer = TRUE;
         }
-        else if(locale && uprv_stricmp(locale,"kr")==0){
+        else if(locale && (uprv_stricmp(locale,"kr")==0 || uprv_stricmp(locale,"ko")==0)){
             cnv->charErrorBufferLength = 4;
             cnv->charErrorBuffer[0] = 0x1b;
             cnv->charErrorBuffer[1] = 0x24;
@@ -459,10 +459,10 @@ U_CFUNC void T_UConverter_fromUnicode_ISO_2022(UConverterFromUnicodeArgs *args,
 {   
     UConverterDataISO2022 *myConverterData=(UConverterDataISO2022*)args->converter->extraInfo;
     const char *locale =myConverterData->currentLocale;
-    if(locale && uprv_stricmp(locale,"jp")==0){
+    if(locale && (uprv_stricmp(locale,"jp")==0 || uprv_stricmp(locale,"ja")==0)){
             T_UConverter_fromUnicode_ISO_2022_JP(args,err);
     }
-    else if(locale && uprv_stricmp(locale,"kr")==0){
+    else if(locale && ( uprv_stricmp(locale,"kr")==0 || uprv_stricmp(locale,"ko")==0)){
         UConverter_fromUnicode_ISO_2022_KR(args,err);
     }
     else{
@@ -478,11 +478,11 @@ U_CFUNC void T_UConverter_fromUnicode_ISO_2022_OFFSETS_LOGIC(UConverterFromUnico
       char const* targetStart = args->target;
     UConverterDataISO2022 *myConverterData=(UConverterDataISO2022*)args->converter->extraInfo;
     const char *locale =myConverterData->currentLocale;
-    if(locale && uprv_stricmp(locale,"jp")==0){
+    if(locale && (uprv_stricmp(locale,"jp")==0 || uprv_stricmp(locale,"ja")==0)){
         T_UConverter_fromUnicode_ISO_2022_JP(args,err);
     }
-    else if(locale && uprv_stricmp(locale,"kr")==0){
-        UConverter_fromUnicode_ISO_2022_KR(args,err);
+    else if(locale && ( uprv_stricmp(locale,"kr")==0 || uprv_stricmp(locale,"ko")==0)){
+        UConverter_fromUnicode_ISO_2022_KR_OFFSETS_LOGIC(args,err);
     }
     else{
       T_UConverter_fromUnicode_UTF8_OFFSETS_LOGIC(args, err);
@@ -1181,7 +1181,8 @@ static void changeState_2022(UConverter* _this,
             _this->mode = UCNV_SI;
             myUConverter =myData2022->currentConverter;
         }
-        else if(uprv_strcmp(chosenConverterName,"latin1")==0 && uprv_strcmp(myData2022->currentLocale,"jp")==0){
+        else if(uprv_strcmp(chosenConverterName,"latin1")==0 && (uprv_stricmp(myData2022->currentLocale,"jp")==0 ||
+                    uprv_stricmp(myData2022->currentLocale,"ja")==0)){
             /* 
              * In ISO-2022-JP2 encoding there must be a switch to ASCII or to JIS X 0201-Roman before a
              * space character (but notnecessarily before "ESC 4/14 2/0" or "ESC N ' '") or control
@@ -1298,7 +1299,8 @@ U_CFUNC void T_UConverter_toUnicode_ISO_2022(UConverterToUnicodeArgs *args,
     }
     if(((UConverterDataISO2022*)(args->converter->extraInfo))->currentLocale){
 
-        if(uprv_strcmp(((UConverterDataISO2022*)(args->converter->extraInfo))->currentLocale, "kr") ==0){
+        if(uprv_strcmp(((UConverterDataISO2022*)(args->converter->extraInfo))->currentLocale, "kr") ==0 ||
+                uprv_strcmp(((UConverterDataISO2022*)(args->converter->extraInfo))->currentLocale, "ko") ==0){
             UConverter_toUnicode_ISO_2022_KR(args,err);
             return;
         }
