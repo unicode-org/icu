@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2002, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-aix,v 1.27 2002/03/14 02:00:35 srl Exp $
+## $Id: mh-aix,v 1.28 2002/03/21 01:26:39 grhoten-oss Exp $
 ##
 ## Please note: AIX does NOT have library versioning per se (there is no 'SONAME' capability). 
 ## So, we are using 'windows' style library names, that is, libicuuc20.1.so instead of libicuuc.so.20.1
@@ -13,7 +13,7 @@ GEN_DEPS.c=	$(CC) -E -M $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX) -E -M $(DEFS) $(CPPFLAGS)
 
 ## Commands to compile
-COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS)  -qroconst -c
+COMPILE.c=	$(CC) $(DEFS) $(CPPFLAGS) $(CFLAGS) -qroconst -c
 COMPILE.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) -qroconst -c
 
 ## Commands to link
@@ -23,8 +23,8 @@ LINK.c=		$(CXX) -brtl $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 LINK.cc=	$(CXX) -brtl $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
 
 ## Commands to make a shared library
-SHLIB.c=	$(AIX_SHLIB) -p 5000 -brtl
-SHLIB.cc=	$(AIX_SHLIB) -p 5000 -brtl
+SHLIB.c=	$(AIX_SHLIB) -p 5000 -brtl $(LDFLAGS)
+SHLIB.cc=	$(AIX_SHLIB) -p 5000 -brtl $(LDFLAGS)
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	-I
