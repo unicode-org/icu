@@ -65,45 +65,24 @@ void ctest_setICU_DATA(void);
  */
 static int traceFnNestingDepth = 0;
 void U_CALLCONV TraceEntry(const void *context, int32_t fnNumber) {
-    fprintf(stderr, "%s() Enter \n", utrace_functionName(fnNumber));
+    fprintf(stdout, "%s() Enter \n", utrace_functionName(fnNumber));
     traceFnNestingDepth++;
 }
         
 void U_CALLCONV TraceExit(const void *context, int32_t fnNumber, UTraceExitVal type, va_list args) {
-    int32_t   intVal;
-    UBool     boolVal;
-    void      *ptrVal;
-
-    fprintf(stderr, "%s() returns", utrace_functionName(fnNumber));
-    switch (type & UTRACE_EXITV_MASK) {
-    case UTRACE_EXITV_NONE:
-        fprintf(stderr, ".");
-        break;
-    case UTRACE_EXITV_I32:
-        intVal = (int32_t)va_arg(args, int32_t);
-        fprintf(stderr, " %d", intVal);
-        break;
-    case UTRACE_EXITV_PTR:
-        ptrVal = (void *)va_arg(args, void *);
-        fprintf(stderr, " %x", ptrVal);
-        break;
-    case UTRACE_EXITV_BOOL:
-        boolVal = (UBool)va_arg(args, int32_t);    /* gcc wants int, not UBool */
-        fprintf(stderr, boolVal? " TRUE": " FALSE");
+    char buf[2000];
+    if (traceFnNestingDepth>0) {
+        traceFnNestingDepth--;
     }
-    if (type & UTRACE_EXITV_STATUS) {
-        UErrorCode status = (UErrorCode)va_arg(args, UErrorCode);
-        fprintf(stderr, "  Status = %s.", u_errorName(status));
-    }
-    traceFnNestingDepth--;
-    fprintf(stderr, "\n");
+    utrace_formatExit(buf, sizeof(buf), traceFnNestingDepth*3, fnNumber, type, args);
+    fprintf(stdout, "%s\n", buf);
 }
 
 void U_CALLCONV TraceData(const void *context, int32_t fnNumber, 
                           int32_t level, const char *fmt, va_list args) {
     char buf[2000];
     utrace_format(buf, sizeof(buf), traceFnNestingDepth*3, fmt, args);
-    fprintf(stderr, "%s\n", buf); 
+    fprintf(stdout, "%s\n", buf); 
 }
 
 
