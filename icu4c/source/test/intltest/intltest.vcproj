@@ -780,12 +780,6 @@
 				RelativePath=".\cpdtrtst.h">
 			</File>
 			<File
-				RelativePath=".\hxuntrts.cpp">
-			</File>
-			<File
-				RelativePath=".\hxuntrts.h">
-			</File>
-			<File
 				RelativePath=".\ittrans.cpp">
 			</File>
 			<File
@@ -820,18 +814,6 @@
 			</File>
 			<File
 				RelativePath=".\trnserr.h">
-			</File>
-			<File
-				RelativePath=".\ufltlgts.cpp">
-			</File>
-			<File
-				RelativePath=".\ufltlgts.h">
-			</File>
-			<File
-				RelativePath=".\unhxtrts.cpp">
-			</File>
-			<File
-				RelativePath=".\unhxtrts.h">
 			</File>
 		</Filter>
 	</Files>
