@@ -235,7 +235,7 @@ U_CAPI UResourceBundle*  U_EXPORT2 ures_open(const char*    path,   /* NULL if n
 *@param status: fills in the outgoing error code.
 *@see ures_close
 *@return : a newly allocated resource bundle.
-*@draft
+*@deprecate remove after Aug 2002
 */
 U_CAPI UResourceBundle* U_EXPORT2 ures_openW(const wchar_t* path, 
                   const char* locale, 
