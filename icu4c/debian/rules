@@ -10,7 +10,7 @@
 
 # This is the debhelper compatability version to use.
 export DH_COMPAT=2
-#firstdir := $(shell sed -n 's/Package: \(.*\)/\1/p' debian/control | head -1)
+#firstdir := $(shell sed -n 's/Package: \(.*\)/\1/p' debian/control.in | head -1)else
 
 # Where the source for ICU is, where to build
 srcdir = source

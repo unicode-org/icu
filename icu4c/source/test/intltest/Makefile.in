@@ -91,6 +91,9 @@ Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 $(TARGET) : $(OBJECTS)
 	$(LINK.cc) -o $@ $^ $(LIBS)
 
+invoke:
+	ICU_DATA=$${ICU_DATA:-$(top_builddir)/data/} TZ=PST8PDT $(INVOKE) $(INVOCATION)
+
 ifeq (,$(MAKECMDGOALS))
 -include $(DEPS)
 else
