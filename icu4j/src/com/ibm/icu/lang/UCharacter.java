@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/UCharacter.java,v $ 
-* $Date: 2002/04/04 00:52:40 $ 
-* $Revision: 1.37 $
+* $Date: 2002/04/04 22:38:13 $ 
+* $Revision: 1.38 $
 *
 *******************************************************************************
 */
@@ -338,7 +338,17 @@ public final class UCharacter
     *      a no-break space (&#92u00A0 or &#92u202F or &#92uFEFF).
     * <li> It is a Unicode line separator (category "Zl").
     * <li> It is a Unicode paragraph separator (category "Zp").
+    * <li> It is &#92u0009, HORIZONTAL TABULATION. 
+    * <li> It is &#92u000A, LINE FEED. 
+    * <li> It is &#92u000B, VERTICAL TABULATION. 
+    * <li> It is &#92u000C, FORM FEED. 
+    * <li> It is &#92u000D, CARRIAGE RETURN. 
+    * <li> It is &#92u001C, FILE SEPARATOR. 
+    * <li> It is &#92u001D, GROUP SEPARATOR. 
+    * <li> It is &#92u001E, RECORD SEPARATOR. 
+    * <li> It is &#92u001F, UNIT SEPARATOR. 
     * </ul>
+    *
     * Up-to-date Unicode implementation of java.lang.Character.isWhitespace().
     * @param ch code point to determine if it is a white space
     * @return true if the specified code point is a white space character
@@ -356,8 +366,7 @@ public final class UCharacter
                 (ch != ZERO_WIDTH_NO_BREAK_SPACE_) ||
                 // TAB VT LF FF CR FS GS RS US NL are all control characters
                 // that are white spaces.
-                (ch >= 0x9 && ch <= 0xd) || (ch >= 0x1c && ch <= 0x1f) ||
-                (ch == 0x85);
+                (ch >= 0x9 && ch <= 0xd) || (ch >= 0x1c && ch <= 0x1f);
     }
        
     /**
@@ -373,11 +382,7 @@ public final class UCharacter
         // if props == 0, it will just fall through and return false
         return cat == UCharacterCategory.SPACE_SEPARATOR || 
             cat == UCharacterCategory.LINE_SEPARATOR ||
-            cat == UCharacterCategory.PARAGRAPH_SEPARATOR ||
-            // TAB VT LF FF CR FS GS RS US NL are all control characters
-            // that are white spaces.
-            (ch >= 0x9 && ch <= 0xd) || (ch >= 0x1c && ch <= 0x1f) ||
-            (ch == 0x85);
+            cat == UCharacterCategory.PARAGRAPH_SEPARATOR;
     }
                                     
     /**
@@ -1797,29 +1802,31 @@ public final class UCharacter
         int numericType = UCharacterProperty.getNumericType(props);
         
         int result = -1;
+        if (numericType == UCharacterProperty.NON_DIGIT_NUMERIC_TYPE_) {
+            result = -2;
+        }
         if (numericType != UCharacterProperty.NON_NUMERIC_TYPE_) {
         	// if props == 0, it will just fall through and return -1
-        	if (numericType == UCharacterProperty.NON_DIGIT_NUMERIC_TYPE_ 
-            	/* && PROPERTY_.hasExceptionValue(index, 
-                      UCharacterProperty.EXC_DENOMINATOR_VALUE_)*/) {
-			    return -2;
-            }
         	if (!UCharacterProperty.isExceptionIndicator(props)) {
             	// not contained in exception data
-            	result = UCharacterProperty.getSignedValue(props);
+            	return UCharacterProperty.getSignedValue(props);
             }
-            else {
-            	int index = UCharacterProperty.getExceptionIndex(props);
-            	if (PROPERTY_.hasExceptionValue(index, 
+            
+			int index = UCharacterProperty.getExceptionIndex(props);
+           	if (!PROPERTY_.hasExceptionValue(index, 
+                               UCharacterProperty.EXC_DENOMINATOR_VALUE_) && 
+                PROPERTY_.hasExceptionValue(index, 
                                    UCharacterProperty.EXC_NUMERIC_VALUE_)) {
-                	result = PROPERTY_.getException(index, 
-                                      UCharacterProperty.EXC_NUMERIC_VALUE_); 
-                }
+               	return PROPERTY_.getException(index, 
+                                     UCharacterProperty.EXC_NUMERIC_VALUE_);
             }
         }
         
         if (result < 0 && useEuropean) {
-            result = getEuropeanDigit(ch);
+            int europeannumeric = getEuropeanDigit(ch);
+            if (europeannumeric >= 0) {
+            	return europeannumeric;
+            }
         }
         
         return result;
