@@ -126,7 +126,7 @@ final class CollatorServiceShim extends Collator.ServiceShim {
             if (actualIDReturn != null) {
                 actualIDReturn[0] = "root";
             }
-            return new RuleBasedCollator(new ULocale("", "", ""));
+            return new RuleBasedCollator(ULocale.ROOT);
         }
     }
     private static ICULocaleService service = new CService();
