@@ -13,6 +13,7 @@
 */
 
 #include "unicode/utypes.h"
+#include "cmemory.h"
 #include "ucmp16.h"
 #include "ucmp8.h"
 #include "unicode/ucnv_bld.h"
@@ -20,6 +21,27 @@
 #include "ucnv_cnv.h"
 
 /* MBCS --------------------------------------------------------------------- */
+
+static void
+_MBCSLoad(UConverterSharedData *sharedData, const uint8_t *raw, UErrorCode *pErrorCode) {
+    const uint8_t *oldraw;
+
+    sharedData->table->mbcs.starters = (bool_t*)raw;
+    oldraw = raw += sizeof(bool_t)*256;
+
+    sharedData->table->mbcs.toUnicode   = ucmp16_cloneFromData(&raw, pErrorCode);
+    if(((raw-oldraw)&3)!=0) {
+        raw+=4-((raw-oldraw)&3);    /* pad to 4 */
+    }
+    sharedData->table->mbcs.fromUnicode = ucmp16_cloneFromData(&raw, pErrorCode);
+}
+
+static void
+_MBCSUnload(UConverterSharedData *sharedData) {
+    ucmp16_close (sharedData->table->mbcs.fromUnicode);
+    ucmp16_close (sharedData->table->mbcs.toUnicode);
+	uprv_free (sharedData->table);
+}
 
 void T_UConverter_toUnicode_MBCS (UConverter * _this,
                                UChar ** target,
@@ -536,6 +558,13 @@ UChar T_UConverter_getNextUChar_MBCS(UConverter* converter,
 
 static UConverterImpl _MBCSImpl={
     UCNV_MBCS,
+
+    _MBCSLoad,
+    _MBCSUnload,
+
+    NULL,
+    NULL,
+    NULL,
 
     T_UConverter_toUnicode_MBCS,
     T_UConverter_toUnicode_MBCS_OFFSETS_LOGIC,

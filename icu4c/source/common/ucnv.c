@@ -113,13 +113,10 @@ void ucnv_close (UConverter * converter)
 {
   if (converter == NULL)
     return;
-  /* ### this cleanup would be cleaner in a function in UConverterImpl */
-  if ((converter->sharedData->conversionType == UCNV_ISO_2022) &&
-      (converter->mode == UCNV_SO))
-    {
-      ucnv_close (((UConverterDataISO2022 *) (converter->extraInfo))->currentConverter);
-      uprv_free (converter->extraInfo);
-    }
+
+  if (converter->sharedData->impl->close != NULL) {
+    converter->sharedData->impl->close(converter);
+  }
 
   if (converter->sharedData->referenceCounter != ~0) {
     umtx_lock (NULL);
@@ -341,18 +338,11 @@ void  ucnv_reset (UConverter * converter)
   converter->fromUnicodeStatus = 0;
   converter->UCharErrorBufferLength = 0;
   converter->charErrorBufferLength = 0;
-  if ((converter->sharedData->conversionType == UCNV_ISO_2022) &&
-      (converter->mode == UCNV_SO))
-    {
-      converter->charErrorBufferLength = 3;
-      converter->charErrorBuffer[0] = 0x1b;
-      converter->charErrorBuffer[1] = 0x25;
-      converter->charErrorBuffer[2] = 0x42;
-      ucnv_close (((UConverterDataISO2022 *) (converter->extraInfo))->currentConverter);
-      ((UConverterDataISO2022 *) (converter->extraInfo))->currentConverter = NULL;
-      ((UConverterDataISO2022 *) (converter->extraInfo))->escSeq2022Length = 0;
-    }
-  converter->mode = UCNV_SI;
+  if (converter->sharedData->impl->reset != NULL) {
+    converter->sharedData->impl->reset(converter);
+  } else {
+    converter->mode = UCNV_SI;
+  }
 
   return;
 }
@@ -442,7 +432,6 @@ void   ucnv_fromUnicode (UConverter * _this,
 			 bool_t flush,
 			 UErrorCode * err)
 {
-  UConverterType myConvType;
   /*
    * Check parameters in for all conversions
    */
@@ -471,43 +460,46 @@ void   ucnv_fromUnicode (UConverter * _this,
       *target += myTargetIndex;
       if (U_FAILURE (*err)) return;
     }
-  
-  myConvType = _this->sharedData->conversionType;  
-  if (offsets) 
-    {
-       int32_t targetSize = targetLimit - *target;
-       int32_t i;
-       switch (myConvType)
-	 {
-	 case UCNV_LATIN_1: case UCNV_SBCS : 
-	   {
-	     for (i=0; i<targetSize; i++) offsets[i] = i;
-	     break;
-	   }
-	 case UCNV_UTF16_LittleEndian: case UCNV_UTF16_BigEndian: case UCNV_DBCS: 
-	   {
-	     --targetSize;
-	     for (i=0; i<targetSize; i+=2) 
-	       {
-		 offsets[i] = i;
-		 offsets[i+1] = i;
-	       }
-	     break;
-	   }
-	 default:
-	   {
-	     _this->sharedData->impl->fromUnicodeWithOffsets(_this,
-								     target,
-								     targetLimit,
-								     source,
-								     sourceLimit,
-								     offsets,
-								     flush,
-								     err);
-	     return;
-	   }
-	 };    
+
+  if (offsets) {
+    if (_this->sharedData->impl->fromUnicodeWithOffsets != NULL) {
+	   _this->sharedData->impl->fromUnicodeWithOffsets(_this,
+								   target,
+								   targetLimit,
+								   source,
+								   sourceLimit,
+								   offsets,
+								   flush,
+								   err);
+       return;
+    } else {
+      /* all code points are of the same length */
+      int32_t targetSize = targetLimit - *target;
+      int32_t i, bytesPerChar = _this->sharedData->maxBytesPerChar;
+
+      if(bytesPerChar == 1) {
+        for (i=0; i<targetSize; i++) {
+          offsets[i] = i;
+        }
+      } else if(bytesPerChar == 2) {
+        for (i=0; i<targetSize; i++) {
+          offsets[i] = i>>1;
+        }
+      } else {
+        int32_t j = 0, k = bytesPerChar;
+
+        for (i=0; i<targetSize; i++) {
+          /* offsets[i] = i/bytesPerChar; -- without division */
+          offsets[i] = j;
+          if(--k == 0) {
+            k = bytesPerChar;
+            ++j;
+          }
+        }
+      }
     }
+  }
+
   /*calls the specific conversion routines */
   _this->sharedData->impl->fromUnicode(_this,
 					   target,
@@ -535,7 +527,6 @@ void   ucnv_toUnicode (UConverter * _this,
   /*
    * Check parameters in for all conversions
    */
-  UConverterType myConvType;
   if (U_FAILURE (*err))   return;
   if ((_this == NULL) || ((UChar *) targetLimit < *target) || (sourceLimit < *source))
     {
@@ -543,7 +534,6 @@ void   ucnv_toUnicode (UConverter * _this,
       return;
     }
 
-  myConvType = _this->sharedData->conversionType;
   /*
    * Deal with stored carry over data.  This is done in the common location
    * to avoid doing it for each conversion.
@@ -563,40 +553,38 @@ void   ucnv_toUnicode (UConverter * _this,
 	return;
     }
 
-  if (offsets) 
-    {
+  if (offsets) {
+    if (_this->sharedData->impl->toUnicodeWithOffsets != NULL) {
+	  _this->sharedData->impl->toUnicodeWithOffsets(_this,
+								target,
+								targetLimit,
+								source,
+								sourceLimit,
+								offsets,
+								flush,
+								err);
+	  return;
+    } else {
+      /* all code points are of the same length */
       int32_t targetSize = targetLimit - *target;
-      int32_t i;
+      int32_t i, bytesPerChar = _this->sharedData->maxBytesPerChar;
 
-      switch (myConvType)
-	{
-	case UCNV_LATIN_1: case UCNV_SBCS : 
-	  {
-	    for (i=0; i<targetSize; i++) offsets[i] = i;
-	    break;
-	  }
-	case UCNV_UTF16_LittleEndian: case UCNV_UTF16_BigEndian: case UCNV_DBCS: 
-	  {
-	    for (i=0; i<targetSize; i++) 
-	      {
-		offsets[i] = i*2;
-	      }
-	    break;
-	  }
-	default:
-	  {
-	    _this->sharedData->impl->toUnicodeWithOffsets(_this,
-								  target,
-								  targetLimit,
-								  source,
-								  sourceLimit,
-								  offsets,
-								  flush,
-								  err);
-	    return;
-	  }
-	};
+      if(bytesPerChar == 1) {
+        for (i=0; i<targetSize; i++) {
+          offsets[i] = i;
+        }
+      } else if(bytesPerChar == 2) {
+        for (i=0; i<targetSize; i++) {
+          offsets[i] = i<<1;
+        }
+      } else {
+        for (i=0; i<targetSize; i++) {
+          offsets[i] = i*bytesPerChar;
+        }
+      }
     }
+  }
+
   /*calls the specific conversion routines */
   _this->sharedData->impl->toUnicode(_this,
 					  target,

@@ -13,6 +13,7 @@
 */
 
 #include "unicode/utypes.h"
+#include "cmemory.h"
 #include "ucmp16.h"
 #include "ucmp8.h"
 #include "unicode/ucnv_bld.h"
@@ -20,6 +21,19 @@
 #include "ucnv_cnv.h"
 
 /* SBCS --------------------------------------------------------------------- */
+
+static void
+_SBCSLoad(UConverterSharedData *sharedData, const uint8_t *raw, UErrorCode *pErrorCode) {
+    sharedData->table->sbcs.toUnicode = (UChar*)raw;
+    raw += sizeof(UChar)*256;
+    sharedData->table->sbcs.fromUnicode = ucmp8_cloneFromData(&raw, pErrorCode);
+}
+
+static void
+_SBCSUnload(UConverterSharedData *sharedData) {
+    ucmp8_close (sharedData->table->sbcs.fromUnicode);
+    uprv_free (sharedData->table);
+}
 
 void T_UConverter_toUnicode_SBCS (UConverter * _this,
                                   UChar ** target,
@@ -211,6 +225,13 @@ UChar T_UConverter_getNextUChar_SBCS(UConverter* converter,
 static UConverterImpl _SBCSImpl={
     UCNV_SBCS,
 
+    _SBCSLoad,
+    _SBCSUnload,
+
+    NULL,
+    NULL,
+    NULL,
+
     T_UConverter_toUnicode_SBCS,
     NULL,
     T_UConverter_fromUnicode_SBCS,
@@ -226,6 +247,23 @@ extern UConverterSharedData _SBCSData={
 };
 
 /* DBCS --------------------------------------------------------------------- */
+
+U_CFUNC void
+_DBCSLoad(UConverterSharedData *sharedData, const uint8_t *raw, UErrorCode *pErrorCode) {
+    const uint8_t *oldraw = raw;
+    sharedData->table->dbcs.toUnicode=ucmp16_cloneFromData(&raw, pErrorCode);
+    if(((raw-oldraw)&3)!=0) {
+        raw+=4-((raw-oldraw)&3);    /* pad to 4 */
+    }
+    sharedData->table->dbcs.fromUnicode =ucmp16_cloneFromData(&raw, pErrorCode);
+}
+
+U_CFUNC void
+_DBCSUnload(UConverterSharedData *sharedData) {
+    ucmp16_close (sharedData->table->dbcs.fromUnicode);
+    ucmp16_close (sharedData->table->dbcs.toUnicode);
+	uprv_free (sharedData->table);
+}
 
 void   T_UConverter_toUnicode_DBCS (UConverter * _this,
                                     UChar ** target,
@@ -470,6 +508,13 @@ UChar T_UConverter_getNextUChar_DBCS(UConverter* converter,
 
 static UConverterImpl _DBCSImpl={
     UCNV_DBCS,
+
+    _DBCSLoad,
+    _DBCSUnload,
+
+    NULL,
+    NULL,
+    NULL,
 
     T_UConverter_toUnicode_DBCS,
     NULL,

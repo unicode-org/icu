@@ -62,22 +62,6 @@ static struct {
  */
 static UConverter *createConverterFromFile (const char *converterName, UErrorCode * err);
 
-/*Given a file returns a newly allocated CompactByteArray based on the a serialized one */
-static CompactByteArray *createCompactByteArrayFromFile (FileStream * infile, UErrorCode * err);
-
-/*Given a file returns a newly allocated CompactShortArray based on the a serialized one */
-static CompactShortArray *createCompactShortArrayFromFile (FileStream * infile, UErrorCode * err);
-
-/*Currently we have function to take us from a codepage name to
- *a platform type and a codepage number
- *assuming the following
- *codepage name = $PLATFORM-#CODEPAGE
- *e.g. ibm-949 = platform type = UCNV_IBM and codepage # = 949
- *the functions below implement that
- */
-static UConverterPlatform getPlatformFromName (char *name);
-static int32_t getCodepageNumberFromName (char *name);
-
 static const UConverterSharedData *getAlgorithmicTypeFromName (const char *realName);
 
 
@@ -86,10 +70,10 @@ static const UConverterSharedData *getAlgorithmicTypeFromName (const char *realN
  */
 static void initializeDataConverter (UConverter * myConverter);
 static void initializeAlgorithmicConverter (UConverter * myConverter);
+
 /**
  *hash function for UConverterSharedData
  */
-
 static int32_t uhash_hashSharedData (void *sharedData);
 
 /*Defines the struct of a UConverterSharedData the immutable, shared part of
@@ -123,12 +107,11 @@ UConverterSharedData_1_4;
 /**
  * Un flatten shared data from a UDATA..
  */
-U_CAPI  UConverterSharedData* U_EXPORT2 ucnv_data_unFlattenClone(const UConverterSharedData_1_4 *data, UErrorCode *status);
+U_CAPI  UConverterSharedData* U_EXPORT2 ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *status);
 
 
 /*initializes some global variables */
 UHashtable *SHARED_DATA_HASHTABLE = NULL;
-UHashtable *ALGORITHMIC_CONVERTERS_HASHTABLE = NULL;
 
 /*Returns uppercased string */
 char *
@@ -141,167 +124,6 @@ char *
 
   return name;
 }
-
-/* Returns true in c is a in set 'setOfChars', false otherwise
- */
-bool_t 
-  isInSet (char c, const char *setOfChars)
-{
-  uint8_t i = 0;
-
-  while (setOfChars[i] != '\0')
-    {
-      if (c == setOfChars[i++])
-        return TRUE;
-    }
-
-  return FALSE;
-}
-
-/* Returns pointer to the next non-whitespace (or non-separator)
- */
-int32_t 
-  nextTokenOffset (const char *line, const char *separators)
-{
-  int32_t i = 0;
-
-  while (line[i] && isInSet (line[i], separators))
-    i++;
-
-  return i;
-}
-
-/* Returns pointer to the next token based on the set of separators
- */
-char *
-  getToken (char *token, char *line, const char *separators)
-{
-  int32_t i = nextTokenOffset (line, separators);
-  int8_t j = 0;
-
-  while (line[i] && (!isInSet (line[i], separators)))
-    token[j++] = line[i++];
-  token[j] = '\0';
-
-  return line + i;
-}
-
-int32_t uhash_hashIString(const void* name)
-{
-  char myName[UCNV_MAX_CONVERTER_NAME_LENGTH];
-  uprv_strcpy(myName, (char*)name);
-  strtoupper(myName);
-
-  return uhash_hashString(myName);
-}
-
-CompactShortArray*  createCompactShortArrayFromFile (FileStream * infile, UErrorCode * err)
-{
-  int32_t i = 0;
-  int16_t *myShortArray = NULL;
-  uint16_t *myIndexArray = NULL;
-  int32_t myValuesCount = 0;
-  int32_t myIndexCount = 0;
-  int32_t myBlockShift = 0;
-
-  if (U_FAILURE (*err))
-    return NULL;
-
-  /*reads in the lengths of the 2 serialized array */
-  T_FileStream_read (infile, &myValuesCount, sizeof (int32_t));
-  T_FileStream_read (infile, &myIndexCount, sizeof (int32_t));
-  T_FileStream_read (infile, &myBlockShift, sizeof (int32_t));
-
-  if (myValuesCount < 0)
-    {
-      *err = U_INVALID_TABLE_FILE;
-      return NULL;
-    }
-  myShortArray = (int16_t *) uprv_malloc (myValuesCount * sizeof (int16_t));
-  if (myShortArray == NULL)
-    {
-      *err = U_MEMORY_ALLOCATION_ERROR;
-      return NULL;
-    }
-  /*reads in the first array */
-  T_FileStream_read (infile, myShortArray, myValuesCount * sizeof (int16_t));
-
-  if (myIndexCount < 0)
-    {
-      uprv_free (myShortArray);
-      *err = U_INVALID_TABLE_FILE;
-      return NULL;
-    }
-
-  myIndexArray = (uint16_t *) uprv_malloc (myIndexCount * sizeof (uint16_t));
-  if (myIndexArray == NULL)
-    {
-      uprv_free (myShortArray);
-      *err = U_MEMORY_ALLOCATION_ERROR;
-      return NULL;
-    }
-
-  /*reads in the second array */
-  T_FileStream_read (infile, myIndexArray, myIndexCount * sizeof (uint16_t));
-
-  /*create a compact array from the data just read
-   *that adopts our newly created arrays
-   */
-  return ucmp16_openAdoptWithBlockShift (myIndexArray, myShortArray, myValuesCount, 0, myBlockShift);
-}
-
-CompactByteArray*  createCompactByteArrayFromFile (FileStream * infile,
-                                                   UErrorCode * err)
-{
-  int32_t i = 0;
-  int8_t *myByteArray = NULL;
-  uint16_t *myIndexArray = NULL;
-  int32_t myValuesCount = 0;
-  int32_t myIndexCount = 0;
-
-  if (U_FAILURE (*err))
-    return NULL;
-
-  /*reads in the lengths of the 2 serialized array */
-  T_FileStream_read (infile, &myValuesCount, sizeof (int32_t));
-  T_FileStream_read (infile, &myIndexCount, sizeof (int32_t));
-
-  if (myValuesCount < 0)
-    {
-      *err = U_INVALID_TABLE_FILE;
-      return NULL;
-    }
-  myByteArray = (int8_t *) uprv_malloc (myValuesCount * sizeof (int8_t));
-  if (myByteArray == NULL)
-    {
-      *err = U_MEMORY_ALLOCATION_ERROR;
-      return NULL;
-    }
-  /*reads in the first array */
-  T_FileStream_read (infile, myByteArray, myValuesCount * sizeof (int8_t));
-
-  if (myIndexCount < 0)
-    {
-      uprv_free (myByteArray);
-      *err = U_INVALID_TABLE_FILE;
-      return NULL;
-    }
-  myIndexArray = (uint16_t *) uprv_malloc (myIndexCount * sizeof (uint16_t));
-  if (myIndexArray == NULL)
-    {
-      uprv_free (myByteArray);
-      *err = U_MEMORY_ALLOCATION_ERROR;
-      return NULL;
-    }
-  /*reads in the second array */
-  T_FileStream_read (infile, myIndexArray, myIndexCount * sizeof (uint16_t));
-
-  /*create a compact array from the data just read
-   *that adopts our newly created arrays
-   */
-  return ucmp8_openAdopt (myIndexArray, myByteArray, myValuesCount);
-}
-
 
 static bool_t
 isCnvAcceptable(void *context,
@@ -323,20 +145,12 @@ isCnvAcceptable(void *context,
 
 UConverter*  createConverterFromFile (const char *fileName, UErrorCode * err)
 {
-  int32_t i = 0;
-  const int8_t *myByteArray = NULL;
-  const uint16_t *myIndexArray = NULL;
-  int32_t myValuesCount = 0;
-  int32_t myIndexCount = 0;
   UConverter *myConverter = NULL;
-  int8_t errorLevel = 0;
-
   UDataMemory *data;
 
   if (err == NULL || U_FAILURE (*err)) {
     return NULL;
   }
-  
 
   data = udata_openChoice(NULL, DATA_TYPE, fileName, isCnvAcceptable, NULL, err);
   if(U_FAILURE(*err))
@@ -352,39 +166,18 @@ UConverter*  createConverterFromFile (const char *fileName, UErrorCode * err)
       return NULL;
     }
 
-  myConverter->sharedData =
-    (UConverterSharedData *) udata_getMemory(data);
-
-  if (myConverter->sharedData == NULL)
-    {
-      udata_close(data);
-      uprv_free (myConverter);
-      *err = U_MEMORY_ALLOCATION_ERROR;
-      return NULL;
-    }
-
-  /* clone it. OK to drop the original sharedData */
-  myConverter->sharedData = ucnv_data_unFlattenClone((UConverterSharedData_1_4 *)myConverter->sharedData, err);
-
-  myConverter->sharedData->dataMemory = (void*)data; /* for future use */
-
-
+  myConverter->sharedData = ucnv_data_unFlattenClone(data, err);
   if(U_FAILURE(*err))
     {
       udata_close(data);
       uprv_free (myConverter);
-      *err = U_MEMORY_ALLOCATION_ERROR;
       return NULL;
     }
 
-  if (U_SUCCESS (*err))
-    {
-      initializeDataConverter (myConverter);
-    }
+  initializeDataConverter (myConverter);
 
   return myConverter;
 }
-
 
 void 
   copyPlatformString (char *platformString, UConverterPlatform pltfrm)
@@ -418,35 +211,6 @@ const UConverterSharedData *
     }
   }
   return NULL;
-}
-
-
-UConverterPlatform 
-  getPlatformFromName (char *name)
-{
-  char myPlatform[10];
-  char mySeparators[2] = {'-', '\0'};
-
-  getToken (myPlatform, name, mySeparators);
-  strtoupper (myPlatform);
-
-  if (uprv_strcmp (myPlatform, "IBM") == 0)
-    return UCNV_IBM;
-  else
-    return UCNV_UNKNOWN;
-}
-
-int32_t 
-  getCodepageNumberFromName (char *name)
-{
-  char myNumber[10];
-  char mySeparators[2] = {'-', '\0'};
-  char *line = NULL;
-
-  line = getToken (myNumber, name, mySeparators);
-  getToken (myNumber, line, mySeparators);
-
-  return T_CString_stringToInteger (myNumber, 10);
 }
 
 int32_t uhash_hashSharedData (void *sharedData)
@@ -487,16 +251,13 @@ UConverterSharedData *getSharedConverterData (const char *name)
   /*special case when no Table has yet been created we return NULL */
   if (SHARED_DATA_HASHTABLE == NULL)    return NULL;
   else
-    /*    return (UConverterSharedData *) uhash_get (SHARED_DATA_HASHTABLE, uhash_hashString (name));*/
     {
-      UConverterSharedData *i = (UConverterSharedData*)uhash_get (SHARED_DATA_HASHTABLE, uhash_hashIString (name));
-      return i;
+      return (UConverterSharedData*)uhash_get (SHARED_DATA_HASHTABLE, uhash_hashIString (name));
     }
 }
 
 /*frees the string of memory blocks associates with a sharedConverter
  *if and only if the referenceCounter == 0
- * ### this cleanup would be cleaner in a function in UConverterImpl
  */
 bool_t   deleteSharedConverterData (UConverterSharedData * deadSharedData)
 {
@@ -510,36 +271,15 @@ bool_t   deleteSharedConverterData (UConverterSharedData * deadSharedData)
        
        When we have an API to simply 'init' a ucmp8, then no action at all will
        need to happen.   --srl 
+
+       This means that the compact arrays would have to be static fields in
+       UConverterSharedData, not pointers to allocated structures.
+       Markus
     */
-    
-    switch (deadSharedData->conversionType)
-    {
-    case UCNV_SBCS:
-    {
-        ucmp8_close (deadSharedData->table->sbcs.fromUnicode);
-        uprv_free (deadSharedData->table);
-    };
-    break;
-    
-    case UCNV_MBCS:
-    {
-        ucmp16_close (deadSharedData->table->mbcs.fromUnicode);
-        ucmp16_close (deadSharedData->table->mbcs.toUnicode);
-	    uprv_free (deadSharedData->table);
-    };
-    break;
 
-    case UCNV_DBCS:
-    case UCNV_EBCDIC_STATEFUL:
-    {
-        ucmp16_close (deadSharedData->table->dbcs.fromUnicode);
-        ucmp16_close (deadSharedData->table->dbcs.toUnicode);
-	    uprv_free (deadSharedData->table);
-    };
-    break;
-
-    default: ; /* semicolon makes MSVC happy */
-    };
+    if (deadSharedData->impl->unload != NULL) {
+        deadSharedData->impl->unload(deadSharedData);
+    }
 
     if(deadSharedData->dataMemory != NULL)
     {
@@ -647,13 +387,6 @@ UConverter *
     }
   else
     {
-      /* ### we have an algorithmic converter, it does not need to be cached?! */
-      if (getSharedConverterData (realName) == NULL)
-        {
-          /* put the shared object in shared table */
-          shareConverterData (mySharedConverterData);
-        }
-
       myUConverter = (UConverter *) uprv_malloc (sizeof (UConverter));
       if (myUConverter == NULL)
         {
@@ -714,30 +447,19 @@ void
   myConverter->subCharLen = myConverter->sharedData->defaultConverterValues.subCharLen;
   uprv_memcpy (myConverter->subChar, myConverter->sharedData->defaultConverterValues.subChar, UCNV_MAX_SUBCHAR_LEN);
 
-  /* ### it would be cleaner to have the following in a function in UConverterImpl, with a UErrorCode */
-  switch (myConverter->sharedData->conversionType)
-    {
-    case UCNV_ISO_2022:
-      {
-        myConverter->charErrorBuffer[0] = 0x1b;
-        myConverter->charErrorBuffer[1] = 0x25;
-        myConverter->charErrorBuffer[2] = 0x42;
-        myConverter->charErrorBufferLength = 3;
-        myConverter->extraInfo = uprv_malloc (sizeof (UConverterDataISO2022));
-        /* ### check for extraInfo==NULL !! does this need to be allocated at all? */
-        ((UConverterDataISO2022 *) myConverter->extraInfo)->currentConverter = NULL;
-        ((UConverterDataISO2022 *) myConverter->extraInfo)->escSeq2022Length = 0;
-        break;
-      }
-    default:
-      break;
-    };
+  if(myConverter->sharedData->impl->open != NULL) {
+    UErrorCode errorCode = U_ZERO_ERROR;
+
+    /* ### pass in real parameters, and use the error code */
+    myConverter->sharedData->impl->open(myConverter, NULL, NULL, &errorCode);
+  }
 }
 
-UConverterSharedData* ucnv_data_unFlattenClone(const UConverterSharedData_1_4 *source, UErrorCode *status)
+UConverterSharedData* ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *status)
 {
-    const uint8_t *raw, *oldraw;
-    UConverterSharedData *data = NULL;
+    const uint8_t *raw = (const uint8_t *)udata_getMemory(pData);
+    const UConverterSharedData_1_4 *source = (const UConverterSharedData_1_4 *) raw;
+    UConverterSharedData *data;
     UConverterType type = source->conversionType;
 
     if(U_FAILURE(*status))
@@ -769,6 +491,7 @@ UConverterSharedData* ucnv_data_unFlattenClone(const UConverterSharedData_1_4 *s
     }
 
     /* fill in fields from the loaded data */
+    data->dataMemory = (void*)pData; /* for future use */
     data->name = source->name; /* ### this could/should come from the caller - should be the same as the canonical name?!! */
     data->codepage = source->codepage;
     data->platform = source->platform;
@@ -776,51 +499,12 @@ UConverterSharedData* ucnv_data_unFlattenClone(const UConverterSharedData_1_4 *s
     data->maxBytesPerChar = source->maxBytesPerChar;
     uprv_memcpy(&data->defaultConverterValues, &source->defaultConverterValues, sizeof(data->defaultConverterValues));
 
-    raw = (uint8_t*)source + source->structSize;
-
-    /* the checks above made sure that the type is valid for a data-based converter */
-  switch (data->conversionType)
-    {
-    case UCNV_SBCS:
-      data->table->sbcs.toUnicode = (UChar*)raw;
-      raw += sizeof(UChar)*256;
-
-      data->table->sbcs.fromUnicode = ucmp8_cloneFromData(&raw, status);
-
-      break;
-
-    case UCNV_EBCDIC_STATEFUL:
-    case UCNV_DBCS:
-      oldraw = raw;
-
-      data->table->dbcs.toUnicode=ucmp16_cloneFromData(&raw, status);
-
-      /* pad to 4 */
-      if(((raw-oldraw)&3)!=0) {
-          raw+=4-((raw-oldraw)&3);
-      }
-
-      data->table->dbcs.fromUnicode =ucmp16_cloneFromData(&raw, status);
-
-      break;
-
-    case UCNV_MBCS:
-      data->table->mbcs.starters = (bool_t*)raw;
-      raw += sizeof(bool_t)*256;
-      
-      oldraw = raw;
-
-      data->table->mbcs.toUnicode   = ucmp16_cloneFromData(&raw, status);
-
-      /* pad to 4 */
-      if(((raw-oldraw)&3)!=0) {
-          raw+=4-((raw-oldraw)&3);
-      }
-
-      data->table->mbcs.fromUnicode = ucmp16_cloneFromData(&raw, status);
-
-      break;
+    if(data->impl->load != NULL) {
+        data->impl->load(data, raw + source->structSize, status);
+        if(U_FAILURE(*status)) {
+            uprv_free(data);
+            return NULL;
+        }
     }
-  
-  return data;
+    return data;
 }

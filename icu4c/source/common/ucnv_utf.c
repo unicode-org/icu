@@ -696,6 +696,13 @@ UChar T_UConverter_getNextUChar_UTF8(UConverter* converter,
 static UConverterImpl _UTF8Impl={
     UCNV_UTF8,
 
+    NULL,
+    NULL,
+
+    NULL,
+    NULL,
+    NULL,
+
     T_UConverter_toUnicode_UTF8,
     T_UConverter_toUnicode_UTF8_OFFSETS_LOGIC,
     T_UConverter_fromUnicode_UTF8,
@@ -860,6 +867,13 @@ UChar T_UConverter_getNextUChar_UTF16_BE(UConverter* converter,
 
 static UConverterImpl _UTF16BEImpl={
     UCNV_UTF16_BigEndian,
+
+    NULL,
+    NULL,
+
+    NULL,
+    NULL,
+    NULL,
 
     T_UConverter_toUnicode_UTF16_BE,
     NULL,
@@ -1029,6 +1043,13 @@ UChar T_UConverter_getNextUChar_UTF16_LE(UConverter* converter,
 
 static UConverterImpl _UTF16LEImpl={
     UCNV_UTF16_LittleEndian,
+
+    NULL,
+    NULL,
+
+    NULL,
+    NULL,
+    NULL,
 
     T_UConverter_toUnicode_UTF16_LE,
     NULL,
