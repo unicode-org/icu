@@ -53,8 +53,8 @@ $Numeric   = [:LineBreak = Numeric:];
 
 $CR      = \u000d;
 $LF      = \u000a;
-$Control = [[:Zl:] [:Zp:] [:Cc:] [:Cf:]];
 $Extend  = [[:Grapheme_Extend = TRUE:]];
+$Control = [[:Zl:] [:Zp:] [:Cc:] [:Cf:] - $Extend];
 $Format  = [[:Cf:] - $Extend];
 $Hiragana = [:Hiragana:];
 $Ideographic = [:IDEOGRAPHIC:];
@@ -195,6 +195,7 @@ $BackKatakanaEx $Format* $BackKatakanaEx;
 
 # rule 3
 $Extend+ [^$Extend];
+$Extend+;               # comes into play when buffer _begins_ with an $Extend+.
 
 # rule 4
 $Format+ $BackABaseLetterEx;
@@ -204,6 +205,7 @@ $Format+ $BackMidLetterEx;
 $Format+ $BackMidNumLetEx;
 $Format+ $BackMidNumEx;
 $Format+ $BackKatakanaEx;
+
 
 # rule 6
 ($MidLetter | $MidNumLet) $Format* $BackABaseLetterEx;
