@@ -1444,6 +1444,7 @@ const char* uprv_getDefaultCodepage()
     char *name = NULL;
     char *euro = NULL;
     char *localeName = NULL;
+    const char *defaultTable = NULL;
  
     uprv_memset(codesetName, 0, 100);
     localeName = setlocale(LC_CTYPE, "");
@@ -1478,14 +1479,18 @@ const char* uprv_getDefaultCodepage()
 #endif  
     if (uprv_strlen(codesetName) == 0) 
     {
-         /* look up in srl's table */
-         uprv_strcpy(codesetName, uprv_defaultCodePageForLocale(localeName));
-     }
-    /* if the table lookup failed, return latin1. */
-    if (uprv_strlen(codesetName) == 0)
-    {
-        uprv_strcpy(codesetName, "LATIN_1");
-    } 
+        /* look up in srl's table */
+        defaultTable = uprv_defaultCodePageForLocale(localeName);
+        if (defaultTable != NULL)
+        {
+            uprv_strcpy(codesetName, defaultTable);
+        } 
+        else
+        {
+            /* if the table lookup failed, return latin1. */
+            uprv_strcpy(codesetName, "LATIN_1");
+        }
+    }
     return codesetName;
 #else
   return "LATIN_1";
