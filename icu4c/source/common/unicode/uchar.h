@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2003, International Business Machines
+*   Copyright (C) 1997-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -286,6 +286,17 @@ typedef enum UProperty {
         mapping or _in_ the target of a case mapping. Not the same as
         the general category Cased_Letter. @draft ICU 2.6 */
     UCHAR_CASE_SENSITIVE,
+    /** Binary property STerm (new in Unicode 4.0.1).
+        Sentence Terminal. Used in UAX #29: Text Boundaries
+        (http://www.unicode.org/reports/tr29/)
+        @draft ICU 3.0 */
+    UCHAR_S_TERM,
+    /** Binary property Variation_Selector (new in Unicode 4.0.1).
+        Indicates all those characters that qualify as Variation Selectors.
+        For details on the behavior of these characters,
+        see StandardizedVariants.html and 15.6 Variation Selectors.
+        @draft ICU 3.0 */
+    UCHAR_VARIATION_SELECTOR,
     /** One more than the last constant for binary Unicode properties. @stable ICU 2.1 */
     UCHAR_BINARY_LIMIT,
 
@@ -956,6 +967,11 @@ enum UBlockCode {
 
     /** @stable ICU 2.2 */
     UBLOCK_CYRILLIC_SUPPLEMENTARY = 97, /*[0500]*/
+    /**
+     * Unicode 4.0.1 renames the "Cyrillic Supplementary" block to "Cyrillic Supplement".
+     * @draft ICU 3.0
+     */
+    UBLOCK_CYRILLIC_SUPPLEMENT = 97, /*[0500]*/
     /** @stable ICU 2.2 */
     UBLOCK_TAGALOG = 98, /*[1700]*/
     /** @stable ICU 2.2 */
@@ -1215,6 +1231,8 @@ typedef enum ULineBreak {
     U_LB_HYPHEN,            /*[HY]*/
     U_LB_IDEOGRAPHIC,       /*[ID]*/
     U_LB_INSEPERABLE,       /*[IN]*/
+    /** Renamed from the misspelled "inseperable" in Unicode 4.0.1/ICU 3.0 @draft ICU 3.0 */
+    U_LB_INSEPARABLE=U_LB_INSEPERABLE,/*[IN]*/
     U_LB_INFIX_NUMERIC,     /*[IS]*/
     U_LB_LINE_FEED,         /*[LF]*/
     U_LB_NONSTARTER,        /*[NS]*/
