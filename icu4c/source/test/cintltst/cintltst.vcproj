@@ -468,6 +468,9 @@
 				RelativePath=".\cucdapi.c">
 			</File>
 			<File
+				RelativePath=".\cucdapi.h">
+			</File>
+			<File
 				RelativePath=".\cucdtst.c">
 			</File>
 			<File
