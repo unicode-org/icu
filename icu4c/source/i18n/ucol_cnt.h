@@ -21,7 +21,7 @@
 #ifndef UCOL_CNTTABLE_H
 #define UCOL_CNTTABLE_H
 
-#include "ucmp32.h"
+#include "ucmpe32.h"
 #include "uhash.h"
 #include "ucol_elm.h"
 
@@ -37,7 +37,7 @@ struct ContractionTable {
 
 struct CntTable {
 	ContractionTable **elements;
-    CompactIntArray *mapping;
+    CompactEIntArray *mapping;
     UChar *codePoints;
     uint32_t *CEs;
     int32_t *offsets;
@@ -46,7 +46,7 @@ struct CntTable {
     int32_t capacity;
 };
 
-CntTable *uprv_cnttab_open(CompactIntArray *mapping, UErrorCode *status);
+CntTable *uprv_cnttab_open(CompactEIntArray *mapping, UErrorCode *status);
 CntTable *uprv_cnttab_clone(CntTable *table);
 void uprv_cnttab_close(CntTable *table);
 

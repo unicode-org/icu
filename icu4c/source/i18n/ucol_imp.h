@@ -27,7 +27,7 @@
 #define UCOL_IMP_H
 
 #include "unicode/ucol.h"
-#include "ucmp32.h"
+#include "ucmpe32.h"
 #include "unicode/ures.h"
 #include "unicode/udata.h"
 
@@ -216,7 +216,7 @@ struct UCollationElements
       if(ch <= 0xFF) {                                                                \
       (order) = (coll)->latinOneMapping[ch];                                          \
       } else {                                                                        \
-      (order) = ucmp32_get((coll)->mapping, ch);                                      \
+      (order) = ucmpe32_get((coll)->mapping, ch);                                      \
       }                                                                               \
       if((order) >= UCOL_NOT_FOUND) {                                                 \
         (order) = getSpecialCE((coll), (order), &(collationSource), (status));        \
@@ -583,7 +583,7 @@ struct UCollator {
     UBool freeOnClose;
     UResourceBundle *rb;
     const UCATableHeader *image;
-    CompactIntArray *mapping;
+    CompactEIntArray *mapping;
     const uint32_t *latinOneMapping;
     const uint32_t *expansion;
     const UChar *contractionIndex;
