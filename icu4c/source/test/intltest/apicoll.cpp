@@ -370,7 +370,7 @@ CollationAPITest::TestSafeClone() {
     UnicodeString test2("abcda");
 
     /* one default collator & two complex ones */
-    someCollators[0] = Collator::createInstance(err);
+    someCollators[0] = Collator::createInstance("en_US", err);
     someCollators[1] = Collator::createInstance("ko", err);
     someCollators[2] = Collator::createInstance("ja_JP", err);
 
