@@ -440,8 +440,8 @@ U_CFUNC uint32_t ucol_getCEGenerator(ucolCEGenerator *g, uint32_t* lows, uint32_
       high = UCOL_COMMON_TOP2<<24;
     } 
     if(low < UCOL_COMMON_BOT2<<24) {
-      g->noOfRanges = ucol_allocWeights(UCOL_COMMON_TOP2<<24, high, count, maxByte, g->ranges);
-      g->current = UCOL_COMMON_BOT2;
+      g->noOfRanges = ucol_allocWeights(UCOL_COMMON_BOT2<<24, high, count, maxByte, g->ranges);
+      g->current = UCOL_COMMON_BOT2<<24;
       return g->current;
     }
   } 
