@@ -219,10 +219,24 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
       order = getSpecialCENew(UCA, collationSource, status); 
     } 
     if(order == UCOL_NOT_FOUND) { /* This is where we have to resort to algorithmical generation */
-      /* Make up an artifical CE from code point as per UCA */
-      order = 0xD08004F1;
-      order |= (ch & 0xF000)<<12;
-      order |= (ch & 0x0FFF)<<11;
+      /* We have to check if ch is possibly a first surrogate - then we need to take the next code unit */
+      /* and make a bigger CE */
+      UChar nextChar;
+      if(UTF_IS_FIRST_SURROGATE(ch) && (collationSource->pos<collationSource->len) &&
+          UTF_IS_SECOND_SURROGATE((nextChar=*(collationSource->pos+1)))) {
+        uint32_t cp = (((ch)<<10UL)+(nextChar)-((0xd800<<10UL)+0xdc00));
+        collationSource->pos++;
+        /* This is a code point minus 0x10000, that's what algorithm requires */
+        order = 0xE0800303 | (cp & 0xF0000) << 8 | (cp & 0xFE00) << 7;
+        *(collationSource->CEpos++) = 0xF0040000 | (cp & 0x1FF) << 19;
+      } else {
+        /* otherwise */
+        /* Make up an artifical CE from code point as per UCA */
+        order = 0xD08004F1;
+        /*order = 0xD01004F1;*/
+        order |= ((uint32_t)ch & 0xF000)<<12;
+        order |= ((uint32_t)ch & 0x0FFF)<<11;
+      }
     }
     return order; /* return the CE */
 }
@@ -554,7 +568,7 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
     uint8_t *frenchEndPtr = NULL;
     uint32_t caseShift = 0;
 
-    sortKeySize += ((compareSec?1:0) + (compareTer?1:0) + (doCase?1:0) + (compareQuad?1:0) + (compareIdent?1:0));
+    sortKeySize += ((compareSec?0:1) + (compareTer?0:1) + (doCase?1:0) + (compareQuad?0:1) + (compareIdent?1:0));
 
     collIterate s;
     init_collIterate((UChar *)source, len, &s, FALSE);
@@ -623,21 +637,24 @@ ucol_calcSortKeyNew(const    UCollatorNew    *coll,
               primary3 = 0; /* the third primary */
               primary2 = (order >>= 8) & 0xFF;
               primary1 = order >>= 8;
-              if(upperFirst) {
+              if(upperFirst && !isContinuation(ce)) {
                 /* Upper cases have this bit turned on, so that they always come after the lower cases */
                 /* if we want to reverse this situation, we'll flip this bit */
                 tertiary ^= 0x80;
               }
+
             } else {
               primary3 = 0;
-              if(carry != 0) {
+              if(carry == 0) {
                 carry = (order >>= 8) & 0xF;
                 primary1 = (order >>= 4) & 0xFF;
               } else {
                 primary2 = (order >>= 8) & 0xFF;
                 primary1 = ((order >>= 8) & 0xF) | carry<<4;
+                carry = 0;
               }
             }
+            
             if((tertiary & 0xF0) == 0xF0) { /* This indicates a long primary (11110000) */
               /* Note: long primary can appear both as a normal CE or as a continuation CE (not that it matters much) */
               primary3 = secondary;
