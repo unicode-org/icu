@@ -90,7 +90,7 @@ public:
      * That is, <code>freeze()</code> may be called multiple times,
      * although for optimal performance it shouldn't be.
      */
-    virtual void freeze(UErrorCode& status);
+    virtual void freeze(UParseError& parseError, UErrorCode& status);
     
     /**
      * Transliterate the given text with the given UTransPosition

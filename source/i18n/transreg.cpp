@@ -300,10 +300,11 @@ TransliteratorRegistry::~TransliteratorRegistry() {
 
 Transliterator* TransliteratorRegistry::get(const UnicodeString& ID,
                                             UnicodeString& aliasReturn,
-                                            UParseError* parseError) {
+                                            UParseError& parseError,
+                                            UErrorCode& status) {
     Entry *entry = find(ID);
     return (entry == 0) ? 0
-        : instantiateEntry(ID, entry, aliasReturn, parseError);
+        : instantiateEntry(ID, entry, aliasReturn, parseError,status);
 }
 
 void TransliteratorRegistry::put(Transliterator* adoptedProto,
@@ -829,8 +830,8 @@ Entry* TransliteratorRegistry::find(UnicodeString& source,
 Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID,
                                                          Entry *entry,
                                                          UnicodeString &aliasReturn,
-                                                         UParseError* parseError) {
-    UErrorCode status = U_ZERO_ERROR;
+                                                         UParseError& parseError,
+                                                         UErrorCode& status) {
 
     for (;;) {
         if (entry->entryType == Entry::RBT_DATA) {
@@ -846,7 +847,7 @@ Transliterator* TransliteratorRegistry::instantiateEntry(const UnicodeString& ID
             UnicodeString id("_", "");
             Transliterator *t = new RuleBasedTransliterator(id, entry->u.data);
             t = new CompoundTransliterator(ID, entry->stringArg,
-                                           entry->intArg, t, status);
+                                           entry->intArg, t, parseError, status);
             if (U_FAILURE(status)) {
                 delete t;
                 t = 0;

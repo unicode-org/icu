@@ -58,7 +58,7 @@ typedef void* UTransliterator;
  * @draft
  */
 typedef enum _UTransDirection {
-
+    
     /**
      * UTRANS_FORWARD means from <source> to <target> for a
      * transliterator with ID <source>-<target>.  For a transliterator
@@ -134,7 +134,7 @@ typedef struct _UTransPosition {
 /********************************************************************
  * General API
  ********************************************************************/
-
+#if 0
 /**
  * Open a system transliterator, given its ID.  Any non-NULL result
  * from this function should later be closed with utrans_close().
@@ -179,6 +179,15 @@ utrans_openRules(const char* id,
                  UTransDirection dir,
                  UParseError* parseErr, /* may be NULL */
                  UErrorCode* status);
+#endif
+
+U_CAPI UTransliterator*
+utrans_open(const char* id,
+            UTransDirection dir,
+            const UChar* rules,         /* may be Null */
+            int32_t rulesLength,        /* -1 if null-terminated */ 
+            UParseError* parseError,    /* may be Null */
+            UErrorCode* status);
 
 /**
  * Open an inverse of an existing transliterator.  For this to work,
@@ -480,5 +489,32 @@ utrans_transIncrementalUChars(const UTransliterator* trans,
                               int32_t textCapacity,
                               UTransPosition* pos,
                               UErrorCode* status);
+
+
+/********************* Deprecated API ************************************/
+/**
+ *@deprecated Remove after Aug 2002
+ */
+
+#ifdef U_USE_DEPRECATED_FORMAT_API
+
+#if ((U_ICU_VERSION_MAJOR_NUM != 1) || (U_ICU_VERSION_MINOR_NUM !=9))
+#   error "ICU version has changed. Please redefine the macros under U_USE_DEPRECATED_FORMAT_API pre-processor definition"
+#else 
+    U_CAPI UTransliterator*
+    utrans_openRules(const char* id,
+                     const UChar* rules,
+                     int32_t rulesLength, /* -1 if null-terminated */
+                     UTransDirection dir,
+                     UParseError* parseErr, /* may be NULL */
+                     UErrorCode* status){
+        return utrans_open(id,dir,rules,rulesLength,parseErr,status);
+    }
+
+#   define utrans_open_1_9(id,dir,status) utrans_open(id,dir,NULL,0,NULL,status)
+
+#endif
+#endif
+/********************* End **********************************************/
 
 #endif

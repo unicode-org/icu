@@ -17,15 +17,13 @@ char RuleBasedTransliterator::fgClassID = 0; // Value is irrelevant
 
 void RuleBasedTransliterator::_construct(const UnicodeString& rules,
                                          UTransDirection direction,
-                                         UErrorCode& status,
-                                         UParseError* parseError) {
+                                         UParseError& parseError,
+                                         UErrorCode& status) {
     data = 0;
     isDataOwned = TRUE;
     if (U_SUCCESS(status)) {
-        data = TransliteratorParser::parse(rules, direction, parseError);
-        if (data == 0) {
-            status = U_ILLEGAL_ARGUMENT_ERROR;
-        } else {
+        data = TransliteratorParser::parse(rules, direction, parseError,status);
+        if (U_SUCCESS(status)) {
             setMaximumContextLength(data->ruleSet.getMaximumContextLength());
         }
     }

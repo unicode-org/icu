@@ -50,17 +50,19 @@ CompoundTransliterator::CompoundTransliterator(
 CompoundTransliterator::CompoundTransliterator(const UnicodeString& id,
                               UTransDirection direction,
                               UnicodeFilter* adoptedFilter,
+                              UParseError& parseError,
                               UErrorCode& status) :
     Transliterator(id, adoptedFilter),
     trans(0), compoundRBTIndex(-1) {
-    init(id, direction, -1, 0, TRUE, status);
+    init(id, direction, -1, 0, TRUE,parseError,status);
 }
 
 CompoundTransliterator::CompoundTransliterator(const UnicodeString& id,
+                              UParseError& parseError,
                               UErrorCode& status) :
     Transliterator(id, 0), // set filter to 0 here!
     trans(0), compoundRBTIndex(-1) {
-    init(id, UTRANS_FORWARD, -1, 0, TRUE, status);
+    init(id, UTRANS_FORWARD, -1, 0, TRUE,parseError,status);
 }
 
 /**
@@ -72,10 +74,11 @@ CompoundTransliterator::CompoundTransliterator(const UnicodeString& ID,
                                                const UnicodeString& idBlock,
                                                int32_t idSplitPoint,
                                                Transliterator *adoptedTrans,
+                                               UParseError& parseError,
                                                UErrorCode& status) :
     Transliterator(ID, 0),
     trans(0), compoundRBTIndex(-1) {
-    init(idBlock, UTRANS_FORWARD, idSplitPoint, adoptedTrans, FALSE, status);
+    init(idBlock, UTRANS_FORWARD, idSplitPoint, adoptedTrans, FALSE,parseError,status);
 }
 
 /**
@@ -114,6 +117,7 @@ void CompoundTransliterator::init(const UnicodeString& id,
                                   int32_t idSplitPoint,
                                   Transliterator *adoptedSplitTrans,
                                   UBool fixReverseID,
+                                  UParseError& parseError,
                                   UErrorCode& status) {
     // assert(trans == 0);
 
@@ -127,7 +131,7 @@ void CompoundTransliterator::init(const UnicodeString& id,
     Transliterator::parseCompoundID(id, regenID, direction,
                                     idSplitPoint, adoptedSplitTrans,
                                     list, compoundRBTIndex,
-                                    NULL, status);
+                                    parseError, status);
 
     init(list, direction, fixReverseID, status);
 }

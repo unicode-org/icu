@@ -64,7 +64,8 @@ class TransliteratorRegistry {
      */
     Transliterator* get(const UnicodeString& ID,
                         UnicodeString& aliasReturn,
-                        UParseError* parseError);
+                        UParseError& parseError,
+                        UErrorCode& status);
 
     /**
      * Register a prototype (adopted).  This adds an entry to the
@@ -246,7 +247,8 @@ class TransliteratorRegistry {
     Transliterator* instantiateEntry(const UnicodeString& ID,
                                      Entry *entry,
                                      UnicodeString& aliasReturn,
-                                     UParseError* parseError);
+                                     UParseError& parseError,
+                                     UErrorCode& status);
 
     static void IDtoSTV(const UnicodeString& id,
                         UnicodeString& source,

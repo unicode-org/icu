@@ -34,7 +34,7 @@ class U_I18N_API UVector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.16 $ $Date: 2001/08/15 19:06:25 $
+ * @version $RCSfile: cpdtrans.h,v $ $Revision: 1.17 $ $Date: 2001/08/31 03:22:53 $
  * @draft
  */
 class U_I18N_API CompoundTransliterator : public Transliterator {
@@ -83,6 +83,7 @@ public:
     CompoundTransliterator(const UnicodeString& id,
                            UTransDirection dir,
                            UnicodeFilter* adoptedFilter,
+                           UParseError& parseError,
                            UErrorCode& status);
 
     /**
@@ -91,6 +92,7 @@ public:
      * @draft
      */
     CompoundTransliterator(const UnicodeString& id,
+                           UParseError& parseError,
                            UErrorCode& status);
 
     /**
@@ -179,6 +181,7 @@ private:
                            const UnicodeString& idBlock,
                            int32_t idSplitPoint,
                            Transliterator *adoptedTrans,
+                           UParseError& parseError,
                            UErrorCode& status);
                            
     /**
@@ -193,6 +196,7 @@ private:
               int32_t idSplitPoint,
               Transliterator *adoptedRbt,
               UBool fixReverseID,
+              UParseError& parseError,
               UErrorCode& status);
 
     void init(UVector& list,

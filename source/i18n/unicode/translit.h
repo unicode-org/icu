@@ -278,7 +278,7 @@ protected:
                                           UTransDirection dir,
                                           int32_t idSplitPoint,
                                           Transliterator *adoptedSplitTrans,
-                                          UParseError* parseError,
+                                          UParseError& parseError,
                                           UErrorCode& status);
     
     /**
@@ -291,7 +291,7 @@ protected:
                                 Transliterator *adoptedSplitTrans,
                                 UVector& result,
                                 int32_t& splitTransIndex,
-                                UParseError* parseError,
+                                UParseError& parseError,
                                 UErrorCode& status);
     /**
      * Internal parsing method for subclasses.
@@ -301,8 +301,9 @@ protected:
                                    int32_t& pos,
                                    UBool& sawDelimiter,
                                    UTransDirection dir,
-                                   UParseError* parseError,
-                                   UBool create);
+                                   UParseError& parseError,
+                                   UBool create,
+                                   UErrorCode& status);
 
     /**
      * Internal parsing method for parseID.
@@ -677,7 +678,7 @@ public:
      * @see #registerInstance
      * @draft
      */
-    Transliterator* createInverse(void) const;
+    Transliterator* createInverse(UErrorCode& status) const;
 
     /**
      * Returns a <code>Transliterator</code> object given its ID.
@@ -693,9 +694,13 @@ public:
      * @draft
      */
     static Transliterator* createInstance(const UnicodeString& ID,
-                                          UTransDirection dir = UTRANS_FORWARD,
-                                          UParseError* parseError = 0);
+                                          UTransDirection dir,
+                                          UParseError& parseError,
+                                          UErrorCode& status);
 
+    static Transliterator* createInstance(const UnicodeString& ID,
+                                          UTransDirection dir,
+                                          UErrorCode& status);
     /**
      * Returns a <code>Transliterator</code> object constructed from
      * the given rule string.  This will be a RuleBasedTransliterator,
@@ -706,8 +711,9 @@ public:
      */
     static Transliterator* createFromRules(const UnicodeString& ID,
                                            const UnicodeString& rules,
-                                           UTransDirection dir = UTRANS_FORWARD,
-                                           UParseError* parseError = 0);
+                                           UTransDirection dir,
+                                           UParseError& parseError,
+                                           UErrorCode& status);
 
     /**
      * Create a rule string that can be passed to createFromRules()

@@ -429,6 +429,7 @@ enum UErrorCode {
     U_UNDEFINED_VARIABLE,
     U_UNQUOTED_SPECIAL,
     U_UNTERMINATED_QUOTE,
+    U_RULE_MASK_ERROR,
     U_PARSE_ERROR_LIMIT,              /**< end of Transliterator specific parse Errors */
 
     /* 
