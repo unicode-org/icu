@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NumberFormat.java,v $ 
- * $Date: 2003/11/14 23:45:01 $ 
- * $Revision: 1.31 $
+ * $Date: 2003/11/21 08:11:49 $ 
+ * $Revision: 1.32 $
  *
  *****************************************************************************************
  */
@@ -917,13 +917,14 @@ public abstract class NumberFormat extends UFormat {
         return currency;
     }
     
+    
 	/** Get the locale for this date format object. You can choose between valid and actual locale.
 	 *  @param type type of the locale we're looking for (valid or actual) 
 	 *  @return the locale
 	 *  @draft ICU 2.8
 	 */
 	public ULocale getLocale(ULocale.ULocaleDataType type) {
-		return new ULocale("");		
+		return new ULocale(Locale.getDefault());		
 	}
 	
     // =======================privates===============================

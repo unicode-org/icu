@@ -1591,14 +1591,17 @@ public abstract class Calendar implements Serializable, Cloneable {
             factory = (CalendarFactory)getFactoryMap().get(factoryName);
         }
 
-        if (factory == null && service != null) {
-            factory = (CalendarFactory)service.get(locale);
+		Locale[] actualReturn = new Locale[1];
+		if (factory == null && service != null) {
+            factory = (CalendarFactory)service.get(locale, actualReturn);
         }
 
         if (factory == null) {
             return new GregorianCalendar(zone, locale);
         } else {
-            return factory.create(zone, locale);
+        	Calendar result = factory.create(zone, locale);
+        	result.validLocale = new ULocale(actualReturn[0]);
+            return result;
         }
     }
     ///CLOVER:ON
@@ -3586,6 +3589,7 @@ public abstract class Calendar implements Serializable, Cloneable {
     private void setWeekendData(Locale loc) {
         ResourceBundle resource =
             ICULocaleData.getResourceBundle("CalendarData", loc);
+        validLocale = new ULocale(resource.getLocale());
         String[] data = resource.getStringArray("Weekend");
         weekendOnset       = Integer.parseInt(data[0]);
         weekendOnsetMillis = Integer.parseInt(data[1]);
@@ -3597,13 +3601,15 @@ public abstract class Calendar implements Serializable, Cloneable {
     // End of weekend support
     //-------------------------------------------------------------------------
 
+    private ULocale validLocale;
+    
 	/** Get the locale for this calendar object. You can choose between valid and actual locale.
 	 *  @param type type of the locale we're looking for (valid or actual) 
 	 *  @return the locale
 	 *  @draft ICU 2.8
 	 */
 	public ULocale getLocale(ULocale.ULocaleDataType type) {
-		return new ULocale("");		
+		return  (ULocale)validLocale.clone();		
 	}
 	
     /**

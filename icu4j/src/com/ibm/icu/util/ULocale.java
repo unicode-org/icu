@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ULocale.java,v $
-* $Date: 2003/11/21 00:16:06 $
-* $Revision: 1.3 $
+* $Date: 2003/11/21 08:11:49 $
+* $Revision: 1.4 $
 *
 ******************************************************************************
 */
@@ -22,9 +22,11 @@ import java.util.Locale;
  * @author weiv
  * @draft ICU 2.8
  */
-public class ULocale {
+public class ULocale implements Cloneable {
     /** 
      * Actual locale where data is coming from 
+     * Actual locale will make sense only after the alternate
+     * ICU data handling framework is implemented in ICU 3.0
      * @draft ICU 2.8
      */
      public static final ULocaleDataType ACTUAL_LOCALE = new ULocaleDataType(0);
@@ -78,5 +80,20 @@ public class ULocale {
      */	
     public ULocale(String locName) {
 		locale = new Locale(locName, "");
+	}
+    /**
+     * Clone method. Clones this ULocale object
+     * @return cloned ULocale object.
+     * @draft ICU 2.8
+     */
+	public Object clone() {
+		try {
+			ULocale copy = (ULocale) super.clone();
+			copy.locale = (Locale) locale.clone();
+			return copy;
+		}
+		catch (CloneNotSupportedException e) {
+			throw new InternalError(e.toString());
+		}
 	}
 }
