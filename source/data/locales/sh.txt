@@ -19,6 +19,7 @@ sh {
             }
     }
     Countries { 
+        Fallback{ "en"}
         AF { "Avganistan" }
         AL { "Albanija" }
         DZ { "Al\u017Eir" }
@@ -241,6 +242,7 @@ sh {
         "n. e.",
     }
     Languages { 
+        Fallback{ "en"}
         af { "Afrikanerski" }
         sq { "Albanski" }
         ar { "Arapski" }

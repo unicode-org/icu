@@ -6,7 +6,7 @@
 // ***************************************************************************
 
 cs {
-    Version{ "2.0" }
+    Version{ "3.0" }
     AmPmMarkers { 
         "dop.",
         "odp.",
@@ -17,7 +17,15 @@ cs {
         "ch <<< cH <<< Ch <<< CH & R < r\u030C <<< R\u030C& S < s\u030C <<< S\u030C& Z < z\u030C <<<"
         " Z\u030C" }
     }
+
+    Variants{
+        Fallback{"en"}
+    }
+    Keys{
+       Fallback{"en"}
+    }
     Countries {
+        Fallback{"en"}
         //AD { "Andorra" }
         AE { "Spojen\u00E9 arabsk\u00E9 emir\u00E1ty" }
         AF { "Afgh\u00E1nist\u00E1n" }
@@ -292,6 +300,7 @@ cs {
         "po Kr.",
     }
     Languages {
+        Fallback{ "en"}
         ar { "arapski" }
         bg { "bugarski" }
         cs { "\u010De\u0161ki" }

@@ -6,7 +6,7 @@
 // ***************************************************************************
 
 et {
-    Version{ "2.0" }
+    Version{ "3.0" }
     CollationElements { 
         Version { "1.0" }
         Sequence { "@& S < s\u030C<<< S\u030C < z <<< Z < z\u030C <<< Z\u030C & V"
@@ -14,7 +14,15 @@ et {
             " W\u0302< u\u0308 <<< U\u0308& Y < \u01B6 <<< \u01B5"
         }
     }
+
+    Variants{
+        Fallback{"en"}
+    }
+    Keys{
+       Fallback{"en"}
+    }
     Countries {
+        Fallback{ "en"}
         //AD { "Andorra" }
         AE { "Araabia \u00DChendemiraadid" }
         AF { "Afganistan" }
@@ -256,6 +264,7 @@ et {
         //ZW { "Zimbabwe" }
     }
     Languages { 
+        Fallback{ "en"}
         ar { "Araabia" }
         bg { "Bulgaaria" }
         cs { "Tiehhi" }

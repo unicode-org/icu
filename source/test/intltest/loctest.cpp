@@ -81,13 +81,13 @@ const char* rawData[27][7] = {
             ""
         },
         // display variant (Greek)
-        {   "",     "",     "",     "",     "", "", "" },
+        {   "", "", "", "", "NY" }, /* TODO: currently there is no translation for NY in Greek fix this test when we have it */
         // display name (Greek)[actual values listed below]
         {   "\\u0391\\u03b3\\u03b3\\u03bb\\u03b9\\u03ba\\u03ac (\\u0397\\u03BD\\u03C9\\u03BC\\u03AD\\u03BD\\u03B5\\u03C2 \\u03A0\\u03BF\\u03BB\\u03B9\\u03C4\\u03B5\\u03AF\\u03B5\\u03C2)",
             "\\u0393\\u03b1\\u03bb\\u03bb\\u03b9\\u03ba\\u03ac (\\u0393\\u03b1\\u03bb\\u03bb\\u03af\\u03b1)",
             "\\u039a\\u03b1\\u03c4\\u03b1\\u03bb\\u03b1\\u03bd\\u03b9\\u03ba\\u03ac (\\u0399\\u03c3\\u03c0\\u03b1\\u03bd\\u03af\\u03b1)",
             "\\u0395\\u03bb\\u03bb\\u03b7\\u03bd\\u03b9\\u03ba\\u03ac (\\u0395\\u03bb\\u03bb\\u03ac\\u03b4\\u03b1)",
-            "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03b9\\u03ba\\u03ac (\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03af\\u03b1, Nynorsk)",
+            "\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03b9\\u03ba\\u03ac (\\u039d\\u03bf\\u03c1\\u03b2\\u03b7\\u03b3\\u03af\\u03b1, NY)",
             "",
             ""
         },
@@ -977,17 +977,18 @@ LocaleTest::TestAtypicalLocales()
                                      "Suecia",
                                      CharsToUnicodeString("Rep\\u00FAblica Dominicana"),
                                      CharsToUnicodeString("B\\u00E9lgica") };
-    UnicodeString arabicDisplayNames [] = { "German (Canada)",
-                                     "Japanese (South Africa)",
-                                     "Russian (Mexico)",
-                                     "English (France)",
-                                     "Spanish (Germany)",
-                                     "Croatia",
-                                     "Sweden",
-                                     "Dominican Republic",
-                                     "Belgium" };
-
-
+    // De-Anglicizing root required the change from
+    // English display names to ISO Codes - ram 2003/09/26
+    UnicodeString arabicDisplayNames [] = { "de (CA)",
+                                     "ja (ZA)",
+                                     "ru (MX)",
+                                     "en (FR)",
+                                     "es (DE)",
+                                     "HR",
+                                     "SE",
+                                     "DO",
+                                     "BE" };
+  
     int32_t i;
     UErrorCode status = U_ZERO_ERROR;
     Locale::setDefault(Locale::getUS(), status);

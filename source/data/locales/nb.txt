@@ -14,7 +14,14 @@ nb {
             "V<<< w<<< W"
         }
     }
+    Variants{
+         Fallback{"en"}
+    }
+    Keys{
+         Fallback{ "en" }
+    }
     Countries {
+        Fallback{ "en"}
         //AD { "Andorra" }
         AE { "De forente arabiske emiratene" }
         //AF { "Afghanistan" }
@@ -289,6 +296,7 @@ nb {
         "l\u00F8rdag",
     }
     Languages {
+        Fallback{ "en"}
         ar { "Arabisk" }
         bg { "Bulgarsk" }
         cs { "Tsjekkisk" }

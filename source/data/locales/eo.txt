@@ -7,8 +7,7 @@
 //              or better http://www.jtcsv.com/cgibin/icu-bugs
 
 eo {
-    Version { "3.0" } 
-
+    Version { "4.0" } 
     // collation: accented characters have primary (base character) differences
     // see Jitterbug 1440 http://www.jtcsv.com/cgibin/icu-bugs?findid=1440
     CollationElements { 
@@ -16,8 +15,14 @@ eo {
         Sequence { "&C<\u0109<<<\u0108 &G<\u011d<<<\u011c &H<\u0125<<<\u0124"
                    "&J<\u0135<<<\u0134 &S<\u015d<<<\u015c &U<\u016d<<<\u016c" }
     }
-
+    Variants{
+        Fallback{"en"}
+    }
+    Keys{
+       Fallback{"en"}
+   }
     Countries { 
+        Fallback{ "en"}
         AT { "A\u016dstrujo" }
         BE { "Belgujo" }
         CA { "Kanado" }
@@ -78,6 +83,7 @@ eo {
         "pK",
     }
     Languages { 
+        Fallback{ "en"}
         da { "dana" }
         de { "germana" }
         el { "greka" }

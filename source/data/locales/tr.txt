@@ -19,6 +19,7 @@ tr {
                    "& U < u\u0308 <<< U\u0308" }
     }
     Countries { 
+        Fallback{ "en"}
         AD { "Andora" }
         AE { "Birle\u015Fik Arap Emirlikleri" }
         AF { "Afganistan" }
@@ -293,6 +294,7 @@ tr {
         "Cumartesi",
     }
     Languages { 
+        Fallback{ "en"}
         ar { "Arap\u00E7a" }
         bg { "Bulgarca" }
         cs { "\u00C7ek\u00E7e" }

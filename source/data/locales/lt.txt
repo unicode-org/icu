@@ -14,6 +14,7 @@ lt {
         "\u0308 & Z < z\u030C <<< Z\u030C" }
     }
     Countries { 
+        Fallback{ "en"}
         AD { "Andora" }
         AE { "Jungtiniai Arab\u0173 Emyratai" }
         AF { "Afganistanas" }
@@ -292,6 +293,7 @@ lt {
         "po.Kr.",
     }
     Languages { 
+        Fallback{ "en"}
         ar { "Arab\u0173" }
         bg { "Bulgar\u0173" }
         cs { "\u010Cekijos" }

@@ -16,6 +16,7 @@ sl {
 //        " z\u030C <<< Z\u030C < z\u0301 <<< Z\u0301 < z\u0307 <<< Z\u0307 " }
     }
     Countries { 
+        Fallback{ "en"}
         AD { "Andora" }
         AE { "Zdru\u017Eeni arabski emirati" }
         AF { "Afganistan" }
@@ -290,6 +291,7 @@ sl {
         "po Kr.",
     }
     Languages { 
+        Fallback{ "en"}
         ar { "Arab\u0161\u010Dina" }
         bg { "Bolgar\u0161\u010Dina" }
         cs { "\u010Ce\u0161\u010Dina" }

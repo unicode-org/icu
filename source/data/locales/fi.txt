@@ -6,7 +6,7 @@
 // ***************************************************************************
 
 fi {
-    Version { "2.0" }
+    Version { "3.0" }
     CollationElements { 
         Version { "1.0" }
         Sequence { "& V << w <<< W & Z < a\u030A <<< A\u030A< a\u0308 <<< A\u0308 "
@@ -14,7 +14,15 @@ fi {
             " << u\u0308 <<< U\u0308"
         }
     }
+
+    Variants{
+        Fallback{"en"}
+    }
+    Keys{
+       Fallback{"en"}
+    }
     Countries { 
+        Fallback{ "en"}
         AE { "Arabiemiirikunnat" }
         //AE { "Yhdistyneet Arabiemiraatit" } // Old value
         AF { "Afganistan" }
@@ -152,9 +160,9 @@ fi {
         ZM { "Sambia" }
     }
     Languages { 
+        Fallback{ "en"}
         ar { "arabia" }
         az { "azerbaizani" }
-        ba { "baski" }
         be { "valkoven\u00e4j\u00e4" }
         bg { "bulgaria" }
         bh { "bihari" }
@@ -167,12 +175,13 @@ fi {
         en { "englanti" }
         es { "espanja" }
         et { "viro" }
+        eu{ "baski" }         
         fa { "farsi" }
         fi { "suomi" }
         fr { "ranska" }
         he { "heprea" }
         hi { "hindi" }
-        hr { "kroatia" }
+        hr { "kroaatti" }
         hu { "unkari" }
         id { "indonesia" }
         it { "italia" }
@@ -183,7 +192,7 @@ fi {
         kn { "kannada" }
         ko { "korea" }
         ku { "kurdi" }
-        la { "latinalainen" }
+        la { "latina" }
         lt { "liettua" }
         lv { "latvia" }
         mk { "makedonia" }
@@ -200,7 +209,7 @@ fi {
         sq { "albania" }
         sr { "serbia" }
         sv { "ruotsi" }
-        sw { "swahili" }
+        sw { "suahili" }
         te { "telugu" }
         th { "thai" }
         tk { "tagalog" }

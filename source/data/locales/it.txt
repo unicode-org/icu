@@ -8,6 +8,7 @@
 it {
     Version{ "2.0" }
     Countries { 
+        Fallback{ "en"}
         //AD { "Andorra" }
         AE { "Emirati Arabi Uniti" }
         //AF { "Afghanistan" }
@@ -249,6 +250,7 @@ it {
         //ZW { "Zimbabwe" }
     }
     Languages { 
+        Fallback{ "en"}
         ar { "arabo" }
         bg { "bulgaro" }
         cs { "ceco" }
