@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1996-2001, International Business Machines
+*   Copyright (C) 1996-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -34,31 +34,6 @@
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
-/* statically loaded Unicode character properties -------------------------- */
-
-/* MACHINE-GENERATED: Do not edit (see com.ibm.icu.dev.tools.translit.UnicodeSetCloseOver) */
-static const UChar CASE_SENSITIVE_RANGES[] = {
-    0x0041,0x005A,0x0061,0x007A,0x00B5,0x00B5,0x00C0,0x00D6,0x00D8,0x00F6,
-    0x00F8,0x0137,0x0139,0x017F,0x0181,0x018C,0x018E,0x0199,0x019C,0x01A9,
-    0x01AC,0x01B9,0x01BC,0x01BD,0x01BF,0x01BF,0x01C4,0x0220,0x0222,0x0233,
-    0x0253,0x0254,0x0256,0x0257,0x0259,0x0259,0x025B,0x025B,0x0260,0x0260,
-    0x0263,0x0263,0x0268,0x0269,0x026F,0x026F,0x0272,0x0272,0x0275,0x0275,
-    0x0280,0x0280,0x0283,0x0283,0x0288,0x0288,0x028A,0x028B,0x0292,0x0292,
-    0x02BC,0x02BC,0x02BE,0x02BE,0x0300,0x0301,0x0307,0x0308,0x030A,0x030A,
-    0x030C,0x030C,0x0313,0x0313,0x0331,0x0331,0x0342,0x0342,0x0345,0x0345,
-    0x0386,0x0386,0x0388,0x038A,0x038C,0x038C,0x038E,0x03A1,0x03A3,0x03CE,
-    0x03D0,0x03D1,0x03D5,0x03D6,0x03D8,0x03F2,0x03F4,0x03F5,0x0400,0x0481,
-    0x048A,0x04BF,0x04C1,0x04CE,0x04D0,0x04F5,0x04F8,0x04F9,0x0500,0x050F,
-    0x0531,0x0556,0x0561,0x0587,0x1E00,0x1E9B,0x1EA0,0x1EF9,0x1F00,0x1F15,
-    0x1F18,0x1F1D,0x1F20,0x1F45,0x1F48,0x1F4D,0x1F50,0x1F57,0x1F59,0x1F59,
-    0x1F5B,0x1F5B,0x1F5D,0x1F5D,0x1F5F,0x1F7D,0x1F80,0x1FB4,0x1FB6,0x1FBC,
-    0x1FBE,0x1FBE,0x1FC2,0x1FC4,0x1FC6,0x1FCC,0x1FD0,0x1FD3,0x1FD6,0x1FDB,
-    0x1FE0,0x1FEC,0x1FF2,0x1FF4,0x1FF6,0x1FFC,0x2126,0x2126,0x212A,0x212B,
-    0x2160,0x217F,0x24B6,0x24E9,0xFB00,0xFB06,0xFB13,0xFB17,0xFF21,0xFF3A,
-    0xFF41,0xFF5A,0xD801,0xDC00,0xD801,0xDC25,0xD801,0xDC28,0xD801,0xDC4D,
-};
-#define CASE_SENSITIVE_RANGES_LENGTH (sizeof(CASE_SENSITIVE_RANGES)/sizeof(CASE_SENSITIVE_RANGES[0]))
-
 /* dynamically loaded Unicode character properties -------------------------- */
 
 /*
@@ -83,9 +58,6 @@ static int8_t havePropsData=0;
 
 /* index values loaded from uprops.dat */
 static int32_t indexes[UPROPS_INDEX_COUNT];
-
-/* case sensitive characters */
-static USet* CASE_SENSITIVE = NULL;
 
 /* if bit 15 is set, then the folding offset is in bits 14..0 of the 16-bit trie result */
 static int32_t U_CALLCONV
@@ -137,10 +109,6 @@ uchar_cleanup()
     dataErrorCode=U_ZERO_ERROR;
     havePropsData=FALSE;
 
-    if (CASE_SENSITIVE != NULL) {
-        uset_close(CASE_SENSITIVE);
-        CASE_SENSITIVE = NULL;
-    }
     return TRUE;
 }
 
@@ -2188,44 +2156,4 @@ u_internalStrFoldCase(UChar *dest, int32_t destCapacity,
         *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
     }
     return destIndex;
-}
-
-/**
- * Returns true if the given code point is either the source of a case
- * mapping or _in_ the target of a case mapping.  Not the same as the
- * general category Cased_Letter.
- *
- * @param cp the code point to test
- * @return true if cp is case sensitive
- */
-U_CAPI UBool U_EXPORT2
-uprv_isCaseSensitive(UChar32 ch) {
-
-    if (CASE_SENSITIVE == NULL) {
-        UErrorCode ec = U_ZERO_ERROR;
-        USet* s = uset_open(0, -1); /* empty */
-        int32_t i;
-        UChar32 start, end;
-        if (s == NULL) {
-            return FALSE;
-        }
-        /* Iterate over 16-bit code units and handle surrogate pairs */
-        for (i=0; i<CASE_SENSITIVE_RANGES_LENGTH; ) {
-            /* Use UNSAFE macros; the data is well-formed */
-            U16_NEXT_UNSAFE(CASE_SENSITIVE_RANGES, i, start);
-            U16_NEXT_UNSAFE(CASE_SENSITIVE_RANGES, i, end);
-            uset_addRange(s, start, end);
-        }
-        umtx_lock(NULL);
-        if (CASE_SENSITIVE == NULL) {
-            CASE_SENSITIVE = s;
-            s = NULL;
-        }
-        umtx_unlock(NULL);
-        if (s != NULL) {
-            uset_close(s);
-        }
-    }
-
-    return CASE_SENSITIVE ? uset_contains(CASE_SENSITIVE, ch) : FALSE;
 }

@@ -344,15 +344,4 @@ uchar_addPropertyStarts(USet *set);
 U_CAPI void U_EXPORT2
 uprv_getInclusions(USet* set);
 
-/**
- * Returns true if the given code point is either the source of a case
- * mapping or _in_ the target of a case mapping.  Not the same as the
- * general category Cased_Letter.
- *
- * @param cp the code point to test
- * @return true if cp's case fold closure contains only itself.
- */
-U_CAPI UBool U_EXPORT2
-uprv_isCaseSensitive(UChar32 ch);
-
 #endif
