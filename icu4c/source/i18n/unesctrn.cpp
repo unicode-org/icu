@@ -137,7 +137,7 @@ UnescapeTransliterator::UnescapeTransliterator(const UnescapeTransliterator& o) 
 }
 
 UnescapeTransliterator::~UnescapeTransliterator() {
-    delete spec;
+    uprv_free(spec);
 }
 
 /**
@@ -153,7 +153,7 @@ UChar* UnescapeTransliterator::copySpec(const UChar* spec) {
         ++len;
     }
     ++len;
-    UChar *result = new UChar[len];
+    UChar *result = (UChar *)uprv_malloc(len*sizeof(UChar));
     uprv_memcpy(result, spec, len*sizeof(result[0]));
     return result;
 }
