@@ -44,6 +44,7 @@ public:
     void TestTibetan(void);
     void TestCompositionExclusion(void);
     void TestZeroIndex(void);
+    void TestComposedCharIter(void);
 
 private:
     static UnicodeString canonTests[][3];
