@@ -501,7 +501,7 @@
             source="1.4">
             <doclet name="com.ibm.icu.dev.tool.docs.CheckTags"
                 path="${build.dir}">
-                <param name="-short"/>
+                <!-- <param name="-short"/> -->
             </doclet>
         </javadoc>
     </target>
@@ -515,8 +515,8 @@
             source="1.4">
             <doclet name="com.ibm.icu.dev.tool.docs.GatherAPIData"
                 path="${build.dir}">
-                <param name="-name" value="ICU4J 3.0"/>
-                <param name="-output" value="${api.dir}/icu4j30.api"/>
+                <param name="-name" value="ICU4J 3.2"/>
+                <param name="-output" value="${api.dir}/icu4j32.api"/>
                 <param name="-gzip"/>
             </doclet>
         </javadoc>
@@ -525,9 +525,9 @@
     <target name="apireport" depends="tools" if="version.1.4" description="run API report generator tool">
         <java classname="com.ibm.icu.dev.tool.docs.ReportAPI" classpath="${build.dir}">
             <arg value="-old:"/>
-            <arg value="${api.dir}/icu4j28.api.gz"/>
-            <arg value="-new:"/>
             <arg value="${api.dir}/icu4j30.api.gz"/>
+            <arg value="-new:"/>
+            <arg value="${api.dir}/icu4j32.api.gz"/>
             <arg value="-html"/>
             <arg value="-out:"/>
             <arg value="${api.dir}/icu4j_compare_28_30.html"/>

@@ -326,7 +326,19 @@ public class GatherAPIData {
     private static int tagStatus(final Doc doc) {
         class Result {
             int res = -1;
-            void set(int val) { if (res != -1) throw new RuntimeException("bad doc: " + doc); res = val; }
+            void set(int val) { 
+		if (res != -1) {
+		    if (val == APIInfo.STA_DEPRECATED) {
+			// ok to have both a 'standard' tag and deprecated
+			return;
+		    } else if (res != APIInfo.STA_DEPRECATED) {
+			// if already not deprecated, this is an error
+			throw new RuntimeException("bad doc: " + doc + " old: " + res + " new: " + val); 
+		    }
+		}
+		// ok to replace with new tag
+		res = val;
+	    }
             int get() {
                 if (res == -1) {
                     System.err.println("warning: no tag for " + doc);
