@@ -18,11 +18,9 @@
 *
 ******************************************************************************
 */
-#include "unicode/utypes.h"
-#include <stdlib.h>
+#include "cmemory.h"
 
-// uprv_malloc(0) returns a pointer to this read-only data.
-//                
+/* uprv_malloc(0) returns a pointer to this read-only data. */                
 static const int32_t zeroMem[] = {0, 0, 0, 0, 0, 0};
 
 U_CAPI void * U_EXPORT2
