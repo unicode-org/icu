@@ -46,7 +46,7 @@
  * or mutexes.
  * @internal
  */
-#if UMTX_STRONG_MEMORY_MODEL
+#if defined(UMTX_STRONG_MEMORY_MODEL) && UMTX_STRONG_MEMORY_MODEL
 
 #define UMTX_CHECK(pMutex, expression, result) \
     (result)=(expression);
