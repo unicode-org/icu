@@ -1098,6 +1098,7 @@ uloc_getNameInternal(const char* localeID,
 
     /* get all pieces, one after another, and separate with '_' */
     fieldCount=0;
+    scriptSize=0;
     i=_getLanguage(localeID, name, nameCapacity, &localeID);
     if(_isIDSeparator(*localeID)) {
         const char *scriptID;

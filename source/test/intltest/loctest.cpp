@@ -1669,9 +1669,9 @@ LocaleTest::TestGetBaseName(void) {
         { "ja@calendar = buddhist", "ja" }
     };
 
-    int32_t i = 0, baseNameLen = 0;
+    int32_t i = 0;
 
-    for(i = 0; i < sizeof(testCases)/sizeof(testCases[0]); i++) {
+    for(i = 0; i < (int32_t)(sizeof(testCases)/sizeof(testCases[0])); i++) {
         Locale loc(testCases[i].localeID);
         if(strcmp(testCases[i].baseName, loc.getBaseName())) {
             errln("For locale \"%s\" expected baseName \"%s\", but got \"%s\"",
@@ -1680,3 +1680,4 @@ LocaleTest::TestGetBaseName(void) {
         }
     }
 }
+
