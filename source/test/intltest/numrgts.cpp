@@ -1219,7 +1219,11 @@ void NumberFormatRegressionTest::Test4106658(void)
     UnicodeString temp;
     FieldPosition pos(FieldPosition::DONT_CARE);
 
+#if defined(HPUX)
+    d1 = 0.0 * -1.0;    // old HPUX compiler ignores volatile keyword
+#else
     d1 *= -1.0; // Some compilers have a problem with defining -0.0
+#endif
     logln("pattern: \"" + df->toPattern(temp) + "\"");
     df->format(d1, buffer, pos);
     if (buffer != UnicodeString("-0")) // Corrected; see 4147706
@@ -1326,7 +1330,11 @@ void NumberFormatRegressionTest::Test4106667(void)
     FieldPosition pos(FieldPosition::DONT_CARE);
 
     logln("pattern: \"" + df->toPattern(temp) + "\"");
+#if defined(HPUX)
+    d = 0.0 * -1.0;    // old HPUX compiler ignores volatile keyword
+#else
     d *= -1.0; // Some compilers have a problem with defining -0.0
+#endif
     df->setPositivePrefix(/*"+"*/bar);
     df->format(d, buffer, pos);
     if (buffer != UnicodeString("-0")) // Corrected; see 4147706
@@ -1725,7 +1733,11 @@ void NumberFormatRegressionTest::Test4147706(void)
     volatile double d1 = 0.0;   // volatile to prevent code optimization
     double d2 = -0.0001;
 
+#if defined(HPUX)
+    d1 = 0.0 * -1.0;    // old HPUX compiler ignores volatile keyword
+#else
     d1 *= -1.0; // Some compilers have a problem with defining -0.0
+#endif
     df->adoptDecimalFormatSymbols(syms);
     f1 = df->format(d1, f1, pos);
     f2 = df->format(d2, f2, pos);
