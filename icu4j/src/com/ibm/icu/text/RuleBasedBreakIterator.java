@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedBreakIterator.java,v $
- * $Date: 2002/02/25 22:43:58 $
- * $Revision: 1.17 $
+ * $Date: 2002/03/01 02:37:47 $
+ * $Revision: 1.18 $
  *
  *****************************************************************************************
  */
@@ -241,7 +241,7 @@ import java.io.*;
  * &nbsp; For examples, see the resource data (which is annotated).</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.17 $ $Date: 2002/02/25 22:43:58 $
+ * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.18 $ $Date: 2002/03/01 02:37:47 $
  */
 public class RuleBasedBreakIterator extends BreakIterator {
 
@@ -393,6 +393,77 @@ public class RuleBasedBreakIterator extends BreakIterator {
     {
         return description.hashCode();
     }
+
+//
+//   Dump out a more-or-less human readable form of the
+//   complete state table and character class definitions
+//
+public void debugDumpTables() {
+    System.out.println("Character Classes:");
+    int currentCharClass = 257;
+    int startCurrentRange = 0;
+    int initialStringLength = 0;
+
+    StringBuffer[] charClassRanges = new StringBuffer[numCategories];
+    for (int i=0; i<numCategories; i++) {
+        charClassRanges[i] = new StringBuffer();
+    }
+
+    for (int i = 0; i < 0xffff; i++) {
+        if ((int)charCategoryTable.elementAt((char)i) != currentCharClass) {
+            if (currentCharClass != 257) {
+                // Complete the output of the previous range.
+                if (i != startCurrentRange+1) {
+                    charClassRanges[currentCharClass].append("-"+ Integer.toHexString(i-1));
+                }
+                if (charClassRanges[currentCharClass].length() % 72 < initialStringLength % 72) {
+                    charClassRanges[currentCharClass].append("\n     ");
+                }
+            }
+
+            // Output the start of the new range.
+            currentCharClass = (int)charCategoryTable.elementAt((char)i);
+            startCurrentRange = i;
+            initialStringLength = charClassRanges[currentCharClass].length();
+            if (charClassRanges[currentCharClass].length() > 0)
+                charClassRanges[currentCharClass].append(", ");
+            charClassRanges[currentCharClass].append(Integer.toHexString(i));
+        }
+    }
+
+    for (int i=0; i<numCategories; i++) {
+        System.out.println(i + ":     " + charClassRanges[i]);
+    }
+
+
+    System.out.println("\n\nState Table.   *: end state     %: look ahead state");
+    System.out.print("C:\t");
+    for (int i = 0; i < numCategories; i++)
+        System.out.print(Integer.toString(i) + "\t");
+    System.out.println(); System.out.print("=================================================");
+    for (int i = 0; i < stateTable.length; i++) {
+        if (i % numCategories == 0) {
+            System.out.println();
+            if (endStates[i / numCategories])
+                System.out.print("*");
+            else
+                System.out.print(" ");
+            if (lookaheadStates[i / numCategories]) {
+                System.out.print("%");
+            }
+            else
+                System.out.print(" ");
+            System.out.print(Integer.toString(i / numCategories) + ":\t");
+        }
+        if (stateTable[i] == 0) {
+            System.out.print(".\t");
+        } else {
+            System.out.print(Integer.toString(stateTable[i]) + "\t");
+        }
+    }
+    System.out.println();
+}
+
 
 // DELETE ME BEFORE RELEASE!!!
 public void writeTablesToFile(FileOutputStream file, boolean littleEndian) throws IOException {

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakIterator.java,v $ 
- * $Date: 2002/02/16 03:06:03 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/03/01 02:37:47 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -402,7 +402,8 @@ public abstract class BreakIterator implements Cloneable
     private static final int WORD_INDEX = 1;                        //ibm.597
     private static final int LINE_INDEX = 2;                        //ibm.597
     private static final int SENTENCE_INDEX = 3;                    //ibm.597
-    private static final SoftReference[] iterCache = new SoftReference[4];  //ibm.597
+    private static final int TITLE_INDEX = 4;
+    private static final SoftReference[] iterCache = new SoftReference[5];  //ibm.597
 
     /**
      * Returns a new instance of BreakIterator that locates word boundaries.
@@ -506,6 +507,30 @@ public abstract class BreakIterator implements Cloneable
                                 "SentenceBreakRules",               //ibm.597
                                 "SentenceBreakDictionary");         //ibm.597
     }                                                               //ibm.597
+
+    /**
+     * Returns a new instance of BreakIterator that locates sentence boundaries.
+     * This function assumes the text being analyzed is in the default locale's
+     * language.
+     * @return A new instance of BreakIterator that locates sentence boundaries.
+     */
+    public static BreakIterator getTitleInstance()
+    {
+        return getTitleInstance(Locale.getDefault());
+    }
+
+    /**
+     * Returns a new instance of BreakIterator that locates sentence boundaries.
+     * @param where A Locale specifying the language of the text being analyzed.
+     * @return A new instance of BreakIterator that locates sentence boundaries.
+     */
+    public static BreakIterator getTitleInstance(Locale where)
+    {
+        return getBreakInstance(where,
+                                TITLE_INDEX,
+                                "TitleBreakRules",
+                                "TitleBreakDictionary");
+    }
 
     private static BreakIterator getBreakInstance(Locale where,     //ibm.597
                                                   int type,         //ibm.597

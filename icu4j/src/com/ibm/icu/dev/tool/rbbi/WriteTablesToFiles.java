@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/rbbi/Attic/WriteTablesToFiles.java,v $ 
- * $Date: 2002/02/16 03:05:35 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/03/01 02:37:47 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -41,6 +41,10 @@ public class WriteTablesToFiles {
         bi = BreakIterator.getSentenceInstance();
         ((RuleBasedBreakIterator)bi).writeTablesToFile(new FileOutputStream(
                     "sent" + suffix + ".brk"), littleEndian);
+
+        bi = BreakIterator.getTitleInstance();
+        ((RuleBasedBreakIterator)bi).writeTablesToFile(new FileOutputStream(
+                    "title" + suffix + ".brk"), littleEndian);
 
         java.util.Locale thai = new java.util.Locale("th", "", "");
         bi = BreakIterator.getWordInstance(thai);
