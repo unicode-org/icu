@@ -362,6 +362,7 @@ public:
     UBool operator==(const NFSubstitution& rhs) const;
     
     void doSubstitution(double number, UnicodeString& toInsertInto, int32_t pos) const;
+    void doSubstitution(llong number, UnicodeString& toInsertInto, int32_t _pos) const {}
     llong transformNumber(llong number) const { return llong(0,0); }
     double transformNumber(double number) const { return number - uprv_floor(number); }
     
