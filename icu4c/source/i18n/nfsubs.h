@@ -294,7 +294,7 @@ public:
         : NFSubstitution(_pos, _ruleSet, formatter, description, status), divisor(_divisor)
     {
         ldivisor = util64_fromDouble(divisor);
-        if (divisor == 1 || divisor == 0) {
+        if (divisor == 0) {
             status = U_PARSE_ERROR;
         }
     }
@@ -303,7 +303,7 @@ public:
         divisor = uprv_pow(radix, exponent);
         ldivisor = util64_fromDouble(divisor);
 
-        if(divisor == 1 || divisor == 0) { // need to signal error somehow
+        if(divisor == 0) {
             status = U_PARSE_ERROR;
         }
     }
@@ -350,7 +350,7 @@ public:
         divisor = uprv_pow(radix, exponent);
         ldivisor = util64_fromDouble(divisor);
 
-        if (divisor == 1 || divisor == 0) {
+        if (divisor == 0) {
             status = U_PARSE_ERROR;
         }
     }

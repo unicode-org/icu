@@ -132,6 +132,12 @@ NFRuleSet::NFRuleSet(UnicodeString* descriptions, int32_t index, UErrorCode& sta
 
     UnicodeString& description = descriptions[index]; // !!! make sure index is valid
 
+    if (description.length() == 0) {
+        // throw new IllegalArgumentException("Empty rule set description");
+        status = U_PARSE_ERROR;
+	return;
+    }
+
     // if the description begins with a rule set name (the rule set
     // name can be omitted in formatter descriptions that consist
     // of only one rule set), copy it out into our "name" member
