@@ -11,7 +11,32 @@
 
 #define ARRAY_LENGTH(array) (sizeof (array) / sizeof (*array))
 
+#define CASE(id,test) case id:                          \
+                          name = #test;                 \
+                          if (exec) {                   \
+                              logln(#test "---");       \
+                              logln((UnicodeString)""); \
+                              test();                   \
+                          }                             \
+                          break
+
 static UErrorCode status = U_ZERO_ERROR;
+
+void BasicNormalizerTest::runIndexedTest(int32_t index, UBool exec,
+                                         char* &name, char* par) {
+    switch (index) {
+        CASE(0,TestDecomp);
+        CASE(1,TestCompatDecomp);
+        CASE(2,TestCanonCompose);
+        CASE(3,TestCompatCompose);
+        CASE(4,TestPrevious);
+        CASE(5,TestHangulDecomp);
+        CASE(6,TestHangulCompose);
+        CASE(7,TestTibetan);
+        CASE(8,TestCompositionExclusion);
+        default: name = ""; break;
+    }
+}
 
 /**
  * Convert Java-style strings with \u Unicode escapes into UnicodeString objects
@@ -136,7 +161,7 @@ BasicNormalizerTest::BasicNormalizerTest()
 
   /* Hangul Compatible */
   // Input            Decomposed                                    Composed
-  // THIS IS NO LONGER TRUE IN UNICODE v2.1.8, SO THIS TEST IS OBSOLETE
+  // THIS IS NO LONGER TRUE IN UNICODE v2.1.9, SO THIS TEST IS OBSOLETE
 //-obsolete-  hangulCompat[0][0] = str("\\ud4db"); hangulCompat[0][1] = str("\\u1111\\u116e\\u1175\\u11af\\u11c2"); hangulCompat[0][2] = str("\\ud478\\u1175\\u11af\\u11c2");
 }
 
@@ -207,22 +232,18 @@ void BasicNormalizerTest::TestCompatCompose()
 
 UnicodeString BasicNormalizerTest::hangulCanon[2][3];
 
-//-obsolete-UnicodeString BasicNormalizerTest::hangulCompat[1][3];
-
 void BasicNormalizerTest::TestHangulCompose() 
 {
   // Make sure that the static composition methods work
   logln("Canonical composition...");
   staticTest(Normalizer::COMPOSE, 0,                    hangulCanon,  ARRAY_LENGTH(hangulCanon),  2);
   logln("Compatibility composition...");
-//-obsolete-  staticTest(Normalizer::COMPOSE_COMPAT, 0,         hangulCompat, ARRAY_LENGTH(hangulCompat), 2);
   
   // Now try iterative composition....
   logln("Static composition...");
   Normalizer* norm = new Normalizer("", Normalizer::COMPOSE, 0);
   iterateTest(norm, hangulCanon, ARRAY_LENGTH(hangulCanon), 2);
   norm->setMode(Normalizer::COMPOSE_COMPAT);
-//-obsolete-  iterateTest(norm, hangulCompat, ARRAY_LENGTH(hangulCompat), 2);
   
   // And finally, make sure you can do it in reverse too
   logln("Reverse iteration...");
@@ -239,14 +260,12 @@ void BasicNormalizerTest::TestHangulDecomp()
   logln("Canonical decomposition...");
   staticTest(Normalizer::DECOMP, 0,                     hangulCanon,  ARRAY_LENGTH(hangulCanon),  1);
   logln("Compatibility decomposition...");
-//-obsolete-  staticTest(Normalizer::DECOMP_COMPAT, 0,         hangulCompat, ARRAY_LENGTH(hangulCompat), 1);
   
   // Now the iterative decomposition methods...
   logln("Iterative decomposition...");
   Normalizer* norm = new Normalizer("", Normalizer::DECOMP, 0);
   iterateTest(norm, hangulCanon, ARRAY_LENGTH(hangulCanon), 1);
   norm->setMode(Normalizer::DECOMP_COMPAT);
-//-obsolete-  iterateTest(norm, hangulCompat, ARRAY_LENGTH(hangulCompat), 1);
   
   // And finally, make sure you can do it in reverse too
   logln("Reverse iteration...");
@@ -257,6 +276,70 @@ void BasicNormalizerTest::TestHangulDecomp()
   delete norm;
 }
 
+/**
+ * The Tibetan vowel sign AA, 0f71, was messed up prior to Unicode version 2.1.9.
+ * Once 2.1.9 or 3.0 is released, uncomment this test.
+ */
+void BasicNormalizerTest::TestTibetan(void) {
+    UnicodeString decomp[1][3];
+    decomp[0][0] = str("\\u0f77");
+    decomp[0][1] = str("\\u0f77");
+    decomp[0][2] = str("\\u0fb2\\u0f71\\u0f80");
+
+    UnicodeString compose[1][3];
+    compose[0][0] = str("\\u0fb2\\u0f71\\u0f80");
+    compose[0][1] = str("\\u0fb2\\u0f71\\u0f80");
+    compose[0][2] = str("\\u0fb2\\u0f71\\u0f80");
+
+    staticTest(Normalizer::DECOMP,         0, decomp, ARRAY_LENGTH(decomp), 1);
+    staticTest(Normalizer::DECOMP_COMPAT,  0, decomp, ARRAY_LENGTH(decomp), 2);
+    staticTest(Normalizer::COMPOSE,        0, compose, ARRAY_LENGTH(compose), 1);
+    staticTest(Normalizer::COMPOSE_COMPAT, 0, compose, ARRAY_LENGTH(compose), 2);
+}
+
+/**
+ * Make sure characters in the CompositionExclusion.txt list do not get
+ * composed to.
+ */
+void BasicNormalizerTest::TestCompositionExclusion(void) {
+    // This list is generated from CompositionExclusion.txt.
+    // Update whenever the normalizer tables are updated.  Note
+    // that we test all characters listed, even those that can be
+    // derived from the Unicode DB and are therefore commented
+    // out.
+    UnicodeString EXCLUDED = str(
+        "\\u0340\\u0341\\u0343\\u0344\\u0374\\u037E\\u0387\\u0958"
+        "\\u0959\\u095A\\u095B\\u095C\\u095D\\u095E\\u095F\\u09DC"
+        "\\u09DD\\u09DF\\u0A33\\u0A36\\u0A59\\u0A5A\\u0A5B\\u0A5E"
+        "\\u0B5C\\u0B5D\\u0F43\\u0F4D\\u0F52\\u0F57\\u0F5C\\u0F69"
+        "\\u0F73\\u0F75\\u0F76\\u0F78\\u0F81\\u0F93\\u0F9D\\u0FA2"
+        "\\u0FA7\\u0FAC\\u0FB9\\u1F71\\u1F73\\u1F75\\u1F77\\u1F79"
+        "\\u1F7B\\u1F7D\\u1FBB\\u1FBE\\u1FC9\\u1FCB\\u1FD3\\u1FDB"
+        "\\u1FE3\\u1FEB\\u1FEE\\u1FEF\\u1FF9\\u1FFB\\u1FFD\\u2000"
+        "\\u2001\\u2126\\u212A\\u212B\\u2329\\u232A\\uF900\\uFA10"
+        "\\uFA12\\uFA15\\uFA20\\uFA22\\uFA25\\uFA26\\uFA2A\\uFB1F"
+        "\\uFB2A\\uFB2B\\uFB2C\\uFB2D\\uFB2E\\uFB2F\\uFB30\\uFB31"
+        "\\uFB32\\uFB33\\uFB34\\uFB35\\uFB36\\uFB38\\uFB39\\uFB3A"
+        "\\uFB3B\\uFB3C\\uFB3E\\uFB40\\uFB41\\uFB43\\uFB44\\uFB46"
+        "\\uFB47\\uFB48\\uFB49\\uFB4A\\uFB4B\\uFB4C\\uFB4D\\uFB4E"
+        );
+    for (int32_t i=0; i<EXCLUDED.length(); ++i) {
+        UnicodeString a(EXCLUDED.charAt(i));
+        UnicodeString b;
+        UnicodeString c;
+        Normalizer::normalize(a, Normalizer::DECOMP_COMPAT, 0, b, status);
+        Normalizer::normalize(b, Normalizer::COMPOSE, 0, c, status);
+        if (c == a) {
+            errln("FAIL: " + hex(a) + " x DECOMP_COMPAT => " +
+                  hex(b) + " x COMPOSE => " +
+                  hex(c));
+        } else if (verbose) {
+            logln("Ok: " + hex(a) + " x DECOMP_COMPAT => " +
+                  hex(b) + " x COMPOSE => " +
+                  hex(c));                
+        }
+    }
+}
 
 //------------------------------------------------------------------------
 // Internal utilities
@@ -358,25 +441,5 @@ void BasicNormalizerTest::assertEqual(const UnicodeString&    input,
         errln(errPrefix + "normalized " + hex(input) + "\n"
             + "                expected " + hex(expected) + "\n"
             + "             iterate got " + hex(result) );
-    }
-}
-
-void BasicNormalizerTest::runIndexedTest(int32_t index, UBool exec, char* &name, char* par)
-{
-    if (exec)
-    {
-        logln("Collation Regression Tests: ");
-    }
-
-    switch (index)
-    {
-        case  0: name = "TestDecomp";            if (exec) TestDecomp(); break;
-        case  1: name = "TestCompatDecomp";        if (exec) TestCompatDecomp(); break;
-        case  2: name = "TestCanonCompose";        if (exec) TestCanonCompose(); break;
-        case  3: name = "TestCompatCompose";    if (exec) TestCompatCompose(); break;
-        case  4: name = "TestPrevious";            if (exec) TestPrevious(); break;
-        case  5: name = "TestHangulDecomp";        if (exec) TestHangulDecomp(); break;
-        case  6: name = "TestHangulCompose";    if (exec) TestHangulCompose(); break;
-        default: name = ""; break;
     }
 }
