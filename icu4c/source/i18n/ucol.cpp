@@ -5278,6 +5278,9 @@ ucol_nextSortKeyPart(const UCollator *coll,
     // type of the iterator.
     UBool doingIdenticalFromStart = FALSE;
     // Normalizing iterator
+    // The division for the array length may truncate the array size to
+    // a little less than UNORM_ITER_SIZE, but that size is dimensioned too high
+    // for all platforms anyway.
     UAlignedMemory stackNormIter[UNORM_ITER_SIZE/sizeof(UAlignedMemory)];
     UNormIterator *normIter = NULL;
     // If the normalization is turned on for the collator and we are below identical level
@@ -6828,6 +6831,9 @@ UCollationResult    ucol_checkIdent(collIterate *sColl, collIterate *tColl, UBoo
   // When we arrive here, we can have normal strings or UCharIterators. Currently they are both
   // of same type, but that doesn't really mean that it will stay that way. 
 
+    // The division for the array length may truncate the array size to
+    // a little less than UNORM_ITER_SIZE, but that size is dimensioned too high
+    // for all platforms anyway.
     UAlignedMemory stackNormIter1[UNORM_ITER_SIZE/sizeof(UAlignedMemory)];
     UAlignedMemory stackNormIter2[UNORM_ITER_SIZE/sizeof(UAlignedMemory)];
     //UChar sStackBuf[256], tStackBuf[256];
@@ -7960,6 +7966,9 @@ ucol_strcollIter( const UCollator    *coll,
 
   // Preparing the context objects for iterating over strings
   collIterate sColl, tColl;
+  // The division for the array length may truncate the array size to
+  // a little less than UNORM_ITER_SIZE, but that size is dimensioned too high
+  // for all platforms anyway.
   UAlignedMemory stackNormIter1[UNORM_ITER_SIZE/sizeof(UAlignedMemory)];
   UAlignedMemory stackNormIter2[UNORM_ITER_SIZE/sizeof(UAlignedMemory)];
   UNormIterator *sNormIter = NULL, *tNormIter = NULL;
