@@ -23,7 +23,6 @@
 #include "cstring.h"
 #include "filestrm.h"
 
-U_CDECL_BEGIN
 
 #include "ucbuf.h"
 #include "error.h"
@@ -31,7 +30,6 @@ U_CDECL_BEGIN
 #include "util.h"
 #include "reslist.h"
 
-U_CDECL_END
 
 #include "toolutil.h"
 #include "uoptions.h"
@@ -96,7 +94,7 @@ main(int argc,
     argc = ccommand((char***)&argv);
 #endif
 
-    argc = u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
+    argc = u_parseArgs(argc, argv, (int32_t)(sizeof(options)/sizeof(options[0])), options);
 
     /* error handling, printing usage message */
     if(argc<0) {
@@ -187,8 +185,8 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
     if(inputDir == NULL) {
         in = T_FileStream_open(filename, "rb");
     } else {
-        int32_t dirlen  = uprv_strlen(inputDir);
-        int32_t filelen = uprv_strlen(filename);
+        int32_t dirlen  = (int32_t)uprv_strlen(inputDir);
+        int32_t filelen = (int32_t)uprv_strlen(filename);
         if(inputDir[dirlen-1] != U_FILE_SEP_CHAR) {
             openFileName = (char *) uprv_malloc(dirlen + filelen + 2);
 
@@ -298,8 +296,8 @@ make_res_filename(const char *filename,
         uprv_strcpy(resName, dirname);
         uprv_strcat(resName, basename);
     } else {
-        int32_t dirlen      = uprv_strlen(outputDir);
-        int32_t basenamelen = uprv_strlen(basename);
+        int32_t dirlen      = (int32_t)uprv_strlen(outputDir);
+        int32_t basenamelen = (int32_t)uprv_strlen(basename);
 
         resName = (char*) uprv_malloc(sizeof(char) * (dirlen + basenamelen + 2));
 
