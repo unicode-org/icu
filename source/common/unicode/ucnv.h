@@ -1268,34 +1268,56 @@ U_CAPI UBool U_EXPORT2
 ucnv_usesFallback(const UConverter *cnv);
 
 /**
- * Detects Unicode signatures in the given byte stream. The signature bytes are not consumed, 
- * instead the number of bytes that make up the signature is returned. The conversion APIs
- * donot discard signature bytes, so if the caller wishes to discard them, the caller should 
- * explicity add code to do that after calling this function.
+ * Detects Unicode signature byte sequences at the start of the byte stream
+ * and returns the charset name of the indicated Unicode charset.
+ * NULL is returned when no Unicode signature is recognized.
+ * The number of bytes in the signature is output as well.
+ *
+ * The caller can ucnv_open() a converter using the charset name.
+ * The first code unit (UChar) from the start of the stream will be U+FEFF
+ * (the Unicode BOM/signature character) and can usually be ignored.
+ *
+ * For most Unicode charsets it is also possible to ignore the indicated
+ * number of initial stream bytes and start converting after them.
+ * However, there are stateful Unicode charsets (UTF-7 and BOCU-1) for which
+ * this will not work. Therefore, it is best to ignore the first output UChar
+ * instead of the input signature bytes.
  * <p>
  * Usage:
  * @code     
  *      UErrorCode err = U_ZERO_ERROR;
  *      char input[] = { '\xEF','\xBB', '\xBF','\x41','\x42','\x43' };
- *      char* source = input;
  *      int32_t signatureLength = 0;
- *      char* encoding = ucnv_detectUnicodeSignatures(source,sizeof(input),&signatureLength,&err);
- *      UConverter* conv = NULL;
+ *      char *encoding = ucnv_detectUnicodeSignatures(input,sizeof(input),&signatureLength,&err);
+ *      UConverter *conv = NULL;
+ *      UChar output[100];
+ *      UChar *target = output, *out;
+ *      char *source = input;
  *      if(encoding!=NULL && U_SUCCESS(err)){
  *          // should signature be discarded ?
- *          if (discardSignature){
- *              source += signatureLength;
- *          }
  *          conv = ucnv_open(encoding, &err);
- *          .... do the conversion ....
+ *          // do the conversion
+ *          ucnv_toUnicode(conv,
+ *                         target, output + sizeof(output)/U_SIZEOF_UCHAR,
+ *                         source, input + sizeof(input),
+ *                         NULL, TRUE, &err);
+ *          out = output;
+ *          if (discardSignature){
+ *              ++out; // ignore initial U+FEFF
+ *          }
+ *          while(out != target) {
+ *              printf("%04x ", *out++);
+ *          }
+ *          puts("");
  *      }
  *     
  * @endcode
  *
  * @param source            The source string in which the signature should be detected.
- * @param sourceLength      Length of the input string, or -1 if NUL-terminated.
- * @param signatureLength   A pointer to int8_t to receive the number of bytes that make up the signature 
+ * @param sourceLength      Length of the input string, or -1 if terminated with a NUL byte.
+ * @param signatureLength   A pointer to int32_t to receive the number of bytes that make up the signature 
  *                          of the detected UTF. 0 if not detected.
+ *                          Can be a NULL pointer.
  * @param pErrorCode        A pointer to receive information about any errors that may occur during detection.
  *                          Must be a valid pointer to an error code value, which must not indicate a failure
  *                          before the function call.

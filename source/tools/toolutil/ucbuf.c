@@ -45,66 +45,78 @@ struct UCHARBUF {
 
 U_CAPI UBool U_EXPORT2
 ucbuf_autodetect_fs(FileStream* in, const char** cp, UConverter** conv, int32_t* signatureLength, UErrorCode* error){
-    UChar target[4];
-    int32_t numRead=0;
-    UChar* pTarget = target;
-    /* initial 0xa5 bytes: make sure that if we read <4 bytes we don't misdetect something */
-    char start[4]={ '\xa5', '\xa5', '\xa5', '\xa5' };
-    char* pStart = start;
-    UBool autodetect=TRUE;
-    
-    numRead=0;
+    char start[8];
+    int32_t numRead;
 
+    UChar target[1]={ 0 };
+    UChar* pTarget;
+    char* pStart;
 
-    numRead=T_FileStream_read(in, start, 4); /* *numRead might be <4 */
+    /* read a few bytes */
+    numRead=T_FileStream_read(in, start, sizeof(start));
 
-    if(numRead<2){
+    *cp = ucnv_detectUnicodeSignature(start, numRead, signatureLength, error);
+    if(*cp==NULL){
+        /* unread the bytes already read */
+        while(numRead>0) {
+            T_FileStream_ungetc(start[--numRead], in);
+        }
+
+        *conv =NULL;
         return FALSE;
     }
 
-    *cp = ucnv_detectUnicodeSignature(start,4,signatureLength,error);
-    
-    /* unread the extra bytes already read*/
-    while(*signatureLength<numRead) {
+    /* open the converter for the detected Unicode charset */
+    *conv = ucnv_open(*cp,error);
+
+    /* convert and ignore initial U+FEFF, and the buffer overflow */
+    pTarget = target;
+    pStart = start;
+    ucnv_toUnicode(*conv, &pTarget, target+1, &pStart, start+*signatureLength, NULL, FALSE, error);
+    *signatureLength = pStart - start;
+    if(*error==U_BUFFER_OVERFLOW_ERROR) {
+        *error=U_ZERO_ERROR;
+    }
+
+    /* verify that we successfully read exactly U+FEFF */
+    if(U_SUCCESS(*error) && (pTarget!=(target+1) || target[0]!=0xfeff)) {
+        *error=U_INTERNAL_PROGRAM_ERROR;
+    }
+
+    /* unread the bytes beyond what was consumed for U+FEFF */
+    while(numRead>*signatureLength) {
         T_FileStream_ungetc(start[--numRead], in);
     }
 
-    
-    if(*cp==NULL){
-        autodetect=FALSE;
-		*conv =NULL;
-    }else{
-        *conv = ucnv_open(*cp,error);
-        if(U_SUCCESS(*error)){
-             ucnv_toUnicode(*conv,(UChar**)&pTarget,target+4,(const char**)&pStart,start+*signatureLength,NULL,FALSE,error);
-        }
-    }
-    return autodetect; 
-
+    return TRUE; 
 }
 
-U_CAPI UBool U_EXPORT2
+U_CAPI FileStream * U_EXPORT2
 ucbuf_autodetect(const char* fileName, const char** cp,UConverter** conv, int32_t* signatureLength,UErrorCode* error){
     FileStream* in=NULL;
-    UBool autodetect =FALSE;
     if(error==NULL || U_FAILURE(*error)){
-        return FALSE;
+        return NULL;
     }
     if(conv==NULL || cp==NULL || fileName==NULL){
         *error = U_ILLEGAL_ARGUMENT_ERROR;
-        return FALSE;
+        return NULL;
     }
     /* open the file */
     in= T_FileStream_open(fileName,"rb");
     
     if(in == NULL){
         *error=U_FILE_ACCESS_ERROR;
-        return FALSE;
+        return NULL;
     }
-    
-    autodetect = ucbuf_autodetect_fs(in,cp,conv,signatureLength,error);
-    T_FileStream_close(in);
-    return autodetect;
+
+    if(ucbuf_autodetect_fs(in,cp,conv,signatureLength,error)) {
+        return in;
+    } else {
+        ucnv_close(*conv);
+        *conv=NULL;
+        T_FileStream_close(in);
+        return NULL;
+    }
 }
 
 /* fill the uchar buffer */
@@ -405,17 +417,18 @@ ucbuf_open(const char* fileName,const char** cp,UBool showWarning, UBool buffere
             buf->conv=NULL;
             buf->showWarning = showWarning;
             buf->isBuffered = buffered;
-            if(*cp==NULL ||(*cp && **cp=='\0')){
+            if(*cp==NULL || **cp=='\0'){
                 /* don't have code page name... try to autodetect */
                 ucbuf_autodetect_fs(in,cp,&buf->conv,&buf->signatureLength,error);
             }
-            buf->conv=ucnv_open(*cp,error);
-            /* code page specified but the converter could not be opened*/
+            if(U_SUCCESS(*error) && buf->conv==NULL) {
+                buf->conv=ucnv_open(*cp,error);
+            }
             if(U_FAILURE(*error)){
+                ucnv_close(buf->conv);
                 uprv_free(buf);
                 return NULL;
             }
-
             
             if((buf->conv==NULL) && (buf->showWarning==TRUE)){
                 fprintf(stderr,"###WARNING: No converter defined. Using codepage of system.\n");
@@ -510,14 +523,35 @@ ucbuf_rewind(UCHARBUF* buf,UErrorCode* error){
         return;
     }
     if(buf){
-        const char* cp=ucnv_getName(buf->conv,error);
         buf->currentPos=buf->buffer;
         buf->bufLimit=buf->buffer;
-        ucnv_close(buf->conv);
-        buf->conv=NULL;
         T_FileStream_rewind(buf->in);
-        ucbuf_autodetect_fs(buf->in,&cp,&buf->conv,&buf->signatureLength,error);
-        buf->remaining=T_FileStream_size(buf->in);
+        buf->remaining=T_FileStream_size(buf->in)-buf->signatureLength;
+
+        ucnv_resetToUnicode(buf->conv);
+        if(buf->signatureLength>0) {
+            UChar target[1]={ 0 };
+            UChar* pTarget;
+            char start[8];
+            char* pStart;
+            int32_t numRead;
+
+            /* read the signature bytes */
+            numRead=T_FileStream_read(buf->in, start, buf->signatureLength);
+
+            /* convert and ignore initial U+FEFF, and the buffer overflow */
+            pTarget = target;
+            pStart = start;
+            ucnv_toUnicode(buf->conv, &pTarget, target+1, &pStart, start+numRead, NULL, FALSE, error);
+            if(*error==U_BUFFER_OVERFLOW_ERROR) {
+                *error=U_ZERO_ERROR;
+            }
+
+            /* verify that we successfully read exactly U+FEFF */
+            if(U_SUCCESS(*error) && (numRead!=buf->signatureLength || pTarget!=(target+1) || target[0]!=0xfeff)) {
+                *error=U_INTERNAL_PROGRAM_ERROR;
+            }
+        }
     }
 }
 

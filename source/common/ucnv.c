@@ -1379,27 +1379,32 @@ ucnv_getInvalidUChars (const UConverter * converter,
     }
 }
 
-#define SIG_MAX_LEN 4
+#define SIG_MAX_LEN 5
 
 U_CAPI const char* U_EXPORT2
 ucnv_detectUnicodeSignature( const char* source,
                              int32_t sourceLength,
                              int32_t* signatureLength,
-                             UErrorCode* pErrorCode){
-    
-    /* initial 0xa5 bytes: make sure that if we read <4 
+                             UErrorCode* pErrorCode) {
+    int32_t dummy;
+
+    /* initial 0xa5 bytes: make sure that if we read <SIG_MAX_LEN
      * bytes we don't misdetect something 
      */
-    char start[SIG_MAX_LEN]={ '\xa5', '\xa5', '\xa5', '\xa5' };
+    char start[SIG_MAX_LEN]={ '\xa5', '\xa5', '\xa5', '\xa5', '\xa5' };
     int i = 0;
 
     if((pErrorCode==NULL) || U_FAILURE(*pErrorCode)){
         return NULL;
     }
     
-    if(source == NULL || signatureLength == NULL || sourceLength < -1){
+    if(source == NULL || sourceLength < -1){
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
+    }
+
+    if(signatureLength == NULL) {
+        signatureLength = &dummy;
     }
 
     if(sourceLength==-1){
@@ -1411,7 +1416,7 @@ ucnv_detectUnicodeSignature( const char* source,
         start[i]=source[i];
         i++;
     }
-  
+
     if(start[0] == '\xFE' && start[1] == '\xFF') {
         *signatureLength=2;
         return  "UTF-16BE";
@@ -1436,10 +1441,29 @@ ucnv_detectUnicodeSignature( const char* source,
     } else if(start[0] == '\xFB' && start[1] == '\xEE' && start[2] == '\x28') {
         *signatureLength=3;
         return "BOCU-1";
-    } else {
-        *signatureLength=0;
-        return NULL;
+    } else if(start[0] == '\x2B' && start[1] == '\x2F' && start[2] == '\x76') {
+        /*
+         * UTF-7: Initial U+FEFF is encoded as +/v8  or  +/v9  or  +/v+  or  +/v/
+         * depending on the second UTF-16 code unit.
+         * Detect the entire, closed Unicode mode sequence +/v8- for only U+FEFF
+         * if it occurs.
+         *
+         * So far we have +/v
+         */
+        if(start[3] == '\x38' && start[4] == '\x2D') {
+            /* 5 bytes +/v8- */
+            *signatureLength=5;
+            return "UTF-7";
+        } else if(start[3] == '\x38' || start[3] == '\x39' || start[3] == '\x2B' || start[3] == '\x2F') {
+            /* 4 bytes +/v8  or  +/v9  or  +/v+  or  +/v/ */
+            *signatureLength=4;
+            return "UTF-7";
+        }
     }
+
+    /* no known Unicode signature byte sequence recognized */
+    *signatureLength=0;
+    return NULL;
 }
 
 /*
