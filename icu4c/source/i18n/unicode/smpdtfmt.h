@@ -223,7 +223,7 @@ public:
      * use the factory methods in the DateFormat class.
      * @param pattern    the pattern for the format.
      * @param locale     the given locale.
-     * @param staus      Output param set to success/failure code.
+     * @param status     Output param set to success/failure code.
      * @stable ICU 2.0
      */
     SimpleDateFormat(const UnicodeString& pattern,
@@ -236,7 +236,7 @@ public:
      * the caller is no longer responsible for deleting it.
      * @param pattern           the given pattern for the format.
      * @param formatDataToAdopt the symbols to be adopted.
-     * @param staus             Output param set to success/faulure code.
+     * @param status            Output param set to success/faulure code.
      * @stable ICU 2.0
      */
     SimpleDateFormat(const UnicodeString& pattern,
@@ -248,8 +248,8 @@ public:
      * symbol data.  The DateFormatSymbols object is NOT adopted; the caller
      * remains responsible for deleting it.
      * @param pattern           the given pattern for the format.
-     * @param formatDataToAdopt the symbols to be set.
-     * @param staus             Output param set to success/faulure code.
+     * @param formatData        the formatting symbols to be use.
+     * @param status            Output param set to success/faulure code.
      * @stable ICU 2.0
      */
     SimpleDateFormat(const UnicodeString& pattern,
@@ -534,14 +534,14 @@ public:
     /**
      * Set the date/time formatting symbols.  The caller no longer owns the
      * DateFormatSymbols object and should not delete it after making this call.
-     * @param newFormatData the given date-time formatting data.
+     * @param newFormatSymbols the given date-time formatting symbols to copy.
      * @stable ICU 2.0
      */
     virtual void adoptDateFormatSymbols(DateFormatSymbols* newFormatSymbols);
 
     /**
      * Set the date/time formatting data.
-     * @param newFormatData the given date-time formatting data.
+     * @param newFormatSymbols the given date-time formatting symbols to copy.
      * @stable ICU 2.0
      */
     virtual void setDateFormatSymbols(const DateFormatSymbols& newFormatSymbols);
