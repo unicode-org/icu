@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Transliterator.java,v $
- * $Date: 2001/10/25 00:01:14 $
- * $Revision: 1.50 $
+ * $Date: 2001/11/15 22:12:04 $
+ * $Revision: 1.51 $
  *
  *****************************************************************************************
  */
@@ -242,7 +242,7 @@ import com.ibm.util.Utility;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.50 $ $Date: 2001/10/25 00:01:14 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.51 $ $Date: 2001/11/15 22:12:04 $
  */
 public abstract class Transliterator {
     /**
@@ -355,6 +355,8 @@ public abstract class Transliterator {
 
     private static Hashtable displayNameCache;
 
+    private static Hashtable specialInverses;
+
     /**
      * Prefix for resource bundle key for the display name for a
      * transliterator.  The ID is appended to this to form the key.
@@ -390,6 +392,10 @@ public abstract class Transliterator {
     protected static final char ID_DELIM = ';';
 
     protected static final char ID_SEP = '-';
+
+    protected static final char VARIANT_SEP = '/';
+
+    private static final String ANY = "Any";
 
     private static final String COPYRIGHT =
         "\u00A9 IBM Corporation 1999. All rights reserved.";
@@ -1255,7 +1261,6 @@ public abstract class Transliterator {
         }
 
         Transliterator t = null;
-        int sep = 0; // index of the separator ('-') in id
 
         // If id is empty, then we have either an empty specifier,
         // which is illegal, or a compound filter, which is legal
@@ -1267,39 +1272,67 @@ public abstract class Transliterator {
         }
 
         else {
-            // Fix the id, if necessary, by reversing it (A-B => B-A).  This
-            // is only done if the id is NOT of the form Foo(Bar).  Record the
-            // position of the separator.
-            //
-            // For both A-B and Foo(Bar) ids, detect the special case of Null,
-            // whose inverse is itself.  Given an ID with no separator "Foo",
-            // an abbreviation for "Any-Foo", consider the inverse to be
-            // "Foo-Any".
-            sep = id.toString().indexOf(ID_SEP);
-            if (sep < 0 && id.toString().equalsIgnoreCase(NullTransliterator.SHORT_ID)) {
-                // Handle "Null"
-                sep = id.length();
-            } else if (dir == REVERSE &&
-                       id.toString().equalsIgnoreCase(NullTransliterator._ID)) {
-                // Reverse of "Any-Null" => "Null"
-                id.delete(0, sep+1);
-                sep = id.length();
-            } else if (dir == REVERSE && revStart < 0) {
-                if (sep >= 0) {
-                    str = id.substring(0, sep);
-                    id.delete(0, sep+1);
-                } else {
-                    str = "Any";
-                }
-                sep = id.length();
-                id.append(ID_SEP).append(str);
-            } else if (sep < 0 && id.length() > 0) {
-                // Don't do anything for empty IDs -- we handle these specially below
-                str = "Any-";
-                sep = str.length() - 1;
-                id.insert(0, str);
-            }
 
+            // Normalize the ID.  Take IDs of the form T, T/V, S-T, S-T/V, or S/V-T
+            // and produce S-T/V.  If the ID needs to be reversed, do so.  This
+            // produces T-S/V, with a default S of "Any".  If the ID has a special
+            // non-canonical inverse, look it up (e.g., NFC -> NFD, Null -> Null).
+            if (id.length() > 0) { // We handle empty IDs below
+                String source = ANY;
+                String target = null;
+                String variant = ""; // Variant INCLUDING "/"
+
+                String idSTR = id.toString();
+                int sep = idSTR.indexOf(ID_SEP);
+                int var = idSTR.indexOf(VARIANT_SEP);
+                if (var < 0) {
+                    var = id.length();
+                }
+                
+                if (sep < 0) {
+                    // Form: T/V or T (or /V)
+                    target = id.substring(0, var);
+                    variant = id.substring(var);
+                } else if (sep < var) {
+                    // Form: S-T/V or S-T
+                    source = id.substring(0, sep++);
+                    target = id.substring(sep, var);
+                    variant = id.substring(var);
+                } else {
+                    // Form: S/V-T
+                    source = id.substring(0, var);
+                    variant = id.substring(var, sep++);
+                    target = id.substring(sep);
+                }
+                id.setLength(0);
+                // For forward IDs *or IDs that were part of a Foo(Bar) ID*,
+                // normalize them to canonical form.
+                if (dir == FORWARD || revStart >= 0) {
+                    id.append(source).append(ID_SEP).append(target);
+                } else {
+                    // Handle special, non-canonical inverse mappings,
+                    // e.g. inverse(Any-NFC) = Any-NFD and vice versa.
+                    if (source.equals(ANY)) {
+                        String inverseTarget = (String) specialInverses.get(target);
+                        if (inverseTarget != null) {
+                            // If the original ID contained "Any-" then make the
+                            // special inverse "Any-Foo"; otherwise make it "Foo".
+                            // So "Any-NFC" => "Any-NFD" but "NFC" => "NFD".
+                            if (sep < 0) {
+                                id.append(inverseTarget);
+                            } else {
+                                source = inverseTarget;
+                                target = ANY;
+                            }
+                        }
+                    }
+                    if (id.length() == 0) {
+                        id.append(target).append(ID_SEP).append(source);
+                    }
+                }
+                id.append(variant);
+            }
+            
             // If we have a reverse part of the ID, e.g., Foo(Bar), then we
             // need to check for an empty part, which represents a Null
             // transliterator.  We return 0 (not a NullTransliterator).  If we
@@ -1355,7 +1388,7 @@ public abstract class Transliterator {
                 id.append(ID.substring(revStart+1, revLimit));
             }
         } else if (revStart < 0) {
-            id.insert(sep, ID.substring(setStart, setLimit));
+            id.insert(0, ID.substring(setStart, setLimit));
         } else {
             // Change Foo(Bar) to Bar(Foo)
             str = ID.substring(pos[0], revStart);
@@ -1539,6 +1572,36 @@ public abstract class Transliterator {
     }
 
     /**
+     * Register two targets as being inverses of one another.  For
+     * example, calling registerSpecialInverses("NFC", "NFD") causes
+     * Transliterator to form the following inverse relationships:
+     *
+     * <pre>NFC => NFD
+     * Any-NFC => Any-NFD
+     * NFD => NFC
+     * Any-NFD => Any-NFC</pre>
+     *
+     * (Without the special inverse registration, the inverse of NFC
+     * would be NFC-Any.)  Note that NFD is shorthand for Any-NFD, but
+     * that the presence or absence of "Any-" is preserved.
+     *
+     * <p>The relationship is symmetrical; registering (a, b) is
+     * equivalent to registering (b, a).
+     *
+     * <p>The relevant IDs must still be registered separately as
+     * factories or classes.
+     *
+     * <p>Only the target is specified.  Special inverses always have
+     * the form Any-Target1 <=> Any-Target2.
+     */
+    public static void registerSpecialInverses(String target1, String target2) {
+        specialInverses.put(target1, target2);
+        if (!target1.equalsIgnoreCase(target2)) {
+            specialInverses.put(target2, target1);
+        }
+    }
+
+    /**
      * Unregisters a transliterator or class.  This may be either
      * a system transliterator or a user transliterator or class.
      *
@@ -1659,6 +1722,9 @@ public abstract class Transliterator {
                 throw new RuntimeException("Can't parse line: " + line);
             }
         }
+
+        specialInverses = new Hashtable();
+        registerSpecialInverses(NullTransliterator.SHORT_ID, NullTransliterator.SHORT_ID);
 
         // Register non-rule-based transliterators
         registerClass(HexToUnicodeTransliterator._ID,
