@@ -23,7 +23,7 @@ U_CDECL_BEGIN
  * and lowercases it.
  * @return ((advance count for the name)<<8)|character
  */
-static U_INLINE int32_t
+static inline int32_t
 getASCIIPropertyNameChar(const char *name) {
     int32_t i;
     char c;
@@ -46,7 +46,7 @@ getASCIIPropertyNameChar(const char *name) {
  * and lowercases it.
  * @return ((advance count for the name)<<8)|character
  */
-static U_INLINE int32_t
+static inline int32_t
 getEBCDICPropertyNameChar(const char *name) {
     int32_t i;
     char c;
