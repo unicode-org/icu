@@ -239,7 +239,7 @@ const UnicodeString& HexToUnicodeTransliterator::toPattern(void) const {
 
 void HexToUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPosition& offsets,
                                                      UBool isIncremental) const {
-    int32_t cursor = offsets.cursor;
+    int32_t cursor = offsets.start;
     int32_t limit = offsets.limit;
     int32_t i, j, ipat;
 
@@ -349,6 +349,7 @@ void HexToUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPo
     }
 
   exit:
+    offsets.contextLimit += limit - offsets.limit;
     offsets.limit = limit;
-    offsets.cursor = cursor;
+    offsets.start = cursor;
 }

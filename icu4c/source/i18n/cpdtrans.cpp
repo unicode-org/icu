@@ -346,24 +346,24 @@ void CompoundTransliterator::handleTransliterate(Replaceable& text, UTransPositi
     }
 
 	int32_t i;
-    int32_t cursor = index.cursor;
+    int32_t cursor = index.start;
     int32_t limit = index.limit;
     int32_t globalLimit = limit;
     /* globalLimit is the overall limit.  We keep track of this
      * since we overwrite index.limit with the previous
-     * index.cursor.  After each transliteration, we update
+     * index.start.  After each transliteration, we update
      * globalLimit for insertions or deletions that have happened.
      */
     
     for (i=0; i<count; ++i) {
-        index.cursor = cursor; // Reset cursor
+        index.start = cursor; // Reset cursor
         index.limit = limit;
         
         trans[i]->handleTransliterate(text, index, incremental);
         
         // Adjust overall limit for insertions/deletions
         globalLimit += index.limit - limit;
-        limit = index.cursor; // Move limit to end of committed text
+        limit = index.start; // Move limit to end of committed text
     }
     // Cursor is good where it is -- where the last
     // transliterator left it.  Limit needs to be put back
