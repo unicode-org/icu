@@ -521,11 +521,9 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      */
     private int _getZoneIndex(String ID)
     {
-        for (int index=0; index<zoneStrings.length; index++)
-            {
-                if (ID.equalsIgnoreCase(zoneStrings[index][0])) return index;
-            }
-
+        for (int index=0; index<zoneStrings.length; index++) {
+            if (ID.equalsIgnoreCase(zoneStrings[index][0])) return index;
+        }
         return -1;
     }
 
