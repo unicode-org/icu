@@ -137,7 +137,7 @@ SOURCE=.\util.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\writejava.c
+SOURCE=.\wrtjava.c
 # End Source File
 # End Group
 # Begin Group "Header Files"
