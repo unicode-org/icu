@@ -49,6 +49,10 @@ static void TestBreakIteratorCAPI()
     uint8_t buffer [CLONETEST_ITERATOR_COUNT] [U_BRK_SAFECLONE_BUFFERSIZE];
     int32_t bufferSize = U_BRK_SAFECLONE_BUFFERSIZE;
 
+    /* Note:  the adjacent "" are concatenating strings, not adding a \" to the
+       string, which is probably what whoever wrote this intended.  Don't fix,
+       because it would throw off the hard coded break positions in the following
+       tests. */
     u_uastrcpy(text, "He's from Africa. ""Mr. Livingston, I presume?"" Yeah");
 
 
@@ -146,7 +150,16 @@ static void TestBreakIteratorCAPI()
     pos=ubrk_previous(word);
     log_verbose("%d \n", pos);
 
-
+    if (ubrk_isBoundary(word, 2) != FALSE) {
+        log_err("error ubrk_isBoundary(word, 2) did not return FALSE\n");
+    }
+    pos=ubrk_current(word);
+    if (pos != 4) {
+        log_err("error ubrk_current() != 4 after ubrk_isBoundary(word, 2)\n");
+    }
+    if (ubrk_isBoundary(word, 4) != TRUE) {
+        log_err("error ubrk_isBoundary(word, 4) did not return TRUE\n");
+    }
 
 
     
