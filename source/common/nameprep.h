@@ -82,7 +82,11 @@ private:
     static const char fgClassID;
 };
 
+#define ASCII_SPACE 0x0020
 
+inline UBool NamePrep::isNotProhibited(UChar32 ch){
+    return (UBool)(ch == ASCII_SPACE);
+}
 
 U_NAMESPACE_END
 

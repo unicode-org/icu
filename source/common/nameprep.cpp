@@ -22,8 +22,6 @@
 // *****************************************************************************
 // class NamePrep
 // *****************************************************************************
-static const UChar ASCII_SPACE = 0x0020;
-
 
 U_NAMESPACE_BEGIN
 
@@ -33,10 +31,6 @@ const char NamePrep::fgClassID=0;
 NamePrep::NamePrep(UErrorCode& status){
     bidiCheck = TRUE;
     doNFKC = TRUE;
-}
-
-UBool NamePrep::isNotProhibited(UChar32 ch){ 
-    return (UBool)(ch == ASCII_SPACE); 
 }
 
 U_NAMESPACE_END
