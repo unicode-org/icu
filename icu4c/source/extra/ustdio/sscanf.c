@@ -69,16 +69,10 @@
 
 /* p */
 #define UFMT_POINTER        {ufmt_pointer, u_scanf_pointer_handler}
-/* D */
-#define UFMT_DATE           {ufmt_date, u_scanf_date_handler}
-/* T */
-#define UFMT_TIME           {ufmt_date, u_scanf_time_handler}
 /* V */
 #define UFMT_SPELLOUT       {ufmt_double, u_scanf_spellout_handler}
 /* P */
 #define UFMT_PERCENT        {ufmt_double, u_scanf_percent_handler}
-/* M */
-#define UFMT_CURRENCY       {ufmt_double, u_scanf_currency_handler}
 /* K */
 #define UFMT_UCHAR          {ufmt_uchar, u_scanf_uchar_handler}
 /* U */
@@ -487,51 +481,6 @@ u_scanf_uinteger_handler(u_localized_string    *input,
 }
 
 static int32_t
-u_scanf_currency_handler(u_localized_string    *input,
-                          const u_scanf_spec_info     *info,
-                          ufmt_args            *args,
-                          const UChar            *fmt,
-                          int32_t            *consumed)
-{
-    int32_t        len;
-    double        *num         = (double*) (args[0].ptrValue);
-    UNumberFormat        *format;
-    int32_t        parsePos     = 0;
-    UErrorCode         status         = U_ZERO_ERROR;
-
-
-    /* skip all ws in the input */
-    u_scanf_skip_leading_ws(input, info->fPadChar);
-
-    /* determine the size of the input's buffer */
-    len = input->len - input->pos;
-
-    /* truncate to the width, if specified */
-    if(info->fWidth != -1)
-        len = ufmt_min(len, info->fWidth);
-
-    /* get the formatter */
-    format = u_locbund_getNumberFormat(&input->fBundle, UNUM_CURRENCY);
-
-    /* handle error */
-    if(format == 0)
-        return 0;
-
-    /* parse the number */
-    *num = unum_parseDouble(format, &(input->str[input->pos]), len, &parsePos, &status);
-
-    /* mask off any necessary bits */
-    /*  if(! info->fIsLong_double)
-    num &= DBL_MAX;*/
-
-    /* update the input's position to reflect consumed data */
-    input->pos += parsePos;
-
-    /* we converted 1 arg */
-    return 1;
-}
-
-static int32_t
 u_scanf_percent_handler(u_localized_string    *input,
                          const u_scanf_spec_info *info,
                          ufmt_args        *args,
@@ -568,88 +517,6 @@ u_scanf_percent_handler(u_localized_string    *input,
     /* mask off any necessary bits */
     /*  if(! info->fIsLong_double)
     num &= DBL_MAX;*/
-
-    /* update the input's position to reflect consumed data */
-    input->pos += parsePos;
-
-    /* we converted 1 arg */
-    return 1;
-}
-
-static int32_t
-u_scanf_date_handler(u_localized_string    *input,
-                      const u_scanf_spec_info     *info,
-                      ufmt_args        *args,
-                      const UChar        *fmt,
-                      int32_t            *consumed)
-{
-    int32_t        len;
-    UDate            *date         = (UDate*) (args[0].ptrValue);
-    UDateFormat        *format;
-    int32_t        parsePos     = 0;
-    UErrorCode         status         = U_ZERO_ERROR;
-
-
-    /* skip all ws in the input */
-    u_scanf_skip_leading_ws(input, info->fPadChar);
-
-    /* determine the size of the input's buffer */
-    len = input->len - input->pos;
-
-    /* truncate to the width, if specified */
-    if(info->fWidth != -1)
-        len = ufmt_min(len, info->fWidth);
-
-    /* get the formatter */
-    format = u_locbund_getDateFormat(&input->fBundle);
-
-    /* handle error */
-    if(format == 0)
-        return 0;
-
-    /* parse the number */
-    *date = udat_parse(format, &(input->str[input->pos]), len, &parsePos, &status);
-
-    /* update the input's position to reflect consumed data */
-    input->pos += parsePos;
-
-    /* we converted 1 arg */
-    return 1;
-}
-
-static int32_t
-u_scanf_time_handler(u_localized_string    *input,
-                      const u_scanf_spec_info     *info,
-                      ufmt_args        *args,
-                      const UChar        *fmt,
-                      int32_t            *consumed)
-{
-    int32_t        len;
-    UDate            *time         = (UDate*) (args[0].ptrValue);
-    UDateFormat        *format;
-    int32_t        parsePos     = 0;
-    UErrorCode         status         = U_ZERO_ERROR;
-
-
-    /* skip all ws in the input */
-    u_scanf_skip_leading_ws(input, info->fPadChar);
-
-    /* determine the size of the input's buffer */
-    len = input->len - input->pos;
-
-    /* truncate to the width, if specified */
-    if(info->fWidth != -1)
-        len = ufmt_min(len, info->fWidth);
-
-    /* get the formatter */
-    format = u_locbund_getTimeFormat(&input->fBundle);
-
-    /* handle error */
-    if(format == 0)
-        return 0;
-
-    /* parse the number */
-    *time = udat_parse(format, &(input->str[input->pos]), len, &parsePos, &status);
 
     /* update the input's position to reflect consumed data */
     input->pos += parsePos;
@@ -1023,13 +890,13 @@ static const u_sscanf_info g_u_sscanf_infos[USCANF_NUM_FMT_HANDLERS] = {
 
 /* 0x40 */
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
-    UFMT_DATE,          UFMT_SCIENTIFIC,    UFMT_EMPTY,         UFMT_SCIDBL,
+    UFMT_EMPTY,         UFMT_SCIENTIFIC,    UFMT_EMPTY,         UFMT_SCIDBL,
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_UCHAR,
-    UFMT_EMPTY,         UFMT_CURRENCY,      UFMT_EMPTY,         UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
 
 /* 0x50 */
     UFMT_PERCENT,       UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
-    UFMT_TIME,          UFMT_USTRING,       UFMT_SPELLOUT,      UFMT_EMPTY,
+    UFMT_EMPTY,         UFMT_USTRING,       UFMT_SPELLOUT,      UFMT_EMPTY,
     UFMT_HEX,           UFMT_EMPTY,         UFMT_EMPTY,         UFMT_SCANSET,
     UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,         UFMT_EMPTY,
 

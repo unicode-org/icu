@@ -34,7 +34,6 @@
  The following is a small list as to what is currently wrong/suggestions for
  ustdio.
 
- * %D and %T printf uses the current timezone, but the scanf version uses GMT.
  * %p should be deprecated. Pointers are 2-16 bytes big and scanf should
     really read them.
  * The format specification should use int32_t and ICU type variants instead of
@@ -794,6 +793,8 @@ u_vsscanf_u(const UChar *buffer,
         const UChar     *patternSpecification,
         va_list         ap);
 
+
+U_CAPI int32_t u_strftime(UChar *s, int32_t maxsize, const char *locale, const char *patternSpecification, UDate time);
 
 #endif
 
