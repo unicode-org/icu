@@ -2734,8 +2734,8 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
 
     UProperty p;
     int32_t v;
-    CharString pname(prop);
-    CharString vname(value);
+    CharString pname(prop, NULL); // default codepage (not invariant codepage)
+    CharString vname(value, NULL);
     UBool mustNotBeEmpty = FALSE;
 
     if (value.length() > 0) {
