@@ -7,7 +7,7 @@
 
 he {
     Version{"2.0"}
-    Countries { 
+    Countries {
         AD { "\u05D0\u05E0\u05D3\u05D5\u05E8\u05D4" }
         AE { "\u05D0\u05D9\u05D7\u05D5\u05D3 \u05D4\u05D0\u05DE\u05D9\u05E8\u05D5\u05D9\u05D5\u05EA \u05D4\u05E2\u05E8\u05D1\u05D9\u05D5\u05EA" }
         AF { "\u05D0\u05E4\u05D2\u05E0\u05D9\u05E1\u05D8\u05DF" }
@@ -248,7 +248,7 @@ he {
         ZM { "\u05D6\u05DE\u05D1\u05D9\u05D4" }
         ZW { "\u05D6\u05D9\u05DE\u05D1\u05D1\u05D5\u05D5\u05D4" }
     }
-    Languages { 
+    Languages {
         ar { "\u05E2\u05E8\u05D1\u05D9\u05EA" }
         bg { "\u05D1\u05D5\u05DC\u05D2\u05E8\u05D9\u05EA" }
         cs { "\u05E6\u05F3\u05DB\u05D9\u05EA" }
@@ -285,8 +285,8 @@ he {
     }
     localPatternChars { "GanjkHmsSEDFwWxhKzAeugXZ" }
 
-    LocaleScript:array { 
-        "Hebr"    // ISO 15924 Name 
+    LocaleScript:array {
+        "Hebr"    // ISO 15924 Name
     }
     ExemplarCharacters{"[[:Hebr:]\u200f\u200e]"}
     //------------------------------------------------------------
@@ -304,23 +304,27 @@ he {
     // information on negatives and decimals?
 
     SpelloutRules {
-        "zero (incomplete data); \u05d0\u05d4\u05d3; \u05e9\u05d2\u05d9\u05d9\u05dd; \u05e9\u05dc\u05d5\u05e9\u05d4;\n"
-        "4: \u05d0\u05d3\u05d1\u05e6\u05d4; \u05d7\u05d2\u05d5\u05d9\u05e9\u05d4; \u05e9\u05e9\u05d4;\n"
-        "7: \u05e9\u05d1\u05e6\u05d4; \u05e9\u05de\u05d5\u05d2\u05d4; \u05ea\u05e9\u05e6\u05d4;\n"
-        "10: \u05e6\u05e9\u05d3\u05d4[ >>];\n"
-        "20: \u05e6\u05e9\u05d3\u05d9\u05dd[ >>];\n"
+        // negative number rule.  This rule is used to format negative
+        // numbers.  The result of formatting the number's absolute
+        // value is placed where the >> is.
+        "-x: \u05de\u05d9\u05e0\u05d5\u05e1 >>;\n"
+        "0: \u05d0\u05e4\u05e1; \u05d0\u05d7\u05d3; \u05e9\u05d2\u05d9\u05d9\u05dd; \u05e9\u05dc\u05d5\u05e9\u05d4;\n"
+        "4: \u05d0\u05e8\u05d1\u05e2\u05d4; \u05d7\u05de\u05d9\u05e9\u05d4; \u05e9\u05d9\u05e9\u05d4;\n"
+        "7: \u05e9\u05d1\u05e2\u05d4; \u05e9\u05de\u05d5\u05e0\u05d4; \u05ea\u05e9\u05e2\u05d4;\n"
+        "10: \u05e2\u05e9\u05e8\u05d4[ >>];\n"
+        "20: \u05e2\u05e9\u05e8\u05d9\u05dd[ >>];\n"
         "30: \u05e9\u05dc\u05d5\u05e9\u05d9\u05dd[ >>];\n"
-        "40: \u05d0\u05d3\u05d1\u05e6\u05d9\u05dd[ >>];\n"
+        "40: \u05d0\u05e8\u05d1\u05e2\u05d9\u05dd[ >>];\n"
         "50: \u05d7\u05de\u05d9\u05e9\u05d9\u05dd[ >>];\n"
-        "60: \u05e9\u05e9\u05d9\u05dd[ >>];\n"
-        "70: \u05e9\u05d1\u05e6\u05d9\u05dd[ >>];\n"
-        "80: \u05e9\u05de\u05d5\u05d2\u05d9\u05dd[ >>];\n"
-        "90: \u05ea\u05e9\u05e6\u05d9\u05dd[ >>];\n"
+        "60: \u05e9\u05d9\u05e9\u05d9\u05dd[ >>];\n"
+        "70: \u05e9\u05d1\u05e2\u05d9\u05dd[ >>];\n"
+        "80: \u05e9\u05de\u05d5\u05e0\u05d9\u05dd[ >>];\n"
+        "90: \u05ea\u05e9\u05e2\u05d9\u05dd[ >>];\n"
         "100: \u05de\u05d0\u05d4[ >>];\n"
         "200: << \u05de\u05d0\u05d4[ >>];\n"
         "1000: \u05d0\u05dc\u05e3[ >>];\n"
         "2000: << \u05d0\u05dc\u05e3[ >>];\n"
-        "1,000,000: =#,##0= (incomplete data);" 
+        "1,000,000: =#,##0= (incomplete data);"
     }
 
     // Currency display names
@@ -329,19 +333,19 @@ he {
     }
 
     // International Calendars Data.
-    // NOTE (ICU 2.6) - the format of this data WILL CHANGE in future releases.  
+    // NOTE (ICU 2.6) - the format of this data WILL CHANGE in future releases.
 
     calendar{
         islamic{
             // Islamic calendar
-            eras:array { 
+            eras:array {
                 "\u05E9\u05E0\u05EA \u05D4\u05D9\u05D2\u05F3\u05E8\u05D4"
             }
             monthNames{
                 format{
                     abbreviated:alias {  // same as MonthNames (no data)
                         "he/calendar/islamic/monthNames/format/wide"
-                    }  
+                    }
                     wide{
                         "\u05DE\u05D5\u05D7\u05E8\u05DD",                                               // Muharram
                         "\u05E1\u05E4\u05E8",                                                           // Safar
@@ -358,7 +362,7 @@ he {
                     }
                 }
             }
-        } 
+        }
         islamic-civil:alias{
             "he/calendar/islamic"
         }
@@ -433,13 +437,13 @@ he {
                 }
             }
         }
-        
+
         hebrew{
             eras:array {
                 "\u05DC\u05D1\u05D4\042\u05E2"
             }
             monthNames{
-                format{                  
+                format{
                     wide {
                         "\u05EA\u05E9\u05E8\u05D9",                 // Tishri
                         "\u05D7\u05E9\u05D5\u05DF",                 // Heshvan
