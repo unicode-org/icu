@@ -119,7 +119,7 @@ packagetest: $(TESTDATAOBJDIR)/testdata.lst $(top_builddir)/tools/pkgdata/icupkg
 cleanpackage:
 	-cd build ; $(INVOKE) $(PKGDATA) -m $(PKGDATA_MODE) $(PKGDATA_VERSIONING) -s . -T . -p $(ICUDATA_NAME) icudata.lst --clean 2> /dev/null
 	-cd $(TESTDATAOBJDIR) ; $(INVOKE) $(PKGDATA) -m common -T . -s . -p testdata testdata.lst  --clean 2> /dev/null
-	$(RMV) $(ICUDATA_NAME).* build/icudata.lst build/*.mak
+	$(RMV) $(ICUDATA_NAME).* build/icudata.lst build/*.mak $(TESTDATAOBJDIR)/testdata.lst
 
 ## Install ICU data. Make a convenience link 'icudata' library if it's a library mode.
 install-local:  build/icudata.lst $(top_builddir)/tools/pkgdata/icupkg.inc install-convrtrstxt $(OS390INSTALL)
