@@ -302,14 +302,18 @@ void UnicodeTest::TestUnicodeData()
     char    buffer[1000];
     char*   bufferPtr, *dirPtr;
     char path[256];
-
+    const char* datafile = "UnicodeData-3.0.0.txt";
+  
     strcpy(path ,  icu_getDefaultDataDirectory());
-    strcat(path, "UnicodeData-3.0.0.txt");
-    
-        input = fopen( path, "r");
-#ifdef WIN32
-        assert(input != 0);
-#endif
+    strcat(path, datafile);
+      
+    input = fopen( path, "r");
+    if (input == 0)
+    {
+        errln("Failed to open: " + UnicodeString(datafile));
+        return;
+    }
+
         int32_t unicode;
         for(;;) {
             bufferPtr = fgets(buffer, 999, input);
