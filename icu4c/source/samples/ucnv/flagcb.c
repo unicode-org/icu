@@ -7,6 +7,7 @@
 #include "unicode/utypes.h"
 #include "unicode/ucnv.h"
 #include "flagcb.h"
+#include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -177,7 +178,7 @@ void debugCB_fromU(const void *context,
                    UErrorCode * err)
 {
     debugCBContext *ctx = (debugCBContext*)context;
-    UConverterFromUCallback junkFrom;
+    /*UConverterFromUCallback junkFrom;*/
     
 #if DEBUG_TMI
     printf("debugCB_fromU: Context %p:%d called, reason %d on cnv %p [err=%s]\n", ctx, ctx->serial, reason, fromUArgs->converter, u_errorName(*err));

@@ -24,9 +24,6 @@ Package=<4>
     Project_Dep_Name layout
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name legacy
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name msgfmt
     End Project Dependency
     Begin Project Dependency
