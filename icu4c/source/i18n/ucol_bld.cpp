@@ -885,9 +885,9 @@ _enumCategoryRangeClosureCategory(const void *context, UChar32 start, UChar32 li
   tempUCATable *t = ((enumStruct *)context)->t;
   UCollator *tempColl = ((enumStruct *)context)->tempColl;
   UCollationElements* colEl = ((enumStruct *)context)->colEl;
-  static UCAElements el;
-  static UChar decomp[256] = { 0 };
-  static uint32_t noOfDec = 0;
+  UCAElements el;
+  UChar decomp[256] = { 0 };
+  uint32_t noOfDec = 0;
 
   UChar32 u32 = 0;
   UChar comp[2];
