@@ -1,0 +1,129 @@
+/*
+**********************************************************************
+*   Copyright (C) 2001, International Business Machines
+*   Corporation and others.  All Rights Reserved.
+**********************************************************************
+*   Date        Name        Description
+*   05/24/01    aliu        Creation.
+**********************************************************************
+*/
+
+#include "unicode/uchar.h"
+#include "unicode/titletrn.h"
+
+/**
+ * ID for this transliterator.
+ */
+const char* TitlecaseTransliterator::_ID = "Any-Title";
+
+TitlecaseTransliterator::TitlecaseTransliterator(UnicodeFilter* adoptedFilter) :
+    Transliterator(_ID, adoptedFilter) {
+    setMaximumContextLength(1);
+}
+
+/**
+ * Destructor.
+ */
+TitlecaseTransliterator::~TitlecaseTransliterator() {}
+
+/**
+ * Copy constructor.
+ */
+TitlecaseTransliterator::TitlecaseTransliterator(const TitlecaseTransliterator& o) :
+    Transliterator(o) {}
+
+/**
+ * Assignment operator.
+ */
+TitlecaseTransliterator& TitlecaseTransliterator::operator=(
+                             const TitlecaseTransliterator& o) {
+    Transliterator::operator=(o);
+    return *this;
+}
+
+/**
+ * Transliterator API.
+ */
+Transliterator* TitlecaseTransliterator::clone(void) const {
+    return new TitlecaseTransliterator(*this);
+}
+
+/**
+ * Implements {@link Transliterator#handleTransliterate}.
+ */
+void TitlecaseTransliterator::handleTransliterate(
+                                  Replaceable& text, UTransPosition& offsets,
+                                  UBool isIncremental) const {
+
+    // The way a filter is supposed to work isn't precisely
+    // specified by Transliterator yet.  We interpret the filter
+    // as masking characters completely -- they do not get
+    // modified, and they are also _invisible for the purposes of
+    // context_.  We are a little inconsistent about this -- we
+    // don't filter characters in the range contextStart..start-1
+    // (the left context).
+
+    // Determine if there is a preceding letter character in the
+    // left context (if there is any left context).
+    UBool wasLastCharALetter = FALSE;
+    if (offsets.start > offsets.contextStart) {
+        wasLastCharALetter =
+            u_isalpha(text.charAt(offsets.start - 1));
+    }
+
+    // The buffer used to batch up changes to be made
+    UnicodeString buffer;
+    int32_t bufStart = 0;
+    int32_t bufLimit = -1;
+
+    int32_t start;
+    for (start = offsets.start; start < offsets.limit; ++start) {
+        // For each character, if the preceding character was a
+        // non-letter, and this character is a letter, then apply
+        // the titlecase transformation.  Otherwise apply the
+        // lowercase transformation.
+        UChar32 c = filteredCharAt(text, start);
+        if (u_isalpha(c)) {
+            UChar32 newChar;
+            if (wasLastCharALetter) {
+                newChar = u_tolower(c);
+            } else {
+                newChar = u_totitle(c);
+            }
+            if (c != newChar) {
+                // This is the simple way of doing this:
+                //text.replace(start, start+1,
+                //             String.valueOf((char) newChar));
+
+                // Instead, we do something more complicated that
+                // minimizes the number of calls to
+                // Replaceable.replace().  We batch up the changes
+                // we want to make in a buffer, recording
+                // our position and dumping the buffer out when a
+                // non-contiguous change arrives.
+                if (bufLimit == start) {
+                    ++bufLimit;
+                    // Fall through and append newChar below
+                } else {
+                    if (buffer.length() > 0) {
+                        text.handleReplaceBetween(bufStart, bufLimit, buffer);
+                        buffer.truncate(0);
+                    }
+                    bufStart = start;
+                    bufLimit = start+1;
+                    // Fall through and append newChar below
+                }
+                buffer.append(newChar);
+            }
+            wasLastCharALetter = TRUE;
+        } else {
+            wasLastCharALetter = FALSE;
+        }
+    }
+    // assert(start == offsets.limit);
+    offsets.start = start;
+
+    if (buffer.length() > 0) {
+        text.handleReplaceBetween(bufStart, bufLimit, buffer);
+    }
+}
