@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/CompoundTransliterator.java,v $ 
- * $Date: 2001/10/10 20:26:27 $ 
- * $Revision: 1.16 $
+ * $Date: 2001/10/21 23:35:41 $ 
+ * $Revision: 1.17 $
  *
  *****************************************************************************************
  */
@@ -35,18 +35,13 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.16 $ $Date: 2001/10/10 20:26:27 $
+ * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.17 $ $Date: 2001/10/21 23:35:41 $
  */
 public class CompoundTransliterator extends Transliterator {
 
     private static final boolean DEBUG = false;
 
     private Transliterator[] trans;
-
-    /**
-     * Array of original filters associated with transliterators.
-     */
-    private UnicodeFilter[] filters = null;
 
     /**
      * For compound RBTs (those with an ::id block before and/or after
@@ -73,13 +68,10 @@ public class CompoundTransliterator extends Transliterator {
      */
     public CompoundTransliterator(Transliterator[] transliterators,
                                   UnicodeFilter filter) {
-        super(joinIDs(transliterators), null); // don't set filter here!
+        super(joinIDs(transliterators), filter);
         trans = new Transliterator[transliterators.length];
         System.arraycopy(transliterators, 0, trans, 0, trans.length);
         computeMaximumContextLength();
-        if (filter != null) {
-            setFilter(filter);
-        }
     }
 
     /**
