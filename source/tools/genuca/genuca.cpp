@@ -624,9 +624,9 @@ write_uca_table(const char *filename,
     FILE *data = fopen(filename, "r");
     uint32_t line = 0;
     int32_t sizesPrim[35], sizesSec[35], sizesTer[35];
-    int32_t sizeBreakDown[35][35][35];
+/*    int32_t sizeBreakDown[35][35][35];
     int32_t *secValue = (int32_t*)uprv_malloc(sizeof(int32_t)*0xffff);
-    int32_t *terValue = (int32_t*)uprv_malloc(sizeof(int32_t)*0xffff);
+    int32_t *terValue = (int32_t*)uprv_malloc(sizeof(int32_t)*0xffff);*/
     UCAElements *element = NULL;
     UChar variableTopValue = 0;
     UCATableHeader *myD = (UCATableHeader *)uprv_malloc(sizeof(UCATableHeader));
@@ -638,12 +638,12 @@ write_uca_table(const char *filename,
         return -1;
     }
 
-    memset(secValue, 0, 0xffff*sizeof(int32_t));
-    memset(terValue, 0, 0xffff*sizeof(int32_t));
+/*    memset(secValue, 0, 0xffff*sizeof(int32_t));
+    memset(terValue, 0, 0xffff*sizeof(int32_t)); */
     memset(sizesPrim, 0, 35*sizeof(int32_t));
     memset(sizesSec, 0, 35*sizeof(int32_t));
     memset(sizesTer, 0, 35*sizeof(int32_t));
-    memset(sizeBreakDown, 0, 35*35*35*sizeof(int32_t));
+/*    memset(sizeBreakDown, 0, 35*35*35*sizeof(int32_t)); */
     memset(inverseTable, 0xDA, sizeof(int32_t)*3*0xFFFF);
 
     opts->variableTopValue = variableTopValue;
@@ -781,8 +781,10 @@ write_uca_table(const char *filename,
     uprv_free(inverse);
     fclose(data);
 
+/*
     uprv_free(secValue);
     uprv_free(terValue);
+*/
 
 	return 0;
 }
