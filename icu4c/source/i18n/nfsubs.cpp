@@ -168,12 +168,22 @@ NFSubstitution::NFSubstitution(int32_t _pos,
     // that pattern (then set it to use the DecimalFormatSymbols
     // belonging to our formatter)
     else if (workingDescription.charAt(0) == gPound || workingDescription.charAt(0) ==gZero) {
-        this->numberFormat = new DecimalFormat(workingDescription, *(formatter->getDecimalFormatSymbols()), status);
+		DecimalFormatSymbols* sym = formatter->getDecimalFormatSymbols();
+		if (!sym) {
+			status = U_MISSING_RESOURCE_ERROR;
+			return;
+		}
+        this->numberFormat = new DecimalFormat(workingDescription, *sym, status);
         /* test for NULL */
         if (this->numberFormat == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
+		if (U_FAILURE(status)) {
+			delete this->numberFormat;
+			this->numberFormat = NULL;
+			return;
+		}
         // this->numberFormat->setDecimalFormatSymbols(formatter->getDecimalFormatSymbols());
     }
     // if the description is ">>>", this substitution bypasses the

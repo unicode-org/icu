@@ -80,18 +80,19 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(URBNFRuleSetTag tag, const Locale& 
     default: status = U_ILLEGAL_ARGUMENT_ERROR; return;
     }
 
-	// the following doesn't work for aliased resources
+    // the following didn't work for aliased resources, but Vladimir supposedly fixed it...
     // const UChar* description = ures_getStringByKey(nfrb, fmt_tag, &len, &status);
     int32_t len = 0;
     UResourceBundle* nfrb = ures_open(NULL, locale.getName(), &status);
-	UResourceBundle* yuck = ures_getByKey(nfrb, fmt_tag, NULL, &status);
-	const UChar* description = ures_getString(yuck, &len, &status);
+    //    UResourceBundle* yuck = ures_getByKey(nfrb, fmt_tag, NULL, &status);
+    //    const UChar* description = ures_getString(yuck, &len, &status);
+    const UChar* description = ures_getStringByKey(nfrb, fmt_tag, &len, &status);
     if (U_SUCCESS(status)) {
         UnicodeString desc(description, len);
         UParseError perror;
         init (desc, perror, status);
     }
-	ures_close(yuck);
+    //    ures_close(yuck);
     ures_close(nfrb);
 }
 
@@ -161,6 +162,12 @@ RuleBasedNumberFormat::operator==(const Format& other) const
             lenient == rhs.lenient) {
             NFRuleSet** p = ruleSets;
             NFRuleSet** q = rhs.ruleSets;
+            if ((p == NULL) != (q == NULL)) {
+                return false;
+            }
+            if (p == NULL) {
+                return true;
+            }
             while (*p && *q && (**p == **q)) {
                 ++p;
                 ++q;
@@ -176,8 +183,10 @@ UnicodeString
 RuleBasedNumberFormat::getRules() const
 {
     UnicodeString result;
-    for (NFRuleSet** p = ruleSets; *p; ++p) {
-        (*p)->appendRules(result);
+    if (ruleSets != NULL) {
+        for (NFRuleSet** p = ruleSets; *p; ++p) {
+            (*p)->appendRules(result);
+        }
     }
     return result;
 }
@@ -186,12 +195,14 @@ UnicodeString
 RuleBasedNumberFormat::getRuleSetName(int32_t index) const
 {
     UnicodeString result;
-    for (NFRuleSet** p = ruleSets; *p; ++p) {
-        NFRuleSet* rs = *p;
-        if (rs->isPublic()) {
-            if (--index == -1) {
-                rs->getName(result);
-                return result;
+    if (ruleSets) {
+        for (NFRuleSet** p = ruleSets; *p; ++p) {
+            NFRuleSet* rs = *p;
+            if (rs->isPublic()) {
+                if (--index == -1) {
+                    rs->getName(result);
+                    return result;
+                }
             }
         }
     }
@@ -202,9 +213,11 @@ int32_t
 RuleBasedNumberFormat::getNumberOfRuleSetNames() const
 {
     int32_t result = 0;
-    for (NFRuleSet** p = ruleSets; *p; ++p) {
-        if ((**p).isPublic()) {
-            ++result;
+    if (ruleSets) {
+        for (NFRuleSet** p = ruleSets; *p; ++p) {
+            if ((**p).isPublic()) {
+                ++result;
+            }
         }
     }
     return result;
@@ -213,7 +226,7 @@ RuleBasedNumberFormat::getNumberOfRuleSetNames() const
 NFRuleSet*
 RuleBasedNumberFormat::findRuleSet(const UnicodeString& name, UErrorCode& status) const
 {
-    if (U_SUCCESS(status)) {
+    if (U_SUCCESS(status) && ruleSets) {
         for (NFRuleSet** p = ruleSets; *p; ++p) {
             NFRuleSet* rs = *p;
             if (rs->isNamed(name)) {
@@ -230,7 +243,7 @@ RuleBasedNumberFormat::format(int32_t number,
                               UnicodeString& toAppendTo,
                               FieldPosition& pos) const
 {
-    defaultRuleSet->format((int64_t)number, toAppendTo, toAppendTo.length());
+    if (defaultRuleSet) defaultRuleSet->format((int64_t)number, toAppendTo, toAppendTo.length());
     return toAppendTo;
 }
 
@@ -240,7 +253,7 @@ RuleBasedNumberFormat::format(int64_t number,
                               UnicodeString& toAppendTo,
                               FieldPosition& pos) const
 {
-    defaultRuleSet->format(number, toAppendTo, toAppendTo.length());
+    if (defaultRuleSet) defaultRuleSet->format(number, toAppendTo, toAppendTo.length());
     return toAppendTo;
 }
 
@@ -250,7 +263,7 @@ RuleBasedNumberFormat::format(double number,
                               UnicodeString& toAppendTo,
                               FieldPosition& pos) const
 {
-    defaultRuleSet->format(number, toAppendTo, toAppendTo.length());
+    if (defaultRuleSet) defaultRuleSet->format(number, toAppendTo, toAppendTo.length());
     return toAppendTo;
 }
 
@@ -336,6 +349,11 @@ RuleBasedNumberFormat::parse(const UnicodeString& text,
                              Formattable& result,
                              ParsePosition& parsePosition) const
 {
+    if (!ruleSets) {
+        parsePosition.setErrorIndex(0);
+        return;
+    }
+
     ParsePosition high_pp;
     Formattable high_result;
 
@@ -392,10 +410,10 @@ RuleBasedNumberFormat::setDefaultRuleSet(const UnicodeString& ruleSetName, UErro
         } else if (ruleSetName.startsWith("%%")) {
             status = U_ILLEGAL_ARGUMENT_ERROR;
         } else {
-			NFRuleSet* result = findRuleSet(ruleSetName, status);
-			if (result != NULL) {
-				defaultRuleSet = result;
-			}
+            NFRuleSet* result = findRuleSet(ruleSetName, status);
+            if (result != NULL) {
+                defaultRuleSet = result;
+            }
         }
     }
 }
@@ -403,20 +421,23 @@ RuleBasedNumberFormat::setDefaultRuleSet(const UnicodeString& ruleSetName, UErro
 void 
 RuleBasedNumberFormat::initDefaultRuleSet()
 {
-	NFRuleSet**p = &ruleSets[1];
-	while (*p) {
-		++p;
-	}
+    if (!ruleSets) {
+        defaultRuleSet = NULL;
+    }
+    NFRuleSet**p = &ruleSets[1];
+    while (*p) {
+        ++p;
+    }
 
-	defaultRuleSet = *--p;
-	if (!defaultRuleSet->isPublic()) {
-		while (p != ruleSets) {
-			if ((*--p)->isPublic()) {
-				defaultRuleSet = *p;
-				break;
-			}
-		}
-	}
+    defaultRuleSet = *--p;
+    if (!defaultRuleSet->isPublic()) {
+        while (p != ruleSets) {
+            if ((*--p)->isPublic()) {
+                defaultRuleSet = *p;
+                break;
+            }
+        }
+    }
 }
 
 
@@ -424,6 +445,7 @@ void
 RuleBasedNumberFormat::init(const UnicodeString& rules, UParseError& pErr, UErrorCode& status)
 {
     // TODO: implement UParseError
+    // Note: this can leave ruleSets == NULL, so remaining code should check
     if (U_FAILURE(status)) {
         return;
     }
@@ -635,6 +657,10 @@ Collator*
 RuleBasedNumberFormat::getCollator() const
 {
 #if !UCONFIG_NO_COLLATION
+    if (!ruleSets) {
+        return NULL;
+    }
+
     // lazy-evaulate the collator
     if (collator == NULL && lenient) {
         // create a default collator based on the formatter's locale,
