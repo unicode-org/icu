@@ -122,7 +122,7 @@ build-data: $(ALL_FILES) icudata.lst  $(OS390LIST)
 
 clean-local:
 	$(RMV) $(CLEANFILES)
-	$(RMV) $(TESTOBJDATADIR)/ja_data.res $(TESTOBJDATADIR)/testdata.lst
+	$(RMV) $(TESTOBJDATADIR)/ja_data.res
 
 #$(ALL_TEST_FILES)
 
