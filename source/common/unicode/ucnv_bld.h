@@ -140,7 +140,7 @@ typedef struct UConverterImpl UConverterImpl;
 typedef struct {
     uint32_t structSize;            /* Size of this structure */
     
-    const char name [UCNV_MAX_CONVERTER_NAME_LENGTH];               /* internal name of the converter- invariant chars */
+    char name [UCNV_MAX_CONVERTER_NAME_LENGTH];               /* internal name of the converter- invariant chars */
 
     int32_t codepage;               /* codepage # (now IBM-$codepage) */
 
