@@ -77,10 +77,14 @@ RegexMatcher::RegexMatcher(const UnicodeString &regexp,
     fPattern           = RegexPattern::compile(regexp, flags, pe, status);
     fPatternOwned      = TRUE;
     fTraceDebug        = FALSE;
+    fDeferredStatus    = U_ZERO_ERROR;
     fStack             = new UVector32(status); 
     fData              = fSmallData;
     if (fPattern->fDataSize > sizeof(fSmallData)/sizeof(int32_t)) {
-        fData = (int32_t *)uprv_malloc(fPattern->fDataSize * sizeof(int32_t));      // TODO:  null check
+        fData = (int32_t *)uprv_malloc(fPattern->fDataSize * sizeof(int32_t)); 
+    }
+    if (fStack == NULL || fData == NULL) {
+        fDeferredStatus = U_MEMORY_ALLOCATION_ERROR;
     }
     reset();
 }
@@ -91,6 +95,7 @@ RegexMatcher::~RegexMatcher() {
     delete fStack;
     if (fData != fSmallData) {
         delete fData;
+        fData = NULL;
     }
     if (fPatternOwned) {
         delete fPattern;
@@ -113,6 +118,10 @@ RegexMatcher &RegexMatcher::appendReplacement(UnicodeString &dest,
     if (U_FAILURE(status)) {
         return *this;
     }
+    if (U_FAILURE(fDeferredStatus)) {
+        status = fDeferredStatus;
+        return *this;
+    }
     if (fMatch == FALSE) {
         status = U_REGEX_INVALID_STATE;
         return *this;
@@ -126,7 +135,8 @@ RegexMatcher &RegexMatcher::appendReplacement(UnicodeString &dest,
     
 
     // scan the replacement text, looking for substitutions ($n) and \escapes.
-    //  TODO:  optimize this loop by efficiently scanning for '$' or '\'
+    //  TODO:  optimize this loop by efficiently scanning for '$' or '\',
+    //         move entire ranges not containing substitutions.
     int32_t  replLen = replacement.length();
     int32_t  replIdx = 0;
     while (replIdx<replLen) {
@@ -150,6 +160,7 @@ RegexMatcher &RegexMatcher::appendReplacement(UnicodeString &dest,
                     dest.append(escapedChar);
                     replIdx += (c==0x55? 9: 5); 
                     // TODO:  Report errors for mal-formed \u escapes?
+                    //        As this is, the original sequence is output.
                     continue;
                 }
             }
@@ -427,27 +438,18 @@ UBool RegexMatcher::find(int32_t start, UErrorCode &status) {
     if (U_FAILURE(status)) {
         return FALSE;
     }
+    if (U_FAILURE(fDeferredStatus)) {
+        status = fDeferredStatus;
+        return FALSE;
+    }
     int32_t inputLen = fInput->length();
     if (start < 0 || start >= inputLen) {
         status = U_INDEX_OUTOFBOUNDS_ERROR;
         return FALSE;
     }
     this->reset();
-
-    // TODO:  optimize a search for the first char of a possible match.
-    // TODO:  optimize the search for a leading literal string.
-    // TODO:  optimize based on the minimum length of a possible match
-    int32_t  startPos;
-    for (startPos=start; startPos < inputLen; startPos=fInput->moveIndex32(startPos, 1)) {
-        MatchAt(startPos, status);
-        if (U_FAILURE(status)) {
-            return FALSE;
-        }
-        if (fMatch) {
-            return TRUE;
-        }
-    }
-    return FALSE;
+    fMatchEnd = start;
+    return find();
 }
 
 
@@ -470,6 +472,10 @@ UnicodeString RegexMatcher::group(int32_t groupNum, UErrorCode &status) const {
     // Note:  calling start() and end() above will do all necessary checking that
     //        the group number is OK and that a match exists.  status will be set.
     if (U_FAILURE(status)) {
+        return UnicodeString();
+    }
+    if (U_FAILURE(fDeferredStatus)) {
+        status = fDeferredStatus;
         return UnicodeString();
     }
 
@@ -501,6 +507,10 @@ UBool RegexMatcher::lookingAt(UErrorCode &status) {
     if (U_FAILURE(status)) {
         return FALSE;
     }
+    if (U_FAILURE(fDeferredStatus)) {
+        status = fDeferredStatus;
+        return FALSE;
+    }
     reset();
     MatchAt(0, status);
     return fMatch;
@@ -510,6 +520,10 @@ UBool RegexMatcher::lookingAt(UErrorCode &status) {
 
 UBool RegexMatcher::matches(UErrorCode &status) {
     if (U_FAILURE(status)) {
+        return FALSE;
+    }
+    if (U_FAILURE(fDeferredStatus)) {
+        status = fDeferredStatus;
         return FALSE;
     }
     reset();
@@ -536,6 +550,10 @@ UnicodeString RegexMatcher::replaceAll(const UnicodeString &replacement, UErrorC
     if (U_FAILURE(status)) {
         return *fInput;
     }
+    if (U_FAILURE(fDeferredStatus)) {
+        status = fDeferredStatus;
+        return *fInput;
+    }
     UnicodeString destString;
     for (reset(); find(); ) {
         appendReplacement(destString, replacement, status);
@@ -559,6 +577,11 @@ UnicodeString RegexMatcher::replaceFirst(const UnicodeString &replacement, UErro
     if (U_FAILURE(status)) {
         return *fInput;
     }
+    if (U_FAILURE(fDeferredStatus)) {
+        status = fDeferredStatus;
+        return *fInput;
+    }
+
     reset();
     if (!find()) {
         return *fInput;
@@ -601,9 +624,8 @@ REStackFrame *RegexMatcher::resetStack() {
     //  new stack frame to all -1.  The -1s are needed for capture group limits, where
     //  they indicate that a group has not yet matched anything.
     fStack->removeAllElements();
-    UErrorCode  status = U_ZERO_ERROR;    // TODO:  do something with status
 
-    int32_t *iFrame = fStack->reserveBlock(fPattern->fFrameSize, status);
+    int32_t *iFrame = fStack->reserveBlock(fPattern->fFrameSize, fDeferredStatus);
     int i;
     for (i=0; i<fPattern->fFrameSize; i++) {
         iFrame[i] = -1;
@@ -629,23 +651,27 @@ void RegexMatcher::setTrace(UBool state) {
 //     start
 //
 //--------------------------------------------------------------------------------
-int32_t RegexMatcher::start(UErrorCode &err) const {
-    return start(0, err);
+int32_t RegexMatcher::start(UErrorCode &status) const {
+    return start(0, status);
 }
 
 
 
 
-int32_t RegexMatcher::start(int group, UErrorCode &err) const {
-    if (U_FAILURE(err)) {
+int32_t RegexMatcher::start(int group, UErrorCode &status) const {
+    if (U_FAILURE(status)) {
+        return -1;
+    }
+    if (U_FAILURE(fDeferredStatus)) {
+        status = fDeferredStatus;
         return -1;
     }
     if (fMatch == FALSE) {
-        err = U_REGEX_INVALID_STATE;
+        status = U_REGEX_INVALID_STATE;
         return -1;
     }
     if (group < 0 || group > fPattern->fGroupMap->size()) {
-        err = U_INDEX_OUTOFBOUNDS_ERROR;
+        status = U_INDEX_OUTOFBOUNDS_ERROR;
         return -1;
     }
     int32_t s;
