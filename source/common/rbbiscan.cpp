@@ -868,8 +868,9 @@ void RBBIRuleScanner::parse() {
 
         for (;;) {
             if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "scan")) { RBBIDebugPrintf(".");}
-            if (tableEl->fCharClass < 127 && tableEl->fCharClass == fC.fChar) {
+            if (tableEl->fCharClass < 127 && fC.fEscaped == FALSE &&   tableEl->fCharClass == fC.fChar) {
                 // Table row specified an individual character, not a set, and
+                //   the input character is not escaped, and
                 //   the input character matched it.
                 break;
             }
@@ -891,7 +892,9 @@ void RBBIRuleScanner::parse() {
                 break;
             }
 
-            if (tableEl->fCharClass >= 128 && tableEl->fCharClass < 240 && fC.fChar != (UChar32)-1) {
+            if (tableEl->fCharClass >= 128 && tableEl->fCharClass < 240 &&   // Table specs a char class &&
+                fC.fEscaped == FALSE &&                                      //   char is not escaped &&
+                fC.fChar != (UChar32)-1) {                                   //   char is not EOF
                 UnicodeSet *uniset = fRuleSets[tableEl->fCharClass-128];
                 if (uniset->contains(fC.fChar)) {
                     // Table row specified a character class, or set of characters,
