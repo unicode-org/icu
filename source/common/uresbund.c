@@ -536,7 +536,7 @@ U_CAPI uint32_t U_EXPORT2 ures_getInt(const UResourceBundle* resB, UErrorCode *s
 
 U_CAPI UResType U_EXPORT2 ures_getType(UResourceBundle *resB) {
   if(resB == NULL) {
-    return (UResType) RES_BOGUS;
+    return RES_NONE;
   }
   return (UResType) (RES_GET_TYPE(resB->fRes));
 }
