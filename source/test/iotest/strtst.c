@@ -274,7 +274,7 @@ static void TestLocalizedString(void) {
     if (locale == NULL || strcmp(locale, "en_US") != 0) {
         log_err("u_fgetlocale didn't return \"en\" Got: %d\n", u_fgetlocale(strFile));
     }
-    u_fsetlocale("de_DE", strFile);
+    u_fsetlocale(strFile, "de_DE");
     locale = u_fgetlocale(strFile);
     if (locale == NULL || strcmp(locale, "de_DE") != 0) {
         log_err("u_fgetlocale didn't return \"de\" Got: %d\n", u_fgetlocale(strFile));
