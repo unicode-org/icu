@@ -95,11 +95,17 @@ for file in `find ./icu \( -name \*.txt -print \)`; do
     #Find a converted UTF-8 BOM
     if [ "$bom8" = "057 08b 0ab" -o "$bom8" = "57 8b ab" ]
     then
-        binary_files="$binary_files `echo $file | cut -d / -f2-`";
+        if [ `echo $binary_files1 | wc -w` -lt 250 ]
+        then
+            binary_files1="$binary_files1 `echo $file | cut -d / -f2-`";
+        else
+            binary_files2="$binary_files2 `echo $file | cut -d / -f2-`";
+        fi
     fi
 done
 
-#echo $binary_files
+#echo $binary_files1
+#echo $binary_files2
 
 for i in $(pax -f $1 2>/dev/null)
 do
@@ -114,7 +120,7 @@ do
        suf=${i#*.*}
        if [ "$suf" = "$j" ]
        then
-         binary_files="$binary_files $i"
+         binary_files2="$binary_files2 $i"
          break
        fi
      done
@@ -126,14 +132,16 @@ do
 done
 
 # now see if a re-extract of binary files is necessary
-if [ ${#binary_files} -eq 0 ]; then
+if [ ${#binary_files1} -eq 0 -a ${#binary_files2} -eq 0 ]; then
   echo ""
   echo "There are no binary files to restore."
 else
   echo "Restoring binary files ..."
   echo ""
-  rm $binary_files
-  pax -C 819 -rvf $1 $binary_files
+  rm $binary_files1
+  rm $binary_files2
+  pax -C 819 -rvf $1 $binary_files1
+  pax -C 819 -rvf $1 $binary_files2
 fi
 echo ""
 echo "$0 has completed extracting ICU from $1."
