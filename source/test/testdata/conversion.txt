@@ -43,6 +43,58 @@ conversion {
     toUnicode {
       Headers { "charset", "bytes", "unicode", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidChars" }
       Cases {
+        // ISO-2022-JP
+
+        // truncated, partial escape sequence
+        {
+          "ISO-2022-JP",
+          :bin{ 1b }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 1b }
+        }
+        {
+          "ISO-2022-JP-2",
+          :bin{ 1b24 }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 1b24 }
+        }
+        // complete escape sequence but nothing else
+        {
+          "ISO-2022-JP-2",
+          :bin{ 1b2442 }, "", :intvector{},
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        // escape plus incomplete DBCS character
+        {
+          "ISO-2022-JP-2",
+          :bin{ 1b244241 }, "", :intvector{},
+          :int{1}, :int{1}, "truncated", ".", :bin{ 41 }
+        }
+        // all complete with DBCS character
+        {
+          "ISO-2022-JP-2",
+          :bin{ 1b24424141 }, "\u758f", :intvector{ 3 },
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        // test the G2 designator & SS2 shift
+        {
+          "ISO-2022-JP-2",
+          :bin{ 431b2e46461b244241411b4e4e353f }, "CF\u758f\u039e\u7591", :intvector{ 0, 4, 8, 12, 13 },
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        // JIS7 with Katakana
+        {
+          "JIS7",
+          :bin{ 41420e41420f4142 }, "AB\uff81\uff82AB", :intvector{ 0, 1, 3, 4, 6, 7 },
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+        // JIS8 with Katakana
+        {
+          "JIS8",
+          :bin{ 41c15c1b284a5cc242 }, "A\uff81\\\xa5\uff82B", :intvector{ 0, 1, 2, 6, 7, 8 },
+          :int{1}, :int{1}, "", ".", :bin{""}
+        }
+
+        // ISO-2022-CN
+
         // truncated, partial escape sequence
         {
           "ISO_2022,locale=zh,version=1",
@@ -258,6 +310,31 @@ conversion {
     fromUnicode {
       Headers { "charset", "unicode", "bytes", "offsets", "flush", "fallbacks", "errorCode", "callback", "invalidUChars" }
       Cases {
+        // ISO-2022-JP-2 with G2 designator & SS2 shift
+        {
+          "ISO-2022-JP-2",
+          "CF\u758f\u038f\u7591",
+          :bin{       43461b244241411b2e461b4e3f353f },
+          :intvector{ 0,1,2,2,2,2,2,3,3,3,3,3,3,4,4 },
+          :int{1}, :int{1}, "", ".", ""
+        }
+        // JIS7 with Katakana
+        {
+          "JIS7",
+          "AB\uff81\uff82AB",
+          :bin{       41420e41420f4142 },
+          :intvector{ 0,1,2,2,3,4,4,5 },
+          :int{1}, :int{1}, "", ".", ""
+        }
+        // JIS8 with Katakana
+        {
+          "JIS8",
+          "A\uff81\\\xa5\uff82B",
+          :bin{       41c15c1b284a5cc242 },
+          :intvector{ 0,1,2,3,3,3,3,4,5 },
+          :int{1}, :int{1}, "", ".", ""
+        }
+
         // ISO-2022-CN-EXT with all subcharsets and shifts and with supplementary code points
         {
           "ISO-2022-CN-EXT",
