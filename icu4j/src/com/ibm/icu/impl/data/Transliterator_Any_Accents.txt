@@ -3,11 +3,11 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/Transliterator_Any_Accents.txt,v $
-# $Date: 2001/09/25 21:08:32 $
-# $Revision: 1.2 $
+# $Date: 2001/09/25 22:58:55 $
+# $Revision: 1.3 $
 #--------------------------------------------------------------------
 
-:: NFD (NFD) ;
+:: NFD (NFC) ;
 
 # to do: make reversible
 
@@ -291,4 +291,4 @@ $pre v $post <> \u028C ; # LATIN SMALL LETTER TURNED V
 # $pre YYY $post <> \u1E9A ; # LATIN SMALL LETTER A WITH RIGHT HALF RING
 # $pre YYY $post <> \u207F ; # SUPERSCRIPT LATIN SMALL LETTER N
 
-:: NFC (NFC) ;
+:: NFC (NFD) ;

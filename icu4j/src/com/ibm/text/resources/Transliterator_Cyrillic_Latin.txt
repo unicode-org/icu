@@ -3,15 +3,15 @@
 # Corporation and others. All Rights Reserved.
 #--------------------------------------------------------------------
 # $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/resources/Attic/Transliterator_Cyrillic_Latin.txt,v $
-# $Date: 2001/09/25 20:48:15 $
-# $Revision: 1.1 $
+# $Date: 2001/09/25 22:58:55 $
+# $Revision: 1.2 $
 #--------------------------------------------------------------------
 # TODO: add remaining characters
 # Should add variants for Russian-English, Russian-German
 # Those can use this as a base, and then remap cases
 # like a $hat to ya or ja.
 
-:: NFD (NFD) ;
+:: NFD (NFC) ;
 
 $modprime = \u02B9;
 $modprime2 = \u02BA;
@@ -285,4 +285,4 @@ $comma = \u0326 ;
 ### ѷ <> XXX ; # CYRILLIC SMALL LETTER IZHITSA
 ### Ѷ <> XXX ; # CYRILLIC CAPITAL LETTER IZHITSA
 
-:: NFC (NFC) ;
+:: NFC (NFD) ;
