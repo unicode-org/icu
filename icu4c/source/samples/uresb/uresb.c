@@ -27,6 +27,7 @@
 #include "uoptions.h"
 #include "toolutil.h"
 
+#include <string.h>
 #include <stdlib.h>
 #ifdef WIN32
 #include <direct.h>
