@@ -562,18 +562,17 @@ RuleBasedBreakIterator::reset()
     // Subclasses may override with their own reset behavior.
 }
 
-
 // internal type for BufferClone 
 struct bufferCloneStructUChar
 {
-    RuleBasedBreakIterator bi;
-    UCharCharacterIterator text;
+    uint8_t bi   [sizeof(RuleBasedBreakIterator)] ;
+    uint8_t text [sizeof(UCharCharacterIterator)] ;
 };
 
 struct bufferCloneStructString
 {
-    RuleBasedBreakIterator bi;
-    StringCharacterIterator text;
+    uint8_t bi   [sizeof(RuleBasedBreakIterator)] ;
+    uint8_t text [sizeof(StringCharacterIterator)] ;
 };
 
 BreakIterator *  RuleBasedBreakIterator::createBufferClone(void *stackBuffer,
@@ -622,30 +621,30 @@ BreakIterator *  RuleBasedBreakIterator::createBufferClone(void *stackBuffer,
         /* allocate one here...*/
         localIterator = new RuleBasedBreakIterator(*this);
         status = U_SAFECLONE_ALLOCATED_ERROR;
-    } else if (IterIsUChar) {
+        return localIterator;
+    }
+    if (IterIsUChar) {
         struct bufferCloneStructUChar * localClone 
                 = (struct bufferCloneStructUChar  *)stackBuffer;
-        localIterator = &localClone->bi;
+        localIterator = (RuleBasedBreakIterator *)&localClone->bi;
         uprv_memcpy(localIterator, this, sizeof(RuleBasedBreakIterator));
         uprv_memcpy(&localClone->text, text, sizeof(UCharCharacterIterator));
-        localClone->text = *(UCharCharacterIterator*)text;
-        localIterator->text = &localClone->text;
-        localIterator->fBufferClone = TRUE;
+        localIterator->text = (CharacterIterator *) &localClone->text;
     } else if (IterIsString) {
         struct bufferCloneStructString * localClone 
                 = (struct bufferCloneStructString  *)stackBuffer;
-        localIterator = &localClone->bi;
+        localIterator = (RuleBasedBreakIterator *)&localClone->bi;
         uprv_memcpy(localIterator, this, sizeof(RuleBasedBreakIterator));
         uprv_memcpy(&localClone->text, text, sizeof(StringCharacterIterator));
-        localClone->text = *(StringCharacterIterator*)text;
-        localIterator->text = &localClone->text;
-        localIterator->fBufferClone = TRUE;
+        localIterator->text = (CharacterIterator *)&localClone->text;
     } else {
         RuleBasedBreakIterator * localClone 
                 = (RuleBasedBreakIterator *)stackBuffer;
         localIterator = localClone;
         uprv_memcpy(localIterator, this, sizeof(RuleBasedBreakIterator));
-        localIterator->fBufferClone = TRUE;
     }
+ 
+    localIterator->fBufferClone = TRUE;
+ 
     return localIterator;    
 }
