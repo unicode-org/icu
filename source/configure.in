@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.96 2000/11/30 19:02:44 srl Exp $
+dnl $Id: configure.in,v 1.97 2000/12/01 18:50:37 srl Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -540,6 +540,17 @@ AC_ARG_ENABLE(extras,
 	extras=true)
 ICU_CONDITIONAL(EXTRAS, test "$extras" = true)
 
+dnl Enable/disable layout
+AC_ARG_ENABLE(layout,
+	[  --enable-layout         build ICU layout [default=no]],
+	[case "${enableval}" in
+		yes) layout=true ;;
+		no)  layout=false ;;
+		*) AC_MSG_ERROR(bad value ${enableval} for --enable-layout) ;;
+		esac], 
+	layout=false)
+ICU_CONDITIONAL(LAYOUT, test "$layout" = true)
+
 AC_ARG_WITH(data-packaging,
 	[  --with-data-packaging=type specify how to package ICU data (files, archive, library, auto) [default=auto]],
 	[case "${withval}" in
@@ -718,7 +729,7 @@ fi
 dnl output the Makefiles
 AC_OUTPUT([README icudefs.mk \
 		Makefile \
-		data/Makefile \
+		data/Makefile data/build/Makefile \
 		common/Makefile config/Makefile.inc i18n/Makefile \
 		layout/Makefile \
 		extra/Makefile extra/ustdio/Makefile \
