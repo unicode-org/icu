@@ -28,6 +28,7 @@
 #include <unistd.h>
 #endif
 #include "unicode/utypes.h"
+#include "unicode/putil.h"
 #include "unicode/udata.h"
 
 #define DATA_NAME "example"
