@@ -6,6 +6,7 @@
 
 #include "ustrtest.h"
 #include "unicode/unistr.h"
+#include "unicode/unicode.h"
 #include "unicode/locid.h"
 #include <stdio.h>
 

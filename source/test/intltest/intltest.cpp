@@ -21,6 +21,7 @@
 #include "unicode/coll.h"
 #include "unicode/smpdtfmt.h"
 #include "unicode/ustring.h"
+#include "unicode/ucnv.h"
 
 #include "intltest.h"
 #include "itmajor.h"
