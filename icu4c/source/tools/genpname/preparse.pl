@@ -32,6 +32,12 @@
 # exist in the UCD.  Therefore, I special case it in several places
 # (search for General_Category_Mask and gcm).
 #
+# NOTE: As of ICU 2.6, this script reads an auxiliary data file,
+# SyntheticPropertyAliases.txt, containing property aliases not
+# present in the UCD but present in ICU.  This file resides in the
+# same directory as this script.  Its contents are merged into those
+# of PropertyAliases.txt as if the two files were appended.
+#
 # Author: Alan Liu
 # Created: October 14 2002
 # Since: ICU 2.4
@@ -369,7 +375,9 @@ sub readAndMerge {
     my $h = read_uchar("$headerDir/uchar.h");
     my $s = read_uscript("$headerDir/uscript.h");
     my $b = read_Blocks("$unidataDir/Blocks.txt");
-    my $pa = read_PropertyAliases("$unidataDir/PropertyAliases.txt");
+    my $pa = {};
+    read_PropertyAliases($pa, "$unidataDir/PropertyAliases.txt");
+    read_PropertyAliases($pa, "SyntheticPropertyAliases.txt");
     my $va = read_PropertyValueAliases("$unidataDir/PropertyValueAliases.txt");
     
     # Extract property family hash
@@ -642,15 +650,17 @@ sub merge_PropertyValueAliases {
 # purposes.
 #
 # @param a filename for PropertyAliases.txt
-#
-# @return a hash reference.  Keys are long names.  Values are short names.
+# @param reference to hash to receive data.  Keys are long names.
+# Values are short names.
 sub read_PropertyAliases {
+
+    my $hash = shift;         # result
 
     my $filename = shift; 
 
-    my $hash = {};         # result
-
     my $fam = {};  # map long names to family string
+    $fam = $hash->{'_family'} if (exists $hash->{'_family'});
+
     my $family; # binary, enumerated, etc.
 
     my $in = new FileHandle($filename, 'r');
@@ -688,12 +698,7 @@ sub read_PropertyAliases {
 
     $in->close();
 
-    # Special case: gcm
-    $hash->{'General_Category_Mask'} = 'gcm';
-    $fam->{'General_Category_Mask'} = 'Bitmask';
-
     $hash->{'_family'} = $fam;
-    $hash;
 }
 
 #----------------------------------------------------------------------
