@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/RuleBasedCollator.java,v $
-* $Date: 2003/02/18 22:02:46 $
-* $Revision: 1.31 $
+* $Date: 2003/02/19 01:16:40 $
+* $Revision: 1.32 $
 *
 *******************************************************************************
 */
@@ -185,28 +185,7 @@ import com.ibm.icu.impl.ICUDebug;
  * @draft ICU 2.2
  */
 public final class RuleBasedCollator extends Collator
-{
-    // public inner classes --------------------------------------------------
-    
-    /** 
-     * Options for retrieving the rule string 
-     * @draft ICU 2.6
-     */
-    public static final class RuleOption 
-    {
-        /** 
-         * Retrieve tailoring only
-         * @draft ICU 2.6
-         */
-        public static final int TAILORING_ONLY = 0;
-        /** 
-         * Retrieve UCA rules and tailoring 
-         * @draft ICU 2.6
-         */
-        public static final int FULL_RULES = 1;
-    };
-    
-
+{   
     // public constructors ---------------------------------------------------
 
     /**
@@ -664,7 +643,7 @@ public final class RuleBasedCollator extends Collator
      * Gets the collation rules for this RuleBasedCollator.
      * Equivalent to String getRules(RuleOption.FULL_RULES).
      * @return returns the collation rules
-     * @see #getRules(int)
+     * @see #getRules(false)
      * @draft ICU 2.2
      */
     public String getRules()
@@ -673,17 +652,18 @@ public final class RuleBasedCollator extends Collator
     }
     
     /**
-     * Returns current rules. Delta defines whether full rules are returned or just the tailoring. 
-     * Returns number of UChars needed to store rules. If buffer is NULL or bufferLen is not enough 
-     * to store rules, will store up to available space.
-     * @param ruleoption one of RuleOption.TAILORING_ONLY, RuleOption.FULL_RULES. 
-     * @return current rules
+     * Returns current rules. The argument defines whether full rules 
+     * (UCA + tailored) rules are returned or just the tailoring. 
+     * @param fullrules true if the rules that defines the full set of 
+     *        collation order is required, otherwise false for returning only 
+     *        the tailored rules
+     * @return the current rules that defines this Collator.
      * @see #getRules
      * @draft ICU 2.6
      */
-    public String getRules(int ruleoption)
+    public String getRules(boolean fullrules)
     {
-        if (ruleoption == RuleOption.TAILORING_ONLY) {
+        if (!fullrules) {
             return m_rules_;
         }
         // take the UCA rules and append real rules at the end 
