@@ -266,6 +266,7 @@ UResourceDataEntry *entryOpen(const char* path, const char* localeID, UErrorCode
     UResourceDataEntry *t1 = NULL;
     UResourceDataEntry *t2 = NULL;
     bool_t isDefault = FALSE;
+	bool_t isRoot = FALSE;
     bool_t hasRealData = FALSE;
     bool_t hasChopped = FALSE;
     char name[96];
@@ -281,12 +282,13 @@ UResourceDataEntry *entryOpen(const char* path, const char* localeID, UErrorCode
     uprv_strcpy(name, r->fName);
     hasRealData = (r->fBogus == U_ZERO_ERROR);
     isDefault = (uprv_strcmp(name, uloc_getDefault()) == 0);
+	isRoot = (uprv_strcmp(name, kRootLocaleName) == 0);
 
     /*Fallback data stuff*/
     hasChopped = chopLocale(name);
     t1 = r;
 
-    while (hasChopped && t1->fParent == NULL) {
+    while (hasChopped && !isRoot && t1->fParent == NULL) {
         /* insert regular parents */
         t2 = init_entry(name, r->fPath, status);
         hasRealData = (t2->fBogus == U_ZERO_ERROR) | hasRealData;
@@ -295,7 +297,7 @@ UResourceDataEntry *entryOpen(const char* path, const char* localeID, UErrorCode
         hasChopped = chopLocale(name);
     }
 
-    if(!hasRealData && !isDefault && t1->fParent == NULL) {
+    if(!hasRealData && !isDefault && !isRoot && t1->fParent == NULL) {
         /* insert default locale */
         uprv_strcpy(name, uloc_getDefault());
         t2 = init_entry(name, r->fPath, status);
@@ -315,7 +317,7 @@ UResourceDataEntry *entryOpen(const char* path, const char* localeID, UErrorCode
         }
     }
 
-    if(uprv_strcmp(t1->fName, kRootLocaleName) != 0 && t1->fParent == NULL) {
+    if(!isRoot && uprv_strcmp(t1->fName, kRootLocaleName) != 0 && t1->fParent == NULL) {
         /* insert root locale */
         t2 = init_entry(kRootLocaleName, r->fPath, status);
         hasRealData = (t2->fBogus == U_ZERO_ERROR) | hasRealData;
@@ -323,7 +325,7 @@ UResourceDataEntry *entryOpen(const char* path, const char* localeID, UErrorCode
         t1 = t2;
     }
 
-    while(t1->fParent != NULL) {
+    while(!isRoot && t1->fParent != NULL) {
         t1->fParent->fCountExisting++;
         t1 = t1->fParent;
         hasRealData = (t1->fBogus == U_ZERO_ERROR) | hasRealData;
