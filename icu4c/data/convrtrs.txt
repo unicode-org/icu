@@ -61,14 +61,14 @@ ibm-857                 # PC Latin 5 (w/o euro update)
 ibm-859                 ibm859 cp859            # PC Latin 9 (w/ euro update)
 ibm-860                 ibm860 cp860 860 csIBM860            # PC Portugal
 ibm-861                 ibm861 cp861 861 cp-is csIBM861           # PC Iceland
-ibm-867                 ibm867 cp867 IBM862 862 cp862 cspc862latinhebrew # PC Hebrew (w/ euro update) #where should the names go here or below - inconsistency!!!
-ibm-862                 # PC Hebrew (w/o euro update)
+ibm-867                 ibm867 cp867 862 cp862 cspc862latinhebrew # PC Hebrew (w/ euro update) #where should the names go here or below - inconsistency!!!
+ibm-862                 IBM862 # PC Hebrew (w/o euro update)
 ibm-863                 ibm863 cp863 863 csIBM863           # PC Canadian French
 ibm-17248               IBM864 cp864 csIBM864            # PC Arabic (w/ euro update) #where should the names go here or below - inconsistency!!!
 ibm-864                 # PC Arabic (w/o euro update)
 ibm-865                 ibm865 cp865 865 csIBM865            # PC Nordic
-ibm-808                 IBM866 cp866 866 csIBM866     # PC Russian (w/ euro update) #where should the names go here or below - inconsistency!!! put IBM866 cp866 866 csIBM866 down
-ibm-866                 # PC Russian (w/o euro update) added IBM866 cp866 866 csIBM866
+ibm-808                 cp866 866 csIBM866     # PC Russian (w/ euro update) #where should the names go here or below - inconsistency!!! put IBM866 cp866 866 csIBM866 down
+ibm-866                 IBM866 # PC Russian (w/o euro update) added IBM866 cp866 866 csIBM866
 ibm-868                 ibm868 cp868 cp-ar csIBM868            # PC Urdu
 ibm-9061                IBM869 869 cp-gr csIBM869 cp869            # PC Greek (w/ euro update)
 ibm-869                 # PC Greek (w/o euro update)
