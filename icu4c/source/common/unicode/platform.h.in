@@ -78,6 +78,11 @@
 #if HAVE_INTTYPES_H
 #include <inttypes.h>
 #else
+#include <sys/types.h>
+#if STDC_HEADERS
+#include <stdlib.h>
+#include <stddef.h>
+#endif
 
 #if ! HAVE_INT8_T
 typedef signed char int8_t;
