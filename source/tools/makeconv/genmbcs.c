@@ -106,7 +106,7 @@ MBCSOpen(uint8_t maxCharLength) {
     return &mbcsData->newConverter;
 }
 
-void
+static void
 MBCSClose(NewConverter *cnvData) {
     MBCSData *mbcsData=(MBCSData *)cnvData;
     if(mbcsData!=NULL) {
@@ -120,7 +120,7 @@ MBCSClose(NewConverter *cnvData) {
     }
 }
 
-const char *
+static const char *
 skipWhitespace(const char *s) {
     while(*s==' ' || *s=='\t') {
         ++s;
@@ -294,7 +294,7 @@ MBCSAddState(NewConverter *cnvData, const char *s) {
     return TRUE;
 }
 
-UBool
+static UBool
 MBCSProcessStates(NewConverter *cnvData) {
     MBCSData *mbcsData=(MBCSData *)cnvData;
     uint32_t sum, i;
@@ -496,7 +496,7 @@ removeFallback(MBCSData *mbcsData, uint32_t offset) {
  * 0 (FALSE) this is a precise mapping
  * -1        the precision of this mapping is not specified
  */
-UBool
+static UBool
 MBCSAddToUnicode(NewConverter *cnvData,
                  const uint8_t *bytes, int32_t length,
                  UChar32 c, uint32_t b,
@@ -645,7 +645,7 @@ MBCSAddToUnicode(NewConverter *cnvData,
     }
 }
 
-UBool
+static UBool
 MBCSAddFromUnicode(NewConverter *cnvData,
                    const uint8_t *bytes, int32_t length,
                    UChar32 c, uint32_t b,
@@ -791,7 +791,7 @@ MBCSTransformEUC(MBCSData *mbcsData) {
     return TRUE;
 }
 
-void
+static void
 MBCSPostprocess(NewConverter *cnvData, const UConverterStaticData *staticData) {
     MBCSData *mbcsData=(MBCSData *)cnvData;
     int32_t entry;
@@ -829,7 +829,7 @@ MBCSPostprocess(NewConverter *cnvData, const UConverterStaticData *staticData) {
     MBCSTransformEUC(mbcsData);
 }
 
-uint32_t
+static uint32_t
 MBCSWrite(NewConverter *cnvData, const UConverterStaticData *staticData, UNewDataMemory *pData) {
     MBCSData *mbcsData=(MBCSData *)cnvData;
     /* fill the header */

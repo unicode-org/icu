@@ -297,8 +297,8 @@ static UChar getNextChar(UFILE *f,
   }
 }
 
-void seekUntilNewline(UFILE *f,
-                      UErrorCode *status)
+static void seekUntilNewline(UFILE *f,
+                             UErrorCode *status)
 {
   UChar c;
 
@@ -314,8 +314,8 @@ void seekUntilNewline(UFILE *f,
     err = kItemNotFound;*/
 }
 
-void seekUntilEndOfComment(UFILE *f,
-                           UErrorCode *status)
+static void seekUntilEndOfComment(UFILE *f,
+                                  UErrorCode *status)
 {
   UChar c, d;
 
