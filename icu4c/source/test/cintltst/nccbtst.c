@@ -190,6 +190,22 @@ static void TestSkip(int32_t inputsize, int32_t outputsize)
         log_err("u-> ibm-930 with skip did not match.\n");
 
     {
+        static const UChar fromU[] = { 0x61, 0xff5e, 0x62, 0x6d63, 0xff5e, 0x6d64, 0x63, 0xff5e, 0x6d66 };
+        static const uint8_t fromUBytes[] = { 0x62, 0x63, 0x0e, 0x5d, 0x5f, 0x5d, 0x63, 0x0f, 0x64, 0x0e, 0x46, 0x6b };
+        static const int32_t fromUOffsets[] = { 0, 2, 3, 3, 3, 5, 5, 6, 6, 8, 8, 8 };
+
+        /* test ibm-930 (EBCDIC_STATEFUL) with fallbacks that are not taken to check correct state transitions */
+        if(!testConvertFromUnicode(fromU, sizeof(fromU)/U_SIZEOF_UCHAR,
+                                   fromUBytes, sizeof(fromUBytes),
+                                   "ibm-930",
+                                   UCNV_FROM_U_CALLBACK_SKIP, fromUOffsets,
+                                   NULL, 0)
+        ) {
+            log_err("u->ibm-930 with skip with untaken fallbacks did not match.\n");
+        }
+    }
+
+    {
         static const UChar usasciiFromU[] = { 0x61, 0x80, 0x4e00, 0x31, 0xd800, 0xdfff, 0x39 };
         static const uint8_t usasciiFromUBytes[] = { 0x61, 0x31, 0x39 };
         static const int32_t usasciiFromUOffsets[] = { 0, 3, 6 };
