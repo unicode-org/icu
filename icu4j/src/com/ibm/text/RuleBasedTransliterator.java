@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/RuleBasedTransliterator.java,v $ 
- * $Date: 2000/04/22 00:03:54 $ 
- * $Revision: 1.24 $
+ * $Date: 2000/04/22 00:08:43 $ 
+ * $Revision: 1.25 $
  *
  *****************************************************************************************
  */
@@ -274,7 +274,7 @@ import com.ibm.util.Utility;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.24 $ $Date: 2000/04/22 00:03:54 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.25 $ $Date: 2000/04/22 00:08:43 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
@@ -883,10 +883,10 @@ public class RuleBasedTransliterator extends Transliterator {
                         cursor = buf.length();
                         break;
                     default:
-                        // Disallow unquoted characters other than [0-9A-Za-z] in
-                        // the ASCII range.  These characters are reserved for
-                        // possible future use.
-                        if (c <= 0x007E &&
+                        // Disallow unquoted characters other than [0-9A-Za-z]
+                        // in the printable ASCII range.  These characters are
+                        // reserved for possible future use.
+                        if (c >= 0x0021 && c <= 0x007E &&
                             !((c >= '0' && c <= '9') ||
                               (c >= 'A' && c <= 'Z') ||
                               (c >= 'a' && c <= 'z'))) {
@@ -1285,6 +1285,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.25  2000/04/22 00:08:43  alan
+ * Narrow range to 21 - 7E for mandatory quoting.
+ *
  * Revision 1.24  2000/04/22 00:03:54  alan
  * Disallow unquoted special chars. Report multiple errors at once.
  *
