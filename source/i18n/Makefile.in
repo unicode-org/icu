@@ -93,7 +93,7 @@ install-library: all-local
 	$(INSTALL) $(TARGET) $(libdir)/$(TARGET)
 
 install-headers:
-	$(mkinstalldirs) $(includedir)
+	$(mkinstalldirs) $(includedir)/unicode
 	@list='$(HEADERS)'; for file in $$list; do \
 	 echo " $(INSTALL_DATA) $$file $(includedir)/$$file"; \
 	 $(INSTALL_DATA) $$file $(includedir)/$$file; \
