@@ -71,9 +71,9 @@ const Collator::EComparisonResult CollationKanaTest::results[] = {
     Collator::GREATER,
     Collator::EQUAL,
     Collator::LESS,
+    Collator::GREATER,
     Collator::LESS,
-    Collator::LESS,
-    Collator::LESS,
+    Collator::GREATER,
     Collator::LESS,
     Collator::LESS                                          // 11
 };
