@@ -24,22 +24,50 @@
 
 /**
  * MBCS action codes for conversions to Unicode.
- * These values are in bits 30..27 of the state table entries.
+ * These values are in bits 23..20 of the state table entries.
  */
 enum {
-    MBCS_STATE_ILLEGAL,
-    MBCS_STATE_CHANGE_ONLY,
-    MBCS_STATE_UNASSIGNED,
+    MBCS_STATE_VALID_DIRECT_16,
+    MBCS_STATE_VALID_DIRECT_20,
 
     MBCS_STATE_FALLBACK_DIRECT_16,
     MBCS_STATE_FALLBACK_DIRECT_20,
 
-    MBCS_STATE_VALID_DIRECT_16,
-    MBCS_STATE_VALID_DIRECT_20,
-
     MBCS_STATE_VALID_16,
-    MBCS_STATE_VALID_16_PAIR
+    MBCS_STATE_VALID_16_PAIR,
+
+    MBCS_STATE_UNASSIGNED,
+    MBCS_STATE_ILLEGAL,
+
+    MBCS_STATE_CHANGE_ONLY
 };
+
+/* Macros for state table entries */
+#define MBCS_ENTRY_TRANSITION(state, offset) (int32_t)(((int32_t)(state)<<24L)|(offset))
+#define MBCS_ENTRY_TRANSITION_SET_OFFSET(entry, offset) (int32_t)(((entry)&0xff000000)|(offset))
+#define MBCS_ENTRY_TRANSITION_ADD_OFFSET(entry, offset) (int32_t)((entry)+(offset))
+
+#define MBCS_ENTRY_FINAL(state, action, value) (int32_t)(0x80000000|((int32_t)(state)<<24L)|((action)<<20L)|(value))
+#define MBCS_ENTRY_SET_FINAL(entry) (int32_t)((entry)|0x80000000)
+#define MBCS_ENTRY_FINAL_SET_ACTION(entry, action) (int32_t)(((entry)&0xff0fffff)|((int32_t)(action)<<20L))
+#define MBCS_ENTRY_FINAL_SET_VALUE(entry, value) (int32_t)(((entry)&0xfff00000)|(value))
+#define MBCS_ENTRY_FINAL_SET_ACTION_VALUE(entry, action, value) (int32_t)(((entry)&0xff000000)|((int32_t)(action)<<20L)|(value))
+
+#define MBCS_ENTRY_SET_STATE(entry, state) (int32_t)(((entry)&0x80ffffff)|((int32_t)(state)<<24L))
+
+#define MBCS_ENTRY_STATE(entry) (((entry)>>24)&0x7f)
+
+#define MBCS_ENTRY_IS_TRANSITION(entry) ((entry)>=0)
+#define MBCS_ENTRY_IS_FINAL(entry) ((entry)<0)
+
+#define MBCS_ENTRY_TRANSITION_STATE(entry) ((entry)>>24)
+#define MBCS_ENTRY_TRANSITION_OFFSET(entry) ((entry)&0xffffff)
+
+#define MBCS_ENTRY_FINAL_STATE(entry) (((entry)>>24)&0x7f)
+#define MBCS_ENTRY_FINAL_IS_VALID_DIRECT_16(entry) ((entry)<(int32_t)0x80100000)
+#define MBCS_ENTRY_FINAL_ACTION(entry) (((entry)>>20)&0xf)
+#define MBCS_ENTRY_FINAL_VALUE(entry) ((entry)&0xfffff)
+#define MBCS_ENTRY_FINAL_VALUE_16(entry) (uint16_t)(entry)
 
 /**
  * MBCS output types for conversions from Unicode.
@@ -86,10 +114,6 @@ typedef struct UConverterMBCSTable {
     const uint8_t *fromUnicodeBytes;
     uint8_t outputType, unicodeMask;
 } UConverterMBCSTable;
-
-enum {
-    MBCS_STAGE_2_MULTIPLIER=4
-};
 
 /**
  * MBCS data structure as part of a .cnv file:
@@ -163,7 +187,7 @@ _MBCSSingleSimpleGetNextUChar(UConverterSharedData *sharedData,
  * returns fallback values.
  */
 #define _MBCS_SINGLE_SIMPLE_GET_NEXT_BMP(sharedData, b) \
-    (UChar)(((sharedData)->table->mbcs.stateTable[0][(uint8_t)(b)])>>7)
+    (UChar)MBCS_ENTRY_FINAL_VALUE_16((sharedData)->table->mbcs.stateTable[0][(uint8_t)(b)])
 
 /**
  * This is an internal function that allows other converter implementations
@@ -174,7 +198,7 @@ _MBCSIsLeadByte(UConverterSharedData *sharedData, char byte);
 
 /** This is a macro version of _MBCSIsLeadByte(). */
 #define _MBCS_IS_LEAD_BYTE(sharedData, byte) \
-    (UBool)((sharedData)->table->mbcs.stateTable[0][(uint8_t)(byte)]>=0)
+    (UBool)MBCS_ENTRY_IS_TRANSITION((sharedData)->table->mbcs.stateTable[0][(uint8_t)(byte)])
 
 /**
  * This is another simple conversion function for internal use by other
