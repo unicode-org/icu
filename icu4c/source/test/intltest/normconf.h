@@ -86,11 +86,10 @@ class NormalizerConformanceTest : public IntlTest {
      * @param buf scratch buffer
      * @return FALSE upon failure
      */
-    UBool hexsplit(const UnicodeString& s, UChar delimiter,
-                   UnicodeString* output, int32_t outputLength,
-                   UnicodeString& buf);
+    UBool hexsplit(const char *s, char delimiter,
+                   UnicodeString output[], int32_t outputLength);
 
-    void _testOneLine(const UnicodeString& line);
+    void _testOneLine(const char *line);
 };
 
 #endif
