@@ -45,6 +45,7 @@
 #define T_FileStream_putc T_FileStream_putc_2_4
 #define T_FileStream_read T_FileStream_read_2_4
 #define T_FileStream_readLine T_FileStream_readLine_2_4
+#define T_FileStream_remove T_FileStream_remove_2_4
 #define T_FileStream_rewind T_FileStream_rewind_2_4
 #define T_FileStream_setError T_FileStream_setError_2_4
 #define T_FileStream_size T_FileStream_size_2_4
@@ -52,7 +53,6 @@
 #define T_FileStream_stdin T_FileStream_stdin_2_4
 #define T_FileStream_stdout T_FileStream_stdout_2_4
 #define T_FileStream_ungetc T_FileStream_ungetc_2_4
-#define T_FileStream_wopen T_FileStream_wopen_2_4
 #define T_FileStream_write T_FileStream_write_2_4
 #define T_FileStream_writeLine T_FileStream_writeLine_2_4
 #define T_UConverter_fromUnicode_UTF8 T_UConverter_fromUnicode_UTF8_2_4
@@ -78,6 +78,7 @@
 #define _Bocu1Data _Bocu1Data_2_4
 #define _CESU8Data _CESU8Data_2_4
 #define _HZData _HZData_2_4
+#define _IMAPData _IMAPData_2_4
 #define _ISCIIData _ISCIIData_2_4
 #define _ISO2022CNData _ISO2022CNData_2_4
 #define _ISO2022Data _ISO2022Data_2_4
@@ -102,8 +103,6 @@
 #define _MBCSGetType _MBCSGetType_2_4
 #define _MBCSIsLeadByte _MBCSIsLeadByte_2_4
 #define _MBCSSimpleGetNextUChar _MBCSSimpleGetNextUChar_2_4
-#define _MBCSSingleFromUChar32 _MBCSSingleFromUChar32_2_4
-#define _MBCSSingleSimpleGetNextUChar _MBCSSingleSimpleGetNextUChar_2_4
 #define _MBCSToUnicodeWithOffsets _MBCSToUnicodeWithOffsets_2_4
 #define _SCSUData _SCSUData_2_4
 #define _UTF16BEData _UTF16BEData_2_4
@@ -117,12 +116,17 @@
 #define __divdi3 __divdi3_2_4
 #define __moddi3 __moddi3_2_4
 #define __pure_virtual __pure_virtual_2_4
+#define breakiterator_cleanup breakiterator_cleanup_2_4
+#define cacheDeleter cacheDeleter_2_4
+#define deleteStringPair deleteStringPair_2_4
+#define deleteUObject deleteUObject_2_4
 #define gLocaleCache gLocaleCache_2_4
 #define locale_cleanup locale_cleanup_2_4
 #define locale_get_default locale_get_default_2_4
 #define locale_set_default locale_set_default_2_4
 #define pname_cleanup pname_cleanup_2_4
 #define putil_cleanup putil_cleanup_2_4
+#define regex_cleanup regex_cleanup_2_4
 #define res_countArrayItems res_countArrayItems_2_4
 #define res_findResource res_findResource_2_4
 #define res_getAlias res_getAlias_2_4
@@ -136,6 +140,7 @@
 #define res_getTableSize res_getTableSize_2_4
 #define res_load res_load_2_4
 #define res_unload res_unload_2_4
+#define service_cleanup service_cleanup_2_4
 #define timeZone_cleanup timeZone_cleanup_2_4
 #define transliterator_cleanup transliterator_cleanup_2_4
 #define u_UCharsToChars u_UCharsToChars_2_4
@@ -476,6 +481,7 @@
 #define ucal_inDaylightTime ucal_inDaylightTime_2_4
 #define ucal_isSet ucal_isSet_2_4
 #define ucal_open ucal_open_2_4
+#define ucal_openTimeZoneEnumeration ucal_openTimeZoneEnumeration_2_4
 #define ucal_roll ucal_roll_2_4
 #define ucal_set ucal_set_2_4
 #define ucal_setAttribute ucal_setAttribute_2_4
@@ -483,6 +489,7 @@
 #define ucal_setDateTime ucal_setDateTime_2_4
 #define ucal_setMillis ucal_setMillis_2_4
 #define ucal_setTimeZone ucal_setTimeZone_2_4
+#define uchar_addPropertyStarts uchar_addPropertyStarts_2_4
 #define uchar_cleanup uchar_cleanup_2_4
 #define ucln_i18n_registerCleanup ucln_i18n_registerCleanup_2_4
 #define ucln_registerCleanup ucln_registerCleanup_2_4
@@ -560,7 +567,6 @@
 #define ucnv_io_countAvailableAliases ucnv_io_countAvailableAliases_2_4
 #define ucnv_io_countAvailableConverters ucnv_io_countAvailableConverters_2_4
 #define ucnv_io_countStandards ucnv_io_countStandards_2_4
-#define ucnv_io_fillAvailableConverters ucnv_io_fillAvailableConverters_2_4
 #define ucnv_io_flushAvailableConverterCache ucnv_io_flushAvailableConverterCache_2_4
 #define ucnv_io_getAlias ucnv_io_getAlias_2_4
 #define ucnv_io_getAliases ucnv_io_getAliases_2_4
@@ -701,6 +707,7 @@
 #define uenum_count uenum_count_2_4
 #define uenum_next uenum_next_2_4
 #define uenum_nextDefault uenum_nextDefault_2_4
+#define uenum_openStringEnumeration uenum_openStringEnumeration_2_4
 #define uenum_reset uenum_reset_2_4
 #define uenum_unext uenum_unext_2_4
 #define uenum_unextDefault uenum_unextDefault_2_4
@@ -798,6 +805,7 @@
 #define umtx_lock umtx_lock_2_4
 #define umtx_unlock umtx_unlock_2_4
 #define unames_cleanup unames_cleanup_2_4
+#define unorm_addPropertyStarts unorm_addPropertyStarts_2_4
 #define unorm_cleanup unorm_cleanup_2_4
 #define unorm_cmpEquivFold unorm_cmpEquivFold_2_4
 #define unorm_compare unorm_compare_2_4
@@ -811,6 +819,7 @@
 #define unorm_internalIsFullCompositionExclusion unorm_internalIsFullCompositionExclusion_2_4
 #define unorm_internalNormalize unorm_internalNormalize_2_4
 #define unorm_isCanonSafeStart unorm_isCanonSafeStart_2_4
+#define unorm_isNFSkippable unorm_isNFSkippable_2_4
 #define unorm_isNormalized unorm_isNormalized_2_4
 #define unorm_next unorm_next_2_4
 #define unorm_normalize unorm_normalize_2_4
@@ -850,7 +859,6 @@
 #define uprv_cnttab_open uprv_cnttab_open_2_4
 #define uprv_cnttab_setContraction uprv_cnttab_setContraction_2_4
 #define uprv_comparePropertyNames uprv_comparePropertyNames_2_4
-#define uprv_computeDirPath uprv_computeDirPath_2_4
 #define uprv_defaultCodePageForLocale uprv_defaultCodePageForLocale_2_4
 #define uprv_digitsAfterDecimal uprv_digitsAfterDecimal_2_4
 #define uprv_dtostr uprv_dtostr_2_4
@@ -863,27 +871,9 @@
 #define uprv_getCharNameCharacters uprv_getCharNameCharacters_2_4
 #define uprv_getDefaultCodepage uprv_getDefaultCodepage_2_4
 #define uprv_getDefaultLocaleID uprv_getDefaultLocaleID_2_4
-
-#if 0
-/* 
-Currently not used but left for future use. Probably by UnicodeSet. 
-uprops.h and unames.c changed accordingly. 
-*/
-#define uprv_getISOCommentCharacters uprv_getISOCommentCharacters_2_4
-#endif
-
 #define uprv_getInclusions uprv_getInclusions_2_4
 #define uprv_getInfinity uprv_getInfinity_2_4
 #define uprv_getMaxCharNameLength uprv_getMaxCharNameLength_2_4
-
-#if 0
-/* 
-Currently not used but left for future use. Probably by UnicodeSet. 
-uprops.h and unames.c changed accordingly. 
-*/
-#define uprv_getMaxISOCommentLength uprv_getMaxISOCommentLength_2_4
-#endif
-
 #define uprv_getMaxValues uprv_getMaxValues_2_4
 #define uprv_getNaN uprv_getNaN_2_4
 #define uprv_getUTCtime uprv_getUTCtime_2_4
@@ -922,6 +912,7 @@ uprops.h and unames.c changed accordingly.
 #define uprv_mstrm_writePadding uprv_mstrm_writePadding_2_4
 #define uprv_mstrm_writeString uprv_mstrm_writeString_2_4
 #define uprv_mstrm_writeUString uprv_mstrm_writeUString_2_4
+#define uprv_openRuleWhiteSpaceSet uprv_openRuleWhiteSpaceSet_2_4
 #define uprv_pow uprv_pow_2_4
 #define uprv_pow10 uprv_pow10_2_4
 #define uprv_realloc uprv_realloc_2_4
@@ -1123,6 +1114,7 @@ uprops.h and unames.c changed accordingly.
 #define DigitList DigitList_2_4
 #define Entry Entry_2_4
 #define EscapeTransliterator EscapeTransliterator_2_4
+#define EventListener EventListener_2_4
 #define FeatureListTable FeatureListTable_2_4
 #define FieldPosition FieldPosition_2_4
 #define Format Format_2_4
@@ -1145,7 +1137,15 @@ uprops.h and unames.c changed accordingly.
 #define GregorianCalendar GregorianCalendar_2_4
 #define HebrewShaping HebrewShaping_2_4
 #define HexToUnicodeTransliterator HexToUnicodeTransliterator_2_4
+#define ICUBreakIteratorFactory ICUBreakIteratorFactory_2_4
+#define ICUBreakIteratorService ICUBreakIteratorService_2_4
 #define ICULayoutEngine ICULayoutEngine_2_4
+#define ICULocaleService ICULocaleService_2_4
+#define ICUNotifier ICUNotifier_2_4
+#define ICUResourceBundleFactory ICUResourceBundleFactory_2_4
+#define ICUService ICUService_2_4
+#define ICUServiceFactory ICUServiceFactory_2_4
+#define ICUServiceKey ICUServiceKey_2_4
 #define ICU_Utility ICU_Utility_2_4
 #define IndicClassTable IndicClassTable_2_4
 #define IndicOpenTypeLayoutEngine IndicOpenTypeLayoutEngine_2_4
@@ -1158,6 +1158,9 @@ uprops.h and unames.c changed accordingly.
 #define LigatureSubstitutionProcessor LigatureSubstitutionProcessor_2_4
 #define LigatureSubstitutionSubtable LigatureSubstitutionSubtable_2_4
 #define Locale Locale_2_4
+#define LocaleKey LocaleKey_2_4
+#define LocaleKeyFactory LocaleKeyFactory_2_4
+#define LocaleUtility LocaleUtility_2_4
 #define LookupListTable LookupListTable_2_4
 #define LookupProcessor LookupProcessor_2_4
 #define LookupSubtable LookupSubtable_2_4
@@ -1222,9 +1225,13 @@ uprops.h and unames.c changed accordingly.
 #define SearchIterator SearchIterator_2_4
 #define SegmentArrayProcessor SegmentArrayProcessor_2_4
 #define SegmentSingleProcessor SegmentSingleProcessor_2_4
+#define ServiceEnumeration ServiceEnumeration_2_4
+#define ServiceListener ServiceListener_2_4
 #define Shaper Shaper_2_4
 #define SimpleArrayProcessor SimpleArrayProcessor_2_4
 #define SimpleDateFormat SimpleDateFormat_2_4
+#define SimpleFactory SimpleFactory_2_4
+#define SimpleLocaleKeyFactory SimpleLocaleKeyFactory_2_4
 #define SimpleTimeZone SimpleTimeZone_2_4
 #define SinglePositioningFormat1Subtable SinglePositioningFormat1Subtable_2_4
 #define SinglePositioningFormat2Subtable SinglePositioningFormat2Subtable_2_4
@@ -1236,12 +1243,15 @@ uprops.h and unames.c changed accordingly.
 #define Spec Spec_2_4
 #define StateTableProcessor StateTableProcessor_2_4
 #define StringCharacterIterator StringCharacterIterator_2_4
+#define StringEnumeration StringEnumeration_2_4
 #define StringMatcher StringMatcher_2_4
+#define StringPair StringPair_2_4
 #define StringReplacer StringReplacer_2_4
 #define StringSearch StringSearch_2_4
 #define SubstitutionLookup SubstitutionLookup_2_4
 #define SubtableProcessor SubtableProcessor_2_4
 #define SymbolTable SymbolTable_2_4
+#define TZEnumeration TZEnumeration_2_4
 #define ThaiLayoutEngine ThaiLayoutEngine_2_4
 #define ThaiMarkFilter ThaiMarkFilter_2_4
 #define ThaiShaping ThaiShaping_2_4
@@ -1271,7 +1281,6 @@ uprops.h and unames.c changed accordingly.
 #define UnicodeNameTransliterator UnicodeNameTransliterator_2_4
 #define UnicodeNotFilter UnicodeNotFilter_2_4
 #define UnicodeOrFilter UnicodeOrFilter_2_4
-#define UnicodePropertySet UnicodePropertySet_2_4
 #define UnicodeReplacer UnicodeReplacer_2_4
 #define UnicodeSet UnicodeSet_2_4
 #define UnicodeSetIterator UnicodeSetIterator_2_4
