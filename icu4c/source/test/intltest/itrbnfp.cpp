@@ -145,7 +145,7 @@ IntlTestRBNFParse::TestParse() {
 void
 IntlTestRBNFParse::testfmt(RuleBasedNumberFormat* formatter, double val, UErrorCode& status) {
     UnicodeString us;
-    formatter->format(val, us, status);
+    formatter->format((const Formattable)val, us, status);
     if (U_SUCCESS(status)) {
         us.insert(0, (UChar)'"');
         us.append((UChar)'"');
@@ -158,7 +158,7 @@ IntlTestRBNFParse::testfmt(RuleBasedNumberFormat* formatter, double val, UErrorC
 void
 IntlTestRBNFParse::testfmt(RuleBasedNumberFormat* formatter, int val, UErrorCode& status) {
     UnicodeString us;
-    formatter->format((int32_t)val, us, status);
+    formatter->format((const Formattable)(int32_t)val, us, status);
     if (U_SUCCESS(status)) {
         us.insert(0, (UChar)'"');
         us.append((UChar)'"');
