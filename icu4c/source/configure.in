@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.142 2001/11/30 01:02:03 grhoten-oss Exp $
+dnl $Id: configure.in,v 1.143 2001/11/30 17:38:56 grhoten-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -100,11 +100,15 @@ AC_CACHE_CHECK([for 64-bit executable support], ac_cv_64bit_ok,
     else
         case "${host}" in
         *-*-solaris*)
-            SOL64=`$CXX -xarch=v9 2>&1 && $CC -xarch=v9 2>&1 | grep 'xarch=v9'`
-            SPARCV9=`isainfo -n 2>&1 | grep sparcv9`
-            if test -z "$SOL64" && test -n "$SPARCV9"; then
-                CPPFLAGS="${CPPFLAGS} -xtarget=ultra -xarch=v9"
-                ENABLE_64BIT_LIBS=yes
+            if test "$ac_cv_prog_gcc" = no; then
+                SOL64=`$CXX -xarch=v9 2>&1 && $CC -xarch=v9 2>&1 | grep -v usage:`
+                SPARCV9=`isainfo -n 2>&1 | grep sparcv9`
+                if test -z "$SOL64" && test -n "$SPARCV9"; then
+                    CPPFLAGS="${CPPFLAGS} -xtarget=ultra -xarch=v9"
+                    ENABLE_64BIT_LIBS=yes
+                else
+                    ENABLE_64BIT_LIBS=no
+                fi
             else
                 ENABLE_64BIT_LIBS=no
             fi
