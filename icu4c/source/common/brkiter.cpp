@@ -27,6 +27,8 @@
 #include "unicode/udata.h"
 #include "unicode/resbund.h"
 #include "cstring.h"
+#include "mutex.h"
+#include "iculserv.h"
 
 // *****************************************************************************
 // class BreakIterator
@@ -258,18 +260,6 @@ BreakIterator::makeTitleInstance(const Locale& /* key */, UErrorCode& status)
 
 // -------------------------------------
 
-BreakIterator*
-BreakIterator::createInstance(const Locale& loc, UBreakType kind, UErrorCode& status)
-{
-  if (fgService != NULL) {
-    return (BreakIterator*)fgService->get(loc, kind, status);
-  } else {
-    return makeInstance(loc, kind, status);
-  }
-}
-
-// -------------------------------------
-
 // Gets all the available locales that has localized text boundary data.
 const Locale*
 BreakIterator::getAvailableLocales(int32_t& count)
@@ -317,45 +307,9 @@ BreakIterator::~BreakIterator()
 //
 //-------------------------------------------
 
-const UObject* 
-BreakIterator::registerBreak(BreakIterator* toAdopt, const Locale& locale, UBreakType kind, UErrorCode& status) 
-{
-  return getService()->registerObject(toAdopt, locale, kind, status);
-}
+static ICULocaleService* gService = NULL;
 
-UBool 
-BreakIterator::unregisterBreak(const UObject* key, UErrorCode& status) 
-{
-  if (fgService != NULL) {
-    return fgService->unregisterFactory((Factory*)key, status);
-  }
-  return FALSE;
-}
-
-StringEnumeration* 
-BreakIterator::getAvailableLocales(void)
-{
-	return getService()->getAvailableLocales();
-}
-
-BreakIterator* 
-BreakIterator::makeInstance(const Locale& loc, int32_t kind, UErrorCode& status)
-{
-    switch (kind) {
-    case BREAK_CHARACTER: return BreakIterator::makeCharacterInstance(loc, status);
-    case BREAK_WORD: return BreakIterator::makeWordInstance(loc, status);
-    case BREAK_LINE: return BreakIterator::makeLineInstance(loc, status);
-    case BREAK_SENTENCE: return BreakIterator::makeSentenceInstance(loc, status);
-    case BREAK_TITLE: return BreakIterator::makeTitleInstance(loc, status);
-    default:
-      status = U_ILLEGAL_ARGUMENT_ERROR;
-      return NULL;
-    }
-}
-
-UMTX BreakIterator::fgLock = 0;
-
-ICULocaleService* BreakIterator::fgService = NULL;
+// -------------------------------------
 
 class ICUBreakIteratorFactory : public ICUResourceBundleFactory {
 protected:
@@ -363,6 +317,8 @@ protected:
     return BreakIterator::makeInstance(loc, kind, status);
   }
 };
+
+// -------------------------------------
 
 class ICUBreakIteratorService : public ICULocaleService {
 public:
@@ -390,19 +346,96 @@ public:
   }
 };
 
-ICULocaleService*
-BreakIterator::getService() 
+// -------------------------------------
+
+static UMTX gLock = 0;
+
+static ICULocaleService* 
+getService(void)
 {
-  if (fgService == NULL) {
-    Mutex mutex(&fgLock);
-    if (fgService == NULL) {
-      fgService = new ICUBreakIteratorService();
+  if (gService == NULL) {
+    Mutex mutex(&gLock);
+    if (gService == NULL) {
+      gService = new ICUBreakIteratorService();
     }
   }
-  return fgService;
+  return gService;
+}
+
+// -------------------------------------
+
+BreakIterator*
+BreakIterator::createInstance(const Locale& loc, UBreakType kind, UErrorCode& status)
+{
+  if (gService != NULL) {
+    return (BreakIterator*)gService->get(loc, kind, status);
+  } else {
+    return makeInstance(loc, kind, status);
+  }
+}
+
+// -------------------------------------
+
+const UObject* 
+BreakIterator::registerBreak(BreakIterator* toAdopt, const Locale& locale, UBreakType kind, UErrorCode& status) 
+{
+  return getService()->registerObject(toAdopt, locale, kind, status);
+}
+
+// -------------------------------------
+
+UBool 
+BreakIterator::unregisterBreak(const UObject* key, UErrorCode& status) 
+{
+  if (gService != NULL) {
+    return gService->unregisterFactory((Factory*)key, status);
+  }
+  return FALSE;
+}
+
+// -------------------------------------
+
+StringEnumeration* 
+BreakIterator::getAvailableLocales(void)
+{
+	return getService()->getAvailableLocales();
+}
+
+// -------------------------------------
+
+BreakIterator* 
+BreakIterator::makeInstance(const Locale& loc, int32_t kind, UErrorCode& status)
+{
+    switch (kind) {
+    case BREAK_CHARACTER: return BreakIterator::makeCharacterInstance(loc, status);
+    case BREAK_WORD: return BreakIterator::makeWordInstance(loc, status);
+    case BREAK_LINE: return BreakIterator::makeLineInstance(loc, status);
+    case BREAK_SENTENCE: return BreakIterator::makeSentenceInstance(loc, status);
+    case BREAK_TITLE: return BreakIterator::makeTitleInstance(loc, status);
+    default:
+      status = U_ILLEGAL_ARGUMENT_ERROR;
+      return NULL;
+    }
 }
 
 U_NAMESPACE_END
+
+// defined in ucln_cmn.h
+
+/**
+ * Release all static memory held by breakiterator.  
+ */
+U_CFUNC UBool breakiterator_cleanup(void) {
+  {
+    Mutex mutex(&gLock);
+    if (gService) {
+        delete gService;
+        gService = NULL;
+    }
+  }
+  umtx_destroy(&gLock);
+  return TRUE;
+}
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
 

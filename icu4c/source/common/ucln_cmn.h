@@ -35,6 +35,8 @@ U_CFUNC UBool uloc_cleanup(void);
 
 U_CFUNC UBool ustring_cleanup(void);
 
+U_CFUNC UBool breakiterator_cleanup(void);
+
 #ifdef ICU_UNICODECONVERTER_USE_DEPRECATES
 /* @deprecated this functionality is going away */
 /* @return true if cleanup complete successfully*/
