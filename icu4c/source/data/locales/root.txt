@@ -402,7 +402,7 @@ root {
         afa { "Afro-Asiatic (Other)" }
         afh { "Afrihili" }
         ak  { "Akan" }
-        akk { "Akkadien" }
+        akk { "Akkadian" }
         ale { "Aleut" }
         alg { "Algonquian Languages" }
         am  { "Amharic" }
