@@ -34,7 +34,8 @@ static int32_t getInt(UnicodeString str)
 		alias++;
 	}
 	*alias='\0';
-	return atoi(buffer);
+    int32_t result = atoi(buffer);
+	return result;
 }
 
 //---------------------------------------------

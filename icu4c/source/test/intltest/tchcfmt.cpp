@@ -10,7 +10,7 @@
 
 #include "intltest.h"
 #include "tchcfmt.h"
-
+#include "cmemory.h"
 #include "unicode/msgfmt.h"
 #include "unicode/choicfmt.h"
 
@@ -56,8 +56,8 @@ TestChoiceFormat::TestSimpleExample( void )
     //Testing ==operator
     const double filelimits[] = {0,1,2};
     const UnicodeString filepart[] = {"are no files","is one file","are {2} files"};
-    ChoiceFormat* formnew=new ChoiceFormat(filelimits, filepart, 3);
-    ChoiceFormat* formequal=new ChoiceFormat(limits, monthNames, 7);
+    ChoiceFormat* formnew=new ChoiceFormat(filelimits, filepart, 3); 
+    ChoiceFormat* formequal=new ChoiceFormat(limits, monthNames, 7); 
     if(*formnew == *form){
         errln("ERROR: ==operator failed\n");
     }
@@ -67,10 +67,18 @@ TestChoiceFormat::TestSimpleExample( void )
     delete formequal; 
     
     //Testing adoptChoices() 
-    formnew->adoptChoices(limits, monthNames, 7);
+    double *limitsToAdopt = new double[7];
+    UnicodeString *monthNamesToAdopt = new UnicodeString[7];
+
+    uprv_arrayCopy(monthNames, monthNamesToAdopt, 7);
+    uprv_memcpy(limitsToAdopt, limits, (size_t)(7 * sizeof(limits[0])));    
+
+    formnew->adoptChoices(limitsToAdopt, monthNamesToAdopt, 7);
     if(!(*formnew == *form)){
         errln("ERROR: ==Operator or adoptChoices failed\n");
     }
+
+    delete formnew; 
       
     //Testing getLimits()
     double *gotLimits=0;
@@ -171,7 +179,15 @@ TestChoiceFormat::TestComplexExample( void )
         "There are 3 files on Disk_A"
     };
 
-    if (status != U_ZERO_ERROR) return;
+    // if (status != U_ZERO_ERROR) return; // TODO: analyze why we have such a bad bail out here!
+
+    if (U_FAILURE(status)) { 
+        delete fileform;
+        delete filenumform;
+        delete pattform;
+        return;
+    }
+
 
     int32_t i;
     for (i = 0; i < 4; ++i) {

@@ -645,6 +645,7 @@ void TimeZoneRegressionTest:: Test4154542()
         }            
         delete temp;
     }
+    delete zone;
 }
 
 

@@ -78,7 +78,6 @@ void CharIterTest::TestConstructionAndEquality() {
     if (*test1 != *test3 || *test1 == *test5)
         errln("operator= failed");
 
-    delete test1;
     delete test2;
     delete test3;
     delete test4;
@@ -110,6 +109,7 @@ void CharIterTest::TestConstructionAndEquality() {
     delete testChar1;
     delete testChar2;
     delete testChar3;
+    delete test1;
 
 }
 void CharIterTest::TestConstructionAndEqualityUChariter() {

@@ -336,7 +336,7 @@ void RBBITest::TestDefaultRuleBasedSentenceIteration()
       sentdata->addElement("Testing the sentence iterator. ");
       sentdata->addElement("\"This isn\'t it.\" ");
       sentdata->addElement("Hi! ");
-	  sentdata = new Vector();
+	  //sentdata = new Vector();
       sentdata->addElement("This is a simple sample sentence. ");
       sentdata->addElement("(This is it.) ");
       sentdata->addElement("This is a simple sample sentence. ");
@@ -1006,6 +1006,10 @@ void RBBITest::generalIteratorTest(RuleBasedBreakIterator& bi, Vector* expectedR
         testIsBoundary(bi, text, boundaries);
 
         doMultipleSelectionTest(bi, text);
+        
+        delete[] boundaries;
+        delete nextResults;
+        delete previousResults;
 }
 
 Vector* RBBITest::testFirstAndNext(RuleBasedBreakIterator& bi, UnicodeString& text) 
@@ -1217,7 +1221,7 @@ void RBBITest::doMultipleSelectionTest(RuleBasedBreakIterator& iterator,
         }
     } while (offset != RuleBasedBreakIterator::DONE);
 
-    //delete testIterator;
+    delete testIterator;
 }
 
 

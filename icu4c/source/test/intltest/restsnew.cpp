@@ -290,6 +290,8 @@ NewResourceBundleTest::TestConstruction()
 
         if (strcmp(version1, versionID1) != 0 || strcmp(version2, versionID2) != 0)
             errln("getVersionNumber() failed");
+        delete[] versionID1;
+        delete[] versionID2;
     }
     {
         UErrorCode   err = U_ZERO_ERROR;
@@ -319,6 +321,8 @@ NewResourceBundleTest::TestConstruction()
 
         if (result2 != "TE_IN")
             errln("Construction test failed; run verbose for more information");
+
+        delete[] wideDirectory;
     }
 }
 void
@@ -428,6 +432,7 @@ NewResourceBundleTest::TestIteration()
 		
 	
 	}
+    delete locale;
 }
              
 		    

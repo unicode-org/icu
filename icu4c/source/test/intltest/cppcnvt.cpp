@@ -525,12 +525,12 @@ void ConvertTest::TestConvert()
 
     fclose(ucs_file_in);    
     delete myConverter;
-#ifndef WIN32
+//#ifndef WIN32
     delete uniString;
     delete uniString2;
     delete uniString3;
     delete testUnistr;
-#endif
+//#endif
   
     }
 }

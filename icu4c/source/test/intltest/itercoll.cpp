@@ -440,6 +440,8 @@ void CollationIteratorTest::verifyExpansion(UnicodeString rules, ExpansionRecord
             errln(msg1 + expect + msg2 + expansion);
         }
     }
+    delete iter;
+    delete coll;
 }
 
 /**

@@ -813,7 +813,7 @@ DateFormatTest::TestDateFormatZone146()
             // java.util.Locale.setDefault(new java.util.Locale("ar", "", ""));
 
             // check to be sure... its GMT all right
-TimeZone *testdefault = TimeZone::createDefault();
+        TimeZone *testdefault = TimeZone::createDefault();
         UnicodeString testtimezone;
         testdefault->getID(testtimezone);
         if (testtimezone == "GMT")
@@ -856,11 +856,15 @@ TimeZone *testdefault = TimeZone::createDefault();
             logln(DATA[i] + result);
             if (result != DATA[i+1]) 
                 errln("FAIL: Expected " + DATA[i+1] + ", got " + result);
+            delete fmt;
         }
     //}
     //finally {
         TimeZone::adoptDefault(saveDefault);
     //}
+        delete testdefault;
+        delete greenwichcalendar;
+        delete thedefault;
 
 
 }
