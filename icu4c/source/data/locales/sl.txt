@@ -3,11 +3,11 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main\sl.xml
+// * Source File: ../../../locale/common/main/sl.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: ../../../locale/icu/main\sl.xml
+ *  ICU <specials> source: ../../../locale/icu/main/sl.xml
  */
 sl{
     Countries{
@@ -101,7 +101,6 @@ sl{
         GU{"Guam"}
         GW{"Gvineja Bissau"}
         GY{"Gvajana"}
-        HK{"Kitajska republika Hong Kong"}
         HM{"Heardov otok in McDonaldovi otoki"}
         HN{"Honduras"}
         HR{"Hrvaška"}
@@ -150,7 +149,6 @@ sl{
         ML{"Mali"}
         MM{"Myanmar"}
         MN{"Mongolija"}
-        MO{"Kitajska republika Macao"}
         MP{"Severni Marianski otoki"}
         MQ{"Martinik"}
         MR{"Mavretanija"}

@@ -3,12 +3,15 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File: ../../../locale/common/main/zh_Hans.xml
+// * Source File: ../../../locale/common/main/lo_LA.xml
 // *
 // ***************************************************************************
-/**
- *  ICU <specials> source: ../../../locale/icu/main/zh_Hans.xml
- */
-zh_Hans{
-    Version{"1.2"}
+lo_LA{
+    NumberPatterns{
+        "#,##0.###;-#,##0.###",
+        "¤#,##0.00;¤-#,##0.00",
+        "#,##0%",
+        "#E0",
+    }
+    Version{"1.0"}
 }
