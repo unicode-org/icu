@@ -557,12 +557,8 @@ void CollationRegressionTest::Test4078588(/* char *par */)
 
     if (result != Collator::LESS)
     {
-        UnicodeString msg;
-
-        msg += (UnicodeString)"Compare(a,bb) returned " + result;
-        msg += "; expected -1";
-
-        errln(msg);
+        errln((UnicodeString)"Compare(a,bb) returned " + (int)result
+            + (UnicodeString)"; expected -1");
     }
 
     delete rbc;
