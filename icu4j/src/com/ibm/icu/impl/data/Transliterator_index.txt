@@ -72,10 +72,10 @@ Publishing-Any:file:Transliterator_Any_Publishing.txt:UTF8:REVERSE
 
 LowerLatin-Jamo:internal:Transliterator_Latin_Jamo.txt:UTF8:FORWARD
 Jamo-LowerLatin:internal:Transliterator_Latin_Jamo.txt:UTF8:REVERSE
-Latin-Jamo:alias:[\u0027[\p{Latin}]];NFKD;Lower;LowerLatin-Jamo
-Jamo-Latin:alias:[\u1100-\u11FF];NFKD;Jamo-LowerLatin;NFC
-Latin-Hangul:alias:[\u0027[\p{Latin}]];NFKD;Lower;LowerLatin-Jamo;NFC
-Hangul-Latin:alias:[\p{Hangul}];NFKD;Jamo-LowerLatin;NFC
+Latin-Jamo:alias:['A-Za-z\u00C0-\u00C5\u00C7-\u00CF\u00D1-\u00D6\u00D9-\u00DD\u00E0-\u00E5\u00E7-\u00EF\u00F1-\u00F6\u00F9-\u00FD\u00FF-\u010F\u0112-\u0125\u0128-\u0130\u0134-\u0137\u0139-\u013E\u0143-\u0148\u014C-\u0151\u0154-\u0165\u0168-\u017E\u01A0-\u01A1\u01AF-\u01B0\u01CD-\u01DC\u01DE-\u01E1\u01E6-\u01ED\u01F0\u01F4-\u01F5\u01F8-\u01FB\u0200-\u021B\u021E-\u021F\u0226-\u0233\u1E00-\u1E99\u1EA0-\u1EF9\u212A-\u212B];NFD;Lower;LowerLatin-Jamo
+Jamo-Latin:alias:['\u1100-\u1112\u1161-\u1175\u11A8-\u11C2\uAC00-\uD7A3];NFD;Jamo-LowerLatin;NFC
+Latin-Hangul:alias:['A-Za-z\u00C0-\u00C5\u00C7-\u00CF\u00D1-\u00D6\u00D9-\u00DD\u00E0-\u00E5\u00E7-\u00EF\u00F1-\u00F6\u00F9-\u00FD\u00FF-\u010F\u0112-\u0125\u0128-\u0130\u0134-\u0137\u0139-\u013E\u0143-\u0148\u014C-\u0151\u0154-\u0165\u0168-\u017E\u01A0-\u01A1\u01AF-\u01B0\u01CD-\u01DC\u01DE-\u01E1\u01E6-\u01ED\u01F0\u01F4-\u01F5\u01F8-\u01FB\u0200-\u021B\u021E-\u021F\u0226-\u0233\u1E00-\u1E99\u1EA0-\u1EF9\u212A-\u212B];NFD;Lower;LowerLatin-Jamo;NFC
+Hangul-Latin:alias:['\u1100-\u1112\u1161-\u1175\u11A8-\u11C2\u3131-\u313F\u3141-\u3143\u3145-\u3163\u3200-\u321C\u3260-\u327B\uAC00-\uD7A3\uFF07\uFFA1-\uFFAF\uFFB1-\uFFB3\uFFB5-\uFFBE\uFFC2-\uFFC7\uFFCA-\uFFCF\uFFD2-\uFFD7\uFFDA-\uFFDC];NFKD;Jamo-LowerLatin;NFC
 
 # Inter-Indic composed rules
 Latin-InterIndic:internal:Transliterator_Latin_InterIndic.txt:UTF8:FORWARD
