@@ -152,7 +152,7 @@ typedef enum {
  * Called when an error has occured in conversion to unicode, or on open/close of the callback (see reason).
  * @param context Pointer to the callback's private data
  * @param args Information about the conversion in progress
- * @param codePoints Points to 'length' bytes of the concerned codepage sequence
+ * @param codeUnits Points to 'length' bytes of the concerned codepage sequence
  * @param length Size (in bytes) of the concerned codepage sequence
  * @param reason Defines the reason the callback was invoked
  * @see ucnv_setToUCallBack
@@ -162,7 +162,7 @@ typedef enum {
 typedef void (U_EXPORT2 *UConverterToUCallback) (
                   const void* context,
                   UConverterToUnicodeArgs *args,
-                  const char *codePoints,
+                  const char *codeUnits,
                   int32_t length,
                   UConverterCallbackReason reason,
                   UErrorCode *);
