@@ -58,6 +58,7 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
      */
     public static boolean       fTrace;
     
+    
     /**
      * Dump the contents of the state table and character classes for this break iterator.
      * For debugging only.
@@ -217,7 +218,7 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
 	public int next(int n) {
         int result = current();
         while (n > 0) {
-            result = handleNext();
+            result = handleNext(fRData.fFTable);
             --n;
         }
         while (n < 0) {
@@ -275,7 +276,7 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
         // point is our return value
 
         for (;;) {
-            result         = handleNext();
+            result         = handleNext(fRData.fFTable);
             if (result == BreakIterator.DONE || result >= start) {
                 break;
             }
@@ -376,7 +377,7 @@ public class RuleBasedBreakIterator_New extends RuleBasedBreakIterator {
 
         fText.setIndex(offset);
         if (offset == fText.getBeginIndex()) {
-            return handleNext();
+            return handleNext(fRData.fFTable);
         }
         result = previous();
 
@@ -702,17 +703,16 @@ public int getRuleStatusVec(int[] fillInArray) {
     }
        
     private static int CIPrevious32(CharacterIterator ci) {
-        int retVal = 0;
-        if (ci.getIndex() == 0) {
+        if (ci.getIndex() <= ci.getBeginIndex()) {
             return CI_DONE32;   
         }
-        char cTrail = ci.previous();
-        retVal = (int)cTrail;
-        if (UTF16.isTrailSurrogate(cTrail)) {
-            char cLead = ci.previous();
-            if (UTF16.isLeadSurrogate(cLead)) {
-                retVal = (((int)cLead  - UTF16.LEAD_SURROGATE_MIN_VALUE) << 10) +
-                          ((int)cTrail - UTF16.TRAIL_SURROGATE_MIN_VALUE) +
+        char trail = ci.previous();
+        int retVal = trail;
+        if (UTF16.isTrailSurrogate(trail)) {
+            char lead = ci.previous();
+            if (UTF16.isLeadSurrogate(lead)) {
+                retVal = (((int)lead  - UTF16.LEAD_SURROGATE_MIN_VALUE) << 10) +
+                          ((int)trail - UTF16.TRAIL_SURROGATE_MIN_VALUE) +
                           UTF16.SUPPLEMENTARY_MIN_VALUE;
             } else {
                 ci.next();
@@ -720,6 +720,8 @@ public int getRuleStatusVec(int[] fillInArray) {
         }
         return retVal;
     }
+    
+
     
     private static int CICurrent32(CharacterIterator ci) {
         char  lead   = ci.current();
@@ -752,19 +754,24 @@ public int getRuleStatusVec(int[] fillInArray) {
         return (ci.getIndex() != ci.getBeginIndex());
     }
     
-    /**
-     * Internal implementation of next() for RBBI.
-     * @internal
-     */
-    private int handleNext() {
-        return handleNext(fRData.fFTable);
-    }
-
     
+    /**
+     * The State Machine Engine for moving forward is here.
+     * @param stateTable
+     * @return the new iterator position
+     * 
+     * A note on supplementary characters and the position of underlying
+     * Java CharacterIterator:   Normally, a character iterator is positioned at
+     * the char most recently returned by next().  Within this function, when
+     * a supplementary char is being processed, the char iterator is left
+     * sitting on the trail surrogate, in the middle of the code point.
+     * This is different from everywhere else, where an iterator always
+     * points at the lead surrogate of a supplementary.
+     */
     private int handleNext(short stateTable[]) {
-        //if (fTrace) {
-        //    System.out.println("Handle Next   pos      char  state category");
-        //}
+        if (fTrace) {
+            System.out.println("Handle Next   pos      char  state category");
+        }
 
         // No matter what, handleNext alway correctly sets the break tag value.
         fLastStatusIndexValid = true;
@@ -835,17 +842,16 @@ public int getRuleStatusVec(int[] fillInArray) {
             //         we need to clear it out here to be safe.
             //category &= ~0x4000;  // TODO:  commented out for perf.  
 
-            //if (fTrace) {
-            //    System.out.print("            " +  RBBIDataWrapper.intToString(fText.getIndex(), 5)); 
-            //    System.out.print(RBBIDataWrapper.intToHexString(c, 10));
-            //    System.out.println(RBBIDataWrapper.intToString(state,7) + RBBIDataWrapper.intToString(category,6));
-            //}
+            if (fTrace) {
+                System.out.print("            " +  RBBIDataWrapper.intToString(fText.getIndex(), 5)); 
+                System.out.print(RBBIDataWrapper.intToHexString(c, 10));
+                System.out.println(RBBIDataWrapper.intToString(state,7) + RBBIDataWrapper.intToString(category,6));
+            }
 
             // look up a state transition in the state table
             //     state = row->fNextState[category];
             state = stateTable[row + RBBIDataWrapper.NEXTSTATES + category];
-            // row   = fRData.getRowIndex(state);   // #$%^&* JITs don't inline!!!!
-            row   = RBBIDataWrapper.ROW_DATA + state * (fRData.fHeader.fCatCount + 4);
+            row   = fRData.getRowIndex(state);  
 
             // Get the next character.  Doing it here positions the iterator
             //    to the correct position for recording matches in the code that
@@ -876,13 +882,6 @@ public int getRuleStatusVec(int[] fillInArray) {
                     result               = lookaheadResult;
                     fLastRuleStatusIndex = lookaheadTagIdx;
                     lookaheadStatus      = 0;
-                    /// i think we have to back up to read the lookahead character again
-                    /// fText->setIndex(lookaheadResult);
-                    /// TODO: this is a simple hack since reverse rules only have simple
-                    /// lookahead rules that we can definitely break out from.
-                    /// we need to make the lookahead rules not chain eventually.
-                    /// return result;
-                    /// this is going to be the longest match again
                     continue;
                 }
 
@@ -916,9 +915,9 @@ public int getRuleStatusVec(int[] fillInArray) {
 
         // Leave the iterator at our result position.
         fText.setIndex(result);
-        // if (fTrace) {
-        //     System.out.println("result = " + result);
-        // }
+        if (fTrace) {
+            System.out.println("result = " + result);
+        }
         return result;
     }
 
@@ -947,7 +946,7 @@ public int getRuleStatusVec(int[] fillInArray) {
 
         row = fRData.getRowIndex(state);
         category = (short)fRData.fTrie.getCodePointValue(c);
-        category &= ~0x4000;    // Clear the dictionary bit, just in case.
+        //category &= ~0x4000;    // Clear the dictionary bit, just in case.
 
         if (fTrace) {
             System.out.println("Handle Prev   pos   char  state category ");
@@ -965,9 +964,9 @@ public int getRuleStatusVec(int[] fillInArray) {
             category = (short)fRData.fTrie.getCodePointValue(c);
 
             // Check the dictionary bit in the character's category.
-             //    Don't exist in this Java engine implementation.  Clear the bit.
+            //    Don't exist in this Java engine implementation.  Clear the bit.
             //
-            category &= ~0x4000;
+            // category &= ~0x4000;
 
             if (fTrace) {
                 System.out.print("             " + fText.getIndex()+ "   ");
@@ -1035,9 +1034,9 @@ public int getRuleStatusVec(int[] fillInArray) {
                 break;
             }
 
-            // then advance one character backwards
+            // then move one character backwards
             c = CIPrevious32(fText);
-        }
+       }
 
         // Note:  the result position isn't what is returned to the user by previous(),
         //        but where the implementation of previous() turns around and
@@ -1065,7 +1064,6 @@ public int getRuleStatusVec(int[] fillInArray) {
         int            state              = START_STATE;
         int            category;
         int            lastCategory       = 0;
-        boolean        hasPassedStartText = !CIHasPrevious(fText);
         int            c                  = CIPrevious32(fText);
         // previous character
         int            result             = fText.getIndex();
@@ -1078,15 +1076,15 @@ public int getRuleStatusVec(int[] fillInArray) {
         int            row = fRData.getRowIndex(state);
 
         category = (short)fRData.fTrie.getCodePointValue(c);
-        category &= ~0x4000;            // Mask off dictionary bit.
+        // category &= ~0x4000;            // Mask off dictionary bit.
 
         if (fTrace) {
             System.out.println("Handle Prev   pos   char  state category ");
         }
-
+        
         // loop until we reach the beginning of the text or transition to state 0
         for (;;) {
-            if (hasPassedStartText) {
+            if (c==CI_DONE32) {
                 // if we have already considered the start of the text
                 if (stateTable[row + RBBIDataWrapper.LOOKAHEAD] != 0 &&
                         lookaheadResult == 0) {
@@ -1100,8 +1098,8 @@ public int getRuleStatusVec(int[] fillInArray) {
             lastCategory = category;
             category = (short)fRData.fTrie.getCodePointValue(c);
 
-            category &= ~0x4000;    // Clear the dictionary bit flag
-                                    //   (Should be unused; holdover from old RBBI)
+            // category &= ~0x4000;    // Clear the dictionary bit flag
+            //                         //   (Should be unused; holdover from old RBBI)
 
             if (fTrace) {
                 System.out.print("             " + fText.getIndex()+ "   ");
@@ -1111,7 +1109,7 @@ public int getRuleStatusVec(int[] fillInArray) {
                     System.out.print(" " + Integer.toHexString(c) + " ");
                 }
                 System.out.println(" " + state + "  " + category + " ");
-            }
+            } 
 
             // look up a state transition in the backwards state table
             state = stateTable[row + RBBIDataWrapper.NEXTSTATES + category];
@@ -1167,7 +1165,6 @@ public int getRuleStatusVec(int[] fillInArray) {
             }
 
             // then move iterator position backwards one character
-            hasPassedStartText = !CIHasPrevious(fText);
             c = CIPrevious32(fText);
         }
 
