@@ -613,13 +613,13 @@ class TestFilter : public UnicodeFilter {
     }
     // Stubs
     virtual UnicodeString& toPattern(UnicodeString& result,
-                                     UBool escapeUnprintable) const {
+                                     UBool /*escapeUnprintable*/) const {
         return result;
     }
-    virtual UBool matchesIndexValue(uint8_t v) const {
+    virtual UBool matchesIndexValue(uint8_t /*v*/) const {
         return FALSE;
     }
-    virtual void addMatchSetTo(UnicodeSet& toUnionTo) const {}
+    virtual void addMatchSetTo(UnicodeSet& /*toUnionTo*/) const {}
 public:
     UClassID getDynamicClassID() const { return (UClassID)&gTestFilterClassID; }
 };
@@ -3598,7 +3598,7 @@ void TransliteratorTest::TestMulticharStringSet() {
 Transliterator* _TUFF[4];
 UnicodeString* _TUFID[4];
 
-static Transliterator* _TUFFactory(const UnicodeString& ID,
+static Transliterator* _TUFFactory(const UnicodeString& /*ID*/,
                                    Transliterator::Token context) {
     return _TUFF[context.integer]->clone();
 }
@@ -3865,19 +3865,6 @@ void TransliteratorTest::TestAllCodepoints(){
     }
 
 } 
-
-//#define TESTCLASSID_DEFAULT(cls) { \
-//  if (cls().getDynamicClassID() != cls::getStaticClassID()) { \
-//    errln("FAIL: " ## cls ## " dynamic and static class ID mismatch from default constructor"); \
-//  } \
-//}
-//#define TESTCLASSID_FACTORY(cls, fact) { \
-//  cls* x = fact; \
-//  if (x->getDynamicClassID() != cls::getStaticClassID()) { \
-//    errln("FAIL: " ## cls ## " dynamic and static class ID mismatch from " ## fact); \
-//  } \
-//  delete x; \
-//}
 
 #define TEST_TRANSLIT_ID(id, cls) { \
   UErrorCode ec = U_ZERO_ERROR; \

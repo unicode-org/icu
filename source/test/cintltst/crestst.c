@@ -529,6 +529,16 @@ static void TestFileStream(void){
     char* buf = (char*) uprv_malloc(bufLen);
     int32_t retLen = 0;
 
+    if(pStdin==NULL){
+        log_err("failed to get T_FileStream_stdin()");
+    }
+    if(pStdout==NULL){
+        log_err("failed to get T_FileStream_stdout()");
+    }
+    if(pStderr==NULL){
+        log_err("failed to get T_FileStream_stderr()");
+    }
+
     uprv_strcpy(fileName,testdatapath);
     uprv_strcat(fileName,".dat");
     stream = T_FileStream_open(fileName, "r");

@@ -705,13 +705,13 @@ class TestFilter1 : public UnicodeFilter {
     }
     // Stubs
     virtual UnicodeString& toPattern(UnicodeString& result,
-                                     UBool escapeUnprintable) const {
+                                     UBool /*escapeUnprintable*/) const {
         return result;
     }
-    virtual UBool matchesIndexValue(uint8_t v) const {
+    virtual UBool matchesIndexValue(uint8_t /*v*/) const {
         return FALSE;
     }
-    virtual void addMatchSetTo(UnicodeSet& toUnionTo) const {}
+    virtual void addMatchSetTo(UnicodeSet& /*toUnionTo*/) const {}
 };
 class TestFilter2 : public UnicodeFilter {
     UClassID getDynamicClassID()const { return &gTestFilter2ClassID; }
@@ -726,13 +726,13 @@ class TestFilter2 : public UnicodeFilter {
     }
     // Stubs
     virtual UnicodeString& toPattern(UnicodeString& result,
-                                     UBool escapeUnprintable) const {
+                                     UBool /*escapeUnprintable*/) const {
         return result;
     }
-    virtual UBool matchesIndexValue(uint8_t v) const {
+    virtual UBool matchesIndexValue(uint8_t /*v*/) const {
         return FALSE;
     }
-    virtual void addMatchSetTo(UnicodeSet& toUnionTo) const {}
+    virtual void addMatchSetTo(UnicodeSet& /*toUnionTo*/) const {}
 };
 class TestFilter3 : public UnicodeFilter {
     UClassID getDynamicClassID()const { return &gTestFilter3ClassID; }
@@ -747,13 +747,13 @@ class TestFilter3 : public UnicodeFilter {
     }
     // Stubs
     virtual UnicodeString& toPattern(UnicodeString& result,
-                                     UBool escapeUnprintable) const {
+                                     UBool /*escapeUnprintable*/) const {
         return result;
     }
-    virtual UBool matchesIndexValue(uint8_t v) const {
+    virtual UBool matchesIndexValue(uint8_t /*v*/) const {
         return FALSE;
     }
-    virtual void addMatchSetTo(UnicodeSet& toUnionTo) const {}
+    virtual void addMatchSetTo(UnicodeSet& /*toUnionTo*/) const {}
 };
 
 
