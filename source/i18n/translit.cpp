@@ -20,6 +20,7 @@
 #include "unicode/locid.h"
 #include "unicode/msgfmt.h"
 #include "unicode/name2uni.h"
+#include "unicode/nortrans.h"
 #include "unicode/nultrans.h"
 #include "unicode/putil.h"
 #include "unicode/rep.h"
@@ -689,6 +690,8 @@ Transliterator* Transliterator::_createInstance(const UnicodeString& ID,
         // We can't call createInstance() here because of deadlock.
         aliasReturn = entry->stringArg;
         return 0;
+    } else if (entry->entryType == CacheEntry::FACTORY) {
+        return entry->u.factory();
     } else {
         // At this point entry type must be either RULES_FORWARD
         // or RULES_REVERSE
@@ -755,15 +758,26 @@ Transliterator* Transliterator::_createInstance(const UnicodeString& ID,
     return 0;
 }
 
+// For public consumption
 void Transliterator::registerFactory(const UnicodeString& id,
-                                     TransliteratorFactory* factory,
+                                     TransliteratorFactory factory,
                                      UErrorCode &status) {
     if (U_FAILURE(status)) {
         return;
     }
-
     if (!cacheInitialized) {
         initializeCache();
+    }
+    _registerFactory(id, factory, status);
+}
+
+// To be called only by Transliterator subclasses that are called
+// to register themselves by initializeCache().
+void Transliterator::_registerFactory(const UnicodeString& id,
+                                      TransliteratorFactory factory,
+                                      UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return;
     }
 
     Mutex lock(&cacheMutex);
@@ -996,6 +1010,7 @@ void Transliterator::initializeCache(void) {
     _registerInstance(new TitlecaseTransliterator(), status);
     _registerInstance(new UnicodeNameTransliterator(), status);
     _registerInstance(new NameUnicodeTransliterator(), status);
+    NormalizationTransliterator::registerIDs();
 
     cacheInitialized = TRUE;
 }
@@ -1019,7 +1034,7 @@ void Transliterator::CacheEntry::adoptPrototype(Transliterator* adopted) {
     u.prototype = adopted;
 }
 
-void Transliterator::CacheEntry::setFactory(TransliteratorFactory* factory) {
+void Transliterator::CacheEntry::setFactory(TransliteratorFactory factory) {
     if (entryType == PROTOTYPE) {
         delete u.prototype;
     }
