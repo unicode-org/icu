@@ -1812,13 +1812,6 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
             result = ucol_prv_getSpecialPrevCE(coll, ch, UCOL_CONTRACTION, data, status);
         }
         else {
-            if (ch <= 0xFF) {
-              result = coll->latinOneMapping[ch];
-              if (result > UCOL_NOT_FOUND) {
-                    result = ucol_prv_getSpecialPrevCE(coll, ch, result, data, status);
-              }
-            }
-            else {
               // TODO: fix me for THAI - I reference *(data->pos-1)
                 if ((data->flags & UCOL_ITER_INNORMBUF) == 0 &&
                     /*UCOL_ISTHAIBASECONSONANT(ch) &&*/   // This is from the old specs - we now rearrange unconditionally
@@ -1854,6 +1847,12 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
                       loadState(data, &entryState, FALSE);
                     }
                 }
+            else if (ch <= 0xFF) {
+              result = coll->latinOneMapping[ch];
+              if (result > UCOL_NOT_FOUND) {
+                result = ucol_prv_getSpecialPrevCE(coll, ch, result, data, status);
+              }
+            }
                 else {
                     /*result = ucmpe32_get(coll->mapping, ch);*/
                     result = UTRIE_GET32_FROM_LEAD(coll->mapping, ch);
@@ -1877,7 +1876,6 @@ inline uint32_t ucol_IGetPrevCE(const UCollator *coll, collIterate *data,
                 }
             }
         }
-    }
     return result;
 }
 
@@ -2640,10 +2638,46 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
             // Move the prevowel and the following base Consonant into the normalization buffer
             //   with their order swapped
 
+            UChar thCh = peekCharacter(source, 0); //getNextNormalizedChar(source);
+            UChar32 cp = 0;
+            if(U16_IS_LEAD(thCh)) {
+              if(!collIter_eos(source)) {
+                collIterateState thaiState;
+                backupState(source, &thaiState);
+                getNextNormalizedChar(source);
+                UChar trailCh = peekCharacter(source, 0); //getNextNormalizedChar(source);
+                if(U16_IS_TRAIL(trailCh)) {
+                  cp = U16_GET_SUPPLEMENTARY(thCh, trailCh);                  
+                } else {
+                  loadState(source, &thaiState, TRUE);
+                }
+              } else {
+                cp = (UChar32)thCh;
+              }
+            } else {
+                cp = (UChar32)thCh;
+            }
+            
+
+            int32_t decompLen = unorm_getDecomposition(cp, FALSE, &(source->writableBuffer[1]), UCOL_WRITABLE_BUFFER_SIZE-1);
+            if(decompLen < 0) {
+              decompLen = -decompLen;
+            }
+
+            if(decompLen >= 2 && U16_IS_LEAD(source->writableBuffer[1]) && U16_IS_TRAIL(source->writableBuffer[2])) {
+              source->writableBuffer[0] = source->writableBuffer[1];
+              source->writableBuffer[1] = source->writableBuffer[2];
+              source->writableBuffer[2] = ch;
+            } else {
+              source->writableBuffer[0] = source->writableBuffer[1];
+              source->writableBuffer[1] = ch;
+            }
+            source->writableBuffer[decompLen+1] = 0; // we added the prevowel
+/*
             source->writableBuffer[0] = peekCharacter(source, 0);
             source->writableBuffer[1] = peekCharacter(source, -1);
             source->writableBuffer[2] = 0;
-
+*/
             if(source->pos) {
               source->fcdPosition       = source->pos+1;   // Indicate where to continue in main input string
                                                            //   after exhausting the writableBuffer
@@ -3137,12 +3171,40 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
           Move the prevowel and the following base Consonant into the
           normalization buffer with their order swapped
           */
+          UChar32 cp = (UChar32)peekCharacter(source, 0);
+          UBool reorder = TRUE;
+
+          int32_t decompLen = unorm_getDecomposition(cp, FALSE, source->writableBuffer, UCOL_WRITABLE_BUFFER_SIZE-1);
+          if(decompLen < 0) { 
+            decompLen = -decompLen; // there was no decomposition
+          } else { // we need to check if we will hit a contraction trigger because of decomposition
+            int32_t i = decompLen;
+            for(i = 0; i < decompLen; i++) {
+              if(ucol_contractionEndCP(source->writableBuffer[i], coll)) {
+                reorder = FALSE;
+              }
+            }
+          }
+
+          UChar *tempbuffer = source->writableBuffer +
+                              (source->writableBufSize - 1);
+          uprv_memcpy(tempbuffer-decompLen + 1, source->writableBuffer, sizeof(UChar)*decompLen);
+          if(reorder) {
+            *(tempbuffer - decompLen) = *(tempbuffer - decompLen + 1);
+            *(tempbuffer - decompLen + 1)     = peekCharacter(source, -1);
+          } else {
+            *(tempbuffer - decompLen) = peekCharacter(source, -1);
+          }
+          *(tempbuffer - decompLen - 1) = 0;
+
+
+/*
           UChar *tempbuffer = source->writableBuffer +
                               (source->writableBufSize - 1);
           *(tempbuffer - 2) = 0;
           *(tempbuffer - 1) = peekCharacter(source, 0);
           *(tempbuffer)     = peekCharacter(source, -1);
-
+*/
           /*
           Indicate where to continue in main input string after exhausting
           the writableBuffer
@@ -3276,7 +3338,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
         *(UCharOffset --) = 0;
         noChars = 0;
         // have to swap thai characters
-        while (ucol_unsafeCP(schar, coll) || UCOL_ISTHAIBASECONSONANT(schar)) {
+        while (ucol_unsafeCP(schar, coll) || (!collIter_bos(source) && UCOL_ISTHAIPREVOWEL(peekCharacter(source, -1)))) { // this one is problematic
             *(UCharOffset) = schar;
             noChars++;
             UCharOffset --;
@@ -3319,7 +3381,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
         *(UCharOffset) = schar;
         noChars++;
 
-        /* a new collIterate is used to simply things, since using the current
+        /* a new collIterate is used to simplify things, since using the current
         collIterate will mean that the forward and backwards iteration will
         share and change the same buffers. we don't want to get into that. */
         collIterate temp;
@@ -7900,6 +7962,9 @@ ucol_strcollIter( const UCollator    *coll,
   
   while((sChar = sColl.iterator->next(sColl.iterator)) ==  
     (tChar = tColl.iterator->next(tColl.iterator))) {
+    if(UCOL_ISTHAIPREVOWEL(sChar)) {
+      break;
+    }
     if(sChar == U_SENTINEL) {
       result = UCOL_EQUAL;
       goto end_compare;
@@ -7983,6 +8048,9 @@ ucol_strcoll( const UCollator    *coll,
             if ( *pSrc != *pTarg || *pSrc == 0) {
                 break;
             }
+            if(UCOL_ISTHAIPREVOWEL(*pSrc)) {
+              break;
+            }
             pSrc++;
             pTarg++;
         }
@@ -8012,6 +8080,9 @@ ucol_strcoll( const UCollator    *coll,
                     break;
                 }
                 if (*pSrc != *pTarg) {
+                    break;
+                }
+                if(UCOL_ISTHAIPREVOWEL(*pSrc)) { // they are the same here, so any will do
                     break;
                 }
                 pSrc++;
