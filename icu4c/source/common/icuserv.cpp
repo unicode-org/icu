@@ -822,6 +822,7 @@ ICUService::getKey(Key& key, UnicodeString* actualReturn, const Factory* factory
 #ifdef DEBUG_SERVICE
       fprintf(stderr, "found in service: " + name);
 #endif
+	  if (!factory) umtx_unlock(&ncthis->lock);
       return cloneInstance(result->service);
     }
   }
