@@ -474,34 +474,69 @@ utrie_fold(UNewTrie *trie, UNewTrieGetFoldedValue *getFoldedValue, UErrorCode *p
 #endif
 
     trie->indexLength=indexLength;
-    return;
+}
+
+/*
+ * Set a value in the trie index map to indicate which data block
+ * is referenced and which one is not.
+ * utrie_compact() will remove data blocks that are not used at all.
+ * Set
+ * - 0 if it is used
+ * - -1 if it is not used
+ */
+static void
+_findUnusedBlocks(UNewTrie *trie) {
+    int32_t i;
+
+    /* fill the entire map with "not used" */
+    uprv_memset(trie->map, 0xff, (UTRIE_MAX_BUILD_TIME_DATA_LENGTH>>UTRIE_SHIFT)*4);
+
+    /* mark each block that _is_ used with 0 */
+    for(i=0; i<trie->indexLength; ++i) {
+        trie->map[ABS(trie->index[i])>>UTRIE_SHIFT]=0;
+    }
+
+    /* never move the all-initial-value block 0 */
+    trie->map[0]=0;
+}
+
+static int32_t
+_findSameDataBlock(const uint32_t *data, int32_t dataLength,
+                   int32_t otherBlock, int32_t step) {
+    int32_t block, i;
+
+    /* ensure that we do not even partially get past dataLength */
+    dataLength-=UTRIE_DATA_BLOCK_LENGTH;
+
+    for(block=UTRIE_DATA_BLOCK_LENGTH; block<=dataLength; block+=step) {
+        for(i=0; i<UTRIE_DATA_BLOCK_LENGTH; ++i) {
+            if(data[block+i]!=data[otherBlock+i]) {
+                break;
+            }
+        }
+        if(i==UTRIE_DATA_BLOCK_LENGTH) {
+            return block;
+        }
+    }
+    return -1;
 }
 
 /*
  * Compact a folded build-time trie.
  *
  * The compaction
- * - removes all-initial-value blocks
- * - maps all blocks that are completely filled with the same values to only of them
- * - overlaps adjacent blocks as much as possible
+ * - removes blocks that are identical with earlier ones
+ * - overlaps adjacent blocks as much as possible (if overlap==TRUE)
+ * - moves blocks in steps of the data granularity
  *
  * It does not
- * - find blocks that are identical but not completely filled with the same value
  * - try to move and overlap blocks that are not already adjacent
+ * - try to move and overlap blocks that overlap with multiple values in the overlap region
  */
 static void
-utrie_compact(UNewTrie *trie, UErrorCode *pErrorCode) {
-    /*
-     * Map of whole blocks that are filled with all the same value.
-     * The first such block per value is stored in this lookup table,
-     * and following blocks will be replaced with the previous block's index.
-     */
-    uint32_t wholeBlockValues[64];
-    int32_t wholeBlockIndexes[64];
-
+utrie_compact(UNewTrie *trie, UBool overlap, UErrorCode *pErrorCode) {
     uint32_t x;
-    int32_t i, start, prevEnd, newStart, overlapStart, countWholeBlocks;
-    UBool addWholeBlock;
+    int32_t i, start, prevEnd, newStart, overlapStart;
 
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return;
@@ -518,13 +553,8 @@ utrie_compact(UNewTrie *trie, UErrorCode *pErrorCode) {
 
     /* compaction */
 
-    /* never move the all-initial-value block 0 */
-    trie->map[0]=0;
-
-    /* prime the whole blocks lookup table with the all-initial-value block 0 */
-    wholeBlockValues[0]=trie->data[0];
-    wholeBlockIndexes[0]=0;
-    countWholeBlocks=1;
+    /* initialize the index map with "block is used/unused" flags */
+    _findUnusedBlocks(trie);
 
     /* if Latin-1 is preallocated and linear, then do not compact Latin-1 data */
     if(trie->isLatin1Linear && UTRIE_SHIFT<=8) {
@@ -542,58 +572,35 @@ utrie_compact(UNewTrie *trie, UErrorCode *pErrorCode) {
          * newStart: index where the current block is to be moved
          */
 
-        /* x: first value in the current block */
-        x=trie->data[start];
-        addWholeBlock=FALSE;
+        /* skip blocks that are not used */
+        if(trie->map[start>>UTRIE_SHIFT]<0) {
+            /* advance start to the next block */
+            start+=UTRIE_DATA_BLOCK_LENGTH;
 
-        /* see if the current block is filled with this value x */
-        for(i=1; i<UTRIE_DATA_BLOCK_LENGTH && x==trie->data[start+i]; ++i) {}
-        if(i==UTRIE_DATA_BLOCK_LENGTH) {
-            /*
-             * yes, the block is filled with x
-             * if this is the first such block, then add it to the whole block lookup table,
-             * but defer that until after overlap checking
-             */
-            if(countWholeBlocks<sizeof(wholeBlockValues)/4) {
-                addWholeBlock=TRUE;
-            }
+            /* leave prevEnd and newStart with the previous block! */
+            continue;
+        }
 
-            /* did we already see another block that is also filled with x? */
-            for(i=0; i<countWholeBlocks; ++i) {
-                if(x==wholeBlockValues[i]) {
-                    if(start>=overlapStart) {
-                        /* yes, set the other block's index value for the current block */
-                        trie->map[start>>UTRIE_SHIFT]=wholeBlockIndexes[i];
+        /* search for an identical block */
+        if( start>=overlapStart &&
+            (i=_findSameDataBlock(trie->data, newStart, start,
+                            overlap ? UTRIE_DATA_GRANULARITY : UTRIE_DATA_BLOCK_LENGTH))
+             >=0
+        ) {
+            /* found an identical block, set the other block's index value for the current block */
+            trie->map[start>>UTRIE_SHIFT]=i;
 
-                        /* advance start to the next block */
-                        start+=UTRIE_DATA_BLOCK_LENGTH;
+            /* advance start to the next block */
+            start+=UTRIE_DATA_BLOCK_LENGTH;
 
-                        /* leave prevEnd and newStart with the previous block! */
-                        break; /* Java: continue outerLoop; */
-                    } else {
-                        /*
-                         * Latin-1 is linear and this is a Latin-1 block
-                         * do not replace its index value (to keep it linear)
-                         * do not add it into the whole blocks lookup table
-                         *   (because an equivalent block is in there already)
-                         * finish the rest of the outer loop
-                         */
-                        addWholeBlock=FALSE;
-                    }
-                }
-            }
-            if(i<countWholeBlocks) {
-                /*
-                 * this is from the break in the previous loop
-                 * because C does not allow a multi-level "continue outer loop";
-                 * we have replaced this block's index value by a repeat block
-                 */
-                continue;
-            }
+            /* leave prevEnd and newStart with the previous block! */
+            continue;
         }
 
         /* see if the beginning of this block can be overlapped with the end of the previous block */
-        if(x==trie->data[prevEnd] && start>=overlapStart) {
+        /* x: first value in the current block */
+        x=trie->data[start];
+        if(x==trie->data[prevEnd] && overlap && start>=overlapStart) {
             /* overlap by at least one */
             for(i=1; i<UTRIE_DATA_BLOCK_LENGTH && x==trie->data[start+i] && x==trie->data[prevEnd-i]; ++i) {}
 
@@ -601,13 +608,6 @@ utrie_compact(UNewTrie *trie, UErrorCode *pErrorCode) {
             i&=~(UTRIE_DATA_GRANULARITY-1);
         } else {
             i=0;
-        }
-
-        if(addWholeBlock) {
-            /* add this block to the lookup table */
-            wholeBlockValues[countWholeBlocks]=x;
-            wholeBlockIndexes[countWholeBlocks]=newStart-i;
-            ++countWholeBlocks;
         }
 
         if(i>0) {
@@ -646,7 +646,6 @@ utrie_compact(UNewTrie *trie, UErrorCode *pErrorCode) {
 #endif
 
     trie->dataLength=newStart;
-    return;
 }
 
 /* serialization ------------------------------------------------------------ */
@@ -722,8 +721,15 @@ utrie_serialize(UNewTrie *trie, uint8_t *data, int32_t capacity,
 
     /* fold and compact if necessary, also checks that indexLength is within limits */
     if(!trie->isCompacted) {
+        /* compact once without overlap to improve folding */
+        utrie_compact(trie, FALSE, pErrorCode);
+
+        /* fold the supplementary part of the index array */
         utrie_fold(trie, getFoldedValue, pErrorCode);
-        utrie_compact(trie, pErrorCode);
+
+        /* compact again with overlap for minimum data array length */
+        utrie_compact(trie, TRUE, pErrorCode);
+
         trie->isCompacted=TRUE;
         if(U_FAILURE(*pErrorCode)) {
             return 0;
