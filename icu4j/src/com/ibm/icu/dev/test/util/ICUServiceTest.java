@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/ICUServiceTest.java,v $
- * $Date: 2002/08/13 22:10:20 $
- * $Revision: 1.4 $
+ * $Date: 2002/09/14 21:36:30 $
+ * $Revision: 1.5 $
  *
  *******************************************************************************
  */
@@ -30,6 +30,7 @@ import com.ibm.icu.impl.ICULocaleService.ICUResourceBundleFactory;
 import java.util.Arrays;
 import java.util.EventListener;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -479,11 +480,10 @@ public class ICUServiceTest extends TestFmwk
 	    return null;
 	}
 
-	protected void handleUpdateVisibleIDs(Set result) {
-	    for (int i = 0; i < ids.length; ++i) {
-		result.add(ids[i]);
-	    }
+	protected Set handleGetSupportedIDs() {
+            return new HashSet(Arrays.asList(ids));
 	}
+
 	protected String handleGetDisplayName(String id, Locale locale) {
 	    return factoryID + LocaleUtility.getLocaleFromName(id).getDisplayName(locale);
 	}
@@ -544,13 +544,15 @@ public class ICUServiceTest extends TestFmwk
 	private static String surfer = californio + "_SURFER";
 	private static String geek = californio + "_GEEK";
 
-	public void handleUpdateVisibleIDs(Set result) {
-	    super.handleUpdateVisibleIDs(result);
+	public Set handleGetSupportedIDs() {
+	    Set result = super.handleGetSupportedIDs();
 
 	    result.add(californio);
 	    result.add(valley);
 	    result.add(surfer);
 	    result.add(geek);
+
+            return result;
 	}
 
 	protected String handleGetDisplayName(String id, Locale locale) {
@@ -620,6 +622,11 @@ public class ICUServiceTest extends TestFmwk
 	confirmEqual("test with en locale", "root", target);
     }
 
+    public void errln(String msg) {
+        System.out.println(msg);
+        (new String[0])[1] = "foo";
+    }
+
     // misc coverage tests
     public void TestCoverage() {
 	// Key
@@ -640,7 +647,7 @@ public class ICUServiceTest extends TestFmwk
 	    logln("OK: " + e.getMessage());
 	}
 	catch (Exception e) {
-	    errln("threw wrong exception");
+	    errln("threw wrong exception" + e);
 	}
 	logln(sf.getDisplayName("object", null));
 
@@ -655,10 +662,11 @@ public class ICUServiceTest extends TestFmwk
 	catch (NullPointerException e) {
 	    logln("OK: " + e.getMessage());
 	}
+        /*
 	catch (Exception e) {
-	    errln("threw wrong exception");
+	    errln("threw wrong exception" + e);
 	}
-
+        */
 	try {
 	    service.registerFactory(null);
 	    errln("didn't throw exception");
@@ -667,7 +675,7 @@ public class ICUServiceTest extends TestFmwk
 	    logln("OK: " + e.getMessage());
 	}
 	catch (Exception e) {
-	    errln("threw wrong exception");
+	    errln("threw wrong exception" + e);
 	}
 
 	try {
@@ -678,7 +686,7 @@ public class ICUServiceTest extends TestFmwk
 	    logln("OK: " + e.getMessage());
 	}
 	catch (Exception e) {
-	    errln("threw wrong exception");
+	    errln("threw wrong exception" + e);
 	}
 
 	logln("object is: " + service.get("object"));
@@ -718,9 +726,9 @@ public class ICUServiceTest extends TestFmwk
 	}
 
 	// LocaleKey
-	LocaleKey lkey = LocaleKey.create("en_US", "ja_JP");
-	lkey = LocaleKey.create(null, null);
-	lkey = LocaleKey.createWithCanonical("en_US", "ja_JP");
+	// LocaleKey lkey = LocaleKey.create("en_US", "ja_JP");
+	// lkey = LocaleKey.create(null, null);
+	LocaleKey lkey = LocaleKey.createWithCanonicalFallback("en_US", "ja_JP");
 
 	// MultipleKeyFactory 
 	MultipleKeyFactory mkf = new MKFSubclass(false);
@@ -736,10 +744,10 @@ public class ICUServiceTest extends TestFmwk
 	invisibleMKF.updateVisibleIDs(new HashMap());
 
 	// ResourceBundleFactory
-	ICUResourceBundleFactory rbf = new ICUResourceBundleFactory(null, true);
+	ICUResourceBundleFactory rbf = new ICUResourceBundleFactory(true);
 	logln("RB: " + rbf.create(lkey));
-	LocaleKey nokey = LocaleKey.create(null, null);
-	logln("RB: " + rbf.create(nokey));
+	// LocaleKey nokey = LocaleKey.create(null, null);
+	// logln("RB: " + rbf.create(nokey));
 
 	rbf = new ICUResourceBundleFactory("foobar", true);
 	logln("RB: " + rbf.create(lkey));
@@ -814,7 +822,8 @@ public class ICUServiceTest extends TestFmwk
 	    return null;
 	}
 
-	public void handleUpdateVisibleIDs(Set result) {
+	public Set handleGetSupportedIDs() {
+            return null;
 	}
     }
 }

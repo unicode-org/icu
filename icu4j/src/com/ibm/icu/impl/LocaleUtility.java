@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/LocaleUtility.java,v $
- * $Date: 2002/06/19 21:03:12 $
- * $Revision: 1.4 $
+ * $Date: 2002/09/14 21:36:29 $
+ * $Revision: 1.5 $
  *  *****************************************************************************************
  */
  
@@ -97,27 +97,4 @@ public class LocaleUtility {
 	}
 	return id;
     }
-
-    /*
-    public static String getDisplayLanguage(String languageID, Locale l) {
-    }
-
-    public static String getDisplayRegion(String regionID, Locale l) {
-    }
-
-    public static String getDisplayVariant(String variantID, Locale l) {
-    }
-
-    public static String getDisplayName(String localeName) {
-	return getDisplayName(getLocaleFromString(localeName));
-    }
-
-    public static String getDisplayName(Locale locale) {
-	String lang = locale.getLanguage();
-	String region = locale.getCountry();
-	String var = locale.getVariant();
-
-	StringBuffer buf = new StringBuffer(lang);
-    }
-    */
 }

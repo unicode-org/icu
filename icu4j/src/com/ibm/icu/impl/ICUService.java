@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICUService.java,v $
- * $Date: 2002/08/13 23:40:52 $
- * $Revision: 1.7 $
+ * $Date: 2002/09/14 21:36:29 $
+ * $Revision: 1.8 $
  *
  *******************************************************************************
  */
@@ -38,11 +38,11 @@ import java.util.TreeMap;
  * generally it should not be mutable, or the caller should clone the
  * object before modifying it.</p>
  *
- * <p>Services 'canonicalize' the query id and use the canonical id
- * to query for the service.  The service also defines a mechanism
- * to 'fallback' the id multiple times.  Clients can optionally
- * request the actual id that was matched by a query when they
- * use an id to retrieve a service object.</p>
+ * <p>Services 'canonicalize' the query id and use the canonical id to
+ * query for the service.  The service also defines a mechanism to
+ * 'fallback' the id multiple times.  Clients can optionally request
+ * the actual id that was matched by a query when they use an id to
+ * retrieve a service object.</p>
  *
  * <p>Service objects are instantiated by Factory objects registered with 
  * the service.  The service queries each Factory in turn, from most recently
@@ -81,9 +81,25 @@ import java.util.TreeMap;
  * ICUService by overriding it, for example, to customize the Key and
  * fallback strategy.  ICULocaleService is a customized service that
  * uses Locale names as ids and uses Keys that implement the standard
- * resource bundle fallback strategy.<p>
+ * resource bundle fallback strategy.<p> 
  */
 public class ICUService extends ICUNotifier {
+    protected final String name;
+
+    /**
+     * Constructor.
+     */
+    public ICUService() {
+        name = "";
+    }
+
+    /**
+     * Construct with a name (useful for debugging).
+     */
+    public ICUService(String name) {
+        this.name = name;
+    }
+
     /**
      * Access to factories is protected by a read-write lock.  This is
      * to allow multiple threads to read concurrently, but keep
@@ -97,10 +113,12 @@ public class ICUService extends ICUNotifier {
     private final List factories = new ArrayList();
 
     /**
-     * Keys define how ids are canonicalized, and determine the
-     * fallback strategy used when querying the factories.  The default
-     * key just takes as its canonicalID the id assigned to it when it
-     * is constructed, and has no fallbacks.
+     * Keys are used to communicate with factories to generate an
+     * instance of the service.  They define how ids are
+     * canonicalized, provide both a current id and a current
+     * descriptor to use in querying the cache and factories, and
+     * determine the fallback strategy.  The default key has no
+     * fallbacks.
      */
     public static class Key {
         private final String id;
@@ -113,7 +131,7 @@ public class ICUService extends ICUNotifier {
         }
 
         /**
-         * Return the original ID.
+         * Return the original ID used to construct this key.
          */
         public final String id() {
             return id;
@@ -128,11 +146,24 @@ public class ICUService extends ICUNotifier {
         }
 
         /**
-         * Return the (canonical) current ID.  This implementation returns the
-	 * canonical ID.
+         * Return the (canonical) current ID.  This implementation
+         * returns the canonical ID.  
          */
         public String currentID() {
             return canonicalID();
+        }
+
+        /**
+         * Return the current descriptor.  This implementation returns
+         * the current ID.  The current descriptor is used to fully
+         * identify an instance of the service in the cache.  The
+         * current ID is that part of the descriptor that a factory
+         * can examine to identify whether it handles the key.  The
+         * factory can either parse the descriptor or use custom API
+         * on the key in order to instantiate the service.
+         */
+        public String currentDescriptor() {
+            return currentID();
         }
 
         /**
@@ -161,17 +192,18 @@ public class ICUService extends ICUNotifier {
         public Object create(Key key);
 
 	/**
-	 * Add IDs understood by this factory to the result map, with
-	 * this factory as the value. If this factory hides IDs
+	 * Add IDs this factory publicly handles to the result map,
+	 * with this factory as the value. If this factory hides IDs
 	 * currently in result, it should remove or reset the mappings
-	 * for those IDs.  
-	 */
+	 * for those IDs.  Result should contain only ids, not
+	 * descriptors.  
+         */
 	public void updateVisibleIDs(Map result);
 
 	/**
 	 * Return the display name for this id in the provided locale.
 	 * If the id is not visible or not defined by the factory,
-	 * return null.  
+	 * return null.  This is an id, not a descriptor.
 	 */
 	public String getDisplayName(String id, Locale locale);
     }
@@ -182,7 +214,8 @@ public class ICUService extends ICUNotifier {
      * factory that matches a single id and returns a single
      * (possibly deferred-initialized) instance.  If visible is
      * true, updates the map passed to updateVisibleIDs with a
-     * mapping from id to itself.
+     * mapping from id to itself.  This ignores the key descriptor
+     * and only examines the id.
      */
     public static class SimpleFactory implements Factory {
 	protected Object instance;
@@ -238,33 +271,55 @@ public class ICUService extends ICUNotifier {
     }
 
     /**
-     * Convenience override for get(String, String[]).
+     * Convenience override for get(String, String[]). This uses
+     * createKey to create a key for the provided descriptor.
      */
-    public Object get(String id) {
-	return get(id, null);
+    public Object get(String descriptor) {
+	return getKey(createKey(descriptor), null);
     }
 
     /**
-     * <p>Given an id, return a service object, and, if actualIDReturn
-     * is not null, the actual id under which it was found in the
-     * first element of actualIDReturn.  If no service object matches
-     * this id, return null, and leave actualIDReturn unchanged.</p>
-     *
-     * <p>This tries each registered factory in order, and if none can
-     * generate a service object for the key, repeats the process with
-     * each fallback of the key until one returns a service object, or
-     * the key has no fallback.</p> 
+     * Convenience override for get(Key, String[]).  This uses
+     * createKey to create a key from the provided descriptor.
      */
-    public Object get(String id, String[] actualIDReturn) {
-	if (id == null) {
-	    throw new NullPointerException();
-	}
+    public Object get(String descriptor, String[] actualReturn) {
+        if (descriptor == null) {
+            throw new NullPointerException("descriptor must not be null");            
+        }
+        return getKey(createKey(descriptor), actualReturn);
+    }
+
+    /**
+     * Convenience override for get(Key, String[]).
+     */
+    public Object getKey(Key key) {
+        return getKey(key, null);
+    }
+
+    /**
+     * <p>Given a key, return a service object, and, if actualReturn
+     * is not null, the descriptor with which it was found in the
+     * first element of actualReturn.  If no service object matches
+     * this key, return null, and leave actualReturn unchanged.</p>
+     *
+     * <p>This queries the cache using the key's descriptor, and if no
+     * object in the cache matches it, tries the key on each
+     * registered factory, in order.  If none generates a service
+     * object for the key, repeats the process with each fallback of
+     * the key, until either one returns a service object, or the key
+     * has no fallback.</p> 
+     *
+     * <p>If key is null, just returns null.</p>
+     */
+    public Object getKey(Key key, String[] actualReturn) {
 	if (factories.size() == 0) {
 	    return null;
 	}
-	
+
+	boolean debug = false;
+        if (debug) System.out.println("Service: " + name + " key: " + key);
+
 	CacheEntry result = null;
-	Key key = createKey(id);
 	if (key != null) {
 	    try {
 		// The factory list can't be modified until we're done, 
@@ -284,15 +339,19 @@ public class ICUService extends ICUNotifier {
 		    cref = new SoftReference(cache);
 		}
 
-		String currentID = null;
-		ArrayList cacheIDList = null;
+		String currentDescriptor = null;
+		ArrayList cacheDescriptorList = null;
 		boolean putInCache = false;
+
+                int NDebug = 0;
+                
 	    outer:
 		do {
-		    currentID = key.currentID();
-
-		    result = (CacheEntry)cache.get(currentID);
+		    currentDescriptor = key.currentDescriptor();
+                    if (debug) System.out.println(name + "[" + NDebug++ + "] looking for: " + currentDescriptor);
+		    result = (CacheEntry)cache.get(currentDescriptor);
 		    if (result != null) {
+                        if (debug) System.out.println(name + " found with descriptor: " + currentDescriptor);
 			break outer;
 		    }
 
@@ -300,11 +359,13 @@ public class ICUService extends ICUNotifier {
 		    // the cache if we eventually succeed.
 		    putInCache = true;
 
+                    int n = 0;
 		    Iterator fi = factories.iterator();
 		    while (fi.hasNext()) {
 			Object service = ((Factory)fi.next()).create(key);
 			if (service != null) {
-			    result = new CacheEntry(currentID, service);
+			    result = new CacheEntry(currentDescriptor, service);
+                            if (debug) System.out.println(name + " factory cache with descriptor: " + currentDescriptor);
 			    break outer;
 			}
 		    }
@@ -314,20 +375,23 @@ public class ICUService extends ICUNotifier {
 		    // don't want to keep querying on an id that's going to
 		    // fallback to the one that succeeded, we want to hit the
 		    // cache the first time next goaround.
-		    if (cacheIDList == null) {
-			cacheIDList = new ArrayList(5);
+		    if (cacheDescriptorList == null) {
+			cacheDescriptorList = new ArrayList(5);
 		    }
-		    cacheIDList.add(currentID);
+		    cacheDescriptorList.add(currentDescriptor);
 
 		} while (key.fallback());
 
 		if (result != null) {
 		    if (putInCache) {
-			cache.put(result.actualID, result);
-			if (cacheIDList != null) {
-			    Iterator iter = cacheIDList.iterator();
+			cache.put(result.actualDescriptor, result);
+			if (cacheDescriptorList != null) {
+			    Iterator iter = cacheDescriptorList.iterator();
 			    while (iter.hasNext()) {
-				cache.put((String)iter.next(), result);
+                                String desc = (String)iter.next();
+                                if (debug) System.out.println(name + " adding descriptor: '" + desc + "' for actual: '" + result.actualDescriptor + "'");
+
+				cache.put(desc, result);
 			    }
 			}
 			// Atomic update.  We held the read lock all this time
@@ -337,9 +401,11 @@ public class ICUService extends ICUNotifier {
 			cacheref = cref;
 		    }
 
-		    if (actualIDReturn != null) {
-			actualIDReturn[0] = result.actualID;
+		    if (actualReturn != null) {
+			actualReturn[0] = result.actualDescriptor;
 		    }
+
+                    if (debug) System.out.println("found in service: " + name);
 
 		    return result.service;
 		}
@@ -349,6 +415,8 @@ public class ICUService extends ICUNotifier {
 	    }
 	}
 
+        if (debug) System.out.println("not found in service: " + name);
+
 	return null;
     }
     private SoftReference cacheref;
@@ -356,10 +424,10 @@ public class ICUService extends ICUNotifier {
     // Record the actual id for this service in the cache, so we can return it
     // even if we succeed later with a different id.
     private static final class CacheEntry {
-	String actualID;
-	Object service;
-	CacheEntry(String actualID, Object service) {
-	    this.actualID = actualID;
+	final String actualDescriptor;
+	final Object service;
+	CacheEntry(String actualDescriptor, Object service) {
+	    this.actualDescriptor = actualDescriptor;
 	    this.service = service;
 	}
     }
@@ -391,9 +459,7 @@ public class ICUService extends ICUNotifier {
 		    // grab the factory list and update it ourselves
 		    try {
 			factoryLock.acquireRead();
-
 			idcache = new TreeMap(String.CASE_INSENSITIVE_ORDER);
-
 			ListIterator lIter = factories.listIterator(factories.size());
 			while (lIter.hasPrevious()) {
 			    Factory f = (Factory)lIter.previous();
@@ -490,8 +556,8 @@ public class ICUService extends ICUNotifier {
     // we define a class so we get atomic simultaneous access to both the 
     // locale and corresponding map
     private static class LocaleRef {
-	Locale locale;
-	SoftReference ref;
+	final Locale locale;
+	final SoftReference ref;
 
 	LocaleRef(Map dnCache, Locale locale) {
 	    this.locale = locale;
@@ -689,6 +755,20 @@ public class ICUService extends ICUNotifier {
 	    return stats.toString();
 	}
 	return "no stats";
+    }
+
+    /**
+     * Return the name of this service. This will be the empty string if none was assigned.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Returns the result of super.toString, appending the name in curly braces.
+     */
+    public String toString() {
+        return super.toString() + "{" + name + "}";
     }
 }
 

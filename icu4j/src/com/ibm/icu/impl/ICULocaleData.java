@@ -185,7 +185,7 @@ public class ICULocaleData {
      * returns an 'unparented' bundle that exactly matches the bundle name and locale name.
      */
     public static ResourceBundle loadResourceBundle(String bundleName, String localeName) {
-	if (localeName != null) {
+	if (localeName != null && localeName.length() > 0) {
 	    bundleName = bundleName + "_" + localeName;
 	}
 	for (int i = 0; i < packageNames.length; ++i) {
