@@ -59,9 +59,9 @@ uenum_count(UEnumeration* en, UErrorCode* status);
  * it is converted to UChar* with the invariant converter.
  * The result is terminated by (UChar)0.
  * @param en the iterator object
- * @param resultLength pointer to return result to receive
- *                     the length of the result.  If the pointer is NULL it is
- *                     ignored.
+ * @param resultLength pointer to receive the length of the result
+ *                     (not including the terminating \0).
+ *                     If the pointer is NULL it is ignored.
  * @param status the error code, set to U_ENUM_OUT_OF_SYNC_ERROR if
  *               the iterator is out of sync with its service.
  * @return a pointer to the string.  The string will be
@@ -87,9 +87,9 @@ uenum_unext(UEnumeration* en,
  * U_INVARIANT_CONVERSION_ERROR and the return value is undefined
  * (but non-NULL).
  * @param en the iterator object
- * @param resultLength pointer to return result to receive
- *                     the length of the result.  If the pointer is NULL it is
- *                     ignored.
+ * @param resultLength pointer to receive the length of the result
+ *                     (not including the terminating \0).
+ *                     If the pointer is NULL it is ignored.
  * @param status the error code, set to U_ENUM_OUT_OF_SYNC_ERROR if
  *               the iterator is out of sync with its service.  Set to
  *               U_INVARIANT_CONVERSION_ERROR if the underlying native string is
