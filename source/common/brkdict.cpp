@@ -12,7 +12,7 @@
 
 #if !UCONFIG_NO_BREAK_ITERATION
 
-#include "unicode/resbund.h"
+#include "unicode/ures.h"
 #include "brkdict.h"
 #include "cmemory.h"
 
@@ -32,15 +32,13 @@ BreakDictionary::BreakDictionary(const char* /*dictionaryFilename*/, UErrorCode&
 {
     if (U_FAILURE(status)) return;
     
-    ResourceBundle th((char *)0, Locale("th"), status);
-
-    if (U_FAILURE(status)) return;
-
-    ResourceBundle th_dict = th.get("BreakDictionaryData", status);
+    UResourceBundle *th_dict = ures_open(NULL, "th", &status);
+    th_dict = ures_getByKey(th_dict, "BreakDictionaryData", th_dict, &status);
     if (U_FAILURE(status)) return;
 
     int32_t len;
-    const uint8_t * data = th_dict.getBinary(len, status);
+    const uint8_t * data = ures_getBinary(th_dict, &len, &status);
+    ures_close(th_dict);
     if (U_FAILURE(status)) return;
 
     UMemoryStream* dictionaryStream = uprv_mstrm_openBuffer(data, len);
