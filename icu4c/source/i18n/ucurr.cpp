@@ -140,14 +140,19 @@ struct CReg {
   CReg(const UChar* _iso, const char* _id)
     : next(0)
   {
-    uprv_strcpy(id, _id);
+    int32_t len = strlen(_id);
+    if (len > 11) {
+      len = 11;
+    }
+    uprv_strncpy(id, _id, len);
+    id[len] = 0;
     uprv_memcpy(iso, _iso, 3 * sizeof(const UChar));
     iso[3] = 0;
   }
 
   static UCurrRegistryKey reg(const UChar* _iso, const char* _id, UErrorCode* status)
   {
-    if (status && U_SUCCESS(*status)) {
+    if (status && U_SUCCESS(*status) && _iso && _id) {
       CReg* n = new CReg(_iso, _id);
       if (n) {
         Mutex mutex(&gLock);
@@ -167,6 +172,7 @@ struct CReg {
     Mutex mutex(&gLock);
     if (gHead == key) {
       gHead = gHead->next;
+      delete (CReg*)key;
       return TRUE;
     }
 
@@ -174,7 +180,7 @@ struct CReg {
     while (p) {
       if (p->next == key) {
         p->next = ((CReg*)key)->next;
-	    delete (CReg*)key;	
+	delete (CReg*)key;	
         return TRUE;
       }
       p = p->next;
