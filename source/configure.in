@@ -4,7 +4,7 @@ dnl Copyright (c) 1999-2000, International Business Machines Corporation and
 dnl others. All Rights Reserved.
 dnl Stephen F. Booth, heavily modified by Yves and others
 
-dnl $Id: configure.in,v 1.129 2001/10/24 20:27:23 rviswanadha Exp $
+dnl $Id: configure.in,v 1.130 2001/10/30 19:56:39 grhoten-oss Exp $
 
 dnl Process this file with autoconf to produce a configure script
 AC_INIT(common/unicode/utypes.h)
@@ -226,34 +226,44 @@ if test $hpuxcma = true; then
   fi
  fi
 else 
-if test $threads = true; then
+ dnl For Compaq Tru64 (OSF1), we must look for pthread_attr_init
+ dnl and must do this before seaching for pthread_mutex_destroy, or
+ dnl we will pick up libpthreads.so not libpthread.so
+ dnl If this fails, then we must test for HPUX specials, before
+ dnl moving on to a more generic test
 
- dnl Locate the right library for POSIX threads. We look for the
- dnl symbols in the libraries first, because on Solaris libc provides
- dnl pthread_create but libpthread has the real code :(
- dnl AIX uses libpthreads instead of libpthread, and HP/UX uses libcma
- dnl (but that was checked above).
- dnl FreeBSD users may need libpthread if they do not have libc_r.
-
- AC_SEARCH_LIBS_FIRST(pthread_mutex_destroy, pthread pthreads c_r cma)
-
- if test "$ac_cv_search_pthread_mutex_destroy" != no; then
+ AC_CHECK_LIB(pthread, pthread_attr_init)
+ if test $ac_cv_lib_pthread_pthread_attr_init = yes; then
   ICU_USE_THREADS=1
  else
-   dnl For HP 11
-   AC_CHECK_LIB(pthread, pthread_mutex_init)
-   if test $ac_cv_lib_pthread_pthread_mutex_init = yes; then
+  if test $threads = true; then
+
+   dnl Locate the right library for POSIX threads. We look for the
+   dnl symbols in the libraries first, because on Solaris libc provides
+   dnl pthread_create but libpthread has the real code :(
+   dnl AIX uses libpthreads instead of libpthread, and HP/UX uses libcma
+   dnl (but that was checked above).
+   dnl FreeBSD users may need libpthread if they do not have libc_r.
+
+   AC_SEARCH_LIBS_FIRST(pthread_mutex_destroy, pthread pthreads c_r cma)
+
+   if test "$ac_cv_search_pthread_mutex_destroy" != no; then
+    ICU_USE_THREADS=1
+   else
+    dnl For HP 11
+    AC_CHECK_LIB(pthread, pthread_mutex_init)
+    if test $ac_cv_lib_pthread_pthread_mutex_init = yes; then
+      ICU_USE_THREADS=1
+    fi
+   fi
+
+   AC_CHECK_FUNC(pthread_mutex_lock)
+
+   if test $ac_cv_func_pthread_mutex_lock = yes; then
      ICU_USE_THREADS=1
    fi
+  fi
  fi
-
- AC_CHECK_FUNC(pthread_mutex_lock)
-
- if test $ac_cv_func_pthread_mutex_lock = yes; then
-   ICU_USE_THREADS=1
- fi
-
-fi
 fi
 
 AC_SUBST(ICU_USE_THREADS)
@@ -735,6 +745,7 @@ case "${host}" in
 	*-*-aix*) 	platform=AIX ;;
 	*-sequent-*)	platform=PTX ;;
 	*-*-hpux*) 	platform=HPUX ;;
+	*-dec-osf*) 	platform=U_OSF ;;
 	*-*-irix*)      platform=IRIX ;;
 	*-*-os390*)	platform=OS390
 			ICUDATA_CHAR="e" ;;
