@@ -139,7 +139,7 @@ void NormalizationTransliterator::handleTransliterate(Replaceable& text, UTransP
         // in incremental mode then we collect up trailing jamo
         // and save them for next time.
         UBool doStandardBackup = TRUE;
-        if ((fMode == UNORM_NFC || fMode == UNORM_NFKC) && isIncremental) {
+        if (fMode == UNORM_NFC || fMode == UNORM_NFKC) {
             // As a minor optimization, if there are three or more
             // trailing jamo, we let the first three through --
             // these should be handled correctly.
