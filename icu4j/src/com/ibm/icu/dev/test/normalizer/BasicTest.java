@@ -1,5 +1,5 @@
 /*
- * $RCSfile: BasicTest.java,v $ $Revision: 1.1 $ $Date: 2000/02/10 06:25:48 $
+ * $RCSfile: BasicTest.java,v $ $Revision: 1.2 $ $Date: 2000/02/26 23:19:25 $
  *
  * (C) Copyright IBM Corp. 1998 - All Rights Reserved
  *
@@ -47,8 +47,10 @@ public class BasicTest extends TestFmwk {
         { "\u212b",             "A\u030a",              "\u00c5"            }, // angstrom_sign
         { "\u00c5",             "A\u030a",              "\u00c5"            }, // A-ring
 
-        { "ýffin",              "A\u0308ffin",          "ýffin"             },
-        { "ý\uFB03n",           "A\u0308\uFB03n",       "ý\uFB03n"          },
+//        { "ýffin",              "A\u0308ffin",          "ýffin"             },
+        { "ýffin",              "y\u0301ffin",          "ýffin"             },	//updated with 3.0
+//        { "ý\uFB03n",           "A\u0308\uFB03n",       "ý\uFB03n"          },
+        { "ý\uFB03n",           "y\u0301\uFB03n",       "ý\uFB03n"          },	//updated with 3.0
 
         { "Henry IV",           "Henry IV",             "Henry IV"          },
         { "Henry \u2163",       "Henry \u2163",         "Henry \u2163"      },
@@ -64,8 +66,10 @@ public class BasicTest extends TestFmwk {
             // Input                Decomposed              Composed
         { "\uFB4f",             "\u05D0\u05DC",         "\u05D0\u05DC",     }, // Alef-Lamed vs. Alef, Lamed
 
-        { "ýffin",              "A\u0308ffin",          "ýffin"             },
-        { "ý\uFB03n",           "A\u0308ffin",          "ýffin"             }, // ffi ligature -> f + f + i
+//        { "ýffin",              "A\u0308ffin",          "ýffin"             },
+//       { "ý\uFB03n",           "A\u0308ffin",          "ýffin"             }, // ffi ligature -> f + f + i
+        { "ýffin",              "y\u0301ffin",          "ýffin"             },	//updated for 3.0
+        { "ý\uFB03n",           "y\u0301ffin",          "ýffin"             }, // ffi ligature -> f + f + i
 
         { "Henry IV",           "Henry IV",             "Henry IV"          },
         { "Henry \u2163",       "Henry IV",             "Henry IV"          },
