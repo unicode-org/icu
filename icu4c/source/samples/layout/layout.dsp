@@ -129,10 +129,6 @@ SOURCE=.\RenderingFontInstance.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\extra\scrptrun\scrptrun.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\UnicodeReader.cpp
 # End Source File
 # Begin Source File
@@ -182,10 +178,6 @@ SOURCE=.\RenderingFontInstance.h
 # Begin Source File
 
 SOURCE=.\resource.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\extra\scrptrun\scrptrun.h
 # End Source File
 # Begin Source File
 
