@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/Demo.java,v $ 
- * $Date: 2001/11/28 22:02:44 $ 
- * $Revision: 1.9 $
+ * $Date: 2001/11/29 01:21:12 $ 
+ * $Revision: 1.10 $
  *
  *****************************************************************************************
  */
@@ -27,7 +27,7 @@ import com.ibm.text.*;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Demo.java,v $ $Revision: 1.9 $ $Date: 2001/11/28 22:02:44 $
+ * @version $RCSfile: Demo.java,v $ $Revision: 1.10 $ $Date: 2001/11/29 01:21:12 $
  */
 public class Demo extends Frame {
 
@@ -254,8 +254,8 @@ public class Demo extends Frame {
             }
         });   
         
-        hexDialog = new InfoDialog(this, "Hex Entry", "Use U+..., \\u..., \\p{...}, or &#x...;",
-           "U+00AD"
+        hexDialog = new InfoDialog(this, "Hex Entry", "Use U+..., \\u..., \\x{...}, or &#x...;",
+           "\u00E1"
         );
         Button button = new Button("Insert");
         button.addActionListener(new ActionListener() {
@@ -277,7 +277,7 @@ public class Demo extends Frame {
         // Compound Transliterator
         
         compoundDialog = new InfoDialog(this, "Compound Transliterator", "",
-           "[^\u0000-\u00FF] hex"
+           "[^\\u0000-\\u00FF] hex"
         );
         button = new Button("Set");
         button.addActionListener(new ActionListener() {
@@ -560,12 +560,12 @@ public class Demo extends Frame {
         InfoDialog(Frame parent, String title, String label, String message) {
             super(parent, title, false);
             me = this;
-            this.setLayout(new BorderLayout(15,15));
+            this.setLayout(new BorderLayout());
             if (label.length() != 0) {
                 this.add("North", new Label(label));
             }
             
-            area = new TextArea(message, 10, 80, TextArea.SCROLLBARS_VERTICAL_ONLY);
+            area = new TextArea(message, 8, 80, TextArea.SCROLLBARS_VERTICAL_ONLY);
             this.add("Center", area);
             
             button = new Button("Hide");
@@ -575,7 +575,7 @@ public class Demo extends Frame {
                 }
             });
             bottom = new Panel();
-            bottom.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 15));
+            bottom.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
             bottom.add(button);
             this.add("South", bottom);
             this.pack();
