@@ -305,6 +305,7 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
     char buffer[2048], primary[100], secondary[100], tertiary[100];
     UBool detectedContraction;
     int32_t i = 0;
+    unsigned int theValue;
     char *pointer = NULL;
     char *commentStart = NULL;
     char *startCodePoint = NULL;
@@ -357,7 +358,12 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
     element->cPoints = element->uchars;
 
     spacePointer = strchr(buffer, ' ');
-    sscanf(buffer, "%04X", element->cPoints); /* read first code point */
+    if(sscanf(buffer, "%04X", &theValue) != 1) /* read first code point */
+    {
+      fprintf(stderr, " scanf(hex) failed on [%s]\n ");
+    }
+    element->cPoints[0] = theValue;
+
     element->codepoint = element->cPoints[0];
     if(spacePointer == 0) {
         detectedContraction = FALSE;
