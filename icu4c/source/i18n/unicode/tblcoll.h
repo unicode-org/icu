@@ -589,8 +589,9 @@ public:
    * Return the maximum length of any expansion sequences that end with the 
    * specified comparison order.
    * @param order a collation order returned by previous or next.
-   * @return the maximum length of any expansion seuences ending
-   *         with the specified order.
+   * @return maximum size of the expansion sequences ending with the collation 
+   *         element or 1 if collation element does not occur at the end of 
+   *         any expansion sequence
    * @see CollationElementIterator#getMaxExpansion
    */
 	int32_t getMaxExpansion(int32_t order) const;

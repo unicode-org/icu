@@ -82,11 +82,7 @@ ucol_reset(UCollationElements *elems)
   ci->pos         = ci->string;
   ci->len         = ci->string + elems->length_;
   ci->CEpos       = ci->toReturn = ci->CEs;
-  /*
-  problem here, that means we'll have to keep calculating the new thai set
-  whenever we reset. maybe getSpecialCE should just do up the whole string
-  instead of only a substring of it.
-  */
+  
   ci->isThai      = TRUE;
   if (ci->stackWritableBuffer != ci->writableBuffer)
   {
@@ -106,7 +102,8 @@ ucol_next(UCollationElements *elems,
   elems->reset_ = FALSE;
   
   UCOL_GETNEXTCE(result, elems->collator_, elems->iteratordata_, status);
-  /*
+
+  /* testing
   if ((elems->iteratordata_).CEpos > (elems->iteratordata_).toReturn) 
     {                       
       result = *((elems->iteratordata_).toReturn++);                                      
@@ -159,8 +156,8 @@ ucol_previous(UCollationElements *elems,
     UCOL_GETPREVCE(result, elems->collator_, elems->iteratordata_, 
                    elems->length_, status);
 
-    /* synwee : to be removed, only for testing */
-    /*
+    /* synwee : to be removed, only for testing 
+    
     const UCollator   *coll  = elems->collator_;
           collIterate *data  = &(elems->iteratordata_);
           int32_t     length = elems->length_;
@@ -211,7 +208,7 @@ ucol_getMaxExpansion(const UCollationElements *elems,
   UCOL_GETMAXEXPANSION(elems->collator_, order, result);
   return result;
 }
-
+ 
 U_CAPI void
 ucol_setText(      UCollationElements *elems,
              const UChar              *text,
@@ -230,12 +227,13 @@ ucol_setText(      UCollationElements *elems,
   if (elems->iteratordata_.isWritable && elems->iteratordata_.string != NULL)
     uprv_free(elems->iteratordata_.string);
   init_collIterate(text, textLength, &elems->iteratordata_, FALSE);
+
+  elems->reset_   = TRUE;
 }
 
 U_CAPI UTextOffset
 ucol_getOffset(const UCollationElements *elems)
 {
-  /* return ((CollationElementIterator*)elems)->getOffset(); */
   const collIterate *ci = &(elems->iteratordata_);
   if (ci->isThai == TRUE)
     return ci->pos - ci->string;
@@ -254,11 +252,6 @@ ucol_setOffset(UCollationElements    *elems,
   collIterate *ci = &(elems->iteratordata_);
   ci->pos         = ci->string + offset;
   ci->CEpos       = ci->toReturn = ci->CEs;
-  /*
-  problem here, that means we'll have to keep calculating the new thai set
-  whenever we reset. maybe getSpecialCE should just do up the whole string
-  instead of only a substring of it.
-  */
   ci->isThai      = TRUE;
   if (ci->stackWritableBuffer != ci->writableBuffer)
   {

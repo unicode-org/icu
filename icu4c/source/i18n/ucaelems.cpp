@@ -17,6 +17,9 @@
 *   internal format for UCA table as well as inverse UCA table.
 *   It then writes binary files containing the data: ucadata.dat 
 *   & invuca.dat
+* 
+*   date        name       comments
+*   03/02/2001  synwee     added setMaxExpansion
 */
 
 #include "ucaelems.h"
@@ -410,6 +413,33 @@ uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *elemen
     }
 }
 
+void uprv_uca_getMaxExpansionHangul(CompactIntArray   *mapping, 
+                                    MaxExpansionTable *maxexpansion,
+                                    UErrorCode        *status)
+{
+  const uint32_t VBASE  = 0x1161;
+  const uint32_t TBASE  = 0x11A7;
+  const uint32_t VCOUNT = 21;
+  const uint32_t TCOUNT = 28;
+
+  uint32_t v = VBASE + VCOUNT - 1;
+  uint32_t t = TBASE + TCOUNT - 1;
+  uint32_t ce;
+
+  while (v >= VBASE)
+  {
+    ce = ucmp32_get(mapping, v);
+    uprv_uca_setMaxExpansion(ce, 2, maxexpansion, status);
+    v --;
+  }
+
+  while (t >= TBASE)
+  {
+    ce = ucmp32_get(mapping, t);
+    uprv_uca_setMaxExpansion(ce, 3, maxexpansion, status);
+    t --;
+  }
+}
 
 UCATableHeader *uprv_uca_reassembleTable(tempUCATable *t, UCATableHeader *mD, UErrorCode *status) {
     CompactIntArray *mapping = t->mapping;
@@ -435,6 +465,9 @@ UCATableHeader *uprv_uca_reassembleTable(tempUCATable *t, UCATableHeader *mD, UE
     UMemoryStream *ms = uprv_mstrm_openNew(8192);
     int32_t mappingSize = ucmp32_flattenMem(mapping, ms);
     const uint8_t *flattened = uprv_mstrm_getBuffer(ms, &mappingSize);
+
+    /* sets hangul expansions */
+    uprv_uca_getMaxExpansionHangul(mapping, maxexpansion, status);
 
     uint32_t tableOffset = 0;
     uint8_t *dataStart;
