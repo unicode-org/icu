@@ -14,9 +14,17 @@ export DH_COMPAT=2
 
 # Where the source for ICU is, where to build
 srcdir = source
-builddir = debian/build
+builddir = build
 # How to get to $(srcdir) from $(builddir)
-builddir_relative_srcdir = ../../$(srcdir)
+builddir_relative_topdir = ..
+builddir_relative_srcdir = $(builddir_relative_topdir)/$(srcdir)
+
+# Getting the ICU version numbers, stolen from configure.in (that's okay, I
+# wrote the configure.in part anyway)
+
+version := $(shell sed -n 's/^[ 	]*\#[ 	]*define[ 	]*U_ICU_VERSION[ 	]*"\([^"]*\)".*/\1/p' $(srcdir)/common/unicode/utypes.h)
+lib_version := $(shell echo $(version) | sed -e 's/\.//' -e 's/^\([^.]*\)$$/\1.0/')
+lib_version_major := $(shell echo $(lib_version) | sed 's/\..*//')
 
 # ICU installation directories, w/o the initial slash
 pkgdatadir = usr/share/icu
@@ -53,14 +61,16 @@ all: build
 
 configure: $(builddir)/configure-stamp
 $(builddir)/configure-stamp:
-	dh_testdir
 	# Add here commands to configure the package.
 	test -d $(builddir) || mkdir $(builddir)
 	cd $(builddir); CFLAGS='$(CFLAGS)' CXXFLAGS='$(CFLAGS)' INSTALL_PROGRAM='$(INSTALL_PROGRAM)' $(builddir_relative_srcdir)/configure --srcdir=$(builddir_relative_srcdir) --prefix=/usr --mandir=/usr/share/man --sysconfdir=/etc --with-data-packaging=files --disable-rpath --enable-shared --enable-static --disable-samples
 	touch $@
 
 build: $(builddir)/configure-stamp $(builddir)/build-stamp
-$(builddir)/build-stamp:
+
+$(builddir)/build-stamp: 
+	@$(MAKE) -f debian/rules $(addprefix debian/,$(DEBIAN_FILES))
+
 	dh_testdir
 
 	# Add here commands to compile the package.
@@ -77,8 +87,8 @@ clean:
 	-$(MAKE) -C $(builddir) distclean
 	#-$(RM) `find $(builddir)/samples $(builddir)/test -name Makefile -print`
 	-$(RM) `find $(builddir) -name Makefile -print`
-	$(RM) $(addprefix debian/,$(DEBIAN_FILES))
 	dh_clean
+	$(RM) $(addprefix debian/,$(DEBIAN_FILES))
 	$(RM) debian/*docs
 
 	if test -d $(builddir) -a $(builddir) != $(srcdir); then rmdir `find $(builddir) -type d -print | sort -r`; fi
@@ -92,20 +102,22 @@ install: build
 	# Add here commands to install the package into debian/tmp
 	$(MAKE) -C $(builddir) install DESTDIR=`pwd`/debian/tmp
 
-
 # Build architecture-independent files here.
 binary-indep: build install
 # We have nothing to do by default.
 
 # Build some Debian files
+DEBIAN_FILES = control icu.conffiles icu.postinst icu.prerm libicu$(lib_version_major).prerm.in libicu$(lib_version_major).prerm libicu$(lib_version_major).postinst
+
+debian/libicu$(lib_version_major).%: debian/libicu.%
+	cp $< $@
+
 debian/%: debian/%.in
 	cd $(builddir) \
-	  && CONFIG_FILES=../$@ CONFIG_HEADERS= $(SHELL) ./config.status
-
-DEBIAN_FILES = icu.conffiles icu.postinst icu.prerm libicu16.prerm
+	  && CONFIG_FILES=$(builddir_relative_topdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 # Build architecture-dependent files here.
-binary-arch: build install $(addprefix debian/,$(DEBIAN_FILES))
+binary-arch: build install
 #	dh_testversion
 	dh_testdir
 	dh_testroot
@@ -196,10 +208,16 @@ binary-arch: build install $(addprefix debian/,$(DEBIAN_FILES))
 	dh_installdeb
 #	dh_perl
 	dh_shlibdeps && \
-	    sed 's/ libicu16[^,]*,//' debian/libicu$(major).substvars >debian/libicu$(major).substvars.new && mv debian/libicu$(major).substvars.new debian/libicu$(major).substvars
+	    sed 's/ libicu$(lib_version_major)[^,]*,//' debian/libicu$(major).substvars >debian/libicu$(major).substvars.new && mv debian/libicu$(major).substvars.new debian/libicu$(major).substvars
 	dh_gencontrol -- -Vversion=$(version) -Vmajor=$(major)
 	dh_md5sums
 	dh_builddeb
 
-binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install
+# Automatically update changelog
+update-changelog:
+	cvers=`sed -n 's/^icu (\([^)]*\)).*/\1/p' debian/changelog | head -1`; if dpkg --compare-versions $$cvers lt $(version)-1; then \
+	    dch -v $(version)-1 "Update to ICU version $(version)."; \
+ 	fi
+
+binary: update-changelog binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install update-changelog
