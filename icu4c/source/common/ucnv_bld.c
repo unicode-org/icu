@@ -185,24 +185,19 @@ static UConverterSharedData *createConverterFromFile (const char *fileName, UErr
     return sharedData;
 }
 
-void 
+int32_t 
 ucnv_copyPlatformString(char *platformString, UConverterPlatform pltfrm)
 {
     switch (pltfrm)
     {
     case UCNV_IBM:
-        {
-            uprv_strcpy (platformString, "ibm");
-            break;
-        }
-    default:
-        {
-            uprv_strcpy (platformString, "");
-            break;
-        }
+        uprv_strcpy(platformString, "ibm-");
+        return 4;
     };
-    
-    return;
+
+    /* default to empty string */
+    *platformString = 0;
+    return 0;
 }
 
 /*returns a converter type from a string

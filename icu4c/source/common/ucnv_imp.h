@@ -57,7 +57,12 @@ UBool ucnv_deleteSharedConverterData (UConverterSharedData * sharedConverterData
  */
 UBool ucnv_isDataBasedConverter (const char *name);
 
-void ucnv_copyPlatformString (char *platformString, UConverterPlatform pltfrm);
+/* Copy the string that is represented by the UConverterPlatform enum
+ * @param platformString An output buffer
+ * @param platform An enum representing a platform
+ * @return the length of the copied string.
+ */
+int32_t ucnv_copyPlatformString(char *platformString, UConverterPlatform platform);
 
 
 #endif /* _UCNV_IMP */

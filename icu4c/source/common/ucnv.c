@@ -104,7 +104,7 @@ ucnv_openU (const UChar * name,
         return NULL;
     if (name == NULL)
         return ucnv_open (NULL, err);
-    if (u_strlen (name) > UCNV_MAX_CONVERTER_NAME_LENGTH)
+    if (u_strlen(name) > UCNV_MAX_CONVERTER_NAME_LENGTH)
     {
         *err = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
@@ -125,13 +125,11 @@ ucnv_openCCSID (int32_t codepage,
     if (U_FAILURE (*err))
         return NULL;
 
-    ucnv_copyPlatformString (myName, platform);
-    myNameLen = uprv_strlen(myName);
-    myName[myNameLen++] = '-';
-    myName[myNameLen] = 0;
-    T_CString_integerToString (myName + myNameLen, codepage, 10);
+    /* ucnv_copyPlatformString could return "ibm-" or "cp" */
+    myNameLen = ucnv_copyPlatformString(myName, platform);
+    T_CString_integerToString(myName + myNameLen, codepage, 10);
 
-    return ucnv_createConverter (myName, err);
+    return ucnv_createConverter(myName, err);
 }
 
 /* Creating a temporary stack-based object that can be used in one thread, 
