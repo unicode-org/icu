@@ -4,12 +4,6 @@
  * Copyright (C) 2002-2003, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/util/Visitor.java,v $
- * $Date: 2004/02/07 00:59:24 $
- * $Revision: 1.4 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.dev.test.util;
 

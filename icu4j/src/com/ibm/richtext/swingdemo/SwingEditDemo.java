@@ -1,6 +1,4 @@
 /*
- * @(#)$RCSfile: SwingEditDemo.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:45:42 $
- *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or

@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2003, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/StringUCharacterIterator.java,v $ 
- * $Date: 2004/01/22 19:26:48 $ 
- * $Revision: 1.4 $
- *
- *******************************************************************************
  */
 package com.ibm.icu.impl;
 

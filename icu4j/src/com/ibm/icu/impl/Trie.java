@@ -3,12 +3,6 @@
 * Copyright (C) 1996-2003, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
-*
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/Trie.java,v $
-* $Date: 2003/09/19 00:14:35 $
-* $Revision: 1.13 $
-*
-******************************************************************************
 */
 
 package com.ibm.icu.impl;

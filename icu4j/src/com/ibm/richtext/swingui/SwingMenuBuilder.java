@@ -1,6 +1,4 @@
 /*
- * @(#)$RCSfile: SwingMenuBuilder.java,v $ $Revision: 1.2 $ $Date: 2001/10/30 02:42:48 $
- *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
  * The program is provided "as is" without any warranty express or

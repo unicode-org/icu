@@ -3,12 +3,6 @@
  * Copyright (C) 2001-2002, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/ChineseCalendarSymbols.java,v $
- * $Date: 2002/08/13 23:37:48 $
- * $Revision: 1.6 $
- *
- *******************************************************************************
  */
 package com.ibm.icu.impl.data;
 

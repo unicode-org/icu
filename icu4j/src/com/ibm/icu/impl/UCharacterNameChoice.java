@@ -3,13 +3,6 @@
 * Copyright (C) 1996-2001, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
-*
-* $Source: 
-*     /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterNameChoiceEnum.java $ 
-* $Date: 2002/09/19 21:19:04 $ 
-* $Revision: 1.1 $
-*
-*******************************************************************************
 */
 
 package com.ibm.icu.impl;

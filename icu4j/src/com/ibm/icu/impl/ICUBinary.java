@@ -4,9 +4,6 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/ICUBinary.java,v $
- * $Date: 2003/12/20 03:06:55 $
- * $Revision: 1.9 $
  *  *****************************************************************************************
  */
 package com.ibm.icu.impl;

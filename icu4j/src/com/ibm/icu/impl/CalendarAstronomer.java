@@ -3,12 +3,6 @@
  * Copyright (C) 1996-2004, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
- *
- * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/CalendarAstronomer.java,v $ 
- * $Date: 2004/02/25 00:02:34 $ 
- * $Revision: 1.1 $
- *
- *****************************************************************************************
  */
 package com.ibm.icu.impl;
 

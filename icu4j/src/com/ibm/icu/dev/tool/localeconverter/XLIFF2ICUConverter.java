@@ -3,12 +3,6 @@
 * Copyright (C) 2003, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
-*
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter.java,v $ 
-* $Date: 2003/05/19 
-* $Revision: 1.12 $
-*
-******************************************************************************
 */
 
 package com.ibm.icu.dev.tool.localeconverter;

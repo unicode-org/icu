@@ -3,12 +3,6 @@
 * Copyright (C) 1996-2001, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
-*
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/UCharArrayIterator.java,v $ 
-* $Date: 2002/10/31 22:35:20 $ 
-* $Revision: 1.3 $
-*
-*******************************************************************************
 */
 
 package com.ibm.icu.impl;

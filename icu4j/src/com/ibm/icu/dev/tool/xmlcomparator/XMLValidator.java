@@ -4,12 +4,6 @@
 * Copyright (C) 2003, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
-*
-* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/xmlcomparator/Attic/XMLValidator.java,v $ 
-* $Date: 2003/05/14 18:37:16 $ 
-* $Revision: 1.2 $
-*
-******************************************************************************
 */
 
 package com.ibm.icu.dev.tool.xmlcomparator;
