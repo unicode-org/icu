@@ -1,6 +1,7 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999 Alan Liu and others. All rights reserved.
+*   Copyright (C) 1999 International Business Machines Corporation   *
+*   and others. All rights reserved.                                 *
 **********************************************************************
 *   Date        Name        Description
 *   10/22/99    alan        Creation.
