@@ -141,7 +141,8 @@ static const UChar CATEGORY_CLOSE[] = {COLON, SET_CLOSE, 0x0000}; /* ":]" */
 
 U_NAMESPACE_BEGIN
 
-const char ParsePosition::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(ParsePosition)
+ParsePosition::~ParsePosition() {}
 
 /**
  * Minimum value that can be stored in a UnicodeSet.
@@ -153,7 +154,7 @@ const UChar32 UnicodeSet::MIN_VALUE = UNICODESET_LOW;
  */
 const UChar32 UnicodeSet::MAX_VALUE = UNICODESET_HIGH - 1;
 
-const char UnicodeSet::fgClassID = 0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UnicodeSet)
 
 static UnicodeSet* INCLUSIONS = NULL; // cached uprv_getInclusions()
 

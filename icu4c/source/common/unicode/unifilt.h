@@ -85,40 +85,41 @@ public:
      * UnicodeFunctor API.  Nothing to do.
      * @draft ICU 2.4
      */
-    virtual void setData(const TransliterationRuleData*) {}
+    virtual void setData(const TransliterationRuleData*);
 
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
      * @draft ICU 2.2
      */
-    virtual inline UClassID getDynamicClassID() const = 0;
+    virtual UClassID getDynamicClassID() const = 0;
 
-    /**
+    /*
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
      * @draft ICU 2.2
      */
-    static inline UClassID getStaticClassID() { return (UClassID)&fgClassID; }
+/*    static UClassID getStaticClassID() { return (UClassID)&fgClassID; }*/
 
 protected:
 
-    /**
+    /*
+     * Since this class has pure virtual functions,
+     * a constructor can't be used.
      * @stable ICU 2.0
      */
-    UnicodeFilter();
+/*    UnicodeFilter();*/
 
 private:
 
-    /**
+    /*
      * The address of this static class variable serves as this class's ID
      * for ICU "poor man's RTTI".
      */
-    static const char fgClassID;
+/*    static const char fgClassID;*/
 };
 
-inline UnicodeFilter::UnicodeFilter() {}
-inline UnicodeFilter::~UnicodeFilter() {}
+/*inline UnicodeFilter::UnicodeFilter() {}*/
 
 U_NAMESPACE_END
 

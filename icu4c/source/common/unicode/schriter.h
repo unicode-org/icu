@@ -153,7 +153,7 @@ public:
    * @return a class ID for this class
    * @stable ICU 2.0
    */
-  static inline UClassID   getStaticClassID(void);
+  static UClassID   getStaticClassID(void);
 
 protected:
   /**
@@ -176,17 +176,7 @@ protected:
    */
   UnicodeString            text;
 
-private:
-  static const char        fgClassID;
 };
-
-inline UClassID
-StringCharacterIterator::getStaticClassID(void) 
-{ return (UClassID)(&fgClassID); }
-
-inline UClassID
-StringCharacterIterator::getDynamicClassID(void) const 
-{ return StringCharacterIterator::getStaticClassID(); }
 
 U_NAMESPACE_END
 #endif

@@ -21,7 +21,7 @@ U_NAMESPACE_BEGIN
  * token is assumed to be an integer. This is needed for iSeries
  */
  
-const char UVector32::fgClassID=0;
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UVector32)
 
 UVector32::UVector32(UErrorCode &status) :
     count(0),

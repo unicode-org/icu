@@ -2814,18 +2814,18 @@ public:
   UChar32 unescapeAt(int32_t &offset) const;
 
   /**
-   * ICU "poor man's RTTI", returns a UClassID for the actual class.
-   *
-   * @draft ICU 2.2
-   */
-  virtual inline UClassID getDynamicClassID() const;
-
-  /**
    * ICU "poor man's RTTI", returns a UClassID for this class.
    *
    * @draft ICU 2.2
    */
-  static inline UClassID getStaticClassID();
+  static UClassID getStaticClassID();
+
+  /**
+   * ICU "poor man's RTTI", returns a UClassID for the actual class.
+   *
+   * @draft ICU 2.2
+   */
+  virtual UClassID getDynamicClassID() const;
 
   //========================================
   // Implementation methods
@@ -3067,11 +3067,6 @@ private:
   uint16_t  fFlags;         // bit flags: see constants above
   UChar     fStackBuffer [ US_STACKBUF_SIZE ]; // buffer for small strings
 
-  /**
-   * The address of this static class variable serves as this class's ID
-   * for ICU "poor man's RTTI".
-   */
-  static const char fgClassID;
 };
 
 U_NAMESPACE_END
@@ -3145,14 +3140,6 @@ UnicodeString::getArrayStart() const
 //========================================
 // Read-only implementation methods
 //========================================
-inline UClassID
-UnicodeString::getStaticClassID()
-{ return (UClassID)&fgClassID; }
-
-inline UClassID
-UnicodeString::getDynamicClassID() const
-{ return UnicodeString::getStaticClassID(); }
-
 inline int32_t  
 UnicodeString::length() const
 { return fLength; }
