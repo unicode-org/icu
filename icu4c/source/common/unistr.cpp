@@ -1260,18 +1260,20 @@ UnicodeString::extract(UTextOffset start,
              &mySource, mySourceLimit, 0, TRUE, &status);
   } else {
     /* Find out the size of the target needed for the current codepage */
-    char target = 0;
+    char targetCh = 0;
     int32_t size = 0;
 
-    myTargetLimit = &target + sizeof(char);
-    while (mySource < mySourceLimit && U_SUCCESS(status)) {
-        myTarget = &target;
+    myTargetLimit = &targetCh + sizeof(char);
+    status = U_BUFFER_OVERFLOW_ERROR;
+    while (mySource < mySourceLimit && status == U_BUFFER_OVERFLOW_ERROR) {
+        myTarget = &targetCh;
+        status = U_ZERO_ERROR;
         ucnv_fromUnicode(converter, &myTarget, myTargetLimit,
                  &mySource, mySourceLimit, 0, TRUE, &status);
         size += sizeof(char);
     }
     /* Use the close at the end of the function */
-    myTarget = target + (char *)size;
+    myTarget = target + size;
   }
 
   // close the converter
