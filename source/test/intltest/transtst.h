@@ -165,6 +165,8 @@ class TransliteratorTest : public IntlTest {
 
     void TestRemove(void);
 
+    void TestToRules(void);
+
     //======================================================================
     // Support methods
     //======================================================================
