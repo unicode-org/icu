@@ -158,9 +158,51 @@ U_CAPI UChar* U_EXPORT2 u_uastrncpy(UChar *ucs1,
  */
 U_CAPI char* U_EXPORT2 u_austrcpy(char *s1,
             const UChar *us2 );
+
+/**
+ * Unicode String literals in C.
+ * We need one macro to declare a variable for the string
+ * and to statically preinitialize it if possible,
+ * and a second macro to dynamically intialize such a string variable if necessary.
+ *
+ * The macros are defined for maximum performance.
+ * They work only for strings that contain "invariant characters", i.e.,
+ * only latin letters, digits, and some punctuation.
+ * See utypes.h for details.
+ *
+ * A pair of macros for a single string must be used with the same
+ * parameters.
+ * The string parameter must be a C string literal.
+ * The length of the string, not including the terminating
+ * <code>NUL</code> must be specified as a constant.
+ * The U_STRING_DECL macro should be invoked exactly once for one
+ * such string variable before it is used.
+ *
+ * Usage:
+ * <pre>
+ * &#32;   U_STRING_DECL(ustringVar1, "Quick-Fox 2", 11);
+ * &#32;   U_STRING_DECL(ustringVar2, "jumps 5%", 8);
+ * &#32;   static bool_t didInit=FALSE;
+ * &#32;   
+ * &#32;   int32_t function() {
+ * &#32;       if(!didInit) {
+ * &#32;           U_STRING_INIT(ustringVar1, "Quick-Fox 2", 11);
+ * &#32;           U_STRING_INIT(ustringVar2, "jumps 5%", 8);
+ * &#32;           didInit=TRUE;
+ * &#32;       }
+ * &#32;       return u_strcmp(ustringVar1, ustringVar2);
+ * &#32;   }
+ * </pre>
+ */
+#if U_SIZEOF_WCHAR_T==U_SIZEOF_UCHAR && U_CHARSET_FAMILY==U_ASCII_FAMILY
+#   define U_STRING_DECL(var, cs, length) static const UChar var[(length)+1]={ (UChar *)L ## cs }
+#   define U_STRING_INIT(var, cs, length)
+#elif U_SIZEOF_UCHAR==1 && U_CHARSET_FAMILY==U_ASCII_FAMILY
+#   define U_STRING_DECL(var, cs, length) static const UChar var[(length)+1]={ (UChar *)cs }
+#   define U_STRING_INIT(var, cs, length)
+#else
+#   define U_STRING_DECL(var, cs, length) static const UChar var[(length)+1]
+#   define U_STRING_INIT(var, cs, length) u_charsToUChars(cs, var, length+1)
 #endif
 
-
-
-
-
+#endif
