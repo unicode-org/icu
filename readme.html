@@ -30,7 +30,7 @@
      <abbr title="International Components for Unicode">ICU</abbr> 2.8
     ReadMe</h1>
 
-    <p>Version: 2003-Oct-13<br>
+    <p>Version: 2003-Oct-14<br>
      Copyright &copy; 1997-2003 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -155,7 +155,8 @@
      The ICU homepage also links to related information about writing
     internationalized software.</p>
 
-    <table border="1" cellpadding="3" width="100%">
+    <table border="1" cellpadding="3" width="100%" summary=
+    "These are some useful links regarding ICU and internationalization in general.">
       <caption>
         Here are some useful links regarding ICU and internationalization in
         general.
@@ -232,8 +233,8 @@
     <h3>Library Initialization</h3>
 
     <p>ICU4C 2.6 introduces a library initialization function. It is required
-    to call it before using any ICU services in a multi-threaded
-    environment. For details please see the <a href=
+    to call it before using any ICU services in a multi-threaded environment.
+    For details please see the <a href=
     "http://oss.software.ibm.com/icu/apiref/index.html">documentation</a> of
     <code>u_init()</code> in the <code>unicode/uclean.h</code> header file.</p>
     <hr>
@@ -279,7 +280,8 @@
     your software product. You need at least the data (<code>[lib]icudt</code>)
     and the common (<code>[lib]icuuc</code>) libraries in order to use ICU.</p>
 
-    <table border="1" cellpadding="0" width="100%">
+    <table border="1" cellpadding="0" width="100%" summary=
+    "The following files describe the code drop.">
       <caption>
         The following files describe the code drop.
       </caption>
@@ -306,7 +308,8 @@
     <p><br>
     </p>
 
-    <table border="1" cellpadding="0" width="100%">
+    <table border="1" cellpadding="0" width="100%" summary=
+    "The following directories contain source code and data files.">
       <caption>
         The following directories contain source code and data files.
       </caption>
@@ -496,7 +499,8 @@
     <h3><a name="HowToBuildSupported" href="#HowToBuildSupported">Supported
     Platforms</a></h3>
 
-    <table border="1" cellpadding="3">
+    <table border="1" cellpadding="3" summary=
+    "ICU can be built on many platforms.">
       <caption>
         Here is a status of functionality of ICU on several different
         platforms.
@@ -1035,8 +1039,8 @@
         prior to invoking the make process to produce binaries that are enabled
         for XPLINK.</p>
 
-        <p>Note: XPLINK, which is enabled for z/OS 1.2 and later, requires the PTF
-        PQ69418 to build XPLINK-enabled binaries.</p>
+        <p>Note: XPLINK, which is enabled for z/OS 1.2 and later, requires the
+        PTF PQ69418 to build XPLINK-enabled binaries.</p>
       </li>
 
       <li>Since the default make on z/OS is not gmake, the pkgdata tool
@@ -1057,9 +1061,9 @@
         <p>When you build ICU on a system such as z/OS 1.2, the binaries that
         result can run on that level of the operating system and later, such as
         z/OS 1.3 and z/OS 1.4. It's possible that you may have a z/OS 1.4
-        system, but you may need to deliver binaries on z/OS 1.2 and
-        above. z/OS gives you this ability by targeting the complier and linker
-        to run at the older level, thereby producing the desired binaries.</p>
+        system, but you may need to deliver binaries on z/OS 1.2 and above.
+        z/OS gives you this ability by targeting the complier and linker to run
+        at the older level, thereby producing the desired binaries.</p>
 
         <p>To set the compiler and LE environment to OS/390 2.10, specify the
         following, "<code>./runConfigureICU OS390V2R10</code>"</p>
@@ -1175,8 +1179,8 @@ Data set name type  : PDS</samp>
     </ul>
 
     <p>The following describes how to setup and build ICU. For background
-    information, you should look at the <a href="#HowToBuildUNIX">UNIX
-    build instructions</a>.</p>
+    information, you should look at the <a href="#HowToBuildUNIX">UNIX build
+    instructions</a>.</p>
 
     <ol>
       <li>
@@ -1285,8 +1289,8 @@ del common/libicuuc.so
     to develop and package ICU. The bin, lib and include directories are needed
     to develop applications that use ICU. These directories will be created
     relative to the "<tt>--prefix=</tt><i>dir</i>" configure option (See the <a
-    href="#HowToBuildUNIX">UNIX build instructions</a>). When ICU is built on Windows, a similar
-    directory structure is built.</p>
+    href="#HowToBuildUNIX">UNIX build instructions</a>). When ICU is built on
+    Windows, a similar directory structure is built.</p>
 
     <p>When changes have been made to the standard ICU distribution, it is
     recommended that at least one of the following guidelines be followed for
@@ -1309,7 +1313,8 @@ del common/libicuuc.so
     The <a href="#SourceCode">ICU Source Code Organization</a> section of this
     readme.html gives a more complete description of the libraries.</p>
 
-    <table border="1" cellpadding="3">
+    <table border="1" cellpadding="3" summary=
+    "ICU has several libraries for you to use.">
       <caption>
         Here is an example of libraries that are frequently packaged.
       </caption>
@@ -1450,14 +1455,15 @@ del common/libicuuc.so
     platforms where this is not the case.</em></p>
 
     <p>Some usage of char * strings in ICU assumes the system charset instead
-    of invariant characters; such strings are only handled with the default
-    converter. See the following section. (The system charset is usually a
-    superset of the invariant characters.)</p>
+    of invariant characters. Such strings are only handled with the default
+    converter (See the following section). The system charset is usually a
+    superset of the invariant characters.</p>
 
-    <p>The following are the ASCII and EBCDIC code values for all of the
+    <p>The following are the ASCII and EBCDIC byte values for all of the
     invariant characters (see also unicode/utypes.h):</p>
 
-    <table border="1">
+    <table border="1" summary=
+    "There are a few invariant characters that can be used for char * strings">
       <tr>
         <th>Character(s)</th>
 
