@@ -62,9 +62,9 @@
 
 /* The following are not available on all systems, defined in wchar.h or string.h . */
 #if U_HAVE_WCHAR_H
-#   define uprv_wcscat(dst, src) wcscat(dst, src)
-#   define uprv_wcscpy(dst, src) wcscpy(dst, src)
-#   define uprv_wcslen(src) wcslen(src)
+#   define uprv_wcscat wcscat
+#   define uprv_wcscpy wcscpy
+#   define uprv_wcslen wcslen
 #else
 U_CAPI wchar_t *uprv_wcscat(wchar_t *dst, const wchar_t *src);
 U_CAPI wchar_t *uprv_wcscpy(wchar_t *dst, const wchar_t *src);
