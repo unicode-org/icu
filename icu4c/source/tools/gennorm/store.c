@@ -259,6 +259,7 @@ enumTrie(EnumTrieFn *fn, void *context) {
     UChar32 code;
     UBool isInBlockZero;
 
+    count=0;
     for(code=0; code<=0x10ffff;) {
         i=utrie_get32(&normTrie, code, &isInBlockZero);
         if(isInBlockZero) {
