@@ -885,22 +885,13 @@ int main(int argc, char **argv)
 	return printTransliterators(pname, printCanon) ? 3 : 0;
     }
 
-    if (fromcpage == 0 && tocpage == 0) {
-	usage(pname, 1);
+    if (!fromcpage) {
+        fromcpage = ucnv_getDefaultName();
+    }
+    if (!tocpage) {
+        tocpage = ucnv_getDefaultName();
     }
 
-    if (fromcpage == 0) {
-	initMsg(pname);
-	u_wmsg("noFromCodeset");
-	//"No conversion from codeset given (use -f)\n");
-	goto error_exit;
-    }
-    if (tocpage == 0) {
-	initMsg(pname);
-	u_wmsg("noToCodeset");
-	// "No conversion to codeset given (use -t)\n");
-	goto error_exit;
-    }
     // Open the correct output file or connect to stdout for reading input
     if (outfilestr != 0 && strcmp(outfilestr, "-")) {
 	outfile = fopen(outfilestr, "wb");
