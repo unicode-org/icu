@@ -64,6 +64,10 @@ U_CAPI int32_t  U_EXPORT2 uprv_max(int32_t x, int32_t y);
 U_CAPI int32_t  U_EXPORT2 uprv_min(int32_t x, int32_t y);
 U_CAPI double   U_EXPORT2 uprv_trunc(double d);
 U_CAPI void     U_EXPORT2 uprv_longBitsFromDouble(double d, int32_t *hi, uint32_t *lo);
+U_CAPI double   U_EXPORT2 uprv_strtod(const char* source, char** end);
+U_CAPI char*    U_EXPORT2 uprv_dtostr(double value, char *buffer, int maximumDigits,UBool fixedPoint);
+U_CAPI int32_t  U_EXPORT2 uprv_itou (UChar * buffer, uint32_t i, uint32_t radix, int32_t pad);
+
 #if U_IS_BIG_ENDIAN
 #   define uprv_isNegative(number) (*((signed char *)&(number))<0)
 #else
