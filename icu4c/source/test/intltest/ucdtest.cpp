@@ -347,8 +347,10 @@ void UnicodeTest::TestUnicodeData()
     int8_t type;
     for(;;) {
         bufferPtr = fgets(buffer, 999, input);
-        if (bufferPtr == NULL) break;
-        if (bufferPtr[0] == '#' || bufferPtr[0] == '\n' || bufferPtr[0] == 0) continue;
+        if (bufferPtr == NULL)
+            break;
+        if (bufferPtr[0] == '#' || bufferPtr[0] == '\n' || bufferPtr[0] == 0)
+            continue;
         sscanf(bufferPtr, "%X", &unicode);
         assert(0 <= unicode && unicode < 65536);
         if (unicode == LAST_CHAR_CODE_IN_FILE)
@@ -401,7 +403,8 @@ void UnicodeTest::TestUnicodeData()
             errln("Unicode character directionality failed at\n " + unicode);
     }
 
-    if (input) fclose(input);
+    if (input)
+        fclose(input);
 
     // test Unicode::getCharName()
     // a more thorough test of u_charName() is in cintltst/cucdtst.c
@@ -457,9 +460,9 @@ int32_t UnicodeTest::MakeDir(char* str)
 void UnicodeTest::TestCodeUnit(){
     const UChar codeunit[]={0x0000,0xe065,0x20ac,0xd7ff,0xd800,0xd841,0xd905,0xdbff,0xdc00,0xdc02,0xddee,0xdfff,0};
 
-    int16_t i;
+    int32_t i;
 
-    for(i=0; i<sizeof(codeunit)/sizeof(codeunit[0]); i++){
+    for(i=0; i<(int32_t)(sizeof(codeunit)/sizeof(codeunit[0])); i++){
         UChar c=codeunit[i];
         UnicodeString msg;
         msg.append((UChar32)c);
@@ -513,8 +516,8 @@ void UnicodeTest::TestCodePoint(){
         0xffff,
         0xfffe,
     };
-    int16_t i;
-    for(i=0; i<sizeof(codePoint)/sizeof(codePoint[0]); i++){
+    int32_t i;
+    for(i=0; i<(int32_t)(sizeof(codePoint)/sizeof(codePoint[0])); i++){
         UChar32 c=codePoint[i];
         UnicodeString msg;
         msg.append(c);
@@ -559,7 +562,7 @@ void UnicodeTest::TestCodePoint(){
                 errln((UnicodeString)"ERROR: isError() failed for "+ prettify(msg));
             }
         }
-        else if(i >=18 && i<sizeof(codePoint)/sizeof(codePoint[0])){
+        else if(i >=18 && i<(int32_t)(sizeof(codePoint)/sizeof(codePoint[0]))){
             if(Unicode::isSurrogate(c)){
                 errln((UnicodeString)"ERROR: isSurrogate() failed for" + prettify(msg));
             }
@@ -594,7 +597,7 @@ void UnicodeTest::TestCharLength()
 
     int32_t i;
     UBool multiple;
-    for(i=0; i<sizeof(codepoint)/sizeof(codepoint[0]); i=(int16_t)(i+2)){
+    for(i=0; i<(int32_t)(sizeof(codepoint)/sizeof(codepoint[0])); i=(int16_t)(i+2)){
         UChar32 c=codepoint[i+1];
         UnicodeString msg;
         msg.append(c);
@@ -618,31 +621,31 @@ and UCharScript enum values are the same.
 */
 void UnicodeTest::TestScript()
 {
-    if (Unicode::kScriptCount != U_CHAR_SCRIPT_COUNT) {
+    if ((int32_t)Unicode::kScriptCount != (int32_t)U_CHAR_SCRIPT_COUNT) {
         errln("ERROR: Unicode::EUnicodeScript is not the same size as UCharScript");
     }
 
-    if (Unicode::kBasicLatin != U_BASIC_LATIN) {
+    if ((int32_t)Unicode::kBasicLatin != (int32_t)U_BASIC_LATIN) {
         errln("ERROR: Different Basic Latin values in EUnicodeScript and UCharScript");
     }
 
-    if (Unicode::kHighSurrogate != U_HIGH_SURROGATES) {
+    if ((int32_t)Unicode::kHighSurrogate != (int32_t)U_HIGH_SURROGATES) {
         errln("ERROR: Different High Surrogate values in EUnicodeScript and UCharScript");
     }
 
-    if (Unicode::kLowSurrogate != U_LOW_SURROGATES) {
+    if ((int32_t)Unicode::kLowSurrogate != (int32_t)U_LOW_SURROGATES) {
         errln("ERROR: Different Low Surrogate values in EUnicodeScript and UCharScript");
     }
 
-    if (Unicode::kCJKRadicalsSupplement != U_CJK_RADICALS_SUPPLEMENT) {
+    if ((int32_t)Unicode::kCJKRadicalsSupplement != (int32_t)U_CJK_RADICALS_SUPPLEMENT) {
         errln("ERROR: Different CJK Radicals Supplement values in EUnicodeScript and UCharScript");
     }
 
-    if (Unicode::kGreek != U_GREEK) {
+    if ((int32_t)Unicode::kGreek != (int32_t)U_GREEK) {
         errln("ERROR: Different Greek values in EUnicodeScript and UCharScript");
     }
 
-    if (Unicode::kThai != U_THAI) {
+    if ((int32_t)Unicode::kThai != (int32_t)U_THAI) {
         errln("ERROR: Different Thai values in EUnicodeScript and UCharScript");
     }
 }
