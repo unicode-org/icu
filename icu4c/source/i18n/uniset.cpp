@@ -13,8 +13,13 @@
 #include "symtable.h"
 #include "cmemory.h"
 
+#ifndef HPUX
+const UChar32 UnicodeSet::HIGH= 0x0110000; // HIGH_VALUE > all valid values. 110000 for codepoints
+#else
+# define HIGH (0x0110000)
+#endif
 const UChar32 UnicodeSet::LOW = 0x000000; // LOW <= all valid values. ZERO for codepoints
-const UChar32 UnicodeSet::HIGH = 0x10000; // HIGH > all valid values. 110000 for codepoints
+
 
 /**
  * Minimum value that can be stored in a UnicodeSet.
