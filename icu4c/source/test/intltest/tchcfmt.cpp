@@ -23,10 +23,13 @@ void TestChoiceFormat::runIndexedTest(int32_t index, UBool exec,
     switch (index) {
         TESTCASE(0,TestSimpleExample);
         TESTCASE(1,TestComplexExample);
-        TESTCASE(2,TestChoiceNextDouble);
-        TESTCASE(3,TestGapNextDouble);
-        TESTCASE(4,TestClosures);
-        TESTCASE(5,TestPatterns);
+        TESTCASE(2,TestClosures);
+        TESTCASE(3,TestPatterns);
+// We can deprecate the test code right away; the API itself goes 2002-Jun-30
+#ifdef ICU_ENABLE_DEPRECATED_NEXTDOUBLE
+        TESTCASE(4,TestChoiceNextDouble);
+        TESTCASE(5,TestGapNextDouble);
+#endif
         default: name = ""; break;
     }
 }
@@ -283,6 +286,8 @@ TestChoiceFormat::TestComplexExample( void )
         }
     }
 
+// We can deprecate the test code right away; the API itself goes 2002-Jun-30
+#ifdef ICU_ENABLE_DEPRECATED_NEXTDOUBLE
     double nd = ChoiceFormat::nextDouble( 1.0 );
     double pd = ChoiceFormat::previousDouble( 1.0 );
     if ((ChoiceFormat::nextDouble( 1.0, TRUE ) == nd)
@@ -301,7 +306,7 @@ TestChoiceFormat::TestComplexExample( void )
     }else{
         it_errln("***  prevDouble");
     }
-
+#endif
 
     const double limits_A[] = {1,2,3,4,5,6,7};
     const UnicodeString monthNames_A[] = {"Sun","Mon","Tue","Wed","Thur","Fri","Sat"};
@@ -475,6 +480,8 @@ TestChoiceFormat::TestComplexExample( void )
     delete pattform;
 }
 
+// We can deprecate the test code right away; the API itself goes 2002-Jun-30
+#ifdef ICU_ENABLE_DEPRECATED_NEXTDOUBLE
 /**
  * test the use of next_Double with ChoiceFormat
  **/
@@ -653,6 +660,7 @@ TestChoiceFormat::testValue( double val )
         return;
     }
 }
+#endif
 
 /**
  * Test new closure API

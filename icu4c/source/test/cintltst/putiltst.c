@@ -263,6 +263,8 @@ static void TestPUtilAPI(){
 
     }
 
+// We can deprecate the test code right away; the API itself goes 2002-Jun-30
+#ifdef ICU_ENABLE_DEPRECATED_NEXTDOUBLE
     log_verbose("Testing uprv_nextDouble() where the value is NaN ...\n");
     expn1=uprv_nextDouble(uprv_getNaN(), TRUE);
     doAssert(expn1, uprv_getNaN(), "uprv_nextDouble(uprv_getNaN(), TRUE) failed.");
@@ -291,6 +293,7 @@ static void TestPUtilAPI(){
     if(expn1 > 1.0 || expn1 < 0.9999){
         log_err("ERROR: uprv_nextDouble failed. Expected : %lf, Got: %f\n", y1, expn1);
     }
+#endif
     
     log_verbose("Testing the API uprv_longBitsFromDouble().....\n");
     uprv_longBitsFromDouble(value1, &hi, &lo);
