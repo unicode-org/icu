@@ -10,8 +10,19 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <assert.h>
+
+/* Define _XPG4_2 for Solaris and friends. */
+#ifndef _XPG4_2
+#define _XPG4_2
+#endif
+
+/* Define __USE_XOPEN_EXTENDED for Linux and glibc. */
+#ifndef __USE_XOPEN_EXTENDED
+#define __USE_XOPEN_EXTENDED
+#endif
+
+#include <string.h>
 
 #ifdef _WIN32
 #  include <windows.h>
