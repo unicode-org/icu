@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Types.java,v $
-* $Date: 2003/07/21 15:50:05 $
-* $Revision: 1.24 $
+* $Date: 2003/08/20 03:46:44 $
+* $Revision: 1.25 $
 *
 *******************************************************************************
 */
@@ -47,7 +47,7 @@ public interface UCD_Types {
      static final byte
         NUMERIC_PROP = 0,
         STRING_PROP = 1,
-        DESCRIPTIVE_PROP = 2,
+        MISC_PROP = 2,
         CATALOG_PROP = 3,
         ENUMERATED_PROP = 4,
         BINARY_PROP = 5,

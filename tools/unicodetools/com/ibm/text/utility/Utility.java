@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2003/07/21 15:50:07 $
-* $Revision: 1.35 $
+* $Date: 2003/08/20 03:47:59 $
+* $Revision: 1.36 $
 *
 *******************************************************************************
 */
@@ -289,7 +289,7 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
 
     public static long longFrom(String p) {
         if (p.length() == 0) return Long.MIN_VALUE;
-        return Long.parseInt(p);
+        return Long.parseLong(p);
     }
 
     public static float floatFrom(String p) {
@@ -707,12 +707,14 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
         UTF8_WINDOWS = Encoding.UTF8_WINDOWS;
    */
    
-   
+    public static PrintWriter openPrintWriter(String filename, Encoding options) throws IOException {
+        return openPrintWriter(UCD_Types.GEN_DIR, filename, options);
+    }
     // Normally use false, false.
     // But for UCD files use true, true
     // Or if they are UTF8, use true, false
-    public static PrintWriter openPrintWriter(String filename, Encoding options) throws IOException {
-        File file = new File(getOutputName(filename));
+    public static PrintWriter openPrintWriter(String directory, String filename, Encoding options) throws IOException {
+        File file = new File(directory + filename);
         Utility.fixDot();
         System.out.println("Creating File: " + file.getCanonicalPath());
         File parent = new File(file.getParent());
@@ -757,8 +759,9 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
         }
     }
     
-    public static void print(PrintWriter pw, Collection c, String separator, Breaker b) {
+    public static int print(PrintWriter pw, Collection c, String separator, Breaker b) {
         Iterator it = c.iterator();
+        int count = 0;
         boolean first = true;
         Object last = null;
         while (it.hasNext()) {
@@ -774,8 +777,10 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
             } else {
                 pw.print(obj);
             }
+            count++;
             last = obj;
         }
+        return count;
     }
     
     public static void print(PrintWriter pw, Map c, String pairSeparator, String separator, Breaker b) {

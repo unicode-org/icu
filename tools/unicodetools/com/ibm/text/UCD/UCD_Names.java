@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2003/07/21 15:50:05 $
-* $Revision: 1.22 $
+* $Date: 2003/08/20 03:46:43 $
+* $Revision: 1.23 $
 *
 *******************************************************************************
 */
@@ -936,7 +936,7 @@ final class UCD_Names implements UCD_Types {
     static final String[][] PROP_TYPE_NAMES = {
         {"Numeric", "AA"},
         {"String", "AB"},
-        {"Descriptive", "AC"},
+        {"Miscellaneous", "AC"},
         {"Catalog", "AD"},
         {"Enumerated", "AE"},
         {"Binary", "ZX"},

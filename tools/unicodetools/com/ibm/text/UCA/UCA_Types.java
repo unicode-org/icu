@@ -5,15 +5,18 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA_Types.java,v $ 
-* $Date: 2002/07/14 22:07:00 $ 
-* $Revision: 1.1 $
+* $Date: 2003/08/20 03:48:45 $ 
+* $Revision: 1.2 $
 *
 *******************************************************************************
 */
 
 package com.ibm.text.UCA;
+import com.ibm.text.UCD.*;
+import com.ibm.text.utility.*;
 
 public interface UCA_Types {
+    public static final String UCA_GEN_DIR = UCD_Types.GEN_DIR + "collation\\";
     public static final char LEVEL_SEPARATOR = '\u0000'; 
     /**
      * Expanding characters are marked with a exception bit combination
