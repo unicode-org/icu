@@ -1219,11 +1219,11 @@ static void TestFallback()
     status = U_ZERO_ERROR;
 
     /* OK first one. This should be a Default value. */
-    junk = ures_get(fr_FR, "Version", &status);
+    junk = ures_get(fr_FR, "%%EURO", &status);
     if(status != U_USING_DEFAULT_ERROR)
     {
-        log_err("Expected U_USING_DEFAULT_ERROR when trying to get Version from fr_FR, got %d\n", 
-            status);
+        log_err("Expected U_USING_DEFAULT_ERROR when trying to get %%EURO from fr_FR, got %s\n", 
+            u_errorName(status));
     }
 
     status = U_ZERO_ERROR;
