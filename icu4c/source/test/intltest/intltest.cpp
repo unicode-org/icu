@@ -26,6 +26,7 @@
 #include "intltest.h"
 #include "caltztst.h"
 #include "itmajor.h"
+#include "tsmutex.h"
 
 #include "umutex.h"
 
@@ -886,12 +887,7 @@ main(int argc, char* argv[])
     UConverter *cnv = NULL;
 
     /* This must be tested before using anything! */
-    if (!umtx_isInitialized(NULL)) {
-        fprintf(stderr,
-                "*** Failure! The global mutex was not initialized.\n"
-                "*** Make sure the right linker was used.\n");
-        return 1;
-    }
+    MutexTest::gMutexInitialized = umtx_isInitialized(NULL);
 
 #ifdef XP_MAC_CONSOLE
     argc = ccommand( &argv );
@@ -1082,6 +1078,7 @@ main(int argc, char* argv[])
     }
     return major.getErrors();
 }
+
 const char* IntlTest::loadTestData(UErrorCode& err){
     const char*      directory=NULL;
     UResourceBundle* test =NULL;
