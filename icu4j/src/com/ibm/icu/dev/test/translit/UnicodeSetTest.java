@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2003/07/23 19:38:28 $ 
- * $Revision: 1.51 $
+ * $Date: 2003/09/24 19:16:32 $ 
+ * $Revision: 1.52 $
  *
  *****************************************************************************************
  */
@@ -17,6 +17,7 @@ import com.ibm.icu.dev.test.*;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.SortedSetRelation;
 import java.util.*;
+import java.text.ParsePosition;
 
 /**
  * @test
@@ -94,7 +95,9 @@ public class UnicodeSetTest extends TestFmwk {
     boolean checkPat (String source, UnicodeSet testSet, String pat) {
         UnicodeSet testSet2 = new UnicodeSet(pat);
         if (!testSet2.equals(testSet)) {
-            errln("Fail toPattern: " + source + " => " + pat);
+            errln("Fail toPattern: " + source + "; " + pat + " => " +
+                  testSet2.toPattern(false) + ", expected " +
+                  testSet.toPattern(false));
             return false;
         }
         return true;
@@ -590,14 +593,14 @@ public class UnicodeSetTest extends TestFmwk {
                         new String[] {"aa", "ab", "ac", NOT, "xy"});
 
         s.applyPattern("[a-z {\\{l} {r\\}}]");
-        expectToPattern(s, "[a-z{\\{l}{r\\}}]",
+        expectToPattern(s, "[a-z{r\\}}{\\{l}]",
                         new String[] {"{l", "r}", NOT, "xy"});
         s.add("[]");
         expectToPattern(s, "[a-z{\\[\\]}{r\\}}{\\{l}]",
                         new String[] {"{l", "r}", "[]", NOT, "xy"});
 
         s.applyPattern("[a-z {\u4E01\u4E02}{\\n\\r}]");
-        expectToPattern(s, "[a-z{\\u4E01\\u4E02}{\\n\\r}]",
+        expectToPattern(s, "[a-z{\\u000A\\u000D}{\\u4E01\\u4E02}]",
                         new String[] {"\u4E01\u4E02", "\n\r"});
     }
 
@@ -881,6 +884,14 @@ public class UnicodeSetTest extends TestFmwk {
             "[^b-]", // trailing '-' is literal
             "ac",
             "-b",
+
+            "[a-b-]", // trailing '-' is literal
+            "ab-",
+            "c=",
+
+            "[[a-q]&[p-z]-]", // trailing '-' is literal
+            "pq-",
+            "or=",
         };
 
         for (int i=0; i<DATA.length; i+=3) {  
@@ -1085,6 +1096,111 @@ public class UnicodeSetTest extends TestFmwk {
                     logln(s);
                 }
             }
+        }
+    }
+
+    public void TestSymbolTable() {
+        // Multiple test cases can be set up here.  Each test case
+        // is terminated by null:
+        // var, value, var, value,..., input pat., exp. output pat., null
+        String DATA[] = {
+            "us", "a-z", "[0-1$us]", "[0-1a-z]", null,
+            "us", "[a-z]", "[0-1$us]", "[0-1[a-z]]", null,
+            "us", "\\[a\\-z\\]", "[0-1$us]", "[-01\\[\\]az]", null
+        };
+
+        for (int i=0; i<DATA.length; ++i) {
+            TokenSymbolTable sym = new TokenSymbolTable();
+
+            // Set up variables
+            while (DATA[i+2] != null) {
+                sym.add(DATA[i], DATA[i+1]);
+                i += 2;
+            }
+
+            // Input pattern and expected output pattern
+            String inpat = DATA[i], exppat = DATA[i+1];
+            i += 2;
+
+            ParsePosition pos = new ParsePosition(0);
+            UnicodeSet us = new UnicodeSet(inpat, pos, sym);
+
+            // results
+            if (pos.getIndex() != inpat.length()) {
+                errln("Failed to read to end of string \""
+                      + inpat + "\": read to "
+                      + pos.getIndex() + ", length is "
+                      + inpat.length());
+            }
+
+            UnicodeSet us2 = new UnicodeSet(exppat);
+            if (!us.equals(us2)) {
+                errln("Failed, got " + us + ", expected " + us2);
+            } else {
+                logln("Ok, got " + us);
+            }
+        }
+    }
+
+    public class TokenSymbolTable implements SymbolTable {
+        HashMap contents = new HashMap();
+
+        /**
+         * (Non-SymbolTable API) Add the given variable and value to
+         * the table.  Variable should NOT contain leading '$'.
+         */
+        public void add(String var, String value) {
+            char[] buffer = new char[value.length()];
+            value.getChars(0, value.length(), buffer, 0);
+            add(var, buffer);
+        }
+
+        /**
+         * (Non-SymbolTable API) Add the given variable and value to
+         * the table.  Variable should NOT contain leading '$'.
+         */
+        public void add(String var, char[] body) {
+            logln("TokenSymbolTable: add \"" + var + "\" => \"" +
+                  new String(body) + "\"");
+            contents.put(var, body);
+        }
+
+        /* (non-Javadoc)
+         * @see com.ibm.icu.text.SymbolTable#lookup(java.lang.String)
+         */
+        public char[] lookup(String s) {
+            logln("TokenSymbolTable: lookup \"" + s + "\" => \"" +
+                  new String((char[]) contents.get(s)) + "\"");
+            return (char[])contents.get(s);
+        }
+
+        /* (non-Javadoc)
+         * @see com.ibm.icu.text.SymbolTable#lookupMatcher(int)
+         */
+        public UnicodeMatcher lookupMatcher(int ch) {
+            return null;
+        }
+
+        /* (non-Javadoc)
+         * @see com.ibm.icu.text.SymbolTable#parseReference(java.lang.String,
+         java.text.ParsePosition, int)
+        */
+        public String parseReference(String text, ParsePosition pos, int
+                                     limit) {
+            int cp;
+            int start = pos.getIndex();
+            int i;
+            for (i = start; i < limit; i += UTF16.getCharCount(cp)) {
+                cp = UTF16.charAt(text, i);
+                if (!com.ibm.icu.lang.UCharacter.isUnicodeIdentifierPart(cp)) {
+                    break;
+                }
+            }
+            logln("TokenSymbolTable: parse \"" + text + "\" from " +
+                  start + " to " + i +
+                  " => \"" + text.substring(start,i) + "\"");
+            pos.setIndex(i);
+            return text.substring(start,i);
         }
     }
 
@@ -1361,7 +1477,7 @@ public class UnicodeSetTest extends TestFmwk {
             set = new UnicodeSet(pat);
         } catch (IllegalArgumentException e) {
             errln("FAIL: Couldn't create UnicodeSet from pattern \"" +
-                  pat + '"');
+                  pat + "\": " + e.getMessage());
             return;
         }
         expectContainment(set, charsIn, charsOut);
