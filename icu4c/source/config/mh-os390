@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-os390,v 1.52 2003/05/23 17:53:09 grhoten-oss Exp $
+## $Id: mh-os390,v 1.53 2003/05/27 16:47:59 grhoten-oss Exp $
 
 ###################################################################
 #                    IMPORTANT NOTE                               #
@@ -32,18 +32,14 @@
 #                                                                 #
 ###################################################################
 
+ifeq (${IEEE390},)
+IEEE390=1
+endif
+
 ifeq (${IEEE390}, 1)
 ICU_IEEE          = -Wc,"float(ieee)" -DIEEE_754=1
 else
 ICU_IEEE          = -DIEEE_754=0
-endif
-
-ifeq (${OS390_XPLINK}, 1)
-# Note:  The following options require the PTF for PQ69418 on z/OS 1.2
-#        and later.
-CFLAGS          += -Wc,"xplink(backchain,storeargs)" -Wc,"GOFF,NOCSECT,RENT,SSCOMM" -Wc,"inline(auto,noreport,500,2500)"
-CXXFLAGS        += -Wc,"xplink(backchain,storeargs)" -Wc,"GOFF,NOCSECT,NOTEMPINC" -Wc,"inline(auto,noreport,300,2500)"
-LDFLAGS         += -Wl,dll,xplink -Wl,EDIT=NO
 endif
 
 # TODO: Consider using  -Wc,roc,ros for making the data readonly
@@ -51,6 +47,15 @@ CFLAGS          += -Wc,"langlvl(extended),spill(2000)" $(ICU_BUILD_OPTIONS) $(IC
 CXXFLAGS        += -Wc,"langlvl(extended),spill(2000)" $(ICU_BUILD_OPTIONS) $(ICU_IEEE) -Wc,dll,expo
 DEFS            += -D_OPEN_THREADS -D_XOPEN_SOURCE_EXTENDED -D_MSE_PROTOS -D_SHR_TZNAME -D_SHR_TIMEZONE -DU_LIBICUDATA_NAME=\"$(ICUDATA_NAME)\"
 ARFLAGS         = -cr
+
+ifeq (${OS390_XPLINK}, 1)
+# Note:  The following options require the PTF for PQ69418 on z/OS 1.2
+#        and later.
+# These lines must be the last options specified.
+CFLAGS          += -Wc,"xplink(backchain,storeargs)" -Wc,"GOFF,NOCSECT,RENT,SSCOMM" -Wc,"inline(auto,noreport,500,2500)"
+CXXFLAGS        += -Wc,"xplink(backchain,storeargs)" -Wc,"GOFF,NOCSECT,NOTEMPINC" -Wc,"inline(auto,noreport,300,2500)"
+LDFLAGS         += -Wl,dll,xplink -Wl,EDIT=NO
+endif
 
 ## OS390BATCH
 ifeq (${OS390BATCH},1)
