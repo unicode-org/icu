@@ -66,8 +66,8 @@
  */
 class U_COMMON_API UVector {
 public:
-    typedef void (*Deleter)(void*);
-    typedef UBool (*Comparer)(void*, void*);
+    typedef void (* U_CALLCONV Deleter)(void*);
+    typedef UBool (* U_CALLCONV Comparer)(const void*, const void*);
 
 private:
     int32_t count;
