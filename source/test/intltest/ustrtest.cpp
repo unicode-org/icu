@@ -596,6 +596,15 @@ UnicodeStringTest::TestExtract()
                 errln("UnicodeString::extract(UConverter) conversion failed (length=%ld, %s)",
                       length, u_errorName(errorCode));
             }
+            // Test again with just the converter name.
+            if( (length=s.extract(0, s.length(), buffer, sizeof(buffer), "UTF-8"))!=13 ||
+                uprv_memcmp(buffer, expect, 13)!=0 ||
+                buffer[13]!=0 ||
+                U_FAILURE(errorCode)
+            ) {
+                errln("UnicodeString::extract(\"UTF-8\") conversion failed (length=%ld, %s)",
+                      length, u_errorName(errorCode));
+            }
 
             // try the constructor
             UnicodeString t(expect, sizeof(expect), cnv, errorCode);
