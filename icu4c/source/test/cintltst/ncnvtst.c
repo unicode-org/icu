@@ -669,6 +669,19 @@ UBool convertFromU( const UChar *source, int sourceLen,  const uint8_t *expect, 
         printSeqErr((const unsigned char*)expect, expectLen);
         return FALSE;
     }
+
+    if(memcmp(buffer, expect, expectLen)){
+        log_err("String does not match. FROM Unicode to codePage%s\n", codepage);
+        printf("\nGot:");
+        printSeqErr((const unsigned char *)buffer, expectLen);
+        printf("\nExpected:");
+        printSeqErr((const unsigned char *)expect, expectLen);
+        return FALSE;
+    }
+    else {    
+        log_verbose("Matches!\n");
+    }
+
     if (expectOffsets != 0){
         log_verbose("comparing %d offsets..\n", targ-buffer);
         if(memcmp(offsetBuffer,expectOffsets,(targ-buffer) * sizeof(int32_t) )){
@@ -681,19 +694,6 @@ UBool convertFromU( const UChar *source, int sourceLen,  const uint8_t *expect, 
             for(i=0; i< (targ-buffer); i++)
                 printf("%d,", expectOffsets[i]);
         }
-    }
-
-    if(!memcmp(buffer, expect, expectLen)){
-        log_verbose("Matches!\n");
-        return TRUE;
-    }
-    else {    
-        log_err("String does not match. FROM Unicode to codePage%s\n", codepage);
-        printf("\nGot:");
-        printSeqErr((const unsigned char *)buffer, expectLen);
-        printf("\nExpected:");
-        printSeqErr((const unsigned char *)expect, expectLen);
-        return FALSE;
     }
 
     return TRUE;    
@@ -762,8 +762,7 @@ UBool convertToU( const uint8_t *source, int sourceLen, const UChar *expect, int
 
     log_verbose("comparing %d uchars (%d bytes)..\n",expectLen,expectLen*2);
 
-    if (expectOffsets != 0)
-    {
+    if (expectOffsets != 0) {
         if(memcmp(offsetBuffer, expectOffsets, (targ-buffer) * sizeof(int32_t))){
 
             log_err("did not get the expected offsets from %s To UNICODE\n", codepage);
@@ -782,11 +781,7 @@ UBool convertToU( const uint8_t *source, int sourceLen, const UChar *expect, int
             puts("\n");
         }
     }
-    if(!memcmp(buffer, expect, expectLen*2)){
-        log_verbose("Matches!\n");
-        return TRUE;
-    }
-    else {
+    if(memcmp(buffer, expect, expectLen*2)){
         log_err("String does not match. from codePage %s TO Unicode\n", codepage);
         printf("\nGot:");
         printUSeqErr(buffer, expectLen);
@@ -794,7 +789,11 @@ UBool convertToU( const uint8_t *source, int sourceLen, const UChar *expect, int
         printUSeqErr(expect, expectLen);
         return FALSE;
     }
+    else {
+        log_verbose("Matches!\n");
+    }
 
+    return TRUE;
 }
 
 
