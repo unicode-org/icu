@@ -207,6 +207,22 @@ u_strncmp(const UChar     *ucs1,
      int32_t     n);
 
 /**
+ * Compare two Unicode strings in code point order.
+ * This is different in UTF-16 from u_strncmp() if supplementary characters are present.
+ * For details, see u_strcmpCodePointOrder().
+ *
+ * @param s1 A string to compare.
+ * @param s2 A string to compare.
+ * @param n The maximum number of characters to compare.
+ * @return a negative/zero/positive integer corresponding to whether
+ * the first string is less than/equal to/greater than the second one
+ * in code point order
+ * @draft
+ */
+U_CAPI int32_t U_EXPORT2
+u_strncmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t n);
+
+/**
  * Compare two strings case-insensitively using full case folding.
  * This is equivalent to u_strcmp(u_strFoldCase(s1, options), u_strFoldCase(s2, options)).
  *
@@ -375,6 +391,22 @@ u_memset(UChar *dest, UChar c, int32_t count);
  */
 U_CAPI int32_t U_EXPORT2
 u_memcmp(UChar *buf1, UChar *buf2, int32_t count);
+
+/**
+ * Compare two Unicode strings in code point order.
+ * This is different in UTF-16 from u_memcmp() if supplementary characters are present.
+ * For details, see u_strcmpCodePointOrder().
+ *
+ * @param s1 A string to compare.
+ * @param s2 A string to compare.
+ * @param n The maximum number of characters to compare.
+ * @return a negative/zero/positive integer corresponding to whether
+ * the first string is less than/equal to/greater than the second one
+ * in code point order
+ * @draft
+ */
+U_CAPI int32_t U_EXPORT2
+u_memcmpCodePointOrder(const UChar *s1, const UChar *s2, int32_t count);
 
 /**
  * Search for a UChar within a Unicode string until <TT>count</TT>
