@@ -37,6 +37,8 @@
 #include "unicode/utypes.h"
 #include "unicode/ustring.h"
 #include "unicode/usetiter.h"
+#include "unicode/uscript.h"
+#include "cstring.h"
 
 /***********************************************************************
 
@@ -176,6 +178,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(72,TestSourceTargetSet);
         TESTCASE(73,TestGurmukhiDevanagari);
         TESTCASE(74,TestRuleWhitespace);
+        TESTCASE(75,TestAllCodepoints);
         default: name = ""; break;
     }
 }
@@ -3730,7 +3733,57 @@ void TransliteratorTest::TestRuleWhitespace() {
         }
     }
 }
+//======================================================================
+// this method is in TestUScript.java
+//======================================================================
+void TransliteratorTest::TestAllCodepoints(){
+    UScriptCode code= USCRIPT_INVALID_CODE;
+    char id[256]={'\0'};
+    char abbr[256]={'\0'};
+    char newId[256]={'\0'};
+    char newAbbrId[256]={'\0'};
+    char oldId[256]={'\0'};
+    char oldAbbrId[256]={'\0'};
 
+    UErrorCode status =U_ZERO_ERROR;
+    UParseError pe;
+    
+    for(uint32_t i = 0; i<=0x10ffff; i++){
+        code =  uscript_getScript(i,&status);
+        if(code == USCRIPT_INVALID_CODE){
+            errln("uscript_getScript for codepoint \\U%08X failed.\n", i);
+        }
+        uprv_strcpy(id,uscript_getName(code));
+        uprv_strcpy(abbr,uscript_getShortName(code));
+
+        uprv_strcpy(newId,"[:");
+        uprv_strcat(newId,id);
+        uprv_strcat(newId,":];NFD");
+
+        uprv_strcpy(newAbbrId,"[:");
+        uprv_strcat(newAbbrId,abbr);
+        uprv_strcat(newAbbrId,":];NFD");
+
+        if(uprv_strcmp(newId,oldId)!=0){
+            Transliterator* t = Transliterator::createInstance(newId,UTRANS_FORWARD,pe,status);
+            if(t==NULL || U_FAILURE(status)){
+                errln((UnicodeString)"FAIL: Could not create " + id);
+            }
+            delete t;
+        }
+        if(uprv_strcmp(newAbbrId,oldAbbrId)!=0){
+            Transliterator* t = Transliterator::createInstance(newAbbrId,UTRANS_FORWARD,pe,status);
+            if(t==NULL || U_FAILURE(status)){
+                errln((UnicodeString)"FAIL: Could not create " + id);
+            }
+            delete t;
+        }
+        uprv_strcpy(oldId,newId);
+        uprv_strcpy(oldAbbrId, newAbbrId);
+
+    }
+
+} 
 //======================================================================
 // Support methods
 //======================================================================
