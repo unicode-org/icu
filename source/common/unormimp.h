@@ -26,6 +26,7 @@
 #include "unicode/uset.h"
 #include "utrie.h"
 #include "ustr_imp.h"
+#include "udataswp.h"
 
 /*
  * This new implementation of the normalization code loads its data from
