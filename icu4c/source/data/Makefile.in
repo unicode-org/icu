@@ -106,19 +106,6 @@ all-local: builddata
 
 install-local: 
 
-## Generate HTML documentation
-doc:
-	@uniq=`date '+%y%m%d9/30/99M%S'`; \
-	tmpdir="/tmp/icu-$$uniq"; \
-	list='$(DOCDIRS)'; for subdir in $$list; do \
-	  echo "Making install-headers in $$subdir"; \
-	  (cd $$subdir && \
-		$(MAKE) includedir=$$tmpdir/include install-headers); \
-	done; \
-	echo "Generating html documentation..."; \
-	doc++ -H -d $$tmpdir/html $$tmpdir/include/*.h > /dev/null 2>&1; \
-	$(RMV) $$tmpdir
-
 dist-local:
 
 clean-local:
@@ -134,11 +121,7 @@ check-local:
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
-		&& CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
-
-$(top_builddir)/config/Makefile.inc: $(srcdir)/config/Makefile.inc.in  $(top_builddir)/config.status
-	cd $(top_builddir) \
-		&& CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
+		&& CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 builddata: UnicodeData-$(UNICODE_VERSION).txt thaidict.brk
 
