@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2001/11/30 23:59:23 $ 
- * $Revision: 1.17 $
+ * $Date: 2001/12/01 01:32:55 $ 
+ * $Revision: 1.18 $
  *
  *****************************************************************************************
  */
@@ -26,17 +26,33 @@ public class UnicodeSetTest extends TestFmwk {
     public static void main(String[] args) throws Exception {
         new UnicodeSetTest().run(args);
     }
-    
-    // Needs porting to C!!
-    
+
+    /**
+     * Test that toPattern() round trips with syntax characters and
+     * whitespace.
+     */
     public void TestToPattern() throws Exception {
-        for (int i = 0; i < 0x10FFFF; ++i) {
-            if (i <= 0xFF & !UCharacter.isLetter(i) || UCharacter.isWhitespace(i)) {
+        for (int i = 0; i <= 0x10FFFF; ++i) {
+            if ((i <= 0xFF && !UCharacter.isLetter(i)) || UCharacter.isWhitespace(i)) {
                 // check various combinations to make sure they all work.
                 if (i != 0 && !toPatternAux(i, i)) continue;
                 if (!toPatternAux(0, i)) continue;
                 if (!toPatternAux(i, 0xFFFF)) continue;
             }
+        }
+
+        String spat = "[:nonspacing mark:]";
+        UnicodeSet s = new UnicodeSet(spat);
+        String tpat = s.toPattern(true);
+        try {
+            UnicodeSet t = new UnicodeSet(tpat);
+            if (!s.equals(t)) {
+                errln("FAIL: " + spat + ".toPattern().new UnicodeSet() => " +
+                      t.toPattern(true));
+            }
+        } catch (Exception e) {
+            errln("FAIL: " + spat + ".toPattern() => " + tpat +
+                  ": INVALID PATTERN");
         }
     }
     
@@ -48,23 +64,24 @@ public class UnicodeSetTest extends TestFmwk {
         try {
             UnicodeSet testSet = new UnicodeSet();
             testSet.add(start, end);
+
+            // What we want to make sure of is that a pattern generated
+            // by toPattern(), with or without escaped unprintables, can
+            // be passed back into the UnicodeSet constructor.
+            String pat0 = testSet.toPattern(true);
+            if (!checkPat(source + " (escaped)", testSet, pat0)) return false;
             
-            pat = testSet.toPattern(true);
-            if (!checkPat(source, testSet, pat)) return false;
+            //String pat1 = unescapeLeniently(pat0);
+            //if (!checkPat(source + " (in code)", testSet, pat1)) return false;
             
-            String pat0 = pat;
-            pat = unescapeLeniently(pat);
-            if (!checkPat(source + " (in code)", testSet, pat)) return false;
+            String pat2 = testSet.toPattern(false);
+            if (!checkPat(source, testSet, pat2)) return false;
             
-            String pat1 = pat;
-            pat = testSet.toPattern(false);
-            if (!checkPat(source, testSet, pat)) return false;
+            //String pat3 = unescapeLeniently(pat2);
+            //if (!checkPat(source + " (in code)", testSet, pat3)) return false;
             
-            String pat2 = pat;
-            pat = unescapeLeniently(pat);
-            if (!checkPat(source + " (in code)", testSet, pat)) return false;
-            
-            logln(source + " => " + pat0 + ", " + pat1 + ", " + pat2 + ", " + pat);
+            //logln(source + " => " + pat0 + ", " + pat1 + ", " + pat2 + ", " + pat3);
+            logln(source + " => " + pat0 + ", " + pat2);
         } catch (Exception e) {
             errln("EXCEPTION in toPattern: " + source + " => " + pat);
             return false;
@@ -482,7 +499,7 @@ public class UnicodeSetTest extends TestFmwk {
             }
         }
         int c = set.charAt(set.size());
-        if (c != '\uFFFE') {
+        if (c != -1) {
             errln("FAIL: charAt(<out of range>) = " +
                   Utility.escape(String.valueOf(c)));
         }
