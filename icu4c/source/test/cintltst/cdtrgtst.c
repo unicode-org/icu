@@ -37,8 +37,7 @@ void addDateForRgrTest(TestNode** root)
     addTest(root, &Test4061287, "tsformat/cdtrgtst/Test4061287");
     addTest(root, &Test4073003, "tsformat/cdtrgtst/Test4073003");
     addTest(root, &Test4162071, "tsformat/cdtrgtst/Test4162071");
-      
-            
+    addTest(root, &Test714,   "tsformat/cdtrgtst/Test714");
 }
 
 /**
@@ -447,6 +446,33 @@ void Test4162071()
     }
     log_verbose("date= %s\n", austrdup(myFormatit(df, x)) );    
     udat_close(df);
+}
+
+void Test714(void)
+{
+    UDate d=978103543000.0;
+    UChar temp[20];
+    UErrorCode status = U_ZERO_ERROR;
+    UDateFormat *fmt;
+    UChar *result;
+    const char* expect =  "7:25:43 AM";
+    
+    fmt= udat_open(UDAT_MEDIUM,UDAT_NONE ,"en_US_CA", NULL, -1, &status);
+    if(U_FAILURE(status))
+    {
+        log_err("FAIL: error in creating the dateformat using medium time style and NO date style: %s\n", 
+            myErrorName(status));
+    }
+    result =myFormatit(fmt, d);
+    u_uastrcpy(temp, expect);
+    if (u_strcmp(result, temp)!=0){
+      log_err("Fail: %s != %s\n", austrdup(result), expect);
+    }
+    else{
+      log_verbose("Ok: %s == %s\n", austrdup(result), expect );
+    }
+        
+    udat_close(fmt);
 }
 
 /*INTERNAL FUNCTION USED */
