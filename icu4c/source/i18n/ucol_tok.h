@@ -90,6 +90,7 @@ typedef struct {
   UColOptionSet *opts;
   uint32_t resultLen;
   UColTokListHeader *lh;
+  UColToken *varTop;
 } UColTokenParser;
 
 typedef struct {

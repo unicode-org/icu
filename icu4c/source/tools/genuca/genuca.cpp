@@ -407,8 +407,20 @@ UCAElements *readAnElement(FILE *data, UErrorCode *status) {
     UCAElements *element = &le; //(UCAElements *)malloc(sizeof(UCAElements));
 
     if(buffer[0] == '[') {
+      char *vt = "[variable top = ";
+      uint32_t vtLen = uprv_strlen(vt);
+      if(uprv_strncmp(buffer, vt, vtLen) == 0) {
         element->variableTop = TRUE;
+        if(sscanf(buffer+vtLen, "%04X", &theValue) != 1) /* read first code point */
+        {
+          fprintf(stderr, " scanf(hex) failed!\n ");
+        }
+        element->cPoints[0] = theValue;
         return element; // just a comment, skip whole line
+      } else {
+        *status = U_INVALID_FORMAT_ERROR;
+        return NULL;
+      }
     }
     element->variableTop = FALSE;
 
@@ -625,7 +637,6 @@ write_uca_table(const char *filename,
     int32_t sizeBreakDown[35][35][35];
     UCAElements *element = NULL;
     UChar variableTopValue = 0;
-    UBool foundVariableTop = FALSE;
     UCATableHeader *myD = (UCATableHeader *)uprv_malloc(sizeof(UCATableHeader));
     UColOptionSet *opts = (UColOptionSet *)uprv_malloc(sizeof(UColOptionSet));
 
@@ -692,14 +703,8 @@ write_uca_table(const char *filename,
 
 
             // we have read the line, now do something sensible with the read data!
-            if(element->variableTop == TRUE) {
-                foundVariableTop = TRUE;
-                continue;
-            }
-
-            if(variableTopValue == 0 && foundVariableTop == TRUE) {
+            if(element->variableTop == TRUE && variableTopValue == 0) {
                 t->options->variableTopValue = element->cPoints[0];
-                foundVariableTop = FALSE;
             }
 
             /* we're first adding to inverse, because addAnElement will reverse the order */
