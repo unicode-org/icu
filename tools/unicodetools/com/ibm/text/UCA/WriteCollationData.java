@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2002/06/02 05:07:08 $ 
-* $Revision: 1.14 $
+* $Date: 2002/06/04 01:58:55 $ 
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -39,7 +39,7 @@ public class WriteCollationData implements UCD_Types {
       
     static final boolean EXCLUDE_UNSUPPORTED = true;    
     static final boolean GENERATED_NFC_MISMATCHES = true;    
-    static final boolean DO_CHARTS = true;   
+    static final boolean DO_CHARTS = false;   
     
     
     static final String UNICODE_VERSION = UCD.latestVersion;
@@ -137,7 +137,8 @@ public class WriteCollationData implements UCD_Types {
         System.err.println("Writing Javascript data");
         BufferedReader in = Utility.openUnicodeFile("CaseFolding", UNICODE_VERSION, true);
         // new BufferedReader(new FileReader(DIR31 + "CaseFolding-3.d3.alpha.txt"), 64*1024);
-        log = new PrintWriter(new FileOutputStream("CaseFolding_data.js"));
+        // log = new PrintWriter(new FileOutputStream("CaseFolding_data.js"));
+        log = Utility.openPrintWriter("CaseFolding_data.js", false, false);
         log.println("var CF = new Object();");
         int count = 0;
         while (true) {
@@ -181,7 +182,9 @@ public class WriteCollationData implements UCD_Types {
         System.err.println("Writing Javascript data");
         Normalizer normKD = new Normalizer(Normalizer.NFKD, UNICODE_VERSION);
         Normalizer normD = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
-        log = new PrintWriter(new FileOutputStream("Normalization_data.js"));
+        //log = new PrintWriter(new FileOutputStream("Normalization_data.js"));
+        log = Utility.openPrintWriter("Normalization_data.js", false, false);
+        
         
         int count = 0;
         int datasize = 0;
@@ -398,24 +401,35 @@ public class WriteCollationData implements UCD_Types {
         sortedD.put(colDbase, s);
     }
     
+    
+    
     /** 
      * Check that the primaries are the same as the compatibility decomposition.
      */
-    static void checkBadDecomps(int strength, boolean decomposition) {
+    static void checkBadDecomps(int strength, boolean decomposition, UnicodeSet alreadySeen) {
         int oldStrength = collator.getStrength();
         collator.setStrength(strength);
         Normalizer nfkd = new Normalizer(Normalizer.NFKD, UNICODE_VERSION);
         if (strength == 1) {
-            log.println("<h2>3. Primaries Incompatible with Decompositions</h2><table border='1'>");
+            log.println("<h2>3. Primaries Incompatible with Decompositions</h2><table border='1' cellspacing='0' cellpadding='2'>");
         } else {
-            log.println("<h2>4. Secondaries Incompatible with Decompositions</h2><table border='1'>");
+            log.println("<h2>4. Secondaries Incompatible with Decompositions</h2><table border='1' cellspacing='0' cellpadding='2'>");
         }
         log.println("<tr><th>Code</td><th>Sort Key</th><th>Decomposed Sort Key</th><th>Name</th></tr>");
-        for (char ch = 0; ch < 0xFFFF; ++ch) {
+        for (int ch = 0; ch < 0x10FFFF; ++ch) {
+        	if (!ucd.isAllocated(ch)) continue;
             if (nfkd.isNormalized(ch)) continue;
             if (ch > 0xAC00 && ch < 0xD7A3) continue; // skip most of Hangul
-            String sortKey = collator.getSortKey(String.valueOf(ch), UCA.NON_IGNORABLE, decomposition);
-            String decompSortKey = collator.getSortKey(nfkd.normalize(ch), UCA.NON_IGNORABLE, decomposition);
+            if (alreadySeen.contains(ch)) continue;
+            Utility.dot(ch);
+            
+            String decomp = nfkd.normalize(ch);
+            if (ch != ' ' && decomp.charAt(0) == ' ') continue; // skip wierd decomps
+            if (ch != '\u0640' && decomp.charAt(0) == '\u0640') continue; // skip wierd decomps
+            
+            
+            String sortKey = collator.getSortKey(UTF16.valueOf(ch), UCA.NON_IGNORABLE, decomposition);
+            String decompSortKey = collator.getSortKey(decomp, UCA.NON_IGNORABLE, decomposition);
             if (false && strength == 2) {
                 sortKey = remove(sortKey, '\u0020');
                 decompSortKey = remove(decompSortKey, '\u0020');
@@ -427,10 +441,12 @@ public class WriteCollationData implements UCD_Types {
                     + "</td><td>" + ucd.getName(ch)
                     + "</td></tr>"
                     );
+            	alreadySeen.add(ch);
             }
         }
         log.println("</table>");
         collator.setStrength(oldStrength);
+        Utility.fixDot();
     }
     
     static final String remove (String s, char ch) {
@@ -696,12 +712,15 @@ public class WriteCollationData implements UCD_Types {
     }
     
     static void writeNonspacingDifference() throws IOException {
-        PrintWriter diLog = new PrintWriter(
+        /*PrintWriter diLog = new PrintWriter(
             new BufferedWriter(
                 new OutputStreamWriter(
                     new FileOutputStream(GEN_DIR + "UCA_Nonspacing.txt"),
                     "UTF8"),
                 32*1024));
+                */
+        PrintWriter diLog = Utility.openPrintWriter("UCA_Nonspacing.js", false, false);
+                
         diLog.write('\uFEFF');
 
         Normalizer nfd = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
@@ -736,13 +755,17 @@ public class WriteCollationData implements UCD_Types {
         diLog.close();
     }
     
+
     static void writeContractions() throws IOException {
-        PrintWriter diLog = new PrintWriter(
+        /*PrintWriter diLog = new PrintWriter(
             new BufferedWriter(
                 new OutputStreamWriter(
                     new FileOutputStream(GEN_DIR + "UCA_Contractions.txt"),
                     "UTF8"),
                 32*1024));
+                */
+        PrintWriter diLog = Utility.openPrintWriter("UCA_Contractions.js", false, false);
+                
         diLog.write('\uFEFF');
 
         Normalizer nfd = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
@@ -770,12 +793,16 @@ public class WriteCollationData implements UCD_Types {
     }
     
     static void checkDisjointIgnorables() throws IOException {
+    	/*
         PrintWriter diLog = new PrintWriter(
             new BufferedWriter(
                 new OutputStreamWriter(
                     new FileOutputStream(GEN_DIR + "DisjointIgnorables.txt"),
                     "UTF8"),
                 32*1024));
+                */
+        PrintWriter diLog = Utility.openPrintWriter("DisjointIgnorables.js", false, false);
+                
         diLog.write('\uFEFF');
 
         /*
@@ -946,12 +973,15 @@ public class WriteCollationData implements UCD_Types {
     }
     
     static void checkCE_overlap() throws IOException {
-        PrintWriter diLog = new PrintWriter(
+        /*PrintWriter diLog = new PrintWriter(
             new BufferedWriter(
                 new OutputStreamWriter(
                     new FileOutputStream(GEN_DIR + "DisjointIgnorables.txt"),
                     "UTF8"),
                 32*1024));
+                */
+        PrintWriter diLog = Utility.openPrintWriter("DisjointIgnorables2.js", false, false);
+                
         diLog.write('\uFEFF');
 
         //diLog = new PrintWriter(new FileOutputStream(GEN_DIR + "DisjointIgnorables.txt"));
@@ -2377,7 +2407,8 @@ F900..FAFF; CJK Compatibility Ideographs
     
     /**
      * Function used to collapse the two different Han blocks from UCA into one.
-     * It does this by reversing the order of the two groups A and B below.
+     * It does this by reversing the order of the two groups A and B in the BMP below.
+     * NOTE: MUST NOT BE CALLED EXCEPT FOR CJK CHARACTERS
      * A:
 	 *	4E00..9FFF; CJK Unified Ideographs
 	 *	F900..FAFF; CJK Compatibility Ideographs
@@ -2387,11 +2418,15 @@ F900..FAFF; CJK Compatibility Ideographs
 	 *	no new B characters are allocated between 4E00 and FAFF, and
 	 *	no new A characters are outside of this range,
 	 * (very high probability) this simple code will work.
+	 * Block1 is CJK
+	 * Block2 is CJK_COMPAT_USED
+	 * Block3 is CJK_A
 	 */
     static int swapCJK(int i) {
-    	if (i >= UCA.CJK_LIMIT_COMPAT_USED) return i;
+    	if (i >= UCA.CJK_COMPAT_USED_BASE) return i - UCA.CJK_COMPAT_USED_BASE + (UCA.CJK_LIMIT - UCA.CJK_BASE);
     	if (i >= UCA.CJK_BASE) return i - UCA.CJK_BASE;
-    	return i + (UCA.CJK_LIMIT_COMPAT_USED - UCA.CJK_BASE);
+    	// remainder must be CJK_A
+    	return i - UCA.CJK_A_BASE + (UCA.CJK_LIMIT - UCA.CJK_BASE) + (UCA.CJK_COMPAT_USED_LIMIT - UCA.CJK_COMPAT_USED_BASE);
     }
     
     // CONSTANTS
@@ -2400,7 +2435,7 @@ F900..FAFF; CJK Compatibility Ideographs
         BYTES_TO_AVOID = 3,
         OTHER_COUNT = 256 - BYTES_TO_AVOID,
         LAST_COUNT = OTHER_COUNT / 2,
-        LAST_COUNT2 = OTHER_COUNT / 16, // room for intervening, without expanding to 5 bytes
+        LAST_COUNT2 = OTHER_COUNT / 20, // room for intervening, without expanding to 5 bytes
         IMPLICIT_3BYTE_COUNT = 1,
         IMPLICIT_BASE_BYTE = 0xE0,
         
@@ -2491,8 +2526,8 @@ F900..FAFF; CJK Compatibility Ideographs
         
         showImplicit("# First CJK", UCA.CJK_BASE);
         showImplicit("# Last CJK", UCA.CJK_LIMIT-1);
-        showImplicit("# First CJK-compat", UCA.CJK_BASE_COMPAT_USED);
-        showImplicit("# Last CJK-compat", UCA.CJK_LIMIT_COMPAT_USED-1);
+        showImplicit("# First CJK-compat", UCA.CJK_COMPAT_USED_BASE);
+        showImplicit("# Last CJK-compat", UCA.CJK_COMPAT_USED_LIMIT-1);
         showImplicit("# First CJK_A", UCA.CJK_A_BASE);
         showImplicit("# Last CJK_A", UCA.CJK_A_LIMIT-1);
         showImplicit("# First CJK_B", UCA.CJK_B_BASE);
@@ -2901,7 +2936,10 @@ F900..FAFF; CJK Compatibility Ideographs
     }
     
     static void writeCollationValidityLog() throws IOException {
-        log = new PrintWriter(new FileOutputStream("CheckCollationValidity.html"));
+    	
+        //log = new PrintWriter(new FileOutputStream("CheckCollationValidity.html"));
+        log = Utility.openPrintWriter("CheckCollationValidity.html", false, false);
+        
         log.println("<html><body>");
 
         
@@ -2986,91 +3024,219 @@ F900..FAFF; CJK Compatibility Ideographs
         
         if (GENERATED_NFC_MISMATCHES) showMismatches();
         removeAdjacentDuplicates2();
-        checkBadDecomps(1, false); // if decomposition is off, all primaries should be identical
-        checkBadDecomps(2, true); // if decomposition is ON, all primaries and secondaries should be identical
         
+        UnicodeSet exceptions = new UnicodeSet("[\u0CCB\u0DDD\u017F\u1E9B\uFB05]");
         
-        if (DO_CHARTS) for (int j = 0; j < 2; ++j) { // with and without key
+        UnicodeSet alreadySeen = new UnicodeSet(exceptions);
         
-            String name = "Collation";
-            String other = "CollationKey";
-            boolean SHOW_CE = false;
-            
-            if (j == 1) {
-                SHOW_CE = true;
-                name = "CollationKey";
-                other = "Collation";
-            }
+        checkBadDecomps(1, false, alreadySeen); // if decomposition is off, all primaries should be identical
+        checkBadDecomps(2, true, alreadySeen); // if decomposition is ON, all primaries and secondaries should be identical
+        
+        log.println("<p>Note: characters with decompositions to space + X, and tatweel + X are excluded,"
+        	+ " as are a few special characters: " + exceptions.toPattern(true) + "</p>");
+        
+        if (DO_CHARTS) {
+        	System.out.println("Charts");
+        	
+        		for (int j = 0; j < 2; ++j) { // with and without key
+	        
+            	String name = "Collation";
+            	String other = "CollationKey";
+            	boolean SHOW_CE = false;
+	            
+            	if (j == 1) {
+                	SHOW_CE = true;
+                	name = "CollationKey";
+                	other = "Collation";
+            	}
 
-            it = sortedD.keySet().iterator();
-            
-            int end = sortedD.size() >> 7;
-            
-            PrintWriter out = writeHead(0, end, name, other, version, SHOW_CE);
-            
-            String lastCol = "";
-            String lastChar = "";
-            boolean firstRow = true;
-            int page = 0;
-            for (int count = 0; it.hasNext(); count++) {
-                page = count >> 7;
-                if (count > 0 && (count & 0xf) == 0) {
-                    if ((count & 0x7F) == 0) {
-                        writeTail(out, page-1, name, other, SHOW_CE);
-                        out = writeHead(page, end, name, other, version, SHOW_CE);
-                        System.out.println("Block: " + page);
-                        firstRow = true;
-                    } else {
-                        out.println("</tr><tr>");
-                        firstRow = false;
-                    }
-                }
-                String col2 = (String)it.next();
-                String ch2 = (String)sortedD.get(col2);
-                
-                // remove mark
-                col2 = col2.substring(0,col2.length()-1);
-            
-                int strength = getStrengthDifference(lastCol, col2);
-                lastCol = col2;
-                
-                out.print("<td");
-                int color = 0xFFFFFF;
-                switch (strength) {
-                    // case 4: color = 0xFFFFFF; break; // white
-                    case 3: color = 0xCCCCFF; break;
-                    case 2: color = 0x9999FF; break;
-                    case 1: color = 0x6666FF; break;
-                    case 0: color = 0x3333FF; break;
-                }
-                /*if (mark == MARK2) {
-                    color = color & 0xFF00FF;
-                }*/
-                if (color != 0xFFFFFF) out.print(" bgcolor='#" + Integer.toString(color,16) + "'");
-                //if (firstRow) out.print(" width='6%'");
-                out.print(">");
-                
-                //log.println(Utility.hex(ch2.charAt(0)));
-                boolean ignorable = col2.charAt(0) == 0;
-                out.print(HTMLString(ch2) + "<br><tt>"
-                    + (ignorable ? "<u>" : "")
-                    + Utility.hex(ch2, " ")
-                    + (ignorable ? "</u>" : "")
-                    );
-                if (SHOW_CE) out.print("</tt><br><tt><b>" + UCA.toString(col2) + "</b>");
-                out.println("</tt></td>");
-                
-                // remember
-                lastCol = col2;
-                lastChar = ch2;
-            }
-            writeTail(out, page-1, name, other, SHOW_CE);
+            	it = sortedD.keySet().iterator();
+	            
+            	int end = sortedD.size() >> 7;
+	            
+            	PrintWriter out = writeHead(0, end, name, other, version, SHOW_CE);
+	            
+            	String lastCol = "";
+            	String lastChar = "";
+            	boolean firstRow = true;
+            	int page = 0;
+            	for (int count = 0; it.hasNext(); count++) {
+                	page = count >> 7;
+                	if (count > 0 && (count & 0xf) == 0) {
+                    	if ((count & 0x7F) == 0) {
+                        	writeTail(out, page-1, name, other, SHOW_CE);
+                        	out = writeHead(page, end, name, other, version, SHOW_CE);
+                        	System.out.println("Block: " + page);
+                        	firstRow = true;
+                    	} else {
+                        	out.println("</tr><tr>");
+                        	firstRow = false;
+                    	}
+                	}
+                	String col2 = (String)it.next();
+                	String ch2 = (String)sortedD.get(col2);
+	                
+                	// remove mark
+                	col2 = col2.substring(0,col2.length()-1);
+	            
+                	int strength = getStrengthDifference(lastCol, col2);
+                	lastCol = col2;
+	                
+                	out.print("<td");
+                	int color = 0xFFFFFF;
+                	switch (strength) {
+                    	// case 4: color = 0xFFFFFF; break; // white
+                    	case 3: color = 0xCCCCFF; break;
+                    	case 2: color = 0x9999FF; break;
+                    	case 1: color = 0x6666FF; break;
+                    	case 0: color = 0x3333FF; break;
+                	}
+                	/*if (mark == MARK2) {
+                    	color = color & 0xFF00FF;
+                	}*/
+                	if (color != 0xFFFFFF) out.print(" bgcolor='#" + Integer.toString(color,16) + "'");
+                	//if (firstRow) out.print(" width='6%'");
+                	out.print(">");
+	                
+                	//log.println(Utility.hex(ch2.charAt(0)));
+                	boolean ignorable = col2.charAt(0) == 0;
+                	out.print(HTMLString(ch2) + "<br><tt>"
+                    	+ (ignorable ? "<u>" : "")
+                    	+ Utility.hex(ch2, " ")
+                    	+ (ignorable ? "</u>" : "")
+                    	);
+                	if (SHOW_CE) out.print("</tt><br><tt><b>" + UCA.toString(col2) + "</b>");
+                	out.println("</tt></td>");
+	                
+                	// remember
+                	lastCol = col2;
+                	lastChar = ch2;
+            	}
+            	writeTail(out, page-1, name, other, SHOW_CE);
+        	}
         }
+        
+        checkWellformedTable();
+        
         log.println("</body></html>");
         log.close();
         sortedD.clear();
         System.out.println("Done");
     }
+    
+    
+	static void checkWellformedTable() throws IOException {
+    	System.out.println("Checking for well-formedness");
+    	
+    	log.println("<h2>5. Checking for well-formedness</h2>");
+    	
+        Normalizer nfd = new Normalizer(Normalizer.NFD, UNICODE_VERSION);
+        
+        int[] ces = new int[50];
+        
+        UCA.UCAContents cc = collator.getContents(UCA.FIXED_CE, nfd);
+        int[] lenArray = new int[1];
+        
+        int minps = Integer.MAX_VALUE;
+        int minpst = Integer.MAX_VALUE;
+        String minpsSample = "", minpstSample = "";
+        int errorCount = 0;
+        
+        while (true) {
+            String str = cc.next(ces, lenArray);
+            if (str == null) break;
+            int len = lenArray[0];
+            
+            for (int i = 0; i < len; ++i) {
+            	int ce = ces[i];
+            	int p = UCA.getPrimary(ce);
+            	int s = UCA.getSecondary(ce);
+            	int t = UCA.getTertiary(ce);
+            	
+            	// Gather data for WF#2 check
+
+            	if (p == 0) {
+            		if (s > 0) {
+            			if (s < minps) {
+            				minps = s;
+            				minpsSample = str;
+            			}
+            		} else {
+            			if (t > 0 && t < minpst) {
+            				minpst = t;
+            				minpstSample = str;
+            			}
+                    }            			
+            	}
+            }
+        }
+        
+        cc = collator.getContents(UCA.FIXED_CE, nfd);
+        log.println("<table border='1' cellspacing='0' cellpadding='2'>");
+        
+        while (true) {
+            String str = cc.next(ces, lenArray);
+            if (str == null) break;
+            int len = lenArray[0];
+            
+            for (int i = 0; i < len; ++i) {
+            	int ce = ces[i];
+            	int p = UCA.getPrimary(ce);
+            	int s = UCA.getSecondary(ce);
+            	int t = UCA.getTertiary(ce);
+            	
+            	// Check WF#1
+            	
+            	if (p != 0 && s == 0) {
+            		log.println("<tr><td>WF1.1"
+            			+ "</td><td>" + CEList.toString(ces, len) 
+            			+ "</td><td>" + ucd.getCodeAndName(str) + "</td></tr>");
+            		errorCount++;
+            	}
+            	if (s != 0 && t == 0) {
+            		log.println("<tr><td>WF1.2"
+            			+ "</td><td>" + CEList.toString(ces, len) 
+            			+ "</td><td>" + ucd.getCodeAndName(str) + "</td></tr>");
+            		errorCount++;
+            	}
+            	
+            	// Check WF#2
+
+            	if (p != 0) {
+            		if (s > minps) {
+            		log.println("<tr><td>WF2.2"
+            			+ "</td><td>" + CEList.toString(ces, len) 
+            			+ "</td><td>" + ucd.getCodeAndName(str) + "</td></tr>");
+            			errorCount++;
+            		}
+            	}
+            	if (s != 0) {
+            		if (t > minpst) {
+            		log.println("<tr><td>WF2.3"
+            			+ "</td><td>" + CEList.toString(ces, len) 
+            			+ "</td><td>" + ucd.getCodeAndName(str) + "</td></tr>");
+            			errorCount++;
+            		}
+            	} else {
+            	}
+            }
+        }
+        log.println("</table>");
+        log.println("<p>Minimum Secondary in Primary Ignorable = " + Utility.hex(minps)
+        	+ " from \t" + collator.getCEList(minpsSample, true) 
+        	+ "\t" + ucd.getCodeAndName(minpsSample) + "</p>");
+        if (minpst < Integer.MAX_VALUE) {
+        	log.println("<p>Minimum Tertiary in Secondary Ignorable =" + Utility.hex(minpst)
+        		+ " from \t" + collator.getCEList(minpstSample, true) 
+        		+ "\t" + ucd.getCodeAndName(minpstSample) + "</p>");
+        }
+                
+        
+        if (errorCount > 0) {
+        	log.println("<p>Well-formedness errors: " + errorCount + "</p>");
+        }
+    }
+    
     
 /*            
 3400;<CJK Ideograph Extension A, First>;Lo;0;L;;;;;N;;;;;
@@ -3163,7 +3329,7 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
         log.println("<h1>2. Differences in Ordering</h1>");
         log.println("<p>Codes and names are in the white rows: bold means that the NO-NFD sort key differs from UCA key.</p>");
         log.println("<p>Keys are in the light blue rows: green is the bad key, blue is UCA, black is where they equal.</p>");
-        log.println("<table border='1'>");
+        log.println("<table border='1' cellspacing='0' cellpadding='2'>");
         log.println("<tr><th>File Order</th><th>Code and Decomp</th><th>Key and Decomp-Key</th></tr>");
         
         while (true) {
@@ -3226,7 +3392,7 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
         log.println("<h1>2. Differences in Ordering</h1>");
         log.println("<p>Codes and names are in the white rows: bold means that the NO-NFD sort key differs from UCA key.</p>");
         log.println("<p>Keys are in the light blue rows: green is the bad key, blue is UCA, black is where they equal.</p>");
-        log.println("<table border='1'>");
+        log.println("<table border='1' cellspacing='0' cellpadding='2'>");
         log.println("<tr><th>File Order</th><th>Code and Decomp</th><th>Key and Decomp-Key</th></tr>");
         
         String lastCol = "a";

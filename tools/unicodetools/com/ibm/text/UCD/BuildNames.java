@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/BuildNames.java,v $
-* $Date: 2002/04/23 01:59:12 $
-* $Revision: 1.4 $
+* $Date: 2002/06/04 01:59:02 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -32,12 +32,43 @@ public class BuildNames implements UCD_Types {
         collectWords();
     }
 
-    static Set words = new TreeSet(new LengthFirstComparator());
+    static Map words = new TreeMap(new LengthFirstComparator());
+    static Map doubleWords = new TreeMap(new LengthFirstComparator());
+    static Map tripleWords = new TreeMap(new LengthFirstComparator());
     static Set lines = new TreeSet(new LengthFirstComparator());
     static int[] letters = new int[128];
+    
+    static class Count {
+    	Count(int count) {this.count = count;}
+    	int count;
+    }
+    
+    static String lastWord = "";
+    
+    static void addWord(String word, Map words) {
+    	Count count = (Count) words.get(word);
+    	if (count == null) {
+    		count = new Count(0);
+    		words.put(word, count);
+    	}
+        count.count++;
+    }
 
-    static void stash(String word) {
-        words.add(word);
+    static void stash(String word, int position) {
+    	addWord(word, words);
+        
+        // doubles
+        
+        if (position != 0) {
+        	addWord(lastWord + "/" + word, doubleWords);
+        }
+        lastWord = word;
+        
+        if (position > 1) {
+        	addWord(lastWord + "/" + word, doubleWords);
+        }
+        lastLastWord = word;
+        
         for (int i = 0; i < word.length(); ++i) {
             letters[word.charAt(i)]++;
         }
@@ -72,6 +103,29 @@ public class BuildNames implements UCD_Types {
         if (!changed) return line;
         return result.toString().trim();
     }
+    
+    static void printWords(Map words) {
+        System.out.println();
+        System.out.println("Finding largest");
+        System.out.println();
+        
+        Map biggest = new TreeMap();
+        Iterator it = words.keySet().iterator();
+        while (it.hasNext()) {
+        	String word = (String) it.next();
+        	Count count = (Count) words.get(word);
+        	biggest.put(new Integer(-count.count * word.length()), word); // make it negative just to reverse the sort
+        }
+        
+        it = biggest.keySet().iterator();
+        int counter = 0;
+        while (it.hasNext()) {
+        	if (counter++ > 50) break;
+        	Integer key = (Integer) it.next();
+        	String word = (String) biggest.get(key);
+        	System.out.println(word + ":\t" + (-key.intValue()));
+        }
+    }  
 
     static void collectWords() throws IOException {
 
@@ -83,8 +137,9 @@ public class BuildNames implements UCD_Types {
         int sum = 0;
         for (int i = 0; i < 0x10FFFF; ++i) {
             if (Default.ucd.hasComputableName(i)) continue;
-            String name = transform(Default.ucd.getName(i));
-
+            String name = Default.ucd.getName(i);
+            if (name == null) continue;
+            name = transform(name);
 
             sum += name.length();
             used++;
@@ -93,18 +148,22 @@ public class BuildNames implements UCD_Types {
 
             int len = Utility.split(name, ' ', parts);
             for (int j = 0; j < len; ++j) {
-                stash(parts[j]);
+                stash(parts[j], j);
             }
 
             lines.add(name);
         }
         System.out.println("Overhead: " + (lastLink - used) + ", " + ((lastLink - used) * 100 / used) + "%");
         System.out.println("Strings: " + sum + ", " + (lastLink*4));
-
+        
+        printWords(words);
+        printWords(doubleWords);
+        
         System.out.println();
         System.out.println("Compacting Words");
         System.out.println();
-        Iterator it = words.iterator();
+        Iterator it = words.keySet().iterator();
+        
         int i = 0;
         while (it.hasNext()) {
             String s = (String) it.next();
