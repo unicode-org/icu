@@ -13,7 +13,6 @@
  * to fit.
  */
 
-#include <stdlib.h>
 #include <stdio.h>
 #include "unicode/utypes.h"
 #include "unicode/ucol.h"
@@ -1569,68 +1568,75 @@ static void TestFCDProblem(void) {
 
 }
 
-struct tester{
+#define NORM_BUFFER_TEST_LEN 32
+typedef struct {
   UChar u;
-  UChar NFC[64];
-  UChar NFD[64];
-};
+  UChar NFC[NORM_BUFFER_TEST_LEN];
+  UChar NFD[NORM_BUFFER_TEST_LEN];
+} tester;
 
 static void TestComposeDecompose(void) {
-  int32_t noOfLoc = uloc_countAvailable();
-  int32_t i = 0, j = 0;
-
-  UErrorCode status = U_ZERO_ERROR;
-  char cName[256];
-  UChar name[256];
-  int32_t nameSize;
-
-  const char *locName = NULL;
-
-  UChar u = 0;
-/*
-  UChar NFC[256] = {0};
-  UChar NFD[256] = {0};
-*/
-  uint32_t nfcSize;
-  uint32_t nfdSize;
-  struct tester *t[0xFFFF];
-  uint32_t noCases = 0;
-  UCollator *coll = NULL;
-
-  t[0] = (struct tester *)malloc(sizeof(struct tester));
-  
-  for(u = 0; u < 0xFFFF; u++) {
-    nfcSize = unorm_normalize(&u, 1, UNORM_NFC, 0, t[noCases]->NFC, 64, &status);
-    nfdSize = unorm_normalize(&u, 1, UNORM_NFD, 0, t[noCases]->NFD, 64, &status);
-
-    if(nfcSize != nfdSize || (uprv_memcmp(t[noCases]->NFC, t[noCases]->NFD, nfcSize * sizeof(UChar)) != 0)) {
-      t[noCases]->u = u;
-      noCases++;
-      t[noCases] = (struct tester *)malloc(sizeof(struct tester));
-    }
-  }
-
-  for(i = 0; i<noOfLoc; i++) {
-    status = U_ZERO_ERROR;
-    locName = uloc_getAvailable(i);
-    if(hasCollationElements(locName)) {
-        nameSize = uloc_getDisplayName(locName, NULL, name, 256, &status);
-        for(j = 0; j<nameSize; j++) {
-          cName[j] = (char)name[j];
+    int32_t noOfLoc = uloc_countAvailable();
+    int32_t i = 0, j = 0;
+    
+    UErrorCode status = U_ZERO_ERROR;
+    
+    const char *locName = NULL;
+    
+    UChar u = 0;
+    /*
+    UChar NFC[256] = {0};
+    UChar NFD[256] = {0};
+    */
+    uint32_t nfcSize;
+    uint32_t nfdSize;
+    tester **t = uprv_malloc(0xFFFF * sizeof(tester *));
+    uint32_t noCases = 0;
+    UCollator *coll = NULL;
+    
+    t[0] = (tester *)uprv_malloc(sizeof(tester));
+    
+    for(u = 0; u < 0xFFFF; u++) {
+        nfcSize = unorm_normalize(&u, 1, UNORM_NFC, 0, t[noCases]->NFC, NORM_BUFFER_TEST_LEN, &status);
+        nfdSize = unorm_normalize(&u, 1, UNORM_NFD, 0, t[noCases]->NFD, NORM_BUFFER_TEST_LEN, &status);
+        
+        if(nfcSize != nfdSize || (uprv_memcmp(t[noCases]->NFC, t[noCases]->NFD, nfcSize * sizeof(UChar)) != 0)) {
+            t[noCases]->u = u;
+            noCases++;
+            t[noCases] = (tester *)uprv_malloc(sizeof(tester));
         }
-        cName[nameSize] = 0;
-        log_verbose("\nTesting locale %s (%s)\n", locName, cName);
-
-        coll = ucol_open(locName, &status);
-
-        for(u=0; u<noCases; u++) {
-          doTest(coll, t[u]->NFC, t[u]->NFD, UCOL_EQUAL);
-        }
-
-        ucol_close(coll);
-
     }
-  }
+    
+    for(i = 0; i<noOfLoc; i++) {
+        status = U_ZERO_ERROR;
+        locName = uloc_getAvailable(i);
+        if(hasCollationElements(locName)) {
+            if (VERBOSITY) {
+                char cName[256];
+                UChar name[256];
+                int32_t nameSize = uloc_getDisplayName(locName, NULL, name, sizeof(cName), &status);
+
+                for(j = 0; j<nameSize; j++) {
+                    cName[j] = (char)name[j];
+                }
+                cName[nameSize] = 0;
+                log_verbose("\nTesting locale %s (%s)\n", locName, cName);
+            }
+            
+            coll = ucol_open(locName, &status);
+            
+            for(u=0; u<noCases; u++) {
+                doTest(coll, t[u]->NFC, t[u]->NFD, UCOL_EQUAL);
+            }
+            
+            ucol_close(coll);
+            
+        }
+    }
+    for(u = 0; u <= noCases; u++) {
+        uprv_free(t[u]);
+    }
+    uprv_free(t);
 }
 
 static void TestUnmappedSpaces(void) {
