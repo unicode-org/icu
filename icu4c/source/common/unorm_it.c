@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003, International Business Machines
+*   Copyright (C) 2003-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -137,7 +137,7 @@ moveContentsTowardStart(UCharIterator *api, UChar chars[], uint32_t states[], in
     srcIndex=delta;
     if(srcIndex>api->start) {
         /* look for a position in the arrays with a known state */
-        while(srcIndex<limit && chars[srcIndex]==UITER_NO_STATE) {
+        while(srcIndex<limit && states[srcIndex]==UITER_NO_STATE) {
             ++srcIndex;
         }
     }
@@ -165,7 +165,7 @@ moveContentsTowardEnd(UCharIterator *api, UChar chars[], uint32_t states[], int3
     srcIndex=destIndex-delta;
     if(srcIndex<api->limit) {
         /* look for a position in the arrays with a known state */
-        while(srcIndex>start && chars[srcIndex]==UITER_NO_STATE) {
+        while(srcIndex>start && states[srcIndex]==UITER_NO_STATE) {
             --srcIndex;
         }
     }
@@ -191,16 +191,15 @@ readNext(UNormIterator *uni, UCharIterator *iter) {
     UCharIterator *api=&uni->api;
 
     /* make capacity/4 room at the end of the arrays */
-    int32_t limit, capacity, room, delta;
+    int32_t limit, capacity, room;
     UErrorCode errorCode;
 
     limit=api->limit;
     capacity=uni->capacity;
     room=capacity/4;
-    delta=room-(capacity-limit);
-    if(delta>0) {
+    if(room>(capacity-limit)) {
         /* move array contents to make room */
-        moveContentsTowardStart(api, uni->chars, uni->states, delta);
+        moveContentsTowardStart(api, uni->chars, uni->states, room);
         api->index=limit=api->limit;
         uni->hasPrevious=TRUE;
     }
@@ -262,16 +261,15 @@ readPrevious(UNormIterator *uni, UCharIterator *iter) {
     UCharIterator *api=&uni->api;
 
     /* make capacity/4 room at the start of the arrays */
-    int32_t start, capacity, room, delta;
+    int32_t start, capacity, room;
     UErrorCode errorCode;
 
     start=api->start;
     capacity=uni->capacity;
     room=capacity/4;
-    delta=room-start;
-    if(delta>0) {
+    if(room>start) {
         /* move array contents to make room */
-        moveContentsTowardEnd(api, uni->chars, uni->states, delta);
+        moveContentsTowardEnd(api, uni->chars, uni->states, room);
         api->index=start=api->start;
         uni->hasNext=TRUE;
     }
