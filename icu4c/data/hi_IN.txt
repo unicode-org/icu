@@ -4,6 +4,11 @@
 hi_IN {
     ShortCountry { IND }
 
+    NumberPatterns {
+        "#,##,##0.###",
+        "\u00A4 #,##0.00;-\u00A4 #,##0.00",
+        "#,##0%"
+    }
     CurrencyElements {
         "\u0930\u0942",
         RUP,  // Rs. ? No.
