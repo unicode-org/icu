@@ -3,12 +3,14 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/26 12:57
-// * Source File: \work\locale\common\collation\\ja.xml
+// * Source File: ../../../locale/common/collation/ja.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/collation/ja.xml
+ */
 ja{
-    Version{"1.1.1"}
+    Version{"1.2"}
     collations{
         standard{
             Sequence{
@@ -506,6 +508,9 @@ ja{
                 "<槇<遙<瑤<凜<熙"
             }
             Version{"4.0"}
+        }
+        validSubLocales{
+            ja_JP{""}
         }
     }
 }

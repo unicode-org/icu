@@ -3,16 +3,21 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/26 13:0
-// * Source File: \work\locale\common\collation\\uk.xml
+// * Source File: ../../../locale/common/collation/uk.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/collation/uk.xml
+ */
 uk{
-    Version{"1.1.1"}
+    Version{"1.2"}
     collations{
         standard{
             Sequence{"&Г<ґ<<<Ґ"}
             Version{"1.0"}
+        }
+        validSubLocales{
+            uk_UA{""}
         }
     }
 }

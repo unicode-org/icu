@@ -3,12 +3,11 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/26 12:55
-// * Source File: \work\locale\common\collation\\en_BE.xml
+// * Source File: ../../../locale/common/collation/en_BE.xml
 // *
 // ***************************************************************************
 en_BE{
-    Version{"1.1.1"}
+    Version{"1.2"}
     collations{
         standard{
             Sequence{" [backwards 2]"}

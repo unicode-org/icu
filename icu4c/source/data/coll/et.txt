@@ -3,12 +3,14 @@
 // * Copyright (C) 2004 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Date & Time: 2004/8/26 12:55
-// * Source File: \work\locale\common\collation\\et.xml
+// * Source File: ../../../locale/common/collation/et.xml
 // *
 // ***************************************************************************
+/**
+ *  ICU <specials> source: ../../../locale/icu/collation/et.xml
+ */
 et{
-    Version{"1.1.1"}
+    Version{"1.2"}
     collations{
         standard{
             Sequence{
@@ -17,6 +19,9 @@ et{
                 "&[before 1]X<õ<<<Õ<ä<<<Ä<ö<<<Ö<ü<<<Ü"
             }
             Version{"2.0"}
+        }
+        validSubLocales{
+            et_EE{""}
         }
     }
 }
