@@ -289,15 +289,36 @@ U_CAPI void U_EXPORT2
 			   UErrorCode * err);
 
 /**
- * Resets the state of stateful conversion to the default state. This is used
+ * Resets the state of a converter to the default state. This is used
  * in the case of error to restart a conversion from a known default state.
- * it will also empty the internal output buffers.
+ * It will also empty the internal output buffers.
  * @param converter the Unicode converter
  * @stable
  */
-
 U_CAPI void U_EXPORT2
     ucnv_reset (UConverter * converter);
+
+/**
+ * Resets the to-Unicode part of a converter state to the default state.
+ * This is used in the case of an error to restart a conversion to
+ * Unicode to a known default state. It will also empty the internal
+ * output buffers used for the conversion to Unicode codepoints.
+ * @param converter the Unicode converter
+ * @draft
+ */
+U_CAPI void
+    ucnv_resetToUnicode(UConverter *converter);
+
+/**
+ * Resets the from-Unicode part of a converter state to the default state.
+ * This is used in the case of an error to restart a conversion from
+ * Unicode to a known default state. It will also empty the internal output
+ * buffers used for the conversion from Unicode codepoints.
+ * @param converter the Unicode converter
+ * @draft
+ */
+U_CAPI void
+    ucnv_resetFromUnicode(UConverter *converter);
 
 /**
  * Returns the maximum length of bytes used by a character. This varies between 1 and 4
