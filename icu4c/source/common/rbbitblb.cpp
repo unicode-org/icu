@@ -27,7 +27,18 @@ RBBITableBuilder::RBBITableBuilder(RBBIRuleBuilder *rb, RBBINode **rootNode) :
  fTree(*rootNode) {
     fRB             = rb;
     fStatus         = fRB->fStatus;
-    fDStates        = new UVector(*fStatus);
+    UErrorCode status = U_ZERO_ERROR;
+    fDStates        = new UVector(status);
+    if (U_FAILURE(*fStatus)) {
+        return;
+    }
+    if (U_FAILURE(status)) {
+        *fStatus = status;
+        return;
+    }
+    if (fDStates == NULL) {
+        *fStatus = U_MEMORY_ALLOCATION_ERROR;;
+    }
 }
 
 
@@ -309,19 +320,37 @@ void RBBITableBuilder::calcFollowPos(RBBINode *n) {
 //
 //-----------------------------------------------------------------------------
 void RBBITableBuilder::buildStateTable() {
+    if (U_FAILURE(*fStatus)) {
+        return;
+    }
     //
     // Add a dummy state 0 - the stop state.  Not from Aho.
     int      lastInputSymbol = fRB->fSetBuilder->getNumCharCategories() - 1;
     RBBIStateDescriptor *failState = new RBBIStateDescriptor(lastInputSymbol, fStatus);
     failState->fPositions = new UVector(*fStatus);
+    if (U_FAILURE(*fStatus)) {
+        return;
+    }
     fDStates->addElement(failState, *fStatus);
+    if (U_FAILURE(*fStatus)) {
+        return;
+    }
 
     // initially, the only unmarked state in Dstates is firstpos(root),
     //       where toot is the root of the syntax tree for (r)#;
     RBBIStateDescriptor *initialState = new RBBIStateDescriptor(lastInputSymbol, fStatus);
+    if (U_FAILURE(*fStatus)) {
+        return;
+    }
     initialState->fPositions = new UVector(*fStatus);
+    if (U_FAILURE(*fStatus)) {
+        return;
+    }
     setAdd(initialState->fPositions, fTree->fFirstPosSet);
     fDStates->addElement(initialState, *fStatus);
+    if (U_FAILURE(*fStatus)) {
+        return;
+    }
 
     // while there is an unmarked state T in Dstates do begin
     for (;;) {
@@ -383,8 +412,14 @@ void RBBITableBuilder::buildStateTable() {
                 if (!UinDstates)
                 {
                     RBBIStateDescriptor *newState = new RBBIStateDescriptor(lastInputSymbol, fStatus);
+                    if (U_FAILURE(*fStatus)) {
+                        return;
+                    }
                     newState->fPositions = U;
                     fDStates->addElement(newState, *fStatus);
+                    if (U_FAILURE(*fStatus)) {
+                        return;
+                    }
                     ux = fDStates->size()-1;
                 }
 
@@ -407,12 +442,22 @@ void RBBITableBuilder::buildStateTable() {
 //
 //-----------------------------------------------------------------------------
 void     RBBITableBuilder::flagAcceptingStates() {
+    if (U_FAILURE(*fStatus)) {
+        return;
+    }
     UVector     endMarkerNodes(*fStatus);
     RBBINode    *endMarker;
     int32_t     i;
     int32_t     n;
 
+    if (U_FAILURE(*fStatus)) {
+        return;
+    }
+
     fTree->findNodes(&endMarkerNodes, RBBINode::endMark, *fStatus);
+    if (U_FAILURE(*fStatus)) {
+        return;
+    }
 
     for (i=0; i<endMarkerNodes.size(); i++) {
         endMarker = (RBBINode *)endMarkerNodes.elementAt(i);
@@ -444,12 +489,18 @@ void     RBBITableBuilder::flagAcceptingStates() {
 //
 //-----------------------------------------------------------------------------
 void     RBBITableBuilder::flagLookAheadStates() {
+    if (U_FAILURE(*fStatus)) {
+        return;
+    }
     UVector     lookAheadNodes(*fStatus);
     RBBINode    *lookAheadNode;
     int32_t     i;
     int32_t     n;
 
     fTree->findNodes(&lookAheadNodes, RBBINode::lookAhead, *fStatus);
+    if (U_FAILURE(*fStatus)) {
+        return;
+    }
     for (i=0; i<lookAheadNodes.size(); i++) {
         lookAheadNode = (RBBINode *)lookAheadNodes.elementAt(i);
 
@@ -471,12 +522,21 @@ void     RBBITableBuilder::flagLookAheadStates() {
 //
 //-----------------------------------------------------------------------------
 void     RBBITableBuilder::flagTaggedStates() {
+    if (U_FAILURE(*fStatus)) {
+        return;
+    }
     UVector     tagNodes(*fStatus);
     RBBINode    *tagNode;
     int32_t     i;
     int32_t     n;
 
+    if (U_FAILURE(*fStatus)) {
+        return;
+    }
     fTree->findNodes(&tagNodes, RBBINode::tag, *fStatus);
+    if (U_FAILURE(*fStatus)) {
+        return;
+    }
     for (i=0; i<tagNodes.size(); i++) {                   // For each tag node t (all of 'em)
         tagNode = (RBBINode *)tagNodes.elementAt(i);
 
@@ -507,7 +567,7 @@ void RBBITableBuilder::setAdd(UVector *dest, UVector *source) {
     int sourceSize       = source->size();
     int32_t  si, di;
 
-    for (si=0; si<sourceSize; si++) {
+    for (si=0; si<sourceSize && U_SUCCESS(*fStatus); si++) {
         void *elToAdd = source->elementAt(si);
         for (di=0; di<destOriginalSize; di++) {
             if (dest->elementAt(di) == elToAdd) {
@@ -515,7 +575,7 @@ void RBBITableBuilder::setAdd(UVector *dest, UVector *source) {
             }
         }
         dest->addElement(elToAdd, *fStatus);
-    elementAlreadyInDest: ;
+        elementAlreadyInDest: ;
     }
 }
 
@@ -730,10 +790,16 @@ RBBIStateDescriptor::RBBIStateDescriptor(int lastInputSymbol, UErrorCode *fStatu
     fTagVal    = 0;
     fPositions = NULL;
     fDtran     = NULL;
+    
+    UErrorCode status = U_ZERO_ERROR;
+    fDtran     = new UVector(lastInputSymbol+1, status);
     if (U_FAILURE(*fStatus)) {
         return;
     }
-    fDtran     = new UVector(lastInputSymbol+1, *fStatus);
+    if (U_FAILURE(status)) {
+        *fStatus = status;
+        return;
+    }
     if (fDtran == NULL) {
         *fStatus = U_MEMORY_ALLOCATION_ERROR;
         return;
