@@ -23,6 +23,7 @@
 #include "cmemory.h"
 #include "filestrm.h"
 #include "toolutil.h"
+#include "uoptions.h"
 
 #include "unicode/udata.h"
 #include "unewdata.h"
@@ -232,6 +233,8 @@ char *
   return line + i;
 }
 
+extern bool_t haveCopyright=TRUE;
+
 static const UDataInfo dataInfo={
     sizeof(UDataInfo),
     0,
@@ -252,7 +255,7 @@ void writeConverterData(UConverterSharedData_1_4 *mySharedData, const char *cnvN
   UNewDataMemory *mem;
   uint32_t sz2;
 
-  mem = udata_create(cnvDir, "cnv", cnvName, &dataInfo, U_COPYRIGHT_STRING, status);
+  mem = udata_create(cnvDir, "cnv", cnvName, &dataInfo, haveCopyright ? U_COPYRIGHT_STRING : NULL, status);
   
   WriteConverterSharedData(mem, mySharedData);
 
@@ -261,85 +264,63 @@ void writeConverterData(UConverterSharedData_1_4 *mySharedData, const char *cnvN
 /*  printf("Done. Wrote %d bytes.\n", sz2); */
 }
 
-static void copyright() {
-    printf("Copyright (C) 1998-1999, International Business Machines\n");
-    printf("Corporation and others.  All Rights Reserved.\n");
-}
+static UOption options[]={
+    UOPTION_HELP_H,
+    UOPTION_HELP_QUESTION_MARK,
+    UOPTION_COPYRIGHT,
+    UOPTION_VERSION,
+    UOPTION_DESTDIR
+};
 
-static void usage(const char *pname, int exitcode) {
-    FILE *where = exitcode ? stderr : stdout;
-    fprintf(where, "%csage: %s [ -h, --help ] [ --version ] [ --copyright ] [ -d destdir ] file ...\n", exitcode ? 'u' : 'U', pname);
-    if (!exitcode) {
-        fputc('\n', where);
-        fprintf(where, "Options: -h, --help\tdisplay this help and exit\n");
-        fprintf(where, "         --version\tdisplay the tool's version and exit\n");
-        fprintf(where, "         --copyright\tdisplay a copyright statement and exit\n");
-        fprintf(where, "         -d destdir\tsets the output directory (defaults to ICU data dir)\n");
-    }
-    exit(exitcode);
-}
-
-int main(int argc, char** argv)
+int main(int argc, const char *argv[])
 {
   UConverterSharedData_1_4* mySharedData = NULL; 
   UErrorCode err = U_ZERO_ERROR;
   char outFileName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
-  char *pname = *argv;
-  const char* destdir = 0;
+  const char *pname = *argv;
+  const char* destdir, *arg;
   size_t destdirlen;
-  char* dot = NULL, *arg, *outBasename;
+  char* dot = NULL, *outBasename;
   char cnvName[UCNV_MAX_FULL_FILE_NAME_LENGTH];
  
-  /* Lame getopt() thingy. */
+    /* preset then read command line options */
+    options[4].value=u_getDataDirectory();
+    argc=u_parseArgs(argc, argv, sizeof(options)/sizeof(options[0]), options);
 
-  for (++argv; *argv && **argv == '-' && (*argv)[1]; ++argv) {
-      switch ((*argv)[1]) {
-          case 'd':
-              if ((*argv)[2]) {
-                  destdir = *argv + 2;
-              } else if (*++argv) {
-                  destdir = *argv;
-              } else {
-                  usage(pname, 1);
-              }
-              break;
+    /* error handling, printing usage message */
+    if(argc<0) {
+        fprintf(stderr,
+            "error in command line argument \"%s\"\n",
+            argv[-argc]);
+    } else if(argc<2) {
+        argc=-1;
+    }
+    if(argc<0 || options[0].doesOccur || options[1].doesOccur) {
+        fprintf(stderr,
+            "usage: %s [-options] files...\n"
+            "\tread .ucm codepage mapping files and write .cnv files\n"
+            "\toptions:\n"
+            "\t\t-h or -? or --help  this usage text\n"
+            "\t\t-V or --version     show a version message\n"
+            "\t\t-c or --copyright   include a copyright notice\n"
+            "\t\t-d or --destdir     destination directory, followed by the path\n",
+            argv[0]);
+        return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
+    }
 
-          case 'h':
-              if (!(*argv)[2]) {
-                  usage(pname, 0);
-              } else {
-                  usage(pname, 1);
-              }
-              break;
+    if(options[3].doesOccur) {
+        printf("makeconv version %hu.%hu, ICU tool to read .ucm codepage mapping files and write .cnv files\n",
+            dataInfo.formatVersion[0], dataInfo.formatVersion[1]);
+        printf("Copyright (C) 1998-2000, International Business Machines\n");
+        printf("Corporation and others.  All Rights Reserved.\n");
+        exit(0);
+    }
 
-          case '-':
-              if (!strcmp(*argv, "--help")) {
-                  usage(pname, 0);
-              } else if (!strcmp(*argv, "--copyright")) {
-                  copyright();
-                  exit(0);
-              } else if (!strcmp(*argv, "--version")) {
-                  printf("makeconv version 1.0, by IBM and others\n");
-                  exit(0);
-              } else {
-                  usage(pname, 1);
-              }
-              break;
+    /* get the options values */
+    haveCopyright = options[2].doesOccur;
+    destdir = options[4].value;
 
-          default:
-              usage(pname, 1);
-      }
-  }
-
-  if (!*argv) {
-      usage(pname, 1);
-  }
-
-  if (!destdir) {
-      destdir = u_getDataDirectory();
-  }
-
-  if (destdir != NULL && *destdir != 0) {
+    if (destdir != NULL && *destdir != 0) {
         uprv_strcpy(outFileName, destdir);
         destdirlen = uprv_strlen(destdir);
         outBasename = outFileName + destdirlen;
@@ -352,7 +333,7 @@ int main(int argc, char** argv)
         outBasename = outFileName;
     }
 
-  for (; *argv; ++argv)
+  for (++argv; *argv; ++argv)
     {
       err = U_ZERO_ERROR;
       arg = getLongPathname(*argv);
@@ -360,7 +341,7 @@ int main(int argc, char** argv)
       /*produces the right destination path for display*/
       if (destdirlen != 0)
         {
-          char *basename;
+          const char *basename;
 
           /* find the last file sepator */
           basename = uprv_strrchr(arg, U_FILE_SEP_CHAR);
