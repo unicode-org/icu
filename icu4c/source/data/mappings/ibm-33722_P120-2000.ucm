@@ -1,35 +1,30 @@
 # *******************************************************************************
 # *
-# *   Copyright (C) 1995-2000, International Business Machines
+# *   Copyright (C) 1995-2001, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # *
 # *******************************************************************************
 #
-# File created on Fri Nov 10 15:04:31 2000
-#
-# File created by dtcocm version 3.00
+# File created by rptp2ucm (compiled on Feb 23 2001)
 # from source files 34B083BA.RPMAP120 and 83BA34B0.TPMAP110
 #
-# Table Version : 1.01
-#
-<code_set_name>               "IBM-33722"
+<code_set_name>               "ibm-33722_P120-2000"
 <char_name_mask>              "AXXXX"
 <mb_cur_max>                  3
 <mb_cur_min>                  1
 <uconv_class>                 "MBCS"
 <subchar>                     \xF4\xFE
-#<subchar1>                   \x1A
+<subchar1>                    \x1A
+<icu:charsetFamily>           "ASCII"
+<icu:alias>                   "ibm-33722_VASCII_VPUA"
+
 <icu:state>                   0-8d, 8e:2, 8f:3, 90-9f, a1-fe:1
 <icu:state>                   a1-fe
 <icu:state>                   a1-e4
 <icu:state>                   a1-fe:1, a1:4, a3-af:4, b6:4, d6:4, da-db:4, ed-f2:4
 <icu:state>                   a1-fe.u
-#
+
 CHARMAP
-#
-#
-#ISO 10646      IBM33722
-#_________      _________
 <U0000> \x00 |0
 <U0001> \x01 |0
 <U0002> \x02 |0
@@ -9555,5 +9550,4 @@ CHARMAP
 <UFFEC> \x1A |2
 <UFFED> \x1A |2
 <UFFEE> \x1A |2
-<UFFFD> \xF4\xFE |2
 END CHARMAP
