@@ -247,14 +247,12 @@ public:
 
 // -------------------------------------
 
-static UMTX gnLock = 0;
-
 static ICULocaleService* 
 getService(void)
 {
   UBool needInit;
   {
-    Mutex mutex(&gnLock);
+    Mutex mutex;
     needInit = (UBool)(gService == NULL);
   }
   if (needInit) {
@@ -285,7 +283,7 @@ getService(void)
     }
     
     if (newservice) {
-      Mutex mutex(&gnLock);
+      Mutex mutex;
       if (gService == NULL) {
         gService = newservice;
         newservice = NULL;
@@ -293,8 +291,10 @@ getService(void)
     }
     if (newservice) {
       delete newservice;
+    } else {
+      // we won the contention - we can register the cleanup.
+      ucln_i18n_registerCleanup();
     }
-    ucln_i18n_registerCleanup();
   }
   return gService;
 }
@@ -1173,7 +1173,6 @@ U_CFUNC UBool calendar_cleanup(void) {
     delete gService;
     gService = NULL;
   }
-  umtx_destroy(&gnLock);
   return TRUE;
 }
 
