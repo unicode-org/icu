@@ -50,6 +50,7 @@ static void U_CALLCONV
 chArrayClose(UEnumeration *en) {
     if(cont->currUChar != NULL) {
         free(cont->currUChar);
+        cont->currUChar = NULL;
     }
     free(en);
 }
