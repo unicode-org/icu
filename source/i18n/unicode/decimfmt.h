@@ -306,11 +306,47 @@ class ChoiceFormat;
  * DecimalFormatSymbols object.  During formatting, the
  * DecimalFormatSymbols-based digits are output.
  *
+ * <p>During parsing, grouping separators are ignored.
+ *
  * <p>If parse(UnicodeString&,Formattable&,ParsePosition&)
  * fails to parse a string, it leaves the parse position unchanged.
  * The convenience method parse(UnicodeString&,Formattable&,UErrorCode&)
  * indicates parse failure by setting a failing
  * UErrorCode.
+ *
+ * <p><strong>Formatting</strong>
+ *
+ * <p>Formatting is guided by several parameters, all of which can be
+ * specified either using a pattern or using the API.
+ *
+ * <p>For <em>non-exponential</em> formatters:
+ *
+ * <ul><li>If the number of actual integer digits exceeds the
+ * <em>maximum integer digits</em>, then only the least significant
+ * digits are shown.  For example, 1997 is formatted as "97" if the
+ * maximum integer digits is set to 2.
+ *
+ * <li>If the number of actual integer digits is less than the
+ * <em>minimum integer digits</em>, then leading zeros are added.  For
+ * example, 1997 is formatted as "01997" if the minimum integer digits
+ * is set to 5.
+ *
+ * <li>If the number of actual fraction digits exceeds the <em>maximum
+ * fraction digits</em>, then half-even rounding it performed to the
+ * maximum fraction digits.  For example, 0.125 is formatted as "0.12"
+ * if the maximum fraction digits is 2.  This behavior can be changed
+ * by specifying a rounding increment and a rounding mode.
+ *
+ * <li>If the number of actual fraction digits is less than the
+ * <em>minimum fraction digits</em>, then trailing zeros are added.
+ * For example, 0.125 is formatted as "0.1250" if the mimimum fraction
+ * digits is set to 4.
+ *
+ * <li>Trailing fractional zeros are not displayed if they occur
+ * <em>j</em> positions after the decimal, where <em>j</em> is greater
+ * than the minimum fraction digits. For example, 0.10005 is
+ * formatted as "0.1" if the minimum fraction digits is 0 or 1.
+ * </ul>
  *
  * <p><strong>Special Values</strong>
  *
