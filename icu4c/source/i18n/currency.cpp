@@ -4,8 +4,8 @@
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * $Source: /xsrl/Nsvn/icu/icu/source/i18n/Attic/currency.cpp,v $ 
-* $Date: 2002/05/13 19:32:16 $ 
-* $Revision: 1.1 $
+* $Date: 2002/05/14 22:18:43 $ 
+* $Revision: 1.2 $
 **********************************************************************
 */
 #include "unicode/currency.h"
@@ -19,7 +19,7 @@ U_NAMESPACE_BEGIN
  * TEMPORARY data structure.
  */
 struct UCurrencyData {
-    char*   code;
+    char   code[4];
     int32_t fractionDigits;
     double  rounding;
 };
@@ -30,26 +30,27 @@ struct UCurrencyData {
  * the default values for currencies not listed here.  The last
  * entry with a NULL code marks the end.
  */
-static UCurrencyData DATA[] = {
+static const UCurrencyData DATA[] = {
     // TODO Temporary implementation; Redo this
     // Code, Fraction digits, Rounding increment
-    { NULL , 2, 0 }, // Default
-    { "BYB", 0, 0 },
+    { ""   , 2, 0.0 }, // Default
+    { "BYB", 0, 0.0 },
     { "CHF", 2, 0.25 },
-    { "ESP", 0, 0 },
-    { "IQD", 3, 0 },
-    { "ITL", 0, 0 },
-    { "JOD", 3, 0 },
-    { "JPY", 0, 0 },
-    { "KWD", 3, 0 },
-    { "LUF", 0, 0 },
-    { "LYD", 3, 0 },
-    { "PTE", 0, 0 },
-    { "PYG", 0, 0 },
-    { "TND", 3, 0 },
-    { "TRL", 0, 0 },
-    { NULL , 0, 0 }, // END
+    { "ESP", 0, 0.0 },
+    { "IQD", 3, 0.0 },
+    { "ITL", 0, 0.0 },
+    { "JOD", 3, 0.0 },
+    { "JPY", 0, 0.0 },
+    { "KWD", 3, 0.0 },
+    { "LUF", 0, 0.0 },
+    { "LYD", 3, 0.0 },
+    { "PTE", 0, 0.0 },
+    { "PYG", 0, 0.0 },
+    { "TND", 3, 0.0 },
+    { "TRL", 0, 0.0 },
 };
+
+#define ARRAY_SIZE(array) (sizeof array  / sizeof array[0])
 
 /**
  * TEMPORARY Internal function to look up currency data.
@@ -63,7 +64,7 @@ _findData(const UnicodeString& currency) {
     currency.extract(0, 3, isoCode, "");
 
     // Start from element 1
-    for (int32_t i=1; DATA[i].code != NULL; ++i) {
+    for (int32_t i=1; i < (int32_t)ARRAY_SIZE(DATA); ++i) {
         int32_t c = uprv_strcmp(DATA[i].code, isoCode);
         if (c == 0) {
             return i;
