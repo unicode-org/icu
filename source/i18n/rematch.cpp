@@ -412,6 +412,11 @@ RegexMatcher &RegexMatcher::reset(const UnicodeString &input) {
 
 
 
+//--------------------------------------------------------------------------------
+//
+//     start
+//
+//--------------------------------------------------------------------------------
 int32_t RegexMatcher::start(UErrorCode &err) const {
     return start(0, err);
 }
@@ -436,7 +441,6 @@ int32_t RegexMatcher::start(int group, UErrorCode &err) const {
         s = fMatchStart; 
     } else {
         s = fCaptureStarts->elementAti(group);
-        // TODO:  what to do if no match on this specific group?
     }
     return s;
 }
