@@ -102,7 +102,7 @@ public:
   virtual TestData* createTestData(const char* name, UErrorCode &status) const;
 
 private:
-  UResourceBundle *getTestBundle(const char* bundleName);
+  UResourceBundle *getTestBundle(const char* bundleName, UErrorCode &status);
   const char* loadTestData(UErrorCode& err);
 
 private:
