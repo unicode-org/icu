@@ -767,6 +767,18 @@ BasicNormalizerTest::TestNormalizerAPI() {
         errln("error in Normalizer::setText(UChar *) or Normalizer::setMode()");
     }
 
+    // test setText(UChar *, length=-1)
+    errorCode=U_ZERO_ERROR;
+
+    // NUL-terminate s
+    s.append((UChar)0);         // append NUL
+    s.truncate(s.length()-1);   // undo length change
+
+    copy.setText(s.getBuffer()+1, -1, errorCode);
+    if(copy.endIndex()!=s.length()-1) {
+        errln("error in Normalizer::setText(UChar *, -1)");
+    }
+
     // test setOption() and getOption()
     copy.setOption(0xaa0000, TRUE);
     copy.setOption(0x20000, FALSE);
