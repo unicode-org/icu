@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/NFRuleSet.java,v $ 
- * $Date: 2002/07/31 17:37:08 $ 
- * $Revision: 1.7 $
+ * $Date: 2004/03/12 20:15:13 $ 
+ * $Revision: 1.8 $
  *
  *****************************************************************************************
  */
@@ -24,7 +24,7 @@ import java.util.Vector;
  * appropriate rule for formatting a particular number and dispatch
  * control to it, and to arbitrate between different rules when parsing
  * a number.
- * $RCSfile: NFRuleSet.java,v $ $Revision: 1.7 $ $Date: 2002/07/31 17:37:08 $
+ * $RCSfile: NFRuleSet.java,v $ $Revision: 1.8 $ $Date: 2004/03/12 20:15:13 $
  */
 final class NFRuleSet {
     //-----------------------------------------------------------------------
@@ -359,12 +359,20 @@ final class NFRuleSet {
         return isFractionRuleSet;
     }
 
-    /*
+    /**
      * Returns the rule set's name
      * @return The rule set's name
      */
     public String getName() {
         return name;
+    }
+
+    /**
+     * Return true if the rule set is public.
+     * @return true if the rule set is public
+     */
+    public boolean isPublic() {
+	return !name.startsWith("%%");
     }
 
     //-----------------------------------------------------------------------
