@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2002/07/25 21:21:31 $
- * $Revision: 1.113 $
+ * $Date: 2002/07/26 23:14:38 $
+ * $Revision: 1.114 $
  *
  *****************************************************************************************
  */
@@ -2665,6 +2665,15 @@ public class TransliteratorTest extends TestFmwk {
     // These tests are not mirrored (yet) in icu4c at
     // source/test/intltest/transtst.cpp
     //======================================================================
+
+    /**
+     * Improve code coverage.
+     */
+    public void TestCoverage() {
+        // NullTransliterator
+        Transliterator t = Transliterator.getInstance("Null", Transliterator.FORWARD);
+        expect(t, "a", "a");
+    }
 
     //======================================================================
     // Support methods
