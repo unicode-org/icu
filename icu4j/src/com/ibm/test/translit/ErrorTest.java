@@ -108,13 +108,13 @@ public class ErrorTest extends TestFmwk {
 	    }
 	} catch (IllegalArgumentException e) { }
 
-        try {
+        //try { // unneeded - Exception cannot be thrown
             Transliterator t2 = new RuleBasedTransliterator(newID, newIDRules);
             try {
                 Transliterator t3 = t2.getInverse();
                 errln("FAIL: The newID transliterator was not registered so createInverse should fail.");
 		} catch (Exception e) { }
-	} catch (Exception e) { }
+        //} catch (Exception e) { }
         try {
             Transliterator t4 = Transliterator.createFromRules(newID, bogusRules, Transliterator.FORWARD);
             if (t4 != null ) {
@@ -193,11 +193,11 @@ public class ErrorTest extends TestFmwk {
 
     public void TestHexToUniErrors() {
         Transliterator t = null;
-        try {
+        //try { // unneeded - exception cannot be thrown
             t = new HexToUnicodeTransliterator("", null);
-	} catch (Exception e) {
-            errln("FAIL: Could not create a HexToUnicodeTransliterator with an empty pattern.");
-	}
+        //} catch (Exception e) {
+        //    errln("FAIL: Could not create a HexToUnicodeTransliterator with an empty pattern.");
+        //}
         try {
             t = new HexToUnicodeTransliterator("\\x", null);
             errln("FAIL: Created a HexToUnicodeTransliterator with a bad pattern.");
