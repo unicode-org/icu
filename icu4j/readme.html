@@ -1174,21 +1174,33 @@ resources to once again be extracted.  Extraction will
 overwrite any corresponding .class files already in that directory.
 </p>
 <h4>Building ICU4J Resources from ICU4C</h4>
-  <ol>
-    <li> Download and build ICU on a <b>Big Endian</b> machine </li>
-    <li> Download and build ICU4J on the same machine</li>
-    <li> Change directory to $icu_root\source\tools\genrb  </li>
-    <li> Launch genrbjar.pl from that directory itself with the command
-        <br>
-         genrbjar.pl $icu_root_dir $icu4j_root &lt;ld_path_variable_name&gt; [&lt;locale&gt;+]
-        <br>
-        To create all the locale data files omit the locale argument
-    </li>
-  </ol>
-  Execution of genrbjar.pl script will create the required source (*.java) files and
-  class file in $icu_root\source\data\locales\java.
-  The ICULocaleData.jar is moved to $icu4j_root\src\com\ibm\icu\impl\data directory.
-
+   <h5>Requirements</h5>
+   	  <ol>
+   	  	<li>Compilers and tools required for building <a href="http://oss.software.ibm.com/cvs/icu/~checkout~/icu/readme.html#HowToBuild">ICU</a>.</li>
+   	  	<li>Java SDK version 1.4.0 or above.</li>
+   	  	<li>Perl version 5 or above.</li>
+   	  </ol>
+   <h5> Procedure</h5>
+	  <ol>
+	    <li> Download and build ICU on a Windows machine. For instructions on downloading and building ICU, please click <a href="http://oss.software.ibm.com/cvs/icu/~checkout~/icu/readme.html#HowToBuild">here</a>.</li>
+	    <li> Change directory to <i>$icu_root</i>/source/tools/genrb  </li>
+	    <li> Launch gendtjar.pl from that directory itself with the command
+	        <br>
+				gendtjar.pl --icu-root=<i>$icu_root</i> --jar=<i>$jdk_home/bin</i> --icu4j-root=<i>$icu4j_root</i> --version=<i>$icu_version</i>			
+	        <br>
+	         e.g: gendtjar.pl --icu-root=\work\icu --jar=\jdk1.4.1\bin --icu4j-root=\work\icu4j --version=3.0
+	         <br>
+	         Execution of gendtjar.pl script will create the required jar files in the $icu_root\source\tools\genrb\temp directory.
+	    </li>
+	    <li> Move icudata.jar to <i>$icu4j_root</i>/src/com/ibm/icu/impl/data directory.</li>
+	  	<li> Move testdata.jar to <i>$icu4j_root</i>/src/com/ibm/dev/data directory.</li>
+	    <li> Build resources target of ant to unpack the jar files with the following command.
+	    	 <br>
+	    	 	<i>$ant_home</i>/bin/ant resources
+	    	 </br>
+	    </li>
+	  </ol>
+ 
 <h3 class="doc"><a name="WhereToFindMore"></a>Where to Find More Information</h3>
 
 <p><a href="http://oss.software.ibm.com/icu4j/">http://oss.software.ibm.com/icu4j/</a> is a
