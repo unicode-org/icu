@@ -18,14 +18,17 @@ StringMatcher::StringMatcher(const UnicodeString& theString,
                              UBool isSeg,
                              const TransliterationRuleData& theData) :
     data(theData),
-    isSegment(isSeg) {
+    isSegment(isSeg)
+{
     theString.extractBetween(start, limit, pattern);
 }
 
 StringMatcher::StringMatcher(const StringMatcher& o) :
+    UnicodeMatcher(o),
     pattern(o.pattern),
-    isSegment(o.isSegment),
-    data(o.data) {
+    data(o.data),
+    isSegment(o.isSegment)
+{
 }
 
 /**
