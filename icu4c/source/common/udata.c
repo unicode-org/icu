@@ -1254,7 +1254,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
     dataPath = u_getDataDirectory();
 
     /* Check to make sure that there is a dataPath to iterate over */
-    if (dataPath && *dataPath) {
+    if ((dataPath && *dataPath) || !isICUData) {
         UDataPathIterator   iter;
         /* #1a look in ind. files: package\nam.typ  ========================= */
         /* init path iterator for individual files */
