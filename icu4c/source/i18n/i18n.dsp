@@ -177,6 +177,10 @@ SOURCE=.\msgfmt.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\nultrans.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\numfmt.cpp
 # End Source File
 # Begin Source File
@@ -764,6 +768,25 @@ InputPath=.\unicode\msgfmt.h
 
 "..\..\include\unicode\msgfmt.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy                unicode\msgfmt.h                ..\..\include\unicode
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
+# Begin Source File
+
+SOURCE=.\unicode\nultrans.h
+
+!IF  "$(CFG)" == "i18n - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "i18n - Win32 Debug"
+
+# Begin Custom Build
+InputPath=.\unicode\nultrans.h
+
+"..\..\include\unicode\nultrans.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	copy                unicode\nultrans.h                ..\..\include\unicode
 
 # End Custom Build
 
