@@ -165,6 +165,9 @@ void addNEWResourceBundleTest(TestNode** root)
   addTest(root, &TestFallback,        "tsutil/creststn/TestFallback");
   addTest(root, &TestAliasConflict,   "tsutil/creststn/TestAlias");
   addTest(root, &TestNewTypes,        "tsutil/creststn/TestNewTypes");
+  addTest(root, &TestBinaryCollationData, "tsutil/creststn/TestBinaryCollationData");
+  addTest(root, &TestAPI,             "tsutil/creststn/TestAPI");
+  addTest(root, &TestErrorConditions, "tsutil/creststn/TestErrorConditions");
 
 }
 
@@ -309,7 +312,301 @@ void TestBinaryCollationData(){
 	}
 
 }
+void TestAPI(){
+    UErrorCode status=U_ZERO_ERROR;
+    const char*        directory=NULL;
+    int32_t len=0;
+    uint32_t intValue=0;
+    const char* key=NULL;
+    const UChar* value=NULL;
+    char testdatapath[256];
+    UChar utestdatapath[256];
+	UResourceBundle *teRes = NULL;
+    UResourceBundle *teFillin=NULL;
+    UResourceBundle *teFillin2=NULL;
+	directory= ctest_getTestDirectory();
+    uprv_strcpy(testdatapath, directory);
+    uprv_strcat(testdatapath, "testdata");
+    u_uastrcpy(utestdatapath, testdatapath);
 
+    /*Test ures_openU */
+    log_verbose("Testing ures_openU()......\n");
+	teRes=ures_openU(utestdatapath, "te", &status);
+	if(U_FAILURE(status)){
+		log_err("ERROR: ures_openU() failed path =%s with %s", austrdup(utestdatapath), myErrorName(status));
+		return;
+	}
+    /*Test ures_getLocale() */
+    log_verbose("Testing ures_getLocale() .....\n");
+    if(strcmp(ures_getLocale(teRes, &status), "te") != 0){
+        log_err("ERROR: ures_getLocale() failed. Expected = te_TE Got = %s\n", ures_getLocale(teRes, &status));
+    }
+    /*Test ures_getNextString() */
+    teFillin=ures_getByKey(teRes, "tagged_array_in_te_te_IN", teFillin, &status);
+    key=ures_getKey(teFillin);
+    value=(UChar*)ures_getNextString(teFillin, &len, &key, &status);
+    ures_resetIterator(NULL);
+    value=(UChar*)ures_getNextString(teFillin, &len, &key, &status);
+    if(status !=U_INDEX_OUTOFBOUNDS_ERROR){
+        log_err("ERROR: calling getNextString where index out of bounds should return U_INDEX_OUTOFBOUNDS_ERROR, Got : %s\n",
+                       myErrorName(status));
+    }
+    ures_resetIterator(teRes);    
+    /*Test ures_getNextResource() where resource is table*/
+    status=U_ZERO_ERROR;
+    teFillin=ures_getNextResource(teRes, teFillin, &status);
+    if(U_FAILURE(status)){
+        log_err("ERROR: ures_getNextResource() failed \n");
+    }
+    key=ures_getKey(teFillin);
+    if(strcmp(key, "%%Collation") != 0){
+        log_err("ERROR: ures_getNextResource() failed\n");
+    }
+
+    /*Test ures_getByIndex on string Resource*/
+    teFillin=ures_getByKey(teRes, "string_only_in_te", teFillin, &status);
+    teFillin2=ures_getByIndex(teFillin, 0, teFillin2, &status);
+    if(U_FAILURE(status)){
+        log_err("ERROR: ures_getByIndex on string resource failed\n");
+    }
+    if(strcmp(austrdup(ures_getString(teFillin2, &len, &status)), "TE") != 0){
+        status=U_ZERO_ERROR;
+        log_err("ERROR: ures_getByIndex on string resource fetched the key=%s, expected \"TE\" \n", austrdup(ures_getString(teFillin2, &len, &status)));
+    }
+    
+    ures_close(teRes);
+    
+    /*Test ures_openFillIn*/
+    log_verbose("Testing ures_openFillIn......\n");
+    status=U_ZERO_ERROR;
+    ures_openFillIn(teRes, testdatapath, "te", &status);
+    if(U_FAILURE(status)){
+        log_err("ERROR: ures_openFillIn failed\n");
+        return;
+    }
+    if(strcmp(ures_getLocale(teRes, &status), "te") != 0){
+        log_err("ERROR: ures_openFillIn did not open the ResourceBundle correctly\n");
+    }
+    ures_getByKey(teRes, "string_only_in_te", teFillin, &status);
+    teFillin2=ures_getNextResource(teFillin, teFillin2, &status);
+    if(ures_getType(teFillin2) != RES_STRING){
+        log_err("ERROR: getType for getNextResource after ures_openFillIn failed\n");
+    }
+    teFillin2=ures_getNextResource(teFillin, teFillin2, &status);
+    if(status !=U_INDEX_OUTOFBOUNDS_ERROR){
+        log_err("ERROR: calling getNextResource where index out of bounds should return U_INDEX_OUTOFBOUNDS_ERROR, Got : %s\n",
+                       myErrorName(status));
+    }
+   
+    ures_close(teRes);
+
+
+    
+}
+void TestErrorConditions(){
+    UErrorCode status;
+    const char*        directory=NULL;
+    const char *key=NULL;
+    const UChar *value=NULL;
+    char testdatapath[256];
+    UChar utestdatapath[256];
+    int32_t len=0;
+ 	UResourceBundle *teRes = NULL;
+    UResourceBundle *coll=NULL;
+	UResourceBundle *binColl = NULL;
+    UResourceBundle *teFillin=NULL;
+    UResourceBundle *teFillin2=NULL;
+	uint8_t *binResult = NULL;
+
+	directory= ctest_getTestDirectory();
+    uprv_strcpy(testdatapath, directory);
+    uprv_strcat(testdatapath, "testdata");
+    u_uastrcpy(utestdatapath, testdatapath);
+  
+    /*Test ures_openU with status != U_ZERO_ERROR*/
+    log_verbose("Testing ures_openU() with status != U_ZERO_ERROR.....\n");
+    status=U_ILLEGAL_ARGUMENT_ERROR;
+	teRes=ures_openU(utestdatapath, "te", &status);
+	if(U_FAILURE(status)){
+		log_verbose("ERROR: ures_openU() failed as expected path =%s with status != U_ZERO_ERROR", austrdup(utestdatapath));
+    }else{
+        log_err("ERROR: ures_openU() is supposed to fail path =%s with status != U_ZERO_ERROR", austrdup(utestdatapath));
+        ures_close(teRes);
+    }
+    /*Test ures_openFillIn with UResourceBundle = NULL*/
+    log_verbose("Testing ures_openFillIn with UResourceBundle = NULL.....\n");
+    status=U_ZERO_ERROR;
+    ures_openFillIn(NULL, testdatapath, "te", &status);
+    if(status != U_INTERNAL_PROGRAM_ERROR){
+        log_err("ERROR: ures_openFillIn with UResourceBundle= NULL should fail.  Expected U_INTERNAL_PROGRAM_ERROR, Got: %s\n",
+                        myErrorName(status));
+    }
+    /*Test ures_getLocale() with status != U_ZERO_ERROR*/
+    status=U_ZERO_ERROR;
+    teRes=ures_openU(utestdatapath, "te", &status);
+	if(U_FAILURE(status)){
+		log_err("ERROR: ures_openU() failed path =%s with %s", austrdup(utestdatapath), myErrorName(status));
+		return;
+	}
+    status=U_ILLEGAL_ARGUMENT_ERROR;
+    if(ures_getLocale(teRes, &status) != NULL){
+        log_err("ERROR: ures_getLocale is supposed to fail with errorCode != U_ZERO_ERROR\n");
+    }
+    /*Test ures_getLocale() with UResourceBundle = NULL*/
+    status=U_ZERO_ERROR;
+    if(ures_getLocale(NULL, &status) != NULL && status != U_ILLEGAL_ARGUMENT_ERROR){
+        log_err("ERROR: ures_getLocale is supposed to fail when UResourceBundle = NULL. Expected: errorCode = U_ILLEGAL_ARGUMENT_ERROR, Got: errorCode=%s\n",
+                                           myErrorName(status));
+    }
+    /*Test ures_getSize() with UResourceBundle = NULL */
+    status=U_ZERO_ERROR;
+    if(ures_getSize(NULL) != 0){
+        log_err("ERROR: ures_getSize() should return 0 when UResourceBundle=NULL.  Got =%d\n", ures_getSize(NULL));
+    }
+    /*Test ures_getType() with UResourceBundle = NULL should return RES_BOGUS or -1*/
+    status=U_ZERO_ERROR;
+    if(ures_getType(NULL) != -1){  
+        log_err("ERROR: ures_getType() should return RES_BOGUS when UResourceBundle=NULL.  Got =%d\n", ures_getType(NULL));
+    }
+    /*Test ures_getKey() with UResourceBundle = NULL*/
+    status=U_ZERO_ERROR;
+    if(ures_getKey(NULL) != NULL){  
+        log_err("ERROR: ures_getKey() should return NULL when UResourceBundle=NULL.  Got =%d\n", ures_getKey(NULL));
+    }
+    /*Test ures_hasNext() with UResourceBundle = NULL*/
+    status=U_ZERO_ERROR;
+    if(ures_hasNext(NULL) != FALSE){  
+        log_err("ERROR: ures_hasNext() should return FALSE when UResourceBundle=NULL.  Got =%d\n", ures_hasNext(NULL));
+    }
+    /*Test ures_get() with UResourceBundle = NULL*/
+    status=U_ZERO_ERROR;
+    if(ures_get(NULL, "string_only_in_te", &status) != NULL && status != U_ILLEGAL_ARGUMENT_ERROR){
+        log_err("ERROR: ures_get is supposed to fail when UResourceBundle = NULL. Expected: errorCode = U_ILLEGAL_ARGUMENT_ERROR, Got: errorCode=%s\n",
+                                           myErrorName(status));
+    } 
+    /*Test ures_getByKey() with UResourceBundle = NULL*/
+    status=U_ZERO_ERROR;
+    teFillin=ures_getByKey(NULL, "string_only_in_te", teFillin, &status);
+    if( teFillin != NULL && status != U_ILLEGAL_ARGUMENT_ERROR){
+        log_err("ERROR: ures_getByKey is supposed to fail when UResourceBundle = NULL. Expected: errorCode = U_ILLEGAL_ARGUMENT_ERROR, Got: errorCode=%s\n",
+                                           myErrorName(status));
+    } 
+    /*Test ures_getByKey() with status != U_ZERO_ERROR*/
+    teFillin=ures_getByKey(NULL, "string_only_in_te", teFillin, &status);
+    if(teFillin != NULL ){
+        log_err("ERROR: ures_getByKey is supposed to fail when errorCode != U_ZERO_ERROR\n");
+    } 
+    /*Test ures_getStringByKey() with UResourceBundle = NULL*/
+    status=U_ZERO_ERROR;
+    if(ures_getStringByKey(NULL, "string_only_in_te", &len, &status) != NULL && status != U_ILLEGAL_ARGUMENT_ERROR){
+        log_err("ERROR: ures_getStringByKey is supposed to fail when UResourceBundle = NULL. Expected: errorCode = U_ILLEGAL_ARGUMENT_ERROR, Got: errorCode=%s\n",
+                                           myErrorName(status));
+    } 
+    /*Test ures_getStringByKey() with status != U_ZERO_ERROR*/
+    if(ures_getStringByKey(teRes, "string_only_in_te", &len, &status) != NULL){
+        log_err("ERROR: ures_getStringByKey is supposed to fail when status != U_ZERO_ERROR. Expected: errorCode = U_ILLEGAL_ARGUMENT_ERROR, Got: errorCode=%s\n",
+                                           myErrorName(status));
+    } 
+    /*Test ures_getString() with UResourceBundle = NULL*/
+    status=U_ZERO_ERROR;
+    if(ures_getString(NULL, &len, &status) != NULL && status != U_ILLEGAL_ARGUMENT_ERROR){
+        log_err("ERROR: ures_getString is supposed to fail when UResourceBundle = NULL. Expected: errorCode = U_ILLEGAL_ARGUMENT_ERROR, Got: errorCode=%s\n",
+                                           myErrorName(status));
+    } 
+    /*Test ures_getString() with status != U_ZERO_ERROR*/
+    if(ures_getString(teRes, &len, &status) != NULL){
+        log_err("ERROR: ures_getString is supposed to fail when status != U_ZERO_ERROR. Expected: errorCode = U_ILLEGAL_ARGUMENT_ERROR, Got: errorCode=%s\n",
+                                           myErrorName(status));
+    } 
+    /*Test ures_getBinary() with UResourceBundle = NULL*/
+    status=U_ZERO_ERROR;
+    if(ures_getBinary(NULL, &len, &status) != NULL && status != U_ILLEGAL_ARGUMENT_ERROR){
+        log_err("ERROR: ures_getBinary is supposed to fail when UResourceBundle = NULL. Expected: errorCode = U_ILLEGAL_ARGUMENT_ERROR, Got: errorCode=%s\n",
+                                           myErrorName(status));
+    } 
+    /*Test ures_getBinary(0 status != U_ILLEGAL_ARGUMENT_ERROR*/
+    status=U_ZERO_ERROR;
+    coll = ures_getByKey(teRes, "CollationElements", coll, &status);
+	binColl=ures_getByKey(teRes, "%%Collation", binColl, &status);
+    
+    status=U_ILLEGAL_ARGUMENT_ERROR;
+	binResult=(uint8_t*)ures_getBinary(binColl,  &len, &status);
+    if(binResult != NULL){
+        log_err("ERROR: ures_getBinary() with status != U_ZERO_ERROR is supposed to fail\n");
+    }
+        
+    /*Test ures_getNextResource() with status != U_ZERO_ERROR*/
+    teFillin=ures_getNextResource(teRes, teFillin, &status);
+    if(teFillin != NULL){
+        log_err("ERROR: ures_getNextResource() with errorCode != U_ZERO_ERROR is supposed to fail\n");
+    }
+    /*Test ures_getNextResource() with UResourceBundle = NULL*/
+    status=U_ZERO_ERROR;
+    teFillin=ures_getNextResource(NULL, teFillin, &status);
+    if(teFillin != NULL || status != U_ILLEGAL_ARGUMENT_ERROR){
+        log_err("ERROR: ures_getNextResource() with UResourceBundle = NULL is supposed to fail.  Expected : U_IILEGAL_ARGUMENT_ERROR, Got : %s\n", 
+                                          myErrorName(status));
+    }
+    /*Test ures_getNextString with errorCode != U_ZERO_ERROR*/
+    teFillin=ures_getByKey(teRes, "tagged_array_in_te_te_IN", teFillin, &status);
+    key=ures_getKey(teFillin);
+    status = U_ILLEGAL_ARGUMENT_ERROR;
+    value=(UChar*)ures_getNextString(teFillin, &len, &key, &status);
+    if(value != NULL){
+        log_err("ERROR: ures_getNextString() with errorCode != U_ZERO_ERROR is supposed to fail\n");
+    }
+    /*Test ures_getNextString with UResourceBundle = NULL*/
+    status=U_ZERO_ERROR;
+    value=(UChar*)ures_getNextString(NULL, &len, &key, &status);
+    if(value != NULL || status != U_ILLEGAL_ARGUMENT_ERROR){
+        log_err("ERROR: ures_getNextString() with UResourceBundle=NULL is supposed to fail\n Expected: U_ILLEGAL_ARGUMENT_ERROR, Got: %s\n",
+                                    myErrorName(status));
+    }
+    /*Test ures_getByIndex with errorCode != U_ZERO_ERROR*/
+    status=U_ZERO_ERROR;
+    teFillin=ures_getByKey(teRes, "array_only_in_te", teFillin, &status);
+    status=U_ILLEGAL_ARGUMENT_ERROR;
+    teFillin2=ures_getByIndex(teFillin, 0, teFillin2, &status);
+    if(teFillin2 != NULL){
+        log_err("ERROR: ures_getByIndex() with errorCode != U_ZERO_ERROR is supposed to fail\n");
+    }
+    /*Test ures_getByIndex with UResourceBundle = NULL */
+    status=U_ZERO_ERROR;
+    teFillin2=ures_getByIndex(NULL, 0, teFillin2, &status);
+    if(status != U_ILLEGAL_ARGUMENT_ERROR){
+        log_err("ERROR: ures_getByIndex() with UResourceBundle=NULL is supposed to fail\n Expected: U_ILLEGAL_ARGUMENT_ERROR, Got: %s\n",
+                                    myErrorName(status));
+    } 
+    /*Test ures_getStringByIndex with errorCode != U_ZERO_ERROR*/
+    status=U_ZERO_ERROR;
+    teFillin=ures_getByKey(teRes, "array_only_in_te", teFillin, &status);
+    status=U_ILLEGAL_ARGUMENT_ERROR;
+    value=(UChar*)ures_getStringByIndex(teFillin, 0, &len, &status);
+    if( value != NULL){
+        log_err("ERROR: ures_getSringByIndex() with errorCode != U_ZERO_ERROR is supposed to fail\n");
+    }
+    /*Test ures_getStringByIndex with UResourceBundle = NULL */
+    status=U_ZERO_ERROR;
+    value=(UChar*)ures_getStringByIndex(NULL, 0, &len, &status);
+    if(value != NULL || status != U_ILLEGAL_ARGUMENT_ERROR){
+        log_err("ERROR: ures_getStringByIndex() with UResourceBundle=NULL is supposed to fail\n Expected: U_ILLEGAL_ARGUMENT_ERROR, Got: %s\n",
+                                    myErrorName(status));
+    } 
+    /*Test ures_getInt() where UResourceBundle = NULL */
+    status=U_ZERO_ERROR;
+    if(ures_getInt(NULL, &status) != -1 && status != U_ILLEGAL_ARGUMENT_ERROR){
+        log_err("ERROR: ures_getInt() with UResourceBundle = NULL should fail. Expected: U_IILEGAL_ARGUMENT_ERROR, Got: %s\n",
+                           myErrorName(status));
+    }
+    /*Test ures_getInt() where status != U_ZERO_ERROR */  
+    if(ures_getInt(teRes, &status) != -1){
+        log_err("ERROR: ures_getInt() with errorCode != U_ZERO_ERROR should fail\n");
+    }
+
+    ures_close(teRes);
+    
+
+}
 
 void TestResourceBundles()
 {
