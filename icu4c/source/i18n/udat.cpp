@@ -286,7 +286,7 @@ udat_getSymbols(const   UDateFormat             *fmt,
 {
   if(U_FAILURE(*status)) return -1;
 
-  int32_t actLen;
+  int32_t actLen = 0;
 
   const DateFormatSymbols *syms = 
     ((SimpleDateFormat*)fmt)->getDateFormatSymbols();
@@ -359,7 +359,7 @@ udat_countSymbols(    const    UDateFormat                *fmt,
 {
   const DateFormatSymbols *syms = 
     ((SimpleDateFormat*)fmt)->getDateFormatSymbols();
-  int32_t count;
+  int32_t count = 0;
 
   switch(type) {
   case UDAT_ERAS:

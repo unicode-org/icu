@@ -12,7 +12,7 @@
 #include <float.h>
 #include <math.h>
 
-void CalendarLimitTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void CalendarLimitTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite TestCalendarLimit");
     switch (index) {

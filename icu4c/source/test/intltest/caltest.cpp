@@ -15,7 +15,7 @@
 // class CalendarTest
 // *****************************************************************************
 
-void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite TestCalendar");
     switch (index) {
@@ -437,13 +437,15 @@ CalendarTest::TestGregorianChange768()
     GregorianCalendar* c = new GregorianCalendar(status);
     if (U_FAILURE(status)) { errln("Couldn't create GregorianCalendar"); return; }
     logln(UnicodeString("With cutoff ") + dateToString(c->getGregorianChange(), str));
-    logln(UnicodeString(" isLeapYear(1800) = ") + ((b = c->isLeapYear(1800)) ? "true" : "false"));
+    b = c->isLeapYear(1800);
+    logln(UnicodeString(" isLeapYear(1800) = ") + (b ? "true" : "false"));
     logln(UnicodeString(" (should be FALSE)"));
     if (b) errln("FAIL");
     c->setGregorianChange(date(0, 0, 1), status);
     if (U_FAILURE(status)) { errln("GregorianCalendar::setGregorianChange failed"); return; }
     logln(UnicodeString("With cutoff ") + dateToString(c->getGregorianChange(), str));
-    logln(UnicodeString(" isLeapYear(1800) = ") + ((b = c->isLeapYear(1800)) ? "true" : "false"));
+    b = c->isLeapYear(1800);
+    logln(UnicodeString(" isLeapYear(1800) = ") + (b ? "true" : "false"));
     logln(UnicodeString(" (should be TRUE)"));
     if (!b) errln("FAIL");
     delete c;
@@ -1173,23 +1175,23 @@ CalendarTest::TestDOW_LOCALandYEAR_WOY()
     cal->clear();
     cal->set(1997, Calendar::DECEMBER, 25);
     doYEAR_WOYLoop(cal, sdf, times, status);
-    //loop_addroll(cal, sdf, times, Calendar::YEAR_WOY, Calendar::YEAR,  status);
+    //loop_addroll(cal, /*sdf,*/ times, Calendar::YEAR_WOY, Calendar::YEAR,  status);
     yearAddTest(*cal, status); // aliu
-    loop_addroll(cal, sdf, times, Calendar::DOW_LOCAL, Calendar::DAY_OF_WEEK, status);
+    loop_addroll(cal, /*sdf,*/ times, Calendar::DOW_LOCAL, Calendar::DAY_OF_WEEK, status);
     if (U_FAILURE(status)) { errln("Error in parse/calculate test for 1997"); return; }
     cal->clear();
     cal->set(1998, Calendar::DECEMBER, 25);
     doYEAR_WOYLoop(cal, sdf, times, status);
-    //loop_addroll(cal, sdf, times, Calendar::YEAR_WOY, Calendar::YEAR,  status);
+    //loop_addroll(cal, /*sdf,*/ times, Calendar::YEAR_WOY, Calendar::YEAR,  status);
     yearAddTest(*cal, status); // aliu
-    loop_addroll(cal, sdf, times, Calendar::DOW_LOCAL, Calendar::DAY_OF_WEEK, status);
+    loop_addroll(cal, /*sdf,*/ times, Calendar::DOW_LOCAL, Calendar::DAY_OF_WEEK, status);
     if (U_FAILURE(status)) { errln("Error in parse/calculate test for 1998"); return; }
     cal->clear();
     cal->set(1582, Calendar::OCTOBER, 1);
     doYEAR_WOYLoop(cal, sdf, times, status);
-    //loop_addroll(cal, sdf, times, Calendar::YEAR_WOY, Calendar::YEAR,  status);
+    //loop_addroll(cal, /*sdf,*/ times, Calendar::YEAR_WOY, Calendar::YEAR,  status);
     yearAddTest(*cal, status); // aliu
-    loop_addroll(cal, sdf, times, Calendar::DOW_LOCAL, Calendar::DAY_OF_WEEK, status);
+    loop_addroll(cal, /*sdf,*/ times, Calendar::DOW_LOCAL, Calendar::DAY_OF_WEEK, status);
     if (U_FAILURE(status)) { errln("Error in parse/calculate test for 1582"); return; }
 
     delete sdf;
@@ -1271,7 +1273,7 @@ static UnicodeString fieldName(Calendar::EDateFields f) {
     }
 }
 
-void CalendarTest::loop_addroll(Calendar *cal, SimpleDateFormat *sdf, int times, Calendar::EDateFields field, Calendar::EDateFields field2, UErrorCode& errorCode) {
+void CalendarTest::loop_addroll(Calendar *cal, /*SimpleDateFormat *sdf,*/ int times, Calendar::EDateFields field, Calendar::EDateFields field2, UErrorCode& errorCode) {
     Calendar *calclone;
     SimpleDateFormat fmt(UnicodeString("EEE MMM dd yyyy / YYYY'-W'ww-ee"), errorCode);
     fmt.setCalendar(*cal);
@@ -1454,7 +1456,7 @@ void CalendarTest::TestWOY(void) {
     SimpleDateFormat fmt(UnicodeString("EEE MMM dd yyyy', WOY' w"), status);
     CHECK(status, "Fail: Cannot construct calendar/format");
 
-    Calendar::EDaysOfWeek fdw;
+    Calendar::EDaysOfWeek fdw = (Calendar::EDaysOfWeek) 0;
 
     for (int8_t pass=1; pass<=2; ++pass) {
         switch (pass) {

@@ -220,7 +220,7 @@ void UnicodeToHexTransliterator::setUppercase(UBool outputUppercase) {
  * Implements {@link Transliterator#handleTransliterate}.
  */
 void UnicodeToHexTransliterator::handleTransliterate(Replaceable& text, UTransPosition& offsets,
-                                                     UBool isIncremental) const {
+                                                     UBool /*isIncremental*/) const {
     /**
      * Performs transliteration changing all characters to
      * Unicode hexadecimal escapes.  For example, '@' -> "U+0040",

@@ -68,7 +68,7 @@ U_CAPI UCalendar*
 ucal_open(    const    UChar*          zoneID,
             int32_t        len,
         const    char*       locale,
-            UCalendarType     type,
+            UCalendarType     /*type*/,
             UErrorCode*    status)
 {
   if(U_FAILURE(*status)) return 0;
@@ -80,7 +80,7 @@ ucal_open(    const    UChar*          zoneID,
   else {
     int32_t length = (len == -1 ? u_strlen(zoneID) : len);
 
-    zone = TimeZone::createTimeZone(UnicodeString((UChar*)zoneID));
+    zone = TimeZone::createTimeZone(UnicodeString(len == -1, zoneID, length));
   }
   if(zone == 0) {
     *status = U_MEMORY_ALLOCATION_ERROR;

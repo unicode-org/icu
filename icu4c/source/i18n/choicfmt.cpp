@@ -463,7 +463,7 @@ ChoiceFormat::format(int32_t number,
 UnicodeString&
 ChoiceFormat::format(double number, 
                      UnicodeString& toAppendTo, 
-                     FieldPosition& status) const
+                     FieldPosition& /*pos*/) const
 {
     // find the number
     int32_t i;

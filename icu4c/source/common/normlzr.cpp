@@ -138,11 +138,11 @@ Normalizer::normalize(const UnicodeString& source,
         break;
     case COMPOSE:
     case COMPOSE_COMPAT:
-        compose(source, mode & COMPAT_BIT, options, result, status);
+        compose(source, (mode & COMPAT_BIT) != 0, options, result, status);
         break;
     case DECOMP:
     case DECOMP_COMPAT:
-        decompose(source, mode & COMPAT_BIT, options, result, status);
+        decompose(source, (mode & COMPAT_BIT) != 0, options, result, status);
         break;
     }
 }
@@ -547,7 +547,7 @@ UChar Normalizer::prevCompose()
         // TODO: The performance of this is awful; add a way to compose
         // a UnicodeString& in place.
         UnicodeString composed;
-        compose(buffer, (fMode & COMPAT_BIT), fOptions, composed, status);
+        compose(buffer, (fMode & COMPAT_BIT) != 0, fOptions, composed, status);
         buffer.truncate(0);
         buffer += composed;
         

@@ -130,8 +130,8 @@ void HexToUnicodeTransliterator::applyPattern(const UnicodeString& thePattern,
      * the index pattern.length() (that is, one past the end), we
      * create a virtual ';' if necessary.
      */
-    UChar c;          // These are outside the loop so we can see the
-    UBool isLiteral; // previous character...
+    UChar c = 0; // These are outside the loop so we can see the
+    UBool isLiteral = FALSE; // previous character...
     for (int32_t i=0; i<=pattern.length(); ++i) {
         // Create the virtual trailing ';' if necessary
         if (i == pattern.length()) {
