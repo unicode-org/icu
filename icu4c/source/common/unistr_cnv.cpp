@@ -26,6 +26,7 @@
 #include "unicode/ustring.h"
 #include "unicode/unistr.h"
 #include "unicode/ucnv.h"
+#include "putilimp.h"
 #include "ustr_cnv.h"
 #include "ustr_imp.h"
 

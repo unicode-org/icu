@@ -67,6 +67,7 @@
 #include "uhash.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "putilimp.h"
 
 /* public RuleBasedCollator constructor ---------------------------------- */
 

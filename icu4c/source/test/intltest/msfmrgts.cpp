@@ -17,6 +17,7 @@
 #include "unicode/numfmt.h"
 #include "unicode/choicfmt.h"
 #include "unicode/gregocal.h"
+#include "putilimp.h"
 
 // *****************************************************************************
 // class MessageFormatRegressionTest

@@ -16,6 +16,7 @@
 #include "uhash.h"
 #include "umutex.h"
 #include "ucln_in.h"
+#include "putilimp.h"
 #include <stdio.h>  // for toString()
 
 #ifdef U_DEBUG_ASTRO

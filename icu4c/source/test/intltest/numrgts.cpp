@@ -19,6 +19,8 @@
 #include "unicode/resbund.h"
 #include "unicode/calendar.h"
 #include "unicode/datefmt.h"
+#include "putilimp.h"
+
 int32_t gMyNumberFormatTestClassID;
 UClassID MyNumberFormatTest::getDynamicClassID()  const
 {

@@ -29,6 +29,7 @@
 #include "cintltst.h"
 #include "cnumtst.h"
 #include "cmemory.h"
+#include "putilimp.h"
 
 #define LENGTH(arr) (sizeof(arr)/sizeof(arr[0]))
 

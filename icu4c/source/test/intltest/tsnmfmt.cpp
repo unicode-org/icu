@@ -10,6 +10,7 @@
 
 #include "unicode/decimfmt.h"
 #include "tsnmfmt.h"
+#include "putilimp.h"
 #include <float.h>
 #include <stdlib.h>
 

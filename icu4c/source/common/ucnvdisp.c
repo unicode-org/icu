@@ -28,6 +28,7 @@
 #include "cstring.h"
 #include "ustr_imp.h"
 #include "ucnv_imp.h"
+#include "putilimp.h"
 
 U_CAPI int32_t U_EXPORT2
 ucnv_getDisplayName(const UConverter *cnv,

@@ -41,6 +41,7 @@
 #include "utrie.h"
 #include "unicode/uset.h"
 #include "udataswp.h"
+#include "putilimp.h"
 
 /*
  * Status of tailored normalization

@@ -23,6 +23,7 @@
 #include "unicode/uversion.h"
 #include "uhash.h"
 #include "ucln_cmn.h"
+#include "putilimp.h"
 
 #include "udatamem.h"
 #include "umapfile.h"

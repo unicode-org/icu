@@ -14,6 +14,7 @@
 #include "unicode/gregocal.h"
 #include "unicode/datefmt.h"
 #include "unicode/smpdtfmt.h"
+#include "putilimp.h"
 
 U_NAMESPACE_USE
 void CalendarLimitTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )

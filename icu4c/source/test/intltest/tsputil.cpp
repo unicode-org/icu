@@ -7,6 +7,7 @@
 #include "tsputil.h"
 
 #include <float.h> // DBL_MAX, DBL_MIN
+#include "putilimp.h"
 
 #define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
 

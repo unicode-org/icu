@@ -24,6 +24,7 @@
 #include "unicode/uloc.h"
 
 #include "cintltst.h"
+#include "putilimp.h"
 #include "uparse.h"
 #include "uprops.h"
 #include "uset_imp.h"
