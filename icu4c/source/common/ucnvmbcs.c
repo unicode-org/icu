@@ -519,6 +519,8 @@ _MBCSGetUnicodeSet(const UConverter *cnv,
             }
         }
     }
+
+    ucnv_extGetUnicodeSet(cnv, set, which, pErrorCode);
 }
 
 /* conversion extensions for input not in the main table -------------------- */
