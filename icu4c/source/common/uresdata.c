@@ -121,6 +121,10 @@ _res_findTableItem(const Resource *pRoot, const Resource res, const char *key) {
 
     limit=*p++; /* number of entries */
 
+    if(limit == 0) { /* this table is empty */
+      return RES_BOGUS;
+    }
+
     /* do a binary search for the key */
     start=0;
     while(start<limit-1) {
