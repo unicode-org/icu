@@ -1,0 +1,138 @@
+﻿# Thai-Latin
+# This set of rules follows ISO 11940
+#	see http://homepage.mac.com/sirbinks/pdf/Thai.r2.pdf
+# except that that does not mention an implicit vowel, so we use ọ
+#
+# The transcription is fairly ugly, so we ought to also do the UNGEGN version
+#	see: http://www.eki.ee/wgrs/rom1_th.pdf
+# and probably make that the main variant.
+
+# Note: this is an internal file. The NFD/NFC is handled externally, in the index
+# The insertion of spaces between words, the reversal of the vowels
+# and the conversion of space to semicolon are done *outside* of these rules.
+# So as far as these rules are concerned, the vowels are in logical order!
+
+# insert implicit vowel (and remove it going the other way)
+
+$consonant = [\u0E01-\u0E2E];
+$vowel = [\u0E30-\u0E3A\u0E40-\u0E44\u0E47];
+
+{ ( $consonant ) } [^$vowel \uE000] > | $1 \uE000 ;
+\uE000 > ọ ;
+ < ọ ;
+
+# Consonants
+
+ข <> k̄h ; # THAI CHARACTER KHO KHAI
+ฃ <> ḳ̄h ; # THAI CHARACTER KHO KHUAT
+ค <> kʹh ; # THAI CHARACTER KHO KHWAI
+ฅ <> ḳh ; # THAI CHARACTER KHO KHON
+ฆ <> kh ; # THAI CHARACTER KHO RAKHANG
+ง <> ng ; # THAI CHARACTER NGO NGU
+ฉ <> c̄h ; # THAI CHARACTER CHO CHING
+ช <> ch ; # THAI CHARACTER CHO CHANG
+ฌ <> c̣h ; # THAI CHARACTER CHO CHOE
+ญ <> ỵ  ; # THAI CHARACTER YO YING
+ฎ <> ḍ ; # THAI CHARACTER DO CHADA
+ฐ <> ṭ̄h ; # THAI CHARACTER THO THAN
+ฑ <> ṯh ; # THAI CHARACTER THO NANGMONTHO
+ฒ <> tʹh ; # THAI CHARACTER THO PHUTHAO
+ณ <> ṇ ; # THAI CHARACTER NO NEN
+ด <> d ; # THAI CHARACTER DO DEK
+ถ <> t̄h ; # THAI CHARACTER THO THUNG
+ธ <> ṭh ; # THAI CHARACTER THO THONG
+น <> n ; # THAI CHARACTER NO NU
+บ <> b ; # THAI CHARACTER BO BAIMAI
+ผ <> p̄h ; # THAI CHARACTER PHO PHUNG
+ฝ <> f̄ ; # THAI CHARACTER FO FA
+ภ <> p̣h ; # THAI CHARACTER PHO SAMPHAO
+ม <> m ; # THAI CHARACTER MO MA
+ย <> y ; # THAI CHARACTER YO YAK
+ร <> r ; # THAI CHARACTER RO RUA
+ฤ <> v ; # THAI CHARACTER RU
+ฦ <> ł ; # THAI CHARACTER LU
+ว <> w ; # THAI CHARACTER WO WAEN
+ศ <> ṣ̄ ; # THAI CHARACTER SO SALA
+ษ <> s̄ʹ ; # THAI CHARACTER SO RUSI
+ส <> s̄ ; # THAI CHARACTER SO SUA
+ห <> h̄ ; # THAI CHARACTER HO HIP
+ฬ <> ḷ ; # THAI CHARACTER LO CHULA
+
+# items moved down so that longer ones come first
+
+ฏ <> ṭ ; # THAI CHARACTER TO PATAK
+ท <> th ; # THAI CHARACTER THO THAHAN
+พ <> ph ; # THAI CHARACTER PHO PHAN
+ล <> l ; # THAI CHARACTER LO LING
+ป <> p ; # THAI CHARACTER PO PLA
+ฟ <> f ; # THAI CHARACTER FO FAN
+ต <> t ; # THAI CHARACTER TO TAO
+จ <> c ; # THAI CHARACTER CHO CHAN
+ก <> k ; # THAI CHARACTER KO KAI
+อ <> x ; # THAI CHARACTER O ANG
+ซ <> s ; # THAI CHARACTER SO SO
+
+ฮ <> ḥ ; # THAI CHARACTER HO NOKHUK
+
+# vowels
+
+ ั <> ạ ; # THAI CHARACTER MAI HAN-AKAT
+า <> ā ; # THAI CHARACTER SARA AA
+ำ <> å ; # THAI CHARACTER SARA AM
+ะ <> a ; # THAI CHARACTER SARA A
+ ี <> ī ; # THAI CHARACTER SARA II
+ ื <> ụ̄ ; # THAI CHARACTER SARA UEE
+ ึ <> ụ ; # THAI CHARACTER SARA UE
+ ู <> ū ; # THAI CHARACTER SARA UU
+ ุ <> u ; # THAI CHARACTER SARA U
+
+ฯ <> ‡ ; # THAI CHARACTER PAIYANNOI
+
+# ฿ <> XXX ; # THAI CURRENCY SYMBOL BAHT
+
+เ <> e ; # THAI CHARACTER SARA E
+แ <> æ ; # THAI CHARACTER SARA AE
+โ <> o ; # THAI CHARACTER SARA O
+ใ <> ı ; # THAI CHARACTER SARA AI MAIMUAN
+ไ <> ị ; # THAI CHARACTER SARA AI MAIMALAI
+ๅ <> ɨ ; # THAI CHARACTER LAKKHANGYAO
+ ็ <> ̆ ; # THAI CHARACTER MAITAIKHU
+ ่ <> ̀ ; # THAI CHARACTER MAI EK
+ ้ <> ̂ ; # THAI CHARACTER MAI THO
+ ๊ <> ́ ; # THAI CHARACTER MAI TRI
+ ๋ <> ̌ ; # THAI CHARACTER MAI CHATTAWA
+ ์ <> ̒ ; # THAI CHARACTER THANTHAKHAT
+ ํ <> ̥̊ ; # THAI CHARACTER NIKHAHIT
+ ๎ <> '~' ; # THAI CHARACTER YAMAKKAN
+
+๏ <> § ; # THAI CHARACTER FONGMAN
+
+๐ <> 0 ; # THAI DIGIT ZERO
+๑ <> 1 ; # THAI DIGIT ONE
+๒ <> 2 ; # THAI DIGIT TWO
+๓ <> 3 ; # THAI DIGIT THREE
+๔ <> 4 ; # THAI DIGIT FOUR
+๕ <> 5 ; # THAI DIGIT FIVE
+๖ <> 6 ; # THAI DIGIT SIX
+๗ <> 7 ; # THAI DIGIT SEVEN
+๘ <> 8 ; # THAI DIGIT EIGHT
+๙ <> 9 ; # THAI DIGIT NINE
+
+๚ <> '||' ; # THAI CHARACTER ANGKHANKHU
+
+๛ <> » ; # THAI CHARACTER KHOMUT
+ๆ <> « ; # THAI CHARACTER MAIYAMOK
+
+# moved down to make shorter first
+ ฺ <>̥ ; # THAI CHARACTER PHINTHU
+ ิ <> i ; # THAI CHARACTER SARA I
+
+# fallbacks
+
+| k < g ;
+| k < h ;
+| c < j ;
+| k < q ;
+| s < z ;
+
+:: (lower);

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/Demo.java,v $ 
- * $Date: 2002/06/13 18:30:29 $ 
- * $Revision: 1.18 $
+ * $Date: 2002/07/13 03:30:25 $ 
+ * $Revision: 1.19 $
  *
  *****************************************************************************************
  */
@@ -15,9 +15,11 @@ import java.applet.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import java.text.CharacterIterator;
 import com.ibm.icu.dev.demo.impl.*;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.text.*;
+import com.ibm.icu.impl.*;
 import java.io.*;
 
 /**
@@ -29,7 +31,7 @@ import java.io.*;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Demo.java,v $ $Revision: 1.18 $ $Date: 2002/06/13 18:30:29 $
+ * @version $RCSfile: Demo.java,v $ $Revision: 1.19 $ $Date: 2002/07/13 03:30:25 $
  */
 public class Demo extends Frame {
 
@@ -449,11 +451,216 @@ public class Demo extends Frame {
         }
     }
     
+    static void printBreaks(int num, String testSource, BreakIterator bi) {
+        String result = "";
+        int lastPos = 0;
+    	while (true) {
+    	    int pos = bi.next();
+    	    if (pos == bi.DONE) break;
+    	    result += testSource.substring(lastPos, pos) + "&";
+    	    lastPos = pos;
+    	    System.out.println(pos);
+    	}
+    	System.out.println("Test" + num + ": " + result);
+    }
+    
+    static void printIteration(int num, String testSource, CharacterIterator ci) {
+        String result = "";
+    	while (true) {
+    	    char ch = ci.next();
+    	    if (ch == ci.DONE) break;
+    	    result += ch + "(" + ci.getIndex() + ")";
+    	}
+    	System.out.println("Test" + num + ": " + result);
+    }
+    
+    static void printSources() {
+        String[] list = {"Latin-ThaiLogical", "ThaiLogical-Latin", "Thai-ThaiLogical", "ThaiLogical-Thai"};
+        UnicodeSet all = new UnicodeSet();
+        for (int i = 0; i < list.length; ++i) {
+            Transliterator tr = Transliterator.getInstance(list[i]);
+            UnicodeSet src = tr.getSourceSet();
+            System.out.println(list[i] + ": " + src.toPattern(true));
+            all.addAll(src);
+        }
+        System.out.println("All: " + all.toPattern(true));
+        UnicodeSet rem = new UnicodeSet("[[:latin:][:thai:]]");
+        System.out.println("missing from [:latin:][:thai:]: " + all.removeAll(rem).toPattern(true));
+    }
+    
+    static void genTestFile(String translitName, String sourceFile) {
+        try {
+            
+            System.out.println("Reading: " + new File(sourceFile).getCanonicalPath());
+            BufferedReader in = new BufferedReader(
+                new InputStreamReader(
+                    new FileInputStream(sourceFile), "UTF-8"));
+            String targetFile = sourceFile;
+            int dotPos = targetFile.lastIndexOf('.');
+            if (dotPos >= 0) targetFile = targetFile.substring(0,dotPos);
+            
+            File outFile = new File(targetFile + ".html");
+            System.out.println("Writing: " + outFile.getCanonicalPath());
+            
+            PrintWriter out = new PrintWriter(
+                new BufferedWriter(
+                    new OutputStreamWriter(
+                        new FileOutputStream(outFile), "UTF-8")));
+            out.println("<head><meta http-equiv='Content-Type' content='text/html; charset=utf-8'>");
+            out.println("<style><!--");
+            out.println("td, th       { vertical-align: top; border: 1px solid black }");
+            out.println("td.r       { background-color: #CCCCCC }");
+            out.println("span.d       { background-color: #FF0000 }");
+            out.println("body         { font-family: 'Arial Unicode MS', 'Lucida Sans Unicode', Arial, sans-serif; margin: 5 }");
+            out.println("--></style>");
+            out.println("<title>" + translitName + "Transliteration Check</title></head>");
+            out.println("<body bgcolor='#FFFFFF'><table>");
+            //out.println("<tr><th width='33%'>Thai</th><th width='33%'>Latin</th><th width='33%'>Thai</th></tr>");
+  
+            Transliterator title = Transliterator.getInstance("title");
+            Transliterator tl = Transliterator.getInstance(translitName);
+            Transliterator lt = tl.getInverse();
+            Transliterator upper = Transliterator.getInstance("upper");
+            Transliterator ltFilter = Transliterator.getInstance("[:^Lu:]" +  lt.getID());
+            
+            BreakIterator sentenceBreak = BreakIterator.getSentenceInstance();
+            
+            int NONE = 0, TITLEWORD = 1;
+            int titleSetting = NONE;
+            boolean upperfilter = false;
+            boolean first = true;
+            while (true) {
+                String line = in.readLine();
+                if (line == null) break;
+                line = line.trim();
+                if (line.length() == 0) continue;
+                if (line.charAt(0) == '\uFEFF') line = line.substring(1); // remove BOM
+                
+                if (line.equals("@TITLECASE@")) {
+                    titleSetting = TITLEWORD;
+                    continue;
+                } else if (line.equals("@UPPERFILTER@")) {
+                    upperfilter = true;
+                    continue;
+                }
+                
+                if (upperfilter) {
+                    line = upper.transliterate(line);
+                }
+                
+                sentenceBreak.setText(line);
+                int start = 0;
+                while (true) {
+                    int end = sentenceBreak.next();
+                    if (end == sentenceBreak.DONE) break;
+                    String sentence = line.substring(start, end);
+                    end = start;
+                    
+                    String latin = tl.transliterate(sentence);
+                    String latinShow = latin;
+                    if (titleSetting == TITLEWORD) {
+                        latinShow = title.transliterate(latin);
+                    } else {
+                        latinShow = titlecaseFirstWord(latinShow);
+                    }
+                    String reverse;
+                    if (upperfilter) {
+                        reverse = ltFilter.transliterate(latin);
+                    } else {
+                        reverse = lt.transliterate(latin);
+                    }
+                    if (!reverse.equals(sentence)) {
+                        int minLen = reverse.length();
+                        if (minLen > sentence.length()) minLen = sentence.length();
+                        int i;
+                        for (i = 0; i < minLen; ++i) {
+                            if (reverse.charAt(i) != sentence.charAt(i)) break;
+                        }
+                        reverse = reverse.substring(0,i) + "<span class='d'>" + reverse.substring(i) + "</span>";
+                        sentence = sentence.substring(0,i) + "<span class='d'>" + sentence.substring(i) + "</span>";
+                    }
+                    out.println("<tr><td" + (first ? " width='50%'>" : ">") + sentence 
+                        + "</td><td rowSpan='2'>" + latinShow
+                        + "</td></tr><tr><td class='r'>" + reverse
+                        + "</td></tr><tr><td></td></tr>");
+                    first = false;
+                }
+            }
+            out.println("</table></body>");
+            out.close();
+            System.out.println("Done Writing");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    static BreakIterator bi = BreakIterator.getWordInstance();
+    
+    static String titlecaseFirstWord(String line) {
+        // search for first word with letters. If the first letter is lower, then titlecase it.
+        bi.setText(line);
+        int start = 0;
+        while (true) {
+            int end = bi.next();
+            if (end == bi.DONE) break;
+            int firstLetterType = getFirstLetterType(line, start, end);
+            if (firstLetterType != Character.UNASSIGNED) {
+                if (firstLetterType != Character.LOWERCASE_LETTER) break;
+                line = line.substring(0, start) 
+                    + UCharacter.toTitleCase(line.substring(start, end), bi)
+                    + line.substring(end);
+                break;
+            }
+            end = start;
+        }
+        return line;
+    }
+    
+    static final int LETTER_MASK = 
+          (1<<Character.UPPERCASE_LETTER)
+        | (1<<Character.LOWERCASE_LETTER)
+        | (1<<Character.TITLECASE_LETTER)
+        | (1<<Character.MODIFIER_LETTER)
+        | (1<<Character.OTHER_LETTER)
+        ;
+    
+    static int getFirstLetterType(String line, int start, int end) {
+        int cp;
+        for (int i = start; i < end; i += UTF16.getCharCount(cp)) {
+            cp = UTF16.charAt(line, i);
+            int type = UCharacter.getType(cp);
+            if (((1<<type) & LETTER_MASK) != 0) return type;
+        }
+        return Character.UNASSIGNED;
+    }
+    
+    
     static {
+        
+        genTestFile("Thai-Latin", "thai_test.txt");
+        
+    	if (false) {
+        BreakTransliterator.register();
+        
+    	BreakTransliterator testTrans = new BreakTransliterator("Any-XXX", null, null, "$");
+    	String testSource = "The Quick:   Brown fox--jumped.";
+    	BreakIterator bi = testTrans.getBreakIterator();
+        bi.setText(new StringCharacterIterator(testSource));
+        printBreaks(0, testSource, bi);
+        //bi.setText(UCharacterIterator.getInstance(testSource));
+        //printBreaks(1, testSource, bi);
+        
+        printIteration(2, testSource, new StringCharacterIterator(testSource));
+        //printIteration(3, testSource, UCharacterIterator.getInstance(testSource));
+        
+    	
+    	
+    	String test = testTrans.transliterate(testSource);
+    	System.out.println("Test3: " + test);
+    	DummyFactory.add(testTrans.getID(), testTrans);
     	
     	// AnyTransliterator.ScriptRunIterator.registerAnyToScript();
     	
-    	if (false) {
     	AnyTransliterator at = new AnyTransliterator("Greek", null);
     	at.transliterate("(cat,\u03b1,\u0915)");
     	DummyFactory.add(at.getID(), at);
