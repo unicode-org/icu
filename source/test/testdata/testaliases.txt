@@ -23,10 +23,10 @@ testaliases
 
     // alias that uses another alias and references parts of the end structure
     referencingalias:alias { "testaliases/anotheralias/Sequence" } // Referencing through another alias
-    anotheralias:alias { "/ICUDATA/uk/CollationElements" }
+    anotheralias:alias { "/ICUDATA/uk/collations/standard" }
 
     // aliasing using position
-    CollationElements:alias { "/ICUDATA/uk" } // Referencing corresponding resource in another bundle
+    collations:alias { "/ICUDATA/uk" } // Referencing corresponding resource in another bundle
 
     // aliasing arrays
     zoneTests {
