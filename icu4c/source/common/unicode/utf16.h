@@ -30,7 +30,7 @@
 #define UTF_IS_FIRST_SURROGATE(uchar) (((uchar)&0xfc00)==0xd800)
 #define UTF_IS_SECOND_SURROGATE(uchar) (((uchar)&0xfc00)==0xdc00)
 
-#define UTF_IS_SURROGATE_FIRST(c) (((c)&0x4000)==0)
+#define UTF_IS_SURROGATE_FIRST(c) (((c)&0x400)==0)
 
 /* get the UTF-32 value directly from the surrogate pseudo-characters */
 #define UTF_SURROGATE_OFFSET ((0xd800<<10UL)+0xdc00-0x10000)
