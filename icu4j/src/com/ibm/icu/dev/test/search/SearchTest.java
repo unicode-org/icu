@@ -63,6 +63,7 @@ public class SearchTest extends TestFmwk {
         new SearchData("a\u0300\u0325",                 "\u0300",       null, Collator.TERTIARY, null, new int[]{-1},             new int[]{0}),
         new SearchData("a\u0300\u0325",                 "\u0300\u0325", null, Collator.TERTIARY, null, new int[]{1, -1},          new int[]{2}),
         new SearchData("a\u0300b",                      "\u0300",       null, Collator.TERTIARY, null, new int[]{1, -1},          new int[]{1}),
+        new SearchData("É",                             "e",            null, Collator.PRIMARY,  null, new int[]{0, -1},          new int[]{1}),
         new SearchData(null,                            null,           null, Collator.TERTIARY, null, new int[]{-1},             new int[]{0})
     };
     
@@ -78,6 +79,7 @@ public class SearchTest extends TestFmwk {
             "characterbreaker", new int[] {1, 17, 30, -1}, new int[] {1, 1, 1}),
         new SearchData("testing that string ab\u00e9cd does not match e", "e", null, Collator.TERTIARY, 
             "characterbreaker", new int[] {1, 28, 41, -1}, new int[] {1, 1, 1}),
+        new SearchData("É", "e", "fr", Collator.PRIMARY,  "characterbreaker", new int[]{0, -1}, new int[]{1}),
         new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
     };
     
@@ -93,6 +95,7 @@ public class SearchTest extends TestFmwk {
             "characterbreaker", new int[] {1, 17, 30, -1}, new int[] {1, 1, 1}),
         new SearchData("testing that string ab\u00e9cd does not match e", "e", null, 
              Collator.TERTIARY, "characterbreaker", new int[] {1, 28, 41, -1}, new int[] {1, 1, 1}),
+        new SearchData("É", "e", "fr", Collator.PRIMARY,  "characterbreaker", new int[]{0, -1}, new int[]{1}),
         new SearchData(null, null, null, Collator.TERTIARY, null, new int[] {-1}, new int[] {0})
     };
     
@@ -686,7 +689,7 @@ public class SearchTest extends TestFmwk {
         }
         count = 0;
         while (BREAKITERATOREXACT[count].text != null) {
-        	if (!assertEqual(BREAKITERATOREXACT[count])) {
+            if (!assertEqual(BREAKITERATOREXACT[count])) {
                 errln("Error at test number " + count);
             }
              count++;
@@ -1040,9 +1043,12 @@ public class SearchTest extends TestFmwk {
             pattern = search.pattern;
             strsrch.setTarget(new StringCharacterIterator(text));
             strsrch.setPattern(pattern);
-    
+            strsrch.getCollator().setStrength(search.strength);
+            strsrch.reset();
+            
             int count = 0;
             int matchindex  = search.offset[count];
+            
             while (matchindex >= 0) {
                 int matchlength = search.size[count];
                 strsrch.next();
@@ -1073,6 +1079,7 @@ public class SearchTest extends TestFmwk {
                 return;
             }
         }
+        strsrch.getCollator().setStrength(Collator.TERTIARY);
     }
     
     public void TestGetSetOffsetCanonical() {
@@ -1141,6 +1148,7 @@ public class SearchTest extends TestFmwk {
                 return;
             }
         }
+        strsrch.getCollator().setStrength(Collator.TERTIARY);
     }
     
     public void TestIgnorable() {
