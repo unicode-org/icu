@@ -16,6 +16,19 @@ fr_FR {
         2,
         1,
     }
+    NumberElements {
+        ",",
+        "\u00A0",  // &nbsp;
+        ";",
+        "%",
+        "0",
+        "#",
+        "-",
+        "E",
+        "\u2030",
+        "\u221E",
+        "\uFFFD",
+    }
 //    LocaleString { "fr_FR" }
 //    ShortCountry { "FRA" }
     LocaleID:int { 0x040c }
