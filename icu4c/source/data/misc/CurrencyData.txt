@@ -25,6 +25,7 @@ CurrencyData{
         DJF:intvector { 0, 0 } // Djibouti Franc: DJIBOUTI (DJ)
         GNF:intvector { 0, 0 } // Guinea Franc: GUINEA (GN)
         IQD:intvector { 3, 0 } // Iraqi Dinar: IRAQ (IQ)
+        ITL:intvector { 0, 0 } // Italian Lira: ITALY (IT)
         JOD:intvector { 3, 0 } // Jordanian Dinar: JORDAN (JO)
         JPY:intvector { 0, 0 } // Yen: JAPAN (JP)
         KMF:intvector { 0, 0 } // Comoro Franc: COMOROS (KM)
