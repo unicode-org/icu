@@ -12,7 +12,6 @@
 class CharIterTest: public IntlTest {
 public:
     CharIterTest();
-    ~CharIterTest();
     
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL );
 

@@ -17,10 +17,6 @@ CharIterTest::CharIterTest()
 {
 }
 
-CharIterTest::~CharIterTest()
-{
-}
-
 void CharIterTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite LocaleTest: ");
@@ -137,7 +133,7 @@ void CharIterTest::TestConstructionAndEqualityUChariter() {
     UCharCharacterIterator* test3 = new UCharCharacterIterator(testText, u_strlen(testText), 2, 20, 5);
     UCharCharacterIterator* test4 = new UCharCharacterIterator(testText2, u_strlen(testText2));
     UCharCharacterIterator* test5 = (UCharCharacterIterator*)test1->clone();
-    UCharCharacterIterator* test6=new UCharCharacterIterator(*test1);
+    UCharCharacterIterator* test6 = new UCharCharacterIterator(*test1);
 
     UCharCharacterIterator* test7a = new UCharCharacterIterator(testText, -1);
     UCharCharacterIterator* test7b = new UCharCharacterIterator(testText, -1);
@@ -150,7 +146,7 @@ void CharIterTest::TestConstructionAndEqualityUChariter() {
 
     if (test8a->startIndex() < 0)
         errln("Construction failed: startIndex is negative");
-    if (test8b->endIndex() > sizeof(testTextchars))
+    if (test8b->endIndex() > (UTextOffset)sizeof(testTextchars))
         errln("Construction failed: endIndex is greater than the text length");
     if (test8c->getIndex() < test8c->startIndex() || test8c->endIndex() < test8c->getIndex())
         errln("Construction failed: index is invalid");
