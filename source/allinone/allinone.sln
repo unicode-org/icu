@@ -14,6 +14,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common", "..\common\common.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ctestfw", "..\tools\ctestfw\ctestfw.vcproj", "{ECA6B435-B4FA-4F9F-BF95-F451D078FC47}"
 	ProjectSection(ProjectDependencies) = postProject
+		{6B231032-3CB5-4EED-9210-810D666A23A0} = {6B231032-3CB5-4EED-9210-810D666A23A0}
 		{73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D} = {73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D}
 	EndProjectSection
 EndProject
@@ -341,14 +342,14 @@ Global
 		{E4993E82-D68A-46CA-BAE0-9D35E172E46F}.Debug.Build.0 = Debug|Win32
 		{E4993E82-D68A-46CA-BAE0-9D35E172E46F}.Release.ActiveCfg = Release|Win32
 		{E4993E82-D68A-46CA-BAE0-9D35E172E46F}.Release.Build.0 = Release|Win32
-		{DB312A49-12A9-4E07-9E96-451DC2D8FF61}.Debug.ActiveCfg = Debug|Win32
-		{DB312A49-12A9-4E07-9E96-451DC2D8FF61}.Debug.Build.0 = Debug|Win32
-		{DB312A49-12A9-4E07-9E96-451DC2D8FF61}.Release.ActiveCfg = Release|Win32
-		{DB312A49-12A9-4E07-9E96-451DC2D8FF61}.Release.Build.0 = Release|Win32
 		{DB312A49-12A9-4E07-9E96-451DC2D8FF62}.Debug.ActiveCfg = Debug|Win32
 		{DB312A49-12A9-4E07-9E96-451DC2D8FF62}.Debug.Build.0 = Debug|Win32
 		{DB312A49-12A9-4E07-9E96-451DC2D8FF62}.Release.ActiveCfg = Release|Win32
 		{DB312A49-12A9-4E07-9E96-451DC2D8FF62}.Release.Build.0 = Release|Win32
+		{DB312A49-12A9-4E07-9E96-451DC2D8FF61}.Debug.ActiveCfg = Debug|Win32
+		{DB312A49-12A9-4E07-9E96-451DC2D8FF61}.Debug.Build.0 = Debug|Win32
+		{DB312A49-12A9-4E07-9E96-451DC2D8FF61}.Release.ActiveCfg = Release|Win32
+		{DB312A49-12A9-4E07-9E96-451DC2D8FF61}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

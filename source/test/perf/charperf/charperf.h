@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2003, International Business Machines
+* Copyright (c) 2002-2005, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 **********************************************************************
@@ -8,8 +8,9 @@
 #ifndef _CHARPERF_H
 #define _CHARPERF_H
 
-#include "uperf.h"
 #include "unicode/uchar.h"
+
+#include "unicode/uperf.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <wchar.h>

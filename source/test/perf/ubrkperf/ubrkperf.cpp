@@ -1,6 +1,7 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (C) 2001 IBM, Inc.   All Rights Reserved.
+ * Copyright (C) 2001-2005 International Business Machines Corporation
+ * and others. All Rights Reserved.
  *
  ********************************************************************/
 /********************************************************************************
@@ -15,6 +16,8 @@
 */
 
 #include "ubrkperf.h"
+#include "uoptions.h"
+#include <stdio.h>
 
 
 #if 0

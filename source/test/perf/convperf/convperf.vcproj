@@ -2,7 +2,8 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="toolutil"
+	Name="convperf"
+	ProjectGUID="{B4C03939-D417-41F0-85B4-848ECF105E3A}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
@@ -12,22 +13,23 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory=".\..\..\..\lib"
+			OutputDirectory=".\Release"
 			IntermediateDirectory=".\Release"
-			ConfigurationType="2"
+			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				InlineFunctionExpansion="2"
-				ImproveFloatingPointConsistency="TRUE"
-				AdditionalIncludeDirectories="..\..\common"
-				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS"
+				Optimization="2"
+				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="..\..\..\..\include;..\..\..\tools\toolutil;..\..\..\common;..\..\..\tools\ctestfw"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
-				PrecompiledHeaderFile=".\Release/toolutil.pch"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderFile=".\Release/convperf.pch"
 				AssemblerListingLocation=".\Release/"
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
@@ -38,21 +40,18 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
-				OutputFile="..\..\..\bin\icutu33.dll"
+				AdditionalDependencies="icuuc.lib icutu.lib icutest.lib"
+				OutputFile=".\Release/convperf.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\..\..\lib"
-				ProgramDatabaseFile=".\..\..\..\lib\icutu33.pdb"
-				BaseAddress="0x4ac00000"
-				ImportLibrary="..\..\..\lib\icutu.lib"/>
+				AdditionalLibraryDirectories="..\..\..\..\lib\"
+				ProgramDatabaseFile=".\Release/convperf.pdb"
+				SubSystem="1"
+				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="NDEBUG"
-				MkTypLibCompatible="TRUE"
-				SuppressStartupBanner="TRUE"
-				TargetEnvironment="1"
-				TypeLibraryName=".\..\..\..\lib\icutu.tlb"/>
+				TypeLibraryName=".\Release/convperf.tlb"
+				HeaderFileName=""/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -76,24 +75,25 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory=".\..\..\..\lib"
+			OutputDirectory=".\Debug"
 			IntermediateDirectory=".\Debug"
-			ConfigurationType="2"
+			ConfigurationType="1"
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="FALSE"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="..\..\common"
-				PreprocessorDefinitions="_DEBUG;WIN32;_WINDOWS"
+				AdditionalIncludeDirectories="..\..\..\..\include;..\..\..\tools\toolutil;..\..\..\common;..\..\..\tools\ctestfw"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				PrecompiledHeaderFile=".\Debug/toolutil.pch"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderFile=".\Debug/convperf.pch"
 				AssemblerListingLocation=".\Debug/"
 				ObjectFile=".\Debug/"
 				ProgramDataBaseFileName=".\Debug/"
+				BrowseInformation="1"
 				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
 				DebugInformationFormat="4"
@@ -102,22 +102,19 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalOptions="/MACHINE:I386"
-				OutputFile="..\..\..\bin\icutu33d.dll"
-				LinkIncremental="2"
+				AdditionalDependencies="icuucd.lib icutud.lib icutestd.lib"
+				OutputFile=".\Debug/convperf.exe"
+				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="..\..\..\lib"
+				AdditionalLibraryDirectories="..\..\..\..\lib\"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile=".\..\..\..\lib\icutu33d.pdb"
-				BaseAddress="0x4ac00000"
-				ImportLibrary="..\..\..\lib\icutud.lib"/>
+				ProgramDatabaseFile=".\Debug/convperf.pdb"
+				SubSystem="1"
+				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
-				PreprocessorDefinitions="_DEBUG"
-				MkTypLibCompatible="TRUE"
-				SuppressStartupBanner="TRUE"
-				TargetEnvironment="1"
-				TypeLibraryName=".\..\..\..\lib\icutud.tlb"/>
+				TypeLibraryName=".\Debug/convperf.tlb"
+				HeaderFileName=""/>
 			<Tool
 				Name="VCPostBuildEventTool"/>
 			<Tool
@@ -147,53 +144,35 @@
 			Name="Source Files"
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat">
 			<File
-				RelativePath=".\propsvec.c">
-			</File>
-			<File
-				RelativePath=".\toolutil.c">
-			</File>
-			<File
-				RelativePath=".\ucbuf.c">
-			</File>
-			<File
-				RelativePath=".\ucm.c">
-			</File>
-			<File
-				RelativePath=".\ucmstate.c">
-			</File>
-			<File
-				RelativePath=".\unewdata.c">
-			</File>
-			<File
-				RelativePath=".\uoptions.c">
-			</File>
-			<File
-				RelativePath=".\uparse.c">
+				RelativePath="convperf.cpp">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="2"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="0"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+						BasicRuntimeChecks="3"
+						BrowseInformation="1"/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl">
 			<File
-				RelativePath=".\propsvec.h">
+				RelativePath="convperf.h">
 			</File>
 			<File
-				RelativePath=".\toolutil.h">
-			</File>
-			<File
-				RelativePath=".\ucbuf.h">
-			</File>
-			<File
-				RelativePath=".\ucm.h">
-			</File>
-			<File
-				RelativePath=".\unewdata.h">
-			</File>
-			<File
-				RelativePath=".\uoptions.h">
-			</File>
-			<File
-				RelativePath=".\uparse.h">
+				RelativePath="data.h">
 			</File>
 		</Filter>
 		<Filter
