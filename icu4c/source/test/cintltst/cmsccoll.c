@@ -26,7 +26,6 @@
 #include "ucol_imp.h"
 #include "ucol_tok.h"
 #include "cmemory.h"
-#include "ucmp32.h"
 #include "cstring.h"
 #include "unicode/parseerr.h"
 
