@@ -32,11 +32,17 @@ U_CDECL_BEGIN
  */
 
 enum UTraceLevel {
+    /** Disable all tracing */
     UTRACE_OFF=-1,
+    /** Trace error conditions only */
     UTRACE_ERROR=0,
+    /** Trace errors and warnings */
     UTRACE_WARNING=3,
+    /** Trace opens and closes of ICU services */
     UTRACE_OPEN_CLOSE=5,
+    /** Trace an intermediate number of ICU operations */
     UTRACE_INFO=7,
+    /** Trace the maximum number of ICU operations */
     UTRACE_VERBOSE=9
 };
 typedef enum UTraceLevel UTraceLevel;
@@ -73,11 +79,17 @@ UTraceEntry(const void *context, int32_t fnNumber);
   *  Type signature for the trace function to be called when exiting from a function.
   *  @param context value supplied at the time the trace functions are set.
   *  @param fnNumber Enum value indicating the ICU function being exited.
+  *  @param retType the UTraceExitVal indicating the number and types of
+  *                 variable arguments that follow.
+  *  @param argType values returned by the function being traced, may include
+  *                 one or both of the function's return value and a
+  *                 UErrorCode parameter value.
+  *  @see   UTraceExitVal
   *  @draft ICU 2.8
   */
 typedef void U_CALLCONV
 UTraceExit(const void *context, int32_t fnNumber, 
-           int32_t retType, va_list args);
+           int32_t argType, va_list args);
 
 /**
   *  Type signature for the trace function to be called from within an ICU function
@@ -94,7 +106,10 @@ UTraceData(const void *context, int32_t fnNumber, int32_t level,
   *  Set ICU Tracing functions.  Installs application-provided tracing
   *  functions into ICU.  After doing this, subsequent ICU operations
   *  will call back to the installed functions, providing a trace
-  *  of the use of ICU.
+  *  of the use of ICU.  Passing a NULL pointer for a tracing function
+  *  is allowed, and inhibits tracing action at points where that function
+  *  would be called.
+  *
   *  @param context an uninterpretted pointer.  Whatever is passed in
   *                 here will in turn be passed to each of the tracing
   *                 functions UTraceEntry, UTraceExit and UTraceData.
@@ -259,11 +274,17 @@ utrace_format(char *outBuf, int32_t capacity,
  *   @draft ICU 2.8
  */
 enum UTraceExitVal {
+    /** The traced function returns no value */
     UTRACE_EXITV_NONE   = 0,
+    /** The traced function returns an int32_t, or compatible, type. */
     UTRACE_EXITV_I32    = 1,
+    /** The traced function returns a pointer */
     UTRACE_EXITV_PTR    = 2,
+    /** The traced function returns a UBool */
     UTRACE_EXITV_BOOL   = 3,
+    /** Mask to extract the return type values from a UTraceExitVal */
     UTRACE_EXITV_MASK   = 0xf,
+    /** Bit indicating that the traced function includes a UErrorCode parameter */
     UTRACE_EXITV_STATUS = 0x10
 };
 typedef enum UTraceExitVal UTraceExitVal;

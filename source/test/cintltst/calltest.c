@@ -35,6 +35,8 @@ void addUSetTest(TestNode** root);
 void addUStringPrepTest(TestNode** root);
 void addIDNATest(TestNode** root);
 void addHeapMutexTest(TestNode **root);
+void addUTraceTest(TestNode** root);
+
 
 void addAllTests(TestNode** root)
 {
@@ -67,6 +69,7 @@ void addAllTests(TestNode** root)
     addIDNATest(root);
 #endif
     addHeapMutexTest(root);
+    addUTraceTest(root);
 
 }
 

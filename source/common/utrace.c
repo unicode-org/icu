@@ -134,7 +134,7 @@ static void outputUString(const UChar *s, int32_t len,
 
     for (i=0; i<len || len==-1; i++) {
         c = s[i];
-        outputHexBytes(c, 2, outBuf, outIx, capacity);
+        outputHexBytes(c, 4, outBuf, outIx, capacity);
         outputChar(' ', outBuf, outIx, capacity, indent);
         if (len == -1 && c==0) {
             break;

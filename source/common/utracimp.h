@@ -15,9 +15,6 @@
 *
 *   Internal header for ICU tracing/logging.
 *
-*   This is currently a design document.
-*   Latest Version: http://oss.software.ibm.com/cvs/icu/~checkout~/icuhtml/design/utrace.h
-*   CVS: http://oss.software.ibm.com/cvs/icu/icuhtml/design/utrace.h
 *
 *   Various notes:
 *   - using a trace level variable to only call trace functions
@@ -38,8 +35,6 @@
 *     va_list should be portable because printf() would fail otherwise!
 *   - Should enum values like UTraceLevel be passed into int32_t-type arguments,
 *     or should enum types be used?
-*     We use enum types in all public APIs, so they should be safe and more
-*     descriptive/type-safe. (Search case-insensitive for "level".)
 */
 
 #ifndef __UTRACIMP_H__
