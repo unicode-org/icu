@@ -389,6 +389,21 @@ static void TestUDataSetAppData(){
     }
 
     /*
+     * First we try some monkey business and try to do bad things.
+     */
+
+    status=U_ZERO_ERROR;
+    udata_setAppData("appData1", NULL, &status);
+    if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("FAIL: TestUDataSetAppData(): udata_setAppData(\"appData1\", NULL, status) should have failed."
+                " It returned status of %s\n", u_errorName(status));
+        goto cleanupAndReturn;
+    }
+    /* The following call should fail.
+       If the following works with a bad UErrorCode, then later calls to appData1 should fail. */
+    udata_setAppData("appData1", fileBuf, &status);
+
+    /*
      * Got testdata.dat into memory, now we try setAppData using the memory image.
      */
 
