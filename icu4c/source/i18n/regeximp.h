@@ -14,36 +14,38 @@
 
 
 //
-//  Opcode types     In the compiled form of the regex, these are the type, or opcodes,
+//  Opcode types     In the compiled form of the regexp, these are the type, or opcodes,
 //                   of the entries.
 //
-static const uint32_t     URX_UNUSED1       = 1;
-static const uint32_t     URX_END           = 2;
-static const uint32_t     URX_ONECHAR       = 3;    // Value field is the 21 bit unicode char to match
-static const uint32_t     URX_STRING        = 4;    // Value field is index of string start
-static const uint32_t     URX_STRING_LEN    = 5;    // Value field is string length (code units)
-static const uint32_t     URX_STATE_SAVE    = 6;    // Value field is pattern position to push
-static const uint32_t     URX_NOP           = 7;
-static const uint32_t     URX_START_CAPTURE = 8;    // Value field is capture group number.
-static const uint32_t     URX_END_CAPTURE   = 9;    // Value field is capture group number
-static const uint32_t     URX_STATIC_SETREF = 10;   // Value field is index of set in array of sets.   
-static const uint32_t     URX_SETREF        = 11;   // Value field is index of set in array of sets.
-static const uint32_t     URX_DOTANY        = 12; 
-static const uint32_t     URX_JMP           = 13;   // Value field is destination position in
+enum {
+     URX_UNUSED1       = 1,
+     URX_END           = 2,
+     URX_ONECHAR       = 3,    // Value field is the 21 bit unicode char to match
+     URX_STRING        = 4,    // Value field is index of string start
+     URX_STRING_LEN    = 5,    // Value field is string length (code units)
+     URX_STATE_SAVE    = 6,    // Value field is pattern position to push
+     URX_NOP           = 7,
+     URX_START_CAPTURE = 8,    // Value field is capture group number.
+     URX_END_CAPTURE   = 9,    // Value field is capture group number
+     URX_STATIC_SETREF = 10,   // Value field is index of set in array of sets.   
+     URX_SETREF        = 11,   // Value field is index of set in array of sets.
+     URX_DOTANY        = 12, 
+     URX_JMP           = 13,   // Value field is destination position in
                                                     //   the pattern.
-static const uint32_t     URX_FAIL          = 14;   // Stop match operation;  No match.
+     URX_FAIL          = 14,   // Stop match operation,  No match.
 
-static const uint32_t     URX_BACKSLASH_A   = 15;   
-static const uint32_t     URX_BACKSLASH_B   = 16;   // Value field:  0:  \b    1:  \B
-static const uint32_t     URX_BACKSLASH_G   = 17; 
-static const uint32_t     URX_BACKSLASH_W   = 18;   // Value field:  0:  \w    1:  \W
-static const uint32_t     URX_BACKSLASH_X   = 19;
-static const uint32_t     URX_BACKSLASH_Z   = 20;   // \z   Unconditional end of line.
+     URX_BACKSLASH_A   = 15,   
+     URX_BACKSLASH_B   = 16,   // Value field:  0:  \b    1:  \B
+     URX_BACKSLASH_G   = 17, 
+     URX_BACKSLASH_W   = 18,   // Value field:  0:  \w    1:  \W
+     URX_BACKSLASH_X   = 19,
+     URX_BACKSLASH_Z   = 20,   // \z   Unconditional end of line.
 
-static const uint32_t     URX_DOTANY_ALL    = 21;   // ., in the . matches any mode.
-static const uint32_t     URX_BACKSLASH_D   = 22;   // Value field:  0:  \d    1:  \D
-static const uint32_t     URX_CARET         = 23;   // Value field:  1:  multi-line mode.
-static const uint32_t     URX_DOLLAR        = 24;   // Also for \Z
+     URX_DOTANY_ALL    = 21,   // ., in the . matches any mode.
+     URX_BACKSLASH_D   = 22,   // Value field:  0:  \d    1:  \D
+     URX_CARET         = 23,   // Value field:  1:  multi-line mode.
+     URX_DOLLAR        = 24   // Also for \Z
+};
 
 
 //
@@ -58,13 +60,16 @@ static const uint32_t     URX_DOLLAR        = 24;   // Also for \Z
 //  Access to Unicode Sets for Perl-like composite character properties
 //     The sets are accessed by the match engine for things like \w (word boundary)
 //     
-static const uint32_t     URX_ISWORD_SET  = 1;
-static const uint32_t     URX_ISALNUM_SET = 2;
-static const uint32_t     URX_ISALPHA_SET = 3;
-static const uint32_t     URX_ISSPACE_SET = 4;
-static const uint32_t     URX_LAST_SET    = 5;
+enum {
+     URX_ISWORD_SET  = 1,
+     URX_ISALNUM_SET = 2,
+     URX_ISALPHA_SET = 3,
+     URX_ISSPACE_SET = 4,
+     URX_LAST_SET    = 5,
 
-static const uint32_t     URX_NEG_SET     = 0x800000;  // Flag bit to reverse sense of set
-                                                       //   membership test.
+     URX_NEG_SET     = 0x800000          // Flag bit to reverse sense of set
+                                         //   membership test.
+};
+
 #endif
 

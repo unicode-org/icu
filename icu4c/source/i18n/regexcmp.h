@@ -97,6 +97,8 @@ private:
                                                      //  there is space to add an opcode there.
     void        compileSet(UnicodeSet *theSet);      // Generate the compiled pattern for
                                                      //   a reference to a UnicodeSet.
+    void        literalChar();                       // Compile a literal char
+    void        fixLiterals(UBool split=FALSE);      // Fix literal strings.
 
 
     UErrorCode                    *fStatus;

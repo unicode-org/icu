@@ -204,6 +204,11 @@ RegexPattern  *RegexPattern::compile(
     if (U_FAILURE(err)) {
         return NULL;
     }
+    if (flags != 0) {
+        err = U_REGEX_UNIMPLEMENTED;
+        return NULL;
+    }
+
     RegexPattern *This = new RegexPattern;
     if (This == NULL) {
         err = U_MEMORY_ALLOCATION_ERROR;

@@ -244,13 +244,13 @@ void    RegexCompile::compile(
         //
         tableEl = &gRuleParseStateTable[state];
         if (RESCAN_DEBUG) {
-            printf("char, line, col = (\'%c\', %d, %d)    state=%s ",
+            printf( "char, line, col = (\'%c\', %d, %d)    state=%s ",
                 fC.fChar, fLineNum, fCharNum, RegexStateNames[state]);
         }
 
         for (;;) {    // loop through table rows belonging to this state, looking for one
                       //   that matches the current input char.
-            if (RESCAN_DEBUG) { printf(".");}
+            if (RESCAN_DEBUG) { printf( ".");}
             if (tableEl->fCharClass < 127 && fC.fQuoted == FALSE &&   tableEl->fCharClass == fC.fChar) {
                 // Table row specified an individual character, not a set, and
                 //   the input character is not quoted, and
@@ -284,7 +284,7 @@ void    RegexCompile::compile(
             // No match on this row, advance to the next  row for this state,
             tableEl++;
         }
-        if (RESCAN_DEBUG) { printf("\n");}
+        if (RESCAN_DEBUG) { printf( "\n");}
 
         //
         // We've found the row of the state table that matches the current input
@@ -301,7 +301,7 @@ void    RegexCompile::compile(
             fStackPtr++;
             if (fStackPtr >= kStackSize) {
                 error(U_REGEX_INTERNAL_ERROR);
-                printf("RegexCompile::parse() - state stack overflow.\n");
+                // printf( "RegexCompile::parse() - state stack overflow.\n");
                 fStackPtr--;
             }
             fStack[fStackPtr] = tableEl->fPushState;
@@ -319,9 +319,12 @@ void    RegexCompile::compile(
             state = fStack[fStackPtr];
             fStackPtr--;
             if (fStackPtr < 0) {
-                error(U_REGEX_INTERNAL_ERROR);
-                printf("RegexCompile::compile() - state stack underflow.\n");
+                // state stack underflow
+                // This will occur if the user pattern has mis-matched parentheses,
+                //   with extra close parens.
+                // 
                 fStackPtr++;
+                error(U_REGEX_MISMATCHED_PAREN);
             }
         }
 
@@ -637,94 +640,12 @@ UBool RegexCompile::doParseActions(EParseAction action)
         break;
 
 
-    case doStartString:
-        // We've just scanned a single "normal" character from the pattern,
-        // which is a character without special meaning that will need to be
-        // matched literally.   Save it away.  It may be the start of a string.
-        {
-            fStringOpStart = fRXPat->fLiteralText.length();
-            fRXPat->fLiteralText.append(fC.fChar);
-            break;
-        }
 
-    case doStringChar:
-        // We've just scanned a "normal" character from the pattern, which now
-        //   needs to be appended the the literal match string being that is
-        //   already being assembled.
-        {
-            fRXPat->fLiteralText.append(fC.fChar);
-            break;
-        }
-
-
-
-    case doSplitString:
-        // We've just peeked at a quantifier, e.g. a *, following a scanned string.
-        //   Separate the last character from the string, because the quantifier
-        //   only applies to it, not to the entire string.  Emit into the compiled
-        //   pattern:
-        //      -  string chars[0..n-2]     (as a string, assuming more than one char)
-        //      -  string char [n-1]        (as a single character)
-        {
-            // Locate the positions of the last and next-to-last characters
-            //  in the string.  Requires a bit of futzing around to account for
-            //  surrogate pairs, since we want 32 bit code points, not 16 bit code units.
-            int32_t  strLength = fRXPat->fLiteralText.length() - fStringOpStart;
-            U_ASSERT(strLength > 0);
-            int32_t  lastCharIdx = fRXPat->fLiteralText.length()-1;
-            lastCharIdx = fRXPat->fLiteralText.getChar32Start(lastCharIdx);
-            int32_t nextToLastCharIdx = lastCharIdx-1;
-            if (nextToLastCharIdx > fStringOpStart) {
-                nextToLastCharIdx = fRXPat->fLiteralText.getChar32Start(nextToLastCharIdx);
-            }
-
-            if (nextToLastCharIdx > fStringOpStart) {
-                // The string contains three or more code units.
-                // emit the first through the next-to-last as a string.
-                int32_t  stringToken = URX_BUILD(URX_STRING, fStringOpStart);
-                fRXPat->fCompiledPat->addElement(stringToken, *fStatus);
-                stringToken = URX_BUILD(URX_STRING_LEN, lastCharIdx - fStringOpStart);
-                fRXPat->fCompiledPat->addElement(stringToken, *fStatus);
-            }
-            else if (nextToLastCharIdx == fStringOpStart) {
-                // The string contains exactly two code units.
-                // emit the first into the compiled pattern as a single char
-                UChar32  c = fRXPat->fLiteralText.char32At(nextToLastCharIdx);
-                int32_t  charToken = URX_BUILD(URX_ONECHAR, c);
-                fRXPat->fCompiledPat->addElement(charToken, *fStatus);
-            }
-            // In all cases emit the last char as a single character.
-            UChar32  c = fRXPat->fLiteralText.char32At(lastCharIdx);
-            int32_t  charToken = URX_BUILD(URX_ONECHAR, c);
-            fRXPat->fCompiledPat->addElement(charToken, *fStatus);
-        }
+    case doLiteralChar:
+        // We've just scanned a "normal" character from the pattern, 
+        literalChar();
         break;
 
-    case doEndString:
-        // We have reached the end of a literal string in the pattern.
-        // Emit the string token into the compiled pattern, or if the string
-        //   has only one character, emit the single character token instead.
-        {
-            int32_t   strLength = fRXPat->fLiteralText.length() - fStringOpStart;
-            U_ASSERT(strLength > 0);
-            int32_t  lastCharIdx = fRXPat->fLiteralText.length()-1;
-            lastCharIdx = fRXPat->fLiteralText.getChar32Start(lastCharIdx);
-            if (lastCharIdx == fStringOpStart) {
-                // The string contains exactly one character.
-                //  Emit it into the compiled pattern as a single char.
-                int32_t  charToken = URX_BUILD(URX_ONECHAR, fRXPat->fLiteralText.char32At(fStringOpStart));
-                fRXPat->fCompiledPat->addElement(charToken, *fStatus);
-            } else {
-                // The string contains two or more chars.  Emit as a string.
-                // Compiled string consumes two tokens in the compiled pattern, one
-                //   for the index of the start-of-string, and one for the length.
-                int32_t  stringToken = URX_BUILD(URX_STRING, fStringOpStart);
-                fRXPat->fCompiledPat->addElement(stringToken, *fStatus);
-                stringToken = URX_BUILD(URX_STRING_LEN, strLength);
-                fRXPat->fCompiledPat->addElement(stringToken, *fStatus);
-            }
-        }
-        break;
 
 
     case doDotAny:
@@ -858,6 +779,151 @@ UBool RegexCompile::doParseActions(EParseAction action)
 };
 
 
+
+//------------------------------------------------------------------------------
+//
+//   literalChar           We've encountered a literal character from the pattern,
+//                             or an escape sequence that reduces to a character.
+//                         Add it to the string containing all literal chars/strings from
+//                             the pattern.
+//                         If we are in a pattern string already, add the new char to it.
+//                         If we aren't in a pattern string, begin one now.
+//
+//------------------------------------------------------------------------------
+void RegexCompile::literalChar()  {
+    int32_t           op;            // An operation in the compiled pattern.
+    int32_t           opType;
+    int32_t           patternLoc;   // A position in the compiled pattern.
+    int32_t           stringLen;
+
+
+    // If the last thing compiled into the pattern was not a literal char,
+    //   force this new literal char to begin a new string, and not append to the previous.
+    op     = fRXPat->fCompiledPat->lastElementi();
+    opType = URX_TYPE(op);
+    if (!(opType == URX_STRING_LEN || opType == URX_ONECHAR)) {
+        fixLiterals();
+    }
+
+    if (fStringOpStart == -1) {
+        // First char of a string in the pattern.
+        // Emit a OneChar op into the compiled pattern.
+        op = URX_BUILD(URX_ONECHAR, fC.fChar);
+        fRXPat->fCompiledPat->addElement(op, *fStatus);
+
+        // Also add it to the string pool, in case we get a second adjacent literal
+        //   and want to change form ONE_CHAR to STRING
+        fStringOpStart = fRXPat->fLiteralText.length();
+        fRXPat->fLiteralText.append(fC.fChar);
+        return;
+    }
+    
+    // We are adding onto an existing string
+    fRXPat->fLiteralText.append(fC.fChar);
+
+    // If the most recently emitted op is a URX_ONECHAR, change it to a string op.
+    op     = fRXPat->fCompiledPat->lastElementi();
+    opType = URX_TYPE(op);
+    U_ASSERT(opType == URX_ONECHAR || opType == URX_STRING_LEN);
+    if (opType == URX_ONECHAR) {
+        op         = URX_BUILD(URX_STRING, fStringOpStart);
+        patternLoc = fRXPat->fCompiledPat->size() - 1;
+        fRXPat->fCompiledPat->setElementAt(op, patternLoc);
+        op         = URX_BUILD(URX_STRING_LEN, 0);
+        fRXPat->fCompiledPat->addElement(op, *fStatus);
+    }
+
+    // The pattern contains a URX_SRING / URX_STRING_LEN.  Update the
+    //  string length to reflect the new char we just added to the string.
+    stringLen  = fRXPat->fLiteralText.length() - fStringOpStart;
+    op         = URX_BUILD(URX_STRING_LEN, stringLen);
+    patternLoc = fRXPat->fCompiledPat->size() - 1;
+    fRXPat->fCompiledPat->setElementAt(op, patternLoc);
+}
+
+
+
+//------------------------------------------------------------------------------
+//
+//    fixLiterals           When compiling something that can follow a literal
+//                          string in a pattern, we need to "fix" any preceding
+//                          string, which will cause any subsequent literals to
+//                          begin a new string, rather than appending to the
+//                          old one.
+//
+//                          Optionally, split the last char of the string off into
+//                          a single "ONE_CHAR" operation, so that quantifiers can
+//                          apply to that char alone.  Example:   abc*
+//                          The * needs to apply to the 'c' only.
+//
+//------------------------------------------------------------------------------
+void    RegexCompile::fixLiterals(UBool split) {
+    int32_t  stringStart = fStringOpStart;    // start index of the current literal string
+    int32_t  op;                              // An op from/for the compiled pattern.
+    int32_t  opType;                          // An opcode type from the compiled pattern.
+    int32_t  stringLastCharIdx;
+    UChar32  lastChar;
+    int32_t  stringNextToLastCharIdx;
+    UChar32  nextToLastChar;
+    int32_t  stringLen;
+
+    fStringOpStart = -1;    
+    if (!split) {
+        return;
+    }
+
+    // Split:  We need to  ensure that the last item in the compiled pattern does
+    //   not refer to a literal string of more than one char.  If it does,
+    //   separate the last char from the rest of the string.
+
+    // If the last operation from the compiled pattern is not a string,
+    //   nothing needs to be done  
+    op     = fRXPat->fCompiledPat->lastElementi();
+    opType = URX_TYPE(op);
+    if (opType != URX_STRING_LEN) {
+        return;
+    }
+    stringLen = URX_VAL(op);
+
+    //
+    // Find the position of the last code point in the string  (might be a surrogate pair)
+    //
+    stringLastCharIdx = fRXPat->fLiteralText.length();
+    stringLastCharIdx = fRXPat->fLiteralText.moveIndex32(stringLastCharIdx, -1);
+    lastChar          = fRXPat->fLiteralText.char32At(stringLastCharIdx);
+
+    // The string should always be at least two code points long, meaning that there
+    //   should be something before the last char position that we just found.
+    U_ASSERT(stringLastCharIdx > stringStart);
+    stringNextToLastCharIdx = fRXPat->fLiteralText.moveIndex32(stringLastCharIdx, -1);
+    U_ASSERT(stringNextToLastCharIdx >= stringStart);
+    nextToLastChar          = fRXPat->fLiteralText.char32At(stringNextToLastCharIdx);
+
+    if (stringNextToLastCharIdx > stringStart) {
+        // The length of string remaining after removing one char is two or more.
+        // Leave the string in the compiled pattern, shorten it by one char,
+        //   and append a URX_ONECHAR op for the last char.
+        stringLen -= (fRXPat->fLiteralText.length() - stringLastCharIdx);
+        op = URX_BUILD(URX_STRING_LEN, stringLen);
+        fRXPat->fCompiledPat->setElementAt(op, fRXPat->fCompiledPat->size() -1);
+        op = URX_BUILD(URX_ONECHAR, lastChar);
+        fRXPat->fCompiledPat->addElement(op, *fStatus);
+    } else {
+        // The original string consisted of exactly two characters.  Replace
+        // the existing compiled URX_STRING/URX_STRING_LEN ops with a pair
+        // of URX_ONECHARs.
+        op = URX_BUILD(URX_ONECHAR, nextToLastChar);
+        fRXPat->fCompiledPat->setElementAt(op, fRXPat->fCompiledPat->size() -2);
+        op = URX_BUILD(URX_ONECHAR, lastChar);
+        fRXPat->fCompiledPat->setElementAt(op, fRXPat->fCompiledPat->size() -1);
+    }
+}
+
+
+
+
+
+
 //------------------------------------------------------------------------------
 //
 //   blockTopLoc()          Find or create a location in the compiled pattern
@@ -889,6 +955,7 @@ int32_t   RegexCompile::blockTopLoc(UBool reserveLoc) {
         // Item just compiled is a single thing, a ".", or a single char, or a set reference.
         // No slot for STATE_SAVE was pre-reserved in the compiled code.
         // We need to make space now.
+        fixLiterals(TRUE);  // If last item was a string, separate the last char.
         theLoc = fRXPat->fCompiledPat->size()-1;
         if (reserveLoc) {
             int32_t opAtTheLoc = fRXPat->fCompiledPat->elementAti(theLoc);
@@ -921,6 +988,10 @@ void  RegexCompile::handleCloseParen() {
         error(U_REGEX_MISMATCHED_PAREN);
         return;
     }
+
+    // Force any literal chars that may follow the close paren to start a new string,
+    //   and not attach to any preceding it.
+    fixLiterals(FALSE);
 
     // Fixup any operations within the just-closed parenthesized group
     //    that need to reference the end of the (block).
@@ -1211,7 +1282,7 @@ UnicodeSet *RegexCompile::scanSet() {
     if (U_FAILURE(localStatus)) {
         //  TODO:  Get more accurate position of the error from UnicodeSet's return info.
         //         UnicodeSet appears to not be reporting correctly at this time.
-        printf("UnicodeSet parse postion.ErrorIndex = %d\n", pos.getIndex());
+        printf( "UnicodeSet parse postion.ErrorIndex = %d\n", pos.getIndex());
         error(localStatus);
         delete uset;
         return NULL;
