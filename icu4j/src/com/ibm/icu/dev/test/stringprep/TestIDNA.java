@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/stringprep/TestIDNA.java,v $
- * $Date: 2003/08/27 21:13:14 $
- * $Revision: 1.2 $
+ * $Date: 2003/08/27 21:19:00 $
+ * $Revision: 1.3 $
  *
  *******************************************************************************
 */
@@ -250,7 +250,7 @@ public class TestIDNA extends TestFmwk {
             }
         }
         try{
-            StringBuffer out = IDNA.convertIDNtoASCII(inBuf,options);
+            StringBuffer out = IDNA.convertIDNToASCII(inBuf,options);
             if(expected!=null && out != null && !out.toString().equals(expected.toLowerCase())){
                errln("convertToIDNASCII did not return expected result with options : "+ options + 
                      " Expected: " + expected+" Got: "+out);
@@ -265,7 +265,7 @@ public class TestIDNA extends TestFmwk {
         }
         
         try{
-            StringBuffer out = IDNA.convertIDNtoASCII(inIter,options);
+            StringBuffer out = IDNA.convertIDNToASCII(inIter,options);
             if(expected!=null && out != null && !out.toString().equals(expected.toLowerCase())){
                errln("convertIDNToASCII did not return expected result with options : "+ options +
                      " Expected: " + expected+" Got: "+ out);
@@ -300,7 +300,7 @@ public class TestIDNA extends TestFmwk {
             TestData.ConformanceTestCase testCase = TestData.conformanceTestCases[i];
             UCharacterIterator iter = UCharacterIterator.getInstance(testCase.input);
             try{
-                StringBuffer output = namePrep.prepare(iter,StringPrep.NONE);
+                StringBuffer output = namePrep.prepare(iter,StringPrep.DEFAULT);
                 if(testCase.output !=null && output!=null && !testCase.output.equals(output.toString())){
                     errln("Did not get the expected output. Expected: " + prettify(testCase.output)+
                           " Got: "+ prettify(output) );
@@ -469,7 +469,7 @@ public class TestIDNA extends TestFmwk {
         expected = IDNA.convertIDNToASCII(source,IDNA.DEFAULT);
         chained = expected;
         for(int i=0; i< 4; i++){
-            chained = IDNA.convertIDNtoASCII(chained,IDNA.DEFAULT);
+            chained = IDNA.convertIDNToASCII(chained,IDNA.DEFAULT);
         }
         if(!expected.toString().equals(chained.toString())){
             errln("Chaining test failed for convertIDNToASCII");
