@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA_Types.java,v $ 
-* $Date: 2003/08/20 03:48:45 $ 
-* $Revision: 1.2 $
+* $Date: 2003/08/21 07:32:52 $ 
+* $Revision: 1.3 $
 *
 *******************************************************************************
 */
@@ -16,7 +16,15 @@ import com.ibm.text.UCD.*;
 import com.ibm.text.utility.*;
 
 public interface UCA_Types {
-    public static final String UCA_GEN_DIR = UCD_Types.GEN_DIR + "collation\\";
+    /**
+     * Version of the UCA tables to use
+     */
+    //private static final String VERSION = "-3.0.1d3"; // ""; // "-2.1.9d7"; 
+    public static final String UCA_BASE = "4.0.0d3";  // "3.1.1"; //      ; // ""; // "-2.1.9d7"; 
+    public static final String VERSION = "-" + UCA_BASE; //  + "d6" ""; // "-2.1.9d7"; 
+    public static final String ALLFILES = "allkeys"; // null if not there
+
+    public static final String UCA_GEN_DIR = UCD_Types.GEN_DIR + "collation_" + UCA_BASE + "\\";
     public static final char LEVEL_SEPARATOR = '\u0000'; 
     /**
      * Expanding characters are marked with a exception bit combination

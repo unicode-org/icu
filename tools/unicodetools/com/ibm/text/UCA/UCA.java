@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/UCA.java,v $ 
-* $Date: 2003/08/20 03:48:45 $ 
-* $Revision: 1.21 $
+* $Date: 2003/08/21 07:32:52 $ 
+* $Revision: 1.22 $
 *
 *******************************************************************************
 */
@@ -75,13 +75,6 @@ final public class UCA implements Comparator, UCA_Types {
         return getSortKey((String) a).compareTo(getSortKey((String) b));
     }
 
-    /**
-     * Version of the UCA tables to use
-     */
-    //private static final String VERSION = "-3.0.1d3"; // ""; // "-2.1.9d7"; 
-    public static final String UCA_BASE = "4.0.0d1";  // "3.1.1"; //    ; // ""; // "-2.1.9d7"; 
-    public static final String VERSION = "-" + UCA_BASE; //  + "d6" ""; // "-2.1.9d7"; 
-    public static final String ALLFILES = "allkeys"; // null if not there
     
     /**
      * Records the codeversion
@@ -800,7 +793,8 @@ CP => [.AAAA.0020.0002.][.BBBB.0000.0000.]
     /**
      * Records the dataversion
      */
-    private String dataVersion = "Missing @version in data!!";
+    public static final String BADVERSION = "Missing @version in data!!";
+    private String dataVersion = BADVERSION;
 
     /**
      * Records the dataversion

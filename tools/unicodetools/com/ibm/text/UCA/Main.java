@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/Main.java,v $ 
-* $Date: 2003/08/20 03:48:46 $ 
-* $Revision: 1.14 $
+* $Date: 2003/08/21 07:32:52 $ 
+* $Revision: 1.15 $
 *
 *******************************************************************************
 */
@@ -21,7 +21,9 @@ public class Main {
 	static final String[] ICU_FILES = {"writeCollationValidityLog", "writeFractionalUCA",
 		"WriteRules", "WriteRulesXML", "writeconformance", "writeconformanceshifted", 
 		"short", 
-		"WriteRules", "WriteRulesXML", "writeconformance", "writeconformanceshifted", 
+		"WriteRules", "WriteRulesXML", "writeconformance", "writeconformanceshifted",
+        "noCE", "short",
+        "WriteRules" 
     };
 	
 	public static void main(String args[]) throws Exception {
@@ -82,8 +84,8 @@ public class Main {
                 else if (arg.equalsIgnoreCase("writeJavascriptInfo")) WriteCollationData.writeJavascriptInfo();
                 else if (arg.equalsIgnoreCase("writeCaseFolding")) WriteCollationData.writeCaseFolding();
                 else if (arg.equalsIgnoreCase("javatest")) WriteCollationData.javatest();
-                else if (arg.equalsIgnoreCase("short")) shortPrint = true;
-                else if (arg.equalsIgnoreCase("noCE")) noCE = true;
+                else if (arg.equalsIgnoreCase("short")) shortPrint = !shortPrint;
+                else if (arg.equalsIgnoreCase("noCE")) noCE = !noCE;
                 
     			else if (arg.equalsIgnoreCase("writeAllocation")) WriteCharts.writeAllocation();
     			else if (arg.equalsIgnoreCase("probe")) Probe.test();
