@@ -111,7 +111,7 @@ UBool TaggedList::nextElement(const UnicodeString*& key,
                                int32_t& pos) const {
     const UHashElement *e = hash->nextElement(pos);
     if (e != NULL) {
-        key   = (const UnicodeString*) e->key;
+        key   = (const UnicodeString*) e->key.pointer;
         value = (const UnicodeString*) e->value;
         return TRUE;
     } else {

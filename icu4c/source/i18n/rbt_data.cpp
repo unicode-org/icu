@@ -40,7 +40,7 @@ TransliterationRuleData::TransliterationRuleData(const TransliterationRuleData& 
         while ((e = other.variableNames->nextElement(pos)) != 0) {
             UnicodeString* value =
                 new UnicodeString(*(const UnicodeString*)e->value);
-            variableNames->put(*(UnicodeString*)e->key, value, status);
+            variableNames->put(*(UnicodeString*)e->key.pointer, value, status);
         }
     }
 

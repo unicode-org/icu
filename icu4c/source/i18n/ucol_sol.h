@@ -21,9 +21,10 @@
 #define UCOL_SOL_H
 
 #include "unicode/utypes.h"
+#include "uhash.h"
 
-U_CFUNC int32_t uhash_hashTokens(const void *k);
-U_CFUNC UBool uhash_compareTokens(const void *key1, const void *key2);
+U_CFUNC int32_t uhash_hashTokens(const UHashKey k);
+U_CFUNC UBool uhash_compareTokens(const UHashKey key1, const UHashKey key2);
 U_CFUNC void deleteToken(void *token);
 
 #endif
