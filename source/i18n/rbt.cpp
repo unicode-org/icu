@@ -67,19 +67,12 @@ RuleBasedTransliterator::clone(void) const {
 }
 
 /**
- * Transliterates a segment of a string.  <code>Transliterator</code> API.
- * @param text the string to be transliterated
- * @param start the beginning index, inclusive; <code>0 <= start
- * <= limit</code>.
- * @param limit the ending index, exclusive; <code>start <= limit
- * <= text.length()</code>.
- * @return The new limit index
+ * Implements {@link Transliterator#handleTransliterate}.
  */
-int32_t RuleBasedTransliterator::transliterate(Replaceable& text,
-                                               int32_t start,
-                                               int32_t limit) const {
-    /* When using Replaceable, the algorithm is simpler, since we don't have
-     * two separate buffers.  We keep start and limit fixed the entire time,
+void
+RuleBasedTransliterator::handleTransliterate(Replaceable& text, Position& index,
+                                             bool_t isIncremental) const {
+    /* We keep start and limit fixed the entire time,
      * relative to the text -- limit may move numerically if text is
      * inserted or removed.  The cursor moves from start to limit, with
      * replacements happening under it.
@@ -93,41 +86,22 @@ int32_t RuleBasedTransliterator::transliterate(Replaceable& text,
      * exz|d    no match, advance cursor
      * exzd|    done
      */
-    int32_t cursor = start;
-    while (cursor < limit) {
-        TransliterationRule* r =
-            data->ruleSet.findMatch(text, start, limit,
-                                    cursor, *data,
-                                    getFilter());
-        if (r == 0) {
-            ++cursor;
-        } else {
-            text.handleReplaceBetween(cursor, cursor + r->getKeyLength(),
-                                      r->getOutput());
-            limit += r->getOutput().length() - r->getKeyLength();
-            cursor += r->getCursorPos();
-        }
-    }
-    return limit;
-}
 
-/**
- * Implements {@link Transliterator#handleTransliterate}.
- */
-void
-RuleBasedTransliterator::handleTransliterate(Replaceable& text, Position& index,
-                                             bool_t isIncremental) const {
     int32_t start = index.start;
     int32_t limit = index.limit;
     int32_t cursor = index.cursor;
 
-    bool_t isPartial;
+    bool_t isPartial = FALSE;
 
     while (cursor < limit) {
-        TransliterationRule* r = data->ruleSet.findIncrementalMatch(
-                text, start, limit, cursor,
-                *data, isPartial,
-                getFilter());
+        TransliterationRule* r = isIncremental ?
+            data->ruleSet.findIncrementalMatch(text, start, limit, cursor,
+                                               *data, isPartial,
+                                               getFilter()) :
+            data->ruleSet.findMatch(text, start, limit,
+                                    cursor, *data,
+                                    getFilter());
+
         /* If we match a rule then apply it by replacing the key
          * with the rule output and repositioning the cursor
          * appropriately.  If we get a partial match, then we
@@ -137,7 +111,7 @@ RuleBasedTransliterator::handleTransliterate(Replaceable& text, Position& index,
          * the cursor.
          */
         if (r == 0) {
-            if (isPartial) {
+            if (isPartial) { // always FALSE unless isIncremental
                 break;
             } else {
                 ++cursor;
