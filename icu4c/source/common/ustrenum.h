@@ -32,6 +32,7 @@ uenum_openCharStringsEnumeration(const char** strings, int32_t count,
                                  UErrorCode* ec);
 
 //----------------------------------------------------------------------
+U_NAMESPACE_BEGIN
 
 /**
  * A wrapper to make a UEnumeration into a StringEnumeration.  The
@@ -91,6 +92,7 @@ private:
     UEnumeration *uenum; // owned
 };
 
+U_NAMESPACE_END
 
 #endif
 
