@@ -4,9 +4,9 @@
 // Corporation and others.  All Rights Reserved.
 //--------------------------------------------------------------------
 // THIS IS A MACHINE-GENERATED FILE
-// Tool: dumpICUrules.bat
+// Tool: dumpicurules.bat
 // Source: ../../text/resources/Transliterator_InterIndic_Kannada.txt
-// Date: Tue Nov 27 20:47:50 2001
+// Date: Fri Nov 30 13:01:41 2001
 //--------------------------------------------------------------------
 
 // InterIndic_Kannada
