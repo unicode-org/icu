@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/WriteCharts.java,v $
- * $Date: 2002/02/25 22:43:57 $
- * $Revision: 1.13 $
+ * $Date: 2002/03/13 19:52:34 $
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -168,9 +168,9 @@ public class WriteCharts {
         sourceSetPlusAnyways.addAll(okAnyway);
         
         UnicodeSetIterator usi = new UnicodeSetIterator(sourceSet);
-        while (true) {
-            int j = usi.next();
-            if (j < 0) break;
+        
+        while (usi.next()) {
+            int j = usi.codepoint;
             /*
         int count = sourceSet.getRangeCount();
         for (int i = 0; i < count; ++i) {
@@ -181,20 +181,20 @@ public class WriteCharts {
                 String ss = UTF16.valueOf(j);
                 String ts = t.transliterate(ss);
                 char group = 0;
-                if (!UnicodeSetIterator.containsAll(targetSetPlusAnyways, ts)) {
+                if (!targetSetPlusAnyways.containsAll(ts)) {
                     group |= 1;
                 }
                 if (UTF16.countCodePoint(ts) == 1) {
                     leftOverSet.remove(UTF16.charAt(ts,0));
                 }
                 String rt = inverse.transliterate(ts);
-                if (!UnicodeSetIterator.containsAll(sourceSetPlusAnyways, rt)) {
+                if (!sourceSetPlusAnyways.containsAll(rt)) {
                     group |= 2;
                 } else if (!ss.equals(rt)) {
                     group |= 4;
                 }
                 
-                if (UnicodeSetIterator.containsSome(privateUse, ts) || UnicodeSetIterator.containsSome(privateUse, rt)) {
+                if (!privateUse.containsNone(ts) || !privateUse.containsNone(rt)) {
                     group |= 16;
                 }
                     
@@ -244,9 +244,8 @@ public class WriteCharts {
             */
             
         usi.reset(leftOverSet);
-        while (true) {
-            int j = usi.next();
-            if (j < 0) break;
+        while (usi.next()) {
+            int j = usi.codepoint;
             
                 String ts = UTF16.valueOf(j);
                 // String decomp = Normalizer.normalize(ts, Normalizer.DECOMP_COMPAT, 0);
@@ -256,10 +255,10 @@ public class WriteCharts {
                 String flag = "";
                 char group = 0x80;
                     
-                if (!UnicodeSetIterator.containsAll(sourceSetPlusAnyways, rt)) {
+                if (!sourceSetPlusAnyways.containsAll(rt)) {
                     group |= 8;
                 }
-                if (UnicodeSetIterator.containsSome(privateUse, rt)) {
+                if (!privateUse.containsNone(rt)) {
                     group |= 16;
                 }
                     

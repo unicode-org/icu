@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2002/03/12 23:10:39 $
- * $Revision: 1.60 $
+ * $Date: 2002/03/13 19:52:34 $
+ * $Revision: 1.61 $
  *
  *****************************************************************************************
  */
@@ -208,7 +208,7 @@ import java.util.Iterator;
  * Unicode property
  * </table>
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.60 $ $Date: 2002/03/12 23:10:39 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.61 $ $Date: 2002/03/13 19:52:34 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -232,7 +232,8 @@ public class UnicodeSet extends UnicodeFilter {
     private int[] buffer; // internal buffer
     
     // NOTE: normally the field should be of type SortedSet; but that is missing a public clone!!
-    private TreeSet strings = new TreeSet();
+    // is not private so that UnicodeSetIterator can get access
+    TreeSet strings = new TreeSet();
 
     /**
      * The pattern representation of this set.  This may not be the
@@ -856,6 +857,25 @@ public class UnicodeSet extends UnicodeFilter {
         }
         return ((i & 1) != 0); // return true if odd
     }
+    
+    /**
+     * Adds the specified multicharacter to this set if it is not already
+     * present.  If this set already contains the multicharacter,
+     * the call leaves this set unchanged.
+     * Thus "ch" => {"ch"}
+     * @param string to add
+     */
+    public final boolean contains(String s) {
+        
+        int cp = getSingleCP(s);
+        if (cp < 0) {
+        	return strings.contains(s);
+		} else {
+			return contains(cp);
+		}
+    }
+    
+    
 
     /**
      * Adds the specified range to this set if it is not already
@@ -892,6 +912,45 @@ public class UnicodeSet extends UnicodeFilter {
     }
 
     /**
+     * Adds the specified multicharacter to this set if it is not already
+     * present.  If this set already contains the multicharacter,
+     * the call leaves this set unchanged.
+     * Thus "ch" => {"ch"}
+     * @param string to add
+     */
+    public final UnicodeSet add(String s) {
+        
+        int cp = getSingleCP(s);
+        if (cp < 0) {
+        	strings.add(s);
+        	pat = null;
+		} else {
+			add(cp, cp);
+		}
+        return this;
+    }
+    
+    /**
+     * @return a code point IF the string consists of a single one.
+     * otherwise returns -1.
+     * @param string to test
+     */
+    private static int getSingleCP(String s) {
+        if (s.length() < 0) {
+        	throw new IllegalArgumentException("Can't use zero-length strings in UnicodeSet");
+        }
+    	if (s.length() > 2) return -1;
+    	if (s.length() == 1) return s.charAt(0);
+    	
+    	// at this point, len = 2
+        int cp = UTF16.charAt(s, 0);
+        if (cp > 0xFFFF) { // is surrogate pair
+        	return cp;
+        }
+        return -1;
+    }
+    
+    /**
      * Adds each of the characters in this string to the set. Thus "ch" => {"c", "h"}
      * If this set already any particular character, it has no effect on that character.
      * @param string to add
@@ -906,37 +965,32 @@ public class UnicodeSet extends UnicodeFilter {
     }
 
     /**
-     * Makes a set from each of the characters in the string. Thus "ch" => {"c", "h"}
+     * Retains EACH of the characters in this string. Note: "ch" == {"c", "h"}
+     * If this set already any particular character, it has no effect on that character.
      * @param string to add
      */
-    public static UnicodeSet fromAll(String s) {
-        return new UnicodeSet().addAll(s);
+    public final UnicodeSet retainAll(String s) {
+    	return retainAll(fromAll(s));
     }
 
     /**
-     * Adds the specified multicharacter to this set if it is not already
-     * present.  If this set already contains the multicharacter,
-     * the call leaves this set unchanged.
-     * Thus "ch" => {"ch"}
+     * Complement EACH of the characters in this string. Note: "ch" == {"c", "h"}
+     * If this set already any particular character, it has no effect on that character.
      * @param string to add
      */
-    public final UnicodeSet add(String s) {
-        if (s.length() < 0) return this;
-        
-        // WARNING: the code below is slightly odd; 
-        // the reason is to avoid UTF16.countCodePoint(s)
-        // when we don't really need to iterate through the whole string
-        
-        int cp = UTF16.charAt(s, 0);
-        if (UTF16.getCharCount(cp) == s.length()) {
-            add(cp, cp);
-        } else {
-           strings.add(s);
-           pat = null;
-        }
-        return this;
+    public final UnicodeSet complementAll(String s) {
+    	return complementAll(fromAll(s));
     }
-    
+
+    /**
+     * Remove EACH of the characters in this string. Note: "ch" == {"c", "h"}
+     * If this set already any particular character, it has no effect on that character.
+     * @param string to add
+     */
+    public final UnicodeSet removeAll(String s) {
+    	return removeAll(fromAll(s));
+    }
+
     /**
      * Makes a set from a multicharacter string. Thus "ch" => {"ch"}
      * @param string to add
@@ -946,6 +1000,14 @@ public class UnicodeSet extends UnicodeFilter {
     }
 
     
+    /**
+     * Makes a set from each of the characters in the string. Thus "ch" => {"c", "h"}
+     * @param string to add
+     */
+    public static UnicodeSet fromAll(String s) {
+        return new UnicodeSet().addAll(s);
+    }
+
 
     /**
      * Retain only the elements in this set that are contained in the
@@ -977,6 +1039,24 @@ public class UnicodeSet extends UnicodeFilter {
      */
     public final UnicodeSet retain(int c) {
         return retain(c, c);
+    }
+    
+    /**
+     * Retain the specified string in this set if it is present.
+     * The set will not contain the specified character once the call
+     * returns.
+     */
+    public final UnicodeSet retain(String s) {
+        int cp = getSingleCP(s);
+        if (cp < 0) {
+        	if (strings.size() == 1 && strings.contains(s)) return this;
+        	strings.clear();
+        	strings.add(s);
+        	pat = null;
+		} else {
+			retain(cp, cp);
+		}
+		return this;
     }
 
     /**
@@ -1010,6 +1090,22 @@ public class UnicodeSet extends UnicodeFilter {
      */
     public final UnicodeSet remove(int c) {
         return remove(c, c);
+    }
+
+    /**
+     * Removes the specified string from this set if it is present.
+     * The set will not contain the specified character once the call
+     * returns.
+     */
+    public final UnicodeSet remove(String s) {
+        int cp = getSingleCP(s);
+        if (cp < 0) {
+        	strings.remove(s);
+        	pat = null;
+		} else {
+			remove(cp, cp);
+		}
+		return this;
     }
 
     /**
@@ -1062,6 +1158,23 @@ public class UnicodeSet extends UnicodeFilter {
         pat = null;
         return this;
     }
+    
+    /**
+     * Complement the specified string in this set.
+     * The set will not contain the specified character once the call
+     * returns.
+     */
+    public final UnicodeSet complement(String s) {
+        int cp = getSingleCP(s);
+        if (cp < 0) {
+        	if (strings.contains(s)) strings.remove(s);
+        	else strings.add(s);
+        	pat = null;
+		} else {
+			complement(cp, cp);
+		}
+		return this;
+    }    
 
     /**
      * Returns <tt>true</tt> if the specified set is a subset
@@ -1154,6 +1267,31 @@ public class UnicodeSet extends UnicodeFilter {
         }
         return true;
     }
+        
+        
+    /**
+     * @return !containsNone(s)
+     */
+    public final boolean containsSome(String s) {
+    	return !containsNone(s);
+    }
+        
+        
+    /**
+     * @return !containsNone(s)
+     */
+    public final boolean containsSome(UnicodeSet s) {
+    	return !containsNone(s);
+    }
+        
+        
+    /**
+     * @return !containsNone(s)
+     */
+    public final boolean containsSome(int start, int end) {
+    	return !containsNone(start, end);
+    }
+        
         
     /**
      * Adds all of the elements in the specified set to this set if
@@ -1292,6 +1430,7 @@ public class UnicodeSet extends UnicodeFilter {
             for (int i = 0; i < len; ++i) {
                 if (list[i] != that.list[i]) return false;
             }
+            if (!strings.equals(that.strings)) return false;
         } catch (Exception e) {
             return false;
         }

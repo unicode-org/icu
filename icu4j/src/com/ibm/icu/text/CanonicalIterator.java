@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CanonicalIterator.java,v $ 
- * $Date: 2002/03/09 02:48:33 $ 
- * $Revision: 1.4 $
+ * $Date: 2002/03/13 19:52:35 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -245,16 +245,18 @@ public class CanonicalIterator {
         
         // cycle through all the characters
         int cp;
+        
         for (int i = 0; i < segment.length(); i += UTF16.getCharCount(cp)) {
             // see if any character is at the start of some decomposition
             cp = UTF16.charAt(segment, i);
             UnicodeSet starts = AT_START.get(cp);
             if (starts == null) continue;
             UnicodeSetIterator usi = new UnicodeSetIterator(starts);
-            // if so, see which decompositions match 
-            while (true) {
-                int cp2 = usi.next();
-                if (cp2 < 0) break; // done
+            // if so, see which decompositions match
+            while (usi.next()) {
+                int cp2 = usi.codepoint;
+                // we know that there are no strings in it
+                // so we don't have to check CharacterIterator.IS_STRING
                 Set remainder = extract(cp2, segment, i, workingBuffer);
                 if (remainder == null) continue;
                 

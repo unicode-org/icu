@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/UnicodeSetTest.java,v $ 
- * $Date: 2002/03/12 23:10:57 $ 
- * $Revision: 1.25 $
+ * $Date: 2002/03/13 19:52:34 $ 
+ * $Revision: 1.26 $
  *
  *****************************************************************************************
  */
@@ -526,7 +526,6 @@ public class UnicodeSetTest extends TestFmwk {
         
         SetSpeed2(100);
         SetSpeed2(1000);
-        SetSpeed2(10000);
     }
     
     public void SetSpeed2(int size) {
@@ -734,6 +733,10 @@ public class UnicodeSetTest extends TestFmwk {
         for (char i = 0; i < limit; ++i) {
             logln("Testing " + i + ", " + bitsToSet(i));
             _testComplement(i);
+            
+        	// AS LONG AS WE ARE HERE, check roundtrip
+        	checkRoundTrip(bitsToSet(i));
+            
             for (char j = 0; j < limit; ++j) {
                 _testAdd(i,j);
                 _testXor(i,j);
@@ -842,13 +845,14 @@ public class UnicodeSetTest extends TestFmwk {
     /**
      * Convert a bitmask to a UnicodeSet.
      */
-    static UnicodeSet bitsToSet(int a) {
+    UnicodeSet bitsToSet(int a) {
         UnicodeSet result = new UnicodeSet();
         for (int i = 0; i < 32; ++i) {
             if ((a & (1<<i)) != 0) {
                 result.add((char)i,(char)i);
             }
         }
+        
         return result;
     }
     
@@ -893,6 +897,10 @@ public class UnicodeSetTest extends TestFmwk {
         int relation = ((Integer) relationObj).intValue();
         UnicodeSet set1 = (UnicodeSet) set1Obj;
         UnicodeSet set2 = (UnicodeSet) set2Obj;
+        
+        // by-the-by, check the iterator
+        checkRoundTrip(set1);
+        checkRoundTrip(set2);
         
         boolean contains = set1.containsAll(set2);
         boolean isContained = set2.containsAll(set1);
@@ -943,6 +951,45 @@ public class UnicodeSetTest extends TestFmwk {
               );
         }
     }
+    
+    /**
+     * Basic consistency check for a few items.
+     * That the iterator works, and that we can create a pattern and
+     * get the same thing back
+     */
+    
+    void checkRoundTrip(UnicodeSet s) {
+        String pat = s.toPattern(false);
+    	UnicodeSet t = new UnicodeSet();
+    	UnicodeSetIterator it = new UnicodeSetIterator(s);
+    	while (it.next()) {
+    		if (it.codepoint != UnicodeSetIterator.IS_STRING) {
+    			t.add(it.codepoint);
+    		} else {
+    			t.add(it.string);
+    		}
+    	}
+        checkEqual(s, t, "iterator roundtrip");
+        
+        t = new UnicodeSet(pat);
+        checkEqual(s, t, "toPattern(false)");
+        
+        pat = s.toPattern(true);
+        t = new UnicodeSet(pat);
+        checkEqual(s, t, "toPattern(true)");
+    }
+    
+    boolean checkEqual(UnicodeSet s, UnicodeSet t, String message) {
+        if (!s.equals(t)) {
+            errln("FAIL " + message
+              + "; source = " + s.toPattern(true)
+              + "; result = " + t.toPattern(true)
+              );
+        	return false;
+        }
+        return true;
+    }
+    		
     
     /**
      * Expect the given set to contain the characters in charsIn and
