@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/data/Attic/LocaleElements.java,v $ 
- * $Date: 2000/06/30 00:00:09 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/07/12 16:44:13 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -69,6 +69,28 @@ public class LocaleElements extends ListResourceBundle {
 
                   "StraightQuotes-CurlyQuotes",
                   "*CurlyQuotes-StraightQuotes",
+
+                  // Composed rules
+
+                  "Devanagari~InterIndic",
+                  "Bengali~InterIndic",
+                  "Gurmukhi~InterIndic",
+                  "Gujarati~InterIndic",
+                  "Oriya~InterIndic",
+                  "Tamil~InterIndic",
+                  "Telugu~InterIndic",
+                  "Kannada~InterIndic",
+                  "Malayalam~InterIndic",
+                  
+                  "InterIndic~Devanagari",
+                  "InterIndic~Bengali",
+                  "InterIndic~Gurmukhi",
+                  "InterIndic~Gujarati",
+                  "InterIndic~Oriya",
+                  "InterIndic~Tamil",
+                  "InterIndic~Telugu",
+                  "InterIndic~Kannada",
+                  "InterIndic~Malayalam",
 
                   // One way rules (forward only)
 
