@@ -55,7 +55,7 @@ enum {
     HANGUL_COUNT=JAMO_L_COUNT*JAMO_V_COUNT*JAMO_T_COUNT
 };
 
-inline UBool
+static inline UBool
 isHangulWithoutJamoT(UChar c) {
     c-=HANGUL_BASE;
     return c<HANGUL_COUNT && c%JAMO_T_COUNT==0;
@@ -64,19 +64,19 @@ isHangulWithoutJamoT(UChar c) {
 /* norm32 helpers */
 
 /* is this a norm32 with a regular index? */
-inline UBool
+static inline UBool
 isNorm32Regular(uint32_t norm32) {
     return norm32<_NORM_MIN_SPECIAL;
 }
 
 /* is this a norm32 with a special index for a lead surrogate? */
-inline UBool
+static inline UBool
 isNorm32LeadSurrogate(uint32_t norm32) {
     return _NORM_MIN_SPECIAL<=norm32 && norm32<_NORM_SURROGATES_TOP;
 }
 
 /* is this a norm32 with a special index for a Hangul syllable or a Jamo? */
-inline UBool
+static inline UBool
 isNorm32HangulOrJamo(uint32_t norm32) {
     return norm32>=_NORM_MIN_HANGUL;
 }
@@ -85,7 +85,7 @@ isNorm32HangulOrJamo(uint32_t norm32) {
  * Given isNorm32HangulOrJamo(),
  * is this a Hangul syllable or a Jamo?
  */
-inline UBool
+static inline UBool
 isHangulJamoNorm32HangulOrJamoL(uint32_t norm32) {
     return norm32<_NORM_MIN_JAMO_V;
 }
@@ -94,7 +94,7 @@ isHangulJamoNorm32HangulOrJamoL(uint32_t norm32) {
  * Given norm32 for Jamo V or T,
  * is this a Jamo V?
  */
-inline UBool
+static inline UBool
 isJamoVTNorm32JamoV(uint32_t norm32) {
     return norm32<_NORM_JAMO_V_TOP;
 }
@@ -212,7 +212,7 @@ loadNormData(UErrorCode &errorCode) {
     return haveNormData;
 }
 
-inline UBool
+static inline UBool
 _haveData(UErrorCode &errorCode) {
     if(haveNormData!=0) {
         errorCode=dataErrorCode;
@@ -238,7 +238,7 @@ unorm_getFCDTrie(UErrorCode *pErrorCode) {
 
 /* data access primitives --------------------------------------------------- */
 
-inline uint32_t
+static inline uint32_t
 _getNorm32(UChar c) {
     return
         normTrieData[
@@ -249,7 +249,7 @@ _getNorm32(UChar c) {
         ];
 }
 
-inline uint32_t
+static inline uint32_t
 _getNorm32FromSurrogatePair(uint32_t norm32, UChar c2) {
     /* the surrogate index in norm32 is an offset over the BMP top of stage 1 */
     uint32_t c=
@@ -269,7 +269,7 @@ _getNorm32FromSurrogatePair(uint32_t norm32, UChar c2) {
  * get a norm32 from text with complete code points
  * (like from decompositions)
  */
-inline uint32_t
+static inline uint32_t
 _getNorm32(const UChar *p, uint32_t mask) {
     uint32_t norm32=_getNorm32(*p);
     if((norm32&mask) && isNorm32LeadSurrogate(norm32)) {
@@ -279,7 +279,7 @@ _getNorm32(const UChar *p, uint32_t mask) {
     return norm32;
 }
 
-inline uint16_t
+static inline uint16_t
 _getFCD16(UChar c) {
     return
         fcdTrieIndex[
@@ -290,7 +290,7 @@ _getFCD16(UChar c) {
         ];
 }
 
-inline uint16_t
+static inline uint16_t
 _getFCD16FromSurrogatePair(uint16_t fcd16, UChar c2) {
     /* the surrogate index in fcd16 is an absolute offset over the start of stage 1 */
     uint32_t c=
@@ -305,13 +305,13 @@ _getFCD16FromSurrogatePair(uint16_t fcd16, UChar c2) {
         ];
 }
 
-inline const uint16_t *
+static inline const uint16_t *
 _getExtraData(uint32_t norm32) {
     return extraData+(norm32>>_NORM_EXTRA_SHIFT);
 }
 
 /* get the canonical or compatibility decomposition for one character */
-inline const UChar *
+static inline const UChar *
 _decompose(uint32_t norm32, uint32_t qcMask, int32_t &length,
            uint8_t &cc, uint8_t &trailCC) {
     const UChar *p=(const UChar *)_getExtraData(norm32);
@@ -338,7 +338,7 @@ _decompose(uint32_t norm32, uint32_t qcMask, int32_t &length,
 }
 
 /* get the canonical decomposition for one character */
-inline const UChar *
+static inline const UChar *
 _decompose(uint32_t norm32, int32_t &length,
            uint8_t &cc, uint8_t &trailCC) {
     const UChar *p=(const UChar *)_getExtraData(norm32);
@@ -363,7 +363,7 @@ _decompose(uint32_t norm32, int32_t &length,
  * before: p<limit  after: p<=limit
  * if only one code unit is used, then c2==0
  */
-inline uint8_t
+static inline uint8_t
 _getNextCC(const UChar *&p, const UChar *limit, UChar &c, UChar &c2) {
     uint32_t norm32;
 
@@ -395,7 +395,7 @@ _getNextCC(const UChar *&p, const UChar *limit, UChar &c, UChar &c2) {
  * return 0 if the character is <minC
  * if c2!=0 then (c2, c) is a surrogate pair (reversed - c2 is first surrogate but read second!)
  */
-inline uint32_t
+static inline uint32_t
 _getPrevNorm32(const UChar *start, const UChar *&src,
                uint32_t minC, uint32_t mask,
                UChar &c, UChar &c2) {
@@ -434,7 +434,7 @@ _getPrevNorm32(const UChar *start, const UChar *&src,
  * get the combining class of (c, c2)=*--p
  * before: start<p  after: start<=p
  */
-inline uint8_t
+static inline uint8_t
 _getPrevCC(const UChar *start, const UChar *&p) {
     UChar c, c2;
 
@@ -445,7 +445,7 @@ _getPrevCC(const UChar *start, const UChar *&p) {
  * is this (or does its decomposition begin with) a "true starter"?
  * (cc==0 and NF*C_YES)
  */
-inline UBool
+static inline UBool
 _isTrueStarter(uint32_t norm32, uint32_t ccOrQCMask, uint32_t decompQCMask) {
     if((norm32&ccOrQCMask)==0) {
         return TRUE; /* this is a true starter (could be Hangul or Jamo L) */
@@ -652,7 +652,7 @@ unorm_checkFCD(const UChar *src, int32_t srcLength) {
                      * _getFCD16(-prevCC) is later called when necessary -
                      * -c fits into int16_t because it is <_NORM_MIN_WITH_LEAD_CC==0x300
                      */
-                    prevCC=-(int16_t)c;
+                    prevCC=(int16_t)-c;
                 } else if((fcd16=_getFCD16(c))==0) {
                     prevCC=0;
                 } else {
@@ -664,7 +664,7 @@ unorm_checkFCD(const UChar *src, int32_t srcLength) {
                 if(src==limit) {
                     return TRUE;
                 } else if((c=*src++)<_NORM_MIN_WITH_LEAD_CC) {
-                    prevCC=-(int16_t)c;
+                    prevCC=(int16_t)-c;
                 } else if((fcd16=_getFCD16(c))==0) {
                     prevCC=0;
                 } else {
@@ -697,14 +697,14 @@ unorm_checkFCD(const UChar *src, int32_t srcLength) {
         if(cc!=0) {
             if(prevCC<0) {
                 /* the previous character was <_NORM_MIN_WITH_LEAD_CC, we need to get its trail cc */
-                prevCC=(int16_t)_getFCD16((UChar)-prevCC)&0xff;
+                prevCC=(int16_t)(_getFCD16((UChar)-prevCC)&0xff);
             }
 
             if(cc<prevCC) {
                 return FALSE;
             }
         }
-        prevCC=(int16_t)fcd16&0xff;
+        prevCC=(int16_t)(fcd16&0xff);
     }
 }
 
@@ -836,7 +836,7 @@ _decompose(UChar *&dest, int32_t &destCapacity,
            UBool compat, UBool ignoreHangul,
            UGrowBuffer *growBuffer, void *context,
            uint8_t &outTrailCC,
-           UErrorCode *pErrorCode) {
+           UErrorCode * /*pErrorCode*/) {
     UChar buffer[3];
     const UChar *limit, *prevSrc, *p;
     uint32_t norm32, ccOrQCMask, qcMask;
@@ -1279,7 +1279,7 @@ unorm_makeFCD(UChar *&dest, int32_t &destCapacity,
                     if(c==0) {
                         break;
                     }
-                    prevCC=-(int16_t)c;
+                    prevCC=(int16_t)-c;
                 } else if((fcd16=_getFCD16(c))==0) {
                     prevCC=0;
                 } else {
@@ -1292,7 +1292,7 @@ unorm_makeFCD(UChar *&dest, int32_t &destCapacity,
                 if(src==limit) {
                     break;
                 } else if((c=*src)<_NORM_MIN_WITH_LEAD_CC) {
-                    prevCC=-(int16_t)c;
+                    prevCC=(int16_t)-c;
                 } else if((fcd16=_getFCD16(c))==0) {
                     prevCC=0;
                 } else {
@@ -1329,7 +1329,7 @@ unorm_makeFCD(UChar *&dest, int32_t &destCapacity,
             /* prevCC<0 is only possible from the above loop, i.e., only if prevSrc<src */
             if(prevCC<0) {
                 /* the previous character was <_NORM_MIN_WITH_LEAD_CC, we need to get its trail cc */
-                prevCC=(int16_t)_getFCD16((UChar)-prevCC)&0xff;
+                prevCC=(int16_t)(_getFCD16((UChar)-prevCC)&0xff);
 
                 /*
                  * set a pointer to this below-U+0300 character;
@@ -1380,7 +1380,7 @@ unorm_makeFCD(UChar *&dest, int32_t &destCapacity,
             if(cc==0) {
                 decompStart=prevSrc;
             }
-            prevCC=(int16_t)fcd16&0xff;
+            prevCC=(int16_t)(fcd16&0xff);
 
             /* just append (c, c2) */
             length= c2==0 ? 1 : 2;
@@ -1434,7 +1434,7 @@ enum {
 };
 
 /* get the composition properties of the next character */
-inline uint32_t
+static inline uint32_t
 _getNextCombining(UChar *&p, const UChar *limit,
                   UChar &c, UChar &c2,
                   uint16_t &combiningIndex, uint8_t &cc) {
@@ -1487,7 +1487,7 @@ _getNextCombining(UChar *&p, const UChar *limit,
  *
  * norm32(c) is special if and only if c2!=0
  */
-inline uint16_t
+static inline uint16_t
 _getCombiningIndexFromStarter(UChar c, UChar c2) {
     uint32_t norm32;
 
@@ -1515,7 +1515,7 @@ _getCombiningIndexFromStarter(UChar c, UChar c2) {
  *
  * See unormimp.h for a description of the composition table format.
  */
-inline uint16_t
+static inline uint16_t
 _combine(const uint16_t *table, uint16_t combineBackIndex,
          uint16_t &value, uint16_t &value2) {
     uint16_t key;
@@ -1535,13 +1535,13 @@ _combine(const uint16_t *table, uint16_t combineBackIndex,
         value=*table;
 
         /* is the composition a starter that combines forward? */
-        key=(value&0x2000)+1;
+        key=(uint16_t)((value&0x2000)+1);
 
         /* get the composition result code point from the variable-length result value */
         if(value&0x8000) {
             if(value&0x4000) {
                 /* surrogate pair composition result */
-                value=(value&0x3ff)|0xd800;
+                value=(uint16_t)((value&0x3ff)|0xd800);
                 value2=*(table+1);
             } else {
                 /* BMP composition result U+2000..U+ffff */
@@ -1845,7 +1845,7 @@ _composePart(UChar *stackBuffer, UChar *&buffer, int32_t &bufferCapacity, int32_
     length=_decompose(buffer, bufferCapacity,
                       prevStarter, src-prevStarter,
                       (decompQCMask&_NORM_QC_NFKD)!=0, FALSE,
-                      u_growBufferFromStatic, stackBuffer,
+                      (UGrowBuffer*)u_growBufferFromStatic, stackBuffer,
                       trailCC,
                       pErrorCode);
 
@@ -2300,7 +2300,7 @@ unorm_normalize(const UChar *src, int32_t srcLength,
  * return 0 if the character is <minC
  * if c2!=0 then (c2, c) is a surrogate pair (reversed - c2 is first surrogate but read second!)
  */
-inline uint32_t
+static inline uint32_t
 _getPrevNorm32(CharacterIterator &src, uint32_t minC, uint32_t mask, UChar &c, UChar &c2) {
     uint32_t norm32;
 
@@ -2457,7 +2457,7 @@ unorm_previousNormalize(UChar *&dest, int32_t &destCapacity,
     }
 
     buffer=stackBuffer;
-    bufferCapacity=sizeof(stackBuffer)/U_SIZEOF_UCHAR;
+    bufferCapacity=(int32_t)(sizeof(stackBuffer)/U_SIZEOF_UCHAR);
     bufferLength=_findPreviousIterationBoundary(src,
                                                 isPreviousBoundary, minC, mask,
                                                 buffer, bufferCapacity,
@@ -2488,7 +2488,7 @@ unorm_previousNormalize(UChar *&dest, int32_t &destCapacity,
  * if c2!=0 then (c2, c) is a surrogate pair
  * always reads complete characters
  */
-inline uint32_t
+static inline uint32_t
 _getNextNorm32(CharacterIterator &src, uint32_t minC, uint32_t mask, UChar &c, UChar &c2) {
     uint32_t norm32;
 
@@ -2646,7 +2646,7 @@ unorm_nextNormalize(UChar *&dest, int32_t &destCapacity,
     }
 
     buffer=stackBuffer;
-    bufferCapacity=sizeof(stackBuffer)/U_SIZEOF_UCHAR;
+    bufferCapacity=(int32_t)(sizeof(stackBuffer)/U_SIZEOF_UCHAR);
     bufferLength=_findNextIterationBoundary(src,
                                             isNextBoundary, minC, mask,
                                             buffer, bufferCapacity,
