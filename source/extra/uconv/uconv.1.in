@@ -62,7 +62,7 @@
 ]
 .SH DESCRIPTION
 .B uconv
-converts each given
+converts, or transcodes, each given
 .I file
 (or its standard input if no
 .I file
@@ -168,7 +168,7 @@ Transcode the data to
 .IR encoding .
 .TP
 .BI "\-o\fP, \fB\-\-output" " file"
-Write the transcode data to
+Write the transcoded data to
 .IR file .
 .SH CALLBACKS
 .B uconv
