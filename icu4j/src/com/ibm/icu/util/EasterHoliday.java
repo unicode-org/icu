@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/EasterHoliday.java,v $ 
- * $Date: 2000/03/10 04:17:58 $ 
- * $Revision: 1.3 $
+ * $Date: 2000/03/21 02:19:32 $ 
+ * $Revision: 1.4 $
  *
  *****************************************************************************************
  */
@@ -14,8 +14,8 @@
 package com.ibm.util;
 
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Calendar;
+import com.ibm.util.GregorianCalendar;
+import com.ibm.util.Calendar;
 import java.util.SimpleTimeZone;
 
 /**
