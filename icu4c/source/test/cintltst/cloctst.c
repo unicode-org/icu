@@ -155,7 +155,7 @@ static void TestBasicGetters() {
         if(status==U_BUFFER_OVERFLOW_ERROR){
             status=U_ZERO_ERROR;
             temp=(char*)malloc(sizeof(char) * (cap+1));
-            uloc_getLanguage(testLocale, temp, cap, &status);
+            uloc_getLanguage(testLocale, temp, cap+1, &status);
         }
         if(U_FAILURE(status)){
             log_err("ERROR: in uloc_getLanguage  %s\n", myErrorName(status));
@@ -169,7 +169,7 @@ static void TestBasicGetters() {
         if(status==U_BUFFER_OVERFLOW_ERROR){
             status=U_ZERO_ERROR;
             temp=(char*)realloc(temp, sizeof(char) * (cap+1));
-            uloc_getCountry(testLocale, temp, cap, &status);
+            uloc_getCountry(testLocale, temp, cap+1, &status);
         }
         if(U_FAILURE(status)){
             log_err("ERROR: in uloc_getCountry  %s\n", myErrorName(status));
@@ -183,7 +183,7 @@ static void TestBasicGetters() {
         if(status==U_BUFFER_OVERFLOW_ERROR){
             status=U_ZERO_ERROR;
             temp=(char*)realloc(temp, sizeof(char) * (cap+1));
-            uloc_getVariant(testLocale, temp, cap, &status);
+            uloc_getVariant(testLocale, temp, cap+1, &status);
         }
         if(U_FAILURE(status)){
             log_err("ERROR: in uloc_getVariant  %s\n", myErrorName(status));
@@ -196,7 +196,7 @@ static void TestBasicGetters() {
         if(status==U_BUFFER_OVERFLOW_ERROR){
             status=U_ZERO_ERROR;
             name=(char*)malloc(sizeof(char) * (cap+1));
-            uloc_getName(testLocale, name, cap, &status);
+            uloc_getName(testLocale, name, cap+1, &status);
         } else if(status==U_ZERO_ERROR) {
           log_err("ERROR: in uloc_getName(%s,NULL,0,..), expected U_BUFFER_OVERFLOW_ERROR!\n", testLocale);
         }
@@ -271,19 +271,19 @@ static void TestPrefixes() {
 
       switch(n) {
       case LANG:
-        len = uloc_getLanguage(loc, buf, 526, &err);
+        len = uloc_getLanguage(loc, buf, PREFIXBUFSIZ, &err);
         break;
 
       case CTRY:
-        len = uloc_getCountry(loc, buf, 526, &err);
+        len = uloc_getCountry(loc, buf, PREFIXBUFSIZ, &err);
         break;
 
       case VAR:
-        len = uloc_getVariant(loc, buf, 526, &err);
+        len = uloc_getVariant(loc, buf, PREFIXBUFSIZ, &err);
         break;
 
       case NAME+1:
-        len = uloc_getName(loc, buf, 526, &err);
+        len = uloc_getName(loc, buf, PREFIXBUFSIZ, &err);
         break;
         
       default:
@@ -298,7 +298,7 @@ static void TestPrefixes() {
         log_verbose("#%d: %s on %s: -> [%s] (length %d)\n",
                 row, testTitles[n], loc, buf, len);
 
-        if(len != (int32_t)strlen(buf)+1) {
+        if(len != (int32_t)strlen(buf)) {
           log_err("#%d: %s on %s: -> [%s] (length returned %d, actual %d!)\n",
                 row, testTitles[n], loc, buf, len, strlen(buf)+1);
 
@@ -509,6 +509,8 @@ static void TestDataDirectory()
 
 /*=========================================================== */
 
+static UChar _NUL=0;
+
 static void doTestDisplayNames(const char* inLocale,
                                     int32_t compareIndex,
                                     int32_t defaultIsFrench)
@@ -564,7 +566,11 @@ setUpDataTable();
             {
                 status=U_ZERO_ERROR;
                 testLang=(UChar*)malloc(sizeof(UChar) * (maxresultsize + 1));
-                uloc_getDisplayLanguage(testLocale, NULL, testLang, maxresultsize, &status);
+                uloc_getDisplayLanguage(testLocale, NULL, testLang, maxresultsize + 1, &status);
+            }
+            else
+            {
+                testLang=&_NUL;
             }
 
             if(U_FAILURE(status)){
@@ -576,7 +582,11 @@ setUpDataTable();
             {
                 status=U_ZERO_ERROR;
                 testCtry=(UChar*)malloc(sizeof(UChar) * (maxresultsize + 1));
-                uloc_getDisplayCountry(testLocale, NULL, testCtry, maxresultsize, &status);
+                uloc_getDisplayCountry(testLocale, NULL, testCtry, maxresultsize + 1, &status);
+            }
+            else
+            {
+                testCtry=&_NUL;
             }
             if(U_FAILURE(status)){
                     log_err("Error in getDisplayCountry()  %s\n", myErrorName(status));
@@ -588,7 +598,11 @@ setUpDataTable();
             {
                 status=U_ZERO_ERROR;
                 testVar=(UChar*)malloc(sizeof(UChar) * (maxresultsize+1));
-                uloc_getDisplayVariant(testLocale, NULL, testVar, maxresultsize, &status);
+                uloc_getDisplayVariant(testLocale, NULL, testVar, maxresultsize + 1, &status);
+            }
+            else
+            {
+                testVar=&_NUL;
             }
             if(U_FAILURE(status)){
                     log_err("Error in getDisplayVariant()  %s\n", myErrorName(status));
@@ -599,7 +613,11 @@ setUpDataTable();
             {
                 status=U_ZERO_ERROR;
                 testName=(UChar*)malloc(sizeof(UChar) * (maxresultsize+1));
-                uloc_getDisplayName(testLocale, NULL, testName, maxresultsize, &status);
+                uloc_getDisplayName(testLocale, NULL, testName, maxresultsize + 1, &status);
+            }
+            else
+            {
+                testName=&_NUL;
             }
             if(U_FAILURE(status)){
                     log_err("Error in getDisplayName()  %s\n", myErrorName(status));
@@ -614,7 +632,11 @@ setUpDataTable();
             {
                 status=U_ZERO_ERROR;
                 testLang=(UChar*)malloc(sizeof(UChar) * (maxresultsize+1));
-                uloc_getDisplayLanguage(testLocale, inLocale, testLang, maxresultsize, &status);
+                uloc_getDisplayLanguage(testLocale, inLocale, testLang, maxresultsize + 1, &status);
+            }
+            else
+            {
+                testLang=&_NUL;
             }
             if(U_FAILURE(status)){
                 log_err("Error in getDisplayLanguage()  %s\n", myErrorName(status));
@@ -626,7 +648,11 @@ setUpDataTable();
             {
                 status=U_ZERO_ERROR;
                 testCtry=(UChar*)malloc(sizeof(UChar) * (maxresultsize+1));
-                uloc_getDisplayCountry(testLocale, inLocale, testCtry, maxresultsize, &status);
+                uloc_getDisplayCountry(testLocale, inLocale, testCtry, maxresultsize + 1, &status);
+            }
+            else
+            {
+                testCtry=&_NUL;
             }
             if(U_FAILURE(status)){
                 log_err("Error in getDisplayCountry()  %s\n", myErrorName(status));
@@ -638,7 +664,11 @@ setUpDataTable();
             {
                 status=U_ZERO_ERROR;
                 testVar=(UChar*)malloc(sizeof(UChar) * (maxresultsize+1));
-                uloc_getDisplayVariant(testLocale, inLocale, testVar, maxresultsize, &status);
+                uloc_getDisplayVariant(testLocale, inLocale, testVar, maxresultsize + 1, &status);
+            }
+            else
+            {
+                testVar=&_NUL;
             }
             if(U_FAILURE(status)){
                     log_err("Error in getDisplayVariant()  %s\n", myErrorName(status));
@@ -650,7 +680,11 @@ setUpDataTable();
             {
                 status=U_ZERO_ERROR;
                 testName=(UChar*)malloc(sizeof(UChar) * (maxresultsize+1));
-                uloc_getDisplayName(testLocale, inLocale, testName, maxresultsize, &status);
+                uloc_getDisplayName(testLocale, inLocale, testName, maxresultsize + 1, &status);
+            }
+            else
+            {
+                testName=&_NUL;
             }
             if(U_FAILURE(status)){
                 log_err("Error in getDisplayName()  %s\n", myErrorName(status));
@@ -701,11 +735,18 @@ setUpDataTable();
             log_err(" Display Name mismatch: %s  versus  %s\n", austrdup(testName), austrdup(expectedName));
         }
 
-    free(testName);
-    free(testLang);
-    free(testCtry);
-    free(testVar);
-
+        if(testName!=&_NUL) {
+            free(testName);
+        }
+        if(testLang!=&_NUL) {
+            free(testLang);
+        }
+        if(testCtry!=&_NUL) {
+            free(testCtry);
+        }
+        if(testVar!=&_NUL) {
+            free(testVar);
+        }
     }
     free(testLocale);
 cleanUpDataTable();
@@ -827,7 +868,7 @@ static void TestSimpleDisplayNames()
         if(status==U_BUFFER_OVERFLOW_ERROR) {
             status=U_ZERO_ERROR;
             testLang=(UChar*)malloc(sizeof(UChar) * (size + 1));
-            uloc_getDisplayLanguage(languageCodes[i], "en_US", testLang, size, &status);
+            uloc_getDisplayLanguage(languageCodes[i], "en_US", testLang, size + 1, &status);
         }
         expectedLang=(UChar*)malloc(sizeof(UChar) * (strlen(languageNames[i])+1));
         u_uastrcpy(expectedLang, languageNames[i]);
@@ -896,7 +937,7 @@ static void TestVariantParsing()
     if(status==U_BUFFER_OVERFLOW_ERROR) {
         status=U_ZERO_ERROR;
         got=(UChar*)realloc(got, sizeof(UChar) * (size+1));
-        uloc_getDisplayVariant(en_US_custom, "en_US", got, size, &status);
+        uloc_getDisplayVariant(en_US_custom, "en_US", got, size + 1, &status);
     }
     u_uastrcpy(displayVar, dispVar);
     if(u_strcmp(got,displayVar)!=0) {
@@ -907,7 +948,7 @@ static void TestVariantParsing()
     if(status==U_BUFFER_OVERFLOW_ERROR) {
         status=U_ZERO_ERROR;
         got=(UChar*)realloc(got, sizeof(UChar) * (size+1));
-        uloc_getDisplayName(en_US_custom, "en_US", got, size, &status);
+        uloc_getDisplayName(en_US_custom, "en_US", got, size + 1, &status);
     }
     u_uastrcpy(displayName, dispName);
     if(u_strcmp(got,displayName)!=0) {
@@ -920,7 +961,7 @@ static void TestVariantParsing()
     if(status==U_BUFFER_OVERFLOW_ERROR) {
         status=U_ZERO_ERROR;
         got=(UChar*)realloc(got, sizeof(UChar) * (size+1));
-        uloc_getDisplayVariant(shortVariant, NULL, got, size, &status);
+        uloc_getDisplayVariant(shortVariant, NULL, got, size + 1, &status);
     }
     if(strcmp(austrdup(got),"FOO")!=0) {
         log_err("FAIL: getDisplayVariant()  Wanted: foo  Got: %s\n", austrdup(got));
@@ -931,7 +972,7 @@ static void TestVariantParsing()
     if(status==U_BUFFER_OVERFLOW_ERROR) {
         status=U_ZERO_ERROR;
         got=(UChar*)realloc(got, sizeof(UChar) * (size+1));
-        uloc_getDisplayVariant(bogusVariant, NULL, got, size, &status);
+        uloc_getDisplayVariant(bogusVariant, NULL, got, size + 1, &status);
     }
     if(strcmp(austrdup(got),"_FOO")!=0) {
         log_err("FAIL: getDisplayVariant()  Wanted: _FOO  Got: %s\n", austrdup(got));
@@ -942,7 +983,7 @@ static void TestVariantParsing()
     if(status==U_BUFFER_OVERFLOW_ERROR) {
         status=U_ZERO_ERROR;
         got=(UChar*)realloc(got, sizeof(UChar) * (size+1));
-        uloc_getDisplayVariant(bogusVariant2, NULL, got, size, &status);
+        uloc_getDisplayVariant(bogusVariant2, NULL, got, size + 1, &status);
     }
     if(strcmp(austrdup(got),"FOO_")!=0) {
         log_err("FAIL: getDisplayVariant()  Wanted: FOO_  Got: %s\n", austrdup(got));
@@ -953,7 +994,7 @@ static void TestVariantParsing()
     if(status==U_BUFFER_OVERFLOW_ERROR) {
         status=U_ZERO_ERROR;
         got=(UChar*)realloc(got, sizeof(UChar) * (size+1));
-        uloc_getDisplayVariant(bogusVariant3, NULL, got, size, &status);
+        uloc_getDisplayVariant(bogusVariant3, NULL, got, size + 1, &status);
     }
     if(strcmp(austrdup(got),"_FOO_")!=0) {
         log_err("FAIL: getDisplayVariant()  Wanted: _FOO_  Got: %s\n", austrdup(got));
