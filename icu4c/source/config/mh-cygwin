@@ -3,7 +3,7 @@
 ## Copyright (c) 2001, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-cygwin,v 1.10 2003/05/30 00:00:22 grhoten-oss Exp $
+## $Id: mh-cygwin,v 1.11 2003/05/30 23:00:07 grhoten-oss Exp $
 
 ## Commands to generate dependency files
 GEN_DEPS.c=	$(CC) -E -MM $(DEFS) $(CPPFLAGS)
@@ -43,7 +43,7 @@ LIBICULE=	-L$(top_builddir)/layout/ -l$(ICUPREFIX)le$(ICULIBSUFFIX)$(SO_TARGET_V
 LIBICULX=	-L$(top_builddir)/layoutex/ -l$(ICUPREFIX)lx$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
 LIBCTESTFW=	-L$(top_builddir)/tools/ctestfw/ -l$(ICUPREFIX)ctestfw$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
 LIBICUTOOLUTIL=	-L$(top_builddir)/tools/toolutil/ -l$(ICUPREFIX)toolutil$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
-LIBUSTDIO=	$(top_builddir)/extra/ustdio/libicuio$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
+LIBUSTDIO=	-L$(top_builddir)/extra/ustdio/ -l$(ICUPREFIX)io$(ICULIBSUFFIX)$(SO_TARGET_VERSION_MAJOR)
 
 
 ## Compilation rules
