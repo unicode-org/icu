@@ -230,7 +230,7 @@ utrace_vformat(char *outBuf, int32_t capacity, int32_t indent, const char *fmt, 
             /* UChar * string, with length, len==-1 for null terminated. */
             ptrArg = va_arg(args, void *);             /* Ptr    */
             intArg =(int32_t)va_arg(args, int32_t);    /* Length */
-            outputUString((const unsigned short *)ptrArg, intArg, outBuf, &outIx, capacity, indent);
+            outputUString((const UChar *)ptrArg, intArg, outBuf, &outIx, capacity, indent);
             break;
 
         case 'b':
@@ -338,7 +338,7 @@ utrace_vformat(char *outBuf, int32_t capacity, int32_t indent, const char *fmt, 
 
                         case 'S':
                             charsToOutput = 0;
-                            outputUString((const unsigned short *)*ptrPtr, -1, outBuf, &outIx, capacity, indent);
+                            outputUString((const UChar *)*ptrPtr, -1, outBuf, &outIx, capacity, indent);
                             outputChar('\n', outBuf, &outIx, capacity, indent);
                             longArg = *ptrPtr==NULL? 0: 1;   /* for test for null term. array. */
                             ptrPtr++;
