@@ -139,7 +139,10 @@ ucol_strcoll(    const    UCollator    *coll,
         const    UChar        *target,
         int32_t            targetLength)
 {
-  return (UCollationResult) ((Collator*)coll)->compare(source,sourceLength,target,targetLength);
+    if (coll == NULL) return UCOL_EQUAL;
+    if (sourceLength == -1) sourceLength = u_strlen(source);
+    if (targetLength == -1) targetLength = u_strlen(target);
+        return (UCollationResult) ((Collator*)coll)->compare(source,sourceLength,target,targetLength);
 }
 
 U_CAPI UBool
