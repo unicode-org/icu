@@ -269,33 +269,36 @@ IntlTestNumberFormat::tryIt(double aNumber)
 
     int32_t numberMatch = 0;
     int32_t stringMatch = 0;
-    UBool dump = FALSE;
+    UnicodeString errMsg;
     int32_t i;
     for (i=0; i<DEPTH; ++i)
     {
+        errMsg.truncate(0); // if non-empty, we failed this iteration
         UErrorCode status = U_ZERO_ERROR;
-        if (i == 0)
+        string[i] = "(n/a)"; // "format was never done" value
+        if (i == 0) {
             number[i].setDouble(aNumber);
-        else
+        } else {
             fFormat->parse(string[i-1], number[i], status);
-        if (U_FAILURE(status))
-        {
-            errln("**** FAIL: Parse of " + string[i-1] + " failed.");
-            dump = TRUE;
-            break;
+            if (U_FAILURE(status)) {
+                number[i].setDouble(1234.5); // "parse failed" value
+                errMsg = "**** FAIL: Parse of " + prettify(string[i-1]) + " failed.";
+                --i; // don't show empty last line: "1234.5 F> (n/a) P>"
+                break;
+            }
         }
         // Convert from long to double
         if (number[i].getType() == Formattable::kLong)
             number[i].setDouble(number[i].getLong());
         else if (number[i].getType() != Formattable::kDouble)
         {
-            errln("**** FAIL: Parse of " + string[i-1]
+            errMsg = ("**** FAIL: Parse of " + prettify(string[i-1])
                 + " returned non-numeric Formattable, type " + UnicodeString(formattableTypeName(number[i].getType()))
                 + ", Locale=" + UnicodeString(fLocale.getName())
                 + ", longValue=" + number[i].getLong());
-            dump = TRUE;
             break;
         }
+        string[i].truncate(0);
         fFormat->format(number[i].getDouble(), string[i]);
         if (i > 0)
         {
@@ -303,16 +306,14 @@ IntlTestNumberFormat::tryIt(double aNumber)
                 numberMatch = i;
             else if (numberMatch > 0 && number[i] != number[i-1])
             {
-                errln("**** FAIL: Numeric mismatch after match.");
-                dump = TRUE;
+                errMsg = ("**** FAIL: Numeric mismatch after match.");
                 break;
             }
             if (stringMatch == 0 && string[i] == string[i-1])
                 stringMatch = i;
             else if (stringMatch > 0 && string[i] != string[i-1])
             {
-                errln("**** FAIL: String mismatch after match.");
-                dump = TRUE;
+                errMsg = ("**** FAIL: String mismatch after match.");
                 break;
             }
         }
@@ -324,17 +325,17 @@ IntlTestNumberFormat::tryIt(double aNumber)
 
     if (stringMatch > 2 || numberMatch > 2)
     {
-        errln("**** FAIL: No string and/or number match within 2 iterations.");
-        dump = TRUE;
+        errMsg = ("**** FAIL: No string and/or number match within 2 iterations.");
     }
 
-    if (dump)
+    if (errMsg.length() != 0)
     {
         for (int32_t k=0; k<=i; ++k)
         {
             logln((UnicodeString)"" + k + ": " + number[k].getDouble() + " F> " +
-                  string[k] + " P> ");
+                  prettify(string[k]) + " P> ");
         }
+        errln(errMsg);
     }
 }
 
@@ -354,12 +355,12 @@ IntlTestNumberFormat::tryIt(int32_t aNumber)
     fFormat->parse(stringNum, number, status);
     if (U_FAILURE(status))
     {
-        errln("**** FAIL: Parse of " + stringNum + " failed.");
+        errln("**** FAIL: Parse of " + prettify(stringNum) + " failed.");
         return;
     }
     if (number.getType() != Formattable::kLong)
     {
-        errln("**** FAIL: Parse of " + stringNum
+        errln("**** FAIL: Parse of " + prettify(stringNum)
             + " returned non-long Formattable, type " + UnicodeString(formattableTypeName(number.getType()))
             + ", Locale=" + UnicodeString(fLocale.getName())
             + ", doubleValue=" + number.getDouble()
@@ -368,7 +369,7 @@ IntlTestNumberFormat::tryIt(int32_t aNumber)
             );
     }
     if (number.getLong() != aNumber) {
-        errln("**** FAIL: Parse of " + stringNum + " failed. Got:" + number.getLong()
+        errln("**** FAIL: Parse of " + prettify(stringNum) + " failed. Got:" + number.getLong()
             + " Expected:" + aNumber);
     }
 }
@@ -398,12 +399,24 @@ void IntlTestNumberFormat::monsterTest(/* char* par */)
 {
     const char *SEP = "============================================================\n";
     int32_t count;
-    const Locale* locales = NumberFormat::getAvailableLocales(count);
-    if (locales && count)
+    const Locale* allLocales = NumberFormat::getAvailableLocales(count);
+    Locale* locales = (Locale*)allLocales;
+    Locale quickLocales[6];
+    if (allLocales && count)
     {
-        if (quick && count > 3) {
-            logln("quick test: testing just 3 locales!");
-            count = 3;
+        if (quick && count > 6) {
+            logln("quick test: testing just 6 locales!");
+            count = 6;
+            locales = quickLocales;
+            locales[0] = allLocales[0];
+            locales[1] = allLocales[1];
+            locales[2] = allLocales[2];
+            // In a quick test, make sure we test locales that use
+            // currency prefix, currency suffix, and choice currency
+            // logic.  Otherwise bugs in these areas can slip through.
+            locales[3] = Locale("ar", "AE", "");
+            locales[4] = Locale("cs", "CZ", "");
+            locales[5] = Locale("en", "IN", "");
         }
         for (int32_t i=0; i<count; ++i)
         {
