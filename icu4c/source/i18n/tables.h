@@ -1042,13 +1042,13 @@ EntryPair::EntryPair(const UnicodeString& str, int32_t aValue, UBool aFwd)
 
 inline
 EntryPair::EntryPair()
-  : nameChars(NULL), nameLen(0), value(0xffffffff), fwd(TRUE), storage(NULL)
+  : value(0xffffffff), fwd(TRUE), storage(NULL), nameChars(NULL), nameLen(0)
 {
 }
 
 inline
 EntryPair::EntryPair(const UChar *name, int32_t nameLength, int32_t aValue, UBool aFwd)
-  : nameChars(name), nameLen(nameLength), value(aValue), fwd(aFwd), storage(NULL)
+  : value(aValue), fwd(aFwd), storage(NULL), nameChars(name), nameLen(nameLength)
 {
 }
 
