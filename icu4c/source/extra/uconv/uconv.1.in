@@ -71,9 +71,15 @@ is specified) from one
 to another. The transcoding is done using Unicode as a pivot encoding
 (e.g. the data are first transcoded from their original encoding to
 Unicode, and then from Unicode to the destination encoding).
-It is possible to specify callbacks that are used to handle invalid
+.PP
+When calling
+.BR uconv ,
+it is possible to specify callbacks that are used to handle invalid
 characters in the input, or characters that cannot be transcoded to
-the destination encoding.
+the destination encoding. Some encodings, for example, offer a default
+substitution character that can be used to represent the occurence of
+such characters in the input. Other callbacks offer a useful visual
+representation of the invalid data.
 .PP
 .B uconv
 can also run the transcoding through a specified
