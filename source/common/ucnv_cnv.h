@@ -229,4 +229,12 @@ ucnv_getNonSurrogateUnicodeSet(const UConverter *cnv,
                                UConverterUnicodeSet which,
                                UErrorCode *pErrorCode);
 
+U_CFUNC void
+ucnv_fromUWriteBytes(UConverter *cnv,
+                     const char *bytes, int32_t length,
+                     char **target, const char *targetLimit,
+                     int32_t **offsets,
+                     int32_t sourceIndex,
+                     UErrorCode *pErrorCode);
+
 #endif /* UCNV_CNV */

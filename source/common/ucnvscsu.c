@@ -181,7 +181,7 @@ _SCSUReset(UConverter *cnv, UConverterResetChoice choice) {
             break;
         }
 
-        cnv->fromUSurrogateLead=0;
+        cnv->fromUChar32=0;
     }
 }
 
@@ -215,8 +215,6 @@ _SCSUClose(UConverter *cnv) {
 }
 
 /* SCSU-to-Unicode conversion functions ------------------------------------- */
-
-/* ### TODO check operator precedence | << + < */
 
 static void
 _SCSUToUnicodeWithOffsets(UConverterToUnicodeArgs *pArgs,
@@ -1059,7 +1057,7 @@ _SCSUFromUnicodeWithOffsets(UConverterFromUnicodeArgs *pArgs,
     dynamicWindow=scsu->fromUDynamicWindow;
     currentOffset=scsu->fromUDynamicOffsets[dynamicWindow];
 
-    c=cnv->fromUSurrogateLead;
+    c=cnv->fromUChar32;
 
     /* sourceIndex=-1 if the current character began in the previous buffer */
     sourceIndex= c==0 ? 0 : -1;
@@ -1386,18 +1384,11 @@ getTrailUnicode:
     }
 endloop:
 
-    if(U_FAILURE(*pErrorCode) && *pErrorCode!=U_BUFFER_OVERFLOW_ERROR) {
-        /* c is an unpaired surrogate */
-        cnv->invalidUCharBuffer[0]=(UChar)c;
-        cnv->invalidUCharLength=1;
-        c=0;
-    }
-
     /* set the converter state back into UConverter */
     scsu->fromUIsSingleByteMode=isSingleByteMode;
     scsu->fromUDynamicWindow=dynamicWindow;
 
-    cnv->fromUSurrogateLead=(UChar)c;
+    cnv->fromUChar32=c;
 
     /* write back the updated pointers */
     pArgs->source=source;
@@ -1553,7 +1544,7 @@ _SCSUFromUnicode(UConverterFromUnicodeArgs *pArgs,
     dynamicWindow=scsu->fromUDynamicWindow;
     currentOffset=scsu->fromUDynamicOffsets[dynamicWindow];
 
-    c=cnv->fromUSurrogateLead;
+    c=cnv->fromUChar32;
 
     /* similar conversion "loop" as in toUnicode */
 loop:
@@ -1851,18 +1842,11 @@ getTrailUnicode:
     }
 endloop:
 
-    if(U_FAILURE(*pErrorCode) && *pErrorCode!=U_BUFFER_OVERFLOW_ERROR) {
-        /* c is an unpaired surrogate */
-        cnv->invalidUCharBuffer[0]=(UChar)c;
-        cnv->invalidUCharLength=1;
-        c=0;
-    }
-
     /* set the converter state back into UConverter */
     scsu->fromUIsSingleByteMode=isSingleByteMode;
     scsu->fromUDynamicWindow=dynamicWindow;
 
-    cnv->fromUSurrogateLead=(UChar)c;
+    cnv->fromUChar32=c;
 
     /* write back the updated pointers */
     pArgs->source=source;

@@ -611,7 +611,7 @@ static void _reset(UConverter *converter, UConverterResetChoice choice,
     }
     if(choice!=UCNV_RESET_TO_UNICODE) {
         converter->fromUnicodeStatus = 0;
-        converter->fromUSurrogateLead = 0;
+        converter->fromUChar32 = 0;
         converter->invalidUCharLength = converter->charErrorBufferLength = 0;
     }
 
@@ -864,7 +864,7 @@ _fromUnicodeWithCallback(UConverterFromUnicodeArgs *pArgs, UErrorCode *err) {
         converterSawEndOfInput=
             (UBool)(U_SUCCESS(*err) &&
                     pArgs->flush && pArgs->source==pArgs->sourceLimit &&
-                    cnv->fromUSurrogateLead==0);
+                    cnv->fromUChar32==0);
 
         /* no callback called yet for this iteration */
         calledCallback=FALSE;
@@ -911,13 +911,11 @@ _fromUnicodeWithCallback(UConverterFromUnicodeArgs *pArgs, UErrorCode *err) {
                      * (continue converting by breaking out of only the inner loop)
                      */
                     break;
-                } else if(pArgs->flush && cnv->fromUSurrogateLead!=0) {
+                } else if(pArgs->flush && cnv->fromUChar32!=0) {
                     /*
                      * the entire input stream is consumed
                      * and there is a partial, truncated input sequence left
                      */
-                    cnv->invalidUCharBuffer[0]=(UChar)cnv->fromUSurrogateLead;
-                    cnv->invalidUCharLength=1;
 
                     /* inject an error and continue with callback handling */
                     *err=U_TRUNCATED_CHAR_FOUND;
@@ -970,20 +968,15 @@ _fromUnicodeWithCallback(UConverterFromUnicodeArgs *pArgs, UErrorCode *err) {
             /* callback handling */
             {
                 UChar32 codePoint;
-                int32_t i;
 
-                /* get the first code point */
-                i=0;
-                errorInputLength=cnv->invalidUCharLength;
-                if(errorInputLength>0) {
-                    U16_NEXT(cnv->invalidUCharBuffer, i, errorInputLength, codePoint);
-                } else {
-                    /* should never occur because errors should be caused by some input */
-                    codePoint=U_SENTINEL;
-                }
+                /* get and write the code point */
+                codePoint=cnv->fromUChar32;
+                errorInputLength=0;
+                U16_APPEND_UNSAFE(cnv->invalidUCharBuffer, errorInputLength, codePoint);
+                cnv->invalidUCharLength=(int8_t)errorInputLength;
 
                 /* set the converter state to deal with the next character */
-                cnv->fromUSurrogateLead=0;
+                cnv->fromUChar32=0;
 
                 /* call the callback function */
                 cnv->fromUCharErrorBehaviour(cnv->fromUContext, pArgs,

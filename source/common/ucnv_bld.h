@@ -148,7 +148,17 @@ struct UConverter {
     uint32_t toUnicodeStatus;           /* Used to internalize stream status information */
     int32_t mode;
     uint32_t fromUnicodeStatus;
-    UChar    fromUSurrogateLead;        /* similar to toUBytes; keeps the lead surrogate of the current character */
+
+    /*
+     * More fromUnicode() status. Serves 3 purposes:
+     * - keeps a lead surrogate between buffers (similar to toUBytes[])
+     * - keeps a lead surrogate at the end of the stream,
+     *   which the framework handles as truncated input
+     * - if the fromUnicode() implementation returns to the framework
+     *   (ucnv.c ucnv_fromUnicode()), then the framework calls the callback
+     *   for this code point
+     */
+    UChar32 fromUChar32;
 
     int8_t subCharLen;                  /* length of the codepage specific character sequence */
     int8_t invalidCharLength;

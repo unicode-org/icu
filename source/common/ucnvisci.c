@@ -116,7 +116,7 @@ typedef struct{
     MaskEnum currentMaskFromUnicode; /* mask for current state in toUnicode */
     MaskEnum currentMaskToUnicode;   /* mask for current state in toUnicode */
     MaskEnum defMaskToUnicode;       /* mask for default state in toUnicode */
-    UBool isFirstBuffer;
+    UBool isFirstBuffer;             /* boolean for fromUnicode to see if we need to announce the first script */
     char name[30];
 }UConverterDataISCII; 
 
@@ -197,13 +197,12 @@ _ISCIIReset(UConverter *cnv, UConverterResetChoice choice){
         data->contextCharToUnicode=NO_CHAR_MARKER;
     }
     if(choice!=UCNV_RESET_TO_UNICODE) {
-        cnv->fromUSurrogateLead=0x0000; 
+        cnv->fromUChar32=0x0000; 
         data->contextCharFromUnicode=0x00;
         data->currentMaskFromUnicode=data->defDeltaToUnicode;
         data->currentDeltaFromUnicode=data->defDeltaToUnicode;
+        data->isFirstBuffer=TRUE;
     }
-    data->isFirstBuffer=TRUE;
-
 }
 
 /** 
@@ -811,7 +810,6 @@ UConverter_fromUnicode_ISCII_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
     int32_t* offsets = args->offsets;
     uint32_t targetByteUnit = 0x0000;
     UChar32 sourceChar = 0x0000;
-    UConverterCallbackReason reason;
     UBool useFallback;
     UConverterDataISCII *converterData;
     uint16_t newDelta=0;
@@ -828,7 +826,7 @@ UConverter_fromUnicode_ISCII_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
     newDelta=converterData->currentDeltaFromUnicode;
     range = (uint16_t)(newDelta/DELTA);
     
-    if(args->converter->fromUSurrogateLead!=0 && target <targetLimit) {
+    if((sourceChar = args->converter->fromUChar32)!=0) {
         goto getTrail;
     }
 
@@ -946,16 +944,10 @@ UConverter_fromUnicode_ISCII_OFFSETS_LOGIC (UConverterFromUnicodeArgs * args,
              }
         }
         else{
-            /* oops.. the code point is unassingned
-             * set the error and reason
-             */
-            reason =UCNV_UNASSIGNED;
-            *err =U_INVALID_CHAR_FOUND;
-
+            /* oops.. the code point is unassigned */
             /*check if the char is a First surrogate*/
             if(UTF_IS_SURROGATE(sourceChar)) {
                 if(UTF_IS_SURROGATE_FIRST(sourceChar)) {
-                    args->converter->fromUSurrogateLead=(UChar)sourceChar;
 getTrail:
                     /*look ahead to find the trail surrogate*/
                     if(source <  sourceLimit) {
@@ -963,94 +955,32 @@ getTrail:
                         UChar trail= (*source);
                         if(UTF_IS_SECOND_SURROGATE(trail)) {
                             source++;
-                            sourceChar=UTF16_GET_PAIR_VALUE(args->converter->fromUSurrogateLead, trail);
-                            args->converter->fromUSurrogateLead=0x00;
-                            reason =UCNV_UNASSIGNED;
+                            sourceChar=UTF16_GET_PAIR_VALUE(sourceChar, trail);
                             *err =U_INVALID_CHAR_FOUND;
                             /* convert this surrogate code point */
                             /* exit this condition tree */
                         } else {
                             /* this is an unmatched lead code unit (1st surrogate) */
                             /* callback(illegal) */
-                            sourceChar =  args->converter->fromUSurrogateLead;
-                            reason=UCNV_ILLEGAL;
                             *err=U_ILLEGAL_CHAR_FOUND;
                         }
                     } else {
                         /* no more input */
                         *err = U_ZERO_ERROR;
-                        break;
                     }
                 } else {
                     /* this is an unmatched trail code unit (2nd surrogate) */
                     /* callback(illegal) */
-                    reason=UCNV_ILLEGAL;
                     *err=U_ILLEGAL_CHAR_FOUND;
                 }
+            } else {
+                /* callback(unassigned) for a BMP code point */
+                *err = U_INVALID_CHAR_FOUND;
             }
-            {
-                /*variables for callback */
-                const UChar* saveSource =NULL;
-                char* saveTarget =NULL;
-                int32_t* saveOffsets =NULL;
-                int currentOffset =0;
-                int32_t saveIndex =0;
 
-                args->converter->invalidUCharLength = 0;
-
-                if(sourceChar>0xffff){
-                    /* we have got a surrogate pair... dissable and populate the invalidUCharBuffer */
-                    args->converter->invalidUCharBuffer[args->converter->invalidUCharLength++] 
-                        =(uint16_t)(((sourceChar)>>10)+0xd7c0);
-                    args->converter->invalidUCharBuffer[args->converter->invalidUCharLength++] 
-                        =(uint16_t)(((sourceChar)&0x3ff)|0xdc00);
-                }
-                else{
-                    args->converter->invalidUCharBuffer[args->converter->invalidUCharLength++] 
-                        =(UChar)sourceChar;
-                }
-                
-                if(offsets){
-                    currentOffset = *(offsets-1)+1;
-                }
-                saveSource = args->source;
-                saveTarget = args->target;
-                saveOffsets = args->offsets;
-                args->target = (char*)target;
-                args->source = source;
-                args->offsets = offsets;
-
-                /*copies current values for the ErrorFunctor to update */
-                /*Calls the ErrorFunctor */
-                args->converter->fromUCharErrorBehaviour ( args->converter->fromUContext, 
-                              args, 
-                              args->converter->invalidUCharBuffer, 
-                              args->converter->invalidUCharLength, 
-                             (UChar32) (sourceChar), 
-                              reason, 
-                              err);
-
-                saveIndex = (int32_t)(args->target - (char*)target);
-                if(args->offsets){
-                    args->offsets = saveOffsets;
-                    while(saveIndex-->0){
-                         *offsets = currentOffset;
-                          offsets++;
-                    }
-                }
-                target = (unsigned char*)args->target;
-                args->source=saveSource;
-                args->target=saveTarget;
-                args->offsets=saveOffsets;
-                args->converter->fromUSurrogateLead=0x00;
-
-                if (U_FAILURE (*err)){
-                    break;
-                }
-            }
+            args->converter->fromUChar32=sourceChar;
+            break;
         }
-
-
     }/* end while(mySourceIndex<mySourceLength) */
 
     /*save the state and return */
