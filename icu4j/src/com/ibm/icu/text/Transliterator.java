@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/Transliterator.java,v $
- * $Date: 2001/09/20 21:20:39 $
- * $Revision: 1.39 $
+ * $Date: 2001/09/21 21:24:04 $
+ * $Revision: 1.40 $
  *
  *****************************************************************************************
  */
@@ -241,7 +241,7 @@ import com.ibm.util.CaseInsensitiveString;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.39 $ $Date: 2001/09/20 21:20:39 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.40 $ $Date: 2001/09/21 21:24:04 $
  */
 public abstract class Transliterator {
     /**
@@ -832,12 +832,52 @@ public abstract class Transliterator {
      * NullTransliterator, if it contains ID blocks which parse as
      * empty for the given direction.
      */
-    public static final Transliterator createFromRules(String ID, String rules, int direction) {
+    public static final Transliterator createFromRules(String ID, String rules, int dir) {
         // TODO Flesh this out
-        return new RuleBasedTransliterator(ID, rules, direction, null);
+        //// return new RuleBasedTransliterator(ID, rules, direction, null);
+
+        StringBuffer idBlock = new StringBuffer();
+        int[] idSplitPoint = new int[] { -1 };
+        RuleBasedTransliterator.Data data = null;
+
+        data = RuleBasedTransliterator.parse(rules, dir,
+                                             idBlock, idSplitPoint);
+
+        // NOTE: The logic here matches that in TransliteratorRegistry.
+        if (idBlock.length() == 0) {
+            if (data == null) {
+                // No idBlock, no data -- this is just an
+                // alias for Null
+                return new NullTransliterator();
+            } else {
+                // No idBlock, data != 0 -- this is an
+                // ordinary RBT_DATA.
+                return new RuleBasedTransliterator(ID, data, null);
+            }
+        } else {
+            if (data == null) {
+                // idBlock, no data -- this is an alias
+                Transliterator t = getInstance(idBlock.toString(), dir);
+                if (t != null) {
+                    t.setID(ID);
+                }
+                return t;
+            } else {
+                // idBlock and data -- this is a compound
+                // RBT
+                Transliterator t = new RuleBasedTransliterator("_", data, null);
+                t = new CompoundTransliterator(ID, idBlock.toString(), idSplitPoint[0],
+                                               t);
+                return t;
+            }
+        }        
     }
 
     public String toRules(boolean escapeUnprintable) {
+        return baseToRules(escapeUnprintable);
+    }
+
+    protected final String baseToRules(boolean escapeUnprintable) {
         // The base class implementation of toRules munges the ID into
         // the correct format.  That is: foo => ::foo
         // KEEP in sync with rbt_pars
@@ -860,13 +900,13 @@ public abstract class Transliterator {
      * 'result' at which the adoptedSplitTrans is stored, or -1 if
      * adoptedSplitTrans == 0
      */
-    private static void parseCompoundID(String id,
-                                        StringBuffer regenID,
-                                        int dir,
-                                        int idSplitPoint,
-                                        Transliterator adoptedSplitTrans,
-                                        Vector result,
-                                        int[] splitTransIndex) {
+    static void parseCompoundID(String id,
+                                StringBuffer regenID,
+                                int dir,
+                                int idSplitPoint,
+                                Transliterator splitTrans,
+                                Vector result,
+                                int[] splitTransIndex) {
         regenID.setLength(0);
         splitTransIndex[0] = -1;
         int pos = 0;
@@ -874,10 +914,10 @@ public abstract class Transliterator {
         while (pos < id.length()) {
             // We compare (pos >= split), not (pos == split), so we can
             // skip over whitespace (see below).
-            if (pos >= idSplitPoint && adoptedSplitTrans != null) {
+            if (pos >= idSplitPoint && splitTrans != null) {
                 splitTransIndex[0] = result.size();
-                result.addElement(adoptedSplitTrans);
-                adoptedSplitTrans = null;
+                result.addElement(splitTrans);
+                splitTrans = null;
             }
             int[] p = new int[] { pos };
             boolean[] sawDelimiter = new boolean[1];
@@ -903,10 +943,10 @@ public abstract class Transliterator {
         }
 
         // Handle case of idSplitPoint == id.length()
-        if (pos >= idSplitPoint && adoptedSplitTrans != null) {
+        if (pos >= idSplitPoint && splitTrans != null) {
             splitTransIndex[0] = result.size();
-            result.addElement(adoptedSplitTrans);
-            adoptedSplitTrans = null;
+            result.addElement(splitTrans);
+            splitTrans = null;
         }
     }
 
@@ -941,12 +981,12 @@ public abstract class Transliterator {
      * determine if there was an error.  Instead, check to see if pos
      * moved.
      */
-     private static Transliterator parseID(String ID,
-                                           StringBuffer regenID,
-                                           int[] pos,
-                                           boolean[] sawDelimiter,
-                                           int dir,
-                                           boolean create) {
+    static Transliterator parseID(String ID,
+                                  StringBuffer regenID,
+                                  int[] pos,
+                                  boolean[] sawDelimiter,
+                                  int dir,
+                                  boolean create) {
         int limit, preDelimLimit,
             revStart, revLimit=0,
             idStart, idLimit,
