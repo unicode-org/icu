@@ -144,6 +144,7 @@ u_sprintf_parse_spec (const UChar     *fmt,
 
       /* use space if no sign present */
     case FLAG_SPACE:
+      info->fShowSign = TRUE;
       info->fSpace = TRUE;
       break;
 
