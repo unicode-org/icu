@@ -11,7 +11,6 @@
 #include "numfmtst.h"
 #include "unicode/dcfmtsym.h"
 #include "unicode/decimfmt.h"
-#include "unicode/locid.h"
 #include <float.h>
  
 // *****************************************************************************
@@ -762,7 +761,84 @@ void NumberFormatTest::TestPad(void) {
     expect(new DecimalFormat("##0.0####*_ g-m/s^2", US, status),
            1.0/3, "0.33333__ g-m/s^2", status);
 
-     
+    char *formatStr = "*x#,###,###,##0.0#;*x(###,###,##0.0#)";
+    expect(new DecimalFormat(formatStr, US, status),
+           int32_t(-10),  "xxxxxxxxxx(10.0)", status);
+    expect(new DecimalFormat(formatStr, US, status),
+           int32_t(-1000),"xxxxxxx(1,000.0)", status);
+    expect(new DecimalFormat(formatStr, US, status),
+           int32_t(-1000000),"xxx(1,000,000.0)", status);
+    expect(new DecimalFormat(formatStr, US, status),
+           -100.37,       "xxxxxxxx(100.37)", status);
+    expect(new DecimalFormat(formatStr, US, status),
+           -10456.37,     "xxxxx(10,456.37)", status);
+    expect(new DecimalFormat(formatStr, US, status),
+           -1120456.37,   "xx(1,120,456.37)", status);
+    expect(new DecimalFormat(formatStr, US, status),
+           -112045600.37, "(112,045,600.37)", status);
+    expect(new DecimalFormat(formatStr, US, status),
+           -1252045600.37,"(1,252,045,600.37)", status);
+
+
+    expect(new DecimalFormat(formatStr, US, status),
+           int32_t(10),  "xxxxxxxxxxxx10.0", status);
+    expect(new DecimalFormat(formatStr, US, status),
+           int32_t(1000),"xxxxxxxxx1,000.0", status);
+    expect(new DecimalFormat(formatStr, US, status),
+           int32_t(1000000),"xxxxx1,000,000.0", status);
+    expect(new DecimalFormat(formatStr, US, status),
+           100.37,       "xxxxxxxxxx100.37", status);
+    expect(new DecimalFormat(formatStr, US, status),
+           10456.37,     "xxxxxxx10,456.37", status);
+    expect(new DecimalFormat(formatStr, US, status),
+           1120456.37,   "xxxx1,120,456.37", status);
+    expect(new DecimalFormat(formatStr, US, status),
+           112045600.37, "xx112,045,600.37", status);
+    expect(new DecimalFormat(formatStr, US, status),
+           10252045600.37,"10,252,045,600.37", status);
+
+// Use jitterbug 760 for checking in these fixes.
+if (strcmp(U_ICU_VERSION, "1.7") == 0) {
+    logln("Not testing TestPad() at this time, fix in a later release");
+}
+else {
+    char *formatStr2 = "#,###,###,##0.0#*x;(###,###,##0.0#*x)";
+    expect(new DecimalFormat(formatStr2, US, status),
+           int32_t(-10),  "(10.0xxxxxxxxxx)", status);
+    expect(new DecimalFormat(formatStr2, US, status),
+           int32_t(-1000),"(1,000.0xxxxxxx)", status);
+    expect(new DecimalFormat(formatStr2, US, status),
+           int32_t(-1000000),"(1,000,000.0xxx)", status);
+    expect(new DecimalFormat(formatStr2, US, status),
+           -100.37,       "(100.37xxxxxxxx)", status);
+    expect(new DecimalFormat(formatStr2, US, status),
+           -10456.37,     "(10,456.37xxxxx)", status);
+    expect(new DecimalFormat(formatStr2, US, status),
+           -1120456.37,   "(1,120,456.37xx)", status);
+    expect(new DecimalFormat(formatStr2, US, status),
+           -112045600.37, "(112,045,600.37)", status);
+    expect(new DecimalFormat(formatStr2, US, status),
+           -1252045600.37,"(1,252,045,600.37)", status);
+
+
+    expect(new DecimalFormat(formatStr2, US, status),
+           int32_t(10),  "10.0xxxxxxxxxxxx", status);
+    expect(new DecimalFormat(formatStr2, US, status),
+           int32_t(1000),"1,000.0xxxxxxxxx", status);
+    expect(new DecimalFormat(formatStr2, US, status),
+           int32_t(1000000),"1,000,000.0xxxxx", status);
+    expect(new DecimalFormat(formatStr2, US, status),
+           100.37,       "100.37xxxxxxxxxx", status);
+    expect(new DecimalFormat(formatStr2, US, status),
+           10456.37,     "10,456.37xxxxxxx", status);
+    expect(new DecimalFormat(formatStr2, US, status),
+           1120456.37,   "1,120,456.37xxxx", status);
+    expect(new DecimalFormat(formatStr2, US, status),
+           112045600.37, "112,045,600.37xx", status);
+    expect(new DecimalFormat(formatStr2, US, status),
+           10252045600.37,"10,252,045,600.37", status);
+}
+    
    //testing the setPadCharacter(UnicodeString) and getPadCharacterString()
     DecimalFormat fmt("#", US, status);
     CHECK(status, "DecimalFormat constructor");
