@@ -89,7 +89,7 @@ check check-local check-recursive build-testdlls build-basetestdata build-local
 ## List of standard targets
 all: all-recursive
 install: install-recursive
-clean: clean-recursive
+clean: clean-local clean-recursive
 distclean : distclean-recursive
 dist: dist-recursive 
 check: check-recursive
