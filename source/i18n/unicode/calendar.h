@@ -790,7 +790,7 @@ public:
      * @return   The first day of the week.
      * @stable ICU 2.0
      */
-    UCalendarDaysOfWeek getFirstDayOfWeek(void) const;
+    EDaysOfWeek getFirstDayOfWeek(void) const;
 
     /**
      * Sets what the minimal days required in the first week of the year are; For

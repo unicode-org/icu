@@ -507,8 +507,11 @@ Calendar::complete(UErrorCode& status)
 
 // -------------------------------------
 int32_t Calendar::fieldDifference(UDate when, EDateFields field, UErrorCode& status) {
+
 	return fieldDifference(when, (UCalendarDateFields) field, status);
+
 }
+
 
 int32_t Calendar::fieldDifference(UDate targetMs, UCalendarDateFields field, UErrorCode& ec) {
     if (U_FAILURE(ec)) return 0;
@@ -670,10 +673,10 @@ Calendar::setFirstDayOfWeek(UCalendarDaysOfWeek value)
 
 // -------------------------------------
 
-UCalendarDaysOfWeek
+Calendar::EDaysOfWeek
 Calendar::getFirstDayOfWeek() const
 {
-    return fFirstDayOfWeek;
+    return (Calendar::EDaysOfWeek)fFirstDayOfWeek;
 }
 
 // -------------------------------------

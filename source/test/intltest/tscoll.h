@@ -28,19 +28,19 @@ class IntlTestCollator: public IntlTest {
     void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = NULL );
 protected:
     // These two should probably go down in IntlTest
-    void doTest(Collator* col, const UChar *source, const UChar *target, UCollationResult result);
+    void doTest(Collator* col, const UChar *source, const UChar *target, Collator::EComparisonResult result);
 
-    void doTest(Collator* col, const UnicodeString &source, const UnicodeString &target, UCollationResult result);
-    void doTestVariant(Collator* col, const UnicodeString &source, const UnicodeString &target, UCollationResult result);
+    void doTest(Collator* col, const UnicodeString &source, const UnicodeString &target, Collator::EComparisonResult result);
+    void doTestVariant(Collator* col, const UnicodeString &source, const UnicodeString &target, Collator::EComparisonResult result);
     virtual void reportCResult( const UnicodeString &source, const UnicodeString &target,
                                 CollationKey &sourceKey, CollationKey &targetKey,
-                                UCollationResult compareResult,
-                                UCollationResult keyResult,
-                                UCollationResult incResult,
-                                UCollationResult expectedResult );
+                                Collator::EComparisonResult compareResult,
+                                Collator::EComparisonResult keyResult,
+                                Collator::EComparisonResult incResult,
+                                Collator::EComparisonResult expectedResult );
 
     static UnicodeString &prettify(const CollationKey &source, UnicodeString &target);
-    static UnicodeString &appendCompareResult(UCollationResult result, UnicodeString &target);
+    static UnicodeString &appendCompareResult(Collator::EComparisonResult result, UnicodeString &target);
     void backAndForth(CollationElementIterator &iter);
     /**
      * Return an integer array containing all of the collation orders

@@ -67,17 +67,17 @@ const UChar CollationSpanishTest::testTargetCases[][CollationSpanishTest::MAX_TO
     {0x68, 0x65, 0x6c, 0x6c, 0x4f, 0},
 };
 
-const UCollationResult CollationSpanishTest::results[] = {
-    UCOL_LESS,
-    UCOL_LESS,
-    UCOL_GREATER,
-    UCOL_LESS,
-    UCOL_LESS,
+const Collator::EComparisonResult CollationSpanishTest::results[] = {
+    Collator::LESS,
+    Collator::LESS,
+    Collator::GREATER,
+    Collator::LESS,
+    Collator::LESS,
     // test primary > 5
-    UCOL_LESS,
-    UCOL_EQUAL,
-    UCOL_LESS,
-    UCOL_EQUAL
+    Collator::LESS,
+    Collator::EQUAL,
+    Collator::LESS,
+    Collator::EQUAL
 };
 
 void CollationSpanishTest::TestTertiary(/* char* par */)

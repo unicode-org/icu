@@ -47,7 +47,7 @@ public:
     void TestJB581();
 
 private:
-    static const UCollationResult results[];
+    static const  Collator::EComparisonResult results[];
 
     RuleBasedCollator *myCollation;
 };
