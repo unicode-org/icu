@@ -5,7 +5,7 @@
 // *
 // ***************************************************************************
 //
-// $Revision: 1.7 $ 
+// $Revision: 1.8 $ 
 // $Tag: 
 // Singapore English locale: Data By Syn Wee Quek
 
@@ -36,6 +36,10 @@ en_SG {
             "SST",
             "Singapore"
         }
+    }
+    Currencies{
+        SGD { "$",  "Singapore Dollar"     } // 8/9/1965-
+        USD { "US$",     "USD" } // US Dollar
     }
 
 }

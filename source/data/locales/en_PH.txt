@@ -19,6 +19,9 @@ en_PH {
         "M/d/yy",
         "{1} {0}",
     }
+    Currencies{
+        PHP { "PHP",  "Peso"     } 
+    }
 //    NumberElements {
 //        ".",
 //        ",",

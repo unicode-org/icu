@@ -21,4 +21,9 @@ en_US {
         216  // width 
     }
     MeasurementSystem:int{ 1 } // US system
+    
+    Currencies{
+        USD { "$",   "US Dollar"            } // 04/04/1792-
+    }
+
 }
