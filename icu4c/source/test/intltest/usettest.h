@@ -60,6 +60,9 @@ private:
 
     UBool toPatternAux(UChar32 start, UChar32 end);
     
+    UBool checkPat(const UnicodeString& source,
+                   const UnicodeSet& testSet);
+
     UBool checkPat(const UnicodeString& source, const UnicodeSet& testSet, const UnicodeString& pat);
 
     void _testComplement(int32_t a, UnicodeSet&, UnicodeSet&);
