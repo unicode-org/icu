@@ -326,7 +326,7 @@ inline void  Regex8BitSet::add(UChar32 c) {
 
 inline void Regex8BitSet::init(const UnicodeSet *s) {
     if (s != NULL) {
-        for (int i=0; i<255; i++) {
+        for (int i=0; i<=255; i++) {
             if (s->contains(i)) {
                 this->add(i);
             }
