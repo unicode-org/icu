@@ -19,14 +19,31 @@
 #include "cmemory.h"
 #include <stdio.h>
 #include "usrchdat.c"
+#include "unicode/ubrk.h"
 
 static UBool      TOCLOSE_ = TRUE;
 static UCollator *EN_US_; 
 static UCollator *FR_FR_;
 static UCollator *DE_;
 static UCollator *ES_;
+
+/**
+ * CHECK_BREAK(char *brk)
+ *     Test if a break iterator is passed in AND break iteration is disabled. 
+ *     Skip the test if so.
+ * CHECK_BREAK_BOOL(char *brk)
+ *     Same as above, but returns 'TRUE' as a passing result
+ */
+
+#if !UCONFIG_NO_BREAK_ITERATION
 static UBreakIterator *EN_WORDBREAKER_;
 static UBreakIterator *EN_CHARACTERBREAKER_;
+#define CHECK_BREAK(x)
+#define CHECK_BREAK_BOOL(x)
+#else
+#define CHECK_BREAK(x)  if(x) { log_info("Skipping test on %s:%d because UCONFIG_NO_BREAK_ITERATION is on\n", __FILE__, __LINE__); return; }
+#define CHECK_BREAK_BOOL(x)  if(x) { log_info("Skipping test on %s:%d because UCONFIG_NO_BREAK_ITERATION is on\n", __FILE__, __LINE__); return TRUE; }
+#endif
 
 /**
 * Opening all static collators and break iterators
@@ -56,9 +73,11 @@ static void open(void)
         ucol_close(ES_);
         ES_ = ucol_openRules(rules, u_strlen(rules), UCOL_ON, UCOL_TERTIARY,
                              NULL, &status); 
+#if !UCONFIG_NO_BREAK_ITERATION
         EN_WORDBREAKER_     = ubrk_open(UBRK_WORD, "en_US", NULL, 0, &status);
         EN_CHARACTERBREAKER_ = ubrk_open(UBRK_CHARACTER, "en_US", NULL, 0, 
                                         &status);
+#endif
         TOCLOSE_ = TRUE;
     }
 }
@@ -82,8 +101,10 @@ static void close(void)
         ucol_close(FR_FR_);
         ucol_close(DE_);
         ucol_close(ES_);
+#if !UCONFIG_NO_BREAK_ITERATION
         ubrk_close(EN_WORDBREAKER_);
         ubrk_close(EN_CHARACTERBREAKER_);
+#endif
     }
     TOCLOSE_ = FALSE;
 }
@@ -165,12 +186,16 @@ static UBreakIterator *getBreakIterator(const char *breaker)
     if (breaker == NULL) {
         return NULL;
     }
+#if !UCONFIG_NO_BREAK_ITERATION
     if (strcmp(breaker, "wordbreaker") == 0) {
         return EN_WORDBREAKER_;
     }
     else {
         return EN_CHARACTERBREAKER_;
     }
+#else
+    return NULL;
+#endif
 }
 
 static void TestOpenClose(void) 
@@ -179,8 +204,10 @@ static void TestOpenClose(void)
           UStringSearch  *result;
     const UChar           pattern[] = {0x61, 0x62, 0x63, 0x64, 0x65, 0x66};
     const UChar           text[] = {0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67};
+#if !UCONFIG_NO_BREAK_ITERATION
           UBreakIterator *breakiter = ubrk_open(UBRK_WORD, "en_US", 
                                                 text, 6, &status);
+#endif
     /* testing null arguments */
     result = usearch_open(NULL, 0, NULL, 0, NULL, NULL, &status);
     if (U_SUCCESS(status) || result != NULL) {
@@ -235,7 +262,10 @@ static void TestOpenClose(void)
         usearch_close(result);
     }
 
+
     status = U_ZERO_ERROR;
+#if !UCONFIG_NO_BREAK_ITERATION
+
     result = usearch_open(pattern, 3, text, 6, "en_US", breakiter, &status);
     if (U_FAILURE(status) || result == NULL) {
         log_err("Error: Break iterator is valid for opening search\n");
@@ -253,6 +283,7 @@ static void TestOpenClose(void)
         usearch_close(result);
     }
     ubrk_close(breakiter);
+#endif
     close();
 }
 
@@ -394,6 +425,8 @@ static UBool assertEqual(const SearchData search)
     UBreakIterator *breaker  = getBreakIterator(search.breaker);
     UStringSearch  *strsrch; 
     
+    CHECK_BREAK_BOOL(search.breaker);
+
     u_unescape(search.text, text, 128);
     u_unescape(search.pattern, pattern, 32);
     ucol_setStrength(collator, search.strength);
@@ -423,6 +456,7 @@ static UBool assertCanonicalEqual(const SearchData search)
     UBreakIterator *breaker  = getBreakIterator(search.breaker);
     UStringSearch  *strsrch; 
     
+    CHECK_BREAK_BOOL(search.breaker);
     u_unescape(search.text, text, 128);
     u_unescape(search.pattern, pattern, 32);
     ucol_setStrength(collator, search.strength);
@@ -456,6 +490,7 @@ static UBool assertEqualWithAttribute(const SearchData            search,
     UBreakIterator *breaker  = getBreakIterator(search.breaker);
     UStringSearch  *strsrch; 
     
+    CHECK_BREAK_BOOL(search.breaker);
     u_unescape(search.text, text, 128);
     u_unescape(search.pattern, pattern, 32);
     ucol_setStrength(collator, search.strength);
@@ -547,6 +582,9 @@ static void TestBreakIterator(void) {
     UChar           pattern[32];
     int             count = 0;
 
+    CHECK_BREAK("x");
+
+#if !UCONFIG_NO_BREAK_ITERATION
     open();
     if (usearch_getBreakIterator(NULL) != NULL) {
         log_err("Expected NULL breakiterator from NULL string search\n");
@@ -635,6 +673,7 @@ static void TestBreakIterator(void) {
     
 ENDTESTBREAKITERATOR:
     close();
+#endif
 }
 
 static void TestVariable(void) 
@@ -1506,6 +1545,10 @@ static void TestBreakIteratorCanonical(void) {
     UErrorCode      status      = U_ZERO_ERROR;
     int             count = 0;
 
+    CHECK_BREAK("x");
+
+#if !UCONFIG_NO_BREAK_ITERATION
+
     open();
     while (count < 4) {
         /* 0-3 test are fixed */
@@ -1566,6 +1609,7 @@ static void TestBreakIteratorCanonical(void) {
     
 ENDTESTBREAKITERATOR:
     close();
+#endif
 }
 
 static void TestVariableCanonical(void) 

@@ -279,7 +279,11 @@ static void TestDecodedBundle(){
     resB = ures_open(testdatapath, "iscii", &error);
     srcFromRes=ures_getStringByKey(resB,"str",&len,&error);
     if(U_FAILURE(error)){
-	log_err("Could not find iscii.bin from test data bundle. Error: %s\n", u_errorName(error));
+#if UCONFIG_NO_LEGACY_CONVERSION
+        log_info("Couldn't load iscii.bin from test data bundle, (because UCONFIG_NO_LEGACY_CONVERSION  is turned on)\n");
+#else
+        log_err("Could not find iscii.bin from test data bundle. Error: %s\n", u_errorName(error));
+#endif
 	uprv_free(uSrc);
 	ures_close(resB);
 	return;
@@ -628,7 +632,8 @@ static void TestBinaryCollationData(){
     uint8_t *binResult = NULL;
     int32_t len=0;
     const char* action="testing the binary collaton data";
- 
+
+#if !UCONFIG_NO_COLLATION 
     log_verbose("Testing binary collation data resource......\n");
 
     testdatapath=loadTestData(&status);
@@ -670,7 +675,7 @@ static void TestBinaryCollationData(){
     ures_close(binColl);
     ures_close(coll);
     ures_close(teRes);
-
+#endif
 }
 
 static void TestAPI() {
