@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2003, International Business Machines Corporation and
+ * Copyright (c) 1997-2004, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -13,7 +13,7 @@
 *********************************************************************************
 */
 #include <stdio.h>
-#include "cmemory.h"
+#include <stdlib.h>
 #include "unicode/uloc.h"
 #include "unicode/ucnv.h"
 #include "unicode/utypes.h"
