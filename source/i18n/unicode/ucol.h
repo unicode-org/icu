@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (c) 1996-2003, International Business Machines Corporation and others.
+* Copyright (c) 1996-2004, International Business Machines Corporation and others.
 * All Rights Reserved.
 *******************************************************************************
 */
@@ -477,6 +477,31 @@ ucol_getAvailable(int32_t index);
  */
 U_STABLE int32_t U_EXPORT2 
 ucol_countAvailable(void);
+
+/**
+ * Create a string enumerator, owned by the caller, of all locales for
+ * which a collator may be opened.
+ * @param status input-output error code
+ * @return a string enumeration over locale strings
+ * @draft ICU 3.0
+ */
+U_DRAFT UEnumeration* U_EXPORT2
+ucol_openAvailableLocales(UErrorCode *status);
+
+/**
+ * Given a keyword, return a string enumeration of all possible values
+ * for that keyword.
+ * @param keyword a particular keyword to consider. At this point, the
+ * only recognized keyword for this service is "collation". If any
+ * other keyword is passed in, *status is set to
+ * U_ILLEGAL_ARGUMENT_ERROR.
+ * @param status input-output error code
+ * @return a string enumeration over collation keyword values, or NULL
+ * upon error
+ * @draft ICU 3.0
+ */
+U_DRAFT UEnumeration* U_EXPORT2
+ucol_getKeywordValues(const char *keyword, UErrorCode *status);
 
 /**
  * Get the collation rules from a UCollator.
