@@ -840,7 +840,7 @@ TestCharNames() {
             log_err("u_charName(0x%lx) error %s\n", names[i].code, u_errorName(errorCode));
             return;
         }
-        if(length<=0 || 0!=uprv_strcmp(name, names[i].name)) {
+        if(length<=0 || 0!=uprv_strcmp(name, names[i].name) || length!=(uint16_t)uprv_strlen(name)) {
             log_err("u_charName(0x%lx) gets %s instead of %s\n", names[i].code, name, names[i].name);
         }
 
@@ -850,7 +850,7 @@ TestCharNames() {
             log_err("u_charName(0x%lx - 1.0) error %s\n", names[i].code, u_errorName(errorCode));
             return;
         }
-        if(length<0 || length>0 && 0!=uprv_strcmp(name, names[i].oldName)) {
+        if(length<0 || length>0 && 0!=uprv_strcmp(name, names[i].oldName) || length!=(uint16_t)uprv_strlen(name)) {
             log_err("u_charName(0x%lx - 1.0) gets %s instead of nothing or %s\n", names[i].code, name, names[i].oldName);
         }
     }
@@ -859,7 +859,7 @@ TestCharNames() {
     length=0;
     errorCode=U_ZERO_ERROR;
     u_enumCharNames(0, 0x110000, enumCharNamesFn, &length, U_UNICODE_CHAR_NAME, &errorCode);
-    if(U_FAILURE(errorCode) || length<10000) {
+    if(U_FAILURE(errorCode) || length<49194) {
         log_err("u_enumCharNames(0..0x1100000) error %s names count=%ld\n", u_errorName(errorCode), length);
     }
 }
