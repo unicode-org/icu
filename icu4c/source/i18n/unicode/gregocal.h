@@ -18,7 +18,7 @@
 *                           {JDK bug 4210209 4209272}
 ********************************************************************************
 */
-         
+
 #ifndef GREGOCAL_H
 #define GREGOCAL_H
 
@@ -703,10 +703,10 @@ inline uint8_t GregorianCalendar::julianDayToDayOfWeek(double julian)
   // accordingly.  We add 1 because Julian day 0 is Monday.
   int8_t dayOfWeek = (int8_t) uprv_fmod(julian + 1, 7);
   
-  uint8_t result = dayOfWeek + ((dayOfWeek < 0) ? (7 + SUNDAY) : SUNDAY);
+  uint8_t result = (uint8_t)(dayOfWeek + ((dayOfWeek < 0) ? (7 + SUNDAY) : SUNDAY));
   return result;
 }
 
 #endif // _GREGOCAL
 //eof
-        
+

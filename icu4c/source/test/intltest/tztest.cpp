@@ -276,8 +276,8 @@ TimeZoneTest::testUsingBinarySearch(SimpleTimeZone* tz, UDate min, UDate max, UD
     UDate maxdelta = max - expectedBoundary;
     if (mindelta >= 0 &&
         mindelta <= INTERVAL &&
-        mindelta >= 0 &&
-        mindelta <= INTERVAL)
+        maxdelta >= 0 &&
+        maxdelta <= INTERVAL)
         logln(UnicodeString("PASS: Expected bdry:  ") + expectedBoundary + " = " + dateToString(expectedBoundary));
     else
         errln(UnicodeString("FAIL: Expected bdry:  ") + expectedBoundary + " = " + dateToString(expectedBoundary));
