@@ -472,14 +472,22 @@ UnicodeString* CanonicalIterator::getEquivalents(const UnicodeString &segment, i
     }
     // convert into a String[] to clean up storage
     //String[] finalResult = new String[result.size()];
-    UnicodeString *finalResult = new UnicodeString[result->count()];
+    UnicodeString *finalResult = NULL;
+    int32_t resultCount;
+    if(resultCount = result->count()) {
+      finalResult = new UnicodeString[resultCount];
+    } else {
+      status = U_ILLEGAL_ARGUMENT_ERROR;
+    }
     /* test for NULL */
     if (finalResult == 0) {
+      if(U_SUCCESS(status)) {
         status = U_MEMORY_ALLOCATION_ERROR;
-        delete result;
-        delete permutations;
-        delete basic;
-        return 0;
+      }
+      delete result;
+      delete permutations;
+      delete basic;
+      return 0;
     }
     //result.toArray(finalResult);
     result_len = 0;
