@@ -127,7 +127,7 @@ static void MessageFormatTest( void )
 
          for (i = 0; i < cnt_testCases; i++) {
             UParseError parseError;
-            UErrorCode status=U_ZERO_ERROR;
+            status=U_ZERO_ERROR;
             patternlength=u_strlen(testCasePatterns[i]);
             resultlength=0;
             resultLengthOut=u_formatMessageWithError( "en_US",testCasePatterns[i], patternlength, result, resultlength, 
@@ -155,24 +155,24 @@ static void MessageFormatTest( void )
         }
     }
     {
-        int i = 0;
         UErrorCode ec = U_ZERO_ERROR;
         int32_t patternLength = u_strlen(testCasePatterns[0]);
             
         UMessageFormat formatter = umsg_open(testCasePatterns[0],patternLength,"en_US",NULL,&ec);
+
         if(U_FAILURE(ec)){
             log_err("umsg_open() failed for testCasePattens[%d].\n",i);
             return;
         }
-        for(;i<cnt_testCases; i++){
+        for(i = 0;i<cnt_testCases; i++){
             UParseError parseError;
-            UChar* result=NULL;
             int32_t resultLength =0,count=0;
             int32_t one=0;
             int32_t two=0;
             double three=0;
     
 
+            result=NULL;
             patternLength = u_strlen(testCasePatterns[i]);
             
             umsg_applyPattern(formatter,testCasePatterns[i],patternLength,&parseError,&ec);
