@@ -130,12 +130,13 @@ public abstract class UResourceBundle extends ResourceBundle{
 
     /**
      * Sole constructor.  (For invocation by subclass constructors, typically
-     * implicit.)
+     * implicit.)  This is public for compatibility with Java, whose compiler
+     * will generate public default constructors for an abstract class.
      * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
-    protected UResourceBundle() {   }
-    
+    public UResourceBundle() {   
+    }
     
     /**
      * Creates a UResourceBundle for the locale specified, from which users can extract resources by using

@@ -631,7 +631,7 @@ import java.util.Set;
  * @author Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu, Laura Werner
  * @stable ICU 2.0
  */
-public abstract class Calendar implements Serializable, Cloneable {
+public abstract class Calendar implements Serializable, Cloneable, Comparable {
 
     // Data flow in Calendar
     // ---------------------
@@ -2876,6 +2876,39 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     public String getDisplayName(ULocale loc) {
         return this.getClass().getName();
+    }
+
+    /**
+     * Compares the times (in millis) represented by two
+     * <code>Calendar</code> objects.
+     *
+     * @param that the <code>Calendar</code> to compare to this.
+     * @return <code>0</code> if the time represented by 
+     * this <code>Calendar</code> is equal to the time represented 
+     * by that <code>Calendar</code>, a value less than 
+     * <code>0</code> if the time represented by this is before
+     * the time represented by that, and a value greater than
+     * <code>0</code> if the time represented by this
+     * is after the time represented by that.
+     * @throws NullPointerException if that 
+     * <code>Calendar</code> is null.
+     * @throws IllegalArgumentException if the time of that 
+     * <code>Calendar</code> can't be obtained because of invalid
+     * calendar values.
+     * @draft ICU 3.4
+     */
+    public int compareTo(Calendar that) {
+	long v = getTimeInMillis() - that.getTimeInMillis();
+	return v < 0 ? -1 : (v > 0 ? 1 : 0);
+    }
+
+    /**
+     * Implement comparable API as a convenience override of
+     * {@link #compareTo(Calendar)}.
+     * @draft ICU 3.4
+     */
+    public int compareTo(Object that) {
+	return compareTo((Calendar)that);
     }
 
     //-------------------------------------------------------------------------

@@ -30,184 +30,184 @@ public class UCharacterEnums {
          * Unassigned character type
          * @stable ICU 2.1
          */
-        public static final int UNASSIGNED              = 0; 
+        public static final byte UNASSIGNED              = 0; 
 
         /**
          * Character type Cn
          * Not Assigned (no characters in [UnicodeData.txt] have this property) 
          * @stable ICU 2.6
          */
-        public static final int GENERAL_OTHER_TYPES     = 0;
+        public static final byte GENERAL_OTHER_TYPES     = 0;
 
         /**
          * Character type Lu
          * @stable ICU 2.1
          */
-        public static final int UPPERCASE_LETTER        = 1;
+        public static final byte UPPERCASE_LETTER        = 1;
 
         /**
          * Character type Ll
          * @stable ICU 2.1
          */
-        public static final int LOWERCASE_LETTER        = 2;
+        public static final byte LOWERCASE_LETTER        = 2;
 
         /**
          * Character type Lt
          * @stable ICU 2.1
          */
 
-        public static final int TITLECASE_LETTER        = 3;
+        public static final byte TITLECASE_LETTER        = 3;
 
         /**
          * Character type Lm
          * @stable ICU 2.1
          */
-        public static final int MODIFIER_LETTER         = 4;
+        public static final byte MODIFIER_LETTER         = 4;
 
         /**
          * Character type Lo
          * @stable ICU 2.1
          */
-        public static final int OTHER_LETTER            = 5;
+        public static final byte OTHER_LETTER            = 5;
 
         /**
          * Character type Mn
          * @stable ICU 2.1
          */
-        public static final int NON_SPACING_MARK        = 6;
+        public static final byte NON_SPACING_MARK        = 6;
 
         /**
          * Character type Me
          * @stable ICU 2.1
          */
-        public static final int ENCLOSING_MARK          = 7;
+        public static final byte ENCLOSING_MARK          = 7;
 
         /**
          * Character type Mc
          * @stable ICU 2.1
          */
-        public static final int COMBINING_SPACING_MARK  = 8;
+        public static final byte COMBINING_SPACING_MARK  = 8;
 
         /**
          * Character type Nd
          * @stable ICU 2.1      
          */
-        public static final int DECIMAL_DIGIT_NUMBER    = 9;
+        public static final byte DECIMAL_DIGIT_NUMBER    = 9;
 
         /**
          * Character type Nl
          * @stable ICU 2.1
          */
-        public static final int LETTER_NUMBER           = 10;
+        public static final byte LETTER_NUMBER           = 10;
         
         /**
          * Character type No
          * @stable ICU 2.1
          */
-        public static final int OTHER_NUMBER            = 11;
+        public static final byte OTHER_NUMBER            = 11;
 
         /**
          * Character type Zs
          * @stable ICU 2.1
          */
-        public static final int SPACE_SEPARATOR         = 12;
+        public static final byte SPACE_SEPARATOR         = 12;
 
         /**
          * Character type Zl
          * @stable ICU 2.1
          */
-        public static final int LINE_SEPARATOR          = 13;
+        public static final byte LINE_SEPARATOR          = 13;
 
         /**
          * Character type Zp
          * @stable ICU 2.1
          */
-        public static final int PARAGRAPH_SEPARATOR     = 14;
+        public static final byte PARAGRAPH_SEPARATOR     = 14;
 
         /**
          * Character type Cc
          * @stable ICU 2.1
          */
-        public static final int CONTROL                 = 15;
+        public static final byte CONTROL                 = 15;
 
         /**
          * Character type Cf
          * @stable ICU 2.1
          */
-        public static final int FORMAT                  = 16;
+        public static final byte FORMAT                  = 16;
 
         /**
          * Character type Co
          * @stable ICU 2.1
          */
-        public static final int PRIVATE_USE             = 17;
+        public static final byte PRIVATE_USE             = 17;
 
         /**
          * Character type Cs
          * @stable ICU 2.1
          */
-        public static final int SURROGATE               = 18;
+        public static final byte SURROGATE               = 18;
 
         /**
          * Character type Pd
          * @stable ICU 2.1
          */
-        public static final int DASH_PUNCTUATION        = 19;
+        public static final byte DASH_PUNCTUATION        = 19;
 
         /**
          * Character type Ps
          * @stable ICU 2.1
          */
-        public static final int START_PUNCTUATION       = 20;
+        public static final byte START_PUNCTUATION       = 20;
         
         /**
          * Character type Pe
          * @stable ICU 2.1
          */
-        public static final int END_PUNCTUATION         = 21;
+        public static final byte END_PUNCTUATION         = 21;
 
         /**
          * Character type Pc
          * @stable ICU 2.1
          */
-        public static final int CONNECTOR_PUNCTUATION   = 22;
+        public static final byte CONNECTOR_PUNCTUATION   = 22;
 
         /**
          * Character type Po
          * @stable ICU 2.1
          */
-        public static final int OTHER_PUNCTUATION       = 23;
+        public static final byte OTHER_PUNCTUATION       = 23;
 
         /**
          * Character type Sm
          * @stable ICU 2.1
          */
-        public static final int MATH_SYMBOL             = 24;
+        public static final byte MATH_SYMBOL             = 24;
 
         /**
          * Character type Sc
          * @stable ICU 2.1
          */
-        public static final int CURRENCY_SYMBOL         = 25;
+        public static final byte CURRENCY_SYMBOL         = 25;
         
         /**
          * Character type Sk
          * @stable ICU 2.1
          */
-        public static final int MODIFIER_SYMBOL         = 26;
+        public static final byte MODIFIER_SYMBOL         = 26;
         
         /**
          * Character type So
          * @stable ICU 2.1
          */
-        public static final int OTHER_SYMBOL            = 27;
+        public static final byte OTHER_SYMBOL            = 27;
         
         /**
          * Character type Pi
          * @see #INITIAL_QUOTE_PUNCTUATION
          * @stable ICU 2.1
          */
-        public static final int INITIAL_PUNCTUATION     = 28;
+        public static final byte INITIAL_PUNCTUATION     = 28;
 
         /**
          * Character type Pi
@@ -216,14 +216,14 @@ public class UCharacterEnums {
          * @draft ICU 2.8
      * @deprecated This is a draft API and might change in a future release of ICU.
          */
-        public static final int INITIAL_QUOTE_PUNCTUATION = 28;
+        public static final byte INITIAL_QUOTE_PUNCTUATION = 28;
 
         /**
          * Character type Pf
          * @see #FINAL_QUOTE_PUNCTUATION
          * @stable ICU 2.1
          */
-        public static final int FINAL_PUNCTUATION       = 29;
+        public static final byte FINAL_PUNCTUATION       = 29;
 
         /**
          * Character type Pf
@@ -232,13 +232,13 @@ public class UCharacterEnums {
          * @draft ICU 2.8
      * @deprecated This is a draft API and might change in a future release of ICU.
          */
-        public static final int FINAL_QUOTE_PUNCTUATION   = 29;
+        public static final byte FINAL_QUOTE_PUNCTUATION   = 29;
         
         /**
          * Character type count
          * @stable ICU 2.1
          */
-        public static final int CHAR_CATEGORY_COUNT     = 30;
+        public static final byte CHAR_CATEGORY_COUNT     = 30;
     }
 
     /**
@@ -258,7 +258,7 @@ public class UCharacterEnums {
         public static final int LEFT_TO_RIGHT              = 0;
 
         /**
-         * JDK-compatible synonum for LEFT_TO_RIGHT.
+         * JDK-compatible synonym for LEFT_TO_RIGHT.
          * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
          */
@@ -271,7 +271,7 @@ public class UCharacterEnums {
         public static final int RIGHT_TO_LEFT              = 1;
 
         /**
-         * JDK-compatible synonum for RIGHT_TO_LEFT.
+         * JDK-compatible synonym for RIGHT_TO_LEFT.
          * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
          */
@@ -284,7 +284,7 @@ public class UCharacterEnums {
         public static final int EUROPEAN_NUMBER            = 2;
 
         /**
-         * JDK-compatible synonum for EUROPEAN_NUMBER.
+         * JDK-compatible synonym for EUROPEAN_NUMBER.
          * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
          */
@@ -297,7 +297,7 @@ public class UCharacterEnums {
         public static final int EUROPEAN_NUMBER_SEPARATOR  = 3;
 
         /**
-         * JDK-compatible synonum for EUROPEAN_NUMBER_SEPARATOR.
+         * JDK-compatible synonym for EUROPEAN_NUMBER_SEPARATOR.
          * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
          */
@@ -310,7 +310,7 @@ public class UCharacterEnums {
         public static final int EUROPEAN_NUMBER_TERMINATOR = 4;
 
         /**
-         * JDK-compatible synonum for EUROPEAN_NUMBER_TERMINATOR.
+         * JDK-compatible synonym for EUROPEAN_NUMBER_TERMINATOR.
          * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
          */
@@ -323,7 +323,7 @@ public class UCharacterEnums {
         public static final int ARABIC_NUMBER              = 5;
 
         /**
-         * JDK-compatible synonum for ARABIC_NUMBER.
+         * JDK-compatible synonym for ARABIC_NUMBER.
          * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
          */
@@ -336,7 +336,7 @@ public class UCharacterEnums {
         public static final int COMMON_NUMBER_SEPARATOR    = 6;
 
         /**
-         * JDK-compatible synonum for COMMON_NUMBER_SEPARATOR.
+         * JDK-compatible synonym for COMMON_NUMBER_SEPARATOR.
          * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
          */
@@ -349,7 +349,7 @@ public class UCharacterEnums {
         public static final int BLOCK_SEPARATOR            = 7;
 
         /**
-         * JDK-compatible synonum for BLOCK_SEPARATOR.
+         * JDK-compatible synonym for BLOCK_SEPARATOR.
          * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
          */
@@ -362,7 +362,7 @@ public class UCharacterEnums {
         public static final int SEGMENT_SEPARATOR          = 8;
 
         /**
-         * JDK-compatible synonum for SEGMENT_SEPARATOR.
+         * JDK-compatible synonym for SEGMENT_SEPARATOR.
          * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
          */
@@ -375,7 +375,7 @@ public class UCharacterEnums {
         public static final int WHITE_SPACE_NEUTRAL        = 9;
 
         /**
-         * JDK-compatible synonum for WHITE_SPACE_NEUTRAL.
+         * JDK-compatible synonym for WHITE_SPACE_NEUTRAL.
          * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
          */
@@ -388,7 +388,7 @@ public class UCharacterEnums {
         public static final int OTHER_NEUTRAL              = 10;
 
         /**
-         * JDK-compatible synonum for OTHER_NEUTRAL.
+         * JDK-compatible synonym for OTHER_NEUTRAL.
          * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
          */
@@ -401,7 +401,7 @@ public class UCharacterEnums {
         public static final int LEFT_TO_RIGHT_EMBEDDING    = 11;
 
         /**
-         * JDK-compatible synonum for LEFT_TO_RIGHT_EMBEDDING.
+         * JDK-compatible synonym for LEFT_TO_RIGHT_EMBEDDING.
          * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
          */
@@ -414,7 +414,7 @@ public class UCharacterEnums {
         public static final int LEFT_TO_RIGHT_OVERRIDE     = 12;  
 
         /**
-         * JDK-compatible synonum for LEFT_TO_RIGHT_OVERRIDE.
+         * JDK-compatible synonym for LEFT_TO_RIGHT_OVERRIDE.
          * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
          */
@@ -427,7 +427,7 @@ public class UCharacterEnums {
         public static final int RIGHT_TO_LEFT_ARABIC       = 13;
 
         /**
-         * JDK-compatible synonum for RIGHT_TO_LEFT_ARABIC.
+         * JDK-compatible synonym for RIGHT_TO_LEFT_ARABIC.
          * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
          */
@@ -440,7 +440,7 @@ public class UCharacterEnums {
         public static final int RIGHT_TO_LEFT_EMBEDDING    = 14;
 
         /**
-         * JDK-compatible synonum for RIGHT_TO_LEFT_EMBEDDING.
+         * JDK-compatible synonym for RIGHT_TO_LEFT_EMBEDDING.
          * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
          */
@@ -453,7 +453,7 @@ public class UCharacterEnums {
         public static final int RIGHT_TO_LEFT_OVERRIDE     = 15;
 
         /**
-         * JDK-compatible synonum for RIGHT_TO_LEFT_OVERRIDE.
+         * JDK-compatible synonym for RIGHT_TO_LEFT_OVERRIDE.
          * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
          */
@@ -466,7 +466,7 @@ public class UCharacterEnums {
         public static final int POP_DIRECTIONAL_FORMAT     = 16;
 
         /**
-         * JDK-compatible synonum for POP_DIRECTIONAL_FORMAT.
+         * JDK-compatible synonym for POP_DIRECTIONAL_FORMAT.
          * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
          */
@@ -479,11 +479,11 @@ public class UCharacterEnums {
         public static final int DIR_NON_SPACING_MARK       = 17;
 
         /**
-         * JDK-compatible synonum for DIR_NON_SPACING_MARK.
+         * JDK-compatible synonym for DIR_NON_SPACING_MARK.
          * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
          */
-        public static final byte DIRECTIONALITY_NON_SPACING_MARK = (byte)DIR_NON_SPACING_MARK;
+        public static final byte DIRECTIONALITY_NONSPACING_MARK = (byte)DIR_NON_SPACING_MARK;
 
         /**
          * Directional type BN
@@ -492,7 +492,7 @@ public class UCharacterEnums {
         public static final int BOUNDARY_NEUTRAL           = 18;
 
         /**
-         * JDK-compatible synonum for BOUNDARY_NEUTRAL.
+         * JDK-compatible synonym for BOUNDARY_NEUTRAL.
          * @draft ICU 3.0
      * @deprecated This is a draft API and might change in a future release of ICU.
          */

@@ -681,6 +681,32 @@ public class IBMCalendarTest extends CalendarTest {
         }
     }
 
+    public void TestComparable() {
+	GregorianCalendar c0 = new GregorianCalendar();
+	GregorianCalendar c1 = new GregorianCalendar();
+	c1.add(Calendar.DAY_OF_MONTH, 1);
+	if (c0.compareTo(c1) >= 0) {
+	    errln("calendar " + c0 + " not < " + c1);
+	}
+	c0.add(Calendar.MONTH, 1);
+	if (c0.compareTo(c1) <= 0) {
+	    errln("calendar " + c0 + " not > " + c1);
+	}
+
+	c0.setTimeInMillis(c1.getTimeInMillis());
+	if (c0.compareTo(c1) != 0) {
+	    errln("calendar " + c0 + " not == " + c1);
+	}
+
+	// coverage
+	try {
+	    c0.compareTo((Object)null);
+	    errln("calendar.compareTo didn't object to null arg");
+	}
+	catch (NullPointerException npe) {
+	}
+    }
+	    
     /**
      * Miscellaneous tests to increase coverage.
      */

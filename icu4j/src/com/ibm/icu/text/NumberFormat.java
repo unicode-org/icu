@@ -183,9 +183,9 @@ public abstract class NumberFormat extends UFormat {
      * and <code>BigDecimal</code> objects.
      * @stable ICU 2.0
      */
-    public final StringBuffer format(Object number,
-                                     StringBuffer toAppendTo,
-                                     FieldPosition pos)
+    public StringBuffer format(Object number,
+			       StringBuffer toAppendTo,
+			       FieldPosition pos)
     {
         if (number instanceof Long) {
             return format(((Long)number).longValue(), toAppendTo, pos);
@@ -1474,9 +1474,11 @@ public abstract class NumberFormat extends UFormat {
     static final long serialVersionUID = -2308460125733713944L;
 
     /**
-     * Empty constructor.
+     * Empty constructor.  Public for compatibily with JDK which lets the
+     * compiler generate a default public constructor even though this is
+     * an abstract class.
      * @stable ICU 2.6
      */
-    protected NumberFormat() {
+    public NumberFormat() {
     }
 }

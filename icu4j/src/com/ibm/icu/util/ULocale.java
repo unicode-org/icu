@@ -268,7 +268,7 @@ public final class ULocale implements Serializable {
      * @draft ICU 2.8
      * @deprecated This is a draft API and might change in a future release of ICU.
      */ 
-    public static final ULocale ROOT = new ULocale(EMPTY_STRING, null);
+    public static final ULocale ROOT = new ULocale(EMPTY_STRING, (Locale)null);
     
     /**
      * Cache the locale.
@@ -767,7 +767,7 @@ public final class ULocale implements Serializable {
      * start of the keyword list is indicated by '@', and consists of one
      * or more keyword/value pairs separated by commas.
      * <p>
-     * This constructor not canonicalize the localeID.
+     * This constructor does not canonicalize the localeID.
      * 
      * @param localeID string representation of the locale, e.g:
      * "en_US", "sy_Cyrl_YU", "zh__pinyin", "es_ES@currency=EUR,collation=traditional"
@@ -776,6 +776,17 @@ public final class ULocale implements Serializable {
      */ 
     public ULocale(String localeID) {
         this.localeID = getName(localeID);
+    }
+
+    /**
+     * Convenience overload of ULocale(String, String, String) for 
+     * compatibility with java.util.Locale.
+     * @see ULocale(String, String, String)
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public ULocale(String a, String b) {
+	this(a, b, null);
     }
 
     /**
@@ -811,7 +822,7 @@ public final class ULocale implements Serializable {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public static ULocale createCanonical(String nonCanonicalID) {
-        return new ULocale(canonicalize(nonCanonicalID), null);
+        return new ULocale(canonicalize(nonCanonicalID), (Locale)null);
     }
 
     private static String lscvToID(String lang, String script, String country, String variant) {
@@ -1073,7 +1084,7 @@ public final class ULocale implements Serializable {
         if (localeID.length() == 0 || localeID.charAt(0) == '@') {
             return null;
         }
-        return new ULocale(getFallbackString(localeID), null);
+        return new ULocale(getFallbackString(localeID), (Locale)null);
     }
 
     /**
@@ -1990,7 +2001,7 @@ public final class ULocale implements Serializable {
      * @deprecated This is a draft API and might change in a future release of ICU.
      */
     public ULocale setKeywordValue(String keyword, String value) {
-        return new ULocale(setKeywordValue(localeID, keyword, value), null);
+        return new ULocale(setKeywordValue(localeID, keyword, value), (Locale)null);
     }
 
     /**

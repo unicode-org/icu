@@ -182,6 +182,14 @@ public abstract class Collator implements Comparator, Cloneable
     public final static int IDENTICAL = 15;
 
     /**
+     * This is for backwards compatibility with Java APIs only.  It
+     * should not be used, IDENTICAL should be used instead.  ICU's
+     * collation does not support Java's FULL_DECOMPOSITION mode.
+     * @since ICU 3.4
+     */
+    public final static int FULL_DECOMPOSITION = IDENTICAL;
+
+    /**
      * <p>Decomposition mode value. With NO_DECOMPOSITION set, Strings
      * will not be decomposed for collation. This is the default
      * decomposition setting unless otherwise specified by the locale
@@ -799,24 +807,6 @@ public abstract class Collator implements Comparator, Cloneable
     {
         return new UnicodeSet(0, 0x10FFFF);
     }
-
-    /**
-     * Compares the equality of two Collators.
-     * @param that the Collator to be compared with this.
-     * @return true if this Collator is the same as that Collator;
-     *         false otherwise.
-     * @stable ICU 2.8
-     */
-    public abstract boolean equals(Object that);
-
-    // public abstract methods -----------------------------------------------
-
-    /**
-     * Generates a unique hash code for this Collator.
-     * @stable ICU 2.8
-     * @return 32 bit unique hash code
-     */
-    public abstract int hashCode();
 
     /**
      * <p>

@@ -266,6 +266,41 @@ public class Currency extends MeasureUnit implements Serializable {
     }
 
     /**
+     * Convenience and compatibility override of getName that
+     * requests the symbol name.
+     * @see getName
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public String getSymbol() {
+	return getSymbol(ULocale.getDefault());
+    }
+
+    /**
+     * Convenience and compatibility override of getName that
+     * requests the symbol name.
+     * @param loc the Locale for the symbol
+     * @see getName
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public String getSymbol(Locale loc) {
+	return getSymbol(ULocale.forLocale(loc));
+    }
+
+    /**
+     * Convenience and compatibility override of getName that
+     * requests the symbol name.
+     * @param uloc the ULocale for the symbol
+     * @see getName
+     * @draft ICU 3.4
+     * @deprecated This is a draft API and might change in a future release of ICU.
+     */
+    public String getSymbol(ULocale uloc) {
+	return getName(uloc, SYMBOL_NAME, null);
+    }
+
+    /**
      * Returns the display name for the given currency in the
      * given locale.  For example, the display name for the USD
      * currency object in the en_US locale is "$".
@@ -284,7 +319,7 @@ public class Currency extends MeasureUnit implements Serializable {
     public String getName(Locale locale,
                           int nameStyle,
                           boolean[] isChoiceFormat) {
-    return getName(ULocale.forLocale(locale), nameStyle, isChoiceFormat);
+	return getName(ULocale.forLocale(locale), nameStyle, isChoiceFormat);
     }
 
     /**
