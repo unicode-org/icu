@@ -373,18 +373,18 @@ static void TestNormalization()
     }
 
     srclen = u_unescape(testdata[0], source, 10);
-    iter = ucol_openElements(coll, source, srclen - 1, &status);
+    iter = ucol_openElements(coll, source, srclen, &status);
     backAndForth(iter);
     ucol_closeElements(iter);
 
     srclen = u_unescape(testdata[1], source, 10);
-    iter = ucol_openElements(coll, source, srclen - 1, &status);
+    iter = ucol_openElements(coll, source, srclen, &status);
     backAndForth(iter);
     ucol_closeElements(iter);
 
     while (count < 12) {
         srclen = u_unescape(testdata[count], source, 10);
-        iter = ucol_openElements(coll, source, srclen - 1, &status);
+        iter = ucol_openElements(coll, source, srclen, &status);
 
         if (U_FAILURE(status)){
             log_err("ERROR: in creation of collator element iterator\n %s\n",
