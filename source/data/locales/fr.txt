@@ -373,7 +373,7 @@ fr {
         "#E0",
     }
 //    ShortLanguage { "fra" }
-    localPatternChars { "GanjkHmsSEDFwWxhKzAe" }
+    localPatternChars { "GaMjkHmsSEDFwWxhKzAe" }
     zoneStrings { 
         {
             "Africa/Casablanca",
