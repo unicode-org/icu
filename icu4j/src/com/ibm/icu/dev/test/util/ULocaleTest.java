@@ -11,6 +11,7 @@
 package com.ibm.icu.dev.test.util;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.DateFormat;
@@ -309,7 +310,7 @@ public class ULocaleTest extends TestFmwk {
      */
     void checkService(String requestedLocale, ServiceFacade svc,
                       Subobject sub, Registrar reg) {
-        Locale req = getLocale(requestedLocale);
+        Locale req = LocaleUtility.getLocaleFromName(requestedLocale);
         Object obj = svc.create(req);
         checkObject(requestedLocale, obj, "gt", "ge");
         if (sub != null) {
@@ -334,24 +335,5 @@ public class ULocaleTest extends TestFmwk {
             Object objUnreg = svc.create(req);
             checkObject(requestedLocale, objUnreg, "gt", "ge");
         }
-    }
-
-    /**
-     * Construct a locale from its ID (this should be in Locale!).
-     */
-    static Locale getLocale(String ID) {
-        String language=ID, country="", variant="";
-        int i = ID.indexOf('_');
-        if (i>=0) {
-            language = ID.substring(0, i);
-            int j = ID.indexOf('_', i+1);
-            if (j<0) {
-                country = ID.substring(i+1);
-            } else {
-                country = ID.substring(i+1, j);
-                variant = ID.substring(j+1);
-            }
-        }
-        return new Locale(language, country, variant);
     }
 }
