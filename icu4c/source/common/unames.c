@@ -25,6 +25,8 @@
 #include "cstring.h"
 #include "unicode/uchar.h"
 #include "unicode/udata.h"
+#include "ucln_cmn.h"
+
 
 /* prototypes ------------------------------------------------------------- */
 
