@@ -79,12 +79,12 @@ class MapEnumeration : public UObject, public StringEnumeration
     const ICUService* _service;
     uint32_t _timestamp;
     RefHandle _table;
-    Key* _filter;
+    ICUServiceKey* _filter;
     int32_t _position;
     int32_t _count;
 
     protected:
-    MapEnumeration(ICUService* service, int32_t timestamp, RefHandle& table, Key* filter = NULL)
+    MapEnumeration(ICUService* service, int32_t timestamp, RefHandle& table, ICUServiceKey* filter = NULL)
         : _buffer(NULL)
         , _buflen(0)
         , _service(service)
@@ -192,7 +192,7 @@ class MapEnumeration : public UObject, public StringEnumeration
 
 class IDEnumeration : public MapEnumeration {
 public:
-  IDEnumeration(ICUService* service, int32_t timestamp, RefHandle& table, Key* filter = NULL)
+  IDEnumeration(ICUService* service, int32_t timestamp, RefHandle& table, ICUServiceKey* filter = NULL)
     : MapEnumeration(service, timestamp, table, filter)
   {
   }
@@ -221,7 +221,7 @@ private:
   UnicodeString _cache;
 
 public:
-  DisplayEnumeration(ICUService* service, int32_t timestamp, RefHandle& table, Locale& locale, Key* filter = NULL)
+  DisplayEnumeration(ICUService* service, int32_t timestamp, RefHandle& table, Locale& locale, ICUServiceKey* filter = NULL)
     : MapEnumeration(service, timestamp, table, filter), _locale(locale)
   {
   }
@@ -234,7 +234,7 @@ protected:
         return NULL;
       }
       const UnicodeString* id = (const UnicodeString*)elem->key.pointer;
-      const Factory* factory = (const Factory*)elem->value.pointer;
+      const ICUServiceFactory* factory = (const ICUServiceFactory*)elem->value.pointer;
       if (_filter == NULL || _filter->isFallbackOf(*id)) {
         factory->getDisplayName(*id, cache, locale);
         return &cache;
@@ -251,36 +251,36 @@ protected:
  ******************************************************************
  */
 
-const UChar Key::PREFIX_DELIMITER = '/';
+const UChar ICUServiceKey::PREFIX_DELIMITER = '/';
 
-Key::Key(const UnicodeString& id) 
+ICUServiceKey::ICUServiceKey(const UnicodeString& id) 
   : _id(id) {
 }
 
-Key::~Key() 
+ICUServiceKey::~ICUServiceKey() 
 {
 }
 
 const UnicodeString& 
-Key::getID() const 
+ICUServiceKey::getID() const 
 {
   return _id;
 }
 
 UnicodeString& 
-Key::canonicalID(UnicodeString& result) const 
+ICUServiceKey::canonicalID(UnicodeString& result) const 
 {
   return result.append(_id);
 }
 
 UnicodeString& 
-Key::currentID(UnicodeString& result) const 
+ICUServiceKey::currentID(UnicodeString& result) const 
 {
   return canonicalID(result);
 }
 
 UnicodeString& 
-Key::currentDescriptor(UnicodeString& result) const 
+ICUServiceKey::currentDescriptor(UnicodeString& result) const 
 {
   prefix(result);
   result.append(PREFIX_DELIMITER);
@@ -288,25 +288,25 @@ Key::currentDescriptor(UnicodeString& result) const
 }
 
 UBool 
-Key::fallback() 
+ICUServiceKey::fallback() 
 {
   return FALSE;
 }
 
 UBool 
-Key::isFallbackOf(const UnicodeString& id) const 
+ICUServiceKey::isFallbackOf(const UnicodeString& id) const 
 {
   return id == _id;
 }
 
 UnicodeString& 
-Key::prefix(UnicodeString& result) const 
+ICUServiceKey::prefix(UnicodeString& result) const 
 {
   return result;
 }
 
 UnicodeString& 
-Key::parsePrefix(UnicodeString& result) 
+ICUServiceKey::parsePrefix(UnicodeString& result) 
 {
   int32_t n = result.indexOf(PREFIX_DELIMITER);
   if (n < 0) {
@@ -317,7 +317,7 @@ Key::parsePrefix(UnicodeString& result)
 }
 
 UnicodeString& 
-Key::parseSuffix(UnicodeString& result) 
+ICUServiceKey::parseSuffix(UnicodeString& result) 
 {
   int32_t n = result.indexOf(PREFIX_DELIMITER);
   if (n >= 0) {
@@ -326,8 +326,9 @@ Key::parseSuffix(UnicodeString& result)
   return result;
 }
 
+#ifdef SERVICE_DEBUG
 UnicodeString& 
-Key::debug(UnicodeString& result) const 
+ICUServiceKey::debug(UnicodeString& result) const 
 {
   debugClass(result);
   result.append(" id: ");
@@ -336,21 +337,17 @@ Key::debug(UnicodeString& result) const
 }
 
 UnicodeString& 
-Key::debugClass(UnicodeString& result) const 
+ICUServiceKey::debugClass(UnicodeString& result) const 
 {
-  return result.append("Key");
+  return result.append("ICUServiceKey");
 }
+#endif
 
-const char Key::fgClassID = '\0';
+const char ICUServiceKey::fgClassID = '\0';
 
 /*
  ******************************************************************
  */
-
-SimpleFactory::SimpleFactory(UObject* instanceToAdopt, const UnicodeString& id) 
-  : _instance(instanceToAdopt), _id(id), _visible(TRUE)
-{
-}
 
 SimpleFactory::SimpleFactory(UObject* instanceToAdopt, const UnicodeString& id, UBool visible) 
   : _instance(instanceToAdopt), _id(id), _visible(visible)
@@ -363,7 +360,7 @@ SimpleFactory::~SimpleFactory()
 }
 
 UObject* 
-SimpleFactory::create(const Key& key, const ICUService* service, UErrorCode& status) const 
+SimpleFactory::create(const ICUServiceKey& key, const ICUService* service, UErrorCode& status) const 
 {
   if (U_SUCCESS(status)) {
     UnicodeString temp;
@@ -395,6 +392,7 @@ SimpleFactory::getDisplayName(const UnicodeString& id, const Locale& locale, Uni
   return result;
 }
 
+#ifdef SERVICE_DEBUG
 UnicodeString& 
 SimpleFactory::debug(UnicodeString& toAppendTo) const 
 {
@@ -411,6 +409,7 @@ SimpleFactory::debugClass(UnicodeString& toAppendTo) const
 {
   return toAppendTo.append("SimpleFactory");
 }
+#endif
 
 const char SimpleFactory::fgClassID = '\0';
 
@@ -599,7 +598,7 @@ UObject*
 ICUService::get(const UnicodeString& descriptor, UnicodeString* actualReturn, UErrorCode& status) const 
 {
   UObject* result = NULL;
-    Key* key = createKey(&descriptor, status);
+    ICUServiceKey* key = createKey(&descriptor, status);
     if (key) {
       result = getKey(*key, actualReturn, NULL, status);
       delete key;
@@ -608,13 +607,13 @@ ICUService::get(const UnicodeString& descriptor, UnicodeString* actualReturn, UE
 }
 
 UObject* 
-ICUService::getKey(Key& key, UErrorCode& status) const 
+ICUService::getKey(ICUServiceKey& key, UErrorCode& status) const 
 {
   return getKey(key, NULL, NULL, status);
 }
 
 UObject* 
-ICUService::getKey(Key& key, UnicodeString* actualReturn, UErrorCode& status) const 
+ICUService::getKey(ICUServiceKey& key, UnicodeString* actualReturn, UErrorCode& status) const 
 {
   return getKey(key, actualReturn, NULL, status);
 }
@@ -640,7 +639,7 @@ private:
 };
 
 UObject* 
-ICUService::getKey(Key& key, UnicodeString* actualReturn, const Factory* factory, UErrorCode& status) const 
+ICUService::getKey(ICUServiceKey& key, UnicodeString* actualReturn, const ICUServiceFactory* factory, UErrorCode& status) const 
 {
   if (U_FAILURE(status)) {
     return NULL;
@@ -684,7 +683,7 @@ ICUService::getKey(Key& key, UnicodeString* actualReturn, const Factory* factory
 
     if (factory != NULL) {
       for (int32_t i = 0; i < limit; ++i) {
-        if (factory == (const Factory*)factories->elementAt(i)) {
+        if (factory == (const ICUServiceFactory*)factories->elementAt(i)) {
           startIndex = i + 1;
           break;
         }
@@ -713,7 +712,7 @@ ICUService::getKey(Key& key, UnicodeString* actualReturn, const Factory* factory
       int32_t n = 0;
       int32_t index = startIndex;
       while (index < limit) {
-        Factory* f = (Factory*)factories->elementAt(index++);
+        ICUServiceFactory* f = (ICUServiceFactory*)factories->elementAt(index++);
         UObject* service = f->create(key, this, status);
         if (U_FAILURE(status)) {
           delete cacheDescriptorList;
@@ -811,7 +810,7 @@ ICUService::getKey(Key& key, UnicodeString* actualReturn, const Factory* factory
 }
 
 UObject* 
-ICUService::handleDefault(const Key& key, UnicodeString* actualIDReturn, UErrorCode& status) const 
+ICUService::handleDefault(const ICUServiceKey& key, UnicodeString* actualIDReturn, UErrorCode& status) const 
 {
   return NULL;
 }
@@ -835,7 +834,7 @@ ICUService::getVisibleIDs(UVector& result, const UnicodeString* matchID, UErrorC
     Mutex mutex(&ncthis->lock);
     const Hashtable* map = getVisibleIDMap(status);
     if (map != NULL) {
-      Key* fallbackKey = createKey(matchID, status);
+      ICUServiceKey* fallbackKey = createKey(matchID, status);
 
       for (int32_t pos = 0;;) {
         const UHashElement* e = map->nextElement(pos);
@@ -880,7 +879,7 @@ ICUService::getVisibleIDMap(UErrorCode& status) const {
       status = U_MEMORY_ALLOCATION_ERROR;
     } else if (factories != NULL) {
       for (int32_t pos = factories->size(); --pos >= 0;) {
-        Factory* f = (Factory*)factories->elementAt(pos);
+        ICUServiceFactory* f = (ICUServiceFactory*)factories->elementAt(pos);
         f->updateVisibleIDs(*idCache, status);
       }
       if (U_FAILURE(status)) {
@@ -903,19 +902,20 @@ ICUService::getDisplayName(const UnicodeString& id, UnicodeString& result) const
 UnicodeString& 
 ICUService::getDisplayName(const UnicodeString& id, UnicodeString& result, const Locale& locale) const 
 {
-  result.setToBogus();
   {
     ICUService* ncthis = (ICUService*)this; // cast away semantic const
     UErrorCode status = U_ZERO_ERROR;
     Mutex mutex(&ncthis->lock);
     const Hashtable* map = getVisibleIDMap(status);
     if (map != NULL) {
-      Factory* f = (Factory*)map->get(id);
+      ICUServiceFactory* f = (ICUServiceFactory*)map->get(id);
       if (f != NULL) {
         f->getDisplayName(id, locale, result);
+		return result;
       }
     }
   }
+  result.setToBogus();
   return result;
 }
 
@@ -961,7 +961,7 @@ ICUService::getDisplayNames(UVector& result,
         const UHashElement* entry = NULL;
         while (entry = m->nextElement(pos)) {
           const UnicodeString* id = (const UnicodeString*)entry->key.pointer;
-          Factory* f = (Factory*)entry->value.pointer;
+          ICUServiceFactory* f = (ICUServiceFactory*)entry->value.pointer;
           UnicodeString name;
           f->getDisplayName(*id, locale, name);
           if (name.isBogus()) {
@@ -980,7 +980,7 @@ ICUService::getDisplayNames(UVector& result,
     }
   }
 
-  Key* matchKey = createKey(matchID, status);
+  ICUServiceKey* matchKey = createKey(matchID, status);
   int32_t pos = 0;
   const UHashElement *entry = NULL;
   while (entry = dnCache->cache.nextElement(pos)) {
@@ -1001,22 +1001,22 @@ ICUService::getDisplayNames(UVector& result,
   return result;
 }
 
-const Factory* 
-ICUService::registerObject(UObject* objToAdopt, const UnicodeString& id, UErrorCode& status) 
+URegistryKey
+ICUService::registerInstance(UObject* objToAdopt, const UnicodeString& id, UErrorCode& status) 
 {
-  return registerObject(objToAdopt, id, TRUE, status);
+  return registerInstance(objToAdopt, id, TRUE, status);
 }
 
-const Factory* 
-ICUService::registerObject(UObject* objToAdopt, const UnicodeString& id, UBool visible, UErrorCode& status) 
+URegistryKey
+ICUService::registerInstance(UObject* objToAdopt, const UnicodeString& id, UBool visible, UErrorCode& status) 
 {
-  Key* key = createKey(&id, status);
+  ICUServiceKey* key = createKey(&id, status);
   if (key != NULL) {
     UnicodeString canonicalID;
     key->canonicalID(canonicalID);
     delete key;
 
-    Factory* f = createSimpleFactory(objToAdopt, canonicalID, visible, status);
+    ICUServiceFactory* f = createSimpleFactory(objToAdopt, canonicalID, visible, status);
     if (f != NULL) {
       return registerFactory(f, status);
     }
@@ -1025,7 +1025,7 @@ ICUService::registerObject(UObject* objToAdopt, const UnicodeString& id, UBool v
   return NULL;
 }
 
-Factory* 
+ICUServiceFactory* 
 ICUService::createSimpleFactory(UObject* objToAdopt, const UnicodeString& id, UBool visible, UErrorCode& status)
 {
   if (U_SUCCESS(status)) {
@@ -1037,8 +1037,8 @@ ICUService::createSimpleFactory(UObject* objToAdopt, const UnicodeString& id, UB
   return NULL;
 }
 
-const Factory* 
-ICUService::registerFactory(Factory* factoryToAdopt, UErrorCode& status) 
+URegistryKey
+ICUService::registerFactory(ICUServiceFactory* factoryToAdopt, UErrorCode& status) 
 {
   if (U_SUCCESS(status) && factoryToAdopt != NULL) {
     Mutex mutex(&lock);
@@ -1063,12 +1063,13 @@ ICUService::registerFactory(Factory* factoryToAdopt, UErrorCode& status)
       notifyChanged();
   }
 
-  return factoryToAdopt;
+  return (URegistryKey)factoryToAdopt;
 }
 
 UBool 
-ICUService::unregisterFactory(Factory* factory, UErrorCode& status) 
+ICUService::unregister(URegistryKey rkey, UErrorCode& status) 
 {
+  ICUServiceFactory *factory = (ICUServiceFactory*)rkey;
   UBool result = FALSE;
   if (factory != NULL && factories != NULL) {
     Mutex mutex(&lock);
@@ -1112,10 +1113,10 @@ ICUService::isDefault() const
   return countFactories() == 0;
 }
 
-Key* 
+ICUServiceKey* 
 ICUService::createKey(const UnicodeString* id, UErrorCode& status) const 
 {
-  return (U_FAILURE(status) || id == NULL) ? NULL : new Key(*id);
+  return (U_FAILURE(status) || id == NULL) ? NULL : new ICUServiceKey(*id);
 }
 
 void 
