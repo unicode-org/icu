@@ -1118,10 +1118,10 @@ static const char * const interIndicArray[] = {
     "[\\u0951-\\u0954\\u09D7\\u090D\\u090e\\u0911\\u0912\\u0929\\u0933\\u0934\\u0935\\u093d\\u0950\\u0958\\u0959\\u095a\\u095b\\u095e\\u09f0\\u09f1]", /*roundtrip exclusions*/
 
     "GURMUKHI-DEVANAGARI", "[:GURMUKHI:]", "[:Devanagari:]", 
-    "[\\u0936\\u0933\\u0951-\\u0954\\u0902\\u0903\\u0943-\\u0949\\u094a\\u0962\\u0963\\u090B\\u090C\\u090D\\u090e\\u0911\\u0912\\u0934\\u0937\\u093D\\u0950\\u0960\\u0961\\u0a72\\u0a73\\u0a74]", /*roundtrip exclusions*/
+    "[\\u0901\\u0902\\u0936\\u0933\\u0951-\\u0954\\u0902\\u0903\\u0943-\\u0949\\u094a\\u0962\\u0963\\u090B\\u090C\\u090D\\u090e\\u0911\\u0912\\u0934\\u0937\\u093D\\u0950\\u0960\\u0961\\u0a72\\u0a73\\u0a74]", /*roundtrip exclusions*/
 
     "DEVANAGARI-GURMUKHI", "[:Devanagari:]", "[:GURMUKHI:]",
-    "[\\u0946\\u0A5C\\u0951-\\u0954\\u0A70\\u0A71\\u090B\\u090C\\u090D\\u090e\\u0911\\u0912\\u0934\\u0937\\u093D\\u0950\\u0960\\u0961\\u0a72\\u0a73\\u0a74]", /*roundtrip exclusions*/
+    "[\\u0A02\\u0946\\u0A5C\\u0951-\\u0954\\u0A70\\u0A71\\u090B\\u090C\\u090D\\u090e\\u0911\\u0912\\u0934\\u0937\\u093D\\u0950\\u0960\\u0961\\u0a72\\u0a73\\u0a74]", /*roundtrip exclusions*/
 
     "GUJARATI-DEVANAGARI", "[:GUJARATI:]", "[:Devanagari:]", 
     "[\\u0946\\u094A\\u0962\\u0963\\u0951-\\u0954\\u0961\\u090c\\u090e\\u0912]", /*roundtrip exclusions*/
@@ -1160,10 +1160,10 @@ static const char * const interIndicArray[] = {
     "[\\u0d4c\\u0d57\\u0950\\u090D\\u0911\\u093d\\u0929\\u0934[\\u0958-\\u095f]]", /*roundtrip exclusions*/
 
     "GURMUKHI-BENGALI", "[:GURMUKHI:]", "[:BENGALI:]",  
-    "[\\u09b6\\u09e2\\u09e3\\u09c3\\u09c4\\u09d7\\u098B\\u098C\\u09B7\\u09E0\\u09E1\\u09F0\\u09F1]", /*roundtrip exclusions*/
+    "[\\u0981\\u0982\\u09b6\\u09e2\\u09e3\\u09c3\\u09c4\\u09d7\\u098B\\u098C\\u09B7\\u09E0\\u09E1\\u09F0\\u09F1]", /*roundtrip exclusions*/
 
     "BENGALI-GURMUKHI", "[:BENGALI:]", "[:GURMUKHI:]",
-    "[\\u0a5c\\u0a47\\u0a70\\u0a71\\u0A33\\u0A35\\u0A59\\u0A5A\\u0A5B\\u0A5E\\u0A72\\u0A73\\u0A74]", /*roundtrip exclusions*/
+    "[\\u0A02\\u0a5c\\u0a47\\u0a70\\u0a71\\u0A33\\u0A35\\u0A59\\u0A5A\\u0A5B\\u0A5E\\u0A72\\u0A73\\u0A74]", /*roundtrip exclusions*/
 
     "GUJARATI-BENGALI", "[:GUJARATI:]", "[:BENGALI:]", 
     "[\\u09d7\\u09e2\\u09e3\\u098c\\u09e1\\u09f0\\u09f1]", /*roundtrip exclusions*/
@@ -1202,40 +1202,40 @@ static const char * const interIndicArray[] = {
     "[\\u0d46\\u0d4a\\u0d47\\u0d31-\\u0d35\\u0d0e\\u0d12]", /*roundtrip exclusions*/
        
     "GUJARATI-GURMUKHI", "[:GUJARATI:]", "[:GURMUKHI:]", 
-    "[\\u0ab3\\u0ab6\\u0A70\\u0a71\\u0a82\\u0a83\\u0ac3\\u0ac4\\u0ac5\\u0ac9\\u0a5c\\u0a72\\u0a73\\u0a74\\u0a8b\\u0a8d\\u0a91\\u0abd]", /*roundtrip exclusions*/
+    "[\\u0A02\\u0ab3\\u0ab6\\u0A70\\u0a71\\u0a82\\u0a83\\u0ac3\\u0ac4\\u0ac5\\u0ac9\\u0a5c\\u0a72\\u0a73\\u0a74\\u0a8b\\u0a8d\\u0a91\\u0abd]", /*roundtrip exclusions*/
 
     "GURMUKHI-GUJARATI", "[:GURMUKHI:]", "[:GUJARATI:]",
-    "[\\u0ab3\\u0ab6\\u0A70\\u0a71\\u0a82\\u0a83\\u0ac3\\u0ac4\\u0ac5\\u0ac9\\u0a5c\\u0a72\\u0a73\\u0a74\\u0a8b\\u0a8d\\u0a91\\u0ab7\\u0abd\\u0ad0\\u0ae0]", /*roundtrip exclusions*/
+    "[\\u0A81\\u0A82\\u0ab3\\u0ab6\\u0A70\\u0a71\\u0a82\\u0a83\\u0ac3\\u0ac4\\u0ac5\\u0ac9\\u0a5c\\u0a72\\u0a73\\u0a74\\u0a8b\\u0a8d\\u0a91\\u0ab7\\u0abd\\u0ad0\\u0ae0]", /*roundtrip exclusions*/
 
     "ORIYA-GURMUKHI", "[:ORIYA:]", "[:GURMUKHI:]", 
-    "[\\u0a5c\\u0a21\\u0a47\\u0a71\\u0b02\\u0b03\\u0b33\\u0b36\\u0b43\\u0b56\\u0b57\\u0B0B\\u0B0C\\u0B37\\u0B3D\\u0B5F\\u0B60\\u0B61\\u0a35\\u0a72\\u0a73\\u0a74]", /*roundtrip exclusions*/
+    "[\\u0A01\\u0A02\\u0a5c\\u0a21\\u0a47\\u0a71\\u0b02\\u0b03\\u0b33\\u0b36\\u0b43\\u0b56\\u0b57\\u0B0B\\u0B0C\\u0B37\\u0B3D\\u0B5F\\u0B60\\u0B61\\u0a35\\u0a72\\u0a73\\u0a74]", /*roundtrip exclusions*/
 
     "GURMUKHI-ORIYA", "[:GURMUKHI:]", "[:ORIYA:]",
-    "[\\u0a71\\u0b02\\u0b03\\u0b33\\u0b36\\u0b43\\u0b56\\u0b57\\u0B0B\\u0B0C\\u0B37\\u0B3D\\u0B5F\\u0B60\\u0B61]", /*roundtrip exclusions*/
+    "[\\u0b01\\u0b02\\u0b03\\u0b33\\u0b36\\u0b43\\u0b56\\u0b57\\u0B0B\\u0B0C\\u0B37\\u0B3D\\u0B5F\\u0B60\\u0B61]", /*roundtrip exclusions*/
 
     "TAMIL-GURMUKHI", "[:TAMIL:]", "[:GURMUKHI:]", 
-    "[\\u0a33\\u0a36\\u0a3c\\u0a70\\u0a71\\u0a47\\u0A16\\u0A17\\u0A18\\u0A1B\\u0A1D\\u0A20\\u0A21\\u0A22\\u0A25\\u0A26\\u0A27\\u0A2B\\u0A2C\\u0A2D\\u0A59\\u0A5A\\u0A5B\\u0A5C\\u0A5E\\u0A72\\u0A73\\u0A74]", /*roundtrip exclusions*/
+    "[\\u0A02\\u0a33\\u0a36\\u0a3c\\u0a70\\u0a71\\u0a47\\u0A16\\u0A17\\u0A18\\u0A1B\\u0A1D\\u0A20\\u0A21\\u0A22\\u0A25\\u0A26\\u0A27\\u0A2B\\u0A2C\\u0A2D\\u0A59\\u0A5A\\u0A5B\\u0A5C\\u0A5E\\u0A72\\u0A73\\u0A74]", /*roundtrip exclusions*/
 
     "GURMUKHI-TAMIL", "[:GURMUKHI:]", "[:TAMIL:]",
-    "[\\u0bc6\\u0bca\\u0bd7\\u0bb7\\u0bb3\\u0b83\\u0B8E\\u0B92\\u0BA9\\u0BB1\\u0BB4]", /*roundtrip exclusions*/
+    "[\\u0b82\\u0bc6\\u0bca\\u0bd7\\u0bb7\\u0bb3\\u0b83\\u0B8E\\u0B92\\u0BA9\\u0BB1\\u0BB4]", /*roundtrip exclusions*/
 
     "TELUGU-GURMUKHI", "[:TELUGU:]", "[:GURMUKHI:]", 
-    "[\\u0a33\\u0a36\\u0a3c\\u0a70\\u0a71\\u0A59\\u0A5A\\u0A5B\\u0A5C\\u0A5E\\u0A72\\u0A73\\u0A74]", /*roundtrip exclusions*/
+    "[\\u0A02\\u0a33\\u0a36\\u0a3c\\u0a70\\u0a71\\u0A59\\u0A5A\\u0A5B\\u0A5C\\u0A5E\\u0A72\\u0A73\\u0A74]", /*roundtrip exclusions*/
 
     "GURMUKHI-TELUGU", "[:GURMUKHI:]", "[:TELUGU:]",
-    "[\\u0c02\\u0c03\\u0c33\\u0c36\\u0c44\\u0c43\\u0c46\\u0c4a\\u0c56\\u0c55\\u0C0B\\u0C0C\\u0C0E\\u0C12\\u0C31\\u0C37\\u0C60\\u0C61]", /*roundtrip exclusions*/
+    "[\\u0c01\\u0c02\\u0c03\\u0c33\\u0c36\\u0c44\\u0c43\\u0c46\\u0c4a\\u0c56\\u0c55\\u0C0B\\u0C0C\\u0C0E\\u0C12\\u0C31\\u0C37\\u0C60\\u0C61]", /*roundtrip exclusions*/
 
     "KANNADA-GURMUKHI", "[:KANNADA:]", "[:GURMUKHI:]", 
-    "[\\u0a33\\u0a36\\u0a3c\\u0a70\\u0a71\\u0A59\\u0A5A\\u0A5B\\u0A5C\\u0A5E\\u0A72\\u0A73\\u0A74]", /*roundtrip exclusions*/
+    "[\\u0A02\\u0a33\\u0a36\\u0a3c\\u0a70\\u0a71\\u0A59\\u0A5A\\u0A5B\\u0A5C\\u0A5E\\u0A72\\u0A73\\u0A74]", /*roundtrip exclusions*/
 
     "GURMUKHI-KANNADA", "[:GURMUKHI:]", "[:KANNADA:]",
-    "[\\u0c83\\u0cb3\\u0cb6\\u0cc4\\u0cc3\\u0cc6\\u0cca\\u0cd5\\u0cd6\\u0C8B\\u0C8C\\u0C8E\\u0C92\\u0CB1\\u0CB7\\u0CE0\\u0CE1]", /*roundtrip exclusions*/
+    "[\\u0c82\\u0c83\\u0cb3\\u0cb6\\u0cc4\\u0cc3\\u0cc6\\u0cca\\u0cd5\\u0cd6\\u0C8B\\u0C8C\\u0C8E\\u0C92\\u0CB1\\u0CB7\\u0CE0\\u0CE1]", /*roundtrip exclusions*/
 
     "MALAYALAM-GURMUKHI", "[:MALAYALAM:]", "[:GURMUKHI:]", 
-    "[\\u0a4b\\u0a4c\\u0a33\\u0a36\\u0a3c\\u0a70\\u0a71\\u0A59\\u0A5A\\u0A5B\\u0A5C\\u0A5E\\u0A72\\u0A73\\u0A74]", /*roundtrip exclusions*/
+    "[\\u0A02\\u0a4b\\u0a4c\\u0a33\\u0a36\\u0a3c\\u0a70\\u0a71\\u0A59\\u0A5A\\u0A5B\\u0A5C\\u0A5E\\u0A72\\u0A73\\u0A74]", /*roundtrip exclusions*/
 
     "GURMUKHI-MALAYALAM", "[:GURMUKHI:]", "[:MALAYALAM:]",
-    "[\\u0d03\\u0d33\\u0d36\\u0d43\\u0d46\\u0d4a\\u0d4c\\u0d57\\u0D0B\\u0D0C\\u0D0E\\u0D12\\u0D31\\u0D34\\u0D37\\u0D60\\u0D61]", /*roundtrip exclusions*/
+    "[\\u0d02\\u0d03\\u0d33\\u0d36\\u0d43\\u0d46\\u0d4a\\u0d4c\\u0d57\\u0D0B\\u0D0C\\u0D0E\\u0D12\\u0D31\\u0D34\\u0D37\\u0D60\\u0D61]", /*roundtrip exclusions*/
 
     "GUJARATI-ORIYA", "[:GUJARATI:]", "[:ORIYA:]", 
     "[\\u0b56\\u0b57\\u0B0C\\u0B5F\\u0B61]", /*roundtrip exclusions*/
