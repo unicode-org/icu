@@ -316,85 +316,85 @@ u_parseCodePointRange(const char *s,
 
 U_CAPI const UChar * U_EXPORT2
 u_strSkipWhiteSpace(const UChar *s, int32_t length) {
-  int32_t i = 0, toReturn;
-  UChar32 c = 0;
-  if(s == NULL) {
-    return NULL;
-  }
-  if(length == 0) {
-    return s;
-  }
-  if(length > 0) {
-    for(;;) {
-      if(i >= length) {
-        break;
-      }
-      toReturn = i;
-      U16_NEXT(s, i, length, c);
-      if(!(c == 0x20 || u_isUWhiteSpace(c))) {
-        break;
-      }
+    int32_t i = 0, toReturn = 0;
+    UChar32 c = 0;
+    if(s == NULL) {
+        return NULL;
     }
-  } else {
-    for(;;) {
-      toReturn = i;
-      U16_NEXT(s, i, length, c);
-      if(!(c == 0x20 || u_isUWhiteSpace(c)) || c == 0) {
-        break;
-      }
+    if(length == 0) {
+        return s;
     }
-  }
-  return s+toReturn;
+    if(length > 0) {
+        for(;;) {
+            if(i >= length) {
+                break;
+            }
+            toReturn = i;
+            U16_NEXT(s, i, length, c);
+            if(!(c == 0x20 || u_isUWhiteSpace(c))) {
+                break;
+            }
+        }
+    } else {
+        for(;;) {
+            toReturn = i;
+            U16_NEXT(s, i, length, c);
+            if(!(c == 0x20 || u_isUWhiteSpace(c)) || c == 0) {
+                break;
+            }
+        }
+    }
+    return s+toReturn;
 }
 
 
 U_CAPI const UChar * U_EXPORT2
 u_strTrailingWhiteSpaceStart(const UChar *s, int32_t length) {
-  int32_t i = 0, toReturn = 0;
-  UChar32 c = 0;
-
-  if(s == NULL) {
-    return NULL;
-  }
-  if(length == 0) {
-    return s;
-  }
-
-  if(length < 0) {
-    length = u_strlen(s);
-  }
-
-  i = length;
-  for(;;) {
-    toReturn = i;
-    if(i <= 0) {
-      break;
+    int32_t i = 0, toReturn = 0;
+    UChar32 c = 0;
+    
+    if(s == NULL) {
+        return NULL;
     }
-    U16_PREV(s, 0, i, c);
-    if(!(c == 0x20 || u_isUWhiteSpace(c))) {
-      break;
+    if(length == 0) {
+        return s;
     }
-  }
-
-  return s+toReturn;
+    
+    if(length < 0) {
+        length = u_strlen(s);
+    }
+    
+    i = length;
+    for(;;) {
+        toReturn = i;
+        if(i <= 0) {
+            break;
+        }
+        U16_PREV(s, 0, i, c);
+        if(!(c == 0x20 || u_isUWhiteSpace(c))) {
+            break;
+        }
+    }
+    
+    return s+toReturn;
 }
 
 U_CAPI int32_t U_EXPORT2
 u_parseUTF8(const char *source, int32_t sLen, char *dest, int32_t destCapacity, UErrorCode *status) {
-  const char *read = source;
-  int32_t i = 0;
-  uint8_t value = 0;
-  if(sLen == -1) {
-    sLen = strlen(source);
-  }
-
-  while(read < source+sLen) {
-    sscanf(read, "%2x", &value);
-    if(i < destCapacity) {
-      dest[i] = value;
+    const char *read = source;
+    int32_t i = 0;
+    unsigned int value = 0;
+    if(sLen == -1) {
+        sLen = strlen(source);
     }
-    i++;
-    read += 2;
-  }
-  return u_terminateChars(dest, destCapacity, i, status);
+    
+    while(read < source+sLen) {
+        sscanf(read, "%2x", &value);
+        if(i < destCapacity) {
+            dest[i] = (char)value;
+        }
+        i++;
+        read += 2;
+    }
+    return u_terminateChars(dest, destCapacity, i, status);
 }
