@@ -71,7 +71,7 @@ public:
     /**
      *  Tests word break status returns.
      */
-    void TestWordStatus();
+    void TestRuleStatus();
 
     void TestBug2190();
 
