@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/lang/Attic/UCharacterUtil.java,v $ 
-* $Date: 2002/02/16 03:05:58 $ 
-* $Revision: 1.4 $
+* $Date: 2002/04/03 04:32:00 $ 
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -43,27 +43,7 @@ final class UCharacterUtil
     return ((msc << 16) | lsc);
   }
    
-  /**
-  * converting first 2 bytes of a byte array into char
-  * if array size is < 2 then algorithmn will only return value == 1 byte
-  * @param bytes 2 byte argument
-  * @return char form
-  */
-  protected static char toChar(byte bytes[])
-  {
-    if (bytes == null || bytes.length == 0) {
-      return 0;
-    }
-    if (bytes.length == 1) {
-      return toChar(bytes[0]);
-    }
-      
-    char firstbyte = (char)(toChar(bytes[0]) << 8);
-    char secondbyte = toChar(bytes[1]);
-    
-    return (char)(firstbyte | secondbyte);
-  }
-   
+  
   /**
   * converting 2 bytes into a char
   * @param msb the most significant byte
@@ -72,56 +52,7 @@ final class UCharacterUtil
   */
   protected static char toChar(byte msb, byte lsb)
   {
-    char firstbyte = (char)(toChar(msb) << 8);
-    char secondbyte = toChar(lsb);
-    
-    return (char)(firstbyte | secondbyte);
-  }
-  
-  /**
-  * converting first 4 bytes of a byte array into int
-  * if array size is < 4 then algorithmn will only return value == # bytes
-  * @param bytes 4 byte argument
-  * @return int form
-  */
-  protected static int toInt(byte bytes[])
-  {
-    if (bytes == null || bytes.length == 0)
-      return 0;
-    int size = bytes.length;
-    if (size > 4)
-      size = 4;
-    int result = 0;
-    for (int i = 0; i < size; i ++)
-      result = (result << 8) | (0x000000FF & bytes[i]);
-    return result;
-  }
-   
-  /**
-  * converting a byte into char
-  * @param onebyte 
-  * @return char form
-  */
-  protected static char toChar(byte onebyte)
-  {
-    char result = (char)(onebyte & 0x000000ff);
-    return result;
-  }
-   
-  /**
-  * converting a integer to a array of 4 characters where each character
-  * corresponds to its respective byte 
-  * @param i integer to be converted
-  * @return array of 4 characters
-  */
-  protected static char[] to4Char(int i)
-  {
-    char result[] = new char[4];
-    result[0] = (char)((i >> 24) & 0xFF);
-    result[1] = (char)((i & 0x00FF0000) >> 16);
-    result[2] = (char)((i & 0x0000FF00) >> 8);
-    result[3] = (char)(i & 0xFF);
-    return result;
+    return (char)((msb << 8) | (lsb & 0xFF));
   }
    
   /**

@@ -6,8 +6,8 @@
 *
 * $Source: 
 *      /usr/cvs/icu4j/icu4j/src/com/ibm/icu/text/UCharacterCategory.java $ 
-* $Date: 2002/02/16 03:05:56 $ 
-* $Revision: 1.5 $
+* $Date: 2002/04/03 04:32:00 $ 
+* $Revision: 1.6 $
 *
 *******************************************************************************
 */
@@ -233,9 +233,9 @@ public class UCharacterCategory
 	    case OTHER_SYMBOL :
 	      return "Symbol, Other";
 	    case INITIAL_PUNCTUATION :
-	      return "Punctuation, Initial quote ";
+	      return "Punctuation, Initial quote";
 	    case FINAL_PUNCTUATION :
-	      return "Punctuation, Final quote ";
+	      return "Punctuation, Final quote";
 	  }
 	  return "Unassigned";
 	}
