@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/Transliterator.java,v $ 
- * $Date: 2000/04/14 01:37:27 $ 
- * $Revision: 1.15 $
+ * $Date: 2000/05/23 16:49:04 $ 
+ * $Revision: 1.16 $
  *
  *****************************************************************************************
  */
@@ -210,7 +210,7 @@ import java.text.MessageFormat;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Transliterator.java,v $ $Revision: 1.15 $ $Date: 2000/04/14 01:37:27 $
+ * @version $RCSfile: Transliterator.java,v $ $Revision: 1.16 $ $Date: 2000/05/23 16:49:04 $
  */
 public abstract class Transliterator {
     /**
@@ -388,7 +388,7 @@ public abstract class Transliterator {
     private static final String RB_RULE_BASED_PREFIX =
         "com.ibm.text.resources.TransliterationRule_";
 
-	private static final char RB_RULE_BASED_SEPEATOR = '_';
+	private static final char RB_RULE_BASED_SEPARATOR = '_';
 
     /**
      * Resource bundle key for the RuleBasedTransliterator rule.
@@ -865,8 +865,8 @@ public abstract class Transliterator {
                 } else {
                     String IDLeft  = ID.substring(0, i);
                     String IDRight = ID.substring(i+1);
-                    resourceName += isReverse ? (IDRight + RB_RULE_BASED_SEPEATOR + IDLeft)
-                                              : (IDLeft + RB_RULE_BASED_SEPEATOR + IDRight);
+                    resourceName += isReverse ? (IDRight + RB_RULE_BASED_SEPARATOR + IDLeft)
+                                              : (IDLeft + RB_RULE_BASED_SEPARATOR + IDRight);
                 }
                 try {
                     ResourceBundle resource = ResourceBundle.getBundle(resourceName);
