@@ -6,12 +6,12 @@
 // THIS IS A MACHINE-GENERATED FILE
 // Tool: dumpICUrules.bat
 // Source: ../../text/resources/Transliterator_Latin_InterIndic.txt
-// Date: Mon Jan 21 10:41:16 2002
+// Date: Fri Feb  8 15:53:55 2002
 //--------------------------------------------------------------------
 
 // Latin_InterIndic
 
-Latin_InterIndic {
+t_Latn_InterIndic {
   Rule {
 //--------------------------------------------------------------------
 // Copyright (c) 2001-2004, International Business Machines
