@@ -2593,7 +2593,7 @@ unorm_previous(UCharIterator *src,
         } else {
             /* just copy the source characters */
             if(destCapacity>0) {
-                uprv_memcpy(buffer+startIndex, dest, uprv_min(bufferLength, destCapacity)*U_SIZEOF_UCHAR);
+                uprv_memcpy(dest, buffer+startIndex, uprv_min(bufferLength, destCapacity)*U_SIZEOF_UCHAR);
             }
             destLength=u_terminateUChars(dest, destCapacity, bufferLength, pErrorCode);
         }
