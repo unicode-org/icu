@@ -1262,7 +1262,7 @@ void ucol_getJamoCEs(const UCollator *coll, UChar ch, uint32_t **buffer) {
 /* here is also the generation of implicit CEs                              */
 uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *status) {
     uint32_t order;
-    if(ch < 0xFF) {               /* so we'll try to find it in the UCA */
+    if(ch <= 0xFF) {               /* so we'll try to find it in the UCA */
       order = UCA->latinOneMapping[ch];
     } else {
       order = ucmp32_get(UCA->mapping, ch);
@@ -1430,7 +1430,7 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
                          UErrorCode *status)
 {
   uint32_t order;
-  if (ch < 0xFF) {
+  if (ch <= 0xFF) {
     order = UCA->latinOneMapping[ch];
   }
   else {
