@@ -11,6 +11,7 @@
 #include "unicode/uniset.h"
 #include "rbt_data.h"
 #include "hash.h"
+#include "cmemory.h"
 
 U_NAMESPACE_BEGIN
 
@@ -56,7 +57,7 @@ TransliterationRuleData::TransliterationRuleData(const TransliterationRuleData& 
 
     variables = 0;
     if (other.variables != 0) {
-        variables = new UnicodeFunctor*[variablesLength];
+        variables = (UnicodeFunctor **)uprv_malloc(variablesLength * sizeof(UnicodeFunctor *));
         /* test for NULL */
         if (variables == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
@@ -77,7 +78,7 @@ TransliterationRuleData::~TransliterationRuleData() {
         for (int32_t i=0; i<variablesLength; ++i) {
             delete variables[i];
         }
-        delete[] variables;
+        uprv_free(variables);
     }
 }
 

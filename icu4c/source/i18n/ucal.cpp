@@ -11,6 +11,7 @@
 #include "unicode/calendar.h"
 #include "unicode/timezone.h"
 #include "unicode/ustring.h"
+#include "cmemory.h"
 
 U_NAMESPACE_USE
 
@@ -38,7 +39,7 @@ ucal_getAvailableTZIDs(        int32_t         rawOffset,
   else
     *status = U_INDEX_OUTOFBOUNDS_ERROR;
   
-  delete [] tzs;
+  uprv_free(tzs);
   return retVal;
 }
 
@@ -56,7 +57,7 @@ ucal_countAvailableTZIDs(int32_t rawOffset)
     return 0;
   }
 
-  delete [] tzs;
+  uprv_free(tzs);
   return count;
 }
 

@@ -279,15 +279,15 @@ ChoiceFormat::applyPattern(const UnicodeString& pattern,
     /* test for NULL */
     if (newClosures == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
-        delete newLimits;
+        uprv_free(newLimits);
         return;
     }
     UnicodeString *newFormats = new UnicodeString[count];
     /* test for NULL */
     if (newFormats == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
-        delete newLimits;
-        delete newClosures;
+        uprv_free(newLimits);
+        uprv_free(newClosures);
         return;
     }
 
