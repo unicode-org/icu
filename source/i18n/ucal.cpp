@@ -67,7 +67,7 @@ ucal_countAvailableTZIDs(int32_t rawOffset)
   }
   UErrorCode ec = U_ZERO_ERROR;
   int32_t count = tzs->count(ec);
-  delete tzs;
+  delete (StringEnumeration*)tzs;
   return count;
 }
 
