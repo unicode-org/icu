@@ -781,7 +781,10 @@ static void TestMaxExpansion()
     UErrorCode          status = U_ZERO_ERROR;
     UCollator          *coll   ;/*= ucol_open("en_US", &status);*/
     UChar               ch     = 0;
-    UChar               supplementary[2] = {0xD800, 0xDC00};
+    UChar32             unassigned = 0xEFFFD;
+    UChar               supplementary[2];
+    uint32_t            index = 0;
+    UBool               isError = FALSE;
     uint32_t            sorder = 0;
     UCollationElements *iter   ;/*= ucol_openElements(coll, &ch, 1, &status);*/
     uint32_t            temporder = 0;
@@ -852,6 +855,7 @@ static void TestMaxExpansion()
                   ch, 3);
       }
 
+      U16_APPEND(supplementary, index, 2, unassigned, isError);
       ucol_setText(iter, supplementary, 2, &status);
       sorder = ucol_previous(iter, &status);
 

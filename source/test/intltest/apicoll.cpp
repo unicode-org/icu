@@ -96,8 +96,9 @@ CollationAPITest::TestProperty(/* char* par */)
       ICU 2.1 currVersionArray = {0x19, 0x00, 0x03, 0x03};
       ICU 2.2 currVersionArray = {0x21, 0x40, 0x04, 0x04};
       ICU 2.4 currVersionArray = {0x21, 0x40, 0x04, 0x04};
+      ICU 2.6 currVersionArray = {0x21, 0x40, 0x03, 0x03};
     */
-    UVersionInfo currVersionArray = {0x21, 0x40, 0x03, 0x03};
+    UVersionInfo currVersionArray = {0x21, 0x40, 0x04, 0x04};
     UVersionInfo versionArray;
     int i = 0;
 
@@ -1012,11 +1013,17 @@ void CollationAPITest::TestSortKey()
     col->setAttribute(UCOL_STRENGTH, UCOL_IDENTICAL, status);
 
     uint8_t key2compat[] = {
+            /* 2.6.1 key */
+        0x26, 0x28, 0x2A, 0x2C, 0x26, 0x01, 
+        0x09, 0x01, 0x09, 0x01, 0x25, 0x01, 
+        0x92, 0x93, 0x94, 0x95, 0x92, 0x00 
+
         /* 2.2 key */
+        /*
         0x1D, 0x1F, 0x21, 0x23, 0x1D, 0x01,
         0x09, 0x01, 0x09, 0x01, 0x1C, 0x01,
         0x92, 0x93, 0x94, 0x95, 0x92, 0x00
-
+        */
         /* 2.0 key */
         /*
         0x19, 0x1B, 0x1D, 0x1F, 0x19,
@@ -1176,7 +1183,7 @@ void CollationAPITest::TestMaxExpansion()
 {
     UErrorCode          status = U_ZERO_ERROR;
     UChar               ch     = 0;
-    UChar               supplementary[2] = {0xD800, 0xDC00};
+    UChar32             unassigned = 0xEFFFD;
     uint32_t            sorder = 0;
     uint32_t            temporder = 0;
 
@@ -1253,7 +1260,7 @@ void CollationAPITest::TestMaxExpansion()
                 ch, 3);
     }
 
-    str.setTo(supplementary, 2);
+    str.setTo(unassigned);
     iter->setText(str, status);
     sorder = iter->previous(status);
 
