@@ -486,16 +486,16 @@ cacheDeleter(void* obj) {
   U_NAMESPACE_USE
     ((CacheEntry*)obj)->unref();
 }
-U_CDECL_END
 
 /**
  * Deleter for UObjects
  */
-U_CAPI void U_EXPORT2
+static void U_CALLCONV
 deleteUObject(void *obj) {
   U_NAMESPACE_USE
     delete (UObject*) obj;
 }
+U_CDECL_END
 
 /*
  ******************************************************************
