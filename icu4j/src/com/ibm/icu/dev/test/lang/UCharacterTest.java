@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/lang/UCharacterTest.java,v $ 
-* $Date: 2001/07/03 16:33:27 $ 
-* $Revision: 1.12 $
+* $Date: 2001/07/18 16:55:37 $ 
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
@@ -660,7 +660,7 @@ public final class UCharacterTest extends TestFmwk
         errln("FAIL: foldCase(\\uabcd, true) should be " + foldedDefault);
     }
 
-    /* ### TODO for ICU 1.8: add the following tests similar to TestCaseMapping  */
+    /* ### TODO: add the following tests similar to TestCaseMapping, follow icu's test cases  */
 
     /* test full string case folding with default option and in the same buffer */
 
