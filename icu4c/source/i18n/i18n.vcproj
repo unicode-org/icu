@@ -922,6 +922,12 @@
 				RelativePath=".\regeximp.h">
 			</File>
 			<File
+				RelativePath=".\regexst.cpp">
+			</File>
+			<File
+				RelativePath=".\regexst.h">
+			</File>
+			<File
 				RelativePath=".\rematch.cpp">
 			</File>
 			<File
