@@ -116,6 +116,20 @@ U_CAPI UBool U_EXPORT2
 ucm_parseHeaderLine(UCMFile *ucm,
                     char *line, char **pKey, char **pValue);
 
+/* @return -1 illegal bytes  0 suitable for base table  1 needs to go into extension table */
+U_CAPI int32_t U_EXPORT2
+ucm_mappingType(UCMStates *baseStates,
+                UCMapping *m,
+                UChar32 codePoints[UCNV_EXT_MAX_UCHARS],
+                uint8_t bytes[UCNV_EXT_MAX_BYTES]);
+
+/* add a mapping to the base or extension table as appropriate */
+U_CAPI UBool U_EXPORT2
+ucm_addMappingAuto(UCMFile *ucm, UBool forBase, UCMStates *baseStates,
+                   UCMapping *m,
+                   UChar32 codePoints[UCNV_EXT_MAX_UCHARS],
+                   uint8_t bytes[UCNV_EXT_MAX_BYTES]);
+
 U_CAPI UBool U_EXPORT2
 ucm_addMappingFromLine(UCMFile *ucm, const char *line, UBool forBase, UCMStates *baseStates);
 
@@ -211,6 +225,24 @@ ucm_optimizeStates(UCMStates *states,
 U_CAPI int32_t U_EXPORT2
 ucm_findFallback(_MBCSToUFallback *toUFallbacks, int32_t countToUFallbacks,
                  uint32_t offset);
+
+/* very rptp2ucm-specific functions ----------------------------------------- */
+
+/*
+ * Input: Separate tables with mappings from/to Unicode,
+ * subchar and subchar1 (0 if none).
+ * All mappings must have flag 0.
+ *
+ * Output: fromUTable will contain the union of mappings with the correct
+ * precision flags, and be sorted.
+ */
+U_CAPI void U_EXPORT2
+ucm_mergeTables(UCMTable *fromUTable, UCMTable *toUTable,
+                const uint8_t *subchar, int32_t subcharLength,
+                uint8_t subchar1);
+
+U_CAPI UBool U_EXPORT2
+ucm_separateMappings(UCMFile *ucm, UBool isSISO);
 
 U_CDECL_END
 
