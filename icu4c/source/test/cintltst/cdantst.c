@@ -229,6 +229,7 @@ static void TestTertiary( )
     myCollation = ucol_open("da_DK", &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+	return;
     }
     ucol_setStrength(myCollation, UCOL_TERTIARY);
     for (i = 0; i < 5 ; i++)
@@ -257,7 +258,8 @@ static void TestPrimary()
     UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("da_DK", &status);
     if(U_FAILURE(status)){
-        log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+        log_err("ERROR: %s: in creation of rule based collator: %s\n", __FILE__, myErrorName(status));
+	return;
     }
     ucol_setStrength(myCollation, UCOL_PRIMARY);
     for (i = 5; i < 8 ; i++)

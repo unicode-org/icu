@@ -124,6 +124,7 @@ static void TestTertiary( )
     myCollation = ucol_open("tr", &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+	return;
     }
     log_verbose("Testing Turkish Collation with Tertiary strength\n");
     ucol_setStrength(myCollation, UCOL_TERTIARY);
@@ -143,6 +144,7 @@ static void TestPrimary()
     myCollation = ucol_open("tr", &status);
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of rule based collator: %s\n", myErrorName(status));
+	return;
     }
     log_verbose("Testing Turkish Collation with Primary strength\n");
     ucol_setStrength(myCollation, UCOL_PRIMARY);
