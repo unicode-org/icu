@@ -83,7 +83,7 @@ static void checkFontVersion(PortableFontInstance &fontInstance, const char *tes
     }
 }
 
-int main(int /*argc*/, char */*argv[]*/)
+int main(int /*argc*/, char * /*argv[]*/)
 {
     le_int32 failures = 0;
 
