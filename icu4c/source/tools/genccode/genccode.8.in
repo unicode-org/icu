@@ -2,9 +2,9 @@
 .\"
 .\" genccode.8: manual page for the gennames utility
 .\"
-.\" Copyright (C) 2000 IBM, Inc. and others.
+.\" Copyright (C) 2003 IBM, Inc. and others.
 .\"
-.TH GENCCODE 8 "19 November 2001" "ICU MANPAGE" "ICU @VERSION@ Manual"
+.TH GENCCODE 8 "17 July 2003" "ICU MANPAGE" "ICU @VERSION@ Manual"
 .SH NAME
 .B genccode
 \- generate C code from an ICU data file
@@ -21,6 +21,9 @@
 ]
 [
 .BI "\-e\fP, \fB\-\-entrypoint" " name"
+]
+[
+.BI "\-f\fP, \fB\-\-filename" " name"
 ]
 [
 .IR filename " .\|.\|."
@@ -66,6 +69,11 @@ indicated big endian data, and the letter
 .I l
 indicates little endian ones).
 .TP
+.BI "\-f\fP, \fB\-\-filename" " name"
+Normally, an ICU data file such as mydata.icu will be turned into mydata_icu.c and mydata_icu.o.
+However, if this parameter was set to "somedata", the output files will be somedata.o and 
+somedata.c, respectively.
+.TP
 .BI "\-e\fP, \fB\-\-entrypoint" " name"
 Set the data entry point (used for linking against the data in a
 shared library form) to
@@ -78,4 +86,4 @@ option).
 .SH VERSION
 @VERSION@
 .SH COPYRIGHT
-Copyright (C) 2000-2001 IBM, Inc. and others.
+Copyright (C) 2000-2003 IBM, Inc. and others.
