@@ -16,8 +16,7 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_IDNA
-
+#if !UCONFIG_NO_IDNA && !UCONFIG_NO_TRANSLITERATION
 #include "idnaref.h"
 #include "strprep.h"
 #include "punyref.h"
@@ -987,5 +986,4 @@ CLEANUP:
 
     return result;
 }
-
 #endif /* #if !UCONFIG_NO_IDNA */

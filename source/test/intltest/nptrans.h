@@ -20,6 +20,7 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_IDNA
+#if !UCONFIG_NO_TRANSLITERATION
 
 #include "strprep.h"
 #include "unicode/uniset.h"
@@ -145,6 +146,10 @@ inline UBool NamePrepTransform::isLDHChar(UChar32 ch){
     return FALSE;
 }
 
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */
+#else
+class NamePrepTransform {
+};
 #endif /* #if !UCONFIG_NO_IDNA */
 
 #endif

@@ -16,6 +16,7 @@
 
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_TRANSLITERATION
 #if !UCONFIG_NO_IDNA
 
 #include "nptrans.h"
@@ -277,3 +278,4 @@ UBool NamePrepTransform::isLabelSeparator(UChar32 ch, UErrorCode& status){
 }
 
 #endif /* #if !UCONFIG_NO_IDNA */
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */

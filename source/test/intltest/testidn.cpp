@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_IDNA
+#if !UCONFIG_NO_IDNA && !UCONFIG_NO_TRANSLITERATION
 
 #include "unicode/uchar.h"
 #include "unicode/putil.h"
