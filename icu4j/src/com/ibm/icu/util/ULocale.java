@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/ULocale.java,v $
-* $Date: 2003/11/21 22:52:04 $
-* $Revision: 1.5 $
+* $Date: 2003/11/24 22:24:28 $
+* $Revision: 1.6 $
 *
 ******************************************************************************
 */
@@ -15,8 +15,6 @@ package com.ibm.icu.util;
 
 import java.util.Locale;
 import java.io.Serializable;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.IOException;
 
 /**
@@ -100,7 +98,7 @@ public final class ULocale implements Serializable {
     }
 
     private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-	locName = (String)in.readObject();
-	locale = new Locale(locName, "");
+	    locName = (String)in.readObject();
+	    locale = new Locale(locName, "");
     }
 }
