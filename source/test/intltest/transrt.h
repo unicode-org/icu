@@ -27,7 +27,10 @@ class TransliteratorRoundTripTest : public IntlTest {
     void TestArabic(void);
     void TestHebrew(void);
     void TestGreek(void);
+    void Testel(void);
     void TestCyrillic(void);
+    void TestDevanagari(void);
+    void TestDevanagariTamil(void);
     void TestJamo(void);
     void TestJamoHangul(void);
 };
