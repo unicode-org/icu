@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/RuleBasedBreakIterator.java,v $ 
- * $Date: 2000/09/15 16:07:52 $ 
- * $Revision: 1.10 $
+ * $Date: 2001/02/06 22:37:30 $ 
+ * $Revision: 1.11 $
  *
  *****************************************************************************************
  */
@@ -32,6 +32,7 @@
 package com.ibm.text;
 
 import com.ibm.util.CompactByteArray;
+import com.ibm.util.Utility;
 import java.util.Vector;
 import java.util.Stack;
 import java.util.Hashtable;
@@ -59,7 +60,7 @@ import java.io.*;
  * They typically define either character categories or commonly-used subexpressions.</p>
  *
  * <p>There is one special substitution.&nbsp; If the description defines a substitution
- * called &quot;$ignore&quot;, the expression must be a [] expression, and the
+ * called &quot;_ignore_&quot;, the expression must be a [] expression, and the
  * expression defines a set of characters (the &quot;<em>ignore characters</em>&quot;) that
  * will be transparent to the BreakIterator.&nbsp; A sequence of characters will break the
  * same way it would if any ignore characters it contains are taken out.&nbsp; Break
@@ -240,7 +241,7 @@ import java.io.*;
  * &nbsp; For examples, see the resource data (which is annotated).</p>
  *
  * @author Richard Gillam
- * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.10 $ $Date: 2000/09/15 16:07:52 $
+ * $RCSfile: RuleBasedBreakIterator.java,v $ $Revision: 1.11 $ $Date: 2001/02/06 22:37:30 $
  */
 public class RuleBasedBreakIterator extends BreakIterator {
 
@@ -248,6 +249,11 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * A token used as a character-category value to identify ignore characters
      */
     protected static final byte IGNORE = -1;
+
+    /**
+     * Special variable used to define ignore characters
+     */
+    private static final String IGNORE_VAR = "_ignore_";
 
     /**
      * The state number of the starting state
@@ -1373,11 +1379,14 @@ visitedChars = 0;
             String replace;
             String replaceWith;
             int equalPos = substitutionRule.indexOf('=');
-            replace = substitutionRule.substring(0, equalPos);
+            if (substitutionRule.charAt(0) != '$') {
+                error("Missing '$' on left-hand side of =", startPos, description);
+            }
+            replace = substitutionRule.substring(1, equalPos);
             replaceWith = substitutionRule.substring(equalPos + 1);
 
             // check to see whether the substitution name is something we've declared
-            // to be "special".  For RuleBasedBreakIterator itself, this is "$ignore".
+            // to be "special".  For RuleBasedBreakIterator itself, this is IGNORE_VAR.
             // This function takes care of any extra processing that has to be done
             // with "special" substitution names.
             handleSpecialSubstitution(replace, replaceWith, startPos, description);
@@ -1398,12 +1407,18 @@ visitedChars = 0;
             // now go through the rest of the description (which hasn't been broken up
             // into separate rules yet) and replace every occurrence of the
             // substitution name with the substitution body
-            replace = "{" + replace + "}";
+            replace = "$" + replace;
             StringBuffer result = new StringBuffer();
             result.append(description.substring(0, startPos));
             int lastPos = startPos;
             int pos = description.indexOf(replace, startPos);
             while (pos != -1) {
+                // [liu] Check that the string we've found isn't a redefinition
+                // of the variable.
+                if (description.charAt(pos-1) == ';' &&
+                    description.charAt(pos + replace.length()) == '=') {
+                    error("Attempt to redefine " + replace, pos, description);
+                }
                 result.append(description.substring(lastPos, pos));
                 result.append(replaceWith);
                 lastPos = pos + replace.length();
@@ -1417,18 +1432,18 @@ visitedChars = 0;
          * This function defines a protocol for handling substitution names that
          * are "special," i.e., that have some property beyond just being
          * substitutions.  At the RuleBasedBreakIterator level, we have one
-         * special substitution name, "<ignore>".  Subclasses can override this
+         * special substitution name, IGNORE_VAR.  Subclasses can override this
          * function to add more.  Any special processing that has to go on beyond
          * that which is done by the normal substitution-processing code is done
          * here.
          */
         protected void handleSpecialSubstitution(String replace, String replaceWith,
                     int startPos, String description) {
-            // if we get a definition for a substitution called "$ignore", it defines
+            // if we get a definition for a substitution called IGNORE_VAR, it defines
             // the ignore characters for the iterator.  Check to make sure the expression
             // is a [] expression, and if it is, parse it and store the characters off
             // to the side.
-            if (replace.equals("$ignore")) {
+            if (replace.equals(IGNORE_VAR)) {
                 if (replaceWith.charAt(0) == '(') {
                     error("Ignore group can't be enclosed in (", startPos, description);
                 }
@@ -2892,7 +2907,8 @@ System.out.println();
          */
         protected void error(String message, int position, String context) {
             throw new IllegalArgumentException("Parse error: " + message + "\n" +
-                    context.substring(0, position) + "\n\n" + context.substring(position));
+                    Utility.escape(context.substring(0, position)) + "\n\n" +
+                    Utility.escape(context.substring(position)));
         }
 
 
