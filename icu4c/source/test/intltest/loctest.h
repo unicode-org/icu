@@ -52,8 +52,6 @@ public:
 
     void TestISO3Fallback(void);
     void TestGetLangsAndCountries(void);
-    void Test4126880(void);
-    void TestBug4135316(void);
     void TestSimpleDisplayNames(void);
     void TestUninstalledISO3Names(void);
     void TestAtypicalLocales(void);

@@ -106,17 +106,6 @@ ucnv_io_countAvailableConverters(UErrorCode *pErrorCode);
 U_CFUNC const char *
 ucnv_io_getAvailableConverter(uint16_t n, UErrorCode *pErrorCode);
 
-#ifdef ICU_UNICODECONVERTER_USE_DEPRECATES
-/**
- * Fill an array const char *aliases[ucnv_io_countAvailableConverters()]
- * with pointers to all converter names in mixed-case.
- * @param aliases The alias array to be filled
- * @param pErrorCode The error code
- */
-U_CFUNC void
-ucnv_io_fillAvailableConverters(const char **aliases, UErrorCode *pErrorCode);
-#endif
-
 /**
  * Return the (n)th converter name in mixed case, or NULL
  * if there is none (typically, if the data cannot be loaded).
