@@ -728,7 +728,8 @@ usprep_prepare(   const UStringPrepProfile* profile,
         type = getValues(result, value, isIndex);
 
         if( type == USPREP_PROHIBITED || 
-            ((result < _SPREP_TYPE_THRESHOLD) && (result&0x01))){
+            ((result < _SPREP_TYPE_THRESHOLD) && (result & 0x01) /* first bit says it the code point is prohibited*/)
+           ){
             *status = U_STRINGPREP_PROHIBITED_ERROR;
             uprv_syntaxError(b1, b2Index-U16_LENGTH(ch), b2Len, parseError);
             goto CLEANUP;
