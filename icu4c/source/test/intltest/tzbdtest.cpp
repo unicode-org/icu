@@ -405,7 +405,7 @@ TimeZoneBoundaryTest::findBoundariesStepwise(int32_t year, UDate interval, TimeZ
 void
 TimeZoneBoundaryTest::TestStepwise()
 {
-    TimeZone *zone =  TimeZone::createTimeZone("EST");
+    TimeZone *zone =  TimeZone::createTimeZone("America/New_York");
     findBoundariesStepwise(1997, ONE_DAY, zone, 2);
     delete zone;
     zone = TimeZone::createTimeZone("UTC"); // updated 12/3/99 aliu
