@@ -548,7 +548,7 @@
   <<	 ⃡
   <<	 ⃢
   <<	 ⃣
-& [last non-ignorable]
+& [last regular]
  <	 '\u0009'
  <	 '\u000A'
  <	 '\u000B'
