@@ -26,6 +26,8 @@
 #include "unicode/uloc.h"
 #include "ucnv_io.h"
 #include "ucnv_bld.h"
+#include "ucnvmbcs.h"
+#include "ucnv_ext.h"
 #include "ucnv_cnv.h"
 #include "ucnv_imp.h"
 #include "uhash.h"
@@ -870,6 +872,9 @@ ucnv_swap(const UDataSwapper *ds,
     _MBCSHeader mbcsHeader;
     uint8_t outputType;
 
+    const int32_t *inExtIndexes;
+    int32_t extOffset;
+
     /* udata_swapDataHeader checks the arguments */
     headerSize=udata_swapDataHeader(ds, inData, length, outData, pErrorCode);
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
@@ -963,10 +968,43 @@ ucnv_swap(const UDataSwapper *ds,
         mbcsHeader.flags=               ds->readUInt32(inMBCSHeader->flags);
         mbcsHeader.fromUBytesLength=    ds->readUInt32(inMBCSHeader->fromUBytesLength);
 
+        extOffset=(int32_t)mbcsHeader.flags>>8;
         outputType=(uint8_t)mbcsHeader.flags;
 
+        /* make sure that the output type is known */
+        switch(outputType) {
+        case MBCS_OUTPUT_1:
+        case MBCS_OUTPUT_2:
+        case MBCS_OUTPUT_3:
+        case MBCS_OUTPUT_4:
+        case MBCS_OUTPUT_3_EUC:
+        case MBCS_OUTPUT_4_EUC:
+        case MBCS_OUTPUT_2_SISO:
+        case MBCS_OUTPUT_EXT_ONLY:
+            /* OK */
+            break;
+        default:
+            udata_printError(ds, "ucnv_swap(): unsupported MBCS output type 0x%x\n",
+                             outputType);
+            *pErrorCode=U_UNSUPPORTED_ERROR;
+            return 0;
+        }
+
         /* calculate the length of the MBCS data */
-        size=(int32_t)(mbcsHeader.offsetFromUBytes+mbcsHeader.fromUBytesLength);
+        if(extOffset==0) {
+            size=(int32_t)(mbcsHeader.offsetFromUBytes+mbcsHeader.fromUBytesLength);
+        } else {
+            /* there is extension data after the base data, see ucnv_ext.h */
+            if(length<(extOffset+UCNV_EXT_INDEXES_MIN_LENGTH*4)) {
+                udata_printError(ds, "ucnv_swap(): too few bytes (%d after headers) for an ICU MBCS .cnv conversion table with extension data\n",
+                                 length);
+                *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+                return 0;
+            }
+
+            inExtIndexes=(const int32_t *)(inBytes+extOffset);
+            size=extOffset+udata_readInt32(ds, inExtIndexes[UCNV_EXT_SIZE]);
+        }
 
         if(length>=0) {
             if(length<size) {
@@ -985,65 +1023,125 @@ ucnv_swap(const UDataSwapper *ds,
             ds->swapArray32(ds, &inMBCSHeader->countStates, 7*4,
                                &outMBCSHeader->countStates, pErrorCode);
 
-            /* swap the state table, 1kB per state */
-            ds->swapArray32(ds, inMBCSHeader+1, (int32_t)(mbcsHeader.countStates*1024),
-                               outMBCSHeader+1, pErrorCode);
+            if(outputType==MBCS_OUTPUT_EXT_ONLY) {
+                /*
+                 * extension-only file,
+                 * contains a base name instead of normal base table data
+                 */
 
-            /* swap the toUFallbacks[] */
-            offset=sizeof(_MBCSHeader)+mbcsHeader.countStates*1024;
-            ds->swapArray32(ds, inBytes+offset, (int32_t)(mbcsHeader.countToUFallbacks*8),
-                               outBytes+offset, pErrorCode);
-
-            /* swap the unicodeCodeUnits[] */
-            offset=mbcsHeader.offsetToUCodeUnits;
-            count=mbcsHeader.offsetFromUTable-offset;
-            ds->swapArray16(ds, inBytes+offset, (int32_t)count,
-                               outBytes+offset, pErrorCode);
-
-            /* offset to the stage 1 table, independent of the outputType */
-            offset=mbcsHeader.offsetFromUTable;
-
-            if(outputType==MBCS_OUTPUT_1) {
-                /* SBCS: swap the fromU tables, all 16 bits wide */
-                count=(mbcsHeader.offsetFromUBytes-offset)+mbcsHeader.fromUBytesLength;
-                ds->swapArray16(ds, inBytes+offset, (int32_t)count,
-                                   outBytes+offset, pErrorCode);
+                /* swap the base name, between the header and the extension data */
+                ds->swapInvChars(ds, inMBCSHeader+1, uprv_strlen((const char *)(inMBCSHeader+1)),
+                                    outMBCSHeader+1, pErrorCode);
             } else {
-                /* otherwise: swap the stage tables separately */
+                /* normal file with base table data */
 
-                /* stage 1 table: uint16_t[0x440 or 0x40] */
-                if(inStaticData->unicodeMask&UCNV_HAS_SUPPLEMENTARY) {
-                    count=0x440*2; /* for all of Unicode */
-                } else {
-                    count=0x40*2; /* only BMP */
-                }
+                /* swap the state table, 1kB per state */
+                ds->swapArray32(ds, inMBCSHeader+1, (int32_t)(mbcsHeader.countStates*1024),
+                                   outMBCSHeader+1, pErrorCode);
+
+                /* swap the toUFallbacks[] */
+                offset=sizeof(_MBCSHeader)+mbcsHeader.countStates*1024;
+                ds->swapArray32(ds, inBytes+offset, (int32_t)(mbcsHeader.countToUFallbacks*8),
+                                   outBytes+offset, pErrorCode);
+
+                /* swap the unicodeCodeUnits[] */
+                offset=mbcsHeader.offsetToUCodeUnits;
+                count=mbcsHeader.offsetFromUTable-offset;
                 ds->swapArray16(ds, inBytes+offset, (int32_t)count,
                                    outBytes+offset, pErrorCode);
 
-                /* stage 2 table: uint32_t[] */
-                offset+=count;
-                count=mbcsHeader.offsetFromUBytes-offset;
-                ds->swapArray32(ds, inBytes+offset, (int32_t)count,
-                                   outBytes+offset, pErrorCode);
+                /* offset to the stage 1 table, independent of the outputType */
+                offset=mbcsHeader.offsetFromUTable;
 
-                /* stage 3/result bytes: sometimes uint16_t[] or uint32_t[] */
-                offset=mbcsHeader.offsetFromUBytes;
-                count=mbcsHeader.fromUBytesLength;
-                switch(outputType) {
-                case MBCS_OUTPUT_2:
-                case MBCS_OUTPUT_3_EUC:
-                case MBCS_OUTPUT_2_SISO:
+                if(outputType==MBCS_OUTPUT_1) {
+                    /* SBCS: swap the fromU tables, all 16 bits wide */
+                    count=(mbcsHeader.offsetFromUBytes-offset)+mbcsHeader.fromUBytesLength;
                     ds->swapArray16(ds, inBytes+offset, (int32_t)count,
                                        outBytes+offset, pErrorCode);
-                    break;
-                case MBCS_OUTPUT_4:
+                } else {
+                    /* otherwise: swap the stage tables separately */
+
+                    /* stage 1 table: uint16_t[0x440 or 0x40] */
+                    if(inStaticData->unicodeMask&UCNV_HAS_SUPPLEMENTARY) {
+                        count=0x440*2; /* for all of Unicode */
+                    } else {
+                        count=0x40*2; /* only BMP */
+                    }
+                    ds->swapArray16(ds, inBytes+offset, (int32_t)count,
+                                       outBytes+offset, pErrorCode);
+
+                    /* stage 2 table: uint32_t[] */
+                    offset+=count;
+                    count=mbcsHeader.offsetFromUBytes-offset;
                     ds->swapArray32(ds, inBytes+offset, (int32_t)count,
                                        outBytes+offset, pErrorCode);
-                    break;
-                default:
-                    /* just uint8_t[], nothing to swap */
-                    break;
+
+                    /* stage 3/result bytes: sometimes uint16_t[] or uint32_t[] */
+                    offset=mbcsHeader.offsetFromUBytes;
+                    count=mbcsHeader.fromUBytesLength;
+                    switch(outputType) {
+                    case MBCS_OUTPUT_2:
+                    case MBCS_OUTPUT_3_EUC:
+                    case MBCS_OUTPUT_2_SISO:
+                        ds->swapArray16(ds, inBytes+offset, (int32_t)count,
+                                           outBytes+offset, pErrorCode);
+                        break;
+                    case MBCS_OUTPUT_4:
+                        ds->swapArray32(ds, inBytes+offset, (int32_t)count,
+                                           outBytes+offset, pErrorCode);
+                        break;
+                    default:
+                        /* just uint8_t[], nothing to swap */
+                        break;
+                    }
                 }
+            }
+
+            if(extOffset!=0) {
+                /* swap the extension data */
+                inBytes+=extOffset;
+                outBytes+=extOffset;
+
+                /* swap toUTable[] */
+                offset=udata_readInt32(ds, inExtIndexes[UCNV_EXT_TO_U_INDEX]);
+                length=udata_readInt32(ds, inExtIndexes[UCNV_EXT_TO_U_LENGTH]);
+                ds->swapArray32(ds, inBytes+offset, length*4, outBytes+offset, pErrorCode);
+
+                /* swap toUUChars[] */
+                offset=udata_readInt32(ds, inExtIndexes[UCNV_EXT_TO_U_UCHARS_INDEX]);
+                length=udata_readInt32(ds, inExtIndexes[UCNV_EXT_TO_U_UCHARS_LENGTH]);
+                ds->swapArray16(ds, inBytes+offset, length*2, outBytes+offset, pErrorCode);
+
+                /* swap fromUTableUChars[] */
+                offset=udata_readInt32(ds, inExtIndexes[UCNV_EXT_FROM_U_UCHARS_INDEX]);
+                length=udata_readInt32(ds, inExtIndexes[UCNV_EXT_FROM_U_LENGTH]);
+                ds->swapArray16(ds, inBytes+offset, length*2, outBytes+offset, pErrorCode);
+
+                /* swap fromUTableValues[] */
+                offset=udata_readInt32(ds, inExtIndexes[UCNV_EXT_FROM_U_VALUES_INDEX]);
+                /* same length as for fromUTableUChars[] */
+                ds->swapArray32(ds, inBytes+offset, length*4, outBytes+offset, pErrorCode);
+
+                /* no need to swap fromUBytes[] */
+
+                /* swap fromUStage12[] */
+                offset=udata_readInt32(ds, inExtIndexes[UCNV_EXT_FROM_U_STAGE_12_INDEX]);
+                length=udata_readInt32(ds, inExtIndexes[UCNV_EXT_FROM_U_STAGE_12_LENGTH]);
+                ds->swapArray16(ds, inBytes+offset, length*2, outBytes+offset, pErrorCode);
+
+                /* swap fromUStage3[] */
+                offset=udata_readInt32(ds, inExtIndexes[UCNV_EXT_FROM_U_STAGE_3_INDEX]);
+                length=udata_readInt32(ds, inExtIndexes[UCNV_EXT_FROM_U_STAGE_3_LENGTH]);
+                ds->swapArray16(ds, inBytes+offset, length*2, outBytes+offset, pErrorCode);
+
+                /* swap fromUStage3b[] */
+                offset=udata_readInt32(ds, inExtIndexes[UCNV_EXT_FROM_U_STAGE_3B_INDEX]);
+                length=udata_readInt32(ds, inExtIndexes[UCNV_EXT_FROM_U_STAGE_3B_LENGTH]);
+                ds->swapArray32(ds, inBytes+offset, length*4, outBytes+offset, pErrorCode);
+
+                /* swap indexes[] */
+                length=udata_readInt32(ds, inExtIndexes[UCNV_EXT_INDEXES_LENGTH]);
+                ds->swapArray32(ds, inBytes, length*4, outBytes, pErrorCode);
             }
         }
     } else {
