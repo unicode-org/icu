@@ -47,11 +47,13 @@ static const UDataInfo dataInfo={
 };
 
 static void createData(const char*);
+extern int genres32(const char *prog, const char *path);
 
 static UOption options[]={
-    UOPTION_HELP_H,
-    UOPTION_HELP_QUESTION_MARK,
-    UOPTION_DESTDIR
+  /*0*/ UOPTION_HELP_H,
+  /*1*/ UOPTION_HELP_QUESTION_MARK,
+  /*2*/ UOPTION_DESTDIR,
+  /*3*/ UOPTION_DEF("genres", 'r', UOPT_NO_ARG)
 };
 
 extern int
@@ -71,16 +73,21 @@ main(int argc, char* argv[]) {
     if(argc<0 || options[0].doesOccur || options[1].doesOccur) {
         fprintf(stderr,
             "usage: %s [-options]\n"
-            "\tcreate the test file " DATA_PKG "_" DATA_NAME "." DATA_TYPE "\n"
+            "\tcreate the test file " DATA_PKG "_" DATA_NAME "." DATA_TYPE " unless the -r option is given.\n"
             "\toptions:\n"
             "\t\t-h or -? or --help  this usage text\n"
-            "\t\t-d or --destdir     destination directory, followed by the path\n",
+            "\t\t-d or --destdir     destination directory, followed by the path\n"
+            "\t\t-r or --genres      generate resource file testtable32.txt instead of UData test \n",
             argv[0]);
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
 
-    /* printf("Generating the test memory mapped file\n"); */
-    createData(options[2].value);
+    if ( options[3].doesOccur ) {
+      return genres32( argv[0], options[2].value );
+    } else { 
+      /* printf("Generating the test memory mapped file\n"); */
+      createData(options[2].value);
+    }
     return 0;
 }
 
