@@ -497,7 +497,7 @@ Locale& Locale::init(const char* localeID)
         // "canonicalize" the locale ID to ICU/Java format
         err = U_ZERO_ERROR;
         length = uloc_getName(localeID, fullName, sizeof(fullNameBuffer), &err);
-        if(err == U_BUFFER_OVERFLOW_ERROR || length >= sizeof(fullNameBuffer)) {
+        if(err == U_BUFFER_OVERFLOW_ERROR || length >= (int32_t)sizeof(fullNameBuffer)) {
             /*Go to heap for the fullName if necessary*/
             fullName = (char *)uprv_malloc(sizeof(char)*(length + 1));
             if(fullName == 0) {
