@@ -5,6 +5,8 @@
 // *
 // ***************************************************************************
 
+// The vast majority of this data is based on the pt_BR locale.
+// The pt_PT locale should be used when Portugal Portuguese is needed.
 pt {
     Version { "2.0" }
     Countries {
