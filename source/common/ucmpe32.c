@@ -21,8 +21,6 @@
 
 #include "ucmpe32.h"
 #include "cmemory.h"
-#include "cstring.h"
-#include "filestrm.h"
 
 /* builder data ------------------------------------------------------------- */
 

@@ -21,7 +21,6 @@
 #include "ucnv_bld.h"
 #include "unicode/ucnv.h"
 #include "ucnv_cnv.h"
-#include "unicode/ustring.h"
 #include "unicode/ucnv_cb.h"
 
 #define UCNV_OPTIONS_VERSION_MASK 0xf

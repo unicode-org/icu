@@ -15,9 +15,10 @@
 */
 
 #include "unicode/utypes.h"
-#include "cwchar.h"
 
 #if !U_HAVE_WCSCPY
+
+#include "cwchar.h"
 
 U_CAPI wchar_t *uprv_wcscat(wchar_t *dst, const wchar_t *src) {
     wchar_t *start=dst;

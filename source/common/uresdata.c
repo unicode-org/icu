@@ -20,7 +20,6 @@
 
 #include "unicode/utypes.h"
 #include "cstring.h"
-#include "cmemory.h"
 #include "unicode/udata.h"
 #include "uresdata.h"
 #include "uresimp.h"
