@@ -287,7 +287,7 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
 uint32_t getSpecialCE(const UCollator *coll, collIterate *source, UErrorCode *status) {
   int32_t i = 0; /* general counter */
   uint32_t CE = *source->CEpos;
-  while (true) {
+  for (;;) {
     const uint32_t *CEOffset = NULL;
     const UChar *UCharOffset = NULL;
     UChar schar, tchar;
@@ -336,7 +336,7 @@ uint32_t getSpecialCE(const UCollator *coll, collIterate *source, UErrorCode *st
       break;
     case CONTRACTION_TAG:
       /* This should handle contractions */
-      while(true) {
+      for (;;) {
         /* First we position ourselves at the begining of contraction sequence */
         const UChar *ContractionStart = UCharOffset = (UChar *)coll->image+getContractOffset(CE);
 
