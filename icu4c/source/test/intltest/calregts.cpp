@@ -70,6 +70,7 @@ CalendarRegressionTest::runIndexedTest( int32_t index, bool_t exec, char* &name,
         CASE(32,Test4165343) 
         CASE(33,Test4166109) 
         CASE(34,Test4167060) 
+        CASE(35,Test4197699)
 
     default: name = ""; break;
     }
@@ -1580,8 +1581,53 @@ CalendarRegressionTest::Test4167060()
     delete calendars[2];
 }
 
+/**
+ * Week of year is wrong at the start and end of the year.
+ */
+void CalendarRegressionTest::Test4197699() {
+    UErrorCode status = U_ZERO_ERROR;
+    GregorianCalendar cal(status);
+    cal.setFirstDayOfWeek(Calendar::MONDAY);
+    cal.setMinimalDaysInFirstWeek(4);
+    SimpleDateFormat fmt("E dd MMM yyyy  'DOY='D 'WOY='w",
+                         Locale::US, status);
+    fmt.setCalendar(cal);
+    if (FAILURE(status)) {
+        errln("Couldn't initialize test");
+        return;
+    }
 
+    int32_t DATA[] = {
+        2000,  Calendar::JANUARY,   1,   52,
+        2001,  Calendar::DECEMBER,  31,  1,
+    };
+    int32_t DATA_length = sizeof(DATA) / sizeof(DATA[0]);
 
+    UnicodeString str;
+    DateFormat& dfmt = *(DateFormat*)&fmt;
+    for (int32_t i=0; i<DATA_length; ) {
+        cal.clear();
+        cal.set(DATA[i], DATA[i+1], DATA[i+2]);
+        i += 3;
+        int32_t expWOY = DATA[i++];
+        int32_t actWOY = cal.get(Calendar::WEEK_OF_YEAR, status);
+        if (expWOY == actWOY) {
+            logln(UnicodeString("Ok: ") + dfmt.format(cal.getTime(status), str.remove()));
+        } else {
+            errln(UnicodeString("FAIL: ") + dfmt.format(cal.getTime(status), str.remove())
+                  + ", expected WOY=" + expWOY);
+            cal.add(Calendar::DATE, -8, status);
+            for (int j=0; j<14; ++j) {
+                cal.add(Calendar::DATE, 1, status);
+                logln(dfmt.format(cal.getTime(status), str.remove()));
+            }
+        }
+        if (FAILURE(status)) {
+            errln("FAIL: Unexpected error from Calendar");
+            return;
+        }
+    }
+}
 
 UDate
 CalendarRegressionTest::makeDate(int32_t y, int32_t m, int32_t d,
