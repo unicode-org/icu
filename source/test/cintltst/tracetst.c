@@ -77,7 +77,7 @@ static void test_format(const char *format, int32_t bufCap, int32_t indent,
     /* run the formatter */
     va_start(args, line);
     memset(buf, 0, sizeof(buf));
-    len = utrace_format(buf, bufCap, indent, format, args);
+    len = utrace_vformat(buf, bufCap, indent, format, args);
 
     /* Check results.   */
     if (strcmp(expectedResult, buf) != 0) {

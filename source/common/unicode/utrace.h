@@ -78,12 +78,13 @@ UTraceEntry(const void *context, int32_t fnNumber);
   *  Type signature for the trace function to be called when exiting from a function.
   *  @param context value supplied at the time the trace functions are set.
   *  @param fnNumber Enum value indicating the ICU function being exited.
-  *  @param retType the UTraceExitVal indicating the number and types of
-  *                 variable arguments that follow.
-  *  @param argType values returned by the function being traced, may include
-  *                 one or both of the function's return value and a
-  *                 UErrorCode parameter value.
-  *  @see   UTraceExitVal
+  *  @param fmt     A formatting string that describes the number and types
+  *                 of arguments included with the variable args.  The fmt
+  *                 string has the same form as the utrace_vformat format
+  *                 string.
+  *  @param args    A variable arguments list.  Contents are described by
+  *                 the fmt parameter.
+  *  @see   utrace_vformat
   *  @draft ICU 2.8
   */
 typedef void U_CALLCONV
@@ -93,8 +94,12 @@ UTraceExit(const void *context, int32_t fnNumber,
 /**
   *  Type signature for the trace function to be called from within an ICU function
   *  to display data or messages.
-  *  @param context value supplied at the time the trace functions are set.
+  *  @param context  value supplied at the time the trace functions are set.
   *  @param fnNumber Enum value indicating the ICU function being exited.
+  *  @param level    The current tracing level
+  *  @param fmt      A format string describing the tracing data that is supplied
+  *                  as variable args
+  *  @param args     The data being traced, passed as variable args.
   *  @draft ICU 2.8
   */
 typedef void U_CALLCONV
@@ -266,14 +271,14 @@ utrace_getFunctions(const void **context,
   *  @draft ICU 2.8
   */
 U_CAPI int32_t U_EXPORT2
-utrace_format(char *outBuf, int32_t capacity,
+utrace_vformat(char *outBuf, int32_t capacity,
               int32_t indent, const char *fmt,  va_list args);
 
 /**
   *  Trace output Formatter.  An application's UTraceData tracing functions may call
   *                 this function to format any additional trace data, beyond that
   *                 provided by default, in human readable form with the same
-  *                 formatting conventions used by utrace_format().
+  *                 formatting conventions used by utrace_vformat().
   *  @param outBuf  pointer to a buffer to receive the formatted output.  Output
   *                 will be nul terminated if there is space in the buffer -
   *                 if the length of the requested output < the output buffer size.
@@ -287,7 +292,7 @@ utrace_format(char *outBuf, int32_t capacity,
   *  @draft ICU 2.8
   */
 U_CAPI int32_t U_EXPORT2
-utrace_formatA(char *outBuf, int32_t capacity,
+utrace_format(char *outBuf, int32_t capacity,
               int32_t indent, const char *fmt,  ...);
 
 

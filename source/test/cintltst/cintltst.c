@@ -65,7 +65,7 @@ void ctest_setICU_DATA(void);
 static int traceFnNestingDepth = 0;
 void U_CALLCONV TraceEntry(const void *context, int32_t fnNumber) {
     char buf[500];
-    utrace_formatA(buf, sizeof(buf), traceFnNestingDepth*3, "%s() enter.\n", utrace_functionName(fnNumber));
+    utrace_format(buf, sizeof(buf), traceFnNestingDepth*3, "%s() enter.\n", utrace_functionName(fnNumber));
     fputs(buf, stdout);
     traceFnNestingDepth++;
 }
@@ -76,9 +76,9 @@ void U_CALLCONV TraceExit(const void *context, int32_t fnNumber, const char *fmt
     if (traceFnNestingDepth>0) {
         traceFnNestingDepth--;
     }
-    utrace_formatA(buf, sizeof(buf), traceFnNestingDepth*3, "%s() ", utrace_functionName(fnNumber));
+    utrace_format(buf, sizeof(buf), traceFnNestingDepth*3, "%s() ", utrace_functionName(fnNumber));
     fputs(buf, stdout);
-    utrace_format(buf, sizeof(buf), traceFnNestingDepth*3, fmt, args);
+    utrace_vformat(buf, sizeof(buf), traceFnNestingDepth*3, fmt, args);
     fputs(buf, stdout);
     putc('\n', stdout);
 }
@@ -86,7 +86,7 @@ void U_CALLCONV TraceExit(const void *context, int32_t fnNumber, const char *fmt
 void U_CALLCONV TraceData(const void *context, int32_t fnNumber, 
                           int32_t level, const char *fmt, va_list args) {
     char buf[500];
-    utrace_format(buf, sizeof(buf), traceFnNestingDepth*3, fmt, args);
+    utrace_vformat(buf, sizeof(buf), traceFnNestingDepth*3, fmt, args);
     fputs(buf, stdout);
     putc('\n', stdout);
 }
