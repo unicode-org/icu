@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UnifiedBinaryProperty.java,v $
-* $Date: 2003/03/19 17:30:56 $
-* $Revision: 1.12 $
+* $Date: 2003/05/02 21:46:33 $
+* $Revision: 1.13 $
 *
 *******************************************************************************
 */
@@ -139,11 +139,11 @@ public final class UnifiedBinaryProperty extends UnicodeProperty {
         defaultValueStyle = _getDefaultStyle();
         
         if (majorProp == (BINARY_PROPERTIES>>8)) {
-            name = valueName;
-            shortName = shortValueName;
+            name = ucd.getBinaryPropertiesID_fromIndex((byte)propValue, LONG);
+            shortName = ucd.getBinaryPropertiesID_fromIndex((byte)propValue, SHORT);
             defaultPropertyStyle = defaultValueStyle;
-            valueName = "YES";
-            shortValueName = "Y";
+            valueName = "True";
+            shortValueName = "T";
         }
         
         // System.out.println("Value = " + getValue(defaultValueStyle));
@@ -312,7 +312,7 @@ public final class UnifiedBinaryProperty extends UnicodeProperty {
 */
     public String getFullName(byte style) {
         String pre = "";
-        if ((majorProp) != BINARY_PROPERTIES>>8) {
+        /*if ((majorProp) != BINARY_PROPERTIES>>8)*/ {
             String preShort = getProperty(SHORT) + "=";
             String preLong = getProperty(LONG) + "=";
             if (style < LONG) pre = preShort;
@@ -322,6 +322,9 @@ public final class UnifiedBinaryProperty extends UnicodeProperty {
         String shortOne = getValue(SHORT);
         if (shortOne.length() == 0) shortOne = "xx";
         String longOne = getValue(LONG);
+        if (majorProp == (SCRIPT>>8)) {
+        	longOne = Default.ucd.getCase(longOne, FULL, TITLE);
+       	} 
         if (longOne.length() == 0) longOne = "none";
 
         String post;

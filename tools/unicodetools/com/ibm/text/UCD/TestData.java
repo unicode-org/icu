@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/TestData.java,v $
-* $Date: 2002/07/30 09:56:40 $
-* $Revision: 1.9 $
+* $Date: 2003/05/02 21:46:33 $
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -18,12 +18,29 @@ import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+import com.ibm.icu.text.*;
 import com.ibm.text.utility.*;
 
 public class TestData implements UCD_Types {
+	public static void main (String[] args) throws IOException {
+		String script = args[0];
+		PrintWriter log = Utility.openPrintWriter("TranslitSkeleton_" + script + ".txt", Utility.UTF8_WINDOWS);
+		try {
+			UnicodeSet base = new UnicodeSet("[:" + script + ":]");
+			UnicodeSetIterator it = new UnicodeSetIterator(base);
+			while (it.next()) {
+				String s = UTF16.valueOf(it.codepoint);
+				String norm = Default.nfd.normalize(s);
+				if (s.equals(norm) && Default.nfkd.isNormalized(norm)) {
+					log.println("# " + s + " <> XXX # " + Default.ucd.getName(it.codepoint));
+				}
+			}
+		} finally {
+			log.close();
+		}
+	}
     /*
 
-    public static void main (String[] args) throws IOException {
         System.out.println("START");
         ucd = UCD.make();
         System.out.println("Loaded UCD " + ucd.getVersion() + " " + (new Date(ucd.getDate())));

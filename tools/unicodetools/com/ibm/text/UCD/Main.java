@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/Main.java,v $
-* $Date: 2003/04/23 20:18:42 $
-* $Revision: 1.31 $
+* $Date: 2003/05/02 21:46:33 $
+* $Revision: 1.32 $
 *
 *******************************************************************************
 */
@@ -155,6 +155,8 @@ public final class Main implements UCD_Types {
             else if (arg.equalsIgnoreCase("TrailingZeros")) GenerateData.genTrailingZeros();
             else if (arg.equalsIgnoreCase("GenerateThaiBreaks")) GenerateThaiBreaks.main(null);
             
+			else if (arg.equalsIgnoreCase("TestData")) TestData.main(new String[]{args[++i]});
+            
             //else if (arg.equalsIgnoreCase("checkAgainstUInfo")) checkAgainstUInfo();
             else if (arg.equalsIgnoreCase("checkScripts")) VerifyUCD.checkScripts();
             else if (arg.equalsIgnoreCase("IdentifierTest")) VerifyUCD.IdentifierTest();
@@ -281,11 +283,14 @@ public final class Main implements UCD_Types {
                 GenerateData.generateVerticalSlice(CATEGORY+29, CATEGORY+32, GenerateData.HEADER_DERIVED,
                     "DerivedData/", "DerivedGeneralCategory" );
                     
-            } else if (arg.equalsIgnoreCase("differences")) {
-                GenerateData.listDifferences();
+            } else if (arg.equalsIgnoreCase("listDifferences")) {
+                CompareProperties.listDifferences();
                 
-            } else if (arg.equalsIgnoreCase("partition")) {
-                GenerateData.partitionProperties();
+			} else if (arg.equalsIgnoreCase("partition")) {
+				CompareProperties.partition();
+                
+			} else if (arg.equalsIgnoreCase("propertyStatistics")) {
+				CompareProperties.statistics();
                 
             } else if (arg.equalsIgnoreCase("listAccents")) {
                 GenerateData.listCombiningAccents();

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2003/04/23 20:18:42 $
-* $Revision: 1.20 $
+* $Date: 2003/05/02 21:46:33 $
+* $Revision: 1.21 $
 *
 *******************************************************************************
 */
@@ -227,7 +227,8 @@ final class UCD_Names implements UCD_Types {
         "Unassigned_Code_Point"
     };
 
-    static final String[] YN_TABLE = {"N", "Y"};
+	static final String[] YN_TABLE = {"F", "T"};
+	static final String[] YN_TABLE_LONG = {"False", "True"};
 
     static String[] SHORT_EA = {
         "N", "A", "H", "W", "F", "Na"

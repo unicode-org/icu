@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2003/04/23 20:18:42 $
-* $Revision: 1.25 $
+* $Date: 2003/05/02 21:46:33 $
+* $Revision: 1.26 $
 *
 *******************************************************************************
 */
@@ -991,7 +991,7 @@ public final class UCD implements UCD_Types {
     }
 
     public String getBinaryPropertiesID(int codePoint, byte bit) {
-        return (getBinaryProperties(codePoint) & (1<<bit)) != 0 ? "Y" : "N";
+        return (getBinaryProperties(codePoint) & (1<<bit)) != 0 ? UCD_Names.YN_TABLE[1] : UCD_Names.YN_TABLE[0];
     }
 
     public static String getBinaryPropertiesID_fromIndex(byte bit) {

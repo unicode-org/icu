@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2003/03/19 17:30:58 $
-* $Revision: 1.27 $
+* $Date: 2003/05/02 21:46:33 $
+* $Revision: 1.28 $
 *
 *******************************************************************************
 */
@@ -339,184 +339,6 @@ public class GenerateData implements UCD_Types {
         }
     }
 
-    public static void partitionProperties() throws IOException {
-
-        // find properties
-
-        Default.setUCD();
-        int count = 0;
-        UnicodeProperty[] props = new UnicodeProperty[500];
-        for (int i = 1; i < LIMIT_ENUM; ++i) { //   || iType == SCRIPT
-            int iType = i & 0xFF00;
-            if (iType == JOINING_GROUP || iType == AGE || iType == COMBINING_CLASS) continue;
-            UnicodeProperty up = UnifiedBinaryProperty.make(i, Default.ucd);
-            if (up == null) continue;
-            if (!up.isStandard()) {
-                System.out.println("Skipping " + up.getName() + "; not standard");
-                continue;
-            }
-            if (up.getValueType() < BINARY) {
-                System.out.println("Skipping " + up.getName() + "; value varies");
-                continue;
-            }
-            // System.out.println(Utility.hex(i) + " " + up.getName(LONG) + "(" + up.getName(SHORT) + ")");
-            // System.out.println("\t" + up.getValue(LONG) + "(" + up.getValue(SHORT) + ")");
-            props[count++] = up;
-        }
-        System.out.println("props: " + count);
-
-        BitSet probe = new BitSet();
-        Map map = new TreeMap(new Comparator() {
-             public int compare(Object o1, Object o2) {
-                BitSet bs1 = (BitSet) o1;
-                BitSet bs2 = (BitSet) o2;
-                int count2 = bs1.size() > bs2.size() ? bs1.size() : bs2.size();
-                for (int i = 0; i < count2; ++i) {
-                    if (bs1.get(i)) {
-                        if (!bs2.get(i)) {
-                            return 1;
-                        }
-                    } else if (bs2.get(i)) {
-                        return -1;
-                    }
-                }
-                return 0;
-             }
-        });
-        int total = 0;
-        for (int cp = 0; cp <= 0x10FFFF; ++cp) {
-            Utility.dot(cp);
-            int cat = Default.ucd.getCategory(cp);
-            if (cat == UNASSIGNED || cat == PRIVATE_USE || cat == SURROGATE) continue;
-            if (!Default.ucd.isAllocated(cp)) continue;
-
-            for (int i = 0; i < count; ++i) {
-                UnicodeProperty up = props[i];
-                boolean iProp = up.hasValue(cp);
-                if (iProp) probe.set(i); else probe.clear(i);
-            }
-
-            ++total;
-            if (!map.containsKey(probe)) {
-                map.put(probe.clone(), new Integer(cp));
-                Utility.fixDot();
-                // System.out.println("Set Size: " + map.size() + ", total: " + total + ", " + Default.ucd.getCodeAndName(cp));
-            }
-        }
-
-        Utility.fixDot();
-        System.out.println("Set Size: " + map.size());
-        PrintWriter output = Utility.openPrintWriter("Partition" + getFileSuffix(true), Utility.LATIN1_UNIX);
-        
-        Iterator it = map.keySet().iterator();
-        while (it.hasNext()) {
-            BitSet probe2 = (BitSet) it.next();
-            int ch = ((Integer) map.get(probe2)).intValue();
-            output.println(Default.ucd.getCodeAndName(ch));
-            for (int i = 0; i < count; ++i) {
-                if (!probe2.get(i)) continue;
-                output.print(" " + props[i].getFullName(SHORT));
-            }
-            output.println();
-        }
-        output.close();
-    }
-
-    public static void listDifferences() throws IOException {
-
-        Default.setUCD();
-        PrintWriter output = Utility.openPrintWriter("PropertyDifferences" + getFileSuffix(true), Utility.LATIN1_UNIX);
-        output.println("# Listing of relationships among properties, suitable for analysis by spreadsheet");
-        output.println("# Generated for " + Default.ucd.getVersion());
-        output.println(generateDateLine());
-        output.println("# P1	P2	R(P1,P2)	C(P1&P2)	C(P1-P2)	C(P2-P1)");
-        
-
-        for (int i = 1; i < LIMIT_ENUM; ++i) {
-            int iType = i & 0xFF00;
-            if (iType == JOINING_GROUP || iType == AGE || iType == COMBINING_CLASS || iType == SCRIPT) continue;
-            UnicodeProperty upi = UnifiedBinaryProperty.make(i, Default.ucd);
-            if (upi == null) continue;
-            if (!upi.isStandard()) {
-                System.out.println("Skipping " + upi.getName() + "; not standard");
-                continue;
-            }
-            if (upi.getValueType() < BINARY) {
-                System.out.println("Skipping " + upi.getName() + "; value varies");
-                continue;
-            }
-            
-            String iNameShort = upi.getFullName(SHORT);
-            String iNameLong = upi.getFullName(LONG);
-
-            System.out.println();
-            System.out.println();
-            System.out.println(iNameLong);
-            output.println("#" + iNameLong);
-
-            int last = -1;
-            for (int j = i+1; j < LIMIT_ENUM; ++j) {
-                int jType = j & 0xFF00;
-                if (jType == JOINING_GROUP || jType == AGE || jType == COMBINING_CLASS || jType == SCRIPT
-                    || (jType == iType && jType != BINARY_PROPERTIES)) continue;
-                UnicodeProperty upj = UnifiedBinaryProperty.make(j, Default.ucd);
-                if (upj == null) continue;
-                if (!upj.isStandard()) continue;
-                if (upj.getValueType() < BINARY) continue;
-                
-
-                if ((j >> 8) != last) {
-                    last = j >> 8;
-                    System.out.println();
-                    System.out.print("\t" + UCD_Names.SHORT_UNIFIED_PROPERTIES[last]);
-                    output.flush();
-                    output.println("#\t" + UCD_Names.SHORT_UNIFIED_PROPERTIES[last]);
-                } else {
-                    System.out.print('.');
-                }
-                System.out.flush();
-
-                int bothCount = 0, i_jPropCount = 0, j_iPropCount = 0, iCount = 0, jCount = 0;
-
-                for (int cp = 0; cp <= 0x10FFFF; ++cp) {
-                    int cat = Default.ucd.getCategory(cp);
-                    if (cat == UNASSIGNED || cat == PRIVATE_USE || cat == SURROGATE) continue;
-                    if (!Default.ucd.isAllocated(cp)) continue;
-
-                    boolean iProp = upi.hasValue(cp);
-                    boolean jProp = upj.hasValue(cp);
-
-                    if (jProp) ++jCount;
-                    if (iProp) {
-                        ++iCount;
-                        if (jProp) ++bothCount;
-                        else ++i_jPropCount;
-                    } else if (jProp) ++j_iPropCount;
-                }
-                if (iCount == 0 || jCount == 0) continue;
-
-                String jNameShort = upj.getFullName(SHORT);
-                //String jNameLong = ubp.getFullID(j, LONG);
-
-                String rel = bothCount == 0 ? "DISJOINT"
-                    : i_jPropCount == 0 && j_iPropCount == 0 ? "EQUALS"
-                    : i_jPropCount == 0 ? "CONTAINS" // depends on reverse output
-                    : j_iPropCount == 0 ? "CONTAINS"
-                    : "OVERLAPS";
-
-                if (j_iPropCount > i_jPropCount) {
-                    // reverse output
-                    output.println(jNameShort + "\t" + iNameShort + "\t" + rel
-                        + "\t" + bothCount + "\t" + j_iPropCount + "\t" + i_jPropCount);
-                } else {
-                    output.println(iNameShort + "\t" + jNameShort + "\t" + rel
-                        + "\t" + bothCount + "\t" + i_jPropCount + "\t" + j_iPropCount);
-                }
-            }
-        }
-        output.close();
-    }
-
     public static void generatePropertyAliases() throws IOException {
         Default.setUCD();
         String prop = "";
@@ -572,10 +394,10 @@ public class GenerateData implements UCD_Types {
         addLine(sorted, "xx; F         ; False");
         checkDuplicate(duplicates, accumulation, "F", "xx=False");
         */
-        addLine(sorted, "qc", "Y", "Yes");
-        checkDuplicate(duplicates, accumulation, "Y", "qc=Yes");
-        addLine(sorted, "qc", "N", "No");
-        checkDuplicate(duplicates, accumulation, "N", "qc=No");
+        addLine(sorted, "qc", UCD_Names.YN_TABLE[1], UCD_Names.YN_TABLE_LONG[1]);
+        checkDuplicate(duplicates, accumulation, UCD_Names.YN_TABLE[1], "qc=" + UCD_Names.YN_TABLE_LONG[1]);
+        addLine(sorted, "qc", UCD_Names.YN_TABLE[0], UCD_Names.YN_TABLE_LONG[0]);
+        checkDuplicate(duplicates, accumulation, UCD_Names.YN_TABLE[0], "qc=" + UCD_Names.YN_TABLE_LONG[0]);
         addLine(sorted, "qc", "M", "Maybe");
         checkDuplicate(duplicates, accumulation, "M", "qc=Maybe");
         
@@ -601,7 +423,7 @@ public class GenerateData implements UCD_Types {
             // Save the Type Name, under BB for binary
             
             if (type == i || type == BINARY_PROPERTIES || type == DERIVED) {
-                if (propAbb.equals("") || propAbb.equals("Y")) {
+                if (propAbb.equals("") || propAbb.equals(UCD_Names.YN_TABLE[1])) {
                     System.out.println("WHOOPS: " + Utility.hex(i));
                 }
                 propAbb = Utility.getUnskeleton(up.getProperty(SHORT), false);
@@ -670,7 +492,7 @@ public class GenerateData implements UCD_Types {
             
             /*
             if (type == BINARY_PROPERTIES || type == DERIVED) {
-                //if (value.equals("YES")) continue;
+                //if (value.equals(YN_TABLE_LONG[1])) continue;
                 addLine(sorted, "ZZ", valueAbb, value);
                 checkDuplicate(duplicates, accumulation, value, value);
                 if (!value.equalsIgnoreCase(valueAbb)) checkDuplicate(duplicates, accumulation, valueAbb, value);
@@ -682,7 +504,7 @@ public class GenerateData implements UCD_Types {
                 String num = up.getValue(NUMBER);
                 num = "; " + Utility.repeat(" ", 3-num.length()) + num;
                 addLine(sorted, propAbb + num, valueAbb, value);
-            } else if (!valueAbb.equals("Y")) {
+            } else if (!valueAbb.equals(UCD_Names.YN_TABLE[1])) {
                 addLine(sorted, propAbb, valueAbb, value);
             }
             checkDuplicate(duplicates, accumulation, value, prop + "=" + value);
