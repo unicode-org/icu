@@ -7,7 +7,7 @@
 * >       DO NOT EDIT BY HAND       <
 * >      RUN TOOL TO REGENERATE     <
 * Tool: com.ibm.text.Normalizer
-* Creation date: Fri Aug 11 10:18:35 PDT 2000
+* Creation date: Tue Sep 19 10:02:47 PDT 2000
 */
 #include "unicode/utypes.h"
 #include "ucmp8.h"
@@ -24,6 +24,8 @@ struct DecompData {
 
     static const uint16_t offsets_values[];
 
+    static CompactShortArray _offsets;
+
     static const CompactShortArray* offsets;
 
     static const uint16_t contents[];
@@ -31,6 +33,8 @@ struct DecompData {
     static const uint16_t canonClass_index[];
 
     static const uint8_t canonClass_values[];
+
+    static CompactByteArray _canonClass;
 
     static const CompactByteArray* canonClass;
 };
