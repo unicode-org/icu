@@ -267,7 +267,7 @@ U_CFUNC void ucol_inv_getGapPositions(UColTokenParser *src, UColTokListHeader *l
 
   UCAConstants *consts = (UCAConstants *)((uint8_t *)src->UCA->image + src->UCA->image->UCAConsts);
 
-  if(lh->baseCE >= (consts->UCA_PRIMARY_IMPLICIT_MIN<<24) && lh->baseCE < (consts->UCA_PRIMARY_IMPLICIT_MAX<<24) ) { /* implicits - */ 
+  if((lh->baseCE & 0xFF000000)>= (consts->UCA_PRIMARY_IMPLICIT_MIN<<24) && (lh->baseCE & 0xFF000000) <= (consts->UCA_PRIMARY_IMPLICIT_MAX<<24) ) { /* implicits - */ 
   //if(lh->baseCE >= PRIMARY_IMPLICIT_MIN && lh->baseCE < PRIMARY_IMPLICIT_MAX ) { /* implicits - */ 
     lh->pos[0] = 0;
     t1 = lh->baseCE;
