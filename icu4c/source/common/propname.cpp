@@ -399,10 +399,50 @@ NameToEnum::swap(const UDataSwapper *ds,
         }
 
         /* copy/swap/permutate _enumArray[] and _nameArray[] */
-        for(i=0; i<tempMap->count; ++i) {
-            oldIndex=sortArray[i].index;
-            ds->swapArray32(ds, inEnumArray+oldIndex, 4, outEnumArray+i, pErrorCode);
-            ds->swapArray16(ds, inNameArray+oldIndex, 2, outNameArray+i, pErrorCode);
+        if(inEnumArray!=outEnumArray) {
+            for(i=0; i<tempMap->count; ++i) {
+                oldIndex=sortArray[i].index;
+                ds->swapArray32(ds, inEnumArray+oldIndex, 4, outEnumArray+i, pErrorCode);
+                ds->swapArray16(ds, inNameArray+oldIndex, 2, outNameArray+i, pErrorCode);
+            }
+        } else {
+            /*
+             * in-place swapping: need to permutate into a temporary array
+             * and then copy back to not destroy the data
+             */
+            EnumValue *tempEnumArray;
+            Offset *oldIndexes;
+
+            /* write name offsets directly from sortArray */
+            for(i=0; i<tempMap->count; ++i) {
+                ds->writeUInt16((uint16_t *)outNameArray+i, (uint16_t)sortArray[i].name);
+            }
+
+            /*
+             * compress the oldIndexes into a separate array to make space for tempEnumArray
+             * the tempMap _nameArray becomes oldIndexes[], getting the index
+             *   values from the 2D sortArray[],
+             * while sortArray=tempMap _enumArray[] becomes tempEnumArray[]
+             * this saves us allocating more memory
+             *
+             * it works because sizeof(NameAndIndex)<=sizeof(EnumValue)
+             * and because the nameArray[] can be used for oldIndexes[]
+             */
+            tempEnumArray=(EnumValue *)sortArray;
+            oldIndexes=(Offset *)(sortArray+tempMap->count);
+
+            /* copy sortArray[].index values into oldIndexes[] */
+            for(i=0; i<tempMap->count; ++i) {
+                oldIndexes[i]=sortArray[i].index;
+            }
+
+            /* permutate inEnumArray[] into tempEnumArray[] */
+            for(i=0; i<tempMap->count; ++i) {
+                ds->swapArray32(ds, inEnumArray+oldIndexes[i], 4, tempEnumArray+i, pErrorCode);
+            }
+
+            /* copy tempEnumArray[] to outEnumArray[] */
+            uprv_memcpy(outEnumArray, tempEnumArray, tempMap->count*4);
         }
     }
 
