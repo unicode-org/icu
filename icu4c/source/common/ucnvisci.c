@@ -1200,7 +1200,7 @@ UConverter_toUnicode_ISCII_OFFSETS_LOGIC(UConverterToUnicodeArgs *args,
                         *err =U_ILLEGAL_CHAR_FOUND;
                         /* reset */
                         *contextCharToUnicode=NO_CHAR_MARKER;
-
+                        reason = UCNV_ILLEGAL;
                         goto CALLBACK;
                     }
 
