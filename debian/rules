@@ -5,7 +5,8 @@
 # Yves Arrouye <yves@debian.org>. They are part of Debian GNU/Linux
 # since the Debian woody release.
 
-# Decide whether we want to ship individual files or not
+# Decide whether we want to automatically manage the repackaging of
+# the common data from individual files or not.
 ICU_AUTO_COMMON=NO
 
 # Uncomment this to turn on verbose mode.
@@ -36,7 +37,7 @@ pkglibdir = usr/lib/icu
 iculibdir = $(pkglibdir)/$(version)
 datasrcdir = usr/share/icu/$(version)/data
 # This is where data needs to be moved
-ifneq ($(ICU_AUTO_COMMON),YES)
+ifeq ($(ICU_AUTO_COMMON),YES)
 icufildir = $(iculibdir)/files
 else
 icufildir = $(iculibdir)
@@ -62,13 +63,13 @@ configure: $(builddir)/configure-stamp
 $(builddir)/configure-stamp:
 	# Add here commands to configure the package.
 	test -d $(builddir) || mkdir $(builddir)
-	cd $(builddir); CFLAGS='$(CFLAGS)' CXXFLAGS='$(CFLAGS)' INSTALL_PROGRAM='$(INSTALL_PROGRAM)' $(SHELL) $(builddir_relative_srcdir)/configure --srcdir=$(builddir_relative_srcdir) --prefix=/usr --mandir=/usr/share/man --sysconfdir=/etc --with-data-packaging=files --disable-rpath --enable-shared --enable-static --disable-samples
+	cd $(builddir); CFLAGS='$(CFLAGS)' CXXFLAGS='$(CFLAGS)' INSTALL_PROGRAM='$(INSTALL_PROGRAM)' $(SHELL) $(builddir_relative_srcdir)/configure --srcdir=$(builddir_relative_srcdir) --prefix=/usr --mandir=/usr/share/man --sysconfdir=/etc --localstatedir=/var --with-data-packaging=files --disable-rpath --enable-shared --enable-static --disable-samples
 	touch $@
 
 build: $(builddir)/configure-stamp debian-files $(builddir)/build-stamp
 
 # Build some Debian files
-DEBIAN_FILES=icu.conffiles postinst prerm icu.postinst icu.prerm libicu$(major).postinst icurepackage
+DEBIAN_FILES=icu.conffiles postinst prerm icu.postinst icu.prerm libicu$(major).postinst
 
 debian/%: debian/%.in
 	cd $(builddir) \
@@ -87,7 +88,7 @@ $(builddir)/build-stamp:
 
 	touch $@
 
-clean:
+clean: update-debian-files
 	dh_testdir
 	dh_testroot
 	 $(RM) $(builddir)/build-stamp $(builddir)/configure-stamp
@@ -166,15 +167,18 @@ endif
 	# build icu package by moving files from icu-dev
 	#
 	$(RM) debian/tmp/$(iculibdir)/../Makefile.inc debian/tmp/$(iculibdir)/../current
+ifneq ($(iculibdir),$(icufildir))
+	dh_movefiles -picu \
+	    $(iculibdir)/*msg.dat
+endif
 	dh_movefiles -picu \
 	    etc \
 	    usr/bin \
 	    usr/sbin \
 	    $(icudatadir)/README \
+	    $(iculibdir)/*.inc \
 	    $(icufildir)/*.cnv \
-	    $(icufildir)/u*.dat $(icufildir)invu*.dat \
-	    $(icufildir)/tz.dat \
-	    $(iculibdir)/Makefile.inc \
+	    $(icufildir)/*.dat \
 	    usr/share/man
 	#
 	# build icu-locales package by moving files from icu-dev
