@@ -135,7 +135,7 @@ ctest_pathnameInContext( char* fullname, int32_t maxsize, const char* relPath )
     mainDir = mainDirBuffer;
 #endif
 
-    lenMainDir = strlen( mainDir );
+    lenMainDir = (int32_t)strlen(mainDir);
     if(lenMainDir > 0 && mainDir[lenMainDir - 1] != U_FILE_SEP_CHAR) {
         mainDir[lenMainDir++] = U_FILE_SEP_CHAR;
         mainDir[lenMainDir] = 0;
@@ -143,19 +143,19 @@ ctest_pathnameInContext( char* fullname, int32_t maxsize, const char* relPath )
 
     if (relPath[0] == '|')
         relPath++;
-    lenRelPath = strlen( relPath );
+    lenRelPath = (int32_t)strlen(relPath);
     if (maxsize < lenMainDir + lenRelPath + 2) {
         fullname[0] = 0;
         return;
     }
-    strcpy( fullname, mainDir );
-    /*strcat( fullname, U_FILE_SEP_STRING );*/
-    strcat( fullname, relPath );
-    strchr( fullname, inpSepChar );
+    strcpy(fullname, mainDir);
+    /*strcat(fullname, U_FILE_SEP_STRING);*/
+    strcat(fullname, relPath);
+    strchr(fullname, inpSepChar);
     tmp = strchr(fullname, inpSepChar);
     while (tmp) {
         *tmp = U_FILE_SEP_CHAR;
-        tmp = strchr( tmp+1, inpSepChar );
+        tmp = strchr(tmp+1, inpSepChar);
     }
 }
 
@@ -174,7 +174,7 @@ void
 ctest_setTestDirectory(const char* newDir) 
 {
     char newTestDir[256];
-    ctest_pathnameInContext(newTestDir, sizeof(newTestDir), newDir); 
+    ctest_pathnameInContext(newTestDir, (int32_t)sizeof(newTestDir), newDir); 
     if(_testDirectory != NULL)
         free(_testDirectory);
     _testDirectory = (char*) malloc(sizeof(char*) * (strlen(newTestDir) + 1));
