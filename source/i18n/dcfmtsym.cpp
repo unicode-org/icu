@@ -199,16 +199,22 @@ DecimalFormatSymbols::initialize(const UnicodeString* numberElements, int32_t nu
     fSymbols[kPercentSymbol].fastCopyFrom(numberElements[3]);
     fSymbols[kZeroDigitSymbol].fastCopyFrom(numberElements[4]);
     fSymbols[kDigitSymbol].fastCopyFrom(numberElements[5]);
-    fSymbols[kPlusSignSymbol].fastCopyFrom(numberElements[6]);
-    fSymbols[kMinusSignSymbol].fastCopyFrom(numberElements[7]);
-    fSymbols[kExponentialSymbol].fastCopyFrom(numberElements[8]);
-    fSymbols[kPerMillSymbol].fastCopyFrom(numberElements[9]);
+    fSymbols[kMinusSignSymbol].fastCopyFrom(numberElements[6]);
+    fSymbols[kExponentialSymbol].fastCopyFrom(numberElements[7]);
+    fSymbols[kPerMillSymbol].fastCopyFrom(numberElements[8]);
     fSymbols[kPadEscapeSymbol] = (UChar)0x002a; // '*' Hard coded for now; get from resource later
-    fSymbols[kInfinitySymbol].fastCopyFrom(numberElements[10]);
-    fSymbols[kNaNSymbol].fastCopyFrom(numberElements[11]);
+    fSymbols[kInfinitySymbol].fastCopyFrom(numberElements[9]);
+    fSymbols[kNaNSymbol].fastCopyFrom(numberElements[10]);
 
     // If there is a currency decimal, use it.
-    fSymbols[kMonetarySeparatorSymbol].fastCopyFrom(numberElements[numberElementsLength >= 13 ? 12 : 0]);
+    fSymbols[kMonetarySeparatorSymbol].fastCopyFrom(numberElements[numberElementsLength >= 12 ? 11 : 0]);
+    if (numberElementsLength >= 13) {
+        fSymbols[kPlusSignSymbol].fastCopyFrom(numberElements[12]);
+    }
+    else {
+        /* This locale really needs to be updated. This locale is out of date. */
+        fSymbols[kPlusSignSymbol] = (UChar)0x002B;  /* + */
+    }
 
     // Default values until it's set later on.
     fSymbols[kCurrencySymbol] = (UChar)0xa4;            // 'OX' currency symbol

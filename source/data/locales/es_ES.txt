@@ -14,13 +14,13 @@ es_ES {
         "%",
         "0",
         "#",
-        "+",
         "-",
         "E",
         "\u2030",
         "\u221E",
         "\uFFFD",
         ",",
+        "+",
     }
     DateTimePatterns { 
         "HH'H'mm''ss\" z",
