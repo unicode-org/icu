@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DictionaryBasedBreakIterator.java,v $
- * $Date: 2003/06/11 16:31:31 $
- * $Revision: 1.13 $
+ * $Date: 2003/12/01 22:03:53 $
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -584,7 +584,7 @@ switch (categoryFlags.length % 4) {
         // which is called by the function above.  This gives us a way to create a separate
         // character category for the dictionary characters even when RuleBasedBreakIterator
         // isn't making a distinction
-	/*
+	/**
 	 * @internal
 	 */
         protected void mungeExpressionList(Hashtable expressions) {
