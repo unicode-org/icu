@@ -11,7 +11,9 @@
 #
 # Set the following variable to the list of binary file suffixes (extensions)
 
-binary_suffixes='ico ICO bmp BMP jpg JPG gif GIF'
+#binary_suffixes='ico ICO bmp BMP jpg JPG gif GIF brk BRK'
+#ICU specific binary files
+binary_suffixes='brk BRK bin BIN'
 
 usage()
 {
@@ -33,6 +35,7 @@ fi
 echo ""
 echo "Extracting from $1 ..."
 echo ""
+# extract everything as iso-8859-1 except these directories
 pax -C 819 -rcvf $1 icu/data/* icu/source/test/testdata/*
 
 # extract files while converting them to EBCDIC
@@ -68,13 +71,31 @@ echo ""
 echo "Determining binary files ..."
 echo ""
 
-for dir in `find ./icu -type d \( -name CVS -o -print \)`; do
-    if [ -f $dir/CVS/Entries ]; then
-        binary_files="$binary_files`cat $dir/CVS/Entries | fgrep -- -kb \
-                      | cut -d / -f2 | sed -e "s%^%$dir/%" \
-                      | sed -e "s%^\./%%" | tr '\n' ' '`"
+#for dir in `find ./icu -type d \( -name CVS -o -print \)`; do
+#    if [ -f $dir/CVS/Entries ]; then
+#        binary_files="$binary_files`cat $dir/CVS/Entries | fgrep -- -kb \
+#                      | cut -d / -f2 | sed -e "s%^%$dir/%" \
+#                      | sed -e "s%^\./%%" | tr '\n' ' '`"
+#    fi
+#done
+#echo "Detecting Unicode files"
+for file in `find ./icu \( -name \*.txt -print \)`; do
+    bom8=`head -n 1 $file|\
+          od -t x1|\
+          head -n 1|\
+          sed 's/  */ /g'|\
+          cut -f2-4 -d ' '|\
+          tr 'A-Z' 'a-z'`;
+#    echo "bom8 is" $bom8 "for" $file
+#    bom8=`head -c 3 $file|od -t x1|head -n 1|cut -d ' ' -f2-4`;
+    #Find a converted UTF-8 BOM
+    if [ "$bom8" = "057 08b 0ab" ]
+    then
+        binary_files="$binary_files `echo $file | cut -d / -f2-`";
     fi
 done
+
+#echo $binary_files
 
 for i in $(pax -f $1 2>/dev/null)
 do
@@ -107,6 +128,7 @@ if [ ${#binary_files} -eq 0 ]; then
 else
   echo "Restoring binary files ..."
   echo ""
+  rm $binary_files
   pax -C 819 -rvf $1 $binary_files
 fi
 echo ""
