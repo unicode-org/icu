@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/Demo.java,v $ 
- * $Date: 2002/03/16 03:49:43 $ 
- * $Revision: 1.13 $
+ * $Date: 2002/03/19 00:17:01 $ 
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -28,11 +28,11 @@ import com.ibm.icu.text.*;
  * <p>Copyright (c) IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: Demo.java,v $ $Revision: 1.13 $ $Date: 2002/03/16 03:49:43 $
+ * @version $RCSfile: Demo.java,v $ $Revision: 1.14 $ $Date: 2002/03/19 00:17:01 $
  */
 public class Demo extends Frame {
 
-    static final boolean DEBUG = true;
+    static final boolean DEBUG = false;
 
     Transliterator translit = null;
     String fontName = "Arial Unicode MS";
@@ -203,15 +203,7 @@ public class Demo extends Frame {
             }
         });
         
-        translitMenu.add(invertSelectionItem = new MenuItem("Invert", 
-            new MenuShortcut(KeyEvent.VK_K, true)));
-        invertSelectionItem.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                handleBatchTransliterate(translit.getInverse());
-            }
-        });
-        
-        translitMenu.add(swapSelectionItem = new MenuItem("Swap", 
+        translitMenu.add(swapSelectionItem = new MenuItem("Reverse", 
             new MenuShortcut(KeyEvent.VK_S)));
         swapSelectionItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -305,7 +297,9 @@ public class Demo extends Frame {
         // RuleBased Transliterator
         
         rulesDialog = new InfoDialog(this, "Rule-Based Transliterator", "",
-           "a > b;"
+           "([A-Z]) > &Hex($1) &Name($1);\r\n" 
+            + "&Hex-Any($1) < ('\\' [uU] [a-fA-F0-9]*);\r\n" 
+			+ "&Name-Any($1) < ('{' [^\\}]* '}');"
         );
         button = new Button("Set");
         button.addActionListener(new ActionListener() {
@@ -370,7 +364,6 @@ public class Demo extends Frame {
     InfoDialog compoundDialog;
     InfoDialog rulesDialog;
     MenuItem convertSelectionItem = null;
-    MenuItem invertSelectionItem = null;
     MenuItem swapSelectionItem = null;
     MenuItem convertTypingItem = null;
     Menu historyMenu;
@@ -401,15 +394,24 @@ public class Demo extends Frame {
     
     
     void setTransliterator(String name, boolean rules) {
-        System.out.println("Got: " + name);
+        if (DEBUG) System.out.println("Got: " + name);
         if (!rules) {
         	translit = Transliterator.getInstance(name);
         } else {
         	translit = Transliterator.createFromRules("Any-Test", name, Transliterator.FORWARD);
+        	if (DEBUG) System.out.println("***Forward Rules");
+        	if (DEBUG) System.out.println(((RuleBasedTransliterator)translit).toRules(true));
             DummyFactory.add("Any-Test", translit);
         	
         	Transliterator translit2 = Transliterator.createFromRules("Test-Any", name, Transliterator.REVERSE);
+        	if (DEBUG) System.out.println("***Backward Rules");
+        	if (DEBUG) System.out.println(((RuleBasedTransliterator)translit2).toRules(true));
             DummyFactory.add("Test-Any", translit2);
+            
+            Transliterator rev = translit.getInverse();
+        	if (DEBUG) System.out.println("***Inverse Rules");
+        	if (DEBUG) System.out.println(((RuleBasedTransliterator)rev).toRules(true));
+            
         }
         text.flush();
         text.setTransliterator(translit);
@@ -420,13 +422,9 @@ public class Demo extends Frame {
         Transliterator inv = translit.getInverse();
         if (inv != null) {
             addHistory(inv);
-            invertSelectionItem.setEnabled(true);
             swapSelectionItem.setEnabled(true);
-            invertSelectionItem.setLabel(Transliterator.getDisplayName(inv.getID()));
         } else {
-            invertSelectionItem.setEnabled(false);
             swapSelectionItem.setEnabled(false);
-            invertSelectionItem.setLabel("No inverse");
         }
     }
     
@@ -469,7 +467,7 @@ public class Demo extends Frame {
             this.name = name;
         }
         public void actionPerformed(ActionEvent e) {
-            System.out.println("Font: " + name);
+            if (DEBUG) System.out.println("Font: " + name);
             fontName = name;
             text.setFont(new Font(fontName, Font.PLAIN, fontSize));
         }
@@ -481,7 +479,7 @@ public class Demo extends Frame {
             this.size = size;
         }
         public void actionPerformed(ActionEvent e) {
-            System.out.println("Size: " + size);
+            if (DEBUG) System.out.println("Size: " + size);
             fontSize = size;
             text.setFont(new Font(fontName, Font.PLAIN, fontSize));
         }

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/translit/TransliteratingTextComponent.java,v $ 
- * $Date: 2002/02/19 04:10:24 $ 
- * $Revision: 1.4 $
+ * $Date: 2002/03/19 00:17:27 $ 
+ * $Revision: 1.5 $
  *
  *****************************************************************************************
  */
@@ -27,11 +27,11 @@ import com.ibm.icu.dev.demo.impl.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliteratingTextComponent.java,v $ $Revision: 1.4 $ $Date: 2002/02/19 04:10:24 $
+ * @version $RCSfile: TransliteratingTextComponent.java,v $ $Revision: 1.5 $ $Date: 2002/03/19 00:17:27 $
  */
 public class TransliteratingTextComponent extends DumbTextComponent {
 
-    private static boolean DEBUG = true;
+    private static boolean DEBUG = false;
 
     private Transliterator translit = null;
     

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/demo/impl/DumbTextComponent.java,v $ 
- * $Date: 2002/02/16 03:04:57 $ 
- * $Revision: 1.5 $
+ * $Date: 2002/03/19 00:17:01 $ 
+ * $Revision: 1.6 $
  *
  *****************************************************************************************
  */
@@ -308,7 +308,7 @@ public class DumbTextComponent extends Canvas
         case KeyEvent.CHAR_UNDEFINED:
             break;
         case KeyEvent.VK_BACK_SPACE:
-            setKeyStart(-1);
+            //setKeyStart(-1);
             if (!editable) break;
             if (contents.length() == 0) break;
             start = selection.getStart();
@@ -323,7 +323,7 @@ public class DumbTextComponent extends Canvas
             replaceRange("", start, end);
             break;        
         case KeyEvent.VK_DELETE:
-            setKeyStart(-1);
+            //setKeyStart(-1);
             if (!editable) break;
             if (contents.length() == 0) break;
             start = selection.getStart();
@@ -353,6 +353,13 @@ public class DumbTextComponent extends Canvas
     protected void setKeyStart(int keyStart) {
         if (activeStart != keyStart) {
             activeStart = keyStart;
+            repaint(10);
+        }
+    }
+    
+    protected void validateKeyStart() {
+    	if (activeStart > selection.getStart()) {
+            activeStart = selection.getStart();
             repaint(10);
         }
     }
@@ -446,6 +453,7 @@ public class DumbTextComponent extends Canvas
           + contents.substring(end));
         select(tempSelection.set(selection).
           fixAfterReplace(start, end, s.length()));
+        validateKeyStart();
     }
 
     public String getText() {
