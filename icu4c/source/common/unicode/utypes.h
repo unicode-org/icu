@@ -285,6 +285,11 @@ typedef void* UClassID;
 #define U_I18N_API    U_EXPORT
 #define U_LAYOUT_API  U_EXPORT
 #define U_USTDIO_API  U_EXPORT
+#elif defined(U_STATIC_IMPLEMENTATION)
+#define U_COMMON_API
+#define U_I18N_API
+#define U_LAYOUT_API
+#define U_USTDIO_API
 #elif defined(U_COMMON_IMPLEMENTATION)
 #define U_COMMON_API  U_EXPORT
 #define U_I18N_API    U_IMPORT
