@@ -143,7 +143,7 @@ public final class ZoneMeta {
         EQUIV_MAP = new TreeMap();
 
         // try leaving all ids as valid
-        // Set valid = getValidIDs();
+//         Set valid = getValidIDs();
 
         ArrayList list = new ArrayList(); // reuse this below
 
@@ -151,9 +151,9 @@ public final class ZoneMeta {
             String[] z = ZoneMetaData.EQUIV[i];
             list.clear();
             for (int j=0; j<z.length; ++j) {
-//                 if (valid.contains(z[j])) {
+//                  if (valid.contains(z[j])) {
                     list.add(z[j]);
-//                 }
+//                  }
             }
             if (list.size() > 1) {
                 String[] a = (String[]) list.toArray(EMPTY);
