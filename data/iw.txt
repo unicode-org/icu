@@ -1,0 +1,107 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright Taligent, Inc.,  1997                                      *
+// * (C) Copyright International Business Machines Corporation,  1997-99      *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+
+iw {
+    CollationElements { "& \u0361 = \u05C4 & \u030D = \u0591 ; \u0592 ; \u0593 ;"
+        " \u0594 ; \u0595 ; \u0596 ; \u0597 ; \u0598 ; \u0599 & \u0301 = \u059A & \u0300"
+        " = \u059B & \u0307 = \u059C ; \u059D & \u0302 = \u059E & \u0308 = \u059F & \u030C"
+        " = \u05A0 & \u0306 = \u05A1 & \u0304 = \u05A3 ; \u05A4 & \u0303 = \u05A5 & \u030A"
+        " = \u05A6 & \u0328 = \u05A7 & \u0327 = \u05A8 & \u030B = \u05A9 & \u0336 = \u05AA"
+        " & \u0337 = \u05AB & \u0338 = \u05AC ; \u05AD ; \u05AE ; \u05AF ; \u05B0 ; \u05B1"
+        " ; \u05B2 ; \u05B3 ; \u05B4 ; \u05B5 ; \u05B6 ; \u05B7 ; \u05B8 ; \u05B9 ; \u05BB"
+        " ; \u05BC ; \u05BD ; \u05BF ; \u05C0 ; \u05C1 ; \u05C2 & \u00B5 < \u05BE < \u05C3"
+        " < \u05F3 < \u05F4 & Z < \u05D0 < \u05D1 < \u05D2 < \u05D3 < \u05D4 < \u05D5 < "
+        "\u05F0 < \u05F1 < \u05D6 < \u05D7 < \u05D8 < \u05D9 < \u05F2 < \u05DA , \u05DB "
+        "< \u05DC < \u05DD , \u05DE < \u05DF , \u05E0 < \u05E1 < \u05E2 < \u05E3 , \u05E4"
+        " < \u05E5 , \u05E6 < \u05E7 < \u05E8 < \u05E9 < \u05EA " }
+    Countries { 
+        IL { "\u05D9\u05E9\u05E8\u05D0\u05DC" }
+    }
+    DateTimePatterns { 
+            "HH:mm:ss z",
+            "HH:mm:ss z",
+            "HH:mm:ss",
+            "HH:mm",
+            "EEEE d MMMM yyyy",
+            "d MMMM yyyy",
+            "dd/MM/yyyy",
+            "dd/MM/yy",
+            "{0} {1}",
+    }
+    DayAbbreviations { 
+            "\u05D0",
+            "\u05D1",
+            "\u05D2",
+            "\u05D3",
+            "\u05D4",
+            "\u05D5",
+            "\u05E9",
+    }
+    DayNames { 
+            "\u05D9\u05D5\u05DD \u05E8\u05D0\u05E9\u05D5\u05DF",
+            "\u05D9\u05D5\u05DD \u05E9\u05E0\u05D9",
+            "\u05D9\u05D5\u05DD \u05E9\u05DC\u05D9\u05E9\u05D9",
+            "\u05D9\u05D5\u05DD \u05E8\u05D1\u05D9\u05E2\u05D9",
+            "\u05D9\u05D5\u05DD \u05D7\u05DE\u05D9\u05E9\u05D9",
+            "\u05D9\u05D5\u05DD \u05E9\u05D9\u05E9\u05D9",
+            "\u05E9\u05D1\u05EA",
+    }
+    Eras { 
+            "\u05DC\u05E1\u05D4\u0022\u05E0",
+            "\u05DC\u05E4\u05E1\u05D4\u0022\u05E0",
+    }
+    Languages { 
+        iw { "\u05E2\u05D1\u05E8\u05D9\u05EA" }
+    }
+    LocaleID { "040d" }
+    LocaleString { "iw" }
+    MonthAbbreviations { 
+            "\u05D9\u05E0\u05D5",
+            "\u05E4\u05D1\u05E8",
+            "\u05DE\u05E8\u05E5",
+            "\u05D0\u05E4\u05E8",
+            "\u05DE\u05D0\u05D9",
+            "\u05D9\u05D5\u05E0",
+            "\u05D9\u05D5\u05DC",
+            "\u05D0\u05D5\u05D2",
+            "\u05E1\u05E4\u05D8",
+            "\u05D0\u05D5\u05E7",
+            "\u05E0\u05D5\u05D1",
+            "\u05D3\u05E6\u05DE",
+            "",
+    }
+    MonthNames { 
+            "\u05D9\u05E0\u05D5\u05D0\u05E8",
+            "\u05E4\u05D1\u05E8\u05D5\u05D0\u05E8",
+            "\u05DE\u05E8\u05E5",
+            "\u05D0\u05E4\u05E8\u05D9\u05DC",
+            "\u05DE\u05D0\u05D9",
+            "\u05D9\u05D5\u05E0\u05D9",
+            "\u05D9\u05D5\u05DC\u05D9",
+            "\u05D0\u05D5\u05D2\u05D5\u05E1\u05D8",
+            "\u05E1\u05E4\u05D8\u05DE\u05D1\u05E8",
+            "\u05D0\u05D5\u05E7\u05D8\u05D5\u05D1\u05E8",
+            "\u05E0\u05D5\u05D1\u05DE\u05D1\u05E8",
+            "\u05D3\u05E6\u05DE\u05D1\u05E8",
+            "",
+    }
+    ShortLanguage { "heb" }
+    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    zoneStrings { 
+        {
+                "Africa/Casablanca",
+                "GMT",
+                "GMT",
+                "GMT",
+                "GMT",
+        }
+    }
+}

@@ -1,0 +1,102 @@
+// ****************************************************************************
+// *                                                                          *
+// * COPYRIGHT:                                                               *
+// * (C) Copyright Taligent, Inc.,  1997                                      *
+// * (C) Copyright International Business Machines Corporation,  1997-99      *
+// * Licensed Material - Program-Property of IBM - All Rights Reserved.       *
+// * US Government Users Restricted Rights - Use, duplication, or disclosure  *
+// * restricted by GSA ADP Schedule Contract with IBM Corp.                   *
+// *                                                                          *
+// ****************************************************************************
+
+th {
+    AmPmMarkers { 
+            "\u0E01\u0E48\u0E2D\u0E19\u0E40\u0E17\u0E35\u0E48\u0E22\u0E07",
+            "\u0E2B\u0E25\u0E31\u0E07\u0E40\u0E17\u0E35\u0E48\u0E22\u0E07",
+    }
+    Countries { 
+        TH { "\u0E1B\u0E23\u0E30\u0E40\u0E17\u0E28\u0E44\u0E17\u0E22" }
+    }
+    DateTimePatterns { 
+            "H' \u0E19\u0E32\u0E2C\u0E34\u0E01\u0E32 'm' \u0E19\u0E32\u0E17\u0E35 'ss' \u0E27"
+            "\u0E34\u0E19\u0E32\u0E17\u0E35'",
+            "H' \u0E19\u0E32\u0E2C\u0E34\u0E01\u0E32 'm' \u0E19\u0E32\u0E17\u0E35'",
+            "H:mm:ss",
+            "H:mm",
+            "EEEE'\u0E17\u0E35\u0E48 'd MMMM G yyyy",
+            "d MMMM yyyy",
+            "d MMM yyyy",
+            "d/M/yyyy",
+            "{1}, {0}",
+    }
+    DayAbbreviations { 
+            "\u0E2D\u0E32.",
+            "\u0E08.",
+            "\u0E2D.",
+            "\u0E1E.",
+            "\u0E1E\u0E24.",
+            "\u0E28.",
+            "\u0E2A.",
+    }
+    DayNames { 
+            "\u0E27\u0E31\u0E19\u0E2D\u0E32\u0E17\u0E34\u0E15\u0E22\u0E4C",
+            "\u0E27\u0E31\u0E19\u0E08\u0E31\u0E19\u0E17\u0E23\u0E4C",
+            "\u0E27\u0E31\u0E19\u0E2D\u0E31\u0E07\u0E04\u0E32\u0E23",
+            "\u0E27\u0E31\u0E19\u0E1E\u0E38\u0E18",
+            "\u0E27\u0E31\u0E19\u0E1E\u0E24\u0E2B\u0E31\u0E2A\u0E1A\u0E14\u0E35",
+            "\u0E27\u0E31\u0E19\u0E28\u0E38\u0E01\u0E23\u0E4C",
+            "\u0E27\u0E31\u0E19\u0E40\u0E2A\u0E32\u0E23\u0E4C",
+    }
+    Eras { 
+            "\u0E1B\u0E35\u0E01\u0E48\u0E2D\u0E19\u0E04\u0E23\u0E34\u0E2A\u0E15\u0E4C\u0E01\u0E32"
+            "\u0E25\u0E17\u0E35\u0E48",
+            "\u0E04.\u0E28.",
+    }
+    Languages { 
+        th { "\u0E44\u0E17\u0E22" }
+    }
+    LocaleID { "041e" }
+    LocaleString { "th" }
+    MonthAbbreviations { 
+            "\u0E21.\u0E04.",
+            "\u0E01.\u0E1E.",
+            "\u0E21\u0E35.\u0E04.",
+            "\u0E40\u0E21.\u0E22.",
+            "\u0E1E.\u0E04.",
+            "\u0E21\u0E34.\u0E22.",
+            "\u0E01.\u0E04.",
+            "\u0E2A.\u0E04.",
+            "\u0E01.\u0E22.",
+            "\u0E15.\u0E04.",
+            "\u0E1E.\u0E22.",
+            "\u0E18.\u0E04.",
+            "",
+    }
+    MonthNames { 
+            "\u0E21\u0E01\u0E23\u0E32\u0E04\u0E21",
+            "\u0E01\u0E38\u0E21\u0E20\u0E32\u0E1E\u0E31\u0E19\u0E18\u0E4C",
+            "\u0E21\u0E35\u0E19\u0E32\u0E04\u0E21",
+            "\u0E40\u0E21\u0E29\u0E32\u0E22\u0E19",
+            "\u0E1E\u0E24\u0E29\u0E20\u0E32\u0E04\u0E21",
+            "\u0E21\u0E34\u0E16\u0E38\u0E19\u0E32\u0E22\u0E19",
+            "\u0E01\u0E23\u0E01\u0E0E\u0E32\u0E04\u0E21",
+            "\u0E2A\u0E34\u0E07\u0E2B\u0E32\u0E04\u0E21",
+            "\u0E01\u0E31\u0E19\u0E22\u0E32\u0E22\u0E19",
+            "\u0E15\u0E38\u0E25\u0E32\u0E04\u0E21",
+            "\u0E1E\u0E24\u0E28\u0E08\u0E34\u0E01\u0E32\u0E22\u0E19",
+            "\u0E18\u0E31\u0E19\u0E27\u0E32\u0E04\u0E21",
+            "",
+    }
+    ShortLanguage { "tha" }
+    localPatternChars { "GanjkHmsSEDFwWxhKz" }
+    zoneStrings { 
+        {
+                "THA",
+                "Thailand Time",
+                "THA",
+                "Thailand Time",
+                "THA",
+                "Bangkok",
+        }
+    }
+}
