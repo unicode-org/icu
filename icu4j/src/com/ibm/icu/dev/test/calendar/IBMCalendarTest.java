@@ -4,15 +4,14 @@
  * others. All Rights Reserved.
  *******************************************************************************
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/IBMCalendarTest.java,v $ 
- * $Date: 2000/03/14 18:09:36 $ 
- * $Revision: 1.1 $
+ * $Date: 2000/03/21 02:51:43 $ 
+ * $Revision: 1.2 $
  *******************************************************************************
  */
 package com.ibm.test.calendar;
 import com.ibm.test.TestFmwk;
 import com.ibm.util.*;
 import java.text.*;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -99,7 +98,7 @@ public class IBMCalendarTest extends TestFmwk {
                 if (data[i+4] != 0) {
                     cal.setTime(new Date(cal.getTime().getTime() + data[i+4]));
                 }
-                boolean isWeekend = IBMCalendar.isWeekend(loc, cal.getTime());
+                boolean isWeekend = cal.isWeekend();
                 boolean ok = isWeekend == (data[i+5] != 0);
                 if (ok) {
                     logln("Ok:   " + fmt.format(cal.getTime()) + " isWeekend=" + isWeekend);
@@ -114,8 +113,9 @@ public class IBMCalendarTest extends TestFmwk {
             Locale loc = (Locale)DATA2[i2];
             int[] data = (int[]) DATA2[i2+1];
             logln("Locale: " + loc);
+            Calendar cal = Calendar.getInstance(loc);
             for (int i=0; i<data.length; i+=2) {
-                int type = IBMCalendar.getDayOfWeekType(loc, data[i]);
+                int type = cal.getDayOfWeekType(data[i]);
                 int exp  = data[i+1];
                 if (type == exp) {
                     logln("Ok:   DOW " + data[i] + " type=" + type);
