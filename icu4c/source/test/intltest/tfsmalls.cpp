@@ -101,7 +101,6 @@ void test_FieldPosition_example( void )
         UTextOffset tempOffset = (tempLen <= (tempLen - pos.getEndIndex())) ? 
             tempLen : (tempLen - pos.getEndIndex());
         temp[tempOffset] = '\0';
-        //cout << temp << fmtText   << endl;
         it_out << "FP " << temp << res << endl;
     }
     delete fmt;

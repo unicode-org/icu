@@ -26,7 +26,6 @@
 //                          testing.
 //  02/10/98    damiba      Added test for compare(UnicodeString&, UnicodeString&, int32_t)
 //===============================================================================
-#include <iostream.h>
 
 #ifndef COLL_H
 #include "unicode/coll.h"
