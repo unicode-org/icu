@@ -542,7 +542,12 @@ void TestSafeClone() {
     uint8_t buffer [CLONETEST_COLLATOR_COUNT] [U_COL_SAFECLONE_BUFFERSIZE];
     int32_t bufferSize = U_COL_SAFECLONE_BUFFERSIZE;
     int index;
-    
+
+    if (U_COL_SAFECLONE_BUFFERSIZE < sizeof(UCollator)) {
+        log_err("U_COL_SAFECLONE_BUFFERSIZE should be larger than sizeof(UCollator)\n");
+        return;
+    }
+
     test1=(UChar*)malloc(sizeof(UChar) * testSize);
     test2=(UChar*)malloc(sizeof(UChar) * testSize);
     u_uastrcpy(test1, "abCda");
