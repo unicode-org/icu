@@ -719,8 +719,6 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
         collationSource->toReturn = collationSource->CEpos - 1;
         return *(collationSource->toReturn);
         /* 
-        synwee :TODO 
-        Heh heh.... waiting for vladimir's code, me cut and paste
         Jamo is Special
         do recursive processing of L, V, and T with fetchCE (but T only if not 
         equal to TBase!!)
@@ -1026,7 +1024,7 @@ uint32_t getSpecialPrevCE(const UCollator *coll, uint32_t CE,
                       (UCharOffset - coll->contractionIndex));
         }
 
-        if (source->pos == source->start) { 
+        if (source->pos >= source->start) { 
           /* this is the start of string */
           CE = *(coll->contractionCEs + 
                  (UCharOffset - coll->contractionIndex)); 
