@@ -1367,7 +1367,7 @@ uint32_t ucol_getNextUCA(UChar ch, collIterate *collationSource, UErrorCode *sta
       if(UTF_IS_FIRST_SURROGATE(ch)) {
         if( (((collationSource->flags & UCOL_ITER_HASLEN) == 0 ) || (collationSource->pos<collationSource->endp)) &&
           UTF_IS_SECOND_SURROGATE((nextChar=*collationSource->pos))) {
-          cp = (((ch)<<10UL)+(nextChar)-((0xd800<<10UL)+0xdc00));
+          cp = ((((uint32_t)ch)<<10UL)+(nextChar)-(((uint32_t)0xd800<<10UL)+0xdc00-0x10000));
           collationSource->pos++;
           if ((cp & 0xFFFE) == 0xFFFE || (0xD800 <= cp && cp <= 0xDC00)) {
               return 0;  /* illegal code value, use completely ignoreable! */
@@ -1536,7 +1536,8 @@ uint32_t ucol_getPrevUCA(UChar ch, collIterate *collationSource,
         /* Handles Han and Supplementary characters here.*/
         if (UTF_IS_FIRST_SURROGATE(prevChar))
       {
-            cp = ((prevChar << 10UL) + ch - ((0xd800 << 10UL) + 0xdc00));
+            //cp = ((prevChar << 10UL) + ch - ((0xd800 << 10UL) + 0xdc00));
+            cp = ((((uint32_t)prevChar)<<10UL)+(ch)-(((uint32_t)0xd800<<10UL)+0xdc00-0x10000));
             collationSource->pos = prev;
         if ((cp & 0xFFFE) == 0xFFFE || (0xD800 <= cp && cp <= 0xDC00)) {
           return 0;  /* illegal code value, use completely ignoreable! */
@@ -2068,29 +2069,29 @@ uint32_t getSpecialCE(const UCollator *coll, uint32_t CE, collIterate *source, U
               /* Spit out the last char of the string, wasn't tasty enough */
               CE = *(coll->contractionCEs +
                    (ContractionStart - coll->contractionIndex));
+          } else {
+            UChar tempchar = 0;
+            if (source->pos != source->endp &&
+                (*source->pos != 0 ||
+                    ((source->flags & UCOL_ITER_INNORMBUF) &&
+                    source->fcdPosition != NULL &&
+                    source->fcdPosition != source->endp &&
+                    *source->fcdPosition != 0))) {
+                /* find the next character if schar is not a base character
+                and we are not yet at the end of the string */
+                tempchar = getNextNormalizedChar(source);
+                source->pos --;
+            }
+            if (tempchar == 0 || u_getCombiningClass(tempchar) == 0) {
+                source->pos --;
+                /* Spit out the last char of the string, wasn't tasty enough */
+                CE = *(coll->contractionCEs +
+                     (ContractionStart - coll->contractionIndex));
             } else {
-              UChar tempchar = 0;
-              if (source->pos != source->endp &&
-                  (*source->pos != 0 ||
-                      ((source->flags & UCOL_ITER_INNORMBUF) &&
-                      source->fcdPosition != NULL &&
-                      source->fcdPosition != source->endp &&
-                      *source->fcdPosition != 0))) {
-                  /* find the next character if schar is not a base character
-                  and we are not yet at the end of the string */
-                  tempchar = getNextNormalizedChar(source);
-                  source->pos --;
-              }
-              if (tempchar == 0 || u_getCombiningClass(tempchar) == 0) {
-                  source->pos --;
-                  /* Spit out the last char of the string, wasn't tasty enough */
-                  CE = *(coll->contractionCEs +
-                       (ContractionStart - coll->contractionIndex));
-              } else {
-                  CE = getDiscontiguos(coll, source, ContractionStart);
-              }
+                CE = getDiscontiguos(coll, source, ContractionStart);
             }
           }
+        }
         }
         else {
             CE = *(coll->contractionCEs +
@@ -5734,7 +5735,8 @@ uint32_t ucol_getIncrementalUCA(UChar ch, incrementalContext *collationSource, U
       if(UTF_IS_FIRST_SURROGATE(ch)) {
         if( (collationSource->lastChar != 0xFFFF) &&
           UTF_IS_SECOND_SURROGATE((collationSource->lastChar))) {
-          uint32_t cp = (((ch)<<10UL)+(collationSource->lastChar)-((0xd800<<10UL)+0xdc00));
+          //uint32_t cp = (((ch)<<10UL)+(collationSource->lastChar)-((0xd800<<10UL)+0xdc00));
+          uint32_t cp = ((((uint32_t)ch)<<10UL)+(collationSource->lastChar)-(((uint32_t)0xd800<<10UL)+0xdc00-0x10000));
           collationSource->lastChar = 0xFFFF; /*used up*/
           if ((cp & 0xFFFE) == 0xFFFE || (0xD800 <= cp && cp <= 0xDC00)) {
               return 0;  /* illegal code value, use completely ignoreable! */
