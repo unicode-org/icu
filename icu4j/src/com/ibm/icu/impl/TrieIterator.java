@@ -5,8 +5,8 @@
 ******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/impl/TrieIterator.java,v $
-* $Date: 2002/11/15 20:39:26 $
-* $Revision: 1.7 $
+* $Date: 2002/11/16 01:49:26 $
+* $Revision: 1.8 $
 *
 ******************************************************************************
 */
@@ -44,6 +44,42 @@ import com.ibm.icu.util.RangeValueIterator;
  * the method extract(int) (equivalent to UTrieEnumValue). Independent of icu4j, 
  * the caller will have to code his own iteration and flesh out the task 
  * (equivalent to UTrieEnumRange) to be performed in the iteration loop.
+ * </p>
+ * <p>There are basically 3 usage scenarios for porting:</p>
+ * <p>1) UTrieEnumValue is the only implemented callback then just implement a 
+ * subclass of TrieIterator and override the extract(int) method. The 
+ * extract(int) method is analogus to UTrieEnumValue callback.
+ * </p>
+ * <p>2) UTrieEnumValue and UTrieEnumRange both are implemented then implement 
+ * a subclass of TrieIterator, override the extract method and iterate, e.g
+ * </p>
+ * <p>utrie_enum(&normTrie, _enumPropertyStartsValue, _enumPropertyStartsRange, 
+ *               set);<br>
+ * In Java :<br>
+ * <pre>
+ * class TrieIteratorImpl extends TrieIterator{
+ *     public TrieIteratorImpl(Trie data){
+ *         super(data);
+ *     }
+ *     public int extract(int value){
+ *         // port the implementation of _enumPropertyStartsValue here
+ *     }
+ * }
+ * .... 
+ * TrieIterator fcdIter  = new TrieIteratorImpl(fcdTrieImpl.fcdTrie);
+ * while(fcdIter.next(result)) {
+ *     // port the implementation of _enumPropertyStartsRange
+ * }
+ * </pre>
+ * </p>
+ * <p>3) UTrieEnumRange is the only implemented callback then just implement 
+ * the while loop, when utrie_enum is called
+ * <pre>
+ * // utrie_enum(&fcdTrie, NULL, _enumPropertyStartsRange, set);
+ * TrieIterator fcdIter  = new TrieIterator(fcdTrieImpl.fcdTrie);
+ * while(fcdIter.next(result)){
+ *     set.add(result.start);
+ * }
  * </p>
  * @author synwee
  * @see com.ibm.icu.util.Trie
