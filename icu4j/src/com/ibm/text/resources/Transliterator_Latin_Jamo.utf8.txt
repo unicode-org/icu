@@ -24,7 +24,7 @@
 # We will, however, insert two 'null' jamo to make foreign words
 # conform to Korean syllable structure.  These are the null initial
 # consonant 110B (IEUNG) and the null vowel 1173 (EU).  In Latin text,
-# we will use the apostrophe in order to disambiguate strings,
+# we will use the hyphen in order to disambiguate strings,
 # e.g. "kan'ggan" (initial GG) vs. "kanggan" (final NG + initial G).
 
 # We will not use all of the characters in the jamo block.  We will
@@ -35,7 +35,7 @@
 # for the rules.  They are phrased in terms of Latin-Jamo transliteration.
 # The Jamo-Latin rules derive from these, since the Jamo-Latin rules are
 # just context-free transliteration of jamo to corresponding short names,
-# with the addition of apostrophes to maintain round-trip integrity
+# with the addition of hyphens to maintain round-trip integrity
 # in the context of the Latin-Jamo rules.
 
 # A sequence of vowels:
@@ -164,54 +164,59 @@
 # we are going from single characters, so we can very easily piggyback
 # on the Latin-Jamo.
 
-# The main issue with Jamo-Latin is when to insert apostrophes.
-# Apostrophes are inserted to obtain correct round trip behavior.  For
+# The main issue with Jamo-Latin is when to insert hyphens.
+# Hyphens are inserted to obtain correct round trip behavior.  For
 # example, the sequence Ki A Gf Gi E, if transliterated to "kagge",
-# would then round trip to Ki A GGi E.  To prevent this, we insert an
-# apostrophe: "kag'ge".  IMPORTANT: The need for apostrophes depends
+# would then round trip to Ki A GGi E.  To prevent this, we insert a
+# hyphen: "kag'ge".  IMPORTANT: The need for hyphens depends
 # very specifically on the behavior of the Latin-Jamo rules.  A change
 # in the Latin-Jamo behavior can completely change the way the
-# apostrophe insertion must be done.
+# hyphen insertion must be done.
 
-# Triple consonants.  For three consonants "axxx" we insert an
-# apostrophe between the first and second "x" if XXf, Xf, and Xi all
+# First try to preserve actual hyphens in the jamo text by doubling
+# them.  This fixes problems like:
+# (Di)(A)(Ji)(U)(NG)-(IEUNG)(YEO)(Nf)(Gi)(YEO)(L) => dajung-yeongyeol
+# => (Di)(A)(Ji)(U)(NG)(IEUNG)(YEO)(Nf)(Gi)(YEO)(L).  This is optional
+# -- if we don't care about losing hyphens in the jamo, we can delete
+# this rule.
+
+  '--' <> '-';
+
+# Triple consonants.  For three consonants "axxx" we insert a
+# hyphen between the first and second "x" if XXf, Xf, and Xi all
 # exist, and we have A Xf XXi.  This prevents the reverse
 # transliteration to A XXf Xi.
 
-  '' < $latinMedialEnd g {} $GGi;
-  '' < $latinMedialEnd s {} $SSi;
+  '-' < $latinMedialEnd g {} $GGi;
+  '-' < $latinMedialEnd s {} $SSi;
 
 # For vowels the rule is similar.  If there is a vowel "ae" such that
-# "a" by itself and "e" by itself are vowels, then we want to map
-# A E to "a'e" so as not to round trip to AE.  However, in the text
-# Ki EO IEUNG E we don't need to map to "keo'e".  "keoe" suffices.
+# "a" by itself and "e" by itself are vowels, then we want to map A E
+# to "a'e" so as not to round trip to AE.  However, in the text Ki EO
+# IEUNG E we don't need to map to "keo'e".  "keoe" suffices.  For
+# vowels of the form "aei", in theory both "ae" + "i" and "a" + "ei"
+# must be tested, but in practice only the former occurs.
 
-# the rule "'' < a {}
-# [ E ];" must be used to introduce and apostrophe between single "a"
-# and single "e".  For vowels of the form "aei", in theory both "ae" +
-# "i" and "a" + "ei" must be tested, but in practice only the former
-# occurs.
-
-  '' < $latinInitial [ye we] {} $O;
-  '' < $latinInitial e {} [$O $U];
-  '' < $latinInitial [o a wa ya] {} $E;
+  '-' < $latinInitial [ye we] {} $O;
+  '-' < $latinInitial e {} [$O $U];
+  '-' < $latinInitial [o a wa ya] {} $E;
 
 # Single finals followed by IEUNG.  The jamo sequence A Xf IEUNG E,
 # where Xi also exists, must be transliterated as "ax'e" to prevent
 # the round trip conversion to A Xi E.
 
-  '' < $latinMedialEnd b {} $IEUNG $jamoMedial;
-  '' < $latinMedialEnd c {} $IEUNG $jamoMedial;
-  '' < $latinMedialEnd d {} $IEUNG $jamoMedial;
-  '' < $latinMedialEnd g {} $IEUNG $jamoMedial;
-  '' < $latinMedialEnd h {} $IEUNG $jamoMedial;
-  '' < $latinMedialEnd j {} $IEUNG $jamoMedial;
-  '' < $latinMedialEnd k {} $IEUNG $jamoMedial;
-  '' < $latinMedialEnd m {} $IEUNG $jamoMedial;
-  '' < $latinMedialEnd n {} $IEUNG $jamoMedial;
-  '' < $latinMedialEnd p {} $IEUNG $jamoMedial;
-  '' < $latinMedialEnd s {} $IEUNG $jamoMedial;
-  '' < $latinMedialEnd t {} $IEUNG $jamoMedial;
+  '-' < $latinMedialEnd b {} $IEUNG $jamoMedial;
+  '-' < $latinMedialEnd c {} $IEUNG $jamoMedial;
+  '-' < $latinMedialEnd d {} $IEUNG $jamoMedial;
+  '-' < $latinMedialEnd g {} $IEUNG $jamoMedial;
+  '-' < $latinMedialEnd h {} $IEUNG $jamoMedial;
+  '-' < $latinMedialEnd j {} $IEUNG $jamoMedial;
+  '-' < $latinMedialEnd k {} $IEUNG $jamoMedial;
+  '-' < $latinMedialEnd m {} $IEUNG $jamoMedial;
+  '-' < $latinMedialEnd n {} $IEUNG $jamoMedial;
+  '-' < $latinMedialEnd p {} $IEUNG $jamoMedial;
+  '-' < $latinMedialEnd s {} $IEUNG $jamoMedial;
+  '-' < $latinMedialEnd t {} $IEUNG $jamoMedial;
 
 # Double finals followed by IEUNG.  Similar to the single finals
 # followed by IEUNG.  Any latin consonant pair X Y, between medials,
@@ -219,43 +224,43 @@
 # part of A XYf IEUNG E, to prevent round trip conversion to A Xf Yi
 # E.
 
-  '' < $latinMedialEnd b s {} $IEUNG $jamoMedial;
-  '' < $latinMedialEnd g g {} $IEUNG $jamoMedial;
-  '' < $latinMedialEnd g s {} $IEUNG $jamoMedial;
-  '' < $latinMedialEnd l b {} $IEUNG $jamoMedial;
-  '' < $latinMedialEnd l g {} $IEUNG $jamoMedial;
-  '' < $latinMedialEnd l h {} $IEUNG $jamoMedial;
-  '' < $latinMedialEnd l m {} $IEUNG $jamoMedial;
-  '' < $latinMedialEnd l p {} $IEUNG $jamoMedial;
-  '' < $latinMedialEnd l s {} $IEUNG $jamoMedial;
-  '' < $latinMedialEnd l t {} $IEUNG $jamoMedial;
-  '' < $latinMedialEnd n g {} $IEUNG $jamoMedial;
-  '' < $latinMedialEnd n h {} $IEUNG $jamoMedial;
-  '' < $latinMedialEnd n j {} $IEUNG $jamoMedial;
-  '' < $latinMedialEnd s s {} $IEUNG $jamoMedial;
+  '-' < $latinMedialEnd b s {} $IEUNG $jamoMedial;
+  '-' < $latinMedialEnd g g {} $IEUNG $jamoMedial;
+  '-' < $latinMedialEnd g s {} $IEUNG $jamoMedial;
+  '-' < $latinMedialEnd l b {} $IEUNG $jamoMedial;
+  '-' < $latinMedialEnd l g {} $IEUNG $jamoMedial;
+  '-' < $latinMedialEnd l h {} $IEUNG $jamoMedial;
+  '-' < $latinMedialEnd l m {} $IEUNG $jamoMedial;
+  '-' < $latinMedialEnd l p {} $IEUNG $jamoMedial;
+  '-' < $latinMedialEnd l s {} $IEUNG $jamoMedial;
+  '-' < $latinMedialEnd l t {} $IEUNG $jamoMedial;
+  '-' < $latinMedialEnd n g {} $IEUNG $jamoMedial;
+  '-' < $latinMedialEnd n h {} $IEUNG $jamoMedial;
+  '-' < $latinMedialEnd n j {} $IEUNG $jamoMedial;
+  '-' < $latinMedialEnd s s {} $IEUNG $jamoMedial;
 
 # Split doubles.  Text of the form A Xi Xf E, where XXi also occurs,
 # we transliterate as "ax'xe" to prevent round trip transliteration as
 # A XXi E.
 
-  '' < $latinMedialEnd b {} $Bi $jamoMedial;
-  '' < $latinMedialEnd d {} $Di $jamoMedial;
-  '' < $latinMedialEnd j {} $Ji $jamoMedial;
-  '' < $latinMedialEnd g {} $Gi $jamoMedial;
-  '' < $latinMedialEnd s {} $Si $jamoMedial;
+  '-' < $latinMedialEnd b {} $Bi $jamoMedial;
+  '-' < $latinMedialEnd d {} $Di $jamoMedial;
+  '-' < $latinMedialEnd j {} $Ji $jamoMedial;
+  '-' < $latinMedialEnd g {} $Gi $jamoMedial;
+  '-' < $latinMedialEnd s {} $Si $jamoMedial;
 
 # XYY.  This corresponds to the XYY rule in Latin-Jamo.  By default
 # Latin-Jamo maps "xyy" to Xf YYi, to keep YY together.  As a result,
 # "xyy" forms that correspond to XYf Yi must be transliterated as
 # "xy'y".
 
-  '' < $latinMedialEnd b s {} $Si;
-  '' < $latinMedialEnd g s {} $Si;
-  '' < $latinMedialEnd l b {} $Bi;
-  '' < $latinMedialEnd l g {} $Gi;
-  '' < $latinMedialEnd l s {} $Si;
-  '' < $latinMedialEnd n g {} $Gi;
-  '' < $latinMedialEnd n j {} $Ji;
+  '-' < $latinMedialEnd b s {} $Si;
+  '-' < $latinMedialEnd g s {} $Si;
+  '-' < $latinMedialEnd l b {} $Bi;
+  '-' < $latinMedialEnd l g {} $Gi;
+  '-' < $latinMedialEnd l s {} $Si;
+  '-' < $latinMedialEnd n g {} $Gi;
+  '-' < $latinMedialEnd n j {} $Ji;
 
 # Deletion of IEUNG is handled below.
 
@@ -483,9 +488,9 @@
   x > | ks;
   z > | s;
 
-# Delete apostrophes (Latin-Jamo).
+# Delete hyphens (Latin-Jamo).
 
-  '' > ;
+  '-' > ;
 
 # Delete null consonants (Jamo-Latin).  Do NOT delete null EU vowels,
 # since these may also occur in text.
