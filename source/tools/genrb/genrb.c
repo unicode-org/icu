@@ -60,7 +60,8 @@ enum
     SOURCEDIR,
     DESTDIR,
     ENCODING,
-    ICUDATADIR
+    ICUDATADIR,
+    COPYRIGHT
 };
 
 UOption options[]={
@@ -72,7 +73,8 @@ UOption options[]={
                       UOPTION_SOURCEDIR,
                       UOPTION_DESTDIR,
                       UOPTION_ENCODING,
-                      UOPTION_ICUDATADIR
+                      UOPTION_ICUDATADIR,
+                      UOPTION_COPYRIGHT
                   };
 
 
@@ -129,6 +131,7 @@ main(int argc,
                 "\t-s or --sourcedir    source directory for files followed by path, defaults to %s\n"
                 "\t-i or --icudatadir   directory for locating any needed intermediate data files,\n"
                 "\t                     followed by path, defaults to %s\n",
+                "\t-c or --copyright    include copyright notice \n",
                 argv[0], u_getDataDirectory(), u_getDataDirectory(),u_getDataDirectory());
         return argc < 0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }
@@ -139,6 +142,10 @@ main(int argc,
 
     if(options[QUIET].doesOccur) {
         setShowWarning(FALSE);
+    }
+    
+    if(options[COPYRIGHT].doesOccur){
+        setIncludeCopyright(TRUE);
     }
 
     if(options[SOURCEDIR].doesOccur) {
@@ -220,7 +227,7 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
         }
     }
 
-    ucbuf = ucbuf_open(in, cp, status);
+    ucbuf = ucbuf_open(in, cp,getShowWarning(), status);
 
     if (ucbuf == NULL || U_FAILURE(*status)) {
         goto finish;

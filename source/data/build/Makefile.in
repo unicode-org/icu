@@ -201,12 +201,12 @@ $(TESTOBJDATADIR)/%.res: $(TESTSRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb
 
 ja_data.txt:  $(TESTSRCDATADIR)/ja_data.txt $(TOOLDIR)/genrb/genrb
 	echo  Creating $@
-	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -s $(TESTSRCDATADIR)  -eISO_2022_JP -d $(TESTOBJDATADIR) $(<F) >/dev/null  
+	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -q -s $(TESTSRCDATADIR)  -eISO_2022_JP -d $(TESTOBJDATADIR) $(<F) >/dev/null  
 
 
 
 %.res: $(SRCDATADIR)/%.txt $(TOOLDIR)/genrb/genrb ucadata.dat uprops.dat unorm.dat
-	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -s $(SRCDATADIR) -d . $(<F)
+	@ICU_DATA=. $(INVOKE) $(TOOLDIR)/genrb/genrb -q -s $(SRCDATADIR) -d . $(<F)
 
 ###################################################################
 

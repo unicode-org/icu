@@ -23,6 +23,8 @@
 
 #define BIN_ALIGNMENT 16
 
+static UBool gIncludeCopyright = FALSE;
+
 uint32_t res_write(UNewDataMemory *mem, struct SResource *res,
                    uint32_t usedOffset, UErrorCode *status);
 
@@ -44,6 +46,10 @@ static uint8_t calcPadding(uint32_t size) {
     /* returns space we need to pad */
     return (uint8_t) ((size % sizeof(uint32_t)) ? (sizeof(uint32_t) - (size % sizeof(uint32_t))) : 0);
 
+}
+
+void setIncludeCopyright(UBool val){
+    gIncludeCopyright=val;
 }
 
 /* Writing Functions */
@@ -262,7 +268,7 @@ void bundle_write(struct SRBRoot *bundle, const char *outputDir, UErrorCode *sta
         return;
     }
 
-    mem = udata_create(outputDir, "res", bundle->fLocale, &dataInfo, U_COPYRIGHT_STRING, status);
+    mem = udata_create(outputDir, "res", bundle->fLocale, &dataInfo, (gIncludeCopyright==TRUE)? U_COPYRIGHT_STRING:NULL, status);
     /*mem = udata_create(outputDir, "res", filename, &dataInfo, U_COPYRIGHT_STRING, status);*/
 
     pad = calcPadding(bundle->fKeyPoint);

@@ -38,6 +38,10 @@ void setShowWarning(UBool val)
     gShowWarning = val;
 }
 
+UBool getShowWarning(){
+    return gShowWarning;
+}
+
 void warning(uint32_t linenumber, const char *msg, ...)
 {
     if (gShowWarning)
