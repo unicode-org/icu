@@ -172,9 +172,6 @@ openAdopt, initAdopt, openAlias, initAlias
       memcpy(index, tIndex, UCMP8_kIndexCount*sizeof(uint16_t));
       memcpy(values, tValues, count);
 
-
-      ucmp8_close(ucmp8Array);
-
       ucmp8_initAlias(&aliaser, index, values, count);
       query(&aliaser);
       ucmp8_close(&aliaser);
