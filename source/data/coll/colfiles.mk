@@ -10,16 +10,16 @@
 # Then, you can have your local changes remain even if you upgrade or re-
 # configure ICU.
 #
-# Example 'reslocal.mk' files:
+# Example 'collocal.mk' files:
 #
 #  * To add an additional locale to the list: 
 #    _____________________________________________________
-#    |  GENRB_SOURCE_LOCAL =   myLocale.txt ...
+#    |  COLLATION_SOURCE_LOCAL =   myLocale.txt ...
 #
 #  * To REPLACE the default list and only build with a few
 #     locale:
 #    _____________________________________________________
-#    |  GENRB_SOURCE = ar.txt ar_AE.txt en.txt de.txt zh.txt
+#    |  COLLATION_SOURCE = ar.txt ar_AE.txt en.txt de.txt zh.txt
 #
 #
 
