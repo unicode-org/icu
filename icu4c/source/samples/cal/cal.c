@@ -254,23 +254,29 @@ get_days(const UChar *days [],
          int32_t fdow,
          UErrorCode *status)
 {
-    UResourceBundle *bundle;
-    int32_t i, count;
+    UResourceBundle *bundle, *dayBundle;
+    int32_t i, count, dayLen;
     const char *key = (useLongNames ? "DayNames" : "DayAbbreviations");
     
-    if(U_FAILURE(*status)) return;
+    if(U_FAILURE(*status))
+        return;
     
     /* fdow is 1-based */
     --fdow;
     
     bundle = ures_open(0, 0, status);
+    if(U_FAILURE(*status))
+        return;
+    dayBundle = ures_getByKey(bundle, key, NULL, status);
     count = ures_countArrayItems(bundle, key, status);
-    if(count != DAY_COUNT) goto finish;   /* sanity check */
+    if(count != DAY_COUNT)
+        goto finish;   /* sanity check */
     for(i = 0; i < count; ++i) {
-        days[i] = ures_getArrayItem(bundle, key, ((i + fdow) % DAY_COUNT), status);
+        days[i] = ures_getStringByIndex(dayBundle, ((i + fdow) % DAY_COUNT), &dayLen, status);
     }
     
 finish:
+    ures_close(dayBundle);
     ures_close(bundle);
 }
 
@@ -281,20 +287,26 @@ get_months(const UChar *months [],
            UBool useLongNames,
            UErrorCode *status)
 {
-    UResourceBundle *bundle;
-    int32_t i, count;
+    UResourceBundle *bundle, *monthBundle;
+    int32_t i, count, monthLen;
     const char *key = (useLongNames ? "MonthNames" : "MonthAbbreviations");
     
-    if(U_FAILURE(*status)) return;
+    if(U_FAILURE(*status))
+        return;
     
     bundle = ures_open(0, 0, status);
+    if(U_FAILURE(*status))
+        return;
+    monthBundle = ures_getByKey(bundle, key, NULL, status);
     count = ures_countArrayItems(bundle, key, status);
-    if(count != MONTH_COUNT) goto finish;   /* sanity check */
+    if(count != MONTH_COUNT)
+        goto finish;   /* sanity check */
     for(i = 0; i < count; ++i) {
-        months[i] = ures_getArrayItem(bundle, key, i, status);
+        months[i] = ures_getStringByIndex(monthBundle, i, &monthLen, status);
     }
     
 finish:
+    ures_close(monthBundle);
     ures_close(bundle);
 }
 
