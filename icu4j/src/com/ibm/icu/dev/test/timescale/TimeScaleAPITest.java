@@ -28,7 +28,7 @@ public class TimeScaleAPITest extends TestFmwk
     {
     }
     
-    public void testBigDecimalFromBigDecimal()
+    public void TestBigDecimalFromBigDecimal()
     {
         BigDecimal bigZero = new BigDecimal(0);
         BigDecimal result;
@@ -54,7 +54,7 @@ public class TimeScaleAPITest extends TestFmwk
         }
     }
     
-    public void testBigDecimalFromDouble()
+    public void TestBigDecimalFromDouble()
     {
         BigDecimal result;
         
@@ -79,7 +79,7 @@ public class TimeScaleAPITest extends TestFmwk
         }
     }
     
-    public void testBigDecimalFromLong()
+    public void TestBigDecimalFromLong()
     {
         BigDecimal result;
         
@@ -104,7 +104,7 @@ public class TimeScaleAPITest extends TestFmwk
         }
     }
     
-    public void testFromDouble()
+    public void TestFromDouble()
     {
         long result;
         
@@ -159,7 +159,7 @@ public class TimeScaleAPITest extends TestFmwk
         }
     }
     
-    public void testFromLong()
+    public void TestFromLong()
     {
         long result;
         
@@ -214,7 +214,7 @@ public class TimeScaleAPITest extends TestFmwk
         }
     }
     
-    public void testGetTimeScale()
+    public void TestGetTimeScale()
     {
         UniversalTimeScale.TimeScaleData data;
         
@@ -239,7 +239,7 @@ public class TimeScaleAPITest extends TestFmwk
         }
     }
     
-    public void testToBigDecimalFromBigDecimal()
+    public void TestToBigDecimalFromBigDecimal()
     {
         BigDecimal bigZero = new BigDecimal(0);
         BigDecimal result;
@@ -265,7 +265,7 @@ public class TimeScaleAPITest extends TestFmwk
         }
     }
     
-    public void testToBigDecimalFromLong()
+    public void TestToBigDecimalFromLong()
     {
         BigDecimal result;
         
@@ -290,7 +290,7 @@ public class TimeScaleAPITest extends TestFmwk
         }
     }
     
-    public void testToDouble()
+    public void TestToDouble()
     {
         double result;
         
@@ -345,7 +345,7 @@ public class TimeScaleAPITest extends TestFmwk
         }
     }
     
-    public void testToLong()
+    public void TestToLong()
     {
         long result;
         

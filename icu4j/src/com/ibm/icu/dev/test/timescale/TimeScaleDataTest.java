@@ -75,7 +75,7 @@ public class TimeScaleDataTest extends TestFmwk {
         }
     }
     
-    public void testEpochOffsets()
+    public void TestEpochOffsets()
     {
         for (int scale = 0; scale < UniversalTimeScale.MAX_SCALE; scale += 1) {
             UniversalTimeScale.TimeScaleData data = UniversalTimeScale.getTimeScaleData(scale);
@@ -84,7 +84,7 @@ public class TimeScaleDataTest extends TestFmwk {
         }
     }
 
-    public void testFromLimits()
+    public void TestFromLimits()
     {
         for (int scale = 0; scale < UniversalTimeScale.MAX_SCALE; scale += 1) {
             UniversalTimeScale.TimeScaleData data = UniversalTimeScale.getTimeScaleData(scale);
@@ -94,7 +94,7 @@ public class TimeScaleDataTest extends TestFmwk {
         }
     }
     
-    public void testToLimits()
+    public void TestToLimits()
     {
         for (int scale = 0; scale < UniversalTimeScale.MAX_SCALE; scale += 1) {
             UniversalTimeScale.TimeScaleData data = UniversalTimeScale.getTimeScaleData(scale);
