@@ -1,0 +1,47 @@
+# PropertyAliases-3.2.0.txt
+#
+# This file contains aliases for properties and property values used in the UCD.
+# These names can be used for XML formats of UCD data, for regular-expression
+# property tests, and other programmatic textual descriptions of Unicode data.
+# The names are not normative, except where they correspond to normative values
+# in the UCD.
+#
+# The names may be translated in appropriate environments, and additional
+# aliases may be useful.
+#
+# FORMAT
+#
+# Each line has three fields. Where the first field is AA, BB, or ZZ, then
+# the line describes a property name.
+# AA - non-enumerated properties
+# BB - enumerated, non-binary properties
+# ZZ - binary properties and quick-check properties
+#
+# (The values AA, BB, and ZZ are arbitrary -- they were simply chosen to distinguish
+# the different types.)
+#
+# Where the first field is not one of the above, the line describes a
+# property value name. The first field describes the property for which that
+# property value name is used. There are two special properties:
+#
+# xx stands for any binary property
+# qc stands for any quick-check property
+#
+# With loose matching of property names, case distinctions, whitespace,
+# and '_' are ignored.
+#
+# NOTE: the property value names are NOT unique across properties, especially
+# with loose matches. For example,
+# AL means Arabic Letter for the Bidi_Class property, and
+# AL means Alpha_Left for the Combining_Class property, and
+# AL means Alphabetic for the Line_Break property.
+#
+# In addition, some property names may be the same as some property value names:
+# cc means Combining_Class property, and
+# cc means the General_Category property value Control (cc)
+#
+# The combination of property value and property name is, however, unique.
+# For more information, see UTR #24: Regular Expression Guidelines
+# ================================================
+
+
