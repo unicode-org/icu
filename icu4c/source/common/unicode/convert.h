@@ -301,7 +301,7 @@ const char*  getName( UErrorCode&  err) const;
   */
  void  setMissingCharAction(UConverterToUCallback     newAction,
                 void* newContext,
-                UConverterToUCallback oldAction, 
+                UConverterToUCallback *oldAction, 
                 void** oldContext,
                 UErrorCode&            err);
 
@@ -318,7 +318,7 @@ const char*  getName( UErrorCode&  err) const;
  */
  void  setMissingUnicodeAction(UConverterFromUCallback  newAction,
                    void* newContext,
-                   UConverterFromUCallback oldAction,
+                   UConverterFromUCallback *oldAction,
                    void** oldContext,
                    UErrorCode&            err);
 /**

@@ -340,7 +340,7 @@ UnicodeConverterCPP::getMissingUnicodeAction() const
 void
 UnicodeConverterCPP::setMissingCharAction(UConverterToUCallback  newAction,
                                           void *newContext,
-                                          UConverterToUCallback oldAction,
+                                          UConverterToUCallback *oldAction,
                                           void **oldContext,
                                           UErrorCode&         err)
 {
@@ -350,7 +350,7 @@ UnicodeConverterCPP::setMissingCharAction(UConverterToUCallback  newAction,
 void
 UnicodeConverterCPP::setMissingUnicodeAction(UConverterFromUCallback   newAction,
                                              void* newContext,
-                                             UConverterFromUCallback   oldAction,
+                                             UConverterFromUCallback   *oldAction,
                                              void** oldContext,
                                              UErrorCode&             err)
 {

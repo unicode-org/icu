@@ -459,7 +459,7 @@ UBool testConvertFromUnicode(const UChar *source, int sourceLen,  const char *ex
 	/*----setting the callback routine----*/
 	   
     
-	ucnv_setFromUCallBack (conv,  /*action*/callback, NULL, oldAction, &oldContext, &status);
+	ucnv_setFromUCallBack (conv,  /*action*/callback, NULL, &oldAction, &oldContext, &status);
 	if (U_FAILURE(status)) 
     { 
 		log_err("FAILURE in setting the callback Function! %s\n", myErrorName(status));  
@@ -655,7 +655,7 @@ UBool testConvertToUnicode( const char *source, int sourcelen, const UChar *expe
     /*----setting the callback routine----*/
 	
        
-	ucnv_setToUCallBack (conv, callback, NULL, oldAction, &oldContext, &status);
+	ucnv_setToUCallBack (conv, callback, NULL, &oldAction, &oldContext, &status);
 	if (U_FAILURE(status)) 
     { 
 		log_err("FAILURE in setting the callback Function! %s\n", myErrorName(status));  
