@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSetIterator.java,v $ 
- * $Date: 2002/12/05 01:24:02 $ 
- * $Revision: 1.11 $
+ * $Date: 2002/12/09 16:40:00 $ 
+ * $Revision: 1.12 $
  *
  *****************************************************************************************
  */
@@ -48,7 +48,7 @@ import java.io.*;
  * @author M. Davis
  * @stable ICU 2.0
  */
-public final class UnicodeSetIterator {
+public class UnicodeSetIterator {
 	
     /**
      * Value of <tt>codepoint</tt> if the iterator points to a string.
@@ -217,41 +217,30 @@ public final class UnicodeSetIterator {
         }
     }
     
-    /**
-     * INTERNAL: Causes the interation to only visit part of long ranges
-     * @internal used only for testing
-     */
-    public void setAbbreviated(boolean abbr) {
-        abbreviated = abbr;
-    }
-    
-    /**
-     * INTERNAL: Causes the interation to only visit part of long ranges
-     * @internal used only for testing
-     */
-    public boolean getAbbreviated() {
-        return abbreviated;
-    }
-    
     // ======================= PRIVATES ===========================
     
     private UnicodeSet set;
     private int endRange = 0;
     private int range = 0;
-    private int endElement;
-    private int nextElement;
-    private boolean abbreviated = false;
+    /**
+     * @internal
+     */
+    protected int endElement;
+    /**
+     * @internal
+     */
+    protected int nextElement;
     private Iterator stringIterator = null;
     
     /**
      * Invariant: stringIterator is null when there are no (more) strings remaining
      */
 
-    private final void loadRange(int range) {
+    /**
+     * @internal
+     */
+    protected void loadRange(int range) {
         nextElement = set.getRangeStart(range);
         endElement = set.getRangeEnd(range);
-        if (abbreviated && (endElement > nextElement + 50)) {
-            endElement = nextElement + 50;
-        }
     }
 }
