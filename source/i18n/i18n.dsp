@@ -2275,6 +2275,10 @@ InputPath=.\unicode\uregex.h
 !ENDIF 
 
 # End Source File
+# Begin Source File
+
+SOURCE=.\uregexc.cpp
+# End Source File
 # End Group
 # Begin Group "transforms"
 
