@@ -390,7 +390,7 @@ openCommonData(
         }
 
         tData.pHeader = &U_ICUDATA_ENTRY_POINT;
-        checkCommonData(&tData, pErrorCode);
+        udata_checkCommonData(&tData, pErrorCode);
         setCommonICUData(&tData, NULL, FALSE, pErrorCode);
         return gCommonICUData;
     }
@@ -437,7 +437,7 @@ openCommonData(
     }
 
     /* we have mapped a file, check its header */
-    checkCommonData(&tData, pErrorCode);
+    udata_checkCommonData(&tData, pErrorCode);
 
 
     /* Cache the UDataMemory struct for this .dat file,
@@ -483,6 +483,14 @@ static UBool extendICUData(UDataMemory *failedData, UErrorCode *pErr)
                pErr);
 
 
+    pData->map = 0;                 /* The mapping for this data is owned by the hash table */
+    pData->mapAddr = 0;             /*   which will unmap it when ICU is shut down.         */
+                                    /* CommonICUData is also unmapped when ICU is shut down.*/
+                                    /* To avoid unmapping the data twice, zero out the map  */
+                                    /*   fields in the UDataMemory that we're assigning     */
+                                    /*   to CommonICUData.                                  */
+    
+
     setCommonICUData(pData,         /*  The new common data.                              */
                  failedData,        /*  Old ICUData ptr.  Overwrite of this value is ok,  */
                  FALSE,             /*  No warnings if write didn't happen                */
@@ -524,7 +532,7 @@ udata_setCommonData(const void *data, UErrorCode *pErrorCode) {
     /* set the data pointer and test for validity */
     UDataMemory_init(&dataMemory);
     UDataMemory_setData(&dataMemory, data);
-    checkCommonData(&dataMemory, pErrorCode);
+    udata_checkCommonData(&dataMemory, pErrorCode);
     if (U_FAILURE(*pErrorCode)) {return;}
 
     /* we have good data */
@@ -555,7 +563,7 @@ udata_setAppData(const char *path, const void *data, UErrorCode *err)
 
     UDataMemory_init(&udm);
     udm.pHeader = data;
-    checkCommonData(&udm, err);
+    udata_checkCommonData(&udm, err);
     udata_cacheDataItem(path, &udm, err);
 }
 
