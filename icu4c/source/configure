@@ -2987,7 +2987,7 @@ esac
 
 
 case "${host}" in
-	*-*-hpux10*) 	
+	*-*-hpux*) 	
 		for file in samples/date/date \
 		  samples/cal/cal test/cintltst/cintltst \
 		  tools/makeconv/makeconv tools/genrb/genrb \
