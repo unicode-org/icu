@@ -962,7 +962,10 @@ void IntlTestTextBoundary::TestGetAvailableLocales()
 
     if (locCount == 0)
         errln("getAvailableLocales() returned an empty list!");
-    // Todo: I have no idea how to test this function...
+    // Just make sure that it's returning good memory.
+    for (int32_t i = 0; i < locCount; ++i) {
+        logln(locList[i].getName());
+    }
 }
 
 //Testing the BreakIterator::getDisplayName() function 
@@ -1052,12 +1055,20 @@ void IntlTestTextBoundary::TestPreceding()
     UTextOffset p2 = e->next();
     UTextOffset p3 = e->next();
     UTextOffset p4 = e->next();
-    UTextOffset f = e->following( p2+1 );
-    UTextOffset p = e->preceding( p2+1 );
+
+    UTextOffset f = e->following(p2+1);
+    UTextOffset p = e->preceding(p2+1);
     if (f!=p3)
         errln("IntlTestTextBoundary::TestPreceding: f!=p3");
     if (p!=p2)
         errln("IntlTestTextBoundary::TestPreceding: p!=p2");
+
+    if (p1+1!=p2)
+        errln("IntlTestTextBoundary::TestPreceding: p1+1!=p2");
+
+    if (p3+1!=p4)
+        errln("IntlTestTextBoundary::TestPreceding: p3+1!=p4");
+
     if (!e->isBoundary(p2) || e->isBoundary(p2+1) || !e->isBoundary(p3))
     {
         errln("IntlTestTextBoundary::TestPreceding: isBoundary err");
