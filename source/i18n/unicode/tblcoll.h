@@ -60,7 +60,13 @@
 
 U_NAMESPACE_BEGIN
 
+/**
+* @stable
+*/
 class StringSearch;
+/**
+* @stable
+*/
 class CollationElementIterator;
 
 /**
