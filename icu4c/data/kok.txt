@@ -57,13 +57,13 @@ kok {
         id { "\u0907\u0928\u094d\u0921\u094b\u0928\u0947\u0937\u093f\u092f\u0928" }
         ie { "\u0907\u0928\u094d\u091f\u0930\u0932\u093f\u0902\u0917\u094d" }
         ik { "\u0907\u0928\u0942\u092a\u0947\u092f\u093e\u0915\u094d" }
-        in { "\u0907\u0928\u094d\u0921\u094b\u0928\u0947\u0937\u093f\u092f\u0928" }
+        //in { "\u0907\u0928\u094d\u0921\u094b\u0928\u0947\u0937\u093f\u092f\u0928" }  // Use "id" instead
         is { "\u0906\u0908\u0938\u094d\u0932\u093e\u0928\u094d\u0921\u093f\u0915" }
         it { "\u0907\u091f\u093e\u0932\u093f\u092f\u0928" }
         iu { "\u0907\u0928\u094d\u092f\u0941\u0915\u091f\u094d\u091f" }
         iw { "\u0939\u0947\u092c\u094d\u0930\u0941" }
         ja { "\u091c\u093e\u092a\u0928\u0940\u0938\u094d" }
-        ji { "\u092f\u093f\u0926\u094d\u0926\u093f\u0937\u094d" }
+        //ji { "\u092f\u093f\u0926\u094d\u0926\u093f\u0937\u094d" }  // Use "yi" instead
         jw { "\u091c\u093e\u0935\u0928\u0940\u0938\u094d" }
         ka { "\u091c\u093e\u0930\u094d\u091c\u093f\u092f\u0928\u094d" }
         ki { "\u0915\u094b\u0902\u0915\u0923\u0940" }
@@ -237,8 +237,8 @@ kok {
           "IST"
       }
     }
-    LocaleScript{ 
-                "Deva"        // ISO 15924 Name 
+    LocaleScript:array { 
+        "Deva"        // ISO 15924 Name 
     }
 //    CollationElements {
 //            ""

@@ -271,7 +271,7 @@ sh {
         hu { "Ma\u0111arski" }
         is { "Islandski" }
         id { "Indonezijski" }
-        in { "Indonezijski" }
+        //in { "Indonezijski" }  // Use "id" instead
         ga { "Irski" }
         it { "Italijanski" }
         ja { "Japanski" }
@@ -302,7 +302,7 @@ sh {
         tr { "Turski" }
         uk { "Ukrajnski" }
         vi { "Vijetnamski" }
-        ji { "Jidi\u0161" }
+        //ji { "Jidi\u0161" }  // Use "yi" instead
         yi { "Jidi\u0161" }
     }
     LocaleID { "081a" }

@@ -8,9 +8,9 @@
 zh_TW {
     Version{ "1.0.1" }
     CollationElements { 
-	    Version { "1.0" }
-		Override { "FALSE" }
-		Sequence { "&[top]<\u5159<\u515B<\u515E<\u515D<\u5161<\u5163<\u55E7<\u74E9<\u7CCE<\u4E00<\u4E59"
+        Version { "1.0" }
+        Override { "FALSE" }
+        Sequence { "&[top]<\u5159<\u515B<\u515E<\u515D<\u5161<\u5163<\u55E7<\u74E9<\u7CCE<\u4E00<\u4E59"
         "<\u4E01<\u4E03<\u4E43<\u4E5D<\u4E86<\u4E8C<\u4EBA<\u513F<\u5165<\u516B<\u51E0<\u5200"
         "<\u5201<\u529B<\u5315<\u5341<\u535C<\u53C8<\u4E09<\u4E0B<\u4E08<\u4E0A<\u4E2B<\u4E38"
         "<\u51E1<\u4E45<\u4E48<\u4E5F<\u4E5E<\u4E8E<\u4EA1<\u5140<\u5203<\u52FA<\u5343<\u53C9"
@@ -1099,7 +1099,7 @@ zh_TW {
         "<\u6207<\u6B1E<\u7227<\u864C<\u8EA8<\u9482<\u9480<\u9481<\u9A69<\u9A68<\u9B2E<\u9E19"
         "<\u7229<\u864B<\u8B9F<\u9483<\u9C79<\u9EB7<\u7675<\u9A6B<\u9C7A<\u9E1D<\u7069<\u706A"
         "<\u9EA4<\u9F7E<\u9F49<\u9F98" }
-	}
+    }
     Countries { 
         AF { "阿富汗" }
         AL { "阿爾巴尼亞" }
@@ -1163,10 +1163,10 @@ zh_TW {
         ET { "衣索比亞" }
         FJ { "斐濟" }
         FI { "芬蘭" }
-        FO { "法羅群島" } // http://www.din.de/gremien/nas/nabd/iso3166ma/codlstp1/en_listp1.html
+        FO { "法羅群島" }
         FR { "法國" }
         GF { "法屬奎亞那" }
-        GL { "綠島" } // http://www.din.de/gremien/nas/nabd/iso3166ma/codlstp1/en_listp1.html
+        GL { "綠島" }
         PF { "法屬波利尼西亞" }
         TF { "南法屬區" }
         GA { "加彭" }
@@ -1257,7 +1257,7 @@ zh_TW {
         RO { "羅馬尼亞" }
         RU { "蘇俄" }
         RW { "盧安達" }
-        SA { "沙烏地阿拉伯 " }
+        SA { "沙烏地阿拉伯" }
         SN { "塞內加爾" }
         SP { "塞爾維亞" }
         SC { "西其利斯" }

@@ -114,7 +114,7 @@ nl {
         // can someone supply me with information on negatives and decimals?
 
     SpelloutRules {
-            " -x: min >>;\n"
+            "-x: min >>;\n"
             "x.x: << komma >>;\n"
             "(zero?); een; twee; drie; vier; vijf; zes; zeven; acht; negen;\n"
             "tien; elf; twaalf; dertien; veertien; vijftien; zestien;\n"

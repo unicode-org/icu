@@ -362,7 +362,7 @@ de {
         hu { "Ungarisch" }
         is { "Isl\u00e4ndisch" }
         id { "Indonesisch" }
-        in { "Indonesisch" }
+        //in { "Indonesisch" }  // Use "id" instead
         // same as in root: ia { "Interlingua" }
         // same as in root: ie { "Interlingue" }
         // ? iu { "Inukitut" }
@@ -451,7 +451,7 @@ de {
         cy { "Walisisch" }
         // ? wo { "Wolof" }
         // ? xh { "Xhosa" }
-        ji { "Jiddisch" }
+        // ji { "Jiddisch" }  // Use "yi" instead
         yi { "Jiddisch" }
         // ? yo { "Yoruba" }
         // ? za { "Zhuang" }

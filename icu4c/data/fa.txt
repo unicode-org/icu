@@ -83,7 +83,7 @@ fa {
         Version { "1.0" }
         Sequence { "[normalization on]" }
     }
-    LocaleScript{ 
+    LocaleScript:array { 
         "Arab"   // ISO 15924 Name 
     }
             // /**************** Info Below is needed ****************/

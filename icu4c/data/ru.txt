@@ -117,9 +117,8 @@ ru {
                 "GMT",
         }
     }
-    LocaleScript{ 
-                "Cyrl"      // ISO 15924 Name 
-
+    LocaleScript:array {
+        "Cyrl"      // ISO 15924 Name 
     }
 
     //------------------------------------------------------------
@@ -128,8 +127,8 @@ ru {
 
 //         * Spellout rules for Russian.
 
-        // Can someone supply me with information on negatives and decimals?
-        // How about words for billions and trillions?
+    // TODO: Can someone supply me with information on negatives and decimals?
+    // How about words for billions and trillions?
 
     SpelloutRules {
             "\u043d\u043e\u043b\u044c; \u043e\u0434\u0438\u043d; \u0434\u0432\u0430; \u0442\u0440\u0438; "

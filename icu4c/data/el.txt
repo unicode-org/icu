@@ -112,8 +112,8 @@ el {
                 "GMT",
         }
     }
-    LocaleScript{ 
-                "Grek"  // ISO 15924 Name 
+    LocaleScript:array { 
+        "Grek"  // ISO 15924 Name 
     }
 
     //------------------------------------------------------------

@@ -18,7 +18,7 @@
 //  but, U+0307 is the DOT ABOVE needed for ż, ċ, and ġ (in collation rules)
 
 mt {
-    Version { "0.9.4" } // 2001-11-15 
+    Version { "0.9.5" } // 2002-01-15 
     ShortLanguage { mlt }
 
 //    "%%PHONEBOOK" { "Bħal lista tat-telefon" }
@@ -182,7 +182,7 @@ mt {
         gv	{ "Manks" }	// Manx
         gwi	{ "Gwiċin" }	// Gwich'in
         hai	{ "Ħajda" }	// Haida
-        hau	{ "Ħawsa" }	// Hausa
+        ha	{ "Ħawsa" }	// Hausa
         haw	{ "Ħawajjan" }	// Hawaiian
         he	{ "Ebrajk" }	// Hebrew
         hi	{ "Ħindi" }	// Hindi
@@ -415,7 +415,7 @@ mt {
         tg	{ "Taġik" }	// Tajik
         th	{ "Tajlandiż" }	// Thai
         tig	{ "Tigre" }	// Tigre
-        tir	{ "Tigrinja" }	// Tigrinya
+        ti	{ "Tigrinja" }	// Tigrinya
         tiv	{ "Tiv" }	// Tiv
         tk	{ "Turkmeni" }	// Turkmen
         tl	{ "Tagalog" }	// Tagalog
@@ -423,7 +423,7 @@ mt {
         tmh	{ "Tamaxek" }	// Tamashek
         tn	{ "Zwana" }	// Tswana
         tog	{ "Tonga (Njasa)" }	// Tonga (Nyasa)
-        ton	{ "Tongan (Gżejjer ta' Tonga)" }	// Tongan (Tonga Islands)
+        to	{ "Tongan (Gżejjer ta' Tonga)" }	// Tongan (Tonga Islands)
         tr	{ "Tork" }	// Turkish
         ts	{ "Tsonga" }	// Tsonga
         tsi	{ "Zimxjan" }	// Tsimshian
@@ -457,7 +457,7 @@ mt {
         yao	{ "Jao" }	// Yao
         yap	{ "Japese" }	// Yapese
         yi	{ "Jiddix" }	// Yiddish
-        yor	{ "Joruba" }	// Yoruba
+        yo	{ "Joruba" }	// Yoruba
         ypk	{ "Lingwi Jupiċi" }	// Yupik Languages
         za	{ "Żwang" }	// Zhuang
         zap	{ "Żapotek" }	// Zapotec
