@@ -44,10 +44,10 @@ public:
     virtual const UnicodeString* lookup(const UnicodeString& s) const = 0;
 
     /**
-     * Lookup the UnicodeSet associated with the given character, and
+     * Lookup the UnicodeMatcher associated with the given character, and
      * return it.  Return <tt>null</tt> if not found.
      */
-    virtual const UnicodeSet* lookupSet(UChar32 ch) const = 0;
+    virtual const UnicodeMatcher* lookupMatcher(UChar32 ch) const = 0;
 
     /**
      * Parse a symbol reference name from the given string, starting

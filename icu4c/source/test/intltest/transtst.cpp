@@ -135,6 +135,7 @@ TransliteratorTest::runIndexedTest(int32_t index, UBool exec,
         TESTCASE(53,TestTitleAccents);
         TESTCASE(54,TestLocaleResource);
         TESTCASE(55,TestParseError);
+        TESTCASE(56,TestOutputSet);
         default: name = ""; break;
     }
 }
@@ -2612,6 +2613,7 @@ void TransliteratorTest::TestParseError() {
     UErrorCode ec = U_ZERO_ERROR;
     UParseError pe;
     Transliterator *t = Transliterator::createFromRules("ID", rule, UTRANS_FORWARD, pe, ec);
+    delete t;
     if (U_FAILURE(ec)) {
         UnicodeString err(pe.preContext);
         err.append((UChar)124/*|*/).append(pe.postContext);
@@ -2624,6 +2626,24 @@ void TransliteratorTest::TestParseError() {
     }
     errln("FAIL: no syntax error");
 }
+
+/**
+ * Make sure sets on output are disallowed.
+ */
+void TransliteratorTest::TestOutputSet() {
+    UnicodeString rule = "$set = [a-cm-n]; b > $set;";
+    UErrorCode ec = U_ZERO_ERROR;
+    UParseError pe;
+    Transliterator *t = Transliterator::createFromRules("ID", rule, UTRANS_FORWARD, pe, ec);
+    delete t;
+    if (U_FAILURE(ec)) {
+        UnicodeString err(pe.preContext);
+        err.append((UChar)124/*|*/).append(pe.postContext);
+        logln("Ok: " + err);
+        return;
+    }
+    errln("FAIL: No syntax error");
+}        
 
 //======================================================================
 // icu4c ONLY

@@ -211,6 +211,12 @@ private:
     int32_t parsePragma(const UnicodeString& rule, int32_t pos, int32_t limit);
 
     /**
+     * Return true if the given string looks like valid output, that is,
+     * does not contain quantifiers or other special input-only elements.
+     */
+    UBool isValidOutput(const UnicodeString& output) const;
+
+    /**
      * Called by main parser upon syntax error.  Search the rule string
      * for the probable end of the rule.  Of course, if the error is that
      * the end of rule marker is missing, then the rule end will not be found.
