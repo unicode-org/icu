@@ -20,9 +20,9 @@ void GlyphPositioningTableHeader::process(LEGlyphID *glyphs, GlyphPositionAdjust
                                           const LETag **glyphTags, le_int32 glyphCount, le_bool rightToLeft,
                                           LETag scriptTag, LETag languageTag,
                                           const GlyphDefinitionTableHeader *glyphDefinitionTableHeader,
-                                          const LEFontInstance *fontInstance) const
+                                          const LEFontInstance *fontInstance, const LETag *featureOrder) const
 {
-    GlyphPositioningLookupProcessor processor(this, scriptTag, languageTag);
+    GlyphPositioningLookupProcessor processor(this, scriptTag, languageTag, featureOrder);
 
     processor.process(glyphs, glyphPositionAdjustments, glyphTags, glyphCount, rightToLeft,
         glyphDefinitionTableHeader, fontInstance);

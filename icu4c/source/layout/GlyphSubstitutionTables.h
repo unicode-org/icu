@@ -27,7 +27,7 @@ struct GlyphSubstitutionTableHeader
     void    process(LEGlyphID *glyphs, const LETag **glyphTags, le_int32 glyphCount,
                  le_bool rightToLeft, LETag scriptTag, LETag languageTag,
                  const GlyphDefinitionTableHeader *glyphDefinitionTableHeader,
-                 const LEGlyphFilter *filter = NULL) const;
+                 const LEGlyphFilter *filter = NULL, const LETag *featureOrder = NULL) const;
 
     le_bool coversScript(LETag scriptTag) const;
 };

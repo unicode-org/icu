@@ -27,13 +27,13 @@ U_NAMESPACE_BEGIN
 
 GlyphSubstitutionLookupProcessor::GlyphSubstitutionLookupProcessor(
         const GlyphSubstitutionTableHeader *glyphSubstitutionTableHeader,
-        LETag scriptTag, LETag languageTag, const LEGlyphFilter *filter)
+        LETag scriptTag, LETag languageTag, const LEGlyphFilter *filter, const LETag *featureOrder)
     : LookupProcessor(
                       (char *) glyphSubstitutionTableHeader,
                       SWAPW(glyphSubstitutionTableHeader->scriptListOffset),
                       SWAPW(glyphSubstitutionTableHeader->featureListOffset),
                       SWAPW(glyphSubstitutionTableHeader->lookupListOffset),
-                      scriptTag, languageTag), fFilter(filter)
+                      scriptTag, languageTag, featureOrder), fFilter(filter)
 {
     // anything?
 }

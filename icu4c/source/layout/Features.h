@@ -32,6 +32,8 @@ struct FeatureListTable
     FeatureRecord		featureRecordArray[ANY_NUMBER];
 
     const FeatureTable	*getFeatureTable(le_uint16 featureIndex, LETag *featureTag) const;
+
+    const FeatureTable *getFeatureTable(LETag featureTag) const;
 };
 
 U_NAMESPACE_END

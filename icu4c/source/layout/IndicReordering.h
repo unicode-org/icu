@@ -136,6 +136,8 @@ public:
     static void adjustMPres(const LEUnicode *chars, le_int32 charCount, LEGlyphID *glyphs,
         le_int32 *charIndices, le_int32 scriptCode);
 
+    static const LETag *getFeatureOrder();
+
 private:
     static le_int32 findSyllable(const IndicClassTable *classTable, const LEUnicode *chars, le_int32 prev, le_int32 charCount);
 
