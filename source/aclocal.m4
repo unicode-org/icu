@@ -103,7 +103,8 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
         *-*-hpux*)
             case "${CXX}" in
             *CC)
-                CPPFLAGS="${CPPFLAGS} +DAportable"
+                CFLAGS="${CFLAGS} +DAportable"
+                CXXFLAGS="${CXXFLAGS} +DAportable"
                 ;;
             esac;;
         esac
@@ -143,7 +144,16 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
             fi
             ;;
         *-*-hpux*)
-            ENABLE_64BIT_LIBS=unknown
+            OLD_CFLAGS="${CFLAGS}"
+            OLD_CXXFLAGS="${CXXFLAGS}"
+            CFLAGS="${CFLAGS} +DA2.0W"
+            CXXFLAGS="${CXXFLAGS} +DA2.0W"
+            AC_TRY_RUN(int main(void) {return 0;},
+                ENABLE_64BIT_LIBS=yes, ENABLE_64BIT_LIBS=no, ENABLE_64BIT_LIBS=no)
+            if test "$ENABLE_64BIT_LIBS" = no; then
+                CFLAGS="${OLD_CFLAGS}"
+                CXXFLAGS="${OLD_CXXFLAGS}"
+            fi
             ;;
         *)
             ENABLE_64BIT_LIBS=no
