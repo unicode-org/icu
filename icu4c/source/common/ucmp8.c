@@ -10,10 +10,6 @@
 #include <stdlib.h>
 #endif
 
-#ifndef _STDIO_H
-#include <stdio.h>
-#endif
-
 
 #include "ucmp8.h"
 #include "cmemory.h"
