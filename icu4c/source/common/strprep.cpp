@@ -272,7 +272,7 @@ int32_t StringPrep::map(const UChar* src, int32_t srcLength,
                     destIndex +=2;
                 }
             }else{
-                syntaxError(src,srcIndex-U16_LENGTH(ch), srcLength,parseError);
+                uprv_syntaxError(src,srcIndex-U16_LENGTH(ch), srcLength,parseError);
                 status = U_IDNA_UNASSIGNED_CODEPOINT_FOUND_ERROR;
                 return 0;
             }
@@ -442,7 +442,7 @@ int32_t StringPrep::process(const UChar* src, int32_t srcLength,
         if(flag == UIDNA_PROHIBITED 
             && isNotProhibited(ch) == FALSE){
             status = U_IDNA_PROHIBITED_CODEPOINT_FOUND_ERROR;
-            syntaxError(b1, b2Index-U16_LENGTH(ch), b2Len, parseError);
+            uprv_syntaxError(b1, b2Index-U16_LENGTH(ch), b2Len, parseError);
             goto CLEANUP;
         }
 
@@ -463,7 +463,7 @@ int32_t StringPrep::process(const UChar* src, int32_t srcLength,
     // satisfy 2
     if( leftToRight == TRUE && rightToLeft == TRUE){
         status = U_IDNA_CHECK_BIDI_ERROR;
-        syntaxError(b2,(rtlPos>ltrPos) ? rtlPos : ltrPos, b2Len, parseError);
+        uprv_syntaxError(b2,(rtlPos>ltrPos) ? rtlPos : ltrPos, b2Len, parseError);
         goto CLEANUP;
     }
 
@@ -473,7 +473,7 @@ int32_t StringPrep::process(const UChar* src, int32_t srcLength,
           (direction == U_RIGHT_TO_LEFT || direction == U_RIGHT_TO_LEFT_ARABIC))
        ){
         status = U_IDNA_CHECK_BIDI_ERROR;
-        syntaxError(b2, rtlPos, b2Len, parseError);
+        uprv_syntaxError(b2, rtlPos, b2Len, parseError);
         return FALSE;
     }
 
