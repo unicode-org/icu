@@ -447,7 +447,6 @@ void   RegexPattern::dumpOp(int32_t index) const {
         
     case URX_START_CAPTURE:
     case URX_END_CAPTURE:
-    case URX_STATIC_SETREF:
     case URX_STATE_SAVE:
     case URX_JMP:
     case URX_BACKSLASH_B:
@@ -481,7 +480,6 @@ void   RegexPattern::dumpOp(int32_t index) const {
 
     case URX_SETREF:
         {
-            REGEX_DUMP_DEBUG_PRINTF("%d ", val);
             UnicodeString s;
             UnicodeSet *set = (UnicodeSet *)fSets->elementAt(val);
             set->toPattern(s, TRUE);
@@ -489,7 +487,22 @@ void   RegexPattern::dumpOp(int32_t index) const {
                 REGEX_DUMP_DEBUG_PRINTF("%c", s.charAt(i));
             }
         }
+        break;
 
+    case URX_STATIC_SETREF:
+        {
+            UnicodeString s;
+            if (val & URX_NEG_SET) {
+                REGEX_DUMP_DEBUG_PRINTF("NOT ");
+                val &= ~URX_NEG_SET;
+            }
+            UnicodeSet *set = fStaticSets[val];
+            set->toPattern(s, TRUE);
+            for (int32_t i=0; i<s.length(); i++) {
+                REGEX_DUMP_DEBUG_PRINTF("%c", s.charAt(i));
+            }
+        }
+        break;
 
         
     default:
