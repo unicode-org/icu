@@ -34,6 +34,7 @@ public class ICUResourceWriter {
     private static final String INTS            = "int";
     private static final String TABLE           = "table";
     private static final String IMPORT          = "import";
+    private static final String INCLUDE         = "include";
     private static final String ALIAS           = "alias";
     private static final String INTVECTOR       = "intvector";
     //private static final String ARRAYS          = "array";
@@ -125,7 +126,22 @@ public class ICUResourceWriter {
             }
         }
     }
-    
+    public static class  ResourceInclude extends Resource{
+        String val;
+        public void write(OutputStream writer, int numIndent, boolean bare){
+            writeComments(writer, numIndent);
+            writeIndent(writer, numIndent);
+            String line =  ((name==null)? EMPTY: name)+COLON+INCLUDE+ OPENBRACE+QUOTE+escapeSyntaxChars(val)+QUOTE+CLOSEBRACE;
+            if(bare==true){
+                if(name!=null){
+                    throw new RuntimeException("Bare option is set to true but the resource has a name!");
+                }
+                write(writer,line); 
+            }else{
+                write(writer, line+LINESEP);
+            }
+        }
+    }
     public static class  ResourceArray extends Resource{
         Resource first;
         public void write(OutputStream writer, int numIndent, boolean bare){

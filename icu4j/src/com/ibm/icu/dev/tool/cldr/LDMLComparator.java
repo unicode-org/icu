@@ -58,7 +58,7 @@ public class LDMLComparator {
     
     private static final String COMMON      = "common";     
     private static final String ICU         = "icu";    
-    private static final String IBM_TOR     = "ibm_tor";
+    private static final String IBM_TOR     = "ibm";
     private static final String WINDOWS     = "windows";    
     private static final String SUNJDK      = "sunjdk";    
     private static final String IBMJDK      = "ibmjdk";    
@@ -363,7 +363,10 @@ public class LDMLComparator {
                 folder = name+"/main/";
                 if(name.equals("icu")|| name.equals("common")|| name.indexOf("jdk")>=0){
                     int index = localeStr.indexOf("_");
-                    String parent = localeStr.substring(0,index);
+                    String parent = "";
+                    if(index > -1){
+                        parent = localeStr.substring(0,index);
+                    }
                     writer.print("                <th bgcolor=\""+
                                    (String)colorHash.get(name)+ "\">" +
                                    name.toUpperCase()+
@@ -762,6 +765,7 @@ public class LDMLComparator {
          try{
              OutputStreamWriter writer = new OutputStreamWriter(new FileOutputStream(destFolder+File.separator+localeName+"_debug.xml"),encoding);
              LDMLUtilities.printDOMTree(doc,new PrintWriter(writer));
+             writer.flush();
          }catch( Exception e){
              //throw the exception away .. this is for debugging
          }
@@ -894,16 +898,17 @@ public class LDMLComparator {
     
     private boolean extractMergeData(Node node,String key){
         Node childOfSource;
-
         for(childOfSource = node.getFirstChild(); childOfSource != null; childOfSource = childOfSource.getNextSibling()) {
              if (childOfSource.getNodeType() != Node.ELEMENT_NODE) {
                  continue;
              }
              String childOfSourceName = childOfSource.getNodeName();
              //Ignore collation and special tags
-             if(childOfSourceName.equals("collations")|| childOfSource.equals("special")){
+             if(childOfSourceName.equals("collations")|| childOfSource.equals("special")
+                || childOfSourceName.indexOf(":")>-1){
                  continue;
              }
+             
              if(childrenAreElements(childOfSource)==false){
                  NamedNodeMap attr = childOfSource.getAttributes();
                  Node typeNode = attr.getNamedItem("type");
@@ -935,11 +940,41 @@ public class LDMLComparator {
                      if(mytypeNode!=null){
                          String mytype = mytypeNode.getNodeValue();
                          if(!mytype.equals("standard")){
-                             type = mytype;
+                             if( ! parentNodeName.equals("calendar")){
+                                 type = mytype;
+                             }else{
+                                 parentNodeName = mytype;
+                             }
                          }
                      }
+                     
                  }
-                 if(grandParentNodeName.equals("monthContext")|| grandParentNodeName.equals("dayContext")){
+                 if(grandParentNodeName.equals("eras") ){
+                     Node calendar = grandParentNode.getParentNode();
+                     NamedNodeMap gpa = calendar.getAttributes();
+                     Node gptNode = gpa.getNamedItem("type");
+                     if(gptNode!=null){
+                         String gptType = gptNode.getNodeValue();
+                         if(!gptType.equals("standard")){
+                             grandParentNodeName = gptType;
+                         }
+                     }
+                     parentNodeName = grandParentNodeName+ "\u200b_" + parentNodeName;
+                 }
+                 if(grandParentNodeName.equals("calendar")){
+                     NamedNodeMap gpa = grandParentNode.getAttributes();
+                     Node gptNode = gpa.getNamedItem("type");
+                     if(gptNode!=null){
+                         String gptType = gptNode.getNodeValue();
+                         if(!gptType.equals("standard")){
+                             grandParentNodeName = gptType;
+                         }
+                     }
+                     parentNodeName = grandParentNodeName+ "\u200b_" + parentNodeName;
+                 }
+                 if(grandParentNodeName.equals("monthContext")|| grandParentNodeName.equals("dayContext") || 
+                         grandParentNodeName.equals("dateFormatLength") || grandParentNodeName.equals("timeFormatLegth") || 
+                         grandParentNodeName.equals("dateTimeFormatLength")){
                     
                      Node calendar = grandParentNode.getParentNode().getParentNode();
                      NamedNodeMap ggpa = calendar.getAttributes();
@@ -948,7 +983,7 @@ public class LDMLComparator {
                          String ggptType = ggptNode.getNodeValue();
                          if(!ggptType.equals("standard")){
                              grandParentNodeName = ggptType;
-                             parentNodeName = ggptType;
+                             parentNodeName = ggptType+"\u200b_"+parentNodeName;
                          }
                      }
                     NamedNodeMap gpa = grandParentNode.getAttributes();
@@ -968,21 +1003,21 @@ public class LDMLComparator {
                         }    
                     }
                     
-                    
-                    
                  }
                  if(childNodeName.equals("pattern") ||grandParentNodeName.equals("zone") ){
-                     NamedNodeMap at = grandParentNode.getAttributes();
-                     Node mytypeNode = at.getNamedItem("type");
-                     if(mytypeNode!=null){
-                         String mytype = mytypeNode.getNodeValue();
-                         if(!mytype.equals("standard")){
-                             if(type.equals("")){
-                                 type = mytype;
-                             }else{
-                                 type = type+"\u200b_"+mytype;
+                     if(parentNodeName.indexOf("date")==-1 && parentNodeName.indexOf("time")==-1){
+                         NamedNodeMap at = grandParentNode.getAttributes();
+                         Node mytypeNode = at.getNamedItem("type");
+                         if(mytypeNode!=null){
+                             String mytype = mytypeNode.getNodeValue();
+                             if(!mytype.equals("standard")){
+                                 if(type.equals("")){
+                                     type = mytype;
+                                 }else{
+                                     type = type+"\u200b_"+mytype;
+                                 }
+                                 
                              }
-                             
                          }
                      }
                  }
@@ -993,11 +1028,7 @@ public class LDMLComparator {
                  if(!nodeValue.equals("") && 
                     !childOfSource.getNodeName().equals("version")){
              
-                     if(     grandParentNodeName.equals("zone")|| 
-                             grandParentNodeName.equals("monthContext")|| 
-                             grandParentNodeName.equals("dayContext")){
-                        parentNodeName = grandParentNodeName+"\u200b_"+parentNodeName;    
-                     }
+                    
                      // for country codes and language codes
                      // replace the deprecated codes with the latest ones
                      if(childNodeName.equals("language")){
@@ -1011,8 +1042,12 @@ public class LDMLComparator {
                              index = temp;
                          }
                      }
-                     String id = parentNodeName+"_"+childNodeName+"_"+type+"_"+getTag(childNodeName, index)+"_"+grandParentNodeName;
-                           
+                     String id = "";
+                     if(!type.equals("")){
+                         id = parentNodeName+"_"+childNodeName+"_"+type+"_"+getTag(childNodeName, index)+"_"+grandParentNodeName;
+                     }else{
+                         id = parentNodeName+"_"+childNodeName+"_"+getTag(childNodeName, index)+"_"+grandParentNodeName; 
+                     }
                      if(!index.equals("")){
                          if(!index.equals(nodeValue) && !index.equals("Fallback")){
                             addElement(childNodeName, parentNodeName, id, index, nodeValue, key);
@@ -1037,8 +1072,12 @@ public class LDMLComparator {
                          String id = grandParentNodeName+"_"+parentNodeName+"_"+childNodeName+"_"+type+"_"+attrName;
                          if(!index.equals("")){
                              addElement(childNodeName, parentNodeName, id, index, item.getNodeValue(), key);
-                         }else{
+                         }else if(!type.equals("")){
                              addElement(childNodeName, parentNodeName, id, type, item.getNodeValue(), key);
+                         }else{
+                             if(!attrName.equals("draft")){
+                                 addElement(childNodeName, parentNodeName, id, attrName, item.getNodeValue(), key);
+                             }
                          }
                      }
                  }

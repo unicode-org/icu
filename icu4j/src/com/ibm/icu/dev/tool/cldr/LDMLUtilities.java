@@ -10,6 +10,8 @@
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
 package com.ibm.icu.dev.tool.cldr;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.File;
@@ -18,6 +20,10 @@ import java.io.BufferedReader;
 
 // DOM imports
 import org.apache.xpath.XPathAPI;
+import org.apache.xalan.serialize.DOMSerializer;
+import org.apache.xalan.serialize.Serializer;
+import org.apache.xalan.serialize.SerializerFactory;
+import org.apache.xalan.templates.OutputProperties;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -57,11 +63,17 @@ public class LDMLUtilities {
     	Document full =null;
         try{
         	full = parse(sourceDir+File.separator+ "root.xml");
-            full = resolveAliases(full, sourceDir, "root");
-            NodeList list = full.getElementsByTagName(LDMLConstants.ALIAS);
-            if(list.getLength()>0){
-                System.err.println("Aliases not resolved!. list.getLength() returned "+ list.getLength());
+            if(full!=null){
+                full = resolveAliases(full, sourceDir, "root");
             }
+           /*
+            * Debugging
+            */
+            Node[] list = getNodeArray(full, LDMLConstants.ALIAS);
+            if(list.length>0){
+                System.err.println("Aliases not resolved!. list.getLength() returned "+ list.length);
+            }
+            
         }catch(RuntimeException ex){
         	if(!ignoreRoot){
         		throw ex;
@@ -91,24 +103,67 @@ public class LDMLUtilities {
                 isAvailable = true;
                 doc = parse(fileName);
                 doc = resolveAliases(doc, sourceDir, loc);
+                /*
+                 * Debugging
+                 *
+                Node[] list = getNodeArray(doc, LDMLConstants.ALIAS);
+                if(list.length>0){
+                    System.err.println("Aliases not resolved!. list.getLength() returned "+ list.length);
+                }
+                */
                 if(full==null){
                     full = doc;
                 }else{
                     StringBuffer xpath = new StringBuffer();
                     mergeLDMLDocuments(full, doc, xpath, loc, sourceDir);
                 }
+                /*
+                 * debugging
+                 *
+                Node ec = getNode(full, "//ldml/characters/exemplarCharacters");
+                if(ec==null){
+                    System.err.println("Could not find exemplarCharacters");
+                }else{
+                    System.out.println("The chars are: "+ getNodeValue(ec));
+                }   
+                */
             }else{
                 if(!ignoreUnavailable){
                     throw new RuntimeException("Could not find: " +fileName);
                 }
             }
+            // TODO: investigate if we really need to revalidate the DOM tree!
+            // full = revalidate(full, locale);
         }
        if(ignoreIfNoneAvailable==true && isAvailable==false){
            return null ;
        }
+       
        return full;
     }
     
+    public static Document revalidate(Document doc, String fileName){
+        // what a waste!!
+        // to revalidate an in-memory DOM tree we need to first
+        // serialize it to byte array and read it back again.
+        // in DOM level 3 implementation there is API to validate
+        // in-memory DOM trees but the latest implementation of Xerces
+        // can only validate against schemas not DTDs!!!
+        try{
+            // revalidate the document
+            Serializer serializer = SerializerFactory.getSerializer(OutputProperties.getDefaultMethodProperties("xml"));
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            serializer.setOutputStream(os);
+            DOMSerializer ds = serializer.asDOMSerializer();
+            ds.serialize(doc);
+            os.flush();
+            ByteArrayInputStream is = new ByteArrayInputStream(os.toByteArray());
+            doc = parse(new InputSource(is),"Fully resolved: "+fileName);
+            return doc;
+        }catch(IOException ex){
+            throw new RuntimeException(ex.getMessage());
+        }
+    }
     public static String convertXPath2ICU(Node alias, Node namespaceNode, StringBuffer fullPath)
         throws TransformerException{
         Node context = alias.getParentNode();
@@ -276,7 +331,12 @@ public class LDMLUtilities {
         }else if(token.indexOf(LDMLConstants.DAY) > -1){
             String dayName = getAttributeValue(token, LDMLConstants.TYPE);
             return getDayIndexAsString(dayName);   
+        }else if(token.indexOf(LDMLConstants.COLLATIONS) > -1){
+            return "collations";
+        }else if(token.indexOf(LDMLConstants.COLLATION) > -1){
+            return getAttributeValue(token, LDMLConstants.TYPE);
         }
+        
         // TODO: this method is not finished yet 
         // the conversion of Xpath to ICU alias path
         // is not as straight forward as I thought
@@ -356,19 +416,19 @@ public class LDMLUtilities {
             xpath.append(childName);
             appendXPathAttribute(child,xpath);
             Node nodeInSource = null;
-            if(childName.indexOf(":")>-1){
-                
+            
+            if(childName.indexOf(":")>-1){ 
                 nodeInSource = getNode(source, xpath.toString(), child);
             }else{
                 nodeInSource =  getNode(source, xpath.toString());
             }
             
-            
+            Node parentNodeInSource = null;
             if(nodeInSource==null){
             	// the child xml has a new node
             	// that should be added to parent
                 String parentXpath = xpath.substring(0, savedLength);
-                Node parentNodeInSource = null;
+
                 if(childName.indexOf(":")>-1){ 
                     parentNodeInSource = getNode(source, parentXpath, child);
                 }else{
@@ -380,12 +440,14 @@ public class LDMLUtilities {
                 
                 Node childToImport = source.importNode(child,true);
                 parentNodeInSource.appendChild(childToImport);
-            }else if( xpath.indexOf(LDMLConstants.IDENTITY)>1){
+            }else if( childName.equals(LDMLConstants.IDENTITY) ||
+                      childName.equals(LDMLConstants.COLLATION)){
                 // replace the source doc
-                Node parentNodeInSource = nodeInSource.getParentNode();
+                // none of the elements under collations are inherited
+                // only the node as a whole!!
+                parentNodeInSource = nodeInSource.getParentNode();
                 Node childToImport = source.importNode(child,true);
                 parentNodeInSource.replaceChild(childToImport, nodeInSource);
-            
             }else{
                 if(areChildrenElementNodes(child)){
                     //recurse to pickup any children!
@@ -393,7 +455,7 @@ public class LDMLUtilities {
                 }else{
                 	// we have reached a leaf node now get the 
                     // replace to the source doc
-                    Node parentNodeInSource = nodeInSource.getParentNode();
+                    parentNodeInSource = nodeInSource.getParentNode();
                     Node childToImport = source.importNode(child,true);
                     parentNodeInSource.replaceChild(childToImport, nodeInSource);       
                 }
@@ -403,6 +465,47 @@ public class LDMLUtilities {
         }
         return source;
     }
+    private static Node[] getNodeArray(Document doc, String tagName){
+        NodeList list =  doc.getElementsByTagName(tagName);
+        // node list is dynamic .. if a node is deleted, then 
+        // list is immidiately updated.
+        // so first cache the nodes returned and do stuff 
+        Node[] array = new Node[list.getLength()];
+        for(int i=0; i<list.getLength(); i++){
+            array[i] = list.item(i);
+        }
+        return array;
+    }
+    /**
+     * Utility to create abosolute Xpath from 1.1 style alias element
+     * @param node
+     * @param type
+     * @return
+     */
+    public static String getAbsoluteXPath(Node node, String type){
+        StringBuffer xpath = new StringBuffer();
+        StringBuffer xpathFragment = new StringBuffer();
+        node = node.getParentNode(); // the node is alias node .. get its parent
+        if(node==null){
+            throw new IllegalArgumentException("Alias node's parent is null!");
+        }
+        xpath.append(node.getNodeName());
+        if(type!=null){
+            xpath.append("[@type='"+type+"']");
+        }
+        Node parent = node;
+        while((parent = parent.getParentNode())!=null){
+            xpathFragment.setLength(0);
+            xpathFragment.append(parent.getNodeName());
+            if(parent.getNodeType()!= Node.DOCUMENT_NODE){
+                appendXPathAttribute(parent, xpathFragment);
+                xpath.insert(0,"/");
+                xpath.insert(0, xpathFragment);
+            }
+        }
+        xpath.insert(0, "//");
+        return xpath.toString();
+    }
     /**
      * 
      * @param doc
@@ -411,32 +514,36 @@ public class LDMLUtilities {
      */
     // TODO guard against circular aliases
     public static Document resolveAliases(Document doc, String sourceDir, String thisLocale){
-       // this is going to be interesting
-       NodeList list =  doc.getElementsByTagName(LDMLConstants.ALIAS);
-       // node list is dynamic .. if a node is deleted, then 
-       // list is immidiately updated.
-       // so first cache the nodes returned and do stuff 
-       Node[] array = new Node[list.getLength()];
-       for(int i=0; i<list.getLength(); i++){
-           array[i] = list.item(i);
-       }
+       Node[] array = getNodeArray(doc, LDMLConstants.ALIAS);
+       
        // resolve all the aliases by iterating over
        // the list of nodes
-       Node replacement = null;
-       Node parent = null;       
+       Node[] replacementList = null;
+       Node parent = null;   
+       String source = null;
+       String path = null;
+       String type = null;
        for(int i=0; i < array.length ; i++){
            Node node = array[i];
            if(node==null){
-               System.err.println("list.item("+i+") returned null!. The list reports it's length as: "+list.getLength());
+               System.err.println("list.item("+i+") returned null!. The list reports it's length as: "+array.length);
                //System.exit(-1);
                continue;
            }
-           String source = getAttributeValue(node, LDMLConstants.SOURCE);
-           String path = getAttributeValue(node, LDMLConstants.PATH);
+           source = getAttributeValue(node, LDMLConstants.SOURCE);
+           path = getAttributeValue(node, LDMLConstants.PATH);
+           type = getAttributeValue(node, LDMLConstants.TYPE);
+           
            parent = node.getParentNode();
-           // if source is defined then path should not be 
-           // relative 
+           
+           if(source!=null && path==null){
+               //this LDML 1.1 style alias parse it
+               path = getAbsoluteXPath(node, type);
+           }
+           
            if(source!=null && !source.equals(thisLocale)){
+               // if source is defined then path should not be 
+               // relative 
                if(path.indexOf("..")>0){
                    throw new IllegalArgumentException("Cannot parse relative xpath: " + path + 
                                                       " in locale: "+ source + 
@@ -444,18 +551,39 @@ public class LDMLUtilities {
                }
                // this is a is an absolute XPath
                Document newDoc = parse(sourceDir + File.separator + source + ".xml" );
-               replacement = getNode(newDoc, path);
+               replacementList = getNodeListAsArray(newDoc, path);
            }else{
                // path attribute is referencing another node in this DOM tree
-               replacement = getNode(parent, path);
+               replacementList = getNodeListAsArray(parent, path);
            }
-           if(replacement != null){
-               parent.removeChild(node); 
-               for(Node child = replacement.getFirstChild(); child!=null; child=child.getNextSibling()){
-                   // found an element node in the aliased resource
-                   // add to the source
-                   Node childToImport = doc.importNode(child,true);
-                   parent.appendChild(childToImport);
+           if(replacementList != null){
+               parent.removeChild(node);
+               int listLen = replacementList.length;
+               if(listLen > 1){
+                   // check if the whole locale is aliased
+                   // if yes then remove the identity from
+                   // the current document!
+                   if(path!=null && path.equals("//ldml/*")){
+                       Node[] identity = getNodeArray(doc, LDMLConstants.IDENTICAL);
+                       for(int j=0; j<identity.length; j++){
+                           parent.removeChild(node);
+                       }
+                   }
+                   for(int j=0; j<listLen; j++){
+                       // found an element node in the aliased resource
+                       // add to the source
+                       Node child = replacementList[j];
+                       Node childToImport = doc.importNode(child,true);
+                       parent.appendChild(childToImport);
+                   }
+               }else{
+                   Node replacement = replacementList[0];
+                   for(Node child = replacement.getFirstChild(); child!=null; child=child.getNextSibling()){
+                       // found an element node in the aliased resource
+                       // add to the source
+                       Node childToImport = doc.importNode(child,true);
+                       parent.appendChild(childToImport);
+                   }
                }
               
            }else{
@@ -565,6 +693,22 @@ public class LDMLUtilities {
             }
         }
         return false;  
+    }
+    public static Node[] getNodeListAsArray( Node doc, String xpath){
+        try{
+            NodeList list = XPathAPI.selectNodeList(doc, xpath);
+            int length = list.getLength();
+            if(length>0){
+                Node[] array = new Node[length];
+                for(int i=0; i<length; i++){
+                    array[i] = list.item(i);
+                }
+                return array;
+            }
+            return null;
+        }catch(TransformerException ex){
+            throw new RuntimeException(ex.getMessage());
+        } 
     }
     /**
      * Fetches the list of nodes that match the given xpath
