@@ -31,7 +31,7 @@
     <h1>International Components for Unicode<br>
      ICU 2.1 ReadMe</h1>
 
-    <p>Version: 2002-Apr-07<br>
+    <p>Version: 2002-Apr-10<br>
      Copyright &copy; 1997-2002 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -218,9 +218,9 @@
     pairs). Especially, normalization is revamped for support of supplementary
     characters and higher performance.</p>
 
-    <p>ICU 2.1 also includes <a
-    href="http://www.unicode.org/versions/corrigendum3.html">Corrigendum #3:
-    U+F951 Normalization</a>.
+    <p>ICU 2.1 also includes <a href=
+    "http://www.unicode.org/versions/corrigendum3.html">Corrigendum #3: U+F951
+    Normalization</a>.</p>
 
     <h3>Memory and resource cleanup</h3>
 
@@ -262,35 +262,48 @@
 
     <h3>Library linking changed</h3>
 
-      <ul>
-        <li><b>Linkage improvement for HP/UX</b>
+    <ul>
+      <li>
+        <b>Linkage improvement for HP/UX</b> 
+
         <ul>
-            <li>The current directory (.) is now searched for libraries.</li>
-            <li>Where available, $ORIGIN is set in the embedded path so that if one ICU 
-                library is found, the system will be able to locate the others.</li>
+          <li>The current directory (.) is now searched for libraries.</li>
+
+          <li>Where available, $ORIGIN is set in the embedded path so that if
+          one ICU library is found, the system will be able to locate the
+          others.</li>
         </ul>
-    </li>
-    <li><b>Library Versioning for AIX (xlC and VisualAge)</b>
-          <ul>
-            <li>AIX does not have facilities to enable library versioning. With this patch, 
-            libraries will now be named for instance <tt>libicuuc<b>20.1.so</b></tt>
-            , however symlinks will allow applications to still link using <tt>-licuuc</tt>
-            (without the benefit of versioning).  To benefit from versioning, on AIX
-            link against the major and minor versions by using <tt>-licuuc20</tt>. 
-            </li>
-          </ul>
-          </li>
-        <li><b>Data Library Versioning for all platforms</b>
-      <ul><li>The versioned name for the data library will be linked against by the ICU libraries,
-         that is, libicudt20b.so instead of libicudata.so</li></ul>
-     </li>
-      </ul>
+      </li>
+
+      <li>
+        <b>Library Versioning for AIX (xlC and VisualAge)</b> 
+
+        <ul>
+          <li>AIX does not have facilities to enable library versioning. With
+          this patch, libraries will now be named for instance
+          <tt>libicuuc<b>20.1.so</b></tt> , however symlinks will allow
+          applications to still link using <tt>-licuuc</tt> (without the
+          benefit of versioning). To benefit from versioning, on AIX link
+          against the major and minor versions by using
+          <tt>-licuuc20</tt>.</li>
+        </ul>
+      </li>
+
+      <li>
+        <b>Data Library Versioning for all platforms</b> 
+
+        <ul>
+          <li>The versioned name for the data library will be linked against by
+          the ICU libraries, that is, libicudt20b.so instead of
+          libicudata.so</li>
+        </ul>
+      </li>
+    </ul>
 
     <h3>Multithreaded usage is safer</h3>
 
     <p>It was discovered that some parts of ICU were not initialized in a
     thread safe manner. This has been fixed.</p>
-
     <hr>
 
     <h2><a name="Download" href="#Download">How to Download the Source
@@ -331,7 +344,8 @@
     distribution archives) in your file system. You can also view the <a href=
     "http://oss.software.ibm.com/icu/userguide/design.html">User's Guide</a> to
     see which libraries you need for your software product. You need at least
-    the data (<code>[lib]icudt</code>) and the common (<code>[lib]icuuc</code>) libraries in order to use ICU.</p>
+    the data (<code>[lib]icudt</code>) and the common (<code>[lib]icuuc</code>)
+    libraries in order to use ICU.</p>
 
     <table border="1" cellpadding="0" width="100%" summary="">
       <caption>
@@ -816,7 +830,7 @@
 
     <p>Building International Components for Unicode on Unix requires:</p>
 
-    <p>A UNIX C++ compiler, (gcc, cc, xlc_r, etc...) installed on the target
+    <p>A UNIX C++ compiler, (gcc, CC, xlC_r, etc...) installed on the target
     machine. A recent version of GNU make (3.7+). For a list of OS/390 tools
     please view the <a href="#HowToBuildOS390">OS/390 build section</a> of this
     document for further details.</p>
@@ -833,43 +847,51 @@
       may have the wrong permissions.</li>
 
       <li>Run the <a href="source/runConfigureICU">runConfigureICU</a> script
-      for your platform. Type "./runConfigureICU --help" for help on how to run
-      it and a list of supported platforms. You may also want to type
-      "./configure --help" to print configure options that you may want to give
-      runConfigureICU. If you are not using the runConfigureICU script, or your
-      platform is not supported by the script, you may need to set your CC,CXX,
-      CFLAGS and CXXFLAGS environment variables, and type "./configure". You
-      can type "./configure --help" to print the available options.</li>
+      for your platform. (See <a href="#HowToConfigureICU">note</a>
+      below).</li>
 
       <li>Type "gmake" (or "make" if GNU make is the default make on your
       platform) to compile the libraries and all the data files. The proper
       name of the GNU make command is printed at the end of the configuration
       run, as in "You must use gmake to compile ICU".</li>
 
-      <li>
-        Optionally, type "gmake check" (or "make check") to run the test suite,
-        which checks for ICU's functionality integrity. 
-
-        <ul>
-          <li><b>Note:</b> You may have to set certain variables if you with to
-          run test programs individually, that is apart from "make check". The
-          <strong>TZ</strong> environment variable needs to be set to
-          <strong>PST8PDT</strong>. Also, the environment variable
-          <strong>ICU_DATA</strong> must be set to the full pathname of the
-          data directory, to indicate where the locale data files and
-          conversion mapping tables are. The trailing "/" is required after the
-          directory name (e.g. "$Root/source/data/" will work, but the value
-          "$Root/source/data" is not acceptable). When running samples or other
-          applications, ICU_DATA only needs to be set if the data is not
-          installed (such as via "gmake install" or "make install") into the
-          default location.</li>
-        </ul>
-      </li>
+      <li>Optionally, type "gmake check" (or "make check") to run the test
+      suite, which checks for ICU's functionality integrity (See <a href=
+      "#HowToTestWithoutGmake">note</a> below).</li>
 
       <li>Type "gmake install" (or "make install") to install. The install
       targets support the use of the DESTDIR variable to create the
-      installation tree under a specific destination directory.</li>
+      installation tree under a specific destination directory. (See <a href=
+      "#HowToTestInstallICU">note</a> below).</li>
     </ol>
+
+    <p><a name="#HowToConfigureICU"><strong>Configuring ICU NOTE:</strong></a>
+    Type "./runConfigureICU --help" for help on how to run it and a list of
+    supported platforms. You may also want to type "./configure --help" to
+    print the available configure options that you may want to give
+    runConfigureICU. If you are not using the runConfigureICU script, or your
+    platform is not supported by the script, you may need to set your CC,CXX,
+    CFLAGS and CXXFLAGS environment variables, and type "./configure". Some of
+    the more frequently used options to configure are --disable-64bit-libs to
+    create 32-bit libraries, and --srcdir to do out of source builds (build the
+    libraries in the current location).</p>
+
+    <p><a name="#HowToTestWithoutGmake"><strong>Running The Tests From The
+    Command Line NOTE:</strong></a> You may have to set certain variables if
+    you with to run test programs individually, that is apart from "make
+    check". The <strong>TZ</strong> environment variable needs to be set to
+    <strong>PST8PDT</strong>. Also, the environment variable
+    <strong>ICU_DATA</strong> can be set to the full pathname of the data
+    directory to indicate where the locale data files and conversion mapping
+    tables are. The trailing "/" is required after the directory name (e.g.
+    "$Root/source/data/" will work, but the value "$Root/source/data" is not
+    acceptable). You do not need to set <strong>ICU_DATA</strong> if the
+    complete data library is in your library path.</p>
+
+    <p><a name="#HowToTestInstallICU"><strong>Installing ICU NOTE:</strong></a>
+    If you are using the "gmake install" command, using the "--prefix" option
+    on configure or runConfigureICU will install ICU to the specified
+    location.</p>
 
     <p>Some platforms use package management tools to control the installation
     and uninstallation of files on the system, as well as the integrity of the
@@ -877,7 +899,7 @@
     package management tools by looking into the "packaging" directory. (Please
     note that if you are using a snapshot of ICU from CVS, it is probable that
     the packaging scripts or related files are not up to date with the contents
-    of ICU at this time, so use them with caution.)</p>
+    of ICU at this time, so use them with caution).</p>
 
     <h3><a name="HowToBuildOS390" href="#HowToBuildOS390">OS/390 (zSeries)
     Platform</a></h3>
@@ -901,23 +923,7 @@
       must not be converted, or must be converted back to their original state.
       You can use the <a href="as_is/os390/unpax-icu.sh">unpax-icu.sh</a>
       script to do this for you automatically. It will unpackage the tar file
-      and convert all the necessary files for you automatically. 
-      <!--The files that must not be converted to ibm-1047 are the
-                                                                          following:
-
-                                                                          <ul>
-                                                                            <li>All UTF-8 files</li>
-
-                                                                            <li>icu/data/*.brk</li>
-
-                                                                            <li>icu/source/test/testdata/uni-text.bin</li>
-
-                                                                            <li>icu/source/test/testdata/th18057.txt</li>
-                                                                          </ul>
-                                                                          Such a conversion can be done using iconv:<br>
-                                                                           <code>iconv -f IBM-1047 -t ISO8859-1 uni-text.bin &gt;
-                                                                          uni-text.bin</code-->
-      </li>
+      and convert all the necessary files for you automatically.</li>
 
       <li>
         <p>OS/390 supports both native S/390 hexadecimal floating point and,
@@ -1087,7 +1093,7 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>')</samp>
             <br>
           </li>
           <!--li>Add QCXXN, to your build process library list. This results in
-                                                                                                                        the resolution of CRTCPPMOD used by the icc compiler</li-->
+                                                                                                                                                                                                                  the resolution of CRTCPPMOD used by the icc compiler</li-->
 
           <li>
             In order to get the tests to run correctly, the QUTCOFFSET needs to
@@ -1397,17 +1403,23 @@ int main(){
 
       <li>makeconv</li>
 
+      <li>gencnval</li>
+
       <li>genrb</li>
 
       <li>gentz</li>
-
-      <li>genccode</li>
 
       <li>gennames</li>
 
       <li>genuca</li>
 
       <li>gennorm</li>
+
+      <li>genccode</li>
+
+      <li>gencmn</li>
+
+      <li>pkgdata</li>
 
       <li>makedata (a project on Windows, or source/data/Makefile on Unix)</li>
 
