@@ -374,6 +374,10 @@ SOURCE=.\usearch.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\util.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\utrans.cpp
 # End Source File
 # Begin Source File
