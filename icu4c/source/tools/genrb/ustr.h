@@ -37,14 +37,14 @@ void ustr_deinit(struct UString *s);
 void ustr_setlen(struct UString *s, int32_t len, UErrorCode *status);
 
 void ustr_cpy(struct UString *dst, const struct UString *src,
-	      UErrorCode *status);
+          UErrorCode *status);
 
 void ustr_cat(struct UString *dst, const struct UString *src,
-	      UErrorCode *status);
+          UErrorCode *status);
 
 void ustr_ncat(struct UString *dst, const struct UString *src,
-	       int32_t n, UErrorCode *status);
+           int32_t n, UErrorCode *status);
 
 void ustr_ucat(struct UString *dst, UChar c, UErrorCode *status);
-void ustr_uscat(struct UString *dst, const UChar* src,UErrorCode *status);
+void ustr_uscat(struct UString *dst, const UChar* src,int len,UErrorCode *status);
 #endif
