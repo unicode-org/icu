@@ -2181,7 +2181,7 @@ inline void setDiscontiguosAttribute(collIterate *source, UChar *buffer,
         source->fcdPosition  = source->pos;
         source->origFlags    = source->flags;
         source->flags       |= UCOL_ITER_INNORMBUF;
-        source->flags       &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
+        source->flags       &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN | UCOL_USE_ITERATOR);
     }
 
     if (length >= source->writableBufSize) {
@@ -2219,6 +2219,9 @@ uint32_t getDiscontiguous(const UCollator *coll, collIterate *source,
           uint8_t  tempflags    = source->flags;
           UBool    multicontraction = FALSE;
           UChar   *tempbufferpos = 0;
+          collIterateState discState;
+
+          backupState(source, &discState);
 
     //*tempdb = *(source->pos - 1);
           *tempdb = peekCharacter(source, -1);
@@ -2305,7 +2308,10 @@ uint32_t getDiscontiguous(const UCollator *coll, collIterate *source,
     since we'll never use another normalization within this function, we
     know that fcdposition points to a base character. the normalization buffer
     never change, hence this revert works. */
-    source->pos   = temppos - 1;
+    loadState(source, &discState, TRUE);
+    goBackOne(source);
+
+    //source->pos   = temppos - 1;
     source->flags = tempflags;
     return *(coll->contractionCEs + (constart - coll->contractionIndex));
 }
@@ -2383,7 +2389,8 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
     case THAI_TAG:
       /* Thai/Lao reordering */
         if  (((source->flags) & UCOL_ITER_INNORMBUF)      /* Already Swapped     ||                 */
-            || source->endp == source->pos                /* At end of string.  No swap possible || */
+            || (source->iterator && !source->iterator->hasNext(source->iterator))
+            || (source->pos && source->endp == source->pos)                /* At end of string.  No swap possible || */
             /*|| UCOL_ISTHAIBASECONSONANT(*(source->pos)) == 0*/)  /* next char not Thai base cons.*/ // This is from the old specs - we now rearrange unconditionally
         {
             // Treat Thai as a length one expansion */
@@ -2394,8 +2401,11 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
         {
             // Move the prevowel and the following base Consonant into the normalization buffer
             //   with their order swapped
-            source->writableBuffer[0] = *source->pos;
-            source->writableBuffer[1] = *(source->pos - 1);
+
+            source->writableBuffer[0] = peekCharacter(source, 0);
+            //source->writableBuffer[0] = *source->pos;
+            source->writableBuffer[1] = peekCharacter(source, -1);
+            //source->writableBuffer[1] = *(source->pos - 1);
             source->writableBuffer[2] = 0;
 
             source->fcdPosition       = source->pos+1;   // Indicate where to continue in main input string
@@ -2403,7 +2413,7 @@ uint32_t ucol_prv_getSpecialCE(const UCollator *coll, UChar ch, uint32_t CE, col
         source->pos   = source->writableBuffer;
             source->origFlags         = source->flags;
             source->flags            |= UCOL_ITER_INNORMBUF;
-            source->flags            &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN);
+            source->flags            &= ~(UCOL_ITER_NORM | UCOL_ITER_HASLEN | UCOL_USE_ITERATOR);
 
         CE = UCOL_IGNORABLE;
       }
@@ -5035,8 +5045,8 @@ enum {
     UCOL_PSK_WAS_SHIFTED_MASK = 1,
     UCOL_PSK_ITER_SKIP_SHIFT = 13,
     UCOL_PSK_ITER_SKIP_MASK = 0xFFF,
-    UCOL_PSK_USED_FRENCH_MASK = 25,
-    UCOL_PSK_USED_FRENCH_SHIFT = 0xF
+    UCOL_PSK_USED_FRENCH_SHIFT = 25,
+    UCOL_PSK_USED_FRENCH_MASK = 0xF
 };
 
 
@@ -5119,6 +5129,9 @@ ucol_nextSortKeyPart(UCollator *coll,
     s.flags |= UCOL_USE_ITERATOR;
 
     int32_t level= (state[1] >> UCOL_PSK_LEVEL_SHIFT) & UCOL_PSK_LEVEL_MASK/* extract from state[1] */;
+    int32_t byteCount = (state[1] >> UCOL_PSK_BYTE_COUNT_SHIFT) & UCOL_PSK_BYTE_COUNT_MASK; /* intra-CE byte counter */
+    UBool doingIdenticalFromStart = FALSE;
+
     UNormIterator *normIter = NULL;
     if(ucol_getAttribute(coll, UCOL_NORMALIZATION_MODE, status) == UCOL_ON && level < UCOL_PSK_IDENTICAL) {
       normIter = unorm_openIter(status);
@@ -5127,6 +5140,18 @@ ucol_nextSortKeyPart(UCollator *coll,
       if(U_FAILURE(*status)) {
         return 0;
       }
+    } else if(level == UCOL_PSK_IDENTICAL) {
+      // for identical level, we need a NFD iterator.
+      // we need to instantiate it here, since we 
+      // will be updating the state - and this 
+      // cannot be done on an ordinary iterator.
+      normIter = unorm_openIter(status);
+      s.iterator = unorm_setIter(normIter, iter, UNORM_NFD, status);
+      s.flags &= ~UCOL_ITER_NORM;
+      if(U_FAILURE(*status)) {
+        return 0;
+      }
+      doingIdenticalFromStart = TRUE;
     }
 
     UBool notIsContinuation = FALSE;
@@ -5138,7 +5163,7 @@ ucol_nextSortKeyPart(UCollator *coll,
     uint32_t newState = 0;
     if(iterState == 0) {
       /* initial state */
-      iter->move(s.iterator, 0, UITER_START);
+      s.iterator->move(s.iterator, 0, UITER_START);
     } else {
         /* reset to previous state */
       s.iterator->setState(s.iterator, state[0], status);
@@ -5195,10 +5220,10 @@ ucol_nextSortKeyPart(UCollator *coll,
       bocsuBytesUsed = usedElements;
     }
 
-    int32_t byteCount = 0; /* intra-CE byte counter */
     UBool dontAdvanceIteratorBecauseWeNeedALevelTerminator = FALSE; 
     int32_t i=0; /* destination byte counter <=count */
     int32_t j = 0;
+    UBool firstTimeOnLevel = TRUE;
 
     // We are going to be looping until we provide enough
     // bytes.
@@ -5206,8 +5231,7 @@ ucol_nextSortKeyPart(UCollator *coll,
       // Before every iteration, we remember what was the latest
       // state successfully processed. Then we begin the transaction.
         switch(level) {
-        case UCOL_PSK_PRIMARY:
-          byteCount = (state[1] >> UCOL_PSK_BYTE_COUNT_SHIFT) & UCOL_PSK_BYTE_COUNT_MASK; 
+        case UCOL_PSK_PRIMARY:          
           wasDoingPrimary = TRUE;
           for(;;) {
               if(i==count) {
@@ -5222,9 +5246,12 @@ ucol_nextSortKeyPart(UCollator *coll,
                   iterState = newState;
                   iterSkips = 0;
                 } else {
-                  iterSkips++;
+                  if(!firstTimeOnLevel && !byteCount) {
+                    iterSkips++;
+                  }
                 }
               }
+              firstTimeOnLevel = FALSE;
               CE = ucol_IGetNextCE(coll, &s, status);
               if(CE==UCOL_NO_MORE_CES) {
                   // Add the level separator
@@ -5278,9 +5305,12 @@ ucol_nextSortKeyPart(UCollator *coll,
                     iterState = newState;
                     iterSkips = 0;
                   } else {
-                    iterSkips++;
+                    if(!firstTimeOnLevel) {
+                      iterSkips++;
+                    }
                   }
                 }
+                firstTimeOnLevel = FALSE;
                 CE = ucol_IGetNextCE(coll, &s, status);
                 if(CE==UCOL_NO_MORE_CES) {
                     // Add the level separator
@@ -5315,7 +5345,7 @@ ucol_nextSortKeyPart(UCollator *coll,
               // or c) in the middle.
               // for a) & b) we want to move to the back immediately
               if(wasDoingPrimary && state[0] == 0) {
-                iter->move(s.iterator, 0, UITER_LIMIT);
+                s.iterator->move(s.iterator, 0, UITER_LIMIT);
               }
               for(;;) {
                 if(i == count) {
@@ -5327,9 +5357,12 @@ ucol_nextSortKeyPart(UCollator *coll,
                     iterState = newState;
                     iterSkips = 0;
                   } else {
-                    iterSkips++;
+                    if(!firstTimeOnLevel) {
+                      iterSkips++;
+                    }
                   }
                 }
+                firstTimeOnLevel = FALSE;
                 CE = ucol_IGetPrevCE(coll, &s, status);
                 if(CE==UCOL_NO_MORE_CES) {
                     // Add the level separator
@@ -5392,9 +5425,12 @@ ucol_nextSortKeyPart(UCollator *coll,
                   iterState = newState;
                   iterSkips = 0;
                 } else {
-                  iterSkips++;
+                  if(!firstTimeOnLevel) {
+                    iterSkips++;
+                  }
                 }
               }
+              firstTimeOnLevel = FALSE;
               CE = ucol_IGetNextCE(coll, &s, status);
               if(CE==UCOL_NO_MORE_CES) {
                 // On the case level we might have an unfinished
@@ -5484,9 +5520,12 @@ ucol_nextSortKeyPart(UCollator *coll,
                   iterState = newState;
                   iterSkips = 0;
                 } else {
-                  iterSkips++;
+                  if(!firstTimeOnLevel) {
+                    iterSkips++;
+                  }
                 }
               }
+              firstTimeOnLevel = FALSE;
               CE = ucol_IGetNextCE(coll, &s, status);
               if(CE==UCOL_NO_MORE_CES) {
                   // Add the level separator
@@ -5541,9 +5580,12 @@ ucol_nextSortKeyPart(UCollator *coll,
                   iterState = newState;
                   iterSkips = 0;
                 } else {
-                  iterSkips++;
+                  if(!firstTimeOnLevel) {
+                    iterSkips++;
+                  }
                 }
               }
+              firstTimeOnLevel = FALSE;
               CE = ucol_IGetNextCE(coll, &s, status);
               if(CE==UCOL_NO_MORE_CES) {
                   // Add the level separator
@@ -5604,11 +5646,23 @@ ucol_nextSortKeyPart(UCollator *coll,
             int32_t bocsuBytesWritten = 0;
             // We always need to do identical on 
             // the NFD form of the string.
-            if(normIter != NULL) {
-              unorm_closeIter(normIter);
+            if(normIter == NULL) {
+              // we arrived from the level below and
+              // normalization was not turned on.
+              // therefore, we need to make a fresh NFD iterator
+              normIter = unorm_openIter(status);
+              s.iterator = unorm_setIter(normIter, iter, UNORM_NFD, status);
+            } else if(!doingIdenticalFromStart) { 
+              // there is an iterator, but we did some other levels.
+              // therefore, we have a FCD iterator - need to make 
+              // a NFD one. 
+              // normIter being at the beginning does not guarantee
+              // that the underlying iterator is at the beginning
+              iter->move(iter, 0, UITER_START);
+              s.iterator = unorm_setIter(normIter, iter, UNORM_NFD, status);
             }
-            normIter = unorm_openIter(status);
-            s.iterator = unorm_setIter(normIter, s.iterator, UNORM_NFD, status);
+            // At this point we have a NFD iterator that is positioned
+            // in the right place
             if(U_FAILURE(*status)) {
               return 0;
             }
@@ -5689,7 +5743,7 @@ saveState:
 
     // now we need to return stuff. First we want to see whether we have
     // done everything for the current state of iterator.
-    if(consumedExpansionCEs || iterSkips || byteCount 
+    if(consumedExpansionCEs /*|| iterSkips*/ || byteCount 
       || dontAdvanceIteratorBecauseWeNeedALevelTerminator) {
       // if we are in expansion or we were not able to 
       // fit parts of the CE, we will have to redo this
@@ -5700,6 +5754,7 @@ saveState:
       // continue further in the next invocation.
       if((newState = s.iterator->getState(s.iterator))!= UITER_NO_STATE) {
         state[0] = s.iterator->getState(s.iterator);
+        iterSkips = 0;
       } else {
         state[0] = iterState;
         iterSkips++;
