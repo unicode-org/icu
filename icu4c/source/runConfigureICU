@@ -60,6 +60,7 @@ case $platform in
         SOLARISGCC)
                 echo Running configure for Solaris using gcc compiler ...
                 CXXFLAGS=-I/usr/local/include/g++; export CXXFLAGS
+				LDFLAGS=-R/usr/local/lib; export LDFLAGS
                 ./configure;;
         SOL2.7CC)
                 echo Running configure for SOLARIS2.7cc using native CC compiler
