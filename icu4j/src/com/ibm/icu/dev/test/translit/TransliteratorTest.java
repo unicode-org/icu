@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $
- * $Date: 2002/06/20 01:16:48 $
- * $Revision: 1.107 $
+ * $Date: 2002/06/26 18:10:04 $
+ * $Revision: 1.108 $
  *
  *****************************************************************************************
  */
@@ -2606,6 +2606,37 @@ public class TransliteratorTest extends TestFmwk {
         expect(anyLatin,
                "greek:\u03B1\u03B2\u03BA\u0391\u0392\u039A hiragana:\u3042\u3076\u304F cyrillic:\u0430\u0431\u0446",
                "greek:abkABK hiragana:abuku cyrillic:abc");
+    }
+
+    /**
+     * Test the source and target set API.  These are only implemented
+     * for RBT and CompoundTransliterator at this time.
+     */
+    public void TestSourceTargetSet() {
+        // Rules
+        String r =
+            "a > b; " +
+            "r [x{lu}] > q;";
+
+        // Expected source
+        UnicodeSet expSrc = new UnicodeSet("[arx{lu}]");
+
+        // Expected target
+        UnicodeSet expTrg = new UnicodeSet("[bq]");
+
+        Transliterator t = Transliterator.createFromRules("test", r, Transliterator.FORWARD);
+        UnicodeSet src = t.getSourceSet();
+        UnicodeSet trg = t.getTargetSet();
+
+        if (src.equals(expSrc) && trg.equals(expTrg)) {
+            logln("Ok: " + r + " => source = " + src.toPattern(true) +
+                  ", target = " + trg.toPattern(true));
+        } else {
+            errln("FAIL: " + r + " => source = " + src.toPattern(true) +
+                  ", expected " + expSrc.toPattern(true) +
+                  "; target = " + trg.toPattern(true) +
+                  ", expected " + expTrg.toPattern(true));
+        }
     }
 
     //======================================================================
