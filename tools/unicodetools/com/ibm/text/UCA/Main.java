@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/Main.java,v $ 
-* $Date: 2002/05/31 01:41:03 $ 
-* $Revision: 1.3 $
+* $Date: 2002/06/02 05:07:08 $ 
+* $Revision: 1.4 $
 *
 *******************************************************************************
 */
@@ -18,7 +18,8 @@ import com.ibm.text.utility.*;
 
 public class Main {
 	static final String UCDVersion = "";
-	static final String[] ICU_FILES = {"FractionalUCA", "writeconformance", "writeconformanceshifted", "WriteRules"};
+	static final String[] ICU_FILES = {"FractionalUCA", "writeconformance", "writeconformanceshifted", 
+		"WriteRules", "WriteRulesWithNames", "WriteRulesXML"};
 	
 	public static void main(String args[]) throws Exception {
 		

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCollationData.java,v $ 
-* $Date: 2002/05/31 01:41:03 $ 
-* $Revision: 1.13 $
+* $Date: 2002/06/02 05:07:08 $ 
+* $Revision: 1.14 $
 *
 *******************************************************************************
 */
@@ -15,6 +15,7 @@ package com.ibm.text.UCA;
 
 import java.util.*;
 import com.ibm.icu.text.UTF16;
+import com.ibm.icu.text.UnicodeSet;
 
 import java.io.*;
 //import java.text.*;
@@ -30,6 +31,9 @@ import com.ibm.text.utility.*;
 import com.ibm.text.UCD.Normalizer;
 
 public class WriteCollationData implements UCD_Types {
+	
+	static final boolean DEBUG = false;
+	
     public static final String copyright = 
       "Copyright (C) 2000, IBM Corp. and others. All Rights Reserved.";
       
@@ -283,7 +287,7 @@ public class WriteCollationData implements UCD_Types {
     static void writeConformance(String filename, byte option, boolean shortPrint)  throws IOException {
         UCD ucd30 = UCD.make("3.0.0");
         
-        PrintWriter log = Utility.openPrintWriter(filename + (shortPrint ? "_SHORT" : "") + ".txt");
+        PrintWriter log = Utility.openPrintWriter(filename + (shortPrint ? "_SHORT" : "") + ".txt", true, false);
         if (!shortPrint) log.write('\uFEFF');
         
         System.out.println("Sorting");
@@ -1149,6 +1153,7 @@ public class WriteCollationData implements UCD_Types {
     }
     
     static Normalizer nfdNew = new Normalizer(Normalizer.NFD, "");
+    static Normalizer NFC = new Normalizer(Normalizer.NFC, "");
     static Normalizer nfkdNew = new Normalizer(Normalizer.NFKD, "");
     
     static void writeRules (byte option) throws IOException {
@@ -1207,6 +1212,56 @@ public class WriteCollationData implements UCD_Types {
             }
         }
         
+        System.out.println("Checking CJK");
+        
+        // Check for characters that are ARE explicitly mapped in the CJK ranges
+        UnicodeSet CJK = new UnicodeSet(0x2E80, 0x2EFF);
+        CJK.add(0x2F00, 0x2EFF);
+        CJK.add(0x2F00, 0x2FDF);
+        CJK.add(0x3400, 0x9FFF);
+        CJK.add(0xF900, 0xFAFF);
+        CJK.add(0x20000, 0x2A6DF);
+        CJK.add(0x2F800, 0x2FA1F);
+        CJK.removeAll(new UnicodeSet("[:Cn:]")); // remove unassigned
+        
+        // make set with canonical decomposibles
+        UnicodeSet composites = new UnicodeSet();
+        for (int i = 0; i < 0x10FFFF; ++i) {
+        	if (!ucd.isAllocated(i)) continue;
+        	if (nfd.isNormalized(i)) continue;
+        	composites.add(i);
+        }
+        UnicodeSet CJKcomposites = new UnicodeSet(CJK).retainAll(composites);
+        System.out.println("CJK composites " + CJKcomposites.toPattern(true));
+        System.out.println("CJK NONcomposites " + new UnicodeSet(CJK).removeAll(composites).toPattern(true));
+        
+        UnicodeSet mapped = new UnicodeSet();
+        Iterator it = alreadyDone.iterator();
+        while (it.hasNext()) {
+        	String member = (String) it.next();
+        	mapped.add(member);
+        }
+        UnicodeSet CJKmapped = new UnicodeSet(CJK).retainAll(mapped);
+        System.out.println("Mapped CJK: " + CJKmapped.toPattern(true));
+        System.out.println("UNMapped CJK: " + new UnicodeSet(CJK).removeAll(mapped).toPattern(true));
+        System.out.println("Neither Mapped nor Composite CJK: "
+        	+ new UnicodeSet(CJK).removeAll(CJKcomposites).removeAll(CJKmapped).toPattern(true));
+        
+        
+        
+/*
+2E80..2EFF; CJK Radicals Supplement
+2F00..2FDF; Kangxi Radicals
+
+3400..4DBF; CJK Unified Ideographs Extension A
+4E00..9FFF; CJK Unified Ideographs
+F900..FAFF; CJK Compatibility Ideographs
+
+20000..2A6DF; CJK Unified Ideographs Extension B
+2F800..2FA1F; CJK Compatibility Ideographs Supplement
+*/
+        
+        
         System.out.println("Adding Kanji");
         for (int i = 0; i < 0x10FFFF; ++i) {
         	if (!ucd.isAllocated(i)) continue;
@@ -1236,10 +1291,29 @@ public class WriteCollationData implements UCD_Types {
         else if (option == IN_XML) filename = "UCA_Rules.xml";
         log = Utility.openPrintWriter(filename, false, false);
         
-        if (option == IN_XML) log.println("<uca>");
-        else log.write('\uFEFF'); // BOM
+        String[] commentText = {
+        	"NOTE: Since UCA handles canonical equivalents, no composites are necessary",
+        	"(except in extensions).",
+        	"For syntax description, see: http://oss.software.ibm.com/icu/userguide/Collate_Intro.html"
+        };
         
-        Iterator it = ordered.keySet().iterator();
+        if (option == IN_XML) {
+        	log.println("<uca>");
+        	log.println("<!--");
+        	for (int i = 0; i < commentText.length; ++i) {
+        		log.println(commentText[i]);
+        	}
+        	log.println("-->");
+        	log.println("<version UCA='" + collator.getDataVersion() + "' UCD='" + collator.getUCDVersion() + "'/>");
+        } else {
+        	log.write('\uFEFF'); // BOM
+        	for (int i = 0; i < commentText.length; ++i) {
+        		log.println("#\t" + commentText[i]);
+        	}
+        	log.println("# VERSION: UCA=" + collator.getDataVersion() + ", UCD=" + collator.getUCDVersion());
+        }
+        
+        it = ordered.keySet().iterator();
         int oldFirstPrimary = UCA.getPrimary(UCA.TERMINATOR);
         boolean wasVariable = false;
         
@@ -1347,46 +1421,6 @@ public class WriteCollationData implements UCD_Types {
             
             if (len == -1) continue;
             
-            // RESETs: do special case for relations to fixed items
-            
-            String reset = "";
-            int xmlReset = 0;
-
-            if (firstTime
-              || collator.getPrimary(lastCE) == 0 && collator.getPrimary(ce) != 0
-              || collator.getSecondary(lastCE) == 0 && collator.getSecondary(ce) != 0
-              || collator.getTertiary(lastCE) == 0 && collator.getTertiary(ce) != 0) {
-                firstTime = false;
-                if (collator.getPrimary(ce) != 0) {
-                    reset = "& [top]";
-                } else {
-                    reset = "& " + quoteOperand(chr);
-                }
-            } else if (variableTop != 0 && (ce & 0xFFFF0000L) > variableTop) {
-                reset = "= [variable\\u0020top]";
-                xmlReset = 1;
-                variableTop = 0;
-            } else {
-                char primary = collator.getPrimary(ce);
-                if (isFixedIdeograph(remapUCA_CompatibilityIdeographToCp(primary))) {
-                    if (primary != lastCJKPrimary) {
-                        reset = "& " + quoteOperand(String.valueOf(primary));
-                        lastCE = UCA.makeKey(primary, UCA.NEUTRAL_SECONDARY, UCA.NEUTRAL_TERTIARY);
-                        xmlReset = 2;
-                    }
-                }
-                lastCJKPrimary = primary;
-            }
-            
-            /*
-            if (primary >= 0x3400) {
-                if (primary == 0x9FA6) {
-                    primary = '\u9FA5';
-                }
-                if (primary < 0x9FA6) {
-                }
-            }
-            */
             
             // get relation
             
@@ -1398,6 +1432,50 @@ public class WriteCollationData implements UCD_Types {
             
             int relation = getStrengthDifference(ces, len, lastCes, lastLen);
 
+            // RESETs: do special case for relations to fixed items
+            
+            String reset = "";
+            String resetComment = "";
+            int xmlReset = 0;
+
+            if (firstTime
+              || collator.getPrimary(lastCE) == 0 && collator.getPrimary(ce) != 0
+              || collator.getSecondary(lastCE) == 0 && collator.getSecondary(ce) != 0
+              || collator.getTertiary(lastCE) == 0 && collator.getTertiary(ce) != 0) {
+                firstTime = false;
+                if (collator.getPrimary(ce) != 0) {
+                    reset = "[top]";
+                } else {
+                    reset = quoteOperand(chr);
+                }
+            } else if (variableTop != 0 && (ce & 0xFFFF0000L) > variableTop) {
+                reset = "[variable\\u0020top]";
+                xmlReset = 1;
+                variableTop = 0;
+            } else {
+                int primary = collator.getPrimary(ce);
+                if (UCA.isImplicitLeadPrimary(primary)) {
+                    if (relation == PRIMARY_DIFF) {
+                    	int resetCp = UCA.ImplicitToCodePoint(primary, UCA.getPrimary(ces[1]));
+                        reset = quoteOperand(UTF16.valueOf(resetCp));
+                        resetComment = ucd.getCodeAndName(resetCp);
+                        // lastCE = UCA.makeKey(primary, UCA.NEUTRAL_SECONDARY, UCA.NEUTRAL_TERTIARY);
+                        xmlReset = 2;
+                    }
+                	// lastCJKPrimary = primary;
+                }
+            }
+            
+            /*
+            if (primary >= 0x3400) {
+                if (primary == 0x9FA6) {
+                    primary = '\u9FA5';
+                }
+                if (primary < 0x9FA6) {
+                }
+            }
+            */
+
             if (chr.equals("\u2F00")) {
                 System.out.println(UCA.ceToString(ces, len));
             }
@@ -1405,7 +1483,7 @@ public class WriteCollationData implements UCD_Types {
             // There are double-CEs, so we have to know what the length of the first bit is.
             
     		int expansionStart = 1;
-    		if (UCA.isImplicitCE(ces[0])) {
+    		if (UCA.isImplicitLeadCE(ces[0])) {
     			expansionStart = 2; // move up if first is double-ce
     		}
             
@@ -1432,16 +1510,17 @@ public class WriteCollationData implements UCD_Types {
                 */
                 
                 if (xmlReset == 2) {
-                    log.print("<reset anchor=\"" + Utility.quoteXML(String.valueOf(collator.getPrimary(ce))) + "\"/>");
+                    log.print("<reset>" + Utility.quoteXML(reset) + "</reset>");
                 }
-                log.print("  <" + XML_RELATION_NAMES[relation]);
-                log.print(" s=\"" + Utility.quoteXML(chr) + "\"");
-                if (len > 1) {
-                    log.print(" expansion=\"" + Utility.quoteXML(expansion) + "\"");
+                log.print("  <" + XML_RELATION_NAMES[relation] + ">");
+                if (expansion.length() > 0) {
+                    log.print("<x>" + Utility.quoteXML(expansion) + "</x>");
                 }
-                log.println("/>");
+                log.print(Utility.quoteXML(chr));
+                log.print("</" + XML_RELATION_NAMES[relation] + ">");
             } else {
-                if (reset.length() != 0) log.println(reset);
+                if (reset.length() != 0) log.println("& " + reset 
+                	+ (resetComment.length() != 0 ? "\t\t# " + resetComment : ""));
                 log.print(RELATION_NAMES[relation] + " " + quoteOperand(chr));
                 if (expansion.length() > 0) log.print(" / " + quoteOperand(expansion));
                 if (option == WITH_NAMES) {
@@ -1461,7 +1540,7 @@ public class WriteCollationData implements UCD_Types {
     }
     
     static long getPrimary(int[] ces) {
-    	if (UCA.isImplicitCE(ces[0])) {
+    	if (UCA.isImplicitLeadCE(ces[0])) {
     		return (UCA.getPrimary(ces[0]) << 16) + UCA.getPrimary(ces[1]);
     	} else {
     		return UCA.getPrimary(ces[0]);
@@ -1469,7 +1548,7 @@ public class WriteCollationData implements UCD_Types {
     }
     
     static long getSecondary(int[] ces) {
-    	if (UCA.isImplicitCE(ces[0])) {
+    	if (UCA.isImplicitLeadCE(ces[0])) {
     		return (UCA.getSecondary(ces[0]) << 16) + UCA.getSecondary(ces[1]);
     	} else {
     		return UCA.getSecondary(ces[0]);
@@ -1477,36 +1556,42 @@ public class WriteCollationData implements UCD_Types {
     }
     
     static long getTertiary(int[] ces) {
-    	if (UCA.isImplicitCE(ces[0])) {
+    	if (UCA.isImplicitLeadCE(ces[0])) {
     		return (UCA.getTertiary(ces[0]) << 16) + UCA.getTertiary(ces[1]);
     	} else {
     		return UCA.getTertiary(ces[0]);
     	}
     }
     
+    static final int 
+    	PRIMARY_DIFF = 0,
+    	SECONDARY_DIFF = 1,
+    	TERTIARY_DIFF = 2,
+    	QUARTERNARY_DIFF = 3;
+    	
 	static int getStrengthDifference(int[] ces, int len, int[] lastCes, int lastLen) {
 		
-        int relation = 3;
+        int relation = QUARTERNARY_DIFF;
         if (getPrimary(ces) != getPrimary(lastCes)) {
-            relation = 0;
+            relation = PRIMARY_DIFF;
         } else if (getSecondary(ces) != getSecondary(lastCes)) {
-            relation = 1;
+            relation = SECONDARY_DIFF;
         } else if (getTertiary(ces) != getTertiary(lastCes)) {
-            relation = 2;
+            relation = TERTIARY_DIFF;
         } else if (len > lastLen) {
-            relation = 2; // HACK
+            relation = TERTIARY_DIFF; // HACK
         } else {
             int minLen = len < lastLen ? len : lastLen;
-			int start = UCA.isImplicitCE(ces[0]) ? 2 : 1;
+			int start = UCA.isImplicitLeadCE(ces[0]) ? 2 : 1;
             for (int kk = start; kk < minLen; ++kk) {
                 int lc = lastCes[kk];
                 int c = ces[kk];
                 if (collator.getPrimary(c) != collator.getPrimary(lc)
                     || collator.getSecondary(c) != collator.getSecondary(lc)) {
-                    relation = 3;   // reset relation on FIRST char, since differ anyway
+                    relation = QUARTERNARY_DIFF;   // reset relation on FIRST char, since differ anyway
                     break;
                     } else if (collator.getTertiary(c) > collator.getTertiary(lc)) {
-                    relation = 2;   // reset to tertiary (but later ce's might override!)
+                    relation = TERTIARY_DIFF;   // reset to tertiary (but later ce's might override!)
                 }
             }
         }
@@ -1760,6 +1845,7 @@ public class WriteCollationData implements UCD_Types {
     static StringBuffer quoteOperandBuffer = new StringBuffer(); // faster
     
     static final String quoteOperand(String s) {
+    	s = NFC.normalize(s);
         quoteOperandBuffer.setLength(0);
         boolean noQuotes = true;
         boolean inQuote = false;
@@ -1910,14 +1996,14 @@ public class WriteCollationData implements UCD_Types {
                 // special handling for Jamo 3-byte forms
                 
                 if (isOldJamo(primary)) {
-                    System.out.print("JAMO: " + Utility.hex(lastValue));
+                    if (DEBUG) System.out.print("JAMO: " + Utility.hex(lastValue));
                     if ((lastValue & 0xFF0000) == 0) { // lastValue was 2-byte form
                         subtotal += primaryDelta[primary];  // we convert from relative to absolute
                         lastValue = primaryDelta[primary] = (subtotal << 8) + 0x10; // make 3 byte, leave gap
                     } else { // lastValue was 3-byte form
                         lastValue = primaryDelta[primary] = lastValue + 3;
                     }
-                    System.out.println(" => " + Utility.hex(lastValue));
+                    if (DEBUG) System.out.println(" => " + Utility.hex(lastValue));
                     continue;
                 }
                 
@@ -1945,12 +2031,17 @@ public class WriteCollationData implements UCD_Types {
                 lastValue = primaryDelta[primary] = subtotal;
             }
             // fixup for Kanji
+            /*
+            
+            // WE DROP THIS: we are skipping all CJK values above, and will fix them separately
+            
             int fixedCompat = remapUCA_CompatibilityIdeographToCp(primary);
             if (isFixedIdeograph(fixedCompat)) {
                 int CE = getImplicitPrimary(fixedCompat);
                 
                 lastValue = primaryDelta[primary] = CE >>> 8; 
             }
+            */
             //if ((primary & 0xFF) == 0) System.out.println(Utility.hex(primary) + " => " + hexBytes(primaryDelta[primary]));
         }
         
@@ -1959,7 +2050,7 @@ public class WriteCollationData implements UCD_Types {
         
         System.out.println("Sorting");
         Map ordered = new TreeMap();
-        UCA.UCAContents ucac = collator.getContents(UCA.FIXED_CE, null);
+        UCA.UCAContents ucac = collator.getContents(UCA.FIXED_CE, NFD);
         int ccounter = 0;
         while (true) {
             Utility.dot(ccounter++);
@@ -2043,6 +2134,11 @@ public class WriteCollationData implements UCD_Types {
         log.println("#  - Differs from previous version in that MAX value was introduced at 1F.");
         log.println("#    All tertiary values are shifted down by 1, filling the gap at 7!");
         
+        int firstImplicit = getImplicitPrimary(UCA.CJK_BASE) >>> 24;
+        int lastImplicit = getImplicitPrimary(0x10FFFF) >>> 24;
+        log.println("[FIRST_IMPLICIT= " + Utility.hex(firstImplicit) + "]");
+        log.println("[LAST_IMPLICIT= " + Utility.hex(lastImplicit) + "]");
+        
         String lastChr = "";
         int lastNp = 0;
         boolean doVariable = false;
@@ -2091,27 +2187,37 @@ public class WriteCollationData implements UCD_Types {
                 
                 oldStr.append(UCA.ceToString(ces[q]));// + "," + Integer.toString(ces[q],16);
                 
-                // special hack for unsupported!
+                // special treatment for unsupported!
                 
-                if (pri >= UCA.UNSUPPORTED_BASE) {
+                if (UCA.isImplicitLeadPrimary(pri)) {
                     ++q;
                     oldStr.append(UCA.ceToString(ces[q]));// + "," + Integer.toString(ces[q],16);
                 
                     int pri2 = UCA.getPrimary(ces[q]);
                     // get old code point
-                    // pri = UNSUPPORTED_BASE + (bigChar >>> 15)
-                    // pri2 = (bigChar & 0x7FFF) | 0x8000
-                    pri -= UCA.UNSUPPORTED_BASE;
-                    pri <<= 15;
-                    pri2 &= 0x7FFF;
-                    pri += pri2;
-                    System.out.println("Unsupported: "
-                        + Utility.hex(UCA.getPrimary(ces[q-1]))
-                        + ", " + Utility.hex(UCA.getPrimary(ces[q]))
-                        + ", " + Utility.hex(pri)
-                        + ", " + Utility.hex(fixPrimary(pri) & 0xFFFFFFFFL)
+                    
+                    int cp = UCA.ImplicitToCodePoint(pri, pri2);
+                    
+                    // double check results!
+                    
+                    int[] testImplicit = new int[2];
+                    UCA.CodepointToImplicit(cp, testImplicit);
+                    boolean gotError = pri != testImplicit[0] || pri2 != testImplicit[1];
+                    if (gotError) {
+                    	System.out.println("ERROR");
+                    }
+                    if (DEBUG || gotError) {
+                    	System.out.println("Computing Unsupported CP as: "
+                        	+ Utility.hex(pri)
+                        	+ ", " + Utility.hex(pri2)
+                        	+ " => " + Utility.hex(cp)
+                        	+ " => " + Utility.hex(testImplicit[0])
+                        	+ ", " + Utility.hex(testImplicit[1])
+                        	// + ", " + Utility.hex(fixPrimary(pri) & 0xFFFFFFFFL)
                         );
-                        
+                    }
+                    
+                    pri = cp | MARK_CODE_POINT;
                 }
                 
                 if (sec != 0x20) {
@@ -2173,10 +2279,14 @@ public class WriteCollationData implements UCD_Types {
         summary.println();
         summary.println("# First Implicit: " + Utility.hex(0xFFFFFFFFL & getImplicitPrimary(0)));
         summary.println("# Last Implicit: " + Utility.hex(0xFFFFFFFFL & getImplicitPrimary(0x10FFFF)));
+        summary.println("# First CJK: " + Utility.hex(0xFFFFFFFFL & getImplicitPrimary(0x4E00)));
+        summary.println("# Last CJK: " + Utility.hex(0xFFFFFFFFL & getImplicitPrimary(0xFA2F)));
+        summary.println("# First CJK_A: " + Utility.hex(0xFFFFFFFFL & getImplicitPrimary(0x3400)));
+        summary.println("# Last CJK: " + Utility.hex(0xFFFFFFFFL & getImplicitPrimary(0x4DBF)));
         
         boolean lastOne = false;
         for (int i = 0; i < 0x10FFFF; ++i) {
-            boolean thisOne = isFixedIdeograph(i);
+            boolean thisOne = UCA.isCJK(i) || UCA.isCJK_AB(i);
             if (thisOne != lastOne) {
                 summary.println("# Implicit Cusp: CJK=" + lastOne + ": " + Utility.hex(i-1) + " => " + Utility.hex(0xFFFFFFFFL & getImplicitPrimary(i-1)));
                 summary.println("# Implicit Cusp: CJK=" + thisOne + ": " + Utility.hex(i) + " => " + Utility.hex(0xFFFFFFFFL & getImplicitPrimary(i)));
@@ -2223,21 +2333,7 @@ public class WriteCollationData implements UCD_Types {
         summary.close();
     }
     
-    // CONSTANTS
-    
-    static final int 
-        HAN_START = 0x3400,
-        HAN_LIMIT = 0xA000,
-        SUPPLEMENTARY_COUNT = 0x100000,
-        BYTES_TO_AVOID = 3,
-        OTHER_COUNT = 256 - BYTES_TO_AVOID,
-        LAST_COUNT = OTHER_COUNT / 2,
-        LAST_COUNT2 = (SUPPLEMENTARY_COUNT - 1) / (OTHER_COUNT * OTHER_COUNT) + 1, // last byte
-        HAN_SHIFT = LAST_COUNT * OTHER_COUNT - HAN_START,
-        IMPLICIT_BOUNDARY = 2 * OTHER_COUNT * LAST_COUNT + HAN_START,
-        LAST2_MULTIPLIER = OTHER_COUNT / LAST_COUNT2;
-    
-    
+    /*
     static boolean isFixedIdeograph(int cp) {
         return (0x3400 <= cp && cp <= 0x4DB5 
             || 0x4E00 <= cp && cp <= 0x9FA5 
@@ -2246,6 +2342,7 @@ public class WriteCollationData implements UCD_Types {
             || 0x2F800 <= cp && cp <= 0x2FA1D // compat: most of these decompose anyway
             );
     }
+    */
 /*
 3400;<CJK Ideograph Extension A, First>;Lo;0;L;;;;;N;;;;;
 4DB5;<CJK Ideograph Extension A, Last>;Lo;0;L;;;;;N;;;;;
@@ -2258,6 +2355,7 @@ public class WriteCollationData implements UCD_Types {
 2FA1D;CJK COMPATIBILITY IDEOGRAPH-2FA1D;Lo;0;L;2A600;;;;N;;;;;
 */
     
+    /*
     static int remapUCA_CompatibilityIdeographToCp(int cp) {
         switch (cp) {    
             case 0x9FA6: return 0xFA0E; // FA0E ; [.9FA6.0020.0002.FA0E] # CJK COMPATIBILITY IDEOGRAPH-FA0E
@@ -2275,6 +2373,45 @@ public class WriteCollationData implements UCD_Types {
         }
         return cp;
     }
+    */
+    
+    /**
+     * Function used to collapse the two different Han blocks from UCA into one.
+     * It does this by reversing the order of the two groups A and B below.
+     * A:
+	 *	4E00..9FFF; CJK Unified Ideographs
+	 *	F900..FAFF; CJK Compatibility Ideographs
+	 * B:
+	 *	3400..4DBF; CJK Unified Ideographs Extension A
+	 * As long as
+	 *	no new B characters are allocated between 4E00 and FAFF, and
+	 *	no new A characters are outside of this range,
+	 * (very high probability) this simple code will work.
+	 */
+    static int swapCJK(int i) {
+    	if (i >= UCA.CJK_LIMIT_COMPAT_USED) return i;
+    	if (i >= UCA.CJK_BASE) return i - UCA.CJK_BASE;
+    	return i + (UCA.CJK_LIMIT_COMPAT_USED - UCA.CJK_BASE);
+    }
+    
+    // CONSTANTS
+    
+    static final int 
+        BYTES_TO_AVOID = 3,
+        OTHER_COUNT = 256 - BYTES_TO_AVOID,
+        LAST_COUNT = OTHER_COUNT / 2,
+        LAST_COUNT2 = OTHER_COUNT / 16, // room for intervening, without expanding to 5 bytes
+        IMPLICIT_3BYTE_COUNT = 1,
+        IMPLICIT_BASE_BYTE = 0xE0,
+        
+        IMPLICIT_LIMIT_BYTE = IMPLICIT_BASE_BYTE + 4, // leave room for 1 3-byte and 2 4-byte forms
+        
+        IMPLICIT_4BYTE_BOUNDARY = IMPLICIT_3BYTE_COUNT * OTHER_COUNT * LAST_COUNT,
+        LAST_MULTIPLIER = OTHER_COUNT / LAST_COUNT,
+        LAST2_MULTIPLIER = OTHER_COUNT / LAST_COUNT2,
+        IMPLICIT_BASE_3BYTE = (IMPLICIT_BASE_BYTE << 24) + 0x030300,
+        IMPLICIT_BASE_4BYTE = ((IMPLICIT_BASE_BYTE + IMPLICIT_3BYTE_COUNT) << 24) + 0x030303
+        ;
     
     // GET IMPLICIT PRIMARY WEIGHTS
     // Return value is left justified primary key
@@ -2287,22 +2424,62 @@ public class WriteCollationData implements UCD_Types {
         // Three byte forms are EC xx xx, ED xx xx, EE xx xx (with a gap of 1)
         // Four byte forms (most supplementaries) are EF xx xx xx (with a gap of LAST2_MULTIPLIER == 14)
         
-        int last0 = cp - IMPLICIT_BOUNDARY;
-        int hanFixup = 0;
-        if (isFixedIdeograph(cp)) hanFixup = 0x04000000;
+        if (DEBUG) System.out.println("Incoming: " + Utility.hex(cp));
+        
+        if (!UCA.isCJK(cp) && !UCA.isCJK_AB(cp)) cp += 0x10FFFF; // space everything else after CJK
+        
+        if (DEBUG) System.out.println("Remapped: " + Utility.hex(cp));
+        
+        cp = swapCJK(cp);
+        
+        if (DEBUG) System.out.println("CJK swapped: " + Utility.hex(cp));
+        // we now have a range of numbers from 0 to 21FFFF.
+        
+        int last0 = cp - IMPLICIT_4BYTE_BOUNDARY;
         if (last0 < 0) {
-            cp += HAN_SHIFT; // shift so HAN shares single block
             int last1 = cp / LAST_COUNT;
             last0 = cp % LAST_COUNT;
+            
             int last2 = last1 / OTHER_COUNT;
             last1 %= OTHER_COUNT;
-            return 0xEC030300 - hanFixup + (last2 << 24) + (last1 << 16) + (last0 << 9);
+            
+            if (DEBUG || last2 > 0xFF-BYTES_TO_AVOID) System.out.println("3B: " + Utility.hex(cp) + " => "
+            	+ Utility.hex(last2) + ", "
+            	+ Utility.hex(last1) + ", "
+            	+ Utility.hex(last0) + ", "
+        	);
+            
+            return IMPLICIT_BASE_3BYTE + (last2 << 24) + (last1 << 16) + ((last0*LAST_MULTIPLIER) << 8);
         } else {
             int last1 = last0 / LAST_COUNT2;
             last0 %= LAST_COUNT2;
+            
             int last2 = last1 / OTHER_COUNT;
             last1 %= OTHER_COUNT;
-            return 0xEF030303 - hanFixup + (last2 << 16) + (last1 << 8) + (last0 * LAST2_MULTIPLIER);
+            
+            int last3 = last2 / OTHER_COUNT;
+            last2 %= OTHER_COUNT;
+            
+            if (DEBUG || last3 > 0xFF-BYTES_TO_AVOID) System.out.println("4B: " + Utility.hex(cp) + " => "
+            	+ Utility.hex(last3) + ", "
+            	+ Utility.hex(last2) + ", "
+            	+ Utility.hex(last1) + ", "
+            	+ Utility.hex(last0 * LAST2_MULTIPLIER) + ", "
+        	);
+
+           return IMPLICIT_BASE_4BYTE + (last3 << 24) + (last2 << 16) + (last1 << 8) + (last0 * LAST2_MULTIPLIER);
+        }
+    }
+    
+    
+    static void showImplicit(String title, int cp) {
+    	if (DEBUG) {
+        	System.out.println(title + "-1: " + Utility.hex(cp-1) + " => "
+        		+ Utility.hex(0xFFFFFFFFL & getImplicitPrimary(cp-1)));
+        	System.out.println(title + ": " + Utility.hex(cp) + " => "
+        		+ Utility.hex(0xFFFFFFFFL & getImplicitPrimary(cp)));
+        	System.out.println(title + "+1: " + Utility.hex(cp+1) + " => "
+        		+ Utility.hex(0xFFFFFFFFL & getImplicitPrimary(cp+1)));
         }
     }
     
@@ -2311,35 +2488,65 @@ public class WriteCollationData implements UCD_Types {
     static void checkImplicit() {
         long oldPrimary = 0;
         System.out.println("Starting Implicit Check");
-        int mask = ~0x04000000;
-        for (int i = 0; i <= 0x10FFFF; ++i) {
-            long newPrimary = 0xFFFFFFFFL & getImplicitPrimary(i);
-            
-            // test correct values
-            
-            if ((newPrimary & mask) < (oldPrimary & mask)) {
-                throw new IllegalArgumentException(Utility.hex(i) + ": overlap: " + Utility.hex(oldPrimary) + " > " + Utility.hex(newPrimary));
-            }
-            
-            long b0 = (newPrimary >> 24) & 0xFF;
-            long b1 = (newPrimary >> 16) & 0xFF;
-            long b2 = (newPrimary >> 8) & 0xFF;
-            long b3 = newPrimary & 0xFF;
-            
-            if (b0 < 0xE8 || b0 > 0xEF || b1 < 3 || b2 < 3 || b3 == 1 || b3 == 2) {
-                throw new IllegalArgumentException(Utility.hex(i) + ": illegal byte value: " + Utility.hex(newPrimary)
-                    + ", " + Utility.hex(b1) + ", " + Utility.hex(b2) + ", " + Utility.hex(b3));
-            }
-            
-            // print range to look at
-            
-            if (false) {
-                int b = i & 0xFF;
-                if (b == 255 || b == 0 || b == 1) {
-                    System.out.println(Utility.hex(i) + " => " + Utility.hex(newPrimary));
-                }
-            }
-            oldPrimary = newPrimary;
+        
+        showImplicit("# First CJK", UCA.CJK_BASE);
+        showImplicit("# Last CJK", UCA.CJK_LIMIT-1);
+        showImplicit("# First CJK-compat", UCA.CJK_BASE_COMPAT_USED);
+        showImplicit("# Last CJK-compat", UCA.CJK_LIMIT_COMPAT_USED-1);
+        showImplicit("# First CJK_A", UCA.CJK_A_BASE);
+        showImplicit("# Last CJK_A", UCA.CJK_A_LIMIT-1);
+        showImplicit("# First CJK_B", UCA.CJK_B_BASE);
+        showImplicit("# Last CJK_B", UCA.CJK_B_LIMIT-1);
+        showImplicit("# First Other Implicit", 0);
+        showImplicit("# Last Other Implicit", 0x10FFFF);
+        showImplicit("# Boundary", IMPLICIT_4BYTE_BOUNDARY);
+        
+        
+        int oldChar = -1;
+        for (int batch = 0; batch < 3; ++batch) {
+        	for (int i = 0; i <= 0x10FFFF; ++i) {
+        		
+        		// separate the three groups
+        		
+        		if (UCA.isCJK(i)) {
+        			if (batch != 0) continue;
+        		} else if (UCA.isCJK_AB(i)) {
+        			if (batch != 1) continue;
+        		} else if (batch != 2) continue;
+        		
+            	long newPrimary = 0xFFFFFFFFL & getImplicitPrimary(i);
+	            
+            	// test correct values
+	            
+	            
+            	if ((newPrimary) < (oldPrimary)) {
+                	throw new IllegalArgumentException(Utility.hex(i) + ": overlap: "
+                		+ Utility.hex(oldChar) + ", " + Utility.hex(oldPrimary)
+                		+ Utility.hex(i) + ", " + " > " + Utility.hex(newPrimary));
+            	}
+	            
+	            
+            	long b0 = (newPrimary >> 24) & 0xFF;
+            	long b1 = (newPrimary >> 16) & 0xFF;
+            	long b2 = (newPrimary >> 8) & 0xFF;
+            	long b3 = newPrimary & 0xFF;
+	            
+            	if (b0 < IMPLICIT_BASE_BYTE || b0 >= IMPLICIT_LIMIT_BYTE  || b1 < 3 || b2 < 3 || b3 == 1 || b3 == 2) {
+                	throw new IllegalArgumentException(Utility.hex(i) + ": illegal byte value: " + Utility.hex(newPrimary)
+                    	+ ", " + Utility.hex(b1) + ", " + Utility.hex(b2) + ", " + Utility.hex(b3));
+            	}
+	            
+            	// print range to look at
+	            
+            	if (false) {
+                	int b = i & 0xFF;
+                	if (b == 255 || b == 0 || b == 1) {
+                    	System.out.println(Utility.hex(i) + " => " + Utility.hex(newPrimary));
+                	}
+            	}
+            	oldPrimary = newPrimary;
+            	oldChar = i;
+        	}
         }
         System.out.println("Successful Implicit Check!!");
     }
@@ -2448,16 +2655,12 @@ public class WriteCollationData implements UCD_Types {
         
     
     static final int secondaryDoubleStart = 0xD0;
+    static final int MARK_CODE_POINT = 0x40000000;
     
     static int fixPrimary(int x) {
         int result = 0;
-        if (x <= 0xFFFF) result = primaryDelta[x];
-        else result = getImplicitPrimary(x);
-        
-        /*if (x > 0x3400) {
-            System.out.println(Utility.hex(x) + " => " + Utility.hex(result));
-        }
-        */
+        if ((x & MARK_CODE_POINT) != 0) result = getImplicitPrimary(x & ~MARK_CODE_POINT);
+        else result = primaryDelta[x];
         return result;
     }
     
@@ -2898,7 +3101,7 @@ A4C6;YI RADICAL KE;So;0;ON;;;;;N;;;;;
             0xE0000, 0xEFFFD, 0xEFFFE, 0xEFFFF,
             0xF0000, 0xFFFFD, 0xFFFFE, 0xFFFFF,
             0x100000, 0x10FFFD, 0x10FFFE, 0x10FFFF,
-            IMPLICIT_BOUNDARY, IMPLICIT_BOUNDARY-1, IMPLICIT_BOUNDARY+1,
+            IMPLICIT_4BYTE_BOUNDARY, IMPLICIT_4BYTE_BOUNDARY-1, IMPLICIT_4BYTE_BOUNDARY+1,
         };
         
     static final int MARK = 1;

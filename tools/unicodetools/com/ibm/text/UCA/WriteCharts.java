@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCA/WriteCharts.java,v $ 
-* $Date: 2002/05/31 01:41:03 $ 
-* $Revision: 1.9 $
+* $Date: 2002/06/02 05:07:08 $ 
+* $Revision: 1.10 $
 *
 *******************************************************************************
 */
@@ -113,7 +113,7 @@ public class WriteCharts implements UCD_Types {
             else if (primary == 0) script = IGNORABLE_ORDER;
             else if (primary < variable) script = VARIABLE_ORDER;
             else if (primary < high) script = COMMON_SCRIPT;
-            else if (primary >= UCA.UNSUPPORTED_BASE && primary <= UCA.UNSUPPORTED_TOP) script = UNSUPPORTED;
+            else if (UCA.isImplicitLeadPrimary(primary)) script = UNSUPPORTED;
             
             if (script == KATAKANA_SCRIPT) script = HIRAGANA_SCRIPT;
             else if ((script == INHERITED_SCRIPT || script == COMMON_SCRIPT) && oldScript >= 0) script = oldScript;
@@ -147,7 +147,7 @@ public class WriteCharts implements UCD_Types {
             for (int i = 0; i < sortKey.length(); ++i) {
                 char w = sortKey.charAt(i);
                 if (w == 0) break;
-				if (w >= UCA.UNSUPPORTED_BASE && w <= UCA.UNSUPPORTED_TOP) {
+				if (UCA.isImplicitLeadPrimary(w)) {
 					++i; // skip next
 				}
                 ++ primaryCount;
@@ -571,7 +571,7 @@ public class WriteCharts implements UCD_Types {
 
     static int getFirstPrimary(String sortKey) {
         int result = sortKey.charAt(0);
-		if (result >= UCA.UNSUPPORTED_BASE && result <= UCA.UNSUPPORTED_TOP) {
+		if (UCA.isImplicitLeadPrimary(result)) {
 			return (result << 16) | sortKey.charAt(1);
 		}
 		return (result << 16);
