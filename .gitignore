@@ -134,6 +134,7 @@ icu4c/source/test/cintltst/Debug
 icu4c/source/test/cintltst/Makefile
 icu4c/source/test/cintltst/Release
 icu4c/source/test/cintltst/cintltst
+icu4c/source/test/collperf/Makefile
 icu4c/source/test/ieeetest/*.d
 icu4c/source/test/ieeetest/Debug
 icu4c/source/test/ieeetest/Makefile
@@ -156,6 +157,7 @@ icu4c/source/test/testmap/Debug
 icu4c/source/test/testmap/Makefile
 icu4c/source/test/testmap/Release
 icu4c/source/test/testmap/testmap
+icu4c/source/test/thaitest/Makefile
 icu4c/source/tools/*.d
 icu4c/source/tools/*.pdb
 icu4c/source/tools/*.plg
