@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002-2004, International Business Machines
+*   Copyright (C) 2002-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -162,7 +162,9 @@ u_hasBinaryProperty(UChar32 c, UProperty which) {
 
 U_CAPI int32_t U_EXPORT2
 u_getIntPropertyValue(UChar32 c, UProperty which) {
-    UErrorCode errorCode=U_ZERO_ERROR;
+    UBiDiProps *bdp;
+    UErrorCode errorCode;
+    int32_t type;
 
     if(which<UCHAR_BINARY_START) {
         return 0; /* undefined */
@@ -189,28 +191,32 @@ u_getIntPropertyValue(UChar32 c, UProperty which) {
         case UCHAR_GENERAL_CATEGORY:
             return (int32_t)u_charType(c);
         case UCHAR_JOINING_GROUP:
-            {
-                UBiDiProps *bdp=ubidi_getSingleton(&errorCode);
-                if(bdp!=NULL) {
-                    return ubidi_getJoiningGroup(bdp, c);
-                } else {
-                    return 0;
-                }
+            errorCode=U_ZERO_ERROR;
+            bdp=ubidi_getSingleton(&errorCode);
+            if(bdp!=NULL) {
+                return ubidi_getJoiningGroup(bdp, c);
+            } else {
+                return 0;
             }
         case UCHAR_JOINING_TYPE:
-            {
-                UBiDiProps *bdp=ubidi_getSingleton(&errorCode);
-                if(bdp!=NULL) {
-                    return ubidi_getJoiningType(bdp, c);
-                } else {
-                    return 0;
-                }
+            errorCode=U_ZERO_ERROR;
+            bdp=ubidi_getSingleton(&errorCode);
+            if(bdp!=NULL) {
+                return ubidi_getJoiningType(bdp, c);
+            } else {
+                return 0;
             }
         case UCHAR_LINE_BREAK:
             return (int32_t)(u_getUnicodeProperties(c, 0)&UPROPS_LB_MASK)>>UPROPS_LB_SHIFT;
         case UCHAR_NUMERIC_TYPE:
-            return (int32_t)GET_NUMERIC_TYPE(u_getUnicodeProperties(c, -1));
+            type=(int32_t)GET_NUMERIC_TYPE(u_getUnicodeProperties(c, -1));
+            if(type>U_NT_NUMERIC) {
+                /* keep internal variants of U_NT_NUMERIC from becoming visible */
+                type=U_NT_NUMERIC;
+            }
+            return type;
         case UCHAR_SCRIPT:
+            errorCode=U_ZERO_ERROR;
             return (int32_t)uscript_getScript(c, &errorCode);
         case UCHAR_HANGUL_SYLLABLE_TYPE:
             return uchar_getHST(c);
@@ -242,6 +248,7 @@ u_getIntPropertyMinValue(UProperty which) {
 
 U_CAPI int32_t U_EXPORT2
 u_getIntPropertyMaxValue(UProperty which) {
+    UErrorCode errorCode;
     int32_t max;
 
     if(which<UCHAR_BINARY_START) {
@@ -255,10 +262,8 @@ u_getIntPropertyMaxValue(UProperty which) {
         case UCHAR_BIDI_CLASS:
         case UCHAR_JOINING_GROUP:
         case UCHAR_JOINING_TYPE:
-            {
-                UErrorCode errorCode=U_ZERO_ERROR;
-                return ubidi_getMaxValue(ubidi_getSingleton(&errorCode), which);
-            }
+            errorCode=U_ZERO_ERROR;
+            return ubidi_getMaxValue(ubidi_getSingleton(&errorCode), which);
         case UCHAR_BLOCK:
             max=(uprv_getMaxValues(0)&UPROPS_BLOCK_MASK)>>UPROPS_BLOCK_SHIFT;
             return max!=0 ? max : (int32_t)UBLOCK_COUNT-1;
