@@ -22,6 +22,7 @@
 *   09/08/98    stephen     Moved definition of kEmptyString for Mac Port
 *   11/09/99    weiv        Added const char * getName() const;
 *   04/12/00    srl         removing unicodestring api's and cached hash code
+*   08/10/01    grhoten     Change the static Locales to accessor functions
 ******************************************************************************
 */
 
@@ -38,10 +39,6 @@
 #ifdef XP_CPLUSPLUS
 
 #include "unicode/unistr.h"
-
-#ifdef ICU_LOCID_USE_DEPRECATES
-typedef struct UHashtable UHashtable;
-#endif
 
 /**    
  *
@@ -175,9 +172,10 @@ typedef struct UHashtable UHashtable;
  * </pre>
  * </blockquote>
  */
-class U_COMMON_API Locale 
+class U_COMMON_API Locale
 {
 public:
+#ifdef ICU_LOCID_USE_DEPRECATES
     /**
      * Useful constants for language.
      */
@@ -206,6 +204,132 @@ public:
     static const Locale US;
     static const Locale CANADA;
     static const Locale CANADA_FRENCH;
+#else
+    /**
+     * A proxy for the Locale. 
+     * This is defined to stay source code compatible and to remove static initialization.
+     * Treat it just like a Locale.
+     */
+    typedef struct U_COMMON_API LocaleProxy {
+        int32_t magicLocaleNumber;  /* Try not to access this. This is not meant for normal use. */
+
+        /** Calls Locale's equivalent function */
+        inline const char *getLanguage( ) const;
+        /** Calls Locale's equivalent function */
+        inline const char *getCountry( ) const;
+        /** Calls Locale's equivalent function */
+        inline const char *getVariant( ) const;
+        /** Calls Locale's equivalent function */
+        inline const char *getName() const;
+        /** Calls Locale's equivalent function */
+        inline const char *getISO3Language() const;
+        /** Calls Locale's equivalent function */
+        inline const char *getISO3Country() const;
+        /** Calls Locale's equivalent function */
+        inline uint32_t getLCID(void) const;
+        /** Calls Locale's equivalent function */
+        inline UnicodeString&  getDisplayLanguage(UnicodeString&   dispLang) const;
+        /** Calls Locale's equivalent function */
+        inline UnicodeString&  getDisplayLanguage( const   Locale&         inLocale,
+                                                    UnicodeString&  dispLang) const;
+        /** Calls Locale's equivalent function */
+        inline UnicodeString&  getDisplayCountry(          UnicodeString& dispCountry) const;
+        /** Calls Locale's equivalent function */
+        inline UnicodeString&  getDisplayCountry(  const   Locale&         inLocale,
+                                                    UnicodeString&  dispCountry) const;
+        /** Calls Locale's equivalent function */
+        inline UnicodeString&  getDisplayVariant(      UnicodeString& dispVar) const;
+        /** Calls Locale's equivalent function */
+        inline UnicodeString&  getDisplayVariant(  const   Locale&         inLocale,
+                                                    UnicodeString&  dispVar) const;
+
+        /** Calls Locale's equivalent function */
+        inline UnicodeString&  getDisplayName(         UnicodeString&  name) const;
+        /** Calls Locale's equivalent function */
+        inline UnicodeString&  getDisplayName( const   Locale&         inLocale,
+                                                UnicodeString&  name) const;
+        /** Calls Locale's equivalent function */
+        inline int32_t         hashCode(void) const;
+
+        /** Cast a LocaleProxy into a Locale. This is the magic behind this proxy. */
+        operator const Locale&() const;
+    } LocaleProxy;
+
+    /**
+     * Useful constants for language.
+     */
+    static const LocaleProxy ENGLISH;
+    static const LocaleProxy FRENCH;
+    static const LocaleProxy GERMAN;
+    static const LocaleProxy ITALIAN;
+    static const LocaleProxy JAPANESE;
+    static const LocaleProxy KOREAN;
+    static const LocaleProxy CHINESE;
+    static const LocaleProxy SIMPLIFIED_CHINESE;
+    static const LocaleProxy TRADITIONAL_CHINESE;
+
+    /**
+     * Useful constants for country.
+     */
+    static const LocaleProxy FRANCE;
+    static const LocaleProxy GERMANY;
+    static const LocaleProxy ITALY;
+    static const LocaleProxy JAPAN;
+    static const LocaleProxy KOREA;
+    static const LocaleProxy CHINA;      /* Alias for PRC */
+    static const LocaleProxy PRC;        /* Peoples Republic of China */
+    static const LocaleProxy TAIWAN;
+    static const LocaleProxy UK;
+    static const LocaleProxy US;
+    static const LocaleProxy CANADA;
+    static const LocaleProxy CANADA_FRENCH;
+
+#endif /* ICU_LOCID_USE_DEPRECATES */
+
+    /** Useful constant for this language. */
+    static const Locale &getEnglish(void);
+    /** Useful constant for this language. */
+    static const Locale &getFrench(void);
+    /** Useful constant for this language. */
+    static const Locale &getGerman(void);
+    /** Useful constant for this language. */
+    static const Locale &getItalian(void);
+    /** Useful constant for this language. */
+    static const Locale &getJapanese(void);
+    /** Useful constant for this language. */
+    static const Locale &getKorean(void);
+    /** Useful constant for this language. */
+    static const Locale &getChinese(void);
+    /** Useful constant for this language. */
+    static const Locale &getSimplifiedChinese(void);
+    /** Useful constant for this language. */
+    static const Locale &getTraditionalChinese(void);
+
+    /** Useful constant for this country. */
+    static const Locale &getFrance(void);
+    /** Useful constant for this country. */
+    static const Locale &getGermany(void);
+    /** Useful constant for this country. */
+    static const Locale &getItaly(void);
+    /** Useful constant for this country. */
+    static const Locale &getJapan(void);
+    /** Useful constant for this country. */
+    static const Locale &getKorea(void);
+    /** Useful constant for this country. */
+    static const Locale &getChina(void);
+    /** Useful constant for this country. */
+    static const Locale &getPRC(void);
+    /** Useful constant for this country. */
+    static const Locale &getTaiwan(void);
+    /** Useful constant for this country. */
+    static const Locale &getUK(void);
+    /** Useful constant for this country. */
+    static const Locale &getUS(void);
+    /** Useful constant for this country. */
+    static const Locale &getCanada(void);
+    /** Useful constant for this country. */
+    static const Locale &getCanadaFrench(void);
+
 
    /**
     * Construct an empty locale. It's only used when a fill-in parameter is
@@ -227,40 +351,6 @@ public:
             const   char * country  = 0, 
             const   char * variant  = 0);
 
-#ifdef ICU_LOCID_USE_DEPRECATES
-    /**
-     * Construct a locale from language, country, variant.
-     *
-     * @param language Lowercase two-letter ISO-639 code.
-     * @param country  Uppercase two-letter ISO-3166 code. (optional)
-     * @param variant  Uppercase vendor and browser specific code. See class
-     *                 description. (optional)
-     * @deprecated Remove in the first release of 2001.
-     */
-    Locale( const   UnicodeString&  language, 
-            const   UnicodeString&  country , 
-            const   UnicodeString&  variant );
-
-     /**
-     * Construct a locale from language, country.
-     *
-     * @param language Lowercase two-letter ISO-639 code.
-     * @param country  Uppercase two-letter ISO-3166 code. (optional)
-     * @deprecated Remove in the first release of 2001.
-     */
-    Locale( const   UnicodeString&  language, 
-                            const   UnicodeString&  country );
-
-    /**
-     * Construct a locale from language.
-     *
-     * @param language Lowercase two-letter ISO-639 code.
-     * @deprecated Remove in the first release of 2001.
-     */
-    Locale( const   UnicodeString&  language);
-
-
-#endif /* ICU_LOCID_USE_DEPRECATES */
     /**
      * Initializes a Locale object from another Locale object.
      *
@@ -318,7 +408,7 @@ public:
      * @system
      * @stable
      */
-    static  Locale& getDefault(void);
+    static  const Locale& getDefault(void);
 
     /**
      * Sets the default. Normally set once at the beginning of applet or
@@ -340,7 +430,6 @@ public:
      * @draft
      * @see uloc_getName
      */
-     
     static Locale createFromName(const char *name);
 
     
@@ -389,64 +478,6 @@ public:
      */
     const char * getISO3Country() const;
 
-#ifdef ICU_LOCID_USE_DEPRECATES
-/* begin deprecated versions */
-
-    /**
-     * Fills in "lang" with the locale's two-letter ISO-639 language code.
-     * @param lang  Receives the language code.
-     * @return      A reference to "lang"
-     * @deprecated Remove in the first release of 2001.
-     */
-                UnicodeString&    getLanguage(        UnicodeString&  lang) const;
-    /**
-     * Fills in "cntry" with the locale's two-letter ISO-3166 country code.
-     * @param cntry Receives the country code.
-     * @return      A reference to "cntry".
-     * @deprecated Remove in the first release of 2001.
-     */
-                UnicodeString&   getCountry(         UnicodeString&  cntry) const;
-    /**
-     * Fills in "var" with the locale's variant code.
-     * @param var   Receives the variant code.
-     * @return      A reference to "var".
-     * @deprecated Remove in the first release of 2001.
-     */
-                UnicodeString&  getVariant(         UnicodeString&  var) const;
-
-    /**
-     * Fills in "name" the programmatic name of the entire locale, with the language,
-     * country and variant separated by underbars. If a field is missing, at
-     * most one underbar will occur. Example: "en", "de_DE", "en_US_WIN",
-     * "de_POSIX", "fr_MAC"
-     * @param var   Receives the programmatic locale name.
-     * @return      A reference to "name".
-     * @deprecated Remove in the first release of 2001.
-     */
-                UnicodeString&  getName(        UnicodeString&  name) const;
-
-
-    /**
-     * Fills in "name" with the locale's three-letter language code, as specified
-     * in ISO draft standard ISO-639-2..
-     * @param name  Receives the three-letter language code.
-     * @param status An UErrorCode to receive any MISSING_RESOURCE_ERRORs
-     * @return      A reference to "name".
-     * @deprecated Remove in the first release of 2001.
-     */
-                UnicodeString&  getISO3Language(UnicodeString&  name, UErrorCode& status) const;
-
-    /**
-     * Fills in "name" with the locale's three-letter ISO-3166 country code.
-     * @param name  Receives the three-letter country code.
-     * @param status An UErrorCode to receive any MISSING_RESOURCE_ERRORs
-     * @return      A reference to "name".
-     * @deprecated Remove in the first release of 2001.
-     */
-                UnicodeString&  getISO3Country( UnicodeString&  name, UErrorCode& status) const;
-
-/* END deprecated [ ICU_LOCID_USE_DEPRECATES ] */
-#endif /* ICU_LOCID_USE_DEPRECATES */
     /**
      * Returns the Windows LCID value corresponding to this locale.
      * This value is stored in the resource data for the locale as a one-to-four-digit
@@ -595,56 +626,9 @@ public:
      */
     static const char* const*  getISOLanguages();
 
-
-#ifdef ICU_LOCID_USE_DEPRECATES
-    /**
-     * Returns a list of all 2-letter country codes defined in ISO 3166.
-     * Can be used to create Locales.
-     * @param count Receives the number of countries in the list.
-     * @return A pointer to an array of UnicodeString objects. The caller does NOT
-     *  get ownership of this list, and must NOT delete it.
-     * @deprecated Remove in the first release of 2001.
-     */
-    static const UnicodeString* getISOCountries(int32_t& count);
-
-    /**
-     * Returns a list of all 2-letter language codes defined in ISO 639.
-     * Can be used to create Locales.
-     * [NOTE:  ISO 639 is not a stable standard-- some languages' codes have changed.
-     * The list this function returns includes both the new and the old codes for the
-     * languages whose codes have changed.]
-     * @param count Receives the number of languages in the list.
-     * @return A pointer to an array of UnicodeString objects. The caller does NOT
-     *  get ownership of this list, and must NOT delete it.
-     * @deprecated Remove in the first release of 2001.
-     */
-    static const UnicodeString* getISOLanguages(int32_t& count);
-#endif /* ICU_LOCID_NO_DEPRECATES */
-    
 protected: /* only protected for testing purposes. DO NOT USE. */
     /** set it from a single string. */
     void setFromPOSIXID(const char *posixID);
-
-#ifdef ICU_LOCID_USE_DEPRECATES
-    /* This never worked, and it's leaky */
-    /**
-     * Given an ISO country code, returns an array of Strings containing the ISO
-     * codes of the languages spoken in that country.  Official languages are listed
-     * in the returned table before unofficial languages, but other than that, the
-     * order of the returned list is indeterminate.  If the value the user passes in
-     * for "country" is not a valid ISO 316 country code, or if we don't have language
-     * information for the specified country, this function returns an empty array.
-     *
-     * [This function is not currently part of Locale's API, but is needed in the
-     * implementation.  We hope to add it to the API in a future release.]
-     * @param country The ISO 2-letter country code of the desired country
-     * @param count Receives the number of languages in the list.
-     * @return A pointer to an array of UnicodeString objects. The caller does NOT
-     *  get ownership of this list, and must NOT delete it.
-     */
-    static const UnicodeString* getLanguagesForCountry(const UnicodeString& country, 
-                                                       int32_t& count);
-#endif
 
 private:
     /**
@@ -655,32 +639,29 @@ private:
      */
     Locale& init(const char* cLocaleID);
 
+    /**
+     * Initialize the locale cache for commonly used locales
+     */
+    static void initLocaleCache(void);
 
     char language[ULOC_LANG_CAPACITY];
     char country[ULOC_COUNTRY_CAPACITY];
-    char* variant;
+    int32_t variantBegin;
     char* fullName;
     char fullNameBuffer[ULOC_FULLNAME_CAPACITY];
     
-    static Locale *localeList;
-    static int32_t localeListCount;
+//    static Locale *localeList;
+//    static int32_t localeListCount;
 
 #ifdef ICU_LOCID_USE_DEPRECATES
-/* Begin deprecated fields */
-    static UnicodeString *isoLanguages;
-    static int32_t isoLanguagesCount;
-    static UnicodeString *isoCountries;
-    static int32_t isoCountriesCount;
-
-    static UHashtable *ctry2LangMapping;
-    static const UnicodeString compressedCtry2LangMapping;
-/* End deprecated fields */
+    static Locale fgDefaultLocale;
+#else
+    friend LocaleProxy;
 #endif
 
-    static Locale fgDefaultLocale;
+    static const Locale &getLocale(int locid);
 
-friend  void locale_set_default_internal(const char *);
-
+    friend  void locale_set_default_internal(const char *);
 };
 
 inline UBool
@@ -704,7 +685,7 @@ Locale::getLanguage() const
 inline const char *
 Locale::getVariant() const
 {
-    return variant;
+    return &fullName[variantBegin];
 }
 
 inline const char * 
@@ -713,7 +694,93 @@ Locale::getName() const
     return fullName;
 }
 
+#ifndef ICU_LOCID_USE_DEPRECATES
+/* Proxy functions */
+inline const char *Locale::LocaleProxy::getLanguage( ) const
+{
+    return ((const Locale)*this).getLanguage();
+}
+
+inline const char *Locale::LocaleProxy::getCountry( ) const
+{
+    return ((const Locale)*this).getCountry();
+}
+
+inline const char *Locale::LocaleProxy::getVariant( ) const
+{
+    return ((const Locale)*this).getVariant();
+}
+
+inline const char *Locale::LocaleProxy::getName() const
+{
+    return ((const Locale)*this).getName();
+}
+
+inline const char *Locale::LocaleProxy::getISO3Language() const
+{
+    return ((const Locale)*this).getISO3Language();
+}
+
+inline const char *Locale::LocaleProxy::getISO3Country() const
+{
+    return ((const Locale)*this).getISO3Country();
+}
+
+inline uint32_t Locale::LocaleProxy::getLCID(void) const
+{
+    return ((const Locale)*this).getLCID();
+}
+
+inline UnicodeString&  Locale::LocaleProxy::getDisplayLanguage(UnicodeString&   dispLang) const
+{
+    return ((const Locale)*this).getDisplayLanguage(dispLang);
+}
+
+inline UnicodeString&  Locale::LocaleProxy::getDisplayLanguage( const   Locale&         inLocale,
+                                            UnicodeString&  dispLang) const
+{
+    return ((const Locale)*this).getDisplayLanguage(inLocale, dispLang);
+}
+
+inline UnicodeString&  Locale::LocaleProxy::getDisplayCountry(UnicodeString& dispCountry) const
+{
+    return ((const Locale)*this).getDisplayCountry(dispCountry);
+}
+
+inline UnicodeString&  Locale::LocaleProxy::getDisplayCountry(const   Locale&         inLocale,
+                                            UnicodeString&  dispCountry) const
+{
+    return ((const Locale)*this).getDisplayCountry(inLocale, dispCountry);
+}
+
+inline UnicodeString&  Locale::LocaleProxy::getDisplayVariant(UnicodeString& dispVar) const
+{
+    return ((const Locale)*this).getDisplayVariant(dispVar);
+}
+
+inline UnicodeString&  Locale::LocaleProxy::getDisplayVariant(const   Locale&         inLocale,
+                                            UnicodeString&  dispVar) const
+{
+    return ((const Locale)*this).getDisplayVariant(inLocale, dispVar);
+}
+
+inline UnicodeString&  Locale::LocaleProxy::getDisplayName(UnicodeString&  name) const
+{
+    return ((const Locale)*this).getDisplayName(name);
+}
+
+inline UnicodeString&  Locale::LocaleProxy::getDisplayName(const   Locale&         inLocale,
+                                        UnicodeString&  name) const
+{
+    return ((const Locale)*this).getDisplayName(inLocale, name);
+}
+
+inline int32_t         Locale::LocaleProxy::hashCode(void) const
+{
+    return ((const Locale)*this).hashCode();
+}
+#endif /* !ICU_LOCID_USE_DEPRECATES */
+
 #endif  /* XP_CPLUSPLUS */
 #endif
-
 
