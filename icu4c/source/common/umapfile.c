@@ -63,7 +63,8 @@
 #   ifdef OS390
         /*   No memory mapping for 390 batch mode.  Fake it using dll loading.  */
 #       include <dll.h>
-#       include "cstring.h"  		
+#       include "cstring.h"
+#       include "cmemory.h"
 #       include "unicode/udata.h"
 #       define LIB_PREFIX "lib"
 #       define LIB_PREFIX_LENGTH 3
@@ -264,9 +265,9 @@
      *
      */
 
-    uprv_mapFile(UDataMemory *pData, const char *path) {
-#       define DATA_TYPE "dat"
+#   define DATA_TYPE "dat"
 
+    UBool uprv_mapFile(UDataMemory *pData, const char *path) {
         const char *inBasename;
         char *basename, *suffix, *tempbasename;
         char pathBuffer[1024];
@@ -282,7 +283,7 @@
         } else {
             inBasename++;
         }
-        basename=computeDirPath(path, pathBuffer);
+        basename=uprv_computeDirPath(path, pathBuffer);
         if(uprv_strcmp(inBasename, U_ICUDATA_NAME".dat") != 0) {
             /* must mmap file... for build */
             int fd;
