@@ -16,34 +16,25 @@
 #include "unicode/utypes.h"
 #include "unicode/ustream.h"
 #include "unicode/ucnv.h"
-
-#if U_IOSTREAM_SOURCE >= 199711
-using namespace std;
-#elif U_IOSTREAM_SOURCE >= 198506
-#endif
+#include "ustr_imp.h"
 
 class UnicodeStreamer {
 public:
     inline static const UChar *getArrayStart(const UnicodeString& s) {return s.getArrayStart();}
-    inline static UConverter *getDefaultConverter(UErrorCode &err) {return UnicodeString::getDefaultConverter(err);}
-    inline static void releaseDefaultConverter(UConverter *conv) {UnicodeString::releaseDefaultConverter(conv);}
 };
 // console IO
 
 #if U_IOSTREAM_SOURCE >= 198506
 
 #if U_IOSTREAM_SOURCE >= 199711
-
-U_COMMON_API std::ostream &
-operator<<(std::ostream& stream, const UnicodeString& s)
-
+#define STD_OSTREAM std::ostream
 #else
-
-U_COMMON_API ostream &
-operator<<(ostream& stream, const UnicodeString& s)
-
+#define STD_OSTREAM ostream
 #endif
 
+
+U_COMMON_API STD_OSTREAM &
+operator<<(STD_OSTREAM& stream, const UnicodeString& s)
 {
     if(s.length() > 0) {
         char buffer[200];
@@ -51,7 +42,7 @@ operator<<(ostream& stream, const UnicodeString& s)
         UErrorCode errorCode = U_ZERO_ERROR;
 
         // use the default converter to convert chunks of text
-        converter = UnicodeStreamer::getDefaultConverter(errorCode);
+        converter = u_getDefaultConverter(&errorCode);
         if(U_SUCCESS(errorCode)) {
             const UChar *us = UnicodeStreamer::getArrayStart(s);
             const UChar *uLimit = us + s.length();
@@ -66,7 +57,7 @@ operator<<(ostream& stream, const UnicodeString& s)
                     stream.write(buffer, s - buffer);
                 }
             } while(errorCode == U_BUFFER_OVERFLOW_ERROR);
-            UnicodeStreamer::releaseDefaultConverter(converter);
+            u_releaseDefaultConverter(converter);
         }
     }
 
