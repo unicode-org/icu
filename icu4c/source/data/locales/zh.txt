@@ -669,6 +669,7 @@ zh {
         af  { "\u5357\u975E\u8377\u5170\u6587" }
         ak  { "\u963F\u80AF\u6587" }
         am  { "\u963F\u59C6\u54C8\u62C9\u6587" }
+        // ? an  { "\u963F\u62C9\u8CA2\u6587" }
         ar  { "\u963F\u62C9\u4F2F\u6587" }
         as  { "\u963F\u8428\u59C6\u6587" }
         av  { "\u963F\u74E6\u5C14\u6587" }
@@ -725,6 +726,7 @@ zh {
         hi  { "\u5370\u5730\u6587" }
         ho  { "\u65B0\u91CC\u6728\u6258\u6587" }
         hr  { "\u514B\u7F57\u5730\u4E9A\u6587" }
+        // ? ht  { "\u6D77\u5730\u4EBA" }
         hu  { "\u5308\u7259\u5229\u6587" }
         hy  { "\u4E9A\u7F8E\u5C3C\u4E9A\u6587" }
         hz  { "\u8D6B\u96F7\u7F57\u6587" }
@@ -734,12 +736,12 @@ zh {
         ig  { "\u4F0A\u683C\u535A\u6587" }
         ii  { "\u56DB\u5DDD\u8BDD" }
         ik  { "\u4F9D\u5974\u76AE\u7EF4\u514B\u6587" }
+        io  { "\u7231\u5FB7\u83AA\u6587\uFF08\u4EBA\u5DE5\u8BED\u8A00\uFF09" }
         is  { "\u51B0\u5C9B\u6587" }
         it  { "\u610F\u5927\u5229\u6587" }
         iu  { "\u7231\u65AF\u57FA\u6469\u6587" }
         ja  { "\u65E5\u6587" }
         jv  { "\u722A\u54C7\u6587" }
-        //jw { "\u722a\u54c7\u6587" } // Use jv instead
         ka  { "\u683C\u9C81\u5409\u4E9A\u6587" }
         kg  { "\u521A\u679C\u6587" }
         ki  { "\u5409\u5E93\u5C24\u6587" }
@@ -749,8 +751,10 @@ zh {
         km  { "\u67EC\u57D4\u5BE8\u6587" }
         kn  { "\u57C3\u7EB3\u5FB7\u6587" }
         ko  { "\u97E9\u6587" }
+        kr  { "\u5361\u52AA\u91CC\u6587" }
         ks  { "\u514B\u4EC0\u7C73\u5C14\u6587" }
         ku  { "\u5E93\u5C14\u5FB7\u6587" }
+        kv  { "\u79D1\u7C73\u6587" }
         kw  { "\u51ef\u5c14\u7279\u6587" }
         ky  { "\u5409\u5C14\u5409\u65AF\u6587" }
         la  { "\u62C9\u4E01\u6587" }
@@ -840,6 +844,7 @@ zh {
         uk  { "\u4E4C\u514B\u5170\u6587" }
         ur  { "\u4E4C\u5C14\u90FD\u6587" }
         uz  { "\u4E4C\u5179\u522B\u514B\u6587" }
+        ve  { "\u6587\u8FBE\u6587" }
         vi  { "\u8D8A\u5357\u6587" }
         vo  { "\u6C83\u62C9\u666E\u514B\u6587" }
         wa  { "\u83EF\u9686\u6587" }
@@ -913,7 +918,7 @@ zh {
         Laoo { "\u8001\u631D\u8BED" }
         Latn { "\u62C9\u4E01\u8BED" }
         Limb { "\u6797\u5E03\u8BED" }
-        Linb { "\u7EBF\u5F62\u6587\u5B57\u4E59" }
+        //Linb { "\u7EBF\u5F62\u6587\u5B57\u4E59" }
         Mlym { "\u9A6C\u62C9\u4E9A\u62C9\u59C6\u8BED" }
         Mong { "\u8499\u53E4\u8BED" }
         Mymr { "\u7F05\u7538" }
