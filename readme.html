@@ -58,6 +58,8 @@
 
           <li><a href="#HowToBuildWindows">Windows</a></li>
 
+          <li><a href="#HowToBuildWindowsXP64">Windows XP on IA64</a></li>
+
           <li><a href="#HowToBuildUnix">Unix</a></li>
 
           <li><a href="#HowToBuildZOS">z/OS (os/390)</a></li>
@@ -836,6 +838,50 @@
     workspace file. Choose "Yes to All" in the dialog asking whether to convert
     the files or not (this creates new files) and then follow the rest of the
     build instructions.</p>
+
+    <h3><a name="HowToBuildWindows" href="#HowToBuildWindows">How To Build And
+    Install On Windows XP on IA64</a></h3>
+
+    <p>Building International Components for Unicode requires:</p>
+
+    <ul>
+      <li>Microsoft XP on an IA64 (Itainium) machine</li>
+
+      <li>Microsoft Platform SDK.</li>
+    </ul>
+
+    <p>The steps are:</p>
+
+    <ol>
+      <li>Open the "Set Windows XP 64bit (Retail)" command
+      window from the Microsoft Platform SDK.</li>
+
+      <li>Follow steps 1-3 in the <a href="#HowToBuildWindows">in the
+      previous section</a>.</li>
+
+      <li>Use cd to get into the <i>&lt;ICU&gt;</i> directory.</li>
+
+      <li>Run this command: 'msdev /USEENV <i>&lt;ICU&gt;</i>\source\allinone\allinone.dsw /MAKE "all - Win64 Release"'</li>
+
+      <li>Run "cd source\test\intltest\Release"</li>
+
+      <li>Run the C++ test suite, "intltest". There should be no errors.</li>
+
+      <li>Run "cd ..\..\cintltst\Release"</li>
+
+      <li>Run the C test suite, "cintltst". There should be no errors.</li>
+
+      <li>Reset the <strong>TZ</strong> environment variable to its original
+      value, unless you plan on testing ICU any further.</li>
+
+      <li>You are now able to develop applications with ICU by using the
+      libraries and tools in <i>&lt;ICU&gt;</i>\bin\. The headers are in
+      <i>&lt;ICU&gt;</i>\include\ and the link libraries are in
+      <i>&lt;ICU&gt;</i>\lib\. To install the ICU runtime on a machine, or ship
+      it with your application, copy the needed components from
+      <i>&lt;ICU&gt;</i>\bin\ to a location on the system PATH or to your
+      application directory.</li>
+    </ol>
 
     <h3><a name="HowToBuildUnix" href="#HowToBuildUnix">How To Build And
     Install On Unix</a></h3>
