@@ -144,11 +144,7 @@ DATAFILESL=$(DAT_FILES) $(CNV_FILESL) $(BRK_FILES) $(RES_FILESL)
 ## Files to remove for 'make clean'
 CLEANFILES = *~ $(BRK_FILES)
 
-install-udata: install-pkgdata
-	$(MKINSTALLDIRS) $(DESTDIR)$(pkgsysconfdir)
-	$(INSTALL_DATA) $(top_srcdir)/../data/convrtrs.txt $(DESTDIR)$(pkgsysconfdir)
-
-#install-local: all-local install-udata
+#install-local: all-local install-pkgdata
 
 install-local:
 
