@@ -87,7 +87,7 @@ unum_openPattern(    const    UChar*            pattern,
 }*/
 
 
-U_CAPI UNumberFormat*
+U_CAPI UNumberFormat* U_EXPORT2
 unum_open(  UNumberFormatStyle    style,  
             const    UChar*    pattern,
             int32_t            patternLength,
@@ -176,14 +176,14 @@ unum_open(  UNumberFormatStyle    style,
   }
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 unum_close(UNumberFormat* fmt)
 {
  
   delete (NumberFormat*) fmt;
 }
 
-U_CAPI UNumberFormat*
+U_CAPI UNumberFormat* U_EXPORT2
 unum_clone(const UNumberFormat *fmt,
        UErrorCode *status)
 {
@@ -200,7 +200,7 @@ unum_clone(const UNumberFormat *fmt,
   return (UNumberFormat*) res;
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 unum_format(    const    UNumberFormat*    fmt,
         int32_t            number,
         UChar*            result,
@@ -227,7 +227,7 @@ unum_format(    const    UNumberFormat*    fmt,
   return res.extract(result, resultLength, *status);
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 unum_formatDouble(    const    UNumberFormat*  fmt,
             double          number,
             UChar*          result,
@@ -254,7 +254,7 @@ unum_formatDouble(    const    UNumberFormat*  fmt,
   return res.extract(result, resultLength, *status);
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 unum_parse(    const   UNumberFormat*  fmt,
         const   UChar*          text,
         int32_t         textLength,
@@ -289,7 +289,7 @@ unum_parse(    const   UNumberFormat*  fmt,
     : (int32_t) res.getDouble();
 }
 
-U_CAPI double
+U_CAPI double U_EXPORT2
 unum_parseDouble(    const   UNumberFormat*  fmt,
             const   UChar*          text,
             int32_t         textLength,
@@ -325,21 +325,21 @@ unum_parseDouble(    const   UNumberFormat*  fmt,
     : (double) res.getLong();
 }
 
-U_CAPI const char*
+U_CAPI const char* U_EXPORT2
 unum_getAvailable(int32_t index)
 {
  
   return uloc_getAvailable(index);
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 unum_countAvailable()
 {
  
   return uloc_countAvailable();
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 unum_getAttribute(const UNumberFormat*          fmt,
           UNumberFormatAttribute  attr)
 {
@@ -396,7 +396,7 @@ unum_getAttribute(const UNumberFormat*          fmt,
   return -1;
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 unum_setAttribute(    UNumberFormat*          fmt,
             UNumberFormatAttribute  attr,
             int32_t                 newValue)
@@ -472,7 +472,7 @@ unum_setAttribute(    UNumberFormat*          fmt,
   }
 }
 
-U_CAPI double
+U_CAPI double U_EXPORT2
 unum_getDoubleAttribute(const UNumberFormat*          fmt,
           UNumberFormatAttribute  attr)
 {
@@ -484,7 +484,7 @@ unum_getDoubleAttribute(const UNumberFormat*          fmt,
   }
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 unum_setDoubleAttribute(    UNumberFormat*          fmt,
             UNumberFormatAttribute  attr,
             double                 newValue)
@@ -495,7 +495,7 @@ unum_setDoubleAttribute(    UNumberFormat*          fmt,
   }
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 unum_getTextAttribute(const UNumberFormat*  fmt,
             UNumberFormatTextAttribute      tag,
             UChar*                          result,
@@ -537,7 +537,7 @@ unum_getTextAttribute(const UNumberFormat*  fmt,
   return res.extract(result, resultLength, *status);
 }
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 unum_setTextAttribute(    UNumberFormat*                    fmt,
             UNumberFormatTextAttribute      tag,
             const    UChar*                            newValue,
@@ -577,7 +577,7 @@ unum_setTextAttribute(    UNumberFormat*                    fmt,
   }
 }
 
-U_CAPI int32_t
+U_CAPI int32_t U_EXPORT2
 unum_toPattern(    const    UNumberFormat*          fmt,
         UBool                  isPatternLocalized,
         UChar*                  result,
@@ -743,7 +743,7 @@ unum_applyPattern(            UNumberFormat     *format,
 }
 */
 
-U_CAPI void
+U_CAPI void U_EXPORT2
 unum_applyPattern(  UNumberFormat  *format,
                     UBool          localized,
                     const UChar    *pattern,

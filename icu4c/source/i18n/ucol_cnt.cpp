@@ -41,7 +41,8 @@ void uprv_growTable(ContractionTable *tbl, UErrorCode *status) {
     }
 }
 
-CntTable *uprv_cnttab_open(CompactEIntArray *mapping, UErrorCode *status) {
+U_CAPI CntTable*  U_EXPORT2
+uprv_cnttab_open(CompactEIntArray *mapping, UErrorCode *status) {
     if(U_FAILURE(*status)) {
         return 0;
     }
@@ -90,7 +91,8 @@ ContractionTable *addATableElement(CntTable *table, uint32_t *key, UErrorCode *s
     return el;
 }
 
-int32_t uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorCode *status) {
+U_CAPI int32_t  U_EXPORT2
+uprv_cnttab_constructTable(CntTable *table, uint32_t mainOffset, UErrorCode *status) {
     int32_t i = 0, j = 0;
     if(U_FAILURE(*status) || table->size == 0) {
         return 0;
@@ -181,7 +183,8 @@ ContractionTable *uprv_cnttab_cloneContraction(ContractionTable *t) {
 
 }
 
-CntTable *uprv_cnttab_clone(CntTable *t) {
+U_CAPI CntTable* U_EXPORT2
+uprv_cnttab_clone(CntTable *t) {
   int32_t i = 0;
   CntTable *r = (CntTable *)uprv_malloc(sizeof(CntTable));
   r->position = t->position;
@@ -221,7 +224,8 @@ CntTable *uprv_cnttab_clone(CntTable *t) {
   return r;
 }
 
-void uprv_cnttab_close(CntTable *table) {
+U_CAPI void  U_EXPORT2
+uprv_cnttab_close(CntTable *table) {
     int32_t i = 0;
     for(i = 0; i<table->size; i++) {
         free(table->elements[i]->CEs);
@@ -236,7 +240,8 @@ void uprv_cnttab_close(CntTable *table) {
 }
 
 /* this is for adding non contractions */
-uint32_t uprv_cnttab_changeLastCE(CntTable *table, uint32_t element, uint32_t value, UErrorCode *status) {
+U_CAPI uint32_t  U_EXPORT2
+uprv_cnttab_changeLastCE(CntTable *table, uint32_t element, uint32_t value, UErrorCode *status) {
     element &= 0xFFFFFF;
 
     ContractionTable *tbl = NULL;
@@ -255,7 +260,8 @@ uint32_t uprv_cnttab_changeLastCE(CntTable *table, uint32_t element, uint32_t va
 
 
 /* inserts a part of contraction sequence in table. Sequences behind the offset are moved back. If element is non existent, it creates on. Returns element handle */
-uint32_t uprv_cnttab_insertContraction(CntTable *table, uint32_t element, UChar codePoint, uint32_t value, UErrorCode *status) {
+U_CAPI uint32_t  U_EXPORT2
+uprv_cnttab_insertContraction(CntTable *table, uint32_t element, UChar codePoint, uint32_t value, UErrorCode *status) {
 
     element &= 0xFFFFFF;
     ContractionTable *tbl = NULL;
@@ -293,7 +299,8 @@ uint32_t uprv_cnttab_insertContraction(CntTable *table, uint32_t element, UChar 
 
 
 /* adds more contractions in table. If element is non existant, it creates on. Returns element handle */
-uint32_t uprv_cnttab_addContraction(CntTable *table, uint32_t element, UChar codePoint, uint32_t value, UErrorCode *status) {
+U_CAPI uint32_t  U_EXPORT2
+uprv_cnttab_addContraction(CntTable *table, uint32_t element, UChar codePoint, uint32_t value, UErrorCode *status) {
 
     element &= 0xFFFFFF;
 
@@ -318,7 +325,8 @@ uint32_t uprv_cnttab_addContraction(CntTable *table, uint32_t element, UChar cod
 }
 
 /* sets a part of contraction sequence in table. If element is non existant, it creates on. Returns element handle */
-uint32_t uprv_cnttab_setContraction(CntTable *table, uint32_t element, uint32_t offset, UChar codePoint, uint32_t value, UErrorCode *status) {
+U_CAPI uint32_t  U_EXPORT2
+uprv_cnttab_setContraction(CntTable *table, uint32_t element, uint32_t offset, UChar codePoint, uint32_t value, UErrorCode *status) {
 
     element &= 0xFFFFFF;
     ContractionTable *tbl = NULL;
@@ -383,7 +391,8 @@ uint32_t _cnttab_getCE(ContractionTable *tbl, int32_t position) {
   }
 }
 
-int32_t uprv_cnttab_findCP(CntTable *table, uint32_t element, UChar codePoint, UErrorCode *status) {
+U_CAPI int32_t  U_EXPORT2
+uprv_cnttab_findCP(CntTable *table, uint32_t element, UChar codePoint, UErrorCode *status) {
 
     if(U_FAILURE(*status)) {
         return 0;
@@ -392,7 +401,8 @@ int32_t uprv_cnttab_findCP(CntTable *table, uint32_t element, UChar codePoint, U
     return _cnttab_findCP(_cnttab_getContractionTable(table, element), codePoint);
 }
 
-uint32_t uprv_cnttab_getCE(CntTable *table, uint32_t element, uint32_t position, UErrorCode *status) {
+U_CAPI uint32_t  U_EXPORT2
+uprv_cnttab_getCE(CntTable *table, uint32_t element, uint32_t position, UErrorCode *status) {
     if(U_FAILURE(*status)) {
         return UCOL_NOT_FOUND;
     }
@@ -400,7 +410,8 @@ uint32_t uprv_cnttab_getCE(CntTable *table, uint32_t element, uint32_t position,
     return(_cnttab_getCE(_cnttab_getContractionTable(table, element), position));
 }
 
-uint32_t uprv_cnttab_findCE(CntTable *table, uint32_t element, UChar codePoint, UErrorCode *status) {
+U_CAPI uint32_t  U_EXPORT2
+uprv_cnttab_findCE(CntTable *table, uint32_t element, UChar codePoint, UErrorCode *status) {
     if(U_FAILURE(*status)) {
         return UCOL_NOT_FOUND;
     }
@@ -408,7 +419,8 @@ uint32_t uprv_cnttab_findCE(CntTable *table, uint32_t element, UChar codePoint, 
     return _cnttab_getCE(tbl, _cnttab_findCP(tbl, codePoint));
 }
 
-UBool uprv_cnttab_isTailored(CntTable *table, uint32_t element, UChar *ztString, UErrorCode *status) {
+U_CAPI UBool  U_EXPORT2
+uprv_cnttab_isTailored(CntTable *table, uint32_t element, UChar *ztString, UErrorCode *status) {
     if(U_FAILURE(*status)) {
         return FALSE;
     }
@@ -430,7 +442,8 @@ UBool uprv_cnttab_isTailored(CntTable *table, uint32_t element, UChar *ztString,
     }
 }
 
-uint32_t uprv_cnttab_changeContraction(CntTable *table, uint32_t element, UChar codePoint, uint32_t newCE, UErrorCode *status) {
+U_CAPI uint32_t  U_EXPORT2
+uprv_cnttab_changeContraction(CntTable *table, uint32_t element, UChar codePoint, uint32_t newCE, UErrorCode *status) {
 
     element &= 0xFFFFFF;
     ContractionTable *tbl = NULL;

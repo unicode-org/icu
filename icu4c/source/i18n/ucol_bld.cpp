@@ -1127,7 +1127,7 @@ ucol_bld_cleanup(void)
     return TRUE;
 }
 
-const InverseTableHeader *
+U_CAPI const InverseTableHeader * U_EXPORT2
 ucol_initInverseUCA(UErrorCode *status)
 {
     if(U_FAILURE(*status)) return NULL;

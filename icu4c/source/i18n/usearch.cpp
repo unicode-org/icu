@@ -2629,8 +2629,8 @@ U_CAPI void U_EXPORT2 usearch_setBreakIterator(UStringSearch  *strsrch,
     }
 }
     
-U_CAPI const U_EXPORT2 UBreakIterator * usearch_getBreakIterator(
-                                              const UStringSearch *strsrch)
+U_CAPI const UBreakIterator* U_EXPORT2 
+usearch_getBreakIterator(const UStringSearch *strsrch)
 {
     if (strsrch) {
         return strsrch->search->breakIter;
@@ -2742,9 +2742,9 @@ U_CAPI void U_EXPORT2 usearch_setPattern(      UStringSearch *strsrch,
     }
 }
 
-U_CAPI const U_EXPORT2 UChar * usearch_getPattern(
-                                                const UStringSearch *strsrch, 
-                                                      int32_t       *length)
+U_CAPI const UChar* U_EXPORT2 
+usearch_getPattern(const UStringSearch *strsrch, 
+                   int32_t       *length)
 {
     if (strsrch) {
         *length = strsrch->pattern.textLength;

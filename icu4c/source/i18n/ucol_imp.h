@@ -157,7 +157,8 @@ struct collIterateState {
     uint8_t   origFlags;
 };
 
-U_CAPI void init_collIterate(const UCollator *collator, const UChar *sourceString, int32_t sourceLen, collIterate *s);
+U_CAPI void U_EXPORT2 
+init_collIterate(const UCollator *collator, const UChar *sourceString, int32_t sourceLen, collIterate *s);
 
 
 struct UCollationElements
@@ -333,7 +334,7 @@ ucol_getSortKeySize(const UCollator *coll, collIterate *s,
  * @return memory, owned by the caller, of size 'length' bytes.
  * @internal INTERNAL USE ONLY
  */
-U_CAPI uint8_t *
+U_CAPI uint8_t* U_EXPORT2 
 ucol_cloneRuleData(const UCollator *coll, int32_t *length, UErrorCode *status);
 
 #define UCOL_SPECIAL_FLAG 0xF0000000
@@ -704,10 +705,10 @@ U_CFUNC
 void ucol_updateInternalState(UCollator *coll);
 
 U_CAPI uint32_t U_EXPORT2 ucol_getFirstCE(const UCollator *coll, UChar u, UErrorCode *status);
-U_CAPI char U_EXPORT2 *ucol_sortKeyToString(const UCollator *coll, const uint8_t *sortkey, char *buffer, uint32_t *len);
+U_CAPI char* U_EXPORT2 ucol_sortKeyToString(const UCollator *coll, const uint8_t *sortkey, char *buffer, uint32_t *len);
 U_CAPI UBool U_EXPORT2 isTailored(const UCollator *coll, const UChar u, UErrorCode *status);
 
-U_CAPI const U_EXPORT2 InverseTableHeader *ucol_initInverseUCA(UErrorCode *status);
+U_CAPI const InverseTableHeader* U_EXPORT2 ucol_initInverseUCA(UErrorCode *status);
 U_CAPI int32_t U_EXPORT2 ucol_inv_getNextCE(uint32_t CE, uint32_t contCE,
                                             uint32_t *nextCE, uint32_t *nextContCE,
                                             uint32_t strength);

@@ -32,7 +32,7 @@ U_NAMESPACE_BEGIN
 static uint32_t uprv_uca_processContraction(CntTable *contractions, UCAElements *element, uint32_t existingCE, UErrorCode *status);
 
 U_CDECL_BEGIN
-static int32_t U_CALLCONV
+static int32_t U_EXPORT2 U_CALLCONV
 prefixLookupHash(const UHashTok e) {
   UCAElements *element = (UCAElements *)e.pointer;
   UChar buf[256];
@@ -45,7 +45,7 @@ prefixLookupHash(const UHashTok e) {
   return uhash_hashUChars(key);
 }
 
-static int8_t U_CALLCONV
+static int8_t U_EXPORT2 U_CALLCONV
 prefixLookupComp(const UHashTok e1, const UHashTok e2) {
   UCAElements *element1 = (UCAElements *)e1.pointer;
   UCAElements *element2 = (UCAElements *)e2.pointer;
@@ -111,7 +111,13 @@ static int32_t uprv_uca_addExpansion(ExpansionTable *expansions, uint32_t value,
     return(expansions->position++);
 }
 
-tempUCATable * uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollator *UCA, UColCETags initTag, UErrorCode *status) {
+static inline void U_CALLCONV
+uhash_freeBlockWrapper(void *obj) {
+  uhash_freeBlock(obj);
+}
+
+U_CAPI tempUCATable*  U_EXPORT2
+uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts, const UCollator *UCA, UColCETags initTag, UErrorCode *status) {
   tempUCATable *t = (tempUCATable *)uprv_malloc(sizeof(tempUCATable));
   MaxExpansionTable *maxet  = (MaxExpansionTable *)uprv_malloc(
                                                    sizeof(MaxExpansionTable));
@@ -167,7 +173,8 @@ tempUCATable * uprv_uca_initTempTable(UCATableHeader *image, UColOptionSet *opts
 return t;
 }
 
-tempUCATable *uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
+U_CAPI tempUCATable* U_EXPORT2
+uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
   if(U_FAILURE(*status)) {
     return NULL;
   }
@@ -256,7 +263,8 @@ tempUCATable *uprv_uca_cloneTempTable(tempUCATable *t, UErrorCode *status) {
 }
 
 
-void uprv_uca_closeTempTable(tempUCATable *t) {
+U_CAPI void  U_EXPORT2
+uprv_uca_closeTempTable(tempUCATable *t) {
   uprv_free(t->expansions->CEs);
   uprv_free(t->expansions);
   if(t->contractions != NULL) {
@@ -883,7 +891,8 @@ static uint32_t uprv_uca_finalizeAddition(tempUCATable *t, UCAElements *element,
 }
 
 /* This adds a read element, while testing for existence */
-uint32_t uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status) {
+U_CAPI uint32_t  U_EXPORT2
+uprv_uca_addAnElement(tempUCATable *t, UCAElements *element, UErrorCode *status) {
   ExpansionTable *expansions = t->expansions;
 
   uint32_t i = 1;
@@ -1047,7 +1056,8 @@ void uprv_uca_getMaxExpansionJamo(CompactEIntArray       *mapping,
 }
 
 
-UCATableHeader *uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
+U_CAPI UCATableHeader* U_EXPORT2
+uprv_uca_assembleTable(tempUCATable *t, UErrorCode *status) {
     CompactEIntArray *mapping = t->mapping;
     ExpansionTable *expansions = t->expansions;
     CntTable *contractions = t->contractions;
