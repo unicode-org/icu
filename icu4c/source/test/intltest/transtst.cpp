@@ -907,13 +907,13 @@ void TransliteratorTest::TestFilterIDs(void) {
     // Array of 3n strings:
     // <id>, <inverse id>, <input>, <expected output>
     const char* DATA[] = {
-        "Unicode-Hex[aeiou]",
-        "Hex-Unicode[aeiou]",
+        "Unicode[aeiou]-Hex",
+        "Hex[aeiou]-Unicode",
         "quizzical",
         "q\\u0075\\u0069zz\\u0069c\\u0061l",
         
-        "Unicode-Hex[aeiou];Hex-Unicode[^5]",
-        "Unicode-Hex[^5];Hex-Unicode[aeiou]",
+        "Unicode[aeiou]-Hex;Hex[^5]-Unicode",
+        "Unicode[^5]-Hex;Hex[aeiou]-Unicode",
         "quizzical",
         "q\\u0075izzical",
 
@@ -1014,22 +1014,40 @@ void TransliteratorTest::TestNameMap(void) {
  * Test liberalized ID syntax.  1006c
  */
 void TransliteratorTest::TestLiberalizedID(void) {
+    // Some test cases have an expected getID() value of NULL.  This
+    // means I have disabled the test case for now.  This stuff is
+    // still under development, and I haven't decided whether to make
+    // getID() return canonical case yet.  It will all get rewritten
+    // with the move to Source-Target/Variant IDs anyway. [aliu]
     const char* DATA[] = {
-        "latin-arabic", "case insensitivity",
-        "  Null  ", "whitespace",
-        " Latin[a-z]-Arabic  ", "inline filter",
-        "  null  ; latin-arabic  ", "compound whitespace",
+        "latin-arabic", NULL /*"Latin-Arabic"*/, "case insensitivity",
+        "  Null  ", "Null", "whitespace",
+        " Latin[a-z]-Arabic  ", "Latin[a-z]-Arabic", "inline filter",
+        "  null  ; latin-arabic  ", NULL /*"Null;Latin-Arabic"*/, "compound whitespace",
     };
     const int32_t DATA_length = sizeof(DATA)/sizeof(DATA[0]);
 
-    for (int32_t i=0; i<DATA_length; i+=2) {
+    for (int32_t i=0; i<DATA_length; i+=3) {
         Transliterator *t = Transliterator::createInstance(DATA[i]);
         if (t == 0) {
-            errln(UnicodeString("FAIL: ") + DATA[i+1] +
-                  " test with ID \"" + DATA[i] + "\"");
+            errln(UnicodeString("FAIL: ") + DATA[i+2] +
+                  " cannot create ID \"" + DATA[i] + "\"");
         } else {
-            logln(UnicodeString("Ok: ") + DATA[i+1] +
-                  " test with ID \"" + DATA[i] + "\"");
+            UnicodeString exp;
+            if (DATA[i+1]) {
+                exp = UnicodeString(DATA[i+1], "");
+            }
+            // Don't worry about getID() if the expected char*
+            // is NULL -- see above.
+            if (exp.length() == 0 || exp == t->getID()) {
+                logln(UnicodeString("Ok: ") + DATA[i+2] +
+                      " create ID \"" + DATA[i] + "\" => \"" +
+                      exp + "\"");
+            } else {
+                errln(UnicodeString("FAIL: ") + DATA[i+2] +
+                      " create ID \"" + DATA[i] + "\" => \"" +
+                      t->getID() + "\", exp \"" + exp + "\"");
+            }
             delete t;
         }
     }
