@@ -566,15 +566,11 @@ static void udata_pathiter_init(UDataPathIterator *iter, const char *path, const
  * @param len  If set, pointer to the length of the returned path, for convenience. 
  * @return Pointer to the next path segment, or NULL if there are no more.
  */
-static const char *udata_pathiter_next(UDataPathIterator *iter, int32_t *outPathLen)
+static const char *udata_pathiter_next(UDataPathIterator *iter)
 {
     const char *path = NULL;
     uint32_t     pathLen = 0;
     const char *pathBasename;
-
-    if(outPathLen != NULL) {
-        *outPathLen = 0;
-    }
 
     do
     {
@@ -674,11 +670,6 @@ static const char *udata_pathiter_next(UDataPathIterator *iter, int32_t *outPath
                 pathLen += (int32_t)uprv_strlen(iter->suffix);
             }
             
-        }
-
-        /* return value of path size */
-        if( outPathLen ) {
-            *outPathLen = pathLen; 
         }
 
 #ifdef UDATA_DEBUG
@@ -797,7 +788,7 @@ openCommonData(const char *path,          /*  Path from OpenCHoice?          */
     udata_pathiter_init(&iter, u_getDataDirectory(), inBasename, path, ".dat", TRUE);
 
     while((UDataMemory_isLoaded(&tData)==FALSE) && 
-          (pathBuffer = udata_pathiter_next(&iter, NULL)) != NULL)
+          (pathBuffer = udata_pathiter_next(&iter)) != NULL)
     {
 #ifdef UDATA_DEBUG
         fprintf(stderr, "ocd: trying path %s - ", pathBuffer);
@@ -1260,7 +1251,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
         /* init path iterator for individual files */
         udata_pathiter_init(&iter, dataPath, pkgName.s, path, tocEntryPathSuffix, FALSE);
 
-        while((pathBuffer = udata_pathiter_next(&iter, NULL)))
+        while((pathBuffer = udata_pathiter_next(&iter)))
         {
 #ifdef UDATA_DEBUG
             fprintf(stderr, "UDATA: trying individual file %s\n", pathBuffer);
@@ -1307,7 +1298,7 @@ doOpenChoice(const char *path, const char *type, const char *name,
         /* init path iterator for individual files */
         udata_pathiter_init(&iter, dataPath, "", path, oldIndFileName.s, FALSE);
 
-        while((pathBuffer = udata_pathiter_next(&iter, NULL)))
+        while((pathBuffer = udata_pathiter_next(&iter)))
         {
 #ifdef UDATA_DEBUG
             fprintf(stderr, "UDATA: trying individual file %s\n", pathBuffer);
