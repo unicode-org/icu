@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2002, International Business Machines
+*   Copyright (C) 2002-2003, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -147,6 +147,7 @@
 
 /* Formerly utf.h, part 1 --------------------------------------------------- */
 
+#ifdef U_USE_UTF_DEPRECATES
 /**
  * Unicode string and array offset and index type.
  * ICU always counts Unicode code units (UChars) for
@@ -155,6 +156,7 @@
  * @obsolete ICU 2.6. Use int32_t directly instead since this API will be removed in that release.
  */
 typedef int32_t UTextOffset;
+#endif
 
 /** Number of bits in a Unicode string code unit - ICU uses 16-bit Unicode. @deprecated ICU 2.4. Obsolete, see utf_old.h. */
 #define UTF_SIZE 16

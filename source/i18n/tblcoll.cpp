@@ -101,57 +101,6 @@ RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
             status);
 }
 
-#ifdef ICU_NORMALIZER_USE_DEPRECATES
-// TODO this is a deprecated constructor, remove >2002-sep-30
-RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
-                                     Normalizer::EMode decompositionMode,
-                                     UErrorCode& status) :
-                                     dataIsOwned(FALSE)
-{
-  construct(rules,
-            UCOL_DEFAULT_STRENGTH,
-            (UColAttributeValue)Normalizer::getUNormalizationMode(decompositionMode, status),
-            status);
-}
-
-// TODO this is a deprecated constructor, remove >2002-sep-30
-RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
-                      ECollationStrength collationStrength,
-                      Normalizer::EMode decompositionMode,
-                      UErrorCode& status) : dataIsOwned(FALSE)
-{
-  construct(rules,
-            getUCollationStrength(collationStrength),
-            (UColAttributeValue)Normalizer::getUNormalizationMode(decompositionMode, status),
-            status);
-}
-
-/**
-* Set the decomposition mode of the Collator object.
-* @param the new decomposition mode
-* @see Collator#getDecomposition
-*/
-void RuleBasedCollator::setDecomposition(Normalizer::EMode  mode)
-{
-  UErrorCode status = U_ZERO_ERROR;
-  ucol_setNormalization(ucollator, Normalizer::getUNormalizationMode(mode,
-                                                                     status));
-}
-
-/**
-* Get the decomposition mode of the Collator object.
-* @return the decomposition mode
-* @see Collator#setDecomposition
-*/
-Normalizer::EMode RuleBasedCollator::getDecomposition(void) const
-{
-  UErrorCode status = U_ZERO_ERROR;
-  return Normalizer::getNormalizerEMode(ucol_getNormalization(ucollator),
-                                                              status);
-}
-
-#endif /* ICU_NORMALIZER_USE_DEPRECATES */
-
 RuleBasedCollator::RuleBasedCollator(const UnicodeString& rules,
                                      UColAttributeValue decompositionMode,
                                      UErrorCode& status) :
