@@ -411,10 +411,9 @@ uloc_getVariant(const char*    localeID,
 
 /**
  * Gets the full name for the specified locale.
- * Note: This has the effect of 'canonicalizing' the string to
- * a certain extent. Upper and lower case are set as needed,
- * and if the components were in 'POSIX' format they are changed to
- * ICU format.  It does NOT map aliased names in any way.
+ * Note: This has the effect of 'canonicalizing' the ICU locale ID to
+ * a certain extent. Upper and lower case are set as needed.
+ * It does NOT map aliased names in any way.
  * See the top of this header file.
  * This API supports preflighting.
  *
