@@ -18,7 +18,6 @@
 *   like UnicodeData.txt are semicolon-delimited.
 */
 
-#include <stdio.h>
 #include "unicode/utypes.h"
 #include "cstring.h"
 #include "filestrm.h"
@@ -50,7 +49,6 @@ u_parseDelimitedFile(const char *filename, char delimiter,
         file=T_FileStream_open(filename, "r");
     }
     if(file==NULL) {
-        fprintf(stderr, "*** unable to open input file %s ***\n", filename);
         *pErrorCode=U_FILE_ACCESS_ERROR;
         return;
     }
@@ -98,7 +96,6 @@ u_parseDelimitedFile(const char *filename, char delimiter,
             if(*start!=0) {
                 ++start;
             } else if(i+1<fieldCount) {
-                fprintf(stderr, "*** too few fields in line %s ***\n", line);
                 *pErrorCode=U_PARSE_ERROR;
                 limit=line+length;
                 i=fieldCount;
