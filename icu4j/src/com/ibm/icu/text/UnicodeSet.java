@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/UnicodeSet.java,v $
- * $Date: 2002/11/08 01:19:58 $
- * $Revision: 1.75 $
+ * $Date: 2002/11/14 22:26:41 $
+ * $Revision: 1.76 $
  *
  *****************************************************************************************
  */
@@ -211,7 +211,7 @@ import java.util.Iterator;
  * </table>
  * <br><b>Warning: you cannot add an empty string ("") to a UnicodeSet.</b>
  * @author Alan Liu
- * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.75 $ $Date: 2002/11/08 01:19:58 $
+ * @version $RCSfile: UnicodeSet.java,v $ $Revision: 1.76 $ $Date: 2002/11/14 22:26:41 $
  */
 public class UnicodeSet extends UnicodeFilter {
 
@@ -940,7 +940,7 @@ public class UnicodeSet extends UnicodeFilter {
         // empty = [HIGH]
         // [start_0, limit_0, start_1, limit_1, HIGH]
 
-        // [..., start_i-1, limit_i-1, start_i, limit_i, ..., HIGH]
+        // [..., start_k-1, limit_k-1, start_k, limit_k, ..., HIGH]
         //                             ^
         //                             list[i]
 
@@ -957,7 +957,7 @@ public class UnicodeSet extends UnicodeFilter {
             if (i > 0 && c == list[i-1]) {
                 // collapse adjacent ranges
 
-                // [..., start_i-1, c, c, limit_i, ..., HIGH]
+                // [..., start_k-1, c, c, limit_k, ..., HIGH]
                 //                     ^
                 //                     list[i]
                 System.arraycopy(list, i+1, list, i-1, len-i-1);
@@ -976,11 +976,11 @@ public class UnicodeSet extends UnicodeFilter {
             // any existing ranges, and it is not 10FFFF.
 
 
-            // [..., start_i-1, limit_i-1, start_i, limit_i, ..., HIGH]
+            // [..., start_k-1, limit_k-1, start_k, limit_k, ..., HIGH]
             //                             ^
             //                             list[i]
 
-            // [..., start_i-1, limit_i-1, c, c+1, start_i, limit_i, ..., HIGH]
+            // [..., start_k-1, limit_k-1, c, c+1, start_k, limit_k, ..., HIGH]
             //                             ^
             //                             list[i]
 
@@ -1321,6 +1321,16 @@ public class UnicodeSet extends UnicodeFilter {
      * inclusive, such that c < list[i]
      */
     private final int findCodePoint(int c) {
+        /* Examples:
+                                           findCodePoint(c)
+           set              list[]         c=0 1 3 4 7 8
+           ===              ==============   ===========
+           []               [110000]         0 0 0 0 0 0
+           [\u0000-\u0003]  [0, 4, 110000]   1 1 1 2 2 2
+           [\u0004-\u0007]  [4, 8, 110000]   0 0 0 1 1 2
+           [:all:]          [0, 110000]      1 1 1 1 1 1
+         */
+
         // Return the smallest i such that c < list[i].  Assume
         // list[len - 1] == HIGH and that c is legal (0..HIGH-1).
         if (c < list[0]) return 0;
