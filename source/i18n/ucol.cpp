@@ -533,6 +533,8 @@ void ucol_setOptionsFromHeader(UCollator* result, UColOptionSet * opts, UErrorCo
     result->options = opts;
 }
 
+#if 0
+// doesn't look like anybody is using this
 void ucol_putOptionsToHeader(UCollator* result, UColOptionSet * opts, UErrorCode *status) {
   if(U_FAILURE(*status)) {
     return;
@@ -546,6 +548,7 @@ void ucol_putOptionsToHeader(UCollator* result, UColOptionSet * opts, UErrorCode
     opts->alternateHandling = result->alternateHandling;
     opts->hiraganaQ = opts->hiraganaQ;
 }
+#endif
 
 static const uint16_t *fcdTrieIndex=NULL;
 
