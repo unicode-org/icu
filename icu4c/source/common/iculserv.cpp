@@ -21,9 +21,6 @@ static Hashtable * LocaleUtility_cache = NULL;
 
 #define UNDERSCORE_CHAR ((UChar)0x005f)
 
-static UMTX LocaleUtility_lock = 0;
-
-
 /*
  ******************************************************************
  */
@@ -94,27 +91,31 @@ LocaleUtility::getAvailableLocaleNames(const UnicodeString& bundleID)
     // have to ignore bundleID for the moment, since we don't have easy C++ api.
     // assume it's the default bundle
 
-    if (LocaleUtility_cache == NULL) {
-        Hashtable* result = new Hashtable();
-        if (result) {
+    Hashtable* htp;
+    umtx_lock(NULL);
+    htp = LocaleUtility_cache;
+    umtx_unlock(NULL);
+
+    if (htp == NULL) {
+        htp = new Hashtable();
+        if (htp) {
             UErrorCode status = U_ZERO_ERROR;
             int32_t count = uloc_countAvailable();
             for (int32_t i = 0; i < count; ++i) {
                 UnicodeString temp(uloc_getAvailable(i), "");
-                result->put(temp, (void*)result, status);
+                htp->put(temp, (void*)htp, status);
                 if (U_FAILURE(status)) {
-                    delete result;
+                    delete htp;
                     return NULL;
                 }
             }
-            {
-                Mutex mutex(&LocaleUtility_lock);
-                if (LocaleUtility_cache == NULL) {
-                    LocaleUtility_cache = result;
-                    return LocaleUtility_cache;
-                }
+            umtx_lock(NULL);
+            if (LocaleUtility_cache == NULL) {
+                LocaleUtility_cache = htp;
+                htp = NULL;
             }
-            delete result;
+            umtx_unlock(NULL);
+            delete htp;
         }
     }
     return LocaleUtility_cache;
@@ -131,11 +132,9 @@ LocaleUtility::isFallbackOf(const UnicodeString& root, const UnicodeString& chil
 UBool
 LocaleUtility::cleanup(void) {
     if (LocaleUtility_cache) {
-        Mutex mutex(&LocaleUtility_lock);
         delete LocaleUtility_cache;
         LocaleUtility_cache = NULL;
     }
-    umtx_destroy(&LocaleUtility_lock);
     return TRUE;
 }
 
@@ -822,9 +821,9 @@ ICULocaleService::getAvailableLocales(void) const
 const UnicodeString&
 ICULocaleService::validateFallbackLocale() const
 {
-    const Locale& loc = Locale::getDefault();
-    if (loc != fallbackLocale) {
-        ICULocaleService* ncThis = (ICULocaleService*)this;
+    const Locale&     loc    = Locale::getDefault();
+    ICULocaleService* ncThis = (ICULocaleService*)this;
+    {
         Mutex mutex(&ncThis->llock);
         if (loc != fallbackLocale) {
             ncThis->fallbackLocale = loc;
@@ -852,7 +851,7 @@ U_NAMESPACE_END
 // defined in ucln_cmn.h
 
 /**
- * Release all static memory held by breakiterator.  
+ * Release all static memory held by Locale Utility.  
  */
 U_CFUNC UBool service_cleanup(void) {
   return LocaleUtility::cleanup();

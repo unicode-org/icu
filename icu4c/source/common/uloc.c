@@ -386,7 +386,7 @@ NULL
 *******************************************************************************/
 
 /*Lazy evaluated the list of installed locales*/
-static void _lazyEvaluate_installedLocales(void);
+static void _load_installedLocales(void);
 
 /*returns TRUE if a is an ID separator FALSE otherwise*/
 #define _isIDSeparator(a) (a == '_' || a == '-')
@@ -1245,8 +1245,7 @@ U_CAPI const char* U_EXPORT2
 uloc_getAvailable(int32_t offset) 
 {
     
-    if (_installedLocales == NULL)
-        _lazyEvaluate_installedLocales();
+    _load_installedLocales();
     
     if (offset > _installedLocalesCount)
         return NULL;
@@ -1258,9 +1257,7 @@ uloc_getAvailable(int32_t offset)
 U_CAPI int32_t  U_EXPORT2
 uloc_countAvailable()
 {
-    if (_installedLocales == NULL)
-        _lazyEvaluate_installedLocales();
-
+    _load_installedLocales();
     return _installedLocalesCount;
 }
 
@@ -1278,43 +1275,53 @@ UBool uloc_cleanup(void) {
     return TRUE;
 }
 
-static void _lazyEvaluate_installedLocales()
+static void _load_installedLocales()
 {
-    UResourceBundle *index = NULL;
-    UResourceBundle installed;
-    UErrorCode status = U_ZERO_ERROR;
-    char ** temp;
-    int32_t i = 0;
-    int32_t localeCount;
-    
-    ures_initStackObject(&installed);
-    index = ures_openDirect(NULL, _kIndexLocaleName, &status);
-    ures_getByKey(index, _kIndexTag, &installed, &status);
-    
-    if(U_SUCCESS(status)) {
-        localeCount = ures_getSize(&installed);
-        temp = (char **) uprv_malloc(sizeof(char*) * (localeCount+1));
+    UBool   localesLoaded;
 
-        ures_resetIterator(&installed);
-        while(ures_hasNext(&installed)) {
-            ures_getNextString(&installed, NULL, (const char **)&temp[i++], &status);
-        }
-        temp[i] = NULL;
+    umtx_lock(NULL);
+    localesLoaded = _installedLocales != NULL;
+    umtx_unlock(NULL);
+    
+    if (localesLoaded == FALSE) {
+        UResourceBundle *index = NULL;
+        UResourceBundle installed;
+        UErrorCode status = U_ZERO_ERROR;
+        char ** temp;
+        int32_t i = 0;
+        int32_t localeCount;
+        
+        ures_initStackObject(&installed);
+        index = ures_openDirect(NULL, _kIndexLocaleName, &status);
+        ures_getByKey(index, _kIndexTag, &installed, &status);
+        
+        if(U_SUCCESS(status)) {
+            localeCount = ures_getSize(&installed);
+            temp = (char **) uprv_malloc(sizeof(char*) * (localeCount+1));
+            
+            ures_resetIterator(&installed);
+            while(ures_hasNext(&installed)) {
+                ures_getNextString(&installed, NULL, (const char **)&temp[i++], &status);
+            }
+            temp[i] = NULL;
+            
+            umtx_lock(NULL);
+            if (_installedLocales == NULL)
+            {
+                _installedLocales = temp;
+                _installedLocalesCount = localeCount;
+                temp = NULL;
+            } 
+            umtx_unlock(NULL);
 
-        umtx_lock(NULL);
-        if (_installedLocales == NULL)
-        {
-            _installedLocales = temp;
-            _installedLocalesCount = localeCount;
-        } else {
             uprv_free(temp);
+            ures_close(&installed);
         }
-        umtx_unlock(NULL);
-
-        ures_close(&installed);
+        ures_close(index);
     }
-    ures_close(index);
 }
+
+
 
 /**
  * Returns a list of all language codes defined in ISO 639.  This is a pointer
