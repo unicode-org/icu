@@ -819,6 +819,61 @@ void RegexTest::API_Match() {
     }
 
     //
+    //   find with zero length matches, match position should bump ahead
+    //     to prevent loops.
+    //
+    {
+        int                 i;
+        UErrorCode          status=U_ZERO_ERROR;
+        RegexMatcher        m("(?= ?)", 0, status);   // This pattern will zero-length matches anywhere,
+                                                      //   using an always-true look-ahead.
+        REGEX_CHECK_STATUS;
+        UnicodeString s("    ");
+        m.reset(s);
+        for (i=0; ; i++) {
+            if (m.find() == FALSE) {
+                break;
+            }
+            REGEX_ASSERT(m.start(status) == i);
+            REGEX_ASSERT(m.end(status) == i);
+        }
+        REGEX_ASSERT(i==5);
+
+        // Check that the bump goes over surrogate pairs OK
+        s = "\\U00010001\\U00010002\\U00010003\\U00010004";
+        s = s.unescape();
+        m.reset(s);
+        for (i=0; ; i+=2) {
+            if (m.find() == FALSE) {
+                break;
+            }
+            REGEX_ASSERT(m.start(status) == i);
+            REGEX_ASSERT(m.end(status) == i);
+        }
+        REGEX_ASSERT(i==10);
+    }
+    {
+        // find() loop breaking test.
+        //        with pattern of /.?/, should see a series of one char matches, then a single
+        //        match of zero length at the end of the input string.
+        int                 i;
+        UErrorCode          status=U_ZERO_ERROR;
+        RegexMatcher        m(".?", 0, status);     
+        REGEX_CHECK_STATUS;
+        UnicodeString s("    ");
+        m.reset(s);
+        for (i=0; ; i++) {
+            if (m.find() == FALSE) {
+                break;
+            }
+            REGEX_ASSERT(m.start(status) == i);
+            REGEX_ASSERT(m.end(status) == (i<4 ? i+1 : i));
+        }
+        REGEX_ASSERT(i==5);
+    }
+
+
+    //
     // Matchers with no input string behave as if they had an empty input string.
     //
 

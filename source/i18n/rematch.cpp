@@ -313,6 +313,14 @@ UBool RegexMatcher::find() {
     }
 
     int32_t startPos = fMatchEnd;
+    if (fMatchStart == fMatchEnd && fMatch) {
+        // Previous match had zero length.  Move start position up one position
+        //  to avoid sending find() into a loop on zero-length matches.
+        if (startPos == fInput->length()) {
+            return FALSE;
+        }
+        startPos = fInput->moveIndex32(startPos, 1);
+    }
     int32_t inputLen = fInput->length();
     int32_t testLen  = inputLen - fPattern->fMinMatchLen;
     if (startPos > testLen) {
