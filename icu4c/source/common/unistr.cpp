@@ -602,6 +602,46 @@ UnicodeString::doCompareCodePointOrder(UTextOffset start,
   return lengthResult;
 }
 
+int8_t
+UnicodeString::doCaseCompare(UTextOffset start,
+                             int32_t length,
+                             const UChar *srcChars,
+                             UTextOffset srcStart,
+                             int32_t srcLength,
+                             uint32_t options) const
+{
+  // compare illegal string values
+  if(isBogus()) {
+    if(srcChars==0) {
+      return 0;
+    } else {
+      return -1;
+    }
+  } else if(srcChars==0) {
+    return 1;
+  }
+
+  // pin indices to legal values
+  pinIndices(start, length);
+
+  // get the correct pointer
+  const UChar *chars = getArrayStart();
+
+  // are we comparing the same buffer contents?
+  chars += start;
+  srcChars += srcStart;
+  if(chars == srcChars) {
+    return 0;
+  }
+
+  int32_t result=u_internalStrcasecmp(chars, length, srcChars, srcLength, options);
+  if(result!=0) {
+    return (int8_t)(result >> 24 | 1);
+  } else {
+    return 0;
+  }
+}
+
 void
 UnicodeString::doExtract(UTextOffset start,
              int32_t length,
@@ -865,13 +905,40 @@ UnicodeString::setCharAt(UTextOffset offset,
   return *this;
 }
 
-UnicodeString&
-UnicodeString::toUpper()
-{ return toUpper(Locale::getDefault()); }
+/*
+ * Implement argument checking and buffer handling
+ * for string case mapping as a common function.
+ */
+enum {
+    TO_LOWER,
+    TO_UPPER,
+    FOLD_CASE
+};
 
-UnicodeString&
-UnicodeString::toLower()
-{ return toLower(Locale::getDefault()); }
+UnicodeString &
+UnicodeString::toLower() {
+  return caseMap(Locale::getDefault(), 0, TO_LOWER);
+}
+
+UnicodeString &
+UnicodeString::toLower(const Locale &locale) {
+  return caseMap(locale, 0, TO_LOWER);
+}
+
+UnicodeString &
+UnicodeString::toUpper() {
+  return caseMap(Locale::getDefault(), 0, TO_UPPER);
+}
+
+UnicodeString &
+UnicodeString::toUpper(const Locale &locale) {
+  return caseMap(locale, 0, TO_UPPER);
+}
+
+UnicodeString &
+UnicodeString::foldCase(uint32_t options) {
+  return caseMap(Locale(), options, TO_LOWER);
+}
 
 // static helper function for string case mapping
 // called by u_internalStrToUpper/Lower()
@@ -890,9 +957,10 @@ UnicodeString::growBuffer(void *context,
   }
 }
 
-UnicodeString&
-UnicodeString::toUpper(const Locale& locale)
-{
+UnicodeString &
+UnicodeString::caseMap(const Locale& locale,
+                       uint32_t options,
+                       int32_t toWhichCase) {
   if(fLength <= 0) {
     // nothing to do
     return *this;
@@ -922,55 +990,26 @@ UnicodeString::toUpper(const Locale& locale)
   }
 
   UErrorCode errorCode = U_ZERO_ERROR;
-  fLength = u_internalStrToUpper(fArray, fCapacity,
-                                 oldArray, oldLength,
-                                 locale.getName(),
-                                 growBuffer, this,
-                                 &errorCode);
-  delete [] bufferToDelete;
-  if(U_FAILURE(errorCode)) {
-    setToBogus();
-  }
-  return *this;
-}
-
-UnicodeString&
-UnicodeString::toLower(const Locale& locale)
-{
-  if(fLength <= 0) {
-    // nothing to do
-    return *this;
-  }
-
-  // We need to allocate a new buffer for the internal string case mapping function.
-  // This is very similar to how doReplace() below keeps the old array pointer
-  // and deletes the old array itself after it is done.
-  // In addition, we are forcing cloneArrayIfNeeded() to always allocate a new array.
-  UChar *oldArray = fArray;
-  int32_t oldLength = fLength;
-  int32_t *bufferToDelete = 0;
-
-  // Make sure that if the string is in fStackBuffer we do not overwrite it!
-  int32_t capacity;
-  if(fLength <= US_STACKBUF_SIZE) {
-    if(fArray == fStackBuffer) {
-      capacity = 2 * US_STACKBUF_SIZE; // make sure that cloneArrayIfNeeded() allocates a new buffer
-    } else {
-      capacity = US_STACKBUF_SIZE;
-    }
+  if(toWhichCase==TO_LOWER) {
+    fLength = u_internalStrToLower(fArray, fCapacity,
+                                   oldArray, oldLength,
+                                   locale.getName(),
+                                   growBuffer, this,
+                                   &errorCode);
+  } else if(toWhichCase==TO_UPPER) {
+    fLength = u_internalStrToUpper(fArray, fCapacity,
+                                   oldArray, oldLength,
+                                   locale.getName(),
+                                   growBuffer, this,
+                                   &errorCode);
   } else {
-    capacity = fLength + 2;
-  }
-  if(!cloneArrayIfNeeded(capacity, capacity, FALSE, &bufferToDelete, TRUE)) {
-    return *this;
+    fLength = u_internalStrFoldCase(fArray, fCapacity,
+                                    oldArray, oldLength,
+                                    options,
+                                    growBuffer, this,
+                                    &errorCode);
   }
 
-  UErrorCode errorCode = U_ZERO_ERROR;
-  fLength = u_internalStrToLower(fArray, fCapacity,
-                                 oldArray, oldLength,
-                                 locale.getName(),
-                                 growBuffer, this,
-                                 &errorCode);
   delete [] bufferToDelete;
   if(U_FAILURE(errorCode)) {
     setToBogus();
