@@ -25,22 +25,22 @@ U_CDECL_BEGIN
 /* No-Op UCharIterator implementation for illegal input --------------------- */
 
 static int32_t U_CALLCONV
-noopGetIndex(UCharIterator *iter, UCharIteratorOrigin origin) {
+noopGetIndex(UCharIterator * /*iter*/, UCharIteratorOrigin /*origin*/) {
     return 0;
 }
 
 static int32_t U_CALLCONV
-noopMove(UCharIterator *iter, int32_t delta, UCharIteratorOrigin origin) {
+noopMove(UCharIterator * /*iter*/, int32_t /*delta*/, UCharIteratorOrigin /*origin*/) {
     return 0;
 }
 
 static UBool U_CALLCONV
-noopHasNext(UCharIterator *iter) {
+noopHasNext(UCharIterator * /*iter*/) {
     return FALSE;
 }
 
 static int32_t U_CALLCONV
-noopCurrent(UCharIterator *iter) {
+noopCurrent(UCharIterator * /*iter*/) {
     return -1;
 }
 

@@ -803,15 +803,15 @@ uloc_getLCID(const char* localeID)
     
     if (U_SUCCESS(err))
     {
-        UResourceBundle *localeID = ures_getByKey(bundle, _kLocaleID, NULL, &err);
+        UResourceBundle *resLocaleID = ures_getByKey(bundle, _kLocaleID, NULL, &err);
         if (U_SUCCESS(err))
         {
-            result = ures_getInt(localeID, &err);
+            result = ures_getInt(resLocaleID, &err);
             if (U_FAILURE(err))
             {
                 result = 0;
             }
-            ures_close(localeID);
+            ures_close(resLocaleID);
         }
         ures_close(bundle);
     }
