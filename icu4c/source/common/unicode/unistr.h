@@ -3952,18 +3952,6 @@ UnicodeString::insert(int32_t start,
 
 
 inline UnicodeString& 
-UnicodeString::remove(int32_t start, 
-             int32_t _length)
-{
-  if(start <= 0 && _length == INT32_MAX) {
-    // remove(guaranteed everything) of a bogus string makes the string empty and non-bogus
-    return remove();
-  } else {
-    return doReplace(start, _length, NULL, 0, 0);
-  }
-}
-
-inline UnicodeString& 
 UnicodeString::remove()
 {
   // remove() of a bogus string makes the string empty and non-bogus
@@ -3973,6 +3961,18 @@ UnicodeString::remove()
     fLength = 0;
   }
   return *this;
+}
+
+inline UnicodeString& 
+UnicodeString::remove(int32_t start, 
+             int32_t _length)
+{
+  if(start <= 0 && _length == INT32_MAX) {
+    // remove(guaranteed everything) of a bogus string makes the string empty and non-bogus
+    return remove();
+  } else {
+    return doReplace(start, _length, NULL, 0, 0);
+  }
 }
 
 inline UnicodeString& 
