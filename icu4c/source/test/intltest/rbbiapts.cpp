@@ -339,6 +339,8 @@ void RBBIAPITest::TestFirstNextFollowing()
 
     status=U_ZERO_ERROR;
     testString="Hello! how are you? I'am fine. Thankyou. How are you doing? This\n costs $20,00,000.";
+    //          0123456789012345678901234567890123456789012345678901234567890123 45678901234567890123456789
+    //          0         1         2         3         4         5         6          7         8
     RuleBasedBreakIterator* sentIter1=(RuleBasedBreakIterator*)RuleBasedBreakIterator::createSentenceInstance(Locale::getDefault(), status);
     if(U_FAILURE(status))
         errln("FAIL : in construction");
@@ -357,10 +359,10 @@ void RBBIAPITest::TestFirstNextFollowing()
         q=sentIter1->next(-2);
         doTest(testString, p, q, 7, "how are you? I'am fine. ");
         p=q;
-        q=sentIter1->next(3);
+        q=sentIter1->next(4);
         doTest(testString, p, q, 60, "how are you? I'am fine. Thankyou. How are you doing? ");
         p=q; 
-        q=sentIter1->next();
+        q=sentIter1->next(2);
         doTest(testString, p, q, 83, "This\n costs $20,00,000.");
         q=sentIter1->following(1);
         doTest(testString, 1, q, 7, "ello! ");
@@ -511,12 +513,13 @@ void RBBIAPITest::TestLastPreviousPreceding()
         if(p != testString.length() )
             errln((UnicodeString)"ERROR: last() returned" + p + (UnicodeString)"instead of " + testString.length());
         q=sentIter1->previous();
+        q=sentIter1->previous();
         doTest(testString, p, q, 60, "This\n costs $20,00,000.");
         p=q;
         q=sentIter1->previous();
-        doTest(testString, p, q, 31, "Thankyou. How are you doing? ");
-        // q=sentIter1->preceding(40);
-        // doTest(testString, 40, q, 31, "Thankyou.");
+        doTest(testString, p, q, 41, "How are you doing? ");
+        q=sentIter1->preceding(40);
+        doTest(testString, 40, q, 31, "Thankyou.");
         q=sentIter1->preceding(25);
         doTest(testString, 25, q, 20, "I'am "); 
         sentIter1->first();
