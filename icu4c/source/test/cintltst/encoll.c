@@ -287,7 +287,7 @@ void doTest(UCollator* myCollation, const UChar source[], const UChar target[], 
 void TestTertiary( )
 {
     int32_t testMoreSize;
-    UCollationResult expected;
+    UCollationResult expected=UCOL_EQUAL;
     int32_t i,j;
     UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("en_US", &status);
@@ -347,7 +347,7 @@ void TestPrimary()
 
 void TestSecondary()
 {
-    UCollationResult expected;
+    UCollationResult expected=UCOL_EQUAL;
     int32_t i,j, testAcuteSize;
     UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("en_US", &status);

@@ -187,7 +187,7 @@ void TestTertiary( )
 void TestSecondary()
 {
     int32_t i,j, testAcuteSize;
-    UCollationResult expected;
+    UCollationResult expected=UCOL_EQUAL;
     UErrorCode status = U_ZERO_ERROR;
     myCollation = ucol_open("fr_FR", &status);
     if(U_FAILURE(status)){
