@@ -409,7 +409,7 @@ dnl On HP/UX, main() functions compiled in C don't invoke
 dnl static constructors in C++ libs.  Hack around that here
 dnl by renaming some .c files to .cpp
 case "${host}" in
-	*-*-hpux10*) 	
+	*-*-hpux*) 	
 		for file in samples/date/date \
 		  samples/cal/cal test/cintltst/cintltst \
 		  tools/makeconv/makeconv tools/genrb/genrb \
