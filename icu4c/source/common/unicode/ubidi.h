@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2004, International Business Machines
+*   Copyright (C) 1999-2005, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -387,11 +387,11 @@ typedef enum UBiDiDirection UBiDiDirection;
 /**
  * Forward declaration of the <code>UBiDi</code> structure for the declaration of
  * the API functions. Its fields are implementation-specific.<p>
- * This structure holds information about a paragraph of text
- * with BiDi-algorithm-related details, or about one line of
+ * This structure holds information about a paragraph (or multiple paragraphs)
+ * of text with BiDi-algorithm-related details, or about one line of
  * such a paragraph.<p>
- * Reordering can be done on a line, or on a paragraph which is
- * then interpreted as one single line.
+ * Reordering can be done on a line, or on one or more paragraphs which are
+ * then interpreted each as one single line.
  * @stable ICU 2.0
  */
 struct UBiDi;
@@ -402,8 +402,9 @@ typedef struct UBiDi UBiDi;
 /**
  * Allocate a <code>UBiDi</code> structure.
  * Such an object is initially empty. It is assigned
- * the BiDi properties of a paragraph by <code>ubidi_setPara()</code>
- * or the BiDi properties of a line of a paragraph by
+ * the BiDi properties of a piece of text containing one or more paragraphs
+ * by <code>ubidi_setPara()</code>
+ * or the BiDi properties of a line within a paragraph by
  * <code>ubidi_setLine()</code>.<p>
  * This object can be reused for as long as it is not deallocated
  * by calling <code>ubidi_close()</code>.<p>
@@ -432,7 +433,7 @@ ubidi_open(void);
  * and the internal structures that are associated with it will be allocated
  * on demand, just like with <code>ubidi_open()</code>.
  *
- * @param maxLength is the maximum paragraph or line length that internal memory
+ * @param maxLength is the maximum text or line length that internal memory
  *        will be preallocated for. An attempt to associate this object with a
  *        longer text will fail, unless this value is 0, which leaves the allocation
  *        up to the implementation.
@@ -542,14 +543,14 @@ ubidi_isInverse(UBiDi *pBiDi);
  *
  * @param pBiDi is a <code>UBiDi</code> object.
  *
- * @param isOrderParagraphLTR specifies whether paragraph separators (B) must
+ * @param orderParagraphsLTR specifies whether paragraph separators (B) must
  * receive level 0, so that successive paragraphs progress from left to right.
  *
  * @see ubidi_setPara
  * @stable ICU 3.4
  */
 U_STABLE void U_EXPORT2
-ubidi_orderParagraphsLTR(UBiDi *pBiDi, UBool isOrderParagraphLTR);
+ubidi_orderParagraphsLTR(UBiDi *pBiDi, UBool orderParagraphsLTR);
 
 /**
  * Is this BiDi object set to allocate level 0 to block separators so that
@@ -559,7 +560,7 @@ ubidi_orderParagraphsLTR(UBiDi *pBiDi, UBool isOrderParagraphLTR);
  * @return TRUE if the BiDi object is set to allocate level 0 to block
  *         separators.
  *
- * @see ubidi_setMultiPara
+ * @see ubidi_orderParagraphsLTR
  * @stable ICU 3.4
  */
 U_STABLE UBool U_EXPORT2
@@ -571,11 +572,11 @@ ubidi_isOrderParagraphsLTR(UBiDi *pBiDi);
  * version 13,
  * also described in The Unicode Standard, Version 4.0 .<p>
  *
- * This function takes a single plain text paragraph with or without
- * externally specified embedding levels from <i>styled</i> text
- * and computes the left-right-directionality of each character.<p>
+ * This function takes a piece of plain text containing one or more paragraphs,
+ * with or without externally specified embedding levels from <i>styled</i>
+ * text and computes the left-right-directionality of each character.<p>
  *
- * If the entire paragraph consists of text of only one direction, then
+ * If the entire text is all of the same directionality, then
  * the function may not perform all the steps described by the algorithm,
  * i.e., some levels may not be the same as if all steps were performed.
  * This is not relevant for unidirectional text.<br>
@@ -598,9 +599,6 @@ ubidi_isOrderParagraphsLTR(UBiDi *pBiDi);
  *
  * @param text is a pointer to the text that the
  *        BiDi algorithm will be performed on
- *        (step (P1) of the algorithm must be performed externally if paraLevel
- *        is specified as <code>UBIDI_DEFAULT_LTR</code> or
- *        <code>UBIDI_DEFAULT_RTL</code>).
  *        <strong>The text must be (at least) <code>length</code> long.</strong>
  *        This pointer is stored in the UBiDi object and can be retrieved
  *        with <code>ubidi_getText()</code>.
@@ -608,14 +606,15 @@ ubidi_isOrderParagraphsLTR(UBiDi *pBiDi);
  * @param length is the length of the text; if <code>length==-1</code> then
  *        the text must be zero-terminated.
  *
- * @param paraLevel specifies the default level for the paragraph;
+ * @param paraLevel specifies the default level for the text;
  *        it is typically 0 (LTR) or 1 (RTL).
  *        If the function shall determine the paragraph level from the text,
  *        then <code>paraLevel</code> can be set to
  *        either <code>UBIDI_DEFAULT_LTR</code>
- *        or <code>UBIDI_DEFAULT_RTL</code>;
- *        if there is no strongly typed character, then
- *        the desired default is used (0 for LTR or 1 for RTL).
+ *        or <code>UBIDI_DEFAULT_RTL</code>; if the text contains multiple
+ *        paragraphs, the paragraph level shall be determined separately for
+ *        each paragraph; if a paragraph does not include any strongly typed
+ *        character, then the desired default is used (0 for LTR or 1 for RTL).
  *        Any other value between 0 and <code>UBIDI_MAX_EXPLICIT_LEVEL</code> is also valid,
  *        with odd levels indicating RTL.
  *
@@ -655,13 +654,13 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
  * contain the reordering information, especially the resolved levels,
  * for all the characters in a line of text. This line of text is
  * specified by referring to a <code>UBiDi</code> object representing
- * this information for a paragraph of text, and by specifying
- * a range of indexes in this paragraph.<p>
+ * this information for a piece of text containing one or more paragraphs,
+ * and by specifying a range of indexes in this text.<p>
  * In the new line object, the indexes will range from 0 to <code>limit-start-1</code>.<p>
  *
  * This is used after calling <code>ubidi_setPara()</code>
- * for a paragraph, and after line-breaking on that paragraph.
- * It is not necessary if the paragraph is treated as a single line.<p>
+ * for a piece of text, and after line-breaking on that text.
+ * It is not necessary if each paragraph is treated as a single line.<p>
  *
  * After line-breaking, rules (L1) and (L2) for the treatment of
  * trailing WS and for reordering are performed on
@@ -680,13 +679,15 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
  * @param pParaBiDi is the parent paragraph object. It must have been set
  * by a successful call to ubidi_setPara.
  *
- * @param start is the line's first index into the paragraph text.
+ * @param start is the line's first index into the text.
  *
- * @param limit is just behind the line's last index into the paragraph text
+ * @param limit is just behind the line's last index into the text
  *        (its last index +1).<br>
- *        It must be <code>0<=start<=limit<=</code>paragraph length.
+ *        It must be <code>0<=start<=limit<=</code>containing paragraph limit.
+ *        If the specified line crosses a paragraph boundary, the function
+ *        will terminate with error code U_ILLEGAL_ARGUMENT_ERROR.
  *
- * @param pLineBiDi is the object that will now represent a line of the paragraph.
+ * @param pLineBiDi is the object that will now represent a line of the text.
  *
  * @param pErrorCode must be a valid pointer to an error code value.
  *
@@ -769,7 +770,7 @@ U_STABLE int32_t U_EXPORT2
 ubidi_countParagraphs(UBiDi *pBiDi);
 
 /**
- * Get a paragraph, given a position within the paragraph.
+ * Get a paragraph, given a position within the text.
  * This function returns information about a paragraph.<p>
  *
  * @param pBiDi is the paragraph or line <code>UBiDi</code> object.
@@ -777,8 +778,8 @@ ubidi_countParagraphs(UBiDi *pBiDi);
  * @param charIndex is the index of a character within the text, in the
  *        range <code>[0..ubidi_getLength(pBiDi)-1]</code>.
  *
- * @param pParaStart will receive the index of the first character in
- *                   the paragraph.
+ * @param pParaStart will receive the index of the first character of the
+ *        paragraph in the text.
  *        This pointer can be <code>NULL</code> if this
  *        value is not necessary.
  *
@@ -813,8 +814,8 @@ ubidi_getParagraph(const UBiDi *pBiDi, int32_t charIndex, int32_t *pParaStart,
  * @param paraIndex is the number of the paragraph, in the
  *        range <code>[0..ubidi_countParagraphs(pBiDi)-1]</code>.
  *
- * @param pParaStart will receive the index of the first character in
- *                   the paragraph.
+ * @param pParaStart will receive the index of the first character of the
+ *        paragraph in the text.
  *        This pointer can be <code>NULL</code> if this
  *        value is not necessary.
  *
@@ -1180,9 +1181,9 @@ ubidi_invertMap(const int32_t *srcMap, int32_t *destMap, int32_t length);
 
 /**
  * Take a <code>UBiDi</code> object containing the reordering
- * information for one paragraph or line of text as set by
- * <code>ubidi_setPara()</code> or <code>ubidi_setLine()</code> and
- * write a reordered string to the destination buffer.
+ * information for a piece of text (one or more paragraphs) set by
+ * <code>ubidi_setPara()</code> or for a line of text set by <code>ubidi_setLine()</code>
+ * and write a reordered string to the destination buffer.
  *
  * This function preserves the integrity of characters with multiple
  * code units and (optionally) modifier letters.
