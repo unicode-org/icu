@@ -24,6 +24,7 @@
 #include "uparse.h"
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
+#include "ustr_imp.h"
 
 U_CAPI const char * U_EXPORT2
 u_skipWhitespace(const char *s) {
@@ -374,4 +375,24 @@ u_strTrailingWhiteSpaceStart(const UChar *s, int32_t length) {
   }
 
   return s+toReturn;
+}
+
+U_CAPI int32_t U_EXPORT2
+u_parseUTF8(const char *source, int32_t sLen, char *dest, int32_t destCapacity, UErrorCode *status) {
+  const char *read = source;
+  int32_t i = 0;
+  uint8_t value = 0;
+  if(sLen == -1) {
+    sLen = strlen(source);
+  }
+
+  while(read < source+sLen) {
+    sscanf(read, "%2x", &value);
+    if(i < destCapacity) {
+      dest[i] = value;
+    }
+    i++;
+    read += 2;
+  }
+  return u_terminateChars(dest, destCapacity, i, status);
 }
