@@ -18,6 +18,7 @@
 #include "unicode/uniset.h"
 #include "unicode/uchar.h"
 #include "unicode/ustring.h"
+#include "unicode/rbbi.h"
 #include "uassert.h"
 #include "cmemory.h"
 #include "uvector.h"
@@ -42,6 +43,7 @@ RegexMatcher::RegexMatcher(const RegexPattern *pat)  {
     fDeferredStatus    = U_ZERO_ERROR;
     fStack             = new UVector32(fDeferredStatus); 
     fData              = fSmallData;
+    fWordBreakItr      = NULL;
     if (pat==NULL) {
         fDeferredStatus = U_ILLEGAL_ARGUMENT_ERROR;
         return;
@@ -67,6 +69,7 @@ RegexMatcher::RegexMatcher(const UnicodeString &regexp, const UnicodeString &inp
     fDeferredStatus    = U_ZERO_ERROR;
     fStack             = new UVector32(status); 
     fData              = fSmallData;
+    fWordBreakItr      = NULL;
     if (U_FAILURE(status)) {
         return;
     }
@@ -89,6 +92,7 @@ RegexMatcher::RegexMatcher(const UnicodeString &regexp,
     fData              = fSmallData;
     fPatternOwned      = RegexPattern::compile(regexp, flags, pe, status);
     fPattern           = fPatternOwned;
+    fWordBreakItr      = NULL;
     if (U_FAILURE(status)) {
         return;
     }
@@ -115,6 +119,7 @@ RegexMatcher::~RegexMatcher() {
         fPatternOwned = NULL;
         fPattern = NULL;
     }
+    delete fWordBreakItr;
 }
 
 
@@ -674,6 +679,9 @@ RegexMatcher &RegexMatcher::reset() {
 RegexMatcher &RegexMatcher::reset(const UnicodeString &input) {
     fInput          = &input;
     reset();
+    if (fWordBreakItr != NULL) {
+        fWordBreakItr->setText(input);
+    }
     return *this;
 }
 
@@ -893,9 +901,6 @@ REStackFrame *RegexMatcher::resetStack() {
 //                               opposite in membership in \w set
 //
 //          parameters:   pos   - the current position in the input buffer
-//                        start - the position where the match operation started.
-//                                don't backup before this position when looking back
-//                                for a preceding base char.
 //
 //--------------------------------------------------------------------------------
 UBool RegexMatcher::isWordBoundary(int32_t pos) {
@@ -932,6 +937,46 @@ UBool RegexMatcher::isWordBoundary(int32_t pos) {
     }
     isBoundary = cIsWord ^ prevCIsWord;
     return isBoundary;
+}
+
+//--------------------------------------------------------------------------------
+//
+//   isUWordBoundary 
+//
+//         Test for a word boundary using RBBI word break.
+//
+//          parameters:   pos   - the current position in the input buffer
+//
+//--------------------------------------------------------------------------------
+UBool RegexMatcher::isUWordBoundary(int32_t pos) {
+    UErrorCode  status=U_ZERO_ERROR;  
+    
+    // If we haven't yet created a break iterator for this matcher, do it now.
+    if (fWordBreakItr == NULL) {
+        fWordBreakItr = 
+            (RuleBasedBreakIterator *)BreakIterator::createWordInstance(Locale::getEnglish(), status);
+        if (U_FAILURE(status)) {
+            // TODO:  reliable error reporting for BI failures.
+            return FALSE;
+        }
+        fWordBreakItr->setText(*fInput);
+    }
+
+    // If we are not positioned at an RBBI style boundary, \b isn't at a boundary either.
+    if (fWordBreakItr->isBoundary(pos) == FALSE) {
+        return FALSE;
+    }
+
+    // Discard RBBI boundaries where the "words" on both sides have the break
+    //   status of UBRK_WORD_NONE.  Spaces and puncutation, for example.
+    int32_t  prevStatus = fWordBreakItr->getRuleStatus();
+    if (prevStatus >= UBRK_WORD_NUMBER && prevStatus < UBRK_WORD_IDEO_LIMIT) {
+        return TRUE;
+    }
+    fWordBreakItr->next();
+    int32_t  nextStatus = fWordBreakItr->getRuleStatus();
+    UBool    returnVal  = (nextStatus >= UBRK_WORD_NUMBER && nextStatus < UBRK_WORD_IDEO_LIMIT);
+    return   returnVal;
 }
 
 //--------------------------------------------------------------------------------
@@ -1236,6 +1281,17 @@ void RegexMatcher::MatchAt(int32_t startIdx, UErrorCode &status) {
         case URX_BACKSLASH_B:          // Test for word boundaries
             {
                 UBool success = isWordBoundary(fp->fInputIdx);
+                success ^= (opValue != 0);     // flip sense for \B
+                if (!success) {
+                    fp = (REStackFrame *)fStack->popFrame(frameSize);
+                }
+            }
+            break;
+
+
+        case URX_BACKSLASH_BU:          // Test for word boundaries, Unicode-style
+            {
+                UBool success = isUWordBoundary(fp->fInputIdx);
                 success ^= (opValue != 0);     // flip sense for \B
                 if (!success) {
                     fp = (REStackFrame *)fStack->popFrame(frameSize);
