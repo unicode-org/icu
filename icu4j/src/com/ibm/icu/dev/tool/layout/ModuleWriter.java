@@ -7,8 +7,8 @@
  * Created on Dec 3, 2003
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/layout/ModuleWriter.java,v $
- * $Date: 2003/12/17 04:54:41 $
- * $Revision: 1.6 $
+ * $Date: 2004/03/26 17:57:24 $
+ * $Revision: 1.7 $
  * 
  *******************************************************************************
  */
@@ -92,10 +92,6 @@ public class ModuleWriter
             " *\n" +
             " * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS\n" +
             " * YOU REALLY KNOW WHAT YOU'RE DOING.\n" +
-            " *\n" +
-            " * $Source" + "$\n" +
-            " * $Date" + "$\n" +
-            " * $Revision" + "$\n" +
             " */\n" +
             "\n";
 
