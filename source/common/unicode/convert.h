@@ -15,6 +15,15 @@
 
 #include "unicode/unistr.h"
 #include "unicode/ucnv.h"
+/**
+ * UnicodeConverter is a C++ wrapper class for UConverter.
+ * You need one UnicodeConverter object in place of one UConverter object.
+ * For details on the API and implementation of the
+ * codepage converter iterface see ucnv.h.
+ *
+ * @see UConverter
+ * @stable
+ */
 
 class U_COMMON_API UnicodeConverter
 {

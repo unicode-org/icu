@@ -13,7 +13,10 @@
  */
 
 /**
- * @name Character Conversion C API
+ * \file 
+ * \brief Description of callback C API for ICU's codeset conversion library
+ *
+ * <h2> Callback API for ICU's codeset conversion libray </h2>
  *
  */
 

@@ -22,6 +22,12 @@
 /* ### TBD: implement letter shaping and remove comment about it missing (jitterbug 471) */
 
 /**
+ * \file
+ * \brief Description of Arabic shaping C API
+ * 
+ */
+
+/**
  * Shape Arabic text on a character basis.
  *
  * <p>This function performs basic operations for "shaping" Arabic text. It is most

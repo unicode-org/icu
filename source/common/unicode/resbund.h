@@ -70,10 +70,12 @@ struct UHashtable;
  * <P>
  * The resource bundle file is a text (ASCII or Unicode) file with the format:
  * <pre>
- * .   locale {
- * .      tag1 {...}
- * .      tag2 {...}
- * .   }
+ * \code
+ *    locale {
+ *       tag1 {...}
+ *       tag2 {...}
+ *    }
+ * \endcode
  * </pre>
  * The tags are used to retrieve the data later. You may not have multiple instances of
  * the same tag.
@@ -91,31 +93,39 @@ struct UHashtable;
  * <P>
  * Solitary strings have the format:
  * <pre>
- * .   Tag { Data }
+ * \code
+ *    Tag { Data }
+ * \endcode
  * </pre>
  * This is indistinguishable from a comma-delimited list with only one element, and in
  * fact may be retrieved as such (as an array, or as element 0 or an array).
  * <P>
  * Comma-delimited lists have the format:
  * <pre>
- * .   Tag { Data, Data, Data }
+ * \code
+ *    Tag { Data, Data, Data }
+ * \endcode
  * </pre>
  * Parsing is lenient; a final string, after the last element, is allowed.
  * <P>
  * Tagged lists have the format:
  * <pre>
- * .   Tag { Subtag { Data } Subtag {Data} }
+ * \code
+ *    Tag { Subtag { Data } Subtag {Data} }
+ * \endcode
  * </pre>
  * Data is retrieved by specifying the subtag.
  * <P>
  * Two-dimensional arrays have the format:
  * <pre>
- * .   TwoD {
- * .       { r1c1, r1c2, ..., r1cm },
- * .       { r2c1, r2c2, ..., r2cm },
- * .       ...
- * .       { rnc1, rnc2, ..., rncm }
- * .   }
+ * \code
+ *    TwoD {
+ *        { r1c1, r1c2, ..., r1cm },
+ *        { r2c1, r2c2, ..., r2cm },
+ *        ...
+ *        { rnc1, rnc2, ..., rncm }
+ *    }
+ * \endcode
  * </pre>
  * where n is the number of rows, and m is the number of columns. Parsing is lenient (as
  * in other data types). A final comma is always allowed after the last element; either
@@ -124,25 +134,31 @@ struct UHashtable;
  * present, there can only be one comma, no more.) It is possible to have zero columns,
  * as follows:
  * <pre>
- * .   Odd { {} {} {} } // 3 x 0 array
+ * \code
+ *    Odd { {} {} {} } // 3 x 0 array
+ * \endcode
  * </pre>
  * But it is impossible to have zero rows. The smallest array is thus a 1 x 0 array,
  * which looks like this:
  * <pre>
- * .   Smallest { {} } // 1 x 0 array
+ *  \code
+ *    Smallest { {} } // 1 x 0 array
+ * \endcode
  * </pre>
  * The array must be strictly rectangular; that is, each row must have the same number
  * of elements.
  * <P>
  * This is an example for using a possible custom resource:
  * <pre>
- * .    Locale currentLocale;
- * .    UErrorCode success = U_ZERO_ERROR;
- * .    ResourceBundle myResources("MyResources", currentLocale, success );
- * .
- * .    UnicodeString button1Title, button2Title;
- * .    myResources.getString("OkKey", button1Title, success );
- * .    myResources.getString("CancelKey", button2Title, success );
+ * \code
+ *     Locale currentLocale;
+ *     UErrorCode success = U_ZERO_ERROR;
+ *     ResourceBundle myResources("MyResources", currentLocale, success );
+ * 
+ *     UnicodeString button1Title, button2Title;
+ *     myResources.getString("OkKey", button1Title, success );
+ *     myResources.getString("CancelKey", button2Title, success );
+ * \endcode
  * </pre>
  * @draft
  */

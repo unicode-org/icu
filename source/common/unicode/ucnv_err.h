@@ -6,7 +6,13 @@
  *
  *
  *   ucnv_err.h:
- *   defines error behaviour functions called by T_UConverter_{from,to}Unicode
+ */
+/**
+ * \file
+ * \brief Description of UConverter error behavior C API
+ *
+ *  <h2> Error Behaviour Fnctions </h2>
+ *  Defines error behaviour functions called by T_UConverter_{from,to}Unicode
  *
  *   These Functions, although public, should NEVER be called directly, they should be used as parameters to
  *   the T_UConverter_setMissing{Char,Unicode}Action API, to set the behaviour of a converter
@@ -14,16 +20,16 @@
  *
  *   usage example:
  *
- *        ...
- *        UErrorCode err = U_ZERO_ERROR;
- *        UConverter* myConverter = T_UConverter_create("ibm-949", &err);
+ *  \code
+ *    UErrorCode err = U_ZERO_ERROR;
+ *    UConverter* myConverter = T_UConverter_create("ibm-949", &err);
  *
- *        if (U_SUCCESS(err))
- *        {
+ *    if (U_SUCCESS(err))
+ *    {
  *       T_UConverter_setMissingUnicodeAction(myConverter, (MissingUnicodeAction)UCNV_FROM_U_CALLBACK_STOP, &err);
  *       T_UConverter_setMissingCharAction(myConverter, (MissingCharAction)UCNV_TO_U_CALLBACK_SUBSTITUTE, &err);
- *        }
- *        ...
+ *    }
+ *  \endcode
  *
  *   The code above tells "myConverter" to stop when it encounters a ILLEGAL/TRUNCATED/INVALID sequences when it is used to
  *   convert from Unicode -> Codepage.

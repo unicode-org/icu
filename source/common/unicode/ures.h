@@ -26,7 +26,10 @@
 #include "unicode/uloc.h"
 
 /**
- * @name ResourceBundle C API
+ * \file
+ * \brief Description of ResourceBundle C API
+ *
+ * <h2>ResourceBundle C API</h2>
  *
  * C API representing a collection of resource information pertaining to a given
  * locale. A resource bundle provides a way of accessing locale- specific information in
@@ -35,10 +38,12 @@
  * <P>
  * The resource bundle file is a text (ASCII or Unicode) file with the format:
  * <pre>
- * .   locale {
- * .      tag1 {...}
- * .      tag2 {...}
- * .   }
+ * \code
+ *    locale {
+ *       tag1 {...}
+ *       tag2 {...}
+ *    }
+ * \endcode
  * </pre>
  * The tags are used to retrieve the data later. You may not have multiple instances of
  * the same tag.
@@ -56,31 +61,39 @@
  * <P>
  * Solitary strings have the format:
  * <pre>
- * .   Tag { Data }
+ * \code
+ *    Tag { Data }
+ * \endcode
  * </pre>
  * This is indistinguishable from a comma-delimited list with only one element, and in
  * fact may be retrieved as such (as an array, or as element 0 or an array).
  * <P>
  * Comma-delimited lists have the format:
  * <pre>
- * .   Tag { Data, Data, Data }
+ * \code
+ *    Tag { Data, Data, Data }
+ * \endcode
  * </pre>
  * Parsing is lenient; a final string, after the last element, is allowed.
  * <P>
  * Tagged lists have the format:
  * <pre>
- * .   Tag { Subtag { Data } Subtag {Data} }
+ * \code
+ *    Tag { Subtag { Data } Subtag {Data} }
+ * \endcode
  * </pre>
  * Data is retrieved by specifying the subtag.
  * <P>
  * Two-dimensional arrays have the format:
  * <pre>
- * .   TwoD {
- * .       { r1c1, r1c2, ..., r1cm },
- * .       { r2c1, r2c2, ..., r2cm },
- * .       ...
- * .       { rnc1, rnc2, ..., rncm }
- * .   }
+ * \code
+ *    TwoD {
+ *        { r1c1, r1c2, ..., r1cm },
+ *        { r2c1, r2c2, ..., r2cm },
+ *        ...
+ *        { rnc1, rnc2, ..., rncm }
+ *    }
+ * \endcode
  * </pre>
  * where n is the number of rows, and m is the number of columns. Parsing is lenient (as
  * in other data types). A final comma is always allowed after the last element; either
@@ -89,12 +102,16 @@
  * present, there can only be one comma, no more.) It is possible to have zero columns,
  * as follows:
  * <pre>
- * .   Odd { {} {} {} } // 3 x 0 array
+ * \code
+ *    Odd { {} {} {} } // 3 x 0 array
+ * \endcode
  * </pre>
  * But it is impossible to have zero rows. The smallest array is thus a 1 x 0 array,
  * which looks like this:
  * <pre>
- * .   Smallest { {} } // 1 x 0 array
+ * \code
+ *   Smallest { {} } // 1 x 0 array
+ * \endcode
  * </pre>
  * The array must be strictly rectangular; that is, each row must have the same number
  * of elements.
@@ -119,8 +136,10 @@
  * To use data in resource bundles, following steps are needed:<P>
  * 1) opening a bundle for a particular locale:
  * <pre>
+ * \code
  *      UErrorCode status = U_ZERO_ERROR;
  *      UResourceBundle* resB = ures_open("/datadir/resources/GUI", "de_AT_EURO", &status);
+ * \endcode
  * </pre>
  * Status allows, besides testing for plain error, to see whether fallback occured. There
  * are two extra non error values for status after this operation: U_USING_FALLBACK_ERROR,
@@ -132,13 +151,15 @@
  *
  * This is an example for using a possible custom resource:
  * <pre>
- * .    const char *currentLocale;
- * .    UErrorCode success = U_ZERO_ERROR;
- * .    UResourceBundle* myResources=ures_open("MyResources", currentLocale, &success );
- * .
- * .    UChar *button1Title, *button2Title;
- * .    button1Title= ures_get(myResources, "OkKey", &success );
- * .    button2Title= ures_get(myResources, "CancelKey", &success );
+ * \code
+ *     const char *currentLocale;
+ *     UErrorCode success = U_ZERO_ERROR;
+ *     UResourceBundle* myResources=ures_open("MyResources", currentLocale, &success );
+ * 
+ *     UChar *button1Title, *button2Title;
+ *     button1Title= ures_get(myResources, "OkKey", &success );
+ *     button2Title= ures_get(myResources, "CancelKey", &success );
+ * \endcode
  * </pre>
  */
 

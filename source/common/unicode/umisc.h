@@ -17,8 +17,13 @@
 
 #include "unicode/utypes.h"
 
-/* This file contains miscellaneous definitions for the C APIs. */
-
+/**
+ * \file
+ * \brief Description of misc definitions for C API
+ *
+ *  This file contains miscellaneous definitions for the C APIs. 
+ */
+ 
 /** A struct representing a range of text containing a specific field 
  *  @stable
  */

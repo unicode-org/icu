@@ -12,6 +12,11 @@
 *
 *   created on: 1999sep09
 *   created by: Markus W. Scherer
+*/
+
+/**
+* \file
+* \brief Description of UChar and UChar32 data types
 *
 *   This file defines the UChar and UChar32 data types for Unicode code units
 *   and code points, as well as macros for efficiently getting code points
