@@ -1536,6 +1536,18 @@ void TransliteratorTest::TestToRules(void) {
         RBT,
         "$a=[:Zs:]; $b=[x$a]; $b{a} > A;",
         "[x[:Zs:]]{a} > A;",
+
+        RBT,
+        "$accentMinus = [ [\\u0300-\\u0345] & [:M:] - [\\u0338]] ;"
+        "$macron = \\u0304 ;"
+        "$evowel = [aeiouyAEIOUY] ;"
+        "$iotasub = \\u0345 ;" 
+        "($evowel $macron $accentMinus *) i > | $1 $iotasub ;",
+        "([AEIOUYaeiouy]\\u0304[[\\u0300-\\u0345]&[:M:]-[\\u0338]]*)i > | $1 \\u0345;",
+
+        RBT,
+        "([AEIOUYaeiouy]\\u0304[[:M:]-[\\u0304\\u0345]]*)i > | $1 \\u0345;",
+        "([AEIOUYaeiouy]\\u0304[[:M:]-[\\u0304\\u0345]]*)i > | $1 \\u0345;",
     };
     static const int32_t DATA_length = (int32_t)(sizeof(DATA) / sizeof(DATA[0]));
 
