@@ -499,6 +499,10 @@ SOURCE=.\ustrcase.c
 # End Source File
 # Begin Source File
 
+SOURCE=.\ustrenum.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\ustrfmt.c
 # End Source File
 # Begin Source File
