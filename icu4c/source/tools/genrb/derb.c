@@ -67,10 +67,12 @@ static UOption options[]={
 /* 7 */    UOPTION_SOURCEDIR,
 /* 8 */    { "bom", NULL, NULL, NULL, 0, UOPT_NO_ARG, 0 },
 /* 9 */    UOPTION_ICUDATADIR,
-/* 10 */   UOPTION_VERSION
+/* 10 */   UOPTION_VERSION,
+/* 11 */   { "suppressAliases", NULL, NULL, NULL, 'A', UOPT_NO_ARG, 0 }
 };
 
 static UBool verbose = FALSE;
+static UBool suppressAliases = FALSE;
 
 extern int
 main(int argc, char* argv[]) {
@@ -119,6 +121,7 @@ main(int argc, char* argv[]) {
             " [ -t, --truncate [ size ] ]"
             " [ -s, --sourcedir source ] [ -d, --destdir destination ]"
             " [ -i, --icudatadir directory ] [ -c, --to-stdout ]"
+            " [ -A, --suppressAliases]"
             " bundle ...\n", argc < 0 ? 'u' : 'U',
             pname);
         return argc<0 ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
@@ -168,6 +171,10 @@ main(int argc, char* argv[]) {
 
     if (options[9].doesOccur) {
         u_setDataDirectory(options[9].value);
+    }
+
+    if (options[11].doesOccur) {
+      suppressAliases = TRUE;
     }
 
     converter = ucnv_open(encoding, &status);
@@ -455,6 +462,70 @@ derb_getString(const ResourceData *pResData, const Resource res, int32_t *pLengt
     }
 }
 
+static const char *
+derb_getTableKey(const Resource *pRoot, const Resource res, uint16_t indexS) {
+    uint16_t *p=(uint16_t *)RES_GET_POINTER(pRoot, res);
+    if(indexS<*p) {
+        return ((const char *)(pRoot)+(p[indexS+1])); /*RES_GET_KEY(pRoot, p[indexS+1]);*/
+    } else {
+        return NULL;    /* indexS>itemCount */
+    }
+}
+
+static Resource
+derb_getArrayItem(Resource *pRoot, Resource res, int32_t indexR) {
+    int32_t *p=(int32_t *)RES_GET_POINTER(pRoot, res);
+    if(indexR<*p) {
+        return ((Resource *)(p))[1+indexR];
+    } else {
+        return RES_BOGUS;   /* indexR>itemCount */
+    }
+}
+
+static Resource
+derb_getTableItem(const Resource *pRoot, const Resource res, uint16_t indexR) {
+    uint16_t *p=(uint16_t *)RES_GET_POINTER(pRoot, res);
+    uint16_t count=*p;
+    if(indexR<count) {
+        return ((Resource *)(p+1+count+(~count&1)))[indexR];
+    } else {
+        return RES_BOGUS;   /* indexR>itemCount */
+    }
+}
+
+
+static void printOutAlias(FILE *out,  UConverter *converter, UResourceBundle *parent, Resource r, const char *key, int32_t indent, const char *pname, UErrorCode *status) {
+    static const UChar cr[] = { '\n' };
+    int32_t len = 0;
+    const UChar* thestr = derb_getString(&(parent->fResData), r, &len); 
+    UChar *string = quotedString(thestr);
+    if(trunc && len > truncsize) {
+        char msg[128];
+        printIndent(out, converter, indent);
+        sprintf(msg, "// WARNING: this resource, size %li is truncated to %li\n",
+            (long)len, (long)truncsize/2);
+        printCString(out, converter, msg, -1);
+        len = truncsize;
+    }
+    if(U_SUCCESS(*status)) {
+        static const UChar open[] = { 0x003A, 0x0061, 0x006C, 0x0069, 0x0061, 0x0073, 0x0020, 0x007B, 0x0020, 0x0022 }; /* ":alias { \"" */
+        static const UChar close[] = { 0x0022, 0x0020, 0x007D, 0x0020 }; /* "\" } " */
+        printIndent(out, converter, indent);
+        if(key != NULL) {
+            printCString(out, converter, key, -1);
+        }
+        printString(out, converter, open, (int32_t)(sizeof(open) / sizeof(*open)));
+        printString(out, converter, string, len);
+        printString(out, converter, close, (int32_t)(sizeof(close) / sizeof(*close)));
+        if(verbose) {
+            printCString(out, converter, " // ALIAS", -1);
+        }
+        printString(out, converter, cr, (int32_t)(sizeof(cr) / sizeof(*cr)));
+    } else {
+        reportError(pname, status, "getting binary value");
+    }
+}
+
 static void printOutBundle(FILE *out, UConverter *converter, UResourceBundle *resource, int32_t indent, const char *pname, UErrorCode *status)
 {
     static const UChar cr[] = { '\n' };
@@ -616,14 +687,39 @@ static void printOutBundle(FILE *out, UConverter *converter, UResourceBundle *re
             }
             printString(out, converter, cr, (int32_t)(sizeof(cr) / sizeof(*cr)));
 
-            while(U_SUCCESS(*status) && ures_hasNext(resource)) {
-                t = ures_getNextResource(resource, t, status);
+            if(suppressAliases == FALSE) {
+              while(U_SUCCESS(*status) && ures_hasNext(resource)) {
+                  t = ures_getNextResource(resource, t, status);
+                  if(U_SUCCESS(*status)) {
+                    printOutBundle(out, converter, t, indent+indentsize, pname, status);
+                  } else {
+                    reportError(pname, status, "While processing table");
+                    *status = U_ZERO_ERROR;
+                  }
+              }
+            } else { /* we have to use low level access to do this */
+              uint16_t i = 0;
+              Resource r = RES_BOGUS;
+              for(i = 0; i < ures_getSize(resource); i++) {
+                /* need to know if it's an alias */
+                if(ures_getType(resource) == RES_TABLE) {
+                  r = derb_getTableItem(resource->fResData.pRoot, resource->fRes, i);
+                  key = derb_getTableKey(resource->fResData.pRoot, resource->fRes, i);
+                } else {
+                  r = derb_getArrayItem(resource->fResData.pRoot, resource->fRes, i);
+                }
                 if(U_SUCCESS(*status)) {
-                  printOutBundle(out, converter, t, indent+indentsize, pname, status);
+                  if(RES_GET_TYPE(r) == RES_ALIAS) {
+                    printOutAlias(out, converter, resource, r, key, indent+indentsize, pname, status);
+                  } else {
+                    t = ures_getByIndex(resource, i, t, status);
+                    printOutBundle(out, converter, t, indent+indentsize, pname, status);
+                  }
                 } else {
                   reportError(pname, status, "While processing table");
                   *status = U_ZERO_ERROR;
                 }
+              }
             }
 
             printIndent(out, converter, indent);
@@ -631,40 +727,6 @@ static void printOutBundle(FILE *out, UConverter *converter, UResourceBundle *re
             ures_close(t);
         }
         break;
-    case RES_ALIAS :
-        {
-            int32_t len = 0;
-            const UChar* thestr = derb_getString(&(resource->fResData), resource->fRes, &len); 
-            /*ures_getString(resource, &len, status);*/
-                        UChar *string = quotedString(thestr);
-            if(trunc && len > truncsize) {
-                char msg[128];
-                printIndent(out, converter, indent);
-                sprintf(msg, "// WARNING: this resource, size %li is truncated to %li\n",
-                    (long)len, (long)truncsize/2);
-                printCString(out, converter, msg, -1);
-                len = truncsize;
-            }
-            if(U_SUCCESS(*status)) {
-                static const UChar open[] = { 0x003A, 0x0061, 0x006C, 0x0069, 0x0061, 0x0073, 0x0020, 0x007B, 0x0020 }; /* ":binary { " */
-                static const UChar close[] = { 0x0020, 0x007D, 0x0020 }; /* " } " */
-                printIndent(out, converter, indent);
-                if(key != NULL) {
-                    printCString(out, converter, key, -1);
-                }
-                printString(out, converter, open, (int32_t)(sizeof(open) / sizeof(*open)));
-                printString(out, converter, string, len);
-                printString(out, converter, close, (int32_t)(sizeof(close) / sizeof(*close)));
-                if(verbose) {
-                    printCString(out, converter, " // BINARY", -1);
-                }
-                printString(out, converter, cr, (int32_t)(sizeof(cr) / sizeof(*cr)));
-            } else {
-                reportError(pname, status, "getting binary value");
-            }
-        }
-        break;
-
     default:
         break;
     }
