@@ -106,7 +106,7 @@ General scanf format:<br>
 <tr><td>%x</td><td>int32_t</td><td>ustdio special lowercase hex radix formatting</td></tr>
 <tr><td>%d</td><td>int32_t</td><td>Decimal format</td></tr>
 <tr><td>%i</td><td>int32_t</td><td>Same as %d</td></tr>
-<tr><td>%n</td><td>int32_t</td><td>count (write the number of chars written)</td></tr>
+<tr><td>%n</td><td>int32_t</td><td>count (write the number of UTF-16 codeunits read/written)</td></tr>
 <tr><td>%o</td><td>int32_t</td><td>ustdio special octal radix formatting</td></tr>
 <tr><td>%u</td><td>uint32_t</td><td>Decimal format</td></tr>
 <tr><td>%p</td><td>void *</td><td>Prints the pointer value</td></tr>
@@ -114,6 +114,7 @@ General scanf format:<br>
 <tr><td>%c</td><td>char</td><td>Use default converter or specified converter from fopen</td></tr>
 <tr><td>%S</td><td>UChar *</td><td>Null terminated UTF-16 string</td></tr>
 <tr><td>%C</td><td>UChar</td><td>16-bit Unicode code unit</td></tr>
+<tr><td>%[]</td><td>UChar *</td><td>(scanf only) Null terminated UTF-16 string which contains the filtered set of characters specified by the UnicodeSet</td></tr>
 <tr><td>%%</td><td>N/A</td><td>Show a percent sign</td></tr>
 </table>
 
@@ -135,13 +136,13 @@ Format modifiers
 <tr><td>%ll</td><td>%d, %i, %o, %x</td><td>int64_t</td><td>long long format</td></tr>
 <tr><td>%ll</td><td>%u</td><td>uint64_t</td><td><b>(Unimplemented)</b> long long format</td></tr>
 <tr><td>%-</td><td><i>all</i></td><td>N/A</td><td>Left justify</td></tr>
-<tr><td>%+</td><td>%d, %i, %o, %x, %e, %f, %g, %E, %F, %G</td><td>N/A</td><td>Always show the plus or minus sign. Needs data for plus sign.</td></tr>
-<tr><td>% </td><td>%d, %i, %o, %x, %e, %f, %g, %E, %F, %G</td><td>N/A</td><td>Instead of a "+" output a blank character for positive numbers.</td></tr>
-<tr><td>%#</td><td>%d, %i, %o, %x, %e, %f, %g, %E, %F, %G</td><td>N/A</td><td>Precede octal value with 0, hex with 0x and show the 
+<tr><td>%+</td><td>%d, %i, %o, %x, %e, %f, %g, %E, %G</td><td>N/A</td><td>Always show the plus or minus sign. Needs data for plus sign.</td></tr>
+<tr><td>% </td><td>%d, %i, %o, %x, %e, %f, %g, %E, %G</td><td>N/A</td><td>Instead of a "+" output a blank character for positive numbers.</td></tr>
+<tr><td>%#</td><td>%d, %i, %o, %x, %e, %f, %g, %E, %G</td><td>N/A</td><td>Precede octal value with 0, hex with 0x and show the 
                 decimal point for floats.</td></tr>
-<tr><td>%n</td><td><i>all</i></td><td>N/A</td><td>Width of input/output. num is an actual number from 0 to 
+<tr><td>%<i>n</i></td><td><i>all</i></td><td>N/A</td><td>Width of input/output. num is an actual number from 0 to 
                 some large number.</td></tr>
-<tr><td>%.n</td><td>%e, %f, %g, %E, %F, %G</td><td>N/A</td><td>Significant digits precision. num is an actual number from
+<tr><td>%.<i>n</i></td><td>%e, %f, %g, %E, %F, %G</td><td>N/A</td><td>Significant digits precision. num is an actual number from
                 0 to some large number.<br>If * is used in printf, then the precision is passed in as an argument before the number to be formatted.</td></tr>
 </table>
 
