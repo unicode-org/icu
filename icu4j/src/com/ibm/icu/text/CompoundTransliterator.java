@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CompoundTransliterator.java,v $ 
- * $Date: 2001/11/29 00:39:07 $ 
- * $Revision: 1.22 $
+ * $Date: 2001/11/29 16:11:46 $ 
+ * $Revision: 1.23 $
  *
  *****************************************************************************************
  */
@@ -30,11 +30,9 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.22 $ $Date: 2001/11/29 00:39:07 $
+ * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.23 $ $Date: 2001/11/29 16:11:46 $
  */
 public class CompoundTransliterator extends Transliterator {
-
-    private static final boolean DEBUG = false;
 
     private Transliterator[] trans;
 
@@ -385,13 +383,59 @@ public class CompoundTransliterator extends Transliterator {
 
         int delta = 0; // delta in length
 
+        StringBuffer log = null;
+        if (DEBUG) {
+            log = new StringBuffer("CompoundTransliterator{" + getID() +
+                                   (incremental ? "}i: IN=" : "}: IN="));
+            Utility.formatInput(log, text, index);
+            System.out.println(Utility.escape(log.toString()));
+        }
+
         // Give each transliterator a crack at the run of characters.
         // See comments at the top of the method for more detail.
         for (int i=0; i<trans.length; ++i) {
             index.start = compoundStart; // Reset start
             int limit = index.limit;
 
+            if (index.start == index.limit) {
+                // Short circuit for empty range
+                if (DEBUG) {
+                    System.out.println("CompoundTransliterator[" + i +
+                                       ".." + (trans.length-1) +
+                                       (incremental ? "]i: " : "]: ") +
+                                       Utility.formatInput(text, index) +
+                                       " (NOTHING TO DO)");
+                }
+                break;
+            }
+
+            if (DEBUG) {
+                log.setLength(0);
+                log.append("CompoundTransliterator[" + i + "=" +
+                           trans[i].getID() +
+                           (incremental ? "]i: " : "]: "));
+                Utility.formatInput(log, text, index);
+            }
+
             trans[i].filteredTransliterate(text, index, incremental);
+
+            // In a properly written transliterator, start == limit after
+            // handleTransliterate() returns when incremental is false.
+            // Catch cases where the subclass doesn't do this, and throw
+            // an exception.  (Just pinning start to limit is a bad idea,
+            // because what's probably happening is that the subclass
+            // isn't transliterating all the way to the end, and it should
+            // in non-incremental mode.)
+            if (!incremental && index.start != index.limit) {
+                System.out.println("ERROR: Incomplete non-incremental transliteration in " + trans[i].getID());
+                index.start = index.limit;
+            }
+
+            if (DEBUG) {
+                log.append(" => ");
+                Utility.formatInput(log, text, index);
+                System.out.println(Utility.escape(log.toString()));
+            }
 
             // Cumulative delta for insertions/deletions
             delta += index.limit - limit;
@@ -412,6 +456,14 @@ public class CompoundTransliterator extends Transliterator {
         // it.  Limit needs to be put back where it was, modulo
         // adjustments for deletions/insertions.
         index.limit = compoundLimit;
+
+        if (DEBUG) {
+            log.setLength(0);
+            log.append("CompoundTransliterator{" + getID() +
+                       (incremental ? "}i: OUT=" : "}: OUT="));
+            Utility.formatInput(log, text, index);
+            System.out.println(Utility.escape(log.toString()));
+        }
     }
 
     /**

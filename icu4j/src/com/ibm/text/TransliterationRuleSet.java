@@ -5,14 +5,15 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/TransliterationRuleSet.java,v $
- * $Date: 2001/11/27 21:57:05 $
- * $Revision: 1.18 $
+ * $Date: 2001/11/29 16:11:46 $
+ * $Revision: 1.19 $
  *
  *****************************************************************************************
  */
 package com.ibm.text;
 
 import java.util.*;
+import com.ibm.util.Utility;
 
 /**
  * A set of rules for a <code>RuleBasedTransliterator</code>.  This set encodes
@@ -27,7 +28,7 @@ import java.util.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.18 $ $Date: 2001/11/27 21:57:05 $
+ * @version $RCSfile: TransliterationRuleSet.java,v $ $Revision: 1.19 $ $Date: 2001/11/29 16:11:46 $
  */
 class TransliterationRuleSet {
     /**
@@ -180,12 +181,6 @@ class TransliterationRuleSet {
     }
 
     /**
-     * To enable a detailed dump of which rules are matching, set
-     * DEBUG to true.  <<This generates a lot of output.>>
-     */
-    private static final boolean DEBUG = false;
-
-    /**
      * Transliterate the given text with the given UTransPosition
      * indices.  Return TRUE if the transliteration should continue
      * or FALSE if it should halt (because of a U_PARTIAL_MATCH match).
@@ -206,65 +201,29 @@ class TransliterationRuleSet {
             int m = rules[i].matchAndReplace(text, pos, incremental);
             switch (m) {
             case UnicodeMatcher.U_MATCH:
-                if (DEBUG) {
-                    System.out.println("match " + rules[i].toRule(true) +
-                                       " => " + formatInput(text, pos));
+                if (Transliterator.DEBUG) {
+                    System.out.println((incremental ? "Rule.i: match ":"Rule: match ") +
+                                       rules[i].toRule(true) + " => " +
+                                       Utility.formatInput(text, pos));
                 }
                 return true;
             case UnicodeMatcher.U_PARTIAL_MATCH:
-                if (DEBUG) {
-                    System.out.println("partial match " + rules[i].toRule(true) +
-                                       " => " + formatInput(text, pos));
+                if (Transliterator.DEBUG) {
+                    System.out.println((incremental ? "Rule.i: partial match ":"Rule: partial match ") +
+                                       rules[i].toRule(true) + " => " +
+                                       Utility.formatInput(text, pos));
                 }
                 return false;
-            default: /* Ram: added default to make GCC happy */
-                break;
             }
         }
         // No match or partial match from any rule
         pos.start += UTF16.getCharCount(UTF16.charAt(text, pos.start));
-        if (DEBUG) {
-            System.out.println("no match => " + formatInput(text, pos));
+        if (Transliterator.DEBUG) {
+            System.out.println((incremental ? "Rule.i: no match => ":"Rule: no match => ") +
+                               Utility.formatInput(text, pos));
         }
         return true;
     }
-
-  /**
-   * For debugging purposes; format the given text in the form
-   * aaa{bbb|ccc|ddd}eee, where the {} indicate the context start
-   * and limit, and the || indicate the start and limit.
-   */
-  private static String formatInput(Replaceable text,
-                                    Transliterator.Position pos) {
-      if (DEBUG) {
-          ReplaceableString input = (ReplaceableString) text;
-          StringBuffer appendTo = new StringBuffer();
-          if (0 <= pos.contextStart &&
-              pos.contextStart <= pos.start &&
-              pos.start <= pos.limit &&
-              pos.limit <= pos.contextLimit &&
-              pos.contextLimit <= input.length()) {
-
-              String a, b, c, d, e;
-              a = input.substring(0, pos.contextStart);
-              b = input.substring(pos.contextStart, pos.start);
-              c = input.substring(pos.start, pos.limit);
-              d = input.substring(pos.limit, pos.contextLimit);
-              e = input.substring(pos.contextLimit, input.length());
-              appendTo.append(a).append('{').append(b).
-                  append('|').append(c).append('|').append(d).
-                  append('}').append(e);
-          } else {
-              appendTo.append("INVALID Position {cs=" +
-                              pos.contextStart + ", s=" + pos.start + ", l=" +
-                              pos.limit + ", cl=" + pos.contextLimit + "} on " +
-                              input);
-          }
-          return com.ibm.util.Utility.escape(appendTo.toString());
-      } else {
-          return null;
-      }
-  }
 
     /**
      * Create rule strings that represents this rule set.
@@ -286,9 +245,12 @@ class TransliterationRuleSet {
 }
 
 /* $Log: TransliterationRuleSet.java,v $
- * Revision 1.18  2001/11/27 21:57:05  alan
- * jitterbug 1389: incorporate Mark's review comments - comments only
+ * Revision 1.19  2001/11/29 16:11:46  alan
+ * jitterbug 1560: add debugging code; fix handling of runs; detect incomplete non-incremental processing
  *
+/* Revision 1.18  2001/11/27 21:57:05  alan
+/* jitterbug 1389: incorporate Mark's review comments - comments only
+/*
 /* Revision 1.17  2001/11/06 05:06:26  alan
 /* jitterbug 60: make toRules() read from original vector
 /*
