@@ -276,25 +276,19 @@ class U_COMMON_API UnicodeSet : public UnicodeFilter {
 
 public:
 
-    /**
-     * Minimum value that can be stored in a UnicodeSet.
-     * @stable ICU 2.4
-     */
-#ifdef U_CYGWIN
-    static U_COMMON_API const UChar32 MIN_VALUE;
-#else
-    static const UChar32 MIN_VALUE;
-#endif
+    enum {
+        /**
+         * Minimum value that can be stored in a UnicodeSet.
+         * @stable ICU 2.4
+         */
+        MIN_VALUE = 0,
 
-    /**
-     * Maximum value that can be stored in a UnicodeSet.
-     * @stable ICU 2.4
-     */
-#ifdef U_CYGWIN
-    static U_COMMON_API const UChar32 MAX_VALUE;
-#else
-    static const UChar32 MAX_VALUE;
-#endif
+        /**
+         * Maximum value that can be stored in a UnicodeSet.
+         * @stable ICU 2.4
+         */
+        MAX_VALUE = 0x10ffff
+    };
 
     //----------------------------------------------------------------
     // Constructors &c

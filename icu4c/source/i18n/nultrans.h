@@ -28,18 +28,6 @@ class U_I18N_API NullTransliterator : public Transliterator {
 public:
 
     /**
-     * ID for this transliterator.
-     * @internal Use transliterator factory methods instead since this class will be removed in that release.
-     */
-    static const UChar ID[]; // public for Transliterator
-
-    /**
-     * ID for this transliterator.
-     * @internal Use transliterator factory methods instead since this class will be removed in that release.
-     */
-    static const UChar SHORT_ID[]; // public for Transliterator
-
-    /**
      * Constructs a transliterator.
      * @internal Use transliterator factory methods instead since this class will be removed in that release.
      */

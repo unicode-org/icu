@@ -42,8 +42,6 @@
 
 U_NAMESPACE_BEGIN
 
-const int32_t BreakIterator::DONE = (int32_t)-1;
-
 // -------------------------------------
 
 BreakIterator*
