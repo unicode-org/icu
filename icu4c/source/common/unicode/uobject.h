@@ -98,7 +98,7 @@ public:
      * See new().
      * @draft ICU 2.6
      */
-    static inline void * operator new(size_t, void *_P) { return (_P); }
+    static inline void * operator new(size_t, void *ptr) { return ptr; }
 
     /**
      * Override for ICU4C C++ memory management for STL.
