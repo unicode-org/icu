@@ -65,6 +65,7 @@ U_NAMESPACE_BEGIN
 
 DigitList::DigitList()
 {
+    fDigits = fDecimalDigits + 1;   // skip the decimal
     clear();
 }
 
@@ -117,7 +118,6 @@ DigitList::operator==(const DigitList& that) const
 void
 DigitList::clear()
 {
-    fDigits = fDecimalDigits + 1;   // skip the decimal
     fDecimalAt = 0;
     fCount = 0;
     fIsPositive = TRUE;
@@ -183,7 +183,7 @@ formatBase10(int64_t number, char *outputStr, int32_t outputLen)
  * can be linked to this function.
  */
 double
-DigitList::getDouble()
+DigitList::getDouble() /*const*/
 {
     double value;
 
@@ -216,7 +216,7 @@ DigitList::getDouble()
 /**
  * Make sure that fitsIntoLong() is called before calling this function.
  */
-int32_t DigitList::getLong()
+int32_t DigitList::getLong() /*const*/
 {
     if (fCount == fDecimalAt) {
         int32_t value;
@@ -242,7 +242,7 @@ int32_t DigitList::getLong()
 /**
  * Make sure that fitsIntoInt64() is called before calling this function.
  */
-int64_t DigitList::getInt64()
+int64_t DigitList::getInt64() /*const*/
 {
     if (fCount == fDecimalAt) {
         uint64_t value;
@@ -286,7 +286,7 @@ int64_t DigitList::getInt64()
  * a long.
  */
 UBool
-DigitList::fitsIntoLong(UBool ignoreNegativeZero)
+DigitList::fitsIntoLong(UBool ignoreNegativeZero) /*const*/
 {
     // Figure out if the result will fit in a long.  We have to
     // first look for nonzero digits after the decimal point;
@@ -302,8 +302,6 @@ DigitList::fitsIntoLong(UBool ignoreNegativeZero)
         // be represented as a double. - bug 4162852
         return fIsPositive || ignoreNegativeZero;
     }
-
-//    initializeLONG_MIN_REP();
 
     // If the digit list represents a double or this number is too
     // big for a long.
@@ -343,7 +341,7 @@ DigitList::fitsIntoLong(UBool ignoreNegativeZero)
  * a long.
  */
 UBool
-DigitList::fitsIntoInt64(UBool ignoreNegativeZero)
+DigitList::fitsIntoInt64(UBool ignoreNegativeZero) /*const*/
 {
     // Figure out if the result will fit in a long.  We have to
     // first look for nonzero digits after the decimal point;
@@ -359,8 +357,6 @@ DigitList::fitsIntoInt64(UBool ignoreNegativeZero)
         // be represented as a double. - bug 4162852
         return fIsPositive || ignoreNegativeZero;
     }
-
-//    initializeLONG_MIN_REP();
 
     // If the digit list represents a double or this number is too
     // big for a long.
@@ -561,7 +557,7 @@ DigitList::round(int32_t maximumDigits)
  * @return true if digit <code>maximumDigits-1</code> should be
  * incremented
  */
-UBool DigitList::shouldRoundUp(int32_t maximumDigits) {
+UBool DigitList::shouldRoundUp(int32_t maximumDigits) const {
     // Implement IEEE half-even rounding
     if (fDigits[maximumDigits] == '5' ) {
         for (int i=maximumDigits+1; i<fCount; ++i) {
@@ -639,46 +635,6 @@ DigitList::isZero() const
             return FALSE;
     return TRUE;
 }
-
-/**
- * We represent LONG_MIN internally as LONG_MAX + 1.  This is actually an impossible
- * value, for positive long integers, so we are safe in doing so.
- */
-/* // This code is unused.
-UBool
-DigitList::isLONG_MIN() const
-{
-//    initializeLONG_MIN_REP();
-
-    if (fCount != LONG_MIN_REP_LENGTH)
-        return FALSE;
-
-    for (int32_t i = 0; i < LONG_MIN_REP_LENGTH; ++i)
-    {
-        if (fDigits[i] != LONG_MIN_REP[i+1])
-            return FALSE;
-    }
-
-    return TRUE;
-}
-*/
-
-// Initialize the LONG_MIN representation buffer.  Note that LONG_MIN
-// is stored as LONG_MAX+1 (LONG_MIN without the negative sign).
-
-/*void
-DigitList::initializeLONG_MIN_REP()
-{
-    if (LONG_MIN_REP_LENGTH == 0)
-    {
-        char buf[LONG_DIGITS];
-        sprintf(buf, "%d", INT32_MIN);
-        LONG_MIN_REP_LENGTH = strlen(buf) - 1;
-        // assert(LONG_MIN_REP_LENGTH == LONG_DIGITS);
-        for (int32_t i=1; i<=LONG_MIN_REP_LENGTH; ++i)
-            LONG_MIN_REP[i-1] = buf[i];
-    }
-}*/
 
 U_NAMESPACE_END
 
