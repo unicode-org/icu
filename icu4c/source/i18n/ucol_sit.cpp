@@ -480,26 +480,29 @@ ucol_getShortDefinitionString(const UCollator *coll,
     uprv_memset(buffer, 0, internalBufferSize*sizeof(char));
     int32_t resultSize = 0;
     char tempbuff[internalBufferSize];
+    char locBuff[internalBufferSize];
     uprv_memset(buffer, 0, internalBufferSize*sizeof(char));
     int32_t elementSize = 0;
+    UBool isAvailable = 0;
     CollatorSpec s;
     ucol_sit_initCollatorSpecs(&s);
 
     if(!locale) {
         locale = ucol_getLocale(coll, ULOC_VALID_LOCALE, status);
     }
+    elementSize = ucol_getFunctionalEquivalent(locBuff, internalBufferSize, "collation", locale, &isAvailable, status);
 
-    if(locale) {
+    if(elementSize) {
         // we should probably canonicalize here...
-        elementSize = uloc_getLanguage(locale, tempbuff, internalBufferSize, status);
+        elementSize = uloc_getLanguage(locBuff, tempbuff, internalBufferSize, status);
         appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, languageArg);
-        elementSize = uloc_getCountry(locale, tempbuff, internalBufferSize, status);
+        elementSize = uloc_getCountry(locBuff, tempbuff, internalBufferSize, status);
         appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, regionArg);
-        elementSize = uloc_getScript(locale, tempbuff, internalBufferSize, status);
+        elementSize = uloc_getScript(locBuff, tempbuff, internalBufferSize, status);
         appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, scriptArg);
-        elementSize = uloc_getVariant(locale, tempbuff, internalBufferSize, status);
+        elementSize = uloc_getVariant(locBuff, tempbuff, internalBufferSize, status);
         appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, variantArg);
-        elementSize = uloc_getKeywordValue(locale, "collation", tempbuff, internalBufferSize, status);
+        elementSize = uloc_getKeywordValue(locBuff, "collation", tempbuff, internalBufferSize, status);
         appendShortStringElement(tempbuff, elementSize, buffer, &resultSize, keywordArg);
     } 
 
@@ -586,7 +589,6 @@ ucol_collatorToIdentifier(const UCollator *coll,
     uint32_t result = 0;
     int32_t i = 0, j = 0;
     int32_t valueIndex = 0;
-    int32_t mask = (1 << localeWidth) - 1;
     UColAttributeValue attrValue = UCOL_DEFAULT;
 
     // if variable top is not default, we need to use strings
@@ -627,7 +629,7 @@ ucol_collatorToIdentifier(const UCollator *coll,
         oldmid = mid;
     }
 
-    result |= (mid << localeShift) & ((1 << localeWidth) - 1);
+    result |= (mid & ((1 << localeWidth) - 1)) << localeShift;
 
     for(i = 0; i < sizeof(attributesToBits)/sizeof(attributesToBits[0]); i++) {
         attrValue = ucol_getAttribute(coll, attributesToBits[i].attribute, status);
@@ -635,7 +637,7 @@ ucol_collatorToIdentifier(const UCollator *coll,
         while(attributesToBits[i].values[j] != attrValue) {
             j++;
         }
-        result |= (j << attributesToBits[i].offset) & ((1 << attributesToBits[i].width) - 1);
+        result |= (j & ((1 << attributesToBits[i].width) - 1)) << attributesToBits[i].offset;
     }
     
     return result;
