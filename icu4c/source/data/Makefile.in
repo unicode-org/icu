@@ -42,9 +42,18 @@ PKGDATA = $(BINDIR)/pkgdata $(PKGDATA_OPTS) -q -c -s $(CURDIR)/out/build/$(ICUDA
 
 # OBJDATADIR must be a short path (with ..'s) to the data.
 
+ifeq ($(top_srcdir),..)
+SRCDATADIR=.
+else
 SRCDATADIR=$(top_srcdir)/data
+endif
+ifeq ($(top_builddir),..)
+OUTDIR=./out
+else
 OUTDIR=$(top_builddir)/data/out
-OUTTMPDIR=$(top_builddir)/data/out/tmp
+endif
+
+OUTTMPDIR=$(OUTDIR)/tmp
 BUILDDIR=$(OUTDIR)/build/$(ICUDATA_PLATFORM_NAME)
 UNICODEDATADIR=$(SRCDATADIR)/unidata
 LOCSRCDIR=$(SRCDATADIR)/locales
