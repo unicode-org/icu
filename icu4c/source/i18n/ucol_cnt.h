@@ -33,7 +33,6 @@ struct ContractionTable {
     uint32_t *CEs;
     uint32_t position;
     uint32_t size;
-    uint32_t backSize;
 };
 
 struct CntTable {
