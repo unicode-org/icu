@@ -694,7 +694,7 @@ static void TestStringFunctions()
     {
         for(j=0;j<4;++j)
         {
-            log_verbose("Testing  %s  \n", austrdup(dataTable[i][j]));
+            log_verbose("Testing  %s  \n", u_austrcpy(tempOut, dataTable[i][j]));
             u_uastrcpy(temp, "");
             u_strcpy(temp,dataTable[i][j]);
         
@@ -773,12 +773,12 @@ static void TestStringFunctions()
 
     log_verbose("Testing u_strtok_r()");
     {
-        const char *string   = "  ,  1 2 3  AHHHHH! 5.5 6 7    ,        8\n";
+        const char string[]  = "  ,  1 2 3  AHHHHH! 5.5 6 7    ,        8\n";
         const char *tokens[] = {",", "1", "2", "3", "AHHHHH!", "5.5", "6", "7", "8\n"};
         const char *delim1 = " ";
         const char *delim2 = " ,";
-        UChar delimBuf[32];
-        UChar currTokenBuf[32];
+        UChar delimBuf[sizeof(string)];
+        UChar currTokenBuf[sizeof(string)];
         UChar *state;
         uint32_t currToken = 0;
         UChar *ptr;
@@ -798,11 +798,16 @@ static void TestStringFunctions()
         }
 
         if (currToken != sizeof(tokens)/sizeof(tokens[0])) {
-            log_err("Didn't get correct number of tokens!\n");
+            log_err("Didn't get correct number of tokens\n");
+        }
+        u_uastrcpy(currTokenBuf, "");
+        if (u_strtok_r(currTokenBuf, delimBuf, &state) != NULL) {
+            log_err("Didn't get NULL for empty string\n");
+        }
+        if (state != NULL) {
+            log_err("State should be NULL for empty string\n");
         }
     }
-
-    cleanUpDataTable();
 
     /* test u_strcmpCodePointOrder() */
     {
@@ -821,6 +826,8 @@ static void TestStringFunctions()
             }
         }
     }
+
+    cleanUpDataTable();
 }
 
 static void TestStringSearching()
