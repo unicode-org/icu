@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2002-2003, International Business Machines
+*   Copyright (C) 2002-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -1618,6 +1618,16 @@ compareIterNoIndexes(UCharIterator *iter1, const char *n1,
         return;
     }
 
+    /* iterate backward */
+    do {
+        c1=iter1->previous(iter1);
+        c2=iter2->previous(iter2);
+        if(c1!=c2) {
+            log_err("%s->previous()=U+%04x != U+%04x=%s->previous() at %d\n", n1, c1, c2, n2, iter1->getIndex(iter1, UITER_CURRENT));
+            return;
+        }
+    } while(c1>=0);
+
     /* back to the middle */
     iter1->move(iter1, middle, UITER_ZERO);
     iter2->move(iter2, middle, UITER_ZERO);
@@ -1687,7 +1697,7 @@ compareIterNoIndexes(UCharIterator *iter1, const char *n1,
 static void
 testUNormIteratorWithText(const UChar *text, int32_t textLength, int32_t middle,
                           const char *name1, const char *n2) {
-    UChar buffer[300];
+    UChar buffer[600];
     char name2[40];
 
     UCharIterator iter1, iter2, *iter;
@@ -1747,7 +1757,7 @@ TestUNormIterator() {
         0x6e, 0xd900, 0x6a, 0xdc00, 0xd900, 0xdc00, 0x61
     };
 
-    UChar longText[300];
+    UChar longText[600];
     int32_t i, middle, length;
 
     length=LENGTHOF(text);
@@ -1761,13 +1771,18 @@ TestUNormIterator() {
         longText[middle+i]=0x30a; /* insert many rings between 'A-ring' and cedilla */
     }
     memcpy(longText+middle+i, text+middle, (LENGTHOF(text)-middle)*U_SIZEOF_UCHAR);
-
     length=LENGTHOF(text)+i;
-    testUNormIteratorWithText(longText, length, length/2, "UCharIterLong", "UNormIterLong1");
+
+    /* append another copy of this string for more overflows */
+    memcpy(longText+length, longText, length*U_SIZEOF_UCHAR);
+    length*=2;
+
+    /* the first test of the following two starts at length/4, inside the sea of combining rings */
+    testUNormIteratorWithText(longText, length, length/4, "UCharIterLong", "UNormIterLong1");
     testUNormIteratorWithText(longText, length, length, "UCharIterLongEnd", "UNormIterLongEnd1");
 
     length=LENGTHOF(surrogateText);
-    testUNormIteratorWithText(surrogateText, length, length/2, "UCharIterSurr", "UNormIterSurr1");
+    testUNormIteratorWithText(surrogateText, length, length/4, "UCharIterSurr", "UNormIterSurr1");
     testUNormIteratorWithText(surrogateText, length, length, "UCharIterSurrEnd", "UNormIterSurrEnd1");
 }
 
