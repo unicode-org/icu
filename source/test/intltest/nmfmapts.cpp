@@ -257,7 +257,7 @@ public:
 		delete currencyStyle;
 	}
 	
-    virtual NumberFormat* createFormat(const Locale& loc, UNumberFormatStyle formatType)
+    virtual NumberFormat* createFormat(const Locale& /* loc */, UNumberFormatStyle formatType)
 	{
 		if (formatType == UNUM_CURRENCY) {
 			return (NumberFormat*)currencyStyle->clone();

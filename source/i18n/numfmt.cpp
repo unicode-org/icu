@@ -339,7 +339,7 @@ static ICULocaleService* gService = NULL;
 
 class ICUNumberFormatFactory : public ICUResourceBundleFactory {
 protected:
-  virtual UObject* handleCreate(const Locale& loc, int32_t kind, const ICUService* service, UErrorCode& status) const {
+  virtual UObject* handleCreate(const Locale& loc, int32_t kind, const ICUService* /* service */, UErrorCode& status) const {
 // !!! kind is not an EStyles, need to determine how to handle this
 	  return NumberFormat::makeInstance(loc, (NumberFormat::EStyles)kind, status);
   }
@@ -421,7 +421,7 @@ public:
 	  return ((NumberFormat*)instance)->clone();
   }
 
-  virtual UObject* handleDefault(const ICUServiceKey& key, UnicodeString* actualID, UErrorCode& status) const {
+  virtual UObject* handleDefault(const ICUServiceKey& key, UnicodeString* /* actualID */, UErrorCode& status) const {
 	LocaleKey& lkey = (LocaleKey&)key;
 	int32_t kind = lkey.kind();
 	Locale loc;

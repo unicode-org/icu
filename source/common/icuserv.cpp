@@ -493,7 +493,6 @@ ICUService::getKey(ICUServiceKey& key, UnicodeString* actualReturn, const ICUSer
       // going to update the cache at all.
       putInCache = TRUE;
 
-      int32_t n = 0;
       int32_t index = startIndex;
       while (index < limit) {
         ICUServiceFactory* f = (ICUServiceFactory*)factories->elementAt(index++);
@@ -591,7 +590,7 @@ ICUService::getKey(ICUServiceKey& key, UnicodeString* actualReturn, const ICUSer
 }
 
 UObject* 
-ICUService::handleDefault(const ICUServiceKey& key, UnicodeString* actualIDReturn, UErrorCode& status) const 
+ICUService::handleDefault(const ICUServiceKey& /* key */, UnicodeString* /* actualIDReturn */, UErrorCode& /* status */) const 
 {
   return NULL;
 }
@@ -744,7 +743,7 @@ ICUService::getDisplayNames(UVector& result,
 
         int32_t pos = 0;
         const UHashElement* entry = NULL;
-        while (entry = m->nextElement(pos)) {
+        while ((entry = m->nextElement(pos)) != NULL) {
           const UnicodeString* id = (const UnicodeString*)entry->key.pointer;
           ICUServiceFactory* f = (ICUServiceFactory*)entry->value.pointer;
           UnicodeString dname;
@@ -768,7 +767,7 @@ ICUService::getDisplayNames(UVector& result,
   ICUServiceKey* matchKey = createKey(matchID, status);
   int32_t pos = 0;
   const UHashElement *entry = NULL;
-  while (entry = dnCache->cache.nextElement(pos)) {
+  while ((entry = dnCache->cache.nextElement(pos)) != NULL) {
     const UnicodeString* id = (const UnicodeString*)entry->value.pointer;
     if (matchKey != NULL && !matchKey->isFallbackOf(*id)) {
       continue;

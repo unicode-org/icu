@@ -86,7 +86,7 @@ LocaleUtility::initNameFromLocale(const Locale& locale, UnicodeString& result)
 }
 
 const Hashtable*
-LocaleUtility::getAvailableLocaleNames(const UnicodeString& bundleID)
+LocaleUtility::getAvailableLocaleNames(const UnicodeString& /* bundleID */)
 {
     // have to ignore bundleID for the moment, since we don't have easy C++ api.
     // assume it's the default bundle
@@ -346,7 +346,7 @@ LocaleKeyFactory::updateVisibleIDs(Hashtable& result, UErrorCode& status) const 
 
         const UHashElement* elem = NULL;
         int32_t pos = 0;
-        while (elem = supported->nextElement(pos)) {
+        while ((elem = supported->nextElement(pos)) != NULL) {
             const UnicodeString& id = *((const UnicodeString*)elem->key.pointer);
             if (!visible) {
                 result.remove(id);
@@ -375,7 +375,10 @@ LocaleKeyFactory::getDisplayName(const UnicodeString& id, const Locale& locale, 
 }
 
 UObject*
-LocaleKeyFactory::handleCreate(const Locale& loc, int32_t kind, const ICUService* service, UErrorCode& status) const {
+LocaleKeyFactory::handleCreate(const Locale& /* loc */, 
+			       int32_t /* kind */, 
+			       const ICUService* /* service */, 
+			       UErrorCode& /* status */) const {
     return NULL;
 }
 
@@ -386,7 +389,7 @@ LocaleKeyFactory::isSupportedID(const UnicodeString& id, UErrorCode& status) con
 }
 
 const Hashtable*
-LocaleKeyFactory::getSupportedIDs(UErrorCode& status) const {
+LocaleKeyFactory::getSupportedIDs(UErrorCode& /* status */) const {
     return NULL;
 }
 
@@ -461,7 +464,7 @@ SimpleLocaleKeyFactory::create(const ICUServiceKey& key, const ICUService* servi
 }
 
 UBool
-SimpleLocaleKeyFactory::isSupportedID(const UnicodeString& id, UErrorCode& status) const
+SimpleLocaleKeyFactory::isSupportedID(const UnicodeString& id, UErrorCode& /* status */) const
 {
     return id == _id;
 }
@@ -525,7 +528,7 @@ ICUResourceBundleFactory::getSupportedIDs(UErrorCode& status) const
 }
 
 UObject*
-ICUResourceBundleFactory::handleCreate(const Locale& loc, int32_t kind, const ICUService* service, UErrorCode& status) const
+ICUResourceBundleFactory::handleCreate(const Locale& loc, int32_t /* kind */, const ICUService* /* service */, UErrorCode& status) const
 {
     if (U_SUCCESS(status)) {
         return new ResourceBundle(_bundleName, loc, status);

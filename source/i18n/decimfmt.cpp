@@ -1329,7 +1329,6 @@ UBool DecimalFormat::subparse(const UnicodeString& text, ParsePosition& parsePos
             decimal = &getConstSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol);
         }
         const UnicodeString *grouping = &getConstSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol);
-        const UnicodeString *exponentChar = &getConstSymbol(DecimalFormatSymbols::kExponentialSymbol);
         UBool sawDecimal = FALSE;
         UBool sawDigit = FALSE;
         int32_t backup = -1;
@@ -2939,7 +2938,7 @@ DecimalFormat::applyPattern(const UnicodeString& pattern,
         int8_t groupingCount = -1;
         int8_t groupingCount2 = -1;
         int32_t padPos = -1;
-        UChar32 padChar;
+        UChar32 padChar = 0;
         int32_t roundingPos = -1;
         DigitList roundingInc;
         int8_t expDigits = -1;
