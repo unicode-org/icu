@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CollationRuleParser.java,v $ 
-* $Date: 2002/09/06 01:53:18 $ 
-* $Revision: 1.6 $
+* $Date: 2002/09/10 22:19:31 $ 
+* $Revision: 1.7 $
 *
 *******************************************************************************
 */
@@ -25,7 +25,7 @@ import com.ibm.icu.impl.UCharacterProperty;
 * @since release 2.2, June 7 2002
 * @draft 2.2
 */
-class CollationRuleParser
+final class CollationRuleParser
 {     
 	// public data members ---------------------------------------------------
 	
@@ -639,6 +639,14 @@ class CollationRuleParser
                                   null, null);
 	};
     
+    /**
+     * Utility data members
+     */
+    private Token m_utilToken_ = new Token();
+    private CollationElementIterator m_UCAColEIter_ 
+                      = RuleBasedCollator.UCA_.getCollationElementIterator("");
+    private int m_utilCEBuffer_[] = new int[2];
+    
     // private methods -------------------------------------------------------
 
     /**
@@ -666,34 +674,33 @@ class CollationRuleParser
             if (lastToken != null) {
                 lastStrength = lastToken.m_strength_;
             }
-            Token key = new Token();
-            key.m_source_ = m_parsedToken_.m_charsLen_ << 24 
+            m_utilToken_.m_source_ = m_parsedToken_.m_charsLen_ << 24 
                                              | m_parsedToken_.m_charsOffset_;
-            key.m_rules_ = m_source_;
+            m_utilToken_.m_rules_ = m_source_;
             // 4 Lookup each source in the CharsToToken map, and find a 
             // sourcetoken
-            Token sourceToken = (Token)m_hashTable_.get(key);
+            Token sourceToken = (Token)m_hashTable_.get(m_utilToken_);
             if (m_parsedToken_.m_strength_ != TOKEN_RESET_) {
 		        if (lastToken == null) { 
 		        	// this means that rules haven't started properly
 		            throwParseException(m_source_.toString(), 0);
 		        }
                 //  6 Otherwise (when relation != reset)
-               if (sourceToken == null) {
-                   // If sourceToken is null, create new one
-		           sourceToken = new Token();
-     		       sourceToken.m_rules_ = m_source_;
-		           sourceToken.m_source_ = m_parsedToken_.m_charsLen_ << 24 
+                if (sourceToken == null) {
+                    // If sourceToken is null, create new one
+		            sourceToken = new Token();
+     		        sourceToken.m_rules_ = m_source_;
+		            sourceToken.m_source_ = m_parsedToken_.m_charsLen_ << 24 
 		                                   | m_parsedToken_.m_charsOffset_;
-		           sourceToken.m_prefix_ = m_parsedToken_.m_prefixLen_ << 24 
+		            sourceToken.m_prefix_ = m_parsedToken_.m_prefixLen_ << 24 
 		                                   | m_parsedToken_.m_prefixOffset_;
-		           // TODO: this should also handle reverse
-		           sourceToken.m_polarity_ = TOKEN_POLARITY_POSITIVE_; 
-		           sourceToken.m_next_ = null;
-		           sourceToken.m_previous_ = null;
-		           sourceToken.m_CELength_ = 0;
-		           sourceToken.m_expCELength_ = 0;
-		           m_hashTable_.put(sourceToken, sourceToken);
+		            // TODO: this should also handle reverse
+		            sourceToken.m_polarity_ = TOKEN_POLARITY_POSITIVE_; 
+    		        sourceToken.m_next_ = null;
+ 		            sourceToken.m_previous_ = null;
+		            sourceToken.m_CELength_ = 0;
+		            sourceToken.m_expCELength_ = 0;
+		            m_hashTable_.put(sourceToken, sourceToken);
 		        } 
 		        else {
 		            // we could have fished out a reset here
@@ -873,11 +880,10 @@ class CollationRuleParser
 	                while (searchCharsLen > 1 && sourceToken == null) {
 	                    searchCharsLen --;
 	                    // key = searchCharsLen << 24 | charsOffset;
-			            Token tokenkey = new Token();
-			            tokenkey.m_source_ = searchCharsLen << 24 
+			            m_utilToken_.m_source_ = searchCharsLen << 24 
 			                                 | m_parsedToken_.m_charsOffset_;
-			            tokenkey.m_rules_ = m_source_;
-			            sourceToken = (Token)m_hashTable_.get(tokenkey);
+			            m_utilToken_.m_rules_ = m_source_;
+			            sourceToken = (Token)m_hashTable_.get(m_utilToken_);
 			        }
 			        if (sourceToken != null) {
 			            expandNext = (m_parsedToken_.m_charsLen_ 
@@ -905,17 +911,19 @@ class CollationRuleParser
     			                } 
     			                else { // start of list
     			                    sourceToken 
-    			                              = sourceToken.m_listHeader_.m_reset_;
+    			                         = sourceToken.m_listHeader_.m_reset_;
     			                }              
     			            } 
     			            else { // we hit NULL, we should be doing the else part 
-    			                sourceToken = sourceToken.m_listHeader_.m_reset_;
+    			                sourceToken 
+                                         = sourceToken.m_listHeader_.m_reset_;
     			                sourceToken = getVirginBefore(sourceToken, 
     			                                              strength);
     			            }
     			        } 
     			        else {
-    			            sourceToken = getVirginBefore(sourceToken, strength);
+    			            sourceToken 
+                                      = getVirginBefore(sourceToken, strength);
                         } 
                     }
                     else { 
@@ -1286,7 +1294,8 @@ class CollationRuleParser
 		                        if (newstrength != TOKEN_RESET_ 
 		                            && newstrength != TOKEN_UNSET_) {
 		                            variabletop = true;
-		                            m_parsedToken_.m_charsOffset_ = m_extraCurrent_;
+		                            m_parsedToken_.m_charsOffset_ 
+                                                             = m_extraCurrent_;
 		                            m_source_.append((char)0xFFFF);
 		                            m_extraCurrent_ ++;
 		                            m_current_ ++;
@@ -1332,8 +1341,8 @@ class CollationRuleParser
 		                    }
 		                    if (m_parsedToken_.m_charsLen_ != 0) {
 		                    	m_source_.append(m_source_.substring(
-                                                     m_current_ - m_parsedToken_.m_charsLen_, 
-		                                             m_current_));
+                                       m_current_ - m_parsedToken_.m_charsLen_, 
+                                       m_current_));
 		                        m_extraCurrent_ += m_parsedToken_.m_charsLen_;
 		                    }
 		                    m_parsedToken_.m_charsLen_ ++;
@@ -1375,16 +1384,18 @@ class CollationRuleParser
 		                // which I do not intend to play with. Instead, we will 
 		                // do prefixes when prefixes are due (before adding the 
 		                // elements).
-		                m_parsedToken_.m_prefixOffset_ = m_parsedToken_.m_charsOffset_;
-		                m_parsedToken_.m_prefixLen_ = m_parsedToken_.m_charsLen_;
+		                m_parsedToken_.m_prefixOffset_ 
+                                                = m_parsedToken_.m_charsOffset_;
+		                m_parsedToken_.m_prefixLen_ 
+                                                = m_parsedToken_.m_charsLen_;
                         if (inchars) { // we're doing characters
 		                    if (wasinquote == false) {
 		                        m_parsedToken_.m_charsOffset_ = m_extraCurrent_;
 		                    }
 		                    if (m_parsedToken_.m_charsLen_ != 0) {
                                 String prefix = m_source_.substring(
-                                                      m_current_ - m_parsedToken_.m_charsLen_, 
-                                                      m_current_);
+                                       m_current_ - m_parsedToken_.m_charsLen_, 
+                                       m_current_);
 		                    	m_source_.append(prefix);
 		                        m_extraCurrent_ += m_parsedToken_.m_charsLen_;
 		                    }
@@ -1475,27 +1486,25 @@ class CollationRuleParser
                                                           throws ParseException
     {
 	    // this is a virgin before - we need to fish the anchor from the UCA
-	    CollationElementIterator coleiter = null;
 	    if (sourcetoken != null) {
             int offset = sourcetoken.m_source_ & 0xFFFFFF;
-            coleiter = RuleBasedCollator.UCA_.getCollationElementIterator(
-                                      m_source_.substring(offset, offset + 1));
+            m_UCAColEIter_.setText(m_source_.substring(offset, offset + 1));
 	    } 
 	    else {
-            coleiter = RuleBasedCollator.UCA_.getCollationElementIterator(
-                       m_source_.substring(m_parsedToken_.m_charsOffset_, 
-                                           m_parsedToken_.m_charsOffset_ + 1));
+            m_UCAColEIter_.setText(
+                             m_source_.substring(m_parsedToken_.m_charsOffset_, 
+                             m_parsedToken_.m_charsOffset_ + 1));
 	    }
 	      	
-	    int basece = coleiter.next() & 0xFFFFFF3F;
-	    int basecontce = coleiter.next();
+	    int basece = m_UCAColEIter_.next() & 0xFFFFFF3F;
+	    int basecontce = m_UCAColEIter_.next();
 	    if (basecontce == CollationElementIterator.NULLORDER) {
 	        basecontce = 0;
 	    }
-	    int ce[] = new int[2]; // first ce and second ce
+	    // first ce and second ce m_utilCEBuffer_
 	    int invpos = CollationParsedRuleBuilder.INVERSE_UCA_.getInversePrevCE(
-                                                          basece, basecontce, 
-                                                          strength, ce);
+                                                     basece, basecontce, 
+                                                     strength, m_utilCEBuffer_);
 	    int ch = CollationParsedRuleBuilder.INVERSE_UCA_.m_table_[3 * invpos 
                                                                   + 2];
         if ((ch &  INVERSE_SIZE_MASK_) != 0) {
@@ -1513,11 +1522,10 @@ class CollationRuleParser
 	    // &\u30ca = \u306a
 	    // &[before 3]\u306a<<<\u306a|\u309d
 	  
-	    Token key = new Token();
-	    key.m_source_ = (m_parsedToken_.m_charsLen_ << 24) 
+	    m_utilToken_.m_source_ = (m_parsedToken_.m_charsLen_ << 24) 
 	                                         | m_parsedToken_.m_charsOffset_;
-	    key.m_rules_ = m_source_;
-	    sourcetoken = (Token)m_hashTable_.get(key);
+	    m_utilToken_.m_rules_ = m_source_;
+	    sourcetoken = (Token)m_hashTable_.get(m_utilToken_);
 	  
 	    // if we found a tailored thing, we have to use the UCA value and 
 	    // construct a new reset token with constructed name
@@ -1529,9 +1537,11 @@ class CollationRuleParser
 	        m_extraCurrent_ ++;
 	        m_parsedToken_.m_charsLen_ ++;
             m_listHeader_[m_resultLength_] = new TokenListHeader();
-	        m_listHeader_[m_resultLength_].m_baseCE_ = ce[0] & 0xFFFFFF3F;
-	        if (RuleBasedCollator.isContinuation(ce[1])) {
-	            m_listHeader_[m_resultLength_].m_baseContCE_ = ce[1];
+	        m_listHeader_[m_resultLength_].m_baseCE_ 
+                                             = m_utilCEBuffer_[0] & 0xFFFFFF3F;
+	        if (RuleBasedCollator.isContinuation(m_utilCEBuffer_[1])) {
+	            m_listHeader_[m_resultLength_].m_baseContCE_ 
+                                                          = m_utilCEBuffer_[1];
 	        } 
 	        else {
 	            m_listHeader_[m_resultLength_].m_baseContCE_ = 0;
@@ -1555,7 +1565,7 @@ class CollationRuleParser
 	 * 2. As you process, you keep a LAST pointer that points to the last token 
 	 * you handled. 
 	 * @param expand string offset, -1 for null strings
-	 * @param targetToken tken to update
+	 * @param targetToken token to update
 	 * @return expandnext offset
 	 * @throws ParseException thrown when rules syntax failed
 	 */
