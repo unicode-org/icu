@@ -291,7 +291,6 @@ sl {
         "po Kr.",
     }
     Languages { 
-        Fallback{ "en"}
         ar { "Arab\u0161\u010Dina" }
         bg { "Bolgar\u0161\u010Dina" }
         cs { "\u010Ce\u0161\u010Dina" }
