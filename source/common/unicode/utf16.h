@@ -46,6 +46,10 @@
 /* number of code units per code point */
 #define UTF16_NEED_MULTIPLE_UCHAR(c) ((uint32_t)(c)>0xffff)
 #define UTF16_CHAR_LENGTH(c) ((uint32_t)(c)<=0xffff ? 1 : 2)
+#define UTF16_MAX_CHAR_LENGTH 2
+
+/* average number of code units compared to UTF-16 */
+#define UTF16_ARRAY_SIZE(size) (size)
 
 /*
  * Get a single code point from an offset that points to any
