@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/test/rbbi/Attic/RBBITest.java,v $ 
- * $Date: 2000/10/04 21:57:45 $ 
- * $Revision: 1.1 $
+ * $Date: 2001/02/06 22:37:58 $ 
+ * $Revision: 1.2 $
  *
  *****************************************************************************************
  */
@@ -526,14 +526,16 @@ public class RBBITest extends TestFmwk
 
     RuleBasedBreakIterator rbbi=(RuleBasedBreakIterator)RuleBasedBreakIterator.getLineInstance();
     //fetch the rules used to create the above RuleBasedBreakIterator
-    String rules="<ignore>=[e];"  +
+    String rules=//"$_ignore_=[e];"  + // [liu] Not sure what the intention was here.
+        // It's illegal to redefine variables, also, why prepend the ignore definition --
+        // even if it's legal to redefine variables, the prepended definition will just
+        // get overridden.
                  rbbi.toString();
-
     RuleBasedBreakIterator lineIter=null;
     try{
      lineIter   = new RuleBasedBreakIterator(rules); 
        }catch(IllegalArgumentException iae){
-         errln("ERROR: failed construction in TestCustomRuleBasedLineIterator() -- custom rules" + iae.toString());
+         errln("ERROR: failed construction in TestCustomRuleBasedLineIterator() -- custom rules\n" + iae.toString());
        }
     Vector linedata=new Vector();
     linedata.addElement("SLhello! ");
@@ -545,11 +547,11 @@ public class RBBITest extends TestFmwk
   public void TestCustomRuleBasedCharacterIteration(){
       logln("Testing the RBBI by using custom rules for character iteration");
 
-      String crules2="$ignore=[e];"                                 + //ignore the character "e"
+      String crules2="$_ignore_=[e];"                                 + //ignore the character "e"
                      ".;"                                            + 
-                     "devVowelSign=[\u093e-\u094c\u0962\u0963];"   +  //devanagiri vowel = \u093e tp \u094c and \u0962.\u0963
-                     "devConsonant=[\u0915-\u0939];"               +  //devanagiri consonant = \u0915 to \u0939
-                     "{devConsonant}{devVowelSign};" ;                //break at all places except the  following 
+                     "$devVowelSign=[\u093e-\u094c\u0962\u0963];"   +  //devanagiri vowel = \u093e tp \u094c and \u0962.\u0963
+                     "$devConsonant=[\u0915-\u0939];"               +  //devanagiri consonant = \u0915 to \u0939
+                     "$devConsonant$devVowelSign;" ;                //break at all places except the  following 
                                                                             //devanagiri consonants+ devanagiri vowelsign
       
       RuleBasedBreakIterator charIterRules=null;
@@ -604,16 +606,16 @@ public class RBBITest extends TestFmwk
   //tests custom rules based word iteration
   public void TestCustomRuleBasedWordIteration(){
       logln("Testing the RBBI by using custom rules for word iteration");
-      String wrules1="$ignore=[[:Mn:][:Me:][:Cf:]];"         + // ignore non-spacing marks, enclosing marks, and format characters,
-                      "danda=[\u0964\u0965];"                + // Hindi Phrase seperator
-                      "let=[[:L:][:Mc:]];"                   + // uppercase(Lu), lowercase(Ll), titlecase(Lt), modifier(Lm) letters, Mc-combining space mark
-                      "mid-word=[[:Pd:]\\\"\\\'\\.];"        + // dashes, quotation, apostraphes, period
-                      "ls=[\n\u000c\u2028\u2029];"           + // line separators:  LF, FF, PS, and LS
-                      "ws=[[:Zs:]\t];"                       + // all space separators and the tab character
-                      "word=(({let}+({mid-word}{let}+)*));"  +  
+      String wrules1="$_ignore_=[[:Mn:][:Me:][:Cf:]];"         + // ignore non-spacing marks, enclosing marks, and format characters,
+                      "$danda=[\u0964\u0965];"                + // Hindi Phrase seperator
+                      "$let=[[:L:][:Mc:]];"                   + // uppercase(Lu), lowercase(Ll), titlecase(Lt), modifier(Lm) letters, Mc-combining space mark
+                      "$mid_word=[[:Pd:]\\\"\\\'\\.];"        + // dashes, quotation, apostraphes, period
+                      "$ls=[\n\u000c\u2028\u2029];"           + // line separators:  LF, FF, PS, and LS
+                      "$ws=[[:Zs:]\t];"                       + // all space separators and the tab character
+                      "$word=(($let+($mid_word$let+)*));"  +  
                       ".;"                                   + // break after every character, with the following exceptions
-                      "{word};"                              + 
-                      "{ws}*\r{ls}{danda}?;" ;
+                      "$word;"                              + 
+                      "$ws*\r$ls$danda?;" ;
 
       RuleBasedBreakIterator wordIterRules=null;
       try{
@@ -658,9 +660,9 @@ public class RBBITest extends TestFmwk
       logln("Testing the RBBI for word iteration by adding rules to support abbreviation");
       RuleBasedBreakIterator rb =(RuleBasedBreakIterator)RuleBasedBreakIterator.getWordInstance();
       
-      String wrules2="abbr=((Mr.)|(Mrs.)|(Ms.)|(Dr.)|(U.S.));" + // abbreviations. 
+      String wrules2="$abbr=((Mr.)|(Mrs.)|(Ms.)|(Dr.)|(U.S.));" + // abbreviations. 
                      rb.toString()                             +
-                     "({abbr}{ws})*{word};";
+                     "($abbr$ws)*$word;";
       RuleBasedBreakIterator wordIter=null;
       try{
       wordIter   = new RuleBasedBreakIterator(wrules2); 

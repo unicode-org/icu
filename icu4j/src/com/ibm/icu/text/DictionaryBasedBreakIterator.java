@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DictionaryBasedBreakIterator.java,v $ 
- * $Date: 2000/07/20 17:02:08 $ 
- * $Revision: 1.6 $
+ * $Date: 2001/02/06 22:37:30 $ 
+ * $Revision: 1.7 $
  *
  *****************************************************************************************
  */
@@ -33,10 +33,10 @@ import java.io.*;
  * to divide them up into words.
  *
  * DictionaryBasedBreakIterator uses the same rule language as RuleBasedBreakIterator,
- * but adds one more special substitution name: $dictionary.  This substitution
+ * but adds one more special substitution name: _dictionary_.  This substitution
  * name is used to identify characters in words in the dictionary.  The idea is that
  * if the iterator passes over a chunk of text that includes two or more characters
- * in a row that are included in {$dictionary}, it goes back through that range and
+ * in a row that are included in _dictionary_, it goes back through that range and
  * derives additional break positions (if possible) using the dictionary.
  *
  * DictionaryBasedBreakIterator is also constructed with the filename of a dictionary
@@ -81,9 +81,14 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
     private int positionInCache;
 
     /**
+     * Special variable name for characters in words in dictionary
+     */
+    private static final String DICTIONARY_VAR = "_dictionary_";
+
+    /**
      * Constructs a DictionaryBasedBreakIterator.
      * @param description Same as the description parameter on RuleBasedBreakIterator,
-     * except for the special meaning of "<dictionary>".  This parameter is just
+     * except for the special meaning of DICTIONARY_VAR.  This parameter is just
      * passed through to RuleBasedBreakIterator's constructor.
      * @param dictionaryFilename The filename of the dictionary file to use
      */
@@ -96,7 +101,7 @@ public class DictionaryBasedBreakIterator extends RuleBasedBreakIterator {
     /**
      * Returns a Builder that is customized to build a DictionaryBasedBreakIterator.
      * This is the same as RuleBasedBreakIterator.Builder, except for the extra code
-     * to handle the <dictionary> tag.
+     * to handle the DICTIONARY_VAR tag.
      */
     protected RuleBasedBreakIterator.Builder makeBuilder() {
         return new Builder();
@@ -503,7 +508,7 @@ switch (categoryFlags.length % 4) {
     /**
      * The Builder class for DictionaryBasedBreakIterator inherits almost all of
      * its functionality from the Builder class for RuleBasedBreakIterator, but
-     * extends it with extra logic to handle the "<dictionary>" token
+     * extends it with extra logic to handle the DICTIIONARY_VAR token
      */
     protected class Builder extends RuleBasedBreakIterator.Builder {
 
@@ -521,7 +526,7 @@ switch (categoryFlags.length % 4) {
 
         /**
          * We override handleSpecialSubstitution() to add logic to handle
-         * the $dictionary tag.  If we see a substitution named "$dictionary",
+         * the $dictionary tag.  If we see a substitution named DICTIONARY_VAR,
          * parse the substitution expression and store the result in
          * dictionaryChars.
          */
@@ -529,7 +534,7 @@ switch (categoryFlags.length % 4) {
                                                  int startPos, String description) {
             super.handleSpecialSubstitution(replace, replaceWith, startPos, description);
 
-            if (replace.equals("$dictionary")) {
+            if (replace.equals(DICTIONARY_VAR)) {
                 if (replaceWith.charAt(0) == '(') {
                     error("Dictionary group can't be enclosed in (", startPos, description);
                 }
