@@ -156,7 +156,7 @@ static const UChar DEFAULTRULEARRAY[] =
 
         , 0x3c, 0x27, (UChar)0x005f, 0x27 /*  underline/underscore (spacing) */
         , 0x3c, (UChar)0x00af          /*  overline or macron (spacing) */
-/*         , 0x3c, (UChar)0x00ad          /* syllable hyphen (SHY) or soft hyphen */
+/*         , 0x3c, (UChar)0x00ad    */      /* syllable hyphen (SHY) or soft hyphen */
         , 0x3c, 0x27, (UChar)0x002c, 0x27           /*  comma (spacing) */
         , 0x3c, 0x27, (UChar)0x003b, 0x27           /*  semicolon */
         , 0x3c, 0x27, (UChar)0x003a, 0x27           /*  colon */
