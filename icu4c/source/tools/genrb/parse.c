@@ -519,7 +519,6 @@ parse(UCHARBUF* buf, const char *inputDir,
                 /* open the file */
                 in = T_FileStream_open(fileName, "rb");
                 if(in){
-                    const char* cp;
                     UChar32 c=0;
                     UCHARBUF* ucbuf;
                     int size = T_FileStream_size(in);
