@@ -187,7 +187,7 @@ void TestExponential(void)
 #else
   double val[] = { 0.01234, 123456789, 1.23e300, -3.141592653e-271 };
 #endif
-  char* pat[] = { "0.####E0", "00.000E00", "##0.######E000", "0.###E0;[0.###E0]"  };
+  const char* pat[] = { "0.####E0", "00.000E00", "##0.######E000", "0.###E0;[0.###E0]" };
   int32_t lval[] = { 0, -1, 1, 123456789 };
 	
   const char* valFormat[] =
