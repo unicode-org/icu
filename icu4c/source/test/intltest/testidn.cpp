@@ -237,14 +237,14 @@ unicodeDataLineFn(void *context,
     uint32_t rangeStart=0,rangeEnd =0;
     UBool* isUnassigned = (UBool*) context;
 
-    /* ignore First and Last entries for ranges */
+    /* ignore First and Last entries for ranges 
     if( *fields[1][0]=='<' &&
         (length=(int32_t)(fields[1][1]-fields[1][0]))>=9 &&
         (0==uprv_memcmp(", First>", fields[1][1]-8, 8) || 0==uprv_memcmp(", Last>", fields[1][1]-7, 7))
     ) {
         return;
     }
-
+   */
 
     u_parseCodePointRange(fields[0][0], &rangeStart,&rangeEnd, pErrorCode);
     
@@ -260,7 +260,7 @@ unicodeDataLineFn(void *context,
 
 static void
 parseTable(const char *filename,UBool isUnassigned,TestIDNA& test, UErrorCode *pErrorCode) {
-    char *fields[1][2];
+    char *fields[2][2];
     int32_t len=0;
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
         return;
@@ -454,13 +454,12 @@ loadIDNData(UErrorCode &errorCode) {
         UDataMemory *data;
         const int32_t *p=NULL;
         const uint8_t *pb;
-
         if(&errorCode==NULL || U_FAILURE(errorCode)) {
             return 0;
         }
 
         /* open the data outside the mutex block */
-        data=udata_openChoice("c:\\work\\devicu\\idn\\genidn\\icudt26l", DATA_TYPE, DATA_NAME, isAcceptable, NULL, &errorCode);
+        data=udata_openChoice(NULL, DATA_TYPE, DATA_NAME, isAcceptable, NULL, &errorCode);
         dataErrorCode=errorCode;
         if(U_FAILURE(errorCode)) {
             return isDataLoaded=FALSE;
