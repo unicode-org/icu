@@ -244,8 +244,8 @@ U_CAPI void
 utrans_register(UTransliterator* adoptedTrans,
                 UErrorCode* status) {
     utrans_ENTRY(status);
-    Transliterator::registerInstance((Transliterator*) adoptedTrans,
-                                     *status);
+    // status currently ignored; may remove later
+    Transliterator::registerInstance((Transliterator*) adoptedTrans);
 }
 
 U_CAPI void

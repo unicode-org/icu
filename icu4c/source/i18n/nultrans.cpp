@@ -9,8 +9,11 @@
 */
 #include "unicode/nultrans.h"
 
-//const UnicodeString NullTransliterator::ID = UnicodeString("Null", "");
-const UChar NullTransliterator::ID[] = {0x4E, 0x75, 0x6C, 0x6C, 0x00}; /* "Null" */
+// "Any-Null"
+const UChar NullTransliterator::ID[] = {65,110,121,45,0x4E, 0x75, 0x6C, 0x6C, 0x00};
+
+// "Null"
+const UChar NullTransliterator::SHORT_ID[] = {0x4E, 0x75, 0x6C, 0x6C, 0x00};
 
 Transliterator* NullTransliterator::clone(void) const {
     return new NullTransliterator();

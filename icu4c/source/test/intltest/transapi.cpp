@@ -579,7 +579,7 @@ void TransliteratorAPITest::TestRegisterUnregister(){
                                                    "a<>b",
                                                    status);
    /* Register it */
-   Transliterator::registerInstance(t, status);
+   Transliterator::registerInstance(t);
 
    /* Now check again -- should exist now*/
    Transliterator *s = Transliterator::createInstance("TestA-TestB");
