@@ -1,11 +1,13 @@
 package com.ibm.text.UCD;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.TreeSet;
 
+import com.ibm.icu.dev.test.util.UnicodeMap;
 import com.ibm.icu.dev.test.util.UnicodeProperty;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.text.utility.Utility;
@@ -15,62 +17,74 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
     private static boolean needAgeCache = true;
     private static UCD[] ucdCache = new UCD[UCD_Types.LIMIT_AGE];
     
-    private static HashMap cache = new HashMap();
+    private static HashMap factoryCache = new HashMap();
     
     public static synchronized ToolUnicodePropertySource make(String version) {
-        ToolUnicodePropertySource result = (ToolUnicodePropertySource)cache.get(version);
+        ToolUnicodePropertySource result = (ToolUnicodePropertySource)factoryCache.get(version);
         if (result != null) return result;
         result = new ToolUnicodePropertySource(version);
-        cache.put(version, result);
+        factoryCache.put(version, result);
         return result; 
     }
     
     private ToolUnicodePropertySource(String version) {
         ucd = UCD.make(version);
+        version = ucd.getVersion();
         TreeSet names = new TreeSet();
         UnifiedProperty.getAvailablePropertiesAliases(names,ucd);
         Iterator it = names.iterator();
         while (it.hasNext()) {
             String name = (String) it.next();
+            //System.out.println("Name: " + name);
             add(new ToolUnicodeProperty(name));
         }
+        
         add(new UnicodeProperty.SimpleProperty() {
-            {set("Name", "na", UnicodeProperty.STRING, "<string>");}
-            public String getValue(int codepoint) {
+            public String _getValue(int codepoint) {
                 if ((ODD_BALLS & ucd.getCategoryMask(codepoint)) != 0) return null;
                 return ucd.getName(codepoint);
             }
-        });
+        }.setMain("Name", "na", UnicodeProperty.STRING, version)
+        .setValues("<string>"));
+        
         add(new UnicodeProperty.SimpleProperty() {
-            {set("Block", "blk", UnicodeProperty.ENUMERATED,
-                ucd.getBlockNames(null));}
-            public String getValue(int codepoint) {
+            public String _getValue(int codepoint) {
+                if (codepoint == 0x1D100) {
+                    System.out.println("here");
+                }
                 //if ((ODD_BALLS & ucd.getCategoryMask(codepoint)) != 0) return null;
                 return ucd.getBlock(codepoint);
             }
-        });
+            protected UnicodeMap _getUnicodeMap() {
+                return ucd.blockData;
+            }
+        }.setMain("Block", "blk", UnicodeProperty.ENUMERATED, version)
+        .setValues(ucd.getBlockNames(null)));
+        
         add(new UnicodeProperty.SimpleProperty() {
-            {set("Bidi_Mirroring_Glyph", "bmg", UnicodeProperty.STRING, "<string>");}
-            public String getValue(int codepoint) {
+            public String _getValue(int codepoint) {
                 //if ((ODD_BALLS & ucd.getCategoryMask(codepoint)) != 0) return null;
                 return ucd.getBidiMirror(codepoint);
             }
-        });
+        }.setMain("Bidi_Mirroring_Glyph", "bmg", UnicodeProperty.STRING, version)
+        .setValues("<string>"));
+        
         add(new UnicodeProperty.SimpleProperty() {
-            {set("Case_Folding", "cf", UnicodeProperty.STRING, "<string>");}
-            public String getValue(int codepoint) {
+            public String _getValue(int codepoint) {
                 //if ((ODD_BALLS & ucd.getCategoryMask(codepoint)) != 0) return null;
                 return ucd.getCase(codepoint,UCD_Types.FULL,UCD_Types.FOLD);
             }
-        });
+        }.setMain("Case_Folding", "cf", UnicodeProperty.STRING, version)
+        .setValues("<string>"));
+        
         add(new UnicodeProperty.SimpleProperty() {
-            {set("Numeric_Value", "nv", UnicodeProperty.NUMERIC, "<number>");}
-            public String getValue(int codepoint) {
+            public String _getValue(int codepoint) {
                 double num = ucd.getNumericValue(codepoint);
                 if (Double.isNaN(num)) return null;
                 return Double.toString(num);
             }
-        });
+        }.setMain("Numeric_Value", "nv", UnicodeProperty.NUMERIC, version)
+        .setValues("<number>"));
     }
     /*
            "Bidi_Mirroring_Glyph", "Block", "Case_Folding", "Case_Sensitive", "ISO_Comment",
@@ -109,7 +123,8 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
             setName(propertyAlias);
         }
 
-        public Collection getAvailableValueAliases(Collection result) {
+        public Collection _getAvailableValueAliases(Collection result) {
+            if (result == null) result = new ArrayList();
             int type = getType() & ~EXTENDED_BIT;
             if (type == STRING) result.add("<string>");
             else if (type == NUMERIC) result.add("<string>");
@@ -149,34 +164,80 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
                     }
                     if (temp != null && temp.length() != 0) result.add(Utility.getUnskeleton(temp, titlecase));
                 }
-                if (prop == (UCD_Types.DECOMPOSITION_TYPE>>8)) result.add("none");
-                if (prop == (UCD_Types.JOINING_TYPE>>8)) result.add("Non_Joining");
-                if (prop == (UCD_Types.NUMERIC_TYPE>>8)) result.add("None");
+                //if (prop == (UCD_Types.DECOMPOSITION_TYPE>>8)) result.add("none");
+                //if (prop == (UCD_Types.JOINING_TYPE>>8)) result.add("Non_Joining");
+                //if (prop == (UCD_Types.NUMERIC_TYPE>>8)) result.add("None");
             }
             return result;
         }
 
-        public Collection getAliases(Collection result) {
-             String longName = up.getName(UCD_Types.LONG);
-             addUnique(Utility.getUnskeleton(longName, true), result);
-             String shortName = up.getName(UCD_Types.SHORT);
-             addUnique(Utility.getUnskeleton(shortName, false), result);
-             return result;
-        }
-        
-        public Collection getValueAliases(String valueAlias, Collection result) {
-            // TODO Auto-generated method stub
+        public Collection _getAliases(Collection result) {
+            if (result == null) result = new ArrayList();
+            String longName = up.getName(UCD_Types.LONG);
+            addUnique(Utility.getUnskeleton(longName, true), result);
+            String shortName = up.getName(UCD_Types.SHORT);
+            addUnique(Utility.getUnskeleton(shortName, false), result);
             return result;
         }
+        
+        public Collection _getValueAliases(String valueAlias, Collection result) {
+            if (result == null) result = new ArrayList();
+            int type = getType() & ~EXTENDED_BIT;
+            if (type == STRING) return result;
+            else if (type == NUMERIC) return result;
+            else if (type == BINARY) {
+                UnicodeProperty.addUnique(valueAlias, result);
+                return lookup(valueAlias, UCD_Names.YN_TABLE_LONG, UCD_Names.YN_TABLE, result);
+            } else if (type == ENUMERATED) {
+                byte style = UCD_Types.LONG;
+                int prop = propMask>>8;
+                boolean titlecase = false;
+                for (int i = 0; i < 256; ++i) {
+                    try {
+                        switch (prop) {
+                        case UCD_Types.CATEGORY>>8:
+                            return lookup(valueAlias, UCD_Names.LONG_GENERAL_CATEGORY, UCD_Names.GENERAL_CATEGORY, result);
+                        case UCD_Types.COMBINING_CLASS>>8:
+                            addUnique(""+i, result);
+                            return lookup(valueAlias, UCD_Names.LONG_COMBINING_CLASS, UCD_Names.COMBINING_CLASS, result);
+                        case UCD_Types.BIDI_CLASS>>8:
+                            return lookup(valueAlias, UCD_Names.LONG_BIDI_CLASS, UCD_Names.BIDI_CLASS, result);
+                        case UCD_Types.DECOMPOSITION_TYPE>>8:
+                            return lookup(valueAlias, UCD_Names.LONG_DECOMPOSITION_TYPE, UCD_Names.DECOMPOSITION_TYPE, result);
+                        case UCD_Types.NUMERIC_TYPE>>8:
+                            return lookup(valueAlias, UCD_Names.LONG_NUMERIC_TYPE, UCD_Names.NUMERIC_TYPE, result);
+                        case UCD_Types.EAST_ASIAN_WIDTH>>8:
+                            return lookup(valueAlias, UCD_Names.LONG_EAST_ASIAN_WIDTH, UCD_Names.EAST_ASIAN_WIDTH, result);
+                        case UCD_Types.LINE_BREAK>>8:
+                            return lookup(valueAlias, UCD_Names.LONG_LINE_BREAK, UCD_Names.LINE_BREAK, result);
+                        case UCD_Types.JOINING_TYPE>>8:
+                            return lookup(valueAlias, UCD_Names.LONG_JOINING_TYPE, UCD_Names.JOINING_TYPE, result);
+                        case UCD_Types.JOINING_GROUP>>8:
+                            return lookup(valueAlias, UCD_Names.JOINING_GROUP, null, result);
+                        case UCD_Types.SCRIPT>>8: 
+                            return lookup(valueAlias, UCD_Names.LONG_SCRIPT, UCD_Names.SCRIPT, result);
+                        case UCD_Types.AGE>>8:
+                            return lookup(valueAlias, UCD_Names.AGE, null, result);
+                        case UCD_Types.HANGUL_SYLLABLE_TYPE>>8: 
+                            return lookup(valueAlias, UCD_Names.LONG_HANGUL_SYLLABLE_TYPE, UCD_Names.HANGUL_SYLLABLE_TYPE, result);
+                        default: throw new IllegalArgumentException("Internal Error: " + prop);
+                        }
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        continue;
+                    }
+                }
+            }
+            throw new ArrayIndexOutOfBoundsException("not supported yet");
+        }
 
-        public String getValue(int codepoint) {
+        public String _getValue(int codepoint) {
             byte style = UCD_Types.LONG;
             String temp = null;
             boolean titlecase = false;
             switch (propMask>>8) {
             case UCD_Types.CATEGORY>>8: temp = (ucd.getCategoryID_fromIndex(ucd.getCategory(codepoint), style)); break;
             case UCD_Types.COMBINING_CLASS>>8: temp = (ucd.getCombiningClassID_fromIndex(ucd.getCombiningClass(codepoint), style)); 
-                if (temp.startsWith("Fixed_")) temp = temp.substring(6);
+                //if (temp.startsWith("Fixed_")) temp = temp.substring(6);
                 break;
             case UCD_Types.BIDI_CLASS>>8: temp =  (ucd.getBidiClassID_fromIndex(ucd.getBidiClass(codepoint), style)); break;
             case UCD_Types.DECOMPOSITION_TYPE>>8: temp =  (ucd.getDecompositionTypeID_fromIndex(ucd.getDecompositionType(codepoint), style));
@@ -226,7 +287,7 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
         private int getPropertyTypeInternal() {
             int result = 0;
             String name = up.getName(UCD_Types.LONG);
-            if ("Age".equals(name)) return STRING;
+            if ("Age".equals(name)) return ENUMERATED;
             switch (up.getValueType()) {
                 case UCD_Types.NUMERIC_PROP: result = NUMERIC; break;
                 case UCD_Types.STRING_PROP: result = STRING; break;
@@ -243,5 +304,18 @@ public class ToolUnicodePropertySource extends UnicodeProperty.Factory {
             return result;
         }
 
+        public String _getVersion() {
+            return up.ucd.getVersion();
+        }
+
     }
+    static Collection lookup(String valueAlias, String[] main, String[] aux, Collection result) {
+        //System.out.println(valueAlias + "=>");
+        int pos = 0xFF & Utility.lookup(valueAlias, main, true);
+        //System.out.println("=>" + aux[pos]);
+        UnicodeProperty.addUnique(valueAlias, result);
+        if (aux == null) return result;
+        return UnicodeProperty.addUnique(aux[pos], result);
+    }
+
 }

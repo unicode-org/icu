@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/utility/Utility.java,v $
-* $Date: 2004/02/07 01:01:17 $
-* $Revision: 1.38 $
+* $Date: 2004/02/12 08:23:14 $
+* $Revision: 1.39 $
 *
 *******************************************************************************
 */
@@ -16,6 +16,7 @@ package com.ibm.text.utility;
 import java.util.*;
 import java.text.*;
 import java.io.*;
+
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.Replaceable;
@@ -717,7 +718,8 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
     public static PrintWriter openPrintWriter(String directory, String filename, Encoding options) throws IOException {
         File file = new File(directory + filename);
         Utility.fixDot();
-        System.out.println("Creating File: " + file.getCanonicalPath());
+        System.out.print("Creating File: " + file);
+        System.out.println("\t" + file.getCanonicalPath());
         File parent = new File(file.getParent());
         //System.out.println("Creating File: "+ parent);
         parent.mkdirs();
@@ -1095,7 +1097,7 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
     }
     
     public static void showSetDifferences(PrintWriter pw, String name1, UnicodeSet set1, String name2, UnicodeSet set2, 
-      boolean separateLines, boolean withChar, UnicodeMap names, UCD ucd) {
+      boolean separateLines, boolean withChar, OldUnicodeMap names, UCD ucd) {
         
         UnicodeSet temp = new UnicodeSet(set1).removeAll(set2);
         pw.println();
@@ -1135,7 +1137,7 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
     static java.text.NumberFormat nf = java.text.NumberFormat.getInstance();
     
     public static void showSetNames(PrintWriter pw, String prefix, UnicodeSet set, boolean separateLines, boolean IDN, 
-            boolean withChar, UnicodeMap names, UCD ucd) {
+            boolean withChar, OldUnicodeMap names, UCD ucd) {
         if (set.size() == 0) {
             pw.println(prefix + "<none>");
             pw.flush();
@@ -1196,4 +1198,5 @@ public final class Utility implements UCD_Types {    // COMMON UTILITIES
     private static boolean isSeparateLineIDN(int start, int end, UCD ucd) {
         return (isSeparateLineIDN(start, ucd) || isSeparateLineIDN(end, ucd));
     }
+
 }

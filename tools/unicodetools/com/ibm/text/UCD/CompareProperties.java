@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/CompareProperties.java,v $
-* $Date: 2004/02/07 01:01:16 $
-* $Revision: 1.4 $
+* $Date: 2004/02/12 08:23:15 $
+* $Revision: 1.5 $
 *
 *******************************************************************************
 */
@@ -92,30 +92,26 @@ public class CompareProperties implements UCD_Types {
 	public final static class UnicodeSetComparator implements Comparator {
 		/**
 		 * Compares two UnicodeSets, producing a transitive ordering.
-		 * @return -1 if first is smaller (in size) than second, 
-		 * 1 if first is greater (in size) than second, 
-		 * Otherwise (since they are equal in size)
-		 * returns a comparison based on the first range that differs.
+         * The ordering is based on the first codepoint that differs between them.
+		 * @return -1 if first set contains the first different code point 
+		 * 1 if the second set does.
+		 * 0 if there is no difference.
 		 * If compareTo were added to UnicodeSet, this can be optimized to use list[i].
 		 * @author Davis
 		 *
 		 */
 		public int compare(Object o1, Object o2) {
-			UnicodeSet bs1 = (UnicodeSet) o1;
-			UnicodeSet bs2 = (UnicodeSet) o2;
-			if (bs1.size() < bs2.size()) return -1;
-			if (bs1.size() > bs2.size()) return 1;
-			UnicodeSetIterator it1 = new UnicodeSetIterator(bs1);
-			UnicodeSetIterator it2 = new UnicodeSetIterator(bs2);
-			// Note: because they are the same size, and we stop if any ranges
-			// are different, it is safe to test for both at the same time
-			while (it1.nextRange() && it2.nextRange()) {
-				if (it1.codepoint < it2.codepoint) return -1;
+			UnicodeSetIterator it1 = new UnicodeSetIterator((UnicodeSet) o1);
+			UnicodeSetIterator it2 = new UnicodeSetIterator((UnicodeSet) o2);
+			while (it1.nextRange()) {
+                if (!it2.nextRange()) return -1; // first has range while second exhausted
+				if (it1.codepoint < it2.codepoint) return -1; // first has code point not in second
 				if (it1.codepoint > it2.codepoint) return 1;
-				if (it1.codepointEnd < it2.codepointEnd) return -1;
-				if (it1.codepointEnd > it2.codepointEnd) return 1;
+				if (it1.codepointEnd < it2.codepointEnd) return 1; // second has codepoint not in first
+				if (it1.codepointEnd > it2.codepointEnd) return -1;
 			}
-			return 0;
+            if (it2.nextRange()) return 1; // second has range while first is exhausted
+			return 0; // otherwise we ran out in both of them, so equal
 		 }
 	}
 
@@ -210,7 +206,7 @@ public class CompareProperties implements UCD_Types {
 	public void printPartition() throws IOException {
 		System.out.println("Set Size: " + map.size());
 		PrintWriter output = Utility.openPrintWriter("Partition"
-			 + GenerateData.getFileSuffix(true), Utility.LATIN1_WINDOWS);
+			 + UnicodeDataFile.getFileSuffix(true), Utility.LATIN1_WINDOWS);
         
 		Iterator it = map.keySet().iterator();
 		while (it.hasNext()) {
@@ -234,7 +230,7 @@ public class CompareProperties implements UCD_Types {
 	public void printStatistics() throws IOException {
 		System.out.println("Set Size: " + map.size());
 		PrintWriter output = Utility.openPrintWriter("Statistics"
-			 + GenerateData.getFileSuffix(true), Utility.LATIN1_WINDOWS);
+			 + UnicodeDataFile.getFileSuffix(true), Utility.LATIN1_WINDOWS);
         
         System.out.println("Finding disjoints/contains");
         for (int i = 0; i < count; ++i) {
@@ -383,10 +379,10 @@ public class CompareProperties implements UCD_Types {
 
     public static void listDifferences() throws IOException {
     
-        PrintWriter output = Utility.openPrintWriter("PropertyDifferences" + GenerateData.getFileSuffix(true), Utility.LATIN1_UNIX);
+        PrintWriter output = Utility.openPrintWriter("PropertyDifferences" + UnicodeDataFile.getFileSuffix(true), Utility.LATIN1_UNIX);
         output.println("# Listing of relationships among properties, suitable for analysis by spreadsheet");
         output.println("# Generated for " + Default.ucd().getVersion());
-        output.println(GenerateData.generateDateLine());
+        output.println(UnicodeDataFile.generateDateLine());
         output.println("# P1	P2	R(P1,P2)	C(P1&P2)	C(P1-P2)	C(P2-P1)");
         
     

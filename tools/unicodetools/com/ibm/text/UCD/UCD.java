@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD.java,v $
-* $Date: 2004/02/07 01:01:13 $
-* $Revision: 1.30 $
+* $Date: 2004/02/12 08:23:16 $
+* $Revision: 1.31 $
 *
 *******************************************************************************
 */
@@ -29,6 +29,7 @@ import java.io.BufferedReader;
 
 import com.ibm.text.utility.*;
 import com.ibm.icu.dev.test.util.BagFormatter;
+import com.ibm.icu.dev.test.util.UnicodeMap;
 import com.ibm.icu.dev.test.util.UnicodeProperty;
 import com.ibm.icu.text.UnicodeSet;
 
@@ -364,9 +365,19 @@ public final class UCD implements UCD_Types {
             
             BIDI_R_SET = new UnicodeSet();
             BIDI_AL_SET = new UnicodeSet();
-        
+            
+            blockData.getSet("Hebrew",BIDI_R_SET);
+            blockData.getSet("Cypriot_Syllabary",BIDI_R_SET);
+            
+            blockData.getSet("Arabic",BIDI_AL_SET);
+            blockData.getSet("Syriac",BIDI_AL_SET);
+            blockData.getSet("Thaana",BIDI_AL_SET);
+            blockData.getSet("Arabic_Presentation_Forms-A",BIDI_AL_SET);
+            blockData.getSet("Arabic_Presentation_Forms-B",BIDI_AL_SET);
+            /*
             int blockId = 0;
             BlockData blockData = new BlockData();
+            UnicodeSet s = blockData.get
             while (getBlockData(blockId++, blockData)) {
                 if (blockData.name.equals("Hebrew")
                  || blockData.name.equals("Cypriot_Syllabary")
@@ -391,6 +402,7 @@ public final class UCD implements UCD_Types {
                         + ".." + Utility.hex(blockData.end));
                 }
             }
+            */
             
             System.out.println("BIDI_R_SET: " + BIDI_R_SET);
             System.out.println("BIDI_AL_SET: " + BIDI_AL_SET);
@@ -835,8 +847,8 @@ public final class UCD implements UCD_Types {
     }
     
     public static String getCategoryID_fromIndex(byte prop, byte style) {
-        return prop < 0 || prop >= UCD_Names.GC.length ? null
-            : (style != LONG) ? UCD_Names.GC[prop] : UCD_Names.LONG_GC[prop];
+        return prop < 0 || prop >= UCD_Names.GENERAL_CATEGORY.length ? null
+            : (style != LONG) ? UCD_Names.GENERAL_CATEGORY[prop] : UCD_Names.LONG_GENERAL_CATEGORY[prop];
     }
     
     
@@ -898,11 +910,11 @@ public final class UCD implements UCD_Types {
     
     public static String getBidiClassID_fromIndex(byte prop, byte style) {
         return prop < 0 
-            || prop >= UCD_Names.BC.length 
+            || prop >= UCD_Names.BIDI_CLASS.length 
             ? null
             : style == SHORT 
-            ? UCD_Names.BC[prop] 
-            : UCD_Names.LONG_BC[prop];
+            ? UCD_Names.BIDI_CLASS[prop] 
+            : UCD_Names.LONG_BIDI_CLASS[prop];
     }
 
     public String getDecompositionTypeID(int codePoint) {
@@ -913,8 +925,8 @@ public final class UCD implements UCD_Types {
         return getDecompositionTypeID_fromIndex(prop, NORMAL);
     }
     public static String getDecompositionTypeID_fromIndex(byte prop, byte style) {
-        return prop < 0 || prop >= UCD_Names.DT.length ? null
-        : style == SHORT ? UCD_Names.SHORT_DT[prop] : UCD_Names.DT[prop];
+        return prop < 0 || prop >= UCD_Names.LONG_DECOMPOSITION_TYPE.length ? null
+        : style == SHORT ? UCD_Names.DECOMPOSITION_TYPE[prop] : UCD_Names.LONG_DECOMPOSITION_TYPE[prop];
     }
 
     public String getNumericTypeID(int codePoint) {
@@ -926,8 +938,8 @@ public final class UCD implements UCD_Types {
     }
 
     public static String getNumericTypeID_fromIndex(byte prop, byte style) {
-        return prop < 0 || prop >= UCD_Names.NT.length ? null
-        : style == SHORT ? UCD_Names.SHORT_NT[prop] : UCD_Names.NT[prop];
+        return prop < 0 || prop >= UCD_Names.LONG_NUMERIC_TYPE.length ? null
+        : style == SHORT ? UCD_Names.NUMERIC_TYPE[prop] : UCD_Names.LONG_NUMERIC_TYPE[prop];
     }
 
     public String getEastAsianWidthID(int codePoint) {
@@ -939,8 +951,8 @@ public final class UCD implements UCD_Types {
     }
 
     public static String getEastAsianWidthID_fromIndex(byte prop, byte style) {
-        return prop < 0 || prop >= UCD_Names.EA.length ? null
-        : style != LONG ? UCD_Names.SHORT_EA[prop] : UCD_Names.EA[prop];
+        return prop < 0 || prop >= UCD_Names.LONG_EAST_ASIAN_WIDTH.length ? null
+        : style != LONG ? UCD_Names.EAST_ASIAN_WIDTH[prop] : UCD_Names.LONG_EAST_ASIAN_WIDTH[prop];
     }
 
     public String getLineBreakID(int codePoint) {
@@ -952,8 +964,8 @@ public final class UCD implements UCD_Types {
     }
 
     public static String getLineBreakID_fromIndex(byte prop, byte style) {
-        return prop < 0 || prop >= UCD_Names.LB.length ? null
-        : style != LONG ? UCD_Names.LB[prop] : UCD_Names.LONG_LB[prop];
+        return prop < 0 || prop >= UCD_Names.LINE_BREAK.length ? null
+        : style != LONG ? UCD_Names.LINE_BREAK[prop] : UCD_Names.LONG_LINE_BREAK[prop];
     }
 
     public String getJoiningTypeID(int codePoint) {
@@ -993,7 +1005,7 @@ public final class UCD implements UCD_Types {
 
     public static String getScriptID_fromIndex(byte prop, byte length) {
         return prop < 0 || prop >= UCD_Names.JOINING_GROUP.length ? null
-        : (length == SHORT) ? UCD_Names.ABB_SCRIPT[prop] : UCD_Names.SCRIPT[prop];
+        : (length == SHORT) ? UCD_Names.SCRIPT[prop] : UCD_Names.LONG_SCRIPT[prop];
     }
 
     public String getAgeID(int codePoint) {
@@ -1553,6 +1565,54 @@ to guarantee identifier closure.
         }
     }
     
+    UnicodeMap blockData;
+    public String getBlock(int codePoint) {
+        if (blockData == null) loadBlocks();
+        return (String)blockData.getValue(codePoint);
+    }
+    public Collection getBlockNames() {
+            return getBlockNames(null);
+    }
+    public Collection getBlockNames(Collection result) {
+        if (result == null) result = new ArrayList();
+        if (blockData == null) loadBlocks();
+        return blockData.getAvailableValues(result);
+    }
+    public UnicodeSet getBlockSet(String value, UnicodeSet result) {
+        if (result == null) result = new UnicodeSet();
+        if (blockData == null) loadBlocks();
+        return blockData.getSet(value, result);
+    }
+    
+    private void loadBlocks() {
+        blockData = new UnicodeMap();
+        try {
+            BufferedReader in = Utility.openUnicodeFile("Blocks", version, true, Utility.LATIN1);
+            try {
+                while (true) {
+                    // 0000..007F; Basic Latin
+                    String line = Utility.readDataLine(in);
+                    if (line == null) break;
+                    if (line.length() == 0) continue;
+                    int pos1 = line.indexOf('.');
+                    int pos2 = line.indexOf(';', pos1);
+                        
+                    //lastBlock = new BlockData();
+                    int start = Integer.parseInt(line.substring(0, pos1), 16);
+                    int end = Integer.parseInt(line.substring(pos1+2, pos2), 16);
+                    String name = line.substring(pos2+1).trim().replace(' ', '_');
+                    blockData.putAll(start,end, name);
+                }
+                blockData.setMissing("No_Block");
+            } finally {
+                in.close();
+            }
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Can't read block file");
+        }
+    }
+    
+    /*
     public static class BlockData {
         public int start;
         public int end;
@@ -1560,13 +1620,17 @@ to guarantee identifier closure.
     }
     
     public String NOBLOCK = Utility.getUnskeleton("no block", true);
+    private BlockData lastBlock;
     
     public String getBlock(int codePoint) {
         if (blocks == null) loadBlocks();
+        if (codePoint >= lastBlock.start && codePoint <= lastBlock.end) return lastBlock.name;
         Iterator it = blocks.iterator();
         while (it.hasNext()) {
-            BlockData data = (BlockData) it.next();
-            if (codePoint >= data.start && codePoint <= data.end) return data.name;
+            lastBlock = (BlockData) it.next();
+            if (codePoint < lastBlock.start) continue;
+            if (codePoint > lastBlock.end) break;
+            return lastBlock.name;
         }
         return NOBLOCK;
     }
@@ -1612,11 +1676,11 @@ to guarantee identifier closure.
                     int pos1 = line.indexOf('.');
                     int pos2 = line.indexOf(';', pos1);
                     
-                    BlockData blockData = new BlockData();
-                    blockData.start = Integer.parseInt(line.substring(0, pos1), 16);
-                    blockData.end = Integer.parseInt(line.substring(pos1+2, pos2), 16);
-                    blockData.name = line.substring(pos2+1).trim().replace(' ', '_');
-                    blocks.add(blockData);
+                    lastBlock = new BlockData();
+                    lastBlock.start = Integer.parseInt(line.substring(0, pos1), 16);
+                    lastBlock.end = Integer.parseInt(line.substring(pos1+2, pos2), 16);
+                    lastBlock.name = line.substring(pos2+1).trim().replace(' ', '_');
+                    blocks.add(lastBlock);
                 }
             } finally {
                 in.close();
@@ -1625,6 +1689,7 @@ to guarantee identifier closure.
             throw new IllegalArgumentException("Can't read block file");
         }
     }
+    */
     /**
      * @return
      */

@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateCaseFolding.java,v $
-* $Date: 2004/02/07 01:01:15 $
-* $Revision: 1.15 $
+* $Date: 2004/02/12 08:23:15 $
+* $Revision: 1.16 $
 *
 *******************************************************************************
 */
@@ -15,6 +15,7 @@ package com.ibm.text.UCD;
 
 import java.util.*;
 import java.io.*;
+
 import com.ibm.icu.text.UTF16;
 
 import com.ibm.text.utility.*;
@@ -37,11 +38,12 @@ public class GenerateCaseFolding implements UCD_Types {
     
     static PrintWriter log;
     
+    
     public static void makeCaseFold(boolean normalized) throws java.io.IOException {
         PICK_SHORT = NF_CLOSURE = normalized;
         
-        log = Utility.openPrintWriter("CaseFoldingLog" + GenerateData.getFileSuffix(true), Utility.LATIN1_UNIX);
-        System.out.println("Writing Log: " + "CaseFoldingLog" + GenerateData.getFileSuffix(true));
+        log = Utility.openPrintWriter("CaseFoldingLog" + UnicodeDataFile.getFileSuffix(true), Utility.LATIN1_UNIX);
+        System.out.println("Writing Log: " + "CaseFoldingLog" + UnicodeDataFile.getFileSuffix(true));
         
         System.out.println("Making Full Data");
         Map fullData = getCaseFolding(true, NF_CLOSURE, "");
@@ -64,15 +66,8 @@ public class GenerateCaseFolding implements UCD_Types {
         String filename = "CaseFolding";
         if (normalized) filename += "-Normalized";
         String directory = "DerivedData/";
-        String newFile = directory + filename + GenerateData.getFileSuffix(true);
-        PrintWriter out = Utility.openPrintWriter(newFile, Utility.LATIN1_UNIX);
-        String[] batName = {""};
-        String mostRecent = GenerateData.generateBat(directory, filename, GenerateData.getFileSuffix(true), batName);
-        
-        out.println("# CaseFolding" + GenerateData.getFileSuffix(false));
-        out.println(GenerateData.generateDateLine());
-        out.println("#");
-        Utility.appendFile("CaseFoldingHeader.txt", Utility.LATIN1, out);
+        UnicodeDataFile fc = UnicodeDataFile.openAndWriteHeader(directory, filename);
+        PrintWriter out = fc.out;
         
         /*
         PrintWriter out = new PrintWriter(
@@ -124,9 +119,8 @@ public class GenerateCaseFolding implements UCD_Types {
                 drawLine(out, ch, "t", rSimpleTurkish);
             }
         }
-        out.close();
+        fc.close();
         log.close();
-        Utility.renameIdentical(mostRecent, Utility.getOutputName(newFile), batName[0]);
     }
     
 /* Goal is following (with no entries for 0131 or 0069)
@@ -470,7 +464,7 @@ public class GenerateCaseFolding implements UCD_Types {
         if (normalize) suffix2 = "-Normalized";
         
         PrintWriter log = Utility.openPrintWriter("SpecialCasingExceptions"
-            + suffix2 + GenerateData.getFileSuffix(true), Utility.LATIN1_UNIX);
+            + suffix2 + UnicodeDataFile.getFileSuffix(true), Utility.LATIN1_UNIX);
         
         for (int ch = 0; ch <= 0x10FFFF; ++ch) {
             Utility.dot(ch);
@@ -580,12 +574,12 @@ public class GenerateCaseFolding implements UCD_Types {
         log.close();
         
         System.out.println("Writing");
-        String newFile = "DerivedData/SpecialCasing" + suffix2 + GenerateData.getFileSuffix(true);
+        String newFile = "DerivedData/SpecialCasing" + suffix2 + UnicodeDataFile.getFileSuffix(true);
         PrintWriter out = Utility.openPrintWriter(newFile, Utility.LATIN1_UNIX);
         String[] batName = {""};
-        String mostRecent = GenerateData.generateBat("DerivedData/", "SpecialCasing", suffix2 + GenerateData.getFileSuffix(true), batName);
-        out.println("# SpecialCasing" + GenerateData.getFileSuffix(false));
-        out.println(GenerateData.generateDateLine());
+        String mostRecent = UnicodeDataFile.generateBat("DerivedData/", "SpecialCasing", suffix2 + UnicodeDataFile.getFileSuffix(true), batName);
+        out.println("# SpecialCasing" + UnicodeDataFile.getFileSuffix(false));
+        out.println(UnicodeDataFile.generateDateLine());
         out.println("#");
         Utility.appendFile("SpecialCasingHeader.txt", Utility.UTF8, out);
 

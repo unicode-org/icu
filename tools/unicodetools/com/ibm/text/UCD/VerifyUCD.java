@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/VerifyUCD.java,v $
-* $Date: 2004/02/07 01:01:12 $
-* $Revision: 1.24 $
+* $Date: 2004/02/12 08:23:16 $
+* $Revision: 1.25 $
 *
 *******************************************************************************
 */
@@ -2239,11 +2239,11 @@ E0020-E007F; [TAGGING CHARACTERS]
             int j = UTF32.char32At(s, 0);
             try {
                 if (q == 0) {
-                check(i, Default.ucd().getCategory(i), Default.ucd().getCategory(j), UCD_Names.GC, "GeneralCategory");
+                check(i, Default.ucd().getCategory(i), Default.ucd().getCategory(j), UCD_Names.GENERAL_CATEGORY, "GeneralCategory");
                 check(i, Default.ucd().getCombiningClass(i), Default.ucd().getCombiningClass(j), "CanonicalClass");
-                check(i, Default.ucd().getBidiClass(i), Default.ucd().getBidiClass(j), UCD_Names.BC, "BidiClass");
+                check(i, Default.ucd().getBidiClass(i), Default.ucd().getBidiClass(j), UCD_Names.BIDI_CLASS, "BidiClass");
                 check(i, Default.ucd().getNumericValue(i), Default.ucd().getNumericValue(j), "NumericValue");
-                check(i, Default.ucd().getNumericType(i), Default.ucd().getNumericType(j), UCD_Names.NT, "NumericType");
+                check(i, Default.ucd().getNumericType(i), Default.ucd().getNumericType(j), UCD_Names.LONG_NUMERIC_TYPE, "NumericType");
 
                 if (false) {
                     for (byte k = LOWER; k < LIMIT_CASE; ++k) {

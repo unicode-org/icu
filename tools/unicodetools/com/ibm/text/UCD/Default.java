@@ -21,13 +21,19 @@ public final class Default implements UCD_Types {
     	setUCD();
     }
     
+    private static boolean inRecursiveCall = false;
     private static void setUCD() {
-        ucd = UCD.make(ucdVersion());
+        if (inRecursiveCall) {
+            throw new IllegalArgumentException("Recursive call to setUCD");
+        }
+        inRecursiveCall = true;
+        ucd = UCD.make(ucdVersion);
         nfd = nf[NFD] = new Normalizer(Normalizer.NFD, ucdVersion());
         nfc = nf[NFC] = new Normalizer(Normalizer.NFC, ucdVersion());
         nfkd = nf[NFKD] = new Normalizer(Normalizer.NFKD, ucdVersion());
         nfkc = nf[NFKC] = new Normalizer(Normalizer.NFKC, ucdVersion());
         System.out.println("Loaded UCD" + ucd().getVersion() + " " + (new Date(ucd().getDate())));
+        inRecursiveCall = false;
     }
     
     static DateFormat myDateFormat = new SimpleDateFormat("yyyy-MM-dd', 'HH:mm:ss' GMT'");
@@ -40,32 +46,32 @@ public final class Default implements UCD_Types {
     }
 
     public static String ucdVersion() {
-        if (ucd() == null) setUCD();
+        if (ucd == null) setUCD();
         return ucdVersion;
     }
 
     public static UCD ucd() {
-        if (ucd() == null) setUCD();
+        if (ucd == null) setUCD();
         return ucd;
     }
     public static Normalizer nfc() {
-        if (ucd() == null) setUCD();
+        if (ucd == null) setUCD();
         return nfc;
     }
     public static Normalizer nfd() {
-        if (ucd() == null) setUCD();
+        if (ucd == null) setUCD();
         return nfd;
     }
     public static Normalizer nfkc() {
-        if (ucd() == null) setUCD();
+        if (ucd == null) setUCD();
         return nfkc;
     }
     public static Normalizer nfkd() {
-        if (ucd() == null) setUCD();
+        if (ucd == null) setUCD();
         return nfkd;
     }
     public static Normalizer nf(int index) {
-        if (ucd() == null) setUCD();
+        if (ucd == null) setUCD();
         return nf[index];
     }
 

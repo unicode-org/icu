@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/GenerateData.java,v $
-* $Date: 2004/02/07 01:01:15 $
-* $Revision: 1.32 $
+* $Date: 2004/02/12 08:23:15 $
+* $Revision: 1.33 $
 *
 *******************************************************************************
 */
@@ -95,24 +95,11 @@ public class GenerateData implements UCD_Types {
     }
 
 
-    //Remove "d1" from DerivedJoiningGroup-3.1.0d1.txt type names
-
-    public static String fixFile(String s) {
-        int len = s.length();
-        if (!s.endsWith(".txt")) return s;
-        if (s.charAt(len-6) != 'd') return s;
-        char c = s.charAt(len-5);
-        if (c != 'X' && (c < '0' || '9' < c)) return s;
-        s = s.substring(0,len-6) + s.substring(len-4);
-        System.out.println("Fixing File Name: " + s);
-        return s;
-    }
-
     static final int HEADER_EXTEND = 0, HEADER_DERIVED = 1, HEADER_SCRIPTS = 2;
 
     public static void doHeader(String fileName, PrintWriter output, int headerChoice) {
         output.println("# " + fileName);
-        output.println(generateDateLine());
+        output.println(UnicodeDataFile.generateDateLine());
         output.println("#");
         if (headerChoice == HEADER_SCRIPTS) {
         } else if (headerChoice == HEADER_EXTEND) {
@@ -128,18 +115,6 @@ public class GenerateData implements UCD_Types {
         output.println();
     }
 
-    public static String getFileSuffix(boolean withDVersion) {
-        return "-" + Default.ucd().getVersion() 
-            + ((withDVersion && dVersion >= 0) ? ("d" + dVersion) : "") 
-            + ".txt";
-    }
-    
-    public static String getHTMLFileSuffix(boolean withDVersion) {
-        return "-" + Default.ucd().getVersion() 
-            + ((withDVersion && dVersion >= 0) ? ("d" + dVersion) : "") 
-            + ".html";
-    }
-    
     public static void checkDifferences (String targetVersion) throws IOException {
         System.out.println("Checking Differences");
         UCD target = UCD.make(targetVersion);
@@ -176,14 +151,14 @@ public class GenerateData implements UCD_Types {
     public static void generateDerived (byte type, boolean checkTypeAndStandard, int headerChoice, String directory, String fileName) throws IOException {
 
         
-        String newFile = directory + fileName + getFileSuffix(true);
+        String newFile = directory + fileName + UnicodeDataFile.getFileSuffix(true);
         System.out.println("New File: " + newFile);
         PrintWriter output = Utility.openPrintWriter(newFile, Utility.LATIN1_UNIX);
         String[] batName = {""};
-        String mostRecent = generateBat(directory, fileName, getFileSuffix(true), batName);
+        String mostRecent = UnicodeDataFile.generateBat(directory, fileName, UnicodeDataFile.getFileSuffix(true), batName);
         System.out.println("Most recent: " + mostRecent);
         
-        doHeader(fileName + getFileSuffix(false), output, headerChoice);
+        doHeader(fileName + UnicodeDataFile.getFileSuffix(false), output, headerChoice);
         for (int i = 0; i < DERIVED_PROPERTY_LIMIT; ++i) {
             UCDProperty up = DerivedProperty.make(i, Default.ucd());
             if (up == null) continue;
@@ -227,13 +202,13 @@ public class GenerateData implements UCD_Types {
 
     public static void generateCompExclusions() throws IOException {
         
-        String newFile = "DerivedData/CompositionExclusions" + getFileSuffix(true);
+        String newFile = "DerivedData/CompositionExclusions" + UnicodeDataFile.getFileSuffix(true);
         PrintWriter output = Utility.openPrintWriter(newFile, Utility.LATIN1_UNIX);
         String[] batName = {""};
-        String mostRecent = generateBat("DerivedData/", "CompositionExclusions", getFileSuffix(true), batName);
+        String mostRecent = UnicodeDataFile.generateBat("DerivedData/", "CompositionExclusions", UnicodeDataFile.getFileSuffix(true), batName);
         
-        output.println("# CompositionExclusions" + getFileSuffix(false));
-        output.println(generateDateLine());
+        output.println("# CompositionExclusions" + UnicodeDataFile.getFileSuffix(false));
+        output.println(UnicodeDataFile.generateDateLine());
         output.println("#");
         output.println("# This file lists the characters from the UAX #15 Composition Exclusion Table.");
         output.println("#");
@@ -289,10 +264,6 @@ public class GenerateData implements UCD_Types {
         Utility.renameIdentical(mostRecent, Utility.getOutputName(newFile), batName[0]);
     }
     
-    static String generateDateLine() {
-        return "# Date: " + Default.getDate() + " [MD]";
-    }
-
     static class CompLister extends PropertyLister {
         UCD oldUCD;
         int type;
@@ -509,21 +480,27 @@ public class GenerateData implements UCD_Types {
             }
         }
         
+        Iterator blockIterator = Default.ucd().getBlockNames().iterator();
+        while (blockIterator.hasNext()) {
+            addLine(sorted, "blk", "n/a", (String)blockIterator.next());
+        }
+        /*
         UCD.BlockData blockData = new UCD.BlockData();
         
         int blockId = 0;
         while (Default.ucd().getBlockData(blockId++, blockData)) {
             addLine(sorted, "blk", "n/a", blockData.name);
         }
+        */
         
         String filename = "PropertyAliases";
-        String newFile = "DerivedData/" + filename + getFileSuffix(true);
+        String newFile = "DerivedData/" + filename + UnicodeDataFile.getFileSuffix(true);
         PrintWriter log = Utility.openPrintWriter(newFile, Utility.LATIN1_UNIX);
         String[] batName = {""};
-        String mostRecent = generateBat("DerivedData/", filename, getFileSuffix(true), batName);
+        String mostRecent = UnicodeDataFile.generateBat("DerivedData/", filename, UnicodeDataFile.getFileSuffix(true), batName);
         
-        log.println("# " + filename + getFileSuffix(false));
-        log.println(generateDateLine());
+        log.println("# " + filename + UnicodeDataFile.getFileSuffix(false));
+        log.println(UnicodeDataFile.generateDateLine());
         log.println("#");
         Utility.appendFile("PropertyAliasHeader.txt", Utility.LATIN1, log);
         log.println(HORIZONTAL_LINE);
@@ -538,12 +515,12 @@ public class GenerateData implements UCD_Types {
         Utility.renameIdentical(mostRecent, Utility.getOutputName(newFile), batName[0]);
         
         filename = "PropertyValueAliases";
-        newFile = "DerivedData/" + filename + getFileSuffix(true);
+        newFile = "DerivedData/" + filename + UnicodeDataFile.getFileSuffix(true);
         log = Utility.openPrintWriter(newFile, Utility.LATIN1_UNIX);
-        mostRecent = generateBat("DerivedData/", filename, getFileSuffix(true), batName);
+        mostRecent = UnicodeDataFile.generateBat("DerivedData/", filename, UnicodeDataFile.getFileSuffix(true), batName);
         
-        log.println("# " + filename + getFileSuffix(false));
-        log.println(generateDateLine());
+        log.println("# " + filename + UnicodeDataFile.getFileSuffix(false));
+        log.println(UnicodeDataFile.generateDateLine());
         log.println("#");
         Utility.appendFile("PropertyValueAliasHeader.txt", Utility.LATIN1, log);
         log.println(HORIZONTAL_LINE);
@@ -554,9 +531,9 @@ public class GenerateData implements UCD_Types {
         Utility.renameIdentical(mostRecent, Utility.getOutputName(newFile), batName[0]);
         
         filename = "PropertyAliasSummary";
-        newFile = "OtherData/" + filename + getFileSuffix(true);
+        newFile = "OtherData/" + filename + UnicodeDataFile.getFileSuffix(true);
         log = Utility.openPrintWriter(newFile, Utility.LATIN1_UNIX);
-        mostRecent = generateBat("OtherData/", filename, getFileSuffix(true), batName);
+        mostRecent = UnicodeDataFile.generateBat("OtherData/", filename, UnicodeDataFile.getFileSuffix(true), batName);
         
         log.println();
         log.println(HORIZONTAL_LINE);
@@ -682,66 +659,16 @@ public class GenerateData implements UCD_Types {
         }
     }
     
- /*   
-    static String skeleton(String source) {
-        StringBuffer result = new StringBuffer();
-        source = source.toLowerCase();
-        for (int i = 0; i < source.length(); ++i) {
-            char c = source.charAt(i);
-            if (c == ' ' || c == '_' || c == '-') continue;
-            result.append(c);
-        }
-        return result.toString();
-    }
-    */
-    // static final byte KEEP_SPECIAL = 0, SKIP_SPECIAL = 1;
-    
-    public static String generateBat(String directory, String fileRoot, String suffix, String[] batName) throws IOException {
-        String mostRecent = Utility.getMostRecentUnicodeDataFile(fixFile(fileRoot), Default.ucd().getVersion(), true, true);
-        if (mostRecent != null) {
-            batName[0] = generateBatAux(directory + "DIFF/Diff_" + fileRoot + suffix,
-                mostRecent, directory + fileRoot + suffix);
-        } else {
-            System.out.println("No previous version of: " + fileRoot + ".txt");
-            return null;
-        }
-       
-        String lessRecent = Utility.getMostRecentUnicodeDataFile(fixFile(fileRoot), Default.ucd().getVersion(), false, true);
-        if (lessRecent != null && !mostRecent.equals(lessRecent)) {
-            generateBatAux(directory + "DIFF/OLDER-Diff_" + fileRoot + suffix,
-                lessRecent, directory + fileRoot + suffix);
-        }
-        return mostRecent;
-    }
-    
-    public static String generateBatAux(String batName, String oldName, String newName) throws IOException {
-        String fullBatName = batName + ".bat";
-        PrintWriter output = Utility.openPrintWriter(batName + ".bat", Utility.LATIN1_UNIX);
-        
-        newName = Utility.getOutputName(newName);
-        System.out.println("Writing BAT to compare " + oldName + " and " + newName);
-        
-        File newFile = new File(newName);
-        File oldFile = new File(oldName);
-        output.println("\"C:\\Program Files\\wincmp.exe\" "
-            + oldFile.getCanonicalFile()
-            + " "
-            + newFile.getCanonicalFile());
-        output.close();
-        return new File(Utility.getOutputName(fullBatName)).getCanonicalFile().toString();
-    }
-        
-
     public static void generateVerticalSlice(int startEnum, int endEnum,
             int headerChoice, String directory, String file) throws IOException {
 
         
-        String newFile = directory + file + getFileSuffix(true);
+        String newFile = directory + file + UnicodeDataFile.getFileSuffix(true);
         PrintWriter output = Utility.openPrintWriter(newFile, Utility.LATIN1_UNIX);
         String[] batName = {""};
-        String mostRecent = generateBat(directory, file, getFileSuffix(true), batName);
+        String mostRecent = UnicodeDataFile.generateBat(directory, file, UnicodeDataFile.getFileSuffix(true), batName);
         
-        doHeader(file + getFileSuffix(false), output, headerChoice);
+        doHeader(file + UnicodeDataFile.getFileSuffix(false), output, headerChoice);
         int last = -1;
         for (int i = startEnum; i < endEnum; ++i) {
             UCDProperty up = UnifiedBinaryProperty.make(i, Default.ucd());
@@ -810,15 +737,15 @@ public class GenerateData implements UCD_Types {
     
     static public void writeNormalizerTestSuite(String directory, String fileName) throws IOException {
         
-        String newFile = directory + fileName + getFileSuffix(true);
+        String newFile = directory + fileName + UnicodeDataFile.getFileSuffix(true);
         PrintWriter log = Utility.openPrintWriter(newFile, Utility.UTF8_UNIX);
         String[] batName = {""};
-        String mostRecent = generateBat(directory, fileName, getFileSuffix(true), batName);
+        String mostRecent = UnicodeDataFile.generateBat(directory, fileName, UnicodeDataFile.getFileSuffix(true), batName);
 
         String[] example = new String[256];
 
-        log.println("# " + fileName + getFileSuffix(false));
-        log.println(generateDateLine());
+        log.println("# " + fileName + UnicodeDataFile.getFileSuffix(false));
+        log.println(UnicodeDataFile.generateDateLine());
         log.println("#");
         log.println("# Normalization Test Suite");
         log.println("# Format:");
@@ -1012,10 +939,10 @@ public class GenerateData implements UCD_Types {
     static final void backwardsCompat(String directory, String filename, int[] list) throws IOException {
     
         
-        String newFile = directory + filename + getFileSuffix(true);
+        String newFile = directory + filename + UnicodeDataFile.getFileSuffix(true);
         PrintWriter log = Utility.openPrintWriter(newFile, Utility.LATIN1_UNIX);
         String[] batName = {""};
-        String mostRecent = generateBat(directory, filename, getFileSuffix(true), batName);
+        String mostRecent = UnicodeDataFile.generateBat(directory, filename, UnicodeDataFile.getFileSuffix(true), batName);
         DiffPropertyLister dpl;
         UnicodeSet cummulative = new UnicodeSet();
         
@@ -1095,13 +1022,13 @@ public class GenerateData implements UCD_Types {
     
     static final void generateAge(String directory, String filename) throws IOException {
         
-        String newFile = directory + filename + getFileSuffix(true);
+        String newFile = directory + filename + UnicodeDataFile.getFileSuffix(true);
         PrintWriter log = Utility.openPrintWriter(newFile, Utility.LATIN1_UNIX);
         String[] batName = {""};
-        String mostRecent = generateBat(directory, filename, getFileSuffix(true), batName);
+        String mostRecent = UnicodeDataFile.generateBat(directory, filename, UnicodeDataFile.getFileSuffix(true), batName);
         try {
-            log.println("# " + filename + getFileSuffix(false));
-            log.println(generateDateLine());
+            log.println("# " + filename + UnicodeDataFile.getFileSuffix(false));
+            log.println(UnicodeDataFile.generateDateLine());
             log.println("#");
             log.println("# Unicode Character Database: Derived Property Data");
             log.println("# This file shows when various code points were designated in Unicode");
@@ -1195,7 +1122,7 @@ public class GenerateData implements UCD_Types {
     
     public static void listCombiningAccents() throws IOException {
         
-        PrintWriter log = Utility.openPrintWriter("ListAccents" + getFileSuffix(true), Utility.LATIN1_UNIX);
+        PrintWriter log = Utility.openPrintWriter("ListAccents" + UnicodeDataFile.getFileSuffix(true), Utility.LATIN1_UNIX);
         Set set = new TreeSet();
         Set set2 = new TreeSet();
         
@@ -1232,7 +1159,7 @@ public class GenerateData implements UCD_Types {
     
     public static void listGreekVowels() throws IOException {
         
-        PrintWriter log = Utility.openPrintWriter("ListGreekVowels" + getFileSuffix(true), Utility.LATIN1_UNIX);
+        PrintWriter log = Utility.openPrintWriter("ListGreekVowels" + UnicodeDataFile.getFileSuffix(true), Utility.LATIN1_UNIX);
         Set set = new TreeSet();
         Set set2 = new TreeSet();
         

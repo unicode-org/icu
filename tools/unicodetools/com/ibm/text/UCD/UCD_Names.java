@@ -5,13 +5,15 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UCD_Names.java,v $
-* $Date: 2004/02/06 18:30:19 $
-* $Revision: 1.24 $
+* $Date: 2004/02/12 08:23:17 $
+* $Revision: 1.25 $
 *
 *******************************************************************************
 */
 
 package com.ibm.text.UCD;
+
+import java.util.Locale;
 
 import com.ibm.text.utility.*;
 
@@ -234,15 +236,15 @@ final class UCD_Names implements UCD_Types {
 	static final String[] YN_TABLE = {"F", "T"};
 	static final String[] YN_TABLE_LONG = {"False", "True"};
 
-    static String[] SHORT_EA = {
+    static String[] EAST_ASIAN_WIDTH = {
         "N", "A", "H", "W", "F", "Na"
     };
 
-    static String[] EA = {
+    static String[] LONG_EAST_ASIAN_WIDTH = {
         "Neutral", "Ambiguous", "Halfwidth", "Wide", "Fullwidth", "Narrow"
     };
 
-    static final String[] LB = {
+    static final String[] LINE_BREAK = {
         "XX", "OP", "CL", "QU", "GL", "NS", "EX", "SY",
         "IS", "PR", "PO", "NU", "AL", "ID", "IN", "HY",
         "CM", "BB", "BA", "SP", "BK", "CR", "LF", "CB",
@@ -255,7 +257,7 @@ final class UCD_Names implements UCD_Types {
 
     };
 
-    static final String[] LONG_LB = {
+    static final String[] LONG_LINE_BREAK = {
         "Unknown", "OpenPunctuation", "ClosePunctuation", "Quotation",
         "Glue", "Nonstarter", "Exclamation", "BreakSymbols",
         "InfixNumeric", "PrefixNumeric", "PostfixNumeric",
@@ -270,7 +272,7 @@ final class UCD_Names implements UCD_Types {
         //"Trailing_Jamo",
     };
 
-	public static final String[] SCRIPT = {
+	public static final String[] LONG_SCRIPT = {
     "COMMON", // 	COMMON -- NOT A LETTER: NO EXACT CORRESPONDENCE IN 15924
     "LATIN", // 	LATIN
     "GREEK", // 	GREEK
@@ -328,7 +330,7 @@ final class UCD_Names implements UCD_Types {
     
   };
 
-	public static final String[] ABB_SCRIPT = {
+	public static final String[] SCRIPT = {
     "Zyyy", // 	COMMON -- NOT A LETTER: NO EXACT CORRESPONDENCE IN 15924
     "Latn", // 	LATIN
     "Grek", // 	GREEK
@@ -398,15 +400,18 @@ final class UCD_Names implements UCD_Types {
 
 
   static final String[] AGE = {
-    "UNSPECIFIED",
+    "unassigned",
     "1.1",
-    "2.0", "2.1",
-    "3.0", "3.1", "3.2",
+    "2.0",
+    "2.1",
+    "3.0",
+    "3.1",
+    "3.2",
     "4.0"
   };
 
 
-    static final String[] GC = {
+    static final String[] GENERAL_CATEGORY = {
         "Cn", // = Other, Not Assigned 0
 
         "Lu", // = Letter, Uppercase 1
@@ -449,7 +454,7 @@ final class UCD_Names implements UCD_Types {
         "Pf" // = Punctuation, Final quote 30 (may behave like Ps or Pe dependingon usage)
     };
 
-    static final String[] LONG_GC = {
+    static final String[] LONG_GENERAL_CATEGORY = {
         "Unassigned", // = Other, Not Assigned 0
 
         "UppercaseLetter", // = Letter, Uppercase 1
@@ -505,7 +510,7 @@ final class UCD_Names implements UCD_Types {
 
 
 
-    static final String[] BC = {
+    static final String[] BIDI_CLASS = {
         "L", //	Left-Right; Most alphabetic, syllabic, and logographic characters (e.g., CJK ideographs)
         "R", //	Right-Left; Arabic, Hebrew, and punctuation specific to those scripts
         "EN", //	European Number
@@ -520,7 +525,7 @@ final class UCD_Names implements UCD_Types {
         "<unused>", "BN", "NSM", "AL", "LRO", "RLO", "LRE", "RLE", "PDF"
     };
 
-    static String[] LONG_BC = {
+    static String[] LONG_BIDI_CLASS = {
         "LeftToRight", //	Left-Right; Most alphabetic, syllabic, and logographic characters (e.g., CJK ideographs)
         "RightToLeft", //	Right-Left; Arabic, Hebrew, and punctuation specific to those scripts
         "EuropeanNumber", //	European Number
@@ -543,8 +548,8 @@ final class UCD_Names implements UCD_Types {
         "LOWER", "TITLE", "UPPER", "UNCASED"
     };
 
-    static String[] DT = {
-        "", // NONE
+    static String[] LONG_DECOMPOSITION_TYPE = {
+        "none", // NONE
         "canonical", // CANONICAL
         "compat",	// Otherwise unspecified compatibility character.
         "font",		// A font variant (e.g. a blackletter form).
@@ -563,9 +568,8 @@ final class UCD_Names implements UCD_Types {
         "square",	// A CJK squared font variant.
         "fraction",	// A vulgar fraction form.
     };
-
-    static String[] SHORT_DT = {
-        "", // NONE
+    static String[] DECOMPOSITION_TYPE = {
+        "none", // NONE
         "can", // CANONICAL
         "com",	// Otherwise unspecified compatibility character.
         "font",		// A font variant (e.g. a blackletter form).
@@ -584,14 +588,19 @@ final class UCD_Names implements UCD_Types {
         "sqr",	// A CJK squared font variant.
         "fra",	// A vulgar fraction form.
     };
+    static {
+        fixArray(LONG_DECOMPOSITION_TYPE);
+        fixArray(DECOMPOSITION_TYPE);
+    }
+
 
     static private String[] MIRRORED_TABLE = {
         "N",
         "Y"
     };
 
-    static String[] NT = {
-        "",
+    static String[] LONG_NUMERIC_TYPE = {
+        "none",
         "numeric",
         "digit",
         "decimal",
@@ -602,8 +611,8 @@ final class UCD_Names implements UCD_Types {
         */
     };
 
-    static String[] SHORT_NT = {
-        "",
+    static String[] NUMERIC_TYPE = {
+        "none",
         "nu",
         "di",
         "de",
@@ -613,18 +622,66 @@ final class UCD_Names implements UCD_Types {
         "ho"
         */
     };
-
     static {
-        if (LIMIT_CATEGORY != GC.length || LIMIT_CATEGORY != LONG_GC.length) {
+        fixArray(LONG_NUMERIC_TYPE);
+        fixArray(NUMERIC_TYPE);
+    }
+
+    static String[] COMBINING_CLASS = new String[256];
+    static String[] LONG_COMBINING_CLASS = new String[256];
+    // TODO clean this up, just a quick copy of code
+    static {
+        for (int style = SHORT; style <= LONG; ++style)
+        for (int index = 0; index < 256; ++index) {
+            String s = null;
+            switch (index) {
+                case 0: s = style < LONG ? "NR" : "NotReordered"; break;
+                case 1: s = style < LONG ? "OV" :  "Overlay"; break;
+                case 7: s = style < LONG ? "NK" :  "Nukta"; break;
+                case 8: s = style < LONG ? "KV" :  "KanaVoicing"; break;
+                case 9: s = style < LONG ? "VR" :  "Virama"; break;
+                case 200: s = style < LONG ? "ATBL" :  "AttachedBelowLeft"; break;
+                case 202: s = style < LONG ? "ATB" :  "AttachedBelow"; break;
+                case 204: s = style < LONG ? "ATBR" :  "AttachedBelowRight"; break;
+                case 208: s = style < LONG ? "ATL" :  "AttachedLeft"; break;
+                case 210: s = style < LONG ? "ATR" :  "AttachedRight"; break;
+                case 212: s = style < LONG ? "ATAL" :  "AttachedAboveLeft"; break;
+                case 214: s = style < LONG ? "ATA" :  "AttachedAbove"; break;
+                case 216: s = style < LONG ? "ATAR" :   "AttachedAboveRight"; break;
+                case 218: s = style < LONG ? "BL" :   "BelowLeft"; break;
+                case 220: s = style < LONG ? "B" :   "Below"; break;
+                case 222: s = style < LONG ? "BR" :   "BelowRight"; break;
+                case 224: s = style < LONG ? "L" :   "Left"; break;
+                case 226: s = style < LONG ? "R" :   "Right"; break;
+                case 228: s = style < LONG ? "AL" :   "AboveLeft"; break;
+                case 230: s = style < LONG ? "A" :   "Above"; break;
+                case 232: s = style < LONG ? "AR" :   "AboveRight"; break;
+                case 233: s = style < LONG ? "DB" :   "DoubleBelow"; break;
+                case 234: s = style < LONG ? "DA" :   "DoubleAbove"; break;
+                case 240: s = style < LONG ? "IS" :   "IotaSubscript"; break;
+                default: s = style < LONG ? "" + index : "Fixed_" + index;
+            }
+            if (style < LONG) COMBINING_CLASS[index] = s;
+            else LONG_COMBINING_CLASS[index] = s;
+        }
+        if (false) for (int i = 0; i < 256; ++i) {
+            System.out.println(i 
+                + "\t" + COMBINING_CLASS[i]
+                 + "\t" + LONG_COMBINING_CLASS[i]);
+        }
+    }
+    
+    static {
+        if (LIMIT_CATEGORY != GENERAL_CATEGORY.length || LIMIT_CATEGORY != LONG_GENERAL_CATEGORY.length) {
             System.err.println("!! ERROR !! Enums and Names out of sync: category");
         }
-        if (LIMIT_BIDI_CLASS != BC.length) {
+        if (LIMIT_BIDI_CLASS != BIDI_CLASS.length) {
             System.err.println("!! ERROR !! Enums and Names out of sync: bidi");
         }
-        if (LIMIT_LINE_BREAK != LB.length || LIMIT_LINE_BREAK != LONG_LB.length) {
+        if (LIMIT_LINE_BREAK != LINE_BREAK.length || LIMIT_LINE_BREAK != LONG_LINE_BREAK.length) {
             System.err.println("!! ERROR !! Enums and Names out of sync: linebreak");
         }
-        if (LIMIT_DECOMPOSITION_TYPE != DT.length || LIMIT_DECOMPOSITION_TYPE != SHORT_DT.length) {
+        if (LIMIT_DECOMPOSITION_TYPE != LONG_DECOMPOSITION_TYPE.length || LIMIT_DECOMPOSITION_TYPE != DECOMPOSITION_TYPE.length) {
             System.err.println("!! ERROR !! Enums and Names out of sync: decomp type");
         }
         if (LIMIT_MIRRORED != MIRRORED_TABLE.length) {
@@ -633,16 +690,16 @@ final class UCD_Names implements UCD_Types {
         if (LIMIT_CASE != CASE_TABLE.length) {
             System.err.println("!! ERROR !! Enums and Names out of sync: case");
         }
-        if (LIMIT_NUMERIC_TYPE != NT.length) {
+        if (LIMIT_NUMERIC_TYPE != LONG_NUMERIC_TYPE.length) {
             System.err.println("!! ERROR !! Enums and Names out of sync: numeric type");
         }
-        if (LIMIT_EAST_ASIAN_WIDTH != EA.length) {
+        if (LIMIT_EAST_ASIAN_WIDTH != LONG_EAST_ASIAN_WIDTH.length) {
             System.err.println("!! ERROR !! Enums and Names out of sync: east Asian Width");
         }
         if (LIMIT_BINARY_PROPERTIES != BP.length) {
             System.err.println("!! ERROR !! Enums and Names out of sync: binary properties");
         }
-        if (LIMIT_SCRIPT != SCRIPT.length) {
+        if (LIMIT_SCRIPT != LONG_SCRIPT.length) {
             System.err.println("!! ERROR !! Enums and Names out of sync: script");
         }
         if (LIMIT_AGE != AGE.length) {
@@ -650,7 +707,7 @@ final class UCD_Names implements UCD_Types {
         }
     }
 
-    public static byte ON = Utility.lookup("ON", BC, true);
+    public static byte ON = Utility.lookup("ON", BIDI_CLASS, true);
 
     public static String[] HANGUL_SYLLABLE_TYPE = {
         "NA",
@@ -744,6 +801,16 @@ final class UCD_Names implements UCD_Types {
         "KHAPH",
         "FE",
     };
+    static {
+        fixArray(JOINING_GROUP);
+    }
+    static void fixArray (String[] array) {
+        for (int i = 0; i < array.length; ++i) {
+            array[i] = Utility.getUnskeleton(
+                array[i].toLowerCase(Locale.ENGLISH),
+                true);
+        }
+    }
 
     public static String[] OLD_JOINING_GROUP = {
         "<no shaping>",

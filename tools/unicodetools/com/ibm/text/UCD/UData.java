@@ -5,8 +5,8 @@
 *******************************************************************************
 *
 * $Source: /xsrl/Nsvn/icu/unicodetools/com/ibm/text/UCD/UData.java,v $
-* $Date: 2004/02/07 01:01:13 $
-* $Revision: 1.10 $
+* $Date: 2004/02/12 08:23:16 $
+* $Revision: 1.11 $
 *
 *******************************************************************************
 */
@@ -201,21 +201,21 @@ class UData implements UCD_Types {
 
         int lastPos = result.length();
         
-        if (full || generalCategory != Lo) result.append(" gc='").append(UCD_Names.GC[generalCategory]).append('\'');
+        if (full || generalCategory != Lo) result.append(" gc='").append(UCD_Names.GENERAL_CATEGORY[generalCategory]).append('\'');
         if (full || combiningClass != 0) result.append(" cc='").append(combiningClass & 0xFF).append('\'');
-        if (full || decompositionType != NONE) result.append(" dt='").append(UCD_Names.DT[decompositionType]).append('\'');
+        if (full || decompositionType != NONE) result.append(" dt='").append(UCD_Names.LONG_DECOMPOSITION_TYPE[decompositionType]).append('\'');
         if (full || !s.equals(decompositionMapping)) result.append(" dm='").append(Utility.quoteXML(decompositionMapping)).append('\'');
 
-        if (full || numericType != NUMERIC_NONE) result.append(" nt='").append(UCD_Names.NT[numericType]).append('\'');
+        if (full || numericType != NUMERIC_NONE) result.append(" nt='").append(UCD_Names.LONG_NUMERIC_TYPE[numericType]).append('\'');
         if (full || !Double.isNaN(numericValue)) result.append(" nv='").append(numericValue).append('\'');
 
-        if (full || eastAsianWidth != EAN) result.append(" ea='").append(UCD_Names.EA[eastAsianWidth]).append('\'');
-        if (full || lineBreak != LB_AL) result.append(" lb='").append(UCD_Names.LB[lineBreak]).append('\'');
+        if (full || eastAsianWidth != EAN) result.append(" ea='").append(UCD_Names.LONG_EAST_ASIAN_WIDTH[eastAsianWidth]).append('\'');
+        if (full || lineBreak != LB_AL) result.append(" lb='").append(UCD_Names.LINE_BREAK[lineBreak]).append('\'');
         if (joiningType != -1 && (full || joiningType != JT_U)) result.append(" jt='").append(UCD_Names.JOINING_TYPE[joiningType]).append('\'');
         if (full || joiningGroup != NO_SHAPING) result.append(" jg='").append(UCD_Names.JOINING_GROUP[joiningGroup]).append('\'');
         if (full || age != 0) result.append(" ag='").append(UCD_Names.AGE[age]).append('\'');
 
-        if (full || bidiClass != BIDI_L) result.append(" bc='").append(UCD_Names.BC[bidiClass]).append('\'');
+        if (full || bidiClass != BIDI_L) result.append(" bc='").append(UCD_Names.BIDI_CLASS[bidiClass]).append('\'');
         if (full || !bidiMirror.equals(s)) result.append(" bmg='").append(Utility.quoteXML(bidiMirror)).append('\'');
 
         if (lastPos != result.length()) {
