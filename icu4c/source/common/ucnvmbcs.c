@@ -675,6 +675,9 @@ _MBCSToUnicode(UConverterToUnicodeArgs *pArgs,
  * of the ToUnicode conversion before it gets copied to
  * multiple version that are then optimized for their needs
  * (with vs. without offsets and getNextUChar).
+ * Special feature on occasion of GB 18030: if single surrogates
+ * are the results, then two consecutive surrogates are combined into
+ * one UChar32 code point if possible.
  */
 U_CFUNC UChar32
 _MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
@@ -692,11 +695,17 @@ _MBCSGetNextUChar(UConverterToUnicodeArgs *pArgs,
         _MBCSToUnicode(pArgs, pErrorCode);
         if(U_FAILURE(*pErrorCode) && *pErrorCode!=U_BUFFER_OVERFLOW_ERROR) {
             return 0xffff;
-        } else if(pArgs->target!=buffer) {
-            if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
-                *pErrorCode=U_ZERO_ERROR;
+        } else {
+            int32_t length=pArgs->target-buffer;
+            if(/* some output and (source consumed or not a surrogate or a surrogate pair [UTF-16 specific]) */
+               length>0 &&
+               (pArgs->flush || !UTF_IS_FIRST_SURROGATE(buffer[0]) || length==2)
+            ) {
+                if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+                    *pErrorCode=U_ZERO_ERROR;
+                }
+                return ucnv_getUChar32KeepOverflow(pArgs->converter, buffer, length);
             }
-            return ucnv_getUChar32KeepOverflow(pArgs->converter, buffer, pArgs->target-buffer);
         }
     }
 
