@@ -1419,6 +1419,7 @@ u_unescapeAt(UNESCAPE_CHAR_AT charAt,
     int8_t bitsPerDigit = 4; 
     int8_t dig;
     int32_t i;
+    UBool braces = FALSE;
 
     /* Check that offset is in range */
     if (*offset < 0 || *offset >= length) {
@@ -1438,7 +1439,13 @@ u_unescapeAt(UNESCAPE_CHAR_AT charAt,
         break;
     case 0x0078 /*'x'*/:
         minDig = 1;
-        maxDig = 2;
+        if (*offset < length && charAt(*offset, context) == 0x7B /*{*/) {
+            ++(*offset);
+            braces = TRUE;
+            maxDig = 8;
+        } else {
+            maxDig = 2;
+        }
         break;
     default:
         dig = _digit8(c);
@@ -1464,6 +1471,12 @@ u_unescapeAt(UNESCAPE_CHAR_AT charAt,
         }
         if (n < minDig) {
             goto err;
+        }
+        if (braces) {
+            if (c != 0x7D /*}*/) {
+                goto err;
+            }
+            ++(*offset);
         }
         return result;
     }
