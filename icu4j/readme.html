@@ -28,8 +28,9 @@ Reserved. </p>
   <li><a href="#PlatformDependencies">Platform Dependencies</a></li>
   <li><a href="#download">How to Download ICU4J</a></li>
   <li><a href="#WhatContain">The Structure and Contents of ICU4J</a></li>
-  <li><a href="#API">Where to get Documentation</a></li>
+  <li><a href="#API">Where to Get Documentation</a></li>
   <li><a href="#HowToInstallJavac">How to Install and Build</a></li>
+  <li><a href="#tryingout">Trying Out ICU4J</a></li>
   <li><a href="#WhereToFindMore">Where to Find More Information</a></li>
   <li><a href="#SubmittingComments">Submitting Comments, Requesting Features and Reporting
     Bugs</a></li>
@@ -39,7 +40,7 @@ Reserved. </p>
 
 <p>Today's global market demands programs that support a wide variety
     of languages and national conventions.&nbsp; Customers prefer software
-    and web pages tailored to their needs, and studies confirm that
+    and web pages tailored to their needs \226 studies confirm that
     this leads to increased sales.&nbsp;  Java provides a strong
     foundation for global programs, and IBM and the ICU4J team played
     a key role in providing globalization technology to Sun for use in
@@ -238,8 +239,15 @@ drive and any directory on that drive that you chose to install icu4j into. </p>
     <td>Mathematic manipulation.</td>
   </tr>
   <tr>
-    <td>$Root/src/com/ibm/icu/richtext</td>
-    <td>Styled text editing package. This includes demos, test and GUIs for editing and displaying styled text.</td>
+    <td>$Root/src/com/ibm/icu/richtext</td> <td>Styled text editing
+    package. This includes demos, tests, and GUIs for editing and
+    displaying styled text.  The richtext package provides a
+    scrollable display, typing, arrow-key support, tabs, alignment and
+    justification, word- and sentence-selection (by double-clicking
+    and triple-clicking, respectively), text styles, clipboard
+    operations (cut, copy and paste) and a log of changes for
+    undo-redo.  Richtext uses Java's TextLayout and complex
+    text support (provided to Sun by the ICU4J team).</td>
   </tr>
   <tr>
     <td>$Root/src/com/ibm/test</td>
@@ -319,22 +327,23 @@ drive and any directory on that drive that you chose to install icu4j into. </p>
 <p>The complete API documentation is available on the ICU4J web site: 
 
 <ul>
-  <li><a href="http://oss.software.ibm.com/icu4j/doc/index.html">Complete index</a></li>
+  <li><a href="http://oss.software.ibm.com/icu4j/doc/index.html">Index to all ICU4J API</a></li>
   <li>International Calendars &#150; <a href="http://oss.software.ibm.com/icu4j/doc/com/ibm/util/IslamicCalendar.html">Islamic</a>,
     <a href="http://oss.software.ibm.com/icu4j/doc/com/ibm/util/BuddhistCalendar.html">Buddhist</a>, <a
     href="http://oss.software.ibm.com/icu4j/doc/com/ibm/util/HebrewCalendar.html">Hebrew</a>, <a
-    href="http://oss.software.ibm.com/icu4j/doc/com/ibm/util/JapaneseCalendar.html">Japanese</a></li>
+    href="http://oss.software.ibm.com/icu4j/doc/com/ibm/util/JapaneseCalendar.html">Japanese</a>.</li>
   <li><a href="http://oss.software.ibm.com/icu4j/doc/com/ibm/text/Normalizer.html">Unicode Normalization</a> &#150;
-    Canonical text representation for W3C</li>
+    Canonical text representation for W3C.</li>
   <li><a href="http://oss.software.ibm.com/icu4j/doc/com/ibm/text/NumberFormat.html">Number Format Enhancements</a> &#150;
-    Scientific Notation, Spelled-out, ...</li>
+    Scientific Notation, Spelled out.</li>
   <li><a href="http://oss.software.ibm.com/icu4j/doc/com/ibm/text/BreakIterator.html">Enhanced word-break detection</a>
     &#150; Rule-based, supports Thai</li>
   <li><a href="http://oss.software.ibm.com/icu4j/doc/com/ibm/text/StringSearch.html">Unicode Text Searching</a> &#150;
-    Efficient multi-lingual searching</li>
+    Efficient multi-lingual searching.</li>
+<li><a href="http://oss.software.ibm.com/icu4j/doc/com/ibm/text/Transliterator.html">Transliteration</a> &#150; A general framework for onverting text from one format to another, e.g. Cyrillic to Latin, or Hex to Unicode.
   <li>Unicode Text <a href="http://oss.software.ibm.com/icu4j/doc/com/ibm/text/UnicodeCompressor.html">Compression</a> &amp;
     <a href="http://oss.software.ibm.com/icu4j/doc/com/ibm/text/UnicodeDecompressor.html">Decompression</a> &#150; 2:1
-    compression on English Unicode text</li>
+    compression on English Unicode text.</li>
 </ul>
 
 <h3><a NAME="HowToInstallJavac"></a><u>How to Install and Build</u></h3>
@@ -342,8 +351,8 @@ drive and any directory on that drive that you chose to install icu4j into. </p>
 <p>To install ICU4J, simply place the prebuilt jar file <strong>icu4j.jar</strong> on your
 Java CLASSPATH.&nbsp; No other files are needed.</p>
 
-<p>We strongly recommend using the Ant build system to build ICU4J.  If you don't have
-them you will need to install the JDK and Ant:</p>
+<p>To build ICU4J, you will need a Java2 JDK and the Ant build system.
+We strongly recommend using the Ant build system to build ICU4J:</p>
 
 <ul>
   <li>It's recommended to install both the JDK and Ant somewhere <em>outside</em> the ICU4J
@@ -355,7 +364,7 @@ them you will need to install the JDK and Ant:</p>
     project. Ant is a portable, Java-based build system similar to make. ICU4J uses Ant
     because it introduces no other dependencies, it's portable, and it's easier to manage than
     a collection of makefiles. We currently build ICU4J using a single makefile on both
-    Windows 9x and Linux using Ant.</p>
+    Windows 9x and Linux using Ant.  The build system requires Ant 1.4 or later.</p>
     <p>Installing Ant is straightforward. Download it (see <a
     href="http://jakarta.apache.org/downloads/binindex.html">http://jakarta.apache.org/downloads/binindex.html</a>),
     extract it onto your system, set some environment variables, and add its bin directory to
@@ -384,7 +393,8 @@ Compiling 24 source files to F:\icu4j\classes
 Completed in 19 seconds</pre>
 </blockquote>
 
-<p>Current targets that you can give after <strong>ant</strong>:</p>
+<p>The following are some targets that you can give after <strong>ant</strong>.  For more
+targets, see the build.xml file:</p>
 <div align="left">
 
 <table border="1" cellpadding="0">
@@ -427,19 +437,9 @@ Completed in 19 seconds</pre>
     is today's date. Any existing file of that name will be overwritten.</td>
   </tr>
   <tr>
-    <td>richeditDocs</td>
-    <td>Run javadoc over the richedit class files, generating an HTML documentation tree in the
-    subdirectory <strong>./richeditDist/richedit/doc</strong>.</td>
-  </tr>
-  <tr>
-    <td>richeditJar</td> <td>Create a jar archive
-    <strong>richedit.jar</strong> in the
-    <strong>./richeditDist/richedit</strong> subdirectory, containing
-    the richedit class files.</td>
-  </tr>
-  <tr>
     <td>richeditZip</td>
-    <td>Create a zip archive of the richedit docs and richedit jar file for distribution, excluding
+    <td>Create a zip archive of the richedit docs and the richedit jar file (which contains only the
+    classes needed by richedit) for distribution, excluding
     unwanted things like CVS directories and emacs backup files. The zip file <strong>richedit.zip</strong>
     will be created in the <strong>./richeditDist</strong> subdirectory. Any existing file of 
     that name will be overwritten.</td>
@@ -466,6 +466,45 @@ file.</p>
 Ant you can build by running javac and javadoc directly. This
 is not recommended. You may have to manually create destination
 directories.)</p>
+
+<h3><a name="tryingout"></a><u>Trying Out ICU4J</u></h3>
+
+<p><strong>Note:</strong> the demos provided with ICU4J are for the
+most part undocumented.  This list can show you where to look, but you'll
+have to experiment a bit.  The demos (with the
+exception of richedit) are <strong>unsupported</strong> and may change
+or disappear without notice.</p>
+<p>The icu4j.jar file contains only the core ICU4J classes, not the
+demo classes, so unless you build ICU4J there is little to try out.
+But you can try out the <strong>richedit</strong> package, since a GUI
+is included in the core.  To run it, type: 
+<tt><blockquote>   java -classpath icu4j.jar com.ibm.richtext.demo.EditDemo [-swing][file]</blockquote></tt>
+This will use an awt GUI, or a swing GUI if
+<tt>-swing</tt> is passed on the command line.  It will open a text
+file if one is provided, otherwise it will open a blank page.  Click
+to type.</p>
+<p>
+You can add tabs to the tab ruler by clicking in the ruler while holding down the control key.
+Clicking on an existing tab changes between left, right, center, and decimal tabs.  Dragging
+a tab moves it, dragging it off the ruler removes it.</p>
+<p>
+You can experiment with complex text by using the keymap functions.
+Please note that these are mainly for demo purposes, for real work
+with Arabic or Hebrew you will want to use an input method.  You will
+need to use a font that supports Arabic or Hebrew, 'Lucida Sans' (provided
+with Java) supports these languages.</p>
+
+<p>The other demo programs are <strong>not supported</strong> and exist only to let you
+experiment with the ICU4J classes.  First, build ICU4J using <tt>ant&nbsp;all</tt>.  Then try
+one of the following:
+<ul>
+<li><tt>java -classpath classes com.ibm.demo.calendar.CalendarApp</tt>
+<li><tt>java -classpath classes com.ibm.demo.holiday.HolidayCalendarDemo</tt>
+<li><tt>java -classpath classes com.ibm.demo.rbbi.TextBoundDemo</tt><br>(Click in the text, then use <tt>ctrl-N</tt> and <tt>ctrl-P</tt> to select the next or previous block of text.)
+<li><tt>java -classpath classes com.ibm.demo.rbnf.RbnfDemo</tt>
+<li><tt>java -classpath classes com.ibm.demo.translit.Demo</tt>
+</ul>
+</p>
 
 <h3><a name="WhereToFindMore"></a><u>Where to Find More Information</u></h3>
 
