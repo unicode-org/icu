@@ -283,7 +283,7 @@ unicodeDataLineFn(void *context,
 
     /* ignore First and Last entries for ranges */
     if( *fields[1][0]=='<' &&
-        (length=(fields[1][1]-fields[1][0]))>=9 &&
+        (length=(int32_t)(fields[1][1]-fields[1][0]))>=9 &&
         (0==uprv_memcmp(", First>", fields[1][1]-8, 8) || 0==uprv_memcmp(", Last>", fields[1][1]-7, 7))
     ) {
         return;

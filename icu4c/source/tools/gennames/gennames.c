@@ -871,7 +871,7 @@ generateData(const char *dataDir) {
         groupWords[0]=(uint16_t)lines[i].code;
 
         /* offset */
-        offset=lines[i].s-stringStore;
+        offset = (uint32_t)(lines[i].s - stringStore);
         groupWords[1]=(uint16_t)(offset>>16);
         groupWords[2]=(uint16_t)(offset);
         udata_writeBlock(pData, groupWords, 6);
@@ -1174,7 +1174,7 @@ addToken(uint8_t *s, int16_t length) {
     uprv_memcpy(stringStart, s, length);
     stringStart[length]=0;
 
-    return stringStart-stringStore;
+    return (uint32_t)(stringStart - stringStore);
 }
 
 static void

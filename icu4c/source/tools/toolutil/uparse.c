@@ -62,7 +62,7 @@ u_parseDelimitedFile(const char *filename, char delimiter,
     }
 
     while(T_FileStream_readLine(file, line, sizeof(line))!=NULL) {
-        length=uprv_strlen(line);
+        length=(int32_t)uprv_strlen(line);
 
         /* remove trailing newline characters */
         while(length>0 && (line[length-1]=='\r' || line[length-1]=='\n')) {

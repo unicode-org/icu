@@ -107,13 +107,13 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
     UChar* target=NULL;
     const char* source=NULL;
     char  cbuf[MAX_IN_BUF] = {'\0'};
-    int numRead=0;
-    int offset=0;
+    int32_t numRead=0;
+    int32_t offset=0;
     const char* sourceLimit =NULL;
     pTarget = buf->buffer;
     /* check if we arrived here without exhausting the buffer*/
     if(buf->currentPos<buf->bufLimit){
-        offset= buf->bufLimit-buf->currentPos;
+        offset = (int32_t)(buf->bufLimit-buf->currentPos);
         memmove(buf->buffer,buf->currentPos,offset* sizeof(UChar));
     }
 
@@ -171,7 +171,7 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
             ucnv_getInvalidChars(buf->conv,context,&len,err);
             context[len]= 0 ; /* null terminate the buffer */
 
-            pos = source-cbuf-len;
+            pos = (int32_t)(source - cbuf - len);
 
             /* for pre-context */
             start = (pos <=CONTEXT_LEN)? 0 : (pos - (CONTEXT_LEN-1));
@@ -183,7 +183,7 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
 
             /* for post-context */
             start = pos+len;
-            stop  = ((pos+CONTEXT_LEN)<= (sourceLimit-cbuf) )? (pos+(CONTEXT_LEN-1)) : (sourceLimit-cbuf);
+            stop  = (int32_t)(((pos+CONTEXT_LEN)<= (sourceLimit-cbuf) )? (pos+(CONTEXT_LEN-1)) : (sourceLimit-cbuf));
 
             memcpy(postContext,source,stop-start);
             /* null terminate the buffer */
@@ -219,7 +219,7 @@ ucbuf_fillucbuf( UCHARBUF* buf,UErrorCode* err){
                             (UBool)(buf->remaining==0),err);
 
         }
-        numRead= target-pTarget;
+        numRead = (int32_t)(target - pTarget);
 
 
 #if DEBUG
@@ -291,7 +291,7 @@ ucbuf_getcx(UCHARBUF* buf,UErrorCode* err) {
     }
 
     /* Determine the amount of data in the buffer */
-    length = buf->bufLimit-buf->currentPos;
+    length = (int32_t)(buf->bufLimit - buf->currentPos);
 
     /* The longest escape sequence is \Uhhhhhhhh; make sure
        we have at least that many characters */
@@ -299,7 +299,7 @@ ucbuf_getcx(UCHARBUF* buf,UErrorCode* err) {
 
         /* fill the buffer */
         ucbuf_fillucbuf(buf,err);
-        length = buf->bufLimit-buf->buffer;
+        length = (int32_t)(buf->bufLimit - buf->buffer);
     }
 
     /* Process the escape */

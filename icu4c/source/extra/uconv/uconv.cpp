@@ -250,7 +250,7 @@ static int printConverters(const char *pname, const char *lookfor,
         if (U_FAILURE(err)) {
             printf("%s", name);
 
-            UnicodeString str(name, uprv_strlen(name) + 1);
+            UnicodeString str(name, (int32_t)(uprv_strlen(name) + 1));
             putchar('\t');
             u_wmsg(stderr, "cantGetAliases", str.getBuffer(),
                 u_wmsg_errorName(err));
@@ -264,7 +264,7 @@ static int printConverters(const char *pname, const char *lookfor,
                 const char *alias = ucnv_getAlias(name, a, &err);
 
                 if (U_FAILURE(err)) {
-                    UnicodeString str(name, uprv_strlen(name) + 1);
+                    UnicodeString str(name, (int32_t)(uprv_strlen(name) + 1));
                     putchar('\t');
                     u_wmsg(stderr, "cantGetAliases", str.getBuffer(),
                         u_wmsg_errorName(err));
@@ -506,7 +506,7 @@ static UBool convertFile(const char *pname,
 
     convfrom = ucnv_open(fromcpage, &err);
     if (U_FAILURE(err)) {
-        UnicodeString str(fromcpage, uprv_strlen(fromcpage) + 1);
+        UnicodeString str(fromcpage, (int32_t)(uprv_strlen(fromcpage) + 1));
         initMsg(pname);
         u_wmsg(stderr, "cantOpenFromCodeset", str.getBuffer(),
             u_wmsg_errorName(err));
@@ -521,7 +521,7 @@ static UBool convertFile(const char *pname,
 
     convto = ucnv_open(tocpage, &err);
     if (U_FAILURE(err)) {
-        UnicodeString str(tocpage, uprv_strlen(tocpage) + 1);
+        UnicodeString str(tocpage, (int32_t)(uprv_strlen(tocpage) + 1));
         initMsg(pname);
         u_wmsg(stderr, "cantOpenToCodeset", str.getBuffer(),
             u_wmsg_errorName(err));
@@ -578,12 +578,12 @@ static UBool convertFile(const char *pname,
         ucnv_toUnicode(convfrom, &unibufp, unibufp + bufsz, &cbufp,
             cbufp + rd, fromoffsets, flush, &err);
 
-        infoffset += cbufp - buf;
+        infoffset += (uint32_t)(cbufp - buf);
 
         if (U_FAILURE(err)) {
             char pos[32];
             sprintf(pos, "%u", infoffset - 1);
-            UnicodeString str(pos, uprv_strlen(pos) + 1);
+            UnicodeString str(pos, (int32_t)(uprv_strlen(pos) + 1));
             initMsg(pname);
             u_wmsg(stderr, "problemCvtToU", str.getBuffer(), u_wmsg_errorName(err));
             willexit = 1;
@@ -595,7 +595,7 @@ static UBool convertFile(const char *pname,
         if (flush && !willexit && cbufp != (buf + rd)) {
             char pos[32];
             sprintf(pos, "%u", infoffset);
-            UnicodeString str(pos, uprv_strlen(pos) + 1);
+            UnicodeString str(pos, (uprv_strlen(pos) + 1));
             initMsg(pname);
             u_wmsg(stderr, "premEndInput", str.getBuffer());
             willexit = 1;
@@ -604,9 +604,9 @@ static UBool convertFile(const char *pname,
         // Prepare to transliterate and convert.
 
         if (t) {
-            u.setTo(unibuf, unibufp - unibuf); // Copy into string.
+            u.setTo(unibuf, (int32_t)(unibufp - unibuf)); // Copy into string.
         } else {
-            u.setTo(unibuf, unibufp - unibuf, bufsz); // Share the buffer.
+            u.setTo(unibuf, (int32_t)(unibufp - unibuf), (int32_t)(bufsz)); // Share the buffer.
         }
 
         // Transliterate if needed.
@@ -641,17 +641,17 @@ static UBool convertFile(const char *pname,
                 char pos[32];
 
                 uint32_t erroffset =
-                    dataOffset(bufp - buf - 1, fromoffsets, bufsz, tooffsets, tobufsz);
-                int32_t ferroffset = infoffset - (unibufp - unibufu) + erroffset;
+                    dataOffset((int32_t)(bufp - buf - 1), fromoffsets, (int32_t)(bufsz), tooffsets, (int32_t)(tobufsz));
+                int32_t ferroffset = (int32_t)(infoffset - (unibufp - unibufu) + erroffset);
 
                 if ((int32_t) ferroffset < 0) {
-                    ferroffset = outfoffset + (bufp - buf);
+                    ferroffset = (int32_t)(outfoffset + (bufp - buf));
                     errtag = "problemCvtFromUOut";
                 } else {
                     errtag = "problemCvtFromU";
                 }
                 sprintf(pos, "%u", ferroffset);
-                UnicodeString str(pos, uprv_strlen(pos) + 1);
+                UnicodeString str(pos, (int32_t)(uprv_strlen(pos) + 1));
                 initMsg(pname);
                 u_wmsg(stderr, errtag, str.getBuffer(),
                        u_wmsg_errorName(err));
@@ -663,7 +663,7 @@ static UBool convertFile(const char *pname,
             if (flush && !willexit && unibufbp != (unibufu + (size_t) (unibufp - unibufu))) {
                 char pos[32];
                 sprintf(pos, "%u", infoffset);
-                UnicodeString str(pos, uprv_strlen(pos) + 1);
+                UnicodeString str(pos, (int32_t)(uprv_strlen(pos) + 1));
                 initMsg(pname);
                 u_wmsg(stderr, "premEnd", str.getBuffer());
                 willexit = 1;
@@ -673,7 +673,7 @@ static UBool convertFile(const char *pname,
 
 
             rd = (size_t) (bufp - buf);
-            outfoffset += (wr = fwrite(buf, 1, rd, outfile));
+            outfoffset += (int32_t)(wr = fwrite(buf, 1, rd, outfile));
             if (wr != rd) {
                 UnicodeString str(strerror(errno), "");
                 initMsg(pname);
@@ -684,7 +684,7 @@ static UBool convertFile(const char *pname,
             if (willexit) {
                 goto error_exit;
             }
-        } while ((ulen -= bufsz) > 0);
+        } while ((ulen -= (int32_t)(bufsz)) > 0);
     } while (!flush);           // Stop when we have flushed the
                                 // converters (this means that it's
                                 // the end of output)
@@ -726,7 +726,7 @@ static void usage(const char *pname, int ecode) {
     msg =
         ures_getStringByKey(gBundle, ecode ? "lcUsageWord" : "ucUsageWord",
                             &msgLen, &err);
-    UnicodeString upname(pname, uprv_strlen(pname) + 1);
+    UnicodeString upname(pname, (int32_t)(uprv_strlen(pname) + 1));
     UnicodeString mname(msg, msgLen + 1);
 
     res = u_wmsg(fp, "usage", mname.getBuffer(), upname.getBuffer());
