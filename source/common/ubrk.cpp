@@ -265,6 +265,13 @@ ubrk_getRuleStatus(UBreakIterator *bi)
     return ((RuleBasedBreakIterator *)bi)->getRuleStatus();
 }
 
+U_CAPI  int32_t U_EXPORT2
+ubrk_getRuleStatusVec(UBreakIterator *bi, int32_t *fillInVec, int32_t capacity, UErrorCode *status)
+{
+    return ((RuleBasedBreakIterator *)bi)->getRuleStatusVec(fillInVec, capacity, *status);
+}
+
+
 U_CAPI const char* U_EXPORT2
 ubrk_getLocaleByType(const UBreakIterator *bi, 
                      ULocDataLocaleType type, 

@@ -23,6 +23,7 @@
 #if !UCONFIG_NO_BREAK_ITERATION
 
 #include <stdlib.h>
+#include <string.h>
 #include "unicode/uloc.h"
 #include "unicode/ubrk.h"
 #include "unicode/ustring.h"
@@ -30,9 +31,16 @@
 #include "cintltst.h"
 #include "cbiapts.h"
 
+#define TEST_ASSET_SUCCESS(status) {if (U_FAILURE(status)) { \
+log_err("Failure at file %s, line %d, error = %s\n", __FILE__, __LINE__, u_errorName(status));}}
+
+#define TEST_ASSERT(expr) {if ((expr)==FALSE) { \
+log_err("Test Failure at file %s, line %d\n", __FILE__, __LINE__);}}
+
 static void TestBreakIteratorSafeClone(void);
 static void TestBreakIteratorRules(void);
 static void TestBreakIteratorRuleError(void);
+static void TestBreakIteratorStatusVec(void);
 
 void addBrkIterAPITest(TestNode** root);
 
@@ -42,6 +50,7 @@ void addBrkIterAPITest(TestNode** root)
     addTest(root, &TestBreakIteratorSafeClone, "tstxtbd/cbiapts/TestBreakIteratorSafeClone");
     addTest(root, &TestBreakIteratorRules, "tstxtbd/cbiapts/TestBreakIteratorRules");
     addTest(root, &TestBreakIteratorRuleError, "tstxtbd/cbiapts/TestBreakIteratorRuleError");
+    addTest(root, &TestBreakIteratorStatusVec, "tstxtbd/cbiapts/TestBreakIteratorStatusVec");
 }
 
 #define CLONETEST_ITERATOR_COUNT 2
@@ -562,5 +571,53 @@ static void TestBreakIteratorRuleError() {
     }
     freeToUCharStrings(&freeHook);
 }
+
+
+/*
+*   TestsBreakIteratorStatusVals()   Test the ubrk_getRuleStatusVec() funciton
+*/
+static void TestBreakIteratorStatusVec() {
+    #define RULE_STRING_LENGTH 200
+    UChar          rules[RULE_STRING_LENGTH];
+
+    #define TEST_STRING_LENGTH 25
+    UChar           testString[TEST_STRING_LENGTH];
+    UBreakIterator *bi        = NULL;
+    int32_t         pos       = 0;
+    int32_t         vals[10];
+    int32_t         numVals;
+    UErrorCode      status    = U_ZERO_ERROR;
+
+    u_uastrncpy(rules,  "[A-N]{100}; \n"
+                             "[a-w]{200}; \n"
+                             "[\\p{L}]{300}; \n"
+                             "[\\p{N}]{400}; \n"
+                             "[0-5]{500}; \n"
+                              "!.*;\n", RULE_STRING_LENGTH);
+    u_uastrncpy(testString, "ABC", TEST_STRING_LENGTH);
+
+
+    bi = ubrk_openRules(rules, -1, testString, -1, NULL, &status);
+    TEST_ASSET_SUCCESS(status);
+    TEST_ASSERT(bi != NULL);
+
+    pos = ubrk_next(bi);
+    TEST_ASSERT(pos == 1);
+
+    memset(vals, -1, sizeof(vals));
+    numVals = ubrk_getRuleStatusVec(bi, vals, 10, &status);
+    TEST_ASSET_SUCCESS(status);
+    TEST_ASSERT(numVals == 2);
+    TEST_ASSERT(vals[0] == 100);
+    TEST_ASSERT(vals[1] == 300);
+    TEST_ASSERT(vals[2] == -1);
+
+    numVals = ubrk_getRuleStatusVec(bi, vals, 0, &status);
+    TEST_ASSERT(status == U_BUFFER_OVERFLOW_ERROR);
+    TEST_ASSERT(numVals == 2);
+
+    ubrk_close(bi);
+}
+
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
