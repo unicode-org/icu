@@ -1050,7 +1050,13 @@ DecimalFormat::parse(const UnicodeString& text,
         mult /= 10;
     }
 
-    // Handle integral values
+    // Handle integral values.  We want to return the most
+    // parsimonious type that will accommodate all of the result's
+    // precision.  We therefore only return a long if the result fits
+    // entirely within a long (taking into account the multiplier) --
+    // otherwise we fall through and return a double.  When more
+    // numeric types are supported by Formattable (e.g., 64-bit
+    // integers, bignums) we will extend this logic to include them.
     if (fDigitList->fitsIntoLong(status[fgStatusPositive],
                                  isParseIntegerOnly())) {
         int32_t n = fDigitList->getLong();
