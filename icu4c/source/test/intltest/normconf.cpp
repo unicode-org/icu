@@ -149,13 +149,13 @@ void NormalizerConformanceTest::TestConformance(void) {
             other.remove(c);
         }
 
-        if (checkConformance(fields, UnicodeString(lineBuf, ""))) {
+        if (checkConformance(fields, lineBuf)) {
             ++passCount;
         } else {
             ++failCount;
         }
         if ((count % 1000) == 0) {
-            logln((UnicodeString)"Line " + count);
+            logln("Line %d", count);
         }
     }
 
@@ -181,7 +181,7 @@ void NormalizerConformanceTest::TestConformance(void) {
         fields[0]=fields[1]=fields[2]=fields[3]=fields[4].setTo(c);
         sprintf(lineBuf, "not mentioned code point U+%04lx", (long)c);
 
-        if (checkConformance(fields, UnicodeString(lineBuf, ""))) {
+        if (checkConformance(fields, lineBuf)) {
             ++passCount;
         } else {
             ++failCount;
@@ -215,7 +215,7 @@ void NormalizerConformanceTest::TestConformance(void) {
  * @return true if the test passes
  */
 UBool NormalizerConformanceTest::checkConformance(const UnicodeString* field,
-                                                  const UnicodeString& line) {
+                                                  const char *line) {
     UBool pass = TRUE;
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString out, fcd;
@@ -312,10 +312,31 @@ UBool NormalizerConformanceTest::checkConformance(const UnicodeString* field,
 
     if (U_FAILURE(status)) {
         errln("Normalizer::normalize returned error status");
-        return FALSE;
+        pass = FALSE;
     }
+
+    if(field[0]!=field[2]) {
+        // two strings that are canonically equivalent must test
+        // equal under a canonical caseless match
+        // see UAX #21 Case Mappings and Jitterbug 2021 and
+        // Unicode Technical Committee meeting consensus 92-C31
+        int32_t rc;
+
+        status=U_ZERO_ERROR;
+        rc=unorm_compare(field[0].getBuffer(), field[0].length(),
+                         field[2].getBuffer(), field[2].length(),
+                         U_COMPARE_IGNORE_CASE, &status);
+        if(U_FAILURE(status)) {
+            errln("unorm_compare(case-insensitive) sets %s", u_errorName(status));
+            pass=FALSE;
+        } else if(rc!=0) {
+            errln("unorm_compare(original, NFD, case-insensitive) returned %d instead of 0 for equal", rc);
+            pass=FALSE;
+        }
+    }
+
     if (!pass) {
-        errln((UnicodeString)"FAIL: " + line);
+        errln("FAIL: %s", line);
     }
     return pass;
 }
