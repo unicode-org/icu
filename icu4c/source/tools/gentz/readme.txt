@@ -3,6 +3,9 @@ and others.  All Rights Reserved.
 
 Readme file for ICU time zone data (source/tools/gentz)
 
+Alan Liu
+Last updated 2 Feb 2001
+
 
 RAW DATA
 --------
@@ -19,7 +22,8 @@ Two tools are used to process the data into a format suitable for ICU:
    gentz    tz.txt -> tz.dat (memory mappable binary file)
 
 After gentz is run, standard ICU data tools are used to incorporate
-tz.dat into the icudata module.
+tz.dat into the icudata module.  The tz.pl script is run manually;
+everything else is automatic.
 
 In order to incorporate the raw data from that source into ICU, take
 the following steps.
@@ -34,19 +38,24 @@ the following steps.
 
 3. Run the perl script tz.pl, passing it the directory location as a
    command-line argument.  On Windows system use the batch file
-   tz.bat.  The output of this step is the intermediate text file
-   source/tools/gentz/tz.txt.
+   tz.bat.  Also specify one or more ourput files: .txt, .htm|.html,
+   and .java.
 
-   As the second argument, pass in "tz.htm".  This will generate an
-   html documentation file that goes into the icu/docs directory.
+   For ICU4C specify .txt and .htm; typically
+
+     <icu>/data/timezone.txt <icu>/docs/tz.htm
+
+   where icu is the ICU4C root directory.  Double check that these are
+   the correct locations and file names; they change periodically.
 
    As the third argument, pass in "tz.java".  This will generate a
    java source file that will be used to update the ICU4J data.
 
-4. Run source/tools/makedata on Windows.  On UNIX systems the
-   equivalent build steps are performed by 'make' and 'make install'.
+4. Do a standard build.  The build scripts will automatically detect
+   that a new .txt file is present and rebuild the binary data (using
+   gentz) from that.
 
-The tz.txt and tz.htm files and typically checked into CVS, whereas
+The .txt and .htm files and typically checked into CVS, whereas
 the raw data files are not, since they are readily available from the
 URL listed above.
 
@@ -100,6 +109,3 @@ inversion is explained in the UNIX zone data file "etcetera".
 Briefly, this is done intentionally in order to comply with
 POSIX-style signedness.  In ICU we reproduce the UNIX zone behavior
 faithfully, including this confusing aspect.
-
-
-Alan Liu 1999

@@ -62,6 +62,7 @@ const TimeZone*     TimeZone::GMT = new SimpleTimeZone(0, GMT_ID);
 const TZHeader *    TimeZone::DATA = 0;
 const uint32_t*     TimeZone::INDEX_BY_ID = 0;
 const OffsetIndex*  TimeZone::INDEX_BY_OFFSET = 0;
+const CountryIndex* TimeZone::INDEX_BY_COUNTRY = 0;
 UnicodeString*      TimeZone::ZONE_IDS = 0;
 UBool               TimeZone::DATA_LOADED = FALSE;
 UDataMemory*        TimeZone::UDATA_POINTER = 0;
@@ -96,6 +97,8 @@ void TimeZone::loadZoneData() {
                     (const uint32_t*)((int8_t*)DATA + DATA->nameIndexDelta);
                 INDEX_BY_OFFSET =
                     (const OffsetIndex*)((int8_t*)DATA + DATA->offsetIndexDelta);
+                INDEX_BY_COUNTRY =
+                    (const CountryIndex*)((int8_t*)DATA + DATA->countryIndexDelta);
                 
                 // Construct the available IDs array. The ordering
                 // of this array conforms to the ordering of the
@@ -438,6 +441,74 @@ TimeZone::createAvailableIDs(int32_t rawOffset, int32_t& numIDs)
             break;
         }
         index = (const OffsetIndex*)((int8_t*)index + delta);
+    }
+
+    numIDs = 0;
+    return 0;
+}
+
+// -------------------------------------
+
+const UnicodeString** const
+TimeZone::createAvailableIDs(const char* country, int32_t& numIDs) {
+
+    // We are creating a new array to existing UnicodeString pointers.
+    // The caller will delete the array when done, but not the pointers
+    // in the array.
+    
+    if (!DATA_LOADED) {
+        loadZoneData();
+    }
+    if (0 == DATA) {
+        numIDs = 0;
+        return 0;
+    }
+
+    /* The country index table is a table of variable-sized objects.
+     * Each entry has an offset to the next entry; the last entry has
+     * a next entry offset of zero.
+     *
+     * The entries are sorted in ascending numerical order of intcode.
+     * This is an integer representation of the 2-letter ISO 3166
+     * country code.  It is computed as (c1-'A')*32 + (c0-'A'), where
+     * the country code is c1 c0, with 'A' <= ci <= 'Z'.
+     *
+     * The list of zones is a list of integers, from 0..n-1, where n
+     * is the total number of system zones.  The numbering corresponds
+     * exactly to the ordering of ZONE_IDS.
+     */
+    const CountryIndex* index = INDEX_BY_COUNTRY;
+
+    uint16_t intcode = 0;
+    if (country != NULL && *country != NULL) {
+        intcode = ((country[0] - 'A') << 5) + (country[1] - 'A');
+    }
+    
+    for (;;) {
+        if (index->intcode > intcode) {
+            // Went past our desired country; no match found
+            break;
+        }
+        if (index->intcode == intcode) {
+            // Found our desired country
+            const UnicodeString** const result =
+                (const UnicodeString** const) new UnicodeString*[index->count];
+            const uint16_t* zoneNumberArray = &(index->zoneNumber);
+            for (uint16_t i=0; i<index->count; ++i) {
+                // Pointer assignment - use existing UnicodeString object!
+                // Don't create a new UnicodeString on the heap here!
+                result[i] = &ZONE_IDS[zoneNumberArray[i]];
+            }
+            numIDs = index->count;
+            return result;
+        }
+        // Compute the position of the next entry.  If the delta value
+        // in this entry is zero, then there is no next entry.
+        uint16_t delta = index->nextEntryDelta;
+        if (delta == 0) {
+            break;
+        }
+        index = (const CountryIndex*)((int8_t*)index + delta);
     }
 
     numIDs = 0;

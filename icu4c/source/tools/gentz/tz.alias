@@ -26,14 +26,14 @@ CTT Asia/Shanghai
 EAT Africa/Addis_Ababa
 ECT Europe/Paris
 # EET Europe/Istanbul # EET is a standard UNIX zone
-EST America/New_York
-HST Pacific/Honolulu
+EST America/New_York # Linked to America/Indianapolis in Olson
+HST Pacific/Honolulu # Olson LINK
 IET America/Indianapolis
 IST Asia/Calcutta
 JST Asia/Tokyo
 # MET Asia/Tehran # MET is a standard UNIX zone
 MIT Pacific/Apia
-MST America/Denver
+MST America/Denver # Linked to America/Phoenix in Olson
 NET Asia/Yerevan
 NST Pacific/Auckland
 PLT Asia/Karachi
@@ -41,5 +41,5 @@ PNT America/Phoenix
 PRT America/Puerto_Rico
 PST America/Los_Angeles
 SST Pacific/Guadalcanal
-UTC Etc/GMT
+UTC Etc/UTC # Olson LINK
 VST Asia/Saigon
