@@ -1,3 +1,9 @@
+icu (1.8.1-1) unstable; urgency=low
+
+  * Update to ICU version 1.8.1.
+
+ -- root <yves@debian.org>  Mon, 21 May 2001 15:27:36 -0700
+
 icu (1.7-1) unstable; urgency=low
 
   * Update to ICU version 1.7.
