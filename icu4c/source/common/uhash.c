@@ -272,6 +272,14 @@ uhash_iget(const UHashtable *hash,
     return _uhash_find(hash, keyholder, hash->keyHasher(keyholder))->value.pointer;
 }
 
+U_CAPI int32_t
+uhash_geti(const UHashtable *hash,
+           const void* key) {
+    UHashTok keyholder;
+    keyholder.pointer = (void*) key;
+    return _uhash_find(hash, keyholder, hash->keyHasher(keyholder))->value.integer;
+}
+
 U_CAPI void*
 uhash_put(UHashtable *hash,
           void* key,
@@ -294,6 +302,17 @@ uhash_iput(UHashtable *hash,
     return _uhash_put(hash, keyholder, valueholder, status).pointer;
 }
 
+int32_t
+uhash_puti(UHashtable *hash,
+           void* key,
+           int32_t value,
+           UErrorCode *status) {
+    UHashTok keyholder, valueholder;
+    keyholder.pointer = key;
+    valueholder.integer = value;
+    return _uhash_put(hash, keyholder, valueholder, status).integer;
+}
+
 U_CAPI void*
 uhash_remove(UHashtable *hash,
              const void* key) {
@@ -308,6 +327,14 @@ uhash_iremove(UHashtable *hash,
     UHashTok keyholder;
     keyholder.integer = key;
     return _uhash_remove(hash, keyholder).pointer;
+}
+
+U_CAPI int32_t
+uhash_removei(UHashtable *hash,
+              const void* key) {
+    UHashTok keyholder;
+    keyholder.pointer = (void*) key;
+    return _uhash_remove(hash, keyholder).integer;
 }
 
 U_CAPI void

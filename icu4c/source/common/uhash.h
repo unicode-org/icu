@@ -281,10 +281,11 @@ U_CAPI int32_t
 uhash_count(const UHashtable *hash);
 
 /**
- * Put an item in a UHashtable.  If the keyDeleter is non-NULL, then
- * the hashtable owns 'key' after this call.  If the valueDeleter is
- * non-NULL, then the hashtable owns 'value' after this call.
- * Storing a NULL value is the same as calling uhash_remove().
+ * Put a (key=pointer, value=pointer) item in a UHashtable.  If the
+ * keyDeleter is non-NULL, then the hashtable owns 'key' after this
+ * call.  If the valueDeleter is non-NULL, then the hashtable owns
+ * 'value' after this call.  Storing a NULL value is the same as
+ * calling uhash_remove().
  * @param hash The target UHashtable.
  * @param key The key to store.
  * @param value The value to store, may be NULL (see above).
@@ -298,7 +299,18 @@ uhash_put(UHashtable *hash,
           void *value,
           UErrorCode *status);
 
-/* NEW */
+/**
+ * Put a (key=integer, value=pointer) item in a UHashtable.
+ * keyDeleter must be NULL.  If the valueDeleter is non-NULL, then the
+ * hashtable owns 'value' after this call.  Storing a NULL value is
+ * the same as calling uhash_remove().
+ * @param hash The target UHashtable.
+ * @param key The integer key to store.
+ * @param value The value to store, may be NULL (see above).
+ * @param status A pointer to an UErrorCode to receive any errors.
+ * @return The previous value, or NULL if none.
+ * @see uhash_get
+ */
 U_CAPI void*
 uhash_iput(UHashtable *hash,
            int32_t key,
@@ -306,34 +318,85 @@ uhash_iput(UHashtable *hash,
            UErrorCode *status);
 
 /**
- * Get an item from a UHashtable.
+ * Put a (key=pointer, value=integer) item in a UHashtable.  If the
+ * keyDeleter is non-NULL, then the hashtable owns 'key' after this
+ * call.  valueDeleter must be NULL.  Storing a 0 value is the same as
+ * calling uhash_remove().
  * @param hash The target UHashtable.
- * @param key A key stored in a hashtable
- * @return The requested item, or 0 if not found.
+ * @param key The key to store.
+ * @param value The integer value to store.
+ * @param status A pointer to an UErrorCode to receive any errors.
+ * @return The previous value, or 0 if none.
+ * @see uhash_get
+ */
+U_CAPI int32_t
+uhash_puti(UHashtable *hash,
+           void* key,
+           int32_t value,
+           UErrorCode *status);
+
+/**
+ * Retrieve a pointer value from a UHashtable using a pointer key,
+ * as previously stored by uhash_put().
+ * @param hash The target UHashtable.
+ * @param key A pointer key stored in a hashtable
+ * @return The requested item, or NULL if not found.
  */
 U_CAPI void*
 uhash_get(const UHashtable *hash, 
           const void *key);
 
-/* NEW */
+/**
+ * Retrieve a pointer value from a UHashtable using a integer key,
+ * as previously stored by uhash_iput().
+ * @param hash The target UHashtable.
+ * @param key An integer key stored in a hashtable
+ * @return The requested item, or NULL if not found.
+ */
 U_CAPI void*
 uhash_iget(const UHashtable *hash,
            int32_t key);
 
 /**
- * Remove an item from a UHashtable.
+ * Retrieve an integer value from a UHashtable using a pointer key,
+ * as previously stored by uhash_puti().
+ * @param hash The target UHashtable.
+ * @param key A pointer key stored in a hashtable
+ * @return The requested item, or 0 if not found.
+ */
+U_CAPI int32_t
+uhash_geti(const UHashtable *hash,
+           const void* key);
+
+/**
+ * Remove an item from a UHashtable stored by uhash_put().
  * @param hash The target UHashtable.
  * @param key A key stored in a hashtable
- * @return The item removed, or 0 if not found.
+ * @return The item removed, or NULL if not found.
  */
 U_CAPI void*
 uhash_remove(UHashtable *hash,
              const void *key);
 
-/* NEW */
+/**
+ * Remove an item from a UHashtable stored by uhash_iput().
+ * @param hash The target UHashtable.
+ * @param key An integer key stored in a hashtable
+ * @return The item removed, or NULL if not found.
+ */
 U_CAPI void*
 uhash_iremove(UHashtable *hash,
               int32_t key);
+
+/**
+ * Remove an item from a UHashtable stored by uhash_puti().
+ * @param hash The target UHashtable.
+ * @param key An key stored in a hashtable
+ * @return The item removed, or 0 if not found.
+ */
+U_CAPI int32_t
+uhash_removei(UHashtable *hash,
+              const void* key);
 
 /**
  * Remove all items from a UHashtable.
