@@ -122,9 +122,10 @@ static void TestPrevious()
     /* A basic test to see if it's working at all */
     backAndForth(iter);
     ucol_closeElements(iter);
+    ucol_close(en_us);
 
     /* Test with a contracting character sequence */
-    u_uastrcpy(rule, " < a,A < b,B < c,C, d,D < z,Z < ch,cH,Ch,CH");
+    u_uastrcpy(rule, "&a,A < b,B < c,C, d,D < z,Z < ch,cH,Ch,CH");
     c1 = ucol_openRules(rule, u_strlen(rule), UCOL_NO_NORMALIZATION, UCOL_DEFAULT_STRENGTH, &status);
 
     /* synwee : temporarily changed
@@ -134,7 +135,6 @@ static void TestPrevious()
     {
         log_err("Couldn't create a RuleBasedCollator with a contracting sequence\n %s\n", 
             myErrorName(status));
-        ucol_close(en_us);
         return;
     }
     source=(UChar*)malloc(sizeof(UChar) * 20);
@@ -143,7 +143,6 @@ static void TestPrevious()
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n", 
             myErrorName(status));
-        ucol_close(en_us);
         return;
     }
     backAndForth(iter);
@@ -152,13 +151,12 @@ static void TestPrevious()
     free(source);
 
     /* Test with an expanding character sequence */
-    u_uastrcpy(rule, "< a < b < c/abd < d");
+    u_uastrcpy(rule, "&a < b < c/abd < d");
     c2 = ucol_openRules(rule, u_strlen(rule), UCOL_NO_NORMALIZATION, UCOL_DEFAULT_STRENGTH,  &status);
     if (c2 == NULL || U_FAILURE(status))
     {
         log_err("Couldn't create a RuleBasedCollator with a contracting sequence.\n %s\n", 
             myErrorName(status));
-    ucol_close(en_us);
         return;
     }
     source=(UChar*)malloc(sizeof(UChar) * 5);    
@@ -167,7 +165,6 @@ static void TestPrevious()
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n", 
             myErrorName(status));
-    ucol_close(en_us);
         return;
     }
     backAndForth(iter);
@@ -175,13 +172,12 @@ static void TestPrevious()
     ucol_close(c2);
     free(source);
     /* Now try both */
-    u_uastrcpy(rule, "< a < b < c/aba < d < z < ch");
+    u_uastrcpy(rule, "&a < b < c/aba < d < z < ch");
     c3 = ucol_openRules(rule, u_strlen(rule), UCOL_DEFAULT_NORMALIZATION,  UCOL_DEFAULT_STRENGTH, &status);
     if (c3 == NULL || U_FAILURE(status))
     {
         log_err("Couldn't create a RuleBasedCollator with a contracting sequence.\n %s\n", 
             myErrorName(status));
-    ucol_close(en_us);
         return;
     }
     source=(UChar*)malloc(sizeof(UChar) * 10);    
@@ -190,14 +186,12 @@ static void TestPrevious()
     if(U_FAILURE(status)){
         log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n", 
             myErrorName(status));
-    ucol_close(en_us);
         return;
     }
     backAndForth(iter);
     ucol_closeElements(iter);
     ucol_close(c3);
     free(source);
-    ucol_close(en_us);
     free(test1);
     free(test2);
 }
@@ -396,106 +390,42 @@ static void backAndForth(UCollationElements *iter)
  */
 static void TestMaxExpansion()
 {
-  /* Try a simple one first: */
-  /* The only expansion ends with 'e' and has length 2 */
-    UChar rule1[50];
-    UChar temp[20];
-    UChar singleUChar[2]={0x00e4};
-    const UChar test1[] =
-    {
-      /*character, count */
-        0x61, 1,
-        0x62, 1,
-        0x65, 2
-    };
-    const UChar test2[] =
-    {
-     /*character, count */
-        0x61, 1,
-        0x62, 1,
-        0x65, 2,
-        0x66, 4
-    };
+  UErrorCode          status = U_ZERO_ERROR; 
+  UCollator          *coll   ;/*= ucol_open("en_US", &status);*/
+  UChar               ch     = 0;
+  UCollationElements *iter   ;/*= ucol_openElements(coll, &ch, 1, &status);*/
+  int                 count  = 1;
 
-    u_uastrcpy(rule1, "< a & ae = ");
-    u_strcat(rule1, singleUChar);
-    u_uastrcpy(temp, " < b < e");
-    u_strcat(rule1, temp);
-    verifyExpansion(rule1, test1, ARRAY_LENGTH(test1));
+  UChar rule[20];
+  u_uastrcpy(rule, "&a < ab < c/aba < d < z < ch");
+  coll = ucol_openRules(rule, u_strlen(rule), UCOL_DEFAULT_NORMALIZATION,  
+                        UCOL_DEFAULT_STRENGTH, &status);
+  iter = ucol_openElements(coll, &ch, 1, &status);
 
-    /* Now a more complicated one:
-        "a1" --> "ae"
-        "z" --> "aeef" */
+  while (ch < 0xFFFF && U_SUCCESS(status)) {
+    int      count = 1;
+    uint32_t order = 0;
+    ch ++;
+    ucol_setText(iter, &ch, 1, &status);
+    order = ucol_previous(iter, &status);
 
-    u_uastrcpy(rule1, "");
-    u_uastrcpy(rule1, "< a & ae = a1 & aeef = z < b < e < f");
-    verifyExpansion(rule1, test2, ARRAY_LENGTH(test2));
-}
+    /* thai management */
+    if (order == 0)
+      order = ucol_previous(iter, &status);
 
-/**
- * Verify that getMaxExpansion works on a given set of collation rules
- *
- * The first row of the "tests" array contains the collation rules
- * at index 0, and the string at index 1 is ignored.
- *
- * Subsequent rows of the array contain a character and a number, both
- * represented as strings.  The character's collation order is determined,
- * and getMaxExpansion is called for that character.  If its value is
- * not equal to the specified number, an error results.
- */
-static void verifyExpansion(UChar* rules, const UChar expansionTests[], int32_t testCount)
-{
-    int32_t i;
-    UErrorCode status = U_ZERO_ERROR;
-    UCollator *coll = NULL;
-    UChar source[10];
-    UCollationElements *iter=NULL;
-    coll = ucol_openRules(rules, u_strlen(rules), UCOL_DEFAULT_NORMALIZATION, UCOL_DEFAULT_STRENGTH, &status);
-    if (coll == NULL || U_FAILURE(status)) {
-        log_err("Couldn't create a RuleBasedCollator. Error =%s \n", myErrorName(status));
-        return;
+    while (U_SUCCESS(status) && 
+           ucol_previous(iter, &status) != UCOL_NULLORDER) {
+      count ++; 
     }
-    u_uastrcpy(source, "");
-    iter=ucol_openElements(coll, source, u_strlen(source), &status);
-    if(U_FAILURE(status)){
-        log_err("ERROR: in creation of collation element iterator using ucol_openElements()\n %s\n", 
-            myErrorName(status));
-        return;
+
+    if (U_FAILURE(status) && ucol_getMaxExpansion(iter, order) < count) {
+      log_err("Failure at codepoint %d, maximum expansion count < %d\n",
+                                                               ch, count);
     }
-    for (i = 0; i < testCount; i += 2)
-    {
-        int32_t expansion, expect, order;
-        /* First get the collation key that the test string expands to */
-        UChar test[2] = { 0, 0} ;
+  }
 
-        test[0] = expansionTests[i+0];
-
-        ucol_setText(iter, test, u_strlen(test), &status);
-        if (U_FAILURE(status)) {
-            log_err("call to ucol_setText(iter, test, length) failed.");
-            return;
-        }
-        order = ucol_next(iter, &status);
-
-        if (U_FAILURE(status)) {
-            log_err("call to iter->next() failed.");
-            return;
-        }
-
-        /*if (order == UCOL_NULLORDER || ucol_next(iter, &status) != UCOL_NULLORDER) {
-            ucol_reset(iter);
-            log_err("verifyExpansion: \'%s\' has multiple orders\n", austrdup(test));
-        }*/
-
-        expansion = ucol_getMaxExpansion(iter, order);
-        expect = expansionTests[i+1];
-
-        if (expansion != expect) {
-            log_err("Expansion for \'%s\' is wrong. Expected %d, Got %d\n", austrdup(test), expect, expansion); 
-        }
-    }
-    ucol_closeElements(iter);
-    ucol_close(coll);
+  ucol_closeElements(iter);
+  ucol_close(coll);
 }
 
 /**
@@ -513,7 +443,6 @@ static int32_t* getOrders(UCollationElements *iter, int32_t *orderLength)
     status= U_ZERO_ERROR;
 
 
-    /* synwee : changed */
     while ((order=ucol_next(iter, &status)) != UCOL_NULLORDER)
     {
         if (size == maxSize)
@@ -528,9 +457,6 @@ static int32_t* getOrders(UCollationElements *iter, int32_t *orderLength)
         }
 
         orders[size++] = order;
-
-
-
     }
 
     if (maxSize > size)
@@ -543,7 +469,7 @@ static int32_t* getOrders(UCollationElements *iter, int32_t *orderLength)
 
 
     }
-/*     ucol_previous(iter, &status); */
+
     *orderLength = size;
     return orders;
 }
