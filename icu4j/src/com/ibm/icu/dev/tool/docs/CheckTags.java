@@ -1,4 +1,16 @@
 /**
+*******************************************************************************
+* Copyright (C) 2002, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
+*******************************************************************************
+*
+* $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/docs/CheckTags.java,v $ 
+* $Date: 2002/12/17 07:31:26 $ 
+* $Revision: 1.13 $
+*
+*******************************************************************************
+*/
+/**
  * This is a tool to check the tags on ICU4J files.  In particular, we're looking for:
  *
  * - methods that have no tags
