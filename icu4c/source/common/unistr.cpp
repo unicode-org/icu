@@ -336,12 +336,12 @@ UnicodeString::numDisplayCells( UTextOffset start,
   // pin indices to legal values
   pinIndices(start, length);
 
-  UChar c;
+  UChar32 c;
   int32_t result = 0;
   UTextOffset limit = start + length;
 
   while(start < limit) {
-    c = getArrayStart()[start];
+    UTF_NEXT_CHAR(fArray, start, limit, c);
     switch(Unicode::getCellWidth(c)) {
     case Unicode::ZERO_WIDTH:
       break;;
@@ -358,7 +358,6 @@ UnicodeString::numDisplayCells( UTextOffset start,
       result += (asian ? 2 : 1);
       break;
     }
-    ++start;
   }
 
   return result;
