@@ -820,12 +820,6 @@ u_setDataDirectory(const char *directory) {
     }
 }
 
-#if HAVE_DLOPEN
-#define LIB_PREFIX "lib"
-#else
-#define LIB_PREFIX
-#endif
-
 U_CAPI const char * U_EXPORT2
 u_getDataDirectory(void) {
     const char *path = NULL;
