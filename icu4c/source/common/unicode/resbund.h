@@ -60,6 +60,26 @@ class VisitedFileCache;
 typedef struct _FileStream FileStream;
 #endif
 
+/* forward declarations */
+class Locale;
+class RuleBasedCollator;
+class ResourceBundle;
+extern int32_t T_ResourceBundle_countArrayItemsImplementation(
+                const ResourceBundle* resourceBundle, 
+                const char* resourceKey,
+                UErrorCode& err);
+extern const UnicodeString** listInstalledLocalesImplementation(
+                const char* path,
+                int32_t* numInstalledLocales);
+extern void getTaggedArrayUCharsImplementation(
+                const ResourceBundle*   bundle,
+                const char           *resourceTag,
+                UChar const**         itemTags,
+                UChar const**         items,
+                int32_t                    maxItems,
+                int32_t&                numItems,
+                UErrorCode&              err);
+
 /**
  * A class representing a collection of resource information pertaining to a given
  * locale. A resource bundle provides a way of accessing locale- specfic information in

@@ -14,6 +14,8 @@
 #include "unicode/brkiter.h"
 
 class RuleBasedBreakIteratorTables;
+class BreakIterator;
+
 /**
  * <p>A subclass of BreakIterator whose behavior is specified using a list of rules.</p>
  * 

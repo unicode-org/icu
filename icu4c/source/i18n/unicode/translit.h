@@ -15,6 +15,7 @@ class UnicodeFilter;
 class TransliterationRuleData;
 struct UHashtable;
 class U_I18N_API UVector;
+class CompoundTransliterator;
 
 /**
  * <code>Transliterator</code> is an abstract class that

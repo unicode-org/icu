@@ -21,6 +21,9 @@
 #include "unicode/utypes.h"
 #include "unicode/locid.h"
 
+/* forward declaration */
+class SimpleDateFormat;
+
 /**
  * DateFormatSymbols is a public class for encapsulating localizable date-time
  * formatting data -- including timezone data. DateFormatSymbols is used by

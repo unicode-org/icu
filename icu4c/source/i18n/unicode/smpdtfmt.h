@@ -25,7 +25,9 @@
 
 #include "unicode/utypes.h"
 #include "unicode/datefmt.h"
+
 class DateFormatSymbols;
+class DateFormat;
 
 /**
  * SimpleDateFormat is a concrete class for formatting and parsing dates in a
