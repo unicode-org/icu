@@ -9,7 +9,7 @@ zh_TW {
     CollationElements { 
 	    Version { "1.0" }
 		Override { "FALSE" }
-		Sequence { " & Z <\u3000<\uFF0C<\u3001<\u3002<\uFF0E<\u2022<\uFF1B<"
+		Sequence { " & [top] <\u3000<\uFF0C<\u3001<\u3002<\uFF0E<\u2022<\uFF1B<"
         "\uFF1A<\uFF1F<\uFF01<\uFE30<\u2026<\u2025<\uFE50<\uFF64<\uFE52<\u00B7<\uFE54<\uFE55"
         "<\uFE56<\uFE57<\uFF5C<\u2013<\uFE31<\u2014<\uFE33<\uFE34<\uFE4F<\uFF08<\uFF09<\uFE35"
         "<\uFE36<\uFF5B<\uFF5D<\uFE37<\uFE38<\u3014<\u3015<\uFE39<\uFE3A<\u3010<\u3011<\uFE3B"
