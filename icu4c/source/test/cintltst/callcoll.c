@@ -435,9 +435,10 @@ void doTest(UCollator* myCollation, const UChar source[], const UChar target[], 
     sortKey2=(uint8_t*)malloc(sizeof(uint8_t) * (sortklenmax+1));
     ucol_getSortKey(myCollation, target, u_strlen(target), sortKey2, sortklen2+1);
     
-    temp= uprv_strcmp(sortKey1, sortKey2);/*memcmp(sortKey1, sortKey2,sortklenmax);*/
-    gSortklen1 = uprv_strlen(sortKey1)+1;
-    gSortklen2 = uprv_strlen(sortKey2)+1;
+    /*memcmp(sortKey1, sortKey2,sortklenmax);*/
+    temp= uprv_strcmp((const char *)sortKey1, (const char *)sortKey2);
+    gSortklen1 = uprv_strlen((const char *)sortKey1)+1;
+    gSortklen2 = uprv_strlen((const char *)sortKey2)+1;
     if(sortklen1 != gSortklen1){
         log_err("SortKey length does not match Expected: %i Got: %i",sortklen1, gSortklen1);
     }
@@ -445,9 +446,15 @@ void doTest(UCollator* myCollation, const UChar source[], const UChar target[], 
         log_err("SortKey length does not match Expected: %i Got: %i", sortklen2, gSortklen2);
     }
 
-    if(temp < 0) keyResult=UCOL_LESS;
-    else if(temp > 0) keyResult= UCOL_GREATER;
-    else keyResult = UCOL_EQUAL;
+    if(temp < 0) {
+        keyResult=UCOL_LESS;
+    }
+    else if(temp > 0) {
+        keyResult= UCOL_GREATER;
+    }
+    else {
+        keyResult = UCOL_EQUAL;
+    }
     reportCResult( source, target, sortKey1, sortKey2, compareResult, keyResult, incResult, result );
     free(sortKey1);
     free(sortKey2);
