@@ -67,10 +67,10 @@
 .BI "\-t\fP, \fB\-\-to\-code" " encoding"
 ]
 [
-.IR file .\|.\|.
+.BI "\-o\fP, \fB\-\-output" " file"
 ]
 [
-.BI "\-o\fP, \fB\-\-output" " file"
+.IR file .\|.\|.
 ]
 .SH DESCRIPTION
 .B uconv
