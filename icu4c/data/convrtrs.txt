@@ -70,7 +70,7 @@ UTF16_PlatformEndian { MIME }	 ISO-10646-UCS-2 { IANA	} csUnicode utf-16 { MIME 
 UTF16_OppositeEndian
 LATIN_1			iso-8859-1 { MIME } ibm-819 cp819 latin1 8859-1	csisolatin1 iso-ir-100 cp367 ISO_8859-1:1987 { IANA } l1 ANSI_X3.110-1983   #!!!!! There's whole lot of names for this
 ISO_2022		iso-2022 { MIME	} 2022 cp2022
-ISO_2022,locale=jp      { MIME } iso-2022-jp
+ISO_2022,locale=jp      iso-2022-jp { MIME }
 LMBCS-1			lmbcs
 LMBCS-2
 LMBCS-3	        
