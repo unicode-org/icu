@@ -49,8 +49,8 @@ UBool  opt_lower      = FALSE;
 UBool  opt_upper      = FALSE;
 UBool  opt_case       = FALSE;
 int    opt_level      = 0;
-char * opt_source     = 0;
-char * opt_target     = 0;
+char * opt_source     = "abc";
+char * opt_target     = "abd";
 UCollator * collator  = 0;
 
 /** 

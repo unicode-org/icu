@@ -20,7 +20,6 @@
 
 int c_main(UFILE *out)
 {
-  printf("** C Case Mapping Sample\n");
   UChar ch;
   UErrorCode errorCode = U_ZERO_ERROR;
   static const UChar upper[] = {0x61, 0x42, 0x49, 0}; /* upper = "aBI" */
@@ -32,6 +31,8 @@ int c_main(UFILE *out)
   const UChar char_K = 0x004b; /* 'K' */
   
   int length;
+
+  printf("** C Case Mapping Sample\n");
 
   /* uchar.h APIs, single character case mapping */
   ch = u_toupper(char_k); /* ch = 'K' */
