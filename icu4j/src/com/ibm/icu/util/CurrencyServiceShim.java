@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/util/CurrencyServiceShim.java,v $
- * $Date: 2003/04/21 21:02:42 $
- * $Revision: 1.1 $
+ * $Date: 2003/05/05 23:42:18 $
+ * $Revision: 1.2 $
  *
  *******************************************************************************
  */
@@ -31,36 +31,30 @@ import com.ibm.icu.impl.ICULocaleService.ICUResourceBundleFactory;
 final class CurrencyServiceShim extends Currency.ServiceShim {
     
     Locale[] getAvailableLocales() {
-        if (service == null) {
+        if (service.isDefault()) {
             return ICULocaleData.getAvailableLocales();
-        } else {
-            return service.getAvailableLocales();
         }
+        return service.getAvailableLocales();
     }
 
     Currency createInstance(Locale loc) {
-        if (service == null) {
+        if (service.isDefault()) {
             return Currency.createCurrency(loc);
-        } else {
-            return (Currency)service.get(loc);
         }
+        return (Currency)service.get(loc);
     }
 
     Object registerInstance(Currency currency, Locale locale) {
-        return getService().registerObject(currency, locale);
+        return service.registerObject(currency, locale);
     }
     
     boolean unregister(Object registryKey) {
-        if (service == null) {
-            return false;
-        }
         return service.unregisterFactory((Factory)registryKey);
     }
 
-    private static ICULocaleService service;
-    private static ICULocaleService getService() {
-        if (service == null) {
-            ICULocaleService newService = new ICULocaleService("Currency");
+    private static class CFService extends ICULocaleService {
+        CFService() {
+            super("Currency");
 
             class CurrencyFactory extends ICUResourceBundleFactory {
                 protected Object handleCreate(Locale loc, int kind, ICUService service) {
@@ -68,13 +62,9 @@ final class CurrencyServiceShim extends Currency.ServiceShim {
                 }
             }
             
-            newService.registerFactory(new CurrencyFactory());
-            synchronized (CurrencyServiceShim.class) {
-                if (service == null) {
-                    service = newService;
-                }
-            }
+            registerFactory(new CurrencyFactory());
+            markDefault();
         }
-        return service;
     }
+    static final ICULocaleService service = new CFService();
 }

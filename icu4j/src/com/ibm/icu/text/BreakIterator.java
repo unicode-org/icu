@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/BreakIterator.java,v $
- * $Date: 2003/02/15 00:29:03 $
- * $Revision: 1.16 $
+ * $Date: 2003/05/05 23:42:17 $
+ * $Revision: 1.17 $
  *
  *****************************************************************************************
  */
@@ -568,10 +568,10 @@ public abstract class BreakIterator implements Cloneable
      * @draft ICU 2.4
      */
     public static boolean unregister(Object key) {
-        if (shim == null) {
-            return false;
+        if (hasShim()) {
+            return shim.unregister(key);
         }
-        return shim.unregister(key);
+        return false;
     }
 
     // end of registration
@@ -634,20 +634,28 @@ public abstract class BreakIterator implements Cloneable
     }
 
     private static BreakIteratorServiceShim shim;
+    private static boolean hasShim() {
+        synchronized(BreakIterator.class) {
+            return shim != null;
+        }
+    }
+
     private static BreakIteratorServiceShim getShim() {
+        BreakIteratorServiceShim newshim = null;
         if (shim == null) {
             try {
                 Class cls = Class.forName("com.ibm.icu.text.BreakIteratorFactory");
-                BreakIteratorServiceShim newshim = (BreakIteratorServiceShim)cls.newInstance();
-                synchronized(BreakIterator.class) {
-                    if (shim == null) {
-                        shim = newshim;
-                    }
-                }
+                newshim = (BreakIteratorServiceShim)cls.newInstance();
             }
             catch (Exception e) {
                 e.printStackTrace();
                 throw new RuntimeException(e.getMessage());
+            }
+        }
+
+        synchronized(BreakIterator.class) {
+            if (shim == null) {
+                shim = newshim;
             }
         }
         return shim;
