@@ -414,6 +414,7 @@ NewResourceBundleTest::TestOtherAPI(){
     ResourceBundle defaultresource(err);
     if(U_FAILURE(err)){
         errln("Construction of default resourcebundle failed");
+        return;
     }
     if(strcmp(defaultresource.getLocale().getName(), Locale::getDefault().getName()) != 0){
         errln("Construction of default resourcebundle didn't take the defaultlocale\n");

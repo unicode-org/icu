@@ -669,6 +669,7 @@ public:
 
     virtual void run()
     {
+      UMTX myMutex = 0;
         // Keep this data here to avoid static initialization.
         FormatThreadTestData kNumberFormatTestData[] = 
         {
@@ -699,7 +700,7 @@ public:
 
         if(U_FAILURE(status))
         {
-            Mutex m;
+            Mutex m(&myMutex);
             error("Error on NumberFormat::createInstance()");
             return;
         }
@@ -709,7 +710,7 @@ public:
         if(U_FAILURE(status))
         {
             {
-                Mutex m;
+                Mutex m(&myMutex);
                 error("Error on NumberFormat::createPercentInstance()");
             }
             delete formatter;
@@ -726,7 +727,7 @@ public:
 
             if(0 != output.compare(kNumberFormatTestData[whichLine].string))
             {
-                Mutex m;
+                Mutex m(&myMutex);
                 error("format().. expected " + kNumberFormatTestData[whichLine].string + " got " + output);
                 continue; // will break
             }
@@ -739,7 +740,7 @@ public:
 
             if(0 != output.compare(kPercentFormatTestData[whichLine].string))
             {
-                Mutex m;
+                Mutex m(&myMutex);
                 error("percent format().. \n" + showDifference(kPercentFormatTestData[whichLine].string,output));
                 continue;
             }
@@ -790,14 +791,14 @@ public:
             {
                UnicodeString tmp;
                errorToString(status,tmp);
-               Mutex m;
+               Mutex m(&myMutex);
                error("Failure on message format, pattern=" + patternToCheck +", error = " + tmp);
                continue;
             }
 
             if(result != expected)
             {
-                Mutex m;
+                Mutex m(&myMutex);
                 error("PatternFormat: \n" + showDifference(expected,result));
                 continue;
             }
@@ -805,7 +806,7 @@ public:
 
         delete formatter;
         delete percentFormatter;
-        Mutex m;
+        Mutex m(&myMutex);
         done();
     }
 
