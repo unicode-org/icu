@@ -7,6 +7,7 @@
 package com.ibm.icu.text;
 
 import java.text.*;
+
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.*;
 import com.ibm.icu.impl.UCharacterProperty;
@@ -347,7 +348,8 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public UnicodeSet(String pattern) {
-        this(pattern, true);
+        this();
+        applyPattern(pattern, null, null, IGNORE_SPACE);
     }
 
     /**
@@ -361,7 +363,8 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public UnicodeSet(String pattern, boolean ignoreWhitespace) {
-        this(pattern, ignoreWhitespace ? IGNORE_SPACE : 0);
+        this();
+        applyPattern(pattern, null, null, ignoreWhitespace ? IGNORE_SPACE : 0);
     }
 
     /**
@@ -376,7 +379,7 @@ public class UnicodeSet extends UnicodeFilter {
      */
     public UnicodeSet(String pattern, int options) {
         this();
-        applyPattern(pattern, options);
+        applyPattern(pattern, null, null, options);
     }
 
     /**
@@ -395,6 +398,26 @@ public class UnicodeSet extends UnicodeFilter {
         this();
         applyPattern(pattern, pos, symbols, IGNORE_SPACE);
     }
+
+    /**
+     * Constructs a set from the given pattern.  See the class description
+     * for the syntax of the pattern language.
+     * @param pattern a string specifying what characters are in the set
+     * @param pos on input, the position in pattern at which to start parsing.
+     * On output, the position after the last character parsed.
+     * @param symbols a symbol table mapping variables to char[] arrays
+     * and chars to UnicodeSets
+     * @param options a bitmask indicating which options to apply.
+     * Valid options are IGNORE_SPACE and CASE.
+     * @exception java.lang.IllegalArgumentException if the pattern
+     * contains a syntax error.
+     * @stable ICU 2.0
+     */
+    public UnicodeSet(String pattern, ParsePosition pos, SymbolTable symbols, int options) {
+        this();
+        applyPattern(pattern, pos, symbols, options);
+    }
+
 
     /**
      * Return a new set that is equivalent to this one.
@@ -443,7 +466,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public final UnicodeSet applyPattern(String pattern) {
-        return applyPattern(pattern, true);
+        return applyPattern(pattern, null, null, IGNORE_SPACE);
     }
 
     /**
@@ -458,7 +481,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @stable ICU 2.0
      */
     public UnicodeSet applyPattern(String pattern, boolean ignoreWhitespace) {
-        return applyPattern(pattern, ignoreWhitespace ? IGNORE_SPACE : 0);
+        return applyPattern(pattern, null, null, ignoreWhitespace ? IGNORE_SPACE : 0);
     }
 
     /**
@@ -473,21 +496,7 @@ public class UnicodeSet extends UnicodeFilter {
      * @internal
      */
     public UnicodeSet applyPattern(String pattern, int options) {
-        ParsePosition pos = new ParsePosition(0);
-        applyPattern(pattern, pos, null, options);
-
-        int i = pos.getIndex();
-
-        // Skip over trailing whitespace
-        if ((options & IGNORE_SPACE) != 0) {
-            i = Utility.skipWhitespace(pattern, i);
-        }
-
-        if (i != pattern.length()) {
-            throw new IllegalArgumentException("Parse of \"" + pattern +
-                                               "\" failed at " + i);
-        }
-        return this;
+        return applyPattern(pattern, null, null, options);
     }
 
     /**
@@ -1936,13 +1945,18 @@ public class UnicodeSet extends UnicodeFilter {
      * of <code>pattern</code>
      * @exception java.lang.IllegalArgumentException if the parse fails.
      */
-    void applyPattern(String pattern,
+    UnicodeSet applyPattern(String pattern,
                       ParsePosition pos,
                       SymbolTable symbols,
                       int options) {
 
         // Need to build the pattern in a temporary string because
         // _applyPattern calls add() etc., which set pat to empty.
+        boolean parsePositionWasNull = pos == null;
+        if (parsePositionWasNull) {
+            pos = new ParsePosition(0);
+        }
+
         StringBuffer rebuiltPat = new StringBuffer();
         RuleCharacterIterator chars =
             new RuleCharacterIterator(pattern, symbols, pos);
@@ -1951,6 +1965,20 @@ public class UnicodeSet extends UnicodeFilter {
             syntaxError(chars, "Extra chars in variable value");
         }
         pat = rebuiltPat.toString();
+        if (parsePositionWasNull) {
+            int i = pos.getIndex();
+
+            // Skip over trailing whitespace
+            if ((options & IGNORE_SPACE) != 0) {
+                i = Utility.skipWhitespace(pattern, i);
+            }
+
+            if (i != pattern.length()) {
+                throw new IllegalArgumentException("Parse of \"" + pattern +
+                                                   "\" failed at " + i);
+            }   
+        }
+        return this;
     }
 
     /**
@@ -2100,7 +2128,7 @@ public class UnicodeSet extends UnicodeFilter {
                     break;
                 case 2:
                     chars.skipIgnored(opts);
-                    nested.applyPropertyPattern(chars, pat);
+                    nested.applyPropertyPattern(chars, pat, symbols);
                     break;
                 case 3: // `nested' already parsed
                     nested._toPattern(pat, false);
@@ -2772,6 +2800,8 @@ public class UnicodeSet extends UnicodeFilter {
         }
         return this;
     }
+    
+    
 
     /**
      * Modifies this set to contain those code points which have the
@@ -2800,11 +2830,31 @@ public class UnicodeSet extends UnicodeFilter {
      *
      * @stable ICU 2.4
      */
+    public UnicodeSet applyPropertyAlias(String propertyAlias, String valueAlias) {
+        return applyPropertyAlias(propertyAlias, valueAlias, null);
+    }
+    
+    /**
+     * Modifies this set to contain those code points which have the
+     * given value for the given property.  Prior contents of this
+     * set are lost.
+     * @param propertyAlias
+     * @param valueAlias
+     * @param symbols if not null, then symbols are first called to see if a property
+     * is available. If true, then everything else is skipped.
+     * @return
+     */
     public UnicodeSet applyPropertyAlias(String propertyAlias,
-                                         String valueAlias) {
+                                         String valueAlias, SymbolTable symbols) {
         int p;
         int v;
         boolean mustNotBeEmpty = false;
+        
+        if (symbols != null 
+                && (symbols instanceof XSymbolTable)
+                && ((XSymbolTable)symbols).applyPropertyAlias(propertyAlias, valueAlias, this)) {
+        	return this;
+        }
 
         if (valueAlias.length() > 0) {
             p = UCharacter.getPropertyEnum(propertyAlias);
@@ -2973,8 +3023,9 @@ public class UnicodeSet extends UnicodeFilter {
 
     /**
      * Parse the given property pattern at the given parse position.
+     * @param symbols TODO
      */
-    private UnicodeSet applyPropertyPattern(String pattern, ParsePosition ppos) {
+    private UnicodeSet applyPropertyPattern(String pattern, ParsePosition ppos, SymbolTable symbols) {
         int pos = ppos.getIndex();
 
         // On entry, ppos should point to one of the following locations:
@@ -3046,7 +3097,7 @@ public class UnicodeSet extends UnicodeFilter {
             }
         }
 
-        applyPropertyAlias(propName, valueName);
+        applyPropertyAlias(propName, valueName, symbols);
 
         if (invert) {
             complement();
@@ -3066,12 +3117,13 @@ public class UnicodeSet extends UnicodeFilter {
      * parsed.
      * @param rebuiltPat the pattern that was parsed, rebuilt or
      * copied from the input pattern, as appropriate.
+     * @param symbols TODO
      */
     private void applyPropertyPattern(RuleCharacterIterator chars,
-                                      StringBuffer rebuiltPat) {
+                                      StringBuffer rebuiltPat, SymbolTable symbols) {
         String pat = chars.lookahead();
         ParsePosition pos = new ParsePosition(0);
-        applyPropertyPattern(pat, pos);
+        applyPropertyPattern(pat, pos, symbols);
         if (pos.getIndex() == 0) {
             syntaxError(chars, "Invalid property pattern");
         }
@@ -3482,5 +3534,26 @@ public class UnicodeSet extends UnicodeFilter {
                 CASE_EQUIV_CLASS.put(a[j], a);
             }
         }
+    }
+    
+    /**
+     * Internal class for customizing UnicodeSet parsing of properties.
+     * TODO: extend to allow customizing of codepoint ranges
+     * @internal
+     * @deprecated
+     * @author medavis
+     */
+    abstract public static class XSymbolTable implements SymbolTable {
+        public UnicodeMatcher lookupMatcher(int i) {
+			return null;}
+        public boolean applyPropertyAlias(String propertyName, String propertyValue, UnicodeSet result) {
+        	return false;   
+        }
+		public char[] lookup(String s) {
+			return null;
+		}
+		public String parseReference(String text, ParsePosition pos, int limit) {
+			return null;
+		} 
     }
 }
