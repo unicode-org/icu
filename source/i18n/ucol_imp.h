@@ -497,7 +497,7 @@ typedef struct {
       uint32_t unsafeCP;
 
       int32_t CEcount;
-      UChar variableTopValue;
+      UChar32 variableTopValue;
       UVersionInfo version;
       UColAttributeValue frenchCollation;
       UColAttributeValue alternateHandling; /* attribute for handling variable elements*/
@@ -506,6 +506,9 @@ typedef struct {
       UColAttributeValue normalizationMode; /* attribute for normalization */
       UColAttributeValue strength;          /* attribute for strength */
       UBool jamoSpecial;                    /* is jamoSpecial */
+      uint8_t padding[3];                   /* for guaranteed alignment */
+      char charsetName[32];                 /* for charset CEs */
+      uint8_t reserved[64];                 /* for future use */
 } UCATableHeader;
 
 typedef struct {

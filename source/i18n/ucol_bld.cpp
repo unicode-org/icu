@@ -809,6 +809,7 @@ uint32_t ucol_getDynamicCEs(UColTokenParser *src, tempUCATable *t, UChar *decomp
         }
       } else { /* there was some stuff found in contraction */
         result[resLen++] = firstFound;
+        firstFound = UCOL_NOT_FOUND;
         continue;
       }
 
