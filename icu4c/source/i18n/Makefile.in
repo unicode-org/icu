@@ -70,7 +70,8 @@ ucol.o ucol_bld.o ucol_elm.o ucol_cnt.o ucol_tok.o ucol_wgt.o ucoleitr.o \
 udat.o umsg.o \
 unifltlg.o unirange.o uniset.o unitohex.o unum.o \
 dbbi.o dbbi_tbl.o rbbi.o rbbi_tbl.o brkdict.o nultrans.o jamohang.o hangjamo.o \
-remtrans.o utrans.o
+remtrans.o utrans.o \
+titletrn.o tolowtrn.o toupptrn.o xformtrn.o
 
 STATIC_OBJECTS = $(OBJECTS:.o=.$(STATIC_O))
 
