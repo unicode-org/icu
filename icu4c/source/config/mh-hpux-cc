@@ -3,7 +3,7 @@
 ## Copyright (c) 1999-2000, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-hpux-cc,v 1.24 2000/10/19 20:29:42 yves Exp $
+## $Id: mh-hpux-cc,v 1.25 2000/10/20 01:17:33 srl Exp $
 
 
 ## This causes source/tools/pkgdata generated makefiles  to create and link
@@ -23,13 +23,13 @@ COMPILE.cc=	$(CXX) +dup_static_removal +d -D__STDC__  +z +a1 $(DEFS) $(CPPFLAGS)
 ## We need to use the C++ linker, even when linking C programs, since
 ##  our libraries contain C++ code (bug in linker?)
 #LINK.c=		$(CC)  +z -Ae $(DEFS) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS)
-LINK.c=	$(CXX)  +z +a1 $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
-LINK.cc=	$(CXX)  +z +a1 $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS)
+LINK.c=	$(CXX)  +z +a1 $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -Wl,+s
+LINK.cc=	$(CXX)  +z +a1 $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -Wl,+s
 
 ## Commands to make a shared library
 #SHLIB.c=	$(LD) $(LDFLAGS) -b
-SHLIB.c=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -b
-SHLIB.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -b
+SHLIB.c=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -b -Wl,+s
+SHLIB.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -b -Wl,+s
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	-Wl,+b,
@@ -39,7 +39,7 @@ LD_RPATH_PRE=
 LDLIBRARYPATH_ENVVAR = SHLIB_PATH
 
 ## Compiler switch to embed a library name
-LD_SONAME = -Wl,+h $-Wl,(MIDDLE_SO_TARGET)
+LD_SONAME = -Wl,+h,$(MIDDLE_SO_TARGET)
 
 ## Versioned target for a shared library.
 FINAL_SO_TARGET = $(basename $(SO_TARGET)).$(SO_TARGET_VERSION)
@@ -95,7 +95,7 @@ LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio
 %.$(SO_TARGET_VERSION_MAJOR): %.$(SO_TARGET_VERSION)
 	$(RM) $@ && ln -s $< $@
 %.$(SO): %.$(SO_TARGET_VERSION_MAJOR)
-	$(RM) $@ && ln -s $*.$(SO).$(SO_TARGET_VERSION) $@
+	$(RM) $@ && ln -s $*.$(SO_TARGET_VERSION) $@
 
 ## End HP/UX-specific setup
 
