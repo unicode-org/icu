@@ -11,6 +11,23 @@
 #include "unicode/uniset.h"
 #include "unicode/parsepos.h"
 #include "symtable.h"
+#include "cmemory.h"
+
+const UChar32 UnicodeSet::LOW = 0x000000; // LOW <= all valid values. ZERO for codepoints
+const UChar32 UnicodeSet::HIGH = 0x10000; // HIGH > all valid values. 110000 for codepoints
+
+/**
+ * Minimum value that can be stored in a UnicodeSet.
+ */
+const UChar32 UnicodeSet::MIN_VALUE = UnicodeSet::LOW;
+
+/**
+ * Maximum value that can be stored in a UnicodeSet.
+ */
+const UChar32 UnicodeSet::MAX_VALUE = HIGH - 1;
+
+const int32_t UnicodeSet::START_EXTRA = 16; // initial storage. Must be >= 0
+const int32_t UnicodeSet::GROW_EXTRA = START_EXTRA; // extra amount for growth. Must be >= 0
 
 // N.B.: This mapping is different in ICU and Java
 const UnicodeString UnicodeSet::CATEGORY_NAMES(
@@ -21,8 +38,8 @@ const UnicodeString UnicodeSet::CATEGORY_NAMES(
  * Unicode::getType(), to pairs strings.  Entries are initially
  * zero length and are filled in on demand.
  */
-UnicodeString* UnicodeSet::CATEGORY_PAIRS_CACHE =
-     new UnicodeString[Unicode::GENERAL_TYPES_COUNT];
+UnicodeSet* UnicodeSet::CATEGORY_CACHE =
+     new UnicodeSet[Unicode::GENERAL_TYPES_COUNT];
 
 /**
  * Delimiter string used in patterns to close a category reference:
@@ -38,19 +55,7 @@ const UChar UnicodeSet::COMPLEMENT   = 0x005E; /*^*/
 const UChar UnicodeSet::COLON        = 0x003A; /*:*/
 const UChar UnicodeSet::BACKSLASH    = 0x005C; /*\*/
 const UChar UnicodeSet::INTERSECTION = 0x0026; /*&*/
-
-//----------------------------------------------------------------
-// Debugging and testing
-//----------------------------------------------------------------
-
-/**
- * Return the representation of this set as a list of character
- * ranges.  Ranges are listed in ascending Unicode order.  For
- * example, the set [a-zA-M3] is represented as "33AMaz".
- */
-const UnicodeString& UnicodeSet::getPairs(void) const {
-    return pairs;
-}
+const UChar UnicodeSet::UPPER_U      = 0x0055; /*U*/
 
 //----------------------------------------------------------------
 // Constructors &c
@@ -59,41 +64,71 @@ const UnicodeString& UnicodeSet::getPairs(void) const {
 /**
  * Constructs an empty set.
  */
-UnicodeSet::UnicodeSet() : pairs() {}
+UnicodeSet::UnicodeSet() :
+    len(1), capacity(1 + START_EXTRA), bufferCapacity(0),
+    buffer(0) {
+
+    list = new UChar32[capacity];
+    list[0] = HIGH;
+}
+
+/**
+ * Constructs a set containing the given range. If <code>end >
+ * start</code> then an empty set is created.
+ *
+ * @param start first character, inclusive, of range
+ * @param end last character, inclusive, of range
+ */
+UnicodeSet::UnicodeSet(UChar32 start, UChar32 end) :
+    len(1), capacity(1 + START_EXTRA), bufferCapacity(0),
+    buffer(0) {
+
+    list = new UChar32[capacity];
+    list[0] = HIGH;
+    xor(start, end);
+}
 
 /**
  * Constructs a set from the given pattern, optionally ignoring
  * white space.  See the class description for the syntax of the
  * pattern language.
  * @param pattern a string specifying what characters are in the set
- * @exception <code>IllegalArgumentException</code> if the pattern
- * contains a syntax error.
  */
 UnicodeSet::UnicodeSet(const UnicodeString& pattern,
-                       UErrorCode& status) : pairs() {
+                       UErrorCode& status) :
+    len(0), capacity(START_EXTRA), bufferCapacity(0),
+    buffer(0) {
+
+    list = new UChar32[capacity];
     applyPattern(pattern, status);
 }
 
 // For internal use by RuleBasedTransliterator
 UnicodeSet::UnicodeSet(const UnicodeString& pattern, ParsePosition& pos,
                        const SymbolTable& symbols,
-                       UErrorCode& status) {
-    parse(pairs, pattern, pos, &symbols, status);
+                       UErrorCode& status) :
+    len(0), capacity(START_EXTRA), bufferCapacity(0),
+    buffer(0) {
+
+    list = new UChar32[capacity];
+    applyPattern(pattern, pos, &symbols, status);
 }
 
 /**
  * Constructs a set from the given Unicode character category.
  * @param category an integer indicating the character category as
- * returned by <code>Character.getType()</code>.
- * @exception <code>IllegalArgumentException</code> if the given
- * category is invalid.
+ * returned by <code>Unicode::getType()</code>.
  */
-UnicodeSet::UnicodeSet(int8_t category, UErrorCode& status) : pairs() {
+UnicodeSet::UnicodeSet(int8_t category, UErrorCode& status) :
+    len(0), capacity(START_EXTRA), list(0), bufferCapacity(0),
+    buffer(0) {
+
     if (U_SUCCESS(status)) {
         if (category < 0 || category >= Unicode::GENERAL_TYPES_COUNT) {
             status = U_ILLEGAL_ARGUMENT_ERROR;
         } else {
-            pairs = getCategoryPairs(category);
+            list = new UChar32[capacity];
+            *this = getCategorySet(category);
         }
     }
 }
@@ -101,18 +136,29 @@ UnicodeSet::UnicodeSet(int8_t category, UErrorCode& status) : pairs() {
 /**
  * Constructs a set that is identical to the given UnicodeSet.
  */
-UnicodeSet::UnicodeSet(const UnicodeSet& o) : pairs(o.pairs) {}
+UnicodeSet::UnicodeSet(const UnicodeSet& o) :
+    list(0), capacity(o.len + GROW_EXTRA), bufferCapacity(0),
+    buffer(0) {
+
+    list = new UChar32[capacity];
+    *this = o;
+}
 
 /**
  * Destructs the set.
  */
-UnicodeSet::~UnicodeSet() {}
+UnicodeSet::~UnicodeSet() {
+    delete[] list;
+    delete[] buffer;
+}
 
 /**
  * Assigns this object to be a copy of another.
  */
 UnicodeSet& UnicodeSet::operator=(const UnicodeSet& o) {
-    pairs = o.pairs;
+    ensureCapacity(o.len);
+    len = o.len;
+    uprv_memcpy(list, o.list, len*sizeof(UChar32));
     return *this;
 }
 
@@ -127,7 +173,11 @@ UnicodeSet& UnicodeSet::operator=(const UnicodeSet& o) {
  * @return <tt>true</tt> if the specified set is equal to this set.
  */
 UBool UnicodeSet::operator==(const UnicodeSet& o) const {
-    return pairs == o.pairs;
+    if (len != o.len) return FALSE;
+    for (int32_t i = 0; i < len; ++i) {
+        if (list[i] != o.list[i]) return FALSE;
+    }
+    return TRUE;
 }
 
 /**
@@ -146,12 +196,30 @@ UnicodeFilter* UnicodeSet::clone() const {
  * @see Object#hashCode()
  */
 int32_t UnicodeSet::hashCode(void) const {
-    return pairs.hashCode();
+    int32_t result = len;
+    for (int32_t i = 0; i < len; ++i) {
+        result *= 1000003;
+        result += list[i];
+    }
+    return result;
 }
 
 //----------------------------------------------------------------
 // Public API
 //----------------------------------------------------------------
+
+/**
+ * Make this object represent the range <code>start - end</code>.
+ * If <code>end > start</code> then this object is set to an
+ * an empty range.
+ *
+ * @param start first character in the set, inclusive
+ * @rparam end last character in the set, inclusive
+ */
+void UnicodeSet::set(UChar32 start, UChar32 end) {
+    clear();
+    xor(start, end);
+}
 
 /**
  * Modifies this set to represent the set specified by the given
@@ -174,7 +242,8 @@ void UnicodeSet::applyPattern(const UnicodeString& pattern,
     }
 
     ParsePosition pos(0);
-    parse(pairs, pattern, pos, NULL, status);
+    applyPattern(pattern, pos, NULL, status);
+    if (U_FAILURE(status)) return;
 
     // Skip over trailing whitespace
     int32_t i = pos.getIndex();
@@ -188,6 +257,39 @@ void UnicodeSet::applyPattern(const UnicodeString& pattern,
     }
 }
 
+const UChar UnicodeSet::HEX[16] = {48,49,50,51,52,53,54,55,  // 0-7
+                                   56,57,65,66,67,68,69,70}; // 8-9 A-F
+
+/**
+ * Append the <code>toPattern()</code> representation of a
+ * character to the given <code>StringBuffer</code>.
+ */
+void UnicodeSet::_toPat(UnicodeString& buf, UChar32 c) {
+    if (c & ~0xFFFF) {
+        // Escape anything above U+FFFF
+        buf.append(BACKSLASH);
+        buf.append(UPPER_U);
+        buf.append(HEX[0xF&(c>>20)]);
+        buf.append(HEX[0xF&(c>>16)]);
+        buf.append(HEX[0xF&(c>>12)]);
+        buf.append(HEX[0xF&(c>>8)]);
+        buf.append(HEX[0xF&(c>>4)]);
+        buf.append(HEX[0xF&c]);
+        return;
+    }
+    // Okay to let ':' pass through
+    switch (c) {
+    case SET_OPEN:
+    case SET_CLOSE:
+    case HYPHEN:
+    case COMPLEMENT:
+    case INTERSECTION:
+    case BACKSLASH:
+        buf.append(BACKSLASH);
+    }
+    buf.append((UChar) c);
+}
+
 /**
  * Returns a string representation of this set.  If the result of
  * calling this function is passed to a UnicodeSet constructor, it
@@ -196,14 +298,14 @@ void UnicodeSet::applyPattern(const UnicodeString& pattern,
 UnicodeString& UnicodeSet::toPattern(UnicodeString& result) const {
     result.remove().append(SET_OPEN);
     
-    // iterate through the ranges in the UnicodeSet
-    for (int32_t i=0; i<pairs.length(); i+=2) {
-        // for a range with the same beginning and ending point,
-        // output that character, otherwise, output the start and
-        // end points of the range separated by a dash
-        result.append(pairs.charAt(i));
-        if (pairs.charAt(i) != pairs.charAt(i+1)) {
-            result.append(HYPHEN).append(pairs.charAt(i+1));
+    int32_t count = getRangeCount();
+    for (int32_t i = 0; i < count; ++i) {
+        UChar32 start = getRangeStart(i);
+        UChar32 end = getRangeEnd(i);
+        _toPat(result, start);
+        if (start != end) {
+            result.append(HYPHEN);
+            _toPat(result, end);
         }
     }
     
@@ -218,8 +320,9 @@ UnicodeString& UnicodeSet::toPattern(UnicodeString& result) const {
  */
 int32_t UnicodeSet::size(void) const {
     int32_t n = 0;
-    for (int32_t i=0; i<pairs.length(); i+=2) {
-        n += pairs.charAt(i+1) - pairs.charAt(i) + 1;
+    int32_t count = getRangeCount();
+    for (int32_t i = 0; i < count; ++i) {
+        n += getRangeEnd(i) - getRangeStart(i) + 1;
     }
     return n;
 }
@@ -230,22 +333,24 @@ int32_t UnicodeSet::size(void) const {
  * @return <tt>true</tt> if this set contains no elements.
  */
 UBool UnicodeSet::isEmpty(void) const {
-    return pairs.length() == 0;
+    return len == 1;
 }
 
 /**
- * Returns <tt>true</tt> if this set contains the specified range
- * of chars.
+ * Returns <tt>true</tt> if this set contains every character
+ * in the specified range of chars.
+ * If <code>end > start</code> then the results of this method
+ * are undefined.
  *
  * @return <tt>true</tt> if this set contains the specified range
  * of chars.
  */
-UBool UnicodeSet::contains(UChar first, UChar last) const {
-    // Set i to the end of the smallest range such that its end
-    // point >= last, or pairs.length() if no such range exists.
-    int32_t i = 1;
-    while (i<pairs.length() && last>pairs.charAt(i)) i+=2;
-    return i<pairs.length() && first>=pairs.charAt(i-1);
+UBool UnicodeSet::contains(UChar32 start, UChar32 end) const {
+    int32_t i = -1;
+    for (;;) {
+        if (start < list[++i]) break;
+    }
+    return ((i & 1) != 0 && end < list[i]);
 }
 
 /**
@@ -253,8 +358,26 @@ UBool UnicodeSet::contains(UChar first, UChar last) const {
  *
  * @return <tt>true</tt> if this set contains the specified char.
  */
+UBool UnicodeSet::contains(UChar32 c) const {
+    // Set i to the index of the start item greater than ch
+    // We know we will terminate without length test!
+    // LATER: for large sets, add binary search
+    int32_t i = -1;
+    for (;;) {
+        if (c < list[++i]) break;
+    }
+    return ((i & 1) != 0); // return true if odd
+}
+
+/**
+ * Implement UnicodeFilter:
+ * Returns <tt>true</tt> if this set contains the specified char.
+ *
+ * @return <tt>true</tt> if this set contains the specified char.
+ * @draft
+ */
 UBool UnicodeSet::contains(UChar c) const {
-    return contains(c, c);
+    return contains((UChar32) c);
 }
 
 /**
@@ -271,14 +394,14 @@ UBool UnicodeSet::containsIndexValue(uint8_t v) const {
      * Then v is contained if xx <= v || v <= yy.  (This is identical to the
      * time zone month containment logic.)
      */
-    for (int32_t i=0; i<pairs.length(); i+=2) {
-        UChar low = pairs.charAt(i);
-        UChar high = pairs.charAt(i+1);
-        if ((low & 0xFF00) == (high & 0xFF00)) {
-            if (uint8_t(low) <= v && v <= uint8_t(high)) {
+    for (int32_t i=0; i<getRangeCount(); ++i) {
+        UChar32 low = getRangeStart(i);
+        UChar32 high = getRangeEnd(i);
+        if ((low & ~0xFF) == (high & ~0xFF)) {
+            if ((low & 0xFF) <= v && v <= (high & 0xFF)) {
                 return TRUE;
             }
-        } else if (uint8_t(low) <= v || v <= uint8_t(high)) {
+        } else if ((low & 0xFF) <= v || v <= (high & 0xFF)) {
             return TRUE;
         }
     }
@@ -288,17 +411,18 @@ UBool UnicodeSet::containsIndexValue(uint8_t v) const {
 /**
  * Adds the specified range to this set if it is not already
  * present.  If this set already contains the specified range,
- * the call leaves this set unchanged.  If <code>last > first</code>
+ * the call leaves this set unchanged.  If <code>end > start</code>
  * then an empty range is added, leaving the set unchanged.
  *
- * @param first first character, inclusive, of range to be added
+ * @param start first character, inclusive, of range to be added
  * to this set.
- * @param last last character, inclusive, of range to be added
+ * @param end last character, inclusive, of range to be added
  * to this set.
  */
-void UnicodeSet::add(UChar first, UChar last) {
-    if (first <= last) {
-        addPair(pairs, first, last);
+void UnicodeSet::add(UChar32 start, UChar32 end) {
+    if (start <= end) {
+        UChar32 range[3] = { start, end+1, HIGH };
+        add(range, 2, 0);
     }
 }
 
@@ -307,24 +431,48 @@ void UnicodeSet::add(UChar first, UChar last) {
  * present.  If this set already contains the specified character,
  * the call leaves this set unchanged.
  */
-void UnicodeSet::add(UChar c) {
+void UnicodeSet::add(UChar32 c) {
     add(c, c);
+}
+
+/**
+ * Retain only the elements in this set that are contained in the
+ * specified range.  If <code>end > start</code> then an empty range is
+ * retained, leaving the set empty.
+ *
+ * @param start first character, inclusive, of range to be retained
+ * to this set.
+ * @param end last character, inclusive, of range to be retained
+ * to this set.
+ */
+void UnicodeSet::retain(UChar32 start, UChar32 end) {
+    if (start <= end) {
+        UChar32 range[3] = { start, end+1, HIGH };
+        retain(range, 2, 0);
+    } else {
+        clear();
+    }
+}
+
+void UnicodeSet::retain(UChar32 c) {
+    retain(c, c);
 }
 
 /**
  * Removes the specified range from this set if it is present.
  * The set will not contain the specified range once the call
- * returns.  If <code>last > first</code> then an empty range is
+ * returns.  If <code>end > start</code> then an empty range is
  * removed, leaving the set unchanged.
  * 
- * @param first first character, inclusive, of range to be removed
+ * @param start first character, inclusive, of range to be removed
  * from this set.
- * @param last last character, inclusive, of range to be removed
+ * @param end last character, inclusive, of range to be removed
  * from this set.
  */
-void UnicodeSet::remove(UChar first, UChar last) {
-    if (first <= last) {
-        removePair(pairs, first, last);
+void UnicodeSet::remove(UChar32 start, UChar32 end) {
+    if (start <= end) {
+        UChar32 range[3] = { start, end+1, HIGH };
+        retain(range, 2, 2);
     }
 }
 
@@ -333,8 +481,30 @@ void UnicodeSet::remove(UChar first, UChar last) {
  * The set will not contain the specified range once the call
  * returns.
  */
-void UnicodeSet::remove(UChar c) {
+void UnicodeSet::remove(UChar32 c) {
     remove(c, c);
+}
+
+/**
+ * Complements the specified range in this set.  Any character in
+ * the range will be removed if it is in this set, or will be
+ * added if it is not in this set.  If <code>end > start</code>
+ * then an empty range is xor'ed, leaving the set unchanged.
+ *
+ * @param start first character, inclusive, of range to be removed
+ * from this set.
+ * @param end last character, inclusive, of range to be removed
+ * from this set.
+ */
+void UnicodeSet::xor(UChar32 start, UChar32 end) {
+    if (start <= end) {
+        UChar32 range[3] = { start, end+1, HIGH };
+        xor(range, 2, 0);
+    }
+}
+
+void UnicodeSet::xor(UChar32 c) {
+    xor(c, c);
 }
 
 /**
@@ -346,16 +516,12 @@ void UnicodeSet::remove(UChar c) {
  * 	       specified set.
  */
 UBool UnicodeSet::containsAll(const UnicodeSet& c) const {
-    // The specified set is a subset if all of its pairs are contained
-    // in this set.
-    int32_t i = 1;
-    for (int32_t j=0; j<c.pairs.length(); j+=2) {
-        UChar last = c.pairs.charAt(j+1);
-        // Set i to the end of the smallest range such that its
-        // end point >= last, or pairs.length() if no such range
-        // exists.
-        while (i<pairs.length() && last>pairs.charAt(i)) i+=2;
-        if (i>pairs.length() || c.pairs.charAt(j) < pairs.charAt(i-1)) {
+    // The specified set is a subset if all of its pairs are contained in
+    // this set.  It's possible to code this more efficiently in terms of
+    // direct manipulation of the inversion lists if the need arises.
+    int32_t n = c.getRangeCount();
+    for (int i=0; i<n; ++i) {
+        if (!contains(c.getRangeStart(i), c.getRangeEnd(i))) {
             return FALSE;
         }
     }
@@ -373,7 +539,7 @@ UBool UnicodeSet::containsAll(const UnicodeSet& c) const {
  * @see #add(char, char)
  */
 void UnicodeSet::addAll(const UnicodeSet& c) {
-    doUnion(pairs, c.pairs);
+    add(c.list, c.len, 0);
 }
 
 /**
@@ -386,7 +552,7 @@ void UnicodeSet::addAll(const UnicodeSet& c) {
  * @param c set that defines which elements this set will retain.
  */
 void UnicodeSet::retainAll(const UnicodeSet& c) {
-    doIntersection(pairs, c.pairs);
+    retain(c.list, c.len, 0);
 }
 
 /**
@@ -399,16 +565,39 @@ void UnicodeSet::retainAll(const UnicodeSet& c) {
  *          this set.
  */
 void UnicodeSet::removeAll(const UnicodeSet& c) {
-    doDifference(pairs, c.pairs);
+    retain(c.list, c.len, 2);
 }
 
 /**
- * Inverts this set.  This operation modifies this set so that
- * its value is its complement.  This is equivalent to the pseudo code:
- * <code>this = new UnicodeSet("[\u0000-\uFFFF]").removeAll(this)</code>.
+ * Complements in this set all elements contained in the specified
+ * set.  Any character in the other set will be removed if it is
+ * in this set, or will be added if it is not in this set.
+ *
+ * @param c set that defines which elements will be xor'ed from
+ *          this set.
+ */
+void UnicodeSet::xorAll(const UnicodeSet& c) {
+    xor(c.list, c.len, 0);
+}
+
+/**
+ * Inverts this set.  This operation modifies this set so that its
+ * value is its complement.  This is equivalent to the pseudo
+ * code: <code>this = new UnicodeSet(UnicodeSet.MIN_VALUE,
+ * UnicodeSet.MAX_VALUE).removeAll(this)</code>.
  */
 void UnicodeSet::complement(void) {
-    doComplement(pairs);
+    if (list[0] == LOW) { 
+        ensureBufferCapacity(len-1);
+        uprv_memcpy(buffer, list + 1, (len-1)*sizeof(UChar32));
+        --len;
+    } else {
+        ensureBufferCapacity(len+1);
+        uprv_memcpy(buffer + 1, list, len*sizeof(UChar32));
+        buffer[0] = LOW;
+        ++len;
+    }
+    swapBuffers();
 }
 
 /**
@@ -416,7 +605,54 @@ void UnicodeSet::complement(void) {
  * empty after this call returns.
  */
 void UnicodeSet::clear(void) {
-    pairs.remove();
+    list[0] = HIGH;
+    len = 1;
+}
+
+/**
+ * Iteration method that returns the number of ranges contained in
+ * this set.
+ * @see #getRangeStart
+ * @see #getRangeEnd
+ */
+int32_t UnicodeSet::getRangeCount() const {
+    return len/2;
+}
+
+/**
+ * Iteration method that returns the first character in the
+ * specified range of this set.
+ * @see #getRangeCount
+ * @see #getRangeEnd
+ */
+UChar32 UnicodeSet::getRangeStart(int32_t index) const {
+    return list[index*2];
+}
+
+/**
+ * Iteration method that returns the last character in the
+ * specified range of this set.
+ * @see #getRangeStart
+ * @see #getRangeEnd
+ */
+UChar32 UnicodeSet::getRangeEnd(int32_t index) const {
+    return list[index*2 + 1] - 1;
+}
+
+/**
+ * Reallocate this objects internal structures to take up the least
+ * possible space, without changing this object's value.
+ */
+void UnicodeSet::compact() {
+    if (len != capacity) {
+        capacity = len;
+        UChar32* temp = new UChar32[capacity];
+        uprv_memcpy(temp, list, len*sizeof(UChar32));
+        delete[] list;
+        list = temp;
+    }
+    delete[] buffer;
+    buffer = NULL;
 }
 
 //----------------------------------------------------------------
@@ -447,17 +683,16 @@ void UnicodeSet::clear(void) {
  * substring of <code>pattern</code>
  * @exception IllegalArgumentException if the parse fails.
  */
-UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
-                                 const UnicodeString& pattern,
-                                 ParsePosition& pos,
-                                 const SymbolTable* symbols,
-                                 UErrorCode& status) {
+void UnicodeSet::applyPattern(const UnicodeString& pattern,
+                              ParsePosition& pos,
+                              const SymbolTable* symbols,
+                              UErrorCode& status) {
     if (U_FAILURE(status)) {
-        return pairsBuf;
+        return;
     }
 
     UBool invert = FALSE;
-    pairsBuf.remove();
+    clear();
 
     int32_t lastChar = -1; // This is either a char (0..FFFF) or -1
     UChar lastOp = 0;
@@ -484,8 +719,8 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
     int32_t openPos = 0; // offset to opening '['
     int32_t i = pos.getIndex();
     int32_t limit = pattern.length();
-    UnicodeString nestedAux;
-    const UnicodeString* nestedPairs;
+    UnicodeSet nestedAux;
+    const UnicodeSet* nestedSet; // never owned
     UnicodeString scratch;
     /* In the case of an embedded SymbolTable variable, we look it up and
      * then take characters from the resultant char[] array.  These chars
@@ -495,24 +730,20 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
     int32_t ivarValueBuffer = 0;
     for (; i<limit; i+=((varValueBuffer==NULL)?1:0)) {
         /* If the next element is a single character, c will be set to it,
-         * and nestedPairs will be null.  In this case isLiteral indicates
+         * and nestedSet will be null.  In this case isLiteral indicates
          * whether the character should assume special meaning if it has
          * one.  If the next element is a nested set, either via a variable
          * reference, or via an embedded "[..]"  or "[:..:]" pattern, then
-         * nestedPairs will be set to the pairs list for the nested set, and
+         * nestedSet will be set to the pairs list for the nested set, and
          * c's value should be ignored.
          */
-        nestedPairs = NULL;
+        nestedSet = NULL;
         UBool isLiteral = FALSE;
         UChar c;
         if (varValueBuffer != NULL) {
             if (ivarValueBuffer < varValueBuffer->length()) {
                 c = varValueBuffer->charAt(ivarValueBuffer++);
-                const UnicodeSet* s = symbols->lookupSet(c);
-                if (s != NULL) {
-                    //nestedSet = s;
-                    nestedPairs = &s->pairs;
-                }
+                nestedSet = symbols->lookupSet(c); // may be NULL
             } else {
                 varValueBuffer = NULL;
                 c = pattern.charAt(i);
@@ -537,7 +768,7 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
             } else {
                 // throw new IllegalArgumentException("Missing opening '['");
                 status = U_ILLEGAL_ARGUMENT_ERROR;
-                return pairsBuf;
+                return;
             }
         case 1:
             mode = 2;
@@ -583,14 +814,14 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
                     if (c == 0x0075 /*u*/) {
                         if ((i+4) >= pattern.length()) {
                             status = U_ILLEGAL_ARGUMENT_ERROR;
-                            return pairsBuf;
+                            return;
                         }
                         c = (UChar)0x0000;
                         for (int32_t j=(++i)+4; i<j; ++i) { // [sic]
                             int32_t digit = Unicode::digit(pattern.charAt(i), 16);
                             if (digit<0) {
                                 status = U_ILLEGAL_ARGUMENT_ERROR;
-                                return pairsBuf;
+                                return;
                             }
                             c = (UChar) ((c << 4) | digit);
                         }
@@ -598,7 +829,7 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
                     }
                 } else {
                     status = U_ILLEGAL_ARGUMENT_ERROR;
-                    return pairsBuf;
+                    return;
                 }
             }
 
@@ -613,14 +844,14 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
                 UnicodeString name = symbols->parseReference(pattern, pos, limit);
                 if (name.length() == 0) {
                     status = U_ILLEGAL_ARGUMENT_ERROR;
-                    return pairsBuf;
+                    return;
                 }
                 varValueBuffer = symbols->lookup(name);
                 if (varValueBuffer == NULL) {
                     //throw new IllegalArgumentException("Undefined variable: "
                     //                                   + name);
                     status = U_ILLEGAL_ARGUMENT_ERROR;
-                    return pairsBuf;
+                    return;
                 }
                 ivarValueBuffer = 0;
                 i = pos.getIndex(); // Make i point PAST last char of var name
@@ -629,7 +860,7 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
 
             /* An opening bracket indicates the first bracket of a nested
              * subpattern, either a normal pattern or a category pattern.  We
-             * recognize these here and set nestedPairs accordingly.
+             * recognize these here and set nestedSet accordingly.
              */
             else if (!isLiteral && c == SET_OPEN) {
                 // Handle "[:...:]", representing a character category
@@ -640,26 +871,28 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
                     if (j < 0) {
                         // throw new IllegalArgumentException("Missing \":]\"");
                         status = U_ILLEGAL_ARGUMENT_ERROR;
-                        return pairsBuf;
+                        return;
                     }
                     scratch.truncate(0);
                     pattern.extractBetween(i, j, scratch);
-                    nestedPairs = &getCategoryPairs(nestedAux, scratch, status);
+                    nestedAux.applyCategory(scratch, status);
+                    nestedSet = &nestedAux;
                     if (U_FAILURE(status)) {
-                        return pairsBuf;
+                        return;
                     }
                     i = j+1; // Make i point to ']' in ":]"
                     if (mode == 3) {
                         // Entire pattern is a category; leave parse loop
-                        pairsBuf.append(*nestedPairs);
+                        *this = *nestedSet;
                         break;
                     }
                 } else {
                     // Recurse to get the pairs for this nested set.
                     pos.setIndex(i);
-                    nestedPairs = &parse(nestedAux, pattern, pos, symbols, status);
+                    nestedAux.applyPattern(pattern, pos, symbols, status);
+                    nestedSet = &nestedAux;
                     if (U_FAILURE(status)) {
-                        return pairsBuf;
+                        return;
                     }
                     i = pos.getIndex() - 1; // - 1 to point at ']'
                 }
@@ -668,31 +901,31 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
 
         /* At this point we have either a character c, or a nested set.  If
          * we have encountered a nested set, either embedded in the pattern,
-         * or as a variable, we have a non-null nestedPairs, and c should be
+         * or as a variable, we have a non-null nestedSet, and c should be
          * ignored.  Otherwise c is the current character, and isLiteral
          * indicates whether it is an escaped literal (or variable) or a
          * normal unescaped character.  Unescaped characters '-', '&', and
          * ']' have special meanings.
          */
-        if (nestedPairs != NULL) {
+        if (nestedSet != NULL) {
             if (lastChar >= 0) {
                 if (lastOp != 0) {
                     // throw new IllegalArgumentException("Illegal rhs for " + lastChar + lastOp);
                     status = U_ILLEGAL_ARGUMENT_ERROR;
-                    return pairsBuf;
+                    return;
                 }
-                addPair(pairsBuf, (UChar)lastChar, (UChar)lastChar);
+                add(lastChar, lastChar);
                 lastChar = -1;
             }
             switch (lastOp) {
             case HYPHEN:
-                doDifference(pairsBuf, *nestedPairs);
+                removeAll(*nestedSet);
                 break;
             case INTERSECTION:
-                doIntersection(pairsBuf, *nestedPairs);
+                retainAll(*nestedSet);
                 break;
             case 0:
-                doUnion(pairsBuf, *nestedPairs);
+                addAll(*nestedSet);
                 break;
             }
             lastOp = 0;
@@ -709,20 +942,20 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
                 //throw new IllegalArgumentException("Invalid range " + lastChar +
                 //                                       '-' + c);
                 status = U_ILLEGAL_ARGUMENT_ERROR;
-                return pairsBuf;
+                return;
             }
-            addPair(pairsBuf, (UChar)lastChar, c);
+            add(lastChar, c);
             lastOp = 0;
             lastChar = -1;
         } else if (lastOp != 0) {
             // We have <set>&<char> or <char>&<char>
             // throw new IllegalArgumentException("Unquoted " + lastOp);
             status = U_ILLEGAL_ARGUMENT_ERROR;
-            return pairsBuf;
+            return;
         } else {
             if (lastChar >= 0) {
                 // We have <char><char>
-                addPair(pairsBuf, (UChar)lastChar, (UChar)lastChar);
+                add(lastChar, lastChar);
             }
             lastChar = c;
         }
@@ -731,14 +964,14 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
     // Handle unprocessed stuff preceding the closing ']'
     if (lastOp == HYPHEN) {
         // Trailing '-' is treated as literal
-        addPair(pairsBuf, lastOp, lastOp);
+        add(lastOp, lastOp);
     } else if (lastOp == INTERSECTION) {
         // throw new IllegalArgumentException("Unquoted trailing " + lastOp);
         status = U_ILLEGAL_ARGUMENT_ERROR;
-        return pairsBuf;
+        return;
     }
     if (lastChar >= 0) {
-        addPair(pairsBuf, (UChar)lastChar, (UChar)lastChar);                    
+        add(lastChar, lastChar);
     }
 
     /**
@@ -746,7 +979,7 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
      * the complement.  (Inversion after '[:' is handled elsewhere.)
      */
     if (invert) {
-        doComplement(pairsBuf);
+        complement();
     }
 
     /**
@@ -758,316 +991,10 @@ UnicodeString& UnicodeSet::parse(UnicodeString& pairsBuf /*result*/,
     if (i == limit) {
         // throw new IllegalArgumentException("Missing ']'");
         status = U_ILLEGAL_ARGUMENT_ERROR;
-        return pairsBuf;
-    }
-
-    pos.setIndex(i+1);
-
-    return pairsBuf;
-}
-
-//----------------------------------------------------------------
-// Implementation: Efficient in-place union & difference
-//----------------------------------------------------------------
-
-/**
- * Performs a union operation: adds the range 'c'-'d' to the given
- * pairs list.  The pairs list is modified in place.  The result
- * is normalized (in order and as short as possible).  For
- * example, addPair("am", 'l', 'q') => "aq".  addPair("ampz", 'n',
- * 'o') => "az".
- */
-void UnicodeSet::addPair(UnicodeString& pairs, UChar c, UChar d) {
-    UChar a = 0;
-    UChar b = 0;
-    for (int32_t i=0; i<pairs.length(); i+=2) {
-        UChar e = pairs.charAt(i);
-        UChar f = pairs.charAt(i+1);
-        if (e <= (d+1) && c <= (f+1)) {
-            // Merge with this range
-            f = (UChar) uprv_max(d, f);
-
-            // Check to see if we need to merge with the
-            // subsequent range also.  This happens if we have
-            // "abdf" and are merging in "cc".  We only need to
-            // check on the right side -- never on the left.
-            if ((i+2) < pairs.length() &&
-                pairs.charAt(i+2) == (f+1)) {
-                f = pairs.charAt(i+3);
-                pairs.remove(i+2, 2);
-            }
-            pairs.setCharAt(i, (UChar) uprv_min(c, e));
-            pairs.setCharAt(i+1, f);
-            return;
-        } else if ((b+1) < c && (d+1) < e) {
-            // Insert before this range c, then d
-            pairs.insert(i, d); // d gets moved to i+1 by next insert
-            pairs.insert(i, c);
-            return;
-        }
-        a = e;
-        b = f;
-    }
-    // If nothing else, fall through and append this new range to
-    // the end.
-    pairs.append(c).append(d);
-}
-
-/**
- * Performs an asymmetric difference: removes the range 'c'-'d'
- * from the pairs list.  The pairs list is modified in place.  The
- * result is normalized (in order and as short as possible).  For
- * example, removePair("am", 'l', 'q') => "ak".
- * removePair("ampz", 'l', 'q') => "akrz".
- */
-void UnicodeSet::removePair(UnicodeString& pairs, UChar c, UChar d) {
-    // Iterate over pairs until we find a pair that overlaps
-    // with the given range.
-    for (int32_t i=0; i<pairs.length(); i+=2) {
-        UChar b = pairs.charAt(i+1);
-        if (b < c) {
-            // Range at i is entirely before the given range,
-            // since we have a-b < c-d.  No overlap yet...keep
-            // iterating.
-            continue;
-        }
-        UChar a = pairs.charAt(i);
-        if (d < a) {
-            // Range at i is entirely after the given range; c-d <
-            // a-b.  Since ranges are in order, nothing else will
-            // overlap.
-            break;
-        }
-        // Once we get here, we know c <= b and d >= a.
-        // rangeEdited is set to true if we have modified the
-        // range a-b (the range at i) in place.
-        UBool rangeEdited = FALSE;
-        if (c > a) {
-            // If c is after a and before b, then we have overlap
-            // of this sort: a--c==b--d or a--c==d--b, where a-b
-            // and c-d are the ranges of interest.  We need to
-            // add the range a,c-1.
-            pairs.setCharAt(i+1, (UChar)(c-1));
-            // i is already a
-            rangeEdited = TRUE;
-        }
-        if (d < b) {
-            // If d is after a and before b, we overlap like this:
-            // c--a==d--b or a--c==d--b, where a-b is the range at
-            // i and c-d is the range being removed.  We need to
-            // add the range d+1,b.
-            if (rangeEdited) {
-                // Insert {d+1, b}
-                pairs.insert(i+2, b); // b moves to i+3 by next insert:
-                pairs.insert(i+2, (UChar)(d+1));
-                i += 2;
-            } else {
-                pairs.setCharAt(i, (UChar)(d+1));
-                // i+1 is already b
-                rangeEdited = TRUE;
-            }
-        }
-        if (!rangeEdited) {
-            // If we didn't add any ranges, that means the entire
-            // range a-b must be deleted, since we have
-            // c--a==b--d.
-            pairs.remove(i, 2);
-            i -= 2;
-        }
-    }
-}
-
-//----------------------------------------------------------------
-// Implementation: Fundamental operators
-//----------------------------------------------------------------
-
-/**
- * Changes the pairs list to represent the complement of the set it
- * currently represents.  The pairs list will be normalized (in
- * order and in shortest possible form) if the original pairs list
- * was normalized.
- */
-void UnicodeSet::doComplement(UnicodeString& pairs) {
-    if (pairs.length() == 0) {
-        pairs.append((UChar)0x0000).append((UChar)0xffff);
         return;
     }
 
-    // Change each end to a start and each start to an end of the
-    // gaps between the ranges.  That is, 3-7 9-12 becomes x-2 8-8
-    // 13-x, where 'x' represents a range that must now be fixed
-    // up.
-    for (int32_t i=0; i<pairs.length(); i+=2) {
-        pairs.setCharAt(i,   (UChar) (pairs.charAt(i)   - 1));
-        pairs.setCharAt(i+1, (UChar) (pairs.charAt(i+1) + 1));
-    }
-
-    // Fix up the initial range, either by adding a start point of
-    // U+0000, or by deleting the range altogether, if the
-    // original range was U+0000 - x.
-    if (pairs.charAt(0) == (UChar)0xFFFF) {
-        pairs.remove(0, 1);
-    } else {
-        pairs.insert(0, (UChar)0x0000);
-    }
-
-    // Fix up the final range, either by adding an end point of
-    // U+FFFF, or by deleting the range altogether, if the
-    // original range was x - U+FFFF.
-    if (pairs.charAt(pairs.length() - 1) == (UChar)0x0000) {
-        pairs.remove(pairs.length() - 1);
-    } else {
-        pairs.append((UChar)0xFFFF);
-    }
-}
-
-/**
- * Given two pairs lists, changes the first in place to represent
- * the union of the two sets.
- */
-void UnicodeSet::doUnion(UnicodeString& c1, const UnicodeString& c2) {
-    UnicodeString result;
-
-    int32_t i = 0;
-    int32_t j = 0;
-
-    // consider all the characters in both strings
-    while (i < c1.length() && j < c2.length()) {
-        UChar ub;
-        
-        // the first character in the result is the lower of the
-        // starting characters of the two strings, and "ub" gets
-        // set to the upper bound of that range
-        if (c1.charAt(i) < c2.charAt(j)) {
-            result.append(c1.charAt(i));
-            ub = c1.charAt(++i);
-        }
-        else {
-            result.append(c2.charAt(j));
-            ub = c2.charAt(++j);
-        }
-        
-        // for as long as one of our two pointers is pointing to a range's
-        // end point, or i is pointing to a character that is less than
-        // "ub" plus one (the "plus one" stitches touching ranges together)...
-        while (i % 2 == 1 || j % 2 == 1 || (i < c1.length() && c1.charAt(i)
-                        <= ub + 1)) {
-            // advance i to the first character that is greater than
-            // "ub" plus one
-            while (i < c1.length() && c1.charAt(i) <= ub + 1)
-                ++i;
-                
-            // if i points to the endpoint of a range, update "ub"
-            // to that character, or if i points to the start of
-            // a range and the endpoint of the preceding range is
-            // greater than "ub", update "up" to _that_ character
-            if (i % 2 == 1)
-                ub = c1.charAt(i);
-            else if (i > 0 && c1.charAt(i - 1) > ub)
-                ub = c1.charAt(i - 1);
-
-            // now advance j to the first character that is greater
-            // that "ub" plus one
-            while (j < c2.length() && c2.charAt(j) <= ub + 1)
-                ++j;
-                
-            // if j points to the endpoint of a range, update "ub"
-            // to that character, or if j points to the start of
-            // a range and the endpoint of the preceding range is
-            // greater than "ub", update "up" to _that_ character
-            if (j % 2 == 1)
-                ub = c2.charAt(j);
-            else if (j > 0 && c2.charAt(j - 1) > ub)
-                ub = c2.charAt(j - 1);
-        }
-        // when we finally fall out of this loop, we will have stitched
-        // together a series of ranges that overlap or touch, i and j
-        // will both point to starting points of ranges, and "ub" will
-        // be the endpoint of the range we're working on.  Write "ub"
-        // to the result
-        result.append(ub);
-        
-    // loop back around to create the next range in the result
-    }
-    
-    // we fall out to here when we've exhausted all the characters in
-    // one of the operands.  We can append all of the remaining characters
-    // in the other operand without doing any extra work.
-    if (i < c1.length())
-        result.append(c1, i, INT32_MAX);
-    if (j < c2.length())
-        result.append(c2, j, INT32_MAX);
-
-    c1 = result;
-}
-
-/**
- * Given two pairs lists, changes the first in place to represent
- * the asymmetric difference of the two sets.
- */
-void UnicodeSet::doDifference(UnicodeString& pairs, const UnicodeString& pairs2) {
-    UnicodeString p2(pairs2);
-    doComplement(p2);
-    doIntersection(pairs, p2);
-}
-
-/**
- * Given two pairs lists, changes the first in place to represent
- * the intersection of the two sets.
- */
-void UnicodeSet::doIntersection(UnicodeString& c1, const UnicodeString& c2) {
-    UnicodeString result;
-
-    int32_t i = 0;
-    int32_t j = 0;
-    int32_t oldI;
-    int32_t oldJ;
-
-    // iterate until we've exhausted one of the operands
-    while (i < c1.length() && j < c2.length()) {
-        
-        // advance j until it points to a character that is larger than
-        // the one i points to.  If this is the beginning of a one-
-        // character range, advance j to point to the end
-        if (i < c1.length() && i % 2 == 0) {
-            while (j < c2.length() && c2.charAt(j) < c1.charAt(i))
-                ++j;
-            if (j < c2.length() && j % 2 == 0 && c2.charAt(j) == c1.charAt(i))
-                ++j;
-        }
-
-        // if j points to the endpoint of a range, save the current
-        // value of i, then advance i until it reaches a character
-        // which is larger than the character pointed at
-        // by j.  All of the characters we've advanced over (except
-        // the one currently pointed to by i) are added to the result
-        oldI = i;
-        while (j % 2 == 1 && i < c1.length() && c1.charAt(i) <= c2.charAt(j))
-            ++i;
-        result.append(c1, oldI, i-oldI);
-
-        // if i points to the endpoint of a range, save the current
-        // value of j, then advance j until it reaches a character
-        // which is larger than the character pointed at
-        // by i.  All of the characters we've advanced over (except
-        // the one currently pointed to by i) are added to the result
-        oldJ = j;
-        while (i % 2 == 1 && j < c2.length() && c2.charAt(j) <= c1.charAt(i))
-            ++j;
-        result.append(c2, oldJ, j-oldJ);
-
-        // advance i until it points to a character larger than j
-        // If it points at the beginning of a one-character range,
-        // advance it to the end of that range
-        if (j < c2.length() && j % 2 == 0) {
-            while (i < c1.length() && c1.charAt(i) < c2.charAt(j))
-                ++i;
-            if (i < c1.length() && i % 2 == 0 && c2.charAt(j) == c1.charAt(i))
-                ++i;
-        }
-    }
-
-    c1 = result;
+    pos.setIndex(i+1);
 }
 
 //----------------------------------------------------------------
@@ -1075,7 +1002,7 @@ void UnicodeSet::doIntersection(UnicodeString& c1, const UnicodeString& c2) {
 //----------------------------------------------------------------
 
 /**
- * Returns a pairs string for the given category, given its name.
+ * Sets this object to the given category, given its name.
  * The category name must be either a two-letter name, such as
  * "Lu", or a one letter name, such as "L".  One-letter names
  * indicate the logical union of all two-letter names that start
@@ -1088,15 +1015,12 @@ void UnicodeSet::doIntersection(UnicodeString& c1, const UnicodeString& c2) {
  * complements such as "^Lu" or "^L".  It would be easy to cache
  * these as well in a hashtable should the need arise.
  */
-UnicodeString& UnicodeSet::getCategoryPairs(UnicodeString& result,
-                                            const UnicodeString& catName,
-                                            UErrorCode& status) {
+void UnicodeSet::applyCategory(const UnicodeString& catName,
+                               UErrorCode& status) {
     if (U_FAILURE(status)) {
-        return result;
+        return;
     }
 
-	// The temporary cat is only really needed if invert is true.
-	// TO DO: Allocate cat on the heap only if needed.
 	UnicodeString cat(catName);
     UBool invert = (catName.length() > 1 &&
                      catName.charAt(0) == COMPLEMENT);
@@ -1104,8 +1028,8 @@ UnicodeString& UnicodeSet::getCategoryPairs(UnicodeString& result,
         cat.remove(0, 1);
     }
 
-    result.remove();
-    
+    UBool match = FALSE;
+
     // if we have two characters, search the category map for that
     // code and either construct and return a UnicodeSet from the
     // data in the category map or throw an exception
@@ -1113,37 +1037,31 @@ UnicodeString& UnicodeSet::getCategoryPairs(UnicodeString& result,
         int32_t i = CATEGORY_NAMES.indexOf(cat);
         if (i>=0 && i%2==0) {
             i /= 2;
-            result = getCategoryPairs((int8_t)i);
-            if (!invert) {
-                return result;
-            }
+            *this = getCategorySet((int8_t)i);
+            match = TRUE;
         }
     } else if (cat.length() == 1) {
         // if we have one character, search the category map for
         // codes beginning with that letter, and union together
         // all of the matching sets that we find (or throw an
         // exception if there are no matches)
+        clear();
         for (int32_t i=0; i<Unicode::GENERAL_TYPES_COUNT; ++i) {
             if (CATEGORY_NAMES.charAt(2*i) == cat.charAt(0)) {
-                const UnicodeString& pairs = getCategoryPairs((int8_t)i);
-                if (result.length() == 0) {
-                    result = pairs;
-                } else {
-                    doUnion(result, pairs);
-                }
+                addAll(getCategorySet((int8_t)i));
+                match = TRUE;
             }
         }
     }
 
-    if (result.length() == 0) {
+    if (!match) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
-        return result;
+        return;
     }
 
     if (invert) {
-        doComplement(result);
+        complement();
     }
-    return result;
 }
 
 /**
@@ -1151,36 +1069,38 @@ UnicodeString& UnicodeSet::getCategoryPairs(UnicodeString& result,
  * cached and returned again if this method is called again with
  * the same parameter.
  */
-const UnicodeString& UnicodeSet::getCategoryPairs(int8_t cat) {
+const UnicodeSet& UnicodeSet::getCategorySet(int8_t cat) {
     // In order to tell what cache entries are empty, we assume
     // every category specifies at least one character.  Thus
-    // pair lists in the cache that are empty are uninitialized.
-    if (CATEGORY_PAIRS_CACHE[cat].length() == 0) {
+    // sets in the cache that are empty are uninitialized.
+    if (CATEGORY_CACHE[cat].isEmpty()) {
         // Walk through all Unicode characters, noting the start
         // and end of each range for which Character.getType(c)
         // returns the given category integer.  Since we are
         // iterating in order, we can simply append the resulting
         // ranges to the pairs string.
-        UnicodeString& pairs = CATEGORY_PAIRS_CACHE[cat];
-        int32_t first = -1;
-        int32_t last = -2;
+        UnicodeSet& set = CATEGORY_CACHE[cat];
+        int32_t start = -1;
+        int32_t end = -2;
+        // N.B.: Change upper limit to 0x10FFFF when there is
+        // actually something up there.
         for (int32_t i=0; i<=0xFFFF; ++i) {
             if (Unicode::getType((UChar)i) == cat) {
-                if ((last+1) == i) {
-                    last = i;
+                if ((end+1) == i) {
+                    end = i;
                 } else {
-                    if (first >= 0) {
-                        pairs.append((UChar)first).append((UChar)last);
+                    if (start >= 0) {
+                        set.add((UChar32)start, (UChar32)end);
                     }
-                    first = last = i;
+                    start = end = i;
                 }
             }
         }
-        if (first >= 0) {
-            pairs.append((UChar)first).append((UChar)last);
+        if (start >= 0) {
+            set.add((UChar32)start, (UChar32)end);
         }
     }
-    return CATEGORY_PAIRS_CACHE[cat];
+    return CATEGORY_CACHE[cat];
 }
 
 //----------------------------------------------------------------
@@ -1193,4 +1113,240 @@ const UnicodeString& UnicodeSet::getCategoryPairs(int8_t cat) {
  */
 UChar UnicodeSet::charAfter(const UnicodeString& str, int32_t i) {
     return ((++i) < str.length()) ? str.charAt(i) : (UChar)0xFFFF;
+}
+
+void UnicodeSet::ensureCapacity(int32_t newLen) {
+    if (newLen <= capacity) return;
+    capacity = newLen + GROW_EXTRA;
+    UChar32* temp = new UChar32[capacity];
+    uprv_memcpy(temp, list, len*sizeof(UChar32));
+    delete[] list;
+    list = temp;
+}
+
+void UnicodeSet::ensureBufferCapacity(int32_t newLen) {
+    if (buffer != NULL && newLen <= bufferCapacity) return;
+    delete[] buffer;
+    bufferCapacity = newLen + GROW_EXTRA;
+    buffer = new UChar32[bufferCapacity];
+}
+
+/**
+ * Swap list and buffer.
+ */
+void UnicodeSet::swapBuffers(void) {
+    // swap list and buffer
+    UChar32* temp = list;
+    list = buffer;
+    buffer = temp;
+
+    int32_t c = capacity;
+    capacity = bufferCapacity;
+    bufferCapacity = c;
+}
+
+//----------------------------------------------------------------
+// Implementation: Fundamental operators
+//----------------------------------------------------------------
+
+inline UChar32 max(UChar32 a, UChar32 b) {
+    return (a > b) ? a : b;
+}
+
+// polarity = 0, 3 is normal: x xor y
+// polarity = 1, 2: x xor ~y == x === y
+
+void UnicodeSet::xor(const UChar32* other, int32_t otherLen, int8_t polarity) {
+    ensureBufferCapacity(len + otherLen);
+    int32_t i = 0, j = 0, k = 0;
+    UChar32 a = list[i++];
+    UChar32 b;
+    if (polarity == 1 || polarity == 2) {
+        b = LOW;
+        if (other[j] == LOW) { // skip base if already LOW
+            ++j;
+            b = other[j];
+        }
+    } else {
+        b = other[j++];
+    }
+    // simplest of all the routines
+    // sort the values, discarding identicals!
+    for (;;) {
+        if (a < b) {
+            buffer[k++] = a;
+            a = list[i++];
+        } else if (b < a) {
+            buffer[k++] = b;
+            b = other[j++];
+        } else if (a != HIGH) { // at this point, a == b
+            // discard both values!
+            a = list[i++];
+            b = other[j++];
+        } else { // DONE!
+            buffer[k++] = HIGH;
+            len = k;
+            break;
+        }
+    }
+    swapBuffers();
+}
+
+// polarity = 0 is normal: x union y
+// polarity = 2: x union ~y
+// polarity = 1: ~x union y
+// polarity = 3: ~x union ~y
+
+void UnicodeSet::add(const UChar32* other, int32_t otherLen, int8_t polarity) {
+    ensureBufferCapacity(len + otherLen);
+    int32_t i = 0, j = 0, k = 0;
+    UChar32 a = list[i++];
+    UChar32 b = other[j++];
+    // change from xor is that we have to check overlapping pairs
+    // polarity bit 1 means a is second, bit 2 means b is.
+    for (;;) {
+        switch (polarity) {
+          case 0: // both first; take lower if unequal
+            if (a < b) { // take a
+                // Back up over overlapping ranges in buffer[]
+                if (k > 0 && a <= buffer[k-1]) {
+                    // Pick latter end value in buffer[] vs. list[]
+                    a = max(list[i], buffer[--k]);
+                } else {
+                    // No overlap
+                    buffer[k++] = a;
+                    a = list[i];
+                }
+                i++; // Common if/else code factored out
+                polarity ^= 1;
+            } else if (b < a) { // take b
+                if (k > 0 && b <= buffer[k-1]) {
+                    b = max(other[j], buffer[--k]);
+                } else {
+                    buffer[k++] = b;
+                    b = other[j];
+                }
+                j++;
+                polarity ^= 2;
+            } else { // a == b, take a, drop b
+                if (a == HIGH) goto loop_end;
+                // This is symmetrical; it doesn't matter if
+                // we backtrack with a or b. - liu
+                if (k > 0 && a <= buffer[k-1]) {
+                    a = max(list[i], buffer[--k]);
+                } else {
+                    // No overlap
+                    buffer[k++] = a;
+                    a = list[i];
+                }
+                i++;
+                polarity ^= 1;
+                b = other[j++]; polarity ^= 2;
+            }
+            break;
+          case 3: // both second; take higher if unequal, and drop other
+            if (b <= a) { // take a
+                if (a == HIGH) goto loop_end;
+                buffer[k++] = a;
+            } else { // take b
+                if (b == HIGH) goto loop_end;
+                buffer[k++] = b;
+            }
+            a = list[i++]; polarity ^= 1;   // factored common code
+            b = other[j++]; polarity ^= 2;
+            break;
+          case 1: // a second, b first; if b < a, overlap
+            if (a < b) { // no overlap, take a
+                buffer[k++] = a; a = list[i++]; polarity ^= 1;
+            } else if (b < a) { // OVERLAP, drop b
+                b = other[j++]; polarity ^= 2;
+            } else { // a == b, drop both!
+                if (a == HIGH) goto loop_end;
+                a = list[i++]; polarity ^= 1;
+                b = other[j++]; polarity ^= 2;
+            }
+            break;
+          case 2: // a first, b second; if a < b, overlap
+            if (b < a) { // no overlap, take b
+                buffer[k++] = b; b = other[j++]; polarity ^= 2;
+            } else  if (a < b) { // OVERLAP, drop a
+                a = list[i++]; polarity ^= 1;
+            } else { // a == b, drop both!
+                if (a == HIGH) goto loop_end;
+                a = list[i++]; polarity ^= 1;
+                b = other[j++]; polarity ^= 2;
+            }
+            break;
+        }
+    }
+ loop_end:
+    buffer[k++] = HIGH;    // terminate
+    len = k;
+    swapBuffers();
+}
+
+// polarity = 0 is normal: x intersect y
+// polarity = 2: x intersect ~y == set-minus
+// polarity = 1: ~x intersect y
+// polarity = 3: ~x intersect ~y
+
+void UnicodeSet::retain(const UChar32* other, int32_t otherLen, int8_t polarity) {
+    ensureBufferCapacity(len + otherLen);
+    int32_t i = 0, j = 0, k = 0;
+    UChar32 a = list[i++];
+    UChar32 b = other[j++];
+    // change from xor is that we have to check overlapping pairs
+    // polarity bit 1 means a is second, bit 2 means b is.
+    for (;;) {
+        switch (polarity) {
+          case 0: // both first; drop the smaller
+            if (a < b) { // drop a
+                a = list[i++]; polarity ^= 1;
+            } else if (b < a) { // drop b
+                b = other[j++]; polarity ^= 2;
+            } else { // a == b, take one, drop other
+                if (a == HIGH) goto loop_end;
+                buffer[k++] = a; a = list[i++]; polarity ^= 1;
+                b = other[j++]; polarity ^= 2;
+            }
+            break;
+          case 3: // both second; take lower if unequal
+            if (a < b) { // take a
+                buffer[k++] = a; a = list[i++]; polarity ^= 1;
+            } else if (b < a) { // take b
+                buffer[k++] = b; b = other[j++]; polarity ^= 2;
+            } else { // a == b, take one, drop other
+                if (a == HIGH) goto loop_end;
+                buffer[k++] = a; a = list[i++]; polarity ^= 1;
+                b = other[j++]; polarity ^= 2;
+            }
+            break;
+          case 1: // a second, b first;
+            if (a < b) { // NO OVERLAP, drop a
+                a = list[i++]; polarity ^= 1;
+            } else if (b < a) { // OVERLAP, take b
+                buffer[k++] = b; b = other[j++]; polarity ^= 2;
+            } else { // a == b, drop both!
+                if (a == HIGH) goto loop_end;
+                a = list[i++]; polarity ^= 1;
+                b = other[j++]; polarity ^= 2;
+            }
+            break;
+          case 2: // a first, b second; if a < b, overlap
+            if (b < a) { // no overlap, drop b
+                b = other[j++]; polarity ^= 2;
+            } else  if (a < b) { // OVERLAP, take a
+                buffer[k++] = a; a = list[i++]; polarity ^= 1;
+            } else { // a == b, drop both!
+                if (a == HIGH) goto loop_end;
+                a = list[i++]; polarity ^= 1;
+                b = other[j++]; polarity ^= 2;
+            }
+            break;
+        }
+    }
+ loop_end:
+    buffer[k++] = HIGH;    // terminate
+    len = k;
+    swapBuffers();
 }
