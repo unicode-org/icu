@@ -26,7 +26,8 @@ static char *make_res_filename(const char *filename, const char *outputDir, UErr
 #define RES_SUFFIX ".res"
 #define COL_SUFFIX ".col"
 
-const char *gCurrentFileName;
+static char theCurrentFileName[4096];
+const char *gCurrentFileName = theCurrentFileName;
 #ifdef XP_MAC_CONSOLE
 #include <console.h>
 #endif
@@ -162,8 +163,16 @@ main(int argc,
         status = U_ZERO_ERROR;
         arg    = getLongPathname(argv[i]);
 
+    if (inputDir) {
+        uprv_strcpy(theCurrentFileName, inputDir);
+        uprv_strcat(theCurrentFileName, U_FILE_SEP_STRING);
+    } else {
+        *theCurrentFileName = 0;
+    }
+    uprv_strcat(theCurrentFileName, arg);
+
     if (verbose) {
-        printf("processing file \"%s\"\n",  arg);
+        printf("processing file \"%s\"\n",  gCurrentFileName);
     }
         processFile(arg, encoding, inputDir, outputDir, &status);
     }
@@ -255,7 +264,6 @@ processFile(const char *filename, const char *cp, const char *inputDir, const ch
     }
 
     /* Parse the data into an SRBRoot */
-    gCurrentFileName = filename;
     data = parse(ucbuf, inputDir, status);
 
     if (data == NULL || U_FAILURE(*status)) {
