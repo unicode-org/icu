@@ -608,7 +608,7 @@ public:
         return U_FAILURE(status) ? 0 : len;
     }
 
-    const char* next(UErrorCode& status) {
+    const char* next(int32_t* resultLength, UErrorCode& status) {
         const UnicodeString* us = snext(status);
         if (us) {
             int newlen;
@@ -620,16 +620,25 @@ public:
             }
             if (U_SUCCESS(status)) {
                 ((char*)_bufp)[newlen] = 0;
+                if (resultLength) {
+                  resultLength[0] = newlen;
+                }
                 return (const char*)_bufp;
             }
         }
         return NULL;
     }
 
-    const UChar* unext(UErrorCode& status) {
+    const UChar* unext(int32_t* resultLength, UErrorCode& status) {
         const UnicodeString* us = snext(status);
-	// TimeZone terminates the ID strings when it builds them
-	return (us == NULL) ? NULL : us->getBuffer();
+        if (us != NULL) {
+          if (resultLength) {
+            resultLength[0] = us->length();
+          }
+          // TimeZone terminates the ID strings when it builds them
+          return us->getBuffer();
+        }
+        return NULL;
     }
 
     const UnicodeString* snext(UErrorCode& status) {

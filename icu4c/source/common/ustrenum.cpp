@@ -46,9 +46,7 @@ ustrenum_unext(UEnumeration* en,
                int32_t* resultLength,
                UErrorCode* ec)
 {
-    const UChar* result = THIS(en)->unext(*ec);
-    *resultLength = (result != NULL) ? u_strlen(result) : 0;
-    return result;
+    return THIS(en)->unext(resultLength, *ec);
 }
 
 /**
@@ -59,9 +57,7 @@ ustrenum_next(UEnumeration* en,
               int32_t* resultLength,
               UErrorCode* ec)
 {
-    const char* result = THIS(en)->next(*ec);
-    *resultLength = (result != NULL) ? uprv_strlen(result) : 0;
-    return result;
+    return THIS(en)->next(resultLength, *ec);
 }
 
 /**
