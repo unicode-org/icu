@@ -157,7 +157,7 @@ param[] =
 static int32_t bundles_count = sizeof(param) / sizeof(param[0]);
 
 
-static void printUChars(UChar*);
+/*static void printUChars(UChar*);*/
 static void TestDecodedBundle(void);
 static void TestGetKeywordValues(void);
 static void TestGetFunctionalEquivalent(void);
@@ -2015,12 +2015,12 @@ static void TestFallback()
 
 }
 
-static void printUChars(UChar* uchars){
-    int16_t i=0;
-    for(i=0; i<u_strlen(uchars); i++){
-        log_err("%04X ", *(uchars+i));
-    }
-}
+/* static void printUChars(UChar* uchars){
+/    int16_t i=0;
+/    for(i=0; i<u_strlen(uchars); i++){
+/        log_err("%04X ", *(uchars+i));
+/    }
+/ } */
 
 static void TestResourceLevelAliasing(void) {
     UErrorCode status = U_ZERO_ERROR;
@@ -2383,6 +2383,14 @@ static void TestGetFunctionalEquivalent(void) {
         "f",    "de_US_CALIFORNIA",            "de",
         "t",    "zh_TW@collation=stroke",      "zh@collation=stroke",
         "f",    "de_CN@collation=pinyin",      "de",
+        "t",    "zh@collation=pinyin",      "zh",
+        "f",    "zh_CN@collation=pinyin",      "zh", /* should be 'T' when validSubLocales works */
+        "t",    "zh_HK@collation=pinyin",      "zh",
+        "t",    "zh_HK@collation=stroke",      "zh@collation=stroke",
+        "t",    "zh_HK",  "zh@collation=stroke",
+        "t",    "zh_MO",  "zh@collation=stroke",
+        "t",    "zh_TW_STROKE",  "zh@collation=stroke",
+        "t",    "zh_TW_STROKE@collation=big5han",  "zh@collation=big5han",
         "f",    "de_CN@calendar=japanese",     "de",
         "t",    "de@calendar=japanese",        "de",
         "t",    "zh_TW@collation=big5han",    "zh@collation=big5han",
