@@ -398,9 +398,10 @@ static void TestLetterNumber()
          * The following checks work only starting from Unicode 4.0.
          * Check the version number here.
          */
+        static UVersionInfo u401={ 4, 0, 1, 0 };
         UVersionInfo version;
         u_getUnicodeVersion(version);
-        if(version[0]<4) {
+        if(version[0]<4 || 0==memcmp(version, u401, 4)) {
             return;
         }
     }
@@ -415,13 +416,9 @@ static void TestLetterNumber()
          * (which checks Nd).
          *
          * This was not true in Unicode 3.2 and earlier.
-         * The following characters had decimal digit values but were No not Nd.
-         * (from DerivedNumericType-3.2.0.txt)
-00B2..00B3    ; decimal # No   [2] SUPERSCRIPT TWO..SUPERSCRIPT THREE
-00B9          ; decimal # No       SUPERSCRIPT ONE
-2070          ; decimal # No       SUPERSCRIPT ZERO
-2074..2079    ; decimal # No   [6] SUPERSCRIPT FOUR..SUPERSCRIPT NINE
-2080..2089    ; decimal # No  [10] SUBSCRIPT ZERO..SUBSCRIPT NINE
+         * Unicode 4.0 fixed discrepancies.
+         * Unicode 4.0.1 re-introduced problems in this area due to an
+         * unintentionally incomplete last-minute change.
          */
         U_STRING_DECL(digitsPattern, "[:Nd:]", 6);
         U_STRING_DECL(decimalValuesPattern, "[:Numeric_Type=Decimal:]", 24);
