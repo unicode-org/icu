@@ -46,7 +46,7 @@
 #   define MAP_IMPLEMENTATION MAP_WIN32
 
 /* ### Todo: properly auto detect mmap(). Until then, just add your platform here. */
-#elif U_HAVE_MMAP || defined(AIX) || defined(HPUX) || defined(OS390) || defined(PTX)
+#elif U_HAVE_MMAP || defined(U_AIX) || defined(U_HPUX) || defined(OS390) || defined(PTX)
     typedef size_t MemoryMap;
 
 #   define IS_MAP(map) ((map)!=0)
@@ -177,7 +177,7 @@
         }
 
         /* get a view of the mapping */
-#ifndef HPUX
+#ifndef U_HPUX
         data=mmap(0, length, PROT_READ, MAP_SHARED,  fd, 0);
 #else
         data=mmap(0, length, PROT_READ, MAP_PRIVATE, fd, 0);

@@ -209,10 +209,10 @@ static void MessageFormatTest( void )
                         austrdup(result), austrdup(testResultStrings[i]) );
                 }
 
-#if !defined(HPUX)
+#if !defined(U_HPUX)
                 /* HP/UX and possibly other platforms don't properly check for this case.
                    We pass in a UDate, but the function expects a UDate *.  When va_arg is used,
-                   most compilers will return NULL, but HP/UX won't do that and will return 2
+                   most compilers will return NULL, but HP-UX won't do that and will return 2
                    in this case.  This is a platform dependent test.
                 */
                 umsg_parse(formatter,result,resultLength,&count,&ec,one,two,d2);
