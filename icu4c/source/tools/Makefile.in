@@ -154,6 +154,7 @@ DATAFILES=$(DATAFILESD) $(DATAFILESC) $(DATAFILESB) $(DATAFILESR)
 CLEANFILES = *~ $(BRK_FILES)
 
 install-udata: install-pkgdata
+	$(INSTALL_DATA) $(top_srcdir)/../data/convrtrs.txt $(DESTDIR)$(pkgdatadir)/$(VERSION)
 
 install-local: all-local install-udata
 
@@ -199,13 +200,15 @@ build-local build-pkgdata: $(TMPDATADIR)/icudata.lst $(TMPDATADIR)/testdata.lst 
 	(cd $(TMPDATADIR); $(PKGDATA) -p testdat2  ./testdata.lst )
 
 install-pkgdata: $(TMPDATADIR)/icudata.lst $(TMPDATADIR)/icupkg.inc
-	$(mkinstalldirs) $(TMPDATADIR)  $(DESTDIR)$(pkgdatadir)/$(VERSION)
+	$(mkinstalldirs) $(TMPDATADIR) $(DESTDIR)$(pkgdatadir)/$(VERSION)
 	(cd $(TMPDATADIR); $(PKGDATA) -p icudata ./icudata.lst -I $(DESTDIR)$(pkgdatadir)/$(VERSION) )
 
 
 clean-pkgdata:
 	@$(mkinstalldirs) $(TMPDATADIR)
 	-@(cd $(TMPDATADIR); $(PKGDATA) -p icudata ./icudata.lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
+	-@(cd $(TMPDATADIR); $(PKGDATA) -p testdat1  ./testdata.lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
+	-@(cd $(TMPDATADIR); $(PKGDATA) -p testdat2  ./testdata.lst --clean || echo '### Warning, cannot clean up icu/data if pkgdata is already gone.' )
 	-$(RMV) $(TMPDATADIR)/icudata.lst $(TMPDATADIR)/icupkg.inc 
 
 check-local:
