@@ -688,6 +688,18 @@ static void TestAPI() {
         }
         ures_close(teRes);
     }
+
+    /* same test, but with an aliased locale resource bundle */
+    status=U_ZERO_ERROR;
+    teRes=ures_open(NULL, "iW_Il_depRecaTed_HebreW", &status);
+    if(U_FAILURE(status)) {
+        log_err("unable to open a locale resource bundle from \"iW_Il_depRecaTed_HebreW\"(%s)\n", u_errorName(status));
+    } else {
+        if(0!=strcmp("he_IL", ures_getLocale(teRes, &status))) {
+            log_err("ures_getLocale(\"iW_Il_depRecaTed_HebreW\")=%s but must be he_IL\n", ures_getLocale(teRes, &status));
+        }
+        ures_close(teRes);
+    }
 }
 
 static void TestErrorConditions(){
