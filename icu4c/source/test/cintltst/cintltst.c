@@ -40,10 +40,6 @@ U_CFUNC void ctst_freeAll(void);
 U_CFUNC void ctst_init(void);
 #endif
 
-
-/* ### TODO: remove when the new normalization implementation is finished */
-#include "unormimp.h"
-
 static char* _testDirectory=NULL;
 
 /*
