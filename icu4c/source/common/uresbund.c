@@ -1944,7 +1944,7 @@ ures_loc_nextLocale(UEnumeration* en,
         len = uprv_strlen(result);
     }
     if (resultLength) {
-        *resuleLength = len;
+        *resultLength = len;
     }
     return result;
 }
