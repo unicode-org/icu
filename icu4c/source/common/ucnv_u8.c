@@ -1,6 +1,6 @@
 /*  
 **********************************************************************
-*   Copyright (C) 2002-2003, International Business Machines
+*   Copyright (C) 2002-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv_u8.c
@@ -19,6 +19,9 @@
 */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_CONVERSION
+
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
 #include "ucnv_bld.h"
@@ -813,3 +816,5 @@ const UConverterSharedData _CESU8Data={
     NULL, NULL, &_CESU8StaticData, FALSE, &_CESU8Impl,
     0
 };
+
+#endif

@@ -59,6 +59,20 @@
 /* common library switches -------------------------------------------------- */
 
 /**
+ * \def UCONFIG_NO_CONVERSION
+ * This switch turns off all converters.
+ *
+ * @draft ICU 3.2
+ */
+#ifndef UCONFIG_NO_CONVERSION
+#   define UCONFIG_NO_CONVERSION 0
+#endif
+
+#if UCONFIG_NO_CONVERSION
+#   define UCONFIG_NO_LEGACY_CONVERSION 1
+#endif
+
+/**
  * \def UCONFIG_NO_LEGACY_CONVERSION
  * This switch turns off all converters except for
  * - Unicode charsets (UTF-7/8/16/32, CESU-8, SCSU, BOCU-1)

@@ -44,7 +44,7 @@ StringEnumeration::next(int32_t *resultLength, UErrorCode &status) {
             if(resultLength!=NULL) {
                 *resultLength=unistr.length();
             }
-            unistr.extract(0, INT32_MAX, chars, charsCapacity, "");
+            unistr.extract(0, INT32_MAX, chars, charsCapacity, US_INV);
             return chars;
         }
     }

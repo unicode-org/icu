@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2002-2003, International Business Machines
+*   Copyright (C) 2002-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -18,6 +18,9 @@
 */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_CONVERSION
+
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_cb.h"
 #include "ucnv_bld.h"
@@ -1386,3 +1389,5 @@ const UConverterSharedData _Bocu1Data={
     NULL, NULL, &_Bocu1StaticData, FALSE, &_Bocu1Impl,
     0
 };
+
+#endif

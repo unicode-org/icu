@@ -74,6 +74,8 @@ typedef struct USet USet;
 
 #endif
 
+#if !UCONFIG_NO_CONVERSION
+
 U_CDECL_BEGIN
 
 /** Maximum length of a converter name including the terminating NULL @stable ICU 2.0 */
@@ -1819,5 +1821,6 @@ ucnv_detectUnicodeSignature(const char* source,
                             UErrorCode *pErrorCode);
 
 #endif
-/*_UCNV*/
 
+#endif
+/*_UCNV*/

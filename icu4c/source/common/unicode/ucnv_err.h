@@ -91,6 +91,7 @@
 
 #include "unicode/utypes.h"
 
+#if !UCONFIG_NO_CONVERSION
 
 /**
  * FROM_U, TO_U context options for sub callback
@@ -447,6 +448,8 @@ U_STABLE void U_EXPORT2 UCNV_TO_U_CALLBACK_ESCAPE (
                   int32_t length,
                   UConverterCallbackReason reason,
                   UErrorCode * err);
+
+#endif
 
 #endif
 

@@ -19,6 +19,9 @@
  *   06/29/2000  helena      Major rewrite of the callback interface.
 */
 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_CONVERSION
 
 #include "unicode/udata.h"
 #include "unicode/ucnv.h"
@@ -1293,3 +1296,5 @@ ucnv_swap(const UDataSwapper *ds,
 }
 
 #endif /* #if !UCONFIG_NO_LEGACY_CONVERSION */
+
+#endif

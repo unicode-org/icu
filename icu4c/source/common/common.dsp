@@ -2113,6 +2113,10 @@ InputPath=.\unicode\resbund.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\resbund_cnv.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\ucat.c
 # End Source File
 # Begin Source File
@@ -2168,10 +2172,6 @@ SOURCE=.\uloc.c
 # End Source File
 # Begin Source File
 
-SOURCE=.\ulocimp.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\unicode\uloc.h
 
 !IF  "$(CFG)" == "common - Win32 Release"
@@ -2219,6 +2219,10 @@ InputPath=.\unicode\uloc.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\ulocimp.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\unicode\ures.h
 
 !IF  "$(CFG)" == "common - Win32 Release"
@@ -2263,6 +2267,10 @@ InputPath=.\unicode\ures.h
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\ures_cnv.c
 # End Source File
 # Begin Source File
 
@@ -2770,6 +2778,10 @@ InputPath=.\unicode\uniset.h
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\uniset_props.cpp
 # End Source File
 # Begin Source File
 
@@ -3363,6 +3375,18 @@ InputPath=.\unicode\unistr.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\unistr_case.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unistr_cnv.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\unistr_props.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\unicode\urep.h
 
 !IF  "$(CFG)" == "common - Win32 Release"
@@ -3407,6 +3431,10 @@ InputPath=.\unicode\urep.h
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=.\ustr_cnv.c
 # End Source File
 # Begin Source File
 

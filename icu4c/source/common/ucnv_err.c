@@ -1,7 +1,7 @@
 /*
  *****************************************************************************
  *
- *   Copyright (C) 1998-2003, International Business Machines
+ *   Copyright (C) 1998-2004, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *****************************************************************************
@@ -14,6 +14,10 @@
 *
 *   06/29/2000  helena      Major rewrite of the callback APIs.
 */
+
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_CONVERSION
 
 #include "unicode/ucnv_err.h"
 #include "unicode/ucnv_cb.h"
@@ -453,3 +457,5 @@ UCNV_TO_U_CALLBACK_ESCAPE (
 
     ucnv_cbToUWriteUChars(toArgs, uniValueString, valueStringLength, 0, err);
 }
+
+#endif

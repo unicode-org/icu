@@ -1694,41 +1694,6 @@ ures_open(const char* path,
     return r;
 }
 
-U_CAPI UResourceBundle* U_EXPORT2 ures_openU(const UChar* myPath, 
-                  const char* localeID, 
-                  UErrorCode* status)
-{
-    char path[2048];
-    UConverter *cnv;
-    int32_t length;
-
-    if(status==NULL || U_FAILURE(*status)) {
-        return NULL;
-    }
-    if(myPath==NULL) {
-        *status=U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
-    }
-
-    cnv=u_getDefaultConverter(status);
-    if(U_FAILURE(*status)) {
-        return NULL;
-    }
-
-    length=ucnv_fromUChars(cnv, path, sizeof(path), myPath, -1, status);
-    u_releaseDefaultConverter(cnv);
-    if(U_FAILURE(*status)) {
-        return NULL;
-    }
-    if(length>=sizeof(path)) {
-        /* not NUL-terminated - path too long */
-        *status=U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
-    }
-
-    return ures_open(path, localeID, status);
-}
-
 /**
  *  Opens a resource bundle without "canonicalizing" the locale name. No fallback will be performed 
  *  or sought. However, alias substitution will happen!

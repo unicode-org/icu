@@ -382,7 +382,7 @@ void RBBISetBuilder::printRanges() {
 
         for (i=0; i<rlRange->fIncludesSets->size(); i++) {
             RBBINode       *usetNode    = (RBBINode *)rlRange->fIncludesSets->elementAt(i);
-            UnicodeString   setName = "anon";
+            UnicodeString   setName = UNICODE_STRING("anon", 4);
             RBBINode       *setRef = usetNode->fParent;
             if (setRef != NULL) {
                 RBBINode *varRef = setRef->fParent;
@@ -422,7 +422,7 @@ void RBBISetBuilder::printRangeGroups() {
 
             for (i=0; i<rlRange->fIncludesSets->size(); i++) {
                 RBBINode       *usetNode    = (RBBINode *)rlRange->fIncludesSets->elementAt(i);
-                UnicodeString   setName = "anon";
+                UnicodeString   setName = UNICODE_STRING("anon", 4);
                 RBBINode       *setRef = usetNode->fParent;
                 if (setRef != NULL) {
                     RBBINode *varRef = setRef->fParent;
@@ -473,7 +473,7 @@ void RBBISetBuilder::printSets() {
         }
 
         RBBIDebugPrintf("%3d    ", i);
-        setName = "anonymous";
+        setName = UNICODE_STRING("anonymous", 9);
         setRef = usetNode->fParent;
         if (setRef != NULL) {
             varRef = setRef->fParent;
@@ -622,7 +622,7 @@ void RangeDescriptor::setDictionaryFlag() {
                 setName = varRef->fText;
             }
         }
-        if (setName.compare("dictionary") == 0) {   // TODO:  no string literals.
+        if (setName.compare(UNICODE_STRING("dictionary", 10)) == 0) {   // TODO:  no string literals.
             this->fNum |= 0x4000;
             break;
         }

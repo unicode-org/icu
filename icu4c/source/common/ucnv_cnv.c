@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2003, International Business Machines
+*   Copyright (C) 1999-2004, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -16,6 +16,9 @@
 */
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_CONVERSION
+
 #include "unicode/ucnv_err.h"
 #include "unicode/ucnv.h"
 #include "unicode/uset.h"
@@ -167,3 +170,5 @@ ucnv_toUWriteCodePoint(UConverter *cnv,
         *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
     }
 }
+
+#endif

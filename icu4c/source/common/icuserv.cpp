@@ -562,7 +562,7 @@ ICUService::getKey(ICUServiceKey& key, UnicodeString* actualReturn, const ICUSer
 
       if (actualReturn != NULL) {
         // strip null prefix
-        if (result->actualDescriptor.indexOf("/") == 0) {
+        if (result->actualDescriptor.indexOf((UChar)0x2f) == 0) { // U+002f=slash (/)
           actualReturn->remove();
           actualReturn->append(result->actualDescriptor, 
                                1, 
