@@ -373,13 +373,15 @@ MBCSProcessStates(MBCSData *mbcsData) {
     mbcsData->countToUCodeUnits=sum;
 
     /* allocate the code unit array and prefill it with "unassigned" values */
-    mbcsData->unicodeCodeUnits=(uint16_t *)uprv_malloc(sum*sizeof(uint16_t));
-    if(mbcsData->unicodeCodeUnits==NULL) {
-        fprintf(stderr, "error: out of memory allocating %ld 16-bit code units\n", sum);
-        return FALSE;
-    }
-    for(i=0; i<sum; ++i) {
-        mbcsData->unicodeCodeUnits[i]=0xfffe;
+    if(sum>0) {
+        mbcsData->unicodeCodeUnits=(uint16_t *)uprv_malloc(sum*sizeof(uint16_t));
+        if(mbcsData->unicodeCodeUnits==NULL) {
+            fprintf(stderr, "error: out of memory allocating %ld 16-bit code units\n", sum);
+            return FALSE;
+        }
+        for(i=0; i<sum; ++i) {
+            mbcsData->unicodeCodeUnits[i]=0xfffe;
+        }
     }
 
     /* allocate the codepage mappings and preset the first 16 characters to 0 */
