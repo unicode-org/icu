@@ -1916,10 +1916,16 @@ NumberFormatRegressionTest::Test4162198(void)
     //}
     
     //logln("The string " + s + " parsed as " + n);
-    
-    if(n.getDouble() != dbl) {
-        errln("Round trip failure");
-    }
+
+    // {dlf} The old code assumes n is a double, but it isn't any more...
+    // Formattable apparently does not and never did interconvert... too bad.
+    //if(n.getDouble() != dbl) {
+    //    errln("Round trip failure");
+    //}
+	if (n.getInt64() != dbl) {
+		errln("Round trip failure");
+	}
+
     delete f;
 }
 

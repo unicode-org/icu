@@ -1626,14 +1626,6 @@ InputPath=.\unicode\uobject.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\digitlst.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\digitlst.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\unicode\parseerr.h
 
 !IF  "$(CFG)" == "common - Win32 Release"

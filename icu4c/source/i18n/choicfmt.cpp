@@ -566,6 +566,19 @@ ChoiceFormat::getFormats(int32_t& cnt) const
 }
 
 // -------------------------------------
+// Formats an int64 number, it's actually formatted as
+// a double.  The returned format string may differ
+// from the input number because of this.
+
+UnicodeString&
+ChoiceFormat::format(int64_t number, 
+                     UnicodeString& appendTo, 
+                     FieldPosition& status) const
+{
+    return format((double) number, appendTo, status);
+}
+
+// -------------------------------------
 // Formats a long number, it's actually formatted as
 // a double.  The returned format string may differ
 // from the input number because of this.

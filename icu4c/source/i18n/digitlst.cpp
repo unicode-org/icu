@@ -47,9 +47,13 @@ static char gDecimal = 0;
 
 /* Only for 32 bit numbers. Ignore the negative sign. */
 static const char LONG_MIN_REP[] = "2147483648";
+static const char I64_MIN_REP[] = "9223372036854775808";
+
+static const int64_t I64_MIN_VALUE = -9223372036854775807 - 1;
 
 enum {
-    LONG_MIN_REP_LENGTH = sizeof(LONG_MIN_REP) - 1 //Ignore the NULL at the end
+    LONG_MIN_REP_LENGTH = sizeof(LONG_MIN_REP) - 1, //Ignore the NULL at the end
+    I64_MIN_REP_LENGTH = sizeof(I64_MIN_REP) - 1 //Ignore the NULL at the end
 };
 
 U_NAMESPACE_BEGIN
@@ -133,7 +137,7 @@ DigitList::clear()
  * @return the number of digits written, not including the sign.
  */
 static int32_t
-formatBase10(int32_t number, char *outputStr, int32_t outputLen) 
+formatBase10(int64_t number, char *outputStr, int32_t outputLen) 
 {
     char buffer[MAX_DIGITS + 1];
     int32_t bufferLen;
@@ -232,6 +236,49 @@ int32_t DigitList::getLong()
     }
 }
 
+
+/**
+ * Make sure that fitsIntoInt64() is called before calling this function.
+ */
+int64_t DigitList::getInt64()
+{
+    if (fCount == fDecimalAt) {
+        uint64_t value;
+
+        fDigits[fCount] = 0;    // NULL terminate
+
+        // This conversion is bad on 64-bit platforms when we want to
+        // be able to return a 64-bit number [grhoten]
+        *fDecimalDigits = fIsPositive ? '+' : '-';
+
+		if (fCount < LONG_MIN_REP_LENGTH) {
+			return (int64_t)atol(fDecimalDigits);
+		}
+
+		// too big for atol, hand-roll atoi64
+		value = 0;
+		for (int i = 0; i < fCount; ++i) {
+			int v = fDigits[i] - kZero;
+			value = value * (uint64_t)10 + (uint64_t)v;
+		}
+		if (!fIsPositive) {
+			value = ~value;
+			value += 1;
+		}
+		int64_t svalue = (int64_t)value;
+        return svalue;
+    }
+    else {
+		// todo: figure out best approach
+
+        // This is 100% accurate in c++ because if we are representing
+        // an integral value, we suffer nothing in the conversion to
+        // double.  If we are to support 64-bit longs later, getLong()
+        // must be rewritten. [LIU]
+        return (int64_t)getDouble();
+    }
+}
+
 /**
  * Return true if the number represented by this object can fit into
  * a long.
@@ -241,9 +288,7 @@ DigitList::fitsIntoLong(UBool ignoreNegativeZero)
 {
     // Figure out if the result will fit in a long.  We have to
     // first look for nonzero digits after the decimal point;
-    // then check the size.  If the digit count is 18 or less, then
-    // the value can definitely be represented as a long.  If it is 19
-    // then it may be too large.
+    // then check the size.
 
     // Trim trailing zeros after the decimal point. This does not change
     // the represented value.
@@ -291,14 +336,79 @@ DigitList::fitsIntoLong(UBool ignoreNegativeZero)
     return !fIsPositive;
 }
 
+/**
+ * Return true if the number represented by this object can fit into
+ * a long.
+ */
+UBool
+DigitList::fitsIntoInt64(UBool ignoreNegativeZero)
+{
+    // Figure out if the result will fit in a long.  We have to
+    // first look for nonzero digits after the decimal point;
+    // then check the size.
+
+    // Trim trailing zeros after the decimal point. This does not change
+    // the represented value.
+    while (fCount > fDecimalAt && fCount > 0 && fDigits[fCount - 1] == kZero)
+        --fCount;
+
+    if (fCount == 0) {
+        // Positive zero fits into a long, but negative zero can only
+        // be represented as a double. - bug 4162852
+        return fIsPositive || ignoreNegativeZero;
+    }
+
+//    initializeLONG_MIN_REP();
+
+    // If the digit list represents a double or this number is too
+    // big for a long.
+    if (fDecimalAt < fCount || fDecimalAt > I64_MIN_REP_LENGTH)
+        return FALSE;
+
+    // If number is small enough to fit in an int64
+    if (fDecimalAt < I64_MIN_REP_LENGTH)
+        return TRUE;
+
+    // At this point we have fDecimalAt == fCount, and fCount == INT64_MIN_REP_LENGTH.
+    // The number will overflow if it is larger than INT64_MAX
+    // or smaller than INT64_MIN.
+    for (int32_t i=0; i<fCount; ++i)
+    {
+        char dig = fDigits[i],
+             max = I64_MIN_REP[i];
+        if (dig > max)
+            return FALSE;
+        if (dig < max)
+            return TRUE;
+    }
+
+    // At this point the first count digits match.  If fDecimalAt is less
+    // than count, then the remaining digits are zero, and we return true.
+    if (fCount < fDecimalAt)
+        return TRUE;
+
+    // Now we have a representation of INT64_MIN_VALUE, without the leading
+    // negative sign.  If this represents a positive value, then it does
+    // not fit; otherwise it fits.
+    return !fIsPositive;
+}
+
+
 // -------------------------------------
 
+void
+DigitList::set(int32_t source, int32_t maximumDigits)
+{
+	set((int64_t)source, maximumDigits);
+}
+
+// -------------------------------------
 /**
  * @param maximumDigits The maximum digits to be generated.  If zero,
  * there is no maximum -- generate all digits.
  */
 void
-DigitList::set(int32_t source, int32_t maximumDigits)
+DigitList::set(int64_t source, int32_t maximumDigits)
 {
     fCount = fDecimalAt = formatBase10(source, fDecimalDigits, MAX_DIGITS);
 
@@ -335,7 +445,7 @@ DigitList::set(double source, int32_t maximumDigits, UBool fixedPoint)
     fIsPositive = !uprv_isNegative(source);    // Allow +0 and -0
 
     // Generate a representation of the form /[+-][0-9]+e[+-][0-9]+/
-    sprintf(rep, "%+1.*e", MAX_DIGITS - 1, source);
+    sprintf(rep, "%+1.*e", MAX_DBL_DIGITS - 1, source);
     fDecimalAt  = 0;
     rep[2]      = rep[1];    // remove decimal
 
@@ -347,7 +457,7 @@ DigitList::set(double source, int32_t maximumDigits, UBool fixedPoint)
     while (*repPtr != 'e') {
         *(digitPtr++) = *(repPtr++);
     }
-    fCount = MAX_DIGITS + fDecimalAt;
+    fCount = MAX_DBL_DIGITS + fDecimalAt;
 
     // Parse an exponent of the form /[eE][+-][0-9]+/
     UBool negExp = (*(++repPtr) == '-');

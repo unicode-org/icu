@@ -375,6 +375,21 @@ public:
                                   UnicodeString& appendTo,
                                   FieldPosition& pos) const;
     /**
+     * Format an int64 number using base-10 representation.
+     *
+     * @param number    The value to be formatted.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param pos       On input: an alignment field, if desired.
+     *                  On output: the offsets of the alignment field.
+     * @return          Reference to 'appendTo' parameter.
+     * @draft ICU 2.8
+     */
+    virtual UnicodeString& format(int64_t number,
+                                  UnicodeString& appendTo,
+                                  FieldPosition& pos) const;
+
+	/**
      * Format a Formattable using base-10 representation.
      *
      * @param obj       The value to be formatted.
@@ -433,6 +448,19 @@ public:
     UnicodeString& format(int32_t number,
                           UnicodeString& appendTo) const;
 
+    /**
+     * Redeclared NumberFormat method.
+     * Format an int64 number. These methods call the NumberFormat
+     * pure virtual format() methods with the default FieldPosition.
+     *
+     * @param number    The value to be formatted.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @return          Reference to 'appendTo' parameter.
+     * @draft ICU 2.8
+     */
+    UnicodeString& format(int64_t number,
+                          UnicodeString& appendTo) const;
    /**
     * Parse the given string using this object's choices. The method
     * does string comparisons to try to find an optimal match.
@@ -1333,7 +1361,7 @@ inline UnicodeString&
 DecimalFormat::format(int32_t number,
                       UnicodeString& appendTo) const {
     FieldPosition pos(0);
-    return format(number, appendTo, pos);
+    return format((int64_t)number, appendTo, pos);
 }
 
 inline const UnicodeString &

@@ -76,6 +76,12 @@ public:
      */
     Formattable(int32_t l);
     /**
+     * Creates a Formattable object with an int64_t number
+     * @param ll the int64_t number.
+     * @draft ICU 2.8
+     */
+    Formattable(int64_t ll);
+    /**
      * Creates a Formattable object with a char string pointer.
      * Assumes that the char string is null terminated.
      * @param strToCopy the char string.
@@ -141,12 +147,19 @@ public:
      * @draft ICU 2.4
      */
     enum Type {
+		/** @draft ICU 2.4 */
         kDate,      // Date
+		/** @draft ICU 2.4 */
         kDouble,    // double
+		/** @draft ICU 2.4 */
         kLong,      // long
+		/** @draft ICU 2.4 */
         kString,    // UnicodeString
-        kArray      // Formattable[]
-    };
+		/** @draft ICU 2.4 */
+        kArray,     // Formattable[]
+		/** @draft ICU 2.8 */
+ 		kInt64      // int64
+   };
 
     /**
      * Gets the data type of this Formattable object.
@@ -166,13 +179,19 @@ public:
      * @return    the long value of this object.
      * @stable ICU 2.0
      */ 
-    int32_t            getLong(void) const { return fValue.fLong; }
+    int32_t         getLong(void) const { return (int32_t)fValue.fInt64; }
+    /**
+     * Gets the int64 value of this object.
+     * @return    the int64 value of this object.
+     * @draft ICU 2.8
+     */ 
+    int64_t         getInt64(void) const { return fValue.fInt64; }
     /**
      * Gets the Date value of this object.
      * @return    the Date value of this object.
      * @stable ICU 2.0
      */ 
-    UDate            getDate(void) const { return fValue.fDate; }
+    UDate           getDate(void) const { return fValue.fDate; }
 
     /**
      * Gets the string value of this object.
@@ -226,6 +245,12 @@ public:
      * @stable ICU 2.0
      */ 
     void            setLong(int32_t l);
+    /**
+     * Sets the int64 value of this object.
+     * @param ll    the new int64 value to be set.
+     * @draft ICU 2.8
+     */ 
+    void            setInt64(int64_t ll);
     /**
      * Sets the Date value of this object.
      * @param d    the new Date value to be set.
@@ -293,12 +318,12 @@ private:
     union {
         UnicodeString*  fString;
         double          fDouble;
-        int32_t            fLong;
-        UDate            fDate;
+        int64_t         fInt64;
+        UDate           fDate;
         struct
         {
           Formattable*  fArray;
-          int32_t          fCount;
+          int32_t       fCount;
         }               fArrayAndCount;
     }                   fValue;
 
