@@ -1101,7 +1101,6 @@ zh_TW {
         "<\u9EA4<\u9F7E<\u9F49<\u9F98" }
 	}
     Countries { 
- Countries { 
         AF { "阿富汗" }
         AL { "阿爾巴尼亞" }
         DZ { "阿爾及利亞" }
