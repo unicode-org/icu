@@ -487,7 +487,8 @@ void UnicodeSetTest::TestAPI() {
 
     logln((UnicodeString)"a [3-10]: " + a);
     logln((UnicodeString)"b [7-15]: " + b);
-    c = a; c.addAll(b);
+    c = a;
+    c.addAll(b);
     UnicodeSet exp((UChar32)3,(UChar32)15);
     if (c == exp) {
         logln((UnicodeString)"c.set(a).add(b): " + c);
@@ -509,7 +510,8 @@ void UnicodeSetTest::TestAPI() {
     } else {
         errln((UnicodeString)"FAIL: c.complement() = " + c + ", expect " + exp);
     }
-    c = a; c.complementAll(b);
+    c = a;
+    c.complementAll(b);
     exp.set((UChar32)3,(UChar32)6);
     exp.add((UChar32)11,(UChar32) 15);
     if (c == exp) {
@@ -1074,7 +1076,7 @@ void UnicodeSetTest::TestInvalidCodePoint() {
         b = set.containsNone(start, end);
         b = set.containsSome(start, end);
 
-        int32_t index = set.indexOf(start);
+        /*int32_t index = set.indexOf(start);*/
         
         set.clear();
         set.add(start);
