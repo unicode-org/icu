@@ -8,6 +8,8 @@
 #define _INTLTESTNUMBERFORMAT
 
 
+#include <stdlib.h>
+
 #include "unicode/utypes.h"
 #include "intltest.h"
 

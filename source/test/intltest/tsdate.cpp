@@ -10,6 +10,7 @@
 #include "unicode/datefmt.h"
 #include "unicode/smpdtfmt.h"
 
+#include <stdlib.h>
 #include <math.h>
 
 const double IntlTestDateFormat::ONEYEAR = 365.25 * ONEDAY; // Approximate
@@ -202,7 +203,7 @@ double IntlTestDateFormat::randDouble()
     // Assume 8-bit (or larger) rand values.  Also assume
     // that the system rand() function is very poor, which it always is.
     double d=0.0;
-    int32_t i;
+    uint32_t i;
     char* poke = (char*)&d;
     do {
         for (i=0; i < sizeof(double); ++i)

@@ -338,7 +338,7 @@ TestChoiceFormat::TestComplexExample( void )
 
     delete form_A; delete form_A2; delete form_B; 
 
-    char* testPattern = "0#none|1#one|2#many";
+    const char* testPattern = "0#none|1#one|2#many";
     ChoiceFormat form_pat( testPattern, status );
     if (!chkstatus( status, "***  ChoiceFormat contructor( newPattern, status)" )) {
         delete fileform;

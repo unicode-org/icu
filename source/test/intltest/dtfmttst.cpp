@@ -85,8 +85,11 @@ void DateFormatTest::TestWallyWedel()
         cal->setTime(today, status);
         offset = cal->get(Calendar::ZONE_OFFSET, status) + cal->get(Calendar::DST_OFFSET, status);
         // logln(i + " " + ids[i] + " offset " + offset);
-        char* sign = "+";
-        if (offset < 0) { sign = "-"; offset = -offset; }
+        const char* sign = "+";
+        if (offset < 0) {
+            sign = "-";
+            offset = -offset;
+        }
         hours = offset/3600000;
         minutes = (offset%3600000)/60000;
         UnicodeString dstOffset = (UnicodeString)"" + sign + (hours < 10 ? "0" : "") +
@@ -679,7 +682,8 @@ DateFormatTest::TestBadInput135a()
   SimpleDateFormat* dateParse = new SimpleDateFormat(status);
   const char* s;
   UDate date;
-  int32_t PFLENGTH = sizeof(parseFormats)/sizeof(parseFormats[0]);
+  const uint32_t PFLENGTH = sizeof(parseFormats)/sizeof(parseFormats[0]);
+
   dateParse->applyPattern("d MMMM, yyyy");
   dateParse->adoptTimeZone(TimeZone::createDefault());
   s = "not parseable";
@@ -695,7 +699,7 @@ DateFormatTest::TestBadInput135a()
     logln((UnicodeString)"Exception during parse: " + (int32_t)status);
   status = U_ZERO_ERROR;
   //}
-  for (int32_t i = 0; i < sizeof(inputStrings)/sizeof(inputStrings[0]); i += (PFLENGTH + 1)) {
+  for (uint32_t i = 0; i < sizeof(inputStrings)/sizeof(inputStrings[0]); i += (PFLENGTH + 1)) {
     ParsePosition parsePosition(0);
     UnicodeString s( inputStrings[i]);
     for (int32_t index = 0; index < PFLENGTH;++index) {
@@ -706,33 +710,39 @@ DateFormatTest::TestBadInput135a()
       parsePosition.setIndex(0);
       date = dateParse->parse(s, parsePosition);
       if (parsePosition.getIndex() != 0) {
-    UnicodeString s1, s2;
-    s.extract(0, parsePosition.getIndex(), s1);
-    s.extract(parsePosition.getIndex(), s.length(), s2);
-    if (date == 0) errln((UnicodeString)"ERROR: null result fmt=\"" +
-                 parseFormats[index] +
-                 "\" pos=" + parsePosition.getIndex() + " " +
-                 s1 + "|" + s2);
-    else {
-      UnicodeString result; ((DateFormat*)dateParse)->format(date, result);
-      logln((UnicodeString)"Parsed \"" + s + "\" using \"" + dateParse->toPattern(thePat) + "\" to: " + result);
-      if (expected == 0) errln((UnicodeString)"FAIL: Expected parse failure");
-      else if (!(result == expected)) errln(UnicodeString("FAIL: Expected ") + expected);
-    }
+        UnicodeString s1, s2;
+        s.extract(0, parsePosition.getIndex(), s1);
+        s.extract(parsePosition.getIndex(), s.length(), s2);
+        if (date == 0) {
+          errln((UnicodeString)"ERROR: null result fmt=\"" +
+                     parseFormats[index] +
+                     "\" pos=" + parsePosition.getIndex() + " " +
+                     s1 + "|" + s2);
+        }
+        else {
+          UnicodeString result;
+          ((DateFormat*)dateParse)->format(date, result);
+          logln((UnicodeString)"Parsed \"" + s + "\" using \"" + dateParse->toPattern(thePat) + "\" to: " + result);
+          if (expected == 0)
+            errln((UnicodeString)"FAIL: Expected parse failure");
+          else if (!(result == expected))
+            errln(UnicodeString("FAIL: Expected ") + expected);
+        }
       }
-      else {
-    if (expected != 0) errln(UnicodeString("FAIL: Expected ") + expected + " from \"" +
-                 s + "\" with \"" + dateParse->toPattern(thePat) + "\"");
+      else if (expected != 0) {
+        errln(UnicodeString("FAIL: Expected ") + expected + " from \"" +
+                     s + "\" with \"" + dateParse->toPattern(thePat) + "\"");
       }
       //}
       //catch(Exception ex) {
       if (U_FAILURE(status))
-    errln((UnicodeString)"An exception was thrown during parse: " + (int32_t)status);
+        errln((UnicodeString)"An exception was thrown during parse: " + (int32_t)status);
       //}
     }
   }
   delete dateParse;
-  if (U_FAILURE(status)) errln((UnicodeString)"FAIL: UErrorCode received during test: " + (int32_t)status);
+  if (U_FAILURE(status))
+    errln((UnicodeString)"FAIL: UErrorCode received during test: " + (int32_t)status);
 }
  
 // -------------------------------------
