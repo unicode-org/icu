@@ -46,7 +46,7 @@ static GSList *appList = NULL;
 GtkWidget *newSample(const gchar *fileName);
 void       closeSample(GtkWidget *sample);
 
-void showabout(GtkWidget *widget, gpointer data)
+void showabout(GtkWidget */*widget*/, gpointer /*data*/)
 {
     GtkWidget *aboutBox;
     const gchar *writtenBy[] = {
@@ -64,7 +64,7 @@ void showabout(GtkWidget *widget, gpointer data)
     gtk_widget_show(aboutBox);
 }
 
-void notimpl(GtkObject *object, gpointer data)
+void notimpl(GtkObject */*object*/, gpointer /*data*/)
 {
     gnome_ok_dialog("Not implemented...");
 }
@@ -77,7 +77,7 @@ gchar *prettyTitle(const gchar *path)
   return title;
 }
 
-void openOK(GtkObject *object, gpointer data)
+void openOK(GtkObject */*object*/, gpointer data)
 {
   GtkFileSelection *fileselection = GTK_FILE_SELECTION(data);
   GtkWidget *app = GTK_WIDGET(gtk_object_get_data(GTK_OBJECT(fileselection), "app"));
@@ -110,7 +110,7 @@ void openOK(GtkObject *object, gpointer data)
   g_free(fileName);
 }
 
-void openfile(GtkObject *object, gpointer data)
+void openfile(GtkObject */*object*/, gpointer data)
 {
   GtkWidget *app = GTK_WIDGET(data);
   GtkWidget *fileselection;
@@ -142,29 +142,29 @@ void openfile(GtkObject *object, gpointer data)
   gtk_main();
 }
 
-void newapp(GtkObject *object, gpointer data)
+void newapp(GtkObject */*object*/, gpointer /*data*/)
 {
   GtkWidget *app = newSample("Sample.txt");
 
   gtk_widget_show_all(app);
 }
 
-void closeapp(GtkWidget *widget, gpointer data)
+void closeapp(GtkWidget */*widget*/, gpointer data)
 {
   GtkWidget *app = GTK_WIDGET(data);
 
   closeSample(app);
 }
 
-void shutdown(GtkObject *object, gpointer data)
+void shutdown(GtkObject */*object*/, gpointer /*data*/)
 {
     gtk_main_quit();
 }
 
 GnomeUIInfo fileMenu[] =
 {
-  GNOMEUIINFO_MENU_NEW_ITEM("_New Sample",
-			    "Create a new Gnome Layout Sample",
+  GNOMEUIINFO_MENU_NEW_ITEM((gchar *) "_New Sample",
+			    (gchar *) "Create a new Gnome Layout Sample",
 			    newapp, NULL),
 
   GNOMEUIINFO_MENU_OPEN_ITEM(openfile, NULL),
@@ -183,12 +183,12 @@ GnomeUIInfo helpMenu[] =
 
 GnomeUIInfo mainMenu[] =
 {
-    GNOMEUIINFO_SUBTREE(N_("File"), fileMenu),
-    GNOMEUIINFO_SUBTREE(N_("Help"), helpMenu),
+    GNOMEUIINFO_SUBTREE(N_((gchar *) "File"), fileMenu),
+    GNOMEUIINFO_SUBTREE(N_((gchar *) "Help"), helpMenu),
     GNOMEUIINFO_END
 };
 
-gint eventDelete(GtkWidget *widget, GdkEvent *event, gpointer data)
+gint eventDelete(GtkWidget *widget, GdkEvent */*event*/, gpointer /*data*/)
 {
   closeSample(widget);
 
@@ -196,7 +196,7 @@ gint eventDelete(GtkWidget *widget, GdkEvent *event, gpointer data)
   return TRUE;
 }
 
-gint eventConfigure(GtkWidget *widget, GdkEventConfigure *event, Context *context)
+gint eventConfigure(GtkWidget */*widget*/, GdkEventConfigure *event, Context *context)
 {
   if (context->paragraph != NULL) {
     context->width  = event->width;
@@ -210,7 +210,7 @@ gint eventConfigure(GtkWidget *widget, GdkEventConfigure *event, Context *contex
   return TRUE;
 }
 
-gint eventExpose(GtkWidget *widget, GdkEvent *event, Context *context)
+gint eventExpose(GtkWidget *widget, GdkEvent */*event*/, Context *context)
 {
   if (context->paragraph != NULL) {
     gint maxLines = context->paragraph->getLineCount() - 1;

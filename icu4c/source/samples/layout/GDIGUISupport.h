@@ -20,7 +20,7 @@ class GDIGUISupport : public GUISupport
 {
 public:
     GDIGUISupport() {};
-    ~GDIGUISupport() {};
+    virtual ~GDIGUISupport() {};
 
     virtual void postErrorMessage(const char *message, const char *title);
 };

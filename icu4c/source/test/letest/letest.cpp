@@ -21,7 +21,7 @@
 
 U_NAMESPACE_USE
 
-le_bool compareResults(le_int32 testNumber, TestResult *expected, TestResult *actual)
+le_bool compareResults(le_int32 /*testNumber*/, TestResult *expected, TestResult *actual)
 {
     /* NOTE: we'll stop on the first failure 'cause once there's one error, it may cascade... */
     if (actual->glyphCount != expected->glyphCount) {
@@ -83,7 +83,7 @@ static void checkFontVersion(PortableFontInstance &fontInstance, const char *tes
     }
 }
 
-int main(int argc, char *argv[])
+int main(int /*argc*/, char */*argv[]*/)
 {
     le_int32 failures = 0;
 

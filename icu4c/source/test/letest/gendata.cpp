@@ -30,17 +30,17 @@ U_NAMESPACE_USE
 
 struct TestInput
 {
-    char      *fontName;
-    LEUnicode *text;
-    le_int32   textLength;
-    le_int32   scriptCode;
-    le_bool    rightToLeft;
+    const char *fontName;
+    LEUnicode  *text;
+    le_int32    textLength;
+    le_int32    scriptCode;
+    le_bool     rightToLeft;
 };
 
 /* 
  * FIXME: should use the output file name and the current date.
  */
-char *header =
+const char *header =
     "/*\n"
     " *******************************************************************************\n"
     " *\n"
@@ -267,7 +267,7 @@ TestInput testInputs[] = {
 
 le_int32 testCount = TEST_COUNT;
 
-void dumpShorts(FILE *file, char *label, le_int32 id, le_uint16 *shorts, le_int32 count) {
+void dumpShorts(FILE *file, const char *label, le_int32 id, le_uint16 *shorts, le_int32 count) {
     char lineBuffer[8 * 8 + 2];
     le_int32 bufp = 0;
 
@@ -290,7 +290,7 @@ void dumpShorts(FILE *file, char *label, le_int32 id, le_uint16 *shorts, le_int3
     fprintf(file, "};\n\n");
 }
 
-void dumpLongs(FILE *file, char *label, le_int32 id, le_int32 *longs, le_int32 count) {
+void dumpLongs(FILE *file, const char *label, le_int32 id, le_int32 *longs, le_int32 count) {
     char lineBuffer[8 * 12 + 2];
     le_int32 bufp = 0;
 
@@ -313,7 +313,7 @@ void dumpLongs(FILE *file, char *label, le_int32 id, le_int32 *longs, le_int32 c
     fprintf(file, "};\n\n");
 }
 
-void dumpFloats(FILE *file, char *label, le_int32 id, float *floats, le_int32 count) {
+void dumpFloats(FILE *file, const char *label, le_int32 id, float *floats, le_int32 count) {
     char lineBuffer[8 * 16 + 2];
     le_int32 bufp = 0;
 
@@ -350,13 +350,13 @@ const char *getShortName(le_int32 scriptCode)
     return shortName;
 }
 
-int main(int argc, char *argv[])
+int main(int /*argc*/, char *argv[])
 {
     le_int32 test;
     FILE *outputFile = fopen(argv[1], "w");
     time_t now = time(NULL);
     struct tm *local = localtime(&now);
-    char *tmFormat = "%m/%d/%Y %I:%M:%S %p %Z";
+    const char *tmFormat = "%m/%d/%Y %I:%M:%S %p %Z";
     char  tmString[64];
 
     strftime(tmString, 64, tmFormat, local);
@@ -373,7 +373,7 @@ int main(int argc, char *argv[])
 
         const char *nameString = fontInstance.getNameString(NAME_VERSION_STRING, PLATFORM_MACINTOSH, MACINTOSH_ROMAN, MACINTOSH_ENGLISH);
 
-        fprintf(outputFile, "char *fontVersionString%d = \"%s\";\n", test, nameString);
+        fprintf(outputFile, "const char *fontVersionString%d = \"%s\";\n", test, nameString);
         fprintf(outputFile, "le_uint32 fontChecksum%d = 0x%8.8X;\n\n", test, fontInstance.getFontChecksum());
 
         fontInstance.deleteNameString(nameString);
