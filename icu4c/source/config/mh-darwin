@@ -4,7 +4,7 @@
 ## Copyright (c) 1999-2003, International Business Machines Corporation and
 ## others. All Rights Reserved.
 ##
-## $Id: mh-darwin,v 1.28 2003/08/08 23:53:43 grhoten-oss Exp $
+## $Id: mh-darwin,v 1.29 2003/10/03 00:51:29 srl Exp $
 
 ## Flags for position independent code
 SHAREDLIBCFLAGS = -dynamic
@@ -57,7 +57,7 @@ MIDDLE_SO_TARGET = $(basename $(SO_TARGET)).$(SO_TARGET_VERSION_MAJOR).$(SO)
 ## Dependency rules
 %.d : $(srcdir)/%.c
 	@echo "generating dependency information for $<"
-	@$(GEN_DEPS.c) $< -o $@
+	@$(GEN_DEPS.c) $< > /dev/null
 	@mv $@ $@~
 	@echo -n "$@ " > $@
 	@cat < $@~ >> $@
@@ -65,9 +65,8 @@ MIDDLE_SO_TARGET = $(basename $(SO_TARGET)).$(SO_TARGET_VERSION_MAJOR).$(SO)
 
 %.d : $(srcdir)/%.cpp
 	@echo "generating dependency information for $<"
-	@$(GEN_DEPS.cc) $< -o $@
+	@$(GEN_DEPS.cc) $< >/dev/null
 	@mv $@ $@~
-	@( echo '/\.[ch]$$' ; echo '+,$$d' ; echo "wq" ) | ed $@~ 2>/dev/null >/dev/null || exit 0
 	@echo -n "$@ " > $@
 	@cat < $@~ >> $@
 	@-rm $@~
