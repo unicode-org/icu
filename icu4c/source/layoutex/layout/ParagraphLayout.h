@@ -183,7 +183,7 @@ public:
      * a table which maps indices into the glyph array to indices into
      * the original character array which was used to create the paragraph.
      *
-     * These objects are only created by <code>ParagraphLayout::Line<code> objects,
+     * These objects are only created by <code>ParagraphLayout::Line</code> objects,
      * so their constructors and destructors are private.
      *
      * @see ParagraphLayout::Line
