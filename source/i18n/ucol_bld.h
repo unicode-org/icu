@@ -38,7 +38,7 @@
 #include "unicode/unistr.h"
 #include "unicode/normlzr.h"
 
-
+U_CFUNC
 UCATableHeader *ucol_assembleTailoringTable(UColTokenParser *src, UErrorCode *status);
 
 typedef struct {

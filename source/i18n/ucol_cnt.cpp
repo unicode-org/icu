@@ -22,6 +22,8 @@
 #include "cmemory.h"
 #include "unicode/uchar.h"
 
+U_NAMESPACE_BEGIN
+
 void uprv_growTable(ContractionTable *tbl, UErrorCode *status) {
     if(tbl->position == tbl->size) {
         uint32_t *newData = (uint32_t *)realloc(tbl->CEs, 2*tbl->size*sizeof(uint32_t));
@@ -457,3 +459,4 @@ uint32_t uprv_cnttab_changeContraction(CntTable *table, uint32_t element, UChar 
     }
 }
 
+U_NAMESPACE_END

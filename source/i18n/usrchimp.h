@@ -90,6 +90,7 @@ struct UStringSearch {
 * @param status error status if any
 * @return TRUE if an exact match is found, FALSE otherwise
 */
+U_CFUNC
 UBool usearch_handleNextExact(UStringSearch *strsrch, UErrorCode *status);
 
 /**
@@ -100,6 +101,7 @@ UBool usearch_handleNextExact(UStringSearch *strsrch, UErrorCode *status);
 * @param status error status if any
 * @return TRUE if a canonical match is found, FALSE otherwise
 */
+U_CFUNC
 UBool usearch_handleNextCanonical(UStringSearch *strsrch, UErrorCode *status);
 
 /**
@@ -108,6 +110,7 @@ UBool usearch_handleNextCanonical(UStringSearch *strsrch, UErrorCode *status);
 * @param strsrch string search data
 * @param status error status if any
 */
+U_CFUNC
 UBool usearch_handlePreviousExact(UStringSearch *strsrch, UErrorCode *status);
 
 /**
@@ -118,6 +121,7 @@ UBool usearch_handlePreviousExact(UStringSearch *strsrch, UErrorCode *status);
 * @param status error status if any
 * @return TRUE if a canonical match is found, FALSE otherwise
 */
+U_CFUNC
 UBool usearch_handlePreviousCanonical(UStringSearch *strsrch, 
                                       UErrorCode    *status);
 
