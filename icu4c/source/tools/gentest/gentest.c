@@ -113,7 +113,8 @@ createData(const char* outputDirectory) {
 
 
     if(dataLength!=(long)size) {
-        fprintf(stderr, "gentest: data length %ld != calculated size %lu\n", dataLength, size);
+        fprintf(stderr, "gentest: data length %ld != calculated size %lu\n",
+            dataLength, (unsigned long)size);
         exit(U_INTERNAL_PROGRAM_ERROR);
     }
 }
