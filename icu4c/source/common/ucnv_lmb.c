@@ -124,9 +124,6 @@ static const char * OptGroupByteToCPName[ULMBCS_CTRLOFFSET] = {
 };
 
 
-
-
-
 /* map UNICODE ranges to converter indexes (or special values) */
 
 ulmbcs_grp_t FindLMBCSUniRange(UChar uniChar, UErrorCode*    err);
@@ -139,16 +136,79 @@ struct _UniLMBCSGrpMap
 } UniLMBCSGrpMap[]
 =
 {
-   { 0x0001, 0x001F,  ULMBCS_GRP_CTRL },
-   { 0x0080, 0x009F,  ULMBCS_GRP_CTRL },
-   { 0x00A0, 0x0113,  ULMBCS_AMBIGUOUS_SBCS },
-   { 0x0115, 0x0120,  ULMBCS_AMBIGUOUS_SBCS }, 
-   { 0x0120, 0x012B,  ULMBCS_GRP_EXCEPT },
-   { 0x012C, 0x01CD,  ULMBCS_AMBIGUOUS_SBCS },
-   { 0x01CE, 0x01CE,  ULMBCS_AMBIGUOUS_MBCS },
-   { 0x01CF, 0x1FFF,  ULMBCS_AMBIGUOUS_SBCS },
-   { 0x2000, 0xFFFD,  ULMBCS_AMBIGUOUS_MBCS },
-   { 0xFFFF, 0xFFFF }
+
+   {0x0001, 0x001F,  ULMBCS_GRP_CTRL},
+   {0x0080, 0x009F,  ULMBCS_GRP_CTRL},
+   {0x00A0, 0x01CD,  ULMBCS_AMBIGUOUS_SBCS},
+   {0x01CE, 0x01CE,  ULMBCS_GRP_TW }, 
+   {0x01CF, 0x02B9,  ULMBCS_AMBIGUOUS_SBCS},
+   {0x02BA, 0x02BA,  ULMBCS_GRP_CN},
+   {0x02BC, 0x02C8,  ULMBCS_AMBIGUOUS_SBCS},
+   {0x02C9, 0x02D0,  ULMBCS_AMBIGUOUS_MBCS},
+   {0x02D8, 0x02DD,  ULMBCS_AMBIGUOUS_SBCS},
+   {0x0384, 0x03CE,  ULMBCS_AMBIGUOUS_SBCS},
+   {0x0400, 0x044E,  ULMBCS_GRP_RU},
+   {0x044F, 0x044F,  ULMBCS_AMBIGUOUS_MBCS},
+   {0x0450, 0x0491,  ULMBCS_GRP_RU},
+   {0x05B0, 0x05F2,  ULMBCS_GRP_HE},
+   {0x060C, 0x06AF,  ULMBCS_GRP_AR}, 
+   {0x0E01, 0x0E5B,  ULMBCS_GRP_TH},
+   {0x200C, 0x200F,  ULMBCS_AMBIGUOUS_SBCS},
+   {0x2010, 0x2010,  ULMBCS_AMBIGUOUS_MBCS},
+   {0x2013, 0x2015,  ULMBCS_AMBIGUOUS_SBCS},
+   {0x2016, 0x2016,  ULMBCS_AMBIGUOUS_MBCS},
+   {0x2017, 0x2024,  ULMBCS_AMBIGUOUS_SBCS},
+   {0x2025, 0x2025,  ULMBCS_AMBIGUOUS_MBCS},
+   {0x2026, 0x2026,  ULMBCS_AMBIGUOUS_SBCS},
+   {0x2027, 0x2027,  ULMBCS_GRP_CN},
+   {0x2030, 0x2033,  ULMBCS_AMBIGUOUS_SBCS},
+   {0x2035, 0x2035,  ULMBCS_AMBIGUOUS_MBCS},
+   {0x2039, 0x203A,  ULMBCS_AMBIGUOUS_SBCS},
+   {0x203B, 0x203B,  ULMBCS_AMBIGUOUS_MBCS},
+   {0x2074, 0x2074,  ULMBCS_GRP_KO},
+   {0x207F, 0x207F,  ULMBCS_GRP_EXCEPT},
+   {0x2081, 0x2084,  ULMBCS_GRP_KO},
+   {0x20A4, 0x20AC,  ULMBCS_AMBIGUOUS_SBCS},
+   {0x2103, 0x2109,  ULMBCS_AMBIGUOUS_MBCS},
+   {0x2111, 0x2126,  ULMBCS_AMBIGUOUS_SBCS},
+   {0x212B, 0x212B,  ULMBCS_AMBIGUOUS_MBCS},
+   {0x2135, 0x2135,  ULMBCS_AMBIGUOUS_SBCS},
+   {0x2153, 0x2154,  ULMBCS_GRP_KO},
+   {0x215B, 0x215E,  ULMBCS_GRP_EXCEPT},
+   {0x2160, 0x2179,  ULMBCS_AMBIGUOUS_MBCS},
+   {0x2190, 0x2195,  ULMBCS_GRP_EXCEPT},
+   {0x2196, 0x2199,  ULMBCS_AMBIGUOUS_MBCS},
+   {0x21A8, 0x21A8,  ULMBCS_GRP_EXCEPT},
+   {0x21B8, 0x21B9,  ULMBCS_GRP_CN},
+   {0x21D0, 0x21D5,  ULMBCS_GRP_EXCEPT},
+   {0x21E7, 0x21E7,  ULMBCS_GRP_CN},
+   {0x2200, 0x220B,  ULMBCS_GRP_EXCEPT},
+   {0x220F, 0x2215,  ULMBCS_AMBIGUOUS_MBCS},
+   {0x2219, 0x2220,  ULMBCS_GRP_EXCEPT},
+   {0x2223, 0x2228,  ULMBCS_AMBIGUOUS_MBCS},
+   {0x2229, 0x222B,  ULMBCS_GRP_EXCEPT},
+   {0x222C, 0x223D,  ULMBCS_AMBIGUOUS_MBCS},
+   {0x2245, 0x2248,  ULMBCS_GRP_EXCEPT},
+   {0x224C, 0x224C,  ULMBCS_GRP_TW},
+   {0x2252, 0x2252,  ULMBCS_AMBIGUOUS_MBCS},
+   {0x2260, 0x2265,  ULMBCS_GRP_EXCEPT},
+   {0x2266, 0x226F,  ULMBCS_AMBIGUOUS_MBCS},
+   {0x2282, 0x2297,  ULMBCS_GRP_EXCEPT},
+   {0x2299, 0x22BF,  ULMBCS_AMBIGUOUS_MBCS},
+   {0x22C0, 0x22C0,  ULMBCS_GRP_EXCEPT},
+   {0x2310, 0x2310,  ULMBCS_GRP_EXCEPT},
+   {0x2312, 0x2312,  ULMBCS_AMBIGUOUS_MBCS},
+   {0x2318, 0x2321,  ULMBCS_GRP_EXCEPT},
+   {0x2318, 0x2321,  ULMBCS_GRP_CN},
+   {0x2460, 0x24E9,  ULMBCS_AMBIGUOUS_MBCS},
+   {0x2500, 0x2500,  ULMBCS_AMBIGUOUS_SBCS},
+   {0x2501, 0x2501,  ULMBCS_AMBIGUOUS_MBCS},
+   {0x2502, 0x2502,  ULMBCS_AMBIGUOUS_SBCS},
+   {0x2503, 0x2503,  ULMBCS_AMBIGUOUS_MBCS},
+   {0x2504, 0x2505,  ULMBCS_GRP_TW},
+   {0x2506, 0xFFFE,  ULMBCS_AMBIGUOUS_MBCS},
+    {0xFFFF, 0xFFFF}
+ 
 };
    
 ulmbcs_grp_t FindLMBCSUniRange(UChar uniChar, UErrorCode*    err)
@@ -172,33 +232,100 @@ ulmbcs_grp_t FindLMBCSUniRange(UChar uniChar, UErrorCode*    err)
    return ULMBCS_GRP_UNICODE;
 }
    
-#if 0 
-/* JSGTODO (by Brendan?) some incomplete source data from Brendan to be integrated */
 
-         0xFE30,  ULMBCS_GRP_JA,       ULMBCS_FLAGS_CONTINUE,
-         0xFA2E,  ULMBCS_GRP_UNICODE,  ULMBCS_FLAGS_UNICODE,
-         0xF8FF,  ULMBCS_GRP_JA,       ULMBCS_FLAGS_CONTINUE,
-         0xD7FF,  ULMBCS_GRP_UNICODE,  ULMBCS_FLAGS_UNICODE,
-         0xABFF,  ULMBCS_GRP_KO,       ULMBCS_FLAGS_UNICODE,
-         0x9FFF,  ULMBCS_GRP_UNICODE,  ULMBCS_FLAGS_UNICODE,
-         0x31FF,  ULMBCS_GRP_JA,       ULMBCS_FLAGS_CONTINUE,
-         0x318F,  ULMBCS_GRP_CN,       ULMBCS_FLAGS_CONTINUE,
-         0x3130,  ULMBCS_GRP_KO,       ULMBCS_FLAGS_UNICODE,
-         0x3100,  ULMBCS_GRP_CN,       ULMBCS_FLAGS_CONTINUE,
-         0x313F,  ULMBCS_GRP_JA,       ULMBCS_FLAGS_UNICODE,
-         0x2FFF,  ULMBCS_GRP_JA,       ULMBCS_FLAGS_CONTINUE,
-         0x2714,  ULMBCS_GRP_UNICODE,  ULMBCS_FLAGS_UNICODE,
-         0x2000,  ULMBCS_GRP_L1,       ULMBCS_FLAGS_CONTINUE,
-         0x0E5C,  ULMBCS_GRP_UNICODE,  ULMBCS_FLAGS_UNICODE,
-         0x0E00,  ULMBCS_GRP_TH,       ULMBCS_FLAGS_UNICODE,
-         0x06FF,  ULMBCS_GRP_UNICODE,  ULMBCS_FLAGS_UNICODE,
-         0x0600,  ULMBCS_GRP_AR,       ULMBCS_FLAGS_UNICODE,
-         0x0500,  ULMBCS_GRP_HE,       ULMBCS_FLAGS_UNICODE,
-         0x0400,  ULMBCS_GRP_RU,       ULMBCS_FLAGS_UNICODE,
-         0x0300,  ULMBCS_GRP_GR,       ULMBCS_FLAGS_UNICODE,
-         0x001F,  ULMBCS_GRP_L1,       ULMBCS_FLAGS_CONTINUE,
-         0x0000,  ULMBCS_GRP_CTRL,     ULMBCS_FLAGS_UNICODE
-#endif
+/**************************************************
+  This table maps locale ID's to LMBCS opt groups.
+  The default return is group 0x01. Note that for
+  performance reasons, the table is sorted in
+  increasing alphabetic order, with the notable
+  exception of zh_TW. This is to force the check
+  for Traditonal Chinese before dropping back to
+  Simplified.
+
+  Note too that the Latin-1 groups have been
+  commented out because it's the default, and
+  this shortens the table, allowing a serial
+  search to go quickly.
+ *************************************************/
+
+struct _LocaleLMBCSGrpMap
+{
+   char         *LocaleID;
+   ulmbcs_grp_t OptGroup;
+}  LocaleLMBCSGrpMap[] =
+{
+   "ar", ULMBCS_GRP_AR,
+   "be", ULMBCS_GRP_RU,
+   "bg", ULMBCS_GRP_L2,
+   /* "ca", ULMBCS_GRP_L1, */
+   "cs", ULMBCS_GRP_L2,
+   /* "da", ULMBCS_GRP_L1, */
+   /* "de", ULMBCS_GRP_L1, */
+   "el", ULMBCS_GRP_GR,
+   /* "en", ULMBCS_GRP_L1, */
+   /* "es", ULMBCS_GRP_L1, */
+   /* "et", ULMBCS_GRP_L1, */
+   /* "fi", ULMBCS_GRP_L1, */
+   /* "fr", ULMBCS_GRP_L1, */
+   "he", ULMBCS_GRP_HE,
+   "hu", ULMBCS_GRP_L2,
+   /* "is", ULMBCS_GRP_L1, */
+   /* "it", ULMBCS_GRP_L1, */
+   "iw", ULMBCS_GRP_HE,
+   "ja", ULMBCS_GRP_JA,
+   "ko", ULMBCS_GRP_KO,
+   /* "lt", ULMBCS_GRP_L1, */
+   /* "lv", ULMBCS_GRP_L1, */
+   "mk", ULMBCS_GRP_RU,
+   /* "nl", ULMBCS_GRP_L1, */
+   /* "no", ULMBCS_GRP_L1, */
+   "pl", ULMBCS_GRP_L2,
+   /* "pt", ULMBCS_GRP_L1, */
+   "ro", ULMBCS_GRP_L2,
+   "ru", ULMBCS_GRP_RU,
+   "sh", ULMBCS_GRP_L2,
+   "sk", ULMBCS_GRP_L2,
+   "sl", ULMBCS_GRP_L2,
+   "sq", ULMBCS_GRP_L2,
+   "sr", ULMBCS_GRP_RU,
+   /* "sv", ULMBCS_GRP_L1, */
+   "th", ULMBCS_GRP_TH,
+   "tr", ULMBCS_GRP_TR,
+   "uk", ULMBCS_GRP_RU,
+   /* "vi", ULMBCS_GRP_L1, */
+   "zh_TW", ULMBCS_GRP_TW,
+   "zh", ULMBCS_GRP_CN,
+   NULL, ULMBCS_GRP_L1
+};
+        
+
+        
+ulmbcs_grp_t FindLMBCSLocale(const char *LocaleID)
+{
+   struct _LocaleLMBCSGrpMap *pTable = LocaleLMBCSGrpMap;
+
+   if ((!LocaleID) || (!*LocaleID)) 
+   {
+      return 0;
+   }
+
+   while (pTable->LocaleID)
+   {
+      if (*pTable->LocaleID == *LocaleID) /* Check only first char for speed */
+      {
+	 /* First char matches - check whole name, for entry-length */
+         if (strncmp(pTable->LocaleID, LocaleID, strlen(pTable->LocaleID)) == 0)
+	    return pTable->OptGroup;
+      }
+      else
+      if (*pTable->LocaleID > *LocaleID) /* Sorted alphabetically - exit */
+         break;
+      pTable++;
+   }
+   return ULMBCS_GRP_L1;
+}
+
+
 
 
 int LMBCSConversionWorker (
@@ -364,14 +491,15 @@ void _LMBCSFromUnicode(UConverter*     _this,
                               extraInfo, group, pLMBCS, &uniChar, 
                               &lastConverterIndex, groups_tried, err);
 
-            MyAssert(bytes_written); /* table should never return unusable group */
+            // MyAssert(bytes_written); /* table should never return unusable group */
+            // JSGTODO: table may be more usable as 'guesses' - remove requirement for match
 
          }
-         else  /* the ambiguous group cases */
+         if (!bytes_written)    /* the ambiguous group cases */
          {
             memset(groups_tried, 0, sizeof(groups_tried));
 
-            /* check for non-default optimization group */
+         /* check for non-default optimization group */
             if (extraInfo->OptGroup != 1 
                   && ULMBCS_AMBIGUOUS_MATCH(group, extraInfo->OptGroup)) 
             {
@@ -391,12 +519,12 @@ void _LMBCSFromUnicode(UConverter*     _this,
             /* check for last optimization group used for this string */
             if (!bytes_written 
                 && (lastConverterIndex) 
-                && (ULMBCS_AMBIGUOUS_MATCH(group, lastConverterIndex)))
+               && (ULMBCS_AMBIGUOUS_MATCH(group, lastConverterIndex)))
                {
                   bytes_written = LMBCSConversionWorker (extraInfo, 
                      lastConverterIndex, pLMBCS, &uniChar, 
                      &lastConverterIndex, groups_tried, err);
-              
+           
                }
             if (!bytes_written)
             {
@@ -405,54 +533,49 @@ void _LMBCSFromUnicode(UConverter*     _this,
                ulmbcs_grp_t grp_end;  
                ulmbcs_grp_t grp_ix;
                grp_start = (group == ULMBCS_AMBIGUOUS_MBCS) 
-                           ? ULMBCS_DOUBLEOPTGROUP 
-                           :  ULMBCS_GRP_L1;
+                        ? ULMBCS_DOUBLEOPTGROUP 
+                        :  ULMBCS_GRP_L1;
                grp_end = (group == ULMBCS_AMBIGUOUS_MBCS) 
-                           ? ULMBCS_GRP_LAST-1 
-                           :  ULMBCS_GRP_TH;
-
+                        ? ULMBCS_GRP_LAST-1 
+                        :  ULMBCS_GRP_TH;
                for (grp_ix = grp_start;
-                      grp_ix <= grp_end && !bytes_written; 
-                       grp_ix++)
+                   grp_ix <= grp_end && !bytes_written; 
+                    grp_ix++)
                {
                   if (extraInfo->OptGrpConverter [grp_ix] && !groups_tried [grp_ix])
                   {
                      bytes_written = LMBCSConversionWorker (extraInfo, 
-                          grp_ix, pLMBCS, &uniChar, 
-                          &lastConverterIndex, groups_tried, err);
+                       grp_ix, pLMBCS, &uniChar, 
+                       &lastConverterIndex, groups_tried, err);
                   }
                }
-
-                  /* a final conversion fallback for sbcs to the exceptions group */
-                  if (!bytes_written && group == ULMBCS_AMBIGUOUS_SBCS)
+                /* a final conversion fallback for sbcs to the exceptions group */
+               if (!bytes_written && group == ULMBCS_AMBIGUOUS_SBCS)
                {
                   bytes_written = LMBCSConversionWorker (extraInfo, 
                      ULMBCS_GRP_EXCEPT, pLMBCS, &uniChar, 
                      &lastConverterIndex, groups_tried, err);
                }
-               /* all of our strategies failed. Fallback to Unicode. Consider adding these to table */
-
-               if (!bytes_written)
-               {
-                              /* encode into LMBCS Unicode range */
-                  uint8_t LowCh = (uint8_t) uniChar;
-                  uint8_t HighCh  = (uint8_t)(uniChar >> 8);
-
-                  *pLMBCS++ = ULMBCS_GRP_UNICODE;
-
-                  if (LowCh == 0)
-                  {
-                     *pLMBCS++ = ULMBCS_UNICOMPATZERO;
-                     *pLMBCS++ = HighCh;
-                  }
-                  else
-                  {
-                     *pLMBCS++ = HighCh;
-                     *pLMBCS++ = LowCh;
-                  }
+            }
+            /* all of our strategies failed. Fallback to Unicode. Consider adding these to table */
+            if (!bytes_written)
+            {
+                           /* encode into LMBCS Unicode range */
+                uint8_t LowCh = (uint8_t) uniChar;
+                uint8_t HighCh  = (uint8_t)(uniChar >> 8);
+                *pLMBCS++ = ULMBCS_GRP_UNICODE;
+                if (LowCh == 0)
+                {
+                   *pLMBCS++ = ULMBCS_UNICOMPATZERO;
+                   *pLMBCS++ = HighCh;
+                }
+                else
+                {
+                   *pLMBCS++ = HighCh;
+                   *pLMBCS++ = LowCh;
+                }
                
-                  bytes_written = pLMBCS - LMBCS;
-               }
+                bytes_written = pLMBCS - LMBCS;
             }
          }
       }
@@ -852,6 +975,7 @@ static void _LMBCSOpenWorker(UConverter*  _this,
                        )
 {
    UConverterDataLMBCS * extraInfo = uprv_malloc (sizeof (UConverterDataLMBCS));
+   
 
    if(extraInfo != NULL)
     {
@@ -869,8 +993,9 @@ static void _LMBCSOpenWorker(UConverter*  _this,
        }
 
        extraInfo->OptGroup = OptGroup;
-        /* JSGTODO: add LocaleConverterIndex logic here */
-       extraInfo->localeConverterIndex = 0;
+       
+       extraInfo->localeConverterIndex = FindLMBCSLocale(locale);
+                
    } 
    else
    {
@@ -935,8 +1060,8 @@ DEFINE_LMBCS_OPEN(19)
 };\
 const UConverterStaticData _LMBCSStaticData##n={\
   sizeof(UConverterStaticData),\
-"LMBCS_" #n,\
-    0, UCNV_IBM, UCNV_LMBCS_1, 1, 1,\
+ "LMBCS-"  #n,\
+    0, UCNV_IBM, UCNV_LMBCS_##n, 1, 1,\
     1, { 0x3f, 0, 0, 0 } \
 };\
 const UConverterSharedData _LMBCSData##n={\
