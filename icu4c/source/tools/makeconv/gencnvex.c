@@ -213,6 +213,7 @@ CnvExtWrite(NewConverter *cnvData, const UConverterStaticData *staticData,
     udata_writeBlock(pData, extData->stage3, extData->stage3Top*2);
     udata_writeBlock(pData, extData->stage3b, extData->stage3bTop*4);
 
+#if 0
     {
         int32_t i, j;
 
@@ -253,6 +254,7 @@ CnvExtWrite(NewConverter *cnvData, const UConverterStaticData *staticData,
             }
         }
     }
+#endif
 
     if(VERBOSE) {
         printf("size of extension data: %ld\n", top);
