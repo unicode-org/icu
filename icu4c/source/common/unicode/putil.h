@@ -152,7 +152,7 @@ U_CAPI const char* U_EXPORT2 u_getDataDirectory(void);
 U_CAPI void U_EXPORT2 u_setDataDirectory(const char *directory);
 
 
-#if OS390
+#ifdef OS390
 /** 
  * Are we in OS/390 batch mode?
  * @draft
