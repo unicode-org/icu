@@ -107,7 +107,7 @@ U_NAMESPACE_BEGIN
 Replaceable::~Replaceable() {}
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UnicodeString)
 
-UnicodeString
+UnicodeString U_EXPORT2
 operator+ (const UnicodeString &s1, const UnicodeString &s2) {
     return
         UnicodeString(s1.length()+s2.length()+1, (UChar32)0, 0).

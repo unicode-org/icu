@@ -3079,7 +3079,7 @@ private:
  * @return UnicodeString(s1).append(s2)
  * @draft ICU 2.8
  */
-U_COMMON_API UnicodeString
+U_COMMON_API UnicodeString U_EXPORT2
 operator+ (const UnicodeString &s1, const UnicodeString &s2);
 
 U_NAMESPACE_END
