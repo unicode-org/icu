@@ -7,11 +7,16 @@
 
 sv {
     Version{ "2.0" }
+    AmPmMarkers { 
+        "fm",
+        "em",
+    }
     CollationElements {
-        Version { "1.0" }
-        Sequence { "& Z < \u00E6 <<< \u00C6 < a\u030A <<< A\u030A <<< aa <<<aA <<< A"
-        "a <<< AA< a\u0308 <<< A\u0308 < o\u0308 <<< O\u0308 << u\u030B <<< U\u030B<o\u030B <<< O"
-        "\u030B << \u00F8 <<< \u00D8 & V <<< w <<< W & Y<<< u\u0308 <<< U\u0308" }
+        Version { "1.1" }
+        Sequence { "& Z < a\u030A <<< A\u030A < a\u0308 <<< A\u0308 < o\u0308 <<< O\u0308"
+            "<< u\u030B <<< U\u030B < o\u030B <<< O\u030B << \u00F8 <<< \u00D8"
+            "& V <<< w <<< W & Y<<< u\u0308 <<< U\u0308"
+        }
     }
     Countries { 
         // AD {"Andorra"}
@@ -28,6 +33,7 @@ sv {
         AS {"Amerikanska Samoa"}
         AT {"\u00D6sterrike"}
         AU {"Australien"}
+        //AW {"Aruba"}
         AZ {"Azerbajdzjan"}
         BA {"Bosnien och Hercegovina"}
         // BB {"Barbados"}
@@ -104,7 +110,7 @@ sv {
         // GU {"Guam"}
         // GW {"Guinea-Bissau"}
         // GY {"Guyana"}
-        //HK { "Hongkong (Kina)" }
+        HK { "Hongkong (Kina)" }
         HM { "Heard- och McDonald\u00F6arna" }
         // HN {"Honduras"}
         HR {"Kroatien"}
@@ -128,9 +134,8 @@ sv {
         // KI {"Kiribati"}
         KM {"Komorerna"}
         KN {"S:t Christopher och Nevis"}
-        KP {"Nordkorea"}
-        KR {"Sydkorea"}
-        //KR { "Republiken Korea" } // Old value
+        KP {"Nordkorea"}    // alternate name { "Demokratiska folkrepubliken Korea" }
+        KR {"Sydkorea"}    // alternate name { "Republiken Korea" }
         // KW {"Kuwait"}
         KY {"Kajman\u00F6arna"}
         KZ {"Kazachstan"}
@@ -236,7 +241,7 @@ sv {
         UA {"Ukraina"}
         // UG {"Uganda"}
         UM { "Sm\u00E5, avl\u00E4gset bel\u00E4gna \u00F6ar som tillh\u00F6r F\u00F6renta staterna" }
-        // US {"USA"} // Poor translation. USA -> United States
+        US { "Amerikas F\u00F6renta Stater" }
         // UY {"Uruguay"}
         // UZ {"Uzbekistan"}
         VA {"Vatikanstaten"}
@@ -261,13 +266,13 @@ sv {
         4,
     }
     DateTimePatterns { 
-        "'kl 'H:mm z",
-        "HH:mm:ss z",
-        "HH:mm:ss",
-        "HH:mm",
+        "'kl. 'H.mm.ss z",
+        "HH.mm.ss z",
+        "HH.mm.ss",
+        "HH.mm",
         "'den 'd MMMM yyyy",
-        "'den 'd MMMM yyyy",
-        "yyyy-MMM-dd",
+        "'den 'd MMM yyyy",
+        "yyyy-MM-dd",
         "yyyy-MM-dd",
         "{1} {0}",
     }
