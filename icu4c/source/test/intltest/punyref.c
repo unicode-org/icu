@@ -1,4 +1,32 @@
 /*
+ *******************************************************************************
+ *
+ *   Copyright (C) 2003, International Business Machines
+ *   Corporation and others.  All Rights Reserved.
+ *
+ *******************************************************************************
+ *   file name:  nameprep.h
+ *   encoding:   US-ASCII
+ *   tab size:   8 (not used)
+ *   indentation:4
+ *
+ *   created on: 2003feb1
+ *   created by: Ram Viswanadha
+ */
+
+/*
+Disclaimer and license
+
+    Regarding this entire document or any portion of it (including
+    the pseudocode and C code), the author makes no guarantees and
+    is not responsible for any damage resulting from its use.  The
+    author grants irrevocable permission to anyone to use, modify,
+    and distribute it in any way that does not diminish the rights
+    of anyone else to use, modify, and distribute it, provided that
+    redistributed derivative works do not contain misleading author or
+    version information.  Derivative works need not be licensed under
+    similar terms.
+
 punycode.c 0.4.0 (2001-Nov-17-Sat)
 http://www.cs.berkeley.edu/~amc/idn/
 Adam M. Costello
