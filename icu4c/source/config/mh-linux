@@ -23,6 +23,13 @@ SHLIB.cc=	$(CXX) $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) -shared
 LD_RPATH=	
 LD_RPATH_PRE=	-Wl,-rpath,
 
+## Compiler switch to embed a library name
+LD_SONAME = -Wl,-soname -Wl,$(MIDDLE_SO_TARGET)
+
+## Versioned target for a shared library.
+FINAL_SO_TARGET = $(SO_TARGET).$(SO_TARGET_VERSION)
+MIDDLE_SO_TARGET = $(SO_TARGET).$(SO_TARGET_VERSION_MAJOR)
+
 ###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
 ## Prefix for the ICU library names
 LIBICU = libicu-
@@ -63,5 +70,12 @@ LIBUSTDIO=      -L$(top_builddir)/extra/ustdio -lustdio
 	@$(SHELL) -ec '$(GEN_DEPS.cc) $< \
 		| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
 		[ -s $@ ] || rm -f $@'
+
+## Versioned libraries rules
+
+%.$(SO).$(SO_TARGET_VERSION_MAJOR): %.$(SO).$(SO_TARGET_VERSION)
+	$(RM) $@ && ln -s $< $@
+%.$(SO): %.$(SO).$(SO_TARGET_VERSION_MAJOR)
+	$(RM) $@ && ln -s $*.$(SO).$(SO_TARGET_VERSION) $@
 
 ## End Linux-specific setup

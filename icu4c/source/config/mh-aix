@@ -26,6 +26,9 @@ SHLIB.cc=	makeC++SharedLib_r -p 5000
 LD_RPATH=	-I
 LD_RPATH_PRE=	
 
+## Versioned target for a shared library.
+FINAL_SO_TARGET = $(SO_TARGET)
+MIDDLE_SO_TARGET = 
 
 ###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
 ## Prefix for the ICU library names
