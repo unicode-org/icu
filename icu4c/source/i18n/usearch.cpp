@@ -3213,7 +3213,7 @@ UBool usearch_handleNextExact(UStringSearch *strsrch, UErrorCode *status)
 			if (U_FAILURE(*status)) {
 				break;
 			}
-            textoffset = shiftForward(strsrch, textoffset, targetce, 
+            textoffset = shiftForward(strsrch, textoffset, lastce, 
                                       patternceindex);
             // status checked at loop.
             patternceindex = patterncelength;
@@ -3282,7 +3282,6 @@ UBool usearch_handleNextCanonical(UStringSearch *strsrch, UErrorCode *status)
                 break;
             }
         }
-        targetce = lastce;
         
         while (found && patternceindex > 0) {
             targetce    = ucol_previous(coleiter, status);
@@ -3313,7 +3312,7 @@ UBool usearch_handleNextCanonical(UStringSearch *strsrch, UErrorCode *status)
 			if (U_FAILURE(*status)) {
 				break;
 			}
-            textoffset = shiftForward(strsrch, textoffset, targetce, 
+            textoffset = shiftForward(strsrch, textoffset, lastce, 
                                       patternceindex);
             // status checked at loop
             patternceindex = patterncelength;

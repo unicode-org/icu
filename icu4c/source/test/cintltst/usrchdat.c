@@ -206,6 +206,16 @@ static const SearchData SUPPLEMENTARY[] = {
     {"abc \\uD800\\uDC00 \\uD800\\uDC01 \\uD801\\uDC00 \\uD800\\uDC00abc abc\\uD800\\uDC00 \\uD800\\uD800\\uDC00 \\uD800\\uDC00\\uDC00", 
      "\\uD800\\uDC00", NULL, UCOL_TERTIARY, NULL, {4, 13, 22, 26, 29, -1}, 
     {2, 2, 2, 2, 2}},
+    {"and\\uD834\\uDDB9this sentence", "\\uD834\\uDDB9", NULL, 
+     UCOL_TERTIARY, NULL, {3, -1}, {2}},
+    {"and \\uD834\\uDDB9 this sentence", " \\uD834\\uDDB9 ", NULL, 
+     UCOL_TERTIARY, NULL, {3, -1}, {4}},
+    {"and-\\uD834\\uDDB9-this sentence", "-\\uD834\\uDDB9-", NULL, 
+     UCOL_TERTIARY, NULL, {3, -1}, {4}},
+    {"and,\\uD834\\uDDB9,this sentence", ",\\uD834\\uDDB9,", NULL, 
+     UCOL_TERTIARY, NULL, {3, -1}, {4}},
+    {"and?\\uD834\\uDDB9?this sentence", "?\\uD834\\uDDB9?", NULL, 
+     UCOL_TERTIARY, NULL, {3, -1}, {4}},
     {NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
 };
 
@@ -430,6 +440,16 @@ static const SearchData SUPPLEMENTARYCANONICAL[] = {
     {"abc \\uD800\\uDC00 \\uD800\\uDC01 \\uD801\\uDC00 \\uD800\\uDC00abc abc\\uD800\\uDC00 \\uD800\\uD800\\uDC00 \\uD800\\uDC00\\uDC00", 
      "\\uD800\\uDC00", NULL, UCOL_TERTIARY, NULL, {4, 13, 22, 26, 29, -1}, 
     {2, 2, 2, 2, 2}},
+    {"and\\uD834\\uDDB9this sentence", "\\uD834\\uDDB9", NULL, 
+     UCOL_TERTIARY, NULL, {3, -1}, {2}},
+    {"and \\uD834\\uDDB9 this sentence", " \\uD834\\uDDB9 ", NULL, 
+     UCOL_TERTIARY, NULL, {3, -1}, {4}},
+    {"and-\\uD834\\uDDB9-this sentence", "-\\uD834\\uDDB9-", NULL, 
+     UCOL_TERTIARY, NULL, {3, -1}, {4}},
+    {"and,\\uD834\\uDDB9,this sentence", ",\\uD834\\uDDB9,", NULL, 
+     UCOL_TERTIARY, NULL, {3, -1}, {4}},
+    {"and?\\uD834\\uDDB9?this sentence", "?\\uD834\\uDDB9?", NULL, 
+     UCOL_TERTIARY, NULL, {3, -1}, {4}},
     {NULL, NULL, NULL, UCOL_TERTIARY, NULL, {-1}, {0}}
 };
 
