@@ -614,7 +614,7 @@ void TestNewConvertWithBufferSizes(int32_t outsize, int32_t insize )
                            (char)0xf0, (char)0x90, (char)0x90, (char)0x81, 
                            (char)0xed, (char)0xb0, (char)0x81, (char)0xed, (char)0xa0, (char)0x81 
         };
-        int32_t offsets[]={ 0, 1, 3, 4 };
+        int32_t offsets[]={ 0, 0, 0, 1, 1, 1, 1, 3, 3, 3, 4, 4, 4 };
         if(!testConvertFromU(testinput, sizeof(testinput)/sizeof(testinput[0]),
             expectedUTF8, sizeof(expectedUTF8), "UTF8", offsets ))
         log_err("u-> UTF8 did not match.\n");  
