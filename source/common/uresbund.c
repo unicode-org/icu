@@ -1293,6 +1293,8 @@ U_CAPI const char* ures_getVersionNumber(const UResourceBundle*   resourceBundle
 
 U_CAPI void U_EXPORT2 ures_getVersion(const UResourceBundle* resB, UVersionInfo versionInfo) {
     if (!resB) return;
+
+    u_versionFromString(versionInfo, ures_getVersionNumber(resB));
 }
 
 /**
