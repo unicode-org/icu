@@ -68,7 +68,7 @@ u_fsettransliterator(UFILE *file, UFileDirection direction,
 {
     UTransliterator *old = NULL;
 
-    if(file==NULL || U_FAILURE(*status))
+    if(U_FAILURE(*status))
     {
         return adopt;
     }
@@ -192,14 +192,6 @@ static const UChar * u_file_translit(UFILE *f, const UChar *src, int32_t *count,
             &pos,
             &status);
 
-#ifdef _DEBUG
-        if(U_FAILURE(status))
-        {
-            fprintf(stderr, " Gack. Translit blew up with a %s\n", u_errorName(status));
-            return src;
-        }
-#endif
-
         /* now: start/limit point to the transliterated text */
         /* Transliterated is [buffer..pos.start) */
         *count            = pos.start;
@@ -220,14 +212,6 @@ static const UChar * u_file_translit(UFILE *f, const UChar *src, int32_t *count,
             0,
             &textLimit,
             &status);
-
-#ifdef _DEBUG
-        if(U_FAILURE(status))
-        {
-            fprintf(stderr, " Gack. Translit(flush) blew up with a %s\n", u_errorName(status));
-            return src;
-        }
-#endif
 
         /* out: converted len */
         *count = textLimit;
