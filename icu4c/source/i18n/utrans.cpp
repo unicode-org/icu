@@ -19,6 +19,8 @@
 #include "unicode/unifilt.h"
 #include "unicode/uniset.h"
 #include "unicode/ustring.h"
+#include "unicode/uenum.h"
+#include "uenumimp.h"
 #include "cpputils.h"
 #include "rbt.h"
 
@@ -132,84 +134,18 @@ U_NAMESPACE_END
  * General API
  ********************************************************************/
 U_NAMESPACE_USE
-#if 0
-
-U_CAPI UTransliterator*
-utrans_open(const char* id,
-            UTransDirection dir,
-            UParseError* parseError,
-            UErrorCode* status) {
-
-    utrans_ENTRY(status) NULL;
-
-    if (id == NULL) {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
-    }
-
-    UnicodeString ID(id, ""); // use invariant converter
-    Transliterator *trans = NULL;
-
-    trans = Transliterator::createInstance(ID, dir, *parseError, *status);
-
-    if (trans == NULL) {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-    }
-    return (UTransliterator*) trans;
-}
-
-U_CAPI UTransliterator*
-utrans_openRules(const char* id,
-                 const UChar* rules,
-                 int32_t rulesLength, /* -1 if null-terminated */
-                 UTransDirection dir,
-                 UParseError* parseErr, /* may be NULL */
-                 UErrorCode* status) {
-
-    utrans_ENTRY(status) NULL;
-
-    if (id == NULL || rules == NULL) {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
-    }
-
-    UnicodeString ID(id, ""); // use invariant converter
-    UnicodeString ruleStr(rulesLength < 0,
-                          rules,
-                          rulesLength); // r-o alias
-
-    RuleBasedTransliterator *trans = NULL;
-
-    // Use if() to avoid construction of ParseError object on stack
-    // unless it is called for by user.
-    if (parseErr != NULL) {
-        trans = new RuleBasedTransliterator(ID, ruleStr, dir,
-                                            NULL, *parseErr, *status);
-    } else {
-        trans = new RuleBasedTransliterator(ID, ruleStr, dir,
-                                            NULL, *status);
-    }
-
-    if (trans == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
-    } else if (U_FAILURE(*status)) {
-        delete trans;
-        trans = NULL;
-    }
-    return (UTransliterator*) trans;
-}
-#endif
 
 U_CAPI UTransliterator* U_EXPORT2
-utrans_open(const char* id,
-            UTransDirection dir,
-            const UChar* rules,         /* may be Null */
-            int32_t rulesLength,        /* -1 if null-terminated */ 
-            UParseError* parseError,    /* may be Null */
-            UErrorCode* status) {
-
-    utrans_ENTRY(status) NULL;
-
+utrans_openU(const UChar *id,
+             int32_t idLength,
+             UTransDirection dir,
+             const UChar *rules,
+             int32_t rulesLength,
+             UParseError *parseError,
+             UErrorCode *status) {
+    if(status==NULL || U_FAILURE(*status)) {
+        return NULL;
+    }
     if (id == NULL) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
@@ -220,7 +156,7 @@ utrans_open(const char* id,
         parseError = &temp;
     }
     
-    UnicodeString ID(id, ""); // use invariant converter
+    UnicodeString ID(idLength<0, id, idLength); // r-o alias
 
     if(rules==NULL){
 
@@ -248,6 +184,19 @@ utrans_open(const char* id,
         }
         return (UTransliterator*) trans;
     }
+}
+
+U_CAPI UTransliterator* U_EXPORT2
+utrans_open(const char* id,
+            UTransDirection dir,
+            const UChar* rules,         /* may be Null */
+            int32_t rulesLength,        /* -1 if null-terminated */ 
+            UParseError* parseError,    /* may be Null */
+            UErrorCode* status) {
+    UnicodeString ID(id, ""); // use invariant converter
+    return utrans_openU(ID.getBuffer(), ID.length(), dir,
+                        rules, rulesLength,
+                        parseError, status);
 }
 
 U_CAPI UTransliterator* U_EXPORT2
@@ -285,6 +234,17 @@ utrans_close(UTransliterator* trans) {
     delete (Transliterator*) trans;
 }
 
+U_CAPI const UChar * U_EXPORT2
+utrans_getUnicodeID(const UTransliterator *trans,
+                    int32_t *resultLength) {
+    // Transliterator keeps its ID NUL-terminated
+    const UnicodeString &ID=((Transliterator*) trans)->getID();
+    if(resultLength!=NULL) {
+        *resultLength=ID.length();
+    }
+    return ID.getBuffer();
+}
+
 U_CAPI int32_t U_EXPORT2
 utrans_getID(const UTransliterator* trans,
              char* buf,
@@ -298,6 +258,12 @@ utrans_register(UTransliterator* adoptedTrans,
     utrans_ENTRY(status);
     // status currently ignored; may remove later
     Transliterator::registerInstance((Transliterator*) adoptedTrans);
+}
+
+U_CAPI void U_EXPORT2
+utrans_unregisterID(const UChar* id, int32_t idLength) {
+    UnicodeString ID(idLength<0, id, idLength); // r-o alias
+    Transliterator::unregister(ID);
 }
 
 U_CAPI void U_EXPORT2
@@ -341,6 +307,93 @@ utrans_getAvailableID(int32_t index,
                       char* buf, // may be NULL
                       int32_t bufCapacity) {
     return Transliterator::getAvailableID(index).extract(0, 0x7fffffff, buf, bufCapacity, "");
+}
+
+/* Transliterator UEnumeration ---------------------------------------------- */
+
+typedef struct UTransEnumeration {
+    UEnumeration uenum;
+    int32_t index, count;
+} UTransEnumeration;
+
+static int32_t U_CALLCONV
+utrans_enum_count(UEnumeration *uenum, UErrorCode *pErrorCode) {
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+    return ((UTransEnumeration *)uenum)->count;
+}
+
+static const UChar* U_CALLCONV
+utrans_enum_unext(UEnumeration *uenum,
+                  int32_t* resultLength,
+                  UErrorCode *pErrorCode) {
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+
+    UTransEnumeration *ute=(UTransEnumeration *)uenum;
+    int32_t index=ute->index;
+    if(index<ute->count) {
+        const UnicodeString &ID=Transliterator::getAvailableID(index);
+        ute->index=index+1;
+        if(resultLength!=NULL) {
+            *resultLength=ID.length();
+        }
+        // Transliterator keeps its ID NUL-terminated
+        return ID.getBuffer();
+    }
+
+    if(resultLength!=NULL) {
+        *resultLength=NULL;
+    }
+    return NULL;
+}
+
+static void U_CALLCONV
+utrans_enum_reset(UEnumeration *uenum, UErrorCode *pErrorCode) {
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return;
+    }
+
+    UTransEnumeration *ute=(UTransEnumeration *)uenum;
+    ute->index=0;
+    ute->count=Transliterator::countAvailableIDs();
+}
+
+static void U_CALLCONV
+utrans_enum_close(UEnumeration *uenum) {
+    uprv_free(uenum);
+}
+
+static const UEnumeration utransEnumeration={
+    NULL,
+    NULL,
+    utrans_enum_close,
+    utrans_enum_count,
+    utrans_enum_unext,
+    uenum_nextDefault,
+    utrans_enum_reset
+};
+
+U_CAPI UEnumeration * U_EXPORT2
+utrans_openIDs(UErrorCode *pErrorCode) {
+    UTransEnumeration *ute;
+
+    if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
+        return NULL;
+    }
+
+    ute=(UTransEnumeration *)uprv_malloc(sizeof(UTransEnumeration));
+    if(ute==NULL) {
+        *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+
+    ute->uenum=utransEnumeration;
+    ute->index=0;
+    ute->count=Transliterator::countAvailableIDs();
+    return (UEnumeration *)ute;
 }
 
 /********************************************************************
