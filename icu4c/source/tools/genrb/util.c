@@ -18,23 +18,15 @@
 #include "util.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "unicode/putil.h"
 
-
-/* Platform-specific directory separator */
-#if defined(WIN32) ||  defined(_WIN32) || defined(OS2) || defined(__OS2__)
-# define DIR_SEP '\\'
-# define CUR_DIR ".\\"
-#else
-# define DIR_SEP '/'
-# define CUR_DIR "./"
-#endif /* WIN32 */
 
 /* go from "/usr/local/include/curses.h" to "/usr/local/include" */
 void
 get_dirname(char *dirname,
 	    const char *filename)
 {
-  const char *lastSlash = uprv_strrchr(filename, DIR_SEP) + 1;
+  const char *lastSlash = uprv_strrchr(filename, U_FILE_SEP_CHAR) + 1;
 
   if(lastSlash>filename) {
     uprv_strncpy(dirname, filename, (lastSlash - filename));
@@ -50,7 +42,7 @@ get_basename(char *basename,
 	     const char *filename)
 {
   /* strip off any leading directory portions */
-  const char *lastSlash = uprv_strrchr(filename, DIR_SEP) + 1;
+  const char *lastSlash = uprv_strrchr(filename, U_FILE_SEP_CHAR) + 1;
   char *lastDot;
 
   if(lastSlash>filename) {
