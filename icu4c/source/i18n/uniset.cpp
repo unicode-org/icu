@@ -44,8 +44,8 @@ const UnicodeString UnicodeSet::CATEGORY_NAMES(
  * Unicode::getType(), to pairs strings.  Entries are initially
  * zero length and are filled in on demand.
  */
-UnicodeSet* UnicodeSet::CATEGORY_CACHE =
-     new UnicodeSet[Unicode::GENERAL_TYPES_COUNT];
+UnicodeSet _CATEGORY_CACHE[Unicode::GENERAL_TYPES_COUNT];
+UnicodeSet* UnicodeSet::CATEGORY_CACHE = _CATEGORY_CACHE;
 
 /**
  * Delimiter string used in patterns to close a category reference:
