@@ -85,13 +85,13 @@ ucnv_extFindToU(const uint32_t *toUSection, int32_t length, uint8_t byte) {
 
         if(i<=4) {
             /* linear search for the last part */
-            if(word<=toUSection[start]) {
+            if(word0<=toUSection[start]) {
                 break;
             }
-            if(++start<limit && word<=toUSection[start]) {
+            if(++start<limit && word0<=toUSection[start]) {
                 break;
             }
-            if(++start<limit && word<=toUSection[start]) {
+            if(++start<limit && word0<=toUSection[start]) {
                 break;
             }
             /* always break at start==limit-1 */
@@ -116,13 +116,20 @@ ucnv_extFindToU(const uint32_t *toUSection, int32_t length, uint8_t byte) {
 }
 
 /*
+ * TRUE if not an SI/SO stateful converter,
+ * or if the match length fits with the current converter state
+ */
+#define UCNV_EXT_TO_U_VERIFY_SISO_MATCH(sisoState, match) \
+    ((sisoState)<0 || ((sisoState)==0) == (match==1))
+
+/*
  * this works like ucnv_extMatchFromU() except
  * - the first character is in pre
  * - no trie is used
  * - the returned matchLength is not offset by 2
  */
 static int32_t
-ucnv_extMatchToU(const int32_t *cx,
+ucnv_extMatchToU(const int32_t *cx, int8_t sisoState,
                  const char *pre, int32_t preLength,
                  const char *src, int32_t srcLength,
                  uint32_t *pMatchValue,
@@ -144,6 +151,20 @@ ucnv_extMatchToU(const int32_t *cx,
     matchValue=0;
     i=j=matchLength=0;
 
+    if(sisoState==0) {
+        /* SBCS state of an SI/SO stateful converter, look at only exactly 1 byte */
+        if(preLength>1) {
+            return 0; /* no match of a DBCS sequence in SBCS mode */
+        } else if(preLength==1) {
+            srcLength=0;
+        } else /* preLength==0 */ {
+            if(srcLength>1) {
+                srcLength=1;
+            }
+        }
+        flush=TRUE;
+    }
+
     /* we must not remember fallback matches when not using fallbacks */
 
     /* match input units until there is a full match or the input is consumed */
@@ -157,7 +178,8 @@ ucnv_extMatchToU(const int32_t *cx,
         value=UCNV_EXT_TO_U_GET_VALUE(value);
         if( value!=0 &&
             (UCNV_EXT_TO_U_IS_ROUNDTRIP(value) ||
-             TO_U_USE_FALLBACK(useFallback))
+             TO_U_USE_FALLBACK(useFallback)) &&
+            UCNV_EXT_TO_U_VERIFY_SISO_MATCH(sisoState, i+j)
         ) {
             /* remember longest match so far */
             matchValue=value;
@@ -194,8 +216,9 @@ ucnv_extMatchToU(const int32_t *cx,
                 /* partial match, continue */
                 index=(int32_t)UCNV_EXT_TO_U_GET_PARTIAL_INDEX(value);
             } else {
-                if( UCNV_EXT_TO_U_IS_ROUNDTRIP(value) ||
-                     TO_U_USE_FALLBACK(useFallback)
+                if( (UCNV_EXT_TO_U_IS_ROUNDTRIP(value) ||
+                     TO_U_USE_FALLBACK(useFallback)) &&
+                    UCNV_EXT_TO_U_VERIFY_SISO_MATCH(sisoState, i+j)
                 ) {
                     /* full match, stop with result */
                     matchValue=value;
@@ -246,12 +269,14 @@ ucnv_extWriteToU(UConverter *cnv, const int32_t *cx,
 }
 
 /*
- * TRUE if not an SI/SO stateful charset,
- * or if the match length fits with the current converter state
+ * get the SI/SO toU state (state 0 is for SBCS, 1 for DBCS),
+ * or -1 if the converter is not SI/SO stateful
+ *
+ * Note: For SI/SO stateful converters getting here,
+ * cnv->mode==0 is equivalent to firstLength==1.
  */
-#define UCNV_EXT_TO_U_VERIFY_SISO_MATCH(cnv, match) \
-    ((cnv)->sharedData->table->mbcs.outputType!=MBCS_OUTPUT_2_SISO || \
-     ((uint8_t)(cnv->mode)==0) == (match==1))
+#define UCNV_SISO_STATE(cnv) \
+    ((cnv)->sharedData->table->mbcs.outputType==MBCS_OUTPUT_2_SISO ? (int8_t)(cnv)->mode : -1)
 
 /*
  * target<targetLimit; set error code for overflow
@@ -268,12 +293,12 @@ ucnv_extInitialMatchToU(UConverter *cnv, const int32_t *cx,
     int32_t match;
 
     /* try to match */
-    match=ucnv_extMatchToU(cx,
+    match=ucnv_extMatchToU(cx, (int8_t)UCNV_SISO_STATE(cnv),
                            (const char *)cnv->toUBytes, firstLength,
                            *src, (int32_t)(srcLimit-*src),
                            &value,
                            cnv->useFallback, flush);
-    if(match>0 && UCNV_EXT_TO_U_VERIFY_SISO_MATCH(cnv, match)) {
+    if(match>0) {
         /* advance src pointer for the consumed input */
         *src+=match-firstLength;
 
@@ -322,7 +347,7 @@ ucnv_extSimpleMatchToU(const int32_t *cx,
     int32_t match;
 
     /* try to match */
-    match=ucnv_extMatchToU(cx,
+    match=ucnv_extMatchToU(cx, -1,
                            cp,
                            NULL, 0,
                            NULL, 0,
@@ -357,12 +382,12 @@ ucnv_extContinueMatchToU(UConverter *cnv,
     uint32_t value;
     int32_t match, length;
 
-    match=ucnv_extMatchToU(cnv->sharedData->table->mbcs.extIndexes,
+    match=ucnv_extMatchToU(cnv->sharedData->table->mbcs.extIndexes, (int8_t)UCNV_SISO_STATE(cnv),
                            cnv->preToU, cnv->preToULength,
                            pArgs->source, (int32_t)(pArgs->sourceLimit-pArgs->source),
                            &value,
                            cnv->useFallback, pArgs->flush);
-    if(match>0 && UCNV_EXT_TO_U_VERIFY_SISO_MATCH(cnv, match)) {
+    if(match>0) {
         if(match>=cnv->preToULength) {
             /* advance src pointer for the consumed input */
             pArgs->source+=match-cnv->preToULength;
