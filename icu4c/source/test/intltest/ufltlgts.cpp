@@ -68,6 +68,8 @@ void UnicodeFilterLogicTest::TestAll(){
         return;
     }
     UnicodeString source("abcdABCDyzYZ");
+    Filter1 filter1;
+    Filter2 filter2;
 
     //sanity testing wihtout any filter
     expect(*t1, "without any Filter", source, UnicodeString("\\u0061\\u0062\\u0063\\u0064\\u0041\\u0042\\u0043\\u0044\\u0079\\u007A\\u0059\\u005A", ""));
@@ -78,13 +80,13 @@ void UnicodeFilterLogicTest::TestAll(){
     expect(*t1, "with Filter2(acyzYZ)", source, UnicodeString("a\\u0062c\\u0064\\u0041\\u0042\\u0043\\u0044yzYZ", ""));
 
 
-    UnicodeFilter *filterNOT=UnicodeFilterLogic::createNot(new Filter1);
-    UnicodeFilter *filterAND=UnicodeFilterLogic::createAnd(new Filter1, new Filter2);
-    UnicodeFilter *filterOR=UnicodeFilterLogic::createOr(new Filter1, new Filter2);
+    UnicodeFilter *filterNOT=UnicodeFilterLogic::createNot(&filter1);
+    UnicodeFilter *filterAND=UnicodeFilterLogic::createAnd(&filter1, &filter2);
+    UnicodeFilter *filterOR=UnicodeFilterLogic::createOr(&filter1, &filter2);
 
-    TestNOT(*t1, new Filter1, "Filter(acAC)", 
+    TestNOT(*t1, &filter1, "Filter(acAC)", 
         source, UnicodeString("\\u0061b\\u0063d\\u0041B\\u0043DyzYZ", ""));
-    TestNOT(*t1, new Filter2, "Filter(acyzYZ)",
+    TestNOT(*t1, &filter2, "Filter(acyzYZ)",
         source, UnicodeString("\\u0061b\\u0063dABCD\\u0079\\u007A\\u0059\\u005A", ""));
     TestNOT(*t1, NULL, "NULL",
         source, UnicodeString("abcdABCDyzYZ", ""));
@@ -95,68 +97,68 @@ void UnicodeFilterLogicTest::TestAll(){
     TestNOT(*t1, filterOR, "FilterOR(Fitler1(acAC),  Filter2(acyzYZ))",
         source, UnicodeString("\\u0061b\\u0063dABCDyzYZ", ""));
 
-    TestAND(*t1, new Filter1, new Filter2, "Filter1(a,c,A,C), Filter2(acyzYZ)", 
+    TestAND(*t1, &filter1, &filter2, "Filter1(a,c,A,C), Filter2(acyzYZ)", 
         source, UnicodeString("a\\u0062c\\u0064A\\u0042C\\u0044yzYZ", ""));
-    TestAND(*t1, new Filter2, new Filter1, "Filter2(acyzYZ), Filter1(a,c,A,C), ", 
+    TestAND(*t1, &filter2, &filter1, "Filter2(acyzYZ), Filter1(a,c,A,C), ", 
         source, UnicodeString("a\\u0062c\\u0064A\\u0042C\\u0044yzYZ", ""));
-    TestAND(*t1, new Filter1, NULL, "Filter1(a,c,A,C), NULL", 
+    TestAND(*t1, &filter1, NULL, "Filter1(a,c,A,C), NULL", 
         source, UnicodeString("a\\u0062c\\u0064A\\u0042C\\u0044\\u0079\\u007A\\u0059\\u005A", ""));
-    TestAND(*t1, NULL, new Filter2, "NULL, Filter2(acyzYZ)",
+    TestAND(*t1, NULL, &filter2, "NULL, Filter2(acyzYZ)",
         source, UnicodeString("a\\u0062c\\u0064\\u0041\\u0042\\u0043\\u0044yzYZ", ""));
     TestAND(*t1, NULL, NULL, "NULL, NULL", 
         source, UnicodeString("\\u0061\\u0062\\u0063\\u0064\\u0041\\u0042\\u0043\\u0044\\u0079\\u007A\\u0059\\u005A", ""));
     TestAND(*t1, filterAND, NULL, "FilterAND(Fitler1(acAC),  Filter2(acyzYZ)), NULL",
         source, UnicodeString("a\\u0062c\\u0064A\\u0042C\\u0044yzYZ", ""));
-    TestAND(*t1, filterAND, new Filter1, "FilterAND(Fitler1(acAC),  Filter2(acyzYZ)), Filter1(acAC)",
+    TestAND(*t1, filterAND, &filter1, "FilterAND(Fitler1(acAC),  Filter2(acyzYZ)), Filter1(acAC)",
         source, UnicodeString("a\\u0062c\\u0064A\\u0042C\\u0044yzYZ", ""));
-    TestAND(*t1, filterAND, new Filter2, "FilterAND(Fitler1(acAC),  Filter2(acyzYZ)), Filter2(acyzYZ)",
+    TestAND(*t1, filterAND, &filter2, "FilterAND(Fitler1(acAC),  Filter2(acyzYZ)), Filter2(acyzYZ)",
         source, UnicodeString("a\\u0062c\\u0064A\\u0042C\\u0044yzYZ", ""));
-    TestAND(*t1, new Filter1, filterAND, "Filter1(acAC), FilterAND(Filter1(acAC), Fitler1(acAC))",
+    TestAND(*t1, &filter1, filterAND, "Filter1(acAC), FilterAND(Filter1(acAC), Fitler1(acAC))",
         source, UnicodeString("a\\u0062c\\u0064A\\u0042C\\u0044yzYZ", ""));
-    TestAND(*t1, new Filter2, filterAND, "Filter2(acyzYZ), FilterAND(Filter1(acAC), Fitler1(acAC))",
+    TestAND(*t1, &filter2, filterAND, "Filter2(acyzYZ), FilterAND(Filter1(acAC), Fitler1(acAC))",
         source, UnicodeString("a\\u0062c\\u0064A\\u0042C\\u0044yzYZ", ""));
     TestAND(*t1, filterOR, NULL, "FilterOR(Fitler1(acAC),  Filter2(acyzYZ)), NULL",
         source, UnicodeString("a\\u0062c\\u0064\\u0041\\u0042\\u0043\\u0044\\u0079\\u007A\\u0059\\u005A", ""));
-    TestAND(*t1, filterOR, new Filter1, "FilterOR(Fitler1(acAC),  Filter2(acyzYZ)), Fitler1(acAC)",
+    TestAND(*t1, filterOR, &filter1, "FilterOR(Fitler1(acAC),  Filter2(acyzYZ)), Fitler1(acAC)",
         source, UnicodeString("a\\u0062c\\u0064A\\u0042C\\u0044\\u0079\\u007A\\u0059\\u005A", ""));
-    TestAND(*t1, filterOR, new Filter2, "FilterOR(Fitler1(acAC),  Filter2(acyzYZ)), Fitler2(acyzYZ)",
+    TestAND(*t1, filterOR, &filter2, "FilterOR(Fitler1(acAC),  Filter2(acyzYZ)), Fitler2(acyzYZ)",
         source, UnicodeString("a\\u0062c\\u0064\\u0041\\u0042\\u0043\\u0044yzYZ", ""));
-    TestAND(*t1, filterNOT, new Filter1, "FilterNOT(Fitler1(acAC)), Fitler1(acAC)",
+    TestAND(*t1, filterNOT, &filter1, "FilterNOT(Fitler1(acAC)), Fitler1(acAC)",
         source, UnicodeString("abcdABCDyzYZ", ""));
-    TestAND(*t1, new Filter1, filterNOT, "Fitler1(acAC), FilterNOT(Fitler1(acAC))",
+    TestAND(*t1, &filter1, filterNOT, "Fitler1(acAC), FilterNOT(Fitler1(acAC))",
         source, UnicodeString("abcdABCDyzYZ", ""));
-    TestAND(*t1, filterNOT, new Filter2, "FilterNOT(Fitler1(acAC)), Fitler2(acyzYZ)",
+    TestAND(*t1, filterNOT, &filter2, "FilterNOT(Fitler1(acAC)), Fitler2(acyzYZ)",
         source, UnicodeString("abcd\\u0041B\\u0043DyzYZ", ""));
-    TestAND(*t1, new Filter2, filterNOT, "Fitler2(acyzYZ), FilterNOT(Fitler1(acAC))",
+    TestAND(*t1, &filter2, filterNOT, "Fitler2(acyzYZ), FilterNOT(Fitler1(acAC))",
         source, UnicodeString("abcd\\u0041B\\u0043DyzYZ", ""));
 
-    TestOR(*t1, new Filter1, new Filter2, "Filter1(a,c,A,C), Filter2(acyzYZ)",
+    TestOR(*t1, &filter1, &filter2, "Filter1(a,c,A,C), Filter2(acyzYZ)",
         source, UnicodeString("a\\u0062c\\u0064\\u0041\\u0042\\u0043\\u0044\\u0079\\u007A\\u0059\\u005A", ""));
-    TestOR(*t1, new Filter2, new Filter1, "Filter2(acyzYZ), Filter1(a,c,A,C)",
+    TestOR(*t1, &filter2, &filter1, "Filter2(acyzYZ), Filter1(a,c,A,C)",
         source, UnicodeString("a\\u0062c\\u0064\\u0041\\u0042\\u0043\\u0044\\u0079\\u007A\\u0059\\u005A", ""));
-    TestOR(*t1, new Filter1, NULL, "Filter1(a,c,A,C), NULL",
+    TestOR(*t1, &filter1, NULL, "Filter1(a,c,A,C), NULL",
         source, UnicodeString("a\\u0062c\\u0064A\\u0042C\\u0044\\u0079\\u007A\\u0059\\u005A", ""));
-    TestOR(*t1, NULL, new Filter2, "NULL, Filter2(acyzYZ)",
+    TestOR(*t1, NULL, &filter2, "NULL, Filter2(acyzYZ)",
         source, UnicodeString("a\\u0062c\\u0064\\u0041\\u0042\\u0043\\u0044yzYZ", ""));
     TestOR(*t1, NULL, NULL, "NULL, NULL",
         source, UnicodeString("\\u0061\\u0062\\u0063\\u0064\\u0041\\u0042\\u0043\\u0044\\u0079\\u007A\\u0059\\u005A", ""));
     TestOR(*t1, filterAND, NULL, "FilterAND(Fitler1(acAC),  Filter2(acyzYZ)), NULL",
         source, UnicodeString("a\\u0062c\\u0064A\\u0042C\\u0044yzYZ", ""));
-    TestOR(*t1, filterAND, new Filter1, "FilterAND(Fitler1(acAC),  Filter2(acyzYZ)), Filter1(acAC)",
+    TestOR(*t1, filterAND, &filter1, "FilterAND(Fitler1(acAC),  Filter2(acyzYZ)), Filter1(acAC)",
         source, UnicodeString("a\\u0062c\\u0064A\\u0042C\\u0044\\u0079\\u007A\\u0059\\u005A", ""));
-    TestOR(*t1, filterAND, new Filter2, "FilterAND(Fitler1(acAC),  Filter2(acyzYZ)), Filter2(acyzYZ)",
+    TestOR(*t1, filterAND, &filter2, "FilterAND(Fitler1(acAC),  Filter2(acyzYZ)), Filter2(acyzYZ)",
         source, UnicodeString("a\\u0062c\\u0064\\u0041\\u0042\\u0043\\u0044yzYZ", ""));
-    TestOR(*t1, new Filter1, filterAND, "Filter1(acAC), FilterAND(Filter1(acAC), Fitler1(acAC))",
+    TestOR(*t1, &filter1, filterAND, "Filter1(acAC), FilterAND(Filter1(acAC), Fitler1(acAC))",
         source, UnicodeString("a\\u0062c\\u0064A\\u0042C\\u0044\\u0079\\u007A\\u0059\\u005A", ""));
-    TestOR(*t1, new Filter2, filterAND, "Filter2(acyzYZ), FilterAND(Filter1(acAC), Fitler1(acAC))",
+    TestOR(*t1, &filter2, filterAND, "Filter2(acyzYZ), FilterAND(Filter1(acAC), Fitler1(acAC))",
         source, UnicodeString("a\\u0062c\\u0064\\u0041\\u0042\\u0043\\u0044yzYZ", ""));
-    TestOR(*t1, filterNOT, new Filter1, "FilterNOT(Fitler1(acAC)), Fitler1(acAC)",
+    TestOR(*t1, filterNOT, &filter1, "FilterNOT(Fitler1(acAC)), Fitler1(acAC)",
         source, UnicodeString("\\u0061\\u0062\\u0063\\u0064\\u0041\\u0042\\u0043\\u0044\\u0079\\u007A\\u0059\\u005A", ""));
-    TestOR(*t1, new Filter1, filterNOT, "Fitler1(acAC), FilterNOT(Fitler1(acAC))",
+    TestOR(*t1, &filter1, filterNOT, "Fitler1(acAC), FilterNOT(Fitler1(acAC))",
         source, UnicodeString("\\u0061\\u0062\\u0063\\u0064\\u0041\\u0042\\u0043\\u0044\\u0079\\u007A\\u0059\\u005A", ""));
-    TestOR(*t1, filterNOT, new Filter2, "FilterNOT(Fitler1(acAC)), Fitler1(acyzYZ)",
+    TestOR(*t1, filterNOT, &filter2, "FilterNOT(Fitler1(acAC)), Fitler1(acyzYZ)",
         source, UnicodeString("\\u0061\\u0062\\u0063\\u0064\\u0041\\u0042\\u0043\\u0044yzYZ", ""));
-    TestOR(*t1, new Filter2, filterNOT, "Fitler2(acyzYZ), FilterNOT(Fitler1(acAC))",
+    TestOR(*t1, &filter2, filterNOT, "Fitler2(acyzYZ), FilterNOT(Fitler1(acAC))",
         source, UnicodeString("\\u0061\\u0062\\u0063\\u0064\\u0041\\u0042\\u0043\\u0044yzYZ", ""));
 
 
