@@ -6,6 +6,7 @@
 
 package com.ibm.icu.impl;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.InputStream;
@@ -63,19 +64,6 @@ public class ICUListResourceBundle extends ListResourceBundle {
 	return realContents;
     }
 
-    /*
-      public void showParents() {
-      System.out.println(getClass().getName());
-      if (parent == null) {
-      System.out.println("parent == null");
-      } else if (parent instanceof ICUListResourceBundle) {
-      ((ICUListResourceBundle)parent).showParents();
-      } else {
-      System.out.println("parent is not ICUListResourceBundle: " + parent.getClass().getName());
-      }
-      }
-    */
-
     /**
      * Return null if value is already in existing contents array, otherwise fetch the
      * real value and return it.
@@ -110,16 +98,19 @@ public class ICUListResourceBundle extends ListResourceBundle {
 			return result;
 		    }
 		    else if (bValue[0] == RESOURCE_UNICODE) {
+			// temporarily disable because of BreakDictionaryData_th.problem
+			// LocaleElements_th is the only resource currently using this.
+
+			return null; 
+			/*
 			InputStream stream = this.getClass().getResourceAsStream(resName);
-			InputStreamReader reader = new InputStreamReader(stream, "UTF-16");
+			InputStreamReader reader = new InputStreamReader(stream, "UTF-16LE");
 			char[] result = readToEOS(reader);
 			return result;
+			*/
 		    }
 		} 
-		catch (IOException e) {
-		    System.out.println("could not load: " + resName);
-		    System.out.println(e);
-
+		catch (Exception e) {
 		    return null;
 		}
 	    }
@@ -170,30 +161,32 @@ public class ICUListResourceBundle extends ListResourceBundle {
 	ArrayList vec = new ArrayList();
 	int count = 0;
 	int pos = 0;
-	final int LENGTH = 0x80; // buffer size
+	final int MAXLENGTH = 0x8000; // max buffer size - 32K
+	int length = 0x80; // start with small buffers and work up
 	do {
 	    pos = 0;
-	    char[] buffer = new char[LENGTH];
+	    length = length >= MAXLENGTH ? MAXLENGTH : length * 2;
+	    char[] buffer = new char[length];
 	    try {
 		do {
-		    int n = stream.read(buffer, pos, buffer.length - pos);
+		    int n = stream.read(buffer, pos, length - pos);
 		    if (n == -1) {
 			break;
 		    }
 		    pos += n;
-		} while (pos < LENGTH);
+		} while (pos < length);
 	    }
 	    catch (IOException e) {
 	    }
 	    vec.add(buffer);
 	    count += pos;
-	} while (pos == LENGTH);
+	} while (pos == length);
 						
 	char[] data = new char[count];
 	pos = 0;
 	for (int i = 0; i < vec.size(); ++i) {
 	    char[] buf = (char[])vec.get(i);
-	    int len = Math.min(LENGTH, count - pos);
+	    int len = Math.min(buf.length, count - pos);
 	    System.arraycopy(buf, 0, data, pos, len);
 	    pos += len;
 	}
