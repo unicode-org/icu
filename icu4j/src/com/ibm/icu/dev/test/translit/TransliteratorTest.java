@@ -11,6 +11,7 @@ import com.ibm.icu.dev.test.*;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.UtilityExtensions;
 import com.ibm.icu.util.CaseInsensitiveString;
+import com.ibm.icu.util.ULocale;
 import java.util.*;
 
 /***********************************************************************
@@ -2360,6 +2361,14 @@ public class TransliteratorTest extends TestFmwk {
             } else {
                 logln("Ok: " + t.getID() + ".getDisplayName() => " + name);
             }
+            
+            // Cover getDisplayName(String)
+            ULocale save = ULocale.getDefault();
+            ULocale.setDefault(ULocale.US);
+            String name2 = Transliterator.getDisplayName(t.getID());
+            if (!name.equals(name2))
+                errln("FAIL: getDisplayName with default locale failed");
+            ULocale.setDefault(save);
         }
     }
 

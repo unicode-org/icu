@@ -8,6 +8,7 @@ package com.ibm.icu.dev.test.format;
 
 import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.util.ULocale;
 
 import java.math.BigInteger;
 import java.math.BigDecimal;
@@ -813,6 +814,68 @@ public class RbnfTest extends TestFmwk {
     doTest(formatter, testData, true);
     }
 
+    public void TestRuleSetDisplayName() {
+        ULocale.setDefault(ULocale.US);
+        String[][] localizations = new String[][] {
+            /* public rule sets*/
+            {"%simplified", "%default", "%ordinal"},
+            /* display names in "en_US" locale*/
+            {"en_US", "Simplified", "Default", "Ordinal"},
+            /* display names in "zh_Hans" locale*/
+            {"zh_Hans", "\u7B80\u5316", "\u7F3A\u7701",  "\u5E8F\u5217"},
+            /* display names in a fake locale*/
+            {"foo_Bar_BAZ", "Simplified", "Default", "Ordinal"}
+        };
+        
+        //Construct RuleBasedNumberFormat by rule sets and localizations list
+        RuleBasedNumberFormat formatter
+            = new RuleBasedNumberFormat(ukEnglish, localizations, ULocale.US);
+        RuleBasedNumberFormat f2= new RuleBasedNumberFormat(ukEnglish, localizations);
+        assertTrue("Check the two formatters' equality", formatter.equals(f2));        
+
+        //get displayName by name
+        String[] ruleSetNames = formatter.getRuleSetNames();
+        for (int i=0; i<ruleSetNames.length; i++) {
+            logln("Rule set name: " + ruleSetNames[i]);
+            String RSName_defLoc = formatter.getRuleSetDisplayName(ruleSetNames[i]);
+            assertEquals("Display name in default locale", localizations[1][i+1], RSName_defLoc);
+            String RSName_loc = formatter.getRuleSetDisplayName(ruleSetNames[i], ULocale.CHINA);
+            assertEquals("Display name in Chinese", localizations[2][i+1], RSName_loc);
+        }
+                
+        // getDefaultRuleSetName
+        String defaultRS = formatter.getDefaultRuleSetName();
+        //you know that the default rule set is %simplified according to rule sets string ukEnglish
+        assertEquals("getDefaultRuleSetName", "%simplified", defaultRS);
+        
+        //get locales of localizations
+        ULocale[] locales = formatter.getRuleSetDisplayNameLocales();
+        for (int i=0; i<locales.length; i++) {
+            logln(locales[i].getName());
+        }
+        
+        //get displayNames
+        String[] RSNames_defLoc = formatter.getRuleSetDisplayNames();
+        for (int i=0; i<RSNames_defLoc.length; i++) {
+            assertEquals("getRuleSetDisplayNames in default locale", localizations[1][i+1], RSNames_defLoc[i]);
+        }
+        
+        String[] RSNames_loc = formatter.getRuleSetDisplayNames(ULocale.UK);
+        for (int i=0; i<RSNames_loc.length; i++) {
+            assertEquals("getRuleSetDisplayNames in English", localizations[1][i+1], RSNames_loc[i]);
+        }    
+        
+        RSNames_loc = formatter.getRuleSetDisplayNames(ULocale.CHINA);
+        for (int i=0; i<RSNames_loc.length; i++) {
+            assertEquals("getRuleSetDisplayNames in Chinese", localizations[2][i+1], RSNames_loc[i]);
+        }        
+
+        RSNames_loc = formatter.getRuleSetDisplayNames(new ULocale("foo_Bar_BAZ"));
+        for (int i=0; i<RSNames_loc.length; i++) {
+            assertEquals("getRuleSetDisplayNames in fake locale", localizations[3][i+1], RSNames_loc[i]);
+        }              
+    }
+    
     void doTest(RuleBasedNumberFormat formatter, String[][] testData,
                 boolean testParsing) {
     //        NumberFormat decFmt = NumberFormat.getInstance(Locale.US);
@@ -870,5 +933,85 @@ public class RbnfTest extends TestFmwk {
             e.printStackTrace();
         }
     }
+
+
+    /**
+     * Spellout rules for U.K. English.  
+     * I borrow the rule sets for TestRuleSetDisplayName()
+     */
+    public static final String ukEnglish =
+        "%simplified:\n"
+        + "    -x: minus >>;\n"
+        + "    x.x: << point >>;\n"
+        + "    zero; one; two; three; four; five; six; seven; eight; nine;\n"
+        + "    ten; eleven; twelve; thirteen; fourteen; fifteen; sixteen;\n"
+        + "        seventeen; eighteen; nineteen;\n"
+        + "    20: twenty[->>];\n"
+        + "    30: thirty[->>];\n"
+        + "    40: forty[->>];\n"
+        + "    50: fifty[->>];\n"
+        + "    60: sixty[->>];\n"
+        + "    70: seventy[->>];\n"
+        + "    80: eighty[->>];\n"
+        + "    90: ninety[->>];\n"
+        + "    100: << hundred[ >>];\n"
+        + "    1000: << thousand[ >>];\n"
+        + "    1,000,000: << million[ >>];\n"
+        + "    1,000,000,000,000: << billion[ >>];\n"
+        + "    1,000,000,000,000,000: =#,##0=;\n"
+        + "%alt-teens:\n"
+        + "    =%simplified=;\n"
+        + "    1000>: <%%alt-hundreds<[ >>];\n"
+        + "    10,000: =%simplified=;\n"
+        + "    1,000,000: << million[ >%simplified>];\n"
+        + "    1,000,000,000,000: << billion[ >%simplified>];\n"
+        + "    1,000,000,000,000,000: =#,##0=;\n"
+        + "%%alt-hundreds:\n"
+        + "    0: SHOULD NEVER GET HERE!;\n"
+        + "    10: <%simplified< thousand;\n"
+        + "    11: =%simplified= hundred>%%empty>;\n"
+        + "%%empty:\n"
+        + "    0:;"
+        + "%ordinal:\n"
+        + "    zeroth; first; second; third; fourth; fifth; sixth; seventh;\n"
+        + "        eighth; ninth;\n"
+        + "    tenth; eleventh; twelfth; thirteenth; fourteenth;\n"
+        + "        fifteenth; sixteenth; seventeenth; eighteenth;\n"
+        + "        nineteenth;\n"
+        + "    twentieth; twenty->>;\n"
+        + "    30: thirtieth; thirty->>;\n"
+        + "    40: fortieth; forty->>;\n"
+        + "    50: fiftieth; fifty->>;\n"
+        + "    60: sixtieth; sixty->>;\n"
+        + "    70: seventieth; seventy->>;\n"
+        + "    80: eightieth; eighty->>;\n"
+        + "    90: ninetieth; ninety->>;\n"
+        + "    100: <%simplified< hundredth; <%simplified< hundred >>;\n"
+        + "    1000: <%simplified< thousandth; <%simplified< thousand >>;\n"
+        + "    1,000,000: <%simplified< millionth; <%simplified< million >>;\n"
+        + "    1,000,000,000,000: <%simplified< billionth;\n"
+        + "        <%simplified< billion >>;\n"
+        + "    1,000,000,000,000,000: =#,##0=;"
+        + "%default:\n"
+        + "    -x: minus >>;\n"
+        + "    x.x: << point >>;\n"
+        + "    =%simplified=;\n"
+        + "    100: << hundred[ >%%and>];\n"
+        + "    1000: << thousand[ >%%and>];\n"
+        + "    100,000>>: << thousand[>%%commas>];\n"
+        + "    1,000,000: << million[>%%commas>];\n"
+        + "    1,000,000,000,000: << billion[>%%commas>];\n"
+        + "    1,000,000,000,000,000: =#,##0=;\n"
+        + "%%and:\n"
+        + "    and =%default=;\n"
+        + "    100: =%default=;\n"
+        + "%%commas:\n"
+        + "    ' and =%default=;\n"
+        + "    100: , =%default=;\n"
+        + "    1000: , <%default< thousand, >%default>;\n"
+        + "    1,000,000: , =%default=;"
+        + "%%lenient-parse:\n"
+        + "    & ' ' , ',' ;\n";
+
 }
 
