@@ -352,7 +352,7 @@ ubidi_getVisualRun(UBiDi *pBiDi, UTextOffset runIndex,
         pBiDi->runCount==-1 && !getRuns(pBiDi) ||
         runIndex>=pBiDi->runCount
     ) {
-        return 0;
+        return UBIDI_LTR;
     } else {
         UTextOffset start=pBiDi->runs[runIndex].logicalStart;
         if(pLogicalStart!=NULL) {

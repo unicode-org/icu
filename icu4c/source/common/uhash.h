@@ -26,7 +26,7 @@
  * (although it does so in no particular order). 
  * Values are stored as void* pointers.
  */
-
+U_CDECL_BEGIN
 /**
  * A hashing function.
  * @param parm A pointer to the data to be hashed.
@@ -64,6 +64,7 @@ struct UHashtable {
   bool_t isGrowable;
 };
 typedef struct UHashtable UHashtable;
+U_CDECL_END
 
 /**
  * Initialize a new UHashtable.
