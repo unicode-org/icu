@@ -1,5 +1,5 @@
 /*
- * @(#)$RCSfile: ATextPanelImpl.java,v $ $Revision: 1.1 $ $Date: 2000/04/20 17:51:23 $
+ * @(#)$RCSfile: ATextPanelImpl.java,v $ $Revision: 1.2 $ $Date: 2000/04/22 17:10:10 $
  *
  * (C) Copyright IBM Corp. 1998-1999.  All Rights Reserved.
  *
@@ -746,16 +746,10 @@ final class ATextPanelImpl {
      * This method is for perf-testing only!
      */
     void handleKeyEvent(java.awt.event.KeyEvent keyEvent) {
-        switch (keyEvent.getID()) {
-            case java.awt.event.KeyEvent.KEY_PRESSED:
-                fTextComponent.keyPressed(keyEvent);
-                break;
-            case java.awt.event.KeyEvent.KEY_TYPED:
-                fTextComponent.keyTyped(keyEvent);
-                break;
-            case java.awt.event.KeyEvent.KEY_RELEASED:
-                fTextComponent.keyReleased(keyEvent);
-                break;
+    
+        Component host = fTextComponent.getHost();
+        if (host != null) {
+            host.dispatchEvent(keyEvent);
         }
     }
 }
