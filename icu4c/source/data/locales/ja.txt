@@ -2448,7 +2448,99 @@ ja {
         "    10,000,000,000,000,000: =#,##0=;" 
     }
 
+    // Currency display names
     Currencies {
+        AED { "AED", "UAE \u30C7\u30A3\u30EB\u30CF\u30E0" } // UAE Dirham
+        ALL { "ALL", "\u30EC\u30AF" } // Leck
+        AMD { "AMD", "\u30A2\u30EB\u30E1\u30CB\u30A2 \u30C9\u30E9\u30E0" } // Armenian Dram
+        ARS { "ARS", "\u30A2\u30EB\u30BC\u30F3\u30C1\u30F3 \u30DA\u30BD" } // Argentine Peso
+        AUD { "AUD", "\u30AA\u30FC\u30B9\u30C8\u30E9\u30EA\u30A2 \u30C9\u30EB" } // Australian Dollar
+        AZM { "AZM", "\u30A2\u30BC\u30EB\u30D0\u30A4\u30B8\u30E3\u30F3 \u30DE\u30CA\u30C8" } // Azerbaijanian Manat
+        BGL { "BGL", "\u30EC\u30D5" } // Lev
+        BHD { "BHD", "\u30D0\u30FC\u30EC\u30FC\u30F3 \u30C7\u30A3\u30FC\u30CA\u30FC\u30EB" } // Bahraini Dinar
+        BND { "BND", "\u30D6\u30EB\u30CD\u30A4 \u30C9\u30EB" } // Brunei Dollar
+        BOB { "BOB", "\u30DC\u30EA\u30D3\u30A2\u30CE" } // Boliviano
+        BRL { "BRL", "\u30D6\u30E9\u30B8\u30EB \u30EC\u30A2\u30FC\u30EB" } // Brazilian Real
+        BYB { "BYB", "\u30D9\u30E9\u30EB\u30FC\u30B7 \u30EB\u30FC\u30D6\u30EB" }
+        BZD { "BZD", "\u30D9\u30EA\u30FC\u30BA \u30C9\u30EB" } // Belize Dollar
+        CAD { "CAD", "\u30AB\u30CA\u30C0 \u30C9\u30EB" } // Canadian Dollar
+        CHF { "CHF", "\u30B9\u30A4\u30B9 \u30D5\u30E9\u30F3" } // Swiss Franc
+        CLP { "CLP", "\u30C1\u30EA \u30DA\u30BD" } // Chilean Peso
+        CNY { "CNY", "\u5143\u4EBA\u6C11\u5E63" } // Yuan Renminbi
+        COP { "COP", "\u30B3\u30ED\u30F3\u30D3\u30A2 \u30DA\u30BD" } // Colombian Peso
+        CRC { "CRC", "\u30B3\u30B9\u30BF\u30EA\u30AB \u30B3\u30ED\u30FC\u30F3" } // Costa Rican Colon
+        CZK { "CZK", "\u30C1\u30A7\u30B3 \u30B3\u30EB\u30CA" } // Czech Koruna
+        DKK { "DKK", "\u30C7\u30F3\u30DE\u30FC\u30AF \u30AF\u30ED\u30FC\u30CD" } // Danish Krone
+        DOP { "DOP", "\u30C9\u30DF\u30CB\u30AB \u30DA\u30BD" } // Dominican Peso
+        DZD { "DZD", "\u30A2\u30EB\u30B8\u30A7\u30EA\u30A2 \u30C7\u30A3\u30FC\u30CA\u30FC\u30EB" } // Algerian Dinar
+        EEK { "EEK", "\u30AF\u30EB\u30FC\u30F3" } // Kroon
+        EGP { "EGP", "\u30A8\u30B8\u30D7\u30C8 \u30DD\u30F3\u30C9" } // Egyptian Pound
+        EUR { "\u20AC", "\u30E6\u30FC\u30ED" } // Euro
+        GBP { "GBP", "\u82F1\u8CA8\u30DD\u30F3\u30C9" } // Pound Sterling
+        GEL { "GEL", "\u30E9\u30EA" } // Lari
+        GTQ { "GTQ", "\u30B1\u30C3\u30C4\u30A1\u30EB" } // Quetzal
+        HKD { "HKD", "\u9999\u6E2F\u30C9\u30EB" } // Hong Kong Dollar
+        HNL { "HNL", "\u30EC\u30F3\u30D4\u30E9" } // Lempira
+        HRK { "HRK", "\u30AF\u30ED\u30A2\u30C1\u30A2 \u30AF\u30FC\u30CA" } // Croatian kuna
+        HUF { "HUF", "\u30D5\u30A9\u30FC\u30EA\u30F3\u30C8" } // Forint
+        IDR { "IDR", "\u30EB\u30D4\u30A2" } // Rupiah
+        ILS { "ILS", "\u30A4\u30B9\u30E9\u30A8\u30EB\u65B0\u30B7\u30A7\u30B1\u30EB" } // New Israeli Sheqel
+        INR { "INR", "\u30A4\u30F3\u30C9 \u30EB\u30D4\u30FC" } // Indian Rupee
+        IQD { "IQD", "\u30A4\u30E9\u30AF \u30C7\u30A3\u30FC\u30CA\u30FC\u30EB" } // Iraqi Dinar
+        IRR { "IRR", "\u30A4\u30E9\u30F3 \u30EA\u30A2\u30EB" } // Iranian Rial
+        ISK { "ISK", "\u30A2\u30A4\u30B9\u30E9\u30F3\u30C9 \u30AF\u30ED\u30FC\u30CA" } // Iceland Krona
+        JMD { "JMD", "\u30B8\u30E3\u30DE\u30A4\u30AB \u30C9\u30EB" } // Jamaican Dollar
+        JOD { "JOD", "\u30E8\u30EB\u30C0\u30F3 \u30C7\u30A3\u30FC\u30CA\u30FC\u30EB" } // Jordanian Dinar
         JPY { "\uFFE5", "\u5186" } // Yen: JAPAN (JP)
+        KES { "KES", "\u30B1\u30CB\u30A2 \u30B7\u30EA\u30F3\u30B0" } // Kenyan Shilling
+        KGS { "KGS", "\u30BD\u30E0" } // Som
+        KRW { "\u20A9", "\u30A6\u30A9\u30F3" } // Won
+        KWD { "KWD", "\u30AF\u30A6\u30A7\u30FC\u30C8 \u30C7\u30A3\u30FC\u30CA\u30FC\u30EB" } // Kuwaiti Dinar
+        KZT { "KZT", "\u30C6\u30F3\u30B2" } // Tenge
+        LBP { "LBP", "\u30EC\u30D0\u30CE\u30F3 \u30DD\u30F3\u30C9" } // Lebanese Pound
+        LTL { "LTL", "\u30EA\u30C8\u30A2\u30CB\u30A2 \u30EA\u30BF\u30B9" } // Lithuanian Litas
+        LVL { "LVL", "\u30E9\u30C8\u30D3\u30A2 \u30E9\u30C3\u30C8" } // Latvian Lats
+        LYD { "LYD", "\u30EA\u30D3\u30A2 \u30C7\u30A3\u30FC\u30CA\u30FC\u30EB" } // Lybian Dinar
+        MAD { "MAD", "\u30E2\u30ED\u30C3\u30B3 \u30C7\u30A3\u30EB\u30CF\u30E0" } // Moroccan Dirham
+        MKD { "MKD", "\u30C7\u30CA\u30EB" } // Denar
+        MNT { "MNT", "\u30C8\u30A5\u30B0\u30EA\u30AF" } // Tugrik
+        MOP { "MOP", "\u30D1\u30BF\u30AB" } // Pataca
+        MVR { "MVR", "\u30EB\u30D5\u30A3\u30E4" } // Rufiyaa
+        MXN { "MXN", "\u30E1\u30AD\u30B7\u30B3 \u30DA\u30BD" } // Mexican Peso
+        MYR { "MYR", "\u30DE\u30EC\u30FC\u30B7\u30A2 \u30EA\u30F3\u30AE\u30C3\u30C8" } // Malaysian Ringgit
+        NIO { "NIO", "\u30B3\u30EB\u30C9\u30D0 \u30AA\u30ED" } // Cordoba Oro
+        NOK { "NOK", "\u30CE\u30EB\u30A6\u30A7\u30FC \u30AF\u30ED\u30FC\u30CD" } // Norwegian Krone
+        NZD { "NZD", "\u30CB\u30E5\u30FC\u30B8\u30FC\u30E9\u30F3\u30C9 \u30C9\u30EB" } // New Zealand Dollar
+        OMR { "OMR", "\u30AA\u30DE\u30FC\u30F3 \u30EA\u30A2\u30EB" } // Rial Omani
+        PAB { "PAB", "\u30D0\u30EB\u30DC\u30A2" } // Balboa
+        PEN { "PEN", "\u30CC\u30A8\u30DC \u30BD\u30EB" } // Nuevo Sol
+        PHP { "PHP", "\u30D5\u30A3\u30EA\u30D4\u30F3 \u30DA\u30BD" } // Philippine Peso
+        PKR { "PKR", "\u30D1\u30AD\u30B9\u30BF\u30F3 \u30EB\u30D4\u30FC" } // Pakistan Rupee
+        PLN { "PLN", "\u30BA\u30ED\u30C1" } // Zloty
+        PYG { "PYG", "\u30B0\u30A2\u30E9\u30CB\u30FC" } // Guarani
+        QAR { "QAR", "\u30AB\u30BF\u30FC\u30EB \u30EA\u30A2\u30EB" } // Qatari Rial
+        ROL { "ROL", "\u30EC\u30A4" } // Leu
+        RUR { "RUR", "\u30ED\u30B7\u30A2 \u30EB\u30FC\u30D6\u30EB" } // Russian Ruble
+        SAR { "SAR", "\u30B5\u30A6\u30B8 \u30EA\u30E4\u30FC\u30EB" } // Saudi Riyal
+        SEK { "SEK", "\u30B9\u30A6\u30A7\u30FC\u30C7\u30F3 \u30AF\u30ED\u30FC\u30CA" } // Swedish Krona
+        SGD { "SGD", "\u30B7\u30F3\u30AC\u30DD\u30FC\u30EB \u30C9\u30EB" } // Singapore Dollar
+        SIT { "SIT", "\u30C8\u30E9\u30EB" } // Tolar
+        SKK { "SKK", "\u30B9\u30ED\u30D0\u30AD\u30A2 \u30B3\u30EB\u30CA" } // Slovak Koruna
+        SYP { "SYP", "\u30B7\u30EA\u30A2 \u30DD\u30F3\u30C9" } // Syrian Pound
+        THB { "THB", "\u30D0\u30FC\u30C4" } // Baht
+        TND { "TND", "\u30C1\u30E5\u30CB\u30B8\u30A2 \u30C7\u30A3\u30FC\u30CA\u30FC\u30EB" } // Tunisian Dinar
+        TRL { "TRL", "\u30C8\u30EB\u30B3 \u30EA\u30E9" } // Turkish Lira
+        TTD { "TTD", "\u30C8\u30EA\u30CB\u30C0\u30FC\u30C9\u30C8\u30D0\u30B4 \u30C9\u30EB" } // Trinidad and Tobago Dollar
+        TWD { "TWD", "\u65B0\u53F0\u6E7E\u5143" } // New Taiwan Dollar
+        UAH { "UAH", "\u30D5\u30EA\u30D6\u30CA" } // Hryvnia
+        USD { "USD", "\u7C73\u30C9\u30EB" } // US Dollar
+        UYU { "UYU", "\u30A6\u30EB\u30B0\u30A2\u30A4 \u30DA\u30BD" } // Peso Uruguayo
+        UZS { "UZS", "\u30A6\u30BA\u30D9\u30AD\u30B9\u30BF\u30F3 \u30B9\u30E0" } // Uzbekistan Sum
+        VEB { "VEB", "\u30DC\u30EA\u30D0\u30EB" } // Bolivar
+        VND { "VND", "\u30C9\u30F3" } // Dong
+        YER { "YER", "\u30A4\u30A8\u30E1\u30F3 \u30EA\u30A2\u30EB" } // Yemeni Rial
+        YUN { "YUN", "\u30E6\u30FC\u30B4\u30B9\u30E9\u30D3\u30A2\u65B0\u30C7\u30A3\u30FC\u30CA\u30FC\u30EB" }
+        ZAR { "ZAR", "\u30E9\u30F3\u30C9" } // Rand
+        ZWD { "ZWD", "\u30B8\u30F3\u30D0\u30D6\u30A8 \u30C9\u30EB" } // Zimbabwe Dollar
     }
 }
