@@ -444,7 +444,10 @@ stepToUnicode(ConversionCase &cc, UConverter *cnv,
                 flush, pErrorCode);
 
             // check pointers and errors
-            if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+            if(source>sourceLimit || target>targetLimit) {
+                *pErrorCode=U_INTERNAL_PROGRAM_ERROR;
+                break;
+            } else if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
                 if(target!=targetLimit) {
                     // buffer overflow must only be set when the target is filled
                     *pErrorCode=U_INTERNAL_PROGRAM_ERROR;
@@ -796,7 +799,10 @@ stepFromUnicode(ConversionCase &cc, UConverter *cnv,
             flush, pErrorCode);
 
         // check pointers and errors
-        if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
+        if(source>sourceLimit || target>targetLimit) {
+            *pErrorCode=U_INTERNAL_PROGRAM_ERROR;
+            break;
+        } else if(*pErrorCode==U_BUFFER_OVERFLOW_ERROR) {
             if(target!=targetLimit) {
                 // buffer overflow must only be set when the target is filled
                 *pErrorCode=U_INTERNAL_PROGRAM_ERROR;
