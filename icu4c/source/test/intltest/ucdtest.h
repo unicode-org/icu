@@ -39,7 +39,7 @@ public:
     void TestMisc(void);
 
     /** Helper function for TestUnicodeData */
-    static void unicodeDataLineFn(void *context,
+    static void U_CALLCONV unicodeDataLineFn(void *context,
                                   char *fields[][2], int32_t fieldCount,
                                   UErrorCode *pErrorCode);
     /** 
