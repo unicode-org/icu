@@ -1459,31 +1459,22 @@ _ISCIIGetUnicodeSet(const UConverter *cnv,
                     UConverterUnicodeSet which,
                     UErrorCode *pErrorCode)
 {
-    int32_t idx;
-    int32_t fromUnicodeDelta;
-    uint8_t offset;
-    static const uint8_t versionToScriptOffset[MALAYALAM+1] = {
-    /*  0, 1, 2, 3, 4, 5, 6, 7, 8 */
-        0, 4, 1, 2, 3, 7, 5, 5, 6
-    };
-    if (cnv->options > MALAYALAM) {
-        /* sanity check */
-        *pErrorCode = U_UNSUPPORTED_ERROR;
-        return;
-    }
-    offset = versionToScriptOffset[cnv->options];
-    fromUnicodeDelta = ((UConverterDataISCII*)(cnv->extraInfo))->currentDeltaFromUnicode;
+    int32_t idx, script;
+    uint8_t mask;
 
-    for (idx = 0; idx < DELTA; idx++) {
-        if ((validityTable[idx] << offset) & DELTA) {
-            uset_add(set, idx + fromUnicodeDelta + INDIC_BLOCK_BEGIN);
+    /* Since all ISCII versions allow switching to other ISCII
+    scripts, we add all roundtrippable characters to this set. */
+    uset_addRange(set, 0, ASCII_END);
+    for (script = DEVANAGARI; script <= MALAYALAM; script++) {
+        mask = (uint8_t)(lookupInitialData[script][1]);
+        for (idx = 0; idx < DELTA; idx++) {
+            if (validityTable[idx] & mask) {
+                uset_add(set, idx + (script * DELTA) + INDIC_BLOCK_BEGIN);
+            }
         }
     }
-    if (cnv->options <= ORIYA) {
-        uset_add(set, DANDA);
-        uset_add(set, DOUBLE_DANDA);
-    }
-    uset_addRange(set, 0, ASCII_END);
+    uset_add(set, DANDA);
+    uset_add(set, DOUBLE_DANDA);
     uset_add(set, ZWNJ);
     uset_add(set, ZWJ);
 }
