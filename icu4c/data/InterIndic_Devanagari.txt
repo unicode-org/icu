@@ -10,7 +10,7 @@
 
 // InterIndic_Devanagari
 
-InterIndic-Devanagari {
+InterIndic_Devanagari {
   Rule {
 //--------------------------------------------------------------------
 // Copyright (c) 1999-2001, International Business Machines

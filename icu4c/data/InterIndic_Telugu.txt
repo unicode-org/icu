@@ -10,7 +10,7 @@
 
 // InterIndic_Telugu
 
-InterIndic-Telugu {
+InterIndic_Telugu {
   Rule {
 //--------------------------------------------------------------------
 // Copyright (c) 1999-2001, International Business Machines

@@ -5,7 +5,7 @@
 
 // Devanagari_InterIndic
 
-Devanagari-InterIndic {
+Devanagari_InterIndic {
   Rule {
 //--------------------------------------------------------------------
 // Copyright (c) 1999-2001, International Business Machines
