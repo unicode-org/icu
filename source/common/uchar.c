@@ -128,8 +128,16 @@ _openProps(UCharProps *ucp, UErrorCode *pErrorCode) {
 
     /* unserialize the properties vectors trie */
     length=(int32_t)(p[UPROPS_ADDITIONAL_VECTORS_INDEX]-p[UPROPS_ADDITIONAL_TRIE_INDEX])*4;
-    length=utrie_unserialize(&ucp->propsVectorsTrie, (const uint8_t *)(p+p[UPROPS_ADDITIONAL_TRIE_INDEX]), length, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
+    if(length>0) {
+        length=utrie_unserialize(&ucp->propsVectorsTrie, (const uint8_t *)(p+p[UPROPS_ADDITIONAL_TRIE_INDEX]), length, pErrorCode);
+    }
+    if(length<=0 || U_FAILURE(*pErrorCode)) {
+        /*
+         * length==0:
+         * Allow the properties vectors trie to be missing -
+         * also requires propsVectorsColumns=indexes[UPROPS_ADDITIONAL_VECTORS_COLUMNS_INDEX]
+         * to be zero so that this trie is never accessed.
+         */
         uprv_memset(&ucp->propsVectorsTrie, 0, sizeof(ucp->propsVectorsTrie));
     }
 }
@@ -952,7 +960,10 @@ uchar_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode) {
 
     /* add the start code point of each same-value range of each trie */
     utrie_enum(&propsTrie, NULL, _enumPropertyStartsRange, sa);
-    utrie_enum(&propsVectorsTrie, NULL, _enumPropertyStartsRange, sa);
+    if(propsVectorsColumns>0) {
+        /* if propsVectorsColumns==0 then the properties vectors trie may not be there at all */
+        utrie_enum(&propsVectorsTrie, NULL, _enumPropertyStartsRange, sa);
+    }
 
     /* add code points with hardcoded properties, plus the ones following them */
 
