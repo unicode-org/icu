@@ -5,15 +5,14 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/DecimalFormat.java,v $ 
- * $Date: 2003/11/21 22:52:05 $ 
- * $Revision: 1.39 $
+ * $Date: 2004/01/08 22:26:59 $ 
+ * $Revision: 1.40 $
  *
  *****************************************************************************************
  */
 package com.ibm.icu.text;
 
 import com.ibm.icu.util.Currency;
-import com.ibm.icu.util.ULocale;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.impl.UCharacterProperty;
 import java.text.ParsePosition;
@@ -3389,6 +3388,8 @@ public class DecimalFormat extends NumberFormat {
         if (formatWidth > 0) {
             formatWidth += positivePrefix.length() + positiveSuffix.length();
         }
+        
+        setLocale(null, null);
     }
 
     /*Rewrite the following 4 "set" methods
@@ -3466,15 +3467,6 @@ public class DecimalFormat extends NumberFormat {
     public void setMinimumFractionDigits(int newValue) {
         super.setMinimumFractionDigits(Math.min(newValue, DOUBLE_FRACTION_DIGITS));
     }
-
-    /** Get the locale for this decimal format object. You can choose between valid and actual locale.
-	 *  @param type type of the locale we're looking for (valid or actual) 
-	 *  @return the locale
-	 *  @draft ICU 2.8
-	 */
-	public ULocale getLocale(ULocale.ULocaleDataType type) {
-		return symbols.getLocale(type);		
-	}
 
     /**
      * First, read the default serializable fields from the stream.  Then

@@ -1603,7 +1603,11 @@ public abstract class Calendar implements Serializable, Cloneable {
             return new GregorianCalendar(zone, locale);
         } else {
         	Calendar result = factory.create(zone, locale);
-        	result.validLocale = new ULocale(actualReturn[0]);
+
+            // TODO: get the actual/valid locale properly
+        	ULocale uloc = new ULocale(actualReturn[0]);
+            result.setLocale(uloc, uloc);
+
             return result;
         }
     }
@@ -3592,7 +3596,6 @@ public abstract class Calendar implements Serializable, Cloneable {
     private void setWeekendData(Locale loc) {
         ResourceBundle resource =
             ICULocaleData.getResourceBundle("CalendarData", loc);
-        validLocale = new ULocale(resource.getLocale());
         String[] data = resource.getStringArray("Weekend");
         weekendOnset       = Integer.parseInt(data[0]);
         weekendOnsetMillis = Integer.parseInt(data[1]);
@@ -3604,17 +3607,6 @@ public abstract class Calendar implements Serializable, Cloneable {
     // End of weekend support
     //-------------------------------------------------------------------------
 
-    private ULocale validLocale;
-    
-	/** Get the locale for this calendar object. You can choose between valid and actual locale.
-	 *  @param type type of the locale we're looking for (valid or actual) 
-	 *  @return the locale
-	 *  @draft ICU 2.8
-	 */
-	public ULocale getLocale(ULocale.ULocaleDataType type) {
-	    return validLocale;		
-	}
-	
     /**
      * Overrides Cloneable
      * @stable ICU 2.0
@@ -3675,6 +3667,20 @@ public abstract class Calendar implements Serializable, Cloneable {
     // =======================privates===============================
 
     /**
+     * Internal class that holds cached locale data.
+     */
+    private static class WeekData {
+        public int firstDayOfWeek;
+        public int minimalDaysInFirstWeek;
+        public Locale actualLocale;
+        public WeekData(int fdow, int mdifw, Locale actualLoc) {
+            this.firstDayOfWeek = fdow;
+            this.minimalDaysInFirstWeek = mdifw;
+            this.actualLocale = actualLoc;
+        }
+    }
+    
+    /**
      * Both firstDayOfWeek and minimalDaysInFirstWeek are locale-dependent.
      * They are used to figure out the week count for a specific date for
      * a given locale. These must be set when a Calendar is constructed.
@@ -3682,20 +3688,24 @@ public abstract class Calendar implements Serializable, Cloneable {
      */
     private void setWeekCountData(Locale desiredLocale)
     {
-    /* try to get the Locale data from the cache */
-    int[] data = (int[]) cachedLocaleData.get(desiredLocale);
+        /* try to get the Locale data from the cache */
+        WeekData data = (WeekData) cachedLocaleData.get(desiredLocale);
+        
+        if (data == null) {  /* cache miss */
+            ResourceBundle resource = ICULocaleData.getLocaleElements(desiredLocale);
+            String[] dateTimePatterns =  resource.getStringArray("DateTimeElements");
+            data = new WeekData(Integer.parseInt(dateTimePatterns[0]),
+                                Integer.parseInt(dateTimePatterns[1]),
+                                resource.getLocale());
+            /* cache update */
+            cachedLocaleData.put(desiredLocale, data);
+        }
+        setFirstDayOfWeek(data.firstDayOfWeek);
+        setMinimalDaysInFirstWeek(data.minimalDaysInFirstWeek);
 
-    if (data == null) {  /* cache miss */
-        ResourceBundle resource = ICULocaleData.getLocaleElements(desiredLocale);
-        String[] dateTimePatterns =  resource.getStringArray("DateTimeElements");
-        data = new int[2];
-        data[0] = Integer.parseInt(dateTimePatterns[0]);
-        data[1] = Integer.parseInt(dateTimePatterns[1]);
-        /* cache update */
-        cachedLocaleData.put(desiredLocale, data);
-    }
-    setFirstDayOfWeek(data[0]);
-    setMinimalDaysInFirstWeek(data[1]);
+        // TODO: determine the actual/valid locale
+        ULocale uloc = new ULocale(data.actualLocale);
+        setLocale(uloc, uloc);
     }
 
     /**
@@ -4871,4 +4881,76 @@ public abstract class Calendar implements Serializable, Cloneable {
     protected final long internalGetTimeInMillis() {
         return time;
     }
+    
+    // -------- BEGIN ULocale boilerplate --------
+
+    /**
+     * Return the locale that was used to create this object, or null.
+     * This may may differ from the locale requested at the time of
+     * this object's creation.  For example, if an object is created
+     * for locale <tt>en_US_CALIFORNIA</tt>, the actual data may be
+     * drawn from <tt>en</tt> (the <i>actual</i> locale), and
+     * <tt>en_US</tt> may be the most specific locale that exists (the
+     * <i>valid</i> locale).
+     * @param type type of information requested, either {@link
+     * com.ibm.icu.util.ULocale#VALID_LOCALE} or {@link
+     * com.ibm.icu.util.ULocale#ACTUAL_LOCALE}.
+     * @return the information specified by <i>type</i>, or null if
+     * this object was not constructed from locale data.
+     * @see com.ibm.icu.util.ULocale
+     * @see com.ibm.icu.util.ULocale#VALID_LOCALE
+     * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
+     * @draft ICU 2.8
+     */
+    public final ULocale getLocale(ULocale.Type type) {
+        return type == ULocale.ACTUAL_LOCALE ?
+            this.actualLocale : this.validLocale;
+    }
+
+    /**
+     * Set information about the locales that were used to create this
+     * object.  If the object was not constructed from locale data,
+     * both arguments should be set to null.  Otherwise, neither
+     * should be null.  The actual locale must be at the same level or
+     * less specific than the valid locale.  This method is intended
+     * for use by factories or other entities that create objects of
+     * this class.
+     * @param valid the most specific locale containing any resource
+     * data, or null
+     * @param actual the locale containing data used to construct this
+     * object, or null
+     * @see com.ibm.icu.util.ULocale
+     * @see com.ibm.icu.util.ULocale#VALID_LOCALE
+     * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
+     * @internal
+     */
+    final void setLocale(ULocale valid, ULocale actual) {
+        // Change the following to an assertion later
+        if ((valid == null) != (actual == null)) {
+            ///CLOVER:OFF
+            throw new IllegalArgumentException();
+            ///CLOVER:ON
+        }
+        // Another check we could do is that the actual locale is at
+        // the same level or less specific than the valid locale.
+        this.validLocale = valid;
+        this.actualLocale = actual;
+    }
+
+    /**
+     * The most specific locale containing any resource data, or null.
+     * @see com.ibm.icu.util.ULocale
+     * @internal
+     */
+    private ULocale validLocale;
+
+    /**
+     * The locale containing data used to construct this object, or
+     * null.
+     * @see com.ibm.icu.util.ULocale
+     * @internal
+     */
+    private ULocale actualLocale;
+
+    // -------- END ULocale boilerplate --------
 }
