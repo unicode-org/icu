@@ -899,7 +899,7 @@ public class LDMLUtilities {
             if(len>1){
                 Node best = getNonAltNode(nl);
                 if(best != null) {
-                    System.err.println("Chose best node from " + xpath);
+                    //System.err.println("Chose best node from " + xpath);
                     return best;
                 }
                 /* else complain */
