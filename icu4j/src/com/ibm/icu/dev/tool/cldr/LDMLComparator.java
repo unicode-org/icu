@@ -271,7 +271,7 @@ public class LDMLComparator {
                     //System.out.println("INFO:  no file created (nothing to write..) " + fileName);
                 } else {
                     ourCvsVersion = "";
-                    getCvsVersion();
+                    getCVSVersion();
                     OutputStreamWriter os = new OutputStreamWriter(new FileOutputStream(fileName),encoding);
                     System.out.println("INFO: Writing: " + fileName + "\t(" + m_totalCount + " items)");
                     PrintWriter writer = new PrintWriter(os);
@@ -288,7 +288,7 @@ public class LDMLComparator {
                         indexwriter.println(" <td><a href=\"" + localeStr+".html" + "\">" +
                             ourLocale.getDisplayName() + "</a></td>");
                         indexwriter.println(" <td>" + m_totalCount + "</td>");
-                        indexwriter.println(" <td>" + getCvsLink(localeStr,ourCvsVersion) +  ourCvsVersion + "</a></td>");
+                        indexwriter.println(" <td>" + LDMLUtilities.getCVSLink(localeStr,ourCvsVersion) +  ourCvsVersion + "</a></td>");
                         indexwriter.println("</tr>");
                         is.close();
                     }
@@ -720,7 +720,7 @@ public class LDMLComparator {
                                     "<input type=submit value=\"" + "Test" + "\"/>" +
                                     "</form>");
                             }
-                    if(m_Vetting && element.referenceUrl != null) {
+                    if(/*m_Vetting &&*/ element.referenceUrl != null) {
                         writer.print("<br><div align='right'><a href=\"" + element.referenceUrl + "\"><i>(Ref)</i></a></div>");
                     }
                     writer.print("</td>");
@@ -808,8 +808,8 @@ public class LDMLComparator {
                                     "<a href=\"./index.html\">Main and About</a>, "+
                                     "</b></p>\n");                                    
                   if((ourCvsVersion!=null) && (ourCvsVersion.length()>0)) {
-                    writer.println("<h3><tt>"+ getCvsLink(localeStr) + localeStr + ".xml</a> version " +
-                        getCvsLink(localeStr,ourCvsVersion) + ourCvsVersion + "</a></tt></h3>");
+                    writer.println("<h3><tt>"+ LDMLUtilities.getCVSLink(localeStr) + localeStr + ".xml</a> version " +
+                        LDMLUtilities.getCVSLink(localeStr,ourCvsVersion) + ourCvsVersion + "</a></tt></h3>");
                   } 
                   writer.print(         "        <table>\n");
         }
@@ -1789,48 +1789,9 @@ public class LDMLComparator {
         writer.print("      </table>\n");   
     }    
     
-    private void getCvsVersion()
+    private void getCVSVersion()
     {
-    //    private String localeStr;    
-      //  private String ourCvsVersion = null;
-       // sourceFolder
-       //                localeStr  = goldFileName.substring(goldFileName.lastIndexOf(File.separatorChar)+1,goldFileName.lastIndexOf('.'));
-         int index = goldFileName.lastIndexOf(File.separatorChar);
-         String sourceDir = goldFileName.substring(0, index);
+        ourCvsVersion = LDMLUtilities.getCVSVersion(goldFileName);
+    }
 
-       File entriesFile = new File(sourceDir + File.separatorChar + "CVS","Entries");
-       if(!entriesFile.exists() || !entriesFile.canRead()) {
-        System.out.println("Can't read, won't try to get CVS " + entriesFile.toString());
-        return;
-       }
-       
-        try {
-            BufferedReader r = new BufferedReader(new FileReader(entriesFile.getPath()));
-            String s;
-            while((s=r.readLine())!=null) {
-                String lookFor = "/"+localeStr+".xml/";
-                if(s.startsWith(lookFor)) {
-                    String ver = s.substring(lookFor.length());
-                    ver = ver.substring(0,ver.indexOf('/'));
-                    ourCvsVersion = ver;
-                }
-            }
-            r.close();
-        } catch ( Throwable th ) {
-            System.err.println(th.toString() + " trying to read CVS Entries file " + entriesFile.getPath());
-            return;
-        }
-
-    }
-    
-    private static final String getCvsLink(String locale)
-    {
-        return "<a href=\"http://oss.software.ibm.com/cvs/icu/locale/common/main/" + locale + ".xml\">";
-    }
-    
-    private static final String getCvsLink(String locale, String version)
-    {
-        return "<a href=\"http://oss.software.ibm.com/cvs/icu/locale/common/main/" + locale + ".xml?rev=" +
-            version + "&content-type=text/x-cvsweb-markup\">";
-    }
 } //end of class definition/declaration

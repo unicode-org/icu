@@ -636,14 +636,18 @@ public class LDML2ICUConverter {
         if(ldml == null) {
             throw new RuntimeException("ERROR: no <ldml> node found in parseBundle()");
         }
-        
+        if(verbose) {
+            System.out.print("INFO: ");
+        }
         for(Node node=ldml.getFirstChild(); node!=null; node=node.getNextSibling()){
             if(node.getNodeType()!=Node.ELEMENT_NODE){
              	continue;
             }
     		String name = node.getNodeName();
             ICUResourceWriter.Resource res = null;
-            
+            if(verbose) {
+                System.out.print(name+" ");
+            }
             if(name.equals(LDMLConstants.ALIAS)){
                 ICUResourceWriter.ResourceString str = new ICUResourceWriter.ResourceString();
                 str.name = "\"%%ALIAS\"";
@@ -704,6 +708,9 @@ public class LDML2ICUConverter {
                 res = null;
             }
             xpath.delete(savedLength,xpath.length());
+        }
+        if(verbose) {
+            System.out.println();
         }
         // now fetch the specials and append to the real bundle
         if(specialsDir!=null && ULocale.getCountry(locName).equals("")){
@@ -3469,7 +3476,13 @@ public class LDML2ICUConverter {
         buffer.append("// * Corporation and others.  All Rights Reserved."+LINESEP);
         buffer.append("// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java" + LINESEP);
        // buffer.append("// * Date & Time: " + c.get(Calendar.YEAR) + "/" + (c.get(Calendar.MONTH)+1) + "/" + c.get(Calendar.DAY_OF_MONTH) + " " + c.get(Calendar.HOUR_OF_DAY) + COLON + c.get(Calendar.MINUTE)+ LINESEP);
-        buffer.append("// * Source File: " + fileName + LINESEP);
+//         String ver = LDMLUtilities.getCVSVersion(fileName);
+//         if(ver==null) {
+//             ver = "";
+//         } else {
+//             ver = " v" + ver;
+//         }
+        buffer.append("// * Source File: " + fileName  + LINESEP);
         buffer.append("// *" + LINESEP);                    
         buffer.append("// ***************************************************************************" + LINESEP);
         writeLine(writer, buffer.toString());
