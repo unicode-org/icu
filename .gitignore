@@ -173,6 +173,7 @@ icu4c/source/tools/gencmn/*.plg
 icu4c/source/tools/gencmn/Debug
 icu4c/source/tools/gencmn/Makefile
 icu4c/source/tools/gencmn/Release
+icu4c/source/tools/gencmn/decmn
 icu4c/source/tools/gencmn/gencmn
 icu4c/source/tools/gencmn/tmp
 icu4c/source/tools/gencnval/*.d
