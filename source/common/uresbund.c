@@ -1221,6 +1221,7 @@ U_CAPI const char* ures_getVersionNumber(const UResourceBundle*   resourceBundle
         /* the minor version from the file. */
         UErrorCode status = U_ZERO_ERROR;
         int32_t minor_len = 0;
+        int32_t len;
 
         const UChar* minor_version = ures_getStringByKey(resourceBundle, kVersionTag, &minor_len, &status);
     
@@ -1228,15 +1229,8 @@ U_CAPI const char* ures_getVersionNumber(const UResourceBundle*   resourceBundle
         /* the length of the major part + the length of the separator */
         /* (==1) + the length of the minor part (+ 1 for the zero byte at */
         /* the end). */
-        int32_t len = uprv_strlen(U_ICU_VERSION);
-        /*
-        if(U_SUCCESS(status) && minor_version.length() > 0) 
-        {
-          minor_len = u_strlen(minor_version);
-        }
-        */
-        len += (minor_len > 0) ? minor_len : 1 /*==uprv_strlen(kDefaultMinorVersion)*/;
-        ++len; /* Add length of separator */
+
+        len = (minor_len > 0) ? minor_len : 1;
     
         /* Allocate the string, and build it up. */
         /* + 1 for zero byte */
@@ -1244,12 +1238,8 @@ U_CAPI const char* ures_getVersionNumber(const UResourceBundle*   resourceBundle
 
         ((UResourceBundle *)resourceBundle)->fVersion = (char *)uprv_malloc(1 + len); 
     
-        uprv_strcpy(resourceBundle->fVersion, U_ICU_VERSION);
-        uprv_strcat(resourceBundle->fVersion, kVersionSeparator);
-
         if(minor_len > 0) {
-            u_UCharsToChars(minor_version, resourceBundle->fVersion + len - minor_len, minor_len);
-          /*minor_version.extract(0, minor_len, fVersionID + len - minor_len, "");*/
+            u_UCharsToChars(minor_version, resourceBundle->fVersion , minor_len);
             resourceBundle->fVersion[len] =  '\0';
         }
         else {
