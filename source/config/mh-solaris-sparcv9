@@ -24,6 +24,9 @@ SHLIB.cc=	$(CXX) -xtarget=ultra -xarch=v9 $(DEFS) $(CPPFLAGS) $(CXXFLAGS) $(LDFL
 LD_RPATH=	-R
 LD_RPATH_PRE=	
 
+###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
+## Prefix for the ICU library names
+LIBICU = libicu-
 ## Shared object suffix
 SO=		so
 

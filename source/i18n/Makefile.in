@@ -44,7 +44,7 @@ subdir = i18n
 CLEANFILES = *~
 
 ## Target information
-TARGET = libicu-i18n.$(SO)
+TARGET = $(LIBICU)i18n.$(SO)
 
 DEFS = @DEFS@
 CPPFLAGS = @CPPFLAGS@ -I$(srcdir) -I$(top_builddir)/common -I$(top_srcdir)/common

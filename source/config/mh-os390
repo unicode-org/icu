@@ -55,6 +55,9 @@ SHLIB.cc=	$(LINK.cc) -Wl,dll
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	-I
 
+###  How ICU libraries are named...  ex. $(LIBICU)uc$(SO)
+## Prefix for the ICU library names
+LIBICU = libicu-
 ## Shared object suffix (switch to dll for shared library build)
 SO=		dll
 
