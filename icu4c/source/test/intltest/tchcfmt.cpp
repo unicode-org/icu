@@ -18,7 +18,7 @@
 
 // tests have obvious memory leaks!
 
-static UBool chkstatus( UErrorCode &status, char* msg = NULL )
+static UBool chkstatus( UErrorCode &status, const char* msg = NULL )
 {
     UBool ok = U_SUCCESS(status);
     if (!ok) it_errln( msg );
@@ -494,7 +494,7 @@ static double randDouble()
     // Assume 8-bit (or larger) rand values.  Also assume
     // that the system rand() function is very poor, which it always is.
     double d = 0;
-    int32_t i;
+    uint32_t i;
     char* poke = (char*)&d;
     for (i=0; i < sizeof(double); ++i)
     {

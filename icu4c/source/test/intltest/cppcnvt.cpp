@@ -224,7 +224,7 @@ void ConvertTest::TestConvert()
     someConverters[0] = new UnicodeConverter;
     someConverters[1] = new UnicodeConverter;
     someConverters[2] = new UnicodeConverter("utf8", err);
-    if (U_FAILURE(err)) errln ((UnicodeString)"FAILURE! " + err);
+    if (U_FAILURE(err)) errln ((UnicodeString)"FAILURE! " + myErrorName(err));
 
     logln("\n---Testing getName...");
 
