@@ -11,7 +11,7 @@ import java.util.*;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: HexToUnicodeTransliterator.java,v $ $Revision: 1.2 $ $Date: 2000/01/18 17:51:09 $
+ * @version $RCSfile: HexToUnicodeTransliterator.java,v $ $Revision: 1.3 $ $Date: 2000/01/27 18:59:19 $
  */
 public class HexToUnicodeTransliterator extends Transliterator {
     private static final String COPYRIGHT =
@@ -33,14 +33,14 @@ public class HexToUnicodeTransliterator extends Transliterator {
      * Implements {@link Transliterator#handleTransliterate}.
      */
     protected void handleTransliterate(Replaceable text,
-                                       int[] offsets) {
+                                       Position offsets, boolean incremental) {
         /**
          * Performs transliteration changing Unicode hexadecimal
          * escapes to characters.  For example, "U+0040" -> '@'.  A fixed
          * set of prefixes is recognized: "&#92;u", "&#92;U", "u+", "U+". 
          */
-        int cursor = offsets[CURSOR];
-        int limit = offsets[LIMIT];
+        int cursor = offsets.cursor;
+        int limit = offsets.limit;
 
         int maxCursor = limit - 6;
     loop:
@@ -91,7 +91,7 @@ public class HexToUnicodeTransliterator extends Transliterator {
             }
         }
 
-        offsets[LIMIT] = limit;
-        offsets[CURSOR] = cursor;
+        offsets.limit = limit;
+        offsets.cursor = cursor;
     }
 }

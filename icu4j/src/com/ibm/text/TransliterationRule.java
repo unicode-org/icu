@@ -1,6 +1,7 @@
 package com.ibm.text;
 
 import java.util.Dictionary;
+import com.ibm.Utility;
 
 /**
  * A transliteration rule used by
@@ -21,9 +22,12 @@ import java.util.Dictionary;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.10 $ $Date: 2000/01/18 20:36:17 $
+ * @version $RCSfile: TransliterationRule.java,v $ $Revision: 1.11 $ $Date: 2000/01/27 18:59:19 $
  *
  * $Log: TransliterationRule.java,v $
+ * Revision 1.11  2000/01/27 18:59:19  Alan
+ * Use Position rather than int[] and move all subclass overrides to one method (handleTransliterate)
+ *
  * Revision 1.10  2000/01/18 20:36:17  Alan
  * Make UnicodeSet inherit from UnicodeFilter
  *
@@ -281,7 +285,7 @@ class TransliterationRule {
      */
     public String toString() {
         return getClass().getName() + '{'
-            + escape((anteContextLength > 0 ? ("(" + pattern.substring(0, anteContextLength) +
+            + Utility.escape((anteContextLength > 0 ? ("(" + pattern.substring(0, anteContextLength) +
                                               ") ") : "")
                      + pattern.substring(anteContextLength, anteContextLength + keyLength)
                      + (anteContextLength + keyLength < pattern.length() ?
@@ -291,39 +295,6 @@ class TransliterationRule {
                         ? (output.substring(0, cursorPos) + '|' + output.substring(cursorPos))
                         : output))
             + '}';
-    }
-
-    /**
-     * Return true if this rule matches the given text.  The text being matched
-     * occupies a virtual buffer consisting of the contents of
-     * <code>result</code> concatenated to a substring of <code>text</code>.
-     * The substring is specified by <code>start</code> and <code>limit</code>.
-     * The value of <code>cursor</code> is an index into this virtual buffer,
-     * from 0 to the length of the buffer.  In terms of the parameters,
-     * <code>cursor</code> must be between 0 and <code>result.length() + limit -
-     * start</code>.
-     * @param text the untranslated text
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= text.length()</code>.
-     * @param result translated text so far
-     * @param cursor position at which to translate next, an offset into result.
-     * If greater than or equal to result.length(), represents offset start +
-     * cursor - result.length() into text.
-     * @param filter the filter.  Any character for which
-     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
-     * altered by this transliterator.  If <tt>filter</tt> is
-     * <tt>null</tt> then no filtering is applied.
-     */
-    public final boolean matches(String text, int start, int limit,
-                                 StringBuffer result, int cursor,
-                                 Dictionary variables,
-                                 UnicodeFilter filter) {
-        // Match anteContext, key, and postContext
-        return regionMatches(text, start, limit, result,
-                             cursor - anteContextLength,
-                             pattern, variables, filter);
     }
 
     /**
@@ -345,9 +316,18 @@ class TransliterationRule {
                                  int cursor, Dictionary variables,
                                  UnicodeFilter filter) {
         // Match anteContext, key, and postContext
-        return regionMatches(text, start, limit,
-                             cursor - anteContextLength,
-                             pattern, variables, filter);
+        cursor -= anteContextLength;
+        if (cursor < start
+            || (cursor + pattern.length()) > limit) {
+            return false;
+        }
+        for (int i=0; i<pattern.length(); ++i, ++cursor) {
+            if (!charMatches(pattern.charAt(i), text.charAt(cursor),
+                             variables, filter)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -382,88 +362,6 @@ class TransliterationRule {
                                        pattern, variables, filter);
         return len < anteContextLength ? MISMATCH :
             (len < pattern.length() ? PARTIAL_MATCH : FULL_MATCH);
-    }
-
-    /**
-     * Return true if a template matches the text.  The entire length of the
-     * template is compared to the text at the cursor.  As in
-     * <code>matches()</code>, the text being matched occupies a virtual buffer
-     * consisting of the contents of <code>result</code> concatenated to a
-     * substring of <code>text</code>.  See <code>matches()</code> for details.
-     * @param text the untranslated text
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= text.length()</code>.
-     * @param result translated text so far
-     * @param cursor position at which to translate next, an offset into result.
-     * If greater than or equal to result.length(), represents offset start +
-     * cursor - result.length() into text.
-     * @param template the text to match against.  All characters must match.
-     * @param variables a dictionary of variables mapping <code>Character</code>
-     * to <code>UnicodeSet</code>
-     * @param filter the filter.  Any character for which
-     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
-     * altered by this transliterator.  If <tt>filter</tt> is
-     * <tt>null</tt> then no filtering is applied.
-     * @return true if there is a match
-     */
-    protected static boolean regionMatches(String text, int start, int limit,
-                                           StringBuffer result, int cursor,
-                                           String template,
-                                           Dictionary variables,
-                                           UnicodeFilter filter) {
-        int rlen = result.length();
-        if (cursor < 0
-            || (cursor + template.length()) > (rlen + limit - start)) {
-            return false;
-        }
-        for (int i=0; i<template.length(); ++i, ++cursor) {
-            if (!charMatches(template.charAt(i),
-                             cursor < rlen ? result.charAt(cursor)
-                                           : text.charAt(cursor - rlen + start),
-                             variables, filter)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * Return true if a template matches the text.  The entire length of the
-     * template is compared to the text at the cursor.
-     * @param text the text, both translated and untranslated
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= text.length()</code>.
-     * @param cursor position at which to translate next, representing offset
-     * into text.  This value must be between <code>start</code> and
-     * <code>limit</code>.
-     * @param template the text to match against.  All characters must match.
-     * @param variables a dictionary of variables mapping <code>Character</code>
-     * to <code>UnicodeSet</code>
-     * @param filter the filter.  Any character for which
-     * <tt>filter.contains()</tt> returns <tt>false</tt> will not be
-     * altered by this transliterator.  If <tt>filter</tt> is
-     * <tt>null</tt> then no filtering is applied.
-     * @return true if there is a match
-     */
-    protected static boolean regionMatches(Replaceable text, int start, int limit,
-                                           int cursor,
-                                           String template, Dictionary variables,
-                                           UnicodeFilter filter) {
-        if (cursor < start
-            || (cursor + template.length()) > limit) {
-            return false;
-        }
-        for (int i=0; i<template.length(); ++i, ++cursor) {
-            if (!charMatches(template.charAt(i), text.charAt(cursor),
-                             variables, filter)) {
-                return false;
-            }
-        }
-        return true;
     }
 
     /**
@@ -528,31 +426,5 @@ class TransliterationRule {
             (((set = (UnicodeSet) variables.get(new Character(keyChar)))
              == null) ?
              keyChar == textChar : set.contains(textChar));
-    }
-
-    /**
-     * Escape non-ASCII characters as Unicode.
-     */
-    public static final String escape(String s) {
-        StringBuffer buf = new StringBuffer();
-        for (int i=0; i<s.length(); ++i) {
-            char c = s.charAt(i);
-            if (c >= ' ' && c <= 0x007F) {
-                buf.append(c);
-            } else {
-                buf.append("\\u");
-                if (c < 0x1000) {
-                    buf.append('0');
-                    if (c < 0x100) {
-                        buf.append('0');
-                        if (c < 0x10) {
-                            buf.append('0');
-                        }
-                    }
-                }
-                buf.append(Integer.toHexString(c));
-            }
-        }
-        return buf.toString();
     }
 }

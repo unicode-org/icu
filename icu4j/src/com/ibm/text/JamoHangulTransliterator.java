@@ -29,18 +29,15 @@ public class JamoHangulTransliterator extends Transliterator {
      * Implements {@link Transliterator#handleTransliterate}.
      */
     protected void handleTransliterate(Replaceable text,
-                                       int[] offsets) {
+                                       Position offsets, boolean incremental) {
         /**
          * Performs transliteration changing Jamo to Hangul 
          */
-        int cursor = offsets[CURSOR];
-        int limit = offsets[LIMIT];
+        int cursor = offsets.cursor;
+        int limit = offsets.limit;
         if (cursor >= limit) return;
         
         int count[] = new int[1];
-        if (limit - cursor > 1) {
-          count[0] = 5; // debugging spot
-        }
 
         char last = filteredCharAt(text, cursor++);
         while (cursor <= limit) {
@@ -48,19 +45,19 @@ public class JamoHangulTransliterator extends Transliterator {
             if (cursor < limit) next = filteredCharAt(text, cursor);
             char replacement = composeHangul(last, next, count);
             if (replacement != last) {
-              text.replace(cursor-1, cursor-1 + count[0], String.valueOf(replacement));
-              limit = limit - count[0] + 1; // fix up limit 2 => -1, 1 => 0
-              last = replacement;
-              if (next == 0xFFFF) break;
-              // don't change cursor, so we revisit char
+                text.replace(cursor-1, cursor-1 + count[0], String.valueOf(replacement));
+                limit = limit - count[0] + 1; // fix up limit 2 => -1, 1 => 0
+                last = replacement;
+                if (next == 0xFFFF) break;
+                // don't change cursor, so we revisit char
             } else {
-              ++cursor;
-              last = next;
+                ++cursor;
+                last = next;
             }
         }
         
-        offsets[LIMIT] = limit + 1;
-        offsets[CURSOR] = cursor;
+        offsets.limit = limit + 1;
+        offsets.cursor = cursor;
     }
     
 

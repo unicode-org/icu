@@ -18,5 +18,5 @@ public interface UnicodeFilter {
      * filtered</b>, then <tt>contains()</tt> returns
      * <b><tt>false</tt></b>.
      */
-    public boolean contains(char c);
+    boolean contains(char c);
 }

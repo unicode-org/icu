@@ -3,6 +3,7 @@ package com.ibm.text;
 import java.util.Hashtable;
 import java.util.Vector;
 import java.text.ParsePosition;
+import com.ibm.Utility;
 
 /**
  * A transliterator that reads a set of rules in order to determine how to perform
@@ -196,9 +197,12 @@ import java.text.ParsePosition;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  *
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.12 $ $Date: 2000/01/18 17:51:09 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.13 $ $Date: 2000/01/27 18:59:19 $
  *
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.13  2000/01/27 18:59:19  Alan
+ * Use Position rather than int[] and move all subclass overrides to one method (handleTransliterate)
+ *
  * Revision 1.12  2000/01/18 17:51:09  Alan
  * Remove "keyboard" from method names. Make maximum context a field of Transliterator, and have subclasses set it.
  *
@@ -278,103 +282,11 @@ public class RuleBasedTransliterator extends Transliterator {
     }
 
     /**
-     * Transliterates a segment of a string.  <code>Transliterator</code> API.
-     * @param text the string to be transliterated
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= text.length()</code>.
-     * @param result buffer to receive the transliterated text; previous
-     * contents are discarded
+     * Implements {@link Transliterator#handleTransliterate}.
      */
-    public void transliterate(String text, int start, int limit,
-                              StringBuffer result) {
-        /* In the following loop there is a virtual buffer consisting of the
-         * text transliterated so far followed by the untransliterated text.  There is
-         * also a cursor, which may be in the already transliterated buffer or just
-         * before the untransliterated text.
-         *
-         * Example: rules 1. ab>x|y
-         *                2. yc>z
-         *
-         * []|eabcd  start - no match, copy e to tranlated buffer
-         * [e]|abcd  match rule 1 - copy output & adjust cursor
-         * [ex|y]cd  match rule 2 - copy output & adjust cursor
-         * [exz]|d   no match, copy d to transliterated buffer
-         * [exzd]|   done
-         *
-         * cursor: an index into the virtual buffer, 0..result.length()-1.
-         * Matches take place at the cursor.  If there is no match, the cursor
-         * is advanced, and one character is moved from the source text to the
-         * result buffer.
-         *         
-         * start, limit: these designate the substring of the source text which
-         * has not been processed yet.  The range of offsets is start..limit-1.
-         * At any moment the virtual buffer consists of result +
-         * text.substring(start, limit).
-         */
-        int cursor = 0;
-        result.setLength(0);
-        while (start < limit || cursor < result.length()) {
-            TransliterationRule r = data.ruleSet.findMatch(text, start, limit, result,
-                                                      cursor, data.setVariables, getFilter());
-            if (DEBUG) {
-                StringBuffer buf = new StringBuffer(
-                        result.toString() + '#' + text.substring(start, limit));
-                buf.insert(cursor <= result.length()
-                           ? cursor : (cursor + 1),
-                           '|');
-                System.err.print((r == null ? "nomatch:" : ("match:" + r + ", "))
-                                 + buf);
-            }
-
-            if (r == null) {
-                if (cursor == result.length()) {
-                    result.append(text.charAt(start++));
-                }
-                ++cursor;
-            } else {
-                // resultPad is length of result to right of cursor; >= 0
-                int resultPad = result.length() - cursor;
-                char[] tail = null;
-                if (r.getKeyLength() > resultPad) {
-                    start += r.getKeyLength() - resultPad;
-                } else if (r.getKeyLength() < resultPad) {
-                    tail = new char[resultPad - r.getKeyLength()];
-                    result.getChars(cursor + r.getKeyLength(), result.length(),
-                                    tail, 0);
-                }
-                result.setLength(cursor);
-                result.append(r.getOutput());
-                if (tail != null) {
-                    result.append(tail);
-                }
-                cursor += r.getCursorPos();
-            }
-
-            if (DEBUG) {
-                StringBuffer buf = new StringBuffer(
-                        result.toString() + '#' + text.substring(start, limit));
-                buf.insert(cursor <= result.length()
-                           ? cursor : (cursor + 1),
-                           '|');
-                System.err.println(" => " + buf);
-            }
-        }
-    }
-
-    /**
-     * Transliterates a segment of a string.  <code>Transliterator</code> API.
-     * @param text the string to be transliterated
-     * @param start the beginning index, inclusive; <code>0 <= start
-     * <= limit</code>.
-     * @param limit the ending index, exclusive; <code>start <= limit
-     * <= text.length()</code>.
-     * @return The new limit index
-     */
-    public int transliterate(Replaceable text, int start, int limit) {
-        /* When using Replaceable, the algorithm is simpler, since we don't have
-         * two separate buffers.  We keep start and limit fixed the entire time,
+    protected void handleTransliterate(Replaceable text,
+                                       Position index, boolean incremental) {
+        /* We keep start and limit fixed the entire time,
          * relative to the text -- limit may move numerically if text is
          * inserted or removed.  The cursor moves from start to limit, with
          * replacements happening under it.
@@ -388,41 +300,25 @@ public class RuleBasedTransliterator extends Transliterator {
          * exz|d    no match, advance cursor
          * exzd|    done
          */
-        int cursor = start;
-        while (cursor < limit) {
-            TransliterationRule r = data.ruleSet.findMatch(text, start, limit,
-                                                      cursor, data.setVariables, getFilter());
-            if (r == null) {
-                ++cursor;
-            } else {
-                text.replace(cursor, cursor + r.getKeyLength(), r.getOutput());
-                limit += r.getOutput().length() - r.getKeyLength();
-                cursor += r.getCursorPos();
-            }
-        }
-        return limit;
-    }
-
-    /**
-     * Implements {@link Transliterator#handleTransliterate}.
-     */
-    protected void handleTransliterate(Replaceable text,
-                                       int[] index) {
-        int start = index[START];
-        int limit = index[LIMIT];
-        int cursor = index[CURSOR];
+        int start = index.start;
+        int limit = index.limit;
+        int cursor = index.cursor;
 
         if (DEBUG) {
             System.out.print("\"" +
-                escape(rsubstring(text, start, cursor)) + '|' +
-                escape(rsubstring(text, cursor, limit)) + "\"");
+                Utility.escape(rsubstring(text, start, cursor)) + '|' +
+                Utility.escape(rsubstring(text, cursor, limit)) + "\"");
         }
 
         boolean partial[] = new boolean[1];
+        partial[0] = false;
 
         while (cursor < limit) {
-            TransliterationRule r = data.ruleSet.findIncrementalMatch(
-                    text, start, limit, cursor, data.setVariables, partial, getFilter());
+            TransliterationRule r = incremental ?
+                data.ruleSet.findIncrementalMatch(text, start, limit, cursor,
+                                                  data.setVariables, partial, getFilter()) :
+                data.ruleSet.findMatch(text, start, limit,
+                                       cursor, data.setVariables, getFilter());
             /* If we match a rule then apply it by replacing the key
              * with the rule output and repositioning the cursor
              * appropriately.  If we get a partial match, then we
@@ -446,13 +342,13 @@ public class RuleBasedTransliterator extends Transliterator {
 
         if (DEBUG) {
             System.out.println(" -> \"" +
-                escape(rsubstring(text, start, cursor)) + '|' + 
-                escape(rsubstring(text, cursor, cursor)) + '|' + 
-                escape(rsubstring(text, cursor, limit)) + "\"");
+                Utility.escape(rsubstring(text, start, cursor)) + '|' + 
+                Utility.escape(rsubstring(text, cursor, cursor)) + '|' + 
+                Utility.escape(rsubstring(text, cursor, limit)) + "\"");
         }
 
-        index[LIMIT] = limit;
-        index[CURSOR] = cursor;
+        index.limit = limit;
+        index.cursor = cursor;
     }
 
 
@@ -463,36 +359,6 @@ public class RuleBasedTransliterator extends Transliterator {
         StringBuffer buf = new StringBuffer();
         while (start < limit) {
             buf.append(r.charAt(start++));
-        }
-        return buf.toString();
-    }
-
-    /**
-     * FOR DEBUGGING: Escape non-ASCII characters as Unicode.
-     */
-    private static final String escape(String s) {
-        StringBuffer buf = new StringBuffer();
-        for (int i=0; i<s.length(); ++i) {
-            char c = s.charAt(i);
-            if (c >= ' ' && c <= 0x007F) {
-                if (c == '\\') {
-                    buf.append("\\\\"); // That is, "\\"
-                } else {
-                    buf.append(c);
-                }
-            } else {
-                buf.append("\\u");
-                if (c < 0x1000) {
-                    buf.append('0');
-                    if (c < 0x100) {
-                        buf.append('0');
-                        if (c < 0x10) {
-                            buf.append('0');
-                        }
-                    }
-                }
-                buf.append(Integer.toHexString(c));
-            }
         }
         return buf.toString();
     }
