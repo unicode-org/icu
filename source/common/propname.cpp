@@ -152,7 +152,7 @@ static UBool _load() {
  * unnecessary function call.  If the data is not loaded, call _load()
  * to load it, and return TRUE if the load succeeds.
  */
-static UBool inline load() {
+static inline UBool load() {
     umtx_lock(NULL);
     UBool f = (PNAME!=NULL);
     umtx_unlock(NULL);
