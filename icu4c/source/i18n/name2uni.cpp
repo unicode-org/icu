@@ -135,10 +135,33 @@ void NameUnicodeTransliterator::handleTransliterate(Replaceable& text, UTransPos
                 buf[ibuf] = 0; // Add terminating zero
                 UErrorCode status = U_ZERO_ERROR;
 
-                // Convert UChar to char
-                u_UCharsToChars(buf, cbuf, ibuf+1);
+                UChar32 ch = 0xFFFF;
 
-                UChar32 ch = u_charFromName(U_UNICODE_CHAR_NAME, cbuf, &status);
+		// Try in this order: U+XXXX (and bail out if we cannot
+		// decode it), or Unicode name then Unicode 1.0 name.
+
+		if (ibuf >= 6 && buf[0] == 0x0055 && buf[1] == 0x002B) {
+		    // We've found a U+ prefix, compute the value.
+		    ch = 0;
+		    int32_t jbuf = 2;
+		    for (; jbuf < ibuf; ++jbuf) {
+			if (buf[jbuf] >= 0x0030 && buf[jbuf] <= 0x0039) {
+			    ch = (ch << 4) + buf[jbuf] - 0x0030;
+			} else if (buf[jbuf] >= 0x0041 && buf[jbuf] <= 0x0045) {
+			    ch = (ch << 4) + buf[jbuf] - 0x0041 + 10;
+			} else {
+			    ch = 0xFFFF;
+			    break;
+			}
+		    }
+		} else {
+                    u_UCharsToChars(buf, cbuf, ibuf+1);
+		    ch = u_charFromName(U_UNICODE_CHAR_NAME, cbuf, &status);
+		    if (ch == (UChar32) 0xFFFF || U_FAILURE(status)) {
+			status = U_ZERO_ERROR;
+			ch = u_charFromName(U_UNICODE_10_CHAR_NAME, cbuf, &status);
+		    }
+		}
                 if (ch != (UChar32) 0xFFFF && U_SUCCESS(status)) {
                     // Lookup succeeded
                     str.truncate(0);
