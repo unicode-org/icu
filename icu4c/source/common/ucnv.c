@@ -67,16 +67,19 @@ static void T_UConverter_fromCodepageToCodepage (UConverter * outConverter,
                                                  UBool flush,
                                                  UErrorCode * err);
 
-/* extern'd in ucnv_bld.h */
-const UAmbiguousConverter UCNV_AMBIGUOUSCONVERTERS[UCNV_MAX_AMBIGUOUSCCSIDS] =
-{
-    { 943, 0x00A5, 0x005C },
-    { 949, 0x20A9, 0x005C },
-    { 1361, 0x20A9, 0x005C },
-    { 942, 0x00A5, 0x005C },
-    { 1363, 0x20A9, 0x005C }
-};
+typedef struct UAmbiguousConverter {
+    const char *name;
+    UChar variant5c;
+} UAmbiguousConverter;
 
+static const UAmbiguousConverter ambiguousConverters[]={
+    { "ibm-942_P120-2000", 0xa5 },
+    { "ibm-943_P130-2000", 0xa5 },
+    { "ibm-33722", 0xa5 },
+    { "ibm-949_P110-2000", 0x20a9 },
+    { "ibm-1363_P110-2000", 0x20a9 },
+    { "ISO_2022,locale=ko,version=0", 0x20a9 }
+};
 
 const char* ucnv_getDefaultName ()
 {
@@ -1253,54 +1256,51 @@ void ucnv_getStarters(const UConverter* converter,
     }
 }
 
-static int32_t ucnv_getAmbiguousCCSID(const UConverter *cnv)
-{
-    UErrorCode status = U_ZERO_ERROR;
-    int32_t i = 0;
-    int32_t ccsid = 0;
-    if (cnv == NULL) 
-    {
-        return -1;
+static const UAmbiguousConverter *ucnv_getAmbiguous(const UConverter *cnv) {
+    UErrorCode errorCode;
+    const char *name;
+    int32_t i;
+
+    if(cnv==NULL) {
+        return NULL;
     }
-    ccsid = ucnv_getCCSID(cnv, &status);
-    if (U_FAILURE(status)) 
-    {
-        return -1;
+
+    errorCode=U_ZERO_ERROR;
+    name=ucnv_getName(cnv, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        return NULL;
     }
-    for (i = 0; i < UCNV_MAX_AMBIGUOUSCCSIDS; i++) {
-        if (ccsid == UCNV_AMBIGUOUSCONVERTERS[i].ccsid) 
-        {
-            return i;
+
+    for(i=0; i<(int32_t)(sizeof(ambiguousConverters)/sizeof(UAmbiguousConverter)); ++i) {
+        if(0==uprv_strcmp(name, ambiguousConverters[i].name)) {
+            return ambiguousConverters+i;
         }
     }
-    return -1;
+
+    return NULL;
 }
 
 void ucnv_fixFileSeparator(const UConverter *cnv, 
                            UChar* source, 
-                           int32_t sourceLength)
-{
-    int32_t i = 0;
-    int32_t offset = 0;
-    if ((source == NULL) || (cnv == NULL))
-    {
+                           int32_t sourceLength) {
+    const UAmbiguousConverter *a;
+    int32_t i;
+    UChar variant5c;
+
+    if(cnv==NULL || source==NULL || sourceLength<=0 || (a=ucnv_getAmbiguous(cnv))==NULL) {
         return;
     }
-    if ((offset = ucnv_getAmbiguousCCSID(cnv)) != -1)
-    {
-        for (i = 0; i < sourceLength; i++) 
-        {
-            if (source[i] == UCNV_AMBIGUOUSCONVERTERS[offset].mismapped)
-            {
-                source[i] = UCNV_AMBIGUOUSCONVERTERS[offset].replacement;
-            }
+
+    variant5c=a->variant5c;
+    for(i=0; i<sourceLength; ++i) {
+        if(source[i]==variant5c) {
+            source[i]=0x5c;
         }
     }
 }
 
-UBool ucnv_isAmbiguous(const UConverter *cnv)
-{
-    return (UBool)(ucnv_getAmbiguousCCSID(cnv) == -1 ? FALSE : TRUE);
+UBool ucnv_isAmbiguous(const UConverter *cnv) {
+    return (UBool)(ucnv_getAmbiguous(cnv)!=NULL);
 }
 
 void ucnv_setFallback(UConverter *cnv, UBool usesFallback)
