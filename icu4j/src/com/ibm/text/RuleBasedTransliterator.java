@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/text/Attic/RuleBasedTransliterator.java,v $ 
- * $Date: 2001/09/19 17:43:37 $ 
- * $Revision: 1.43 $
+ * $Date: 2001/09/21 21:24:04 $ 
+ * $Revision: 1.44 $
  *
  *****************************************************************************************
  */
@@ -279,11 +279,15 @@ import com.ibm.text.resources.ResourceReader;
  * <p>Copyright (c) IBM Corporation 1999-2000. All rights reserved.</p>
  * 
  * @author Alan Liu
- * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.43 $ $Date: 2001/09/19 17:43:37 $
+ * @version $RCSfile: RuleBasedTransliterator.java,v $ $Revision: 1.44 $ $Date: 2001/09/21 21:24:04 $
  */
 public class RuleBasedTransliterator extends Transliterator {
 
     private Data data;
+
+    // Indicator for ID blocks
+    private static final String ID_TOKEN = "::";
+    private static final int ID_TOKEN_LEN = 2;
 
     private static final String COPYRIGHT =
         "\u00A9 IBM Corporation 1999. All rights reserved.";
@@ -332,6 +336,31 @@ public class RuleBasedTransliterator extends Transliterator {
 
     static Data parse(ResourceReader rules, int direction) {
         return new Parser(rules, direction).getData();
+    }
+
+    /**
+     * Parse a given set of rules.  Return up to three pieces of
+     * parsed data.  These are the header ::id block, the rule block,
+     * and the footer ::id block.  Any or all of these may be empty.
+     * If the ::id blocks are empty, their corresponding parameters
+     * are returned as the empty string.  If there are no rules, the
+     * TransliterationRuleData result is 0.
+     * @param ruleDataResult caller owns the pointer stored here.
+     * May be NULL.
+     * @param headerRule string including semicolons for the header
+     * ::id block.  May be empty.
+     * @param footerRule string including semicolons for the footer
+     * ::id block.  May be empty.
+     */
+    static Data parse(String rules,
+                      int direction,
+                      StringBuffer idBlockResult,
+                      int[] idSplitPointResult) {
+        Parser parser = new Parser(new String[] { rules }, direction);
+        idBlockResult.setLength(0);
+        idBlockResult.append(parser.idBlock);
+        idSplitPointResult[0] = parser.idSplitPoint;
+        return (parser.ruleCount == 0) ? null : parser.getData();
     }
 
     /**
@@ -474,14 +503,26 @@ public class RuleBasedTransliterator extends Transliterator {
 
 
     private static class Parser {
-        /**
-         * Current rule being parsed.
-         */
-        private String rules;
 
         private int direction;
 
         private Data data;
+
+        // In a compound RBT, the index at which the RBT rules are
+        // inserted into the ID block.  Index 0 means before any IDs
+        // in the block.  Index idBlock.length() means after all IDs
+        // in the block.  Index is a string index.
+        int idSplitPoint;
+       
+        // The block of ::IDs, both at the top and at the bottom.
+        // Inserted into these may be additional rules at the
+        // idSplitPoint.
+        String idBlock;
+
+        // The number of rules parsed.  This tells us if there were
+        // any actual transliterator rules, or if there were just ::ID
+        // block IDs.
+        int ruleCount;
 
         /**
          * This class implements the SymbolTable interface.  It is used
@@ -717,6 +758,8 @@ public class RuleBasedTransliterator extends Transliterator {
          * rules
          */
         private void parseRules(RuleBody ruleArray) {
+            ruleCount = 0;
+
             determineVariableRange(ruleArray);
             setVariablesVector = new Vector();
             parseData = new ParseData();
@@ -725,6 +768,16 @@ public class RuleBasedTransliterator extends Transliterator {
             int errorCount = 0;
 
             ruleArray.reset();
+
+            StringBuffer idBlockResult = new StringBuffer();
+            idSplitPoint = -1;
+            // The mode marks whether we are in the header ::id block, the
+            // rule block, or the footer ::id block.
+            // mode == 0: start: rule->1, ::id->0
+            // mode == 1: in rules: rule->1, ::id->2
+            // mode == 2: in footer rule block: rule->ERROR, ::id->2
+            int mode = 0;
+
         main:
             for (;;) {
                 String rule = ruleArray.nextLine();
@@ -754,10 +807,54 @@ public class RuleBasedTransliterator extends Transliterator {
                     // at once.  We keep parsing rules even after a failure, up
                     // to a specified limit, and report all errors at once.
                     try {
-                        // We've found the start of a rule.  c is its first
-                        // character, and pos points past c.  Lexically parse the
-                        // rule into component pieces.
-                        pos = parseRule(rule, --pos, limit);                    
+                        // We've found the start of a rule or ID.  c is its first
+                        // character, and pos points past c.
+                        --pos;
+                        // Look for an ID token.  Must have at least ID_TOKEN_LEN + 1
+                        // chars left.
+                        if ((pos + ID_TOKEN_LEN + 1) <= limit &&
+                            rule.regionMatches(pos, ID_TOKEN, 0, ID_TOKEN_LEN)) {
+                            pos += ID_TOKEN_LEN;
+                            c = rule.charAt(pos);
+                            while (UCharacter.isWhitespace(c) && pos < limit) {
+                                ++pos;
+                                c = rule.charAt(pos);
+                            }
+                            int[] p = new int[] { pos };
+                            boolean[] sawDelim = new boolean[1];
+                            StringBuffer regenID = new StringBuffer();
+                            Transliterator.parseID(rule, regenID, p, sawDelim, direction, false);
+                            if (p[0] == pos || !sawDelim[0]) {
+                                // Invalid ::id
+                                int i1 = pos + 2;
+                                while (i1 < rule.length() && rule.charAt(i1) != ';') {
+                                    ++i1;
+                                }
+                                throw new IllegalArgumentException("Invalid ::ID " +
+                                                                   rule.substring(pos, i1));
+                            } else {
+                                if (mode == 1) {
+                                    mode = 2;
+                                    idSplitPoint = idBlockResult.length();
+                                }
+                                String str = rule.substring(pos, p[0]);
+                                idBlockResult.append(str);
+                                if (!sawDelim[0]) {
+                                    idBlockResult.append(';');
+                                }
+                                pos = p[0];
+                            }
+                        } else {
+                            // Parse a rule
+                            pos = parseRule(rule, pos, limit);
+                            ++ruleCount;
+                            if (mode == 2) {
+                                // ::id in illegal position (because a rule
+                                // occurred after the ::id footer block)
+                                throw new IllegalArgumentException("::ID in illegal position");
+                            }
+                            mode = 1;
+                        }
                     } catch (IllegalArgumentException e) {
                         if (errorCount == 30) {
                             errors.append("\nMore than 30 errors; further messages squelched");
@@ -773,6 +870,8 @@ public class RuleBasedTransliterator extends Transliterator {
                     }
                 }
             }
+
+            idBlock = idBlockResult.toString();
 
             // Convert the set vector to an array
             data.setVariables = new UnicodeSet[setVariablesVector.size()];
@@ -1480,6 +1579,9 @@ public class RuleBasedTransliterator extends Transliterator {
 
 /**
  * $Log: RuleBasedTransliterator.java,v $
+ * Revision 1.44  2001/09/21 21:24:04  alan
+ * jitterbug 64: allow ::ID blocks in rules
+ *
  * Revision 1.43  2001/09/19 17:43:37  alan
  * jitterbug 60: initial implementation of toRules()
  *

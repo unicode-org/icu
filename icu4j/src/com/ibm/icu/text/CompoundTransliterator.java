@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/text/CompoundTransliterator.java,v $ 
- * $Date: 2001/09/20 21:20:39 $ 
- * $Revision: 1.13 $
+ * $Date: 2001/09/21 21:24:04 $ 
+ * $Revision: 1.14 $
  *
  *****************************************************************************************
  */
@@ -35,7 +35,7 @@ import java.util.Vector;
  * <p>Copyright &copy; IBM Corporation 1999.  All rights reserved.
  *
  * @author Alan Liu
- * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.13 $ $Date: 2001/09/20 21:20:39 $
+ * @version $RCSfile: CompoundTransliterator.java,v $ $Revision: 1.14 $ $Date: 2001/09/21 21:24:04 $
  */
 public class CompoundTransliterator extends Transliterator {
 
@@ -140,6 +140,19 @@ public class CompoundTransliterator extends Transliterator {
     }
 
     /**
+     * Package private constructor for compound RBTs.  Construct a
+     * compound transliterator using the given idBlock, with the
+     * splitTrans inserted at the idSplitPoint.
+     */
+    CompoundTransliterator(String ID,
+                           String idBlock,
+                           int idSplitPoint,
+                           Transliterator splitTrans) {
+        super(ID, null);
+        init(idBlock, FORWARD, idSplitPoint, splitTrans, false);
+    }
+    
+    /**
      * Package private constructor for Transliterator from a vector of
      * transliterators.  The vector order is FORWARD, so if dir is
      * REVERSE then the vector order will be reversed.  The caller is
@@ -157,6 +170,39 @@ public class CompoundTransliterator extends Transliterator {
     /**
      * Finish constructing a transliterator: only to be called by
      * constructors.  Before calling init(), set trans and filter to NULL.
+     * @param id the id containing ';'-separated entries
+     * @param direction either FORWARD or REVERSE
+     * @param idSplitPoint the index into id at which the
+     * splitTrans should be inserted, if there is one, or
+     * -1 if there is none.
+     * @param splitTrans a transliterator to be inserted
+     * before the entry at offset idSplitPoint in the id string.  May be
+     * NULL to insert no entry.
+     * @param fixReverseID if TRUE, then reconstruct the ID of reverse
+     * entries by calling getID() of component entries.  Some constructors
+     * do not require this because they apply a facade ID anyway.
+     */
+    private void init(String id,
+                      int direction,
+                      int idSplitPoint,
+                      Transliterator splitTrans,
+                      boolean fixReverseID) {
+        // assert(trans == 0);
+
+        Vector list = new Vector();
+        int[] splitTransIndex = new int[1];
+        StringBuffer regenID = new StringBuffer();
+        Transliterator.parseCompoundID(id, regenID, direction,
+                                       idSplitPoint, splitTrans,
+                                       list, splitTransIndex);
+        compoundRBTIndex = splitTransIndex[0];
+
+        init(list, direction, fixReverseID);
+    }
+
+    /**
+     * Finish constructing a transliterator: only to be called by
+     * constructors.  Before calling init(), set trans and filter to NULL.
      * @param list a vector of transliterator objects to be adopted.  It
      * should NOT be empty.  The list should be in declared order.  That
      * is, it should be in the FORWARD order; if direction is REVERSE then
@@ -165,7 +211,6 @@ public class CompoundTransliterator extends Transliterator {
      * @param fixReverseID if TRUE, then reconstruct the ID of reverse
      * entries by calling getID() of component entries.  Some constructors
      * do not require this because they apply a facade ID anyway.
-     * @param status the error code indicating success or failure
      */
     private void init(Vector list,
                       int direction,
@@ -300,6 +345,34 @@ public class CompoundTransliterator extends Transliterator {
             }
         }
         super.setFilter(f);
+    }
+
+    public String toRules(boolean escapeUnprintable) {
+        // We do NOT call toRules() on our component transliterators, in
+        // general.  If we have several rule-based transliterators, this
+        // yields a concatenation of the rules -- not what we want.  We do
+        // handle compound RBT transliterators specially -- those for which
+        // compoundRBTIndex >= 0.  For the transliterator at compoundRBTIndex,
+        // we do call toRules() recursively.
+        StringBuffer rulesSource = new StringBuffer();
+        for (int i=0; i<trans.length; ++i) {
+            String rule;
+            if (i == compoundRBTIndex) {
+                rule = trans[i].toRules(escapeUnprintable);
+            } else {
+                rule = trans[i].baseToRules(escapeUnprintable);
+            }
+            if (rulesSource.length() != 0 &&
+                rulesSource.charAt(rulesSource.length() - 1) != '\n') {
+                rulesSource.append('\n');
+            }
+            rulesSource.append(rule);
+            if (rulesSource.length() != 0 &&
+                rulesSource.charAt(rulesSource.length() - 1) != ID_DELIM) {
+                rulesSource.append(ID_DELIM);
+            }
+        }
+        return rulesSource.toString();
     }
 
     /**

@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/translit/TransliteratorTest.java,v $ 
- * $Date: 2001/09/20 21:21:10 $ 
- * $Revision: 1.44 $
+ * $Date: 2001/09/21 21:23:34 $ 
+ * $Revision: 1.45 $
  *
  *****************************************************************************************
  */
@@ -357,8 +357,8 @@ public class TransliteratorTest extends TestFmwk {
      * Compose the hex transliterators forward and reverse.
      */
     public void TestCompoundHex() {
-        Transliterator a = Transliterator.getInstance("Unicode-Hex");
-        Transliterator b = Transliterator.getInstance("Hex-Unicode");
+        Transliterator a = Transliterator.getInstance("Any-Hex");
+        Transliterator b = Transliterator.getInstance("Hex-Any");
         Transliterator[] trans = { a, b };
         Transliterator ab = new CompoundTransliterator(trans);
 
@@ -379,7 +379,7 @@ public class TransliteratorTest extends TestFmwk {
      * Do some basic tests of filtering.
      */
     public void TestFiltering() {
-        Transliterator hex = Transliterator.getInstance("Unicode-Hex");
+        Transliterator hex = Transliterator.getInstance("Any-Hex");
         hex.setFilter(new UnicodeFilter() {
             public boolean contains(char c) {
                 return c != 'c';
@@ -510,18 +510,18 @@ public class TransliteratorTest extends TestFmwk {
      * Prefix, suffix support in hex transliterators
      */
     public void TestJ243() {
-        // Test default Hex-Unicode, which should handle
+        // Test default Hex-Any, which should handle
         // \\u, \\U, u+, and U+
         HexToUnicodeTransliterator hex = new HexToUnicodeTransliterator();
         expect(hex, "\\u0041+\\U0042,u+0043uu+0044z", "A+B,CuDz");
 
-        // Try a custom Hex-Unicode
+        // Try a custom Hex-Any
         // \\uXXXX and &#xXXXX;
         HexToUnicodeTransliterator hex2 = new HexToUnicodeTransliterator("\\\\u###0;&\\#x###0\\;"); 
         expect(hex2, "\\u61\\u062\\u0063\\u00645\\u66x&#x30;&#x031;&#x0032;&#x00033;",
                "abcd5fx012&#x00033;");
 
-        // Try custom Unicode-Hex (default is tested elsewhere)
+        // Try custom Any-Hex (default is tested elsewhere)
         UnicodeToHexTransliterator hex3 = new UnicodeToHexTransliterator("&\\#x###0;");
         expect(hex3, "012", "&#x30;&#x31;&#x32;");
     }
@@ -748,13 +748,13 @@ public class TransliteratorTest extends TestFmwk {
      */
     public void TestFilterIDs() {
         String[] DATA = {
-            "Unicode[aeiou]-Hex",
-            "Hex[aeiou]-Unicode",
+            "Any[aeiou]-Hex",
+            "Hex[aeiou]-Any",
             "quizzical",
             "q\\u0075\\u0069zz\\u0069c\\u0061l",
             
-            "Unicode[aeiou]-Hex;Hex[^5]-Unicode",
-            "Unicode[^5]-Hex;Hex[aeiou]-Unicode",
+            "Any[aeiou]-Hex;Hex[^5]-Any",
+            "Any[^5]-Hex;Hex[aeiou]-Any",
             "quizzical",
             "q\\u0075izzical",
             
@@ -961,6 +961,96 @@ public class TransliteratorTest extends TestFmwk {
         }
     }
     
+    /**
+     * Test compound RBT rules.
+     */
+    public void TestCompoundRBT() {
+        // Careful with spacing and ';' here:  Phrase this exactly
+        // as toRules() is going to return it.  If toRules() changes
+        // with regard to spacing or ';', then adjust this string.
+        String rule = "::Hex-Any;\n" +
+                      "::Any-Lower;\n" +
+                      "a > '.A.';\n" +
+                      "b > '.B.';\n" +
+                      "::Any[^t]-Upper;";
+        Transliterator t = Transliterator.createFromRules("Test", rule, Transliterator.FORWARD);
+        if (t == null) {
+            errln("FAIL: createFromRules failed");
+            return;
+        }
+        expect(t, "\u0043at in the hat, bat on the mat",
+               "C.A.t IN tHE H.A.t, .B..A.t ON tHE M.A.t");
+        String r = t.toRules(true);
+        if (r.equals(rule)) {
+            logln("OK: toRules() => " + r);
+        } else {
+            errln("FAIL: toRules() => " + r +
+                  ", expected " + rule);
+        }
+
+        // Now test toRules
+        t = Transliterator.getInstance("Greek-Latin; Latin-Cyrillic", Transliterator.FORWARD);
+        if (t == null) {
+            errln("FAIL: createInstance failed");
+            return;
+        }
+        String exp = "::Greek-Latin;\n::Latin-Cyrillic;";
+        r = t.toRules(true);
+        if (!r.equals(exp)) {
+            errln("FAIL: toRules() => " + r +
+                  ", expected " + exp);
+        } else {
+            logln("OK: toRules() => " + r);
+        }
+
+        // Round trip the result of toRules
+        t = Transliterator.createFromRules("Test", r, Transliterator.FORWARD);
+        if (t == null) {
+            errln("FAIL: createFromRules #2 failed");
+            return;
+        } else {
+            logln("OK: createFromRules(" + r + ") succeeded");
+        }
+
+        // Test toRules again
+        r = t.toRules(true);
+        if (!r.equals(exp)) {
+            errln("FAIL: toRules() => " + r +
+                  ", expected " + exp);
+        } else {
+            logln("OK: toRules() => " + r);
+        }
+
+        // Test Foo(Bar) IDs.  Careful with spacing in id; make it conform
+        // to what the regenerated ID will look like.
+        String id = "Upper(Lower);(NFKC)";
+        t = Transliterator.getInstance(id, Transliterator.FORWARD);
+        if (t == null) {
+            errln("FAIL: createInstance #2 failed");
+            return;
+        }
+        if (t.getID().equals(id)) {
+            logln("OK: created " + id);
+        } else {
+            errln("FAIL: createInstance(" + id +
+                  ").getID() => " + t.getID());
+        }
+
+        Transliterator u = t.getInverse();
+        if (u == null) {
+            errln("FAIL: createInverse failed");
+            return;
+        }
+        exp = "NFKC();Lower(Upper)";
+        if (u.getID().equals(exp)) {
+            logln("OK: createInverse(" + id + ") => " +
+                  u.getID());
+        } else {
+            errln("FAIL: createInverse(" + id + ") => " +
+                  u.getID());
+        }
+    }
+
     /**
      * Test inverse of Greek-Latin; Title()
      */
