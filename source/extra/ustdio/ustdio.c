@@ -408,17 +408,20 @@ u_fgets(UFILE        *f,
         UChar        *s)
 {
     int32_t dataSize;
-    int32_t read;
     int32_t count;
     UChar *alias;
+    UChar *limit;
+    UChar *sItr;
 
     if (n <= 0) {
         /* Caller screwed up. We need to write the null terminatior. */
         return NULL;
     }
 
-    /* fill the buffer */
-    ufile_fill_uchar_buffer(f);
+    /* fill the buffer if needed */
+    if (f->fUCPos >= f->fUCLimit) {
+        ufile_fill_uchar_buffer(f);
+    }
 
     /* subtract 1 from n to compensate for the terminator */
     --n;
@@ -426,72 +429,40 @@ u_fgets(UFILE        *f,
     /* determine the amount of data in the buffer */
     dataSize = (int32_t)(f->fUCLimit - f->fUCPos);
 
-    /* if the buffer contains more data than requested, operate on the buffer */
-    if(dataSize > n) {
-
-        /* find the first occurrence of a delimiter character */
-        alias = f->fUCPos;
-        count = 0;
-        while( ! IS_STRING_DELIMITER(*alias) && count < n) {
-            count++;
-            alias++;
-        }
-        /* Preserve the newline */
-        if (IS_STRING_DELIMITER(*alias) && count < n) {
-            count++;
-            alias++;
-        }
-
-        /* copy the characters into the target*/
-        memcpy(s, f->fUCPos, count * sizeof(UChar));
-
-        /* add the terminator */
-        s[count] = 0x0000;
-
-        /* update the current buffer position */
-        f->fUCPos += count;
-
-        /* refill the buffer */
-        ufile_fill_uchar_buffer(f);
-
-        /* return s */
-        return s;
-    }
+    /* if 0 characters were left, return 0 */
+    if (dataSize == 0)
+        return NULL;
 
     /* otherwise, iteratively fill the buffer and copy */
-    read = 0;
-    do {
-
-        /* determine the amount of data in the buffer */
-        dataSize = (int32_t)(f->fUCLimit - f->fUCPos);
-
-        /* find the first occurrence of a delimiter character, if present */
+    count = 0;
+    sItr = s;
+    while (dataSize > 0 && count < n) {
         alias = f->fUCPos;
-        count = 0;
-        while (alias < f->fUCLimit && count < n && !IS_STRING_DELIMITER(*alias)) {
-            ++count;
-            alias++;
+
+        /* Find how much to copy */
+        if (dataSize < n) {
+            limit = f->fUCLimit;
+        }
+        else {
+            limit = alias + n;
+        }
+
+        /* Copy UChars until we find the first occurrence of a delimiter character */
+        while (alias < limit && !IS_STRING_DELIMITER(*alias)) {
+            count++;
+            *(sItr++) = *(alias++);
         }
         /* Preserve the newline */
-        if (alias < f->fUCLimit && count < n && IS_STRING_DELIMITER(*alias)) {
+        if (alias < limit && IS_STRING_DELIMITER(*alias)) {
             count++;
-            alias++;
+            *(sItr++) = *(alias++);
         }
 
-        /* copy the current data in the buffer */
-        memcpy(s + read, f->fUCPos, count * sizeof(UChar));
-
-        /* update number of items read */
-        read += count;
-
         /* update the current buffer position */
-        f->fUCPos += count;
+        f->fUCPos = alias;
 
         /* if we found a delimiter */
-        if(alias < f->fUCLimit) {
-
-            /* refill the buffer */
-            ufile_fill_uchar_buffer(f);
+        if (alias < f->fUCLimit) {
 
             /* break out */
             break;
@@ -500,14 +471,12 @@ u_fgets(UFILE        *f,
         /* refill the buffer */
         ufile_fill_uchar_buffer(f);
 
-    } while(dataSize != 0 && read < n);
-
-    /* if 0 characters were read, return 0 */
-    if(read == 0)
-        return 0;
+        /* determine the amount of data in the buffer */
+        dataSize = (int32_t)(f->fUCLimit - f->fUCPos);
+    }
 
     /* add the terminator and return s */
-    s[read] = 0x0000;
+    *sItr = 0x0000;
     return s;
 }
 
