@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/format/RbnfTest.java,v $ 
- * $Date: 2002/12/02 17:09:58 $ 
- * $Revision: 1.14 $
+ * $Date: 2002/12/18 21:20:52 $ 
+ * $Revision: 1.15 $
  *
  *****************************************************************************************
  */
@@ -15,6 +15,8 @@ package com.ibm.icu.dev.test.format;
 import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.ibm.icu.dev.test.TestFmwk;
 
+import java.math.BigInteger;
+import java.math.BigDecimal;
 import java.util.Locale;
 import java.text.NumberFormat;
 
@@ -628,6 +630,8 @@ public class RbnfTest extends TestFmwk {
 
         String[][] testData = {
             { "0", "0" },
+            { "1", "1" },
+            { "10", "10" },
             { ".1", "1/10" },
             { ".11", "1/9" },
             { ".125", "1/8" },
@@ -710,6 +714,19 @@ public class RbnfTest extends TestFmwk {
         formatter.setDefaultRuleSet("%year");
         logln("testing year rules");
         doTest(formatter, testDataYear, true);
+    }
+
+    public void TestBigNumbers() {
+        BigInteger bigI = new BigInteger("1234567890", 10);
+        StringBuffer buf = new StringBuffer();
+        RuleBasedNumberFormat fmt = new RuleBasedNumberFormat(RuleBasedNumberFormat.SPELLOUT);
+        fmt.format(bigI, buf, null);
+        logln("big int: " + buf.toString());
+
+        buf.setLength(0);
+        BigDecimal bigD = new BigDecimal(bigI);
+        fmt.format(bigD, buf, null);
+        logln("big dec: " + buf.toString());
     }
 
     void doTest(RuleBasedNumberFormat formatter, String[][] testData,

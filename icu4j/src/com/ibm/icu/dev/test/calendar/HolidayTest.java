@@ -5,8 +5,8 @@
  *******************************************************************************
  *
  * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/test/calendar/HolidayTest.java,v $ 
- * $Date: 2002/12/11 23:30:38 $ 
- * $Revision: 1.2 $
+ * $Date: 2002/12/18 21:20:52 $ 
+ * $Revision: 1.3 $
  *
  *****************************************************************************************
  */
@@ -20,9 +20,12 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.EasterHoliday;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.Holiday;
-import com.ibm.icu.util.EasterHoliday;
+import com.ibm.icu.util.RangeDateRule;
+import com.ibm.icu.util.SimpleDateRule;
+import com.ibm.icu.util.SimpleHoliday;
 import com.ibm.icu.util.TimeZone;
 
 /**
@@ -127,7 +130,11 @@ public class HolidayTest extends TestFmwk {
 	}
     
     public void TestCoverage(){
-        Holiday[] h = { new EasterHoliday("Ram's Easter")};
+        Holiday[] h = { new EasterHoliday("Ram's Easter"),
+                        new SimpleHoliday(2, 29, 0, "Leap year", 1900, 2100)};
         exerciseHolidays(h, Locale.getDefault());
+
+        RangeDateRule rdr = new RangeDateRule();
+        rdr.add(new SimpleDateRule(7, 15));
     }
  }

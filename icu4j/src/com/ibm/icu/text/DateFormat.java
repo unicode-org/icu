@@ -735,10 +735,12 @@ public abstract class DateFormat extends Format {
      * Overrides hashCode
      * @stable ICU 2.0
      */
+    ///CLOVER:OFF
     public int hashCode() {
         return numberFormat.hashCode();
         // just enough fields for a reasonable distribution
     }
+    ///CLOVER:ON
 
     /**
      * Overrides equals
