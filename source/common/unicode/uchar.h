@@ -1465,11 +1465,11 @@ u_getIntPropertyMinValue(UProperty which);
  * Examples for min/max values (for Unicode 3.2):
  *
  * - UCHAR_BIDI_CLASS:    0/18 (U_LEFT_TO_RIGHT/U_BOUNDARY_NEUTRAL)
- * - UCHAR_SCRIPT:       -1/45 (USCRIPT_INVALID_CODE/USCRIPT_TAGBANWA)
+ * - UCHAR_SCRIPT:        0/45 (USCRIPT_COMMON/USCRIPT_TAGBANWA)
  * - UCHAR_IDEOGRAPHIC:   0/1  (FALSE/TRUE)
  *
  * For undefined UProperty constant values, min/max values will be 0/-1.
-
+ *
  * @param which UProperty selector constant, identifies which binary property to check.
  *        Must be UCHAR_BINARY_START<=which<UCHAR_BINARY_LIMIT
  *        or UCHAR_INT_START<=which<UCHAR_INT_LIMIT.
