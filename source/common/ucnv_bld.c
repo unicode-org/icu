@@ -60,16 +60,9 @@ static struct {
  *goes to disk and opens it.
  *allocates the memory and returns a new UConverter object
  */
-static UConverter *createConverterFromFile (const char *converterName, UErrorCode * err);
+static UConverterSharedData *createConverterFromFile (const char *converterName, UErrorCode * err);
 
 static const UConverterSharedData *getAlgorithmicTypeFromName (const char *realName);
-
-
-/*these functions initialize the lightweight mutable part of the
- *object to correct values based on the sharedData defaults.
- */
-static void initializeDataConverter (UConverter * myConverter);
-static void initializeAlgorithmicConverter (UConverter * myConverter);
 
 /**
  *hash function for UConverterSharedData
@@ -109,21 +102,8 @@ UConverterSharedData_1_4;
  */
 U_CAPI  UConverterSharedData* U_EXPORT2 ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *status);
 
-
 /*initializes some global variables */
 UHashtable *SHARED_DATA_HASHTABLE = NULL;
-
-/*Returns uppercased string */
-char *
-  strtoupper (char *name)
-{
-  int32_t i = 0;
-
-  while (name[i] = uprv_toupper (name[i]))
-    i++;
-
-  return name;
-}
 
 static bool_t
 isCnvAcceptable(void *context,
@@ -143,10 +123,10 @@ isCnvAcceptable(void *context,
 
 #define DATA_TYPE "cnv"
 
-UConverter*  createConverterFromFile (const char *fileName, UErrorCode * err)
+UConverterSharedData *createConverterFromFile (const char *fileName, UErrorCode * err)
 {
-  UConverter *myConverter = NULL;
   UDataMemory *data;
+  UConverterSharedData *sharedData;
 
   if (err == NULL || U_FAILURE (*err)) {
     return NULL;
@@ -158,25 +138,14 @@ UConverter*  createConverterFromFile (const char *fileName, UErrorCode * err)
       return NULL;
     }
 
-  myConverter = (UConverter *) uprv_malloc (sizeof (UConverter));
-  if (myConverter == NULL)
-    {
-      udata_close(data);
-      *err = U_MEMORY_ALLOCATION_ERROR;
-      return NULL;
-    }
-
-  myConverter->sharedData = ucnv_data_unFlattenClone(data, err);
+  sharedData = ucnv_data_unFlattenClone(data, err);
   if(U_FAILURE(*err))
     {
       udata_close(data);
-      uprv_free (myConverter);
       return NULL;
     }
 
-  initializeDataConverter (myConverter);
-
-  return myConverter;
+  return sharedData;
 }
 
 void 
@@ -324,6 +293,7 @@ UConverter *
     isDefaultConverter = FALSE;
   }
 
+  /* resolve aliases */
   if (*converterName == 0) {
     /* Use the PlatformInvariant algorithmic converter. */
     realName = "PlatformInvariant";
@@ -342,122 +312,74 @@ UConverter *
     }
   }
 
+  /* get the shared data for an algorithmic converter, if it is one */
   mySharedConverterData = (UConverterSharedData *)getAlgorithmicTypeFromName (realName);
   if (mySharedConverterData == NULL)
     {
+      /* it is a data-based converter, get its shared data */
       mySharedConverterData = getSharedConverterData (realName);
-
       if (mySharedConverterData == NULL)
         {
           /*Not cached, we need to stream it in from file */
-          myUConverter = createConverterFromFile (realName, err);
-
-          if (U_FAILURE (*err) || (myUConverter == NULL))
+          mySharedConverterData = createConverterFromFile (realName, err);
+          if (U_FAILURE (*err) || (mySharedConverterData == NULL))
             {
-              return myUConverter;
+              return NULL;
             }
           else
             {
-              /*shared it with other library clients */
-              shareConverterData (myUConverter->sharedData);
-              return myUConverter;
+              /* share it with other library clients */
+              shareConverterData (mySharedConverterData);
             }
         }
       else
         {
-          /*Is already cached, point to an existing one */
-          myUConverter = (UConverter *) uprv_malloc (sizeof (UConverter));
-          if (myUConverter == NULL)
-            {
-              *err = U_MEMORY_ALLOCATION_ERROR;
-              return NULL;
-            }
-
           /* ### this is unsafe: the shared data could have been deleted since sharing or getting it - these operations should increase the counter! */
-          /*update the reference counter: one more client */
+          /* update the reference counter: one more client */
           umtx_lock (NULL);
           mySharedConverterData->referenceCounter++;
           umtx_unlock (NULL);
-
-          myUConverter->sharedData = mySharedConverterData;
-          initializeDataConverter (myUConverter);
-
-          return myUConverter;
         }
     }
-  else
+
+  /* allocate the converter */
+  myUConverter = (UConverter *) uprv_malloc (sizeof (UConverter));
+  if (myUConverter == NULL)
     {
-      myUConverter = (UConverter *) uprv_malloc (sizeof (UConverter));
-      if (myUConverter == NULL)
-        {
-          *err = U_MEMORY_ALLOCATION_ERROR;
-          return NULL;
-        }
-
-      /*initializes the converter */
-      uprv_memset(myUConverter, 0, sizeof(UConverter));
-      myUConverter->sharedData = mySharedConverterData;
-      initializeAlgorithmicConverter (myUConverter);
-      return myUConverter;
+      if (mySharedConverterData->referenceCounter != ~0) {
+        umtx_lock (NULL);
+        --mySharedConverterData->referenceCounter;
+        umtx_unlock (NULL);
+      }
+      *err = U_MEMORY_ALLOCATION_ERROR;
+      return NULL;
     }
 
-  return NULL;
-}
-
-/*Initializes the mutable lightweight portion of the object
- *By copying data from UConverter->sharedData->defaultConverter
- */
-void   initializeDataConverter (UConverter * myUConverter)
-{
-
+  /* initialize the converter */
+  uprv_memset(myUConverter, 0, sizeof(UConverter));
+  myUConverter->sharedData = mySharedConverterData;
   myUConverter->mode = UCNV_SI;
-  myUConverter->UCharErrorBufferLength = 0;
-  myUConverter->charErrorBufferLength = 0;
-  myUConverter->subCharLen = myUConverter->sharedData->defaultConverterValues.subCharLen;
-  uprv_memcpy (myUConverter->subChar,
-              myUConverter->sharedData->defaultConverterValues.subChar,
-              myUConverter->subCharLen);
-  myUConverter->toUnicodeStatus = 0x00;
-  myUConverter->fromUnicodeStatus = 0x00;
-  myUConverter->sharedData->defaultConverterValues.toUnicodeStatus = 0x00;
-
   myUConverter->fromCharErrorBehaviour = (UConverterToUCallback) UCNV_TO_U_CALLBACK_SUBSTITUTE;
   myUConverter->fromUCharErrorBehaviour = (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_SUBSTITUTE;
-  myUConverter->extraInfo = NULL;
+  myUConverter->toUnicodeStatus = myUConverter->sharedData->defaultConverterValues.toUnicodeStatus;
+  myUConverter->subCharLen = myUConverter->sharedData->defaultConverterValues.subCharLen;
+  uprv_memcpy (myUConverter->subChar, myUConverter->sharedData->defaultConverterValues.subChar, myUConverter->subCharLen);
 
-  return;
-}
-
-/* This function initializes algorithmic converters
- * based on their type
- */
-void 
-  initializeAlgorithmicConverter (UConverter * myConverter)
-{
-  myConverter->mode = UCNV_SI;
-  myConverter->fromCharErrorBehaviour = (UConverterToUCallback) UCNV_TO_U_CALLBACK_SUBSTITUTE;
-  myConverter->fromUCharErrorBehaviour = (UConverterFromUCallback) UCNV_FROM_U_CALLBACK_SUBSTITUTE;
-  myConverter->charErrorBufferLength = 0;
-  myConverter->UCharErrorBufferLength = 0;
-
-  myConverter->extraInfo = NULL;
-
-  myConverter->fromUnicodeStatus = 0;
-  myConverter->toUnicodeStatus = myConverter->sharedData->defaultConverterValues.toUnicodeStatus;
-  myConverter->subCharLen = myConverter->sharedData->defaultConverterValues.subCharLen;
-  uprv_memcpy (myConverter->subChar, myConverter->sharedData->defaultConverterValues.subChar, UCNV_MAX_SUBCHAR_LEN);
-
-  if(myConverter->sharedData->impl->open != NULL) {
-    UErrorCode errorCode = U_ZERO_ERROR;
-
-    /* ### pass in real parameters, and use the error code */
-    myConverter->sharedData->impl->open(myConverter, NULL, NULL, &errorCode);
+  if(myUConverter != NULL && myUConverter->sharedData->impl->open != NULL) {
+    myUConverter->sharedData->impl->open(myUConverter, realName, NULL, err);
+    if(U_FAILURE(*err)) {
+      ucnv_close(myUConverter);
+      return NULL;
+    }
   }
+
+  return myUConverter;
 }
 
 UConverterSharedData* ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *status)
 {
     const uint8_t *raw = (const uint8_t *)udata_getMemory(pData);
+    /* version 1.0 of .cnv files directly contains a UConverterSharedData_1_4 structure */
     const UConverterSharedData_1_4 *source = (const UConverterSharedData_1_4 *) raw;
     UConverterSharedData *data;
     UConverterType type = source->conversionType;
@@ -497,7 +419,12 @@ UConverterSharedData* ucnv_data_unFlattenClone(UDataMemory *pData, UErrorCode *s
     data->platform = source->platform;
     data->minBytesPerChar = source->minBytesPerChar;
     data->maxBytesPerChar = source->maxBytesPerChar;
-    uprv_memcpy(&data->defaultConverterValues, &source->defaultConverterValues, sizeof(data->defaultConverterValues));
+
+    /* version 1.0 of .cnv files does not store valid toUnicodeStatus - do not copy the whole defaultConverterValues */
+    data->defaultConverterValues.subCharLen = source->defaultConverterValues.subCharLen;
+    uprv_memcpy(&data->defaultConverterValues.subChar,
+                &source->defaultConverterValues.subChar,
+                data->defaultConverterValues.subCharLen);
 
     if(data->impl->load != NULL) {
         data->impl->load(data, raw + source->structSize, status);

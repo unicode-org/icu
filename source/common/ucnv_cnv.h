@@ -136,6 +136,10 @@ typedef UChar (*T_GetNextUCharFunction) (UConverter *,
 					 const char *,
 					 UErrorCode *);
 
+typedef void (*UConverterGetStarters)(const UConverter* converter,
+				     bool_t starters[256],
+				     UErrorCode *pErrorCode);
+
 bool_t CONVERSION_U_SUCCESS (UErrorCode err);
 
 void flushInternalUnicodeBuffer (UConverter * _this,
@@ -152,6 +156,22 @@ void flushInternalCharBuffer (UConverter * _this,
 			      int32_t** offsets,
 			      UErrorCode * err);
 
+/**
+ * UConverterImpl contains all the data and functions for a converter type.
+ * Its function pointers work much like a C++ vtable.
+ * Many converter types need to define only a subset of the functions;
+ * when a function pointer is NULL, then a default action will be performed.
+ *
+ * Every converter type must implement toUnicode, fromUnicode, and getNextUChar,
+ * otherwise the converter may crash.
+ * Every converter type that has variable-length codepage sequences should
+ * also implement toUnicodeWithOffsets and fromUnicodeWithOffsets for
+ * correct offset handling.
+ * All other functions may or may not be implemented - it depends only on
+ * whether the converter type needs them.
+ *
+ * When open() fails, then close() will be called, if present.
+ */
 struct UConverterImpl {
     UConverterType type;
 
@@ -167,9 +187,11 @@ struct UConverterImpl {
     T_FromUnicodeFunction fromUnicode;
     T_FromUnicodeFunction fromUnicodeWithOffsets;
     T_GetNextUCharFunction getNextUChar;
+
+    UConverterGetStarters getStarters;
 };
 
-extern UConverterSharedData
+extern const UConverterSharedData
     _SBCSData, _DBCSData, _MBCSData, _Latin1Data,
     _UTF8Data, _UTF16BEData, _UTF16LEData, _EBCDICStatefulData,
     _ISO2022Data;
