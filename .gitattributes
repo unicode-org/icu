@@ -182,7 +182,6 @@ icu4j/src/com/ibm/test/rbbi/english.dict -text
 icu4j/src/com/ibm/test/rbbi/package.html svneol=native#text/html
 icu4j/src/com/ibm/test/rbnf/package.html svneol=native#text/html
 icu4j/src/com/ibm/test/search/package.html svneol=native#text/html
-icu4j/src/com/ibm/test/topleveltest/package.html svneol=native#text/html
 icu4j/src/com/ibm/test/translit/package.html svneol=native#text/html
 icu4j/src/com/ibm/text/components/package.html svneol=native#text/html
 icu4j/src/com/ibm/text/package.html svneol=native#text/html
