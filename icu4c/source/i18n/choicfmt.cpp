@@ -260,7 +260,7 @@ ChoiceFormat::dtos(double value,
     char temp[256];
 
     uprv_dtostr(value, temp, 3, TRUE);
-    string = UnicodeString(temp);
+    string = UnicodeString(temp, "");    /* invariant codepage */
     return string;
 }
 
