@@ -184,13 +184,14 @@ T_FileStream_error(FileStream* fileStream)
     return (fileStream == 0 || ferror((FILE*)fileStream));
 }
 
-U_CAPI void U_EXPORT2
+/* This function doesn't work. */
+/* force the stream to set its error flag*/
+/*U_CAPI void U_EXPORT2
 T_FileStream_setError(FileStream* fileStream)
 {
-    /* force the stream to set its error flag*/
     fseek((FILE*)fileStream, 99999, SEEK_SET);
 }
-
+*/
 
 U_CAPI FileStream* U_EXPORT2
 T_FileStream_stdin(void)
