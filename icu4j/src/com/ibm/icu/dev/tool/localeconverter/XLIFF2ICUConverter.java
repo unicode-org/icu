@@ -6,7 +6,7 @@
 *
 * $Source: /xsrl/Nsvn/icu/icu4j/src/com/ibm/icu/dev/tool/localeconverter/XLIFF2ICUConverter.java,v $ 
 * $Date: 2003/05/19 
-* $Revision: 1.2 $
+* $Revision: 1.3 $
 *
 ******************************************************************************
 */
@@ -29,11 +29,11 @@ import java.io.*;
 import java.util.*;
 
 public class XLIFF2ICUConverter {
-    protected String    sourceDir;
-    protected String    fileName;
-    protected String    encoding;
-    protected String    destDir;
-    protected String    xmlfileName;
+    protected String    sourceDir = null;
+    protected String    fileName = null;
+    protected String    packageName = null;
+    protected String    destDir = null;
+    protected String    xmlfileName = null;
     protected Document  doc;
     
     /**
@@ -43,7 +43,7 @@ public class XLIFF2ICUConverter {
     private static final int HELP2 = 1;
     private static final int SOURCEDIR = 2;
     private static final int DESTDIR = 3;
-    private static final int ENCODING = 4;
+    private static final int PACKAGE_NAME = 4;
     private static final int FILENAME = 5;
        
     private static final UOption[] options = new UOption[] {
@@ -51,7 +51,7 @@ public class XLIFF2ICUConverter {
         UOption.HELP_QUESTION_MARK(),
         UOption.SOURCEDIR(),
         UOption.DESTDIR(),
-        UOption.ENCODING(),
+        UOption.PACKAGE_NAME(),
     };
     
     private static int tabCount = 0;
@@ -104,12 +104,14 @@ public class XLIFF2ICUConverter {
         if(options[DESTDIR].doesOccur) {
             destDir = options[DESTDIR].value;
         }
-        if(options[ENCODING].doesOccur) {
-            encoding = options[ENCODING].value;
+        if(options[PACKAGE_NAME].doesOccur) {
+            packageName = options[PACKAGE_NAME].value;
         }
         
         for (int i = 0; i < remainingArgc; i++) {
             tabCount = 0;
+            int lastIndex = args[i].lastIndexOf(File.separator, args[i].length()) + 1; /* add 1 to skip past the separator */
+            fileName = args[i].substring(lastIndex, args[i].length());
             convert(args[i]);
         }
     }
@@ -155,24 +157,28 @@ public class XLIFF2ICUConverter {
             "Options:\n"+
             "-s or --sourcedir    source directory for files followed by path, default is current directory.\n" +
             "-d or --destdir      destination directory, followed by the path, default is current directory.\n" +
+            "-p or --package-name user may specify the package name explicitly.\n" +
             "-h or -? or --help   this usage text.\n"+
             "example: XLIFF2ICUConverter -s xxx -d yyy myResources.xml");
     }
     
     private String getFullPath(boolean fileType, String fName){
         String str;
-        int lastIndex = fName.lastIndexOf('.', fName.length());
+        int lastIndex1 = fName.lastIndexOf(File.separator, fName.length()) + 1; /*add 1 to skip past the separator*/
+        int lastIndex2 = fName.lastIndexOf('.', fName.length());
         if (fileType == true) {
             if (destDir != null && fName != null) {
-                str = destDir + File.separator + fName.substring(0, lastIndex) + ".txt";                   
+                str = destDir + File.separator + fName.substring(lastIndex1, lastIndex2) + ".txt";                   
             } else {
-                str = System.getProperty("user.dir") + File.separator + fName.substring(0, lastIndex) + ".txt";
+                str = System.getProperty("user.dir") + File.separator + fName.substring(lastIndex1, lastIndex2) + ".txt";
             }
         } else {
             if(sourceDir != null && fName != null) {
-                str = sourceDir + File.separator + fName.substring(0, lastIndex) + ".xlf";
+                str = sourceDir + File.separator + fName.substring(lastIndex1, lastIndex2) + ".xlf";
+            } else if (lastIndex1 > 0) {
+                str = fName;
             } else {
-                str = System.getProperty("user.dir") + File.separator + fName.substring(0, lastIndex) + ".xlf";
+                str = System.getProperty("user.dir") + File.separator + fName.substring(lastIndex1, lastIndex2) + ".xlf";
             }
         }
         return str;
@@ -478,7 +484,15 @@ public class XLIFF2ICUConverter {
                     }
                 }
             }
+            if(packageName != null) {
+                pkg = packageName;
+            }
             if(pkg.equals("")) {
+                NodeList nlist = doc.getElementsByTagName(TARGET);
+                if(nlist.getLength()> 0) {
+                    System.out.println("There are translation items in the file. Please specify the package name using \"-p packageName\" in the command line.");
+                    System.exit(0);
+                }
                 boolean b;
                 b = bundleLang.add(lg);
                 if(b==false){
