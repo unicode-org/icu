@@ -61,7 +61,7 @@ randul()
 static double
 randd()
 {
-    return ((double)randul()) / ULONG_MAX;
+    return ((double)randul()) / UINT32_MAX;
 }
 
 /**
