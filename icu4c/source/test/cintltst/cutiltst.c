@@ -23,6 +23,8 @@ void addHashtableTest(TestNode** root);
 void addCStringTest(TestNode** root);
 void addMemoryStreamTest(TestNode** root);
 
+void addUtility(TestNode** root);
+
 void addUtility(TestNode** root)
 {
     addLocaleTest(root);
