@@ -1547,10 +1547,10 @@ public:
   /**
    * Return the length of the UnicodeString object.  
    * The length is the number of characters in the text.
-   * @returns the length of the UnicodeString object
+   * @return the length of the UnicodeString object
    * @stable
    */
-  inline int32_t  length(void) const;
+  inline int32_t length(void) const;
 
   /**
    * Count Unicode code points in the length UChar code units of the string.
@@ -1566,6 +1566,32 @@ public:
    */
   int32_t
   countChar32(int32_t start=0, int32_t length=0x7fffffff) const;
+
+  /**
+   * Check if the length UChar code units of the string
+   * contain more Unicode code points than a certain number.
+   * This is more efficient than counting all code points in this part of the string
+   * and comparing that number with a threshold.
+   * This function may not need to scan the string at all if the length
+   * falls within a certain range, and
+   * never needs to count more than 'number+1' code points.
+   * Logically equivalent to (countChar32(start, length)>number).
+   * A Unicode code point may occupy either one or two UChar code units.
+   *
+   * @param start the index of the first code unit to check (0 for the entire string)
+   * @param length the number of UChar code units to check
+   *               (use 0x7fffffff for the entire string; remember that start/length
+   *                values are pinned)
+   * @param number The number of code points in the (sub)string is compared against
+   *               the 'number' parameter.
+   * @return Boolean value for whether the string contains more Unicode code points
+   *         than 'number'. Same as (u_countChar32(s, length)>number).
+   * @see countChar32
+   * @see u_strHasMoreChar32Than
+   * @draft ICU 2.4
+   */
+  UBool
+  hasMoreChar32Than(int32_t start, int32_t length, int32_t number) const;
 
   /**
    * Determine if this string is empty.

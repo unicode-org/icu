@@ -727,6 +727,13 @@ UnicodeString::countChar32(int32_t start, int32_t length) const {
   return u_countChar32(fArray+start, length);
 }
 
+UBool
+UnicodeString::hasMoreChar32Than(int32_t start, int32_t length, int32_t number) const {
+  pinIndices(start, length);
+  // if(isBogus()) then fArray==0 and start==0 - u_strHasMoreChar32Than() checks for NULL
+  return u_strHasMoreChar32Than(fArray+start, length, number);
+}
+
 int32_t
 UnicodeString::moveIndex32(int32_t index, int32_t delta) const {
   // pin index
