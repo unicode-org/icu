@@ -13,30 +13,26 @@
 #include "cstring.h"
 #include "uassert.h"
 
-/* set_num key prefix string. msg_num key is simply a number. */
-static const char SET_KEY_PREFIX[] = "%cat%";
+/* Separator between set_num and msg_num */
+static const char SEPARATOR = '%';
 
-/* length of SET_KEY_PREFIX */
-#define SET_KEY_PREFIX_LEN 5
-
-/* Maximum length of a set_num/msg_num key, incl. terminating zero */
-#define MAX_KEY_LEN (SET_KEY_PREFIX_LEN+11)
+/* Maximum length of a set_num/msg_num key, incl. terminating zero.
+ * Longest possible key is "2147483647%2147483647" */
+#define MAX_KEY_LEN (22)
 
 /**
  * Fill in buffer with a set_num/msg_num key string, given the numeric
- * value. Numeric value must be >= 0. Buffer must be of length
- * MAX_KEY_LEN or more. If isSet is true, then a set_num key is
- * created; otherwise a msg_num key is created.
+ * values. Numeric values must be >= 0. Buffer must be of length
+ * MAX_KEY_LEN or more.
  */
 static char*
-_catkey(char* buffer, int32_t num, UBool isSet) {
+_catkey(char* buffer, int32_t set_num, int32_t msg_num) {
     int32_t i = 0;
-    U_ASSERT(num>=0);
-    if (isSet) {
-        uprv_strcpy(buffer, SET_KEY_PREFIX);
-        i = SET_KEY_PREFIX_LEN;
-    }
-    T_CString_integerToString(buffer + i, num, 10);
+    U_ASSERT(set_num>=0 && msg_num>=0);
+    T_CString_integerToString(buffer, set_num, 10);
+    i = uprv_strlen(buffer);
+    buffer[i++] = SEPARATOR;
+    T_CString_integerToString(buffer+i, msg_num, 10);
     return buffer;
 }
 
@@ -55,7 +51,6 @@ u_catgets(u_nl_catd catd, int32_t set_num, int32_t msg_num,
           const UChar* s,
           int32_t* len, UErrorCode* ec) {
 
-    UResourceBundle* res;
     char key[MAX_KEY_LEN];
     const UChar* result;
 
@@ -63,18 +58,9 @@ u_catgets(u_nl_catd catd, int32_t set_num, int32_t msg_num,
         goto ERROR;
     }
 
-    res = ures_getByKey((const UResourceBundle*) catd,
-                        _catkey(key, set_num, TRUE),
-                        NULL, ec);
-    if (U_FAILURE(*ec)) {
-        goto ERROR;
-    }
-
-    result = ures_getStringByKey(res,
-                                 _catkey(key, msg_num, FALSE),
+    result = ures_getStringByKey((const UResourceBundle*) catd,
+                                 _catkey(key, set_num, msg_num),
                                  len, ec);
-    ures_close(res);
-
     if (U_FAILURE(*ec)) {
         goto ERROR;
     }

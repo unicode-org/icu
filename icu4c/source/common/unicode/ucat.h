@@ -14,6 +14,53 @@
 #include "unicode/utypes.h"
 #include "unicode/ures.h"
 
+/**
+ * \file
+ * \brief C API: Message Catalog Wrappers
+ *
+ * This C API provides look-alike functions that deliberately resemble
+ * the POSIX catopen, catclose, and catgets functions.  The underlying
+ * implementation is in terms of ICU resource bundles, rather than
+ * POSIX message catalogs.
+ *
+ * The ICU resource bundles obey standard ICU inheritance policies.
+ * To facilitate this, sets and messages are flattened into one tier.
+ * This is done by creating resource bundle keys of the form
+ * <set_num>%<msg_num> where set_num is the set number and msg_num is
+ * the message number, formatted as decimal strings.
+ *
+ * Example:  Consider a message catalog containing two sets:
+ *
+ * Set 1: Message 4  = "Good morning."
+ *        Message 5  = "Good afternoon."
+ *        Message 7  = "Good evening."
+ *        Message 8  = "Good night."
+ * Set 4: Message 14 = "Please "
+ *        Message 19 = "Thank you."
+ *        Message 20 = "Sincerely,"
+ *
+ * The ICU resource bundle source file would, assuming it is named
+ * "greet.txt", would look like this:
+ *
+ * greet
+ * {
+ *     1%4  { "Good morning." }
+ *     1%5  { "Good afternoon." }
+ *     1%7  { "Good evening." }
+ *     1%8  { "Good night." }
+ * 
+ *     4%14 { "Please " }
+ *     4%19 { "Thank you." }
+ *     4%20 { "Sincerely," }
+ * }
+ *
+ * The catgets function is commonly used in combination with functions
+ * like printf and strftime.  ICU components like message format can
+ * be used instead, although they use a different format syntax.
+ * There is an unsupported ICU package, ustdio, that provides some of
+ * the POSIX-style formatting API.
+ */
+
 U_CDECL_BEGIN
 
 /**
@@ -32,9 +79,12 @@ typedef UResourceBundle* u_nl_catd;
  * e.g. "/usr/resource/my_app/resources/guimessages" on a Unix system.
  * If NULL, ICU default data files will be used.
  *
+ * Unlike POSIX, environment variables are not interpolated within the
+ * name.
+ *
  * @param locale the locale for which we want to open the resource. If
- * NULL, the default locale will be used. If strlen(locale) == 0, the
- * root locale will be used.
+ * NULL, the default ICU locale will be used (see uloc_getDefault). If
+ * strlen(locale) == 0, the root locale will be used.
  *
  * @param ec input/output error code. Upon output,
  * U_USING_FALLBACK_WARNING indicates that a fallback locale was
@@ -91,7 +141,9 @@ u_catclose(u_nl_catd catd);
  * @return a pointer to a zero-terminated UChar array which lives in
  * an internal buffer area, typically a memory mapped/DLL file. The
  * caller must NOT delete this pointer. If the call is unsuccessful
- * for any reason, then s is returned.
+ * for any reason, then s is returned.  This includes the situation in
+ * which ec indicates a failing error code upon entry to this
+ * function.
  * 
  * @draft ICU 2.6
  */
