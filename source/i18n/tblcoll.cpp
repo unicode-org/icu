@@ -47,6 +47,8 @@
 * 11/02/99     helena      Collator performance enhancements.  Special case
 *                          for NO_OP situations. 
 * 11/17/99     srl         More performance enhancements. Inlined some internal functions.
+* 12/15/99     aliu        Update to support Thai collation.  Move NormalizerIterator
+*                          to implementation file.
 *******************************************************************************
 */
 
@@ -134,6 +136,186 @@ const int16_t RuleBasedCollator::FILEID = 0x5443;                    // unique f
 const char* RuleBasedCollator::kFilenameSuffix = ".col";             // binary collation file extension
 char  RuleBasedCollator::fgClassID = 0; // Value is irrelevant       // class id
 
+////////////////////////////////////////////////////////////////////////
+// NormalizerIterator
+//
+// This class is essentially a duplicate of CollationElementIterator,
+// stripped down for speed.  It is declared here so we can incorporate
+// internal classes as subobjects, as well as just to hide it from the
+// public interface.
+////////////////////////////////////////////////////////////////////////
+
+/* Internal class for quick iteration over the text.
+   100% pure inline code
+*/
+class NormalizerIterator { 
+public:
+    Normalizer *cursor;
+    VectorOfInt *bufferAlias;
+    VectorOfInt *reorderBuffer;
+    VectorOfInt ownBuffer;
+    UChar*      text;
+    int32_t     expIndex;
+    int32_t     textLen;
+    UTextOffset  currentOffset;
+    
+    NormalizerIterator(void);
+    NormalizerIterator(const UChar* source, int32_t length, Normalizer::EMode mode);
+    ~NormalizerIterator(void);
+    void setText(const UChar* source, int32_t length, UErrorCode& status);
+    void setModeAndText(Normalizer::EMode mode, const UChar* source, int32_t length, UErrorCode& status);
+    
+    UChar current(void) const;
+    UChar next(void);
+    void reset(void);
+};
+
+inline
+NormalizerIterator::NormalizerIterator() :
+    cursor(0),
+    bufferAlias(0),
+    reorderBuffer(0),
+    ownBuffer(2),
+    text(0),
+    textLen(0),
+    currentOffset(0),
+    expIndex(0)
+{
+}
+
+inline
+NormalizerIterator::NormalizerIterator(const UChar* source, int32_t length, Normalizer::EMode mode) :
+    cursor(0),
+    bufferAlias(0),
+    reorderBuffer(0),
+    ownBuffer(2),
+    text(0),
+    textLen(0),
+    currentOffset(0),
+    expIndex(0)
+{
+    if (mode == Normalizer::NO_OP) {
+        text = (UChar*)source;
+        textLen = length;
+        currentOffset = 0;
+    } else {
+        cursor = new Normalizer(source, length, mode);
+
+    }
+}
+
+inline
+NormalizerIterator::~NormalizerIterator() 
+{
+    if (cursor != 0) {
+        delete cursor;
+        cursor = 0;
+    }
+    if (reorderBuffer != 0) {
+        delete reorderBuffer;
+    }
+}
+
+inline
+void
+NormalizerIterator::setText(const UChar* source, int32_t length, UErrorCode& status)
+{
+    if (cursor == 0) {
+        text = (UChar*)source;
+        textLen = length;
+        currentOffset = 0;
+
+    } else {
+        text = 0;
+        cursor->setText(source, length, status);
+    }
+    bufferAlias = 0;
+    currentOffset = 0;
+}
+
+/* You can only set mode after the comparision of two strings is completed.
+   Setting the mode in the middle of a comparison is not allowed.
+   */
+inline
+void
+
+NormalizerIterator::setModeAndText(Normalizer::EMode mode, const UChar* source, int32_t length, UErrorCode& status)
+{
+    if(mode != Normalizer::NO_OP)
+    {
+        /* DO have a mode -  will need a normalizer object */
+        if(cursor != NULL)
+        {
+            /* Just modify the existing cursor */
+            cursor->setMode(mode);
+            cursor->setText(source, length, status);
+        }
+        else
+        {
+            cursor = new Normalizer(source, length, mode);
+        }
+
+        /* RESET the old data */
+        text = 0;
+        textLen = 0;
+    }
+    else 
+    {
+        /* NO_OP mode.. */
+        if(cursor != NULL)
+        { /* get rid of the old cursor */
+            delete cursor; 
+            cursor = 0;
+        }
+
+        text = (UChar*)source;
+        textLen = length;
+    }
+    currentOffset = 0; /* always */
+   
+    bufferAlias = 0;
+}
+
+inline
+UChar
+NormalizerIterator::current(void) const
+{
+    if (text != 0) {
+        if(currentOffset >= textLen)
+        {
+            return Normalizer::DONE;
+        }
+        else
+        {
+            return text[currentOffset];
+        }
+    }
+
+    return cursor->current();
+}
+
+
+inline
+UChar
+NormalizerIterator::next(void)
+{
+    if (text != 0) {
+        return ((currentOffset < textLen) ? text[++currentOffset] : Normalizer::DONE);
+    }
+    return cursor->next();
+}
+
+inline
+void
+NormalizerIterator::reset(void)
+{
+    currentOffset = 0;
+    if(cursor)
+    {
+        cursor->reset();
+    }
+}
+
 //================ Some inline definitions of implementation functions........ ========
 
 inline int32_t
@@ -171,28 +353,13 @@ RuleBasedCollator::getStrengthOrder(NormalizerIterator* cursor,
         // all we have to do here is return the next ordering in the buffer.  
         if (cursor->expIndex < cursor->bufferAlias->size())
         {
-	  //_L((stderr, "next from [%08X] from bufferAlias\n", this));
+            //_L((stderr, "next from [%08X] from bufferAlias\n", this));
             return strengthOrder(cursor->bufferAlias->at(cursor->expIndex++));
         }
         else
         {
             cursor->bufferAlias = NULL;
-            cursor->expIndex = 0;
         }
-    }
-    else if (cursor->swapOrder != 0)
-    {
-        // If we find a character with no order, we return the marking
-        // flag, UNMAPPEDCHARVALUE, 0x7fff0000, and then the character 
-        // itself shifted left 16 bits as orders.  At this point, the
-        // UNMAPPEDCHARVALUE flag has already been returned by the code
-        // below, so just return the shifted character here.
-        int32_t order = cursor->swapOrder << 16;
-
-	  //_L((stderr, "next from [%08X] swaporder..\n", this));
-        cursor->swapOrder = 0;
-
-        return order;
     }
 
     UChar ch = cursor->current();
@@ -210,26 +377,108 @@ RuleBasedCollator::getStrengthOrder(NormalizerIterator* cursor,
     {
         // Returned an "unmapped" flag and save the character so it can be 
         // returned next time this method is called.
-        if (ch == 0x0000) return ch;
-        cursor->swapOrder = ch;  // \u0000 is not valid in C++'s UnicodeString
-        return CollationElementIterator::UNMAPPEDCHARVALUE;
-    }
-    
-    if (value >= CONTRACTCHARINDEX)
-    {
-        value = nextContractChar(cursor, ch, status);
+        if (ch == 0x0000) return ch; // \u0000 is not valid in C++'s UnicodeString
+        cursor->ownBuffer.at(0) = CollationElementIterator::UNMAPPEDCHARVALUE;
+        cursor->ownBuffer.at(1) = ch << 16;
+        cursor->bufferAlias = &cursor->ownBuffer;
+
+    } else {
+        
+        if (value >= CONTRACTCHARINDEX)
+        {
+            value = nextContractChar(cursor, ch, status);
+        }
+        
+        if (value >= EXPANDCHARINDEX) {
+            cursor->bufferAlias = getExpandValueList(value);
+        }
+        
+        if (CollationElementIterator::isThaiPreVowel(ch)) {
+            UChar consonant = cursor->current();
+            if (CollationElementIterator::isThaiBaseConsonant(consonant)) {
+                cursor->next();
+                cursor->bufferAlias = makeReorderedBuffer(cursor, consonant, value,
+                                                          cursor->bufferAlias);                
+            }
+        }
     }
 
-    if (value >= EXPANDCHARINDEX)
-    {
-        cursor->bufferAlias = getExpandValueList(value);
-        cursor->expIndex = 0;
-        value = cursor->bufferAlias->at(cursor->expIndex++);
+    if (cursor->bufferAlias != NULL) {
+        cursor->expIndex = 1;
+        value = cursor->bufferAlias->at(0);
     }
 
-    int32_t str = strengthOrder(value);   
-    
     return strengthOrder(value);
+}
+
+/**
+ * A clone of CollationElementIterator::makeReorderedBuffer, trimmed down
+ * to only handle forward.
+ */
+inline VectorOfInt*
+RuleBasedCollator::makeReorderedBuffer(NormalizerIterator* cursor,
+                                       UChar colFirst,
+                                       int32_t lastValue,
+                                       VectorOfInt* lastExpansion) const {
+    VectorOfInt* result;
+
+    int32_t firstValue = ucmp32_get(data->mapping, colFirst);
+    if (firstValue >= CONTRACTCHARINDEX) {
+        UErrorCode status = U_ZERO_ERROR;
+        firstValue = nextContractChar(cursor, colFirst, status);
+    }
+
+    VectorOfInt* firstExpansion = NULL;
+    if (firstValue >= EXPANDCHARINDEX) {
+        firstExpansion = getExpandValueList(firstValue);
+    }
+
+    if (firstExpansion == NULL && lastExpansion == NULL) {
+        cursor->ownBuffer.at(0) = firstValue;
+        cursor->ownBuffer.at(1) = lastValue;
+        result = &cursor->ownBuffer;
+    }
+    else {
+        int32_t firstLength = firstExpansion==NULL? 1 : firstExpansion->size();
+        int32_t lastLength = lastExpansion==NULL? 1 : lastExpansion->size();
+        if (cursor->reorderBuffer == NULL) {
+            cursor->reorderBuffer = new VectorOfInt(firstLength+lastLength);
+        }
+        // reorderdBuffer gets reused for the life of this object.
+        // Since its internal buffer only grows, there is a danger
+        // that it will get really, really big, and never shrink.  If
+        // this is actually happening, insert code here to check for
+        // the condition.  Something along the lines of:
+        //! else if (reorderBuffer->size() >= 256 &&
+        //!          (firstLength+lastLength) < 16) {
+        //!     delete reorderBuffer;
+        //!     reorderBuffer = new VectorOfInt(firstLength+lastLength);
+        //! }
+        // The specific numeric values need to be determined
+        // empirically. [aliu]
+        result = cursor->reorderBuffer;
+
+        if (firstExpansion == NULL) {
+            result->atPut(0, firstValue);
+        }
+        else {
+            // System.arraycopy(firstExpansion, 0, result, 0, firstLength);
+            *result = *firstExpansion;
+        }
+
+        if (lastExpansion == NULL) {
+            result->atPut(firstLength, lastValue);
+        }
+        else {
+            // System.arraycopy(lastExpansion, 0, result, firstLength, lastLength);
+            for (int32_t i=0; i<lastLength; ++i) {
+                result->atPut(firstLength + i, lastExpansion->at(i));
+            }
+        }
+        result->setSize(firstLength+lastLength);
+    }
+
+    return result;
 }
 
 // ==================== End inlines ============================================
